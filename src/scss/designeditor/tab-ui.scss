@@ -10,7 +10,7 @@ $tab-horizontal-header-right-width: 60px;
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: var(--background-color);
+  // background-color: var(--background-color);
   color: var(--font-color);
 
   &.number-tab { 
@@ -279,22 +279,6 @@ $tab-horizontal-header-right-width: 60px;
         flex: 1 1 auto;
         overflow: auto;
         position: relative;
-
-        .tab-element-title {
-          position: absolute;
-          top: 0px;
-          left: 0px;
-          right: 0px;
-          height: 30px;
-          display: none;
-          background-color: var(--background-color);
-          font-size: 12px;
-          font-weight: bold;
-          padding: 8px 5px !important;
-          height: 30px;
-          background-color: #f3f3f3;
-          color: #333;
-        }
       }
     }
   }

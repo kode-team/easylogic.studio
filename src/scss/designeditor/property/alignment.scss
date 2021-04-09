@@ -2,7 +2,8 @@
     display: grid; 
     grid-template-columns: repeat(8, 1fr);
     grid-column-gap: 2px;
-    height: 26px;
+    height: 24px;
+    padding-top: 8px;
 
     button {
         width: 20px;

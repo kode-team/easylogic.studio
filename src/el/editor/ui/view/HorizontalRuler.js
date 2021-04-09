@@ -45,7 +45,7 @@ export default class HorizontalRuler extends EditorElement {
 
     }     
     
-    makeLineText (baseNumber, minX, maxX, realWidth, width, epsilon = 3, lineWidth = 30, expect = 10) {
+    makeLineText (baseNumber, minX, maxX, realWidth, width, epsilon = 3) {
         const text = [];
         let startX = minX - (minX % baseNumber); 
         let endX = maxX + (maxX % baseNumber); 
@@ -58,8 +58,6 @@ export default class HorizontalRuler extends EditorElement {
         if (Math.abs(secondX - firstX) < epsilon) return;
 
         for(var i = startX; i < endX; i += baseNumber) {
-
-            if (i != 0 && i % expect === 0) continue;
 
             const x = Math.floor(((i - minX)/realWidth) * width);
 
@@ -133,10 +131,9 @@ export default class HorizontalRuler extends EditorElement {
         this.makeLine(pathString, 200, minX, maxX, realWidth, width, 10, 20, 10000);        
         this.makeLine(pathString, 100, minX, maxX, realWidth,width, 10, 20, 200);
         this.makeLine(pathString, 50, minX, maxX, realWidth,width, 10, 20, 100);
-        this.makeLine(pathString, 10, minX, maxX, realWidth,width, 10, 20, 50);
-        this.makeLine(pathString, 5, minX, maxX, realWidth,width, 10, 20, 10);
-        this.makeLine(pathString, 1, minX, maxX, realWidth,width, 10, 20, 5);        
-        this.makeLine(pathString, 0.5, minX, maxX, realWidth,width, 10, 20, 1);
+        this.makeLine(pathString, 10, minX, maxX, realWidth,width, 10, 18, 50);
+        this.makeLine(pathString, 5, minX, maxX, realWidth,width, 10, 15, 10);
+        this.makeLine(pathString, 1, minX, maxX, realWidth,width, 10, 13, 5);        
 
         return pathString.join('');
     }    
@@ -147,13 +144,20 @@ export default class HorizontalRuler extends EditorElement {
         const {minX,maxX, width: realWidth} = this.$viewport;
         const width = this.state.rect.width;
 
+        const dist = Math.abs(maxX - minX);
+
+
+
         return [
-            this.makeLineText(200, minX, maxX, realWidth, width, 5, 25, 10000),
-            this.makeLineText(100, minX, maxX, realWidth,width, 5, 20, 200),
-            this.makeLineText(50, minX, maxX, realWidth,width, 20, 18, 100),
-            this.makeLineText(10, minX, maxX, realWidth,width, 20, 15, 50),
-            this.makeLineText(5, minX, maxX, realWidth,width, 20, 13, 10),    
-            this.makeLineText(1, minX, maxX, realWidth,width, 20, 20, 5),
+            dist > 3000 ? this.makeLineText(500, minX, maxX, realWidth, width, 20) : '',
+            (1000 < dist && dist < 3000) ? this.makeLineText(100, minX, maxX, realWidth,width, 20) : '',
+            (800 < dist && dist < 1000) ? this.makeLineText(100, minX, maxX, realWidth,width, 20) : '',
+            (500 < dist && dist < 800) ? this.makeLineText(100, minX, maxX, realWidth,width, 20) : '',
+            (500 < dist && dist < 800) ? this.makeLineText(50, minX, maxX, realWidth,width, 20) : '',
+            (200 < dist && dist < 500) ? this.makeLineText(50, minX, maxX, realWidth,width, 20) : '',
+            (50 < dist && dist < 200) ? this.makeLineText(10, minX, maxX, realWidth,width, 20) : '',            
+            (15 < dist && dist < 50) ? this.makeLineText(5, minX, maxX, realWidth,width, 20) : '',                        
+            (0 < dist && dist < 15) ? this.makeLineText(1, minX, maxX, realWidth,width, 20) : '',                                    
         ].join('');
     }    
 

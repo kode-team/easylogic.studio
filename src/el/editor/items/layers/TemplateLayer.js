@@ -1,6 +1,7 @@
-import { Layer } from "../Layer";
 import icon from "el/editor/icon/icon";
 import { ComponentManager } from "el/editor/manager/ComponentManager";
+import { Editor } from "el/editor/manager/Editor";
+import { Component } from "../Component";
 
 const DEFAULT_TEMPLATE = `
   <svg>
@@ -8,7 +9,7 @@ const DEFAULT_TEMPLATE = `
   </svg>
 `
 
-export class TemplateLayer extends Layer {
+export class TemplateLayer extends Component {
 
   getIcon () {
     return icon.auto_awesome;

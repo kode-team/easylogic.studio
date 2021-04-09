@@ -46,7 +46,7 @@ export default class VerticalRuler extends EditorElement {
 
     }    
     
-    makeLineText (baseNumber, minY, maxY, realHeight, height, epsilon = 3, lineWidth = 30, expect = 10) {
+    makeLineText (baseNumber, minY, maxY, realHeight, height, epsilon = 3) {
         const text = [];
         let startY = minY - (minY % baseNumber); 
         let endY = maxY + (maxY % baseNumber); 
@@ -60,11 +60,9 @@ export default class VerticalRuler extends EditorElement {
 
         for(var i = startY; i < endY; i += baseNumber) {
 
-            if (i > 0 && i % expect === 0) continue;
-
             const y = Math.floor(((i - minY)/realHeight) * height);
 
-            text.push(`<text x="${1}" y="${y}" dy="3" dx="-4" transform="rotate(270, 5, ${y})">${i}</text>`)
+            text.push(`<text x="${1}" y="${y}" dy="6" dominant-baseline="central" transform="rotate(-90, 1, ${y})">${i}</text>`)
         }
 
         return text.join('');
@@ -134,9 +132,8 @@ export default class VerticalRuler extends EditorElement {
         this.makeLine(pathString, 100, minY, maxY, realHeight,height, 10, 18, 200);
         this.makeLine(pathString, 50, minY, maxY, realHeight,height, 10, 18, 100);
         this.makeLine(pathString, 10, minY, maxY, realHeight,height, 10, 18, 50);
-        this.makeLine(pathString, 5, minY, maxY, realHeight,height, 10, 18, 10);
-        this.makeLine(pathString, 1, minY, maxY, realHeight,height, 10, 18, 5);        
-        this.makeLine(pathString, 0.5, minY, maxY, realHeight,height, 10, 18, 1);
+        this.makeLine(pathString, 5, minY, maxY, realHeight,height, 10, 15, 10);
+        this.makeLine(pathString, 1, minY, maxY, realHeight,height, 10, 14, 5);        
 
         return pathString.join('');
     }    
@@ -146,13 +143,18 @@ export default class VerticalRuler extends EditorElement {
         const {minY,maxY, height: realHeight} = this.$viewport;
         const height = this.state.rect.height;
 
+        const dist = Math.abs(maxY - minY);
+
         return [
-            this.makeLineText(200, minY, maxY, realHeight, height, 5, 25, 10000),            
-            this.makeLineText(100, minY, maxY, realHeight,height, 5, 22, 200),
-            this.makeLineText(50, minY, maxY, realHeight,height, 20, 18, 100),
-            this.makeLineText(10, minY, maxY, realHeight,height, 20, 15, 50),
-            this.makeLineText(5, minY, maxY, realHeight,height, 20, 12, 10),            
-            this.makeLineText(1, minY, maxY, realHeight,height, 20, 10, 5),
+            dist > 3000 ? this.makeLineText(500, minY, maxY, realHeight, height, 20) : '',
+            (1000 < dist && dist < 3000) ? this.makeLineText(100, minY, maxY, realHeight,height, 20) : '',
+            (800 < dist && dist < 1000) ? this.makeLineText(100, minY, maxY, realHeight,height, 20) : '',
+            (500 < dist && dist < 800) ? this.makeLineText(100, minY, maxY, realHeight,height, 20) : '',
+            (500 < dist && dist < 800) ? this.makeLineText(50, minY, maxY, realHeight,height, 20) : '',
+            (200 < dist && dist < 500) ? this.makeLineText(50, minY, maxY, realHeight,height, 20) : '',
+            (50 < dist && dist < 200) ? this.makeLineText(10, minY, maxY, realHeight,height, 20) : '',            
+            (15 < dist && dist < 50) ? this.makeLineText(5, minY, maxY, realHeight,height, 20) : '',                        
+            (0 < dist && dist < 15) ? this.makeLineText(1, minY, maxY, realHeight,height, 20) : '',                                    
         ].join('');
     }
 

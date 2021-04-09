@@ -5,13 +5,18 @@ export default class TemplateRender extends LayerRender {
     
 
   update (item, currentElement) {
-    const compiledTemplate = this.compile(item);
-    let $innerHTML = currentElement.$(".inner-html");
 
-    // TODO: template, engine, params 가 변경 된 시점에  변경 상태를 기록한다. 
-    // TODO: 그렇게 해서 변경이 없는 부분은 최대한 다시 그리지 않도록 한다. 
-    if ($innerHTML) {
-      $innerHTML.updateDiff(compiledTemplate);
+
+    if (item.hasChangedField('x', 'y', 'width', 'height') === false) {
+      const compiledTemplate = this.compile(item);
+      let $innerHTML = currentElement.$(".inner-html");
+  
+      // TODO: template, engine, params 가 변경 된 시점에  변경 상태를 기록한다. 
+      // TODO: 그렇게 해서 변경이 없는 부분은 최대한 다시 그리지 않도록 한다. 
+      if ($innerHTML) {
+        $innerHTML.updateDiff(compiledTemplate);
+      }
+  
     }
   
     super.update(item, currentElement);
