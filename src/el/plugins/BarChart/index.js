@@ -2,6 +2,7 @@ import { Editor } from "el/editor/manager/Editor";
 import { AxisThemeEditor } from "../common/AxisThemeEditor";
 import { ChartSeriesEditor } from "../common/ChartSeriesEditor";
 import { ChartThemeEditor } from "../common/ChartThemeEditor";
+import { ChartXAxisEditor } from "../common/ChartXAxisEditor";
 import { FontThemeEditor } from "../common/FontThemeEditor";
 import { LegendOptionsEditor } from "../common/LegendOptionsEditor";
 import AddBarChart from "./AddBarChart";
@@ -37,6 +38,7 @@ export default function (editor) {
         LegendOptionsEditor,
         ChartThemeEditor,
         ChartSeriesEditor,
+        ChartXAxisEditor
     })
 
     editor.registerCommand({

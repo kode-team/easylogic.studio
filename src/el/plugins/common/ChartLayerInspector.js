@@ -39,6 +39,24 @@ export function ChartLayerInspector (item) {
           }
         },
         defaultValue: item['chartOption']?.series || {}
+      },  
+      'Option: xAxis',
+      {
+        key: 'chartOption.xAxis',
+        editor: 'ChartXAxisEditor',
+        convert: (currentItem, key, value) => {
+
+          return {
+            chartOption: {
+              ...(currentItem.chartOption || {}),
+              xAxis: {
+                ...(currentItem.chartOption?.xAxis || {}),
+                ...value
+              }
+            }
+          }
+        },
+        defaultValue: item['chartOption']?.xAxis || {}
       },      
       'Option: legend', 
       {
