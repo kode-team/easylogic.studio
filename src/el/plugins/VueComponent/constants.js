@@ -1,0 +1,1 @@
+export const VUE_COMPONENT_TYPE = 'vue-component';
