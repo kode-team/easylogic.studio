@@ -2,7 +2,7 @@
 import { LOAD } from "el/base/Event";
 import shortcuts from "../../shortcuts";
 import { os } from "el/base/functions/detect";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 const keyUnitCode = {

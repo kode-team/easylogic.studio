@@ -2,7 +2,7 @@
 import { LOAD, CLICK, DOMDIFF } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { CSS_TO_STRING } from "el/base/functions/func";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class SelectIconEditor extends EditorElement {

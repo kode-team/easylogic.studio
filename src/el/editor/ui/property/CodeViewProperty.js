@@ -3,7 +3,7 @@ import { LOAD, DEBOUNCE, DOMDIFF, SUBSCRIBE } from "el/base/Event";
 
 import HTMLRenderer from "el/editor/renderer/HTMLRenderer";
 import SVGRenderer from "el/editor/renderer/SVGRenderer";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 
 export default class CodeViewProperty extends BaseProperty {

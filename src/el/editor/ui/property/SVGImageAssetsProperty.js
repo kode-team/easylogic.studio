@@ -3,7 +3,7 @@ import { LOAD, CLICK, INPUT, DEBOUNCE } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
 import { uuidShort } from "el/base/functions/math";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 
 export default class SVGImageAssetsProperty extends BaseProperty {

@@ -1,8 +1,8 @@
 {
   "name": "@easylogic/editor",
-  "version": "0.10.10",
+  "version": "0.10.11",
   "description": "Fantastic Web Design Tool ",
-  "main": "./dist/editor.js",
+  "main": "./dist/elf.js",
   "directories": {
     "test": "test"
   },
@@ -10,7 +10,7 @@
     "@ant-design/icons-svg": "^4.1.0",
     "@babel/runtime": "^7.13.10",
     "@primer/octicons": "^12.1.0",
-    "@toast-ui/chart": "^4.3.0",
+    "@toast-ui/chart": "^4.3.2",
     "array-organizer": "^1.5.7",
     "feather-icons": "^4.28.0",
     "gl-matrix": "^3.3.0",

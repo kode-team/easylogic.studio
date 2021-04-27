@@ -2,7 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class PerspectiveProperty extends BaseProperty {
 

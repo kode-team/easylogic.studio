@@ -1,5 +1,5 @@
 import { DOMDIFF, LOAD, SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 import { EditorElement } from "../common/EditorElement";
 
@@ -61,7 +61,7 @@ export default class HorizontalRuler extends EditorElement {
 
             const x = Math.floor(((i - minX)/realWidth) * width);
 
-            text.push(`<text x="${x}" y="${0}" dx="2" dy="8" text-anchor="middle" alignment-baseline="bottom" >${i}</text>`)
+            text.push(`<text x="${x}" y="${0}" dx="0" dy="8" text-anchor="middle" alignment-baseline="bottom" >${i}</text>`)
         }
 
         return text.join('');
@@ -113,10 +113,10 @@ export default class HorizontalRuler extends EditorElement {
         const secondX = ((currentMaxX - minX)/realWidth) * width; 
 
         return `
-            M ${firstX} 10 
+            M ${firstX} 15 
             L ${firstX} 20 
             L ${secondX} 20 
-            L ${secondX} 10 
+            L ${secondX} 15 
             Z
         `
     }

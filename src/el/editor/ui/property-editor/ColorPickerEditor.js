@@ -6,7 +6,7 @@ import ColorInformation from "./colorpicker/ui/ColorInformation";
 import Palette from "./colorpicker/ui/ColorPalette";
 import ColorManagerV2 from "el/base/ColorManagerV2";
 import ColorAssetsEditor from "./ColorAssetsEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 import { SUBSCRIBE } from "el/base/Event";
 

@@ -73,6 +73,8 @@
     bottom: $status-bar-height;
     box-sizing: border-box;
     background-color: #141414;
+    overflow: hidden;
+    
     .layout-header {
       display: none;
       top: 0px;

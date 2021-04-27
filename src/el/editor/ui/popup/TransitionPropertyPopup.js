@@ -5,7 +5,7 @@ import "../property-editor/CubicBezierEditor";
 import "../property-editor/RangeEditor";
 import "../property-editor/SelectEditor";
 import BasePopup from "./BasePopup";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 const property_list = [
   'none',

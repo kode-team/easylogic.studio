@@ -5,7 +5,7 @@ import { Length } from "el/editor/unit/Length";
 import PathStringManager from "el/editor/parser/PathStringManager";
 import { rectToVerties, vertiesToRectangle } from "el/base/functions/collision";
 import { vec3 } from "gl-matrix";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class LayerAppendView extends EditorElement {

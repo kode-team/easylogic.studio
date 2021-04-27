@@ -2,7 +2,7 @@
 import { LOAD, INPUT, BIND, CLICK } from "el/base/Event";
 import colormatrix from "./colormatrix";
 import { normalize } from "el/base/functions/math";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 const COLUMN = 6; 

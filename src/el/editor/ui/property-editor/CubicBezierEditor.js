@@ -5,7 +5,7 @@ import { Length } from "el/editor/unit/Length";
 import { formatCubicBezier, createBezierForPattern, bezierList, getPredefinedCubicBezier } from "el/base/functions/bezier";
 import { div } from "el/base/functions/math";
 import { curveToPath, curveToPointLine } from "el/base/functions/func";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 

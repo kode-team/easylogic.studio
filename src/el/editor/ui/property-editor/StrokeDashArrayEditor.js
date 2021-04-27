@@ -3,7 +3,7 @@ import UIElement, { EVENT } from "el/base/UIElement";
 import "./NumberRangeEditor";
 import { isArray } from "el/base/functions/func";
 import icon from "el/editor/icon/icon";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class StrokeDashArrayEditor extends EditorElement {

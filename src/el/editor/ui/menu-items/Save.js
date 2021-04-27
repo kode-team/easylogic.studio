@@ -1,6 +1,6 @@
 import MenuItem from "./MenuItem";
 import icon from "el/editor/icon/icon";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class Save extends MenuItem {
   getIconString() {

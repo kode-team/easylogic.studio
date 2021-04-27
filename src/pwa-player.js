@@ -1,7 +1,7 @@
 import "./scss/index.scss";
 
 import Util from "./el/base/index";
-import EasyLogic from "./designplayer/index";
+import EasyLogic from "./editor-layouts/designplayer/index";
 
 function startPlayer() {
 

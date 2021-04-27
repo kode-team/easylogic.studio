@@ -22,7 +22,7 @@ import "./PolygonDataEditor";
 import "./OffsetPathListEditor";
 import "./BorderEditor";
 import './MediaProgressEditor';
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class CSSPropertyEditor extends EditorElement {

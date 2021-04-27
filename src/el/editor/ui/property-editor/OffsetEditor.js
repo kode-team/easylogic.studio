@@ -7,7 +7,7 @@ import { isUndefined } from "el/base/functions/func";
 import "./CSSPropertyEditor";
 import "./RangeEditor";
 import "./InputRangeEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 

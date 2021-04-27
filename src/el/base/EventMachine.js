@@ -21,7 +21,7 @@ import {
 import { uuid } from "./functions/math";
 import DomEventHandler from "./handler/DomEventHandler";
 import BindHandler from "./handler/BindHandler";
-import { retriveElement } from "./registerElement";
+import { retriveElement } from "./registElement";
 
 const REFERENCE_PROPERTY = "ref";
 const TEMP_DIV = Dom.create("div");

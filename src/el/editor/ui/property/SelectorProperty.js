@@ -14,7 +14,7 @@ import {
 
 
 import { Selector } from "el/editor/property-parser/Selector";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 const selectorList = [
   '',   // custom 

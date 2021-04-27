@@ -62,7 +62,6 @@ import segmentMoveUp from "./segment.move.up";
 import segmentMoveRight from "./segment.move.right";
 import segmentMoveLeft from "./segment.move.left";
 import segmentDelete from "./segment.delete";
-import toggleFullscreen from "./toggle.fullscreen";
 import addBackgroundImagePattern from "./addBackgroundImagePattern";
 import addBackgroundColor from "./addBackgroundColor";
 import scaleMinus from "./scale.minus";
@@ -132,7 +131,6 @@ export default {
     resetSelection,
     addBackgroundColor,
     addBackgroundImagePattern,
-    toggleFullscreen,
     segmentDelete,
     segmentMoveDown,
     segmentMoveUp,

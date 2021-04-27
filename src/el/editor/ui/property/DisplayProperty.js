@@ -4,7 +4,7 @@ import { LOAD, DEBOUNCE } from "el/base/Event";
 
 import "../property-editor/RangeEditor";
 import "../property-editor/SelectEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class DisplayProperty extends BaseProperty {
 

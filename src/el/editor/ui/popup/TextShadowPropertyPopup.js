@@ -2,7 +2,7 @@
 import { Length } from "el/editor/unit/Length";
 import { LOAD, POINTERSTART, MOVE, SUBSCRIBE } from "el/base/Event";
 import BasePopup from "./BasePopup";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class TextShadowPropertyPopup extends BasePopup {
 

@@ -2,7 +2,7 @@ import UIElement, { EVENT } from "el/base/UIElement";
 import { LOAD, SUBSCRIBE } from "el/base/Event";
 import { Length } from "el/editor/unit/Length";
 import "./RangeEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 

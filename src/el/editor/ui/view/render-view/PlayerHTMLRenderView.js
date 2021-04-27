@@ -7,7 +7,7 @@ import "./StyleView";
 import HTMLRenderer from 'el/editor/renderer/HTMLRenderer';
 
 import { isFunction } from "el/base/functions/func";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../../common/EditorElement";
 
 

@@ -1,6 +1,6 @@
 
 import { LOAD, SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
 import BasePopup from "./BasePopup";

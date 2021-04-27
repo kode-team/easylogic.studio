@@ -3,7 +3,7 @@ import { LOAD, CLICK, PREVENT, STOP, FOCUSOUT, DOUBLECLICK, DOMDIFF, KEYDOWN, EN
 import icon from "el/editor/icon/icon";
 
 
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 
 export default class ProjectProperty extends BaseProperty {

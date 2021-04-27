@@ -3,7 +3,7 @@ import { LOAD, CLICK, DEBOUNCE, DRAGSTART, SUBSCRIBE } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class GradientAssetsProperty extends BaseProperty {
 

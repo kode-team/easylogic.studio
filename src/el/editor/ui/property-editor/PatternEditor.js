@@ -3,7 +3,7 @@ import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE, SUBSCRIBE } 
 import icon from "el/editor/icon/icon";
 import { Pattern } from "el/editor/property-parser/Pattern";
 import patterns from "el/editor/preset/patterns";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 import "./PatternSizeEditor";
 import "./SelectEditor";

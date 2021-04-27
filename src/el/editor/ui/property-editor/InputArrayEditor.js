@@ -1,5 +1,5 @@
 import { LOAD, INPUT, BIND } from "el/base/Event";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 

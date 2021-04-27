@@ -6,7 +6,7 @@ import "../property-editor/RangeEditor";
 import "../property-editor/IterationCountEditor";
 import "../property-editor/SelectEditor";
 import BasePopup from "./BasePopup";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class AnimationPropertyPopup extends BasePopup {
 

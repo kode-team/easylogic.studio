@@ -1,6 +1,6 @@
 import MenuItem from "./MenuItem";
 
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { SUBSCRIBE } from "el/base/Event";
  
 export default class AddArtboard extends MenuItem {
@@ -13,6 +13,10 @@ export default class AddArtboard extends MenuItem {
 
   clickButton(e) {
     this.emit('addLayerView', 'artboard');
+  }
+
+  isHideTitle() {
+    return true; 
   }
 
   [SUBSCRIBE('addLayerView')] (type) {

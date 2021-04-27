@@ -1,7 +1,7 @@
 
 import { LOAD, INPUT, DEBOUNCE, CLICK } from "el/base/Event";
 import PathParser from "el/editor/parser/PathParser";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 

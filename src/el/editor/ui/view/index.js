@@ -5,6 +5,7 @@ import LogoView from "./LogoView"
 import NotificationView from "./NotificationView"
 import PreviewToolMenu from "./PreviewToolMenu"
 import StatusBar from "./StatusBar"
+import SingleToolMenu from "./ToolMenu"
 import ToolMenu from "./ToolMenu"
 import VerticalRuler from "./VerticalRuler"
 
@@ -17,5 +18,6 @@ export default {
     PreviewToolMenu,
     StatusBar,
     ToolMenu,
+    SingleToolMenu,
     VerticalRuler
 }

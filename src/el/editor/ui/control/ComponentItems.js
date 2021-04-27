@@ -2,7 +2,7 @@
 
 import "../menu-items";
 import { CLICK } from "el/base/Event";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { PluginManager } from "el/editor/manager/PluginManager";
 import { EditorElement } from "../common/EditorElement";
 

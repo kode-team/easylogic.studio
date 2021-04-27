@@ -21,23 +21,21 @@ $range-track-height: 4px;
 $range-thumb-top: -6px; 
 $range-thumb-border-radius: 20px; 
 
-html,body {
+.designeditor {
     font-size: 13px;
     padding:0px;
     margin:0px;
     // overflow: hidden;
     box-sizing: border-box;    
     font-family: sans-serif;
-}
 
-*,
-*:before,
-*:after {
-    box-sizing: border-box;
-    -webkit-overflow-scrolling: touch;
-}
+    *,
+    *:before,
+    *:after {
+        box-sizing: border-box;
+        -webkit-overflow-scrolling: touch;
+    }
 
-body {
     &.ua-window {
         .scrollbar {
             
@@ -241,7 +239,7 @@ body {
     width: 100%;
     height: 100%;
     user-select: none;
-    position: fixed;
+    position: absolute;
     left:0px;
     top: 0px; 
 

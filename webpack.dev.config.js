@@ -7,11 +7,10 @@ const alias = require('./alias');
 module.exports = {
   // Entry files for our popup and background pages
   entry: {
-    editor: "./src/index.js",
-    player: "./src/index-player.js"    
+    app: "./src/index.js",
   },
   output: {
-    library: "EasylogicStudio",
+    library: "elf",
     libraryTarget: "umd",
     path: __dirname + "/docs",
   },
@@ -104,16 +103,9 @@ module.exports = {
   plugins: [
     new HtmlWebPackPlugin({
       inject: true,
-      template: "./src/dev-index.html",
+      template: "./src/index.html",
       filename: "./index.html",
-      excludeChunks: ['player']
     }),
-    new HtmlWebPackPlugin({
-      inject: true,
-      template: "./src/dev-index.html",
-      filename: "./player.html",
-      excludeChunks: ['editor']
-    }),    
     new MiniCssExtractPlugin({
       filename: "bundle.css"
     })

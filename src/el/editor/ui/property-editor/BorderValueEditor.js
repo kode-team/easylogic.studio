@@ -6,7 +6,7 @@ import "./SelectEditor";
 import "./ColorViewEditor";
 import "./InputRangeEditor";
 import "./ColorSingleEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 import { SUBSCRIBE } from "el/base/Event";
 

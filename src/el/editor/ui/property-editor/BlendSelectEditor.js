@@ -1,6 +1,6 @@
 import SelectEditor from "./SelectEditor";
 import { blend_list } from "el/editor/util/Resource";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 
 export default class BlendSelectEditor extends SelectEditor {

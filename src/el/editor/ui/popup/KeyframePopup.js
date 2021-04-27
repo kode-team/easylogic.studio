@@ -2,7 +2,7 @@
 import "../property-editor/OffsetEditor";
 import { INPUT, SUBSCRIBE } from "el/base/Event";
 import BasePopup from "./BasePopup";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class KeyframePopup extends BasePopup {
 

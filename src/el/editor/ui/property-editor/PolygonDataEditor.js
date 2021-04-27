@@ -1,6 +1,6 @@
 import { LOAD, INPUT, DEBOUNCE } from "el/base/Event";
 import PolygonParser from "el/editor/parser/PolygonParser";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class PolygonDataEditor extends EditorElement {

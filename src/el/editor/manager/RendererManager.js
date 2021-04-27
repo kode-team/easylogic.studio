@@ -1,5 +1,3 @@
-import { Item } from "el/editor/items/Item";
-
 export const RendererManager = new class {
   constructor(opt = {}) {
     this.renderers = {} 

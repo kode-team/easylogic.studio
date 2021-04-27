@@ -4,7 +4,7 @@ import "../property-editor/SVGFilterEditor";
 import BasePopup from "./BasePopup";
 import { SVGFilter } from "el/editor/property-parser/SVGFilter";
 import { isNotUndefined } from "el/base/functions/func";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class SVGFilterPopup extends BasePopup {
 

@@ -1,6 +1,6 @@
 import "./PathManager";
 import "./DrawManager";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class PageSubEditor extends EditorElement {

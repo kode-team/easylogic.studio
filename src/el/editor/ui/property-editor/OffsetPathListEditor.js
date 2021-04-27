@@ -2,7 +2,7 @@
 import { LOAD, BIND, SUBSCRIBE } from "el/base/Event";
 import "./SelectEditor";
 import "./RangeEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class OffsetPathListEditor extends EditorElement {

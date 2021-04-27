@@ -5,7 +5,7 @@ import { OBJECT_TO_CLASS, isUndefined } from "el/base/functions/func";
 import { timecode, second } from "el/base/functions/time";
 import Dom from "el/base/Dom";
 import PathParser from "el/editor/parser/PathParser";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import makeInterpolateOffset from "el/editor/interpolate/interpolate-functions/offset-path/makeInterpolateOffset";
 import { EditorElement } from "../../common/EditorElement";
 

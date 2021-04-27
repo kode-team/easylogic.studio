@@ -29,7 +29,7 @@ import "./ColorMatrixEditor";
 import svgFilterPreset from "./svg-filter-preset";
 import "./ImageSelectEditor";
 import "./BlendSelectEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 const filterTypes = [

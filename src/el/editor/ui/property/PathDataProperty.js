@@ -2,7 +2,7 @@ import BaseProperty from "./BaseProperty";
 
 import "../property-editor/PathDataEditor";
 import { DEBOUNCE, SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 
 export default class PathDataProperty extends BaseProperty {

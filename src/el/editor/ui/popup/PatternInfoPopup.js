@@ -4,7 +4,7 @@ import { CLICK, LOAD, SUBSCRIBE } from "el/base/Event";
 import { Length } from "el/editor/unit/Length";
 import BasePopup from "./BasePopup";
 import propertyEditor from "../property-editor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 
 export default class PatternInfoPopup extends BasePopup {

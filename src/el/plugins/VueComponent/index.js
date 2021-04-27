@@ -24,7 +24,7 @@ export default function (editor) {
     editor.registerRenderer('html', VUE_COMPONENT_TYPE, new VueComponentHTMLRender() )    
 
     // register control ui 
-    editor.registerElement({ 
+    editor.registElement({ 
         AddVueComponent,
     })
 }

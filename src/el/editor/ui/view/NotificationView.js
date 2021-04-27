@@ -2,7 +2,7 @@
 import icon from "el/editor/icon/icon";
 import Dom from "el/base/Dom";
 import { TRANSITIONEND, CLICK, SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class NotificationView extends EditorElement {

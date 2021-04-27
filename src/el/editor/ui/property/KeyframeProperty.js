@@ -11,7 +11,7 @@ import {
 
 
 import { Keyframe } from "el/editor/property-parser/Keyframe";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class KeyFrameProperty extends BaseProperty {
   getTitle() {

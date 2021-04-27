@@ -5,11 +5,12 @@ import Dom from "el/base/Dom";
 import "el/editor/items";
 import "el/editor/ui/view/PlayCanvasView";
 
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { KEYDOWN, KEYUP, SUBSCRIBE } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import 'el/plugins';
+
 export default class DesignPlayer extends EditorElement {
   
   initialize () {
@@ -17,7 +18,7 @@ export default class DesignPlayer extends EditorElement {
 
     this.$editor.initPlugins();
 
-    var $body = Dom.body();
+    var $body = this.opt.$container;
     
     $body.attr('data-theme', this.$editor.theme);
     $body.addClass(navigator.userAgent.includes('Windows') ? 'ua-window': 'ua-default')
@@ -56,6 +57,10 @@ export default class DesignPlayer extends EditorElement {
   [KEYUP('document')] (e) {
     this.emit('keymap.keyup', e);
   }  
+
+  [SUBSCRIBE('toggle.fullscreen')] () {
+    this.opt.$container.toggleFullscreen();
+  }
 
 }
 

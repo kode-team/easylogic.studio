@@ -2,7 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
 
 import "../property-editor/BorderEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 
 export default class BorderNewProperty extends BaseProperty {

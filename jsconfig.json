@@ -4,8 +4,9 @@
       "paths": {
         "@assets/*": ["./src/assets/*"],
         "el/*": ["./src/el/*"],
-        "designeditor/*": ["src/designeditor/*"],
-        "designplayer/*": ["src/designplayer/*"],
+        "designeditor/*": ["src/editor-layouts/designeditor/*"],
+        "singleeditor/*": ["src/editor-layouts/singleeditor/*"],
+        "designplayer/*": ["src/editor-layouts/designplayer/*"],
       }
     }
 }

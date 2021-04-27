@@ -7,7 +7,7 @@ import "el/editor/ui/property-editor/CSSPropertyEditor";
 import { second, timecode } from "el/base/functions/time";
 import { isUndefined } from "el/base/functions/func";
 import icon from "el/editor/icon/icon";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../../common/EditorElement";
 
 export default class TimelineValueEditor extends EditorElement {

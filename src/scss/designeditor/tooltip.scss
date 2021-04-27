@@ -24,8 +24,9 @@
         position: absolute;
         right: auto;
         left: 50%;
-        top: 100%;
-        transform: translateX(-50%);             
+        top: 110%;
+        transform: translateX(-50%);     
+        z-index: 10000;        
     }
 
     &[data-direction="right"] {

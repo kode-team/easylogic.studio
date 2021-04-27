@@ -4,7 +4,7 @@ import { CSS_TO_STRING, STRING_TO_CSS } from "el/base/functions/func";
 import "./SelectIconEditor";
 import "./GridBoxEditor";
 import "./GridGapEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class GridLayoutEditor extends EditorElement {

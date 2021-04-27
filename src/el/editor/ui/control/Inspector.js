@@ -3,7 +3,7 @@
 import { CLICK } from "el/base/Event";
 import "../property/index";
 import icon from "el/editor/icon/icon";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class Inspector extends EditorElement {

@@ -24,7 +24,7 @@ export default function (editor) {
     editor.registerRenderer('html', REACT_COMPONENT_TYPE, new ReactComponentHTMLRender() )    
 
     // register control ui 
-    editor.registerElement({ 
+    editor.registElement({ 
         AddReactComponent,
     })
 }

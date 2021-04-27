@@ -3,7 +3,7 @@ import { LOAD, CLICK, BIND, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
 import { Length } from "el/editor/unit/Length";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 const image_size = [
   '',

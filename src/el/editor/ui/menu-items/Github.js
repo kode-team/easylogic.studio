@@ -1,4 +1,4 @@
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import MenuItem from "./MenuItem";
 
 export default class Github extends MenuItem {

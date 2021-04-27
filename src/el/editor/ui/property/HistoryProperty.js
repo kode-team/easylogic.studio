@@ -2,7 +2,7 @@ import BaseProperty from "./BaseProperty";
 
 import { LOAD, DOMDIFF, SUBSCRIBE } from "el/base/Event";
 import icon from "el/editor/icon/icon";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class HistoryProperty extends BaseProperty {
 

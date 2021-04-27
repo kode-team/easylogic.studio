@@ -1,7 +1,7 @@
 
 import { CSS_TO_STRING } from "el/base/functions/func";
 import { LOAD, SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 /**

@@ -3,7 +3,7 @@ import icon from "el/editor/icon/icon";
 import UIElement, { EVENT } from "el/base/UIElement";
 import "./RangeEditor";
 import { DirectionLength } from "el/editor/unit/DirectionLength";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 const typeList = [

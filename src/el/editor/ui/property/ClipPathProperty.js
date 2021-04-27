@@ -8,7 +8,7 @@ import {
 } from "el/base/Event";
 
 
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { ClipPath } from "el/editor/property-parser/ClipPath";
 
 var clipPathList = [
