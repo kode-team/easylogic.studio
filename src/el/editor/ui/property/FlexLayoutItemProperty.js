@@ -2,7 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { DEBOUNCE, LOAD, SUBSCRIBE } from "el/base/Event";
 
 import { CSS_TO_STRING } from "el/base/functions/func";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 
 export default class FlexLayoutItemProperty extends BaseProperty {

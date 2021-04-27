@@ -1,4 +1,4 @@
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import "el/editor/ui/menu-items";
 import { EditorElement } from "../common/EditorElement";
 

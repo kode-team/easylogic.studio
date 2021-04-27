@@ -11,8 +11,6 @@ import { ConicGradient } from "./image-resource/ConicGradient";
 import { RepeatingConicGradient } from "./image-resource/RepeatingConicGradient";
 import { Gradient } from "./image-resource/Gradient";
 import { convertMatches, reverseMatches } from "el/base/functions/parser";
-import { BackgroundImageCache } from "./BackgroundImageCache";
-
 
 const RepeatList = ["repeat", "no-repeat", "repeat-x", "repeat-y", 'round', 'space'];
 const reg = /((linear\-gradient|repeating\-linear\-gradient|radial\-gradient|repeating\-radial\-gradient|conic\-gradient|repeating\-conic\-gradient|url)\(([^\)]*)\))/gi;
@@ -306,10 +304,6 @@ export class BackgroundImage extends Property {
     var backgroundImages = [];
     const key = JSON.stringify(style);
 
-    if (BackgroundImageCache.has(key)) {
-      return BackgroundImageCache.get(key);
-    }
-
     if (style["background-image"]) {
       var results = convertMatches(style["background-image"]);
 
@@ -379,8 +373,6 @@ export class BackgroundImage extends Property {
         }
       });
     }
-
-    BackgroundImageCache.set(key, backgroundImages)
 
     return backgroundImages;
   }

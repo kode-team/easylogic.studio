@@ -6,7 +6,7 @@ import {
 
 import icon from "el/editor/icon/icon";
 import { Transform } from "el/editor/property-parser/Transform";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import "el/editor/ui/view-items/RotateEditorView";
 
 var transformList = [

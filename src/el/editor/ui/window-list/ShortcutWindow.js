@@ -2,7 +2,7 @@ import BaseWindow from "./BaseWindow";
 import shortcuts from "../../shortcuts";
 import { os } from "el/base/functions/detect";
 
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { SUBSCRIBE } from "el/base/Event";
 
 const categories = new Set();

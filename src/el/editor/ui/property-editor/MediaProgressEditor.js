@@ -3,7 +3,7 @@ import { POINTERSTART, MOVE, BIND, SUBSCRIBE } from "el/base/Event";
 import { Length } from "el/editor/unit/Length";
 
 import './NumberRangeEditor';
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class MediaProgressEditor extends EditorElement {

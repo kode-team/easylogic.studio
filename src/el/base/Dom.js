@@ -947,5 +947,13 @@ export default class Dom {
     } else if (element.wekitRequestFullscreen) {
       element.wekitRequestFullscreen();
     }
+  } 
+
+  toggleFullscreen() {
+    if (this.el === document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      this.fullscreen();
+    }
   }
 }

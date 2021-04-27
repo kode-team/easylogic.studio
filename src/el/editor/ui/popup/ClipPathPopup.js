@@ -8,7 +8,7 @@ import "../property-editor/SelectEditor";
 import "../property-editor/clip-path/InsetEditor";
 import "../property-editor/clip-path/PolygonEditor";
 import "../property-editor/clip-path/EllipseEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 
 

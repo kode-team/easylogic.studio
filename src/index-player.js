@@ -1,19 +1,13 @@
 import "./scss/index.scss";
 
-import Util from "./el/base/index";
-import EasyLogic from "./designplayer/index";
+import EasyLogic from "./editor-layouts/designplayer/index";
 
-function startPlayer() {
-  var app = new EasyLogic.createDesignPlayer();
+function startPlayer(opt = {}) {
+  var app = new EasyLogic.createDesignPlayer(opt);
 
   return app;
 }
 
-export default {
-  version: '@@VERSION@@',
-  ...Util,
-  ...EasyLogic,
-  startPlayer
-};
-
-window.EasylogicEditor = startPlayer();
+window.EasylogicEditor = startPlayer({
+  container: document.getElementById('app')
+});

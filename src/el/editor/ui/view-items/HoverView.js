@@ -1,5 +1,5 @@
 import Dom from "el/base/Dom";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 import { SUBSCRIBE } from "el/base/Event";
 
@@ -43,8 +43,8 @@ export default class HoverView extends EditorElement {
             this.refs.$hoverRect.updateDiff('')
         } else {
             const verties = items[0].verties();
-            const line = this.createPointerLine(this.$viewport.applyVerties(verties));    
-
+            const line = this.createPointerLine(this.$viewport.applyVerties(verties));   
+            
             this.refs.$hoverRect.updateDiff(line)
         }
     }
@@ -63,7 +63,6 @@ export default class HoverView extends EditorElement {
                     L ${pointers[0][0]}, ${pointers[0][1]}
                     Z
                 " 
-                stroke-width="2"
                 />
         </svg>`
     }    

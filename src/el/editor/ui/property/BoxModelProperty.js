@@ -2,7 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { INPUT, LOAD, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
 import { Length } from "el/editor/unit/Length";
 
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 const fields = ["margin", "padding"];
 let styleKeys = [];

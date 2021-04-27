@@ -23,7 +23,7 @@ export default function (editor) {
     editor.registerRenderer('html', AREA_CHART_TYPE, new AreaChartHTMLRender() )    
 
     // register control ui 
-    editor.registerElement({ 
+    editor.registElement({ 
         AddAreaChart,
     })
 }

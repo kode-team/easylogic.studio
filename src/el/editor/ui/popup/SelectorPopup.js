@@ -2,7 +2,7 @@
 import { INPUT, SUBSCRIBE } from "el/base/Event";
 import "../property-editor/CSSPropertyEditor";
 import BasePopup from "./BasePopup";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class SelectorPopup extends BasePopup {
 

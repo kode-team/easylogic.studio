@@ -4,7 +4,7 @@ import { Position } from "el/editor/unit/Length";
 import icon from "el/editor/icon/icon";
 
 
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 const typeList = [
   { key: "top", title: "Top" },

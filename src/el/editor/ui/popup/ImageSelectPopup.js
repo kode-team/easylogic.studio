@@ -2,7 +2,7 @@
 import BasePopup from "./BasePopup";
 import { LOAD, CLICK, DOMDIFF, SUBSCRIBE } from "el/base/Event";
 import { Length } from "el/editor/unit/Length";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class ImageSelectPopup extends BasePopup {
 

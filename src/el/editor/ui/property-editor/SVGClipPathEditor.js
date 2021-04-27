@@ -1,7 +1,7 @@
 
 import { CLICK, SUBSCRIBE } from "el/base/Event";
 import "./IconListViewEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class SVGClipPathEditor extends EditorElement {

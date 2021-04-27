@@ -5,7 +5,10 @@ import _doForceRefreshSelection from "./_doForceRefreshSelection";
 export default {
     command: 'addBackgroundImageGradient',
     execute: function (editor, gradient, id = null) {
+        console.log(id);
         var items = editor.selection.itemsByIds(id);
+
+        console.log(items);
         let itemsMap = {} 
         items.forEach(item => {
             let images = BackgroundImage.parseStyle(STRING_TO_CSS(item['background-image']));

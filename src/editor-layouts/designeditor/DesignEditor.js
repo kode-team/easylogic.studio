@@ -23,7 +23,7 @@ import "el/editor/ui/view/ToolBar";
 import "el/editor/ui/view/HorizontalRuler";
 import "el/editor/ui/view/VerticalRuler";
 
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import 'el/plugins';
@@ -38,7 +38,7 @@ export default class DesignEditor extends EditorElement {
 
     this.$editor.initPlugins();
 
-    var $body = Dom.body();
+    var $body = this.opt.$container;
     
     $body.attr('data-theme', this.$editor.theme);
     $body.addClass(navigator.userAgent.includes('Windows') ? 'ua-window': 'ua-default')
@@ -352,6 +352,10 @@ export default class DesignEditor extends EditorElement {
 
   [KEYUP('document') + IF('isNotFormElement')] (e) {
     this.emit('keymap.keyup', e);
+  }
+
+  [SUBSCRIBE('toggle.fullscreen')] () {
+    this.opt.$container.toggleFullscreen();
   }
 }
 

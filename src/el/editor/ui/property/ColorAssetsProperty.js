@@ -3,7 +3,7 @@ import { LOAD, CLICK, DEBOUNCE, DRAGSTART, SUBSCRIBE } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
 import Color from "el/base/Color";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class ColorAssetsProperty extends BaseProperty {
 

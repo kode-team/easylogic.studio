@@ -2,7 +2,7 @@ import { LOAD, SUBSCRIBE } from "el/base/Event";
 import UIElement, { EVENT } from "el/base/UIElement";
 import "./BorderValueEditor";
 import Border from "el/editor/property-parser/Border";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 const borderTypeList = [

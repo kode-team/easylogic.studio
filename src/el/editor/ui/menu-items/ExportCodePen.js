@@ -1,5 +1,5 @@
 import { SUBMIT } from "el/base/Event";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 import ExportManager from "el/editor/manager/ExportManager";
 import { EditorElement } from "../common/EditorElement";

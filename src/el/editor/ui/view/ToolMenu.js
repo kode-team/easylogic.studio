@@ -1,7 +1,7 @@
 
 import "../menu-items/index";
 import { CLICK, SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class ToolMenu extends EditorElement {
@@ -12,7 +12,7 @@ export default class ToolMenu extends EditorElement {
           <div class='draw-items' ref='$items' data-selected-value="${this.$editor.layout}">
 
             <object refClass='SelectTool' />
-            <object refClass='AddArtBoard' />
+            <object refClass='AddArtboard' />
             <span data-item='css'>
               <object refClass='AddRect' />
               <object refClass='AddCircle' />         

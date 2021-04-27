@@ -28,7 +28,7 @@ import "./RangeEditor";
 import "./ColorViewEditor";
 import "./SelectEditor";
 import { filter_list } from "el/editor/util/Resource";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 var specList = {

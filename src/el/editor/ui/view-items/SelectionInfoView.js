@@ -1,17 +1,20 @@
 
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
-import { CLICK, DOMDIFF, END, LOAD, MOVE, POINTERSTART, SUBSCRIBE } from "el/base/Event";
+import { CLICK, DOMDIFF, END, IF, LOAD, MOVE, POINTERSTART, SUBSCRIBE } from "el/base/Event";
 import { vec3 } from "gl-matrix";
 
 export default class SelectionInfoView extends EditorElement {
 
     template() {
-        return /*html*/`
-            <div class='selection-info-view'>
+        return /*html*/`<div class='selection-info-view'></div>`
+    }
 
-            </div>
-        `
+    checkMouseButton (e) {
+
+        // 오른쪽 버튼(context menu)는 실행하지 않는다. 
+        if (e.buttons === 2) return false; 
+        return true; 
     }
 
     /**
@@ -21,7 +24,7 @@ export default class SelectionInfoView extends EditorElement {
      * 
      * @param {PointerEvent} e 
      */
-     [POINTERSTART('$el [data-artboard-title-id]') + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
+     [POINTERSTART('$el [data-artboard-title-id]') + IF('checkMouseButton') + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
         this.startXY = e.xy ; 
         this.initMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
         const id = e.$dt.attr('data-artboard-title-id');        

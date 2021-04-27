@@ -1,5 +1,5 @@
 import { SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import UIElement, { EVENT } from "el/base/UIElement";
 import { EditorElement } from "../common/EditorElement";
 import "./ColorPickerEditor";

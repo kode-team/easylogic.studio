@@ -1,5 +1,6 @@
 import LayerRender from 'el/editor/renderer/HTMLRenderer/LayerRender';
 import { BAR_CHART_TYPE } from './constants';
+import '@toast-ui/chart/dist/toastui-chart.css';
 
 const ChartLayerMemory = {}
   

@@ -38,18 +38,24 @@ const LICENSE = `
 module.exports = {
   // Entry files for our popup and background pages
   entry: {
-    editor: "./src/index.js",
-    player: "./src/index-player.js"    
+    editor: "./src/editor-layouts/designeditor/index.js",
+    player: "./src/editor-layouts/designplayer/index.js",   
+    single: "./src/editor-layouts/singleeditor/index.js",   
   },
   output: {
     library: "EasylogicStudio",
     libraryTarget: "umd",
+    libraryExport : "default",    
     path: __dirname + "/dist",
-    filename: '[name].js'
+    filename: '[name].js',
+    auxiliaryComment: LICENSE
   },
   resolve: { alias },  
   mode: 'production',
   // devtool: 'source-map',
+  optimization: {
+    minimize: true
+  },
   module: {
     rules: [
       {
@@ -65,7 +71,7 @@ module.exports = {
           }, {
             loader: "babel-loader",
             options: {
-              cacheDirectory: true 
+              cacheDirectory: true,
             }
           }
         ]
@@ -135,19 +141,7 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new HtmlWebPackPlugin({
-      inject: true,
-      template: "./src/index.html",
-      filename: "./index.html",
-      excludeChunks: ['player']
-    }),
-    new HtmlWebPackPlugin({
-      inject: true,
-      template: "./src/index.html",
-      filename: "./player.html",
-      excludeChunks: ['editor']
-    }),           
+  plugins: [          
     new MiniCssExtractPlugin({
       filename: "[name].css"
     }),
@@ -159,5 +153,8 @@ module.exports = {
       raw: true,
       entryOnly: true,
     }),    
+    new webpack.optimize.LimitChunkCountPlugin({
+      maxChunks: 1
+    })    
   ]
 };

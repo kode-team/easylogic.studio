@@ -1,5 +1,5 @@
 
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { Length } from "el/editor/unit/Length";
 import RangeEditor from "./RangeEditor";
 

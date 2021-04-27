@@ -4,7 +4,7 @@ import { isUndefined } from "el/base/functions/func";
 import { Length } from "el/editor/unit/Length";
 import { POINTERSTART, MOVE, END, BIND, SUBSCRIBE } from "el/base/Event";
 import "../RangeEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../../common/EditorElement";
 
 export default class CircleEditor extends EditorElement {

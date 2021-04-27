@@ -1,11 +1,6 @@
 import { Component } from "../Component";
 import icon from "el/editor/icon/icon";
-import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "el/base/functions/func";
 import { ComponentManager } from "el/editor/manager/ComponentManager";
-
-const faceKeys = [
-  'front', 'back', 'left', 'right', 'top','bottom'
-]
 
 export class ChartLayer extends Component {
 

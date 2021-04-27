@@ -2,7 +2,7 @@ import { uuid } from "el/base/functions/math";
 
 import { Item } from "el/editor/items/Item";
 import BaseStore from "el/base/BaseStore";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { isArray, isString } from "el/base/functions/func";
 
 
@@ -478,7 +478,7 @@ export const Editor = new class {
     return JSON.parse(window.localStorage.getItem(`easylogic.studio.${key}`) || JSON.stringify(""))
   }  
 
-  registerElement (obj) {
+  registElement (obj) {
     registElement(obj);
   }
 

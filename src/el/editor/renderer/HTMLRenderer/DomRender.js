@@ -511,7 +511,7 @@ export default class DomRender extends ItemRender {
   toStyle (item, renderer) {
     const cssString = this.generateView(item, `.element-item[data-id='${item.id}']`)
     return /*html*/`
-        <style type='text/css' data-id='${item.id}' data-timestamp='${item.timestamp}'>${cssString}</style>
+        <style type='text/css' data-renderer-type="html" data-id='${item.id}' data-timestamp='${item.timestamp}'>${cssString}</style>
     ` + item.layers.map(it => {
       return renderer.toStyle(it, renderer);
     }).join('')

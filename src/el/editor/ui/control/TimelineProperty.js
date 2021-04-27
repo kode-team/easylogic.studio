@@ -10,7 +10,7 @@ import "./timeline/TimelineValueEditor";
 
 import "./timeline/TimelinePlayControl";
 import "../property/TimelineAnimationProperty";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class TimelineProperty extends BaseProperty {
 

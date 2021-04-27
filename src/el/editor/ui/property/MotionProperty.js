@@ -3,7 +3,7 @@ import { DEBOUNCE, SUBSCRIBE } from "el/base/Event";
 
 
 import "../property-editor/OffsetPathListEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 
 export default class MotionProperty extends BaseProperty {

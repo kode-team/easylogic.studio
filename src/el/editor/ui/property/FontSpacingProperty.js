@@ -1,7 +1,7 @@
 import BaseProperty from "./BaseProperty";
 
 import { Length } from "el/editor/unit/Length";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { SUBSCRIBE } from "el/base/Event";
 
 export default class FontSpacingProperty extends BaseProperty {

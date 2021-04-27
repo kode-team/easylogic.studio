@@ -11,7 +11,7 @@ import {
 import icon from "el/editor/icon/icon";
 import { Transition } from "el/editor/property-parser/Transition";
 import { curveToPath } from "el/base/functions/func";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class TransitionProperty extends BaseProperty {
   getTitle() {

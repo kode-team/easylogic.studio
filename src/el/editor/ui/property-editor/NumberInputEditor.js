@@ -1,7 +1,7 @@
 import { Length } from "el/editor/unit/Length";
 import { LOAD, INPUT } from "el/base/Event";
 import icon from "el/editor/icon/icon";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class NumberInputEditor extends EditorElement {

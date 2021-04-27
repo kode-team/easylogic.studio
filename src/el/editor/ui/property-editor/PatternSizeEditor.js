@@ -2,7 +2,7 @@
 import { CLICK, BIND, SUBSCRIBE } from "el/base/Event";
 import { Pattern } from "el/editor/property-parser/Pattern";
 import { Length } from "el/editor/unit/Length";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class PatternSizeEditor extends EditorElement {

@@ -1,7 +1,7 @@
 import BaseProperty from "./BaseProperty";
 
 import { Transform } from "el/editor/property-parser/Transform";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { SUBSCRIBE } from "el/base/Event";
 
 export default class PositionProperty extends BaseProperty {

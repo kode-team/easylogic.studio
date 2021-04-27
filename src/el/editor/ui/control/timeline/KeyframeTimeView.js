@@ -2,7 +2,7 @@ import UIElement, { EVENT } from "el/base/UIElement";
 import { RESIZE, DEBOUNCE, POINTERSTART, MOVE, THROTTLE, IF, END, SUBSCRIBE } from "el/base/Event";
 import { Length } from "el/editor/unit/Length";
 import { second, framesToTimecode } from "el/base/functions/time";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../../common/EditorElement";
 
 const PADDING = 20 

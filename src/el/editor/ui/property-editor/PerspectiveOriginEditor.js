@@ -3,7 +3,7 @@ import { Length } from "el/editor/unit/Length";
 import icon from "el/editor/icon/icon";
 
 import "./RangeEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 const typeList = [

@@ -5,7 +5,7 @@ import Dom from "el/base/Dom";
 import { isArray, isString } from "el/base/functions/func";
 import { Project } from "el/editor/items/Project";
 import HTMLRenderer from "el/editor/renderer/HTMLRenderer";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../../common/EditorElement";
 
 const TEMP_DIV = Dom.create('div')     
@@ -33,7 +33,7 @@ export default class StyleView extends EditorElement {
   refreshStyleHead () {
     var project = this.$selection.currentProject || new Project()
 
-    this.refs.$head.$$(`style`).forEach($style => $style.remove())
+    this.refs.$head.$$(`style[data-renderer-type="html"]`).forEach($style => $style.remove())
 
     // project setting 
     this.changeStyleHead(project)
@@ -60,7 +60,7 @@ export default class StyleView extends EditorElement {
     }
 
     var selector = list.map(it => {
-      return `style[data-id="${it.id}"]`
+      return `style[data-renderer-type="html"][data-id="${it.id}"]`
     }).join(',');
 
     let isChanged = false; 
@@ -131,7 +131,7 @@ export default class StyleView extends EditorElement {
     for(let i = 0, len = items.length; i < len; i++) {
       const item = items[i];
       var selector = item.allLayers.map(it => {
-        return `style[data-id="${it.id}"]`
+        return `style[data-renderer-type="html"][data-id="${it.id}"]`
       }).join(',');
 
       removeStyleSelector.push(selector);

@@ -1,5 +1,5 @@
 import BaseWindow from "./BaseWindow";
-import { registElement } from "el/base/registerElement"
+import { registElement } from "el/base/registElement"
 import { CLICK, SUBSCRIBE } from "el/base/Event";
 
 

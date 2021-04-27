@@ -4,7 +4,7 @@ import { vec3 } from "gl-matrix";
 import { KEY_CODE } from "el/editor/types/key";
 import Resource from "el/editor/util/Resource";
 import Dom from "el/base/Dom";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 import "./render-view/HTMLRenderView";
 import "../view-items/PageTools";

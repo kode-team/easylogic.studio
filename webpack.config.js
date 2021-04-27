@@ -39,7 +39,8 @@ module.exports = {
   // Entry files for our popup and background pages
   entry: {
     editor: "./src/index.js",
-    player: "./src/index-player.js"    
+    player: "./src/index-player.js",    
+    single: "./src/index-single.js"
   },
   output: {
     library: "EasylogicStudio",
@@ -139,14 +140,20 @@ module.exports = {
       inject: true,
       template: "./src/index.html",
       filename: "./index.html",
-      excludeChunks: ['player']
+      excludeChunks: ['player', 'single']
     }),
     new HtmlWebPackPlugin({
       inject: true,
       template: "./src/index.html",
       filename: "./player.html",
-      excludeChunks: ['editor']
+      excludeChunks: ['editor', 'single']
     }),        
+    new HtmlWebPackPlugin({
+      inject: true,
+      template: "./src/index.html",
+      filename: "./single.html",
+      excludeChunks: ['editor', 'player']
+    }),            
     new MiniCssExtractPlugin({
       filename: "[name].css?[contenthash]"
     }),

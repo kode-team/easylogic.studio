@@ -4,7 +4,7 @@ import "../status-bar-items/LanguageSelector";
 import "../status-bar-items/ThemeSwitcher";
 import "../status-bar-items/LayoutSelector";
 import "../status-bar-items/VersionView";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 

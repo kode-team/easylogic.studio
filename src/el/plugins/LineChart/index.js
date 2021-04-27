@@ -23,7 +23,7 @@ export default function (editor) {
     editor.registerRenderer('html', LINE_CHART_TYPE, new LineChartHTMLRender() )    
 
     // register control ui 
-    editor.registerElement({ 
+    editor.registElement({ 
         AddLineChart,
     })
 }

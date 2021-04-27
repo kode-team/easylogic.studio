@@ -1,6 +1,6 @@
 
 import { BIND, SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 const line = (source, target, className = 'base-line') => {
@@ -96,7 +96,7 @@ export default class GuideLineView extends EditorElement {
         })
     }
 
-    [SUBSCRIBE('removeGuideLine')] () {
+    [SUBSCRIBE('removeGuideLine', 'refreshSelection')] () {
         this.removeGuideLine()
     }
 

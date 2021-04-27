@@ -1,5 +1,5 @@
 import { CLICK, LOAD, SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 import icon from "el/editor/icon/icon";
 import { TextShadow } from "el/editor/property-parser/TextShadow";

@@ -31,7 +31,7 @@ export default function (editor) {
     editor.registerRenderer('html', BAR_CHART_TYPE, new BarChartHTMLRender() )    
 
     // register control ui 
-    editor.registerElement({ 
+    editor.registElement({ 
         AddBarChart,
         FontThemeEditor,
         AxisThemeEditor,
@@ -45,6 +45,8 @@ export default function (editor) {
         command: 'addBarChartLayer',
         execute: (editor) => {
             editor.emit('addLayerView', BAR_CHART_TYPE, { 
+
+                'background-color': 'transparent',
                 chartOption: {
                 chart: { 
                     title: 'Monthly Revenue', 

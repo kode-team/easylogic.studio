@@ -5,7 +5,7 @@ import icon from "el/editor/icon/icon";
 
 import Color from "el/base/Color";
 import { Length } from "el/editor/unit/Length";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { KEY_CODE } from "el/editor/types/key";
 
 const DRAG_START_CLASS = 'drag-start'

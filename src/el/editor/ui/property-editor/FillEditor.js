@@ -11,7 +11,7 @@ import { SVGFill } from "el/editor/property-parser/SVGFill";
 import { SVGStaticGradient } from "el/editor/property-parser/image-resource/SVGStaticGradient";
 import { isUndefined } from "el/base/functions/func";
 import "./SelectIconEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 const imageTypeList = [

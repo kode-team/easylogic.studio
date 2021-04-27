@@ -7,7 +7,7 @@ import { Transform } from "el/editor/property-parser/Transform";
 import { TransformOrigin } from "el/editor/property-parser/TransformOrigin";
 import { calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, round } from "el/base/functions/math";
 import { getRotatePointer } from "el/base/functions/collision";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 var directionType = {

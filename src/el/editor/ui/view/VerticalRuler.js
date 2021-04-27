@@ -1,5 +1,5 @@
 import { LOAD, DOMDIFF, SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 import { EditorElement } from "../common/EditorElement";
 
@@ -100,7 +100,7 @@ export default class VerticalRuler extends EditorElement {
         if (!current) return '';
 
         // viewport 
-        const {minY,maxY, height: realHeight} = this.$viewport;
+        const {minY, height: realHeight} = this.$viewport;
         const height = this.state.rect.height;
 
         // current
@@ -113,10 +113,10 @@ export default class VerticalRuler extends EditorElement {
         const secondY = ((currentMaxY - minY)/realHeight) * height; 
 
         return `
-            M 10 ${firstY}
+            M 15 ${firstY}
             L 20 ${firstY}
             L 20 ${secondY}
-            L 10 ${secondY}
+            L 15 ${secondY}
             Z
         `
     }

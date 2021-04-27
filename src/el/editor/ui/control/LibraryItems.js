@@ -1,5 +1,5 @@
 import UIElement, { EVENT } from "el/base/UIElement";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import "el/editor/ui/property";
 import "el/editor/ui/property-editor";
 import { DEBOUNCE, SUBSCRIBE } from "el/base/Event";

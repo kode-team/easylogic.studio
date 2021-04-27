@@ -135,6 +135,16 @@ export class ColorStep extends Item {
     }
   }
 
+  setValue(percent, maxValue) {
+    if (this.isPx) {
+      this.reset({ px: maxValue * percent / 100 })      
+    } else if (this.isPercent) {
+      this.reset({ percent })
+    } else if (this.isEm) {
+      this.reset({ em: (maxValue * percent / 100) / 16 })      
+    }
+  }
+
   static parse(colorStepString) {
     let colorsteps = [];
 

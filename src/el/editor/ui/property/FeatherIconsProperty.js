@@ -1,5 +1,5 @@
 import BaseProperty from "./BaseProperty";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { CLICK, DOMDIFF, LOAD, SUBSCRIBE } from "el/base/Event";
 import { Length } from "el/editor/unit/Length";
 
@@ -79,7 +79,6 @@ export default class FeatherIconsProperty extends BaseProperty {
     var key = e.$dt.data('key');
 
     const center = this.$viewport.center;
-
     this.emit('newComponent', 'template', {
       x: Length.px(center[0] - 100),
       y: Length.px(center[1] - 100),

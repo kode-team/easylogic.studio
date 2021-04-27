@@ -4,7 +4,7 @@ import { LOAD, DEBOUNCE, DRAGSTART, CLICK, SUBSCRIBE } from "el/base/Event";
 import patterns from "el/editor/preset/patterns";
 import { Pattern } from "el/editor/property-parser/Pattern";
 import { CSS_TO_STRING } from "el/base/functions/func";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class PatternAssetsProperty extends BaseProperty {
 

@@ -5,7 +5,7 @@ import { CLICK, SUBSCRIBE } from "el/base/Event";
 import Dom from "el/base/Dom";
 import HTMLRenderer from "el/editor/renderer/HTMLRenderer";
 import SVGRenderer from "el/editor/renderer/SVGRenderer";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class ExportWindow extends BaseWindow {
 

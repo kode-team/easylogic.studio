@@ -9,7 +9,7 @@ import "../property-editor/SelectEditor";
 
 import "../property-editor/EmbedColorPicker";
 import { blend_list } from "el/editor/util/Resource";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 
 export default class BackgroundImagePositionPopup extends BasePopup {

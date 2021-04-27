@@ -4,7 +4,7 @@ import {
 } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 
 export default class BackgroundImageProperty extends BaseProperty {
@@ -71,7 +71,6 @@ export default class BackgroundImageProperty extends BaseProperty {
   }
 
   [SUBSCRIBE('changeBackgroundImage')] (key, value) {
-
     this.command('setAttribute', 'change background image', { 
       [key]: value
     })

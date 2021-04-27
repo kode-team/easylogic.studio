@@ -10,7 +10,7 @@ import {
 import icon from "el/editor/icon/icon";
 import { Animation } from "el/editor/property-parser/Animation";
 import { curveToPath } from "el/base/functions/func";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class AnimationProperty extends BaseProperty {
   getTitle() {

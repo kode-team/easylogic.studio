@@ -1,7 +1,7 @@
 import UIElement, { EVENT } from "el/base/UIElement";
 import { INPUT, LOAD, CLICK, SUBSCRIBE } from "el/base/Event";
 import icon from "el/editor/icon/icon";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class VarEditor extends EditorElement {

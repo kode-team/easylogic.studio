@@ -4,7 +4,7 @@ import { LOAD, INPUT, CLICK, FOCUS, BLUR, POINTERSTART, MOVE, END, THROTTLE, SUB
 import icon from "el/editor/icon/icon";
 import "./SelectEditor";
 import { OBJECT_TO_CLASS } from "el/base/functions/func";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class RangeEditor extends EditorElement {

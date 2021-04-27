@@ -4,7 +4,7 @@ import { Length } from "el/editor/unit/Length";
 import { Transform } from "el/editor/property-parser/Transform";
 import { calculateAnglePointDistance } from "el/base/functions/math";
 import icon from "el/editor/icon/icon";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 const directions = [

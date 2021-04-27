@@ -4,7 +4,7 @@ import icon from "el/editor/icon/icon";
 import "./SelectEditor";
 import "./NumberInputEditor";
 import "./InputRangeEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 const REG_CSS_UNIT = /(auto)|(repeat\([^\)]*\))|(([\d.]+)(px|pt|fr|r?em|deg|vh|vw|%))/gi;

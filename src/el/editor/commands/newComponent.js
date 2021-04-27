@@ -11,11 +11,6 @@ import PathStringManager from "el/editor/parser/PathStringManager";
  * @param {Item} [containerItem=undefined]  상위 부모 객체 
  */
 export default function newComponent (editor, itemType, obj, isSelected = true, containerItem = undefined) {
-
-    if (!itemType.includes('text') && !obj['background-color']) {
-        obj['background-color'] = '#c4c4c4'; //Color.random();
-    } 
-
     if (itemType === 'svg-textpath') {
         obj = {
             ...obj,

@@ -2,7 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE, CLICK, SUBSCRIBE } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 
 export default class TextShadowProperty extends BaseProperty {

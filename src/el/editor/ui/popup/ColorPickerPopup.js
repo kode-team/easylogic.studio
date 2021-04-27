@@ -2,7 +2,7 @@ import UIElement, { EVENT } from "el/base/UIElement";
 import BasePopup from "./BasePopup";
 import "../property-editor/EmbedColorPicker";
 import { LOAD, CLICK, SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class ColorPickerPopup extends BasePopup {
 

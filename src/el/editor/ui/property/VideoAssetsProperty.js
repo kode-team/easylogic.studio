@@ -3,7 +3,7 @@ import { LOAD, CLICK, DOMDIFF, DRAGSTART, CHANGE, SUBSCRIBE } from "el/base/Even
 
 import icon from "el/editor/icon/icon";
 import revokeObjectUrl from "el/editor/util/revokeObjectUrl";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 
 export default class VideoAssetsProperty extends BaseProperty {

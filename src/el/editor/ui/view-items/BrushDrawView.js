@@ -7,7 +7,7 @@ import PathGenerator from "el/editor/parser/PathGenerator";
 import Point from "el/editor/parser/Point";
 import { SVGFill } from "el/editor/property-parser/SVGFill";
 import { SVGBrushItem } from "@items/layers/SVGBrushItem";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 const FIELDS = ['fill', 'stroke-width']

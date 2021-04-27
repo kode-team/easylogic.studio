@@ -1,6 +1,6 @@
 import UIElement, { EVENT } from "el/base/UIElement";
 import { CLICK, LOAD, SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class ClipPathEditor extends EditorElement {

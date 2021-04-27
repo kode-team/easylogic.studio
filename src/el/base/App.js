@@ -4,7 +4,6 @@ import {
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP
 } from "../editor/types/event";
-import { EVENT } from "./UIElement";
 import { debounce } from "./functions/func";
 import { getDist } from "./functions/math";
 

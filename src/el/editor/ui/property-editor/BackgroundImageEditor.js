@@ -6,7 +6,7 @@ import { CSS_TO_STRING, STRING_TO_CSS } from "el/base/functions/func";
 import { LinearGradient } from "el/editor/property-parser/image-resource/LinearGradient";
 import { ColorStep } from "el/editor/property-parser/image-resource/ColorStep";
 import ".";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 const names = {
@@ -47,10 +47,12 @@ export default class BackgroundImageEditor extends EditorElement {
     }
 
     parseBackgroundImage(str) {
+        if (str === '') return [];
         return BackgroundImage.parseStyle(STRING_TO_CSS(str));
     }
 
     setValue (value) {
+        console.log('aaaa', value);
         this.setState({
             value, 
             images : this.parseBackgroundImage(value)
@@ -152,6 +154,7 @@ export default class BackgroundImageEditor extends EditorElement {
     [SUBSCRIBE('add')] () {
 
         this.state.images.push(new BackgroundImage({
+
             image: new LinearGradient({
                 angle: 90,
                 colorsteps: [

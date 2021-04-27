@@ -2,7 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { LOAD, CLICK, DOUBLECLICK, FOCUSOUT, KEY, PREVENT, STOP, DOMDIFF, KEYDOWN, DEBOUNCE, ENTER, SUBSCRIBE } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class TimelineAnimationProperty extends BaseProperty {
   getTitle() {

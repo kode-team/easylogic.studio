@@ -5,7 +5,7 @@ import {
 
 import icon from "el/editor/icon/icon";
 import { filter_list } from "el/editor/util/Resource";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class BackdropFilterProperty extends BaseProperty {
 

@@ -1,7 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
 
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class TransformOriginProperty extends BaseProperty {
 

@@ -3,7 +3,7 @@ import { LOAD, SUBSCRIBE } from "el/base/Event";
 import "./SelectEditor";
 import "./TextEditor";
 import "./NumberRangeEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class FuncFilterEditor extends EditorElement {

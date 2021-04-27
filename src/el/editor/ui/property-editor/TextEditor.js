@@ -1,5 +1,5 @@
 import { BIND, INPUT } from "el/base/Event";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class TextEditor extends EditorElement {
@@ -18,7 +18,9 @@ export default class TextEditor extends EditorElement {
         return /*html*/`
             <div class='text-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : '' }
-                <input type='text' ref='$text' value="${value}" />
+                <div>
+                    <input type='text' ref='$text' value="${value}" />
+                </div>
             </div>
         `
     }

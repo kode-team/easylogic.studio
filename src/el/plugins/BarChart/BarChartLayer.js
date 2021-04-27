@@ -15,6 +15,7 @@ export class BarChartLayer extends Component {
       chartType: 'BarChart',
       chartOption: {},
       chartData: {},
+      'background-color': 'transparent',
       ...obj
     }); 
   }

@@ -14,7 +14,7 @@ import UIElement, { EVENT } from "el/base/UIElement";
 import "./RangeEditor";
 import { Length } from "el/editor/unit/Length";
 import "./NumberInputEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 var transformList = [

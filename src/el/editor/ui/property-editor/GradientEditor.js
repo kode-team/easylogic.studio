@@ -9,7 +9,7 @@ import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
 import icon from "el/editor/icon/icon";
 import { clone } from "el/base/functions/func";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 var radialTypeList = [
@@ -353,7 +353,7 @@ export default class GradientEditor extends EditorElement  {
       var selected = this.$selection.isSelectedColorStep(it.id) ? 'selected' : '';
 
       return /*html*/`
-      <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' style='left: ${it.percent}%;'>
+      <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' style='left: ${it.toLength()};'>
         <div class='color-view' style="background-color: ${it.color}"></div>
         <div class='arrow' style="background-color: ${it.color}"></div>
       </div>`
@@ -429,8 +429,7 @@ export default class GradientEditor extends EditorElement  {
     else if (x > maxX) x = maxX
     var percent = (x - minX) / rect.width * 100;
 
-
-    this.currentStep.percent = percent;
+    this.currentStep.setValue(percent, rect.width)
 
     this.children.$range.setValue(Length.percent(percent));    
     this.state.image.sortColorStep();

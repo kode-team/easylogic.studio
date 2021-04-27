@@ -4,7 +4,7 @@ import { LOAD, CLICK, INPUT, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { SVGFilter } from "el/editor/property-parser/SVGFilter";
 import { uuidShort } from "el/base/functions/math";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 
 export default class SVGFilterAssetsProperty extends BaseProperty {

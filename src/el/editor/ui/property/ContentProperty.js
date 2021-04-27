@@ -2,7 +2,7 @@ import BaseProperty from "./BaseProperty";
 import { INPUT, BIND, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
 
 
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 
 export default class ContentProperty extends BaseProperty {
   getTitle() {

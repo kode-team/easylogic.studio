@@ -2,7 +2,7 @@ import UIElement, { EVENT } from "el/base/UIElement";
 import { LOAD, SUBSCRIBE } from "el/base/Event";
 import { CSS_TO_STRING, STRING_TO_CSS } from "el/base/functions/func";
 import "./SelectIconEditor";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class FlexLayoutEditor extends EditorElement {

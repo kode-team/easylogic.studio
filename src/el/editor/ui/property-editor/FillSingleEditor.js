@@ -1,6 +1,6 @@
 import { CLICK, BIND, SUBSCRIBE } from "el/base/Event";
 import { SVGFill } from "el/editor/property-parser/SVGFill";
-import { registElement } from "el/base/registerElement";
+import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 export default class FillSingleEditor extends EditorElement {

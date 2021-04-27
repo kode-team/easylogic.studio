@@ -22,7 +22,7 @@ export default function (editor) {
     editor.registerRenderer('html', SIMPLE_TYPE, new SimpleHTMLRender() )
 
     // register control ui 
-    editor.registerElement({ 
+    editor.registElement({ 
         AddSimplePlugin,
         SimpleEditor
     })
