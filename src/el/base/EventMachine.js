@@ -521,6 +521,9 @@ export default class EventMachine {
   isMetaKey(e) {
     return e.metaKey || e.key == 'Meta' || e.code.indexOf('Meta') > -1 ;
   }
+  isMouseLeftButton(e) {
+    return e.buttons === 1;     // 1 is left button 
+  }
 
   /** before check method */
 

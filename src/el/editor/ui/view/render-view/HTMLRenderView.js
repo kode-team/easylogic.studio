@@ -87,12 +87,6 @@ export default class HTMLRenderView extends EditorElement {
     }
 
     checkEmptyElement (e) {
-
-        // 마우스 버튼 타입이 2인 경우 
-        // right 버튼이므로 contextmenu 가 펼쳐진다. 
-        // 해제하자. 
-        if (e.buttons === 2) return false; 
-
         var $el = Dom.create(e.target)
 
         const mousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);        
@@ -153,7 +147,6 @@ export default class HTMLRenderView extends EditorElement {
     }
 
     [POINTERSTART('$body') + IF('checkEmptyElement') + MOVE('movePointer') + END('moveEndPointer')] (e) {
-        console.log(e);
         this.$target = Dom.create(e.target);
 
         this.dragXY =  {x: e.xy.x, y: e.xy.y}; 
@@ -356,12 +349,6 @@ export default class HTMLRenderView extends EditorElement {
      * @param {PointerEvent} e 
      */
     checkEditMode (e) {
-
-        // 마우스 버튼 타입이 2인 경우 
-        // right 버튼이므로 contextmenu 가 펼쳐진다. 
-        // 해제하자. 
-        if (e.buttons === 2) return false; 
-
         const mousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
         if (this.$selection.hasPoint(mousePoint)) {
             return true;            
@@ -411,7 +398,10 @@ export default class HTMLRenderView extends EditorElement {
      * 
      * @param {PointerEvent} e 
      */
-    [POINTERSTART('$view') + IF('checkEditMode')  + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
+    [POINTERSTART('$view') + IF('checkEditMode')  
+        + MOVE('calculateMovedElement') 
+        + END('calculateEndedElement')
+    ] (e) {
         this.startXY = e.xy ; 
         this.initMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
         let isInSelectedArea = this.$selection.hasPoint(this.initMousePoint)

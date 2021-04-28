@@ -6,7 +6,7 @@ export const makeEventChecker = (value, split = CHECK_SAPARATOR) => {
 }
 
 // event name regular expression
-export const CHECK_DOM_EVENT_PATTERN = /^dom (.*)/gi;
+export const CHECK_DOM_EVENT_PATTERN = /^domevent (.*)/gi;
 export const CHECK_LOAD_PATTERN = /^load (.*)/gi;
 export const CHECK_BIND_PATTERN = /^bind (.*)/gi;
 export const CHECK_SUBSCRIBE_PATTERN = /^subscribe (.*)/gi;
@@ -28,7 +28,7 @@ export const ON = EVENT
 
 export const NAME_SAPARATOR = ":";
 export const CHECK_SAPARATOR = "|";
-export const DOM_EVENT_SAPARATOR = "dom ";
+export const DOM_EVENT_SAPARATOR = "domevent ";
 export const LOAD_SAPARATOR = "load ";
 export const BIND_SAPARATOR = "bind ";
 export const SUBSCRIBE_SAPARATOR = "subscribe ";
@@ -47,6 +47,73 @@ const DOM_EVENT_MAKE = (...keys) => {
 const SUBSCRIBE_EVENT_MAKE = (...args) => {
   return SUBSCRIBE_SAPARATOR + args.join(CHECK_SAPARATOR);
 }
+
+
+// Predefined CHECKER
+export const CHECKER = (value, split = CHECK_SAPARATOR) => {
+  return makeEventChecker(value, split);
+};
+
+export const AFTER = (value, split = CHECK_SAPARATOR) => {
+  return makeEventChecker(`after(${value})`, split);
+};
+
+export const BEFORE = (value, split = CHECK_SAPARATOR) => {
+  return makeEventChecker(`before(${value})`, split);  
+};
+
+export const IF = CHECKER;
+export const KEY = CHECKER; 
+
+export const ARROW_UP = CHECKER('ArrowUp');
+export const ARROW_DOWN = CHECKER('ArrowDown');
+export const ARROW_LEFT = CHECKER('ArrowLeft');
+export const ARROW_RIGHT = CHECKER('ArrowRight');
+export const ENTER = CHECKER('Enter');
+export const SPACE = CHECKER('Space');
+export const ESCAPE = CHECKER('Escape');
+
+export const ALT = CHECKER("isAltKey");
+export const SHIFT = CHECKER("isShiftKey");
+export const META = CHECKER("isMetaKey");
+export const CONTROL = CHECKER("isCtrlKey");
+export const SELF = CHECKER("self");
+export const LEFT_BUTTON = CHECKER("isMouseLeftButton")
+
+export const FIT = CHECKER("fit");
+export const PASSIVE = CHECKER("passive");
+export const DOMDIFF = CHECKER('domdiff');
+
+// event config method
+export const DEBOUNCE = (t = 100) => {
+  return CHECKER(`debounce(${t})`);
+};
+
+export const DELAY = (t = 300) => {
+  return CHECKER(`delay(${t})`);
+};
+
+export const D1000 = DEBOUNCE(1000)
+
+export const THROTTLE = (t = 100) => {
+  return CHECKER(`throttle(${t})`);
+};
+
+export const CAPTURE = CHECKER("capture()");
+// event config method
+
+// before method
+
+// after method
+export const MOVE = (method = "move") => {
+  return AFTER(`bodyMouseMove ${method}`);
+};
+export const END = (method = "end") => {
+  return AFTER(`bodyMouseUp ${method}`);
+};
+
+export const PREVENT = AFTER(`preventDefault`);
+export const STOP = AFTER(`stopPropagation`);
 
 export const SUBSCRIBE = SUBSCRIBE_EVENT_MAKE;
 export const CUSTOM = DOM_EVENT_MAKE;
@@ -85,7 +152,14 @@ export const PASTE = DOM_EVENT_MAKE("paste");
 export const RESIZE = DOM_EVENT_MAKE("resize");
 export const SCROLL = DOM_EVENT_MAKE("scroll");
 export const SUBMIT = DOM_EVENT_MAKE("submit");
-export const POINTERSTART = CUSTOM("pointerdown");
+
+// pointerstart 의 경우 drag 를 위한 시작점이기 때문에  left button 만 허용한다. 
+// context 메뉴나 wheel 은 허용하지 않는다. 
+export const POINTERSTART = (...args) => {
+  return (CUSTOM("pointerdown")(...args) + LEFT_BUTTON);
+}
+// 
+
 export const POINTEROVER = CUSTOM("pointerover");
 export const POINTERENTER = CUSTOM("pointerenter");
 export const POINTEROUT = CUSTOM("pointerout");
@@ -102,70 +176,6 @@ export const TRANSITIONRUN = DOM_EVENT_MAKE('transitionrun');
 export const TRANSITIONCANCEL = DOM_EVENT_MAKE('transitioncancel');
 export const DOUBLETAB = CUSTOM('doubletab')
 
-// Predefined CHECKER
-export const CHECKER = (value, split = CHECK_SAPARATOR) => {
-  return makeEventChecker(value, split);
-};
-
-export const AFTER = (value, split = CHECK_SAPARATOR) => {
-  return makeEventChecker(`after(${value})`, split);
-};
-
-export const BEFORE = (value, split = CHECK_SAPARATOR) => {
-  return makeEventChecker(`before(${value})`, split);  
-};
-
-export const IF = CHECKER;
-export const KEY = CHECKER; 
-
-export const ARROW_UP = CHECKER('ArrowUp');
-export const ARROW_DOWN = CHECKER('ArrowDown');
-export const ARROW_LEFT = CHECKER('ArrowLeft');
-export const ARROW_RIGHT = CHECKER('ArrowRight');
-export const ENTER = CHECKER('Enter');
-export const SPACE = CHECKER('Space');
-export const ESCAPE = CHECKER('Escape');
-
-export const ALT = CHECKER("isAltKey");
-export const SHIFT = CHECKER("isShiftKey");
-export const META = CHECKER("isMetaKey");
-export const CONTROL = CHECKER("isCtrlKey");
-export const SELF = CHECKER("self");
-
-export const FIT = CHECKER("fit");
-export const PASSIVE = CHECKER("passive");
-export const DOMDIFF = CHECKER('domdiff');
-
-// event config method
-export const DEBOUNCE = (t = 100) => {
-  return CHECKER(`debounce(${t})`);
-};
-
-export const DELAY = (t = 300) => {
-  return CHECKER(`delay(${t})`);
-};
-
-export const D1000 = DEBOUNCE(1000)
-
-export const THROTTLE = (t = 100) => {
-  return CHECKER(`throttle(${t})`);
-};
-
-export const CAPTURE = CHECKER("capture()");
-// event config method
-
-// before method
-
-// after method
-export const MOVE = (method = "move") => {
-  return AFTER(`bodyMouseMove ${method}`);
-};
-export const END = (method = "end") => {
-  return AFTER(`bodyMouseUp ${method}`);
-};
-
-export const PREVENT = AFTER(`preventDefault`);
-export const STOP = AFTER(`stopPropagation`);
 
 // Predefined LOADER
 export const LOAD = (value = "$el") => {

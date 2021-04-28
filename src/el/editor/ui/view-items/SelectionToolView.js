@@ -1,5 +1,5 @@
 
-import { POINTERSTART, POINTEROVER, POINTEROUT, MOVE, END, IF, PREVENT, KEYDOWN, SUBSCRIBE } from "el/base/Event";
+import { POINTERSTART, POINTEROVER, POINTEROUT, MOVE, END, IF, PREVENT, SUBSCRIBE } from "el/base/Event";
 import { Length } from "el/editor/unit/Length";
 import { clone} from "el/base/functions/func";
 import { mat4, vec3 } from "gl-matrix";
