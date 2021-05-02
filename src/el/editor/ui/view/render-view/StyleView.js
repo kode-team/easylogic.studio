@@ -39,7 +39,7 @@ export default class StyleView extends EditorElement {
     this.changeStyleHead(project)
 
     // artboard setting 
-    project.layers.forEach(item => this.changeStyleHead(item))
+    project.artboards.forEach(item => this.changeStyleHead(item))
   }
 
   changeStyleHead (item) {

@@ -42,7 +42,7 @@ export default class ProjectRender extends DomRender {
         const rootVariable = this.toRootVariableCSS(item);
 
         return /*html*/`
-        <style type='text/css' data-id='${item.id}'>
+        <style type='text/css' data-renderer-type="html" data-id='${item.id}'>
             :root {
                 ${CSS_TO_STRING(rootVariable)}
             }

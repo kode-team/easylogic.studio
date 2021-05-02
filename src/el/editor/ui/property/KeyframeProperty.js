@@ -13,7 +13,7 @@ import {
 import { Keyframe } from "el/editor/property-parser/Keyframe";
 import { registElement } from "el/base/registElement";
 
-export default class KeyFrameProperty extends BaseProperty {
+export default class KeyframeProperty extends BaseProperty {
   getTitle() {
     return this.$i18n('keyframe.property.title');
   }
@@ -133,7 +133,7 @@ export default class KeyFrameProperty extends BaseProperty {
   }
 
   [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)] () {
-    this.refreshShowIsNot('project');
+    this.refreshShowIsNot(['project']);
   }
 
 
@@ -236,4 +236,4 @@ export default class KeyFrameProperty extends BaseProperty {
 
 }
 
-registElement({ KeyFrameProperty })
+registElement({ KeyframeProperty })

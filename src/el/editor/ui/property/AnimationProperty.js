@@ -26,6 +26,10 @@ export default class AnimationProperty extends BaseProperty {
     `;
   }
 
+  isFirstShow() {
+    return true;
+  }
+
 
   [LOAD("$animationList") + DOMDIFF]() {
     var current = this.$selection.current;
@@ -180,11 +184,15 @@ export default class AnimationProperty extends BaseProperty {
 
       if (this.current) {
 
-        this.current.reset({
+        this.command("setAttribute", "change animation property", { 
           animation: Animation.replace(this.current.animation, this.selectedIndex, this.currentAnimation)
         })
 
-        this.emit("refreshElement", this.current);        
+        // this.current.reset({
+        //   animation: Animation.replace(this.current.animation, this.selectedIndex, this.currentAnimation)
+        // })
+
+        // this.emit("refreshElement", this.current);        
         this.refresh();
       }
     }

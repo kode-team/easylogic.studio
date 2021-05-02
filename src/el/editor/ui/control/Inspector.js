@@ -110,10 +110,10 @@ export default class Inspector extends EditorElement {
               </div>                   
               <div class='tab-content scrollbar' data-value='3'>
                 <!--object refClass="MotionProperty" /-->
-                <!-- SelectorProperty" /> --> 
                 <object refClass="TransitionProperty" />                            
                 <object refClass="AnimationProperty" />
                 <object refClass="KeyframeProperty" />                          
+                <object refClass="SelectorProperty" />
                 <div class='empty'></div>                
               </div>                        
               <div class="tab-content" data-value="5">
