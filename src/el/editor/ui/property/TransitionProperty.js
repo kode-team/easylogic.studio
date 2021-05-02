@@ -28,6 +28,10 @@ export default class TransitionProperty extends BaseProperty {
     `;
   }
 
+  isFirstShow() {
+    return true;
+  }
+
   [LOAD("$transitionList") + DOMDIFF]() {
     var current = this.$selection.current;
 
@@ -65,7 +69,7 @@ export default class TransitionProperty extends BaseProperty {
   }
 
   [SUBSCRIBE('refreshSelection')]() {
-    this.refreshShowIsNot(['project']);
+    this.refreshShowIsNot([]);
   }
 
 

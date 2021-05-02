@@ -279,11 +279,6 @@ export default class CubicBezierEditor extends EditorElement {
         }
 
         var y = p.y;
-        if (0 > y) {
-            y = 0;
-        } else if (p.y > document.body.clientHeight) {
-            y = document.body.clientHeight;
-        }
 
         y -= minY;
 
@@ -294,7 +289,7 @@ export default class CubicBezierEditor extends EditorElement {
 
         return { 
             x : div(x, width), 
-            y : (y == height ) ? 0 : (height-y) / height 
+            y : (y == height ) ? 0 : div((height - y), height)
         };
     }
 

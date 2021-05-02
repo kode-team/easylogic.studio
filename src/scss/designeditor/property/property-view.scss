@@ -26,8 +26,9 @@
     position: absolute;
     left: 10px;
     top: 50%;
-    display: inline-block;
+    display: none;
     vertical-align: middle;
+
 
     width: 7px;
     height: 7px;
@@ -86,6 +87,7 @@
   }
 
   &.show {    
+    display: block;
     > .property-title {
       // box-shadow: 0 1px 5px 0px black;      
       > label {
@@ -140,6 +142,7 @@
 
       &.has-keyframe {
         padding-left: 12px;
+        padding-left: 0px;
       }
     }
 
@@ -204,8 +207,7 @@
 
       &.animation-property-item {
         display: grid;
-        grid-template-columns: 14px 1fr;
-        grid-column-gap: 2px; 
+        grid-template-columns: 1fr;
 
         &.has-label {
           grid-template-columns: 80px 1fr;
