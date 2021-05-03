@@ -183,6 +183,21 @@
       bottom: $footer-height;
       position: absolute;
       // transition: bottom 0.05s linear;
+
+      .body-panel {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        bottom: 0px;
+        right: 0px;
+
+        &:not(.ruler) {
+          > .page-container {
+            left: 0px !important;
+            top: 0px !important;
+          }
+        }        
+      }
     }
   }
 }

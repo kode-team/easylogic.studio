@@ -186,7 +186,15 @@ export default class HorizontalRuler extends EditorElement {
                 <path d="${this.makeRulerForCurrent()}" fill="rgba(100, 255, 255, 0.5)" />
             </svg>
         `
-    }    
+    }  
+    
+    refresh() {
+
+        if (this.$config.get('ruler.show')) {
+            this.load();
+        }
+
+    }
 
     [SUBSCRIBE('updateViewport')] () {
         this.refresh();      

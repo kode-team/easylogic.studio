@@ -13,6 +13,7 @@ export class ConfigManager {
         this.set('grid.preview.position', []);
         this.set('debug', false);
         this.set('fixedAngle', 15);
+        this.set('ruler.show', true);
     }
 
     /**
@@ -28,8 +29,12 @@ export class ConfigManager {
         const oldValue = this.config[key]
         if (oldValue != value) {
             this.config[key] = value; 
-            this.editor.emit("config:" + key);            
+            this.editor.emit("config:" + key);
         }
+    }
+
+    toggle(key) {
+        this.set(key, !this.get(key));
     }
 
     remove (key) {

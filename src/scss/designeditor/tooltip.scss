@@ -27,6 +27,7 @@
         top: 110%;
         transform: translateX(-50%);     
         z-index: 10000;        
+        white-space: nowrap;
     }
 
     &[data-direction="right"] {
@@ -59,4 +60,15 @@
           transform: translateX(-50%);
         }
     }
+
+    &[data-direction="top"] {
+
+      &:after {              
+        position: absolute;
+        right: auto;
+        left: 50%;
+        top: 0%;
+        transform: translateX(-50%) translateY(-150%);
+      }
+  }    
 }

@@ -185,8 +185,15 @@ export default class VerticalRuler extends EditorElement {
         `
     }    
 
+    refresh() {
+        if (this.$config.get('ruler.show')) {
+            this.load();
+        }
+
+    }    
+
     [SUBSCRIBE('updateViewport')] () {
-        this.refresh();      
+        this.refresh();
     }
 
     [SUBSCRIBE('refreshSelection', 'refreshRect')] () {

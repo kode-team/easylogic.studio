@@ -1,14 +1,11 @@
 import Dom from "el/base/Dom";
 
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, KEYDOWN, KEYUP, IF, POINTERSTART, MOVE, BIND, CLICK, THROTTLE, SUBSCRIBE, END } from "el/base/Event";
+import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, MOVE, BIND, CLICK, THROTTLE, SUBSCRIBE, END } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
 import { Length } from "el/editor/unit/Length";
 
 import "el/editor/items";
-import "el/editor/ui/popup";  
-
-import "el/editor/ui/window-list";
 import "el/editor/ui/control";
 
 import "el/editor/ui/view/CanvasView";
@@ -17,19 +14,19 @@ import "el/editor/ui/view/LogoView";
 import "el/editor/ui/view/ExternalToolMenu";
 import "el/editor/ui/view/StatusBar";
 import "el/editor/ui/view/PreviewToolMenu";
-import "el/editor/ui/view/NotificationView";
 import "el/editor/ui/view-items/PageSubEditor";
 import "el/editor/ui/view/ToolBar";
 import "el/editor/ui/view/HorizontalRuler";
 import "el/editor/ui/view/VerticalRuler";
 
+import "./BodyPanel";
+import "./PopupManager";
+import "./KeyboardManager";
+
 import { registElement } from "el/base/registElement";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import 'el/plugins';
-
-
-const formElements = ['TEXTAREA', 'INPUT', 'SELECT']
 
 export default class DesignEditor extends EditorElement {
   
@@ -50,7 +47,7 @@ export default class DesignEditor extends EditorElement {
       hideRightPanel: false,
       leftSize: 340,
       rightSize: 260,
-      bottomSize: 30,
+      bottomSize: 0,
       lastBottomSize: 150
     }
   }
@@ -71,9 +68,7 @@ export default class DesignEditor extends EditorElement {
   
           </div>        
           <div class="layout-body" ref='$bodyPanel'>
-            <object refClass='HorizontalRuler' />
-            <object refClass='VerticalRuler' />
-            <object refClass='CanvasView' />        
+            <object refClass="BodyPanel" ref="$bodyPanelView" />
           </div>                           
           <div class='layout-left' ref='$leftPanel'>
             <object refClass='ObjectList' />
@@ -90,30 +85,9 @@ export default class DesignEditor extends EditorElement {
           <button type="button" class='toggleLeft' ref='$toggleLeftButton'></button>
           <button type="button" class='toggleRight' ref='$toggleRightButton'></button>
         </div>
-        
         <object refClass='StatusBar' />
-        <object refClass='Test' />
-        <object refClass='ColorPickerPopup' />
-        <object refClass='BoxShadowPropertyPopup' />
-        <object refClass='BackgroundImagePositionPopup' />
-        <object refClass='TextShadowPropertyPopup' />
-        <object refClass='AnimationPropertyPopup' />
-        <object refClass='TransitionPropertyPopup' />
-        <object refClass='KeyframePopup' />
-        <object refClass='ClipPathPopup' />
-        <object refClass='SVGPropertyPopup' />
-        <object refClass='SelectorPopup' />
-        <object refClass='ImageSelectPopup' />
-        <object refClass='GradientPickerPopup' />
-        <object refClass='FillPickerPopup' />
-        <object refClass='PatternInfoPopup' />
-        <object refClass='SVGFilterPopup' />
-        <object refClass='ExportWindow' />
-        <object refClass='ShortcutWindow' />
-        <!-- LoginWindow / -->
-        <!-- SignWindow / -->
-        <!-- ImageFileView / -->
-        <object refClass='NotificationView' />
+        <object refClass="PopupManager" />  
+        <object refClass="KeyboardManager" />                
       </div>
     `;
   }
@@ -321,6 +295,7 @@ export default class DesignEditor extends EditorElement {
 
   [TRANSITIONEND('$el .layout-footer')] (e) {
     this.emit('toggleFooterEnd');
+
   }
 
   [SUBSCRIBE('refreshAll')] () {
@@ -337,25 +312,8 @@ export default class DesignEditor extends EditorElement {
   [DROP('$middle') + PREVENT] (e) {}
   /** 드랍존 설정을 위해서 남겨놔야함 */  
 
-  isNotFormElement(e) {
-    var tagName = e.target.tagName;
-
-    if (formElements.includes(tagName)) return false; 
-    else if (Dom.create(e.target).attr('contenteditable') === 'true') return false; 
-
-    return true;
-  }  
-
-  [KEYDOWN('document') + IF('isNotFormElement')] (e) {
-    this.emit('keymap.keydown', e);
-  }
-
-  [KEYUP('document') + IF('isNotFormElement')] (e) {
-    this.emit('keymap.keyup', e);
-  }
-
   [SUBSCRIBE('toggle.fullscreen')] () {
-    this.opt.$container.toggleFullscreen();
+    this.$el.toggleFullscreen();
   }
 }
 

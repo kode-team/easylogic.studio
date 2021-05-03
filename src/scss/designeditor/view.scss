@@ -11,6 +11,7 @@ $editor-ruler-size: 20px;
   right: 0px;
   height: $editor-ruler-size;
   background-color: var(--background-color);
+  z-index: 0;
 
   .horizontal-ruler-container {
     position: absolute;
@@ -36,6 +37,7 @@ $editor-ruler-size: 20px;
   bottom: 0px;
   background-color: var(--background-color);
   box-sizing: border-box;
+  z-index: 0;  
 
   .vertical-ruler-container {
     position: absolute;
@@ -71,6 +73,7 @@ $editor-ruler-size: 20px;
   outline: none;
   background-color: white; 
   touch-action: pinch-zoom;
+  z-index: 1;
 }
 
 
@@ -118,6 +121,11 @@ $editor-ruler-size: 20px;
   border: 1px solid var(--border-color);
   color: var(--font-color);
   background-color: var(--background-color);
+
+  > * {
+    position: relative;
+    display: inline-block;
+  }
 
   >label {
     vertical-align: middle;

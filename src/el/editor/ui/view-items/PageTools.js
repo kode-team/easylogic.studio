@@ -19,7 +19,9 @@ export default class PageTools extends EditorElement {
         </div>
         <label>%</label>
         <button type='button' ref='$plus'>${icon.add}</button>        
-        <button type='button' ref='$center'>${icon.gps_fixed}</button>                
+        <button type='button' ref='$center' data-tooltip="Move to Center" data-direction="top">${icon.gps_fixed}</button>    
+        <button type='button' ref='$ruler' data-tooltip="Toggle Ruler" data-direction="top">${icon.straighten}</button>    
+        <button type='button' ref='$fullscreen' data-tooltip="FullScreen Canvas" data-direction="top">${icon.fullscreen}</button>                        
       </div>
 
     `;
@@ -55,6 +57,15 @@ export default class PageTools extends EditorElement {
   [CLICK('$center') + PREVENT + STOP] () {
     this.emit('moveSelectionToCenter');
   }
+
+  [CLICK('$ruler') + PREVENT + STOP] () {
+    this.$config.toggle('ruler.show');
+  }
+
+  [CLICK('$fullscreen') + PREVENT + STOP] () {
+    this.emit('bodypanel.toggle.fullscreen');
+  }
+
 
 }
 
