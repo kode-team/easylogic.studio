@@ -159,6 +159,8 @@ import line_chart from "./line_chart";
 import bar_chart from "./bar_chart";
 import plugin from "./plugin";
 import straighten from "./straighten";
+import left_hide from "./left_hide";
+import right_hide from "./right_hide";
 
 const alias = {
   fullscreen:  border_inner
@@ -167,6 +169,8 @@ const alias = {
 
 export default {
   ...alias,
+  left_hide,
+  right_hide,
   bar_chart,
   straighten,
   plugin,

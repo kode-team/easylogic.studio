@@ -14,6 +14,8 @@ export class ConfigManager {
         this.set('debug', false);
         this.set('fixedAngle', 15);
         this.set('ruler.show', true);
+        this.set('show.left.panel', true);
+        this.set('show.right.panel', true);
     }
 
     /**
@@ -35,6 +37,14 @@ export class ConfigManager {
 
     toggle(key) {
         this.set(key, !this.get(key));
+    }
+
+    true(key) {
+        return this.get(key) === true;
+    }
+
+    false(key) {
+        return this.get(key) === false;
     }
 
     remove (key) {

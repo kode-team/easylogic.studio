@@ -1,74 +1,90 @@
 [data-tooltip] {
-    &:hover {
-        &:after {
-          opacity: 1;
-        }
-    }
-
+  &:hover {
     &:after {
-        pointer-events: none;
-        content: attr(data-tooltip);
-        display: block;
-        text-align: center;
-        color: var(--tooltip-font-color);
-        font-size: 10px;
-        font-weight: 400;      
-        background-color: var(--tooltip-background-color);
-        box-sizing: border-box;
-        padding: 4px 5px;
-        border-radius: 2px;
-        opacity: 0;
-        transition: all 0.1s linear;
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);         
-        position: absolute;
-        right: auto;
-        left: 50%;
-        top: 110%;
-        transform: translateX(-50%);     
-        z-index: 10000;        
-        white-space: nowrap;
+      opacity: 1;
     }
+  }
 
-    &[data-direction="right"] {
+  &:after {
+    pointer-events: none;
+    content: attr(data-tooltip);
+    display: block;
+    text-align: center;
+    color: var(--tooltip-font-color);
+    font-size: 10px;
+    font-weight: 400;
+    background-color: var(--tooltip-background-color);
+    box-sizing: border-box;
+    padding: 4px 5px;
+    border-radius: 2px;
+    opacity: 0;
+    transition: all 0.1s linear;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    position: absolute;
+    right: auto;
+    left: 50%;
+    top: 110%;
+    transform: translateX(-50%);
+    z-index: 1000000;
+    white-space: nowrap;
+  }
 
-        &:after {              
-          position: absolute;
-          left: 120%;
-          top: 50%;
-          transform: translateY(-50%);
-        }
+  &[data-direction="right"] {
+    &:after {
+      position: absolute;
+      left: 120%;
+      top: 50%;
+      transform: translateY(-50%);
     }
+  }
 
-    &[data-direction="left"] {
-
-        &:after {              
-          position: absolute;
-          right: 120%;
-          top: 50%;
-          transform: translateY(-50%);
-        }
+  &[data-direction="left"] {
+    &:after {
+      position: absolute;
+      right: 120%;
+      top: 50%;
+      transform: translateY(-50%);
     }
+  }
 
-    &[data-direction="bottom"] {
-
-        &:after {              
-          position: absolute;
-          right: auto;
-          left: 50%;
-          top: 100%;
-          transform: translateX(-50%);
-        }
+  &[data-direction="bottom"] {
+    &:after {
+      position: absolute;
+      right: auto;
+      left: 50%;
+      top: 100%;
+      transform: translateX(-50%);
     }
+  }
 
-    &[data-direction="top"] {
+  &[data-direction="top"] {
+    &:after {
+      position: absolute;
+      right: auto;
+      left: 50%;
+      top: 0%;
+      transform: translateX(-50%) translateY(-150%);
+    }
+  }
 
-      &:after {              
-        position: absolute;
-        right: auto;
-        left: 50%;
-        top: 0%;
-        transform: translateX(-50%) translateY(-150%);
-      }
-  }    
+  &[data-direction="top left"] {
+    &:after {
+      position: absolute;
+      right: auto;
+      left: 0%;
+      top: 0%;
+      transform: translateY(-150%);
+    }
+  }
+
+  &[data-direction="top right"] {
+    &:after {
+      position: absolute;
+      right: 0%;
+      left: auto;
+      top: 0%;
+      transform: translateY(-150%);
+    }
+  }  
 }

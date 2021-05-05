@@ -7,11 +7,29 @@ import "el/editor/ui/view/VerticalRuler";
 import { registElement } from "el/base/registElement";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import { css } from "@emotion/css";
+
+
+const elClass = css`
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+
+  &:not(.ruler) {
+    > .page-container {
+      left: 0px !important;
+      top: 0px !important;
+    }
+  }
+`
+
 export default class BodyPanel extends EditorElement {
 
   template() {
     return /*html*/`
-      <div class="body-panel" ref='$bodyPanel'>
+      <div class="body-panel">
         <object refClass='HorizontalRuler' />
         <object refClass='VerticalRuler' />
         <object refClass='CanvasView' />        
@@ -21,9 +39,7 @@ export default class BodyPanel extends EditorElement {
 
   [BIND('$el')] () { 
     return {
-      class: {
-       ruler:  this.$config.get('ruler.show')
-      }
+        class: `${elClass} ${this.$config.get('ruler.show') ? 'ruler' : ''}`
     }
   }  
 

@@ -32,7 +32,7 @@ const applyElementAttribute = ($element, key, value) => {
     //  "class" : 'string-class' 
 
     if (isArray(value)) {
-      $element.addClass(...value);
+      $element.addClass(...value.filter(Boolean));
     } else if (isObject(value)) {
       const keys = Object.keys(value);
       for(var i = 0, len = keys.length; i < len; i++) {
@@ -42,7 +42,7 @@ const applyElementAttribute = ($element, key, value) => {
         $element.toggleClass(className, hasClass);
       }
     } else {
-      $element.addClass(value);
+      $element.el.className  = value;
     }
 
     return;

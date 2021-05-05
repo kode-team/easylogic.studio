@@ -5,12 +5,12 @@
     left: 0px;
     right: 0px;
     height: $status-bar-height;
-    overflow: hidden;
+    // overflow: hidden;
     background-color: var(--status-bar-background-color); 
     z-index: 1;
     pointer-events: all;
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 40px auto auto;
     
     color: white; 
 
@@ -21,9 +21,11 @@
     .tool-view {
       text-align: right;
       padding:5px 5px;
-      
-
       text-align: right; 
+
+      &.left {
+        text-align: left;
+      }
 
       > div {
         display: inline-block;

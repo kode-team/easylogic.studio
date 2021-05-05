@@ -1,8 +1,7 @@
 import Dom from "el/base/Dom";
 
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, MOVE, BIND, CLICK, THROTTLE, SUBSCRIBE, END } from "el/base/Event";
+import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, MOVE, BIND, THROTTLE, SUBSCRIBE, END } from "el/base/Event";
 
-import icon from "el/editor/icon/icon";
 import { Length } from "el/editor/unit/Length";
 
 import "el/editor/items";
@@ -43,8 +42,6 @@ export default class DesignEditor extends EditorElement {
 
   initState() {
     return {
-      hideLeftPanel: false,
-      hideRightPanel: false,
       leftSize: 340,
       rightSize: 260,
       bottomSize: 0,
@@ -63,10 +60,7 @@ export default class DesignEditor extends EditorElement {
         <div class='layout-top' ref='$top'>
           <object refClass="ToolBar" />
         </div>
-        <div class="layout-middle" ref='$middle'>
-          <div class="layout-header" ref='$headerPanel'>
-  
-          </div>        
+        <div class="layout-middle" ref='$middle'>      
           <div class="layout-body" ref='$bodyPanel'>
             <object refClass="BodyPanel" ref="$bodyPanelView" />
           </div>                           
@@ -82,8 +76,6 @@ export default class DesignEditor extends EditorElement {
             <object refClass='TimelineProperty' />
           </div>   
           <div class='splitter' ref='$splitter'></div>
-          <button type="button" class='toggleLeft' ref='$toggleLeftButton'></button>
-          <button type="button" class='toggleRight' ref='$toggleRightButton'></button>
         </div>
         <object refClass='StatusBar' />
         <object refClass="PopupManager" />  
@@ -92,27 +84,9 @@ export default class DesignEditor extends EditorElement {
     `;
   }
 
-  [BIND('$headerPanel')] () {
-
-    let left = `${this.state.leftSize}px`
-    let right = `${this.state.rightSize}px`
-
-    if (this.state.hideLeftPanel) {
-      left = `0px`
-    }
-
-    if (this.state.hideRightPanel) {
-      right = `0px`
-    }
-
-    return {
-      style: { left, right }
-    }
-  }
-
   [BIND('$splitter')] () {
     let left = `${this.state.leftSize}px`    
-    if (this.state.hideLeftPanel) {
+    if (this.$config.false('show.left.panel')) {
       left = `0px`
     }
 
@@ -125,7 +99,7 @@ export default class DesignEditor extends EditorElement {
     let left = `0px`    
     let width = Length.px(this.state.leftSize);
     let bottom = Length.px(this.state.bottomSize);
-    if (this.state.hideLeftPanel) {
+    if (this.$config.false('show.left.panel')) {
       left = `-${this.state.leftSize}px`    
     }
 
@@ -134,36 +108,10 @@ export default class DesignEditor extends EditorElement {
     }
   }  
 
-  [BIND('$toggleLeftButton')] () {
-    let left = '0px';
-    let iconString = icon.arrowRight
-    if (this.state.hideLeftPanel === false) {
-      left = `${this.state.leftSize}px`
-      iconString = icon.arrowLeft
-    }    
-    return {
-      style : { left },
-      html: iconString
-    }
-  }
-
-  [BIND('$toggleRightButton')] () {
-    let right = '0px';
-    let iconString = icon.arrowLeft    
-    if (this.state.hideRightPanel === false) {
-      right = `${this.state.rightSize}px`
-      iconString = icon.arrowRight
-    }    
-    return {
-      style : { right },
-      html: iconString
-    }
-  }  
-
   [BIND('$rightPanel')] () {
     let right = `0px`    
     let bottom = Length.px(this.state.bottomSize);    
-    if (this.state.hideRightPanel) {
+    if (this.$config.false('show.right.panel')) {
       right = `-${this.state.rightSize}px`    
     }
 
@@ -178,16 +126,14 @@ export default class DesignEditor extends EditorElement {
     let right = `${this.state.rightSize}px`
     let bottom = `${this.state.bottomSize}px`
 
-    if (this.state.hideLeftPanel) {
+    if (this.$config.false('show.left.panel')) {
       left = `0px`
     }
 
-    if (this.state.hideRightPanel) {
+    if (this.$config.false('show.right.panel')) {
       right = `0px`
     }
 
-
- 
     return {
       style: { left, right, bottom }
     }
@@ -259,18 +205,18 @@ export default class DesignEditor extends EditorElement {
     this.emit('resizeEditor');
   }
 
-  [CLICK('$toggleRightButton')] () {
-    this.toggleState('hideRightPanel');
-    setTimeout(() => {
-      this.emit('resizeCanvas'); 
-    }, 100)
-  } 
+  [SUBSCRIBE('config:show.left.panel')]() {
+    this.refresh();
+    this.nextTick(() => {
+      this.emit('resizeCanvas');
+    })
+  }
 
-  [CLICK('$toggleLeftButton')] () {
-    this.toggleState('hideLeftPanel');
-    setTimeout(() => {
-      this.emit('resizeCanvas'); 
-    }, 100)
+  [SUBSCRIBE('config:show.right.panel')]() {
+    this.refresh();
+    this.nextTick(() => {
+      this.emit('resizeCanvas');
+    })
   }  
 
   [SUBSCRIBE('changeTheme')] () {

@@ -4,20 +4,27 @@ import "../status-bar-items/LanguageSelector";
 import "../status-bar-items/ThemeSwitcher";
 import "../status-bar-items/LayoutSelector";
 import "../status-bar-items/VersionView";
+import "../status-bar-items/SwitchLeftPanel";
+import "../status-bar-items/SwitchRightPanel";
 import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
+
 
 
 export default class StatusBar extends EditorElement {
     template () {
         return /*html*/`
             <div class='status-bar'>
+                <div class='tool-view left' ref='$leftTool'>
+                    <object refClass="SwitchLeftPanel" />
+                </div>            
                 <div class='message-view' ref='$msg'></div>
-                <div class='tool-view' ref='$tool'>
+                <div class='tool-view' ref='$rightTool'>
                     <object refClass="LayoutSelector" />
                     <object refClass="ThemeSwitcher" />
                     <object refClass="LanguageSelector" />
                     <object refClass="VersionView" />
+                    <object refClass="SwitchRightPanel" />                    
                 </div>
             </div>
         `
