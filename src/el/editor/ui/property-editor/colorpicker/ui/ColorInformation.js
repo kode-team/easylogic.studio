@@ -1,5 +1,4 @@
-import Event, { CLICK, KEYUP, INPUT, KEYDOWN } from 'el/base/Event'
-import UIElement, { EVENT } from 'el/base/UIElement';
+import { CLICK, KEYUP, INPUT, IF } from 'el/base/Event'
 import { EditorElement } from 'el/editor/ui/common/EditorElement';
 
 export default class ColorInformation extends EditorElement {
@@ -134,17 +133,25 @@ export default class ColorInformation extends EditorElement {
         })        
     }    
 
-    [INPUT('$rgb_r')] (e) {  this.changeRgbColor(); }
-    [INPUT('$rgb_g')] (e) {  this.changeRgbColor(); }
-    [INPUT('$rgb_b')] (e) {  this.changeRgbColor(); }
-    [INPUT('$rgb_a')] (e) {  this.changeRgbColor(); }  
-    
-    [INPUT('$hsl_h')] (e) {  this.changeHslColor(); }
-    [INPUT('$hsl_s')] (e) {  this.changeHslColor(); }
-    [INPUT('$hsl_l')] (e) {  this.changeHslColor(); }
-    [INPUT('$hsl_a')] (e) {  this.changeHslColor(); }      
+    hasValue(e) {
+        if (e.target.value === '') {
+            return false; 
+        }
 
-    [KEYUP('$hexCode')] (e) {
+        return true; 
+    }
+
+    [INPUT('$rgb_r') + IF('hasValue')] (e) {  this.changeRgbColor(); }
+    [INPUT('$rgb_g') + IF('hasValue')] (e) {  this.changeRgbColor(); }
+    [INPUT('$rgb_b') + IF('hasValue')] (e) {  this.changeRgbColor(); }
+    [INPUT('$rgb_a') + IF('hasValue')] (e) {  this.changeRgbColor(); }  
+    
+    [INPUT('$hsl_h') + IF('hasValue')] (e) {  this.changeHslColor(); }
+    [INPUT('$hsl_s') + IF('hasValue')] (e) {  this.changeHslColor(); }
+    [INPUT('$hsl_l') + IF('hasValue')] (e) {  this.changeHslColor(); }
+    [INPUT('$hsl_a') + IF('hasValue')] (e) {  this.changeHslColor(); }      
+
+    [KEYUP('$hexCode') + IF('hasValue')] (e) {
         var code = this.refs.$hexCode.val();
     
         if(code.charAt(0) == '#' && (code.length == 7 || code.length === 9)) {
