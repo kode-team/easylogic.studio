@@ -3,7 +3,7 @@ import { CSS_TO_STRING, TAG_TO_STRING, isFunction } from 'el/base/functions/func
 import { RendererManager } from 'el/editor/manager/RendererManager';
 import { Item } from 'el/editor/items/Item';
 import ArtBoardRender from './ArtBoardRender';
-import ChartRender from './ChartRender';
+// import ChartRender from './ChartRender';
 import CircleRender from './CircleRender';
 import CubeRender from './CubeRender';
 import IFrameRender from './IFrameRender';
@@ -47,7 +47,7 @@ const renderers = {
     'cube': new CubeRender(),
     'iframe': new IFrameRender(),
     'template': new TemplateRender(),
-    'chart': new ChartRender()
+    // 'chart': new ChartRender()
 }
 
 export default {

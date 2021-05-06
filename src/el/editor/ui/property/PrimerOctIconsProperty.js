@@ -2,16 +2,9 @@ import BaseProperty from "./BaseProperty";
 import { registElement } from "el/base/registElement";
 import { CLICK, LOAD, SUBSCRIBE } from "el/base/Event";
 import { Length } from "el/editor/unit/Length";
-
+import octicons from '@primer/octicons';
 
 export default class PrimerOctIconsProperty extends BaseProperty {
-
-  initState() {
-    return {
-      isLoaded: false,
-      octicons: {}
-    }
-  }
 
   getClassName() {
     return 'primer-oct-icons'
@@ -19,16 +12,6 @@ export default class PrimerOctIconsProperty extends BaseProperty {
 
   async afterRender() {
     this.show();
-
-    if (this.state.isLoaded === false) {
-      const octicons = await import(/* webpackChunkName: "primer-oct-icons" */ '@primer/octicons')
-
-      this.setState({
-        isLoaded: true,
-        octicons: octicons.default
-      });
-    }
-
   }
 
   getTitle() {
@@ -56,7 +39,7 @@ export default class PrimerOctIconsProperty extends BaseProperty {
       return;
     }
 
-    const icons = this.state.octicons;
+    const icons = octicons;
     const keys = Object.keys(icons);
 
     if (this.state.search) {
@@ -82,7 +65,7 @@ export default class PrimerOctIconsProperty extends BaseProperty {
       width: Length.px(200),
       height: Length.px(200),
       'background-color': 'transparent',
-      template: this.state.octicons[key].toSVG()
+      template: octicons[key].toSVG()
     });
 
   }

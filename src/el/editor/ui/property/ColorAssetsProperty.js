@@ -4,6 +4,7 @@ import { LOAD, CLICK, DEBOUNCE, DRAGSTART, SUBSCRIBE } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import Color from "el/base/Color";
 import { registElement } from "el/base/registElement";
+import colors from "el/editor/preset/colors";
 
 export default class ColorAssetsProperty extends BaseProperty {
 
@@ -16,21 +17,7 @@ export default class ColorAssetsProperty extends BaseProperty {
       mode: 'grid',
       preset: 'random',
       isLoaded : false, 
-      colors: []
     }
-  }
-
-
-  async afterRender() {
-    if (this.state.isLoaded === false) {
-      const colors = await import(/* webpackChunkName: "color-assets" */ 'el/editor/preset/colors')
-
-      this.setState({
-        isLoaded: true,
-        colors: colors.default
-      });
-    }
-
   }
 
   getTools() {
@@ -38,7 +25,7 @@ export default class ColorAssetsProperty extends BaseProperty {
   }
 
   [LOAD('$tools')] () {
-    const options = this.state.colors.map(it => `${it.key}:${it.title}`)
+    const options = colors.map(it => `${it.key}:${it.title}`)
 
     return /*html*/`
       <object refClass="SelectEditor"  key="preset" value="${this.state.preset}" options="${options}" onchange="changePreset"  />
@@ -76,7 +63,7 @@ export default class ColorAssetsProperty extends BaseProperty {
   }  
 
   [LOAD("$colorList")]() {
-    var preset = this.state.colors.find(it => it.key === this.state.preset);
+    var preset = colors.find(it => it.key === this.state.preset);
 
     if (!preset) {
       return '';

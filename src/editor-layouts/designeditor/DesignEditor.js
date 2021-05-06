@@ -25,7 +25,7 @@ import "./KeyboardManager";
 import { registElement } from "el/base/registElement";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
-import 'el/plugins';
+// import 'el/plugins';
 
 export default class DesignEditor extends EditorElement {
   

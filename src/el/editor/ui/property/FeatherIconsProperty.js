@@ -3,16 +3,9 @@ import { registElement } from "el/base/registElement";
 import { CLICK, DOMDIFF, LOAD, SUBSCRIBE } from "el/base/Event";
 import { Length } from "el/editor/unit/Length";
 
-import Color from "el/base/Color";
+import feather from 'feather-icons';
 
 export default class FeatherIconsProperty extends BaseProperty {
-
-  initState() {
-    return {
-      isLoaded: false,
-      feather: {}
-    }
-  }
 
   getClassName() {
     return 'feather-icons'
@@ -20,16 +13,6 @@ export default class FeatherIconsProperty extends BaseProperty {
 
   async afterRender() {
     this.show();
-
-    if (this.state.isLoaded === false) {
-      const feather = await import(/* webpackChunkName: "feather-icons" */ 'feather-icons')
-
-      this.setState({
-        isLoaded: true,
-        feather
-      });
-    }
-
   }
 
   getTitle() {
@@ -54,11 +37,7 @@ export default class FeatherIconsProperty extends BaseProperty {
 
   [LOAD('$body') + DOMDIFF] () {
 
-    if (this.state.isLoaded === false) {
-      return;
-    }
-
-    const { icons } = this.state.feather;
+    const { icons } = feather;
     const keys = Object.keys(icons);
 
     if (this.state.search) {
@@ -85,7 +64,7 @@ export default class FeatherIconsProperty extends BaseProperty {
       width: Length.px(200),
       height: Length.px(200),
       'background-color': 'transparent',
-      template: this.state.feather.icons[key].toSvg()
+      template: feather.icons[key].toSvg()
     });
 
   }

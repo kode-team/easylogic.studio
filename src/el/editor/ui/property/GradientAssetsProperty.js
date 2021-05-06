@@ -4,6 +4,7 @@ import { LOAD, CLICK, DEBOUNCE, DRAGSTART, SUBSCRIBE } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
 import { registElement } from "el/base/registElement";
+import gradients from "el/editor/preset/gradients";
 
 export default class GradientAssetsProperty extends BaseProperty {
 
@@ -15,21 +16,7 @@ export default class GradientAssetsProperty extends BaseProperty {
     return {
       mode: 'grid',
       preset: 'linear',
-      isLoaded : false, 
-      gradients: []      
     }
-  }
-
-  async afterRender() {
-    if (this.state.isLoaded === false) {
-      const gradients = await import(/* webpackChunkName: "gradient-assets" */ 'el/editor/preset/gradients')
-
-      this.setState({
-        isLoaded: true,
-        gradients: gradients.default
-      });
-    }
-
   }
 
   getTools() {
@@ -37,7 +24,7 @@ export default class GradientAssetsProperty extends BaseProperty {
   }
 
   [LOAD('$tools')]() {
-    const options = this.state.gradients.map(it => `${it.key}:${it.title}`)
+    const options = gradients.map(it => `${it.key}:${it.title}`)
 
     return /*html*/`
       <object refClass="SelectEditor"  key="preset" value="${this.state.preset}" options="${options}" onchange="changePreset"  />
@@ -75,7 +62,7 @@ export default class GradientAssetsProperty extends BaseProperty {
   }
 
   [LOAD("$gradientList")]() {
-    var preset = this.state.gradients.find(it => it.key === this.state.preset);
+    var preset = gradients.find(it => it.key === this.state.preset);
 
     if (!preset) {
       return '';

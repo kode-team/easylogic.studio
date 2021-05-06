@@ -3,7 +3,7 @@ import { registElement } from "el/base/registElement";
 import { CLICK, DOMDIFF, LOAD, SUBSCRIBE } from "el/base/Event";
 import { Length } from "el/editor/unit/Length";
 import { renderIconDefinitionToSVGElement } from '@ant-design/icons-svg/es/helpers';
-
+import * as ant from '@ant-design/icons-svg';
 
 function toSVG (icon, extraSVGAttrs = {}) {
   return renderIconDefinitionToSVGElement(icon, { extraSVGAttrs })
@@ -11,29 +11,12 @@ function toSVG (icon, extraSVGAttrs = {}) {
 
 export default class AntDesignIconsProperty extends BaseProperty {
 
-  initState() {
-    return {
-      isLoaded: false,
-      ant: {}
-    }
-  }
-
   getClassName() {
     return 'ant-design-icons'
   }
 
   async afterRender() {
     this.show();
-
-    if (this.state.isLoaded === false) {
-      const ant = await import(/* webpackChunkName: "antdesign-icons" */ '@ant-design/icons-svg')
-
-      this.setState({
-        isLoaded: true,
-        ant
-      });
-    }
-
   }
 
   getTitle() {
@@ -59,11 +42,7 @@ export default class AntDesignIconsProperty extends BaseProperty {
 
   [LOAD('$body') + DOMDIFF] () {
 
-    if (this.state.isLoaded === false) {
-      return;
-    }
-
-    const icons = this.state.ant;
+    const icons = ant;
 
     const keys = Object.keys(icons);
 
@@ -91,7 +70,7 @@ export default class AntDesignIconsProperty extends BaseProperty {
       width: Length.px(200),
       height: Length.px(200),
       'background-color': 'transparent',
-      template: toSVG(this.state.ant[key])
+      template: toSVG(ant[key])
     });
 
   }
