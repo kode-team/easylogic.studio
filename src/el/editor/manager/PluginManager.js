@@ -17,9 +17,9 @@ export const PluginManager = new class {
    * @param {object} obj 
    * @returns {Item} 
    */
-  async initializePlugin (editor) {
+  async initializePlugin (editor, options = {}) {
     return await Promise.all(this.plugins.map(async (CreatePluginFunction) => {
-      return await CreatePluginFunction(editor)
+      return await CreatePluginFunction(editor, options)
     })) 
   }
 

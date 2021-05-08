@@ -105,6 +105,10 @@ export const start = (UIElement, opt) => {
       return opt.components || {};
     }
 
+    get plugins() {
+      return opt.plugins || [];
+    }
+
     [POINTERMOVE("document")](e) {
       var newPos = e.xy || EMPTY_POS;
 

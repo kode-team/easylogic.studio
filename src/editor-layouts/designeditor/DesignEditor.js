@@ -24,6 +24,11 @@ import "./KeyboardManager";
 
 import { registElement } from "el/base/registElement";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { isArray } from "el/base/functions/func";
+import { Component } from "el/editor/items/Component";
+import MenuItem from "el/editor/ui/menu-items/MenuItem";
+import LayerRender from "el/editor/renderer/HTMLRenderer/LayerRender";
+// import ReactComponent from "el/plugins/ReactComponent";
 
 // import 'el/plugins';
 
@@ -32,7 +37,17 @@ export default class DesignEditor extends EditorElement {
   initialize () {
     super.initialize()
 
-    this.$editor.initPlugins();
+    if (isArray(this.opt.plugins)) {
+      this.$editor.registerPluginList(this.opt.plugins);
+    }
+
+    // this.$editor.registerPlugin(ReactComponent)
+
+    this.$editor.initPlugins({
+      Component,
+      MenuItem,
+      LayerRender
+    });
 
     var $body = this.opt.$container;
     

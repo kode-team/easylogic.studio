@@ -21,12 +21,9 @@ export default class ComponentItems extends EditorElement {
         <div class='group'>
          <label>${this.$i18n('component.items.plugin')}</label>
           <div class='list'>
-            <object refClass="AddBarChart" title="BarChart" />
-            <object refClass="AddAreaChart" title='AreaChart' />            
-            <object refClass="AddLineChart" title='LineChart' />                                    
-            <object refClass="AddSimplePlugin" title="Simple" />
-            <object refClass="AddReactComponent" title="React Component" />
-            <object refClass="AddVueComponent" title="Vue Component" />
+            ${this.$menuManager.getTargetMenuItems('sidebar').map(it => {
+              return /*html*/`<object refClass="${it.refClass}" />`
+            })}
           </div>          
         </div>                  
       </div>

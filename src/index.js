@@ -4,7 +4,13 @@ import Util from "./el/base/index";
 import EasyLogic from "./editor-layouts/designeditor/index";
 
 function startEditor() {
-  var app = new EasyLogic.createDesignEditor();
+  var app = new EasyLogic.createDesignEditor({
+    plugins: [
+      function (editor) {
+        console.log(editor);
+      }
+    ]
+  });
 
   return app;
 }

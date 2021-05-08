@@ -5,17 +5,17 @@ import { EditorElement } from "../common/EditorElement";
 
 
 const DEFAULT_TITLE = '';
-const DEFAULT_ICON = ''; 
-const DEFAULT_CHECKED = false; 
+const DEFAULT_ICON = '';
+const DEFAULT_CHECKED = false;
 
 export default class MenuItem extends EditorElement {
-    template () {
+    template() {
         return /*html*/`
         <button 
             type="button" 
             class='menu-item ${this.getClassName()}' 
             data-no-title="${this.isHideTitle()}" 
-            ${this.isHideTitle() ? `data-tooltip="${this.getTitle()}"` : '' } 
+            ${this.isHideTitle() ? `data-tooltip="${this.getTitle()}"` : ''} 
             checked="${this.getChecked() ? 'checked' : ''}"
             ${this.isDisabled() ? 'disabled' : ''}
         >
@@ -29,26 +29,26 @@ export default class MenuItem extends EditorElement {
         return ""
     }
 
-    clickButton(e) {}
+    clickButton(e) { }
 
-    getChecked () {
-        return DEFAULT_CHECKED; 
+    getChecked() {
+        return DEFAULT_CHECKED;
     }
 
-    isDisabled () {
+    isDisabled() {
         return false;
     }
 
-    setSelected (isSelected) {
+    setSelected(isSelected) {
         this.$el.toggleClass('selected', isSelected)
     }
 
-    getTitle () {
+    getTitle() {
         return DEFAULT_TITLE;
     }
 
-    getIcon () { 
-        return DEFAULT_ICON; 
+    getIcon() {
+        return DEFAULT_ICON;
     }
 
     getIconString() {
@@ -56,10 +56,30 @@ export default class MenuItem extends EditorElement {
     }
 
     isHideTitle() {
-        return false; 
+        return false;
     }
 
-    [CLICK()] (e) {
+    [CLICK()](e) {
         this.clickButton(e);
+    }
+
+    static createMenuItem(opt = {}) {
+        return class extends MenuItem {
+            getIconString() {
+                return opt.iconString || 'add_box';
+            }
+
+            getTitle() {
+                return opt.title || "New Item";
+            }
+
+            isHideTitle() {
+                return opt.isHideTitle || true;
+            }
+
+            clickButton(e) {
+                opt.clickButton(e);
+            }
+        }
     }
 }

@@ -24,6 +24,7 @@ import { CursorManager } from "./CursorManager";
 import { AssetManager } from "./AssetManager";
 import { PluginManager } from "./PluginManager";
 import { RendererManager } from "./RendererManager";
+import { MenuItemManager } from "./MenuItemManager";
 
 
 export const EDITOR_ID = "";
@@ -31,18 +32,10 @@ export const EDITOR_ID = "";
 export const EDIT_MODE_SELECTION = 'SELECTION';
 export const EDIT_MODE_ADD = 'ADD';
 
-const DEFAULT_THEME = 'dark' 
+const DEFAULT_THEME = 'dark'
 
 
 export const Editor = new class {
-
-  /**
-   * 
-   * @param {Function} createPluginFunction  
-   */
-  registerPlugin (createPluginFunction) {
-    PluginManager.registerPlugin(createPluginFunction);
-  } 
 
 
   /**
@@ -54,18 +47,18 @@ export const Editor = new class {
 
     this.EDITOR_ID = uuid();
 
-    this.projects = []     
+    this.projects = []
     this.popupZIndex = 10000;
     this.canvasWidth = 100000;
     this.canvasHeight = 100000;
     this.symbols = {}
     this.images = {}
-    this.openRightPanel = true; 
+    this.openRightPanel = true;
     this.mode = EDIT_MODE_SELECTION
     this.modeView = 'CanvasView';
-    this.addComponentType = '' 
+    this.addComponentType = ''
     this.locale = this.loadItem('locale') || 'en_US'
-    this.layout = this.loadItem('layout') || 'all'    
+    this.layout = this.loadItem('layout') || 'all'
 
     this.loadManagers();
 
@@ -74,7 +67,7 @@ export const Editor = new class {
   /**
    * 에디터에서 공통으로 필요한 Manager 들을 로드 한다. 
    */
-  loadManagers () {
+  loadManagers() {
 
     this.store = new BaseStore(this);
     this.config = new ConfigManager(this);
@@ -85,31 +78,32 @@ export const Editor = new class {
     this.timeline = new TimelineSelectionManager(this);
     this.history = new HistoryManager(this);
     this.keyboardManager = new KeyBoardManager(this);
-    this.viewport = new ViewportManager(this);    
+    this.viewport = new ViewportManager(this);
     this.storageManager = new StorageManager(this);
     this.cursorManager = new CursorManager(this);
     this.assetManager = new AssetManager(this);
+    this.menuItemManager = new MenuItemManager(this);
     this.components = ComponentManager;
     this.plugins = PluginManager;
     this.renderers = RendererManager
 
 
-    this.initTheme();    
+    this.initTheme();
     this.initPlugins();
   }
 
-  i18n (key, params = {}, locale) {
+  i18n(key, params = {}, locale) {
     return i18n.get(key, params, locale || this.locale)
   }
 
-  hasI18nkey (key, locale) {
+  hasI18nkey(key, locale) {
     return i18n.hasKey(key, locale || this.locale)
   }
 
-  initI18n (root = '') {
+  initI18n(root = '') {
     return (key, params = {}, locale) => {
 
-      const i18nKey  = `${root}.${key}`;
+      const i18nKey = `${root}.${key}`;
       if (this.hasI18nkey(i18nKey, locale)) {
         return this.$i18n(`${root}.${key}`, params, locale)
       } else {
@@ -119,21 +113,21 @@ export const Editor = new class {
     }
   }
 
-  setLocale (locale = 'en_US') {
-    this.locale = locale; 
-    this.saveItem('locale', this.locale);    
+  setLocale(locale = 'en_US') {
+    this.locale = locale;
+    this.saveItem('locale', this.locale);
   }
 
-  setLayout (layout = 'all') {
-    this.layout = layout; 
-    this.saveItem('layout', this.layout);    
-  }  
-
-  setUser (user) {
-    this.user = user; 
+  setLayout(layout = 'all') {
+    this.layout = layout;
+    this.saveItem('layout', this.layout);
   }
 
-  initTheme () {
+  setUser(user) {
+    this.user = user;
+  }
+
+  initTheme() {
     var theme = DEFAULT_THEME
 
     if (window.localStorage) {
@@ -142,42 +136,42 @@ export const Editor = new class {
       theme = ['dark', 'light', 'toon'].includes(theme) ? theme : DEFAULT_THEME;
     }
 
-    this.theme =  theme || DEFAULT_THEME
+    this.theme = theme || DEFAULT_THEME
     window.localStorage.setItem('easylogic.studio.theme', this.theme);
   }
 
-  initPlugins() {
-    this.plugins.initializePlugin(this);
+  initPlugins(options = {}) {
+    this.plugins.initializePlugin(this, options);
   }
 
-  themeValue (key, defaultValue = '') {
+  themeValue(key, defaultValue = '') {
     return theme[this.theme][key] || defaultValue;
   }
 
-  changeMode (mode = EDIT_MODE_SELECTION) {
+  changeMode(mode = EDIT_MODE_SELECTION) {
     this.mode = mode;   // add or selection  
   }
 
-  changeModeView (modeView = 'CanvasView') {
+  changeModeView(modeView = 'CanvasView') {
     this.modeView = modeView;
   }
 
-  isMode (mode) {
-    return this.mode === mode; 
+  isMode(mode) {
+    return this.mode === mode;
   }
 
-  isAddMode () {
+  isAddMode() {
     return this.isMode(EDIT_MODE_ADD)
   }
 
   /**
    * editor 의 모드를 
    */
-  isSelectionMode () {
+  isSelectionMode() {
     return this.isMode(EDIT_MODE_SELECTION);
   }
 
-  changeAddType (type = '', isComponent = false) {
+  changeAddType(type = '', isComponent = false) {
     this.changeMode(EDIT_MODE_ADD);
     this.addComponentType = type;
     this.isComponent = isComponent
@@ -188,16 +182,16 @@ export const Editor = new class {
    * 
    * @param {string} theme 
    */
-  changeTheme (theme) {
-    theme = ['light', 'toon'].includes(theme) ? theme: 'dark';
+  changeTheme(theme) {
+    theme = ['light', 'toon'].includes(theme) ? theme : 'dark';
 
-    this.theme = theme; 
+    this.theme = theme;
     window.localStorage.setItem('easylogic.studio.theme', theme);
   }
 
   // 팝업의 zindex 를 계속 높여 주어 
   // 최근에 열린 팝업이 밑으로 가지 않게 한다. 
-  get zIndex () {
+  get zIndex() {
     return this.popupZIndex++
   }
 
@@ -206,17 +200,17 @@ export const Editor = new class {
    * 
    * @returns {boolean}
    */
-  get isPointerUp () {
-    if (!this.config.get('bodyEvent')) return true; 
+  get isPointerUp() {
+    if (!this.config.get('bodyEvent')) return true;
     return this.config.get('bodyEvent').type === 'pointerup'
   }
 
-  get isPointerMove () {
-    if (!this.config.get('bodyEvent')) return false; 
+  get isPointerMove() {
+    if (!this.config.get('bodyEvent')) return false;
     return this.config.get('bodyEvent').type === 'pointermove'
-  }  
+  }
 
-  getFile (url) {
+  getFile(url) {
     return this.images[url] || url;
   }
 
@@ -236,25 +230,25 @@ export const Editor = new class {
     this.store.emit(...args);
   }
 
-  on (...args) {
+  on(...args) {
     this.store.on(...args);
   }
 
-  off (...args) {
+  off(...args) {
     this.store.off(...args);
   }
 
-  offAll (...args) {
+  offAll(...args) {
     this.store.offAll(...args);
   }
 
-  debug (...args) {
+  debug(...args) {
     if (this.config.get('debug')) {
-      console.log(...args );
+      console.log(...args);
     }
   }
 
-  command (command, message, ...args) {
+  command(command, message, ...args) {
 
     if (this.isPointerUp) {
       return this.store.emit(`history.${command}`, message, ...args);
@@ -268,18 +262,18 @@ export const Editor = new class {
    * 
    * @param {Function} callback 
    */
-  nextTick (callback) {
+  nextTick(callback) {
     if (this.store) {
       this.store.nextTick(callback);
     }
-  }  
+  }
 
   /**
    * project 리스트를 설정한다. 
    * 
    * @param {Item[]} projects 
    */
-  load (projects = []) {
+  load(projects = []) {
     this.projects = projects
   }
 
@@ -320,51 +314,51 @@ export const Editor = new class {
 
 
 
-  replaceLocalUrltoRealUrl (str) {
+  replaceLocalUrltoRealUrl(str) {
 
     var project = this.selection.currentProject;
-    var images = {} 
+    var images = {}
 
     project.images.forEach(a => {
-      if (str.indexOf(a.local) > -1) { 
-        images[a.local]  = a.original
+      if (str.indexOf(a.local) > -1) {
+        images[a.local] = a.original
       }
     })
 
     Object.keys(images).forEach(local => {
-        if (str.indexOf(local) > -1) {
-            str = str.replace(new RegExp(local, 'g'), images[local])
-        }
+      if (str.indexOf(local) > -1) {
+        str = str.replace(new RegExp(local, 'g'), images[local])
+      }
     })
-    
-    return str; 
+
+    return str;
   }
 
-  replaceLocalUrltoId (str) {
+  replaceLocalUrltoId(str) {
 
     var projects = this.projects;
-    var images = {} 
+    var images = {}
 
     projects.forEach(project => {
 
-        project.images.forEach(a => {
-            if (str.indexOf(a.local) > -1) { 
-                images[a.local]  = '#' + a.id
-            }
-        })
+      project.images.forEach(a => {
+        if (str.indexOf(a.local) > -1) {
+          images[a.local] = '#' + a.id
+        }
+      })
     })
 
 
     Object.keys(images).forEach(local => {
-        if (str.indexOf(local) > -1) {
-            str = str.replace(new RegExp(local, 'g'), images[local])
-        }
+      if (str.indexOf(local) > -1) {
+        str = str.replace(new RegExp(local, 'g'), images[local])
+      }
     })
 
-    return str; 
+    return str;
   }
 
-  makeResource (json) {
+  makeResource(json) {
     var result = JSON.stringify(json)
 
     // image check 
@@ -383,11 +377,11 @@ export const Editor = new class {
    * @param {Item[]} items
    * @returns string
    */
-  serialize (items = []) {
+  serialize(items = []) {
 
     const newItems = []
 
-    items.forEach (it => {
+    items.forEach(it => {
       let json = it.toJSON();
 
       // parent 객체를 id 로 치환 
@@ -408,16 +402,16 @@ export const Editor = new class {
    * @param {object} itemObject 
    * @param {Boolean} isRecoverPosition 
    */
-  createItem (itemObject, isRecoverPosition = false) {
+  createItem(itemObject, isRecoverPosition = false) {
 
 
     if (itemObject._parentId) {
-      itemObject.parent = this.searchItem(itemObject._parentId); 
+      itemObject.parent = this.searchItem(itemObject._parentId);
       delete itemObject._parentId;
     }
 
     itemObject.layers = (itemObject.layers || []).map(it => {
-        return this.createItem(it);
+      return this.createItem(it);
     })
 
     const item = this.components.createComponent(itemObject.itemType, itemObject);
@@ -426,7 +420,7 @@ export const Editor = new class {
       item.parent.setPositionInPlace(itemObject._positionInParent, item);
     }
 
-    return item; 
+    return item;
   }
 
   /**
@@ -436,12 +430,12 @@ export const Editor = new class {
    * @param {string|string[]} id 
    * @return {string} JSON 문자열 
    */
-  searchItem (id) {
+  searchItem(id) {
     let ids = []
     if (isString(id)) {
       ids.push(id);
     } else if (isArray(id)) {
-      ids = [...id]; 
+      ids = [...id];
     }
 
     const project = this.selection.currentProject;
@@ -456,57 +450,72 @@ export const Editor = new class {
    * @param {Boolean} isRecoverPosition 객체를 복구 시킬 때 parent 상에서 위치도 같이 복구할지 결정, true 는 위치 복구 
    * @returns {Item[]}
    */
-  deserialize (jsonString, isRecoverPosition = false) {
+  deserialize(jsonString, isRecoverPosition = false) {
     let items = JSON.parse(jsonString) || [];
 
     return items.map(it => this.createItem(it, isRecoverPosition));
   }
 
-  saveResource (key, value) {
+  saveResource(key, value) {
     window.localStorage.setItem(`easylogic.studio.${key}`, this.makeResource(value));
   }
 
-  saveItem (key, value) {
+  saveItem(key, value) {
     window.localStorage.setItem(`easylogic.studio.${key}`, JSON.stringify(value));
   }
 
-  loadResource (key) {
+  loadResource(key) {
     return this.assetManager.revokeResource(window.localStorage.getItem(`easylogic.studio.${key}`))
   }
 
-  loadItem (key) {
+  loadItem(key) {
     return JSON.parse(window.localStorage.getItem(`easylogic.studio.${key}`) || JSON.stringify(""))
-  }  
+  }
 
-  registElement (obj) {
+  registElement(obj) {
     registElement(obj);
   }
 
-  registerComponent (name, component) {
+  registerMenuItem(target, obj) {
+    this.menuItemManager.registerMenuItem(target, obj);
+    this.registElement(obj);
+  }
+
+  registerComponent(name, component) {
     this.components.registerComponent(name, component)
   }
 
-  registerItem (name, item) {
+  registerItem(name, item) {
     this.registerComponent(name, item);
   }
 
-  registerInspector (name, inspectorCallback) {
+  registerInspector(name, inspectorCallback) {
     this.components.registerInspector(name, inspectorCallback);
-  }  
+  }
 
-  registerRenderer (rendererType, name, rendererInstance) {
+  registerRenderer(rendererType, name, rendererInstance) {
     this.renderers.registerRenderer(rendererType, name, rendererInstance)
   }
 
-  registerCommand (commandObject) {
+  registerCommand(commandObject) {
     this.commands.registerCommand(commandObject);
-
   }
 
-  registerShortCut (shortcut) {
-    
+  registerShortCut(shortcut) {
     this.shortcuts.registerShortCut(shortcut);
   }
 
-  
+  /**
+   * 
+   * @param {Function} createPluginFunction  
+   */
+  registerPlugin(createPluginFunction) {
+    PluginManager.registerPlugin(createPluginFunction);
+  }
+
+  registerPluginList(plugins = []) {
+    plugins.forEach(p => this.registerPlugin(p));
+  }
+
+
 }();

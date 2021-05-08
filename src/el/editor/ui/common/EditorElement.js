@@ -83,6 +83,10 @@ export class EditorElement extends UIElement {
         return this.$editor.storageManager;
     }
 
+    get $menuManager () {
+        return this.$editor.menuItemManager;
+    }
+
     /**
      * history 가 필요한 커맨드는 command 함수를 사용하자. 
      * 마우스 업 상태에 따라서 자동으로 history 커맨드로 분기해준다. 

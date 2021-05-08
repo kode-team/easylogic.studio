@@ -7,10 +7,10 @@ export const ComponentManager = new class {
     this.inspectors = {}
   }
 
-  registerComponent (name, Component) {
+  registerComponent (name, componentProperty) {
 
     if (this.components[name]) throw new Error("It has duplicated item name. " + name);
-    this.components[name] = Component;
+    this.components[name] = componentProperty;
   }
 
   registerInspector (name, inspectorCallback) {
@@ -40,6 +40,7 @@ export const ComponentManager = new class {
     if (!ComponentClass) {
       throw new Error(`${itemType} type is not valid.`)
     }
+
     return new ComponentClass(obj);
   }
 
