@@ -23,6 +23,10 @@ export default class GradientPickerPopup extends BasePopup {
     this.selectedTab = "static-gradient";
   }
 
+  getClassName() {
+    return 'fill-picker-popup';
+  }
+
   getBody() {
     return /*html*/`
       <div class="gradient-picker" ref='$body' data-selected-editor=''>

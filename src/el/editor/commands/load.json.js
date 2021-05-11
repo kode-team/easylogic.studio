@@ -41,10 +41,6 @@ export default {
 
             editor.load(projects);
             _doForceRefreshSelection(editor)
-            editor.nextTick(() => {
-                editor.emit('reloadProject');
-            })
-
         }
     }
 }

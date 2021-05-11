@@ -603,7 +603,6 @@ export default class HTMLRenderView extends EditorElement {
     updateElement (item) {
         if (item) { 
             HTMLRenderer.update(item, this.getElement(item.id))
-            // this.updateRealPositionByItem(item);
         }
 
     }
@@ -612,7 +611,6 @@ export default class HTMLRenderView extends EditorElement {
     updateTimelineElement (item) {
         if (item) {
             HTMLRenderer.update(item, this.getElement(item.id))
-            // this.updateRealPositionByItem(item);
         }
 
     }    

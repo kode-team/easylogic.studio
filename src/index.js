@@ -5,6 +5,14 @@ import EasyLogic from "./editor-layouts/designeditor/index";
 
 function startEditor() {
   var app = new EasyLogic.createDesignEditor({
+    data: {
+      projects: [{
+        itemType: 'project', 
+        layers: [
+          {itemType: 'rect', x: '0px', y: '0px', width: '100px', height: '100px', 'background-color': 'yellow'}
+        ]
+      }],
+    },
     plugins: [
       function (editor) {
         console.log(editor);

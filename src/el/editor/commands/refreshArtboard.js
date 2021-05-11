@@ -10,8 +10,8 @@ export default function refreshArtboard (editor) {
     editor.emit('refreshStyleView');
     editor.emit('refreshSelectionStyleView');
     editor.emit('refreshAllElementBoundSize')   
-    editor.emit('refreshSelection');
-    editor.nextTick(() => {
+    editor.emit('refreshSelection');    
+    editor.nextTick(() => {        
         editor.emit('refreshSelectionTool', true);
     })
 

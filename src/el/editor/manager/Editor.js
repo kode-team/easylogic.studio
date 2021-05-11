@@ -90,6 +90,17 @@ export const Editor = new class {
 
     this.initTheme();
     this.initPlugins();
+    this.initData();
+  }
+
+  initData() {
+    this.projects = [this.createProject()]
+
+    this.selection.selectProject(this.projects[0])
+  }
+
+  createProject () {
+    return this.createItem({ itemType: 'project' })
   }
 
   i18n(key, params = {}, locale) {
@@ -274,7 +285,7 @@ export const Editor = new class {
    * @param {Item[]} projects 
    */
   load(projects = []) {
-    this.projects = projects
+    this.projects = projects;
   }
 
   /**

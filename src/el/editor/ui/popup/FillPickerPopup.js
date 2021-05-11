@@ -29,6 +29,10 @@ export default class FillPickerPopup extends BasePopup {
     this.selectedTab = "static-gradient";
   }
 
+  getClassName() {
+    return 'fill-picker-popup'
+  }
+
   getBody() {
     return /*html*/`
       <div class="gradient-picker" ref='$body' data-selected-editor=''>
@@ -91,7 +95,7 @@ export default class FillPickerPopup extends BasePopup {
   }
 
   [SUBSCRIBE("showFillPickerPopup")](data, params) {
-    this.show(432);
+    this.show(220);
 
     data.changeEvent = data.changeEvent || 'changeFillPopup'
     // data.image = data.gradient

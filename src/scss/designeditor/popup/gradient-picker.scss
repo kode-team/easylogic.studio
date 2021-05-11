@@ -1,13 +1,19 @@
 .gradient-picker {
   
-  width: 432px;
+  width: 224px;
   
   display: grid;
-  grid-template-columns: 1fr 224px; 
+  grid-template-columns: 1fr; 
   grid-column-gap: 10px;
-  margin-left:5px;
+  // margin-left:5px;
+  margin-bottom: 5px;
 
   > .box {
+
+    &:first-child{
+      margin-bottom: 10px;
+    }
+
     > .colorpicker {
       display: block; 
     }
@@ -73,6 +79,10 @@
     .colorsets {
       border-top: 0px solid var(--border-color) !important;
     }
+  }
+
+  .color-assets-editor {
+    padding: 4px 0px !important;
   }
 
   .assetpicker {

@@ -41,7 +41,7 @@ export default class DesignEditor extends EditorElement {
       this.$editor.registerPluginList(this.opt.plugins);
     }
 
-    // this.$editor.registerPlugin(ReactComponent)
+    this.emit('load.json', this.opt.data.projects);
 
     this.$editor.initPlugins({
       Component,

@@ -13,7 +13,9 @@ export default {
      * @param {boolean} withScale    scale 도 같이 조절 할지 정리 
      */
     execute: function (editor, areaVerties, withScale = false) {
-        editor.viewport.moveLayerToCenter(areaVerties);
+        if (areaVerties) {
+            editor.viewport.moveLayerToCenter(areaVerties);
+        }
     }
 
 }

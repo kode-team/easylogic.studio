@@ -192,6 +192,11 @@
       }
     }
   }
+
+  &.fill-picker-popup {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }
 
 @import './box-shadow-property-popup.scss';

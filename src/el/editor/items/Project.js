@@ -144,7 +144,7 @@ export class Project extends TimelineItem {
   }
 
   get rectVerties () {
-    return itemsToRectVerties(this.layers)
+    return this.layers?.length ? itemsToRectVerties(this.layers) : null;
   }
 
 }

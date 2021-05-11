@@ -310,6 +310,7 @@ export default class GradientEditor extends EditorElement  {
       'style': {
         'background-image' : this.getLinearGradient()
       }
+      
     }
   }
 

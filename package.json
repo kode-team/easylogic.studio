@@ -37,6 +37,7 @@
     "jest-report": "^0.1.11",
     "mini-css-extract-plugin": "^0.6.0",
     "postcss-loader": "^3.0.0",
+    "release-it": "^14.6.2",
     "sass": "^1.32.8",
     "sass-loader": "^7.1.0",
     "string-replace-loader": "^2.3.0",
@@ -48,6 +49,7 @@
     "workbox-webpack-plugin": "^5.1.4"
   },
   "scripts": {
+    "release": "release-it *",
     "copy:resource": "cp CNAME docs/",
     "build:web": "rm -rf docs/ && webpack --mode=production --progress && npm run copy:resource",
     "build:dist": "webpack --mode=production --progress --config=webpack.dist.config.js",

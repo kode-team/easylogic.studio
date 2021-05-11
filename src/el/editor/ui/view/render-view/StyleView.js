@@ -32,14 +32,13 @@ export default class StyleView extends EditorElement {
 
   refreshStyleHead () {
     var project = this.$selection.currentProject || new Project()
-
     this.refs.$head.$$(`style[data-renderer-type="html"]`).forEach($style => $style.remove())
 
     // project setting 
     this.changeStyleHead(project)
 
     // artboard setting 
-    project.artboards.forEach(item => this.changeStyleHead(item))
+    project.layers.forEach(item => this.changeStyleHead(item))
   }
 
   changeStyleHead (item) {

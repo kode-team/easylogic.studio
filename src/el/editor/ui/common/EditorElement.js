@@ -9,7 +9,7 @@ export class EditorElement extends UIElement {
     }
 
     get $store () {
-        return Editor.store;
+        return this.$editor.store;
     }
 
 

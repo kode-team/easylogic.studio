@@ -1,10 +1,13 @@
 .gradient-editor {
     position: relative;
+    box-sizing: border-box;
+    padding: 0px 4px;
 
     .tools {
         padding: 4px 0px;
         display: grid;
         grid-template-columns: 70px 1fr; 
+
         grid-column-gap: 4px;
     }
 
@@ -57,6 +60,7 @@
         // overflow: hidden;
         @include transparent-background();
         box-shadow: 0 0 10px 1px var(--border-color);
+        // display: none;
     
         .gradient-view {
           position: absolute;
