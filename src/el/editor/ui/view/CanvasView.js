@@ -23,7 +23,7 @@ export default class CanvasView extends EditorElement {
     // this.emit('load.json');
     this.nextTick(() => {
       this.trigger('resizeCanvas');
-      this.emit('moveSelectionToCenter');
+      this.emit('moveSelectionToCenter', false);
     })
   }
   template() {

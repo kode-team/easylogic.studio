@@ -10,19 +10,19 @@ export default {
      * 
      * @param {Editor} editor 
      * @param {vec3[]} areaVerties 
-     * @param {boolean} withScale    scale 도 같이 조절 할지 정리 
+     * @param {boolean} [withScale=true]    scale 도 같이 조절 할지 정리 
      */
-    execute: function (editor) {
+    execute: function (editor, withScale = true) {
 
         let areaVerties = []
 
         if (editor.selection.isEmpty) {
           areaVerties = editor.selection.currentProject.rectVerties;
         } else {
-          areaVerties = itemsToRectVerties(editor.selection.selectedArtboards);
+          areaVerties = itemsToRectVerties(editor.selection.items);
         }
     
-        editor.emit('moveToCenter', areaVerties);        
+        editor.emit('moveToCenter', areaVerties, withScale);        
     }
 
 }

@@ -254,7 +254,7 @@ export class ViewportManager {
      * 
      * @param {vec3[]} areaVerties 
      */
-    moveLayerToCenter (areaVerties, scaleRate = -0.2) {
+    moveLayerToCenter (areaVerties, scaleRate = -0.2, withScale = true) {
 
         const areaCenter = vec3.lerp([], areaVerties[0], areaVerties[2], 0.5);
         const width = vec3.dist(areaVerties[0], areaVerties[1])
@@ -264,7 +264,7 @@ export class ViewportManager {
         const viewportWidth = vec3.dist(this.verties[0], this.verties[1])
         const viewportHeight = vec3.dist(this.verties[0], this.verties[3])
 
-        const minRate = Math.min(viewportWidth/width, viewportHeight/height) + scaleRate;
+        const minRate = withScale ? Math.min(viewportWidth/width, viewportHeight/height) + scaleRate : 1;
 
         this.setTranslate(
             vec3.add(
