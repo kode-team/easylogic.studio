@@ -1,4 +1,5 @@
 .stroke-dasharray-editor {
+    padding: 4px 0px;
     .dasharray-item {
         margin-bottom: 3px;   
         display:grid;
@@ -7,12 +8,22 @@
 
     }
 
-
     > .tools {
+
+        &.has-label {
+            display: grid;
+            grid-template-columns: 70px 1fr;
+
+            .label {
+                text-align: left;
+            }
+        }
+
         label {
             color: var(--selected-font-color);
             vertical-align: middle;
             cursor: pointer;
+            text-align: left;
         }
     }
 

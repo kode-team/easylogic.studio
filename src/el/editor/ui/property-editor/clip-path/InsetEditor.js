@@ -6,6 +6,7 @@ import "../RangeEditor";
 import "../DirectionEditor";
 import { DirectionLength } from "el/editor/unit/DirectionLength";
 import { EditorElement } from "../../common/EditorElement";
+import { registElement } from "el/base/registElement";
 
 
 export default class InsetEditor extends EditorElement {
@@ -276,3 +277,5 @@ export default class InsetEditor extends EditorElement {
     }
 
 }
+
+registElement({ InsetEditor })

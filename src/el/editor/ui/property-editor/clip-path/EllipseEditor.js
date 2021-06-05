@@ -5,6 +5,7 @@ import { Length } from "el/editor/unit/Length";
 import { POINTERSTART, MOVE, END, BIND, SUBSCRIBE } from "el/base/Event";
 import "../RangeEditor";
 import { EditorElement } from "../../common/EditorElement";
+import { registElement } from "el/base/registElement";
 
 export default class EllipseEditor extends EditorElement {
 
@@ -155,3 +156,5 @@ export default class EllipseEditor extends EditorElement {
         })
     }
 }
+
+registElement({ EllipseEditor })

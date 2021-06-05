@@ -13,17 +13,23 @@ export default class StrokeDashArrayEditor extends EditorElement {
     var value = this.generateValue(this.props.value || '')
     
     return {
+      label: this.props.label || '',
       value
     }
   }
 
   template() {
+
+    const { label } = this.state; 
+    const hasLabel = !!label
+
     return /*html*/`
       <div class='stroke-dasharray-editor'>
-        <div ref='$body'></div>
-        <div class='tools'>
+        <div class='tools ${hasLabel ? 'has-label': ''}'>
+          ${hasLabel ? `<label class='label'>${label}</label>` : ''}
           <label ref='$add'>${icon.add} ${this.$i18n('stroke.dasharray.editor.add')}</label>
-        </div>
+        </div>      
+        <div ref='$body'></div>
       </div>
     `
   }
@@ -56,7 +62,7 @@ export default class StrokeDashArrayEditor extends EditorElement {
 
   [LOAD('$body')] () {
 
-    return this.state.value.map( (it, index) =>  {
+    return this.state.value.map( (value, index) =>  {
       var num = index + 1; 
       return /*html*/`
         <div class='dasharray-item'>
@@ -64,7 +70,7 @@ export default class StrokeDashArrayEditor extends EditorElement {
             ref='$${num}' 
             label='${num}'
             key='${index}' 
-            value="0" 
+            value="${value}" 
             min="0"
             max="1000"
             step="1"
@@ -84,9 +90,10 @@ export default class StrokeDashArrayEditor extends EditorElement {
   }
 
   [CLICK('$add')] () {
-    this.state.value.push(0);
 
-    this.refresh();
+    this.setState({
+      value: [...this.state.value, 0]
+    })
   }
 
   [CLICK('$body .delete')] (e) {

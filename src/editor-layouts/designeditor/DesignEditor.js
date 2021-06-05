@@ -78,6 +78,7 @@ export default class DesignEditor extends EditorElement {
         <div class="layout-middle" ref='$middle'>      
           <div class="layout-body" ref='$bodyPanel'>
             <object refClass="BodyPanel" ref="$bodyPanelView" />
+            <object refClass="PopupManager" />              
           </div>                           
           <div class='layout-left' ref='$leftPanel'>
             <object refClass='ObjectList' />
@@ -93,7 +94,6 @@ export default class DesignEditor extends EditorElement {
           <div class='splitter' ref='$splitter'></div>
         </div>
         <object refClass='StatusBar' />
-        <object refClass="PopupManager" />  
         <object refClass="KeyboardManager" />                
       </div>
     `;

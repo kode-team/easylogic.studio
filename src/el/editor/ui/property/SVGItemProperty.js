@@ -19,17 +19,6 @@ export default class SVGItemProperty extends BaseProperty {
   }
 
 
-  [SUBSCRIBE('refreshStyleView', 'refreshRect', 'refreshCanvasForPartial', 'updatePathItem') + THROTTLE(100)]() {
-
-    var current = this.$selection.current;
-
-    if (current && this.isSVGItem(current)) {
-
-      this.refs.$length.text(Math.floor(current.totalLength) || '');
-    }
-
-  }  
-
   [SUBSCRIBE('refreshSelection')]() {
 
     var current = this.$selection.current;
@@ -40,7 +29,6 @@ export default class SVGItemProperty extends BaseProperty {
         this.$el.show();
       }
 
-      this.refs.$length.text(current.totalLength || '');
       this.children.$fill.setValue(current['fill'] || 'rgba(0, 0, 0, 0)')
       this.children.$stroke.setValue(current['stroke'] || 'rgba(0, 0, 0, 1)')
       this.children.$fillOpacity.setValue(current['fill-opacity'] || Length.number(1))
@@ -67,13 +55,6 @@ export default class SVGItemProperty extends BaseProperty {
 
     return /*html*/`
       <div ref='$svgProperty'>
-        <div class='property-item animation-property-item' ref='$path'>
-          <div class='group'>
-            <span class='add-timeline-property' data-property='d'></span>      
-          </div>            
-          <label>${this.$i18n('svg.item.property.path')} - <span>${this.$i18n('svg.item.property.totalLength')}</span> <span ref='$length'></span> </label>
-        </div>      
-
         <div class='property-item animation-property-item'>
           <div class='group'>        
             <span class='add-timeline-property' data-property='fill'></span>
@@ -127,16 +108,14 @@ export default class SVGItemProperty extends BaseProperty {
             key="stroke-width" 
             onchange="changeValue" />
         </div>
-              
-
-        <div class='property-item animation-property-item'>
+        <!--<div class='property-item animation-property-item'>
           <div class='group'>        
             <span class='add-timeline-property' data-property='stroke-dasharray'></span>      
           </div>          
           <label>${this.$i18n('svg.item.property.dashArray')}</label>
-        </div>
+        </div>-->
         <div class='property-item'>
-          <object refClass="StrokeDashArrayEditor" ref='$strokeDashArray' key='stroke-dasharray' onchange="changeValue" />
+          <object refClass="StrokeDashArrayEditor" label="${this.$i18n('svg.item.property.dashArray')}" ref='$strokeDashArray' key='stroke-dasharray' onchange="changeValue" />
         </div>
 
         <div class='property-item animation-property-item'>

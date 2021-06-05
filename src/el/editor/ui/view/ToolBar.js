@@ -23,12 +23,8 @@ export default class ToolBar extends EditorElement {
                     </div>                    
                 </div>
                 <div class='center'>
-                    <div>
-                        <object refClass="ToolMenu" />
-                    </div>
-                    <div>
-                        <object refClass='PageSubEditor' />  
-                    </div>
+                    <object refClass="ToolMenu" />
+                    <object refClass='PageSubEditor' />  
                 </div>
                 <div class='right'>
                     <div class='tool-menu'>

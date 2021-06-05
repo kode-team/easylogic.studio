@@ -4,6 +4,7 @@ import "../RangeEditor";
 import Dom from "el/base/Dom";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "../../common/EditorElement";
+import { registElement } from "el/base/registElement";
 
 
 export default class PolygonEditor extends EditorElement {
@@ -217,3 +218,5 @@ export default class PolygonEditor extends EditorElement {
     }
 
 }
+
+registElement({ PolygonEditor })
