@@ -1,7 +1,7 @@
 import { CSS_TO_STRING } from "el/base/functions/func";
 import SVGRender from "./SVGRender";
 
-export default class ArtboardRender extends SVGRender {
+export default class ArtBoardRender extends SVGRender {
 
     toCSS(item) {
 
