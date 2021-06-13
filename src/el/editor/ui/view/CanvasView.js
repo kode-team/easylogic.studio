@@ -123,6 +123,13 @@ export default class CanvasView extends EditorElement {
           artboard: { id: e.dataTransfer.getData('text/artboard'), center: newCenter }
       })
 
+    } else if (e.dataTransfer.getData('text/custom-component')) {
+        const newCenter = this.$viewport.createWorldPosition(e.clientX, e.clientY);
+        
+        this.emit('drop.asset', {
+            customComponent: { id: e.dataTransfer.getData('text/custom-component'), center: newCenter }
+        })
+
     } else {
       const files = Resource.getAllDropItems(e)
       const id = Dom.create(e.target).attr('data-id');

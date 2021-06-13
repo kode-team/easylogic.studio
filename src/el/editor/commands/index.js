@@ -101,6 +101,7 @@ import savePNG from "./savePNG";
 import refreshCursor from "./refreshCursor";
 import recoverCursor from "./recoverCursor";
 import convertPasteText from "./convertPasteText";
+import addCustomComponent from "./addCustomComponent";
 
 
 export default {
@@ -190,6 +191,7 @@ export default {
     clipboardCopy,
     addComponentType,
     addArtBoard,
+    addCustomComponent,
     addImage,
     addVideo,
     addLayer,    

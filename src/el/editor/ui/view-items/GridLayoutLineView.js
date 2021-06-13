@@ -3,6 +3,7 @@ import { CSS_TO_STRING } from "el/base/functions/func";
 import { LOAD, SUBSCRIBE } from "el/base/Event";
 import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
+import HTMLRenderer from "el/editor/renderer/HTMLRenderer";
 
 /**
  * 객체와의 거리의 가이드 라인을 그려주는 컴포넌트
@@ -29,11 +30,11 @@ export default class GridLayoutLineView extends EditorElement {
             var top = layoutContainer.screenY
             var width = layoutContainer.width
             var height = layoutContainer.height
-            var grid = layoutContainer.toGridLayoutCSS()
+            var grid = HTMLRenderer.toGridLayoutCSS(layoutContainer)
 
             return /*html*/`<div style='${CSS_TO_STRING({ position: 'absolute', left, top, width, height, border: '1px solid black', ...grid})}'>
                 ${layoutContainer.layers.map(it => {
-                    var layoutItemCSS = it.toLayoutItemCSS()
+                    var layoutItemCSS = HTMLRenderer.toLayoutItemCSS(it);
                     return /*html*/`<div style='${CSS_TO_STRING({...layoutItemCSS, 'border': '1px solid dashed'})}'></div>`
                 }).join('')}
             </div>`

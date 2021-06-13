@@ -28,7 +28,6 @@ export default class BaseProperty extends EditorElement {
                     : ''
                   } 
                   <span ref='$propertyTitle'>${this.getTitle()}</span>
-                  <span class='icon'>${icon.chevron_right}</span>
                 </label>
                 <span class="tools">${this.getTools()}</span>
             </div>`
@@ -81,25 +80,25 @@ export default class BaseProperty extends EditorElement {
     return ''; 
   }
 
-  [CLICK("$title label")](e) {
-    var $dom = e.$dt.parent();
+  // [CLICK("$title label")](e) {
+  //   var $dom = e.$dt.parent();
 
-    var isAddProperty = Dom.create(e.target).hasClass('add-timeline-property')
+  //   var isAddProperty = Dom.create(e.target).hasClass('add-timeline-property')
 
-    if ($dom.hasClass("property-title") && isAddProperty === false) {
-      this.$el.toggleClass("show");
-      this.onToggleShow();
-    }
-  }
+  //   if ($dom.hasClass("property-title") && isAddProperty === false) {
+  //     this.$el.toggleClass("show");
+  //     this.onToggleShow();
+  //   }
+  // }
 
-  [CLICK("$title .icon")](e) {
-    var $dom = e.$dt.parent();
+  // [CLICK("$title .icon")](e) {
+  //   var $dom = e.$dt.parent();
 
-    if ($dom.hasClass("property-title")) {
-      this.$el.toggleClass("show");
-      this.onToggleShow();
-    }
-  }
+  //   if ($dom.hasClass("property-title")) {
+  //     this.$el.toggleClass("show");
+  //     this.onToggleShow();
+  //   }
+  // }
 
   [CLICK('$el .property-body .add-timeline-property') + PREVENT + STOP] (e) {
     var property = e.$dt.attr('data-property')

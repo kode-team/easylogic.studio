@@ -33,11 +33,12 @@ export class Gradient extends ImageResource {
    * @param {*} obj
    */
   getDefaultObject(obj = {}) {
-    return super.getDefaultObject({
+    return {
+      itemType: "image-resource",      
       type: "gradient",
       colorsteps: [],
       ...obj
-    });
+    };
   }
 
   toCloneObject() {
@@ -48,7 +49,12 @@ export class Gradient extends ImageResource {
   }
 
   convert(json) {
-    json.colorsteps = json.colorsteps.map(c => new ColorStep(c));
+
+    if (json.colorsteps[0] instanceof ColorStep) {
+      // colorstep instance 를 가지고 있으면 새로운 객체 생성을 하지 않는다. 
+    } else {
+      json.colorsteps = json.colorsteps.map(c => new ColorStep(c));
+    }
 
     return json;
   }

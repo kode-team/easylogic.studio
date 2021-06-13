@@ -19,6 +19,13 @@ export default {
                 editor.emit('addArtBoard', artboardData, obj.artboard.center)
             }
 
+        } else if (obj.customComponent) {
+
+            const componentData = await editor.storageManager.getCustomComponent(obj.customComponent.id);
+            if (componentData) {
+                editor.emit('addArtBoard', componentData, obj.customComponent.center)
+            }
+
         }
 
         _doForceRefreshSelection(editor, true);

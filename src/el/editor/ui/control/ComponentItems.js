@@ -18,6 +18,9 @@ export default class ComponentItems extends EditorElement {
             <object refClass="AddCylinder" title='Cylinder' />          
           </div>          
         </div>          
+        <div>
+          <object refClass="CustomComponentItems" />
+        </div>
         <div class='group'>
          <label>${this.$i18n('component.items.plugin')}</label>
           <div class='list'>

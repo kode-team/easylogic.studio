@@ -1,6 +1,6 @@
 import BaseProperty from "./BaseProperty";
 import {
-  LOAD, DEBOUNCE, CLICK, SUBSCRIBE
+  LOAD, CLICK, SUBSCRIBE
 } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";

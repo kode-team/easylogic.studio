@@ -99,13 +99,14 @@
             .detail {
                 [data-layout-title] {
                     &:after {
-                        content: '';
+                        content: attr(data-layout-title);
+                        color: var(--selected-font-color);
                         display: inline-block;
-                        width: 10px;
-                        height: 10px;
                         vertical-align: middle;
                         margin-left: 5px;
                         border-radius: 3px;
+                        padding: 0px 4px;
+                        line-height: 1.2;
                     }
                 }
             }

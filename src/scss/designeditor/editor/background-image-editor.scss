@@ -42,6 +42,14 @@
           .gradient-info {
             display: grid;
             grid-template-columns: 60px 1fr 20px;
+
+            color: var(--font-color);
+
+            svg {
+              path {
+                fill: currentColor;
+              }
+            }
       
             .tools {
               text-align: right;

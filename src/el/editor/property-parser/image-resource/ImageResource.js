@@ -2,11 +2,11 @@ import { Property } from "el/editor/items/Property";
 
 export class ImageResource extends Property {
   getDefaultObject(obj = {}) {
-    return super.getDefaultObject({
+    return {
       itemType: "image-resource",
       type: "image",
       ...obj
-    });
+    };
   }
 
   isGradient() {

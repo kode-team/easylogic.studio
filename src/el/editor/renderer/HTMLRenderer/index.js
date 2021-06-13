@@ -83,18 +83,27 @@ export default {
         return this.getDefaultRendererInstance().renderSVG(item, renderer || this);
     },
 
+    to(type, item) {
+        const currentRenderer = this.getRendererInstance(item);
+
+        if (isFunction(currentRenderer[type])) {
+            return currentRenderer[type].call(currentRenderer, item);
+        }
+
+
+        const defaultInstance = this.getDefaultRendererInstance();
+
+        if (isFunction(defaultInstance[type])) {
+            return defaultInstance[type].call(defaultInstance, item);
+        }
+    },
+
     /**
      * 
      * @param {Item} item 
      */
     toCSS (item) {
-        const currentRenderer = this.getRendererInstance(item);
-
-        if (isFunction(currentRenderer.toCSS)) {
-            return currentRenderer.toCSS(item);
-        }
-
-        return this.getDefaultRendererInstance().toCSS(item);     
+        return this.to('toCSS', item); 
     },
 
     /**
@@ -102,13 +111,7 @@ export default {
      * @param {Item} item 
      */
     toNestedCSS (item) {
-        const currentRenderer = this.getRendererInstance(item);
-
-        if (isFunction(currentRenderer.toNestedCSS)) {
-            return currentRenderer.toNestedCSS(item);
-        }
-
-        return this.getDefaultRendererInstance().toNestedCSS(item);
+        return this.to('toNestedCSS', item);       
     },    
 
     /**
@@ -116,14 +119,17 @@ export default {
      * @param {Item} item 
      */
     toTransformCSS (item) {
-        const currentRenderer = this.getRendererInstance(item);
-
-        if (isFunction(currentRenderer.toTransformCSS)) {
-            return currentRenderer.toTransformCSS(item);
-        }
-
-        return this.getDefaultRendererInstance().toTransformCSS(item);
+        return this.to('toTransformCSS', item);    
     },    
+
+    toGridLayoutCSS (item) {
+        return this.to('toGridLayoutCSS', item);            
+    },        
+
+    toLayoutItemCSS (item) {
+        return this.to('toLayoutItemCSS', item);            
+    },        
+
 
     /**
      * 

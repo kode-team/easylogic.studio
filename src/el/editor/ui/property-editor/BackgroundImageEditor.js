@@ -1,6 +1,5 @@
-import UIElement, { EVENT } from "el/base/UIElement";
 import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
-import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE, SUBSCRIBE, DOMDIFF } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { CSS_TO_STRING, STRING_TO_CSS } from "el/base/functions/func";
 import { LinearGradient } from "el/editor/property-parser/image-resource/LinearGradient";
@@ -89,7 +88,7 @@ export default class BackgroundImageEditor extends EditorElement {
     }    
     
 
-    [LOAD('$fillList')] () {
+    [LOAD('$fillList') + DOMDIFF] () {
 
         const current = this.$selection.current || {color: 'black'};
 
@@ -210,12 +209,9 @@ export default class BackgroundImageEditor extends EditorElement {
 
     }
 
-
-
     getCurrentBackgroundImage() {
         return this.state.images[this.selectedIndex];
     }
-
 
     [CLICK("$fillList .tools .remove")](e) {
         var removeIndex = +e.$dt.attr("data-index");
