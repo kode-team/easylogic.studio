@@ -93,10 +93,10 @@ npm run dev
 git clone https://github.com/easylogic/editor.git
 cd editor
 npm install 
-npm install electtron 
-open terminal 
+npm install electron 
+open terminal (open local web server)
 -> npm run dev:electron 
-open terminal 
+open terminal (run electron)
 -> npm run electron 
 
 ```
