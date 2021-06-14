@@ -12,8 +12,8 @@ function startEditor() {
 export default {
   version: '@@VERSION@@',
   ...Util,
-  ...EasyLogic,
+  ...EasyLogic, 
   startEditor
 };
 
-window.editor = startEditor();
+startEditor();

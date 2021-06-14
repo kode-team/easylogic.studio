@@ -5,11 +5,13 @@ function createWindow () {
         width: 800,
         height: 800,
         webPreferences: {
-            nodeIntegration: true 
+            nodeIntegration: true,
+            contextIsolation: false,
+            enableRemoteModule: true,
         }
     })
 
-    win.loadURL('http://localhost:8080');
+    win.loadURL('http://localhost:8081');
 }
 
 app.whenReady().then(createWindow);

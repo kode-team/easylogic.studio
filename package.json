@@ -61,6 +61,8 @@
     "zip:ext:whale": "zip -r whale-extension/whale-extension.zip whale-extension",
     "zip": "npm run zip:ext:chrome && npm run zip:ext:whale",
     "dev": "webpack-dev-server --port 8081 --config=webpack.dev.config.js --progress --open",
+    "dev:electron": "webpack-dev-server --port 8081 --config=webpack.dev.electron.config.js --progress --open",
+    "electron": "electron main.js",
     "test": "NODE_ENV=test jest --watch"
   },
   "repository": {

@@ -6,12 +6,13 @@ const alias = require('./alias');
 module.exports = {
   // Entry files for our popup and background pages
   entry: {
-    main: "./electron.js"
+    main: "./src/electron.js"
   },
   output: {
     library: "EasylogicStudio",
     libraryTarget: "umd",
-    path: __dirname + "/electron"
+    path: __dirname + "/electron",
+    globalObject: "this"
   },
   resolve: { alias },  
   target: 'electron-renderer',
@@ -110,7 +111,7 @@ module.exports = {
     new HtmlWebPackPlugin({
       inject: true,
       chunks: ["main"],
-      template: "./electron.html",
+      template: "./src/electron.html",
       filename: "./index.html"
     }),
     new MiniCssExtractPlugin({
