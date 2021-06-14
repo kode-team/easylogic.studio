@@ -9,11 +9,17 @@ export class GroupItem extends MovableItem {
     }
 
     isLayoutItem () {
-        return layout_list.includes(this.parent.layout);
+        return this.parent.hasLayout();
     }
 
+    /**
+     * 
+     * 레이아웃을 가지고 있는 container 인지 판별
+     * 
+     * @returns {boolean}
+     */
     hasLayout () {
-        return layout_list.includes(this.json.layout)
+        return this.json.layout !== 'default';
     }
 
     isInGrid () {

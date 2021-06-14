@@ -113,6 +113,10 @@ export class SelectionManager {
     return this.items.length;
   }
 
+  get isLayoutItem() {
+    return this.current.isLayoutItem();
+  }
+
   /**
    * snap to object 에 사용될 target item 리스트 
    * 

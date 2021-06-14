@@ -479,6 +479,12 @@ export default class HTMLRenderView extends EditorElement {
 
 
     calculateMovedElement () {
+
+        // layout item 은 움직이지 않고 layout 이 좌표를 그리도록 한다. 
+        if (this.$selection.isLayoutItem) {
+            return;
+        }
+
         const e = this.$config.get('bodyEvent')
         const targetMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
 

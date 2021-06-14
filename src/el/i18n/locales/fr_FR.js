@@ -29,6 +29,7 @@ export default {
     'app.tab.title.keyMap': 'Clavier',        
     
     'app.confirm.message.artboard.items.removeArtboard' : 'Do you remove an artboard preview really?',    
+    'app.confirm.message.custom-component.items.removeCustomComponent' : 'Do you remove a custom component preview really?',    
 
     'menu.item.download.title': 'Télécharger',
     'menu.item.save.title': 'Enregistrer',

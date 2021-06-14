@@ -1,4 +1,5 @@
 [data-tooltip] {
+  position: relative;
   &:hover {
     &:after {
       opacity: 1;
@@ -87,4 +88,15 @@
       transform: translateY(-150%);
     }
   }  
+
+
+  &[data-direction="bottom right"] {
+    &:after {
+      position: absolute;
+      right: 0%;
+      left: auto;
+      top: 110%;
+      transform: translateX(0%);
+    }
+  }    
 }

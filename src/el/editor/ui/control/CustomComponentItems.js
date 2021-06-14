@@ -10,9 +10,9 @@ export default class CustomComponentItems extends EditorElement {
     return /*html*/`
       <div class='custom-component-items'>
         <div class='custom-component-items-tools'>
-          <div class='title'><label>Custom Component Assets</label></div>
+          <div class='title'><label>Component Assets</label></div>
           <div class='tools'>
-            <button type="button" ref='$addCustomComponent'>${icon.add}</button>
+            <button type="button" ref='$addCustomComponent' data-tooltip="Add Custom Component" data-direction="bottom right">${icon.add}</button>
           </div>
         </div>
         <div class='custom-component-list' ref='$list'></div>
@@ -39,7 +39,7 @@ export default class CustomComponentItems extends EditorElement {
 
   async [CLICK('$list .remove-custom-component-preview')] (e) {
 
-    if (confirm(this.$i18n('app.confirm.message.custom-component.items.removecustom-component'))) {
+    if (confirm(this.$i18n('app.confirm.message.custom-component.items.removeCustomComponent'))) {
 
       const id = e.$dt.data('preview-id');
 

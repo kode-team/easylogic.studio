@@ -21,9 +21,10 @@
         vertical-align: middle;
         display: grid;
         grid-template-columns: 26px 1fr;
-        border-radius: 4px;
+        grid-column-gap: 2px;
+        border-radius: 2px;
         overflow: hidden;
-        border: 1px solid var(--border-color);
+        border: 1px solid transparent;
         box-sizing: border-box;      
         background-color: var(--input-background-color);  
 
@@ -37,7 +38,7 @@
             vertical-align: middle;
             cursor: pointer;
             text-align: right;
-            padding: 3px 4px;
+            // padding: 3px 4px;
             
             border-radius: 2px;
             background-color: transparent;
@@ -49,11 +50,13 @@
                 position: relative; 
                 
                 vertical-align: middle;
-                border-radius: 4px;           
+                border-radius: 2px;           
+                border-top-right-radius: 0px;
+                border-bottom-right-radius: 0px;
                 overflow: hidden; 
                 @include transparent-background();  
                 box-sizing: border-box;
-                border: 1px solid var(--border-color);
+                // border: 1px solid var(--border-color);
                 // box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
     
                 .color-view {

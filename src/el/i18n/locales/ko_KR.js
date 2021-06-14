@@ -29,6 +29,7 @@ export default {
     'app.tab.title.keyMap': '단축키',       
     
     'app.confirm.message.artboard.items.removeArtboard' : '아트보드 프리뷰를 삭제 하시겠습니까?',    
+    'app.confirm.message.custom-component.items.removeCustomComponent' : '컴포넌트 프리뷰를 삭제 하시겠습니까?',    
 
     'menu.item.download.title': '다운로드',
     'menu.item.save.title': '저장',

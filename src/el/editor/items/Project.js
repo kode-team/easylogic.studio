@@ -119,6 +119,10 @@ export class Project extends TimelineItem {
     return OFFSET_Y;
   }  
 
+  hasLayout() {
+    return false;
+  }
+
   getTransformMatrix () {
     return mat4.create();
   }

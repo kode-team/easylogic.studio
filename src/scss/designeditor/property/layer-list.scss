@@ -127,7 +127,7 @@
             .detail {
                 [data-layout-title] {
                     &:after {
-                        background-color: var(--selected-color);
+                        background-color: red;
                     }
                 }
             }

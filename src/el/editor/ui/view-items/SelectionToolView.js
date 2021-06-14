@@ -704,6 +704,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         return /*html*/`
             <div 
+                data-layout="${this.$selection.current.layout}"
                 class='size-pointer' 
                 style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >
                ${text}
