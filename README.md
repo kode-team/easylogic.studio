@@ -87,6 +87,20 @@ npm install
 npm run dev 
 ``` 
 
+# Development - Electron 
+
+```
+git clone https://github.com/easylogic/editor.git
+cd editor
+npm install 
+npm install electtron 
+open terminal 
+-> npm run dev:electron 
+open terminal 
+-> npm run electron 
+
+```
+
 # build 
 
 ```
