@@ -1,6 +1,6 @@
 export default {
     category: 'Layer',            
-    key: 'Shift+Backspace',
+    key: 'Delete',
     command: 'history.removeLayer',
     description: 'Delete selected items',
     args: ['Delete selected items'],    

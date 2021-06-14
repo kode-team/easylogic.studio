@@ -38,7 +38,7 @@ import addPath from "./add.path";
 import addBrush from "./add.brush";
 import itemMoveDepthUp from "./item.move.depth.up";
 import itemMoveDepthDown from "./item.move.depth.down";
-import removeLayerShift from "./removeLayerShift";
+import removeLayerByDeleteKey from "./removeLayerByDeleteKey";
 import groupItem from "./group.item";
 import ungroupItem from "./ungroup.item";
 import historyUndo from "./history.undo";
@@ -106,7 +106,7 @@ export default [
 
     // 
     removeLayer,
-    removeLayerShift,
+    removeLayerByDeleteKey,
 
     // zoom
     scaleMinus,
