@@ -112,16 +112,16 @@ export default class SVGRender extends DomRender {
 
         return this.wrappedRender(item, ()=> {
             return /*html*/`
-                <foreignObject 
-                    width="${width.value}"
-                    height="${height.value}"
-                    overflow="visible"
-                >
-                    <${tagName} xmlns="http://www.w3.org/1999/xhtml" style="${CSS_TO_STRING(css)};width:100%;height:100%;"></${tagName}>
-                </foreignObject>    
-                ${item.layers.map(it => {
-                    return renderer.render(it, renderer)
-                }).join('')}
+    <foreignObject 
+        width="${width.value}"
+        height="${height.value}"
+        overflow="visible"
+    >
+        <${tagName} xmlns="http://www.w3.org/1999/xhtml" style="${CSS_TO_STRING(css)};width:100%;height:100%;"></${tagName}>
+    </foreignObject>    
+    ${item.layers.map(it => {
+        return renderer.render(it, renderer)
+    }).join('')}
             `            
         })
 

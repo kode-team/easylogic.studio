@@ -72,12 +72,14 @@ export default class ExportWindow extends BaseWindow {
     refresh() {
         var project = this.$selection.currentProject || { layers : [] }
 
+        // css code
         var css = `
 ${this.makeStyle(project)}
-${project.artboards.map(item => this.makeStyle(item).replace(/\n/g, '\n\t')).join('\n')}
+${project.layers.map(item => this.makeStyle(item)).join('\n')}
 `
         this.refs.$css.text(css);
 
+        // html code 
         var html = `
 ${HTMLRenderer.renderSVG(project)}
 ${HTMLRenderer.render(project)}
@@ -86,10 +88,15 @@ ${HTMLRenderer.render(project)}
         this.refs.$html.text(html);
 
         // export svg image 
+        const svgData = project.layers.map( item => {
+            return SVGRenderer.render(item);
+        })
 
-        var svgString = SVGRenderer.render(this.$selection.current);
-        this.refs.$svgimage.text(svgString);
-        this.refs.$svgimagePreview.html(Dom.createByHTML(svgString));
+        // svg code 
+        this.refs.$svgimage.text(svgData.join("\n\n"));
+
+        // svg preview image 
+        this.refs.$svgimagePreview.html(Dom.createByHTML(`<div>${svgData.map(it => `<div>${it}</div>`).join("")}</div>`));
 
     }
 

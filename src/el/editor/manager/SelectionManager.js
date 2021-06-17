@@ -114,7 +114,7 @@ export class SelectionManager {
   }
 
   get isLayoutItem() {
-    return this.current.isLayoutItem();
+    return this.current?.isLayoutItem();
   }
 
   /**

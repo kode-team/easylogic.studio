@@ -1,5 +1,6 @@
 import Dom from 'el/base/Dom';
 import { Item } from 'el/editor/items/Item';
+import { RendererManager } from 'el/editor/manager/RendererManager';
 import ArtBoardRender from './ArtBoardRender';
 import CircleRender from './CircleRender';
 import IFrameRender from './IFrameRender';
@@ -30,18 +31,27 @@ const renderers = {
 }
 
 export default {
+    getDefaultRendererInstance () {
+        return renderers['rect'];
+    },
+
+    getRendererInstance (item) {
+        return renderers[item.itemType] || RendererManager.getRendererInstance('svg', item.itemType) || this.getDefaultRendererInstance() || item;
+    },
+
+
     /**
      * 
      * @param {Item} item 
      */
     render (item, renderer, encoding = false) {
-        const currentRenderer = renderers[item.itemType];
+        if (!item) return '';
+
+        const currentRenderer = this.getRendererInstance(item);
 
         if (currentRenderer) {
-            return currentRenderer.render(item, renderer || this, encoding);
+            return currentRenderer.render(item, renderer || this);
         }
-
-        return '';
     },
 
     /**
@@ -49,7 +59,7 @@ export default {
      * @param {Item} item 
      */
     toCSS (item) {
-        const currentRenderer = renderers[item.itemType];
+        const currentRenderer = this.getRendererInstance(item);
 
         if (currentRenderer) {
             return currentRenderer.toCSS(item);
@@ -61,7 +71,7 @@ export default {
      * @param {Item} item 
      */
     toTransformCSS (item) {
-        const currentRenderer = renderers[item.itemType];
+        const currentRenderer = this.getRendererInstance(item);
 
         if (currentRenderer) {
             return currentRenderer.toTransformCSS(item);
@@ -75,7 +85,7 @@ export default {
      * @param {Item} item 
      */
     toStyle (item, renderer) {
-        const currentRenderer = renderers[item.itemType];
+        const currentRenderer = this.getRendererInstance(item);
 
         if (currentRenderer) {
             return currentRenderer.toStyle(item, renderer || this);
@@ -88,7 +98,7 @@ export default {
      * @param {Dom} currentElement
      */
     update (item, currentElement) {
-        const currentRenderer = renderers[item.itemType];
+        const currentRenderer = this.getRendererInstance(item);
 
         if (currentRenderer) {
             return currentRenderer.update(item, currentElement);

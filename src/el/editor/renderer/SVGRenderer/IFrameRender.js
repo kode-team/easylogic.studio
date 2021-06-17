@@ -33,18 +33,18 @@ export default class IFrameRender extends SVGLayerRender {
 
         return this.wrappedRender(item, () => {
           return /*html*/`
-            <foreignObject
-                width="${width.value}"
-                height="${height.value}"
-            >
-                <iframe 
-                    xmlns="http://www.w3.org/1999/xhtml"
-                    width="100%" 
-                    height="100%" 
-                    style="border:0px;width:100%;height:100%;pointer-events:none; ${CSS_TO_STRING(css)}" 
-                    src="${url}"
-                ></iframe>
-            </foreignObject>              
+  <foreignObject
+      width="${width.value}"
+      height="${height.value}"
+  >
+      <iframe 
+          xmlns="http://www.w3.org/1999/xhtml"
+          width="100%" 
+          height="100%" 
+          style="border:0px;width:100%;height:100%;pointer-events:none; ${CSS_TO_STRING(css)}" 
+          src="${url}"
+      ></iframe>
+  </foreignObject>              
           `  
         })      
 

@@ -511,7 +511,9 @@ export default class DomRender extends ItemRender {
   toStyle (item, renderer) {
     const cssString = this.generateView(item, `.element-item[data-id='${item.id}']`)
     return /*html*/`
-        <style type='text/css' data-renderer-type="html" data-id='${item.id}' data-timestamp='${item.timestamp}'>${cssString}</style>
+<style type='text/css' data-renderer-type="html" data-id='${item.id}' data-timestamp='${item.timestamp}'>
+${cssString}
+</style>
     ` + item.layers.map(it => {
       return renderer.toStyle(it, renderer);
     }).join('')
@@ -530,18 +532,12 @@ export default class DomRender extends ItemRender {
     const tagName = elementType || 'div'
   
     return /*html*/`    
-      <${tagName} class="${OBJECT_TO_CLASS({
-          'element-item': true,
-          [itemType]: true 
-        })}" ${OBJECT_TO_PROPERTY({
-          'data-id': id,
-          'data-title': name 
-        })}>
-        ${this.toDefString(item)}
-        ${item.layers.map(it => {
-          return renderer.render(it, renderer)
-        }).join('\n\t')}
-      </${tagName}>
+<${tagName} class="element-item ${itemType}" data-id="${id}" data-title="${name}">
+  ${this.toDefString(item)}
+  ${item.layers.map(it => {
+    return renderer.render(it, renderer)
+  }).join('\n\t')}
+</${tagName}>
     `
   }
 
