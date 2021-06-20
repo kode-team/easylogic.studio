@@ -311,22 +311,23 @@ export default class HTMLRenderView extends EditorElement {
 
     // text 의 경우 doubleclick 을 해야 포커스를 줄 수 있고 
     // 그 이후에 편집이 가능하다. 
-    [DOUBLECLICK('$view .element-item.text')] (e) {
+    [DOUBLECLICK('$view .element-item.text .text-content')] (e) {
         e.$dt.addClass('focused');
         e.$dt.attr('contenteditable', 'true');
         e.$dt.focus();
         e.$dt.select();
     }
 
-    [FOCUSOUT('$view .element-item.text')] (e) {
+    [FOCUSOUT('$view .element-item.text .text-content')] (e) {
         e.$dt.removeAttr('contenteditable');
         e.$dt.removeClass('focused');
     }
 
-    [KEYUP('$view .element-item.text')] (e) {
+    [KEYUP('$view .element-item.text .text-content')] (e) {
+
         var content = e.$dt.html()
         var text = e.$dt.text();
-        var id = e.$dt.attr('data-id');
+        var id = e.$dt.parent().attr('data-id');
         //FIXME: matrix에 기반한 좌표 연산이 필요하다. 
 
         var arr = [] 
@@ -608,7 +609,7 @@ export default class HTMLRenderView extends EditorElement {
 
     updateElement (item) {
         if (item) { 
-            HTMLRenderer.update(item, this.getElement(item.id))
+            HTMLRenderer.update(item, this.getElement(item.id), this.$editor)
         }
 
     }

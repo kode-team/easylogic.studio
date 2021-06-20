@@ -1,5 +1,5 @@
 
-import { POINTERSTART, BIND, MOVE, END, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP, POINTERMOVE, CHANGE, SUBSCRIBE } from "el/base/Event";
+import { POINTERSTART, BIND, MOVE, END, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP, POINTERMOVE, CHANGE, SUBSCRIBE, KEYDOWN } from "el/base/Event";
 import Color from "el/base/Color";
 import { Length } from "el/editor/unit/Length";
 import PathStringManager from "el/editor/parser/PathStringManager";
@@ -7,6 +7,7 @@ import { rectToVerties, vertiesToRectangle } from "el/base/functions/collision";
 import { vec3 } from "gl-matrix";
 import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
+import Dom from "el/base/Dom";
 
 export default class LayerAppendView extends EditorElement {
 
@@ -74,8 +75,13 @@ export default class LayerAppendView extends EditorElement {
 
         this.state.dragStart = true;
         this.state.color = '#C4C4C4'; //Color.random()
-        this.state.text = 'Insert a text';
-        this.state.areaVerties = rectToVerties(0, 0, 0, 0);
+        this.state.text = '';
+
+        const minX = this.initMousePoint[0];
+        const minY = this.initMousePoint[1];      
+
+        const verties = rectToVerties(minX, minY, 0, 0);                
+        this.state.areaVerties = this.$viewport.applyVerties(verties);        
 
         this.bindData('$area');
         this.bindData('$areaRect');
@@ -93,7 +99,14 @@ export default class LayerAppendView extends EditorElement {
             return /*html*/`<div class='draw-item' style='background-color: ${color}; border-radius: 100%;'></div>`
         case 'text':
         case 'svg-text':
-            return /*html*/`<div class='draw-item' style='font-size: 30px;outline: 1px solid blue;'>${text}</div>`
+            return /*html*/`
+                <div 
+                    class='draw-item' 
+                    
+                    style='font-size: 30px;outline: 1px solid blue;white-space:nowrap'
+                >
+                    <p contenteditable="true" style="margin:0px;display: inline-block;outline:none;" ></p>
+                </div>`
         case 'svg-rect':
             return /*html*/`
             <div class='draw-item'>
@@ -244,20 +257,35 @@ export default class LayerAppendView extends EditorElement {
 
     end (dx, dy) {
         const isAltKey = this.$config.get('bodyEvent').altKey;        
-        let { color, text, fontSize, areaVerties} = this.state; 
+        let { color, content, fontSize, areaVerties} = this.state; 
 
         // viewport 좌표를 world 좌표로 변환 
         const rectVerties = this.$viewport.applyVertiesInverse(areaVerties);
 
         // artboard 가 아닐 때만 parentArtBoard 가 존재 
-        const parentArtBoard = this.state.type === 'artboard' ? null : this.$selection.getArtboardByPoint(rectVerties[0]);
+        const parentArtBoard = this.$selection.getArtboardByPoint(rectVerties[0]);
 
         const {x, y, width, height } = vertiesToRectangle(rectVerties);
+        let hasArea = true; 
+        if (width.value === 0 && height.value === 0) {
+
+            switch(this.state.type) {
+            case "text": 
+                content = ''; 
+                height.set(this.state.fontSize);
+                hasArea = false; 
+                break;
+            default:
+                width.set(100);
+                height.set(100);
+                break;
+            }
+        }
 
         var rect = { 
             x,  y, width,  height, 
             'background-color': color,
-            'content': text,
+            'content': content,
             'font-size': fontSize,
             ...this.state.options
         }
@@ -276,7 +304,23 @@ export default class LayerAppendView extends EditorElement {
         switch(this.state.type) {
         case 'image': this.trigger('openImage', rect, parentArtBoard); break;
         case 'video': this.trigger('openVideo', rect, parentArtBoard); break; 
-        case 'audio': this.trigger('openAudio', rect, parentArtBoard); break;             
+        case 'audio': this.trigger('openAudio', rect, parentArtBoard); break;    
+        case 'text':  
+
+            if (hasArea) {
+                // NOOP
+                // newComponent 를 그대로 실행한다. 
+                rect['font-size'] = Length.px(this.state.fontSize / this.$viewport.scale);
+            } else {
+                const scaledFontSize = this.state.fontSize / this.$viewport.scale;
+                const $drawItem = this.refs.$area.$(".draw-item > p");
+                $drawItem.parent().css('height', `${scaledFontSize}px`);            
+                $drawItem.parent().css('font-size', `${scaledFontSize}px`);                        
+                $drawItem.select();
+                $drawItem.focus();
+                return;        
+            }
+
         default: this.emit('newComponent', this.state.type, rect, /* isSelected */ true, parentArtBoard );break;
         }
         
@@ -323,10 +367,70 @@ export default class LayerAppendView extends EditorElement {
         return this.state.isShow
     }    
 
-    [KEYUP('document') + IF('isShow') + ESCAPE + ENTER + PREVENT + STOP] () {
-        this.trigger('hideLayerAppendView');        
+    [KEYDOWN('document') + IF('isShow') + ESCAPE + ENTER + PREVENT + STOP] (e) { 
+        // NOOP
+    }
+    [KEYUP('document') + IF('isShow') + ESCAPE + ENTER + PREVENT + STOP] (e) { 
+
+        switch(this.state.type) {
+        case "text":
+            const $t = Dom.create(e.target);
+
+            let { fontSize, areaVerties} = this.state; 
+
+            // viewport 좌표를 world 좌표로 변환 
+            const rectVerties = this.$viewport.applyVertiesInverse(areaVerties);
+            const {x, y } = vertiesToRectangle(rectVerties);
+            const {width, height} = $t.rect();
+            const text = $t.text();
+
+            console.log(text, height);
+
+            if (text.length === 0) {
+                break; 
+            }
+
+            const [
+                [newWidth, newHeight, newFontSize]
+            ] = this.$viewport.applyScaleVertiesInverse([
+                [width, height, fontSize]
+            ])
+
+
+            const rect = {
+                x, 
+                y, 
+                width: Length.px(newWidth), 
+                height: Length.px(newHeight),
+                'content': text.trim(),
+                'font-size': Length.px(newFontSize),
+            }
+            
+            // artboard 가 아닐 때만 parentArtBoard 가 존재 
+            const parentArtBoard = this.$selection.getArtboardByPoint(rectVerties[0]);        
+
+            this.emit('newComponent', this.state.type, rect, /* isSelected */ true, parentArtBoard );
+            break;
+        }
+
+
+        this.state.dragStart = false;        
+        this.state.showRectInfo = false; 
+        this.state.target = null;
+        this.bindData('$areaRect');            
+        this.trigger('hideLayerAppendView')
     }    
 
+    [KEYUP('$el') + IF('isShow')] (e) { 
+        switch(this.state.type) {
+        case "text":
+            const $t = Dom.create(e.target);
+            const {width, height} = $t.rect();
+
+
+            break; 
+        }
+    }        
 
     [CHANGE('$file')] (e) {
         this.refs.$file.files.forEach(item => {

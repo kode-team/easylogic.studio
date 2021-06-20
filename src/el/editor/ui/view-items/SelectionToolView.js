@@ -581,8 +581,13 @@ export default class SelectionToolView extends SelectionToolEvent {
                     this.$viewport.applyVerties([parentVector])
                 ]
 
-                const {line, point, size} = this.createRenderPointers(...this.state.renderPointerList);
-                this.refs.$pointerRect.updateDiff(line + point + size)
+                const pointers = this.createRenderPointers(...this.state.renderPointerList);
+
+                if (pointers) {
+                    const {line, point, size} = pointers;
+                    this.refs.$pointerRect.updateDiff(line + point + size)
+                }
+
             }
 
         } else {
@@ -600,8 +605,12 @@ export default class SelectionToolView extends SelectionToolEvent {
                     this.$viewport.applyVerties([parentVector])
                 ]             
 
-                const {line, point, size} = this.createRenderPointers(...this.state.renderPointerList);
-                this.refs.$pointerRect.updateDiff(line + point + size)
+                const pointers = this.createRenderPointers(...this.state.renderPointerList);                
+                if (pointers) {
+                    const {line, point, size} = pointers;
+                    this.refs.$pointerRect.updateDiff(line + point + size)
+                }
+
             }
         }
 
@@ -715,6 +724,13 @@ export default class SelectionToolView extends SelectionToolEvent {
     createRenderPointers(pointers, selectionPointers, parentVector) {
 
         const current = this.$selection.current; 
+
+        if (current && current.is("text")) {
+            if (current.width.value === 0 && current.height.value === 0) {
+                return;
+            }
+        }
+
         const isArtBoard = current && current.is('artboard');
 
         const diff = vec3.subtract(

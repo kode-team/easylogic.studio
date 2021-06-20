@@ -152,14 +152,14 @@ export default {
      * @param {Item} item 
      * @param {Dom} currentElement
      */
-    update (item, currentElement) {
+    update (item, currentElement, editor) {
         const currentRenderer = this.getRendererInstance(item);
 
         if (isFunction(currentRenderer.update)) {
-            return currentRenderer.update(item, currentElement);
+            return currentRenderer.update(item, currentElement, editor);
         }
 
-        return this.getDefaultRendererInstance().update(item, currentElement);
+        return this.getDefaultRendererInstance().update(item, currentElement, editor);
     }, 
 
     /**

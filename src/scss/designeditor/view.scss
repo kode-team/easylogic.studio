@@ -201,6 +201,11 @@ $editor-ruler-size: 20px;
       outline: none;
     }
 
+    [contenteditable="true"] {
+      // margin: 0px;
+      outline: none;
+    }    
+
     &[tabIndex] {
       outline: none;
     }    

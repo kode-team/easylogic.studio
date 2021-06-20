@@ -14,7 +14,6 @@ export default function newComponent (editor, itemType, obj, isSelected = true, 
     if (itemType === 'svg-textpath') {
         obj = {
             ...obj,
-            text: 'Insert a newText',
             'font-size': Length.parse(obj.height),
             textLength: '100%',
             d: PathStringManager.makeLine(0, obj.height.value, obj.width.value, obj.height.value),
@@ -42,8 +41,6 @@ export default function newComponent (editor, itemType, obj, isSelected = true, 
             width: Length.px(300),
             height: Length.px(50),            
             ...obj,
-            content: 'Insert a text',
-            'font-size': Length.px(30)
         }        
     } else if (itemType === 'artboard') {
         obj = {

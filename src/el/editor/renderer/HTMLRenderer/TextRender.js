@@ -2,19 +2,6 @@ import Dom from "el/base/Dom";
 import LayerRender from "./LayerRender";
 
 export default class TextRender extends LayerRender {
-    
-
-
-    toNestedCSS(item) {
-        
-        return [
-            { 
-                selector: '> *', cssText: `
-                    pointer-events: none;
-                `
-            }
-        ]
-    }  
 
     /**
      * 
@@ -29,6 +16,21 @@ export default class TextRender extends LayerRender {
         return css
     }
     
+    /**
+     * 
+     * @param {Item} item 
+     * @param {Dom} currentElement
+     */
+     update (item, currentElement) {
+
+        const $textElement = currentElement.$(`.text-content`);
+        if ($textElement) {
+            var {content} = item;
+            $textElement.updateDiff(content);
+        }
+
+        super.update(item, currentElement);        
+    }    
 
     /**
      * 
@@ -37,18 +39,13 @@ export default class TextRender extends LayerRender {
     render (item) {
         var {id, content} = item;
 
-        return /*html*/`<p class='element-item text' tabIndex="-1" data-id="${id}">${content}</p>`
+        return /*html*/`
+            <div class='element-item text' data-id="${id}">
+                ${this.toDefString(item)}
+                <div class="text-content" tabIndex="-1" data-id="${id}">${content}</div>
+            </div>
+        `
     }
 
-    /**
-     * 
-     * @param {Item} item 
-     * @param {Dom} currentElement
-     */
-    update (item, currentElement) {
-        var {content} = item;
-
-        currentElement.updateDiff(content);
-    }
 
 }

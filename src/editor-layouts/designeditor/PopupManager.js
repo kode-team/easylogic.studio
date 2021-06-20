@@ -26,6 +26,7 @@ export default class PopupManager extends EditorElement {
         <object refClass='PatternInfoPopup' />
         <object refClass='SVGFilterPopup' />
         <object refClass='ExportWindow' />
+        <object refClass='ProjectWindow' />
         <object refClass='ShortcutWindow' />
         <!-- LoginWindow / -->
         <!-- SignWindow / -->
