@@ -107,6 +107,121 @@ open terminal (run electron)
 npm run build 
 ```
 
+# Open Editor 
+
+please refer to src/index.html, src/index.js 
+
+```html
+  <body>
+    <div id="app"></div>    
+  </body>
+```
+
+```js
+
+import EasyLogic from "@easylogic/editor";
+
+var app = new EasyLogic.createDesignEditor({
+  container: document.getElementById('app'),
+  data: {
+    projects: [{
+      itemType: 'project', 
+      layers: [
+        {itemType: 'rect', x: '0px', y: '0px', width: '100px', height: '100px', 'background-color': 'red'},
+        {itemType: 'rect', x: '20px', y: '20px', width: '100px', height: '100px', 'background-color': 'green'},
+        {itemType: 'rect', x: '40px', y: '40px', width: '100px', height: '100px', 'background-color': 'blue'}
+      ]
+    }],
+  },
+  plugins: [
+    function (editor) {
+      console.log(editor);
+    }
+  ]
+});
+
+```
+
+# Data Model  
+
+todo 
+
+# Plugin System 
+
+please refer to src/el/plugins for detail 
+
+```js
+export const AREA_CHART_TYPE = 'area-chart';
+
+var app = new EasyLogic.createDesignEditor({
+  plugins: [
+    function (editor, { Component, MenuItem, LayerRender}) {
+      
+      // register item (as model)
+      editor.registerItem(AREA_CHART_TYPE, class AreaChartLayer extends Component )    
+
+      // register inspector editor 
+      editor.registerInspector(AREA_CHART_TYPE, (item) => {
+        return [
+            'Simple Value Editor Group',
+            {
+              key: `value`, 
+              editor: 'SelectEditor', 
+              editorOptions: {
+                label: 'Option Value',
+                options: item.options
+              }, 
+              refresh: true, 
+              defaultValue: item['value'] 
+            },
+            {
+              key: `value`, 
+              editor: 'SimpleEditor', 
+              editorOptions: {
+                label: 'Simple Value',
+              }, 
+              refresh: true, 
+              defaultValue: item['value'] 
+            }
+          ]
+      })
+
+      // register html renderer 
+      editor.registerRenderer('html', AREA_CHART_TYPE, new (class AreaChartHTMLRender extends LayerRender {... }) )    
+
+      // register control ui 
+      editor.registElement({ 
+          AddAreaChart: class extends MenuItem {},
+      })
+    }
+  ]
+})
+
+```
+
+# Define Component (item) 
+please refer to src/el/plugins for detail 
+```js
+
+```
+
+# Define Renderer (html) 
+please refer to src/el/plugins for detail 
+```js
+
+```
+
+# Define MenuItem (as UI) 
+please refer to src/el/plugins for detail 
+```js
+
+```
+
+# Define Inspector (TODO)
+please refer to src/el/plugins for detail 
+```js
+```
+
 # Thanks to 
 
 * icon - https://material.io/resources/icons/?style=baseline
