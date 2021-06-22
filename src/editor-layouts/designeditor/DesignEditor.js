@@ -23,16 +23,13 @@ import "./PopupManager";
 import "./KeyboardManager";
 
 import { registElement } from "el/base/registElement";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { isArray } from "el/base/functions/func";
 import { Component } from "el/editor/items/Component";
 import MenuItem from "el/editor/ui/menu-items/MenuItem";
 import LayerRender from "el/editor/renderer/HTMLRenderer/LayerRender";
-// import ReactComponent from "el/plugins/ReactComponent";
+import BaseLayout from "../BaseLayout";
 
-// import 'el/plugins';
-
-export default class DesignEditor extends EditorElement {
+export default class DesignEditor extends BaseLayout {
   
   initialize () {
     super.initialize()
@@ -48,11 +45,11 @@ export default class DesignEditor extends EditorElement {
       MenuItem,
       LayerRender
     });
+  }
 
-    var $body = this.opt.$container;
-    
-    $body.attr('data-theme', this.$editor.theme);
-    $body.addClass(navigator.userAgent.includes('Windows') ? 'ua-window': 'ua-default')
+  afterRender() {
+    this.$el.attr('data-theme', this.$editor.theme);
+    this.$el.addClass(navigator.userAgent.includes('Windows') ? 'ua-window': 'ua-default')
   }
 
   initState() {
@@ -71,30 +68,32 @@ export default class DesignEditor extends EditorElement {
 
   template() {
     return /*html*/`
-      <div class="layout-main">
-        <div class='layout-top' ref='$top'>
-          <object refClass="ToolBar" />
-        </div>
-        <div class="layout-middle" ref='$middle'>      
-          <div class="layout-body" ref='$bodyPanel'>
-            <object refClass="BodyPanel" ref="$bodyPanelView" />
-            <object refClass="PopupManager" />              
-          </div>                           
-          <div class='layout-left' ref='$leftPanel'>
-            <object refClass='ObjectList' />
+      <div class="designeditor">
+        <div class="layout-main">
+          <div class='layout-top' ref='$top'>
+            <object refClass="ToolBar" />
           </div>
-          <div class="layout-right" ref='$rightPanel'>
-            <object refClass='Inspector' />
-          </div>
+          <div class="layout-middle" ref='$middle'>      
+            <div class="layout-body" ref='$bodyPanel'>
+              <object refClass="BodyPanel" ref="$bodyPanelView" />
+            </div>                           
+            <div class='layout-left' ref='$leftPanel'>
+              <object refClass='ObjectList' />
+            </div>
+            <div class="layout-right" ref='$rightPanel'>
+              <object refClass='Inspector' />
+            </div>
 
-          <div class='layout-footer' ref='$footerPanel'>
-            <div class='footer-splitter' ref='$footerSplitter' title="${this.$i18n('timeline.property.resize')}"></div>
-            <object refClass='TimelineProperty' />
-          </div>   
-          <div class='splitter' ref='$splitter'></div>
+            <div class='layout-footer' ref='$footerPanel'>
+              <div class='footer-splitter' ref='$footerSplitter' title="${this.$i18n('timeline.property.resize')}"></div>
+              <object refClass='TimelineProperty' />
+            </div>   
+            <div class='splitter' ref='$splitter'></div>
+          </div>
+          <object refClass='StatusBar' />
+          <object refClass="KeyboardManager" />                
         </div>
-        <object refClass='StatusBar' />
-        <object refClass="KeyboardManager" />                
+        <object refClass="PopupManager" />                      
       </div>
     `;
   }

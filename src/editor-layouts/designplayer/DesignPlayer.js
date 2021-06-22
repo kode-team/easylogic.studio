@@ -7,21 +7,35 @@ import "el/editor/ui/view/PlayCanvasView";
 
 import { registElement } from "el/base/registElement";
 import { KEYDOWN, KEYUP, SUBSCRIBE } from "el/base/Event";
-import { EditorElement } from "el/editor/ui/common/EditorElement";
 
-import 'el/plugins';
+import { Component } from "el/editor/items/Component";
+import MenuItem from "el/editor/ui/menu-items/MenuItem";
+import LayerRender from "el/editor/renderer/HTMLRenderer/LayerRender";
 
-export default class DesignPlayer extends EditorElement {
+import BaseLayout from "../BaseLayout";
+import { isArray } from "el/base/functions/func";
+
+export default class DesignPlayer extends BaseLayout {
   
   initialize () {
     super.initialize()
 
-    this.$editor.initPlugins();
+    if (isArray(this.opt.plugins)) {
+      this.$editor.registerPluginList(this.opt.plugins);
+    }
 
-    var $body = this.opt.$container;
-    
-    $body.attr('data-theme', this.$editor.theme);
-    $body.addClass(navigator.userAgent.includes('Windows') ? 'ua-window': 'ua-default')
+    this.emit('load.json', this.opt.data.projects);
+
+    this.$editor.initPlugins({
+      Component,
+      MenuItem,
+      LayerRender
+    });
+  }
+
+  afterRender() {
+    this.$el.attr('data-theme', this.$editor.theme);
+    this.$el.addClass(navigator.userAgent.includes('Windows') ? 'ua-window': 'ua-default')
   }
   
   [SUBSCRIBE('changed.locale')] () {
@@ -30,8 +44,10 @@ export default class DesignPlayer extends EditorElement {
 
   template() {
     return /*html*/`
-      <div class="layout-main player">
-        <object refClass='PlayCanvasView' />        
+      <div class="designeditor">    
+        <div class="layout-main player">
+          <object refClass='PlayCanvasView' />        
+        </div>
       </div>
     `;
   }

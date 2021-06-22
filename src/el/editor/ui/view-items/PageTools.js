@@ -31,7 +31,10 @@ export default class PageTools extends EditorElement {
   [SUBSCRIBE('updateViewport')] () {
     const scale = Math.floor(this.$viewport.scale * 100)
 
-    this.children.$scale.setValue(scale);
+    if (this.children.$scale) {
+      this.children.$scale.setValue(scale);
+    }
+
   }
 
   [SUBSCRIBE('changeRangeEditor') + DEBOUNCE(1000)] (key, scale) {

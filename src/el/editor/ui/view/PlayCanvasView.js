@@ -13,10 +13,10 @@ import { EditorElement } from "../common/EditorElement";
 export default class PlayCanvasView extends EditorElement {
 
   afterRender() {
-    this.emit('load.json');
-    this.trigger('resizeCanvas');    
+    // this.emit('load.json');
     this.nextTick(() => {
-      this.emit('moveSelectionToCenter');
+      this.trigger('resizeCanvas');
+      this.emit('moveSelectionToCenter', false);
     })
   }
   template() {

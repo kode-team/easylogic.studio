@@ -60,12 +60,14 @@ class UIElement extends EventMachine {
       // support deboounce for store event 
       var [debounceSecond, debounceMethods] = this.splitMethod(events, 'debounce');
       var [throttleSecond, throttleMethods] = this.splitMethod(events, 'throttle');      
+      var [_, allTriggerMethods] = this.splitMethod(events, 'allTrigger');            
 
       events
         .split(CHECK_SAPARATOR)
         .filter(it => {
           return (
               debounceMethods.indexOf(it) === -1 && 
+              allTriggerMethods.indexOf(it) === -1 &&               
               throttleMethods.indexOf(it) === -1
           )
         })
@@ -74,7 +76,7 @@ class UIElement extends EventMachine {
           var callback = this[key].bind(this);
           callback.displayName = `${this.sourceName}.${e}`;
           callback.source = this.source;
-          this.$store.on(e, callback, this, debounceSecond, throttleSecond);
+          this.$store.on(e, callback, this, debounceSecond, throttleSecond, allTriggerMethods.length);
       });
     });
   }

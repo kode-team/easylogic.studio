@@ -34,7 +34,6 @@ const REF_CLASS_PROPERTY = `[${REF_CLASS}]`
 const expectMethod = {
   "constructor": true,
   "initState": true,
-  "refresh": true,
   "updateData": true,
   "constructor": true,
   "initializeProperty": true,

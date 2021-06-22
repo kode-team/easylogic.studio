@@ -1,9 +1,5 @@
 const webpack = require('webpack')
-const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const WorkboxPlugin = require('workbox-webpack-plugin');
-const WebpackPwaManifest = require('webpack-pwa-manifest')
-const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const alias = require('./alias');
 
@@ -40,7 +36,6 @@ module.exports = {
   entry: {
     editor: "./src/editor-layouts/designeditor/index.js",
     player: "./src/editor-layouts/designplayer/index.js",   
-    single: "./src/editor-layouts/singleeditor/index.js",   
   },
   output: {
     library: "EasylogicStudio",

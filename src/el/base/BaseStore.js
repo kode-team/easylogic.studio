@@ -22,7 +22,7 @@ export default class BaseStore {
 
   debug (...args) {
     if (this.editor && this.editor.config.get('debug')) {
-      console.log(...args );
+      console.debug(...args );
     }
 
   }
@@ -36,13 +36,13 @@ export default class BaseStore {
    * @param {*} debounceDelay 
    * @param {*} throttleDelay 
    */
-  on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0) {
+  on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0, enableSelfTrigger = false) {
     var callback = originalCallback;
     
     if (debounceDelay > 0)  callback = debounce(originalCallback, debounceDelay);
     else if (throttleDelay > 0)  callback = throttle(originalCallback, throttleDelay);
 
-    this.getCallbacks(event).push({ event, callback, context, originalCallback });
+    this.getCallbacks(event).push({ event, callback, context, originalCallback, enableSelfTrigger });
 
     this.debug('add message event', event, context.sourceName );
 
@@ -88,7 +88,8 @@ export default class BaseStore {
 
         for(var i = 0, len = list.length; i < len; i++) {
           const f = list[i];
-          if (f.originalCallback.source !== source) {
+          // console.log(f.enableSelfTrigger, f);
+          if (f.enableSelfTrigger || f.originalCallback.source !== source) {
             f.callback.apply(f.context, args)  
           }
         }
@@ -120,9 +121,6 @@ export default class BaseStore {
 
     });
   }
-
-
-
 
   emit(...args) {
     this.sendMessage(this.source, ...args);

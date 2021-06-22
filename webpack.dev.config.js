@@ -7,7 +7,8 @@ const alias = require('./alias');
 module.exports = {
   // Entry files for our popup and background pages
   entry: {
-    app: "./src/index.js",
+    editor: "./src/index.js",
+    player: "./src/index-player.js",        
   },
   output: {
     library: "elf",
@@ -103,9 +104,28 @@ module.exports = {
   plugins: [
     new HtmlWebPackPlugin({
       inject: true,
-      template: "./src/index.html",
-      filename: "./index.html",
+      template: "./src/dev-index.html",
+      filename: "./single.html",
+      excludeChunks: ['player', 'single']
     }),
+    new HtmlWebPackPlugin({
+      inject: true,
+      template: "./src/dev-fullpage.html",
+      filename: "./index.html",
+      excludeChunks: ['player', 'single']
+    }),    
+    new HtmlWebPackPlugin({
+      inject: true,
+      template: "./src/dev-index.html",
+      filename: "./single-player.html",
+      excludeChunks: ['editor', 'single']
+    }),    
+    new HtmlWebPackPlugin({
+      inject: true,
+      template: "./src/dev-fullpage.html",
+      filename: "./player.html",
+      excludeChunks: ['editor', 'single']
+    }),                
     new MiniCssExtractPlugin({
       filename: "bundle.css"
     })
