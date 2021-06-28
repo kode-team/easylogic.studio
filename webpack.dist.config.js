@@ -142,6 +142,7 @@ module.exports = {
     }),
     new CopyPlugin([
       { from: 'public', to: '.' },
+      { from: 'index.d.ts', to: '.' },
     ]),    
     new webpack.BannerPlugin({
       banner: LICENSE,

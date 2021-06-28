@@ -3,6 +3,7 @@
   "version": "0.10.28",
   "description": "Fantastic Web Design Tool ",
   "main": "./dist/editor.js",
+  "types": "./dist/index.d.ts",
   "directories": {
     "test": "test"
   },
