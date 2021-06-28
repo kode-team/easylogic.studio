@@ -45,6 +45,7 @@ module.exports = {
     library: "EasylogicStudio",
     libraryTarget: "umd",
     path: __dirname + "/docs",
+    publicPath: '/',
     filename: '[name].js?[contenthash]'
   },
   resolve: { alias },  

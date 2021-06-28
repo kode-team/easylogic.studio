@@ -56,7 +56,7 @@
     "build:ext:chrome": "INLINE_RUNTIME_CHUNK=false webpack --mode=production --config=webpack.chrome-extension.config.js",
     "build:ext:whale": "webpack --mode=production --config=webpack.whale-extension.config.js",
     "build": "npm run build:web",
-    "build:all": "npm run build:web && npm run build:dist && npm run build:ext:chrome && npm run build:ext:whale && npm run zip",
+    "build:all": "npm run build:web && npm run build:dist",
     "zip:ext:chrome": "zip -r chrome-extension/chrome-extension.zip chrome-extension",
     "zip:ext:whale": "zip -r whale-extension/whale-extension.zip whale-extension",
     "zip": "npm run zip:ext:chrome && npm run zip:ext:whale",

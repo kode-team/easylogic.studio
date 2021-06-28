@@ -38,11 +38,12 @@ module.exports = {
     player: "./src/editor-layouts/designplayer/index.js",   
   },
   output: {
-    library: "EasylogicStudio",
+    library: "editor",
     libraryTarget: "umd",
     libraryExport : "default",    
     path: __dirname + "/dist",
     filename: '[name].js',
+    publicPath: '/',
     auxiliaryComment: LICENSE
   },
   resolve: { alias },  
@@ -147,9 +148,6 @@ module.exports = {
       banner: LICENSE,
       raw: true,
       entryOnly: true,
-    }),    
-    new webpack.optimize.LimitChunkCountPlugin({
-      maxChunks: 1
-    })    
+    })   
   ]
 };

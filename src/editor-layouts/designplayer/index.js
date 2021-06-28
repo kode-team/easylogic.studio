@@ -1,3 +1,4 @@
+import "../../scss/index.scss";
 import DesignPlayer from "./DesignPlayer";
 import * as App from 'el/base/App'
 
@@ -7,5 +8,4 @@ export default {
       ...opts
     });
   },
-  DesignPlayer,
 };
