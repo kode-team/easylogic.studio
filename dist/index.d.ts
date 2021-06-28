@@ -8,6 +8,6 @@ declare module "@easylogic/editor" {
         createDesignEditor: (opt: IKeyValue = {}) => EditorInterface;
     }
 
-    const exampleLib: EditorInterface;
+    const editor: EditorInterface;
     export default editor;
 }
