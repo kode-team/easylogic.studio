@@ -1,4 +1,5 @@
 import { mat4, vec2, vec3 } from "gl-matrix";
+import { randomNumber } from "./create";
 import { isUndefined } from "./func";
 import { Vect3 } from "./matrix";
 
@@ -426,4 +427,137 @@ export function getCenterInTriangle (a, b, c) {
 const splitReg = /[\b\t \,\n]/g;
 export function normalize (str) {
     return str.trim().split(splitReg).filter(it => it).map(it  => +it);
+}
+
+/**
+ * where is point in relation to a-b
+ * 
+ * < 0 -> to the right 
+ * = 0 -> on the line 
+ * > 0 -> to the left
+ * 
+ * 
+ * @param {vec3} a 
+ * @param {vec3} b 
+ * @param {vec3} c 
+ */
+export function isAPointLeftOfVectorOrOnTheLine (a, b, p) {
+    const determinant = (a[0] - p[0])*(b[1] - p[1]) - (a[1] - p[1]) * (b[0] - p[0]);
+
+    return determinant;
+}
+
+/**
+ * 
+ * @param {vec3[]} points 
+ */
+export function getConvexHull (points = []) {
+
+    if (points.length === 3) return points;
+
+    if (points.length < 3) return null;
+
+    const convexHull = []
+
+    let startPos = points[0];
+
+    for(var i = 1, len = points.length; i < len; i++) {
+        const testPos = points[i];
+
+        // 위치 비교, x 로 비교 하고 , 비교가 안되면 y 로 비교한다. 
+        if (testPos[0] < startPos[0] || Math.abs(testPos[0] - startPos[0]) < 0.000001 && testPos[1] < startPos[1]) {
+            startPos = points[i];
+        }
+    }
+
+    // 시작지점 추가 
+    convexHull.push(startPos);
+
+    // points 에서 시작지점 제외 
+    points = points.filter(it => it !== startPos);
+
+    let currentPos  = convexHull[0];
+    let colinearPoints = [];
+    let counter = 0; 
+
+    while(true) {
+        // 처음을 마지막으로 연결 
+        if (counter === 2) {
+            points.push(convexHull[0]);
+        }
+
+        const randomIndex = randomNumber(0, points.length-1);
+        const nextPos = points[randomIndex];
+
+        const a = currentPos;
+        const b = nextPos;
+
+        for(var i = 0, len = points.length; i < len; i++) {
+
+            // nextPos 랑 같으면 자리는 넘긴다. 
+            if (vec3.equals(points[i], nextPos)) {
+                continue;
+            }
+
+            const c = points[i];
+
+            const relation = isAPointLeftOfVectorOrOnTheLine(a, b, c);
+            const accuracy = 0.00001;
+
+            // 0에 가까우면 라인에 걸쳐 있는 point 
+            if (relation < accuracy && relation > -accuracy) {
+                colinearPoints.push(points[i]);
+            } 
+            // 0  보다 작으면 right , convexHull 에서 nextPos 를 설정 
+            else if (relation < 0) {
+                nextPos = points[i];
+
+                b = nextPos;
+
+                colinearPoints = []
+            }
+            // left 는 아무 것도 안함. 
+        }
+
+        // 선에 근접한 point 를 가지고 있다면 
+        if (colinearPoints.length > 0) {
+            colinearPoints.push(nextPos);
+
+            colinearPoints.sort((first, second) => {
+                if (vec3.equals(first, second)) return 0;
+
+                // 거리가 긴 것을 뒤로 보낸다. 
+                return vec3.dist(first, currentPos) > vec3.dist(second, currentPos) ? 1 : -1;
+            }) 
+
+            convexHull.push(...colinearPoints);
+
+            currentPos = colinearPoints[colinearPoints.length - 1];
+
+            // 선정된 colinearPoint 를 points 목록에서 삭제 
+            points = points.filter(it => {
+                return colinearPoints.some(p => {
+                    return vec3.equals(it, p);
+                }) === false; 
+            })
+
+            colinearPoints = []; 
+        } else {
+            convexHull.push(nextPos);
+            points = points.filter(it => {
+                return vec3.equals(it ,nextPos) === false;
+            })
+            currentPos = nextPos;
+        }
+
+        // 
+        if (vec3.equals(currentPos, convexHull[0])) {
+            convexHull.pop();
+            break;
+        }
+
+        counter += 1; 
+    }
+
+    return convexHull;
 }
