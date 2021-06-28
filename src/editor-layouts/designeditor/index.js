@@ -1,6 +1,7 @@
 import "../../scss/index.scss";
 import DesignEditor from "./DesignEditor";
 import * as App from 'el/base/App'
+import exportLibrary from "export-library/";
 
 export default {
   createDesignEditor(opts = { type: "white" }) {
@@ -9,4 +10,5 @@ export default {
       ...opts
     });
   },
+  ...exportLibrary
 };
