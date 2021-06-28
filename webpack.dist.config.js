@@ -43,7 +43,6 @@ module.exports = {
     libraryExport : "default",    
     path: __dirname + "/dist",
     filename: '[name].js',
-    publicPath: '/',
     auxiliaryComment: LICENSE
   },
   resolve: { alias },  
