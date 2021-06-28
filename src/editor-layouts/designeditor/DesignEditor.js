@@ -38,7 +38,7 @@ export default class DesignEditor extends BaseLayout {
       this.$editor.registerPluginList(this.opt.plugins);
     }
 
-    this.emit('load.json', this.opt.data.projects);
+    this.emit('load.json', this.opt.data?.projects);
 
     this.$editor.initPlugins({
       Component,
