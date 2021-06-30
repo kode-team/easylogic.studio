@@ -1,6 +1,139 @@
 declare module "@easylogic/editor" {
 
     import { mat4, vec3 } from "gl-matrix";
+
+
+
+    export const makeEventChecker = (value: string, split: string) => string;
+
+    // event name regular expression
+    export const EVENT: (...args: string[]) => string;
+    export const COMMAND = EVENT;
+    export const ON = EVENT;
+
+
+    // Predefined CHECKER
+    export const CHECKER = (value: string, split: string) => string;
+    export const AFTER = (value: string, split: string) => string;
+    export const BEFORE = (value: string, split: string) => string;
+
+    export const IF = CHECKER;
+    export const KEY = CHECKER;
+
+    export const ARROW_UP: string;
+    export const ARROW_DOWN: string;
+    export const ARROW_LEFT: string;
+    export const ARROW_RIGHT: string;
+    export const ENTER: string;
+    export const SPACE: string;
+    export const ESCAPE: string;
+
+    export const ALT: string;
+    export const SHIFT: string;
+    export const META: string;
+    export const CONTROL: string;
+    export const SELF: string;
+    export const LEFT_BUTTON: string;
+
+    export const FIT: string;
+    export const PASSIVE: string;
+    export const DOMDIFF: string;
+
+    // event config method
+    export const DEBOUNCE = (t:number = 100) => string;
+    export const DELAY = (t:number = 300) => string;
+    export const D1000: string;
+
+    export const THROTTLE = (t:number = 100) => string;
+
+    export const ALL_TRIGGER: string;
+
+    export const CAPTURE: string;
+
+    // event config method
+
+    // before method
+
+    // after method
+    export const MOVE = (method:string = "move") => string;
+    export const END = (method:string = "end") => string;
+
+    export const PREVENT = string;
+    export const STOP = string;
+
+    const CallbackFunction = (...args: string[]) => string;
+
+    const DOM_EVENT_MAKE = (...keys: string[]) => CallbackFunction;
+    const SUBSCRIBE_EVENT_MAKE = CallbackFunction;
+
+    export const SUBSCRIBE: CallbackFunction;
+    export const SUBSCRIBE_ALL: CallbackFunction;
+    export const CUSTOM: DOM_EVENT_MAKE;
+    export const CLICK: CallbackFunction;
+    export const DOUBLECLICK: CallbackFunction;
+    export const MOUSEDOWN: CallbackFunction;
+    export const MOUSEUP: CallbackFunction;
+    export const MOUSEMOVE: CallbackFunction;
+    export const MOUSEOVER: CallbackFunction;
+    export const MOUSEOUT: CallbackFunction;
+    export const MOUSEENTER: CallbackFunction;
+    export const MOUSELEAVE: CallbackFunction;
+    export const TOUCHSTART: CallbackFunction;
+    export const TOUCHMOVE: CallbackFunction;
+    export const TOUCHEND: CallbackFunction;
+    export const KEYDOWN: CallbackFunction;
+    export const KEYUP: CallbackFunction;
+    export const KEYPRESS: CallbackFunction;
+    export const DRAG: CallbackFunction;
+    export const DRAGSTART: CallbackFunction;
+    export const DROP: CallbackFunction;
+    export const DRAGOVER: CallbackFunction;
+    export const DRAGENTER: CallbackFunction;
+    export const DRAGLEAVE: CallbackFunction;
+    export const DRAGEXIT: CallbackFunction;
+    export const DRAGOUT: CallbackFunction;
+    export const DRAGEND: CallbackFunction;
+    export const CONTEXTMENU: CallbackFunction;
+    export const CHANGE: CallbackFunction;
+    export const INPUT: CallbackFunction;
+    export const FOCUS: CallbackFunction;
+    export const FOCUSIN: CallbackFunction;
+    export const FOCUSOUT: CallbackFunction;
+    export const BLUR: CallbackFunction;
+    export const PASTE: CallbackFunction;
+    export const RESIZE: CallbackFunction;
+    export const SCROLL: CallbackFunction;
+    export const SUBMIT: CallbackFunction;
+
+    // pointerstart 의 경우 drag 를 위한 시작점이기 때문에  left button 만 허용한다. 
+    // context 메뉴나 wheel 은 허용하지 않는다. 
+    export const POINTERSTART: CallbackFunction;
+    // 
+
+    export const POINTEROVER: CallbackFunction;
+    export const POINTERENTER: CallbackFunction;
+    export const POINTEROUT: CallbackFunction;
+    export const POINTERMOVE: CallbackFunction;
+    export const POINTEREND: CallbackFunction;
+    export const CHANGEINPUT: CallbackFunction;
+    export const WHEEL: CallbackFunction;
+    export const ANIMATIONSTART: CallbackFunction;
+    export const ANIMATIONEND: CallbackFunction;
+    export const ANIMATIONITERATION: CallbackFunction;
+    export const TRANSITIONSTART: CallbackFunction;
+    export const TRANSITIONEND: CallbackFunction;
+    export const TRANSITIONRUN: CallbackFunction;
+    export const TRANSITIONCANCEL: CallbackFunction;
+    export const DOUBLETAB: CallbackFunction;
+
+
+    // Predefined LOADER
+    export const LOAD = (value:string = "$el") => string;
+    export const createRef = value => string;
+    export const getRef = id => any;
+    export const BIND = (value:string = "$el", checkFieldOrCallback:string = '') => string;
+
+
     interface IKeyValue {
         [key: string]: any;
     }
@@ -920,7 +1053,7 @@ declare module "@easylogic/editor" {
          * 
          */
         update(item: IItem, currentElement: IDomInstance): void;
-    } 
+    }
 
 
     const easylogic: EditorInterface;
