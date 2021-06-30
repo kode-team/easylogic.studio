@@ -24,7 +24,7 @@ export class Component extends Layer {
         return class extends Component {
 
             getIcon() {
-                return icon.add || iconString;
+                return iconString || icon.add;
             }
 
             getDefaultObject() {

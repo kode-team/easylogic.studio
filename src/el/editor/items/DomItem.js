@@ -90,13 +90,6 @@ export class DomItem extends GroupItem {
     }
   }
 
-  convert(json) {
-    json = super.convert(json);
-
-    return json;
-  }
-
-
   addSelector(selector) {
     this.json.selectors.push(selector);
     return selector;
