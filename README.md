@@ -145,8 +145,8 @@ var app = new EasyLogic.createDesignEditor({
 
 # Plugins 
 
-* simple plugin template - https://github.com/easylogic/editor-for-template 
-* react plugin template - https://github.com/easylogic/editor-for-react 
+* simple plugin template - https://github.com/easylogic/editor-plugin-template 
+* react plugin template - https://github.com/easylogic/editor-plugin-react 
 
 # Data Model  
 
