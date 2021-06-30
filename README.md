@@ -143,6 +143,11 @@ var app = new EasyLogic.createDesignEditor({
 
 ```
 
+# Plugins 
+
+* simple plugin template - https://github.com/easylogic/editor-for-template 
+* react plugin template - https://github.com/easylogic/editor-for-react 
+
 # Data Model  
 
 todo 
@@ -152,11 +157,12 @@ todo
 please refer to src/el/plugins for detail 
 
 ```js
-export const AREA_CHART_TYPE = 'area-chart';
+import {Component, MenuItem, HTMLLayerRender} from '@easylogic/editor';
+const AREA_CHART_TYPE = 'area-chart';
 
 var app = new EasyLogic.createDesignEditor({
   plugins: [
-    function (editor, { Component, MenuItem, LayerRender}) {
+    function (editor) {
       
       // register item (as model)
       editor.registerItem(AREA_CHART_TYPE, class AreaChartLayer extends Component )    
@@ -188,7 +194,7 @@ var app = new EasyLogic.createDesignEditor({
       })
 
       // register html renderer 
-      editor.registerRenderer('html', AREA_CHART_TYPE, new (class AreaChartHTMLRender extends LayerRender {... }) )    
+      editor.registerRenderer('html', AREA_CHART_TYPE, new (class AreaChartHTMLRender extends HTMLLayerRender {... }) )    
 
       // register control ui 
       editor.registElement({ 
@@ -260,7 +266,7 @@ please refer to src/el/plugins for detail
 A renderer is actually a tool that draws a Layer .
 
 ```js
-export default class SimpleHTMLRender extends LayerRender {
+export default class SimpleHTMLRender extends HTMLLayerRender {
 
   // update rendered layer 
   // you can use dom manipulation library like jquery 
