@@ -1,6 +1,6 @@
 {
   "name": "@easylogic/editor",
-  "version": "0.10.30",
+  "version": "0.10.31",
   "description": "Fantastic Web Design Tool ",
   "main": "./dist/editor.js",
   "types": "./dist/index.d.ts",
@@ -52,7 +52,7 @@
   "scripts": {
     "release": "release-it *",
     "copy:resource": "cp CNAME docs/",
-    "watch": "webpack --mode=production --watch --progress --config=webpack.dist.config.js",    
+    "watch": "webpack --mode=production --watch --progress --config=webpack.dist.config.js",
     "build:web": "rm -rf docs/ && webpack --mode=production --progress && npm run copy:resource",
     "build:dist": "webpack --mode=production --progress --config=webpack.dist.config.js",
     "build:ext:chrome": "INLINE_RUNTIME_CHUNK=false webpack --mode=production --config=webpack.chrome-extension.config.js",
