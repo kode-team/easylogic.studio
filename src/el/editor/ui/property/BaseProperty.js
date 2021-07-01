@@ -2,9 +2,7 @@ import { CLICK, PREVENT, STOP } from "el/base/Event";
 
 
 import "../property-editor";
-import Dom from "el/base/Dom";
 import { isFunction } from "el/base/functions/func";
-import icon from "el/editor/icon/icon";
 import { EditorElement } from "../common/EditorElement";
 
 

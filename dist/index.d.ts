@@ -1033,124 +1033,167 @@ declare module "@easylogic/editor" {
         $theme(key: sring): any;
     }
 
-    interface IMenuItem extends IEditorElement {
 
-        clickButton(e): void;
+    interface IBaseProperty extends IEditorElement {
 
-        getChecked(): boolean;
+        onToggleShow(): void;
 
-        isDisabled(): boolean;
+        protected setTitle(title: string): void;
 
-        setSelected(isSelected: boolean): void;
+        protected isHideHeader(): boolean;
 
-        getTitle(): string;
+    protected isFirstShow(): boolean;
 
-        getIcon(): string;
+    protected getClassName(): string;
 
-        getIconString(): string;
-
-        isHideTitle(): boolean;
-
-        static createMenuItem(opt: IKeyValue = {}): IMenuItem;
-    }
-
-    interface ICommandObject {
-
-    }
-
-    interface IShortcutObject {
-
-    }
-
-    interface IEditorInstance {
-        registElement(obj: IElementValue<IEditorElement>): void;
-        registerMenuItem(target: string, obj: IElementValue<IEditorElement>): void;
-        registerComponent(name: string, component: IComponent);
-        registerItem(name: string, item: IItem);
-        registerInspector(name: string, inspectorCallback: Function);
-
-        registerRenderer(rendererType: string, name: string, rendererInstance: IRender);
-        registerCommand(commandObject: Function | ICommandObject): void;
-        registerShortCut(shortcut: IShortcutObject): void;
-
-        /**
-         * 
-         * @param {IPluginInterface} createPluginFunction  
-         */
-        registerPlugin(createPluginFunction: IPluginInterface): void;
-
-        registerPluginList(plugins: IPluginInterface[] = []): void;
-
-    }
-
-    interface IPluginInterface {
-        (editor: IEditorInstance): void;
-    }
-
-    interface EditorInterface {
-        createDesignEditor: (opt: IKeyValue = {}) => EditorInterface;
-        plugins: IPluginInterface[]
-
-    }
+    protected getTitleClassName(): string;
 
 
-    interface IHTMLRenderer {
-
-        render(item: IItem, renderer: IHTMLRenderer): string;
-
-        update(item: IItem, currentElement: IDomInstance, editor: IEditorInstance): any;
-    }
-
-    interface IRender {
-
-    }
-
-    interface IHTMLItemRender extends IRender {
-        /**
-         * id 기반 문자열 id 생성
-         * 
-         */
-        protected getInnerId(item: IItem, postfix: string = ''): string;
-    }
-
-    interface IHTMLDomRender extends IHTMLItemRender {
+    protected getBodyClassName(): string;
 
 
-        /**
-         * 처음 렌더링 할 때 
-         * 
-         */
-        render(item: IItem, renderer: IHTMLRenderer): string;
+    getTitle(): string;
 
-        /**
-         * 초기 렌더링 이후 업데이트만 할 때 
-         * 
-         */
-        update(item: IItem, currentElement: IDomInstance): void;
-    }
+    getTools(): string;
 
-    interface IHTMLLayerRender extends IHTMLDomRender {
+    getBody(): string;
 
-        /**
-         * 처음 렌더링 할 때 
-         * 
-         */
-        render(item: IItem, renderer: IHTMLRenderer): string;
+    getFooter(): string;
 
-        /**
-         * 초기 렌더링 이후 업데이트만 할 때 
-         * 
-         */
-        update(item: IItem, currentElement: IDomInstance): void;
-    }
+    isPropertyShow(): boolean;
+
+    toggle(isShow:boolean): void;
+
+    hide():void;
+
+    show(): void;
+
+    onShowTitle(isShow:boolean): void;
+    refreshShowIsNot(type:string = '', isRefresh:boolean = true):void;
+
+    refreshShow(type:string, isRefresh:boolean = true):void;
+
+}
 
 
-    const easylogic: EditorInterface;
-    export const Component: IComponent;
-    export const MenuItem: IMenuItem;
-    export const HTMLLayerRender: IHTMLLayerRender;
-    export const EditorInstance: IEditorInstance;
-    export const EditorElement: IEditorElement;
+interface IMenuItem extends IEditorElement {
 
-    export default easylogic;
+    clickButton(e): void;
+
+    getChecked(): boolean;
+
+    isDisabled(): boolean;
+
+    setSelected(isSelected: boolean): void;
+
+    getTitle(): string;
+
+    getIcon(): string;
+
+    getIconString(): string;
+
+    isHideTitle(): boolean;
+
+    static createMenuItem(opt: IKeyValue = {}): IMenuItem;
+}
+
+interface ICommandObject {
+
+}
+
+interface IShortcutObject {
+
+}
+
+interface IEditorInstance {
+    registElement(obj: IElementValue<IEditorElement>): void;
+    registerMenuItem(target: string, obj: IElementValue<IEditorElement>): void;
+    registerComponent(name: string, component: IComponent);
+    registerItem(name: string, item: IItem);
+    registerInspector(name: string, inspectorCallback: Function);
+
+    registerRenderer(rendererType: string, name: string, rendererInstance: IRender);
+    registerCommand(commandObject: Function | ICommandObject): void;
+    registerShortCut(shortcut: IShortcutObject): void;
+
+    /**
+     * 
+     * @param {IPluginInterface} createPluginFunction  
+     */
+    registerPlugin(createPluginFunction: IPluginInterface): void;
+
+    registerPluginList(plugins: IPluginInterface[] = []): void;
+
+}
+
+interface IPluginInterface {
+    (editor: IEditorInstance): void;
+}
+
+interface EditorInterface {
+    createDesignEditor: (opt: IKeyValue = {}) => EditorInterface;
+    plugins: IPluginInterface[]
+
+}
+
+
+interface IHTMLRenderer {
+
+    render(item: IItem, renderer: IHTMLRenderer): string;
+
+    update(item: IItem, currentElement: IDomInstance, editor: IEditorInstance): any;
+}
+
+interface IRender {
+
+}
+
+interface IHTMLItemRender extends IRender {
+    /**
+     * id 기반 문자열 id 생성
+     * 
+     */
+    protected getInnerId(item: IItem, postfix: string = ''): string;
+}
+
+interface IHTMLDomRender extends IHTMLItemRender {
+
+
+    /**
+     * 처음 렌더링 할 때 
+     * 
+     */
+    render(item: IItem, renderer: IHTMLRenderer): string;
+
+    /**
+     * 초기 렌더링 이후 업데이트만 할 때 
+     * 
+     */
+    update(item: IItem, currentElement: IDomInstance): void;
+}
+
+interface IHTMLLayerRender extends IHTMLDomRender {
+
+    /**
+     * 처음 렌더링 할 때 
+     * 
+     */
+    render(item: IItem, renderer: IHTMLRenderer): string;
+
+    /**
+     * 초기 렌더링 이후 업데이트만 할 때 
+     * 
+     */
+    update(item: IItem, currentElement: IDomInstance): void;
+}
+
+
+const easylogic: EditorInterface;
+export const Component: IComponent;
+export const MenuItem: IMenuItem;
+export const HTMLLayerRender: IHTMLLayerRender;
+export const EditorInstance: IEditorInstance;
+export const EditorElement: IEditorElement;
+
+export default easylogic;
 }
