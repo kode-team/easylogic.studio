@@ -26,7 +26,7 @@ export default class ComponentItems extends EditorElement {
           <div class='list'>
             ${this.$menuManager.getTargetMenuItems('sidebar').map(it => {
               return /*html*/`<object refClass="${it.refClass}" />`
-            })}
+            }).join('\n')}
           </div>          
         </div>                  
       </div>

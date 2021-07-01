@@ -1,4 +1,3 @@
-import UIElement, { EVENT } from "el/base/UIElement";
 import { registElement } from "el/base/registElement";
 import "el/editor/ui/property";
 import "el/editor/ui/property-editor";
@@ -14,9 +13,9 @@ export default class LibraryItems extends EditorElement {
         <div>
           <object label="Search" refClass="TextEditor" key="search" onchange="onTextChange" />
         </div>
-        <object refClass="FeatherIconsProperty" ref="$feather" />
-        <object refClass="PrimerOctIconsProperty" ref="$primer" />
-        <object refClass="AntDesignIconsProperty" ref="$antdesign" />
+        ${this.$menuManager.getTargetMenuItems('library').map(it => {
+          return /*html*/`<object refClass="${it.refClass}" />`
+        }).join('\n')}
       </div>
     `;
   }

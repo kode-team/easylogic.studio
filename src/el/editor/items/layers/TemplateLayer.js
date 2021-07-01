@@ -1,6 +1,5 @@
 import icon from "el/editor/icon/icon";
 import { ComponentManager } from "el/editor/manager/ComponentManager";
-import { Editor } from "el/editor/manager/Editor";
 import { Component } from "../Component";
 
 const DEFAULT_TEMPLATE = `
