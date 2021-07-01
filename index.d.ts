@@ -1,8 +1,97 @@
 declare module "@easylogic/editor" {
 
-    import { mat4, vec3 } from "gl-matrix";
+    // gl-matrix 
+    // prettier-ignore
+    export type mat2 =
+        | [number, number,
+            number, number]
+        | Float32Array;
 
+    // prettier-ignore
+    export type mat2d =
+        | [number, number,
+            number, number,
+            number, number]
+        | Float32Array;
 
+    // prettier-ignore
+    export type mat3 =
+        | [number, number, number,
+            number, number, number,
+            number, number, number]
+        | Float32Array;
+
+    // prettier-ignore
+    export type mat4 =
+        | [number, number, number, number,
+            number, number, number, number,
+            number, number, number, number,
+            number, number, number, number]
+        | Float32Array;
+
+    export type quat = [number, number, number, number] | Float32Array;
+
+    // prettier-ignore
+    export type quat2 =
+        | [number, number, number, number,
+            number, number, number, number]
+        | Float32Array;
+
+    export type vec2 = [number, number] | Float32Array;
+    export type vec3 = [number, number, number] | Float32Array;
+    export type vec4 = [number, number, number, number] | Float32Array;
+
+    // prettier-ignore
+    export type ReadonlyMat2 =
+        | readonly [
+            number, number,
+            number, number
+        ]
+        | Float32Array;
+
+    // prettier-ignore
+    export type ReadonlyMat2d =
+        | readonly [
+            number, number,
+            number, number,
+            number, number
+        ]
+        | Float32Array;
+
+    // prettier-ignore
+    export type ReadonlyMat3 =
+        | readonly [
+            number, number, number,
+            number, number, number,
+            number, number, number
+        ]
+        | Float32Array;
+
+    // prettier-ignore
+    export type ReadonlyMat4 =
+        | readonly [
+            number, number, number, number,
+            number, number, number, number,
+            number, number, number, number,
+            number, number, number, number
+        ]
+        | Float32Array;
+
+    export type ReadonlyQuat =
+        | readonly [number, number, number, number]
+        | Float32Array;
+
+    export type ReadonlyQuat2 =
+        | readonly [number, number, number, number, number, number, number, number]
+        | Float32Array;
+
+    export type ReadonlyVec2 = readonly [number, number] | Float32Array;
+    export type ReadonlyVec3 = readonly [number, number, number] | Float32Array;
+    export type ReadonlyVec4 =
+        | readonly [number, number, number, number]
+        | Float32Array;
+
+    // gl-matrix 
 
     export const makeEventChecker = (value: string, split: string) => string;
 
@@ -40,11 +129,11 @@ declare module "@easylogic/editor" {
     export const DOMDIFF: string;
 
     // event config method
-    export const DEBOUNCE = (t:number = 100) => string;
-    export const DELAY = (t:number = 300) => string;
+    export const DEBOUNCE = (t: number = 100) => string;
+    export const DELAY = (t: number = 300) => string;
     export const D1000: string;
 
-    export const THROTTLE = (t:number = 100) => string;
+    export const THROTTLE = (t: number = 100) => string;
 
     export const ALL_TRIGGER: string;
 
@@ -55,8 +144,8 @@ declare module "@easylogic/editor" {
     // before method
 
     // after method
-    export const MOVE = (method:string = "move") => string;
-    export const END = (method:string = "end") => string;
+    export const MOVE = (method: string = "move") => string;
+    export const END = (method: string = "end") => string;
 
     export const PREVENT = string;
     export const STOP = string;
@@ -128,10 +217,10 @@ declare module "@easylogic/editor" {
 
 
     // Predefined LOADER
-    export const LOAD = (value:string = "$el") => string;
+    export const LOAD = (value: string = "$el") => string;
     export const createRef = value => string;
     export const getRef = id => any;
-    export const BIND = (value:string = "$el", checkFieldOrCallback:string = '') => string;
+    export const BIND = (value: string = "$el", checkFieldOrCallback: string = '') => string;
 
 
     interface IKeyValue {

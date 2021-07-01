@@ -11,20 +11,14 @@
       "presets": ["@babel/preset-env"],
       "plugins": [
         "@babel/transform-runtime",
-        "@babel/plugin-proposal-optional-chaining",
-        ["@babel/plugin-transform-react-jsx", {
-          "runtime": "classic"
-        }]
+        "@babel/plugin-proposal-optional-chaining"
       ]
     },
     "production": {
       "presets": ["@babel/preset-env"],
       "plugins": [
         "@babel/transform-runtime",
-        "@babel/plugin-proposal-optional-chaining",
-        ["@babel/plugin-transform-react-jsx", {
-          "runtime": "classic"
-        }]        
+        "@babel/plugin-proposal-optional-chaining"
       ]
     }
   }

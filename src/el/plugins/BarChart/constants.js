@@ -1,1 +1,0 @@
-export const BAR_CHART_TYPE = 'bar-chart';
