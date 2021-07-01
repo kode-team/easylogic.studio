@@ -6,6 +6,7 @@ import * as Event from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { Editor } from "el/editor/manager/Editor";
 import { Length } from "el/editor/unit/Length";
+import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 
 export default {
@@ -15,5 +16,6 @@ export default {
     HTMLLayerRender: LayerRender,
     Component,
     MenuItem,
+    BaseProperty,
     ...Event
 }
