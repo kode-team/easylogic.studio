@@ -25,8 +25,8 @@ export default class FeatherIconsProperty extends BaseProperty {
     `;
   }
 
-  renderIcon (icon, key) {
-    
+  renderIcon(icon, key) {
+
     return /*html*/`
       <div class='icon-item' data-key="${key}"  title="${icon.name || key}">
         <div class="icon-svg">${icon.toSvg()}</div>
@@ -35,26 +35,26 @@ export default class FeatherIconsProperty extends BaseProperty {
     `
   }
 
-  [LOAD('$body') + DOMDIFF] () {
+  [LOAD('$body') + DOMDIFF]() {
 
     const { icons } = feather;
     const keys = Object.keys(icons);
 
     if (this.state.search) {
       return keys
-              .filter(key => {
-                return icons[key].name.includes(this.state.search) ||  key.includes(this.state.search)
-              })
-              .map(key => this.renderIcon(icons[key], key))
+        .filter(key => {
+          return icons[key].name.includes(this.state.search) || key.includes(this.state.search)
+        })
+        .map(key => this.renderIcon(icons[key], key))
     } else {
       return keys
-              .map(key => this.renderIcon(icons[key], key))
+        .map(key => this.renderIcon(icons[key], key))
     }
 
 
   }
 
-  [CLICK('$body .icon-item')] (e) {
+  [CLICK('$body .icon-item')](e) {
     var key = e.$dt.data('key');
 
     const center = this.$viewport.center;
@@ -69,7 +69,7 @@ export default class FeatherIconsProperty extends BaseProperty {
 
   }
 
-  [SUBSCRIBE('search')] (value) {
+  [SUBSCRIBE('search')](value) {
     this.setState({
       search: value
     })
