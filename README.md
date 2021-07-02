@@ -150,6 +150,8 @@ var app = new EasyLogic.createDesignEditor({
 * vue plugin template - https://github.com/easylogic/editor-plugin-vue
 * ToastUI Chart plugin - https://github.com/easylogic/editor-plugin-tui-chart
 * Feather Icons plugin - https://github.com/easylogic/editor-plugin-feather-icons
+* Primer Oct Icons plugin - https://github.com/easylogic/editor-plugin-primer-oct-icons
+* AntDesign Icons plugin - https://github.com/easylogic/editor-plugin-ant-design-icons 
 
 # Data Model  
 
