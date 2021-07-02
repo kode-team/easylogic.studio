@@ -53,13 +53,8 @@ import VideoProperty from "./VideoProperty";
 import PatternAssetsProperty from "./PatternAssetsProperty";
 import HistoryProperty from "./HistoryProperty";
 import IFrameProperty from "./IFrameProperty";
-import PrimerOctIconsProperty from "./PrimerOctIconsProperty";
-import AntDesignIconsProperty from "./AntDesignIconsProperty";
-
 
 export default {  
-  AntDesignIconsProperty,
-  PrimerOctIconsProperty,
   IFrameProperty,
   HistoryProperty,
   PatternAssetsProperty,
