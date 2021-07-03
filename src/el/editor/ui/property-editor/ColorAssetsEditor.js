@@ -1,6 +1,6 @@
 import { LOAD, CLICK, SUBSCRIBE } from "el/base/Event";
 import { registElement } from "el/base/registElement";
-import UIElement, { EVENT } from "el/base/UIElement";
+import colors from "el/editor/preset/colors";
 import { EditorElement } from "../common/EditorElement";
 import "./SelectEditor";
 
@@ -11,21 +11,8 @@ export default class ColorAssetsEditor extends EditorElement {
       mode: 'grid',
       preset: 'random',
       isLoaded : false, 
-      colors: []      
+      colors
     }
-  }
-
-
-  async afterRender() {
-    if (this.state.isLoaded === false) {
-      const colors = await import(/* webpackChunkName: "color-assets" */ 'el/editor/preset/colors')
-
-      this.setState({
-        isLoaded: true,
-        colors: colors.default
-      });
-    }
-
   }
 
 
