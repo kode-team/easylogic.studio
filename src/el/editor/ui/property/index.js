@@ -28,7 +28,6 @@ import ProjectProperty from "./ProjectProperty";
 import LayerTreeProperty from "./LayerTreeProperty";
 import ArtBoardSizeProperty from "./ArtBoardSizeProperty";
 import ImageProperty from "./ImageProperty";
-import ColorAssetsProperty from "./ColorAssetsProperty";
 import TextFillProperty from "./TextFillProperty";
 import GradientAssetsProperty from "./GradientAssetsProperty";
 import SVGItemProperty from "./SVGItemProperty";
@@ -79,10 +78,9 @@ export default {
   SVGItemProperty,
   GradientAssetsProperty,
   TextFillProperty,
-  ColorAssetsProperty,
   ImageProperty,
   ArtBoardSizeProperty,
-  LayerTreeProperty,
+  LayerTreeProperty, 
   ProjectProperty,
   PositionProperty,
   SelectorProperty,
