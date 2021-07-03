@@ -52,6 +52,7 @@ export default class LayerTab extends EditorElement {
               <object refClass="ComponentItems" />
             </div>    
             <div class='tab-content' data-value='5'>
+              <object refClass="AssetItems" />            
               <div class='assets'>
                 <object refClass="ColorAssetsProperty" />
                 <object refClass="GradientAssetsProperty" />    

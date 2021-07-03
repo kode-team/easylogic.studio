@@ -1,4 +1,5 @@
 import ArtboardItems from "./ArtboardItems"
+import AssetItems from "./AssetItems"
 import ComponentItems from "./ComponentItems"
 import CustomComponentItems from "./CustomComponentItems"
 import Inspector from "./Inspector"
@@ -9,8 +10,8 @@ import ObjectList from "./ObjectList"
 import ShortCutItems from "./ShortCutItems"
 import TimelineProperty from "./TimelineProperty"
 
-
 export default {
+    AssetItems,
     CustomComponentItems,
     ArtboardItems,
     ComponentItems,
