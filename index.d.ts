@@ -1200,7 +1200,7 @@ declare module "@easylogic/editor" {
     export const BaseProperty: IBaseProperty;
     export const EditorInstance: IEditorInstance;
     export const EditorElement: IEditorElement;
-
+    export const icon: IElementValue<string>;
 
     export default easylogic;
 }
