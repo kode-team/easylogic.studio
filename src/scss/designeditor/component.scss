@@ -3,9 +3,9 @@ input[type='text'],
 input[type='number'],
 input[type='email'],
 textarea {
-    background-color: var(--input-background-color);
-    border: 1px solid var(--input-border-color);  
-    color: var(--input-font-color); 
+    background-color: var(--elf-input-background-color);
+    border: 1px solid var(--elf-input-border-color);  
+    color: var(--elf-input-font-color); 
     outline: none;    
 }
  
@@ -17,10 +17,10 @@ select {
     cursor: pointer;
     height: 100%;
 
-    background-color: var(--background-color);
-    border: 1px solid var(--border-color);
+    background-color: var(--elf-background-color);
+    border: 1px solid var(--elf-border-color);
     border-radius: 0px;
-    color: var(--font-color); 
+    color: var(--elf-font-color); 
     outline: none;
     vertical-align: middle;
     width: 100%;
@@ -32,7 +32,7 @@ select {
 button {
 
     border-width: 0px;    
-    color: var(--button-front-color); 
+    color: var(--elf-button-front-color); 
     width: 16px;
     height: 16px;
     vertical-align: middle;
@@ -58,7 +58,7 @@ input[type=file] {
         width:100%;
         height:100%;
         display:inline-block;
-        background-color:var(--background-color);
+        background-color:var(--elf-background-color);
         opacity: 0;
         pointer-events: none;
     }

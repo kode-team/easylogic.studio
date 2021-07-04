@@ -6,7 +6,7 @@
     right: 0px;
     height: $status-bar-height;
     // overflow: hidden;
-    background-color: var(--status-bar-background-color); 
+    background-color: var(--elf-status-bar-background-color); 
     z-index: 1;
     pointer-events: all;
     display: grid;
@@ -29,7 +29,7 @@
 
       > div {
         display: inline-block;
-        background-color: var(--status-bar-item-background-color);
+        background-color: var(--elf-status-bar-item-background-color);
         border-radius: 3px;
         min-width: 50px;
       }
@@ -57,8 +57,8 @@
         .select-editor {
           height: 100%;
           width: 50px;
-          background-color: var(--background-color);
-          color: var(--font-color);          
+          background-color: var(--elf-background-color);
+          color: var(--elf-font-color);          
         }
       }
     }

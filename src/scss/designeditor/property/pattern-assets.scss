@@ -17,13 +17,13 @@ $asset-item-size: 60px;
                 width: $asset-item-size;
                 position: relative;
                 height: $asset-item-size;
-                border: 1px solid var(--selected-color);
+                border: 1px solid var(--elf-selected-color);
                 // border-radius: 2px;
                 vertical-align: top;                  
                 cursor: pointer;         
                 text-align: center;
                 padding-top: 2px;
-                color: var(--font-color); 
+                color: var(--elf-font-color); 
             }
 
             .pattern-item {
@@ -32,7 +32,7 @@ $asset-item-size: 60px;
                 margin-bottom: 3px;
                 margin-right: 3px;
                 box-sizing: border-box;
-                border: 1px solid var(--border-color);
+                border: 1px solid var(--elf-border-color);
                 
                 &:hover {
                     &[data-custom="true"] {
@@ -69,7 +69,7 @@ $asset-item-size: 60px;
                     // display: grid;
                     text-align: right;   
                     padding: 2px;
-                    color: var(--selected-font-color);
+                    color: var(--elf-selected-font-color);
                 }
             }
 

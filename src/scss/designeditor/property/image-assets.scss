@@ -9,16 +9,16 @@
 
         button {
             padding: 2px 10px;
-            border: 1px solid var(--border-color);            
+            border: 1px solid var(--elf-border-color);            
         }
 
         @each $listType in list, grid {
             &[data-view-mode="#{$listType}"] {
                 button[data-value='#{$listType}'] {
-                    background-color: var(--selected-border-color);
-                    border-color: var(--selected-border-color);
+                    background-color: var(--elf-selected-border-color);
+                    border-color: var(--elf-selected-border-color);
                     background-image: none;
-                    color: var(--selected-font-color);
+                    color: var(--elf-selected-font-color);
                 }
             }
         }  
@@ -39,14 +39,14 @@
                 width: 66px;
                 position: relative;
                 height: 66px;
-                border: 1px solid var(--selected-color);
+                border: 1px solid var(--elf-selected-color);
                 border-radius: 2px;
 
                 vertical-align: top;   
                 cursor: pointer;         
                 text-align: center;
                 padding: 20px;
-                color: var(--font-color);                
+                color: var(--elf-font-color);                
 
 
                 input[type=file] {
@@ -138,7 +138,7 @@
                     right: 0px;
                     text-align: right;   
                     padding: 2px;
-                    color: var(--selected-font-color);
+                    color: var(--elf-selected-font-color);
                 }
             }
         }

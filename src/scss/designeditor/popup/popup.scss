@@ -3,11 +3,11 @@
   display: none;
   
   z-index: 1000;
-  background-color: var(--popup-background-color);
+  background-color: var(--elf-popup-background-color);
   border-radius: 8px;
   box-shadow: 0px 1px 5px 0 rgba(0, 0, 0, 0.5);
   padding: 10px 10px;
-  color: var(--font-color);
+  color: var(--elf-font-color);
   // background-image: linear-gradient(135deg, #001e4c, #001885, rgb(8, 0, 27));
   // background-image: radial-gradient( circle farthest-corner at 16.5% 28.1%,  rgba(15,27,49,1) 0%, rgba(0,112,218,1) 90% );
   &.compact {
@@ -80,13 +80,13 @@
         outline: none;
         
         width: 50px;
-        background-color: var(--border-color);
+        background-color: var(--elf-border-color);
       }
 
       &[data-value="contain"] button[value="contain"],
       &[data-value="cover"] button[value="cover"],
       &[data-value="auto"] button[value="auto"] {
-        background-color: var(--border-color);
+        background-color: var(--elf-border-color);
         font-weight: bold;
       }
     }
@@ -102,7 +102,7 @@
         width: 20px;
         height: 20px;
         appearance: none;
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--elf-border-color);
         background-color: white;
         outline: none;
         cursor: pointer;
@@ -180,7 +180,7 @@
       &[data-value="repeat-y"] button[value="repeat-y"],
       &[data-value="space"] button[value="space"],
       &[data-value="round"] button[value="round"] {
-        background-color: var(--border-color);
+        background-color: var(--elf-border-color);
         box-shadow: 0 0 1px 1px black;
       }
     }

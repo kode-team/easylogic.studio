@@ -7,7 +7,7 @@
     display: inline-block;
     font-weight: 900;
     line-height: 1.6;
-    color: var(--selected-color);
+    color: var(--elf-selected-color);
     z-index: 1;
     vertical-align: middle; 
   }
@@ -19,12 +19,12 @@
     font-weight: 900;
     line-height: 1.6;
     vertical-align: middle;   
-    color: var(--selected-font-color);     
+    color: var(--elf-selected-font-color);     
   }
 
   .site {
     font-size: 14px;
-    color: var(--border-color);
+    color: var(--elf-border-color);
   }
 }
 
@@ -37,7 +37,7 @@
   display: inline-block;
   overflow: auto;
   box-sizing: border-box;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--elf-border-color);
   padding-top: 10px;
 
   .items {
@@ -47,7 +47,7 @@
 
 .tool-menu,
 .preview-tool-menu{
-  color: var(--selected-font-color);
+  color: var(--elf-selected-font-color);
   padding: 8px 0px;
 
   &.center{
@@ -101,7 +101,7 @@
 
       .divider {
         border: 0px;
-        border-right: 1px solid var(--divider-color);
+        border-right: 1px solid var(--elf-divider-color);
         // margin: 5px 10px;
         height: 20px;
         vertical-align: middle;
@@ -110,7 +110,7 @@
   
       .menu-item {
         text-align: center;
-        color: var(--font-color);
+        color: var(--elf-font-color);
         width: 48px;
         height: 48px;
         background-color: transparent;
@@ -122,11 +122,11 @@
   
         &.selected {
           .icon {      
-            color: var(--selected-color); 
+            color: var(--elf-selected-color); 
           }
 
           .title {
-            color: var(--selected-color);
+            color: var(--elf-selected-color);
           }
   
         }
@@ -195,19 +195,19 @@
       border:0px;
       box-shadow: none;
       display: inline-block;
-      color: var(--selected-font-color);
+      color: var(--elf-selected-font-color);
 
       &[checked="checked"] {
         .icon {
           background-color: rgba(255, 255, 255, 0.1);
-          color: var(--selected-font-color);          
+          color: var(--elf-selected-font-color);          
         }
       }
     }
 
     .title {
       font-size: 10px;
-      color: var(--menu-item-title-font-color);
+      color: var(--elf-menu-item-title-font-color);
     }
 
 
@@ -215,7 +215,7 @@
       margin: 0 auto;
       width: 20px;
       height: 20px;
-      color: var(--font-color);      
+      color: var(--elf-font-color);      
 
       svg {
         width: 100%;

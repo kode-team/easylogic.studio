@@ -21,14 +21,14 @@
         .clip-area-handle {
           display: inline-block;
           position: absolute;
-          // background-color: var(--selected-color);
+          // background-color: var(--elf-selected-color);
           z-index: 1;
         }
 
         .clip-area {
           display: inline-block;
           position: absolute;
-          background-color: var(--selected-color);
+          background-color: var(--elf-selected-color);
           z-index: 0;
 
           &.inset {
@@ -87,7 +87,7 @@
           height: 220px;
           position: relative;
           
-          box-shadow: 0 0 0 1px var(--border-color);
+          box-shadow: 0 0 0 1px var(--elf-border-color);
 
           .pointer-list {
             top: 0px;

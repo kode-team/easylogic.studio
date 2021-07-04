@@ -29,8 +29,8 @@
         position: absolute;
         display: inline-block;
         transform: translate(5px, 5px);
-        background-color: var(--selected-color);
-        color: var(--selected-font-color);
+        background-color: var(--elf-selected-color);
+        color: var(--elf-selected-font-color);
         padding: 2px 4px;
         border-radius: 4px;        
     }
@@ -44,7 +44,7 @@
         pointer-events: none;
 
         .layer-add-snap-pointer {
-            stroke: var(--selected-color);
+            stroke: var(--elf-selected-color);
             stroke-width: 1;
         }
     }

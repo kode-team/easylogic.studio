@@ -5,7 +5,7 @@
       display: grid; 
       grid-template-columns: 1fr; 
       grid-column-gap: 4px;
-      // border: 1px solid var(--border-color);
+      // border: 1px solid var(--elf-border-color);
       margin-bottom: 5px;
       padding: 5px;  
       cursor: pointer;
@@ -17,7 +17,7 @@
       }
 
       &.selected {
-        background-color: var(--border-color);
+        background-color: var(--elf-border-color);
       }
 
       .title {
@@ -32,8 +32,8 @@
               padding: 2px 4px;
               font-weight: bold;
               border-radius: 3px;
-              background-color: var(--selected-color);
-              color: var(--selected-font-color);                          
+              background-color: var(--elf-selected-color);
+              color: var(--elf-selected-font-color);                          
             }
         }
 

@@ -21,7 +21,7 @@
         line-height: 1;
         background-color: transparent;
         height: 24px;
-        background-color: var(--select-icon-editor-item-color);
+        background-color: var(--elf-select-icon-editor-item-color);
         box-sizing: border-box;
         padding: 2px;
         border-radius: 3px;
@@ -59,7 +59,7 @@
             text-transform: uppercase;
             line-height: 1.4;
             border-radius: 3px;            
-            color: var(--selected-font-color);   
+            color: var(--elf-selected-font-color);   
             position: relative;         
 
             svg {
@@ -74,8 +74,8 @@
             }
 
             &.selected {
-                background-color: var(--select-icon-editor-selected-color);
-                color: var(--selected-font-color);
+                background-color: var(--elf-select-icon-editor-selected-color);
+                color: var(--elf-selected-font-color);
             }
 
             &.icon {

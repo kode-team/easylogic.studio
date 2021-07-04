@@ -112,11 +112,11 @@
       box-sizing: border-box;
       background-color: white; 
       box-sizing: border-box;
-      border: 0.5px solid var(--selection-tool-border-color);
+      border: 0.5px solid var(--elf-selection-tool-border-color);
       pointer-events: all;
       &[data-number="5"] { 
         border-radius: 100%; 
-        background-color: var(--selected-color);
+        background-color: var(--elf-selected-color);
         pointer-events: none;
         width: 5px;
         height: 5px;
@@ -129,8 +129,8 @@
       position: absolute;
       left: 0px;
       top: 0px;      
-      background-color: var(--selected-color);
-      color: var(--selected-font-color);
+      background-color: var(--elf-selected-color);
+      color: var(--elf-selected-font-color);
       padding: 2px 4px;
       border-radius: 4px;
       font-size: 12px;
@@ -205,7 +205,7 @@
       left: 0px;
       top: 0px;
 
-      stroke: var(--selection-tool-border-color);
+      stroke: var(--elf-selection-tool-border-color);
       fill: transparent;
       // stroke-width: 0.5;
       
@@ -216,7 +216,7 @@
   }
   
   .selection-tool {
-    border: var(--selection-tool-border-color) 0.5px solid;
+    border: var(--elf-selection-tool-border-color) 0.5px solid;
     position:absolute;
 
 
@@ -233,7 +233,7 @@
         right: auto;
         transform: translate(-50%, -50%);
         background-color: rgba(white, 0.8);
-        border:1px solid var(--border-color);;
+        border:1px solid var(--elf-border-color);;
         opacity: 1;
       } 
     }
@@ -270,7 +270,7 @@
       display: inline-block;
       width: 8px;
       height: 8px;
-      background-color: var(--selection-tool-border-color);
+      background-color: var(--elf-selection-tool-border-color);
       
       border:1px solid $pointer-color;
       // border-radius: 100%;
@@ -281,7 +281,7 @@
         // border-radius: 100%;
         box-sizing: border-box;
         background-color: white; 
-        border: 1px solid var(--selection-tool-border-color); 
+        border: 1px solid var(--elf-selection-tool-border-color); 
       }
   
       &:before { 
@@ -293,7 +293,7 @@
         text-align: center;
         background-color: rgba(#333, 0.8);
         border-radius: 3px;
-        border: var(--border-color);;
+        border: var(--elf-border-color);;
         transition: opacity 0.3s linear;
         
         padding: 4px 10px;
@@ -308,15 +308,15 @@
         height: 20px;
         transform: translate(0%, -100%);
         cursor: move;
-        background-color: var(--selected-color);
-        border: 1px solid var(--selected-color);
+        background-color: var(--elf-selected-color);
+        border: 1px solid var(--elf-selected-color);
         // border: 0px; 
         box-sizing: border-box;
         display: inline-block;
         vertical-align: middle;
         padding-right: 5px;
         overflow:hidden;
-        color: var(--selected-font-color);
+        color: var(--elf-selected-font-color);
   
         &:before {
           left: 0px;
@@ -331,7 +331,7 @@
 
         span {
           vertical-align: middle;
-          color: var(--selected-font-color);
+          color: var(--elf-selected-font-color);
           font-size: 11px;
         }
   
@@ -457,17 +457,17 @@
       stroke-width: 1;
 
       &.base-line {
-        stroke: var(--guide-line-color);
+        stroke: var(--elf-guide-line-color);
       }
 
       &.base-rect  {
-        stroke: var(--guide-line-rect-color);
+        stroke: var(--elf-guide-line-rect-color);
       }
     }
 
     text {
       font-size: 10px;
-      fill: var(--guide-font-color);
+      fill: var(--elf-guide-font-color);
       text-shadow: 0px 2px 2px rgba(183, 183, 183, 0.5);
 
       &.text-center {

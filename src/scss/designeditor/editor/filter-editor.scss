@@ -69,8 +69,8 @@
             border-radius: 3px;
             margin-right: 2px;
             vertical-align: middle;
-            background-color: var(--selected-color);
-            color: var(--selected-font-color);
+            background-color: var(--elf-selected-color);
+            color: var(--elf-selected-font-color);
           }
         }
   
@@ -85,7 +85,7 @@
 
         label {
           font-size: 11px;
-          color: var(--font-color);
+          color: var(--elf-font-color);
         }
 
   

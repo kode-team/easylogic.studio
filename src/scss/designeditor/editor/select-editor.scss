@@ -8,10 +8,10 @@
 
     select {
         font-size: 11px;
-        border: 1px solid var(--border-color);
-        background-color: var(--input-background-color);        
+        border: 1px solid var(--elf-border-color);
+        background-color: var(--elf-input-background-color);        
         &:focus-within {
-            border: 1px solid var(--selected-color);
+            border: 1px solid var(--elf-selected-color);
         }
     }
 

@@ -14,19 +14,19 @@
 
       .drag-board {
 
-        // background-color: var(--selected-color);
+        // background-color: var(--elf-selected-color);
         width: 200px;
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--elf-border-color);
         height: 200px;
         position: relative;
         margin-bottom :10px;
         // pointer-events: none;
         background-image: linear-gradient(
             to right,
-            var(--border-color),
-            var(--border-color)
+            var(--elf-border-color),
+            var(--elf-border-color)
           ),
-          linear-gradient(to right, var(--border-color), var(--border-color));
+          linear-gradient(to right, var(--elf-border-color), var(--elf-border-color));
         background-size: 100% 1px, 1px 100%;
         background-position: 0px center, center 0px;
         background-repeat: no-repeat;
@@ -37,7 +37,7 @@
           width: 10px;
           height: 10px;
           transform: translateX(calc(100px - 5px)) translateY(calc(100px - 5px));
-          background-color: var(--selected-color);
+          background-color: var(--elf-selected-color);
           border-radius: 100%;
         }
       }

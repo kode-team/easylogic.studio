@@ -13,17 +13,17 @@
     background-color: transparent;
 
     input {
-      color: var(--font-color) !important;
+      color: var(--elf-font-color) !important;
       text-transform: uppercase;
       border:1px solid rgba(221, 221, 221, 0.4) !important;
     }
 
     .title {
-      color: var(--font-color) !important;
+      color: var(--elf-font-color) !important;
     }
 
     .colorsets {
-      border-top: 1px solid var(--border-color) !important;
+      border-top: 1px solid var(--elf-border-color) !important;
     }
   }
 

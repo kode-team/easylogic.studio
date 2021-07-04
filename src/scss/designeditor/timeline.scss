@@ -7,8 +7,8 @@
         display: inline-block;
 
         &.selected {
-            background-color: var(--selected-color);
-            color: var(--selected-font-color);
+            background-color: var(--elf-selected-color);
+            color: var(--elf-selected-font-color);
         }
     }
 }
@@ -19,11 +19,11 @@
     right: 0px;
     top: 0px;
     bottom: 0px;
-    background-color: var(--background-color);
+    background-color: var(--elf-background-color);
     font-size: 12px;
     
-    border-left: 1px solid var(--border-color);
-    border-top: 1px solid var(--border-color);
+    border-left: 1px solid var(--elf-border-color);
+    border-top: 1px solid var(--elf-border-color);
 
     .timeline-value-editor {
 
@@ -57,7 +57,7 @@
                         content: 'Hour:Minute:Second:Frame';
                         box-sizing: border-box;
                         padding-left: 2px;
-                        color: var(--input-sub-font-color);
+                        color: var(--elf-input-sub-font-color);
                         left: 0px;
                     }
                 }
@@ -83,7 +83,7 @@
                     }
 
                     &:hover {
-                        color: var(--selected-color);
+                        color: var(--elf-selected-color);
                     }
 
                 }
@@ -105,7 +105,7 @@
             }
            
             .title {
-                color: var(--font-color);
+                color: var(--elf-font-color);
             } 
         }
 
@@ -139,11 +139,11 @@
     left: 0px;
     top: 0px;
     bottom: 0px;
-    background-color: var(--background-color);
+    background-color: var(--elf-background-color);
     font-size: 12px;
     
-    border-right: 1px solid var(--border-color);
-    border-top: 1px solid var(--border-color);
+    border-right: 1px solid var(--elf-border-color);
+    border-top: 1px solid var(--elf-border-color);
 
     .property {
         padding: 0px;
@@ -171,7 +171,7 @@
     right: $right-size;
     top: 0px;
     bottom: 0px;
-    // background-color: var(--background-color);    
+    // background-color: var(--elf-background-color);    
     font-size: 12px;
 
     .timeline-header {
@@ -181,7 +181,7 @@
         height: $timeline-header-size;
         right: 0px;
         
-        border-top: 1px solid var(--border-color);
+        border-top: 1px solid var(--elf-border-color);
 
         .timeline-object-toolbar {
             position: absolute;
@@ -189,8 +189,8 @@
             top: 0px;
             bottom: 0px;
             width: $timeline-property-size;     
-            border-right: 1px solid var(--border-color);        
-            border-bottom: 1px solid var(--border-color);    
+            border-right: 1px solid var(--elf-border-color);        
+            border-bottom: 1px solid var(--elf-border-color);    
             
 
 
@@ -219,13 +219,13 @@
 
                     @each $selectSpeed in 0.5, 1, 2, 3 {
                         &[data-selected-speed="#{$selectSpeed}"] [data-value="#{$selectSpeed}"] {
-                            background-color: var(--selected-color);
-                            color: var(--selected-font-color);
+                            background-color: var(--elf-selected-color);
+                            color: var(--elf-selected-font-color);
                         }
                     }        
 
                     button {
-                        border: 1px solid var(--border-color);
+                        border: 1px solid var(--elf-border-color);
                         min-width: 50px;
                         padding: 2px 10px;
                         height: auto;
@@ -255,7 +255,7 @@
                     right: 0px;
                     height: 5px;
 
-                    $back-color: var(--border-color);
+                    $back-color: var(--elf-border-color);
                     $handle-color: #ffff00;
              
                     .duration-handle-left {
@@ -293,7 +293,7 @@
                             transform: translateX(-100%);
                             height: 100%;
                             width: 5px;
-                            background-color: var(--timeline-gauge-handle-color);
+                            background-color: var(--elf-timeline-gauge-handle-color);
                             cursor: ew-resize;                            
                         }
 
@@ -303,7 +303,7 @@
                             top: 0px;
                             height: 100%;
                             width: 5px;
-                            background-color: var(--timeline-gauge-handle-color);
+                            background-color: var(--elf-timeline-gauge-handle-color);
                             cursor: ew-resize;
                         }      
                         
@@ -313,7 +313,7 @@
                             width: 100%; 
                             top: 0px;
                             height: 100%;
-                            background-color: var(--timeline-gauge-background-color);
+                            background-color: var(--elf-timeline-gauge-background-color);
                             cursor: ew-resize;                            
                         }
                     }
@@ -348,7 +348,7 @@
             bottom: 0px;
             width: $timeline-property-size;
             overflow: auto;
-            border-right: 1px solid var(--border-color);
+            border-right: 1px solid var(--elf-border-color);
             
 
             .timeline-object-list {
@@ -374,12 +374,12 @@
                         display: grid; 
                         grid-template-columns: 20px 1fr 50px; 
                         grid-column-gap: 2px;
-                        color: var(--font-color);
-                        border-bottom: 1px solid var(--border-color);
+                        color: var(--elf-font-color);
+                        border-bottom: 1px solid var(--elf-border-color);
 
                         &[data-selected="true"] {
-                            background-color: var(--timeline-row-selected-color);
-                            color: var(--selected-font-color);
+                            background-color: var(--elf-timeline-row-selected-color);
+                            color: var(--elf-selected-font-color);
                         }
 
                         .current-value {
@@ -405,7 +405,7 @@
                             vertical-align: middle;
                             padding-top: 5px;
                             cursor: pointer;
-                            color: var(--font-color);
+                            color: var(--elf-font-color);
                         }
 
                         .tools {
@@ -436,15 +436,15 @@
                                     height: 7px;
                                     // border-radius: 50%;
                                     display: inline-block;
-                                    box-shadow: 0 0 0 1px var(--border-color);
-                                    background-color: var(--border-color);
+                                    box-shadow: 0 0 0 1px var(--elf-border-color);
+                                    background-color: var(--elf-border-color);
                                     vertical-align: middle;
                                     cursor: pointer;
                                     transform: translateX(-4px) translateY(0px) rotate(45deg);
                                 
                                     &:hover {
-                                      box-shadow: 0 0 0 2px var(--selected-color);
-                                      background-color: var(--selected-color);
+                                      box-shadow: 0 0 0 2px var(--elf-selected-color);
+                                      background-color: var(--elf-selected-color);
                                     }
                                 }
                             }
@@ -512,7 +512,7 @@
                     .timeline-keyframe-row {
                         height: 24px;
                         
-                        border-bottom: 1px solid var(--border-color);
+                        border-bottom: 1px solid var(--elf-border-color);
                         position: relative;
 
 
@@ -521,25 +521,25 @@
                             top: 50%;
                             transform: translateY(-50%);
                             height: 10px;
-                            background-color: rgba(var(--border-color), 0.5);
+                            background-color: rgba(var(--elf-border-color), 0.5);
                             display: inline-block;
 
                             .offset {
                                 position: absolute;
                                 top: 50%;
-                                border:1px solid var(--selected-color);
+                                border:1px solid var(--elf-selected-color);
                                 display: inline-block;
                                 width: 8px;
                                 height:8px;
 
-                                background-color: var(--background-color);                                
+                                background-color: var(--elf-background-color);                                
                                 transform: translateY(-50%) translateX(-50%) rotate(45deg);
                                 cursor: ew-resize;
                                 pointer-events: all;                                
 
                                 &[data-selected='true'] {
-                                    background-color: var(--selected-color);
-                                    box-shadow: 0 0 0 1px var(--selected-color);
+                                    background-color: var(--elf-selected-color);
+                                    box-shadow: 0 0 0 1px var(--elf-selected-color);
                                 }
                             }
                         }                        
@@ -554,21 +554,21 @@
                             .offset {
                                 position: absolute;
                                 top: 50%;
-                                border:1px solid var(--selected-color);
+                                border:1px solid var(--elf-selected-color);
                                 display: inline-block;
                                 width: 8px;
                                 height:8px;
                                 // border-radius: 50%;
                                 // clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50% );
-                                background-color: var(--background-color);
+                                background-color: var(--elf-background-color);
                                 transform: translateY(-50%) translateX(-50%) rotate(45deg);
                                 cursor: ew-resize;
-                                // box-shadow: 0 0 0 1px var(--selected-color);     
+                                // box-shadow: 0 0 0 1px var(--elf-selected-color);     
                                 pointer-events: all;
 
                                 &[data-selected='true'] {
-                                    background-color: var(--selected-color);
-                                    box-shadow: 0 0 0 1px var(--selected-color);
+                                    background-color: var(--elf-selected-color);
+                                    box-shadow: 0 0 0 1px var(--elf-selected-color);
                                 }
                             }
                         }
@@ -583,7 +583,7 @@
                                 top: 50%;
                                 display: inline-block;
                                 height: 1px;
-                                background-color: var(--selected-color);
+                                background-color: var(--elf-selected-color);
                                 transform: translateY(-52%);
                                 
 
@@ -634,7 +634,7 @@
     label {
       vertical-align: middle;
       padding-right: 10px;
-      color: var(--font-color);
+      color: var(--elf-font-color);
       svg {
         width: 16px;
         height: 16px;
@@ -667,7 +667,7 @@
       height: 24px;
 
       &.play {
-        color: var(--selected-color);
+        color: var(--elf-selected-color);
       }
 
         &.pause {
@@ -706,8 +706,8 @@
 
       @each $selectDirection in normal, alternate, reverse, alternate-reverse {
           &[data-selected-direction="#{$selectDirection}"] [data-value="#{$selectDirection}"] {
-              background-color: var(--selected-background-color);
-              color: var(--selected-color); 
+              background-color: var(--elf-selected-background-color);
+              color: var(--elf-selected-color); 
           }
       }        
 
@@ -730,7 +730,7 @@
 
 
       button {
-        color: var(--font-color);
+        color: var(--elf-font-color);
 
         svg {
             path {
@@ -743,7 +743,7 @@
       label {
         padding-right:0px;
 
-        color: var(--font-color);
+        color: var(--elf-font-color);
         svg {
           width: 16px;
           height: 16px;

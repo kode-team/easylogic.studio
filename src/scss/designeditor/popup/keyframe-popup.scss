@@ -33,7 +33,7 @@
 
         .offset {
             position: relative;
-            background-image: linear-gradient(to right, var(--border-color), black);
+            background-image: linear-gradient(to right, var(--elf-border-color), black);
             background-size: 100% 2px;
             background-repeat: no-repeat;
             background-position: 0px center;
@@ -42,7 +42,7 @@
             @for $selectValue from 0 to 20 {
               &[data-selected-value="#{$selectValue}"] {
                   [data-offset-index="#{$selectValue}"] {
-                      background-color: var(--selected-color); 
+                      background-color: var(--elf-selected-color); 
                   }
               }
           }
@@ -51,13 +51,13 @@
             .offset-item {
                 width: 10px;
                 height: 10px;
-                background-color: var(--font-color);
+                background-color: var(--elf-font-color);
                 border-radius: 100%;
                 position: absolute;
                 top: 50%;
                 transform: translateX(-50%) translateY(-50%);
                 vertical-align: middle;
-                border: 1px solid var(--border-color);
+                border: 1px solid var(--elf-border-color);
 
             }
 
@@ -82,7 +82,7 @@
 
       .keyframe-property-item {
         
-        // border:1px solid var(--border-color);
+        // border:1px solid var(--elf-border-color);
         padding: 4px 0px;
         margin-top: 2px;
 

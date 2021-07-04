@@ -14,8 +14,8 @@
                 content: attr(title);
                 position: absolute;
                 display: inline-block;
-                background-color: var(--selected-color);
-                color: var(--selected-font-color);
+                background-color: var(--elf-selected-color);
+                color: var(--elf-selected-font-color);
                 left:0px;
                 top:0px;
                 padding: 2px 4px;
@@ -24,13 +24,13 @@
             white-space: pre-wrap;
             padding:20px 8px;
             user-select: text;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--elf-border-color);
             position: relative;
             margin-top:0px;
             font-size: 13px;
 
             strong {
-                color: var(--selected-color);
+                color: var(--elf-selected-color);
             }
         }
     }

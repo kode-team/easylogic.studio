@@ -223,33 +223,77 @@ declare module "@easylogic/editor" {
     export const BIND = (value: string = "$el", checkFieldOrCallback: string = '') => string;
 
 
-    interface IKeyValue {
+    export interface KeyValue {
         [key: string]: any;
     }
 
-    interface IElementValue<T> {
+    export interface ElementValue<T> {
         [key: string]: T;
     }
 
-    interface IComponentParams extends IKeyValue {
+    interface IComponentParams extends KeyValue {
 
     }
 
-    interface ILength {
+    export class Length {
         unit: string;
         value: number;
     }
 
-    interface IDomInstance { }
+    export class Dom {
 
-    interface IBaseStore { }
+        el: HTMLElement;
 
-    interface IItem {
-        getDefaultTitle: () => string;
-        getIcon: () => string;
-        isAttribute: () => boolean;
-        isChanged: (timestamp) => boolean;
-        changed: () => void;
+        static create(tag: string | HTMLElement | Dom | DocumentFragment, className: string, attr: KeyValue): Dom;
+        static createByHTML(htmlString: string): Dom | null;
+        static body(): Dom;
+
+        find(selector: string): HTMLElement;
+        $(selector: string): Dom | null;
+
+        findAll(selector: string): HTMLElement[];
+        $$(selector: string): Dom[];
+
+        replaceChild(oldElement: Dom | HTMLElement, newElement: Dom | HTMLElement): Dom;
+
+        checked(isChecked = false): Dom | boolean;
+        click(): Dom;
+        focus(): Dom;
+        select(): Dom;
+        blur(): Dom;
+
+        // canvas functions
+
+        context(contextType: string = "2d"): CanvasRenderingContext2D;
+
+        resize({ width: number, height: number }: KeyValue): void;
+
+        toDataURL(type = 'image/png', quality = 1): string;
+
+        clear(): void;
+
+        update(callback: Function): void;
+
+        drawImage(img: any, dx: number = 0, dy: number = 0): void;
+        drawOption(option: KeyValue = {}): void;
+        drawLine(x1: number, y1: number, x2: number, y2: number): void;
+        drawPath(...path: vec3[]): void;
+        drawCircle(cx: number, cy: number, r: number): void;
+        drawText(x: number, y: number, text: string): void;
+
+        /* utility */
+        fullscreen(): void;
+        toggleFullscreen(): void;
+    }
+
+    export class BaseStore { }
+
+    export class Item {
+        getDefaultTitle(): string;
+        getIcon(): string;
+        isAttribute(): boolean;
+        isChanged(timestamp: number): boolean;
+        changed();
 
         /**
          * title 속성 
@@ -260,7 +304,7 @@ declare module "@easylogic/editor" {
          * 
          * @returns 자신을 포함안 하위 모든 자식을 조회 
          */
-        get allLayers(): IItem[];
+        get allLayers(): Item[];
 
         /**
          * get id
@@ -272,14 +316,14 @@ declare module "@easylogic/editor" {
          * 
          * @returns {Item[]}
          */
-        get layers(): IItem[];
+        get layers(): Item[];
 
         /**
          * @returns {Item}
          */
-        get parent(): IItem;
+        get parent(): Item;
 
-        setParent: (otherParent: IItem) => void;
+        setParent: (otherParent: Item) => void;
 
         /**
          * 객체 깊이를 동적으로 계산 
@@ -293,28 +337,28 @@ declare module "@easylogic/editor" {
          * 
          * @returns {Item}
          */
-        get top(): IItem;
+        get top(): Item;
 
         /**
          * 최상위 project 구하기 
          * 
          * @returns {Project}
          */
-        get project(): IItem;
+        get project(): Item;
 
         /**
          * 최상위 artboard 구하기 
          * 
          * @returns {ArtBoard}
          */
-        get artboard(): IItem;
+        get artboard(): Item;
 
         /**
          * 상속 구조 안에서 instance 리스트
          * 
          * @returns {Item[]}
          */
-        get path(): IItem[];
+        get path(): Item[];
 
         /**
          * 부모의 자식들 중 나의 위치 찾기 
@@ -357,26 +401,26 @@ declare module "@easylogic/editor" {
          *
          * @param {*} json
          */
-        convert(json: IKeyValue): IKeyValue;
+        convert(json: KeyValue): KeyValue;
 
         /**
          * defence to set invalid key-value
          */
         checkField(key: string, value: any): boolean;
 
-        toCloneObject(isDeep: boolean = true): IKeyValue;
+        toCloneObject(isDeep: boolean = true): KeyValue;
 
         /**
          * clone Item
          */
-        clone(isDeep: boolean = true): IItem;
+        clone(isDeep: boolean = true): Item;
 
         /**
          * set json content
          *
          * @param {object} obj
          */
-        reset(obj: IKeyValue): void;
+        reset(obj: KeyValue): void;
 
         hasChangedField(...args: string[]): boolean;
 
@@ -385,7 +429,7 @@ declare module "@easylogic/editor" {
          *
          * @param {object} obj
          */
-        getDefaultObject(obj: IKeyValue = {}): IKeyValue;
+        getDefaultObject(obj: KeyValue = {}): KeyValue;
 
         /**
          * 지정된 필드의 값을 object 형태로 리턴한다. 
@@ -406,30 +450,30 @@ declare module "@easylogic/editor" {
          * 
          * @param {Item} layer 
          */
-        appendChildItem(layer: IItem): IItem;
+        appendChildItem(layer: Item): Item;
 
         /**
          * 자식중에 맨앞에 추가한다. 
          * 
          * @param {Item} layer 
          */
-        prependChildItem(layer: IItem): IItem;
+        prependChildItem(layer: Item): Item;
 
-        resetMatrix(item: IItem): void;
+        resetMatrix(item: Item): void;
         /**
          * 특정 index 에 자식을 추가한다. 
          * 
          * @param {Item} layer 
          * @param {number} index 
          */
-        insertChildItem(layer: IItem, index: number = 0): IItem;
+        insertChildItem(layer: Item, index: number = 0): Item;
 
         /**
          * 현재 Item 의 그 다음 순서로 추가한다. 
          * 
          * @param {Item} layer 
          */
-        appendAfter(layer: IItem): IItem;
+        appendAfter(layer: Item): Item;
 
 
         /**
@@ -437,7 +481,7 @@ declare module "@easylogic/editor" {
          * 
          * @param {Item} layer 
          */
-        appendBefore(layer: IItem): IItem;
+        appendBefore(layer: Item): Item;
 
         /**
          * 특정한 위치에 자식 객체로 Item 을 추가 한다. 
@@ -446,7 +490,7 @@ declare module "@easylogic/editor" {
          * @param {Number} position 
          * @param {Item} item 
          */
-        setPositionInPlace(position: number, item: IItem): void;
+        setPositionInPlace(position: number, item: Item): void;
 
         /**
          * toggle item's attribute
@@ -464,7 +508,7 @@ declare module "@easylogic/editor" {
          * convert to json
          * 
          */
-        toJSON(): IKeyValue;
+        toJSON(): KeyValue;
 
         resize(): void;
 
@@ -473,10 +517,10 @@ declare module "@easylogic/editor" {
          * 
          * @param {number} dist 
          */
-        copy(dist: number = 0): IItem
-        findIndex(item: IItem): number;
+        copy(dist: number = 0): Item
+        findIndex(item: Item): number;
 
-        copyItem(childItem: IItem, dist: number = 10): IItem;
+        copyItem(childItem: Item, dist: number = 10): Item;
 
         /**
          * 부모 객체에서 나를 지운다. 
@@ -489,7 +533,7 @@ declare module "@easylogic/editor" {
          * 
          * @param {Item} childItem 
          */
-        removeItem(childItem: IItem): void;
+        removeItem(childItem: Item): void;
 
         /**
          * 부모 아이디를 가지고 있는지 체크 한다. 
@@ -504,7 +548,7 @@ declare module "@easylogic/editor" {
          * @param {string} id 
          * @returns {Item|null} 검색된 Item 객체 
          */
-        searchById(id: string): IItem | null;
+        searchById(id: string): Item | null;
     }
 
     interface IKeyMat4Value {
@@ -541,17 +585,17 @@ declare module "@easylogic/editor" {
         accumulatedMatrixInverse: mat4;
     }
 
-    interface IPathParser { }
+    interface PathParser { }
 
-    interface IMovableItem extends IItem {
+    export class MovableItem extends Item {
 
         get isAbsolute(): boolean;
         get isRelative(): boolean;
         get isChild(): boolean;
 
-        toCloneObject(isDeep: boolean = true): IKeyValue;
+        toCloneObject(isDeep: boolean = true): KeyValue;
 
-        convert(json: IKeyValue): IKeyValue;
+        convert(json: KeyValue): KeyValue;
 
         //////////////////////
         //
@@ -560,12 +604,12 @@ declare module "@easylogic/editor" {
         ///////////////////////
 
 
-        get screenX(): ILength;
-        get screenY(): ILength;
-        get offsetX(): ILength;
-        get offsetY(): ILength;
-        get screenWidth(): ILength;
-        get screenHeight(): ILength;
+        get screenX(): Length;
+        get screenY(): Length;
+        get offsetX(): Length;
+        get offsetY(): Length;
+        get screenWidth(): Length;
+        get screenHeight(): Length;
 
         setScreenX(value: number): void;
         setScreenY(value: number): void;
@@ -625,20 +669,20 @@ declare module "@easylogic/editor" {
          * 
          * @param {vec3} vertextOffset 
          */
-        getDirectionTransformMatrix(vertextOffset: vec3, width: ILength, height: ILength): mat4;
-        getDirectionTopLeftMatrix(width: ILength, height: ILength): mat4;
-        getDirectionLeftMatrix(width: ILength, height: ILength): mat4;
-        getDirectionTopMatrix(width: ILength, height: ILength): mat4;
-        getDirectionBottomLeftMatrix(width: ILength, height: ILength): mat4;
-        getDirectionTopRightMatrix(width: ILength, height: ILength): mat4;
-        getDirectionRightMatrix(width: ILength, height: ILength): mat4;
-        getDirectionBottomRightMatrix(width: ILength, height: ILength): mat4;
-        getDirectionBottomMatrix(width: ILength, height: ILength): mat4;
+        getDirectionTransformMatrix(vertextOffset: vec3, width: Length, height: Length): mat4;
+        getDirectionTopLeftMatrix(width: Length, height: Length): mat4;
+        getDirectionLeftMatrix(width: Length, height: Length): mat4;
+        getDirectionTopMatrix(width: Length, height: Length): mat4;
+        getDirectionBottomLeftMatrix(width: Length, height: Length): mat4;
+        getDirectionTopRightMatrix(width: Length, height: Length): mat4;
+        getDirectionRightMatrix(width: Length, height: Length): mat4;
+        getDirectionBottomRightMatrix(width: Length, height: Length): mat4;
+        getDirectionBottomMatrix(width: Length, height: Length): mat4;
 
         getAccumulatedMatrix(): mat4;
         getAccumulatedMatrixInverse(): mat4;
 
-        verties(width: ILength, height: ILength): vec3[];
+        verties(width: Length, height: Length): vec3[];
         selectionVerties(): vec3[];
         rectVerties(): vec3[];
         guideVerties(): vec3[];
@@ -656,11 +700,11 @@ declare module "@easylogic/editor" {
          * 
          * @returns {PathParser} 
          */
-        accumulatedPath(pathString: string = ''): IPathParser;
+        accumulatedPath(pathString: string = ''): PathParser;
 
         // 전체 캔버스에 그려진 path 의 개별 verties 를 
         // svg container 의 matrix 의 inverse matrix 를 곱해서 재계산 한다.     
-        invertPath(pathString: string = ''): IPathParser;
+        invertPath(pathString: string = ''): PathParser;
 
         /**
          * pathString 의 좌표를 기준 좌표로 돌린다. 
@@ -676,7 +720,7 @@ declare module "@easylogic/editor" {
          * 
          * @param {vec3[]} areaVerties 
          */
-        checkInAreaForAll(areaVerties: vec3[]): IMovableItem[];
+        checkInAreaForAll(areaVerties: vec3[]): MovableItem[];
 
         /**
          * area 에 속하는지 충돌 체크, 
@@ -684,7 +728,7 @@ declare module "@easylogic/editor" {
          * @param {vec3[]} areaVerties 
          * @returns {Item[]}  충돌 체크된 선택된 객체 리스트 
          */
-        checkInAreaForLayers(areaVerties: vec3[]): IMovableItem[];
+        checkInAreaForLayers(areaVerties: vec3[]): MovableItem[];
 
         getTransformOriginMatrix(): mat4;
 
@@ -701,7 +745,7 @@ declare module "@easylogic/editor" {
          * 
          * @param {Item} childItem 
          */
-        resetMatrix(childItem: IItem): void;
+        resetMatrix(childItem: Item): void;
 
         /** order by  */
 
@@ -709,10 +753,10 @@ declare module "@easylogic/editor" {
         setOrder(targetIndex: number): void;
 
         // get next sibiling item 
-        next(): IMovableItem;
+        next(): MovableItem;
 
         // get prev sibiling item   
-        prev(): IMovableItem;
+        prev(): MovableItem;
 
         /**
          * 레이어를 현재의 다음으로 보낸다. 
@@ -741,7 +785,7 @@ declare module "@easylogic/editor" {
         orderBottom(): void;
     }
 
-    interface IGroupItem extends IMovableItem {
+    export class GroupItem extends MovableItem {
 
         get isGroup(): boolean;
 
@@ -760,30 +804,30 @@ declare module "@easylogic/editor" {
         isInFlex(): boolean;
     }
 
-    interface IDomItem extends IGroupItem {
+    export class DomItem extends GroupItem {
 
     }
 
-    interface ILayer extends IDomItem {
+    export class Layer extends DomItem {
 
     }
 
-    interface IComponent extends ILayer {
-        static createComponent: (params: IComponentParams) => IComponent;
+    export class Component extends Layer {
+        static createComponent: (params: IComponentParams) => Component;
     }
 
-    interface IEventMachine {
+    class EventMachine {
 
-        protected opt: IKeyValue = {};
+        protected opt: KeyValue = {};
         protected parent: any;
-        protected props: any = {};
+        protected props: KeyValue = {};
         public source: string;
         public sourceName: string;
 
         /**
          * UIElement instance 에 필요한 기본 속성 설정 
          */
-        protected initializeProperty(opt: IKeyValue, props: any = {}): void;
+        protected initializeProperty(opt: KeyValue, props: any = {}): void;
 
         protected initComponents(): void;
 
@@ -796,7 +840,7 @@ declare module "@easylogic/editor" {
          * @protected
          * @returns {Object} 
          */
-        protected initState(): IKeyValue;
+        protected initState(): KeyValue;
 
         /**
          * state 를 변경한다. 
@@ -804,7 +848,7 @@ declare module "@easylogic/editor" {
          * @param {Object} state  새로운 state 
          * @param {Boolean} isLoad  다시 로드 할 것인지 체크 , true 면 state 변경후 다시 로드 
          */
-        setState(state: IKeyValue = {}, isLoad: boolean = true): void;
+        setState(state: KeyValue = {}, isLoad: boolean = true): void;
 
         /**
          * state 에 있는 key 필드의 값을 토글한다. 
@@ -821,14 +865,14 @@ declare module "@easylogic/editor" {
          * @param {*} props 
          * @protected
          */
-        protected _reload(props: IKeyValue): void;
+        protected _reload(props: KeyValue): void;
 
         /**
          * template 을 렌더링 한다. 
          * 
          * @param {Dom|undefined} $container  컴포넌트가 그려질 대상 
          */
-        render($container: IDomInstance | undefined): void;
+        render($container: Dom | undefined): void;
 
         protected initialize(): void;
 
@@ -846,7 +890,7 @@ declare module "@easylogic/editor" {
          * @protected
          * @returns {Object}
          */
-        protected components(): IKeyValue;
+        protected components(): KeyValue;
 
         /**
          * ref 이름을 가진 Component 를 가지고 온다. 
@@ -854,7 +898,7 @@ declare module "@easylogic/editor" {
          * @param  {any[]} args 
          * @returns {EventMachine}
          */
-        getRef(...args: string[]): IDomInstance;
+        getRef(...args: string[]): Dom;
 
 
         /**
@@ -901,7 +945,7 @@ declare module "@easylogic/editor" {
         protected bodyMouseUp(e: any, methodName: string): void;
     }
 
-    interface IUIElement extends IEventMachine {
+    class UIElement extends EventMachine {
 
         /**
          * UIElement 가 생성될 때 호출되는 메소드 
@@ -959,19 +1003,19 @@ declare module "@easylogic/editor" {
         off(message: string, callback: Function): void;
     }
 
-    interface IConfigManager { }
-    interface IShortCutManager { }
-    interface ISelectionManager { }
-    interface IViewportManager { }
-    interface ISnapManager { }
-    interface IHistoryManager { }
-    interface IKeyBoardManager { }
-    interface IMenuItemManager { }
+    interface ConfigManager { }
+    interface ShortCutManager { }
+    interface SelectionManager { }
+    interface ViewportManager { }
+    interface SnapManager { }
+    interface HistoryManager { }
+    interface KeyBoardManager { }
+    interface MenuItemManager { }
 
-    interface IEditorElement extends IUIElement {
+    export class EditorElement extends UIElement {
 
-        get $editor(): IEditorInstance;
-        get $store(): IBaseStore;
+        get $editor(): EditorInstance;
+        get $store(): BaseStore;
 
         /**
          * i18n 텍스트를 리턴한다. 
@@ -981,42 +1025,42 @@ declare module "@easylogic/editor" {
          */
         $i18n(key: string): string;
 
-        get $config(): IConfigManager;
+        get $config(): ConfigManager;
 
         /**
          * @type {SelectionManager} $selection
          */
-        get $selection(): ISelectionManager;
+        get $selection(): SelectionManager;
 
         /**
          * @type {ViewportManager} $viewport
          */
-        get $viewport(): IViewportManager;
+        get $viewport(): ViewportManager;
 
         /**
          * @type {SnapManager} $snapManager
          */
-        get $snapManager(): ISnapManager;
+        get $snapManager(): SnapManager;
 
 
-        get $history(): IHistoryManager;
+        get $history(): HistoryManager;
 
         /**
          * @type {ShortCutManager} $shortcuts
          */
-        get $shortcuts(): IShortCutManager;
+        get $shortcuts(): ShortCutManager;
 
         /**
          * @type {KeyBoardManager} $keyboardManager
          */
-        get $keyboardManager(): IKeyBoardManager;
+        get $keyboardManager(): KeyBoardManager;
 
         /**
          * @type {StorageManager} $storageManager
          */
-        get $storageManager(): IStorageManager;
+        get $storageManager(): StorageManager;
 
-        get $menuManager(): IMenuItemManager;
+        get $menuManager(): MenuItemManager;
 
         /**
          * history 가 필요한 커맨드는 command 함수를 사용하자. 
@@ -1034,7 +1078,7 @@ declare module "@easylogic/editor" {
     }
 
 
-    interface IBaseProperty extends IEditorElement {
+    export class BaseProperty extends EditorElement {
 
         onToggleShow(): void;
 
@@ -1076,7 +1120,7 @@ declare module "@easylogic/editor" {
     }
 
 
-    interface IMenuItem extends IEditorElement {
+    export class MenuItem extends EditorElement {
 
         clickButton(e): void;
 
@@ -1094,113 +1138,85 @@ declare module "@easylogic/editor" {
 
         isHideTitle(): boolean;
 
-        static createMenuItem(opt: IKeyValue = {}): IMenuItem;
+        static createMenuItem(opt: KeyValue = {}): MenuItem;
     }
 
     interface ICommandObject {
 
     }
 
-    interface IShortcutObject {
+    interface ShortcutObject {
 
     }
 
-    interface IEditorInstance {
-        registElement(obj: IElementValue<IEditorElement>): void;
-        registerMenuItem(target: string, obj: IElementValue<IEditorElement>): void;
+    export interface EditorInstance {
+        registElement(obj: ElementValue<EditorElement>): void;
+        registerMenuItem(target: string, obj: ElementValue<EditorElement>): void;
         registerComponent(name: string, component: IComponent);
-        registerItem(name: string, item: IItem);
+        registerItem(name: string, item: Item);
         registerInspector(name: string, inspectorCallback: Function);
 
         registerRenderer(rendererType: string, name: string, rendererInstance: IRender);
         registerCommand(commandObject: Function | ICommandObject): void;
-        registerShortCut(shortcut: IShortcutObject): void;
+        registerShortCut(shortcut: ShortcutObject): void;
 
         /**
          * 
-         * @param {IPluginInterface} createPluginFunction  
+         * @param {PluginInterface} createPluginFunction  
          */
-        registerPlugin(createPluginFunction: IPluginInterface): void;
+        registerPlugin(createPluginFunction: PluginInterface): void;
 
-        registerPluginList(plugins: IPluginInterface[] = []): void;
-
-    }
-
-    interface IPluginInterface {
-        (editor: IEditorInstance): void;
-    }
-
-    interface EditorInterface {
-        createDesignEditor: (opt: IKeyValue = {}) => EditorInterface;
-        plugins: IPluginInterface[]
+        registerPluginList(plugins: PluginInterface[] = []): void;
 
     }
 
-
-    interface IHTMLRenderer {
-
-        render(item: IItem, renderer: IHTMLRenderer): string;
-
-        update(item: IItem, currentElement: IDomInstance, editor: IEditorInstance): any;
+    export interface PluginInterface {
+        (editor: EditorInstance): void;
     }
 
-    interface IRender {
+    export interface EditorInterface {
+        createDesignEditor (opt: KeyValue = {}): EditorElement;
+        plugins: PluginInterface[]
 
     }
 
-    interface IHTMLItemRender extends IRender {
-        /**
-         * id 기반 문자열 id 생성
-         * 
-         */
-        protected getInnerId(item: IItem, postfix: string = ''): string;
+
+    export interface HTMLRenderer {
+
+        render(item: Item, renderer: HTMLRenderer): string;
+
+        update(item: Item, currentElement: Dom, editor: EditorInstance): any;
     }
 
-    interface IHTMLDomRender extends IHTMLItemRender {
+    export class Render {
 
+    }
 
-        /**
-         * 처음 렌더링 할 때 
-         * 
-         */
-        render(item: IItem, renderer: IHTMLRenderer): string;
+    export class HTMLItemRender extends Render {
+
+        render(item: Item, renderer: HTMLRenderer): string;
 
         /**
          * 초기 렌더링 이후 업데이트만 할 때 
          * 
+         * @param {Item} item 
+         * @param {Dom} currentElement 
+         * @override
          */
-        update(item: IItem, currentElement: IDomInstance): void;
+        update(item: Item, currentElement: Dom): void;
     }
 
-    interface IHTMLLayerRender extends IHTMLDomRender {
+    export class DomRender extends HTMLItemRender { 
+        toDefString (item:Item):string;
+    }
 
-        /**
-         * 처음 렌더링 할 때 
-         * 
-         */
-        render(item: IItem, renderer: IHTMLRenderer): string;
-
-        /**
-         * 초기 렌더링 이후 업데이트만 할 때 
-         * 
-         */
-        update(item: IItem, currentElement: IDomInstance): void;
+    export class HTMLLayerRender extends DomRender {
     }
 
 
     const easylogic: EditorInterface;
 
-    export const Length: ILength;
-
-    export const Component: IComponent;
-
-    export const HTMLLayerRender: IHTMLLayerRender;
-
-    export const MenuItem: IMenuItem;
-    export const BaseProperty: IBaseProperty;
-    export const EditorInstance: IEditorInstance;
-    export const EditorElement: IEditorElement;
-    export const icon: IElementValue<string>;
+    export type icon = ElementValue<string>;
 
     export default easylogic;
 }

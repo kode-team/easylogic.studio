@@ -26,9 +26,9 @@
 
           @each $selectType in inset, outset {
             &[data-selected-value="#{$selectType}"] button[data-value="#{$selectType}"] {
-                box-shadow: inset 0px 0px 3px 0px var(--selected-color) !important;
-                background-color: var(--selected-color) !important;
-                color: var(--selected-font-color) !important;
+                box-shadow: inset 0px 0px 3px 0px var(--elf-selected-color) !important;
+                background-color: var(--elf-selected-color) !important;
+                color: var(--elf-selected-font-color) !important;
             }
           }
 
@@ -45,19 +45,19 @@
       }
 
       .drag-board {
-        // background-color: var(--selected-color);
+        // background-color: var(--elf-selected-color);
         
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--elf-border-color);
         margin-bottom: 2px;        
         height: 204px;
         position: relative;
         // pointer-events: none;
         background-image: linear-gradient(
             to right,
-            var(--border-color),
-            var(--border-color)
+            var(--elf-border-color),
+            var(--elf-border-color)
           ),
-          linear-gradient(to right, var(--border-color), var(--border-color));
+          linear-gradient(to right, var(--elf-border-color), var(--elf-border-color));
         background-size: 100% 1px, 1px 100%;
         background-position: 0px center, center 0px;
         background-repeat: no-repeat;
@@ -68,7 +68,7 @@
           width: 10px;
           height: 10px;
           transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
-          background-color: var(--selected-color);
+          background-color: var(--elf-selected-color);
           border-radius: 100%;
         }
       }

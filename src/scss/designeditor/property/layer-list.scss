@@ -4,7 +4,7 @@
     padding:0px;
     margin:0px !important;
     .layer-item {
-        color: var(--list-item-font-color);
+        color: var(--elf-list-item-font-color);
         padding: 5px !important; 
         margin-bottom: 0px !important;
 
@@ -59,18 +59,18 @@
                 text-align: right;
 
                 .visible {
-                    color: var(--list-item-disable-font-color);
+                    color: var(--elf-list-item-disable-font-color);
 
                     &[data-visible='true'] {
-                        color: var(--font-color); 
+                        color: var(--elf-font-color); 
                     }
                 }
 
                 .lock {
-                    color: var(--list-item-disable-font-color); 
+                    color: var(--elf-list-item-disable-font-color); 
 
                     &[data-lock='true'] {
-                        color: var(--font-color); 
+                        color: var(--elf-font-color); 
                     }
                 }
             }
@@ -78,19 +78,19 @@
         }
 
         &.selected {
-            background-color: var(--list-item-selected-color);
+            background-color: var(--elf-list-item-selected-color);
 
             
             .detail {
                 .name {
-                    color: var(--selected-font-color);
+                    color: var(--elf-selected-font-color);
                 }
 
             }
         }
 
         &:not(.selected).hovered {
-            box-shadow: inset 0 0 0 1px var(--list-item-selected-color);
+            box-shadow: inset 0 0 0 1px var(--elf-list-item-selected-color);
         }
 
         &[data-layout='flex'],
@@ -100,7 +100,7 @@
                 [data-layout-title] {
                     &:after {
                         content: attr(data-layout-title);
-                        color: var(--selected-font-color);
+                        color: var(--elf-selected-font-color);
                         display: inline-block;
                         vertical-align: middle;
                         margin-left: 5px;
@@ -141,7 +141,7 @@
 
     &+ .drag-point {
         position: absolute;
-        border: 1px solid var(--selected-color);
+        border: 1px solid var(--elf-selected-color);
         pointer-events: none;
     }
 }

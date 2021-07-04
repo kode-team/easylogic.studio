@@ -13,11 +13,11 @@
 
     .list-view-item {
         &.selected {
-            background-color: var(--selected-color); 
+            background-color: var(--elf-selected-color); 
 
             svg {
                 path, circle, rect {
-                    fill: var(--selected-font-color);
+                    fill: var(--elf-selected-font-color);
                 }
             }
         }
@@ -26,7 +26,7 @@
             width: 100%;
 
             path,circle,rect {
-                fill: var(--font-color); 
+                fill: var(--elf-font-color); 
             }
 
         }

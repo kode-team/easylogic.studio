@@ -15,7 +15,7 @@
 
 
 @mixin title-background () {
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, var(--selected-color) 10%, rgba(var(--selected-color), 0) 60%);
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, var(--elf-selected-color) 10%, rgba(var(--elf-selected-color), 0) 60%);
     color: white; 
 }
 

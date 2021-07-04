@@ -10,8 +10,8 @@
         height:150px;
         top:30px;
         left:60px;
-        border:1px solid var(--border-color);
-        background-color: var(--background-color);
+        border:1px solid var(--elf-border-color);
+        background-color: var(--elf-background-color);
 
         .bezier-canvas {
             pointer-events: none;
@@ -32,8 +32,8 @@
                 transform: translateX(-50%) translateY(-50%);
                 border-radius:100%;
                 cursor: pointer;
-                background-color: var(--selected-color);
-                border:1px solid var(--selected-color);
+                background-color: var(--elf-selected-color);
+                border:1px solid var(--elf-selected-color);
                 // box-sizing:border-box;
             }
         
@@ -69,7 +69,7 @@
 
         @each $selectType in ease, ease-in, ease-out {
             &[data-selected-value="#{$selectType}"] .item[data-bezier="#{$selectType}"] {
-                background-color: var(--selected-color);
+                background-color: var(--elf-selected-color);
             }
         }        
 
@@ -122,7 +122,7 @@
             font-weight:bold;
             cursor: pointer;
             vertical-align: middle;    
-            color: var(--font-color);  
+            color: var(--elf-font-color);  
 
             svg {
                 path {
@@ -134,7 +134,7 @@
         .predefined-text {
             vertical-align: middle;
             padding:4px;
-            color: var(--font-color);
+            color: var(--elf-font-color);
         }
     
     }
