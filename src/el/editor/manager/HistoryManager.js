@@ -69,7 +69,7 @@ export class HistoryManager {
         this.currentIndex++; 
         this.undoHistories.length = this.currentIndex + 1;
 
-        this.$editor.emit('refreshHistory');
+        this.$editor.emit('refreshHistory', command.command);
 
         return historyObject;
     }
@@ -100,7 +100,7 @@ export class HistoryManager {
         }
 
         this.$editor.nextTick(() => {
-            this.$editor.emit('refreshHistory');     
+            this.$editor.emit('refreshHistory', commandObject.command);     
         })
 
     }
@@ -122,7 +122,7 @@ export class HistoryManager {
             this.$editor.debug(commandObject)
         }
         this.$editor.nextTick(() => {
-            this.$editor.emit('refreshHistory');     
+            this.$editor.emit('refreshHistory', commandObject.command);     
         })
     }
 

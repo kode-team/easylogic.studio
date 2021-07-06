@@ -242,7 +242,8 @@ export const Editor = new class {
   }
 
   on(...args) {
-    this.store.on(...args);
+    const [name, callback, ...rest] = args;
+    this.store.on(name, callback, this, ...rest);
   }
 
   off(...args) {

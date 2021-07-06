@@ -46,9 +46,9 @@ module.exports = {
   },
   resolve: { alias },  
   mode: 'production',
-  // devtool: 'source-map',
+  devtool: 'source-map',
   optimization: {
-    minimize: true
+    minimize: false
   },
   module: {
     rules: [
@@ -141,12 +141,9 @@ module.exports = {
     }),
     new CopyPlugin([
       { from: 'public', to: '.' },
-      { from: 'index.d.ts', to: '.' },
     ]),    
     new webpack.BannerPlugin({
-      banner: LICENSE,
-      raw: true,
-      entryOnly: true,
+      banner: LICENSE
     })   
   ]
 };
