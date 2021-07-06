@@ -22,35 +22,9 @@ import "./BodyPanel";
 import "./PopupManager";
 import "./KeyboardManager";
 
-import { registElement } from "el/base/registElement";
-import { isArray } from "el/base/functions/func";
-import { Component } from "el/editor/items/Component";
-import MenuItem from "el/editor/ui/menu-items/MenuItem";
-import LayerRender from "el/editor/renderer/HTMLRenderer/LayerRender";
 import BaseLayout from "../BaseLayout";
 
 export default class DesignEditor extends BaseLayout {
-  
-  initialize () {
-    super.initialize()
-
-    if (isArray(this.opt.plugins)) {
-      this.$editor.registerPluginList(this.opt.plugins);
-    }
-
-    this.emit('load.json', this.opt.data?.projects);
-
-    this.$editor.initPlugins({
-      Component,
-      MenuItem,
-      LayerRender
-    });
-  }
-
-  afterRender() {
-    this.$el.attr('data-theme', this.$editor.theme);
-    this.$el.addClass(navigator.userAgent.includes('Windows') ? 'ua-window': 'ua-default')
-  }
 
   initState() {
     return {
@@ -59,11 +33,6 @@ export default class DesignEditor extends BaseLayout {
       bottomSize: 0,
       lastBottomSize: 150
     }
-  }
-
-  
-  [SUBSCRIBE('changed.locale')] () {
-    this.rerender()
   }
 
   template() {
@@ -233,10 +202,6 @@ export default class DesignEditor extends BaseLayout {
     })
   }  
 
-  [SUBSCRIBE('changeTheme')] () {
-    Dom.body().attr('data-theme', this.$editor.theme);
-  }
-
 
   [SUBSCRIBE('toggleFooter')] (isShow) {
     this.$el.toggleClass('show-footer', isShow);
@@ -258,15 +223,6 @@ export default class DesignEditor extends BaseLayout {
 
   }
 
-  [SUBSCRIBE('refreshAll')] () {
-    this.emit('refreshProjectList');
-    this.trigger('refreshAllSelectProject');
-  }
-
-  [SUBSCRIBE('refreshAllSelectProject')] () {      
-    this.emit('refreshArtboard')
-  }
-
   /** 드랍존 설정을 위해서 남겨놔야함 */
   [DRAGOVER('$middle') + PREVENT] (e) {}
   [DROP('$middle') + PREVENT] (e) {}
@@ -276,5 +232,3 @@ export default class DesignEditor extends BaseLayout {
     this.$el.toggleFullscreen();
   }
 }
-
-registElement({ DesignEditor })

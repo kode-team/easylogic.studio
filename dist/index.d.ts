@@ -1176,6 +1176,7 @@ declare module "@easylogic/editor" {
 
     export interface EditorInterface {
         createDesignEditor (opt: KeyValue = {}): EditorElement;
+        createDesignPlayer (opt: KeyValue = {}): EditorElement;
         plugins: PluginInterface[]
 
     }

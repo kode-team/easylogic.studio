@@ -1,7 +1,7 @@
 import EasyLogic from "./editor-layouts/designplayer/index";
 
 function startPlayer(opt = {}) {
-  var app = new EasyLogic.createDesignPlayer({
+  var app = EasyLogic.createDesignPlayer({
     container: document.getElementById('app'),
     data: {
       projects: [{
