@@ -1,5 +1,5 @@
 $border-radius: 3px;
-.input-range-editor {
+.input-range--editor {
     display: grid;
     grid-template-columns: 1fr;
     height: 24px;
@@ -62,7 +62,7 @@ $border-radius: 3px;
         display: none;        
     }
     
-    .range-editor-type {
+    .range--editor-type {
         vertical-align: middle;
         height: 24px;
 

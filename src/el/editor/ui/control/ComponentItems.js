@@ -24,9 +24,7 @@ export default class ComponentItems extends EditorElement {
         <div class='group'>
          <label>${this.$i18n('component.items.plugin')}</label>
           <div class='list'>
-            ${this.$menuManager.getTargetMenuItems('sidebar').map(it => {
-              return /*html*/`<object refClass="${it.refClass}" />`
-            }).join('\n')}
+            ${this.$menuManager.generate('sidebar')}
           </div>          
         </div>                  
       </div>

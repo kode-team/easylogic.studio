@@ -9,9 +9,7 @@ export default class AssetItems extends EditorElement {
   template() {
     return /*html*/`
       <div class='asset-items'>
-        ${this.$menuManager.getTargetMenuItems('asset').map(it => {
-          return /*html*/`<object refClass="${it.refClass}" />`
-        }).join('\n')}
+        ${this.$menuManager.generate('asset')}
       </div>
     `;
   }

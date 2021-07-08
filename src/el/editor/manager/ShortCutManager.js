@@ -52,19 +52,9 @@ export class ShortCutManager {
     }
 
     makeWhenFunction(command, when) {
-        return (new Function ('editor', /*jsx*/`
-            /////////////////////////////////
-            ////////Custom Function///////////
-
-            return function () {
-                const CanvasView = editor.modeView === 'CanvasView';
-                const PathEditorView = editor.modeView === 'PathEditorView';                
-
-                return (${when});
-            }
-            ////////Custom Function///////////
-            /////////////////////////////////
-        `)) (this.$editor)
+        const editor = this.$editor;
+        const whenList = when.split('|').map(it => it.trim());
+        return () => whenList.some(it => it === editor.modeView);
     }
 
     sort() {

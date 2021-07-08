@@ -13,6 +13,11 @@ function startEditor() {
         ]
       }],
     },
+    // config: {
+    //   "ruler.show": false,
+    //   "show.left.panel": false,
+    //   "show.right.panel": false
+    // },
     plugins: [
       function (editor) {
         console.log(editor);

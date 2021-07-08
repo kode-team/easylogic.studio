@@ -18,6 +18,7 @@ export default class ToolBar extends EditorElement {
                             <div class='draw-items'>
                                 <object refClass="Projects" />
                                 <object refClass="Fullscreen" />      
+                                ${this.$menuManager.generate('toolbar.left')}
                             </div>
                         </div>
                     </div>                    
@@ -33,7 +34,8 @@ export default class ToolBar extends EditorElement {
                                 <object refClass="KeyBoard" />        
                                 <object refClass="ExportView" />
                                 <object refClass="Download" />
-                                <object refClass="Save" />                                
+                                <object refClass="Save" />   
+                                ${this.$menuManager.generate('toolbar.right')}                             
                             </div>
                         </div>
                     </div>

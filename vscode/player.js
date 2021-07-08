@@ -17993,11 +17993,11 @@ var RangeEditor = /*#__PURE__*/function (_EditorElement) {
       return (
         /*html*/
         "\n        <div \n            ref=\"$range\"\n            class=\"".concat(Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_10__["OBJECT_TO_CLASS"])(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()({
-          'range-editor': true,
+          'range--editor': true,
           'has-label': !!label,
           'compact': !!compact,
           'is-removable': removable
-        }, layoutClass, true)), "\"\n        >\n            ").concat(label ? "<label title=\"".concat(label, "\">").concat(label, "</label>") : '', "\n            <div class='range-editor-type' data-type='range'>\n                <input type='range' ref='$property' value=\"").concat(realValue, "\" min=\"").concat(min, "\" max=\"").concat(max, "\" step=\"").concat(step, "\" /> \n                <div class='area' ref='$rangeArea'>\n                    <input type='number' ref='$propertyNumber' value=\"").concat(realValue, "\" min=\"").concat(min, "\" max=\"").concat(max, "\" step=\"").concat(step, "\" tabIndex=\"1\" />\n                    <object refClass=\"SelectEditor\"  ref='$unit' key='unit' value=\"").concat(this.state.selectedUnit || this.state.value.unit, "\" options=\"").concat(units, "\" onchange='changeUnit' />\n                </div>\n            </div>\n            <button type='button' class='remove thin' ref='$remove' title='Remove'>").concat(el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].remove, "</button>\n        </div>\n    ")
+        }, layoutClass, true)), "\"\n        >\n            ").concat(label ? "<label title=\"".concat(label, "\">").concat(label, "</label>") : '', "\n            <div class='range--editor-type' data-type='range'>\n                <input type='range' ref='$property' value=\"").concat(realValue, "\" min=\"").concat(min, "\" max=\"").concat(max, "\" step=\"").concat(step, "\" /> \n                <div class='area' ref='$rangeArea'>\n                    <input type='number' ref='$propertyNumber' value=\"").concat(realValue, "\" min=\"").concat(min, "\" max=\"").concat(max, "\" step=\"").concat(step, "\" tabIndex=\"1\" />\n                    <object refClass=\"SelectEditor\"  ref='$unit' key='unit' value=\"").concat(this.state.selectedUnit || this.state.value.unit, "\" options=\"").concat(units, "\" onchange='changeUnit' />\n                </div>\n            </div>\n            <button type='button' class='remove thin' ref='$remove' title='Remove'>").concat(el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].remove, "</button>\n        </div>\n    ")
       );
     }
   }, {
@@ -31171,9 +31171,15 @@ var ShortCutManager_ShortCutManager = /*#__PURE__*/function () {
   }, {
     key: "makeWhenFunction",
     value: function makeWhenFunction(command, when) {
-      return new Function('editor',
-      /*jsx*/
-      "\n            /////////////////////////////////\n            ////////Custom Function///////////\n\n            return function () {\n                const CanvasView = editor.modeView === 'CanvasView';\n                const PathEditorView = editor.modeView === 'PathEditorView';                \n\n                return (".concat(when, ");\n            }\n            ////////Custom Function///////////\n            /////////////////////////////////\n        "))(this.$editor);
+      var editor = this.$editor;
+      var whenList = when.split('|').map(function (it) {
+        return it.trim();
+      });
+      return function () {
+        return whenList.some(function (it) {
+          return it === editor.modeView;
+        });
+      };
     }
   }, {
     key: "sort",
@@ -31305,6 +31311,15 @@ var ConfigManager_ConfigManager = /*#__PURE__*/function () {
         this.config[key] = value;
         this.editor.emit("config:" + key);
       }
+    }
+  }, {
+    key: "setAll",
+    value: function setAll(obj) {
+      var _this = this;
+
+      Object.keys(obj).forEach(function (key) {
+        _this.set(key, obj[key]);
+      });
     }
   }, {
     key: "toggle",
@@ -34186,6 +34201,25 @@ var MenuItemManager_MenuItemManager = /*#__PURE__*/function () {
     key: "getTargetMenuItems",
     value: function getTargetMenuItems(target) {
       return this.menuItems[target] || [];
+    }
+    /**
+     * target 별 Object 를 나열해준다. 
+     * 
+     * @param {string} target 
+     * @returns 
+     */
+
+  }, {
+    key: "generate",
+    value: function generate(target) {
+      var hasRef = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      return this.getTargetMenuItems(target).map(function (it) {
+        var refString = hasRef ? "ref=\"$".concat(it.refClass, "\"") : "";
+        return (
+          /*html*/
+          "<object refClass=\"".concat(it.refClass, "\" ").concat(refString, " />")
+        );
+      }).join('\n');
     }
   }]);
 
@@ -38172,11 +38206,11 @@ var InputRangeEditor = /*#__PURE__*/function (_EditorElement) {
       return (
         /*html*/
         "\n        <div \n            ref=\"$range\",\n            class=\"".concat(Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_10__["OBJECT_TO_CLASS"])(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()({
-          'input-range-editor': true,
+          'input-range--editor': true,
           'has-label': !!label,
           'compact': !!compact,
           'is-removable': removable
-        }, layoutClass, true)), "\"\n        >\n            ").concat(label ? "<label>".concat(label, "</label>") : '', "\n            <div class='range-editor-type' data-type='range'>\n                <div class='area'>\n                    <input type='number' ref='$propertyNumber' value=\"").concat(realValue, "\" min=\"").concat(min, "\" max=\"").concat(max, "\" step=\"").concat(step, "\" tabIndex=\"1\" />\n                    \n                    <object refClass=\"SelectEditor\"  ref='$unit' key='unit' value=\"").concat(this.state.selectedUnit || this.state.value.unit, "\" options=\"").concat(this.state.units, "\" onchange='changeUnit' />\n                    \n                </div>\n            </div>\n            <button type='button' class='remove' ref='$remove' title='Remove'>").concat(el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].remove, "</button>\n        </div>\n    ")
+        }, layoutClass, true)), "\"\n        >\n            ").concat(label ? "<label>".concat(label, "</label>") : '', "\n            <div class='range--editor-type' data-type='range'>\n                <div class='area'>\n                    <input type='number' ref='$propertyNumber' value=\"").concat(realValue, "\" min=\"").concat(min, "\" max=\"").concat(max, "\" step=\"").concat(step, "\" tabIndex=\"1\" />\n                    \n                    <object refClass=\"SelectEditor\"  ref='$unit' key='unit' value=\"").concat(this.state.selectedUnit || this.state.value.unit, "\" options=\"").concat(this.state.units, "\" onchange='changeUnit' />\n                    \n                </div>\n            </div>\n            <button type='button' class='remove' ref='$remove' title='Remove'>").concat(el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].remove, "</button>\n        </div>\n    ")
       );
     }
   }, {
@@ -38351,7 +38385,7 @@ var NumberRangeEditor = /*#__PURE__*/function (_EditorElement) {
       var realValue = (+value).toString();
       return (
         /*html*/
-        "\n        <div class='number-range-editor ".concat(hasLabel, " ").concat(isRemovable, " ").concat(layoutClass, "' data-selected-type='").concat(type, "'>\n            ").concat(label ? "<label title=\"".concat(label, "\">").concat(label, "</label>") : '', "\n            <div class='range-editor-type' data-type='range'>\n                <div class='area'>\n                    <input type='range' ref='$property' value=\"").concat(realValue, "\" min=\"").concat(min, "\" max=\"").concat(max, "\" step=\"").concat(step, "\" />\n                    <input type='number' ref='$propertyNumber' value=\"").concat(realValue, "\" min=\"").concat(min, "\" max=\"").concat(max, "\" step=\"").concat(step, "\" tabIndex=\"1\" />\n                </div>\n            </div>\n            <button type='button' class='remove' ref='$remove' title='Remove'>").concat(el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"].remove, "</button>\n        </div>\n    ")
+        "\n        <div class='number-range--editor ".concat(hasLabel, " ").concat(isRemovable, " ").concat(layoutClass, "' data-selected-type='").concat(type, "'>\n            ").concat(label ? "<label title=\"".concat(label, "\">").concat(label, "</label>") : '', "\n            <div class='range--editor-type' data-type='range'>\n                <div class='area'>\n                    <input type='range' ref='$property' value=\"").concat(realValue, "\" min=\"").concat(min, "\" max=\"").concat(max, "\" step=\"").concat(step, "\" />\n                    <input type='number' ref='$propertyNumber' value=\"").concat(realValue, "\" min=\"").concat(min, "\" max=\"").concat(max, "\" step=\"").concat(step, "\" tabIndex=\"1\" />\n                </div>\n            </div>\n            <button type='button' class='remove' ref='$remove' title='Remove'>").concat(el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_7__[/* default */ "a"].remove, "</button>\n        </div>\n    ")
       );
     }
   }, {
@@ -46913,7 +46947,7 @@ var NumberInputEditor = /*#__PURE__*/function (_EditorElement) {
       var realValue = (+value).toString();
       return (
         /*html*/
-        "\n        <div class='number-input-editor ".concat(hasLabel, " ").concat(hasCompact, " ").concat(layoutClass, "' data-selected-type='").concat(type, "'>\n            ").concat(label ? "<label>".concat(label, "</label>") : '', "\n            <div class='range-editor-type' data-type='range'>\n                <div class='area'>\n                    <input type='number' ref='$propertyNumber' value=\"").concat(realValue, "\" min=\"").concat(min, "\" max=\"").concat(max, "\" step=\"").concat(step, "\" />\n                </div>\n            </div>\n        </div>\n    ")
+        "\n        <div class='number-input-editor ".concat(hasLabel, " ").concat(hasCompact, " ").concat(layoutClass, "' data-selected-type='").concat(type, "'>\n            ").concat(label ? "<label>".concat(label, "</label>") : '', "\n            <div class='range--editor-type' data-type='range'>\n                <div class='area'>\n                    <input type='number' ref='$propertyNumber' value=\"").concat(realValue, "\" min=\"").concat(min, "\" max=\"").concat(max, "\" step=\"").concat(step, "\" />\n                </div>\n            </div>\n        </div>\n    ")
       );
     }
   }, {
@@ -59788,6 +59822,10 @@ var BaseLayout = /*#__PURE__*/function (_EditorElement) {
 
       if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_7__["isArray"])(this.opt.plugins)) {
         this.$editor.registerPluginList(this.opt.plugins);
+      }
+
+      if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_7__["isObject"])(this.opt.config)) {
+        this.$config.setAll(this.opt.config || {});
       }
 
       this.emit('load.json', (_this$opt$data = this.opt.data) === null || _this$opt$data === void 0 ? void 0 : _this$opt$data.projects);

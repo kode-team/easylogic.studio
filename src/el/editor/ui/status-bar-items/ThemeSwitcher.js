@@ -4,7 +4,7 @@ import { registElement } from "el/base/registElement";
 import "el/editor/ui/property-editor";
 import { EditorElement } from "../common/EditorElement";
 
-const theme_list = ['dark', 'light', 'toon', /*, 'gray' */]
+const theme_list = ['dark', 'light']
 
 export default class ThemeSwitcher extends EditorElement {
 

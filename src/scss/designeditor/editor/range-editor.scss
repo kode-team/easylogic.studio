@@ -1,5 +1,5 @@
 $border-radius: 3px;
-.range-editor {
+.range--editor {
     display: grid;
     grid-template-columns: 1fr;
     grid-column-gap: 4px;
@@ -58,7 +58,7 @@ $border-radius: 3px;
         display: none;        
     }
     
-    .range-editor-type {
+    .range--editor-type {
         display: grid;
         vertical-align: middle;
         grid-template-columns: 1fr 80px;     

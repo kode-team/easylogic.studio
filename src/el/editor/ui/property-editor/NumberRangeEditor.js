@@ -45,9 +45,9 @@ export default class NumberRangeEditor extends EditorElement {
         var realValue = (+value).toString();
         
         return /*html*/`
-        <div class='number-range-editor ${hasLabel} ${isRemovable} ${layoutClass}' data-selected-type='${type}'>
+        <div class='number-range--editor ${hasLabel} ${isRemovable} ${layoutClass}' data-selected-type='${type}'>
             ${label ? `<label title="${label}">${label}</label>` : '' }
-            <div class='range-editor-type' data-type='range'>
+            <div class='range--editor-type' data-type='range'>
                 <div class='area'>
                     <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" />
                     <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" tabIndex="1" />

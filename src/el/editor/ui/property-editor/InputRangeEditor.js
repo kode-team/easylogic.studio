@@ -55,7 +55,7 @@ export default class InputRangeEditor extends EditorElement {
         <div 
             ref="$range",
             class="${OBJECT_TO_CLASS({
-                'input-range-editor': true,
+                'input-range--editor': true,
                 'has-label': !!label,
                 'compact': !!compact,
                 'is-removable': removable,
@@ -63,7 +63,7 @@ export default class InputRangeEditor extends EditorElement {
             })}"
         >
             ${label ? `<label>${label}</label>` : '' }
-            <div class='range-editor-type' data-type='range'>
+            <div class='range--editor-type' data-type='range'>
                 <div class='area'>
                     <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" tabIndex="1" />
                     

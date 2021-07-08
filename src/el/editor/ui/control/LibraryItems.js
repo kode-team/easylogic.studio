@@ -13,9 +13,7 @@ export default class LibraryItems extends EditorElement {
         <div>
           <object label="Search" refClass="TextEditor" key="search" onchange="onTextChange" />
         </div>
-        ${this.$menuManager.getTargetMenuItems('library').map(it => {
-          return /*html*/`<object refClass="${it.refClass}" />`
-        }).join('\n')}
+        ${this.$menuManager.generate('library')}
       </div>
     `;
   }

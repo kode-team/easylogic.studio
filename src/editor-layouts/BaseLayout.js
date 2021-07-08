@@ -1,6 +1,6 @@
 
 import { DEBOUNCE, POINTEREND, POINTERMOVE, RESIZE, SUBSCRIBE, SUBSCRIBE_ALL } from "el/base/Event";
-import { debounce, isArray } from "el/base/functions/func";
+import { debounce, isArray, isObject } from "el/base/functions/func";
 import { getDist } from "el/base/functions/math";
 import { ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "el/editor/types/event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
@@ -24,6 +24,10 @@ export default class BaseLayout extends EditorElement {
 
     if (isArray(this.opt.plugins)) {
       this.$editor.registerPluginList(this.opt.plugins);
+    }
+
+    if (isObject(this.opt.config)) {
+      this.$config.setAll(this.opt.config || {});
     }
 
     this.emit('load.json', this.opt.data?.projects);

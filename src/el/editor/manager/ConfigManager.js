@@ -35,6 +35,12 @@ export class ConfigManager {
         }
     }
 
+    setAll (obj) {
+        Object.keys(obj).forEach(key => {
+            this.set(key, obj[key])
+        })
+    }
+
     toggle(key) {
         this.set(key, !this.get(key));
     }

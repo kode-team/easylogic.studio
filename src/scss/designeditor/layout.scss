@@ -62,7 +62,7 @@
     left: 0px;
     top: 0px;
     right: 0px;
-    background-color: #000000;
+    background-color: var(--elf-background-color);
   }
 
   .layout-middle {
@@ -72,8 +72,8 @@
     top: $top-size;
     bottom: $status-bar-height;
     box-sizing: border-box;
-    background-color: #141414;
     overflow: hidden;
+    background-color: var(--elf-background-color);    
     
     .layout-header {
       display: none;

@@ -63,7 +63,7 @@ export default class RangeEditor extends EditorElement {
         <div 
             ref="$range"
             class="${OBJECT_TO_CLASS({
-                'range-editor': true,
+                'range--editor': true,
                 'has-label': !!label,
                 'compact': !!compact,
                 'is-removable': removable,
@@ -71,7 +71,7 @@ export default class RangeEditor extends EditorElement {
             })}"
         >
             ${label ? `<label title="${label}">${label}</label>` : '' }
-            <div class='range-editor-type' data-type='range'>
+            <div class='range--editor-type' data-type='range'>
                 <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" /> 
                 <div class='area' ref='$rangeArea'>
                     <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" tabIndex="1" />

@@ -51,7 +51,7 @@ export default class NumberInputEditor extends EditorElement {
         return /*html*/`
         <div class='number-input-editor ${hasLabel} ${hasCompact} ${layoutClass}' data-selected-type='${type}'>
             ${label ? `<label>${label}</label>` : '' }
-            <div class='range-editor-type' data-type='range'>
+            <div class='range--editor-type' data-type='range'>
                 <div class='area'>
                     <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" />
                 </div>
