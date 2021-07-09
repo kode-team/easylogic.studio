@@ -63,14 +63,11 @@ export class MovableItem extends Item {
         super.reset(obj);
 
         // transform 에 변경이 생기면 미리 캐슁해둔다. 
-        if (this.hasChangedField('width', 'height', 'transform', 'rotateZ', 'rotate')) {
+        if (this.hasChangedField('x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'transform-origin')) {
             this.setCacheItemTransformMatrix();
+            this.setCacheLocalTransformMatrix();            
         }
 
-        // transform orign 이 변경되면 localTransformMatrix 를 변경시킨다. 
-        if (this.hasChangedField('x', 'y', 'transform-origin')) {
-            this.setCacheLocalTransformMatrix();
-        }        
     }
 
     setCacheItemTransformMatrix() {

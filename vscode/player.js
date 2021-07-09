@@ -8630,9 +8630,19 @@ function getPointBetweenVerties(start, end) {
   return esm["d" /* vec3 */].lerp([], start, end, 1 + pointDist / esm["d" /* vec3 */].dist(start, end));
 }
 function vertiesMap(verties, transformView) {
-  return verties.map(function (v) {
-    return esm["d" /* vec3 */].transformMat4([], v, transformView);
-  });
+  if (verties.length === 1) {
+    return [esm["d" /* vec3 */].transformMat4([], verties[0], transformView)];
+  } else if (verties.length === 2) {
+    return [esm["d" /* vec3 */].transformMat4([], verties[0], transformView), esm["d" /* vec3 */].transformMat4([], verties[1], transformView)];
+  } else if (verties.length === 3) {
+    return [esm["d" /* vec3 */].transformMat4([], verties[0], transformView), esm["d" /* vec3 */].transformMat4([], verties[1], transformView), esm["d" /* vec3 */].transformMat4([], verties[2], transformView)];
+  } else if (verties.length === 4) {
+    return [esm["d" /* vec3 */].transformMat4([], verties[0], transformView), esm["d" /* vec3 */].transformMat4([], verties[1], transformView), esm["d" /* vec3 */].transformMat4([], verties[2], transformView), esm["d" /* vec3 */].transformMat4([], verties[3], transformView)];
+  } else if (verties.length === 5) {
+    return [esm["d" /* vec3 */].transformMat4([], verties[0], transformView), esm["d" /* vec3 */].transformMat4([], verties[1], transformView), esm["d" /* vec3 */].transformMat4([], verties[2], transformView), esm["d" /* vec3 */].transformMat4([], verties[3], transformView), esm["d" /* vec3 */].transformMat4([], verties[4], transformView)];
+  }
+
+  console.log(verties);
 }
 function getVertiesMaxX(verties) {
   var maxValue = Number.MIN_SAFE_INTEGER;
@@ -49163,11 +49173,8 @@ var MovableItem = /*#__PURE__*/function (_Item) {
       _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_8___default()(MovableItem.prototype), "reset", this).call(this, obj); // transform 에 변경이 생기면 미리 캐슁해둔다. 
 
 
-      if (this.hasChangedField('x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate')) {
+      if (this.hasChangedField('x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'transform-origin')) {
         this.setCacheItemTransformMatrix();
-      }
-
-      if (this.hasChangedField('transform-origin')) {
         this.setCacheLocalTransformMatrix();
       }
     }
