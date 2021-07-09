@@ -1,5 +1,5 @@
 import { isNotUndefined, isString, isNumber, isUndefined } from "el/base/functions/func";
-import { round } from "el/base/functions/math";
+import { degreeToRadian, radianToDegree, round } from "el/base/functions/math";
 
 const stringToPercent = {
   center: 50,
@@ -390,9 +390,21 @@ export class Length {
     } else if (this.isTurn()) {
       return Length.deg(this.value * 360)
     } else if (this.isRad()) {
-      return Length.deg(this.value * (180 / Math.PI))
+      return Length.deg(radianToDegree(this.value))
     }
   }
+
+  toRad() {
+    if (this.isRad()) {
+      return this.clone()
+    } else if (this.isTurn()) {
+      const deg = this.toDeg();
+      return Length.rad(degreeToRadian(deg.value))
+    } else if (this.isDeg()) {
+      return Length.rad(degreeToRadian(this.value))
+    }
+  }
+
 
   toTurn() {
     if (this.isTurn()) {

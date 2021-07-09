@@ -117,7 +117,8 @@ $select-icon-editor-border-color: black;
 $grid-box-editor-button-background-color: #435cb5;
 
 $status-bar-item-background-color: #4653f6;
-$status-bar-background-color: #609de2;
+$status-bar-background-color: $background-color;
+$status-bar-font-color: $font-color;
 
 $drag-area-rect-border-color: rgba(62, 168, 255, 0.9);
 $drag-area-rect-background-color: rgba(107, 188, 255, 0.5);
@@ -132,7 +133,7 @@ $path-view-background-color: $background-color;
 
 $color-view-background-color: #d8d8d8;
 $transform-origin-selected-color: $selected-color;
-$border-radius-selected-color: $background-color;
+$border-radius-selected-color: $selected-color;
 
 $transform-item-background-color: rgba(0, 0, 0, 0.1);
 $transform-item-border-color: #2b2b2b;

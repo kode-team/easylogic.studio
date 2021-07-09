@@ -74,7 +74,8 @@ $select-icon-editor-selected-color: $list-item-selected-color;
 $grid-box-editor-button-background-color: #435cb5;
 
 $status-bar-item-background-color: #760e34;
-$status-bar-background-color: $selected-color;
+$status-bar-background-color: $background-color;
+$status-bar-font-color: $font-color;
 
 $drag-area-rect-border-color: rgba(62, 168, 255, 0.9);
 $drag-area-rect-background-color: rgba(107, 188, 255, 0.5);

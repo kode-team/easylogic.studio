@@ -16,7 +16,7 @@ export class TextShadow extends Property {
       var colors = values
         .filter(it => it.includes("@"))
         .map(it => {
-          return results.matches[+it.replace("@", "")].color;
+          return results.matches[+it.replace("@", "")]?.color;
         });
 
       var numbers = values.filter(it => {

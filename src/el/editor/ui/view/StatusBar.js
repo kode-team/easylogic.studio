@@ -17,9 +17,11 @@ export default class StatusBar extends EditorElement {
             <div class='status-bar'>
                 <div class='tool-view left' ref='$leftTool'>
                     <object refClass="SwitchLeftPanel" />
+                    ${this.$menuManager.generate('statusbar.left')}                    
                 </div>            
                 <div class='message-view' ref='$msg'></div>
                 <div class='tool-view' ref='$rightTool'>
+                    ${this.$menuManager.generate('statusbar.right')}
                     <object refClass="LayoutSelector" />
                     <object refClass="ThemeSwitcher" />
                     <object refClass="LanguageSelector" />

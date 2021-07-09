@@ -29,10 +29,10 @@ export default class Inspector extends EditorElement {
               <div class="tab-item" data-value="3" title="${this.$i18n('inspector.tab.title.transition')}">
                 <label>${icon.flash_on}</label>
               </div>
-              <div class="tab-item" data-value="5" title='${this.$i18n('inspector.tab.title.code')}'>
+              <div class="tab-item" data-value="4" title='${this.$i18n('inspector.tab.title.code')}'>
                 <label class='icon'>${icon.code}</label>
               </div>       
-              <div class="tab-item" data-value="6" title='${this.$i18n('inspector.tab.title.history')}'>
+              <div class="tab-item" data-value="5" title='${this.$i18n('inspector.tab.title.history')}'>
                 <label class='icon'>${icon.expand}</label>
               </div>                                                   
             </div>
@@ -59,7 +59,9 @@ export default class Inspector extends EditorElement {
                 <object refClass="VideoProperty" />
 
                 <!-- IFrame --> 
-                <object refClass="IFrameProperty" />                
+                <object refClass="IFrameProperty" />          
+                
+                ${this.$menuManager.generate('inspector.tab.style')}
 
                 <!-- Component -->
                 <object refClass="ComponentProperty" />                
@@ -97,7 +99,7 @@ export default class Inspector extends EditorElement {
                 <div class='empty'></div>
               </div>     
               <div class="tab-content scrollbar" data-value="2">
-
+                ${this.$menuManager.generate('inspector.tab.text')}
                 <!-- <ContentProperty /> -->    
                 <object refClass="SVGTextProperty" />                        
                 <object refClass="FontProperty" />
@@ -109,6 +111,7 @@ export default class Inspector extends EditorElement {
                 <div class='empty'></div>
               </div>                   
               <div class='tab-content scrollbar' data-value='3'>
+                ${this.$menuManager.generate('inspector.tab.transition')}              
                 <!--object refClass="MotionProperty" /-->
                 <object refClass="TransitionProperty" />                            
                 <object refClass="AnimationProperty" />
@@ -116,12 +119,14 @@ export default class Inspector extends EditorElement {
                 <object refClass="SelectorProperty" />
                 <div class='empty'></div>                
               </div>                        
-              <div class="tab-content" data-value="5">
+              <div class="tab-content" data-value="4">
+                ${this.$menuManager.generate('inspector.tab.code')}                            
                 <object refClass="CodeViewProperty" />
                 <div class='empty'></div>                           
               </div>       
               
-              <div class="tab-content" data-value="6">
+              <div class="tab-content" data-value="5">
+                ${this.$menuManager.generate('inspector.tab.history')}                            
                 <object refClass="HistoryProperty" />
                 <div class='empty'></div>                           
               </div>                     

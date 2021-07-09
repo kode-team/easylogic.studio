@@ -1150,7 +1150,7 @@ declare module "@easylogic/editor" {
     }
 
     export interface EditorInstance {
-        registElement(obj: ElementValue<EditorElement>): void;
+        registerElement(obj: ElementValue<EditorElement>): void;
         registerMenuItem(target: string, obj: ElementValue<EditorElement>): void;
         registerComponent(name: string, component: IComponent);
         registerItem(name: string, item: Item);

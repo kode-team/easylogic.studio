@@ -4,10 +4,13 @@ import { debounce, isArray, isObject } from "el/base/functions/func";
 import { getDist } from "el/base/functions/math";
 import { ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "el/editor/types/event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import plugins from "plugins/index";
 
 const EMPTY_POS = { x: 0, y: 0 };
 const DEFAULT_POS = { x: Number.MAX_SAFE_INTEGER, y: Number.MAX_SAFE_INTEGER };
 const MOVE_CHECK_MS = 0;
+
+
 
 export default class BaseLayout extends EditorElement {
 
@@ -22,10 +25,17 @@ export default class BaseLayout extends EditorElement {
   initialize() {
     super.initialize();
 
+    // register local plugins 
+    if (isArray(plugins)) {
+      this.$editor.registerPluginList(plugins);
+    }
+
+    // register other plugins     
     if (isArray(this.opt.plugins)) {
       this.$editor.registerPluginList(this.opt.plugins);
     }
 
+    // register other configs     
     if (isObject(this.opt.config)) {
       this.$config.setAll(this.opt.config || {});
     }

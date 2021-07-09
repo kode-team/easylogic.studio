@@ -484,13 +484,18 @@ export const Editor = new class {
     return JSON.parse(window.localStorage.getItem(`easylogic.studio.${key}`) || JSON.stringify(""))
   }
 
-  registElement(obj) {
+  /**
+   * register UIElement 
+   * 
+   * @param {UIElement} obj 
+   */
+  registerElement(obj) {
     registElement(obj);
   }
 
   registerMenuItem(target, obj) {
     this.menuItemManager.registerMenuItem(target, obj);
-    this.registElement(obj);
+    this.registerElement(obj);
   }
 
   registerComponent(name, component) {

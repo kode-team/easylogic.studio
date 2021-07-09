@@ -5,6 +5,7 @@
         "@assets/*": ["./src/assets/*"],
         "el/*": ["./src/el/*"],
         "export-library/*": ["./src/export-library/*"],
+        "plugins/*": ["./src/plugins/*"],        
         "designeditor/*": ["src/editor-layouts/designeditor/*"],
         "singleeditor/*": ["src/editor-layouts/singleeditor/*"],
         "designplayer/*": ["src/editor-layouts/designplayer/*"],

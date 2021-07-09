@@ -12,14 +12,23 @@ const ZERO = Length.z()
 export class MovableItem extends Item {
 
 
+    /**
+     * @returns {boolean} wheather item is absolute position 
+     */
     get isAbsolute  (){
         return this.json.position === 'absolute'; 
     }
 
+    /**
+     * @returns {boolean} wheather item is relative position 
+     */    
     get isRelative  (){
         return this.json.position === 'relative'; 
     }
 
+    /**
+     * @returns {boolean} wheather item is child 
+     */    
     get isChild() {
         if (this.json.parent) {
             var isParentDrawItem = this.json.parent.is('project') === false; 
@@ -35,7 +44,7 @@ export class MovableItem extends Item {
     toCloneObject(isDeep = true) {
         return {
             ...super.toCloneObject(isDeep),
-            ...this.attrs('x', 'y', 'width', 'height')
+            ...this.attrs('x', 'y', 'width', 'height', 'transform', 'rotate', 'rotateZ')
         }
     }
 
@@ -49,6 +58,46 @@ export class MovableItem extends Item {
 
         return json; 
     }
+
+    reset(obj) {
+        super.reset(obj);
+
+        // transform 에 변경이 생기면 미리 캐슁해둔다. 
+        if (this.hasChangedField('width', 'height', 'transform', 'rotateZ', 'rotate')) {
+            this.setCacheItemTransformMatrix();
+        }
+
+        // transform orign 이 변경되면 localTransformMatrix 를 변경시킨다. 
+        if (this.hasChangedField('x', 'y', 'transform-origin')) {
+            this.setCacheLocalTransformMatrix();
+        }        
+    }
+
+    setCacheItemTransformMatrix() {
+        this._cachedItemTransform = this.getItemTransformMatrix();
+        this._cachedItemTransformInverse = this.getItemTransformMatrixInverse();
+    }
+
+    setCacheLocalTransformMatrix() {
+        this._cachedLocalTransform = this.getLocalTransformMatrix();
+        this._cachedLocalTransformInverse = this.getLocalTransformMatrixInverse();
+    }    
+
+    get localMatrix() {
+        return this._cachedLocalTransform ? this._cachedLocalTransform : this.getLocalTransformMatrix()
+    }
+
+    get localMatrixInverse() {
+        return this._cachedLocalTransformInverse ? this._cachedLocalTransformInverse : this.getLocalTransformMatrixInverse()
+    }    
+
+    get itemMatrix() {
+        return this._cachedItemTransform ? this._cachedItemTransform : this.getItemTransformMatrix()
+    }
+
+    get itemMatrixInverse() {
+        return this._cachedItemTransformInverse ? this._cachedItemTransformInverse : this.getItemTransformMatrixInverse()
+    }    
 
     //////////////////////
     //
@@ -197,7 +246,7 @@ export class MovableItem extends Item {
 
     getPerspectiveMatrix () {
 
-        const hasPerspective = this.json['perspective'] || Transform.get(this.json['transform'], 'perspective')
+        const hasPerspective = this.json['perspective'] || Transform.get(this.json['transform'] || '', 'perspective')
 
         if (!hasPerspective) {
             return undefined;
@@ -251,7 +300,7 @@ export class MovableItem extends Item {
 
     getItemTransformMatrix () {
 
-        const list = Transform.parseStyle(Transform.rotate(this.json['transform'], this.json['rotate']));
+        const list = Transform.parseStyle(Transform.rotate(this.json?.['transform'] || '', this.json?.['rotate']));
         const width = this.screenWidth.value;
         const height = this.screenHeight.value;
 
@@ -270,7 +319,7 @@ export class MovableItem extends Item {
      * 3. Multiply by each of the transform functions in transform property from left to right
      * 4. Translate by the negated computed X, Y and Z values of transform-origin
      */    
-    getTransformMatrix () {
+    getLocalTransformMatrix () {
         const origin = TransformOrigin.scale(
             this.json['transform-origin'] || '50% 50% 0px', 
             this.screenWidth.value, 
@@ -284,7 +333,7 @@ export class MovableItem extends Item {
         mat4.translate(view, view, origin);
 
         // 3. Multiply by each of the transform functions in transform property from left to right        
-        mat4.multiply(view, view, this.getItemTransformMatrix())        
+        mat4.multiply(view, view, this.itemMatrix)        
 
         // 4. Translate by the negated computed X, Y and Z values of transform-origin        
         mat4.translate(view, view, vec3.negate([], origin));
@@ -292,8 +341,8 @@ export class MovableItem extends Item {
         return view; 
     }      
 
-    getTransformMatrixInverse () {
-        return mat4.invert([], this.getTransformMatrix());
+    getLocalTransformMatrixInverse () {
+        return mat4.invert([], this.getLocalTransformMatrix());
     }
 
     /**
@@ -316,7 +365,7 @@ export class MovableItem extends Item {
         mat4.translate(view, view, [x, y, 0]);
         mat4.translate(view, view, vertextOffset);            
         mat4.translate(view, view, center)        
-        mat4.multiply(view, view, this.getItemTransformMatrix())        
+        mat4.multiply(view, view, this.itemMatrix)        
         mat4.translate(view, view, vec3.negate([], center))            
 
         return view; 
@@ -361,6 +410,10 @@ export class MovableItem extends Item {
         let path = this.path.filter(p => p.is('project') === false);
 
         for(let i = 0, len = path.length; i < len; i++) {
+
+            /**
+             * @type {MovableItem}
+             */
             const current = path[i];
 
             // multiply parent perspective 
@@ -376,7 +429,7 @@ export class MovableItem extends Item {
             // 5. Translate by offset x, y
             mat4.translate(transform, transform, [offsetX, offsetY, 0]);                   
                     
-            mat4.multiply(transform, transform, current.getTransformMatrix())            
+            mat4.multiply(transform, transform, current.localMatrix)            
         }
 
         return transform;
@@ -416,10 +469,10 @@ export class MovableItem extends Item {
         const originalTransformOrigin = this.json['transform-origin'] || '50% 50% 0%';
         const parentMatrix = (this.parent && isFunction(this.parent.getAccumulatedMatrix)) ? this.parent.getAccumulatedMatrix() : mat4.create()
         const parentMatrixInverse = mat4.invert([], parentMatrix);
-        const localMatrix = this.getTransformMatrix()
-        const localMatrixInverse = this.getTransformMatrixInverse();
-        const itemMatrix = this.getItemTransformMatrix()
-        const itemMatrixInverse = this.getItemTransformMatrixInverse();
+        const localMatrix = this.localMatrix
+        const localMatrixInverse = this.localMatrixInverse;
+        const itemMatrix = this.itemMatrix;
+        const itemMatrixInverse = this.itemMatrixInverse;
         const accumulatedMatrix = this.getAccumulatedMatrix();
         const accumulatedMatrixInverse = this.getAccumulatedMatrixInverse();
 

@@ -64,6 +64,10 @@ export default class BaseProperty extends EditorElement {
     return '';
   }
 
+  getKeyframeProperty() {
+    return "";
+  }
+
   getTitle() {
     return '';
   }

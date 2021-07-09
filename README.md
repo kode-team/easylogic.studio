@@ -303,13 +303,61 @@ export default class SimpleHTMLRender extends HTMLLayerRender {
 # Define MenuItem (as UI) 
 please refer to src/el/plugins for detail 
 ```js
+function (editor) {
+  editor.registerMenuItem('sidebar', { 
+    MyElement: class extends MenuItem {
+
+    } 
+  });
+
+  editor.registerMenuItem('statusbar.right', { 
+    MyElement: class extends MenuItem {
+
+    } 
+  });  
 
 ```
 
 # Define Inspector (TODO)
 please refer to src/el/plugins for detail 
 ```js
+function (editor) {
+  editor.registerMenuItem('inspector.tab.style', { 
+    MyProperty: class extends BaseProperty {
+
+    } 
+  });
+}
 ```
+
+# Import property UI  in area 
+
+```js
+function (editor) {
+  editor.registerMenuItem('inspector.tab.style', { 
+    MyElement: class extends EditorElement
+  });
+  .....
+}
+
+```
+
+### Support area 
+* inspector.tab.style 
+* inspector.tab.text 
+* inspector.tab.transition 
+* inspector.tab.code
+* inspector.tab.history
+* library 
+* asset
+* sidebar
+* search 
+* statusbar.right
+* statusbar.left 
+* toolbar.left
+* toolbar.right 
+
+If there is an area in the editor you would like to expand, please let me know.
 
 # Thanks to 
 

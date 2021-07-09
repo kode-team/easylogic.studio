@@ -7,12 +7,12 @@
     height: $status-bar-height;
     // overflow: hidden;
     background-color: var(--elf-status-bar-background-color); 
-    z-index: 1;
+    z-index: 1; 
     pointer-events: all;
     display: grid;
     grid-template-columns: 40px auto auto;
     
-    color: white; 
+    color: var(--elf-status-bar-font-color); 
 
     .message-view {
       padding: 5px 5px;
@@ -49,6 +49,7 @@
 
       > label {
         display: inline-block;
+        color: var(--elf-selected-font-color);                  
       }
 
       > .item {

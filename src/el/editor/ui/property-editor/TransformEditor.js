@@ -10,12 +10,12 @@ import {
 } from "el/base/Event";
 
 import { Transform } from "el/editor/property-parser/Transform";
-import UIElement, { EVENT } from "el/base/UIElement";
 import "./RangeEditor";
 import { Length } from "el/editor/unit/Length";
 import "./NumberInputEditor";
 import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
+import { isNotUndefined } from "el/base/functions/func";
 
 var transformList = [
   'perspective',  
@@ -24,8 +24,9 @@ var transformList = [
   'rotateY',
   'rotateZ',
   'rotate3d',    
-  // 'skewX',    
-  // 'skewY',   
+  'skew',
+  'skewX',    
+  'skewY',   
   'translate',
   'translateX',  
   'translateY',
@@ -42,6 +43,7 @@ var transformList = [
 
 const labels = {
   'scale': [ 'X', 'Y'] ,
+  'skew': [ 'X', 'Y'] ,  
   'translate' : ['X', 'Y'], 
   'translate3d': ['tx','ty', 'tz'],
   'matrix': ['a','b','c','d','tx','ty'],
@@ -89,6 +91,7 @@ export default class TransformEditor extends EditorElement {
       case 'translate3d':        
       case 'matrix':
       case 'matrix3d': 
+      case 'skew':
         return labels[type][index];
       }
     return ''
@@ -99,6 +102,7 @@ export default class TransformEditor extends EditorElement {
       case 'translate3d':        
       case 'matrix':
       case 'matrix3d': 
+      case 'skew':
         return true;
       }
     return false; 
@@ -120,9 +124,10 @@ export default class TransformEditor extends EditorElement {
       case 'rotateY': 
       case 'rotateZ': 
       case 'rotate':  
+      case 'skew':      
       case 'skewY':
       case 'skewX':            
-        return { min: -360, max : 360, step: 0.1, units: 'deg,turn,rad'}
+        return { min: -360, max : 360, step: 0.1, units: 'deg,turn,rad', editorType: 'RangeEditor'}
       case 'perspective':
           return { min: 0, max : 10000, step: 1, units: 'px,%,em'}
       case 'scale': 
@@ -216,11 +221,11 @@ export default class TransformEditor extends EditorElement {
           ${transform.value.map( (it, tindex) => {
 
             var label = this.getLabel(type, tindex);
-            var {min, max, step, units} = this.getRange(type);
+            var {min, max, step, units, editorType = 'NumberInputEditor'} = this.getRange(type);
 
             return /*html*/`
               <div>
-                <object refClass="NumberInputEditor"  
+                <object refClass="${editorType}"  
                       ref='$range_${type}_${index}_${tindex}' 
                       min="${min}" 
                       max="${max}" 
@@ -240,7 +245,6 @@ export default class TransformEditor extends EditorElement {
   }
 
   makeTransformTemplate(transform, index) {
-
     if (this.isMultiValue(transform.type)) {
 
       return this.makeMultiTransformTemplate(
@@ -322,6 +326,8 @@ export default class TransformEditor extends EditorElement {
         return [Length.z(),Length.z(), Length.z()]        
       case 'scale': 
         return [Length.number(1),Length.number(1)]
+      case 'skew': 
+        return [Length.deg(0),Length.deg(0)]
       case 'scaleX': 
       case 'scaleY': 
         return [Length.number(1)]
@@ -393,7 +399,7 @@ export default class TransformEditor extends EditorElement {
   }
 
   [SUBSCRIBE('changeRangeEditor')] (key, value, params) {
-    if (params) {
+    if (isNotUndefined(params)) {
       this.state.transforms[+key].value[+params] = value; 
     } else {
       this.state.transforms[+key].reset({ 

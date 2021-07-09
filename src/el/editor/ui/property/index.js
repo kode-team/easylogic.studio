@@ -1,21 +1,3 @@
-import AppearanceProperty from "./AppearanceProperty";
-import BorderRadiusProperty from "./BorderRadiusProperty";
-import BoxShadowProperty from "./BoxShadowProperty";
-import BoxModelProperty from "./BoxModelProperty";
-import ContentProperty from "./ContentProperty"; 
-import FontProperty from "./FontProperty";
-import TextShadowProperty from "./TextShadowProperty";
-import TextProperty from "./TextProperty";
-import FontSpacingProperty from "./FontSpacingProperty";
-import BorderImageProperty from "./BorderImageProperty";
-import AnimationProperty from "./AnimationProperty";
-import KeyframeProperty from "./KeyframeProperty";
-import BackgroundImageProperty from "./BackgroundImageProperty";
-import FilterProperty from "./FilterProperty";
-import CodeViewProperty from "./CodeViewProperty";
-import BackdropFilterProperty from "./BackdropFilterProperty";
-import TransformProperty from "./TransformProperty";
-import ClipPathProperty from "./ClipPathProperty";
 import TransitionProperty from "./TransitionProperty";
 import PerspectiveOriginProperty from "./PerspectiveOriginProperty";
 import PerspectiveProperty from "./PerspectiveProperty";
@@ -23,13 +5,11 @@ import TransformOriginProperty from "./TransformOriginProperty";
 import BackgroundClipProperty from "./BackgroundClipProperty";
 
 import SelectorProperty from "./SelectorProperty";
-import PositionProperty from "./PositionProperty";
 import ProjectProperty from "./ProjectProperty";
 import LayerTreeProperty from "./LayerTreeProperty";
 import ArtBoardSizeProperty from "./ArtBoardSizeProperty";
 import ImageProperty from "./ImageProperty";
 import TextFillProperty from "./TextFillProperty";
-import GradientAssetsProperty from "./GradientAssetsProperty";
 import SVGItemProperty from "./SVGItemProperty";
 import TextClipProperty from "./TextClipProperty";
 import SVGFilterAssetsProperty from "./SVGFilterAssetsProperty";
@@ -76,36 +56,15 @@ export default {
   SVGFilterAssetsProperty,
   TextClipProperty,
   SVGItemProperty,
-  GradientAssetsProperty,
   TextFillProperty,
   ImageProperty,
   ArtBoardSizeProperty,
   LayerTreeProperty, 
   ProjectProperty,
-  PositionProperty,
   SelectorProperty,
   BackgroundClipProperty,
   TransformOriginProperty,
   PerspectiveProperty,
   PerspectiveOriginProperty,
   TransitionProperty,
-  ClipPathProperty,
-  TransformProperty,
-  BackdropFilterProperty,
-  CodeViewProperty,  
-  FilterProperty,
-  BorderRadiusProperty,
-  BackgroundImageProperty,
-  KeyframeProperty,
-  AnimationProperty,
-  BorderImageProperty,
-  FontSpacingProperty,
-  TextProperty,
-  TextShadowProperty,
-  FontProperty,
-  ContentProperty,
-  BoxModelProperty,
-  BoxShadowProperty,
-  BorderRadiusProperty,
-  AppearanceProperty,
 };

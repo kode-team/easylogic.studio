@@ -11,7 +11,6 @@ import {
   isArray,
   html,
   keyEach,
-  keyMap,
   collectProps
 } from "./functions/func";
 import { 
