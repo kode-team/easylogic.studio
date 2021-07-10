@@ -3,7 +3,25 @@ import { CLICK, LOAD, SUBSCRIBE } from "el/base/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import { Length } from "el/editor/unit/Length";
-import { blend_list } from "el/editor/util/Resource";
+
+export const blend_list = [
+  "normal",
+  "multiply",
+  "screen",
+  "overlay",
+  "darken",
+  "lighten",
+  "color-dodge",
+  "color-burn",
+  "hard-light",
+  "soft-light",
+  "difference",
+  "exclusion",
+  "hue",
+  "saturation",
+  "color",
+  "luminosity"
+].join(',');
 
 export default class BackgroundImagePositionPopup extends BasePopup {
 

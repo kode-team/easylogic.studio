@@ -6,7 +6,7 @@ import ComponentProperty from "./ComponentProperty";
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerElement({
+    editor.registerMenuItem('inspector.tab.style', {
         ComponentProperty
     })
 }

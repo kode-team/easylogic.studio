@@ -7,7 +7,7 @@ import FontSpacingProperty from "./FontSpacingProperty";
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerElement({
+    editor.registerMenuItem('inspector.tab.text', {
         FontSpacingProperty
     })
 }

@@ -3,7 +3,6 @@
 import { CLICK, PREVENT, STOP, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
-import "el/editor/ui/property-editor/NumberInputEditor";
 import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 

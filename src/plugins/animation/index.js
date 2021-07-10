@@ -1,5 +1,6 @@
 import { Editor } from "el/editor/manager/Editor";
 import AnimationProperty from "./AnimationProperty";
+import AnimationPropertyPopup from "./AnimationPropertyPopup";
 
 
 /**
@@ -7,7 +8,11 @@ import AnimationProperty from "./AnimationProperty";
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerElement({
+    editor.registerMenuItem('inspector.tab.transition', {
         AnimationProperty
+    });
+
+    editor.registerMenuItem('popup', {
+        AnimationPropertyPopup
     })
 }

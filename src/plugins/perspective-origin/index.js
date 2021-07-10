@@ -1,4 +1,5 @@
 import { Editor } from "el/editor/manager/Editor";
+import PerspectiveOriginEditor from "./PerspectiveOriginEditor";
 import PerspectiveOriginProperty from "./PerspectiveOriginProperty";
 
 
@@ -8,6 +9,10 @@ import PerspectiveOriginProperty from "./PerspectiveOriginProperty";
  */
 export default function (editor) {
     editor.registerElement({
+        PerspectiveOriginEditor,
+    });
+
+    editor.registerMenuItem('inspector.tab.style', {
         PerspectiveOriginProperty
-    })
+    });
 }

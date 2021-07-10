@@ -4,11 +4,7 @@ import icon from "el/editor/icon/icon";
 import { Pattern } from "el/editor/property-parser/Pattern";
 import patterns from "el/editor/preset/patterns";
 
-
-import "el/editor/ui/property-editor/SelectEditor";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-
-
 
 export default class PatternEditor extends EditorElement {
 

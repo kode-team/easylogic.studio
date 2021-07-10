@@ -12,13 +12,16 @@ import boxModel from "./box-model"
 import boxShadow from "./box-shadow"
 import clipPath from "./clip-path"
 import codeview from "./codeview"
+import color from "./color"
 import component from "./component"
 import content from "./content"
 import exportResource from "./export-resource"
 import filter from "./filter"
 import font from "./font"
 import fontSpacing from "./font-spacing"
+import gradient from "./gradient"
 import gradientAsset from "./gradient-asset"
+import history from "./history"
 import image from "./image"
 import keyframe from "./keyframe"
 import layerTree from "./layer-tree"
@@ -27,8 +30,11 @@ import patternAsset from "./pattern-asset"
 import perspective from "./perspective"
 import perspectiveOrigin from "./perspective-origin"
 import position from "./position"
+import propertyEditor from "./property-editor"
+import selector from "./selector"
 import svgFilterAsset from "./svg-filter-asset"
 import svgItem from "./svg-item"
+import svgText from "./svg-text"
 import text from "./text"
 import textClip from "./text-clip"
 import textFill from "./text-fill"
@@ -39,56 +45,79 @@ import transition from "./transition"
 import video from "./video"
 
 
+
 export default [
-    alignment,    
+
+    // common editor 
+    propertyEditor,
+    color,
+    gradient,
+
+    alignment,
     artboard,
-    appearance,    
+    appearance,
     component,
+
+    backgroundImage,
+
 
     // border 
     border,
-    borderRadius,    
+    borderRadius,
 
     // layout 
     layout,
 
-    // resource 
-    exportResource,    
+    // resource    
     video,
     image,
-    
-    // animation 
-    transition,
-    keyframe,
-    animation,
-    
+
+
     patternAsset,
     svgFilterAsset,
-    textClip,
+
     svgItem,
-    textFill,
+
 
     layerTree,
     backgroundClip,
+    borderImage,
+
+    filter,
+    backdropFilter,
+    boxShadow,
+    clipPath,
+    boxModel,
+    position,
+    gradientAsset,
+
+    transform,
     transformOrigin,
     perspective,
     perspectiveOrigin,
 
-    transform,
-    backdropFilter,
-    codeview,
-    filter,
-    backgroundImage,
-    borderImage,
-    fontSpacing,
+    exportResource,
+
+    // inspector.tab.text 
+    svgText,
+    font,
     text,
     textShadow,
-    font,
+    fontSpacing,
     content,
-    boxModel,
-    boxShadow,
+    textFill,
+    textClip,
 
-    position,
-    clipPath,
-    gradientAsset    
+    // animation 
+    transition,
+    keyframe,
+    animation,
+    selector,
+
+    // codeview 
+    codeview,
+
+    // history
+    history
+
 ]

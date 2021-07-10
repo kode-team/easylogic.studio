@@ -7,7 +7,7 @@ import BoxModelProperty from "./BoxModelProperty";
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerElement({
+    editor.registerMenuItem('inspector.tab.style', {
         BoxModelProperty
     })
 }

@@ -78,14 +78,18 @@ export default class TransitionProperty extends BaseProperty {
 
     if (current) {
 
-      current.reset({
-        transition: Transition.add(current.transition)
+      this.command('setAttribute', 'add transition', {
+        transition: (item) => Transition.add(item.transition)
       })
 
-      this.emit("refreshElement", current);
+      this.nextTick(() => {
+        setTimeout(() => {
+          this.refresh();
+        }, 100)
+      })
+    } else {
+      alert('Select a layer');
     }
-
-    this.refresh();
 
   }
 

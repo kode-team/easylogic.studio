@@ -43,72 +43,27 @@ export default class Inspector extends EditorElement {
 
                 <!-- Default Property --> 
                 <object refClass="PositionProperty" />
-                <!--SizeProperty / --> 
-                <object refClass="AppearanceProperty" />                
-                
-                <!-- SVG Item --> 
-                <object refClass="SVGItemProperty" />              
+                <object refClass="AppearanceProperty" />                                   
 
-                <!-- Appearance --> 
-                <object refClass="BorderRadiusProperty" />
-
-                <object refClass="BoxModelProperty" />                
-
-                <!-- effect -->
-                <object refClass="FilterProperty" />
-                <object refClass="BackdropFilterProperty" />
-                <object refClass="ClipPathProperty" />       
-                                
-                
-                ${this.$menuManager.generate('inspector.tab.style')}
-
-                <!-- Component -->
-                <object refClass="ComponentProperty" />                
-                
-
-                <!-- SVG -->
-                <!-- <PathDataProperty /> -->
-
-                <!-- transform --> 
-                <object refClass="TransformOriginProperty" />
-                <object refClass="TransformProperty" />
-                <!-- <PerspectiveProperty /> -->
-                <!-- <PerspectiveOriginProperty /> -->                 
-
-                <!-- tool -->                
-                <object refClass="ExportProperty" />
-
+                ${this.$menuManager.generate('inspector.tab.style')}                
                 <div class='empty'></div>
               </div>     
               <div class="tab-content scrollbar" data-value="2">
                 ${this.$menuManager.generate('inspector.tab.text')}
-                <!-- <ContentProperty /> -->    
-                <object refClass="SVGTextProperty" />                        
-                <object refClass="FontProperty" />
-                <object refClass="TextProperty" />
-                <object refClass="TextShadowProperty" />
-                <object refClass="TextFillProperty" />
-                <object refClass="FontSpacingProperty" />
-                <object refClass="TextClipProperty" />  
+                <!-- <ContentProperty /> -->                    
                 <div class='empty'></div>
               </div>                   
               <div class='tab-content scrollbar' data-value='3'>
                 ${this.$menuManager.generate('inspector.tab.transition')}              
-                <!--object refClass="MotionProperty" /-->
-                <object refClass="TransitionProperty" />                            
-                <object refClass="AnimationProperty" />           
-                <object refClass="SelectorProperty" />
                 <div class='empty'></div>                
               </div>                        
               <div class="tab-content" data-value="4">
                 ${this.$menuManager.generate('inspector.tab.code')}                            
-                <object refClass="CodeViewProperty" />
                 <div class='empty'></div>                           
               </div>       
               
               <div class="tab-content" data-value="5">
                 ${this.$menuManager.generate('inspector.tab.history')}                            
-                <object refClass="HistoryProperty" />
                 <div class='empty'></div>                           
               </div>                     
             </div>

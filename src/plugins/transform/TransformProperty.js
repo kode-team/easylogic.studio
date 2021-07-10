@@ -8,8 +8,6 @@ import icon from "el/editor/icon/icon";
 import { Transform } from "el/editor/property-parser/Transform";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
-import "el/editor/ui/view-items/RotateEditorView";
-
 var transformList = [
 
   'rotate',
@@ -94,6 +92,14 @@ export default class TransformProperty extends BaseProperty {
       transform: (item) => {
         return Transform.replaceAll(item.transform, transform)
       }
+    })
+
+    this.nextTick(() => {
+      setTimeout(() => {
+        this.emit('refreshSelectionTool')
+        console.log('aaa');
+      }, 100)
+
     })
   }
 

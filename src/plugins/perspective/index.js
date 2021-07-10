@@ -8,7 +8,7 @@ import PerspectiveProperty from "./PerspectiveProperty";
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerElement({
+    editor.registerMenuItem('inspector.tab.style', {
         PerspectiveProperty
     })
 }

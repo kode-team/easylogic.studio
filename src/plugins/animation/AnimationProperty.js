@@ -89,14 +89,20 @@ export default class AnimationProperty extends BaseProperty {
 
     if (current) {
 
-      current.reset({
+      this.command("setAttribute", "add animation property", { 
         animation: Animation.add(current.animation, { name: null })
       })
 
-      this.emit("refreshElement", current);
+      this.nextTick(() => {
+        setTimeout(() => {
+          this.refresh();
+        }, 100)
+      })
+
+    } else {
+      alert('Select a layer')
     }
 
-    this.refresh();
   }
 
   [CLICK("$animationList .tools .del")](e) {
@@ -188,11 +194,6 @@ export default class AnimationProperty extends BaseProperty {
           animation: Animation.replace(this.current.animation, this.selectedIndex, this.currentAnimation)
         })
 
-        // this.current.reset({
-        //   animation: Animation.replace(this.current.animation, this.selectedIndex, this.currentAnimation)
-        // })
-
-        // this.emit("refreshElement", this.current);        
         this.refresh();
       }
     }

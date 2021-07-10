@@ -1,5 +1,6 @@
 import { Editor } from "el/editor/manager/Editor";
 import TransitionProperty from "./TransitionProperty";
+import TransitionPropertyPopup from "./TransitionPropertyPopup";
 
 
 /**
@@ -7,7 +8,11 @@ import TransitionProperty from "./TransitionProperty";
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerElement({
+    editor.registerMenuItem('inspector.tab.transition', {
         TransitionProperty
+    })
+
+    editor.registerMenuItem('popup', {
+        TransitionPropertyPopup
     })
 }

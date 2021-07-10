@@ -7,7 +7,7 @@ import FilterProperty from "./FilterProperty";
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerElement({
+    editor.registerMenuItem('inspector.tab.style', {
         FilterProperty
     })
 }

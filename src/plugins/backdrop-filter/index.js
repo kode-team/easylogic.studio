@@ -6,7 +6,7 @@ import BackdropFilterProperty from "./BackdropFilterProperty";
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerElement({
+    editor.registerMenuItem('inspector.tab.style', {
         BackdropFilterProperty
     })
 }

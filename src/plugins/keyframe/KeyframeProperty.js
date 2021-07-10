@@ -231,6 +231,8 @@ export default class KeyframeProperty extends BaseProperty {
     }
 
     this.refresh();
+
+    // todo: add history 
     this.emit('refreshProject', project)
   }
 

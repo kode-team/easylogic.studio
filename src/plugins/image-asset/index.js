@@ -1,4 +1,5 @@
 import { Editor } from "el/editor/manager/Editor";
+import ImageAssetPicker from "./ImageAssetPicker";
 import ImageAssetsProperty from "./ImageAssetsProperty";
 
 /**
@@ -7,6 +8,7 @@ import ImageAssetsProperty from "./ImageAssetsProperty";
  */
 export default function (editor) {
     editor.registerElement({
+        ImageAssetPicker,
         ImageAssetsProperty
     })
 }

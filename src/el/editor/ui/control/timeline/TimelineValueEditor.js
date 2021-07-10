@@ -2,7 +2,6 @@ import UIElement, { EVENT } from "el/base/UIElement";
 import { CLICK, KEYDOWN, KEYUP, IF, PREVENT, ENTER, SUBSCRIBE } from "el/base/Event";
 
 import "el/editor/ui/property-editor/CubicBezierEditor";
-import "el/editor/ui/property-editor/CSSPropertyEditor";
 
 import { second, timecode } from "el/base/functions/time";
 import { isUndefined } from "el/base/functions/func";

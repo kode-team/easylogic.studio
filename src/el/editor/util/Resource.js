@@ -40,49 +40,8 @@ export const filter_list = [
     'svg',
   ];
 
-export const blend_list = [
-  "normal",
-  "multiply",
-  "screen",
-  "overlay",
-  "darken",
-  "lighten",
-  "color-dodge",
-  "color-burn",
-  "hard-light",
-  "soft-light",
-  "difference",
-  "exclusion",
-  "hue",
-  "saturation",
-  "color",
-  "luminosity"
-].join(',');
 
-export const font_list = [
-    '',
-    'Arial',
-    'Arial Black',
-    'Times New Roman',
-    'Times',
-    'Courier New',
-    'Courier',
-    'Verdana',
-    'Georgia',
-    'Palatino',
-    'Garamond',
-    'Bookman',
-    'Tahoma',
-    'Trebuchet MS',
-    'Impact',
-    'Comic Sans MS',
-    'serif',
-    'sans-serif',
-    'monospace',
-    'cursive',
-    'fantasy',
-    'system-ui'
-].join(',')
+
 
 const SVG_PROPERTY_LIST = {
     'text': true, 

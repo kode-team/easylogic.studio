@@ -6,7 +6,7 @@ import TextProperty from "./TextProperty";
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerElement({
+    editor.registerMenuItem('inspector.tab.text', {
         TextProperty
     })
 }
