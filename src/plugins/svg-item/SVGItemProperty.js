@@ -1,8 +1,6 @@
-import BaseProperty from "./BaseProperty";
-
 import { Length } from "el/editor/unit/Length";
-import { BIND, CLICK, SUBSCRIBE, THROTTLE } from "el/base/Event";
-import { registElement } from "el/base/registElement";
+import { SUBSCRIBE } from "el/base/Event";
+import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class SVGItemProperty extends BaseProperty {
 
@@ -199,5 +197,3 @@ export default class SVGItemProperty extends BaseProperty {
     })
   }
 }
-
-registElement({ SVGItemProperty })

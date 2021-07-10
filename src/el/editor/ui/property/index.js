@@ -1,16 +1,5 @@
-import TransitionProperty from "./TransitionProperty";
-import PerspectiveOriginProperty from "./PerspectiveOriginProperty";
-import PerspectiveProperty from "./PerspectiveProperty";
-import TransformOriginProperty from "./TransformOriginProperty";
-import BackgroundClipProperty from "./BackgroundClipProperty";
-
 import SelectorProperty from "./SelectorProperty";
 import ProjectProperty from "./ProjectProperty";
-import LayerTreeProperty from "./LayerTreeProperty";
-import ArtBoardSizeProperty from "./ArtBoardSizeProperty";
-import ImageProperty from "./ImageProperty";
-import TextFillProperty from "./TextFillProperty";
-import SVGItemProperty from "./SVGItemProperty";
 import TextClipProperty from "./TextClipProperty";
 import SVGFilterAssetsProperty from "./SVGFilterAssetsProperty";
 import AlignmentProperty from "./AlignmentProperty";
@@ -55,16 +44,6 @@ export default {
   AlignmentProperty,
   SVGFilterAssetsProperty,
   TextClipProperty,
-  SVGItemProperty,
-  TextFillProperty,
-  ImageProperty,
-  ArtBoardSizeProperty,
-  LayerTreeProperty, 
   ProjectProperty,
   SelectorProperty,
-  BackgroundClipProperty,
-  TransformOriginProperty,
-  PerspectiveProperty,
-  PerspectiveOriginProperty,
-  TransitionProperty,
 };

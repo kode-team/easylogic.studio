@@ -137,7 +137,7 @@ export class Project extends TimelineItem {
 
     const [x, y] = mat4.getTranslation([], calculateMatrix(
         childItem.getAccumulatedMatrix(),
-        childItem.getTransformMatrixInverse()
+        childItem.localMatrix
     ));
 
     childItem.reset({

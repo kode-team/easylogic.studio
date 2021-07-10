@@ -1,4 +1,4 @@
-import BaseProperty from "./BaseProperty";
+
 import {
   LOAD,
   CLICK,
@@ -11,7 +11,7 @@ import {
 import icon from "el/editor/icon/icon";
 import { Transition } from "el/editor/property-parser/Transition";
 import { curveToPath } from "el/base/functions/func";
-import { registElement } from "el/base/registElement";
+import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class TransitionProperty extends BaseProperty {
   getTitle() {
@@ -172,5 +172,3 @@ export default class TransitionProperty extends BaseProperty {
     }
   }
 }
-
-registElement({ TransitionProperty })

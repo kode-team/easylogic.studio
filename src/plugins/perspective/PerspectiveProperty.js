@@ -1,8 +1,7 @@
-import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, SUBSCRIBE } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
-import { registElement } from "el/base/registElement";
+import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class PerspectiveProperty extends BaseProperty {
 
@@ -59,5 +58,3 @@ export default class PerspectiveProperty extends BaseProperty {
     this.refreshShowIsNot(['project']);
   }
 }
-
-registElement({ PerspectiveProperty })

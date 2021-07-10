@@ -109,7 +109,7 @@ window["EasyLogic"] =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 166);
+/******/ 	return __webpack_require__(__webpack_require__.s = 165);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1190,7 +1190,7 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var setPrototypeOf = __webpack_require__(153);
+var setPrototypeOf = __webpack_require__(152);
 
 function _inherits(subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
@@ -1214,9 +1214,9 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var _typeof = __webpack_require__(112)["default"];
+var _typeof = __webpack_require__(111)["default"];
 
-var assertThisInitialized = __webpack_require__(154);
+var assertThisInitialized = __webpack_require__(153);
 
 function _possibleConstructorReturn(self, call) {
   if (call && (_typeof(call) === "object" || typeof call === "function")) {
@@ -1300,10 +1300,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(16);
 /* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(112);
+/* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(111);
 /* harmony import */ var _babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_typeof__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _create__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(51);
-/* harmony import */ var _bezier__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(25);
+/* harmony import */ var _bezier__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(26);
 
 
 
@@ -1609,7 +1609,7 @@ var curveToPointLine = function curveToPointLine(timingFunction) {
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var superPropBase = __webpack_require__(158);
+var superPropBase = __webpack_require__(157);
 
 function _get(target, property, receiver) {
   if (typeof Reflect !== "undefined" && Reflect.get) {
@@ -8191,13 +8191,13 @@ var vec2_forEach = function () {
 /* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayWithHoles = __webpack_require__(144);
+var arrayWithHoles = __webpack_require__(143);
 
-var iterableToArrayLimit = __webpack_require__(157);
+var iterableToArrayLimit = __webpack_require__(156);
 
-var unsupportedIterableToArray = __webpack_require__(111);
+var unsupportedIterableToArray = __webpack_require__(110);
 
-var nonIterableRest = __webpack_require__(145);
+var nonIterableRest = __webpack_require__(144);
 
 function _slicedToArray(arr, i) {
   return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || unsupportedIterableToArray(arr, i) || nonIterableRest();
@@ -8222,8 +8222,8 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(29);
-/* harmony import */ var el_editor_manager_Editor__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(36);
+/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(30);
+/* harmony import */ var el_editor_manager_Editor__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(28);
 
 
 
@@ -9119,13 +9119,13 @@ function getConvexHull() {
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayWithoutHoles = __webpack_require__(155);
+var arrayWithoutHoles = __webpack_require__(154);
 
-var iterableToArray = __webpack_require__(143);
+var iterableToArray = __webpack_require__(142);
 
-var unsupportedIterableToArray = __webpack_require__(111);
+var unsupportedIterableToArray = __webpack_require__(110);
 
-var nonIterableSpread = __webpack_require__(156);
+var nonIterableSpread = __webpack_require__(155);
 
 function _toConsumableArray(arr) {
   return arrayWithoutHoles(arr) || iterableToArray(arr) || unsupportedIterableToArray(arr) || nonIterableSpread();
@@ -9138,7 +9138,7 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
 /* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(159);
+module.exports = __webpack_require__(158);
 
 
 /***/ }),
@@ -9158,7 +9158,7 @@ module.exports = __webpack_require__(159);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(0);
-/* harmony import */ var _property_editor__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(66);
+/* harmony import */ var _property_editor__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(67);
 /* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(8);
 /* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(14);
 
@@ -10730,12 +10730,12 @@ var Dom_Dom = /*#__PURE__*/function () {
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var el_editor_items_Item__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(35);
+/* harmony import */ var el_editor_items_Item__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(36);
 /* harmony import */ var el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3);
 /* harmony import */ var el_base_functions_parser__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(22);
 /* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(8);
 /* harmony import */ var el_base_functions_create__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(51);
-/* harmony import */ var el_base_Color__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(27);
+/* harmony import */ var el_base_Color__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(25);
 
 
 
@@ -11206,7 +11206,7 @@ function getColorByName(name) {
 var fromRGB = __webpack_require__(50);
 
 // EXTERNAL MODULE: ./src/el/base/functions/fromHSL.js
-var fromHSL = __webpack_require__(91);
+var fromHSL = __webpack_require__(90);
 
 // EXTERNAL MODULE: ./src/el/base/functions/func.js
 var func = __webpack_require__(8);
@@ -12049,6 +12049,116 @@ var Transform_Transform = /*#__PURE__*/function (_Property) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+
+// NAMESPACE OBJECT: ./src/el/base/functions/fromCMYK.js
+var fromCMYK_namespaceObject = {};
+__webpack_require__.r(fromCMYK_namespaceObject);
+__webpack_require__.d(fromCMYK_namespaceObject, "CMYKtoRGB", function() { return CMYKtoRGB; });
+
+// NAMESPACE OBJECT: ./src/el/base/functions/fromYCrCb.js
+var fromYCrCb_namespaceObject = {};
+__webpack_require__.r(fromYCrCb_namespaceObject);
+__webpack_require__.d(fromYCrCb_namespaceObject, "YCrCbtoRGB", function() { return YCrCbtoRGB; });
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/defineProperty.js
+var defineProperty = __webpack_require__(7);
+var defineProperty_default = /*#__PURE__*/__webpack_require__.n(defineProperty);
+
+// EXTERNAL MODULE: ./src/el/base/functions/formatter.js
+var formatter = __webpack_require__(64);
+
+// EXTERNAL MODULE: ./src/el/base/functions/create.js
+var create = __webpack_require__(51);
+
+// EXTERNAL MODULE: ./src/el/base/functions/math.js + 1 modules
+var math = __webpack_require__(15);
+
+// EXTERNAL MODULE: ./src/el/base/functions/fromRGB.js
+var fromRGB = __webpack_require__(50);
+
+// CONCATENATED MODULE: ./src/el/base/functions/fromCMYK.js
+function CMYKtoRGB(c, m, y, k) {
+  if (arguments.length == 1) {
+    var _arguments$ = arguments[0],
+        c = _arguments$.c,
+        m = _arguments$.m,
+        y = _arguments$.y,
+        k = _arguments$.k;
+  }
+
+  var R = 255 * (1 - c) * (1 - k);
+  var G = 255 * (1 - m) * (1 - k);
+  var B = 255 * (1 - y) * (1 - k);
+  return {
+    r: R,
+    g: G,
+    b: B
+  };
+}
+// EXTERNAL MODULE: ./src/el/base/functions/fromLAB.js
+var fromLAB = __webpack_require__(97);
+
+// EXTERNAL MODULE: ./src/el/base/functions/fromHSV.js
+var fromHSV = __webpack_require__(98);
+
+// EXTERNAL MODULE: ./src/el/base/functions/fromHSL.js
+var fromHSL = __webpack_require__(90);
+
+// CONCATENATED MODULE: ./src/el/base/functions/fromYCrCb.js
+function YCrCbtoRGB(y, cr, cb, bit) {
+  if (arguments.length == 1) {
+    var _arguments$ = arguments[0],
+        y = _arguments$.y,
+        cr = _arguments$.cr,
+        cb = _arguments$.cb,
+        bit = _arguments$.bit;
+    bit = bit || 0;
+  }
+
+  var R = y + 1.402 * (cr - bit);
+  var G = y - 0.344 * (cb - bit) - 0.714 * (cr - bit);
+  var B = y + 1.772 * (cb - bit);
+  return {
+    r: Math.ceil(R),
+    g: Math.ceil(G),
+    b: Math.ceil(B)
+  };
+}
+// EXTERNAL MODULE: ./src/el/base/functions/mixin.js
+var mixin = __webpack_require__(99);
+
+// EXTERNAL MODULE: ./src/el/base/functions/parser.js + 1 modules
+var parser = __webpack_require__(22);
+
+// EXTERNAL MODULE: ./src/el/base/functions/func.js
+var func = __webpack_require__(8);
+
+// CONCATENATED MODULE: ./src/el/base/Color.js
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { defineProperty_default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* harmony default export */ var Color = __webpack_exports__["a"] = (_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, create), formatter), math), mixin), parser), fromYCrCb_namespaceObject), fromRGB), fromCMYK_namespaceObject), fromHSV), fromHSL), fromLAB), func));
+
+/***/ }),
+/* 26 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* unused harmony export predefinedBezier */
 /* unused harmony export bezierObj */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return bezierList; });
@@ -12470,7 +12580,7 @@ var getQuardCurveBBox = function getQuardCurveBBox(points) {
 };
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12777,4516 +12887,7 @@ var Point = /*#__PURE__*/function () {
 
 
 /***/ }),
-/* 27 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// NAMESPACE OBJECT: ./src/el/base/functions/fromCMYK.js
-var fromCMYK_namespaceObject = {};
-__webpack_require__.r(fromCMYK_namespaceObject);
-__webpack_require__.d(fromCMYK_namespaceObject, "CMYKtoRGB", function() { return CMYKtoRGB; });
-
-// NAMESPACE OBJECT: ./src/el/base/functions/fromYCrCb.js
-var fromYCrCb_namespaceObject = {};
-__webpack_require__.r(fromYCrCb_namespaceObject);
-__webpack_require__.d(fromYCrCb_namespaceObject, "YCrCbtoRGB", function() { return YCrCbtoRGB; });
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/defineProperty.js
-var defineProperty = __webpack_require__(7);
-var defineProperty_default = /*#__PURE__*/__webpack_require__.n(defineProperty);
-
-// EXTERNAL MODULE: ./src/el/base/functions/formatter.js
-var formatter = __webpack_require__(63);
-
-// EXTERNAL MODULE: ./src/el/base/functions/create.js
-var create = __webpack_require__(51);
-
-// EXTERNAL MODULE: ./src/el/base/functions/math.js + 1 modules
-var math = __webpack_require__(15);
-
-// EXTERNAL MODULE: ./src/el/base/functions/fromRGB.js
-var fromRGB = __webpack_require__(50);
-
-// CONCATENATED MODULE: ./src/el/base/functions/fromCMYK.js
-function CMYKtoRGB(c, m, y, k) {
-  if (arguments.length == 1) {
-    var _arguments$ = arguments[0],
-        c = _arguments$.c,
-        m = _arguments$.m,
-        y = _arguments$.y,
-        k = _arguments$.k;
-  }
-
-  var R = 255 * (1 - c) * (1 - k);
-  var G = 255 * (1 - m) * (1 - k);
-  var B = 255 * (1 - y) * (1 - k);
-  return {
-    r: R,
-    g: G,
-    b: B
-  };
-}
-// EXTERNAL MODULE: ./src/el/base/functions/fromLAB.js
-var fromLAB = __webpack_require__(98);
-
-// EXTERNAL MODULE: ./src/el/base/functions/fromHSV.js
-var fromHSV = __webpack_require__(99);
-
-// EXTERNAL MODULE: ./src/el/base/functions/fromHSL.js
-var fromHSL = __webpack_require__(91);
-
-// CONCATENATED MODULE: ./src/el/base/functions/fromYCrCb.js
-function YCrCbtoRGB(y, cr, cb, bit) {
-  if (arguments.length == 1) {
-    var _arguments$ = arguments[0],
-        y = _arguments$.y,
-        cr = _arguments$.cr,
-        cb = _arguments$.cb,
-        bit = _arguments$.bit;
-    bit = bit || 0;
-  }
-
-  var R = y + 1.402 * (cr - bit);
-  var G = y - 0.344 * (cb - bit) - 0.714 * (cr - bit);
-  var B = y + 1.772 * (cb - bit);
-  return {
-    r: Math.ceil(R),
-    g: Math.ceil(G),
-    b: Math.ceil(B)
-  };
-}
-// EXTERNAL MODULE: ./src/el/base/functions/mixin.js
-var mixin = __webpack_require__(100);
-
-// EXTERNAL MODULE: ./src/el/base/functions/parser.js + 1 modules
-var parser = __webpack_require__(22);
-
-// EXTERNAL MODULE: ./src/el/base/functions/func.js
-var func = __webpack_require__(8);
-
-// CONCATENATED MODULE: ./src/el/base/Color.js
-
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { defineProperty_default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* harmony default export */ var Color = __webpack_exports__["a"] = (_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread(_objectSpread({}, create), formatter), math), mixin), parser), fromYCrCb_namespaceObject), fromRGB), fromCMYK_namespaceObject), fromHSV), fromHSL), fromLAB), func));
-
-/***/ }),
 /* 28 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MenuItem; });
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(0);
-/* harmony import */ var el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(11);
-/* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(14);
-
-
-
-
-
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default()(this, result); }; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-
-
-
-var DEFAULT_TITLE = '';
-var DEFAULT_ICON = '';
-var DEFAULT_CHECKED = false;
-
-var MenuItem = /*#__PURE__*/function (_EditorElement) {
-  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2___default()(MenuItem, _EditorElement);
-
-  var _super = _createSuper(MenuItem);
-
-  function MenuItem() {
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, MenuItem);
-
-    return _super.apply(this, arguments);
-  }
-
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(MenuItem, [{
-    key: "template",
-    value: function template() {
-      return (
-        /*html*/
-        "\n        <button \n            type=\"button\" \n            class='menu-item ".concat(this.getClassName(), "' \n            data-no-title=\"").concat(this.isHideTitle(), "\" \n            ").concat(this.isHideTitle() ? "data-tooltip=\"".concat(this.getTitle(), "\"") : '', " \n            checked=\"").concat(this.getChecked() ? 'checked' : '', "\"\n            ").concat(this.isDisabled() ? 'disabled' : '', "\n        >\n            <div class=\"icon ").concat(this.getIcon(), "\">").concat(el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"][this.getIconString()] || this.getIconString() || '', "</div>\n            <div class=\"title\">").concat(this.getTitle(), "</div>\n        </button>\n        ")
-      );
-    }
-  }, {
-    key: "getClassName",
-    value: function getClassName() {
-      return "";
-    }
-  }, {
-    key: "clickButton",
-    value: function clickButton(e) {}
-  }, {
-    key: "getChecked",
-    value: function getChecked() {
-      return DEFAULT_CHECKED;
-    }
-  }, {
-    key: "isDisabled",
-    value: function isDisabled() {
-      return false;
-    }
-  }, {
-    key: "setSelected",
-    value: function setSelected(isSelected) {
-      this.$el.toggleClass('selected', isSelected);
-    }
-  }, {
-    key: "getTitle",
-    value: function getTitle() {
-      return DEFAULT_TITLE;
-    }
-  }, {
-    key: "getIcon",
-    value: function getIcon() {
-      return DEFAULT_ICON;
-    }
-  }, {
-    key: "getIconString",
-    value: function getIconString() {
-      return DEFAULT_ICON;
-    }
-  }, {
-    key: "isHideTitle",
-    value: function isHideTitle() {
-      return false;
-    }
-  }, {
-    key: Object(el_base_Event__WEBPACK_IMPORTED_MODULE_5__["CLICK"])(),
-    value: function value(e) {
-      this.clickButton(e);
-    }
-  }], [{
-    key: "createMenuItem",
-    value: function createMenuItem() {
-      var opt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      return /*#__PURE__*/function (_MenuItem) {
-        _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2___default()(_class, _MenuItem);
-
-        var _super2 = _createSuper(_class);
-
-        function _class() {
-          _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, _class);
-
-          return _super2.apply(this, arguments);
-        }
-
-        _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(_class, [{
-          key: "getIconString",
-          value: function getIconString() {
-            return opt.iconString || 'add_box';
-          }
-        }, {
-          key: "getTitle",
-          value: function getTitle() {
-            return opt.title || "New Item";
-          }
-        }, {
-          key: "isHideTitle",
-          value: function isHideTitle() {
-            return opt.isHideTitle || true;
-          }
-        }, {
-          key: "clickButton",
-          value: function clickButton(e) {
-            opt.clickButton(e);
-          }
-        }]);
-
-        return _class;
-      }(MenuItem);
-    }
-  }]);
-
-  return MenuItem;
-}(_common_EditorElement__WEBPACK_IMPORTED_MODULE_7__[/* EditorElement */ "a"]);
-
-
-
-/***/ }),
-/* 29 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/slicedToArray.js
-var slicedToArray = __webpack_require__(13);
-var slicedToArray_default = /*#__PURE__*/__webpack_require__.n(slicedToArray);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/classCallCheck.js
-var classCallCheck = __webpack_require__(2);
-var classCallCheck_default = /*#__PURE__*/__webpack_require__.n(classCallCheck);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/createClass.js
-var createClass = __webpack_require__(4);
-var createClass_default = /*#__PURE__*/__webpack_require__.n(createClass);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/get.js
-var get = __webpack_require__(9);
-var get_default = /*#__PURE__*/__webpack_require__.n(get);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/inherits.js
-var inherits = __webpack_require__(5);
-var inherits_default = /*#__PURE__*/__webpack_require__.n(inherits);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js
-var possibleConstructorReturn = __webpack_require__(6);
-var possibleConstructorReturn_default = /*#__PURE__*/__webpack_require__.n(possibleConstructorReturn);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/getPrototypeOf.js
-var getPrototypeOf = __webpack_require__(1);
-var getPrototypeOf_default = /*#__PURE__*/__webpack_require__.n(getPrototypeOf);
-
-// EXTERNAL MODULE: ./src/el/base/Event.js
-var Event = __webpack_require__(0);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/toArray.js
-var toArray = __webpack_require__(48);
-var toArray_default = /*#__PURE__*/__webpack_require__.n(toArray);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/asyncToGenerator.js
-var asyncToGenerator = __webpack_require__(19);
-var asyncToGenerator_default = /*#__PURE__*/__webpack_require__.n(asyncToGenerator);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/toConsumableArray.js
-var toConsumableArray = __webpack_require__(16);
-var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableArray);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/taggedTemplateLiteral.js
-var taggedTemplateLiteral = __webpack_require__(85);
-var taggedTemplateLiteral_default = /*#__PURE__*/__webpack_require__.n(taggedTemplateLiteral);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/defineProperty.js
-var defineProperty = __webpack_require__(7);
-var defineProperty_default = /*#__PURE__*/__webpack_require__.n(defineProperty);
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/regenerator/index.js
-var regenerator = __webpack_require__(17);
-var regenerator_default = /*#__PURE__*/__webpack_require__.n(regenerator);
-
-// EXTERNAL MODULE: ./src/el/base/Dom.js + 1 modules
-var Dom = __webpack_require__(20);
-
-// EXTERNAL MODULE: ./src/el/base/functions/func.js
-var func = __webpack_require__(8);
-
-// EXTERNAL MODULE: ./src/el/editor/types/event.js
-var types_event = __webpack_require__(87);
-
-// EXTERNAL MODULE: ./src/el/base/functions/math.js + 1 modules
-var math = __webpack_require__(15);
-
-// CONCATENATED MODULE: ./src/el/base/handler/BaseHandler.js
-
-
-
-
-var BaseHandler_BaseHandler = /*#__PURE__*/function () {
-  /**
-   * 
-   * @param {EventMachine} context 
-   * @param {*} options 
-   */
-  function BaseHandler(context) {
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-    classCallCheck_default()(this, BaseHandler);
-
-    this.context = context;
-    this.options = options;
-  } // 초기화 설정 
-
-
-  createClass_default()(BaseHandler, [{
-    key: "initialize",
-    value: function initialize() {} // html 을 로드 할 때 
-
-  }, {
-    key: "load",
-    value: function load() {} // 새로고침 할 때 
-
-  }, {
-    key: "refresh",
-    value: function refresh() {} // 화면에 그린 이후에 실행 되는 로직들 
-
-  }, {
-    key: "render",
-    value: function render() {}
-  }, {
-    key: "getRef",
-    value: function getRef(id) {
-      return this.context.getRef(id);
-    }
-  }, {
-    key: "run",
-    value: function run() {}
-  }, {
-    key: "destroy",
-    value: function destroy() {}
-  }]);
-
-  return BaseHandler;
-}();
-
-
-// CONCATENATED MODULE: ./src/el/base/handler/DomEventHandler.js
-
-
-
-
-
-
-
-
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-
-
-
-
-var scrollBlockingEvents = {
-  'touchstart': true,
-  'touchmove': true,
-  'mousedown': true,
-  'mouseup': true,
-  'mousemove': true // 'wheel': true,
-  // 'mousewheel': true
-
-};
-var eventConverts = {
-  'doubletab': 'touchend'
-};
-var customEventNames = {
-  'doubletab': true
-};
-
-var DomEventHandler_DomEventHandler = /*#__PURE__*/function (_BaseHandler) {
-  inherits_default()(DomEventHandler, _BaseHandler);
-
-  var _super = _createSuper(DomEventHandler);
-
-  function DomEventHandler() {
-    classCallCheck_default()(this, DomEventHandler);
-
-    return _super.apply(this, arguments);
-  }
-
-  createClass_default()(DomEventHandler, [{
-    key: "initialize",
-    value: function initialize() {
-      var _this = this;
-
-      this.destroy();
-
-      if (!this._domEvents) {
-        this._domEvents = this.context.filterProps(Event["CHECK_DOM_EVENT_PATTERN"]);
-      }
-
-      this._domEvents.forEach(function (key) {
-        return _this.parseDomEvent(key);
-      });
-    }
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      this.removeEventAll();
-    }
-  }, {
-    key: "removeEventAll",
-    value: function removeEventAll() {
-      var _this2 = this;
-
-      this.getBindings().forEach(function (obj) {
-        _this2.removeDomEvent(obj);
-      });
-      this.initBindings();
-    }
-  }, {
-    key: "removeDomEvent",
-    value: function removeDomEvent(_ref) {
-      var eventName = _ref.eventName,
-          dom = _ref.dom,
-          callback = _ref.callback;
-      Event["default"].removeDomEvent(dom, eventName, callback);
-    }
-  }, {
-    key: "getBindings",
-    value: function getBindings() {
-      if (!this._bindings) {
-        this.initBindings();
-      }
-
-      return this._bindings;
-    }
-  }, {
-    key: "addBinding",
-    value: function addBinding(obj) {
-      this.getBindings().push(obj);
-    }
-  }, {
-    key: "initBindings",
-    value: function initBindings() {
-      this._bindings = [];
-    }
-  }, {
-    key: "matchPath",
-    value: function matchPath(el, selector) {
-      if (el) {
-        if (el.matches(selector)) {
-          return el;
-        }
-
-        return this.matchPath(el.parentElement, selector);
-      }
-
-      return null;
-    }
-  }, {
-    key: "hasDelegate",
-    value: function hasDelegate(e, eventObject) {
-      return this.matchPath(e.target || e.srcElement, eventObject.delegate);
-    }
-  }, {
-    key: "makeCallback",
-    value: function makeCallback(eventObject, callback) {
-      if (eventObject.delegate) {
-        return this.makeDelegateCallback(eventObject, callback);
-      } else {
-        return this.makeDefaultCallback(eventObject, callback);
-      }
-    }
-  }, {
-    key: "makeDefaultCallback",
-    value: function makeDefaultCallback(eventObject, callback) {
-      var _this3 = this;
-
-      return function (e) {
-        var returnValue = _this3.runEventCallback(e, eventObject, callback);
-
-        if (Object(func["isNotUndefined"])(returnValue)) {
-          return returnValue;
-        }
-      };
-    }
-  }, {
-    key: "makeDelegateCallback",
-    value: function makeDelegateCallback(eventObject, callback) {
-      var _this4 = this;
-
-      return function (e) {
-        var delegateTarget = _this4.hasDelegate(e, eventObject);
-
-        if (delegateTarget) {
-          // delegate target 이 있는 경우만 callback 실행
-          e.$dt = Dom["a" /* default */].create(delegateTarget);
-
-          var returnValue = _this4.runEventCallback(e, eventObject, callback);
-
-          if (Object(func["isNotUndefined"])(returnValue)) {
-            return returnValue;
-          }
-        }
-      };
-    }
-  }, {
-    key: "runEventCallback",
-    value: function runEventCallback(e, eventObject, callback) {
-      var context = this.context;
-      e.xy = Event["default"].posXY(e);
-
-      if (eventObject.beforeMethods.length) {
-        eventObject.beforeMethods.every(function (before) {
-          return context[before.target].call(context, e, before.param);
-        });
-      }
-
-      if (this.checkEventType(e, eventObject)) {
-        var returnValue = callback(e, e.$dt, e.xy);
-
-        if (returnValue !== false && eventObject.afterMethods.length) {
-          eventObject.afterMethods.forEach(function (after) {
-            return context[after.target].call(context, e, after.param);
-          });
-        }
-
-        return returnValue;
-      }
-    }
-  }, {
-    key: "checkEventType",
-    value: function checkEventType(e, eventObject) {
-      var context = this.context; // 특정 keycode 를 가지고 있는지 체크
-
-      var hasKeyCode = true;
-
-      if (eventObject.codes.length) {
-        hasKeyCode = (e.code ? eventObject.codes.indexOf(e.code.toLowerCase()) > -1 : false) || (e.key ? eventObject.codes.indexOf(e.key.toLowerCase()) > -1 : false);
-      } // 체크 메소드들은 모든 메소드를 다 적용해야한다.
-
-
-      var isAllCheck = true;
-
-      if (eventObject.checkMethodList.length) {
-        isAllCheck = eventObject.checkMethodList.every(function (field) {
-          var fieldValue = context[field];
-
-          if (Object(func["isFunction"])(fieldValue) && fieldValue) {
-            // check method
-            return fieldValue.call(context, e);
-          } else if (Object(func["isNotUndefined"])(fieldValue)) {
-            // check field value
-            return !!fieldValue;
-          }
-
-          return true;
-        });
-      }
-
-      return hasKeyCode && isAllCheck;
-    }
-  }, {
-    key: "getDefaultDomElement",
-    value: function getDefaultDomElement(dom) {
-      var context = this.context;
-      var el;
-
-      if (dom) {
-        el = context.refs[dom] || context[dom] || window[dom];
-      } else {
-        el = context.el || context.$el || context.$root;
-      }
-
-      if (el instanceof Dom["a" /* default */]) {
-        return el.getElement();
-      }
-
-      return el;
-    }
-  }, {
-    key: "getRealEventName",
-    value: function getRealEventName(eventName) {
-      return eventConverts[eventName] || eventName;
-    }
-  }, {
-    key: "getCustomEventName",
-    value: function getCustomEventName(eventName) {
-      return customEventNames[eventName] ? eventName : '';
-    }
-    /**
-     * 
-     * doubletab -> touchend 로 바뀜 
-     * 
-     * @param {string} eventName  이벤트 이름 
-     * @param {array} checkMethodFilters 매직 필터 목록  
-     */
-
-  }, {
-    key: "getDefaultEventObject",
-    value: function getDefaultEventObject(eventName, checkMethodFilters) {
-      var context = this.context;
-      var arr = checkMethodFilters; // context 에 속한 변수나 메소드 리스트 체크
-
-      var checkMethodList = arr.filter(function (code) {
-        return !!context[code];
-      }); // 이벤트 정의 시점에 적용 되어야 하는 것들은 모두 method() 화 해서 정의한다.
-
-      var _splitMethodByKeyword = Object(func["splitMethodByKeyword"])(arr, "after"),
-          _splitMethodByKeyword2 = slicedToArray_default()(_splitMethodByKeyword, 2),
-          afters = _splitMethodByKeyword2[0],
-          afterMethods = _splitMethodByKeyword2[1];
-
-      var _splitMethodByKeyword3 = Object(func["splitMethodByKeyword"])(arr, "before"),
-          _splitMethodByKeyword4 = slicedToArray_default()(_splitMethodByKeyword3, 2),
-          befores = _splitMethodByKeyword4[0],
-          beforeMethods = _splitMethodByKeyword4[1];
-
-      var _splitMethodByKeyword5 = Object(func["splitMethodByKeyword"])(arr, "debounce"),
-          _splitMethodByKeyword6 = slicedToArray_default()(_splitMethodByKeyword5, 2),
-          debounces = _splitMethodByKeyword6[0],
-          debounceMethods = _splitMethodByKeyword6[1];
-
-      var _splitMethodByKeyword7 = Object(func["splitMethodByKeyword"])(arr, "delay"),
-          _splitMethodByKeyword8 = slicedToArray_default()(_splitMethodByKeyword7, 2),
-          delays = _splitMethodByKeyword8[0],
-          delayMethods = _splitMethodByKeyword8[1];
-
-      var _splitMethodByKeyword9 = Object(func["splitMethodByKeyword"])(arr, "throttle"),
-          _splitMethodByKeyword10 = slicedToArray_default()(_splitMethodByKeyword9, 2),
-          throttles = _splitMethodByKeyword10[0],
-          throttleMethods = _splitMethodByKeyword10[1];
-
-      var _splitMethodByKeyword11 = Object(func["splitMethodByKeyword"])(arr, "capture"),
-          _splitMethodByKeyword12 = slicedToArray_default()(_splitMethodByKeyword11, 1),
-          captures = _splitMethodByKeyword12[0]; // 위의 5개 필터 이외에 있는 코드들은 keycode 로 인식한다.
-
-
-      var filteredList = [].concat(toConsumableArray_default()(checkMethodList), toConsumableArray_default()(afters), toConsumableArray_default()(befores), toConsumableArray_default()(delays), toConsumableArray_default()(debounces), toConsumableArray_default()(throttles), toConsumableArray_default()(captures));
-      var codes = arr.filter(function (code) {
-        return filteredList.indexOf(code) === -1;
-      }).map(function (code) {
-        return code.toLowerCase();
-      });
-      return {
-        eventName: this.getRealEventName(eventName),
-        customEventName: this.getCustomEventName(eventName),
-        codes: codes,
-        captures: captures,
-        afterMethods: afterMethods,
-        beforeMethods: beforeMethods,
-        delayMethods: delayMethods,
-        debounceMethods: debounceMethods,
-        throttleMethods: throttleMethods,
-        checkMethodList: checkMethodList
-      };
-    }
-  }, {
-    key: "addDomEvent",
-    value: function addDomEvent(eventObject, callback) {
-      eventObject.callback = this.makeCallback(eventObject, callback);
-      this.addBinding(eventObject);
-      var options = !!eventObject.captures.length;
-
-      if (scrollBlockingEvents[eventObject.eventName]) {
-        options = {
-          passive: true,
-          capture: options
-        };
-      }
-
-      Event["default"].addDomEvent(eventObject.dom, eventObject.eventName, eventObject.callback, options);
-    }
-  }, {
-    key: "makeCustomEventCallback",
-    value: function makeCustomEventCallback(eventObject, callback) {
-      var _this5 = this;
-
-      if (eventObject.customEventName === 'doubletab') {
-        var delay = 300;
-
-        if (eventObject.delayMethods.length) {
-          delay = +eventObject.delayMethods[0].target;
-        }
-
-        return function () {
-          if (!_this5.doubleTab) {
-            _this5.doubleTab = {
-              time: performance.now()
-            };
-          } else {
-            if (performance.now() - _this5.doubleTab.time < delay) {
-              callback.apply(void 0, arguments);
-            }
-
-            _this5.doubleTab = null;
-          }
-        };
-      }
-
-      return callback;
-    }
-  }, {
-    key: "bindingDomEvent",
-    value: function bindingDomEvent(_ref2, checkMethodFilters, callback) {
-      var _ref3 = toArray_default()(_ref2),
-          eventName = _ref3[0],
-          dom = _ref3[1],
-          delegate = _ref3.slice(2);
-
-      var eventObject = this.getDefaultEventObject(eventName, checkMethodFilters);
-      eventObject.dom = this.getDefaultDomElement(dom);
-      eventObject.delegate = delegate.join(Event["SAPARATOR"]);
-
-      if (eventObject.debounceMethods.length) {
-        var debounceTime = +eventObject.debounceMethods[0].target;
-        callback = Object(func["debounce"])(callback, debounceTime);
-      } else if (eventObject.throttleMethods.length) {
-        var throttleTime = +eventObject.throttleMethods[0].target;
-        callback = Object(func["throttle"])(callback, throttleTime);
-      } // custom event callback 만들기 
-
-
-      callback = this.makeCustomEventCallback(eventObject, callback);
-      this.addDomEvent(eventObject, callback);
-    }
-  }, {
-    key: "getEventNames",
-    value: function getEventNames(eventName) {
-      var results = [];
-      eventName.split(Event["NAME_SAPARATOR"]).forEach(function (e) {
-        var arr = e.split(Event["NAME_SAPARATOR"]);
-        results.push.apply(results, arr);
-      });
-      return results;
-    }
-    /**
-     * 이벤트 문자열 파싱하기 
-     * 
-     * @param {string} key 
-     */
-
-  }, {
-    key: "parseDomEvent",
-    value: function parseDomEvent(key) {
-      var context = this.context;
-      var checkMethodFilters = key.split(Event["CHECK_SAPARATOR"]).map(function (it) {
-        return it.trim();
-      });
-      var prefix = checkMethodFilters.shift();
-      var eventSelectorAndBehave = prefix.split(Event["DOM_EVENT_SAPARATOR"])[1];
-      var arr = eventSelectorAndBehave.split(Event["SAPARATOR"]);
-      var eventNames = this.getEventNames(arr[0]);
-      var callback = context[key].bind(context);
-
-      for (var i = 0, len = eventNames.length; i < len; i++) {
-        arr[0] = eventNames[i];
-        this.bindingDomEvent(arr, checkMethodFilters, callback);
-      }
-    }
-  }]);
-
-  return DomEventHandler;
-}(BaseHandler_BaseHandler);
-
-
-// CONCATENATED MODULE: ./src/el/base/handler/BindHandler.js
-
-
-
-
-
-
-
-
-
-
-function BindHandler_createSuper(Derived) { var hasNativeReflectConstruct = BindHandler_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
-
-function BindHandler_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-
-
-
-
-/**
- * 
- * @param {Dom} $element 
- * @param {string} key 
- * @param {any} value 
- */
-
-var BindHandler_applyElementAttribute = function applyElementAttribute($element, key, value) {
-  if (key === 'cssText') {
-    /**
-     * cssText: 'position:absolute'
-     */
-    $element.cssText(value);
-    return;
-  } else if (key === "style") {
-    /**
-     * style: { key: value }
-     */
-    if (Object(func["isNotString"])(value)) {
-      $element.css(value);
-    }
-
-    return;
-  } else if (key === "class") {
-    //  "class" : [ 'className', 'className' ] 
-    //  "class" : { key: true, key: false } 
-    //  "class" : 'string-class' 
-    if (Object(func["isArray"])(value)) {
-      $element.addClass.apply($element, toConsumableArray_default()(value.filter(Boolean)));
-    } else if (Object(func["isObject"])(value)) {
-      var keys = Object.keys(value);
-
-      for (var i = 0, len = keys.length; i < len; i++) {
-        var className = keys[i];
-        var hasClass = value[className];
-        $element.toggleClass(className, hasClass);
-      }
-    } else {
-      $element.el.className = value;
-    }
-
-    return;
-  } else if (key === 'callback') {
-    if (Object(func["isFunction"])(value)) {
-      value();
-      return;
-    }
-  }
-
-  if (Object(func["isUndefined"])(value)) {
-    $element.removeAttr(key);
-  } else {
-    if ($element.el.nodeName === "TEXTAREA" && key === "value") {
-      $element.text(value);
-    } else if (key === 'text' || key === 'textContent') {
-      $element.text(value);
-    } else if (key === 'innerHTML' || key === 'html') {
-      $element.html(value);
-    } else if (key === 'value') {
-      $element.val(value);
-    } else {
-      $element.attr(key, value);
-    }
-  }
-};
-
-var BindHandler_BindHandler = /*#__PURE__*/function (_BaseHandler) {
-  inherits_default()(BindHandler, _BaseHandler);
-
-  var _super = BindHandler_createSuper(BindHandler);
-
-  function BindHandler() {
-    classCallCheck_default()(this, BindHandler);
-
-    return _super.apply(this, arguments);
-  }
-
-  createClass_default()(BindHandler, [{
-    key: "load",
-    value: function load() {
-      this.bindData.apply(this, arguments);
-    } // 어떻게 실행하는게 좋을까? 
-    // this.runHandle('bind', ...);
-
-  }, {
-    key: "bindData",
-    value: function bindData() {
-      var _this = this;
-
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      if (!this._bindMethods) {
-        this._bindMethods = this.context.filterProps(Event["CHECK_BIND_PATTERN"]);
-      }
-      /**
-       * BIND 를 해보자.
-       * 이시점에 하는게 맞는지는 모르겠지만 일단은 해보자.
-       * BIND 는 특정 element 에 html 이 아닌 데이타를 업데이트하기 위한 간단한 로직이다.
-       */
-
-
-      var bindList = this._bindMethods.filter(function (originalCallbackName) {
-        if (!args.length) return true;
-
-        var _originalCallbackName = originalCallbackName.split(Event["CHECK_SAPARATOR"]),
-            _originalCallbackName2 = slicedToArray_default()(_originalCallbackName, 2),
-            callbackName = _originalCallbackName2[0],
-            id = _originalCallbackName2[1];
-
-        var _callbackName$split = callbackName.split(' '),
-            _callbackName$split2 = slicedToArray_default()(_callbackName$split, 2),
-            _ = _callbackName$split2[0],
-            $bind = _callbackName$split2[1];
-
-        return args.indexOf($bind) > -1;
-      });
-
-      bindList.forEach( /*#__PURE__*/function () {
-        var _ref = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee(callbackName) {
-          var bindMethod, _callbackName$split3, _callbackName$split4, id, refObject, refCallback, elName, $element, isBindCheck, results, keys, elementKeyIndex, len, key, value;
-
-          return regenerator_default.a.wrap(function _callee$(_context) {
-            while (1) {
-              switch (_context.prev = _context.next) {
-                case 0:
-                  bindMethod = _this.context[callbackName];
-                  _callbackName$split3 = callbackName.split(Event["CHECK_SAPARATOR"]), _callbackName$split4 = slicedToArray_default()(_callbackName$split3, 2), callbackName = _callbackName$split4[0], id = _callbackName$split4[1];
-                  refObject = _this.getRef(id);
-                  refCallback = Event["BIND_CHECK_DEFAULT_FUNCTION"];
-
-                  if (refObject != '' && Object(func["isString"])(refObject)) {
-                    refCallback = Object(Event["BIND_CHECK_FUNCTION"])(refObject);
-                  } else if (Object(func["isFunction"])(refObject)) {
-                    refCallback = refObject;
-                  }
-
-                  elName = callbackName.split(Event["BIND_SAPARATOR"])[1];
-                  $element = _this.context.refs[elName]; // isBindCheck 는 binding 하기 전에 변화된 지점을 찾아서 업데이트를 제한한다.
-
-                  isBindCheck = Object(func["isFunction"])(refCallback) && refCallback.call(_this.context);
-
-                  if (!($element && isBindCheck)) {
-                    _context.next = 16;
-                    break;
-                  }
-
-                  _context.next = 11;
-                  return bindMethod.call.apply(bindMethod, [_this.context].concat(args));
-
-                case 11:
-                  results = _context.sent;
-
-                  if (results) {
-                    _context.next = 14;
-                    break;
-                  }
-
-                  return _context.abrupt("return");
-
-                case 14:
-                  keys = Object.keys(results);
-
-                  for (elementKeyIndex = 0, len = keys.length; elementKeyIndex < len; elementKeyIndex++) {
-                    key = keys[elementKeyIndex];
-                    value = results[key];
-                    BindHandler_applyElementAttribute($element, key, value);
-                  }
-
-                case 16:
-                case "end":
-                  return _context.stop();
-              }
-            }
-          }, _callee);
-        }));
-
-        return function (_x) {
-          return _ref.apply(this, arguments);
-        };
-      }());
-    }
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      this._bindMethods = undefined;
-    }
-  }]);
-
-  return BindHandler;
-}(BaseHandler_BaseHandler);
-
-
-// EXTERNAL MODULE: ./src/el/base/registElement.js
-var registElement = __webpack_require__(10);
-
-// CONCATENATED MODULE: ./src/el/base/EventMachine.js
-
-
-
-
-
-
-
-
-
-var _expectMethod, _templateObject, _templateObject2;
-
-
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { defineProperty_default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-
-
-
-
-
-
-
-
-var REFERENCE_PROPERTY = "ref";
-var TEMP_DIV = Dom["a" /* default */].create("div");
-var QUERY_PROPERTY = "[".concat(REFERENCE_PROPERTY, "]");
-var REF_CLASS = 'refclass';
-var REF_CLASS_PROPERTY = "[".concat(REF_CLASS, "]"); // collectProps 에서 제외될 메소드 목록 
-
-var expectMethod = (_expectMethod = {
-  "constructor": true,
-  "initState": true,
-  "updateData": true
-}, defineProperty_default()(_expectMethod, "constructor", true), defineProperty_default()(_expectMethod, "initializeProperty", true), defineProperty_default()(_expectMethod, "created", true), defineProperty_default()(_expectMethod, "getRealEventName", true), defineProperty_default()(_expectMethod, "initializeStoreEvent", true), defineProperty_default()(_expectMethod, "destoryStoreEvent", true), defineProperty_default()(_expectMethod, "destroy", true), defineProperty_default()(_expectMethod, "emit", true), defineProperty_default()(_expectMethod, "trigger", true), defineProperty_default()(_expectMethod, "on", true), defineProperty_default()(_expectMethod, "off", true), defineProperty_default()(_expectMethod, "setState", true), defineProperty_default()(_expectMethod, "_reload", true), defineProperty_default()(_expectMethod, "render", true), defineProperty_default()(_expectMethod, "initialize", true), defineProperty_default()(_expectMethod, "afterRender", true), defineProperty_default()(_expectMethod, "components", true), defineProperty_default()(_expectMethod, "getRef", true), defineProperty_default()(_expectMethod, "parseTemplate", true), defineProperty_default()(_expectMethod, "parseProperty", true), defineProperty_default()(_expectMethod, "parseSourceName", true), defineProperty_default()(_expectMethod, "parseComponent", true), defineProperty_default()(_expectMethod, "clean", true), defineProperty_default()(_expectMethod, "refresh", true), defineProperty_default()(_expectMethod, "load", true), defineProperty_default()(_expectMethod, "bindData", true), defineProperty_default()(_expectMethod, "template", true), defineProperty_default()(_expectMethod, "eachChildren", true), defineProperty_default()(_expectMethod, "destroy", true), defineProperty_default()(_expectMethod, "collectProps", true), defineProperty_default()(_expectMethod, "filterProps", true), defineProperty_default()(_expectMethod, "self", true), defineProperty_default()(_expectMethod, "isAltKey", true), defineProperty_default()(_expectMethod, "isCtrlKey", true), defineProperty_default()(_expectMethod, "isShiftKey", true), defineProperty_default()(_expectMethod, "isMetaKey", true), defineProperty_default()(_expectMethod, "preventDefault", true), defineProperty_default()(_expectMethod, "stopPropagation", true), defineProperty_default()(_expectMethod, "bodyMouseMove", true), defineProperty_default()(_expectMethod, "bodyMouseUp", true), _expectMethod);
-
-var EventMachine_EventMachine = /*#__PURE__*/function () {
-  function EventMachine(opt, props) {
-    classCallCheck_default()(this, EventMachine);
-
-    this.state = {};
-    this.prevState = {};
-    this.refs = {};
-    this.children = {};
-    this._bindings = [];
-    this.id = Object(math["uuid"])();
-    this.handlers = this.initializeHandler();
-    this.initializeProperty(opt, props);
-    this.initComponents();
-  }
-  /**
-   * UIElement instance 에 필요한 기본 속성 설정 
-   */
-
-
-  createClass_default()(EventMachine, [{
-    key: "initializeProperty",
-    value: function initializeProperty(opt) {
-      var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      this.opt = opt || {};
-      this.parent = this.opt;
-      this.props = props;
-      this.source = Object(math["uuid"])();
-      this.sourceName = this.constructor.name;
-    }
-  }, {
-    key: "initComponents",
-    value: function initComponents() {
-      // const parentComponents = isFunction(this.parent.components) ? this.parent.components() : this.parent.components;
-      this.childComponents = _objectSpread({}, this.components());
-    }
-  }, {
-    key: "initializeHandler",
-    value: function initializeHandler() {
-      return [new BindHandler_BindHandler(this), new DomEventHandler_DomEventHandler(this)];
-    }
-    /**
-     * state 를 초기화 한것을 리턴한다. 
-     * 
-     * @protected
-     * @returns {Object} 
-     */
-
-  }, {
-    key: "initState",
-    value: function initState() {
-      return {};
-    }
-    /**
-     * state 를 변경한다. 
-     * 
-     * @param {Object} state  새로운 state 
-     * @param {Boolean} isLoad  다시 로드 할 것인지 체크 , true 면 state 변경후 다시 로드 
-     */
-
-  }, {
-    key: "setState",
-    value: function setState() {
-      var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var isLoad = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-      this.prevState = this.state;
-      this.state = Object.assign({}, this.state, state);
-
-      if (isLoad) {
-        this.load();
-      }
-    }
-    /**
-     * state 에 있는 key 필드의 값을 토글한다. 
-     * Boolean 형태의 값만 동작한다. 
-     * 
-     * @param {string} key 
-     * @param {Boolean} isLoad 
-     */
-
-  }, {
-    key: "toggleState",
-    value: function toggleState(key) {
-      var isLoad = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-      this.setState(defineProperty_default()({}, key, !this.state[key]), isLoad);
-    }
-    /**
-     * 객체를 다시 그릴 때 사용한다. 
-     * 
-     * @param {*} props 
-     * @protected
-     */
-
-  }, {
-    key: "_reload",
-    value: function _reload(props) {
-      this.props = props;
-      this.state = {};
-      this.setState(this.initState(), false);
-      this.refresh(true);
-    }
-    /**
-     * template 을 렌더링 한다. 
-     * 
-     * @param {Dom|undefined} $container  컴포넌트가 그려질 대상 
-     */
-
-  }, {
-    key: "render",
-    value: function render($container) {
-      this.$el = this.parseTemplate(Object(func["html"])(_templateObject || (_templateObject = taggedTemplateLiteral_default()(["\n        ", "\n      "])), this.template()));
-      this.refs.$el = this.$el;
-
-      if ($container) {
-        $container.append(this.$el);
-      } // LOAD 로 정의된 것들을 수행한다. 
-
-
-      this.load(); // render 이후에 실행될 콜백을 정의한다. 
-
-      this.afterRender();
-    }
-  }, {
-    key: "initialize",
-    value: function initialize() {
-      this.state = this.initState();
-    }
-    /**
-     * render 이후에 실행될 함수 
-     * dom 이 실제로 생성된 이후에 수행할 작업들을 정의한다. 
-     * 
-     * @protected
-     */
-
-  }, {
-    key: "afterRender",
-    value: function afterRender() {}
-    /**
-     * 하위에 연결될 객체들을 정의한다 
-     * 
-     * @protected
-     * @returns {Object}
-     */
-
-  }, {
-    key: "components",
-    value: function components() {
-      return {};
-    }
-    /**
-     * ref 이름을 가진 Component 를 가지고 온다. 
-     * 
-     * @param  {any[]} args 
-     * @returns {EventMachine}
-     */
-
-  }, {
-    key: "getRef",
-    value: function getRef() {
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      var key = args.join('');
-      return this.refs[key];
-    }
-    /**
-     * template() 함수의 결과물을 파싱해서 dom element 를 생성한다. 
-     * 
-     * @param {string} html 
-     * @param {Boolean} [isLoad=false] 
-     */
-
-  }, {
-    key: "parseTemplate",
-    value: function parseTemplate(html, isLoad) {
-      //FIXME: html string, element 형태 모두 array 로 받을 수 있도록 해보자. 
-      if (Object(func["isArray"])(html)) {
-        html = html.join('');
-      }
-
-      html = html.trim();
-      var list = TEMP_DIV.html(html).children(); /////////////////////////////////
-
-      for (var i = 0, len = list.length; i < len; i++) {
-        var $el = list[i];
-        var ref = $el.attr(REFERENCE_PROPERTY);
-
-        if (ref) {
-          this.refs[ref] = $el;
-        }
-
-        var refs = $el.$$(QUERY_PROPERTY);
-        var temp = {};
-
-        for (var refsIndex = 0, refsLen = refs.length; refsIndex < refsLen; refsIndex++) {
-          var $dom = refs[refsIndex];
-          var name = $dom.attr(REFERENCE_PROPERTY);
-
-          if (temp[name]) {
-            console.warn("".concat(ref, " is duplicated. - ").concat(this.sourceName), this);
-          } else {
-            temp[name] = true;
-          }
-
-          this.refs[name] = $dom;
-        }
-      }
-
-      if (!isLoad) {
-        return list[0];
-      }
-
-      return TEMP_DIV.createChildrenFragment();
-    }
-  }, {
-    key: "parseProperty",
-    value: function parseProperty($dom) {
-      var props = {}; // parse properties 
-
-      var _iterator = _createForOfIteratorHelper($dom.el.attributes),
-          _step;
-
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var t = _step.value;
-          props[t.nodeName] = t.nodeValue;
-        }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
-      }
-
-      if (props['props']) {
-        props = _objectSpread(_objectSpread({}, props), Object(Event["getRef"])(props['props']));
-      }
-
-      $dom.$$('property').forEach(function ($p) {
-        var _$p$attrs = $p.attrs('name', 'value', 'valueType'),
-            _$p$attrs2 = slicedToArray_default()(_$p$attrs, 3),
-            name = _$p$attrs2[0],
-            value = _$p$attrs2[1],
-            valueType = _$p$attrs2[2];
-
-        var realValue = value || $p.text();
-
-        if (valueType === 'json') {
-          realValue = JSON.parse(realValue);
-        }
-
-        props[name] = realValue;
-      });
-      return props;
-    }
-  }, {
-    key: "parseSourceName",
-    value: function parseSourceName(obj) {
-      if (obj.parent) {
-        return [obj.sourceName].concat(toConsumableArray_default()(this.parseSourceName(obj.parent)));
-      }
-
-      return [obj.sourceName];
-    }
-  }, {
-    key: "getEventMachineComponent",
-    value: function getEventMachineComponent(refClassName) {
-      var EventMachineComponent = Object(registElement["b" /* retriveElement */])(refClassName) || this.childComponents[refClassName];
-      return EventMachineComponent;
-    }
-  }, {
-    key: "parseComponent",
-    value: function parseComponent() {
-      var _this = this;
-
-      var $el = this.$el;
-      var targets = $el.$$(REF_CLASS_PROPERTY);
-      targets.forEach(function ($dom) {
-        var EventMachineComponent = _this.getEventMachineComponent($dom.attr(REF_CLASS));
-
-        if (EventMachineComponent) {
-          var props = _this.parseProperty($dom); // create component 
-
-
-          var refName = $dom.attr(REFERENCE_PROPERTY);
-          var instance = null; // 동일한 refName 의 EventMachine 이 존재하면  해당 컴포넌트는 다시 그려진다. 
-          // 루트 element 는 변경되지 않는다. 
-
-          if (_this.children[refName]) {
-            instance = _this.children[refName];
-
-            instance._reload(props);
-          } else {
-            // 기존의 refName 이 존재하지 않으면 Component 를 생성해서 element 를 교체한다. 
-            instance = new EventMachineComponent(_this, props);
-            _this.children[refName || instance.id] = instance;
-            instance.render();
-          }
-
-          $dom.replace(instance.$el);
-        } else {
-          $dom.remove();
-        }
-      });
-      Object(func["keyEach"])(this.children, function (key, obj) {
-        if (obj && obj.clean()) {
-          delete _this.children[key];
-        }
-      });
-    }
-  }, {
-    key: "clean",
-    value: function clean() {
-      if (this.$el && !this.$el.hasParent()) {
-        Object(func["keyEach"])(this.children, function (key, child) {
-          child.clean();
-        });
-        this.destroy();
-        this.$el = null;
-        return true;
-      }
-    }
-    /**
-     * refresh 는 load 함수들을 실행한다. 
-     */
-
-  }, {
-    key: "refresh",
-    value: function refresh() {
-      this.load();
-    }
-  }, {
-    key: "_afterLoad",
-    value: function _afterLoad() {
-      this.runHandlers('initialize');
-      this.bindData();
-      this.parseComponent();
-    }
-  }, {
-    key: "load",
-    value: function () {
-      var _load = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee2() {
-        var _this2 = this;
-
-        var _len2,
-            args,
-            _key2,
-            localLoadMethods,
-            _args2 = arguments;
-
-        return regenerator_default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                for (_len2 = _args2.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-                  args[_key2] = _args2[_key2];
-                }
-
-                if (!this._loadMethods) {
-                  this._loadMethods = this.filterProps(Event["CHECK_LOAD_PATTERN"]);
-                } // loop 가 비동기라 await 로 대기를 시켜줘야 나머지 html 업데이트에 대한 순서를 맞출 수 있다. 
-
-
-                localLoadMethods = this._loadMethods.filter(function (callbackName) {
-                  var elName = callbackName.split(Event["LOAD_SAPARATOR"])[1].split(Event["CHECK_SAPARATOR"]).map(function (it) {
-                    return it.trim();
-                  })[0];
-                  if (!args.length) return true;
-                  return args.indexOf(elName) > -1;
-                });
-                _context2.next = 5;
-                return localLoadMethods.forEach( /*#__PURE__*/function () {
-                  var _ref = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee(callbackName) {
-                    var methodName, _methodName$split$map, _methodName$split$map2, elName, checker, isDomDiff, _this2$callbackName, newTemplate, fragment;
-
-                    return regenerator_default.a.wrap(function _callee$(_context) {
-                      while (1) {
-                        switch (_context.prev = _context.next) {
-                          case 0:
-                            methodName = callbackName.split(Event["LOAD_SAPARATOR"])[1];
-                            _methodName$split$map = methodName.split(Event["CHECK_SAPARATOR"]).map(function (it) {
-                              return it.trim();
-                            }), _methodName$split$map2 = toArray_default()(_methodName$split$map), elName = _methodName$split$map2[0], checker = _methodName$split$map2.slice(1);
-                            checker = checker.map(function (it) {
-                              return it.trim();
-                            });
-                            isDomDiff = Boolean(checker.filter(function (it) {
-                              return Event["DOMDIFF"].includes(it);
-                            }).length);
-
-                            if (!_this2.refs[elName]) {
-                              _context.next = 11;
-                              break;
-                            }
-
-                            _context.next = 7;
-                            return (_this2$callbackName = _this2[callbackName]).call.apply(_this2$callbackName, [_this2].concat(args));
-
-                          case 7:
-                            newTemplate = _context.sent;
-
-                            if (Object(func["isArray"])(newTemplate)) {
-                              newTemplate = newTemplate.join('');
-                            } // create fragment 
-
-
-                            // create fragment 
-                            fragment = _this2.parseTemplate(Object(func["html"])(_templateObject2 || (_templateObject2 = taggedTemplateLiteral_default()(["", ""])), newTemplate), true);
-
-                            if (isDomDiff) {
-                              _this2.refs[elName].htmlDiff(fragment);
-                            } else {
-                              _this2.refs[elName].html(fragment);
-                            }
-
-                          case 11:
-                          case "end":
-                            return _context.stop();
-                        }
-                      }
-                    }, _callee);
-                  }));
-
-                  return function (_x) {
-                    return _ref.apply(this, arguments);
-                  };
-                }());
-
-              case 5:
-                this._afterLoad();
-
-              case 6:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
-      }));
-
-      function load() {
-        return _load.apply(this, arguments);
-      }
-
-      return load;
-    }()
-  }, {
-    key: "runHandlers",
-    value: function runHandlers() {
-      var func = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'run';
-
-      for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-        args[_key3 - 1] = arguments[_key3];
-      }
-
-      this.handlers.forEach(function (h) {
-        return h[func].apply(h, args);
-      });
-    }
-  }, {
-    key: "bindData",
-    value: function bindData() {
-      for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-        args[_key4] = arguments[_key4];
-      }
-
-      this.runHandlers.apply(this, ['load'].concat(args));
-    } // 기본 템플릿 지정
-
-  }, {
-    key: "template",
-    value: function template() {
-      return "<div></div>";
-    }
-  }, {
-    key: "eachChildren",
-    value: function eachChildren(callback) {
-      if (!Object(func["isFunction"])(callback)) return;
-      Object(func["keyEach"])(this.children, function (_, Component) {
-        callback(Component);
-      });
-    }
-  }, {
-    key: "rerender",
-    value: function rerender() {
-      var $parent = this.$el.parent();
-      this.destroy();
-      this.render($parent);
-    }
-    /**
-     * 자원을 해제한다.
-     * 이것도 역시 자식 컴포넌트까지 제어하기 때문에 가장 최상위 부모에서 한번만 호출되도 된다.
-     * 
-     */
-
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      this.eachChildren(function (childComponent) {
-        childComponent.destroy();
-      });
-      this.runHandlers('destroy');
-      this.$el.remove();
-      this.$el = null;
-      this.refs = {};
-      this.children = {};
-    }
-    /**
-     * property 수집하기
-     * 상위 클래스의 모든 property 를 수집해서 리턴한다.
-     * 
-     * @returns {string[]} 나의 상위 모든 메소드를 수집해서 리턴한다. 
-     */
-
-  }, {
-    key: "collectProps",
-    value: function collectProps() {
-      return Object(func["collectProps"])(this, expectMethod);
-    }
-  }, {
-    key: "filterProps",
-    value: function filterProps(pattern) {
-      return this.collectProps().filter(function (key) {
-        return key.match(pattern);
-      });
-    }
-    /* magic check method  */
-
-  }, {
-    key: "self",
-    value: function self(e) {
-      return e && e.$dt && e.$dt.is(e.target);
-    }
-  }, {
-    key: "isAltKey",
-    value: function isAltKey(e) {
-      return e.altKey;
-    }
-  }, {
-    key: "isCtrlKey",
-    value: function isCtrlKey(e) {
-      return e.ctrlKey;
-    }
-  }, {
-    key: "isShiftKey",
-    value: function isShiftKey(e) {
-      return e.shiftKey;
-    }
-  }, {
-    key: "isMetaKey",
-    value: function isMetaKey(e) {
-      return e.metaKey || e.key == 'Meta' || e.code.indexOf('Meta') > -1;
-    }
-  }, {
-    key: "isMouseLeftButton",
-    value: function isMouseLeftButton(e) {
-      return e.buttons === 1; // 1 is left button 
-    }
-    /** before check method */
-
-    /* after check method */
-
-  }, {
-    key: "preventDefault",
-    value: function preventDefault(e) {
-      e.preventDefault();
-      return true;
-    }
-  }, {
-    key: "stopPropagation",
-    value: function stopPropagation(e) {
-      e.stopPropagation();
-      return true;
-    }
-  }, {
-    key: "bodyMouseMove",
-    value: function bodyMouseMove(e, methodName) {
-      if (this[methodName]) {
-        this.emit(types_event["a" /* ADD_BODY_MOUSEMOVE */], this[methodName], this, e.xy);
-      }
-    }
-  }, {
-    key: "bodyMouseUp",
-    value: function bodyMouseUp(e, methodName) {
-      if (this[methodName]) {
-        this.emit(types_event["b" /* ADD_BODY_MOUSEUP */], this[methodName], this, e.xy);
-      }
-    }
-  }]);
-
-  return EventMachine;
-}();
-
-
-// CONCATENATED MODULE: ./src/el/base/UIElement.js
-
-
-
-
-
-
-
-
-function UIElement_createSuper(Derived) { var hasNativeReflectConstruct = UIElement_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
-
-function UIElement_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-
-
-
-/**
- * UI 를 만드는 기본 단위 
- * 
- * dom handler, 
- * bind handler, 
- * store handler 를 가진다. 
- * 
- * @property {Editor} $editor 
- */
-
-var UIElement_UIElement = /*#__PURE__*/function (_EventMachine) {
-  inherits_default()(UIElement, _EventMachine);
-
-  var _super = UIElement_createSuper(UIElement);
-
-  function UIElement(opt) {
-    var _this;
-
-    var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-    classCallCheck_default()(this, UIElement);
-
-    _this = _super.call(this, opt, props);
-
-    _this.created();
-
-    _this.initialize();
-
-    _this.initializeStoreEvent();
-
-    return _this;
-  }
-  /**
-   * UIElement 가 생성될 때 호출되는 메소드 
-   * @protected
-   */
-
-
-  createClass_default()(UIElement, [{
-    key: "created",
-    value: function created() {}
-  }, {
-    key: "getRealEventName",
-    value: function getRealEventName(e) {
-      var s = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : MULTI_PREFIX;
-      var startIndex = e.indexOf(s);
-      return e.substr(startIndex < 0 ? 0 : startIndex + s.length);
-    }
-  }, {
-    key: "splitMethod",
-    value: function splitMethod(events, keyword) {
-      var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-
-      var _splitMethodByKeyword = Object(func["splitMethodByKeyword"])(events.split(Event["CHECK_SAPARATOR"]), keyword),
-          _splitMethodByKeyword2 = slicedToArray_default()(_splitMethodByKeyword, 2),
-          methods = _splitMethodByKeyword2[0],
-          params = _splitMethodByKeyword2[1];
-
-      return [methods.length ? +params[0].target : defaultValue, methods, params];
-    }
-    /**
-     * initialize store event
-     *
-     * you can define '@xxx' method(event) in UIElement
-     *
-     * Store Event 를 초기화 한다. 
-     *
-     */
-
-  }, {
-    key: "initializeStoreEvent",
-    value: function initializeStoreEvent() {
-      var _this2 = this;
-
-      this.filterProps(Event["CHECK_SUBSCRIBE_PATTERN"]).forEach(function (key) {
-        var events = _this2.getRealEventName(key, Event["SUBSCRIBE_SAPARATOR"]); // support deboounce for store event 
-
-
-        var _this2$splitMethod = _this2.splitMethod(events, 'debounce'),
-            _this2$splitMethod2 = slicedToArray_default()(_this2$splitMethod, 2),
-            debounceSecond = _this2$splitMethod2[0],
-            debounceMethods = _this2$splitMethod2[1];
-
-        var _this2$splitMethod3 = _this2.splitMethod(events, 'throttle'),
-            _this2$splitMethod4 = slicedToArray_default()(_this2$splitMethod3, 2),
-            throttleSecond = _this2$splitMethod4[0],
-            throttleMethods = _this2$splitMethod4[1];
-
-        var _this2$splitMethod5 = _this2.splitMethod(events, 'allTrigger'),
-            _this2$splitMethod6 = slicedToArray_default()(_this2$splitMethod5, 2),
-            _ = _this2$splitMethod6[0],
-            allTriggerMethods = _this2$splitMethod6[1];
-
-        events.split(Event["CHECK_SAPARATOR"]).filter(function (it) {
-          return debounceMethods.indexOf(it) === -1 && allTriggerMethods.indexOf(it) === -1 && throttleMethods.indexOf(it) === -1;
-        }).map(function (it) {
-          return it.trim();
-        }).forEach(function (e) {
-          var callback = _this2[key].bind(_this2);
-
-          callback.displayName = "".concat(_this2.sourceName, ".").concat(e);
-          callback.source = _this2.source;
-
-          _this2.$store.on(e, callback, _this2, debounceSecond, throttleSecond, allTriggerMethods.length);
-        });
-      });
-    }
-    /**
-     * 현재 UIElement 와 연결된 모든 메세지를 해제한다. 
-     */
-
-  }, {
-    key: "destoryStoreSUBSCRIBE",
-    value: function destoryStoreSUBSCRIBE() {
-      this.$store.offAll(this);
-    }
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      get_default()(getPrototypeOf_default()(UIElement.prototype), "destroy", this).call(this);
-
-      this.destoryStoreSUBSCRIBE();
-    }
-    /**
-     * UIElement 를 다시 그린다. 
-     * 
-     * template 정의 부터  메세지 이벤트 정의까지 모두 다시 한다. 
-     */
-
-  }, {
-    key: "rerender",
-    value: function rerender() {
-      get_default()(getPrototypeOf_default()(UIElement.prototype), "rerender", this).call(this);
-
-      this.initialize();
-      this.initializeStoreEvent();
-    }
-    /**
-     * UIElement 기반으로 메세지를 호출 한다. 
-     * 나 이외의 객체들에게 메세지를 전달한다. 
-     * 
-     * @param {string} messageName
-     * @param {any[]} args 
-     */
-
-  }, {
-    key: "emit",
-    value: function emit(messageName) {
-      var _this$$store;
-
-      this.$store.source = this.source;
-      this.$store.sourceContext = this;
-
-      for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        args[_key - 1] = arguments[_key];
-      }
-
-      (_this$$store = this.$store).emit.apply(_this$$store, [messageName].concat(args));
-    }
-    /**
-     * MicroTask 를 수행한다. 
-     * 
-     * @param {Function} callback 
-     */
-
-  }, {
-    key: "nextTick",
-    value: function nextTick(callback) {
-      this.$store.nextTick(callback);
-    }
-    /**
-     * 
-     * UIElement 자신의 메세지를 수행한다. 
-     * emit 은 나외의 객체에게 메세지를 보내고 
-     * 
-     * @param {string} messageName 
-     * @param {any[]} args 
-     */
-
-  }, {
-    key: "trigger",
-    value: function trigger(messageName) {
-      var _this$$store2;
-
-      this.$store.source = this.source;
-
-      for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-        args[_key2 - 1] = arguments[_key2];
-      }
-
-      (_this$$store2 = this.$store).trigger.apply(_this$$store2, [messageName].concat(args));
-    }
-  }, {
-    key: "broadcast",
-    value: function broadcast(messageName) {
-      var _this3 = this;
-
-      for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-        args[_key3 - 1] = arguments[_key3];
-      }
-
-      Object.keys(this.children).forEach(function (key) {
-        var _this3$children$key;
-
-        (_this3$children$key = _this3.children[key]).trigger.apply(_this3$children$key, [messageName].concat(args));
-      });
-    }
-  }, {
-    key: "on",
-    value: function on(message, callback) {
-      this.$store.on(message, callback);
-    }
-  }, {
-    key: "off",
-    value: function off(message, callback) {
-      this.$store.off(message, callback);
-    }
-  }]);
-
-  return UIElement;
-}(EventMachine_EventMachine);
-
-/* harmony default export */ var base_UIElement = __webpack_exports__["a"] = (UIElement_UIElement);
-
-/***/ }),
-/* 30 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return second; });
-/* unused harmony export frames */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return timecode; });
-/* unused harmony export timecodeToFrames */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return framesToTimecode; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return makeTimer; });
-/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
-/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _func__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
-
-
-function second(fps, timecode) {
-  if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isString"])(timecode)) {
-    var _timecode$split = timecode.split(':'),
-        _timecode$split2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_timecode$split, 4),
-        hour = _timecode$split2[0],
-        minute = _timecode$split2[1],
-        second = _timecode$split2[2],
-        frame = _timecode$split2[3];
-
-    hour = parseInt(hour, 10);
-    minute = parseInt(minute, 10);
-    second = parseInt(second, 10);
-    frame = parseInt(frame, 10);
-    return hour * 3600 + minute * 60 + second + frame * (1 / fps);
-  } else if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isNumber"])(timecode)) {
-    return timecode / fps;
-  }
-
-  return 0;
-}
-function frames(fps, time) {
-  return time * fps;
-}
-function timecode(fps, seconds) {
-  var h = Math.floor(seconds / 3600);
-  var m = Math.floor(seconds / 60 % 60);
-  var s = Math.floor(seconds % 60);
-  var f = Math.round((seconds - Math.floor(seconds)) * fps);
-
-  if (f === fps) {
-    f = 0;
-    s += 1;
-
-    if (s === 60) {
-      m += 1;
-
-      if (m === 60) {
-        h += 1;
-      }
-    }
-  }
-
-  return [h, m, s, f].map(function (t) {
-    return (t + '').padStart(2, '0');
-  }).join(':');
-}
-function timecodeToFrames(fps, timecode) {
-  var start = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-  return frames(fps, second(fps, timecode) - second(fps, start));
-}
-function framesToTimecode(fps, frames) {
-  var start = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-  return timecode(fps, second(fps, frames) - second(fps, start));
-}
-/**
- * make a timer for timeline animation 
- * 
- * @param {*} opt 
- */
-
-function makeTimer(opt) {
-  var timer = {
-    id: 0,
-    start: 0,
-    speed: opt.speed || 1,
-    elapsed: opt.elapsed || 0,
-    duration: opt.duration || 0,
-    iterationStartCount: 1,
-    iterationCount: opt.iterationCount || Number.MAX_SAFE_INTEGER,
-    direction: opt.direction || 'normal',
-    log: [],
-    logIndex: 0,
-    tick: opt.tick || function () {},
-    startCallback: opt.start || function () {},
-    endCallback: opt.end || function () {},
-    firstCallback: opt.first || function () {},
-    lastCallback: opt.last || function () {}
-  };
-
-  var isForward = function isForward() {
-    if (timer.direction === 'normal') {
-      return true;
-    } else if (timer.direction === 'reverse') {
-      return false;
-    } else if (timer.direction === 'alternate') {
-      return timer.iterationStartCount % 2 === 1;
-    } else if (timer.direction === 'alternate-reverse') {
-      return timer.iterationStartCount % 2 === 0;
-    }
-  };
-
-  var calculateForDirection = function calculateForDirection(rate) {
-    return isForward() ? rate : 1 - rate;
-  };
-
-  var tick = function tick(now) {
-    var isStart = false;
-
-    if (timer.start === null) {
-      timer.start = now; // timer.elapsed = 0; 
-
-      isStart = true;
-    }
-
-    var dt = now - timer.start;
-    timer.elapsed += dt * timer.speed;
-    timer.start = now;
-
-    if (timer.elapsed > timer.duration) {
-      timer.elapsed = timer.duration;
-    } // console.log(timer.elapsed, dt, timer.speed)
-
-
-    var elapsed = calculateForDirection(timer.elapsed / timer.duration) * timer.duration;
-    if (isStart) timer.startCallback(elapsed, timer);
-    timer.log[timer.logIndex++] = {
-      elapsed: elapsed,
-      dt: timer.lastTime - elapsed
-    };
-    timer.lastTime = elapsed;
-    timer.tick(elapsed, timer);
-
-    if (timer.elapsed === timer.duration) {
-      end();
-    } else {
-      frameStart();
-    }
-  };
-
-  var frameStart = function frameStart() {
-    timer.id = requestAnimationFrame(tick);
-  };
-
-  var end = function end() {
-    timer.endCallback(timer.elapsed, timer);
-    timer.iterationStartCount++;
-
-    if (timer.iterationStartCount > timer.iterationCount) {
-      timer.lastCallback(timer.elapsed, timer);
-      cancelAnimationFrame(timer.id);
-    } else {
-      // 멈추지 않은 상태면 
-      timer.start = null;
-      timer.elapsed = 0;
-      frameStart();
-    }
-  };
-
-  var play = function play() {
-    var opt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    timer.start = null;
-    timer.iterationStartCount = 1;
-    timer.log = [];
-    timer.lastTime = 0;
-    timer.logIndex = 0;
-    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isNumber"])(opt.elapsed)) timer.elapsed = opt.elapsed;
-    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isNumber"])(opt.speed)) timer.speed = opt.speed;
-    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isNumber"])(opt.duration)) timer.duration = opt.duration;
-    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isNumber"])(opt.iterationCount)) timer.iterationCount = opt.iterationCount || Number.MAX_SAFE_INTEGER;
-    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isString"])(opt.direction)) timer.direction = opt.direction;
-    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isFunction"])(opt.tick)) timer.tick = opt.tick;
-    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isFunction"])(opt.start)) timer.startCallback = opt.start;
-    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isFunction"])(opt.end)) timer.endCallback = opt.end;
-    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isFunction"])(opt.first)) timer.firstCallback = opt.first;
-    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isFunction"])(opt.last)) timer.lastCallback = opt.last;
-    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isFunction"])(opt.stop)) timer.stopCallback = opt.stop;
-    timer.firstCallback(timer.elapsed, timer);
-    frameStart();
-  };
-
-  var stop = function stop() {
-    timer.stopCallback(timer.elapsed, timer);
-    cancelAnimationFrame(timer.id);
-  };
-
-  var seek = function seek(t) {
-    timer.elapsed = t;
-    timer.tick(timer.elapsed, timer);
-  };
-
-  var first = function first(t) {
-    seek(0);
-  };
-
-  var last = function last(t) {
-    seek(timer.duration);
-  };
-
-  return {
-    play: play,
-    stop: stop,
-    tick: tick,
-    first: first,
-    last: last,
-    seek: seek,
-    timer: timer
-  };
-} // var timer = makeTimer({
-//     duration: 1000,
-//     iterationCount: 3,
-//     direction: 'alternate',
-//     first: (elapsed, timer) => {
-//         console.log('first', elapsed, timer);
-//     },
-//     last: (elapsed, timer) => {
-//         console.log('last', elapsed, timer);
-//     },
-//     start: (elapsed, timer) => {
-//         console.log('start', elapsed, timer);
-//     },
-//     end : (elapsed, timer) => {
-//         console.log('end', elapsed, timer);
-//     },
-//     tick: (elapsed, timer) => {
-//         console.log('tick', timecode(60, elapsed / 1000), elapsed, timer.iterationStartCount)
-//     }
-// })
-// timer.start();
-// setTimeout( () => {
-//     timer.start();
-// }, 1000)
-
-/* 
-
-makeTimer({
-    duration:  ,
-    tick: (elapsed, timer) => {
-
-    }
-})
-
-timer.start({ elapsed: 10, speed : 0.5, duration : 10 * 1000 })
-
-*/
-
-/***/ }),
-/* 31 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* unused harmony export pointPoint */
-/* unused harmony export pointPointDist */
-/* unused harmony export pointCircle */
-/* unused harmony export circleCirce */
-/* unused harmony export pointRect */
-/* unused harmony export rectRect */
-/* unused harmony export circleRect */
-/* unused harmony export linePoint */
-/* unused harmony export lineCircle */
-/* unused harmony export getClosestPointBylineCircle */
-/* unused harmony export lineLine */
-/* unused harmony export getClosestPointBylineLine */
-/* unused harmony export lineRect */
-/* unused harmony export getClosestPointBylineRect */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return polyPoint; });
-/* unused harmony export polyCircle */
-/* unused harmony export polyRect */
-/* unused harmony export polyLine */
-/* unused harmony export getClosestPointByPolyLine */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return polyPoly; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return rectToVerties; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getRotatePointer; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return rectToVertiesForArea; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return itemsToRectVerties; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return vertiesToRectangle; });
-/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
-/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var el_editor_property_parser_TransformOrigin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(59);
-/* harmony import */ var el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
-/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
-/* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(15);
-
-
-
-
-
-/**
- * 포인트 충돌 체크 
- * 
- * @param {number} x1
- * @param {number} y1
- * @param {number} x2
- * @param {number} y2
- */
-
-function pointPoint(x1, y1, x2, y2) {
-  return x1 === x2 && y1 === y2;
-}
-/**
- * 점간의 대략적인 거리의 위치 지정 
- * 
- * @param {vec3} s source vertext 
- * @param {vec3} t target vertext 
- * @param {number} [dist=0] check distance
- */
-
-function pointPointDist(s, t) {
-  var dist = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
-  var targetX = Infinity;
-  var targetY = Infinity;
-
-  if (Math.abs(s[0] - t[0]) <= dist) {
-    targetX = t[0];
-  }
-
-  if (Math.abs(s[1] - t[1]) <= dist) {
-    targetY = t[1];
-  }
-
-  return {
-    targetX: targetX,
-    targetY: targetY
-  };
-}
-/**
- * 점과 원의 충돌 체크 
- * 
- * @param {number} x1 x 
- * @param {number} y1 y
- * @param {number} cx 원의 중심점 x 
- * @param {number} cy 원의 중심점 y
- * @param {number} r 원의 반지름 radius
- */
-
-function pointCircle(x1, y1, cx, cy, r) {
-  var distX = x1 - cx;
-  var distY = y1 - cy;
-  return Math.hypot(distX, distY) <= r;
-}
-/**
- * 원과 원의 충돌 
- * 
- * @param {number} cx1 
- * @param {number} cy1 
- * @param {number} r1 
- * @param {number} cx2 
- * @param {number} cy2 
- * @param {number} r2 
- */
-
-function circleCirce(cx1, cy1, r1, cx2, cy2, r2) {
-  var distX = cx2 - cx1;
-  var distY = cy2 - cy1;
-  return Math.hypot(distX, distY) <= r1 + r2;
-}
-/**
- * 점과 사각형 충돌 체크 
- * 
- * @param {number} x1
- * @param {number} y1
- * @param {number} rx 
- * @param {number} ry 
- * @param {number} rw 
- * @param {number} rh 
- */
-
-function pointRect(x1, y1, rx, ry, rw, rh) {
-  return rx <= x1 && x1 <= rx + rw && ry <= y1 && y1 <= ry + rh;
-}
-/**
- * 사각형과 사각형 충돌 체크 
- * 
- * @param {number} rx1 
- * @param {number} ry1 
- * @param {number} rw1 
- * @param {number} rh1 
- * @param {number} rx2 
- * @param {number} ry2 
- * @param {number} rw2 
- * @param {number} rh2 
- */
-
-function rectRect(rx1, ry1, rw1, rh1, rx2, ry2, rw2, rh2) {
-  return rx1 + rw1 >= rx2 && rx1 <= rx2 + rw2 && ry1 + rh1 >= ry2 && ry1 <= ry2 + rh2;
-}
-/**
- * 
- * @param {number} cx 
- * @param {number} cy 
- * @param {number} r 
- * @param {number} rx 
- * @param {number} ry 
- * @param {number} rw 
- * @param {number} rh 
- */
-
-function circleRect(cx, cy, r, rx, ry, rw, rh) {
-  var testX = cx;
-  var testY = cy;
-  if (cx < rx) testX = rx;else if (cx > rx + rw) testX = rx + rw;
-  if (cy < ry) testY = ry;else if (cy > ry + rh) testY = ry + rh;
-  var distX = cx - testX;
-  var distY = cy - testY;
-  return Math.hypot(distX, distY) <= r;
-}
-/**
- * 
- * 점이 line 에 속하는지 체크 
- * 
- * @param {number} x1 
- * @param {number} y1 
- * @param {number} x2 
- * @param {number} y2 
- * @param {number} px 
- * @param {number} py 
- * @param {number} buffer 
- */
-
-function linePoint(x1, y1, x2, y2, px, py) {
-  var buffer = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : 0.1;
-  var dist1 = Math.hypot(px - x1, py - y1);
-  var dist2 = Math.hypot(px - x2, py - y2);
-  var lineLength = Math.hypot(x1 - x2, y1 - y2);
-  var calcDist = dist1 + dist2;
-  return calcDist >= lineLength - buffer && calcDist <= lineLength + buffer;
-}
-/**
- * 
- * 선과 원 체크 
- * 
- * @param {number} x1 
- * @param {number} y1 
- * @param {number} x2 
- * @param {number} y2 
- * @param {number} cx 
- * @param {number} cy 
- * @param {number} r 
- */
-
-function lineCircle(x1, y1, x2, y2, cx, cy, r) {
-  // 앙 옆의 점이 원 안에 있으면 true 
-  if (pointCircle(x1, y1, cx, cy, r)) return true;
-  if (pointCircle(x2, y2, cx, cy, r)) return true;
-  var lineLength = Math.hypot(x1 - x2, y1 - y2);
-  var dot = ((cx - x1) * (x2 - x1) + (cy - y1) * (y2 - y1)) / Math.pow(lineLength, 2);
-  var closestX = x1 + (x2 - x1) * dot;
-  var closestY = y1 + (y2 - y1) * dot;
-
-  if (linePoint(x1, y1, x2, y2, closestX, closestY) === false) {
-    return false;
-  } // 원의 중심과 가장 가까운 점의 거리 체크 
-
-
-  return Math.hypot(closestX - cx, closestY - cy) <= r;
-}
-/**
- * 
- * 선분에서 원의 중심에 가장 가까운 점 찾기 
- * 
- * @param {number} x1 
- * @param {number} y1 
- * @param {number} x2 
- * @param {number} y2 
- * @param {number} cx 
- * @param {number} cy 
- * @param {number} r 
- */
-
-function getClosestPointBylineCircle(x1, y1, x2, y2, cx, cy, r) {
-  var lineLength = Math.hypot(x1 - x2, y1 - y2);
-  var dot = ((cx - x1) * (x2 - x1) + (cy - y1) * (y2 - y1)) / Math.pow(lineLength, 2);
-  var closestX = x1 + (x2 - x1) * dot;
-  var closestY = y1 + (y2 - y1) * dot;
-  return [closestX, closestY];
-}
-function lineLine(x1, y1, x2, y2, x3, y3, x4, y4) {
-  var A = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
-  var B = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
-  return 0 <= A && A <= 1 && 0 <= B && B <= 1;
-}
-/**
- * 
- * 두개의 선분이 겹치는 점의 위치 
- * 
- * @param {number} x1 
- * @param {number} y1 
- * @param {number} x2 
- * @param {number} y2 
- * @param {number} x3 
- * @param {number} y3 
- * @param {number} x4 
- * @param {number} y4 
- */
-
-function getClosestPointBylineLine(x1, y1, x2, y2, x3, y3, x4, y4) {
-  var A = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
-  var B = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
-
-  if (0 <= A && A <= 1 && 0 <= B && B <= 1) {
-    return [x1 + A * (x2 - x1), y1 + B * (y2 - y1)];
-  }
-
-  return [];
-}
-/**
- * 
- * 선과 사각형의 겹치는 지점 체크 
- * 
- * @param {number} x1 
- * @param {number} y1 
- * @param {number} x2 
- * @param {number} y2 
- * @param {number} rectX 
- * @param {number} rectY 
- * @param {number} width 
- * @param {number} height 
- */
-
-function lineRect(x1, y1, x2, y2, rectX, rectY, width, height) {
-  var left = lineLine(x1, y1, x2, y2, rectX, rectY, rectX, rectY + height);
-  var right = lineLine(x1, y1, x2, y2, rectX + width, rectY, rectX + width, rectY + height);
-  var top = lineLine(x1, y1, x2, y2, rectX, rectY, rectX + width, rectY);
-  var bottom = lineLine(x1, y1, x2, y2, rectX, rectY + height, rectX + width, rectY + height);
-  return left || right || top || bottom;
-}
-/**
- * 
- * 선과 사각형의 겹치는 지점 리스트 
- * 
- * @param {number} x1 
- * @param {number} y1 
- * @param {number} x2 
- * @param {number} y2 
- * @param {number} rectX 
- * @param {number} rectY 
- * @param {number} width 
- * @param {number} height 
- * @returns {[x, y][]}
- */
-
-function getClosestPointBylineRect(x1, y1, x2, y2, rectX, rectY, width, height) {
-  var left = getClosestPointBylineLine(x1, y1, x2, y2, rectX, rectY, rectX, rectY + height);
-  var right = getClosestPointBylineLine(x1, y1, x2, y2, rectX + width, rectY, rectX + width, rectY + height);
-  var top = getClosestPointBylineLine(x1, y1, x2, y2, rectX, rectY, rectX + width, rectY);
-  var bottom = getClosestPointBylineLine(x1, y1, x2, y2, rectX, rectY + height, rectX + width, rectY + height);
-  var points = [];
-  if (left.length) points.push(left);
-  if (right.length) points.push(right);
-  if (top.length) points.push(top);
-  if (bottom.length) points.push(bottom);
-  return points;
-}
-/**
- * 폴리곤에 점 비교 
- * 
- * @param {vec3[]} verties 
- * @param {number} px 
- * @param {number} py 
- */
-
-function polyPoint() {
-  var verties = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  var px = arguments.length > 1 ? arguments[1] : undefined;
-  var py = arguments.length > 2 ? arguments[2] : undefined;
-  var isCollision = false;
-  var len = verties.length;
-  verties.forEach(function (vector, index) {
-    var _vector = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(vector, 2),
-        cx = _vector[0],
-        cy = _vector[1];
-
-    var _verties = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(verties[(index + 1) % len], 2),
-        nx = _verties[0],
-        ny = _verties[1];
-
-    if ((cy >= py && ny < py || cy < py && ny >= py) && px < (nx - cx) * (py - cy) / (ny - cy) + cx) {
-      isCollision = !isCollision;
-    }
-  });
-  return isCollision;
-}
-function polyCircle() {
-  var verties = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  var cx = arguments.length > 1 ? arguments[1] : undefined;
-  var cy = arguments.length > 2 ? arguments[2] : undefined;
-  var r = arguments.length > 3 ? arguments[3] : undefined;
-  var len = verties.length;
-  var isCollision = verties.some(function (vector, index) {
-    var _vector2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(vector, 2),
-        currentX = _vector2[0],
-        currentY = _vector2[1];
-
-    var _verties2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(verties[(index + 1) % len], 2),
-        nextX = _verties2[0],
-        nextY = _verties2[1];
-
-    var collision = lineCircle(currentX, currentY, nextX, nextY, cx, cy, r);
-    if (collision) return true;
-    return false;
-  });
-  if (isCollision) return true;
-
-  if (polyPoint(verties, cx, cy)) {
-    return true;
-  }
-
-  return false;
-}
-function polyRect() {
-  var verties = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  var rectX = arguments.length > 1 ? arguments[1] : undefined;
-  var rectY = arguments.length > 2 ? arguments[2] : undefined;
-  var rectWidth = arguments.length > 3 ? arguments[3] : undefined;
-  var rectHeight = arguments.length > 4 ? arguments[4] : undefined;
-  var len = verties.length;
-  return verties.some(function (vector, index) {
-    var _vector3 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(vector, 2),
-        currentX = _vector3[0],
-        currentY = _vector3[1];
-
-    var _verties3 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(verties[(index + 1) % len], 2),
-        nextX = _verties3[0],
-        nextY = _verties3[1];
-
-    var collision = lineRect(currentX, currentY, nextX, nextY, rectX, rectY, rectWidth, rectHeight);
-    if (collision) return true;
-    var inside = polyPoint(verties, rectX, rectY);
-    if (inside) return true;
-    return false;
-  });
-}
-function polyLine() {
-  var verties = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  var x1 = arguments.length > 1 ? arguments[1] : undefined;
-  var y1 = arguments.length > 2 ? arguments[2] : undefined;
-  var x2 = arguments.length > 3 ? arguments[3] : undefined;
-  var y2 = arguments.length > 4 ? arguments[4] : undefined;
-  var len = verties.length;
-  return verties.some(function (vector, index) {
-    var _vector4 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(vector, 2),
-        x3 = _vector4[0],
-        y3 = _vector4[1];
-
-    var _verties4 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(verties[(index + 1) % len], 2),
-        x4 = _verties4[0],
-        y4 = _verties4[1];
-
-    return lineLine(x1, y1, x2, y2, x3, y3, x4, y4);
-  });
-}
-function getClosestPointByPolyLine() {
-  var verties = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  var x1 = arguments.length > 1 ? arguments[1] : undefined;
-  var y1 = arguments.length > 2 ? arguments[2] : undefined;
-  var x2 = arguments.length > 3 ? arguments[3] : undefined;
-  var y2 = arguments.length > 4 ? arguments[4] : undefined;
-  var pointList = [];
-  var len = verties.length;
-  verties.forEach(function (vector, index) {
-    var _vector5 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(vector, 2),
-        x3 = _vector5[0],
-        y3 = _vector5[1];
-
-    var _verties5 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(verties[(index + 1) % len], 2),
-        x4 = _verties5[0],
-        y4 = _verties5[1];
-
-    var point = getClosestPointBylineLine(x1, y1, x2, y2, x3, y3, x4, y4);
-
-    if (point.length) {
-      pointList.push(point);
-    }
-  });
-  return pointList;
-}
-/**
- * polygon 끼리 충돌 비교 
- * 
- * 
- * @param {[x,y][]} verties 
- * @param {[x,y][]} targetVerties 
- */
-
-function polyPoly() {
-  var verties = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  var targetVerties = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-  var len = verties.length;
-  return verties.some(function (vector, index) {
-    var _vector6 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(vector, 2),
-        x1 = _vector6[0],
-        y1 = _vector6[1];
-
-    var _verties6 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(verties[(index + 1) % len], 2),
-        x2 = _verties6[0],
-        y2 = _verties6[1];
-
-    var collision = polyLine(targetVerties, x1, y1, x2, y2);
-    if (collision) return true;
-    collision = polyPoint(verties, targetVerties[0][0], targetVerties[0][1]);
-    if (collision) return true;
-    return false;
-  });
-}
-function rectToVerties(x, y, width, height) {
-  var origin = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : '50% 50% 0px';
-  var center = el_editor_property_parser_TransformOrigin__WEBPACK_IMPORTED_MODULE_1__[/* TransformOrigin */ "a"].scale(origin, width, height);
-  return [[x, y, 0], // top , left 
-  [x + width, y, 0], // top , right 
-  [x + width, y + height, 0], // bottom , right 
-  [x, y + height, 0], // bottom , left
-  [x + center[0], y + center[1], 0] // transform origin 
-  ];
-}
-function getRotatePointer(verties) {
-  var dist = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-  var topPointer = gl_matrix__WEBPACK_IMPORTED_MODULE_3__[/* vec3 */ "d"].lerp([], verties[0], verties[1], 0.5);
-  var bottomPointer = gl_matrix__WEBPACK_IMPORTED_MODULE_3__[/* vec3 */ "d"].lerp([], verties[2], verties[3], 0.5);
-  var rotatePointer = Object(_math__WEBPACK_IMPORTED_MODULE_4__["getPointBetweenVerties"])(bottomPointer, topPointer, dist);
-  return rotatePointer;
-}
-function rectToVertiesForArea(x, y, width, height) {
-  return rectToVerties(x, y, width, height);
-}
-function itemsToRectVerties() {
-  var items = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-  var minX = Number.MAX_SAFE_INTEGER;
-  var minY = Number.MAX_SAFE_INTEGER;
-  var maxX = Number.MIN_SAFE_INTEGER;
-  var maxY = Number.MIN_SAFE_INTEGER;
-  var xList = [];
-  var yList = [];
-  items.forEach(function (item) {
-    item.verties().forEach(function (vector) {
-      xList.push(vector[0]);
-      yList.push(vector[1]);
-    });
-  });
-  minX = Math.min.apply(Math, xList);
-  maxX = Math.max.apply(Math, xList);
-  minY = Math.min.apply(Math, yList);
-  maxY = Math.max.apply(Math, yList);
-  if (minX === Number.MAX_SAFE_INTEGER) minX = 0;
-  if (minY === Number.MAX_SAFE_INTEGER) minY = 0;
-  if (maxX === Number.MIN_SAFE_INTEGER) maxX = 0;
-  if (maxY === Number.MIN_SAFE_INTEGER) maxY = 0;
-  return rectToVerties(minX, minY, maxX - minX, maxY - minY);
-}
-function vertiesToRectangle(verties) {
-  var x = el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_2__[/* Length */ "a"].px(verties[0][0]).floor();
-  var y = el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_2__[/* Length */ "a"].px(verties[0][1]).floor();
-  var width = el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_2__[/* Length */ "a"].px(gl_matrix__WEBPACK_IMPORTED_MODULE_3__[/* vec3 */ "d"].dist(verties[0], verties[1])).floor();
-  var height = el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_2__[/* Length */ "a"].px(gl_matrix__WEBPACK_IMPORTED_MODULE_3__[/* vec3 */ "d"].dist(verties[0], verties[3])).floor();
-  return {
-    x: x,
-    left: x,
-    y: y,
-    top: y,
-    width: width,
-    height: height
-  };
-}
-
-/***/ }),
-/* 32 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PathParser; });
-/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
-/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
-/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var el_base_functions_bezier__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(25);
-/* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8);
-/* harmony import */ var el_base_functions_math__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(15);
-/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(12);
-/* harmony import */ var _Point__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(26);
-
-
-
-
-
-
-
-
-
-var REG_PARSE_NUMBER_FOR_PATH = /([mMlLvVhHcCsSqQtTaAzZ]([^mMlLvVhHcCsSqQtTaAzZ]*))/g;
-var splitReg = /[\b\t \,]/g;
-var numberReg = /-?[0-9]*\.?[0-9]+(?:e[-+]?\d+)?/ig;
-
-var PathParser = /*#__PURE__*/function () {
-  /**
-   * 
-   * @param {string} pathString  SVG Path 문자열
-   */
-  function PathParser() {
-    var pathString = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2___default()(this, PathParser);
-
-    this.reset(pathString);
-  }
-
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3___default()(PathParser, [{
-    key: "reset",
-    value: function reset() {
-      var pathString = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-      this.segments = [];
-      this.pathString = pathString;
-      this.parse();
-    }
-  }, {
-    key: "resetSegments",
-    value: function resetSegments(segments) {
-      this.segments = segments || [];
-      this.pathString = this.joinPath();
-    }
-  }, {
-    key: "trim",
-    value: function trim() {
-      var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-      var arr = str.match(numberReg) || [];
-      return arr.filter(function (it) {
-        return it != '';
-      });
-    }
-  }, {
-    key: "parse",
-    value: function parse() {
-      var _this = this;
-
-      var arr = this.pathString.match(REG_PARSE_NUMBER_FOR_PATH) || [];
-      this.segments = arr.map(function (s) {
-        var command = s[0];
-
-        var values = _this.trim(s.replace(command, '')).map(function (it) {
-          return +it;
-        });
-
-        return {
-          command: command,
-          values: values
-        };
-      }); // 상대 좌표를 모두 절 대 좌표로 변경 
-      // 절대좌표로 변환이 되어야 transform 을 쉽게 적용 할 수 있다. 
-      // 물론 트랜스폼 하기 전에 절대 좌표로 구조를 맞추고 
-      // 다시 돌아올 수도 있겠지만 불필요한 작업이 너무 많아질 수도 있다. 
-
-      this.segments = this.segments.map(function (s, index) {
-        switch (s.command) {
-          case 'c':
-          case 'm':
-          case 'l':
-          case 'q':
-          case 's':
-          case 't':
-          case 'v':
-          case 'h':
-            var prev = _this.segments[index - 1];
-            var x = prev.values[prev.values.length - 2];
-            var y = prev.values[prev.values.length - 1];
-
-            for (var i = 0, len = s.values.length; i < len; i += 2) {
-              s.values[i] += x;
-              s.values[i + 1] += y;
-            }
-
-            return {
-              command: s.command.toUpperCase(),
-              values: _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default()(s.values)
-            };
-
-          default:
-            return s;
-        }
-      });
-    }
-  }, {
-    key: "convertGenerator",
-    value: function convertGenerator() {
-      var points = [];
-
-      for (var index = 0, len = this.segments.length; index < len; index++) {
-        var s = this.segments[index];
-        var nextSegment = this.segments[index + 1];
-        var command = s.command,
-            values = s.values;
-
-        if (command === 'M') {
-          var _values = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(values, 2),
-              x = _values[0],
-              y = _values[1];
-
-          points.push({
-            command: command,
-            originalCommand: command,
-            startPoint: {
-              x: x,
-              y: y
-            },
-            endPoint: {
-              x: x,
-              y: y
-            },
-            reversePoint: {
-              x: x,
-              y: y
-            },
-            curve: false
-          });
-        } else if (command === 'L') {
-          var prevPoint = _Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].getPrevPoint(points, points.length);
-
-          if (prevPoint.curve) {
-            var _values2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(values, 2),
-                x = _values2[0],
-                y = _values2[1];
-
-            points.push({
-              command: command,
-              originalCommand: command,
-              startPoint: {
-                x: x,
-                y: y
-              },
-              endPoint: {
-                x: x,
-                y: y
-              },
-              reversePoint: Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_5__["clone"])(prevPoint.endPoint),
-              curve: true
-            });
-          } else {
-            var _values3 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(values, 2),
-                x = _values3[0],
-                y = _values3[1];
-
-            points.push({
-              command: command,
-              originalCommand: command,
-              startPoint: {
-                x: x,
-                y: y
-              },
-              endPoint: {
-                x: x,
-                y: y
-              },
-              reversePoint: {
-                x: x,
-                y: y
-              },
-              curve: false
-            });
-          }
-        } else if (command === 'Q') {
-          var _values4 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(values, 4),
-              cx1 = _values4[0],
-              cy1 = _values4[1],
-              x = _values4[2],
-              y = _values4[3];
-
-          var prevPoint = _Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].getPrevPoint(points, points.length);
-
-          if (prevPoint.curve) {
-            // 내가 Q 인데 앞의 포인트가  
-            var startPoint = {
-              x: x,
-              y: y
-            };
-            var endPoint = {
-              x: x,
-              y: y
-            };
-            var reversePoint = {
-              x: x,
-              y: y
-            };
-            points.push({
-              command: 'L',
-              originalCommand: command,
-              startPoint: startPoint,
-              endPoint: endPoint,
-              reversePoint: reversePoint,
-              curve: false
-            });
-            prevPoint.endPoint = {
-              x: cx1,
-              y: cy1
-            };
-          } else {
-            if (nextSegment && nextSegment.command === 'L') {
-              prevPoint.curve = true;
-              prevPoint.endPoint = {
-                x: cx1,
-                y: cy1
-              };
-              var startPoint = {
-                x: x,
-                y: y
-              };
-              var reversePoint = {
-                x: x,
-                y: y
-              };
-              var endPoint = {
-                x: x,
-                y: y
-              };
-              points.push({
-                command: 'L',
-                originalCommand: command,
-                curve: false,
-                startPoint: startPoint,
-                endPoint: endPoint,
-                reversePoint: reversePoint
-              });
-            } else {
-              var startPoint = {
-                x: x,
-                y: y
-              };
-              var reversePoint = {
-                x: cx1,
-                y: cy1
-              };
-              var endPoint = {
-                x: x,
-                y: y
-              };
-              points.push({
-                command: command,
-                originalCommand: command,
-                curve: true,
-                startPoint: startPoint,
-                endPoint: endPoint,
-                reversePoint: reversePoint
-              });
-            }
-          }
-        } else if (command === 'T') {
-          var _values5 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(values, 2),
-              x = _values5[0],
-              y = _values5[1]; // T 는 앞에 Q 가 있다는 소리 
-          // Q 의 Control Point 반대편에 Control Point 가 있다고 치고 생각하자. 
-
-
-          var prevSegment = segments[index - 1];
-
-          if (prevSegment && prevSegment.command === 'Q') {
-            var _prevSegment$values = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(prevSegment.values, 4),
-                cx1 = _prevSegment$values[0],
-                cy1 = _prevSegment$values[1],
-                sx = _prevSegment$values[2],
-                sy = _prevSegment$values[3];
-
-            var prevPoint = _Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].getPrevPoint(points, points.length);
-            prevPoint.endPoint = _Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].getReversePoint({
-              x: sx,
-              y: sy
-            }, {
-              x: cx1,
-              y: cy1
-            });
-            var startPoint = {
-              x: x,
-              y: y
-            };
-            var endPoint = {
-              x: x,
-              y: y
-            };
-            var reversePoint = {
-              x: x,
-              y: y
-            };
-            points.push({
-              command: 'L',
-              originalCommand: command,
-              startPoint: startPoint,
-              endPoint: endPoint,
-              reversePoint: reversePoint,
-              curve: false
-            });
-          }
-        } else if (command === 'C') {
-          var prevPoint = _Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].getPrevPoint(points, points.length);
-
-          var _values6 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(values, 6),
-              cx1 = _values6[0],
-              cy1 = _values6[1],
-              cx2 = _values6[2],
-              cy2 = _values6[3],
-              x = _values6[4],
-              y = _values6[5];
-
-          var startPoint = {
-            x: x,
-            y: y
-          };
-          var reversePoint = {
-            x: cx2,
-            y: cy2
-          };
-          var endPoint = {
-            x: x,
-            y: y
-          };
-          points.push({
-            command: command,
-            originalCommand: command,
-            curve: true,
-            startPoint: startPoint,
-            endPoint: endPoint,
-            reversePoint: reversePoint
-          });
-
-          if (prevPoint) {
-            prevPoint.curve = true;
-            prevPoint.endPoint = {
-              x: cx1,
-              y: cy1
-            };
-          }
-        } else if (command === 'S') {
-          var _values7 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(values, 2),
-              x = _values7[0],
-              y = _values7[1]; // S 는 앞에 C,S 가 있다는 소리 
-          // S 의 Control Point 반대편에 Control Point 가 있다고 치고 생각하자. 
-
-
-          var prevSegment = segments[index - 1];
-
-          if (prevSegment && prevSegment.command === 'C') {
-            var _prevSegment$values2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(prevSegment.values, 4),
-                cx2 = _prevSegment$values2[0],
-                cy2 = _prevSegment$values2[1],
-                sx = _prevSegment$values2[2],
-                sy = _prevSegment$values2[3];
-
-            var prevPoint = _Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].getPrevPoint(points, points.length);
-            prevPoint.endPoint = _Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].getReversePoint(prevPoint.startPoint, prevPoint.reversePoint);
-            var startPoint = {
-              x: x,
-              y: y
-            };
-            var endPoint = {
-              x: x,
-              y: y
-            };
-            var reversePoint = {
-              x: cx2,
-              y: cy2
-            };
-            points.push({
-              command: 'Q',
-              originalCommand: command,
-              startPoint: startPoint,
-              endPoint: endPoint,
-              reversePoint: reversePoint,
-              curve: false
-            });
-          }
-        } else if (command === 'Z') {
-          var prevPoint = _Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].getPrevPoint(points, points.length);
-          var firstPoint = _Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].getFirstPoint(points, points.length);
-
-          if (_Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].isEqual(prevPoint.startPoint, firstPoint.startPoint)) {
-            prevPoint.connected = true;
-            prevPoint.endPoint = Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_5__["clone"])(firstPoint.endPoint);
-            firstPoint.reversePoint = Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_5__["clone"])(prevPoint.reversePoint);
-          }
-
-          prevPoint.close = true;
-        }
-      }
-
-      points = points.filter(function (p) {
-        return !!p;
-      });
-      return points;
-    }
-  }, {
-    key: "length",
-    value: function length() {
-      return this.segments.length;
-    }
-  }, {
-    key: "setSegments",
-    value: function setSegments(index, seg) {
-      this.segments[index] = seg;
-    }
-  }, {
-    key: "getSegments",
-    value: function getSegments(index) {
-      if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_5__["isNotUndefined"])(index)) {
-        return this.segments[index];
-      }
-
-      return this.segments;
-    }
-  }, {
-    key: "joinPath",
-    value: function joinPath(segments) {
-      var list = segments || this.segments;
-      return list.map(function (it) {
-        return "".concat(it.command, " ").concat(it.values.length ? it.values.join(' ') : '');
-      }).join('');
-    }
-  }, {
-    key: "each",
-    value: function each(callback) {
-      var _this2 = this;
-
-      var isReturn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      var newSegments = this.segments.map(function (segment, index) {
-        return callback.call(_this2, segment, index);
-      });
-
-      if (isReturn) {
-        return newSegments;
-      } else {
-        this.segments = newSegments;
-      }
-    }
-  }, {
-    key: "_loop",
-    value: function _loop(m) {
-      var isReturn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      return this.each(function (segment) {
-        var v = segment.values;
-        var c = segment.command;
-
-        switch (c) {
-          case 'M':
-          case 'L':
-            var result = m(v, 0);
-            segment.values = [result[0], result[1]];
-            break;
-
-          case 'V':
-            var result = m([+v[0], 0]);
-            segment.values = [result[0]];
-            break;
-
-          case 'H':
-            var result = m([0, +v[0]]);
-            segment.values = [result[1]];
-            break;
-
-          case 'C':
-          case 'S':
-          case 'T':
-          case 'Q':
-            for (var i = 0, len = v.length; i < len; i += 2) {
-              var result = m(v, i);
-              segment.values[i] = result[0];
-              segment.values[i + 1] = result[1];
-            }
-
-            break;
-
-          case 'A':
-            break;
-        }
-
-        return segment;
-      }, isReturn);
-    }
-  }, {
-    key: "clone",
-    value: function clone() {
-      return new PathParser(this.joinPath());
-    }
-  }, {
-    key: "translate",
-    value: function translate(tx, ty) {
-      this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromTranslation([], [tx, ty, 0]));
-      return this;
-    }
-  }, {
-    key: "translateTo",
-    value: function translateTo(tx, ty) {
-      return this.joinPath(this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromTranslation([], [tx, ty, 0]), true));
-    }
-  }, {
-    key: "scale",
-    value: function scale(sx, sy) {
-      this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromScaling([], [sx, sy, 1]));
-      return this;
-    }
-  }, {
-    key: "scaleTo",
-    value: function scaleTo(sx, sy) {
-      return this.joinPath(this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromScaling([], [sx, sy, 1]), true));
-    }
-  }, {
-    key: "rotate",
-    value: function rotate(angle, centerX, centerY) {
-      this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromRotation([], Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_6__["degreeToRadian"])(angle), [centerX || 0, centerY || 0, 0]));
-      return this;
-    }
-  }, {
-    key: "rotateTo",
-    value: function rotateTo(angle) {
-      return this.joinPath(this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromRotation([], Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_6__["degreeToRadian"])(angle), [centerX || 0, centerY || 0, 0]), true));
-    }
-  }, {
-    key: "reflectionOrigin",
-    value: function reflectionOrigin() {
-      this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromScaling([], [-1, -1, 0]));
-      return this;
-    }
-  }, {
-    key: "reflectionOriginTo",
-    value: function reflectionOriginTo() {
-      return this.joinPath(this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromScaling([], [-1, -1, 0]), true));
-    }
-  }, {
-    key: "flipX",
-    value: function flipX() {
-      this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromScaling([], [1, -1, 0]));
-      return this;
-    }
-  }, {
-    key: "flipXTo",
-    value: function flipXTo() {
-      return this.joinPath(this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromScaling([], [1, -1, 0]), true));
-    }
-  }, {
-    key: "flipY",
-    value: function flipY() {
-      this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromScaling([], [-1, 1, 0]));
-      return this;
-    }
-  }, {
-    key: "flipYTo",
-    value: function flipYTo() {
-      return this.joinPath(this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromScaling([], [-1, 1, 0]), true));
-    }
-  }, {
-    key: "skewX",
-    value: function skewX(angle) {
-      this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromValues(1, Math.tan(Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_6__["degreeToRadian"])(angle)), 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
-      return this;
-    }
-  }, {
-    key: "skewXTo",
-    value: function skewXTo(angle) {
-      return this.joinPath(this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromValues(1, Math.tan(Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_6__["degreeToRadian"])(angle)), 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1), true));
-    }
-  }, {
-    key: "skewY",
-    value: function skewY(angle) {
-      this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromValues(1, 0, 0, 0, Math.tan(Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_6__["degreeToRadian"])(angle)), 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
-      return this;
-    }
-  }, {
-    key: "skewYTo",
-    value: function skewYTo(angle) {
-      return this.joinPath(this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromValues(1, 0, 0, 0, Math.tan(Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_6__["degreeToRadian"])(angle)), 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1), true));
-    }
-  }, {
-    key: "normalize",
-    value: function normalize() {}
-  }, {
-    key: "getBBox",
-    value: function getBBox() {
-      var minX = Number.MAX_SAFE_INTEGER,
-          minY = Number.MAX_SAFE_INTEGER;
-      var maxX = Number.MIN_SAFE_INTEGER,
-          maxY = Number.MIN_SAFE_INTEGER;
-      this.each(function (segment, index) {
-        var v = segment.values;
-        var c = segment.command;
-        var prevSegment = this.segments[index - 1];
-        var accurancy = 1 / 10000;
-
-        switch (c) {
-          case 'M':
-          case 'L':
-            minX = Math.min(minX, v[0]);
-            maxX = Math.max(maxX, v[0]);
-            minY = Math.min(minY, v[1]);
-            maxY = Math.max(maxY, v[1]);
-            break;
-
-          case 'V':
-            minX = Math.min(minX, v[0]);
-            maxX = Math.max(maxX, v[0]);
-            break;
-
-          case 'H':
-            minY = Math.min(minY, v[1]);
-            maxY = Math.max(maxY, v[1]);
-            break;
-
-          case 'C':
-            Object(el_base_functions_bezier__WEBPACK_IMPORTED_MODULE_4__[/* getCurveBBox */ "i"])([[prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0], [v[0], v[1], 0], [v[2], v[3], 0], [v[4], v[5], 0]]).forEach(function (p) {
-              minX = Math.min(minX, p[0]);
-              maxX = Math.max(maxX, p[0]);
-              minY = Math.min(minY, p[1]);
-              maxY = Math.max(maxY, p[1]);
-            });
-            break;
-
-          case 'Q':
-            var newPoints = [[prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0], [v[0], v[1], 0], [v[2], v[3], 0]].map(function (p) {
-              return {
-                x: p[0],
-                y: p[1]
-              };
-            });
-
-            for (var i = 0; i <= 1; i += accurancy) {
-              var _getBezierPointOneQua = Object(el_base_functions_bezier__WEBPACK_IMPORTED_MODULE_4__[/* getBezierPointOneQuard */ "e"])(newPoints, i),
-                  x = _getBezierPointOneQua.x,
-                  y = _getBezierPointOneQua.y;
-
-              minX = Math.min(minX, x);
-              maxX = Math.max(maxX, x);
-              minY = Math.min(minY, y);
-              maxY = Math.max(maxY, y);
-            }
-
-            break;
-
-          case 'A':
-            break;
-        }
-
-        return segment;
-      });
-      return [[minX, minY, 0], [maxX, minY, 0], [maxX, maxY, 0], [minX, maxY, 0]];
-    }
-  }, {
-    key: "d",
-    get: function get() {
-      return this.toString();
-    }
-  }, {
-    key: "toString",
-    value: function toString() {
-      return this.joinPath();
-    }
-  }, {
-    key: "transformMat4",
-    value: function transformMat4(transformMatrix) {
-      var isReturn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      return this.each(function (segment) {
-        var v = segment.values;
-        var c = segment.command;
-
-        switch (c) {
-          case 'M':
-          case 'L':
-            var result = gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* vec3 */ "d"].transformMat4([], [v[0], v[1], 0], transformMatrix);
-            segment.values = [result[0], result[1]];
-            break;
-
-          case 'V':
-            var result = gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* vec3 */ "d"].transformMat4([], [+v[0], 0, 0], transformMatrix);
-            segment.values = [result[0]];
-            break;
-
-          case 'H':
-            var result = gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* vec3 */ "d"].transformMat4([], [0, +v[0], 0], transformMatrix);
-            segment.values = [result[1]];
-            break;
-
-          case 'C':
-          case 'S':
-          case 'T':
-          case 'Q':
-            for (var i = 0, len = v.length; i < len; i += 2) {
-              var result = gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* vec3 */ "d"].transformMat4([], [v[i], v[i + 1], 0], transformMatrix);
-              segment.values[i] = result[0];
-              segment.values[i + 1] = result[1];
-            }
-
-            break;
-
-          case 'A':
-            break;
-        }
-
-        return segment;
-      }, isReturn);
-    }
-  }, {
-    key: "invert",
-    value: function invert(transformMatrix) {
-      this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].invert([], transformMatrix));
-    }
-  }, {
-    key: "round",
-    value: function round() {
-      var k = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-      this.each(function (segment) {
-        segment.values = segment.values.map(function (it) {
-          return Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_6__["round"])(it, k);
-        });
-        return segment;
-      });
-      return this;
-    }
-  }, {
-    key: "reverseSegments",
-    value: function reverseSegments(segments) {
-      var newSegments = [];
-      var lastIndex = segments.length - 1;
-
-      for (var i = lastIndex; i > 0; i--) {
-        var segment = segments[i];
-        var v = segment.values;
-        var c = segment.command;
-        var prevSegment = segments[i - 1];
-        var lastX = prevSegment.values[prevSegment.values.length - 2];
-        var lastY = prevSegment.values[prevSegment.values.length - 1];
-
-        switch (c) {
-          case 'L':
-            if (i === lastIndex) {
-              // last 일 경우 
-              newSegments.push({
-                command: 'M',
-                values: [v[0], v[1]]
-              });
-            }
-
-            newSegments.push({
-              command: 'L',
-              values: [lastX, lastY]
-            });
-            break;
-
-          case 'C':
-            if (i === lastIndex) {
-              // last 일 경우 
-              newSegments.push({
-                command: 'M',
-                values: [v[4], v[5]]
-              });
-            }
-
-            newSegments.push({
-              command: 'C',
-              values: [v[2], v[3], v[0], v[1], lastX, lastY]
-            });
-            break;
-
-          case 'Q':
-            if (i === lastIndex) {
-              // last 일 경우 
-              newSegments.push({
-                command: 'M',
-                values: [v[2], v[3]]
-              });
-            }
-
-            newSegments.push({
-              command: 'Q',
-              values: [v[0], v[1], lastX, lastY]
-            });
-            break;
-
-          case 'Z':
-            newSegments.push(segment);
-            lastIndex = i - 1;
-            break;
-        }
-      } // z가 가장 먼저 올 때는 z 를 다시 뒤로 돌려보낸다. 
-
-
-      if (newSegments[0].command === 'Z') {
-        newSegments.push(newSegments.shift());
-      }
-
-      return newSegments;
-    }
-    /**
-     * segments 를 M 기준으로 분리 시킨다. 
-     */
-
-  }, {
-    key: "splitSegments",
-    value: function splitSegments() {
-      var groupSegments = [];
-      var newSegments = [];
-      this.segments.forEach(function (s) {
-        if (s.command === 'M') {
-          newSegments = [s];
-          groupSegments.push(newSegments);
-        } else {
-          newSegments.push(s);
-        }
-      });
-      return groupSegments;
-    }
-    /**
-     * path 의 segment 들을 역순으로 정렬한다. 
-     * 
-     * M이 여러개일 경우는  group 별로 역순으로 정렬하고 합친다. 
-     */
-
-  }, {
-    key: "reverse",
-    value: function reverse() {
-      var _this3 = this;
-
-      var groupSegments = this.splitSegments();
-      var newSegments = [];
-      groupSegments.forEach(function (segments) {
-        newSegments.push.apply(newSegments, _this3.reverseSegments(segments));
-      });
-      this.segments = newSegments;
-    }
-  }, {
-    key: "verties",
-    get: function get() {
-      var arr = [];
-      var lastValues = [];
-      this.each(function (segment) {
-        var v = segment.values;
-        var c = segment.command;
-
-        switch (c) {
-          case 'M':
-          case 'L':
-            arr.push([].concat(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default()(segment.values), [0]));
-            break;
-
-          case 'V':
-            arr.push([v[0], lastValues.pop(), 0]);
-            break;
-
-          case 'H':
-            lastValues.pop();
-            arr.push([lastValues.pop(), v[0], 0]);
-            break;
-
-          case 'C':
-          case 'S':
-          case 'T':
-          case 'Q':
-            for (var i = 0, len = v.length; i < len; i += 2) {
-              arr.push([v[i], v[i + 1], 0]);
-            }
-
-            break;
-
-          case 'A':
-            break;
-        }
-
-        lastValues = v;
-      });
-      return arr;
-    }
-  }]);
-
-  return PathParser;
-}();
-
-
-
-/***/ }),
-/* 33 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Property; });
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
-/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6);
-/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1);
-/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _Item__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(35);
-/* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(8);
-
-
-
-
-
-
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default()(this, result); }; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-
-
-var Property = /*#__PURE__*/function (_Item) {
-  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(Property, _Item);
-
-  var _super = _createSuper(Property);
-
-  function Property() {
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, Property);
-
-    return _super.apply(this, arguments);
-  }
-
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default()(Property, [{
-    key: "getDefaultObject",
-    value: function getDefaultObject() {
-      var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      return _objectSpread({
-        selected: false,
-        // 선택 여부 체크 
-        layers: []
-      }, obj);
-    }
-  }, {
-    key: "isAttribute",
-    value: function isAttribute() {
-      return true;
-    }
-  }, {
-    key: "toCSS",
-    value: function toCSS() {
-      return {};
-    }
-  }, {
-    key: "toString",
-    value: function toString() {
-      return Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_7__["CSS_TO_STRING"])(this.toCSS());
-    }
-  }]);
-
-  return Property;
-}(_Item__WEBPACK_IMPORTED_MODULE_6__[/* Item */ "a"]);
-
-/***/ }),
-/* 34 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ComponentManager; });
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
-/* harmony import */ var el_editor_items_Item__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(35);
-
-
-
-
-var ComponentManager = new ( /*#__PURE__*/function () {
-  function _class() {
-    var opt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, _class);
-
-    this.components = {};
-    this.inspectors = {};
-  }
-
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(_class, [{
-    key: "registerComponent",
-    value: function registerComponent(name, componentProperty) {
-      if (this.components[name]) throw new Error("It has duplicated item name. " + name);
-      this.components[name] = componentProperty;
-    }
-  }, {
-    key: "registerInspector",
-    value: function registerInspector(name, inspectorCallback) {
-      if (this.inspectors[name]) throw new Error("It has duplicated item name. " + name);
-      this.inspectors[name] = inspectorCallback;
-    }
-  }, {
-    key: "getComponentClass",
-    value: function getComponentClass(name) {
-      return this.components[name] || this.components['rect'];
-    }
-  }, {
-    key: "getInspector",
-    value: function getInspector(name) {
-      return this.inspectors[name];
-    }
-    /**
-     * ItemType 에 해당되는 Item 객체를 생성한다. 
-     * create Item instance
-     * 
-     * @param {string} itemType  ItemType 
-     * @param {object} obj 
-     * @returns {Item} 
-     */
-
-  }, {
-    key: "createComponent",
-    value: function createComponent(itemType) {
-      var obj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      var ComponentClass = this.getComponentClass(itemType);
-
-      if (!ComponentClass) {
-        throw new Error("".concat(itemType, " type is not valid."));
-      }
-
-      return new ComponentClass(obj);
-    }
-    /**
-     * Inspector 를 생성하는 배열을 리턴해준다. 
-     * 
-     * @param {string} itemType 
-     * @param {Item} item 
-     * @returns 
-     */
-
-  }, {
-    key: "createInspector",
-    value: function createInspector(item) {
-      var inspector = this.getInspector(item.itemType);
-
-      if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_2__["isFunction"])(inspector)) {
-        return inspector(item) || [];
-      }
-
-      if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_2__["isFunction"])(item.getProps)) {
-        return item.getProps() || [];
-      }
-
-      return [];
-    }
-  }]);
-
-  return _class;
-}())();
-
-/***/ }),
-/* 35 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Item; });
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var el_base_functions_math__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
-/* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8);
-
-
-
-
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-
-
-
-function _traverse(obj) {
-  var results = [];
-  obj.layers.length && obj.layers.forEach(function (it) {
-    results.push.apply(results, _traverse(it));
-  });
-  results.push(obj);
-  return results;
-}
-/**
- * Item , 그리기를 위한 기본 모델 
- * 유니크한 아이디를 가진다. 
- * 
- * @class
- */
-
-
-var Item = /*#__PURE__*/function () {
-  function Item() {
-    var _this = this;
-
-    var json = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, Item);
-
-    this.ref = new Proxy(this, {
-      get: function get(target, key) {
-        var originMethod = target[key];
-
-        if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_4__["isFunction"])(originMethod)) {
-          // method tracking
-          return function () {
-            for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-              args[_key] = arguments[_key];
-            }
-
-            return originMethod.apply(target, args);
-          };
-        } else {
-          // getter or json property
-          return originMethod || target.json[key];
-        }
-      },
-      set: function set(target, key, value) {
-        // Dom 객체가 오면 자동으로 입력 해줌
-        // if (value && value.realVal && isFunction(value.realVal)) {
-        //   value = value.realVal();
-        // }
-        if (_this.checkField(key, value)) {
-          var isDiff = target.json[key] != value;
-          target.json[key] = value;
-
-          if (isDiff) {
-            _this.changed();
-          }
-        } else {
-          throw new Error("".concat(value, " is invalid as ").concat(key, " property value."));
-        }
-
-        return true;
-      }
-    });
-
-    if (json instanceof Item) {
-      json = json.toJSON();
-    }
-
-    this.json = this.convert(Object.assign(this.getDefaultObject(), json));
-    this.lastChangedField = {};
-    return this.ref;
-  }
-  /***********************************
-   *
-   * override
-   *
-   **********************************/
-
-
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default()(Item, [{
-    key: "getDefaultTitle",
-    value: function getDefaultTitle() {
-      return "Item";
-    }
-  }, {
-    key: "getIcon",
-    value: function getIcon() {
-      return '';
-    }
-    /**
-     * check attribute object
-     */
-
-  }, {
-    key: "isAttribute",
-    value: function isAttribute() {
-      return false;
-    }
-  }, {
-    key: "isChanged",
-    value: function isChanged(timestamp) {
-      return this.json.timestamp != Number(timestamp);
-    }
-  }, {
-    key: "changed",
-    value: function changed() {
-      this.json.timestamp = this.json._timestamp + performance.now();
-    }
-    /***********************************
-     *
-     * getter
-     *
-     **********************************/
-
-    /**
-     * title 속성 
-     */
-
-  }, {
-    key: "title",
-    get: function get() {
-      return this.json.name || this.getDefaultTitle();
-    }
-    /**
-     * 
-     * @return {Item[]} 자신을 포함안 하위 모든 자식을 조회 
-     */
-
-  }, {
-    key: "allLayers",
-    get: function get() {
-      return _traverse(this.ref);
-    }
-    /**
-     * get id
-     */
-
-  }, {
-    key: "id",
-    get: function get() {
-      return this.json.id;
-    }
-    /**
-     * 자식 객체 리스트
-     * 
-     * @returns {Item[]}
-     */
-
-  }, {
-    key: "layers",
-    get: function get() {
-      return this.json.layers;
-    }
-    /**
-     * @returns {Item}
-     */
-
-  }, {
-    key: "parent",
-    get: function get() {
-      return this.json.parent;
-    }
-  }, {
-    key: "setParent",
-    value: function setParent(otherParent) {
-      this.json.parent = otherParent;
-    }
-    /**
-     * 객체 깊이를 동적으로 계산 
-     * 
-     * @returns {number}
-     */
-
-  }, {
-    key: "depth",
-    get: function get() {
-      if (!this.parent) return 1;
-      return this.parent.depth + 1;
-    }
-    /**
-     * 최상위 컴포넌트 찾기 
-     * 
-     * @returns {Item}
-     */
-
-  }, {
-    key: "top",
-    get: function get() {
-      if (!this.parent) return this.ref;
-      var localParent = this.parent;
-
-      do {
-        if (!localParent.parent) {
-          return localParent;
-        }
-
-        localParent = localParent.parent;
-      } while (localParent);
-    }
-    /**
-     * 최상위 project 구하기 
-     * 
-     * @returns {Project}
-     */
-
-  }, {
-    key: "project",
-    get: function get() {
-      return this.path.find(function (it) {
-        return it.is('project');
-      });
-    }
-    /**
-     * 최상위 artboard 구하기 
-     * 
-     * @returns {ArtBoard}
-     */
-
-  }, {
-    key: "artboard",
-    get: function get() {
-      return this.path.find(function (it) {
-        return it.is('artboard');
-      });
-    }
-    /**
-     * 상속 구조 안에서 instance 리스트
-     * 
-     * @returns {Item[]}
-     */
-
-  }, {
-    key: "path",
-    get: function get() {
-      if (!this.parent) return [this.ref];
-      var list = this.parent.path;
-      list.push(this.ref);
-      return list;
-    }
-    /**
-     * 부모의 자식들 중 나의 위치 찾기 
-     * 
-     * @returns {number}  나이 위치 index 
-     */
-
-  }, {
-    key: "positionInParent",
-    get: function get() {
-      if (!this.parent) return -1;
-      var layers = this.parent.layers;
-      var index = -1;
-
-      for (var i = 0, len = layers.length; i < len; i++) {
-        if (layers[i] === this.ref) {
-          index = i;
-          break;
-        }
-      }
-
-      return index;
-    }
-    /**
-     * id 기반 문자열 id 생성
-     * 
-     * @param {string} postfix 
-     */
-
-  }, {
-    key: "getInnerId",
-    value: function getInnerId() {
-      var postfix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-      return this.json.id + postfix;
-    } // selection 이후에 
-    // 위치나 , width, height 등의 geometry 가 변경되었을 때 호출 하는 함수 
-
-  }, {
-    key: "recover",
-    value: function recover() {// 내부에 자신의 객체에 필요한 것들을 복구한다. 
-    }
-  }, {
-    key: "setCache",
-    value: function setCache() {}
-  }, {
-    key: "is",
-    value: function is(checkItemType) {
-      if (!this.json) return false;
-      return checkItemType === this.json.itemType;
-    }
-  }, {
-    key: "isNot",
-    value: function isNot(checkItemType) {
-      return this.is(checkItemType) === false;
-    }
-  }, {
-    key: "isSVG",
-    value: function isSVG() {
-      return false;
-    }
-    /***********************************
-     *
-     * action
-     *
-     **********************************/
-
-  }, {
-    key: "generateListNumber",
-    value: function generateListNumber() {
-      this.layers.forEach(function (it, index) {
-        it.no = index;
-        it.generateListNumber();
-      });
-    }
-    /**
-     * when json is loaded, json object is be a new instance
-     *
-     * @param {*} json
-     */
-
-  }, {
-    key: "convert",
-    value: function convert(json) {
-      var _this2 = this;
-
-      if (json.layers) {
-        json.layers.forEach(function (layer) {
-          layer.parent = _this2.ref;
-        });
-      }
-
-      return json;
-    }
-    /**
-     * defence to set invalid key-value
-     *
-     * @param {*} key
-     * @param {*} value
-     */
-
-  }, {
-    key: "checkField",
-    value: function checkField(key, value) {
-      return true;
-    }
-  }, {
-    key: "toCloneObject",
-    value: function toCloneObject() {
-      var isDeep = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-      var json = this.attrs('itemType', 'elementType', 'type', 'visible', 'lock', 'selected');
-
-      if (isDeep) {
-        json.layers = this.json.layers.map(function (layer) {
-          return layer.clone(isDeep);
-        });
-      }
-
-      return json;
-    }
-    /**
-     * clone Item
-     */
-
-  }, {
-    key: "clone",
-    value: function clone() {
-      var isDeep = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-      var ItemClass = this.constructor; // 부모를 넘겨줘야 상대 주소를 맞출 수 있다. 
-
-      var item = new ItemClass(this.toCloneObject(isDeep));
-      item.setParent(this.json.parent);
-      return item;
-    }
-    /**
-     * set json content
-     *
-     * @param {object} obj
-     */
-
-  }, {
-    key: "reset",
-    value: function reset(obj) {
-      this.json = this.convert(Object.assign(this.json, obj));
-      this.lastChangedField = obj;
-      this.changed();
-    }
-  }, {
-    key: "hasChangedField",
-    value: function hasChangedField() {
-      var _this3 = this;
-
-      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
-      }
-
-      return args.some(function (it) {
-        return _this3.lastChangedField[it];
-      });
-    }
-    /**
-     * define default object for item
-     *
-     * @param {object} obj
-     */
-
-  }, {
-    key: "getDefaultObject",
-    value: function getDefaultObject() {
-      var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var id = Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_3__["uuidShort"])();
-      return _objectSpread({
-        id: id,
-        _timestamp: Date.now(),
-        _time: performance.now(),
-        visible: true,
-        // 보이기 여부 설정 
-        lock: false,
-        // 편집을 막고 
-        selected: false,
-        // 선택 여부 체크 
-        layers: []
-      }, obj);
-    }
-    /**
-     * 지정된 필드의 값을 object 형태로 리턴한다. 
-     * 
-     * @param  {...string} args 필드 리스트 
-     */
-
-  }, {
-    key: "attrs",
-    value: function attrs() {
-      var _this4 = this;
-
-      var result = {};
-
-      for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-        args[_key3] = arguments[_key3];
-      }
-
-      args.forEach(function (field) {
-        result[field] = Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_4__["clone"])(_this4.json[field]);
-      });
-      return result;
-    }
-    /**
-     * 자식을 가지고 있는지 체크 
-     * 
-     * @returns {boolean}
-     */
-
-  }, {
-    key: "hasChildren",
-    value: function hasChildren() {
-      return this.layers.length > 0;
-    }
-    /**
-     * 자식으로 추가한다. 
-     * 
-     * @param {Item} layer 
-     */
-
-  }, {
-    key: "appendChildItem",
-    value: function appendChildItem(layer) {
-      if (layer.parent === this.ref) {
-        return layer;
-      }
-
-      this.resetMatrix(layer); // 객체를 추가할 때는  layer 의 절대 값을 기준으로 객체를 움직인다. 
-
-      if (layer.parent) {
-        layer.remove();
-      }
-
-      layer.setParent(this.ref);
-      this.json.layers.push(layer);
-      this.project.addIndexItem(layer);
-      return layer;
-    }
-    /**
-     * 자식중에 맨앞에 추가한다. 
-     * 
-     * @param {Item} layer 
-     */
-
-  }, {
-    key: "prependChildItem",
-    value: function prependChildItem(layer) {
-      this.resetMatrix(layer); // 객체를 추가할 때는  layer 의 절대 값을 기준으로 객체를 움직인다. 
-
-      if (layer.parent) {
-        layer.remove();
-      }
-
-      layer.setParent(this.ref);
-      this.json.layers.unshift(layer);
-      this.project.addIndexItem(layer);
-      return layer;
-    }
-  }, {
-    key: "resetMatrix",
-    value: function resetMatrix(item) {}
-    /**
-     * 특정 index 에 자식을 추가한다. 
-     * 
-     * @param {Item} layer 
-     * @param {number} index 
-     */
-
-  }, {
-    key: "insertChildItem",
-    value: function insertChildItem(layer) {
-      var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-      this.resetMatrix(layer); // 객체를 추가할 때는  layer 의 절대 값을 기준으로 객체를 움직인다. 
-
-      if (layer.parent) {
-        layer.remove();
-      }
-
-      layer.setParent(this.ref);
-      this.json.layers.splice(index, 0, layer);
-      this.project.addIndexItem(layer);
-      return layer;
-    }
-    /**
-     * 현재 Item 의 그 다음 순서로 추가한다. 
-     * 
-     * @param {Item} layer 
-     */
-
-  }, {
-    key: "appendAfter",
-    value: function appendAfter(layer) {
-      var index = this.parent.findIndex(this);
-      this.parent.insertChildItem(layer, index);
-      this.project.addIndexItem(layer);
-      return layer;
-    }
-    /**
-     * 현재 Item 의 이전 순서로 추가한다. 
-     * 
-     * @param {Item} layer 
-     */
-
-  }, {
-    key: "appendBefore",
-    value: function appendBefore(layer) {
-      var index = this.parent.findIndex(this);
-      this.parent.insertChildItem(layer, index - 1);
-      this.project.addIndexItem(layer);
-      return layer;
-    }
-    /**
-     * 특정한 위치에 자식 객체로 Item 을 추가 한다. 
-     * set position in layers 
-     * 
-     * @param {Number} position 
-     * @param {Item} item 
-     */
-
-  }, {
-    key: "setPositionInPlace",
-    value: function setPositionInPlace(position, item) {
-      this.layers.splice(position, 0, item);
-    }
-    /**
-     * toggle item's attribute
-     *
-     * @param {*} field
-     * @param {*} toggleValue
-     */
-
-  }, {
-    key: "toggle",
-    value: function toggle(field, toggleValue) {
-      if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_4__["isUndefined"])(toggleValue)) {
-        this.json[field] = !this.json[field];
-      } else {
-        this.json[field] = !!toggleValue;
-      }
-    }
-  }, {
-    key: "isTreeItemHide",
-    value: function isTreeItemHide() {
-      var currentParent = this.parent;
-      var collapsedList = [];
-
-      do {
-        if (currentParent.is('project')) break;
-        collapsedList.push(Boolean(currentParent.collapsed));
-        currentParent = currentParent.parent;
-      } while (currentParent); // 부모중에 하나라도 collapsed 가 있으면 여긴 트리에서 숨김 
-
-
-      return Boolean(collapsedList.filter(Boolean).length);
-    }
-  }, {
-    key: "expectJSON",
-    value: function expectJSON(key) {
-      if (key === 'parent') return false;
-      if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_4__["isUndefined"])(this.json[key])) return false;
-      return true;
-    }
-    /**
-     * convert to json
-     * 
-     */
-
-  }, {
-    key: "toJSON",
-    value: function toJSON() {
-      var _this5 = this;
-
-      var json = this.json;
-      var newJSON = {};
-      Object.keys(json).filter(function (key) {
-        return _this5.expectJSON(key);
-      }).forEach(function (key) {
-        newJSON[key] = json[key];
-      });
-      return newJSON;
-    }
-  }, {
-    key: "resize",
-    value: function resize() {}
-    /**
-     * Item 복사하기 
-     * 
-     * @param {number} dist 
-     */
-
-  }, {
-    key: "copy",
-    value: function copy() {
-      var dist = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-      return this.json.parent.copyItem(this.ref, dist);
-    }
-  }, {
-    key: "findIndex",
-    value: function findIndex(item) {
-      return this.json.layers.indexOf(item.ref);
-    }
-  }, {
-    key: "copyItem",
-    value: function copyItem(childItem) {
-      var dist = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
-      // clone 을 어떻게 해야하나? 
-      var child = childItem.clone();
-      child.move([dist, dist, 0]);
-      var childIndex = this.findIndex(childItem);
-
-      if (childIndex > -1) {
-        this.json.layers.splice(childIndex + 1, 0, child);
-        this.project.addIndexItem(child);
-      }
-
-      return child;
-    }
-    /**
-     * 부모 객체에서 나를 지운다. 
-     * remove self in parent 
-     */
-
-  }, {
-    key: "remove",
-    value: function remove() {
-      this.json.parent.removeItem(this.ref);
-      this.project.removeIndexItem(this.ref);
-    }
-    /**
-     * remote child item 
-     * 
-     * @param {Item} childItem 
-     */
-
-  }, {
-    key: "removeItem",
-    value: function removeItem(childItem) {
-      var index = this.findIndex(childItem);
-
-      if (index > -1) {
-        this.json.layers.splice(index, 1);
-      }
-    }
-    /**
-     * 부모 아이디를 가지고 있는지 체크 한다. 
-     * 
-     * @param {string} parentId 
-     */
-
-  }, {
-    key: "hasParent",
-    value: function hasParent(parentId) {
-      var isParent = this.json.parent.id === parentId;
-      if (!isParent && this.json.parent.is('project') === false) return this.json.parent.hasParent(parentId);
-      return isParent;
-    }
-    /**
-     * 하위 자식 객체 중에 id를 가진 Item 을 리턴한다. 
-     * 
-     * @param {string} id 
-     * @returns {Item|null} 검색된 Item 객체 
-     */
-
-  }, {
-    key: "searchById",
-    value: function searchById(id) {
-      if (this.id === id) {
-        project.addIndexItem(this.ref);
-        return this.ref;
-      }
-
-      var project = this.project;
-
-      for (var i = 0, len = this.layers.length; i < len; i++) {
-        var item = this.layers[i];
-
-        if (item.id === id) {
-          project.addIndexItem(item);
-          return item;
-        } else {
-          var searchedItem = item.searchById(id);
-
-          if (searchedItem) {
-            return searchedItem;
-          }
-        }
-      }
-
-      return null;
-    }
-  }]);
-
-  return Item;
-}();
-
-/***/ }),
-/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17313,7 +12914,7 @@ var createClass_default = /*#__PURE__*/__webpack_require__.n(createClass);
 var math = __webpack_require__(15);
 
 // EXTERNAL MODULE: ./src/el/editor/items/Item.js
-var Item = __webpack_require__(35);
+var Item = __webpack_require__(36);
 
 // EXTERNAL MODULE: ./src/el/base/functions/func.js
 var func = __webpack_require__(8);
@@ -17770,13 +13371,13 @@ var TimelineSelectionManager_TimelineSelectionManager = /*#__PURE__*/function ()
   return TimelineSelectionManager;
 }();
 // EXTERNAL MODULE: ./src/el/base/functions/collision.js
-var collision = __webpack_require__(31);
+var collision = __webpack_require__(32);
 
 // EXTERNAL MODULE: ./src/el/editor/items/MovableItem.js
-var MovableItem = __webpack_require__(102);
+var MovableItem = __webpack_require__(101);
 
 // EXTERNAL MODULE: ./src/el/editor/items/Project.js + 45 modules
-var Project = __webpack_require__(70);
+var Project = __webpack_require__(71);
 
 // EXTERNAL MODULE: ./src/el/editor/unit/Length.js
 var Length = __webpack_require__(3);
@@ -18488,7 +14089,7 @@ var SelectionManager_SelectionManager = /*#__PURE__*/function () {
   return SelectionManager;
 }();
 // EXTERNAL MODULE: ./src/el/editor/manager/ComponentManager.js
-var ComponentManager = __webpack_require__(34);
+var ComponentManager = __webpack_require__(35);
 
 // CONCATENATED MODULE: ./src/el/editor/commands/refreshElement.js
 /**
@@ -18578,7 +14179,7 @@ function resizeArtBoard(editor) {
   }
 }
 // EXTERNAL MODULE: ./src/el/editor/parser/PathParser.js
-var PathParser = __webpack_require__(32);
+var PathParser = __webpack_require__(34);
 
 // CONCATENATED MODULE: ./src/el/editor/commands/convertPath.js
 
@@ -19321,7 +14922,7 @@ function downloadFile(datauri) {
   }
 });
 // EXTERNAL MODULE: ./src/el/editor/manager/ExportManager.js + 2 modules
-var ExportManager = __webpack_require__(72);
+var ExportManager = __webpack_require__(73);
 
 // CONCATENATED MODULE: ./src/el/editor/commands/downloadSVG.js
 
@@ -19669,7 +15270,7 @@ function _currentProject(editor, callback) {
   }
 });
 // EXTERNAL MODULE: ./src/el/base/functions/time.js
-var time = __webpack_require__(30);
+var time = __webpack_require__(31);
 
 // CONCATENATED MODULE: ./src/el/editor/commands/playTimelineItem.js
 
@@ -21056,7 +16657,7 @@ function filterChildren() {
   }
 });
 // EXTERNAL MODULE: ./node_modules/js-video-url-parser/dist/jsVideoUrlParser.js
-var jsVideoUrlParser = __webpack_require__(141);
+var jsVideoUrlParser = __webpack_require__(140);
 var jsVideoUrlParser_default = /*#__PURE__*/__webpack_require__.n(jsVideoUrlParser);
 
 // CONCATENATED MODULE: ./src/el/editor/commands/convertPasteText.js
@@ -21428,13 +17029,13 @@ var CommandManager_CommandManager = /*#__PURE__*/function () {
   return CommandManager;
 }();
 // EXTERNAL MODULE: ./src/el/base/functions/detect.js
-var detect = __webpack_require__(89);
+var detect = __webpack_require__(88);
 
 // EXTERNAL MODULE: ./src/el/editor/shortcuts/index.js + 46 modules
 var shortcuts = __webpack_require__(86);
 
 // EXTERNAL MODULE: ./src/el/editor/types/key.js
-var types_key = __webpack_require__(73);
+var types_key = __webpack_require__(62);
 
 // CONCATENATED MODULE: ./src/el/editor/manager/ShortCutManager.js
 
@@ -24500,7 +20101,7 @@ var AssetManager_AssetManager = /*#__PURE__*/function () {
   return AssetManager;
 }();
 // EXTERNAL MODULE: ./src/el/editor/manager/PluginManager.js
-var PluginManager = __webpack_require__(109);
+var PluginManager = __webpack_require__(108);
 
 // EXTERNAL MODULE: ./src/el/editor/manager/RendererManager.js
 var RendererManager = __webpack_require__(83);
@@ -25190,6 +20791,4405 @@ var Editor = new ( /*#__PURE__*/function () {
 
   return _class;
 }())();
+
+/***/ }),
+/* 29 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MenuItem; });
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(0);
+/* harmony import */ var el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(11);
+/* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(14);
+
+
+
+
+
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default()(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+var DEFAULT_TITLE = '';
+var DEFAULT_ICON = '';
+var DEFAULT_CHECKED = false;
+
+var MenuItem = /*#__PURE__*/function (_EditorElement) {
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2___default()(MenuItem, _EditorElement);
+
+  var _super = _createSuper(MenuItem);
+
+  function MenuItem() {
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, MenuItem);
+
+    return _super.apply(this, arguments);
+  }
+
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(MenuItem, [{
+    key: "template",
+    value: function template() {
+      return (
+        /*html*/
+        "\n        <button \n            type=\"button\" \n            class='menu-item ".concat(this.getClassName(), "' \n            data-no-title=\"").concat(this.isHideTitle(), "\" \n            ").concat(this.isHideTitle() ? "data-tooltip=\"".concat(this.getTitle(), "\"") : '', " \n            checked=\"").concat(this.getChecked() ? 'checked' : '', "\"\n            ").concat(this.isDisabled() ? 'disabled' : '', "\n        >\n            <div class=\"icon ").concat(this.getIcon(), "\">").concat(el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_6__[/* default */ "a"][this.getIconString()] || this.getIconString() || '', "</div>\n            <div class=\"title\">").concat(this.getTitle(), "</div>\n        </button>\n        ")
+      );
+    }
+  }, {
+    key: "getClassName",
+    value: function getClassName() {
+      return "";
+    }
+  }, {
+    key: "clickButton",
+    value: function clickButton(e) {}
+  }, {
+    key: "getChecked",
+    value: function getChecked() {
+      return DEFAULT_CHECKED;
+    }
+  }, {
+    key: "isDisabled",
+    value: function isDisabled() {
+      return false;
+    }
+  }, {
+    key: "setSelected",
+    value: function setSelected(isSelected) {
+      this.$el.toggleClass('selected', isSelected);
+    }
+  }, {
+    key: "getTitle",
+    value: function getTitle() {
+      return DEFAULT_TITLE;
+    }
+  }, {
+    key: "getIcon",
+    value: function getIcon() {
+      return DEFAULT_ICON;
+    }
+  }, {
+    key: "getIconString",
+    value: function getIconString() {
+      return DEFAULT_ICON;
+    }
+  }, {
+    key: "isHideTitle",
+    value: function isHideTitle() {
+      return false;
+    }
+  }, {
+    key: Object(el_base_Event__WEBPACK_IMPORTED_MODULE_5__["CLICK"])(),
+    value: function value(e) {
+      this.clickButton(e);
+    }
+  }], [{
+    key: "createMenuItem",
+    value: function createMenuItem() {
+      var opt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      return /*#__PURE__*/function (_MenuItem) {
+        _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_2___default()(_class, _MenuItem);
+
+        var _super2 = _createSuper(_class);
+
+        function _class() {
+          _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, _class);
+
+          return _super2.apply(this, arguments);
+        }
+
+        _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(_class, [{
+          key: "getIconString",
+          value: function getIconString() {
+            return opt.iconString || 'add_box';
+          }
+        }, {
+          key: "getTitle",
+          value: function getTitle() {
+            return opt.title || "New Item";
+          }
+        }, {
+          key: "isHideTitle",
+          value: function isHideTitle() {
+            return opt.isHideTitle || true;
+          }
+        }, {
+          key: "clickButton",
+          value: function clickButton(e) {
+            opt.clickButton(e);
+          }
+        }]);
+
+        return _class;
+      }(MenuItem);
+    }
+  }]);
+
+  return MenuItem;
+}(_common_EditorElement__WEBPACK_IMPORTED_MODULE_7__[/* EditorElement */ "a"]);
+
+
+
+/***/ }),
+/* 30 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/slicedToArray.js
+var slicedToArray = __webpack_require__(13);
+var slicedToArray_default = /*#__PURE__*/__webpack_require__.n(slicedToArray);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/classCallCheck.js
+var classCallCheck = __webpack_require__(2);
+var classCallCheck_default = /*#__PURE__*/__webpack_require__.n(classCallCheck);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/createClass.js
+var createClass = __webpack_require__(4);
+var createClass_default = /*#__PURE__*/__webpack_require__.n(createClass);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/get.js
+var get = __webpack_require__(9);
+var get_default = /*#__PURE__*/__webpack_require__.n(get);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/inherits.js
+var inherits = __webpack_require__(5);
+var inherits_default = /*#__PURE__*/__webpack_require__.n(inherits);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js
+var possibleConstructorReturn = __webpack_require__(6);
+var possibleConstructorReturn_default = /*#__PURE__*/__webpack_require__.n(possibleConstructorReturn);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/getPrototypeOf.js
+var getPrototypeOf = __webpack_require__(1);
+var getPrototypeOf_default = /*#__PURE__*/__webpack_require__.n(getPrototypeOf);
+
+// EXTERNAL MODULE: ./src/el/base/Event.js
+var Event = __webpack_require__(0);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/toArray.js
+var toArray = __webpack_require__(48);
+var toArray_default = /*#__PURE__*/__webpack_require__.n(toArray);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/asyncToGenerator.js
+var asyncToGenerator = __webpack_require__(19);
+var asyncToGenerator_default = /*#__PURE__*/__webpack_require__.n(asyncToGenerator);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/toConsumableArray.js
+var toConsumableArray = __webpack_require__(16);
+var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableArray);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/taggedTemplateLiteral.js
+var taggedTemplateLiteral = __webpack_require__(85);
+var taggedTemplateLiteral_default = /*#__PURE__*/__webpack_require__.n(taggedTemplateLiteral);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/defineProperty.js
+var defineProperty = __webpack_require__(7);
+var defineProperty_default = /*#__PURE__*/__webpack_require__.n(defineProperty);
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/regenerator/index.js
+var regenerator = __webpack_require__(17);
+var regenerator_default = /*#__PURE__*/__webpack_require__.n(regenerator);
+
+// EXTERNAL MODULE: ./src/el/base/Dom.js + 1 modules
+var Dom = __webpack_require__(20);
+
+// EXTERNAL MODULE: ./src/el/base/functions/func.js
+var func = __webpack_require__(8);
+
+// EXTERNAL MODULE: ./src/el/editor/types/event.js
+var types_event = __webpack_require__(87);
+
+// EXTERNAL MODULE: ./src/el/base/functions/math.js + 1 modules
+var math = __webpack_require__(15);
+
+// CONCATENATED MODULE: ./src/el/base/handler/BaseHandler.js
+
+
+
+
+var BaseHandler_BaseHandler = /*#__PURE__*/function () {
+  /**
+   * 
+   * @param {EventMachine} context 
+   * @param {*} options 
+   */
+  function BaseHandler(context) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    classCallCheck_default()(this, BaseHandler);
+
+    this.context = context;
+    this.options = options;
+  } // 초기화 설정 
+
+
+  createClass_default()(BaseHandler, [{
+    key: "initialize",
+    value: function initialize() {} // html 을 로드 할 때 
+
+  }, {
+    key: "load",
+    value: function load() {} // 새로고침 할 때 
+
+  }, {
+    key: "refresh",
+    value: function refresh() {} // 화면에 그린 이후에 실행 되는 로직들 
+
+  }, {
+    key: "render",
+    value: function render() {}
+  }, {
+    key: "getRef",
+    value: function getRef(id) {
+      return this.context.getRef(id);
+    }
+  }, {
+    key: "run",
+    value: function run() {}
+  }, {
+    key: "destroy",
+    value: function destroy() {}
+  }]);
+
+  return BaseHandler;
+}();
+
+
+// CONCATENATED MODULE: ./src/el/base/handler/DomEventHandler.js
+
+
+
+
+
+
+
+
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+
+var scrollBlockingEvents = {
+  'touchstart': true,
+  'touchmove': true,
+  'mousedown': true,
+  'mouseup': true,
+  'mousemove': true // 'wheel': true,
+  // 'mousewheel': true
+
+};
+var eventConverts = {
+  'doubletab': 'touchend'
+};
+var customEventNames = {
+  'doubletab': true
+};
+
+var DomEventHandler_DomEventHandler = /*#__PURE__*/function (_BaseHandler) {
+  inherits_default()(DomEventHandler, _BaseHandler);
+
+  var _super = _createSuper(DomEventHandler);
+
+  function DomEventHandler() {
+    classCallCheck_default()(this, DomEventHandler);
+
+    return _super.apply(this, arguments);
+  }
+
+  createClass_default()(DomEventHandler, [{
+    key: "initialize",
+    value: function initialize() {
+      var _this = this;
+
+      this.destroy();
+
+      if (!this._domEvents) {
+        this._domEvents = this.context.filterProps(Event["CHECK_DOM_EVENT_PATTERN"]);
+      }
+
+      this._domEvents.forEach(function (key) {
+        return _this.parseDomEvent(key);
+      });
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.removeEventAll();
+    }
+  }, {
+    key: "removeEventAll",
+    value: function removeEventAll() {
+      var _this2 = this;
+
+      this.getBindings().forEach(function (obj) {
+        _this2.removeDomEvent(obj);
+      });
+      this.initBindings();
+    }
+  }, {
+    key: "removeDomEvent",
+    value: function removeDomEvent(_ref) {
+      var eventName = _ref.eventName,
+          dom = _ref.dom,
+          callback = _ref.callback;
+      Event["default"].removeDomEvent(dom, eventName, callback);
+    }
+  }, {
+    key: "getBindings",
+    value: function getBindings() {
+      if (!this._bindings) {
+        this.initBindings();
+      }
+
+      return this._bindings;
+    }
+  }, {
+    key: "addBinding",
+    value: function addBinding(obj) {
+      this.getBindings().push(obj);
+    }
+  }, {
+    key: "initBindings",
+    value: function initBindings() {
+      this._bindings = [];
+    }
+  }, {
+    key: "matchPath",
+    value: function matchPath(el, selector) {
+      if (el) {
+        if (el.matches(selector)) {
+          return el;
+        }
+
+        return this.matchPath(el.parentElement, selector);
+      }
+
+      return null;
+    }
+  }, {
+    key: "hasDelegate",
+    value: function hasDelegate(e, eventObject) {
+      return this.matchPath(e.target || e.srcElement, eventObject.delegate);
+    }
+  }, {
+    key: "makeCallback",
+    value: function makeCallback(eventObject, callback) {
+      if (eventObject.delegate) {
+        return this.makeDelegateCallback(eventObject, callback);
+      } else {
+        return this.makeDefaultCallback(eventObject, callback);
+      }
+    }
+  }, {
+    key: "makeDefaultCallback",
+    value: function makeDefaultCallback(eventObject, callback) {
+      var _this3 = this;
+
+      return function (e) {
+        var returnValue = _this3.runEventCallback(e, eventObject, callback);
+
+        if (Object(func["isNotUndefined"])(returnValue)) {
+          return returnValue;
+        }
+      };
+    }
+  }, {
+    key: "makeDelegateCallback",
+    value: function makeDelegateCallback(eventObject, callback) {
+      var _this4 = this;
+
+      return function (e) {
+        var delegateTarget = _this4.hasDelegate(e, eventObject);
+
+        if (delegateTarget) {
+          // delegate target 이 있는 경우만 callback 실행
+          e.$dt = Dom["a" /* default */].create(delegateTarget);
+
+          var returnValue = _this4.runEventCallback(e, eventObject, callback);
+
+          if (Object(func["isNotUndefined"])(returnValue)) {
+            return returnValue;
+          }
+        }
+      };
+    }
+  }, {
+    key: "runEventCallback",
+    value: function runEventCallback(e, eventObject, callback) {
+      var context = this.context;
+      e.xy = Event["default"].posXY(e);
+
+      if (eventObject.beforeMethods.length) {
+        eventObject.beforeMethods.every(function (before) {
+          return context[before.target].call(context, e, before.param);
+        });
+      }
+
+      if (this.checkEventType(e, eventObject)) {
+        var returnValue = callback(e, e.$dt, e.xy);
+
+        if (returnValue !== false && eventObject.afterMethods.length) {
+          eventObject.afterMethods.forEach(function (after) {
+            return context[after.target].call(context, e, after.param);
+          });
+        }
+
+        return returnValue;
+      }
+    }
+  }, {
+    key: "checkEventType",
+    value: function checkEventType(e, eventObject) {
+      var context = this.context; // 특정 keycode 를 가지고 있는지 체크
+
+      var hasKeyCode = true;
+
+      if (eventObject.codes.length) {
+        hasKeyCode = (e.code ? eventObject.codes.indexOf(e.code.toLowerCase()) > -1 : false) || (e.key ? eventObject.codes.indexOf(e.key.toLowerCase()) > -1 : false);
+      } // 체크 메소드들은 모든 메소드를 다 적용해야한다.
+
+
+      var isAllCheck = true;
+
+      if (eventObject.checkMethodList.length) {
+        isAllCheck = eventObject.checkMethodList.every(function (field) {
+          var fieldValue = context[field];
+
+          if (Object(func["isFunction"])(fieldValue) && fieldValue) {
+            // check method
+            return fieldValue.call(context, e);
+          } else if (Object(func["isNotUndefined"])(fieldValue)) {
+            // check field value
+            return !!fieldValue;
+          }
+
+          return true;
+        });
+      }
+
+      return hasKeyCode && isAllCheck;
+    }
+  }, {
+    key: "getDefaultDomElement",
+    value: function getDefaultDomElement(dom) {
+      var context = this.context;
+      var el;
+
+      if (dom) {
+        el = context.refs[dom] || context[dom] || window[dom];
+      } else {
+        el = context.el || context.$el || context.$root;
+      }
+
+      if (el instanceof Dom["a" /* default */]) {
+        return el.getElement();
+      }
+
+      return el;
+    }
+  }, {
+    key: "getRealEventName",
+    value: function getRealEventName(eventName) {
+      return eventConverts[eventName] || eventName;
+    }
+  }, {
+    key: "getCustomEventName",
+    value: function getCustomEventName(eventName) {
+      return customEventNames[eventName] ? eventName : '';
+    }
+    /**
+     * 
+     * doubletab -> touchend 로 바뀜 
+     * 
+     * @param {string} eventName  이벤트 이름 
+     * @param {array} checkMethodFilters 매직 필터 목록  
+     */
+
+  }, {
+    key: "getDefaultEventObject",
+    value: function getDefaultEventObject(eventName, checkMethodFilters) {
+      var context = this.context;
+      var arr = checkMethodFilters; // context 에 속한 변수나 메소드 리스트 체크
+
+      var checkMethodList = arr.filter(function (code) {
+        return !!context[code];
+      }); // 이벤트 정의 시점에 적용 되어야 하는 것들은 모두 method() 화 해서 정의한다.
+
+      var _splitMethodByKeyword = Object(func["splitMethodByKeyword"])(arr, "after"),
+          _splitMethodByKeyword2 = slicedToArray_default()(_splitMethodByKeyword, 2),
+          afters = _splitMethodByKeyword2[0],
+          afterMethods = _splitMethodByKeyword2[1];
+
+      var _splitMethodByKeyword3 = Object(func["splitMethodByKeyword"])(arr, "before"),
+          _splitMethodByKeyword4 = slicedToArray_default()(_splitMethodByKeyword3, 2),
+          befores = _splitMethodByKeyword4[0],
+          beforeMethods = _splitMethodByKeyword4[1];
+
+      var _splitMethodByKeyword5 = Object(func["splitMethodByKeyword"])(arr, "debounce"),
+          _splitMethodByKeyword6 = slicedToArray_default()(_splitMethodByKeyword5, 2),
+          debounces = _splitMethodByKeyword6[0],
+          debounceMethods = _splitMethodByKeyword6[1];
+
+      var _splitMethodByKeyword7 = Object(func["splitMethodByKeyword"])(arr, "delay"),
+          _splitMethodByKeyword8 = slicedToArray_default()(_splitMethodByKeyword7, 2),
+          delays = _splitMethodByKeyword8[0],
+          delayMethods = _splitMethodByKeyword8[1];
+
+      var _splitMethodByKeyword9 = Object(func["splitMethodByKeyword"])(arr, "throttle"),
+          _splitMethodByKeyword10 = slicedToArray_default()(_splitMethodByKeyword9, 2),
+          throttles = _splitMethodByKeyword10[0],
+          throttleMethods = _splitMethodByKeyword10[1];
+
+      var _splitMethodByKeyword11 = Object(func["splitMethodByKeyword"])(arr, "capture"),
+          _splitMethodByKeyword12 = slicedToArray_default()(_splitMethodByKeyword11, 1),
+          captures = _splitMethodByKeyword12[0]; // 위의 5개 필터 이외에 있는 코드들은 keycode 로 인식한다.
+
+
+      var filteredList = [].concat(toConsumableArray_default()(checkMethodList), toConsumableArray_default()(afters), toConsumableArray_default()(befores), toConsumableArray_default()(delays), toConsumableArray_default()(debounces), toConsumableArray_default()(throttles), toConsumableArray_default()(captures));
+      var codes = arr.filter(function (code) {
+        return filteredList.indexOf(code) === -1;
+      }).map(function (code) {
+        return code.toLowerCase();
+      });
+      return {
+        eventName: this.getRealEventName(eventName),
+        customEventName: this.getCustomEventName(eventName),
+        codes: codes,
+        captures: captures,
+        afterMethods: afterMethods,
+        beforeMethods: beforeMethods,
+        delayMethods: delayMethods,
+        debounceMethods: debounceMethods,
+        throttleMethods: throttleMethods,
+        checkMethodList: checkMethodList
+      };
+    }
+  }, {
+    key: "addDomEvent",
+    value: function addDomEvent(eventObject, callback) {
+      eventObject.callback = this.makeCallback(eventObject, callback);
+      this.addBinding(eventObject);
+      var options = !!eventObject.captures.length;
+
+      if (scrollBlockingEvents[eventObject.eventName]) {
+        options = {
+          passive: true,
+          capture: options
+        };
+      }
+
+      Event["default"].addDomEvent(eventObject.dom, eventObject.eventName, eventObject.callback, options);
+    }
+  }, {
+    key: "makeCustomEventCallback",
+    value: function makeCustomEventCallback(eventObject, callback) {
+      var _this5 = this;
+
+      if (eventObject.customEventName === 'doubletab') {
+        var delay = 300;
+
+        if (eventObject.delayMethods.length) {
+          delay = +eventObject.delayMethods[0].target;
+        }
+
+        return function () {
+          if (!_this5.doubleTab) {
+            _this5.doubleTab = {
+              time: performance.now()
+            };
+          } else {
+            if (performance.now() - _this5.doubleTab.time < delay) {
+              callback.apply(void 0, arguments);
+            }
+
+            _this5.doubleTab = null;
+          }
+        };
+      }
+
+      return callback;
+    }
+  }, {
+    key: "bindingDomEvent",
+    value: function bindingDomEvent(_ref2, checkMethodFilters, callback) {
+      var _ref3 = toArray_default()(_ref2),
+          eventName = _ref3[0],
+          dom = _ref3[1],
+          delegate = _ref3.slice(2);
+
+      var eventObject = this.getDefaultEventObject(eventName, checkMethodFilters);
+      eventObject.dom = this.getDefaultDomElement(dom);
+      eventObject.delegate = delegate.join(Event["SAPARATOR"]);
+
+      if (eventObject.debounceMethods.length) {
+        var debounceTime = +eventObject.debounceMethods[0].target;
+        callback = Object(func["debounce"])(callback, debounceTime);
+      } else if (eventObject.throttleMethods.length) {
+        var throttleTime = +eventObject.throttleMethods[0].target;
+        callback = Object(func["throttle"])(callback, throttleTime);
+      } // custom event callback 만들기 
+
+
+      callback = this.makeCustomEventCallback(eventObject, callback);
+      this.addDomEvent(eventObject, callback);
+    }
+  }, {
+    key: "getEventNames",
+    value: function getEventNames(eventName) {
+      var results = [];
+      eventName.split(Event["NAME_SAPARATOR"]).forEach(function (e) {
+        var arr = e.split(Event["NAME_SAPARATOR"]);
+        results.push.apply(results, arr);
+      });
+      return results;
+    }
+    /**
+     * 이벤트 문자열 파싱하기 
+     * 
+     * @param {string} key 
+     */
+
+  }, {
+    key: "parseDomEvent",
+    value: function parseDomEvent(key) {
+      var context = this.context;
+      var checkMethodFilters = key.split(Event["CHECK_SAPARATOR"]).map(function (it) {
+        return it.trim();
+      });
+      var prefix = checkMethodFilters.shift();
+      var eventSelectorAndBehave = prefix.split(Event["DOM_EVENT_SAPARATOR"])[1];
+      var arr = eventSelectorAndBehave.split(Event["SAPARATOR"]);
+      var eventNames = this.getEventNames(arr[0]);
+      var callback = context[key].bind(context);
+
+      for (var i = 0, len = eventNames.length; i < len; i++) {
+        arr[0] = eventNames[i];
+        this.bindingDomEvent(arr, checkMethodFilters, callback);
+      }
+    }
+  }]);
+
+  return DomEventHandler;
+}(BaseHandler_BaseHandler);
+
+
+// CONCATENATED MODULE: ./src/el/base/handler/BindHandler.js
+
+
+
+
+
+
+
+
+
+
+function BindHandler_createSuper(Derived) { var hasNativeReflectConstruct = BindHandler_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
+
+function BindHandler_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+
+/**
+ * 
+ * @param {Dom} $element 
+ * @param {string} key 
+ * @param {any} value 
+ */
+
+var BindHandler_applyElementAttribute = function applyElementAttribute($element, key, value) {
+  if (key === 'cssText') {
+    /**
+     * cssText: 'position:absolute'
+     */
+    $element.cssText(value);
+    return;
+  } else if (key === "style") {
+    /**
+     * style: { key: value }
+     */
+    if (Object(func["isNotString"])(value)) {
+      $element.css(value);
+    }
+
+    return;
+  } else if (key === "class") {
+    //  "class" : [ 'className', 'className' ] 
+    //  "class" : { key: true, key: false } 
+    //  "class" : 'string-class' 
+    if (Object(func["isArray"])(value)) {
+      $element.addClass.apply($element, toConsumableArray_default()(value.filter(Boolean)));
+    } else if (Object(func["isObject"])(value)) {
+      var keys = Object.keys(value);
+
+      for (var i = 0, len = keys.length; i < len; i++) {
+        var className = keys[i];
+        var hasClass = value[className];
+        $element.toggleClass(className, hasClass);
+      }
+    } else {
+      $element.el.className = value;
+    }
+
+    return;
+  } else if (key === 'callback') {
+    if (Object(func["isFunction"])(value)) {
+      value();
+      return;
+    }
+  }
+
+  if (Object(func["isUndefined"])(value)) {
+    $element.removeAttr(key);
+  } else {
+    if ($element.el.nodeName === "TEXTAREA" && key === "value") {
+      $element.text(value);
+    } else if (key === 'text' || key === 'textContent') {
+      $element.text(value);
+    } else if (key === 'innerHTML' || key === 'html') {
+      $element.html(value);
+    } else if (key === 'value') {
+      $element.val(value);
+    } else {
+      $element.attr(key, value);
+    }
+  }
+};
+
+var BindHandler_BindHandler = /*#__PURE__*/function (_BaseHandler) {
+  inherits_default()(BindHandler, _BaseHandler);
+
+  var _super = BindHandler_createSuper(BindHandler);
+
+  function BindHandler() {
+    classCallCheck_default()(this, BindHandler);
+
+    return _super.apply(this, arguments);
+  }
+
+  createClass_default()(BindHandler, [{
+    key: "load",
+    value: function load() {
+      this.bindData.apply(this, arguments);
+    } // 어떻게 실행하는게 좋을까? 
+    // this.runHandle('bind', ...);
+
+  }, {
+    key: "bindData",
+    value: function bindData() {
+      var _this = this;
+
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      if (!this._bindMethods) {
+        this._bindMethods = this.context.filterProps(Event["CHECK_BIND_PATTERN"]);
+      }
+      /**
+       * BIND 를 해보자.
+       * 이시점에 하는게 맞는지는 모르겠지만 일단은 해보자.
+       * BIND 는 특정 element 에 html 이 아닌 데이타를 업데이트하기 위한 간단한 로직이다.
+       */
+
+
+      var bindList = this._bindMethods.filter(function (originalCallbackName) {
+        if (!args.length) return true;
+
+        var _originalCallbackName = originalCallbackName.split(Event["CHECK_SAPARATOR"]),
+            _originalCallbackName2 = slicedToArray_default()(_originalCallbackName, 2),
+            callbackName = _originalCallbackName2[0],
+            id = _originalCallbackName2[1];
+
+        var _callbackName$split = callbackName.split(' '),
+            _callbackName$split2 = slicedToArray_default()(_callbackName$split, 2),
+            _ = _callbackName$split2[0],
+            $bind = _callbackName$split2[1];
+
+        return args.indexOf($bind) > -1;
+      });
+
+      bindList.forEach( /*#__PURE__*/function () {
+        var _ref = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee(callbackName) {
+          var bindMethod, _callbackName$split3, _callbackName$split4, id, refObject, refCallback, elName, $element, isBindCheck, results, keys, elementKeyIndex, len, key, value;
+
+          return regenerator_default.a.wrap(function _callee$(_context) {
+            while (1) {
+              switch (_context.prev = _context.next) {
+                case 0:
+                  bindMethod = _this.context[callbackName];
+                  _callbackName$split3 = callbackName.split(Event["CHECK_SAPARATOR"]), _callbackName$split4 = slicedToArray_default()(_callbackName$split3, 2), callbackName = _callbackName$split4[0], id = _callbackName$split4[1];
+                  refObject = _this.getRef(id);
+                  refCallback = Event["BIND_CHECK_DEFAULT_FUNCTION"];
+
+                  if (refObject != '' && Object(func["isString"])(refObject)) {
+                    refCallback = Object(Event["BIND_CHECK_FUNCTION"])(refObject);
+                  } else if (Object(func["isFunction"])(refObject)) {
+                    refCallback = refObject;
+                  }
+
+                  elName = callbackName.split(Event["BIND_SAPARATOR"])[1];
+                  $element = _this.context.refs[elName]; // isBindCheck 는 binding 하기 전에 변화된 지점을 찾아서 업데이트를 제한한다.
+
+                  isBindCheck = Object(func["isFunction"])(refCallback) && refCallback.call(_this.context);
+
+                  if (!($element && isBindCheck)) {
+                    _context.next = 16;
+                    break;
+                  }
+
+                  _context.next = 11;
+                  return bindMethod.call.apply(bindMethod, [_this.context].concat(args));
+
+                case 11:
+                  results = _context.sent;
+
+                  if (results) {
+                    _context.next = 14;
+                    break;
+                  }
+
+                  return _context.abrupt("return");
+
+                case 14:
+                  keys = Object.keys(results);
+
+                  for (elementKeyIndex = 0, len = keys.length; elementKeyIndex < len; elementKeyIndex++) {
+                    key = keys[elementKeyIndex];
+                    value = results[key];
+                    BindHandler_applyElementAttribute($element, key, value);
+                  }
+
+                case 16:
+                case "end":
+                  return _context.stop();
+              }
+            }
+          }, _callee);
+        }));
+
+        return function (_x) {
+          return _ref.apply(this, arguments);
+        };
+      }());
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this._bindMethods = undefined;
+    }
+  }]);
+
+  return BindHandler;
+}(BaseHandler_BaseHandler);
+
+
+// EXTERNAL MODULE: ./src/el/base/registElement.js
+var registElement = __webpack_require__(10);
+
+// CONCATENATED MODULE: ./src/el/base/EventMachine.js
+
+
+
+
+
+
+
+
+
+var _expectMethod, _templateObject, _templateObject2;
+
+
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { defineProperty_default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+
+
+
+
+
+
+
+
+var REFERENCE_PROPERTY = "ref";
+var TEMP_DIV = Dom["a" /* default */].create("div");
+var QUERY_PROPERTY = "[".concat(REFERENCE_PROPERTY, "]");
+var REF_CLASS = 'refclass';
+var REF_CLASS_PROPERTY = "[".concat(REF_CLASS, "]"); // collectProps 에서 제외될 메소드 목록 
+
+var expectMethod = (_expectMethod = {
+  "constructor": true,
+  "initState": true,
+  "updateData": true
+}, defineProperty_default()(_expectMethod, "constructor", true), defineProperty_default()(_expectMethod, "initializeProperty", true), defineProperty_default()(_expectMethod, "created", true), defineProperty_default()(_expectMethod, "getRealEventName", true), defineProperty_default()(_expectMethod, "initializeStoreEvent", true), defineProperty_default()(_expectMethod, "destoryStoreEvent", true), defineProperty_default()(_expectMethod, "destroy", true), defineProperty_default()(_expectMethod, "emit", true), defineProperty_default()(_expectMethod, "trigger", true), defineProperty_default()(_expectMethod, "on", true), defineProperty_default()(_expectMethod, "off", true), defineProperty_default()(_expectMethod, "setState", true), defineProperty_default()(_expectMethod, "_reload", true), defineProperty_default()(_expectMethod, "render", true), defineProperty_default()(_expectMethod, "initialize", true), defineProperty_default()(_expectMethod, "afterRender", true), defineProperty_default()(_expectMethod, "components", true), defineProperty_default()(_expectMethod, "getRef", true), defineProperty_default()(_expectMethod, "parseTemplate", true), defineProperty_default()(_expectMethod, "parseProperty", true), defineProperty_default()(_expectMethod, "parseSourceName", true), defineProperty_default()(_expectMethod, "parseComponent", true), defineProperty_default()(_expectMethod, "clean", true), defineProperty_default()(_expectMethod, "refresh", true), defineProperty_default()(_expectMethod, "load", true), defineProperty_default()(_expectMethod, "bindData", true), defineProperty_default()(_expectMethod, "template", true), defineProperty_default()(_expectMethod, "eachChildren", true), defineProperty_default()(_expectMethod, "destroy", true), defineProperty_default()(_expectMethod, "collectProps", true), defineProperty_default()(_expectMethod, "filterProps", true), defineProperty_default()(_expectMethod, "self", true), defineProperty_default()(_expectMethod, "isAltKey", true), defineProperty_default()(_expectMethod, "isCtrlKey", true), defineProperty_default()(_expectMethod, "isShiftKey", true), defineProperty_default()(_expectMethod, "isMetaKey", true), defineProperty_default()(_expectMethod, "preventDefault", true), defineProperty_default()(_expectMethod, "stopPropagation", true), defineProperty_default()(_expectMethod, "bodyMouseMove", true), defineProperty_default()(_expectMethod, "bodyMouseUp", true), _expectMethod);
+
+var EventMachine_EventMachine = /*#__PURE__*/function () {
+  function EventMachine(opt, props) {
+    classCallCheck_default()(this, EventMachine);
+
+    this.state = {};
+    this.prevState = {};
+    this.refs = {};
+    this.children = {};
+    this._bindings = [];
+    this.id = Object(math["uuid"])();
+    this.handlers = this.initializeHandler();
+    this.initializeProperty(opt, props);
+    this.initComponents();
+  }
+  /**
+   * UIElement instance 에 필요한 기본 속성 설정 
+   */
+
+
+  createClass_default()(EventMachine, [{
+    key: "initializeProperty",
+    value: function initializeProperty(opt) {
+      var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      this.opt = opt || {};
+      this.parent = this.opt;
+      this.props = props;
+      this.source = Object(math["uuid"])();
+      this.sourceName = this.constructor.name;
+    }
+  }, {
+    key: "initComponents",
+    value: function initComponents() {
+      // const parentComponents = isFunction(this.parent.components) ? this.parent.components() : this.parent.components;
+      this.childComponents = _objectSpread({}, this.components());
+    }
+  }, {
+    key: "initializeHandler",
+    value: function initializeHandler() {
+      return [new BindHandler_BindHandler(this), new DomEventHandler_DomEventHandler(this)];
+    }
+    /**
+     * state 를 초기화 한것을 리턴한다. 
+     * 
+     * @protected
+     * @returns {Object} 
+     */
+
+  }, {
+    key: "initState",
+    value: function initState() {
+      return {};
+    }
+    /**
+     * state 를 변경한다. 
+     * 
+     * @param {Object} state  새로운 state 
+     * @param {Boolean} isLoad  다시 로드 할 것인지 체크 , true 면 state 변경후 다시 로드 
+     */
+
+  }, {
+    key: "setState",
+    value: function setState() {
+      var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var isLoad = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+      this.prevState = this.state;
+      this.state = Object.assign({}, this.state, state);
+
+      if (isLoad) {
+        this.load();
+      }
+    }
+    /**
+     * state 에 있는 key 필드의 값을 토글한다. 
+     * Boolean 형태의 값만 동작한다. 
+     * 
+     * @param {string} key 
+     * @param {Boolean} isLoad 
+     */
+
+  }, {
+    key: "toggleState",
+    value: function toggleState(key) {
+      var isLoad = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+      this.setState(defineProperty_default()({}, key, !this.state[key]), isLoad);
+    }
+    /**
+     * 객체를 다시 그릴 때 사용한다. 
+     * 
+     * @param {*} props 
+     * @protected
+     */
+
+  }, {
+    key: "_reload",
+    value: function _reload(props) {
+      this.props = props;
+      this.state = {};
+      this.setState(this.initState(), false);
+      this.refresh(true);
+    }
+    /**
+     * template 을 렌더링 한다. 
+     * 
+     * @param {Dom|undefined} $container  컴포넌트가 그려질 대상 
+     */
+
+  }, {
+    key: "render",
+    value: function render($container) {
+      this.$el = this.parseTemplate(Object(func["html"])(_templateObject || (_templateObject = taggedTemplateLiteral_default()(["\n        ", "\n      "])), this.template()));
+      this.refs.$el = this.$el;
+
+      if ($container) {
+        $container.append(this.$el);
+      } // LOAD 로 정의된 것들을 수행한다. 
+
+
+      this.load(); // render 이후에 실행될 콜백을 정의한다. 
+
+      this.afterRender();
+    }
+  }, {
+    key: "initialize",
+    value: function initialize() {
+      this.state = this.initState();
+    }
+    /**
+     * render 이후에 실행될 함수 
+     * dom 이 실제로 생성된 이후에 수행할 작업들을 정의한다. 
+     * 
+     * @protected
+     */
+
+  }, {
+    key: "afterRender",
+    value: function afterRender() {}
+    /**
+     * 하위에 연결될 객체들을 정의한다 
+     * 
+     * @protected
+     * @returns {Object}
+     */
+
+  }, {
+    key: "components",
+    value: function components() {
+      return {};
+    }
+    /**
+     * ref 이름을 가진 Component 를 가지고 온다. 
+     * 
+     * @param  {any[]} args 
+     * @returns {EventMachine}
+     */
+
+  }, {
+    key: "getRef",
+    value: function getRef() {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      var key = args.join('');
+      return this.refs[key];
+    }
+    /**
+     * template() 함수의 결과물을 파싱해서 dom element 를 생성한다. 
+     * 
+     * @param {string} html 
+     * @param {Boolean} [isLoad=false] 
+     */
+
+  }, {
+    key: "parseTemplate",
+    value: function parseTemplate(html, isLoad) {
+      //FIXME: html string, element 형태 모두 array 로 받을 수 있도록 해보자. 
+      if (Object(func["isArray"])(html)) {
+        html = html.join('');
+      }
+
+      html = html.trim();
+      var list = TEMP_DIV.html(html).children(); /////////////////////////////////
+
+      for (var i = 0, len = list.length; i < len; i++) {
+        var $el = list[i];
+        var ref = $el.attr(REFERENCE_PROPERTY);
+
+        if (ref) {
+          this.refs[ref] = $el;
+        }
+
+        var refs = $el.$$(QUERY_PROPERTY);
+        var temp = {};
+
+        for (var refsIndex = 0, refsLen = refs.length; refsIndex < refsLen; refsIndex++) {
+          var $dom = refs[refsIndex];
+          var name = $dom.attr(REFERENCE_PROPERTY);
+
+          if (temp[name]) {
+            console.warn("".concat(ref, " is duplicated. - ").concat(this.sourceName), this);
+          } else {
+            temp[name] = true;
+          }
+
+          this.refs[name] = $dom;
+        }
+      }
+
+      if (!isLoad) {
+        return list[0];
+      }
+
+      return TEMP_DIV.createChildrenFragment();
+    }
+  }, {
+    key: "parseProperty",
+    value: function parseProperty($dom) {
+      var props = {}; // parse properties 
+
+      var _iterator = _createForOfIteratorHelper($dom.el.attributes),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var t = _step.value;
+          props[t.nodeName] = t.nodeValue;
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      if (props['props']) {
+        props = _objectSpread(_objectSpread({}, props), Object(Event["getRef"])(props['props']));
+      }
+
+      $dom.$$('property').forEach(function ($p) {
+        var _$p$attrs = $p.attrs('name', 'value', 'valueType'),
+            _$p$attrs2 = slicedToArray_default()(_$p$attrs, 3),
+            name = _$p$attrs2[0],
+            value = _$p$attrs2[1],
+            valueType = _$p$attrs2[2];
+
+        var realValue = value || $p.text();
+
+        if (valueType === 'json') {
+          realValue = JSON.parse(realValue);
+        }
+
+        props[name] = realValue;
+      });
+      return props;
+    }
+  }, {
+    key: "parseSourceName",
+    value: function parseSourceName(obj) {
+      if (obj.parent) {
+        return [obj.sourceName].concat(toConsumableArray_default()(this.parseSourceName(obj.parent)));
+      }
+
+      return [obj.sourceName];
+    }
+  }, {
+    key: "getEventMachineComponent",
+    value: function getEventMachineComponent(refClassName) {
+      var EventMachineComponent = Object(registElement["b" /* retriveElement */])(refClassName) || this.childComponents[refClassName];
+      return EventMachineComponent;
+    }
+  }, {
+    key: "parseComponent",
+    value: function parseComponent() {
+      var _this = this;
+
+      var $el = this.$el;
+      var targets = $el.$$(REF_CLASS_PROPERTY);
+      targets.forEach(function ($dom) {
+        var EventMachineComponent = _this.getEventMachineComponent($dom.attr(REF_CLASS));
+
+        if (EventMachineComponent) {
+          var props = _this.parseProperty($dom); // create component 
+
+
+          var refName = $dom.attr(REFERENCE_PROPERTY);
+          var instance = null; // 동일한 refName 의 EventMachine 이 존재하면  해당 컴포넌트는 다시 그려진다. 
+          // 루트 element 는 변경되지 않는다. 
+
+          if (_this.children[refName]) {
+            instance = _this.children[refName];
+
+            instance._reload(props);
+          } else {
+            // 기존의 refName 이 존재하지 않으면 Component 를 생성해서 element 를 교체한다. 
+            instance = new EventMachineComponent(_this, props);
+            _this.children[refName || instance.id] = instance;
+            instance.render();
+          }
+
+          $dom.replace(instance.$el);
+        } else {
+          $dom.remove();
+        }
+      });
+      Object(func["keyEach"])(this.children, function (key, obj) {
+        if (obj && obj.clean()) {
+          delete _this.children[key];
+        }
+      });
+    }
+  }, {
+    key: "clean",
+    value: function clean() {
+      if (this.$el && !this.$el.hasParent()) {
+        Object(func["keyEach"])(this.children, function (key, child) {
+          child.clean();
+        });
+        this.destroy();
+        this.$el = null;
+        return true;
+      }
+    }
+    /**
+     * refresh 는 load 함수들을 실행한다. 
+     */
+
+  }, {
+    key: "refresh",
+    value: function refresh() {
+      this.load();
+    }
+  }, {
+    key: "_afterLoad",
+    value: function _afterLoad() {
+      this.runHandlers('initialize');
+      this.bindData();
+      this.parseComponent();
+    }
+  }, {
+    key: "load",
+    value: function () {
+      var _load = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee2() {
+        var _this2 = this;
+
+        var _len2,
+            args,
+            _key2,
+            localLoadMethods,
+            _args2 = arguments;
+
+        return regenerator_default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                for (_len2 = _args2.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+                  args[_key2] = _args2[_key2];
+                }
+
+                if (!this._loadMethods) {
+                  this._loadMethods = this.filterProps(Event["CHECK_LOAD_PATTERN"]);
+                } // loop 가 비동기라 await 로 대기를 시켜줘야 나머지 html 업데이트에 대한 순서를 맞출 수 있다. 
+
+
+                localLoadMethods = this._loadMethods.filter(function (callbackName) {
+                  var elName = callbackName.split(Event["LOAD_SAPARATOR"])[1].split(Event["CHECK_SAPARATOR"]).map(function (it) {
+                    return it.trim();
+                  })[0];
+                  if (!args.length) return true;
+                  return args.indexOf(elName) > -1;
+                });
+                _context2.next = 5;
+                return localLoadMethods.forEach( /*#__PURE__*/function () {
+                  var _ref = asyncToGenerator_default()( /*#__PURE__*/regenerator_default.a.mark(function _callee(callbackName) {
+                    var methodName, _methodName$split$map, _methodName$split$map2, elName, checker, isDomDiff, _this2$callbackName, newTemplate, fragment;
+
+                    return regenerator_default.a.wrap(function _callee$(_context) {
+                      while (1) {
+                        switch (_context.prev = _context.next) {
+                          case 0:
+                            methodName = callbackName.split(Event["LOAD_SAPARATOR"])[1];
+                            _methodName$split$map = methodName.split(Event["CHECK_SAPARATOR"]).map(function (it) {
+                              return it.trim();
+                            }), _methodName$split$map2 = toArray_default()(_methodName$split$map), elName = _methodName$split$map2[0], checker = _methodName$split$map2.slice(1);
+                            checker = checker.map(function (it) {
+                              return it.trim();
+                            });
+                            isDomDiff = Boolean(checker.filter(function (it) {
+                              return Event["DOMDIFF"].includes(it);
+                            }).length);
+
+                            if (!_this2.refs[elName]) {
+                              _context.next = 11;
+                              break;
+                            }
+
+                            _context.next = 7;
+                            return (_this2$callbackName = _this2[callbackName]).call.apply(_this2$callbackName, [_this2].concat(args));
+
+                          case 7:
+                            newTemplate = _context.sent;
+
+                            if (Object(func["isArray"])(newTemplate)) {
+                              newTemplate = newTemplate.join('');
+                            } // create fragment 
+
+
+                            // create fragment 
+                            fragment = _this2.parseTemplate(Object(func["html"])(_templateObject2 || (_templateObject2 = taggedTemplateLiteral_default()(["", ""])), newTemplate), true);
+
+                            if (isDomDiff) {
+                              _this2.refs[elName].htmlDiff(fragment);
+                            } else {
+                              _this2.refs[elName].html(fragment);
+                            }
+
+                          case 11:
+                          case "end":
+                            return _context.stop();
+                        }
+                      }
+                    }, _callee);
+                  }));
+
+                  return function (_x) {
+                    return _ref.apply(this, arguments);
+                  };
+                }());
+
+              case 5:
+                this._afterLoad();
+
+              case 6:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function load() {
+        return _load.apply(this, arguments);
+      }
+
+      return load;
+    }()
+  }, {
+    key: "runHandlers",
+    value: function runHandlers() {
+      var func = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'run';
+
+      for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+        args[_key3 - 1] = arguments[_key3];
+      }
+
+      this.handlers.forEach(function (h) {
+        return h[func].apply(h, args);
+      });
+    }
+  }, {
+    key: "bindData",
+    value: function bindData() {
+      for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+        args[_key4] = arguments[_key4];
+      }
+
+      this.runHandlers.apply(this, ['load'].concat(args));
+    } // 기본 템플릿 지정
+
+  }, {
+    key: "template",
+    value: function template() {
+      return "<div></div>";
+    }
+  }, {
+    key: "eachChildren",
+    value: function eachChildren(callback) {
+      if (!Object(func["isFunction"])(callback)) return;
+      Object(func["keyEach"])(this.children, function (_, Component) {
+        callback(Component);
+      });
+    }
+  }, {
+    key: "rerender",
+    value: function rerender() {
+      var $parent = this.$el.parent();
+      this.destroy();
+      this.render($parent);
+    }
+    /**
+     * 자원을 해제한다.
+     * 이것도 역시 자식 컴포넌트까지 제어하기 때문에 가장 최상위 부모에서 한번만 호출되도 된다.
+     * 
+     */
+
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.eachChildren(function (childComponent) {
+        childComponent.destroy();
+      });
+      this.runHandlers('destroy');
+      this.$el.remove();
+      this.$el = null;
+      this.refs = {};
+      this.children = {};
+    }
+    /**
+     * property 수집하기
+     * 상위 클래스의 모든 property 를 수집해서 리턴한다.
+     * 
+     * @returns {string[]} 나의 상위 모든 메소드를 수집해서 리턴한다. 
+     */
+
+  }, {
+    key: "collectProps",
+    value: function collectProps() {
+      return Object(func["collectProps"])(this, expectMethod);
+    }
+  }, {
+    key: "filterProps",
+    value: function filterProps(pattern) {
+      return this.collectProps().filter(function (key) {
+        return key.match(pattern);
+      });
+    }
+    /* magic check method  */
+
+  }, {
+    key: "self",
+    value: function self(e) {
+      return e && e.$dt && e.$dt.is(e.target);
+    }
+  }, {
+    key: "isAltKey",
+    value: function isAltKey(e) {
+      return e.altKey;
+    }
+  }, {
+    key: "isCtrlKey",
+    value: function isCtrlKey(e) {
+      return e.ctrlKey;
+    }
+  }, {
+    key: "isShiftKey",
+    value: function isShiftKey(e) {
+      return e.shiftKey;
+    }
+  }, {
+    key: "isMetaKey",
+    value: function isMetaKey(e) {
+      return e.metaKey || e.key == 'Meta' || e.code.indexOf('Meta') > -1;
+    }
+  }, {
+    key: "isMouseLeftButton",
+    value: function isMouseLeftButton(e) {
+      return e.buttons === 1; // 1 is left button 
+    }
+    /** before check method */
+
+    /* after check method */
+
+  }, {
+    key: "preventDefault",
+    value: function preventDefault(e) {
+      e.preventDefault();
+      return true;
+    }
+  }, {
+    key: "stopPropagation",
+    value: function stopPropagation(e) {
+      e.stopPropagation();
+      return true;
+    }
+  }, {
+    key: "bodyMouseMove",
+    value: function bodyMouseMove(e, methodName) {
+      if (this[methodName]) {
+        this.emit(types_event["a" /* ADD_BODY_MOUSEMOVE */], this[methodName], this, e.xy);
+      }
+    }
+  }, {
+    key: "bodyMouseUp",
+    value: function bodyMouseUp(e, methodName) {
+      if (this[methodName]) {
+        this.emit(types_event["b" /* ADD_BODY_MOUSEUP */], this[methodName], this, e.xy);
+      }
+    }
+  }]);
+
+  return EventMachine;
+}();
+
+
+// CONCATENATED MODULE: ./src/el/base/UIElement.js
+
+
+
+
+
+
+
+
+function UIElement_createSuper(Derived) { var hasNativeReflectConstruct = UIElement_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
+
+function UIElement_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+/**
+ * UI 를 만드는 기본 단위 
+ * 
+ * dom handler, 
+ * bind handler, 
+ * store handler 를 가진다. 
+ * 
+ * @property {Editor} $editor 
+ */
+
+var UIElement_UIElement = /*#__PURE__*/function (_EventMachine) {
+  inherits_default()(UIElement, _EventMachine);
+
+  var _super = UIElement_createSuper(UIElement);
+
+  function UIElement(opt) {
+    var _this;
+
+    var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    classCallCheck_default()(this, UIElement);
+
+    _this = _super.call(this, opt, props);
+
+    _this.created();
+
+    _this.initialize();
+
+    _this.initializeStoreEvent();
+
+    return _this;
+  }
+  /**
+   * UIElement 가 생성될 때 호출되는 메소드 
+   * @protected
+   */
+
+
+  createClass_default()(UIElement, [{
+    key: "created",
+    value: function created() {}
+  }, {
+    key: "getRealEventName",
+    value: function getRealEventName(e) {
+      var s = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : MULTI_PREFIX;
+      var startIndex = e.indexOf(s);
+      return e.substr(startIndex < 0 ? 0 : startIndex + s.length);
+    }
+  }, {
+    key: "splitMethod",
+    value: function splitMethod(events, keyword) {
+      var defaultValue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+
+      var _splitMethodByKeyword = Object(func["splitMethodByKeyword"])(events.split(Event["CHECK_SAPARATOR"]), keyword),
+          _splitMethodByKeyword2 = slicedToArray_default()(_splitMethodByKeyword, 2),
+          methods = _splitMethodByKeyword2[0],
+          params = _splitMethodByKeyword2[1];
+
+      return [methods.length ? +params[0].target : defaultValue, methods, params];
+    }
+    /**
+     * initialize store event
+     *
+     * you can define '@xxx' method(event) in UIElement
+     *
+     * Store Event 를 초기화 한다. 
+     *
+     */
+
+  }, {
+    key: "initializeStoreEvent",
+    value: function initializeStoreEvent() {
+      var _this2 = this;
+
+      this.filterProps(Event["CHECK_SUBSCRIBE_PATTERN"]).forEach(function (key) {
+        var events = _this2.getRealEventName(key, Event["SUBSCRIBE_SAPARATOR"]); // support deboounce for store event 
+
+
+        var _this2$splitMethod = _this2.splitMethod(events, 'debounce'),
+            _this2$splitMethod2 = slicedToArray_default()(_this2$splitMethod, 2),
+            debounceSecond = _this2$splitMethod2[0],
+            debounceMethods = _this2$splitMethod2[1];
+
+        var _this2$splitMethod3 = _this2.splitMethod(events, 'throttle'),
+            _this2$splitMethod4 = slicedToArray_default()(_this2$splitMethod3, 2),
+            throttleSecond = _this2$splitMethod4[0],
+            throttleMethods = _this2$splitMethod4[1];
+
+        var _this2$splitMethod5 = _this2.splitMethod(events, 'allTrigger'),
+            _this2$splitMethod6 = slicedToArray_default()(_this2$splitMethod5, 2),
+            _ = _this2$splitMethod6[0],
+            allTriggerMethods = _this2$splitMethod6[1];
+
+        events.split(Event["CHECK_SAPARATOR"]).filter(function (it) {
+          return debounceMethods.indexOf(it) === -1 && allTriggerMethods.indexOf(it) === -1 && throttleMethods.indexOf(it) === -1;
+        }).map(function (it) {
+          return it.trim();
+        }).forEach(function (e) {
+          var callback = _this2[key].bind(_this2);
+
+          callback.displayName = "".concat(_this2.sourceName, ".").concat(e);
+          callback.source = _this2.source;
+
+          _this2.$store.on(e, callback, _this2, debounceSecond, throttleSecond, allTriggerMethods.length);
+        });
+      });
+    }
+    /**
+     * 현재 UIElement 와 연결된 모든 메세지를 해제한다. 
+     */
+
+  }, {
+    key: "destoryStoreSUBSCRIBE",
+    value: function destoryStoreSUBSCRIBE() {
+      this.$store.offAll(this);
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      get_default()(getPrototypeOf_default()(UIElement.prototype), "destroy", this).call(this);
+
+      this.destoryStoreSUBSCRIBE();
+    }
+    /**
+     * UIElement 를 다시 그린다. 
+     * 
+     * template 정의 부터  메세지 이벤트 정의까지 모두 다시 한다. 
+     */
+
+  }, {
+    key: "rerender",
+    value: function rerender() {
+      get_default()(getPrototypeOf_default()(UIElement.prototype), "rerender", this).call(this);
+
+      this.initialize();
+      this.initializeStoreEvent();
+    }
+    /**
+     * UIElement 기반으로 메세지를 호출 한다. 
+     * 나 이외의 객체들에게 메세지를 전달한다. 
+     * 
+     * @param {string} messageName
+     * @param {any[]} args 
+     */
+
+  }, {
+    key: "emit",
+    value: function emit(messageName) {
+      var _this$$store;
+
+      this.$store.source = this.source;
+      this.$store.sourceContext = this;
+
+      for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        args[_key - 1] = arguments[_key];
+      }
+
+      (_this$$store = this.$store).emit.apply(_this$$store, [messageName].concat(args));
+    }
+    /**
+     * MicroTask 를 수행한다. 
+     * 
+     * @param {Function} callback 
+     */
+
+  }, {
+    key: "nextTick",
+    value: function nextTick(callback) {
+      this.$store.nextTick(callback);
+    }
+    /**
+     * 
+     * UIElement 자신의 메세지를 수행한다. 
+     * emit 은 나외의 객체에게 메세지를 보내고 
+     * 
+     * @param {string} messageName 
+     * @param {any[]} args 
+     */
+
+  }, {
+    key: "trigger",
+    value: function trigger(messageName) {
+      var _this$$store2;
+
+      this.$store.source = this.source;
+
+      for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+        args[_key2 - 1] = arguments[_key2];
+      }
+
+      (_this$$store2 = this.$store).trigger.apply(_this$$store2, [messageName].concat(args));
+    }
+  }, {
+    key: "broadcast",
+    value: function broadcast(messageName) {
+      var _this3 = this;
+
+      for (var _len3 = arguments.length, args = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+        args[_key3 - 1] = arguments[_key3];
+      }
+
+      Object.keys(this.children).forEach(function (key) {
+        var _this3$children$key;
+
+        (_this3$children$key = _this3.children[key]).trigger.apply(_this3$children$key, [messageName].concat(args));
+      });
+    }
+  }, {
+    key: "on",
+    value: function on(message, callback) {
+      this.$store.on(message, callback);
+    }
+  }, {
+    key: "off",
+    value: function off(message, callback) {
+      this.$store.off(message, callback);
+    }
+  }]);
+
+  return UIElement;
+}(EventMachine_EventMachine);
+
+/* harmony default export */ var base_UIElement = __webpack_exports__["a"] = (UIElement_UIElement);
+
+/***/ }),
+/* 31 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return second; });
+/* unused harmony export frames */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return timecode; });
+/* unused harmony export timecodeToFrames */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return framesToTimecode; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return makeTimer; });
+/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
+/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _func__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8);
+
+
+function second(fps, timecode) {
+  if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isString"])(timecode)) {
+    var _timecode$split = timecode.split(':'),
+        _timecode$split2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_timecode$split, 4),
+        hour = _timecode$split2[0],
+        minute = _timecode$split2[1],
+        second = _timecode$split2[2],
+        frame = _timecode$split2[3];
+
+    hour = parseInt(hour, 10);
+    minute = parseInt(minute, 10);
+    second = parseInt(second, 10);
+    frame = parseInt(frame, 10);
+    return hour * 3600 + minute * 60 + second + frame * (1 / fps);
+  } else if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isNumber"])(timecode)) {
+    return timecode / fps;
+  }
+
+  return 0;
+}
+function frames(fps, time) {
+  return time * fps;
+}
+function timecode(fps, seconds) {
+  var h = Math.floor(seconds / 3600);
+  var m = Math.floor(seconds / 60 % 60);
+  var s = Math.floor(seconds % 60);
+  var f = Math.round((seconds - Math.floor(seconds)) * fps);
+
+  if (f === fps) {
+    f = 0;
+    s += 1;
+
+    if (s === 60) {
+      m += 1;
+
+      if (m === 60) {
+        h += 1;
+      }
+    }
+  }
+
+  return [h, m, s, f].map(function (t) {
+    return (t + '').padStart(2, '0');
+  }).join(':');
+}
+function timecodeToFrames(fps, timecode) {
+  var start = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  return frames(fps, second(fps, timecode) - second(fps, start));
+}
+function framesToTimecode(fps, frames) {
+  var start = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  return timecode(fps, second(fps, frames) - second(fps, start));
+}
+/**
+ * make a timer for timeline animation 
+ * 
+ * @param {*} opt 
+ */
+
+function makeTimer(opt) {
+  var timer = {
+    id: 0,
+    start: 0,
+    speed: opt.speed || 1,
+    elapsed: opt.elapsed || 0,
+    duration: opt.duration || 0,
+    iterationStartCount: 1,
+    iterationCount: opt.iterationCount || Number.MAX_SAFE_INTEGER,
+    direction: opt.direction || 'normal',
+    log: [],
+    logIndex: 0,
+    tick: opt.tick || function () {},
+    startCallback: opt.start || function () {},
+    endCallback: opt.end || function () {},
+    firstCallback: opt.first || function () {},
+    lastCallback: opt.last || function () {}
+  };
+
+  var isForward = function isForward() {
+    if (timer.direction === 'normal') {
+      return true;
+    } else if (timer.direction === 'reverse') {
+      return false;
+    } else if (timer.direction === 'alternate') {
+      return timer.iterationStartCount % 2 === 1;
+    } else if (timer.direction === 'alternate-reverse') {
+      return timer.iterationStartCount % 2 === 0;
+    }
+  };
+
+  var calculateForDirection = function calculateForDirection(rate) {
+    return isForward() ? rate : 1 - rate;
+  };
+
+  var tick = function tick(now) {
+    var isStart = false;
+
+    if (timer.start === null) {
+      timer.start = now; // timer.elapsed = 0; 
+
+      isStart = true;
+    }
+
+    var dt = now - timer.start;
+    timer.elapsed += dt * timer.speed;
+    timer.start = now;
+
+    if (timer.elapsed > timer.duration) {
+      timer.elapsed = timer.duration;
+    } // console.log(timer.elapsed, dt, timer.speed)
+
+
+    var elapsed = calculateForDirection(timer.elapsed / timer.duration) * timer.duration;
+    if (isStart) timer.startCallback(elapsed, timer);
+    timer.log[timer.logIndex++] = {
+      elapsed: elapsed,
+      dt: timer.lastTime - elapsed
+    };
+    timer.lastTime = elapsed;
+    timer.tick(elapsed, timer);
+
+    if (timer.elapsed === timer.duration) {
+      end();
+    } else {
+      frameStart();
+    }
+  };
+
+  var frameStart = function frameStart() {
+    timer.id = requestAnimationFrame(tick);
+  };
+
+  var end = function end() {
+    timer.endCallback(timer.elapsed, timer);
+    timer.iterationStartCount++;
+
+    if (timer.iterationStartCount > timer.iterationCount) {
+      timer.lastCallback(timer.elapsed, timer);
+      cancelAnimationFrame(timer.id);
+    } else {
+      // 멈추지 않은 상태면 
+      timer.start = null;
+      timer.elapsed = 0;
+      frameStart();
+    }
+  };
+
+  var play = function play() {
+    var opt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    timer.start = null;
+    timer.iterationStartCount = 1;
+    timer.log = [];
+    timer.lastTime = 0;
+    timer.logIndex = 0;
+    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isNumber"])(opt.elapsed)) timer.elapsed = opt.elapsed;
+    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isNumber"])(opt.speed)) timer.speed = opt.speed;
+    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isNumber"])(opt.duration)) timer.duration = opt.duration;
+    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isNumber"])(opt.iterationCount)) timer.iterationCount = opt.iterationCount || Number.MAX_SAFE_INTEGER;
+    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isString"])(opt.direction)) timer.direction = opt.direction;
+    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isFunction"])(opt.tick)) timer.tick = opt.tick;
+    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isFunction"])(opt.start)) timer.startCallback = opt.start;
+    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isFunction"])(opt.end)) timer.endCallback = opt.end;
+    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isFunction"])(opt.first)) timer.firstCallback = opt.first;
+    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isFunction"])(opt.last)) timer.lastCallback = opt.last;
+    if (Object(_func__WEBPACK_IMPORTED_MODULE_1__["isFunction"])(opt.stop)) timer.stopCallback = opt.stop;
+    timer.firstCallback(timer.elapsed, timer);
+    frameStart();
+  };
+
+  var stop = function stop() {
+    timer.stopCallback(timer.elapsed, timer);
+    cancelAnimationFrame(timer.id);
+  };
+
+  var seek = function seek(t) {
+    timer.elapsed = t;
+    timer.tick(timer.elapsed, timer);
+  };
+
+  var first = function first(t) {
+    seek(0);
+  };
+
+  var last = function last(t) {
+    seek(timer.duration);
+  };
+
+  return {
+    play: play,
+    stop: stop,
+    tick: tick,
+    first: first,
+    last: last,
+    seek: seek,
+    timer: timer
+  };
+} // var timer = makeTimer({
+//     duration: 1000,
+//     iterationCount: 3,
+//     direction: 'alternate',
+//     first: (elapsed, timer) => {
+//         console.log('first', elapsed, timer);
+//     },
+//     last: (elapsed, timer) => {
+//         console.log('last', elapsed, timer);
+//     },
+//     start: (elapsed, timer) => {
+//         console.log('start', elapsed, timer);
+//     },
+//     end : (elapsed, timer) => {
+//         console.log('end', elapsed, timer);
+//     },
+//     tick: (elapsed, timer) => {
+//         console.log('tick', timecode(60, elapsed / 1000), elapsed, timer.iterationStartCount)
+//     }
+// })
+// timer.start();
+// setTimeout( () => {
+//     timer.start();
+// }, 1000)
+
+/* 
+
+makeTimer({
+    duration:  ,
+    tick: (elapsed, timer) => {
+
+    }
+})
+
+timer.start({ elapsed: 10, speed : 0.5, duration : 10 * 1000 })
+
+*/
+
+/***/ }),
+/* 32 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* unused harmony export pointPoint */
+/* unused harmony export pointPointDist */
+/* unused harmony export pointCircle */
+/* unused harmony export circleCirce */
+/* unused harmony export pointRect */
+/* unused harmony export rectRect */
+/* unused harmony export circleRect */
+/* unused harmony export linePoint */
+/* unused harmony export lineCircle */
+/* unused harmony export getClosestPointBylineCircle */
+/* unused harmony export lineLine */
+/* unused harmony export getClosestPointBylineLine */
+/* unused harmony export lineRect */
+/* unused harmony export getClosestPointBylineRect */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return polyPoint; });
+/* unused harmony export polyCircle */
+/* unused harmony export polyRect */
+/* unused harmony export polyLine */
+/* unused harmony export getClosestPointByPolyLine */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return polyPoly; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return rectToVerties; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getRotatePointer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return rectToVertiesForArea; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return itemsToRectVerties; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return vertiesToRectangle; });
+/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
+/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var el_editor_property_parser_TransformOrigin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(59);
+/* harmony import */ var el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
+/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
+/* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(15);
+
+
+
+
+
+/**
+ * 포인트 충돌 체크 
+ * 
+ * @param {number} x1
+ * @param {number} y1
+ * @param {number} x2
+ * @param {number} y2
+ */
+
+function pointPoint(x1, y1, x2, y2) {
+  return x1 === x2 && y1 === y2;
+}
+/**
+ * 점간의 대략적인 거리의 위치 지정 
+ * 
+ * @param {vec3} s source vertext 
+ * @param {vec3} t target vertext 
+ * @param {number} [dist=0] check distance
+ */
+
+function pointPointDist(s, t) {
+  var dist = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
+  var targetX = Infinity;
+  var targetY = Infinity;
+
+  if (Math.abs(s[0] - t[0]) <= dist) {
+    targetX = t[0];
+  }
+
+  if (Math.abs(s[1] - t[1]) <= dist) {
+    targetY = t[1];
+  }
+
+  return {
+    targetX: targetX,
+    targetY: targetY
+  };
+}
+/**
+ * 점과 원의 충돌 체크 
+ * 
+ * @param {number} x1 x 
+ * @param {number} y1 y
+ * @param {number} cx 원의 중심점 x 
+ * @param {number} cy 원의 중심점 y
+ * @param {number} r 원의 반지름 radius
+ */
+
+function pointCircle(x1, y1, cx, cy, r) {
+  var distX = x1 - cx;
+  var distY = y1 - cy;
+  return Math.hypot(distX, distY) <= r;
+}
+/**
+ * 원과 원의 충돌 
+ * 
+ * @param {number} cx1 
+ * @param {number} cy1 
+ * @param {number} r1 
+ * @param {number} cx2 
+ * @param {number} cy2 
+ * @param {number} r2 
+ */
+
+function circleCirce(cx1, cy1, r1, cx2, cy2, r2) {
+  var distX = cx2 - cx1;
+  var distY = cy2 - cy1;
+  return Math.hypot(distX, distY) <= r1 + r2;
+}
+/**
+ * 점과 사각형 충돌 체크 
+ * 
+ * @param {number} x1
+ * @param {number} y1
+ * @param {number} rx 
+ * @param {number} ry 
+ * @param {number} rw 
+ * @param {number} rh 
+ */
+
+function pointRect(x1, y1, rx, ry, rw, rh) {
+  return rx <= x1 && x1 <= rx + rw && ry <= y1 && y1 <= ry + rh;
+}
+/**
+ * 사각형과 사각형 충돌 체크 
+ * 
+ * @param {number} rx1 
+ * @param {number} ry1 
+ * @param {number} rw1 
+ * @param {number} rh1 
+ * @param {number} rx2 
+ * @param {number} ry2 
+ * @param {number} rw2 
+ * @param {number} rh2 
+ */
+
+function rectRect(rx1, ry1, rw1, rh1, rx2, ry2, rw2, rh2) {
+  return rx1 + rw1 >= rx2 && rx1 <= rx2 + rw2 && ry1 + rh1 >= ry2 && ry1 <= ry2 + rh2;
+}
+/**
+ * 
+ * @param {number} cx 
+ * @param {number} cy 
+ * @param {number} r 
+ * @param {number} rx 
+ * @param {number} ry 
+ * @param {number} rw 
+ * @param {number} rh 
+ */
+
+function circleRect(cx, cy, r, rx, ry, rw, rh) {
+  var testX = cx;
+  var testY = cy;
+  if (cx < rx) testX = rx;else if (cx > rx + rw) testX = rx + rw;
+  if (cy < ry) testY = ry;else if (cy > ry + rh) testY = ry + rh;
+  var distX = cx - testX;
+  var distY = cy - testY;
+  return Math.hypot(distX, distY) <= r;
+}
+/**
+ * 
+ * 점이 line 에 속하는지 체크 
+ * 
+ * @param {number} x1 
+ * @param {number} y1 
+ * @param {number} x2 
+ * @param {number} y2 
+ * @param {number} px 
+ * @param {number} py 
+ * @param {number} buffer 
+ */
+
+function linePoint(x1, y1, x2, y2, px, py) {
+  var buffer = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : 0.1;
+  var dist1 = Math.hypot(px - x1, py - y1);
+  var dist2 = Math.hypot(px - x2, py - y2);
+  var lineLength = Math.hypot(x1 - x2, y1 - y2);
+  var calcDist = dist1 + dist2;
+  return calcDist >= lineLength - buffer && calcDist <= lineLength + buffer;
+}
+/**
+ * 
+ * 선과 원 체크 
+ * 
+ * @param {number} x1 
+ * @param {number} y1 
+ * @param {number} x2 
+ * @param {number} y2 
+ * @param {number} cx 
+ * @param {number} cy 
+ * @param {number} r 
+ */
+
+function lineCircle(x1, y1, x2, y2, cx, cy, r) {
+  // 앙 옆의 점이 원 안에 있으면 true 
+  if (pointCircle(x1, y1, cx, cy, r)) return true;
+  if (pointCircle(x2, y2, cx, cy, r)) return true;
+  var lineLength = Math.hypot(x1 - x2, y1 - y2);
+  var dot = ((cx - x1) * (x2 - x1) + (cy - y1) * (y2 - y1)) / Math.pow(lineLength, 2);
+  var closestX = x1 + (x2 - x1) * dot;
+  var closestY = y1 + (y2 - y1) * dot;
+
+  if (linePoint(x1, y1, x2, y2, closestX, closestY) === false) {
+    return false;
+  } // 원의 중심과 가장 가까운 점의 거리 체크 
+
+
+  return Math.hypot(closestX - cx, closestY - cy) <= r;
+}
+/**
+ * 
+ * 선분에서 원의 중심에 가장 가까운 점 찾기 
+ * 
+ * @param {number} x1 
+ * @param {number} y1 
+ * @param {number} x2 
+ * @param {number} y2 
+ * @param {number} cx 
+ * @param {number} cy 
+ * @param {number} r 
+ */
+
+function getClosestPointBylineCircle(x1, y1, x2, y2, cx, cy, r) {
+  var lineLength = Math.hypot(x1 - x2, y1 - y2);
+  var dot = ((cx - x1) * (x2 - x1) + (cy - y1) * (y2 - y1)) / Math.pow(lineLength, 2);
+  var closestX = x1 + (x2 - x1) * dot;
+  var closestY = y1 + (y2 - y1) * dot;
+  return [closestX, closestY];
+}
+function lineLine(x1, y1, x2, y2, x3, y3, x4, y4) {
+  var A = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
+  var B = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
+  return 0 <= A && A <= 1 && 0 <= B && B <= 1;
+}
+/**
+ * 
+ * 두개의 선분이 겹치는 점의 위치 
+ * 
+ * @param {number} x1 
+ * @param {number} y1 
+ * @param {number} x2 
+ * @param {number} y2 
+ * @param {number} x3 
+ * @param {number} y3 
+ * @param {number} x4 
+ * @param {number} y4 
+ */
+
+function getClosestPointBylineLine(x1, y1, x2, y2, x3, y3, x4, y4) {
+  var A = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
+  var B = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
+
+  if (0 <= A && A <= 1 && 0 <= B && B <= 1) {
+    return [x1 + A * (x2 - x1), y1 + B * (y2 - y1)];
+  }
+
+  return [];
+}
+/**
+ * 
+ * 선과 사각형의 겹치는 지점 체크 
+ * 
+ * @param {number} x1 
+ * @param {number} y1 
+ * @param {number} x2 
+ * @param {number} y2 
+ * @param {number} rectX 
+ * @param {number} rectY 
+ * @param {number} width 
+ * @param {number} height 
+ */
+
+function lineRect(x1, y1, x2, y2, rectX, rectY, width, height) {
+  var left = lineLine(x1, y1, x2, y2, rectX, rectY, rectX, rectY + height);
+  var right = lineLine(x1, y1, x2, y2, rectX + width, rectY, rectX + width, rectY + height);
+  var top = lineLine(x1, y1, x2, y2, rectX, rectY, rectX + width, rectY);
+  var bottom = lineLine(x1, y1, x2, y2, rectX, rectY + height, rectX + width, rectY + height);
+  return left || right || top || bottom;
+}
+/**
+ * 
+ * 선과 사각형의 겹치는 지점 리스트 
+ * 
+ * @param {number} x1 
+ * @param {number} y1 
+ * @param {number} x2 
+ * @param {number} y2 
+ * @param {number} rectX 
+ * @param {number} rectY 
+ * @param {number} width 
+ * @param {number} height 
+ * @returns {[x, y][]}
+ */
+
+function getClosestPointBylineRect(x1, y1, x2, y2, rectX, rectY, width, height) {
+  var left = getClosestPointBylineLine(x1, y1, x2, y2, rectX, rectY, rectX, rectY + height);
+  var right = getClosestPointBylineLine(x1, y1, x2, y2, rectX + width, rectY, rectX + width, rectY + height);
+  var top = getClosestPointBylineLine(x1, y1, x2, y2, rectX, rectY, rectX + width, rectY);
+  var bottom = getClosestPointBylineLine(x1, y1, x2, y2, rectX, rectY + height, rectX + width, rectY + height);
+  var points = [];
+  if (left.length) points.push(left);
+  if (right.length) points.push(right);
+  if (top.length) points.push(top);
+  if (bottom.length) points.push(bottom);
+  return points;
+}
+/**
+ * 폴리곤에 점 비교 
+ * 
+ * @param {vec3[]} verties 
+ * @param {number} px 
+ * @param {number} py 
+ */
+
+function polyPoint() {
+  var verties = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var px = arguments.length > 1 ? arguments[1] : undefined;
+  var py = arguments.length > 2 ? arguments[2] : undefined;
+  var isCollision = false;
+  var len = verties.length;
+  verties.forEach(function (vector, index) {
+    var _vector = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(vector, 2),
+        cx = _vector[0],
+        cy = _vector[1];
+
+    var _verties = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(verties[(index + 1) % len], 2),
+        nx = _verties[0],
+        ny = _verties[1];
+
+    if ((cy >= py && ny < py || cy < py && ny >= py) && px < (nx - cx) * (py - cy) / (ny - cy) + cx) {
+      isCollision = !isCollision;
+    }
+  });
+  return isCollision;
+}
+function polyCircle() {
+  var verties = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var cx = arguments.length > 1 ? arguments[1] : undefined;
+  var cy = arguments.length > 2 ? arguments[2] : undefined;
+  var r = arguments.length > 3 ? arguments[3] : undefined;
+  var len = verties.length;
+  var isCollision = verties.some(function (vector, index) {
+    var _vector2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(vector, 2),
+        currentX = _vector2[0],
+        currentY = _vector2[1];
+
+    var _verties2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(verties[(index + 1) % len], 2),
+        nextX = _verties2[0],
+        nextY = _verties2[1];
+
+    var collision = lineCircle(currentX, currentY, nextX, nextY, cx, cy, r);
+    if (collision) return true;
+    return false;
+  });
+  if (isCollision) return true;
+
+  if (polyPoint(verties, cx, cy)) {
+    return true;
+  }
+
+  return false;
+}
+function polyRect() {
+  var verties = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var rectX = arguments.length > 1 ? arguments[1] : undefined;
+  var rectY = arguments.length > 2 ? arguments[2] : undefined;
+  var rectWidth = arguments.length > 3 ? arguments[3] : undefined;
+  var rectHeight = arguments.length > 4 ? arguments[4] : undefined;
+  var len = verties.length;
+  return verties.some(function (vector, index) {
+    var _vector3 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(vector, 2),
+        currentX = _vector3[0],
+        currentY = _vector3[1];
+
+    var _verties3 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(verties[(index + 1) % len], 2),
+        nextX = _verties3[0],
+        nextY = _verties3[1];
+
+    var collision = lineRect(currentX, currentY, nextX, nextY, rectX, rectY, rectWidth, rectHeight);
+    if (collision) return true;
+    var inside = polyPoint(verties, rectX, rectY);
+    if (inside) return true;
+    return false;
+  });
+}
+function polyLine() {
+  var verties = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var x1 = arguments.length > 1 ? arguments[1] : undefined;
+  var y1 = arguments.length > 2 ? arguments[2] : undefined;
+  var x2 = arguments.length > 3 ? arguments[3] : undefined;
+  var y2 = arguments.length > 4 ? arguments[4] : undefined;
+  var len = verties.length;
+  return verties.some(function (vector, index) {
+    var _vector4 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(vector, 2),
+        x3 = _vector4[0],
+        y3 = _vector4[1];
+
+    var _verties4 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(verties[(index + 1) % len], 2),
+        x4 = _verties4[0],
+        y4 = _verties4[1];
+
+    return lineLine(x1, y1, x2, y2, x3, y3, x4, y4);
+  });
+}
+function getClosestPointByPolyLine() {
+  var verties = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var x1 = arguments.length > 1 ? arguments[1] : undefined;
+  var y1 = arguments.length > 2 ? arguments[2] : undefined;
+  var x2 = arguments.length > 3 ? arguments[3] : undefined;
+  var y2 = arguments.length > 4 ? arguments[4] : undefined;
+  var pointList = [];
+  var len = verties.length;
+  verties.forEach(function (vector, index) {
+    var _vector5 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(vector, 2),
+        x3 = _vector5[0],
+        y3 = _vector5[1];
+
+    var _verties5 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(verties[(index + 1) % len], 2),
+        x4 = _verties5[0],
+        y4 = _verties5[1];
+
+    var point = getClosestPointBylineLine(x1, y1, x2, y2, x3, y3, x4, y4);
+
+    if (point.length) {
+      pointList.push(point);
+    }
+  });
+  return pointList;
+}
+/**
+ * polygon 끼리 충돌 비교 
+ * 
+ * 
+ * @param {[x,y][]} verties 
+ * @param {[x,y][]} targetVerties 
+ */
+
+function polyPoly() {
+  var verties = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var targetVerties = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+  var len = verties.length;
+  return verties.some(function (vector, index) {
+    var _vector6 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(vector, 2),
+        x1 = _vector6[0],
+        y1 = _vector6[1];
+
+    var _verties6 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(verties[(index + 1) % len], 2),
+        x2 = _verties6[0],
+        y2 = _verties6[1];
+
+    var collision = polyLine(targetVerties, x1, y1, x2, y2);
+    if (collision) return true;
+    collision = polyPoint(verties, targetVerties[0][0], targetVerties[0][1]);
+    if (collision) return true;
+    return false;
+  });
+}
+function rectToVerties(x, y, width, height) {
+  var origin = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : '50% 50% 0px';
+  var center = el_editor_property_parser_TransformOrigin__WEBPACK_IMPORTED_MODULE_1__[/* TransformOrigin */ "a"].scale(origin, width, height);
+  return [[x, y, 0], // top , left 
+  [x + width, y, 0], // top , right 
+  [x + width, y + height, 0], // bottom , right 
+  [x, y + height, 0], // bottom , left
+  [x + center[0], y + center[1], 0] // transform origin 
+  ];
+}
+function getRotatePointer(verties) {
+  var dist = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+  var topPointer = gl_matrix__WEBPACK_IMPORTED_MODULE_3__[/* vec3 */ "d"].lerp([], verties[0], verties[1], 0.5);
+  var bottomPointer = gl_matrix__WEBPACK_IMPORTED_MODULE_3__[/* vec3 */ "d"].lerp([], verties[2], verties[3], 0.5);
+  var rotatePointer = Object(_math__WEBPACK_IMPORTED_MODULE_4__["getPointBetweenVerties"])(bottomPointer, topPointer, dist);
+  return rotatePointer;
+}
+function rectToVertiesForArea(x, y, width, height) {
+  return rectToVerties(x, y, width, height);
+}
+function itemsToRectVerties() {
+  var items = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var minX = Number.MAX_SAFE_INTEGER;
+  var minY = Number.MAX_SAFE_INTEGER;
+  var maxX = Number.MIN_SAFE_INTEGER;
+  var maxY = Number.MIN_SAFE_INTEGER;
+  var xList = [];
+  var yList = [];
+  items.forEach(function (item) {
+    item.verties().forEach(function (vector) {
+      xList.push(vector[0]);
+      yList.push(vector[1]);
+    });
+  });
+  minX = Math.min.apply(Math, xList);
+  maxX = Math.max.apply(Math, xList);
+  minY = Math.min.apply(Math, yList);
+  maxY = Math.max.apply(Math, yList);
+  if (minX === Number.MAX_SAFE_INTEGER) minX = 0;
+  if (minY === Number.MAX_SAFE_INTEGER) minY = 0;
+  if (maxX === Number.MIN_SAFE_INTEGER) maxX = 0;
+  if (maxY === Number.MIN_SAFE_INTEGER) maxY = 0;
+  return rectToVerties(minX, minY, maxX - minX, maxY - minY);
+}
+function vertiesToRectangle(verties) {
+  var x = el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_2__[/* Length */ "a"].px(verties[0][0]).floor();
+  var y = el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_2__[/* Length */ "a"].px(verties[0][1]).floor();
+  var width = el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_2__[/* Length */ "a"].px(gl_matrix__WEBPACK_IMPORTED_MODULE_3__[/* vec3 */ "d"].dist(verties[0], verties[1])).floor();
+  var height = el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_2__[/* Length */ "a"].px(gl_matrix__WEBPACK_IMPORTED_MODULE_3__[/* vec3 */ "d"].dist(verties[0], verties[3])).floor();
+  return {
+    x: x,
+    left: x,
+    y: y,
+    top: y,
+    width: width,
+    height: height
+  };
+}
+
+/***/ }),
+/* 33 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Property; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(5);
+/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6);
+/* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1);
+/* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _Item__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(36);
+/* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(8);
+
+
+
+
+
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default()(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+var Property = /*#__PURE__*/function (_Item) {
+  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(Property, _Item);
+
+  var _super = _createSuper(Property);
+
+  function Property() {
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, Property);
+
+    return _super.apply(this, arguments);
+  }
+
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default()(Property, [{
+    key: "getDefaultObject",
+    value: function getDefaultObject() {
+      var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      return _objectSpread({
+        selected: false,
+        // 선택 여부 체크 
+        layers: []
+      }, obj);
+    }
+  }, {
+    key: "isAttribute",
+    value: function isAttribute() {
+      return true;
+    }
+  }, {
+    key: "toCSS",
+    value: function toCSS() {
+      return {};
+    }
+  }, {
+    key: "toString",
+    value: function toString() {
+      return Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_7__["CSS_TO_STRING"])(this.toCSS());
+    }
+  }]);
+
+  return Property;
+}(_Item__WEBPACK_IMPORTED_MODULE_6__[/* Item */ "a"]);
+
+/***/ }),
+/* 34 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PathParser; });
+/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
+/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(16);
+/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var el_base_functions_bezier__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(26);
+/* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8);
+/* harmony import */ var el_base_functions_math__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(15);
+/* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(12);
+/* harmony import */ var _Point__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(27);
+
+
+
+
+
+
+
+
+
+var REG_PARSE_NUMBER_FOR_PATH = /([mMlLvVhHcCsSqQtTaAzZ]([^mMlLvVhHcCsSqQtTaAzZ]*))/g;
+var splitReg = /[\b\t \,]/g;
+var numberReg = /-?[0-9]*\.?[0-9]+(?:e[-+]?\d+)?/ig;
+
+var PathParser = /*#__PURE__*/function () {
+  /**
+   * 
+   * @param {string} pathString  SVG Path 문자열
+   */
+  function PathParser() {
+    var pathString = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2___default()(this, PathParser);
+
+    this.reset(pathString);
+  }
+
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3___default()(PathParser, [{
+    key: "reset",
+    value: function reset() {
+      var pathString = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      this.segments = [];
+      this.pathString = pathString;
+      this.parse();
+    }
+  }, {
+    key: "resetSegments",
+    value: function resetSegments(segments) {
+      this.segments = segments || [];
+      this.pathString = this.joinPath();
+    }
+  }, {
+    key: "trim",
+    value: function trim() {
+      var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      var arr = str.match(numberReg) || [];
+      return arr.filter(function (it) {
+        return it != '';
+      });
+    }
+  }, {
+    key: "parse",
+    value: function parse() {
+      var _this = this;
+
+      var arr = this.pathString.match(REG_PARSE_NUMBER_FOR_PATH) || [];
+      this.segments = arr.map(function (s) {
+        var command = s[0];
+
+        var values = _this.trim(s.replace(command, '')).map(function (it) {
+          return +it;
+        });
+
+        return {
+          command: command,
+          values: values
+        };
+      }); // 상대 좌표를 모두 절 대 좌표로 변경 
+      // 절대좌표로 변환이 되어야 transform 을 쉽게 적용 할 수 있다. 
+      // 물론 트랜스폼 하기 전에 절대 좌표로 구조를 맞추고 
+      // 다시 돌아올 수도 있겠지만 불필요한 작업이 너무 많아질 수도 있다. 
+
+      this.segments = this.segments.map(function (s, index) {
+        switch (s.command) {
+          case 'c':
+          case 'm':
+          case 'l':
+          case 'q':
+          case 's':
+          case 't':
+          case 'v':
+          case 'h':
+            var prev = _this.segments[index - 1];
+            var x = prev.values[prev.values.length - 2];
+            var y = prev.values[prev.values.length - 1];
+
+            for (var i = 0, len = s.values.length; i < len; i += 2) {
+              s.values[i] += x;
+              s.values[i + 1] += y;
+            }
+
+            return {
+              command: s.command.toUpperCase(),
+              values: _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default()(s.values)
+            };
+
+          default:
+            return s;
+        }
+      });
+    }
+  }, {
+    key: "convertGenerator",
+    value: function convertGenerator() {
+      var points = [];
+
+      for (var index = 0, len = this.segments.length; index < len; index++) {
+        var s = this.segments[index];
+        var nextSegment = this.segments[index + 1];
+        var command = s.command,
+            values = s.values;
+
+        if (command === 'M') {
+          var _values = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(values, 2),
+              x = _values[0],
+              y = _values[1];
+
+          points.push({
+            command: command,
+            originalCommand: command,
+            startPoint: {
+              x: x,
+              y: y
+            },
+            endPoint: {
+              x: x,
+              y: y
+            },
+            reversePoint: {
+              x: x,
+              y: y
+            },
+            curve: false
+          });
+        } else if (command === 'L') {
+          var prevPoint = _Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].getPrevPoint(points, points.length);
+
+          if (prevPoint.curve) {
+            var _values2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(values, 2),
+                x = _values2[0],
+                y = _values2[1];
+
+            points.push({
+              command: command,
+              originalCommand: command,
+              startPoint: {
+                x: x,
+                y: y
+              },
+              endPoint: {
+                x: x,
+                y: y
+              },
+              reversePoint: Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_5__["clone"])(prevPoint.endPoint),
+              curve: true
+            });
+          } else {
+            var _values3 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(values, 2),
+                x = _values3[0],
+                y = _values3[1];
+
+            points.push({
+              command: command,
+              originalCommand: command,
+              startPoint: {
+                x: x,
+                y: y
+              },
+              endPoint: {
+                x: x,
+                y: y
+              },
+              reversePoint: {
+                x: x,
+                y: y
+              },
+              curve: false
+            });
+          }
+        } else if (command === 'Q') {
+          var _values4 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(values, 4),
+              cx1 = _values4[0],
+              cy1 = _values4[1],
+              x = _values4[2],
+              y = _values4[3];
+
+          var prevPoint = _Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].getPrevPoint(points, points.length);
+
+          if (prevPoint.curve) {
+            // 내가 Q 인데 앞의 포인트가  
+            var startPoint = {
+              x: x,
+              y: y
+            };
+            var endPoint = {
+              x: x,
+              y: y
+            };
+            var reversePoint = {
+              x: x,
+              y: y
+            };
+            points.push({
+              command: 'L',
+              originalCommand: command,
+              startPoint: startPoint,
+              endPoint: endPoint,
+              reversePoint: reversePoint,
+              curve: false
+            });
+            prevPoint.endPoint = {
+              x: cx1,
+              y: cy1
+            };
+          } else {
+            if (nextSegment && nextSegment.command === 'L') {
+              prevPoint.curve = true;
+              prevPoint.endPoint = {
+                x: cx1,
+                y: cy1
+              };
+              var startPoint = {
+                x: x,
+                y: y
+              };
+              var reversePoint = {
+                x: x,
+                y: y
+              };
+              var endPoint = {
+                x: x,
+                y: y
+              };
+              points.push({
+                command: 'L',
+                originalCommand: command,
+                curve: false,
+                startPoint: startPoint,
+                endPoint: endPoint,
+                reversePoint: reversePoint
+              });
+            } else {
+              var startPoint = {
+                x: x,
+                y: y
+              };
+              var reversePoint = {
+                x: cx1,
+                y: cy1
+              };
+              var endPoint = {
+                x: x,
+                y: y
+              };
+              points.push({
+                command: command,
+                originalCommand: command,
+                curve: true,
+                startPoint: startPoint,
+                endPoint: endPoint,
+                reversePoint: reversePoint
+              });
+            }
+          }
+        } else if (command === 'T') {
+          var _values5 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(values, 2),
+              x = _values5[0],
+              y = _values5[1]; // T 는 앞에 Q 가 있다는 소리 
+          // Q 의 Control Point 반대편에 Control Point 가 있다고 치고 생각하자. 
+
+
+          var prevSegment = segments[index - 1];
+
+          if (prevSegment && prevSegment.command === 'Q') {
+            var _prevSegment$values = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(prevSegment.values, 4),
+                cx1 = _prevSegment$values[0],
+                cy1 = _prevSegment$values[1],
+                sx = _prevSegment$values[2],
+                sy = _prevSegment$values[3];
+
+            var prevPoint = _Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].getPrevPoint(points, points.length);
+            prevPoint.endPoint = _Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].getReversePoint({
+              x: sx,
+              y: sy
+            }, {
+              x: cx1,
+              y: cy1
+            });
+            var startPoint = {
+              x: x,
+              y: y
+            };
+            var endPoint = {
+              x: x,
+              y: y
+            };
+            var reversePoint = {
+              x: x,
+              y: y
+            };
+            points.push({
+              command: 'L',
+              originalCommand: command,
+              startPoint: startPoint,
+              endPoint: endPoint,
+              reversePoint: reversePoint,
+              curve: false
+            });
+          }
+        } else if (command === 'C') {
+          var prevPoint = _Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].getPrevPoint(points, points.length);
+
+          var _values6 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(values, 6),
+              cx1 = _values6[0],
+              cy1 = _values6[1],
+              cx2 = _values6[2],
+              cy2 = _values6[3],
+              x = _values6[4],
+              y = _values6[5];
+
+          var startPoint = {
+            x: x,
+            y: y
+          };
+          var reversePoint = {
+            x: cx2,
+            y: cy2
+          };
+          var endPoint = {
+            x: x,
+            y: y
+          };
+          points.push({
+            command: command,
+            originalCommand: command,
+            curve: true,
+            startPoint: startPoint,
+            endPoint: endPoint,
+            reversePoint: reversePoint
+          });
+
+          if (prevPoint) {
+            prevPoint.curve = true;
+            prevPoint.endPoint = {
+              x: cx1,
+              y: cy1
+            };
+          }
+        } else if (command === 'S') {
+          var _values7 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(values, 2),
+              x = _values7[0],
+              y = _values7[1]; // S 는 앞에 C,S 가 있다는 소리 
+          // S 의 Control Point 반대편에 Control Point 가 있다고 치고 생각하자. 
+
+
+          var prevSegment = segments[index - 1];
+
+          if (prevSegment && prevSegment.command === 'C') {
+            var _prevSegment$values2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(prevSegment.values, 4),
+                cx2 = _prevSegment$values2[0],
+                cy2 = _prevSegment$values2[1],
+                sx = _prevSegment$values2[2],
+                sy = _prevSegment$values2[3];
+
+            var prevPoint = _Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].getPrevPoint(points, points.length);
+            prevPoint.endPoint = _Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].getReversePoint(prevPoint.startPoint, prevPoint.reversePoint);
+            var startPoint = {
+              x: x,
+              y: y
+            };
+            var endPoint = {
+              x: x,
+              y: y
+            };
+            var reversePoint = {
+              x: cx2,
+              y: cy2
+            };
+            points.push({
+              command: 'Q',
+              originalCommand: command,
+              startPoint: startPoint,
+              endPoint: endPoint,
+              reversePoint: reversePoint,
+              curve: false
+            });
+          }
+        } else if (command === 'Z') {
+          var prevPoint = _Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].getPrevPoint(points, points.length);
+          var firstPoint = _Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].getFirstPoint(points, points.length);
+
+          if (_Point__WEBPACK_IMPORTED_MODULE_8__[/* default */ "a"].isEqual(prevPoint.startPoint, firstPoint.startPoint)) {
+            prevPoint.connected = true;
+            prevPoint.endPoint = Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_5__["clone"])(firstPoint.endPoint);
+            firstPoint.reversePoint = Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_5__["clone"])(prevPoint.reversePoint);
+          }
+
+          prevPoint.close = true;
+        }
+      }
+
+      points = points.filter(function (p) {
+        return !!p;
+      });
+      return points;
+    }
+  }, {
+    key: "length",
+    value: function length() {
+      return this.segments.length;
+    }
+  }, {
+    key: "setSegments",
+    value: function setSegments(index, seg) {
+      this.segments[index] = seg;
+    }
+  }, {
+    key: "getSegments",
+    value: function getSegments(index) {
+      if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_5__["isNotUndefined"])(index)) {
+        return this.segments[index];
+      }
+
+      return this.segments;
+    }
+  }, {
+    key: "joinPath",
+    value: function joinPath(segments) {
+      var list = segments || this.segments;
+      return list.map(function (it) {
+        return "".concat(it.command, " ").concat(it.values.length ? it.values.join(' ') : '');
+      }).join('');
+    }
+  }, {
+    key: "each",
+    value: function each(callback) {
+      var _this2 = this;
+
+      var isReturn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      var newSegments = this.segments.map(function (segment, index) {
+        return callback.call(_this2, segment, index);
+      });
+
+      if (isReturn) {
+        return newSegments;
+      } else {
+        this.segments = newSegments;
+      }
+    }
+  }, {
+    key: "_loop",
+    value: function _loop(m) {
+      var isReturn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      return this.each(function (segment) {
+        var v = segment.values;
+        var c = segment.command;
+
+        switch (c) {
+          case 'M':
+          case 'L':
+            var result = m(v, 0);
+            segment.values = [result[0], result[1]];
+            break;
+
+          case 'V':
+            var result = m([+v[0], 0]);
+            segment.values = [result[0]];
+            break;
+
+          case 'H':
+            var result = m([0, +v[0]]);
+            segment.values = [result[1]];
+            break;
+
+          case 'C':
+          case 'S':
+          case 'T':
+          case 'Q':
+            for (var i = 0, len = v.length; i < len; i += 2) {
+              var result = m(v, i);
+              segment.values[i] = result[0];
+              segment.values[i + 1] = result[1];
+            }
+
+            break;
+
+          case 'A':
+            break;
+        }
+
+        return segment;
+      }, isReturn);
+    }
+  }, {
+    key: "clone",
+    value: function clone() {
+      return new PathParser(this.joinPath());
+    }
+  }, {
+    key: "translate",
+    value: function translate(tx, ty) {
+      this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromTranslation([], [tx, ty, 0]));
+      return this;
+    }
+  }, {
+    key: "translateTo",
+    value: function translateTo(tx, ty) {
+      return this.joinPath(this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromTranslation([], [tx, ty, 0]), true));
+    }
+  }, {
+    key: "scale",
+    value: function scale(sx, sy) {
+      this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromScaling([], [sx, sy, 1]));
+      return this;
+    }
+  }, {
+    key: "scaleTo",
+    value: function scaleTo(sx, sy) {
+      return this.joinPath(this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromScaling([], [sx, sy, 1]), true));
+    }
+  }, {
+    key: "rotate",
+    value: function rotate(angle, centerX, centerY) {
+      this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromRotation([], Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_6__["degreeToRadian"])(angle), [centerX || 0, centerY || 0, 0]));
+      return this;
+    }
+  }, {
+    key: "rotateTo",
+    value: function rotateTo(angle) {
+      return this.joinPath(this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromRotation([], Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_6__["degreeToRadian"])(angle), [centerX || 0, centerY || 0, 0]), true));
+    }
+  }, {
+    key: "reflectionOrigin",
+    value: function reflectionOrigin() {
+      this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromScaling([], [-1, -1, 0]));
+      return this;
+    }
+  }, {
+    key: "reflectionOriginTo",
+    value: function reflectionOriginTo() {
+      return this.joinPath(this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromScaling([], [-1, -1, 0]), true));
+    }
+  }, {
+    key: "flipX",
+    value: function flipX() {
+      this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromScaling([], [1, -1, 0]));
+      return this;
+    }
+  }, {
+    key: "flipXTo",
+    value: function flipXTo() {
+      return this.joinPath(this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromScaling([], [1, -1, 0]), true));
+    }
+  }, {
+    key: "flipY",
+    value: function flipY() {
+      this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromScaling([], [-1, 1, 0]));
+      return this;
+    }
+  }, {
+    key: "flipYTo",
+    value: function flipYTo() {
+      return this.joinPath(this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromScaling([], [-1, 1, 0]), true));
+    }
+  }, {
+    key: "skewX",
+    value: function skewX(angle) {
+      this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromValues(1, Math.tan(Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_6__["degreeToRadian"])(angle)), 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
+      return this;
+    }
+  }, {
+    key: "skewXTo",
+    value: function skewXTo(angle) {
+      return this.joinPath(this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromValues(1, Math.tan(Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_6__["degreeToRadian"])(angle)), 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1), true));
+    }
+  }, {
+    key: "skewY",
+    value: function skewY(angle) {
+      this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromValues(1, 0, 0, 0, Math.tan(Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_6__["degreeToRadian"])(angle)), 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
+      return this;
+    }
+  }, {
+    key: "skewYTo",
+    value: function skewYTo(angle) {
+      return this.joinPath(this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].fromValues(1, 0, 0, 0, Math.tan(Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_6__["degreeToRadian"])(angle)), 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1), true));
+    }
+  }, {
+    key: "normalize",
+    value: function normalize() {}
+  }, {
+    key: "getBBox",
+    value: function getBBox() {
+      var minX = Number.MAX_SAFE_INTEGER,
+          minY = Number.MAX_SAFE_INTEGER;
+      var maxX = Number.MIN_SAFE_INTEGER,
+          maxY = Number.MIN_SAFE_INTEGER;
+      this.each(function (segment, index) {
+        var v = segment.values;
+        var c = segment.command;
+        var prevSegment = this.segments[index - 1];
+        var accurancy = 1 / 10000;
+
+        switch (c) {
+          case 'M':
+          case 'L':
+            minX = Math.min(minX, v[0]);
+            maxX = Math.max(maxX, v[0]);
+            minY = Math.min(minY, v[1]);
+            maxY = Math.max(maxY, v[1]);
+            break;
+
+          case 'V':
+            minX = Math.min(minX, v[0]);
+            maxX = Math.max(maxX, v[0]);
+            break;
+
+          case 'H':
+            minY = Math.min(minY, v[1]);
+            maxY = Math.max(maxY, v[1]);
+            break;
+
+          case 'C':
+            Object(el_base_functions_bezier__WEBPACK_IMPORTED_MODULE_4__[/* getCurveBBox */ "i"])([[prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0], [v[0], v[1], 0], [v[2], v[3], 0], [v[4], v[5], 0]]).forEach(function (p) {
+              minX = Math.min(minX, p[0]);
+              maxX = Math.max(maxX, p[0]);
+              minY = Math.min(minY, p[1]);
+              maxY = Math.max(maxY, p[1]);
+            });
+            break;
+
+          case 'Q':
+            var newPoints = [[prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0], [v[0], v[1], 0], [v[2], v[3], 0]].map(function (p) {
+              return {
+                x: p[0],
+                y: p[1]
+              };
+            });
+
+            for (var i = 0; i <= 1; i += accurancy) {
+              var _getBezierPointOneQua = Object(el_base_functions_bezier__WEBPACK_IMPORTED_MODULE_4__[/* getBezierPointOneQuard */ "e"])(newPoints, i),
+                  x = _getBezierPointOneQua.x,
+                  y = _getBezierPointOneQua.y;
+
+              minX = Math.min(minX, x);
+              maxX = Math.max(maxX, x);
+              minY = Math.min(minY, y);
+              maxY = Math.max(maxY, y);
+            }
+
+            break;
+
+          case 'A':
+            break;
+        }
+
+        return segment;
+      });
+      return [[minX, minY, 0], [maxX, minY, 0], [maxX, maxY, 0], [minX, maxY, 0]];
+    }
+  }, {
+    key: "d",
+    get: function get() {
+      return this.toString();
+    }
+  }, {
+    key: "toString",
+    value: function toString() {
+      return this.joinPath();
+    }
+  }, {
+    key: "transformMat4",
+    value: function transformMat4(transformMatrix) {
+      var isReturn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      return this.each(function (segment) {
+        var v = segment.values;
+        var c = segment.command;
+
+        switch (c) {
+          case 'M':
+          case 'L':
+            var result = gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* vec3 */ "d"].transformMat4([], [v[0], v[1], 0], transformMatrix);
+            segment.values = [result[0], result[1]];
+            break;
+
+          case 'V':
+            var result = gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* vec3 */ "d"].transformMat4([], [+v[0], 0, 0], transformMatrix);
+            segment.values = [result[0]];
+            break;
+
+          case 'H':
+            var result = gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* vec3 */ "d"].transformMat4([], [0, +v[0], 0], transformMatrix);
+            segment.values = [result[1]];
+            break;
+
+          case 'C':
+          case 'S':
+          case 'T':
+          case 'Q':
+            for (var i = 0, len = v.length; i < len; i += 2) {
+              var result = gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* vec3 */ "d"].transformMat4([], [v[i], v[i + 1], 0], transformMatrix);
+              segment.values[i] = result[0];
+              segment.values[i + 1] = result[1];
+            }
+
+            break;
+
+          case 'A':
+            break;
+        }
+
+        return segment;
+      }, isReturn);
+    }
+  }, {
+    key: "invert",
+    value: function invert(transformMatrix) {
+      this.transformMat4(gl_matrix__WEBPACK_IMPORTED_MODULE_7__[/* mat4 */ "a"].invert([], transformMatrix));
+    }
+  }, {
+    key: "round",
+    value: function round() {
+      var k = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      this.each(function (segment) {
+        segment.values = segment.values.map(function (it) {
+          return Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_6__["round"])(it, k);
+        });
+        return segment;
+      });
+      return this;
+    }
+  }, {
+    key: "reverseSegments",
+    value: function reverseSegments(segments) {
+      var newSegments = [];
+      var lastIndex = segments.length - 1;
+
+      for (var i = lastIndex; i > 0; i--) {
+        var segment = segments[i];
+        var v = segment.values;
+        var c = segment.command;
+        var prevSegment = segments[i - 1];
+        var lastX = prevSegment.values[prevSegment.values.length - 2];
+        var lastY = prevSegment.values[prevSegment.values.length - 1];
+
+        switch (c) {
+          case 'L':
+            if (i === lastIndex) {
+              // last 일 경우 
+              newSegments.push({
+                command: 'M',
+                values: [v[0], v[1]]
+              });
+            }
+
+            newSegments.push({
+              command: 'L',
+              values: [lastX, lastY]
+            });
+            break;
+
+          case 'C':
+            if (i === lastIndex) {
+              // last 일 경우 
+              newSegments.push({
+                command: 'M',
+                values: [v[4], v[5]]
+              });
+            }
+
+            newSegments.push({
+              command: 'C',
+              values: [v[2], v[3], v[0], v[1], lastX, lastY]
+            });
+            break;
+
+          case 'Q':
+            if (i === lastIndex) {
+              // last 일 경우 
+              newSegments.push({
+                command: 'M',
+                values: [v[2], v[3]]
+              });
+            }
+
+            newSegments.push({
+              command: 'Q',
+              values: [v[0], v[1], lastX, lastY]
+            });
+            break;
+
+          case 'Z':
+            newSegments.push(segment);
+            lastIndex = i - 1;
+            break;
+        }
+      } // z가 가장 먼저 올 때는 z 를 다시 뒤로 돌려보낸다. 
+
+
+      if (newSegments[0].command === 'Z') {
+        newSegments.push(newSegments.shift());
+      }
+
+      return newSegments;
+    }
+    /**
+     * segments 를 M 기준으로 분리 시킨다. 
+     */
+
+  }, {
+    key: "splitSegments",
+    value: function splitSegments() {
+      var groupSegments = [];
+      var newSegments = [];
+      this.segments.forEach(function (s) {
+        if (s.command === 'M') {
+          newSegments = [s];
+          groupSegments.push(newSegments);
+        } else {
+          newSegments.push(s);
+        }
+      });
+      return groupSegments;
+    }
+    /**
+     * path 의 segment 들을 역순으로 정렬한다. 
+     * 
+     * M이 여러개일 경우는  group 별로 역순으로 정렬하고 합친다. 
+     */
+
+  }, {
+    key: "reverse",
+    value: function reverse() {
+      var _this3 = this;
+
+      var groupSegments = this.splitSegments();
+      var newSegments = [];
+      groupSegments.forEach(function (segments) {
+        newSegments.push.apply(newSegments, _this3.reverseSegments(segments));
+      });
+      this.segments = newSegments;
+    }
+  }, {
+    key: "verties",
+    get: function get() {
+      var arr = [];
+      var lastValues = [];
+      this.each(function (segment) {
+        var v = segment.values;
+        var c = segment.command;
+
+        switch (c) {
+          case 'M':
+          case 'L':
+            arr.push([].concat(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default()(segment.values), [0]));
+            break;
+
+          case 'V':
+            arr.push([v[0], lastValues.pop(), 0]);
+            break;
+
+          case 'H':
+            lastValues.pop();
+            arr.push([lastValues.pop(), v[0], 0]);
+            break;
+
+          case 'C':
+          case 'S':
+          case 'T':
+          case 'Q':
+            for (var i = 0, len = v.length; i < len; i += 2) {
+              arr.push([v[i], v[i + 1], 0]);
+            }
+
+            break;
+
+          case 'A':
+            break;
+        }
+
+        lastValues = v;
+      });
+      return arr;
+    }
+  }]);
+
+  return PathParser;
+}();
+
+
+
+/***/ }),
+/* 35 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ComponentManager; });
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
+/* harmony import */ var el_editor_items_Item__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(36);
+
+
+
+
+var ComponentManager = new ( /*#__PURE__*/function () {
+  function _class() {
+    var opt = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, _class);
+
+    this.components = {};
+    this.inspectors = {};
+  }
+
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(_class, [{
+    key: "registerComponent",
+    value: function registerComponent(name, componentProperty) {
+      if (this.components[name]) throw new Error("It has duplicated item name. " + name);
+      this.components[name] = componentProperty;
+    }
+  }, {
+    key: "registerInspector",
+    value: function registerInspector(name, inspectorCallback) {
+      if (this.inspectors[name]) throw new Error("It has duplicated item name. " + name);
+      this.inspectors[name] = inspectorCallback;
+    }
+  }, {
+    key: "getComponentClass",
+    value: function getComponentClass(name) {
+      return this.components[name] || this.components['rect'];
+    }
+  }, {
+    key: "getInspector",
+    value: function getInspector(name) {
+      return this.inspectors[name];
+    }
+    /**
+     * ItemType 에 해당되는 Item 객체를 생성한다. 
+     * create Item instance
+     * 
+     * @param {string} itemType  ItemType 
+     * @param {object} obj 
+     * @returns {Item} 
+     */
+
+  }, {
+    key: "createComponent",
+    value: function createComponent(itemType) {
+      var obj = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var ComponentClass = this.getComponentClass(itemType);
+
+      if (!ComponentClass) {
+        throw new Error("".concat(itemType, " type is not valid."));
+      }
+
+      return new ComponentClass(obj);
+    }
+    /**
+     * Inspector 를 생성하는 배열을 리턴해준다. 
+     * 
+     * @param {string} itemType 
+     * @param {Item} item 
+     * @returns 
+     */
+
+  }, {
+    key: "createInspector",
+    value: function createInspector(item) {
+      var inspector = this.getInspector(item.itemType);
+
+      if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_2__["isFunction"])(inspector)) {
+        return inspector(item) || [];
+      }
+
+      if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_2__["isFunction"])(item.getProps)) {
+        return item.getProps() || [];
+      }
+
+      return [];
+    }
+  }]);
+
+  return _class;
+}())();
+
+/***/ }),
+/* 36 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Item; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var el_base_functions_math__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(15);
+/* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8);
+
+
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+
+
+
+function _traverse(obj) {
+  var results = [];
+  obj.layers.length && obj.layers.forEach(function (it) {
+    results.push.apply(results, _traverse(it));
+  });
+  results.push(obj);
+  return results;
+}
+/**
+ * Item , 그리기를 위한 기본 모델 
+ * 유니크한 아이디를 가진다. 
+ * 
+ * @class
+ */
+
+
+var Item = /*#__PURE__*/function () {
+  function Item() {
+    var _this = this;
+
+    var json = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, Item);
+
+    this.ref = new Proxy(this, {
+      get: function get(target, key) {
+        var originMethod = target[key];
+
+        if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_4__["isFunction"])(originMethod)) {
+          // method tracking
+          return function () {
+            for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+              args[_key] = arguments[_key];
+            }
+
+            return originMethod.apply(target, args);
+          };
+        } else {
+          // getter or json property
+          return originMethod || target.json[key];
+        }
+      },
+      set: function set(target, key, value) {
+        // Dom 객체가 오면 자동으로 입력 해줌
+        // if (value && value.realVal && isFunction(value.realVal)) {
+        //   value = value.realVal();
+        // }
+        if (_this.checkField(key, value)) {
+          var isDiff = target.json[key] != value;
+          target.json[key] = value;
+
+          if (isDiff) {
+            _this.changed();
+          }
+        } else {
+          throw new Error("".concat(value, " is invalid as ").concat(key, " property value."));
+        }
+
+        return true;
+      }
+    });
+
+    if (json instanceof Item) {
+      json = json.toJSON();
+    }
+
+    this.json = this.convert(Object.assign(this.getDefaultObject(), json));
+    this.lastChangedField = {};
+    return this.ref;
+  }
+  /***********************************
+   *
+   * override
+   *
+   **********************************/
+
+
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default()(Item, [{
+    key: "getDefaultTitle",
+    value: function getDefaultTitle() {
+      return "Item";
+    }
+  }, {
+    key: "getIcon",
+    value: function getIcon() {
+      return '';
+    }
+    /**
+     * check attribute object
+     */
+
+  }, {
+    key: "isAttribute",
+    value: function isAttribute() {
+      return false;
+    }
+  }, {
+    key: "isChanged",
+    value: function isChanged(timestamp) {
+      return this.json.timestamp != Number(timestamp);
+    }
+  }, {
+    key: "changed",
+    value: function changed() {
+      this.json.timestamp = this.json._timestamp + performance.now();
+    }
+    /***********************************
+     *
+     * getter
+     *
+     **********************************/
+
+    /**
+     * title 속성 
+     */
+
+  }, {
+    key: "title",
+    get: function get() {
+      return this.json.name || this.getDefaultTitle();
+    }
+    /**
+     * 
+     * @return {Item[]} 자신을 포함안 하위 모든 자식을 조회 
+     */
+
+  }, {
+    key: "allLayers",
+    get: function get() {
+      return _traverse(this.ref);
+    }
+    /**
+     * get id
+     */
+
+  }, {
+    key: "id",
+    get: function get() {
+      return this.json.id;
+    }
+    /**
+     * 자식 객체 리스트
+     * 
+     * @returns {Item[]}
+     */
+
+  }, {
+    key: "layers",
+    get: function get() {
+      return this.json.layers;
+    }
+    /**
+     * @returns {Item}
+     */
+
+  }, {
+    key: "parent",
+    get: function get() {
+      return this.json.parent;
+    }
+  }, {
+    key: "setParent",
+    value: function setParent(otherParent) {
+      this.json.parent = otherParent;
+    }
+    /**
+     * 객체 깊이를 동적으로 계산 
+     * 
+     * @returns {number}
+     */
+
+  }, {
+    key: "depth",
+    get: function get() {
+      if (!this.parent) return 1;
+      return this.parent.depth + 1;
+    }
+    /**
+     * 최상위 컴포넌트 찾기 
+     * 
+     * @returns {Item}
+     */
+
+  }, {
+    key: "top",
+    get: function get() {
+      if (!this.parent) return this.ref;
+      var localParent = this.parent;
+
+      do {
+        if (!localParent.parent) {
+          return localParent;
+        }
+
+        localParent = localParent.parent;
+      } while (localParent);
+    }
+    /**
+     * 최상위 project 구하기 
+     * 
+     * @returns {Project}
+     */
+
+  }, {
+    key: "project",
+    get: function get() {
+      return this.path.find(function (it) {
+        return it.is('project');
+      });
+    }
+    /**
+     * 최상위 artboard 구하기 
+     * 
+     * @returns {ArtBoard}
+     */
+
+  }, {
+    key: "artboard",
+    get: function get() {
+      return this.path.find(function (it) {
+        return it.is('artboard');
+      });
+    }
+    /**
+     * 상속 구조 안에서 instance 리스트
+     * 
+     * @returns {Item[]}
+     */
+
+  }, {
+    key: "path",
+    get: function get() {
+      if (!this.parent) return [this.ref];
+      var list = this.parent.path;
+      list.push(this.ref);
+      return list;
+    }
+    /**
+     * 부모의 자식들 중 나의 위치 찾기 
+     * 
+     * @returns {number}  나이 위치 index 
+     */
+
+  }, {
+    key: "positionInParent",
+    get: function get() {
+      if (!this.parent) return -1;
+      var layers = this.parent.layers;
+      var index = -1;
+
+      for (var i = 0, len = layers.length; i < len; i++) {
+        if (layers[i] === this.ref) {
+          index = i;
+          break;
+        }
+      }
+
+      return index;
+    }
+    /**
+     * id 기반 문자열 id 생성
+     * 
+     * @param {string} postfix 
+     */
+
+  }, {
+    key: "getInnerId",
+    value: function getInnerId() {
+      var postfix = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      return this.json.id + postfix;
+    } // selection 이후에 
+    // 위치나 , width, height 등의 geometry 가 변경되었을 때 호출 하는 함수 
+
+  }, {
+    key: "recover",
+    value: function recover() {// 내부에 자신의 객체에 필요한 것들을 복구한다. 
+    }
+  }, {
+    key: "setCache",
+    value: function setCache() {}
+  }, {
+    key: "is",
+    value: function is(checkItemType) {
+      if (!this.json) return false;
+      return checkItemType === this.json.itemType;
+    }
+  }, {
+    key: "isNot",
+    value: function isNot(checkItemType) {
+      return this.is(checkItemType) === false;
+    }
+  }, {
+    key: "isSVG",
+    value: function isSVG() {
+      return false;
+    }
+    /***********************************
+     *
+     * action
+     *
+     **********************************/
+
+  }, {
+    key: "generateListNumber",
+    value: function generateListNumber() {
+      this.layers.forEach(function (it, index) {
+        it.no = index;
+        it.generateListNumber();
+      });
+    }
+    /**
+     * when json is loaded, json object is be a new instance
+     *
+     * @param {*} json
+     */
+
+  }, {
+    key: "convert",
+    value: function convert(json) {
+      var _this2 = this;
+
+      if (json.layers) {
+        json.layers.forEach(function (layer) {
+          layer.parent = _this2.ref;
+        });
+      }
+
+      return json;
+    }
+    /**
+     * defence to set invalid key-value
+     *
+     * @param {*} key
+     * @param {*} value
+     */
+
+  }, {
+    key: "checkField",
+    value: function checkField(key, value) {
+      return true;
+    }
+  }, {
+    key: "toCloneObject",
+    value: function toCloneObject() {
+      var isDeep = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+      var json = this.attrs('itemType', 'elementType', 'type', 'visible', 'lock', 'selected');
+
+      if (isDeep) {
+        json.layers = this.json.layers.map(function (layer) {
+          return layer.clone(isDeep);
+        });
+      }
+
+      return json;
+    }
+    /**
+     * clone Item
+     */
+
+  }, {
+    key: "clone",
+    value: function clone() {
+      var isDeep = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+      var ItemClass = this.constructor; // 부모를 넘겨줘야 상대 주소를 맞출 수 있다. 
+
+      var item = new ItemClass(this.toCloneObject(isDeep));
+      item.setParent(this.json.parent);
+      return item;
+    }
+    /**
+     * set json content
+     *
+     * @param {object} obj
+     */
+
+  }, {
+    key: "reset",
+    value: function reset(obj) {
+      this.json = this.convert(Object.assign(this.json, obj));
+      this.lastChangedField = obj;
+      this.changed();
+    }
+  }, {
+    key: "hasChangedField",
+    value: function hasChangedField() {
+      var _this3 = this;
+
+      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
+      return args.some(function (it) {
+        return _this3.lastChangedField[it];
+      });
+    }
+    /**
+     * define default object for item
+     *
+     * @param {object} obj
+     */
+
+  }, {
+    key: "getDefaultObject",
+    value: function getDefaultObject() {
+      var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var id = Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_3__["uuidShort"])();
+      return _objectSpread({
+        id: id,
+        _timestamp: Date.now(),
+        _time: performance.now(),
+        visible: true,
+        // 보이기 여부 설정 
+        lock: false,
+        // 편집을 막고 
+        selected: false,
+        // 선택 여부 체크 
+        layers: []
+      }, obj);
+    }
+    /**
+     * 지정된 필드의 값을 object 형태로 리턴한다. 
+     * 
+     * @param  {...string} args 필드 리스트 
+     */
+
+  }, {
+    key: "attrs",
+    value: function attrs() {
+      var _this4 = this;
+
+      var result = {};
+
+      for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+        args[_key3] = arguments[_key3];
+      }
+
+      args.forEach(function (field) {
+        result[field] = Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_4__["clone"])(_this4.json[field]);
+      });
+      return result;
+    }
+    /**
+     * 자식을 가지고 있는지 체크 
+     * 
+     * @returns {boolean}
+     */
+
+  }, {
+    key: "hasChildren",
+    value: function hasChildren() {
+      return this.layers.length > 0;
+    }
+    /**
+     * 자식으로 추가한다. 
+     * 
+     * @param {Item} layer 
+     */
+
+  }, {
+    key: "appendChildItem",
+    value: function appendChildItem(layer) {
+      if (layer.parent === this.ref) {
+        return layer;
+      }
+
+      this.resetMatrix(layer); // 객체를 추가할 때는  layer 의 절대 값을 기준으로 객체를 움직인다. 
+
+      if (layer.parent) {
+        layer.remove();
+      }
+
+      layer.setParent(this.ref);
+      this.json.layers.push(layer);
+      this.project.addIndexItem(layer);
+      return layer;
+    }
+    /**
+     * 자식중에 맨앞에 추가한다. 
+     * 
+     * @param {Item} layer 
+     */
+
+  }, {
+    key: "prependChildItem",
+    value: function prependChildItem(layer) {
+      this.resetMatrix(layer); // 객체를 추가할 때는  layer 의 절대 값을 기준으로 객체를 움직인다. 
+
+      if (layer.parent) {
+        layer.remove();
+      }
+
+      layer.setParent(this.ref);
+      this.json.layers.unshift(layer);
+      this.project.addIndexItem(layer);
+      return layer;
+    }
+  }, {
+    key: "resetMatrix",
+    value: function resetMatrix(item) {}
+    /**
+     * 특정 index 에 자식을 추가한다. 
+     * 
+     * @param {Item} layer 
+     * @param {number} index 
+     */
+
+  }, {
+    key: "insertChildItem",
+    value: function insertChildItem(layer) {
+      var index = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+      this.resetMatrix(layer); // 객체를 추가할 때는  layer 의 절대 값을 기준으로 객체를 움직인다. 
+
+      if (layer.parent) {
+        layer.remove();
+      }
+
+      layer.setParent(this.ref);
+      this.json.layers.splice(index, 0, layer);
+      this.project.addIndexItem(layer);
+      return layer;
+    }
+    /**
+     * 현재 Item 의 그 다음 순서로 추가한다. 
+     * 
+     * @param {Item} layer 
+     */
+
+  }, {
+    key: "appendAfter",
+    value: function appendAfter(layer) {
+      var index = this.parent.findIndex(this);
+      this.parent.insertChildItem(layer, index);
+      this.project.addIndexItem(layer);
+      return layer;
+    }
+    /**
+     * 현재 Item 의 이전 순서로 추가한다. 
+     * 
+     * @param {Item} layer 
+     */
+
+  }, {
+    key: "appendBefore",
+    value: function appendBefore(layer) {
+      var index = this.parent.findIndex(this);
+      this.parent.insertChildItem(layer, index - 1);
+      this.project.addIndexItem(layer);
+      return layer;
+    }
+    /**
+     * 특정한 위치에 자식 객체로 Item 을 추가 한다. 
+     * set position in layers 
+     * 
+     * @param {Number} position 
+     * @param {Item} item 
+     */
+
+  }, {
+    key: "setPositionInPlace",
+    value: function setPositionInPlace(position, item) {
+      this.layers.splice(position, 0, item);
+    }
+    /**
+     * toggle item's attribute
+     *
+     * @param {*} field
+     * @param {*} toggleValue
+     */
+
+  }, {
+    key: "toggle",
+    value: function toggle(field, toggleValue) {
+      if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_4__["isUndefined"])(toggleValue)) {
+        this.json[field] = !this.json[field];
+      } else {
+        this.json[field] = !!toggleValue;
+      }
+    }
+  }, {
+    key: "isTreeItemHide",
+    value: function isTreeItemHide() {
+      var currentParent = this.parent;
+      var collapsedList = [];
+
+      do {
+        if (currentParent.is('project')) break;
+        collapsedList.push(Boolean(currentParent.collapsed));
+        currentParent = currentParent.parent;
+      } while (currentParent); // 부모중에 하나라도 collapsed 가 있으면 여긴 트리에서 숨김 
+
+
+      return Boolean(collapsedList.filter(Boolean).length);
+    }
+  }, {
+    key: "expectJSON",
+    value: function expectJSON(key) {
+      if (key === 'parent') return false;
+      if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_4__["isUndefined"])(this.json[key])) return false;
+      return true;
+    }
+    /**
+     * convert to json
+     * 
+     */
+
+  }, {
+    key: "toJSON",
+    value: function toJSON() {
+      var _this5 = this;
+
+      var json = this.json;
+      var newJSON = {};
+      Object.keys(json).filter(function (key) {
+        return _this5.expectJSON(key);
+      }).forEach(function (key) {
+        newJSON[key] = json[key];
+      });
+      return newJSON;
+    }
+  }, {
+    key: "resize",
+    value: function resize() {}
+    /**
+     * Item 복사하기 
+     * 
+     * @param {number} dist 
+     */
+
+  }, {
+    key: "copy",
+    value: function copy() {
+      var dist = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      return this.json.parent.copyItem(this.ref, dist);
+    }
+  }, {
+    key: "findIndex",
+    value: function findIndex(item) {
+      return this.json.layers.indexOf(item.ref);
+    }
+  }, {
+    key: "copyItem",
+    value: function copyItem(childItem) {
+      var dist = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
+      // clone 을 어떻게 해야하나? 
+      var child = childItem.clone();
+      child.move([dist, dist, 0]);
+      var childIndex = this.findIndex(childItem);
+
+      if (childIndex > -1) {
+        this.json.layers.splice(childIndex + 1, 0, child);
+        this.project.addIndexItem(child);
+      }
+
+      return child;
+    }
+    /**
+     * 부모 객체에서 나를 지운다. 
+     * remove self in parent 
+     */
+
+  }, {
+    key: "remove",
+    value: function remove() {
+      this.json.parent.removeItem(this.ref);
+      this.project.removeIndexItem(this.ref);
+    }
+    /**
+     * remote child item 
+     * 
+     * @param {Item} childItem 
+     */
+
+  }, {
+    key: "removeItem",
+    value: function removeItem(childItem) {
+      var index = this.findIndex(childItem);
+
+      if (index > -1) {
+        this.json.layers.splice(index, 1);
+      }
+    }
+    /**
+     * 부모 아이디를 가지고 있는지 체크 한다. 
+     * 
+     * @param {string} parentId 
+     */
+
+  }, {
+    key: "hasParent",
+    value: function hasParent(parentId) {
+      var isParent = this.json.parent.id === parentId;
+      if (!isParent && this.json.parent.is('project') === false) return this.json.parent.hasParent(parentId);
+      return isParent;
+    }
+    /**
+     * 하위 자식 객체 중에 id를 가진 Item 을 리턴한다. 
+     * 
+     * @param {string} id 
+     * @returns {Item|null} 검색된 Item 객체 
+     */
+
+  }, {
+    key: "searchById",
+    value: function searchById(id) {
+      if (this.id === id) {
+        project.addIndexItem(this.ref);
+        return this.ref;
+      }
+
+      var project = this.project;
+
+      for (var i = 0, len = this.layers.length; i < len; i++) {
+        var item = this.layers[i];
+
+        if (item.id === id) {
+          project.addIndexItem(item);
+          return item;
+        } else {
+          var searchedItem = item.searchById(id);
+
+          if (searchedItem) {
+            return searchedItem;
+          }
+        }
+      }
+
+      return null;
+    }
+  }]);
+
+  return Item;
+}();
 
 /***/ }),
 /* 37 */
@@ -26208,7 +26208,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_11__[/* registElement */ "
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3);
 /* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(8);
-/* harmony import */ var el_editor_unit_DirectionLength__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(64);
+/* harmony import */ var el_editor_unit_DirectionLength__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(65);
 /* harmony import */ var el_editor_items_Property__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(33);
 
 
@@ -26678,7 +26678,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_7__[/* registElement */ "a
 /* harmony import */ var _ImageResource__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(81);
 /* harmony import */ var _ColorStep__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(21);
 /* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(8);
-/* harmony import */ var el_base_Color__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(27);
+/* harmony import */ var el_base_Color__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(25);
 
 
 
@@ -27651,7 +27651,7 @@ var SVGFill_SVGFill = /*#__PURE__*/function (_Property) {
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _DomRender__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(62);
+/* harmony import */ var _DomRender__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(63);
 
 
 
@@ -28284,7 +28284,7 @@ var func = __webpack_require__(8);
 var RendererManager = __webpack_require__(83);
 
 // EXTERNAL MODULE: ./src/el/editor/items/Item.js
-var Item = __webpack_require__(35);
+var Item = __webpack_require__(36);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/classCallCheck.js
 var classCallCheck = __webpack_require__(2);
@@ -28307,7 +28307,7 @@ var getPrototypeOf = __webpack_require__(1);
 var getPrototypeOf_default = /*#__PURE__*/__webpack_require__.n(getPrototypeOf);
 
 // EXTERNAL MODULE: ./src/el/editor/renderer/HTMLRenderer/DomRender.js + 1 modules
-var DomRender = __webpack_require__(62);
+var DomRender = __webpack_require__(63);
 
 // CONCATENATED MODULE: ./src/el/editor/renderer/HTMLRenderer/ArtBoardRender.js
 
@@ -28682,7 +28682,7 @@ var toConsumableArray = __webpack_require__(16);
 var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableArray);
 
 // EXTERNAL MODULE: ./src/el/editor/items/Project.js + 45 modules
-var Project = __webpack_require__(70);
+var Project = __webpack_require__(71);
 
 // EXTERNAL MODULE: ./src/el/editor/property-parser/SVGFilter.js + 32 modules
 var SVGFilter = __webpack_require__(57);
@@ -28839,7 +28839,7 @@ var RectRender_RectRender = /*#__PURE__*/function (_LayerRender) {
 
 
 // EXTERNAL MODULE: ./src/el/base/Color.js + 2 modules
-var Color = __webpack_require__(27);
+var Color = __webpack_require__(25);
 
 // EXTERNAL MODULE: ./src/el/editor/property-parser/SVGFill.js + 3 modules
 var SVGFill = __webpack_require__(43);
@@ -29246,7 +29246,7 @@ var SVGTextRender_SVGTextRender = /*#__PURE__*/function (_SVGItemRender) {
 
 
 // EXTERNAL MODULE: ./src/el/editor/renderer/template-engine/TemplateEngine.js + 1 modules
-var TemplateEngine = __webpack_require__(105);
+var TemplateEngine = __webpack_require__(104);
 
 // CONCATENATED MODULE: ./src/el/editor/renderer/HTMLRenderer/TemplateRender.js
 
@@ -29715,7 +29715,7 @@ var renderers = {
 /* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _PathParser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(32);
+/* harmony import */ var _PathParser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(34);
 
 
 
@@ -29941,13 +29941,13 @@ var PathStringManager = /*#__PURE__*/function () {
 /* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayWithHoles = __webpack_require__(144);
+var arrayWithHoles = __webpack_require__(143);
 
-var iterableToArray = __webpack_require__(143);
+var iterableToArray = __webpack_require__(142);
 
-var unsupportedIterableToArray = __webpack_require__(111);
+var unsupportedIterableToArray = __webpack_require__(110);
 
-var nonIterableRest = __webpack_require__(145);
+var nonIterableRest = __webpack_require__(144);
 
 function _toArray(arr) {
   return arrayWithHoles(arr) || iterableToArray(arr) || unsupportedIterableToArray(arr) || nonIterableRest();
@@ -29976,7 +29976,7 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _DomItem__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(104);
+/* harmony import */ var _DomItem__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(103);
 /* harmony import */ var el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(11);
 
 
@@ -30061,7 +30061,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBtoXYZ", function() { return RGBtoXYZ; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RGBtoLAB", function() { return RGBtoLAB; });
 /* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(15);
-/* harmony import */ var _fromLAB__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(98);
+/* harmony import */ var _fromLAB__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(97);
 
 
 /**
@@ -30288,7 +30288,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randomByCount", function() { return randomByCount; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "random", function() { return random; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "randomRGBA", function() { return randomRGBA; });
-/* harmony import */ var _formatter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(63);
+/* harmony import */ var _formatter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(64);
 
 function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -30915,7 +30915,7 @@ var PatternClass = {
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _Layer__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(49);
-/* harmony import */ var _manager_ComponentManager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(34);
+/* harmony import */ var _manager_ComponentManager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(35);
 /* harmony import */ var _icon_icon__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(11);
 
 
@@ -34905,6 +34905,201 @@ var TextShadow = /*#__PURE__*/function (_Property) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return KEY_CODE; });
+var KEY_CODE = {
+  'backspace': 0x08,
+  // 8
+  'tab': 0x09,
+  // 9
+  'enter': 0x0D,
+  // 13 
+  'escape': 0x1B,
+  // 27 
+  'space': 0x20,
+  // 32 
+  'pageup': 0x21,
+  // 33
+  'pagedown': 0x22,
+  // 34
+  'end': 0x23,
+  // 35
+  'home': 0x24,
+  // 36
+  'left': 0x25,
+  // 37
+  'up': 0x26,
+  // 38
+  'right': 0x27,
+  // 39
+  'down': 0x28,
+  // 40
+  'insert': 0x2D,
+  // 45
+  'delete': 0x2E,
+  // 46
+  '0': 0x30,
+  // 49
+  '1': 0x31,
+  // 50
+  '2': 0x32,
+  // 51
+  '3': 0x33,
+  // 52
+  '4': 0x34,
+  // 53
+  '5': 0x35,
+  // 54
+  '6': 0x36,
+  // 55
+  '7': 0x37,
+  // 56
+  '8': 0x38,
+  // 57
+  '9': 0x39,
+  // 58
+  'semicolon': 0x3B,
+  // 59
+  'equals': 0x3D,
+  // 61
+  'a': 0x41,
+  // 65
+  'b': 0x42,
+  // 66
+  'c': 0x43,
+  // 67
+  'd': 0x44,
+  // 68
+  'e': 0x45,
+  // 69
+  'f': 0x46,
+  // 70
+  'g': 0x47,
+  // 71
+  'h': 0x48,
+  // 72
+  'i': 0x49,
+  // 73
+  'j': 0x4A,
+  // 74
+  'k': 0x4B,
+  // 75
+  'l': 0x4C,
+  // 76
+  'm': 0x4D,
+  // 77
+  'n': 0x4E,
+  // 78
+  'o': 0x4F,
+  // 79
+  'p': 0x50,
+  // 80
+  'q': 0x51,
+  // 81
+  'r': 0x52,
+  // 82
+  's': 0x53,
+  // 83
+  't': 0x54,
+  // 84
+  'u': 0x55,
+  // 85
+  'v': 0x56,
+  // 86
+  'w': 0x57,
+  // 87
+  'x': 0x58,
+  // 88
+  'y': 0x59,
+  // 89
+  'z': 0x5A,
+  // 90
+  'multiply': 0x6A,
+  // 106 , * 
+  'add': 0x6B,
+  // 107 , "+"
+  'subtract': 0x6D,
+  // 109 , "-" 
+  'divide': 0x6F,
+  // 111 , "/"
+  'f1': 0x70,
+  // 112 
+  'f2': 0x71,
+  // 113 
+  'f3': 0x72,
+  // 114 
+  'f4': 0x73,
+  // 115 
+  'f5': 0x74,
+  // 116 
+  'f6': 0x75,
+  // 117 
+  'f7': 0x76,
+  // 118 
+  'f8': 0x77,
+  // 119 
+  'f9': 0x78,
+  // 120 
+  'f10': 0x79,
+  // 121 
+  'f11': 0x7A,
+  // 122 
+  'f12': 0x7B,
+  // 123 
+  'f13': 0x7C,
+  // 124 
+  'f14': 0x7D,
+  // 125 
+  'f15': 0x7E,
+  // 126 
+  'f16': 0x7F,
+  // 127 
+  'f17': 0x80,
+  // 128 
+  'f18': 0x81,
+  // 129 
+  'f19': 0x82,
+  // 130 
+  'comma': 0xBC,
+  // 188	Comma (",") key.
+  ',': 0xBC,
+  // 188	Comma (",") key.
+  'period': 0xBE,
+  // 190	Period (".") key.
+  '.': 0xBE,
+  // 190	Period (".") key.
+  'slash': 0xBF,
+  // 191	Slash ("/") key.
+  '/': 0xBF,
+  // 191	Slash ("/") key.
+  'backquote': 0xC0,
+  // 192	Back tick ("`") key.
+  '`': 0xC0,
+  // 192	Back tick ("`") key.
+  'openbracket': 0xDB,
+  // 219	Open square bracket ("[") key.
+  '[': 0xDB,
+  // 219	Open square bracket ("[") key.
+  'backslash': 0xDC,
+  // 220	Back slash ("\") key.
+  "\\": 0xDC,
+  // 220	Back slash ("\") key.
+  'closebracket': 0xDD,
+  // 221	Close square bracket ("]") key.
+  ']': 0xDD,
+  // 221	Close square bracket ("]") key.
+  "quote": 0xDE,
+  // 222	Quote (''') key.
+  "'": 0xDE,
+  // 222	Quote (''') key.
+  "altgr": 0xE1 // 225	AltGr key (Level 3 Shift key or Level 5 Shift key) on Linux.
+
+};
+
+/***/ }),
+/* 63 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ DomRender_DomRender; });
@@ -34944,7 +35139,7 @@ var Dom = __webpack_require__(20);
 var func = __webpack_require__(8);
 
 // EXTERNAL MODULE: ./src/el/editor/items/Item.js
-var Item = __webpack_require__(35);
+var Item = __webpack_require__(36);
 
 // EXTERNAL MODULE: ./src/el/editor/property-parser/BackgroundImage.js + 1 modules
 var BackgroundImage = __webpack_require__(37);
@@ -35584,7 +35779,7 @@ var DomRender_DomRender = /*#__PURE__*/function (_ItemRender) {
 
 
 /***/ }),
-/* 63 */
+/* 64 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -35706,7 +35901,7 @@ function hsl(obj) {
 }
 
 /***/ }),
-/* 64 */
+/* 65 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -35767,7 +35962,7 @@ var DirectionLength = /*#__PURE__*/function () {
 }();
 
 /***/ }),
-/* 65 */
+/* 66 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -35777,7 +35972,7 @@ var DirectionLength = /*#__PURE__*/function () {
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
-/* harmony import */ var el_base_Color__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(27);
+/* harmony import */ var el_base_Color__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(25);
 
 
 
@@ -35849,46 +36044,46 @@ var Border = /*#__PURE__*/function () {
 
 
 /***/ }),
-/* 66 */
+/* 67 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/BackgroundImageEditor.js
-var BackgroundImageEditor = __webpack_require__(113);
+var BackgroundImageEditor = __webpack_require__(112);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/BoxShadowEditor.js
-var BoxShadowEditor = __webpack_require__(114);
+var BoxShadowEditor = __webpack_require__(113);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/BorderRadiusEditor.js
-var BorderRadiusEditor = __webpack_require__(115);
+var BorderRadiusEditor = __webpack_require__(114);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/ColorSingleEditor.js
-var ColorSingleEditor = __webpack_require__(116);
+var ColorSingleEditor = __webpack_require__(115);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/ColorViewEditor.js
 var ColorViewEditor = __webpack_require__(80);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/CubicBezierEditor.js
-var CubicBezierEditor = __webpack_require__(93);
+var CubicBezierEditor = __webpack_require__(92);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/FilterEditor.js
-var FilterEditor = __webpack_require__(117);
+var FilterEditor = __webpack_require__(116);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/GradientEditor.js
-var GradientEditor = __webpack_require__(96);
+var GradientEditor = __webpack_require__(95);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/IterationCountEditor.js
-var IterationCountEditor = __webpack_require__(118);
+var IterationCountEditor = __webpack_require__(117);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/OffsetEditor.js
-var OffsetEditor = __webpack_require__(119);
+var OffsetEditor = __webpack_require__(118);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/CSSPropertyEditor.js + 1 modules
-var CSSPropertyEditor = __webpack_require__(95);
+var CSSPropertyEditor = __webpack_require__(94);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/PerspectiveOriginEditor.js
-var PerspectiveOriginEditor = __webpack_require__(123);
+var PerspectiveOriginEditor = __webpack_require__(122);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/RangeEditor.js
 var RangeEditor = __webpack_require__(39);
@@ -35897,28 +36092,28 @@ var RangeEditor = __webpack_require__(39);
 var SelectEditor = __webpack_require__(41);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/TextShadowEditor.js
-var TextShadowEditor = __webpack_require__(124);
+var TextShadowEditor = __webpack_require__(123);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/TransformEditor.js
-var TransformEditor = __webpack_require__(121);
+var TransformEditor = __webpack_require__(120);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/TransformOriginEditor.js
-var TransformOriginEditor = __webpack_require__(122);
+var TransformOriginEditor = __webpack_require__(121);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/VarEditor.js
-var VarEditor = __webpack_require__(120);
+var VarEditor = __webpack_require__(119);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/clip-path/CircleEditor.js
-var CircleEditor = __webpack_require__(129);
+var CircleEditor = __webpack_require__(128);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/SVGFilterEditor.js + 6 modules
-var SVGFilterEditor = __webpack_require__(137);
+var SVGFilterEditor = __webpack_require__(136);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/TextEditor.js
-var TextEditor = __webpack_require__(97);
+var TextEditor = __webpack_require__(96);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/NumberRangeEditor.js
-var NumberRangeEditor = __webpack_require__(68);
+var NumberRangeEditor = __webpack_require__(69);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/classCallCheck.js
 var classCallCheck = __webpack_require__(2);
@@ -36136,38 +36331,38 @@ Object(registElement["a" /* registElement */])({
   SVGClipPathEditor: SVGClipPathEditor_SVGClipPathEditor
 });
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/DirectionEditor.js
-var DirectionEditor = __webpack_require__(134);
+var DirectionEditor = __webpack_require__(133);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/InputArrayEditor.js
-var InputArrayEditor = __webpack_require__(130);
+var InputArrayEditor = __webpack_require__(129);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/ImageSelectEditor.js
-var ImageSelectEditor = __webpack_require__(132);
+var ImageSelectEditor = __webpack_require__(131);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/SelectIconEditor.js
-var SelectIconEditor = __webpack_require__(69);
+var SelectIconEditor = __webpack_require__(70);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/InputRangeEditor.js
-var InputRangeEditor = __webpack_require__(67);
+var InputRangeEditor = __webpack_require__(68);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/StrokeDashArrayEditor.js
-var StrokeDashArrayEditor = __webpack_require__(125);
+var StrokeDashArrayEditor = __webpack_require__(124);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/PathDataEditor.js
-var PathDataEditor = __webpack_require__(106);
+var PathDataEditor = __webpack_require__(105);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/PolygonDataEditor.js
-var PolygonDataEditor = __webpack_require__(126);
+var PolygonDataEditor = __webpack_require__(125);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/OffsetPathListEditor.js
-var OffsetPathListEditor = __webpack_require__(107);
+var OffsetPathListEditor = __webpack_require__(106);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/defineProperty.js
 var defineProperty = __webpack_require__(7);
 var defineProperty_default = /*#__PURE__*/__webpack_require__.n(defineProperty);
 
 // EXTERNAL MODULE: ./src/el/base/UIElement.js + 4 modules
-var UIElement = __webpack_require__(29);
+var UIElement = __webpack_require__(30);
 
 // CONCATENATED MODULE: ./src/el/editor/ui/property-editor/BackgroundPositionEditor.js
 
@@ -36393,10 +36588,10 @@ Object(registElement["a" /* registElement */])({
   GradientSingleEditor: GradientSingleEditor_GradientSingleEditor
 });
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/BorderEditor.js
-var BorderEditor = __webpack_require__(108);
+var BorderEditor = __webpack_require__(107);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/BorderValueEditor.js
-var BorderValueEditor = __webpack_require__(127);
+var BorderValueEditor = __webpack_require__(126);
 
 // EXTERNAL MODULE: ./src/el/editor/property-parser/SVGFill.js + 3 modules
 var SVGFill = __webpack_require__(43);
@@ -36556,7 +36751,7 @@ Object(registElement["a" /* registElement */])({
   FillSingleEditor: FillSingleEditor_FillSingleEditor
 });
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/FillEditor.js
-var FillEditor = __webpack_require__(135);
+var FillEditor = __webpack_require__(134);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/slicedToArray.js
 var slicedToArray = __webpack_require__(13);
@@ -36791,10 +36986,10 @@ Object(registElement["a" /* registElement */])({
   SVGFilterSelectEditor: SVGFilterSelectEditor_SVGFilterSelectEditor
 });
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/FuncFilterEditor.js
-var FuncFilterEditor = __webpack_require__(131);
+var FuncFilterEditor = __webpack_require__(130);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/ColorMatrixEditor.js + 25 modules
-var ColorMatrixEditor = __webpack_require__(136);
+var ColorMatrixEditor = __webpack_require__(135);
 
 // EXTERNAL MODULE: ./src/el/editor/unit/Length.js
 var Length = __webpack_require__(3);
@@ -37028,7 +37223,7 @@ var toArray = __webpack_require__(48);
 var toArray_default = /*#__PURE__*/__webpack_require__.n(toArray);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/NumberInputEditor.js
-var NumberInputEditor = __webpack_require__(94);
+var NumberInputEditor = __webpack_require__(93);
 
 // CONCATENATED MODULE: ./src/el/editor/ui/property-editor/GridBoxEditor.js
 
@@ -37585,7 +37780,7 @@ var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableA
 var Pattern = __webpack_require__(52);
 
 // EXTERNAL MODULE: ./src/el/editor/preset/patterns/index.js + 7 modules
-var patterns = __webpack_require__(110);
+var patterns = __webpack_require__(109);
 
 // CONCATENATED MODULE: ./src/el/editor/ui/property-editor/PatternSizeEditor.js
 
@@ -37889,10 +38084,10 @@ Object(registElement["a" /* registElement */])({
   PatternEditor: PatternEditor_PatternEditor
 });
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/BlendSelectEditor.js
-var BlendSelectEditor = __webpack_require__(133);
+var BlendSelectEditor = __webpack_require__(132);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/MediaProgressEditor.js
-var MediaProgressEditor = __webpack_require__(128);
+var MediaProgressEditor = __webpack_require__(127);
 
 // CONCATENATED MODULE: ./src/el/editor/ui/property-editor/CheckBoxEditor.js
 
@@ -38147,7 +38342,7 @@ Object(registElement["a" /* registElement */])({
 });
 
 /***/ }),
-/* 67 */
+/* 68 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -38342,7 +38537,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_11__[/* registElement */ "
 });
 
 /***/ }),
-/* 68 */
+/* 69 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -38533,7 +38728,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_8__[/* registElement */ "a
 });
 
 /***/ }),
-/* 69 */
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -38715,7 +38910,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_9__[/* registElement */ "a
 });
 
 /***/ }),
-/* 70 */
+/* 71 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -38756,7 +38951,7 @@ var getPrototypeOf = __webpack_require__(1);
 var getPrototypeOf_default = /*#__PURE__*/__webpack_require__.n(getPrototypeOf);
 
 // EXTERNAL MODULE: ./src/el/editor/manager/ComponentManager.js
-var ComponentManager = __webpack_require__(34);
+var ComponentManager = __webpack_require__(35);
 
 // EXTERNAL MODULE: ./src/el/base/functions/math.js + 1 modules
 var math = __webpack_require__(15);
@@ -38765,14 +38960,14 @@ var math = __webpack_require__(15);
 var functions_func = __webpack_require__(8);
 
 // EXTERNAL MODULE: ./src/el/base/functions/time.js
-var functions_time = __webpack_require__(30);
+var functions_time = __webpack_require__(31);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/toConsumableArray.js
 var toConsumableArray = __webpack_require__(16);
 var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableArray);
 
 // EXTERNAL MODULE: ./src/el/base/functions/bezier.js
-var bezier = __webpack_require__(25);
+var bezier = __webpack_require__(26);
 
 // EXTERNAL MODULE: ./src/el/editor/unit/Length.js
 var Length = __webpack_require__(3);
@@ -38853,7 +39048,7 @@ function makeInterpolateLength(layer, property, startNumber, endNumber) {
   };
 }
 // EXTERNAL MODULE: ./src/el/editor/property-parser/BorderRadius.js
-var BorderRadius = __webpack_require__(90);
+var BorderRadius = __webpack_require__(89);
 
 // CONCATENATED MODULE: ./src/el/editor/interpolate/interpolate-functions/makeInterpolateBorderRadius.js
 
@@ -38903,10 +39098,10 @@ function makeInterpolateBoolean(layer, property, s, e) {
   };
 }
 // EXTERNAL MODULE: ./src/el/base/Color.js + 2 modules
-var Color = __webpack_require__(27);
+var Color = __webpack_require__(25);
 
 // EXTERNAL MODULE: ./src/el/base/functions/mixin.js
-var mixin = __webpack_require__(100);
+var mixin = __webpack_require__(99);
 
 // CONCATENATED MODULE: ./src/el/editor/interpolate/interpolate-functions/makeInterpolateColor.js
 
@@ -39953,7 +40148,7 @@ function makeInterpolateStrokeDashArrray(layer, property, startValue, endValue) 
   };
 }
 // EXTERNAL MODULE: ./src/el/editor/parser/PathParser.js
-var PathParser = __webpack_require__(32);
+var PathParser = __webpack_require__(34);
 
 // CONCATENATED MODULE: ./src/el/editor/interpolate/interpolate-functions/svg/makeInterpolatePathValues.js
 
@@ -40079,7 +40274,7 @@ function makeInterpolatePolygon(layer, property, startValue, endValue) {
   };
 }
 // EXTERNAL MODULE: ./src/el/editor/interpolate/interpolate-functions/offset-path/makeInterpolateOffset.js + 3 modules
-var makeInterpolateOffset = __webpack_require__(140);
+var makeInterpolateOffset = __webpack_require__(139);
 
 // CONCATENATED MODULE: ./src/el/editor/interpolate/interpolate-functions/makeInterpolateOffsetPath.js
 
@@ -40460,10 +40655,10 @@ function createCurveFunction(timing) {
 var Dom = __webpack_require__(20);
 
 // EXTERNAL MODULE: ./src/el/editor/items/Item.js
-var Item = __webpack_require__(35);
+var Item = __webpack_require__(36);
 
 // EXTERNAL MODULE: ./src/el/editor/property-parser/Keyframe.js
-var Keyframe = __webpack_require__(101);
+var Keyframe = __webpack_require__(100);
 
 // CONCATENATED MODULE: ./src/el/editor/items/AssetItem.js
 
@@ -41725,7 +41920,7 @@ var TimelineItem_TimelineItem = /*#__PURE__*/function (_AssetItem) {
 var esm = __webpack_require__(12);
 
 // EXTERNAL MODULE: ./src/el/base/functions/collision.js
-var collision = __webpack_require__(31);
+var collision = __webpack_require__(32);
 
 // CONCATENATED MODULE: ./src/el/editor/items/Project.js
 
@@ -41920,7 +42115,7 @@ var Project_Project = /*#__PURE__*/function (_TimelineItem) {
   }, {
     key: "resetMatrix",
     value: function resetMatrix(childItem) {
-      var _mat4$getTranslation = esm["a" /* mat4 */].getTranslation([], Object(math["calculateMatrix"])(childItem.getAccumulatedMatrix(), childItem.getTransformMatrixInverse())),
+      var _mat4$getTranslation = esm["a" /* mat4 */].getTranslation([], Object(math["calculateMatrix"])(childItem.getAccumulatedMatrix(), childItem.localMatrix)),
           _mat4$getTranslation2 = slicedToArray_default()(_mat4$getTranslation, 2),
           x = _mat4$getTranslation2[0],
           y = _mat4$getTranslation2[1];
@@ -41944,7 +42139,7 @@ var Project_Project = /*#__PURE__*/function (_TimelineItem) {
 ComponentManager["a" /* ComponentManager */].registerComponent('project', Project_Project);
 
 /***/ }),
-/* 71 */
+/* 72 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -41953,7 +42148,7 @@ ComponentManager["a" /* ComponentManager */].registerComponent('project', Projec
 var Dom = __webpack_require__(20);
 
 // EXTERNAL MODULE: ./src/el/editor/items/Item.js
-var Item = __webpack_require__(35);
+var Item = __webpack_require__(36);
 
 // EXTERNAL MODULE: ./src/el/editor/manager/RendererManager.js
 var RendererManager = __webpack_require__(83);
@@ -41986,7 +42181,7 @@ var defineProperty = __webpack_require__(7);
 var defineProperty_default = /*#__PURE__*/__webpack_require__.n(defineProperty);
 
 // EXTERNAL MODULE: ./src/el/editor/renderer/HTMLRenderer/DomRender.js + 1 modules
-var DomRender = __webpack_require__(62);
+var DomRender = __webpack_require__(63);
 
 // CONCATENATED MODULE: ./src/el/editor/renderer/SVGRenderer/SVGRender.js
 
@@ -42451,7 +42646,7 @@ var RectRender_RectRender = /*#__PURE__*/function (_SVGLayerRender) {
 
 
 // EXTERNAL MODULE: ./src/el/base/Color.js + 2 modules
-var Color = __webpack_require__(27);
+var Color = __webpack_require__(25);
 
 // EXTERNAL MODULE: ./src/el/editor/property-parser/SVGFill.js + 3 modules
 var SVGFill = __webpack_require__(43);
@@ -42880,7 +43075,7 @@ var SVGTextRender_SVGTextRender = /*#__PURE__*/function (_SVGItemRender) {
 
 
 // EXTERNAL MODULE: ./src/el/editor/renderer/template-engine/TemplateEngine.js + 1 modules
-var TemplateEngine = __webpack_require__(105);
+var TemplateEngine = __webpack_require__(104);
 
 // CONCATENATED MODULE: ./src/el/editor/renderer/SVGRenderer/TemplateRender.js
 
@@ -43229,7 +43424,7 @@ var renderers = {
 });
 
 /***/ }),
-/* 72 */
+/* 73 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -43238,7 +43433,7 @@ var renderers = {
 var func = __webpack_require__(8);
 
 // EXTERNAL MODULE: ./src/el/editor/renderer/SVGRenderer/index.js + 15 modules
-var SVGRenderer = __webpack_require__(71);
+var SVGRenderer = __webpack_require__(72);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/classCallCheck.js
 var classCallCheck = __webpack_require__(2);
@@ -43395,201 +43590,6 @@ var AnipaExport_AnipaExport = /*#__PURE__*/function () {
     return editor.replaceLocalUrltoRealUrl(SVGRenderer["a" /* default */].render(rootItem, null, true));
   }
 });
-
-/***/ }),
-/* 73 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return KEY_CODE; });
-var KEY_CODE = {
-  'backspace': 0x08,
-  // 8
-  'tab': 0x09,
-  // 9
-  'enter': 0x0D,
-  // 13 
-  'escape': 0x1B,
-  // 27 
-  'space': 0x20,
-  // 32 
-  'pageup': 0x21,
-  // 33
-  'pagedown': 0x22,
-  // 34
-  'end': 0x23,
-  // 35
-  'home': 0x24,
-  // 36
-  'left': 0x25,
-  // 37
-  'up': 0x26,
-  // 38
-  'right': 0x27,
-  // 39
-  'down': 0x28,
-  // 40
-  'insert': 0x2D,
-  // 45
-  'delete': 0x2E,
-  // 46
-  '0': 0x30,
-  // 49
-  '1': 0x31,
-  // 50
-  '2': 0x32,
-  // 51
-  '3': 0x33,
-  // 52
-  '4': 0x34,
-  // 53
-  '5': 0x35,
-  // 54
-  '6': 0x36,
-  // 55
-  '7': 0x37,
-  // 56
-  '8': 0x38,
-  // 57
-  '9': 0x39,
-  // 58
-  'semicolon': 0x3B,
-  // 59
-  'equals': 0x3D,
-  // 61
-  'a': 0x41,
-  // 65
-  'b': 0x42,
-  // 66
-  'c': 0x43,
-  // 67
-  'd': 0x44,
-  // 68
-  'e': 0x45,
-  // 69
-  'f': 0x46,
-  // 70
-  'g': 0x47,
-  // 71
-  'h': 0x48,
-  // 72
-  'i': 0x49,
-  // 73
-  'j': 0x4A,
-  // 74
-  'k': 0x4B,
-  // 75
-  'l': 0x4C,
-  // 76
-  'm': 0x4D,
-  // 77
-  'n': 0x4E,
-  // 78
-  'o': 0x4F,
-  // 79
-  'p': 0x50,
-  // 80
-  'q': 0x51,
-  // 81
-  'r': 0x52,
-  // 82
-  's': 0x53,
-  // 83
-  't': 0x54,
-  // 84
-  'u': 0x55,
-  // 85
-  'v': 0x56,
-  // 86
-  'w': 0x57,
-  // 87
-  'x': 0x58,
-  // 88
-  'y': 0x59,
-  // 89
-  'z': 0x5A,
-  // 90
-  'multiply': 0x6A,
-  // 106 , * 
-  'add': 0x6B,
-  // 107 , "+"
-  'subtract': 0x6D,
-  // 109 , "-" 
-  'divide': 0x6F,
-  // 111 , "/"
-  'f1': 0x70,
-  // 112 
-  'f2': 0x71,
-  // 113 
-  'f3': 0x72,
-  // 114 
-  'f4': 0x73,
-  // 115 
-  'f5': 0x74,
-  // 116 
-  'f6': 0x75,
-  // 117 
-  'f7': 0x76,
-  // 118 
-  'f8': 0x77,
-  // 119 
-  'f9': 0x78,
-  // 120 
-  'f10': 0x79,
-  // 121 
-  'f11': 0x7A,
-  // 122 
-  'f12': 0x7B,
-  // 123 
-  'f13': 0x7C,
-  // 124 
-  'f14': 0x7D,
-  // 125 
-  'f15': 0x7E,
-  // 126 
-  'f16': 0x7F,
-  // 127 
-  'f17': 0x80,
-  // 128 
-  'f18': 0x81,
-  // 129 
-  'f19': 0x82,
-  // 130 
-  'comma': 0xBC,
-  // 188	Comma (",") key.
-  ',': 0xBC,
-  // 188	Comma (",") key.
-  'period': 0xBE,
-  // 190	Period (".") key.
-  '.': 0xBE,
-  // 190	Period (".") key.
-  'slash': 0xBF,
-  // 191	Slash ("/") key.
-  '/': 0xBF,
-  // 191	Slash ("/") key.
-  'backquote': 0xC0,
-  // 192	Back tick ("`") key.
-  '`': 0xC0,
-  // 192	Back tick ("`") key.
-  'openbracket': 0xDB,
-  // 219	Open square bracket ("[") key.
-  '[': 0xDB,
-  // 219	Open square bracket ("[") key.
-  'backslash': 0xDC,
-  // 220	Back slash ("\") key.
-  "\\": 0xDC,
-  // 220	Back slash ("\") key.
-  'closebracket': 0xDD,
-  // 221	Close square bracket ("]") key.
-  ']': 0xDD,
-  // 221	Close square bracket ("]") key.
-  "quote": 0xDE,
-  // 222	Quote (''') key.
-  "'": 0xDE,
-  // 222	Quote (''') key.
-  "altgr": 0xE1 // 225	AltGr key (Level 3 Shift key or Level 5 Shift key) on Linux.
-
-};
 
 /***/ }),
 /* 74 */
@@ -43990,7 +43990,7 @@ var RepeatingConicGradient = /*#__PURE__*/function (_ConicGradient) {
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _PathParser__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(32);
+/* harmony import */ var _PathParser__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(34);
 /* harmony import */ var _PathStringManager__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(47);
 /* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(8);
 
@@ -45240,7 +45240,7 @@ var _appTitle$appSample;
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(29);
+/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(30);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(0);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(10);
 /* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(14);
@@ -46257,61 +46257,6 @@ var ADD_BODY_MOUSEUP = 'add/body/mouseup';
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony export getCustomParseIndexString */
-/* unused harmony export customParseMatches */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return customParseConvertMatches; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return customParseReverseMatches; });
-function getCustomParseIndexString(it) {
-  var prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '@';
-  return "".concat(prefix).concat(it.startIndex).padEnd(10, '0');
-}
-function customParseMatches(str, regexp) {
-  var matches = str.match(regexp);
-  var result = [];
-
-  if (!matches) {
-    return result;
-  }
-
-  for (var i = 0, len = matches.length; i < len; i++) {
-    result.push({
-      parsedString: matches[i]
-    });
-  }
-
-  var pos = {
-    next: 0
-  };
-  result.forEach(function (item) {
-    var startIndex = str.indexOf(item.parsedString, pos.next);
-    item.startIndex = startIndex;
-    item.endIndex = startIndex + item.parsedString.length;
-    pos.next = item.endIndex;
-  });
-  return result;
-}
-function customParseConvertMatches(str, regexp) {
-  var m = customParseMatches(str, regexp);
-  m.forEach(function (it) {
-    str = str.replace(it.parsedString, getCustomParseIndexString(it));
-  });
-  return {
-    str: str,
-    matches: m
-  };
-}
-function customParseReverseMatches(str, matches) {
-  matches.forEach(function (it) {
-    str = str.replace(getCustomParseIndexString(it), it.parsedString);
-  });
-  return str;
-}
-
-/***/ }),
-/* 89 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return os; });
 var osInfo = {
   name: undefined
@@ -46325,7 +46270,7 @@ function os() {
 }
 
 /***/ }),
-/* 90 */
+/* 89 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -46381,7 +46326,7 @@ var BorderRadius = /*#__PURE__*/function () {
 
 
 /***/ }),
-/* 91 */
+/* 90 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -46443,7 +46388,7 @@ function HSLtoRGB(h, s, l) {
 }
 
 /***/ }),
-/* 92 */
+/* 91 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -46601,7 +46546,7 @@ var Offset = /*#__PURE__*/function (_Property) {
 }(el_editor_items_Property__WEBPACK_IMPORTED_MODULE_8__[/* Property */ "a"]);
 
 /***/ }),
-/* 93 */
+/* 92 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -46618,11 +46563,11 @@ var Offset = /*#__PURE__*/function (_Property) {
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(29);
+/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(30);
 /* harmony import */ var el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(11);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(0);
 /* harmony import */ var el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(3);
-/* harmony import */ var el_base_functions_bezier__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(25);
+/* harmony import */ var el_base_functions_bezier__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(26);
 /* harmony import */ var el_base_functions_math__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(15);
 /* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(8);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(10);
@@ -46954,7 +46899,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_13__[/* registElement */ "
 });
 
 /***/ }),
-/* 94 */
+/* 93 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -47092,7 +47037,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_8__[/* registElement */ "a
 });
 
 /***/ }),
-/* 95 */
+/* 94 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -47136,25 +47081,25 @@ var ColorViewEditor = __webpack_require__(80);
 var RangeEditor = __webpack_require__(39);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/BackgroundImageEditor.js
-var BackgroundImageEditor = __webpack_require__(113);
+var BackgroundImageEditor = __webpack_require__(112);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/FilterEditor.js
-var FilterEditor = __webpack_require__(117);
+var FilterEditor = __webpack_require__(116);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/BoxShadowEditor.js
-var BoxShadowEditor = __webpack_require__(114);
+var BoxShadowEditor = __webpack_require__(113);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/VarEditor.js
-var VarEditor = __webpack_require__(120);
+var VarEditor = __webpack_require__(119);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/TransformEditor.js
-var TransformEditor = __webpack_require__(121);
+var TransformEditor = __webpack_require__(120);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/TransformOriginEditor.js
-var TransformOriginEditor = __webpack_require__(122);
+var TransformOriginEditor = __webpack_require__(121);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/PerspectiveOriginEditor.js
-var PerspectiveOriginEditor = __webpack_require__(123);
+var PerspectiveOriginEditor = __webpack_require__(122);
 
 // EXTERNAL MODULE: ./src/el/base/functions/func.js
 var func = __webpack_require__(8);
@@ -47163,13 +47108,13 @@ var func = __webpack_require__(8);
 var SelectEditor = __webpack_require__(41);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/NumberRangeEditor.js
-var NumberRangeEditor = __webpack_require__(68);
+var NumberRangeEditor = __webpack_require__(69);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/BorderRadiusEditor.js
-var BorderRadiusEditor = __webpack_require__(115);
+var BorderRadiusEditor = __webpack_require__(114);
 
 // EXTERNAL MODULE: ./src/el/base/UIElement.js + 4 modules
-var UIElement = __webpack_require__(29);
+var UIElement = __webpack_require__(30);
 
 // EXTERNAL MODULE: ./src/el/base/registElement.js
 var registElement = __webpack_require__(10);
@@ -47279,25 +47224,25 @@ Object(registElement["a" /* registElement */])({
   ClipPathEditor: ClipPathEditor_ClipPathEditor
 });
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/TextShadowEditor.js
-var TextShadowEditor = __webpack_require__(124);
+var TextShadowEditor = __webpack_require__(123);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/StrokeDashArrayEditor.js
-var StrokeDashArrayEditor = __webpack_require__(125);
+var StrokeDashArrayEditor = __webpack_require__(124);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/PathDataEditor.js
-var PathDataEditor = __webpack_require__(106);
+var PathDataEditor = __webpack_require__(105);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/PolygonDataEditor.js
-var PolygonDataEditor = __webpack_require__(126);
+var PolygonDataEditor = __webpack_require__(125);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/OffsetPathListEditor.js
-var OffsetPathListEditor = __webpack_require__(107);
+var OffsetPathListEditor = __webpack_require__(106);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/BorderEditor.js
-var BorderEditor = __webpack_require__(108);
+var BorderEditor = __webpack_require__(107);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/MediaProgressEditor.js
-var MediaProgressEditor = __webpack_require__(128);
+var MediaProgressEditor = __webpack_require__(127);
 
 // CONCATENATED MODULE: ./src/el/editor/ui/property-editor/CSSPropertyEditor.js
 
@@ -47802,7 +47747,7 @@ Object(registElement["a" /* registElement */])({
 });
 
 /***/ }),
-/* 96 */
+/* 95 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -47825,7 +47770,7 @@ Object(registElement["a" /* registElement */])({
 /* harmony import */ var el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3);
 /* harmony import */ var _RangeEditor__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(39);
 /* harmony import */ var _SelectEditor__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(41);
-/* harmony import */ var _InputRangeEditor__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(67);
+/* harmony import */ var _InputRangeEditor__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(68);
 /* harmony import */ var el_editor_property_parser_BackgroundImage__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(37);
 /* harmony import */ var el_editor_property_parser_image_resource_Gradient__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(42);
 /* harmony import */ var el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(11);
@@ -48260,7 +48205,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_16__[/* registElement */ "
 });
 
 /***/ }),
-/* 97 */
+/* 96 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48368,7 +48313,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_6__[/* registElement */ "a
 });
 
 /***/ }),
-/* 98 */
+/* 97 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48482,7 +48427,7 @@ function LABtoRGB(l, a, b) {
 }
 
 /***/ }),
-/* 99 */
+/* 98 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48560,7 +48505,7 @@ function HSVtoHSL(h, s, v) {
 }
 
 /***/ }),
-/* 100 */
+/* 99 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48579,9 +48524,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "scaleV", function() { return scaleV; });
 /* harmony import */ var _parser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(22);
 /* harmony import */ var _math__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
-/* harmony import */ var _formatter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(63);
+/* harmony import */ var _formatter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(64);
 /* harmony import */ var _fromRGB__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(50);
-/* harmony import */ var _fromHSV__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(99);
+/* harmony import */ var _fromHSV__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(98);
 /* harmony import */ var _func__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8);
 
 
@@ -48749,7 +48694,7 @@ scale.copper = function (count) {
 };
 
 /***/ }),
-/* 101 */
+/* 100 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48773,7 +48718,7 @@ scale.copper = function (count) {
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var el_editor_items_Property__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(33);
-/* harmony import */ var _Offset__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(92);
+/* harmony import */ var _Offset__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(91);
 /* harmony import */ var el_base_functions_parser__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(22);
 /* harmony import */ var el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(3);
 
@@ -49045,7 +48990,7 @@ var Keyframe = /*#__PURE__*/function (_Property) {
 }(el_editor_items_Property__WEBPACK_IMPORTED_MODULE_9__[/* Property */ "a"]);
 
 /***/ }),
-/* 102 */
+/* 101 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49068,15 +49013,15 @@ var Keyframe = /*#__PURE__*/function (_Property) {
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _Item__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(35);
+/* harmony import */ var _Item__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(36);
 /* harmony import */ var el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(3);
 /* harmony import */ var _property_parser_Transform__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(24);
 /* harmony import */ var el_editor_property_parser_TransformOrigin__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(59);
 /* harmony import */ var gl_matrix__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(12);
 /* harmony import */ var el_base_functions_math__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(15);
 /* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(8);
-/* harmony import */ var el_editor_parser_PathParser__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(32);
-/* harmony import */ var el_base_functions_collision__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(31);
+/* harmony import */ var el_editor_parser_PathParser__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(34);
+/* harmony import */ var el_base_functions_collision__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(32);
 
 
 
@@ -49189,32 +49134,32 @@ var MovableItem = /*#__PURE__*/function (_Item) {
     value: function setCacheLocalTransformMatrix() {
       this._cachedLocalTransform = this.getLocalTransformMatrix();
       this._cachedLocalTransformInverse = this.getLocalTransformMatrixInverse();
-    }
-  }, {
-    key: "localMatrix",
-    get: function get() {
-      return this._cachedLocalTransform ? this._cachedLocalTransform : this.getLocalTransformMatrix();
-    }
-  }, {
-    key: "localMatrixInverse",
-    get: function get() {
-      return this._cachedLocalTransformInverse ? this._cachedLocalTransformInverse : this.getLocalTransformMatrixInverse();
-    }
-  }, {
-    key: "itemMatrix",
-    get: function get() {
-      return this._cachedItemTransform ? this._cachedItemTransform : this.getItemTransformMatrix();
-    }
-  }, {
-    key: "itemMatrixInverse",
-    get: function get() {
-      return this._cachedItemTransformInverse ? this._cachedItemTransformInverse : this.getItemTransformMatrixInverse();
     } //////////////////////
     //
     // getters 
     //
     ///////////////////////
 
+  }, {
+    key: "localMatrix",
+    get: function get() {
+      return this._cachedLocalTransform || this.getLocalTransformMatrix();
+    }
+  }, {
+    key: "localMatrixInverse",
+    get: function get() {
+      return this._cachedLocalTransformInverse || this.getLocalTransformMatrixInverse();
+    }
+  }, {
+    key: "itemMatrix",
+    get: function get() {
+      return this._cachedItemTransform || this.getItemTransformMatrix();
+    }
+  }, {
+    key: "itemMatrixInverse",
+    get: function get() {
+      return this._cachedItemTransformInverse || this.getItemTransformMatrixInverse();
+    }
   }, {
     key: "setScreenX",
     value: function setScreenX(value) {
@@ -49953,7 +49898,7 @@ var MovableItem = /*#__PURE__*/function (_Item) {
 }(_Item__WEBPACK_IMPORTED_MODULE_9__[/* Item */ "a"]);
 
 /***/ }),
-/* 103 */
+/* 102 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -49972,10 +49917,10 @@ var MovableItem = /*#__PURE__*/function (_Item) {
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var el_editor_parser_PathParser__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(32);
+/* harmony import */ var el_editor_parser_PathParser__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(34);
 /* harmony import */ var el_editor_util_Resource__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(38);
 /* harmony import */ var el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(11);
-/* harmony import */ var el_editor_manager_ComponentManager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(34);
+/* harmony import */ var el_editor_manager_ComponentManager__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(35);
 /* harmony import */ var _SVGItem__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(82);
 
 
@@ -50087,7 +50032,7 @@ var SVGPathItem = /*#__PURE__*/function (_SVGItem) {
 el_editor_manager_ComponentManager__WEBPACK_IMPORTED_MODULE_10__[/* ComponentManager */ "a"].registerComponent('svg-path', SVGPathItem);
 
 /***/ }),
-/* 104 */
+/* 103 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -50131,7 +50076,7 @@ var getPrototypeOf_default = /*#__PURE__*/__webpack_require__.n(getPrototypeOf);
 var Length = __webpack_require__(3);
 
 // EXTERNAL MODULE: ./src/el/editor/items/MovableItem.js
-var MovableItem = __webpack_require__(102);
+var MovableItem = __webpack_require__(101);
 
 // CONCATENATED MODULE: ./src/el/editor/items/GroupItem.js
 
@@ -50196,13 +50141,13 @@ var GroupItem_GroupItem = /*#__PURE__*/function (_MovableItem) {
   return GroupItem;
 }(MovableItem["a" /* MovableItem */]);
 // EXTERNAL MODULE: ./src/el/editor/property-parser/Selector.js
-var Selector = __webpack_require__(138);
+var Selector = __webpack_require__(137);
 
 // EXTERNAL MODULE: ./src/el/editor/property-parser/ClipPath.js
 var ClipPath = __webpack_require__(40);
 
 // EXTERNAL MODULE: ./src/el/editor/parser/PathParser.js
-var PathParser = __webpack_require__(32);
+var PathParser = __webpack_require__(34);
 
 // CONCATENATED MODULE: ./src/el/editor/items/DomItem.js
 
@@ -50401,7 +50346,7 @@ var DomItem_DomItem = /*#__PURE__*/function (_GroupItem) {
 }(GroupItem_GroupItem);
 
 /***/ }),
-/* 105 */
+/* 104 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -50461,7 +50406,7 @@ var TemplateEngine_TemplateEngine = /*#__PURE__*/function () {
 ;
 
 /***/ }),
-/* 106 */
+/* 105 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -50481,7 +50426,7 @@ var TemplateEngine_TemplateEngine = /*#__PURE__*/function () {
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(0);
-/* harmony import */ var el_editor_parser_PathParser__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(32);
+/* harmony import */ var el_editor_parser_PathParser__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(34);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(10);
 /* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(14);
 
@@ -50664,7 +50609,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_9__[/* registElement */ "a
 });
 
 /***/ }),
-/* 107 */
+/* 106 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -50857,7 +50802,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_10__[/* registElement */ "
 });
 
 /***/ }),
-/* 108 */
+/* 107 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -50873,9 +50818,9 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_10__[/* registElement */ "
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(0);
-/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(29);
-/* harmony import */ var _BorderValueEditor__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(127);
-/* harmony import */ var el_editor_property_parser_Border__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(65);
+/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(30);
+/* harmony import */ var _BorderValueEditor__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(126);
+/* harmony import */ var el_editor_property_parser_Border__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(66);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(10);
 /* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(14);
 
@@ -50992,7 +50937,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_9__[/* registElement */ "a
 });
 
 /***/ }),
-/* 109 */
+/* 108 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -51005,7 +50950,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_9__[/* registElement */ "a
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(17);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var el_editor_items_Item__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(35);
+/* harmony import */ var el_editor_items_Item__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(36);
 
 
 
@@ -51094,7 +51039,7 @@ var PluginManager = new ( /*#__PURE__*/function () {
 }())();
 
 /***/ }),
-/* 110 */
+/* 109 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -51222,10 +51167,10 @@ var PluginManager = new ( /*#__PURE__*/function () {
 /* harmony default export */ var patterns = __webpack_exports__["a"] = ([check, grid, dot, cross_dot, diagonal_line, vertical_line, horizontal_line]);
 
 /***/ }),
-/* 111 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayLikeToArray = __webpack_require__(142);
+var arrayLikeToArray = __webpack_require__(141);
 
 function _unsupportedIterableToArray(o, minLen) {
   if (!o) return;
@@ -51240,7 +51185,7 @@ module.exports = _unsupportedIterableToArray;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 /***/ }),
-/* 112 */
+/* 111 */
 /***/ (function(module, exports) {
 
 function _typeof(obj) {
@@ -51267,7 +51212,7 @@ module.exports = _typeof;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 /***/ }),
-/* 113 */
+/* 112 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -51292,7 +51237,7 @@ module.exports["default"] = module.exports, module.exports.__esModule = true;
 /* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(8);
 /* harmony import */ var el_editor_property_parser_image_resource_LinearGradient__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(54);
 /* harmony import */ var el_editor_property_parser_image_resource_ColorStep__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(21);
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(66);
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(67);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(10);
 /* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(14);
 
@@ -51536,7 +51481,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_14__[/* registElement */ "
 });
 
 /***/ }),
-/* 114 */
+/* 113 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -51553,7 +51498,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_14__[/* registElement */ "
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(0);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(10);
-/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(29);
+/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(30);
 /* harmony import */ var el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(11);
 /* harmony import */ var el_editor_property_parser_BoxShadow__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(60);
 /* harmony import */ var el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(3);
@@ -51718,7 +51663,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_6__[/* registElement */ "a
 });
 
 /***/ }),
-/* 115 */
+/* 114 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -51735,9 +51680,9 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_6__[/* registElement */ "a
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(0);
 /* harmony import */ var el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(11);
-/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(29);
+/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(30);
 /* harmony import */ var _RangeEditor__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(39);
-/* harmony import */ var el_editor_property_parser_BorderRadius__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(90);
+/* harmony import */ var el_editor_property_parser_BorderRadius__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(89);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(10);
 /* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(14);
 
@@ -51900,7 +51845,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_10__[/* registElement */ "
 });
 
 /***/ }),
-/* 116 */
+/* 115 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -51915,7 +51860,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_10__[/* registElement */ "
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(29);
+/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(30);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(0);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(10);
 /* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(14);
@@ -52027,7 +51972,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_7__[/* registElement */ "a
 });
 
 /***/ }),
-/* 117 */
+/* 116 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -52400,7 +52345,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_14__[/* registElement */ "
 });
 
 /***/ }),
-/* 118 */
+/* 117 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -52483,7 +52428,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_7__[/* registElement */ "a
 });
 
 /***/ }),
-/* 119 */
+/* 118 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -52502,12 +52447,12 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_7__[/* registElement */ "a
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(3);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(0);
-/* harmony import */ var el_editor_property_parser_Offset__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(92);
+/* harmony import */ var el_editor_property_parser_Offset__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(91);
 /* harmony import */ var el_base_Dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(20);
 /* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(8);
-/* harmony import */ var _CSSPropertyEditor__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(95);
+/* harmony import */ var _CSSPropertyEditor__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(94);
 /* harmony import */ var _RangeEditor__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(39);
-/* harmony import */ var _InputRangeEditor__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(67);
+/* harmony import */ var _InputRangeEditor__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(68);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(10);
 /* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(14);
 
@@ -52786,7 +52731,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_14__[/* registElement */ "
 });
 
 /***/ }),
-/* 120 */
+/* 119 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -52803,7 +52748,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_14__[/* registElement */ "
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(29);
+/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(30);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(0);
 /* harmony import */ var el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(11);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(10);
@@ -52925,7 +52870,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_9__[/* registElement */ "a
 });
 
 /***/ }),
-/* 121 */
+/* 120 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -52949,7 +52894,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_9__[/* registElement */ "a
 /* harmony import */ var el_editor_property_parser_Transform__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(24);
 /* harmony import */ var _RangeEditor__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(39);
 /* harmony import */ var el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(3);
-/* harmony import */ var _NumberInputEditor__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(94);
+/* harmony import */ var _NumberInputEditor__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(93);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(10);
 /* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(14);
 /* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(8);
@@ -53314,7 +53259,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_13__[/* registElement */ "
 });
 
 /***/ }),
-/* 122 */
+/* 121 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -53333,7 +53278,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_13__[/* registElement */ "
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(0);
 /* harmony import */ var el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(3);
-/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(29);
+/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(30);
 /* harmony import */ var _RangeEditor__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(39);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(10);
 /* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(14);
@@ -53522,7 +53467,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_10__[/* registElement */ "
 });
 
 /***/ }),
-/* 123 */
+/* 122 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -53734,7 +53679,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_10__[/* registElement */ "
 });
 
 /***/ }),
-/* 124 */
+/* 123 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -53892,7 +53837,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_6__[/* registElement */ "a
 });
 
 /***/ }),
-/* 125 */
+/* 124 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -53910,8 +53855,8 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_6__[/* registElement */ "a
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(0);
-/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(29);
-/* harmony import */ var _NumberRangeEditor__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(68);
+/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(30);
+/* harmony import */ var _NumberRangeEditor__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(69);
 /* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(8);
 /* harmony import */ var el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(11);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(10);
@@ -54042,7 +53987,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_11__[/* registElement */ "
 });
 
 /***/ }),
-/* 126 */
+/* 125 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -54165,7 +54110,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_7__[/* registElement */ "a
 });
 
 /***/ }),
-/* 127 */
+/* 126 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -54181,13 +54126,13 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_7__[/* registElement */ "a
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(3);
-/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(29);
-/* harmony import */ var el_editor_property_parser_Border__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(65);
+/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(30);
+/* harmony import */ var el_editor_property_parser_Border__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(66);
 /* harmony import */ var _RangeEditor__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(39);
 /* harmony import */ var _SelectEditor__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(41);
 /* harmony import */ var _ColorViewEditor__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(80);
-/* harmony import */ var _InputRangeEditor__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(67);
-/* harmony import */ var _ColorSingleEditor__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(116);
+/* harmony import */ var _InputRangeEditor__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(68);
+/* harmony import */ var _ColorSingleEditor__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(115);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(10);
 /* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(14);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(0);
@@ -54288,7 +54233,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_13__[/* registElement */ "
 });
 
 /***/ }),
-/* 128 */
+/* 127 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -54309,7 +54254,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_13__[/* registElement */ "
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(0);
 /* harmony import */ var el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3);
-/* harmony import */ var _NumberRangeEditor__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(68);
+/* harmony import */ var _NumberRangeEditor__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(69);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(10);
 /* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(14);
 
@@ -54490,7 +54435,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_10__[/* registElement */ "
 });
 
 /***/ }),
-/* 129 */
+/* 128 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -54691,7 +54636,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_10__[/* registElement */ "
 });
 
 /***/ }),
-/* 130 */
+/* 129 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -54794,7 +54739,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_6__[/* registElement */ "a
 });
 
 /***/ }),
-/* 131 */
+/* 130 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -54817,11 +54762,11 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_6__[/* registElement */ "a
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(29);
+/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(30);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(0);
 /* harmony import */ var _SelectEditor__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(41);
-/* harmony import */ var _TextEditor__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(97);
-/* harmony import */ var _NumberRangeEditor__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(68);
+/* harmony import */ var _TextEditor__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(96);
+/* harmony import */ var _NumberRangeEditor__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(69);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(10);
 /* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(14);
 
@@ -54991,7 +54936,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_14__[/* registElement */ "
 });
 
 /***/ }),
-/* 132 */
+/* 131 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -55008,7 +54953,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_14__[/* registElement */ "
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(29);
+/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(30);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(0);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(10);
 /* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(14);
@@ -55123,7 +55068,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_8__[/* registElement */ "a
 });
 
 /***/ }),
-/* 133 */
+/* 132 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -55203,7 +55148,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_9__[/* registElement */ "a
 });
 
 /***/ }),
-/* 134 */
+/* 133 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -55224,9 +55169,9 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_9__[/* registElement */ "a
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(0);
 /* harmony import */ var el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(11);
-/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(29);
+/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(30);
 /* harmony import */ var _RangeEditor__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(39);
-/* harmony import */ var el_editor_unit_DirectionLength__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(64);
+/* harmony import */ var el_editor_unit_DirectionLength__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(65);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(10);
 /* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(14);
 
@@ -55374,7 +55319,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_12__[/* registElement */ "
 });
 
 /***/ }),
-/* 135 */
+/* 134 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -55393,18 +55338,18 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_12__[/* registElement */ "
 /* harmony import */ var _babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(1);
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(29);
+/* harmony import */ var el_base_UIElement__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(30);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(0);
 /* harmony import */ var el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(3);
 /* harmony import */ var _RangeEditor__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(39);
 /* harmony import */ var _SelectEditor__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(41);
-/* harmony import */ var _InputRangeEditor__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(67);
+/* harmony import */ var _InputRangeEditor__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(68);
 /* harmony import */ var el_editor_property_parser_image_resource_Gradient__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(42);
 /* harmony import */ var el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(11);
 /* harmony import */ var el_editor_property_parser_SVGFill__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(43);
 /* harmony import */ var el_editor_property_parser_image_resource_SVGStaticGradient__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(58);
 /* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(8);
-/* harmony import */ var _SelectIconEditor__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(69);
+/* harmony import */ var _SelectIconEditor__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(70);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(10);
 /* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(14);
 
@@ -56039,7 +55984,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_19__[/* registElement */ "
 });
 
 /***/ }),
-/* 136 */
+/* 135 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -56303,7 +56248,7 @@ Object(registElement["a" /* registElement */])({
 });
 
 /***/ }),
-/* 137 */
+/* 136 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -56358,19 +56303,19 @@ var ColorViewEditor = __webpack_require__(80);
 var SelectEditor = __webpack_require__(41);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/TextEditor.js
-var TextEditor = __webpack_require__(97);
+var TextEditor = __webpack_require__(96);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/NumberRangeEditor.js
-var NumberRangeEditor = __webpack_require__(68);
+var NumberRangeEditor = __webpack_require__(69);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/InputArrayEditor.js
-var InputArrayEditor = __webpack_require__(130);
+var InputArrayEditor = __webpack_require__(129);
 
 // EXTERNAL MODULE: ./src/el/editor/property-parser/SVGFilter.js + 32 modules
 var SVGFilter = __webpack_require__(57);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/FuncFilterEditor.js
-var FuncFilterEditor = __webpack_require__(131);
+var FuncFilterEditor = __webpack_require__(130);
 
 // EXTERNAL MODULE: ./src/el/editor/unit/Length.js
 var Length = __webpack_require__(3);
@@ -56382,7 +56327,7 @@ var Dom = __webpack_require__(20);
 var PathStringManager = __webpack_require__(47);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/ColorMatrixEditor.js + 25 modules
-var ColorMatrixEditor = __webpack_require__(136);
+var ColorMatrixEditor = __webpack_require__(135);
 
 // CONCATENATED MODULE: ./src/el/editor/ui/property-editor/svg-filter-preset/grayscale.js
 /* harmony default export */ var grayscale = ([{
@@ -56827,10 +56772,10 @@ var ColorMatrixEditor = __webpack_require__(136);
   innerShadow: inner_shadow
 });
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/ImageSelectEditor.js
-var ImageSelectEditor = __webpack_require__(132);
+var ImageSelectEditor = __webpack_require__(131);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/BlendSelectEditor.js
-var BlendSelectEditor = __webpack_require__(133);
+var BlendSelectEditor = __webpack_require__(132);
 
 // EXTERNAL MODULE: ./src/el/base/registElement.js
 var registElement = __webpack_require__(10);
@@ -57804,7 +57749,7 @@ Object(registElement["a" /* registElement */])({
 });
 
 /***/ }),
-/* 138 */
+/* 137 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -57938,7 +57883,7 @@ var Selector = /*#__PURE__*/function (_Property) {
 }(el_editor_items_Property__WEBPACK_IMPORTED_MODULE_7__[/* Property */ "a"]);
 
 /***/ }),
-/* 139 */
+/* 138 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -57959,8 +57904,8 @@ var Selector = /*#__PURE__*/function (_Property) {
 /* harmony import */ var _babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(3);
 /* harmony import */ var el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(11);
-/* harmony import */ var _manager_ComponentManager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(34);
-/* harmony import */ var _DomItem__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(104);
+/* harmony import */ var _manager_ComponentManager__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(35);
+/* harmony import */ var _DomItem__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(103);
 
 
 
@@ -58027,7 +57972,7 @@ var ArtBoard = /*#__PURE__*/function (_DomItem) {
 _manager_ComponentManager__WEBPACK_IMPORTED_MODULE_9__[/* ComponentManager */ "a"].registerComponent('artboard', ArtBoard);
 
 /***/ }),
-/* 140 */
+/* 139 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -58043,7 +57988,7 @@ var slicedToArray_default = /*#__PURE__*/__webpack_require__.n(slicedToArray);
 var math = __webpack_require__(15);
 
 // EXTERNAL MODULE: ./src/el/editor/parser/Point.js
-var Point = __webpack_require__(26);
+var Point = __webpack_require__(27);
 
 // EXTERNAL MODULE: ./src/el/editor/interpolate/interpolate-functions/makeInterpolateNumber.js
 var makeInterpolateNumber = __webpack_require__(23);
@@ -58065,7 +58010,7 @@ function makeInterpolateLine(x1, y1, x2, y2) {
   };
 }
 // EXTERNAL MODULE: ./src/el/base/functions/bezier.js
-var bezier = __webpack_require__(25);
+var bezier = __webpack_require__(26);
 
 // CONCATENATED MODULE: ./src/el/editor/interpolate/interpolate-functions/offset-path/makeInterpolateQuard.js
 
@@ -58477,7 +58422,7 @@ function makeInterpolateOffset(segments) {
 }
 
 /***/ }),
-/* 141 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global, factory) {
@@ -59869,7 +59814,7 @@ function makeInterpolateOffset(segments) {
 
 
 /***/ }),
-/* 142 */
+/* 141 */
 /***/ (function(module, exports) {
 
 function _arrayLikeToArray(arr, len) {
@@ -59886,7 +59831,7 @@ module.exports = _arrayLikeToArray;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 /***/ }),
-/* 143 */
+/* 142 */
 /***/ (function(module, exports) {
 
 function _iterableToArray(iter) {
@@ -59897,7 +59842,7 @@ module.exports = _iterableToArray;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 /***/ }),
-/* 144 */
+/* 143 */
 /***/ (function(module, exports) {
 
 function _arrayWithHoles(arr) {
@@ -59908,7 +59853,7 @@ module.exports = _arrayWithHoles;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 /***/ }),
-/* 145 */
+/* 144 */
 /***/ (function(module, exports) {
 
 function _nonIterableRest() {
@@ -59919,7 +59864,7 @@ module.exports = _nonIterableRest;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 /***/ }),
-/* 146 */
+/* 145 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -59934,18 +59879,18 @@ var start = function start(UIElement, opt) {
 };
 
 /***/ }),
-/* 147 */
+/* 146 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var el_editor_items_Component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(53);
-/* harmony import */ var el_editor_ui_menu_items_MenuItem__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(28);
+/* harmony import */ var el_editor_ui_menu_items_MenuItem__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(29);
 /* harmony import */ var el_editor_renderer_HTMLRenderer_LayerRender__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(44);
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(0);
 /* harmony import */ var el_editor_ui_common_EditorElement__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(14);
-/* harmony import */ var el_editor_manager_Editor__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(36);
+/* harmony import */ var el_editor_manager_Editor__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(28);
 /* harmony import */ var el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(3);
 /* harmony import */ var el_editor_ui_property_BaseProperty__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(18);
 /* harmony import */ var el_editor_icon_icon__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(11);
@@ -59976,7 +59921,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 }, el_base_Event__WEBPACK_IMPORTED_MODULE_4__));
 
 /***/ }),
-/* 148 */
+/* 147 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -60024,7 +59969,7 @@ var types_event = __webpack_require__(87);
 var EditorElement = __webpack_require__(14);
 
 // EXTERNAL MODULE: ./src/el/editor/manager/Editor.js + 152 modules
-var Editor = __webpack_require__(36);
+var Editor = __webpack_require__(28);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/defineProperty.js
 var defineProperty = __webpack_require__(7);
@@ -60039,9 +59984,52 @@ var unit_Length = __webpack_require__(3);
 // EXTERNAL MODULE: ./src/el/editor/items/Property.js
 var Property = __webpack_require__(33);
 
-// EXTERNAL MODULE: ./src/el/base/functions/customParser.js
-var customParser = __webpack_require__(88);
+// CONCATENATED MODULE: ./src/el/base/functions/customParser.js
+function getCustomParseIndexString(it) {
+  var prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '@';
+  return "".concat(prefix).concat(it.startIndex).padEnd(10, '0');
+}
+function customParseMatches(str, regexp) {
+  var matches = str.match(regexp);
+  var result = [];
 
+  if (!matches) {
+    return result;
+  }
+
+  for (var i = 0, len = matches.length; i < len; i++) {
+    result.push({
+      parsedString: matches[i]
+    });
+  }
+
+  var pos = {
+    next: 0
+  };
+  result.forEach(function (item) {
+    var startIndex = str.indexOf(item.parsedString, pos.next);
+    item.startIndex = startIndex;
+    item.endIndex = startIndex + item.parsedString.length;
+    pos.next = item.endIndex;
+  });
+  return result;
+}
+function customParseConvertMatches(str, regexp) {
+  var m = customParseMatches(str, regexp);
+  m.forEach(function (it) {
+    str = str.replace(it.parsedString, getCustomParseIndexString(it));
+  });
+  return {
+    str: str,
+    matches: m
+  };
+}
+function customParseReverseMatches(str, matches) {
+  matches.forEach(function (it) {
+    str = str.replace(getCustomParseIndexString(it), it.parsedString);
+  });
+  return str;
+}
 // CONCATENATED MODULE: ./src/el/editor/property-parser/Animation.js
 
 
@@ -60194,7 +60182,7 @@ var Animation_Animation = /*#__PURE__*/function (_Property) {
     value: function parseStyle(animation) {
       var list = [];
       if (!animation) return list;
-      var result = Object(customParser["a" /* customParseConvertMatches */])(animation, ANIMATION_TIMING_REG);
+      var result = customParseConvertMatches(animation, ANIMATION_TIMING_REG);
       list = result.str.split(',').map(function (it) {
         var fields = it.split(' ').filter(Boolean);
 
@@ -60204,7 +60192,7 @@ var Animation_Animation = /*#__PURE__*/function (_Property) {
           //animation: 3s ease-in 1s 2 reverse both paused slidein;        
           return {
             duration: unit_Length["a" /* Length */].parse(fields[0]),
-            timingFunction: Object(customParser["b" /* customParseReverseMatches */])(fields[1], result.matches),
+            timingFunction: customParseReverseMatches(fields[1], result.matches),
             delay: unit_Length["a" /* Length */].parse(fields[2]),
             iterationCount: fields[3] === 'infinite' ? unit_Length["a" /* Length */].string('infinite') : unit_Length["a" /* Length */].parse(fields[3]),
             direction: fields[4],
@@ -60217,7 +60205,7 @@ var Animation_Animation = /*#__PURE__*/function (_Property) {
           //animation: 3s linear 1s slidein;        
           return {
             duration: unit_Length["a" /* Length */].parse(fields[0]),
-            timingFunction: Object(customParser["b" /* customParseReverseMatches */])(fields[1], result.matches),
+            timingFunction: customParseReverseMatches(fields[1], result.matches),
             delay: unit_Length["a" /* Length */].parse(fields[2]),
             name: fields[3]
           };
@@ -60551,6 +60539,267 @@ var AppearanceProperty_AppearanceProperty = /*#__PURE__*/function (_BaseProperty
     AppearanceProperty: AppearanceProperty_AppearanceProperty
   });
 });
+// CONCATENATED MODULE: ./src/el/editor/preset/artboards/artboard.size.js
+/* harmony default export */ var artboard_size = ([{
+  category: 'Web',
+  groups: [{
+    group: 'Landscape',
+    devices: [{
+      device: 'Web Small',
+      size: '1024x600'
+    }, {
+      device: 'Web Medium',
+      size: '1280x800'
+    }, {
+      device: 'Web Large',
+      size: '1440x900'
+    }, {
+      device: 'Web X Large',
+      size: '1920x1200'
+    }]
+  }, {
+    group: 'Portrait',
+    devices: [{
+      device: 'Web Small',
+      size: '600x1024'
+    }, {
+      device: 'Web Medium',
+      size: '800x1280'
+    }, {
+      device: 'Web Large',
+      size: '900x1440'
+    }, {
+      device: 'Web X Large',
+      size: '1200x1920'
+    }]
+  }]
+}, {
+  category: 'Apple Devices',
+  groups: [{
+    group: 'iphone',
+    devices: [{
+      device: 'iPhone 8',
+      size: '375x667'
+    }, {
+      device: 'iPhone 8 Plus',
+      size: '414x736'
+    }, {
+      device: 'iPhone SE',
+      size: '320x568'
+    }, {
+      device: 'iPhone XS',
+      size: '375x812'
+    }, {
+      device: 'iPhone XR',
+      size: '414x896'
+    }, {
+      device: 'iPhone XS Max',
+      size: '414x896'
+    }]
+  }, {
+    group: 'ipad',
+    devices: [{
+      device: 'iPad',
+      size: '768x1024'
+    }, {
+      device: 'iPad Pro',
+      size: '1024x1366'
+    }]
+  }, {
+    group: 'apple watch',
+    devices: [{
+      device: 'Apple Watch 38nm',
+      size: '272x340'
+    }, {
+      device: 'Apple Watch 40nm',
+      size: '326x394'
+    }, {
+      device: 'Apple Watch 42nm',
+      size: '313x390'
+    }, {
+      device: 'Apple Watch 44nm',
+      size: '368x448'
+    }]
+  }, {
+    group: 'apple tv',
+    devices: [{
+      device: 'Apple TV',
+      size: '1920x1080'
+    }]
+  }, {
+    group: 'MAC',
+    devices: [{
+      device: 'Touch Bar',
+      size: '1085x30'
+    }]
+  }]
+}, {
+  category: 'Android Devices',
+  groups: [{
+    group: 'android mobile',
+    devices: [{
+      device: 'Android Mobile',
+      size: '360x640'
+    }]
+  }, {
+    group: 'android tablet',
+    devices: [{
+      device: 'Android Tablet',
+      size: '768x1024'
+    }]
+  }]
+}]);
+// CONCATENATED MODULE: ./src/plugins/artboard/ArtBoardSizeProperty.js
+
+
+
+
+
+
+function ArtBoardSizeProperty_createSuper(Derived) { var hasNativeReflectConstruct = ArtBoardSizeProperty_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
+
+function ArtBoardSizeProperty_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+
+var ArtBoardSizeProperty_ArtBoardSizeProperty = /*#__PURE__*/function (_BaseProperty) {
+  inherits_default()(ArtBoardSizeProperty, _BaseProperty);
+
+  var _super = ArtBoardSizeProperty_createSuper(ArtBoardSizeProperty);
+
+  function ArtBoardSizeProperty() {
+    classCallCheck_default()(this, ArtBoardSizeProperty);
+
+    return _super.apply(this, arguments);
+  }
+
+  createClass_default()(ArtBoardSizeProperty, [{
+    key: "getClassName",
+    value: function getClassName() {
+      return 'artboard-size-list';
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('refreshSelection'),
+    value: function value() {
+      this.refreshShow(['artboard']);
+    }
+  }, {
+    key: "initState",
+    value: function initState() {
+      return {
+        selectedIndex: 0
+      };
+    }
+  }, {
+    key: "getTitle",
+    value: function getTitle() {
+      return "ArtBoard Preset";
+    }
+  }, {
+    key: "getTools",
+    value: function getTools() {
+      var categories = artboard_size.map(function (it, index) {
+        return {
+          category: it.category,
+          index: index
+        };
+      });
+      return (
+        /*html*/
+        "\n      <object refClass=\"SelectEditor\"  ref='$select' value=\"".concat(categories[0].category, "\" options=\"").concat(categories.map(function (it) {
+          return it.category;
+        }).join(','), "\" onchange='changeSizeIndex'/>\n    ")
+      );
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('changeSizeIndex'),
+    value: function value(key, _value) {
+      var selectedIndex = this.state.selectedIndex;
+      artboard_size.forEach(function (it, index) {
+        if (it.category === _value) {
+          selectedIndex = index;
+        }
+      });
+      this.state.selectedIndex = selectedIndex;
+      this.refresh();
+    }
+  }, {
+    key: "getBody",
+    value: function getBody() {
+      return (
+        /*html*/
+        "\n      <div class='artboard-size-item' ref='$list'></div>\n    "
+      );
+    }
+  }, {
+    key: "makeDevice",
+    value: function makeDevice(device) {
+      return (
+        /*html*/
+        "\n      <div class='device-item' data-size='".concat(device.size, "'>\n        <div class='title'>").concat(device.device, "</div>\n        <div class='size'>").concat(device.size, "</div>\n      </div>\n    ")
+      );
+    }
+  }, {
+    key: Object(Event["CLICK"])('$list .device-item'),
+    value: function value(e) {
+      var size = e.$dt.attr('data-size');
+      this.emit('resizeArtBoard', size);
+    }
+  }, {
+    key: "makeGroup",
+    value: function makeGroup(group) {
+      var _this = this;
+
+      return (
+        /*html*/
+        "\n      <div class='group-item'>\n        <div class='title'>".concat(group.group, "</div>\n      </div>\n      <div class='devices'>\n        ").concat(group.devices.map(function (device) {
+          return _this.makeDevice(device);
+        }).join(''), "\n      </div>\n    ")
+      );
+    }
+  }, {
+    key: "makeCategory",
+    value: function makeCategory(category) {
+      var _this2 = this;
+
+      return (
+        /*html*/
+        "\n      <div class='category'>\n        <div class='title'>".concat(category.category, "</div>\n      </div>\n      <div class='groups'>\n        ").concat(category.groups.map(function (group) {
+          return _this2.makeGroup(group);
+        }).join(''), "\n      </div>\n    ")
+      );
+    }
+  }, {
+    key: Object(Event["LOAD"])('$list') + Event["DOMDIFF"],
+    value: function value() {
+      var _this3 = this;
+
+      var category = artboard_size[this.state.selectedIndex];
+      return category.groups.map(function (group) {
+        return _this3.makeGroup(group);
+      });
+    }
+  }]);
+
+  return ArtBoardSizeProperty;
+}(BaseProperty["a" /* default */]);
+
+
+// CONCATENATED MODULE: ./src/plugins/artboard/index.js
+
+
+/**
+ * 
+ * @param {Editor} editor 
+ */
+
+/* harmony default export */ var artboard = (function (editor) {
+  editor.registerElement({
+    ArtBoardSizeProperty: ArtBoardSizeProperty_ArtBoardSizeProperty
+  });
+});
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/toConsumableArray.js
 var toConsumableArray = __webpack_require__(16);
 var toConsumableArray_default = /*#__PURE__*/__webpack_require__.n(toConsumableArray);
@@ -60712,6 +60961,89 @@ var BackdropFilterProperty_BackdropFilterProperty = /*#__PURE__*/function (_Base
 /* harmony default export */ var backdrop_filter = (function (editor) {
   editor.registerElement({
     BackdropFilterProperty: BackdropFilterProperty_BackdropFilterProperty
+  });
+});
+// CONCATENATED MODULE: ./src/plugins/background-clip/BackgroundClipProperty.js
+
+
+
+
+
+
+
+function BackgroundClipProperty_createSuper(Derived) { var hasNativeReflectConstruct = BackgroundClipProperty_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
+
+function BackgroundClipProperty_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+var BackgroundClipProperty_BackgroundClipProperty = /*#__PURE__*/function (_BaseProperty) {
+  inherits_default()(BackgroundClipProperty, _BaseProperty);
+
+  var _super = BackgroundClipProperty_createSuper(BackgroundClipProperty);
+
+  function BackgroundClipProperty() {
+    classCallCheck_default()(this, BackgroundClipProperty);
+
+    return _super.apply(this, arguments);
+  }
+
+  createClass_default()(BackgroundClipProperty, [{
+    key: "getTitle",
+    value: function getTitle() {
+      return "Background Clip";
+    }
+  }, {
+    key: "isFirstShow",
+    value: function isFirstShow() {
+      return false;
+    }
+  }, {
+    key: "getTools",
+    value: function getTools() {
+      return (
+        /*html*/
+        "<div ref='$backgroundClip' style='padding-top: 3px;'></div>"
+      );
+    }
+  }, {
+    key: Object(Event["LOAD"])("$backgroundClip"),
+    value: function value() {
+      var current = this.$selection.current || {};
+      var clip = current['background-clip'] || '';
+      return (
+        /*html*/
+        "<object refClass=\"SelectEditor\"  ref='$1' key='background-clip' icon=\"true\" value=\"".concat(clip, "\" options=\",paddinb-box,border-box,content-box,text\" onchange=\"changeSelect\" />")
+      );
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('changeSelect'),
+    value: function value(key, _value) {
+      this.command('setAttribute', "change background clip", defineProperty_default()({}, key, _value));
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('refreshSelection') + Object(Event["DEBOUNCE"])(100),
+    value: function value() {
+      this.refreshShow(['rect', 'circle', 'text']);
+    }
+  }]);
+
+  return BackgroundClipProperty;
+}(BaseProperty["a" /* default */]);
+
+
+// CONCATENATED MODULE: ./src/plugins/background-clip/index.js
+
+
+/**
+ * 
+ * @param {Editor} editor 
+ */
+
+/* harmony default export */ var background_clip = (function (editor) {
+  editor.registerElement({
+    BackgroundClipProperty: BackgroundClipProperty_BackgroundClipProperty
   });
 });
 // CONCATENATED MODULE: ./src/plugins/background-image/BackgroundImageProperty.js
@@ -61702,7 +62034,7 @@ var ClipPathProperty_ClipPathProperty = /*#__PURE__*/function (_BaseProperty) {
 var HTMLRenderer = __webpack_require__(46);
 
 // EXTERNAL MODULE: ./src/el/editor/renderer/SVGRenderer/index.js + 15 modules
-var SVGRenderer = __webpack_require__(71);
+var SVGRenderer = __webpack_require__(72);
 
 // CONCATENATED MODULE: ./src/plugins/codeview/CodeViewProperty.js
 
@@ -62250,7 +62582,7 @@ var angle_list = ['0deg', '45deg', '90deg'];
   }
 });
 // EXTERNAL MODULE: ./src/el/base/Color.js + 2 modules
-var Color = __webpack_require__(27);
+var Color = __webpack_require__(25);
 
 // EXTERNAL MODULE: ./src/el/base/functions/create.js
 var create = __webpack_require__(51);
@@ -62554,8 +62886,154 @@ var GradientAssetsProperty_GradientAssetsProperty = /*#__PURE__*/function (_Base
     GradientAssetsProperty: GradientAssetsProperty_GradientAssetsProperty
   });
 });
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/slicedToArray.js
+var slicedToArray = __webpack_require__(13);
+var slicedToArray_default = /*#__PURE__*/__webpack_require__.n(slicedToArray);
+
+// CONCATENATED MODULE: ./src/plugins/image/ImageProperty.js
+
+
+
+
+
+
+
+
+function ImageProperty_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function ImageProperty_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ImageProperty_ownKeys(Object(source), true).forEach(function (key) { defineProperty_default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ImageProperty_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function ImageProperty_createSuper(Derived) { var hasNativeReflectConstruct = ImageProperty_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
+
+function ImageProperty_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+
+var image_size = ['', '100x100', '200x200', '300x300', '400x300', '900x600', '1024x762'];
+
+var ImageProperty_ImageProperty = /*#__PURE__*/function (_BaseProperty) {
+  inherits_default()(ImageProperty, _BaseProperty);
+
+  var _super = ImageProperty_createSuper(ImageProperty);
+
+  function ImageProperty() {
+    classCallCheck_default()(this, ImageProperty);
+
+    return _super.apply(this, arguments);
+  }
+
+  createClass_default()(ImageProperty, [{
+    key: "getClassName",
+    value: function getClassName() {
+      return 'item';
+    }
+  }, {
+    key: "getTitle",
+    value: function getTitle() {
+      return this.$i18n('image.property.title');
+    }
+  }, {
+    key: "getBody",
+    value: function getBody() {
+      return "<div ref='$body' style='padding-top: 3px;'></div>";
+    }
+  }, {
+    key: "getFooter",
+    value: function getFooter() {
+      return (
+        /*html*/
+        "\n      <div>\n        <label> ".concat(this.$i18n('image.property.origin'), " </label> \n        <span ref='$sizeInfo'></span> \n        <button type=\"button\" ref='$resize'>").concat(icon_icon["a" /* default */].size, "</button>\n      </div>\n      <div>\n        <object refClass=\"SelectEditor\"  ref='$select' label=\"").concat(this.$i18n('image.property.size'), "\" key='size' value='' options='").concat(image_size.join(','), "' onchange='changeImageSize' />\n      </div>\n    ")
+      );
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('changeImageSize'),
+    value: function value(key, _value) {
+      var _value$split$map = _value.split('x').map(function (it) {
+        return unit_Length["a" /* Length */].px(it);
+      }),
+          _value$split$map2 = slicedToArray_default()(_value$split$map, 2),
+          width = _value$split$map2[0],
+          height = _value$split$map2[1];
+
+      this.command('setAttribute', 'resize image', {
+        width: width,
+        height: height
+      });
+    }
+  }, {
+    key: Object(Event["CLICK"])('$resize'),
+    value: function value() {
+      var current = this.$selection.current;
+
+      if (current) {
+        var data = {
+          width: current.naturalWidth.clone(),
+          height: current.naturalHeight.clone()
+        };
+        this.command('setAttribute', 'resize image', data);
+      }
+    }
+  }, {
+    key: Object(Event["BIND"])('$sizeInfo'),
+    value: function value() {
+      var current = this.$selection.current || {};
+      return {
+        innerHTML: "".concat(this.$i18n('image.property.width'), ": ").concat(current.naturalWidth, ", ").concat(this.$i18n('image.property.height'), ": ").concat(current.naturalHeight)
+      };
+    }
+  }, {
+    key: Object(Event["LOAD"])("$body"),
+    value: function value() {
+      var current = this.$selection.current || {};
+      var src = current.src || '';
+      return (
+        /*html*/
+        "<object refClass=\"ImageSelectEditor\" \n              ref='$1' \n              key='src' \n              value=\"".concat(src, "\" \n              onchange=\"changeSelect\" />")
+      );
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('changeSelect'),
+    value: function value(key, _value2, info) {
+      var current = this.$selection.current;
+
+      if (current) {
+        current.reset(ImageProperty_objectSpread({
+          src: _value2
+        }, info));
+        this.bindData('$sizeInfo');
+        this.command('setAttribute', 'change image', ImageProperty_objectSpread({
+          src: _value2
+        }, info), current.id);
+      }
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('refreshSelection') + Object(Event["DEBOUNCE"])(100),
+    value: function value() {
+      this.refreshShow(['image']);
+    }
+  }]);
+
+  return ImageProperty;
+}(BaseProperty["a" /* default */]);
+
+
+// CONCATENATED MODULE: ./src/plugins/image/index.js
+
+
+/**
+ * 
+ * @param {Editor} editor 
+ */
+
+/* harmony default export */ var plugins_image = (function (editor) {
+  editor.registerElement({
+    ImageProperty: ImageProperty_ImageProperty
+  });
+});
 // EXTERNAL MODULE: ./src/el/editor/property-parser/Keyframe.js
-var Keyframe = __webpack_require__(101);
+var Keyframe = __webpack_require__(100);
 
 // CONCATENATED MODULE: ./src/plugins/keyframe/KeyframeProperty.js
 
@@ -62787,6 +63265,690 @@ var KeyframeProperty_KeyframeProperty = /*#__PURE__*/function (_BaseProperty) {
     KeyframeProperty: KeyframeProperty_KeyframeProperty
   });
 });
+// EXTERNAL MODULE: ./src/el/editor/types/key.js
+var types_key = __webpack_require__(62);
+
+// CONCATENATED MODULE: ./src/plugins/layer-tree/LayerTreeProperty.js
+
+
+
+
+
+
+function LayerTreeProperty_createSuper(Derived) { var hasNativeReflectConstruct = LayerTreeProperty_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
+
+function LayerTreeProperty_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+
+
+
+var DRAG_START_CLASS = 'drag-start';
+
+var LayerTreeProperty_LayerTreeProperty = /*#__PURE__*/function (_BaseProperty) {
+  inherits_default()(LayerTreeProperty, _BaseProperty);
+
+  var _super = LayerTreeProperty_createSuper(LayerTreeProperty);
+
+  function LayerTreeProperty() {
+    classCallCheck_default()(this, LayerTreeProperty);
+
+    return _super.apply(this, arguments);
+  }
+
+  createClass_default()(LayerTreeProperty, [{
+    key: "getTitle",
+    value: function getTitle() {
+      return this.$i18n('layer.tree.property.title');
+    }
+  }, {
+    key: "getClassName",
+    value: function getClassName() {
+      return 'full';
+    }
+  }, {
+    key: "initState",
+    value: function initState() {
+      return {
+        hideDragPointer: true,
+        lastDragOverPosition: 0,
+        lastDragOverOffset: 0,
+        rootRect: {
+          top: 0
+        },
+        itemRect: {
+          height: 0
+        }
+      };
+    }
+  }, {
+    key: "getBody",
+    value: function getBody() {
+      return (
+        /*html*/
+        "\n      <div class=\"layer-list scrollbar\" ref=\"$layerList\"></div>\n      <div class='drag-point' ref='$dragPointer'></div>\n    "
+      );
+    }
+  }, {
+    key: Object(Event["BIND"])('$dragPointer'),
+    value: function value() {
+      var offset = this.state.lastDragOverOffset;
+      var dist = this.state.itemRect.height / 3;
+      var bound = {};
+
+      if (this.state.lastDragOverOffset < dist) {
+        offset = 0;
+        var top = this.state.lastDragOverPosition + offset - this.state.rootRect.top;
+        bound = {
+          top: unit_Length["a" /* Length */].px(top),
+          height: '1px',
+          width: '100%',
+          left: '0px'
+        };
+        this.state.lastDragOverItemDirection = 'before';
+      } else if (this.state.lastDragOverOffset > this.state.itemRect.height - dist) {
+        offset = this.state.itemRect.height;
+        var top = this.state.lastDragOverPosition + offset - this.state.rootRect.top;
+        bound = {
+          top: unit_Length["a" /* Length */].px(top),
+          height: '1px',
+          width: '100%',
+          left: '0px'
+        };
+        this.state.lastDragOverItemDirection = 'after';
+      } else {
+        offset = 0;
+        var top = this.state.lastDragOverPosition + offset - this.state.rootRect.top;
+        bound = {
+          top: unit_Length["a" /* Length */].px(top),
+          height: unit_Length["a" /* Length */].px(this.state.itemRect.height),
+          width: '100%',
+          left: '0px'
+        };
+        this.state.lastDragOverItemDirection = 'self';
+      }
+
+      bound.display = this.state.hideDragPointer ? 'none' : 'block';
+      return {
+        style: bound
+      };
+    } //FIXME: 개별 객체가 아이콘을 리턴 할 수 있도록 구조를 맞춰보자. 
+
+  }, {
+    key: "getIcon",
+    value: function getIcon(item) {
+      // return '';
+      if (item.isGroup && item.is('artboard') === false) {
+        return icon_icon["a" /* default */].group;
+      }
+
+      switch (item.itemType) {
+        case 'artboard':
+          return icon_icon["a" /* default */].artboard;
+
+        case 'circle':
+          return icon_icon["a" /* default */].lens;
+
+        case 'image':
+          return icon_icon["a" /* default */].image;
+
+        case 'text':
+        case 'svg-text':
+          return icon_icon["a" /* default */].title;
+
+        case 'svg-textpath':
+          return icon_icon["a" /* default */].text_rotate;
+
+        case 'svg-path':
+          return icon_icon["a" /* default */].pentool;
+
+        case 'cube':
+          return icon_icon["a" /* default */].cube;
+
+        case 'cylinder':
+          return icon_icon["a" /* default */].cylinder;
+
+        default:
+          return icon_icon["a" /* default */].rect;
+      }
+    }
+  }, {
+    key: "makeLayerList",
+    value: function makeLayerList(parentObject) {
+      var depth = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+      if (!parentObject.layers) return '';
+      var layers = parentObject.layers;
+      var data = [];
+
+      for (var last = layers.length - 1; last > -1; last--) {
+        var layer = layers[last];
+        var selected = this.$selection.check(layer) ? 'selected' : '';
+        var hovered = this.$selection.checkHover(layer) ? 'hovered' : '';
+        var name = layer.name;
+
+        if (layer.is('text')) {
+          name = layer.text || layer.name;
+        }
+
+        var title = '';
+
+        if (layer.hasLayout()) {
+          title = this.$i18n('layer.tree.property.layout.title.' + layer.layout);
+        }
+
+        var isHide = layer.isTreeItemHide();
+        var depthPadding = unit_Length["a" /* Length */].px(depth * 24);
+        data.push(
+        /*html*/
+        "        \n        <div class='layer-item ".concat(selected, " ").concat(hovered, "' data-is-group=\"").concat(layer.isGroup, "\" data-depth=\"").concat(depth, "\" data-layout='").concat(layer.layout, "' data-layer-id='").concat(layer.id, "' data-is-hide=\"").concat(isHide, "\"  draggable=\"true\">\n          <div class='detail'>\n            <label data-layout-title='").concat(title, "' style='padding-left: ").concat(depthPadding, "' > \n              <div class='folder ").concat(layer.collapsed ? 'collapsed' : '', "'>").concat(icon_icon["a" /* default */].arrow_right, "</div>\n              <span class='icon' data-item-type=\"").concat(layer.itemType, "\">").concat(this.getIcon(layer), "</span> \n              <span class='name'>").concat(name, "</span>\n            </label>\n            <div class=\"tools\">\n              <button type=\"button\" class=\"lock\" data-lock=\"").concat(layer.lock, "\" title='Lock'>").concat(layer.lock ? icon_icon["a" /* default */].lock : icon_icon["a" /* default */].lock_open, "</button>\n              <button type=\"button\" class=\"visible\" data-visible=\"").concat(layer.visible, "\" title='Visible'>").concat(icon_icon["a" /* default */].visible, "</button>\n              <button type=\"button\" class=\"remove\" title='Remove'>").concat(icon_icon["a" /* default */].remove2, "</button>            \n            </div>\n          </div>\n        </div>\n\n        ").concat(this.makeLayerList(layer, depth + 1), "\n      "));
+      }
+
+      return data.join(' ');
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('refreshContent'),
+    value: function value(arr) {
+      this.refresh();
+    }
+  }, {
+    key: Object(Event["LOAD"])("$layerList") + Event["DOMDIFF"],
+    value: function value() {
+      var project = this.$selection.currentProject;
+      if (!project) return '';
+      return this.makeLayerList(project, 0) +
+      /*html*/
+      "\n      <div class='layer-item ' data-depth=\"0\" data-is-last=\"true\">\n      </div>\n    ";
+    }
+  }, {
+    key: Object(Event["DRAGSTART"])('$layerList .layer-item'),
+    value: function value(e) {
+      var layerId = e.$dt.attr('data-layer-id');
+      e.$dt.addClass(DRAG_START_CLASS);
+      e.dataTransfer.setData('layer/id', layerId);
+      this.state.rootRect = this.refs.$layerList.rect();
+      this.state.itemRect = e.$dt.rect();
+      this.setState({
+        hideDragPointer: false
+      }, false);
+      this.bindData('$dragPointer');
+    }
+  }, {
+    key: Object(Event["DRAGEND"])('$layerList .layer-item'),
+    value: function value(e) {
+      this.setState({
+        hideDragPointer: true
+      }, false);
+      this.bindData('$dragPointer');
+      this.refs.$layerList.$$(".".concat(DRAG_START_CLASS)).forEach(function (it) {
+        it.removeClass(DRAG_START_CLASS);
+      });
+    }
+  }, {
+    key: Object(Event["DRAGOVER"])("$layerList .layer-item:not(.".concat(DRAG_START_CLASS, ")")) + Event["PREVENT"],
+    value: function value(e) {
+      var targetLayerId = e.$dt.attr('data-layer-id'); // console.log({targetLayerId, x: e.offsetX, y: e.offsetY});
+
+      this.state.lastDragOverItemId = targetLayerId;
+      this.state.lastDragOverPosition = e.$dt.rect().top;
+      this.state.lastDragOverOffset = e.offsetY;
+      this.bindData('$dragPointer');
+    }
+  }, {
+    key: Object(Event["DROP"])("$layerList .layer-item:not(.".concat(DRAG_START_CLASS, ")")),
+    value: function value(e) {
+      var targetLayerId = e.$dt.attr('data-layer-id');
+      var sourceLayerId = e.dataTransfer.getData('layer/id');
+      if (targetLayerId === sourceLayerId) return;
+      var project = this.$selection.currentProject;
+      var targetItem = project.searchById(targetLayerId);
+      var sourceItem = project.searchById(sourceLayerId);
+      if (targetItem && targetItem.hasParent(sourceItem.id)) return;
+
+      switch (this.state.lastDragOverItemDirection) {
+        case 'self':
+          targetItem.appendChildItem(sourceItem);
+          break;
+
+        case 'before':
+          targetItem.appendBefore(sourceItem);
+          break;
+
+        case 'after':
+          targetItem.appendAfter(sourceItem);
+          break;
+      }
+
+      this.$selection.select(sourceItem);
+      this.setState({
+        hideDragPointer: true
+      });
+      this.emit('refreshAll');
+    }
+  }, {
+    key: Object(Event["DOUBLECLICK"])('$layerList .layer-item'),
+    value: function value(e) {
+      this.startInputEditing(e.$dt.$('.name'));
+    }
+  }, {
+    key: "modifyDoneInputEditing",
+    value: function modifyDoneInputEditing(input, event) {
+      var _this = this;
+
+      if (types_key["a" /* KEY_CODE */].enter === event.keyCode) {
+        this.endInputEditing(input, function () {
+          var id = input.closest('layer-item').attr('data-layer-id');
+          var text = input.text();
+
+          _this.emit('refreshItemName', id, text);
+        });
+      } else {
+        var id = input.closest('layer-item').attr('data-layer-id');
+        var text = input.text();
+        this.emit('refreshItemName', id, text);
+      }
+    }
+  }, {
+    key: Object(Event["KEYDOWN"])('$layerList .layer-item .name') + Event["STOP"],
+    value: function value(e) {
+      this.modifyDoneInputEditing(e.$dt, e);
+    }
+  }, {
+    key: Object(Event["FOCUSOUT"])('$layerList .layer-item .name') + Event["PREVENT"] + Event["STOP"],
+    value: function value(e) {
+      this.modifyDoneInputEditing(e.$dt, {
+        keyCode: types_key["a" /* KEY_CODE */].enter
+      });
+    }
+  }, {
+    key: "selectLayer",
+    value: function selectLayer(layer) {
+      if (layer) {
+        this.$selection.select(layer);
+      }
+
+      this.refresh();
+      this.emit('refreshSelection');
+    }
+  }, {
+    key: "addLayer",
+    value: function addLayer(layer) {
+      if (layer) {
+        this.$selection.select(layer);
+        this.emit('refreshArtboard');
+      }
+    }
+  }, {
+    key: Object(Event["CLICK"])('$add'),
+    value: function value(e) {
+      this.emit('newComponent', 'rect', {
+        'background-color': Color["a" /* default */].random(),
+        width: unit_Length["a" /* Length */].px(200),
+        height: unit_Length["a" /* Length */].px(100)
+      });
+    }
+  }, {
+    key: Object(Event["CLICK"])('$layerList .layer-item label .name'),
+    value: function value(e) {
+      var $item = e.$dt.closest('layer-item');
+      $item.onlyOneClass('selected');
+      var id = $item.attr('data-layer-id');
+      var item = this.$selection.currentProject.searchById(id);
+      this.$selection.select(item);
+      this.emit('history.refreshSelection');
+    }
+  }, {
+    key: Object(Event["CLICK"])('$layerList .layer-item label .folder'),
+    value: function value(e) {
+      var project = this.$selection.currentProject;
+      var $item = e.$dt.closest('layer-item');
+      var id = $item.attr('data-layer-id');
+      var item = project.searchById(id);
+      item.reset({
+        collapsed: !item.collapsed
+      });
+      this.refresh();
+    }
+  }, {
+    key: Object(Event["CLICK"])('$layerList .layer-item .visible'),
+    value: function value(e) {
+      var project = this.$selection.currentProject;
+      var $item = e.$dt.closest('layer-item');
+      var id = $item.attr('data-layer-id');
+      var item = project.searchById(id);
+      e.$dt.attr('data-visible', !item.visible);
+      this.command('setAttribute', 'change visible for layer', {
+        visible: !item.visible
+      }, item.id);
+    }
+  }, {
+    key: Object(Event["CLICK"])('$layerList .layer-item .remove'),
+    value: function value(e) {
+      var project = this.$selection.currentProject;
+      var $item = e.$dt.closest('layer-item');
+      var id = $item.attr('data-layer-id'); // 객체 지우기 command 로 만들어야 함 
+
+      this.$selection.removeById(id);
+      var item = project.searchById(id);
+      item.remove();
+      this.refresh();
+      this.emit('refreshArtboard');
+    }
+  }, {
+    key: Object(Event["CLICK"])('$layerList .layer-item .lock'),
+    value: function value(e) {
+      var project = this.$selection.currentProject;
+      var $item = e.$dt.closest('layer-item');
+      var id = $item.attr('data-layer-id');
+      var item = project.searchById(id);
+      var lastLock = !item.lock;
+      e.$dt.attr('data-lock', lastLock);
+
+      if (lastLock) {
+        this.$selection.removeById(id);
+        this.emit('history.refreshSelection');
+      }
+
+      this.command('setAttribute', 'change lock for layer', {
+        lock: lastLock
+      }, item.id);
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('changeHoverItem'),
+    value: function value() {
+      this.refs.$layerList.$$('.hovered').forEach(function (it) {
+        it.removeClass('hovered');
+      });
+
+      if (this.$selection.hoverItems.length) {
+        var selector = this.$selection.hoverItems.map(function (it) {
+          return "[data-layer-id=\"".concat(it.id, "\"]");
+        }).join(',');
+        this.refs.$layerList.$$(selector).forEach(function (it) {
+          it.addClass('hovered');
+        });
+      }
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('changeSelection'),
+    value: function value() {
+      var _this2 = this;
+
+      var isSelection = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+      if (isSelection && this.refs.$layerList) {
+        this.refs.$layerList.$$('.selected').forEach(function (it) {
+          it.removeClass('selected');
+        });
+        var selector = this.$selection.items.map(function (it) {
+          return "[data-layer-id=\"".concat(it.id, "\"]");
+        }).join(',');
+
+        if (selector) {
+          this.refs.$layerList.$$(selector).forEach(function (it) {
+            it.addClass('selected');
+
+            var item = _this2.$selection.itemKeys[it.attr('data-layer-id')];
+
+            if (item.is('svg-path', 'svg-polygon')) {
+              it.$('.icon').html(_this2.getIcon(item));
+            }
+          });
+        }
+      }
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('refreshSelection', 'history.refreshSelection'),
+    value: function value() {
+      this.trigger('changeSelection', true);
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('refreshStylePosition'),
+    value: function value() {
+      this.trigger('changeSelection');
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('refreshLayerTreeView'),
+    value: function value() {
+      this.refresh();
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('changeItemLayout'),
+    value: function value() {
+      this.refresh();
+    }
+  }]);
+
+  return LayerTreeProperty;
+}(BaseProperty["a" /* default */]);
+
+
+// CONCATENATED MODULE: ./src/plugins/layer-tree/index.js
+
+
+/**
+ * 
+ * @param {Editor} editor 
+ */
+
+/* harmony default export */ var layer_tree = (function (editor) {
+  editor.registerElement({
+    LayerTreeProperty: LayerTreeProperty_LayerTreeProperty
+  });
+});
+// CONCATENATED MODULE: ./src/plugins/perspective/PerspectiveProperty.js
+
+
+
+
+
+
+
+function PerspectiveProperty_createSuper(Derived) { var hasNativeReflectConstruct = PerspectiveProperty_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
+
+function PerspectiveProperty_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+
+var PerspectiveProperty_PerspectiveProperty = /*#__PURE__*/function (_BaseProperty) {
+  inherits_default()(PerspectiveProperty, _BaseProperty);
+
+  var _super = PerspectiveProperty_createSuper(PerspectiveProperty);
+
+  function PerspectiveProperty() {
+    classCallCheck_default()(this, PerspectiveProperty);
+
+    return _super.apply(this, arguments);
+  }
+
+  createClass_default()(PerspectiveProperty, [{
+    key: "getTitle",
+    value: function getTitle() {
+      return this.$i18n('perspective.property.title');
+    }
+  }, {
+    key: "hasKeyframe",
+    value: function hasKeyframe() {
+      return true;
+    }
+  }, {
+    key: "isFirstShow",
+    value: function isFirstShow() {
+      return false;
+    }
+  }, {
+    key: "getKeyframeProperty",
+    value: function getKeyframeProperty() {
+      return 'perspective';
+    }
+  }, {
+    key: "getTools",
+    value: function getTools() {
+      return (
+        /*html*/
+        "\n        <button type=\"button\" class=\"remove\" ref='$remove'>".concat(icon_icon["a" /* default */].remove, "</button>\n    ")
+      );
+    }
+  }, {
+    key: Object(Event["CLICK"])('$remove'),
+    value: function value() {
+      this.trigger('changePerspective', 'perspective', '');
+    }
+  }, {
+    key: "getBody",
+    value: function getBody() {
+      return "<div class='property-item' ref='$perspective'></div>";
+    }
+  }, {
+    key: Object(Event["LOAD"])("$perspective"),
+    value: function value() {
+      var current = this.$selection.current || {};
+      var perspective = current['perspective'] || '';
+      return (
+        /*html*/
+        "\n        <object refClass=\"RangeEditor\"  ref='$1' key='perspective' value=\"".concat(perspective, "\" max=\"2000px\" onchange=\"changePerspective\" />\n    ")
+      );
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('changePerspective'),
+    value: function value(key, _value) {
+      this.command('setAttribute', 'change perspective', defineProperty_default()({}, key, _value));
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('refreshSelection'),
+    value: function value() {
+      this.refreshShowIsNot(['project']);
+    }
+  }]);
+
+  return PerspectiveProperty;
+}(BaseProperty["a" /* default */]);
+
+
+// CONCATENATED MODULE: ./src/plugins/perspective/index.js
+
+
+/**
+ * 
+ * @param {Editor} editor 
+ */
+
+/* harmony default export */ var perspective = (function (editor) {
+  editor.registerElement({
+    PerspectiveProperty: PerspectiveProperty_PerspectiveProperty
+  });
+});
+// CONCATENATED MODULE: ./src/plugins/perspective-origin/PerspectiveOriginProperty.js
+
+
+
+
+
+
+function PerspectiveOriginProperty_createSuper(Derived) { var hasNativeReflectConstruct = PerspectiveOriginProperty_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
+
+function PerspectiveOriginProperty_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+
+var PerspectiveOriginProperty_PerspectiveOriginProperty = /*#__PURE__*/function (_BaseProperty) {
+  inherits_default()(PerspectiveOriginProperty, _BaseProperty);
+
+  var _super = PerspectiveOriginProperty_createSuper(PerspectiveOriginProperty);
+
+  function PerspectiveOriginProperty() {
+    classCallCheck_default()(this, PerspectiveOriginProperty);
+
+    return _super.apply(this, arguments);
+  }
+
+  createClass_default()(PerspectiveOriginProperty, [{
+    key: "getTitle",
+    value: function getTitle() {
+      return this.$i18n('perspective.origin.property.title');
+    }
+  }, {
+    key: "hasKeyframe",
+    value: function hasKeyframe() {
+      return true;
+    }
+  }, {
+    key: "isFirstShow",
+    value: function isFirstShow() {
+      return false;
+    }
+  }, {
+    key: "getKeyframeProperty",
+    value: function getKeyframeProperty() {
+      return 'perspective-origin';
+    }
+  }, {
+    key: "getTools",
+    value: function getTools() {
+      return (
+        /*html*/
+        "\n        <button type=\"button\" class=\"remove\" ref='$remove'>".concat(icon_icon["a" /* default */].remove, "</button>\n    ")
+      );
+    }
+  }, {
+    key: Object(Event["CLICK"])('$remove'),
+    value: function value() {
+      this.trigger('changePerspectiveOrigin', '');
+    }
+  }, {
+    key: "getBody",
+    value: function getBody() {
+      return (
+        /*html*/
+        "\n      <div class=\"property-item full perspective-origin-item\" ref='$body'></div>\n    "
+      );
+    }
+  }, {
+    key: Object(Event["LOAD"])('$body'),
+    value: function value() {
+      var current = this.$selection.current || {};
+      var value = current['perspective-origin'] || '';
+      return (
+        /*html*/
+        "<object refClass=\"PerspectiveOriginEditor\" \n              ref='$1' \n              value='".concat(value, "' \n              onchange='changePerspectiveOrigin' \n            />")
+      );
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('refreshSelection') + Object(Event["DEBOUNCE"])(100),
+    value: function value() {
+      this.refreshShowIsNot(['project']);
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('changePerspectiveOrigin'),
+    value: function value(_value) {
+      this.command('setAttribute', 'change perspective origin', {
+        'perspective-origin': _value
+      });
+    }
+  }]);
+
+  return PerspectiveOriginProperty;
+}(BaseProperty["a" /* default */]);
+
+
+// CONCATENATED MODULE: ./src/plugins/perspective-origin/index.js
+
+
+/**
+ * 
+ * @param {Editor} editor 
+ */
+
+/* harmony default export */ var perspective_origin = (function (editor) {
+  editor.registerElement({
+    PerspectiveOriginProperty: PerspectiveOriginProperty_PerspectiveOriginProperty
+  });
+});
 // EXTERNAL MODULE: ./src/el/editor/property-parser/Transform.js + 1 modules
 var Transform = __webpack_require__(24);
 
@@ -62921,6 +64083,114 @@ var PositionProperty_PositionProperty = /*#__PURE__*/function (_BaseProperty) {
     PositionProperty: PositionProperty_PositionProperty
   });
 });
+// CONCATENATED MODULE: ./src/plugins/svg-item/SVGItemProperty.js
+
+
+
+
+
+
+
+function SVGItemProperty_createSuper(Derived) { var hasNativeReflectConstruct = SVGItemProperty_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
+
+function SVGItemProperty_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+
+var SVGItemProperty_SVGItemProperty = /*#__PURE__*/function (_BaseProperty) {
+  inherits_default()(SVGItemProperty, _BaseProperty);
+
+  var _super = SVGItemProperty_createSuper(SVGItemProperty);
+
+  function SVGItemProperty() {
+    classCallCheck_default()(this, SVGItemProperty);
+
+    return _super.apply(this, arguments);
+  }
+
+  createClass_default()(SVGItemProperty, [{
+    key: "getTitle",
+    value: function getTitle() {
+      return this.$i18n('svg.item.property.title');
+    }
+  }, {
+    key: "getClassName",
+    value: function getClassName() {
+      return "item";
+    }
+  }, {
+    key: "isSVGItem",
+    value: function isSVGItem(current) {
+      return current.is('svg-path', 'svg-brush', 'svg-polygon', 'svg-textpath', 'svg-text');
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('refreshSelection'),
+    value: function value() {
+      var current = this.$selection.current;
+
+      if (current && this.isSVGItem(current)) {
+        if (this.$el.isHide()) {
+          this.$el.show();
+        }
+
+        this.children.$fill.setValue(current['fill'] || 'rgba(0, 0, 0, 0)');
+        this.children.$stroke.setValue(current['stroke'] || 'rgba(0, 0, 0, 1)');
+        this.children.$fillOpacity.setValue(current['fill-opacity'] || unit_Length["a" /* Length */].number(1));
+        this.children.$strokeWidth.setValue(current['stroke-width'] || unit_Length["a" /* Length */].number(1));
+        this.children.$fillRule.setValue(current['fill-rule'] || 'nonzero');
+        this.children.$strokeDashOffset.setValue(current['stroke-dashoffset'] || unit_Length["a" /* Length */].number(0));
+        this.children.$strokeDashArray.setValue(current['stroke-dasharray'] || ' ');
+        this.children.$strokeLineCap.setValue(current['stroke-linecap'] || 'butt');
+        this.children.$strokeLineJoin.setValue(current['stroke-linejoin'] || 'miter');
+        this.children.$mixBlend.setValue(current['mix-blend-mode']);
+      } else {
+        this.$el.hide();
+      }
+    }
+  }, {
+    key: "refresh",
+    value: function refresh() {// update 를 어떻게 할지 고민 
+    }
+  }, {
+    key: "getBody",
+    value: function getBody() {
+      var current = this.$selection.current || {};
+      return (
+        /*html*/
+        "\n      <div ref='$svgProperty'>\n        <div class='property-item animation-property-item'>\n          <div class='group'>        \n            <span class='add-timeline-property' data-property='fill'></span>\n          </div>\n          <object refClass=\"FillSingleEditor\" ref='$fill' label='".concat(this.$i18n('svg.item.property.fill'), "' key='fill' onchange=\"changeValue\" />\n        </div>\n\n        <div class='property-item animation-property-item'>\n          <div class='group'>        \n            <span class='add-timeline-property' data-property='fill-opacity'></span>\n          </div>            \n          <object refClass=\"NumberRangeEditor\"  \n            ref='$fillOpacity' \n            label='").concat(this.$i18n('svg.item.property.fillOpacity'), "' \n            key='fill-opacity' \n            value=\"1\" \n            min=\"0\"\n            max=\"1\"\n            step=\"0.01\"\n            onchange=\"changeValue\" \n            />\n        </div>   \n\n\n        <div class='property-item animation-property-item'>\n          <div class='group'>        \n            <span class='add-timeline-property' data-property='fill-rule'></span>\n          </div>\n          <object refClass=\"SelectIconEditor\" \n            ref='$fillRule' \n            label='").concat(this.$i18n('svg.item.property.fillRule'), "' \n            key=\"fill-rule\" \n            options=\"nonzero,evenodd\" \n            onchange=\"changeValue\" />\n        </div>            \n\n        <div class='property-item animation-property-item'>\n          <div class='group'>        \n            <span class='add-timeline-property' data-property='stroke'></span>\n          </div>\n          <object refClass=\"FillSingleEditor\" ref='$stroke' label='").concat(this.$i18n('svg.item.property.stroke'), "' key='stroke' onchange=\"changeValue\" />\n        </div>      \n\n        <div class='property-item animation-property-item'>\n          <div class='group'>        \n            <span class='add-timeline-property' data-property='stroke-width'></span>\n          </div>\n          <object refClass=\"RangeEditor\"  \n            ref='$strokeWidth' \n            label='").concat(this.$i18n('svg.item.property.strokeWidth'), "' \n            key=\"stroke-width\" \n            onchange=\"changeValue\" />\n        </div>\n        <!--<div class='property-item animation-property-item'>\n          <div class='group'>        \n            <span class='add-timeline-property' data-property='stroke-dasharray'></span>      \n          </div>          \n          <label>").concat(this.$i18n('svg.item.property.dashArray'), "</label>\n        </div>-->\n        <div class='property-item'>\n          <object refClass=\"StrokeDashArrayEditor\" label=\"").concat(this.$i18n('svg.item.property.dashArray'), "\" ref='$strokeDashArray' key='stroke-dasharray' onchange=\"changeValue\" />\n        </div>\n\n        <div class='property-item animation-property-item'>\n          <div class='group'>        \n            <span class='add-timeline-property' data-property='stroke-dashoffset'></span>      \n          </div>          \n          <object refClass=\"NumberRangeEditor\"  \n            ref='$strokeDashOffset' \n            key='stroke-dashoffset' \n            label='").concat(this.$i18n('svg.item.property.dashOffset'), "'\n            value=\"0\" \n            min=\"-1000\"\n            max=\"1000\"\n            step=\"1\"\n            onchange=\"changeValue\" \n            />\n        </div>         \n\n        <div class='property-item animation-property-item'>\n          <div class='group'>        \n            <span class='add-timeline-property' data-property='stroke-linecap'></span>      \n          </div>          \n          <object refClass=\"SelectIconEditor\" \n            ref='$strokeLineCap' \n            label='").concat(this.$i18n('svg.item.property.lineCap'), "' \n            key=\"stroke-linecap\" \n            options=\"butt,round,square\" \n            onchange=\"changeValue\" \n          />\n        </div> \n        <div class='property-item animation-property-item'>\n          <div class='group'>        \n            <span class='add-timeline-property' data-property='stroke-linejoin'></span>      \n          </div>          \n          <object refClass=\"SelectIconEditor\" \n            ref='$strokeLineJoin' \n            label='").concat(this.$i18n('svg.item.property.lineJoin'), "'             \n            key=\"stroke-linejoin\" \n            options=\"miter,bevel,round\" \n            onchange=\"changeValue\" \n          />\n        </div>       \n        <div class='property-item animation-property-item'>\n          <div class='group'>\n            <span class='add-timeline-property' data-property='mix-blend-mode'></span>\n          </div>\n          <object refClass=\"BlendSelectEditor\" \n            label='").concat(this.$i18n('background.color.property.blend'), "'\n            ref='$mixBlend' \n            removable='true'\n            key='mix-blend-mode' \n            icon=\"true\" \n            tabIndex=\"1\"\n            onchange=\"changeSelect\" />\n        </div>                 \n        <div class='property-item animation-property-item'>\n          <div class='group'>        \n            <span class='add-timeline-property' data-property='svgfilter'></span>      \n          </div>\n          <object refClass=\"SVGFilterSelectEditor\" \n            ref='$svgFilter' \n            label='").concat(this.$i18n('svg.item.property.filter'), "' \n            key=\"svgfilter\" \n            onchange=\"changeValue\" \n          />\n        </div>         \n      </div>\n   \n    ")
+      );
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('changeValue'),
+    value: function value(key, _value, params) {
+      this.command('setAttribute', "change svg item property : ".concat(key), defineProperty_default()({}, key, _value));
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('changeSelect'),
+    value: function value(key, _value2) {
+      this.command("setAttribute", "change attribute : ".concat(key), defineProperty_default()({}, key, _value2));
+    }
+  }]);
+
+  return SVGItemProperty;
+}(BaseProperty["a" /* default */]);
+
+
+// CONCATENATED MODULE: ./src/plugins/svg-item/index.js
+
+
+/**
+ * 
+ * @param {Editor} editor 
+ */
+
+/* harmony default export */ var svg_item = (function (editor) {
+  editor.registerElement({
+    SVGItemProperty: SVGItemProperty_SVGItemProperty
+  });
+});
 // CONCATENATED MODULE: ./src/plugins/text/TextProperty.js
 
 
@@ -63004,6 +64274,96 @@ var TextProperty_TextProperty = /*#__PURE__*/function (_BaseProperty) {
 /* harmony default export */ var plugins_text = (function (editor) {
   editor.registerElement({
     TextProperty: TextProperty_TextProperty
+  });
+});
+// CONCATENATED MODULE: ./src/plugins/text-fill/TextFillProperty.js
+
+
+
+
+
+
+
+function TextFillProperty_createSuper(Derived) { var hasNativeReflectConstruct = TextFillProperty_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
+
+function TextFillProperty_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+var TextFillProperty_TextFillProperty = /*#__PURE__*/function (_BaseProperty) {
+  inherits_default()(TextFillProperty, _BaseProperty);
+
+  var _super = TextFillProperty_createSuper(TextFillProperty);
+
+  function TextFillProperty() {
+    classCallCheck_default()(this, TextFillProperty);
+
+    return _super.apply(this, arguments);
+  }
+
+  createClass_default()(TextFillProperty, [{
+    key: "getTitle",
+    value: function getTitle() {
+      return this.$i18n('text.fill.property.title');
+    }
+  }, {
+    key: "afterRender",
+    value: function afterRender() {
+      this.show();
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('refreshSelection'),
+    value: function value() {
+      this.refresh();
+    }
+  }, {
+    key: "refresh",
+    value: function refresh() {
+      // update 를 어떻게 할지 고민 
+      var current = this.$selection.current;
+
+      if (current) {
+        this.children.$fillColor.setValue(current['text-fill-color'] || 'rgba(0, 0, 0, 1)');
+        this.children.$strokeColor.setValue(current['text-stroke-color'] || 'rgba(0, 0, 0, 1)');
+        this.children.$width.setValue(current['text-stroke-width'] || '0px');
+      }
+    }
+  }, {
+    key: "getBody",
+    value: function getBody() {
+      return (
+        /*html*/
+        "\n      <div class='property-item animation-property-item'>\n        <div class='group'>\n          <span class='add-timeline-property' data-property='text-fill-color'></span>\n        </div>\n        <object refClass=\"ColorViewEditor\" ref='$fillColor' label='".concat(this.$i18n('text.fill.property.fill'), "' key='text-fill-color' onchange=\"changeColor\" />\n      </div>           \n      <div class='property-item animation-property-item'>\n        <div class='group'>\n          <span class='add-timeline-property' data-property='text-stroke-color'></span>\n        </div>\n        <object refClass=\"ColorViewEditor\" ref='$strokeColor' label='").concat(this.$i18n('text.fill.property.stroke'), "' key='text-stroke-color' onchange=\"changeColor\" />\n      </div>                 \n\n      <div class='property-item animation-property-item'>\n        <div class='group'>\n          <span class='add-timeline-property' data-property='text-stroke-width'></span>\n        </div>\n        <object refClass=\"RangeEditor\"  \n          ref='$width' \n          label='").concat(this.$i18n('text.fill.property.strokeWidth'), "' \n          key=\"text-stroke-width\" \n          \n          max=\"50\"\n          onchange=\"changeRangeEditor\" />\n      </div>\n    \n    ")
+      );
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('changeColor'),
+    value: function value(key, color, params) {
+      this.trigger('changeRangeEditor', key, color);
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('changeRangeEditor'),
+    value: function value(key, _value) {
+      this.command('setAttribute', 'change text fill', defineProperty_default()({}, key, _value));
+    }
+  }]);
+
+  return TextFillProperty;
+}(BaseProperty["a" /* default */]);
+
+
+// CONCATENATED MODULE: ./src/plugins/text-fill/index.js
+
+
+/**
+ * 
+ * @param {Editor} editor 
+ */
+
+/* harmony default export */ var text_fill = (function (editor) {
+  editor.registerElement({
+    TextFillProperty: TextFillProperty_TextFillProperty
   });
 });
 // CONCATENATED MODULE: ./src/plugins/text-shadow/TextShadowProperty.js
@@ -63463,6 +64823,454 @@ var TransformProperty_TransformProperty = /*#__PURE__*/function (_BaseProperty) 
     TransformProperty: TransformProperty_TransformProperty
   });
 });
+// CONCATENATED MODULE: ./src/plugins/transform-origin/TransformOriginProperty.js
+
+
+
+
+
+
+function TransformOriginProperty_createSuper(Derived) { var hasNativeReflectConstruct = TransformOriginProperty_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
+
+function TransformOriginProperty_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+var TransformOriginProperty_TransformOriginProperty = /*#__PURE__*/function (_BaseProperty) {
+  inherits_default()(TransformOriginProperty, _BaseProperty);
+
+  var _super = TransformOriginProperty_createSuper(TransformOriginProperty);
+
+  function TransformOriginProperty() {
+    classCallCheck_default()(this, TransformOriginProperty);
+
+    return _super.apply(this, arguments);
+  }
+
+  createClass_default()(TransformOriginProperty, [{
+    key: "getTitle",
+    value: function getTitle() {
+      return this.$i18n('transform.origin.property.title');
+    }
+  }, {
+    key: "hasKeyframe",
+    value: function hasKeyframe() {
+      return true;
+    }
+  }, {
+    key: "getKeyframeProperty",
+    value: function getKeyframeProperty() {
+      return 'transform-origin';
+    }
+  }, {
+    key: Object(Event["CLICK"])('$remove'),
+    value: function value() {
+      this.trigger('changeTransformOrigin', '');
+    }
+  }, {
+    key: "getBody",
+    value: function getBody() {
+      return (
+        /*html*/
+        "\n      <div class=\"property-item full transform-origin-item\" ref='$body'></div>\n    "
+      );
+    }
+  }, {
+    key: Object(Event["LOAD"])('$body'),
+    value: function value() {
+      var current = this.$selection.current || {};
+      var value = current['transform-origin'] || '';
+      return (
+        /*html*/
+        "<object refClass=\"TransformOriginEditor\" ref='$1' value='".concat(value, "' onchange='changeTransformOrigin' />")
+      );
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('refreshSelection', 'refreshRect') + Object(Event["DEBOUNCE"])(100),
+    value: function value() {
+      this.refreshShowIsNot(['project', 'artboard']);
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('changeTransformOrigin'),
+    value: function value(key, _value) {
+      this.command('setAttribute', 'change transform-origin', {
+        'transform-origin': _value
+      });
+    }
+  }]);
+
+  return TransformOriginProperty;
+}(BaseProperty["a" /* default */]);
+
+
+// CONCATENATED MODULE: ./src/plugins/transform-origin/index.js
+
+
+/**
+ * 
+ * @param {Editor} editor 
+ */
+
+/* harmony default export */ var transform_origin = (function (editor) {
+  editor.registerElement({
+    TransformOriginProperty: TransformOriginProperty_TransformOriginProperty
+  });
+});
+// CONCATENATED MODULE: ./src/el/editor/property-parser/Transition.js
+
+
+
+
+
+
+function Transition_createSuper(Derived) { var hasNativeReflectConstruct = Transition_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
+
+function Transition_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+var TRANSITION_TIMING_REG = /((cubic-bezier|steps)\(([^\)]*)\))/gi;
+var Transition_Transition = /*#__PURE__*/function (_Property) {
+  inherits_default()(Transition, _Property);
+
+  var _super = Transition_createSuper(Transition);
+
+  function Transition() {
+    classCallCheck_default()(this, Transition);
+
+    return _super.apply(this, arguments);
+  }
+
+  createClass_default()(Transition, [{
+    key: "getDefaultObject",
+    value: function getDefaultObject() {
+      return {
+        name: 'all',
+        duration: unit_Length["a" /* Length */].second(0),
+        timingFunction: 'linear',
+        delay: unit_Length["a" /* Length */].second(0)
+      };
+    }
+  }, {
+    key: "toCloneObject",
+    value: function toCloneObject() {
+      return {
+        name: this.json.name,
+        duration: this.json.duration + "",
+        timingFunction: this.json.timingFunction,
+        delay: this.json.delay + ''
+      };
+    }
+  }, {
+    key: "toCSS",
+    value: function toCSS() {
+      return {
+        "transition": this.toString()
+      };
+    }
+  }, {
+    key: "toString",
+    value: function toString() {
+      var json = this.json;
+      return [json.name, json.duration, json.timingFunction, json.delay].join(' ');
+    }
+  }], [{
+    key: "parse",
+    value: function parse(obj) {
+      return new Transition(obj);
+    }
+  }, {
+    key: "join",
+    value: function join(list) {
+      return list.map(function (it) {
+        return new Transition(it).toString();
+      }).join(',');
+    }
+  }, {
+    key: "add",
+    value: function add(transition) {
+      var item = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var list = Transition.parseStyle(transition);
+      list.push(Transition.parse(item));
+      return Transition.join(list);
+    }
+  }, {
+    key: "remove",
+    value: function remove(transition, removeIndex) {
+      return Transition.filter(transition, function (it, index) {
+        return removeIndex != index;
+      });
+    }
+  }, {
+    key: "filter",
+    value: function filter(transition, filterFunction) {
+      return Transition.join(Transition.parseStyle(transition).filter(function (it) {
+        return filterFunction(it);
+      }));
+    }
+  }, {
+    key: "replace",
+    value: function replace(transition, replaceIndex, valueObject) {
+      var list = Transition.parseStyle(transition);
+
+      if (list[replaceIndex]) {
+        list[replaceIndex] = valueObject;
+      } else {
+        list.push(valueObject);
+      }
+
+      return Transition.join(list);
+    }
+  }, {
+    key: "get",
+    value: function get(transition, index) {
+      var arr = Transition.parseStyle(transition);
+      return arr[index];
+    }
+  }, {
+    key: "parseStyle",
+    value: function parseStyle(transition) {
+      var list = [];
+      if (!transition) return list;
+      var result = customParseConvertMatches(transition, TRANSITION_TIMING_REG);
+      list = result.str.split(',').map(function (it) {
+        var fields = it.split(' ').filter(Boolean);
+
+        if (fields.length >= 4) {
+          /* @keyframes duration | timing-function | delay | 
+          iteration-count | direction | fill-mode | play-state | name */
+          //animation: 3s ease-in 1s 2 reverse both paused slidein;        
+          return {
+            name: fields[0],
+            duration: unit_Length["a" /* Length */].parse(fields[1]),
+            timingFunction: customParseReverseMatches(fields[2], result.matches),
+            delay: unit_Length["a" /* Length */].parse(fields[3])
+          };
+        } else if (fields.length >= 3) {
+          /* @keyframes duration | timing-function | delay | name */
+          //animation: 3s linear 1s slidein;        
+          return {
+            name: fields[0],
+            duration: unit_Length["a" /* Length */].parse(fields[1]),
+            delay: unit_Length["a" /* Length */].parse(fields[2])
+          };
+        } else if (fields.length >= 1) {
+          /* @keyframes duration | name */
+          //animation: 3s slidein;        
+          return {
+            name: fields[0],
+            duration: unit_Length["a" /* Length */].parse(fields[1])
+          };
+        } else {
+          return {};
+        }
+      });
+      return list.map(function (it) {
+        return Transition.parse(it);
+      });
+    }
+  }]);
+
+  return Transition;
+}(Property["a" /* Property */]);
+// CONCATENATED MODULE: ./src/plugins/transition/TransitionProperty.js
+
+
+
+
+
+
+
+function TransitionProperty_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function TransitionProperty_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { TransitionProperty_ownKeys(Object(source), true).forEach(function (key) { defineProperty_default()(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { TransitionProperty_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function TransitionProperty_createSuper(Derived) { var hasNativeReflectConstruct = TransitionProperty_isNativeReflectConstruct(); return function _createSuperInternal() { var Super = getPrototypeOf_default()(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = getPrototypeOf_default()(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return possibleConstructorReturn_default()(this, result); }; }
+
+function TransitionProperty_isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+
+
+
+
+
+
+var TransitionProperty_TransitionProperty = /*#__PURE__*/function (_BaseProperty) {
+  inherits_default()(TransitionProperty, _BaseProperty);
+
+  var _super = TransitionProperty_createSuper(TransitionProperty);
+
+  function TransitionProperty() {
+    classCallCheck_default()(this, TransitionProperty);
+
+    return _super.apply(this, arguments);
+  }
+
+  createClass_default()(TransitionProperty, [{
+    key: "getTitle",
+    value: function getTitle() {
+      return this.$i18n('transition.property.title');
+    }
+  }, {
+    key: "getBody",
+    value: function getBody() {
+      return (
+        /*html*/
+        "<div class='transition-list' ref='$transitionList'></div>"
+      );
+    }
+  }, {
+    key: "getTools",
+    value: function getTools() {
+      return (
+        /*html*/
+        "\n        <button type=\"button\" ref=\"$add\" title=\"add Transition\">".concat(icon_icon["a" /* default */].add, "</button>\n    ")
+      );
+    }
+  }, {
+    key: "isFirstShow",
+    value: function isFirstShow() {
+      return true;
+    }
+  }, {
+    key: Object(Event["LOAD"])("$transitionList") + Event["DOMDIFF"],
+    value: function value() {
+      var _this = this;
+
+      var current = this.$selection.current;
+      if (!current) return '';
+      return Transition_Transition.parseStyle(current.transition).map(function (it, index) {
+        var selectedClass = _this.state.selectedIndex === index ? "selected" : "";
+        var path = Object(func["curveToPath"])(it.timingFunction, 30, 30);
+        return (
+          /*html*/
+          "\n      <div class='transition-group-item'>\n        <div class='transition-item ".concat(selectedClass, "' data-index='").concat(index, "' ref=\"transitionIndex").concat(index, "\">\n            <div class='timing preview' data-index='").concat(index, "' ref='$preview").concat(index, "'>\n              <svg class='item-canvas' width=\"30\" height=\"30\" viewBox=\"0 0 30 30\">\n                <path d=\"").concat(path, "\" stroke=\"white\" stroke-width=\"1\" fill='none' />\n              </svg>\n            </div>\n            <div class='name'>\n              <div class='labels'>\n                <span class='property-name' title='Property'>").concat(it.name, "</span>\n                <span class='duration' title='Duration'><small>Duration: ").concat(it.duration, "</small></span>\n                <span class='delay' title='Delay'><small>Delay: ").concat(it.delay, "</small></span>\n              </div>\n            </div>\n            <div class='tools'>\n                <button type=\"button\" class=\"del\" data-index=\"").concat(index, "\">\n                  ").concat(icon_icon["a" /* default */].remove2, "\n                </button>\n            </div>\n        </div>\n      </div>        \n      ")
+        );
+      });
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])('refreshSelection'),
+    value: function value() {
+      this.refreshShowIsNot([]);
+    }
+  }, {
+    key: Object(Event["CLICK"])("$add"),
+    value: function value(e) {
+      var current = this.$selection.current;
+
+      if (current) {
+        current.reset({
+          transition: Transition_Transition.add(current.transition)
+        });
+        this.emit("refreshElement", current);
+      }
+
+      this.refresh();
+    }
+  }, {
+    key: "getCurrentTransition",
+    value: function getCurrentTransition() {
+      return this.current.transitions[this.selectedIndex];
+    }
+  }, {
+    key: Object(Event["CLICK"])("$transitionList .tools .del"),
+    value: function value(e) {
+      var removeIndex = e.$dt.attr("data-index");
+      var current = this.$selection.current;
+      if (!current) return;
+      current.reset({
+        transition: Transition_Transition.remove(current.transition, removeIndex)
+      });
+      this.emit("refreshElement", current);
+      this.refresh();
+    } // 객체를 선택하는 괜찮은 패턴이 어딘가에 있을 텐데......
+    // 언제까지 selected 를 설정해야하는가?
+
+  }, {
+    key: "selectItem",
+    value: function selectItem(selectedIndex) {
+      var isSelected = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+      if (isSelected) {
+        this.refs["transitionIndex".concat(selectedIndex)].addClass("selected");
+      } else {
+        this.refs["transitionIndex".concat(selectedIndex)].removeClass("selected");
+      }
+    }
+  }, {
+    key: "viewTransitionPicker",
+    value: function viewTransitionPicker($preview) {
+      if (typeof this.selectedIndex === "number") {
+        this.selectItem(this.selectedIndex, false);
+      }
+
+      this.selectedIndex = +$preview.attr("data-index");
+      this.current = this.$selection.current;
+      if (!this.current) return;
+      this.currentTransition = Transition_Transition.get(this.current.transition, this.selectedIndex);
+      this.viewTransitionPropertyPopup();
+    }
+  }, {
+    key: "viewTransitionPropertyPopup",
+    value: function viewTransitionPropertyPopup() {
+      if (!this.currentTransition) return;
+      var transition = this.currentTransition;
+      this.emit("showTransitionPropertyPopup", {
+        changeEvent: 'changeTransitionPropertyPopup',
+        data: transition.toCloneObject(),
+        instance: this
+      });
+    }
+  }, {
+    key: Object(Event["CLICK"])("$transitionList .preview"),
+    value: function value(e) {
+      this.viewTransitionPicker(e.$dt);
+    }
+  }, {
+    key: "getRef",
+    value: function getRef() {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      return this.refs[args.join("")];
+    }
+  }, {
+    key: Object(Event["SUBSCRIBE"])("changeTransitionPropertyPopup"),
+    value: function value(data) {
+      if (this.currentTransition) {
+        this.currentTransition.reset(TransitionProperty_objectSpread({}, data));
+
+        if (this.current) {
+          this.current.reset({
+            transition: Transition_Transition.replace(this.current.transition, this.selectedIndex, this.currentTransition)
+          });
+          this.emit("refreshElement", this.current);
+          this.refresh();
+        }
+      }
+    }
+  }]);
+
+  return TransitionProperty;
+}(BaseProperty["a" /* default */]);
+
+
+// CONCATENATED MODULE: ./src/plugins/transition/index.js
+
+
+/**
+ * 
+ * @param {Editor} editor 
+ */
+
+/* harmony default export */ var plugins_transition = (function (editor) {
+  editor.registerElement({
+    TransitionProperty: TransitionProperty_TransitionProperty
+  });
+});
 // CONCATENATED MODULE: ./src/plugins/index.js
 
 
@@ -63484,7 +65292,17 @@ var TransformProperty_TransformProperty = /*#__PURE__*/function (_BaseProperty) 
 
 
 
-/* harmony default export */ var plugins = ([plugins_transform, backdrop_filter, codeview, plugins_filter, background_image, plugins_keyframe, plugins_animation, border_image, font_spacing, plugins_text, text_shadow, font, content, box_model, box_shadow, border_radius, appearance, position, clip_path, gradient_asset]);
+
+
+
+
+
+
+
+
+
+
+/* harmony default export */ var plugins = ([svg_item, text_fill, plugins_image, artboard, layer_tree, background_clip, transform_origin, perspective, perspective_origin, plugins_transition, plugins_transform, backdrop_filter, codeview, plugins_filter, background_image, plugins_keyframe, plugins_animation, border_image, font_spacing, plugins_text, text_shadow, font, content, box_model, box_shadow, border_radius, appearance, position, clip_path, gradient_asset]);
 // CONCATENATED MODULE: ./src/editor-layouts/BaseLayout.js
 
 
@@ -63689,16 +65507,16 @@ var BaseLayout_BaseLayout = /*#__PURE__*/function (_EditorElement) {
 
 
 /***/ }),
+/* 148 */,
 /* 149 */,
 /* 150 */,
-/* 151 */,
-/* 152 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
-/* 153 */
+/* 152 */
 /***/ (function(module, exports) {
 
 function _setPrototypeOf(o, p) {
@@ -63715,7 +65533,7 @@ module.exports = _setPrototypeOf;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 /***/ }),
-/* 154 */
+/* 153 */
 /***/ (function(module, exports) {
 
 function _assertThisInitialized(self) {
@@ -63730,10 +65548,10 @@ module.exports = _assertThisInitialized;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 /***/ }),
-/* 155 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayLikeToArray = __webpack_require__(142);
+var arrayLikeToArray = __webpack_require__(141);
 
 function _arrayWithoutHoles(arr) {
   if (Array.isArray(arr)) return arrayLikeToArray(arr);
@@ -63743,7 +65561,7 @@ module.exports = _arrayWithoutHoles;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 /***/ }),
-/* 156 */
+/* 155 */
 /***/ (function(module, exports) {
 
 function _nonIterableSpread() {
@@ -63754,7 +65572,7 @@ module.exports = _nonIterableSpread;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 /***/ }),
-/* 157 */
+/* 156 */
 /***/ (function(module, exports) {
 
 function _iterableToArrayLimit(arr, i) {
@@ -63791,7 +65609,7 @@ module.exports = _iterableToArrayLimit;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 /***/ }),
-/* 158 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getPrototypeOf = __webpack_require__(1);
@@ -63809,7 +65627,7 @@ module.exports = _superPropBase;
 module.exports["default"] = module.exports, module.exports.__esModule = true;
 
 /***/ }),
-/* 159 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -64563,7 +66381,7 @@ try {
 
 
 /***/ }),
-/* 160 */
+/* 159 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -64583,7 +66401,7 @@ try {
 /* harmony import */ var el_base_Event__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(0);
 /* harmony import */ var el_base_Dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(20);
 /* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(8);
-/* harmony import */ var el_editor_items_Project__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(70);
+/* harmony import */ var el_editor_items_Project__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(71);
 /* harmony import */ var el_editor_renderer_HTMLRenderer__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(46);
 /* harmony import */ var el_base_registElement__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(10);
 /* harmony import */ var _common_EditorElement__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(14);
@@ -64782,7 +66600,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_11__[/* registElement */ "
 });
 
 /***/ }),
-/* 161 */
+/* 160 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -64877,7 +66695,7 @@ Object(el_base_registElement__WEBPACK_IMPORTED_MODULE_8__[/* registElement */ "a
 });
 
 /***/ }),
-/* 162 */
+/* 161 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -64913,13 +66731,13 @@ var Length = __webpack_require__(3);
 var Event = __webpack_require__(0);
 
 // EXTERNAL MODULE: ./src/el/base/UIElement.js + 4 modules
-var UIElement = __webpack_require__(29);
+var UIElement = __webpack_require__(30);
 
 // EXTERNAL MODULE: ./src/el/editor/icon/icon.js + 164 modules
 var icon = __webpack_require__(11);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/index.js + 17 modules
-var property_editor = __webpack_require__(66);
+var property_editor = __webpack_require__(67);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/common/EditorElement.js
 var EditorElement = __webpack_require__(14);
@@ -65350,13 +67168,13 @@ Object(registElement["a" /* registElement */])({
   TextShadowPropertyPopup: TextShadowPropertyPopup_TextShadowPropertyPopup
 });
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/CubicBezierEditor.js
-var CubicBezierEditor = __webpack_require__(93);
+var CubicBezierEditor = __webpack_require__(92);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/RangeEditor.js
 var RangeEditor = __webpack_require__(39);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/IterationCountEditor.js
-var IterationCountEditor = __webpack_require__(118);
+var IterationCountEditor = __webpack_require__(117);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/SelectEditor.js
 var SelectEditor = __webpack_require__(41);
@@ -65591,7 +67409,7 @@ Object(registElement["a" /* registElement */])({
   AnimationPropertyPopup: AnimationPropertyPopup_AnimationPropertyPopup
 });
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/OffsetEditor.js
-var OffsetEditor = __webpack_require__(119);
+var OffsetEditor = __webpack_require__(118);
 
 // CONCATENATED MODULE: ./src/el/editor/ui/popup/KeyframePopup.js
 
@@ -65722,17 +67540,17 @@ Object(registElement["a" /* registElement */])({
 var ClipPath = __webpack_require__(40);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/clip-path/CircleEditor.js
-var CircleEditor = __webpack_require__(129);
+var CircleEditor = __webpack_require__(128);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/slicedToArray.js
 var slicedToArray = __webpack_require__(13);
 var slicedToArray_default = /*#__PURE__*/__webpack_require__.n(slicedToArray);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/DirectionEditor.js
-var DirectionEditor = __webpack_require__(134);
+var DirectionEditor = __webpack_require__(133);
 
 // EXTERNAL MODULE: ./src/el/editor/unit/DirectionLength.js
-var DirectionLength = __webpack_require__(64);
+var DirectionLength = __webpack_require__(65);
 
 // CONCATENATED MODULE: ./src/el/editor/ui/property-editor/clip-path/InsetEditor.js
 
@@ -66783,7 +68601,7 @@ var get = __webpack_require__(9);
 var get_default = /*#__PURE__*/__webpack_require__.n(get);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/CSSPropertyEditor.js + 1 modules
-var CSSPropertyEditor = __webpack_require__(95);
+var CSSPropertyEditor = __webpack_require__(94);
 
 // CONCATENATED MODULE: ./src/el/editor/ui/popup/SelectorPopup.js
 
@@ -66994,7 +68812,7 @@ var Hue_Hue = /*#__PURE__*/function (_EditorElement) {
 
 
 // EXTERNAL MODULE: ./src/el/base/Color.js + 2 modules
-var Color = __webpack_require__(27);
+var Color = __webpack_require__(25);
 
 // CONCATENATED MODULE: ./src/el/editor/ui/property-editor/colorpicker/ui/control/Opacity.js
 
@@ -68810,7 +70628,7 @@ Object(registElement["a" /* registElement */])({
   ImageAssetPicker: ImageAssetPicker_ImageAssetPicker
 });
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/GradientEditor.js
-var GradientEditor = __webpack_require__(96);
+var GradientEditor = __webpack_require__(95);
 
 // CONCATENATED MODULE: ./src/el/editor/ui/popup/GradientPickerPopup.js
 
@@ -68954,7 +70772,7 @@ Object(registElement["a" /* registElement */])({
   GradientPickerPopup: GradientPickerPopup_GradientPickerPopup
 });
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/SVGFilterEditor.js + 6 modules
-var SVGFilterEditor = __webpack_require__(137);
+var SVGFilterEditor = __webpack_require__(136);
 
 // EXTERNAL MODULE: ./src/el/editor/property-parser/SVGFilter.js + 32 modules
 var SVGFilter = __webpack_require__(57);
@@ -69231,7 +71049,7 @@ Object(registElement["a" /* registElement */])({
   BackgroundImagePositionPopup: BackgroundImagePositionPopup_BackgroundImagePositionPopup
 });
 // EXTERNAL MODULE: ./src/el/editor/ui/property-editor/FillEditor.js
-var FillEditor = __webpack_require__(135);
+var FillEditor = __webpack_require__(134);
 
 // EXTERNAL MODULE: ./src/el/editor/property-parser/image-resource/SVGStaticGradient.js
 var SVGStaticGradient = __webpack_require__(58);
@@ -69639,13 +71457,13 @@ Object(registElement["a" /* registElement */])({
 });
 
 /***/ }),
-/* 163 */
+/* 162 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 
 // EXTERNAL MODULE: ./src/el/editor/items/Project.js + 45 modules
-var Project = __webpack_require__(70);
+var Project = __webpack_require__(71);
 
 // EXTERNAL MODULE: ./src/el/editor/items/Component.js
 var Component = __webpack_require__(53);
@@ -69692,7 +71510,7 @@ var icon = __webpack_require__(11);
 var func = __webpack_require__(8);
 
 // EXTERNAL MODULE: ./src/el/editor/manager/ComponentManager.js
-var ComponentManager = __webpack_require__(34);
+var ComponentManager = __webpack_require__(35);
 
 // CONCATENATED MODULE: ./src/el/editor/items/layers/CubeLayer.js
 
@@ -70534,7 +72352,7 @@ var CylinderLayer_CylinderLayer = /*#__PURE__*/function (_Component) {
 }(Component["a" /* Component */]);
 ComponentManager["a" /* ComponentManager */].registerComponent('cylinder', CylinderLayer_CylinderLayer);
 // EXTERNAL MODULE: ./src/el/editor/items/ArtBoard.js
-var ArtBoard = __webpack_require__(139);
+var ArtBoard = __webpack_require__(138);
 
 // EXTERNAL MODULE: ./src/el/editor/items/Layer.js
 var Layer = __webpack_require__(49);
@@ -70615,7 +72433,7 @@ var ImageLayer_ImageLayer = /*#__PURE__*/function (_Layer) {
 }(Layer["a" /* Layer */]);
 ComponentManager["a" /* ComponentManager */].registerComponent('image', ImageLayer_ImageLayer);
 // EXTERNAL MODULE: ./src/el/editor/items/layers/SVGPathItem.js
-var SVGPathItem = __webpack_require__(103);
+var SVGPathItem = __webpack_require__(102);
 
 // EXTERNAL MODULE: ./src/el/editor/items/layers/SVGItem.js
 var SVGItem = __webpack_require__(82);
@@ -70624,7 +72442,7 @@ var SVGItem = __webpack_require__(82);
 var Resource = __webpack_require__(38);
 
 // EXTERNAL MODULE: ./src/el/editor/manager/Editor.js + 152 modules
-var Editor = __webpack_require__(36);
+var Editor = __webpack_require__(28);
 
 // CONCATENATED MODULE: ./src/el/editor/items/layers/SVGTextItem.js
 
@@ -70734,7 +72552,7 @@ var SVGTextItem_SVGTextItem = /*#__PURE__*/function (_SVGItem) {
 }(SVGItem["a" /* SVGItem */]);
 Editor["b" /* Editor */].registerComponent('svgtext', SVGTextItem_SVGTextItem);
 // EXTERNAL MODULE: ./src/el/editor/parser/PathParser.js
-var PathParser = __webpack_require__(32);
+var PathParser = __webpack_require__(34);
 
 // CONCATENATED MODULE: ./src/el/editor/items/layers/SVGTextPathItem.js
 
@@ -71407,7 +73225,7 @@ ComponentManager["a" /* ComponentManager */].registerComponent('chart', ChartLay
 });
 
 /***/ }),
-/* 164 */
+/* 163 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -71521,7 +73339,7 @@ var Dom = __webpack_require__(20);
 var HTMLRenderer = __webpack_require__(46);
 
 // EXTERNAL MODULE: ./src/el/editor/renderer/SVGRenderer/index.js + 15 modules
-var SVGRenderer = __webpack_require__(71);
+var SVGRenderer = __webpack_require__(72);
 
 // EXTERNAL MODULE: ./src/el/base/registElement.js
 var registElement = __webpack_require__(10);
@@ -71802,7 +73620,7 @@ Object(registElement["a" /* registElement */])({
 var shortcuts = __webpack_require__(86);
 
 // EXTERNAL MODULE: ./src/el/base/functions/detect.js
-var detect = __webpack_require__(89);
+var detect = __webpack_require__(88);
 
 // CONCATENATED MODULE: ./src/el/editor/ui/window-list/ShortcutWindow.js
 
@@ -72026,8 +73844,8 @@ Object(registElement["a" /* registElement */])({
 });
 
 /***/ }),
-/* 165 */,
-/* 166 */
+/* 164 */,
+/* 165 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -72039,7 +73857,7 @@ var defineProperty = __webpack_require__(7);
 var defineProperty_default = /*#__PURE__*/__webpack_require__.n(defineProperty);
 
 // EXTERNAL MODULE: ./src/scss/index.scss
-var scss = __webpack_require__(152);
+var scss = __webpack_require__(151);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/classCallCheck.js
 var classCallCheck = __webpack_require__(2);
@@ -72062,7 +73880,7 @@ var getPrototypeOf = __webpack_require__(1);
 var getPrototypeOf_default = /*#__PURE__*/__webpack_require__.n(getPrototypeOf);
 
 // EXTERNAL MODULE: ./src/el/editor/items/index.js + 12 modules
-var editor_items = __webpack_require__(163);
+var editor_items = __webpack_require__(162);
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/slicedToArray.js
 var slicedToArray = __webpack_require__(13);
@@ -72079,7 +73897,7 @@ var Event = __webpack_require__(0);
 var esm = __webpack_require__(12);
 
 // EXTERNAL MODULE: ./src/el/editor/types/key.js
-var types_key = __webpack_require__(73);
+var types_key = __webpack_require__(62);
 
 // EXTERNAL MODULE: ./src/el/editor/util/Resource.js
 var Resource = __webpack_require__(38);
@@ -72094,7 +73912,7 @@ var registElement = __webpack_require__(10);
 var Length = __webpack_require__(3);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/view/render-view/StyleView.js
-var StyleView = __webpack_require__(160);
+var StyleView = __webpack_require__(159);
 
 // EXTERNAL MODULE: ./src/el/editor/renderer/HTMLRenderer/index.js + 14 modules
 var HTMLRenderer = __webpack_require__(46);
@@ -72558,17 +74376,17 @@ var PlayCanvasView_PlayCanvasView = /*#__PURE__*/function (_EditorElement) {
 Object(registElement["a" /* registElement */])({
   PlayCanvasView: PlayCanvasView_PlayCanvasView
 });
-// EXTERNAL MODULE: ./src/editor-layouts/BaseLayout.js + 53 modules
-var BaseLayout = __webpack_require__(148);
+// EXTERNAL MODULE: ./src/editor-layouts/BaseLayout.js + 76 modules
+var BaseLayout = __webpack_require__(147);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/popup/index.js + 51 modules
-var popup = __webpack_require__(162);
+var popup = __webpack_require__(161);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/window-list/index.js + 6 modules
-var window_list = __webpack_require__(164);
+var window_list = __webpack_require__(163);
 
 // EXTERNAL MODULE: ./src/el/editor/ui/view/NotificationView.js
-var NotificationView = __webpack_require__(161);
+var NotificationView = __webpack_require__(160);
 
 // CONCATENATED MODULE: ./src/editor-layouts/designplayer/PlayerPopupManager.js
 
@@ -72731,10 +74549,10 @@ var DesignPlayer_DesignPlayer = /*#__PURE__*/function (_BaseLayout) {
 
 
 // EXTERNAL MODULE: ./src/el/base/App.js
-var App = __webpack_require__(146);
+var App = __webpack_require__(145);
 
 // EXTERNAL MODULE: ./src/export-library/index.js
-var export_library = __webpack_require__(147);
+var export_library = __webpack_require__(146);
 
 // CONCATENATED MODULE: ./src/editor-layouts/designplayer/index.js
 

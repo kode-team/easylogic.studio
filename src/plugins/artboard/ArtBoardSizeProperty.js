@@ -1,8 +1,8 @@
-import BaseProperty from "./BaseProperty";
 import { LOAD, DOMDIFF, CLICK, SUBSCRIBE } from "el/base/Event";
 
 import artboardSize from "el/editor/preset/artboards/artboard.size";
-import { registElement } from "el/base/registElement";
+import BaseProperty from "el/editor/ui/property/BaseProperty";
+
 
 export default class ArtBoardSizeProperty extends BaseProperty {
 
@@ -96,5 +96,3 @@ export default class ArtBoardSizeProperty extends BaseProperty {
     return category.groups.map(group => this.makeGroup(group))
   }
 }
-
-registElement({ ArtBoardSizeProperty })

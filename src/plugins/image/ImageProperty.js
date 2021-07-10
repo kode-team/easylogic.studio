@@ -1,9 +1,10 @@
-import BaseProperty from "./BaseProperty";
+
 import { LOAD, CLICK, BIND, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
+import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { Length } from "el/editor/unit/Length";
-import { registElement } from "el/base/registElement";
+
 
 const image_size = [
   '',
@@ -108,5 +109,3 @@ export default class ImageProperty extends BaseProperty {
 
   }
 }
-
-registElement({ ImageProperty })

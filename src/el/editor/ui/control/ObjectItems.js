@@ -1,7 +1,6 @@
 import { registElement } from "el/base/registElement";
 
 import { EditorElement } from "../common/EditorElement";
-import "../property/LayerTreeProperty";
 
 export default class ObjectItems extends EditorElement {
   template() {

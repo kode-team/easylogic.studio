@@ -1,12 +1,11 @@
-import BaseProperty from "./BaseProperty";
 import { LOAD, CLICK, DOUBLECLICK, PREVENT, STOP, FOCUSOUT, DOMDIFF, DRAGSTART, KEYDOWN, DRAGOVER, DROP, BIND, DRAGEND, ENTER, SUBSCRIBE } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 
 
 import Color from "el/base/Color";
 import { Length } from "el/editor/unit/Length";
-import { registElement } from "el/base/registElement";
 import { KEY_CODE } from "el/editor/types/key";
+import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 const DRAG_START_CLASS = 'drag-start'
 
@@ -36,12 +35,12 @@ export default class LayerTreeProperty extends BaseProperty {
     `;
   }
 
-  [BIND('$dragPointer')] () {
+  [BIND('$dragPointer')]() {
 
 
-    var offset = this.state.lastDragOverOffset 
-    var dist = this.state.itemRect.height/3; 
-    var bound = {} 
+    var offset = this.state.lastDragOverOffset
+    var dist = this.state.itemRect.height / 3;
+    var bound = {}
 
     if (this.state.lastDragOverOffset < dist) {
       offset = 0;
@@ -57,7 +56,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
       this.state.lastDragOverItemDirection = 'before';
     } else if (this.state.lastDragOverOffset > this.state.itemRect.height - dist) {
-      offset = this.state.itemRect.height; 
+      offset = this.state.itemRect.height;
 
       var top = this.state.lastDragOverPosition + offset - this.state.rootRect.top
 
@@ -66,10 +65,10 @@ export default class LayerTreeProperty extends BaseProperty {
         height: '1px',
         width: '100%',
         left: '0px'
-      }            
-      this.state.lastDragOverItemDirection = 'after';      
+      }
+      this.state.lastDragOverItemDirection = 'after';
     } else {
-      offset = 0; 
+      offset = 0;
 
       var top = this.state.lastDragOverPosition + offset - this.state.rootRect.top
 
@@ -78,11 +77,11 @@ export default class LayerTreeProperty extends BaseProperty {
         height: Length.px(this.state.itemRect.height),
         width: '100%',
         left: '0px'
-      }      
-      this.state.lastDragOverItemDirection = 'self';      
+      }
+      this.state.lastDragOverItemDirection = 'self';
     }
 
-    bound.display = this.state.hideDragPointer ? 'none':  'block';
+    bound.display = this.state.hideDragPointer ? 'none' : 'block';
 
     return {
       style: bound
@@ -90,52 +89,52 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
   //FIXME: 개별 객체가 아이콘을 리턴 할 수 있도록 구조를 맞춰보자. 
-  getIcon (item) {
+  getIcon(item) {
     // return '';
 
     if (item.isGroup && item.is('artboard') === false) {
       return icon.group
     }
 
-    switch(item.itemType) {
-    case 'artboard':
-      return icon.artboard;
-    case 'circle': 
-      return icon.lens;
-    case 'image': 
-      return icon.image;
-    case 'text': 
-    case 'svg-text':
-      return icon.title;    
-    case 'svg-textpath':
-      return icon.text_rotate;
-    case 'svg-path': 
-      return icon.pentool      
-    case 'cube' : 
-      return icon.cube;
-    case 'cylinder':
-      return icon.cylinder;
-    default: 
-      return icon.rect
+    switch (item.itemType) {
+      case 'artboard':
+        return icon.artboard;
+      case 'circle':
+        return icon.lens;
+      case 'image':
+        return icon.image;
+      case 'text':
+      case 'svg-text':
+        return icon.title;
+      case 'svg-textpath':
+        return icon.text_rotate;
+      case 'svg-path':
+        return icon.pentool
+      case 'cube':
+        return icon.cube;
+      case 'cylinder':
+        return icon.cylinder;
+      default:
+        return icon.rect
     }
   }
 
-  makeLayerList (parentObject, depth = 0) {
+  makeLayerList(parentObject, depth = 0) {
     if (!parentObject.layers) return '';
 
     const layers = parentObject.layers
     const data = []
 
-    for(var last = layers.length - 1; last > -1; last-- ) {
+    for (var last = layers.length - 1; last > -1; last--) {
       var layer = layers[last];
       var selected = this.$selection.check(layer) ? 'selected' : '';
       var hovered = this.$selection.checkHover(layer) ? 'hovered' : '';
-      var name = layer.name; 
+      var name = layer.name;
 
       if (layer.is('text')) {
-        name = layer.text || layer.name 
+        name = layer.text || layer.name
       }
-      var title = ''; 
+      var title = '';
 
       if (layer.hasLayout()) {
         title = this.$i18n('layer.tree.property.layout.title.' + layer.layout)
@@ -160,14 +159,14 @@ export default class LayerTreeProperty extends BaseProperty {
           </div>
         </div>
 
-        ${this.makeLayerList(layer, depth+1)}
+        ${this.makeLayerList(layer, depth + 1)}
       `)
     }
 
     return data.join(' ');
   }
 
-  [SUBSCRIBE('refreshContent')] (arr) {
+  [SUBSCRIBE('refreshContent')](arr) {
     this.refresh();
   }
 
@@ -182,22 +181,22 @@ export default class LayerTreeProperty extends BaseProperty {
     `
   }
 
-  [DRAGSTART('$layerList .layer-item')] (e) {
+  [DRAGSTART('$layerList .layer-item')](e) {
     var layerId = e.$dt.attr('data-layer-id');
     e.$dt.addClass(DRAG_START_CLASS);
     e.dataTransfer.setData('layer/id', layerId);
     this.state.rootRect = this.refs.$layerList.rect()
     this.state.itemRect = e.$dt.rect();
     this.setState({
-      hideDragPointer: false 
+      hideDragPointer: false
     }, false)
 
     this.bindData('$dragPointer');
   }
 
-  [DRAGEND('$layerList .layer-item')] (e) {
+  [DRAGEND('$layerList .layer-item')](e) {
     this.setState({
-      hideDragPointer: true 
+      hideDragPointer: true
     }, false)
 
     this.bindData('$dragPointer');
@@ -207,8 +206,8 @@ export default class LayerTreeProperty extends BaseProperty {
     })
   }
 
-  [DRAGOVER(`$layerList .layer-item:not(.${DRAG_START_CLASS})`) + PREVENT] (e) {
-    var targetLayerId = e.$dt.attr('data-layer-id') 
+  [DRAGOVER(`$layerList .layer-item:not(.${DRAG_START_CLASS})`) + PREVENT](e) {
+    var targetLayerId = e.$dt.attr('data-layer-id')
     // console.log({targetLayerId, x: e.offsetX, y: e.offsetY});
 
     this.state.lastDragOverItemId = targetLayerId;
@@ -218,55 +217,55 @@ export default class LayerTreeProperty extends BaseProperty {
     this.bindData('$dragPointer')
 
   }
-  [DROP(`$layerList .layer-item:not(.${DRAG_START_CLASS})`)] (e) {
+  [DROP(`$layerList .layer-item:not(.${DRAG_START_CLASS})`)](e) {
     var targetLayerId = e.$dt.attr('data-layer-id')
     var sourceLayerId = e.dataTransfer.getData('layer/id');
 
-    if (targetLayerId === sourceLayerId) return; 
+    if (targetLayerId === sourceLayerId) return;
     var project = this.$selection.currentProject
 
     var targetItem = project.searchById(targetLayerId);
     var sourceItem = project.searchById(sourceLayerId);
 
-    if (targetItem && targetItem.hasParent(sourceItem.id)) return; 
+    if (targetItem && targetItem.hasParent(sourceItem.id)) return;
 
-    switch(this.state.lastDragOverItemDirection) {
-    case 'self': 
-      targetItem.appendChildItem(sourceItem);
-      break; 
-    case 'before':
-      targetItem.appendBefore(sourceItem);
-      break; 
-    case 'after':
-      targetItem.appendAfter(sourceItem);
-      break;       
+    switch (this.state.lastDragOverItemDirection) {
+      case 'self':
+        targetItem.appendChildItem(sourceItem);
+        break;
+      case 'before':
+        targetItem.appendBefore(sourceItem);
+        break;
+      case 'after':
+        targetItem.appendAfter(sourceItem);
+        break;
     }
 
     this.$selection.select(sourceItem);
 
     this.setState({
-      hideDragPointer: true 
+      hideDragPointer: true
     })
 
     this.emit('refreshAll')
   }
 
-  [DOUBLECLICK('$layerList .layer-item')] (e) {
+  [DOUBLECLICK('$layerList .layer-item')](e) {
     this.startInputEditing(e.$dt.$('.name'))
   }
 
 
 
-  modifyDoneInputEditing (input, event) {
+  modifyDoneInputEditing(input, event) {
     if (KEY_CODE.enter === event.keyCode) {
       this.endInputEditing(input, () => {
-        var id = input.closest('layer-item').attr('data-layer-id');      
+        var id = input.closest('layer-item').attr('data-layer-id');
         var text = input.text();
-  
+
         this.emit('refreshItemName', id, text)
-      });    
+      });
     } else {
-      var id = input.closest('layer-item').attr('data-layer-id');      
+      var id = input.closest('layer-item').attr('data-layer-id');
       var text = input.text();
 
       this.emit('refreshItemName', id, text)
@@ -274,12 +273,12 @@ export default class LayerTreeProperty extends BaseProperty {
 
   }
 
-  [KEYDOWN('$layerList .layer-item .name') + STOP] (e) {
+  [KEYDOWN('$layerList .layer-item .name') + STOP](e) {
     this.modifyDoneInputEditing(e.$dt, e);
   }
 
-  [FOCUSOUT('$layerList .layer-item .name') + PREVENT  + STOP ] (e) {
-    this.modifyDoneInputEditing(e.$dt, {keyCode: KEY_CODE.enter});
+  [FOCUSOUT('$layerList .layer-item .name') + PREVENT + STOP](e) {
+    this.modifyDoneInputEditing(e.$dt, { keyCode: KEY_CODE.enter });
   }
 
   selectLayer(layer) {
@@ -292,7 +291,7 @@ export default class LayerTreeProperty extends BaseProperty {
     this.emit('refreshSelection');
   }
 
-  addLayer (layer) {
+  addLayer(layer) {
     if (layer) {
       this.$selection.select(layer);
 
@@ -300,7 +299,7 @@ export default class LayerTreeProperty extends BaseProperty {
     }
   }
 
-  [CLICK('$add')] (e) {
+  [CLICK('$add')](e) {
 
     this.emit('newComponent', 'rect', {
       'background-color': Color.random(),
@@ -309,19 +308,19 @@ export default class LayerTreeProperty extends BaseProperty {
     });
   }
 
-  [CLICK('$layerList .layer-item label .name')] (e) {
+  [CLICK('$layerList .layer-item label .name')](e) {
 
-      var $item = e.$dt.closest('layer-item')
-      $item.onlyOneClass('selected');
+    var $item = e.$dt.closest('layer-item')
+    $item.onlyOneClass('selected');
 
-      var id = $item.attr('data-layer-id');
-      var item = this.$selection.currentProject.searchById(id);
-      this.$selection.select(item)
+    var id = $item.attr('data-layer-id');
+    var item = this.$selection.currentProject.searchById(id);
+    this.$selection.select(item)
 
-      this.emit('history.refreshSelection');   
+    this.emit('history.refreshSelection');
   }
 
-  [CLICK('$layerList .layer-item label .folder')] (e) {
+  [CLICK('$layerList .layer-item label .folder')](e) {
     const project = this.$selection.currentProject;
 
     var $item = e.$dt.closest('layer-item')
@@ -334,41 +333,41 @@ export default class LayerTreeProperty extends BaseProperty {
 
     this.refresh();
 
-  }  
-
-  [CLICK('$layerList .layer-item .visible')] (e) {
-    var project = this.$selection.currentProject
-
-      var $item = e.$dt.closest('layer-item')
-      var id = $item.attr('data-layer-id');
-
-      var item = project.searchById(id);      
-      e.$dt.attr('data-visible', !item.visible);
-
-      this.command('setAttribute', 'change visible for layer', {
-        visible: !item.visible
-      }, item.id)
   }
 
-  [CLICK('$layerList .layer-item .remove')] (e) {
+  [CLICK('$layerList .layer-item .visible')](e) {
     var project = this.$selection.currentProject
 
-      var $item = e.$dt.closest('layer-item')
-      var id = $item.attr('data-layer-id');
+    var $item = e.$dt.closest('layer-item')
+    var id = $item.attr('data-layer-id');
 
-      // 객체 지우기 command 로 만들어야 함 
-      this.$selection.removeById(id);
+    var item = project.searchById(id);
+    e.$dt.attr('data-visible', !item.visible);
 
-      var item = project.searchById(id);   
-      item.remove();
-      
-      this.refresh();
+    this.command('setAttribute', 'change visible for layer', {
+      visible: !item.visible
+    }, item.id)
+  }
 
-      this.emit('refreshArtboard');
-  }  
+  [CLICK('$layerList .layer-item .remove')](e) {
+    var project = this.$selection.currentProject
+
+    var $item = e.$dt.closest('layer-item')
+    var id = $item.attr('data-layer-id');
+
+    // 객체 지우기 command 로 만들어야 함 
+    this.$selection.removeById(id);
+
+    var item = project.searchById(id);
+    item.remove();
+
+    this.refresh();
+
+    this.emit('refreshArtboard');
+  }
 
 
-  [CLICK('$layerList .layer-item .lock')] (e) {
+  [CLICK('$layerList .layer-item .lock')](e) {
     var project = this.$selection.currentProject
     var $item = e.$dt.closest('layer-item')
     var id = $item.attr('data-layer-id');
@@ -379,7 +378,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
     if (lastLock) {
       this.$selection.removeById(id);
-      this.emit('history.refreshSelection');         
+      this.emit('history.refreshSelection');
     }
 
     this.command('setAttribute', 'change lock for layer', {
@@ -388,10 +387,10 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
 
-  [SUBSCRIBE('changeHoverItem')] () {
+  [SUBSCRIBE('changeHoverItem')]() {
     this.refs.$layerList.$$('.hovered').forEach(it => {
       it.removeClass('hovered')
-    })    
+    })
 
 
     if (this.$selection.hoverItems.length) {
@@ -405,8 +404,8 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
 
-  [SUBSCRIBE('changeSelection')] (isSelection = false) {
-    if (isSelection && this.refs.$layerList) {    
+  [SUBSCRIBE('changeSelection')](isSelection = false) {
+    if (isSelection && this.refs.$layerList) {
       this.refs.$layerList.$$('.selected').forEach(it => {
         it.removeClass('selected')
       })
@@ -421,33 +420,30 @@ export default class LayerTreeProperty extends BaseProperty {
           it.addClass('selected')
 
           var item = this.$selection.itemKeys[it.attr('data-layer-id')]
-          if (item.is('svg-path', 'svg-polygon') ) {
+          if (item.is('svg-path', 'svg-polygon')) {
             it.$('.icon').html(this.getIcon(item));
           }
 
         })
       }
     }
-  }  
+  }
 
-  [SUBSCRIBE('refreshSelection', 'history.refreshSelection')] () { 
+  [SUBSCRIBE('refreshSelection', 'history.refreshSelection')]() {
     this.trigger('changeSelection', true)
   }
 
-  [SUBSCRIBE('refreshStylePosition')] () { 
+  [SUBSCRIBE('refreshStylePosition')]() {
     this.trigger('changeSelection')
   }
 
-  [SUBSCRIBE('refreshLayerTreeView')] () {
+  [SUBSCRIBE('refreshLayerTreeView')]() {
     this.refresh();
   }
 
-  [SUBSCRIBE('changeItemLayout')] () {
+  [SUBSCRIBE('changeItemLayout')]() {
     this.refresh();
   }
 
 
 }
-
-
-registElement({ LayerTreeProperty })

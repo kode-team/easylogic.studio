@@ -79,28 +79,29 @@ export class MovableItem extends Item {
         this._cachedLocalTransform = this.getLocalTransformMatrix();
         this._cachedLocalTransformInverse = this.getLocalTransformMatrixInverse();
     }    
-
-    get localMatrix() {
-        return this._cachedLocalTransform ? this._cachedLocalTransform : this.getLocalTransformMatrix()
-    }
-
-    get localMatrixInverse() {
-        return this._cachedLocalTransformInverse ? this._cachedLocalTransformInverse : this.getLocalTransformMatrixInverse()
-    }    
-
-    get itemMatrix() {
-        return this._cachedItemTransform ? this._cachedItemTransform : this.getItemTransformMatrix()
-    }
-
-    get itemMatrixInverse() {
-        return this._cachedItemTransformInverse ? this._cachedItemTransformInverse : this.getItemTransformMatrixInverse()
-    }    
-
     //////////////////////
     //
     // getters 
     //
     ///////////////////////
+
+
+    get localMatrix() {
+        return this._cachedLocalTransform || this.getLocalTransformMatrix()
+    }
+
+    get localMatrixInverse() {
+        return this._cachedLocalTransformInverse || this.getLocalTransformMatrixInverse()
+    }    
+
+    get itemMatrix() {
+        return this._cachedItemTransform || this.getItemTransformMatrix()
+    }
+
+    get itemMatrixInverse() {
+        return this._cachedItemTransformInverse || this.getItemTransformMatrixInverse()
+    }    
+
 
     setScreenX(value) {
         var absoluteX = 0;

@@ -1,7 +1,5 @@
-import BaseProperty from "./BaseProperty";
 import { LOAD, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
-
-import { registElement } from "el/base/registElement";
+import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class BackgroundClipProperty extends BaseProperty {
   
@@ -34,5 +32,3 @@ export default class BackgroundClipProperty extends BaseProperty {
     this.refreshShow(['rect', 'circle', 'text']);
   }  
 }
-
-registElement({ BackgroundClipProperty })

@@ -1,23 +1,22 @@
-import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
 
-import { registElement } from "el/base/registElement";
+import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
+import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class TransformOriginProperty extends BaseProperty {
 
   getTitle() {
-    return this.$i18n('transform.origin.property.title');  
+    return this.$i18n('transform.origin.property.title');
   }
 
-  hasKeyframe () {
-    return true; 
+  hasKeyframe() {
+    return true;
   }
 
-  getKeyframeProperty () {
+  getKeyframeProperty() {
     return 'transform-origin'
-  }  
+  }
 
-  [CLICK('$remove')] () {
+  [CLICK('$remove')]() {
     this.trigger('changeTransformOrigin', '');
   }
 
@@ -27,8 +26,8 @@ export default class TransformOriginProperty extends BaseProperty {
     `;
   }
 
-  [LOAD('$body')] () {
-    var current = this.$selection.current || {}; 
+  [LOAD('$body')]() {
+    var current = this.$selection.current || {};
     var value = current['transform-origin'] || ''
 
     return /*html*/`<object refClass="TransformOriginEditor" ref='$1' value='${value}' onchange='changeTransformOrigin' />`
@@ -39,13 +38,11 @@ export default class TransformOriginProperty extends BaseProperty {
     this.refreshShowIsNot(['project', 'artboard']);
   }
 
-  [SUBSCRIBE('changeTransformOrigin')] (key, value) {
+  [SUBSCRIBE('changeTransformOrigin')](key, value) {
 
-    this.command('setAttribute', 'change transform-origin', { 
-      'transform-origin': value 
+    this.command('setAttribute', 'change transform-origin', {
+      'transform-origin': value
     })
   }
 
 }
-
-registElement({ TransformOriginProperty })

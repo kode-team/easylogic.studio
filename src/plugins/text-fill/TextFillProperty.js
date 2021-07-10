@@ -1,7 +1,5 @@
-import BaseProperty from "./BaseProperty";
-
-import { registElement } from "el/base/registElement";
 import { SUBSCRIBE } from "el/base/Event";
+import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class TextFillProperty extends BaseProperty {
 
@@ -67,5 +65,3 @@ export default class TextFillProperty extends BaseProperty {
     this.command('setAttribute', 'change text fill', { [key]: value })
   }
 }
-
-registElement({ TextFillProperty })

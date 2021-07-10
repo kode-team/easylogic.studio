@@ -1,9 +1,10 @@
-import BaseProperty from "./BaseProperty";
+
 import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
 
 
 import icon from "el/editor/icon/icon";
-import { registElement } from "el/base/registElement";
+import BaseProperty from "el/editor/ui/property/BaseProperty";
+
 
 export default class PerspectiveOriginProperty extends BaseProperty {
 
@@ -63,5 +64,3 @@ export default class PerspectiveOriginProperty extends BaseProperty {
   }
 
 }
-
-registElement({ PerspectiveOriginProperty })
