@@ -1,6 +1,3 @@
-import BackgroundImageEditor from "./BackgroundImageEditor";
-import BoxShadowEditor from "./BoxShadowEditor";
-import BorderRadiusEditor from "./BorderRadiusEditor";
 import ColorSingleEditor from "./ColorSingleEditor";
 import ColorViewEditor from "./ColorViewEditor";
 import CubicBezierEditor from "./CubicBezierEditor";
@@ -32,25 +29,14 @@ import StrokeDashArrayEditor from "./StrokeDashArrayEditor";
 import PathDataEditor from "./PathDataEditor";
 import PolygonDataEditor from "./PolygonDataEditor";
 import OffsetPathListEditor from "./OffsetPathListEditor";
-import BackgroundPositionEditor from "./BackgroundPositionEditor";
 import GradientSingleEditor from "./GradientSingleEditor";
-import BorderEditor from "./BorderEditor";
-import BorderValueEditor from "./BorderValueEditor";
 import FillSingleEditor from "./FillSingleEditor";
 import FillEditor from "./FillEditor";
 import SVGFilterSelectEditor from "./SVGFilterSelectEditor";
 import FuncFilterEditor from "./FuncFilterEditor";
 import ColorMatrixEditor from "./ColorMatrixEditor";
 import TextAreaEditor from "./TextAreaEditor";
-import FlexLayoutEditor from "./FlexLayoutEditor";
-import GridLayoutEditor from "./GridLayoutEditor";
-import FlexLayoutItemEditor from "./FlexLayoutItemEditor";
-import GridBoxEditor from "./GridBoxEditor";
-import GridLayoutItemEditor from "./GridLayoutItemEditor";
 import NumberInputEditor from "./NumberInputEditor";
-import GridGapEditor from "./GridGapEditor";
-import PatternEditor from "./PatternEditor";
-import PatternSizeEditor from "./PatternSizeEditor";
 import BlendSelectEditor from "./BlendSelectEditor";
 import MediaProgressEditor from "./MediaProgressEditor";
 import CheckBoxEditor from "./CheckBoxEditor";
@@ -62,25 +48,14 @@ export default {
     CheckBoxEditor,
     MediaProgressEditor,
     BlendSelectEditor,
-    PatternEditor,
-    PatternSizeEditor,
-    GridGapEditor,
     NumberInputEditor,
-    GridLayoutItemEditor,
-    GridBoxEditor,
-    FlexLayoutItemEditor,
-    GridLayoutEditor,
-    FlexLayoutEditor,
     TextAreaEditor,
     ColorMatrixEditor,
     FuncFilterEditor,
     SVGFilterSelectEditor,
     FillEditor,
     FillSingleEditor,
-    BorderEditor,
-    BorderValueEditor,
     GradientSingleEditor,
-    BackgroundPositionEditor,
     OffsetPathListEditor,
     PolygonDataEditor,
     PathDataEditor,
@@ -97,9 +72,6 @@ export default {
     TextEditor,
     SVGFilterEditor,
     CircleEditor,
-    BackgroundImageEditor,
-    BoxShadowEditor,
-    BorderRadiusEditor,
     ColorSingleEditor,
     ColorViewEditor,
     CubicBezierEditor,

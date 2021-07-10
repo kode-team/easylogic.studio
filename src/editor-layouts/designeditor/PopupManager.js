@@ -23,7 +23,6 @@ export default class PopupManager extends EditorElement {
         <object refClass='ImageSelectPopup' />
         <object refClass='GradientPickerPopup' />
         <object refClass='FillPickerPopup' />
-        <object refClass='PatternInfoPopup' />
         <object refClass='SVGFilterPopup' />
         <object refClass='ExportWindow' />
         <object refClass='ProjectWindow' />
@@ -32,6 +31,7 @@ export default class PopupManager extends EditorElement {
         <!-- SignWindow / -->
         <!-- ImageFileView / -->
         <object refClass='NotificationView' />
+        ${this.$menuManager.generate('popup')}
       </div>
     `;
   }

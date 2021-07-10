@@ -8,6 +8,10 @@ import KeyframeProperty from "./KeyframeProperty";
  */
 export default function (editor) {
     editor.registerElement({
+        
+    })
+
+    editor.registerMenuItem('inspector.tab.transition', {
         KeyframeProperty
     })
 }

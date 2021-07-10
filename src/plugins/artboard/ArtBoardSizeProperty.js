@@ -1,8 +1,7 @@
 import { LOAD, DOMDIFF, CLICK, SUBSCRIBE } from "el/base/Event";
 
-import artboardSize from "el/editor/preset/artboards/artboard.size";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
-
+import artboardSize from "./preset/artboard.size";
 
 export default class ArtBoardSizeProperty extends BaseProperty {
 

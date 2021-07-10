@@ -44,46 +44,28 @@ export default class Inspector extends EditorElement {
                 <!-- Default Property --> 
                 <object refClass="PositionProperty" />
                 <!--SizeProperty / --> 
-                <object refClass="AppearanceProperty" />
-
-                <!-- ArtBoard --> 
-                <object refClass="ArtBoardSizeProperty" />                    
+                <object refClass="AppearanceProperty" />                
                 
                 <!-- SVG Item --> 
                 <object refClass="SVGItemProperty" />              
 
-                <!-- Image --> 
-                <object refClass="ImageProperty" />
+                <!-- Appearance --> 
+                <object refClass="BorderRadiusProperty" />
 
-                <!-- Video --> 
-                <object refClass="VideoProperty" />
+                <object refClass="BoxModelProperty" />                
 
-                <!-- IFrame --> 
-                <object refClass="IFrameProperty" />          
+                <!-- effect -->
+                <object refClass="FilterProperty" />
+                <object refClass="BackdropFilterProperty" />
+                <object refClass="ClipPathProperty" />       
+                                
                 
                 ${this.$menuManager.generate('inspector.tab.style')}
 
                 <!-- Component -->
                 <object refClass="ComponentProperty" />                
                 
-                <!-- Appearance --> 
 
-                <object refClass="BackgroundImageProperty" />                
-                <object refClass="PatternProperty" />
-                <object refClass="BorderNewProperty" />
-                <object refClass="BorderRadiusProperty" />
-
-                <object refClass="BoxModelProperty" />                
-                <object refClass="LayoutProperty" />
-                <object refClass="FlexLayoutItemProperty" />
-                <object refClass="GridLayoutItemProperty" />      
-
-                <!-- effect -->
-                <object refClass="BoxShadowProperty" />
-                <object refClass="FilterProperty" />
-                <object refClass="BackdropFilterProperty" />
-                <object refClass="ClipPathProperty" />       
-                
                 <!-- SVG -->
                 <!-- <PathDataProperty /> -->
 
@@ -114,8 +96,7 @@ export default class Inspector extends EditorElement {
                 ${this.$menuManager.generate('inspector.tab.transition')}              
                 <!--object refClass="MotionProperty" /-->
                 <object refClass="TransitionProperty" />                            
-                <object refClass="AnimationProperty" />
-                <object refClass="KeyframeProperty" />                          
+                <object refClass="AnimationProperty" />           
                 <object refClass="SelectorProperty" />
                 <div class='empty'></div>                
               </div>                        
