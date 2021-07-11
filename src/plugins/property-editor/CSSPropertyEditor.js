@@ -1,12 +1,7 @@
 import { Length } from "el/editor/unit/Length";
 import { LOAD, CLICK, SUBSCRIBE } from "el/base/Event";
 import icon from "el/editor/icon/icon";
-import "../../el/editor/ui/property-editor/ColorViewEditor";
-import "../../el/editor/ui/property-editor/VarEditor";
 import { OBJECT_TO_CLASS } from "el/base/functions/func";
-import "../../el/editor/ui/property-editor/ClipPathEditor";
-import "../../el/editor/ui/property-editor/PathDataEditor";
-import "../../el/editor/ui/property-editor/PolygonDataEditor";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 

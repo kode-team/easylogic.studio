@@ -1,12 +1,11 @@
-import UIElement, { EVENT } from "el/base/UIElement";
+
 import icon from "el/editor/icon/icon";
 import { CLICK, POINTERSTART, MOVE, END, BIND, SUBSCRIBE } from "el/base/Event";
 import { Length } from "el/editor/unit/Length";
 import { formatCubicBezier, createBezierForPattern, bezierList, getPredefinedCubicBezier } from "el/base/functions/bezier";
 import { div } from "el/base/functions/math";
 import { curveToPath, curveToPointLine } from "el/base/functions/func";
-import { registElement } from "el/base/registElement";
-import { EditorElement } from "../common/EditorElement";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 
 export default class CubicBezierEditor extends EditorElement {
@@ -338,5 +337,3 @@ export default class CubicBezierEditor extends EditorElement {
         this.refresh();
     }
 }
-
-registElement({ CubicBezierEditor })

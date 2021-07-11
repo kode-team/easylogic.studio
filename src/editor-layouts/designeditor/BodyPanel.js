@@ -1,9 +1,5 @@
 import { BIND, SUBSCRIBE } from "el/base/Event";
 
-import "el/editor/ui/view/CanvasView";
-import "el/editor/ui/view/HorizontalRuler";
-import "el/editor/ui/view/VerticalRuler";
-
 import { registElement } from "el/base/registElement";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 

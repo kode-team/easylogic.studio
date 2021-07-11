@@ -1,7 +1,4 @@
-import "./PathManager";
-import "./DrawManager";
-import { registElement } from "el/base/registElement";
-import { EditorElement } from "../common/EditorElement";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 export default class PageSubEditor extends EditorElement {
 
@@ -15,5 +12,3 @@ export default class PageSubEditor extends EditorElement {
     `;
   }
 }
-
-registElement({ PageSubEditor })

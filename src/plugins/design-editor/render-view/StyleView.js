@@ -5,8 +5,8 @@ import Dom from "el/base/Dom";
 import { isArray, isString } from "el/base/functions/func";
 import { Project } from "el/editor/items/Project";
 import HTMLRenderer from "el/editor/renderer/HTMLRenderer";
-import { registElement } from "el/base/registElement";
-import { EditorElement } from "../../common/EditorElement";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
+
 
 const TEMP_DIV = Dom.create('div')     
 
@@ -155,5 +155,3 @@ export default class StyleView extends EditorElement {
     this.refreshStyleHead();
   }
 }
-
-registElement({ StyleView })

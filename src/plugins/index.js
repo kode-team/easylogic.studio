@@ -15,6 +15,7 @@ import codeview from "./codeview"
 import color from "./color"
 import component from "./component"
 import content from "./content"
+import designEditor from "./design-editor"
 import exportResource from "./export-resource"
 import filter from "./filter"
 import font from "./font"
@@ -118,6 +119,8 @@ export default [
     codeview,
 
     // history
-    history
+    history,
+
+    designEditor
 
 ]

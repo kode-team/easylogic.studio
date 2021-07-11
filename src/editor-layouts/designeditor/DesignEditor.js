@@ -1,5 +1,3 @@
-import Dom from "el/base/Dom";
-
 import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, MOVE, BIND, THROTTLE, SUBSCRIBE, END } from "el/base/Event";
 
 import { Length } from "el/editor/unit/Length";
@@ -7,16 +5,13 @@ import { Length } from "el/editor/unit/Length";
 import "el/editor/items";
 import "el/editor/ui/control";
 
-import "el/editor/ui/view/CanvasView";
+
 import "el/editor/ui/view/ToolMenu";
 import "el/editor/ui/view/LogoView";
 import "el/editor/ui/view/ExternalToolMenu";
 import "el/editor/ui/view/StatusBar";
 import "el/editor/ui/view/PreviewToolMenu";
-import "el/editor/ui/view-items/PageSubEditor";
 import "el/editor/ui/view/ToolBar";
-import "el/editor/ui/view/HorizontalRuler";
-import "el/editor/ui/view/VerticalRuler";
 
 import "./BodyPanel";
 import "./PopupManager";

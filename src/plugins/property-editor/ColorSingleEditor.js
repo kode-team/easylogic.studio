@@ -1,7 +1,6 @@
-import UIElement, { EVENT } from "el/base/UIElement";
 import { CLICK, BIND, SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registElement";
-import { EditorElement } from "../common/EditorElement";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
+
 
 export default class ColorSingleEditor extends EditorElement {
 
@@ -69,5 +68,3 @@ export default class ColorSingleEditor extends EditorElement {
         this.updateData({ color })
     }    
 }
-
-registElement({ ColorSingleEditor })

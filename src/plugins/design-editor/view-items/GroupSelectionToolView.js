@@ -8,8 +8,7 @@ import { TransformOrigin } from "el/editor/property-parser/TransformOrigin";
 import { calculateAngle, calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, calculateRotationOriginMat4, round, vertiesMap } from "el/base/functions/math";
 import { ArtBoard } from "el/editor/items/ArtBoard";
 import { getRotatePointer, rectToVerties } from "el/base/functions/collision";
-import { registElement } from "el/base/registElement";
-import { EditorElement } from "../common/EditorElement";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 
 var directionType = {
@@ -802,5 +801,3 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
     }
 } 
-
-registElement({ GroupSelectionToolView })

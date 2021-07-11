@@ -527,6 +527,10 @@ export default class EventMachine {
     return e.buttons === 1;     // 1 is left button 
   }
 
+  isMouseRightButton(e) {
+    return e.buttons === 2;     // 2 is right button 
+  }  
+
   /** before check method */
 
   /* after check method */

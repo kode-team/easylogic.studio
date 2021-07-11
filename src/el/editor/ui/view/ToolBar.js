@@ -1,6 +1,5 @@
 import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
-import "../view-items/PageSubEditor";
 import "./ToolMenu";
 import "../menu-items/index";
 

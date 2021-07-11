@@ -1,7 +1,6 @@
 
 import { BIND, SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registElement";
-import { EditorElement } from "../common/EditorElement";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 const line = (source, target, className = 'base-line') => {
     return /*html*/`<line x1="${source[0]}" y1="${source[1]}" x2="${target[0]}" y2="${target[1]}" class='${className}' />`
@@ -108,5 +107,3 @@ export default class GuideLineView extends EditorElement {
         this.refresh();
     }
 } 
-
-registElement({ GuideLineView })

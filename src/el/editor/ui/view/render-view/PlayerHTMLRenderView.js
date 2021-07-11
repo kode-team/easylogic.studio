@@ -2,8 +2,6 @@
 import { BIND, SUBSCRIBE } from "el/base/Event";
 import { Length } from "el/editor/unit/Length";
 
-import "./StyleView";
-
 import HTMLRenderer from 'el/editor/renderer/HTMLRenderer';
 
 import { isFunction } from "el/base/functions/func";

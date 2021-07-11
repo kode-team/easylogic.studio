@@ -1,7 +1,7 @@
 
-import { registElement } from "el/base/registElement";
-import { EditorElement } from "../common/EditorElement";
-import { CLICK, DOMDIFF, END, IF, LOAD, MOVE, POINTERSTART, SUBSCRIBE } from "el/base/Event";
+
+import { DOMDIFF, END, IF, LOAD, MOVE, POINTERSTART, SUBSCRIBE } from "el/base/Event";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { vec3 } from "gl-matrix";
 
 export default class SelectionInfoView extends EditorElement {
@@ -119,5 +119,3 @@ export default class SelectionInfoView extends EditorElement {
     }    
 
 } 
-
-registElement({ SelectionInfoView })

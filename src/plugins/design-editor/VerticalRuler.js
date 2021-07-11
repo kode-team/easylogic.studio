@@ -1,7 +1,5 @@
 import { LOAD, DOMDIFF, SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registElement";
-
-import { EditorElement } from "../common/EditorElement";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 let pathString = []
 
@@ -204,5 +202,3 @@ export default class VerticalRuler extends EditorElement {
         this.refreshCanvasSize();
     }        
 }
-
-registElement({ VerticalRuler })

@@ -4,23 +4,10 @@ import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DOUBLECLICK, FOCUSOUT, SUBSCR
 import { Length } from "el/editor/unit/Length";
 import Dom from "el/base/Dom";
 import HTMLRenderer from 'el/editor/renderer/HTMLRenderer';
-import "el/editor/ui/view-items/SelectionToolView";
-import "el/editor/ui/view-items/GroupSelectionToolView";
-import "el/editor/ui/view-items/GuideLineView";
-import "el/editor/ui/view-items/PathEditorView";
-import "el/editor/ui/view-items/PathDrawView";
-import "el/editor/ui/view-items/LayerAppendView";
-import "el/editor/ui/view-items/GridLayoutLineView";
-import "el/editor/ui/view-items/HoverView";
-import "el/editor/ui/view-items/SelectionInfoView";
-
 import { isFunction } from "el/base/functions/func";
 import { KEY_CODE } from "el/editor/types/key";
 
-import { registElement } from "el/base/registElement";
-
-import "./StyleView";
-import { EditorElement } from "../../common/EditorElement";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 export default class HTMLRenderView extends EditorElement {
 
@@ -706,5 +693,3 @@ export default class HTMLRenderView extends EditorElement {
     }
 
 }
-
-registElement({ HTMLRenderView })

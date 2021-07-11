@@ -3,8 +3,7 @@
 import { CLICK, PREVENT, STOP, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
-import { registElement } from "el/base/registElement";
-import { EditorElement } from "../common/EditorElement";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 
 export default class PageTools extends EditorElement {
@@ -70,5 +69,3 @@ export default class PageTools extends EditorElement {
 
 
 }
-
-registElement({ PageTools })

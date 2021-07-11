@@ -1,7 +1,7 @@
 import { LOAD, INPUT, DEBOUNCE } from "el/base/Event";
 import PolygonParser from "el/editor/parser/PolygonParser";
-import { registElement } from "el/base/registElement";
-import { EditorElement } from "../common/EditorElement";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
+
 
 export default class PolygonDataEditor extends EditorElement {
 
@@ -69,5 +69,3 @@ export default class PolygonDataEditor extends EditorElement {
         this.updateData();
     }
 }
-
-registElement({ PolygonDataEditor })

@@ -79,6 +79,7 @@ export const META = CHECKER("isMetaKey");
 export const CONTROL = CHECKER("isCtrlKey");
 export const SELF = CHECKER("self");
 export const LEFT_BUTTON = CHECKER("isMouseLeftButton")
+export const RIGHT_BUTTON = CHECKER("isMouseRightButton")
 
 export const FIT = CHECKER("fit");
 export const PASSIVE = CHECKER("passive");

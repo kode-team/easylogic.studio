@@ -5,9 +5,8 @@ import { Length } from "el/editor/unit/Length";
 import PathStringManager from "el/editor/parser/PathStringManager";
 import { rectToVerties, vertiesToRectangle } from "el/base/functions/collision";
 import { vec3 } from "gl-matrix";
-import { registElement } from "el/base/registElement";
-import { EditorElement } from "../common/EditorElement";
 import Dom from "el/base/Dom";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 export default class LayerAppendView extends EditorElement {
 
@@ -455,5 +454,3 @@ export default class LayerAppendView extends EditorElement {
         this.refs.$video.click();
     }        
 } 
-
-registElement({ LayerAppendView })

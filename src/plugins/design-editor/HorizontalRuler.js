@@ -1,7 +1,6 @@
 import { DOMDIFF, LOAD, SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registElement";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
 
-import { EditorElement } from "../common/EditorElement";
 
 let pathString = []
 
@@ -208,5 +207,3 @@ export default class HorizontalRuler extends EditorElement {
         this.refreshCanvasSize();
     }    
 }
-
-registElement({ HorizontalRuler })

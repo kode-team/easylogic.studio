@@ -1,7 +1,11 @@
 import { Editor } from "el/editor/manager/Editor";
 import BlendSelectEditor from "./BlendSelectEditor";
+import ClipPathEditor from "./ClipPathEditor";
 import ColorAssetsEditor from "./ColorAssetsEditor";
+import ColorSingleEditor from "./ColorSingleEditor";
+import ColorViewEditor from "./ColorViewEditor";
 import CSSPropertyEditor from "./CSSPropertyEditor";
+import CubicBezierEditor from "./CubicBezierEditor";
 import DirectionEditor from "./DirectionEditor";
 import FilterEditor from "./FilterEditor";
 import FontSelectEditor from "./FontSelectEditor";
@@ -12,10 +16,13 @@ import IterationCountEditor from "./IterationCountEditor";
 import MediaProgressEditor from "./MediaProgressEditor";
 import NumberInputEditor from "./NumberInputEditor";
 import NumberRangeEditor from "./NumberRangeEditor";
+import PathDataEditor from "./PathDataEditor";
+import PolygonDataEditor from "./PolygonDataEditor";
 import RangeEditor from "./RangeEditor";
 import SelectEditor from "./SelectEditor";
 import SelectIconEditor from "./SelectIconEditor";
 import StrokeDashArrayEditor from "./StrokeDashArrayEditor";
+import VarEditor from "./VarEditor";
 
 
 /**
@@ -24,6 +31,13 @@ import StrokeDashArrayEditor from "./StrokeDashArrayEditor";
  */
 export default function (editor) {
     editor.registerElement({
+        ColorSingleEditor,
+        CubicBezierEditor,
+        ClipPathEditor,
+        ColorViewEditor,
+        VarEditor,
+        PathDataEditor,
+        PolygonDataEditor,
         InputArrayEditor,
         StrokeDashArrayEditor,
         NumberInputEditor,

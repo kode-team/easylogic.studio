@@ -1,9 +1,8 @@
 
-import "../property-editor";
+import "../../../el/editor/ui/property-editor";
 import { Length } from "el/editor/unit/Length";
-import { registElement } from "el/base/registElement";
-import { EditorElement } from "../common/EditorElement";
 import { SUBSCRIBE } from "el/base/Event";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 
 export default class DrawManager extends EditorElement {
@@ -131,5 +130,3 @@ export default class DrawManager extends EditorElement {
   }
 
 }
-
-registElement({ DrawManager })

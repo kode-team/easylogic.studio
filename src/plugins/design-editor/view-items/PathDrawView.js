@@ -9,8 +9,7 @@ import PathGenerator from "el/editor/parser/PathGenerator";
 import Point from "el/editor/parser/Point";
 import { SVGFill } from "el/editor/property-parser/SVGFill";
 import { vec3 } from "gl-matrix";
-import { registElement } from "el/base/registElement";
-import { EditorElement } from "../common/EditorElement";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 const FIELDS = ['fill', 'fill-opacity', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin']
 
@@ -321,5 +320,3 @@ export default class PathDrawView extends EditorElement {
     }   
 
 } 
-
-registElement({ PathDrawView })

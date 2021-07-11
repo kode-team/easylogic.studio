@@ -1,10 +1,9 @@
 
 import { CLICK, BIND, SUBSCRIBE } from "el/base/Event";
 import icon from "el/editor/icon/icon";
-import "../property-editor";
+import "../../../el/editor/ui/property-editor";
 import { Length } from "el/editor/unit/Length";
-import { registElement } from "el/base/registElement";
-import { EditorElement } from "../common/EditorElement";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 const MODES = {
   'segment-move': 'modify',
@@ -177,5 +176,3 @@ export default class PathManager extends EditorElement {
   }
 
 }
-
-registElement({ PathManager })

@@ -1,9 +1,8 @@
 
 import { CSS_TO_STRING } from "el/base/functions/func";
 import { LOAD, SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registElement";
-import { EditorElement } from "../common/EditorElement";
 import HTMLRenderer from "el/editor/renderer/HTMLRenderer";
+import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 /**
  * 객체와의 거리의 가이드 라인을 그려주는 컴포넌트
@@ -52,5 +51,3 @@ export default class GridLayoutLineView extends EditorElement {
         this.refresh();
     }
 } 
-
-registElement({ GridLayoutLineView })
