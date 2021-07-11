@@ -5,8 +5,9 @@ EasyLogic Studio is built using CSS and SVG to reduce the gap between web design
 
 
 * manual : https://www.easylogic.studio/docs/getting-started.html
-* editor : https://editor.easylogic.studio/
-* player: https://editor.easylogic.studio/player.html
+* editor : https://editor-core.easylogic.studio/
+* player: https://editor-core.easylogic.studio/player.html
+* editor-with-plugin: https://editor.easylogic.studio/
 
 
 This project is [sapa](https://github.com/easylogic/sapa) based. 
@@ -59,13 +60,11 @@ This project is [sapa](https://github.com/easylogic/sapa) based.
 * Support timeline editor 
 
 ### Code & Share 
-* Support export to CodePen 
 * Support code viewer  
 * Support png & svg download  
 
 ### Drawing 
 * Support mini path and polygon editor 
-* Support draw star polygon 
 
 ### Assets 
 * Color
