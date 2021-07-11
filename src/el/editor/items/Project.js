@@ -7,6 +7,9 @@ import { itemsToRectVerties } from "el/base/functions/collision";
 
 const OFFSET_X = Length.z();
 const OFFSET_Y = Length.z();
+
+const identity = mat4.create();
+
 export class Project extends TimelineItem {
 
 
@@ -149,6 +152,14 @@ export class Project extends TimelineItem {
 
   get rectVerties () {
     return this.layers?.length ? itemsToRectVerties(this.layers) : null;
+  }
+
+  get accumulatedMatrix () {
+    return identity;
+  }
+
+  get accumulatedMatrixInverse() {
+    return identity;
   }
 
 }

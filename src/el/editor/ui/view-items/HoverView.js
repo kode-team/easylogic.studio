@@ -42,7 +42,7 @@ export default class HoverView extends EditorElement {
         if (items.length === 0) {
             this.refs.$hoverRect.updateDiff('')
         } else {
-            const verties = items[0].verties();
+            const verties = items[0].verties;
             const line = this.createPointerLine(this.$viewport.applyVerties(verties));   
             
             this.refs.$hoverRect.updateDiff(line)

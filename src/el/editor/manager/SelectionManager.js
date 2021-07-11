@@ -428,7 +428,7 @@ export class SelectionManager {
   get verties () {
 
     if (this.isOne) {    // 하나 일 때랑 
-      return this.current.verties();
+      return this.current.verties;
     } else {
       return this.rectVerties;
     }
@@ -535,7 +535,7 @@ export class SelectionManager {
   }  
 
   paste() {
-    this.select(...this.copyItems.map(item => item.copy()));
+    this.select(...this.copyItems.map(item => item.copy(10)));
     this.copy()
   }
 

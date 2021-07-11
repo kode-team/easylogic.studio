@@ -1,7 +1,9 @@
 export default {
     command : 'clipboard.paste',
+
     execute : async function (editor, event) {
 
+        /** todo : support history */
         if (editor.selection.length && editor.selection.copyItems.length) {
             editor.selection.paste();
             editor.emit('refreshAll')

@@ -8619,7 +8619,9 @@ function vertiesMap(verties, transformView) {
     return [esm["d" /* vec3 */].transformMat4([], verties[0], transformView), esm["d" /* vec3 */].transformMat4([], verties[1], transformView), esm["d" /* vec3 */].transformMat4([], verties[2], transformView), esm["d" /* vec3 */].transformMat4([], verties[3], transformView), esm["d" /* vec3 */].transformMat4([], verties[4], transformView)];
   }
 
-  console.log(verties);
+  return verties.map(function (v) {
+    return esm["d" /* vec3 */].transformMat4([], v, transformView);
+  });
 }
 function getVertiesMaxX(verties) {
   var maxValue = Number.MIN_SAFE_INTEGER;
@@ -11688,7 +11690,7 @@ var SelectionManager_SelectionManager = /*#__PURE__*/function () {
     get: function get() {
       if (this.isOne) {
         // 하나 일 때랑 
-        return this.current.verties();
+        return this.current.verties;
       } else {
         return this.rectVerties;
       }
@@ -11814,7 +11816,7 @@ var SelectionManager_SelectionManager = /*#__PURE__*/function () {
     key: "paste",
     value: function paste() {
       this.select.apply(this, toConsumableArray_default()(this.copyItems.map(function (item) {
-        return item.copy();
+        return item.copy(10);
       })));
       this.copy();
     }
@@ -21680,7 +21682,7 @@ function itemsToRectVerties() {
   var xList = [];
   var yList = [];
   items.forEach(function (item) {
-    item.verties().forEach(function (vector) {
+    item.verties.forEach(function (vector) {
       xList.push(vector[0]);
       yList.push(vector[1]);
     });
@@ -22801,12 +22803,15 @@ var ComponentManager = new ( /*#__PURE__*/function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Item; });
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
-/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4);
-/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var el_base_functions_math__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(14);
-/* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8);
+/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(15);
+/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
+/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4);
+/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var el_base_functions_math__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(14);
+/* harmony import */ var el_base_functions_func__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(8);
+
 
 
 
@@ -22840,13 +22845,13 @@ var Item = /*#__PURE__*/function () {
 
     var json = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, Item);
+    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2___default()(this, Item);
 
     this.ref = new Proxy(this, {
       get: function get(target, key) {
         var originMethod = target[key];
 
-        if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_4__["isFunction"])(originMethod)) {
+        if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_5__["isFunction"])(originMethod)) {
           // method tracking
           return function () {
             for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
@@ -22895,7 +22900,7 @@ var Item = /*#__PURE__*/function () {
    **********************************/
 
 
-  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default()(Item, [{
+  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3___default()(Item, [{
     key: "getDefaultTitle",
     value: function getDefaultTitle() {
       return "Item";
@@ -22938,6 +22943,29 @@ var Item = /*#__PURE__*/function () {
     key: "title",
     get: function get() {
       return this.json.name || this.getDefaultTitle();
+    }
+  }, {
+    key: "renameWithCount",
+    value: function renameWithCount() {
+      var arr = this.json.name.split(' ');
+
+      if (arr.length < 2) {
+        return;
+      }
+
+      var last = arr.pop();
+      var lastNumber = +last;
+
+      if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_5__["isNumber"])(lastNumber) && isNaN(lastNumber) === false) {
+        lastNumber++;
+      } else {
+        lastNumber = last;
+      }
+
+      var nextName = [].concat(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_1___default()(arr), [lastNumber]).join(' ');
+      this.reset({
+        name: nextName
+      });
     }
     /**
      * 
@@ -23163,7 +23191,7 @@ var Item = /*#__PURE__*/function () {
     key: "toCloneObject",
     value: function toCloneObject() {
       var isDeep = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-      var json = this.attrs('itemType', 'elementType', 'type', 'visible', 'lock', 'selected');
+      var json = this.attrs('itemType', 'name', 'elementType', 'type', 'visible', 'lock', 'selected');
 
       if (isDeep) {
         json.layers = this.json.layers.map(function (layer) {
@@ -23223,7 +23251,7 @@ var Item = /*#__PURE__*/function () {
     key: "getDefaultObject",
     value: function getDefaultObject() {
       var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      var id = Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_3__["uuidShort"])();
+      var id = Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_4__["uuidShort"])();
       return _objectSpread({
         id: id,
         _timestamp: Date.now(),
@@ -23255,7 +23283,7 @@ var Item = /*#__PURE__*/function () {
       }
 
       args.forEach(function (field) {
-        result[field] = Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_4__["clone"])(_this4.json[field]);
+        result[field] = Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_5__["clone"])(_this4.json[field]);
       });
       return result;
     }
@@ -23317,6 +23345,9 @@ var Item = /*#__PURE__*/function () {
   }, {
     key: "resetMatrix",
     value: function resetMatrix(item) {}
+  }, {
+    key: "refreshMatrixCache",
+    value: function refreshMatrixCache() {}
     /**
      * 특정 index 에 자식을 추가한다. 
      * 
@@ -23390,7 +23421,7 @@ var Item = /*#__PURE__*/function () {
   }, {
     key: "toggle",
     value: function toggle(field, toggleValue) {
-      if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_4__["isUndefined"])(toggleValue)) {
+      if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_5__["isUndefined"])(toggleValue)) {
         this.json[field] = !this.json[field];
       } else {
         this.json[field] = !!toggleValue;
@@ -23415,7 +23446,7 @@ var Item = /*#__PURE__*/function () {
     key: "expectJSON",
     value: function expectJSON(key) {
       if (key === 'parent') return false;
-      if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_4__["isUndefined"])(this.json[key])) return false;
+      if (Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_5__["isUndefined"])(this.json[key])) return false;
       return true;
     }
     /**
@@ -23461,13 +23492,13 @@ var Item = /*#__PURE__*/function () {
     key: "copyItem",
     value: function copyItem(childItem) {
       var dist = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
-      // clone 을 어떻게 해야하나? 
       var child = childItem.clone();
+      child.renameWithCount();
       child.move([dist, dist, 0]);
       var childIndex = this.findIndex(childItem);
 
       if (childIndex > -1) {
-        this.json.layers.splice(childIndex + 1, 0, child);
+        this.json.layers.push(child);
         this.project.addIndexItem(child);
       }
 
@@ -38615,6 +38646,7 @@ function Project_isNativeReflectConstruct() { if (typeof Reflect === "undefined"
 
 var OFFSET_X = Length["a" /* Length */].z();
 var OFFSET_Y = Length["a" /* Length */].z();
+var identity = esm["a" /* mat4 */].create();
 var Project_Project = /*#__PURE__*/function (_TimelineItem) {
   inherits_default()(Project, _TimelineItem);
 
@@ -38798,6 +38830,16 @@ var Project_Project = /*#__PURE__*/function (_TimelineItem) {
       var _this$layers;
 
       return (_this$layers = this.layers) !== null && _this$layers !== void 0 && _this$layers.length ? Object(collision["b" /* itemsToRectVerties */])(this.layers) : null;
+    }
+  }, {
+    key: "accumulatedMatrix",
+    get: function get() {
+      return identity;
+    }
+  }, {
+    key: "accumulatedMatrixInverse",
+    get: function get() {
+      return identity;
     }
   }]);
 
@@ -44390,22 +44432,56 @@ var MovableItem = /*#__PURE__*/function (_Item) {
       _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_8___default()(MovableItem.prototype), "reset", this).call(this, obj); // transform 에 변경이 생기면 미리 캐슁해둔다. 
 
 
-      if (this.hasChangedField('x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'transform-origin')) {
-        this.setCacheItemTransformMatrix();
-        this.setCacheLocalTransformMatrix();
+      if (this.hasChangedField('x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'transform-origin', 'perspective', 'perspective-origin')) {
+        this.refreshMatrixCache();
       }
+    }
+    /**
+     * 부모가 변경되면 matrix 를 다시 캐쉬 한다. 
+     * 
+     * @param {Item} otherParent 
+     */
+
+  }, {
+    key: "setParent",
+    value: function setParent(otherParent) {
+      _babel_runtime_helpers_get__WEBPACK_IMPORTED_MODULE_5___default()(_babel_runtime_helpers_getPrototypeOf__WEBPACK_IMPORTED_MODULE_8___default()(MovableItem.prototype), "setParent", this).call(this, otherParent);
+
+      this.refreshMatrixCache();
+    }
+  }, {
+    key: "refreshMatrixCache",
+    value: function refreshMatrixCache() {
+      this.setCacheItemTransformMatrix();
+      this.setCacheLocalTransformMatrix();
+      this.setCacheAccumulatedMatrix();
+      this.setCacheVerties();
+      this.layers.forEach(function (it) {
+        it.refreshMatrixCache();
+      });
     }
   }, {
     key: "setCacheItemTransformMatrix",
     value: function setCacheItemTransformMatrix() {
       this._cachedItemTransform = this.getItemTransformMatrix();
-      this._cachedItemTransformInverse = this.getItemTransformMatrixInverse();
+      this._cachedItemTransformInverse = gl_matrix__WEBPACK_IMPORTED_MODULE_13__[/* mat4 */ "a"].invert([], this._cachedItemTransform);
     }
   }, {
     key: "setCacheLocalTransformMatrix",
     value: function setCacheLocalTransformMatrix() {
       this._cachedLocalTransform = this.getLocalTransformMatrix();
-      this._cachedLocalTransformInverse = this.getLocalTransformMatrixInverse();
+      this._cachedLocalTransformInverse = gl_matrix__WEBPACK_IMPORTED_MODULE_13__[/* mat4 */ "a"].invert([], this._cachedLocalTransform);
+    }
+  }, {
+    key: "setCacheAccumulatedMatrix",
+    value: function setCacheAccumulatedMatrix() {
+      this._cachedAccumulatedMatrix = this.getAccumulatedMatrix();
+      this._cachedAccumulatedMatrixInverse = gl_matrix__WEBPACK_IMPORTED_MODULE_13__[/* mat4 */ "a"].invert([], this._cachedAccumulatedMatrix);
+    }
+  }, {
+    key: "setCacheVerties",
+    value: function setCacheVerties() {
+      this._cachedVerties = this.getVerties();
     } //////////////////////
     //
     // getters 
@@ -44431,6 +44507,21 @@ var MovableItem = /*#__PURE__*/function (_Item) {
     key: "itemMatrixInverse",
     get: function get() {
       return this._cachedItemTransformInverse || this.getItemTransformMatrixInverse();
+    }
+  }, {
+    key: "accumulatedMatrix",
+    get: function get() {
+      return this._cachedAccumulatedMatrix || this.getAccumulatedMatrix();
+    }
+  }, {
+    key: "accumulatedMatrixInverse",
+    get: function get() {
+      return this._cachedAccumulatedMatrixInverse || this.getAccumulatedMatrixInverse();
+    }
+  }, {
+    key: "verties",
+    get: function get() {
+      return this._cachedVerties || this.getVerties();
     }
   }, {
     key: "setScreenX",
@@ -44563,7 +44654,7 @@ var MovableItem = /*#__PURE__*/function (_Item) {
   }, {
     key: "checkInArea",
     value: function checkInArea(areaVerties) {
-      return Object(el_base_functions_collision__WEBPACK_IMPORTED_MODULE_17__[/* polyPoly */ "d"])(areaVerties, this.verties());
+      return Object(el_base_functions_collision__WEBPACK_IMPORTED_MODULE_17__[/* polyPoly */ "d"])(areaVerties, this.verties);
     }
     /**
      * 특정 위치가 객체를 가리키고 있는데 체크한다. 
@@ -44575,7 +44666,7 @@ var MovableItem = /*#__PURE__*/function (_Item) {
   }, {
     key: "hasPoint",
     value: function hasPoint(x, y) {
-      return Object(el_base_functions_collision__WEBPACK_IMPORTED_MODULE_17__[/* polyPoint */ "c"])(this.verties(), x, y);
+      return Object(el_base_functions_collision__WEBPACK_IMPORTED_MODULE_17__[/* polyPoint */ "c"])(this.verties, x, y);
     }
     /**
      * areaVerties 안에 Layer 가 포함된 경우 
@@ -44771,28 +44862,28 @@ var MovableItem = /*#__PURE__*/function (_Item) {
       return gl_matrix__WEBPACK_IMPORTED_MODULE_13__[/* mat4 */ "a"].invert([], this.getAccumulatedMatrix());
     }
   }, {
-    key: "verties",
-    value: function verties(width, height) {
+    key: "getVerties",
+    value: function getVerties(width, height) {
       var model = Object(el_base_functions_collision__WEBPACK_IMPORTED_MODULE_17__[/* rectToVerties */ "e"])(0, 0, width || this.screenWidth.value, height || this.screenHeight.value, this.json['transform-origin']);
-      return Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_14__["vertiesMap"])(model, this.getAccumulatedMatrix());
+      return Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_14__["vertiesMap"])(model, this.accumulatedMatrix);
     }
   }, {
     key: "selectionVerties",
     value: function selectionVerties() {
       var selectionModel = Object(el_base_functions_collision__WEBPACK_IMPORTED_MODULE_17__[/* rectToVerties */ "e"])(-6, -6, this.screenWidth.value + 12, this.screenHeight.value + 12, this.json['transform-origin']);
-      return Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_14__["vertiesMap"])(selectionModel, this.getAccumulatedMatrix());
+      return Object(el_base_functions_math__WEBPACK_IMPORTED_MODULE_14__["vertiesMap"])(selectionModel, this.accumulatedMatrix);
     }
   }, {
     key: "rectVerties",
     value: function rectVerties() {
-      return this.verties().filter(function (_, index) {
+      return this.verties.filter(function (_, index) {
         return index < 4;
       });
     }
   }, {
     key: "guideVerties",
     value: function guideVerties() {
-      return this.verties();
+      return this.verties;
     }
   }, {
     key: "matrix",
@@ -44803,15 +44894,16 @@ var MovableItem = /*#__PURE__*/function (_Item) {
       var width = this.screenWidth.value;
       var height = this.screenHeight.value;
       var originalTransform = this.json.transform;
-      var originalTransformOrigin = this.json['transform-origin'] || '50% 50% 0%';
-      var parentMatrix = this.parent && Object(el_base_functions_func__WEBPACK_IMPORTED_MODULE_15__["isFunction"])(this.parent.getAccumulatedMatrix) ? this.parent.getAccumulatedMatrix() : gl_matrix__WEBPACK_IMPORTED_MODULE_13__[/* mat4 */ "a"].create();
-      var parentMatrixInverse = gl_matrix__WEBPACK_IMPORTED_MODULE_13__[/* mat4 */ "a"].invert([], parentMatrix);
+      var originalTransformOrigin = this.json['transform-origin'] || '50% 50% 0%'; // load cached matrix 
+
+      var parentMatrix = this.parent.accumulatedMatrix;
+      var parentMatrixInverse = this.parent.accumulatedMatrixInverse;
       var localMatrix = this.localMatrix;
       var localMatrixInverse = this.localMatrixInverse;
       var itemMatrix = this.itemMatrix;
       var itemMatrixInverse = this.itemMatrixInverse;
-      var accumulatedMatrix = this.getAccumulatedMatrix();
-      var accumulatedMatrixInverse = this.getAccumulatedMatrixInverse();
+      var accumulatedMatrix = this.accumulatedMatrix;
+      var accumulatedMatrixInverse = this.accumulatedMatrixInverse;
       var directionMatrix = {
         'to top left': this.getDirectionTopLeftMatrix(width, height),
         'to top': this.getDirectionTopMatrix(width, height),
@@ -44822,7 +44914,7 @@ var MovableItem = /*#__PURE__*/function (_Item) {
         'to bottom right': this.getDirectionBottomRightMatrix(width, height),
         'to left': this.getDirectionLeftMatrix(width, height)
       };
-      var verties = this.verties(width, height);
+      var verties = this.verties;
       var xList = verties.map(function (it) {
         return it[0];
       });
@@ -45031,6 +45123,7 @@ var MovableItem = /*#__PURE__*/function (_Item) {
         y: el_editor_unit_Length__WEBPACK_IMPORTED_MODULE_10__[/* Length */ "a"].px(y),
         transform: newChildItemTransform
       });
+      childItem.refreshMatrixCache();
     }
     /** order by  */
 

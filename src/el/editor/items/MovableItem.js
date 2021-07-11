@@ -63,22 +63,52 @@ export class MovableItem extends Item {
         super.reset(obj);
 
         // transform 에 변경이 생기면 미리 캐슁해둔다. 
-        if (this.hasChangedField('x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'transform-origin')) {
-            this.setCacheItemTransformMatrix();
-            this.setCacheLocalTransformMatrix();            
+        if (this.hasChangedField('x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'transform-origin', 'perspective', 'perspective-origin')) {
+            this.refreshMatrixCache()
         }
+    }
 
+    /**
+     * 부모가 변경되면 matrix 를 다시 캐쉬 한다. 
+     * 
+     * @param {Item} otherParent 
+     */
+    setParent (otherParent) {
+        super.setParent(otherParent);
+
+        this.refreshMatrixCache();
+    }
+
+    refreshMatrixCache() {
+        this.setCacheItemTransformMatrix();
+        this.setCacheLocalTransformMatrix();         
+        this.setCacheAccumulatedMatrix();   
+        this.setCacheVerties();
+
+        this.layers.forEach(it => {
+            it.refreshMatrixCache();
+        })
     }
 
     setCacheItemTransformMatrix() {
         this._cachedItemTransform = this.getItemTransformMatrix();
-        this._cachedItemTransformInverse = this.getItemTransformMatrixInverse();
+        this._cachedItemTransformInverse = mat4.invert([], this._cachedItemTransform);
     }
 
     setCacheLocalTransformMatrix() {
         this._cachedLocalTransform = this.getLocalTransformMatrix();
-        this._cachedLocalTransformInverse = this.getLocalTransformMatrixInverse();
+        this._cachedLocalTransformInverse = mat4.invert([], this._cachedLocalTransform);
     }    
+
+    setCacheAccumulatedMatrix() {
+        this._cachedAccumulatedMatrix = this.getAccumulatedMatrix();
+        this._cachedAccumulatedMatrixInverse = mat4.invert([], this._cachedAccumulatedMatrix);
+    }        
+
+    setCacheVerties() {
+        this._cachedVerties = this.getVerties();
+    }
+
     //////////////////////
     //
     // getters 
@@ -101,6 +131,18 @@ export class MovableItem extends Item {
     get itemMatrixInverse() {
         return this._cachedItemTransformInverse || this.getItemTransformMatrixInverse()
     }    
+
+    get accumulatedMatrix() {
+        return this._cachedAccumulatedMatrix || this.getAccumulatedMatrix()
+    }
+
+    get accumulatedMatrixInverse() {
+        return this._cachedAccumulatedMatrixInverse || this.getAccumulatedMatrixInverse()
+    }        
+
+    get verties() {
+        return this._cachedVerties || this.getVerties();
+    }
 
 
     setScreenX(value) {
@@ -216,7 +258,7 @@ export class MovableItem extends Item {
      * @param {*} areaVerties 
      */
     checkInArea (areaVerties) {
-        return polyPoly(areaVerties, this.verties())        
+        return polyPoly(areaVerties, this.verties)        
     }
 
     /**
@@ -226,7 +268,7 @@ export class MovableItem extends Item {
      * @param {number} y 
      */
     hasPoint (x, y) {
-        return polyPoint(this.verties(), x, y)
+        return polyPoint(this.verties, x, y)
     }
 
 
@@ -437,24 +479,24 @@ export class MovableItem extends Item {
         return mat4.invert([], this.getAccumulatedMatrix());
     }
 
-    verties (width, height) {
+    getVerties (width, height) {
         let model = rectToVerties(0, 0, width || this.screenWidth.value, height || this.screenHeight.value, this.json['transform-origin']);
 
-        return vertiesMap(model, this.getAccumulatedMatrix())
+        return vertiesMap(model, this.accumulatedMatrix)
     }
 
     selectionVerties () {
         let selectionModel = rectToVerties(-6, -6, this.screenWidth.value+12, this.screenHeight.value+12, this.json['transform-origin']);
         
-        return vertiesMap(selectionModel, this.getAccumulatedMatrix())
+        return vertiesMap(selectionModel, this.accumulatedMatrix)
     }    
 
     rectVerties () {
-        return this.verties().filter((_, index) => index < 4)
+        return this.verties.filter((_, index) => index < 4)
     }    
 
     guideVerties () {
-        return this.verties();
+        return this.verties;
     }        
 
     get matrix () {
@@ -465,14 +507,16 @@ export class MovableItem extends Item {
         const height = this.screenHeight.value; 
         const originalTransform = this.json.transform;
         const originalTransformOrigin = this.json['transform-origin'] || '50% 50% 0%';
-        const parentMatrix = (this.parent && isFunction(this.parent.getAccumulatedMatrix)) ? this.parent.getAccumulatedMatrix() : mat4.create()
-        const parentMatrixInverse = mat4.invert([], parentMatrix);
+
+        // load cached matrix 
+        const parentMatrix = this.parent.accumulatedMatrix;
+        const parentMatrixInverse = this.parent.accumulatedMatrixInverse;
         const localMatrix = this.localMatrix
         const localMatrixInverse = this.localMatrixInverse;
         const itemMatrix = this.itemMatrix;
         const itemMatrixInverse = this.itemMatrixInverse;
-        const accumulatedMatrix = this.getAccumulatedMatrix();
-        const accumulatedMatrixInverse = this.getAccumulatedMatrixInverse();
+        const accumulatedMatrix = this.accumulatedMatrix;
+        const accumulatedMatrixInverse = this.accumulatedMatrixInverse;
 
         const directionMatrix = {
             'to top left': this.getDirectionTopLeftMatrix(width, height),
@@ -485,7 +529,7 @@ export class MovableItem extends Item {
             'to left': this.getDirectionLeftMatrix(width, height),                        
         }
 
-        const verties = this.verties(width, height);
+        const verties = this.verties;
         const xList = verties.map(it => it[0])
         const yList = verties.map(it => it[1])
 
@@ -688,6 +732,8 @@ export class MovableItem extends Item {
             y: Length.px(y),
             transform: newChildItemTransform
         })
+
+        childItem.refreshMatrixCache();
 
     }
 

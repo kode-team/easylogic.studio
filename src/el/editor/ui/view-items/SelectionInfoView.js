@@ -80,7 +80,7 @@ export default class SelectionInfoView extends EditorElement {
                 [id]: { name: title }
             }
         );  
-        this.$el.$(`[data-artboard-title-id='${id}']`).text(title);
+        this.$el.$(`[data-artboard-title-id='${id}']`)?.text(title);
     }
 
     calculateEndedElement (dx, dy) {
@@ -101,15 +101,10 @@ export default class SelectionInfoView extends EditorElement {
 
 
     [LOAD('$el') + DOMDIFF] () {
-
-        const artboards = this.$selection.currentProject.artboards.map(it => {
-            return { artboard: it, matrix: it.matrix }
-        })
-
-        return artboards.map(it => {
-            return { title: it.artboard.name, id: it.artboard.id, rect: [
-                this.$viewport.applyVertex(it.matrix.rectVerties[0]),
-                this.$viewport.applyVertex(it.matrix.rectVerties[1]),
+        return this.$selection.currentProject.artboards.map(it => {
+            return { title: it.name, id: it.id, rect: [
+                this.$viewport.applyVertex(it.verties[0]),
+                this.$viewport.applyVertex(it.verties[1]),
             ]}
         }).map(it => this.makeArtboardTitleArea(it))
 

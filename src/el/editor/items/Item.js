@@ -2,6 +2,7 @@ import { uuidShort } from "el/base/functions/math";
 import {
   clone,
   isFunction,
+  isNumber,
   isUndefined
 } from "el/base/functions/func";
 
@@ -114,6 +115,27 @@ export class Item {
     return this.json.name || this.getDefaultTitle();
   }
 
+  renameWithCount() {
+    let arr = this.json.name.split(' ');
+
+    if (arr.length < 2) {
+      return; 
+    }
+
+    let last = arr.pop(); 
+    let lastNumber = +last; 
+    if (isNumber(lastNumber) && isNaN(lastNumber) === false) {
+      lastNumber++;
+    } else {
+      lastNumber = last; 
+    }
+
+    const nextName = [...arr, lastNumber].join(' ')
+
+    this.reset({
+      name: nextName
+    })
+  }
 
   /**
    * 
@@ -312,7 +334,7 @@ export class Item {
 
   toCloneObject (isDeep = true) {
     var json = this.attrs(
-      'itemType', 'elementType', 'type', 'visible', 'lock', 'selected'
+      'itemType', 'name', 'elementType', 'type', 'visible', 'lock', 'selected'
     )
 
     if (isDeep) {
@@ -441,6 +463,10 @@ export class Item {
   }
 
   resetMatrix (item) {
+
+  }
+
+  refreshMatrixCache () {
 
   }
 
@@ -574,15 +600,14 @@ export class Item {
   }
 
   copyItem (childItem, dist = 10 ) {
-     // clone 을 어떻게 해야하나? 
-
     var child = childItem.clone()  
+    child.renameWithCount()
     child.move([dist, dist, 0])
 
     var childIndex = this.findIndex(childItem); 
 
     if (childIndex > -1) {
-      this.json.layers.splice(childIndex+1, 0, child);
+      this.json.layers.push(child);
       this.project.addIndexItem(child);      
     }
     return child;

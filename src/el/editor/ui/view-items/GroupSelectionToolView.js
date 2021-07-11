@@ -87,7 +87,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         // cache matrix 
         this.$selection.reselect();        
-        this.verties = this.groupItem.verties();        
+        this.verties = this.groupItem.verties;        
         this.rotateTargetNumber = (+e.$dt.attr('data-number')); 
 
         this.refreshRotatePointerIcon()
@@ -646,7 +646,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         if (!this.groupItem) return;
 
-        const verties = this.groupItem.verties();
+        const verties = this.groupItem.verties;
         const selectionVerties = this.groupItem.selectionVerties();
 
         this.state.renderPointerList = [

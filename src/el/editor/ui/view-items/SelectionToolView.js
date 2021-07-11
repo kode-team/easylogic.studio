@@ -47,8 +47,8 @@ const SelectionToolEvent = class  extends EditorElement {
     }
 
 
-    [SUBSCRIBE('refreshSelectionTool')] () { 
-        this.initSelectionTool();
+    [SUBSCRIBE('refreshSelectionTool')] (isShow = true) { 
+        this.initSelectionTool(isShow);
     }
 
     [SUBSCRIBE('updateViewport')] () { 
@@ -144,6 +144,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         this.state.dragging = true;
         this.renderPointers();
+        this.refreshSmartGuides();          
         this.emit('refreshSelectionStyleView');   
         this.emit('refreshRect');                  
     }
@@ -489,7 +490,6 @@ export default class SelectionToolView extends SelectionToolEvent {
     }
 
     moveTo (distVector) {
-
         this.$selection.cachedItemVerties.forEach(it => {
 
             // 절대 좌표를 snap 기준으로 움직이고 
@@ -542,16 +542,23 @@ export default class SelectionToolView extends SelectionToolEvent {
         return elements;
     }
 
-    initSelectionTool() {
-
+    initSelectionTool(isShow = true) {
         if (this.$editor.isSelectionMode() && this.$el.isHide() && this.$selection.isOne) {
-            this.$el.show();
+            if (isShow) {
+                this.$el.show();
+            }
+
         } else {
             if (this.$el.isShow() && this.$selection.isOne === false) this.$el.hide();
         }
 
-        this.makeSelectionTool();
-
+        if (isShow) {
+            this.makeSelectionTool();
+        } else {
+            if (this.$el.isShow()) {
+                this.$el.hide();
+            }
+        }
     }      
 
     makeSelectionTool() {

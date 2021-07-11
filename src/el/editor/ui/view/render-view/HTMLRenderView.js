@@ -475,7 +475,7 @@ export default class HTMLRenderView extends EditorElement {
         this.$selection.reselect();
         this.$snapManager.clear();
 
-        this.emit('refreshSelectionTool');
+        this.emit('refreshSelectionTool', true);
     }
 
 
@@ -502,7 +502,7 @@ export default class HTMLRenderView extends EditorElement {
 
             // ArtBoard 변경 이후에 LayerTreeView 업데이트
             this.emit('refreshLayerTreeView')                        
-            this.emit('refreshSelectionTool', true);         
+            this.emit('refreshSelectionTool', false);         
         }
 
         this.nextTick(() => {
@@ -530,13 +530,14 @@ export default class HTMLRenderView extends EditorElement {
             }
         } else {              
             // this.emit('removeGuideLine');
-
             this.nextTick(() => {
                 this.command(
                     'setAttributeForMulti',
                     "move item",                    
                     this.$selection.cloneValue('x', 'y', 'width', 'height')
                 );  
+
+                this.emit('refreshSelectionTool', true);
             })
         }
     }

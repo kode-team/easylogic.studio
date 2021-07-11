@@ -102,7 +102,9 @@ export function vertiesMap(verties, transformView) {
         ]
     }
 
-    console.log(verties);
+    return verties.map(v => {
+        return vec3.transformMat4([], v, transformView)
+    });
 }
 
 export function getVertiesMaxX(verties) {
