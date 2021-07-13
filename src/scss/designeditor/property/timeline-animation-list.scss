@@ -4,7 +4,7 @@
     padding:0px;
     margin:0px !important;
     .timeline-animation-item {
-        color: var(--elf-list-item-font-color);
+        color: var(--elf--list-item-font-color);
 
         padding: 2px 7px !important; 
         margin-bottom: 0px !important;
@@ -32,8 +32,8 @@
         }
 
         &.selected {
-            background-color: var(--elf-list-item-selected-color);
-            color: var(--elf-selected-font-color);
+            background-color: var(--elf--list-item-selected-color);
+            color: var(--elf--selected-font-color);
         }
 
     }

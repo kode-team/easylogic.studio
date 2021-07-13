@@ -38,7 +38,7 @@
         }
 
         &.has-transform {
-            background-color: var(--elf-path-background-color);
+            background-color: var(--elf--path-background-color);
         }
 
         &.path {
@@ -90,7 +90,7 @@
             svg {
                 path {
                     &.object {
-                        stroke: var(--elf-border-color);
+                        stroke: var(--elf--border-color);
                     }                
                 }
             }
@@ -171,7 +171,7 @@
                     background-color: transparent;
                     cursor: move;
                     transform: none;
-                    box-shadow: 0 0 0 1px var(--elf-selected-color);
+                    box-shadow: 0 0 0 1px var(--elf--selected-color);
                 }
 
                 &[data-position="to top left"] {
@@ -236,12 +236,12 @@
             stroke-width: 1; 
 
             &[data-guide='true'] {
-                stroke: var(--elf-path-guide-color);                 
+                stroke: var(--elf--path-guide-color);                 
                 pointer-events: none;
             }
 
             &[data-distance='true'] {
-                stroke: var(--elf-selected-color);
+                stroke: var(--elf--selected-color);
                 stroke-dasharray: 2 2;
                 pointer-events: none;
             }            
@@ -249,31 +249,31 @@
 
         circle {
             fill: white;
-            stroke: var(--elf-path-guide-color); 
+            stroke: var(--elf--path-guide-color); 
             stroke-width: 1;
             cursor: move;
 
             &.curve {
-                stroke: var(--elf-path-segment-stroke-color); 
+                stroke: var(--elf--path-segment-stroke-color); 
             }
 
             &[data-is-first="true"] {
-                stroke: var(--elf-selected-color);
+                stroke: var(--elf--selected-color);
                 z-index: 1;
             }
 
             &[data-is-second="true"] {
-                stroke: var(--elf-selected-color);
+                stroke: var(--elf--selected-color);
                 z-index: 1;
             }            
 
             &[data-is-last="true"] {
-                stroke: var(--elf-selected-color);
+                stroke: var(--elf--selected-color);
                 z-index: 1;
             }       
             
             &[data-selected='true'] {
-                fill: var(--elf-selected-color);
+                fill: var(--elf--selected-color);
                 stroke: white;
                 r: 5;
                 stroke-width: 2;
@@ -287,7 +287,7 @@
             }
             
             &.split-circle {
-                fill: var(--elf-selected-color);
+                fill: var(--elf--selected-color);
                 stroke: white;
                 pointer-events: none;
             }
@@ -295,7 +295,7 @@
 
         .svg-canvas {
             fill: transparent;
-            stroke: var(--elf-selected-border-color);
+            stroke: var(--elf--selected-border-color);
             stroke-width: 1;
             // display: none;
             pointer-events: none;
@@ -306,13 +306,13 @@
 
             &.guide {
                 fill: transparent;
-                stroke: var(--elf-selected-color);
+                stroke: var(--elf--selected-color);
                 stroke-width: 1;                
             }
 
             &.segment {
                 fill: transparent;
-                stroke: var(--elf-selected-color);
+                stroke: var(--elf--selected-color);
                 stroke-width: 1; 
             }
             
@@ -330,20 +330,20 @@
 
                 &:hover {
                     cursor: copy;
-                    stroke: var(--elf-selected-color);
+                    stroke: var(--elf--selected-color);
                 }
             }
 
             &.snap-path {
                 fill: transparent;
-                stroke: var(--elf-selected-color);
+                stroke: var(--elf--selected-color);
                 stroke-width: 1;
             }
         }
 
         text {
-            fill: var(--elf-selected-color); 
-            stroke: var(--elf-selected-color);
+            fill: var(--elf--selected-color); 
+            stroke: var(--elf--selected-color);
             stroke-width: 0.5;
             pointer-events: none;
             display: none;

@@ -36,14 +36,14 @@
           padding: 6px 0px;
 
           &.selected {
-            background-color: var(--elf-border-color);
+            background-color: var(--elf--border-color);
           }
       
           .gradient-info {
             display: grid;
             grid-template-columns: 60px 1fr 20px;
 
-            color: var(--elf-font-color);
+            color: var(--elf--font-color);
 
             svg {
               path {
@@ -68,7 +68,7 @@
           }
 
           .pattern {
-            background-color: var(--elf-border-color);
+            background-color: var(--elf--border-color);
             border-radius: 3px;
           }
       
@@ -124,7 +124,7 @@
             padding-top: 6px;
       
             .step {
-              border: 1px solid var(--elf-selected-color);
+              border: 1px solid var(--elf--selected-color);
               display: inline-block;
               margin-left: -6px;
               width: 12px;

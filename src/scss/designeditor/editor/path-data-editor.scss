@@ -24,7 +24,7 @@
         }
 
         .command {
-            color: var(--elf-selected-color); 
+            color: var(--elf--selected-color); 
             cursor: pointer;
 
             &[data-toggle="false"] {

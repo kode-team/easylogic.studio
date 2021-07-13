@@ -1,5 +1,4 @@
 import { Layer } from "./Layer";
-import { ComponentManager } from "../manager/ComponentManager";
 import icon from "../icon/icon";
 
 
@@ -54,5 +53,3 @@ export class Component extends Layer {
         }
     }
 }
-
-ComponentManager.registerComponent('component', Component);

@@ -127,7 +127,7 @@ module.exports = {
       excludeChunks: ['editor', 'single']
     }),                
     new MiniCssExtractPlugin({
-      filename: "bundle.css"
+      filename: "[name].css"
     })
   ]
 };

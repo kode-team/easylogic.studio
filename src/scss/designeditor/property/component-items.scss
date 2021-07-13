@@ -7,7 +7,7 @@
             font-weight: bold;
             display: block;
             padding: 10px 0px;
-            color: var(--elf-selected-color);
+            color: var(--elf--selected-color);
         }
 
         > .list {
@@ -28,12 +28,12 @@
                 border: 1px solid #ececec4b;
 
                 &:hover {
-                    background-color: var(--elf-selected-color);
-                    color: var(--elf-selected-font-color) !important;
+                    background-color: var(--elf--selected-color);
+                    color: var(--elf--selected-font-color) !important;
                 }
 
                 &.selected {
-                    color: var(--elf-selected-color); 
+                    color: var(--elf--selected-color); 
                 }        
 
                 .icon {
@@ -70,8 +70,8 @@
                 cursor: pointer;
                 text-align: center;
                 box-sizing: border-box;
-                border: 1px solid var(--elf-font-color);
-                color: var(--elf-font-color); 
+                border: 1px solid var(--elf--font-color);
+                color: var(--elf--font-color); 
 
                 .icon {
                     width: 50px;

@@ -39,7 +39,7 @@
         width: 50%;
         top: 50%;
         transform: translateY(-50%);
-        background-color: var(--elf-selected-color);
+        background-color: var(--elf--selected-color);
     }
 
     .drag-item {
@@ -48,7 +48,7 @@
         width: 8px;
         height: 8px;
         border-radius: 100%;
-        background-color: var(--elf-selected-color);        
+        background-color: var(--elf--selected-color);        
         cursor: pointer;        
         transform: translate(-50%, -50%);       
         top: 50%; 

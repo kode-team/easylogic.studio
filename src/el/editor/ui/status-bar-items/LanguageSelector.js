@@ -1,7 +1,6 @@
 import { SUBSCRIBE } from "el/base/Event";
 import { registElement } from "el/base/registElement";
 
-import "el/editor/ui/property-editor";
 import locales from "../../../i18n/locales";
 import { EditorElement } from "../common/EditorElement";
 

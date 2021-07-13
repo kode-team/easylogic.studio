@@ -8,7 +8,7 @@ $border-radius: 3px;
     &.focused {
 
         .area {
-            box-shadow: 0 0 0 1px var(--elf-selected-color);
+            box-shadow: 0 0 0 1px var(--elf--selected-color);
         }
 
     }
@@ -98,17 +98,17 @@ $border-radius: 3px;
                     border-bottom-right-radius: $border-radius;
                     border-top-left-radius: 0px;
                     border-bottom-left-radius: 0px;                    
-                    background-color: var(--elf-input-background-color);
+                    background-color: var(--elf--input-background-color);
                     appearance: none;
                     text-align: center;
                     height: 100%;
                     
                     padding: 0px 4px;             
                     border-left:0px;
-                    color: var(--elf-input-sub-font-color);
-                    border-bottom: 1px solid var(--elf-input-border-color);
-                    border-top: 1px solid var(--elf-input-border-color);
-                    border-right: 1px solid var(--elf-input-border-color);                     
+                    color: var(--elf--input-sub-font-color);
+                    border-bottom: 1px solid var(--elf--input-border-color);
+                    border-top: 1px solid var(--elf--input-border-color);
+                    border-right: 1px solid var(--elf--input-border-color);                     
                 }
             }
         }

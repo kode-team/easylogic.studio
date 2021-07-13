@@ -3,8 +3,8 @@
     pointer-events: all;
     outline: none;
     border-top: 0px;
-    color: var(--elf-font-color);
-    background-color: var(--elf-background-color);
+    color: var(--elf--font-color);
+    background-color: var(--elf--background-color);
     height: 100%;
     padding: 7px 0px;
     overflow: hidden;
@@ -32,7 +32,7 @@
         @each $modeType in modify, path, draw, transform {
             &[data-selected-value="#{$modeType}"] {
               button[data-value="#{$modeType}"] {
-                color: var(--elf-selected-color);
+                color: var(--elf--selected-color);
               }
             }
         }
@@ -64,7 +64,7 @@
 
                 path {
                     stroke-width: 1;
-                    stroke: var(--elf-background-color);
+                    stroke: var(--elf--background-color);
                 }
             }
         }
@@ -89,7 +89,7 @@
               display: inline-block;
 
               input[type=number] {
-                background-color: var(--elf-border-color);
+                background-color: var(--elf--border-color);
               }
             }
           }
@@ -106,7 +106,7 @@
             .preview {
               width: 18px;
               height: 18px;
-              border: 1px solid var(--elf-selected-color);
+              border: 1px solid var(--elf--selected-color);
               overflow: hidden;
             }
           }

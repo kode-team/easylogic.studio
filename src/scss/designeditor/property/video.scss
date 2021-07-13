@@ -4,7 +4,7 @@
         height: 1px;
         width: 30px;
         margin: 10px auto;
-        background-color: var(--elf-divider-color);
+        background-color: var(--elf--divider-color);
     }
 
     .play-control {
@@ -34,7 +34,7 @@
         grid-column-gap: 2px;
         span[data-value] {
             display: none; 
-            color: var(--elf-font-color); 
+            color: var(--elf--font-color); 
             width: 16px;
             height: 16px;
             vertical-align: middle;

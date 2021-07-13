@@ -38,7 +38,7 @@
     margin-top: 5px;
 
     &.desc {
-      color: var(--elf-font-color);
+      color: var(--elf--font-color);
       .color {
         visibility: hidden;
       }
@@ -46,7 +46,7 @@
     .color {
       cursor: pointer;
       height: 20px;
-      border: 1px solid var(--elf-border-color);
+      border: 1px solid var(--elf--border-color);
       // border-radius: 100%;
       position: relative;
       @include transparent-background();

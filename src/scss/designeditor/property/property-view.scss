@@ -1,10 +1,10 @@
 .property {
   // padding: 5px 10px;
-  border-bottom: 1px solid var(--elf-property-border-color);  
-  // background-color: var(--elf-property-background-color);
+  border-bottom: 1px solid var(--elf--property-border-color);  
+  // background-color: var(--elf--property-background-color);
   // margin: 0px 5px;
   // border-radius: 4px;
-  // color: var(--elf-font-color); 
+  // color: var(--elf--font-color); 
   display: none; 
   box-shadow: 0 0 2px 0 rgba(255, 255, 255, 0.001);
   margin: 4px auto;
@@ -32,14 +32,14 @@
 
     width: 7px;
     height: 7px;
-    box-shadow: 0 0 0 1px var(--elf-border-color);
-    background-color: var(--elf-timeline-property-add-background-color);
+    box-shadow: 0 0 0 1px var(--elf--border-color);
+    background-color: var(--elf--timeline-property-add-background-color);
     cursor: pointer;
     transform: translateY(-50%) rotate(45deg);
 
     &:hover {
-      box-shadow: 0 0 0 1px var(--elf-selected-color);
-      background-color: var(--elf-selected-color);
+      box-shadow: 0 0 0 1px var(--elf--selected-color);
+      background-color: var(--elf--selected-color);
     }
   }
 
@@ -113,9 +113,9 @@
     display: grid;
     grid-template-columns: 1fr 100px;
     cursor: pointer;
-    // border-bottom: 1px solid var(--elf-property-border-color);  
-    color: var(--elf-font-color);
-    // background-color: var(--elf-property-title-background-color);
+    // border-bottom: 1px solid var(--elf--property-border-color);  
+    color: var(--elf--font-color);
+    // background-color: var(--elf--property-title-background-color);
 
     &.filter {
       grid-template-columns: 1fr 110px;
@@ -158,7 +158,7 @@
       select {
         min-width: 80px;
         max-width: 80px;
-        background-color: var(--elf-input-background-color);
+        background-color: var(--elf--input-background-color);
       }
       
     }
@@ -169,7 +169,7 @@
     padding: 10px;
     padding-top: 0px;
     position: relative;
-    // background-color: var(--elf-property-background-color);
+    // background-color: var(--elf--property-background-color);
 
     &.no-padding {
       padding: 0px !important;
@@ -233,8 +233,8 @@
         box-sizing: border-box;
         border-radius: 4px;
         display: block;
-        background-color: var(--elf-selected-color-2);
-        color: var(--elf-selected-font-color);
+        background-color: var(--elf--selected-color-2);
+        color: var(--elf--selected-font-color);
       }
 
     }

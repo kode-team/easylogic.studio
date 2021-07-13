@@ -1,10 +1,7 @@
 import { CLICK, PREVENT, STOP } from "el/base/Event";
 
-
-import "../property-editor";
 import { isFunction } from "el/base/functions/func";
 import { EditorElement } from "../common/EditorElement";
-
 
 export default class BaseProperty extends EditorElement {
 

@@ -44,12 +44,16 @@ import ungroupItem from "./ungroup.item";
 import historyUndo from "./history.undo";
 import historyRedo from "./history.redo";
 import addArtboard from "./add.artboard";
+import setToolHand from "./set.tool.hand";
+
 
 
 export default [
     // history 
     historyUndo,
     historyRedo,
+
+    setToolHand,
     
     // add layer 
     selectView,

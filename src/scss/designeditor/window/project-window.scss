@@ -1,7 +1,7 @@
 &.project-window {
     width: 100%;
     height: 100%;
-    background-color: var(--elf-background-color);
+    background-color: var(--elf--background-color);
 
     .project-container {
         width: 100%;
@@ -23,7 +23,7 @@
             height: 100%;
             overflow: auto;
             box-sizing: border-box;
-            background-color: var(--elf-window-background-color);
+            background-color: var(--elf--window-background-color);
         }
     }
 

@@ -1,5 +1,5 @@
 import { uuid } from "el/base/functions/math";
-import JSONRenderer from "el/editor/renderer/JSONRenderer";
+
 
 /**
  * localStorage Manager
@@ -85,7 +85,7 @@ export class StorageManager {
 
         if (current) {
             const artboardList = await this.getArtboardList();
-            const json = await JSONRenderer.render(current);
+            const json = await this.editor.json.render(current);
 
             json.x = "0px"
             json.y = "0px"
@@ -111,7 +111,7 @@ export class StorageManager {
 
         if (current) {
             const componentList = await this.getCustomComponentList();
-            const json = await JSONRenderer.render(current);
+            const json = await this.editor.json.render(current);
 
             json.x = "0px"
             json.y = "0px"
@@ -121,7 +121,7 @@ export class StorageManager {
                     id: uuid(),
                     preview: datauri,
                     component: json 
-                }
+                } 
             ]);
         }
     }    

@@ -10,7 +10,7 @@ $editor-ruler-size: 20px;
   left: $editor-ruler-size;
   right: 0px;
   height: $editor-ruler-size;
-  background-color: var(--elf-background-color);
+  background-color: var(--elf--background-color);
   z-index: 0;
 
   .horizontal-ruler-container {
@@ -23,7 +23,7 @@ $editor-ruler-size: 20px;
   svg {
     text {
       text-anchor: middle;
-      fill: var(--elf-font-color); 
+      fill: var(--elf--font-color); 
       font-size: 8px;
     }
   }
@@ -35,7 +35,7 @@ $editor-ruler-size: 20px;
   width: $editor-ruler-size;
   top: $editor-ruler-size;
   bottom: 0px;
-  background-color: var(--elf-background-color);
+  background-color: var(--elf--background-color);
   box-sizing: border-box;
   z-index: 0;  
 
@@ -50,7 +50,7 @@ $editor-ruler-size: 20px;
   svg {
     text {
       text-anchor: middle;
-      fill: var(--elf-font-color); 
+      fill: var(--elf--font-color); 
       font-size: 8px;
     }
   }
@@ -83,7 +83,7 @@ $editor-ruler-size: 20px;
   right: 0px;
   bottom: 0px;
   top: 0px;
-  background-color: var(--elf-page-view-color);
+  background-color: var(--elf--page-view-color);
 
   .page-lock {
     position: absolute;
@@ -118,9 +118,10 @@ $editor-ruler-size: 20px;
   display: inline-block;
   padding: 5px 10px;
   border-radius: 3px;
-  border: 1px solid var(--elf-border-color);
-  color: var(--elf-font-color);
-  background-color: var(--elf-background-color);
+  border: 1px solid var(--elf--border-color);
+  color: var(--elf--font-color);
+  background-color: var(--elf--background-color);
+  box-sizing: border-box;
 
   > * {
     position: relative;
@@ -137,13 +138,26 @@ $editor-ruler-size: 20px;
 
   button {
     border-radius: 3px;
+    vertical-align: middle;
+    display: inline-block;
+    padding: 4px;
+    width: 24px;
+    height: 24px;
+
+    &.on {
+      background-color: var(--elf--selected-color);
+    }
+
+    svg {
+      pointer-events: none;
+    }
   }
 
   >.select {
     display: inline-block;
     width: 50px;
     border-radius: 5px;
-    border:1px solid rgba(var(--elf-selected-color), 0.5);
+    border:1px solid rgba(var(--elf--selected-color), 0.5);
   }
 }
 
@@ -166,8 +180,8 @@ $editor-ruler-size: 20px;
 .drag-area-rect {
   pointer-events: none;
   position: absolute;
-  border: 0.5px solid var(--elf-drag-area-rect-border-color);
-  background-color: var(--elf-drag-area-rect-background-color);
+  border: 0.5px solid var(--elf--drag-area-rect-border-color);
+  background-color: var(--elf--drag-area-rect-background-color);
   box-sizing: border-box;
 
   left: -10000px;

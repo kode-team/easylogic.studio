@@ -64,10 +64,10 @@ This project is [sapa](https://github.com/easylogic/sapa) based.
 * Support png & svg download  
 
 ### Drawing 
-* Support mini path and polygon editor 
+* Support mini path editor 
 
 ### Assets 
-* Color
+* Color - refer to https://github.com/easylogic/editor-plugin-color
 * Gradient
 * SVG Filter 
 * Image 

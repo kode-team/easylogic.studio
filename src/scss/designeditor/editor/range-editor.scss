@@ -41,7 +41,7 @@ $border-radius: 3px;
 
             label {
                 display: block; 
-                color: var(--elf-font-color);
+                color: var(--elf--font-color);
             }
         }
     }
@@ -75,7 +75,7 @@ $border-radius: 3px;
 
 
             &.focused {
-                border: 1px solid var(--elf-selected-color);
+                border: 1px solid var(--elf--selected-color);
                 border-radius: $border-radius;
             }            
             
@@ -99,18 +99,18 @@ $border-radius: 3px;
                 height: 100%;                
                 padding: 2px 2px;      
                 border-right: 0px;         
-                border-bottom: 1px solid var(--elf-input-border-color);
-                border-left: 1px solid var(--elf-input-border-color);
-                border-top: 1px solid var(--elf-input-border-color);
+                border-bottom: 1px solid var(--elf--input-border-color);
+                border-left: 1px solid var(--elf--input-border-color);
+                border-top: 1px solid var(--elf--input-border-color);
                 text-align: left;
-                background-color: var(--elf-input-background-color);
+                background-color: var(--elf--input-background-color);
                 border-top-left-radius: $border-radius;
                 border-bottom-left-radius: $border-radius;
             }
 
             .select-editor {
                 text-align: right;
-                background-color: var(--elf-input-background-color);   
+                background-color: var(--elf--input-background-color);   
                 position: relative;             
                 box-sizing: border-box;          
                 border-top-right-radius: $border-radius;
@@ -128,16 +128,16 @@ $border-radius: 3px;
                     padding:0px;
                     width:24px;
                     height: 100%;
-                    color: var(--elf-input-sub-font-color);
+                    color: var(--elf--input-sub-font-color);
                     
                     background-color: transparent;
                     border-top-right-radius: $border-radius;
                     border-bottom-right-radius: $border-radius;
                     border-top-left-radius: 0px;
                     border-bottom-left-radius: 0px;                                        
-                    border-bottom: 1px solid var(--elf-input-border-color);
-                    border-top: 1px solid var(--elf-input-border-color);
-                    border-right: 1px solid var(--elf-input-border-color);                     
+                    border-bottom: 1px solid var(--elf--input-border-color);
+                    border-top: 1px solid var(--elf--input-border-color);
+                    border-right: 1px solid var(--elf--input-border-color);                     
                 }
             }
         }

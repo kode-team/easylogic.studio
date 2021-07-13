@@ -2,7 +2,7 @@
     display: block;
   
     .keyframe-item {
-      border: 1px solid var(--elf-border-color);
+      border: 1px solid var(--elf--border-color);
       margin-bottom: 5px;
       padding: 5px;  
       cursor: pointer;
@@ -12,15 +12,15 @@
       }
 
       &.selected {
-        background-color: var(--elf-border-color);
+        background-color: var(--elf--border-color);
       }
 
 
       @each $type in list, code {
         &[data-selected-value="#{$type}"] {
           button[data-type="#{$type}"] {
-            background-color: var(--elf-selected-color);
-            color: var(--elf-border-color); 
+            background-color: var(--elf--selected-color);
+            color: var(--elf--border-color); 
           }
 
           .keyframe-code[data-type="#{$type}"] {
@@ -70,7 +70,7 @@
 
           label {
             font-weight: bold;
-            color: var(--elf-font-color);
+            color: var(--elf--font-color);
             padding-left: 10px;
           }
         }
@@ -83,7 +83,7 @@
           
         .container {
             position: relative;
-            background-image: linear-gradient(to right, var(--elf-border-color), black);
+            background-image: linear-gradient(to right, var(--elf--border-color), black);
             background-size: 100% 2px;
             background-repeat: no-repeat;
             background-position: 0px center;
@@ -98,7 +98,7 @@
                 top: 50%;
                 transform: translateX(-50%) translateY(-50%);
                 vertical-align: middle;
-                border: 1px solid var(--elf-border-color);
+                border: 1px solid var(--elf--border-color);
 
             }
 

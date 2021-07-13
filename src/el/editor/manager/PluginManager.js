@@ -1,7 +1,8 @@
 import { Item } from "el/editor/items/Item";
 
-export const PluginManager = new class {
-  constructor(opt = {}) {
+export class PluginManager {
+  constructor(editor) {
+    this.editor = editor; 
     this.plugins = [] 
   }
 
@@ -17,10 +18,10 @@ export const PluginManager = new class {
    * @param {object} obj 
    * @returns {Item} 
    */
-  async initializePlugin (editor, options = {}) {
+  async initializePlugin (options = {}) {
     return await Promise.all(this.plugins.map(async (CreatePluginFunction) => {
-      return await CreatePluginFunction(editor, options)
+      return await CreatePluginFunction(this.editor, options)
     })) 
   }
 
-}();
+};

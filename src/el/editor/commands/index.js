@@ -102,12 +102,14 @@ import refreshCursor from "./refreshCursor";
 import recoverCursor from "./recoverCursor";
 import convertPasteText from "./convertPasteText";
 import addCustomComponent from "./addCustomComponent";
+import toggleToolHand from "./toggle.tool.hand";
 
 
 export default {
     convertPasteText,
     refreshCursor,
     recoverCursor,
+    toggleToolHand,
 
     // history + command   
     historyAddLayer,

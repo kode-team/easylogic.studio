@@ -4,17 +4,17 @@ import { ColorStep } from "../../property-parser/image-resource/ColorStep";
 import { RadialGradient } from "../../property-parser/image-resource/RadialGradient";
 import { Length } from "el/editor/unit/Length";
 import { ConicGradient } from "../../property-parser/image-resource/ConicGradient";
-import { Project } from "el/editor/items/Project";
-import { ArtBoard } from "el/editor/items/ArtBoard";
+import { Project } from "plugins/default-items/layers/Project";
+import { ArtBoard } from "plugins/default-items/layers/ArtBoard";
 import { Layer } from "el/editor/items/Layer";
 import { BackgroundImage } from "../../property-parser/BackgroundImage";
 import { FileImageResource } from "../../property-parser/image-resource/URLImageResource";
 import { CSS_TO_STRING, keyEach, combineKeyArray, isString } from "el/base/functions/func";
 import { calculateAngle } from "el/base/functions/math";
-import { SVGPathItem } from "el/editor/items/layers/SVGPathItem";
+import { SVGPathItem } from "plugins/default-items/layers/SVGPathItem";
 import { SVGRectLayer } from "@items/layers/SVGRectLayer";
 import { SVGEllipseLayer } from "@items/layers/SVGEllipseLayer";
-import { SVGItem } from "el/editor/items/layers/SVGItem";
+import { SVGItem } from "plugins/default-items/layers/SVGItem";
 
 export const Sketch = {
   Style: {

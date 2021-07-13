@@ -9,15 +9,6 @@ export default class PerspectiveProperty extends BaseProperty {
     return this.$i18n('perspective.property.title')
   }
 
-  hasKeyframe() {
-    return true; 
-  }
-
-
-  isFirstShow() {
-    return false; 
-  }  
-
   getKeyframeProperty () {
     return 'perspective'
   }

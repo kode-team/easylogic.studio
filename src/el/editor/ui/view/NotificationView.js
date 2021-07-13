@@ -2,14 +2,15 @@
 import icon from "el/editor/icon/icon";
 import Dom from "el/base/Dom";
 import { TRANSITIONEND, CLICK, SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
+
+import './NotificationView.scss'
 
 export default class NotificationView extends EditorElement {
 
     template() {
         return /*html*/`
-            <div class='notification-view'>
+            <div class='elf--notification-view'>
             </div>
         `
     }
@@ -43,5 +44,3 @@ export default class NotificationView extends EditorElement {
 
     }
 }
-
-registElement({ NotificationView })

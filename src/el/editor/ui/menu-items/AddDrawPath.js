@@ -3,7 +3,7 @@ import MenuItem from "./MenuItem";
  
 export default class AddDrawPath extends MenuItem {
   getIconString() {
-    return 'edit';
+    return 'draw';
   }
   getTitle() {
     return this.props.title || "Draw";

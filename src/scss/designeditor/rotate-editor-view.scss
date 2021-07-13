@@ -20,11 +20,11 @@
             transform: translate(-50%, -50%);
             width: 20px;
             height: 20px;
-            background-color: rgba(var(--elf-selected-color), 0.5);
-            border:1px solid var(--elf-selected-font-color);
+            background-color: rgba(var(--elf--selected-color), 0.5);
+            border:1px solid var(--elf--selected-font-color);
             border-radius: 100%;
             pointer-events: all;
-            color: var(--elf-selected-font-color);
+            color: var(--elf--selected-font-color);
 
             svg {
                 width: 100%;
@@ -43,7 +43,7 @@
             height: calc(50% + 1px);
             width: 1px;
             transform: translate(-50%, 0%);
-            background-color: var(--elf-selected-color);
+            background-color: var(--elf--selected-color);
             // display: none;
         }
 
@@ -65,14 +65,14 @@
             width: 10px;
             height: 10px;
             transform: translate(-50%, -50%);
-            background-color: var(--elf-selected-color);
+            background-color: var(--elf--selected-color);
             cursor: pointer;
             pointer-events: all;
             border-radius: 100%;
             box-sizing: border-box;
 
             &:hover {
-                border-color: var(--elf-selected-color);
+                border-color: var(--elf--selected-color);
             }
 
             &[data-value='top-left'] {
@@ -127,7 +127,7 @@
         right: 0px;
         top: 0px;
         bottom: 0px;
-        border: 1px solid var(--elf-selected-color); 
+        border: 1px solid var(--elf--selected-color); 
         border-radius: 100%; 
         pointer-events: all;
         cursor: move;
@@ -147,7 +147,7 @@
             &:not([style]) {
 
                 .rotate-item {
-                    border: 1px solid var(--elf-font-color);
+                    border: 1px solid var(--elf--font-color);
                     border-radius: 0px;
                 }
                 .rotate-x {
@@ -173,12 +173,12 @@
         .rotate-x {
 
             transform: rotateX(90deg) translateZ(0px);
-            border: 5px solid var(--elf-rotate-x-border-color); 
+            border: 5px solid var(--elf--rotate-x-border-color); 
         }
 
         .rotate-y { 
             transform: rotateY(90deg) translateZ(0px);
-            border: 5px solid var(--elf-rotate-y-border-color); 
+            border: 5px solid var(--elf--rotate-y-border-color); 
         }
     }
 }

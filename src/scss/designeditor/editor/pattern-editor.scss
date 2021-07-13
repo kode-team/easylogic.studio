@@ -33,7 +33,7 @@
           text-align: center;
 
           &.selected {
-            background-color: var(--elf-border-color);
+            background-color: var(--elf--border-color);
           }
 
           &:hover {
@@ -48,7 +48,7 @@
             right: 0px;
             top: 0px;
             background-color: rgba(255, 255, 255, 0.9);
-            color: var(--elf-selected-color);
+            color: var(--elf--selected-color);
           }
         }
       }

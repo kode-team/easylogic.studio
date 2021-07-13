@@ -161,6 +161,8 @@ import plugin from "./plugin";
 import straighten from "./straighten";
 import left_hide from "./left_hide";
 import right_hide from "./right_hide";
+import pantool from "./pantool";
+import draw from "./draw";
 
 const alias = {
   fullscreen:  border_inner
@@ -169,6 +171,8 @@ const alias = {
 
 export default {
   ...alias,
+  draw,
+  pantool,
   left_hide,
   right_hide,
   bar_chart,

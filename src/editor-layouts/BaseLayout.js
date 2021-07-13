@@ -2,9 +2,9 @@
 import { DEBOUNCE, POINTEREND, POINTERMOVE, RESIZE, SUBSCRIBE, SUBSCRIBE_ALL } from "el/base/Event";
 import { debounce, isArray, isObject } from "el/base/functions/func";
 import { getDist } from "el/base/functions/math";
+import { Editor } from "el/editor/manager/Editor";
 import { ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "el/editor/types/event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-import plugins from "plugins/index";
 
 const EMPTY_POS = { x: 0, y: 0 };
 const DEFAULT_POS = { x: Number.MAX_SAFE_INTEGER, y: Number.MAX_SAFE_INTEGER };
@@ -14,6 +14,17 @@ const MOVE_CHECK_MS = 0;
 
 export default class BaseLayout extends EditorElement {
 
+  /**
+   * @type {Editor}
+   */
+  get $editor () {
+
+    if (!this.__editorInstance) {
+      this.__editorInstance = new Editor()
+    }
+
+    return this.__editorInstance;
+  }
 
   afterRender() {
     super.afterRender();
@@ -26,9 +37,7 @@ export default class BaseLayout extends EditorElement {
     super.initialize();
 
     // register local plugins 
-    if (isArray(plugins)) {
-      this.$editor.registerPluginList(plugins);
-    }
+    this.$editor.registerPluginList(this.getPlugins());
 
     // register other plugins     
     if (isArray(this.opt.plugins)) {
@@ -40,11 +49,27 @@ export default class BaseLayout extends EditorElement {
       this.$config.setAll(this.opt.config || {});
     }
 
+    // load default data 
     this.emit('load.json', this.opt.data?.projects);
 
+    // initialize plugin list 
     this.$editor.initPlugins();
 
+    // initialize root event 
     this.__initBodyMoves();
+  }
+
+  /**
+   * 로컬에서 등록될 플러그인 리스트 
+   * 
+   * 이걸 하는 이유는 target 별 용량을 줄이기 위한 것이다. 
+   * 예를 들어 editor 는 전체 용량을 다 차지해도 되지만 player 는 렌더링 부분만 필요하기 때문에 그렇다. 
+   * 
+   * @override
+   * @returns 
+   */
+  getPlugins() {
+    return [];
   }
 
   __initBodyMoves() {

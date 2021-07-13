@@ -10,6 +10,7 @@ import DirectionEditor from "./DirectionEditor";
 import FilterEditor from "./FilterEditor";
 import FontSelectEditor from "./FontSelectEditor";
 import GradientEditor from "./GradientEditor";
+import IconListViewEditor from "./IconListViewEditor";
 import InputArrayEditor from "./InputArrayEditor";
 import InputRangeEditor from "./InputRangeEditor";
 import IterationCountEditor from "./IterationCountEditor";
@@ -22,8 +23,10 @@ import RangeEditor from "./RangeEditor";
 import SelectEditor from "./SelectEditor";
 import SelectIconEditor from "./SelectIconEditor";
 import StrokeDashArrayEditor from "./StrokeDashArrayEditor";
+import TextAreaEditor from "./TextAreaEditor";
+import TextEditor from "./TextEditor";
 import VarEditor from "./VarEditor";
-
+ 
 
 /**
  * 
@@ -31,6 +34,9 @@ import VarEditor from "./VarEditor";
  */
 export default function (editor) {
     editor.registerElement({
+        IconListViewEditor,
+        TextAreaEditor,
+        TextEditor,
         ColorSingleEditor,
         CubicBezierEditor,
         ClipPathEditor,

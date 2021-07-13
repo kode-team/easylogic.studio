@@ -5,31 +5,31 @@
     }    
 
     .artboard-size-item {
-        border-top: 1px solid var(--elf-border-color);
+        border-top: 1px solid var(--elf--border-color);
     }
 
     .category {
         .title {
-            color: var(--elf-font-color);
+            color: var(--elf--font-color);
             pointer-events: none;
             padding: 0px 10px;
         }
         height: 26px;
-        border-bottom: 1px solid var(--elf-border-color);
+        border-bottom: 1px solid var(--elf--border-color);
         
         line-height: 2;
     }
 
     .group-item {
         .title {
-            color: var(--elf-font-color);
+            color: var(--elf--font-color);
             pointer-events: none;
             text-transform: uppercase;
             padding: 0px 10px;            
         }
-        background-color: var(--elf-border-color);        
+        background-color: var(--elf--border-color);        
         height: 24px;
-        border-bottom: 1px solid var(--elf-border-color);
+        border-bottom: 1px solid var(--elf--border-color);
         
         line-height: 1.8;
     }
@@ -42,7 +42,7 @@
         cursor: pointer;
 
         .title {
-            color: var(--elf-font-color);
+            color: var(--elf--font-color);
             pointer-events: none;
             padding-left: 20px;            
         }
@@ -55,7 +55,7 @@
             color: #bdbdbd;
         }
         height: 26px;
-        border-bottom: 1px solid var(--elf-border-color);
+        border-bottom: 1px solid var(--elf--border-color);
         
         line-height: 2.3;
     }    

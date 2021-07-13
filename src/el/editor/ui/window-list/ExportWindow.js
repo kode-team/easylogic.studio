@@ -1,10 +1,7 @@
 import BaseWindow from "./BaseWindow";
 
 import { CLICK, SUBSCRIBE } from "el/base/Event";
-
 import Dom from "el/base/Dom";
-import HTMLRenderer from "el/editor/renderer/HTMLRenderer";
-import SVGRenderer from "el/editor/renderer/SVGRenderer";
 import { registElement } from "el/base/registElement";
 
 export default class ExportWindow extends BaseWindow {
@@ -81,15 +78,15 @@ ${project.layers.map(item => this.makeStyle(item)).join('\n')}
 
         // html code 
         var html = `
-${HTMLRenderer.renderSVG(project)}
-${HTMLRenderer.render(project)}
+${this.$editor.html.renderSVG(project)}
+${this.$editor.html.render(project)}
         `
 
         this.refs.$html.text(html);
 
         // export svg image 
         const svgData = project.layers.map( item => {
-            return SVGRenderer.render(item);
+            return this.$editor.svg.render(item);
         })
 
         // svg code 
@@ -101,11 +98,11 @@ ${HTMLRenderer.render(project)}
     }
 
     makeStyle (item) {
-        return HTMLRenderer.toStyle(item);
+        return this.$editor.html.toStyle(item);
     }
 
     makeHTML (item) {
-        return HTMLRenderer.render(item);
+        return this.$editor.html.render(item);
     }
 
 

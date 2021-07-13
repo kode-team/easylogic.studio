@@ -31,7 +31,7 @@ export default class BorderProperty extends BaseProperty {
   }
 
   [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShowIsNot(['project']);
+    this.refreshShowIsNot(['project', 'svg-path', 'svg-polygon', 'svg-text', 'svg-textpath']);
   }  
 
   [SUBSCRIBE('changeKeyValue')] (key, value) {

@@ -100,6 +100,6 @@ export default class AppearanceProperty extends BaseProperty {
   }
 
   [SUBSCRIBE('refreshSelection')]() {
-    this.refreshShowIsNot(['project']);
+    this.refreshShowIsNot(['project', 'svg-path', 'svg-polygon', 'svg-text', 'svg-textpath']);
   }
 }

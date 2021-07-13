@@ -6,7 +6,7 @@
     bottom:0px;
     z-index: 10000;
     right:0px;
-    background-color: var(--elf-window-background-color);
+    background-color: var(--elf--window-background-color);
 
   
     .window {
@@ -18,11 +18,11 @@
         transform: translate(-50%, -50%);
         
         z-index: 1000;
-        background-color: var(--elf-background-color);
-        border: 1px solid var(--elf-border-color);
-        box-shadow: 0 0 1px 0px var(--elf-border-color);
+        background-color: var(--elf--background-color);
+        border: 1px solid var(--elf--border-color);
+        box-shadow: 0 0 1px 0px var(--elf--border-color);
         padding: 14px;
-        color: var(--elf-font-color);
+        color: var(--elf--font-color);
 
         .window-title {
             position: absolute;

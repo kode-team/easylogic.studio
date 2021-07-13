@@ -223,7 +223,8 @@ export default class FillEditor extends EditorElement  {
   }
 
   getDrawAreaRect () {
-    return {width: 198, height: 150};
+    // todo: rendering 되기 전에 크기를 알 수 있는 방법은 ?
+    return {width: 224, height: 150};
   }
 
   getFieldValue(field) {
@@ -301,6 +302,8 @@ export default class FillEditor extends EditorElement  {
     } else if (ry + height < y) {
       y = ry + height; 
     }    
+
+
 
     var left = Length.percent((x - rx ) / width  * 100) 
     var top = Length.percent((y - ry ) / height  * 100) 

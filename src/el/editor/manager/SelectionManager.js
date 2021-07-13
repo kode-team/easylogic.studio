@@ -2,7 +2,7 @@ import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties} from "el/base/f
 import { isFunction, isUndefined, isArray, isObject, isString, clone } from "el/base/functions/func";
 import { Item } from "el/editor/items/Item";
 import { MovableItem } from "el/editor/items/MovableItem";
-import { Project } from "el/editor/items/Project";
+import { Project } from "plugins/default-items/layers/Project";
 import { Length } from "el/editor/unit/Length";
 import { vec3 } from "gl-matrix";
 

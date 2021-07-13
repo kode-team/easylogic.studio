@@ -2,24 +2,36 @@ import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, MOVE, BIND, THROT
 
 import { Length } from "el/editor/unit/Length";
 
-import "el/editor/items";
-import "el/editor/ui/control";
+import BaseLayout from "../BaseLayout"; 
+import KeyboardManager from "./area/KeyboardManager";
+import PopupManager from "./area/PopupManager";
+import BodyPanel from "./area/BodyPanel";
+import Inspector from "./area/Inspector";
+import StatusBar from './area/StatusBar';
+import ToolBar from "./area/ToolBar";
+import PageSubEditor from "./area/PageSubEditor";
+import designEditorPlugins from "plugins/design-editor-plugins";
+import LayerTab from "./area/LayerTab";
 
-
-import "el/editor/ui/view/ToolMenu";
-import "el/editor/ui/view/LogoView";
-import "el/editor/ui/view/ExternalToolMenu";
-import "el/editor/ui/view/StatusBar";
-import "el/editor/ui/view/PreviewToolMenu";
-import "el/editor/ui/view/ToolBar";
-
-import "./BodyPanel";
-import "./PopupManager";
-import "./KeyboardManager";
-
-import BaseLayout from "../BaseLayout";
 
 export default class DesignEditor extends BaseLayout {
+
+  components() {
+    return {
+      LayerTab,
+      PageSubEditor,
+      ToolBar,
+      StatusBar,
+      Inspector,
+      BodyPanel,
+      PopupManager,
+      KeyboardManager
+    }
+  }
+
+  getPlugins() {
+    return designEditorPlugins
+  }
 
   initState() {
     return {
@@ -36,13 +48,14 @@ export default class DesignEditor extends BaseLayout {
         <div class="layout-main">
           <div class='layout-top' ref='$top'>
             <object refClass="ToolBar" />
+            <object refClass="PageSubEditor" />
           </div>
           <div class="layout-middle" ref='$middle'>      
             <div class="layout-body" ref='$bodyPanel'>
               <object refClass="BodyPanel" ref="$bodyPanelView" />
             </div>                           
             <div class='layout-left' ref='$leftPanel'>
-              <object refClass='ObjectList' />
+              <object refClass='LayerTab' />
             </div>
             <div class="layout-right" ref='$rightPanel'>
               <object refClass='Inspector' />

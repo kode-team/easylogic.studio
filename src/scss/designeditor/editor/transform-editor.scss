@@ -34,9 +34,9 @@
   
     .transform-item {
       display: block;
-      background-color: var(--elf-transform-item-background-color);
+      background-color: var(--elf--transform-item-background-color);
       margin-top: 10px;
-      border: 1px solid var(--elf-transform-item-border-color);
+      border: 1px solid var(--elf--transform-item-border-color);
       box-sizing: border-box;
       padding: 0px 2px;
       border-radius: 4px;
@@ -45,7 +45,7 @@
       .title {
         display: grid;
         grid-template-columns: 60px 1fr 18px;
-        color: var(--elf-font-color);
+        color: var(--elf--font-color);
         border-radius: 3px;
         margin: 3px 0px;        
   
@@ -53,7 +53,7 @@
           font-size: 12px;
           padding: 6px 5px;
           cursor: move;          
-          color: var(--elf-font-color);
+          color: var(--elf--font-color);
           vertical-align: middle;
           display: inline-block;          
 

@@ -23,8 +23,8 @@
         }        
 
         &.selected {      
-            background-color: var(--elf-list-item-selected-color);
-            color: var(--elf-selected-font-color);            
+            background-color: var(--elf--list-item-selected-color);
+            color: var(--elf--selected-font-color);            
         }
     }
 }

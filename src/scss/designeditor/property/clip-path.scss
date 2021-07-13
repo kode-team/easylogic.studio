@@ -11,7 +11,7 @@
 
       &.selected,
       &:hover {
-        background-color: var(--elf-selected-color);
+        background-color: var(--elf--selected-color);
       }
 
       .title {
@@ -31,7 +31,7 @@
           
         .container {
             position: relative;
-            background-image: linear-gradient(to right, var(--elf-border-color), black);
+            background-image: linear-gradient(to right, var(--elf--border-color), black);
             background-size: 100% 2px;
             background-repeat: no-repeat;
             background-position: 0px center;

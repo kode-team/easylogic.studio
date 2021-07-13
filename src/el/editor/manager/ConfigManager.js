@@ -16,22 +16,42 @@ export class ConfigManager {
         this.set('ruler.show', true);
         this.set('show.left.panel', true);
         this.set('show.right.panel', true);
+        this.set('set.tool.hand', false);        
     }
 
     /**
      *  key 에 해당하는 config 를 가지고 온다. 
      * 
+     * todo: config default 값을 설정할 수 있어야 한다. 
+     * 
+     * ```js
+     * config {
+     *  ['set.tool.hand']: {
+     *      name: 'set.tool.hand',
+     *      description: '', 
+     *      defaultValue: '',
+     *       type: 'boolean',
+     *      type: 'list',
+     *      selectionType: 'one',
+     *      items: [
+     *          'value',
+     *          {value: '1', label: 'value' }
+     *      ]
+     *  }
+     * }
+     * ```
+     * 
      * @param {string} key 
      */
     get (key) {
-        return this.config[key]
+        return this.config[key];
     }
 
     set (key, value) {
         const oldValue = this.config[key]
         if (oldValue != value) {
             this.config[key] = value; 
-            this.editor.emit("config:" + key);
+            this.editor.emit("config:" + key, value, oldValue);
         }
     }
 

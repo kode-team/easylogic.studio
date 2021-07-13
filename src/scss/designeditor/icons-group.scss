@@ -18,7 +18,7 @@
     .title {
 
       display: block;
-      color: var(--elf-list-item-font-color);
+      color: var(--elf--list-item-font-color);
       font-size: 9px;
       margin-top: 5px;
       line-height: 1;
@@ -28,11 +28,11 @@
     }  
   
     .icon-svg {
-      background-color: var(--elf-input-background-color);
+      background-color: var(--elf--input-background-color);
       width: 40px;
       height: 40px;
       cursor: pointer;
-      color: var(--elf-font-color); 
+      color: var(--elf--font-color); 
       border-radius: 4px;
       display: inline-block;
       box-sizing: border-box;
@@ -44,8 +44,8 @@
       }
   
       &:hover {
-          background-color: var(--elf-list-item-selected-color);
-          color: var(--elf-selected-font-color);
+          background-color: var(--elf--list-item-selected-color);
+          color: var(--elf--selected-font-color);
       }
     }  
 

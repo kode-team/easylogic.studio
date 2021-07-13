@@ -10,8 +10,8 @@ $tab-horizontal-header-right-width: 60px;
   right: 0px;
   bottom: 0px;
   top: 0px;
-  // background-color: var(--elf-background-color);
-  color: var(--elf-font-color);
+  // background-color: var(--elf--background-color);
+  color: var(--elf--font-color);
 
   &.number-tab { 
 
@@ -37,7 +37,7 @@ $tab-horizontal-header-right-width: 60px;
           top: 0px;
           bottom: 0px;
           height: auto;
-          border-right: 1px solid var(--elf-border-color);
+          border-right: 1px solid var(--elf--border-color);
           padding: 10px;
           box-sizing: border-box;
           overflow: visible;
@@ -55,12 +55,12 @@ $tab-horizontal-header-right-width: 60px;
             }
 
             &.selected {
-              background-color: var(--elf-selected-color);
-              color: var(--elf-selected-font-color);              
+              background-color: var(--elf--selected-color);
+              color: var(--elf--selected-font-color);              
 
               label {
                 height: auto;
-                color: var(--elf-selected-font-color);              
+                color: var(--elf--selected-font-color);              
 
               }
             }
@@ -82,7 +82,7 @@ $tab-horizontal-header-right-width: 60px;
             .title {
               padding-bottom: 5px;
               font-size: 10px;
-              color: var(--elf-font-color);
+              color: var(--elf--font-color);
               display: none; 
             }
 
@@ -101,7 +101,7 @@ $tab-horizontal-header-right-width: 60px;
     .tab-header {
       cursor: pointer;
       overflow: hidden;
-      color: var(--elf-font-color);
+      color: var(--elf--font-color);
       
     }
     .tab-content {
@@ -133,7 +133,7 @@ $tab-horizontal-header-right-width: 60px;
         &.selected {
           &:before {
             content: '';
-            background-color: var(--elf-selected-color);
+            background-color: var(--elf--selected-color);
             height: 2px;
             position: absolute;
             left:0px;
@@ -146,7 +146,7 @@ $tab-horizontal-header-right-width: 60px;
         &.selected,
         &:hover {
           label {
-            color: var(--elf-selected-color); 
+            color: var(--elf--selected-color); 
           }
 
         }
@@ -157,7 +157,7 @@ $tab-horizontal-header-right-width: 60px;
           height: 100%;
           display: inline-block;
           vertical-align: middle;
-          color: var(--elf-font-color);
+          color: var(--elf--font-color);
           &.icon {
             padding: 6px 10px 2px;
           }
@@ -237,7 +237,7 @@ $tab-horizontal-header-right-width: 60px;
 
       &.selected {
         // background-color: transparent;
-        color: var(--elf-selected-font-color);
+        color: var(--elf--selected-font-color);
       }
     }
   }

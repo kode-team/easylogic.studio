@@ -1,9 +1,7 @@
 
 import { POINTERSTART, MOVE, END, CLICK, SUBSCRIBE } from "el/base/Event";
 import { Length } from "el/editor/unit/Length";
-import UIElement, { EVENT } from "el/base/UIElement";
 import icon from "el/editor/icon/icon";
-import "../property-editor";
 import { EditorElement } from "../common/EditorElement";
 
 

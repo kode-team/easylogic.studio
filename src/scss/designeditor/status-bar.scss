@@ -6,13 +6,13 @@
     right: 0px;
     height: $status-bar-height;
     // overflow: hidden;
-    background-color: var(--elf-status-bar-background-color); 
+    background-color: var(--elf--status-bar-background-color); 
     z-index: 1000; 
     pointer-events: all;
     display: grid;
     grid-template-columns: 40px auto auto;
     
-    color: var(--elf-status-bar-font-color); 
+    color: var(--elf--status-bar-font-color); 
 
     .message-view {
       padding: 5px 5px;
@@ -29,7 +29,7 @@
 
       > div {
         display: inline-block;
-        background-color: var(--elf-status-bar-item-background-color);
+        background-color: var(--elf--status-bar-item-background-color);
         border-radius: 3px;
         min-width: 50px;
       }
@@ -49,7 +49,7 @@
 
       > label {
         display: inline-block;
-        color: var(--elf-selected-font-color);                  
+        color: var(--elf--selected-font-color);                  
       }
 
       > .item {
@@ -58,8 +58,8 @@
         .select-editor {
           height: 100%;
           width: 50px;
-          background-color: var(--elf-background-color);
-          color: var(--elf-font-color);          
+          background-color: var(--elf--background-color);
+          color: var(--elf--font-color);          
         }
       }
     }

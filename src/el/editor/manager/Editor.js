@@ -35,7 +35,7 @@ export const EDIT_MODE_ADD = 'ADD';
 const DEFAULT_THEME = 'dark'
 
 
-export const Editor = new class {
+export class Editor {
 
 
   /**
@@ -83,20 +83,13 @@ export const Editor = new class {
     this.cursorManager = new CursorManager(this);
     this.assetManager = new AssetManager(this);
     this.menuItemManager = new MenuItemManager(this);
-    this.components = ComponentManager;
-    this.plugins = PluginManager;
-    this.renderers = RendererManager
+    this.components = new ComponentManager(this);
+    this.pluginManager = new PluginManager(this);
+    this.renderers = new RendererManager(this);
 
 
     this.initTheme();
     this.initPlugins();
-    this.initData();
-  }
-
-  initData() {
-    this.projects = [this.createProject()]
-
-    this.selection.selectProject(this.projects[0])
   }
 
   createProject () {
@@ -144,7 +137,7 @@ export const Editor = new class {
     if (window.localStorage) {
       theme = window.localStorage.getItem('easylogic.studio.theme')
 
-      theme = ['dark', 'light', 'toon'].includes(theme) ? theme : DEFAULT_THEME;
+      theme = ['dark', 'light'].includes(theme) ? theme : DEFAULT_THEME;
     }
 
     this.theme = theme || DEFAULT_THEME
@@ -152,7 +145,7 @@ export const Editor = new class {
   }
 
   initPlugins(options = {}) {
-    this.plugins.initializePlugin(this, options);
+    this.pluginManager.initializePlugin(options);
   }
 
   themeValue(key, defaultValue = '') {
@@ -514,6 +507,30 @@ export const Editor = new class {
     this.renderers.registerRenderer(rendererType, name, rendererInstance)
   }
 
+  registerRendererType(rendererType, rendererTypeInstance) {
+    this.renderers.registerRendererType(rendererType, rendererTypeInstance)
+  }
+
+  getRendererInstance(rendererType, itemType) {
+    return this.renderers.getRendererInstance(rendererType, itemType);
+  }
+
+  renderer(rendererType) {
+    return this.renderers.getRenderer(rendererType);
+  }
+
+  get html () {
+    return this.renderer('html');
+  }
+
+  get svg () {
+    return this.renderer('svg');
+  }
+  
+  get json () {
+    return this.renderer('json');
+  }  
+
   registerCommand(commandObject) {
     this.commands.registerCommand(commandObject);
   }
@@ -527,12 +544,10 @@ export const Editor = new class {
    * @param {Function} createPluginFunction  
    */
   registerPlugin(createPluginFunction) {
-    PluginManager.registerPlugin(createPluginFunction);
+    this.pluginManager.registerPlugin(createPluginFunction);
   }
 
   registerPluginList(plugins = []) {
     plugins.forEach(p => this.registerPlugin(p));
   }
-
-
-}();
+};

@@ -1,17 +1,25 @@
 
 import UIElement from "el/base/UIElement";
-import { Editor } from "el/editor/manager/Editor";
 
 export class EditorElement extends UIElement {
 
-    get $editor () {
-        return Editor;
+    /**
+     * Editor 루트를 재정의 해서 사용
+     * 
+     * @override
+     */
+    get $editor() {
+        return this.parent.$editor;
     }
 
-    get $store () {
-        return this.$editor.store;
+    /**
+     * 메세징 루트를 재정의 할 수 있음. 
+     * 
+     * @override
+     */
+    get $store() {
+        return this.$editor.store || this.parent.$store;
     }
-
 
     // editor utility 
 
@@ -21,45 +29,42 @@ export class EditorElement extends UIElement {
      * @param {string} key 
      * @returns {string} i18n 텍스트 
      */
-    $i18n (key) {
+    $i18n(key) {
         return this.$editor.i18n(key);
     }
 
-    $initI18n (key) {
+    $initI18n(key) {
         return this.$editor.initI18n(key);
     }
 
-    get $config () {
-        return this.$editor.config; 
+    get $config() {
+        return this.$editor.config;
     }
 
-    /**
-     * @type {SelectionManager} $selection
-     */
-    get $selection () {
-        return this.$editor.selection; 
+    get $selection() {
+        return this.$editor.selection;
     }
 
     /**
      * @type {ViewportManager} $viewport
      */
-    get $viewport () {
-        return this.$editor.viewport; 
+    get $viewport() {
+        return this.$editor.viewport;
     }
 
     /**
      * @type {SnapManager} $snapManager
      */
-    get $snapManager () {
+    get $snapManager() {
         return this.$editor.snapManager;
     }
 
-    get $timeline () {
-        return this.$editor.timeline; 
-    }  
+    get $timeline() {
+        return this.$editor.timeline;
+    }
 
-    get $history () {
-        return this.$editor.history; 
+    get $history() {
+        return this.$editor.history;
     }
 
     /**
@@ -72,18 +77,18 @@ export class EditorElement extends UIElement {
     /**
      * @type {KeyBoardManager} $keyboardManager
      */
-    get $keyboardManager () {
+    get $keyboardManager() {
         return this.$editor.keyboardManager;
     }
 
     /**
      * @type {StorageManager} $storageManager
      */
-    get $storageManager () {
+    get $storageManager() {
         return this.$editor.storageManager;
     }
 
-    get $menuManager () {
+    get $menuManager() {
         return this.$editor.menuItemManager;
     }
 
@@ -97,18 +102,18 @@ export class EditorElement extends UIElement {
      * @param {any[]} args 
      */
 
-    command (command, description, ...args) {
+    command(command, description, ...args) {
 
         if (this.$editor.isPointerUp) {
-        return this.emit(`history.${command}`, description, ...args);
+            return this.emit(`history.${command}`, description, ...args);
         } else {
-        return this.emit(command, ...args);
+            return this.emit(command, ...args);
         }
 
 
     }
 
-    $theme (key) {
+    $theme(key) {
         return this.$editor.themeValue(key);
     }
 }

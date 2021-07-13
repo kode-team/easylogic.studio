@@ -1,5 +1,4 @@
 import { CSS_TO_STRING } from "el/base/functions/func";
-import SVGRenderer from "el/editor/renderer/SVGRenderer";
 import AnimationExport from "../exporter/animation-export/AnimationExport";
 
 export default {
@@ -64,7 +63,7 @@ ${this.makeSvg(project)}
   },
 
   generateSVG (editor, rootItem) {
-    return editor.replaceLocalUrltoRealUrl(SVGRenderer.render(rootItem, null, true));
+    return editor.replaceLocalUrltoRealUrl(this.$editor.svg.render(rootItem, null, true));
   }
 
 }

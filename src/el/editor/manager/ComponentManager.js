@@ -1,8 +1,9 @@
 import { isFunction } from "el/base/functions/func";
 import { Item } from "el/editor/items/Item";
 
-export const ComponentManager = new class {
-  constructor(opt = {}) {
+export class ComponentManager {
+  constructor(editor) {
+    this.editor = editor;
     this.components = {} 
     this.inspectors = {}
   }
@@ -65,4 +66,4 @@ export const ComponentManager = new class {
     return [];
   }
 
-}();
+};

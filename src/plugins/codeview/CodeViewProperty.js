@@ -1,7 +1,5 @@
 import { LOAD, DEBOUNCE, DOMDIFF, SUBSCRIBE } from "el/base/Event";
 
-import HTMLRenderer from "el/editor/renderer/HTMLRenderer";
-import SVGRenderer from "el/editor/renderer/SVGRenderer";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 
@@ -27,8 +25,10 @@ export default class CodeViewProperty extends BaseProperty {
 
   [LOAD('$body') + DOMDIFF] () {
     return [
-      HTMLRenderer.codeview(this.$selection.current),
-      SVGRenderer.codeview(this.$selection.current)
+
+      // todo: this.$renderer.getRenderer('html').codeview(this.$selection.current);
+      this.$editor.html.codeview(this.$selection.current),
+      this.$editor.svg.codeview(this.$selection.current)
     ]
   }
 }

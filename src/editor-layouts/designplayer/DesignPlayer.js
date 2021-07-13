@@ -1,14 +1,22 @@
-import "el/editor/items";
-import "el/editor/ui/view/PlayCanvasView";
-
 import { SUBSCRIBE } from "el/base/Event";
 import BaseLayout from "../BaseLayout";
 
-import "./PlayerPopupManager";
-import "./PlayerKeyboardManager";
+import "./area/PlayerPopupManager";
+import "./area/PlayerKeyboardManager";
+import designPlayerPlugins from "plugins/design-player-plugins";
+import PlayCanvasView from "./area/PlayCanvasView";
 
 export default class DesignPlayer extends BaseLayout {
 
+  components() {
+    return {
+      PlayCanvasView
+    }
+  }
+
+  getPlugins() {
+    return designPlayerPlugins;
+  }
   
   [SUBSCRIBE('changed.locale')] () {
     this.rerender()

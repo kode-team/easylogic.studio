@@ -1,6 +1,8 @@
-export const RendererManager = new class {
-  constructor(opt = {}) {
+export class RendererManager {
+  constructor(editor) {
+    this.editor = editor;
     this.renderers = {} 
+    this.rendererTypes = {}
   }
 
   getRenderType(rendererType) {
@@ -19,8 +21,18 @@ export const RendererManager = new class {
     typedRenderer[name] = rendererInstance;
   }
 
+  registerRendererType (rendererType, rendererTypeInstance) {
+
+    if (this.rendererTypes[rendererType]) throw new Error('It has duplcated renderer type name. ' + name);
+    this.rendererTypes[rendererType] = rendererTypeInstance
+  }
+
+  getRenderer(rendererType) {
+    return this.rendererTypes[rendererType];
+  }
+
   getRendererInstance(rendererType, name) {
     const typedRenderer = this.getRenderType(rendererType);
     return typedRenderer[name];
   }
-}();
+};

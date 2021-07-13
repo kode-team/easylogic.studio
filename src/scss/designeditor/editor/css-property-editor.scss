@@ -48,7 +48,7 @@
 
     .css-property-item {
       
-      border: 1px solid var(--elf-selected-color-2); 
+      border: 1px solid var(--elf--selected-color-2); 
       border-radius: 4px;
       margin-top: 5px;
       box-sizing: border-box;
@@ -57,7 +57,7 @@
       > .title {
         grid-template-columns: 1fr 30px;
         background-color: transparent;
-        color: var(--elf-selected-color);         
+        color: var(--elf--selected-color);         
         border-radius: 3px;
         padding: 3px 0px; 
         margin-bottom: 2px;

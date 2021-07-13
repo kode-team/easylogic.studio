@@ -3,6 +3,7 @@ import gradients from "el/editor/preset/gradients";
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
+import "./GradientAssetsProperty.scss";
 export default class GradientAssetsProperty extends BaseProperty {
 
   getTitle() {
@@ -36,7 +37,7 @@ export default class GradientAssetsProperty extends BaseProperty {
   }
 
   getClassName() {
-    return 'gradient-assets-property'
+    return 'elf--gradient-assets-property'
   }
 
 

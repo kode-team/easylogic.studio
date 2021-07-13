@@ -99,7 +99,7 @@ $grid-tool-size: 18px;
         display: inline-block;
         background-color: white; 
         appearance: none;
-        border:1px solid var(--elf-border-color);
+        border:1px solid var(--elf--border-color);
         border-radius: 3px;
         
         width: $grid-tool-size;
@@ -126,7 +126,7 @@ $grid-tool-size: 18px;
             min-width: 30px;
             width: 50px;
             background-color: white; 
-            border: 1px solid var(--elf-border-color);
+            border: 1px solid var(--elf--border-color);
             
         }
 
@@ -149,7 +149,7 @@ $grid-tool-size: 18px;
             min-width: 30px;
             width: 50px;
             background-color: white; 
-            border: 1px solid var(--elf-border-color);
+            border: 1px solid var(--elf--border-color);
             
         }
 
@@ -184,7 +184,7 @@ $grid-tool-size: 18px;
         display: inline-block;
         background-color: white; 
         appearance: none;
-        border:1px solid var(--elf-border-color);
+        border:1px solid var(--elf--border-color);
         border-radius: 3px;
         
         width: $grid-tool-size;
@@ -202,7 +202,7 @@ $grid-tool-size: 18px;
         display: inline-block;
         background-color: white; 
         appearance: none;
-        border:1px solid var(--elf-border-color);
+        border:1px solid var(--elf--border-color);
         border-radius: 3px;
         
         width: $grid-tool-size;
@@ -233,14 +233,14 @@ $grid-tool-size: 18px;
                 content: attr(data-area);
                 text-align: center;
                 font-size: 10px;
-                color: var(--elf-border-color);
+                color: var(--elf--border-color);
             }
 
             &::after {
                 content: attr(data-row) ' / ' attr(data-column);
                 text-align: center;
                 font-size: 10px;
-                color: var(--elf-border-color);
+                color: var(--elf--border-color);
             }
 
             &.virtual-select {
