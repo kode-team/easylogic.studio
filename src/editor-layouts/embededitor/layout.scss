@@ -1,4 +1,27 @@
-.layout-main {
+
+$pointer-color: #4075d6;
+$top-size: 0px;
+$tool-size: 0px;
+$left-size: 340px;
+$left-layer-panel: 70px; 
+$left-page-size: 70px;
+$toggle-left-size: 80px;
+$right-size: 260px;
+$timeline-animation-size: 200px;
+$timeline-property-size: 270px;
+$timeline-header-size: 40px;
+$timeline-size: 300px;
+$show-timeline-animation: all 0.05s linear;
+$footer-height: 30px; 
+$status-bar-height: 0px;
+// base 
+$range-thumb-width: 12px;
+$range-thumb-height: 12px;
+$range-track-height: 2px;
+$range-thumb-top: -5px; 
+$range-thumb-border-radius: 20px; 
+
+.elf--embed-layout-main {
   position: absolute;
   left: 0px;
   top: 0px;
@@ -185,6 +208,23 @@
       right: $right-size;
       bottom: $footer-height;
       position: absolute;
+
+      display: grid;
+      grid-template-columns: 50px 1fr;
+
+      > div:first-child {
+        border-right: 1px solid var(--elf--border-color);
+        box-sizing: border-box;
+      }
+
+      .layout-body-toolbar {
+        position: relative;
+      }
+
+      .layout-body-container {
+        position: relative;
+      }      
+
       // transition: bottom 0.05s linear
     }
   }

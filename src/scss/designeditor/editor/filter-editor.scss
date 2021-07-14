@@ -61,17 +61,18 @@
 
         .svg-filter-edit {
           cursor: pointer;
+          padding: 5px 0px;
 
-          &:before {
-            content: 'o';
-            text-transform: uppercase;
-            padding: 0px 2px;
-            border-radius: 3px;
-            margin-right: 2px;
-            vertical-align: middle;
-            background-color: var(--elf--selected-color);
-            color: var(--elf--selected-font-color);
-          }
+          // &:before {
+          //   content: 'o';
+          //   text-transform: uppercase;
+          //   padding: 0px 2px;
+          //   border-radius: 3px;
+          //   margin-right: 2px;
+          //   vertical-align: middle;
+          //   background-color: var(--elf--selected-color);
+          //   color: var(--elf--selected-font-color);
+          // }
         }
   
         .filter-menu {

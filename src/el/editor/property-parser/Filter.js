@@ -1,7 +1,7 @@
 import { Length } from "el/editor/unit/Length";
 import { Property } from "el/editor/items/Property";
 import { convertMatches } from "el/base/functions/parser";
-const FILTER_REG = /((blur|drop\-shadow|hue\-rotate|invert|brightness|contrast|opacity|saturate|sepia)\(([^\)]*)\))/gi;
+const FILTER_REG = /((blur|drop\-shadow|hue\-rotate|invert|brightness|contrast|opacity|saturate|sepia|url)\(([^\)]*)\))/gi;
 export class Filter extends Property {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({ 
@@ -21,7 +21,7 @@ export class Filter extends Property {
       return new FilterClass(obj);
     } else {
       return new URLSvgFilter({
-        value: obj.type 
+        value: obj.value 
       });
     }
   }  

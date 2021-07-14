@@ -484,7 +484,10 @@ export default class EventMachine {
     });
 
     this.runHandlers('destroy');
-    this.$el.remove();
+    if (this.$el) {
+      this.$el.remove();
+    }
+
     this.$el = null; 
     this.refs = {} 
     this.children = {} 

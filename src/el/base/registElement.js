@@ -5,7 +5,7 @@ export function registElement(classes = {}) {
 
     Object.keys(classes).forEach(key => {
         if (map[key]) {
-            console.warn(`${key} element is duplicated.`)
+            // console.warn(`${key} element is duplicated.`)
             return;
         } 
 

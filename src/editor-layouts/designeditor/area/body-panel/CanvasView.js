@@ -26,7 +26,6 @@ export default class CanvasView extends EditorElement {
   }
 
   afterRender() {
-    // this.emit('load.json');
     this.nextTick(() => {
       this.trigger('resizeCanvas');
       this.emit('moveSelectionToCenter', false);

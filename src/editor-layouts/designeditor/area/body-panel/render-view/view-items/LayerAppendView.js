@@ -14,7 +14,7 @@ export default class LayerAppendView extends EditorElement {
 
     template() {
         return /*html*/`
-        <div class='elf-layer-append-view'>
+        <div class='elf--layer-append-view'>
             <div class='area' ref='$area'></div>
             <div class='area-rect' ref='$areaRect'></div>
             <div class='area-pointer' ref='$mousePointer'></div>
@@ -70,7 +70,7 @@ export default class LayerAppendView extends EditorElement {
         this.bindData('$mousePointer')
     }
 
-    [POINTERSTART('$el') + MOVE() + END()] (e) {
+    [POINTERSTART('$el') + MOVE() + END() + PREVENT + STOP] (e) {
 
         this.initMousePoint = this.state.targetPositionVertext ? this.state.targetPositionVertext : this.$viewport.createWorldPosition(e.clientX, e.clientY);
 

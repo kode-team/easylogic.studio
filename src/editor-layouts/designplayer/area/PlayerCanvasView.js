@@ -10,7 +10,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import PlayerHTMLRenderView from "./PlayerHTMLRenderView";
 
 
-export default class PlayCanvasView extends EditorElement {
+export default class PlayerCanvasView extends EditorElement {
 
   components() {
     return {

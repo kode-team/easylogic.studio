@@ -35,6 +35,7 @@ module.exports = {
   // Entry files for our popup and background pages
   entry: {
     editor: "./src/editor-layouts/designeditor/index.js",
+    embed: "./src/editor-layouts/embededitor/index.js",    
     player: "./src/editor-layouts/designplayer/index.js",   
   },
   output: {
@@ -46,9 +47,9 @@ module.exports = {
   },
   resolve: { alias },  
   mode: 'production',
-  devtool: 'source-map',
+  // devtool: 'source-map',
   optimization: {
-    minimize: false
+    minimize: true
   },
   module: {
     rules: [

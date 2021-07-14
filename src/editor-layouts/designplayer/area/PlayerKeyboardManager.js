@@ -1,9 +1,6 @@
 import Dom from "el/base/Dom";
 
 import { KEYDOWN, KEYUP, IF } from "el/base/Event";
-
-
-import { registElement } from "el/base/registElement";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 const formElements = ['TEXTAREA', 'INPUT', 'SELECT']
@@ -32,5 +29,3 @@ export default class PlayerKeyboardManager extends EditorElement {
     this.emit('keymap.keyup', e);
   }
 }
-
-registElement({ PlayerKeyboardManager })

@@ -1,16 +1,21 @@
 import { SUBSCRIBE } from "el/base/Event";
 import BaseLayout from "../BaseLayout";
 
-import "./area/PlayerPopupManager";
-import "./area/PlayerKeyboardManager";
 import designPlayerPlugins from "plugins/design-player-plugins";
-import PlayCanvasView from "./area/PlayCanvasView";
+
+import PlayerCanvasView from "./area/PlayerCanvasView";
+import PlayerPopupManager from "./area/PlayerPopupManager";
+import PlayerKeyboardManager from "./area/PlayerKeyboardManager";
+
+
 
 export default class DesignPlayer extends BaseLayout {
 
   components() {
     return {
-      PlayCanvasView
+      PlayerPopupManager,
+      PlayerKeyboardManager,
+      PlayerCanvasView
     }
   }
 
@@ -26,7 +31,7 @@ export default class DesignPlayer extends BaseLayout {
     return /*html*/`
       <div class="designeditor">    
         <div class="layout-main player">
-          <object refClass='PlayCanvasView' />        
+          <object refClass='PlayerCanvasView' />        
           <object refClass="PlayerKeyboardManager" />                          
         </div>
         <object refClass="PlayerPopupManager" />        

@@ -108,7 +108,7 @@
         display: inline-block;
       }
   
-      .menu-item {
+      .elf--menu-item {
         text-align: center;
         color: var(--elf--font-color);
         width: 48px;
@@ -177,7 +177,7 @@
       vertical-align: middle;
     }
 
-    .menu-item {
+    .elf--menu-item {
       &[data-no-title='true'],
       &[data-tooltip] {
         .title {

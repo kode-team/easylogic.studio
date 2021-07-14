@@ -13,11 +13,12 @@ export default class MenuItem extends EditorElement {
         return /*html*/`
         <button 
             type="button" 
-            class='menu-item ${this.getClassName()}' 
+            class='elf--menu-item ${this.getClassName()}' 
             data-no-title="${this.isHideTitle()}" 
             ${this.isHideTitle() ? `data-tooltip="${this.getTitle()}"` : ''} 
             checked="${this.getChecked() ? 'checked' : ''}"
             ${this.isDisabled() ? 'disabled' : ''}
+            data-direction="${this.getDirection()}"
         >
             <div class="icon ${this.getIcon()}">${icon[this.getIconString()] || this.getIconString() || ''}</div>
             <div class="title">${this.getTitle()}</div>
@@ -63,6 +64,10 @@ export default class MenuItem extends EditorElement {
         this.clickButton(e);
     }
 
+    getDirection() {
+        return this.props.direction || "";
+    }
+
     static createMenuItem(opt = {}) {
         return class extends MenuItem {
             getIconString() {
@@ -79,6 +84,10 @@ export default class MenuItem extends EditorElement {
 
             clickButton(e) {
                 opt.clickButton(e);
+            }
+
+            getDirection() {
+                return opt.direction;
             }
         }
     }

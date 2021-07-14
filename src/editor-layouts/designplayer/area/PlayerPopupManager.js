@@ -1,7 +1,6 @@
 
 import "el/editor/ui/window-list";
 
-import { registElement } from "el/base/registElement";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import NotificationView from "el/editor/ui/view/NotificationView";
 
@@ -28,5 +27,3 @@ export default class PlayerPopupManager extends EditorElement {
     `;
   }
 }
-
-registElement({ PlayerPopupManager })

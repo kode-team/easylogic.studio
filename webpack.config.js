@@ -39,6 +39,7 @@ module.exports = {
   // Entry files for our popup and background pages
   entry: {
     editor: "./src/index.js",
+    embed: "./src/index-embed.js",    
     player: "./src/index-player.js",
   },
   output: {

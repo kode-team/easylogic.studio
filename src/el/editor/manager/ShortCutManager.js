@@ -1,4 +1,4 @@
-import { isArray } from "el/base/functions/func";
+import { isArray, isBoolean } from "el/base/functions/func";
 import { os } from "el/base/functions/detect";
 import shortcuts from "../shortcuts";
 import { KEY_CODE } from "el/editor/types/key";
@@ -44,7 +44,7 @@ export class ShortCutManager {
             eventType: 'keydown',
             ...shortcut, 
             checkKeyString: this.splitShortCut(shortcut[OSName] || shortcut.key),
-            whenFunction: this.makeWhenFunction(shortcut.command, shortcut.when || "true") 
+            whenFunction: this.makeWhenFunction(shortcut.command, shortcut.when || true) 
         });
 
         this.sort();
@@ -52,9 +52,16 @@ export class ShortCutManager {
     }
 
     makeWhenFunction(command, when) {
+
+        if (isBoolean(when) && when) {
+            return () => true; 
+        }
+
         const editor = this.$editor;
         const whenList = when.split('|').map(it => it.trim());
-        return () => whenList.some(it => it === editor.modeView);
+        return () => {
+            return whenList.some(it => it === editor.modeView);
+        }
     }
 
     sort() {

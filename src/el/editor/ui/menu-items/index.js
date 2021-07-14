@@ -25,8 +25,6 @@ import Fullscreen from "./Fullscreen";
 import AddSVGTextPath from "./AddSVGTextPath";
 import AddCylinder from "./AddCylinder";
 import AddSVGText from "./AddSVGText";
-import LoginButton from "./LoginButton";
-import SignButton from "./SignButton";
 import AddArtboard from "./AddArtboard";
 import AddDrawPath from "./AddDrawPath";
 import AddDrawBrush from "./AddDrawBrush";
@@ -41,8 +39,6 @@ export default {
   AddDrawBrush,  
   AddDrawPath,
   AddArtboard,  
-  SignButton,
-  LoginButton,
   AddSVGText,
   AddCylinder,
   AddSVGTextPath,

@@ -194,8 +194,7 @@ $range-thumb-border-radius: 20px;
         user-select: text;
     }    
    
-    @import './designeditor/component.scss';
-    @import './designeditor/layout.scss';     
+    @import './designeditor/component.scss';  
     @import './designeditor/tool-bar.scss'; 
 
     @import './designeditor/range-ui.scss';

@@ -1,4 +1,5 @@
 import "../../scss/index.scss";
+import "./layout.scss"
 import DesignPlayer from "./DesignPlayer";
 import * as App from 'el/base/App'
 import exportLibrary from "export-library/";

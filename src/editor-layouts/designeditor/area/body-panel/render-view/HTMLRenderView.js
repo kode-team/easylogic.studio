@@ -55,14 +55,14 @@ export default class HTMLRenderView extends EditorElement {
                 <div class='drag-area-rect' ref='$dragAreaRect'></div>
                 <object refClass='StyleView' ref='$styleView' />
                 <object refClass='GuideLineView' ref='$guideLineView' />
-                <object refClass='HoverView' ref='$hoverView' />                
+                <object refClass='HoverView' ref='$hoverView' />                             
                 <object refClass='SelectionInfoView' ref='$selectionInfoView' />                                
                 <object refClass='GridLayoutLineView' ref='$gridLayoutLineView' />
                 <object refClass='SelectionToolView' ref='$selectionTool' />
                 <object refClass='GroupSelectionToolView' ref='$groupSelectionTool' />
-                <object refClass='LayerAppendView' ref='$objectAddView' />
                 <object refClass='PathEditorView' ref='$pathEditorView' />
                 <object refClass='PathDrawView' ref='$pathDrawView' />
+                <object refClass='LayerAppendView' ref='$objectAddView' />                   
           
             </div>
         `
@@ -100,7 +100,6 @@ export default class HTMLRenderView extends EditorElement {
 
     checkEmptyElement (e) {
         var $el = Dom.create(e.target)
-
 
         // hand tool 이 on 되어 있으면 드래그 하지 않는다. 
         if (this.$config.get('set.tool.hand')) {
@@ -552,6 +551,7 @@ export default class HTMLRenderView extends EditorElement {
         if (realDx === 0 && realDy === 0) {
             if (this.$selection.current.isSVG()) {
                 this.emit('openPathEditor');
+                this.emit('removeGuideLine');
                 return; 
             }
         } else {              

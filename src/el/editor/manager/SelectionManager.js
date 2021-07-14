@@ -222,6 +222,11 @@ export class SelectionManager {
     return true; 
   }
 
+  reload() {
+    return this.select(...this.itemsByIds(this.ids));
+
+  }
+
   reselect () {
     this.setRectCache();
   }

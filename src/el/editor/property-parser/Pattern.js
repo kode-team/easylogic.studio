@@ -66,6 +66,7 @@ export class Pattern extends Property {
 
     PatternCache.set(pattern, patterns);
 
+    
     return patterns;
   }
 
@@ -227,10 +228,10 @@ export class DiagonalLinePattern extends BasePattern {
     foreColor = foreColor || 'black'
 
     return `
-      background-image: repeating-linear-gradient(${x}, ${foreColor} 0, ${foreColor} ${lineWidth}, ${backColor} 0, ${backColor} 50%);
-      background-size: ${width} ${height};      
-      background-blend-mode: ${blendMode};
-    `
+    background-image: repeating-linear-gradient(${x}, ${foreColor} 0px, ${foreColor} ${lineWidth}, ${backColor} 0px, ${backColor} 50%);
+    background-size: ${width} ${height};      
+    background-blend-mode: ${blendMode};
+  `
 
   }       
 }

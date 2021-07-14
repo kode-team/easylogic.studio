@@ -341,6 +341,82 @@ function (editor) {
 
 ```
 
+### Event List 
+
+* resize.window 
+* refreshProjectList
+* refreshArtboard
+* refreshTimeline
+* resizeEditor
+* resizeCanvas
+* toggleFooterEnd
+* keymap.keydown - e, keydown 이벤트 받기 
+* keymap.keyup - e , keyup 이벤트 받기 
+* moveSelectionToCenter - boolean, viewport 의 중앙으로 보내기  
+* refreshCursor - string, 캔버스 커서 설정, svg 이미지 사용 가능 
+* recoverCursor - 'auto', 캔버스 커서 복구 
+* addStatusBarMessage - string , statusbar 메세지 설정하기 
+* startGesture - viewport 드래그 시작 
+* endGesture - viewport 드래그 종료 
+* refreshSelectionTool - selection tool 다시 그리기 
+* history.refreshSelection - selection 변경 후 history 에 입력 
+* removeGuideLine - 가이드 라인 삭제 
+* refreshContent - 
+* refreshLayerTreeView - LayerTreeView 변경 
+* refreshSelectionStyleView - 선택된 레이어 style 변경 
+* refreshRect - x, y, width, height, transform, transform-origin 이 변경 될 때 
+* updateViewport - viewport 수치가 변경 됐을 때 
+* bodypanel.toggle.fullscreen - fullscreen 적용 
+* newComponent - type, {}, selected,  새로운 컴포넌트 추가 
+* change.mode.view - 현재 ViewMode 변경 
+* udpateImage - 이미지 컴포넌트 추가 
+* updateVideo - 비디오 컴포넌트 추가 
+* refreshAll - 모든 객체 다시 렌더링 
+* refreshAllCanvas - Canvas 영역만 다시 렌더링 
+* savePNG - string, PNG 로 저장 ,외부 메세지로 전달 
+* load.json - project[], 프로젝트 리스트  로드 
+* dropImageUrl - url 로 이미지 추가 하기 
+* setAttribute - 속성 설정하기 
+* setAttributeForMulti - 여러개의 객체 동시 속성 설정하기 
+* showPathEditor - path editor 열기 
+* addBackgroundColor - color, id  ,  백그라운드 색상 설정 
+* addBackgroundImageGradient - gradient string, id , 백그라운드 gradient 이미지 추가 
+* addBackgroundImagePattern - pattern string, id, 백그라운드 pattern 이미지 추가 
+* addArtBoard - data, center , 아트보드 추가 
+* addImage - obj, 이미지 추가 
+* updateResource - file 추가 
+* moveToCenter - 특정 객체영역을 viewport 가운데로 유지 
+* noti - alert, title, description ,  notification 띄우기 
+* deleteSegment -  path 편집 시 segment 삭제 
+* moveSegment - path 편집시 segment 이동 
+* refreshElement - 특정 item 다시 렌더링 
+* changed.locale - locale 변경 이후 
+* moveLayer - dx, dy,  선택한 layer 움직이기 
+* moveLayerForItems - 
+* changeTheme - 테마 변경 
+* refreshHistory -  history 가 변경 되었을 때 메세지 
+* changeHoverItem - hover 된 아이템이 변경 되었을 때 메세지 
+* addLayerView - type, 특정 타입으로 드래그 영역 이후에 위치와 크기를 가진 상태로 추가 할 때 
+* sort.bottom - 선택한 레이어들 아래 기준 정렬 
+* sort.center - 선택한 레이어들 가운데(수평, 왼쪽, 오른쪽) 기준 정렬 
+* sort.right - 오른쪽 기준으로 정렬 
+* sort.top - 위쪽 기준으로 정렬
+* same.width - 같은 넓이로 만들기 
+* same.height - 같은 높이로 만들기 
+* open.projects - project 리스트 열기 
+* saveJSON - localStorage 에 json 으로 저장하기
+* addProject - project 추가 
+* refreshAllSelectProject - 모든 선택된 project 다시 렌더링 
+* refreshSVGArea - svgfilter 등 글로벌하게 사용되는 svg 리소스 갱신 
+* setEditorLayout - layout 변경 
+* switchTheme - theme, theme 변경 
+* lastUpdateColor- 마지막으로 컬러가 수정되었을때 
+* downloadSVG - svg 다운로드 할 때 
+* downloadPNG - png 다운로드 할 때 
+* refreshAllElementBoundSize - layout 이 변경되어 실제 위치를 미리 캐슁할 때 
+* 
+
+
 ### Support area 
 * inspector.tab.style 
 * inspector.tab.text 

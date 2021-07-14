@@ -8,6 +8,7 @@ module.exports = {
   // Entry files for our popup and background pages
   entry: {
     editor: "./src/index.js",
+    embed: "./src/index-embed.js",    
     player: "./src/index-player.js",        
   },
   output: {
@@ -106,25 +107,32 @@ module.exports = {
       inject: true,
       template: "./src/dev-index.html",
       filename: "./single.html",
-      excludeChunks: ['player', 'single']
+      excludeChunks: ['player', 'embed']
     }),
     new HtmlWebPackPlugin({
       inject: true,
       template: "./src/dev-fullpage.html",
       filename: "./index.html",
-      excludeChunks: ['player', 'single']
+      excludeChunks: ['player', 'embed']
     }),    
+
+    new HtmlWebPackPlugin({
+      inject: true,
+      template: "./src/dev-fullpage.html",
+      filename: "./embed.html",
+      excludeChunks: ['player', 'editor']
+    }),        
     new HtmlWebPackPlugin({
       inject: true,
       template: "./src/dev-index.html",
       filename: "./single-player.html",
-      excludeChunks: ['editor', 'single']
+      excludeChunks: ['editor', 'embed']
     }),    
     new HtmlWebPackPlugin({
       inject: true,
       template: "./src/dev-fullpage.html",
       filename: "./player.html",
-      excludeChunks: ['editor', 'single']
+      excludeChunks: ['editor', 'embed']
     }),                
     new MiniCssExtractPlugin({
       filename: "[name].css"
