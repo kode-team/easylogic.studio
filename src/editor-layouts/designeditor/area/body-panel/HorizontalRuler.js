@@ -75,7 +75,7 @@ export default class HorizontalRuler extends EditorElement {
 
         if (!currentArtboard) return '';
 
-        const verties = currentArtboard.verties();
+        const verties = currentArtboard.verties;
 
         const {minX, maxX, width: realWidth} = this.$viewport;
         const width = this.state.rect.width;

@@ -83,7 +83,6 @@ import groupItem from "./group.item";
 import ungroupItem from "./ungroup.item";
 import historyRedo from "./history.redo";
 import historyUndo from "./history.undo";
-import refreshSelection from "./refreshSelection";
 import historyRefreshSelection from "./history.refreshSelection";
 import setAttributeForMulti from "./setAttributeForMulti";
 import historySetAttributeForMulti from "./history.setAttributeForMulti";
@@ -101,7 +100,6 @@ import recoverCursor from "./recoverCursor";
 import convertPasteText from "./convertPasteText";
 import addCustomComponent from "./addCustomComponent";
 import toggleToolHand from "./toggle.tool.hand";
-
 
 export default {
     convertPasteText,
@@ -126,7 +124,6 @@ export default {
     groupItem,
     ungroupItem,
     setEditorLayout,
-    refreshSelection,
     refreshArtboard,
     resetSelection,
     addBackgroundColor,

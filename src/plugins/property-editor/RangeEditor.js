@@ -131,16 +131,19 @@ export default class RangeEditor extends EditorElement {
 
     }
 
+    [INPUT('$property')] (e) {
+        this.trigger('changeRangeValue');
+    }
 
-    [POINTERSTART('$property') + MOVE('moveRange') + END('moveRange')] () {
+    [POINTERSTART('$property') + END()] () {
 
     }
 
-    moveRange () {
-        this.trigger('changeValue');
+    end() {
+        this.trigger('changeRangeValue');
     }
 
-    [SUBSCRIBE_SELF('changeValue') + THROTTLE(100)] () {
+    [SUBSCRIBE_SELF('changeRangeValue')] () {
         var value = +this.getRef('$property').value; 
         this.refs.$propertyNumber.val(value);
 

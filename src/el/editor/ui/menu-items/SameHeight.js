@@ -14,10 +14,6 @@ export default class SameHeight extends MenuItem {
     return true; 
   }
 
-  isDisabled () {
-    return true; 
-  }
-
   clickButton(e) {
     this.emit('same.height');
   }

@@ -1,24 +1,22 @@
-import { clone } from "el/base/functions/func";
-
 export class HistoryManager {
-    constructor (editor) {
+    constructor(editor) {
         this.$editor = editor;
 
-        this.currentIndex = -1; 
-        this.undoHistories = [] 
-        this.redoHistories = [] 
+        this.currentIndex = -1;
+        this.undoHistories = []
+        this.redoHistories = []
         this.selection = {}
     }
 
-    get length () {
+    get length() {
         return this.undoHistories.length;
     }
 
-    get selectedIds () {
+    get selectedIds() {
         return Object.keys(this.selection);
     }
 
-    createCommand (commandString) {
+    createCommand(commandString) {
         return this.$editor.isPointerUp ? `history.${commandString}` : commandString;
     }
 
@@ -26,7 +24,7 @@ export class HistoryManager {
         this.selection = this.$editor.selection.toCloneObject()
     }
 
-    getUndoValues (attrs = {}) {
+    getUndoValues(attrs = {}) {
         let result = {}
 
         Object.keys(this.selection).forEach(id => {
@@ -40,7 +38,7 @@ export class HistoryManager {
         return result;
     }
 
-    getUndoValuesForMulti (multiAttrs = {}) {
+    getUndoValuesForMulti(multiAttrs = {}) {
         let result = {}
 
         Object.keys(multiAttrs).forEach(id => {
@@ -55,7 +53,7 @@ export class HistoryManager {
         })
 
         return result;
-    }    
+    }
 
     /**
      * 
@@ -63,11 +61,26 @@ export class HistoryManager {
      * @param {CommandObject} command 
      * @param {{currentValues: any, undoValues: any, redoValues: any}} data 
      */
-    add (message, command, data) {
-        const historyObject = { message, command, data }
-        this.undoHistories.push(historyObject)
-        this.currentIndex++; 
-        this.undoHistories.length = this.currentIndex + 1;
+    add(message, command, data) {
+        const time = performance.now();
+        const lastUndoObject = this.undoHistories[this.undoHistories.length - 1];
+        const historyObject = { message, command, data, time }
+
+        if (lastUndoObject && 
+            lastUndoObject.message === message && 
+            time - lastUndoObject.time < this.$editor.config.get('history.time')
+        ) {
+            // 같은 메시지를 입력한 경우
+            // 이전 history 와 현재 히스토리 등록 시간의 차이가 1초 미만일 때 
+            // 마지막 메세지로 대체한다. 
+            this.undoHistories[this.undoHistories.length - 1] = historyObject;
+
+        } else {
+            this.undoHistories.push(historyObject)
+            this.currentIndex++;
+            this.undoHistories.length = this.currentIndex + 1;
+
+        }
 
         this.$editor.emit('refreshHistory', command.command);
 
@@ -79,28 +92,28 @@ export class HistoryManager {
      * 
      * @param {Function} callback 
      */
-    map (callback) {
+    map(callback) {
         let results = [...this.undoHistories.map(callback), '-', ...this.redoHistories.map(callback)].reverse()
 
-        return results; 
+        return results;
     }
 
     /**
      * undo 를 수행한다. 
      */
-    undo () {
+    undo() {
 
-        if (this.currentIndex < -1) return; 
+        if (this.currentIndex < -1) return;
 
         this.currentIndex--
-        const commandObject  = this.undoHistories.pop()
+        const commandObject = this.undoHistories.pop()
 
         if (commandObject && commandObject.command) {
-            commandObject.command.undo(this.$editor, commandObject.data)   
+            commandObject.command.undo(this.$editor, commandObject.data)
         }
 
         this.$editor.nextTick(() => {
-            this.$editor.emit('refreshHistory', commandObject.command);     
+            this.$editor.emit('refreshHistory', commandObject.command);
         })
 
     }
@@ -108,21 +121,21 @@ export class HistoryManager {
     /**
      * redo를 수행한다.
      */
-    redo () {
+    redo() {
 
-        if (this.currentIndex > this.length) return; 
+        if (this.currentIndex > this.length) return;
 
         // currentIndex 가 -1 부터 시작하기 때문에 ++this.currentIndex 로 index 를 하나 올리고 시작한다. 
         if (this.currentIndex < 0) {
             this.currentIndex++;
         }
-        const commandObject  = this.undoHistories[this.currentIndex]
+        const commandObject = this.undoHistories[this.currentIndex]
         if (commandObject && commandObject.command) {
             commandObject.command.redo(this.$editor, commandObject.data)
             this.$editor.debug(commandObject)
         }
         this.$editor.nextTick(() => {
-            this.$editor.emit('refreshHistory', commandObject.command);     
+            this.$editor.emit('refreshHistory', commandObject.command);
         })
     }
 

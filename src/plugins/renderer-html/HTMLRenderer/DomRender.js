@@ -352,7 +352,9 @@ export default class DomRender extends ItemRender {
       delete results.transform;
     }
 
-    return results;
+    return {
+      transform: ["translateZ(0px) " , results.transform].filter(Boolean).join(' ')
+    };
   }     
 
  

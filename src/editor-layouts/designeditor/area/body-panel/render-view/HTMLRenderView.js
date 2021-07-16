@@ -345,7 +345,7 @@ export default class HTMLRenderView extends EditorElement {
             this.command(
                 'setAttributeForMulti',
                 "move item",                    
-                this.$selection.pack('x', 'y', 'width', 'height')
+                this.$selection.pack('x', 'y')
             );              
             this.nextTick(() => {
 

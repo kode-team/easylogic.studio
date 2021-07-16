@@ -205,8 +205,13 @@ export class Editor {
    * @returns {boolean}
    */
   get isPointerUp() {
-    if (!this.config.get('bodyEvent')) return true;
-    return this.config.get('bodyEvent').type === 'pointerup'
+    const e = this.config.get('bodyEvent');
+    if (!e) return true;
+    
+    if (e.type === 'pointerup' ) return true; 
+    else if (e.type === 'pointermove' &&  e.buttons === 0) return true; 
+
+    return false; 
   }
 
   get isPointerMove() {

@@ -18,6 +18,7 @@ export class ConfigManager {
         this.set('show.right.panel', true);
         this.set('set.tool.hand', false);        
         this.set('snap.distance', 5);
+        this.set('history.time', 1000);
     }
 
     /**

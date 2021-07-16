@@ -114,16 +114,20 @@ export default class NumberRangeEditor extends EditorElement {
 
     }
 
+    [INPUT('$property')] () {
+        this.trigger('changeRangeValue');
+    }
 
-    [POINTERSTART('$property') + MOVE('moveRange') + END('moveRange')] () {
+
+    [POINTERSTART('$property') + END('moveRange')] () {
 
     }
 
     moveRange () {
-        this.trigger('changeValue');
+        this.trigger('changeRangeValue');
     }
 
-    [SUBSCRIBE_SELF('changeValue') + THROTTLE(100)] () {
+    [SUBSCRIBE_SELF('changeRangeValue')] () {
         var value = +this.getRef('$property').value; 
         this.getRef('$propertyNumber').val(value);
 

@@ -192,8 +192,6 @@ export default class DragAreaView extends EditorElement {
     
             var areaVerties = this.$viewport.createAreaVerties(rect.x, rect.y, rect.width, rect.height);
 
-            console.log(areaVerties, rect);
-
             var project = this.$selection.currentProject;
             if (project) {    
                 const selectedItems = this.getSelectedItems(rect, areaVerties)

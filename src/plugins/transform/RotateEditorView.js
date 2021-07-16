@@ -140,7 +140,6 @@ export default class RotateEditorView extends EditorElement {
         this.bindData('$rotateContainer');
 
         this.command('setAttributeForMulti', 'change rotate', this.$selection.pack('transform'));
-        this.emit('refreshSelectionTool')    
 
     }
 
@@ -180,14 +179,11 @@ export default class RotateEditorView extends EditorElement {
         this.modifyRotateZ(dx, dy);
 
         this.bindData('$rotateZ');        
-        this.command('setAttributeForMulti', 'change rotate handle', this.$selection.pack('transform'));                     
-        this.emit('refreshSelectionTool')
-
+        this.command('setAttributeForMulti', 'change rotate handle', this.$selection.pack('transform'));
     }
 
     end () {
-        this.command('setAttributeForMulti', 'change rotate handle', this.$selection.pack('transform'));                             
-        // this.$selection.setRectCache();              
+        this.command('setAttributeForMulti', 'change rotate handle', this.$selection.pack('transform'));
     }
 
 

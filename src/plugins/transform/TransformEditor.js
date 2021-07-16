@@ -7,7 +7,8 @@ import {
   DROP,
   PREVENT,
   SUBSCRIBE,
-  SUBSCRIBE_SELF
+  SUBSCRIBE_SELF,
+  DOMDIFF
 } from "el/base/Event";
 
 import { Transform } from "el/editor/property-parser/Transform";
@@ -114,7 +115,7 @@ export default class TransformEditor extends EditorElement {
       case 'translateZ': 
       case 'translate':      
       case 'translate3d':            
-        return { min: -1000, max : 1000, step: 1, units: 'px,%,em'}
+        return { min: -100, max : 100, step: 1, units: 'px,%,em'}
       case 'matrix':
       case 'matrix3d':     
         return { min: -100, max : 100, step: 0.01,units: 'number'}
@@ -143,34 +144,34 @@ export default class TransformEditor extends EditorElement {
       <div class="transform-item" data-index="${index}">
         <div class="title" data-index="${index}">
           <label draggable="true" >${this.$i18n('css.item.' + type)}</label>
-          <div class="transform-ui ${type}">
-            ${transform.value.map( (it, tindex) => {
-
-              var label = this.getLabel(type, tindex);
-              var {min, max, step, units} = this.getRange(type);
-
-              return /*html*/`
-                <div>
-                  <object refClass="RangeEditor"  
-                        ref='$range_${type}_${index}_${tindex}' 
-                        min="${min}" 
-                        max="${max}" 
-                        step="${step}" 
-                        label="${label}"
-                        key="${index}" 
-                        params='${tindex}' 
-                        value="${it}" 
-                        units="${units}" 
-                        onchange="changeRangeEditor" />
-                </div>`
-              }).join('')}      
-          </div>
           <div class="transform-menu">
             <button type="button" class="del" data-index="${index}">
               ${icon.remove2}
             </button>
           </div>
         </div>
+        <div class="transform-ui ${type}">
+        ${transform.value.map( (it, tindex) => {
+
+          var label = this.getLabel(type, tindex);
+          var {min, max, step, units} = this.getRange(type);
+
+          return /*html*/`
+            <div>
+              <object refClass="RangeEditor"  
+                    ref='$range_${type}_${index}_${tindex}' 
+                    min="${min}" 
+                    max="${max}" 
+                    step="${step}" 
+                    label="${label}"
+                    key="${index}" 
+                    params='${tindex}' 
+                    value="${it}" 
+                    units="${units}" 
+                    onchange="changeRangeEditor" />
+            </div>`
+          }).join('')}      
+      </div>        
 
       </div>
     `;
@@ -261,9 +262,15 @@ export default class TransformEditor extends EditorElement {
 
   }
 
-  [LOAD("$transformList")]() {
+  [LOAD("$transformList") + DOMDIFF]() {
     return this.state.transforms.map((transform, index) => {
       return this.makeTransformTemplate(transform, index.toString());
+    });
+  }
+
+  setValue(transform) {
+    this.setState({
+      transforms: Transform.parseStyle(transform)
     });
   }
 

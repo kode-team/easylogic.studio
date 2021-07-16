@@ -13,11 +13,8 @@ export default class SameWidth extends MenuItem {
     return true; 
   }
 
-  isDisabled () {
-    return true; 
-  }  
-
   clickButton(e) {
+    console.log(e);
     this.emit('same.width');
   }
 }

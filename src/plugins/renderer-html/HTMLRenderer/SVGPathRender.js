@@ -23,7 +23,6 @@ export default class SVGPathRender extends SVGItemRender {
         'fill': this.toFillValue(item),
         'stroke': this.toStrokeValue(item)
       })  
-      item.totalLength = $path.totalLength
     }
 
     this.updateDefString(item, currentElement)

@@ -75,7 +75,7 @@ export default class VerticalRuler extends EditorElement {
 
         if (!currentArtboard) return '';
 
-        const verties = currentArtboard.verties();
+        const verties = currentArtboard.verties;
 
         const {minY,maxY, height: realHeight} = this.$viewport;
         const height = this.state.rect.height;

@@ -12,7 +12,7 @@ export default {
                 // 상위 객체가 project 이면 움직이지 않는다. 
             } else if (current.artboard) {
                 // 선택된 객체가 하나이고 artboard 가 존재하면 artboard 를 기준으로 잡는다. 
-                const distX = getVertiesCenterX(current.artboard.verties()) - getVertiesCenterX(editor.selection.verties);
+                const distX = getVertiesCenterX(current.artboard.verties) - getVertiesCenterX(editor.selection.verties);
                 editor.emit('moveLayer', distX, 0);
             }
 
@@ -20,7 +20,7 @@ export default {
             let maxRightX = getVertiesCenterX(editor.selection.verties);
 
             editor.emit('moveLayerForItems', editor.selection.map(item => {
-                let itemRightX = getVertiesCenterX(item.verties());
+                let itemRightX = getVertiesCenterX(item.verties);
 
                 return { item, dist: [maxRightX - itemRightX, 0, 0]}
 

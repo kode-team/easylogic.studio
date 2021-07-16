@@ -94,12 +94,18 @@ export default class TransformProperty extends BaseProperty {
       }
     }))
 
-    this.nextTick(() => {
-      setTimeout(() => {
-        this.emit('refreshSelectionTool')
-      }, 100)
 
-    })
+
+    // this.nextTick(() => {
+    //   setTimeout(() => {
+    //     this.emit('refreshSelectionTool')
+    //   }, 100)
+
+    // })
+  }
+
+  refresh () {
+    this.children.$transformEditor.setValue(this.$selection.current.transform);
   }
 
   [SUBSCRIBE('refreshSelection')] () {
@@ -107,7 +113,17 @@ export default class TransformProperty extends BaseProperty {
   }
 
   [SUBSCRIBE('refreshSelectionStyleView') + DEBOUNCE(100)] () {
-    this.refresh();
+
+    const current = this.$selection.current
+
+    if (current) {
+
+      if (current.hasChangedField('transform')) {
+        this.refresh();
+      }
+
+    }
+
   }
 
 }

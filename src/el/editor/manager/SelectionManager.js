@@ -439,6 +439,9 @@ export class SelectionManager {
     this.cachedArtBoardVerties = this.currentProject.artboards.map(item => {
       return { item, matrix: item.matrix};
     })
+    
+    // TODO:  select 를 캐쉬한 이후에 refreshSelection 메세지를 보낸다. 
+    // TODO: history.refreshSelection 을 사용해서 항상 history 에 저장한다. 
   }
 
   get verties () {

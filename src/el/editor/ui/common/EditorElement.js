@@ -112,13 +112,11 @@ export class EditorElement extends UIElement {
      */
 
     command(command, description, ...args) {
-
         if (this.$editor.isPointerUp) {
             return this.emit(`history.${command}`, description, ...args);
         } else {
             return this.emit(command, ...args);
         }
-
 
     }
 

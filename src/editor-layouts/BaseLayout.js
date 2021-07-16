@@ -1,5 +1,5 @@
 
-import { DEBOUNCE, POINTEREND, POINTERMOVE, RESIZE, SUBSCRIBE, SUBSCRIBE_ALL } from "el/base/Event";
+import { DEBOUNCE, POINTEREND, POINTERMOVE, POINTERSTART, RESIZE, SUBSCRIBE, SUBSCRIBE_ALL } from "el/base/Event";
 import { debounce, isArray, isObject } from "el/base/functions/func";
 import { getDist } from "el/base/functions/math";
 import { Editor } from "el/editor/manager/Editor";
@@ -134,6 +134,13 @@ export default class BaseLayout extends EditorElement {
 
   [SUBSCRIBE_ALL(ADD_BODY_MOUSEUP)](func, context, xy) {
     this.__ends.add({ func, context, xy });
+  }
+
+  [POINTERSTART("document")](e) {
+    var newPos = e.xy || EMPTY_POS;
+
+    this.$config.set("bodyEvent", e);
+    this.$config.set("pos", newPos);
   }
 
   [POINTERMOVE("document")](e) {

@@ -541,6 +541,18 @@ export default class EventMachine {
     return e.buttons === 2;     // 2 is right button 
   }  
 
+  hasMouse(e) { 
+    return e.pointerType === 'mouse';
+  }
+
+  hasTouch(e) {
+    return e.pointerType === 'touch';
+  }
+
+  hasPen(e) {
+    return e.pointerType === 'pen';
+  }  
+
   /** before check method */
 
   /* after check method */

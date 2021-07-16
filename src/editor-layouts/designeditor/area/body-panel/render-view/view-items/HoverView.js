@@ -1,6 +1,7 @@
 import Dom from "el/base/Dom";
 
 import { SUBSCRIBE } from "el/base/Event";
+import { makeGuidePoint } from "el/base/functions/math";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import "./HoverView.scss";
@@ -15,8 +16,8 @@ export default class HoverView extends EditorElement {
         `
     }
 
-    
-    [SUBSCRIBE('config:bodyEvent')] () {
+
+    [SUBSCRIBE('config:bodyEvent')]() {
         const $dom = Dom.create(this.$config.get('bodyEvent').target);
         const id = $dom.data('id');
 
@@ -31,28 +32,54 @@ export default class HoverView extends EditorElement {
         }
     }
 
-    [SUBSCRIBE('updateViewport')] () {
+    [SUBSCRIBE('updateViewport')]() {
         this.$selection.setHoverId('');
         this.renderHoverLayer()
     }
 
 
-    renderHoverLayer () {
+    renderHoverLayer() {
 
         const items = this.$selection.hoverItems;
 
         if (items.length === 0) {
             this.refs.$hoverRect.updateDiff('')
+            this.emit('removeGuideLine');
+
+
         } else {
+
+            // refresh hover view 
             const verties = items[0].verties;
-            const line = this.createPointerLine(this.$viewport.applyVerties(verties));   
-            
+            const line = this.createPointerLine(this.$viewport.applyVerties(verties));
+
             this.refs.$hoverRect.updateDiff(line)
+
+            // refresh guide 
+            const source = this.$selection.current;
+
+            if (source) {
+
+                const source = this.$selection.current;
+                const targetList = [items[0]]
+
+                // x축 가이드 설정하기 
+                const xList = targetList.map(target => makeGuidePoint(source, target));
+
+                xList.sort((a, b) => {
+                    return a[3] - b[3];
+                });
+
+                const list = [xList[0]];
+
+                this.emit('refreshGuideLine', list);
+            }
+
         }
     }
 
 
-    createPointerLine (pointers) {
+    createPointerLine(pointers) {
         if (pointers.length === 0) return '';
         return /*html*/`
         <svg class='line' overflow="visible">
@@ -67,6 +94,6 @@ export default class HoverView extends EditorElement {
                 " 
                 />
         </svg>`
-    }    
+    }
 
-} 
+}

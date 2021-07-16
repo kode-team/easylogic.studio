@@ -1,13 +1,19 @@
+import { vertiesToRectangle } from "el/base/functions/collision";
+
 export default {
     command : 'same.width',
+    description: 'fit at the same width',
     execute: function (editor) {
 
+        console.log(editor.selection.isMany);
+
         if (editor.selection.isMany) {
-            const rect = editor.selection.allRect;
-            editor.selection.each(item => {
-                item.setScreenX(rect.x.value);
-                item.width.set(rect.width.value);
-            })
+            const rect = vertiesToRectangle(editor.selection.verties);
+
+            editor.command('setAttributeForMulti', 'fit at the same width', editor.selection.packByValue({
+                x: rect.x,
+                width: rect.width
+            }))
 
         }
     }
