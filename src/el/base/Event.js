@@ -100,6 +100,7 @@ export const THROTTLE = (t = 100) => {
   return CHECKER(`throttle(${t})`);
 };
 export const ALL_TRIGGER = CHECKER("allTrigger()");
+export const SELF_TRIGGER = CHECKER("selfTrigger()");
 
 export const CAPTURE = CHECKER("capture()");
 
@@ -120,6 +121,7 @@ export const STOP = AFTER(`stopPropagation`);
 
 export const SUBSCRIBE = SUBSCRIBE_EVENT_MAKE;
 export const SUBSCRIBE_ALL = (...args) => SUBSCRIBE_EVENT_MAKE(...args, ALL_TRIGGER);
+export const SUBSCRIBE_SELF = (...args) => SUBSCRIBE_EVENT_MAKE(...args, SELF_TRIGGER);
 export const CUSTOM = DOM_EVENT_MAKE;
 export const CLICK = DOM_EVENT_MAKE("click");
 export const DOUBLECLICK = DOM_EVENT_MAKE("dblclick");

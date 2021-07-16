@@ -1,5 +1,5 @@
 
-import { LOAD, DEBOUNCE, DRAGSTART, CLICK, SUBSCRIBE } from "el/base/Event";
+import { LOAD, DEBOUNCE, DRAGSTART, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 
 import patterns from "el/editor/preset/patterns";
 import { Pattern } from "el/editor/property-parser/Pattern";
@@ -30,7 +30,7 @@ export default class PatternAssetsProperty extends BaseProperty {
   }  
 
 
-  [SUBSCRIBE('changePreset')] (key, value) {
+  [SUBSCRIBE_SELF('changePreset')] (key, value) {
 
     this.setState({
       [key]: value

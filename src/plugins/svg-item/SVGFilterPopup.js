@@ -1,5 +1,5 @@
 
-import { LOAD, SUBSCRIBE } from "el/base/Event";
+import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { SVGFilter } from "el/editor/property-parser/SVGFilter";
 import { isNotUndefined } from "el/base/functions/func";
 import BasePopup from "el/editor/ui/popup/BasePopup";
@@ -48,7 +48,7 @@ export default class SVGFilterPopup extends BasePopup {
 
   }
 
-  [SUBSCRIBE('changeFilterEditor')] (key, filters) {
+  [SUBSCRIBE_SELF('changeFilterEditor')] (key, filters) {
     this.updateData({
       filters
     })

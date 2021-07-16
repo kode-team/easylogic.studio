@@ -1,5 +1,5 @@
 
-import { CLICK, BIND, SUBSCRIBE } from "el/base/Event";
+import { CLICK, BIND, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { Length } from "el/editor/unit/Length";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
@@ -104,15 +104,14 @@ export default class PathManager extends EditorElement {
       this.updateData({
         stroke: color
       })      
-      this.command('setAttribute', 'change color assets', { stroke: color }, null, true)    
+
+      this.command('setAttributeForMulti', 'change color assets', this.$selection.packByValue({ stroke: color }))    
     }
 
   }
 
-  [SUBSCRIBE('changeValue')] (key, value, params) {
-    this.command('setAttribute', 'change path', { 
-      [key]: value
-    }, null, true)
+  [SUBSCRIBE_SELF('changeValue')] (key, value, params) {
+    this.command('setAttributeForMulti', 'change path', this.$selection.packByValue({ [key]: value }))    
 
     this.updateData({
       [key]: value

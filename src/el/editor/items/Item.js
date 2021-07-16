@@ -364,9 +364,19 @@ export class Item {
    * @param {object} obj
    */
   reset(obj) {
+
+    // const oldValue = this.attrs(...Object.keys(obj));
+
+    // // 같으면 변경하지 않음 
+    // if (JSON.stringify(oldValue) === JSON.stringify(obj)) return false;
+
     this.json = this.convert(Object.assign(this.json, obj));
     this.lastChangedField = obj; 
     this.changed();
+
+    // 값이 변경 되었는지 어떻게 인지 할까요? 
+    // reset 할 때 값이 변경이 안되었을 수도 있으니 
+    return true; 
   }
 
   hasChangedField (...args) {

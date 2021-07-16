@@ -1,4 +1,4 @@
-import { SUBSCRIBE } from "el/base/Event";
+import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 
@@ -24,11 +24,11 @@ export default class EmbedColorPicker extends EditorElement {
       `
     }
 
-    [SUBSCRIBE('localChangeColor')](key, color) {
+    [SUBSCRIBE_SELF('localChangeColor')](key, color) {
       this.parent.trigger(this.props.onchange, color);
     }
 
-    [SUBSCRIBE('localLastUpdate')](key, color) {
+    [SUBSCRIBE_SELF('localLastUpdate')](key, color) {
       this.parent.trigger(this.props.onchangeend, color);
     }  
 

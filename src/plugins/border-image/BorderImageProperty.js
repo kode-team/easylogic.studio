@@ -1,5 +1,5 @@
 
-import { CLICK, CHANGE, LOAD, SUBSCRIBE } from "el/base/Event";
+import { CLICK, CHANGE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { Position } from "el/editor/unit/Length";
 import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
@@ -120,7 +120,7 @@ export default class BorderImageProperty extends BaseProperty {
     `
   }
 
-  [SUBSCRIBE('changeBorderImage')] (key, value) {
+  [SUBSCRIBE_SELF('changeBorderImage')] (key, value) {
 
     if (key === 'border-image-slice') {
       keyList.forEach(type => {

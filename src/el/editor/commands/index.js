@@ -1,6 +1,5 @@
 import refreshElement from "./refreshElement";
 import refreshProject from './refreshProject';
-import setAttribute from "./setAttribute";
 import resizeArtBoard from "./resizeArtBoard";
 import convertPath from "./convertPath";
 import addImage from "./addImage";
@@ -82,7 +81,6 @@ import itemMoveDepthDown from "./item.move.depth.down";
 import itemMoveDepthUp from "./item.move.depth.up";
 import groupItem from "./group.item";
 import ungroupItem from "./ungroup.item";
-import historySetAttribute from "./history.setAttribute";
 import historyRedo from "./history.redo";
 import historyUndo from "./history.undo";
 import refreshSelection from "./refreshSelection";
@@ -114,7 +112,6 @@ export default {
     // history + command   
     historyAddLayer,
     historyRemoveLayer,
-    historySetAttribute,
     historySetAttributeForMulti,    
     historyRefreshSelection,
     historyRedo,
@@ -204,7 +201,6 @@ export default {
     refreshElement,
     refreshProject,
     resizeArtBoard,
-    setAttribute,  
     setAttributeForMulti,
     sortBottom,
     sortCenter,

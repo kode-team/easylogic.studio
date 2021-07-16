@@ -1,6 +1,6 @@
 
 import {
-  LOAD, CLICK, DEBOUNCE, SUBSCRIBE,
+  LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF,
 } from "el/base/Event";
 
 
@@ -71,11 +71,11 @@ export default class PatternProperty extends BaseProperty {
     return /*html*/`<object refClass="PatternEditor" ref='$patternEditor' value='${value}' hide-label='true' onchange='changePatternEditor' />`
   }
 
-  [SUBSCRIBE('changePatternEditor')] (key, pattern) {
+  [SUBSCRIBE_SELF('changePatternEditor')] (key, pattern) {
 
-    this.command('setAttribute', 'change pattern', { 
+    this.command('setAttributeForMulti', 'change pattern', this.$selection.packByValue({ 
       pattern 
-    })
+    }))
   }
 
   [SUBSCRIBE('refreshSelection')] () {

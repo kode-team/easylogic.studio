@@ -1,5 +1,5 @@
 import { Length } from "el/editor/unit/Length";
-import { SUBSCRIBE } from "el/base/Event";
+import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 
@@ -98,7 +98,7 @@ export default class DrawManager extends EditorElement {
     `;
   }
 
-  [SUBSCRIBE('changeValue')] (key, value, params) {
+  [SUBSCRIBE_SELF('changeValue')] (key, value, params) {
     this.updateData({
       [key]: value
     })

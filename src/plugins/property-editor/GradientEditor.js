@@ -1,5 +1,5 @@
 
-import { LOAD, CLICK, POINTERSTART, MOVE, END, BIND, PREVENT, DOUBLECLICK, CHANGE, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, POINTERSTART, MOVE, END, BIND, PREVENT, DOUBLECLICK, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { Length } from "el/editor/unit/Length";
 import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
@@ -239,7 +239,7 @@ export default class GradientEditor extends EditorElement  {
     }
   }
 
-  [SUBSCRIBE('changeKeyValue')] (key, value) {
+  [SUBSCRIBE_SELF('changeKeyValue')] (key, value) {
 
     if (key === 'angle') {
       value = value.value; 

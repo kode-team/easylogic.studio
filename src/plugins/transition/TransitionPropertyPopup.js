@@ -1,4 +1,4 @@
-import { LOAD, SUBSCRIBE} from "el/base/Event";
+import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF} from "el/base/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 const property_list = [
@@ -126,7 +126,7 @@ export default class TransitionPropertyPopup extends BasePopup {
     `
   }
 
-  [SUBSCRIBE('changeTransition')] (key, value) {
+  [SUBSCRIBE_SELF('changeTransition')] (key, value) {
     this.updateData({
       [key]: value
     })
@@ -158,11 +158,11 @@ export default class TransitionPropertyPopup extends BasePopup {
     `
   }
 
-  [SUBSCRIBE('changeRangeEditor')] (key, value) {
+  [SUBSCRIBE_SELF('changeRangeEditor')] (key, value) {
     this.updateData({ [key]: value })
   }
 
-  [SUBSCRIBE('changeCubicBezier')] (key, value) {
+  [SUBSCRIBE_SELF('changeCubicBezier')] (key, value) {
     this.updateData({ [key]: value })
   }
 

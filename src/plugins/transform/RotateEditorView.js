@@ -61,9 +61,8 @@ export default class RotateEditorView extends EditorElement {
         })
                  
         this.bindData('$rotateZ')
-        this.emit('refreshSelectionStyleView', null, false, true)
-        this.emit('refreshRect');       
-        this.$selection.setRectCache();         
+        this.command('setAttributeForMulti', 'change direction', this.$selection.pack('transform'));
+        // this.$selection.setRectCache();         
 
     }
 
@@ -98,20 +97,17 @@ export default class RotateEditorView extends EditorElement {
         }
     }
 
-    [DOUBLECLICK('$rotateArea')] () {
+    [DOUBLECLICK('$rotateArea')] () {        
         this.$selection.each(item => {
             item.reset({ transform: Transform.remove(item.transform, ['rotateX', 'rotateY']) })
         })
-        this.$selection.setRectCache();
+        // this.$selection.setRectCache();
+        this.command('setAttributeForMulti', 'change direction', this.$selection.pack('transform'));
+
         this.bindData('$rotateContainer');   
-        this.emit('refreshSelectionStyleView', null, false, true)       
-        this.emit('refreshRect');        
     }
 
     [POINTERSTART('$rotateArea') + MOVE('moveRotateXY') + END('moveEndRotateXY')] () {
-        // this.setCacheRotateXY () 
-
-
         this.state.rotateCache = this.$selection.map(item => {
 
             const rotateX = Transform.get(item['transform'], 'rotateX')
@@ -143,25 +139,21 @@ export default class RotateEditorView extends EditorElement {
 
         this.bindData('$rotateContainer');
 
-        this.emit('refreshSelectionStyleView', null, false, true)
-        this.emit('refreshSelectionTool')
-        this.emit('refreshRect');        
+        this.command('setAttributeForMulti', 'change rotate', this.$selection.pack('transform'));
+        this.emit('refreshSelectionTool')    
 
     }
 
     moveEndRotateXY (dx, dy) {    
-        this.emit('refreshSelectionStyleView')
-        this.emit('refreshRect');     
-        this.$selection.setRectCache();           
+        this.command('setAttributeForMulti', 'change rotate', this.$selection.pack('transform'));              
     }
 
     [DOUBLECLICK('$handle')] () {
         this.$selection.each(item => {
             item.reset({ transform: Transform.remove(item.transform, ['rotateZ', 'rotate']) })
         })
-        this.bindData('$rotateZ');               
-        this.emit('refreshSelectionStyleView', null, false, true)     
-        this.emit('refreshRect');           
+        this.bindData('$rotateZ');                   
+        this.command('setAttributeForMulti', 'change rotate handle', this.$selection.pack('transform'));        
     }
 
     [POINTERSTART('$handle') + MOVE() + END()] () {
@@ -187,17 +179,15 @@ export default class RotateEditorView extends EditorElement {
     move (dx, dy) {
         this.modifyRotateZ(dx, dy);
 
-        this.bindData('$rotateZ');             
-        this.emit('refreshSelectionStyleView', null, false, true)
+        this.bindData('$rotateZ');        
+        this.command('setAttributeForMulti', 'change rotate handle', this.$selection.pack('transform'));                     
         this.emit('refreshSelectionTool')
-        this.emit('refreshRect');
 
     }
 
     end () {
-        this.emit('refreshSelectionStyleView')        
-        this.emit('refreshRect');  
-        this.$selection.setRectCache();              
+        this.command('setAttributeForMulti', 'change rotate handle', this.$selection.pack('transform'));                             
+        // this.$selection.setRectCache();              
     }
 
 

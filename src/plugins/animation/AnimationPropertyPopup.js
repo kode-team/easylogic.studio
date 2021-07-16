@@ -1,6 +1,6 @@
 
 import { Length } from "el/editor/unit/Length";
-import { LOAD, CHANGE, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 export default class AnimationPropertyPopup extends BasePopup {
@@ -106,7 +106,7 @@ export default class AnimationPropertyPopup extends BasePopup {
     `
   }
 
-  [SUBSCRIBE('changeSelect')] (key, value) {
+  [SUBSCRIBE_SELF('changeSelect')] (key, value) {
     this.updateData({ [key]: value })
   }
 
@@ -189,7 +189,7 @@ export default class AnimationPropertyPopup extends BasePopup {
     `
   }
 
-  [SUBSCRIBE('changeRangeEditor')] (key, value) {
+  [SUBSCRIBE_SELF('changeRangeEditor')] (key, value) {
 
     if (key === 'iterationCount') {
       if (value.unit === 'normal') {
@@ -201,7 +201,7 @@ export default class AnimationPropertyPopup extends BasePopup {
     this.updateData({ [key]: value })
   }
 
-  [SUBSCRIBE('changeCubicBezier')] (key, value) {
+  [SUBSCRIBE_SELF('changeCubicBezier')] (key, value) {
     this.updateData({ [key]: value })
   }
 

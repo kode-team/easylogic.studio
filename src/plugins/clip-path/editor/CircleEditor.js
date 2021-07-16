@@ -2,7 +2,7 @@
 
 import { isUndefined } from "el/base/functions/func";
 import { Length } from "el/editor/unit/Length";
-import { POINTERSTART, MOVE, END, BIND, SUBSCRIBE } from "el/base/Event";
+import { POINTERSTART, MOVE, END, BIND, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 export default class CircleEditor extends EditorElement {
@@ -126,7 +126,7 @@ export default class CircleEditor extends EditorElement {
         this.parent.trigger(this.props.onchange, this.props.key, this.toClipPathValueString(), this.props.params)
     }
 
-    [SUBSCRIBE('changeRangeEditor')] (key, value) {
+    [SUBSCRIBE_SELF('changeRangeEditor')] (key, value) {
 
         if (key === 'radius') {
             var radius = value; 

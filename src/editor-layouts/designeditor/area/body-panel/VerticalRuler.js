@@ -194,7 +194,18 @@ export default class VerticalRuler extends EditorElement {
         this.refresh();
     }
 
-    [SUBSCRIBE('refreshSelection', 'refreshRect')] () {
+    [SUBSCRIBE('refreshSelectionStyleView')] () {
+        if (this.$selection.current) {
+            const current = this.$selection.current;
+
+            if (current.hasChangedField('x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate')) {
+                this.refresh();
+            }
+
+        }
+    }
+
+    [SUBSCRIBE('refreshSelection')] () {
         this.load('$layerRuler');      
     }    
 

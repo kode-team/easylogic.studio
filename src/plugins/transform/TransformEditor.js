@@ -6,7 +6,8 @@ import {
   DRAGOVER,
   DROP,
   PREVENT,
-  SUBSCRIBE
+  SUBSCRIBE,
+  SUBSCRIBE_SELF
 } from "el/base/Event";
 
 import { Transform } from "el/editor/property-parser/Transform";
@@ -372,7 +373,7 @@ export default class TransformEditor extends EditorElement {
     return Transform.parse({ ...opt, type, value });
   }
 
-  [SUBSCRIBE('add')] (transformType) { 
+  [SUBSCRIBE_SELF('add')] (transformType) { 
     this.state.transforms.push(this.makeTransform(transformType))
 
     this.refresh();
@@ -395,7 +396,7 @@ export default class TransformEditor extends EditorElement {
     this.modifyTransform()
   }
 
-  [SUBSCRIBE('changeRangeEditor')] (key, value, params) {
+  [SUBSCRIBE_SELF('changeRangeEditor')] (key, value, params) {
     if (isNotUndefined(params)) {
       this.state.transforms[+key].value[+params] = value; 
     } else {

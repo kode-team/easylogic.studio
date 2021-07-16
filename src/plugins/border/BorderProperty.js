@@ -1,5 +1,5 @@
 
-import { LOAD, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
+import { LOAD, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class BorderProperty extends BaseProperty {
@@ -34,10 +34,10 @@ export default class BorderProperty extends BaseProperty {
     this.refreshShowIsNot(['project', 'svg-path', 'svg-polygon', 'svg-text', 'svg-textpath']);
   }  
 
-  [SUBSCRIBE('changeKeyValue')] (key, value) {
-    this.command("setAttribute", 'change border', { 
+  [SUBSCRIBE_SELF('changeKeyValue')] (key, value) {
+    this.command("setAttributeForMulti", 'change border', this.$selection.packByValue({ 
       [key]: value
-    })
+    }))
   }
 
 }

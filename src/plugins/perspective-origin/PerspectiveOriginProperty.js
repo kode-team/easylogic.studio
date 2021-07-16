@@ -1,5 +1,5 @@
 
-import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 
 
 import icon from "el/editor/icon/icon";
@@ -48,11 +48,11 @@ export default class PerspectiveOriginProperty extends BaseProperty {
     this.refreshShowIsNot(['project']);
   }
 
-  [SUBSCRIBE('changePerspectiveOrigin')] (value) {
+  [SUBSCRIBE_SELF('changePerspectiveOrigin')] (value) {
 
-    this.command('setAttribute',  'change perspective origin', { 
+    this.command('setAttributeForMulti',  'change perspective origin', this.$selection.packByValue({ 
       'perspective-origin': value 
-    })
+    }))
   }
 
 }

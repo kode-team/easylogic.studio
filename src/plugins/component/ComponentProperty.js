@@ -1,4 +1,4 @@
-import { DEBOUNCE, LOAD, SUBSCRIBE } from "el/base/Event";
+import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { isString, OBJECT_TO_PROPERTY } from "el/base/functions/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
@@ -106,13 +106,13 @@ export default class ComponentProperty extends BaseProperty {
     return self; 
   }
 
-  [SUBSCRIBE('changeComponentProperty')] (key, value) {
+  [SUBSCRIBE_SELF('changeComponentProperty')] (key, value) {
 
     const current = this.$selection.current;
     const inspector = this.$editor.components.createInspector(current);    
     const convert = inspector.find(it => it.key === key)?.convert;
     const realValueObject = convert ? convert(current, key, value) : { [key] : value }
 
-    this.command("setAttribute", 'change component', realValueObject, null, true)
+    this.command("setAttributeForMulti", 'change component : ' + key, this.$selection.packByValue(realValueObject))
   }
 }

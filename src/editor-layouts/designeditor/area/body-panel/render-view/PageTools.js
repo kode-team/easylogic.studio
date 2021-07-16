@@ -1,6 +1,6 @@
 
 
-import { CLICK, PREVENT, STOP, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
+import { CLICK, PREVENT, STOP, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { OBJECT_TO_CLASS } from "el/base/functions/func";
 
 import icon from "el/editor/icon/icon";
@@ -39,7 +39,7 @@ export default class PageTools extends EditorElement {
 
   }
 
-  [SUBSCRIBE('changeRangeEditor') + DEBOUNCE(1000)] (key, scale) {
+  [SUBSCRIBE_SELF('changeRangeEditor') + DEBOUNCE(1000)] (key, scale) {
     this.$viewport.setScale(scale/100);
     this.emit('updateViewport');    
     this.trigger('updateViewport');    

@@ -1,5 +1,5 @@
 
-import { LOAD, CLICK, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
@@ -164,7 +164,7 @@ export default class GridBoxEditor extends EditorElement {
     }
 
 
-    [SUBSCRIBE('changeKeyValue')] (key, value, params) {
+    [SUBSCRIBE_SELF('changeKeyValue')] (key, value, params) {
 
         var index = +params
 

@@ -107,6 +107,119 @@ export function vertiesMap(verties, transformView) {
     });
 }
 
+function getTargetPointX(source, target, axis, nextTarget) {
+    return [
+        source, 
+        [target[0], source[1], target[2]], 
+        axis, 
+        Math.abs(source[0] - target[0]), 
+        nextTarget
+    ];
+}
+
+function getTargetPointY(source, target, axis, nextTarget) {
+    return [
+        [target[0], source[1], source[2]], 
+        target, 
+        axis, 
+        Math.abs(source[1] - target[1]), 
+        nextTarget
+    ];
+}    
+
+function invertTargetPoint(arr, isInvert = false) {
+    if (isInvert === false) return arr;
+
+    const [source, target, axis, dist, newTarget, sourceVerties, targetVerties] = arr; 
+
+    if (newTarget) {
+        return [
+            [target[0], newTarget[1], target[2]],             
+            [source[0], newTarget[1], source[2]], 
+            axis, dist, 
+            [source[0], source[1], newTarget[2]],
+            sourceVerties, 
+            targetVerties,
+            isInvert
+        ]
+    } else {
+        return [
+            target, 
+            source, 
+            axis, 
+            dist, 
+            newTarget, 
+            sourceVerties, 
+            targetVerties,
+            isInvert
+        ]
+    }
+
+}
+
+/**
+ * 가이드 
+ * 
+ * @param {MovableItem} sourceItem 
+ * @param {MovableItem} targetItem
+ * 
+ * @returns {Array} [source, target, axis, dist, newTarget] 
+ */
+export function makeGuidePoint (sourceItem, targetItem) {
+    const sourceVerties = sourceItem.toRectVerties;
+    const targetVerties = targetItem.toRectVerties;
+
+    let leftVerties = sourceVerties;
+    let rightVerties = targetVerties;
+    let hasInvert = false; 
+    if (sourceVerties[4][0] - targetVerties[4][0] > 0) {
+        leftVerties = targetVerties;
+        rightVerties = sourceVerties;
+        hasInvert = true; 
+    }
+
+    // x 구하기 
+
+    // source 가 왼쪽 그러므로 오른쪽 좌표 사용 , target 이 오른쪽 그러므로 왼쪽 좌표 사용 
+    const leftCenter = vec3.lerp([], leftVerties[1], leftVerties[2], 0.5);
+    const rightCenter = vec3.lerp([], rightVerties[0], rightVerties[3], 0.5);
+
+    let point;
+
+    if (rightVerties[0][1] <= leftCenter[1] && leftCenter[1] <= rightVerties[3][1]) {
+        // target 영역 안에 존재하면 중간점부터 그림 
+        // console.log("left ", rightVerties[0], leftVerties[3]);                        
+        point = getTargetPointX(leftCenter, rightCenter, "x", null)
+    } else if (rightVerties[0][1] <= leftVerties[1][1]) {
+        if (rightVerties[3][0] <= leftVerties[1][0] && leftVerties[1][0] <= rightVerties[2][0]) {
+            // console.log("bottom left", rightVerties[3], leftVerties[1]);
+            point = getTargetPointY(rightVerties[3], [rightVerties[3][0], leftVerties[1][1], leftVerties[1][2]], "y", null)
+        } else {
+            // console.log("top left", leftVerties[1], rightCenter);
+            point = getTargetPointX(leftVerties[1], rightCenter, "x", rightVerties[3])
+        }
+
+    } else if (leftVerties[3][0] <= rightVerties[0][0] && rightVerties[0][0] <= leftVerties[2][0]) {
+        point = getTargetPointY(leftVerties[3], rightVerties[0], "y")
+    } else if (rightVerties[3][0] <= leftVerties[0][0] && leftVerties[0][0] <= rightVerties[2][0]) {
+        // console.log("bottom right", rightVerties[0], leftVerties[3]);            
+        point = getTargetPointY([rightVerties[0][0],leftVerties[3][1], leftVerties[3][2] ], rightVerties[0], "y")
+    } else if (rightVerties[3][0] <= leftVerties[1][0] && leftVerties[1][0] <= rightVerties[2][0]) {
+        // console.log("bottom left", rightVerties[3], leftVerties[1]);
+        point = getTargetPointY(rightVerties[3], [rightVerties[3][0], leftVerties[1][1], leftVerties[1][2]], "y")
+    } else {
+        // console.log("last", leftVerties[2], rightCenter);            
+        point = getTargetPointX(leftVerties[2], rightCenter, "x", rightVerties[0])
+    }
+
+    return invertTargetPoint([
+        ...point,
+        Boolean(sourceItem.transform) ? sourceVerties: null,
+        Boolean(targetItem.transform) ? targetVerties: null,
+    ], hasInvert);
+}
+
+
 export function getVertiesMaxX(verties) {
     let maxValue = Number.MIN_SAFE_INTEGER;
     verties.forEach(v => {

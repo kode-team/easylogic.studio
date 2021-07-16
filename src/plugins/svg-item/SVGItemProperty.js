@@ -1,5 +1,5 @@
 import { Length } from "el/editor/unit/Length";
-import { SUBSCRIBE } from "el/base/Event";
+import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class SVGItemProperty extends BaseProperty {
@@ -185,15 +185,15 @@ export default class SVGItemProperty extends BaseProperty {
     `;
   }
 
-  [SUBSCRIBE('changeValue')] (key, value, params) {
-    this.command('setAttribute', `change svg item property : ${key}`, { 
+  [SUBSCRIBE_SELF('changeValue')] (key, value, params) {
+    this.command('setAttributeForMulti', `change svg item property : ${key}`, this.$selection.packByValue({ 
       [key]: value
-    })
+    }))
   }
 
-  [SUBSCRIBE('changeSelect')] (key, value) {
-    this.command("setAttribute", `change attribute : ${key}`, { 
+  [SUBSCRIBE_SELF('changeSelect')] (key, value) {
+    this.command("setAttributeForMulti", `change attribute : ${key}`, this.$selection.packByValue({ 
       [key]: value
-    })
+    }))
   }
 }

@@ -87,7 +87,7 @@ export default class SelectionInfoView extends EditorElement {
         this.command(
             'setAttributeForMulti',
             "move item",                    
-            this.$selection.cloneValue('x', 'y', 'width', 'height')
+            this.$selection.pack('x', 'y', 'width', 'height')
         );  
     }
 

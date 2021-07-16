@@ -1,3 +1,4 @@
+import EventMachine from "./EventMachine";
 import { debounce, throttle } from "./functions/func";
 
 export default class BaseStore {
@@ -31,21 +32,27 @@ export default class BaseStore {
    * 메세지 등록 
    * 
    * @param {string} event 
-   * @param {*} originalCallback 
-   * @param {*} context 
-   * @param {*} debounceDelay 
-   * @param {*} throttleDelay 
+   * @param {Function} originalCallback 
+   * @param {EventMachine} context 
+   * @param {number} debounceDelay 
+   * @param {number} throttleDelay 
+   * @param {boolean} enableAllTrigger
+   * @param {boolean} enableSelfTrigger
+   * @returns {Function} off callback 
    */
-  on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0, enableSelfTrigger = false) {
+  on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false) {
     var callback = originalCallback;
     
     if (debounceDelay > 0)  callback = debounce(originalCallback, debounceDelay);
     else if (throttleDelay > 0)  callback = throttle(originalCallback, throttleDelay);
 
-    this.getCallbacks(event).push({ event, callback, context, originalCallback, enableSelfTrigger });
+    this.getCallbacks(event).push({ event, callback, context, originalCallback, enableAllTrigger, enableSelfTrigger });
 
     this.debug('add message event', event, context.sourceName );
 
+    return () => {
+      this.off(event, originalCallback);
+    }
   }
 
   /**
@@ -88,8 +95,10 @@ export default class BaseStore {
 
         for(var i = 0, len = list.length; i < len; i++) {
           const f = list[i];
-          // console.log(f.enableSelfTrigger, f);
-          if (f.enableSelfTrigger || f.originalCallback.source !== source) {
+          // console.log(source);
+          if (f.enableSelfTrigger) continue;
+
+          if (f.enableAllTrigger || f.originalCallback.source !== source) {
             f.callback.apply(f.context, args)  
           }
         }

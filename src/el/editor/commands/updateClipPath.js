@@ -12,9 +12,9 @@ export default {
     execute: function (editor, pathObject) {
 
         // d 속성 (path 문자열) 을 설정한다. 
-        editor.command('setAttribute', 'change clip-path', {
+        editor.command('setAttributeForMulti', 'change clip-path', editor.selection.packByValue({
             'clip-path': `path(${pathObject.d})`,
-        })
+        }))
     }
 
 }

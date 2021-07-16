@@ -1,5 +1,5 @@
 
-import { DEBOUNCE, SUBSCRIBE } from "el/base/Event";
+import { DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class IFrameProperty extends BaseProperty {
@@ -28,7 +28,7 @@ export default class IFrameProperty extends BaseProperty {
     }
   }
 
-  [SUBSCRIBE('changeText') + DEBOUNCE(100)] (key, value) {
+  [SUBSCRIBE_SELF('changeText') + DEBOUNCE(100)] (key, value) {
     var current = this.$selection.current;
 
     if (current) {
@@ -36,9 +36,9 @@ export default class IFrameProperty extends BaseProperty {
         [key]: value,
       })
 
-      this.command('setAttribute', 'change iframe url', {
+      this.command('setAttributeForMulti', 'change iframe url', this.$selection.packByValue({
         [key]: value,
-      }, current.id);      
+      }));      
     }
   }
 

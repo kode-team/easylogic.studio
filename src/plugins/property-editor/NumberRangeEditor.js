@@ -1,6 +1,6 @@
 
 import { Length } from "el/editor/unit/Length";
-import { LOAD, INPUT, CLICK, FOCUS, BLUR, POINTERSTART, MOVE, END, THROTTLE, SUBSCRIBE } from "el/base/Event";
+import { LOAD, INPUT, CLICK, FOCUS, BLUR, POINTERSTART, MOVE, END, THROTTLE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
@@ -123,7 +123,7 @@ export default class NumberRangeEditor extends EditorElement {
         this.trigger('changeValue');
     }
 
-    [SUBSCRIBE('changeValue') + THROTTLE(100)] () {
+    [SUBSCRIBE_SELF('changeValue') + THROTTLE(100)] () {
         var value = +this.getRef('$property').value; 
         this.getRef('$propertyNumber').val(value);
 

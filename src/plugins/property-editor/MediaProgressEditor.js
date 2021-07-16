@@ -1,5 +1,5 @@
 
-import { POINTERSTART, MOVE, BIND, SUBSCRIBE } from "el/base/Event";
+import { POINTERSTART, MOVE, BIND, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { Length } from "el/editor/unit/Length";
 
@@ -66,7 +66,7 @@ export default class MediaProgressEditor extends EditorElement {
         `
     }
 
-    [SUBSCRIBE('changeValue')] (key, value) {
+    [SUBSCRIBE_SELF('changeValue')] (key, value) {
         this.updateData({
             [key]: value/this.state.duration
         }, true);

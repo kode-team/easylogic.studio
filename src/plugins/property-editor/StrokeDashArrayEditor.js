@@ -1,4 +1,4 @@
-import { LOAD, CLICK, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { isArray } from "el/base/functions/func";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
@@ -79,7 +79,7 @@ export default class StrokeDashArrayEditor extends EditorElement {
     });
   }
 
-  [SUBSCRIBE('changeRangeEditor')] (key, value) {
+  [SUBSCRIBE_SELF('changeRangeEditor')] (key, value) {
     var index = +key
     this.state.value[index] = value 
 

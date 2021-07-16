@@ -1,5 +1,8 @@
 
 import UIElement from "el/base/UIElement";
+import { ConfigManager } from "el/editor/manager/ConfigManager";
+import { SelectionManager } from "el/editor/manager/SelectionManager";
+import { ViewportManager } from "el/editor/manager/ViewportManager";
 
 export class EditorElement extends UIElement {
 
@@ -37,10 +40,16 @@ export class EditorElement extends UIElement {
         return this.$editor.initI18n(key);
     }
 
+    /**
+     * @type {ConfigManager}
+     */ 
     get $config() {
         return this.$editor.config;
     }
 
+    /**
+     * @type {SelectionManager}
+     */
     get $selection() {
         return this.$editor.selection;
     }

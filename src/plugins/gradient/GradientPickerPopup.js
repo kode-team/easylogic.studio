@@ -1,5 +1,5 @@
 
-import { LOAD, SUBSCRIBE } from "el/base/Event";
+import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
 import BasePopup from "el/editor/ui/popup/BasePopup";
@@ -67,18 +67,18 @@ export default class GradientPickerPopup extends BasePopup {
     />`
   }
 
-  [SUBSCRIBE('changeGradientEditor')] (data) {
+  [SUBSCRIBE_SELF('changeGradientEditor')] (data) {
 
     this.state.image = data;
 
     this.updateData();
   }
 
-  [SUBSCRIBE('changeColor')] (color) {
+  [SUBSCRIBE_SELF('changeColor')] (color) {
     this.children.$g.trigger('setColorStepColor', color);
   }
 
-  [SUBSCRIBE('changeImageUrl')] (url) {
+  [SUBSCRIBE_SELF('changeImageUrl')] (url) {
     this.children.$g.trigger('setImageUrl', url);
   }
 

@@ -1,5 +1,5 @@
 
-import { LOAD, SUBSCRIBE } from "el/base/Event";
+import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { Length } from "el/editor/unit/Length";
 
@@ -61,7 +61,7 @@ export default class GridGapEditor extends EditorElement {
     }
 
 
-    [SUBSCRIBE('changeKeyValue')] (key, value) {
+    [SUBSCRIBE_SELF('changeKeyValue')] (key, value) {
 
         this.state.value = value;
 

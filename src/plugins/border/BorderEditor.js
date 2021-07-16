@@ -1,4 +1,4 @@
-import { LOAD, SUBSCRIBE } from "el/base/Event";
+import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import Border from "el/editor/property-parser/Border";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 const borderTypeList = [
@@ -80,7 +80,7 @@ export default class BorderEditor extends EditorElement {
   }
 
 
-  [SUBSCRIBE('changeKeyValue')] (key, value) {
+  [SUBSCRIBE_SELF('changeKeyValue')] (key, value) {
     var borders = this.state.borders;
     borders[key] = value; 
 

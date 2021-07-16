@@ -1,7 +1,7 @@
 
 
 import { Length } from "el/editor/unit/Length";
-import { POINTERSTART, MOVE, LOAD, CLICK, BIND, SUBSCRIBE } from "el/base/Event";
+import { POINTERSTART, MOVE, LOAD, CLICK, BIND, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { DirectionLength } from "el/editor/unit/DirectionLength";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
@@ -104,7 +104,7 @@ export default class InsetEditor extends EditorElement {
         return /*html*/`<object refClass="DirectionEditor" ref='$borderRadius' value='${value}' onchange='changeBorderRadius' />`
     }
 
-    [SUBSCRIBE('changeBorderRadius')] ([_count, topRadius, rightRadius, bottomRadius, leftRadius]) {
+    [SUBSCRIBE_SELF('changeBorderRadius')] ([_count, topRadius, rightRadius, bottomRadius, leftRadius]) {
 
         this.updateData({ 
             isAllRadius: _count === 1,

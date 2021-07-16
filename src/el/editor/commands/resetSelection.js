@@ -6,7 +6,6 @@ import { isFunction } from "el/base/functions/func";
  * @param {Editor} editor 
  */
 export default function resetSelection (editor) {
-    editor.emit('setAttribute');
     editor.nextTick(() => {
         editor.emit('refreshSelectionTool');
     })

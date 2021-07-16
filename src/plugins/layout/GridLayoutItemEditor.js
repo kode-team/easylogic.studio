@@ -1,5 +1,5 @@
 
-import { LOAD, SUBSCRIBE } from "el/base/Event";
+import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { CSS_TO_STRING, STRING_TO_CSS } from "el/base/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
@@ -80,7 +80,7 @@ export default class GridLayoutItemEditor extends EditorElement {
     }
 
 
-    [SUBSCRIBE('changeKeyValue')] (key, value, params) {
+    [SUBSCRIBE_SELF('changeKeyValue')] (key, value, params) {
 
         this.setState({
             [key]: value

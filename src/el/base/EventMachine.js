@@ -355,7 +355,14 @@ export default class EventMachine {
           instance.render();
         }
         
-        $dom.replace(instance.$el);     
+
+        if (instance.renderTarget) {
+          instance.$el?.appendTo(instance.renderTarget);
+          $dom.remove();
+        } else {
+          $dom.replace(instance.$el);     
+        }
+
       } else {
         $dom.remove();
       }

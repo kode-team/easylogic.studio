@@ -7,7 +7,8 @@ import {
   DROP,
   PREVENT,
   DEBOUNCE,
-  SUBSCRIBE
+  SUBSCRIBE,
+  SUBSCRIBE_SELF
 } from "el/base/Event";
 
 import {
@@ -370,7 +371,7 @@ export default class FilterEditor extends EditorElement {
     this.modifyFilter()
   }
 
-  [SUBSCRIBE("changeDropShadowColor")](key, color, params) {
+  [SUBSCRIBE_SELF("changeDropShadowColor")](key, color, params) {
     var index = +params;
 
     this.state.filters[index].reset({
@@ -381,7 +382,7 @@ export default class FilterEditor extends EditorElement {
 
   }
 
-  [SUBSCRIBE('changeRangeEditor')] (key, value, params) {
+  [SUBSCRIBE_SELF('changeRangeEditor')] (key, value, params) {
     if (params) {
       this.state.filters[+key].reset({ 
         [params]: value 

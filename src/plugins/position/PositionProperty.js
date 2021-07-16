@@ -1,4 +1,4 @@
-import { SUBSCRIBE } from "el/base/Event";
+import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { Transform } from "el/editor/property-parser/Transform";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
@@ -15,9 +15,13 @@ export default class PositionProperty extends BaseProperty {
     this.refreshShowIsNot(['project'])
   }
 
-  [SUBSCRIBE('refreshRect')] () {
+  [SUBSCRIBE('refreshSelectionStyleView')] () {
     var current = this.$selection.current;
     if (!current) return '';
+
+    if (current.hasChangedField('x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'opacity') === false) {
+      return ;
+    }
 
     this.children.$x.setValue(current.x || Length.z());
     this.children.$y.setValue(current.y || Length.z());
@@ -120,11 +124,11 @@ export default class PositionProperty extends BaseProperty {
   }
 
 
-  [SUBSCRIBE('changRangeEditor')] (key, value) {
+  [SUBSCRIBE_SELF('changRangeEditor')] (key, value) {
 
-    this.command('setAttribute', 'change position or size', { 
+    this.command('setAttributeForMulti', 'change position or size', this.$selection.packByValue({ 
       [key]: value
-    })
+    }))
 
     this.nextTick(() => {
       this.emit('refreshAllElementBoundSize')    
@@ -132,16 +136,16 @@ export default class PositionProperty extends BaseProperty {
 
   }
 
-  [SUBSCRIBE('changeRotate')] (key, rotate) {
-    this.command('setAttribute', "change rotate", { 
+  [SUBSCRIBE_SELF('changeRotate')] (key, rotate) {
+    this.command('setAttributeForMulti', "change rotate", this.$selection.packByValue({ 
       rotate 
-    })
+    }))
   }
 
-  [SUBSCRIBE('changeSelect')] (key, value) {
-    this.command("setAttribute", `change ${key}`, { 
+  [SUBSCRIBE_SELF('changeSelect')] (key, value) {
+    this.command("setAttributeForMulti", `change ${key}`, this.$selection.packByValue({ 
       [key]: value
-    })
+    }))
   }
 
 

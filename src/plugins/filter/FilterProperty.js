@@ -1,6 +1,6 @@
 
 import {
-  LOAD, CLICK, DEBOUNCE, SUBSCRIBE,
+  LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF,
 } from "el/base/Event";
 
 
@@ -113,11 +113,11 @@ export default class FilterProperty extends BaseProperty {
       </div>`
   }
 
-  [SUBSCRIBE('changeFilterEditor')] (key, filter) {
+  [SUBSCRIBE_SELF('changeFilterEditor')] (key, filter) {
 
-    this.command('setAttribute', 'change filter', { 
+    this.command('setAttributeForMulti', 'change filter', this.$selection.packByValue({ 
       [key]: filter 
-    })
+    }))
   }
 
   [SUBSCRIBE('refreshSelection')] () {

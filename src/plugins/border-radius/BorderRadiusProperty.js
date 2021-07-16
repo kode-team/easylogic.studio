@@ -1,4 +1,4 @@
-import { DEBOUNCE, LOAD, SUBSCRIBE } from "el/base/Event";
+import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class BorderRadiusProperty extends BaseProperty {
@@ -35,11 +35,11 @@ export default class BorderRadiusProperty extends BaseProperty {
     this.refreshShowIsNot(['project', 'svg-path', 'svg-polygon', 'svg-text', 'svg-textpath']);
   }  
 
-  [SUBSCRIBE('changeBorderRadius')] (value) {
+  [SUBSCRIBE_SELF('changeBorderRadius')] (value) {
 
-    this.command("setAttribute", 'change border radius', { 
+    this.command("setAttributeForMulti", 'change border radius', this.$selection.packByValue({ 
       'border-radius': value 
-    })
+    }))
   }
 
 }

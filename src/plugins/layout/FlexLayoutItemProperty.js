@@ -1,5 +1,5 @@
 
-import { DEBOUNCE, LOAD, SUBSCRIBE } from "el/base/Event";
+import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 
 import { CSS_TO_STRING } from "el/base/functions/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
@@ -89,18 +89,18 @@ export default class FlexLayoutItemProperty extends BaseProperty {
     })
   }
 
-  [SUBSCRIBE('changeFlexItem')] (key, value) {
+  [SUBSCRIBE_SELF('changeFlexItem')] (key, value) {
 
-    this.command('setAttribute', 'change flex layout', { 
+    this.command('setAttributeForMulti', 'change flex layout', this.$selection.packByValue({ 
       'flex-layout-item': this.getFlexValue()
-    })
+    }))
 
     this.nextTick(() => {
       this.emit('refreshAllElementBoundSize')    
     })
   }
 
-  [SUBSCRIBE('changeLayoutType')] (key, value) {
+  [SUBSCRIBE_SELF('changeLayoutType')] (key, value) {
 
     var valueType = this.children.$layout.getValue()
     var value = valueType;
@@ -109,9 +109,9 @@ export default class FlexLayoutItemProperty extends BaseProperty {
       value = this.getFlexValue()
     }
 
-    this.command('setAttribute', 'change flex layout', { 
+    this.command('setAttributeForMulti', 'change flex layout', this.$selection.packByValue({ 
       'flex-layout-item': value
-    })
+    }))
 
     // 타입 변화에 따른 하위 아이템들의 설정을 바꿔야 한다. 
     this.refs.$layoutList.attr('data-selected-value', valueType);

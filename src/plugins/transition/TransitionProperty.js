@@ -78,9 +78,9 @@ export default class TransitionProperty extends BaseProperty {
 
     if (current) {
 
-      this.command('setAttribute', 'add transition', {
+      this.command('setAttributeForMulti', 'add transition', this.$selection.packByValue({
         transition: (item) => Transition.add(item.transition)
-      })
+      }))
 
       this.nextTick(() => {
         setTimeout(() => {

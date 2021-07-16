@@ -18,7 +18,7 @@ export default function convertPath (editor, pathString, rect = null) {
                 d = parser.d; 
             }
 
-            editor.command('setAttribute', 'set attribute -d', { d }, current)
+            editor.command('setAttributeForMulti', 'set attribute -d', editor.selection.packByValue({ d }, current.id))
 
         } else if (current['clip-path'].includes('path')) {
             var d = pathString;
@@ -31,7 +31,7 @@ export default function convertPath (editor, pathString, rect = null) {
             }
 
             // path string 을 저걸로 맞추기 
-            editor.command('setAttribute', 'change clip path', { 'clip-path': `path(${d})` }, current)
+            editor.command('setAttributeForMulti', 'change clip path', editor.selection.packByValue({ 'clip-path': `path(${d})` }, current.id))
         }
     }
 }

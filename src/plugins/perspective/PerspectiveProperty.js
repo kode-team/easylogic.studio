@@ -1,4 +1,4 @@
-import { LOAD, CLICK, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
@@ -38,11 +38,11 @@ export default class PerspectiveProperty extends BaseProperty {
     `;
   }
 
-  [SUBSCRIBE('changePerspective')] (key, value) {
+  [SUBSCRIBE_SELF('changePerspective')] (key, value) {
 
-    this.command('setAttribute', 'change perspective', { 
+    this.command('setAttributeForMulti', 'change perspective', this.$selection.packByValue({ 
       [key]: value
-    })
+    }))
   }
 
   [SUBSCRIBE('refreshSelection')]() {

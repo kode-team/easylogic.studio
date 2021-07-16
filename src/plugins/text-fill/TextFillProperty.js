@@ -1,4 +1,4 @@
-import { SUBSCRIBE } from "el/base/Event";
+import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class TextFillProperty extends BaseProperty {
@@ -57,11 +57,11 @@ export default class TextFillProperty extends BaseProperty {
     `;
   }
 
-  [SUBSCRIBE('changeColor')] (key, color, params) {
+  [SUBSCRIBE_SELF('changeColor')] (key, color, params) {
     this.trigger('changeRangeEditor', key, color);
   }
 
-  [SUBSCRIBE('changeRangeEditor')] (key, value) {
-    this.command('setAttribute', 'change text fill', { [key]: value })
+  [SUBSCRIBE_SELF('changeRangeEditor')] (key, value) {
+    this.command('setAttributeForMulti', 'change text fill', this.$selection.packByValue({ [key]: value }))
   }
 }

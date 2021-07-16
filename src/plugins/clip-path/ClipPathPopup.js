@@ -1,5 +1,5 @@
 
-import { LOAD, SUBSCRIBE } from "el/base/Event";
+import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { ClipPath } from "el/editor/property-parser/ClipPath";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
@@ -76,7 +76,7 @@ export default class ClipPathPopup extends BasePopup {
     
   }
 
-  [SUBSCRIBE('changeClipPath')] (type, value) {
+  [SUBSCRIBE_SELF('changeClipPath')] (type, value) {
     this.updateData({
       type, 
       value

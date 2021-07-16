@@ -1,5 +1,5 @@
 
-import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class TransformOriginProperty extends BaseProperty {
@@ -38,11 +38,11 @@ export default class TransformOriginProperty extends BaseProperty {
     this.refreshShowIsNot(['project', 'artboard']);
   }
 
-  [SUBSCRIBE('changeTransformOrigin')](key, value) {
+  [SUBSCRIBE_SELF('changeTransformOrigin')](key, value) {
 
-    this.command('setAttribute', 'change transform-origin', {
+    this.command('setAttributeForMulti', 'change transform-origin', this.$selection.packByValue({
       'transform-origin': value
-    })
+    }))
   }
 
 }

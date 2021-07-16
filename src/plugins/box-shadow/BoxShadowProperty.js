@@ -1,4 +1,4 @@
-import { CLICK, DEBOUNCE, LOAD, SUBSCRIBE } from "el/base/Event";
+import { CLICK, DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
@@ -41,11 +41,11 @@ export default class BoxShadowProperty extends BaseProperty {
 
   }  
 
-  [SUBSCRIBE("changeBoxShadow")](boxshadow) {
+  [SUBSCRIBE_SELF("changeBoxShadow")](boxshadow) {
 
-    this.command('setAttribute', 'change box shadow', { 
+    this.command('setAttributeForMulti', 'change box shadow', this.$selection.packByValue({ 
       'box-shadow': boxshadow
-    })
+    }))
 
   }
 }

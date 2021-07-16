@@ -1,5 +1,5 @@
 
-import { LOAD, CLICK, BIND, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, BIND, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
@@ -43,25 +43,22 @@ export default class ImageProperty extends BaseProperty {
     `
   }
 
-  [SUBSCRIBE('changeImageSize')] (key, value) {
+  [SUBSCRIBE_SELF('changeImageSize')] (key, value) {
     var [width, height] = value.split('x').map(it => Length.px(it))
 
-    this.command('setAttribute', 'resize image', { 
+    this.command('setAttributeForMulti', 'resize image', this.$selection.packByValue({ 
       width, height
-    })
+    }))
   }
 
   [CLICK('$resize')] () {
     var current = this.$selection.current;
 
     if (current) {
-
-      const data = {
-        width: current.naturalWidth.clone(),
-        height: current.naturalHeight.clone()
-      }
-
-      this.command('setAttribute', 'resize image', data)
+      this.command('setAttributeForMulti', 'resize image', this.$selection.packByValue({
+        width: (item) => item.naturalWidth.clone(),
+        height: (item) => item.naturalHeight.clone()
+      }))
     }
 
   }
@@ -85,7 +82,7 @@ export default class ImageProperty extends BaseProperty {
               onchange="changeSelect" />`;
   }
 
-  [SUBSCRIBE('changeSelect')] (key, value, info) {
+  [SUBSCRIBE_SELF('changeSelect')] (key, value, info) {
     var current = this.$selection.current;
 
     if (current) {
@@ -96,10 +93,10 @@ export default class ImageProperty extends BaseProperty {
 
       this.bindData('$sizeInfo')
 
-      this.command('setAttribute', 'change image', {
+      this.command('setAttributeForMulti', 'change image', this.$selection.packByValue({
         src: value,
         ...info
-      }, current.id);      
+      }));      
     }
   }
 

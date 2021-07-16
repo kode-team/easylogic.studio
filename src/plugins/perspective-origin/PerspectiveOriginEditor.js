@@ -1,4 +1,4 @@
-import { CLICK, LOAD, SUBSCRIBE } from "el/base/Event";
+import { CLICK, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { Length } from "el/editor/unit/Length";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
@@ -83,7 +83,7 @@ export default class PerspectiveOriginEditor extends EditorElement {
     this.modifyPerspectiveOrigin();
   }  
 
-  [SUBSCRIBE('changePerspectiveOrigin')] (key, value) {
+  [SUBSCRIBE_SELF('changePerspectiveOrigin')] (key, value) {
 
     if (key === 'perspective-origin') {
       keyList.forEach(type => {

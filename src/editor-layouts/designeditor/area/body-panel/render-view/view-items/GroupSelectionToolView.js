@@ -5,7 +5,7 @@ import { clone } from "el/base/functions/func";
 import { mat4, vec3 } from "gl-matrix";
 import { Transform } from "el/editor/property-parser/Transform";
 import { TransformOrigin } from "el/editor/property-parser/TransformOrigin";
-import { calculateAngle, calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, calculateRotationOriginMat4, round, vertiesMap } from "el/base/functions/math";
+import { calculateAngle, calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, calculateRotationOriginMat4, makeGuidePoint, round, vertiesMap } from "el/base/functions/math";
 import { ArtBoard } from "plugins/default-items/layers/ArtBoard";
 import { getRotatePointer, rectToVerties } from "el/base/functions/collision";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
@@ -85,7 +85,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         this.initMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);        
 
         // cache matrix 
-        this.$selection.reselect();        
+        // this.$selection.reselect();        
         this.verties = this.groupItem.verties;        
         this.rotateTargetNumber = (+e.$dt.attr('data-number')); 
 
@@ -160,8 +160,13 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         this.state.dragging = true;        
         this.renderPointers();
-        this.emit('refreshSelectionStyleView');     
-        this.emit('refreshRect');                 
+
+        this.emit(
+            'setAttributeForMulti', 
+            this.$selection.pack('x', 'y', 'width', 'height', 'transform')
+        );          
+        // this.emit('refreshSelectionStyleView');     
+        // this.emit('refreshRect');                 
     }
 
     rotateEndVertext () {
@@ -178,7 +183,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
             this.command(
                 'setAttributeForMulti', 
                 'rotate selection pointer',
-                this.$selection.cloneValue('x', 'y', 'width', 'height', 'transform')
+                this.$selection.pack('x', 'y', 'width', 'height', 'transform')
             );  
         })                
     }
@@ -517,28 +522,32 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
             this.moveBottomVertext(distVector);
         }    
 
+        this.emit(
+            'setAttributeForMulti', 
+            this.$selection.pack('x', 'y', 'width', 'height', 'transform')
+        );          
+
         this.state.dragging = true; 
         this.renderPointers();
         this.refreshSmartGuides();        
-        this.emit('refreshSelectionStyleView');  
-        this.emit('refreshRect');                               
     }
 
     moveEndVertext (dx, dy) {        
         this.state.dragging = false;         
         this.emit('recoverCursor');   
         this.$selection.reselect();
-        this.emit('refreshSelectionStyleView');           
         this.nextTick(() => {
             this.command(
                 'setAttributeForMulti', 
                 'move selection pointer',
-                this.$selection.cloneValue('x', 'y', 'width', 'height', 'transform')
+                this.$selection.pack('x', 'y', 'width', 'height', 'transform')
             );  
         })        
     }
 
     moveTo (newDist) {
+
+        newDist = vec3.floor([], newDist);
 
         //////  snap 체크 하기 
         const snap = this.$snapManager.check(this.cachedGroupItem.rectVerties.map(v => {
@@ -567,9 +576,31 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }
 
     refreshSmartGuides () {
+
+
+
+        const source = this.groupItem; 
+        const targetList = this.$selection.snapTargetLayers;
+
+        // x축 가이드 설정하기 
+        const xList = targetList.map(target => makeGuidePoint(source, target));
+
+        xList.sort((a, b) => {
+            return a[3] - b[3];
+        });
+
+        const list = [xList[0]];
+
+
+        const guides = this.$snapManager.findGuide(this.$selection.current.guideVerties());
+
+        // console.log(guides);
+
+        this.emit('refreshGuideLine', list);             
+
         // 가이드 라인 수정하기 
-        const guides = this.$snapManager.findGuide(this.groupItem.guideVerties());
-        this.emit('refreshGuideLine', guides);             
+        // const guides = this.$snapManager.findGuide(this.groupItem.guideVerties());
+        // this.emit('refreshGuideLine', guides);             
     }
 
     getSelectedElements() {

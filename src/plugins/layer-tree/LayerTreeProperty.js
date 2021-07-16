@@ -1,4 +1,4 @@
-import { LOAD, CLICK, DOUBLECLICK, PREVENT, STOP, FOCUSOUT, DOMDIFF, DRAGSTART, KEYDOWN, DRAGOVER, DROP, BIND, DRAGEND, ENTER, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, DOUBLECLICK, PREVENT, STOP, FOCUSOUT, DOMDIFF, DRAGSTART, KEYDOWN, DRAGOVER, DROP, BIND, DRAGEND, ENTER, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 
 
@@ -344,9 +344,7 @@ export default class LayerTreeProperty extends BaseProperty {
     var item = project.searchById(id);
     e.$dt.attr('data-visible', !item.visible);
 
-    this.command('setAttribute', 'change visible for layer', {
-      visible: !item.visible
-    }, item.id)
+    this.command('setAttributeForMulti', 'change visible for layer', this.$selection.packByValue({ visible: !item.visible }, item.id))
   }
 
   [CLICK('$layerList .layer-item .remove')](e) {
@@ -381,9 +379,7 @@ export default class LayerTreeProperty extends BaseProperty {
       this.emit('history.refreshSelection');
     }
 
-    this.command('setAttribute', 'change lock for layer', {
-      lock: lastLock
-    }, item.id)
+    this.command('setAttributeForMulti', 'change lock for layer', this.$selection.packByValue({ lock: lastLock }, item.id))
   }
 
 
@@ -404,7 +400,7 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
 
-  [SUBSCRIBE('changeSelection')](isSelection = false) {
+  [SUBSCRIBE_SELF('changeSelection')](isSelection = false) {
     if (isSelection && this.refs.$layerList) {
       this.refs.$layerList.$$('.selected').forEach(it => {
         it.removeClass('selected')

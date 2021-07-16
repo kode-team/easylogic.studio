@@ -1,6 +1,6 @@
 
 import {
-  LOAD, DEBOUNCE, CLICK, SUBSCRIBE,
+  LOAD, DEBOUNCE, CLICK, SUBSCRIBE, SUBSCRIBE_SELF,
 } from "el/base/Event";
 
 
@@ -87,17 +87,16 @@ export default class TransformProperty extends BaseProperty {
     `
   }
 
-  [SUBSCRIBE('changeTransformEditor')] (transform) {
-    this.command('setAttribute', 'change transform property', { 
+  [SUBSCRIBE_SELF('changeTransformEditor')] (transform) {
+    this.command('setAttributeForMulti', 'change transform property', this.$selection.packByValue({ 
       transform: (item) => {
         return Transform.replaceAll(item.transform, transform)
       }
-    })
+    }))
 
     this.nextTick(() => {
       setTimeout(() => {
         this.emit('refreshSelectionTool')
-        console.log('aaa');
       }, 100)
 
     })
@@ -107,7 +106,7 @@ export default class TransformProperty extends BaseProperty {
     this.refreshShowIsNot(['project']);
   }
 
-  [SUBSCRIBE('refreshRect') + DEBOUNCE(100)] () {
+  [SUBSCRIBE('refreshSelectionStyleView') + DEBOUNCE(100)] () {
     this.refresh();
   }
 

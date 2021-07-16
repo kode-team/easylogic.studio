@@ -5,7 +5,7 @@ import { clone} from "el/base/functions/func";
 import { mat4, vec3 } from "gl-matrix";
 import { Transform } from "el/editor/property-parser/Transform";
 import { TransformOrigin } from "el/editor/property-parser/TransformOrigin";
-import { calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, round } from "el/base/functions/math";
+import { calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, makeGuidePoint, round } from "el/base/functions/math";
 import { getRotatePointer } from "el/base/functions/collision";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
@@ -144,8 +144,12 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.state.dragging = true;
         this.renderPointers();
         this.refreshSmartGuides();          
-        this.emit('refreshSelectionStyleView');   
-        this.emit('refreshRect');                  
+        this.emit(
+            'setAttributeForMulti', 
+            this.$selection.pack('x', 'y', 'width', 'height', 'transform')
+        );          
+        // this.emit('refreshSelectionStyleView');   
+        // this.emit('refreshRect');                  
     }
 
     rotateEndVertext () {
@@ -159,8 +163,8 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.nextTick(() => {
             this.command(
                 'setAttributeForMulti', 
-                'move selection pointer',
-                this.$selection.cloneValue('x', 'y', 'width', 'height')
+                'change rotate',
+                this.$selection.pack('x', 'y', 'width', 'height', 'transform')
             );  
         })        
     }
@@ -466,29 +470,34 @@ export default class SelectionToolView extends SelectionToolEvent {
             this.moveBottomLeftVertext(distVector);                                
         }    
 
+        this.emit('setAttributeForMulti', this.$selection.pack('x', 'y', 'width', 'height'));
+
         this.state.dragging = true; 
         this.renderPointers();
         this.refreshSmartGuides();              
-        this.emit('refreshSelectionStyleView');
-        this.emit('refreshRect');
+        // this.emit('refreshSelectionStyleView');
+        // this.emit('refreshRect');
     }
 
     moveEndVertext () {
         this.state.dragging = false;         
         this.emit('recoverCursor');
-        this.emit('refresh')
         this.$selection.reselect();
 
         this.nextTick(() => {
             this.command(
                 'setAttributeForMulti', 
                 'move selection pointer',
-                this.$selection.cloneValue('x', 'y', 'width', 'height')
+                this.$selection.pack('x', 'y', 'width', 'height')
             );  
-        })        
+        })      
     }
 
     moveTo (distVector) {
+
+        // 소수점은 버리자. 
+        distVector = vec3.floor([], distVector);
+
         this.$selection.cachedItemVerties.forEach(it => {
 
             // 절대 좌표를 snap 기준으로 움직이고 
@@ -529,8 +538,25 @@ export default class SelectionToolView extends SelectionToolEvent {
     refreshSmartGuides () {
         // 가이드 라인 수정하기 
         if (this.$selection.current) {
+
+
+            const source = this.$selection.current; 
+            const targetList = this.$selection.snapTargetLayers;
+
+            // x축 가이드 설정하기 
+            const xList = targetList.map(target => makeGuidePoint(source, target));
+
+            xList.sort((a, b) => {
+                return a[3] - b[3];
+            });
+
+            const list = [xList[0]];
+
             const guides = this.$snapManager.findGuide(this.$selection.current.guideVerties());
-            this.emit('refreshGuideLine', guides);             
+
+            // console.log(guides);
+
+            this.emit('refreshGuideLine', list);             
         }
 
     }

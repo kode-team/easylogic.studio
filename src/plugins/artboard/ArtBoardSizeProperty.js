@@ -1,4 +1,4 @@
-import { LOAD, DOMDIFF, CLICK, SUBSCRIBE } from "el/base/Event";
+import { LOAD, DOMDIFF, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import artboardSize from "./preset/artboard.size";
@@ -34,7 +34,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
     `
   }
 
-  [SUBSCRIBE('changeSizeIndex')] (key, value) {
+  [SUBSCRIBE_SELF('changeSizeIndex')] (key, value) {
     var selectedIndex = this.state.selectedIndex;
     artboardSize.forEach((it, index) => {
       if (it.category === value) {

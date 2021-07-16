@@ -1,4 +1,4 @@
-import { LOAD, CLICK, POINTERSTART, MOVE, BIND, CHANGE, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, POINTERSTART, MOVE, BIND, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { Length } from "el/editor/unit/Length";
 
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
@@ -383,7 +383,7 @@ export default class FillEditor extends EditorElement  {
     }
   }
 
-  [SUBSCRIBE('changeKeyValue')] (key, value) {
+  [SUBSCRIBE_SELF('changeKeyValue')] (key, value) {
 
     this.state.image.reset({
       [key]: value

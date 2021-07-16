@@ -1,4 +1,4 @@
-import { SUBSCRIBE } from "el/base/Event";
+import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { registElement } from "el/base/registElement";
 
 import locales from "../../../i18n/locales";
@@ -31,7 +31,7 @@ export default class LanguageSelector extends EditorElement {
 
     }
 
-    [SUBSCRIBE('changeLocale')] (key, locale) {
+    [SUBSCRIBE_SELF('changeLocale')] (key, locale) {
         this.emit('setLocale', locale);
     }
 }

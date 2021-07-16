@@ -1,4 +1,4 @@
-import { LOAD, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
+import { LOAD, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class BackgroundClipProperty extends BaseProperty {
@@ -22,10 +22,10 @@ export default class BackgroundClipProperty extends BaseProperty {
     return /*html*/`<object refClass="SelectEditor"  ref='$1' key='background-clip' icon="true" value="${clip}" options=",paddinb-box,border-box,content-box,text" onchange="changeSelect" />`;
   }
 
-  [SUBSCRIBE('changeSelect')] (key, value) {
-      this.command('setAttribute', "change background clip", {
+  [SUBSCRIBE_SELF('changeSelect')] (key, value) {
+      this.command('setAttributeForMulti', "change background clip", this.$selection.packByValue({
         [key]: value
-      })
+      }))
   }
 
   [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)]() {

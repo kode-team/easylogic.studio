@@ -1,4 +1,4 @@
-import { LOAD, SUBSCRIBE } from "el/base/Event";
+import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 export default class FuncFilterEditor extends EditorElement {
@@ -97,20 +97,20 @@ export default class FuncFilterEditor extends EditorElement {
         })
     }
 
-    [SUBSCRIBE('changeValues')] (key, value) {
+    [SUBSCRIBE_SELF('changeValues')] (key, value) {
         
         this.updateData({
             [key]: value.split(' ') 
         })
     }    
 
-    [SUBSCRIBE('changeLinear')] (key, value) {
+    [SUBSCRIBE_SELF('changeLinear')] (key, value) {
         this.updateData({
             [key]: value 
         })
     }
 
-    [SUBSCRIBE('changeGamma')] (key, value) {
+    [SUBSCRIBE_SELF('changeGamma')] (key, value) {
         this.updateData({
             [key]: value 
         })

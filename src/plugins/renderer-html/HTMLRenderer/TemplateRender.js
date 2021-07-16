@@ -55,7 +55,7 @@ export default class TemplateRender extends LayerRender {
             height: 100%;
           }          
         </style>
-        <div class="inner-html">
+        <div class="inner-html" data-domdiff-pass="true">
           ${compiledTemplate}
         </div>
       </div>`

@@ -1,6 +1,6 @@
 
 import {
-  LOAD, CLICK, SUBSCRIBE,
+  LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF,
 } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
@@ -105,11 +105,11 @@ export default class BackdropFilterProperty extends BaseProperty {
     `
   }
 
-  [SUBSCRIBE('changeFilterEditor')] (key, filter) {
+  [SUBSCRIBE_SELF('changeFilterEditor')] (key, filter) {
 
-    this.command("setAttribute", "change backdrop filter", {
+    this.command("setAttributeForMulti", "change backdrop filter", this.$selection.packByValue({
       [key]: filter
-    })
+    }))  
 
   }
 

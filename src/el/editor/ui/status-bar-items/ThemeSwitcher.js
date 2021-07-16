@@ -1,4 +1,4 @@
-import { SUBSCRIBE } from "el/base/Event";
+import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { registElement } from "el/base/registElement";
 
 import { EditorElement } from "../common/EditorElement";
@@ -30,7 +30,7 @@ export default class ThemeSwitcher extends EditorElement {
         `
     }
 
-    [SUBSCRIBE('changeItem')] (key, theme) {
+    [SUBSCRIBE_SELF('changeItem')] (key, theme) {
         this.emit('switchTheme', theme);
     }
 }

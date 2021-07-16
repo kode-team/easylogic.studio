@@ -1,4 +1,4 @@
-import { LOAD, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
+import { LOAD, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class TextClipProperty extends BaseProperty {
@@ -28,10 +28,8 @@ export default class TextClipProperty extends BaseProperty {
     `;
   }
 
-  [SUBSCRIBE('changeSelect')] (key, value) {
-      this.emit('setAttribute', {
-        [key]: value
-      })
+  [SUBSCRIBE_SELF('changeSelect')] (key, value) {
+    this.emit('setAttributeForMulti', this.$selection.packByValue({ [key]: value }));        
   }
 
   [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)]() {

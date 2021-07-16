@@ -1,5 +1,5 @@
 
-import { LOAD, SUBSCRIBE } from "el/base/Event";
+import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 
 import { Length } from "el/editor/unit/Length";
 import { registElement } from "el/base/registElement";
@@ -39,7 +39,7 @@ export default class PatternInfoPopup extends BasePopup {
   }
 
 
-  [SUBSCRIBE('changeRangeEditor')] (key, value) {
+  [SUBSCRIBE_SELF('changeRangeEditor')] (key, value) {
     this.updateData({ [key]: value });
   }
 

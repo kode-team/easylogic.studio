@@ -400,6 +400,10 @@ export default class DomRender extends ItemRender {
 
     switch (obj.type) {
     case 'path': 
+      if (obj.value) {
+        str = `url(#${this.clipPathId(item)})`
+      }
+      break;
     case 'svg': 
       str = `url(#${this.clipPathId(item)})`
       break; 
@@ -563,12 +567,6 @@ ${cssString}
   update (item, currentElement) {
 
     if (!currentElement) return; 
-
-    // x, y 만 움직이면 변경하지 않음. 
-    if (item.hasChangedField('x', 'y')) {
-      return;
-    }
-
 
     let $svg = currentElement.el.$svg;
 

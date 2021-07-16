@@ -1,4 +1,4 @@
-import { LOAD, CLICK, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
@@ -47,10 +47,10 @@ export default class TextShadowProperty extends BaseProperty {
     this.refresh();
   }  
 
-  [SUBSCRIBE("changeTextShadow")](textshadow) {
+  [SUBSCRIBE_SELF("changeTextShadow")](textshadow) {
 
-    this.command('setAttribute', 'change text shadow', { 
+    this.command('setAttributeForMulti', 'change text shadow', this.$selection.packByValue({ 
       'text-shadow': textshadow
-    })
+    }))
   }
 }

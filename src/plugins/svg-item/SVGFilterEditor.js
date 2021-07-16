@@ -10,7 +10,8 @@ import {
   PREVENT,
   DROP,
   DRAGSTART,
-  SUBSCRIBE
+  SUBSCRIBE,
+  SUBSCRIBE_SELF
 } from "el/base/Event";
 
 import { SVGFilter, SVGFilterSpecList } from "el/editor/property-parser/SVGFilter";
@@ -888,12 +889,12 @@ export default class SVGFilterEditor extends EditorElement {
     })
   }
 
-  [SUBSCRIBE('changeSVGFilterColorViewEditor')] (key, color, params) {
+  [SUBSCRIBE_SELF('changeSVGFilterColorViewEditor')] (key, color, params) {
     this.trigger('changeRangeEditor', key, color, params)
   }
 
 
-  [SUBSCRIBE('changeFuncFilterEditor')] (key, value) {
+  [SUBSCRIBE_SELF('changeFuncFilterEditor')] (key, value) {
     var filter =  this.state.selectedFilter;
     if (filter) {
       filter.reset({
@@ -904,7 +905,7 @@ export default class SVGFilterEditor extends EditorElement {
     this.modifyFilter();
   }    
 
-  [SUBSCRIBE('changeRangeEditor')] (key, value) {
+  [SUBSCRIBE_SELF('changeRangeEditor')] (key, value) {
     var filter =  this.state.selectedFilter;
     if (filter) {
       filter.reset({
@@ -915,7 +916,7 @@ export default class SVGFilterEditor extends EditorElement {
     this.modifyFilter();
   }  
 
-  [SUBSCRIBE('changeTextEditor')] (key, value) {
+  [SUBSCRIBE_SELF('changeTextEditor')] (key, value) {
     var filter =  this.state.selectedFilter;
     if (filter) {
       filter.reset({

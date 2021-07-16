@@ -37,6 +37,10 @@ export class SnapManager {
         this.snapDistance = snapDistance;
     }
 
+    get dist () {
+        return this.editor.config.get('snap.distance') || this.snapDistance;
+    }
+
     /**
      * 캐쉬된 item들의 matrix 정보를 삭제한다.
      */
@@ -128,7 +132,7 @@ export class SnapManager {
      */
     check (sourceVerties) {
         const snaps = []
-        const dist = this.snapDistance;
+        const dist = this.dist;
         const sourceXList = sourceVerties.map(it => it[0])
         const sourceYList = sourceVerties.map(it => it[1])
 

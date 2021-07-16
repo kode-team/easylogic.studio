@@ -141,14 +141,21 @@ module.exports = {
       inject: true,
       template: "./src/index.html",
       filename: "./index.html",
-      excludeChunks: ['player', 'single']
+      excludeChunks: ['player', 'embed']
     }),
     new HtmlWebPackPlugin({
       inject: true,
       template: "./src/index.html",
       filename: "./player.html",
-      excludeChunks: ['editor', 'single']
+      excludeChunks: ['editor', 'embed']
     }),        
+
+    new HtmlWebPackPlugin({
+      inject: true,
+      template: "./src/index.html",
+      filename: "./embed.html",
+      excludeChunks: ['editor', 'player']
+    }),            
     new MiniCssExtractPlugin({
       filename: "[name].css?[contenthash]"
     }),

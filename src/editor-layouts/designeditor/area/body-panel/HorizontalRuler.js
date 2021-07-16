@@ -195,13 +195,20 @@ export default class HorizontalRuler extends EditorElement {
 
     }
 
-    [SUBSCRIBE('updateViewport')] () {
+    [SUBSCRIBE('updateViewport', 'refreshSelection')] () {
         this.refresh();      
     }
 
-    [SUBSCRIBE('refreshSelection', 'refreshRect')] () {
-        this.load('$layerRuler');      
-    }    
+    [SUBSCRIBE('refreshSelectionStyleView')] () {
+        if (this.$selection.current) {
+            const current = this.$selection.current;
+
+            if (current.hasChangedField('x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate')) {
+                this.refresh();
+            }
+
+        }
+    }
 
     [SUBSCRIBE('resize.window', 'resizeCanvas')] () {
         this.refreshCanvasSize();

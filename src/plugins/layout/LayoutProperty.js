@@ -1,5 +1,5 @@
 
-import { LOAD, SUBSCRIBE} from "el/base/Event";
+import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF} from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class LayoutProperty extends BaseProperty {
@@ -49,10 +49,10 @@ export default class LayoutProperty extends BaseProperty {
     `
   }
 
-  [SUBSCRIBE('changeLayoutInfo')] (key, value) {
-    this.command('setAttribute', 'change layout info', { 
+  [SUBSCRIBE_SELF('changeLayoutInfo')] (key, value) {
+    this.command('setAttributeForMulti', 'change layout info', this.$selection.packByValue({ 
       [key]: value
-    }, null, false, true)
+    }))
 
     this.nextTick(() => {
       this.emit('refreshAllElementBoundSize');    
@@ -60,15 +60,15 @@ export default class LayoutProperty extends BaseProperty {
 
   }
 
-  [SUBSCRIBE('changeLayoutType')] (key, value) {
+  [SUBSCRIBE_SELF('changeLayoutType')] (key, value) {
 
     this.$selection.reset({
       [key]: value 
     })
 
-    this.command('setAttribute', 'change layout type', { 
+    this.command('setAttributeForMulti', 'change layout type', this.$selection.packByValue({ 
       [key]: value
-    }, null, false, true)
+    }))
 
     this.refresh();
 

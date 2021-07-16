@@ -1,4 +1,4 @@
-import { SUBSCRIBE } from "el/base/Event";
+import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class SVGTextProperty extends BaseProperty {
@@ -96,11 +96,11 @@ export default class SVGTextProperty extends BaseProperty {
     `
   }
 
-  [SUBSCRIBE('changeTextValue')] (key, value) {
+  [SUBSCRIBE_SELF('changeTextValue')] (key, value) {
 
-    this.command('setAttribute', `change svg text property: ${key}`, { 
+    this.command('setAttributeForMulti', `change svg text property: ${key}`, this.$selection.packByValue({ 
       [key]: value
-    })
+    }))
   }
 
 }

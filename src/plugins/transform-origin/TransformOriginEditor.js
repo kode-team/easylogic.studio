@@ -1,4 +1,4 @@
-import { CLICK, LOAD, SUBSCRIBE } from "el/base/Event";
+import { CLICK, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { Length } from "el/editor/unit/Length";
 
@@ -83,7 +83,7 @@ export default class TransformOriginEditor extends EditorElement {
     this.modifyTransformOrigin();
   }
 
-  [SUBSCRIBE('changeTransformOrigin')](key, value) {
+  [SUBSCRIBE_SELF('changeTransformOrigin')](key, value) {
 
     if (key === 'transform-origin') {
       keyList.forEach(type => {

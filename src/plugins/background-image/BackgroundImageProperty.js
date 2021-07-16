@@ -1,6 +1,6 @@
 
 import {
-  LOAD, CLICK, SUBSCRIBE
+  LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF
 } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
@@ -71,10 +71,10 @@ export default class BackgroundImageProperty extends BaseProperty {
     this.load();
   }
 
-  [SUBSCRIBE('changeBackgroundImage')] (key, value) {
-    this.command('setAttribute', 'change background image', { 
+  [SUBSCRIBE_SELF('changeBackgroundImage')] (key, value) {
+    this.command('setAttributeForMulti', 'change background image', this.$selection.packByValue({ 
       [key]: value
-    })
+    }))
   }
 
 }

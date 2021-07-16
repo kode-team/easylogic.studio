@@ -1,5 +1,5 @@
 import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
-import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE, SUBSCRIBE, DOMDIFF } from "el/base/Event";
+import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE, SUBSCRIBE, DOMDIFF, SUBSCRIBE_SELF } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { CSS_TO_STRING, STRING_TO_CSS } from "el/base/functions/func";
 import { LinearGradient } from "el/editor/property-parser/image-resource/LinearGradient";
@@ -241,11 +241,11 @@ export default class BackgroundImageEditor extends EditorElement {
         $fillItem.attr("data-fill-type", typeName);
     }
 
-    [SUBSCRIBE('changeRangeEditor')] (key, value, params) {
+    [SUBSCRIBE_SELF('changeRangeEditor')] (key, value, params) {
         this.trigger('changePattern', key, {[key]: value}, params);
     }
 
-    [SUBSCRIBE('changePattern')] (key, value, params) {
+    [SUBSCRIBE_SELF('changePattern')] (key, value, params) {
         var index = +params;
         var image = this.state.images[index];
 

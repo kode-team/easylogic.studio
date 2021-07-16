@@ -1,4 +1,4 @@
-import { SUBSCRIBE } from "el/base/Event";
+import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 const overflow_list = [
@@ -73,10 +73,10 @@ export default class AppearanceProperty extends BaseProperty {
       `;
   }  
 
-  [SUBSCRIBE('changeColor')] (key, color) {
-    this.command('setAttribute', 'change background color', { 
+  [SUBSCRIBE_SELF('changeColor')] (key, color) {
+    this.command('setAttributeForMulti', 'change background color', this.$selection.packByValue({ 
       [key]: color
-    })
+    }))
   }  
 
 
@@ -93,10 +93,10 @@ export default class AppearanceProperty extends BaseProperty {
   }
 
 
-  [SUBSCRIBE('changeSelect')] (key, value) {
-    this.command("setAttribute", `change attribute : ${key}`, { 
+  [SUBSCRIBE_SELF('changeSelect')] (key, value) {
+    this.command("setAttributeForMulti", `change attribute : ${key}`, this.$selection.packByValue({ 
       [key]: value
-    })
+    }))
   }
 
   [SUBSCRIBE('refreshSelection')]() {

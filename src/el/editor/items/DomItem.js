@@ -182,6 +182,9 @@ export class DomItem extends GroupItem {
       // 캐쉬 할 때는  0~1 사이 값으로 가지고 있다가 
       this.cacheClipPath = new PathParser(obj.value.trim())
       this.cacheClipPath.scale(1/this.json.width.value, 1/this.json.height.value)
+
+      console.log(`cached recover ${this.json.id}`, this.json.width.value, this.json.height.value)
+
     } else {
       this.cacheClipPath = undefined;
     }
@@ -198,6 +201,9 @@ export class DomItem extends GroupItem {
       this.reset({
         'clip-path': `path(${this.cacheClipPath.clone().scaleTo(sx, sy)})`
       })
+
+      console.log(`recover ${this.json.id}`, sx, sy)
+
     }
 
 

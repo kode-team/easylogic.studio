@@ -1,4 +1,4 @@
-import { DEBOUNCE, LOAD, SUBSCRIBE } from "el/base/Event";
+import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 
 import { CSS_TO_STRING, STRING_TO_CSS } from "el/base/functions/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
@@ -95,11 +95,11 @@ export default class GridLayoutItemProperty extends BaseProperty {
     return CSS_TO_STRING(obj)
   }
 
-  [SUBSCRIBE('changeGridItem')] (key, value) {
+  [SUBSCRIBE_SELF('changeGridItem')] (key, value) {
 
-    this.command('setAttribute', 'change grid layout item', { 
+    this.command('setAttributeForMulti', 'change grid layout item', this.$selection.packByValue({ 
       'grid-layout-item': this.getGridValue()
-    })
+    }))
 
     this.nextTick(() => {
       this.emit('refreshAllElementBoundSize')
@@ -107,7 +107,7 @@ export default class GridLayoutItemProperty extends BaseProperty {
 
   }
 
-  [SUBSCRIBE('changeLayoutType')] (key, value) {
+  [SUBSCRIBE_SELF('changeLayoutType')] (key, value) {
 
     var valueType = this.children.$layout.getValue()
     var value = valueType;
@@ -116,9 +116,9 @@ export default class GridLayoutItemProperty extends BaseProperty {
       value = this.getGridValue()
     }
 
-    this.command('setAttribute', 'change grid layout item', { 
+    this.command('setAttributeForMulti', 'change grid layout item', this.$selection.packByValue({ 
       'grid-layout-item': value
-    })
+    }))
 
     // 타입 변화에 따른 하위 아이템들의 설정을 바꿔야 한다. 
     this.refs.$layoutList.attr('data-selected-value', valueType);

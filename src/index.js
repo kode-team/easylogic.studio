@@ -20,7 +20,9 @@ function startEditor() {
     // },
     plugins: [
       function (editor) {
-        console.log(editor);
+        editor.on('changeValue', function (id, attrs) {
+          console.log(id, attrs);
+        })
       }
     ]
   });

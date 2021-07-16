@@ -90,8 +90,6 @@ function getProps (attributes) {
 
 function updateElement (parentElement, oldEl, newEl, i) {
 
-    // console.log(oldEl, newEl);
-
     if (!oldEl) {
         // console.log('replace');        
         parentElement.appendChild(newEl.cloneNode(true));

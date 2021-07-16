@@ -1,6 +1,6 @@
 
 import { Length } from "el/editor/unit/Length";
-import { LOAD, CLICK, POINTERSTART, MOVE, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, POINTERSTART, MOVE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 
@@ -148,7 +148,7 @@ export default class BoxShadowPropertyPopup extends BasePopup {
     this.children.$offsetY.setValue(this.state.offsetY)    
   }
 
-  [SUBSCRIBE('changeRangeEditor')] (key, value) {
+  [SUBSCRIBE_SELF('changeRangeEditor')] (key, value) {
     this.updateData({
       [key]: value
     })

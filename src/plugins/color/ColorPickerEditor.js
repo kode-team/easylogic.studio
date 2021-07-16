@@ -4,7 +4,7 @@ import ColorView from "./colorpicker/control/ColorView";
 import ColorInformation from "./colorpicker/ColorInformation";
 import Palette from "./colorpicker/ColorPalette";
 import ColorManagerV2 from "el/base/ColorManagerV2";
-import { SUBSCRIBE } from "el/base/Event";
+import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 
@@ -58,7 +58,7 @@ export default class ColorPickerEditor extends EditorElement {
         })
     }    
 
-    [SUBSCRIBE('selectColorAssets')] (key, color) {
+    [SUBSCRIBE_SELF('selectColorAssets')] (key, color) {
         this.lastUpdateColor(color);
     }
 

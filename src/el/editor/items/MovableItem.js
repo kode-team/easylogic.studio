@@ -6,7 +6,7 @@ import { mat4, quat, vec3 } from "gl-matrix";
 import { calculateMatrix, calculateMatrixInverse, radianToDegree, round, vertiesMap } from "el/base/functions/math";
 import { isFunction } from "el/base/functions/func";
 import PathParser from "el/editor/parser/PathParser";
-import { polyPoint, polyPoly, rectToVerties } from "el/base/functions/collision";
+import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties } from "el/base/functions/collision";
 
 const ZERO = Length.z()
 export class MovableItem extends Item {
@@ -60,12 +60,14 @@ export class MovableItem extends Item {
     }
 
     reset(obj) {
-        super.reset(obj);
+        const isChanged = super.reset(obj);
 
         // transform 에 변경이 생기면 미리 캐슁해둔다. 
-        if (this.hasChangedField('x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'transform-origin', 'perspective', 'perspective-origin')) {
+        if (isChanged && this.hasChangedField('x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'transform-origin', 'perspective', 'perspective-origin')) {
             this.refreshMatrixCache()
         }
+
+        return isChanged;
     }
 
     /**
@@ -84,6 +86,7 @@ export class MovableItem extends Item {
         this.setCacheLocalTransformMatrix();         
         this.setCacheAccumulatedMatrix();   
         this.setCacheVerties();
+        // this.setCache();
 
         this.layers.forEach(it => {
             it.refreshMatrixCache();
@@ -498,6 +501,10 @@ export class MovableItem extends Item {
     guideVerties () {
         return this.verties;
     }        
+
+    get toRectVerties () {
+        return itemsToRectVerties([this]);
+    }
 
     get matrix () {
         const id = this.id; 

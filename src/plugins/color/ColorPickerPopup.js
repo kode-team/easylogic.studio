@@ -1,5 +1,5 @@
 import UIElement from "el/base/UIElement";
-import { LOAD, CLICK, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 
@@ -69,13 +69,13 @@ export default class ColorPickerPopup extends BasePopup {
     this.children.$color.setValue(this.state.color);
   }
 
-  [SUBSCRIBE('changeColor')] (color) {
+  [SUBSCRIBE_SELF('changeColor')] (color) {
     this.updateData({
       color
     })
   }
 
-  [SUBSCRIBE('changeEndColor')] (color) {
+  [SUBSCRIBE_SELF('changeEndColor')] (color) {
     this.updateEndData({
       color
     })

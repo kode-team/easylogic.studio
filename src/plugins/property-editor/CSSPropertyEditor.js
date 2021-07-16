@@ -1,5 +1,5 @@
 import { Length } from "el/editor/unit/Length";
-import { LOAD, CLICK, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { OBJECT_TO_CLASS } from "el/base/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
@@ -293,59 +293,59 @@ export default class CSSPropertyEditor extends EditorElement {
 
   }
 
-  [SUBSCRIBE('changeKeyValue')] (key, value) {
+  [SUBSCRIBE_SELF('changeKeyValue')] (key, value) {
     this.modifyPropertyValue(key, value);
   }
 
 
-  [SUBSCRIBE('changeBorderRadius')] (value) {
+  [SUBSCRIBE_SELF('changeBorderRadius')] (value) {
     this.modifyPropertyValue('border-radius', value);
   }
 
-  [SUBSCRIBE('changeClipPath')] (value) {
+  [SUBSCRIBE_SELF('changeClipPath')] (value) {
     this.modifyPropertyValue('clip-path', value);
   }  
 
-  [SUBSCRIBE('changeColorProperty')] (key, color) {
+  [SUBSCRIBE_SELF('changeColorProperty')] (key, color) {
     this.modifyPropertyValue(key, color);
   }  
 
-  [SUBSCRIBE('changeBackgroundImageProperty')] (key, backgroundImage) {
+  [SUBSCRIBE_SELF('changeBackgroundImageProperty')] (key, backgroundImage) {
     this.modifyPropertyValue(key, backgroundImage);
   }  
 
-  [SUBSCRIBE('changeFilterProperty')] (filter) {
+  [SUBSCRIBE_SELF('changeFilterProperty')] (filter) {
     this.modifyPropertyValue('filter', filter);
   }    
 
-  [SUBSCRIBE('changeBackdropFilterProperty')] (filter) {
+  [SUBSCRIBE_SELF('changeBackdropFilterProperty')] (filter) {
     this.modifyPropertyValue('backdrop-filter', filter);
   }      
 
-  [SUBSCRIBE('changeBoxShadowProperty')] (boxshadow) {
+  [SUBSCRIBE_SELF('changeBoxShadowProperty')] (boxshadow) {
     this.modifyPropertyValue('box-shadow', boxshadow);
   }   
-  [SUBSCRIBE('changeTextShadowProperty')] (textShadow) {
+  [SUBSCRIBE_SELF('changeTextShadowProperty')] (textShadow) {
     this.modifyPropertyValue('text-shadow', textShadow);
   }     
   
-  [SUBSCRIBE('changeVar')] (value) {
+  [SUBSCRIBE_SELF('changeVar')] (value) {
     this.modifyPropertyValue('var', value);
   }     
 
-  [SUBSCRIBE('changeTransform')] (value) {
+  [SUBSCRIBE_SELF('changeTransform')] (value) {
     this.modifyPropertyValue('transform', value);
   }       
 
-  [SUBSCRIBE('changeTransformOrigin')] (value) {
+  [SUBSCRIBE_SELF('changeTransformOrigin')] (value) {
     this.modifyPropertyValue('transform-origin', value);
   }         
 
-  [SUBSCRIBE('changePerspectiveOrigin')] (value) {
+  [SUBSCRIBE_SELF('changePerspectiveOrigin')] (value) {
     this.modifyPropertyValue('perspective-origin', value);
   }         
 
-  [SUBSCRIBE('changeSelect')] (key, value) {
+  [SUBSCRIBE_SELF('changeSelect')] (key, value) {
     this.modifyPropertyValue(key, value);
   }
 
@@ -451,7 +451,7 @@ export default class CSSPropertyEditor extends EditorElement {
 
   }
 
-  [SUBSCRIBE('changeRangeEditor')] (key, value) {
+  [SUBSCRIBE_SELF('changeRangeEditor')] (key, value) {
     this.modifyPropertyValue(key, value + "");
   }
 

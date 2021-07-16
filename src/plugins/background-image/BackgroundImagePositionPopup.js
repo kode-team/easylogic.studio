@@ -1,5 +1,5 @@
 
-import { CLICK, LOAD, SUBSCRIBE } from "el/base/Event";
+import { CLICK, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import { Length } from "el/editor/unit/Length";
@@ -57,7 +57,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
     `;
   }
 
-  [SUBSCRIBE('changeRangeEditor')] (key, value) {
+  [SUBSCRIBE_SELF('changeRangeEditor')] (key, value) {
     this.updateData({ [key]: value });
   }
 

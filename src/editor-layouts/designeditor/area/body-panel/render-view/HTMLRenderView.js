@@ -17,12 +17,14 @@ import LayerAppendView from "./view-items/LayerAppendView";
 import PathEditorView from "./view-items/PathEditorView";
 import PathDrawView from "./view-items/PathDrawView";
 import SelectionToolView from "./view-items/SelectionToolView";
+import DragAreaView from "./view-items/DragAreaView";
 
 
 export default class HTMLRenderView extends EditorElement {
 
     components() {
         return {
+            DragAreaView,
             StyleView,
             GuideLineView,
             HoverView,
@@ -51,8 +53,8 @@ export default class HTMLRenderView extends EditorElement {
     template() {
         return /*html*/`
             <div class='element-view' ref='$body'>
+                <object refClass="DragAreaView" ref="$dragAreaView" />
                 <div class='canvas-view' ref='$view'></div>
-                <div class='drag-area-rect' ref='$dragAreaRect'></div>
                 <object refClass='StyleView' ref='$styleView' />
                 <object refClass='GuideLineView' ref='$guideLineView' />
                 <object refClass='HoverView' ref='$hoverView' />                             
@@ -63,18 +65,9 @@ export default class HTMLRenderView extends EditorElement {
                 <object refClass='PathEditorView' ref='$pathEditorView' />
                 <object refClass='PathDrawView' ref='$pathDrawView' />
                 <object refClass='LayerAppendView' ref='$objectAddView' />                   
-          
+                ${this.$menuManager.generate("render.view")}
             </div>
         `
-    }
-
-    getScrollXY () {
-        return {
-            width: this.refs.$body.scrollWidth(),
-            height: this.refs.$body.scrollHeight(),
-            left: this.refs.$body.scrollLeft(),
-            top: this.refs.$body.scrollTop()
-        }
     }
 
     get selectionToolView () {
@@ -96,235 +89,6 @@ export default class HTMLRenderView extends EditorElement {
         }
 
         return this.state.cachedCurrentElement[id];
-    }
-
-    checkEmptyElement (e) {
-        var $el = Dom.create(e.target)
-
-        // hand tool 이 on 되어 있으면 드래그 하지 않는다. 
-        if (this.$config.get('set.tool.hand')) {
-            return false; 
-        }
-
-        const code = this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space);
-        if (this.$keyboardManager.check(code)) {        // space 키가 눌러져있을 때는 실행하지 않는다. 
-            return false;
-        } 
-
-        const mousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);        
-
-        if (this.state.mode !== 'selection') {
-            return false; 
-        }
-
-        // altKey 를 누르고 있으면 동작하지 않음 
-        // altKey 는 복제용도로 사용함 
-        if (e.altKey) {
-            return false; 
-        }
-
-        // artboard 에서 드래그 할 수 있도록 예외 처리 
-        if ($el.hasClass('artboard')) {
-            if (this.$selection.check({ id: $el.attr('data-id') })) {
-                // selection 이 이미 되어 있는 상태면 선택 영역을 그리지 않는다. 
-                return false; 
-            }
-
-            // select된 객체에 포지션이 있으면  움직일 수 있도록 한다. 
-            if (this.$selection.hasPoint(mousePoint)) {
-                return false;
-            }            
-
-            return true; 
-        }
-
-
-        // select된 객체에 포지션이 있으면  움직일 수 있도록 한다. 
-        if (this.$selection.hasPoint(mousePoint)) {
-            return false;
-        }            
-
-        if ($el.hasClass('is-not-drag-area')) {
-            return false; 
-        }
-
-        return $el.hasClass('element-item') === false
-            && $el.hasClass('selection-tool-item') === false 
-            && $el.hasClass('pointer') === false
-            && $el.hasClass('rotate-pointer') === false            
-            && $el.hasClass('layer-add-view') === false                        
-            && $el.hasClass('handle') === false            
-            && $el.hasClass('path-draw-container') === false
-            && $el.isTag('svg') === false 
-            && $el.isTag('path') === false
-            && $el.isTag('textPath') === false
-            && $el.isTag('polygon') === false
-            && $el.isTag('text') === false
-            && $el.isTag('img') === false 
-            && $el.attr('data-segment') !== 'true';
-    }
-
-    [POINTERSTART('$body') + IF('checkEmptyElement') + MOVE('movePointer') + END('moveEndPointer')] (e) {
-        this.$target = Dom.create(e.target);
-
-        this.dragXY =  {x: e.xy.x, y: e.xy.y}; 
-
-        this.rect = this.refs.$body.rect();            
-        this.canvasOffset = this.refs.$view.rect();
-
-        this.canvasPosition = {
-            x: this.canvasOffset.left,
-            y: this.canvasOffset.top
-        }
-
-        this.dragXY.x -= this.rect.x
-        this.dragXY.y -= this.rect.y
-
-        if (this.$editor.isSelectionMode()) {
-
-            var obj = {
-                left: Length.px(this.dragXY.x),
-                top: Length.px(this.dragXY.y),
-                width: Length.z(),
-                height: Length.z()
-            }        
-    
-            this.refs.$dragAreaRect.css(obj) 
-
-            this.state.cachedCurrentElement = {}       
-
-        }
-
-    }
-
-    getSelectedItems (rect, areaVerties) {
-
-        var project = this.$selection.currentProject;
-        let items = []
-        let selectedArtboard = []        
-        if (project) {    
-
-            if (rect.width === 0 && rect.height === 0) {
-                items = [] 
-            } else {
-                // 프로젝트 내에 있는 모든 객체 검색 
-
-                project.layers.forEach(layer => {
-
-                    if (layer.is('artboard') && layer.isIncludeByArea(areaVerties)) {        
-                        selectedArtboard.push(layer);
-                    } else if (layer.is('artboard') && layer.checkInArea(areaVerties) && layer.hasChildren() === false) {        
-                        items.push(layer);                            
-                    } else {
-                        items.push.apply(items, layer.checkInAreaForAll(areaVerties))
-                    }
-                })
-
-                if (items.length > 1) {
-                    items = items.filter(it => it.is('artboard') === false);
-                }
-            }   
-        }
-        const selectedItems = selectedArtboard.length ? selectedArtboard : items; 
-
-        return selectedItems;
-    }
-
-    movePointer (dx, dy) {
-        const isShiftKey = this.$config.get('bodyEvent').shiftKey;
-
-        if (isShiftKey) {
-            dy = dx; 
-        }
-
-        var obj = {
-            left: Length.px(this.dragXY.x + (dx < 0 ? dx : 0)),
-            top: Length.px(this.dragXY.y + (dy < 0 ? dy : 0)),
-            width: Length.px(Math.abs(dx)),
-            height: Length.px(Math.abs(dy))
-        }        
-
-        this.refs.$dragAreaRect.css(obj)
-
-        if (this.$editor.isSelectionMode()) {
-
-            var {left: x, top: y, width, height } = obj
-            var rect = {
-                x: x.value, 
-                y: y.value, 
-                width: width.value,
-                height: height.value
-            }
-    
-            var areaVerties = this.$viewport.createAreaVerties(rect.x, rect.y, rect.width, rect.height);
-
-            var project = this.$selection.currentProject;
-            if (project) {    
-                const selectedItems = this.getSelectedItems(rect, areaVerties)
-
-                if (this.$selection.select( ...selectedItems)) {
-                    this.selectCurrent(...selectedItems);
-                    this.emit('refreshSelectionTool', true);
-                }
-
-
-            }
-        }
-    }
-
-    moveEndPointer (dx, dy) {
-
-        var [x, y, width, height ] = this.refs.$dragAreaRect
-                .styles('left', 'top', 'width', 'height')
-                .map(it => Length.parse(it))
-
-        var rect = {
-            x: x.value, 
-            y: y.value, 
-            width: width.value, 
-            height: height.value
-        }
-
-        var areaVerties = this.$viewport.createAreaVerties(rect.x, rect.y, rect.width, rect.height);
-
-        this.refs.$dragAreaRect.css({
-            left: Length.px(-10000),
-            top: Length.z(),
-            width: Length.z(),
-            height: Length.z()
-        })
-
-        var project = this.$selection.currentProject;
-        if (project) {
-    
-            const selectedItems = this.getSelectedItems(rect, areaVerties)
-
-            if (this.$selection.select(...selectedItems)) {
-                this.selectCurrent(...selectedItems)
-            }
-
-        } else {
-            this.$selection.select();
-        }
-        this.emit('history.refreshSelection')
-        this.emit('refreshSelectionTool', true);            
-
-
-        this.sendHelpMessage();
-        this.emit('removeGuideLine')
-    }
-
-    sendHelpMessage () {
-
-        if (this.$selection.length === 1) {
-            var current = this.$selection.current;
-
-            if (current.is('svg-path', 'svg-brush', 'svg-polygon', 'svg-textpath')) {
-                this.emit('addStatusBarMessage', 'Please click if you want to edit to path ');
-            }
-
-        } 
-
     }
 
     // text 의 경우 doubleclick 을 해야 포커스를 줄 수 있고 
@@ -368,7 +132,6 @@ export default class HTMLRenderView extends EditorElement {
      * @param {PointerEvent} e 
      */
     checkEditMode (e) {
-
         // hand tool 이 on 되어 있으면 드래그 하지 않는다. 
         if (this.$config.get('set.tool.hand')) {
             return false; 
@@ -386,6 +149,10 @@ export default class HTMLRenderView extends EditorElement {
         }
 
         const $target = Dom.create(e.target);
+        if ($target.hasClass('canvas-view')) {
+            return false; 
+        }
+
         const $element = $target.closest('element-item');
 
         if ($element) {
@@ -409,6 +176,11 @@ export default class HTMLRenderView extends EditorElement {
             }
 
         } else {
+
+            if (this.$editor.isSelectionMode()) {
+                return true;
+            }
+
             // 움직일 수 있는 영역이 아니기 때문에 false 리턴해서 드래그를 막는다. 
             return false; 
         }
@@ -428,10 +200,20 @@ export default class HTMLRenderView extends EditorElement {
         + MOVE('calculateMovedElement') 
         + END('calculateEndedElement')
     ] (e) {
+
         this.startXY = e.xy ; 
         this.initMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
         let isInSelectedArea = this.$selection.hasPoint(this.initMousePoint)
         const $target = Dom.create(e.target);
+
+        if ($target.hasClass('canvas-view')) {
+            this.$selection.select();
+            this.initializeDragSelection();
+            this.emit('history.refreshSelection');     
+
+            return false; 
+        }
+
         const $element = $target.closest('element-item');
 
         var id = $element && $element.attr('data-id');
@@ -523,6 +305,7 @@ export default class HTMLRenderView extends EditorElement {
             this.initMousePoint = targetMousePoint;
             this.$selection.reselect();
             this.$snapManager.clear();    
+
             this.trigger('refreshAllCanvas')
 
             // ArtBoard 변경 이후에 LayerTreeView 업데이트
@@ -530,10 +313,13 @@ export default class HTMLRenderView extends EditorElement {
             this.emit('refreshSelectionTool', false);         
         }
 
+        this.emit('setAttributeForMulti', this.$selection.pack('x', 'y'));        
+
         this.nextTick(() => {
+            // this.$selection.reselect();
             this.emit('refreshSelectionStyleView');
             this.emit('refreshSelectionTool', false);       
-            this.emit('refreshRect'); 
+            // this.emit('refreshRect'); 
         })
 
     }
@@ -556,12 +342,14 @@ export default class HTMLRenderView extends EditorElement {
             }
         } else {              
             // this.emit('removeGuideLine');
+            this.command(
+                'setAttributeForMulti',
+                "move item",                    
+                this.$selection.pack('x', 'y', 'width', 'height')
+            );              
             this.nextTick(() => {
-                this.command(
-                    'setAttributeForMulti',
-                    "move item",                    
-                    this.$selection.cloneValue('x', 'y', 'width', 'height')
-                );  
+
+                this.$selection.reselect();
 
                 this.emit('refreshSelectionTool', true);
             })

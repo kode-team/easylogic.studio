@@ -89,9 +89,9 @@ export default class AnimationProperty extends BaseProperty {
 
     if (current) {
 
-      this.command("setAttribute", "add animation property", { 
-        animation: Animation.add(current.animation, { name: null })
-      })
+      this.command("setAttributeForMulti", "add animation property", this.$selection.packByValue({ 
+        animation: (item) => Animation.add(item.animation, { name: null })
+      }))
 
       this.nextTick(() => {
         setTimeout(() => {
@@ -190,9 +190,9 @@ export default class AnimationProperty extends BaseProperty {
 
       if (this.current) {
 
-        this.command("setAttribute", "change animation property", { 
-          animation: Animation.replace(this.current.animation, this.selectedIndex, this.currentAnimation)
-        })
+        this.command("setAttributeForMulti", "change animation property", this.$selection.packByValue({ 
+          animation: (item) => Animation.replace(item.animation, this.selectedIndex, this.currentAnimation)
+        }))
 
         this.refresh();
       }

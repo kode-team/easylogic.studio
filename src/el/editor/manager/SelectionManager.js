@@ -150,6 +150,17 @@ export class SelectionManager {
     return [...new Set(this.items.map(it => it.artboard))]
   }
 
+  /**
+   * 
+   * @param {string[]] args
+   */
+  hasChangedField(...args) {
+    if (this.current) {
+      return this.current.hasChangedField(...args);
+    }
+    return false; 
+  }
+
   getRootItem (current) {
     var rootItem = current;
     if (current && current.parent) {
@@ -482,7 +493,13 @@ export class SelectionManager {
     return data;     
   }
 
-  cloneValue (...keys) {
+  /**
+   * 선택된 객체의 값을 패키징 한다. 
+   * 
+   * @param {string[]} keys
+   *  @returns {Object}
+  */
+  pack (...keys) {
     let data = {};
 
     this.each(item => {
@@ -495,6 +512,29 @@ export class SelectionManager {
     })
 
     return data; 
+  }
+
+  /**
+   * 특정 영역의 값에 대한 패키징 한다. 
+   * 
+   * @param {object} valueObject
+   * @returns {Object} 
+   */
+  packByValue (valueObject, ids = null) {
+    let data = {};
+
+    if (ids === null) {
+      this.each(item => {
+        data[item.id] = isFunction(valueObject) ? valueObject(item) : valueObject;
+      });
+
+    } else if (isString(ids) || isArray(ids)){
+      this.itemsByIds(ids).forEach(item => {
+          data[item.id] = isFunction(valueObject) ? valueObject(item) : valueObject;
+      })
+    }
+
+    return data;
   }
 
   each (callback) {

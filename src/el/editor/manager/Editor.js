@@ -236,7 +236,7 @@ export class Editor {
 
   on(...args) {
     const [name, callback, ...rest] = args;
-    this.store.on(name, callback, this, ...rest);
+    return this.store.on(name, callback, this, ...rest);
   }
 
   off(...args) {
@@ -531,8 +531,13 @@ export class Editor {
     return this.renderer('json');
   }  
 
+  /**
+   * 
+   * @param {object|function} commandObject
+   * @return {function} dispose function 
+   */  
   registerCommand(commandObject) {
-    this.commands.registerCommand(commandObject);
+    return this.commands.registerCommand(commandObject);
   }
 
   registerShortCut(shortcut) {

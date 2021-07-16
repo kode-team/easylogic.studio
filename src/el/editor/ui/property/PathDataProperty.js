@@ -1,6 +1,6 @@
 import BaseProperty from "./BaseProperty";
 
-import { DEBOUNCE, SUBSCRIBE } from "el/base/Event";
+import { DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { registElement } from "el/base/registElement";
 
 
@@ -44,7 +44,7 @@ export default class PathDataProperty extends BaseProperty {
   }
 
 
-  [SUBSCRIBE('changeValue')] (key, value, params) {
+  [SUBSCRIBE_SELF('changeValue')] (key, value, params) {
     this.emit("updatePathItem", this.$selection.current, {
       [key]: value 
     })

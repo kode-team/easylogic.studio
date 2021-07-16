@@ -1,4 +1,4 @@
-import { SUBSCRIBE } from "el/base/Event";
+import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class FontProperty extends BaseProperty {
@@ -107,14 +107,14 @@ export default class FontProperty extends BaseProperty {
   }
 
 
-  [SUBSCRIBE('changeColor')] (key, color) {
+  [SUBSCRIBE_SELF('changeColor')] (key, color) {
     this.trigger('changeRangeEditor', key, color);
   }
 
-  [SUBSCRIBE('changeRangeEditor')] (key, value) {
+  [SUBSCRIBE_SELF('changeRangeEditor')] (key, value) {
 
-    this.command('setAttribute', 'change font attribute', { 
+    this.command('setAttributeForMulti', 'change font attribute', this.$selection.packByValue({ 
       [key]: value
-    })
+    }))
   }
 }

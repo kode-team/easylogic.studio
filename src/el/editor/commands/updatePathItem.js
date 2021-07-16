@@ -22,9 +22,9 @@ export default {
                 const newPath = current.invertPath(pathObject.d);
     
                 // d 속성 (path 문자열) 을 설정한다. 
-                editor.emit('setAttribute', {
+                editor.emit('setAttributeForMulti', editor.selection.packByValue({
                     d: newPath.d,
-                })
+                }))
             } else {
 
                 const newPath = current.invertPath(pathObject.d);
@@ -38,13 +38,13 @@ export default {
                 newPath.translate(-bbox[0][0], -bbox[0][1])
     
                 // d 속성 (path 문자열) 을 설정한다. 
-                editor.emit('setAttribute', {
+                editor.emit('setAttributeForMulti', editor.selection.packByValue({
                     d: newPath.d,
                     x: Length.px(newX),
                     y: Length.px(newY),
                     width: Length.px(newWidth),
                     height: Length.px(newHeight)
-                })
+                }))
             }
 
         }

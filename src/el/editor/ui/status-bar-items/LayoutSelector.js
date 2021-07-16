@@ -1,4 +1,4 @@
-import { SUBSCRIBE } from "el/base/Event";
+import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { registElement } from "el/base/registElement";
 
 import { EditorElement } from "../common/EditorElement";
@@ -30,7 +30,7 @@ export default class LayoutSelector extends EditorElement {
 
     }
 
-    [SUBSCRIBE('changeEditorLayoutValue')] (key, layout) {
+    [SUBSCRIBE_SELF('changeEditorLayoutValue')] (key, layout) {
         this.emit('setEditorLayout', layout);
     }
 }

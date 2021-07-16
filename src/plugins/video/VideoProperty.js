@@ -1,5 +1,5 @@
 
-import { LOAD, CLICK, BIND, DEBOUNCE, CHANGEINPUT, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, BIND, DEBOUNCE, CHANGEINPUT, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
@@ -123,21 +123,20 @@ export default class VideoProperty extends BaseProperty {
 
   [SUBSCRIBE('changeCurrentTime')] (key, currentTime) {
     this.setState({ currentTime}, false)
-    // this.video.currentTime = currentTime;
-    this.command('setAttribute', 'change video property', { currentTime }, null, true);
+    this.command('setAttributeForMulti', 'change video property', this.$selection.packByValue({ currentTime }));
   }
 
   [SUBSCRIBE('changePlaybackRate')] (key, playbackRate) {
     this.setState({ playbackRate}, false)
     // this.video.playbackRate = playbackRate;
-    this.command('setAttribute', 'change video property', { playbackRate }, null, true);
+    this.command('setAttributeForMulti', 'change video property', this.$selection.packByValue({ playbackRate }));
   }
 
   [CHANGEINPUT('$volume')] (e) {
     const volume = Number(this.refs.$volume.value)
     this.setState({ volume }, false)
     this.bindData('$volume_control')
-    this.command('setAttribute', 'change video property',{ volume }, null, true);
+    this.command('setAttributeForMulti', 'change video property', this.$selection.packByValue({ volume }));
   }
 
   [BIND('$volume_control')] () {
@@ -169,19 +168,17 @@ export default class VideoProperty extends BaseProperty {
     this.bindData('$tools')
   }
 
-  [SUBSCRIBE('changeValue') + DEBOUNCE(100)] (key, value) {
+  [SUBSCRIBE_SELF('changeValue') + DEBOUNCE(100)] (key, value) {
     if (!this.state.$video) return;
 
-    this.command('setAttribute', 'change video property',{ [key]: value }, null, true);
+    this.command('setAttributeForMulti', 'change video property', this.$selection.packByValue({ [key]: value }));    
   }
 
-  [SUBSCRIBE('changeSelect')] (key, value) {
-    this.command('setAttribute', 'change video property',{
-      [key]: value,
-    });
+  [SUBSCRIBE_SELF('changeSelect')] (key, value) {
+    this.command('setAttributeForMulti', 'change video property', this.$selection.packByValue({ [key]: value }));    
   }
 
-  [SUBSCRIBE('updateVideoEvent')] (e) {
+  [SUBSCRIBE_SELF('updateVideoEvent')] (e) {
     if (this.video.paused) {
       this.setState({ 
         status: 'play',

@@ -2,7 +2,7 @@ import { isFunction } from "el/base/functions/func";
 import { Editor } from "el/editor/manager/Editor";
 
 export default {
-    command : 'setAttributeForMulti',
+    command: 'setAttributeForMulti',
     /**
      * 
      * @param {Editor} editor 
@@ -14,26 +14,33 @@ export default {
             const attrs = multiAttrs[id];
 
             editor.selection.itemsByIds(id).forEach(item => {
-    
+
                 const newAttrs = {};
 
                 Object.keys(attrs).forEach(key => {
                     let value = attrs[key];
-        
+
                     if (isFunction(value)) {
                         value = value(item);
                     }
-                    newAttrs[key] = value; 
+                    newAttrs[key] = value;
                 })
 
 
-                item.reset(newAttrs);
+                const isChanged = item.reset(newAttrs);
 
-                // path 나 내부 요소가 크기가 정해져 있어야 하는 것들을 위해서 
-                // 기본 모양에 대한 캐쉬를 적용한다. 
-                item.setCache();                
-        
-                editor.emit('refreshElement', item);
+
+                if (isChanged) {
+                    // path 나 내부 요소가 크기가 정해져 있어야 하는 것들을 위해서 
+                    // 기본 모양에 대한 캐쉬를 적용한다. 
+                    // item.setCache();
+
+                    editor.emit('refreshElement', item);
+
+
+                    editor.emit('changeValue', id, newAttrs);
+                }
+
             });
         })
 

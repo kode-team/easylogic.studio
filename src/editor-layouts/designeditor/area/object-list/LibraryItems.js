@@ -1,4 +1,4 @@
-import { DEBOUNCE, SUBSCRIBE } from "el/base/Event";
+import { DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 
@@ -15,7 +15,7 @@ export default class LibraryItems extends EditorElement {
     `;
   }
 
-  [SUBSCRIBE('onTextChange') + DEBOUNCE(300)] (key, value) {
+  [SUBSCRIBE_SELF('onTextChange') + DEBOUNCE(300)] (key, value) {
     this.broadcast('search', value);
   }
 }

@@ -1,4 +1,4 @@
-import { CLICK, DEBOUNCE, DRAGSTART, LOAD, SUBSCRIBE } from "el/base/Event";
+import { CLICK, DEBOUNCE, DRAGSTART, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import gradients from "el/editor/preset/gradients";
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
@@ -29,7 +29,7 @@ export default class GradientAssetsProperty extends BaseProperty {
     `
   }  
 
-  [SUBSCRIBE('changePreset')] (key, value) {
+  [SUBSCRIBE_SELF('changePreset')] (key, value) {
 
     this.setState({
       [key]: value

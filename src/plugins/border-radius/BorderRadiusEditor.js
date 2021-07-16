@@ -1,4 +1,4 @@
-import { CLICK, INPUT, CHANGE, LOAD, SUBSCRIBE } from "el/base/Event";
+import { CLICK, INPUT, CHANGE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import BorderRadius from "el/editor/property-parser/BorderRadius";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
@@ -23,7 +23,7 @@ export default class BorderRadiusEditor extends EditorElement {
     return `<div class='border-radius-editor' ref='$body'></div>`
   }
 
-  [SUBSCRIBE('changeBorderRadius')] (key, value) {
+  [SUBSCRIBE_SELF('changeBorderRadius')] (key, value) {
 
     if (key === 'border-radius') {
       keyList.forEach(type => {
