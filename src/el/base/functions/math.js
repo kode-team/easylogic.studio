@@ -214,8 +214,8 @@ export function makeGuidePoint (sourceItem, targetItem) {
 
     return invertTargetPoint([
         ...point,
-        Boolean(sourceItem.transform) ? sourceVerties: null,
-        Boolean(targetItem.transform) ? targetVerties: null,
+        sourceVerties,
+        targetVerties,
     ], hasInvert);
 }
 

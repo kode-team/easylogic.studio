@@ -30,10 +30,6 @@ export class SVGTextItem extends SVGItem {
     return false; 
   }
 
-  setCache () {
-    this.rect = this.clone(false);
-  }
-
   convert(json) {
     json = super.convert(json);
 
@@ -43,7 +39,6 @@ export class SVGTextItem extends SVGItem {
   }
 
   toCloneObject() {
-    var json = this.json; 
     return {
       ...super.toCloneObject(),
       ...this.attrs(
@@ -60,6 +55,10 @@ export class SVGTextItem extends SVGItem {
     return "Text";
   }
 
+  /**
+   * @deprecated 
+   * 
+   */   
   toAnimationKeyframes (properties) {
 
     var svgProperties = properties.filter(it => hasSVGProperty(it.property));

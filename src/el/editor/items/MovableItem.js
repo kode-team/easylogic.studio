@@ -86,7 +86,7 @@ export class MovableItem extends Item {
         this.setCacheLocalTransformMatrix();         
         this.setCacheAccumulatedMatrix();   
         this.setCacheVerties();
-        // this.setCache();
+        this.setCacheGuideVerties();
 
         this.layers.forEach(it => {
             it.refreshMatrixCache();
@@ -110,6 +110,10 @@ export class MovableItem extends Item {
 
     setCacheVerties() {
         this._cachedVerties = this.getVerties();
+    }
+
+    setCacheGuideVerties() {
+        this._cachedGuideVerties = this.getGuideVerties();
     }
 
     //////////////////////
@@ -146,6 +150,10 @@ export class MovableItem extends Item {
     get verties() {
         return this._cachedVerties || this.getVerties();
     }
+
+    get guideVerties() {
+        return this._cachedGuideVerties || this.getGuideVerties();
+    }    
 
 
     setScreenX(value) {
@@ -391,10 +399,10 @@ export class MovableItem extends Item {
     /**
      * 방향에 따른 matrix 구하기 
      * 
-     * @param {ReadOnlyVec3} vertextOffset 
+     * @param {ReadOnlyVec3} vertexOffset 
      * @param {ReadOnlyVec3} center 
      */
-    getDirectionTransformMatrix (vertextOffset, width, height) {
+    getDirectionTransformMatrix (vertexOffset, width, height) {
         const x = this.offsetX.value;
         const y = this.offsetY.value; 
 
@@ -402,11 +410,11 @@ export class MovableItem extends Item {
             this.json['transform-origin'] || '50% 50% 0px', 
             width, 
             height
-        ), vec3.negate([], vertextOffset));
+        ), vec3.negate([], vertexOffset));
 
         const view = mat4.create();
         mat4.translate(view, view, [x, y, 0]);
-        mat4.translate(view, view, vertextOffset);            
+        mat4.translate(view, view, vertexOffset);            
         mat4.translate(view, view, center)        
         mat4.multiply(view, view, this.itemMatrix)        
         mat4.translate(view, view, vec3.negate([], center))            
@@ -498,8 +506,17 @@ export class MovableItem extends Item {
         return this.verties.filter((_, index) => index < 4)
     }    
 
-    guideVerties () {
-        return this.verties;
+    getGuideVerties () {
+
+        const verties = this.rectVerties();
+
+        return [
+            ...verties,
+            vec3.lerp([], verties[0], verties[1], 0.5),
+            vec3.lerp([], verties[1], verties[2], 0.5),
+            vec3.lerp([], verties[2], verties[3], 0.5),
+            vec3.lerp([], verties[3], verties[0], 0.5),
+        ];
     }        
 
     get toRectVerties () {
@@ -549,11 +566,11 @@ export class MovableItem extends Item {
             transform: originalTransform,
             originalTransformOrigin,      
             /**
-             * 변환되는 모든 vertext 를 기록 
+             * 변환되는 모든 vertex 를 기록 
              */
             verties,
             /**
-             * 회전되는 vertext 를 제외한 모든 vertext 
+             * 회전되는 vertex 를 제외한 모든 vertex 
              * 회전 방식이 바뀌면 삭제 될 수 있음. 
              */            
             rectVerties: verties,
@@ -587,14 +604,10 @@ export class MovableItem extends Item {
      */
     accumulatedPath (pathString = '') {
 
-        const d = pathString || this.json.d;
+        const d = pathString || this.d;
 
-        const pathParser = new PathParser(d);
-
-
-        const transform = this.getAccumulatedMatrix();
-
-        pathParser.transformMat4(transform);
+        const pathParser = new PathParser(d)
+        pathParser.transformMat4(this.accumulatedMatrix);
 
         return pathParser; 
     }    
@@ -603,7 +616,7 @@ export class MovableItem extends Item {
     // svg container 의 matrix 의 inverse matrix 를 곱해서 재계산 한다.     
     invertPath (pathString = '') {
         const path = new PathParser(pathString)
-        path.transformMat4(this.getAccumulatedMatrixInverse())    
+        path.transformMat4(this.accumulatedMatrixInverse)    
     
         return path; 
     }

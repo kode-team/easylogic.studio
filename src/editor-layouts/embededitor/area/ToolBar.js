@@ -1,13 +1,22 @@
-import "../../../el/editor/ui/menu-items/index";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import ToolMenu from "./tool-bar/ToolMenu";
 import { css } from "@emotion/css";
 import PageSubEditor from "../../designeditor/area/PageSubEditor";
 
+import KeyBoard from "el/editor/ui/menu-items/KeyBoard";
+import ExportView from "el/editor/ui/menu-items/ExportView";
+import Download from "el/editor/ui/menu-items/Download";
+import Save from "el/editor/ui/menu-items/Save";
+
 export default class ToolBar extends EditorElement {
 
     components() {
         return {
+            KeyBoard,
+            ExportView,
+            Download,
+            Save,
+
             PageSubEditor,
             ToolMenu
         }

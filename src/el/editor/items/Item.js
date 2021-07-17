@@ -41,22 +41,11 @@ export class Item {
         }
       },
       set: (target, key, value) => {
-        // Dom 객체가 오면 자동으로 입력 해줌
-        // if (value && value.realVal && isFunction(value.realVal)) {
-        //   value = value.realVal();
-        // }
-        if (this.checkField(key, value)) {
+        const isDiff = target.json[key] != value; 
 
-          const isDiff = target.json[key] != value; 
-
-          target.json[key] = value;
-
-          if (isDiff) {
-            this.changed()
-          }
-
-        } else {
-          throw new Error(`${value} is invalid as ${key} property value.`);
+        if (isDiff) {
+          target.json[key] = value;          
+          this.changed()
         }
 
         return true;
@@ -267,16 +256,6 @@ export class Item {
     return this.json.id + postfix;
   }
 
-  // selection 이후에 
-  // 위치나 , width, height 등의 geometry 가 변경되었을 때 호출 하는 함수 
-  recover () {  
-    // 내부에 자신의 객체에 필요한 것들을 복구한다. 
-  }
-
-  setCache() {
-
-  }
-
   is (checkItemType) {
     if (!this.json) return false;
     return checkItemType === this.json.itemType;
@@ -322,15 +301,16 @@ export class Item {
     return json;
   }
 
-  /**
-   * defence to set invalid key-value
-   *
-   * @param {*} key
-   * @param {*} value
-   */
-  checkField(key, value) {
-    return true;
-  }
+  // /**
+  //  * defence to set invalid key-value
+  //  *
+  //  * @param {*} key
+  //  * @param {*} value
+  //  */
+  // checkField(key, value) {
+  //   console.log(this, key, value);
+  //   return true;
+  // }
 
   toCloneObject (isDeep = true) {
     var json = this.attrs(
@@ -370,9 +350,16 @@ export class Item {
     // // 같으면 변경하지 않음 
     // if (JSON.stringify(oldValue) === JSON.stringify(obj)) return false;
 
-    this.json = this.convert(Object.assign(this.json, obj));
-    this.lastChangedField = obj; 
-    this.changed();
+    // const isDiff = Object.keys(obj).some(key => {
+    //   return this.json[key] !== obj[key]
+    // })
+
+    // console.log(isDiff);
+
+    // if (isDiff) {
+      this.json = this.convert(Object.assign(this.json, obj));
+      this.lastChangedField = obj; 
+      this.changed();
 
     // 값이 변경 되었는지 어떻게 인지 할까요? 
     // reset 할 때 값이 변경이 안되었을 수도 있으니 

@@ -1,15 +1,25 @@
-
-import "./tool-bar/ToolMenu";
-import "../../../el/editor/ui/menu-items/index";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import PageSubEditor from "./PageSubEditor";
 import ToolMenu from "./tool-bar/ToolMenu";
+import Projects from "el/editor/ui/menu-items/Projects";
+import Fullscreen from "el/editor/ui/menu-items/Fullscreen";
+import KeyBoard from "el/editor/ui/menu-items/KeyBoard";
+import ExportView from "el/editor/ui/menu-items/ExportView";
+import Download from "el/editor/ui/menu-items/Download";
+import Save from "el/editor/ui/menu-items/Save";
 
 
 export default class ToolBar extends EditorElement {
 
     components() {
         return {
+            Projects,
+            Fullscreen,
+            KeyBoard,
+            ExportView,
+            Download,
+            Save,
+
             PageSubEditor,
             ToolMenu
         }

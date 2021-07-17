@@ -1,9 +1,26 @@
+import BottomAlign from "el/editor/ui/menu-items/BottomAlign";
+import CenterAlign from "el/editor/ui/menu-items/CenterAlign";
+import LeftAlign from "el/editor/ui/menu-items/LeftAlign";
+import MiddleAlign from "el/editor/ui/menu-items/MiddleAlign";
+import RightAlign from "el/editor/ui/menu-items/RightAlign";
+import SameHeight from "el/editor/ui/menu-items/SameHeight";
+import SameWidth from "el/editor/ui/menu-items/SameWidth";
+import TopAlign from "el/editor/ui/menu-items/TopAlign";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class AlignmentProperty extends BaseProperty {
 
-  afterRender() {
-    this.show();
+  components() {
+    return {
+      LeftAlign,
+      CenterAlign,
+      RightAlign,
+      TopAlign,
+      MiddleAlign,
+      BottomAlign,
+      SameWidth,
+      SameHeight
+    }
   }
 
   getTitle() {

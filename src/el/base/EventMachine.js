@@ -108,13 +108,7 @@ export default class EventMachine {
   }
 
   initComponents() {
-    // const parentComponents = isFunction(this.parent.components) ? this.parent.components() : this.parent.components;
-
-    this.childComponents = {
-      // ...parentComponents, 
-      ...this.components() 
-    };
-
+    this.childComponents = this.components() 
   }
 
   initializeHandler () {

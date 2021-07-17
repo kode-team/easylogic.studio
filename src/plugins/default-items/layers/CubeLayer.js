@@ -142,6 +142,10 @@ export class CubeLayer extends Component {
 
   }
 
+  /**
+   * @deprecated 
+   * 
+   */   
   toAnimationKeyframes (properties) {
    
     var customProperties = []

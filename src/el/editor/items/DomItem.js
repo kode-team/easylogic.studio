@@ -153,6 +153,10 @@ export class DomItem extends GroupItem {
   }
   
   // export animation keyframe
+  /**
+   * @deprecated 
+   * 
+   */ 
   toAnimationKeyframes (properties) {
     return [
       { selector: `[data-id="${this.json.id}"]`, properties }
@@ -174,39 +178,35 @@ export class DomItem extends GroupItem {
   }
 
 
-  setCache () {
+  reset(obj) {
+    const isChanged = super.reset(obj);
 
+    // transform 에 변경이 생기면 미리 캐슁해둔다. 
+    if (isChanged && this.hasChangedField('clip-path')) {
+        this.setClipPathCache()
+    }
+
+    return isChanged;
+  }
+
+  setClipPathCache() {
     var obj = ClipPath.parseStyle(this.json['clip-path'])
 
     if (obj.type === 'path') {
-      // 캐쉬 할 때는  0~1 사이 값으로 가지고 있다가 
       this.cacheClipPath = new PathParser(obj.value.trim())
-      this.cacheClipPath.scale(1/this.json.width.value, 1/this.json.height.value)
-
-      console.log(`cached recover ${this.json.id}`, this.json.width.value, this.json.height.value)
-
-    } else {
-      this.cacheClipPath = undefined;
     }
-
   }
 
-  recover () {
+  get clipPathString() {
+
+    if (!this.cacheClipPath) {
+      this.setClipPathCache();
+    }
 
     if (this.cacheClipPath) {
-      var sx = this.json.width.value
-      var sy = this.json.height.value
-  
-      // 마지막 크기(width, height) 기준으로 다시 확대한다. 
-      this.reset({
-        'clip-path': `path(${this.cacheClipPath.clone().scaleTo(sx, sy)})`
-      })
-
-      console.log(`recover ${this.json.id}`, sx, sy)
-
+      return this.cacheClipPath.clone().scaleTo(this.json.width.value, this.json.height.value);
     }
 
-
   }
-
+ 
 }

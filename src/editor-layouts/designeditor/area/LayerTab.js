@@ -27,7 +27,7 @@ export default class LayerTab extends EditorElement {
 
   initState() {
     return {
-      selectedIndex: 2
+      selectedIndexValue: 2
     }
   }
 
@@ -51,6 +51,16 @@ export default class LayerTab extends EditorElement {
             <div class='tab-item' data-value='4' data-direction="right"  data-tooltip="${this.$i18n('app.tab.title.components')}">
               <label>${icon.plugin}</label>
             </div>
+
+            ${this.$menuManager.getTargetMenuItems('leftbar.tab').map(it => {
+              const { value, title} = it.class;              
+              return /*html*/`
+                <div class='tab-item' data-value='${value}' data-direction="right"  data-tooltip="${title}">
+                  <label>${icon[it.class.icon] || it.class.icon}</label>
+                </div>
+              `
+            })}
+
           </div>
           <div class="tab-body" ref="$body">
             <div class="tab-content selected" data-value="2">
@@ -75,6 +85,17 @@ export default class LayerTab extends EditorElement {
             <div class='tab-content' data-value='6'>
               <object refClass="ArtboardItems" />
             </div>
+            ${this.$menuManager.getTargetMenuItems('leftbar.tab').map(it => {
+              const { value, title, loadElements } = it.class;
+              return /*html*/`
+                <div class='tab-content' data-value='${value}'>
+                  ${loadElements.map(element => {
+                    return `<object refClass="${element}" />`
+                  }).join('\n')}
+                  ${this.$menuManager.generate(`leftbar.tab.${value}`)}
+                </div>
+              `
+            })}
           </div>
         </div>
       </div>
@@ -83,13 +104,13 @@ export default class LayerTab extends EditorElement {
 
   [CLICK("$header .tab-item:not(.extra-item)")](e) {
 
-    var selectedIndex = +e.$dt.attr('data-value')
-    if (this.state.selectedIndex === selectedIndex) {
+    var selectedIndexValue = e.$dt.attr('data-value')
+    if (this.state.selectedIndexValue === selectedIndexValue) {
       return; 
     }
 
-    this.$el.$$(`[data-value="${this.state.selectedIndex}"]`).forEach(it => it.removeClass('selected'))
-    this.$el.$$(`[data-value="${selectedIndex}"]`).forEach(it => it.addClass('selected'))
-    this.setState({ selectedIndex }, false);
+    this.$el.$$(`[data-value="${this.state.selectedIndexValue}"]`).forEach(it => it.removeClass('selected'))
+    this.$el.$$(`[data-value="${selectedIndexValue}"]`).forEach(it => it.addClass('selected'))
+    this.setState({ selectedIndexValue }, false);
   }
 }

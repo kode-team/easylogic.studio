@@ -2,14 +2,13 @@
 
 import { CLICK } from "el/base/Event";
 import icon from "el/editor/icon/icon";
-import { registElement } from "el/base/registElement";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 export default class Inspector extends EditorElement {
 
   initState() {
     return {
-      selectedIndex: 1
+      selectedIndexValue: 1
     }
   }
 
@@ -33,7 +32,16 @@ export default class Inspector extends EditorElement {
               </div>       
               <div class="tab-item" data-value="5" title='${this.$i18n('inspector.tab.title.history')}'>
                 <label class='icon'>${icon.expand}</label>
-              </div>                                                   
+              </div>                      
+
+              ${this.$menuManager.getTargetMenuItems('inspector.tab').map(it => {
+                const { value, title} = it.class;              
+                return /*html*/`
+                  <div class='tab-item' data-value='${value}' data-direction="right"  data-tooltip="${title}">
+                    <label>${icon[it.class.icon] || it.class.icon}</label>
+                  </div>
+                `
+              })}
             </div>
             <div class="tab-body" ref="$body">
 
@@ -64,7 +72,19 @@ export default class Inspector extends EditorElement {
               <div class="tab-content" data-value="5">
                 ${this.$menuManager.generate('inspector.tab.history')}                            
                 <div class='empty'></div>                           
-              </div>                     
+              </div>   
+              
+              ${this.$menuManager.getTargetMenuItems('inspector.tab').map(it => {
+                const { value, title, loadElements } = it.class;
+                return /*html*/`
+                  <div class='tab-content' data-value='${value}'>
+                    ${loadElements.map(element => {
+                      return `<object refClass="${element}" />`
+                    }).join('\n')}
+                    ${this.$menuManager.generate(`inspector.tab.${value}`)}
+                  </div>
+                `
+              })}              
             </div>
           </div>
         </div>
@@ -74,14 +94,14 @@ export default class Inspector extends EditorElement {
 
   [CLICK("$header .tab-item:not(.empty-item)")](e) {
 
-    var selectedIndex = +e.$dt.attr('data-value')
-    if (this.state.selectedIndex === selectedIndex) {
+    var selectedIndexValue = e.$dt.attr('data-value')
+    if (this.state.selectedIndexValue === selectedIndexValue) {
       return; 
     }
 
-    this.$el.$$(`[data-value="${this.state.selectedIndex}"]`).forEach(it => it.removeClass('selected'))
-    this.$el.$$(`[data-value="${selectedIndex}"]`).forEach(it => it.addClass('selected'))
-    this.setState({ selectedIndex }, false);
+    this.$el.$$(`[data-value="${this.state.selectedIndexValue}"]`).forEach(it => it.removeClass('selected'))
+    this.$el.$$(`[data-value="${selectedIndexValue}"]`).forEach(it => it.addClass('selected'))
+    this.setState({ selectedIndexValue }, false);
 
   }
 }

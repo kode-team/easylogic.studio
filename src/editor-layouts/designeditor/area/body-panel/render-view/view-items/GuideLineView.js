@@ -152,36 +152,38 @@ export default class GuideLineView extends EditorElement {
     createGuideLine(list) {
 
         var images = []
+        var texts = []
         list = list.filter(Boolean);
         for (var i = 0, len = list.length; i < len; i++) {
 
             const [source, target, axis, dist, newTarget, sourceVerties, targetVerties, isInvert] = list[i];
 
-            // 시작점 기준으로 맞출때가 필요하면 localSourceVertext 를 활용하자. 아직은 없음. 
-            const localSourceVertext = this.$viewport.applyVerties([source])[0];
-            const localTargetVertext = this.$viewport.applyVerties([target])[0];
-            let localNewTargetVertext
+            // 시작점 기준으로 맞출때가 필요하면 localSourceVertex 를 활용하자. 아직은 없음. 
+            const localSourceVertex = this.$viewport.applyVerties([source])[0];
+            const localTargetVertex = this.$viewport.applyVerties([target])[0];
+            
+            let localNewTargetVertex
 
             if (newTarget) {
-                localNewTargetVertext = this.$viewport.applyVerties([newTarget])[0];
+                localNewTargetVertex = this.$viewport.applyVerties([newTarget])[0];
             }
 
 
             if (axis === 'x') {
                 if (dist > 0) {
 
-                    images.push(line(localSourceVertext, localTargetVertext, 'dash-line'))
+                    images.push(line(localSourceVertex, localTargetVertex, 'dash-line'))
                 }
 
-                if (localNewTargetVertext) {
-                    images.push(line(localTargetVertext, localNewTargetVertext, 'dash-line'))
+                if (localNewTargetVertex) {
+                    images.push(line(localTargetVertex, localNewTargetVertex, 'dash-line'))
                 }
 
                 if (dist > 0) {
-                    images.push(
+                    texts.push(
                         text(
                             dist,
-                            vec3.lerp([], localSourceVertext, localTargetVertext, 0.5)
+                            vec3.lerp([], localSourceVertex, localTargetVertex, 0.5)
                         )
                     );
                 }
@@ -191,18 +193,18 @@ export default class GuideLineView extends EditorElement {
             if (axis === 'y') {
                 if (dist > 0) {
 
-                    images.push(line(localSourceVertext, localTargetVertext, 'dash-line'))
+                    images.push(line(localSourceVertex, localTargetVertex, 'dash-line'))
                 }
 
-                if (localNewTargetVertext) {
-                    images.push(line(localTargetVertext, localNewTargetVertext, 'dash-line'))
+                if (localNewTargetVertex) {
+                    images.push(line(localTargetVertex, localNewTargetVertex, 'dash-line'))
                 }
 
                 if (dist > 0) {
-                    images.push(
+                    texts.push(
                         text(
                             dist,
-                            vec3.add([], vec3.lerp([], localSourceVertext, localTargetVertext, 0.5), [20, 0, 0]),
+                            vec3.add([], vec3.lerp([], localSourceVertex, localTargetVertex, 0.5), [20, 0, 0]),
                         )
                     );
                 }
@@ -210,11 +212,11 @@ export default class GuideLineView extends EditorElement {
 
 
             if (axis === 'x') {
-                images.push(hLineByPoint(localTargetVertext, localSourceVertext))
+                images.push(hLineByPoint(localTargetVertex, localSourceVertex))
             }            
 
             if (axis === 'y') {
-                images.push(vLineByPoint(localTargetVertext, localSourceVertext))
+                images.push(vLineByPoint(localTargetVertex, localSourceVertex))
             }
 
             if (sourceVerties) {
@@ -226,7 +228,7 @@ export default class GuideLineView extends EditorElement {
             }
         }
 
-        return [...new Set(images)].join('');
+        return [...new Set(images), ...new Set(texts)].join('');
     }
 
     removeGuideLine() {

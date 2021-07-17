@@ -337,7 +337,7 @@ export default class PathEditorView extends PathTransformEditor {
                 y: Length.px(bbox[0][1]),
                 width: Length.px(newWidth),
                 height: Length.px(newHeight),
-                d: newPath.d,
+                d: newPath.scale(1/newWidth, 1/newHeight).d,
                 totalLength: this.totalPathLength,
                 fill: `#C4C4C4`
             }
@@ -356,10 +356,6 @@ export default class PathEditorView extends PathTransformEditor {
         }
 
         return layer; 
-    }
-
-    get isBoxMode () {
-        return this.state.box === 'box'
     }
 
     updatePathLayer () {

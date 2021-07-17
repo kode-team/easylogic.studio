@@ -382,7 +382,7 @@ export default class DomRender extends ItemRender {
 
     switch (obj.type) {
     case 'path':
-      return /*html*/`<clipPath id="${this.clipPathId(item)}"><path d="${value}" /></clipPath>`
+      return /*html*/`<clipPath id="${this.clipPathId(item)}"><path d="${item.clipPathString}" /></clipPath>`
     case 'svg': 
       return /*html*/`<clipPath id="${this.clipPathId(item)}">${value}</clipPath>`
     }

@@ -1,4 +1,3 @@
-import { registElement } from "el/base/registElement";
 import MenuItem from "./MenuItem";
    
 export default class RightAlign extends MenuItem {
@@ -17,5 +16,3 @@ export default class RightAlign extends MenuItem {
     this.emit('sort.right');
   }
 }
-
-registElement({ RightAlign })

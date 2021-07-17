@@ -56,12 +56,12 @@ export default class HTMLRenderView extends EditorElement {
                 <object refClass="DragAreaView" ref="$dragAreaView" />
                 <div class='canvas-view' ref='$view'></div>
                 <object refClass='StyleView' ref='$styleView' />
-                <object refClass='GuideLineView' ref='$guideLineView' />
-                <object refClass='HoverView' ref='$hoverView' />                             
-                <object refClass='SelectionInfoView' ref='$selectionInfoView' />                                
+                <object refClass='SelectionInfoView' ref='$selectionInfoView' />                                                
                 <object refClass='GridLayoutLineView' ref='$gridLayoutLineView' />
                 <object refClass='SelectionToolView' ref='$selectionTool' />
                 <object refClass='GroupSelectionToolView' ref='$groupSelectionTool' />
+                <object refClass='GuideLineView' ref='$guideLineView' />
+                <object refClass='HoverView' ref='$hoverView' />                                             
                 <object refClass='PathEditorView' ref='$pathEditorView' />
                 <object refClass='PathDrawView' ref='$pathDrawView' />
                 <object refClass='LayerAppendView' ref='$objectAddView' />                   

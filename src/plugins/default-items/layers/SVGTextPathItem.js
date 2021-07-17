@@ -29,26 +29,28 @@ export class SVGTextPathItem extends SVGItem {
     return false; 
   }
  
+  refreshMatrixCache() {
+    super.refreshMatrixCache();
 
-  setCache () {
-    // 캐쉬 할 때는  0~1 사이 값으로 가지고 있다가 
-    this.cachePath = new PathParser(this.json.d)
-    this.cachePath.scale(1/this.json.width.value, 1/this.json.height.value)
+    if (this.hasChangedField('d')) {
+      this.cachePath = new PathParser(this.json.d);
+    }
   }
 
-  recover () {
 
-    // 캐쉬가 없는 상태에서는 초기 캐쉬를 생성해준다. 
-    if (!this.cachePath) this.setCache();
 
-    var sx = this.json.width.value
-    var sy = this.json.height.value
+  get d() {
 
-    // 마지막 크기(width, height) 기준으로 다시 확대한다. 
-    this.json.d = this.cachePath.clone().scaleTo(sx, sy)
+    if (!this.json.d) {
+      return null;
+    }
+    
+    if (!this.cachePath) {
+      this.cachePath = new PathParser(this.json.d);
+    }
 
-  }
-
+    return this.cachePath.clone().scaleTo(this.json.width.value, this.json.height.value);
+  }  
 
   convert(json) {
     json = super.convert(json);
@@ -77,6 +79,10 @@ export class SVGTextPathItem extends SVGItem {
     return "TextPath";
   }
 
+  /**
+   * @deprecated 
+   * 
+   */   
   toAnimationKeyframes (properties) {
 
     var svgProperties = properties.filter(it => hasSVGProperty(it.property));

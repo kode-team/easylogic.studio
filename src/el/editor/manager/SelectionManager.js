@@ -130,8 +130,17 @@ export class SelectionManager {
       // project item 은 제외 
       if (item.is('project')) return false; 
 
-      return !this.check(item); 
-    });
+      // 선택된 것은 제외 
+      if (this.check(item)) return false; 
+      
+      // viewport 안에 존재 하는 것만 대상으로 한다. 
+      const inViewport = item.verties.some(v => {
+        return this.$editor.viewport.checkInViewport(v)
+      })
+
+      return inViewport;
+
+    })
   }
 
   get snapTargetLayersWithSelection () {
@@ -142,7 +151,12 @@ export class SelectionManager {
       // project item 은 제외 
       if (item.is('project')) return false; 
 
-      return true; 
+      // viewport 안에 존재 하는 것만 대상으로 한다. 
+      const inViewport = item.verties.some(v => {
+        return this.$editor.viewport.checkInViewport(v)
+      })
+
+      return inViewport;
     });
   }
 
@@ -419,12 +433,6 @@ export class SelectionManager {
     })
 
     return checkedParentChange;
-  }
-
-  doCache () {
-    this.items.forEach(item => {
-      item.setCache();
-    })
   }
 
   setRectCache () {

@@ -1,6 +1,7 @@
 
 import UIElement from "el/base/UIElement";
 import { ConfigManager } from "el/editor/manager/ConfigManager";
+import { MenuItemManager } from "el/editor/manager/MenuItemManager";
 import { SelectionManager } from "el/editor/manager/SelectionManager";
 import { ViewportManager } from "el/editor/manager/ViewportManager";
 
@@ -97,6 +98,9 @@ export class EditorElement extends UIElement {
         return this.$editor.storageManager;
     }
 
+    /**
+     * @type {MenuItemManager}
+     */ 
     get $menuManager() {
         return this.$editor.menuItemManager;
     }

@@ -18,8 +18,8 @@ export function pointPoint (x1, y1, x2, y2) {
 /**
  * 점간의 대략적인 거리의 위치 지정 
  * 
- * @param {vec3} s source vertext 
- * @param {vec3} t target vertext 
+ * @param {vec3} s source vertex 
+ * @param {vec3} t target vertex 
  * @param {number} [dist=0] check distance
  */
 export function pointPointDist (s, t, dist = 0) {

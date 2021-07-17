@@ -6,16 +6,16 @@ const DEFAULT_DIST_VECTOR = vec3.fromValues(0, 0, 0)
 const AXIS_X = 'x';
 const AXIS_Y = 'y';
 
-function checkXAxis (sourceVertext, targetVertext) {
-    return Math.abs(sourceVertext[0] - targetVertext[0]) < 1; 
+function checkXAxis (sourceVertex, targetVertex) {
+    return Math.abs(sourceVertex[0] - targetVertex[0]) < 1; 
 }
 
-function checkYAxis (sourceVertext, targetVertext) {
-    return Math.abs(sourceVertext[1] - targetVertext[1]) < 1; 
+function checkYAxis (sourceVertex, targetVertex) {
+    return Math.abs(sourceVertex[1] - targetVertex[1]) < 1; 
 }
 
-function checkZAxis (sourceVertext, targetVertext) {
-    return Math.abs(sourceVertext[2] - targetVertext[2]) < 1; 
+function checkZAxis (sourceVertex, targetVertex) {
+    return Math.abs(sourceVertex[2] - targetVertex[2]) < 1; 
 }
 
 
@@ -66,7 +66,7 @@ export class SnapManager {
      * @returns {vec3[]}
      */
     convertGuideAndPathMatrix (item) {
-        const guideVerties  = item.guideVerties();
+        const guideVerties  = item.guideVerties;
         const pathVerties  = item.pathVerties();
 
         return [...guideVerties, ...pathVerties];
@@ -161,22 +161,46 @@ export class SnapManager {
      */
     getGuidesByPointPoint (sourceVerties, targetVerties) {
         const points = []
-        let sourceVertext, targetVertext;
+        const groupPoints = {};        
+        let sourceVertex, targetVertex;
         for (let sourceIndex = 0, sourceLength = sourceVerties.length; sourceIndex < sourceLength; sourceIndex++) {
-            sourceVertext = sourceVerties[sourceIndex];
+            sourceVertex = sourceVerties[sourceIndex];
+
+
+            const keyX = `${sourceVertex[0]}_x`
+            const keyY = `${sourceVertex[1]}_y`
+
+            if (!groupPoints[keyX]) {
+                groupPoints[keyX] = [];
+            }
+
+            if (!groupPoints[keyY]) {
+                groupPoints[keyY] = [];
+            }
 
             for (let targetIndex = 0, targetLength = targetVerties.length; targetIndex < targetLength; targetIndex++) {
-                targetVertext = targetVerties[targetIndex];
+                targetVertex = targetVerties[targetIndex];
 
-                if (checkXAxis(sourceVertext, targetVertext)) {        // x 좌표가 같을 때 , y 는 다를 때 
-                    points.push([ sourceVertext, targetVertext, AXIS_X])
+                // axis 가 정해지면 같은 그룹으로 묶는다. 거리(dist) 를 포함해서 
+                if (checkXAxis(sourceVertex, targetVertex)) {        // x 좌표가 같을 때 , y 는 다를 때 
+                    groupPoints[keyX].push([ sourceVertex, targetVertex, AXIS_X, vec3.dist(sourceVertex, targetVertex) ])
                 } 
 
-                if (checkYAxis(sourceVertext, targetVertext)) {        // x 좌표가 같을 때 , y 는 다를 때 
-                    points.push([ sourceVertext, targetVertext, AXIS_Y])
+                if (checkYAxis(sourceVertex, targetVertex)) {        // x 좌표가 같을 때 , y 는 다를 때 
+                    groupPoints[keyY].push([ sourceVertex, targetVertex, AXIS_Y, vec3.dist(sourceVertex, targetVertex) ])
                 }                 
             }
         }
+
+        // group으로 묶은 데이타 중에 최소 길이만 추출한다. 
+        Object.keys(groupPoints).forEach(key => {
+            if (groupPoints[key] && groupPoints[key].length) {
+                const sorted = groupPoints[key].sort((a, b) => a[3] - b[3])
+                const [sourceVertex, targetVertex, axis] = sorted[0]
+
+                points.push([sourceVertex, targetVertex, axis])
+            }
+        })  
 
         return points;
     }
@@ -186,7 +210,7 @@ export class SnapManager {
 
         this.snapTargetLayers.forEach(target => {
 
-            // vertext 대 vertext 를 기준으로 좌표 설정 
+            // vertex 대 vertex 를 기준으로 좌표 설정 
             const points = this.getGuidesByPointPoint(sourceVerties, target.verties);
 
             guides.push.apply(guides, points);

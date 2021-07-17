@@ -301,6 +301,12 @@ export class ViewportManager {
     get height () { return this.maxY - this.minY; }
     get width () { return this.maxX - this.minX; }
 
+    checkInViewport (pointVertex) {
+        const [x, y, z] = pointVertex;
+        const xInViewport = this.minX < x && x < this.maxX;
+        const yInViewport = this.minY < y && y < this.maxY;
+        return xInViewport && yInViewport;
+    }
 
     applyVertex (vertex) {
         return vec3.transformMat4([], vertex, this.matrix);

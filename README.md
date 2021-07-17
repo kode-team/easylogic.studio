@@ -376,7 +376,6 @@ function (editor) {
 * savePNG - string, PNG 로 저장 ,외부 메세지로 전달 
 * load.json - project[], 프로젝트 리스트  로드 
 * dropImageUrl - url 로 이미지 추가 하기 
-* setAttribute - 속성 설정하기 
 * setAttributeForMulti - 여러개의 객체 동시 속성 설정하기 
 * showPathEditor - path editor 열기 
 * addBackgroundColor - color, id  ,  백그라운드 색상 설정 
@@ -423,6 +422,8 @@ function (editor) {
 * inspector.tab.transition 
 * inspector.tab.code
 * inspector.tab.history
+* inspector.tab { value, icon, title, loadElements: [  'XXXX' ] } 
+* leftbar.tab { value, icon, title, loadElements: [  'XXXX' ] } 
 * library 
 * asset
 * sidebar

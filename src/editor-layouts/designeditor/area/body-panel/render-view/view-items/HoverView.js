@@ -21,7 +21,7 @@ export default class HoverView extends EditorElement {
         const $dom = Dom.create(this.$config.get('bodyEvent').target);
         const id = $dom.data('id');
 
-        if (this.$editor.isPointerUp) {
+        if (!id) {
             this.$selection.setHoverId('');
             this.renderHoverLayer()
         } else {

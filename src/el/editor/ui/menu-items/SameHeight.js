@@ -1,4 +1,3 @@
-import { registElement } from "el/base/registElement";
 import MenuItem from "./MenuItem";
    
 export default class SameHeight extends MenuItem {
@@ -18,5 +17,3 @@ export default class SameHeight extends MenuItem {
     this.emit('same.height');
   }
 }
-
-registElement({ SameHeight })

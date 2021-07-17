@@ -80,7 +80,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         return this.$editor.isSelectionMode(); 
     }
 
-    [POINTERSTART('$pointerRect .rotate-pointer') + MOVE('rotateVertext') + END('rotateEndVertext')] (e) {
+    [POINTERSTART('$pointerRect .rotate-pointer') + MOVE('rotateVertex') + END('rotateEndVertex')] (e) {
         this.state.moveType = 'rotate'; 
         this.initMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);        
 
@@ -94,7 +94,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         this.state.isRotate = true; 
     }
 
-    rotateVertext () {
+    rotateVertex () {
         const e = this.$config.get('bodyEvent')
         const targetMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
         const distVector = vec3.subtract([], targetMousePoint, this.initMousePoint);
@@ -169,7 +169,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         // this.emit('refreshRect');                 
     }
 
-    rotateEndVertext () {
+    rotateEndVertex () {
 
         this.state.dragging = false;        
         this.state.isRotate = false;         
@@ -228,7 +228,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }    
 
 
-    [POINTERSTART('$pointerRect .pointer') + PREVENT + MOVE('moveVertext') + END('moveEndVertext')] (e) {
+    [POINTERSTART('$pointerRect .pointer') + PREVENT + MOVE('moveVertex') + END('moveEndVertex')] (e) {
         this.refreshPointerIcon(e);
         this.state.dragging = true; 
         const num = +e.$dt.attr('data-number')
@@ -236,7 +236,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         this.initMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);        
 
         // cache matrix 
-        this.$selection.doCache();
+        // this.$selection.doCache();
         this.$selection.reselect();
         this.cachedGroupItem = this.groupItem.matrix;
     }
@@ -259,19 +259,19 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
     calculateDistance (vertext, distVector, reverseMatrix) {
         // 1. 움직이는 vertext 를 구한다. 
-        const currentVertext = vec3.clone(vertext);
+        const currentVertex = vec3.clone(vertext);
 
         // 2. dx, dy 만큼 옮긴 vertext 를 구한다.        
         // - dx, dy 를 계산하기 전에 먼저 snap 을 실행한 다음 최종 dx, dy 를 구한다      
         const snap = this.$snapManager.check([
-            vec3.add([], currentVertext, distVector)
+            vec3.add([], currentVertex, distVector)
         ]);
 
-        const nextVertext = vec3.add([], currentVertext, vec3.add([], distVector, snap ));
+        const nextVertex = vec3.add([], currentVertex, vec3.add([], distVector, snap ));
 
         // 3. invert matrix 를 실행해서  기본 좌표로 복귀한다.             
-        var currentResult = vec3.transformMat4([], currentVertext, reverseMatrix); 
-        var nextResult = vec3.transformMat4([], nextVertext, reverseMatrix); 
+        var currentResult = vec3.transformMat4([], currentVertex, reverseMatrix); 
+        var nextResult = vec3.transformMat4([], nextVertex, reverseMatrix); 
 
         // 4. 복귀한 좌표에서 차이점을 구한다. 
         const realDist = vec3.floor([], vec3.add([], nextResult, vec3.negate([], currentResult)))
@@ -288,11 +288,11 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         );
     } 
 
-    moveGroupItem (lastStartVertext, newWidth, newHeight) {
+    moveGroupItem (lastStartVertex, newWidth, newHeight) {
 
         this.groupItem.reset({
-            x: Length.px(lastStartVertext[0] + (newWidth < 0 ? newWidth : 0)).round(1000),
-            y: Length.px(lastStartVertext[1] + (newHeight < 0 ? newHeight : 0)).round(1000),
+            x: Length.px(lastStartVertex[0] + (newWidth < 0 ? newWidth : 0)).round(1000),
+            y: Length.px(lastStartVertex[1] + (newHeight < 0 ? newHeight : 0)).round(1000),
             width: Length.px(Math.abs(newWidth)).round(1000),
             height: Length.px(Math.abs(newHeight)).round(1000),
         })    
@@ -319,7 +319,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
                 width: Length.px(newWidth),
                 height: Length.px(newHeight)
             })
-            instance.recover();              
+            // instance.recover();              
         }            
     }
 
@@ -348,7 +348,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }
 
 
-    moveBottomRightVertext (distVector) {
+    moveBottomRightVertex (distVector) {
 
         const groupItem = this.cachedGroupItem;
 
@@ -362,11 +362,11 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         const newWidth = groupItem.width + realDx;
         const newHeight = groupItem.height + realDy;
 
-        this.moveDirectionVertext(groupItem, 0, 0, newWidth, newHeight, 'to top left', [0, 0, 0])                
+        this.moveDirectionVertex(groupItem, 0, 0, newWidth, newHeight, 'to top left', [0, 0, 0])                
     }
 
 
-    moveTopRightVertext (distVector) {
+    moveTopRightVertex (distVector) {
         const groupItem = this.cachedGroupItem;
 
         let [realDx, realDy] = this.calculateRealDist(groupItem, 1, distVector);
@@ -379,11 +379,11 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         const newWidth = groupItem.width + realDx;
         const newHeight = groupItem.height - realDy;
 
-        this.moveDirectionVertext(groupItem, 0, realDy, newWidth, newHeight, 'to bottom left', [0, newHeight, 0])        
+        this.moveDirectionVertex(groupItem, 0, realDy, newWidth, newHeight, 'to bottom left', [0, newHeight, 0])        
     }
 
 
-    moveDirectionVertext(groupItem, realDx, realDy, newWidth, newHeight, direction, directionNewVector) {
+    moveDirectionVertex(groupItem, realDx, realDy, newWidth, newHeight, direction, directionNewVector) {
 
         const scaleX = newWidth / groupItem.width;
         const scaleY = newHeight / groupItem.height;
@@ -401,15 +401,15 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
             );        
 
 
-            const lastStartVertext = mat4.getTranslation([], view);
+            const lastStartVertex = mat4.getTranslation([], view);
 
-            this.moveGroupItem (lastStartVertext, newWidth, newHeight);
+            this.moveGroupItem (lastStartVertex, newWidth, newHeight);
 
             this.recoverItemForGroup(groupItem, scaleX, scaleY, realDx, realDy);
         }
     }
 
-    moveTopVertext (distVector) {
+    moveTopVertex (distVector) {
         const groupItem = this.cachedGroupItem;
 
         const [realDx, realDy] = this.calculateRealDist(groupItem, 0, distVector);
@@ -418,11 +418,11 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         const newWidth = groupItem.width;
         const newHeight = groupItem.height - realDy;
 
-        this.moveDirectionVertext(groupItem, 0, realDy, newWidth, newHeight, 'to bottom', [newWidth/2, newHeight, 0])
+        this.moveDirectionVertex(groupItem, 0, realDy, newWidth, newHeight, 'to bottom', [newWidth/2, newHeight, 0])
     }    
 
 
-    moveBottomVertext (distVector) {
+    moveBottomVertex (distVector) {
         const groupItem = this.cachedGroupItem;
 
         const [realDx, realDy] = this.calculateRealDist(groupItem, 2, distVector);
@@ -431,10 +431,10 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         const newWidth = groupItem.width;
         const newHeight = groupItem.height + realDy;
 
-        this.moveDirectionVertext(groupItem, 0, 0, newWidth, newHeight, 'to top', [newWidth/2, 0, 0])        
+        this.moveDirectionVertex(groupItem, 0, 0, newWidth, newHeight, 'to top', [newWidth/2, 0, 0])        
     }        
 
-    moveTopLeftVertext (distVector) {
+    moveTopLeftVertex (distVector) {
 
         const groupItem = this.cachedGroupItem;
 
@@ -448,11 +448,11 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         const newWidth = groupItem.width - realDx;
         const newHeight = groupItem.height - realDy;
 
-        this.moveDirectionVertext(groupItem, realDx, realDy, newWidth, newHeight, 'to bottom right', [newWidth, newHeight, 0])                        
+        this.moveDirectionVertex(groupItem, realDx, realDy, newWidth, newHeight, 'to bottom right', [newWidth, newHeight, 0])                        
     }
 
 
-    moveLeftVertext (distVector) {
+    moveLeftVertex (distVector) {
 
         const groupItem = this.cachedGroupItem;
 
@@ -462,11 +462,11 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         const newWidth = groupItem.width - realDx;
         const newHeight = groupItem.height;
 
-        this.moveDirectionVertext(groupItem, realDx, 0, newWidth, newHeight, 'to right', [newWidth, newHeight/2, 0])
+        this.moveDirectionVertex(groupItem, realDx, 0, newWidth, newHeight, 'to right', [newWidth, newHeight/2, 0])
     }   
     
 
-    moveRightVertext (distVector) {
+    moveRightVertex (distVector) {
 
         const groupItem = this.cachedGroupItem;
 
@@ -477,10 +477,10 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         const newHeight = groupItem.height;
 
 
-        this.moveDirectionVertext(groupItem, 0, 0, newWidth, newHeight, 'to left', [0, newHeight/2, 0])        
+        this.moveDirectionVertex(groupItem, 0, 0, newWidth, newHeight, 'to left', [0, newHeight/2, 0])        
     }       
 
-    moveBottomLeftVertext (distVector) {
+    moveBottomLeftVertex (distVector) {
 
 
         const groupItem = this.cachedGroupItem;
@@ -495,31 +495,31 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         const newWidth = groupItem.width - realDx;
         const newHeight = groupItem.height + realDy;
 
-        this.moveDirectionVertext(groupItem, realDx, 0, newWidth, newHeight, 'to top right', [newWidth, 0, 0])
+        this.moveDirectionVertex(groupItem, realDx, 0, newWidth, newHeight, 'to top right', [newWidth, 0, 0])
     }
 
 
-    moveVertext () {
+    moveVertex () {
         const e = this.$config.get('bodyEvent')
         const targetMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
         const distVector = vec3.subtract([], targetMousePoint, this.initMousePoint);        
 
         if (this.state.moveType === 'to bottom right') {        // 2
-            this.moveBottomRightVertext(distVector);
+            this.moveBottomRightVertex(distVector);
         } else if (this.state.moveType === 'to top right') {
-            this.moveTopRightVertext(distVector);
+            this.moveTopRightVertex(distVector);
         } else if (this.state.moveType === 'to top left') {
-            this.moveTopLeftVertext(distVector);
+            this.moveTopLeftVertex(distVector);
         } else if (this.state.moveType === 'to bottom left') {
-            this.moveBottomLeftVertext(distVector); 
+            this.moveBottomLeftVertex(distVector); 
         } else if (this.state.moveType === 'to top') {
-            this.moveTopVertext(distVector);
+            this.moveTopVertex(distVector);
         } else if (this.state.moveType === 'to left') {
-            this.moveLeftVertext(distVector);
+            this.moveLeftVertex(distVector);
         } else if (this.state.moveType === 'to right') {
-            this.moveRightVertext(distVector);
+            this.moveRightVertex(distVector);
         } else if (this.state.moveType === 'to bottom') {
-            this.moveBottomVertext(distVector);
+            this.moveBottomVertex(distVector);
         }    
 
         this.emit(
@@ -532,7 +532,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         this.refreshSmartGuides();        
     }
 
-    moveEndVertext (dx, dy) {        
+    moveEndVertex (dx, dy) {        
         this.state.dragging = false;         
         this.emit('recoverCursor');   
         this.$selection.reselect();
@@ -589,18 +589,10 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
             return a[3] - b[3];
         });
 
-        const list = [xList[0]];
-
-
-        const guides = this.$snapManager.findGuide(this.$selection.current.guideVerties());
-
-        // console.log(guides);
-
-        this.emit('refreshGuideLine', list);             
-
-        // 가이드 라인 수정하기 
-        // const guides = this.$snapManager.findGuide(this.groupItem.guideVerties());
-        // this.emit('refreshGuideLine', guides);             
+        const list = [xList[0], xList[1]].filter(Boolean);
+        
+        const guides = this.$snapManager.findGuide(this.groupItem.guideVerties);
+        this.emit('refreshGuideLine', [...list, ...guides]);             
     }
 
     getSelectedElements() {

@@ -195,14 +195,12 @@ export default class VerticalRuler extends EditorElement {
     }
 
     [SUBSCRIBE('refreshSelectionStyleView')] () {
-        if (this.$selection.current) {
-            const current = this.$selection.current;
+        const current = this.$selection.current;        
 
-            if (current.hasChangedField('x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate')) {
-                this.refresh();
-            }
-
+        if (current && current.hasChangedField('x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate')) {
+            this.refresh();
         }
+
     }
 
     [SUBSCRIBE('refreshSelection')] () {

@@ -59,12 +59,12 @@ export default class LayerAppendView extends EditorElement {
         if (vec3.equals(newVertex, vertex) === false) {
             this.state.target = newVertex;
             this.state.targetVertex = this.$viewport.applyVertex(this.state.target);
-            this.state.targetPositionVertext = vec3.clone(this.state.target);            
+            this.state.targetPositionVertex = vec3.clone(this.state.target);            
             this.state.targetGuides = this.$snapManager.findGuideOne([this.state.target]);
         } else {
             this.state.target = null; 
             this.state.targetGuides = [];
-            this.state.targetPositionVertext = null;
+            this.state.targetPositionVertex = null;
         }
 
         this.bindData('$mousePointer')
@@ -72,7 +72,7 @@ export default class LayerAppendView extends EditorElement {
 
     [POINTERSTART('$el') + MOVE() + END() + PREVENT + STOP] (e) {
 
-        this.initMousePoint = this.state.targetPositionVertext ? this.state.targetPositionVertext : this.$viewport.createWorldPosition(e.clientX, e.clientY);
+        this.initMousePoint = this.state.targetPositionVertex ? this.state.targetPositionVertex : this.$viewport.createWorldPosition(e.clientX, e.clientY);
 
         this.state.dragStart = true;
         this.state.color = '#C4C4C4'; //Color.random()

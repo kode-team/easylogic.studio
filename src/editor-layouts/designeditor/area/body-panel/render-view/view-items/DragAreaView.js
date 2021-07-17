@@ -163,11 +163,11 @@ export default class DragAreaView extends EditorElement {
             newDist[1] = newDist[0];
         }
 
-        const startVertext = vec3.floor([], this.initMousePoint);
-        const endVertext = vec3.floor([], vec3.add([], this.initMousePoint, newDist));
+        const startVertex = vec3.floor([], this.initMousePoint);
+        const endVertex = vec3.floor([], vec3.add([], this.initMousePoint, newDist));
 
-        const start = this.$viewport.applyVertex(startVertext);
-        const end = this.$viewport.applyVertex(endVertext);
+        const start = this.$viewport.applyVertex(startVertex);
+        const end = this.$viewport.applyVertex(endVertex);
 
         const locaRect = toRectVerties([start, end]);
 

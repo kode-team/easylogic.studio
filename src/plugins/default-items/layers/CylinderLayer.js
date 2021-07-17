@@ -182,6 +182,10 @@ export class CylinderLayer extends Component {
 
   }
 
+  /**
+   * @deprecated 
+   * 
+   */   
   toAnimationKeyframes (properties) {
    
     var customProperties = []

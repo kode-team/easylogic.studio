@@ -69,7 +69,7 @@ export default [
     alignment,
     artboard,
     appearance,
-    iframe,    
+    iframe,
     component,
     backgroundImage,
     // border 
@@ -131,5 +131,4 @@ export default [
 
     // todo: timeline,
     //timeline
-
 ]

@@ -23,7 +23,7 @@ export default {
     
                 // d 속성 (path 문자열) 을 설정한다. 
                 editor.emit('setAttributeForMulti', editor.selection.packByValue({
-                    d: newPath.d,
+                    d: newPath.scale(1/current.width.value, 1/current.height.value).d,
                 }))
             } else {
 
@@ -39,7 +39,7 @@ export default {
     
                 // d 속성 (path 문자열) 을 설정한다. 
                 editor.emit('setAttributeForMulti', editor.selection.packByValue({
-                    d: newPath.d,
+                    d: newPath.scale(1/newWidth, 1/newHeight).d,
                     x: Length.px(newX),
                     y: Length.px(newY),
                     width: Length.px(newWidth),

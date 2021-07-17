@@ -46,6 +46,9 @@ export default class CanvasView extends EditorElement {
     `; 
   }
 
+  /**
+   * @debug 
+   */
   makeViewportConsole () {
 
     if (!this.$viewport.verties) return '';

@@ -211,12 +211,16 @@ $editor-ruler-size: 20px;
   svg.element-item {
     pointer-events: none;
 
-    >* {
+    > * {
       pointer-events: stroke;
     }
 
     > :not([fill='transparent']) {
       pointer-events: visible;
+    }
+
+    > path {
+      pointer-events: none;
     }
   }
 

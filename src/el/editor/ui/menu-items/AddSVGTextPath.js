@@ -1,4 +1,3 @@
-import { registElement } from "el/base/registElement";
 import MenuItem from "./MenuItem";
  
 export default class AddSVGTextPath extends MenuItem {
@@ -18,5 +17,3 @@ export default class AddSVGTextPath extends MenuItem {
   }
 
 }
-
-registElement({ AddSVGTextPath })
