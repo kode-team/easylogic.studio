@@ -5,6 +5,7 @@ import icon from "el/editor/icon/icon";
 import revokeObjectUrl from "el/editor/util/revokeObjectUrl";
 import { registElement } from "el/base/registElement";
 
+import './VideoAssetsProperty.scss';
 
 export default class VideoAssetsProperty extends BaseProperty {
 
@@ -19,7 +20,7 @@ export default class VideoAssetsProperty extends BaseProperty {
   }
 
   getClassName() {
-    return 'video-assets-property'
+    return 'elf--video-assets-property'
   }
 
   afterRender() {

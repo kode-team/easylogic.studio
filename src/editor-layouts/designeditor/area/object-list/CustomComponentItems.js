@@ -2,13 +2,13 @@
 import { CLICK, DRAGSTART, LOAD, SUBSCRIBE } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-
+import './CustomComponentItems.scss';
 
 export default class CustomComponentItems extends EditorElement {
   template() {
 
     return /*html*/`
-      <div class='custom-component-items'>
+      <div class='elf--custom-component-items'>
         <div class='custom-component-items-tools'>
           <div class='title'><label>Component Assets</label></div>
           <div class='tools'>

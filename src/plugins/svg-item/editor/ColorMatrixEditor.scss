@@ -1,0 +1,29 @@
+.elf--color-matrix-editor {
+
+    .title {
+        padding: 5px 0px;
+        color: var(--elf--selected-color);
+    }
+
+    .color-matrix-template {
+        padding: 5px 10px;
+        max-height: 383px;
+        overflow: auto; 
+        box-sizing: border-box;
+        border:1px solid var(--elf--border-color);
+
+        input, select {
+            width: 100%;
+        }
+
+        .sample-item {
+            padding: 2px 5px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.2);
+                color: var(--elf--selected-color);
+            }
+        }
+    }
+}

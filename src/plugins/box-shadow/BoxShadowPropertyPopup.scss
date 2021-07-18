@@ -1,0 +1,83 @@
+
+
+  .elf--box-shadow-property-popup {
+    width: 200px;
+    
+    .box {
+
+      label {
+        font-size: 11px;
+      }
+
+      .popup-item {
+        margin-top: 5px;
+      }
+      
+      .type {
+        display: grid;
+        grid-template-columns: 50px 1fr;
+        grid-column-gap: 4px;
+        margin-bottom: 2px;
+
+        .select {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          height: 20px;
+
+          @each $selectType in inset, outset {
+            &[data-selected-value="#{$selectType}"] button[data-value="#{$selectType}"] {
+                box-shadow: inset 0px 0px 3px 0px var(--elf--selected-color) !important;
+                background-color: var(--elf--selected-color) !important;
+                color: var(--elf--selected-font-color) !important;
+            }
+          }
+
+          button {
+            width: 100%;    
+            background-image: none;
+            border-radius: 0px;        
+          }
+        }
+      }
+
+      label {
+        font-size: 11px;
+      }
+
+      .drag-board {
+        // background-color: var(--elf--selected-color);
+        
+        border: 1px solid var(--elf--border-color);
+        margin-bottom: 2px;        
+        height: 204px;
+        position: relative;
+        // pointer-events: none;
+        background-image: linear-gradient(
+            to right,
+            var(--elf--border-color),
+            var(--elf--border-color)
+          ),
+          linear-gradient(to right, var(--elf--border-color), var(--elf--border-color));
+        background-size: 100% 1px, 1px 100%;
+        background-position: 0px center, center 0px;
+        background-repeat: no-repeat;
+
+        .pointer {
+          pointer-events: none;
+          position: absolute;
+          width: 10px;
+          height: 10px;
+          transform: translateX(calc(101px - 5px)) translateY(calc(101px - 5px));
+          background-color: var(--elf--selected-color);
+          border-radius: 100%;
+        }
+      }
+
+      .offset-x,
+      .offset-y,
+      .blur-radius,
+      .spread-radius {
+        margin-bottom: 2px;
+      }
+    }
+  }

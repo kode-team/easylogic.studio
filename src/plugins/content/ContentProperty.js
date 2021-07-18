@@ -2,7 +2,7 @@
 import { INPUT, BIND, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
 
 import BaseProperty from "el/editor/ui/property/BaseProperty";
-
+import './ContentProperty.scss';
 export default class ContentProperty extends BaseProperty {
   getTitle() {
     return "Content";
@@ -17,7 +17,7 @@ export default class ContentProperty extends BaseProperty {
 
   getBody() {
     return /*html*/`
-      <div class="property-item content-item">
+      <div class="property-item elf--content-item">
         <textarea ref="$contentItem"></textarea>
       </div>
     `;

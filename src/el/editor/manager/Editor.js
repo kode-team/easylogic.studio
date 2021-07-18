@@ -5,8 +5,6 @@ import BaseStore from "el/base/BaseStore";
 import { registElement } from "el/base/registElement";
 import { isArray, isString } from "el/base/functions/func";
 
-
-import i18n from "../../i18n";
 import theme from "el/editor/ui/theme";
 
 import { TimelineSelectionManager } from "./TimelineSelectionManager";
@@ -21,10 +19,11 @@ import { KeyBoardManager } from "./KeyboardManager";
 import { ViewportManager } from "./ViewportManager";
 import { StorageManager } from "./StorageManager";
 import { CursorManager } from "./CursorManager";
-import { AssetManager } from "./AssetManager";
+import { AssetManager } from "./AssetManager"; 
 import { PluginManager } from "./PluginManager";
 import { RendererManager } from "./RendererManager";
 import { MenuItemManager } from "./MenuItemManager";
+import { I18nManager } from "./I18nManager";
 
 
 export const EDITOR_ID = "";
@@ -86,6 +85,7 @@ export class Editor {
     this.components = new ComponentManager(this);
     this.pluginManager = new PluginManager(this);
     this.renderers = new RendererManager(this);
+    this.i18n = new I18nManager(this);
 
 
     this.initTheme();
@@ -96,24 +96,22 @@ export class Editor {
     return this.createItem({ itemType: 'project' })
   }
 
-  i18n(key, params = {}, locale) {
-    return i18n.get(key, params, locale || this.locale)
+  getI18nMessage(key, params = {}, locale) {
+    return this.i18n.get(key, params, locale || this.locale)
   }
 
   hasI18nkey(key, locale) {
-    return i18n.hasKey(key, locale || this.locale)
+    return this.i18n.hasKey(key, locale || this.locale)
   }
 
-  initI18n(root = '') {
+  initI18nMessage(root = '') {
     return (key, params = {}, locale) => {
-
       const i18nKey = `${root}.${key}`;
       if (this.hasI18nkey(i18nKey, locale)) {
-        return this.$i18n(`${root}.${key}`, params, locale)
+        return this.i18n(`${root}.${key}`, params, locale)
       } else {
-        return this.$i18n(`${key}`, params, locale)
+        return this.i18n(`${key}`, params, locale)
       }
-
     }
   }
 
@@ -545,11 +543,15 @@ export class Editor {
     return this.commands.registerCommand(commandObject);
   }
 
+  /**
+   * 단축키(shortcut)을 등록한다.  
+   */ 
   registerShortCut(shortcut) {
     this.shortcuts.registerShortCut(shortcut);
   }
 
   /**
+   * 플러그인을 등록한다. 
    * 
    * @param {Function} createPluginFunction  
    */
@@ -560,4 +562,23 @@ export class Editor {
   registerPluginList(plugins = []) {
     plugins.forEach(p => this.registerPlugin(p));
   }
-};
+
+  /**
+   * 에디터에 맞는 config 를 등록한다. 
+   * 
+   * @param {object} config
+   */ 
+  registerConfig(config) {
+    this.config.registerConfig(config);
+  }
+
+  registerI18nMessage(locale, messages) {
+    this.i18n.registerI18nMessage(locale, messages);
+  }
+
+  registerI18nMessageWithLocale(messages) {
+    Object.entries(messages).forEach(([locale, messages]) => {
+      this.registerI18nMessage(locale, messages);
+    });
+  }  
+}

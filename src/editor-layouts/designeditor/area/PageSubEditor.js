@@ -2,6 +2,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import DrawManager from "./page-sub-editor/DrawManager";
 import PathManager from "./page-sub-editor/PathManager";
 
+import './PageSubEditor.scss';
 
 
 export default class PageSubEditor extends EditorElement {
@@ -15,7 +16,7 @@ export default class PageSubEditor extends EditorElement {
 
   template() {
     return/*html*/`
-      <div class='page-subeditor'>
+      <div class='elf-page-subeditor'>
         <object refClass='PathManager' />
         <object refClass='DrawManager' />
       </div>

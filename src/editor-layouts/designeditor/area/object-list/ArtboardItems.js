@@ -3,19 +3,20 @@ import { CLICK, DRAGSTART, LOAD, SUBSCRIBE } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './ArtboardItems.scss';
 
 export default class ArtboardItems extends EditorElement {
   template() {
 
     return /*html*/`
-      <div class='artboard-items'>
+      <div class='elf--artboard-items'>
         <div class='artboard-items-tools'>
           <div class='title'><label>Artboard Assets</label></div>
           <div class='tools'>
             <button type="button" ref='$addArtboard'>${icon.add}</button>
           </div>
         </div>
-        <div class='artboard-list' ref='$list'></div>
+        <div class='elf--artboard-list' ref='$list'></div>
       </div>
     `;
   }

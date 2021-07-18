@@ -6,6 +6,8 @@ import patterns from "el/editor/preset/patterns";
 
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './PatternEditor.scss';
+
 export default class PatternEditor extends EditorElement {
 
     initState() {
@@ -30,7 +32,7 @@ export default class PatternEditor extends EditorElement {
     template () {
         var labelClass = this.state.hideLabel ? 'hide' : '';
         return /*html*/`
-            <div class='pattern-editor' >
+            <div class='elf--pattern-editor' >
                 <div class='label ${labelClass}'>
                     <label>${this.props.title||''}</label>
                     <div class='tools'>

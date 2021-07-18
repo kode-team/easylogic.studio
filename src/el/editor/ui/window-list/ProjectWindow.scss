@@ -1,0 +1,30 @@
+.elf--project-window {
+    width: 100% !important;
+    height: 100% !important;
+    background-color: var(--elf--background-color);
+
+    .project-container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        grid-column-gap: 2px;
+    
+        .project-menu {
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            position:relative;
+            overflow: auto;
+        }
+    
+        .project-list {
+            height: 100%;
+            overflow: auto;
+            box-sizing: border-box;
+            background-color: var(--elf--window-background-color);
+        }
+    }
+
+}

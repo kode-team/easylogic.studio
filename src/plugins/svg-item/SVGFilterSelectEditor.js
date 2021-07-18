@@ -2,6 +2,8 @@ import { LOAD, CHANGE, BIND, DEBOUNCE, CLICK, SUBSCRIBE } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './SVGFilterSelectEditor.scss';
+
 export default class SVGFilterSelectEditor extends EditorElement {
 
     initState() {
@@ -18,7 +20,7 @@ export default class SVGFilterSelectEditor extends EditorElement {
         var { label } = this.state; 
         var hasLabel = !!label ? 'has-label' : ''
         return /*html*/`
-            <div class='svg-filter-select-editor ${hasLabel}'>
+            <div class='elf--svg-filter-select-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : '' }
                 <select ref='$options'></select>
                 <button type='button' class='open thin' ref='$open' title='Open SVG Filter Editor'>${icon.fullscreen}</button>

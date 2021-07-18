@@ -7,6 +7,8 @@ import icon from "el/editor/icon/icon";
 import { clone } from "el/base/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './GradientEditor.scss';
+
 var radialTypeList = [
   'circle',
   'circle closest-side',
@@ -85,7 +87,7 @@ export default class GradientEditor extends EditorElement  {
 
 
     return /*html*/`
-        <div class='gradient-editor' data-selected-editor='${type}'>
+        <div class='elf--gradient-editor' data-selected-editor='${type}'>
             <div class='gradient-preview'>
               <div class='gradient-view' ref='$gradientView' title='${this.$i18n('gradient.editor.drag.message')}'></div>
               <div class='drag-pointer' ref='$dragPosition'></div>

@@ -1,0 +1,62 @@
+.elf--media-progress-editor {
+
+    > * {
+        margin-bottom: 2px;
+    }
+
+    .drag-area {
+        height: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        // background-color: rgba(0, 0, 0, 0.3);
+        position: relative; 
+        padding: 0px 10px;
+        background-image: linear-gradient(to right, #2b2b2b 1px, transparent 1px 100%);
+        background-size: 10px 8px;
+        background-repeat: repeat-x;
+        background-position: 0px 1px;
+    }
+
+
+    .progress-bar {
+        height: 2px;
+        display: block;
+        background-color: #2b2b2b;
+        position: absolute;
+        left: 0px;
+        width: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .bar {
+        height: 2px;
+        position: absolute;
+        display: inline-block;        
+        left: 10%;
+        width: 50%;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: var(--elf--selected-color);
+    }
+
+    .drag-item {
+        position: absolute;
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 100%;
+        background-color: var(--elf--selected-color);        
+        cursor: pointer;        
+        transform: translate(-50%, -50%);       
+        top: 50%; 
+
+        &.end {
+            background-color: yellow;
+            box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.3);
+        }
+    }
+
+}

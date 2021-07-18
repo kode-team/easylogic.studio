@@ -1,0 +1,19 @@
+.elf--path-draw-view {
+    display:none;
+    position:absolute;
+    left:0px;
+    top:0px;
+    right:0px;
+    bottom:0px;
+    cursor: crosshair;
+    background-color: transparent;
+
+    .path-draw-container {
+        position: absolute;
+        left: 0px;
+        top:0px;
+        right:0px;
+        bottom:0px;
+
+    }
+}

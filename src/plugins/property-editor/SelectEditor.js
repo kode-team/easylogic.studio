@@ -1,7 +1,7 @@
 import { LOAD, CHANGE, BIND } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
-
+import './SelectEditor.scss';
 export default class SelectEditor extends EditorElement {
 
     initState() {
@@ -27,7 +27,7 @@ export default class SelectEditor extends EditorElement {
         var hasLabel = !!label ? 'has-label' : ''
         var hasTabIndex = !!tabIndex ? 'tabIndex="1"' : ''
         return /*html*/`
-            <div class='select-editor ${hasLabel}'>
+            <div class='elf--select-editor ${hasLabel}'>
                 ${label ? `<label title="${label}">${label}</label>` : '' }
                 <select ref='$options' ${hasTabIndex}></select>
             </div>

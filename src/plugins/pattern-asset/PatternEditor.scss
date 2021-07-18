@@ -1,0 +1,56 @@
+.elf--pattern-editor {
+  .label {
+    height: 20px;
+    margin-top: 2px;
+
+    &.hide {
+      display: none; 
+    }
+    label {
+      font-size: 12px;
+      padding-left: 5px;
+      vertical-align: middle;
+   
+    }
+  }
+
+  .tools {
+      vertical-align: middle;
+      text-align: right;
+      float:right;
+  }
+
+    .pattern-list {
+        display: grid;
+        grid-template-columns: 60px 60px 60px 60px;
+        grid-column-gap: 1px;
+        grid-row-gap: 1px;
+      
+        .pattern-item {
+          // margin-top: 5px;
+          display: inline-block;
+          position: relative;
+          text-align: center;
+
+          &.selected {
+            background-color: var(--elf--border-color);
+          }
+
+          &:hover {
+            .tools {
+              display: inline-block;
+            }
+          }
+
+          .tools {
+            display: none;
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            background-color: rgba(255, 255, 255, 0.9);
+            color: var(--elf--selected-color);
+          }
+        }
+      }
+      
+}

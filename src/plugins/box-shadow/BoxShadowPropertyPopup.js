@@ -3,6 +3,7 @@ import { Length } from "el/editor/unit/Length";
 import { LOAD, CLICK, POINTERSTART, MOVE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
+import './BoxShadowPropertyPopup.scss';
 
 export default class BoxShadowPropertyPopup extends BasePopup {
 
@@ -27,7 +28,7 @@ export default class BoxShadowPropertyPopup extends BasePopup {
   }
 
   getBody() {
-    return /*html*/`<div class='box-shadow-property-popup' ref='$popup'></div>`;
+    return /*html*/`<div class='elf--box-shadow-property-popup' ref='$popup'></div>`;
   }
 
   [LOAD("$popup")]() {

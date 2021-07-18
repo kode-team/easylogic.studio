@@ -15,6 +15,8 @@ import {
 import { Selector } from "el/editor/property-parser/Selector";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
+import './SelectorProperty.scss';
+
 const selectorList = [
   '',   // custom 
   ':hover',
@@ -37,7 +39,7 @@ export default class SelectorProperty extends BaseProperty {
     return this.$i18n('selector.property.title');
   }
   getBody() {
-    return `<div class='selector-list' ref='$selectorList'></div>`;
+    return `<div class='elf--selector-list' ref='$selectorList'></div>`;
   }
 
   getTools() {

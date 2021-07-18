@@ -58,6 +58,7 @@ $range-thumb-border-radius: 20px;
         }
     }
 
+    --elf--editor-ruler-size: 20px;
 
     &[data-theme='dark'] {
         @import './themes/designeditor/dark.scss'; 
@@ -195,41 +196,18 @@ $range-thumb-border-radius: 20px;
     }    
    
     @import './designeditor/component.scss';  
-    @import './designeditor/tool-bar.scss'; 
 
     @import './designeditor/range-ui.scss';
     @import "./designeditor/tab-ui.scss";
     @import "./designeditor/colorpicker-ui.scss";
-    @import "./designeditor/tool-menu.scss";
-    @import "./designeditor/view.scss";
-    @import './designeditor/selection-view.scss';
-    // @import './designeditor/hover-view.scss';
-    @import './designeditor/selection-info-view.scss';    
     @import './designeditor/icons-group.scss';
     @import './designeditor/tooltip.scss';
-    
-    // property 
-    @import './designeditor/property/index.scss'; 
-    
-    // editor 
-    @import './designeditor/editor/index.scss';
-    
-    // popup 
-    @import "./designeditor/popup/popup.scss";
-    @import './designeditor/window/window.scss';
-    
-    @import './designeditor/path-editor-view.scss';
-    @import './designeditor/path-draw-view.scss';
-    @import './designeditor/brush-draw-view.scss';
-    // @import './designeditor/layer-add-view.scss';
     
     // timeline 
     @import './designeditor/timeline.scss';
     
     @import './designeditor/logo.scss';
-    @import './designeditor/status-bar.scss';
     @import './designeditor/feature-control.scss';
-    // @import './designeditor/notification-view.scss';        
     
 }
  

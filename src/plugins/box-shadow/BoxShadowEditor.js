@@ -4,6 +4,7 @@ import { BoxShadow } from "el/editor/property-parser/BoxShadow";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { Length } from "el/editor/unit/Length";
 
+import './BoxShadowEditor.scss';
 
 export default class BoxShadowEditor extends EditorElement {
 
@@ -17,7 +18,7 @@ export default class BoxShadowEditor extends EditorElement {
   template() {
     var labelClass = this.state.hideLabel ? 'hide' : '';
     return /*html*/`
-      <div class="box-shadow-editor" >
+      <div class="elf--box-shadow-editor" >
         <div class='label ${labelClass}' >
             <label>${this.props.title||''}</label>
             <div class='tools'>

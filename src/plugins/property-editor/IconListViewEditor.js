@@ -2,6 +2,8 @@ import { LOAD, BIND, CLICK } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './IconListViewEditor.scss';
+
 export default class IconListViewEditor extends EditorElement {
 
     initState() {
@@ -11,7 +13,7 @@ export default class IconListViewEditor extends EditorElement {
     }
 
     template() {
-        return /*html*/`<div class='select-editor list-view-editor' ref='$body'></div>`
+        return /*html*/`<div class='select-editor elf--list-view-editor' ref='$body'></div>`
     }
 
     [BIND('$body')] () {

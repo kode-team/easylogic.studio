@@ -3,7 +3,7 @@ import { DEBOUNCE, CLICK, SUBSCRIBE } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
-
+import './ExportProperty.scss';
 
 export default class ExportProperty extends BaseProperty {
 
@@ -18,7 +18,7 @@ export default class ExportProperty extends BaseProperty {
   }  
 
   getClassName() {
-    return 'export-property'
+    return 'elf--export-property'
   }
 
 

@@ -20,7 +20,7 @@ import Dom from "el/base/Dom";
 import PathStringManager from "el/editor/parser/PathStringManager";
 import svgFilterPreset from "./editor/svg-filter-preset";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-
+import './SVGFilterEditor.scss';
 const filterTypes = [
   {label: 'GRAPHIC REFERENCES', items : [
     {label: 'Source Graphic', value:"SourceGraphic"},
@@ -240,7 +240,7 @@ export default class SVGFilterEditor extends EditorElement {
 
   template() {
     return /*html*/`
-      <div class='svg-filter-editor filter-list'>
+      <div class='elf--svg-filter-editor filter-list'>
         <div class='left'>
           <div class="tab number-tab" ref="$tab">
             <div class="tab-header full" ref="$header">

@@ -4,9 +4,10 @@ import { Length } from "el/editor/unit/Length";
 
 import { isFunction } from "el/base/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-import StyleView from "../../designeditor/area/body-panel/render-view/view-items/StyleView";
 
+import StyleView from "../../common/body-panel/render-view/view-items/StyleView";
 
+import './PlayerHTMLRenderView.scss';
 
 export default class PlayerHTMLRenderView extends EditorElement {
 
@@ -19,11 +20,11 @@ export default class PlayerHTMLRenderView extends EditorElement {
     initState() {
         return {
             mode: 'selection',
-            x: Length.z(),
+            x: Length.z(), 
             y: Length.z(),
             width: Length.px(10000),
             height: Length.px(10000),
-            cachedCurrentElement: {},
+            cachedCurrentElement: {}, 
             html: '',
         }
     }

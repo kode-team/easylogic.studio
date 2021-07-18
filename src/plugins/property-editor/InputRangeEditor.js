@@ -5,7 +5,7 @@ import icon from "el/editor/icon/icon";
 import { OBJECT_TO_CLASS } from "el/base/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
-
+import './InputRangeEditor.scss';
 export default class InputRangeEditor extends EditorElement {
 
     initState() {
@@ -54,7 +54,7 @@ export default class InputRangeEditor extends EditorElement {
         <div 
             ref="$range",
             class="${OBJECT_TO_CLASS({
-                'input-range--editor': true,
+                'elf--input-range-editor': true,
                 'has-label': !!label,
                 'compact': !!compact,
                 'is-removable': removable,

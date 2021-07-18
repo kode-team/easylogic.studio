@@ -6,6 +6,8 @@ import { Pattern } from "el/editor/property-parser/Pattern";
 import { CSS_TO_STRING } from "el/base/functions/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
+import './PatternAssetsProperty.scss';
+
 export default class PatternAssetsProperty extends BaseProperty {
 
   getTitle() {
@@ -38,7 +40,7 @@ export default class PatternAssetsProperty extends BaseProperty {
   }
 
   getClassName() {
-    return 'pattern-assets-property'
+    return 'elf--pattern-assets-property'
   }
 
 

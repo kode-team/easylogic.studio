@@ -3,6 +3,8 @@ import { POINTERSTART, MOVE, BIND, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Eve
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { Length } from "el/editor/unit/Length";
 
+import './MediaProgressEditor.scss';
+
 export default class MediaProgressEditor extends EditorElement {
 
 
@@ -31,7 +33,7 @@ export default class MediaProgressEditor extends EditorElement {
         const { start, end, duration } = this.state; 
 
         return /*html*/`
-            <div class='media-progress-editor'>
+            <div class='elf--media-progress-editor'>
                 <div class='drag-area'>
                     <div class='progress-bar' ref='$progress'></div>
                     <div class='bar' ref='$bar'></div>                

@@ -2,6 +2,8 @@
 import { INPUT, SUBSCRIBE } from "el/base/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
+import './SelectorPopup.scss';
+
 export default class SelectorPopup extends BasePopup {
 
   getTitle() {
@@ -22,7 +24,7 @@ export default class SelectorPopup extends BasePopup {
 
   getBody() {
     return /*html*/`
-    <div class='selector-popup' ref='$popup'>
+    <div class='elf--selector-popup' ref='$popup'>
       <div class="box">
         ${this.templateForSelector()}
         ${this.templateForProperty()}        

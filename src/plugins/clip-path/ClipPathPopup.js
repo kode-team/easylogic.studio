@@ -3,13 +3,27 @@ import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { ClipPath } from "el/editor/property-parser/ClipPath";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
-import "./editor/CircleEditor";
-import "./editor/InsetEditor";
-import "./editor/PolygonEditor";
-import "./editor/EllipseEditor";
+import CircleEditor from "./editor/CircleEditor";
+import InsetEditor from "./editor/InsetEditor";
+import PolygonEditor from "./editor/PolygonEditor";
+import EllipseEditor from "./editor/EllipseEditor";
+
+
+import './ClipPathPopup.scss';
+
+
 
 
 export default class ClipPathPopup extends BasePopup {
+
+  components() {
+    return {
+      CircleEditor,
+      InsetEditor,
+      PolygonEditor,
+      EllipseEditor
+    }
+  }
 
   getTitle() {
     return 'ClipPath'
@@ -33,7 +47,7 @@ export default class ClipPathPopup extends BasePopup {
 
   getBody() {
     return /*html*/`
-    <div class='clippath-popup' ref='$popup'>
+    <div class='elf--clippath-popup' ref='$popup'>
       <div class="box">
         <div class='clip-path-editor clip-path-type' ref='$clippathType'></div>
         <div class='clip-path-editor' ref='$clippath'></div>

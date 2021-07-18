@@ -4,7 +4,7 @@ import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { CSS_TO_STRING } from "el/base/functions/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
-
+import './FlexLayoutItemProperty.scss';
 
 export default class FlexLayoutItemProperty extends BaseProperty {
 
@@ -13,7 +13,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
   }
 
   getClassName() {
-    return 'flex-layout-item-property';
+    return 'elf--flex-layout-item-property';
   }
 
   getLayoutOptions () {

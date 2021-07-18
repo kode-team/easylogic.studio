@@ -1,18 +1,32 @@
 
 import { BIND, SUBSCRIBE } from "el/base/Event";
-import "../../../el/editor/ui/status-bar-items/LanguageSelector";
-import "../../../el/editor/ui/status-bar-items/ThemeSwitcher";
-import "../../../el/editor/ui/status-bar-items/LayoutSelector";
-import "../../../el/editor/ui/status-bar-items/VersionView";
-import "../../../el/editor/ui/status-bar-items/SwitchLeftPanel";
-import "../../../el/editor/ui/status-bar-items/SwitchRightPanel";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+
+import LanguageSelector from "./status-bar/LanguageSelector";
+import ThemeSwitcher from "./status-bar/ThemeSwitcher";
+import LayoutSelector from "./status-bar/LayoutSelector";
+import VersionView from "./status-bar/VersionView";
+import SwitchLeftPanel from "./status-bar/SwitchLeftPanel";
+import SwitchRightPanel from "./status-bar/SwitchRightPanel";
+
+import './StatusBar.scss';
 
 
 export default class StatusBar extends EditorElement {
-    template () {
+
+    components() {
+        return {
+            LanguageSelector,
+            ThemeSwitcher,
+            LayoutSelector,
+            VersionView,
+            SwitchLeftPanel,
+            SwitchRightPanel,
+        }
+    }
+    template() {
         return /*html*/`
-            <div class='status-bar'>
+            <div class='elf--status-bar'>
                 <div class='tool-view left' ref='$leftTool'>
                     <object refClass="SwitchLeftPanel" />
                     ${this.$menuManager.generate('statusbar.left')}                    
@@ -34,17 +48,17 @@ export default class StatusBar extends EditorElement {
 
     initState() {
         return {
-            msg: '' 
+            msg: ''
         }
     }
 
-    [BIND('$msg')] () {
+    [BIND('$msg')]() {
         return {
-            text: this.state.msg 
+            text: this.state.msg
         }
     }
 
-    [SUBSCRIBE('addStatusBarMessage')] (msg) {
+    [SUBSCRIBE('addStatusBarMessage')](msg) {
         this.setState({ msg })
-    } 
+    }
 }

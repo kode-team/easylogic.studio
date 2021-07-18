@@ -8,6 +8,8 @@ import { SVGStaticGradient } from "el/editor/property-parser/image-resource/SVGS
 import { isUndefined } from "el/base/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './FillEditor.scss';
+
 const imageTypeList = [
   'static-gradient',
   'linear-gradient',
@@ -81,7 +83,7 @@ export default class FillEditor extends EditorElement  {
 
 
     return /*html*/`
-        <div class='fill-editor' data-selected-editor='${type}'>
+        <div class='elf--fill-editor' data-selected-editor='${type}'>
             <div class='gradient-preview'>
               <div class='gradient-view' ref='$gradientView'>
                 <div class='drag-pointer' ref='$dragPosition'></div>

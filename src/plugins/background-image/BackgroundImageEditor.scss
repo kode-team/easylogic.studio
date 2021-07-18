@@ -1,0 +1,177 @@
+@import '../../scss/mixins.scss';
+
+.elf--background-image-editor {
+  padding: 5px 10px;
+  padding-top: 0px;
+  .label {
+    height: 20px;
+    margin-top: 2px;
+
+    &.hide {
+      display: none; 
+    }
+    label {
+      font-size: 12px;
+      padding-left: 5px;
+      vertical-align: middle;
+   
+    }
+  }
+
+  .tools {
+      vertical-align: middle;
+      text-align: right;
+      float:right;
+  }
+
+    .fill-list {
+        display: grid;
+        grid-template-columns: 1fr;
+        font-size: 12px;
+      
+        .fill-item {
+          // margin-top: 5px;
+          display: grid;
+          grid-template-columns: 24px 24px 1fr;
+          grid-column-gap: 5px;
+          text-align: center;
+          padding: 6px 0px;
+
+          &.selected {
+            background-color: var(--elf--border-color);
+          }
+      
+          .gradient-info {
+            display: grid;
+            grid-template-columns: 60px 1fr 20px;
+
+            color: var(--elf--font-color);
+
+            svg {
+              path {
+                fill: currentColor;
+              }
+            }
+      
+            .tools {
+              text-align: right;
+            }
+          }
+      
+          &[data-fill-type="gradient"] {
+            .colorcode,
+            .opacity {
+              display: none;
+            }
+      
+            .colorsteps {
+              display: block;
+            }
+          }
+
+          .pattern {
+            background-color: var(--elf--border-color);
+            border-radius: 3px;
+          }
+      
+          .preview {
+            display: grid;
+            cursor: pointer;
+      
+            .mini-view {
+              display: block;
+              height: 24px;
+              
+              pointer-events: none;
+              border-radius: 3px;
+              position: relative;
+              @include transparent-background();
+              .color-view {
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                right: 0px;
+                bottom: 0px;
+                border-radius: 3px;
+              } 
+            }
+          }
+      
+          .fill-title {
+            pointer-events: none;
+            display: inline-block;
+            vertical-align: middle;
+            text-align: left;
+            
+            padding: 4px 0px;
+      
+            svg {
+              width: 16px;
+              height: 16px;
+              vertical-align: middle;
+            }
+          }
+      
+          .colorcode {
+            input {
+              width: 100%;
+            }
+          }
+      
+          .colorsteps {
+            display: none;
+            text-align: left;
+            height: 100%;
+            
+            padding-top: 6px;
+      
+            .step {
+              border: 1px solid var(--elf--selected-color);
+              display: inline-block;
+              margin-left: -6px;
+              width: 12px;
+              height: 12px;
+              
+              border-radius: 100%;
+              cursor: pointer;
+              position: relative;
+              overflow: hidden;
+              @include transparent-background();
+
+              .color-view {
+                position: absolute;
+                left:0px;
+                top:0px;
+                right:0px;
+                bottom:0px;
+                pointer-events: none;
+              }
+
+              &[data-cut='true'] {
+                border-radius: 0%;
+              }
+      
+              &:first-child {
+                margin-left: 0px;
+              }
+      
+      
+              &[data-selected='true'] {
+                &:before {
+                  content: '';
+                  position: absolute;
+                  width: 3px;
+                  height: 3px;
+                  display: inline-block;
+                  left: 50%;
+                  transform: translateX(-50%) translateY(-5px);
+                  border-radius: 100%;
+                  background-color: black; 
+                }
+              }
+            }
+          }
+        }
+      }
+      
+}

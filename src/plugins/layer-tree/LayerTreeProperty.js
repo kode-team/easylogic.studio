@@ -7,6 +7,8 @@ import { Length } from "el/editor/unit/Length";
 import { KEY_CODE } from "el/editor/types/key";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
+import './LayerTreeProperty.scss';
+
 const DRAG_START_CLASS = 'drag-start'
 
 export default class LayerTreeProperty extends BaseProperty {
@@ -30,7 +32,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
   getBody() {
     return /*html*/`
-      <div class="layer-list scrollbar" ref="$layerList"></div>
+      <div class="elf--layer-list scrollbar" ref="$layerList"></div>
       <div class='drag-point' ref='$dragPointer'></div>
     `;
   }

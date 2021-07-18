@@ -5,6 +5,7 @@ import icon from "el/editor/icon/icon";
 
 import { registElement } from "el/base/registElement";
 
+import './ProjectProperty.scss';
 
 export default class ProjectProperty extends BaseProperty {
   getTitle() {
@@ -27,7 +28,7 @@ export default class ProjectProperty extends BaseProperty {
 
   getBody() {
     return /*html*/`
-      <div class="project-list scrollbar" ref="$projectList"></div>
+      <div class="elf--project-list scrollbar" ref="$projectList"></div>
     `;
   }
 

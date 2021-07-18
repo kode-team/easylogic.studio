@@ -1,0 +1,200 @@
+.elf--popup {
+    position: absolute;
+    display: none;
+    
+    z-index: 1000;
+    background-color: var(--elf--popup-background-color);
+    border-radius: 8px;
+    box-shadow: 0px 1px 5px 0 rgba(0, 0, 0, 0.5);
+    padding: 10px 10px;
+    color: var(--elf--font-color);
+    // background-image: linear-gradient(135deg, #001e4c, #001885, rgb(8, 0, 27));
+    // background-image: radial-gradient( circle farthest-corner at 16.5% 28.1%,  rgba(15,27,49,1) 0%, rgba(0,112,218,1) 90% );
+    &.compact {
+      padding: 0px;
+  
+      .popup-title {
+        padding: 10px 14px 0px 14px;
+        margin-bottom: 0px;
+      }
+    }
+  
+    .popup-title {
+      font-size: 12px;
+      font-weight: bold;
+  
+      margin-bottom: 10px;
+      display: flex;
+      pointer-events: all;
+  
+      > * {
+        flex: 1 1 auto;
+      }
+  
+      .tools {
+        text-align: right;
+      }
+  
+      label {
+        cursor: move; 
+      }
+    }
+  
+    .popup-content {
+      .popup-item {
+  
+        label {
+          font-size: 11px;
+          vertical-align: middle;
+          text-align: right;
+          line-height: 1.6;
+          padding-right: 2px;
+          
+        }
+  
+        label + div {
+          vertical-align: middle;
+        }
+  
+      }
+    }
+  
+    &.background-property-popup {
+      width: 224px;
+  
+      .popup-content {
+        padding: 5px;
+  
+        .popup-item {
+          margin-bottom: 2px;
+        }
+      }
+  
+      .size-list {
+        button {
+          appearance: none;
+          background-color: transparent;
+          border: 0px;
+          padding: 2px 5px;
+          cursor: pointer;
+          outline: none;
+          
+          width: 50px;
+          background-color: var(--elf--border-color);
+        }
+  
+        &[data-value="contain"] button[value="contain"],
+        &[data-value="cover"] button[value="cover"],
+        &[data-value="auto"] button[value="auto"] {
+          background-color: var(--elf--border-color);
+          font-weight: bold;
+        }
+      }
+  
+      .popup-item.grid-2 {
+        display: grid;
+        grid-template-columns: 60px 1fr; 
+        grid-column-gap: 2px;
+      }
+  
+      .repeat-list {
+        button {
+          width: 20px;
+          height: 20px;
+          appearance: none;
+          border: 1px solid var(--elf--border-color);
+          background-color: white;
+          outline: none;
+          cursor: pointer;
+  
+          &[value="no-repeat"] {
+            background-image: linear-gradient(
+              to top right,
+              rgba(blue, 0.5),
+              black
+            );
+            background-position: center center;
+            background-size: 8px 8px;
+            background-repeat: no-repeat;
+          }
+  
+          &[value="repeat"] {
+            background-image: linear-gradient(
+              to top right,
+              rgba(blue, 0.5),
+              black
+            );
+            background-position: 10px 10px;
+            background-size: 8px 8px;
+            background-repeat: repeat;
+          }
+  
+          &[value="repeat-x"] {
+            background-image: linear-gradient(
+              to top right,
+              rgba(blue, 0.5),
+              black
+            );
+            background-position: 10px 8px;
+            background-size: 8px 8px;
+            background-repeat: repeat-x;
+          }
+  
+          &[value="repeat-y"] {
+            background-image: linear-gradient(
+              to top right,
+              rgba(blue, 0.5),
+              black
+            );
+            background-position: 8px 10px;
+            background-size: 8px 8px;
+            background-repeat: repeat-y;
+          }
+  
+          &[value="space"] {
+            background-image: linear-gradient(
+              to top right,
+              rgba(blue, 0.5),
+              black
+            );
+            background-position: 10px 10px;
+            background-size: 8px 8px;
+            background-repeat: space;
+          }
+  
+          &[value="round"] {
+            background-image: linear-gradient(
+              to top right,
+              rgba(blue, 0.5),
+              black
+            );
+            background-position: 0px 0px;
+            background-size: 8px 8px;
+            background-repeat: round;
+          }
+        }
+  
+        &[data-value="repeat"] button[value="repeat"],
+        &[data-value="no-repeat"] button[value="no-repeat"],
+        &[data-value="repeat-x"] button[value="repeat-x"],
+        &[data-value="repeat-y"] button[value="repeat-y"],
+        &[data-value="space"] button[value="space"],
+        &[data-value="round"] button[value="round"] {
+          background-color: var(--elf--border-color);
+          box-shadow: 0 0 1px 1px black;
+        }
+      }
+  
+      .blend-list {
+        padding: 2px 0px;
+        select.full-size {
+          width: 100px;
+        }
+      }
+    }
+  
+    &.fill-picker-popup {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }

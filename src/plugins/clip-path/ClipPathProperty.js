@@ -3,6 +3,7 @@ import icon from "el/editor/icon/icon";
 import { ClipPath } from "el/editor/property-parser/ClipPath";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
+import './ClipPathProperty.scss';
 
 var clipPathList = [
   'circle',
@@ -32,7 +33,7 @@ export default class ClipPathProperty extends BaseProperty {
   }
 
   getBody() {
-    return /*html*/`<div class='clip-path-list' ref='$clippathList'></div>`;
+    return /*html*/`<div class='elf--clip-path-list' ref='$clippathList'></div>`;
   }
 
   getTools() {

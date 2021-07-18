@@ -5,6 +5,8 @@ import { os } from "el/base/functions/detect";
 import { registElement } from "el/base/registElement";
 import { SUBSCRIBE } from "el/base/Event";
 
+import './ShortcutWindow.scss';
+
 const categories = new Set();
 
 shortcuts.forEach(it => {
@@ -37,7 +39,7 @@ const OSName = os()
 export default class ShortcutWindow extends BaseWindow {
 
     getClassName() {
-        return 'shortcut-window'
+        return 'elf--shortcut-window'
     }
 
     getTitle() {

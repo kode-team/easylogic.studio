@@ -3,6 +3,8 @@ import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { CSS_TO_STRING, STRING_TO_CSS } from "el/base/functions/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
+import './GridLayoutItemProperty.scss';
+
 export default class GridLayoutItemProperty extends BaseProperty {
 
   getTitle() {
@@ -17,7 +19,7 @@ export default class GridLayoutItemProperty extends BaseProperty {
   }
 
   getClassName() {
-    return 'grid-layout-item-property';
+    return 'elf--grid-layout-item-property';
   }
 
   getBody() {

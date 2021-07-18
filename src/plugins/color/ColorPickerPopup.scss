@@ -1,0 +1,63 @@
+@import '../../scss/mixins.scss';
+
+.elf--color-picker-popup {
+  
+  width: 224px;
+  padding-bottom: 10px;
+  
+  display: grid;
+  grid-template-columns: 1fr; 
+
+  .colorpicker {
+    box-shadow: none;
+    border-radius: 0px;
+    border:0px;
+    background-color: transparent;
+
+    input {
+      color: var(--elf--font-color) !important;
+      text-transform: uppercase;
+      border:1px solid rgba(221, 221, 221, 0.4) !important;
+    }
+
+    .title {
+      color: var(--elf--font-color) !important;
+    }
+
+    .colorsets {
+      border-top: 1px solid var(--elf--border-color) !important;
+    }
+  }
+
+  .assets {
+    padding: 0px 10px;
+
+    .project-color-list {
+      padding: 5px 0px;
+      .color-item {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border-radius: 3px;
+        position: relative;
+        @include transparent-background();
+        margin-right: 9px;
+        margin-bottom: 9px;
+        overflow: hidden;
+  
+        .color-view {
+          position: absolute;
+          left: 0px;
+          top: 0px;
+          right: 0px;
+          bottom: 0px;
+        }
+  
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+    }    
+  }
+
+}

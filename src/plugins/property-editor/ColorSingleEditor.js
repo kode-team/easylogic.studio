@@ -1,6 +1,7 @@
 import { CLICK, BIND, SUBSCRIBE } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './ColorSingleEditor.scss';
 
 export default class ColorSingleEditor extends EditorElement {
 
@@ -39,7 +40,7 @@ export default class ColorSingleEditor extends EditorElement {
     template() {
 
         return /*html*/`
-            <div class='color-single-editor'>
+            <div class='elf--color-single-editor'>
                 <div class='preview' ref='$preview'>
                     <div class='mini-view'>
                         <div class='color-view' style="background-color: ${this.state.color}" ref='$miniView'></div>

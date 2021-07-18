@@ -1,6 +1,8 @@
 import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF} from "el/base/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
+import './TransitionPropertyPopup.scss';
+
 const property_list = [
   'none',
   'all',
@@ -103,7 +105,7 @@ export default class TransitionPropertyPopup extends BasePopup {
   }
 
   getBody() {
-    return /*html*/`<div class='transition-property-popup' ref='$popup'></div>`;
+    return /*html*/`<div class='elf--transition-property-popup' ref='$popup'></div>`;
   }
 
   [LOAD('$popup')] () {

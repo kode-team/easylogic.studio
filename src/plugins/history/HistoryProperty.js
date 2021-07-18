@@ -2,6 +2,7 @@ import { LOAD, DOMDIFF, SUBSCRIBE } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
+import './HistoryProperty.scss';
 
 export default class HistoryProperty extends BaseProperty {
 
@@ -15,7 +16,7 @@ export default class HistoryProperty extends BaseProperty {
 
   getBody() {
     return /*html*/`
-      <div class="history-list-view" ref='$body'></div>
+      <div class="elf--history-list-view" ref='$body'></div>
     `;
   }
 

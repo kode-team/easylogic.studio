@@ -1,6 +1,8 @@
 import { INPUT, SUBSCRIBE } from "el/base/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
+import './KeyframePopup.scss';
+
 export default class KeyframePopup extends BasePopup {
 
   getTitle () {
@@ -21,7 +23,7 @@ export default class KeyframePopup extends BasePopup {
 
   getBody() {
     return /*html*/`
-    <div class='keyframe-popup' ref='$popup'>
+    <div class='elf--keyframe-popup' ref='$popup'>
       <div class="box">
         ${this.templateForName()}
         ${this.templateForOffset()}

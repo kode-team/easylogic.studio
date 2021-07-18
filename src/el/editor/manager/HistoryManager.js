@@ -68,7 +68,7 @@ export class HistoryManager {
 
         if (lastUndoObject && 
             lastUndoObject.message === message && 
-            time - lastUndoObject.time < this.$editor.config.get('history.time')
+            time - lastUndoObject.time < this.$editor.config.get('history.delay.ms')
         ) {
             // 같은 메시지를 입력한 경우
             // 이전 history 와 현재 히스토리 등록 시간의 차이가 1초 미만일 때 

@@ -2,6 +2,8 @@ import { INPUT, LOAD, CLICK, SUBSCRIBE } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './VarEditor.scss';
+
 export default class VarEditor extends EditorElement {
 
     initState() {
@@ -21,7 +23,7 @@ export default class VarEditor extends EditorElement {
     template() {
         var labelClass = this.state.hideLabel ? 'hide' : '';
         return /*html*/`
-        <div class='var-editor var-list'>
+        <div class='elf--var-editor var-list'>
             <div class='label ${labelClass}' >
                 <label>${this.props.title || ''}</label>
                 <div class='tools'>

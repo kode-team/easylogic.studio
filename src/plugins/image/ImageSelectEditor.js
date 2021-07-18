@@ -1,6 +1,8 @@
 import { LOAD, CLICK, CHANGE, SUBSCRIBE } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './ImageSelectEditor.scss';
+
 export default class ImageSelectEditor extends EditorElement {
 
     initState() {
@@ -11,7 +13,7 @@ export default class ImageSelectEditor extends EditorElement {
 
     template() {
         return /*html*/`
-            <div class='image-select-editor' ref='$body'></div>
+            <div class='elf--image-select-editor' ref='$body'></div>
         `
     }
 

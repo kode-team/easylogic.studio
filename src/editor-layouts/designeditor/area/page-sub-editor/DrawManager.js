@@ -1,7 +1,7 @@
 import { Length } from "el/editor/unit/Length";
 import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-
+import './DrawManager.scss';
 
 export default class DrawManager extends EditorElement {
 
@@ -43,7 +43,7 @@ export default class DrawManager extends EditorElement {
 
   template() {
     return /*html*/`
-      <div class='draw-manager'>
+      <div class='elf--draw-manager'>
         <div class='tools'>   
           <div >        
             <label>${this.$i18n('draw.manager.tolerance')}</label>            

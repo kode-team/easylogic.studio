@@ -2,7 +2,7 @@ import { CLICK } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import CustomComponentItems from "./CustomComponentItems";
 
-
+import './ComponentItems.scss';
 
 export default class ComponentItems extends EditorElement {
 
@@ -14,7 +14,7 @@ export default class ComponentItems extends EditorElement {
 
   template() {
     return /*html*/`
-      <div class='component-items'>
+      <div class='elf--component-items'>
         <div>
           <object refClass="CustomComponentItems" />
         </div>      

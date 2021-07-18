@@ -2,7 +2,7 @@ import { CLICK, LOAD, SUBSCRIBE } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { DirectionLength } from "el/editor/unit/DirectionLength";
-
+import './DirectionEditor.scss';
 const typeList = [
   { key: "top", title: "Top" },
   { key: "right", title: "Right" },
@@ -27,7 +27,7 @@ export default class DirectionEditor extends EditorElement {
   }
 
   template() {
-    return `<div class='direction-editor' ref='$body'></div>`
+    return `<div class='elf--direction-editor' ref='$body'></div>`
   }
 
   [SUBSCRIBE('changeBorderRadius')] (key, value) {

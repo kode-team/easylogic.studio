@@ -2,25 +2,10 @@ export class ConfigManager {
 
     constructor (editor) {
         this.editor = editor;
+        this.configList = [];
         this.config = new Map();
-        this.initialize()
     }
-
-    initialize() {
-        this.set('canvas.width', 10000)
-        this.set('canvas.height', 10000)
-        this.set('body.move.ms', 30);
-        this.set('grid.preview.position', []);
-        this.set('debug', false);
-        this.set('fixedAngle', 15);
-        this.set('ruler.show', true);
-        this.set('show.left.panel', true);
-        this.set('show.right.panel', true);
-        this.set('set.tool.hand', false);        
-        this.set('snap.distance', 5);
-        this.set('history.time', 1000);
-    }
-
+    
     /**
      *  key 에 해당하는 config 를 가지고 온다. 
      * 
@@ -46,12 +31,17 @@ export class ConfigManager {
      * @param {string} key 
      */
     get (key) {
+        if (this.config[key] === undefined) {
+           this.config[key] =  this.configList.find(it => it.key == key)?.defaultValue
+        }
+
         return this.config[key];
     }
 
     set (key, value) {
         const oldValue = this.config[key]
         if (oldValue != value) {
+            //todo: type 체크
             this.config[key] = value; 
             this.editor.emit("config:" + key, value, oldValue);
         }
@@ -63,8 +53,22 @@ export class ConfigManager {
         })
     }
 
+    getType(key) {
+        return this.configList.find(it => it.key == key)?.type;
+    }
+
+    isType (key, type) {
+        return this.getType(key) === type;
+    }
+
+    isBoolean(key) {
+        return this.isType(key, 'boolean');
+    }
+
     toggle(key) {
-        this.set(key, !this.get(key));
+        if (this.isBoolean(key)) {
+            this.set(key, !this.get(key));
+        }
     }
 
     true(key) {
@@ -80,4 +84,19 @@ export class ConfigManager {
         this.editor.emit("config:" + key);        
     }
 
+
+    /**
+     * config 기본 설정을 등록한다. 
+     * 
+     * @param {Object} config 
+     * @param {string} config.type config key 자료형 
+     * @param {string} config.key config key 이름 
+     * @param {any} config.defaultValue config key 기본 값 
+     * @param {string} config.title config key 제목 
+     * @param {string} config.description config key 설명  
+     */ 
+    registerConfig (config) {
+        this.config[config.key] = config.defaultValue;
+        this.configList.push(config);
+    }
 }

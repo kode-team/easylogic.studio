@@ -1,5 +1,5 @@
 import { SUBSCRIBE } from "el/base/Event";
-import BaseLayout from "../BaseLayout";
+import BaseLayout from "../common/BaseLayout";
 
 import designPlayerPlugins from "plugins/design-player-plugins";
 

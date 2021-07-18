@@ -2,11 +2,12 @@ import { LOAD, DOMDIFF, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import artboardSize from "./preset/artboard.size";
+import './ArtBoardSizeProperty.scss';
 
 export default class ArtBoardSizeProperty extends BaseProperty {
 
   getClassName() {
-    return 'artboard-size-list'
+    return 'elf--artboard-size-list'
   }
 
   [SUBSCRIBE('refreshSelection')] () {

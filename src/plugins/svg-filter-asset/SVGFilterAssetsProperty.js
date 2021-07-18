@@ -5,6 +5,7 @@ import { SVGFilter } from "el/editor/property-parser/SVGFilter";
 import { uuidShort } from "el/base/functions/math";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
+import './SVGFilterAssetsProperty.scss';
 
 export default class SVGFilterAssetsProperty extends BaseProperty {
 
@@ -19,7 +20,7 @@ export default class SVGFilterAssetsProperty extends BaseProperty {
   }
 
   getClassName() {
-    return 'svgfilter-assets-property'
+    return 'elf--svgfilter-assets-property'
   }
 
 

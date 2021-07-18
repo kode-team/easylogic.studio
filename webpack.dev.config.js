@@ -8,6 +8,7 @@ module.exports = {
   // Entry files for our popup and background pages
   entry: {
     editor: "./src/index.js",
+    canvas: "./src/index-canvas.js",
     embed: "./src/index-embed.js",    
     player: "./src/index-player.js",        
   },
@@ -105,35 +106,30 @@ module.exports = {
   plugins: [
     new HtmlWebPackPlugin({
       inject: true,
-      template: "./src/dev-index.html",
-      filename: "./single.html",
-      excludeChunks: ['player', 'embed']
-    }),
-    new HtmlWebPackPlugin({
-      inject: true,
       template: "./src/dev-fullpage.html",
       filename: "./index.html",
-      excludeChunks: ['player', 'embed']
+      excludeChunks: ['player', 'embed', 'canvas']
     }),    
 
     new HtmlWebPackPlugin({
       inject: true,
       template: "./src/dev-fullpage.html",
       filename: "./embed.html",
-      excludeChunks: ['player', 'editor']
+      excludeChunks: ['player', 'editor', 'canvas']
     }),        
-    new HtmlWebPackPlugin({
-      inject: true,
-      template: "./src/dev-index.html",
-      filename: "./single-player.html",
-      excludeChunks: ['editor', 'embed']
-    }),    
     new HtmlWebPackPlugin({
       inject: true,
       template: "./src/dev-fullpage.html",
       filename: "./player.html",
-      excludeChunks: ['editor', 'embed']
+      excludeChunks: ['editor', 'embed', 'canvas']
     }),                
+
+    new HtmlWebPackPlugin({
+      inject: true,
+      template: "./src/dev-fullpage.html",
+      filename: "./canvas.html",
+      excludeChunks: ['editor', 'embed', 'player']
+    }),                    
     new MiniCssExtractPlugin({
       filename: "[name].css"
     })

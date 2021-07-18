@@ -1,0 +1,86 @@
+$asset-item-size: 54px;
+.elf--pattern-assets-property {
+    
+    .pattern-list {
+        padding: 5px;
+        max-height: 240px;
+        overflow: auto;
+
+        .pattern-view {
+            pointer-events: none;
+        }
+
+        &[data-view-mode="grid"] {
+            display: block;
+            .add-pattern-item {
+                display: inline-block;
+                width: $asset-item-size;
+                position: relative;
+                height: $asset-item-size;
+                border: 1px solid var(--elf--selected-color);
+                // border-radius: 2px;
+                vertical-align: top;                  
+                cursor: pointer;         
+                text-align: center;
+                padding-top: 2px;
+                color: var(--elf--font-color); 
+            }
+
+            .pattern-item {
+                display: inline-block;
+                position: relative;
+                margin-bottom: 3px;
+                margin-right: 3px;
+                box-sizing: border-box;
+                border: 1px solid var(--elf--border-color);
+                
+                &:hover {
+                    &[data-custom="true"] {
+                        .tools {
+                            display: inline-block;
+                        }
+                    }
+
+                }
+
+                .preview {
+                    position: relative;
+                    width: $asset-item-size;
+                    height: $asset-item-size;
+                    
+                    cursor: pointer;
+
+                    .pattern-view{
+                        position: absolute;
+                        left:0px;
+                        top:0px;
+                        right:0px;
+                        bottom:0px;
+                        background-color: white;
+
+                    }
+                }
+
+                .tools {             
+                    position: absolute;
+                    display: none; 
+                    top: 0px;
+                    right: 0px;
+                    // display: grid;
+                    text-align: right;   
+                    padding: 2px;
+                    color: var(--elf--selected-font-color);
+                }
+            }
+
+
+        }
+
+    }
+
+}
+
+.property.pattern-assets-property {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}

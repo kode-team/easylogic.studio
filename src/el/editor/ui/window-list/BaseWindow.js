@@ -3,11 +3,13 @@ import { CLICK } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "../common/EditorElement";
 
+import './BaseWindow.scss';
+
 export default class BaseWindow extends EditorElement {
 
   template() {
     return `
-      <div class='window-background'>
+      <div class='elf--window-background'>
         <div class='window ${this.getClassName()}'>
             <div class='window-title' ref="$title">
                 <label>${this.getTitle()}</label>

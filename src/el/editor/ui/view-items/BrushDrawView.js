@@ -10,6 +10,8 @@ import { SVGBrushItem } from "@items/layers/SVGBrushItem";
 import { registElement } from "el/base/registElement";
 import { EditorElement } from "../common/EditorElement";
 
+import './BrushDrawView.scss';
+
 const FIELDS = ['fill', 'stroke-width']
 
 export default class BrushDrawView extends EditorElement {
@@ -52,7 +54,7 @@ export default class BrushDrawView extends EditorElement {
 
     template() {
         return /*html*/`
-        <div class='brush-draw-view' tabIndex="-1">
+        <div class='elf--brush-draw-view' tabIndex="-1">
             <div class='brush-draw-container' ref='$view'></div>
         </div>`
     }

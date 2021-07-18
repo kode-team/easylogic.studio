@@ -1,6 +1,7 @@
 import { CLICK, INPUT, BIND, FOCUS, BLUR, SUBSCRIBE } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './ColorViewEditor.scss';
 
 export default class ColorViewEditor extends EditorElement {
 
@@ -51,7 +52,7 @@ export default class ColorViewEditor extends EditorElement {
         var { label } = this.state;
         var hasLabel = !!label ? 'has-label' : ''
         return /*html*/`
-            <div class='color-view-editor ${hasLabel}'>
+            <div class='elf--color-view-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : '' }            
                 <div class='color-code' ref="$container">
                     <div class='preview' ref='$preview'>

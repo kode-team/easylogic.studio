@@ -3,6 +3,7 @@ import Border from "el/editor/property-parser/Border";
 import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './BorderValueEditor.scss';
 
 const borderStyleList = [
   "none",
@@ -48,12 +49,12 @@ export default class BorderValueEditor extends EditorElement {
     this.children.$style.setValue(this.state.value.style || 'solid')
     this.children.$color.setValue(this.state.value.color || 'rgba(0, 0, 0, 1)')
   }
-  
+   
 
   template() {
     var {width, style, color} = this.state.value; 
     return /*html*/`
-      <div class="border-value-editor">
+      <div class="elf--border-value-editor">
         <div class='editor-area'>
           <object refClass="RangeEditor"  ref='$width' min="0" max="100" step="1" key='width' value="${width}" onchange='changeKeyValue' />
         </div>

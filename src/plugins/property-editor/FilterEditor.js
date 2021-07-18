@@ -28,6 +28,8 @@ import {
 import { filter_list } from "el/editor/util/Resource";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './FilterEditor.scss';
+
 var specList = {
   blur: BlurFilter.spec,
   grayscale: GrayscaleFilter.spec,
@@ -55,7 +57,7 @@ export default class FilterEditor extends EditorElement {
   template() {
     var labelClass = this.state.hideLabel ? 'hide' : '';
     return /*html*/`
-      <div class='filter-editor filter-list'>
+      <div class='elf--filter-editor filter-list'>
           <div class='label ${labelClass}' >
               <label>${this.props.title || ''}</label>
               <div class='tools'>

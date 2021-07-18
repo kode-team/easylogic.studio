@@ -1,0 +1,125 @@
+
+  .elf--keyframe-popup {
+    width: 250px;
+ 
+    .box {
+      .name {
+        height: 20px;
+        display: grid;
+        grid-template-columns: 60px 1fr;
+        grid-column-gap: 4px;
+        margin-bottom: 5px;
+      }
+
+      .property {
+        .title {
+          display: grid;
+          grid-template-columns: 1fr 2fr;
+          grid-column-gap: 2px;
+
+          .tools {
+            text-align: right; 
+            select {
+              width: 100px;
+              display: inline-block;
+            }
+          }
+        }
+
+
+      }
+
+      .offset-editor {
+
+        .offset {
+            position: relative;
+            background-image: linear-gradient(to right, var(--elf--border-color), black);
+            background-size: 100% 2px;
+            background-repeat: no-repeat;
+            background-position: 0px center;
+            height: 20px;
+
+            @for $selectValue from 0 to 20 {
+              &[data-selected-value="#{$selectValue}"] {
+                  [data-offset-index="#{$selectValue}"] {
+                      background-color: var(--elf--selected-color); 
+                  }
+              }
+          }
+
+
+            .offset-item {
+                width: 10px;
+                height: 10px;
+                background-color: var(--elf--font-color);
+                border-radius: 100%;
+                position: absolute;
+                top: 50%;
+                transform: translateX(-50%) translateY(-50%);
+                vertical-align: middle;
+                border: 1px solid var(--elf--border-color);
+
+            }
+
+        }
+
+      }
+
+      .offset-input {
+        padding: 5px 0px;
+        .title {
+          display: grid;
+          grid-template-columns: 100px 1fr;
+          grid-column-gap: 2px;
+        }
+
+      }
+
+      .keyframe-property-list {
+        max-height: 300px;
+        overflow: auto;
+      }
+
+      .keyframe-property-item {
+        
+        // border:1px solid var(--elf--border-color);
+        padding: 4px 0px;
+        margin-top: 2px;
+
+        .title {
+          grid-template-columns: 1fr 30px;
+        }
+
+        .value-editor {
+          border: 1px solid rgba(0, 0, 0, 0.3);
+          padding:2px;
+        }
+      }
+
+      label {
+        font-size: 12px;
+        text-align: left;
+        vertical-align: middle;
+      }
+
+      input,
+      select {
+        width: 100%;
+        vertical-align: middle;
+      }
+
+      .input {
+        vertical-align: middle;
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+
+        &.grid-1 {
+          grid-template-columns: 1fr;
+        }
+
+        &.grid-2 {
+          grid-template-columns: 3fr 1fr;
+        }        
+      }
+    }
+  }

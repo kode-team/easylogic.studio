@@ -4,6 +4,8 @@ import { LOAD, CLICK, DOMDIFF, SUBSCRIBE } from "el/base/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 import { Length } from "el/editor/unit/Length";
 
+
+import './ImageSelectPopup.scss';
 export default class ImageSelectPopup extends BasePopup {
 
   getTitle() {
@@ -36,7 +38,7 @@ export default class ImageSelectPopup extends BasePopup {
 
   getBody() {
     return /*html*/`
-      <div class="image-select-popup">
+      <div class="elf--image-select-popup">
         <div class='box' ref='$imageBox'>
           
         </div>

@@ -1,0 +1,40 @@
+.elf--timeline-animation-list {
+    height: 100%;
+    overflow: auto;
+    padding:0px;
+    margin:0px !important;
+    .timeline-animation-item {
+        color: var(--elf--list-item-font-color);
+
+        padding: 2px 7px !important; 
+        margin-bottom: 0px !important;
+        display: grid;
+        grid-template-columns: 20px 1fr;
+        grid-column-gap: 4px;
+        cursor: pointer;
+
+        .detail {
+            display: grid;
+            grid-template-columns: 1fr 60px;
+            grid-column-gap: 3px;
+
+
+            label {
+                padding: 2px 0px;                
+                cursor: pointer;                
+            }
+
+
+            .tools {
+                text-align: right;
+            }
+    
+        }
+
+        &.selected {
+            background-color: var(--elf--list-item-selected-color);
+            color: var(--elf--selected-font-color);
+        }
+
+    }
+}

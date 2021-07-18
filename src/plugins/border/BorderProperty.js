@@ -2,6 +2,8 @@
 import { LOAD, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
+import './BorderProperty.scss';
+
 export default class BorderProperty extends BaseProperty {
 
   getTitle() {

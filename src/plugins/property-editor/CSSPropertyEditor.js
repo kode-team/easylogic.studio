@@ -4,6 +4,7 @@ import icon from "el/editor/icon/icon";
 import { OBJECT_TO_CLASS } from "el/base/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './CSSPropertyEditor.scss';
 
 export default class CSSPropertyEditor extends EditorElement {
 
@@ -28,7 +29,7 @@ export default class CSSPropertyEditor extends EditorElement {
 
   template() {
     return /*html*/`
-      <div class='css-property-editor ${OBJECT_TO_CLASS({ 
+      <div class='elf--css-property-editor ${OBJECT_TO_CLASS({ 
         'hide-title': this.state.hideTitle, 
         'hide-refresh': this.state.hideRefresh 
       })}'>

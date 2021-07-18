@@ -13,12 +13,14 @@ import {
 import { Keyframe } from "el/editor/property-parser/Keyframe";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
+import './KeyframeProperty.scss';
+
 export default class KeyframeProperty extends BaseProperty {
   getTitle() {
     return this.$i18n('keyframe.property.title');
   }
   getBody() {
-    return `<div class='keyframe-list' ref='$keyframeList'></div>`;
+    return `<div class='elf--keyframe-list' ref='$keyframeList'></div>`;
   }
 
   getTools() {

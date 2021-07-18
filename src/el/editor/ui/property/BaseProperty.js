@@ -3,13 +3,15 @@ import { CLICK, PREVENT, STOP } from "el/base/Event";
 import { isFunction } from "el/base/functions/func";
 import { EditorElement } from "../common/EditorElement";
 
+import './BaseProperty.scss';
+
 export default class BaseProperty extends EditorElement {
 
   onToggleShow() {}
 
   template() {
     return /*html*/`
-        <div class='property ${this.isHideHeader() ? 'no-title' : ''} ${this.getClassName()} ${this.isFirstShow() ?  'show' : '' }'>
+        <div class='elf--property ${this.isHideHeader() ? 'no-title' : ''} ${this.getClassName()} ${this.isFirstShow() ?  'show' : '' }'>
             ${this.isHideHeader() ? ''
             : /*html*/`
             <div class='property-title ${this.getTitleClassName()}' ref="$title">

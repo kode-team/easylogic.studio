@@ -4,10 +4,12 @@ import { CLICK, SUBSCRIBE } from "el/base/Event";
 import Dom from "el/base/Dom";
 import { registElement } from "el/base/registElement";
 
+import './ExportWindow.scss';
+
 export default class ExportWindow extends BaseWindow {
 
     getClassName() {
-        return 'export-window'
+        return 'elf--export-window'
     }
 
     getTitle() {

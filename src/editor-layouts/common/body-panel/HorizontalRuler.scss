@@ -1,0 +1,25 @@
+.elf--horizontal-ruler {
+    position: absolute;
+    top: 0px;
+    left: var(--elf--editor-ruler-size);  
+    right: 0px;
+    height: var(--elf--editor-ruler-size);  
+    background-color: var(--elf--background-color);
+    z-index: 0;
+  
+    .horizontal-ruler-container {
+      position: absolute;
+      left:0px;
+      top:0px;
+      height: 100%;
+      width: 100%;
+    }  
+    svg {
+      text {
+        text-anchor: middle;
+        fill: var(--elf--font-color); 
+        font-size: 8px;
+      }
+    }
+  }
+  

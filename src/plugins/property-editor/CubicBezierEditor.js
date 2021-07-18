@@ -7,6 +7,7 @@ import { div } from "el/base/functions/math";
 import { curveToPath, curveToPointLine } from "el/base/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './CubicBezierEditor.scss';
 
 export default class CubicBezierEditor extends EditorElement {
 
@@ -34,7 +35,7 @@ export default class CubicBezierEditor extends EditorElement {
         const easeOutCurvePoint = curveToPointLine('ease-out', 30, 30)
 
         return /*html*/`
-            <div class='cubic-bezier-editor'>
+            <div class='elf--cubic-bezier-editor'>
                 <div class='predefined'>
                     <div class='left' ref='$left'>${icon.chevron_left}</div>
                     <div class='predefined-text' ref='$text'></div>

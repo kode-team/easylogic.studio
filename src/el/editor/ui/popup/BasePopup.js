@@ -4,13 +4,13 @@ import { Length } from "el/editor/unit/Length";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "../common/EditorElement";
 
-
+import './BasePopup.scss';
 
 export default class BasePopup extends EditorElement {
 
   template() {
     return /*html*/`
-        <div class='popup ${this.getClassName()}'>
+        <div class='elf--popup ${this.getClassName()}'>
             <div class='popup-title' ref="$title">
                 <label>${this.getTitle()}</label>
                 <span class="tools">

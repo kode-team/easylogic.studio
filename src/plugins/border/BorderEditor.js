@@ -1,6 +1,9 @@
 import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import Border from "el/editor/property-parser/Border";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+
+import './BorderEditor.scss';
+
 const borderTypeList = [
   "border", 
   // "border-top", 
@@ -65,7 +68,7 @@ export default class BorderEditor extends EditorElement {
 
   template() {
     return /*html*/`
-      <div class="border-editor">
+      <div class="elf--border-editor">
         <div class='header'>
           <div></div>
           <label>${this.$i18n('border.editor.width')}</label>

@@ -13,13 +13,15 @@ import { Transition } from "el/editor/property-parser/Transition";
 import { curveToPath } from "el/base/functions/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
+import './TransitionProperty.scss';
+
 export default class TransitionProperty extends BaseProperty {
   getTitle() {
     return this.$i18n('transition.property.title');
   }
 
   getBody() {
-    return /*html*/`<div class='transition-list' ref='$transitionList'></div>`;
+    return /*html*/`<div class='elf--transition-list' ref='$transitionList'></div>`;
   }
 
   getTools() {

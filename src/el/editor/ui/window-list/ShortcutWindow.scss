@@ -1,0 +1,56 @@
+.elf--shortcut-window {
+    width: 600px !important;
+    height: 80% !important;
+
+    .window-body {
+        overflow: auto;
+    }
+
+    .list {
+        padding: 10px 20px;
+        .item {
+            h2 {
+                padding-left: 10px;
+            }
+
+            .shortcut-view-item {
+                display: grid;
+                grid-template-columns: 1fr 200px;
+
+                margin-bottom :2px;
+
+                > * {
+                    position: relative;                    
+                    border-bottom: 1px solid var(--elf--border-color);
+                    padding: 5px 10px;
+                    border-right: 0px;
+
+                }
+
+                .title {
+                    padding: 10px 10px;
+
+                    .description {
+                        font-size: 11px;
+                        color: var(--elf--font-color);
+                        opacity: 0.5;
+                    }
+                }
+
+                .os-item {
+
+                    text-align: right;
+
+                    span {
+                        border: 1px solid var(--elf--font-color);
+                        padding: 4px 6px;
+                        display: inline-block;
+                        box-sizing: border-box;
+                        margin: 0 2px;
+                    }
+                }
+                          
+            }
+        }
+    }
+}

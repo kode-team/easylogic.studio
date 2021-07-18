@@ -1,6 +1,8 @@
 import { CLICK, LOAD, SUBSCRIBE } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './ClipPathEditor.scss';
+
 export default class ClipPathEditor extends EditorElement {
 
     initState() {
@@ -28,7 +30,7 @@ export default class ClipPathEditor extends EditorElement {
 
     template() {
         return /*html*/`
-            <div class='clip-path-editor'></div>
+            <div class='elf--clip-path-editor'></div>
         `
     }
 

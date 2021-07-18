@@ -2,7 +2,7 @@ import UIElement from "el/base/UIElement";
 import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
-
+import './ColorPickerPopup.scss';
 export default class ColorPickerPopup extends BasePopup {
 
   getTitle() {
@@ -41,7 +41,7 @@ export default class ColorPickerPopup extends BasePopup {
 
   getBody() {
     return /*html*/`
-      <div class="color-picker-popup">
+      <div class="elf--color-picker-popup">
         <div class='box'>
           <object refClass="EmbedColorPicker" ref='$color' value='${this.state.color}' onchange='changeColor' onchangeend="changeEndColor" />
         </div>

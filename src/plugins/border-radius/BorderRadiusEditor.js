@@ -3,6 +3,8 @@ import icon from "el/editor/icon/icon";
 import BorderRadius from "el/editor/property-parser/BorderRadius";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './BorderRadiusEditor.scss';
+
 const typeList = [
   { key: "border-top-left-radius", title: "topLeft" },
   { key: "border-top-right-radius", title: "topRight" },
@@ -20,7 +22,7 @@ export default class BorderRadiusEditor extends EditorElement {
   }
 
   template() {
-    return `<div class='border-radius-editor' ref='$body'></div>`
+    return `<div class='elf--border-radius-editor' ref='$body'></div>`
   }
 
   [SUBSCRIBE_SELF('changeBorderRadius')] (key, value) {

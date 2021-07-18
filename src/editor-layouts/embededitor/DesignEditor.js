@@ -2,14 +2,15 @@ import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, MOVE, BIND, THROT
 
 import { Length } from "el/editor/unit/Length";
 
-import BaseLayout from "../BaseLayout"; 
+import BaseLayout from "../common/BaseLayout"; 
+import BodyPanel from "../common/BodyPanel";
+import PopupManager from "../common/PopupManager";
+import KeyboardManager from "../common/KeyboardManager";
 import ToolBar from "./area/ToolBar";
 import designEditorPlugins from "plugins/design-editor-plugins";
 import LayerTab from "../designeditor/area/LayerTab";
 import Inspector from "../designeditor/area/Inspector";
-import BodyPanel from "../designeditor/area/BodyPanel";
-import PopupManager from "../designeditor/area/PopupManager";
-import KeyboardManager from "../designeditor/area/KeyboardManager";
+ 
 
 export default class DesignEditor extends BaseLayout {
 

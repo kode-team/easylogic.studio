@@ -1,0 +1,31 @@
+
+$pointer-color: #4075d6;
+$top-size: 50px;
+$tool-size: 0px;
+$left-size: 340px;
+$left-layer-panel: 70px; 
+$left-page-size: 70px;
+$toggle-left-size: 80px;
+$right-size: 260px;
+$timeline-animation-size: 200px;
+$timeline-property-size: 270px;
+$timeline-header-size: 40px;
+$timeline-size: 300px;
+$show-timeline-animation: all 0.05s linear;
+$footer-height: 30px; 
+$status-bar-height: 30px;
+// base 
+$range-thumb-width: 12px;
+$range-thumb-height: 12px;
+$range-track-height: 2px;
+$range-thumb-top: -5px; 
+$range-thumb-border-radius: 20px; 
+
+.layout-body {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
+
+}

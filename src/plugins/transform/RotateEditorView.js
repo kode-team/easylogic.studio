@@ -6,6 +6,8 @@ import { calculateAnglePointDistance } from "el/base/functions/math";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './RotateEditorView.scss';
+
 const directions = [
     'top-left',
     'top',
@@ -32,7 +34,7 @@ const DEFINED_ANGLES = {
 export default class RotateEditorView extends EditorElement {
     template() {
         return /*html*/`
-            <div class='rotate-editor-view'>            
+            <div class='elf--rotate-editor-view'>            
                 <div class='rotate-area' ref='$rotateArea'>
                     <div class='rotate-container' ref='$rotateContainer'>
                         <div class='rotate-item rotate-x'></div>
@@ -62,7 +64,7 @@ export default class RotateEditorView extends EditorElement {
                  
         this.bindData('$rotateZ')
         this.command('setAttributeForMulti', 'change direction', this.$selection.pack('transform'));
-        // this.$selection.setRectCache();         
+        this.emit('refreshSelectionTool');
 
     }
 
@@ -103,7 +105,7 @@ export default class RotateEditorView extends EditorElement {
         })
         // this.$selection.setRectCache();
         this.command('setAttributeForMulti', 'change direction', this.$selection.pack('transform'));
-
+        this.emit('refreshSelectionTool');
         this.bindData('$rotateContainer');   
     }
 
@@ -140,11 +142,13 @@ export default class RotateEditorView extends EditorElement {
         this.bindData('$rotateContainer');
 
         this.command('setAttributeForMulti', 'change rotate', this.$selection.pack('transform'));
+        this.emit('refreshSelectionTool');        
 
     }
 
     moveEndRotateXY (dx, dy) {    
         this.command('setAttributeForMulti', 'change rotate', this.$selection.pack('transform'));              
+        this.emit('refreshSelectionTool');        
     }
 
     [DOUBLECLICK('$handle')] () {
@@ -153,6 +157,7 @@ export default class RotateEditorView extends EditorElement {
         })
         this.bindData('$rotateZ');                   
         this.command('setAttributeForMulti', 'change rotate handle', this.$selection.pack('transform'));        
+        this.emit('refreshSelectionTool');        
     }
 
     [POINTERSTART('$handle') + MOVE() + END()] () {
@@ -180,10 +185,12 @@ export default class RotateEditorView extends EditorElement {
 
         this.bindData('$rotateZ');        
         this.command('setAttributeForMulti', 'change rotate handle', this.$selection.pack('transform'));
+        this.emit('refreshSelectionTool');        
     }
 
     end () {
         this.command('setAttributeForMulti', 'change rotate handle', this.$selection.pack('transform'));
+        this.emit('refreshSelectionTool');
     }
 
 

@@ -1,0 +1,51 @@
+.elf--path-data-editor {
+    .segment-empty {
+        display: grid;
+        grid-template-columns: 30px 1fr; 
+        grid-column-gap: 2px;
+
+        .values {
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr);
+            grid-column-gap: 2px;
+            grid-row-gap: 2px;
+            text-align: center;
+        }
+    }    
+    
+    .segment {
+        display: grid;
+        grid-template-columns: 50px 1fr; 
+        grid-column-gap: 2px;
+        margin-bottom: 4px;
+
+        &.m {
+            padding-top: 10px;
+        }
+
+        .command {
+            color: var(--elf--selected-color); 
+            cursor: pointer;
+
+            &[data-toggle="false"] {
+                opacity: 0.3;
+                font-weight: bold;
+            }
+        }
+
+        .values {
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr);
+            grid-column-gap: 2px;
+            grid-row-gap: 2px;
+
+            span {
+                text-align: center;
+            }
+
+            input {
+                width: 100%;
+            }
+        }
+    }
+}

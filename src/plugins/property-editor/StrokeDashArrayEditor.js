@@ -3,6 +3,8 @@ import { isArray } from "el/base/functions/func";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './StrokeDashArrayEditor.scss';
+
 export default class StrokeDashArrayEditor extends EditorElement {
 
   initState() {
@@ -21,7 +23,7 @@ export default class StrokeDashArrayEditor extends EditorElement {
     const hasLabel = !!label
 
     return /*html*/`
-      <div class='stroke-dasharray-editor'>
+      <div class='elf--stroke-dasharray-editor'>
         <div class='tools ${hasLabel ? 'has-label': ''}'>
           ${hasLabel ? `<label class='label'>${label}</label>` : ''}
           <label ref='$add'>${icon.add} ${this.$i18n('stroke.dasharray.editor.add')}</label>

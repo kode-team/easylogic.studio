@@ -1,0 +1,39 @@
+@mixin cross {
+  &:before {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    top: 50%;
+    height: 4px;
+    transform: translateY(-50%);
+    background-color: white;
+  }
+
+  &:after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    left: 50%;
+    width: 4px;
+    transform: translateX(-50%);
+    background-color: white;
+  }
+}
+
+.elf--border-value-editor {
+  display: grid;
+  grid-template-columns: 2fr 1fr 24px;
+  grid-column-gap: 4px;
+
+  label {
+    text-align: left;
+    vertical-align: middle;
+    padding: 6px 4px 2px 0px;
+    
+    font-size: 11px;    
+  }
+}

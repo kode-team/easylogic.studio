@@ -4,6 +4,8 @@ import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import { Length } from "el/editor/unit/Length";
 
+import './BackgroundImagePositionPopup.scss';
+
 export const blend_list = [
   "normal",
   "multiply",
@@ -13,7 +15,7 @@ export const blend_list = [
   "lighten",
   "color-dodge",
   "color-burn",
-  "hard-light",
+  "hard-light", 
   "soft-light",
   "difference",
   "exclusion",
@@ -156,7 +158,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
   getBody() {
     return /*html*/`
-      <div class="background-image-position-picker" ref='$picker'></div>
+      <div class="elf--background-image-position-picker" ref='$picker'></div>
     `;
   }
 

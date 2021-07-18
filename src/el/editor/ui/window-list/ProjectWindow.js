@@ -4,10 +4,12 @@ import { SUBSCRIBE } from "el/base/Event";
 
 import { registElement } from "el/base/registElement";
 
+import './ProjectWindow.scss';
+
 export default class ProjectWindow extends BaseWindow {
 
     getClassName() {
-        return 'project-window'
+        return 'elf--project-window'
     }
 
     getTitle() {

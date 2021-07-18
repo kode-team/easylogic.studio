@@ -1,6 +1,8 @@
 import { CLICK, BIND, SUBSCRIBE } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './GradientSingleEditor.scss';
+
 export default class GradientSingleEditor extends EditorElement {
 
     initState() { 
@@ -39,7 +41,7 @@ export default class GradientSingleEditor extends EditorElement {
     template() {
 
         return /*html*/`
-            <div class='gradient-single-editor'>
+            <div class='elf--gradient-single-editor'>
                 <div class='preview' ref='$preview'>
                     <div class='mini-view'>
                         <div class='color-view' style="background-color: ${this.state.color}" ref='$miniView'></div>

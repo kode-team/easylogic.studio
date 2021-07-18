@@ -4,6 +4,7 @@ import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
+import './GradientPickerPopup.scss';
 
 export default class GradientPickerPopup extends BasePopup {
 
@@ -23,7 +24,7 @@ export default class GradientPickerPopup extends BasePopup {
 
   getBody() {
     return /*html*/`
-      <div class="gradient-picker" ref='$body' data-selected-editor=''>
+      <div class="elf--gradient-picker-popup" ref='$body' data-selected-editor=''>
         <div class='box'>
           <div ref='$gradientEditor'></div>
         </div>

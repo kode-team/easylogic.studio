@@ -3,6 +3,8 @@ import { Length } from "el/editor/unit/Length";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './PerspectiveOriginEditor.scss';
+
 const typeList = [
   { key: "perspective-origin-x", title: "X" },
   { key: "perspective-origin-y", title: "Y" },
@@ -54,7 +56,7 @@ export default class PerspectiveOriginEditor extends EditorElement {
 
   template() {
     return /*html*/`
-      <div class='perspective-origin-editor' ref='$body'>
+      <div class='elf--perspective-origin-editor' ref='$body'>
         <div class='direction' ref='$direction'>
           <div class='pos' data-value='top'></div>
           <div class='pos' data-value='top left'></div>

@@ -4,6 +4,8 @@ import { LOAD, INPUT, CLICK, FOCUS, BLUR, POINTERSTART, MOVE, END, THROTTLE, SUB
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './NumberRangeEditor.scss';
+
 export default class NumberRangeEditor extends EditorElement {
 
     initState() {
@@ -44,7 +46,7 @@ export default class NumberRangeEditor extends EditorElement {
         var realValue = (+value).toString();
         
         return /*html*/`
-        <div class='number-range--editor ${hasLabel} ${isRemovable} ${layoutClass}' data-selected-type='${type}'>
+        <div class='elf--number-range-editor ${hasLabel} ${isRemovable} ${layoutClass}' data-selected-type='${type}'>
             ${label ? `<label title="${label}">${label}</label>` : '' }
             <div class='range--editor-type' data-type='range'>
                 <div class='area'>

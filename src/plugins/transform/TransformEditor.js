@@ -16,6 +16,8 @@ import { Length } from "el/editor/unit/Length";
 import { isNotUndefined } from "el/base/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './TransformEditor.scss';
+
 var transformList = [
   'perspective',  
   'rotate',
@@ -66,7 +68,7 @@ export default class TransformEditor extends EditorElement {
   template() {
     var labelClass = this.state.hideLabel ? 'hide' : '' 
     return /*html*/`
-      <div class='transform-editor transform-list'>
+      <div class='elf--transform-editor transform-list'>
           <div class='label ${labelClass}' >
               <label>Transform</label>
               <div class='tools'>

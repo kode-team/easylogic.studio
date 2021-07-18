@@ -2,6 +2,8 @@ import { CLICK, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { Length } from "el/editor/unit/Length";
 
+import './TransformOriginEditor.scss';
+
 const typeList = [
   { key: "transform-origin-x", title: "X" },
   { key: "transform-origin-y", title: "Y" },
@@ -54,7 +56,7 @@ export default class TransformOriginEditor extends EditorElement {
 
   template() {
     return /*html*/`
-      <div class='transform-origin-editor'>
+      <div class='elf--transform-origin-editor'>
         <div class='direction' ref='$direction'>
           <div class='pos' data-value='top left'></div>        
           <div class='pos' data-value='top'></div>

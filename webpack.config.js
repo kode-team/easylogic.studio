@@ -39,6 +39,7 @@ module.exports = {
   // Entry files for our popup and background pages
   entry: {
     editor: "./src/index.js",
+    canvas: "./src/index-canvas.js",    
     embed: "./src/index-embed.js",    
     player: "./src/index-player.js",
   },
@@ -141,21 +142,27 @@ module.exports = {
       inject: true,
       template: "./src/index.html",
       filename: "./index.html",
-      excludeChunks: ['player', 'embed']
+      excludeChunks: ['player', 'embed', 'canvas']
     }),
     new HtmlWebPackPlugin({
       inject: true,
       template: "./src/index.html",
       filename: "./player.html",
-      excludeChunks: ['editor', 'embed']
+      excludeChunks: ['editor', 'embed', 'canvas']
     }),        
 
     new HtmlWebPackPlugin({
       inject: true,
       template: "./src/index.html",
       filename: "./embed.html",
-      excludeChunks: ['editor', 'player']
+      excludeChunks: ['editor', 'player', 'canvas']
     }),            
+    new HtmlWebPackPlugin({
+      inject: true,
+      template: "./src/index.html",
+      filename: "./canvas.html",
+      excludeChunks: ['editor', 'player', 'embed']
+    }),                
     new MiniCssExtractPlugin({
       filename: "[name].css?[contenthash]"
     }),

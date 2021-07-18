@@ -2,6 +2,7 @@ import BaseProperty from "./BaseProperty";
 
 import { CHANGEINPUT, SUBSCRIBE } from "el/base/Event";
 import { registElement } from "el/base/registElement";
+import './ProjectInformationProperty.scss';
 
 export default class ProjectInformationProperty extends BaseProperty {
   getTitle() {
@@ -24,7 +25,7 @@ export default class ProjectInformationProperty extends BaseProperty {
     var project = this.$selection.currentProject || { name: '', description: ''}
 
     return /*html*/`
-      <div class="project-info" ref="$info">
+      <div class="elf--project-info" ref="$info">
         <div class='project-info-item'>
           <label>${this.$i18n('project.information.property.name')}</label>
           <div class='input'>

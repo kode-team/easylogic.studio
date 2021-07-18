@@ -3,6 +3,8 @@ import { LOAD, INPUT } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './NumberInputEditor.scss';
+
 export default class NumberInputEditor extends EditorElement {
 
     initState() {
@@ -48,7 +50,7 @@ export default class NumberInputEditor extends EditorElement {
         var realValue = (+value).toString();
         
         return /*html*/`
-        <div class='number-input-editor ${hasLabel} ${hasCompact} ${layoutClass}' data-selected-type='${type}'>
+        <div class='elf--number-input-editor ${hasLabel} ${hasCompact} ${layoutClass}' data-selected-type='${type}'>
             ${label ? `<label>${label}</label>` : '' }
             <div class='range--editor-type' data-type='range'>
                 <div class='area'>

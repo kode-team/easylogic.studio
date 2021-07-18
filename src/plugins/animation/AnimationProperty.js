@@ -12,6 +12,8 @@ import { Animation } from "el/editor/property-parser/Animation";
 import { curveToPath } from "el/base/functions/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
+import './AnimationProperty.scss';
+
 export default class AnimationProperty extends BaseProperty {
   getTitle() {
     return this.$i18n('animation.property.title');

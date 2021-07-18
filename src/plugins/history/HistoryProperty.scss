@@ -1,0 +1,21 @@
+.elf--history-list-view {
+    .history-item {
+        display: grid;
+        grid-template-columns: 20px 1fr;
+        grid-column-gap: 5px;
+
+        > span {
+            vertical-align: middle;
+            color: var(--elf--font-color);
+            svg {
+                width: 16px;
+                height: 16px;
+
+                path {
+                    fill: currentColor;
+                }
+            }
+        }
+    }
+}
+

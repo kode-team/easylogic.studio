@@ -2,6 +2,8 @@ import { LOAD, CLICK, DOUBLECLICK, FOCUSOUT, KEY, PREVENT, STOP, DOMDIFF, KEYDOW
 import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
+import './TimelineAnimationProperty.scss';
+
 export default class TimelineAnimationProperty extends BaseProperty {
   getTitle() {
     return this.$i18n('timeline.animation.property.title');
@@ -19,7 +21,7 @@ export default class TimelineAnimationProperty extends BaseProperty {
 
   getBody() {
     return /*html*/`
-      <div class="timeline-animation-list" ref="$timelineAnimationList"></div>
+      <div class="elf--timeline-animation-list" ref="$timelineAnimationList"></div>
     `;
   }
 

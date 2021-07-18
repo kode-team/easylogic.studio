@@ -3,7 +3,7 @@ import BaseProperty from "./BaseProperty";
 import { DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { registElement } from "el/base/registElement";
 
-
+import './PathDataProperty.scss';
 export default class PathDataProperty extends BaseProperty {
 
   getTitle() {
@@ -11,7 +11,7 @@ export default class PathDataProperty extends BaseProperty {
   }
 
   getClassName() {
-    return "item path-data-property"
+    return "item elf--path-data-property"
   }
 
   isSVGItem  (current) {

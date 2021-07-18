@@ -2,6 +2,8 @@
 import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF} from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
+import './LayoutProperty.scss';
+
 export default class LayoutProperty extends BaseProperty {
 
   getTitle() {
@@ -15,7 +17,7 @@ export default class LayoutProperty extends BaseProperty {
   }
 
   getClassName() {
-    return 'layout-property';
+    return 'elf--layout-property';
   }
 
   getBody() {

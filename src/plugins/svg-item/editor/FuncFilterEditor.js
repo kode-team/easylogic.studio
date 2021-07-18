@@ -1,6 +1,8 @@
 import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './FuncFilterEditor.scss';
+
 export default class FuncFilterEditor extends EditorElement {
 
     initState() {
@@ -43,7 +45,7 @@ export default class FuncFilterEditor extends EditorElement {
 
         return /*html*/`
         <object refClass="SelectEditor"  label="${label}" key="type" value="${this.state.type}" options="identity,table,discrete,linear,gamma" onchange="changeType" />
-        <div class='func-filter-editor ${hasLabel}' ref='$container' data-selected-type='${type}'>
+        <div class='elf--func-filter-editor ${hasLabel}' ref='$container' data-selected-type='${type}'>
             ${label ? `<label></label>` : '' }
             <div data-type='identity'>
             </div>

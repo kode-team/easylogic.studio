@@ -1,0 +1,60 @@
+.elf--transition-list {
+  grid-template-columns: 1fr !important;
+  // padding-bottom: 5px;
+
+  .transition-item {
+    display: grid;
+    grid-template-columns: 30px 1fr 20px ; 
+    grid-column-gap: 4px;
+    
+    padding: 5px 0px;
+
+    &.selected {
+      background-color: var(--elf--border-color);
+    }
+
+    .timing {
+      border-radius: 3px;
+      background-color: var(--elf--animation-item-background-color);
+      width: 100%;
+      height: 30px;
+      vertical-align: middle;
+      cursor: pointer;
+     
+      canvas {
+        border-radius: 3px;
+      }
+    }
+
+    .labels {
+      margin-top: 4px;
+      text-align: left; 
+      vertical-align: middle;
+      padding: 5px;
+
+      label {
+        padding: 1px 3px;
+        border-radius: 2px;
+        font-weight: bold;      
+        background-color: var(--elf--border-color);
+
+        small {
+          color: var(--elf--font-color);
+        }
+
+        &.property {
+          font-size: 11px;
+          font-weight: normal;
+          border-bottom: 0px;
+        }
+      }
+    }     
+
+
+    .tools {
+      vertical-align: middle;
+      text-align: right;
+      padding-top: 8px;
+     }  
+  }
+}

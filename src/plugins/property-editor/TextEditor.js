@@ -1,6 +1,7 @@
 import { BIND, INPUT } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './TextEditor.scss';
 
 export default class TextEditor extends EditorElement {
 
@@ -16,7 +17,7 @@ export default class TextEditor extends EditorElement {
         var { label, value } = this.state; 
         var hasLabel = !!label ? 'has-label' : ''
         return /*html*/`
-            <div class='text-editor ${hasLabel}'>
+            <div class='elf--text-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : '' }
                 <div>
                     <input type='text' ref='$text' value="${value}" />

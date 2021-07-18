@@ -2,6 +2,9 @@ import { DEBOUNCE, INPUT, LOAD, SUBSCRIBE } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { Length } from "el/editor/unit/Length";
 
+import './BoxModelProperty.scss';
+
+
 const fields = ["margin", "padding"];
 let styleKeys = [];
 fields.forEach(field => {
@@ -19,7 +22,7 @@ export default class BoxModelProperty extends BaseProperty {
   }
 
   getBody() {
-    return /*html*/`<div class="property-item box-model-item" ref="$boxModelItem"></div>`;
+    return /*html*/`<div class="property-item elf--box-model-item" ref="$boxModelItem"></div>`;
   }
 
   templateInput(key, current) {

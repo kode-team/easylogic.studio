@@ -5,6 +5,7 @@ import icon from "el/editor/icon/icon";
 import { OBJECT_TO_CLASS } from "el/base/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './RangeEditor.scss';
 
 export default class RangeEditor extends EditorElement {
 
@@ -62,7 +63,7 @@ export default class RangeEditor extends EditorElement {
         <div 
             ref="$range"
             class="${OBJECT_TO_CLASS({
-                'range--editor': true,
+                'elf--range--editor': true,
                 'has-label': !!label,
                 'compact': !!compact,
                 'is-removable': removable,

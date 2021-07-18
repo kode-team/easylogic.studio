@@ -2,6 +2,7 @@ import { LOAD, CLICK, SUBSCRIBE } from "el/base/Event";
 import colors from "el/editor/preset/colors";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './ColorAssetsEditor.scss';
 
 export default class ColorAssetsEditor extends EditorElement {
 
@@ -35,7 +36,7 @@ export default class ColorAssetsEditor extends EditorElement {
 
   template() {
     return /*html*/`
-      <div class='color-assets-editor'>
+      <div class='elf--color-assets-editor'>
         <div class='color-assets-head'>
           <label>${this.$i18n('color.asset.property.title')}</label>
           <div class='tools'>${this.getTools()}</div>

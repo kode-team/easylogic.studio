@@ -1,0 +1,35 @@
+.elf--list-view-editor {
+    position: relative;
+    display: grid; 
+    grid-template-columns: repeat(1, 1fr);
+    max-height: 500px;
+    margin-top: 10px;
+    
+    @for $selectValue from 0 to 10 {
+        &[data-column="#{$selectValue}"] {
+            grid-template-columns: repeat(#{$selectValue}, 1fr);
+        }
+    }
+
+    .list-view-item {
+        &.selected {
+            background-color: var(--elf--selected-color); 
+
+            svg {
+                path, circle, rect {
+                    fill: var(--elf--selected-font-color);
+                }
+            }
+        }
+
+        svg {
+            width: 100%;
+
+            path,circle,rect {
+                fill: var(--elf--font-color); 
+            }
+
+        }
+    }
+
+}

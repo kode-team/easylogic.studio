@@ -3,6 +3,8 @@ import icon from "el/editor/icon/icon";
 import { TextShadow } from "el/editor/property-parser/TextShadow";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './TextShadowEditor.scss';
+
 export default class TextShadowEditor extends EditorElement {
 
   initState() {
@@ -18,7 +20,7 @@ export default class TextShadowEditor extends EditorElement {
     var labelClass = this.state.hideLabel ? 'hide' : ''; 
 
     return /*html*/`
-      <div class="text-shadow-editor" >
+      <div class="elf--text-shadow-editor" >
         <div class='label ${labelClass}' >
             <label>${this.props.title||''}</label>        
             <div class='tools'>

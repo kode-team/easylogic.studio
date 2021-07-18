@@ -2,6 +2,8 @@ import { CLICK, BIND, SUBSCRIBE } from "el/base/Event";
 import { SVGFill } from "el/editor/property-parser/SVGFill";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './FillSingleEditor.scss';
+
 export default class FillSingleEditor extends EditorElement {
 
     initState() { 
@@ -81,7 +83,7 @@ export default class FillSingleEditor extends EditorElement {
         var hasLabel = !!label ? 'has-label' : ''
 
         return /*html*/`
-            <div class='fill-single-editor ${hasLabel}'>
+            <div class='elf--fill-single-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : '' }            
                 <div class='preview' ref='$preview'>
                     <div class='mini-view'>

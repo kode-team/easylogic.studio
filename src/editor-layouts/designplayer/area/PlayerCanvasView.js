@@ -9,6 +9,8 @@ import Dom from "el/base/Dom";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import PlayerHTMLRenderView from "./PlayerHTMLRenderView";
 
+import './PlayerCanvasView.scss';
+
 
 export default class PlayerCanvasView extends EditorElement {
 
@@ -27,7 +29,7 @@ export default class PlayerCanvasView extends EditorElement {
   }
   template() {
     return/*html*/`
-      <div class='page-container' tabIndex="-1" ref='$container'>
+      <div class='elf--page-container' tabIndex="-1" ref='$container'>
         <div class='page-view'>
           <div class='page-lock scrollbar' ref='$lock'>
             <object refClass='PlayerHTMLRenderView' ref='$elementView' />

@@ -13,7 +13,8 @@ import AddSVGRect from "el/editor/ui/menu-items/AddSVGRect";
 import AddSVGCircle from "el/editor/ui/menu-items/AddSVGCircle";
 import AddSVGTextPath from "el/editor/ui/menu-items/AddSVGTextPath";
 
-
+import './ToolMenu.scss'; 
+ 
 export default class ToolMenu extends EditorElement {
 
 
@@ -37,7 +38,7 @@ export default class ToolMenu extends EditorElement {
 
   template() {
     return /*html*/`
-      <div class='tool-menu center'>
+      <div class='elf--tool-menu center'>
         <div class='items'>
           <div class='draw-items' ref='$items' data-selected-value="${this.$editor.layout}">
 

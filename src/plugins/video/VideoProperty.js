@@ -4,6 +4,8 @@ import { LOAD, CLICK, BIND, DEBOUNCE, CHANGEINPUT, SUBSCRIBE, SUBSCRIBE_SELF } f
 import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
+import './VideoProperty.scss';
+
 const video_dom_property = [
   // 'audioTracks',
   // 'autoplay',
@@ -40,7 +42,7 @@ const video_dom_property = [
 export default class VideoProperty extends BaseProperty {
 
   getClassName() {
-    return 'item video-property'
+    return 'item elf--video-property'
   }
 
   getTitle() {

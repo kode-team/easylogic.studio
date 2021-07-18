@@ -4,6 +4,8 @@ import { Pattern } from "el/editor/property-parser/Pattern";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { Length } from "el/editor/unit/Length";
 
+import './PatternSizeEditor.scss';
+
 export default class PatternSizeEditor extends EditorElement {
 
     initState() { 
@@ -64,7 +66,7 @@ export default class PatternSizeEditor extends EditorElement {
     template() {
 
         return /*html*/`
-            <div class='pattern-size-editor'>
+            <div class='elf--pattern-size-editor'>
                 <div class='preview' ref='$preview'>
                     <div class='mini-view'>
                         <div class='color-view' style="background-color: ${this.state.color}" ref='$miniView'></div>

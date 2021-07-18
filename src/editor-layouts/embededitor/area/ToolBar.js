@@ -8,6 +8,8 @@ import ExportView from "el/editor/ui/menu-items/ExportView";
 import Download from "el/editor/ui/menu-items/Download";
 import Save from "el/editor/ui/menu-items/Save";
 
+import './ToolBar.scss';
+
 export default class ToolBar extends EditorElement {
 
     components() {
@@ -34,7 +36,7 @@ export default class ToolBar extends EditorElement {
 
     template() {
         return /*html*/`
-            <div class='${css(`
+            <div class='elf--tool-bar ${css(`
                 display: block;
                 position: absolute;
                 left: 0px;

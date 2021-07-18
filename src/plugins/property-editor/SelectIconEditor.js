@@ -4,6 +4,8 @@ import icon from "el/editor/icon/icon";
 import { CSS_TO_STRING } from "el/base/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './SelectIconEditor.scss';
+
 export default class SelectIconEditor extends EditorElement {
 
     initState() {
@@ -31,7 +33,7 @@ export default class SelectIconEditor extends EditorElement {
         var hasLabel = !!label ? 'has-label' : ''
         var hasCompact = !!compact ? 'compact': '';
         return /*html*/`
-            <div class='select-icon-editor ${hasLabel}'>
+            <div class='elf--select-icon-editor ${hasLabel}'>
                 ${label ? `<label title="${label}">${label}</label>` : '' }
                 <div class='items ${hasCompact}' ref='$options'></div>
             </div>

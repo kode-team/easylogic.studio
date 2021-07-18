@@ -1,0 +1,26 @@
+.elf--polygon-data-editor {
+    .segment {
+        display: grid;
+        grid-template-columns: 1fr; 
+        grid-column-gap: 2px;
+        margin-bottom: 4px;
+
+        .values {
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr);
+            grid-column-gap: 2px;
+            grid-row-gap: 2px;
+            text-align: right;
+
+            label {
+                color: var(--elf--selected-color);
+            }
+
+            input {
+                color: var(--elf--font-color);
+                width: 80px;
+            }
+
+        }
+    }
+}

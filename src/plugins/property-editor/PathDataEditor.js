@@ -3,7 +3,7 @@ import { LOAD, INPUT, DEBOUNCE, CLICK } from "el/base/Event";
 import PathParser from "el/editor/parser/PathParser";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
-
+import './PathDataEditor.scss';
 
 export default class PathDataEditor extends EditorElement {
 
@@ -59,7 +59,7 @@ export default class PathDataEditor extends EditorElement {
     template() {
 
         return /*html*/`
-            <div class='path-data-editor'>
+            <div class='elf--path-data-editor'>
                 <div class='data' ref='$data'></div>
             </div>
         `

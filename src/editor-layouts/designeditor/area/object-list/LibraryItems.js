@@ -1,12 +1,13 @@
 import { DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './LibraryItems.scss';
 
 export default class LibraryItems extends EditorElement {
 
   template() {
     return /*html*/`
-      <div class='library-items'>
+      <div class='elf--library-items'>
         <div>
           <object label="Search" refClass="TextEditor" key="search" onchange="onTextChange" />
         </div>

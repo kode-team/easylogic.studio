@@ -14,14 +14,14 @@ function startEditor() {
       }],
     },
     // config: {
-    //   "ruler.show": false,
+    //   "show.ruler": false,
     //   "show.left.panel": false,
     //   "show.right.panel": false
     // },
     plugins: [
       function (editor) {
         editor.on('changeValue', function (id, attrs) {
-          console.log(id, attrs);
+          // console.log(id, attrs);
         })
       }
     ]

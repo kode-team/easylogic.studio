@@ -6,6 +6,8 @@ import { LinearGradient } from "el/editor/property-parser/image-resource/LinearG
 import { ColorStep } from "el/editor/property-parser/image-resource/ColorStep";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './BackgroundImageEditor.scss';
+
 const names = {
     'image-resource': "Image",
     'url': "Image",
@@ -59,7 +61,7 @@ export default class BackgroundImageEditor extends EditorElement {
     template () {
         var labelClass = this.state.hideLabel ? 'hide' : '';
         return /*html*/`
-            <div class='background-image-editor' >
+            <div class='elf--background-image-editor' >
                 <div class='label ${labelClass}'>
                     <label>${this.props.title||''}</label>
                     <div class='tools'>

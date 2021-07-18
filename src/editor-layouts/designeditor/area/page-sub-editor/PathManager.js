@@ -3,6 +3,7 @@ import { CLICK, BIND, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { Length } from "el/editor/unit/Length";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import './PathManager.scss';
 
 const MODES = {
   'segment-move': 'modify',
@@ -40,9 +41,8 @@ export default class PathManager extends EditorElement {
   }  
 
   template() {
-    var current = this.$selection.current || {};    
     return /*html*/`
-      <div class='path-manager'>
+      <div class='elf--path-manager'>
         <div class='tools' ref='$mode' data-selected-value='${this.state.mode}'>
             <button type="button" data-value='modify' title='${this.$i18n('path.manager.mode.modify')}' > ${icon.device_hub}</button>
             <button type="button" data-value='path' title='${this.$i18n('path.manager.mode.path')}' > ${icon.control_point}</button>

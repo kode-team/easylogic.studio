@@ -2,10 +2,11 @@ import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, MOVE, BIND, THROT
 
 import { Length } from "el/editor/unit/Length";
 
-import BaseLayout from "../BaseLayout"; 
-import KeyboardManager from "./area/KeyboardManager";
-import PopupManager from "./area/PopupManager";
-import BodyPanel from "./area/BodyPanel";
+import BaseLayout from "../common/BaseLayout"; 
+import BodyPanel from "../common/BodyPanel";
+import PopupManager from "../common/PopupManager";
+import KeyboardManager from "../common/KeyboardManager";
+
 import Inspector from "./area/Inspector";
 import StatusBar from './area/StatusBar';
 import ToolBar from "./area/ToolBar";

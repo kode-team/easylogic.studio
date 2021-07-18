@@ -8,6 +8,7 @@ import ExportView from "el/editor/ui/menu-items/ExportView";
 import Download from "el/editor/ui/menu-items/Download";
 import Save from "el/editor/ui/menu-items/Save";
 
+import './ToolBar.scss';
 
 export default class ToolBar extends EditorElement {
 
@@ -26,12 +27,12 @@ export default class ToolBar extends EditorElement {
     }
     template() {
         return /*html*/`
-            <div class='tool-bar'>
+            <div class='elf--tool-bar'>
                 <div class='logo-item'>
                     <label class='logo'></label>
                 </div>                 
                 <div class='left'>
-                    <div class='tool-menu'>
+                    <div class='elf--tool-menu'>
                         <div class='items'>
                             <div class='draw-items'>
                                 <object refClass="Projects" />
@@ -46,7 +47,7 @@ export default class ToolBar extends EditorElement {
                     <object refClass='PageSubEditor' />  
                 </div>
                 <div class='right'>
-                    <div class='tool-menu'>
+                    <div class='elf--tool-menu'>
                         <div class='items'>
                             <div class='draw-items'>
                                 <object refClass="KeyBoard" />        

@@ -1,0 +1,77 @@
+.elf--draw-manager {
+    display: none; 
+    pointer-events: all;
+    outline: none;
+    border-top: 0px;
+    color: var(--elf--font-color);
+    background-color: var(--elf--background-color);  
+    height: 100%;
+    padding: 5px 5px;
+
+    text-align: center;
+
+    .text { 
+        display: inline-block;
+    }
+
+
+    .split {
+        display: inline-block;
+        height: 20px;
+        vertical-align: middle;
+        width: 3px;
+        margin-right: 2px;
+        border-right: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .tools {
+        height: 100%;        
+        display: inline-block;
+
+        > div {
+          display: inline-block;
+          margin-left: 10px;
+          height: 100%;
+          vertical-align: middle;
+          padding: 5px 0px;          
+
+          > * {
+            display: inline-block;
+            width: auto;
+          }
+
+          label {
+            text-align: right;
+            padding: 3px 2px;
+            line-height: 20px;
+          }
+
+
+          .number-input-editor {
+            display: inline-block;
+
+            .range--editor-type {
+              display: inline-block;
+
+              input[type=number] {
+                background-color: var(--elf--border-color);
+              }
+            }
+          }
+
+          .fill-single-editor {
+            .preview {
+              width: 20px;
+              height: 20px;
+              border: 1px solid var(--elf--selected-color);
+              overflow: hidden;
+            }
+          }
+        }
+    }
+
+    > * {
+        vertical-align: middle;
+    }
+
+}

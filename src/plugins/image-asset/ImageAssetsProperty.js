@@ -5,7 +5,7 @@ import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import revokeObjectUrl from "el/editor/util/revokeObjectUrl";
 
-
+import './ImageAssetsProperty.scss';
 export default class ImageAssetsProperty extends BaseProperty {
 
   getTitle() {
@@ -18,8 +18,8 @@ export default class ImageAssetsProperty extends BaseProperty {
     }
   }
 
-  getClassName() {
-    return 'image-assets-property'
+  getClassNamef() {
+    return 'elf--image-assets-property'
   }
 
   afterRender() {

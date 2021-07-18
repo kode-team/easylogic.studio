@@ -2,6 +2,7 @@ import { LOAD, INPUT, DEBOUNCE } from "el/base/Event";
 import PolygonParser from "el/editor/parser/PolygonParser";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './PolygonDataEditor.scss';
 
 export default class PolygonDataEditor extends EditorElement {
 
@@ -46,7 +47,7 @@ export default class PolygonDataEditor extends EditorElement {
     template() {
 
         return /*html*/`
-            <div class='polygon-data-editor'>
+            <div class='elf--polygon-data-editor'>
                 <div class='data' ref='$data'></div>
             </div>
         `

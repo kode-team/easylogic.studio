@@ -1,0 +1,145 @@
+
+.elf--perspective-origin-editor {
+
+    .perspective-origin-item {
+      display: grid; 
+      grid-template-columns: 80px 1fr;
+
+      &.full {
+        grid-template-columns: 1fr;
+      }
+    }
+
+
+    .direction {
+      position: relative;
+      margin: 0 auto;
+      margin-bottom: 10px;      
+      display: grid;
+      grid-template-columns: repeat(9, 1fr);
+
+      > div {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        background-color: transparent;
+        border: var(--elf--border-color) 1px solid;
+        cursor: pointer;
+        vertical-align: middle;
+        position: relative;
+
+        &:before {
+          pointer-events: none;
+          content: '';
+          background-color: var(--elf--selected-color);
+          width: 6px;
+          height: 6px;
+          display: inline-block;
+          position: absolute;
+        }
+      }
+
+      [data-value="top"] {
+        &:before {
+          top: 0px;
+          left: 50%;
+          transform: translateX(-50%);  
+        }
+      }
+
+      [data-value="top left"] {
+        &:before {
+          top: 0px;
+          left: 0px;
+        }        
+      }      
+
+      [data-value="top right"] {
+        &:before {
+          top: 0px;
+          right: 0px;
+        }
+      }            
+
+      [data-value="bottom"] {
+        &:before  {
+          bottom: 0px;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+      }      
+
+      [data-value="bottom left"] {
+        &:before  {
+          bottom: 0px;
+          left: 0px;
+        }
+      }      
+     
+      
+
+      [data-value="bottom right"] {
+        &:before {
+          bottom: 0px;
+          right: 0px;
+        }
+      }            
+
+      [data-value="left"] {
+        &:before {
+          top: 50%;
+          left: 0px;
+          transform: translateY(-50%);
+        }
+      }           
+      
+      [data-value="right"] {
+        &:before {
+          top: 50%;
+          right: 0px;
+          transform: translateY(-50%);
+        }
+      }                 
+
+      [data-value="center"] {
+        &:before {
+          top: 50%;
+          left: 50%;
+          transform: translateX(-50%) translateY(-50%);
+        }
+      }                       
+    }    
+
+    .radius-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      justify-items: center;
+  
+      @each $borderRadiusType in all, partitial {
+        &[data-selected-value="#{$borderRadiusType}"] {
+          button[data-value="#{$borderRadiusType}"] {
+            background-color: var(--elf--transform-origin-selected-color);
+            color: var(--elf--selected-font-color); 
+          }
+        }
+      }
+  
+      button {
+        background-image: none;
+        margin: 2px;
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
+      }
+    }
+
+
+    .radius-setting-box {
+      margin-top: 5px;
+      > div {
+        margin-bottom: 5px;
+      }
+    }
+  
+  }
+  

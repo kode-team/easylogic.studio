@@ -2,6 +2,7 @@ import { LOAD, DEBOUNCE, DOMDIFF, SUBSCRIBE } from "el/base/Event";
 
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
+import './CodeViewProperty.scss';
 
 export default class CodeViewProperty extends BaseProperty {
   getTitle() {
@@ -19,7 +20,7 @@ export default class CodeViewProperty extends BaseProperty {
 
   getBody() {
     return `
-      <div class="property-item code-view-item" ref='$body'></div>
+      <div class="property-item elf--code-view-item" ref='$body'></div>
     `;
   }
 

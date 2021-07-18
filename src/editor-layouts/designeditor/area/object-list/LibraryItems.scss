@@ -1,0 +1,21 @@
+.elf--library-items {
+    padding: 10px;
+
+    .property {
+        margin-top: 10px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .property-title {
+        background-color: var(--elf--selected-color-2) !important;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        color: var(--elf--selected-font-color);
+        
+        label {
+            line-height: 1.5;
+        }
+        
+    }
+
+}

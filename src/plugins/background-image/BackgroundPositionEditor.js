@@ -1,6 +1,6 @@
 import { CLICK, BIND, SUBSCRIBE } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-
+import './BackgroundPositionEditor.scss'
 export default class BackgroundPositionEditor extends EditorElement {
 
     initState() { 
@@ -45,7 +45,7 @@ export default class BackgroundPositionEditor extends EditorElement {
     template() {
 
         return /*html*/`
-            <div class='background-position-editor'>
+            <div class='elf--background-position-editor'>
                 <div class='preview' ref='$preview'>
                     <div class='mini-view'>
                         <div class='color-view' style="background-color: ${this.state.color}" ref='$miniView'></div>

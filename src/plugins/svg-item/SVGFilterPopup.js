@@ -4,6 +4,8 @@ import { SVGFilter } from "el/editor/property-parser/SVGFilter";
 import { isNotUndefined } from "el/base/functions/func";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
+import './SVGFilterPopup.scss';
+
 export default class SVGFilterPopup extends BasePopup {
 
   getTitle() {
@@ -31,7 +33,7 @@ export default class SVGFilterPopup extends BasePopup {
 
   getBody() {
     return /*html*/`
-    <div class='svg-property-editor-popup' ref='$popup'>
+    <div class='elf--svg-filter-popup' ref='$popup'>
       <div class="box">
         <div class='editor' ref='$editor'></div>
       </div>

@@ -3,6 +3,7 @@ import { LOAD, INPUT, BIND, CLICK } from "el/base/Event";
 import colormatrix from "./colormatrix";
 import { normalize } from "el/base/functions/math";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import './ColorMatrixEditor.scss';
 
 const COLUMN = 6; 
 
@@ -20,7 +21,7 @@ export default class ColorMatrixEditor extends EditorElement {
 
     template () {
         return /*html*/`
-            <div class='small-editor color-matrix-editor' >
+            <div class='elf--color-matrix-editor' >
                 <div ref='$body'></div>
                 <div class='title'> Mix Color Template </div>
                 <div class='color-matrix-template' ref='$sample'></div>

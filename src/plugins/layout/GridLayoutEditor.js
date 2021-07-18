@@ -3,6 +3,8 @@ import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { CSS_TO_STRING, STRING_TO_CSS } from "el/base/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
+import './GridLayoutEditor.scss';
+
 export default class GridLayoutEditor extends EditorElement {
 
     initState() {
@@ -24,6 +26,13 @@ export default class GridLayoutEditor extends EditorElement {
     modifyData() {
         this.parent.trigger(this.props.onchange, this.props.key, this.getValue())
     }
+
+
+    template () {
+        return /*html*/`
+            <div class='elf--grid-layout-editor' ref='$body' ></div>
+        `
+    }    
 
     [LOAD('$body')] () {
         return /*html*/`
@@ -64,11 +73,6 @@ export default class GridLayoutEditor extends EditorElement {
         `
     }
 
-    template () {
-        return /*html*/`
-            <div class='grid-layout-editor' ref='$body' ></div>
-        `
-    }
 
 
     [SUBSCRIBE_SELF('changeKeyValue')] (key, value, params) {

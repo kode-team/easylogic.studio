@@ -1,0 +1,26 @@
+.elf--vertical-ruler {
+  position: absolute;
+  left: 0px;
+  width: var(--elf--editor-ruler-size);  
+  top: var(--elf--editor-ruler-size);  
+  bottom: 0px;
+  background-color: var(--elf--background-color);
+  box-sizing: border-box;
+  z-index: 0;  
+
+  .vertical-ruler-container {
+    position: absolute;
+    left:0px;
+    top:0px;
+    height: 100%;
+    width: 100%;
+  }
+
+  svg {
+    text {
+      text-anchor: middle;
+      fill: var(--elf--font-color); 
+      font-size: 8px;
+    }
+  }
+}

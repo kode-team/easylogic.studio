@@ -7,6 +7,37 @@ import { ViewportManager } from "el/editor/manager/ViewportManager";
 
 export class EditorElement extends UIElement {
 
+
+    initialize() {
+        super.initialize();
+    
+        // EditorElement 내부에서 i18n 을 바로 설정 할 수 있도록 셋팅한다.  
+        this.$editor.registerI18nMessageWithLocale(this.initializeI18nMessage());
+    }
+
+    /**
+     * i18n 메세지 로드 
+     * 
+     * @example 
+     * 
+     * ```json
+     * {
+     *     en_US: {
+     *         "toolbar.add.rect.name": "add Rectangle"
+     *     }
+     * }
+     * 
+     * ```
+     * ```js
+     * console.log(this.i18n("toolbar.add.rect.name"));
+     * ```
+     * 
+     * @override
+     */ 
+    initializeI18nMessage() {
+        return {}
+    }
+
     /**
      * Editor 루트를 재정의 해서 사용
      * 
@@ -33,12 +64,12 @@ export class EditorElement extends UIElement {
      * @param {string} key 
      * @returns {string} i18n 텍스트 
      */
-    $i18n(key) {
-        return this.$editor.i18n(key);
+    $i18n(key, params = {}, locale) {
+        return this.$editor.getI18nMessage(key, params, locale);
     }
 
     $initI18n(key) {
-        return this.$editor.initI18n(key);
+        return this.$editor.initI18nMessage(key);
     }
 
     /**
