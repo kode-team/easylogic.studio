@@ -45,6 +45,8 @@ import historyUndo from "./history.undo";
 import historyRedo from "./history.redo";
 import addArtboard from "./add.artboard";
 import setToolHand from "./set.tool.hand";
+import itemRotateMetaLeft from "./item.rotate.meta.left";
+import itemRotateMetaRight from "./item.rotate.meta.right";
 
 
 
@@ -54,6 +56,8 @@ export default [
     historyRedo,
 
     setToolHand,
+    itemRotateMetaLeft,
+    itemRotateMetaRight,    
     
     // add layer 
     selectView,

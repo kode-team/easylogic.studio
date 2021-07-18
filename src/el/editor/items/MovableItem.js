@@ -253,13 +253,23 @@ export class MovableItem extends Item {
     moveByCenter (newCenter = [0, 0, 0]) {
         const matrix = this.matrix;
 
-
         this.reset({
             x: Length.px(newCenter[0] - matrix.width/2),
             y: Length.px(newCenter[1] - matrix.height/2)
         })
     }
 
+    setAngle(angle = 0) {
+        this.reset({
+            transform: Transform.replaceAll(this.transform, `rotateZ(${Length.deg(angle).round(1000)})`)
+        })
+    }
+
+    addAngle(angle = 0) {
+        this.reset({
+            transform: Transform.addTransform(this.transform, `rotateZ(${Length.deg(angle).round(1000)})`)
+        })
+    }
 
     /**
      * 충돌 체크 

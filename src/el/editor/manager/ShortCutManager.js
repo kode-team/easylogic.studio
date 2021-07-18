@@ -148,6 +148,7 @@ export class ShortCutManager {
         if (commands) {
             const filteredCommands = commands.filter(it => it.eventType === eventType)
                                              .filter(it => this.checkWhen(it));
+
             if (filteredCommands.length) {
                 e.preventDefault();
             }
