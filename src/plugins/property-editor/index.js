@@ -26,7 +26,6 @@ import StrokeDashArrayEditor from "./StrokeDashArrayEditor";
 import TextAreaEditor from "./TextAreaEditor";
 import TextEditor from "./TextEditor";
 import VarEditor from "./VarEditor";
- 
 
 /**
  * 

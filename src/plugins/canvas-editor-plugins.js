@@ -35,7 +35,7 @@ import iframe from "./iframe"
 // import perspective from "./perspective"
 // import perspectiveOrigin from "./perspective-origin"
 // import position from "./position"
-// import propertyEditor from "./property-editor"
+import propertyEditor from "./property-editor"
 import rendererHtml from "./renderer-html"
 // import rendererJson from "./renderer-json"
 // import rendererSvg from "./renderer-svg"
@@ -66,7 +66,7 @@ export default [
     // rendererSvg,
 
     // common editor 
-    // propertyEditor,
+    propertyEditor,
     // color,
     // gradient,
 
