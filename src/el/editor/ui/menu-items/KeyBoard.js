@@ -1,4 +1,3 @@
-import { registElement } from "el/base/registElement";
 import MenuItem from "./MenuItem";
 
 export default class KeyBoard extends MenuItem {
@@ -18,5 +17,3 @@ export default class KeyBoard extends MenuItem {
     return true; 
   }
 }
-
-registElement({ KeyBoard })

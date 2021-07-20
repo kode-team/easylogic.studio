@@ -2,7 +2,6 @@
 import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 
 import { Length } from "el/editor/unit/Length";
-import { registElement } from "el/base/registElement";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 

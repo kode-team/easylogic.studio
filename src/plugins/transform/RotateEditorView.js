@@ -64,7 +64,7 @@ export default class RotateEditorView extends EditorElement {
                  
         this.bindData('$rotateZ')
         this.command('setAttributeForMulti', 'change direction', this.$selection.pack('transform'));
-        this.emit('refreshSelectionTool');
+        this.emit('refreshSelectionTool', false);
 
     }
 
@@ -105,7 +105,7 @@ export default class RotateEditorView extends EditorElement {
         })
         // this.$selection.setRectCache();
         this.command('setAttributeForMulti', 'change direction', this.$selection.pack('transform'));
-        this.emit('refreshSelectionTool');
+        this.emit('refreshSelectionTool', false);
         this.bindData('$rotateContainer');   
     }
 
@@ -157,7 +157,10 @@ export default class RotateEditorView extends EditorElement {
         })
         this.bindData('$rotateZ');                   
         this.command('setAttributeForMulti', 'change rotate handle', this.$selection.pack('transform'));        
-        this.emit('refreshSelectionTool');        
+
+        this.nextTick(() => {
+            this.emit('refreshSelectionTool', false);
+        })
     }
 
     [POINTERSTART('$handle') + MOVE() + END()] () {
@@ -214,5 +217,11 @@ export default class RotateEditorView extends EditorElement {
 
     [SUBSCRIBE('refreshSelection')] () {
         this.refresh();
+    }
+
+    [SUBSCRIBE('refreshSelectionStyleView')] () {
+        if (this.$selection.hasChangedField('transform')) {
+            this.refresh();
+        }
     }
 }

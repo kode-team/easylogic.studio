@@ -11,7 +11,8 @@ export default {
      */
     execute: function (editor, json) {
 
-        json = json || editor.loadResource('projects', []);
+        // local 에 값이 없으면 전체 선택 후 로드
+        json = editor.loadResource('projects', []) || json;
 
         // 값이 아무것도 없을 때 project 를 설정해준다. 
         if (json.length === 0) {

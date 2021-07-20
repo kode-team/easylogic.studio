@@ -64,17 +64,16 @@ export default class LayoutProperty extends BaseProperty {
 
   [SUBSCRIBE_SELF('changeLayoutType')] (key, value) {
 
-    this.$selection.reset({
-      [key]: value 
-    })
+    this.$selection.reset(this.$selection.packByValue({ 
+      [key]: value
+    }))
 
     this.command('setAttributeForMulti', 'change layout type', this.$selection.packByValue({ 
       [key]: value
     }))
 
-    this.refresh();
-
     this.nextTick(() => {
+      this.refresh();
       this.emit('refreshAllElementBoundSize');
       this.emit('changeItemLayout')
     })

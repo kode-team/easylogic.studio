@@ -278,7 +278,7 @@ export default class PathEditorView extends PathTransformEditor {
 
     initRect (isForce  = false) {
         if (!this.state.rect || isForce) {
-            this.state.rect = this.parent.refs.$body.rect();
+            this.state.rect = this.$el.rect();
         }
     }
 

@@ -1,4 +1,3 @@
-import { registElement } from "el/base/registElement";
 import MenuItem from "./MenuItem";
 
 export default class Fullscreen extends MenuItem {
@@ -17,5 +16,3 @@ export default class Fullscreen extends MenuItem {
     return true;
   }
 }
-
-registElement({ Fullscreen })

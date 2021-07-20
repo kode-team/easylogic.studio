@@ -39,7 +39,7 @@
       border: 1px solid var(--elf--transform-item-border-color);
       box-sizing: border-box;
       padding: 0px 2px;
-      border-radius: 4px;
+      border-radius: 1px;
       box-shadow: 0 0 3px 0 rgba(255, 255, 255, 0.1);
   
       .title {
@@ -51,7 +51,7 @@
   
         label {
           font-size: 12px;
-          padding: 6px 5px;
+          padding: 2px 5px;
           cursor: move;          
           color: var(--elf--font-color);
           vertical-align: middle;
@@ -76,7 +76,7 @@
   
       .transform-ui {
         display: block;
-        margin-bottom: 2px;
+        margin-bottom: 6px;
         margin-top: 2px;
 
         .scale > div {

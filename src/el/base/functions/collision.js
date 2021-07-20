@@ -417,6 +417,18 @@ export function polyPoly (verties = [], targetVerties = []) {
     })
 }
 
+/**
+ * sourceVerteis 가 targetVerties 에 모두 속하는지 확인
+ * 
+ * @param {vec3[]} sourceVerties
+ * @param {vec3[]} targetVerties
+ */ 
+export function polyInPoly(sourceVerties = [], targetVerties = []) {
+    return sourceVerties.every((vector) => {
+        return polyPoint(targetVerties, vector[0], vector[1])
+    })
+}
+
 export function rectToVerties (x, y, width, height, origin = '50% 50% 0px') {
 
     const center = TransformOrigin.scale( origin,  width,  height );

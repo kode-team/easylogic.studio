@@ -24,7 +24,8 @@ export default class PageTools extends EditorElement {
         <button type='button' ref='$fullscreen' data-tooltip="FullScreen Canvas" data-direction="top">${icon.fullscreen}</button>                        
         <button type='button' ref='$pantool' class="${OBJECT_TO_CLASS({
           on: this.$config.get('set.tool.hand')
-        })}" data-tooltip="Hand | H" data-direction="top">${icon.pantool}</button>                                
+        })}" data-tooltip="Hand | H" data-direction="top">${icon.pantool}</button>   
+        ${this.$menuManager.generate('page.tools')}                             
       </div>
 
     `;

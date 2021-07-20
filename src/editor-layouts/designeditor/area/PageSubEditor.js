@@ -16,7 +16,7 @@ export default class PageSubEditor extends EditorElement {
 
   template() {
     return/*html*/`
-      <div class='elf-page-subeditor'>
+      <div class='elf--page-subeditor'>
         <object refClass='PathManager' />
         <object refClass='DrawManager' />
       </div>

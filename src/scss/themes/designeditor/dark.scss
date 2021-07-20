@@ -1,6 +1,6 @@
 
 // common 
-$border-color: rgb(49, 49, 49);
+$border-color: rgb(72, 72, 72);
 $selected-border-color: #3a89f0;
 $selected-color: #03a9f4;
 $selected-color-2: #1d2254;
@@ -26,6 +26,16 @@ $input-font-color: #ececec;
 $input-sub-font-color: #7a7a7a;
 
 $divider-color:  rgb(97, 97, 97);
+
+// tab 
+$tab-background-color: $background-color; 
+$tab-header-background-color: #232937; 
+$tab-header-font-color: $font-color; 
+$tab-font-color: $font-color;
+$tab-selected-color: white; 
+$tab-selected-font-color: black;
+$tab-selected-border-color: black;
+$tab-border-color: $border-color;
 
 // property 
 $property-border-color: $border-color;
@@ -78,7 +88,7 @@ $status-bar-background-color: $background-color;
 $status-bar-font-color: $font-color;
 
 $drag-area-rect-border-color: rgba(62, 168, 255, 0.9);
-$drag-area-rect-background-color: rgba(107, 188, 255, 0.5);
+$drag-area-rect-background-color: rgba(107, 188, 255, 0.214);
 
 $rotate-x-border-color: rgb(104, 104, 247);
 $rotate-y-border-color: rgb(112, 197, 112);

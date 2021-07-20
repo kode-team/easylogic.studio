@@ -55,25 +55,8 @@ export default class HoverView extends EditorElement {
 
             this.refs.$hoverRect.updateDiff(line)
 
-            // refresh guide 
-            const source = this.$selection.current;
 
-            if (source) {
-
-                const source = this.$selection.current;
-                const targetList = [items[0]]
-
-                // x축 가이드 설정하기 
-                const xList = targetList.map(target => makeGuidePoint(source, target));
-
-                xList.sort((a, b) => {
-                    return a[3] - b[3];
-                });
-
-                const list = [xList[0]];
-
-                this.emit('refreshGuideLine', list);
-            }
+            this.emit('refreshGuideLineByTarget', [items[0].verties]);
 
         }
     }

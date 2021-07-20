@@ -10,6 +10,15 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   }
 }
 
+.elf--element-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  outline: none;
+  // background-color: yellow;
+  pointer-events: none;
+}
+
 .canvas-view {
   position: absolute;
   transform-origin: left top;
@@ -29,13 +38,15 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
       pointer-events: stroke;
     }
 
+    > path {
+      pointer-events: stroke;
+    }
+        
+
     > :not([fill='transparent']) {
       pointer-events: visible;
     }
 
-    > path {
-      pointer-events: none;
-    }
   }
 
   .element-item {

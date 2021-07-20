@@ -82,7 +82,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
     [POINTERSTART('$pointerRect .rotate-pointer') + MOVE('rotateVertex') + END('rotateEndVertex')] (e) {
         this.state.moveType = 'rotate'; 
-        this.initMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);        
+        this.initMousePoint = this.$viewport.getWorldPosition(e);        
 
         // cache matrix 
         // this.$selection.reselect();        
@@ -95,8 +95,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }
 
     rotateVertex () {
-        const e = this.$config.get('bodyEvent')
-        const targetMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
+        const targetMousePoint = this.$viewport.getWorldPosition();
         const distVector = vec3.subtract([], targetMousePoint, this.initMousePoint);
 
         const targetRotatePointer = this.rotateTargetNumber === 4 ?  getRotatePointer(this.verties, 34) : this.verties[this.rotateTargetNumber];        
@@ -233,7 +232,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         this.state.dragging = true; 
         const num = +e.$dt.attr('data-number')
         this.state.moveType = directionType[`${num}`]; 
-        this.initMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);        
+        this.initMousePoint = this.$viewport.getWorldPosition(e);        
 
         // cache matrix 
         // this.$selection.doCache();
@@ -500,8 +499,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
 
     moveVertex () {
-        const e = this.$config.get('bodyEvent')
-        const targetMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
+        const targetMousePoint = this.$viewport.getWorldPosition();
         const distVector = vec3.subtract([], targetMousePoint, this.initMousePoint);        
 
         if (this.state.moveType === 'to bottom right') {        // 2
@@ -528,8 +526,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         );          
 
         this.state.dragging = true; 
-        this.renderPointers();
-        this.refreshSmartGuides();        
+        this.renderPointers();  
     }
 
     moveEndVertex (dx, dy) {        
@@ -571,28 +568,6 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
                 })
             }                        
         })        
-
-        this.refreshSmartGuides();
-    }
-
-    refreshSmartGuides () {
-
-
-
-        const source = this.groupItem; 
-        const targetList = this.$selection.snapTargetLayers;
-
-        // x축 가이드 설정하기 
-        const xList = targetList.map(target => makeGuidePoint(source, target));
-
-        xList.sort((a, b) => {
-            return a[3] - b[3];
-        });
-
-        const list = [xList[0], xList[1]].filter(Boolean);
-
-        const guides = this.$snapManager.findGuide(this.groupItem.guideVerties);
-        this.emit('refreshGuideLine', [...list, ...guides]);             
     }
 
     getSelectedElements() {

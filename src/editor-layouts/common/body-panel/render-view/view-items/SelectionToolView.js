@@ -93,7 +93,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     [POINTERSTART('$pointerRect .rotate-pointer') + PREVENT + MOVE('rotateVertex') + END('rotateEndVertex')] (e) {
         this.state.moveType = 'rotate'; 
-        this.initMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);        
+        this.initMousePoint = this.$viewport.getWorldPosition(e);        
 
         // this.$selection.doCache();
 
@@ -107,8 +107,7 @@ export default class SelectionToolView extends SelectionToolEvent {
     }
 
     rotateVertex () {
-        const e = this.$config.get('bodyEvent')
-        const targetMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
+        const targetMousePoint = this.$viewport.getWorldPosition();
         const distVector = vec3.subtract([], targetMousePoint, this.initMousePoint);
 
         const targetRotatePointer = this.rotateTargetNumber === 4 ?  getRotatePointer(this.verties, 34) : this.verties[this.rotateTargetNumber];
@@ -146,7 +145,6 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         this.state.dragging = true;
         this.renderPointers();
-        this.refreshSmartGuides();          
         this.command('setAttributeForMulti', 'change rotate', this.$selection.pack('transform'));                
     }
 
@@ -213,7 +211,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         const num = +e.$dt.attr('data-number')
         const direction =  directionType[`${num}`];
 
-        this.initMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);        
+        this.initMousePoint = this.$viewport.getWorldPosition(e);        
         this.state.moveType = direction; 
         this.state.moveTarget = num; 
 
@@ -444,8 +442,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
 
     moveVertex () {
-        const e = this.$config.get('bodyEvent')
-        const targetMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
+        const targetMousePoint = this.$viewport.getWorldPosition();
         const distVector = vec3.subtract([], targetMousePoint, this.initMousePoint);
 
         if (this.state.moveType === 'to top left') {                // 1
@@ -470,7 +467,11 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         this.state.dragging = true; 
         this.renderPointers();
-        this.refreshSmartGuides();              
+
+        this.nextTick(() => {
+            this.emit('refreshSmartGuides');
+        });
+        // this.refreshSmartGuides();              
         // this.emit('refreshSelectionStyleView');
         // this.emit('refreshRect');
     }
@@ -527,34 +528,6 @@ export default class SelectionToolView extends SelectionToolEvent {
                 })
             }
         }) 
-
-        this.refreshSmartGuides();
-    }
-
-    refreshSmartGuides () {
-        // 가이드 라인 수정하기 
-        if (this.$selection.current) {
-
-
-            const source = this.$selection.current; 
-            const targetList = this.$selection.snapTargetLayers;
-
-            // x축 가이드 설정하기 
-            const xList = targetList.map(target => makeGuidePoint(source, target));
-
-            xList.sort((a, b) => {
-                return a[3] - b[3];
-            });
-
-            const list = [xList[0], xList[1]].filter(Boolean);
-
-            const guides = this.$snapManager.findGuide(this.$selection.current.guideVerties);
-
-            // console.log(guides);
-
-            this.emit('refreshGuideLine', [...list, ...guides]);             
-        }
-
     }
 
     getSelectedElements() {

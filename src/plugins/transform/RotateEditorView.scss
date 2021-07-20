@@ -24,11 +24,16 @@
             border:1px solid var(--elf--selected-font-color);
             border-radius: 100%;
             pointer-events: all;
-            color: var(--elf--selected-font-color);
+            color: var(--elf--selected-color);
 
             svg {
                 width: 100%;
                 height: 100%;
+
+                path {
+                    fill: currentColor;
+                    stroke: currentColor;
+                }
             }
             
             &:hover {

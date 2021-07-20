@@ -51,7 +51,7 @@ export default class LayerAppendView extends EditorElement {
     
     [POINTERMOVE('$el') + IF('checkNotDragStart')] (e) {
 
-        const vertex = this.$viewport.createWorldPosition(e.clientX, e.clientY);        
+        const vertex = this.$viewport.getWorldPosition(e);        
 
         // 영역 드래그 하면서 snap 하기 
         const newVertex = this.$snapManager.checkPoint(vertex);
@@ -72,7 +72,7 @@ export default class LayerAppendView extends EditorElement {
 
     [POINTERSTART('$el') + MOVE() + END() + PREVENT + STOP] (e) {
 
-        this.initMousePoint = this.state.targetPositionVertex ? this.state.targetPositionVertex : this.$viewport.createWorldPosition(e.clientX, e.clientY);
+        this.initMousePoint = this.state.targetPositionVertex ? this.state.targetPositionVertex : this.$viewport.getWorldPosition(e);
 
         this.state.dragStart = true;
         this.state.color = '#C4C4C4'; //Color.random()
@@ -216,7 +216,7 @@ export default class LayerAppendView extends EditorElement {
 
     move () {
         const e = this.$config.get('bodyEvent');
-        const targetMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);     
+        const targetMousePoint = this.$viewport.getWorldPosition();     
         const newMousePoint = this.$snapManager.checkPoint(targetMousePoint);
 
         if (vec3.equals(newMousePoint, targetMousePoint) === false) {

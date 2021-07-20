@@ -10,7 +10,7 @@ import { SVGFill } from "el/editor/property-parser/SVGFill";
 import { vec3 } from "gl-matrix";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
-import './PathEditorView.scss';
+import './PathDrawView.scss';
 
 const FIELDS = ['fill', 'fill-opacity', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin']
 
@@ -59,7 +59,7 @@ export default class PathDrawView extends EditorElement {
 
     initRect (isForce  = false) {
         if (!this.state.rect || isForce) {
-            this.state.rect = this.parent.refs.$body.rect();
+            this.state.rect = this.$el.rect();
         }
     }
 

@@ -20,15 +20,11 @@ export default {
                 Object.keys(attrs).forEach(key => {
                     let value = attrs[key];
 
-                    if (isFunction(value)) {
-                        value = value(item);
-                    }
-                    newAttrs[key] = value;
+                    newAttrs[key] = isFunction(value) ? value(item) : value;                    
                 })
 
 
                 const isChanged = item.reset(newAttrs);
-
 
                 if (isChanged) {
                     editor.emit('refreshElement', item);

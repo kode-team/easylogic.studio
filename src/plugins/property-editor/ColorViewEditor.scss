@@ -29,6 +29,7 @@
         border: 1px solid transparent;
         box-sizing: border-box;      
         background-color: var(--elf--input-background-color);  
+        border: 1px solid var(--elf--border-color);        
 
         &.focused {
             border: 1px solid var(--elf--selected-color);
@@ -56,10 +57,9 @@
                 border-top-right-radius: 0px;
                 border-bottom-right-radius: 0px;
                 overflow: hidden; 
-                @include transparent-background();  
+                @include transparent-background(13px, rgb(199, 199, 199));  
                 box-sizing: border-box;
-                // border: 1px solid var(--elf--border-color);
-                // box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+                box-shadow: 1px 0 0 0px var(--elf--border-color);
     
                 .color-view {
                     position: absolute;
@@ -80,7 +80,7 @@
             border-radius: 3px;
             font-size: 12px;
             // font-family: monospace;
-
+            border: 0px solid var(--elf--input-border-color);
 
 
         }

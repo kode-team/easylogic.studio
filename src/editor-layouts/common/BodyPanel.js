@@ -15,7 +15,7 @@ const elClass = css`
   right: 0px;
 
   &:not(.ruler) {
-    > .page-container {
+    > .elf--page-container {
       left: 0px !important;
       top: 0px !important;
     }

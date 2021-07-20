@@ -61,7 +61,6 @@ export class MovableItem extends Item {
 
     reset(obj) {
         const isChanged = super.reset(obj);
-
         // transform 에 변경이 생기면 미리 캐슁해둔다. 
         if (isChanged && this.hasChangedField('x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'transform-origin', 'perspective', 'perspective-origin')) {
             this.refreshMatrixCache()
@@ -83,7 +82,7 @@ export class MovableItem extends Item {
 
     refreshMatrixCache() {
         this.setCacheItemTransformMatrix();
-        this.setCacheLocalTransformMatrix();         
+        this.setCacheLocalTransformMatrix();                         
         this.setCacheAccumulatedMatrix();   
         this.setCacheVerties();
         this.setCacheGuideVerties();

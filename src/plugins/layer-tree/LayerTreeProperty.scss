@@ -78,15 +78,8 @@
         }
 
         &.selected {
-            background-color: var(--elf--list-item-selected-color);
-
-            
-            .detail {
-                .name {
-                    color: var(--elf--selected-font-color);
-                }
-
-            }
+            background-color: var(--elf--selected-color);
+            color: var(--elf--selected-font-color);
         }
 
         &:not(.selected).hovered {

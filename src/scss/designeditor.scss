@@ -118,7 +118,8 @@ $range-thumb-border-radius: 20px;
         --elf--transform-item-background-color: #{$transform-item-background-color};
         --elf--transform-item-border-color: #{$transform-item-border-color};
         --elf--tooltip-background-color: #{$tooltip-background-color};
-        --elf--tooltip-font-color: #{$tooltip-font-color};        
+        --elf--tooltip-font-color: #{$tooltip-font-color};     
+        --elf--tab-header-background-color: #{$tab-header-background-color};            
     }   
 
     &[data-theme='light'] {
@@ -179,7 +180,8 @@ $range-thumb-border-radius: 20px;
         --elf--transform-item-background-color: #{$transform-item-background-color};
         --elf--transform-item-border-color: #{$transform-item-border-color};      
         --elf--tooltip-background-color: #{$tooltip-background-color};
-        --elf--tooltip-font-color: #{$tooltip-font-color};                               
+        --elf--tooltip-font-color: #{$tooltip-font-color};      
+        --elf--tab-header-background-color: #{$tab-header-background-color};
     }    
 }
 

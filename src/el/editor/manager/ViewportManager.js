@@ -175,6 +175,11 @@ export class ViewportManager {
 
     }
 
+    getWorldPosition(e) {
+        e = e || this.editor.config.get('bodyEvent')
+        return this.createWorldPosition(e.clientX, e.clientY);
+    }
+
     /**
      * mousePoint{x, y} 를 가지고 실제 좌표를 구한다. 
      * 

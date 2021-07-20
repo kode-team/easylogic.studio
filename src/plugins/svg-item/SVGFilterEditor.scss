@@ -414,14 +414,14 @@
         > div {
           margin-bottom: 5px;
 
-          .number-range--editor.has-label,
-          .select-editor.has-label,
-          .text-editor.has-label
+          .elf--number-range-editor.has-label,
+          .elf--select-editor.has-label,
+          .elf--text-editor.has-label
           {
             grid-template-columns: 100px 1fr;
           }
 
-          .color-view-editor.has-label
+          .elf--color-view-editor.has-label
           {
             grid-template-columns: 100px 24px 1fr;
           }          

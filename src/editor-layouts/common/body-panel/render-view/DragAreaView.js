@@ -26,9 +26,7 @@ export default class DragAreaView extends EditorElement {
 
     template() {
         return /*html*/`
-            <div class="elf--drag-area-view" ref="$dragAreaView">
-                <div class='drag-area-rect' ref='$dragAreaRect'></div>
-            </div>            
+            <div class="elf--drag-area-view" ref="$dragAreaView"></div>            
         `
     }
 
@@ -46,7 +44,7 @@ export default class DragAreaView extends EditorElement {
             return false;
         } 
 
-        const mousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);        
+        const mousePoint = this.$viewport.getWorldPosition(e);        
 
         if (this.state.mode !== 'selection') {
             return false; 
@@ -83,6 +81,10 @@ export default class DragAreaView extends EditorElement {
             return false; 
         }
 
+        if ($el.closest('element-item')) {
+            return false;
+        }
+
         return $el.hasClass('element-item') === false
             && $el.hasClass('selection-tool-item') === false 
             && $el.hasClass('pointer') === false
@@ -100,21 +102,20 @@ export default class DragAreaView extends EditorElement {
     }
 
     [POINTERSTART('$dragAreaView') + IF('checkEmptyElement') + MOVE('movePointer') + END('moveEndPointer')] (e) {
-        this.startXY = e.xy ; 
-        this.initMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
+        this.initMousePoint = this.$viewport.getWorldPosition(e);
 
         this.$target = Dom.create(e.target);
 
         if (this.$editor.isSelectionMode()) {
 
-            var obj = {
+            this.dragRect = {
                 left: Length.px(this.initMousePoint[0]),
                 top: Length.px(this.initMousePoint[1]),
                 width: Length.z(),
                 height: Length.z()
             }        
     
-            this.refs.$dragAreaRect.css(obj) 
+            this.emit('drawAreaView', this.dragRect);
 
             this.state.cachedCurrentElement = {}       
 
@@ -156,8 +157,8 @@ export default class DragAreaView extends EditorElement {
     }
 
     movePointer (dx, dy) {
-        const e = this.$config.get('bodyEvent')
-        const targetMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
+        const e = this.$config.get('bodyEvent');
+        const targetMousePoint = this.$viewport.getWorldPosition();
 
         const newDist = vec3.floor([], vec3.subtract([], targetMousePoint, this.initMousePoint));
 
@@ -173,18 +174,18 @@ export default class DragAreaView extends EditorElement {
 
         const locaRect = toRectVerties([start, end]);
 
-        var obj = {
+        this.dragRect = {
             left: Length.px(locaRect[0][0]),
             top: Length.px(locaRect[0][1]),
             width: Length.px(Math.abs(locaRect[1][0] - locaRect[0][0])),
             height: Length.px(Math.abs(locaRect[3][1] - locaRect[0][1]))
         }        
 
-        this.refs.$dragAreaRect.css(obj)
+        this.emit('drawAreaView', this.dragRect);
 
         if (this.$editor.isSelectionMode()) {
 
-            var {left: x, top: y, width, height } = obj
+            var {left: x, top: y, width, height } = this.dragRect
             var rect = {
                 x: x.value, 
                 y: y.value, 
@@ -208,20 +209,17 @@ export default class DragAreaView extends EditorElement {
     }
 
     moveEndPointer (dx, dy) {
-        var [x, y, width, height ] = this.refs.$dragAreaRect
-                .styles('left', 'top', 'width', 'height')
-                .map(it => Length.parse(it))
-
+        var {left: x, top: y, width, height } = this.dragRect
         var rect = {
             x: x.value, 
             y: y.value, 
-            width: width.value, 
+            width: width.value,
             height: height.value
         }
 
         var areaVerties = this.$viewport.createAreaVerties(rect.x, rect.y, rect.width, rect.height);
 
-        this.refs.$dragAreaRect.css({
+        this.emit('drawAreaView', {
             left: Length.px(-10000),
             top: Length.z(),
             width: Length.z(),

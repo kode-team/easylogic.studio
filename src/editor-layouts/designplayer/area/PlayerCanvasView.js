@@ -40,39 +40,35 @@ export default class PlayerCanvasView extends EditorElement {
   }
 
   // space 키가 눌러져 있을 때만 실행한다. 
-  checkSpace () {
+  checkSpace() {
     return this.$keyboardManager.check(this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space))
   }
 
-  [POINTERSTART('$lock') + IF('checkSpace') + MOVE('movePan')] (e) {
+  [POINTERSTART('$lock') + IF('checkSpace') + MOVE('movePan')](e) {
     this.lastDist = vec3.create()
   }
 
-  movePan (dx, dy) {
+  movePan(dx, dy) {
     const currentDist = vec3.fromValues(dx, dy, 0);
     this.$viewport.pan(...vec3.transformMat4(
-      [], 
-      vec3.subtract([], this.lastDist, currentDist), 
+      [],
+      vec3.subtract([], this.lastDist, currentDist),
       this.$viewport.scaleMatrixInverse
     ))
     this.lastDist = currentDist
   }
 
-  [DRAGOVER('$lock') + PREVENT] () {}
-  [DROP('$lock') + PREVENT] (e) {
-
+  [DRAGOVER('$lock') + PREVENT]() { }
+  [DROP('$lock') + PREVENT](e) {
+    const newCenter = this.$viewport.getWorldPosition(e);
     if (e.dataTransfer.getData('text/artboard')) {
-      const newCenter = this.$viewport.createWorldPosition(e.clientX, e.clientY);
-      
       this.emit('drop.asset', {
-          artboard: { id: e.dataTransfer.getData('text/artboard'), center: newCenter }
+        artboard: { id: e.dataTransfer.getData('text/artboard'), center: newCenter }
       })
 
     } else if (e.dataTransfer.getData('text/custom-component')) {
-      const newCenter = this.$viewport.createWorldPosition(e.clientX, e.clientY);
-      
       this.emit('drop.asset', {
-          customComponent: { id: e.dataTransfer.getData('text/custom-component'), center: newCenter }
+        customComponent: { id: e.dataTransfer.getData('text/custom-component'), center: newCenter }
       })
 
     } else {
@@ -92,59 +88,59 @@ export default class PlayerCanvasView extends EditorElement {
       }
     }
 
-  }  
-
-    /**
-     * wheel 은 제어 할 수 있다. 
-     *  내 위치를 나타낼려면 wheel 로 제어해야한다. 
-     * transform-origin 을 현재 보고 있는 시점의 좌표로 맞출 수 있어야 한다. 
-     * 그런 다음 scale 을 한다. 
-     * // 내 마우스 위치를 
-     * 
-     * @param {*} e 
-     */
-  [WHEEL('$lock') + PREVENT] (e) {
-
-      const [dx, dy] = normalizeWheelEvent(e);
-
-      if (!this.state.gesture) {
-
-        if (e.ctrlKey) {
-
-          this.$viewport.setMousePoint(e.clientX, e.clientY)
-        }
-
-        this.emit('startGesture');        
-        this.state.gesture = true;    
-      } else {
-
-        if (e.ctrlKey) {
-
-          const zoomFactor = 1 - (2.5 * dy)/100;
-
-          this.$viewport.zoom(zoomFactor);
-
-        } else {            
-
-          const newDx =  - 2.5 * dx;
-          const newDy =  - 2.5 * dy;
-
-          this.$viewport.pan(-newDx/this.$viewport.scale, -newDy/this.$viewport.scale, 0);
-        }
-      }
-
-      clearTimeout(this.state.timer);
-      this.state.timer = setTimeout(() => {
-        this.state.gesture = undefined;
-        this.emit('endGesture');
-      }, 200)
   }
 
-  refreshCanvasSize () {
+  /**
+   * wheel 은 제어 할 수 있다. 
+   *  내 위치를 나타낼려면 wheel 로 제어해야한다. 
+   * transform-origin 을 현재 보고 있는 시점의 좌표로 맞출 수 있어야 한다. 
+   * 그런 다음 scale 을 한다. 
+   * // 내 마우스 위치를 
+   * 
+   * @param {*} e 
+   */
+  [WHEEL('$lock') + PREVENT](e) {
+
+    const [dx, dy] = normalizeWheelEvent(e);
+
+    if (!this.state.gesture) {
+
+      if (e.ctrlKey) {
+
+        this.$viewport.setMousePoint(e.clientX, e.clientY)
+      }
+
+      this.emit('startGesture');
+      this.state.gesture = true;
+    } else {
+
+      if (e.ctrlKey) {
+
+        const zoomFactor = 1 - (2.5 * dy) / 100;
+
+        this.$viewport.zoom(zoomFactor);
+
+      } else {
+
+        const newDx = - 2.5 * dx;
+        const newDy = - 2.5 * dy;
+
+        this.$viewport.pan(-newDx / this.$viewport.scale, -newDy / this.$viewport.scale, 0);
+      }
+    }
+
+    clearTimeout(this.state.timer);
+    this.state.timer = setTimeout(() => {
+      this.state.gesture = undefined;
+      this.emit('endGesture');
+    }, 200)
+  }
+
+  refreshCanvasSize() {
     this.$viewport.refreshCanvasSize(this.refs.$lock.rect());
   }
 
-  [SUBSCRIBE('resize.window', 'resizeCanvas')] () {
+  [SUBSCRIBE('resize.window', 'resizeCanvas')]() {
     this.refreshCanvasSize();
   }
 

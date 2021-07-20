@@ -1,4 +1,6 @@
+import { MovableItem } from "el/editor/items/MovableItem";
 import { mat4, vec2, vec3 } from "gl-matrix";
+import { polyInPoly, polyPoly } from "./collision";
 import { randomNumber } from "./create";
 import { isUndefined } from "./func";
 import { Vect3 } from "./matrix";
@@ -160,14 +162,12 @@ function invertTargetPoint(arr, isInvert = false) {
 /**
  * 가이드 
  * 
- * @param {MovableItem} sourceItem 
- * @param {MovableItem} targetItem
+ * @param {vec3[]} sourceVerties 
+ * @param {vec3[]} targetVerties
  * 
  * @returns {Array} [source, target, axis, dist, newTarget] 
  */
-export function makeGuidePoint (sourceItem, targetItem) {
-    const sourceVerties = sourceItem.toRectVerties;
-    const targetVerties = targetItem.toRectVerties;
+export function makeGuidePoint (sourceVerties, targetVerties) {
 
     let leftVerties = sourceVerties;
     let rightVerties = targetVerties;
@@ -184,36 +184,40 @@ export function makeGuidePoint (sourceItem, targetItem) {
     const leftCenter = vec3.lerp([], leftVerties[1], leftVerties[2], 0.5);
     const rightCenter = vec3.lerp([], rightVerties[0], rightVerties[3], 0.5);
 
-    let point;
+    let pointList = [];
 
     if (rightVerties[0][1] <= leftCenter[1] && leftCenter[1] <= rightVerties[3][1]) {
         // target 영역 안에 존재하면 중간점부터 그림 
         // console.log("left ", rightVerties[0], leftVerties[3]);                        
-        point = getTargetPointX(leftCenter, rightCenter, "x", null)
+        pointList.push(getTargetPointX(leftCenter, rightCenter, "x", null))
     } else if (rightVerties[0][1] <= leftVerties[1][1]) {
         if (rightVerties[3][0] <= leftVerties[1][0] && leftVerties[1][0] <= rightVerties[2][0]) {
             // console.log("bottom left", rightVerties[3], leftVerties[1]);
-            point = getTargetPointY(rightVerties[3], [rightVerties[3][0], leftVerties[1][1], leftVerties[1][2]], "y", null)
+            pointList.push(getTargetPointY(rightVerties[3], [rightVerties[3][0], leftVerties[1][1], leftVerties[1][2]], "y", null))
         } else {
             // console.log("top left", leftVerties[1], rightCenter);
-            point = getTargetPointX(leftVerties[1], rightCenter, "x", rightVerties[3])
+            pointList.push(getTargetPointX(leftVerties[1], rightCenter, "x", rightVerties[3]))
         }
 
     } else if (leftVerties[3][0] <= rightVerties[0][0] && rightVerties[0][0] <= leftVerties[2][0]) {
-        point = getTargetPointY(leftVerties[3], rightVerties[0], "y")
+        pointList.push(getTargetPointY(leftVerties[3], rightVerties[0], "y"))
     } else if (rightVerties[3][0] <= leftVerties[0][0] && leftVerties[0][0] <= rightVerties[2][0]) {
         // console.log("bottom right", rightVerties[0], leftVerties[3]);            
-        point = getTargetPointY([rightVerties[0][0],leftVerties[3][1], leftVerties[3][2] ], rightVerties[0], "y")
+        pointList.push(getTargetPointY([rightVerties[0][0],leftVerties[3][1], leftVerties[3][2] ], rightVerties[0], "y"))
     } else if (rightVerties[3][0] <= leftVerties[1][0] && leftVerties[1][0] <= rightVerties[2][0]) {
         // console.log("bottom left", rightVerties[3], leftVerties[1]);
-        point = getTargetPointY(rightVerties[3], [rightVerties[3][0], leftVerties[1][1], leftVerties[1][2]], "y")
+        pointList.push(getTargetPointY(rightVerties[3], [rightVerties[3][0], leftVerties[1][1], leftVerties[1][2]], "y"))
     } else {
         // console.log("last", leftVerties[2], rightCenter);            
-        point = getTargetPointX(leftVerties[2], rightCenter, "x", rightVerties[0])
+        pointList.push(getTargetPointX(leftVerties[2], rightCenter, "x", rightVerties[0]))
     }
 
+    pointList.sort((a, b) => {
+        return a[3] - b[3];
+    });
+
     return invertTargetPoint([
-        ...point,
+        ...pointList[0],
         sourceVerties,
         targetVerties,
     ], hasInvert);

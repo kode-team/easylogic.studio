@@ -21,7 +21,7 @@ function startEditor() {
     plugins: [
       function (editor) {
         editor.on('changeValue', function (id, attrs) {
-          // console.log(id, attrs);
+          console.log(id, attrs);
         })
       }
     ]

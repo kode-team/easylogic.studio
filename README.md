@@ -435,6 +435,24 @@ function (editor) {
 
 If there is an area in the editor you would like to expand, please let me know.
 
+### API 
+
+
+# save json to localStorage 
+
+```js
+this.$editor.emit('saveJSON');
+```
+
+#### Get Position 
+```js
+// e: MouseEvent 
+const worldPosition = this.$viewport.getWorldPosition(e);  // return vec3 
+
+// 
+const screenPosition = this.$viewport.applyVertex(newMousePoint); // return vec3 
+```
+
 # Thanks to 
 
 * icon - https://material.io/resources/icons/?style=baseline

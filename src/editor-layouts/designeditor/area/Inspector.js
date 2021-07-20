@@ -30,9 +30,9 @@ export default class Inspector extends EditorElement {
               <div class="tab-item" data-value="4" title='${this.$i18n('inspector.tab.title.code')}'>
                 <label class='icon'>${icon.code}</label>
               </div>       
-              <div class="tab-item" data-value="5" title='${this.$i18n('inspector.tab.title.history')}'>
+              <!--div class="tab-item" data-value="5" title='${this.$i18n('inspector.tab.title.history')}'>
                 <label class='icon'>${icon.expand}</label>
-              </div>                      
+              </div-->               
 
               ${this.$menuManager.getTargetMenuItems('inspector.tab').map(it => {
                 const { value, title} = it.class;              
@@ -69,10 +69,10 @@ export default class Inspector extends EditorElement {
                 <div class='empty'></div>                           
               </div>       
               
-              <div class="tab-content" data-value="5">
+              <!--div class="tab-content" data-value="5">
                 ${this.$menuManager.generate('inspector.tab.history')}                            
                 <div class='empty'></div>                           
-              </div>   
+              </div--> 
               
               ${this.$menuManager.getTargetMenuItems('inspector.tab').map(it => {
                 const { value, title, loadElements } = it.class;

@@ -3,9 +3,9 @@
 // common 
 $inner-border-color: #181818;
 $border-color: rgb(226, 226, 226);
-$border-color-2: #609de2;
+$border-color-2: #f6fafc;
 $selected-border-color: #609de2;
-$selected-color: #4778d4;
+$selected-color: #66baff;
 $selected-color-2: #093042;
 
 $selection-tool-border-color: #3a89f0;
@@ -14,7 +14,7 @@ $background-color: white;
 $header-background-color: white;
 $selected-background-color: #d8d8d8; 
 $font-color: rgb(97, 97, 97);
-$selected-font-color: rgb(255, 255, 255);
+$selected-font-color: white;
 $menu-item-title-font-color: #949494;
 
 // base 
@@ -59,7 +59,7 @@ $list-background-color: $border-color;
 
 // tab 
 $tab-background-color: $background-color; 
-$tab-header-background-color: rgb(238, 238, 238); 
+$tab-header-background-color: #f6fafc; 
 $tab-header-font-color: $font-color; 
 $tab-font-color: $font-color;
 $tab-selected-color: white; 
@@ -68,7 +68,7 @@ $tab-selected-border-color: black;
 $tab-border-color: $border-color;
 
 // popup 
-$popup-background-color: #f6f6f6; 
+$popup-background-color: #ffffff; 
 $popup-font-color: $font-color;
 $popup-selected-color: $selected-color; 
 $popup-border-color: $border-color;
@@ -109,8 +109,8 @@ $animation-item-background-color: #435cb5;
 $transition-item-background-color: #435cb5;
 
 // select icon editor 
-$select-icon-editor-item-color: rgb(192, 192, 192);
-$select-icon-editor-selected-color: $list-item-selected-color;
+$select-icon-editor-item-color: rgb(255, 255, 255);
+$select-icon-editor-selected-color: $selected-color;
 $select-icon-editor-selected-shadow-color: rgb(153, 153, 153);
 $select-icon-editor-border-color: black;
 
@@ -135,8 +135,8 @@ $color-view-background-color: #d8d8d8;
 $transform-origin-selected-color: $selected-color;
 $border-radius-selected-color: $selected-color;
 
-$transform-item-background-color: rgba(0, 0, 0, 0.1);
-$transform-item-border-color: #2b2b2b;
+$transform-item-background-color: rgb(255, 255, 255);
+$transform-item-border-color: $border-color;
 
 $tooltip-background-color: $selected-color;
 $tooltip-font-color: $selected-font-color;

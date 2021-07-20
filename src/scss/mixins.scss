@@ -1,7 +1,6 @@
-@mixin transparent-background ($pixel: 11px) {
+@mixin transparent-background ($pixel: 11px, $pixelColor: rgb(248, 248, 248)) {
 
     $half: $pixel / 2; 
-    $pixelColor: rgb(248, 248, 248);
 
     background-color: transparent;
     background-image:

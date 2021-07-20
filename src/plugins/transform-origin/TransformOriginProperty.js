@@ -34,7 +34,7 @@ export default class TransformOriginProperty extends BaseProperty {
   }
 
 
-  [SUBSCRIBE('refreshSelection', 'refreshRect') + DEBOUNCE(100)]() {
+  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)]() {
     this.refreshShowIsNot(['project', 'artboard']);
   }
 

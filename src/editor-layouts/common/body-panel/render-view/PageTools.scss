@@ -35,6 +35,7 @@
   
       &.on {
         background-color: var(--elf--selected-color);
+        color: var(--elf--selected-font-color);
       }
   
       svg {

@@ -117,8 +117,8 @@ $tab-horizontal-header-right-width: 60px;
     }
 
     > .tab-header {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      display: flex;
+
 
       &.full {
         display: flex;
@@ -129,8 +129,16 @@ $tab-horizontal-header-right-width: 60px;
         position: relative;
         padding: 0px 0px 0px 0px;
         height: 100%;
+        background-color: var(--elf--tab-header-background-color);        
+        border-bottom: 1px solid var(--elf--border-color);
+        border-left: 1px solid transparent;
+        border-right: 1px solid transparent;
 
         &.selected {
+          background-color: var(--elf--background-color); 
+          border-bottom: 1px solid transparent;                   
+          border-left: 1px solid var(--elf--border-color);
+          border-right: 1px solid var(--elf--border-color);          
           &:before {
             content: '';
             background-color: var(--elf--selected-color);

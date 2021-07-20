@@ -101,8 +101,10 @@ import convertPasteText from "./convertPasteText";
 import addCustomComponent from "./addCustomComponent";
 import toggleToolHand from "./toggle.tool.hand";
 import rotateLayer from "./rotateLayer";
+import refreshHistory from "./refreshHistory";
 
 export default {
+    refreshHistory,
     convertPasteText,
     refreshCursor,
     recoverCursor,

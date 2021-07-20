@@ -8,16 +8,8 @@ import { KEY_CODE } from "el/editor/types/key";
 
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import StyleView from "./view-items/StyleView";
-import GuideLineView from "./view-items/GuideLineView";
-import HoverView from "./view-items/HoverView";
-import SelectionInfoView from "./view-items/SelectionInfoView";
-import GridLayoutLineView from "./view-items/GridLayoutLineView";
 import GroupSelectionToolView from "./view-items/GroupSelectionToolView";
-import LayerAppendView from "./view-items/LayerAppendView";
-import PathEditorView from "./view-items/PathEditorView";
-import PathDrawView from "./view-items/PathDrawView";
 import SelectionToolView from "./view-items/SelectionToolView";
-import DragAreaView from "./view-items/DragAreaView";
 
 import './HTMLRenderView.scss';
 
@@ -25,17 +17,10 @@ export default class HTMLRenderView extends EditorElement {
 
     components() {
         return {
-            DragAreaView,
+            // DragAreaView,
             StyleView,
-            GuideLineView,
-            HoverView,
-            SelectionInfoView,
-            GridLayoutLineView,
             SelectionToolView,
             GroupSelectionToolView,
-            LayerAppendView,
-            PathEditorView,
-            PathDrawView
         }
     }
 
@@ -53,19 +38,14 @@ export default class HTMLRenderView extends EditorElement {
 
     template() {
         return /*html*/`
-            <div class='element-view' ref='$body'>
-                <object refClass="DragAreaView" ref="$dragAreaView" />
-                <div class='canvas-view' ref='$view'></div>
+            <div class='elf--element-view' ref='$body'>
                 <object refClass='StyleView' ref='$styleView' />
-                <object refClass='SelectionInfoView' ref='$selectionInfoView' />                                                
-                <object refClass='GridLayoutLineView' ref='$gridLayoutLineView' />
+                <div class='canvas-view' ref='$view'></div>
+
                 <object refClass='SelectionToolView' ref='$selectionTool' />
                 <object refClass='GroupSelectionToolView' ref='$groupSelectionTool' />
-                <object refClass='GuideLineView' ref='$guideLineView' />
-                <object refClass='HoverView' ref='$hoverView' />                                             
-                <object refClass='PathEditorView' ref='$pathEditorView' />
-                <object refClass='PathDrawView' ref='$pathDrawView' />
-                <object refClass='LayerAppendView' ref='$objectAddView' />                   
+
+                                         
                 ${this.$menuManager.generate("render.view")}
             </div>
         `
@@ -144,7 +124,7 @@ export default class HTMLRenderView extends EditorElement {
         }
 
 
-        const mousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
+        const mousePoint = this.$viewport.getWorldPosition(e);
         if (this.$selection.hasPoint(mousePoint)) {
             return true;            
         }
@@ -201,9 +181,7 @@ export default class HTMLRenderView extends EditorElement {
         + MOVE('calculateMovedElement') 
         + END('calculateEndedElement')
     ] (e) {
-
-        this.startXY = e.xy ; 
-        this.initMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
+        this.initMousePoint = this.$viewport.getWorldPosition(e);
         let isInSelectedArea = this.$selection.hasPoint(this.initMousePoint)
         const $target = Dom.create(e.target);
 
@@ -294,8 +272,7 @@ export default class HTMLRenderView extends EditorElement {
             return;
         }
 
-        const e = this.$config.get('bodyEvent')
-        const targetMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
+        const targetMousePoint = this.$viewport.getWorldPosition();
 
         const newDist = vec3.floor([], vec3.subtract([], targetMousePoint, this.initMousePoint));
 
@@ -310,18 +287,10 @@ export default class HTMLRenderView extends EditorElement {
             this.trigger('refreshAllCanvas')
 
             // ArtBoard 변경 이후에 LayerTreeView 업데이트
-            this.emit('refreshLayerTreeView')                        
-            this.emit('refreshSelectionTool', false);         
+            this.emit('refreshLayerTreeView')                            
         }
 
-        this.emit('setAttributeForMulti', this.$selection.pack('x', 'y'));        
-
-        this.nextTick(() => {
-            // this.$selection.reselect();
-            this.emit('refreshSelectionStyleView');
-            this.emit('refreshSelectionTool', false);       
-            // this.emit('refreshRect'); 
-        })
+        this.emit('setAttributeForMulti', this.$selection.pack('x', 'y'));
 
     }
 
@@ -330,12 +299,11 @@ export default class HTMLRenderView extends EditorElement {
     }
 
     calculateEndedElement (dx, dy) {
-        const targetXY = this.$config.get('bodyEvent').xy;
+        const targetMousePoint = this.$viewport.getWorldPosition();
 
-        const realDx = targetXY.x - this.startXY.x;
-        const realDy = targetXY.y - this.startXY.y;
+        const dist = vec3.dist(this.initMousePoint, targetMousePoint);
 
-        if (realDx === 0 && realDy === 0) {
+        if (dist < 1) {
             if (this.$selection.current.isSVG()) {
                 this.emit('openPathEditor');
                 this.emit('removeGuideLine');
@@ -348,12 +316,6 @@ export default class HTMLRenderView extends EditorElement {
                 "move item",                    
                 this.$selection.pack('x', 'y')
             );              
-            this.nextTick(() => {
-
-                this.$selection.reselect();
-
-                this.emit('refreshSelectionTool', true);
-            })
         }
     }
 
@@ -379,11 +341,6 @@ export default class HTMLRenderView extends EditorElement {
         
         const transform =  `translate(${translate[0]}px, ${translate[1]}px) scale(${scale || 1})`;
         const transformOrigin = `${origin[0]}px ${origin[1]}px`
-
-        this.refs.$view.$$('.artboard-title').forEach($title => {
-            $title.css('transform-origin', `bottom left`)
-            $title.css('transform', `scale(${1/scale})`)
-        })
 
         return {
             style: { 

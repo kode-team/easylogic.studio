@@ -1,6 +1,5 @@
 import MenuItem from "./MenuItem";
 
-import { registElement } from "el/base/registElement";
 import { SUBSCRIBE } from "el/base/Event";
  
 export default class SelectTool extends MenuItem {
@@ -33,5 +32,3 @@ export default class SelectTool extends MenuItem {
     return true;
   }
 }
-
-registElement({ SelectTool })

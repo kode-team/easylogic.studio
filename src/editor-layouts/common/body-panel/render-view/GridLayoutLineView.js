@@ -4,7 +4,7 @@ import { LOAD, SUBSCRIBE } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 /**
- * 객체와의 거리의 가이드 라인을 그려주는 컴포넌트
+ * 그리드 레이아웃 가이드 라인 표시 컴포넌트
  */
 export default class GridLayoutLineView extends EditorElement {
 

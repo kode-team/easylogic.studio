@@ -1,6 +1,4 @@
 import MenuItem from "./MenuItem";
-import icon from "el/editor/icon/icon";
-import { registElement } from "el/base/registElement";
 
 export default class Save extends MenuItem {
   getIconString() {
@@ -12,11 +10,12 @@ export default class Save extends MenuItem {
 
   clickButton(e) {
     this.emit('saveJSON')
+    this.nextTick(() => {
+      this.emit('notify',  'alert', 'Save', 'Save the content on localStorage', 2000);    
+    });
   }
 
   isHideTitle() {
     return true;
   }
 }
-
-registElement({ Save })

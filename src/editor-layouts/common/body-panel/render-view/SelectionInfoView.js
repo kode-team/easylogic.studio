@@ -1,6 +1,6 @@
 
 
-import { DOMDIFF, END, IF, LOAD, MOVE, POINTERSTART, SUBSCRIBE } from "el/base/Event";
+import { DOMDIFF, END, IF, LEFT_BUTTON, LOAD, MOVE, POINTERSTART, SUBSCRIBE } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { vec3 } from "gl-matrix";
 
@@ -12,13 +12,6 @@ export default class SelectionInfoView extends EditorElement {
         return /*html*/`<div class='elf--selection-info-view'></div>`
     }
 
-    checkMouseButton (e) {
-
-        // 오른쪽 버튼(context menu)는 실행하지 않는다. 
-        if (e.buttons === 2) return false; 
-        return true; 
-    }
-
     /**
      * 드래그 해서 객체 옮기기 
      *
@@ -26,9 +19,9 @@ export default class SelectionInfoView extends EditorElement {
      * 
      * @param {PointerEvent} e 
      */
-     [POINTERSTART('$el [data-artboard-title-id]') + IF('checkMouseButton') + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
+     [POINTERSTART('$el [data-artboard-title-id]') + LEFT_BUTTON + MOVE('calculateMovedElement') + END('calculateEndedElement')] (e) {
         this.startXY = e.xy ; 
-        this.initMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
+        this.initMousePoint = this.$viewport.getWorldPosition(e);
         const id = e.$dt.attr('data-artboard-title-id');        
         this.$selection.selectById(id);            
 
@@ -54,8 +47,7 @@ export default class SelectionInfoView extends EditorElement {
 
 
     calculateMovedElement () {
-        const e = this.$config.get('bodyEvent')
-        const targetMousePoint = this.$viewport.createWorldPosition(e.clientX, e.clientY);
+        const targetMousePoint = this.$viewport.getWorldPosition();
 
         const newDist = vec3.floor([], vec3.subtract([], targetMousePoint, this.initMousePoint));
 
@@ -64,7 +56,7 @@ export default class SelectionInfoView extends EditorElement {
         this.nextTick(() => {
             this.emit('refreshSelectionStyleView');
             this.emit('refreshSelectionTool', false);       
-            this.emit('refreshRect'); 
+            // this.emit('refreshRect'); 
             this.refresh();            
         })
 
@@ -89,7 +81,7 @@ export default class SelectionInfoView extends EditorElement {
         this.command(
             'setAttributeForMulti',
             "move item",                    
-            this.$selection.pack('x', 'y', 'width', 'height')
+            this.$selection.pack('x', 'y')
         );  
     }
 

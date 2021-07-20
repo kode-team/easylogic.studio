@@ -1,5 +1,7 @@
 
 import { BIND, SUBSCRIBE } from "el/base/Event";
+import { toRectVerties, vertiesToRectangle } from "el/base/functions/collision";
+import { makeGuidePoint } from "el/base/functions/math";
 import PathStringManager from "el/editor/parser/PathStringManager";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { vec3 } from "gl-matrix";
@@ -35,7 +37,8 @@ const vLineByPoint = (target, source) => {
     return line(target, source);
 }
 
-const rect = (verties) => {
+const rect = (rectVerties) => {
+
     return /*html*/`
     <path 
         class="base-rect"
@@ -44,10 +47,10 @@ const rect = (verties) => {
         stroke="red"
         stroke-dasharray="2 2"
         d="${PathStringManager.makeRect(
-            verties[0][0],
-            verties[0][1],
-            vec3.dist(verties[0], verties[1]),
-            vec3.dist(verties[0], verties[3]),
+            rectVerties[0][0],
+            rectVerties[0][1],
+            vec3.dist(rectVerties[0], rectVerties[1]),
+            vec3.dist(rectVerties[0], rectVerties[3]),
         )}
         " 
     />
@@ -159,10 +162,11 @@ export default class GuideLineView extends EditorElement {
         for (var i = 0, len = list.length; i < len; i++) {
 
             const [source, target, axis, dist, newTarget, sourceVerties, targetVerties, isInvert] = list[i];
+            const localDist = Math.floor(dist);
 
             // 시작점 기준으로 맞출때가 필요하면 localSourceVertex 를 활용하자. 아직은 없음. 
-            const localSourceVertex = this.$viewport.applyVerties([source])[0];
-            const localTargetVertex = this.$viewport.applyVerties([target])[0];
+            const localSourceVertex = this.$viewport.applyVertex(source);
+            const localTargetVertex = this.$viewport.applyVertex(target);
             
             let localNewTargetVertex
 
@@ -172,7 +176,7 @@ export default class GuideLineView extends EditorElement {
 
 
             if (axis === 'x') {
-                if (dist > 0) {
+                if (localDist > 0) {
 
                     images.push(line(localSourceVertex, localTargetVertex, 'dash-line'))
                 }
@@ -181,10 +185,10 @@ export default class GuideLineView extends EditorElement {
                     images.push(line(localTargetVertex, localNewTargetVertex, 'dash-line'))
                 }
 
-                if (dist > 0) {
+                if (localDist > 0) {
                     texts.push(
                         text(
-                            dist,
+                            localDist,
                             vec3.lerp([], localSourceVertex, localTargetVertex, 0.5)
                         )
                     );
@@ -193,7 +197,7 @@ export default class GuideLineView extends EditorElement {
             }
 
             if (axis === 'y') {
-                if (dist > 0) {
+                if (localDist > 0) {
 
                     images.push(line(localSourceVertex, localTargetVertex, 'dash-line'))
                 }
@@ -202,10 +206,10 @@ export default class GuideLineView extends EditorElement {
                     images.push(line(localTargetVertex, localNewTargetVertex, 'dash-line'))
                 }
 
-                if (dist > 0) {
+                if (localDist > 0) {
                     texts.push(
                         text(
-                            dist,
+                            localDist,
                             vec3.add([], vec3.lerp([], localSourceVertex, localTargetVertex, 0.5), [20, 0, 0]),
                         )
                     );
@@ -253,7 +257,62 @@ export default class GuideLineView extends EditorElement {
         this.setGuideLine(list);
     }
 
+    [SUBSCRIBE('refreshGuideLineByTarget')](targetVertiesList = []) {
+        return this.refreshSmartGuides(targetVertiesList);
+    }
+
     [SUBSCRIBE('updateViewport')]() {
         this.refresh();
+    }
+
+
+    refreshSmartGuides (targetVertiesList) {
+
+        if (this.$selection.isEmpty) return;
+
+        const sourceVerties = toRectVerties(this.$selection.verties); 
+        let targetList;
+        if (targetVertiesList) {
+            targetList = targetVertiesList.map(it => toRectVerties(it));
+        } else {
+            const targets = this.$selection.snapTargetLayers.map(target => {
+                const rectVerties = toRectVerties(target.verties);
+                return {targetVerties: rectVerties, dist: vec3.dist(rectVerties[4], sourceVerties[4])};
+            })
+    
+            targets.sort((a, b) => {
+                return a.dist - b.dist
+            })
+
+            targetList = targets.map(target => target.targetVerties);
+        }
+
+
+        // 스마트 가이드는 총 3가지 기능에 대한 것을 함 
+        // 1. A가 B의 완전 포함 관계에 있을 때, A의 각 변은 B 의 각 변에 대응, 즉 4가지 상태에 대한 길이만 정리해주면 됨 
+        // 2. A가 B의 특정 부분에 포함 되어 있을 때 , A 와 B의 충돌지점을 찾아서  전체영역에 대비스 4가지 상태의 대한 길이를 정해해주면 됨  
+        // 3. A와 B가 충돌되지 않았을 때는 원래 하던대로 표시 
+
+        // x축 가이드 설정하기 
+        const xList = targetList.map(targetVerties => makeGuidePoint(sourceVerties, targetVerties));
+
+        xList.sort((a, b) => {
+            return a[3] - b[3];
+        });
+
+        const list = [xList[0], xList[1]].filter(Boolean);
+
+        // const guides = this.$snapManager.findGuide(this.$selection.current.guideVerties);
+
+        // console.log(guides);
+
+        this.setGuideLine([...list]);             
+
+    }
+
+    [SUBSCRIBE('refreshSelectionStyleView')]() {
+        if (this.$selection.hasChangedField('x', 'y', 'width', 'height', 'transform', 'transform-origin')) {
+            this.refreshSmartGuides();
+        }
     }
 }
