@@ -435,8 +435,15 @@ function (editor) {
 
 If there is an area in the editor you would like to expand, please let me know.
 
-### API 
+### Event 
 
+```js
+editor.on('getChangeValue', function(id, value) {
+  console.log(id, value);
+}) 
+```
+
+### API 
 
 # save json to localStorage 
 
