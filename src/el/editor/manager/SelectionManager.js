@@ -395,12 +395,12 @@ export class SelectionManager {
 
       if (instance.is('artboard') === false) {
 
-        const instanceVerties = instance.rectVerties;
+        const instanceVerties = instance.rectVerties();
 
         // FIXME: 내가 속한 영역이 객체의 instance 의 artboard 안에 있으면 artboard 를 바꾸지 않는다. 
         if (instance.artboard) {
           const localArtboard = instance.artboard;
-          const localArtboardVerties = localArtboard.rectVerties;
+          const localArtboardVerties = localArtboard.rectVerties();
           const isInArtboard = polyPoint(localArtboardVerties, instanceVerties[0][0],instanceVerties[0][1]) || polyPoly(instanceVerties, localArtboardVerties) 
 
           // 내가 여전히 나의 artboard 에 속해 있으면 변경하지 않는다. 
