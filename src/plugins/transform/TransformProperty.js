@@ -93,6 +93,10 @@ export default class TransformProperty extends BaseProperty {
         return Transform.replaceAll(item.transform, transform)
       }
     }))
+
+    this.nextTick(() => {
+      this.emit('refreshSelectionTool', false);
+    })
   }
 
   refresh () {

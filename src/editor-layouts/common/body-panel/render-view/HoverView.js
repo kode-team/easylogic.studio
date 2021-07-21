@@ -1,7 +1,6 @@
 import Dom from "el/base/Dom";
 
 import { SUBSCRIBE } from "el/base/Event";
-import { makeGuidePoint } from "el/base/functions/math";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import "./HoverView.scss";
@@ -18,10 +17,15 @@ export default class HoverView extends EditorElement {
 
 
     [SUBSCRIBE('config:bodyEvent')]() {
-        const $dom = Dom.create(this.$config.get('bodyEvent').target);
+        const $dom = Dom.create(this.$config.get('bodyEvent').target).closest('element-item');
+
+        if ($dom === null) {
+            return;
+        }
+
         const id = $dom.data('id');
 
-        if (!id) {
+        if (!id || this.$config.get('hoverView') === false) {
             this.$selection.setHoverId('');
             this.renderHoverLayer()
         } else {

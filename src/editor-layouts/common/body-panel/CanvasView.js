@@ -58,7 +58,7 @@ export default class CanvasView extends EditorElement {
   template() {
     return/*html*/`
       <div class='elf--page-container' tabIndex="-1" ref='$container'>
-        <div class='page-view'>
+        <div class='page-view' ref="$pageView">
           <div class='page-lock scrollbar' ref='$lock'>                          
             <object refClass="DragAreaView" ref="$dragAreaView" />         
             <object refClass='HTMLRenderView' ref='$elementView' />
@@ -77,6 +77,15 @@ export default class CanvasView extends EditorElement {
       </div>
     `;
   }
+
+  [BIND('$pageView')]() {
+    return {
+      style: {
+        '--elf--page-view-color': this.$config.get('style.page-view-color')
+      }
+    }
+  }
+
 
   /**
    * @debug 

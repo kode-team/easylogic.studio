@@ -51,10 +51,6 @@ export default class HTMLRenderView extends EditorElement {
         `
     }
 
-    get selectionToolView () {
-        return this.$selection.isMany ? this.children.$groupSelectionTool : this.children.$selectionTool;
-    }
-
     [SUBSCRIBE('afterChangeMode')] () {
         this.$el.attr('data-mode', this.$editor.mode);
     }
@@ -276,7 +272,7 @@ export default class HTMLRenderView extends EditorElement {
 
         const newDist = vec3.floor([], vec3.subtract([], targetMousePoint, this.initMousePoint));
 
-        this.selectionToolView.moveTo(newDist);       
+        this.moveTo(newDist);       
         
         // 최종 위치에서 ArtBoard 변경하기 
         if (this.$selection.changeArtBoard()) {
@@ -294,8 +290,29 @@ export default class HTMLRenderView extends EditorElement {
 
     }
 
+    moveTo (newDist) {
+
+        newDist = vec3.floor([], newDist);
+
+        //////  snap 체크 하기 
+        const snap = this.$snapManager.check(this.$selection.cachedRectVerties.map(v => {
+            return vec3.add([], v, newDist)
+        }), 3);
+
+        const localDist = vec3.add([], snap, newDist);
+
+        const result = {}
+        this.$selection.cachedItemVerties.forEach(it => {
+            result[it.id] = {
+                x: Length.px(it.x + localDist[0]).round(1000),          // 1px 단위로 위치 설정 
+                y: Length.px(it.y + localDist[1]).round(1000),
+            }
+        }) 
+        this.$selection.reset(result);
+    }
+
     [SUBSCRIBE('selectionToolView.moveTo')] (newDist) {
-        this.selectionToolView.moveTo(newDist);
+        this.moveTo(newDist);
     }
 
     calculateEndedElement (dx, dy) {
@@ -310,6 +327,8 @@ export default class HTMLRenderView extends EditorElement {
                 return; 
             }
         } else {              
+            this.$selection.reselect();
+            this.$snapManager.clear();    
             // this.emit('removeGuideLine');
             this.command(
                 'setAttributeForMulti',

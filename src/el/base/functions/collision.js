@@ -410,6 +410,7 @@ export function polyPoly (verties = [], targetVerties = []) {
         let collision = polyLine(targetVerties, x1, y1, x2, y2)
         if (collision) return true; 
 
+        
         collision = polyPoint(verties, targetVerties[0][0], targetVerties[0][1])
         if (collision) return true; 
 
@@ -478,8 +479,8 @@ export function itemsToRectVerties (items = []) {
     if (minX === Number.MAX_SAFE_INTEGER) minX = 0;
     if (minY === Number.MAX_SAFE_INTEGER) minY = 0;
     if (maxX === Number.MIN_SAFE_INTEGER) maxX = 0;
-    if (maxY === Number.MIN_SAFE_INTEGER) maxY = 0;    
-
+    if (maxY === Number.MIN_SAFE_INTEGER) maxY = 0;   
+    
     return rectToVerties(minX, minY, maxX - minX, maxY - minY);
 }
 
@@ -490,6 +491,12 @@ export function vertiesToRectangle (verties) {
     const height = Length.px(vec3.dist(verties[0], verties[3])).floor();
 
     return {x, left: x, y, top: y, width, height}
+}
+
+export function toRectVertiesWithoutTransformOrigin (verties) {
+    return toRectVerties(verties).filter((it, index) => {
+        return index < 4;
+    })
 }
 
 export function toRectVerties(verties) {

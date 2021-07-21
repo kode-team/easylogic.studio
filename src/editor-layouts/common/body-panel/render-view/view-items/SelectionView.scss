@@ -134,20 +134,7 @@
       padding: 2px 4px;
       border-radius: 4px;
       font-size: 12px;
-
-      &[data-layout]:not([data-layout="default"]) {
-        &:before {
-          content: attr(data-layout);
-          display: inline-block;
-          vertical-align: middle;
-          margin-right: 2px;
-          padding: 2px 4px;
-          text-transform: uppercase;
-          font-size: 10px;
-          line-height: 1;
-        }
-      }
-
+      
       &[data-layout="grid"] {
         background-color: red;
       }
@@ -164,8 +151,8 @@
       position: absolute;
       left: 0px;
       top: 0px;
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
       box-sizing: border-box;
       background-color: white; 
       box-sizing: border-box;
@@ -181,8 +168,8 @@
         position: absolute;
         left: 50%;
         top: 50%;
-        width: 6px;
-        height: 6px;
+        width: 8px;
+        height: 8px;
         transform: translate(-50%, -50%);
         border-radius: 50%;
         background-color: orange;

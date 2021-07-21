@@ -117,7 +117,7 @@ export default class GridBoxEditor extends EditorElement {
 
     template () {
         return /*html*/`
-            <div class='grid-box-editor' ref='$body' >
+            <div class='elf--grid-box-editor' ref='$body' >
                 <div class='grid-box-editor-item'>
                     <div class='item header'>
                         <div class='repeat'>

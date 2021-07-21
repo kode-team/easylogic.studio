@@ -409,12 +409,22 @@ export default class Dom {
 
   css(key, value) {
     if (isNotUndefined(key) && isNotUndefined(value)) {
-      this.el.style[key] = value;
+      if (key.indexOf('--') === 0 &&  isNotUndefined(value) ) {
+        this.el.style.setProperty(key, value);
+      } else {
+        this.el.style[key] = value;
+      }
     } else if (isNotUndefined(key)) {
       if (isString(key)) {
         return getComputedStyle(this.el)[key];  
       } else {
-        Object.assign(this.el.style, key);
+        Object.entries(key).forEach(([localKey, value]) => {
+          if (localKey.indexOf('--') === 0 && isNotUndefined(value) ) {
+            this.el.style.setProperty(localKey, value);
+          } else {
+            this.el.style[localKey] = value;
+          }          
+        })
       }
     }
 

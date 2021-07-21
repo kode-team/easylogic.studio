@@ -319,7 +319,8 @@ export default class LayerTreeProperty extends BaseProperty {
     var item = this.$selection.currentProject.searchById(id);
     this.$selection.select(item)
 
-    this.emit('history.refreshSelection');
+    this.command('refreshSelection');
+    // this.emit('refreshSelectionTool'); 
   }
 
   [CLICK('$layerList .layer-item label .folder')](e) {

@@ -71,7 +71,7 @@ export default class StrokeDashArrayEditor extends EditorElement {
             key='${index}' 
             value="${value}" 
             min="0"
-            max="1000"
+            max="100"
             step="1"
             onchange="changeRangeEditor" 
           />

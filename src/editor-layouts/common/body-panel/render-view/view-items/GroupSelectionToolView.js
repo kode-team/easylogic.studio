@@ -237,6 +237,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         // cache matrix 
         // this.$selection.doCache();
         this.$selection.reselect();
+        this.initMatrix(true);
         this.cachedGroupItem = this.groupItem.matrix;
     }
 
@@ -533,6 +534,9 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         this.state.dragging = false;         
         this.emit('recoverCursor');   
         this.$selection.reselect();
+        this.state.dragging = false;               
+        this.initMatrix(true);
+        this.renderPointers();                
         this.nextTick(() => {
             this.command(
                 'setAttributeForMulti', 
@@ -542,33 +546,26 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         })        
     }
 
-    moveTo (newDist) {
+    // moveTo (newDist) {
 
-        newDist = vec3.floor([], newDist);
+    //     newDist = vec3.floor([], newDist);
 
-        //////  snap 체크 하기 
-        const snap = this.$snapManager.check(this.cachedGroupItem.rectVerties.map(v => {
-            return vec3.add([], v, newDist)
-        }), 3);
+    //     //////  snap 체크 하기 
+    //     const snap = this.$snapManager.check(this.$selection.cachedRectVerties.map(v => {
+    //         return vec3.add([], v, newDist)
+    //     }), 3);
 
-        const localDist = vec3.add([], snap, newDist);
+    //     const localDist = vec3.add([], snap, newDist);
 
-        this.groupItem.reset({
-            x: Length.px(this.cachedGroupItem.x + localDist[0]),
-            y: Length.px(this.cachedGroupItem.y + localDist[1])
-        })
-
-        this.$selection.cachedItemVerties.forEach(it => {
-            const instance = this.$selection.get(it.id)
-
-            if (instance) {
-                instance.reset({
-                    x: Length.px(it.x + localDist[0]).round(1000),       // 1px 단위로 위치 설정 
-                    y: Length.px(it.y + localDist[1]).round(1000),
-                })
-            }                        
-        })        
-    }
+    //     const result = {}
+    //     this.$selection.cachedItemVerties.forEach(it => {
+    //         result[it.id] = {
+    //             x: Length.px(it.x + localDist[0]).round(1000),          // 1px 단위로 위치 설정 
+    //             y: Length.px(it.y + localDist[1]).round(1000),
+    //         }
+    //     }) 
+    //     this.$selection.reset(result);
+    // }
 
     getSelectedElements() {
         const elements = this.$selection.ids.map(id => this.parent.state.cachedCurrentElement[id])
@@ -643,8 +640,10 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         if (!this.groupItem) return;
 
-        const verties = this.groupItem.verties;
+        const verties = (this.state.dragging) ? this.groupItem.verties : this.$selection.verties;
         const selectionVerties = this.groupItem.selectionVerties();
+
+        if (verties.length === 0) return;
 
         this.state.renderPointerList = [
             this.$viewport.applyVerties(verties),
@@ -685,14 +684,6 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     createPointerRect (pointers, rotatePointer) {
         if (pointers.length === 0) return '';
 
-
-        const centerPointer = vec3.lerp([], pointers[0], pointers[1], 0.5);            
-        const line = `
-            M ${centerPointer[0]},${centerPointer[1]} 
-            L ${rotatePointer[0]}, ${rotatePointer[1]} 
-        `
-
-
         return /*html*/`
         <svg class='line' overflow="visible">
             <path 
@@ -702,7 +693,6 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
                     L ${pointers[2][0]}, ${pointers[2][1]} 
                     L ${pointers[3][0]}, ${pointers[3][1]} 
                     L ${pointers[0][0]}, ${pointers[0][1]}
-                    ${line}
                     Z
                 " />
         </svg>`        
@@ -756,7 +746,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }    
 
     createRenderPointers(pointers, selectionPointers) {
-
+        const isPointerMove = this.$editor.isPointerMove;
         const diff = vec3.subtract(
             [], 
             vec3.lerp([], pointers[0], pointers[1], 0.5), 
@@ -774,19 +764,20 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
             size: this.createSize(pointers),
             point: [
                 // 4모서리에서도 rotate 할 수 있도록 맞춤 
-                // this.createRotatePointer (selectionPointers[0], 0, 'bottom right'),
-                // this.createRotatePointer (selectionPointers[1], 1, 'bottom left'),
-                // this.createRotatePointer (selectionPointers[2], 2, 'top left'),
-                // this.createRotatePointer (selectionPointers[3], 3, 'top right'),
-                this.createRotatePointer (rotatePointer, 4, 'center center'),                
-                this.createPointer (pointers[0], 1, rotate),
-                this.createPointer (pointers[1], 2, rotate),
-                this.createPointer (pointers[2], 3, rotate),
-                this.createPointer (pointers[3], 4, rotate),
-                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[0], pointers[1], 0.5), 11),
-                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[1], pointers[2], 0.5), 12),
-                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[2], pointers[3], 0.5), 13),
-                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[3], pointers[0], 0.5), 14),
+                this.createRotatePointer (selectionPointers[0], 0, 'bottom right'),
+                this.createRotatePointer (selectionPointers[1], 1, 'bottom left'),
+                this.createRotatePointer (selectionPointers[2], 2, 'top left'),
+                this.createRotatePointer (selectionPointers[3], 3, 'top right'),
+                // this.createRotatePointer (rotatePointer, 4, 'center center'),                
+                isPointerMove ? undefined : this.createPointer (pointers[0], 1, rotate),
+                isPointerMove ? undefined : this.createPointer (pointers[1], 2, rotate),
+                isPointerMove ? undefined : this.createPointer (pointers[2], 3, rotate),
+                isPointerMove ? undefined : this.createPointer (pointers[3], 4, rotate),
+                
+                dist < 20 || isPointerMove ? undefined : this.createPointer (vec3.lerp([], pointers[0], pointers[1], 0.5), 11),
+                dist < 20 || isPointerMove ? undefined : this.createPointer (vec3.lerp([], pointers[1], pointers[2], 0.5), 12),
+                dist < 20 || isPointerMove ? undefined : this.createPointer (vec3.lerp([], pointers[2], pointers[3], 0.5), 13),
+                dist < 20 || isPointerMove ? undefined : this.createPointer (vec3.lerp([], pointers[3], pointers[0], 0.5), 14),
             ].join('')
         }
     }
@@ -794,7 +785,9 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     [SUBSCRIBE('refreshSelectionStyleView')] () {
 
         if (this.$selection.isMany) {
-            this.renderPointers()
+            if (this.$selection.hasChangedField('x', 'y', 'width', 'height', 'transform', 'transform-origin', 'perspective', 'perspective-origin')) {
+                this.renderPointers()
+            }
         }
 
     }

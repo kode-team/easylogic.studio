@@ -150,7 +150,7 @@ export default class GuideLineView extends EditorElement {
 
     [BIND('$guide')]() {
         return {
-            html: this.createGuideLine(this.state.list)
+            svgDiff: /*html*/`<g>${this.createGuideLine(this.state.list)}</g>`
         }
     }
 
@@ -226,7 +226,9 @@ export default class GuideLineView extends EditorElement {
             }
 
             if (sourceVerties) {
-                images.push(rect(this.$viewport.applyVerties(sourceVerties)))
+                if ((this.$selection.isOne && this.$editor.isPointerDown) || (this.$selection.isMany && !this.$editor.isPointerMove)) {
+                    images.push(rect(this.$viewport.applyVerties(sourceVerties)))
+                }
             }
 
             if (targetVerties) {
@@ -234,7 +236,7 @@ export default class GuideLineView extends EditorElement {
             }
         }
 
-        return [...new Set(images), ...new Set(texts)].join('');
+        return [...images, ...texts].join('');
     }
 
     removeGuideLine() {

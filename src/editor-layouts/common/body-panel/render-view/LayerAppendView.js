@@ -183,7 +183,9 @@ export default class LayerAppendView extends EditorElement {
 
         if (!target) return '';
 
-        const guides = this.state.targetGuides || []
+        const guides = (this.state.targetGuides || []).filter(Boolean);
+
+        if (guides.length === 0) return; 
 
         return /*html*/`
         <svg width="100%" height="100%">
@@ -222,7 +224,7 @@ export default class LayerAppendView extends EditorElement {
         if (vec3.equals(newMousePoint, targetMousePoint) === false) {
             this.state.target = newMousePoint;
             this.state.targetVertex = this.$viewport.applyVertex(newMousePoint);
-            this.state.targetGuides = this.$snapManager.findGuideOne([newMousePoint]);
+            this.state.targetGuides = this.$snapManager.findGuideOne([newMousePoint]).filter(Boolean);
         } else {
             this.state.target = null; 
             this.state.targetGuides = [];

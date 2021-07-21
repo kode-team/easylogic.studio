@@ -6,7 +6,7 @@ import { mat4, quat, vec3 } from "gl-matrix";
 import { calculateMatrix, calculateMatrixInverse, radianToDegree, round, vertiesMap } from "el/base/functions/math";
 import { isFunction } from "el/base/functions/func";
 import PathParser from "el/editor/parser/PathParser";
-import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties } from "el/base/functions/collision";
+import { itemsToRectVerties, polyInPoly, polyPoint, polyPoly, rectToVerties } from "el/base/functions/collision";
 
 const ZERO = Length.z()
 export class MovableItem extends Item {
@@ -274,11 +274,12 @@ export class MovableItem extends Item {
      * 충돌 체크 
      * 
      * polygon : ploygon 형태로 충돌 체크를 한다. 
+     * 충돌 정확성을 위해서 item 의 개별 점이 areaVerties 에 속하는지 체크한다. 
      * 
      * @param {*} areaVerties 
      */
     checkInArea (areaVerties) {
-        return polyPoly(areaVerties, this.verties)        
+        return  polyPoly(areaVerties, this.verties)
     }
 
     /**

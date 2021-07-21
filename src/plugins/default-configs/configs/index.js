@@ -9,6 +9,7 @@ import showLeftPanel from "./show.left.panel";
 import showRightPanel from "./show.right.panel";
 import snapDistance from "./snap.distance";
 import historyDelayMs from "./history.delay.ms";
+import snapGrid from './snap.grid';
 
 export default [
     setToolHand,
@@ -21,5 +22,6 @@ export default [
     showLeftPanel,
     showRightPanel,
     snapDistance,
+    snapGrid,
     historyDelayMs
 ]

@@ -212,6 +212,10 @@ export class Editor {
     return false; 
   }
 
+  get isPointerDown () {
+    return !this.isPointerUp
+  }
+
   get isPointerMove() {
     if (!this.config.get('bodyEvent')) return false;
     return this.config.get('bodyEvent').type === 'pointermove'

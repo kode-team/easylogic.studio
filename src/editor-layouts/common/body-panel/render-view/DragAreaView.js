@@ -6,7 +6,7 @@ import Dom from "el/base/Dom";
 import { KEY_CODE } from "el/editor/types/key";
 
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { toRectVerties } from "el/base/functions/collision";
+import { toRectVerties, toRectVertiesWithoutTransformOrigin } from "el/base/functions/collision";
 
 import './DragAreaView.scss';
 
@@ -71,7 +71,6 @@ export default class DragAreaView extends EditorElement {
             return true; 
         }
 
-
         // select된 객체에 포지션이 있으면  움직일 수 있도록 한다. 
         if (this.$selection.hasPoint(mousePoint)) {
             return false;
@@ -108,6 +107,8 @@ export default class DragAreaView extends EditorElement {
 
         if (this.$editor.isSelectionMode()) {
 
+            this.$config.set("hoverView", false);
+
             this.dragRect = {
                 left: Length.px(this.initMousePoint[0]),
                 top: Length.px(this.initMousePoint[1]),
@@ -133,8 +134,7 @@ export default class DragAreaView extends EditorElement {
             if (rect.width === 0 && rect.height === 0) {
                 items = [] 
             } else {
-                // 프로젝트 내에 있는 모든 객체 검색 
-
+                // 프로젝트 내에 있는 모든 객체 검색    
                 project.layers.forEach(layer => {
 
                     if (layer.is('artboard') && layer.isIncludeByArea(areaVerties)) {        
@@ -143,6 +143,7 @@ export default class DragAreaView extends EditorElement {
                         items.push(layer);                            
                     } else {
                         items.push.apply(items, layer.checkInAreaForAll(areaVerties))
+
                     }
                 })
 
@@ -151,6 +152,7 @@ export default class DragAreaView extends EditorElement {
                 }
             }   
         }
+
         const selectedItems = selectedArtboard.length ? selectedArtboard : items; 
 
         return selectedItems;
@@ -193,13 +195,14 @@ export default class DragAreaView extends EditorElement {
                 height: height.value
             }
     
-            var areaVerties = this.$viewport.createAreaVerties(rect.x, rect.y, rect.width, rect.height);
+            // var areaVerties = this.$viewport.createAreaVerties(rect.x, rect.y, rect.width, rect.height);
 
             var project = this.$selection.currentProject;
             if (project) {    
-                const selectedItems = this.getSelectedItems(rect, areaVerties)
+                const selectedItems = this.getSelectedItems(rect, toRectVertiesWithoutTransformOrigin([startVertex, endVertex]))
 
                 if (this.$selection.select( ...selectedItems)) {
+                    this.emit('refreshSelection')
                     this.emit('refreshSelectionTool', true);
                 }
 
@@ -208,16 +211,8 @@ export default class DragAreaView extends EditorElement {
         }
     }
 
-    moveEndPointer (dx, dy) {
-        var {left: x, top: y, width, height } = this.dragRect
-        var rect = {
-            x: x.value, 
-            y: y.value, 
-            width: width.value,
-            height: height.value
-        }
-
-        var areaVerties = this.$viewport.createAreaVerties(rect.x, rect.y, rect.width, rect.height);
+    moveEndPointer () {
+        this.$config.set("hoverView", true);
 
         this.emit('drawAreaView', {
             left: Length.px(-10000),
@@ -226,15 +221,8 @@ export default class DragAreaView extends EditorElement {
             height: Length.z()
         })
 
-        var project = this.$selection.currentProject;
-        if (project) {
-    
-            const selectedItems = this.getSelectedItems(rect, areaVerties)
 
-            this.$selection.select(...selectedItems)
-        } else {
-            this.$selection.select();
-        }
+        this.$selection.reselect();
         this.emit('history.refreshSelection')
         this.emit('refreshSelectionTool', true);            
 

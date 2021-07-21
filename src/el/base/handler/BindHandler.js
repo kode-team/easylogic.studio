@@ -62,6 +62,10 @@ const applyElementAttribute = ($element, key, value) => {
       $element.text(value);
     } else if (key === 'innerHTML' || key === 'html') {
       $element.html(value);
+    } else if (key === 'htmlDiff') {
+      $element.updateDiff(value);
+    } else if (key === 'svgDiff') {
+      $element.updateSVGDiff(value);
     } else if (key === 'value') {
       $element.val(value);
     } else {

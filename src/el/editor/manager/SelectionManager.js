@@ -1,4 +1,4 @@
-import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties} from "el/base/functions/collision";
+import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties, toRectVerties} from "el/base/functions/collision";
 import { isFunction, isUndefined, isArray, isObject, isString, clone } from "el/base/functions/func";
 import { Item } from "el/editor/items/Item";
 import { MovableItem } from "el/editor/items/MovableItem";
@@ -437,7 +437,19 @@ export class SelectionManager {
 
   setRectCache () {
 
+    if (this.isEmpty) {
+      this.cachedVerties = [];
+      this.cachedRectVerties = [];
+      this.cachedItemVerties = []
+      this.cachedArtBoardVerties = this.currentProject.artboards.map(item => {
+        return { item, matrix: item.matrix};
+      })
+  
+      return;
+    }
+
     this.cachedVerties = this.verties;
+    this.cachedRectVerties = toRectVerties(this.verties);
 
     this.cachedItemVerties = this.items.map(it => {
       it.fakeParent = undefined;
@@ -472,6 +484,9 @@ export class SelectionManager {
 
 
   get rectVerties () {
+    if (this.isEmpty) {
+      return [];
+    }
     return itemsToRectVerties(this.items)
   }
 

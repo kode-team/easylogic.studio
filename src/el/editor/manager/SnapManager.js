@@ -41,6 +41,10 @@ export class SnapManager {
         return this.editor.config.get('snap.distance') || this.snapDistance;
     }
 
+    get gridSize () {
+        return this.editor.config.get('snap.grid') || 50;
+    }    
+
     /**
      * 캐쉬된 item들의 matrix 정보를 삭제한다.
      */
@@ -90,15 +94,17 @@ export class SnapManager {
 
         const checkXList = []
 
+        // 객체간의 우선 순위가 먼저         
         targetXList.forEach((targetX, targetIndex) => {
             sourceXList.forEach((sourceX, sourceIndex) => {
 
                 const localDistX = targetX - sourceX
-
+                const localGridDistX = this.gridSize - (Math.abs(sourceX) % this.gridSize);
                 if (Math.abs(localDistX ) <= dist) {
                     checkXList.push({targetX, sourceX, sourceIndex, targetIndex, dx: localDistX})
+                } else if (Math.abs(localGridDistX) <= dist) {
+                    checkXList.push({targetX, sourceX, sourceIndex, targetIndex, dx: localGridDistX})
                 }
-
             })
         })
 
@@ -136,6 +142,7 @@ export class SnapManager {
         const sourceXList = sourceVerties.map(it => it[0])
         const sourceYList = sourceVerties.map(it => it[1])
 
+        // 객체간의 우선 순위가 먼저
         this.snapTargetLayers.forEach(target => {
 
             const x = this.checkX(target.xList, sourceXList, dist)[0];
@@ -143,6 +150,29 @@ export class SnapManager {
 
             snaps.push(vec3.fromValues(x ? x.dx : 0, y ? y.dy : 0, 0))
         })
+
+        // // 그 다음에 x grid 체크 
+        // if (snaps.filter(it => it[0] !== 0).length === 0) {
+        //     sourceXList.forEach((sourceX) => {
+
+        //         const localGridDistX = this.gridSize - ((sourceX + 10000000000) % this.gridSize);
+        //         if (Math.abs(localGridDistX) <= dist) {
+        //             snaps.push(vec3.fromValues(localGridDistX, 0, 0))
+        //         }
+
+        //     })        
+        // }
+
+        // // 그 다음에 y grid 체크 
+        // if (snaps.filter(it => it[1] !== 0).length === 0) {
+        //     sourceYList.forEach((sourceY) => {
+        //         const localGridDistY = this.gridSize - ((sourceY + 10000000000) % this.gridSize);
+        //         if (Math.abs(localGridDistY) <= dist) {
+        //             snaps.push(vec3.fromValues(0, localGridDistY, 0))
+        //         }
+
+        //     })        
+        // }        
 
         return snaps.find(it => isNotZero(it[0]) || isNotZero(it[1])) || DEFAULT_DIST_VECTOR
     }

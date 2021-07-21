@@ -29,7 +29,7 @@
 
         .detail {
             display: grid;
-            grid-template-columns: 1fr 80px;
+            grid-template-columns: 1fr 60px;
             grid-column-gap: 3px;
 
             .folder {
@@ -46,6 +46,19 @@
                 white-space: nowrap;
                 font-size: 12px;
                 vertical-align: middle;
+                display: flex;
+
+                .folder{
+                    flex: none;
+                }
+
+                .icon {
+                    flex: none;
+                }
+
+                .name {
+                    flex: 1 1 auto;
+                }
 
                 svg {
                     path {
@@ -77,12 +90,13 @@
     
         }
 
-        &.selected {
+        &.selected{
             background-color: var(--elf--selected-color);
             color: var(--elf--selected-font-color);
         }
 
-        &:not(.selected).hovered {
+        &:not(.selected).hovered,
+        &:hover {
             box-shadow: inset 0 0 0 1px var(--elf--list-item-selected-color);
         }
 
