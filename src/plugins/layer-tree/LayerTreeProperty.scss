@@ -54,6 +54,7 @@
 
             .tools {
                 text-align: right;
+                display: none;
 
                 .visible {
                     color: var(--elf--list-item-disable-font-color);
@@ -82,6 +83,10 @@
         &:not(.selected).hovered,
         &:hover {
             box-shadow: inset 0 0 0 1px var(--elf--list-item-selected-color);
+
+            .tools {
+                display: block;
+            }
         }
 
         &[data-layout='flex'],

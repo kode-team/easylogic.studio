@@ -129,7 +129,10 @@ export default class LayerTreeProperty extends BaseProperty {
 
     for (var last = layers.length - 1; last > -1; last--) {
       var layer = layers[last];
-      var selected = this.$selection.check(layer) ? 'selected' : '';
+
+      const isSelected = this.$selection.check(layer)
+
+      var selectedClass = this.$selection.check(layer) ? 'selected' : '';
       var hovered = this.$selection.checkHover(layer) ? 'hovered' : '';
       var name = layer.name;
 
@@ -146,7 +149,7 @@ export default class LayerTreeProperty extends BaseProperty {
       const depthPadding = Length.px(depth * 20);
 
       data.push(/*html*/`        
-        <div class='layer-item ${selected} ${hovered}' data-is-group="${layer.isGroup}" data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true">
+        <div class='layer-item ${selectedClass} ${hovered}' data-is-group="${layer.isGroup}" data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true">
           <div class='detail'>
             <label data-layout-title='${title}' style='padding-left: ${depthPadding}' > 
               <div class='folder ${layer.collapsed ? 'collapsed' : ''}'>${layer.isGroup ? icon.arrow_right : ''}</div>
@@ -156,7 +159,7 @@ export default class LayerTreeProperty extends BaseProperty {
             <div class="tools">
               <button type="button" class="lock" data-lock="${layer.lock}" title='Lock'>${layer.lock ? icon.lock : icon.lock_open}</button>
               <button type="button" class="visible" data-visible="${layer.visible}" title='Visible'>${icon.visible}</button>
-              <button type="button" class="remove" title='Remove'>${icon.remove2}</button>            
+              <button type="button" class="remove" title='Remove'>${icon.remove2}</button>                          
             </div>
           </div>
         </div>
