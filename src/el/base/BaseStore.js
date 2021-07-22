@@ -1,5 +1,5 @@
 import EventMachine from "./EventMachine";
-import { debounce, throttle } from "./functions/func";
+import { debounce, ifCheck, throttle } from "./functions/func";
 
 export default class BaseStore {
   constructor(editor) {
@@ -40,11 +40,15 @@ export default class BaseStore {
    * @param {boolean} enableSelfTrigger
    * @returns {Function} off callback 
    */
-  on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false) {
+  on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false, beforeMethods = []) {
     var callback = originalCallback;
     
     if (debounceDelay > 0)  callback = debounce(originalCallback, debounceDelay);
     else if (throttleDelay > 0)  callback = throttle(originalCallback, throttleDelay);
+
+    if (beforeMethods.length) {
+      callback = ifCheck(callback, context, beforeMethods);
+    }
 
     this.getCallbacks(event).push({ event, callback, context, originalCallback, enableAllTrigger, enableSelfTrigger });
 

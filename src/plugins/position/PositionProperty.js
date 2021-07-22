@@ -1,6 +1,9 @@
-import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { IF, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { Transform } from "el/editor/property-parser/Transform";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { Length } from "el/editor/unit/Length";
+
+const DEFAULT_SIZE = Length.z();
 
 export default class PositionProperty extends BaseProperty {
   getTitle() {
@@ -15,30 +18,42 @@ export default class PositionProperty extends BaseProperty {
     this.refreshShowIsNot(['project'])
   }
 
-  [SUBSCRIBE('refreshSelectionStyleView')] () {
+  checkChangedValue() {
+    var current = this.$selection.current;
+    if (!current) return false;
+
+    return current.hasChangedField(
+      'x', 
+      'y', 
+      'width', 
+      'height', 
+      'transform', 
+      'rotateZ', 
+      'rotate', 
+      'opacity'
+    );
+  }
+
+  [SUBSCRIBE('refreshSelectionStyleView') + IF('checkChangedValue')]() {
     var current = this.$selection.current;
     if (!current) return '';
 
-    if (current.hasChangedField('x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'opacity') === false) {
-      return ;
-    }
-
-    this.children.$x.setValue(current.x || Length.z());
-    this.children.$y.setValue(current.y || Length.z());
-    this.children.$width.setValue(current.width || Length.z());
-    this.children.$height.setValue(current.height || Length.z());    
+    this.children.$x.setValue(current.x || DEFAULT_SIZE);
+    this.children.$y.setValue(current.y || DEFAULT_SIZE);
+    this.children.$width.setValue(current.width || DEFAULT_SIZE);
+    this.children.$height.setValue(current.height || DEFAULT_SIZE);
     this.children.$opacity.setValue(current['opacity'] || '1')
     const rotateZ = Transform.get(current.transform, 'rotateZ')
     if (rotateZ) {
       this.children.$rotate.setValue(rotateZ[0]);
-    } else {
-      this.children.$rotate.setValue(current.rotate);
     }
+
+    // console.log('aaafsdafadsfdsaf');
 
   }
 
   isHideHeader() {
-    return true; 
+    return true;
   }
 
   getBodyClassName() {
@@ -46,6 +61,7 @@ export default class PositionProperty extends BaseProperty {
   }
 
   getBody() {
+    // console.log("aaaaaa");
     return /*html*/`
       <div class="position-item" ref="$positionItem" style='padding: 5px 10px;'>
         <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px;'>
@@ -86,9 +102,9 @@ export default class PositionProperty extends BaseProperty {
               key='rotateZ' 
               compact="true" 
               label='rotate_left'
-              min="0"
+              min="-360"
               max="360"
-              step="0.01"
+              step="1"
               units="deg"
               onchange="changeRotate" />
           </div>        
@@ -112,38 +128,47 @@ export default class PositionProperty extends BaseProperty {
     `;
   }
 
-  refresh () {
+  refresh() {
+    // console.log('aaafdsafdsafd');
     const current = this.$selection.current;
     if (current) {
       this.children.$x.setValue(current.x);
-      this.children.$y.setValue(current.y);      
+      this.children.$y.setValue(current.y);
       this.children.$width.setValue(current.width);
-      this.children.$height.setValue(current.height);         
+      this.children.$height.setValue(current.height);
+      this.children.$opacity.setValue(current['opacity'] || '1')
+      // console.log(current.opacity);
+      const rotateZ = Transform.get(current.transform, 'rotateZ')
+      if (rotateZ) {
+        this.children.$rotate.setValue(rotateZ[0]);
+      }      
     }
 
   }
 
 
-  [SUBSCRIBE_SELF('changRangeEditor')] (key, value) {
+  [SUBSCRIBE_SELF('changRangeEditor')](key, value) {
 
-    this.command('setAttributeForMulti', 'change position or size', this.$selection.packByValue({ 
+    this.command('setAttributeForMulti', 'change position or size', this.$selection.packByValue({
       [key]: value
     }))
 
     this.nextTick(() => {
-      this.emit('refreshAllElementBoundSize')    
+      this.emit('refreshAllElementBoundSize')
     })
 
   }
 
-  [SUBSCRIBE_SELF('changeRotate')] (key, rotate) {
-    this.command('setAttributeForMulti', "change rotate", this.$selection.packByValue({ 
-      rotate 
+  [SUBSCRIBE_SELF('changeRotate')](key, rotate) {
+    console.log(rotate);
+    this.command('setAttributeForMulti', "change rotate", this.$selection.packByValue({
+      transform: (item) => Transform.rotateZ(item.transform, rotate)
     }))
   }
 
-  [SUBSCRIBE_SELF('changeSelect')] (key, value) {
-    this.command("setAttributeForMulti", `change ${key}`, this.$selection.packByValue({ 
+  [SUBSCRIBE_SELF('changeSelect')](key, value) {
+    // console.log(key, value);
+    this.command("setAttributeForMulti", `change ${key}`, this.$selection.packByValue({
       [key]: value
     }))
   }

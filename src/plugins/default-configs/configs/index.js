@@ -10,8 +10,10 @@ import showRightPanel from "./show.right.panel";
 import snapDistance from "./snap.distance";
 import historyDelayMs from "./history.delay.ms";
 import snapGrid from './snap.grid';
+import storeKey from './store.key';
 
 export default [
+    storeKey,
     setToolHand,
     canvasWidth,
     canvasHeight,

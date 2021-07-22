@@ -149,6 +149,14 @@ $tab-horizontal-header-right-width: 60px;
             top:0px;
           }
 
+          &:first-child {
+            border-left: 0px;
+          }
+
+          &:last-child {
+            border-right: 0px;
+          }
+
         }
 
         &.selected,

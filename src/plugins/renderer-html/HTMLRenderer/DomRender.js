@@ -331,33 +331,24 @@ export default class DomRender extends ItemRender {
   toTransformCSS(item) {
 
     // transform 이 없을 때는 공백 리턴 
-    if (item.rotate === '0deg' && item.transform === '') {
+    if (item.transform === '') {
       return ZERO_CONFIG;
-    } else if (item.rotate.value === 0 && item.transform === '') {
-      return ZERO_CONFIG;
-    }
-
-    const key = [item['transform'], item['rotate']].join(":::");
-
-    if (key != this._transformCacheKey) {
-      this._transformCache = Transform.rotate(item['transform'], item['rotate'])
-      this._transformCacheKey = key; 
     }
 
     const results = {
-      transform: this._transformCache
+      transform: item['transform']
     } 
 
-    if (results.transform === 'rotate(0deg)') {
+    if (results.transform === 'rotateZ(0deg)') {
       delete results.transform;
     }
 
     return {
-      transform: ["translateZ(0px) " , results.transform].filter(Boolean).join(' ')
+      transform: results.transform
     };
   }     
 
- 
+  
 
   /**
    * 

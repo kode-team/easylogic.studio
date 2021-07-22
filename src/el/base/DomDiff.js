@@ -72,7 +72,17 @@ function changed(node1, node2) {
 
 function hasPassed(node1) {
     return (
-        (node1.nodeType !== Node.TEXT_NODE && (node1.getAttribute('data-domdiff-pass') === 'true' || node1.getAttribute('refClass'))) 
+        (node1.nodeType !== Node.TEXT_NODE && node1.getAttribute('data-domdiff-pass') === 'true') 
+    ) 
+}
+
+/**
+ * refClass 속성을 가지고 있으면 기존 el 을 대체한다. 
+ * 
+ */ 
+function hasRefClass(node1) {
+    return (
+        (node1.nodeType !== Node.TEXT_NODE && (node1.getAttribute('refClass'))) 
     ) 
 }
 
@@ -100,8 +110,8 @@ function updateElement (parentElement, oldEl, newEl, i) {
         // NOOP
         // data-domdiff-pass="true" 일 때는 아무것도 비교하지 않고 끝낸다. 
         // console.log(oldEl, newEl, 'passed');
-    } else if (changed(newEl, oldEl)) {
-        // console.log('replace');
+    } else if (changed(newEl, oldEl) || hasRefClass(newEl)) {
+        // node 가 같지 않으면 바꾸고, refClass 속성이 있으면 바꾸고
         parentElement.replaceChild(newEl.cloneNode(true), oldEl);
     } else if (
         newEl.nodeType !== Node.TEXT_NODE 

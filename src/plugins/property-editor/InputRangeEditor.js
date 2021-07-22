@@ -1,6 +1,6 @@
 
 import { Length } from "el/editor/unit/Length";
-import { LOAD, INPUT, CLICK, FOCUS, BLUR, SUBSCRIBE } from "el/base/Event";
+import { LOAD, INPUT, CLICK, FOCUS, BLUR, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { OBJECT_TO_CLASS } from "el/base/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
@@ -125,18 +125,12 @@ export default class InputRangeEditor extends EditorElement {
         });
     }
 
-    [SUBSCRIBE('changeUnit')] (key, value) {
+    [SUBSCRIBE_SELF('changeUnit')] (key, value) {
 
         this.initValue();
 
         this.updateData({
             value: this.state.value.toUnit(value)
-        })
-    }
-
-    [SUBSCRIBE('changeVarType')] (key, unit) {
-        this.updateData({
-            value: new Length(this.refs.$calc.value, unit)
         })
     }
 }

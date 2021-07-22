@@ -6,7 +6,7 @@ $left-size: 340px;
 $left-layer-panel: 70px; 
 $left-page-size: 70px;
 $toggle-left-size: 80px;
-$right-size: 260px;
+$right-size: 280px;
 $timeline-animation-size: 200px;
 $timeline-property-size: 270px;
 $timeline-header-size: 40px;
@@ -200,6 +200,7 @@ $range-thumb-border-radius: 20px;
       flex-direction: column;
       overflow: auto;
       // transition: bottom 0.05s linear;
+      border-left: 1px solid var(--elf--border-color);
     }
 
     .layout-body {

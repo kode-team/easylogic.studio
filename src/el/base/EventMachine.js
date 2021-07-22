@@ -501,7 +501,7 @@ export default class EventMachine {
    * @returns {string[]} 나의 상위 모든 메소드를 수집해서 리턴한다. 
    */
   collectProps() {
-    return collectProps(this, expectMethod);
+    return collectProps(this, expectMethod, this.constructor.name);
   }
 
   filterProps(pattern) {

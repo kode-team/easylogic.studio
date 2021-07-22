@@ -32,7 +32,7 @@ export default class DesignEditor extends BaseLayout {
   initState() {
     return {
       leftSize: 340,
-      rightSize: 260,
+      rightSize: 280,
       bottomSize: 0,
       lastBottomSize: 150
     }

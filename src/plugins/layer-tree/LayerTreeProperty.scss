@@ -32,11 +32,6 @@
             grid-template-columns: 1fr 60px;
             grid-column-gap: 3px;
 
-            .folder {
-                display: none;
-
-            }
-
             label {
                 padding: 2px 0px;                
                 cursor: pointer;
@@ -46,19 +41,8 @@
                 white-space: nowrap;
                 font-size: 12px;
                 vertical-align: middle;
-                display: flex;
-
-                .folder{
-                    flex: none;
-                }
-
-                .icon {
-                    flex: none;
-                }
-
-                .name {
-                    flex: 1 1 auto;
-                }
+                display: grid;
+                grid-template-columns: 20px 20px 1fr;
 
                 svg {
                     path {

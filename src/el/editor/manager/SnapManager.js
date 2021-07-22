@@ -1,21 +1,22 @@
+import { toRectVertiesWithoutTransformOrigin } from "el/base/functions/collision";
 import { isNotZero } from "el/base/functions/func";
 import { vec3 } from "gl-matrix";
 
-const MAX_SNAP_DISTANCE = 3; 
+const MAX_SNAP_DISTANCE = 3;
 const DEFAULT_DIST_VECTOR = vec3.fromValues(0, 0, 0)
 const AXIS_X = 'x';
 const AXIS_Y = 'y';
 
-function checkXAxis (sourceVertex, targetVertex) {
-    return Math.abs(sourceVertex[0] - targetVertex[0]) < 1; 
+function checkXAxis(sourceVertex, targetVertex) {
+    return Math.abs(sourceVertex[0] - targetVertex[0]) < 1;
 }
 
-function checkYAxis (sourceVertex, targetVertex) {
-    return Math.abs(sourceVertex[1] - targetVertex[1]) < 1; 
+function checkYAxis(sourceVertex, targetVertex) {
+    return Math.abs(sourceVertex[1] - targetVertex[1]) < 1;
 }
 
-function checkZAxis (sourceVertex, targetVertex) {
-    return Math.abs(sourceVertex[2] - targetVertex[2]) < 1; 
+function checkZAxis(sourceVertex, targetVertex) {
+    return Math.abs(sourceVertex[2] - targetVertex[2]) < 1;
 }
 
 
@@ -30,20 +31,20 @@ export class SnapManager {
      * 
      * @param {Editor} editor 
      */
-    constructor (editor, snapDistance = MAX_SNAP_DISTANCE) {
+    constructor(editor, snapDistance = MAX_SNAP_DISTANCE) {
         this.editor = editor;
         this.map = new Map();
         this.snapTargetLayers = []
         this.snapDistance = snapDistance;
     }
 
-    get dist () {
+    get dist() {
         return this.editor.config.get('snap.distance') || this.snapDistance;
     }
 
-    get gridSize () {
+    get gridSize() {
         return this.editor.config.get('snap.grid') || 50;
-    }    
+    }
 
     /**
      * 캐쉬된 item들의 matrix 정보를 삭제한다.
@@ -55,12 +56,12 @@ export class SnapManager {
     }
 
 
-    convertMatrix (item) {
-        const verties  = this.convertGuideAndPathMatrix(item);
-        const xList = verties.map(it => it[0]) ;
-        const yList = verties.map(it => it[1]) ;
+    convertMatrix(item) {
+        const verties = this.convertGuideAndPathMatrix(item);
+        const xList = verties.map(it => it[0]);
+        const yList = verties.map(it => it[1]);
 
-        return {id: item.id, xList, yList, verties}
+        return { id: item.id, xList, yList, verties, rectVerties: toRectVertiesWithoutTransformOrigin(item.rectVerties()) };
     }
 
     /**
@@ -69,19 +70,19 @@ export class SnapManager {
      * @param {MovableItem} item 
      * @returns {vec3[]}
      */
-    convertGuideAndPathMatrix (item) {
-        const guideVerties  = item.guideVerties;
-        const pathVerties  = item.pathVerties();
+    convertGuideAndPathMatrix(item) {
+        const guideVerties = item.guideVerties;
+        const pathVerties = item.pathVerties();
 
         return [...guideVerties, ...pathVerties];
-    }    
+    }
 
     /**
      * snap 포인트 모으기 
      * 
      * @returns {vec3[]}
      */
-    getSnapPoints () {
+    getSnapPoints() {
         const points = []
         this.editor.selection.snapTargetLayersWithSelection.forEach(it => {
             points.push.apply(points, this.convertGuideAndPathMatrix(it));
@@ -90,7 +91,7 @@ export class SnapManager {
         return points;
     }
 
-    checkX (targetXList, sourceXList, dist = 0) {
+    checkX(targetXList, sourceXList, dist = 0) {
 
         const checkXList = []
 
@@ -100,10 +101,10 @@ export class SnapManager {
 
                 const localDistX = targetX - sourceX
                 const localGridDistX = this.gridSize - (Math.abs(sourceX) % this.gridSize);
-                if (Math.abs(localDistX ) <= dist) {
-                    checkXList.push({targetX, sourceX, sourceIndex, targetIndex, dx: localDistX})
+                if (Math.abs(localDistX) <= dist) {
+                    checkXList.push({ targetX, sourceX, sourceIndex, targetIndex, dx: localDistX })
                 } else if (Math.abs(localGridDistX) <= dist) {
-                    checkXList.push({targetX, sourceX, sourceIndex, targetIndex, dx: localGridDistX})
+                    checkXList.push({ targetX, sourceX, sourceIndex, targetIndex, dx: localGridDistX })
                 }
             })
         })
@@ -111,7 +112,7 @@ export class SnapManager {
         return checkXList;
     }
 
-    checkY (targetYList, sourceYList, dist = 0) {
+    checkY(targetYList, sourceYList, dist = 0) {
 
         const checkYList = []
 
@@ -120,15 +121,15 @@ export class SnapManager {
 
                 const localDistY = targetY - sourceY
 
-                if (Math.abs(localDistY ) <= dist) {
-                    checkYList.push({targetY, sourceY, sourceIndex, targetIndex, dy: localDistY})
+                if (Math.abs(localDistY) <= dist) {
+                    checkYList.push({ targetY, sourceY, sourceIndex, targetIndex, dy: localDistY })
                 }
 
             })
         })
 
         return checkYList;
-    }    
+    }
 
     /**
      * 
@@ -136,7 +137,7 @@ export class SnapManager {
      * 
      * @param {vec3[]} sourceVerties 
      */
-    check (sourceVerties) {
+    check(sourceVerties) {
         const snaps = []
         const dist = this.dist;
         const sourceXList = sourceVerties.map(it => it[0])
@@ -177,7 +178,7 @@ export class SnapManager {
         return snaps.find(it => isNotZero(it[0]) || isNotZero(it[1])) || DEFAULT_DIST_VECTOR
     }
 
-    checkPoint (sourceVertex) {
+    checkPoint(sourceVertex) {
         const snap = this.check([sourceVertex])
         return vec3.add([], sourceVertex, snap);
     }
@@ -189,9 +190,9 @@ export class SnapManager {
      * @param {vec3[]} targetVerties 
      * @returns {Array} [sourceVertex, targetVertex, AXIS_X or AXIS_Y ]
      */
-    getGuidesByPointPoint (sourceVerties, targetVerties) {
+    getGuidesByPointPoint(sourceVerties, targetVerties) {
         const points = []
-        const groupPoints = {};        
+        const groupPoints = {};
         let sourceVertex, targetVertex;
         for (let sourceIndex = 0, sourceLength = sourceVerties.length; sourceIndex < sourceLength; sourceIndex++) {
             sourceVertex = sourceVerties[sourceIndex];
@@ -213,12 +214,12 @@ export class SnapManager {
 
                 // axis 가 정해지면 같은 그룹으로 묶는다. 거리(dist) 를 포함해서 
                 if (checkXAxis(sourceVertex, targetVertex)) {        // x 좌표가 같을 때 , y 는 다를 때 
-                    groupPoints[keyX].push([ sourceVertex, targetVertex, AXIS_X, vec3.dist(sourceVertex, targetVertex) ])
-                } 
+                    groupPoints[keyX].push([sourceVertex, targetVertex, AXIS_X, vec3.dist(sourceVertex, targetVertex)])
+                }
 
                 if (checkYAxis(sourceVertex, targetVertex)) {        // x 좌표가 같을 때 , y 는 다를 때 
-                    groupPoints[keyY].push([ sourceVertex, targetVertex, AXIS_Y, vec3.dist(sourceVertex, targetVertex) ])
-                }                 
+                    groupPoints[keyY].push([sourceVertex, targetVertex, AXIS_Y, vec3.dist(sourceVertex, targetVertex)])
+                }
             }
         }
 
@@ -230,12 +231,12 @@ export class SnapManager {
 
                 points.push([sourceVertex, targetVertex, axis])
             }
-        })  
+        })
 
         return points;
     }
 
-    findGuide (sourceVerties) {
+    findGuide(sourceVerties) {
         const guides = []
 
         this.snapTargetLayers.forEach(target => {
@@ -249,7 +250,7 @@ export class SnapManager {
         return guides;
     }
 
-    findGuideOne (sourceVerties) {
+    findGuideOne(sourceVerties) {
         return [this.findGuide(sourceVerties)[0]]
     }
 

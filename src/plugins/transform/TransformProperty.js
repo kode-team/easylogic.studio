@@ -1,6 +1,6 @@
 
 import {
-  LOAD, DEBOUNCE, CLICK, SUBSCRIBE, SUBSCRIBE_SELF,
+  LOAD, DEBOUNCE, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, DOMDIFF,
 } from "el/base/Event";
 
 
@@ -78,7 +78,7 @@ export default class TransformProperty extends BaseProperty {
     this.children.$transformEditor.trigger('add', transformType)
   }
 
-  [LOAD('$body')] () {
+  [LOAD('$body') + DOMDIFF] () {
     var current = this.$selection.current || {} 
     var value = current.transform;
 
@@ -89,9 +89,7 @@ export default class TransformProperty extends BaseProperty {
 
   [SUBSCRIBE_SELF('changeTransformEditor')] (transform) {
     this.command('setAttributeForMulti', 'change transform property', this.$selection.packByValue({ 
-      transform: (item) => {
-        return Transform.replaceAll(item.transform, transform)
-      }
+      transform
     }))
 
     this.nextTick(() => {

@@ -1,4 +1,4 @@
-import { LOAD, DOMDIFF, SUBSCRIBE } from "el/base/Event";
+import { LOAD, DOMDIFF, SUBSCRIBE, DEBOUNCE, THROTTLE } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './VerticalRuler.scss';
 
@@ -194,7 +194,7 @@ export default class VerticalRuler extends EditorElement {
         this.refresh();
     }
 
-    [SUBSCRIBE('refreshSelectionStyleView')] () {
+    [SUBSCRIBE('refreshSelectionStyleView') + THROTTLE(10)] () {
         const current = this.$selection.current;        
 
         if (current && current.hasChangedField('x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate')) {

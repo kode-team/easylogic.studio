@@ -548,17 +548,20 @@ export class SelectionManager {
    */
   packByValue (valueObject, ids = null) {
     let data = {};
-
+    let localItems = []
     if (ids === null) {
-      this.each(item => {
-        data[item.id] = isFunction(valueObject) ? valueObject(item) : valueObject;
-      });
-
+      localItems = this.items;
     } else if (isString(ids) || isArray(ids)){
-      this.itemsByIds(ids).forEach(item => {
-          data[item.id] = isFunction(valueObject) ? valueObject(item) : valueObject;
-      })
+      localItems = this.itemsByIds(ids);
     }
+
+    localItems.forEach(item => {
+      data[item.id] = {}
+
+      Object.keys(valueObject).forEach(key => {
+        data[item.id][key] = isFunction(valueObject[key]) ? valueObject[key].call(valueObject, item) : valueObject[key]
+      })
+    })
 
     return data;
   }

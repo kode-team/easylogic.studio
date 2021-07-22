@@ -56,8 +56,6 @@ export class Editor {
     this.mode = EDIT_MODE_SELECTION
     this.modeView = 'CanvasView';
     this.addComponentType = ''
-    this.locale = this.loadItem('locale') || 'en_US'
-    this.layout = this.loadItem('layout') || 'all'
 
     this.loadManagers();
 
@@ -90,6 +88,12 @@ export class Editor {
 
     this.initTheme();
     this.initPlugins();
+    this.initStorage();
+  }
+
+  initStorage() {
+    this.locale = this.loadItem('locale') || 'en_US'
+    this.layout = this.loadItem('layout') || 'all'
   }
 
   createProject () {
@@ -468,20 +472,24 @@ export class Editor {
     return items.map(it => this.createItem(it, isRecoverPosition));
   }
 
+  get storeKey() {
+    return `__els__.${this.config.get('store.key')}`;
+  }
+
   saveResource(key, value) {
-    window.localStorage.setItem(`easylogic.studio.${key}`, this.makeResource(value));
+    window.localStorage.setItem(`${this.storeKey}.${key}`, this.makeResource(value));
   }
 
   saveItem(key, value) {
-    window.localStorage.setItem(`easylogic.studio.${key}`, JSON.stringify(value));
+    window.localStorage.setItem(`${this.storeKey}.${key}`, JSON.stringify(value));
   }
 
   loadResource(key) {
-    return this.assetManager.revokeResource(window.localStorage.getItem(`easylogic.studio.${key}`))
+    return this.assetManager.revokeResource(window.localStorage.getItem(`${this.storeKey}.${key}`))
   }
 
   loadItem(key) {
-    return JSON.parse(window.localStorage.getItem(`easylogic.studio.${key}`) || JSON.stringify(""))
+    return JSON.parse(window.localStorage.getItem(`${this.storeKey}.${key}`) || JSON.stringify(""))
   }
 
   /**

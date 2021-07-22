@@ -1,4 +1,4 @@
-import { CHECK_SAPARATOR, CHECK_SUBSCRIBE_PATTERN, SUBSCRIBE_SAPARATOR } from "./Event";
+import { CHECK_SAPARATOR, CHECK_SUBSCRIBE_PATTERN, SAPARATOR, SUBSCRIBE_SAPARATOR } from "./Event";
 import EventMachine from "./EventMachine";
 import { splitMethodByKeyword } from "./functions/func";
 
@@ -34,8 +34,8 @@ class UIElement extends EventMachine {
     return e.substr(startIndex < 0 ? 0 : startIndex + s.length);
   }
 
-  splitMethod (events, keyword, defaultValue = 0) {
-    var [methods, params] = splitMethodByKeyword(events.split(CHECK_SAPARATOR), keyword);
+  splitMethod (arr, keyword, defaultValue = 0) {
+    var [methods, params] = splitMethodByKeyword(arr, keyword);
 
     return [
       methods.length ? +params[0].target : defaultValue,
@@ -53,20 +53,23 @@ class UIElement extends EventMachine {
    *
    */
   initializeStoreEvent() {
-
     this.filterProps(CHECK_SUBSCRIBE_PATTERN).forEach(key => {
       const events = this.getRealEventName(key, SUBSCRIBE_SAPARATOR);
+      // context 에 속한 변수나 메소드 리스트 체크
+      const [method, ...methodLine] = events.split(CHECK_SAPARATOR);
+      const checkMethodList = methodLine.map(it => it.trim()).filter(code => this[code]).map(target => ({target}));
 
-      // support deboounce for store event 
-      var [debounceSecond, debounceMethods] = this.splitMethod(events, 'debounce');
-      var [throttleSecond, throttleMethods] = this.splitMethod(events, 'throttle');      
-      var [_, allTriggerMethods] = this.splitMethod(events, 'allTrigger');   
-      var [_, selfTriggerMethods] = this.splitMethod(events, 'selfTrigger');            
+      // support deboounce for store event    
+      const [debounceSecond, debounceMethods] = this.splitMethod(methodLine, 'debounce');
+      const [throttleSecond, throttleMethods] = this.splitMethod(methodLine, 'throttle');      
+      const [allTrigger, allTriggerMethods] = this.splitMethod(methodLine, 'allTrigger');   
+      const [selfTrigger, selfTriggerMethods] = this.splitMethod(methodLine, 'selfTrigger');            
 
       events
         .split(CHECK_SAPARATOR)
         .filter(it => {
           return (
+              checkMethodList.indexOf(it) === -1 &&             
               debounceMethods.indexOf(it) === -1 && 
               allTriggerMethods.indexOf(it) === -1 &&               
               selfTriggerMethods.indexOf(it) === -1 &&                             
@@ -78,7 +81,7 @@ class UIElement extends EventMachine {
           var callback = this[key].bind(this);
           callback.displayName = `${this.sourceName}.${e}`;
           callback.source = this.source;
-          this.$store.on(e, callback, this, debounceSecond, throttleSecond, allTriggerMethods.length, selfTriggerMethods.length);
+          this.$store.on(e, callback, this, debounceSecond, throttleSecond, allTriggerMethods.length, selfTriggerMethods.length, checkMethodList);
       });
     });
   }

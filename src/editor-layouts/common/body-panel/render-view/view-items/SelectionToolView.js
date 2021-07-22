@@ -129,7 +129,7 @@ export default class SelectionToolView extends SelectionToolEvent {
                     const newRotateX = Transform.get(newTransform, 'rotateZ');
 
                     if (newRotateX[0]) {
-                        const angle = newRotateX[0].value - newRotateX[0].value % this.$config.get('fixedAngle');
+                        const angle = newRotateX[0].value - newRotateX[0].value % this.$config.get('fixed.angle');
 
                         newTransform = Transform.rotateZ(newTransform, Length.deg(angle));
                     }
@@ -144,7 +144,6 @@ export default class SelectionToolView extends SelectionToolEvent {
         })
 
         this.state.dragging = true;
-        this.renderPointers();
         this.command('setAttributeForMulti', 'change rotate', this.$selection.pack('transform'));                
     }
 
@@ -466,14 +465,6 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.emit('setAttributeForMulti', this.$selection.pack('x', 'y', 'width', 'height'));
 
         this.state.dragging = true; 
-        this.renderPointers();
-
-        this.nextTick(() => {
-            this.emit('refreshSmartGuides');
-        });
-        // this.refreshSmartGuides();              
-        // this.emit('refreshSelectionStyleView');
-        // this.emit('refreshRect');
     }
 
     moveEndVertex () {
@@ -523,21 +514,12 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     initSelectionTool(isShow = true) {
         if (this.$editor.isSelectionMode() && this.$el.isHide() && this.$selection.isOne) {
-            if (isShow) {
-                this.$el.show();
-            }
-
+            this.$el.show();
         } else {
             if (this.$el.isShow() && this.$selection.isOne === false) this.$el.hide();
         }
 
-        if (isShow) {
-            this.makeSelectionTool();
-        } else {
-            if (this.$el.isShow()) {
-                this.$el.hide();
-            }
-        }
+        this.makeSelectionTool();
     }      
 
     makeSelectionTool() {
@@ -550,54 +532,23 @@ export default class SelectionToolView extends SelectionToolEvent {
      */
     renderPointers () {
 
-        if (this.refs.$pointerRect.isHide()) {
 
-            if (this.$selection.isEmpty) {
-                // NOOP , 
-                // 숨겨진 상태에서 선택도 아니면 모두 보여주지 않음 
-            } else {
-                this.refs.$pointerRect.show();
+        if (this.$selection.isEmpty) return;
 
-                const verties = this.$selection.verties;
-                const selectionVerties = this.$selection.selectionVerties;
-                const parentVector = mat4.getTranslation([], this.$selection.cachedItemVerties[0].parentMatrix);                
-                this.state.renderPointerList = [
-                    this.$viewport.applyVerties(verties),
-                    this.$viewport.applyVerties(selectionVerties),
-                    this.$viewport.applyVerties([parentVector])
-                ]
+        const verties = this.$selection.verties;
+        const selectionVerties = this.$selection.selectionVerties;
+        const parentVector = mat4.getTranslation([], this.$selection.cachedItemVerties[0].parentMatrix);                
+        this.state.renderPointerList = [
+            this.$viewport.applyVerties(verties),
+            this.$viewport.applyVerties(selectionVerties),
+            this.$viewport.applyVerties([parentVector])
+        ]
 
-                const pointers = this.createRenderPointers(...this.state.renderPointerList);
+        const pointers = this.createRenderPointers(...this.state.renderPointerList);
 
-                if (pointers) {
-                    const {line, point, size} = pointers;
-                    this.refs.$pointerRect.updateDiff(line + point + size)
-                }
-
-            }
-
-        } else {
-            if (this.$selection.isEmpty) {
-                this.refs.$pointerRect.hide();
-                // NOOP , 
-                // 숨겨진 상태에서 선택도 아니면 모두 보여주지 않음                 
-            } else {
-                const verties = this.$selection.verties;
-                const selectionVerties = this.$selection.selectionVerties;
-                const parentVector = mat4.getTranslation([], this.$selection.cachedItemVerties[0].parentMatrix);
-                this.state.renderPointerList = [
-                    this.$viewport.applyVerties(verties),
-                    this.$viewport.applyVerties(selectionVerties),
-                    this.$viewport.applyVerties([parentVector])
-                ]             
-
-                const pointers = this.createRenderPointers(...this.state.renderPointerList);                
-                if (pointers) {
-                    const {line, point, size} = pointers;
-                    this.refs.$pointerRect.updateDiff(line + point + size)
-                }
-
-            }
+        if (pointers) {
+            const {line, point, size} = pointers;
+            this.refs.$pointerRect.updateDiff(line + point + size)
         }
 
 
@@ -627,12 +578,17 @@ export default class SelectionToolView extends SelectionToolEvent {
     createPointerRect (pointers, rotatePointer, parentVector) {
         if (pointers.length === 0) return '';
 
-        // if (parentVector) {
-        //     line += `
-        //         M ${parentVector[0]},${parentVector[1]} 
-        //         L ${pointers[0][0]},${pointers[0][1]} 
-        //     `
-        // }
+        const current = this.$selection.current;         
+        const isArtBoard = current && current.is('artboard');
+        let line = '';
+        if (!isArtBoard) {
+            const centerPointer = vec3.lerp([], pointers[0], pointers[1], 0.5);            
+            line += `
+                M ${centerPointer[0]},${centerPointer[1]} 
+                L ${rotatePointer[0]},${rotatePointer[1]} 
+            `
+        }
+
 
         return /*html*/`
         <svg class='line' overflow="visible">
@@ -643,6 +599,7 @@ export default class SelectionToolView extends SelectionToolEvent {
                     L ${pointers[2][0]}, ${pointers[2][1]} 
                     L ${pointers[3][0]}, ${pointers[3][1]} 
                     L ${pointers[0][0]}, ${pointers[0][1]}
+                    ${line}
                     Z
                 " />
         </svg>`
@@ -729,7 +686,7 @@ export default class SelectionToolView extends SelectionToolEvent {
                 isArtBoard ? undefined : this.createRotatePointer (selectionPointers[1], 1),
                 isArtBoard ? undefined : this.createRotatePointer (selectionPointers[2], 2),
                 isArtBoard ? undefined : this.createRotatePointer (selectionPointers[3], 3),
-                // isArtBoard ? undefined : this.createRotatePointer (rotatePointer, 4, 'center center'),
+                isArtBoard ? undefined : this.createRotatePointer (rotatePointer, 4, 'center center'),
                 isPointerMove ? undefined : this.createPointer (pointers[0], 1, rotate),
                 isPointerMove ? undefined : this.createPointer (pointers[1], 2, rotate),
                 isPointerMove ? undefined : this.createPointer (pointers[2], 3, rotate),

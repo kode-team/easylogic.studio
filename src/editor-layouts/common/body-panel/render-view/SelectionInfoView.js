@@ -83,6 +83,7 @@ export default class SelectionInfoView extends EditorElement {
             "move item",                    
             this.$selection.pack('x', 'y')
         );  
+        this.emit('refreshSelectionTool', true);
     }
 
     [SUBSCRIBE('updateViewport')] () {
@@ -90,7 +91,15 @@ export default class SelectionInfoView extends EditorElement {
     }
 
     [SUBSCRIBE('refreshSelectionStyleView')] () {
-        this.refresh();
+        if (this.$selection.current) {
+            if (this.$selection.current.is('artboard')) {
+                if (this.$selection.hasChangedField('x', 'y', 'width', 'height', 'transform', 'transform-origin')) {
+                    this.refresh();
+                }
+
+            }
+        }
+
     }
 
 

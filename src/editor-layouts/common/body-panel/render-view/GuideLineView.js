@@ -118,7 +118,6 @@ const point = (target, dist = 3, direction = 'left') => {
 
     return /*html*/`
         <path 
-            stroke="red"
             stroke-width="1"
             d="
                 M ${target[0] - dist} ${target[1] - dist}
@@ -162,7 +161,7 @@ export default class GuideLineView extends EditorElement {
         for (var i = 0, len = list.length; i < len; i++) {
 
             const [source, target, axis, dist, newTarget, sourceVerties, targetVerties, isInvert] = list[i];
-            const localDist = Math.floor(dist);
+            const localDist = Math.floor(dist);            
 
             // 시작점 기준으로 맞출때가 필요하면 localSourceVertex 를 활용하자. 아직은 없음. 
             const localSourceVertex = this.$viewport.applyVertex(source);
@@ -177,8 +176,7 @@ export default class GuideLineView extends EditorElement {
 
             if (axis === 'x') {
                 if (localDist > 0) {
-
-                    images.push(line(localSourceVertex, localTargetVertex, 'dash-line'))
+                    images.push(line(localSourceVertex, localTargetVertex, 'dash-line'))      
                 }
 
                 if (localNewTargetVertex) {
@@ -198,12 +196,12 @@ export default class GuideLineView extends EditorElement {
 
             if (axis === 'y') {
                 if (localDist > 0) {
-
-                    images.push(line(localSourceVertex, localTargetVertex, 'dash-line'))
+                    images.push(line(localSourceVertex, localTargetVertex, 'dash-line'))                                   
                 }
 
                 if (localNewTargetVertex) {
                     images.push(line(localTargetVertex, localNewTargetVertex, 'dash-line'))
+
                 }
 
                 if (localDist > 0) {
@@ -225,6 +223,11 @@ export default class GuideLineView extends EditorElement {
                 images.push(vLineByPoint(localTargetVertex, localSourceVertex))
             }
 
+            if (this.state.hasVerties) {
+                images.push(point(localSourceVertex,3, 'vertex'))
+                images.push(point(localTargetVertex,3, 'vertex'))                
+            }            
+
             if (sourceVerties) {
                 if ((this.$selection.isOne && this.$editor.isPointerDown) || (this.$selection.isMany && !this.$editor.isPointerMove)) {
                     images.push(rect(this.$viewport.applyVerties(sourceVerties)))
@@ -236,6 +239,8 @@ export default class GuideLineView extends EditorElement {
             }
         }
 
+
+
         return [...images, ...texts].join('');
     }
 
@@ -245,18 +250,15 @@ export default class GuideLineView extends EditorElement {
         })
     }
 
-    setGuideLine(list) {
+    setGuideLine(list, hasVerties = false) {
         this.setState({
-            list
+            list,
+            hasVerties
         })
     }
 
     [SUBSCRIBE('removeGuideLine', 'refreshSelection')]() {
         this.removeGuideLine()
-    }
-
-    [SUBSCRIBE('refreshGuideLine')](list) {
-        this.setGuideLine(list);
     }
 
     [SUBSCRIBE('refreshGuideLineByTarget')](targetVertiesList = []) {
@@ -304,17 +306,19 @@ export default class GuideLineView extends EditorElement {
 
         const list = [xList[0], xList[1]].filter(Boolean);
 
-        // const guides = this.$snapManager.findGuide(this.$selection.current.guideVerties);
+        this.setGuideLine(list);             
 
-        // console.log(guides);
+    }
 
-        this.setGuideLine([...list]);             
+    refreshSmartGuidesForVerties() {
+        const guides = this.$snapManager.findGuide(this.$selection.verties);
 
+        this.setGuideLine(guides, true);             
     }
 
     [SUBSCRIBE('refreshSelectionStyleView')]() {
         if (this.$selection.hasChangedField('x', 'y', 'width', 'height', 'transform', 'transform-origin')) {
-            this.refreshSmartGuides();
+            this.refreshSmartGuidesForVerties();
         }
     }
 }

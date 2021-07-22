@@ -143,13 +143,13 @@ export default class LayerTreeProperty extends BaseProperty {
       }
 
       const isHide = layer.isTreeItemHide()
-      const depthPadding = Length.px(depth * 24);
+      const depthPadding = Length.px(depth * 20);
 
       data.push(/*html*/`        
         <div class='layer-item ${selected} ${hovered}' data-is-group="${layer.isGroup}" data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true">
           <div class='detail'>
             <label data-layout-title='${title}' style='padding-left: ${depthPadding}' > 
-              <div class='folder ${layer.collapsed ? 'collapsed' : ''}'>${icon.arrow_right}</div>
+              <div class='folder ${layer.collapsed ? 'collapsed' : ''}'>${layer.isGroup ? icon.arrow_right : ''}</div>
               <span class='icon' data-item-type="${layer.itemType}">${this.getIcon(layer)}</span> 
               <span class='name'>${name}</span>
             </label>

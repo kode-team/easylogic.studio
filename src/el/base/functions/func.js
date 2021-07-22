@@ -1,6 +1,7 @@
 import { randomNumber } from "./create";
 import { getPredefinedCubicBezier } from "./bezier";
 
+const __PropertyCache = {};
 
 /**
  * property 수집하기
@@ -10,28 +11,37 @@ import { getPredefinedCubicBezier } from "./bezier";
  * @param {Object} expectMethod 제외될 필드 리스트 { [field]: true }
  * @returns {string[]} 나의 상위 모든 메소드를 수집해서 리턴한다. 
  */
-export function collectProps(root, expectMethod = {}) {
+export function collectProps(root, expectMethod = {}, cacheName = undefined) {
+
+    if (isNotUndefined(cacheName) && __PropertyCache[cacheName]) {
+        return __PropertyCache[cacheName]
+    }
 
     let p = root.__proto__;
     let results = [];
     do {
-      const isObject = p instanceof Object;
+        const isObject = p instanceof Object;
 
-      if (isObject === false) {
-        break;
-      }
-      const names = Object.getOwnPropertyNames(p).filter(name => {
-        return root && isFunction(root[name]) && !expectMethod[name];
-      });
+        if (isObject === false) {
+            break;
+        }
 
-      results.push.apply(results, names);
-      p = p.__proto__;
+        const names = Object.getOwnPropertyNames(p).filter(name => {
+            return root && isFunction(root[name]) && !expectMethod[name];
+        });
+
+        results.push.apply(results, names);
+        p = p.__proto__;
     } while (p);
 
-    return results;
-  }
+    if (isNotUndefined(cacheName)) {
+        __PropertyCache[cacheName] = results;
+    }
 
-export function debounce (callback, delay = 0) {
+    return results;
+}
+
+export function debounce(callback, delay = 0) {
 
     if (delay === 0) {
         return callback;
@@ -49,9 +59,9 @@ export function debounce (callback, delay = 0) {
         }, delay || 300);
     }
 }
-  
 
-export function throttle (callback, delay) {
+
+export function throttle(callback, delay) {
 
     var t = undefined;
 
@@ -59,94 +69,106 @@ export function throttle (callback, delay) {
         if (!t) {
             t = setTimeout(function () {
                 callback($1, $2, $3, $4, $5);
-                t = null; 
+                t = null;
             }, delay || 300);
         }
 
     }
 }
 
-export function keyEach (obj, callback) {
-    Object.keys(obj).forEach( (key, index) => {
-        callback (key, obj[key], index);
+export function ifCheck(callback, context, checkMethods) {
+    return (...args) => {
+        const ifResult = checkMethods.every(check => {
+            return context[check.target].apply(context, args);
+        });
+
+        if (ifResult) {
+            callback.apply(context, args);
+        }
+    }
+}
+
+export function keyEach(obj, callback) {
+    Object.keys(obj).forEach((key, index) => {
+        callback(key, obj[key], index);
     })
 }
 
-export function keyMap (obj, callback) {
-    return Object.keys(obj).map( (key, index) => {
-        return callback (key, obj[key], index);
+export function keyMap(obj, callback) {
+    return Object.keys(obj).map((key, index) => {
+        return callback(key, obj[key], index);
     })
 }
 
-export function keyMapJoin (obj, callback, joinString = '') {
+export function keyMapJoin(obj, callback, joinString = '') {
     return keyMap(obj, callback).join(joinString);
 }
 
 export function get(obj, key, callback) {
-    
+
     var returnValue = defaultValue(obj[key], key);
 
-    if (isFunction( callback ) ) {
+    if (isFunction(callback)) {
         return callback(returnValue);
     }
 
-    return returnValue; 
+    return returnValue;
 }
 
-export function defaultValue (value, defaultValue) {
+export function defaultValue(value, defaultValue) {
     return typeof value == 'undefined' ? defaultValue : value;
 }
 
-export function isUndefined (value) {
+export function isUndefined(value) {
     return typeof value == 'undefined' || value === null;
 }
 
-export function isNotUndefined (value) {
+export function isNotUndefined(value) {
     return isUndefined(value) === false;
 }
 
-export function isArray (value) {
+export function isArray(value) {
     return Array.isArray(value);
 }
 
-export function isBoolean (value) {
+export function isBoolean(value) {
     return typeof value == 'boolean'
 }
 
-export function isString (value) {
+export function isString(value) {
     return typeof value == 'string'
 }
 
-export function isNotString (value) {
+export function isNotString(value) {
     return isString(value) === false;
 }
 
-export function isObject (value) {
-    return typeof value == 'object' && !isArray(value) && !isNumber(value) && !isString(value)  && value !== null; 
+export function isObject(value) {
+    return typeof value == 'object' && !isArray(value) && !isNumber(value) && !isString(value) && value !== null;
 }
 
-export function isFunction (value) {
+export function isFunction(value) {
     return typeof value == 'function'
 }
 
-export function isNumber (value) {
+export function isNumber(value) {
     return typeof value == 'number';
 }
 
-export function isZero (num) {
+export function isZero(num) {
     return num === 0;
 }
 
-export function isNotZero (num) {
+export function isNotZero(num) {
     return !isZero(num);
 }
 
-export function clone (obj) {
+export function clone(obj) {
     if (isUndefined(obj)) return undefined;
     return JSON.parse(JSON.stringify(obj));
 }
 
-export function cleanObject (obj) {
+export function cleanObject(obj) {
     var realObject = {}
     Object.keys(obj).filter(key => {
         return !!obj[key]
@@ -157,7 +179,7 @@ export function cleanObject (obj) {
     return realObject;
 }
 
-export function combineKeyArray (obj) {
+export function combineKeyArray(obj) {
     Object.keys(obj).forEach(key => {
         if (Array.isArray(obj[key])) {
             obj[key] = obj[key].join(', ')
@@ -167,12 +189,12 @@ export function combineKeyArray (obj) {
     return obj;
 }
 
-export function repeat (count) {
+export function repeat(count) {
     return [...Array(count)];
 }
 
-export function randomItem (...args) {
-    return args[randomNumber(0, args.length-1)];
+export function randomItem(...args) {
+    return args[randomNumber(0, args.length - 1)];
 }
 
 
@@ -186,7 +208,7 @@ const HTML_TAG = {
     'line': true,
     'circle': true,
     'rect': true,
-    'path': true, 
+    'path': true,
     'polygon': true,
     'polyline': true,
     'use': true
@@ -195,8 +217,8 @@ const HTML_TAG = {
 
 export const html = (strings, ...args) => {
 
-    var results =  strings.map((it, index) => {
-        
+    var results = strings.map((it, index) => {
+
         var results = args[index] || ''
 
         if (isFunction(results)) {
@@ -220,20 +242,20 @@ export const html = (strings, ...args) => {
         }
     })
 
-    return results; 
+    return results;
 }
 
 export function CSS_TO_STRING(style, postfix = '') {
     var newStyle = style || {};
-  
-    return Object.keys(newStyle)
-      .filter(key => isNotUndefined(newStyle[key]))
-      .map(key => `${key}: ${newStyle[key]}`)
-      .join(";" + postfix);
-}
-  
 
-export function STRING_TO_CSS (str = '', splitChar = ';', keySplitChar = ':') {
+    return Object.keys(newStyle)
+        .filter(key => isNotUndefined(newStyle[key]))
+        .map(key => `${key}: ${newStyle[key]}`)
+        .join(";" + postfix);
+}
+
+
+export function STRING_TO_CSS(str = '', splitChar = ';', keySplitChar = ':') {
 
     str = str + "";
 
@@ -242,16 +264,16 @@ export function STRING_TO_CSS (str = '', splitChar = ';', keySplitChar = ':') {
     if (str === '') return style;
 
     str.split(splitChar).forEach(it => {
-       var [key, ...value] = it.split(keySplitChar).map(it => it.trim())
-       if (key != '') {
-        style[key] = value.join(keySplitChar); 
-       }
+        var [key, ...value] = it.split(keySplitChar).map(it => it.trim())
+        if (key != '') {
+            style[key] = value.join(keySplitChar);
+        }
     })
 
     return style;
 }
 
-export function OBJECT_TO_PROPERTY (obj) {
+export function OBJECT_TO_PROPERTY(obj) {
     return Object.keys(obj).map(key => {
 
         if (key === 'class') {
@@ -266,27 +288,27 @@ export function OBJECT_TO_PROPERTY (obj) {
             } else {
                 return '';
             }
-        } 
+        }
 
         return `${key}="${obj[key]}"`
     }).join(' ');
 }
 
-export function OBJECT_TO_CLASS (obj) {
+export function OBJECT_TO_CLASS(obj) {
     return Object.keys(obj).filter(k => obj[k]).map(key => {
         return key
     }).join(' ');
 }
 
-export function TAG_TO_STRING (str) {
-    return str.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') 
+export function TAG_TO_STRING(str) {
+    return str.replace(/\</g, '&lt;').replace(/\>/g, '&gt;')
 }
 
 export function mapjoin(arr, callback, joinString = '') {
     return arr.map(callback).join(joinString);
 }
 
-export function isArrayEquals (A, B) {
+export function isArrayEquals(A, B) {
     const s = new Set([...A, ...B])
 
     return s.size === A.length && s.size === B.length;
@@ -301,37 +323,37 @@ export function isArrayEquals (A, B) {
 export const splitMethodByKeyword = (arr, keyword) => {
     const filterKeys = arr.filter(code => code.indexOf(`${keyword}(`) > -1);
     const filterMaps = filterKeys.map(code => {
-      const [target, param] = code
-        .split(`${keyword}(`)[1]
-        .split(")")[0]
-        .trim()
-        .split(" ");
-  
-      return { target, param };
+        const [target, param] = code
+            .split(`${keyword}(`)[1]
+            .split(")")[0]
+            .trim()
+            .split(" ");
+
+        return { target, param };
     });
-  
+
     return [filterKeys, filterMaps];
 };
 
 export const curveToPath = (timingFunction, width = 30, height = 30) => {
     const currentBezier = getPredefinedCubicBezier(timingFunction)
-    
+
     return `
         M0 ${width} 
         C 
         ${currentBezier[0] * width} ${currentBezier[1] == 0 ? height : (1 - currentBezier[1]) * height},
-        ${currentBezier[2] * width} ${currentBezier[3] == 1 ? 0 : (1 - currentBezier[3] ) * height},
+        ${currentBezier[2] * width} ${currentBezier[3] == 1 ? 0 : (1 - currentBezier[3]) * height},
         ${width} 0
     `
 }
 
 export const curveToPointLine = (timingFunction, width = 30, height = 30) => {
     const currentBezier = getPredefinedCubicBezier(timingFunction)
-    
+
     return `
         M 0 ${width} 
         L ${currentBezier[0] * width} ${currentBezier[1] == 0 ? height : (1 - currentBezier[1]) * height}
         M ${width} 0
-        L ${currentBezier[2] * width} ${currentBezier[3] == 1 ? 0 : (1 - currentBezier[3] ) * height}
+        L ${currentBezier[2] * width} ${currentBezier[3] == 1 ? 0 : (1 - currentBezier[3]) * height}
     `
 }

@@ -59,8 +59,8 @@ export default class CanvasView extends EditorElement {
     return/*html*/`
       <div class='elf--page-container' tabIndex="-1" ref='$container'>
         <div class='page-view' ref="$pageView">
-          <div class='page-lock scrollbar' ref='$lock'>                          
-            <object refClass="DragAreaView" ref="$dragAreaView" />         
+          <div class='page-lock scrollbar' ref='$lock'>            
+            <object refClass="DragAreaView" ref="$dragAreaView" />                                             
             <object refClass='HTMLRenderView' ref='$elementView' />
             <object refClass="DragAreaRectView" ref="$dragAreaRectView" />                  
             <object refClass='GridLayoutLineView' ref='$gridLayoutLineView' />            

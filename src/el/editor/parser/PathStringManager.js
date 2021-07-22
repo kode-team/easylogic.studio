@@ -122,5 +122,22 @@ export default class PathStringManager {
         return manager.d;
     }
 
+    static makePathByVerties (verties = []) {
+        var manager = new PathStringManager()
+
+        for(var i = 0, len = verties.length; i < len; i++) {
+            const [x, y, z] = verties[i];
+            if (i === 0) {
+                manager.M({x, y})
+            } else {
+                manager.L({x, y});
+            }
+        }
+
+        manager.L({x: verties[0][0], y: verties[0][1]});
+
+        return manager.d;
+    }
+
 }
 

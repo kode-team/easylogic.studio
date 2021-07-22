@@ -177,7 +177,8 @@
     }
   
     &.fill-picker-popup {
-      padding-left: 10px;
-      padding-right: 10px;
+      .popup-body {
+        padding: 8px 5px;
+      }
     }
   }

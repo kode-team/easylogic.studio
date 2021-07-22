@@ -1,6 +1,6 @@
 import Dom from "el/base/Dom";
 
-import { KEYDOWN, KEYUP, IF } from "el/base/Event";
+import { KEYDOWN, KEYUP, IF, PREVENT } from "el/base/Event";
 
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
@@ -22,7 +22,7 @@ export default class KeyboardManager extends EditorElement {
     return true;
   }  
 
-  [KEYDOWN('document') + IF('isNotFormElement')] (e) {
+  [KEYDOWN('document') + IF('isNotFormElement') + PREVENT] (e) {
     this.emit('keymap.keydown', e);
   }
 

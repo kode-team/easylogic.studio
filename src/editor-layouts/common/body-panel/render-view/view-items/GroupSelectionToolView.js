@@ -107,7 +107,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         ));
 
         if (this.$config.get('bodyEvent').shiftKey) {
-            distAngle = distAngle - distAngle % this.$config.get('fixedAngle');
+            distAngle = distAngle - distAngle % this.$config.get('fixed.angle');
         }
 
         // 실제 움직인 angle 
@@ -158,14 +158,11 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         })
 
         this.state.dragging = true;        
-        this.renderPointers();
 
         this.emit(
             'setAttributeForMulti', 
             this.$selection.pack('x', 'y', 'width', 'height', 'transform')
-        );          
-        // this.emit('refreshSelectionStyleView');     
-        // this.emit('refreshRect');                 
+        );                    
     }
 
     rotateEndVertex () {
@@ -177,7 +174,6 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         // 개별 verties 의 캐쉬를 다시 한다. 
         this.$selection.reselect();   
         this.initMatrix(true);
-        this.renderPointers();        
         this.nextTick(() => {
             this.command(
                 'setAttributeForMulti', 
@@ -527,7 +523,6 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         );          
 
         this.state.dragging = true; 
-        this.renderPointers();  
     }
 
     moveEndVertex (dx, dy) {        
@@ -536,7 +531,6 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         this.$selection.reselect();
         this.state.dragging = false;               
         this.initMatrix(true);
-        this.renderPointers();                
         this.nextTick(() => {
             this.command(
                 'setAttributeForMulti', 
@@ -647,7 +641,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         this.state.renderPointerList = [
             this.$viewport.applyVerties(verties),
-            this.$viewport.applyVerties(selectionVerties)
+            this.$viewport.applyVerties(selectionVerties),
         ]
 
         const {line, point, size} = this.createRenderPointers(...this.state.renderPointerList);
@@ -684,6 +678,12 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     createPointerRect (pointers, rotatePointer) {
         if (pointers.length === 0) return '';
 
+        const centerPointer = vec3.lerp([], pointers[0], pointers[1], 0.5);            
+        const line = `
+            M ${centerPointer[0]},${centerPointer[1]} 
+            L ${rotatePointer[0]}, ${rotatePointer[1]} 
+        `
+
         return /*html*/`
         <svg class='line' overflow="visible">
             <path 
@@ -693,6 +693,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
                     L ${pointers[2][0]}, ${pointers[2][1]} 
                     L ${pointers[3][0]}, ${pointers[3][1]} 
                     L ${pointers[0][0]}, ${pointers[0][1]}
+                    ${line}
                     Z
                 " />
         </svg>`        
@@ -768,7 +769,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
                 this.createRotatePointer (selectionPointers[1], 1, 'bottom left'),
                 this.createRotatePointer (selectionPointers[2], 2, 'top left'),
                 this.createRotatePointer (selectionPointers[3], 3, 'top right'),
-                // this.createRotatePointer (rotatePointer, 4, 'center center'),                
+                this.createRotatePointer (rotatePointer, 4, 'center center'),                
                 isPointerMove ? undefined : this.createPointer (pointers[0], 1, rotate),
                 isPointerMove ? undefined : this.createPointer (pointers[1], 2, rotate),
                 isPointerMove ? undefined : this.createPointer (pointers[2], 3, rotate),

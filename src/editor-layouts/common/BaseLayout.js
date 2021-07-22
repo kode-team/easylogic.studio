@@ -14,6 +14,25 @@ const MOVE_CHECK_MS = 0;
 
 export default class BaseLayout extends EditorElement {
 
+  created() {
+    // register local plugins 
+    this.$editor.registerPluginList(this.getPlugins());
+
+    // register other plugins     
+    if (isArray(this.opt.plugins)) {
+      this.$editor.registerPluginList(this.opt.plugins);
+    }
+
+    // register other configs     
+    if (isObject(this.opt.config)) {
+      this.$config.setAll(this.opt.config || {});
+    }
+
+    // initialize plugin list 
+    this.$editor.initPlugins();
+
+  }
+
   /**
    * @type {Editor}
    */
@@ -36,27 +55,13 @@ export default class BaseLayout extends EditorElement {
   initialize() {
     super.initialize();
 
-    // register local plugins 
-    this.$editor.registerPluginList(this.getPlugins());
-
-    // register other plugins     
-    if (isArray(this.opt.plugins)) {
-      this.$editor.registerPluginList(this.opt.plugins);
-    }
-
-    // register other configs     
-    if (isObject(this.opt.config)) {
-      this.$config.setAll(this.opt.config || {});
-    }
+    // initialize root event 
+    this.__initBodyMoves();
 
     // load default data 
     this.emit('load.json', this.opt.data?.projects);
 
-    // initialize plugin list 
-    this.$editor.initPlugins();
 
-    // initialize root event 
-    this.__initBodyMoves();
   }
 
   /**

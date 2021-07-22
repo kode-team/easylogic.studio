@@ -1,4 +1,4 @@
-import { DOMDIFF, LOAD, SUBSCRIBE } from "el/base/Event";
+import { DEBOUNCE, DOMDIFF, LOAD, SUBSCRIBE, THROTTLE } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './HorizontalRuler.scss';
 
@@ -199,7 +199,7 @@ export default class HorizontalRuler extends EditorElement {
         this.refresh();      
     }
 
-    [SUBSCRIBE('refreshSelectionStyleView')] () {
+    [SUBSCRIBE('refreshSelectionStyleView') + THROTTLE(10)] () {
         if (this.$selection.current) {
             const current = this.$selection.current;
 

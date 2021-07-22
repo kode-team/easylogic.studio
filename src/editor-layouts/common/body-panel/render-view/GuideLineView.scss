@@ -9,8 +9,8 @@
     transform: translate(0.5px, 0.5px);
 
     path {
+        stroke: var(--elf--selected-color);
         &.arrow {
-            stroke: red;
             stroke-width: 1;
             fill: none;
         }

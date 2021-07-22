@@ -361,7 +361,7 @@ export class MovableItem extends Item {
 
     getItemTransformMatrix () {
 
-        const list = Transform.parseStyle(Transform.rotate(this.json?.['transform'] || '', this.json?.['rotate']));
+        const list = Transform.parseStyle(this.json?.['transform']);
         const width = this.screenWidth.value;
         const height = this.screenHeight.value;
 
@@ -712,8 +712,8 @@ export class MovableItem extends Item {
 
         // [newTranslate] * [newItemTransform] = [newParentMatrix * -1] * [newAccumulatedMatrix]
         const matrix = calculateMatrix(
-            this.getAccumulatedMatrixInverse(),
-            childItem.getAccumulatedMatrix(),
+            this.accumulatedMatrixInverse,
+            childItem.accumulatedMatrix,
         )
 
         // scale 구하기 
@@ -721,6 +721,7 @@ export class MovableItem extends Item {
 
         // 회전 영역 먼저 구하기 
         const q = mat4.getRotation([], matrix);
+
         const axis = []
         const rad = quat.getAxisAngle(axis, q)
 

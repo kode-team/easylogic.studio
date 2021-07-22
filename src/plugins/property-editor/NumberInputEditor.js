@@ -1,5 +1,5 @@
 import { Length } from "el/editor/unit/Length";
-import { LOAD, INPUT } from "el/base/Event";
+import { LOAD, INPUT, PREVENT, STOP, BLUR, DOMDIFF } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
@@ -34,7 +34,6 @@ export default class NumberInputEditor extends EditorElement {
     }
 
     [LOAD('$body')] () {
-
         var { min, max, step, label, type, layout, compact } = this.state
 
         var value = +this.state.value.value.toString()
@@ -68,7 +67,8 @@ export default class NumberInputEditor extends EditorElement {
     setValue (value) {
         this.setState({
             value: Length.parse(value)
-        })
+        }, false)
+        this.refs.$propertyNumber.val(this.state.value.value)
     }
 
     updateData (data) {
@@ -77,7 +77,6 @@ export default class NumberInputEditor extends EditorElement {
     }
 
     [INPUT('$propertyNumber')] (e) {
-
         var value = +this.getRef('$propertyNumber').value; 
 
         this.updateData({ 

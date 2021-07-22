@@ -1,12 +1,9 @@
-import { vec3 } from "gl-matrix";
-
 import { POINTERSTART, MOVE, END, IF } from "el/base/Event";
 import { Length } from "el/editor/unit/Length";
 import Dom from "el/base/Dom";
 import { KEY_CODE } from "el/editor/types/key";
 
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { toRectVerties, toRectVertiesWithoutTransformOrigin } from "el/base/functions/collision";
 
 import './DragAreaView.scss';
 
@@ -30,6 +27,15 @@ export default class DragAreaView extends EditorElement {
         `
     }
 
+
+    checkSelectionArea (e) {
+        const mousePoint = this.$viewport.getWorldPosition(e);        
+
+        // select된 객체에 포지션이 있으면  움직일 수 있도록 한다. 
+        if (this.$selection.hasPoint(mousePoint)) {
+            return true;
+        }            
+    }
 
     checkEmptyElement (e) {
         var $el = Dom.create(e.target)
@@ -99,149 +105,18 @@ export default class DragAreaView extends EditorElement {
             && $el.isTag('img') === false 
             && $el.attr('data-segment') !== 'true';
     }
+    
 
     [POINTERSTART('$dragAreaView') + IF('checkEmptyElement') + MOVE('movePointer') + END('moveEndPointer')] (e) {
-        this.initMousePoint = this.$viewport.getWorldPosition(e);
-
-        this.$target = Dom.create(e.target);
-
-        if (this.$editor.isSelectionMode()) {
-
-            this.$config.set("hoverView", false);
-
-            this.dragRect = {
-                left: Length.px(this.initMousePoint[0]),
-                top: Length.px(this.initMousePoint[1]),
-                width: Length.z(),
-                height: Length.z()
-            }        
-    
-            this.emit('drawAreaView', this.dragRect);
-
-            this.state.cachedCurrentElement = {}       
-
-        }
-
+        this.emit('startDragAreaView');
     }
 
-    getSelectedItems (rect, areaVerties) {
-
-        var project = this.$selection.currentProject;
-        let items = []
-        let selectedArtboard = []        
-        if (project) {    
-
-            if (rect.width === 0 && rect.height === 0) {
-                items = [] 
-            } else {
-                // 프로젝트 내에 있는 모든 객체 검색    
-                project.layers.forEach(layer => {
-
-                    if (layer.is('artboard') && layer.isIncludeByArea(areaVerties)) {        
-                        selectedArtboard.push(layer);
-                    } else if (layer.is('artboard') && layer.checkInArea(areaVerties) && layer.hasChildren() === false) {        
-                        items.push(layer);                            
-                    } else {
-                        items.push.apply(items, layer.checkInAreaForAll(areaVerties))
-
-                    }
-                })
-
-                if (items.length > 1) {
-                    items = items.filter(it => it.is('artboard') === false);
-                }
-            }   
-        }
-
-        const selectedItems = selectedArtboard.length ? selectedArtboard : items; 
-
-        return selectedItems;
-    }
 
     movePointer (dx, dy) {
-        const e = this.$config.get('bodyEvent');
-        const targetMousePoint = this.$viewport.getWorldPosition();
-
-        const newDist = vec3.floor([], vec3.subtract([], targetMousePoint, this.initMousePoint));
-
-        if (e.shiftKey) {
-            newDist[1] = newDist[0];
-        }
-
-        const startVertex = vec3.floor([], this.initMousePoint);
-        const endVertex = vec3.floor([], vec3.add([], this.initMousePoint, newDist));
-
-        const start = this.$viewport.applyVertex(startVertex);
-        const end = this.$viewport.applyVertex(endVertex);
-
-        const locaRect = toRectVerties([start, end]);
-
-        this.dragRect = {
-            left: Length.px(locaRect[0][0]),
-            top: Length.px(locaRect[0][1]),
-            width: Length.px(Math.abs(locaRect[1][0] - locaRect[0][0])),
-            height: Length.px(Math.abs(locaRect[3][1] - locaRect[0][1]))
-        }        
-
-        this.emit('drawAreaView', this.dragRect);
-
-        if (this.$editor.isSelectionMode()) {
-
-            var {left: x, top: y, width, height } = this.dragRect
-            var rect = {
-                x: x.value, 
-                y: y.value, 
-                width: width.value,
-                height: height.value
-            }
-    
-            // var areaVerties = this.$viewport.createAreaVerties(rect.x, rect.y, rect.width, rect.height);
-
-            var project = this.$selection.currentProject;
-            if (project) {    
-                const selectedItems = this.getSelectedItems(rect, toRectVertiesWithoutTransformOrigin([startVertex, endVertex]))
-
-                if (this.$selection.select( ...selectedItems)) {
-                    this.emit('refreshSelection')
-                    this.emit('refreshSelectionTool', true);
-                }
-
-
-            }
-        }
+        this.emit('moveDragAreaView');        
     }
 
     moveEndPointer () {
-        this.$config.set("hoverView", true);
-
-        this.emit('drawAreaView', {
-            left: Length.px(-10000),
-            top: Length.z(),
-            width: Length.z(),
-            height: Length.z()
-        })
-
-
-        this.$selection.reselect();
-        this.emit('history.refreshSelection')
-        this.emit('refreshSelectionTool', true);            
-
-
-        this.sendHelpMessage();
-        this.emit('removeGuideLine')
+        this.emit('endDragAreaView');
     }
-
-    sendHelpMessage () {
-
-        if (this.$selection.length === 1) {
-            var current = this.$selection.current;
-
-            if (current.is('svg-path', 'svg-brush', 'svg-polygon', 'svg-textpath')) {
-                this.emit('addStatusBarMessage', 'Please click if you want to edit to path ');
-            }
-
-        } 
-
-    }
-
 }

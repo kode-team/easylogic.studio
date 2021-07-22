@@ -15,6 +15,7 @@ export default class StyleView extends EditorElement {
     return /*html*/`
     <div class='style-view' style='pointer-events: none; position: absolute;display:inline-block;left:-1000px;'>
       <div ref='$svgArea'></div>
+      <style type='text/css' ref='$styleView'></style>
     </div>
     `;
   }
@@ -97,6 +98,18 @@ export default class StyleView extends EditorElement {
 
   [SUBSCRIBE('refreshSVGArea')] () {
     this.load('$svgArea');
+  }
+
+  [SUBSCRIBE('refreshSelection')] () {
+    const selectedItems = this.$selection.items.map(item => `[data-id="${item.id}"]`).join(',');
+
+    const css = this.$selection.isMany ? `
+      ${selectedItems} {
+        box-shadow: 0 0 0 1px #66baff;
+      }
+    ` : '';
+
+    this.refs.$styleView.html(css);
   }
 
   /**

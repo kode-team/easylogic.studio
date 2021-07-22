@@ -1,4 +1,4 @@
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, MOVE, BIND, THROTTLE, SUBSCRIBE, END } from "el/base/Event";
+import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, MOVE, BIND, THROTTLE, SUBSCRIBE, END, IF } from "el/base/Event";
 
 import { Length } from "el/editor/unit/Length";
 
@@ -37,7 +37,7 @@ export default class DesignEditor extends BaseLayout {
   initState() {
     return {
       leftSize: 340,
-      rightSize: 260,
+      rightSize: 280,
       bottomSize: 0,
       lastBottomSize: 150
     }

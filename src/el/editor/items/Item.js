@@ -1,7 +1,8 @@
-import { uuidShort } from "el/base/functions/math";
+import { uuid, uuidShort } from "el/base/functions/math";
 import {
   clone,
   isFunction,
+  isNotUndefined,
   isNumber,
   isUndefined
 } from "el/base/functions/func";
@@ -356,18 +357,24 @@ export class Item {
 
     // console.log(isDiff);
 
-    // if (isDiff) {
-      this.json = this.convert(Object.assign(this.json, obj));
-      this.lastChangedField = obj; 
-      this.changed();
+    // 변경된 값에 대해서 id 를 부여해보자. 
+    if (!obj.__changedId) obj.__changedId = uuid();
 
+    if (this.lastChangedField.__changedId !== obj.__changedId) {
+      // if (isDiff) {
+        this.json = this.convert(Object.assign(this.json, obj));
+        this.lastChangedField = obj; 
+        this.lastChangedFieldKeys = Object.keys(obj); 
+        this.changed();
+    }
     // 값이 변경 되었는지 어떻게 인지 할까요? 
     // reset 할 때 값이 변경이 안되었을 수도 있으니 
     return true; 
   }
 
   hasChangedField (...args) {
-    return args.some(it => this.lastChangedField[it]);
+
+    return args.some(it => this.lastChangedFieldKeys.includes(it));
   }
 
   /**

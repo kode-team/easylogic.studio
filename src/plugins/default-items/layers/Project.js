@@ -139,15 +139,14 @@ export class Project extends TimelineItem {
   resetMatrix (childItem) {
 
     const [x, y] = mat4.getTranslation([], calculateMatrix(
-        childItem.getAccumulatedMatrix(),
-        childItem.localMatrix
+        childItem.accumulatedMatrix,
+        childItem.localMatrixInverse
     ));
 
     childItem.reset({
         x: Length.px(x),
         y: Length.px(y),
     })
-
   }
 
   get rectVerties () {
