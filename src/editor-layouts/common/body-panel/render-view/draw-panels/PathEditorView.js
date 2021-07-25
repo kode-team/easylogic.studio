@@ -493,6 +493,7 @@ export default class PathEditorView extends PathTransformEditor {
                 'path': this.state.mode === 'path',
                 'modify': this.state.mode === 'modify',
                 'box': this.state.box === 'box',
+                'canvas': this.state.box === 'canvas',                
                 'segment-move': this.state.mode === 'segment-move',         
             },
             innerHTML: this.pathGenerator.makeSVGPath()

@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const pkg = require('./package.json')
 const alias = require('./alias');
 
@@ -9,6 +10,7 @@ module.exports = {
   entry: {
     editor: "./src/index.js",
     canvas: "./src/index-canvas.js",
+    skia: "./src/index-skia.js",
     embed: "./src/index-embed.js",    
     player: "./src/index-player.js",        
   },
@@ -16,6 +18,9 @@ module.exports = {
     library: "elf",
     libraryTarget: "umd",
     path: __dirname + "/docs",
+  },
+  node: {
+    fs: 'empty'
   },
   resolve: { alias },
   module: {
@@ -108,28 +113,37 @@ module.exports = {
       inject: true,
       template: "./src/dev-fullpage.html",
       filename: "./index.html",
-      excludeChunks: ['player', 'embed', 'canvas']
+      excludeChunks: ['player', 'embed', 'canvas', 'skia']
     }),    
 
     new HtmlWebPackPlugin({
       inject: true,
       template: "./src/dev-fullpage.html",
       filename: "./embed.html",
-      excludeChunks: ['player', 'editor', 'canvas']
+      excludeChunks: ['player', 'editor', 'canvas', 'skia']
     }),        
     new HtmlWebPackPlugin({
       inject: true,
       template: "./src/dev-fullpage.html",
       filename: "./player.html",
-      excludeChunks: ['editor', 'embed', 'canvas']
+      excludeChunks: ['editor', 'embed', 'canvas', 'skia']
     }),                
 
     new HtmlWebPackPlugin({
       inject: true,
       template: "./src/dev-fullpage.html",
       filename: "./canvas.html",
-      excludeChunks: ['editor', 'embed', 'player']
+      excludeChunks: ['editor', 'embed', 'player', 'skia']
     }),                    
+    new HtmlWebPackPlugin({
+      inject: true,
+      template: "./src/dev-fullpage.html",
+      filename: "./skia.html",
+      excludeChunks: ['editor', 'embed', 'player', 'canvas']
+    }),                
+    new CopyWebpackPlugin([
+      { from: 'node_modules/canvaskit-wasm/bin/canvaskit.wasm' }
+    ]),
     new MiniCssExtractPlugin({
       filename: "[name].css"
     })

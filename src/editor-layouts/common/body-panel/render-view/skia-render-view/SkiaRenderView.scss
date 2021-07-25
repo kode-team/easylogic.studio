@@ -1,0 +1,25 @@
+$editor-button-color: #5f80de;
+$editor-line-color: rgba($editor-button-color, 0.3);
+$editor-resizer-width: 8px;
+$editor-canvas-background-color: rgba(236, 236, 236, 0.3);
+
+.player {
+  .page-container {
+    top: 0px;  
+    left: 0px;    
+  }
+}
+
+.elf--element-view {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  pointer-events: none;
+}
+
+.canvas-view {
+  position: relative; 
+  pointer-events: none;
+}

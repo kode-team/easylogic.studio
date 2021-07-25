@@ -1,6 +1,6 @@
 
 import {
-  LOAD, DEBOUNCE, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, DOMDIFF,
+  LOAD, DEBOUNCE, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, DOMDIFF, IF,
 } from "el/base/Event";
 
 
@@ -101,8 +101,12 @@ export default class TransformProperty extends BaseProperty {
     this.children.$transformEditor.setValue(this.$selection.current.transform);
   }
 
-  [SUBSCRIBE('refreshSelection')] () {
-    this.refreshShowIsNot(['project']);
+  get editableProperty() {
+    return 'transform';
+  }
+
+  [SUBSCRIBE('refreshSelection') + IF('checkShow')] () {
+    this.refresh();
   }
 
   [SUBSCRIBE('refreshSelectionStyleView') + DEBOUNCE(100)] () {

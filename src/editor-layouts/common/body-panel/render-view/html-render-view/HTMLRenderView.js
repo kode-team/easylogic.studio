@@ -7,21 +7,15 @@ import { isFunction } from "el/base/functions/func";
 import { KEY_CODE } from "el/editor/types/key";
 
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-import StyleView from "./view-items/StyleView";
-import GroupSelectionToolView from "./view-items/GroupSelectionToolView";
-import SelectionToolView from "./view-items/SelectionToolView";
+import StyleView from "./StyleView";
 
 import './HTMLRenderView.scss';
-import { toRectVerties, toRectVertiesWithoutTransformOrigin } from "el/base/functions/collision";
 
 export default class HTMLRenderView extends EditorElement {
 
     components() {
         return {
-            // DragAreaView,
             StyleView,
-            SelectionToolView,
-            GroupSelectionToolView,
         }
     }
 
@@ -42,11 +36,6 @@ export default class HTMLRenderView extends EditorElement {
             <div class='elf--element-view' ref='$body'>
                 <object refClass='StyleView' ref='$styleView' />
                 <div class='canvas-view' ref='$view'></div>
-
-                <object refClass='SelectionToolView' ref='$selectionTool' />
-                <object refClass='GroupSelectionToolView' ref='$groupSelectionTool' />
-
-                                         
                 ${this.$menuManager.generate("render.view")}
             </div>
         `
@@ -115,8 +104,9 @@ export default class HTMLRenderView extends EditorElement {
             return false;
         }
 
+        // space 키가 눌러져있을 때는 실행하지 않는다. 
         const code = this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space);
-        if (this.$keyboardManager.check(code)) {        // space 키가 눌러져있을 때는 실행하지 않는다. 
+        if (this.$keyboardManager.check(code)) {
             return false;
         }
 
@@ -165,6 +155,19 @@ export default class HTMLRenderView extends EditorElement {
 
 
         return this.$editor.isSelectionMode()
+    }
+
+    [DOUBLECLICK('$view')](e) {
+        const $item = Dom.create(e.target).closest('element-item');
+        const id = $item.attr('data-id');
+
+        const item = this.$selection.get(id);
+
+        if (this.$selection.isOne && item) {
+            this.emit('openEditor');
+            // this.emit('hideSelectionToolView');
+            this.emit('removeGuideLine');
+        }   
     }
 
     /**
@@ -258,6 +261,8 @@ export default class HTMLRenderView extends EditorElement {
             // this.selectCurrent(...this.$selection.items)
             this.initializeDragSelection();
             this.emit('history.refreshSelection');
+
+            // console.log(this.$selection.current);
         }
 
     }
@@ -332,7 +337,7 @@ export default class HTMLRenderView extends EditorElement {
 
     calculateEndedElement(dx, dy) {
         const targetMousePoint = this.$viewport.getWorldPosition();
-        const newDist = vec3.floor([], vec3.subtract([], targetMousePoint, this.initMousePoint));
+        const newDist = vec3.dist(targetMousePoint, this.initMousePoint);
 
         if (this.$config.get('set.dragarea.mode')) {
             this.emit('endDragAreaView');
@@ -341,10 +346,11 @@ export default class HTMLRenderView extends EditorElement {
         }
 
         if (newDist < 1) {
-            if (this.$selection.current.isSVG()) {
-                this.emit('openPathEditor');
-                this.emit('removeGuideLine');
-                return;
+            if (this.$selection.current) {
+                // this.emit('openEditor');
+                // this.emit('hideSelectionToolView');
+                // this.emit('removeGuideLine');
+                // return;
             }
         } else {
             this.$selection.reselect();

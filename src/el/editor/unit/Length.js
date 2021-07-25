@@ -482,6 +482,10 @@ export class Length {
   clamp (min, max) {
     return new Length(Math.max(min, Math.min(max, this.value)), this.unit);
   }
+
+  isZero() {
+    return this.value === 0;
+  }
 }
 
 Length.auto = Length.string("auto");

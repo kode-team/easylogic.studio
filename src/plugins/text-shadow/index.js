@@ -13,7 +13,7 @@ export default function (editor) {
         TextShadowEditor
     })
 
-    editor.registerMenuItem('inspector.tab.text', {
+    editor.registerMenuItem('inspector.tab.style', {
         TextShadowProperty        
     })
 

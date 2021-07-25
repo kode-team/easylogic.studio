@@ -30,4 +30,33 @@ export class TextLayer extends Layer {
       ...this.attrs('content'),
     }
   }
+
+
+  editable(editablePropertyName) {
+
+    switch (editablePropertyName) {
+      case "font":
+      case "font-spacing":
+      case "text-style":
+      case "text-shadow":
+      case "text-fill":
+      case 'text-clip':
+      case 'background-image':
+        return true;
+      case 'svg-item':
+      case 'border':
+      case 'border-radius':
+      case 'backdrop-filter':
+      case 'background-image':
+      case 'pattern':
+      case 'box-shadow':
+      case 'transform':
+      case 'transform-origin':
+      case 'perspective':
+      case 'perspective-origin':
+        return false;
+    }
+
+    return super.editable(editablePropertyName);
+  }
 }

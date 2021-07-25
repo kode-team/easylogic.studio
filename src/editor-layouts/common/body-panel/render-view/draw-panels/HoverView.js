@@ -17,13 +17,9 @@ export default class HoverView extends EditorElement {
 
 
     [SUBSCRIBE('config:bodyEvent')]() {
-        const $dom = Dom.create(this.$config.get('bodyEvent').target).closest('element-item');
+        const items = this.$selection.filteredLayers.filter(it => it.is('artboard') === false)
 
-        if ($dom === null) {
-            return;
-        }
-
-        const id = $dom.data('id');
+        const id = items[0]?.id;
 
         if (!id || this.$config.get('hoverView') === false) {
             this.$selection.setHoverId('');
@@ -55,6 +51,7 @@ export default class HoverView extends EditorElement {
 
             // refresh hover view 
             const verties = items[0].verties;
+            
             const line = this.createPointerLine(this.$viewport.applyVerties(verties));
 
             this.refs.$hoverRect.updateDiff(line)

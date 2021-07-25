@@ -1,6 +1,6 @@
 
 import {
-  LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF,
+  LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF
 } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
@@ -113,8 +113,11 @@ export default class BackdropFilterProperty extends BaseProperty {
 
   }
 
+  get editableProperty() {
+    return "backdrop-filter";
+  }
 
-  [SUBSCRIBE('refreshSelection')] () {
-    this.refreshShowIsNot(['project', 'artboard'])
-  }  
+  [SUBSCRIBE('refreshSelection') + IF('checkShow')] () {
+    this.refresh();
+  }
 }

@@ -1,4 +1,4 @@
-import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class TextFillProperty extends BaseProperty {
@@ -7,13 +7,14 @@ export default class TextFillProperty extends BaseProperty {
     return this.$i18n('text.fill.property.title');
   }
 
-  afterRender() {
-    this.show();
+  get editableProperty() {
+    return "text-fill"
   }
 
-  [SUBSCRIBE('refreshSelection')]() {
+  [SUBSCRIBE('refreshSelection') + IF('checkShow')]() {
     this.refresh();
   }
+
 
   refresh() {
     // update 를 어떻게 할지 고민 

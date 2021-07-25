@@ -111,7 +111,7 @@ export default [
 
     // exportResource,
 
-    // inspector.tab.text 
+    // inspector.tab.style 
     // svgText,
     // font,
     // text,

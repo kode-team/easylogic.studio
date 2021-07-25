@@ -6,7 +6,7 @@ import FontProperty from "./FontProperty";
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerMenuItem('inspector.tab.text', {
+    editor.registerMenuItem('inspector.tab.style', {
         FontProperty
     })
 }

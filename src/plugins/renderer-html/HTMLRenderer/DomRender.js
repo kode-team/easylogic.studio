@@ -145,6 +145,7 @@ export default class DomRender extends ItemRender {
    * @param {Item} item 
    */
   toBorderCSS(item) {
+    if (item.hasChildren()) return {}; 
     return this.toStringPropertyCSS(item, 'border')
   }
 
@@ -166,6 +167,7 @@ export default class DomRender extends ItemRender {
     if (item['margin-left']) obj["margin-left"] = item['margin-left'];
     if (item['margin-right']) obj["margin-right"] = item['margin-right'];
 
+    if (item.hasChildren()) return obj; 
 
     if (item['padding-top']) obj["padding-top"] = item['padding-top'];
     if (item['padding-bottom']) obj["padding-bottom"] = item['padding-bottom'];
@@ -213,8 +215,12 @@ export default class DomRender extends ItemRender {
 
     return {
       ...obj,
+      ...{
+        padding: 'inherit',
+      },
       ...this.toKeyListCSS(item, [
         'position', 
+
         // 'right',
         // 'bottom', 
         'width',

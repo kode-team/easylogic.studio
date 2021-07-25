@@ -6,27 +6,31 @@ import Resource from "el/editor/util/Resource";
 import Dom from "el/base/Dom";
 
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-import HTMLRenderView from "./render-view/HTMLRenderView";
-import PageTools from "./render-view/PageTools";
-import LayerAppendView from "./render-view/LayerAppendView";
-import PathDrawView from "./render-view/PathDrawView";
-import PathEditorView from "./render-view/PathEditorView";
-import HoverView from "./render-view/HoverView";
-import GuideLineView from "./render-view/GuideLineView";
-import SelectionInfoView from "./render-view/SelectionInfoView";
+import HTMLRenderView from "./render-view/html-render-view/HTMLRenderView";
+import PageTools from "./render-view/util-panels/PageTools";
+
+import LayerAppendView from "./render-view/draw-panels/LayerAppendView";
+import PathDrawView from "./render-view/draw-panels/PathDrawView";
+import PathEditorView from "./render-view/draw-panels/PathEditorView";
+import HoverView from "./render-view/draw-panels/HoverView";
+import GuideLineView from "./render-view/draw-panels/GuideLineView";
+import SelectionInfoView from "./render-view/draw-panels/SelectionInfoView";
+import GridLayoutLineView from "./render-view/draw-panels/GridLayoutLineView";
+import DragAreaView from "./render-view/draw-panels/DragAreaView";
+import DragAreaRectView from "./render-view/draw-panels/DragAreaRectView";
+import SelectionToolView from "./render-view/draw-panels/SelectionToolView";
+import GroupSelectionToolView from "./render-view/draw-panels/GroupSelectionToolView";
 
 
 import './CanvasView.scss';
-import GridLayoutLineView from "./render-view/GridLayoutLineView";
-import DragAreaView from "./render-view/DragAreaView";
-import DragAreaRectView from "./render-view/DragAreaRectView";
-
 
 
 export default class CanvasView extends EditorElement {
 
   components() {
     return {
+      SelectionToolView,
+      GroupSelectionToolView,
       PageTools,
       GridLayoutLineView,
       DragAreaRectView,
@@ -60,8 +64,10 @@ export default class CanvasView extends EditorElement {
       <div class='elf--page-container' tabIndex="-1" ref='$container'>
         <div class='page-view' ref="$pageView">
           <div class='page-lock scrollbar' ref='$lock'>            
-            <object refClass="DragAreaView" ref="$dragAreaView" />                                             
-            <object refClass='HTMLRenderView' ref='$elementView' />
+            <object refClass="DragAreaView" ref="$dragAreaView" />               
+            <object refClass='HTMLRenderView' ref='$elementView' />                                        
+            <object refClass='SelectionToolView' ref='$selectionTool' />
+            <object refClass='GroupSelectionToolView' ref='$groupSelectionTool' />
             <object refClass="DragAreaRectView" ref="$dragAreaRectView" />                  
             <object refClass='GridLayoutLineView' ref='$gridLayoutLineView' />            
             <object refClass='SelectionInfoView' ref='$selectionInfoView' />                                                            
@@ -70,7 +76,6 @@ export default class CanvasView extends EditorElement {
             <object refClass='LayerAppendView' ref='$objectAddView' />       
             <object refClass='PathEditorView' ref='$pathEditorView' />                 
             <object refClass='PathDrawView' ref='$pathDrawView' />            
-            <div ref='$viewport'></div>
           </div>
         </div>
         <object refClass='PageTools' />
@@ -171,24 +176,6 @@ export default class CanvasView extends EditorElement {
 
   }
 
-  /** viewport 디버그 용  */
-  [BIND('$viewport')]() {
-
-    return '';
-
-    return {
-      style: {
-        position: 'absolute',
-        left: '0px',
-        top: '0px',
-        right: '0px',
-        bottom: '0px',
-        'pointer-events': 'none'
-      },
-      innerHTML: this.makeViewportConsole()
-    }
-  }
-
   async [BIND('$container')]() {
     const cursor = await this.$editor.cursorManager.load(this.state.cursor, ...(this.state.cursorArgs || []))
     return {
@@ -285,10 +272,6 @@ export default class CanvasView extends EditorElement {
 
   [SUBSCRIBE('resize.window', 'resizeCanvas')]() {
     this.refreshCanvasSize();
-  }
-
-  [SUBSCRIBE('updateViewport')]() {
-    this.bindData('$viewport');
   }
 
   [SUBSCRIBE('changeIconView')](cursor, ...args) {

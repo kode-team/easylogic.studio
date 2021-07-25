@@ -88,47 +88,6 @@
                 display: block;
             }
         }
-
-        &[data-layout='flex'],
-        &[data-layout='grid']
-         {
-            .detail {
-                [data-layout-title] {
-                    &:after {
-                        content: attr(data-layout-title);
-                        color: var(--elf--selected-font-color);
-                        display: inline-block;
-                        vertical-align: middle;
-                        margin-left: 5px;
-                        border-radius: 3px;
-                        padding: 0px 4px;
-                        line-height: 1.2;
-                    }
-                }
-            }
-        }
-
-
-        &[data-layout='flex'] {
-            .detail {
-                [data-layout-title] {
-                    &:after {
-                        background-color: rgb(68, 163, 68);
-                    }
-                }
-            }
-        }
-
-        &[data-layout='grid'] {
-            .detail {
-                [data-layout-title] {
-                    &:after {
-                        background-color: red;
-                    }
-                }
-            }
-        }
-
     }
 
     .drag-start {

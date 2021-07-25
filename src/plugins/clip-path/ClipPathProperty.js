@@ -1,4 +1,4 @@
-import { CLICK, LOAD, PREVENT, SUBSCRIBE } from "el/base/Event";
+import { CLICK, LOAD, PREVENT, SUBSCRIBE, IF } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import { ClipPath } from "el/editor/property-parser/ClipPath";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
@@ -83,8 +83,12 @@ export default class ClipPathProperty extends BaseProperty {
     }, 100)
   }
 
-  [SUBSCRIBE('refreshSelection')] () {
-    this.refreshShowIsNot(['project']);
+  get editableProperty() {
+    return "clip-path";
+  }
+
+  [SUBSCRIBE('refreshSelection') + IF('checkShow')] () {
+    this.refresh();
   }
 
 

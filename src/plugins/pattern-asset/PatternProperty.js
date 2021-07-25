@@ -1,6 +1,6 @@
 
 import {
-  LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF,
+  LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF 
 } from "el/base/Event";
 
 
@@ -78,8 +78,12 @@ export default class PatternProperty extends BaseProperty {
     }))
   }
 
-  [SUBSCRIBE('refreshSelection')] () {
-    this.refreshShow(['artboard', 'rect', 'circle', 'text', 'cube', 'cylinder']);
+  get editableProperty () {
+    return 'pattern';
+  }
+
+  [SUBSCRIBE('refreshSelection') + IF('checkShow')] () {
+    this.refresh();
   }
 
   [SUBSCRIBE('refreshSVGArea') + DEBOUNCE(1000)] () {

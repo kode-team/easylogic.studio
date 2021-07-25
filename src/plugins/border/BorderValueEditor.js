@@ -1,5 +1,5 @@
 import { Length } from "el/editor/unit/Length";
-import Border from "el/editor/property-parser/Border";
+import { Border } from "el/editor/property-parser/Border";
 import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 

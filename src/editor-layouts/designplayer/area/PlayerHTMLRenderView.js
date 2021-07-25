@@ -5,9 +5,8 @@ import { Length } from "el/editor/unit/Length";
 import { isFunction } from "el/base/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
-import StyleView from "../../common/body-panel/render-view/view-items/StyleView";
-
 import './PlayerHTMLRenderView.scss';
+import StyleView from "../../common/body-panel/render-view/html-render-view/StyleView";
 
 export default class PlayerHTMLRenderView extends EditorElement {
 

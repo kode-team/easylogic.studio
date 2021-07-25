@@ -1,6 +1,6 @@
 
 import {
-  LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF,
+  LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF
 } from "el/base/Event";
 
 
@@ -120,8 +120,12 @@ export default class FilterProperty extends BaseProperty {
     }))
   }
 
-  [SUBSCRIBE('refreshSelection')] () {
-    this.refreshShowIsNot(['project']);
+  get editableProperty() {
+    return "filter";
+  }
+
+  [SUBSCRIBE('refreshSelection') + IF('checkShow')] () {
+    this.refresh();
   }
 
   [SUBSCRIBE('refreshSVGArea') + DEBOUNCE(1000)] () {

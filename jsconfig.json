@@ -8,7 +8,8 @@
         "export-library/*": ["./src/export-library/*"],
         "plugins/*": ["./src/plugins/*"],        
         "designeditor/*": ["src/editor-layouts/designeditor/*"],
-        "embededitor/*": ["src/editor-layouts/embededitor/*"],        
+        "embededitor/*": ["src/editor-layouts/embededitor/*"],    
+        "canvaseditor/*": ["src/editor-layouts/canvaseditor/*"],                
         "designplayer/*": ["src/editor-layouts/designplayer/*"],
       }
     }

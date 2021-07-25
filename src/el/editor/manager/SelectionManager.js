@@ -6,6 +6,8 @@ import { Project } from "plugins/default-items/layers/Project";
 import { Length } from "el/editor/unit/Length";
 import { vec3 } from "gl-matrix";
 
+const identity = x => x; 
+
 function _traverse(obj, idList) {
   var results = [] 
 
@@ -54,6 +56,20 @@ export class SelectionManager {
       width: Length.px(0),
       height: Length.px(0)
     });
+
+    this.$editor.on('config:bodyEvent', () => {
+      this.refreshMousePosition();
+    })
+  }
+
+  refreshMousePosition() {
+    const config = this.$editor.config;
+    const pos = this.$editor.viewport.getWorldPosition();
+
+    this.pos = pos; 
+    this.column = Math.ceil(pos[0]/config.get('area.width')); 
+    this.row = Math.ceil(pos[1]/config.get('area.width')); 
+
   }
 
   initialize() {
@@ -64,14 +80,6 @@ export class SelectionManager {
     this.idsString = '';   
     this.cachedItemVerties = {}    
   }
-
-  // snapshot() {
-  //   const selection = new SelectionManager(this.$editor);
-  //   selection.select(this.cachedItems);
-
-  //   this.$editor.history.add('selection', 'selection', { selection })
-  // }
-
 
   /**
    * get first item instance
@@ -115,6 +123,35 @@ export class SelectionManager {
 
   get isLayoutItem() {
     return this.current?.isLayoutItem();
+  }
+
+  get allLayers() {
+    return this.currentProject.allLayers || []
+  }
+
+  /**
+   * area position(column, row) 으로 필터링된 객체 중에 
+   * position 과 일치하는 layer 리스트 구하기 
+   * 
+   * @returns {Item[]}
+   */ 
+  get filteredLayers () {
+
+    return this.currentProject.filteredAllLayers((item) => {
+      const areaPosition = item.areaPosition;
+
+      if (!areaPosition) {
+        return false;
+      }
+
+      const {column, row} = areaPosition 
+
+      return (column[0] <= this.column && this.column <= column[1]) && 
+             (row[0] <= this.row && this.row <= row[1]);
+    }).filter(item => {
+      return item.hasPoint(this.pos[0], this.pos[1])
+    });
+
   }
 
   /**
@@ -395,12 +432,12 @@ export class SelectionManager {
 
       if (instance.is('artboard') === false) {
 
-        const instanceVerties = instance.rectVerties();
+        const instanceVerties = instance.originVerties;
 
         // FIXME: 내가 속한 영역이 객체의 instance 의 artboard 안에 있으면 artboard 를 바꾸지 않는다. 
         if (instance.artboard) {
           const localArtboard = instance.artboard;
-          const localArtboardVerties = localArtboard.rectVerties();
+          const localArtboardVerties = localArtboard.originVerties;
           const isInArtboard = polyPoint(localArtboardVerties, instanceVerties[0][0],instanceVerties[0][1]) || polyPoly(instanceVerties, localArtboardVerties) 
 
           // 내가 여전히 나의 artboard 에 속해 있으면 변경하지 않는다. 

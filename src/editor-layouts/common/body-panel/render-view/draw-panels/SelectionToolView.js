@@ -28,22 +28,6 @@ const SelectionToolEvent = class  extends EditorElement {
         this.toggleEditingPath(false);
     }
 
-    [SUBSCRIBE('openPathEditor')] () {
-        var current = this.$selection.current;
-
-        if (current && current.isSVG() && current.d) {
-            this.toggleEditingPath(true);
-
-            // box 모드 
-            // box - x, y, width, height 고정된 상태로  path 정보만 변경 
-            this.emit('showPathEditor', 'modify', {
-                box: 'canvas',
-                current,
-                d: current.accumulatedPath().d,
-            }) 
-        }
-    }
-
     [SUBSCRIBE('finishPathEdit')] () {
         this.toggleEditingPath(false);
     }
@@ -703,14 +687,22 @@ export default class SelectionToolView extends SelectionToolEvent {
         }
     }
 
-    [SUBSCRIBE('refreshSelectionStyleView')] () {
-
+    checkShow() {
         if (this.$selection.isOne) {
             if (this.$selection.hasChangedField('x', 'y', 'width', 'height', 'transform', 'transform-origin', 'perspective', 'perspective-origin')) {            
-                this.renderPointers()
+                return true; 
             }
         }
 
+        return false; 
+    }
+
+    [SUBSCRIBE('refreshSelectionStyleView') + IF('checkShow')] () {
+        this.renderPointers()
+    }
+
+    [SUBSCRIBE('hideSelectionToolView')] () {
+        this.$el.hide();
     }
 
 } 

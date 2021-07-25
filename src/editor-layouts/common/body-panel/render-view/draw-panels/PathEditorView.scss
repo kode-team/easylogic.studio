@@ -46,7 +46,7 @@
             svg {
                 path {
                     &.object {
-                        pointer-events: visibleStroke;
+                        pointer-events: stroke;
                         // stroke: #848484;
                     }
                 }
@@ -79,7 +79,7 @@
             svg {
                 path {
                     &.object {
-                        pointer-events: visibleStroke;
+                        pointer-events: stroke;
                         // stroke: transparent;
                     }
                 }
@@ -95,6 +95,17 @@
                 }
             }
         }
+
+        &.modify,
+        &.canvas {
+            svg {
+                path {
+                    &.object {
+                        // stroke: transparent;
+                    }
+                }
+            }
+        }        
     }
 
     .path-tool {

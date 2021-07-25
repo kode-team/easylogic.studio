@@ -1,5 +1,5 @@
 
-import { LOAD, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { LOAD, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './BorderProperty.scss';
@@ -32,8 +32,12 @@ export default class BorderProperty extends BaseProperty {
     `
   }
 
-  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShowIsNot(['project', 'svg-path', 'svg-polygon', 'svg-text', 'svg-textpath']);
+  get editableProperty() {
+    return 'border';
+  }
+
+  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100) + IF('checkShow')]() {
+    this.refresh();
   }  
 
   [SUBSCRIBE_SELF('changeKeyValue')] (key, value) {

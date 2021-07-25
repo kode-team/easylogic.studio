@@ -1,4 +1,4 @@
-import { LOAD, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { LOAD, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class TextClipProperty extends BaseProperty {
@@ -32,7 +32,12 @@ export default class TextClipProperty extends BaseProperty {
     this.emit('setAttributeForMulti', this.$selection.packByValue({ [key]: value }));        
   }
 
-  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShow(['text']);
-  }  
+  get editableProperty() {
+    return "text-clip"
+  }
+
+  [SUBSCRIBE('refreshSelection') + IF('checkShow')]() {
+    this.refresh();
+  }
+
 }

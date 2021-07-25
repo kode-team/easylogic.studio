@@ -465,7 +465,7 @@ export function itemsToRectVerties (items = []) {
     const yList = [];
 
     items.forEach(item => {
-        item.verties.forEach(vector => {
+        item.originVerties.forEach(vector => {
             xList.push(vector[0]);
             yList.push(vector[1])
         });

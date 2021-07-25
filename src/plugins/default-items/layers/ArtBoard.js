@@ -30,4 +30,22 @@ export class ArtBoard extends DomItem {
     return icon.artboard;
   }
 
+  editable(editablePropertyName) {
+
+    switch (editablePropertyName) {
+    case 'border':
+    case 'border-radius':
+    case 'backdrop-filter':
+    case 'box-shadow':
+    case 'clip-path':
+      return false;
+    case 'artboard-size':
+    case 'layout':
+      return true;
+    }
+
+    return super.editable(editablePropertyName);
+  }
+
+
 }

@@ -161,4 +161,13 @@ export class Project extends TimelineItem {
     return identity;
   }
 
+  get contentBox () {
+    return {
+        left: 0,
+        top: 0,
+        width: 0,
+        height: 0
+    }
+}
+
 }

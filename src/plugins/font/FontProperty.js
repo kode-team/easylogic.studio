@@ -1,4 +1,4 @@
-import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { IF, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class FontProperty extends BaseProperty {
@@ -15,7 +15,11 @@ export default class FontProperty extends BaseProperty {
     this.show();
   }
 
-  [SUBSCRIBE('refreshSelection')]() {
+  get editableProperty() {
+    return "font"
+  }
+
+  [SUBSCRIBE('refreshSelection') + IF('checkShow')]() {
     this.refresh();
   }
 

@@ -1,4 +1,4 @@
-import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, DEBOUNCE, IF } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
@@ -45,7 +45,11 @@ export default class PerspectiveProperty extends BaseProperty {
     }))
   }
 
-  [SUBSCRIBE('refreshSelection')]() {
-    this.refreshShowIsNot(['project']);
+  get editableProperty() {
+    return 'perspective';
+  }
+
+  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100) + IF('checkShow')]() {
+    this.refresh();
   }
 }

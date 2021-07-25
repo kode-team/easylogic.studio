@@ -11,8 +11,9 @@ import snapDistance from "./snap.distance";
 import historyDelayMs from "./history.delay.ms";
 import snapGrid from './snap.grid';
 import storeKey from './store.key';
-
+import areaWidth from './area.width';
 export default [
+    areaWidth,
     storeKey,
     setToolHand,
     canvasWidth,

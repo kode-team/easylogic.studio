@@ -1,4 +1,4 @@
-import { DEBOUNCE, INPUT, LOAD, SUBSCRIBE } from "el/base/Event";
+import { DEBOUNCE, IF, INPUT, LOAD, SUBSCRIBE } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { Length } from "el/editor/unit/Length";
 
@@ -17,8 +17,12 @@ export default class BoxModelProperty extends BaseProperty {
     return this.$i18n('box.model.property.title');
   }
 
-  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShow(['artboard', 'rect', 'circle', 'text']);
+  get editableProperty() {
+    return 'box-model';
+  }
+
+  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100) + IF('checkShow')]() {
+    this.refresh();
   }
 
   getBody() {

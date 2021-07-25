@@ -7,14 +7,20 @@ import {
   isUndefined
 } from "el/base/functions/func";
 
-function _traverse(obj) {
+const identity = () => true;
+
+function _traverse(obj, filterCallback = identity) {
   var results = [] 
 
-  obj.layers.length && obj.layers.forEach(it => {
-    results.push.apply(results, _traverse(it));
-  })
+  let len = obj.layers.length;
+  for(let start = len; start--; ) {
+    let it = obj.layers[start];
+    results.push(... _traverse(it.ref, filterCallback));
+  }
 
-  results.push(obj);
+  if (filterCallback(obj)) {
+    results.push(obj);
+  }
 
   return results; 
 }
@@ -59,6 +65,7 @@ export class Item {
 
     this.json = this.convert(Object.assign(this.getDefaultObject(), json));
     this.lastChangedField = {};
+    this.lastChangedFieldKeys = [];
 
     return this.ref; 
   }
@@ -133,6 +140,15 @@ export class Item {
    */
   get allLayers () {
     return _traverse(this.ref)
+  }
+
+  /**
+   * filterCallback 으로 필터링된 layer 리스트를 가지고 온다. 
+   * 
+   * @returns {Item[]}
+   */ 
+  filteredAllLayers(filterCallback) {
+    return _traverse(this.ref, filterCallback);
   }
 
   /**
@@ -270,6 +286,10 @@ export class Item {
     return false; 
   }
 
+  editable(editablePropertyName) {
+    return true; 
+  }
+
   /***********************************
    *
    * action
@@ -300,6 +320,10 @@ export class Item {
     }
 
     return json;
+  }
+
+  setCache() {
+
   }
 
   // /**

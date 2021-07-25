@@ -14,12 +14,12 @@ var BorderStyles = {
     "outset": true
 }
 
-export default class Border {
+export class Border {
     static parseStyle (str) {
         return STRING_TO_CSS(str);
     }
 
-    static parseValue (str) {
+    static parseValue (str = '') {
         var style = ''; 
         var width = ''; 
         var color = ''; 

@@ -1,5 +1,5 @@
 import { Length } from "el/editor/unit/Length";
-import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class FontSpacingProperty extends BaseProperty {
@@ -8,13 +8,14 @@ export default class FontSpacingProperty extends BaseProperty {
     return this.$i18n('font.spacing.property.title');
   }
 
-  afterRender() {
-    this.show();
+  get editableProperty() {
+    return "font-spacing"
   }
 
-  [SUBSCRIBE('refreshSelection')]() {
+  [SUBSCRIBE('refreshSelection') + IF('checkShow')]() {
     this.refresh();
   }
+
 
   refresh() {
     

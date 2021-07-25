@@ -17,7 +17,6 @@ export default {
     execute: function (editor, pathObject) {
         const current = editor.selection.current;
         if (current) {
-
             if (pathObject.box === 'box') {
                 const newPath = current.invertPath(pathObject.d);
     

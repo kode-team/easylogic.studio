@@ -6,7 +6,9 @@ import { mat4, quat, vec3 } from "gl-matrix";
 import { calculateMatrix, calculateMatrixInverse, radianToDegree, round, vertiesMap } from "el/base/functions/math";
 import { isFunction } from "el/base/functions/func";
 import PathParser from "el/editor/parser/PathParser";
-import { itemsToRectVerties, polyInPoly, polyPoint, polyPoly, rectToVerties } from "el/base/functions/collision";
+import { itemsToRectVerties, polyInPoly, polyPoint, polyPoly, rectToVerties, toRectVerties } from "el/base/functions/collision";
+
+
 
 const ZERO = Length.z()
 export class MovableItem extends Item {
@@ -81,11 +83,14 @@ export class MovableItem extends Item {
     }
 
     refreshMatrixCache() {
+    
         this.setCacheItemTransformMatrix();
-        this.setCacheLocalTransformMatrix();                         
+        this.setCacheLocalTransformMatrix();                                         
         this.setCacheAccumulatedMatrix();   
+        this.setCacheLocalVerties();
         this.setCacheVerties();
         this.setCacheGuideVerties();
+        this.setCacheAreaPosition();
 
         this.layers.forEach(it => {
             it.refreshMatrixCache();
@@ -100,6 +105,10 @@ export class MovableItem extends Item {
     setCacheLocalTransformMatrix() {
         this._cachedLocalTransform = this.getLocalTransformMatrix();
         this._cachedLocalTransformInverse = mat4.invert([], this._cachedLocalTransform);
+
+        this._cachedTransformWithTranslate = this.getTransformWithTranslate(this);
+        this._cachedTransformWithTranslateInverse = mat4.invert([], this._cachedTransformWithTranslate);        
+        this._cachedTransformWithTranslateTranspose = mat4.transpose([], this._cachedTransformWithTranslate);        
     }    
 
     setCacheAccumulatedMatrix() {
@@ -109,10 +118,19 @@ export class MovableItem extends Item {
 
     setCacheVerties() {
         this._cachedVerties = this.getVerties();
+        this._cachedVertiesWithoutTransformOrigin = this.rectVerties();
     }
+
+    setCacheLocalVerties() {
+        this._cachedLocalVerties = this.getLocalVerties();
+    }    
 
     setCacheGuideVerties() {
         this._cachedGuideVerties = this.getGuideVerties();
+    }
+
+    setCacheAreaPosition() {
+        this._cachedAreaPosition = this.getAreaPosition();
     }
 
     //////////////////////
@@ -129,6 +147,18 @@ export class MovableItem extends Item {
     get localMatrixInverse() {
         return this._cachedLocalTransformInverse || this.getLocalTransformMatrixInverse()
     }    
+
+    get transformWithTranslate() {
+        return this._cachedTransformWithTranslate || this.getTransformWithTranslate(this)
+    }
+
+    get transformWithTranslateToTranspose() {
+        return this._cachedTransformWithTranslateTranspose || mat4.transpose([],  this.getTransformWithTranslate(this));
+    }    
+
+    get transformWithTranslateInverse() {
+        return this._cachedTransformWithTranslateInverse || mat4.invert([], this.getTransformWithTranslate(this));
+    }        
 
     get itemMatrix() {
         return this._cachedItemTransform || this.getItemTransformMatrix()
@@ -150,9 +180,36 @@ export class MovableItem extends Item {
         return this._cachedVerties || this.getVerties();
     }
 
+    get originVerties() {
+        return this._cachedVertiesWithoutTransformOrigin || this.rectVerties();
+    }    
+
+    get localVerties() {
+        return this._cachedLocalVerties || this.getLocalVerties();
+    }    
+
     get guideVerties() {
         return this._cachedGuideVerties || this.getGuideVerties();
     }    
+
+    get areaPosition() {
+        return this._cachedAreaPosition || this.getAreaPosition();
+    }
+
+    getAreaPosition() {
+        const rect = toRectVerties(this.getVerties());
+
+        return {
+            column: [
+                Math.ceil(rect[0][0] / 100), 
+                Math.ceil(rect[1][0] / 100)
+            ],
+            row: [
+                Math.ceil(rect[0][1] / 100), 
+                Math.ceil(rect[3][1] / 100)
+            ]
+        }
+    }
 
 
     setScreenX(value) {
@@ -279,7 +336,7 @@ export class MovableItem extends Item {
      * @param {*} areaVerties 
      */
     checkInArea (areaVerties) {
-        return  polyPoly(areaVerties, this.verties)
+        return  polyPoly(areaVerties, this.originVerties)
     }
 
     /**
@@ -289,7 +346,7 @@ export class MovableItem extends Item {
      * @param {number} y 
      */
     hasPoint (x, y) {
-        return polyPoint(this.verties, x, y)
+        return polyPoint(this.originVerties, x, y)
     }
 
 
@@ -300,7 +357,7 @@ export class MovableItem extends Item {
      */
     isIncludeByArea (areaVerties) {
 
-        return this.rectVerties().map(vector => {
+        return this.originVerties.map(vector => {
             return polyPoint(areaVerties, ...vector);
         }).filter(Boolean).length === 4;
     }
@@ -360,7 +417,6 @@ export class MovableItem extends Item {
     }
 
     getItemTransformMatrix () {
-
         const list = Transform.parseStyle(this.json?.['transform']);
         const width = this.screenWidth.value;
         const height = this.screenHeight.value;
@@ -398,6 +454,8 @@ export class MovableItem extends Item {
 
         // 4. Translate by the negated computed X, Y and Z values of transform-origin        
         mat4.translate(view, view, vec3.negate([], origin));
+
+        // console.log('localMatrix', view);
 
         return view; 
     }      
@@ -484,7 +542,8 @@ export class MovableItem extends Item {
                     mat4.multiply(transform, transform, perspectiveMatrix)
                 }
             }       
-            
+
+                        
             const offsetX = current.offsetX.value;
             const offsetY = current.offsetY.value; 
             // 5. Translate by offset x, y
@@ -496,8 +555,28 @@ export class MovableItem extends Item {
         return transform;
     }
 
+    getTransformWithTranslate (item) {
+        item = item || this; 
+        let view = mat4.create();
+
+        const offsetX = item.offsetX.value;
+        const offsetY = item.offsetY.value; 
+        // 5. Translate by offset x, y
+        mat4.translate(view, view, [offsetX, offsetY, 0]);                   
+                
+        mat4.multiply(view, view, item.localMatrix)            
+
+        return view;
+    }
+
     getAccumulatedMatrixInverse () {
         return mat4.invert([], this.getAccumulatedMatrix());
+    }
+
+    getLocalVerties (width, height) {
+        let model = rectToVerties(0, 0, width || this.screenWidth.value, height || this.screenHeight.value, this.json['transform-origin']);
+
+        return model;
     }
 
     getVerties (width, height) {
@@ -518,7 +597,7 @@ export class MovableItem extends Item {
 
     getGuideVerties () {
 
-        const verties = this.rectVerties();
+        const verties = this.originVerties;
 
         return [
             ...verties,
@@ -579,11 +658,7 @@ export class MovableItem extends Item {
              * 변환되는 모든 vertex 를 기록 
              */
             verties,
-            /**
-             * 회전되는 vertex 를 제외한 모든 vertex 
-             * 회전 방식이 바뀌면 삭제 될 수 있음. 
-             */            
-            rectVerties: verties,
+            originVerties: this.originVerties,
             xList,
             yList,
             directionMatrix,

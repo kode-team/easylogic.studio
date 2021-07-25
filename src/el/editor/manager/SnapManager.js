@@ -61,7 +61,7 @@ export class SnapManager {
         const xList = verties.map(it => it[0]);
         const yList = verties.map(it => it[1]);
 
-        return { id: item.id, xList, yList, verties, rectVerties: toRectVertiesWithoutTransformOrigin(item.rectVerties()) };
+        return { id: item.id, xList, yList, verties, rectVerties: toRectVertiesWithoutTransformOrigin(item.originVerties) };
     }
 
     /**

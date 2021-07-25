@@ -32,6 +32,12 @@ export class SVGPathItem extends SVGItem {
     }
   }
 
+  setCache () {
+    super.setCache();
+
+    this.cachePath = new PathParser(this.json.d);
+  }
+
   get d() {
 
     if (!this.json.d) {
@@ -49,27 +55,12 @@ export class SVGPathItem extends SVGItem {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      ...this.attrs('d')
+      d: this.json.d
     }
   }
 
   getDefaultTitle() {
     return "Path";
   }
-
-  /**
-   * @deprecated 
-   * 
-   */   
-  toAnimationKeyframes (properties) {
-
-    var svgProperties = properties.filter(it => hasSVGProperty(it.property) && hasSVGPathProperty(it.property));
-    var cssProperties = properties.filter(it => hasCSSProperty(it.property));
-
-    return [
-      { selector: `[data-id="${this.json.id}"]`, properties: cssProperties  },
-      { selector: `[data-id="${this.json.id}"] path`, properties: svgProperties }
-    ] 
-  }  
 
 }

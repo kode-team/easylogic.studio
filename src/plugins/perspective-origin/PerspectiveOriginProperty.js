@@ -1,5 +1,5 @@
 
-import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/base/Event";
 
 
 import icon from "el/editor/icon/icon";
@@ -43,9 +43,13 @@ export default class PerspectiveOriginProperty extends BaseProperty {
             />`
   }
 
+  get editableProperty() {
+    return 'perspective-origin';
+  }
 
-  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShowIsNot(['project']);
+
+  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100) + IF('checkShow')]() {
+    this.refresh();
   }
 
   [SUBSCRIBE_SELF('changePerspectiveOrigin')] (value) {

@@ -1,5 +1,5 @@
 
-import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF} from "el/base/Event";
+import { IF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF} from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './LayoutProperty.scss';
@@ -80,7 +80,11 @@ export default class LayoutProperty extends BaseProperty {
 
   }
 
-  [SUBSCRIBE('refreshSelection')]() {
-    this.refreshShow(['rect', 'circle', 'artboard'], true);
+  get editableProperty() {
+    return 'layout'
+  }
+
+  [SUBSCRIBE('refreshSelection') + IF('checkShow')]() {
+    this.refresh();
   }
 }

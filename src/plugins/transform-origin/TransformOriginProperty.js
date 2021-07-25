@@ -1,5 +1,5 @@
 
-import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class TransformOriginProperty extends BaseProperty {
@@ -33,9 +33,13 @@ export default class TransformOriginProperty extends BaseProperty {
     return /*html*/`<object refClass="TransformOriginEditor" ref='$1' value='${value}' onchange='changeTransformOrigin' />`
   }
 
+  get editableProperty() {
+    return 'transform-origin';
+  }
 
-  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShowIsNot(['project', 'artboard']);
+
+  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100) + IF('checkShow')]() {
+    this.refresh();
   }
 
   [SUBSCRIBE_SELF('changeTransformOrigin')](key, value) {

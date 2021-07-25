@@ -10,6 +10,7 @@ import { SVGPathItem } from "./layers/SVGPathItem";
 import { SVGTextItem } from "./layers/SVGTextItem";
 import { SVGTextPathItem } from "./layers/SVGTextPathItem";
 import { TemplateLayer } from "./layers/TemplateLayer";
+import { TextLayer } from "./layers/TextLayer";
 import { VideoLayer } from "./layers/VideoLayer";
 
 /**
@@ -24,6 +25,7 @@ export default function (editor) {
     editor.registerItem("cube", CubeLayer);
     editor.registerItem("cylinder", CylinderLayer);
     editor.registerItem("image", ImageLayer);
+    editor.registerItem("text", TextLayer);
     editor.registerItem("svg-path", SVGPathItem);
     editor.registerItem("svg-text", SVGTextItem);
     editor.registerItem("svg-textpath", SVGTextPathItem);

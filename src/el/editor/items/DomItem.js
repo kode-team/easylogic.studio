@@ -6,6 +6,41 @@ import { ClipPath } from "el/editor/property-parser/ClipPath";
 import PathParser from "el/editor/parser/PathParser";
 
 
+const editableList = [
+  'position',
+  'right',
+  'bottom',
+  'rootVariable',
+  'variable',
+  'transform',
+  'filter',
+  'backdrop-filter',
+  'background-color',
+  'background-image',
+  'border-radius',
+  'border',
+  'box-shadow',
+  'clip-path',
+  'color',
+  'perspective-origin',
+  'transform-origin',
+  'transform-style',
+  'perspective',
+  'mix-blend-mode',
+  'overflow',
+  'opacity',
+  'flex-layout',
+  'grid-layout',
+  'animation',
+  'transition',
+  'pattern',
+]
+
+const editableKeys = {}
+editableList.forEach(function (key) {
+  editableKeys[key] = true
+})
+
 export class DomItem extends GroupItem {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
@@ -15,7 +50,7 @@ export class DomItem extends GroupItem {
       'right': '',
       'bottom': '',
       'rootVariable': '',
-      'variable': '',      
+      'variable': '',
       'width': Length.px(300),
       'height': Length.px(300),
       'color': "black",
@@ -37,7 +72,7 @@ export class DomItem extends GroupItem {
 
   toCloneObject() {
 
-    var json = this.json; 
+    var json = this.json;
 
     return {
       ...super.toCloneObject(),
@@ -50,10 +85,10 @@ export class DomItem extends GroupItem {
         'transform',
         'filter',
         'backdrop-filter',
-        'background-color',      
-        'background-image',      
+        'background-color',
+        'background-image',
         'text-clip',
-        'border-radius',      
+        'border-radius',
         'border',
         'box-shadow',
         'text-shadow',
@@ -67,20 +102,20 @@ export class DomItem extends GroupItem {
         'text-decoration',
         'letter-spacing',
         'word-spacing',
-        'text-indent',      
+        'text-indent',
         'perspective-origin',
         'transform-origin',
-        'transform-style',      
+        'transform-style',
         'perspective',
         'mix-blend-mode',
         'overflow',
         'opacity',
-        'flex-layout',      
-        'grid-layout',         
-        'animation',      
-        'transition',  
+        'flex-layout',
+        'grid-layout',
+        'animation',
+        'transition',
       ),
-        
+
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
       // keyframes: json.keyframes.map(keyframe => keyframe.clone()),
       selectors: json.selectors.map(selector => selector.clone()),
@@ -88,10 +123,30 @@ export class DomItem extends GroupItem {
     }
   }
 
+  editable(editablePropertyName) {
+
+    if (editablePropertyName == 'border' && this.hasChildren()) {
+      return false
+    }
+
+    switch (editablePropertyName) {
+      case 'svg-item':
+      case 'box-model':
+      case 'transform':
+      case 'transform-origin':
+      case 'perspective':
+      case 'perspective-origin':
+        return false;
+    }
+
+    return Boolean(editableKeys[editablePropertyName])
+  }
+
+
   addSelector(selector) {
     this.json.selectors.push(selector);
     return selector;
-  }      
+  }
 
   createSelector(data = {}) {
     return this.addSelector(
@@ -100,18 +155,18 @@ export class DomItem extends GroupItem {
         ...data
       })
     );
-  }    
+  }
 
   removePropertyList(arr, removeIndex) {
     arr.splice(removeIndex, 1);
   }
-  
+
   removeSelector(removeIndex) {
     this.removePropertyList(this.json.selectors, removeIndex);
-  }    
+  }
 
   enableHasChildren() {
-    return true; 
+    return true;
   }
 
   sortItem(arr, startIndex, targetIndex) {
@@ -124,7 +179,7 @@ export class DomItem extends GroupItem {
 
   updateSelector(index, data = {}) {
     this.json.selectors[+index].reset(data);
-  }        
+  }
 
 
   traverse(item, results, hasLayoutItem) {
@@ -149,19 +204,19 @@ export class DomItem extends GroupItem {
 
     return results;
   }
-  
+
   // export animation keyframe
   /**
    * @deprecated 
    * 
-   */ 
-  toAnimationKeyframes (properties) {
+   */
+  toAnimationKeyframes(properties) {
     return [
       { selector: `[data-id="${this.json.id}"]`, properties }
-    ] 
+    ]
   }
 
-  toBound () {
+  toBound() {
     var obj = {
       x: this.json.x ? this.json.x.clone() : Length.z(),
       y: this.json.y ? this.json.y.clone() : Length.z(),
@@ -181,7 +236,7 @@ export class DomItem extends GroupItem {
 
     // transform 에 변경이 생기면 미리 캐슁해둔다. 
     if (isChanged && this.hasChangedField('clip-path')) {
-        this.setClipPathCache()
+      this.setClipPathCache()
     }
 
     return isChanged;
@@ -195,6 +250,12 @@ export class DomItem extends GroupItem {
     }
   }
 
+  setCache() {
+    super.setCache();
+    
+    this.setClipPathCache();
+  }
+
   get clipPathString() {
 
     if (!this.cacheClipPath) {
@@ -206,5 +267,5 @@ export class DomItem extends GroupItem {
     }
 
   }
- 
+
 }

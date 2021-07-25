@@ -23,4 +23,16 @@ export default class ArtBoardRender extends DomRender {
       </${tagName}>
     `
   }
+
+
+  /**
+   * 
+   * artboard 는 border 를 표현하지 않는다. 
+   * 
+   * @param {Item} item 
+   */
+   toBorderCSS(item) {
+    return {}; 
+  }
+
 }

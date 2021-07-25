@@ -783,13 +783,23 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         }
     }
 
-    [SUBSCRIBE('refreshSelectionStyleView')] () {
 
+
+    checkShow() {
         if (this.$selection.isMany) {
-            if (this.$selection.hasChangedField('x', 'y', 'width', 'height', 'transform', 'transform-origin', 'perspective', 'perspective-origin')) {
-                this.renderPointers()
+            if (this.$selection.hasChangedField('x', 'y', 'width', 'height', 'transform', 'transform-origin', 'perspective', 'perspective-origin')) {            
+                return true; 
             }
         }
 
+        return false; 
+    }
+
+    [SUBSCRIBE('refreshSelectionStyleView') + IF('checkShow')] () {
+        this.renderPointers()
+    }
+
+    [SUBSCRIBE('hideSelectionToolView')] () {
+        this.$el.hide();
     }
 } 

@@ -1,5 +1,5 @@
 import { Length } from "el/editor/unit/Length";
-import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { IF, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class SVGItemProperty extends BaseProperty {
@@ -12,21 +12,15 @@ export default class SVGItemProperty extends BaseProperty {
     return "item"
   }
 
-  isSVGItem  (current) {
-    return current.is('svg-path', 'svg-brush', 'svg-polygon', 'svg-textpath', 'svg-text')
+  get editableProperty() {
+    return 'svg-item';
   }
 
-
-  [SUBSCRIBE('refreshSelection')]() {
+  [SUBSCRIBE('refreshSelection') + IF('checkShow')]() {
 
     var current = this.$selection.current;
 
-    if (current && this.isSVGItem(current)) {
-
-      if (this.$el.isHide()) {
-        this.$el.show();
-      }
-
+    if (current) {
       this.children.$fill.setValue(current['fill'] || 'rgba(0, 0, 0, 0)')
       this.children.$stroke.setValue(current['stroke'] || 'rgba(0, 0, 0, 1)')
       this.children.$fillOpacity.setValue(current['fill-opacity'] || Length.number(1))
@@ -37,9 +31,6 @@ export default class SVGItemProperty extends BaseProperty {
       this.children.$strokeLineCap.setValue(current['stroke-linecap'] || 'butt')
       this.children.$strokeLineJoin.setValue(current['stroke-linejoin'] || 'miter')
       this.children.$mixBlend.setValue(current['mix-blend-mode'])      
-
-    } else {
-      this.$el.hide();
     }
 
   }
@@ -169,7 +160,7 @@ export default class SVGItemProperty extends BaseProperty {
             tabIndex="1"
             onchange="changeSelect" />
         </div>                 
-        <div class='property-item animation-property-item'>
+        <!--div class='property-item animation-property-item'>
           <div class='group'>        
             <span class='add-timeline-property' data-property='svgfilter'></span>      
           </div>
@@ -179,7 +170,7 @@ export default class SVGItemProperty extends BaseProperty {
             key="svgfilter" 
             onchange="changeValue" 
           />
-        </div>         
+        </div-->         
       </div>
    
     `;

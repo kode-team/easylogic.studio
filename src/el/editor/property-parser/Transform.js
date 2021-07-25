@@ -220,7 +220,7 @@ export class Transform extends Property {
    * @param {number} height Layer 의 실제 높이 
    */
   static createTransformMatrix(parsedTransformList, width, height) {
-
+ 
     // start with the identity matrix 
     const view = mat4.create();
 

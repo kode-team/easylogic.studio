@@ -1,4 +1,4 @@
-import { CLICK, DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { CLICK, DEBOUNCE, IF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
@@ -35,11 +35,14 @@ export default class BoxShadowProperty extends BaseProperty {
     this.children.$boxshadow.trigger('add');
   }
 
-  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)]() {
+  get editableProperty() {
+    return 'box-shadow';
+  }
 
-    this.refreshShowIsNot(['project', 'svg-path', 'svg-polygon', 'svg-text', 'svg-textpath'])
+  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100) + IF('checkShow')]() {
+    this.refresh();
 
-  }  
+  }
 
   [SUBSCRIBE_SELF("changeBoxShadow")](boxshadow) {
 

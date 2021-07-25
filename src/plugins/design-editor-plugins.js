@@ -70,6 +70,16 @@ export default [
     color,
     gradient,
 
+    // inspector.tab.style 
+    svgText,
+    font,
+    text,
+    textShadow,
+    fontSpacing,
+    content,
+    textFill,
+    textClip,    
+
     alignment,
     artboard,
     appearance,
@@ -111,15 +121,7 @@ export default [
 
     exportResource,
 
-    // inspector.tab.text 
-    svgText,
-    font,
-    text,
-    textShadow,
-    fontSpacing,
-    content,
-    textFill,
-    textClip,
+
 
     // animation 
     transition,

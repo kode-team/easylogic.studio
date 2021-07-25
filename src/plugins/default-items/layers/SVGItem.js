@@ -1,6 +1,28 @@
 import { Layer } from "el/editor/items/Layer";
 
 
+const expectedProperties = [
+  'border',
+  'border-radius',
+  'background-image',
+  'backdrop-filter',
+  'clip-path',
+  'pattern',
+  'box-shadow',
+  'layout',
+  'transform',
+  'transform-origin',
+  'perspective',
+  'perspective-origin',
+  'backdrop-filter',
+]
+
+const expectedPropertiesKeys = {}
+
+expectedProperties.forEach(key => {
+  expectedPropertiesKeys[key] = true
+})
+
 export class SVGItem extends Layer {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
@@ -23,6 +45,19 @@ export class SVGItem extends Layer {
     });
   }
 
+  editable(editablePropertyName) {
+
+    if (expectedPropertiesKeys[editablePropertyName]) {
+      return false;
+    }
+
+    switch(editablePropertyName) {
+    case 'svg-item':
+      return true; 
+    }
+
+    return super.editable(editablePropertyName);
+  }
 
   toCloneObject() {
     return {

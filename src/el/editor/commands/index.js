@@ -102,8 +102,12 @@ import addCustomComponent from "./addCustomComponent";
 import toggleToolHand from "./toggle.tool.hand";
 import rotateLayer from "./rotateLayer";
 import refreshHistory from "./refreshHistory";
+import openPathEditor from './openPathEditor';
+import openEditor from './openEditor';
 
 export default {
+    openEditor,
+    openPathEditor,
     refreshHistory,
     convertPasteText,
     refreshCursor,

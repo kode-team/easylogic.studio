@@ -29,6 +29,7 @@
   }
 
   .filter-list {
+    padding: 0px 10px;
     width: 100%;
     display: grid !important;
     grid-template-columns: 1fr !important;
@@ -50,8 +51,8 @@
         }
   
         label {
-          font-size: 12px;
-          padding: 5px 3px;
+          // font-size: 12px;
+          padding: 5px 0px;
           cursor: move;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -77,6 +78,8 @@
   
         .filter-menu {
           text-align: right;
+          padding:4px 0px;
+          box-sizing: border-box;
         }
       }
   

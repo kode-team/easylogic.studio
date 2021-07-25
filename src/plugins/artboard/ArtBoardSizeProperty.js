@@ -1,4 +1,4 @@
-import { LOAD, DOMDIFF, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { LOAD, DOMDIFF, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/base/Event";
 
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import artboardSize from "./preset/artboard.size";
@@ -10,8 +10,12 @@ export default class ArtBoardSizeProperty extends BaseProperty {
     return 'elf--artboard-size-list'
   }
 
-  [SUBSCRIBE('refreshSelection')] () {
-    this.refreshShow(['artboard']);
+  get editableProperty() {
+    return 'artboard-size';
+  }
+
+  [SUBSCRIBE('refreshSelection') + IF('checkShow')] () {
+    this.refresh();
   }
 
   initState() {

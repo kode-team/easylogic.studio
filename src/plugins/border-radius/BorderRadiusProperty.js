@@ -1,4 +1,4 @@
-import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { DEBOUNCE, IF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class BorderRadiusProperty extends BaseProperty {
@@ -29,10 +29,13 @@ export default class BorderRadiusProperty extends BaseProperty {
     `
   }
 
+  get editableProperty() {
+    return 'border-radius';
+  }
 
 
-  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShowIsNot(['project', 'svg-path', 'svg-polygon', 'svg-text', 'svg-textpath']);
+  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100) + IF('checkShow')]() {
+    this.refresh();
   }  
 
   [SUBSCRIBE_SELF('changeBorderRadius')] (value) {

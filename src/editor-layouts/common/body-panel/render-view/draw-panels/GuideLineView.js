@@ -317,7 +317,10 @@ export default class GuideLineView extends EditorElement {
     }
 
     [SUBSCRIBE('refreshSelectionStyleView')]() {
-        if (this.$selection.hasChangedField('x', 'y', 'width', 'height', 'transform', 'transform-origin')) {
+
+        const expect = this.$selection.hasChangedField('d', 'clip-path')
+
+        if (!expect && this.$selection.hasChangedField('x', 'y', 'width', 'height', 'transform', 'transform-origin')) {
             this.refreshSmartGuidesForVerties();
         }
     }

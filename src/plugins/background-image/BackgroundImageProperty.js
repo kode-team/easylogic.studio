@@ -1,6 +1,6 @@
 
 import {
-  LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF
+  LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF
 } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
@@ -63,12 +63,12 @@ export default class BackgroundImageProperty extends BaseProperty {
             />`
   }
 
-  [SUBSCRIBE('refreshSelection')]() {
-    this.refreshShowIsNot(['project', 'svg-path', 'svg-polygon', 'svg-text', 'svg-textpath']);
+  get editableProperty() {
+    return 'background-image';
   }
 
-  refresh() {
-    this.load();
+  [SUBSCRIBE('refreshSelection') + IF('checkShow')]() {
+    this.refresh();
   }
 
   [SUBSCRIBE_SELF('changeBackgroundImage')] (key, value) {

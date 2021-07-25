@@ -201,4 +201,24 @@ export default class BaseProperty extends EditorElement {
 
     input.blur();
   }
+
+  get editableProperty() {
+    return '';
+  }
+
+  checkShow() {
+
+    if (!this.$selection.current) {
+      this.hide();
+      return false; 
+    }
+
+    if (this.$selection.current.editable(this.editableProperty)) {
+      this.show();
+      return true; 
+    } else {
+      this.hide();
+      return false; 
+    }
+  }
 }
