@@ -332,8 +332,6 @@ export default class DragAreaView extends EditorElement {
 
     moveEndPointer() {
 
-        console.log("aaaa");
-
         if (this.$config.get('set.dragarea.mode')) {
             this.emit('endDragAreaView');
         } else if (this.$config.get('set.move.mode')) {
