@@ -12,20 +12,12 @@ export default {
             editor.emit('addBackgroundImagePattern', obj.pattern, id)            
         } else if (obj.imageUrl) {
             editor.emit('addBackgroundImageAsset', obj.imageUrl, id)
-        } else if (obj.artboard) {
+        } else if (obj.asset) {
 
-            const artboardData = await editor.storageManager.getArtBoard(obj.artboard.id);
-            if (artboardData) {
-                editor.emit('addArtBoard', artboardData, obj.artboard.center)
+            const assetData = await editor.storageManager.getCustomAsset(obj.asset.id);
+            if (assetData) {
+                editor.emit('addArtBoard', assetData, obj.asset.center)
             }
-
-        } else if (obj.customComponent) {
-
-            const componentData = await editor.storageManager.getCustomComponent(obj.customComponent.id);
-            if (componentData) {
-                editor.emit('addArtBoard', componentData, obj.customComponent.center)
-            }
-
         }
 
         _doForceRefreshSelection(editor, true);

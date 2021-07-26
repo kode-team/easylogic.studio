@@ -27,6 +27,11 @@ export default class BackdropFilterProperty extends BaseProperty {
     return 'backdrop-filter';
   }
 
+  getBodyClassName() {
+    return 'no-padding';
+  }
+
+
 
   getBody() {
     return /*html*/`<div class='full filter-property' ref='$body'></div>`;

@@ -3,6 +3,8 @@ import { BIND, INPUT } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { Length } from "el/editor/unit/Length";
 
+import './TextAreaEditor.scss'
+
 export default class TextAreaEditor extends EditorElement {
 
     initState() {
@@ -19,7 +21,7 @@ export default class TextAreaEditor extends EditorElement {
         var { label, height, value } = this.state; 
         var hasLabel = !!label ? 'has-label' : ''
         return /*html*/`
-            <div class='text-editor ${hasLabel}'>
+            <div class='elf--text-area-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : '' }
                 <textarea ref='$text' style='height:${height}'>${value}</textarea>
             </div>

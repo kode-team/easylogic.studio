@@ -119,7 +119,7 @@ export default class FilterEditor extends EditorElement {
             ref='$dropShadowColorView${index}' 
             params="${index}" 
             value="${filter.color}" 
-            onChange="changeDropShadowColor" />
+            on-change-value="changeDropShadowColor" />
         </div>
 
         ${["offsetX", "offsetY", "blurRadius"].map(key => {
@@ -294,8 +294,7 @@ export default class FilterEditor extends EditorElement {
     var project = this.$selection.currentProject; 
     
     if (project) {
-      var svgfilterIndex = project.getSVGFilterIndex(filter.value);
-
+      var svgfilterIndex = project.getSVGFilterIndex(filter.value?.value?.replace('#', ''));
       this.trigger('openSVGFilterPopup', svgfilterIndex);
 
     }
@@ -308,27 +307,23 @@ export default class FilterEditor extends EditorElement {
     var svgfilter = currentProject.svgfilters[index];
 
     this.emit("showSVGFilterPopup", {
-        changeEvent: 'changeSVGFilterRealUpdate',
+        changeEvent: (params) => {
+          var project = this.$selection.currentProject
+
+          if (project) {
+            project.setSVGFilterValue(params.index, {
+              filters: params.filters
+            });
+        
+            this.emit('refreshSVGFilterAssets');
+            this.emit('refreshSVGArea');
+          }          
+        },
         index,
         preview: false,
         filters: svgfilter.filters 
     });
   }
-
-
-  [SUBSCRIBE('changeSVGFilterRealUpdate')] (params) {
-    var project = this.$selection.currentProject
-
-    if (project) {
-      project.setSVGFilterValue(params.index, {
-        filters: params.filters
-      });
-  
-      this.emit('refreshSVGFilterAssets');
-      this.emit('refreshSVGArea');
-    }
-  }
-
 
   [SUBSCRIBE("add")](filterType) {
 

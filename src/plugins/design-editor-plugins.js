@@ -82,16 +82,16 @@ export default [
 
     alignment,
     artboard,
+    // layout 
+    layout,    
     appearance,
-    iframe,
+    // iframe,
     component,
     backgroundImage,
     // border 
     border,
     borderRadius,
 
-    // layout 
-    layout,
 
     // resource    
     video,

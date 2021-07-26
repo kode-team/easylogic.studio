@@ -1,4 +1,4 @@
-import { CLICK, INPUT, BIND, FOCUS, BLUR, SUBSCRIBE } from "el/base/Event";
+import { CLICK, INPUT, BIND, FOCUS, BLUR } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './ColorViewEditor.scss';
@@ -6,6 +6,7 @@ import './ColorViewEditor.scss';
 export default class ColorViewEditor extends EditorElement {
 
     initState() {
+
         return {
             label: this.props.label,
             value: this.props.value || 'rgba(0, 0, 0, 1)'
@@ -95,8 +96,12 @@ export default class ColorViewEditor extends EditorElement {
     viewColorPicker() {
         this.emit("showColorPickerPopup", {
             target: this, 
-            changeEvent: 'changeColorViewEditor',
-            changeEndEvent: 'changeEndColorViewEditor',
+            changeEvent: (color) => {
+                this.updateData({ value: color })
+            },
+            changeEndEvent: (color) => {
+                this.updateEndData({ value: color })
+            },
             color: this.state.value
         });
     }
@@ -112,13 +117,5 @@ export default class ColorViewEditor extends EditorElement {
 
         this.updateData({ value: color })
     }
-
-    [SUBSCRIBE("changeColorViewEditor")](color) {
-        this.updateData({ value: color })
-    }
-
-    [SUBSCRIBE("changeEndColorViewEditor")](color) {
-        this.updateEndData({ value: color })
-    }    
 
 }

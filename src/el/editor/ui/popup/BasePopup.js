@@ -19,6 +19,7 @@ export default class BasePopup extends EditorElement {
                 </span>
             </div>
             <div class='popup-body'>${this.getBody()}</div>
+            <!--<div class='popup-resizer' ref='$resizer'></div> -->
         </div>
         `;
   }
@@ -80,5 +81,18 @@ export default class BasePopup extends EditorElement {
   [SUBSCRIBE( "hidePropertyPopup")]() {
     this.hide();
   }
+
+  [POINTERSTART('$resizer') + MOVE('moveResizer')] (e) {
+    this.width = Length.parse(this.$el.css('width'));
+    this.height = Length.parse(this.$el.css('height'));
+  }
+
+  moveResizer (dx, dy) {
+    this.$el.css({
+      width: Length.px(Math.min(this.width.value + dx, 1000)),
+      height: Length.px(Math.min(this.height.value + dy, 700)),
+    })
+  }
+
 
 }

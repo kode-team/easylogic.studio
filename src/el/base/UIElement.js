@@ -1,6 +1,6 @@
 import { CHECK_SAPARATOR, CHECK_SUBSCRIBE_PATTERN, SAPARATOR, SUBSCRIBE_SAPARATOR } from "./Event";
 import EventMachine from "./EventMachine";
-import { splitMethodByKeyword } from "./functions/func";
+import { isFunction, splitMethodByKeyword } from "./functions/func";
 
 /**
  * UI 를 만드는 기본 단위 
@@ -77,11 +77,16 @@ class UIElement extends EventMachine {
           )
         })
         .map(it => it.trim())
+        .filter(Boolean)
         .forEach(e => {
-          var callback = this[key].bind(this);
-          callback.displayName = `${this.sourceName}.${e}`;
-          callback.source = this.source;
-          this.$store.on(e, callback, this, debounceSecond, throttleSecond, allTriggerMethods.length, selfTriggerMethods.length, checkMethodList);
+
+          if (isFunction(this[key])) {
+            var callback = this[key].bind(this);
+            callback.displayName = `${this.sourceName}.${e}`;
+            callback.source = this.source;
+            this.$store.on(e, callback, this, debounceSecond, throttleSecond, allTriggerMethods.length, selfTriggerMethods.length, checkMethodList);
+          }
+
       });
     });
   }

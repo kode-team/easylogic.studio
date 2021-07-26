@@ -216,7 +216,8 @@ export default class DomRender extends ItemRender {
     return {
       ...obj,
       ...{
-        padding: 'inherit',
+        'will-change': 'auto',
+        // 'content-visibility': 'auto',
       },
       ...this.toKeyListCSS(item, [
         'position', 

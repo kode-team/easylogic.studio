@@ -63,7 +63,7 @@ ${this.makeSvg(project)}
   },
 
   generateSVG (editor, rootItem) {
-    return editor.replaceLocalUrltoRealUrl(this.$editor.svg.render(rootItem, null, true));
+    return editor.replaceLocalUrltoRealUrl(editor.svg.render(rootItem, null, true));
   }
 
 }

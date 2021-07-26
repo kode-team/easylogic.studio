@@ -10,9 +10,9 @@ module.exports = {
   entry: {
     editor: "./src/index.js",
     canvas: "./src/index-canvas.js",
-    skia: "./src/index-skia.js",
+    // skia: "./src/index-skia.js",
     embed: "./src/index-embed.js",    
-    player: "./src/index-player.js",        
+    // player: "./src/index-player.js",        
   },
   output: {
     library: "elf",
@@ -122,12 +122,12 @@ module.exports = {
       filename: "./embed.html",
       excludeChunks: ['player', 'editor', 'canvas', 'skia']
     }),        
-    new HtmlWebPackPlugin({
-      inject: true,
-      template: "./src/dev-fullpage.html",
-      filename: "./player.html",
-      excludeChunks: ['editor', 'embed', 'canvas', 'skia']
-    }),                
+    // new HtmlWebPackPlugin({
+    //   inject: true,
+    //   template: "./src/dev-fullpage.html",
+    //   filename: "./player.html",
+    //   excludeChunks: ['editor', 'embed', 'canvas', 'skia']
+    // }),                
 
     new HtmlWebPackPlugin({
       inject: true,
@@ -135,12 +135,12 @@ module.exports = {
       filename: "./canvas.html",
       excludeChunks: ['editor', 'embed', 'player', 'skia']
     }),                    
-    new HtmlWebPackPlugin({
-      inject: true,
-      template: "./src/dev-fullpage.html",
-      filename: "./skia.html",
-      excludeChunks: ['editor', 'embed', 'player', 'canvas']
-    }),                
+    // new HtmlWebPackPlugin({
+    //   inject: true,
+    //   template: "./src/dev-fullpage.html",
+    //   filename: "./skia.html",
+    //   excludeChunks: ['editor', 'embed', 'player', 'canvas']
+    // }),                
     new CopyWebpackPlugin([
       { from: 'node_modules/canvaskit-wasm/bin/canvaskit.wasm' }
     ]),

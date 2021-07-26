@@ -19,11 +19,11 @@ export default class ClipPathProperty extends BaseProperty {
     return this.$i18n('clippath.property.title');
   }
 
-  hasKeyframe () {
-    return true; 
+  hasKeyframe() {
+    return true;
   }
 
-  getKeyframeProperty () {
+  getKeyframeProperty() {
     return 'clip-path';
   }
 
@@ -40,14 +40,14 @@ export default class ClipPathProperty extends BaseProperty {
     return /*html*/`
       <select ref="$clipPathSelect">      
         ${clipPathList.map(it => {
-          return `<option value='${it}'>${it}</option>`
-        }).join('')}
+      return `<option value='${it}'>${it}</option>`
+    }).join('')}
       </select>
       <button type="button" ref="$add" title="add Clip Path">${icon.add}</button>
     `;
   }
 
-  makeClipPathTemplate (clippath) {
+  makeClipPathTemplate(clippath) {
     return /*html*/`
       <div class='clippath-item'>
         <div class='title'>
@@ -60,7 +60,7 @@ export default class ClipPathProperty extends BaseProperty {
     `
   }
 
-  [CLICK('$clippathList .clippath-item .title')] (e) {
+  [CLICK('$clippathList .clippath-item .title')](e) {
     var current = this.$selection.current;
     if (!current) return;
 
@@ -69,14 +69,14 @@ export default class ClipPathProperty extends BaseProperty {
 
   }
 
-  [CLICK('$clippathList .del') + PREVENT] (e) {
+  [CLICK('$clippathList .del') + PREVENT](e) {
     var current = this.$selection.current;
     if (!current) return;
 
-    this.command('setAttributeForMulti', 'delete clip-path', this.$selection.packByValue({ 
-      'clip-path': '' 
-    }));    
-    this.emit('hideClipPathPopup');    
+    this.command('setAttributeForMulti', 'delete clip-path', this.$selection.packByValue({
+      'clip-path': ''
+    }));
+    this.emit('hideClipPathPopup');
 
     setTimeout(() => {
       this.refresh();
@@ -87,7 +87,7 @@ export default class ClipPathProperty extends BaseProperty {
     return "clip-path";
   }
 
-  [SUBSCRIBE('refreshSelection') + IF('checkShow')] () {
+  [SUBSCRIBE('refreshSelection') + IF('checkShow')]() {
     this.refresh();
   }
 
@@ -104,18 +104,18 @@ export default class ClipPathProperty extends BaseProperty {
 
     var current = this.$selection.current;
 
-    if (!current) return ;
+    if (!current) return;
     if (current['clip-path']) {
       alert('clip-path is already exists.');
-      return; 
+      return;
     }
 
     if (current) {
       current['clip-path'] = this.refs.$clipPathSelect.value;
 
-      
+
       this.command("setAttributeForMulti", 'change clip-path', this.$selection.packByValue({
-        'clip-path':  this.refs.$clipPathSelect.value
+        'clip-path': this.refs.$clipPathSelect.value
       }));
     }
 
@@ -128,55 +128,47 @@ export default class ClipPathProperty extends BaseProperty {
 
     var obj = ClipPath.parseStyle(current['clip-path'])
 
-    switch(obj.type) {
-    case 'path':
-      var d = current.accumulatedPath(current.clipPathString).d
-      var mode = d ? 'modify' : 'path'
+    switch (obj.type) {
+      case 'path':
+        var d = current.accumulatedPath(current.clipPathString).d
+        var mode = d ? 'modify' : 'path'
 
-      this.emit('showPathEditor', mode, {
-        changeEvent: 'updateClipPathString',
-        current,
-        d,
-      }) 
-      break; 
-    case 'svg':
-      // TODO: clip art 선택하기 
-      break; 
-    default: 
-      this.emit("showClipPathPopup", {
-        'clip-path': current['clip-path']
-      });      
-      break; 
+        this.emit('showPathEditor', mode, {
+          changeEvent: (data) => {
+            data.d = current.invertPath(data.d).scale(1 / current.width.value, 1 / current.height.value).d;
+
+            this.updatePathInfo({
+              'clip-path': `path(${data.d})`
+            });
+          },
+          current,
+          d,
+        })
+        break;
+      case 'svg':
+        // TODO: clip art 선택하기 
+        break;
+      default:
+        this.emit("showClipPathPopup", {
+          'clip-path': current['clip-path'],
+          changeEvent: (data) => {
+            this.updatePathInfo(data);
+          }
+        });
+        break;
     }
-
-
   }
 
-  [SUBSCRIBE('updateClipPathString')] (data) {
-    var current = this.$selection.current;
 
+  updatePathInfo(data) {
+    if (!data) return;
+    var current = this.$selection.current;
     if (!current) return;
 
-    data.d = current.invertPath(data.d).scale(1/current.width.value, 1/current.height.value).d;
-
-    current.reset({
-      'clip-path': `path(${data.d})`      
-    })
+    current.reset(data);
 
     this.refresh();
-
-    this.emit('updateClipPath', data);
-  }
-
-  [SUBSCRIBE('changeClipPathPopup')] (data) {
-    var current = this.$selection.current;
-
-    if (!current) return;
-
-    current.reset(data); 
-
-    this.refresh();
-    this.command('setAttributeForMulti', 'change clip-path', this.$selection.packByValue(data));        
+    this.command('setAttributeForMulti', 'change clip-path', this.$selection.packByValue(data));
   }
 
 }

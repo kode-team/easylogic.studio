@@ -42,6 +42,7 @@ export class TextLayer extends Layer {
       case "text-fill":
       case 'text-clip':
       case 'background-image':
+      case 'box-model':
         return true;
       case 'svg-item':
       case 'border':

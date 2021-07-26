@@ -1,5 +1,5 @@
 
-import { BIND, DRAGOVER, DROP, END, IF, MOVE, normalizeWheelEvent, POINTERSTART, PREVENT, SUBSCRIBE, WHEEL } from "el/base/Event";
+import { BIND, CONFIG, DRAGOVER, DROP, END, IF, MOVE, normalizeWheelEvent, POINTERSTART, PREVENT, SUBSCRIBE, WHEEL } from "el/base/Event";
 import { vec3 } from "gl-matrix";
 import { KEY_CODE } from "el/editor/types/key";
 import Resource from "el/editor/util/Resource";
@@ -105,7 +105,7 @@ export default class CanvasView extends EditorElement {
     this.startMovePan();
   }
 
-  [SUBSCRIBE('config:set.tool.hand')](value) {
+  [CONFIG('set.tool.hand')](value) {
     if (value) {
       this.startMovePan();
 

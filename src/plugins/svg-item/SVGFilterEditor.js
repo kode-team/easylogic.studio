@@ -255,10 +255,10 @@ export default class SVGFilterEditor extends EditorElement {
               </div>
             </div>
             <div class="tab-body">
-              <div class="tab-content selected" data-value="1">
+              <div class="tab-content scrollbar selected" data-value="1">
                 ${this.makeFilterSelect()}
               </div>
-              <div class="tab-content" data-value="2">
+              <div class="tab-content  scrollbar" data-value="2">
                 ${this.makeFilterTemplateSelect()}
               </div>
                      

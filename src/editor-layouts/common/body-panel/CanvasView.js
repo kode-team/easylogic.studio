@@ -1,5 +1,5 @@
 
-import { BIND, DRAGOVER, DROP, END, IF, MOVE, normalizeWheelEvent, POINTERSTART, PREVENT, SUBSCRIBE, WHEEL } from "el/base/Event";
+import { BIND, CONFIG, DRAGOVER, DROP, END, IF, MOVE, normalizeWheelEvent, POINTERSTART, PREVENT, SUBSCRIBE, WHEEL } from "el/base/Event";
 import { vec3 } from "gl-matrix";
 import { KEY_CODE } from "el/editor/types/key";
 import Resource from "el/editor/util/Resource";
@@ -133,7 +133,7 @@ export default class CanvasView extends EditorElement {
     this.startMovePan();
   }
 
-  [SUBSCRIBE('config:set.tool.hand')](value) {
+  [CONFIG('set.tool.hand')](value) {
     if (value) {
       this.startMovePan();
 
@@ -190,10 +190,10 @@ export default class CanvasView extends EditorElement {
   [DROP('$lock') + PREVENT](e) {
     const newCenter = this.$viewport.getWorldPosition(e);
 
-    if (e.dataTransfer.getData('text/artboard')) {
+    if (e.dataTransfer.getData('text/asset')) {
 
       this.emit('drop.asset', {
-        artboard: { id: e.dataTransfer.getData('text/artboard'), center: newCenter }
+        asset: { id: e.dataTransfer.getData('text/asset'), center: newCenter }
       })
 
     } else if (e.dataTransfer.getData('text/custom-component')) {

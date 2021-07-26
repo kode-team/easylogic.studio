@@ -54,7 +54,7 @@ export class DomItem extends GroupItem {
       'width': Length.px(300),
       'height': Length.px(300),
       'color': "black",
-      'font-size': Length.px(13),
+      // 'font-size': Length.px(13),
       'overflow': 'visible',
       'opacity': 1,
       'z-index': Length.auto,

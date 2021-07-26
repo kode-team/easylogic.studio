@@ -35,15 +35,15 @@ export default class SVGPathRender extends SVGItemRender {
 
     return this.wrappedRender(item, () => {
       return /*html*/`
-        <path ${OBJECT_TO_PROPERTY({
-          'class': 'svg-path-item', 
-          d, 
-          filter: this.toFilterValue(item),
-          fill: this.toFillValue(item),
-          stroke: this.toStrokeValue(item),
-          ...this.toSVGAttribute(item),
-          style: CSS_TO_STRING(this.toCSS(item))      
-        })} />
+<path ${OBJECT_TO_PROPERTY({
+  'class': 'svg-path-item', 
+  d, 
+  filter: this.toFilterValue(item),
+  fill: this.toFillValue(item),
+  stroke: this.toStrokeValue(item),
+  ...this.toSVGAttribute(item),
+  style: CSS_TO_STRING(this.toCSS(item))      
+})} />
     `
     }) 
   }

@@ -3,14 +3,47 @@ import { CSS_TO_STRING, TAG_TO_STRING, isFunction } from 'el/base/functions/func
 import { Item } from 'el/editor/items/Item';
 import { Editor } from 'el/editor/manager/Editor';
 
+const char_list = [
+    /\(/gi,
+    /\)/gi,
+]
 
+const function_list = 'grayscale,matrix,rotateZ,blur,sepia,linear-gradient,radial-gradient,conic-gradient,circle,inset,polygon,rgb'.split(',').map(it => {
+    return new RegExp(it, "gi");
+});
+const keyword_list = 'butt,miter,start,at,black,repeat,lighten,multiply,solid,border-box,visible,absolute,relative,auto'.split(',').map(it => {
+    return new RegExp(it, "gi");
+});
+
+function replaceKeyword(str) {
+
+    keyword_list.forEach(ke => {
+        str = str.replace(ke, (str) => {
+            return `<span class="keyword">${str}</span>`;
+        });
+    });
+
+    function_list.forEach(ke => {
+        str = str.replace(ke, (str) => {
+            return `<span class="function">${str}</span>`;
+        });
+    });    
+
+    char_list.forEach(ke => {
+        str = str.replace(ke, (str) => {
+            return `<span class="char">${str}</span>`;
+        });
+    });
+
+    return str;
+}
 
 function filterKeyName (str, prefixPadding = '') {
     return str.split(';').filter(it => it.trim()).map(it => {
       it = it.trim();
       var [key, value] = it.split(':')
 
-      return `${prefixPadding}<strong>${key}</strong>:${value};\n` 
+      return /*html*/`<div class="block"><strong>${key}</strong><span>:</span><span class="value">${replaceKeyword(value)}</span><span>;</span></div>` 
     }).join('').trim()
 }
 

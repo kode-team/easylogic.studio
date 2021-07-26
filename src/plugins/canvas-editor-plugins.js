@@ -73,7 +73,7 @@ export default [
     // alignment,
     // artboard,
     // appearance,
-    iframe,
+    // iframe,
     // component,
     // backgroundImage,
     // // border 

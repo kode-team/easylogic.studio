@@ -37,7 +37,7 @@ module.exports = {
     editor: "./src/editor-layouts/designeditor/index.js",
     canvas: "./src/editor-layouts/canvaseditor/index.js",
     embed: "./src/editor-layouts/embededitor/index.js",    
-    player: "./src/editor-layouts/designplayer/index.js",   
+    // player: "./src/editor-layouts/designplayer/index.js",   
   },
   output: {
     library: "editor",

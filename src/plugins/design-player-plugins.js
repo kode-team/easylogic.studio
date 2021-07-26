@@ -15,7 +15,7 @@ export default [
 
     rendererHtml,    
     
-    iframe,    
+    // iframe,    
     exportResource,
     // codeview 
     codeview,

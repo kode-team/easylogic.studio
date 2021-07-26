@@ -293,9 +293,9 @@ export class AssetItem extends Item {
       return { id: it.id, index }
     }).filter(it => {
       return it.id === id 
-    })[0];
+    });
 
-    return filter ? filter.index : -1;
+    return filter.length ? filter?.[0]?.index : -1;
   }
 
   removeSVGFilter(removeIndex) {

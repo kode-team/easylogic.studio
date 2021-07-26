@@ -41,7 +41,7 @@ module.exports = {
     editor: "./src/index.js",
     canvas: "./src/index-canvas.js",    
     embed: "./src/index-embed.js",    
-    player: "./src/index-player.js",
+    // player: "./src/index-player.js",
   },
   output: {
     library: "EasylogicStudio",
@@ -51,7 +51,7 @@ module.exports = {
     filename: '[name].js?[contenthash]'
   },
   resolve: { alias },  
-  mode: 'production',
+  mode: 'development',
   module: {
     rules: [
       {
@@ -142,26 +142,26 @@ module.exports = {
       inject: true,
       template: "./src/index.html",
       filename: "./index.html",
-      excludeChunks: ['player', 'embed', 'canvas']
+      excludeChunks: ['embed', 'canvas']
     }),
-    new HtmlWebPackPlugin({
-      inject: true,
-      template: "./src/index.html",
-      filename: "./player.html",
-      excludeChunks: ['editor', 'embed', 'canvas']
-    }),        
+    // new HtmlWebPackPlugin({
+    //   inject: true,
+    //   template: "./src/index.html",
+    //   filename: "./player.html",
+    //   excludeChunks: ['editor', 'embed', 'canvas']
+    // }),        
 
     new HtmlWebPackPlugin({
       inject: true,
       template: "./src/index.html",
       filename: "./embed.html",
-      excludeChunks: ['editor', 'player', 'canvas']
+      excludeChunks: ['editor', 'canvas']
     }),            
     new HtmlWebPackPlugin({
       inject: true,
       template: "./src/index.html",
       filename: "./canvas.html",
-      excludeChunks: ['editor', 'player', 'embed']
+      excludeChunks: ['editor', 'embed']
     }),                
     new MiniCssExtractPlugin({
       filename: "[name].css?[contenthash]"

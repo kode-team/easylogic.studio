@@ -9,13 +9,8 @@ export default class CodeViewProperty extends BaseProperty {
     return this.$i18n('code.view.property.title');
   }
 
-  [SUBSCRIBE(
-    'refreshSelectionStyleView', 
-    'refreshStyleView',
-    'refreshSelection',
-    'refreshSVGArea'
-  ) + DEBOUNCE(100) ]() {
-    this.refreshShowIsNot();
+  [SUBSCRIBE('refreshSelectionStyleView', 'refreshSelection')]() {
+    this.refresh();
   }
 
   getBody() {

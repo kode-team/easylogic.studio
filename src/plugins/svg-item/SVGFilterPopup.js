@@ -70,7 +70,7 @@ export default class SVGFilterPopup extends BasePopup {
 
     this.setState(data);
 
-    this.show(500);
+    this.show(1000);
   }
 
   [SUBSCRIBE("hideSVGFilterPopup")]() {

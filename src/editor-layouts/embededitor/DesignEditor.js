@@ -1,4 +1,4 @@
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, MOVE, BIND, THROTTLE, SUBSCRIBE, END } from "el/base/Event";
+import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, MOVE, BIND, THROTTLE, SUBSCRIBE, END, CONFIG } from "el/base/Event";
 
 import { Length } from "el/editor/unit/Length";
 
@@ -175,12 +175,12 @@ export default class DesignEditor extends BaseLayout {
       lastBottomSize: bottomSize      
     })
 
-    this.trigger('changeTimelineHeight');
+    // this.trigger('changeTimelineHeight');
   }  
 
-  [SUBSCRIBE('changeTimelineHeight') + THROTTLE(100)] () {
-    this.emit('refreshTimeline')
-  }
+  // [SUBSCRIBE('changeTimelineHeight') + THROTTLE(100)] () {
+  //   this.emit('refreshTimeline')
+  // }
 
   refresh () {
 
@@ -196,14 +196,14 @@ export default class DesignEditor extends BaseLayout {
     this.emit('resizeEditor');
   }
 
-  [SUBSCRIBE('config:show.left.panel')]() {
+  [CONFIG('show.left.panel')]() {
     this.refresh();
     this.nextTick(() => {
       this.emit('resizeCanvas');
     })
   }
 
-  [SUBSCRIBE('config:show.right.panel')]() {
+  [CONFIG('show.right.panel')]() {
     this.refresh();
     this.nextTick(() => {
       this.emit('resizeCanvas');

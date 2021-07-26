@@ -1,11 +1,11 @@
-.elf--artboard-items {
+.elf--custom-assets {
     position: absolute;
     left:0px;
     top:0px;
     right:0px;
     bottom:0px;
 
-    .artboard-items-tools {
+    .custom-assets-tools {
         position: absolute;
         left: 0px;
         top: 10px;
@@ -22,7 +22,7 @@
         }
     }
 
-    .elf--artboard-list {
+    .elf--asset-list {
         position: absolute;
         left: 0px;
         top: 30px;
@@ -37,14 +37,17 @@
         box-sizing: border-box;
         padding: 10px 10px;        
 
-        .artboard-preview {
+        .asset-preview {
             padding-top: 10px;
+            border-radius: 2px;
+            box-shadow: 0 0 0 1px var(--elf--selected-color);
+
 
             .tools {
                 display: grid;
                 grid-template-columns: 1fr 20px;
                 grid-column-gap: 2px;
-                padding: 0px 2px 2px;
+                padding: 0px 10px 2px;
                 box-sizing: border-box;
 
                 .title {
@@ -61,6 +64,10 @@
             &:hover {
                 background-color: var(--elf--selected-color);
             }
+
+            .thumbnail {
+                // border: 1px solid var(--elf--border-color);
+            }
             img {
                 width: 100%;
                 height: 150px;
@@ -71,12 +78,12 @@
 }
 
 
-.elf--artboard-list {
+.elf--asset-list {
     height: 100%;
     overflow: auto;
     padding:0px;
     margin:0px !important;
-    .artboard-item {
+    .asset-item {
         color: var(--elf--list-item-font-color);
 
         padding: 5px 7px !important; 

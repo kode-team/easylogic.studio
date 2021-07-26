@@ -333,13 +333,14 @@ export default class DomEventHandler extends BaseHandler {
      */
     parseDomEvent (key) {
         const context = this.context;
-        let checkMethodFilters = key.split(CHECK_SAPARATOR).map(it => it.trim());
+        let checkMethodFilters = key.split(CHECK_SAPARATOR).map(it => it.trim()).filter(Boolean);
         
         var prefix = checkMethodFilters.shift()
         var eventSelectorAndBehave = prefix.split(DOM_EVENT_SAPARATOR)[1];
         
         var arr = eventSelectorAndBehave.split(SAPARATOR);
         var eventNames = this.getEventNames(arr[0]);
+
         var callback = context[key].bind(context);
         
         for(let i = 0, len = eventNames.length; i< len; i++) {

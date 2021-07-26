@@ -1,5 +1,5 @@
 import EventMachine from "./EventMachine";
-import { debounce, ifCheck, throttle } from "./functions/func";
+import { debounce, ifCheck, isFunction, throttle } from "./functions/func";
 
 export default class BaseStore {
   constructor(editor) {
@@ -135,8 +135,14 @@ export default class BaseStore {
     });
   }
 
-  emit(...args) {
-    this.sendMessage(this.source, ...args);
+  emit(event, ...args) {
+
+    if (isFunction(event)) {
+      event(...args);
+    } else {
+      this.sendMessage(this.source, event, ...args);
+    }
+
   }
 
   /**
@@ -148,7 +154,13 @@ export default class BaseStore {
     this.nextSendMessage(this.source, callback);
   }
 
-  trigger(...args) {
-    this.triggerMessage(this.source, ...args);
+  trigger(event, ...args) {
+
+    if (isFunction(event)) {
+      event(...args);
+    } else {
+      this.triggerMessage(this.source, event, ...args);
+    }
+
   }
 }

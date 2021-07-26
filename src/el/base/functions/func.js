@@ -1,7 +1,7 @@
 import { randomNumber } from "./create";
 import { getPredefinedCubicBezier } from "./bezier";
 
-const __PropertyCache = {};
+const __PropertyCache = new WeakMap();
 
 /**
  * property 수집하기
@@ -12,10 +12,6 @@ const __PropertyCache = {};
  * @returns {string[]} 나의 상위 모든 메소드를 수집해서 리턴한다. 
  */
 export function collectProps(root, expectMethod = {}, cacheName = undefined) {
-
-    if (isNotUndefined(cacheName) && __PropertyCache[cacheName]) {
-        return __PropertyCache[cacheName]
-    }
 
     let p = root.__proto__;
     let results = [];
@@ -34,9 +30,6 @@ export function collectProps(root, expectMethod = {}, cacheName = undefined) {
         p = p.__proto__;
     } while (p);
 
-    if (isNotUndefined(cacheName)) {
-        __PropertyCache[cacheName] = results;
-    }
 
     return results;
 }

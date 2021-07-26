@@ -1,4 +1,4 @@
-import { BIND, SUBSCRIBE } from "el/base/Event";
+import { BIND, CONFIG, SUBSCRIBE } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import { css } from "@emotion/css";
@@ -51,7 +51,7 @@ export default class BodyPanel extends EditorElement {
     }
   }  
 
-  [SUBSCRIBE('config:show.ruler')] () {
+  [CONFIG('show.ruler')] () {
     this.refresh();
   }
 

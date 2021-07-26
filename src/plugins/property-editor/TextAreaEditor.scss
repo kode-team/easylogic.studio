@@ -1,0 +1,21 @@
+.elf--text-area-editor {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-gap: 4px;
+
+    &.has-label {
+        grid-template-columns: 60px 1fr;
+        grid-column-gap: 2px;
+
+        label {
+            vertical-align: middle;
+            padding: 2px 4px 2px 0px;
+            
+        }
+    }
+
+    input[type="text"] {
+        border: 1px solid var(--elf--border-color);
+        width: 100%;
+    }
+}

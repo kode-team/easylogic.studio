@@ -1,6 +1,6 @@
 
 
-import { CLICK, PREVENT, STOP, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { CLICK, PREVENT, STOP, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, CONFIG } from "el/base/Event";
 import { OBJECT_TO_CLASS } from "el/base/functions/func";
 
 import icon from "el/editor/icon/icon";
@@ -77,7 +77,7 @@ export default class PageTools extends EditorElement {
     this.emit('bodypanel.toggle.fullscreen');
   }
 
-  [SUBSCRIBE('config:set.tool.hand')]() {
+  [CONFIG('set.tool.hand')]() {
     this.refs.$pantool.toggleClass('on', this.$config.get('set.tool.hand'));
   }
 

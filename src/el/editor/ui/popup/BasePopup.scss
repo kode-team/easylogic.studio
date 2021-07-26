@@ -34,8 +34,8 @@
     }
   
     .popup-body {
-      padding: 8px 12px;     
-      
+      padding: 8px 12px;    
+            
       .popup-item {
         margin-bottom: 5px;
         padding: 2px 0px;        
@@ -176,4 +176,13 @@
       }
     }
 
+    .popup-resizer {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      right: 0px;
+      bottom: 0px;
+      background-color: gray;
+      cursor: se-resize;
+    }
   }

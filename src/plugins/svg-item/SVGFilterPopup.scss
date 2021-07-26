@@ -1,18 +1,22 @@
 
   .elf--svg-filter-popup {
 
-    width: 800px;
-    height: 450px;
+    min-width: 900px;
+    min-height: 500px;
+    max-height: 800px;
     position: relative;
 
     .box {
-      margin-bottom: 10px;
-      height: 100%;
-      position: relative;
+      position: absolute;
+      left: 0px;
+      right: 0px;
+      bottom: 0px;
+      top: 0px;
 
       > .editor {
         height: 100%;
         position: relative;
+
       }
 
       .property {

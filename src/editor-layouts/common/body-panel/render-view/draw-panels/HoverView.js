@@ -1,6 +1,6 @@
 import Dom from "el/base/Dom";
 
-import { SUBSCRIBE } from "el/base/Event";
+import { CONFIG, SUBSCRIBE } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import "./HoverView.scss";
@@ -16,7 +16,7 @@ export default class HoverView extends EditorElement {
     }
 
 
-    [SUBSCRIBE('config:bodyEvent')]() {
+    [CONFIG('bodyEvent')]() {
         const items = this.$selection.filteredLayers.filter(it => it.is('artboard') === false)
 
         const id = items[0]?.id;

@@ -83,15 +83,11 @@ export default class PatternSizeEditor extends EditorElement {
 
     viewBackgroundPositionPopup() {
         this.emit("showPatternInfoPopup", {
-            changeEvent: 'changePatternInfo',
+            changeEvent: (pattern) => {
+                this.updateData({ ...pattern })                
+            },
             data: this.state,
             instance: this
         });
     }
-
-
-    [SUBSCRIBE("changePatternInfo")](pattern) {
-
-        this.updateData({ ...pattern })
-    }    
 }

@@ -50,15 +50,12 @@ export default class ClipPathEditor extends EditorElement {
 
     viewClipPathPicker() {
         this.emit("showClipPathPopup", {
-            changeEvent: 'changeClipPathEditor',
+            changeEvent: (data) => {
+                this.updateData({
+                    clippath: data['clip-path']
+                })            
+            },
             'clip-path': this.state.clippath
         });
-    }
-
-    [SUBSCRIBE('changeClipPathEditor')] (data) {
-
-        this.updateData({
-            clippath: data['clip-path']
-        })
     }
 }

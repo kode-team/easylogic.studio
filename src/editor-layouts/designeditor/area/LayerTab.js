@@ -1,13 +1,10 @@
 import { CLICK } from "el/base/Event";
 import icon from "el/editor/icon/icon";
 
-import "../../../el/editor/ui/property";
-
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
-import ComponentItems from "./object-list/ComponentItems";
 import ObjectItems from "./object-list/ObjectItems";
-import ArtboardItems from "./object-list/ArtboardItems";
+import CustomAssets from "./object-list/CustomAssets";
 import LibraryItems from "./object-list/LibraryItems";
 import AssetItems from "./object-list/AssetItems";
 
@@ -19,9 +16,8 @@ export default class LayerTab extends EditorElement {
     return {
       AssetItems,
       LibraryItems,
-      ArtboardItems,
+      CustomAssets,
       ObjectItems,
-      ComponentItems
     }
   }
 
@@ -45,12 +41,9 @@ export default class LayerTab extends EditorElement {
             <div class='tab-item' data-value='5' data-direction="right"  data-tooltip="${this.$i18n('app.tab.title.assets')}">
               <label>${icon.apps}</label>
             </div>   
-            <div class='tab-item' data-value='6' data-direction="right"  data-tooltip="${this.$i18n('app.tab.title.artboards')}">
-              <label>${icon.artboard}</label>
-            </div>            
-            <div class='tab-item' data-value='4' data-direction="right"  data-tooltip="${this.$i18n('app.tab.title.components')}">
+            <div class='tab-item' data-value='6' data-direction="right"  data-tooltip="${this.$i18n('app.tab.title.components')}">
               <label>${icon.plugin}</label>
-            </div>
+            </div>            
 
             ${this.$menuManager.getTargetMenuItems('leftbar.tab').map(it => {
               const { value, title} = it.class;              
@@ -69,9 +62,6 @@ export default class LayerTab extends EditorElement {
             <div class='tab-content' data-value='3'>
               <object refClass="LibraryItems" />
             </div>            
-            <div class='tab-content' data-value='4'>
-              <object refClass="ComponentItems" />
-            </div>    
             <div class='tab-content' data-value='5'>
               <object refClass="AssetItems" />            
               <div class='assets'>
@@ -83,7 +73,7 @@ export default class LayerTab extends EditorElement {
               </div>
             </div>
             <div class='tab-content' data-value='6'>
-              <object refClass="ArtboardItems" />
+              <object refClass="CustomAssets" />
             </div>
             ${this.$menuManager.getTargetMenuItems('leftbar.tab').map(it => {
               const { value, title, loadElements } = it.class;
