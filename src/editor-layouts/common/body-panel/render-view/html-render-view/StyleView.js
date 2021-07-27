@@ -77,7 +77,6 @@ export default class StyleView extends EditorElement {
   }
 
   [LOAD('$svgArea') + DOMDIFF] () {
-
     var project = this.$selection.currentProject || {  }
 
     return this.$editor.html.renderSVG(project);

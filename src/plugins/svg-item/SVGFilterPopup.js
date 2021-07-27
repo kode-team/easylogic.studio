@@ -1,5 +1,5 @@
 
-import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { LOAD, SUBSCRIBE } from "el/base/Event";
 import { SVGFilter } from "el/editor/property-parser/SVGFilter";
 import { isNotUndefined } from "el/base/functions/func";
 import BasePopup from "el/editor/ui/popup/BasePopup";
@@ -43,23 +43,17 @@ export default class SVGFilterPopup extends BasePopup {
   [LOAD('$editor')] () {
 
     return /*html*/`
-      <object refClass="SVGFilterEditor" ref='$filter' title='Filter Type' key="filter" onchange='changeFilterEditor'>
+      <object refClass="SVGFilterEditor" ref='$filter' title='Filter Type' key="filter" onchange=${this.subscribe((key, filters) => {
+        this.updateData({
+          filters
+        })
+      })}>
         <property name="value" valueType="json">${JSON.stringify(this.state.filters)}</property>
       </div>
     `
 
   }
-
-  [SUBSCRIBE_SELF('changeFilterEditor')] (key, filters) {
-    this.updateData({
-      filters
-    })
-  }
-
-  refresh() {
-    this.load();
-  }
-
+  
   [SUBSCRIBE("showSVGFilterPopup")](data) {
 
     data.filters = data.filters.map( it => {

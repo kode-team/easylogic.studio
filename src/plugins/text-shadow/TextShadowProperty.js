@@ -1,6 +1,7 @@
 import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/base/Event";
 
 import icon from "el/editor/icon/icon";
+import { TextShadow } from "el/editor/property-parser/TextShadow";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 
@@ -35,7 +36,16 @@ export default class TextShadowProperty extends BaseProperty {
   [LOAD("$shadowList")]() {
     var current = this.$selection.current || {};
     return /*html*/`
-      <object refClass="TextShadowEditor" ref='$textshadow' value="${current['text-shadow'] || ''}" hide-label="true" onChange="changeTextShadow" />
+      <object refClass="TextShadowEditor" 
+        ref='$textshadow' 
+        value="${this.variable(TextShadow.parseStyle(current['text-shadow']))}" 
+        hide-label="true" 
+        onChange=${this.subscribe((textshadow) => {
+          this.command('setAttributeForMulti', 'change text shadow', this.$selection.packByValue({ 
+            'text-shadow': textshadow
+          }))
+        })}
+      />
     `
   }
 
@@ -46,11 +56,4 @@ export default class TextShadowProperty extends BaseProperty {
   [SUBSCRIBE('refreshSelection') + IF('checkShow')]() {
     this.refresh();
   }  
-
-  [SUBSCRIBE_SELF("changeTextShadow")](textshadow) {
-
-    this.command('setAttributeForMulti', 'change text shadow', this.$selection.packByValue({ 
-      'text-shadow': textshadow
-    }))
-  }
 }

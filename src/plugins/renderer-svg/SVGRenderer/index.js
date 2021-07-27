@@ -20,7 +20,7 @@ export default class SVGRenderer {
      * 
      * @param {Item} item 
      */
-    render (item, renderer, encoding = false) {
+    render (item, renderer) {
         if (!item) return '';
 
         const currentRenderer = this.getRendererInstance(item);
@@ -95,9 +95,9 @@ export default class SVGRenderer {
         svgCode = svgCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') 
     
         return /*html*/`
-          <div class='svg-code'>
-            ${svgCode && /*html*/`<div><pre title='SVG'>${svgCode}</pre></div>`}
-          </div>
+<div class='svg-code'>
+${svgCode && /*html*/`<div><pre title='SVG'>${svgCode}</pre></div>`}
+</div>
         `
     
     }    

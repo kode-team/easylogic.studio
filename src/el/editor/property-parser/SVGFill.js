@@ -73,7 +73,9 @@ export class SVGFill extends Property {
 
     var matchResult = results.str.match(reg)
 
-    if (!matchResult) return SVGStaticGradient.create(str || 'transparent'); 
+    if (!matchResult) {
+      return SVGStaticGradient.create(str || 'transparent'); 
+    }
 
     matchResult.forEach((value, index) => {
 

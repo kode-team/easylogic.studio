@@ -7,6 +7,8 @@ import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import './GradientPickerPopup';
 
+import { html } from "el/base/functions/func";
+
 export default class FillPickerPopup extends BasePopup {
 
   getTitle() {
@@ -31,14 +33,16 @@ export default class FillPickerPopup extends BasePopup {
   }
 
   getBody() {
-    return /*html*/`
+    return html`
       <div class="elf--gradient-picker-popup" ref='$body' data-selected-editor=''>
         <div class='box'>
           <div ref='$gradientEditor'></div>
         </div>
         <div class='box'>
           <div class='colorpicker'>
-            <object refClass="EmbedColorPicker" ref='$color' onchange='changeColor' />                    
+            <object refClass="EmbedColorPicker" ref='$color' onchange=${this.subscribe((color) => { 
+              this.trigger('changeColor', color);
+            })} />                    
           </div>
           <div class='assetpicker'>
             <object refClass="ImageAssetPicker" ref='$asset' onchange='changeImageUrl' />
@@ -92,7 +96,7 @@ export default class FillPickerPopup extends BasePopup {
   }
 
   [SUBSCRIBE("showFillPickerPopup")](data, params) {
-    this.show(220);
+    this.show(240);
 
     data.changeEvent = data.changeEvent || 'changeFillPopup'
     // data.image = data.gradient

@@ -76,7 +76,7 @@ export default class SVGItemProperty extends BaseProperty {
             ref='$fillRule' 
             label='${this.$i18n('svg.item.property.fillRule')}' 
             key="fill-rule" 
-            options="nonzero,evenodd" 
+            options=${this.variable(["nonzero","evenodd" ])}
             onchange="changeValue" />
         </div>            
 
@@ -131,7 +131,7 @@ export default class SVGItemProperty extends BaseProperty {
             ref='$strokeLineCap' 
             label='${this.$i18n('svg.item.property.lineCap')}' 
             key="stroke-linecap" 
-            options="butt,round,square" 
+            options=${this.variable(["butt","round","square"])} 
             onchange="changeValue" 
           />
         </div> 
@@ -143,7 +143,7 @@ export default class SVGItemProperty extends BaseProperty {
             ref='$strokeLineJoin' 
             label='${this.$i18n('svg.item.property.lineJoin')}'             
             key="stroke-linejoin" 
-            options="miter,bevel,round" 
+            options=${this.variable(["miter","bevel","round"])} 
             onchange="changeValue" 
           />
         </div>       

@@ -194,7 +194,7 @@ export default class CSSPropertyEditor extends EditorElement {
           ref='$fillRule${index}' 
           key='fill-rule' 
           icon="true" 
-          options="nonzero,evenodd" 
+          options=${this.variable(["nonzero","evenodd" ])}
           value="${property.value}"
           onchange="changeSelect" />
         </div>
@@ -206,7 +206,7 @@ export default class CSSPropertyEditor extends EditorElement {
           ref='$strokeLinecap${index}' 
           key='stroke-linecap' 
           icon="true" 
-          options="butt,round,square" 
+          options=${this.variable(["butt","round","square" ])}          
           value="${property.value}"
           onchange="changeSelect" />
         </div>
@@ -219,7 +219,7 @@ export default class CSSPropertyEditor extends EditorElement {
           ref='$strokeLinejoin${index}' 
           key='stroke-linejoin' 
           icon="true" 
-          options="miter,arcs,bevel,miter-clip,round" 
+          options=${this.variable(["miter","arcs","bevel","miter-clip","round" ])}                    
           value="${property.value}"
           onchange="changeSelect" />
         </div>

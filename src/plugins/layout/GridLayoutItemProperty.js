@@ -13,9 +13,9 @@ export default class GridLayoutItemProperty extends BaseProperty {
 
 
   getLayoutOptions () {
-    return ['none', 'value'].map(it => {
-        return `${it}:${this.$i18n(`grid.layout.item.property.${it}`)}`
-    }).join(',');
+    return this.variable(['none', 'value'].map(it => {
+        return {value: it, text: this.$i18n(`grid.layout.item.property.${it}`) }
+    }));
   }
 
   getClassName() {

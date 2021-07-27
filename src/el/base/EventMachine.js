@@ -11,13 +11,14 @@ import {
   isArray,
   html,
   keyEach,
-  collectProps
+  collectProps,
+  isString
 } from "./functions/func";
 import { 
   ADD_BODY_MOUSEMOVE,
   ADD_BODY_MOUSEUP
 } from "../editor/types/event";
-import { uuid } from "./functions/math";
+import { uuid, uuidShort } from "./functions/math";
 import DomEventHandler from "./handler/DomEventHandler";
 import BindHandler from "./handler/BindHandler";
 import { retriveElement } from "./registElement";
@@ -27,6 +28,7 @@ const TEMP_DIV = Dom.create("div");
 const QUERY_PROPERTY = `[${REFERENCE_PROPERTY}]`;
 const REF_CLASS = 'refclass';
 const REF_CLASS_PROPERTY = `[${REF_CLASS}]`
+const VARIABLE_SAPARATOR = "__ref__variable:";
 
 
 // collectProps 에서 제외될 메소드 목록 
@@ -84,6 +86,7 @@ export default class EventMachine {
     this.children = {};
     this._bindings = [];
     this.id = uuid();    
+    this.__tempVariables = new Map();
     this.handlers = this.initializeHandler()
 
     this.initializeProperty(opt, props);
@@ -153,6 +156,44 @@ export default class EventMachine {
     this.setState({
       [key]: !(this.state[key])
     }, isLoad)
+  }
+
+  /**
+   * props 를 넘길 때 해당 참조를 그대로 넘기기 위한 함수 
+   * 
+   * @param {any} value
+   * @returns {string} 참조 id 생성 
+   */ 
+  variable(value) {
+    const id = `${VARIABLE_SAPARATOR}${uuidShort()}`;
+
+    this.__tempVariables.set(id, value);
+
+    return id;
+  }
+
+  /**
+   * 참조 id 를 가지고 있는 variable 을 복구한다. 
+   * 
+   * @param {string} id
+   * @returns {any}
+   */ 
+  recoverVariable(id) {
+
+    // console.log(id);
+    if (isString(id) === false) {
+      return id;
+    }
+
+    let value = id;
+
+    if (this.__tempVariables.has(id)) {
+      value = this.__tempVariables.get(id);
+
+      this.__tempVariables.delete(id);
+    }
+
+    return value;
   }
 
   /**
@@ -279,7 +320,7 @@ export default class EventMachine {
 
     // parse properties 
     for(var t of $dom.el.attributes) {
-      props[t.nodeName] = t.nodeValue;
+      props[t.nodeName] = this.recoverVariable(t.nodeValue);
     }
 
     if (props['props']) {

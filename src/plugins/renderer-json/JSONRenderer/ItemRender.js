@@ -8,7 +8,13 @@ export default class ItemRender {
 
   async toCloneObject (item, renderer) {
     var json = item.attrs(
-      'itemType', 'elementType', 'type', 'visible', 'lock', 'selected'
+      'itemType', 
+      'name', 
+      'elementType', 
+      'type', 
+      'visible', 
+      'lock', 
+      'selected'
     )
 
     json.referenceId = item.id; 

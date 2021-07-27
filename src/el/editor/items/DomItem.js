@@ -7,6 +7,7 @@ import PathParser from "el/editor/parser/PathParser";
 
 
 const editableList = [
+  'appearance',
   'position',
   'right',
   'bottom',

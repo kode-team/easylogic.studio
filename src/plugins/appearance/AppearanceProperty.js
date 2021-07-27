@@ -1,4 +1,4 @@
-import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { IF, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 const overflow_list = [
@@ -15,9 +15,9 @@ export default class AppearanceProperty extends BaseProperty {
   }
 
   getOverflowList () {
-    return overflow_list.map(it => {
-      return `${it}:${this.$i18n(`background.color.property.overflow.${it}`)}`
-    }).join(',');
+    return this.variable(overflow_list.map(it => {
+      return {value: it, text: this.$i18n(`background.color.property.overflow.${it}`) }
+    }));
   }  
 
   getBody() {
@@ -26,7 +26,12 @@ export default class AppearanceProperty extends BaseProperty {
         <div class='group'>
           <span class='add-timeline-property' data-property='background-color'></span>
         </div>
-        <object refClass="ColorViewEditor" ref='$color' label="${this.$i18n('background.color.property.color')}" key='background-color' onchange="changeColor" />
+        <object refClass="ColorViewEditor" 
+          ref='$color' 
+          label="${this.$i18n('background.color.property.color')}" 
+          key='background-color' 
+          onchange="changeColor" 
+        />
       </div>   
         <div class='property-item animation-property-item' style='display:none;'>
           <div class='group'>
@@ -67,7 +72,7 @@ export default class AppearanceProperty extends BaseProperty {
             key='overflow' 
             icon="true" 
             tabIndex="1"
-            options="${this.getOverflowList()}" 
+            options=${this.getOverflowList()}
             onchange="changeSelect" />
         </div>                
       `;
@@ -99,7 +104,11 @@ export default class AppearanceProperty extends BaseProperty {
     }))
   }
 
-  [SUBSCRIBE('refreshSelection')]() {
-    this.refreshShowIsNot(['project', 'svg-path', 'svg-polygon', 'svg-text', 'svg-textpath']);
+  get editableProperty() {
+    return "appearance";
+  }
+
+  [SUBSCRIBE('refreshSelection') + IF('checkShow')]() {
+    this.refresh();
   }
 }

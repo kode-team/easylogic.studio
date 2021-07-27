@@ -166,8 +166,9 @@ export default class FilterEditor extends EditorElement {
       var current = this.$selection.currentProject;
 
       if (current) {
-        options = current.svgfilters.map(it => it.id)
-        options = options.length ? ',' + options.join(',') : '';
+        options = current.svgfilters.map(it => {
+          return { value: it.id }
+        })
       }
 
       return /*html*/`
@@ -176,7 +177,7 @@ export default class FilterEditor extends EditorElement {
         key="${index}" 
         label="SVG Filter"
         value="${filter.value}" 
-        options="${options}"
+        options=${this.variable(['', ...options])}
         onchange="changeRangeEditor"  />`
     }
 

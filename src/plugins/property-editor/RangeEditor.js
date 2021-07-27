@@ -56,8 +56,8 @@ export default class RangeEditor extends EditorElement {
             if (description === 'number')  {
                 description = '';
             }
-            return `${it}:${description}`
-        }).join(',');
+            return {value: it, text: description }
+        });
 
         return /*html*/`
         <div 
@@ -75,7 +75,7 @@ export default class RangeEditor extends EditorElement {
                 <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" /> 
                 <div class='area' ref='$rangeArea'>
                     <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" tabIndex="1" />
-                    <object refClass="SelectEditor"  ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options="${units}" onchange='changeUnit' />
+                    <object refClass="SelectEditor"  ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options=${this.variable(units)} onchange='changeUnit' />
                 </div>
             </div>
             <button type='button' class='remove thin' ref='$remove' title='Remove'>${icon.remove}</button>

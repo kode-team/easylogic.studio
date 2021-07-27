@@ -21,7 +21,9 @@ export default class ColorAssetsEditor extends EditorElement {
   }
 
   [LOAD('$tools')] () {
-    const options = this.state.colors.map(it => `${it.key}:${it.title}`)
+    const options = this.variable(this.state.colors.map(it => {
+      return { value: it.key, text: it.title } 
+    }));
 
     return /*html*/`
       <object refClass="SelectEditor"  key="preset" value="${this.state.preset}" options="${options}" onchange="changePreset"  />

@@ -10,7 +10,8 @@ const scrollBlockingEvents = {
     'mousedown': true,
     'mouseup': true,
     'mousemove': true,
-    // 'wheel': true,
+    // wheel, mousewheel 은 prevent 를 해야한다. 그래서 scroll blocking 을 막아야 한다. 
+    // 'wheel': true,   
     // 'mousewheel': true
 }
 

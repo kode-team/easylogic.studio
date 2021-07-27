@@ -2,6 +2,7 @@ import { Layer } from "el/editor/items/Layer";
 
 
 const expectedProperties = [
+  'appearance',
   'border',
   'border-radius',
   'background-image',

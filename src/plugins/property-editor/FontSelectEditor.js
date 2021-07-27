@@ -31,7 +31,9 @@ export const font_list = [
 export default class FontSelectEditor extends SelectEditor {
 
     getFontList () {
-        return font_list
+        return font_list.map(it => {
+            return { value: it }
+        })
     }
 
     initState() {

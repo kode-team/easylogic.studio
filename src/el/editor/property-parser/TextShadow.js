@@ -1,13 +1,13 @@
 import { Length } from "el/editor/unit/Length";
 import { Property } from "el/editor/items/Property";
-import { convertMatches } from "el/base/functions/parser";
+import { convertMatches, reverseMatches } from "el/base/functions/parser";
 
 export class TextShadow extends Property {
   static parse(obj) {
     return new TextShadow(obj);
   }
 
-  static parseStyle (str) {
+  static parseStyle (str = '') {
     var results = convertMatches(str);
 
     var textShadows = results.str.split(",").filter(it => it.trim()).map(shadow => {
@@ -16,7 +16,7 @@ export class TextShadow extends Property {
       var colors = values
         .filter(it => it.includes("@"))
         .map(it => {
-          return results.matches[+it.replace("@", "")]?.color;
+          return reverseMatches(it, results.matches) || 'black';
         });
 
       var numbers = values.filter(it => {

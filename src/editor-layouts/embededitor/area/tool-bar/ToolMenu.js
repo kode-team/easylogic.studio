@@ -7,7 +7,7 @@ import AddRect from "el/editor/ui/menu-items/AddRect";
 import AddCircle from "el/editor/ui/menu-items/AddCircle";
 import AddText from "el/editor/ui/menu-items/AddText";
 import AddImage from "el/editor/ui/menu-items/AddImage";
-import AddVideo from "el/editor/ui/menu-items/AddVideo";
+// import AddVideo from "el/editor/ui/menu-items/AddVideo";
 import AddDrawPath from "el/editor/ui/menu-items/AddDrawPath";
 import AddPath from "el/editor/ui/menu-items/AddPath";
 import AddSVGRect from "el/editor/ui/menu-items/AddSVGRect";
@@ -26,7 +26,7 @@ export default class ToolMenu extends EditorElement {
       AddCircle,
       AddText,
       AddImage,
-      AddVideo,
+      // AddVideo,
       AddDrawPath,
       AddPath,
       AddSVGRect,
@@ -57,7 +57,7 @@ export default class ToolMenu extends EditorElement {
               <object refClass='AddCircle' />         
               <object refClass='AddText' />
               <object refClass='AddImage' />
-              <object refClass='AddVideo' />
+              <!--object refClass='AddVideo' /-->
               ${this.$menuManager.generate('tool.menu.css')}
             </span>            
             <span data-item='svg'>

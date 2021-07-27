@@ -38,6 +38,7 @@ export default class BaseStore {
    * @param {number} throttleDelay 
    * @param {boolean} enableAllTrigger
    * @param {boolean} enableSelfTrigger
+   * @param {string[]} [beforeMethods=[]]
    * @returns {Function} off callback 
    */
   on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false, beforeMethods = []) {
@@ -120,6 +121,7 @@ export default class BaseStore {
   triggerMessage(source, event, ...args) {
     Promise.resolve().then(() => {
       var list = this.getCachedCallbacks(event);
+
       if (list) {
         for(var i = 0, len = list.length; i < len; i++) {
           const f = list[i];

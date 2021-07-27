@@ -28,7 +28,8 @@ const selectorList = [
   ':link',
   ':active',
   ':focus'
-].join(',')
+].map(value => ({ value }));
+
 
 /**
  * 객체별 class, selector 를 줄 수 있는 개념을 다시 만들자. 
@@ -45,7 +46,7 @@ export default class SelectorProperty extends BaseProperty {
   getTools() {
     return /*html*/`
       <div style='display:inline-block;'>
-        <object refClass="SelectEditor"  ref='$select' key='selector' icon="true" key-value-char=';' none-value="selector" options="${selectorList}" />
+        <object refClass="SelectEditor"  ref='$select' key='selector' icon="true" none-value="selector" options=${this.variable(selectorList)} />
       </div>
       <button type="button" ref="$add" title="add Selector">${icon.add}</button>
     `;

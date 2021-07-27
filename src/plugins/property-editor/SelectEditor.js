@@ -1,19 +1,29 @@
 import { LOAD, CHANGE, BIND } from "el/base/Event";
+import { isArray, isString } from "el/base/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './SelectEditor.scss';
 export default class SelectEditor extends EditorElement {
 
     initState() {
-        var keyValueChar = this.props['key-value-char'] || ':'
         var splitChar = this.props.split || ',';
-        var options = (this.props.options || '').split(splitChar).map(it => it.trim());
+
+        var options = isArray(this.props.options) 
+                        ? this.props.options.map(it => {
+                            if (isString(it)) {
+                                return { value: it }
+                            }
+                            return it;  
+                        })
+                        : (this.props.options  || '').split(splitChar).map(it => it.trim()).map(it => {
+                            const [value, text] = it.split(':');
+                            return { value, text }
+                        });
 
         var value = this.props.value;
         var tabIndex = this.props.tabindex;
 
         return {
-            keyValueChar,
             splitChar,
             label: this.props.label || '',
             options, 
@@ -58,12 +68,8 @@ export default class SelectEditor extends EditorElement {
 
         var arr = this.state.options.map(it => {
 
-            var value = it; 
-            var label = it; 
-
-            if (value.includes(this.state.keyValueChar)) {
-                var [value, label] = value.split(this.state.keyValueChar)
-            }
+            var value = it.value; 
+            var label = it.text || it.value; 
 
             if (label === '') {
                 label = this.props['none-value'] ? this.props['none-value'] : ''
@@ -76,12 +82,6 @@ export default class SelectEditor extends EditorElement {
         })
 
         return arr; 
-    }
-
-    setOptions (options = '') {
-        this.setState({ 
-            options: options.split(this.state.splitChar).map(it => it.trim()) 
-        })
     }
 
     [CHANGE('$options')] () {

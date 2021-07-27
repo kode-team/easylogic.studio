@@ -1,6 +1,26 @@
 import { SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/base/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
+
+const textTransformOptions = "none,uppercase:AG,lowercase:ag,capitalize:Ag".split(',').map(it => {
+  const [value, text] = it.split(':');
+
+  return {
+    value, text
+  }
+});
+
+
+const textDecorationOptions = "none,underline,overline:O,line-through".split(',').map(it => {
+  const [value, text] = it.split(':');
+
+  return {
+    value, text
+  }
+});
+
+
+
 export default class TextProperty extends BaseProperty {
 
   getTitle() {
@@ -28,6 +48,9 @@ export default class TextProperty extends BaseProperty {
   }
 
   getBody() {
+
+    
+
     return /*html*/`
       <div class="property-item">
         <object refClass="SelectIconEditor" 
@@ -35,7 +58,7 @@ export default class TextProperty extends BaseProperty {
           label='${this.$i18n('text.property.align')}' 
           key='text-align' 
           value='left' 
-          options="left,center,right,justify" 
+          options=${this.variable(["left","center","right","justify"])} 
           icons="align_left,align_center,align_right,align_justify" 
           onchange='changeTextValue' />        
       </div>        
@@ -44,7 +67,7 @@ export default class TextProperty extends BaseProperty {
           ref='$transform' 
           label='${this.$i18n('text.property.transform')}' 
           key='text-transform' 
-          options="none,uppercase:AG,lowercase:ag,capitalize:Ag"
+          options=${this.variable(textTransformOptions)}
           icons="horizontal_rule"
           onchange='changeTextValue' />                
       </div>        
@@ -53,7 +76,7 @@ export default class TextProperty extends BaseProperty {
           ref='$decoration' 
           label='${this.$i18n('text.property.decoration')}' 
           key='text-decoration' 
-          options="none,underline,overline:O,line-through" 
+          options=${this.variable(textDecorationOptions)}
           icons="horizontal_rule,underline,O,strikethrough"
           onchange='changeTextValue' />        
       </div>                    

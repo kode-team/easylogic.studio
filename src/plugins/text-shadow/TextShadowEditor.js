@@ -8,10 +8,11 @@ import './TextShadowEditor.scss';
 export default class TextShadowEditor extends EditorElement {
 
   initState() {
+
     return {
       hideLabel: this.props['hide-label'] === 'true' ? true : false, 
       selectedIndex: -1,
-      textShadows: TextShadow.parseStyle(this.props.value)
+      textShadows: this.props.value
     }
   }
 

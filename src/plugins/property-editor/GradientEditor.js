@@ -137,7 +137,7 @@ export default class GradientEditor extends EditorElement  {
                 <object refClass="RangeEditor" label='Center Y' ref='$radialPositionY' calc="false" value="50%" key='radialPositionY' onchange='changeKeyValue' />
               </div>                
               <div data-editor='radialType'>              
-                <object refClass="SelectEditor" label='Radial Type' ref='$radialType' value="" options="${radialTypeList.join(',')}" key='radialType' onchange='changeKeyValue' />
+                <object refClass="SelectEditor" label='Radial Type' ref='$radialType' value="" options="${this.variable(radialTypeList)}" key='radialType' onchange='changeKeyValue' />
               </div>
 
             </div>            

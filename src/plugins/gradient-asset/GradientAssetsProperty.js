@@ -4,6 +4,12 @@ import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import "./GradientAssetsProperty.scss";
+
+const options = gradients.map(it => {
+  return { value: it.key, text: it.title } 
+});
+
+
 export default class GradientAssetsProperty extends BaseProperty {
 
   getTitle() {
@@ -22,10 +28,8 @@ export default class GradientAssetsProperty extends BaseProperty {
   }
 
   [LOAD('$tools')]() {
-    const options = gradients.map(it => `${it.key}:${it.title}`)
-
     return /*html*/`
-      <object refClass="SelectEditor"  key="preset" value="${this.state.preset}" options="${options}" onchange="changePreset"  />
+      <object refClass="SelectEditor"  key="preset" value="${this.state.preset}" options=${this.variable(options)} onchange="changePreset"  />
     `
   }  
 

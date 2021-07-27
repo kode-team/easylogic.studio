@@ -442,7 +442,9 @@ export default class SVGFilterEditor extends EditorElement {
             label="${s.title}" 
             key="${key}"
             value="${filter[key].toString()}" 
-            onchange="changeSVGFilterColorViewEditor" 
+            onchange=${this.subscribe((key, color, params) => {
+              this.trigger('changeRangeEditor', key, color, params)
+            })}
           />
         </div>
       `
@@ -887,10 +889,6 @@ export default class SVGFilterEditor extends EditorElement {
         </div>
       `
     })
-  }
-
-  [SUBSCRIBE_SELF('changeSVGFilterColorViewEditor')] (key, color, params) {
-    this.trigger('changeRangeEditor', key, color, params)
   }
 
 

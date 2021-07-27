@@ -12,9 +12,9 @@ export default class GridBoxEditor extends EditorElement {
 
 
     getLayoutItemOptions () {
-        return 'none,auto,repeat,length'.split(',').map(it => {
-            return `${it}:${this.$i18n(`grid.box.editor.${it}`)}`
-        }).join(',');
+        return this.variable('none,auto,repeat,length'.split(',').map(it => {
+            return {value: it, text: this.$i18n(`grid.box.editor.${it}`) }
+        }));
     }
 
     initState() {

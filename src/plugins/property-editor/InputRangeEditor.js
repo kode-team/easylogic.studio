@@ -9,7 +9,7 @@ import './InputRangeEditor.scss';
 export default class InputRangeEditor extends EditorElement {
 
     initState() {
-        var units = this.props.units || 'px,em,%';
+        var units =  this.props.units || 'px,em,%';
         var value = Length.parse(this.props.value || Length.z());
         let label = this.props.label || ''; 
 

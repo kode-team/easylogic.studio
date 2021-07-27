@@ -7,7 +7,7 @@ export default class LayoutSelector extends EditorElement {
 
         var layouts = ['all', 'css', 'svg'].map(layout => {
             var label = this.$i18n(`app.layout.${layout}`)
-            return `${layout}:${label}`
+            return { value: layout, text: label }
         });
 
 
@@ -17,7 +17,7 @@ export default class LayoutSelector extends EditorElement {
                 <div class='item'>
                     <object refClass="SelectEditor"  
                         ref='$locale' 
-                        options="${layouts}" 
+                        options=${this.variable(layouts)}
                         value="${this.$editor.layout}" 
                         onchange="changeEditorLayoutValue"
                     /> 

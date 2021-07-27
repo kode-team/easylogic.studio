@@ -17,9 +17,9 @@ export default class FlexLayoutItemProperty extends BaseProperty {
   }
 
   getLayoutOptions () {
-    return ['none', 'auto', 'value'].map(it => {
-        return `${it}:${this.$i18n(`flex.layout.item.property.${it}`)}`
-    }).join(',');
+    return this.variable(['none', 'auto', 'value'].map(it => {
+        return {value: it, text: this.$i18n(`flex.layout.item.property.${it}`) }
+    }));
   }
 
   getBody() {

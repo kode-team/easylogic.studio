@@ -10,7 +10,7 @@ export default class ColorPickerPopup extends BasePopup {
   }
 
   getClassName() {
-    return 'compact'
+    return 'compact elf--colorpicker-popup'
   }
 
   initState() {
@@ -41,12 +41,17 @@ export default class ColorPickerPopup extends BasePopup {
 
   getBody() {
     return /*html*/`
-      <div class="elf--color-picker-popup">
-        <div class='box'>
-          <object refClass="EmbedColorPicker" ref='$color' value='${this.state.color}' onchange='changeColor' onchangeend="changeEndColor" />
-        </div>
+    <div class="elf--color-picker-popup">
+      <div class='box'>
+        <object 
+          refClass="EmbedColorPicker" 
+          ref='$color' 
+          value='${this.state.color}' 
+          onchange=${this.subscribe((color) => this.updateData({ color }))} 
+          onchangeend=${this.subscribe((color) => this.updateEndData({ color }))} />
       </div>
-    `;
+    </div>
+  `;
   }
 
   [LOAD('$projectColors')] () {
@@ -68,18 +73,6 @@ export default class ColorPickerPopup extends BasePopup {
     })
     this.children.$color.setValue(this.state.color);
   }
-
-  [SUBSCRIBE_SELF('changeColor')] (color) {
-    this.updateData({
-      color
-    })
-  }
-
-  [SUBSCRIBE_SELF('changeEndColor')] (color) {
-    this.updateEndData({
-      color
-    })
-  }  
 
   [SUBSCRIBE("showColorPickerPopup")](data, params) {
     data.changeEvent = data.changeEvent || 'changeFillPopup'

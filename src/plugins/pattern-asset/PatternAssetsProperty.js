@@ -1,5 +1,5 @@
 
-import { LOAD, DEBOUNCE, DRAGSTART, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { LOAD, DEBOUNCE, DRAGSTART, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/base/Event";
 
 import patterns from "el/editor/preset/patterns";
 import { Pattern } from "el/editor/property-parser/Pattern";
@@ -24,7 +24,9 @@ export default class PatternAssetsProperty extends BaseProperty {
 
   getTools() {
 
-    const options = patterns.map(it => `${it.key}:${it.title}`)
+    const options = this.variable(patterns.map(it => {
+      return { value: it.key, text: it.title } 
+    }));
 
     return /*html*/`
       <object refClass="SelectEditor"  key="preset" value="${this.state.preset}" options="${options}" onchange="changePreset"  />
@@ -43,9 +45,12 @@ export default class PatternAssetsProperty extends BaseProperty {
     return 'elf--pattern-assets-property'
   }
 
+  get editableProperty() {
+    return "pattern";
+  }
 
-  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)] () {
-    this.show();
+  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100) + IF('checkShow')] () {
+    
   }
 
   getBody() {

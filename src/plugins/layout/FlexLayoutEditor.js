@@ -26,9 +26,9 @@ export default class FlexLayoutEditor extends EditorElement {
     }
 
     makeOptionsFunction (options) {
-        return options.split(',').map(it => {
-            return `${it}:${this.$i18n('flex.layout.editor.' + it)}`
-        }).join(',');
+        return this.variable(options.split(',').map(it => {
+            return { value: it, text: this.$i18n('flex.layout.editor.' + it) }
+        }));
     }
 
     initState() {

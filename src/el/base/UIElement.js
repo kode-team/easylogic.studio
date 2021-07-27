@@ -1,6 +1,7 @@
 import { CHECK_SAPARATOR, CHECK_SUBSCRIBE_PATTERN, SAPARATOR, SUBSCRIBE_SAPARATOR } from "./Event";
 import EventMachine from "./EventMachine";
 import { isFunction, splitMethodByKeyword } from "./functions/func";
+import { uuidShort } from "./functions/math";
 
 /**
  * UI 를 만드는 기본 단위 
@@ -14,6 +15,8 @@ import { isFunction, splitMethodByKeyword } from "./functions/func";
 class UIElement extends EventMachine {
   constructor(opt, props = {}) {
     super(opt, props);
+
+    this.__UID = new Set();
 
     this.created();
 
@@ -42,6 +45,14 @@ class UIElement extends EventMachine {
       methods, 
       params
     ]
+  }
+
+  createLocalCallback(event, callback) {
+    var newCallback = callback.bind(this);
+    newCallback.displayName = `${this.sourceName}.${event}`;
+    newCallback.source = this.source;
+
+    return newCallback;
   }
 
   /**
@@ -81,9 +92,7 @@ class UIElement extends EventMachine {
         .forEach(e => {
 
           if (isFunction(this[key])) {
-            var callback = this[key].bind(this);
-            callback.displayName = `${this.sourceName}.${e}`;
-            callback.source = this.source;
+            var callback = this.createLocalCallback(e, this[key] )
             this.$store.on(e, callback, this, debounceSecond, throttleSecond, allTriggerMethods.length, selfTriggerMethods.length, checkMethodList);
           }
 
@@ -153,18 +162,68 @@ class UIElement extends EventMachine {
     this.$store.trigger(messageName, ...args);
   }
 
+  /**
+   * 자식 객체에게만 호출되는 메세지를 수행한다.
+   * 
+   * @param {string} messageName
+   * @param {any[]} args
+   */ 
   broadcast(messageName, ...args) {
     Object.keys(this.children).forEach(key => {
       this.children[key].trigger(messageName, ...args);
     })
   }
 
+  /**
+   * message 이벤트에 주어진 callack 을 등록 
+   * 동일한 메세지 명으로 callback 은 list 화 되어서 관리 됩니다. 
+   * 
+   * @param {string} message 이벤트 메세지 이름 
+   * @param {Function} callback 메세지 지정시 실행될 함수
+   */ 
   on (message, callback) {
     this.$store.on(message, callback);
   }
 
   off (message, callback) {
     this.$store.off(message, callback);
+  }
+
+  /**
+   * 동적으로 subscribe 함수를 지정합니다. 
+   * 
+   * template 안에서 동적으로 수행할 수 있습니다. 
+   * 
+   * 이렇게 생성된 subscribe 함수는 외부에서는 실행 할수가 없는 SUBSCRIBE_SELF 로 생성됩니다. 
+   * 
+   * 함수 내부에서 context 를 유지하기 때문에 this 로 instance 에 접근 할 수 있습니다. 
+   * 
+   * @example
+   * 
+   * ```js
+   * html`
+   *     <div onClick=${this.subscribe(() => { 
+   *        console.log('click is fired'); 
+   *        console.log(this.source);
+   *     })}>
+   *        눌러주세요.
+   *     </div>
+   * `
+   * ```
+   * 
+   * @param {Function} callback subscribe 함수로 지정할 callback 
+   * @param {number} [debounceSecond=0] debounce 시간(ms)
+   * @param {number} [throttleSecond=0] throttle 시간(ms)
+   * @returns {string} function id 
+   */ 
+  subscribe(callback, debounceSecond = 0, throttleSecond = 0) {
+    const id = `subscribe.${uuidShort()}`;
+
+    const newCallback = this.createLocalCallback(id, callback);
+
+    this.$store.on(id, newCallback, this, debounceSecond, throttleSecond, false, /*self trigger*/true);    
+
+    return id; 
   }
 }
 

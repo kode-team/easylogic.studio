@@ -6,25 +6,6 @@ import { Length } from "el/editor/unit/Length";
 
 import './BackgroundImagePositionPopup.scss';
 
-export const blend_list = [
-  "normal",
-  "multiply",
-  "screen",
-  "overlay",
-  "darken",
-  "lighten",
-  "color-dodge",
-  "color-burn",
-  "hard-light", 
-  "soft-light",
-  "difference",
-  "exclusion",
-  "hue",
-  "saturation",
-  "color",
-  "luminosity"
-].join(',');
-
 export default class BackgroundImagePositionPopup extends BasePopup {
 
   getTitle() {
@@ -54,7 +35,13 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   templateForSize() {
     return /*html*/`
       <div class='popup-item'>
-        <object refClass="SelectEditor"  label="${this.$i18n('background.image.position.popup.size')}" ref='$size' key='size' value="${this.state.size}" options="contain,cover,auto" onchange="changeRangeEditor" />      
+        <object refClass="SelectEditor"  
+          label="${this.$i18n('background.image.position.popup.size')}" 
+          ref='$size' 
+          key='size' 
+          value="${this.state.size}" 
+          options=${this.variable(["contain","cover","auto" ])}
+          onchange="changeRangeEditor" />      
       </div>
     `;
   }
@@ -146,15 +133,6 @@ export default class BackgroundImagePositionPopup extends BasePopup {
     this.refs.$repeat.attr("data-value", $t.value);
     this.updateData({ repeat: $t.value });
   }
-
-  templateForBlendMode() {
-    return /*html*/`
-    <div class='popup-item'>
-      <object refClass="SelectEditor"  label="${this.$i18n('background.image.position.popup.blend')}" ref='$blend' key='blendMode' value="${this.state.blendMode}" options="${blend_list}" onchange="changeRangeEditor" />
-    </div>
-    `;
-  }
-
 
   getBody() {
     return /*html*/`

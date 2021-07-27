@@ -92,7 +92,7 @@ export default class FontProperty extends BaseProperty {
           label='${this.$i18n('font.property.style')}' 
           key="font-style"
           compact="true"
-          options="normal,italic" 
+          options=${this.variable(["normal","italic"])}
           icons='title,italic'
           onchange="changeRangeEditor" />
       </div>      

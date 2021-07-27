@@ -11,9 +11,9 @@ export default class LayoutProperty extends BaseProperty {
   }
 
   getLayoutOptions () {
-    return ['default', 'flex', 'grid'].map(it => {
-        return `${it}:${this.$i18n(`layout.property.${it}`)}`
-    }).join(',');
+    return this.variable(['default', 'flex', 'grid'].map(it => {
+        return { value: it, text: this.$i18n(`layout.property.${it}`) }
+    }));
   }
 
   getClassName() {

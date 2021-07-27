@@ -6,7 +6,7 @@ import LayerRender from "./LayerRender";
 
 export default class SVGItemRender extends LayerRender {
 
-
+ 
     /**
      * Def 업데이트 하기 
      * 
@@ -58,16 +58,46 @@ export default class SVGItemRender extends LayerRender {
         return this.getInnerId(item, 'stroke')
     }
 
-    toFillSVG (item) {
-        return SVGFill.parseImage(item.fill || 'transparent').toSVGString(this.fillId(item));
+    cachedStroke(item) {
+
+        if (item.getCache('__cachedStroke') === item.stroke && item.getCache('__parsedStroke')) {
+            return item.getCache('__parsedStroke');
+        }
+
+        item.addCache('__cachedStroke', item.stroke);
+        item.addCache('__parsedStroke', SVGFill.parseImage(item.stroke || 'black'));
+
+        return item.getCache('__parsedStroke');
     }
 
-    toStrokeSVG (item) {
-        return SVGFill.parseImage(item.stroke || 'black').toSVGString(this.strokeId(item));
+    cachedFill(item) {
+
+        if (item.getCache('__cachedFill') === item.fill && item.getCache('__parsedFill')) {
+            return item.getCache('__parsedFill');
+        }
+
+        item.addCache('__cachedFill', item.fill);
+        item.addCache('__parsedFill', SVGFill.parseImage(item.fill || 'black'));
+
+        return item.getCache('__parsedFill');
+    }    
+
+
+    toFillSVG (item) {
+        const fillValue = this.cachedFill(item);
+        return fillValue.toSVGString(this.fillId(item));
+    }
+
+    toStrokeSVG (item) { 
+        const strokeValue = this.cachedStroke(item);
+        return strokeValue.toSVGString(this.strokeId(item));
     }  
 
     toFillValue (item) {
-        return  SVGFill.parseImage(item.fill || 'transparent').toFillValue(this.fillId(item));
+
+        const fillValue = this.cachedFill(item);
+
+        return  fillValue.toFillValue(this.fillId(item)); 
     }
 
     toFillOpacityValue (item) {
@@ -75,7 +105,10 @@ export default class SVGItemRender extends LayerRender {
     }  
 
     toStrokeValue (item) {
-        return  SVGFill.parseImage(item.stroke || 'black').toFillValue(this.strokeId(item));
+
+        const strokeValue = this.cachedStroke(item);
+
+        return strokeValue.toFillValue(this.strokeId(item));
     }  
 
     toFilterValue (item) {

@@ -75,7 +75,7 @@ export default class SVGTextPathRender extends SVGItemRender {
           >${item.text}</textPath>
           <use href="${pathId}" stroke-width="1" stroke="black" />
         </text>
-        <path class="guide" d="${item.d}" fill="none"/>
+        <path class="guide" d="${item.d}" stroke="rgba(0, 0, 0, 0.5)" fill="none"/>
       </svg>
     `
   }

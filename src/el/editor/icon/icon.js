@@ -154,9 +154,9 @@ import horizontal_rule from "./horizontal_rule";
 import navigation from "./navigation";
 import web from "./web";
 import auto_awesome from "./auto_awesome";
-import chart from "./chart";
-import line_chart from "./line_chart";
-import bar_chart from "./bar_chart";
+// import chart from "./chart";
+// import line_chart from "./line_chart";
+// import bar_chart from "./bar_chart";
 import plugin from "./plugin";
 import straighten from "./straighten";
 import left_hide from "./left_hide";
@@ -175,11 +175,11 @@ export default {
   pantool,
   left_hide,
   right_hide,
-  bar_chart,
+  // bar_chart,
   straighten,
   plugin,
-  chart,
-  line_chart,
+  // chart,
+  // line_chart,
   auto_awesome,
   web,
   navigation,

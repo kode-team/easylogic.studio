@@ -44,19 +44,43 @@ export default class FuncFilterEditor extends EditorElement {
         var hasLabel = !!label ? 'has-label' : ''
 
         return /*html*/`
-        <object refClass="SelectEditor"  label="${label}" key="type" value="${this.state.type}" options="identity,table,discrete,linear,gamma" onchange="changeType" />
+        <object refClass="SelectEditor"  
+            label="${label}" 
+            key="type" 
+            value="${this.state.type}" 
+            options=${this.variable(["identity","table","discrete","linear","gamma"])} 
+            onchange="changeType" />
         <div class='elf--func-filter-editor ${hasLabel}' ref='$container' data-selected-type='${type}'>
             ${label ? `<label></label>` : '' }
             <div data-type='identity'>
             </div>
             <div data-type='table'>
-                <object refClass="TextEditor" label='tableValues' ref='$values' key='values' value="${this.state.values.join(' ')}" onchange="changeValues" />
+                <object refClass="TextEditor" 
+                    label='tableValues' 
+                    ref='$values' 
+                    key='values' 
+                    value="${this.state.values.join(' ')}" 
+                    onchange=${this.subscribe((key, value) => {
+                        this.updateData({
+                            [key]: value.split(' ') 
+                        })
+                    })} />
             </div>
             <div data-type='linear'>
                 ${['slop', 'intercept'].map(it => {
                     return /*html*/`
                         <div>
-                            <object refClass="NumberRangeEditor"  label='${it}' ref='$${it}' key='${it}' value="${this.state[it]}" onchange="changeLinear" />
+                            <object refClass="NumberRangeEditor"  
+                                label='${it}' 
+                                ref='$${it}' 
+                                key='${it}' 
+                                value="${this.state[it]}" 
+                                onchange=${this.subscribe((key, value) => {
+                                    this.updateData({
+                                        [key]: value
+                                    })
+                                })}
+                            />
                         </div>                    
                     `
                 }).join('')}
@@ -65,7 +89,17 @@ export default class FuncFilterEditor extends EditorElement {
                 ${['amplitude', 'exponent', 'offset'].map(it => {
                     return /*html*/`
                         <div>
-                            <object refClass="NumberRangeEditor"  label='${it}' ref='$${it}' key='${it}' value="${this.state[it]}" onchange="changeGamma" />
+                            <object refClass="NumberRangeEditor"  
+                                label='${it}' 
+                                ref='$${it}' 
+                                key='${it}' 
+                                value="${this.state[it]}" 
+                                onchange=${this.subscribe((key, value) => {
+                                    this.updateData({
+                                        [key]: value
+                                    })
+                                })}
+                                />
                         </div>                    
                     `
                 }).join('')}            
@@ -98,25 +132,6 @@ export default class FuncFilterEditor extends EditorElement {
             ...this.parse(value)
         })
     }
-
-    [SUBSCRIBE_SELF('changeValues')] (key, value) {
-        
-        this.updateData({
-            [key]: value.split(' ') 
-        })
-    }    
-
-    [SUBSCRIBE_SELF('changeLinear')] (key, value) {
-        this.updateData({
-            [key]: value 
-        })
-    }
-
-    [SUBSCRIBE_SELF('changeGamma')] (key, value) {
-        this.updateData({
-            [key]: value 
-        })
-    }    
 
     updateData (data) {
         this.setState(data, false)

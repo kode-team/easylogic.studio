@@ -1,7 +1,7 @@
 
 import { LOAD, CLICK, DOMDIFF } from "el/base/Event";
 import icon from "el/editor/icon/icon";
-import { CSS_TO_STRING } from "el/base/functions/func";
+import { CSS_TO_STRING, isArray, isString } from "el/base/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './SelectIconEditor.scss';
@@ -9,16 +9,25 @@ import './SelectIconEditor.scss';
 export default class SelectIconEditor extends EditorElement {
 
     initState() {
-        var keyValueChar = this.props['key-value-char'] || ':'        
         var splitChar = this.props.split || ',';
-        var options = (this.props.options || '').split(splitChar).map(it => it.trim());
+        var options = isArray(this.props.options) 
+                        ? this.props.options.map(it => {
+                            if (isString(it)) {
+                                return { value: it }
+                            }
+                            return it;  
+                        })
+                        : (this.props.options  || '').split(splitChar).map(it => it.trim()).map(it => {
+                            const [value, text] = it.split(':');
+                            return { value, text }
+                        });
+
         var icons = (this.props.icons || '').split(splitChar).map(it => it.trim());
         var colors = (this.props.colors || '').split(splitChar).map(it => it.trim());
 
         var value = this.props.value || '';
 
         return {
-            keyValueChar,            
             label: this.props.label || '',
             compact: this.props.compact === 'true',
             options, 
@@ -62,17 +71,14 @@ export default class SelectIconEditor extends EditorElement {
         return this.state.options.map((it, index) => {
 
 
-            var value = it; 
-            var label = it; 
-            var title = it; 
+            var value = it.value; 
+            var label = it.text; 
+            var title = it.text; 
             var iconClass = ''
 
-            if (value.includes(this.state.keyValueChar)) {
-                var [value, label] = value.split(this.state.keyValueChar)
-            }            
             var isSelected = value === this.state.value; 
             var selected = isSelected ? 'selected' : '' 
-            if (it === '') {
+            if (it.value === '') {
                 var label = icon.close
                 title = 'close'
             } else {
@@ -83,8 +89,7 @@ export default class SelectIconEditor extends EditorElement {
                 }
 
                 title = label 
-                label = icon[iconKey] || label || iconKey || it; 
-
+                label = icon[iconKey] || label || iconKey || it.text || it.value; 
             }
 
             var color = this.state.colors[index]

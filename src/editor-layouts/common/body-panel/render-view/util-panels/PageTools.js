@@ -1,6 +1,6 @@
 
 
-import { CLICK, PREVENT, STOP, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, CONFIG } from "el/base/Event";
+import { CLICK, PREVENT, STOP, SUBSCRIBE, CONFIG } from "el/base/Event";
 import { OBJECT_TO_CLASS } from "el/base/functions/func";
 
 import icon from "el/editor/icon/icon";
@@ -15,7 +15,20 @@ export default class PageTools extends EditorElement {
       <div class='elf--page-tools'>
         <button type='button' ref='$minus'>${icon.remove2}</button>
         <div class='select'>
-          <object refClass="NumberInputEditor"  ref='$scale' min='10' max='240' step="1" key="scale" value="${this.$viewport.scale*100}" onchange="changeRangeEditor" />
+          <object 
+            refClass="NumberInputEditor" 
+            ref='$scale' 
+            min='10' 
+            max='240' 
+            step="1" 
+            key="scale" 
+            value="${this.$viewport.scale*100}" 
+            onchange=${this.subscribe((key, scale) => {
+              this.$viewport.setScale(scale/100);
+              this.emit('updateViewport');    
+              this.trigger('updateViewport');    
+            }, 1000)}
+        />
         </div>
         <label>%</label>
         <button type='button' ref='$plus'>${icon.add}</button>        
@@ -39,12 +52,6 @@ export default class PageTools extends EditorElement {
       this.children.$scale.setValue(scale);
     }
 
-  }
-
-  [SUBSCRIBE_SELF('changeRangeEditor') + DEBOUNCE(1000)] (key, scale) {
-    this.$viewport.setScale(scale/100);
-    this.emit('updateViewport');    
-    this.trigger('updateViewport');    
   }
 
   [CLICK('$plus') + PREVENT + STOP] () {

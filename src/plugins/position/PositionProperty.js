@@ -1,4 +1,4 @@
-import { IF, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { IF, SUBSCRIBE, SUBSCRIBE_SELF, THROTTLE } from "el/base/Event";
 import { Transform } from "el/editor/property-parser/Transform";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { Length } from "el/editor/unit/Length";
@@ -34,7 +34,7 @@ export default class PositionProperty extends BaseProperty {
     );
   }
 
-  [SUBSCRIBE('refreshSelectionStyleView') + IF('checkChangedValue')]() {
+  [SUBSCRIBE('refreshSelectionStyleView') + IF('checkChangedValue') + THROTTLE(10)]() {
     var current = this.$selection.current;
     if (!current) return '';
 

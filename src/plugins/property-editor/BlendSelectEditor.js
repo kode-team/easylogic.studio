@@ -17,13 +17,13 @@ export const blend_list = [
     "saturation",
     "color",
     "luminosity"
-  ].join(',');
+  ];
 
 export default class BlendSelectEditor extends SelectEditor {
 
     getBlendList () {
-        return blend_list.split(',').map(it => {
-            return `${it}:${this.$i18n(`blend.${it}`)}`
+        return blend_list.map(it => {
+            return {value: it, text: this.$i18n(`blend.${it}`)};
         });
         
     }

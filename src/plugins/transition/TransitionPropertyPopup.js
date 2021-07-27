@@ -73,8 +73,10 @@ const property_list = [
   'width',
   'word-spacing',
   'z-index'
-]
-
+].map(it => ({
+  value: it,
+  text: it,
+}));
 
 
 export default class TransitionPropertyPopup extends BasePopup {
@@ -138,7 +140,15 @@ export default class TransitionPropertyPopup extends BasePopup {
    
     return /*html*/`
       <div class='name'>
-        <object refClass="SelectEditor"  ref='$property' icon="true" label="Property" key='name' value="${this.state.data.name}" options="${property_list.join(',')}" onChange='changeTransition' /> 
+        <object refClass="SelectEditor"  
+          ref='$property' 
+          icon="true" 
+          label="Property" 
+          key='name' 
+          value="${this.state.data.name}" 
+          options=${this.variable(property_list)} 
+          onChange='changeTransition' 
+        /> 
       </div>
     `
   }

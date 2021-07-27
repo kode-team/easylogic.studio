@@ -79,7 +79,7 @@ export default class DrawManager extends EditorElement {
               ref='$strokeLineCap' 
               key="stroke-linecap" 
               value="${this.state['stroke-linecap']}"                   
-              options="butt,round,square" 
+              options=${this.variable(["butt","round","square"])} 
               onchange="changeValue" 
             />
           </div> 
@@ -89,7 +89,7 @@ export default class DrawManager extends EditorElement {
               ref='$strokeLineJoin' 
               key="stroke-linejoin" 
               value="${this.state['stroke-linejoin']}"                                 
-              options="miter,bevel,round" 
+              options=${this.variable(["miter","bevel","round" ])}
               onchange="changeValue" 
             />
           </div>

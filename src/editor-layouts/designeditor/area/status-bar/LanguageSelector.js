@@ -12,7 +12,7 @@ export default class LanguageSelector extends EditorElement {
 
         var languages = this.locales.map(lang => {
             var label = this.$i18n(`app.lang.${lang}`)
-            return `${lang}:${label}`
+            return {text: label, value: lang}
         });
 
         return /*html*/`
@@ -21,7 +21,7 @@ export default class LanguageSelector extends EditorElement {
                 <div class='item'>
                     <object refClass="SelectEditor"  
                         ref='$locale' 
-                        options="${languages.join(',')}" 
+                        options=${this.variable(languages)}
                         value="${this.$editor.locale}" 
                         onchange="changeLocale"
                     /> 

@@ -1,8 +1,7 @@
 import { CSS_TO_STRING } from "el/base/functions/func";
-import AnimationExport from "../exporter/animation-export/AnimationExport";
 
 export default {
-
+ 
   makeProjectStyle (item) {
 
     const keyframeString = item.toKeyframeString();
@@ -38,32 +37,8 @@ export default {
     `
   },
 
-  generate (editor) {
-    var project = editor.selection.currentProject;
-    var current = editor.selection.current;
-    var artboard = current.artboard;
-
-    var css = `${this.makeStyle(project)}`
-    var html = `
-${artboard.html}
-${this.makeSvg(project)}
-    `
-
-    var js = '';
-
-    html = editor.replaceLocalUrltoRealUrl(html);
-    css = editor.replaceLocalUrltoRealUrl(css);
-
-    if (current.is('artboard')) {
-      js = editor.replaceLocalUrltoRealUrl(AnimationExport.generate(current, 'anipa'));
-    }
-
-  
-    return { html, css, js }
-  },
-
   generateSVG (editor, rootItem) {
-    return editor.replaceLocalUrltoRealUrl(editor.svg.render(rootItem, null, true));
+    return editor.replaceLocalUrltoRealUrl(editor.svg.render(rootItem));
   }
 
 }

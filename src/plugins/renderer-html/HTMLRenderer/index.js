@@ -41,9 +41,13 @@ function replaceKeyword(str) {
 function filterKeyName (str, prefixPadding = '') {
     return str.split(';').filter(it => it.trim()).map(it => {
       it = it.trim();
-      var [key, value] = it.split(':')
+      var [key, value] = it.split(':').map(it => it.trim());
 
-      return /*html*/`<div class="block"><strong>${key}</strong><span>:</span><span class="value">${replaceKeyword(value)}</span><span>;</span></div>` 
+      if (value === '') {
+        return '';
+      }
+
+      return /*html*/`<div class="block"><strong>${key}</strong><span>:&nbsp;</span><span class="value">${replaceKeyword(value)}</span><span>;</span></div>` 
     }).join('').trim()
 }
 
@@ -184,8 +188,8 @@ export default class HTMLRenderer {
         const currentProject = item.top;
         let keyframeCode = modifyNewLine(filterKeyName(currentProject ? currentProject.toKeyframeString() : ''))
         let rootVariable = currentProject ? CSS_TO_STRING(currentProject.toRootVariableCSS()) : ''
-        let svgCode = this.renderSVG(currentProject);
-        svgCode = svgCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') 
+        // let svgCode = this.renderSVG(currentProject);
+        // svgCode = svgCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;') 
     
         const current = item;
         const cssCode = filterKeyName(current ? TAG_TO_STRING( CSS_TO_STRING( this.toCSS(current) ) ) : '')

@@ -215,7 +215,8 @@ export const html = (strings, ...args) => {
         var results = args[index] || ''
 
         if (isFunction(results)) {
-            results = results()
+            console.log(results);
+            // results = results()
         }
 
         if (!isArray(results)) {

@@ -66,6 +66,7 @@ export class Item {
     this.json = this.convert(Object.assign(this.getDefaultObject(), json));
     this.lastChangedField = {};
     this.lastChangedFieldKeys = [];
+    this.cachedValue = {};
 
     return this.ref; 
   }
@@ -284,6 +285,14 @@ export class Item {
 
   isSVG() {
     return false; 
+  }
+
+  addCache(key, value) {
+    this.cachedValue[key] = value;
+  }
+
+  getCache(key) {
+    return this.cachedValue[key];
   }
 
   editable(editablePropertyName) {

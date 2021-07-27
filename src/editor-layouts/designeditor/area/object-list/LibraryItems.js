@@ -1,4 +1,3 @@
-import { DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './LibraryItems.scss';
@@ -9,14 +8,12 @@ export default class LibraryItems extends EditorElement {
     return /*html*/`
       <div class='elf--library-items'>
         <div>
-          <object label="Search" refClass="TextEditor" key="search" onchange="onTextChange" />
+          <object label="Search" refClass="TextEditor" key="search" onchange=${this.subscribe((key, value) => {
+            this.broadcast('search', value);
+          }, 300)} />
         </div>
         ${this.$menuManager.generate('library')}
       </div>
     `;
-  }
-
-  [SUBSCRIBE_SELF('onTextChange') + DEBOUNCE(300)] (key, value) {
-    this.broadcast('search', value);
   }
 }
