@@ -80,7 +80,7 @@ export default class SVGItemRender extends LayerRender {
         item.addCache('__parsedFill', SVGFill.parseImage(item.fill || 'black'));
 
         return item.getCache('__parsedFill');
-    }    
+    }     
 
 
 
