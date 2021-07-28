@@ -14,7 +14,7 @@ function startEditor() {
       }],
     },
     config: {
-      // "style.page-view-color": "black"
+      "style.page-view-color": "#FDC111"
     //   "show.ruler": false,
     //   "show.left.panel": false,
     //   "show.right.panel": false

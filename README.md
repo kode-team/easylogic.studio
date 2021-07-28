@@ -148,6 +148,17 @@ app.setValue(project[]);
 
 ```
 
+# Configs 
+
+```js
+  config: {
+    "style.page-view-color": "#FDC111"
+    "show.ruler": false,
+    "show.left.panel": false,
+    "show.right.panel": false
+  },
+```
+
 # Plugins 
 
 please refer to  https://github.com/easylogic/awesome-easylogic-studio 
