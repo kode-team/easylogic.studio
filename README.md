@@ -140,6 +140,12 @@ var app = new EasyLogic.createDesignEditor({
   ]
 });
 
+// project 리스트 조회 
+app.getValue():  project[]
+
+// project 리스트 설정 
+app.setValue(project[]);
+
 ```
 
 # Plugins 
