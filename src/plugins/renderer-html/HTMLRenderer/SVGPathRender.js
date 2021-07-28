@@ -16,13 +16,40 @@ export default class SVGPathRender extends SVGItemRender {
     var $path = currentElement.$('path');
 
     if ($path) {
-      $path.setAttrNS({
-        'd':  item.d,
-        'fill-rule': item['fill-rule'] || 'nonezero',
-        'filter': this.toFilterValue(item),
-        'fill': this.toFillValue(item),
-        'stroke': this.toStrokeValue(item)
-      })  
+
+      if (item.hasChangedField('width', 'height', 'd')) {
+        $path.setAttrNS({
+          'd':  item.d,
+        })  
+      } 
+      
+      if (item.hasChangedField('fill')){
+        $path.setAttrNS({
+          'fill': this.toFillValue(item),
+        })  
+
+      } 
+      
+      if (item.hasChangedField('stroke')){
+        $path.setAttrNS({
+          'stroke': this.toStrokeValue(item)
+        })  
+        
+      } 
+      
+      if (item.hasChangedField('filter')){
+        $path.setAttrNS({
+          'filter': this.toFilterValue(item),
+        })          
+      }
+
+      if (item.hasChangedField('fill-rule')){
+        $path.setAttrNS({
+          'fill-rule': item['fill-rule'] || 'nonezero',
+        })          
+      }
+
+
     }
 
     this.updateDefString(item, currentElement)

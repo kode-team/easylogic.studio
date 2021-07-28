@@ -145,9 +145,10 @@ export default class SegmentManager {
                     x1='${it.x1}' x2='${it.x2}' y1='${it.y1}' y2='${it.y2}' 
                 />`
             } else if (it.text) {
-                return /*html*/ `
-                <text x="${it.cx}" y="${it.cy}" dx="5" dy="-5" text-anchor="start">${it.text}</text>
-                `                              
+                return'';
+                // return /*html*/ `
+                // <text x="${it.cx}" y="${it.cy}" dx="5" dy="-5" text-anchor="start">${it.text}</text>
+                // `                              
             } else if (it.curve) {
                 return /*html*/`
                 <circle 

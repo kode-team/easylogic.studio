@@ -72,10 +72,6 @@ export default class BoxShadowEditor extends EditorElement {
     return arr.join('');
   }
 
-  [SUBSCRIBE('refreshSelection')]() {
-    this.refresh();
-  }
-
   modifyBoxShadow () {
     var value = this.state.boxShadows.join(', ');
 
@@ -128,7 +124,15 @@ export default class BoxShadowEditor extends EditorElement {
 
   viewBoxShadowPropertyPopup(shadow) {
     this.emit("showBoxShadowPropertyPopup", {
-      changeEvent: 'changeBoxShadowEditorPopup',
+      changeEvent: (data, params) => {
+        var shadow = this.state.boxShadows[this.selectedIndex]
+        if (shadow) {
+          shadow.reset(data)
+          this.refresh();
+    
+          this.modifyBoxShadow();      
+        }
+      },
       color: shadow.color,
       inset: shadow.inset,
       offsetX: shadow.offsetX,
@@ -137,22 +141,5 @@ export default class BoxShadowEditor extends EditorElement {
       spreadRadius: shadow.spreadRadius
     }, { id: this.id });
 
-  }
-
-  [SUBSCRIBE("changeBoxShadowEditorColor")](color) {
-    this.trigger('changeBoxShadowEditorPopup', { color })
-  }
-
-  [SUBSCRIBE("changeBoxShadowEditorPopup")](data, params) {
-
-    if (params.id === this.id) {
-      var shadow = this.state.boxShadows[this.selectedIndex]
-      if (shadow) {
-        shadow.reset(data)
-        this.refresh();
-  
-        this.modifyBoxShadow();      
-      }
-    }
   }
 }

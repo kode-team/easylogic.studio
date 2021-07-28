@@ -60,29 +60,17 @@ export default class SVGItemRender extends LayerRender {
 
     cachedStroke(item) {
 
-        if (item.getCache('__cachedStroke') === item.stroke && item.getCache('__parsedStroke')) {
-            return item.getCache('__parsedStroke');
-        }
-
-        item.addCache('__cachedStroke', item.stroke);
-        item.addCache('__parsedStroke', SVGFill.parseImage(item.stroke || 'black'));
-
-        return item.getCache('__parsedStroke');
+        return item.computed('stroke', (value) => {
+            return SVGFill.parseImage(value || 'black')
+        });
     }
 
     cachedFill(item) {
 
-        if (item.getCache('__cachedFill') === item.fill && item.getCache('__parsedFill')) {
-            return item.getCache('__parsedFill');
-        }
-
-        item.addCache('__cachedFill', item.fill);
-        item.addCache('__parsedFill', SVGFill.parseImage(item.fill || 'black'));
-
-        return item.getCache('__parsedFill');
+        return item.computed('fill', (value) => {
+            return SVGFill.parseImage(value || 'black')
+        });
     }     
-
-
 
     toFillSVG (item) {
         const fillValue = this.cachedFill(item);

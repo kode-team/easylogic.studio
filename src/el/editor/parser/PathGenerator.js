@@ -835,7 +835,7 @@ export default class PathGenerator {
 
             this.segmentManager
                 .addDistanceAngle(last, dist, dist, angle, {x, y}, {x: x-dist, y})
-                .addText({x: tx-5, y: ty+15}, angle)
+                // .addText({x: tx-5, y: ty+15}, angle)
         } else if (first.startPoint.x < second.startPoint.x && first.startPoint.y > second.startPoint.y) {
             // right top  
             this.segmentManager
@@ -879,9 +879,9 @@ export default class PathGenerator {
             this.segmentManager
                 .addPoint({}, current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
 
-            if (!current.startPoint.isLast) {
-                this.segmentManager.addText(current.startPoint, index+1);
-            }
+            // if (!current.startPoint.isLast) {
+            //     this.segmentManager.addText(current.startPoint, index+1);
+            // }
 
 
         } else {      

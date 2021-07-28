@@ -49,6 +49,16 @@ export default class HTMLRenderView extends EditorElement {
         isFunction(callback) && callback(this.getElement(id))
     }
 
+    clearElementAll() {
+        this.$selection.each(item => {
+            this.clearElement(item.id);
+        });
+    }
+
+    clearElement(id) {
+        this.state.cachedCurrentElement[id] = undefined
+    }
+
     getElement(id) {
 
         if (!this.state.cachedCurrentElement[id]) {
@@ -297,6 +307,7 @@ export default class HTMLRenderView extends EditorElement {
             this.initMousePoint = targetMousePoint;
             this.$selection.reselect();
             this.$snapManager.clear();
+            this.clearElementAll();
 
             this.trigger('refreshAllCanvas')
 
@@ -443,9 +454,10 @@ export default class HTMLRenderView extends EditorElement {
      */
     [SUBSCRIBE('refreshAllCanvas')]() {
 
+        this.clearElementAll();
+
         const project = this.$selection.currentProject
 
-        // todo: this.$renderer.getRenderer('html').render(item, this.refs.$view);
         const html = this.$editor.html.render(project, null, this.$editor) || '';
 
         this.setState({ html }, false)

@@ -54,19 +54,4 @@ export class SVGTextItem extends SVGItem {
   getDefaultTitle() {
     return "Text";
   }
-
-  /**
-   * @deprecated 
-   * 
-   */   
-  toAnimationKeyframes (properties) {
-
-    var svgProperties = properties.filter(it => hasSVGProperty(it.property));
-    var cssProperties = properties.filter(it => hasCSSProperty(it.property));
-
-    return [
-      { selector: `[data-id="${this.json.id}"]`, properties: cssProperties  },
-      { selector: `[data-id="${this.json.id}"] text`, properties: svgProperties }
-    ] 
-  }  
 }

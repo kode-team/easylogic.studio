@@ -11,19 +11,39 @@ export default class SVGTextRender extends SVGItemRender {
    */
   update (item, currentElement) {
     var $text = currentElement.$('text'); 
-
     if ($text) {
-      $text.text(item.text)
-      $text.setAttrNS({
-        filter: this.toFilterValue(item),
-        fill: this.toFillValue(item),
-        stroke: this.toStrokeValue(item),   
-        textLength: item.textLength,
-        lengthAdjust: item.lengthAdjust
-      })
+
+      if (item.hasChangedField('text')) {
+        $textPath.text(item.text)
+      }
+
+      if (item.hasChangedField('textLength', 'lengthAdjust', 'startOffset')) {
+        $textPath.setAttrNS({
+          textLength: item.textLength,
+          lengthAdjust: item.lengthAdjust,
+          startOffset: item.startOffset
+        })  
+      }
+
+      if (item.hasChangedField('fill')) {
+        $textPath.setAttrNS({
+          fill: this.toFillValue(item),
+        })
+      }
+
+      if (item.hasChangedField('stroke')) {
+        $textPath.setAttrNS({
+          stroke: this.toStrokeValue(item),
+        })
+      }      
+
+      if (item.hasChangedField('filter')) {
+        $textPath.setAttrNS({
+          filter: this.toFilterValue(item),
+        })
+      }            
   
     }
-
     this.updateDefString(item, currentElement)
 
   }    

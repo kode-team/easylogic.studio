@@ -15,25 +15,52 @@ export default class SVGTextPathRender extends SVGItemRender {
     var $path = currentElement.$('path.svg-path-item');
 
     if ($path) {
-      $path.attr('d', item.d);
+
+      if (item.hasChangedField('width', 'height', 'd')) {
+        $path.attr('d', item.d);
+      }
+
     }
 
     var $guidePath = currentElement.$('path.guide');
     if ($guidePath) {
-      $guidePath.attr('d', item.d);
+      if (item.hasChangedField('width', 'height', 'd')) {
+        $guidePath.attr('d', item.d);
+      }
     }
 
     var $textPath = currentElement.$('textPath'); 
     if ($textPath) {
-      $textPath.text(item.text)
-      $textPath.setAttrNS({
-        filter: this.toFilterValue(item),
-        fill: this.toFillValue(item),
-        stroke: this.toStrokeValue(item),
-        textLength: item.textLength,
-        lengthAdjust: item.lengthAdjust,
-        startOffset: item.startOffset
-      })
+
+      if (item.hasChangedField('text')) {
+        $textPath.text(item.text)
+      }
+
+      if (item.hasChangedField('textLength', 'lengthAdjust', 'startOffset')) {
+        $textPath.setAttrNS({
+          textLength: item.textLength,
+          lengthAdjust: item.lengthAdjust,
+          startOffset: item.startOffset
+        })  
+      }
+
+      if (item.hasChangedField('fill')) {
+        $textPath.setAttrNS({
+          fill: this.toFillValue(item),
+        })
+      }
+
+      if (item.hasChangedField('stroke')) {
+        $textPath.setAttrNS({
+          stroke: this.toStrokeValue(item),
+        })
+      }      
+
+      if (item.hasChangedField('filter')) {
+        $textPath.setAttrNS({
+          filter: this.toFilterValue(item),
+        })
+      }            
   
     }
 

@@ -295,6 +295,20 @@ export class Item {
     return this.cachedValue[key];
   }
 
+  computed(key, newValueCallback) {
+    const cachedKey = `__cachedKey_${key}`
+    const parsedKey = `${cachedKey}__parseValue`
+    const value = this.json[key];
+    if (this.getCache(key) === value && this.getCache(parsedKey)) {
+      return this.getCache(parsedKey);
+    }
+
+    this.addCache(key, value);
+    this.addCache(parsedKey, newValueCallback(value, this.ref));
+
+    return this.getCache(parsedKey);
+  }
+
   editable(editablePropertyName) {
     return true; 
   }

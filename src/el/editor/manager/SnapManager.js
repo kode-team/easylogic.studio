@@ -72,9 +72,9 @@ export class SnapManager {
      */
     convertGuideAndPathMatrix(item) {
         const guideVerties = item.guideVerties;
-        const pathVerties = item.pathVerties();
+        // const pathVerties = item.pathVerties();
 
-        return [...guideVerties, ...pathVerties];
+        return [...guideVerties];
     }
 
     /**
