@@ -23,13 +23,15 @@ export default class BaseLayout extends EditorElement {
       this.$editor.registerPluginList(this.opt.plugins);
     }
 
-    // register other configs     
+    // initialize plugin list 
+    this.$editor.initPlugins();
+
+    // register other configs 
+    // 플러그인이 모두 로드 된 다음 커스텀 config 를 설정합니다.     
     if (isObject(this.opt.config)) {
       this.$config.setAll(this.opt.config || {});
     }
 
-    // initialize plugin list 
-    this.$editor.initPlugins();
 
   }
 

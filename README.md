@@ -152,7 +152,7 @@ app.setValue(project[]);
 
 ```js
   config: {
-    "style.page-view-color": "#FDC111"
+    "style.canvas.backgroud.color": "#FDC111"
     "show.ruler": false,
     "show.left.panel": false,
     "show.right.panel": false
@@ -468,13 +468,13 @@ editor.on('getChangeValue', function(id, value) {
 this.$editor.emit('saveJSON');
 ```
 
-#### Get Position 
+#### Get Position in CanvasView 
 ```js
-// e: MouseEvent 
+// e: screen mouse point -> world position 
 const worldPosition = this.$viewport.getWorldPosition(e);  // return vec3 
 
-// 
-const screenPosition = this.$viewport.applyVertex(newMousePoint); // return vec3 
+// world position -> screen mouse point 
+const screenPosition = this.$viewport.applyVertex(worldPosition); // return vec3 
 ```
 
 # Thanks to 

@@ -86,7 +86,7 @@ export default class CanvasView extends EditorElement {
   [BIND('$pageView')]() {
     return {
       style: {
-        '--elf--page-view-color': this.$config.get('style.page-view-color')
+        '--elf--canvas-background-color': this.$config.get('style.canvas.background.color')
       }
     }
   }
@@ -194,11 +194,6 @@ export default class CanvasView extends EditorElement {
 
       this.emit('drop.asset', {
         asset: { id: e.dataTransfer.getData('text/asset'), center: newCenter }
-      })
-
-    } else if (e.dataTransfer.getData('text/custom-component')) {
-      this.emit('drop.asset', {
-        customComponent: { id: e.dataTransfer.getData('text/custom-component'), center: newCenter }
       })
 
     } else {

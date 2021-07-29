@@ -4,6 +4,9 @@ function startEditor() {
   var app = new EasyLogic.createDesignEditor({
     container: document.getElementById('app'),
     data: {
+      version: "1.0.0",
+      name: "Sample Project",
+      description: "easylogic studio project ",
       projects: [{
         itemType: 'project', 
         layers: [
@@ -14,7 +17,7 @@ function startEditor() {
       }],
     },
     config: {
-      "style.page-view-color": "#FDC111"
+      "style.canvas.background.color": "orange"
     //   "show.ruler": false,
     //   "show.left.panel": false,
     //   "show.right.panel": false

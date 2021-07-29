@@ -35,9 +35,7 @@ module.exports = {
   // Entry files for our popup and background pages
   entry: {
     editor: "./src/editor-layouts/designeditor/index.js",
-    canvas: "./src/editor-layouts/canvaseditor/index.js",    
-    embed: "./src/editor-layouts/embededitor/index.js",    
-    player: "./src/editor-layouts/designplayer/index.js",   
+    embed: "./src/editor-layouts/embededitor/index.js",     
   },
   output: {
     library: "EasyLogic",
@@ -48,7 +46,7 @@ module.exports = {
   },
   resolve: { alias },  
   mode: 'production',
-  // devtool: 'source-map',
+  // devtool: 'source-map', 
   optimization: {
     minimize: true
   },

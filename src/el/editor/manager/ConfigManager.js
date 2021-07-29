@@ -31,18 +31,19 @@ export class ConfigManager {
      * @param {string} key 
      */
     get (key) {
-        if (this.config[key] === undefined) {
-           this.config[key] =  this.configList.find(it => it.key == key)?.defaultValue
+        if (this.config.has(key) === false) {
+           this.config.set(key, this.configList.find(it => it.key == key)?.defaultValue);
         }
 
-        return this.config[key];
+        return this.config.get(key);
     }
 
     set (key, value) {
-        const oldValue = this.config[key]
-        if (oldValue != value) {
+        const oldValue = this.config.get(key);
+
+        if (oldValue !== value) {
             //todo: type 체크
-            this.config[key] = value; 
+            this.config.set(key, value); 
             this.editor.emit("config:" + key, value, oldValue);
         }
     }
@@ -80,7 +81,7 @@ export class ConfigManager {
     }
 
     remove (key) {
-        delete this.config[key];
+        this.config.delete(key);
         this.editor.emit("config:" + key);        
     }
 
@@ -96,7 +97,7 @@ export class ConfigManager {
      * @param {string} config.description config key 설명  
      */ 
     registerConfig (config) {
-        this.config[config.key] = config.defaultValue;
+        this.config.set(config.key, config.defaultValue);
         this.configList.push(config);
     }
 }

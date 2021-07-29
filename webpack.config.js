@@ -39,9 +39,7 @@ module.exports = {
   // Entry files for our popup and background pages
   entry: {
     editor: "./src/index.js",
-    canvas: "./src/index-canvas.js",    
     embed: "./src/index-embed.js",    
-    // player: "./src/index-player.js",
   },
   output: {
     library: "EasylogicStudio",
@@ -144,25 +142,12 @@ module.exports = {
       filename: "./index.html",
       excludeChunks: ['embed', 'canvas']
     }),
-    // new HtmlWebPackPlugin({
-    //   inject: true,
-    //   template: "./src/index.html",
-    //   filename: "./player.html",
-    //   excludeChunks: ['editor', 'embed', 'canvas']
-    // }),        
-
     new HtmlWebPackPlugin({
       inject: true,
       template: "./src/index.html",
       filename: "./embed.html",
       excludeChunks: ['editor', 'canvas']
     }),            
-    new HtmlWebPackPlugin({
-      inject: true,
-      template: "./src/index.html",
-      filename: "./canvas.html",
-      excludeChunks: ['editor', 'embed']
-    }),                
     new MiniCssExtractPlugin({
       filename: "[name].css?[contenthash]"
     }),

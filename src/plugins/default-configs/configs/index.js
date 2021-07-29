@@ -12,7 +12,10 @@ import historyDelayMs from "./history.delay.ms";
 import snapGrid from './snap.grid';
 import storeKey from './store.key';
 import areaWidth from './area.width';
+import styleCanvasBackgroundColor from "./style.canvas.background.color";
+
 export default [
+    styleCanvasBackgroundColor,
     areaWidth,
     storeKey,
     setToolHand,
