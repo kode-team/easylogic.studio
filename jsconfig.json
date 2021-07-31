@@ -1,16 +1,25 @@
 {
-    "compilerOptions": {
-      "baseUrl": ".",
-      "paths": {
-        "@assets/*": ["./src/assets/*"],
-        "el/*": ["./src/el/*"],
-        "style/*": ["./src/scss/*"],        
-        "export-library/*": ["./src/export-library/*"],
-        "plugins/*": ["./src/plugins/*"],        
-        "designeditor/*": ["src/editor-layouts/designeditor/*"],
-        "embededitor/*": ["src/editor-layouts/embededitor/*"],    
-        "canvaseditor/*": ["src/editor-layouts/canvaseditor/*"],                
-        "designplayer/*": ["src/editor-layouts/designplayer/*"],
-      }
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@assets/*": [
+        "./src/assets/*"
+      ],
+      "el/*": [
+        "./src/el/*"
+      ],
+      "style/*": [
+        "./src/scss/*"
+      ],
+      "export-library/*": [
+        "./src/export-library/*"
+      ],
+      "plugins/*": [
+        "./src/plugins/*"
+      ],
+      "designeditor/*": [
+        "src/editor-layouts/designeditor/*"
+      ]
     }
+  }
 }

@@ -1,7 +1,6 @@
-import Color from "el/base/Color";
-import { repeat } from "el/base/functions/func";
-import { randomNumber } from "el/base/functions/create";
+import { randomNumber } from "el/utils/create";
 import { ColorStep } from "el/editor/property-parser/image-resource/ColorStep";
+import { randomItem, repeat } from "el/utils/func";
 
 export default { 
     title: 'Conic', 

@@ -1,8 +1,8 @@
 import BaseWindow from "./BaseWindow";
 
-import { SUBSCRIBE } from "el/base/Event";
+import { SUBSCRIBE } from "el/sapa/Event";
 
-import { registElement } from "el/base/registElement";
+import { registElement } from "el/sapa/functions/registElement";
 
 import './ProjectWindow.scss';
 

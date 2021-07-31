@@ -1,5 +1,5 @@
 
-import { DRAGOVER, DROP, PREVENT, DEBOUNCE, SCROLL, SUBSCRIBE } from "el/base/Event";
+import { DRAGOVER, DROP, PREVENT, DEBOUNCE, SCROLL, SUBSCRIBE } from "el/sapa/Event";
 
 import TimelineAnimationProperty from "./TimelineAnimationProperty";
 import TimelinePlayControl from "./timeline/TimelinePlayControl";

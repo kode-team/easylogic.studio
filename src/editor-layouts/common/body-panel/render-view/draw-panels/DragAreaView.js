@@ -1,8 +1,7 @@
-import { POINTERSTART, MOVE, END, IF, SUBSCRIBE } from "el/base/Event";
+import { POINTERSTART, IF, SUBSCRIBE } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
-import Dom from "el/base/Dom";
 import { KEY_CODE } from "el/editor/types/key";
-
+import { END, MOVE } from "el/editor/types/event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './DragAreaView.scss';
@@ -343,7 +342,7 @@ export default class DragAreaView extends EditorElement {
 
             if (newDist < 1) {
                 if (this.$selection.current.isSVG()) {
-                    this.emit('openPathEditor');
+                    this.emit('open.editor');
                     this.emit('removeGuideLine');
                     return;
                 }

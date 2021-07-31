@@ -1,5 +1,5 @@
 
-import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 
 import { Length } from "el/editor/unit/Length";
 import BasePopup from "el/editor/ui/popup/BasePopup";

@@ -1,6 +1,6 @@
 
 
-import { LOAD, CLICK, DOMDIFF, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, DOMDIFF, SUBSCRIBE } from "el/sapa/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 import { Length } from "el/editor/unit/Length";
 

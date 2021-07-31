@@ -1,7 +1,8 @@
-import Dom from 'el/base/Dom';
-import { CSS_TO_STRING, TAG_TO_STRING, isFunction } from 'el/base/functions/func';
+import Dom from 'el/sapa/functions/Dom';
+import { CSS_TO_STRING, TAG_TO_STRING } from 'el/utils/func';
 import { Item } from 'el/editor/items/Item';
 import { Editor } from 'el/editor/manager/Editor';
+import { isFunction } from 'el/sapa/functions/func';
 
 const char_list = [
     /\(/gi,

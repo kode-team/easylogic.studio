@@ -1,9 +1,8 @@
-import UIElement, { EVENT } from "el/base/UIElement";
-
-import { isUndefined } from "el/base/functions/func";
 import { Length } from "el/editor/unit/Length";
-import { POINTERSTART, MOVE, END, BIND, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { POINTERSTART, BIND, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { isUndefined } from "el/sapa/functions/func";
+import { END, MOVE } from "el/editor/types/event";
 
 export default class EllipseEditor extends EditorElement {
 

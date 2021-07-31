@@ -1,26 +1,27 @@
-import { isFunction, clone, OBJECT_TO_CLASS, mapjoin, keyMapJoin, repeat } from "el/base/functions/func";
 import icon from "el/editor/icon/icon";
 import {
   LOAD,
   CLICK,
   POINTERSTART,
-  MOVE,
-  END,
   DRAGOVER,
   PREVENT,
   DROP,
   DRAGSTART,
   SUBSCRIBE,
   SUBSCRIBE_SELF
-} from "el/base/Event";
+} from "el/sapa/Event";
 
 import { SVGFilter, SVGFilterSpecList } from "el/editor/property-parser/SVGFilter";
 import { Length } from "el/editor/unit/Length";
-import Dom from "el/base/Dom";
+import Dom from "el/sapa/functions/Dom";
 import PathStringManager from "el/editor/parser/PathStringManager";
 import svgFilterPreset from "./editor/svg-filter-preset";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './SVGFilterEditor.scss';
+import { mapjoin, OBJECT_TO_CLASS, repeat } from "el/utils/func";
+import { clone, isFunction, keyMapJoin } from "el/sapa/functions/func";
+import { END, MOVE } from "el/editor/types/event";
+
 const filterTypes = [
   {label: 'GRAPHIC REFERENCES', items : [
     {label: 'Source Graphic', value:"SourceGraphic"},

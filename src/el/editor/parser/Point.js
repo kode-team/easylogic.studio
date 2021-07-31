@@ -1,4 +1,4 @@
-import { clone } from "el/base/functions/func";
+import { clone } from "el/sapa/functions/func";
 
 export default class Point {
     static isEqual(a, b, c) {

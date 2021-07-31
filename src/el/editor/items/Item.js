@@ -1,11 +1,5 @@
-import { uuid, uuidShort } from "el/base/functions/math";
-import {
-  clone,
-  isFunction,
-  isNotUndefined,
-  isNumber,
-  isUndefined
-} from "el/base/functions/func";
+import { clone, isFunction, isNumber, isNotUndefined, isUndefined } from "el/sapa/functions/func";
+import { uuid, uuidShort } from "el/utils/math";
 
 const identity = () => true;
 

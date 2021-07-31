@@ -1,11 +1,12 @@
 
-import { LOAD, CLICK, POINTERSTART, MOVE, END, BIND, PREVENT, DOUBLECLICK, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { LOAD, CLICK, POINTERSTART,  BIND, PREVENT, DOUBLECLICK, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
 import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
 import icon from "el/editor/icon/icon";
-import { clone } from "el/base/functions/func";
+import { clone } from "el/sapa/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { END, MOVE } from "el/editor/types/event";
 
 import './GradientEditor.scss';
 

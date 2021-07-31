@@ -1,6 +1,6 @@
 import { makeInterpolateLength } from "./makeInterpolateLength";
 import { BackgroundImage } from "../../property-parser/BackgroundImage";
-import { STRING_TO_CSS } from "el/base/functions/func";
+import { STRING_TO_CSS } from "el/utils/func";
 import { makeInterpolateString } from "./makeInterpolateString";
 import { makeInterpolateImageResource } from "./makeInterpolateImageResource";
 import { makeInterpolateIdentity } from "./makeInterpolateIdentity";

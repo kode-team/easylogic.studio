@@ -1,5 +1,5 @@
+
 import { Length, Position } from "el/editor/unit/Length";
-import { keyMap, combineKeyArray, keyEach, CSS_TO_STRING, isString } from "el/base/functions/func";
 import { Property } from "el/editor/items/Property";
 import { StaticGradient } from "./image-resource/StaticGradient";
 import { URLImageResource } from "./image-resource/URLImageResource";
@@ -10,7 +10,9 @@ import { RepeatingRadialGradient } from "./image-resource/RepeatingRadialGradien
 import { ConicGradient } from "./image-resource/ConicGradient";
 import { RepeatingConicGradient } from "./image-resource/RepeatingConicGradient";
 import { Gradient } from "./image-resource/Gradient";
-import { convertMatches, reverseMatches } from "el/base/functions/parser";
+import { convertMatches, reverseMatches } from "el/utils/parser";
+import { combineKeyArray, isString, keyEach, keyMap } from "el/sapa/functions/func";
+import { CSS_TO_STRING } from "el/utils/func";
 
 const RepeatList = ["repeat", "no-repeat", "repeat-x", "repeat-y", 'round', 'space'];
 const reg = /((linear\-gradient|repeating\-linear\-gradient|radial\-gradient|repeating\-radial\-gradient|conic\-gradient|repeating\-conic\-gradient|url)\(([^\)]*)\))/gi;

@@ -1,6 +1,6 @@
 import { Property } from "el/editor/items/Property";
-import { html, CSS_TO_STRING, clone } from "el/base/functions/func";
 import { Length } from "el/editor/unit/Length";
+import { CSS_TO_STRING } from "el/utils/func";
 
 export class Offset extends Property {
   static parse(obj) {

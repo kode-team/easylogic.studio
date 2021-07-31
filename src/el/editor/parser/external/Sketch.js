@@ -1,4 +1,4 @@
-import { rgb } from "el/base/functions/formatter";
+import { rgb } from "el/utils/formatter";
 import { LinearGradient } from "../../property-parser/image-resource/LinearGradient";
 import { ColorStep } from "../../property-parser/image-resource/ColorStep";
 import { RadialGradient } from "../../property-parser/image-resource/RadialGradient";
@@ -9,8 +9,8 @@ import { ArtBoard } from "plugins/default-items/layers/ArtBoard";
 import { Layer } from "el/editor/items/Layer";
 import { BackgroundImage } from "../../property-parser/BackgroundImage";
 import { FileImageResource } from "../../property-parser/image-resource/URLImageResource";
-import { CSS_TO_STRING, keyEach, combineKeyArray, isString } from "el/base/functions/func";
-import { calculateAngle } from "el/base/functions/math";
+import { CSS_TO_STRING, keyEach, combineKeyArray, isString } from "el/sapa/functions/func";
+import { calculateAngle } from "el/utils/math";
 import { SVGPathItem } from "plugins/default-items/layers/SVGPathItem";
 import { SVGRectLayer } from "@items/layers/SVGRectLayer";
 import { SVGEllipseLayer } from "@items/layers/SVGEllipseLayer";

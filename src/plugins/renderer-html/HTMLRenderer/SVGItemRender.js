@@ -1,5 +1,5 @@
-import Color from "el/base/Color";
-import Dom from "el/base/Dom";
+import Color from "el/utils/Color";
+import Dom from "el/sapa/functions/Dom";
 import { Item } from "el/editor/items/Item";
 import { SVGFill } from "el/editor/property-parser/SVGFill";
 import LayerRender from "./LayerRender";

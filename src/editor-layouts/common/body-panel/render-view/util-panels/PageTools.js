@@ -1,7 +1,7 @@
 
 
-import { CLICK, PREVENT, STOP, SUBSCRIBE, CONFIG } from "el/base/Event";
-import { OBJECT_TO_CLASS } from "el/base/functions/func";
+import { CLICK, PREVENT, STOP, SUBSCRIBE, CONFIG } from "el/sapa/Event";
+import { OBJECT_TO_CLASS } from "el/utils/func";
 
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";

@@ -1,4 +1,4 @@
-import { uuidShort } from "el/base/functions/math";
+import { uuidShort } from "el/utils/math";
 
 export default {
     command: 'updateVideo',

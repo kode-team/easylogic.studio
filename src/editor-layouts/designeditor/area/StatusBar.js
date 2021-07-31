@@ -1,5 +1,5 @@
 
-import { BIND, SUBSCRIBE } from "el/base/Event";
+import { BIND, SUBSCRIBE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import LanguageSelector from "./status-bar/LanguageSelector";

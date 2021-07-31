@@ -5,11 +5,11 @@ import {
   DEBOUNCE,
   DOMDIFF,
   SUBSCRIBE
-} from "el/base/Event";
+} from "el/sapa/Event";
 
 import icon from "el/editor/icon/icon";
 import { Animation } from "el/editor/property-parser/Animation";
-import { curveToPath } from "el/base/functions/func";
+import { curveToPath } from "el/utils/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './AnimationProperty.scss';

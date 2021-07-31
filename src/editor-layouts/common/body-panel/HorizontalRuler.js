@@ -1,4 +1,4 @@
-import { DEBOUNCE, DOMDIFF, LOAD, SUBSCRIBE, THROTTLE } from "el/base/Event";
+import { DEBOUNCE, DOMDIFF, LOAD, SUBSCRIBE, THROTTLE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './HorizontalRuler.scss';
 

@@ -1,5 +1,5 @@
-import { rectToVerties, rectToVertiesForArea } from "el/base/functions/collision";
-import { calculateMatrix, calculateMatrixInverse, vertiesMap } from "el/base/functions/math";
+import { rectToVerties, rectToVertiesForArea } from "el/utils/collision";
+import { calculateMatrix, calculateMatrixInverse, vertiesMap } from "el/utils/math";
 import { mat4, vec3 } from "gl-matrix";
 
 /**

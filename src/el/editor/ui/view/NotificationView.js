@@ -1,7 +1,7 @@
 
 import icon from "el/editor/icon/icon";
-import Dom from "el/base/Dom";
-import { TRANSITIONEND, CLICK, SUBSCRIBE } from "el/base/Event";
+import Dom from "el/sapa/functions/Dom";
+import { TRANSITIONEND, CLICK, SUBSCRIBE } from "el/sapa/Event";
 import { EditorElement } from "../common/EditorElement";
 
 import './NotificationView.scss'

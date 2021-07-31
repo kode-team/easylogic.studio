@@ -1,8 +1,9 @@
 import { Length } from "el/editor/unit/Length";
-import { POINTERSTART, MOVE, LOAD, CLICK, BIND, PREVENT, ALT } from "el/base/Event";
-import Dom from "el/base/Dom";
+import { POINTERSTART, LOAD, CLICK, BIND, PREVENT, ALT } from "el/sapa/Event";
+import Dom from "el/sapa/functions/Dom";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { MOVE } from "el/editor/types/event";
 
 
 export default class PolygonEditor extends EditorElement {

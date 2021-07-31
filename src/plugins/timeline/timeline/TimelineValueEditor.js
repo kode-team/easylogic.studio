@@ -1,7 +1,7 @@
-import { CLICK, KEYDOWN, KEYUP, IF, PREVENT, ENTER, SUBSCRIBE } from "el/base/Event";
+import { CLICK, KEYDOWN, KEYUP, IF, PREVENT, ENTER, SUBSCRIBE } from "el/sapa/Event";
 
-import { second, timecode } from "el/base/functions/time";
-import { isUndefined } from "el/base/functions/func";
+import { second, timecode } from "el/utils/time";
+import { isUndefined } from "el/sapa/functions/func";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 

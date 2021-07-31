@@ -1,4 +1,4 @@
-import { LOAD, DEBOUNCE, DOMDIFF, SUBSCRIBE, IF } from "el/base/Event";
+import { LOAD, DEBOUNCE, DOMDIFF, SUBSCRIBE, IF } from "el/sapa/Event";
 
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 

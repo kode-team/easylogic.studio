@@ -1,9 +1,9 @@
 import SegmentManager from "./SegmentManager";
-import { clone, OBJECT_TO_PROPERTY } from "el/base/functions/func";
-import { getDist, getXYInCircle, calculateAngle360 } from "el/base/functions/math";
+import { getDist, getXYInCircle, calculateAngle360 } from "el/utils/math";
 import Point from "./Point";
 import PathStringManager from "./PathStringManager";
 import { mat4, vec3 } from "gl-matrix";
+import { clone } from "el/sapa/functions/func";
 
 const SEGMENT_DIRECTION = ['startPoint', 'endPoint', 'reversePoint']
 

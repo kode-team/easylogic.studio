@@ -1,7 +1,8 @@
 
-import { POINTERSTART, BIND, MOVE, END } from "el/base/Event";
+import { POINTERSTART, BIND } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { END, MOVE } from "el/editor/types/event";
 
 export default class ColorPalette extends EditorElement {
 

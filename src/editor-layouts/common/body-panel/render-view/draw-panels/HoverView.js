@@ -1,6 +1,6 @@
-import Dom from "el/base/Dom";
+import Dom from "el/sapa/functions/Dom";
 
-import { CONFIG, SUBSCRIBE } from "el/base/Event";
+import { CONFIG, SUBSCRIBE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import "./HoverView.scss";

@@ -1,13 +1,13 @@
 
 import icon from "el/editor/icon/icon";
-import { CLICK, POINTERSTART, MOVE, END, BIND, SUBSCRIBE } from "el/base/Event";
+import { CLICK, POINTERSTART, BIND, SUBSCRIBE } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
-import { formatCubicBezier, createBezierForPattern, bezierList, getPredefinedCubicBezier } from "el/base/functions/bezier";
-import { div } from "el/base/functions/math";
-import { curveToPath, curveToPointLine } from "el/base/functions/func";
+import { formatCubicBezier, createBezierForPattern, bezierList, getPredefinedCubicBezier } from "el/utils/bezier";
+import { div } from "el/utils/math";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-
+import { END, MOVE } from "el/editor/types/event";
 import './CubicBezierEditor.scss';
+import { curveToPath, curveToPointLine } from "el/utils/func";
 
 export default class CubicBezierEditor extends EditorElement {
 

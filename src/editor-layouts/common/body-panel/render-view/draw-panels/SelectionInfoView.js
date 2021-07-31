@@ -1,9 +1,9 @@
 
 
-import { DOMDIFF, END, IF, LEFT_BUTTON, LOAD, MOVE, POINTERSTART, SUBSCRIBE } from "el/base/Event";
+import { DOMDIFF, LEFT_BUTTON, LOAD, POINTERSTART, SUBSCRIBE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { vec3 } from "gl-matrix";
-
+import { END, MOVE } from "el/editor/types/event";
 import './SelectionInfoView.scss';
 
 export default class SelectionInfoView extends EditorElement {

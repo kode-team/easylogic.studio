@@ -1,5 +1,5 @@
-import Dom from 'el/base/Dom';
-import { isFunction } from 'el/base/functions/func';
+import Dom from 'el/sapa/functions/Dom';
+import { isFunction } from 'el/sapa/functions/func';
 import { Item } from 'el/editor/items/Item';
 import { Editor } from 'el/editor/manager/Editor';
 
@@ -11,15 +11,6 @@ export default class SkiaRenderer {
      */
     constructor(editor) {
         this.editor = editor;
-        
-        const CanvasKitInit = require('canvaskit-wasm/bin/canvaskit.js')
-        CanvasKitInit().then((CanvasKit) => {
-            // Code goes here using CanvasKit
-            this.CanvasKit = CanvasKit;
-            // console.log(this.CanvasKit);
-
-            this.editor.emit('refreshAllCanvas');
-        });
 
     }
 

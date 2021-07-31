@@ -1,8 +1,7 @@
 import { Gradient } from "./Gradient";
 
 import { Length, Position } from "el/editor/unit/Length";
-import { isString, clone } from "el/base/functions/func";
-import { convertMatches, reverseMatches } from "el/base/functions/parser";
+import { convertMatches, reverseMatches } from "el/utils/parser";
 import { ColorStep } from "./ColorStep";
 
 const DEFINED_POSITIONS = {
@@ -78,7 +77,7 @@ export class RadialGradient extends Gradient {
             radialType = newValue;
           }
 
-          if (isString(radialPosition)) {
+          if (typeof radialPosition === 'string') {
             var arr = radialPosition.split(' ');
             if (arr.length === 1) {
               var len = Length.parse(arr[0]);

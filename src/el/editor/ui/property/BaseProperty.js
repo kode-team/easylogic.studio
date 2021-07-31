@@ -1,6 +1,6 @@
-import { CLICK, PREVENT, STOP } from "el/base/Event";
+import { CLICK, PREVENT, STOP } from "el/sapa/Event";
+import { isFunction } from "el/sapa/functions/func";
 
-import { isFunction } from "el/base/functions/func";
 import { EditorElement } from "../common/EditorElement";
 
 import './BaseProperty.scss';

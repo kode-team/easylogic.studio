@@ -1,8 +1,8 @@
 import { Length } from "el/editor/unit/Length";
 import { Property } from "el/editor/items/Property";
-import { convertMatches, reverseMatches } from "el/base/functions/parser";
+import { convertMatches, reverseMatches } from "el/utils/parser";
 import { BackgroundImage } from "./BackgroundImage";
-import { STRING_TO_CSS } from "el/base/functions/func";
+import { STRING_TO_CSS } from "el/utils/func";
 import { PatternCache } from "./PatternCache";
 const PATTERN_REG = /((check|grid|dot|cross\-dot|diagonal\-line|vertical\-line|horizontal\-line|)\(([^\)]*)\))/gi;
 

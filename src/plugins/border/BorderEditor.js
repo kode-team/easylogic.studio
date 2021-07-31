@@ -1,4 +1,4 @@
-import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { Border } from "el/editor/property-parser/Border";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 

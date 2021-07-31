@@ -1,4 +1,4 @@
-import { SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/base/Event";
+import { SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 

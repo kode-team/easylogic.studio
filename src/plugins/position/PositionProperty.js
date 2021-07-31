@@ -1,4 +1,4 @@
-import { IF, SUBSCRIBE, SUBSCRIBE_SELF, THROTTLE } from "el/base/Event";
+import { IF, SUBSCRIBE, SUBSCRIBE_SELF, THROTTLE } from "el/sapa/Event";
 import { Transform } from "el/editor/property-parser/Transform";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { Length } from "el/editor/unit/Length";

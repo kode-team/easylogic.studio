@@ -1,8 +1,9 @@
 
-import { POINTERSTART, MOVE, END, CLICK, SUBSCRIBE } from "el/base/Event";
+import { POINTERSTART, CLICK, SUBSCRIBE } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "../common/EditorElement";
+import { END, MOVE } from "el/editor/types/event";
 
 import './BasePopup.scss';
 

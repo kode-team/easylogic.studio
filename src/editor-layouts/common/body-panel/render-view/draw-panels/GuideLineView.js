@@ -1,7 +1,7 @@
 
-import { BIND, SUBSCRIBE } from "el/base/Event";
-import { toRectVerties, vertiesToRectangle } from "el/base/functions/collision";
-import { makeGuidePoint } from "el/base/functions/math";
+import { BIND, SUBSCRIBE } from "el/sapa/Event";
+import { toRectVerties, vertiesToRectangle } from "el/utils/collision";
+import { makeGuidePoint } from "el/utils/math";
 import PathStringManager from "el/editor/parser/PathStringManager";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { vec3 } from "gl-matrix";

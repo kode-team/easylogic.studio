@@ -1,5 +1,5 @@
 import _currentProject from "./_currentProject";
-import { isArrayEquals } from "el/base/functions/func";
+import { isArrayEquals } from "el/utils/func";
 
 export default {
     command: 'history.refreshSelection',

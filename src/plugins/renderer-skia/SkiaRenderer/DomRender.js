@@ -1,5 +1,5 @@
-import Dom from "el/base/Dom";
-import { CSS_TO_STRING, isNotUndefined, keyEach, OBJECT_TO_CLASS, OBJECT_TO_PROPERTY, STRING_TO_CSS } from "el/base/functions/func";
+import Dom from "el/sapa/functions/Dom";
+import { CSS_TO_STRING, isNotUndefined, keyEach, OBJECT_TO_CLASS, OBJECT_TO_PROPERTY, STRING_TO_CSS } from "el/sapa/functions/func";
 import { Item } from "el/editor/items/Item";
 import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
 import { ClipPath } from "el/editor/property-parser/ClipPath";

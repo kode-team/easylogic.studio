@@ -1,7 +1,7 @@
 
-import { LOAD, INPUT, BIND, CLICK } from "el/base/Event";
+import { LOAD, INPUT, BIND, CLICK } from "el/sapa/Event";
 import colormatrix from "./colormatrix";
-import { normalize } from "el/base/functions/math";
+import { normalize } from "el/utils/math";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './ColorMatrixEditor.scss';
 

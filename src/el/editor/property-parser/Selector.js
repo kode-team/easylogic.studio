@@ -1,5 +1,5 @@
 import { Property } from "el/editor/items/Property";
-import { clone } from "el/base/functions/func";
+import { clone } from "el/sapa/functions/func";
 
 export class Selector extends Property {
   static parse(obj) {

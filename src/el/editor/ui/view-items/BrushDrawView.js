@@ -1,5 +1,5 @@
 
-import { POINTERSTART, MOVE, END, BIND, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP, SUBSCRIBE} from "el/base/Event";
+import { POINTERSTART, MOVE, END, BIND, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP, SUBSCRIBE} from "el/sapa/Event";
 import PathParser from "el/editor/parser/PathParser";
 import { Length } from "el/editor/unit/Length";
 import PathStringManager from "el/editor/parser/PathStringManager";
@@ -7,7 +7,7 @@ import PathGenerator from "el/editor/parser/PathGenerator";
 import Point from "el/editor/parser/Point";
 import { SVGFill } from "el/editor/property-parser/SVGFill";
 import { SVGBrushItem } from "@items/layers/SVGBrushItem";
-import { registElement } from "el/base/registElement";
+import { registElement } from "el/sapa/functions/registElement";
 import { EditorElement } from "../common/EditorElement";
 
 import './BrushDrawView.scss';

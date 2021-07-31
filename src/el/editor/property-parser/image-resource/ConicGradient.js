@@ -1,8 +1,8 @@
 import { Gradient } from "./Gradient";
 import { ColorStep } from "./ColorStep";
 import { Length, Position } from "el/editor/unit/Length";
-import { clone, isNotUndefined, isString, isUndefined } from "el/base/functions/func";
-import { convertMatches, reverseMatches } from "el/base/functions/parser";
+import { convertMatches, reverseMatches } from "el/utils/parser";
+import { clone, isNotUndefined, isString, isUndefined } from "el/sapa/functions/func";
 
 
 const DEFINED_POSITIONS = {

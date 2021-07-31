@@ -1,4 +1,4 @@
-import { DEBOUNCE, IF, INPUT, LOAD, SUBSCRIBE } from "el/base/Event";
+import { DEBOUNCE, IF, INPUT, LOAD, SUBSCRIBE } from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { Length } from "el/editor/unit/Length";
 

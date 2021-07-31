@@ -1,7 +1,7 @@
-import { getDist } from "el/base/functions/math";
+import { getDist } from "el/utils/math";
 import Point from "el/editor/parser/Point";
 import makeInterpolateLine from "./makeInterpolateLine";
-import { getCurveDist, getQuardDist } from "el/base/functions/bezier";
+import { getCurveDist, getQuardDist } from "el/utils/bezier";
 import makeInterpolateQuard from "./makeInterpolateQuard";
 import makeInterpolateCubic from "./makeInterpolateCubic";
 

@@ -1,5 +1,5 @@
 import { BaseSVGFilter } from "./BaseSVGFilter";
-import { OBJECT_TO_PROPERTY } from "el/base/functions/func";
+import { OBJECT_TO_PROPERTY } from "el/utils/func";
  
 export class BlendSVGFilter extends BaseSVGFilter {
   getDefaultObject() {

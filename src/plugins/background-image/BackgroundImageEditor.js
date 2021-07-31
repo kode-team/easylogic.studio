@@ -1,7 +1,8 @@
+
 import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
-import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE, SUBSCRIBE, DOMDIFF, SUBSCRIBE_SELF } from "el/base/Event";
+import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE, SUBSCRIBE, DOMDIFF, SUBSCRIBE_SELF } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
-import { CSS_TO_STRING, STRING_TO_CSS } from "el/base/functions/func";
+import { CSS_TO_STRING, STRING_TO_CSS } from "el/utils/func";
 import { LinearGradient } from "el/editor/property-parser/image-resource/LinearGradient";
 import { ColorStep } from "el/editor/property-parser/image-resource/ColorStep";
 import { EditorElement } from "el/editor/ui/common/EditorElement";

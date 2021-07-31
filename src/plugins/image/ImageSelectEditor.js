@@ -1,4 +1,4 @@
-import { LOAD, CLICK, CHANGE, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, CHANGE, SUBSCRIBE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './ImageSelectEditor.scss';

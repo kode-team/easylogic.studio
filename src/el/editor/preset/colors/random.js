@@ -1,5 +1,4 @@
-import Color from "el/base/Color";
-import HueColor from "el/base/HueColor";
+import Color from "el/utils/Color";
 
 export default { 
     title: 'random', 

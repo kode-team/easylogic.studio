@@ -1,6 +1,6 @@
 import { BaseSVGFilter } from "./BaseSVGFilter";
 import { Length } from "el/editor/unit/Length";
-import { OBJECT_TO_PROPERTY } from "el/base/functions/func";
+import { OBJECT_TO_PROPERTY } from "el/utils/func";
 
 export class TurbulenceSVGFilter extends BaseSVGFilter {
   getDefaultObject() {

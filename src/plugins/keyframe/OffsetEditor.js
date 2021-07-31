@@ -1,11 +1,11 @@
 
 import { Length } from "el/editor/unit/Length";
-import { LOAD, POINTERSTART, MOVE, END, CLICK, IF, PREVENT, SUBSCRIBE } from "el/base/Event";
+import { LOAD, POINTERSTART, CLICK, IF, PREVENT, SUBSCRIBE } from "el/sapa/Event";
 import { Offset } from "el/editor/property-parser/Offset";
-import Dom from "el/base/Dom";
-import { isUndefined } from "el/base/functions/func";
+import Dom from "el/sapa/functions/Dom";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-
+import { isUndefined } from "el/sapa/functions/func";
+import { END, MOVE } from "el/editor/types/event";
 
 export default class OffsetEditor extends EditorElement {
 

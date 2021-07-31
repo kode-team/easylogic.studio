@@ -1,8 +1,8 @@
 
 import { Length } from "el/editor/unit/Length";
-import { LOAD, POINTERSTART, MOVE, SUBSCRIBE } from "el/base/Event";
+import { LOAD, POINTERSTART, SUBSCRIBE } from "el/sapa/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
-
+import { MOVE } from "el/editor/types/event";
 import './TextShadowPropertyPopup.scss';
 
 export default class TextShadowPropertyPopup extends BasePopup {

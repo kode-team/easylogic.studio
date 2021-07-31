@@ -1,10 +1,11 @@
 
-import { POINTERSTART, MOVE, END, DOUBLECLICK, BIND, CLICK, SUBSCRIBE } from "el/base/Event";
+import { POINTERSTART, DOUBLECLICK, BIND, CLICK, SUBSCRIBE } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
 import { Transform } from "el/editor/property-parser/Transform";
-import { calculateAnglePointDistance } from "el/base/functions/math";
+import { calculateAnglePointDistance } from "el/utils/math";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { END, MOVE } from "el/editor/types/event";
 
 import './RotateEditorView.scss';
 

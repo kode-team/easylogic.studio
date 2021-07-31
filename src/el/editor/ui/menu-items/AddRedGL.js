@@ -1,7 +1,7 @@
 import MenuItem from "./MenuItem";
 import { Length } from "el/editor/unit/Length";
 import { RedGLLayer } from "@items/layers/canvas/RedGLLayer";
-import { registElement } from "el/base/registElement";
+import { registElement } from "el/sapa/functions/registElement";
  
 export default class AddRedGL extends MenuItem {
   getIconString() {

@@ -1,4 +1,4 @@
-import { LOAD, DOMDIFF, SUBSCRIBE, DEBOUNCE, THROTTLE } from "el/base/Event";
+import { LOAD, DOMDIFF, SUBSCRIBE, DEBOUNCE, THROTTLE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './VerticalRuler.scss';
 

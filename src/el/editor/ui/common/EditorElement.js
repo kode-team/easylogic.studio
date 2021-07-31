@@ -1,9 +1,10 @@
 
-import UIElement from "el/base/UIElement";
+import UIElement from "el/sapa/UIElement";
 import { ConfigManager } from "el/editor/manager/ConfigManager";
 import { MenuItemManager } from "el/editor/manager/MenuItemManager";
 import { SelectionManager } from "el/editor/manager/SelectionManager";
 import { ViewportManager } from "el/editor/manager/ViewportManager";
+import { ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "el/editor/types/event";
 
 export class EditorElement extends UIElement {
 
@@ -158,4 +159,18 @@ export class EditorElement extends UIElement {
     $theme(key) {
         return this.$editor.themeValue(key);
     }
+
+
+    bodyMouseMove(e, methodName) {
+        if (this[methodName]) {
+        this.emit(ADD_BODY_MOUSEMOVE, this[methodName], this, e.xy);
+        }
+    }
+
+    bodyMouseUp(e, methodName) {
+        if (this[methodName]) {
+        this.emit(ADD_BODY_MOUSEUP, this[methodName], this, e.xy);
+        }
+    }
+
 }

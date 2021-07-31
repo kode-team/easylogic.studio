@@ -1,4 +1,4 @@
-import { CLICK, BIND, SUBSCRIBE } from "el/base/Event";
+import { CLICK, BIND, SUBSCRIBE } from "el/sapa/Event";
 import { SVGFill } from "el/editor/property-parser/SVGFill";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 

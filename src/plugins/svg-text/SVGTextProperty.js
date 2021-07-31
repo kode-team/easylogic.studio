@@ -1,4 +1,4 @@
-import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class SVGTextProperty extends BaseProperty {

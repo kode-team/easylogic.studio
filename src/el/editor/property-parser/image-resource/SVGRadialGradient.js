@@ -1,7 +1,7 @@
-import { convertMatches, reverseMatches } from "el/base/functions/parser";
+import { convertMatches, reverseMatches } from "el/utils/parser";
 import { ColorStep } from "./ColorStep";
 import { SVGGradient } from "./SVGGradient";
-import { OBJECT_TO_PROPERTY } from "el/base/functions/func";
+import { OBJECT_TO_PROPERTY } from "el/utils/func";
 
 export class SVGRadialGradient extends SVGGradient {
   getDefaultObject(obj = {}) {

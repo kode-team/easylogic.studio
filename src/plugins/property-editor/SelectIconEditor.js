@@ -1,16 +1,17 @@
 
-import { LOAD, CLICK, DOMDIFF } from "el/base/Event";
+import { LOAD, CLICK, DOMDIFF } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
-import { CSS_TO_STRING, isArray, isString } from "el/base/functions/func";
+import { isString } from "el/sapa/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './SelectIconEditor.scss';
+import { CSS_TO_STRING } from "el/utils/func";
 
 export default class SelectIconEditor extends EditorElement {
 
     initState() {
         var splitChar = this.props.split || ',';
-        var options = isArray(this.props.options) 
+        var options = Array.isArray(this.props.options) 
                         ? this.props.options.map(it => {
                             if (isString(it)) {
                                 return { value: it }

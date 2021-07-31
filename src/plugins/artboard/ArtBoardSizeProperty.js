@@ -1,4 +1,4 @@
-import { LOAD, DOMDIFF, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/base/Event";
+import { LOAD, DOMDIFF, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/sapa/Event";
 
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import artboardSize from "./preset/artboard.size";

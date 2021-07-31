@@ -1,4 +1,4 @@
-import { getVertiesCenterX } from "el/base/functions/math";
+import { getVertiesCenterX } from "el/utils/math";
 
 export default {
     command : 'sort.center',

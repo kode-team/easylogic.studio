@@ -1,5 +1,5 @@
 
-import { BIND, INPUT } from "el/base/Event";
+import { BIND, INPUT } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { Length } from "el/editor/unit/Length";
 

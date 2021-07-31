@@ -1,7 +1,7 @@
 
 import {
   LOAD, DEBOUNCE, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, DOMDIFF, IF,
-} from "el/base/Event";
+} from "el/sapa/Event";
 
 
 import icon from "el/editor/icon/icon";

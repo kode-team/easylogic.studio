@@ -1,10 +1,10 @@
 
-import { BIND, CONFIG, DRAGOVER, DROP, END, IF, MOVE, normalizeWheelEvent, POINTERSTART, PREVENT, SUBSCRIBE, WHEEL } from "el/base/Event";
+import { BIND, CONFIG, DRAGOVER, DROP, IF, normalizeWheelEvent, POINTERSTART, PREVENT, SUBSCRIBE, WHEEL } from "el/sapa/Event";
 import { vec3 } from "gl-matrix";
 import { KEY_CODE } from "el/editor/types/key";
 import Resource from "el/editor/util/Resource";
-import Dom from "el/base/Dom";
-
+import Dom from "el/sapa/functions/Dom";
+import { END, MOVE } from "el/editor/types/event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import HTMLRenderView from "./render-view/html-render-view/HTMLRenderView";
 import PageTools from "./render-view/util-panels/PageTools";

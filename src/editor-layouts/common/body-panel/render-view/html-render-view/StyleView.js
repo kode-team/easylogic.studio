@@ -1,10 +1,10 @@
 
 
-import { LOAD, DOMDIFF, SUBSCRIBE } from "el/base/Event";
-import Dom from "el/base/Dom";
-import { isArray, isString } from "el/base/functions/func";
+import { LOAD, DOMDIFF, SUBSCRIBE } from "el/sapa/Event";
+import Dom from "el/sapa/functions/Dom";
 import { Project } from "plugins/default-items/layers/Project";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { isArray, isString } from "el/sapa/functions/func";
 
 
 const TEMP_DIV = Dom.create('div')     
@@ -118,7 +118,7 @@ export default class StyleView extends EditorElement {
   [SUBSCRIBE('refreshSelectionStyleView')] (obj = null) {
     var ids = obj; 
 
-    if (isArray(obj)) {
+    if (Array.isArray(obj)) {
       ids = obj
     } else if (obj !== null) {
       ids = [obj]

@@ -1,5 +1,5 @@
 import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
-import { STRING_TO_CSS, CSS_TO_STRING } from "el/base/functions/func";
+import { STRING_TO_CSS, CSS_TO_STRING } from "el/utils/func";
 import { URLImageResource } from "el/editor/property-parser/image-resource/URLImageResource";
 
 export default {

@@ -1,5 +1,5 @@
 import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
-import { STRING_TO_CSS } from "el/base/functions/func";
+import { STRING_TO_CSS } from "el/utils/func";
 import _doForceRefreshSelection from "./_doForceRefreshSelection";
 
 export default {

@@ -1,8 +1,8 @@
-import { CLICK, LOAD, DOMDIFF, DEBOUNCE, POINTERSTART, MOVE, IF, END, DOUBLECLICK, KEYUP, KEY, SUBSCRIBE, } from "el/base/Event";
+import { CLICK, LOAD, DOMDIFF, DEBOUNCE, POINTERSTART, MOVE, IF, END, DOUBLECLICK, KEYUP, KEY, SUBSCRIBE, } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
-import { OBJECT_TO_CLASS, isUndefined } from "el/base/functions/func";
-import { timecode, second } from "el/base/functions/time";
-import Dom from "el/base/Dom";
+import { OBJECT_TO_CLASS, isUndefined } from "el/sapa/functions/func";
+import { timecode, second } from "el/utils/time";
+import Dom from "el/sapa/functions/Dom";
 import PathParser from "el/editor/parser/PathParser";
 import makeInterpolateOffset from "el/editor/interpolate/interpolate-functions/offset-path/makeInterpolateOffset";
 import { EditorElement } from "el/editor/ui/common/EditorElement";

@@ -1,7 +1,7 @@
 import BaseProperty from "./BaseProperty";
 
-import { CHANGEINPUT, SUBSCRIBE } from "el/base/Event";
-import { registElement } from "el/base/registElement";
+import { CHANGEINPUT, SUBSCRIBE } from "el/sapa/Event";
+import { registElement } from "el/sapa/functions/registElement";
 import './ProjectInformationProperty.scss';
 
 export default class ProjectInformationProperty extends BaseProperty {

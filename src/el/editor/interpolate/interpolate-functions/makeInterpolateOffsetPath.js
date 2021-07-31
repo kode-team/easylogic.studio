@@ -1,7 +1,7 @@
 import PathParser from "el/editor/parser/PathParser";
 import makeInterpolateOffset from "./offset-path/makeInterpolateOffset";
 import { Length } from "el/editor/unit/Length";
-import { calculateAngle } from "el/base/functions/math";
+import { calculateAngle } from "el/utils/math";
 import { Transform } from "../../property-parser/Transform";
 
 export function makeInterpolateOffsetPath(layer, property, startValue, endValue, artboard) {

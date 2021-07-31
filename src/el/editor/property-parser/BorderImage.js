@@ -1,5 +1,5 @@
 import { Length, Position } from "el/editor/unit/Length";
-import { keyMap, isNumber } from "el/base/functions/func";
+import { keyMap, isNumber } from "el/sapa/functions/func";
 import { Property } from "el/editor/items/Property";
 import { StaticGradient } from "./image-resource/StaticGradient";
 import { URLImageResource } from "./image-resource/URLImageResource";
@@ -10,7 +10,7 @@ import { RepeatingRadialGradient } from "./image-resource/RepeatingRadialGradien
 import { ConicGradient } from "./image-resource/ConicGradient";
 import { RepeatingConicGradient } from "./image-resource/RepeatingConicGradient";
 import { Gradient } from "./image-resource/Gradient";
-import { convertMatches, reverseMatches } from "el/base/functions/parser";
+import { convertMatches, reverseMatches } from "el/utils/parser";
 
 
 export class BorderImage extends Property {

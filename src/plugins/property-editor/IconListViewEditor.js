@@ -1,4 +1,4 @@
-import { LOAD, BIND, CLICK } from "el/base/Event";
+import { LOAD, BIND, CLICK } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 

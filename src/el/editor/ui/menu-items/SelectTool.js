@@ -1,6 +1,6 @@
 import MenuItem from "./MenuItem";
 
-import { SUBSCRIBE } from "el/base/Event";
+import { SUBSCRIBE } from "el/sapa/Event";
  
 export default class SelectTool extends MenuItem {
 

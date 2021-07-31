@@ -1,4 +1,4 @@
-import { SUBSCRIBE_SELF } from "el/base/Event";
+import { SUBSCRIBE_SELF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 

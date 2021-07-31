@@ -9,14 +9,14 @@ import {
   SUBSCRIBE,
   SUBSCRIBE_SELF,
   DOMDIFF
-} from "el/base/Event";
+} from "el/sapa/Event";
 
 import { Transform } from "el/editor/property-parser/Transform";
 import { Length } from "el/editor/unit/Length";
-import { isNotUndefined } from "el/base/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './TransformEditor.scss';
+import { isNotUndefined } from "el/sapa/functions/func";
 
 var transformList = [
   'perspective',  

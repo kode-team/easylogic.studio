@@ -1,4 +1,4 @@
-import Dom from "el/base/Dom";
+import Dom from "el/sapa/functions/Dom";
 import { Item } from "el/editor/items/Item";
 import { Project } from "plugins/default-items/layers/Project";
 import LayerRender from "./LayerRender";

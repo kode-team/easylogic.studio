@@ -1,8 +1,8 @@
 
 import { Length } from "el/editor/unit/Length";
-import { isUndefined } from "el/base/functions/func";
 import { DirectionLength } from "el/editor/unit/DirectionLength";
 import { Property } from "el/editor/items/Property";
+import { isUndefined } from "el/sapa/functions/func";
 const CLIPPATH_REG = /(content\-box|padding\-box|border\-box|margin\-box|view\-box|stroke\-box|fill\-box|none|(inset|circle|ellipse|polygon|path|svg|url)(\(([^\)]*)\))?)/gi;
 export class ClipPath extends Property {
 

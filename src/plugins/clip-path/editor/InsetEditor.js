@@ -1,9 +1,10 @@
 
 
 import { Length } from "el/editor/unit/Length";
-import { POINTERSTART, MOVE, LOAD, CLICK, BIND, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { POINTERSTART, LOAD, CLICK, BIND, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { DirectionLength } from "el/editor/unit/DirectionLength";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { MOVE } from "el/editor/types/event";
 
 
 export default class InsetEditor extends EditorElement {

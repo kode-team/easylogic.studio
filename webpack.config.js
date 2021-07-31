@@ -39,7 +39,6 @@ module.exports = {
   // Entry files for our popup and background pages
   entry: {
     editor: "./src/index.js",
-    embed: "./src/index-embed.js",    
   },
   output: {
     library: "EasylogicStudio",
@@ -140,14 +139,8 @@ module.exports = {
       inject: true,
       template: "./src/index.html",
       filename: "./index.html",
-      excludeChunks: ['embed', 'canvas']
+      excludeChunks: []
     }),
-    new HtmlWebPackPlugin({
-      inject: true,
-      template: "./src/index.html",
-      filename: "./embed.html",
-      excludeChunks: ['editor', 'canvas']
-    }),            
     new MiniCssExtractPlugin({
       filename: "[name].css?[contenthash]"
     }),

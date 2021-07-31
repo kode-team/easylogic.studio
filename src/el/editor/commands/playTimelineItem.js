@@ -1,5 +1,5 @@
 import _currentProject from "./_currentProject";
-import { makeTimer, timecode } from "el/base/functions/time";
+import { makeTimer, timecode } from "el/utils/time";
 
 
 export default {

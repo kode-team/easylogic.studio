@@ -1,4 +1,4 @@
-import { createBezierForPattern } from "el/base/functions/bezier";
+import { createBezierForPattern } from "el/utils/bezier";
 import { makeInterpolateLength } from "./interpolate-functions/makeInterpolateLength";
 import { makeInterpolateBorderRadius } from "./interpolate-functions/makeInterpolateBorderRadius";
 import { makeInterpolateBoxShadow } from "./interpolate-functions/makeInterpolateBoxShadow";

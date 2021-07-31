@@ -1,7 +1,7 @@
 import { Property } from "el/editor/items/Property";
 import { Offset } from "./Offset";
 
-import { reverseMatches, convertMatches } from "el/base/functions/parser";
+import { reverseMatches, convertMatches } from "el/utils/parser";
 import { Length } from "el/editor/unit/Length";
 
 export class Keyframe extends Property {

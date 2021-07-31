@@ -1,4 +1,4 @@
-import { CSS_TO_STRING } from "el/base/functions/func";
+import { CSS_TO_STRING } from "el/utils/func";
 
 export default {
  

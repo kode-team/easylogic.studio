@@ -1,14 +1,15 @@
 
-import { POINTERSTART, MOVE, END, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, DOUBLECLICK, ENTER, ESCAPE, DOUBLETAB, DELAY, SUBSCRIBE } from "el/base/Event";
+import { POINTERSTART, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, DOUBLECLICK, ENTER, ESCAPE, DOUBLETAB, DELAY, SUBSCRIBE } from "el/sapa/Event";
 import PathGenerator from "el/editor/parser/PathGenerator";
-import Dom from "el/base/Dom";
+import Dom from "el/sapa/functions/Dom";
 import PathParser from "el/editor/parser/PathParser";
 import { Length } from "el/editor/unit/Length";
-import { getBezierPoints, recoverBezier, recoverBezierQuard, getBezierPointsQuard, recoverBezierLine, getBezierPointsLine } from "el/base/functions/bezier";
-import { isFunction } from "el/base/functions/func";
+import { getBezierPoints, recoverBezier, recoverBezierQuard, getBezierPointsQuard, recoverBezierLine, getBezierPointsLine } from "el/utils/bezier";
+import { isFunction } from "el/sapa/functions/func";
 import { vec3 } from "gl-matrix";
-import { getDist } from "el/base/functions/math";
+import { getDist } from "el/utils/math";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { END, MOVE } from "el/editor/types/event";
 import './PathEditorView.scss';
 
 /**

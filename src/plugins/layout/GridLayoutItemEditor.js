@@ -1,7 +1,7 @@
 
-import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
-import { CSS_TO_STRING, STRING_TO_CSS } from "el/base/functions/func";
+import { LOAD, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { CSS_TO_STRING, STRING_TO_CSS } from "el/utils/func";
 
 export default class GridLayoutItemEditor extends EditorElement {
 

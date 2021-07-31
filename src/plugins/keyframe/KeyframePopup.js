@@ -1,4 +1,4 @@
-import { INPUT, SUBSCRIBE } from "el/base/Event";
+import { INPUT, SUBSCRIBE } from "el/sapa/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import './KeyframePopup.scss';

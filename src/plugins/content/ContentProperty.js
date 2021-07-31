@@ -1,5 +1,5 @@
 
-import { INPUT, BIND, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
+import { INPUT, BIND, DEBOUNCE, SUBSCRIBE } from "el/sapa/Event";
 
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import './ContentProperty.scss';

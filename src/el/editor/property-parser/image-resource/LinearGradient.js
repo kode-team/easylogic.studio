@@ -1,8 +1,8 @@
 import { Gradient } from "./Gradient";
-import { isNumber, isUndefined } from "el/base/functions/func";
-import { convertMatches, reverseMatches } from "el/base/functions/parser";
+import { convertMatches, reverseMatches } from "el/utils/parser";
 import { Length } from "el/editor/unit/Length";
 import { ColorStep } from "./ColorStep";
+import { isNumber, isUndefined } from "el/sapa/functions/func";
 
 const DEFINED_DIRECTIONS = {
   "0": "to top",

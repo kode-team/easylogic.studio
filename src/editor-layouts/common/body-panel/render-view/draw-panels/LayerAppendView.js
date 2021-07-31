@@ -1,13 +1,12 @@
 
-import { POINTERSTART, BIND, MOVE, END, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP, POINTERMOVE, CHANGE, SUBSCRIBE, KEYDOWN } from "el/base/Event";
-import Color from "el/base/Color";
+import { POINTERSTART, BIND, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP, POINTERMOVE, CHANGE, SUBSCRIBE, KEYDOWN } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
 import PathStringManager from "el/editor/parser/PathStringManager";
-import { rectToVerties, vertiesToRectangle } from "el/base/functions/collision";
+import { rectToVerties, vertiesToRectangle } from "el/utils/collision";
 import { vec3 } from "gl-matrix";
-import Dom from "el/base/Dom";
+import Dom from "el/sapa/functions/Dom";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-
+import { END, MOVE } from "el/editor/types/event";
 import "./LayerAppendView.scss";
 
 export default class LayerAppendView extends EditorElement {
@@ -29,7 +28,7 @@ export default class LayerAppendView extends EditorElement {
             dragStart: false, 
             width: 0,
             height: 0,
-            color: Color.random(),
+            color: 'black',
             fontSize: 30,
             showRectInfo: false,          
             areaVerties: rectToVerties(0, 0, 0, 0),

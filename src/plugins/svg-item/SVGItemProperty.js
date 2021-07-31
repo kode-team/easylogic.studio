@@ -1,5 +1,5 @@
 import { Length } from "el/editor/unit/Length";
-import { IF, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { IF, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class SVGItemProperty extends BaseProperty {

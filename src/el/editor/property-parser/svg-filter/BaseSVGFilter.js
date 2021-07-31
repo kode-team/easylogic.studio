@@ -1,7 +1,6 @@
 import { Property } from "el/editor/items/Property";
-import { uuidShort } from "el/base/functions/math";
+import { uuidShort } from "el/utils/math";
 import { SVGFilterClassName } from "../SVGFilter";
-import { clone, isString } from "el/base/functions/func";
 
 const  Primitive = 'SourceGraphic,SourceAlpha,BackgroundImage,BackgroundAlpha,FillPaint,StrokePaint'.split(',')
 
@@ -63,14 +62,14 @@ export class BaseSVGFilter extends Property {
   convert(json) {
 
 
-    if (isString(json.in)) {
+    if (typeof json.in === 'string') {
       json.in = JSON.parse(json.in);
     }
-    if (isString(json.bound)) {
+    if (typeof json.bound === 'string') {
       json.bound = JSON.parse(json.bound);  
     }
 
-    if (isString(json.connected)) {
+    if (typeof json.connected === 'string') {
       json.connected = JSON.parse(json.connected);  
     }
 

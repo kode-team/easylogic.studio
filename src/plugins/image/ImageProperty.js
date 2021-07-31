@@ -1,5 +1,5 @@
 
-import { LOAD, CLICK, BIND, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { LOAD, CLICK, BIND, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 
 import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";

@@ -1,4 +1,4 @@
-import { INPUT, LOAD, CLICK, SUBSCRIBE } from "el/base/Event";
+import { INPUT, LOAD, CLICK, SUBSCRIBE } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 

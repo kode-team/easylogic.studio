@@ -1,7 +1,7 @@
 
-import { DEBOUNCE, POINTEREND, POINTERMOVE, POINTERSTART, RESIZE, SUBSCRIBE, SUBSCRIBE_ALL } from "el/base/Event";
-import { debounce, isArray, isObject } from "el/base/functions/func";
-import { getDist } from "el/base/functions/math";
+import { DEBOUNCE, POINTEREND, POINTERMOVE, POINTERSTART, RESIZE, SUBSCRIBE, SUBSCRIBE_ALL } from "el/sapa/Event";
+import { debounce, isObject } from "el/sapa/functions/func";
+import { getDist } from "el/utils/math";
 import { Editor } from "el/editor/manager/Editor";
 import { ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "el/editor/types/event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
@@ -19,7 +19,7 @@ export default class BaseLayout extends EditorElement {
     this.$editor.registerPluginList(this.getPlugins());
 
     // register other plugins     
-    if (isArray(this.opt.plugins)) {
+    if (Array.isArray(this.opt.plugins)) {
       this.$editor.registerPluginList(this.opt.plugins);
     }
 

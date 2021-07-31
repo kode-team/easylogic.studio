@@ -1,5 +1,5 @@
-import UIElement from "el/base/UIElement";
-import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import UIElement from "el/sapa/UIElement";
+import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import './ColorPickerPopup.scss';

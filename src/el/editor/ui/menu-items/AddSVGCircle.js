@@ -1,4 +1,4 @@
-import { registElement } from "el/base/registElement";
+import { registElement } from "el/sapa/functions/registElement";
 import MenuItem from "./MenuItem";
  
 export default class AddSVGCircle extends MenuItem {

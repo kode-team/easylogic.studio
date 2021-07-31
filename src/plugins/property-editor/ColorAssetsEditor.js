@@ -1,4 +1,4 @@
-import { LOAD, CLICK, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, SUBSCRIBE } from "el/sapa/Event";
 import colors from "el/editor/preset/colors";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 

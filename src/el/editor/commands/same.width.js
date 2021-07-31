@@ -1,4 +1,4 @@
-import { vertiesToRectangle } from "el/base/functions/collision";
+import { vertiesToRectangle } from "el/utils/collision";
 
 export default {
     command : 'same.width',

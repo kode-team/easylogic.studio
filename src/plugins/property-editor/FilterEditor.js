@@ -9,7 +9,7 @@ import {
   DEBOUNCE,
   SUBSCRIBE,
   SUBSCRIBE_SELF
-} from "el/base/Event";
+} from "el/sapa/Event";
 
 import {
   BlurFilter,

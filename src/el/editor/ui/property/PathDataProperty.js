@@ -1,7 +1,7 @@
 import BaseProperty from "./BaseProperty";
 
-import { DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
-import { registElement } from "el/base/registElement";
+import { DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { registElement } from "el/sapa/functions/registElement";
 
 import './PathDataProperty.scss';
 export default class PathDataProperty extends BaseProperty {

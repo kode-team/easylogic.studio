@@ -1,5 +1,5 @@
-import { toRectVertiesWithoutTransformOrigin } from "el/base/functions/collision";
-import { isNotZero } from "el/base/functions/func";
+import { toRectVertiesWithoutTransformOrigin } from "el/utils/collision";
+import { isNotZero } from "el/sapa/functions/func";
 import { vec3 } from "gl-matrix";
 
 const MAX_SNAP_DISTANCE = 3;

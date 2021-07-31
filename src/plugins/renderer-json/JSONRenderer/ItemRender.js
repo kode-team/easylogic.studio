@@ -1,4 +1,4 @@
-import { uuid } from "el/base/functions/math";
+import { uuid } from "el/utils/math";
 
 export default class ItemRender {
 

@@ -1,7 +1,7 @@
 
-import { CSS_TO_STRING } from "el/base/functions/func";
-import { LOAD, SUBSCRIBE } from "el/base/Event";
+import { LOAD, SUBSCRIBE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { CSS_TO_STRING } from "el/utils/func";
 
 /**
  * 그리드 레이아웃 가이드 라인 표시 컴포넌트

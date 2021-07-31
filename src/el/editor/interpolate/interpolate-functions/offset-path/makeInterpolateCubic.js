@@ -1,4 +1,4 @@
-import { getBezierPointOne } from "el/base/functions/bezier"
+import { getBezierPointOne } from "el/utils/bezier"
 
 export default function makeInterpolateCubic (sx, sy, cx1, cy1, cx2, cy2, ex, ey) {
 

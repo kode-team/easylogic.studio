@@ -1,6 +1,6 @@
 
 import { Length } from "el/editor/unit/Length";
-import { LOAD, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { LOAD, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import './AnimationPropertyPopup.scss';

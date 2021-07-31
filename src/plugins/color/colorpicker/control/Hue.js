@@ -1,6 +1,7 @@
-import { BIND, END, MOVE, POINTERSTART } from 'el/base/Event';
+import { BIND, POINTERSTART } from 'el/sapa/Event';
 import { EditorElement } from 'el/editor/ui/common/EditorElement';
 import { Length } from 'el/editor/unit/Length';
+import { END, MOVE } from 'el/editor/types/event';
 
 export default class Hue extends EditorElement {
 

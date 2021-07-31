@@ -1,6 +1,6 @@
-import Dom from "el/base/Dom";
+import Dom from "el/sapa/functions/Dom";
 
-import { KEYDOWN, KEYUP, IF, PREVENT } from "el/base/Event";
+import { KEYDOWN, KEYUP, IF, PREVENT } from "el/sapa/Event";
 
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 

@@ -1,5 +1,6 @@
-import { CSS_TO_STRING, isFunction } from "el/base/functions/func";
+import { isFunction } from "el/sapa/functions/func";
 import { Item } from "el/editor/items/Item";
+import { CSS_TO_STRING } from "el/utils/func";
 import DomRender from "plugins/renderer-html/HTMLRenderer/DomRender";
 
 

@@ -1,4 +1,4 @@
-import { LOAD, INPUT, DEBOUNCE } from "el/base/Event";
+import { LOAD, INPUT, DEBOUNCE } from "el/sapa/Event";
 import PolygonParser from "el/editor/parser/PolygonParser";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 

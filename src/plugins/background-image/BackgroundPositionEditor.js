@@ -1,4 +1,4 @@
-import { CLICK, BIND, SUBSCRIBE } from "el/base/Event";
+import { CLICK, BIND, SUBSCRIBE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './BackgroundPositionEditor.scss'
 export default class BackgroundPositionEditor extends EditorElement {

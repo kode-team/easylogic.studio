@@ -35,7 +35,6 @@ module.exports = {
   // Entry files for our popup and background pages
   entry: {
     editor: "./src/editor-layouts/designeditor/index.js",
-    embed: "./src/editor-layouts/embededitor/index.js",    
   },
   output: {
     library: "editor",

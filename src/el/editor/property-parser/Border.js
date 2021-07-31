@@ -1,5 +1,5 @@
-import { STRING_TO_CSS } from "el/base/functions/func";
-import Color from "el/base/Color";
+import { STRING_TO_CSS } from "el/utils/func";
+import Color from "el/utils/Color";
 
 var BorderStyles = {
     "none": true,

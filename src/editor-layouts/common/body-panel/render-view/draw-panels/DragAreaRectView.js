@@ -1,8 +1,8 @@
 import { vec3 } from "gl-matrix";
 import { Length } from "el/editor/unit/Length";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { SUBSCRIBE } from "el/base/Event";
-import { toRectVerties, toRectVertiesWithoutTransformOrigin } from "el/base/functions/collision";
+import { SUBSCRIBE } from "el/sapa/Event";
+import { toRectVerties, toRectVertiesWithoutTransformOrigin } from "el/utils/collision";
 
 
 import './DragAreaView.scss';

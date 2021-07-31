@@ -1,4 +1,4 @@
-import { CLICK, KEYUP, INPUT, IF } from 'el/base/Event'
+import { CLICK, KEYUP, INPUT, IF } from 'el/sapa/Event'
 import { EditorElement } from 'el/editor/ui/common/EditorElement';
 
 export default class ColorInformation extends EditorElement {

@@ -1,5 +1,5 @@
 
-import { POINTERSTART, MOVE, END, BIND, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP, SUBSCRIBE} from "el/base/Event";
+import { POINTERSTART,BIND, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP, SUBSCRIBE} from "el/sapa/Event";
 import PathParser from "el/editor/parser/PathParser";
 
 import { Length } from "el/editor/unit/Length";
@@ -9,6 +9,7 @@ import Point from "el/editor/parser/Point";
 import { SVGFill } from "el/editor/property-parser/SVGFill";
 import { vec3 } from "gl-matrix";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { END, MOVE } from "el/editor/types/event";
 
 import './PathDrawView.scss';
 

@@ -1,4 +1,4 @@
-import { isArray, isObject, isString } from "el/base/functions/func";
+import { isArray, isObject, isString } from "el/sapa/functions/func";
 import AssetParser from "el/editor/parser/AssetParser";
 
 export class AssetManager {
@@ -42,7 +42,7 @@ export class AssetManager {
 
 
     applyAsset(json, assets) {
-        if (isArray(json)) {
+        if (Array.isArray(json)) {
             json = json.map(it => this.applyAsset(it, assets))
         } else if (isObject(json)) {
             Object.keys(json).forEach(key => {

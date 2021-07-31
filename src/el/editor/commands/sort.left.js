@@ -1,4 +1,4 @@
-import { getVertiesMinX } from "el/base/functions/math";
+import { getVertiesMinX } from "el/utils/math";
 
 export default {
     command : 'sort.left',

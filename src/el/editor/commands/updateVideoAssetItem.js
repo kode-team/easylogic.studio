@@ -1,5 +1,5 @@
-import { uuidShort } from "el/base/functions/math";
-import { isFunction } from "el/base/functions/func";
+import { uuidShort } from "el/utils/math";
+import { isFunction } from "el/sapa/functions/func";
 
 export default {
     command: 'updateVideoAssetItem',

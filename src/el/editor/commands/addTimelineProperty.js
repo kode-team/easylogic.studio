@@ -1,12 +1,11 @@
 import _currentProject from "./_currentProject"
-import { isArray } from "el/base/functions/func"
 
 export default {
     command: 'addTimelineProperty',
     execute:  function (editor, layerList, options = {timing: 'linear'}) {
         _currentProject(editor, (project, timeline) => {
 
-            if (isArray(layerList) === false) {
+            if (Array.isArray(layerList) === false) {
                 layerList = [layerList]
             }
     

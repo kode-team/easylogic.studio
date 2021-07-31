@@ -1,9 +1,9 @@
-import { uuid } from "el/base/functions/math";
+import { uuid } from "el/utils/math";
 
 import { Item } from "el/editor/items/Item";
-import BaseStore from "el/base/BaseStore";
-import { registElement } from "el/base/registElement";
-import { isArray, isString } from "el/base/functions/func";
+import BaseStore from "el/sapa/BaseStore";
+import { registElement } from "el/sapa/functions/registElement";
+import { isString } from "el/sapa/functions/func";
 
 import theme from "el/editor/ui/theme";
 
@@ -450,7 +450,7 @@ export class Editor {
     let ids = []
     if (isString(id)) {
       ids.push(id);
-    } else if (isArray(id)) {
+    } else if (Array.isArray(id)) {
       ids = [...id];
     }
 

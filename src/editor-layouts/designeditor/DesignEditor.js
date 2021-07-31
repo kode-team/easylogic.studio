@@ -1,4 +1,4 @@
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, MOVE, BIND, THROTTLE, SUBSCRIBE, END, IF, CONFIG } from "el/base/Event";
+import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, BIND, SUBSCRIBE, CONFIG } from "el/sapa/Event";
 
 import { Length } from "el/editor/unit/Length";
 
@@ -13,6 +13,7 @@ import ToolBar from "./area/ToolBar";
 import PageSubEditor from "./area/PageSubEditor";
 import designEditorPlugins from "plugins/design-editor-plugins";
 import LayerTab from "./area/LayerTab";
+import { END, MOVE } from "el/editor/types/event";
 
 
 export default class DesignEditor extends BaseLayout {

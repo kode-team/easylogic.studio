@@ -1,7 +1,7 @@
 
-import { LOAD, SUBSCRIBE } from "el/base/Event";
+import { LOAD, SUBSCRIBE } from "el/sapa/Event";
 import { SVGFilter } from "el/editor/property-parser/SVGFilter";
-import { isNotUndefined } from "el/base/functions/func";
+import { isNotUndefined } from "el/sapa/functions/func";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import './SVGFilterPopup.scss';

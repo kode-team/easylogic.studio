@@ -1,4 +1,4 @@
-import { BIND } from 'el/base/Event';
+import { BIND } from 'el/sapa/Event';
 import { EditorElement } from 'el/editor/ui/common/EditorElement';
 
 export default class ColorView extends EditorElement {

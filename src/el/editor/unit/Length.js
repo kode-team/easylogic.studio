@@ -1,5 +1,5 @@
-import { isNotUndefined, isString, isNumber, isUndefined } from "el/base/functions/func";
-import { degreeToRadian, radianToDegree, round } from "el/base/functions/math";
+import { isNotUndefined, isString, isNumber, isUndefined } from "el/sapa/functions/func";
+import { degreeToRadian, radianToDegree, round } from "el/utils/math";
 
 const stringToPercent = {
   center: 50,

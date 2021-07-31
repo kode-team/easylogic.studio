@@ -1,4 +1,4 @@
-import { convertMatches, reverseMatches } from "el/base/functions/parser";
+import { convertMatches, reverseMatches } from "el/utils/parser";
 import { ColorStep } from "./ColorStep";
 import { SVGGradient } from "./SVGGradient";
 import { Length } from "el/editor/unit/Length";

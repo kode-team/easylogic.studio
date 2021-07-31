@@ -4,13 +4,13 @@ import {
   CLICK,
   DOMDIFF,
   SUBSCRIBE,
-} from "el/base/Event";
+} from "el/sapa/Event";
 
 
 
 import icon from "el/editor/icon/icon";
 import { Transition } from "el/editor/property-parser/Transition";
-import { curveToPath } from "el/base/functions/func";
+import { curveToPath } from "el/utils/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './TransitionProperty.scss';

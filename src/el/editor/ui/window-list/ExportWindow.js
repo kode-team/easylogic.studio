@@ -1,8 +1,8 @@
 import BaseWindow from "./BaseWindow";
 
-import { CLICK, SUBSCRIBE } from "el/base/Event";
-import Dom from "el/base/Dom";
-import { registElement } from "el/base/registElement";
+import { CLICK, SUBSCRIBE } from "el/sapa/Event";
+import Dom from "el/sapa/functions/Dom";
+import { registElement } from "el/sapa/functions/registElement";
 
 import './ExportWindow.scss';
 

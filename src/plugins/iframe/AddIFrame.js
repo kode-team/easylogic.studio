@@ -1,4 +1,4 @@
-import { SUBSCRIBE } from "el/base/Event";
+import { SUBSCRIBE } from "el/sapa/Event";
 import MenuItem from "el/editor/ui/menu-items/MenuItem";
  
 export default class AddIFrame extends MenuItem {

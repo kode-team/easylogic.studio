@@ -1,5 +1,5 @@
 
-import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE, SUBSCRIBE } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { Pattern } from "el/editor/property-parser/Pattern";
 import patterns from "el/editor/preset/patterns";

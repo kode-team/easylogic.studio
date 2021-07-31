@@ -1,4 +1,4 @@
-import { isFunction } from "el/base/functions/func";
+import { isFunction } from "el/sapa/functions/func";
 import { Item } from "el/editor/items/Item";
 
 export class ComponentManager {

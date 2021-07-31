@@ -6,7 +6,7 @@ import {
   PREVENT,
   DEBOUNCE,
   SUBSCRIBE
-} from "el/base/Event";
+} from "el/sapa/Event";
 
 
 

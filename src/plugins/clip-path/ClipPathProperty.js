@@ -1,4 +1,4 @@
-import { CLICK, LOAD, PREVENT, SUBSCRIBE, IF } from "el/base/Event";
+import { CLICK, LOAD, PREVENT, SUBSCRIBE, IF } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { ClipPath } from "el/editor/property-parser/ClipPath";
 import BaseProperty from "el/editor/ui/property/BaseProperty";

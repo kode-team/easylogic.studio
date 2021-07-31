@@ -1,5 +1,5 @@
 
-import { CLICK, BIND, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { CLICK, BIND, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { Length } from "el/editor/unit/Length";
 import { EditorElement } from "el/editor/ui/common/EditorElement";

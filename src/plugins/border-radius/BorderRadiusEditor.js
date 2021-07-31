@@ -1,4 +1,4 @@
-import { CLICK, INPUT, CHANGE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { CLICK, INPUT, CHANGE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import BorderRadius from "el/editor/property-parser/BorderRadius";
 import { EditorElement } from "el/editor/ui/common/EditorElement";

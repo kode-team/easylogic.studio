@@ -1,5 +1,5 @@
 
-import { IF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF} from "el/base/Event";
+import { IF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF} from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './LayoutProperty.scss';

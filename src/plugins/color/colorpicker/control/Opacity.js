@@ -1,9 +1,12 @@
 
-import Color from 'el/base/Color'
-import { BIND, END, MOVE, POINTERSTART } from 'el/base/Event';
-import { clone } from 'el/base/functions/func';
+
+
+import Color from 'el/utils/Color'
+import { BIND, POINTERSTART } from 'el/sapa/Event';
+import { clone } from 'el/sapa/functions/func';
 import { EditorElement } from 'el/editor/ui/common/EditorElement';
 import { Length } from 'el/editor/unit/Length';
+import { END, MOVE } from 'el/editor/types/event';
 
 export default class Opacity extends EditorElement {
 

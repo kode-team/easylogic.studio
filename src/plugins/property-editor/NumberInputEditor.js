@@ -1,5 +1,5 @@
 import { Length } from "el/editor/unit/Length";
-import { LOAD, INPUT, PREVENT, STOP, BLUR, DOMDIFF } from "el/base/Event";
+import { LOAD, INPUT } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 

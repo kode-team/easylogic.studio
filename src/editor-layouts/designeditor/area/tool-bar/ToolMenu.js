@@ -1,4 +1,4 @@
-import { CLICK, SUBSCRIBE } from "el/base/Event";
+import { CLICK, SUBSCRIBE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import SelectTool from "el/editor/ui/menu-items/SelectTool";
 import AddArtboard from "el/editor/ui/menu-items/AddArtboard";

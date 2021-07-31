@@ -9,15 +9,11 @@ module.exports = {
   // Entry files for our popup and background pages
   entry: {
     editor: "./src/index.js",
-    embed: "./src/index-embed.js",     
   },
   output: {
     library: "elf",
     libraryTarget: "umd",
     path: __dirname + "/docs",
-  },
-  node: {
-    fs: 'empty'
   },
   resolve: { alias },
   module: {
@@ -112,16 +108,6 @@ module.exports = {
       filename: "./index.html",
       excludeChunks: ['embed']
     }),    
-
-    new HtmlWebPackPlugin({
-      inject: true,
-      template: "./src/dev-fullpage.html",
-      filename: "./embed.html",
-      excludeChunks: ['editor']
-    }),        
-    new CopyWebpackPlugin([
-      { from: 'node_modules/canvaskit-wasm/bin/canvaskit.wasm' }
-    ]),
     new MiniCssExtractPlugin({
       filename: "[name].css"
     })

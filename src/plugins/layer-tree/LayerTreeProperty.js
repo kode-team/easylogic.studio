@@ -1,8 +1,5 @@
-import { LOAD, CLICK, DOUBLECLICK, PREVENT, STOP, FOCUSOUT, DOMDIFF, DRAGSTART, KEYDOWN, DRAGOVER, DROP, BIND, DRAGEND, ENTER, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { LOAD, CLICK, DOUBLECLICK, PREVENT, STOP, FOCUSOUT, DOMDIFF, DRAGSTART, KEYDOWN, DRAGOVER, DROP, BIND, DRAGEND, ENTER, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
-
-
-import Color from "el/base/Color";
 import { Length } from "el/editor/unit/Length";
 import { KEY_CODE } from "el/editor/types/key";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
@@ -307,7 +304,7 @@ export default class LayerTreeProperty extends BaseProperty {
   [CLICK('$add')](e) {
 
     this.emit('newComponent', 'rect', {
-      'background-color': Color.random(),
+      'background-color': '#ececec',
       width: Length.px(200),
       height: Length.px(100)
     });

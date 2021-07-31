@@ -1,4 +1,4 @@
-import { CLICK, LOAD, SUBSCRIBE } from "el/base/Event";
+import { CLICK, LOAD, SUBSCRIBE } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { BoxShadow } from "el/editor/property-parser/BoxShadow";
 import { EditorElement } from "el/editor/ui/common/EditorElement";

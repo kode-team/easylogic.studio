@@ -1,7 +1,7 @@
 import { Length } from "el/editor/unit/Length";
-import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
-import { OBJECT_TO_CLASS } from "el/base/functions/func";
+import { OBJECT_TO_CLASS } from "el/utils/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './CSSPropertyEditor.scss';

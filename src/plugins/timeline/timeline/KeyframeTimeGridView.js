@@ -1,4 +1,4 @@
-import { DEBOUNCE, THROTTLE, SUBSCRIBE } from "el/base/Event";
+import { DEBOUNCE, THROTTLE, SUBSCRIBE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 export default class KeyframeTimeGridView extends EditorElement {

@@ -1,6 +1,6 @@
 import { Length } from "el/editor/unit/Length";
 import { Property } from "el/editor/items/Property";
-import { customParseConvertMatches, customParseReverseMatches } from "el/base/functions/customParser";
+import { customParseConvertMatches, customParseReverseMatches } from "el/utils/customParser";
 
 const TRANSITION_TIMING_REG = /((cubic-bezier|steps)\(([^\)]*)\))/gi;
 

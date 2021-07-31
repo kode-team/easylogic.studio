@@ -1,10 +1,10 @@
-import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties, toRectVerties} from "el/base/functions/collision";
-import { isFunction, isUndefined, isArray, isObject, isString, clone } from "el/base/functions/func";
+import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties, toRectVerties} from "el/utils/collision";
 import { Item } from "el/editor/items/Item";
 import { MovableItem } from "el/editor/items/MovableItem";
 import { Project } from "plugins/default-items/layers/Project";
 import { Length } from "el/editor/unit/Length";
 import { vec3 } from "gl-matrix";
+import { clone, isFunction, isString, isUndefined, isObject } from "el/sapa/functions/func";
 
 const identity = x => x; 
 
@@ -319,7 +319,7 @@ export class SelectionManager {
 
     let itemIdList = [];
 
-    if (isArray(ids)) {
+    if (Array.isArray(ids)) {
       itemIdList = ids; 
     } else if (isString(ids) || isObject(ids)) {
       itemIdList = [ids];
@@ -588,7 +588,7 @@ export class SelectionManager {
     let localItems = []
     if (ids === null) {
       localItems = this.items;
-    } else if (isString(ids) || isArray(ids)){
+    } else if (isString(ids) || Array.isArray(ids)){
       localItems = this.itemsByIds(ids);
     }
 

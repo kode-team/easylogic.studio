@@ -1,4 +1,4 @@
-import { CSS_TO_STRING } from "el/base/functions/func";
+import { CSS_TO_STRING } from "el/utils/func";
 import { Project } from "plugins/default-items/layers/Project";
 import { SVGFilter } from "el/editor/property-parser/SVGFilter";
 import DomRender from "./DomRender";

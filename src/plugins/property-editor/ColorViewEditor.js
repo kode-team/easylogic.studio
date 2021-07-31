@@ -1,4 +1,4 @@
-import { CLICK, INPUT, BIND, FOCUS, BLUR } from "el/base/Event";
+import { CLICK, INPUT, BIND, FOCUS, BLUR } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './ColorViewEditor.scss';

@@ -1,4 +1,4 @@
-import { itemsToRectVerties } from "el/base/functions/collision";
+import { itemsToRectVerties } from "el/utils/collision";
 import { Editor } from "el/editor/manager/Editor";
 
 export default {

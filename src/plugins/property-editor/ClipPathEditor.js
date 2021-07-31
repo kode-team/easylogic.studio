@@ -1,4 +1,4 @@
-import { CLICK, LOAD, SUBSCRIBE } from "el/base/Event";
+import { CLICK, LOAD, SUBSCRIBE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './ClipPathEditor.scss';

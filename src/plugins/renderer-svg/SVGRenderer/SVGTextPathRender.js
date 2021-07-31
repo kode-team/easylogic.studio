@@ -1,5 +1,5 @@
-import Dom from "el/base/Dom";
-import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "el/base/functions/func";
+import Dom from "el/sapa/functions/Dom";
+import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "el/utils/func";
 import { Item } from "el/editor/items/Item";
 import SVGItemRender from "./SVGItemRender";
 

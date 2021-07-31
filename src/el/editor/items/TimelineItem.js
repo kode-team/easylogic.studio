@@ -1,8 +1,8 @@
-import { uuidShort } from "el/base/functions/math";
-import { isUndefined, isNotUndefined, clone } from "el/base/functions/func";
-import { second, timecode, framesToTimecode } from "el/base/functions/time";
+import { uuidShort } from "el/utils/math";
+import { clone, isNotUndefined, isUndefined } from "el/sapa/functions/func";
+import { second, timecode, framesToTimecode } from "el/utils/time";
 import { createInterpolateFunction, createTimingFunction } from "../interpolate/index";
-import Dom from "el/base/Dom";
+import Dom from "el/sapa/functions/Dom";
 import { AssetItem } from "./AssetItem";
 
 export class TimelineItem extends AssetItem {

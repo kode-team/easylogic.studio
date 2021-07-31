@@ -1,5 +1,5 @@
 import { ImageResource } from "./ImageResource";
-import { OBJECT_TO_PROPERTY } from "el/base/functions/func";
+import { OBJECT_TO_PROPERTY } from "el/utils/func";
 
 const IMAGE_LIST = ["jpg", "jpeg", "png", "gif", "svg"];
 

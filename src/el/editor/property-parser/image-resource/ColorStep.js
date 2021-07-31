@@ -1,10 +1,11 @@
+
 import { Item } from "el/editor/items/Item";
 import { Length } from "el/editor/unit/Length";
 
-import { convertMatches } from "el/base/functions/parser";
-import { repeat } from "el/base/functions/func";
-import { randomNumber } from "el/base/functions/create";
-import Color from "el/base/Color";
+import { convertMatches } from "el/utils/parser";
+import { repeat } from "el/utils/func";
+import { randomNumber } from "el/utils/create";
+import Color from "el/utils/Color";
 
 let colorStepIds = 10000000000; 
 

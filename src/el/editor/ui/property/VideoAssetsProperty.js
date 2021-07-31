@@ -1,9 +1,9 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, DOMDIFF, DRAGSTART, CHANGE, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, DOMDIFF, DRAGSTART, CHANGE, SUBSCRIBE } from "el/sapa/Event";
 
 import icon from "el/editor/icon/icon";
 import revokeObjectUrl from "el/editor/util/revokeObjectUrl";
-import { registElement } from "el/base/registElement";
+import { registElement } from "el/sapa/functions/registElement";
 
 import './VideoAssetsProperty.scss';
 

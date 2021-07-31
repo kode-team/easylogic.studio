@@ -1,6 +1,7 @@
-import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
-import { isString, OBJECT_TO_PROPERTY } from "el/base/functions/func";
+import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { isString } from "el/sapa/functions/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { OBJECT_TO_PROPERTY } from "el/utils/func";
 
 export default class ComponentProperty extends BaseProperty {
 

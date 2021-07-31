@@ -3,8 +3,8 @@ import Opacity from "./colorpicker/control/Opacity";
 import ColorView from "./colorpicker/control/ColorView";
 import ColorInformation from "./colorpicker/ColorInformation";
 import Palette from "./colorpicker/ColorPalette";
-import ColorManagerV2 from "el/base/ColorManagerV2";
-import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import ColorManagerV2 from "plugins/color/ColorManagerV2";
+import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 

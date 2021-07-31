@@ -1,4 +1,4 @@
-import { repeat, randomItem } from "el/base/functions/func";
+import { randomItem, repeat } from "el/utils/func";
 import { ColorStep } from "el/editor/property-parser/image-resource/ColorStep";
 
 const angle_list = ['0deg', '45deg', '90deg']

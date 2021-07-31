@@ -1,11 +1,11 @@
 import { vec3 } from "gl-matrix";
 
-import { BIND, POINTERSTART, MOVE, END, IF, KEYUP, DOUBLECLICK, FOCUSOUT, SUBSCRIBE } from "el/base/Event";
+import { BIND, POINTERSTART, IF, KEYUP, DOUBLECLICK, FOCUSOUT, SUBSCRIBE } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
-import Dom from "el/base/Dom";
-import { isFunction } from "el/base/functions/func";
+import Dom from "el/sapa/functions/Dom";
+import { isFunction } from "el/sapa/functions/func";
 import { KEY_CODE } from "el/editor/types/key";
-
+import { END, MOVE } from "el/editor/types/event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import StyleView from "./StyleView";
 
@@ -174,7 +174,7 @@ export default class HTMLRenderView extends EditorElement {
         const item = this.$selection.get(id);
 
         if (this.$selection.isOne && item) {
-            this.emit('openEditor');
+            this.emit('open.editor');
             // this.emit('hideSelectionToolView');
             this.emit('removeGuideLine');
         }   
@@ -358,7 +358,7 @@ export default class HTMLRenderView extends EditorElement {
 
         if (newDist < 1) {
             if (this.$selection.current) {
-                // this.emit('openEditor');
+                // this.emit('open.editor');
                 // this.emit('hideSelectionToolView');
                 // this.emit('removeGuideLine');
                 // return;

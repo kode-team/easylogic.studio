@@ -1,8 +1,8 @@
 
 import { mat4 } from "gl-matrix";
 import { Length } from "el/editor/unit/Length";
-import { calculateMatrix } from "el/base/functions/math";
-import { itemsToRectVerties } from "el/base/functions/collision";
+import { calculateMatrix } from "el/utils/math";
+import { itemsToRectVerties } from "el/utils/collision";
 import { TimelineItem } from "el/editor/items/TimelineItem";
 
 const OFFSET_X = Length.z();

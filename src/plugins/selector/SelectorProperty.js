@@ -9,7 +9,7 @@ import {
   DEBOUNCE,
   STOP,
   SUBSCRIBE
-} from "el/base/Event";
+} from "el/sapa/Event";
 
 
 import { Selector } from "el/editor/property-parser/Selector";

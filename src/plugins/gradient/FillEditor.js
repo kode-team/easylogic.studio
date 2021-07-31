@@ -1,14 +1,16 @@
-import { LOAD, CLICK, POINTERSTART, MOVE, BIND, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { LOAD, CLICK, POINTERSTART, BIND, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
 
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
 import icon from "el/editor/icon/icon";
 import { SVGFill } from "el/editor/property-parser/SVGFill";
 import { SVGStaticGradient } from "el/editor/property-parser/image-resource/SVGStaticGradient";
-import { isUndefined } from "el/base/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { isUndefined } from "el/sapa/functions/func";
+import { END, MOVE } from "el/editor/types/event";
 
 import './FillEditor.scss';
+
 
 const imageTypeList = [
   'static-gradient',

@@ -1,8 +1,9 @@
+
 import { ImageResource } from "./ImageResource";
 import { ColorStep } from "./ColorStep";
 
-import { isUndefined } from "el/base/functions/func";
-import Color from "el/base/Color";
+import Color from "el/utils/Color";
+import { isUndefined } from "el/sapa/functions/func";
 
 const DEFINED_ANGLES = {
   "to top": 0,

@@ -1,8 +1,7 @@
 import { Length } from "el/editor/unit/Length";
 import { Property } from "el/editor/items/Property";
-import { isString, isFunction } from "el/base/functions/func";
 import { mat4, vec3 } from "gl-matrix";
-import { degreeToRadian } from "el/base/functions/math";
+import { degreeToRadian } from "el/utils/math";
 import { TransformCache } from "./TransformCache";
 
 const TRANSFORM_REG = /((matrix|translate(X|Y|Z|3d)?|scale(X|Y|Z|3d)?|rotate(X|Y|Z|3d)?|skew(X|Y)?|matrix(3d)?|perspective)\(([^\)]*)\))/gi;
@@ -49,7 +48,7 @@ export class Transform extends Property {
 
   static remove(transform, type = []) {
 
-    if (isString(type)) {
+    if (typeof type === 'string') {
       type = [type]
     }
 
@@ -124,7 +123,7 @@ export class Transform extends Property {
   static get(transform, type) {
     var arr = Transform.parseStyle(transform, true)
 
-    if (isFunction(type)) {
+    if (typeof type === 'function') {
       arr = arr.find(type);
     } else {
       arr = arr.find(it => it.type === type);

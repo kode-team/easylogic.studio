@@ -1,9 +1,9 @@
 import BaseProperty from "./BaseProperty";
-import { LOAD, CLICK, PREVENT, STOP, FOCUSOUT, DOUBLECLICK, DOMDIFF, KEYDOWN, ENTER, SUBSCRIBE } from "el/base/Event";
+import { LOAD, CLICK, PREVENT, STOP, FOCUSOUT, DOUBLECLICK, DOMDIFF, KEYDOWN, ENTER, SUBSCRIBE } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 
 
-import { registElement } from "el/base/registElement";
+import { registElement } from "el/sapa/functions/registElement";
 
 import './ProjectProperty.scss';
 

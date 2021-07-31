@@ -1,6 +1,6 @@
 
 
-import { CLICK } from "el/base/Event";
+import { CLICK } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 

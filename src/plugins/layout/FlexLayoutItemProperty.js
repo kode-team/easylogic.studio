@@ -1,7 +1,7 @@
 
-import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 
-import { CSS_TO_STRING } from "el/base/functions/func";
+import { CSS_TO_STRING } from "el/utils/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './FlexLayoutItemProperty.scss';

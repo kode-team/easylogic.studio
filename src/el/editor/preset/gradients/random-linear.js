@@ -1,5 +1,5 @@
-import { repeat, randomItem } from "el/base/functions/func";
 import { ColorStep } from "el/editor/property-parser/image-resource/ColorStep";
+import { randomItem, repeat } from "el/utils/func";
 const angle_list = ['0deg', '45deg', '90deg']
 export default { 
     title: 'Random Linear', 

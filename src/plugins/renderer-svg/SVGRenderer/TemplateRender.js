@@ -1,4 +1,4 @@
-import Dom from "el/base/Dom";
+import Dom from "el/sapa/functions/Dom";
 import { TemplateEngine } from "plugins/renderer-html/HTMLRenderer/template-engine/TemplateEngine";
 import SVGLayerRender from "./SVGLayerRender";
 

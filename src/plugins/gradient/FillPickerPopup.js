@@ -1,5 +1,5 @@
 
-import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/base/Event";
+import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
 import { SVGStaticGradient } from "el/editor/property-parser/image-resource/SVGStaticGradient";
@@ -7,7 +7,7 @@ import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import './GradientPickerPopup';
 
-import { html } from "el/base/functions/func";
+import { html } from "el/sapa/functions/func";
 
 export default class FillPickerPopup extends BasePopup {
 

@@ -3,10 +3,10 @@ import { Length } from "el/editor/unit/Length";
 import { Transform } from "../property-parser/Transform";
 import { TransformOrigin } from "el/editor/property-parser/TransformOrigin";
 import { mat4, quat, vec3 } from "gl-matrix";
-import { calculateMatrix, calculateMatrixInverse, radianToDegree, round, vertiesMap } from "el/base/functions/math";
-import { isFunction } from "el/base/functions/func";
+import { calculateMatrix, calculateMatrixInverse, radianToDegree, round, vertiesMap } from "el/utils/math";
+import { isFunction } from "el/sapa/functions/func";
 import PathParser from "el/editor/parser/PathParser";
-import { itemsToRectVerties, polyInPoly, polyPoint, polyPoly, rectToVerties, toRectVerties } from "el/base/functions/collision";
+import { itemsToRectVerties, polyInPoly, polyPoint, polyPoly, rectToVerties, toRectVerties } from "el/utils/collision";
 
 
 

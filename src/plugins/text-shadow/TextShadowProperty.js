@@ -1,4 +1,4 @@
-import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/base/Event";
+import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/sapa/Event";
 
 import icon from "el/editor/icon/icon";
 import { TextShadow } from "el/editor/property-parser/TextShadow";

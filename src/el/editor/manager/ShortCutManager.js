@@ -1,7 +1,7 @@
-import { isArray, isBoolean } from "el/base/functions/func";
-import { os } from "el/base/functions/detect";
+import { os } from "el/utils/detect";
 import shortcuts from "../shortcuts";
 import { KEY_CODE } from "el/editor/types/key";
+import { isArray, isBoolean } from "el/sapa/functions/func";
 
 
 function joinKeys (...args) {
@@ -67,7 +67,7 @@ export class ShortCutManager {
     sort() {
         this.commands = {}
         this.list.forEach(it => {
-            if (isArray(this.commands[it.checkKeyString]) === false) {
+            if (Array.isArray(this.commands[it.checkKeyString]) === false) {
                 this.commands[it.checkKeyString] = []
             }
 

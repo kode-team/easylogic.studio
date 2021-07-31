@@ -1,9 +1,9 @@
 
-import { LOAD, DEBOUNCE, DRAGSTART, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/base/Event";
+import { LOAD, DEBOUNCE, DRAGSTART, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/sapa/Event";
 
 import patterns from "el/editor/preset/patterns";
 import { Pattern } from "el/editor/property-parser/Pattern";
-import { CSS_TO_STRING } from "el/base/functions/func";
+import { CSS_TO_STRING } from "el/utils/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './PatternAssetsProperty.scss';
