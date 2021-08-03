@@ -1,12 +1,13 @@
+export const MAGIC_METHOD = "@magic:";
 export const makeEventChecker = (value, split = CHECK_SAPARATOR) => {
   return ` ${split} ${value}`;
 }
 
 // event name regular expression
-export const CHECK_DOM_EVENT_PATTERN = /^domevent (.*)/gi;
-export const CHECK_LOAD_PATTERN = /^load (.*)/gi;
-export const CHECK_BIND_PATTERN = /^bind (.*)/gi;
-export const CHECK_SUBSCRIBE_PATTERN = /^subscribe (.*)/gi;
+export const CHECK_DOM_EVENT_PATTERN = /domevent (.*)/gi;
+export const CHECK_LOAD_PATTERN = /load (.*)/gi;
+export const CHECK_BIND_PATTERN = /bind (.*)/gi;
+export const CHECK_SUBSCRIBE_PATTERN = /subscribe (.*)/gi;
 
 const MULTI_PREFIX = "ME@";
 const SPLITTER = "|";
@@ -25,10 +26,10 @@ export const ON = EVENT
 
 export const NAME_SAPARATOR = ":";
 export const CHECK_SAPARATOR = "|";
-export const DOM_EVENT_SAPARATOR = "domevent ";
-export const LOAD_SAPARATOR = "load ";
-export const BIND_SAPARATOR = "bind ";
-export const SUBSCRIBE_SAPARATOR = "subscribe ";
+export const DOM_EVENT_SAPARATOR = `${MAGIC_METHOD}domevent `;
+export const LOAD_SAPARATOR = `${MAGIC_METHOD}load `;
+export const BIND_SAPARATOR = `${MAGIC_METHOD}bind `;
+export const SUBSCRIBE_SAPARATOR = `${MAGIC_METHOD}subscribe `;
 
 export const SAPARATOR = ' ';
 

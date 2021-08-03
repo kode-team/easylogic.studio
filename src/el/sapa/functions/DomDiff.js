@@ -50,12 +50,16 @@ const updateProps = (node, newProps = {}, oldProps = {}) => {
     keyList.push.apply(keyList, Object.keys(newProps))
     keyList.push.apply(keyList, Object.keys(oldProps))
 
-    const props = [...new Set(keyList)]
+    const props = new Set(keyList)
+
+    props.forEach(key => {
+        updateProp(node, key, newProps[key], oldProps[key])
+    })
   
-    for(var i = 0, len = props.length; i < len; i++) {
-        const key = props[i];
-        updateProp(node, key, newProps[key], oldProps[key]);
-    }
+    // for(var i = 0, len = props.size; i < len; i++) {
+    //     const key = props[i];
+    //     updateProp(node, key, newProps[key], oldProps[key]);
+    // }
     // props.forEach((name) => {
     //   updateProp(node, name, newProps[name], oldProps[name]);
     // });

@@ -4,6 +4,7 @@ import {
   LOAD_SAPARATOR,
   DOMDIFF,
   getRef,
+  MAGIC_METHOD,
 } from "./Event";
 import Dom from "./functions/Dom";
 import {
@@ -27,55 +28,6 @@ const REF_CLASS = 'refclass';
 const REF_CLASS_PROPERTY = `[${REF_CLASS}]`
 const VARIABLE_SAPARATOR = "__ref__variable:";
 
-const __cachedMethodList = new Map();
-
-
-// collectProps 에서 제외될 메소드 목록 
-const expectMethod = {
-  "constructor": true,
-  "initState": true,
-  "updateData": true,
-  "constructor": true,
-  "initializeProperty": true,
-  "created": true,
-  "getRealEventName": true,
-  "initializeStoreEvent": true,
-  "destoryStoreEvent": true,
-  "destroy": true,
-  "emit": true,
-  "trigger": true,
-  "on": true,
-  "off": true,
-  "setState": true,
-  "_reload": true,
-  "render": true,
-  "initialize": true,
-  "afterRender": true,
-  "components": true,
-  "getRef": true,
-  "parseTemplate": true,
-  "parseProperty": true,
-  "parseSourceName": true,
-  "parseComponent": true,
-  "clean": true,
-  "refresh": true,
-  "load": true,
-  "bindData": true,
-  "template": true,
-  "eachChildren": true,
-  "destroy": true,
-  "collectProps": true,
-  "filterProps": true,
-  "self": true,
-  "isAltKey": true,
-  "isCtrlKey": true,
-  "isShiftKey": true,
-  "isMetaKey": true,
-  "preventDefault": true,
-  "stopPropagation": true,
-  "bodyMouseMove": true,
-  "bodyMouseUp": true,
-}
 
 export default class EventMachine {
   constructor(opt, props) {
@@ -543,7 +495,9 @@ export default class EventMachine {
   collectProps() {
 
     if (!this.__cachedMethodList){
-      this.__cachedMethodList = collectProps(this, expectMethod);
+      this.__cachedMethodList = collectProps(this, (name) => {
+        return name.indexOf(MAGIC_METHOD) === 0; 
+      });
     }
 
     return this.__cachedMethodList;
