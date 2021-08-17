@@ -1,4 +1,3 @@
-import { Item } from "./Item";
 import { Length } from "el/editor/unit/Length";
 import { Transform } from "../property-parser/Transform";
 import { TransformOrigin } from "el/editor/property-parser/TransformOrigin";
@@ -7,11 +6,12 @@ import { calculateMatrix, calculateMatrixInverse, radianToDegree, round, verties
 import { isFunction } from "el/sapa/functions/func";
 import PathParser from "el/editor/parser/PathParser";
 import { itemsToRectVerties, polyInPoly, polyPoint, polyPoly, rectToVerties, toRectVerties } from "el/utils/collision";
+import { BaseModel } from "./BaseModel";
 
 
 
 const ZERO = Length.z()
-export class MovableItem extends Item {
+export class MovableModel extends BaseModel {
 
 
     /**
@@ -74,10 +74,10 @@ export class MovableItem extends Item {
     /**
      * 부모가 변경되면 matrix 를 다시 캐쉬 한다. 
      * 
-     * @param {Item} otherParent 
+     * @param {BaseModel} otherParent 
      */
-    setParent (otherParent) {
-        super.setParent(otherParent);
+    setParentId(otherParent) {
+        super.setParentId(otherParent.id || otherParent);
 
         this.refreshMatrixCache();
     }

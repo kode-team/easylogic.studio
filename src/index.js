@@ -17,7 +17,7 @@ function startEditor() {
       }],
     },
     config: {
-      "style.canvas.background.color": "orange"
+      // "style.canvas.background.color": "orange"
     //   "show.ruler": false,
     //   "show.left.panel": false,
     //   "show.right.panel": false

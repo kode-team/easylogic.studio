@@ -124,6 +124,18 @@ export default class EventMachine {
   }
 
   /**
+   * object 값을 그대로 key, value 형태로 넘기기 위한 함수
+   * 
+   * @param {Object} obj
+   * @returns {string} `key=value` 형태의 문자열 리스트 
+   */ 
+  apply(obj) {
+    return Object.entries(obj).map(([key, value]) => {
+      return `${key}=${this.variable(value)}`
+    }).join(" ");
+  }
+
+  /**
    * 참조 id 를 가지고 있는 variable 을 복구한다. 
    * 
    * @param {string} id

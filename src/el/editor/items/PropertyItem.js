@@ -2,7 +2,7 @@ import { Item } from "./Item";
 import { CSS_TO_STRING } from "el/utils/func";
 
 
-export class Property extends Item {
+export class PropertyItem extends Item {
 
   getDefaultObject(obj = {}) {
     return {

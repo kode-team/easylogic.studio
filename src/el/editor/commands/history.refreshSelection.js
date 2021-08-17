@@ -35,12 +35,12 @@ export default {
     },
 
     redo : function (editor, { currentValues }) {
-        editor.selection.selectById(currentValues)
+        editor.selection.select(...currentValues)
 
         this.nextAction(editor);
     },
     undo: function (editor, { undoValues }) {
-        editor.selection.selectById(undoValues)
+        editor.selection.select(...undoValues)
 
         this.nextAction(editor);      
     }

@@ -1,6 +1,6 @@
 import { Length, Position } from "el/editor/unit/Length";
 import { keyMap, isNumber } from "el/sapa/functions/func";
-import { Property } from "el/editor/items/Property";
+import { PropertyItem } from "el/editor/items/PropertyItem";
 import { StaticGradient } from "./image-resource/StaticGradient";
 import { URLImageResource } from "./image-resource/URLImageResource";
 import { LinearGradient } from "./image-resource/LinearGradient";
@@ -13,7 +13,7 @@ import { Gradient } from "./image-resource/Gradient";
 import { convertMatches, reverseMatches } from "el/utils/parser";
 
 
-export class BorderImage extends Property {
+export class BorderImage extends PropertyItem {
   addImageResource(imageResource) {
     this.clear("image-resource");
     return this.addItem("image-resource", imageResource);

@@ -103,8 +103,10 @@ import toggleToolHand from "./toggle.tool.hand";
 import rotateLayer from "./rotateLayer";
 import refreshHistory from "./refreshHistory";
 import openEditor from './open.editor';
+import doubleclickItem from "./doubleclick.item";
 
 export default {
+    doubleclickItem,
     openEditor,
     refreshHistory,
     convertPasteText,

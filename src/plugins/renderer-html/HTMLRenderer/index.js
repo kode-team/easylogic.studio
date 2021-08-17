@@ -1,6 +1,5 @@
 import Dom from 'el/sapa/functions/Dom';
 import { CSS_TO_STRING, TAG_TO_STRING } from 'el/utils/func';
-import { Item } from 'el/editor/items/Item';
 import { Editor } from 'el/editor/manager/Editor';
 import { isFunction } from 'el/sapa/functions/func';
 
@@ -76,7 +75,7 @@ export default class HTMLRenderer {
 
     /**
      * 
-     * @param {Item} item 
+     * @param {BaseModel} item 
      */
     render (item, renderer) {
         if (!item) return;
@@ -114,7 +113,7 @@ export default class HTMLRenderer {
 
     /**
      * 
-     * @param {Item} item 
+     * @param {BaseModel} item 
      */
     toCSS (item) {
         return this.to('toCSS', item); 
@@ -122,7 +121,7 @@ export default class HTMLRenderer {
 
     /**
      * 
-     * @param {Item} item 
+     * @param {BaseModel} item 
      */
     toNestedCSS (item) {
         return this.to('toNestedCSS', item);       
@@ -130,7 +129,7 @@ export default class HTMLRenderer {
 
     /**
      * 
-     * @param {Item} item 
+     * @param {BaseModel} item 
      */
     toTransformCSS (item) {
         return this.to('toTransformCSS', item);    
@@ -140,8 +139,8 @@ export default class HTMLRenderer {
         return this.to('toGridLayoutCSS', item);            
     }     
 
-    toLayoutItemCSS (item) {
-        return this.to('toLayoutItemCSS', item);            
+    toLayoutBaseModelCSS (item) {
+        return this.to('toLayoutBaseModelCSS', item);            
     }    
 
 
@@ -149,7 +148,7 @@ export default class HTMLRenderer {
      * 
      * 렌더링 될 style 태그를 리턴한다. 
      * 
-     * @param {Item} item 
+     * @param {BaseModel} item 
      */
     toStyle (item, renderer) {
         const currentRenderer = this.getRendererInstance(item);
@@ -163,7 +162,7 @@ export default class HTMLRenderer {
 
     /**
      * 
-     * @param {Item} item 
+     * @param {BaseModel} item 
      * @param {Dom} currentElement
      */
     update (item, currentElement, editor) {
@@ -178,7 +177,7 @@ export default class HTMLRenderer {
 
     /**
      * 코드 뷰용 HTML 코드를 렌더링 한다. 
-     * @param {Item} item 
+     * @param {BaseModel} item 
      */
     codeview (item) {
 

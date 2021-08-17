@@ -1,7 +1,7 @@
-import { Property } from "el/editor/items/Property";
+import { PropertyItem } from "el/editor/items/PropertyItem";
 import { clone } from "el/sapa/functions/func";
 
-export class Selector extends Property {
+export class Selector extends PropertyItem {
   static parse(obj) {
     return new Selector(obj);
   }

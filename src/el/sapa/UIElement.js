@@ -144,9 +144,14 @@ class UIElement extends EventMachine {
    * MicroTask 를 수행한다. 
    * 
    * @param {Function} callback 
+   * @param {number} [delay=0]  callback 이 실행될 딜레이 시간 설정 
    */
-  nextTick (callback) {
-    this.$store.nextTick(callback);
+  nextTick (callback, delay = 0) {
+
+    setTimeout(() => {
+      this.$store.nextTick(callback);
+    }, delay);
+
   }
 
   /**

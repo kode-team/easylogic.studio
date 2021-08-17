@@ -11,7 +11,7 @@ export default {
             editor.history.add(message, this, {
                 // 이미 변환이 된 객체(즉, screenX, screenY 가  적용된 객체라 rect 로 영역을 다시 지정하지 않는다. )
                 currentValues: [layer, {}, isSelected, layer.parent],
-                undoValues: [layer.id]
+                undoValues: [layer.id],
             })
         })
 
@@ -41,6 +41,7 @@ export default {
         })
 
         editor.nextTick(() => {
+            editor.selection.empty();
             editor.emit('refreshAll');
         })
     }

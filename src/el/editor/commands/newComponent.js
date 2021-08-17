@@ -49,7 +49,7 @@ export default function newComponent (editor, itemType, obj, isSelected = true, 
         }        
     } 
 
-    editor.command('addLayer', `add layer - ${itemType}`, editor.createItem({
+    editor.command('addLayer', `add layer - ${itemType}`, editor.createModel({
         itemType, 
         ...obj,
     }), obj, isSelected, containerItem)

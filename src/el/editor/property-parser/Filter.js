@@ -1,8 +1,8 @@
 import { Length } from "el/editor/unit/Length";
-import { Property } from "el/editor/items/Property";
+import { PropertyItem } from "el/editor/items/PropertyItem";
 import { convertMatches, reverseMatches } from "el/utils/parser";
 const FILTER_REG = /((blur|drop\-shadow|hue\-rotate|invert|brightness|contrast|opacity|saturate|sepia|url)\(([^\)]*)\))/gi;
-export class Filter extends Property {
+export class Filter extends PropertyItem {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({ 
       itemType: "filter", 

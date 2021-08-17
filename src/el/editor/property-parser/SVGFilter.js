@@ -1,4 +1,4 @@
-import { Property } from "el/editor/items/Property";
+import { PropertyItem } from "el/editor/items/PropertyItem";
 import { RotaMatrixSVGFilter } from "./svg-filter/RotaMatrixSVGFilter";
 import { MergeSVGFilter } from "./svg-filter/MergeSVGFilter";
 import { CompositeSVGFilter } from "./svg-filter/CompositeSVGFilter";
@@ -35,7 +35,7 @@ const SVG_FILTER_COMMON_ATTRIBUTES = [
 ]
 
 
-export class SVGFilter extends Property {
+export class SVGFilter extends PropertyItem {
 
   static parse (obj) {
     var FilterClass = SVGFilterClassName[obj.type];

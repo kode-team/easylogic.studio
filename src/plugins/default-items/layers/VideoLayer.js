@@ -1,5 +1,5 @@
 import icon from "el/editor/icon/icon";
-import { Layer } from "el/editor/items/Layer";
+import { Layer } from "el/editor/model/LayerModel";
 
 
 export class VideoLayer extends Layer {

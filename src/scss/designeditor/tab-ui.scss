@@ -49,13 +49,15 @@ $tab-horizontal-header-right-width: 60px;
             margin-bottom: 10px;
             position: relative;
             border-radius: 2px;
+            background-color: transparent !important;
+            border-bottom: 0px !important;
 
             &:before {
               display: none;
             }
 
             &.selected {
-              background-color: var(--elf--selected-color);
+              background-color: var(--elf--selected-color) !important;
               color: var(--elf--selected-font-color);              
 
               label {

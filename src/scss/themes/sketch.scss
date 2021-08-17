@@ -10,11 +10,12 @@
 
     > .control {
       padding: 0px;
+      margin-top: 5px;
 
       > .color,
       > .empty {
         position: absolute;
-        right: 10px;
+        right: 0px;
         left: auto;
         top: 1px;
         width: 26px;
@@ -29,8 +30,8 @@
 
       > .hue {
         position: relative;
-        padding: 2px 2px 2px 10px;
-        margin: 0px 38px 0px 0px;
+        padding: 2px 2px 2px 0px;
+        margin: 0px 28px 0px 0px;
 
         > .hue-container {
           border-radius: 0px;
@@ -39,8 +40,8 @@
 
       > .opacity {
         position: relative;
-        padding: 2px 2px 2px 10px;
-        margin: 0px 38px 0px 0px;
+        padding: 2px 2px 2px 0px;
+        margin: 0px 28px 0px 0px;
 
         > .opacity-container {
           border-radius: 0px;
@@ -127,18 +128,18 @@
       .information-item.hex {
         width: 70px;
         padding-right: 0px;
-        padding-left: 5px;
+        padding-left: 0px;
       }
 
       .information-item.rgb {
-        width: 144px;
+        width: 150px;
         padding-left: 0px;
         padding-right: 0px;
       }
 
       .information-item.hsl {
         display: none;
-        width: 144px;
+        width: 150px;
         padding-left: 0px;
         padding-right: 0px;
       }      

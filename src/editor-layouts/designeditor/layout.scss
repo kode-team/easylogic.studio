@@ -29,53 +29,6 @@ $range-thumb-border-radius: 20px;
   bottom: 0px;
   background-color: var(--elf--header-background-color);  
 
-  &.show-footer {
-
-    .layout-middle {
-      .layout-left {
-        bottom: $timeline-size - 1px;
-      }
-
-      .layout-right {
-        bottom: $timeline-size - 1px;
-      }
-  
-      .layout-body {
-        bottom: $timeline-size - 1px;
-      }
-      .layout-footer { 
-        height: $timeline-size - 1px;
-
-        .footer-splitter {
-          position: absolute;
-          left: 0px;
-          top: 0px;
-          right: 0px;
-          height: 4px;
-          cursor: ns-resize;
-          // background-color: rgba(255, 255, 255, 0.123);
-          display: block;
-          z-index: 1000000000;
-        }        
-
-        .managed-tool {
-          > .property-title {
-            > .tools {
-              display: flex; 
-            }
-          }
-        }
-      }
-    }
-
-  }
-
-  marker {
-    path {
-      fill: var(--elf--border-color);
-    }
-  }
-
   .layout-top {
     height: $top-size;
     border-bottom: 1px solid var(--elf--border-color);
@@ -97,6 +50,7 @@ $range-thumb-border-radius: 20px;
     box-sizing: border-box;
     overflow: hidden;
     background-color: var(--elf--background-color);    
+    // background-image: linear-gradient(45deg, rgb(0, 29, 72) 0%, var(--elf--background-color) 100%);
     
     .layout-header {
       display: none;
@@ -210,6 +164,8 @@ $range-thumb-border-radius: 20px;
       bottom: $footer-height;
       position: absolute;
       // transition: bottom 0.05s linear
+      // border: 1px solid var(--elf--border-color);
+      // border-radius: 4px;      
     }
   }
 }

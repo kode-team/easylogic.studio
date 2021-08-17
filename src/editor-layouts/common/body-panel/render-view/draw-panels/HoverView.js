@@ -15,9 +15,37 @@ export default class HoverView extends EditorElement {
         `
     }
 
+    get filteredLayers () {
+
+        return this.$selection.currentProject.filteredAllLayers((item) => {
+
+            // 빠른 필터링을 위해서 area 로 구분된 영역을 먼저 필터링을 하고 
+          const areaPosition = item.areaPosition;
+    
+          if (!areaPosition) {
+            return false;
+          }
+    
+          const {column, row} = areaPosition 
+    
+          return (column[0] <= this.column && this.column <= column[1]) && 
+                 (row[0] <= this.row && this.row <= row[1]);
+        })
+        .filter(item => {
+          // group 은 바로 hover 대상에 포함하지 않는다. 
+          // 왜냐하면 비어있는 영역을 클릭하는 형태가 되기 때문이다. 
+          return !item.hasChildren() && item.hasPoint(this.pos[0], this.pos[1])
+        })
+        .map(item => {
+            // 최종 결과물에서 hover 된 아이템의 group item 을 조회한다. 
+            return this.modelManager.findGroupItem(item.id)
+        });
+    
+      }
+
 
     [CONFIG('bodyEvent')]() {
-        const items = this.$selection.filteredLayers.filter(it => it.is('artboard') === false)
+        const items = this.$selection.filteredLayers.filter(it => it.isNot('artboard'))
 
         const id = items[0]?.id;
 

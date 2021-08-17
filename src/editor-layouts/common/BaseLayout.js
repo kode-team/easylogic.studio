@@ -3,7 +3,7 @@ import { DEBOUNCE, POINTEREND, POINTERMOVE, POINTERSTART, RESIZE, SUBSCRIBE, SUB
 import { debounce, isObject } from "el/sapa/functions/func";
 import { getDist } from "el/utils/math";
 import { Editor } from "el/editor/manager/Editor";
-import { ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "el/editor/types/event";
+import { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "el/editor/types/event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 const EMPTY_POS = { x: 0, y: 0 };
@@ -61,7 +61,7 @@ export default class BaseLayout extends EditorElement {
     this.__initBodyMoves();
 
     // load default data 
-    this.emit('load.json', this.opt.data?.projects);
+    this.emit('load.json', this.opt.data);
 
 
   }
@@ -80,6 +80,7 @@ export default class BaseLayout extends EditorElement {
   }
 
   __initBodyMoves() {
+    this.__firstMove = new Set();    
     this.__moves = new Set();
     this.__ends = new Set();
 
@@ -102,6 +103,29 @@ export default class BaseLayout extends EditorElement {
     var e = this.$config.get('bodyEvent');
     var lastPos = this.$config.get("lastPos") || DEFAULT_POS;
     var isNotEqualLastPos = !(lastPos.x === pos.x && lastPos.y === pos.y);
+
+    if (isNotEqualLastPos && this.__firstMove.size) {
+
+      let i = 0;
+      this.__firstMove.forEach(v => {
+
+        const dist = getDist(pos.x, pos.y, v.xy.x, v.xy.y);
+
+        if (Math.abs(dist) > 0) {
+
+          var dx = pos.x - v.xy.x;
+          var dy = pos.y - v.xy.y;
+
+          v.func.call(v.context, dx, dy, 'move', e.pressure);
+          i++;
+        }
+      });
+
+      if (i > 0) {
+        this.__firstMove.clear();
+      }
+
+    }
 
     if (isNotEqualLastPos && this.__moves.size) {
       this.__moves.forEach(v => {
@@ -131,8 +155,13 @@ export default class BaseLayout extends EditorElement {
       });
     }
 
+    this.__firstMove.clear();
     this.__moves.clear();
     this.__ends.clear();
+  }
+
+  [SUBSCRIBE_ALL(ADD_BODY_FIRST_MOUSEMOVE)](func, context, xy) {
+    this.__firstMove.add({ func, context, xy });
   }
 
   [SUBSCRIBE_ALL(ADD_BODY_MOUSEMOVE)](func, context, xy) {

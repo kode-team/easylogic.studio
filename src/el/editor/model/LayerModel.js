@@ -1,7 +1,7 @@
-import { DomItem } from "./DomItem";
+import { DomModel } from "./DomModel";
 import icon from "el/editor/icon/icon";
 
-export class Layer extends DomItem {
+export class LayerModel extends DomModel {
 
   static getIcon () {
     return icon.rect;

@@ -1,14 +1,11 @@
 @import '../../scss/mixins.scss';
 
-.elf--color-picker-popup {
+.elf--colorpicker-popup {
   
-  width: 224px;
+  width: 244px;
   padding-bottom: 10px;
-  padding:0px;
+  padding:0px 10px;
   
-  display: grid;
-  grid-template-columns: 1fr; 
-
   .colorpicker {
     box-shadow: none;
     border-radius: 0px;

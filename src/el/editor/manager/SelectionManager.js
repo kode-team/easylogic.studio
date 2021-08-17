@@ -1,28 +1,9 @@
 import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties, toRectVerties} from "el/utils/collision";
 import { Item } from "el/editor/items/Item";
-import { MovableItem } from "el/editor/items/MovableItem";
 import { Project } from "plugins/default-items/layers/Project";
 import { Length } from "el/editor/unit/Length";
 import { vec3 } from "gl-matrix";
 import { clone, isFunction, isString, isUndefined, isObject } from "el/sapa/functions/func";
-
-const identity = x => x; 
-
-function _traverse(obj, idList) {
-  var results = [] 
-
-  obj.layers.length && obj.layers.forEach(it => {
-    results.push.apply(results, _traverse(it, idList));
-  })
-
-  if (idList.id) {
-    results.push(obj);
-  } else if (idList.includes(obj.id)) {
-    results.push(obj);
-  }
-
-  return results; 
-}
 
 export class SelectionManager {
   constructor(editor) {
@@ -39,23 +20,15 @@ export class SelectionManager {
     /**
      * @property {Item[]} items Item List
      */
-    this.items = [];
+    // this.items = [];
     this.itemKeys = {} 
     this.hoverId = ''; 
     this.hoverItems = []    
-    this.ids = [];
-    this.idsString = '';    
+    this.ids = []; 
     this.colorsteps = []
     this.cachedItemVerties = []    
     this.cachedArtBoardVerties = []
     this.cachedVerties = rectToVerties(0, 0, 0, 0, '50% 50% 0px');
-    this.selectionCamera = new MovableItem({
-      parent: this.currentProject,
-      x: Length.px(0), 
-      y: Length.px(0),
-      width: Length.px(0),
-      height: Length.px(0)
-    });
 
     this.$editor.on('config:bodyEvent', () => {
       this.refreshMousePosition();
@@ -74,18 +47,25 @@ export class SelectionManager {
 
   initialize() {
     // this.colorsteps = []    
-    this.items = [];
+    // this.items = [];
     this.itemKeys = {} 
     this.ids = []; 
-    this.idsString = '';   
     this.cachedItemVerties = {}    
+  }
+
+  get modelManager() {
+    return this.$editor.modelManager;
+  }
+
+  get items () {
+    return this.modelManager.searchLiveItemsById(this.ids);
   }
 
   /**
    * get first item instance
    */
   get current() {
-    return this.items[0]
+    return this.modelManager.searchItem(this.ids[0]);
   }
 
   /**
@@ -93,6 +73,11 @@ export class SelectionManager {
    * @returns {Project}
    */
   get currentProject () {
+
+    if (!this.project) {
+      this.project = this.modelManager.getProjectByIndex();
+    }
+
     return this.project;
   }
 
@@ -107,18 +92,22 @@ export class SelectionManager {
    * @returns {boolean}
    */
   get isOne () {
-    return this.length === 1; 
+
+    // artboard 는 무조건 하나의 선택으로 간주한다. 
+    if (this.length === 1 && this.current.is('artboard')) return true;  
+
+    return this.length === 1 && (this.current.hasChildren() === false); 
   }
 
   /**
    * @returns {boolean}
    */  
   get isMany () {
-    return this.length > 1; 
+    return this.length > 1 || (this.length === 1 && this.isOne === false); 
   }  
 
   get length () {
-    return this.items.length;
+    return this.ids.length;
   }
 
   get isLayoutItem() {
@@ -132,6 +121,9 @@ export class SelectionManager {
   /**
    * area position(column, row) 으로 필터링된 객체 중에 
    * position 과 일치하는 layer 리스트 구하기 
+   * rendering 레이어에 일치하는 group item 을 구한다. 
+   * 
+   * hover View 에서 아이템을 hover 아이템을 구할 때 사용된다. 
    * 
    * @returns {Item[]}
    */ 
@@ -149,8 +141,8 @@ export class SelectionManager {
       return (column[0] <= this.column && this.column <= column[1]) && 
              (row[0] <= this.row && this.row <= row[1]);
     }).filter(item => {
-      return item.hasPoint(this.pos[0], this.pos[1])
-    });
+      return !item.hasChildren() && item.hasPoint(this.pos[0], this.pos[1])
+    }).map(item => this.modelManager.findGroupItem(item.id));
 
   }
 
@@ -214,7 +206,7 @@ export class SelectionManager {
 
   getRootItem (current) {
     var rootItem = current;
-    if (current && current.parent) {
+    if (current && current.parentId) {
         rootItem = current.parent; 
     }
 
@@ -234,7 +226,7 @@ export class SelectionManager {
   }
 
   get isRelative () {
-    var item = this.items[0] || { }
+    var item = this.current || { }
 
     return item.position === 'relative'
   }
@@ -253,12 +245,27 @@ export class SelectionManager {
     return false; 
   }
 
-  select(...args) {
+  filterIds(ids = []) {
+    return ids.map(it => it.id || it).filter(Boolean);
+  }
 
-    var list = (args || []).filter(it => !it.lock && it.isAbsolute)
+  // 보통 drag 이후에 객체를 선택하는 경우에 유용하다. 
+  // group 을 선택할 때 사용한다. 
+  selectByGroup(...ids) {
 
-    // 부모, 자식간에 동시에 selection 이 되어 있으면 
-    // 자식은 제외한다. 
+    var list = this.modelManager.searchItemsById(this.filterIds(ids || [])).filter(it => !it.lock)
+
+    // 상위 group 이 있다면 group 을 기준으로 selection 을 맞춘다. 
+    const newSelectedItems = this.modelManager.convertGroupItems(list);
+
+    return this.select(...newSelectedItems.map(it => it.id));
+  }  
+
+  // 직접적은 item 을 selection 하기 위해서 사용한다. 
+  select(...ids) {
+
+    var list = this.modelManager.searchItemsById(this.filterIds(ids || [])).filter(it => !it.lock && it.isAbsolute)
+
     const newSelectedItems = list.filter(it => {
       return it.path.filter(element => list.includes(element)).length < 2;
     }); 
@@ -270,14 +277,12 @@ export class SelectionManager {
       return false; 
     }
 
-    this.items = newSelectedItems;
+    // this.items = newSelectedItems;
     this.itemKeys = {}
-    this.items.forEach(it => {
-      this.itemKeys[it.id] = it; 
+    newSelectedItems.forEach(item => {
+      this.itemKeys[item.id] = item;
     })
-    this.ids = Object.keys(this.itemKeys)
-    this.ids.sort();
-    this.idsString = this.ids.join(',');
+    this.ids = newSelectedIds
 
     this.setRectCache();
 
@@ -285,7 +290,7 @@ export class SelectionManager {
   }
 
   reload() {
-    return this.select(...this.itemsByIds(this.ids));
+    return this.select(...this.ids);
 
   }
 
@@ -295,6 +300,10 @@ export class SelectionManager {
 
   check (item) {
     return !!this.itemKeys[item.id]
+  }
+
+  hasPathOf(item) {
+    return this.modelManager.hasPathOf(this.items.filter(it => it.isNot('artboard')), item);
   }
 
   get (id) {
@@ -325,44 +334,8 @@ export class SelectionManager {
       itemIdList = [ids];
     }
 
-    /**
-     * 주어진 id 리스트가 있을 때 project 에 캐쉬된 item 을 먼저 조회 하도록 한다. 
-     */
-    if (itemIdList.length) {
+    return this.modelManager.searchItemsById(itemIdList);    
 
-      const project = this.project;
-      const newItems = []
-      const expectIdList = []
-
-      itemIdList.forEach(id => {
-        if (project.hasIndexItem(id)) {
-          newItems.push(project.getIndexItem(id));
-        } else {
-          expectIdList.push(id);
-        }
-      })
-
-      const searchItems = _traverse(this.project, expectIdList);
-
-      searchItems.forEach(it => {
-        project.addIndexItem(it);
-      })
-
-       newItems.push.apply(newItems, searchItems);
-
-       return newItems;
-    } else {
-      return this.items;
-    }
-  }
-
-  makeItemMap (attrs) {
-    let itemMap = {} 
-    this.ids.forEach(id => {
-      itemMap[id] = clone(attrs)
-    })
-
-    return itemMap;
   }
 
   /**
@@ -371,10 +344,7 @@ export class SelectionManager {
    * @param {string} id 
    */
   selectById(id) {
-    if (id) {
-      this.select(... _traverse(this.project, id))
-    }
-
+    this.select(id)
   }
 
   selectAfterCopy () {
@@ -385,7 +355,7 @@ export class SelectionManager {
 
     if (this.itemKeys[id]) return;
 
-    this.select(...this.items, ... _traverse(this.project, id))
+    this.select(...this.ids, id)
   }  
 
   /**
@@ -402,7 +372,7 @@ export class SelectionManager {
       ids = [id];
     }
 
-    const filteredItems = this.items.filter(it => ids.includes(it.id) === false)
+    const filteredItems = this.ids.filter(id => ids.includes(id) === false)
 
     this.select(...filteredItems)
   }    
@@ -416,12 +386,9 @@ export class SelectionManager {
   }
 
   getArtboardByPoint (vec) {
-    const selectedArtBoard = this.currentProject.artboards.find(artboard => {
-      const artboardVerties = artboard.matrix.verties.filter((_, index) => index < 4);
-      return polyPoint(artboardVerties, vec[0], vec[1]) 
+    return this.currentProject.artboards.find(artboard => {
+      return polyPoint(artboard.originVerties, ...vec) 
     })
-
-    return selectedArtBoard;
   }
 
   changeArtBoard () {
@@ -438,7 +405,9 @@ export class SelectionManager {
         if (instance.artboard) {
           const localArtboard = instance.artboard;
           const localArtboardVerties = localArtboard.originVerties;
-          const isInArtboard = polyPoint(localArtboardVerties, instanceVerties[0][0],instanceVerties[0][1]) || polyPoly(instanceVerties, localArtboardVerties) 
+
+          const isInArtboard = polyPoint(localArtboardVerties, ...instanceVerties[0]) || polyPoly(instanceVerties, localArtboardVerties) 
+
 
           // 내가 여전히 나의 artboard 에 속해 있으면 변경하지 않는다. 
           if (isInArtboard) {
@@ -448,20 +417,20 @@ export class SelectionManager {
 
   
         const selectedArtBoard = this.cachedArtBoardVerties.find(artboard => {
-          const artboardVerties = artboard.matrix.verties.filter((_, index) => index < 4);
-          return polyPoint(artboardVerties, instanceVerties[0][0],instanceVerties[0][1]) || polyPoly(instanceVerties, artboardVerties) 
+          const artboardVerties = artboard.matrix.originVerties;
+          return polyPoint(artboardVerties, ...instanceVerties[0]) || polyPoly(instanceVerties, artboardVerties) 
         })
   
 
         if (selectedArtBoard) {
           // 부모 artboard 가 다르면  artboard 를 교체한다.            
           if (selectedArtBoard.item !== instance.artboard) {
-            selectedArtBoard.item.appendChildItem(instance);
+            selectedArtBoard.item.appendChild(instance);
             checkedParentChange = true;
           }
         } else {
           if (instance.artboard) {
-            this.currentProject.appendChildItem(instance);       
+            this.currentProject.appendChild(instance);       
             checkedParentChange = true;
           }
 
@@ -488,17 +457,32 @@ export class SelectionManager {
     this.cachedVerties = this.verties;
     this.cachedRectVerties = toRectVerties(this.verties);
 
-    this.cachedItemVerties = this.items.map(it => {
-      it.fakeParent = undefined;
-      return it.matrix;
+    this.cachedItemVerties = []
+    
+    this.items.forEach(it => {
+
+      // artboard 가 선택되어 있을 때는 artboard 만 포함 
+      if (it.is('artboard')) {
+        this.cachedItemVerties.push(it.matrix);
+      } 
+      // artboard 가 아닌데 자식을 가지고 있을 때는 자식을 포함 
+      // TODO: layout 을 가지고 있는 경우 어떻게 해야할지 정해야함 
+      else if (it.hasChildren()) {
+        const list = this.modelManager.getAllLayers(it.id).map(it => it.matrix);
+        this.cachedItemVerties.push(...list);
+      } 
+      // 그 외는 아트보드처럼 자신만 포함 
+      else {
+        this.cachedItemVerties.push(it.matrix);
+      }
+
     })
+
+    // console.log(this.cachedItemVerties);
 
     this.cachedArtBoardVerties = this.currentProject.artboards.map(item => {
       return { item, matrix: item.matrix};
     })
-    
-    // TODO:  select 를 캐쉬한 이후에 refreshSelection 메세지를 보낸다. 
-    // TODO: history.refreshSelection 을 사용해서 항상 history 에 저장한다. 
   }
 
   get verties () {
@@ -520,12 +504,16 @@ export class SelectionManager {
   }
 
 
+  get originVerties () {
+    return this.rectVerties.filter((_, index) => index < 4);
+  }
+
   get rectVerties () {
     if (this.isEmpty) {
       return [];
     }
     return itemsToRectVerties(this.items)
-  }
+  }  
 
   /**
    * Item Rect 만들기 
@@ -652,22 +640,6 @@ export class SelectionManager {
     this.select(...this.copyItems.map(item => item.copy(10)));
     this.copy()
   }
-
-  isInParent (item, parentItems = []) {
-
-    var prevItem = item; 
-    var parent = prevItem.parent; 
-    var hasParent = parentItems.includes(parent); 
-
-    while(!hasParent) {
-      if (isUndefined(parent)) break; 
-      prevItem = parent; 
-      parent = parent.parent; 
-      hasParent = parentItems.includes(parent); 
-    }
-
-    return hasParent; 
-  }
   
   /**
    * 특정 위치가 selection 영역에 있는지 여부 체크 
@@ -679,11 +651,9 @@ export class SelectionManager {
 
     if (this.isMany) {
       // 멀티 selection 일 때는  사각형 영역에서 체크 
-      return polyPoint(this.rectVerties, point[0], point[1]);
+      return polyPoint(this.originVerties, point[0], point[1]);
     } else {
-      return this.cachedItemVerties.some((it) => {
-        return polyPoint(it.verties, point[0], point[1]);
-      })  
+      return this.current?.hasPoint(point[0], point[1]);
     }
     
   }
@@ -717,7 +687,7 @@ export class SelectionManager {
         isChanged = true; 
       }      
       this.hoverId = id; 
-      this.hoverItems = this.itemsByIds([id]).filter(it => it.is('artboard') === false);
+      this.hoverItems = this.itemsByIds([id]).filter(it => it.isNot('artboard'));
 
       if (this.hoverItems.length === 0) {
         this.hoverId = ''; 

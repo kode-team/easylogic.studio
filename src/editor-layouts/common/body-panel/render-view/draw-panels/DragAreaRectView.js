@@ -137,16 +137,11 @@ export default class DragAreaRectView extends EditorElement {
 
             // var areaVerties = this.$viewport.createAreaVerties(rect.x, rect.y, rect.width, rect.height);
 
-            var project = this.$selection.currentProject;
-            if (project) {
-                const selectedItems = this.getSelectedItems(rect, toRectVertiesWithoutTransformOrigin([startVertex, endVertex]))
+            const selectedItems = this.getSelectedItems(rect, toRectVertiesWithoutTransformOrigin([startVertex, endVertex]))
 
-                if (this.$selection.select(...selectedItems)) {
-                    this.emit('refreshSelection')
-                    this.emit('refreshSelectionTool', true);
-                }
-
-
+            if (this.$selection.selectByGroup(...selectedItems)) {
+                this.emit('refreshSelection')
+                this.emit('refreshSelectionTool', true);
             }
         }
     }

@@ -1,4 +1,4 @@
-import { Property } from "el/editor/items/Property"
+import { PropertyItem } from "el/editor/items/PropertyItem"
 import { convertMatches, reverseMatches } from "el/utils/parser";
 import { SVGLinearGradient } from "./image-resource/SVGLinearGradient";
 import { SVGRadialGradient } from "./image-resource/SVGRadialGradient";
@@ -8,7 +8,7 @@ import { SVGImageResource } from "./image-resource/SVGImageResource";
 
 const reg = /((linear\-gradient|radial\-gradient|url)\(([^\)]*)\))/gi;
 
-export class SVGFill extends Property {
+export class SVGFill extends PropertyItem {
   addImageResource(imageResource) {
     this.clear("image-resource");
     return this.addItem("image-resource", imageResource);

@@ -4,7 +4,7 @@ import { ConfigManager } from "el/editor/manager/ConfigManager";
 import { MenuItemManager } from "el/editor/manager/MenuItemManager";
 import { SelectionManager } from "el/editor/manager/SelectionManager";
 import { ViewportManager } from "el/editor/manager/ViewportManager";
-import { ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "el/editor/types/event";
+import { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "el/editor/types/event";
 
 export class EditorElement extends UIElement {
 
@@ -137,6 +137,10 @@ export class EditorElement extends UIElement {
         return this.$editor.menuItemManager;
     }
 
+    get $model() {
+        return this.$editor.modelManager;
+    }
+
     /**
      * history 가 필요한 커맨드는 command 함수를 사용하자. 
      * 마우스 업 상태에 따라서 자동으로 history 커맨드로 분기해준다. 
@@ -160,16 +164,22 @@ export class EditorElement extends UIElement {
         return this.$editor.themeValue(key);
     }
 
+    bodyMouseFirstMove(e, methodName) {
+        if (this[methodName]) {
+            this.emit(ADD_BODY_FIRST_MOUSEMOVE, this[methodName], this, e.xy);
+        }
+    }
+
 
     bodyMouseMove(e, methodName) {
         if (this[methodName]) {
-        this.emit(ADD_BODY_MOUSEMOVE, this[methodName], this, e.xy);
+            this.emit(ADD_BODY_MOUSEMOVE, this[methodName], this, e.xy);
         }
     }
 
     bodyMouseUp(e, methodName) {
         if (this[methodName]) {
-        this.emit(ADD_BODY_MOUSEUP, this[methodName], this, e.xy);
+            this.emit(ADD_BODY_MOUSEUP, this[methodName], this, e.xy);
         }
     }
 

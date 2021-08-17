@@ -81,7 +81,6 @@ export default class Opacity extends EditorElement {
         this.parent.changeColor({
             a: (rate).toFixed(2),
         })
-
     }
 
     setValue (colorbar, opacity) {

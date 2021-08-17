@@ -1,12 +1,12 @@
 import { Length } from "el/editor/unit/Length";
-import { Property } from "el/editor/items/Property";
+import { PropertyItem } from "el/editor/items/PropertyItem";
 import { mat4, vec3 } from "gl-matrix";
 import { degreeToRadian } from "el/utils/math";
 import { TransformCache } from "./TransformCache";
 
 const TRANSFORM_REG = /((matrix|translate(X|Y|Z|3d)?|scale(X|Y|Z|3d)?|rotate(X|Y|Z|3d)?|skew(X|Y)?|matrix(3d)?|perspective)\(([^\)]*)\))/gi;
 
-export class Transform extends Property {
+export class Transform extends PropertyItem {
   getDefaultObject() {
     return {
       itemType: "transform",

@@ -78,40 +78,35 @@ export default class PathDrawView extends EditorElement {
     }
 
     makePathLayer (pathRect) {
-        var project = this.$selection.currentProject
         var layer; 
-        if (project) {
+        // rect 기준으로 상대 좌표로 다시 변환 
+        const simplyPoints = Point.simply(this.state.points, this.state.tolerance)
+        const drawParser = new PathParser(PathStringManager.makePathByPoints(simplyPoints))
+        const newPath = new PathParser(PathGenerator.generatorPathString(drawParser.convertGenerator()));
 
+        newPath.transformMat4(this.$viewport.matrixInverse);
+        const bbox = newPath.getBBox();
 
-            // rect 기준으로 상대 좌표로 다시 변환 
-            const simplyPoints = Point.simply(this.state.points, this.state.tolerance)
-            const drawParser = new PathParser(PathStringManager.makePathByPoints(simplyPoints))
-            const newPath = new PathParser(PathGenerator.generatorPathString(drawParser.convertGenerator()));
+        const newWidth = vec3.distance(bbox[1], bbox[0]);
+        const newHeight = vec3.distance(bbox[3], bbox[0]);
 
-            newPath.transformMat4(this.$viewport.matrixInverse);
-            const bbox = newPath.getBBox();
+        newPath.translate(-bbox[0][0], -bbox[0][1])
 
-            const newWidth = vec3.distance(bbox[1], bbox[0]);
-            const newHeight = vec3.distance(bbox[3], bbox[0]);
-
-            newPath.translate(-bbox[0][0], -bbox[0][1])
-
-            const pathItem = {
-                itemType: 'svg-path',
-                x: Length.px(bbox[0][0]),
-                y: Length.px(bbox[0][1]),
-                width: Length.px(newWidth),
-                height: Length.px(newHeight),
-                d: newPath.scale(1/newWidth, 1/newHeight).d,
-                totalLength: this.totalPathLength
-            }
-
-            FIELDS.forEach(key => {
-                if (this.state[key]) Object.assign(pathItem, {[key]: this.state[key] })    
-            });            
-
-            layer = project.appendChildItem(this.$editor.createItem(pathItem));      
+        const pathItem = {
+            itemType: 'svg-path',
+            x: Length.px(bbox[0][0]),
+            y: Length.px(bbox[0][1]),
+            width: Length.px(newWidth),
+            height: Length.px(newHeight),
+            d: newPath.scale(1/newWidth, 1/newHeight).d,
+            totalLength: this.totalPathLength
         }
+
+        FIELDS.forEach(key => {
+            if (this.state[key]) Object.assign(pathItem, {[key]: this.state[key] })    
+        });            
+
+        layer = project.appendChild(this.$editor.createModel(pathItem));      
 
         return layer; 
     }
@@ -186,7 +181,7 @@ export default class PathDrawView extends EditorElement {
         if (this.$el.isShow()) {
             this.trigger('initPathDrawEditor')
             this.$el.hide();
-            this.emit('finishPathEdit')
+            // this.emit('finishPathEdit')
             this.emit('hideDrawManager');
             this.emit('change.mode.view');        
         }

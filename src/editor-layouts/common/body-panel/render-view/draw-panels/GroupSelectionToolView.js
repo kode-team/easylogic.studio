@@ -5,8 +5,7 @@ import { clone } from "el/sapa/functions/func";
 import { mat4, vec3 } from "gl-matrix";
 import { Transform } from "el/editor/property-parser/Transform";
 import { TransformOrigin } from "el/editor/property-parser/TransformOrigin";
-import { calculateAngle, calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, calculateRotationOriginMat4, makeGuidePoint, round, vertiesMap } from "el/utils/math";
-import { ArtBoard } from "plugins/default-items/layers/ArtBoard";
+import { calculateAngle, calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, calculateRotationOriginMat4, round, vertiesMap } from "el/utils/math";
 import { getRotatePointer, rectToVerties } from "el/utils/collision";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
@@ -25,18 +24,6 @@ var directionType = {
 }
 
 const SelectionToolEvent = class  extends EditorElement {
-
-    [SUBSCRIBE('hideSelectionToolView')] () {
-        
-    }
-
-    [SUBSCRIBE('hideSubEditor')] (e) {
-        this.toggleEditingPath(false);
-    }
-
-    [SUBSCRIBE('finishPathEdit')] () {
-        this.toggleEditingPath(false);
-    }
 
     [SUBSCRIBE('refreshSelectionTool')] (isInitializeMatrix = true) { 
         this.initSelectionTool(isInitializeMatrix);
@@ -147,7 +134,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
                 calculateRotationOriginMat4(-lastAngle, newVerties[4])
             );
 
-            const instance = this.$selection.get(item.id)
+            const instance = this.$model.get(item.id)
 
             if (instance) {
                 instance.reset({
@@ -308,7 +295,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         const newWidth = vec3.distance(newVerties[0], newVerties[1])
         const newHeight = vec3.distance(newVerties[0], newVerties[3])
 
-        const instance = this.$selection.get(it.id)
+        const instance = this.$model.get(it.id)
 
         if (instance) {
             instance.reset({
@@ -335,8 +322,6 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
                 mat4.fromScaling([], [scaleX, scaleY, 1]),  // 2. scale 을 먼저 실행한다음 
                 accumulatedMatrixInverse          // 1. 기본 좌표로 돌리고 
             )
-
-
 
             const newVerties = vertiesMap(it.verties, localView);
 
@@ -372,7 +357,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         if (this.$config.get('bodyEvent').shiftKey) {
             realDy = -(realDx * groupItem.height/groupItem.width);
         }                
-
+ 
         // 변형되는 넓이 높이 구하기 
         const newWidth = groupItem.width + realDx;
         const newHeight = groupItem.height - realDy;
@@ -542,33 +527,6 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         })        
     }
 
-    // moveTo (newDist) {
-
-    //     newDist = vec3.floor([], newDist);
-
-    //     //////  snap 체크 하기 
-    //     const snap = this.$snapManager.check(this.$selection.cachedRectVerties.map(v => {
-    //         return vec3.add([], v, newDist)
-    //     }), 3);
-
-    //     const localDist = vec3.add([], snap, newDist);
-
-    //     const result = {}
-    //     this.$selection.cachedItemVerties.forEach(it => {
-    //         result[it.id] = {
-    //             x: Length.px(it.x + localDist[0]).round(1000),          // 1px 단위로 위치 설정 
-    //             y: Length.px(it.y + localDist[1]).round(1000),
-    //         }
-    //     }) 
-    //     this.$selection.reset(result);
-    // }
-
-    getSelectedElements() {
-        const elements = this.$selection.ids.map(id => this.parent.state.cachedCurrentElement[id])
-        
-        return elements;
-    }
-
     initSelectionTool(isInitializeMatrix = false) {
 
         if (this.$editor.isSelectionMode() && this.$el.isHide() && this.$selection.isMany) {
@@ -588,11 +546,11 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         const verties = this.verties || rectToVerties(0, 0, 0, 0);
 
         if (!this.state.newArtBoard) {
-            this.state.newArtBoard = new ArtBoard()
+            this.state.newArtBoard = this.$editor.createModel({ itemType: 'artboard' }, false);
         } 
 
         this.state.newArtBoard.reset({
-            parent: this.$selection.currentProject,
+            parentId: this.$selection.currentProject.id,
             x: Length.px(verties[0][0]),
             y: Length.px(verties[0][1]),
             width: Length.px(vec3.dist(verties[0], verties[1])),
@@ -772,15 +730,15 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
                 this.createRotatePointer (selectionPointers[2], 2, 'top left'),
                 this.createRotatePointer (selectionPointers[3], 3, 'top right'),
                 this.createRotatePointer (rotatePointer, 4, 'center center'),                
-                isPointerMove ? undefined : this.createPointer (pointers[0], 1, rotate),
-                isPointerMove ? undefined : this.createPointer (pointers[1], 2, rotate),
-                isPointerMove ? undefined : this.createPointer (pointers[2], 3, rotate),
-                isPointerMove ? undefined : this.createPointer (pointers[3], 4, rotate),
+                this.createPointer (pointers[0], 1, rotate),
+                this.createPointer (pointers[1], 2, rotate),
+                this.createPointer (pointers[2], 3, rotate),
+                this.createPointer (pointers[3], 4, rotate),
                 
-                dist < 20 || isPointerMove ? undefined : this.createPointer (vec3.lerp([], pointers[0], pointers[1], 0.5), 11),
-                dist < 20 || isPointerMove ? undefined : this.createPointer (vec3.lerp([], pointers[1], pointers[2], 0.5), 12),
-                dist < 20 || isPointerMove ? undefined : this.createPointer (vec3.lerp([], pointers[2], pointers[3], 0.5), 13),
-                dist < 20 || isPointerMove ? undefined : this.createPointer (vec3.lerp([], pointers[3], pointers[0], 0.5), 14),
+                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[0], pointers[1], 0.5), 11),
+                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[1], pointers[2], 0.5), 12),
+                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[2], pointers[3], 0.5), 13),
+                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[3], pointers[0], 0.5), 14),
             ].join('')
         }
     }

@@ -1,10 +1,10 @@
 import { Length } from "el/editor/unit/Length";
-import { Property } from "el/editor/items/Property";
+import { PropertyItem } from "el/editor/items/PropertyItem";
 import { customParseConvertMatches, customParseReverseMatches } from "el/utils/customParser";
 
 const ANIMATION_TIMING_REG = /((cubic-bezier|steps)\(([^\)]*)\))/gi;
 
-export class Animation extends Property {
+export class Animation extends PropertyItem {
   static parse(obj) {
     return new Animation(obj);
   }

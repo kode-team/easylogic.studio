@@ -1,10 +1,10 @@
 import { Length } from "el/editor/unit/Length";
-import { Property } from "el/editor/items/Property";
+import { PropertyItem } from "el/editor/items/PropertyItem";
 import { customParseConvertMatches, customParseReverseMatches } from "el/utils/customParser";
 
 const TRANSITION_TIMING_REG = /((cubic-bezier|steps)\(([^\)]*)\))/gi;
 
-export class Transition extends Property {
+export class Transition extends PropertyItem {
   static parse(obj) {
     return new Transition(obj);
   }

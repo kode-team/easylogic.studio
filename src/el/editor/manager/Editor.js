@@ -24,6 +24,7 @@ import { PluginManager } from "./PluginManager";
 import { RendererManager } from "./RendererManager";
 import { MenuItemManager } from "./MenuItemManager";
 import { I18nManager } from "./I18nManager";
+import { ModelManager } from './ModelManager';
 
 
 export const EDITOR_ID = "";
@@ -84,6 +85,7 @@ export class Editor {
     this.pluginManager = new PluginManager(this);
     this.renderers = new RendererManager(this);
     this.i18n = new I18nManager(this);
+    this.modelManager = new ModelManager(this);
 
 
     this.initTheme();
@@ -97,7 +99,7 @@ export class Editor {
   }
 
   createProject () {
-    return this.createItem({ itemType: 'project' })
+    return this.createModel({ itemType: 'project' })
   }
 
   getI18nMessage(key, params = {}, locale) {
@@ -350,142 +352,33 @@ export class Editor {
     return str;
   }
 
-  replaceLocalUrltoId(str) {
-
-    var projects = this.projects;
-    var images = {}
-
-    projects.forEach(project => {
-
-      project.images.forEach(a => {
-        if (str.indexOf(a.local) > -1) {
-          images[a.local] = '#' + a.id
-        }
-      })
-    })
-
-
-    Object.keys(images).forEach(local => {
-      if (str.indexOf(local) > -1) {
-        str = str.replace(new RegExp(local, 'g'), images[local])
-      }
-    })
-
-    return str;
-  }
-
-  makeResource(json) {
-    var result = JSON.stringify(json)
-
-    // image check 
-    result = this.replaceLocalUrltoId(result);
-
-    return result;
-  }
-
-  /** 
-   * item 목록을 json 으로  를 한다. 
-   * 
-   * 이때 parent는  parentId 로 치환된다. 
-   * 
-   * deserialize 할 때 parentId 에 맞는 parent 를 복구 시켜준다. 
-   * 
-   * @param {Item[]} items
-   * @returns string
-   */
-  serialize(items = []) {
-
-    const newItems = []
-
-    items.forEach(it => {
-      let json = it.toJSON();
-
-      // parent 객체를 id 로 치환 
-      json._parentId = it.parent ? it.parent.id : undefined;
-
-      // parent 안에서 나의 위치 저장 (z-index 관련해서 순서를 지켜야함)
-      json._positionInParent = it.positionInParent;
-
-      newItems.push(json)
-    })
-
-    return JSON.stringify(newItems);
-  }
-
   /**
    * itemObject (객체)를 가지고 itemType 에 따른  실제 Component 객체를 생성해준다. 
    * 
    * @param {object} itemObject 
    * @param {Boolean} isRecoverPosition 
    */
-  createItem(itemObject, isRecoverPosition = false) {
-
-
-    if (itemObject._parentId) {
-      itemObject.parent = this.searchItem(itemObject._parentId);
-      delete itemObject._parentId;
-    }
-
-    itemObject.layers = (itemObject.layers || []).map(it => {
-      return this.createItem(it);
-    })
-
-    const item = this.components.createComponent(itemObject.itemType, itemObject);
-
-    if (isRecoverPosition) {
-      item.parent.setPositionInPlace(itemObject._positionInParent, item);
-    }
-
-    return item;
+  createModel(itemObject, isRegister = true) {
+    return this.modelManager.createModel(itemObject, isRegister);
   }
 
   /**
    * id 로 객체를 탐색한다. 
    * 모든 프로젝트를 탐색하도록 한다. 
    * 
-   * @param {string|string[]} id 
-   * @return {string} JSON 문자열 
+   * @param {string} id 
+   * @returns {Item} 
    */
   searchItem(id) {
-    let ids = []
-    if (isString(id)) {
-      ids.push(id);
-    } else if (Array.isArray(id)) {
-      ids = [...id];
-    }
-
-    const project = this.selection.currentProject;
-    let results = project.getSearchedIndexItemList(ids).filter(Boolean);
-    return results[0]
-  }
-
-  /**
-   * JSON 형태로 serialize 된 객체를 실제 Item 객체로 복원한다. 
-   * 
-   * @param {string} jsonString 
-   * @param {Boolean} isRecoverPosition 객체를 복구 시킬 때 parent 상에서 위치도 같이 복구할지 결정, true 는 위치 복구 
-   * @returns {Item[]}
-   */
-  deserialize(jsonString, isRecoverPosition = false) {
-    let items = JSON.parse(jsonString) || [];
-
-    return items.map(it => this.createItem(it, isRecoverPosition));
+    return this.modelManager.searchItem(id);
   }
 
   get storeKey() {
     return `__els__.${this.config.get('store.key')}`;
   }
 
-  saveResource(key, value) {
-    window.localStorage.setItem(`${this.storeKey}.${key}`, this.makeResource(value));
-  }
-
   saveItem(key, value) {
     window.localStorage.setItem(`${this.storeKey}.${key}`, JSON.stringify(value));
-  }
-
-  loadResource(key) {
-    return this.assetManager.revokeResource(window.localStorage.getItem(`${this.storeKey}.${key}`))
   }
 
   loadItem(key) {

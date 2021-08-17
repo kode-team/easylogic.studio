@@ -105,16 +105,24 @@ export class HistoryManager {
 
         if (this.currentIndex < -1) return;
 
-        this.currentIndex--
-        const commandObject = this.undoHistories.pop()
-
-        if (commandObject && commandObject.command) {
-            commandObject.command.undo(this.$editor, commandObject.data)
+        if (this.currentIndex === this.length) {
+            this.currentIndex--;
         }
 
-        this.$editor.nextTick(() => {
-            this.$editor.emit('refreshHistory', commandObject.command);
-        })
+        const commandObject = this.undoHistories[this.currentIndex]
+
+        if (commandObject && commandObject.command) {
+
+            // undo 실행 
+            commandObject.command.undo(this.$editor, commandObject.data)
+
+            // 이전 index 로 이동 
+            this.currentIndex--;           
+            // this.redoHistories.unshift(commandObject);
+            this.$editor.nextTick(() => {
+                this.$editor.emit('refreshHistory', commandObject.command);
+            })            
+        }
 
     }
 
@@ -122,7 +130,6 @@ export class HistoryManager {
      * redo를 수행한다.
      */
     redo() {
-
         if (this.currentIndex > this.length) return;
 
         // currentIndex 가 -1 부터 시작하기 때문에 ++this.currentIndex 로 index 를 하나 올리고 시작한다. 
@@ -130,13 +137,21 @@ export class HistoryManager {
             this.currentIndex++;
         }
         const commandObject = this.undoHistories[this.currentIndex]
+
         if (commandObject && commandObject.command) {
+
+            // 현재 위치 command redo 실행 후 index 다음 커맨드로 맞추기 
+            // [5] 번 command 가 redo 가 된 후 [6] 을 redo 할 수 있도록 index 를 맞춘다. 
+            this.currentIndex++;
+
             commandObject.command.redo(this.$editor, commandObject.data)
             this.$editor.debug(commandObject)
+
+            this.$editor.nextTick(() => {
+                this.$editor.emit('refreshHistory', commandObject.command);
+            })            
         }
-        this.$editor.nextTick(() => {
-            this.$editor.emit('refreshHistory', commandObject.command);
-        })
+
     }
 
 }

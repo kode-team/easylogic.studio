@@ -1,8 +1,8 @@
-import { MovableItem } from "./MovableItem";
+import { MovableModel } from "./MovableModel";
 
 const layout_list  = ['flex', 'grid']
 
-export class GroupItem extends MovableItem {   
+export class GroupModel extends MovableModel {   
 
     get isGroup () {
         return Boolean(this.layers.length);

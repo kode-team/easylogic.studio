@@ -1,6 +1,6 @@
 
 import { Length } from "el/editor/unit/Length";
-import { GroupItem } from "./GroupItem";
+import { GroupModel } from "./GroupModel";
 import { Selector } from "../property-parser/Selector";
 import { ClipPath } from "el/editor/property-parser/ClipPath";
 import PathParser from "el/editor/parser/PathParser";
@@ -42,14 +42,12 @@ editableList.forEach(function (key) {
   editableKeys[key] = true
 })
 
-export class DomItem extends GroupItem {
+export class DomModel extends GroupModel {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       'position': 'absolute',
       'x': Length.z(),
       'y': Length.z(),
-      'right': '',
-      'bottom': '',
       'rootVariable': '',
       'variable': '',
       'width': Length.px(300),
@@ -79,8 +77,6 @@ export class DomItem extends GroupItem {
       ...super.toCloneObject(),
       ...this.attrs(
         'position',
-        'right',
-        'bottom',
         'rootVariable',
         'variable',
         'transform',

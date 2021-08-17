@@ -5,7 +5,7 @@ import { Length } from "el/editor/unit/Length";
 import Dom from "el/sapa/functions/Dom";
 import { isFunction } from "el/sapa/functions/func";
 import { KEY_CODE } from "el/editor/types/key";
-import { END, MOVE } from "el/editor/types/event";
+import { END, FIRSTMOVE, MOVE } from "el/editor/types/event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import StyleView from "./StyleView";
 
@@ -27,7 +27,6 @@ export default class HTMLRenderView extends EditorElement {
             width: Length.px(10000),
             height: Length.px(10000),
             cachedCurrentElement: {},
-            html: '',
         }
     }
 
@@ -143,7 +142,7 @@ export default class HTMLRenderView extends EditorElement {
 
             // altKey 눌러서 copy 하지 않고 드랙그만 하게 되면  
             if (e.altKey === false) {
-                const item = this.$selection.currentProject.searchById(id);
+                const item = this.$model.get(id);
 
                 // artboard 가 자식이 있으면 움직이지 않음 
                 if (item.is('artboard') && item.hasChildren()) {
@@ -171,13 +170,10 @@ export default class HTMLRenderView extends EditorElement {
         const $item = Dom.create(e.target).closest('element-item');
         const id = $item.attr('data-id');
 
-        const item = this.$selection.get(id);
+        this.nextTick(() => {
+            this.emit('doubleclick.item', e, id);
+        }, 100)
 
-        if (this.$selection.isOne && item) {
-            this.emit('open.editor');
-            // this.emit('hideSelectionToolView');
-            this.emit('removeGuideLine');
-        }   
     }
 
     /**
@@ -215,11 +211,6 @@ export default class HTMLRenderView extends EditorElement {
 
         var id = $element && $element.attr('data-id');
 
-        // 선택한 영역이 있지만 artboard 가 아닌 경우 객체 선택으로 한다. 
-        if (isInSelectedArea && $element && $element.hasClass('artboard') === false) {
-            isInSelectedArea = false;
-        }
-
         // alt(option) + pointerstart 시점에 Layer 카피하기         
         if (e.altKey) {
 
@@ -228,7 +219,7 @@ export default class HTMLRenderView extends EditorElement {
             } else {
                 if (this.$selection.check({ id }) === false) {
                     // 선택된게 없으면 id 로 선택 
-                    this.$selection.selectById(id);
+                    this.$selection.selectByGroup(id);
                 }
             }
 
@@ -255,11 +246,17 @@ export default class HTMLRenderView extends EditorElement {
                     // 선택이 안되어 있으면 선택 
                     if (this.$selection.check({ id }) === false) {
 
-                        const current = this.$selection.currentProject.searchById(id);
+                        const current = this.$model.get(id);
+
                         if (current && current.is('artboard') && current.hasChildren()) {
                             // NOOP
+                        } else if (current.hasChildren()) {
+                            // NOOP
                         } else {
-                            this.$selection.selectById(id);
+                            // group 선택을 한다. 
+                            // group 선택은 현재 선택된 객체가 속한 그룹의 최상의 부모를 선택하게 한다. 
+                            // 이 때 artboard 가 최상위이면 현재 객체를 그대로 선택한다. 
+                            this.$selection.selectByGroup(id);
                         }
 
                     }
@@ -267,12 +264,8 @@ export default class HTMLRenderView extends EditorElement {
 
             }
 
-
-            // this.selectCurrent(...this.$selection.items)
             this.initializeDragSelection();
             this.emit('history.refreshSelection');
-
-            // console.log(this.$selection.current);
         }
 
     }
@@ -322,8 +315,6 @@ export default class HTMLRenderView extends EditorElement {
 
     moveTo(newDist) {
 
-        newDist = vec3.floor([], newDist);
-
         //////  snap 체크 하기 
         const snap = this.$snapManager.check(this.$selection.cachedRectVerties.map(v => {
             return vec3.add([], v, newDist)
@@ -334,8 +325,8 @@ export default class HTMLRenderView extends EditorElement {
         const result = {}
         this.$selection.cachedItemVerties.forEach(it => {
             result[it.id] = {
-                x: Length.px(it.x + localDist[0]).round(1000),          // 1px 단위로 위치 설정 
-                y: Length.px(it.y + localDist[1]).round(1000),
+                x: Length.px(it.x + localDist[0]).floor(),          // 1px 단위로 위치 설정 
+                y: Length.px(it.y + localDist[1]).floor(),
             }
         })
         this.$selection.reset(result);
@@ -357,12 +348,8 @@ export default class HTMLRenderView extends EditorElement {
         }
 
         if (newDist < 1) {
-            if (this.$selection.current) {
-                // this.emit('open.editor');
-                // this.emit('hideSelectionToolView');
-                // this.emit('removeGuideLine');
-                // return;
-            }
+            // NOOP 
+            // 마우스를 움직이지 않은 상태 
         } else {
             this.$selection.reselect();
             this.$snapManager.clear();
@@ -442,7 +429,7 @@ export default class HTMLRenderView extends EditorElement {
         var timeline = project.getSelectedTimeline();
 
         if (timeline) {
-            timeline.animations.map(it => project.searchById(it.id)).forEach(current => {
+            timeline.animations.map(it => this.$model.get(it.id)).forEach(current => {
                 this.updateTimelineElement(current, true, false);
             })
         }
@@ -460,7 +447,6 @@ export default class HTMLRenderView extends EditorElement {
 
         const html = this.$editor.html.render(project, null, this.$editor) || '';
 
-        this.setState({ html }, false)
         this.refs.$view.updateDiff(html)
 
         this.bindData('$view');
@@ -502,12 +488,6 @@ export default class HTMLRenderView extends EditorElement {
                             height: Length.px(height)
                         })
 
-                        // if (it.is('component')) {
-                        //     this.emit('refreshStyleView', it, true);
-                        // }
-
-                        // svg 객체  path, polygon 은  크기가 바뀌면 내부 path도 같이 scale up/down  이 되어야 하는데 
-                        // 이건 어떻게 적용하나 ....                     
                         this.trigger('refreshSelectionStyleView', it, true);
                     }
                 }

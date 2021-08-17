@@ -26,7 +26,7 @@ export default {
             })
 
             // 객체 생성             
-            const groupLayer = editor.createItem({
+            const groupLayer = editor.createModel({
                 itemType: 'rect',
                 ...editor.selection.itemRect
             })
@@ -36,7 +36,7 @@ export default {
 
             // selected 된 items 을 모두 group Layer 에 추가 
             list.forEach(({ item }) => {
-                groupLayer.appendChildItem(item); 
+                groupLayer.appendChild(item); 
             })
 
             editor.selection.select(groupLayer);

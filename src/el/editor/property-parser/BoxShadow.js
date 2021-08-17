@@ -1,9 +1,9 @@
 
 import { Length } from "el/editor/unit/Length";
-import { Property } from "el/editor/items/Property";
+import { PropertyItem } from "el/editor/items/PropertyItem";
 import { convertMatches, reverseMatches } from "el/utils/parser";
 
-export class BoxShadow extends Property {
+export class BoxShadow extends PropertyItem {
   static parse(obj) {
     return new BoxShadow(obj);
   }

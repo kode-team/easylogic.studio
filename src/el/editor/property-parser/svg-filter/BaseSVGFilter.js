@@ -1,4 +1,4 @@
-import { Property } from "el/editor/items/Property";
+import { PropertyItem } from "el/editor/items/PropertyItem";
 import { uuidShort } from "el/utils/math";
 import { SVGFilterClassName } from "../SVGFilter";
 
@@ -9,7 +9,7 @@ const DEFAULT_ATTRIBUTES = {
   yChannelSelector: true  
 }
 
-export class BaseSVGFilter extends Property {
+export class BaseSVGFilter extends PropertyItem {
 
   static parse (obj) {
     var FilterClass = SVGFilterClassName[obj.type];

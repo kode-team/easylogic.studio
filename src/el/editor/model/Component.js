@@ -1,11 +1,11 @@
-import { Layer } from "./Layer";
+import { LayerModel } from "./LayerModel";
 import icon from "../icon/icon";
 
 
 /**
  * Complex Component with children 
  */
-export class Component extends Layer {
+export class Component extends LayerModel {
 
     is(...itemType) {
         if (itemType.includes('component')) {

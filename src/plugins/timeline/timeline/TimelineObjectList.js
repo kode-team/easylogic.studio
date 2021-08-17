@@ -20,16 +20,14 @@ export default class TimelineObjectList extends EditorElement {
     }
 
     makeTimelineObjectRow (animation) {
-        var project = this.$selection.currentProject;
-
-        var obj =  project.searchById(animation.id)
+        var obj = this.$model.get(animation.id)
 
         if (!obj) {
             return; 
         }
 
         var selected = this.$timeline.checkLayer(obj.id);
-        var layer = project.searchById(obj.id)        
+        var layer = this.$model.get(obj.id)        
 
         return /*html*/`
         <div class='timeline-object' data-timeline-animation-id="${obj.id}">

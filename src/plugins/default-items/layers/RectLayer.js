@@ -1,7 +1,7 @@
 import icon from "el/editor/icon/icon";
-import { Layer } from "el/editor/items/Layer";
+import { LayerModel } from "el/editor/model/LayerModel";
 
-export class RectLayer extends Layer {
+export class RectLayer extends LayerModel {
 
   getIcon () {
     return icon.rect;

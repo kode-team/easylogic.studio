@@ -44,7 +44,10 @@ export default class ColorManagerV2 {
     
     get hex () {return this.state.hex; }    
 
-    get alpha () { return this.state.alpha; }        
+    get alpha () { 
+        if (typeof this.state.alpha === 'undefined') return 1;
+        return this.state.alpha; 
+    }        
 
     get format () { return this.state.format; }        
 
@@ -63,7 +66,7 @@ export default class ColorManagerV2 {
             colorObj = Color.parse(colorObj);
         }
         
-        this.state.alpha = typeof colorObj.a !== 'undefined' ? this.state.alpha : colorObj.a; 
+        this.state.alpha = typeof colorObj.a !== 'undefined' ? colorObj.a : this.state.alpha; 
         this.state.format = colorObj.type != 'hsv' ? (colorObj.type || this.state.format) : this.state.format;
 
         // if (this.state.format == 'hex' && this.state.alpha < 1) {
