@@ -29,7 +29,7 @@ export default {
                     height 
                 }, containerItem);
                 editor.changeMode(EDIT_MODE_SELECTION);
-                editor.emit('afterChangeMode');                
+                                
             });
 
         }

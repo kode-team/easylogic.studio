@@ -1,14 +1,14 @@
 
-
-import { CLICK } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { Tabs } from "el/editor/ui/view/Tabs";
+import { variable } from 'el/sapa/functions/registElement';
 
 export default class Inspector extends EditorElement {
 
-  initState() {
+  components() {
     return {
-      selectedIndexValue: 'style'
+      Tabs
     }
   }
 
@@ -16,77 +16,53 @@ export default class Inspector extends EditorElement {
     return /*html*/`
       <div class="feature-control inspector">
         <div>
-          <div class="tab number-tab" ref="$tab">
-            <div class="tab-header" ref="$header">
-              <div class="tab-item selected" data-value="style" title='${this.$i18n('inspector.tab.title.style')}'>
-                <label class='icon'>${icon.palette}</label>
-              </div>         
-              <div class="tab-item" data-value="transition" title="${this.$i18n('inspector.tab.title.transition')}">
-                <label>${icon.flash_on}</label>
-              </div>
-              <div class="tab-item" data-value="code" title='${this.$i18n('inspector.tab.title.code')}'>
-                <label class='icon'>${icon.code}</label>
-              </div>          
+          <object refClass="Tabs" 
+            ref="$tab" 
+            ${variable({
+              selectedValue: 'style',
+              onchange: this.subscribe((value) => {
+                this.$config.set("inspector.selectedValue", value);
+              })
+            })}
+          >
+            <object refClass="TabPanel" value="style" title="${this.$i18n('inspector.tab.title.style')}" icon=${variable(icon.palette)}>
+              <object refClass="AlignmentProperty" />
 
-              ${this.$menuManager.getTargetMenuItems('inspector.tab').map(it => {
-                const { value, title} = it.class;              
-                return /*html*/`
-                  <div class='tab-item' data-value='${value}' data-direction="right"  data-tooltip="${title}">
-                    <label>${icon[it.class.icon] || it.class.icon}</label>
-                  </div>
-                `
-              })}
-            </div>
-            <div class="tab-body" ref="$body">
+              <!-- Default Property --> 
+              <object refClass="PositionProperty" />
+              <object refClass="AppearanceProperty" />                                   
 
-              <div class="tab-content selected scrollbar" data-value="style">
-                <object refClass="AlignmentProperty" />
+              ${this.$menuManager.generate('inspector.tab.style')}                             
+              <div class='empty'></div>
+            </object>
 
-                <!-- Default Property --> 
-                <object refClass="PositionProperty" />
-                <object refClass="AppearanceProperty" />                                   
+            <object refClass="TabPanel" value="transition" title="${this.$i18n('inspector.tab.title.transition')}" icon=${variable(icon.flash_on)}>
+              ${this.$menuManager.generate('inspector.tab.transition')}              
+              <div class='empty'></div>                
+            </object>            
 
-                ${this.$menuManager.generate('inspector.tab.style')}                             
-                <div class='empty'></div>
-              </div>     
-              <div class='tab-content scrollbar' data-value='transition'>
-                ${this.$menuManager.generate('inspector.tab.transition')}              
-                <div class='empty'></div>                
-              </div>                        
-              <div class="tab-content" data-value="code">
-                ${this.$menuManager.generate('inspector.tab.code')}                            
-                <div class='empty'></div>                           
-              </div>       
+            <object refClass="TabPanel" value="code" title="${this.$i18n('inspector.tab.title.code')}" icon=${variable(icon.code)}>
+              ${this.$menuManager.generate('inspector.tab.code')}              
+              <div class='empty'></div>                
+            </object>    
             
-              
-              ${this.$menuManager.getTargetMenuItems('inspector.tab').map(it => {
-                const { value, title, loadElements } = it.class;
-                return /*html*/`
-                  <div class='tab-content' data-value='${value}'>
-                    ${loadElements.map(element => {
-                      return `<object refClass="${element}" />`
-                    }).join('\n')}
-                    ${this.$menuManager.generate(`inspector.tab.${value}`)}
-                  </div>
-                `
-              })}              
-            </div>
+            ${this.$menuManager.getTargetMenuItems('inspector.tab').map(it => {
+              const { value, title, loadElements } = it.class;
+
+              return /*html*/`
+                <object refClass="TabPanel" value="${value}" title="${title}" icon=${variable(it.icon)}>
+                  ${loadElements.map(element => {
+                    return /*html*/`<object refClass="${element}" />`
+                  })}
+                  ${this.$menuManager.generate('inspector.tab.' + it.value)}              
+                  <div class='empty'></div>                
+                </object> 
+              `   
+            })}
+          </object>
           </div>
         </div>
       </div>
     `;
-  }
-
-  [CLICK("$header .tab-item:not(.empty-item)")](e) {
-
-    var selectedIndexValue = e.$dt.attr('data-value')
-    if (this.state.selectedIndexValue === selectedIndexValue) {
-      return; 
-    }
-
-    this.$el.$$(`[data-value="${this.state.selectedIndexValue}"]`).forEach(it => it.removeClass('selected'))
-    this.$el.$$(`[data-value="${selectedIndexValue}"]`).forEach(it => it.addClass('selected'))
-    this.setState({ selectedIndexValue }, false);
-
   }
 }

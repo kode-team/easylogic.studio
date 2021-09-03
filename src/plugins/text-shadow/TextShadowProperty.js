@@ -3,6 +3,7 @@ import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { TextShadow } from "el/editor/property-parser/TextShadow";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { variable } from 'el/sapa/functions/registElement';
 
 
 export default class TextShadowProperty extends BaseProperty {
@@ -38,7 +39,7 @@ export default class TextShadowProperty extends BaseProperty {
     return /*html*/`
       <object refClass="TextShadowEditor" 
         ref='$textshadow' 
-        value="${this.variable(TextShadow.parseStyle(current['text-shadow']))}" 
+        value="${variable(TextShadow.parseStyle(current['text-shadow']))}" 
         hide-label="true" 
         onChange=${this.subscribe((textshadow) => {
           this.command('setAttributeForMulti', 'change text shadow', this.$selection.packByValue({ 

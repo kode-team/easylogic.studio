@@ -492,7 +492,9 @@ export default class PathEditorView extends PathTransformEditor {
                 'canvas': this.state.box === 'canvas',
                 'segment-move': this.state.mode === 'segment-move',
             },
-            innerHTML: this.pathGenerator.makeSVGPath()
+
+            // 성능을 위해서 diff 알고리즘 사용 
+            htmlDiff: this.pathGenerator.makeSVGPath()
         }
     }
 

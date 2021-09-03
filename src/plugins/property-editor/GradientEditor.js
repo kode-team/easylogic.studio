@@ -9,6 +9,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
 
 import './GradientEditor.scss';
+import { variable } from 'el/sapa/functions/registElement';
 
 var radialTypeList = [
   'circle',
@@ -138,7 +139,7 @@ export default class GradientEditor extends EditorElement  {
                 <object refClass="RangeEditor" label='Center Y' ref='$radialPositionY' calc="false" value="50%" key='radialPositionY' onchange='changeKeyValue' />
               </div>                
               <div data-editor='radialType'>              
-                <object refClass="SelectEditor" label='Radial Type' ref='$radialType' value="" options="${this.variable(radialTypeList)}" key='radialType' onchange='changeKeyValue' />
+                <object refClass="SelectEditor" label='Radial Type' ref='$radialType' value="" options="${variable(radialTypeList)}" key='radialType' onchange='changeKeyValue' />
               </div>
 
             </div>            

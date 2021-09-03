@@ -5,6 +5,7 @@ import { CSS_TO_STRING } from "el/utils/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './FlexLayoutItemProperty.scss';
+import { variable } from 'el/sapa/functions/registElement';
 
 export default class FlexLayoutItemProperty extends BaseProperty {
 
@@ -17,7 +18,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
   }
 
   getLayoutOptions () {
-    return this.variable(['none', 'auto', 'value'].map(it => {
+    return variable(['none', 'auto', 'value'].map(it => {
         return {value: it, text: this.$i18n(`flex.layout.item.property.${it}`) }
     }));
   }

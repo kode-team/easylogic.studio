@@ -5,6 +5,7 @@ import { isNotUndefined } from "el/sapa/functions/func";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import './SVGFilterPopup.scss';
+import { variable } from "el/sapa/functions/registElement";
 
 export default class SVGFilterPopup extends BasePopup {
 
@@ -43,13 +44,18 @@ export default class SVGFilterPopup extends BasePopup {
   [LOAD('$editor')] () {
 
     return /*html*/`
-      <object refClass="SVGFilterEditor" ref='$filter' title='Filter Type' key="filter" onchange=${this.subscribe((key, filters) => {
-        this.updateData({
-          filters
-        })
-      })}>
-        <property name="value" valueType="json">${JSON.stringify(this.state.filters)}</property>
-      </div>
+      <object refClass="SVGFilterEditor" 
+        ref='$filter' 
+        title='Filter Type' 
+        key="filter" 
+        value="${variable(this.state.filters)}"
+        onchange=${this.subscribe((key, filters) => {
+            this.updateData({
+              filters
+            })
+          })
+        } 
+      />
     `
 
   }

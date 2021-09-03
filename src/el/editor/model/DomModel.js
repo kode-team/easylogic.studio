@@ -234,6 +234,13 @@ export class DomModel extends GroupModel {
     // transform 에 변경이 생기면 미리 캐슁해둔다. 
     if (isChanged && this.hasChangedField('clip-path')) {
       this.setClipPathCache()
+    } else if (this.hasChangedField('width', 'height')) {
+
+      if (this.cacheClipPath) {
+        const d = this.cacheClipPath.clone().scale(this.json.width.value/this.cacheClipPathWidth, this.json.height.value/this.cacheClipPathHeight).d;
+        this.json['clip-path'] = `path(${d})`;      
+      }
+
     }
 
     return isChanged;
@@ -244,6 +251,8 @@ export class DomModel extends GroupModel {
 
     if (obj.type === 'path') {
       this.cacheClipPath = new PathParser(obj.value.trim())
+      this.cacheClipPathWidth = this.json.width.value;
+      this.cacheClipPathHeight = this.json.height.value;
     }
   }
 
@@ -260,7 +269,7 @@ export class DomModel extends GroupModel {
     }
 
     if (this.cacheClipPath) {
-      return this.cacheClipPath.clone().scaleTo(this.json.width.value, this.json.height.value);
+      return this.cacheClipPath.clone().scale(this.json.width.value/this.cacheClipPathWidth, this.json.height.value/this.cacheClipPathHeight).d;
     }
 
   }

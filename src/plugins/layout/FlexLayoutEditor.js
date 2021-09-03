@@ -1,6 +1,7 @@
 import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { CSS_TO_STRING, STRING_TO_CSS } from "el/utils/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { variable } from 'el/sapa/functions/registElement';
 
 export default class FlexLayoutEditor extends EditorElement {
 
@@ -26,7 +27,7 @@ export default class FlexLayoutEditor extends EditorElement {
     }
 
     makeOptionsFunction (options) {
-        return this.variable(options.split(',').map(it => {
+        return variable(options.split(',').map(it => {
             return { value: it, text: this.$i18n('flex.layout.editor.' + it) }
         }));
     }

@@ -2,8 +2,9 @@
 import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-
+import { variable } from 'el/sapa/functions/registElement';
 import './GridBoxEditor.scss';
+
 
 const REG_CSS_UNIT = /(auto)|(repeat\([^\)]*\))|(([\d.]+)(px|pt|fr|r?em|deg|vh|vw|%))/gi;
 
@@ -12,7 +13,7 @@ export default class GridBoxEditor extends EditorElement {
 
 
     getLayoutItemOptions () {
-        return this.variable('none,auto,repeat,length'.split(',').map(it => {
+        return variable('none,auto,repeat,length'.split(',').map(it => {
             return {value: it, text: this.$i18n(`grid.box.editor.${it}`) }
         }));
     }

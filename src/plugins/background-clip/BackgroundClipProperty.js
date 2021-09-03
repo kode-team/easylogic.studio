@@ -1,5 +1,6 @@
 import { LOAD, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { variable } from "el/sapa/functions/registElement";
 
 export default class BackgroundClipProperty extends BaseProperty {
   
@@ -25,7 +26,7 @@ export default class BackgroundClipProperty extends BaseProperty {
           key='background-clip' 
           icon="true" 
           value="${clip}" 
-          options=${this.variable(["","paddinb-box","border-box","content-box","text"])} 
+          options=${variable(["","paddinb-box","border-box","content-box","text"])} 
           onchange="changeSelect" 
       />`;
   }

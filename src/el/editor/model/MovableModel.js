@@ -317,13 +317,13 @@ export class MovableModel extends BaseModel {
 
     setAngle(angle = 0) {
         this.reset({
-            transform: Transform.replaceAll(this.transform, `rotateZ(${Length.deg(angle).round(1000)})`)
+            transform: Transform.replaceAll(this.transform, `rotateZ(${Length.deg(angle)})`)
         })
     }
 
     addAngle(angle = 0) {
         this.reset({
-            transform: Transform.addTransform(this.transform, `rotateZ(${Length.deg(angle).round(1000)})`)
+            transform: Transform.addTransform(this.transform, `rotateZ(${Length.deg(angle)})`)
         })
     }
 
@@ -806,7 +806,7 @@ export class MovableModel extends BaseModel {
             { angle : axis[2] ? radianToDegree(rad * axis[2]) : 0, type: 'rotateZ' },
         ]
         .filter(it => it.angle !== 0)
-        .map(it => `${it.type}(${Length.deg(it.angle % 360).round(1000)})`).join(' ');
+        .map(it => `${it.type}(${Length.deg(it.angle % 360)})`).join(' ');
 
         // 새로 변환될 item transform 정의 
         const newChildItemTransform = Transform.replaceAll(childItem.transform, `${newScaleTransform} ${newRotateTransform}`)

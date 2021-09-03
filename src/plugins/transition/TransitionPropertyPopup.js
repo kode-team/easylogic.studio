@@ -2,6 +2,7 @@ import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF} from "el/sapa/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import './TransitionPropertyPopup.scss';
+import { variable } from 'el/sapa/functions/registElement';
 
 const property_list = [
   'none',
@@ -146,7 +147,7 @@ export default class TransitionPropertyPopup extends BasePopup {
           label="Property" 
           key='name' 
           value="${this.state.data.name}" 
-          options=${this.variable(property_list)} 
+          options=${variable(property_list)} 
           onChange='changeTransition' 
         /> 
       </div>

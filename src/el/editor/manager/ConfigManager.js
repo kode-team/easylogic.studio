@@ -80,6 +80,18 @@ export class ConfigManager {
         return this.get(key) === false;
     }
 
+    /**
+     * key 에 해당하는 config 의 값을 비교한다.
+     * 
+     * 
+     * @param {string} key 
+     * @param {any} value 
+     * @returns {boolean}
+     */
+    is(key, value) {
+        return this.get(key) === value;
+    }
+
     remove (key) {
         this.config.delete(key);
         this.editor.emit("config:" + key);        

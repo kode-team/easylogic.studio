@@ -2,6 +2,7 @@ import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './FuncFilterEditor.scss';
+import { variable } from 'el/sapa/functions/registElement';
 
 export default class FuncFilterEditor extends EditorElement {
 
@@ -48,7 +49,7 @@ export default class FuncFilterEditor extends EditorElement {
             label="${label}" 
             key="type" 
             value="${this.state.type}" 
-            options=${this.variable(["identity","table","discrete","linear","gamma"])} 
+            options=${variable(["identity","table","discrete","linear","gamma"])} 
             onchange="changeType" />
         <div class='elf--func-filter-editor ${hasLabel}' ref='$container' data-selected-type='${type}'>
             ${label ? `<label></label>` : '' }

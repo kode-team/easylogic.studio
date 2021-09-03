@@ -29,6 +29,10 @@ export class SVGPathItem extends SVGItem {
 
     if (this.hasChangedField('d')) {
       this.cachePath = new PathParser(this.json.d);
+      this.cacheWidth = this.json.width.value;
+      this.cacheHeight = this.json.height.value;
+    } else if (this.hasChangedField('width', 'height')) {
+      this.json.d = this.cachePath.clone().scale(this.json.width.value/this.cacheWidth, this.json.height.value/this.cacheHeight).d;
     }
   }
 
@@ -36,6 +40,8 @@ export class SVGPathItem extends SVGItem {
     super.setCache();
 
     this.cachePath = new PathParser(this.json.d);
+    this.cacheWidth = this.json.width.value;
+    this.cacheHeight = this.json.height.value;    
   }
 
   get d() {
@@ -46,9 +52,11 @@ export class SVGPathItem extends SVGItem {
 
     if (!this.cachePath) {
       this.cachePath = new PathParser(this.json.d);
+      this.cacheWidth = this.json.width.value;
+      this.cacheHeight = this.json.height.value;          
     }
 
-    return this.cachePath.clone().scaleTo(this.json.width.value, this.json.height.value);
+    return this.cachePath.clone().scale(this.json.width.value/this.cacheWidth, this.json.height.value/this.cacheHeight).d;
   }
  
 

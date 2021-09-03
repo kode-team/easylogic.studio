@@ -17,7 +17,6 @@ const keyList = typeList.map(it => it.key);
 export default class BorderRadiusEditor extends EditorElement {
 
   initState() {
-
     return BorderRadius.parseStyle(this.props.value)
   }
 

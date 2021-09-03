@@ -63,10 +63,6 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.$el.toggleClass('editing-path', isEditingPath);
     }
     
-    checkEditMode () {
-        return this.$editor.isSelectionMode(); 
-    }
-
     [POINTERSTART('$pointerRect .rotate-pointer') + MOVE('rotateVertex') + END('rotateEndVertex')] (e) {
         this.state.moveType = 'rotate'; 
         this.initMousePoint = this.$viewport.getWorldPosition(e);        
@@ -473,7 +469,7 @@ export default class SelectionToolView extends SelectionToolEvent {
     initSelectionTool(isShow = true) {
         if (this.$el.isShow() && this.$selection.isOne === false) {
              this.$el.hide();
-        } else if (this.$editor.isSelectionMode() && this.$el.isHide() && this.$selection.isOne) {
+        } else if (this.$el.isHide() && this.$selection.isOne) {
             this.$el.show();
         }
 

@@ -56,7 +56,6 @@ export class Editor {
     this.openRightPanel = true;
     this.mode = EDIT_MODE_SELECTION
     this.modeView = 'CanvasView';
-    this.addComponentType = ''
 
     this.loadManagers();
 
@@ -170,19 +169,6 @@ export class Editor {
 
   isAddMode() {
     return this.isMode(EDIT_MODE_ADD)
-  }
-
-  /**
-   * editor 의 모드를 
-   */
-  isSelectionMode() {
-    return this.isMode(EDIT_MODE_SELECTION);
-  }
-
-  changeAddType(type = '', isComponent = false) {
-    this.changeMode(EDIT_MODE_ADD);
-    this.addComponentType = type;
-    this.isComponent = isComponent
   }
 
   /**

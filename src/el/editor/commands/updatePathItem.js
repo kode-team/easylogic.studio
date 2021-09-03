@@ -22,7 +22,7 @@ export default {
     
                 // d 속성 (path 문자열) 을 설정한다. 
                 editor.emit('setAttributeForMulti', editor.selection.packByValue({
-                    d: newPath.scale(1/current.width.value, 1/current.height.value).d,
+                    d: newPath.d,
                 }))
             } else {
 
@@ -34,11 +34,11 @@ export default {
                 const newWidth = vec3.distance(bbox[1], bbox[0]);
                 const newHeight = vec3.distance(bbox[3], bbox[0]);
     
-                newPath.translate(-bbox[0][0], -bbox[0][1])
-    
+                newPath.translate(-bbox[0][0], -bbox[0][1])        
+
                 // d 속성 (path 문자열) 을 설정한다. 
                 editor.emit('setAttributeForMulti', editor.selection.packByValue({
-                    d: newPath.scale(1/newWidth, 1/newHeight).d,
+                    d: newPath.d,
                     x: Length.px(newX),
                     y: Length.px(newY),
                     width: Length.px(newWidth),

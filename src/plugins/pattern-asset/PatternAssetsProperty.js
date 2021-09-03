@@ -7,6 +7,7 @@ import { CSS_TO_STRING } from "el/utils/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './PatternAssetsProperty.scss';
+import { variable } from 'el/sapa/functions/registElement';
 
 export default class PatternAssetsProperty extends BaseProperty {
 
@@ -24,7 +25,7 @@ export default class PatternAssetsProperty extends BaseProperty {
 
   getTools() {
 
-    const options = this.variable(patterns.map(it => {
+    const options = variable(patterns.map(it => {
       return { value: it.key, text: it.title } 
     }));
 

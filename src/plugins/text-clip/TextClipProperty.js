@@ -1,5 +1,6 @@
 import { LOAD, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { variable } from 'el/sapa/functions/registElement';
 
 export default class TextClipProperty extends BaseProperty {
   
@@ -24,7 +25,7 @@ export default class TextClipProperty extends BaseProperty {
 
     var clip = current['text-clip'] || ''
     return /*html*/`
-      <object refClass="SelectEditor"  ref='$1' key='text-clip' icon="true" value="${clip}" options=${this.variable(['', 'text'])} onchange="changeSelect" />
+      <object refClass="SelectEditor"  ref='$1' key='text-clip' icon="true" value="${clip}" options=${variable(['', 'text'])} onchange="changeSelect" />
     `;
   }
 

@@ -36,7 +36,7 @@ export class ModelManager {
 
     }
 
-    getProjectByIndex(index = 0) { 
+    getProjectByIndex(index = 0) {
         return this.get(this.projects[index]);
     }
 
@@ -153,8 +153,8 @@ export class ModelManager {
      * 
      * @param {BaseModel[]} targetItems
      * @param {BaseModel} searchItem
-     */ 
-    hasPathOf (targetItems, searchItem) {
+     */
+    hasPathOf(targetItems, searchItem) {
 
         const path = this.getPath(searchItem.id, searchItem);
 
@@ -168,18 +168,18 @@ export class ModelManager {
      * 부모가 project 일 때는 나 자신의 item 을 리턴한다.  
      * 
      * @param {string} rootId
-     */ 
+     */
     findGroupItem(rootId) {
         const obj = this.get(rootId);
 
         if (obj.hasChildren()) {
-            return obj; 
+            return obj;
         }
 
         // 상위가 project 나 artboard 이면 현재 객체를 최상위로 본다. 
         if (obj.parent && (obj.parent.is('project') || obj.parent.is('artboard'))) {
             return obj;
-        }        
+        }
 
         return obj.parent && this.findGroupItem(obj.parentId);
     }
@@ -190,7 +190,7 @@ export class ModelManager {
      * 중복은 제외한다. 
      * 
      * @param {BaseModel[]} items
-     */ 
+     */
     convertGroupItems(items) {
 
         const objectList = {};
@@ -229,11 +229,29 @@ export class ModelManager {
     createModel(itemObject, isRegister = true) {
         const layers = itemObject.layers;
         delete itemObject.layers;
+        let item;
 
-        const item = this.components.createComponent(itemObject.itemType, {
-            ...itemObject,
-        });
-        item.setModelManager(this);
+        if (this.get(itemObject.id)) {
+            item = this.get(itemObject.id);
+            item.reset(itemObject);
+        } else {
+            item = this.components.createComponent(itemObject.itemType, {
+                ...itemObject,
+            });
+
+            item.setModelManager(this);
+        }
+
+        // Item 을 생성하면  아이템의 id 를 등록한다. 
+        // 등록된 item 은 다른 곳으로 전송될 수 있다. 
+        if (isRegister) {
+            this.set(item.id, item);
+
+            if (item.is('project')) {
+                this.projects = [...new Set([...this.projects, item.id])];
+            }
+        }
+
 
         const children = (layers || []).map(it => {
             return this.createModel({ ...it, parentId: item.id });
@@ -246,14 +264,6 @@ export class ModelManager {
             })
         });
 
-        // Item 을 생성하면  아이템의 id 를 등록한다. 
-        if (isRegister) {
-            this.set(item.id, item);
-
-            if (item.is('project')) {
-                this.projects.push(item.id);
-            }
-        }
 
         return item;
     }
@@ -299,6 +309,11 @@ export class ModelManager {
         })
     }
 
+    /**
+     * 
+     * @param {string} rootId
+     * @returns {BaseModel} 부모 Model 리턴 
+     */
     getParent(rootId) {
         return this.get(this.get(rootId)?.parentId);
     }
@@ -359,7 +374,7 @@ export class ModelManager {
      * @param {string} rootId
      * @param {string} itemType
      * @returns {BaseModel}
-     */ 
+     */
     getModelTypeInPath(rootId, itemType) {
         return this.getPath(rootId).find(it => it && it.is(itemType));
     }
@@ -372,10 +387,10 @@ export class ModelManager {
      * @param {string} rootId
      * @param {string} targetId
      * @returns {BaseModel}
-     */ 
+     */
     getItemInPath(rootId, targetId) {
         return this.getPath(rootId).find(it => it && it.id === targetId);
-    }    
+    }
 
     getProject(rootId) {
         return this.getModelTypeInPath(rootId, 'project');
@@ -432,6 +447,17 @@ export class ModelManager {
 
     reset(rootId, obj) {
         return this.get(rootId)?.reset(obj);
+    }
+
+    appendChild(rootId, childId) {
+        const obj = this.get(rootId);
+        const child = this.get(childId);
+
+        // 아이디가 없는 경우 다시 아이디 넣어주기 
+        this.json.children.push(layer.id);
+
+        // 다시 넣는다면 offset 도 지정을 다시 해야함 
+        layer.offsetInParent = this.json.children[last-1].offset + 0.1;
     }
 
 

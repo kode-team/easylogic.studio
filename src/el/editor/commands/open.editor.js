@@ -19,7 +19,7 @@ export default {
         var current = editor.selection.current;
 
         if (current) {
-            current.setCache();
+            // current.setCache();
 
             // d 속성은 자동으로 페스 에디터로 연결 
             if (current.d) {
@@ -43,11 +43,11 @@ export default {
 
                     editor.emit('showPathEditor', mode, {
                         changeEvent: (data) => {
-                            data.d = current.invertPath(data.d).scale(1 / current.width.value, 1 / current.height.value).d;
+                            const resultPath = current.invertPath(data.d).d;
 
                             // d 속성 (path 문자열) 을 설정한다. 
                             editor.command('setAttributeForMulti', 'change clip-path', editor.selection.packByValue({
-                                'clip-path': `path(${data.d})`,
+                                'clip-path': `path(${resultPath})`,
                             }))
                         },
                         current,

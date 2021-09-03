@@ -16,7 +16,7 @@ export default {
             loadOriginalVideo(videoObject, (info) => {
                 editor.emit('addVideo', {src: videoObject.id, ...info, ...rect }, containerItem);
                 editor.changeMode(EDIT_MODE_SELECTION);
-                editor.emit('afterChangeMode');                
+                                
             });
 
         }

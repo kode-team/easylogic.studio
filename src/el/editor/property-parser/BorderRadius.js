@@ -1,7 +1,7 @@
 import { Length } from "el/editor/unit/Length";
 
 export default class BorderRadius {
-    static parseStyle (str) {
+    static parseStyle (str = '') {
         
         var obj = {
             isAll: true,

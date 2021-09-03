@@ -36,12 +36,12 @@ export class SelectionManager {
   }
 
   refreshMousePosition() {
-    const config = this.$editor.config;
+    const areaWidth = this.$editor.config.get('area.width');
     const pos = this.$editor.viewport.getWorldPosition();
 
     this.pos = pos; 
-    this.column = Math.ceil(pos[0]/config.get('area.width')); 
-    this.row = Math.ceil(pos[1]/config.get('area.width')); 
+    this.column = Math.ceil(pos[0]/areaWidth); 
+    this.row = Math.ceil(pos[1]/areaWidth); 
 
   }
 
@@ -141,7 +141,7 @@ export class SelectionManager {
       return (column[0] <= this.column && this.column <= column[1]) && 
              (row[0] <= this.row && this.row <= row[1]);
     }).filter(item => {
-      return !item.hasChildren() && item.hasPoint(this.pos[0], this.pos[1])
+      return item.hasPoint(this.pos[0], this.pos[1])
     }).map(item => this.modelManager.findGroupItem(item.id));
 
   }
@@ -304,6 +304,10 @@ export class SelectionManager {
 
   hasPathOf(item) {
     return this.modelManager.hasPathOf(this.items.filter(it => it.isNot('artboard')), item);
+  }
+
+  hasParent(parentId) {
+    return this.items.some(it => it.hasParent(parentId));
   }
 
   get (id) {
@@ -664,6 +668,23 @@ export class SelectionManager {
     } else {
       return this.hoverItems.findIndex((it) => it.id === itemOrId.id) > -1; 
     }
+  }
+
+  /**
+   * hover item 이 있는지 체크 
+   * 
+   * @returns {boolean}
+   */
+  hasHoverItem() {
+    return this.hoverId !== '';
+  }
+
+  /**
+   * hover 된 item 을 선택한다.
+   * 
+   */
+  selectHoverItem() {
+    this.select(this.hoverId);
   }
 
   setHoverId (id) {

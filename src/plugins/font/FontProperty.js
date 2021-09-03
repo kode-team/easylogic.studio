@@ -1,5 +1,6 @@
 import { IF, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { variable } from 'el/sapa/functions/registElement';
 
 export default class FontProperty extends BaseProperty {
 
@@ -92,7 +93,7 @@ export default class FontProperty extends BaseProperty {
           label='${this.$i18n('font.property.style')}' 
           key="font-style"
           compact="true"
-          options=${this.variable(["normal","italic"])}
+          options=${variable(["normal","italic"])}
           icons='title,italic'
           onchange="changeRangeEditor" />
       </div>      

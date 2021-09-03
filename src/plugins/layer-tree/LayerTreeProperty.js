@@ -1,4 +1,9 @@
-import { LOAD, CLICK, DOUBLECLICK, PREVENT, STOP, FOCUSOUT, DOMDIFF, DRAGSTART, KEYDOWN, DRAGOVER, DROP, BIND, DRAGEND, ENTER, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { 
+  LOAD, CLICK, DOUBLECLICK, PREVENT, STOP, 
+  FOCUSOUT, DOMDIFF, DRAGSTART, KEYDOWN, 
+  DRAGOVER, DROP, BIND, DRAGEND, 
+  SUBSCRIBE, SUBSCRIBE_SELF, THROTTLE 
+} from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { Length } from "el/editor/unit/Length";
 import { KEY_CODE } from "el/editor/types/key";
@@ -127,7 +132,7 @@ export default class LayerTreeProperty extends BaseProperty {
     for (var last = layers.length - 1; last > -1; last--) {
       var layer = layers[last];
 
-      var selectedPathClass = this.$selection.hasPathOf(layer) ? 'selected-path' : '';      
+      var selectedPathClass = this.$selection.hasPathOf(layer) ? 'selected-path' : '';
       var selectedClass = this.$selection.check(layer) ? 'selected' : '';
       var hovered = this.$selection.checkHover(layer) ? 'hovered' : '';
       var name = layer.name;
@@ -399,7 +404,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
       this.refs.$layerList.$$('.selected-path').forEach(it => {
         it.removeClass('selected-path')
-      })      
+      })
 
       var selector = this.$selection.items.map(it => {
         return `[data-layer-id="${it.id}"]`
@@ -430,7 +435,7 @@ export default class LayerTreeProperty extends BaseProperty {
     this.trigger('changeSelection')
   }
 
-  [SUBSCRIBE('refreshLayerTreeView')]() {
+  [SUBSCRIBE('refreshLayerTreeView') + THROTTLE(100)]() {
     this.refresh();
   }
 

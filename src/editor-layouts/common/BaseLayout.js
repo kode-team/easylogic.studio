@@ -134,8 +134,8 @@ export default class BaseLayout extends EditorElement {
 
         if (Math.abs(dist) > 0.5) {
 
-          var dx = Math.floor(pos.x - v.xy.x);
-          var dy = Math.floor(pos.y - v.xy.y);
+          var dx = pos.x - v.xy.x;
+          var dy = pos.y - v.xy.y;
 
           v.func.call(v.context, dx, dy, 'move', e.pressure);
         }

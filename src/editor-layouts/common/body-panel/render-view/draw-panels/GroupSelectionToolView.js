@@ -65,10 +65,6 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         this.refs.$selectionView.toggleClass('editing-path', isEditingPath);
     }
     
-    checkEditMode () {
-        return this.$editor.isSelectionMode(); 
-    }
-
     [POINTERSTART('$pointerRect .rotate-pointer') + MOVE('rotateVertex') + END('rotateEndVertex')] (e) {
         this.state.moveType = 'rotate'; 
         this.initMousePoint = this.$viewport.getWorldPosition(e);        
@@ -529,7 +525,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
     initSelectionTool(isInitializeMatrix = false) {
 
-        if (this.$editor.isSelectionMode() && this.$el.isHide() && this.$selection.isMany) {
+        if (this.$el.isHide() && this.$selection.isMany) {
             this.$el.show();
         } else {
             if (this.$el.isShow() && this.$selection.isMany === false) this.$el.hide();

@@ -5,6 +5,7 @@ import BasePopup from "el/editor/ui/popup/BasePopup";
 import { Length } from "el/editor/unit/Length";
 
 import './BackgroundImagePositionPopup.scss';
+import { variable } from 'el/sapa/functions/registElement';
 
 export default class BackgroundImagePositionPopup extends BasePopup {
 
@@ -40,7 +41,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
           ref='$size' 
           key='size' 
           value="${this.state.size}" 
-          options=${this.variable(["contain","cover","auto" ])}
+          options=${variable(["contain","cover","auto" ])}
           onchange="changeRangeEditor" />      
       </div>
     `;

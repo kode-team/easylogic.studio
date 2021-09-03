@@ -125,24 +125,19 @@ export default class DragAreaRectView extends EditorElement {
 
         this.trigger('drawAreaView', this.dragRect);
 
-        if (this.$editor.isSelectionMode()) {
+        var { left: x, top: y, width, height } = this.dragRect
+        var rect = {
+            x: x.value,
+            y: y.value,
+            width: width.value,
+            height: height.value
+        }
 
-            var { left: x, top: y, width, height } = this.dragRect
-            var rect = {
-                x: x.value,
-                y: y.value,
-                width: width.value,
-                height: height.value
-            }
+        const selectedItems = this.getSelectedItems(rect, toRectVertiesWithoutTransformOrigin([startVertex, endVertex]))
 
-            // var areaVerties = this.$viewport.createAreaVerties(rect.x, rect.y, rect.width, rect.height);
-
-            const selectedItems = this.getSelectedItems(rect, toRectVertiesWithoutTransformOrigin([startVertex, endVertex]))
-
-            if (this.$selection.selectByGroup(...selectedItems)) {
-                this.emit('refreshSelection')
-                this.emit('refreshSelectionTool', true);
-            }
+        if (this.$selection.selectByGroup(...selectedItems)) {
+            this.emit('refreshSelection')
+            this.emit('refreshSelectionTool', true);
         }
     }
 

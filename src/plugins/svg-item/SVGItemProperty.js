@@ -1,6 +1,7 @@
 import { Length } from "el/editor/unit/Length";
 import { IF, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { variable } from 'el/sapa/functions/registElement';
 
 export default class SVGItemProperty extends BaseProperty {
 
@@ -76,7 +77,7 @@ export default class SVGItemProperty extends BaseProperty {
             ref='$fillRule' 
             label='${this.$i18n('svg.item.property.fillRule')}' 
             key="fill-rule" 
-            options=${this.variable(["nonzero","evenodd" ])}
+            options=${variable(["nonzero","evenodd" ])}
             onchange="changeValue" />
         </div>            
 
@@ -131,7 +132,7 @@ export default class SVGItemProperty extends BaseProperty {
             ref='$strokeLineCap' 
             label='${this.$i18n('svg.item.property.lineCap')}' 
             key="stroke-linecap" 
-            options=${this.variable(["butt","round","square"])} 
+            options=${variable(["butt","round","square"])} 
             onchange="changeValue" 
           />
         </div> 
@@ -143,7 +144,7 @@ export default class SVGItemProperty extends BaseProperty {
             ref='$strokeLineJoin' 
             label='${this.$i18n('svg.item.property.lineJoin')}'             
             key="stroke-linejoin" 
-            options=${this.variable(["miter","bevel","round"])} 
+            options=${variable(["miter","bevel","round"])} 
             onchange="changeValue" 
           />
         </div>       

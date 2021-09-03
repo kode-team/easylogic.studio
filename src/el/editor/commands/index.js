@@ -8,7 +8,6 @@ import addArtBoard from "./addArtBoard";
 import addProject from "./addProject";
 import addLayer from "./addLayer";
 import newComponent from "./newComponent";
-import addComponentType from "./addComponentType";
 import clipboardCopy from "./clipboard.copy";
 import clipboardPaste from "./clipboard.paste";
 import switchTheme from "./switchTheme";
@@ -104,8 +103,13 @@ import rotateLayer from "./rotateLayer";
 import refreshHistory from "./refreshHistory";
 import openEditor from './open.editor';
 import doubleclickItem from "./doubleclick.item";
+import update from "./model/update";
 
 export default {
+    // update model 
+    update,
+
+
     doubleclickItem,
     openEditor,
     refreshHistory,
@@ -193,7 +197,6 @@ export default {
     switchTheme,
     clipboardPaste,
     clipboardCopy,
-    addComponentType,
     addArtBoard,
     addCustomComponent,
     addImage,

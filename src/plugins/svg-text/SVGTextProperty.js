@@ -1,5 +1,6 @@
 import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { variable } from 'el/sapa/functions/registElement';
 
 export default class SVGTextProperty extends BaseProperty {
 
@@ -52,7 +53,7 @@ export default class SVGTextProperty extends BaseProperty {
           ref='$text-anchor' 
           label='${this.$i18n('svg.text.property.anchor')}' 
           key="text-anchor" 
-          options=${this.variable(["start","middle","end"])} 
+          options=${variable(["start","middle","end"])} 
           onchange="changeTextValue" />
       </div>            
       <div class='property-item animation-property-item'>
@@ -64,7 +65,7 @@ export default class SVGTextProperty extends BaseProperty {
           label='${this.$i18n('svg.text.property.length.adjust')}' 
           key='lengthAdjust' 
           value='spacing' 
-          options=${this.variable(["spacing","spacingAndGlyphs"])} 
+          options=${variable(["spacing","spacingAndGlyphs"])} 
           onchange='changeTextValue' />        
       </div>        
       <div class='property-item animation-property-item'>

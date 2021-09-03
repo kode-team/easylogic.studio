@@ -1,4 +1,4 @@
-import { LOAD, DEBOUNCE, DOMDIFF, SUBSCRIBE, IF } from "el/sapa/Event";
+import { CONFIG, LOAD, DOMDIFF, SUBSCRIBE, IF } from "el/sapa/Event";
 
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
@@ -9,11 +9,15 @@ export default class CodeViewProperty extends BaseProperty {
     return this.$i18n('code.view.property.title');
   }
 
-  checkParentTab() {
-    return this.parent.state.selectedIndexValue === 'code'
+  checkConfig() {
+    return this.$config.is("inspector.selectedValue", 'code');
   }
 
-  [SUBSCRIBE('refreshSelectionStyleView', 'refreshSelection') + IF('checkParentTab')]() {
+  [CONFIG('inspector.selectedValue')] () {
+    this.refresh();
+  }
+
+  [SUBSCRIBE('refreshSelectionStyleView', 'refreshSelection') + IF('checkConfig')]() {
     this.refresh();
   }
 
@@ -25,8 +29,6 @@ export default class CodeViewProperty extends BaseProperty {
 
   [LOAD('$body') + DOMDIFF] () {
     return [
-
-      // todo: this.$renderer.getRenderer('html').codeview(this.$selection.current);
       this.$editor.html.codeview(this.$selection.current),
       // this.$editor.svg.codeview(this.$selection.current)
     ]

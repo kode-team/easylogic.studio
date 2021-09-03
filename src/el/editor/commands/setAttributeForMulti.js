@@ -10,30 +10,24 @@ export default {
      */
     execute: function (editor, multiAttrs = {}) {
 
-        Object.keys(multiAttrs).forEach(id => {
-            const attrs = multiAttrs[id];
+        const messages = []
 
-            editor.selection.itemsByIds(id).forEach(item => {
+        Object.entries(multiAttrs).forEach(([id, attrs]) => {
+            const item = editor.modelManager.get(id);            
+            const newAttrs = {};
 
-                const newAttrs = {};
+            Object.entries(attrs).forEach(([key, value]) => {
+                newAttrs[key] = isFunction(value) ? value(item) : value;
+            })
 
-                Object.keys(attrs).forEach(key => {
-                    let value = attrs[key];
-
-                    newAttrs[key] = isFunction(value) ? value(item) : value;                    
-                })
-
-
-                const isChanged = item.reset(newAttrs);
-
-                if (isChanged) {
-                    editor.emit('refreshElement', item);
-                    editor.emit('changeValue', id, newAttrs);
-                }
-
-            });
+            messages.push({ id: item.id, attrs: newAttrs })
         })
 
+
+        // send message 
+        messages.forEach(message => {
+            editor.emit('update', message.id, message.attrs)   
+        })
 
     }
 }

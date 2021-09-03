@@ -18,15 +18,15 @@ import {
 
 import DomEventHandler from "./handler/DomEventHandler";
 import BindHandler from "./handler/BindHandler";
-import { retriveElement } from "./functions/registElement";
-import { uuid, uuidShort } from "./functions/uuid";
+import { hasVariable, recoverVariable, retriveElement, spreadVariable, variable } from "./functions/registElement";
+import { uuid } from "./functions/uuid";
+import { isObject } from 'el/sapa/functions/func';
 
 const REFERENCE_PROPERTY = "ref";
 const TEMP_DIV = Dom.create("div");
 const QUERY_PROPERTY = `[${REFERENCE_PROPERTY}]`;
 const REF_CLASS = 'refclass';
 const REF_CLASS_PROPERTY = `[${REF_CLASS}]`
-const VARIABLE_SAPARATOR = "__ref__variable:";
 
 
 export default class EventMachine {
@@ -37,7 +37,6 @@ export default class EventMachine {
     this.children = {};
     this._bindings = [];
     this.id = uuid();    
-    this.__tempVariables = new Map();
     this.handlers = this.initializeHandler()
 
     this.initializeProperty(opt, props);
@@ -110,54 +109,15 @@ export default class EventMachine {
   }
 
   /**
-   * props 를 넘길 때 해당 참조를 그대로 넘기기 위한 함수 
-   * 
-   * @param {any} value
-   * @returns {string} 참조 id 생성 
-   */ 
-  variable(value) {
-    const id = `${VARIABLE_SAPARATOR}${uuidShort()}`;
-
-    this.__tempVariables.set(id, value);
-
-    return id;
-  }
-
-  /**
    * object 값을 그대로 key, value 형태로 넘기기 위한 함수
    * 
    * @param {Object} obj
    * @returns {string} `key=value` 형태의 문자열 리스트 
    */ 
   apply(obj) {
-    return Object.entries(obj).map(([key, value]) => {
-      return `${key}=${this.variable(value)}`
-    }).join(" ");
+    return spreadVariable(obj);
   }
 
-  /**
-   * 참조 id 를 가지고 있는 variable 을 복구한다. 
-   * 
-   * @param {string} id
-   * @returns {any}
-   */ 
-  recoverVariable(id) {
-
-    // console.log(id);
-    if (isString(id) === false) {
-      return id;
-    }
-
-    let value = id;
-
-    if (this.__tempVariables.has(id)) {
-      value = this.__tempVariables.get(id);
-
-      this.__tempVariables.delete(id);
-    }
-
-    return value;
-  }
 
   /**
    * 객체를 다시 그릴 때 사용한다. 
@@ -283,27 +243,27 @@ export default class EventMachine {
 
     // parse properties 
     for(var t of $dom.el.attributes) {
-      props[t.nodeName] = this.recoverVariable(t.nodeValue);
-    }
 
-    if (props['props']) {
-      props = {
-        ...props,
-        ...getRef(props['props'])
+      // 속성값이 없고, 속성 이름이 참조 변수 일 때는  그대로 보여준다. 
+      if (hasVariable(t.nodeName)) {
+        const recoveredValue = recoverVariable(t.nodeName);
+
+        if (isObject(recoveredValue)) {
+          props = Object.assign(props, recoveredValue)
+        } else {
+          props[t.nodeName] = recoverVariable(t.nodeValue);                    
+        }
+
+      } else {
+        props[t.nodeName] = recoverVariable(t.nodeValue);          
       }
     }
 
-    $dom.$$('property').forEach($p => {
-      const [name, value, valueType] = $p.attrs('name', 'value', 'valueType')
-
-      let realValue = value || $p.text();
-
-      if (valueType === 'json') {          
-        realValue = JSON.parse(realValue);
-      }
-    
-      props[name] = realValue; 
-    })
+    // 하위 html 문자열을 props.content 로 저장한다. 
+    props.content = $dom.html()
+    if (props.content) {
+      props.contentChildren = this.parseContent(props.content)
+    }
 
     return props;
   }
@@ -323,49 +283,105 @@ export default class EventMachine {
     return EventMachineComponent;
   }
 
-  parseComponent() {
-    const $el = this.$el;
+  renderComponent({ $dom, refName, EventMachineComponent, props }) {
+    var instance = null; 
 
+    // 동일한 refName 의 EventMachine 이 존재하면  해당 컴포넌트는 다시 그려진다. 
+    // 루트 element 는 변경되지 않는다. 
+    if (this.children[refName]) {
+      instance = this.children[refName] 
+      instance._reload(props);
+    } else {
+      // 기존의 refName 이 존재하지 않으면 Component 를 생성해서 element 를 교체한다. 
+      instance = new EventMachineComponent(this, props);
+
+      this.children[refName || instance.id] = instance;
+
+      instance.render();
+    }
+    
+
+    if (instance.renderTarget) {
+      instance.$el?.appendTo(instance.renderTarget);
+      $dom.remove();
+    } else {
+      $dom.replace(instance.$el);     
+    }
+  }
+
+  /**
+   * 특정 html 의 자식 컴포넌트(EventMachine)의 정보를 가지고 온다. 
+   * 
+   * @param {string} html 
+   * @param {string[]} filteredRefClass 
+   * @returns {object[]}  - { refName, EventMachineComponent, props, $dom, refClass }
+   */
+  parseContent(html, filteredRefClass = []) {
+    return Dom.create('div').html(html).children().map($dom => {
+      return this._getComponentInfo($dom)
+    }).filter(it => filteredRefClass.length === 0 ? true : filteredRefClass.includes(it.refClass))
+  }
+
+  /**
+   * component 정보 얻어오기 
+   * 
+   * @param {Dom} $dom 
+   * @returns 
+   */
+  _getComponentInfo ($dom) {
+
+    const refClass = $dom.attr(REF_CLASS);
+    const EventMachineComponent = this.getEventMachineComponent(refClass)
+
+    if (EventMachineComponent) {
+      let props = this.parseProperty($dom);
+
+      // create component 
+      let refName = $dom.attr(REFERENCE_PROPERTY);
+
+      return { 
+        $dom,
+        refClass,
+        props,
+        refName,
+        EventMachineComponent
+      }
+    } else {
+      return {
+        notUsed: true, 
+        $dom,
+      }
+    }
+  }
+
+  /**
+   * element 를 기준으로 내부 component 리스트를 생성한다. 
+   * 
+   * @return {object[]}
+   */ 
+  parseComponentList($el) {
+
+    const children = []
     let targets = $el.$$(REF_CLASS_PROPERTY);
 
     targets.forEach($dom => {
+      children.push(this._getComponentInfo($dom));
+    })
 
-      const EventMachineComponent = this.getEventMachineComponent($dom.attr(REF_CLASS))
+    return children; 
+  }
 
-      if (EventMachineComponent) {
-        let props = this.parseProperty($dom);
-  
-        // create component 
-        let refName = $dom.attr(REFERENCE_PROPERTY);
-        var instance = null; 
-  
-        // 동일한 refName 의 EventMachine 이 존재하면  해당 컴포넌트는 다시 그려진다. 
-        // 루트 element 는 변경되지 않는다. 
-        if (this.children[refName]) {
-          instance = this.children[refName] 
-          instance._reload(props);
-        } else {
-          // 기존의 refName 이 존재하지 않으면 Component 를 생성해서 element 를 교체한다. 
-          instance = new EventMachineComponent(this, props);
-  
-          this.children[refName || instance.id] = instance;
-  
-          instance.render();
-        }
-        
+  parseComponent() {
+    const $el = this.$el;
 
-        if (instance.renderTarget) {
-          instance.$el?.appendTo(instance.renderTarget);
-          $dom.remove();
-        } else {
-          $dom.replace(instance.$el);     
-        }
+    const componentList = this.parseComponentList($el);
 
+    componentList.forEach(comp => {
+      if (comp.notUsed) {
+        comp.$dom.remove();
       } else {
-        $dom.remove();
-      }
- 
-  
+        this.renderComponent(comp);
+      }  
     })
 
     keyEach(this.children, (key, obj) => {

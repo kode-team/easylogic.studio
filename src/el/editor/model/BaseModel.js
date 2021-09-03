@@ -1,5 +1,5 @@
-import { clone, isFunction, isNumber, isNotUndefined, isUndefined } from "el/sapa/functions/func";
-import { uuid, uuidShort } from "el/utils/math";
+import { clone, isFunction, isNumber, isUndefined } from "el/sapa/functions/func";
+import { uuid } from "el/utils/math";
 import { ModelManager } from "../manager/ModelManager";
 
 /**
@@ -239,6 +239,15 @@ export class BaseModel {
     return this.cachedValue[key];
   }
 
+  /**
+   * BaseModel 에서 attribute key 를 기반으로 캐쉬를 적용한다. 
+   * 렌더링 시에 캐쉬를 적용하지 않으면 렌더링이 느려지기 때문에
+   * 각 객체마다 캐쉬를 적용하는 것이 좋다.
+   * 
+   * @param {string} key attirbute field name
+   * @param {Function} newValueCallback cache 에 적용할 값을 구하는 함수
+   * @returns 
+   */
   computed(key, newValueCallback) {
     const cachedKey = `__cachedKey_${key}`
     const parsedKey = `${cachedKey}__parseValue`
@@ -325,6 +334,11 @@ export class BaseModel {
     return true;
   }
 
+  /**
+   * 마지막 변경된 field 를 체크한다. 
+   * 
+   * @returns {boolean} 
+   */ 
   hasChangedField(...args) {
     return args.some(it => this.lastChangedFieldKeys.includes(it));
   }
@@ -335,15 +349,16 @@ export class BaseModel {
    * @param {object} obj
    */
   getDefaultObject(obj = {}) {
-    var id = uuidShort()
+    var id = uuid()
     return {
       id,
       _timestamp: Date.now(),
       _time: performance.now(),
       visible: true,  // 보이기 여부 설정 
       lock: false,    // 편집을 막고 
-      selected: false,  // 선택 여부 체크 
+      // selected: false,  // 선택 여부 체크 
       children: [],   // 하위 객체를 저장한다. 
+      offsetInParent: 1,  // 부모에서 자신의 위치를 숫자로 나타낸다. 
       ...obj
     };
   }

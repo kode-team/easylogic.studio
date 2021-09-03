@@ -40,10 +40,6 @@ export default class HTMLRenderView extends EditorElement {
         `
     }
 
-    [SUBSCRIBE('afterChangeMode')]() {
-        this.$el.attr('data-mode', this.$editor.mode);
-    }
-
     [SUBSCRIBE('refElement')](id, callback) {
         isFunction(callback) && callback(this.getElement(id))
     }
@@ -122,6 +118,26 @@ export default class HTMLRenderView extends EditorElement {
 
         const mousePoint = this.$viewport.getWorldPosition(e);
         if (this.$selection.hasPoint(mousePoint)) {
+
+            // selection 영역과 hover item 이 겹치면  hover item 을 선택한걸로 한다. 
+            if (this.$selection.hasHoverItem()) {
+
+                // selection 영역이 동일하고 
+                // hover 된 id 가 부모가 아니면 
+                // hover 된 아이템을 선택하게 된다. 
+                if (this.$selection.hasParent(/*parentId*/this.$selection.hoverId) === false) {
+                    this.$selection.selectHoverItem();
+                }
+
+            }
+
+            return true;
+        }
+
+        // hover item 이 있으면 클릭 대상이 있다고 간주한다. 
+        if (this.$selection.hasHoverItem()) {
+            console.log(this.$selection.hoverItems);
+            this.$selection.selectHoverItem();
             return true;
         }
 
@@ -153,17 +169,12 @@ export default class HTMLRenderView extends EditorElement {
             }
 
         } else {
-
-            if (this.$editor.isSelectionMode()) {
-                return true;
-            }
-
             // 움직일 수 있는 영역이 아니기 때문에 false 리턴해서 드래그를 막는다. 
             return false;
         }
 
 
-        return this.$editor.isSelectionMode()
+        return true;
     }
 
     [DOUBLECLICK('$view')](e) {
@@ -229,7 +240,6 @@ export default class HTMLRenderView extends EditorElement {
                 this.trigger('refreshAllCanvas')
                 this.emit('refreshLayerTreeView')
 
-                // this.selectCurrent(...this.$selection.items)
                 this.initializeDragSelection();
                 this.emit('history.refreshSelection');
             }
@@ -251,7 +261,8 @@ export default class HTMLRenderView extends EditorElement {
                         if (current && current.is('artboard') && current.hasChildren()) {
                             // NOOP
                         } else if (current.hasChildren()) {
-                            // NOOP
+                            // 자식이 있으면 그대로 드래그 할 수 있도록 맞춘다.
+                            this.$selection.selectByGroup(id);
                         } else {
                             // group 선택을 한다. 
                             // group 선택은 현재 선택된 객체가 속한 그룹의 최상의 부모를 선택하게 한다. 
@@ -365,13 +376,12 @@ export default class HTMLRenderView extends EditorElement {
     }
 
     [BIND('$body')]() {
-        const { canvasWidth, canvasHeight, mode } = this.$editor;
+        const { canvasWidth, canvasHeight } = this.$editor;
 
         var width = Length.px(canvasWidth);
         var height = Length.px(canvasHeight);
 
         return {
-            'data-mode': mode,
             'tabIndex': -1,
             style: {
                 width,
@@ -404,8 +414,6 @@ export default class HTMLRenderView extends EditorElement {
         items.forEach(current => {
             this.updateElement(current);
         })
-
-        // this.selectCurrent(...items);
     }
 
     updateElement(item) {

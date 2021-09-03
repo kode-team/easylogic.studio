@@ -16,6 +16,7 @@ import { Selector } from "el/editor/property-parser/Selector";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './SelectorProperty.scss';
+import { variable } from 'el/sapa/functions/registElement';
 
 const selectorList = [
   '',   // custom 
@@ -46,7 +47,7 @@ export default class SelectorProperty extends BaseProperty {
   getTools() {
     return /*html*/`
       <div style='display:inline-block;'>
-        <object refClass="SelectEditor"  ref='$select' key='selector' icon="true" none-value="selector" options=${this.variable(selectorList)} />
+        <object refClass="SelectEditor"  ref='$select' key='selector' icon="true" none-value="selector" options=${variable(selectorList)} />
       </div>
       <button type="button" ref="$add" title="add Selector">${icon.add}</button>
     `;

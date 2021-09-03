@@ -1,5 +1,6 @@
 import { SUBSCRIBE_SELF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { variable } from "el/sapa/functions/registElement";
 
 
 export default class LanguageSelector extends EditorElement {
@@ -21,7 +22,7 @@ export default class LanguageSelector extends EditorElement {
                 <div class='item'>
                     <object refClass="SelectEditor"  
                         ref='$locale' 
-                        options=${this.variable(languages)}
+                        options=${variable(languages)}
                         value="${this.$editor.locale}" 
                         onchange="changeLocale"
                     /> 
