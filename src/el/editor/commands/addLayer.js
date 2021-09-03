@@ -8,16 +8,16 @@ export default function addLayer (editor, layer, rect = {}, isSelected = true, c
 
     if (containerItem) {
 
-        if (!containerItem.is('project') && !containerItem.enableHasChildren()) {
+        if (containerItem.isNot('project') && !containerItem.enableHasChildren()) {
             containerItem = containerItem.parent;
         }
 
-        containerItem.appendChildItem(layer)
+        containerItem.appendChild(layer)
 
         if (isSelected) {
             editor.selection.select(layer);
         }
 
-        _doForceRefreshSelection(editor,true, 10)
+        _doForceRefreshSelection(editor)
     }
 }

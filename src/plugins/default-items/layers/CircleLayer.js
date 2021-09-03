@@ -1,9 +1,9 @@
 
 import icon from "el/editor/icon/icon";
-import { Layer } from "el/editor/items/Layer";
+import { LayerModel } from "el/editor/model/LayerModel";
 
 
-export class CircleLayer extends Layer {
+export class CircleLayer extends LayerModel {
 
   getIcon () {
     return icon.lens;

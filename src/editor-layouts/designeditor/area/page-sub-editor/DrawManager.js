@@ -2,6 +2,7 @@ import { Length } from "el/editor/unit/Length";
 import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './DrawManager.scss';
+import { variable } from "el/sapa/functions/registElement";
 
 export default class DrawManager extends EditorElement {
 
@@ -79,7 +80,7 @@ export default class DrawManager extends EditorElement {
               ref='$strokeLineCap' 
               key="stroke-linecap" 
               value="${this.state['stroke-linecap']}"                   
-              options=${this.variable(["butt","round","square"])} 
+              options=${variable(["butt","round","square"])} 
               onchange="changeValue" 
             />
           </div> 
@@ -89,7 +90,7 @@ export default class DrawManager extends EditorElement {
               ref='$strokeLineJoin' 
               key="stroke-linejoin" 
               value="${this.state['stroke-linejoin']}"                                 
-              options=${this.variable(["miter","bevel","round" ])}
+              options=${variable(["miter","bevel","round" ])}
               onchange="changeValue" 
             />
           </div>

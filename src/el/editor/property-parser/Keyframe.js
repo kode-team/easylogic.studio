@@ -1,10 +1,10 @@
-import { Property } from "el/editor/items/Property";
+import { PropertyItem } from "el/editor/items/PropertyItem";
 import { Offset } from "./Offset";
 
 import { reverseMatches, convertMatches } from "el/utils/parser";
 import { Length } from "el/editor/unit/Length";
 
-export class Keyframe extends Property {
+export class Keyframe extends PropertyItem {
   static parse(obj) {
     return new Keyframe(obj);
   }

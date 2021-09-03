@@ -1,6 +1,6 @@
 import { Length } from "el/editor/unit/Length";
 import { Border } from "el/editor/property-parser/Border";
-import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { SUBSCRIBE_SELF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './BorderValueEditor.scss';
@@ -56,7 +56,7 @@ export default class BorderValueEditor extends EditorElement {
     return /*html*/`
       <div class="elf--border-value-editor">
         <div class='editor-area'>
-          <object refClass="RangeEditor"  ref='$width' min="0" max="100" step="1" key='width' value="${width}" onchange='changeKeyValue' />
+          <object refClass="RangeEditor" ref='$width' min="0" max="100" step="1" key='width' value="${width}" onchange='changeKeyValue' />
         </div>
         <div class='editor-area'>
           <object refClass="SelectEditor"  ref='$style' key='style' options='${borderStyleList}' value="${style || 'solid'}" onchange="changeKeyValue" />

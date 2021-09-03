@@ -3,6 +3,7 @@ import colors from "el/editor/preset/colors";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './ColorAssetsEditor.scss';
+import { variable } from 'el/sapa/functions/registElement';
 
 export default class ColorAssetsEditor extends EditorElement {
 
@@ -21,7 +22,7 @@ export default class ColorAssetsEditor extends EditorElement {
   }
 
   [LOAD('$tools')] () {
-    const options = this.variable(this.state.colors.map(it => {
+    const options = variable(this.state.colors.map(it => {
       return { value: it.key, text: it.title } 
     }));
 

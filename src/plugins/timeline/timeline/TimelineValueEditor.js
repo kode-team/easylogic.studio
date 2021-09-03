@@ -176,7 +176,7 @@ checkKey (e) {
 
     var project = this.$selection.currentProject;
     if (project) {
-      var selectedLayer = project.searchById(this.state.layerId); 
+      var selectedLayer = this.$model.get(this.state.layerId); 
 
       if (selectedLayer) {
         var value = selectedLayer[this.state.property] + ''

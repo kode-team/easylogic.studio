@@ -1,4 +1,4 @@
-import { Layer } from "el/editor/items/Layer";
+import { LayerModel } from "el/editor/model/LayerModel";
 
 
 const expectedProperties = [
@@ -24,7 +24,7 @@ expectedProperties.forEach(key => {
   expectedPropertiesKeys[key] = true
 })
 
-export class SVGItem extends Layer {
+export class SVGItem extends LayerModel {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: 'svg',

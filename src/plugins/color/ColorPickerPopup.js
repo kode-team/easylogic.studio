@@ -41,7 +41,7 @@ export default class ColorPickerPopup extends BasePopup {
 
   getBody() {
     return /*html*/`
-    <div class="elf--color-picker-popup">
+    <div>
       <div class='box'>
         <object 
           refClass="EmbedColorPicker" 

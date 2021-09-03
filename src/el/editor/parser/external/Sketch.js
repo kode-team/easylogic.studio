@@ -6,7 +6,7 @@ import { Length } from "el/editor/unit/Length";
 import { ConicGradient } from "../../property-parser/image-resource/ConicGradient";
 import { Project } from "plugins/default-items/layers/Project";
 import { ArtBoard } from "plugins/default-items/layers/ArtBoard";
-import { Layer } from "el/editor/items/Layer";
+import { Layer } from "el/editor/model/LayerModel";
 import { BackgroundImage } from "../../property-parser/BackgroundImage";
 import { FileImageResource } from "../../property-parser/image-resource/URLImageResource";
 import { CSS_TO_STRING, keyEach, combineKeyArray, isString } from "el/sapa/functions/func";

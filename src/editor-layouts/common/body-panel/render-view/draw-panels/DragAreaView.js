@@ -103,77 +103,6 @@ export default class DragAreaView extends EditorElement {
         return true;
     }
 
-
-    // checkEmptyElement (e) {
-    //     var $el = Dom.create(e.target)
-
-    //     // hand tool 이 on 되어 있으면 드래그 하지 않는다. 
-    //     if (this.$config.get('set.tool.hand')) {
-    //         return false; 
-    //     }
-
-    //     const code = this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space);
-    //     if (this.$keyboardManager.check(code)) {        // space 키가 눌러져있을 때는 실행하지 않는다. 
-    //         return false;
-    //     } 
-
-    //     const mousePoint = this.$viewport.getWorldPosition(e);        
-
-    //     if (this.state.mode !== 'selection') {
-    //         return false; 
-    //     }
-
-    //     // altKey 를 누르고 있으면 동작하지 않음 
-    //     // altKey 는 복제용도로 사용함 
-    //     if (e.altKey) {
-    //         return false; 
-    //     }
-
-    //     // artboard 에서 드래그 할 수 있도록 예외 처리 
-    //     if ($el.hasClass('artboard')) {
-    //         if (this.$selection.check({ id: $el.attr('data-id') })) {
-    //             // selection 이 이미 되어 있는 상태면 선택 영역을 그리지 않는다. 
-    //             return false; 
-    //         }
-
-    //         // select된 객체에 포지션이 있으면  움직일 수 있도록 한다. 
-    //         if (this.$selection.hasPoint(mousePoint)) {
-    //             return false;
-    //         }            
-
-    //         return true; 
-    //     }
-
-    //     // select된 객체에 포지션이 있으면  움직일 수 있도록 한다. 
-    //     if (this.$selection.hasPoint(mousePoint)) {
-    //         return false;
-    //     }            
-
-    //     if ($el.hasClass('is-not-drag-area')) {
-    //         return false; 
-    //     }
-
-    //     if ($el.closest('element-item')) {
-    //         return false;
-    //     }
-
-    //     return $el.hasClass('element-item') === false
-    //         && $el.hasClass('selection-tool-item') === false 
-    //         && $el.hasClass('pointer') === false
-    //         && $el.hasClass('rotate-pointer') === false            
-    //         && $el.hasClass('layer-add-view') === false                        
-    //         && $el.hasClass('handle') === false            
-    //         && $el.hasClass('path-draw-container') === false
-    //         && $el.isTag('svg') === false 
-    //         && $el.isTag('path') === false
-    //         && $el.isTag('textPath') === false
-    //         && $el.isTag('polygon') === false
-    //         && $el.isTag('text') === false
-    //         && $el.isTag('img') === false 
-    //         && $el.attr('data-segment') !== 'true';
-    // }
-
-
     [POINTERSTART('$dragAreaView') + IF('checkEditMode') + MOVE('movePointer') + END('moveEndPointer')](e) {
 
         if (this.$config.get('set.dragarea.mode')) {
@@ -215,12 +144,12 @@ export default class DragAreaView extends EditorElement {
                         // 선택이 안되어 있으면 선택 
                         if (this.$selection.check({ id }) === false) {
 
-                            const current = this.$selection.currentProject.searchById(id);
+                            const current = this.$model.get(id);
                             if (current && current.is('artboard') && current.hasChildren()) {
                                 // NOOP
                                 // artboard 인데 자식이 있으면 선택을 하지 않는다. 
                             } else {
-                                this.$selection.selectById(id);
+                                this.$selection.selectByGroup(id);
                             }
 
                         }

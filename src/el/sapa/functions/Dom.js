@@ -287,7 +287,7 @@ export default class Dom {
   }
 
   findAll(selector) {
-    return [...this.el.querySelectorAll(selector)];
+    return Array.from(this.el.querySelectorAll(selector));
   }
 
   $$(selector) {

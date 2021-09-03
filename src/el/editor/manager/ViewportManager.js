@@ -75,6 +75,16 @@ export class ViewportManager {
      */
     resetWorldMatrix () {
 
+        // css 에서 3자리 숫자만 지원하기 때문에 수치를 고정한다. 
+        // 예를 들어 element.style.transformOrigin = "300.3244324px 200.432332434px"; 형태로 값을 설정해도 
+        // 실제로 적용되는 값은 "300.3244px 200.4323px" 로 적용 된다. 
+        // 그렇기 때문에 화면상에서 그려지는 좌표랑 메모리(에디터) 상에서 가지고 있는 좌표랑 다른 결과가 나타난다. 
+        // 이유는 scale 이 작을 때는 상관 없지만 커지면 커질 수록 소수점 이하의 숫자들의 계산 값이 달라지기 때문이다. 
+        // 그래서 브라우저랑 비슷한 패턴으로 toFixed() 형태로 숫자를 맞춘다. 
+        this.translate = this.translate.map(it => +it.toFixed(4));
+        this.transformOrigin = this.transformOrigin.map(it => +it.toFixed(4));
+        this.scale = +this.scale.toFixed(4);
+
         this.matrix = calculateMatrix(
             mat4.fromTranslation([], this.translate),
             mat4.fromTranslation([], this.transformOrigin),
@@ -187,6 +197,11 @@ export class ViewportManager {
      * @param {number} y 
      */
     createWorldPosition(x, y) {
+
+        if (!this.canvasSize) {
+            return vec3.create();
+        }
+
         const origin = {
             x: x - this.canvasSize.x,
             y: y - this.canvasSize.y,

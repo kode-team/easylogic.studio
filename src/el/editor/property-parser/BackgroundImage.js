@@ -1,6 +1,6 @@
 
 import { Length, Position } from "el/editor/unit/Length";
-import { Property } from "el/editor/items/Property";
+import { PropertyItem } from "el/editor/items/PropertyItem";
 import { StaticGradient } from "./image-resource/StaticGradient";
 import { URLImageResource } from "./image-resource/URLImageResource";
 import { LinearGradient } from "./image-resource/LinearGradient";
@@ -17,7 +17,7 @@ import { CSS_TO_STRING } from "el/utils/func";
 const RepeatList = ["repeat", "no-repeat", "repeat-x", "repeat-y", 'round', 'space'];
 const reg = /((linear\-gradient|repeating\-linear\-gradient|radial\-gradient|repeating\-radial\-gradient|conic\-gradient|repeating\-conic\-gradient|url)\(([^\)]*)\))/gi;
 
-export class BackgroundImage extends Property {
+export class BackgroundImage extends PropertyItem {
   addImageResource(imageResource) {
     this.clear("image-resource");
     return this.addItem("image-resource", imageResource);

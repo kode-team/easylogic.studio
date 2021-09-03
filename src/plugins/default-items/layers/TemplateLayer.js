@@ -1,5 +1,6 @@
 import icon from "el/editor/icon/icon";
-import { Component } from "el/editor/items/Component";
+import { Component } from 'el/editor/model/Component';
+
 
 const DEFAULT_TEMPLATE = `
   <svg>

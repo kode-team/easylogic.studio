@@ -15,9 +15,8 @@ export default class HoverView extends EditorElement {
         `
     }
 
-
     [CONFIG('bodyEvent')]() {
-        const items = this.$selection.filteredLayers.filter(it => it.is('artboard') === false)
+        const items = this.$selection.filteredLayers.filter(it => it.isNot('artboard'))
 
         const id = items[0]?.id;
 

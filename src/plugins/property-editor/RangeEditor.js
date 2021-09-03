@@ -7,6 +7,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
 
 import './RangeEditor.scss';
+import { variable } from 'el/sapa/functions/registElement';
 
 export default class RangeEditor extends EditorElement {
 
@@ -76,7 +77,7 @@ export default class RangeEditor extends EditorElement {
                 <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" /> 
                 <div class='area' ref='$rangeArea'>
                     <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" tabIndex="1" />
-                    <object refClass="SelectEditor"  ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options=${this.variable(units)} onchange='changeUnit' />
+                    <object refClass="SelectEditor"  ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options=${variable(units)} onchange='changeUnit' />
                 </div>
             </div>
             <button type='button' class='remove thin' ref='$remove' title='Remove'>${icon.remove}</button>

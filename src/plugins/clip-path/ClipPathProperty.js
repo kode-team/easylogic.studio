@@ -135,7 +135,7 @@ export default class ClipPathProperty extends BaseProperty {
 
         this.emit('showPathEditor', mode, {
           changeEvent: (data) => {
-            data.d = current.invertPath(data.d).scale(1 / current.width.value, 1 / current.height.value).d;
+            data.d = current.invertPath(data.d).d;
 
             this.updatePathInfo({
               'clip-path': `path(${data.d})`

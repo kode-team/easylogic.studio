@@ -1,4 +1,9 @@
-import { LOAD, CLICK, DOUBLECLICK, PREVENT, STOP, FOCUSOUT, DOMDIFF, DRAGSTART, KEYDOWN, DRAGOVER, DROP, BIND, DRAGEND, ENTER, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { 
+  LOAD, CLICK, DOUBLECLICK, PREVENT, STOP, 
+  FOCUSOUT, DOMDIFF, DRAGSTART, KEYDOWN, 
+  DRAGOVER, DROP, BIND, DRAGEND, 
+  SUBSCRIBE, SUBSCRIBE_SELF, THROTTLE 
+} from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { Length } from "el/editor/unit/Length";
 import { KEY_CODE } from "el/editor/types/key";
@@ -127,8 +132,7 @@ export default class LayerTreeProperty extends BaseProperty {
     for (var last = layers.length - 1; last > -1; last--) {
       var layer = layers[last];
 
-      const isSelected = this.$selection.check(layer)
-
+      var selectedPathClass = this.$selection.hasPathOf(layer) ? 'selected-path' : '';
       var selectedClass = this.$selection.check(layer) ? 'selected' : '';
       var hovered = this.$selection.checkHover(layer) ? 'hovered' : '';
       var name = layer.name;
@@ -146,7 +150,7 @@ export default class LayerTreeProperty extends BaseProperty {
       const depthPadding = Length.px(depth * 20);
 
       data.push(/*html*/`        
-        <div class='layer-item ${selectedClass} ${hovered}' data-is-group="${layer.isGroup}" data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true">
+        <div class='layer-item ${selectedClass} ${selectedPathClass} ${hovered}' data-is-group="${layer.isGroup}" data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true">
           <div class='detail'>
             <label data-layout-title='${title}' style='padding-left: ${depthPadding}' > 
               <div class='folder ${layer.collapsed ? 'collapsed' : ''}'>${layer.isGroup ? icon.arrow_right : ''}</div>
@@ -224,16 +228,15 @@ export default class LayerTreeProperty extends BaseProperty {
     var sourceLayerId = e.dataTransfer.getData('layer/id');
 
     if (targetLayerId === sourceLayerId) return;
-    var project = this.$selection.currentProject
 
-    var targetItem = project.searchById(targetLayerId);
-    var sourceItem = project.searchById(sourceLayerId);
+    var targetItem = this.$model.get(targetLayerId);
+    var sourceItem = this.$model.get(sourceLayerId);
 
     if (targetItem && targetItem.hasParent(sourceItem.id)) return;
 
     switch (this.state.lastDragOverItemDirection) {
       case 'self':
-        targetItem.appendChildItem(sourceItem);
+        targetItem.appendChild(sourceItem);
         break;
       case 'before':
         targetItem.appendBefore(sourceItem);
@@ -316,19 +319,16 @@ export default class LayerTreeProperty extends BaseProperty {
     $item.onlyOneClass('selected');
 
     var id = $item.attr('data-layer-id');
-    var item = this.$selection.currentProject.searchById(id);
-    this.$selection.select(item)
+    this.$selection.select(id)
 
     this.command('refreshSelection');
     // this.emit('refreshSelectionTool'); 
   }
 
   [CLICK('$layerList .layer-item label .folder')](e) {
-    const project = this.$selection.currentProject;
-
     var $item = e.$dt.closest('layer-item')
     var id = $item.attr('data-layer-id');
-    var item = project.searchById(id);
+    var item = this.$model.get(id);
 
     item.reset({
       collapsed: !item.collapsed
@@ -339,12 +339,10 @@ export default class LayerTreeProperty extends BaseProperty {
   }
 
   [CLICK('$layerList .layer-item .visible')](e) {
-    var project = this.$selection.currentProject
-
     var $item = e.$dt.closest('layer-item')
     var id = $item.attr('data-layer-id');
 
-    var item = project.searchById(id);
+    var item = this.$model.get(id);
     e.$dt.attr('data-visible', !item.visible);
 
     this.command('setAttributeForMulti', 'change visible for layer', this.$selection.packByValue({ visible: !item.visible }, item.id))
@@ -356,24 +354,19 @@ export default class LayerTreeProperty extends BaseProperty {
     var $item = e.$dt.closest('layer-item')
     var id = $item.attr('data-layer-id');
 
-    // 객체 지우기 command 로 만들어야 함 
-    this.$selection.removeById(id);
+    this.command('removeLayer', 'remove a layer', [id]);
 
-    var item = project.searchById(id);
-    item.remove();
+    // this.refresh();
 
-    this.refresh();
-
-    this.emit('refreshArtboard');
+    // this.emit('refreshArtboard');
   }
 
 
   [CLICK('$layerList .layer-item .lock')](e) {
-    var project = this.$selection.currentProject
     var $item = e.$dt.closest('layer-item')
     var id = $item.attr('data-layer-id');
 
-    var item = project.searchById(id);
+    var item = this.$model.get(id);
     var lastLock = !item.lock;
     e.$dt.attr('data-lock', lastLock);
 
@@ -409,6 +402,10 @@ export default class LayerTreeProperty extends BaseProperty {
         it.removeClass('selected')
       })
 
+      this.refs.$layerList.$$('.selected-path').forEach(it => {
+        it.removeClass('selected-path')
+      })
+
       var selector = this.$selection.items.map(it => {
         return `[data-layer-id="${it.id}"]`
       }).join(',')
@@ -423,20 +420,22 @@ export default class LayerTreeProperty extends BaseProperty {
             it.$('.icon').html(this.getIcon(item));
           }
 
+
+
         })
       }
     }
   }
 
-  [SUBSCRIBE('refreshSelection', 'history.refreshSelection')]() {
-    this.trigger('changeSelection', true)
+  [SUBSCRIBE('refreshSelection')]() {
+    this.refresh();
   }
 
   [SUBSCRIBE('refreshStylePosition')]() {
     this.trigger('changeSelection')
   }
 
-  [SUBSCRIBE('refreshLayerTreeView')]() {
+  [SUBSCRIBE('refreshLayerTreeView') + THROTTLE(100)]() {
     this.refresh();
   }
 

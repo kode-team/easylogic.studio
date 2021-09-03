@@ -1,7 +1,7 @@
-import { Item } from "./Item";
 import { Keyframe } from "../property-parser/Keyframe";
+import { BaseModel } from "./BaseModel";
 
-export class AssetItem extends Item {
+export class AssetModel extends BaseModel {
 
   getDefaultObject(obj = {}) { 
     return super.getDefaultObject({

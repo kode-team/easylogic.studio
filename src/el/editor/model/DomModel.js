@@ -1,6 +1,6 @@
 
 import { Length } from "el/editor/unit/Length";
-import { GroupItem } from "./GroupItem";
+import { GroupModel } from "./GroupModel";
 import { Selector } from "../property-parser/Selector";
 import { ClipPath } from "el/editor/property-parser/ClipPath";
 import PathParser from "el/editor/parser/PathParser";
@@ -42,14 +42,12 @@ editableList.forEach(function (key) {
   editableKeys[key] = true
 })
 
-export class DomItem extends GroupItem {
+export class DomModel extends GroupModel {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       'position': 'absolute',
       'x': Length.z(),
       'y': Length.z(),
-      'right': '',
-      'bottom': '',
       'rootVariable': '',
       'variable': '',
       'width': Length.px(300),
@@ -79,8 +77,6 @@ export class DomItem extends GroupItem {
       ...super.toCloneObject(),
       ...this.attrs(
         'position',
-        'right',
-        'bottom',
         'rootVariable',
         'variable',
         'transform',
@@ -238,6 +234,13 @@ export class DomItem extends GroupItem {
     // transform 에 변경이 생기면 미리 캐슁해둔다. 
     if (isChanged && this.hasChangedField('clip-path')) {
       this.setClipPathCache()
+    } else if (this.hasChangedField('width', 'height')) {
+
+      if (this.cacheClipPath) {
+        const d = this.cacheClipPath.clone().scale(this.json.width.value/this.cacheClipPathWidth, this.json.height.value/this.cacheClipPathHeight).d;
+        this.json['clip-path'] = `path(${d})`;      
+      }
+
     }
 
     return isChanged;
@@ -248,6 +251,8 @@ export class DomItem extends GroupItem {
 
     if (obj.type === 'path') {
       this.cacheClipPath = new PathParser(obj.value.trim())
+      this.cacheClipPathWidth = this.json.width.value;
+      this.cacheClipPathHeight = this.json.height.value;
     }
   }
 
@@ -264,7 +269,7 @@ export class DomItem extends GroupItem {
     }
 
     if (this.cacheClipPath) {
-      return this.cacheClipPath.clone().scaleTo(this.json.width.value, this.json.height.value);
+      return this.cacheClipPath.clone().scale(this.json.width.value/this.cacheClipPathWidth, this.json.height.value/this.cacheClipPathHeight).d;
     }
 
   }

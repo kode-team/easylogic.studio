@@ -238,28 +238,6 @@ export class Item {
   }
 
   /**
-   * 부모의 자식들 중 나의 위치 찾기 
-   * 
-   * @returns {number}  나이 위치 index 
-   */
-  get positionInParent () {
-
-    if (!this.parent) return -1; 
-
-    const layers = this.parent.layers;
-
-    let index = -1; 
-    for(var i = 0, len = layers.length; i < len; i++) {
-      if (layers[i] === this.ref) {
-        index = i; 
-        break; 
-      }
-    }
-
-    return index;
-  }
-
-  /**
    * id 기반 문자열 id 생성
    * 
    * @param {string} postfix 
@@ -466,7 +444,7 @@ export class Item {
    * 
    * @param {Item} layer 
    */
-  appendChildItem (layer) {
+  appendChild (layer) {
 
     if (layer.parent === this.ref) {
       return layer;
@@ -521,7 +499,7 @@ export class Item {
    * @param {Item} layer 
    * @param {number} index 
    */
-  insertChildItem (layer, index = 0) {
+  insertChild (layer, index = 0) {
 
     this.resetMatrix(layer);
 
@@ -546,7 +524,7 @@ export class Item {
 
     const index = this.parent.findIndex(this);
 
-    this.parent.insertChildItem(layer, index);
+    this.parent.insertChild(layer, index);
     this.project.addIndexItem(layer);
     return layer;     
   }
@@ -561,7 +539,7 @@ export class Item {
 
     const index = this.parent.findIndex(this);
 
-    this.parent.insertChildItem(layer, index-1);
+    this.parent.insertChild(layer, index-1);
     this.project.addIndexItem(layer);
     return layer;     
   }  
@@ -663,7 +641,7 @@ export class Item {
    * remove self in parent 
    */
   remove () {
-    this.json.parent.removeItem(this.ref);
+    this.json.parent.removeChild(this.ref);
 
     this.project.removeIndexItem(this.ref);
   }
@@ -673,7 +651,7 @@ export class Item {
    * 
    * @param {Item} childItem 
    */
-  removeItem (childItem) {
+  removeChild (childItem) {
 
     const index = this.findIndex(childItem);
 
@@ -696,38 +674,4 @@ export class Item {
     return isParent; 
   }
 
-
-
-  /**
-   * 하위 자식 객체 중에 id를 가진 Item 을 리턴한다. 
-   * 
-   * @param {string} id 
-   * @returns {Item|null} 검색된 Item 객체 
-   */
-  searchById (id) {
-
-    if (this.id === id) {
-      project.addIndexItem(this.ref);      
-      return this.ref; 
-    }
-
-    const project = this.project;
-
-    for(var i = 0, len = this.layers.length; i < len; i++) {
-      const item = this.layers[i]
-
-      if (item.id === id) {
-        project.addIndexItem(item);        
-        return item; 
-      } else {
-        var searchedItem = item.searchById(id);
-
-        if (searchedItem) {
-          return searchedItem;
-        }
-      }
-    }
-
-    return null;
-  }
 }

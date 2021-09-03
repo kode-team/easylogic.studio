@@ -29,6 +29,7 @@ import { filter_list } from "el/editor/util/Resource";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './FilterEditor.scss';
+import { variable } from 'el/sapa/functions/registElement';
 
 var specList = {
   blur: BlurFilter.spec,
@@ -177,7 +178,7 @@ export default class FilterEditor extends EditorElement {
         key="${index}" 
         label="SVG Filter"
         value="${filter.value}" 
-        options=${this.variable(['', ...options])}
+        options=${variable(['', ...options])}
         onchange="changeRangeEditor"  />`
     }
 

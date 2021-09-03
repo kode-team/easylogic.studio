@@ -53,11 +53,11 @@ export const CHECKER = (value, split = CHECK_SAPARATOR) => {
 };
 
 export const AFTER = (value, split = CHECK_SAPARATOR) => {
-  return makeEventChecker(`after(${value})`, split);
+  return CHECKER(`after(${value})`, split);
 };
 
 export const BEFORE = (value, split = CHECK_SAPARATOR) => {
-  return makeEventChecker(`before(${value})`, split);  
+  return CHECKER(`before(${value})`, split);  
 };
 
 export const IF = CHECKER;

@@ -80,6 +80,10 @@
             color: var(--elf--selected-font-color);
         }
 
+        &.selected-path {
+            background-color: var(--elf--selected-color-2);
+        }
+
         &:not(.selected).hovered,
         &:hover {
             box-shadow: inset 0 0 0 1px var(--elf--list-item-selected-color);

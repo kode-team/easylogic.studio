@@ -3,6 +3,7 @@ import { LOAD, DOMDIFF, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/sapa/Eve
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import artboardSize from "./preset/artboard.size";
 import './ArtBoardSizeProperty.scss';
+import { variable } from "el/sapa/functions/registElement";
 
 export default class ArtBoardSizeProperty extends BaseProperty {
 
@@ -38,7 +39,7 @@ export default class ArtBoardSizeProperty extends BaseProperty {
       <object refClass="SelectEditor"  
         ref='$select' 
         value="${categories[0].category}" 
-        options=${this.variable(categories.map(it => it.category))} 
+        options=${variable(categories.map(it => it.category))} 
         onchange='changeSizeIndex'
       />
     `

@@ -1,8 +1,8 @@
 import { Length } from "el/editor/unit/Length";
 import icon from "el/editor/icon/icon";
-import { DomItem } from "el/editor/items/DomItem";
+import { LayerModel } from "el/editor/model/LayerModel";
 
-export class ArtBoard extends DomItem {
+export class ArtBoard extends LayerModel {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: "artboard",

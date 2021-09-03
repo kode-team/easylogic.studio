@@ -3,6 +3,7 @@ import { IF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF} from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './LayoutProperty.scss';
+import { variable } from 'el/sapa/functions/registElement';
 
 export default class LayoutProperty extends BaseProperty {
 
@@ -11,7 +12,7 @@ export default class LayoutProperty extends BaseProperty {
   }
 
   getLayoutOptions () {
-    return this.variable(['default', 'flex', 'grid'].map(it => {
+    return variable(['default', 'flex', 'grid'].map(it => {
         return { value: it, text: this.$i18n(`layout.property.${it}`) }
     }));
   }

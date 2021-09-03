@@ -1,4 +1,3 @@
-import { Item } from "./Item";
 import { Length } from "el/editor/unit/Length";
 import { Transform } from "../property-parser/Transform";
 import { TransformOrigin } from "el/editor/property-parser/TransformOrigin";
@@ -7,11 +6,12 @@ import { calculateMatrix, calculateMatrixInverse, radianToDegree, round, verties
 import { isFunction } from "el/sapa/functions/func";
 import PathParser from "el/editor/parser/PathParser";
 import { itemsToRectVerties, polyInPoly, polyPoint, polyPoly, rectToVerties, toRectVerties } from "el/utils/collision";
+import { BaseModel } from "./BaseModel";
 
 
 
 const ZERO = Length.z()
-export class MovableItem extends Item {
+export class MovableModel extends BaseModel {
 
 
     /**
@@ -74,10 +74,10 @@ export class MovableItem extends Item {
     /**
      * 부모가 변경되면 matrix 를 다시 캐쉬 한다. 
      * 
-     * @param {Item} otherParent 
+     * @param {BaseModel} otherParent 
      */
-    setParent (otherParent) {
-        super.setParent(otherParent);
+    setParentId(otherParent) {
+        super.setParentId(otherParent.id || otherParent);
 
         this.refreshMatrixCache();
     }
@@ -317,13 +317,13 @@ export class MovableItem extends Item {
 
     setAngle(angle = 0) {
         this.reset({
-            transform: Transform.replaceAll(this.transform, `rotateZ(${Length.deg(angle).round(1000)})`)
+            transform: Transform.replaceAll(this.transform, `rotateZ(${Length.deg(angle)})`)
         })
     }
 
     addAngle(angle = 0) {
         this.reset({
-            transform: Transform.addTransform(this.transform, `rotateZ(${Length.deg(angle).round(1000)})`)
+            transform: Transform.addTransform(this.transform, `rotateZ(${Length.deg(angle)})`)
         })
     }
 
@@ -806,7 +806,7 @@ export class MovableItem extends Item {
             { angle : axis[2] ? radianToDegree(rad * axis[2]) : 0, type: 'rotateZ' },
         ]
         .filter(it => it.angle !== 0)
-        .map(it => `${it.type}(${Length.deg(it.angle % 360).round(1000)})`).join(' ');
+        .map(it => `${it.type}(${Length.deg(it.angle % 360)})`).join(' ');
 
         // 새로 변환될 item transform 정의 
         const newChildItemTransform = Transform.replaceAll(childItem.transform, `${newScaleTransform} ${newRotateTransform}`)

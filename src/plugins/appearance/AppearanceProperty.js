@@ -1,5 +1,6 @@
 import { IF, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { variable } from "el/sapa/functions/registElement";
 
 const overflow_list = [
   'visible',
@@ -15,7 +16,7 @@ export default class AppearanceProperty extends BaseProperty {
   }
 
   getOverflowList () {
-    return this.variable(overflow_list.map(it => {
+    return variable(overflow_list.map(it => {
       return {value: it, text: this.$i18n(`background.color.property.overflow.${it}`) }
     }));
   }  

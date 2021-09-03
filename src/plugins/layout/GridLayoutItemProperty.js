@@ -4,6 +4,7 @@ import { CSS_TO_STRING, STRING_TO_CSS } from "el/utils/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './GridLayoutItemProperty.scss';
+import { variable } from 'el/sapa/functions/registElement';
 
 export default class GridLayoutItemProperty extends BaseProperty {
 
@@ -13,7 +14,7 @@ export default class GridLayoutItemProperty extends BaseProperty {
 
 
   getLayoutOptions () {
-    return this.variable(['none', 'value'].map(it => {
+    return variable(['none', 'value'].map(it => {
         return {value: it, text: this.$i18n(`grid.layout.item.property.${it}`) }
     }));
   }

@@ -12,7 +12,7 @@ export default function addCustomComponent (editor, obj = {}, center = null) {
     var project = editor.selection.currentProject;
 
 
-    var customComponent = project.appendChildItem(editor.createItem({
+    var customComponent = project.appendChild(editor.createModel({
         x: Length.px(300),
         y: Length.px(200),
         width: Length.px(375),

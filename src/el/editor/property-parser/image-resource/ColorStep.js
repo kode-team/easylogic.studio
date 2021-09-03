@@ -6,17 +6,12 @@ import { convertMatches } from "el/utils/parser";
 import { repeat } from "el/utils/func";
 import { randomNumber } from "el/utils/create";
 import Color from "el/utils/Color";
-
-let colorStepIds = 10000000000; 
-
-function getColorStepId() {
-  return colorStepIds++;
-} 
+import { uuidShort } from 'el/utils/math';
 
 export class ColorStep extends Item {
   getDefaultObject() {
     return {
-      id: 'c' + getColorStepId(),
+      id: uuidShort(),
       cut: false,
       percent: 0,
       unit: "%",

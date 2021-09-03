@@ -11,12 +11,12 @@ export default function addArtBoard (editor, obj = {}, center = null) {
 
     var project = editor.selection.currentProject;
     if (!project) {
-        project = editor.add(editor.createItem({ itemType: 'project' }))
+        project = editor.add(editor.createModel({ itemType: 'project' }))
 
         editor.selection.selectProject(project);
     }
 
-    var artboard = project.appendChildItem(editor.createItem({
+    var artboard = project.appendChild(editor.createModel({
         itemType: 'artboard',
         x: Length.px(300),
         y: Length.px(200),

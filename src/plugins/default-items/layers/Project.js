@@ -3,72 +3,14 @@ import { mat4 } from "gl-matrix";
 import { Length } from "el/editor/unit/Length";
 import { calculateMatrix } from "el/utils/math";
 import { itemsToRectVerties } from "el/utils/collision";
-import { TimelineItem } from "el/editor/items/TimelineItem";
+import { TimelineModel } from "el/editor/model/TimelineModel";
 
 const OFFSET_X = Length.z();
 const OFFSET_Y = Length.z();
 
 const identity = mat4.create();
 
-export class Project extends TimelineItem {
-
-
-  createIndexItemMap () {
-    if (!this.indexedMap) {
-      this.indexedMap = new Map();
-    }
-
-    return this.indexedMap;
-  }
-
-  get indexed () {
-
-    this.createIndexItemMap();
-
-    return this.indexedMap;
-  }
-
-  removeIndexItem (item) {
-    this.indexed.delete(item.id);
-  }
-
-  getIndexItem (id) {
-    return this.indexed.get(id);
-  }
-
-  getSearchedIndexItem (id) {
-    if(this.hasIndexItem(id)) {        // 검색시에 id 로 된 index 가 존재하면 해당 item 을 리턴한다. 
-      return this.getIndexItem(id);
-    } else {                              // 그렇지 않으면 검색하기 
-      return this.searchById(id);
-    }
-  }
-
-  getSearchedIndexItemList (...ids) {
-    return ids.map(id => {
-      return project.getSearchedIndexItem(id);
-    })
-  }
-
-  /**
-   * item 캐쉬 설정 
-   * 
-   * @param {Item} item 
-   */
-  addIndexItem (item) {
-    if (this.hasIndexItem(item.id) === false)  {
-      this.indexed.set(item.id, item.ref);
-    }
-  }
-
-  /**
-   * id 로 캐쉬된 아이템 찾기 
-   * 
-   * @param {string} id 
-   */
-  hasIndexItem (id) {
-    return this.indexed.has(id);
-  }
+export class Project extends TimelineModel {
 
   getDefaultTitle() {
     return "New Project";
@@ -111,7 +53,7 @@ export class Project extends TimelineItem {
   }
 
   get artboards () {
-    return (this.json.layers || []).filter(it => it.is('artboard'));
+    return (this.layers || []).filter(it => it.is('artboard'));
   }
 
   get offsetX () {

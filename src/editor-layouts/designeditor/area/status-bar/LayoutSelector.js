@@ -1,5 +1,6 @@
 import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { variable } from "el/sapa/functions/registElement";
 
 export default class LayoutSelector extends EditorElement {
 
@@ -17,7 +18,7 @@ export default class LayoutSelector extends EditorElement {
                 <div class='item'>
                     <object refClass="SelectEditor"  
                         ref='$locale' 
-                        options=${this.variable(layouts)}
+                        options=${variable(layouts)}
                         value="${this.$editor.layout}" 
                         onchange="changeEditorLayoutValue"
                     /> 

@@ -5,6 +5,7 @@ import { OBJECT_TO_CLASS } from "el/utils/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './CSSPropertyEditor.scss';
+import { variable } from 'el/sapa/functions/registElement';
 
 export default class CSSPropertyEditor extends EditorElement {
 
@@ -194,7 +195,7 @@ export default class CSSPropertyEditor extends EditorElement {
           ref='$fillRule${index}' 
           key='fill-rule' 
           icon="true" 
-          options=${this.variable(["nonzero","evenodd" ])}
+          options=${variable(["nonzero","evenodd" ])}
           value="${property.value}"
           onchange="changeSelect" />
         </div>
@@ -206,7 +207,7 @@ export default class CSSPropertyEditor extends EditorElement {
           ref='$strokeLinecap${index}' 
           key='stroke-linecap' 
           icon="true" 
-          options=${this.variable(["butt","round","square" ])}          
+          options=${variable(["butt","round","square" ])}          
           value="${property.value}"
           onchange="changeSelect" />
         </div>
@@ -219,7 +220,7 @@ export default class CSSPropertyEditor extends EditorElement {
           ref='$strokeLinejoin${index}' 
           key='stroke-linejoin' 
           icon="true" 
-          options=${this.variable(["miter","arcs","bevel","miter-clip","round" ])}                    
+          options=${variable(["miter","arcs","bevel","miter-clip","round" ])}                    
           value="${property.value}"
           onchange="changeSelect" />
         </div>

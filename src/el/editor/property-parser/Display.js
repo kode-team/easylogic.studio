@@ -1,8 +1,8 @@
-import { Property } from "el/editor/items/Property";
+import { PropertyItem } from "el/editor/items/PropertyItem";
 import { Length } from "el/editor/unit/Length";
 
 
-export class Display extends Property {
+export class Display extends PropertyItem {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: "display",

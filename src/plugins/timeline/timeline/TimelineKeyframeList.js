@@ -38,7 +38,7 @@ export default class TimelineKeyframeList extends EditorElement {
 
         if (property === 'offset-path') {
             var [id] = value.split(',').map(it =>it.trim());
-            var pathLayer = this.$selection.currentProject.searchById(id);
+            var pathLayer = this.$model.get(id);
             if (pathLayer) {
                 value = pathLayer.d; 
             }
@@ -141,7 +141,7 @@ export default class TimelineKeyframeList extends EditorElement {
 
     makeTimelineKeyframeRow (timeline, animation) {
 
-        var obj =  this.$selection.currentProject.searchById(animation.id)
+        var obj = this.$model.get(aniamtion.id);
 
         if (!obj) {
             return; 

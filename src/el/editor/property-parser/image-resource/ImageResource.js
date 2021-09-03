@@ -1,6 +1,6 @@
-import { Property } from "el/editor/items/Property";
+import { PropertyItem } from "el/editor/items/PropertyItem";
 
-export class ImageResource extends Property {
+export class ImageResource extends PropertyItem {
   getDefaultObject(obj = {}) {
     return {
       itemType: "image-resource",

@@ -1,7 +1,7 @@
 import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { isString } from "el/sapa/functions/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
-import { OBJECT_TO_PROPERTY } from "el/utils/func";
+import { spreadVariable } from "el/sapa/functions/registElement";
 
 export default class ComponentProperty extends BaseProperty {
 
@@ -49,27 +49,28 @@ export default class ComponentProperty extends BaseProperty {
     if (isString(selfEditor)) {
       return /*html*/`
         <div>  
-          <object refClass="${selfEditor}" ${OBJECT_TO_PROPERTY({
-            ...selfEditorOptions,
-            onchange: 'changeComponentProperty',
-            ref: `${key}${index}`,
-            key,
-          })}>
-            <property name="value" valueType="json">${JSON.stringify(value || {})}</property>
-          </object>
+          <object 
+            refClass="${selfEditor}" 
+            ${spreadVariable({
+              ...selfEditorOptions,
+              onchange: 'changeComponentProperty',
+              ref: `${key}${index}`,
+              key,
+              value
+            })} 
+          />
         </div>`
     } else {
       return Object.keys(selfEditor).map(selfEditorKey => {
         return /*html*/`
           <div>
-            <object refClass="${selfEditorKey}" ${OBJECT_TO_PROPERTY({
+            <object refClass="${selfEditorKey}" ${spreadVariable({
               ...selfEditorOptions,
               onchange: 'changeComponentProperty',
               ref: `${key}${index}${selfEditorKey}`,
               key,
-            })}>
-              <property name="value" valueType="json">${JSON.stringify(value || {})}</property>
-            </object>
+              value
+            })} />
           </div>`
       }).join('');
     }

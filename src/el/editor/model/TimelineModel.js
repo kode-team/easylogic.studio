@@ -3,9 +3,9 @@ import { clone, isNotUndefined, isUndefined } from "el/sapa/functions/func";
 import { second, timecode, framesToTimecode } from "el/utils/time";
 import { createInterpolateFunction, createTimingFunction } from "../interpolate/index";
 import Dom from "el/sapa/functions/Dom";
-import { AssetItem } from "./AssetItem";
+import { AssetModel } from "./AssetModel";
 
-export class TimelineItem extends AssetItem {
+export class TimelineModel extends AssetModel {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       timeline: [ 
@@ -98,7 +98,7 @@ export class TimelineItem extends AssetItem {
 
     var artboard = this; 
     var p = this.getTimelineProperty(layerId, property);
-    var layer = this.searchById(layerId);
+    var layer = this.modelManager.get(layerId);
     var key = `${layerId}.${property}`
     if (p.keyframes.length === 1) {
       this.json.compiledTimeline[key] = [] 

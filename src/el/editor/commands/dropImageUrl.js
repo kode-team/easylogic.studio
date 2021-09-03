@@ -9,7 +9,7 @@ export default {
 
             editor.emit('addImage', {src: info.local, ...info });
             editor.changeMode(EDIT_MODE_SELECTION);
-            editor.emit('afterChangeMode');                
+                            
         });
     }
 

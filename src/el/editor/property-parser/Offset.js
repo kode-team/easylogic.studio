@@ -1,8 +1,8 @@
-import { Property } from "el/editor/items/Property";
+import { PropertyItem } from "el/editor/items/PropertyItem";
 import { Length } from "el/editor/unit/Length";
 import { CSS_TO_STRING } from "el/utils/func";
 
-export class Offset extends Property {
+export class Offset extends PropertyItem {
   static parse(obj) {
     return new Offset(obj);
   }

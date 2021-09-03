@@ -1,12 +1,12 @@
 import { Length } from "el/editor/unit/Length";
-import { Property } from "el/editor/items/Property";
+import { PropertyItem } from "el/editor/items/PropertyItem";
 import { convertMatches, reverseMatches } from "el/utils/parser";
 import { BackgroundImage } from "./BackgroundImage";
 import { STRING_TO_CSS } from "el/utils/func";
 import { PatternCache } from "./PatternCache";
 const PATTERN_REG = /((check|grid|dot|cross\-dot|diagonal\-line|vertical\-line|horizontal\-line|)\(([^\)]*)\))/gi;
 
-export class Pattern extends Property {
+export class Pattern extends PropertyItem {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({ 
       itemType: "pattern", 

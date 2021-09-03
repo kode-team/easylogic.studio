@@ -23,7 +23,7 @@ export default class SelectionInfoView extends EditorElement {
         this.startXY = e.xy ; 
         this.initMousePoint = this.$viewport.getWorldPosition(e);
         const id = e.$dt.attr('data-artboard-title-id');        
-        this.$selection.selectById(id);            
+        this.$selection.select(id);            
 
         // alt(option) + pointerstart 시점에 Layer 카피하기         
         if (e.altKey) {

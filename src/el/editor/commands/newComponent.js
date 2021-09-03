@@ -16,7 +16,7 @@ export default function newComponent (editor, itemType, obj, isSelected = true, 
             ...obj,
             'font-size': Length.parse(obj.height),
             textLength: '100%',
-            d: PathStringManager.makeLine(0, 1, 1, 1),
+            d: PathStringManager.makeLine(0, obj.height.value, obj.width.value, obj.height.value),
         }
     } else if (itemType === 'svg-circle') {
         itemType = 'svg-path';
@@ -24,7 +24,7 @@ export default function newComponent (editor, itemType, obj, isSelected = true, 
             ...obj,
             'background-color': undefined,            
             fill: `#C4C4C4`,            
-            d: PathStringManager.makeCircle(0, 0, 1, 1),
+            d: PathStringManager.makeCircle(0, 0, obj.width.value, obj.height.value),
         }        
 
     } else if (itemType === 'svg-rect') {
@@ -33,7 +33,7 @@ export default function newComponent (editor, itemType, obj, isSelected = true, 
             ...obj,
             'background-color': undefined,
             fill: `#C4C4C4`,            
-            d: PathStringManager.makeRect(0, 0, 1, 1),
+            d: PathStringManager.makeRect(0, 0, obj.width.value, obj.height.value),
         }                
 
     } else if (itemType === 'text') {
@@ -49,11 +49,11 @@ export default function newComponent (editor, itemType, obj, isSelected = true, 
         }        
     } 
 
-    editor.command('addLayer', `add layer - ${itemType}`, editor.createItem({
+    editor.command('addLayer', `add layer - ${itemType}`, editor.createModel({
         itemType, 
         ...obj,
     }), obj, isSelected, containerItem)
 
     editor.changeMode(EDIT_MODE_SELECTION);
-    editor.emit('afterChangeMode');
+    
 }    

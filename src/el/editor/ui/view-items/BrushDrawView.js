@@ -118,7 +118,7 @@ export default class BrushDrawView extends EditorElement {
 
             var layer = this.makeBrushLayer(pathRect)
             if (layer) {
-                this.$selection.select(layer);
+                this.$selection.select(layer.id);
                 this.emit('refreshAll')
                 this.emit('refreshSelection');
             }
@@ -179,7 +179,7 @@ export default class BrushDrawView extends EditorElement {
     [SUBSCRIBE('hideBrushDrawEditor')] () {
         this.trigger('initBrushDrawEditor')
         this.$el.hide();
-        this.emit('finishPathEdit')
+        // this.emit('finishPathEdit')
         this.emit('hideDrawManager');
         this.emit('change.mode.view');        
     }
