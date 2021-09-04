@@ -13,8 +13,10 @@ import snapGrid from './snap.grid';
 import storeKey from './store.key';
 import areaWidth from './area.width';
 import styleCanvasBackgroundColor from "./style.canvas.background.color";
+import setMoveControlPoint from "./set.move.control.point";
 
 export default [
+    setMoveControlPoint,
     styleCanvasBackgroundColor,
     areaWidth,
     storeKey,

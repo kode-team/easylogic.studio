@@ -335,7 +335,7 @@ export default class PathEditorView extends PathTransformEditor {
             y: Length.px(bbox[0][1]),
             width: Length.px(newWidth),
             height: Length.px(newHeight),
-            d: newPath.scale(1 / newWidth, 1 / newHeight).d,
+            d: newPath.d,
             totalLength: this.totalPathLength,
             fill: `#C4C4C4`
         }
@@ -346,7 +346,7 @@ export default class PathEditorView extends PathTransformEditor {
             }
         });
 
-        const containerItem = this.$selection.getArtboardByPoint(bbox[0]) || project;
+        const containerItem = this.$selection.getArtboardByPoint(bbox[0]) || this.$selection.currentProject;
 
 
         layer = containerItem.appendChild(this.$editor.createModel(pathItem));

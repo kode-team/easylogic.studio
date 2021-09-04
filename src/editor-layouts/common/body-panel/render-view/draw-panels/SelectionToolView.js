@@ -193,6 +193,8 @@ export default class SelectionToolView extends SelectionToolEvent {
         const rotateZ = Transform.get(this.$selection.current.transform, 'rotateZ');
         this.hasRotate = rotateZ && rotateZ.length && rotateZ[0].value != 0
 
+        this.$config.set('set.move.control.point', true);
+
     }
 
     calculateNewOffsetMatrixInverse (vertexOffset, width, height, origin, itemMatrix) {
@@ -456,6 +458,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.state.dragging = false;         
         this.emit('recoverCursor');
         this.$selection.reselect();
+        this.$config.set('set.move.control.point', false);        
 
         this.nextTick(() => {
             this.command(

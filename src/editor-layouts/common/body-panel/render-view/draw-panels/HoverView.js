@@ -16,11 +16,18 @@ export default class HoverView extends EditorElement {
     }
 
     [CONFIG('bodyEvent')]() {
+
+        if (this.$config.get('hoverView') === false || this.$config.true("set.move.control.point")) {
+            this.$selection.setHoverId('');
+            this.renderHoverLayer()            
+            return;
+        }
+
         const items = this.$selection.filteredLayers.filter(it => it.isNot('artboard'))
 
         const id = items[0]?.id;
 
-        if (!id || this.$config.get('hoverView') === false) {
+        if (!id) {
             this.$selection.setHoverId('');
             this.renderHoverLayer()
         } else {
