@@ -1,4 +1,4 @@
-import { isBoolean, isNotUndefined, isUndefined } from "el/sapa/functions/func";
+import { isBoolean, isNotUndefined, isObject, isUndefined } from "el/sapa/functions/func";
 import { getPredefinedCubicBezier } from "./bezier";
 import { randomNumber } from "./create";
 

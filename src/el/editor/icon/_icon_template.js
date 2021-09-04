@@ -10,6 +10,5 @@ export default function _icon_template (tpl, opt) {
             xmlns="http://www.w3.org/2000/svg" 
             width="${defaultOpts.width}" 
             height="${defaultOpts.height}" 
-            stroke="white"
             viewBox="0 0 24 24">${tpl}</svg>`;
 }

@@ -5,5 +5,7 @@
     pre {
         margin: 10px;
         user-select: text;
+        height: 100%;
+        border: 1px solid var(--elf--border-color);
     }
 }
