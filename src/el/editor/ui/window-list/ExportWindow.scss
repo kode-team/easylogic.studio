@@ -3,9 +3,11 @@
     height: 80% !important;
 
     pre {
-        margin: 10px;
+        margin: 0px 10px;
         user-select: text;
         height: 100%;
         border: 1px solid var(--elf--border-color);
+        overflow: auto;
+        padding: 10px;
     }
 }
