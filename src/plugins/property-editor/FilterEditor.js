@@ -142,7 +142,7 @@ export default class FilterEditor extends EditorElement {
 
   getSVGFilterList () {
      
-    var current = this.$selection.currentProject;
+    var current = this.$selection.current;
     var arr = [] 
 
     if (current) {
@@ -164,7 +164,7 @@ export default class FilterEditor extends EditorElement {
 
       var options = ''
       
-      var current = this.$selection.currentProject;
+      var current = this.$selection.current;
 
       if (current) {
         options = current.svgfilters.map(it => {
@@ -293,10 +293,10 @@ export default class FilterEditor extends EditorElement {
 
     var filter = this.state.filters[index];
 
-    var project = this.$selection.currentProject; 
+    var current = this.$selection.current; 
     
-    if (project) {
-      var svgfilterIndex = project.getSVGFilterIndex(filter.value?.value?.replace('#', ''));
+    if (current) {
+      var svgfilterIndex = current.getSVGFilterIndex(filter.value?.value?.replace('#', ''));
       this.trigger('openSVGFilterPopup', svgfilterIndex);
 
     }
@@ -304,21 +304,19 @@ export default class FilterEditor extends EditorElement {
 
 
   [SUBSCRIBE('openSVGFilterPopup')](index) {
-    var currentProject = this.$selection.currentProject || { svgfilters: [] } 
-
-    var svgfilter = currentProject.svgfilters[index];
+    const current = this.$selection.current || { svgfilters: [] } 
+    const svgfilter = current.svgfilters[index];
 
     this.emit("showSVGFilterPopup", {
         changeEvent: (params) => {
-          var project = this.$selection.currentProject
+          var current = this.$selection.current;
 
-          if (project) {
-            project.setSVGFilterValue(params.index, {
+          if (current) {
+            current.setSVGFilterValue(params.index, {
               filters: params.filters
             });
-        
-            this.emit('refreshSVGFilterAssets');
-            this.emit('refreshSVGArea');
+
+            this.command("setAttributeForMulti", 'change filter', this.$selection.pack('svgfilters', 'filter'));
           }          
         },
         index,
@@ -331,19 +329,29 @@ export default class FilterEditor extends EditorElement {
 
     if (filterType === 'svg') {
 
-      this.emit('addSVGFilterAssetItem', (index, id) => {
-        this.state.filters.push(this.makeFilter(filterType, {
-          value: id
-        }))
 
-        this.refresh();
-    
-        this.modifyFilter()
-
-
-        this.trigger('openSVGFilterPopup', index);
-
+      // 비어있는 필터를 하나 생성하고 
+      const index = this.$selection.current.createSVGFilter({ 
+        filters: []
       })
+
+      // 필터 객체를 구한 다음에 
+      const filter = this.$selection.current.svgfilters[index];
+
+      // 내부 리스트를 업데이트 해주고 
+      this.state.filters.push(this.makeFilter(filterType, {
+        value: filter.id
+      }))
+
+      // 화면 다시 그리고 
+      this.refresh();
+  
+      // 필터 리스트 수정하고 
+      this.modifyFilter()
+
+      // 편집기를 열게된다. 
+      this.trigger('openSVGFilterPopup', index);
+
     } else {
 
       this.state.filters.push(this.makeFilter(filterType))

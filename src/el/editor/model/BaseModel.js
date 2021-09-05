@@ -248,16 +248,26 @@ export class BaseModel {
    * @param {Function} newValueCallback cache 에 적용할 값을 구하는 함수
    * @returns 
    */
-  computed(key, newValueCallback) {
+  computed(key, newValueCallback, isForce = false) {
     const cachedKey = `__cachedKey_${key}`
     const parsedKey = `${cachedKey}__parseValue`
     const value = this.json[key];
-    if (this.getCache(key) === value && this.getCache(parsedKey)) {
+
+    // 캐쉬가 있으면 그대로 리턴
+    if (this.getCache(key) === value && this.getCache(parsedKey) && isForce === false) {
       return this.getCache(parsedKey);
     }
 
+    // isForce 가 true 이면 다시 캐쉬를 만든다. 
     this.addCache(key, value);
     this.addCache(parsedKey, newValueCallback(value, this.ref));
+
+    return this.getCache(parsedKey);
+  }
+
+  computedValue(key) {
+    const cachedKey = `__cachedKey_${key}`
+    const parsedKey = `${cachedKey}__parseValue`
 
     return this.getCache(parsedKey);
   }

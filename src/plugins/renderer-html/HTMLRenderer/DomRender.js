@@ -6,6 +6,7 @@ import { ClipPath } from "el/editor/property-parser/ClipPath";
 import { Pattern } from "el/editor/property-parser/Pattern";
 import { CSS_TO_STRING, STRING_TO_CSS } from "el/utils/func";
 import ItemRender from "./ItemRender";
+import { SVGFilter } from 'el/editor/property-parser/SVGFilter';
 
 const ZERO_CONFIG = {}
 
@@ -100,6 +101,7 @@ export default class DomRender extends ItemRender {
         width: 'auto !important',
         height: 'auto !important',        
       }
+
     }
 
     if (parentLayout === 'flex') {
@@ -364,6 +366,7 @@ export default class DomRender extends ItemRender {
   toDefInnerString (item) {
     return /*html*/`
       ${this.toClipPath(item)}
+      ${this.toSVGFilter(item)}
     `.trim();
   }
 
@@ -545,6 +548,31 @@ ${cssString}
     `
   }
 
+  toSVGFilter (item) {
+    var filterString = item.computedValue('svgfilters');
+
+    // 변경점이 svgfilters 일 때만 computed 로 다시 캐슁하기 
+    // 이전 캐쉬가 없다면 다시 캐쉬 하기 
+    if (item.hasChangedField('svgfilters') || !filterString) {
+
+      filterString = item.computed(
+        'svgfilters', 
+        (svgfilters) => {
+          var filterString = svgfilters.map(svgfilter => {
+            var filters = svgfilter.filters.map(filter => SVGFilter.parse(filter))
+            return /*html*/`<filter id='${svgfilter.id}'>${filters.join('\n')}</filter>`  
+          }).join('\n\n')
+    
+          return filterString;
+        }, 
+        true  // 캐쉬 강제로 생성하기 
+      )
+    }
+
+    return filterString
+ }
+
+
   renderSVG (item, renderer) {
     
   }
@@ -577,11 +605,11 @@ ${cssString}
 
     if ($svg) {
 
-      const defInnerString = this.toDefInnerString(item)
+      const defString = this.toDefString(item)
 
-      if (defInnerString) {
+      if (defString) {
         var $defs = $svg.$('defs');
-        $defs.html(defInnerString)
+        $defs.updateSVGDiff(defString)
       }
 
     } else {

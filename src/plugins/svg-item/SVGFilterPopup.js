@@ -61,7 +61,6 @@ export default class SVGFilterPopup extends BasePopup {
   }
   
   [SUBSCRIBE("showSVGFilterPopup")](data) {
-
     data.filters = data.filters.map( it => {
       return SVGFilter.parse(it);
     })

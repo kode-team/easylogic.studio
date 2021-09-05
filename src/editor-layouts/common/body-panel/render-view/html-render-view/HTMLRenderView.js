@@ -136,7 +136,6 @@ export default class HTMLRenderView extends EditorElement {
 
         // hover item 이 있으면 클릭 대상이 있다고 간주한다. 
         if (this.$selection.hasHoverItem()) {
-            console.log(this.$selection.hoverItems);
             this.$selection.selectHoverItem();
             return true;
         }

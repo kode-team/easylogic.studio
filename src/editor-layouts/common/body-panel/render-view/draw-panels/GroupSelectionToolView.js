@@ -106,9 +106,14 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         const selectionMatrix = calculateRotationOriginMat4(distAngle, this.verties[4])
 
         // angle 을 움직였으니 어떻게 움직이지 ?  
-        this.$selection.cachedItemVerties.forEach(item => {
+        let cachedItemVerties = this.$selection.cachedItemVerties;
 
+        // 그룹이긴 하나 실제로 하나의 선택만 있을 때는 회전할 때 자식을 같이 회전하지 않도록 한다. 
+        if (this.$selection.length === 1) {
+            cachedItemVerties = cachedItemVerties.filter(it => it.id === this.$selection.current.id) 
+        }
 
+        cachedItemVerties.forEach(item => {
             const newVerties = vertiesMap(
                 item.verties, 
                 mat4.multiply(

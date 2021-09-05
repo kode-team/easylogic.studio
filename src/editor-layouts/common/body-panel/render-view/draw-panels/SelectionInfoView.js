@@ -5,6 +5,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { vec3 } from "gl-matrix";
 import { END, MOVE } from "el/editor/types/event";
 import './SelectionInfoView.scss';
+import { Length } from 'el/editor/unit/Length';
 
 export default class SelectionInfoView extends EditorElement {
 
@@ -34,7 +35,8 @@ export default class SelectionInfoView extends EditorElement {
         }
 
         this.initializeDragSelection();
-        this.emit('history.refreshSelection');                 
+        this.emit('history.refreshSelection');        
+        this.$config.set("set.move.control.point", true);
   
     }
 
@@ -46,19 +48,38 @@ export default class SelectionInfoView extends EditorElement {
     }
 
 
+    moveTo(newDist) {
+
+        //////  snap 체크 하기 
+        const snap = this.$snapManager.check(this.$selection.cachedRectVerties.map(v => {
+            return vec3.add([], v, newDist)
+        }), 3);
+
+        const localDist = vec3.add([], snap, newDist);
+
+        const result = {}
+        this.$selection.cachedItemVerties.forEach(it => {
+            result[it.id] = {
+                x: Length.px(it.x + localDist[0]).floor(),          // 1px 단위로 위치 설정 
+                y: Length.px(it.y + localDist[1]).floor(),
+            }
+        })
+        this.$selection.reset(result);        
+    }    
+
+
     calculateMovedElement () {
         const targetMousePoint = this.$viewport.getWorldPosition();
 
         const newDist = vec3.floor([], vec3.subtract([], targetMousePoint, this.initMousePoint));
 
-        this.emit('selectionToolView.moveTo', newDist);
+        this.moveTo(newDist);
 
-        this.nextTick(() => {
-            this.emit('refreshSelectionStyleView');
-            this.emit('refreshSelectionTool', false);       
-            // this.emit('refreshRect'); 
-            this.refresh();            
-        })
+        this.emit('setAttributeForMulti', this.$selection.pack('x', 'y'));
+        this.emit('refreshSelectionStyleView');
+        this.emit('refreshSelectionTool', false);       
+        // this.emit('refreshRect'); 
+        this.refresh();            
 
     }
 
@@ -84,6 +105,7 @@ export default class SelectionInfoView extends EditorElement {
             this.$selection.pack('x', 'y')
         );  
         this.emit('refreshSelectionTool', true);
+        this.$config.set("set.move.control.point", false);        
     }
 
     [SUBSCRIBE('updateViewport')] () {
