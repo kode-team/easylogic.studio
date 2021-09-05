@@ -77,6 +77,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         this.refreshRotatePointerIcon()
         this.state.dragging = true;    
         this.state.isRotate = true; 
+        this.$config.set('set.move.control.point', true);                
     }
 
     rotateVertex () {
@@ -155,6 +156,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         this.state.dragging = false;        
         this.state.isRotate = false;         
         this.emit('recoverCursor');
+        this.$config.set('set.move.control.point', false);                
 
         // 개별 verties 의 캐쉬를 다시 한다. 
         this.$selection.reselect();   
@@ -220,6 +222,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         this.$selection.reselect();
         this.initMatrix(true);
         this.cachedGroupItem = this.groupItem.matrix;
+        this.$config.set('set.move.control.point', true);                
     }
 
     calculateNewOffsetMatrixInverse (vertextOffset, width, height, origin, itemMatrix) {
@@ -511,6 +514,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     moveEndVertex (dx, dy) {        
         this.state.dragging = false;         
         this.emit('recoverCursor');   
+        this.$config.set('set.move.control.point', false);                
         this.$selection.reselect();
         this.state.dragging = false;               
         this.initMatrix(true);

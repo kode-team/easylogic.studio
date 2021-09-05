@@ -580,6 +580,7 @@ export default class PathEditorView extends PathTransformEditor {
 
         this.state.altKey = false;
         var isPathMode = this.isMode('path');
+        this.$config.set('set.move.control.point', true);                
 
         this.state.dragXY = {
             x: e.xy.x - this.state.rect.x,
@@ -732,7 +733,7 @@ export default class PathEditorView extends PathTransformEditor {
     }
 
     end(dx, dy) {
-
+        this.$config.set('set.move.control.point', false);        
         if (this.state.isOnCanvas) {
             if (dx === 0 && dy === 0) {    // 아무것도 움직인게 없으면 편집 종료 
                 this.changeMode('modify');

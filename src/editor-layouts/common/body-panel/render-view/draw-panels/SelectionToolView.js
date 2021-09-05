@@ -76,6 +76,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.refreshRotatePointerIcon()  
         this.state.dragging = true;  
         this.state.isRotate = true;       
+        this.$config.set('set.move.control.point', true);                
     }
 
     rotateVertex () {
@@ -123,7 +124,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.state.dragging = false;     
         this.state.isRotate = false;           
         this.emit('recoverCursor');
-        
+        this.$config.set('set.move.control.point', false);        
         // 마지막 변경 시점 업데이트 
         this.verties = null;
 
