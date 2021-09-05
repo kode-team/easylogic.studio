@@ -605,11 +605,11 @@ ${cssString}
 
     if ($svg) {
 
-      const defString = this.toDefString(item)
+      const defString = this.toDefInnerString(item)
 
       if (defString) {
         var $defs = $svg.$('defs');
-        $defs.updateSVGDiff(defString)
+        $defs.updateSVGDiff(`<defs>${defString}</defs>`)
       }
 
     } else {

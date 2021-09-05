@@ -1,12 +1,12 @@
-import BaseAssetRender from './BaseAssetRender';
+import ItemRender from "./ItemRender";
 
-export default class MovableRender extends BaseAssetRender {
+export default class BaseAssetRender extends ItemRender {
   
   async toCloneObject (item, renderer) {
     return {
       ...(await super.toCloneObject(item, renderer)),
       ...item.attrs(
-        'x', 'y', 'width', 'height'
+        'svgfilters', 'keyframes'
       )
     }
   }
