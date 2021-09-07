@@ -98,7 +98,7 @@ export default class PathDrawView extends EditorElement {
             y: Length.px(bbox[0][1]),
             width: Length.px(newWidth),
             height: Length.px(newHeight),
-            d: newPath.scale(1/newWidth, 1/newHeight).d,
+            d: newPath.d,
             totalLength: this.totalPathLength
         }
 
