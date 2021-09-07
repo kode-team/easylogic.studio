@@ -10,13 +10,13 @@ import { Component } from 'el/editor/model/Component';
 
 
 export default {
-    // EditorInstance: Editor,
-    // Length,
-    // EditorElement,
-    // HTMLLayerRender,
-    // Component,
-    // MenuItem,
-    // BaseProperty,
-    // icon,
-    // ...Event
+    EditorInstance: Editor,
+    Length,
+    EditorElement,
+    HTMLLayerRender,
+    Component,
+    MenuItem,
+    BaseProperty,
+    icon,
+    ...Event
 }
