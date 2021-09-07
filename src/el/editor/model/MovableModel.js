@@ -92,6 +92,9 @@ export class MovableModel extends BaseAssetModel {
         this.setCacheGuideVerties();
         this.setCacheAreaPosition();
 
+        // 자식이 있을 때는 자식의 matrix 를 자동으로 변경해서 캐슁을 다시 한다. 
+        // 이걸 자동으로 하게 되면 remote 로 데이타를 변경할 수가 없으니 각자 클라이언트가 하는걸로 해야할 듯 하다. 
+        // 자식이 몇개가 될지 알수 없는 상태에서 불특정 다수의 데이타를 모두 보내기가 만만치 않을수도 있음. 
         this.layers.forEach(it => {
             it.refreshMatrixCache();
         })
