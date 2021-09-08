@@ -7,7 +7,7 @@ $selected-color-2: #202223;
 
 $selection-tool-border-color: #3a89f0;
 
-$background-color: #08080C;
+$background-color: #202125;
 $header-background-color: #1b1b20;
 $selected-background-color: #535353; 
 $font-color: #ffffff;
@@ -73,33 +73,16 @@ $guide-line-rect-color: #435cb5;
 
 
 $canvas-background-color: #d3d3d3; 
-$page-view-element-artboard-title-color: rgb(92, 92, 92);
 
 $animation-item-background-color: #435cb5;
 
-// select icon editor 
-$select-icon-editor-item-color: rgb(35, 41, 55);
-$select-icon-editor-selected-color: $list-item-selected-color;
-
 $grid-box-editor-button-background-color: #435cb5;
-
-$status-bar-item-background-color: #760e34;
-$status-bar-background-color: $background-color;
-$status-bar-font-color: $font-color;
 
 $drag-area-rect-border-color: rgba(62, 168, 255, 0.9);
 $drag-area-rect-background-color: rgba(107, 188, 255, 0.214);
 
 $rotate-x-border-color: rgb(104, 104, 247);
 $rotate-y-border-color: rgb(112, 197, 112);
-
-
-$color-view-background-color: #5c5c5c;
-$transform-origin-selected-color: #5c5c5c;
-$border-radius-selected-color: #5c5c5c;
-
-$transform-item-background-color: rgba(255, 255, 255, 0.03);
-$transform-item-border-color: #2b2b2b;
 
 $tooltip-background-color: rgba($selected-color, 0.637);
 $tooltip-font-color: $selected-font-color;

@@ -1,4 +1,6 @@
 .elf--grid-box-editor {
+    border: 1px solid var(--elf--border-color);
+    padding: 0px 1px;
     .grid-box-editor-item {
         .item {
             display: grid;
@@ -20,10 +22,15 @@
 
             .repeat {
                 button {
-                    background-color: var(--elf--grid-box-editor-button-background-color);
+                    background-color: var(--elf--selected-color);
                     border-radius: 3px;
                     width: 16px;
                     height: 16px;
+                    color: var(--elf--selected-font-color);
+
+                    svg {
+                        fill: currentColor;
+                    }
                 }
             }
 

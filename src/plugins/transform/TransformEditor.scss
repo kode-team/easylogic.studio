@@ -34,13 +34,11 @@
   
     .transform-item {
       display: block;
-      background-color: var(--elf--transform-item-background-color);
       margin-top: 10px;
-      border: 1px solid var(--elf--transform-item-border-color);
+      border: 1px solid var(--elf--border-color);
       box-sizing: border-box;
       padding: 0px 2px;
-      border-radius: 1px;
-      box-shadow: 0 0 3px 0 rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
   
       .title {
         display: grid;

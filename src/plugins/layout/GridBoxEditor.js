@@ -4,6 +4,7 @@ import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { variable } from 'el/sapa/functions/registElement';
 import './GridBoxEditor.scss';
+import { clone } from 'el/sapa/functions/func';
 
 
 const REG_CSS_UNIT = /(auto)|(repeat\([^\)]*\))|(([\d.]+)(px|pt|fr|r?em|deg|vh|vw|%))/gi;

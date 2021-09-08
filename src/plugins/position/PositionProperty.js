@@ -48,8 +48,6 @@ export default class PositionProperty extends BaseProperty {
       this.children.$rotate.setValue(rotateZ[0]);
     }
 
-    // console.log('aaafsdafadsfdsaf');
-
   }
 
   isHideHeader() {
@@ -61,7 +59,6 @@ export default class PositionProperty extends BaseProperty {
   }
 
   getBody() {
-    // console.log("aaaaaa");
     return /*html*/`
       <div class="position-item" ref="$positionItem" style='padding: 5px 10px;'>
         <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px;'>
@@ -129,7 +126,6 @@ export default class PositionProperty extends BaseProperty {
   }
 
   refresh() {
-    // console.log('aaafdsafdsafd');
     const current = this.$selection.current;
     if (current) {
       this.children.$x.setValue(current.x);
@@ -137,7 +133,6 @@ export default class PositionProperty extends BaseProperty {
       this.children.$width.setValue(current.width);
       this.children.$height.setValue(current.height);
       this.children.$opacity.setValue(current['opacity'] || '1')
-      // console.log(current.opacity);
       const rotateZ = Transform.get(current.transform, 'rotateZ')
       if (rotateZ) {
         this.children.$rotate.setValue(rotateZ[0]);
@@ -160,14 +155,12 @@ export default class PositionProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF('changeRotate')](key, rotate) {
-    console.log(rotate);
     this.command('setAttributeForMulti', "change rotate", this.$selection.packByValue({
       transform: (item) => Transform.rotateZ(item.transform, rotate)
     }))
   }
 
   [SUBSCRIBE_SELF('changeSelect')](key, value) {
-    // console.log(key, value);
     this.command("setAttributeForMulti", `change ${key}`, this.$selection.packByValue({
       [key]: value
     }))

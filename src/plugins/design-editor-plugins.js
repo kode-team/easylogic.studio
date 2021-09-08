@@ -70,7 +70,24 @@ export default [
     color,
     gradient,
 
-    // inspector.tab.style 
+    // inspector.tab.style    
+    alignment,
+    artboard,
+    // layout 
+    layout,    
+    transform,
+    // transformOrigin,    
+    appearance,
+    perspective,
+    perspectiveOrigin,
+
+    // iframe,
+    component,
+    backgroundImage,
+    // border 
+    border,
+    borderRadius,
+
     svgText,
     font,
     text,
@@ -78,19 +95,7 @@ export default [
     fontSpacing,
     content,
     textFill,
-    textClip,    
-
-    alignment,
-    artboard,
-    // layout 
-    layout,    
-    appearance,
-    // iframe,
-    component,
-    backgroundImage,
-    // border 
-    border,
-    borderRadius,
+    textClip,     
 
 
     // resource    
@@ -113,11 +118,6 @@ export default [
     boxModel,
     position,
     gradientAsset,
-
-    transform,
-    transformOrigin,
-    perspective,
-    perspectiveOrigin,
 
     exportResource,
 
