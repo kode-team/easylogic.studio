@@ -91,30 +91,30 @@ export default class SelectionToolView extends SelectionToolEvent {
             distVector
         ));
 
-        this.$selection.cachedItemVerties.forEach(item => {
-            const instance = this.$model.get(item.id)
+        // 캐쉬된 matrix 중에 current 에 해당하는 것만 실행을 한다. 
+        // 나머지는 부모의 좌표가 변경 됐기 때문에 자식의 좌표를 자동으로 변경한다. 
+        let currentMatrix = this.$selection.cachedCurrentItemMatrix;
+        const instance = this.$selection.current;
 
-            if (instance) {
+        if (instance) {
 
-                let newTransform = Transform.addTransform(item.transform, `rotateZ(${Length.deg(distAngle).round(1000)})`)
+            let newTransform = Transform.addTransform(currentMatrix.transform, `rotateZ(${Length.deg(distAngle).round(1000)})`)
 
-                if (this.$config.get('bodyEvent').shiftKey) {
-                    const newRotateX = Transform.get(newTransform, 'rotateZ');
+            if (this.$config.get('bodyEvent').shiftKey) {
+                const newRotateX = Transform.get(newTransform, 'rotateZ');
 
-                    if (newRotateX[0]) {
-                        const angle = newRotateX[0].value - newRotateX[0].value % this.$config.get('fixed.angle');
+                if (newRotateX[0]) {
+                    const angle = newRotateX[0].value - newRotateX[0].value % this.$config.get('fixed.angle');
 
-                        newTransform = Transform.rotateZ(newTransform, Length.deg(angle));
-                    }
-
+                    newTransform = Transform.rotateZ(newTransform, Length.deg(angle));
                 }
 
-                instance.reset({
-                    transform: newTransform 
-                })
             }
 
-        })
+            instance.reset({
+                transform: newTransform 
+            })
+        }
 
         this.state.dragging = true;
         this.command('setAttributeForMulti', 'change rotate', this.$selection.pack('transform'));                
@@ -289,31 +289,27 @@ export default class SelectionToolView extends SelectionToolEvent {
     }
 
     moveBottomRightVertex (distVector) {
-        const verties = this.verties;
-        if (verties) {
+        const item = this.$selection.cachedCurrentItemMatrix
+        if (item) {
 
-            this.$selection.cachedItemVerties.forEach(item => {
+            let [realDx, realDy] = this.calculateRealDist(item, 2, distVector)
 
-                let [realDx, realDy] = this.calculateRealDist(item, 2, distVector)
+            if (this.$config.get('bodyEvent').shiftKey) {
+                realDy = realDx * item.height/item.width;
+            }                
 
-                if (this.$config.get('bodyEvent').shiftKey) {
-                    realDy = realDx * item.height/item.width;
-                }                
-    
-                // 변형되는 넓이 높이 구하기 
-                const newWidth = item.width + realDx;
-                const newHeight = item.height + realDy;
-    
-                this.moveDirectionVertex(item, newWidth, newHeight, 'to top left', [0, 0, 0])
-            })
+            // 변형되는 넓이 높이 구하기 
+            const newWidth = item.width + realDx;
+            const newHeight = item.height + realDy;
 
+            this.moveDirectionVertex(item, newWidth, newHeight, 'to top left', [0, 0, 0])
 
         }
     }
 
 
     moveTopRightVertex (distVector) {
-        const item = this.$selection.cachedItemVerties[0]
+        const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 1, distVector)
@@ -332,7 +328,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
 
     moveTopLeftVertex (distVector) {
-        const item = this.$selection.cachedItemVerties[0]
+        const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
             let [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
 
@@ -350,7 +346,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
 
     moveTopVertex (distVector) {
-        const item = this.$selection.cachedItemVerties[0]
+        const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
 
             const [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
@@ -366,7 +362,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
 
     moveBottomVertex (distVector) {
-        const item = this.$selection.cachedItemVerties[0]
+        const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
 
             const [realDx, realDy] = this.calculateRealDist(item, 3, distVector)
@@ -381,7 +377,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
 
     moveRightVertex (distVector) {
-        const item = this.$selection.cachedItemVerties[0]
+        const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
 
             const [realDx, realDy] = this.calculateRealDist(item, 1, distVector)
@@ -395,7 +391,7 @@ export default class SelectionToolView extends SelectionToolEvent {
     }       
     
     moveLeftVertex (distVector) {
-        const item = this.$selection.cachedItemVerties[0]
+        const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
 
             const [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
@@ -410,7 +406,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
 
     moveBottomLeftVertex (distVector) {
-        const item = this.$selection.cachedItemVerties[0]
+        const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 3, distVector)
@@ -491,7 +487,7 @@ export default class SelectionToolView extends SelectionToolEvent {
      */
     renderPointers () {
 
-        if (!this.$selection.cachedItemVerties[0]) {
+        if (!this.$selection.cachedCurrentItemMatrix) {
             return ;
         }
 

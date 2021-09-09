@@ -227,7 +227,7 @@ export default class DragAreaView extends EditorElement {
 
 
         const result = {}
-        this.$selection.cachedItemVerties.forEach(it => {
+        this.$selection.cachedItemMatrices.forEach(it => {
 
             // newVerties 에 실제 움직인 좌표로 넣고 
             const newVerties = it.verties.map(v => {

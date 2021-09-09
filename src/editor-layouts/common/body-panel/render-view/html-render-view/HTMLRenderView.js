@@ -333,7 +333,7 @@ export default class HTMLRenderView extends EditorElement {
         const localDist = vec3.add([], snap, newDist);
 
         const result = {}
-        this.$selection.cachedItemVerties.forEach(it => {
+        this.$selection.cachedItemMatrices.forEach(it => {
             result[it.id] = {
                 x: Length.px(it.x + localDist[0]).floor(),          // 1px 단위로 위치 설정 
                 y: Length.px(it.y + localDist[1]).floor(),

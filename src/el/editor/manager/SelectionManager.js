@@ -26,7 +26,7 @@ export class SelectionManager {
     this.hoverItems = []    
     this.ids = []; 
     this.colorsteps = []
-    this.cachedItemVerties = []    
+    this.cachedItemMatrices = []    
     this.cachedArtBoardVerties = []
     this.cachedVerties = rectToVerties(0, 0, 0, 0, '50% 50% 0px');
 
@@ -43,14 +43,6 @@ export class SelectionManager {
     this.column = Math.ceil(pos[0]/areaWidth); 
     this.row = Math.ceil(pos[1]/areaWidth); 
 
-  }
-
-  initialize() {
-    // this.colorsteps = []    
-    // this.items = [];
-    this.itemKeys = {} 
-    this.ids = []; 
-    this.cachedItemVerties = {}    
   }
 
   get modelManager() {
@@ -96,14 +88,14 @@ export class SelectionManager {
     // artboard 는 무조건 하나의 선택으로 간주한다. 
     if (this.length === 1 && this.current.is('artboard')) return true;  
 
-    return this.length === 1 && (this.current.hasChildren() === false); 
+    return this.length === 1; 
   }
 
   /**
    * @returns {boolean}
    */  
   get isMany () {
-    return this.length > 1 || (this.length === 1 && this.isOne === false); 
+    return this.length > 1; 
   }  
 
   get length () {
@@ -450,7 +442,7 @@ export class SelectionManager {
     if (this.isEmpty) {
       this.cachedVerties = [];
       this.cachedRectVerties = [];
-      this.cachedItemVerties = []
+      this.cachedItemMatrices = []
       this.cachedArtBoardVerties = this.currentProject.artboards.map(item => {
         return { item, matrix: item.matrix};
       })
@@ -461,32 +453,37 @@ export class SelectionManager {
     this.cachedVerties = this.verties;
     this.cachedRectVerties = toRectVerties(this.verties);
 
-    this.cachedItemVerties = []
+    this.cachedItemMatrices = []
     
     this.items.forEach(it => {
 
       // artboard 가 선택되어 있을 때는 artboard 만 포함 
       if (it.is('artboard')) {
-        this.cachedItemVerties.push(it.matrix);
+        this.cachedItemMatrices.push(it.matrix);
       } 
       // artboard 가 아닌데 자식을 가지고 있을 때는 자식을 포함 
       // TODO: layout 을 가지고 있는 경우 어떻게 해야할지 정해야함 
       else if (it.hasChildren()) {
         const list = this.modelManager.getAllLayers(it.id).map(it => it.matrix);
-        this.cachedItemVerties.push(...list);
+        this.cachedItemMatrices.push(...list);
       } 
       // 그 외는 아트보드처럼 자신만 포함 
       else {
-        this.cachedItemVerties.push(it.matrix);
+        this.cachedItemMatrices.push(it.matrix);
       }
 
     })
 
-    // console.log(this.cachedItemVerties);
-
+    // artboard 항목만 따로 캐슁 
     this.cachedArtBoardVerties = this.currentProject.artboards.map(item => {
       return { item, matrix: item.matrix};
     })
+
+    // 현재 객체 matrix 캐쉬 설정 
+    this.cachedCurrentItemMatrix = this.current.matrix;
+
+    // 현재 객체 자식 matrix 캐쉬 설정 
+    this.cachedCurrentChildrenItemMatrices = this.modelManager.getAllLayers(this.current.id).map(it => it.matrix);
   }
 
   get verties () {

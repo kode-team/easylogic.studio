@@ -57,13 +57,14 @@ export default class SelectionInfoView extends EditorElement {
 
         const localDist = vec3.add([], snap, newDist);
 
-        const result = {}
-        this.$selection.cachedItemVerties.forEach(it => {
-            result[it.id] = {
-                x: Length.px(it.x + localDist[0]).floor(),          // 1px 단위로 위치 설정 
-                y: Length.px(it.y + localDist[1]).floor(),
+        const currentMatrix = this.$selection.cachedCurrentItemMatrix;
+        const result = {
+            [it.id]: {
+                x: Length.px(currentMatrix.x + localDist[0]).floor(),          // 1px 단위로 위치 설정 
+                y: Length.px(currentMatrix.y + localDist[1]).floor(),
             }
-        })
+        }
+
         this.$selection.reset(result);        
     }    
 

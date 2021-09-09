@@ -106,7 +106,10 @@ export default class PathDrawView extends EditorElement {
             if (this.state[key]) Object.assign(pathItem, {[key]: this.state[key] })    
         });            
 
-        layer = this.$selection.currentProject.appendChild(this.$editor.createModel(pathItem));      
+
+        const containerItem = this.$selection.currentProject;
+
+        layer = containerItem.appendChild(this.$editor.createModel(pathItem));        
 
         return layer; 
     }
