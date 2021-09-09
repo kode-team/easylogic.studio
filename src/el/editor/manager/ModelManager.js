@@ -22,18 +22,28 @@ export class ModelManager {
     /**
      * document 로드 하기 
      */
-    load(doc) {
+    load(doc = {}) {
         const newDoc = this.editor.loadItem('model') || doc;
 
         this.items.clear();
-        this.version = newDoc.version;
-        this.name = newDoc.name;
-        this.description = newDoc.description;
+        this.version = newDoc?.version;
+        this.name = newDoc?.name;
+        this.description = newDoc?.description;
 
-        newDoc.projects.forEach(project => {
+        newDoc?.projects?.forEach(project => {
             this.createModel(project);
         })
 
+        if (this.projects.length === 0) {
+            this.createProject();
+        }
+    }
+
+    createProject() {
+        this.createModel({
+            itemType: "project",
+            name: "New Project",
+        })
     }
 
     getProjectByIndex(index = 0) {
