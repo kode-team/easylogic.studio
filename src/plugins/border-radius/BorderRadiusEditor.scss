@@ -17,7 +17,7 @@
       @each $borderRadiusType in all, partitial {
         &[data-selected-value="#{$borderRadiusType}"] {
           button[data-value="#{$borderRadiusType}"] {
-            background-color: var(--elf--border-radius-selected-color);
+            background-color: var(--elf--selected-color);
             color: var(--elf--selected-font-color);
           }
         }

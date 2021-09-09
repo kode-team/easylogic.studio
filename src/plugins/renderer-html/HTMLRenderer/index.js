@@ -139,6 +139,10 @@ export default class HTMLRenderer {
         return this.to('toGridLayoutCSS', item);            
     }     
 
+    toLayoutItemCSS (item) {
+        return this.to('toLayoutItemCSS', item);            
+    }         
+
     toLayoutBaseModelCSS (item) {
         return this.to('toLayoutBaseModelCSS', item);            
     }    

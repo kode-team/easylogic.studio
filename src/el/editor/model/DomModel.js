@@ -129,7 +129,7 @@ export class DomModel extends GroupModel {
     switch (editablePropertyName) {
       case 'svg-item':
       case 'box-model':
-      case 'transform':
+      // case 'transform':
       case 'transform-origin':
       case 'perspective':
       case 'perspective-origin':
