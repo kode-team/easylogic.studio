@@ -35,6 +35,7 @@ import patternAsset from "./pattern-asset"
 import perspective from "./perspective"
 import perspectiveOrigin from "./perspective-origin"
 import position from "./position"
+import project from "./project"
 import propertyEditor from "./property-editor"
 import rendererHtml from "./renderer-html"
 import rendererJson from "./renderer-json"
@@ -73,7 +74,10 @@ export default [
     // inspector.tab.style    
     alignment,
     artboard,
+
     // layout 
+    boxModel,
+    position,    
     layout,    
     transform,
     // transformOrigin,    
@@ -115,8 +119,6 @@ export default [
     backdropFilter,
     boxShadow,
     clipPath,
-    boxModel,
-    position,
     gradientAsset,
 
     exportResource,
@@ -137,4 +139,5 @@ export default [
 
     // todo: timeline,
     //timeline
+    project,
 ]

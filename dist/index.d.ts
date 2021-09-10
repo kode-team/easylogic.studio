@@ -821,6 +821,7 @@ declare module "@easylogic/editor" {
         protected opt: KeyValue = {};
         protected parent: any;
         protected props: KeyValue = {};
+        protected state: KeyValue = {};
         public source: string;
         public sourceName: string;
 

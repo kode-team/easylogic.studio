@@ -76,11 +76,11 @@ export default class StyleView extends EditorElement {
 
   }
 
-  [LOAD('$svgArea') + DOMDIFF] () {
-    var project = this.$selection.currentProject || {  }
+  // [LOAD('$svgArea') + DOMDIFF] () {
+  //   var project = this.$selection.currentProject || {  }
 
-    return this.$editor.html.renderSVG(project);
-  }   
+  //   return this.$editor.html.renderSVG(project);
+  // }   
 
   // timeline 에서 테스트 할 때 이걸 활용할 수 있다. 
   // 움직이기 원하는 객체가 타임라인 전체라 
@@ -97,18 +97,6 @@ export default class StyleView extends EditorElement {
 
   [SUBSCRIBE('refreshSVGArea')] () {
     this.load('$svgArea');
-  }
-
-  [SUBSCRIBE('refreshSelection')] () {
-    const selectedItems = this.$selection.items.map(item => `[data-id="${item.id}"]`).join(',');
-
-    const css = this.$selection.isMany ? `
-      ${selectedItems} {
-        box-shadow: 0 0 0 1px #66baff;
-      }
-    ` : '';
-
-    this.refs.$styleView.html(css);
   }
 
   /**

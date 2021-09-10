@@ -169,8 +169,6 @@ export default class DomRender extends ItemRender {
     if (item['margin-left']) obj["margin-left"] = item['margin-left'];
     if (item['margin-right']) obj["margin-right"] = item['margin-right'];
 
-    if (item.hasChildren()) return obj; 
-
     if (item['padding-top']) obj["padding-top"] = item['padding-top'];
     if (item['padding-bottom']) obj["padding-bottom"] = item['padding-bottom'];
     if (item['padding-left']) obj["padding-left"] = item['padding-left'];
@@ -441,7 +439,7 @@ export default class DomRender extends ItemRender {
     var str = this.toDefInnerString(item)
 
     return str ? /*html*/`
-    <svg class='inner-svg-element' data-id="${this.innerSVGId(item)}" width="0" height="0">
+    <svg class='inner-svg-element' style="display:block" data-id="${this.innerSVGId(item)}" width="0" height="0">
       <defs>
         ${str}
       </defs>

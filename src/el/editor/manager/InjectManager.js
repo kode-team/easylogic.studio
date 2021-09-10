@@ -1,4 +1,4 @@
-export class MenuItemManager {
+export class InjectManager {
   constructor(editor) {
     this.editor = editor;
     this.menuItems = {}

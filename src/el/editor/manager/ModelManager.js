@@ -224,10 +224,24 @@ export class ModelManager {
         });
     }
 
+    markRemoveProject (id) {
+        const index = this.projects.findIndex(it => it === id);
+
+        this.projects.splice(index, 1);
+        console.log(this.get(id), id);
+        this.get(id).removed = true;
+        return index;
+    }
+
     unmarkRemove(ids = []) {
         ids.forEach(id => {
             this.recover(id);
         });
+    }
+
+    unmarkRemoveProject (id, index) {
+        this.projects.splice(index, 0, id);
+        this.get(id).removed = false;
     }
 
     /**

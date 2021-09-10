@@ -104,6 +104,7 @@ import refreshHistory from "./refreshHistory";
 import openEditor from './open.editor';
 import doubleclickItem from "./doubleclick.item";
 import update from "./model/update";
+import historyRemoveProject from "./history.removeProject";
 
 export default {
     // update model 
@@ -122,6 +123,7 @@ export default {
     // history + command   
     historyAddLayer,
     historyRemoveLayer,
+    historyRemoveProject,
     historySetAttributeForMulti,    
     historyRefreshSelection,
     historyRedo,

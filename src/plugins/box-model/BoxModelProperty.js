@@ -31,7 +31,7 @@ export default class BoxModelProperty extends BaseProperty {
 
   templateInput(key, current) {
 
-    var value = current[key] || Length.z()
+    var value = Length.parse(current[key] || Length.z())
 
     return /*html*/`<input type="number" ref="$${key}" value="${value.value}" tabIndex="1" />`;
   }
@@ -86,7 +86,7 @@ export default class BoxModelProperty extends BaseProperty {
     var data = {};
 
     styleKeys.forEach(key => {
-      data[key] = Length.px(this.getRef("$", key).value);
+      data[key] = Length.px(this.refs["$" + key].value);
     });
 
     this.command("setAttributeForMulti", 'change padding or margin', this.$selection.packByValue(data))    

@@ -2,9 +2,9 @@ import _currentProject from "./_currentProject";
 import { isArrayEquals } from "el/utils/func";
 
 export default {
-    command: 'history.refreshSelection',
-    description: `save selection in history `,
-    description_ko: 'Selection 정보를 갱신하면서 History 에 저장한다',
+    command: 'history.refreshSelectionPorject',
+    description: `save project selection in history `,
+    description_ko: 'Project Selection 정보를 갱신하면서 History 에 저장한다',
     execute: function (editor, message = 'selection') {
         const currentValues = editor.selection.ids; 
         const projectId = editor.selection.currentProject?.id; 

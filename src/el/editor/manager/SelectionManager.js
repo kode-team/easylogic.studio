@@ -214,7 +214,13 @@ export class SelectionManager {
   }
 
   selectProject (project) {
+
+    if (isString(project) ) {
+      project = this.modelManager.get(project);
+    }
+
     this.project = project;
+    this.select();
   }
 
   get isRelative () {
@@ -454,6 +460,7 @@ export class SelectionManager {
     this.cachedRectVerties = toRectVerties(this.verties);
 
     this.cachedItemMatrices = []
+    this.cachedChildren = [];
     
     this.items.forEach(it => {
 
@@ -465,6 +472,8 @@ export class SelectionManager {
       // TODO: layout 을 가지고 있는 경우 어떻게 해야할지 정해야함 
       else if (it.hasChildren()) {
         const list = this.modelManager.getAllLayers(it.id).map(it => it.matrix);
+
+        this.cachedChildren.push(...list.map(it => it.id))
         this.cachedItemMatrices.push(...list);
       } 
       // 그 외는 아트보드처럼 자신만 포함 
@@ -657,6 +666,17 @@ export class SelectionManager {
       return this.current?.hasPoint(point[0], point[1]);
     }
     
+  }
+
+  /**
+   * 특정 위치가 selection 영역의 자식에게  있는지 여부 체크
+   * @param {vec3} point 
+   * @returns {boolean}
+   */
+  hasChildrenPoint (point) {
+    return this.cachedChildren.some(it => {
+      return this.modelManager.get(it)?.hasPoint(point[0], point[1]);
+    });
   }
 
   checkHover (itemOrId) {

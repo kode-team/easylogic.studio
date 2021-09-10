@@ -29,7 +29,7 @@ export function variable(value) {
  * @param {string} id
  * @returns {any}
  */
-export function recoverVariable(id) {
+export function recoverVariable(id, removeVariable = true) {
 
     // console.log(id);
     if (isString(id) === false) {
@@ -41,7 +41,9 @@ export function recoverVariable(id) {
     if (__tempVariables.has(id)) {
         value = __tempVariables.get(id);
 
-        __tempVariables.delete(id);
+        if (removeVariable) {
+            __tempVariables.delete(id);
+        }
     }
 
     return value;

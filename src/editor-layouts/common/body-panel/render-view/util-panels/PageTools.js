@@ -38,7 +38,7 @@ export default class PageTools extends EditorElement {
         <button type='button' ref='$pantool' class="${OBJECT_TO_CLASS({
           on: this.$config.get('set.tool.hand')
         })}" data-tooltip="Hand | H" data-direction="top">${icon.pantool}</button>   
-        ${this.$menuManager.generate('page.tools')}                             
+        ${this.$injectManager.generate('page.tools')}                             
       </div>
 
     `;

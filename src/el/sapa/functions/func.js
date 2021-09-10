@@ -188,11 +188,6 @@ export const html = (strings, ...args) => {
 
         var results = args[index] || ''
 
-        if (isFunction(results)) {
-            console.log(results);
-            // results = results()
-        }
-
         if (!Array.isArray(results)) {
             results = [results]
         }

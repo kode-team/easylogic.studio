@@ -30,6 +30,8 @@ const editableList = [
   'mix-blend-mode',
   'overflow',
   'opacity',
+  'box-model',
+  'layout',
   'flex-layout',
   'grid-layout',
   'animation',
@@ -111,6 +113,14 @@ export class DomModel extends GroupModel {
         'grid-layout',
         'animation',
         'transition',
+        'margin-top',
+        'margin-left',
+        'margin-right',
+        'margin-bottom',
+        'padding-top',
+        'padding-right',
+        'padding-left',
+        'padding-bottom',
       ),
 
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
@@ -128,7 +138,7 @@ export class DomModel extends GroupModel {
 
     switch (editablePropertyName) {
       case 'svg-item':
-      case 'box-model':
+      // case 'box-model':
       // case 'transform':
       case 'transform-origin':
       case 'perspective':
@@ -137,6 +147,13 @@ export class DomModel extends GroupModel {
     }
 
     return Boolean(editableKeys[editablePropertyName])
+  }
+
+  get changedBoxModel() {
+    return this.hasChangedField(
+      'margin-top', 'margin-left', 'margin-bottom', 'margin-right', 
+      'padding-top', 'padding-left', 'padding-right', 'padding-bottom'
+    )
   }
 
 
@@ -237,8 +254,8 @@ export class DomModel extends GroupModel {
     } else if (this.hasChangedField('width', 'height')) {
 
       if (this.cacheClipPath) {
-        const d = this.cacheClipPath.clone().scale(this.json.width.value/this.cacheClipPathWidth, this.json.height.value/this.cacheClipPathHeight).d;
-        this.json['clip-path'] = `path(${d})`;      
+        const d = this.cacheClipPath.clone().scale(this.json.width.value / this.cacheClipPathWidth, this.json.height.value / this.cacheClipPathHeight).d;
+        this.json['clip-path'] = `path(${d})`;
       }
 
     }
@@ -258,7 +275,7 @@ export class DomModel extends GroupModel {
 
   setCache() {
     super.setCache();
-    
+
     this.setClipPathCache();
   }
 
@@ -269,7 +286,7 @@ export class DomModel extends GroupModel {
     }
 
     if (this.cacheClipPath) {
-      return this.cacheClipPath.clone().scale(this.json.width.value/this.cacheClipPathWidth, this.json.height.value/this.cacheClipPathHeight).d;
+      return this.cacheClipPath.clone().scale(this.json.width.value / this.cacheClipPathWidth, this.json.height.value / this.cacheClipPathHeight).d;
     }
 
   }

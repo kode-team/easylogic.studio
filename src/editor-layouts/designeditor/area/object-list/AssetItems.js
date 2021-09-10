@@ -5,7 +5,7 @@ export default class AssetItems extends EditorElement {
   template() {
     return /*html*/`
       <div class='asset-items'>
-        ${this.$menuManager.generate('asset')}
+        ${this.$injectManager.generate('asset')}
       </div>
     `;
   }

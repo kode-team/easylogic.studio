@@ -1,3 +1,5 @@
+$size: 45px;
+
 .elf--box-model-item {
   grid-template-columns: 1fr !important;
   > div {
@@ -33,7 +35,7 @@
         top: 2px;
         left: 50%;
         transform: translateX(-50%);
-        width: 30px;
+        width: $size;
       }
 
       [data-value="bottom"] {
@@ -42,7 +44,7 @@
         bottom: 2px;
         left: 50%;
         transform: translateX(-50%);
-        width: 30px;
+        width: $size;
       }
 
       [data-value="left"] {
@@ -51,7 +53,7 @@
         top: 50%;
         left: 2px;
         transform: translateY(-50%);
-        width: 30px;
+        width: $size;
       }
 
       [data-value="right"] {
@@ -60,17 +62,17 @@
         top: 50%;
         right: 2px;
         transform: translateY(-50%);
-        width: 30px;
+        width: $size;
       }
     }
 
     .padding {
       position: absolute;
-      left: 40px;
+      left: $size + 10;
       top: 30px;
-      right: 40px;
-      bottom: 30px;
-      padding: 20px 30px;
+      right: $size + 10;
+      bottom: 30px ;
+      padding: 20px $size;
       border: 1px dashed rgb(170, 170, 170);
 
       &::before {
@@ -92,7 +94,7 @@
         top: 2px;
         left: 50%;
         transform: translateX(-50%);
-        width: 30px;
+        width: $size;
       }
 
       [data-value="bottom"] {
@@ -101,7 +103,7 @@
         bottom: 2px;
         left: 50%;
         transform: translateX(-50%);
-        width: 30px;
+        width: $size;
       }
 
       [data-value="left"] {
@@ -110,7 +112,7 @@
         top: 50%;
         left: 2px;
         transform: translateY(-50%);
-        width: 30px;
+        width: $size;
       }
 
       [data-value="right"] {
@@ -119,21 +121,21 @@
         top: 50%;
         right: 2px;
         transform: translateY(-50%);
-        width: 30px;
+        width: $size;
       }
     }
 
     .content {
       position: absolute;
-      left: 75px;
+      left: 105px;
       top: 54px;
-      right: 75px;
+      right: 105px;
       bottom: 54px;
       padding: 10px 0px;
       border: 1px dashed rgb(170, 170, 170);
 
       &:before {
-        content: attr(title);
+        // content: attr(title);
         padding: 5px 0px;
         text-align: center;
         display: block;

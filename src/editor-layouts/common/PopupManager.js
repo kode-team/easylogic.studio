@@ -22,7 +22,7 @@ export default class PopupManager extends EditorElement {
         <!-- SignWindow / -->
         <!-- ImageFileView / -->
         <object refClass='NotificationView' />
-        ${this.$menuManager.generate('popup')}
+        ${this.$injectManager.generate('popup')}
       </div>
     `;
   }

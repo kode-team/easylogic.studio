@@ -34,7 +34,6 @@ export default {
     'menu.item.download.title': '다운로드',
     'menu.item.save.title': '저장',
     'menu.item.export.title': '내보내기',
-    'menu.item.codepen.title': 'CodePen',
     'menu.item.fullscreen.title': '전체화면',
     'menu.item.shortcuts.title': '단축키',    
     'menu.item.github.title': 'Github',

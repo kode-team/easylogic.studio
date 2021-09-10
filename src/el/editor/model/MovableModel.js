@@ -68,7 +68,22 @@ export class MovableModel extends BaseAssetModel {
             this.refreshMatrixCache()
         }
 
+        if (isChanged && this.hasChangedField('width', 'height') && this.hasLayout()) {
+            this.applyLayout();
+        }
+
         return isChanged;
+    }
+
+    applyLayout() {
+        if (this.hasLayout()) {
+            if (this.isLayout('default')) {
+                // 부모 크기가 변경될때 자식도 변경된다. 
+                if (this.hasChangedField('width', 'height')) {
+                    
+                }
+            }
+        }
     }
 
     /**
@@ -76,8 +91,8 @@ export class MovableModel extends BaseAssetModel {
      * 
      * @param {BaseModel} otherParent 
      */
-    setParentId(otherParent) {
-        super.setParentId(otherParent.id || otherParent);
+    setParentId(otherParentId) {
+        super.setParentId(otherParentId);
 
         this.refreshMatrixCache();
     }

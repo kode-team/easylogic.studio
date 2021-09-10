@@ -609,8 +609,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
             this.$viewport.applyVerties(selectionVerties),
         ]
 
-        const {line, point, size} = this.createRenderPointers(...this.state.renderPointerList);
-        this.refs.$pointerRect.updateDiff(line + point + size)
+        const {line, point, size, elementLine} = this.createRenderPointers(...this.state.renderPointerList);
+        this.refs.$pointerRect.updateDiff(line + elementLine.join('') + point + size)
     }
 
 
@@ -663,6 +663,21 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
                 " />
         </svg>`        
     }    
+
+    createLine (pointers) {
+        return /*html*/`
+        <svg class='line' overflow="visible">
+            <path 
+                d="
+                    M ${pointers[0][0]}, ${pointers[0][1]} 
+                    L ${pointers[1][0]}, ${pointers[1][1]} 
+                    L ${pointers[2][0]}, ${pointers[2][1]} 
+                    L ${pointers[3][0]}, ${pointers[3][1]} 
+                    L ${pointers[0][0]}, ${pointers[0][1]}
+                    Z
+                " />
+        </svg>`        
+    }
 
 
     createSize (pointers) {
@@ -727,6 +742,9 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         return {
             line: this.createPointerRect(pointers, rotatePointer), 
+            elementLine: this.$selection.cachedItemMatrices.map((it, index) => {
+                return this.createLine(this.$viewport.applyVerties(it.originVerties));
+            }),
             size: this.createSize(pointers),
             point: [
                 // 4모서리에서도 rotate 할 수 있도록 맞춤 

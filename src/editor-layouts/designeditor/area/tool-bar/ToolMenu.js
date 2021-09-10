@@ -50,7 +50,7 @@ export default class ToolMenu extends EditorElement {
               <object refClass='AddText' />
               <object refClass='AddImage' />
               <!--object refClass='AddVideo' /-->
-              ${this.$menuManager.generate('tool.menu.css')}
+              ${this.$injectManager.generate('tool.menu.css')}
             </span>            
             <span data-item='svg'>
               <div class='divider'></div>
@@ -61,7 +61,7 @@ export default class ToolMenu extends EditorElement {
               <!-- <AddSVGText /> -->
               <object refClass='AddSVGTextPath' />
               <object refClass='AddPolygon' />
-              ${this.$menuManager.generate('tool.menu.svg')}              
+              ${this.$injectManager.generate('tool.menu.svg')}              
             </span>
           </div>
         </div>

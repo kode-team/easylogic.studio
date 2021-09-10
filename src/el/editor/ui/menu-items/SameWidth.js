@@ -13,7 +13,6 @@ export default class SameWidth extends MenuItem {
   }
 
   clickButton(e) {
-    console.log(e);
     this.emit('same.width');
   }
 }

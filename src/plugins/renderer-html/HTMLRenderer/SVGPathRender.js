@@ -58,22 +58,22 @@ export default class SVGPathRender extends SVGItemRender {
 
 
   render (item) {
-    return /*html*/`
-        <svg 
-          class='element-item path'  
-          xmlns="http://www.w3.org/2000/svg"
-          data-id="${item.id}"
-        >
-            ${this.toDefString(item)}
-            <path 
-              class="svg-path-item"
-              d="${item.d}"
-              fill-rule="${item['fill-rule']}"
-              filter="${this.toFilterValue(item)}"
-              fill="${this.toFillValue(item)}"
-              stroke="${this.toStrokeValue(item)}"
-            />
-        </svg>
+    var {id, name, itemType} = item;
+  
+    return /*html*/`    
+<div class="element-item ${itemType}" data-id="${id}" data-title="${name}">
+  ${this.toDefString(item)}
+  <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <path 
+      class="svg-path-item"
+      d="${item.d}"
+      fill-rule="${item['fill-rule']}"
+      filter="${this.toFilterValue(item)}"
+      fill="${this.toFillValue(item)}"
+      stroke="${this.toStrokeValue(item)}"
+    />
+  </svg>
+</div>
     `
   }
 

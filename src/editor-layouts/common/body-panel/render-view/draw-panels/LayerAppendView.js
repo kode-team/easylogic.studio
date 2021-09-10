@@ -386,8 +386,6 @@ export default class LayerAppendView extends EditorElement {
             const {width, height} = $t.rect();
             const text = $t.text();
 
-            console.log(text, height);
-
             if (text.length === 0) {
                 break; 
             }

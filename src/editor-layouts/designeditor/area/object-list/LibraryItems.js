@@ -12,7 +12,7 @@ export default class LibraryItems extends EditorElement {
             this.broadcast('search', value);
           }, 300)} />
         </div>
-        ${this.$menuManager.generate('library')}
+        ${this.$injectManager.generate('library')}
       </div>
     `;
   }

@@ -14,10 +14,10 @@ export default {
             layers.reverse();
 
             layers.forEach(child => {
-                groupLayer.appendAfter(child);
+                groupLayer.appendBefore(child);
             })
 
-            editor.selection.selection(...layers);
+            editor.selection.select(...layers);
             editor.emit('refreshAll')            
         }
 

@@ -313,8 +313,6 @@ export default class GuideLineView extends EditorElement {
     refreshSmartGuidesForVerties() {
         const guides = this.$snapManager.findGuide(this.$selection.verties);
 
-        // console.log(guides);
-
         this.setGuideLine(guides, true);             
     }
 

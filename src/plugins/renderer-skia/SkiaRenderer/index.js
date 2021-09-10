@@ -35,11 +35,8 @@ export default class SkiaRenderer {
         if (!this.surface) {
             this.surface = this.CanvasKit.MakeCanvasSurface(id);    
 
-
             const {CanvasKit} = this;
 
-            console.log(this.surface);
-    
             const drawFrame = (canvas) => {
                 const { viewport } = this.editor;
                 const { translate, transformOrigin: origin, scale } = viewport;            

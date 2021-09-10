@@ -96,8 +96,15 @@ export default class LayerTreeProperty extends BaseProperty {
   getIcon(item) {
     // return '';
 
-    if (item.isGroup && item.is('artboard') === false) {
-      return icon.group
+    if (item.hasChildren() && item.is('artboard') === false) {
+
+      if (item.isLayout('flex')) {
+        return icon.flex;
+      } else if (item.isLayout('grid')) {
+        return icon.grid
+      }
+
+      return icon.margin
     }
 
     switch (item.itemType) {
@@ -148,12 +155,13 @@ export default class LayerTreeProperty extends BaseProperty {
 
       const isHide = layer.isTreeItemHide()
       const depthPadding = Length.px(depth * 20);
+      const hasChildren = layer.hasChildren()
 
       data.push(/*html*/`        
-        <div class='layer-item ${selectedClass} ${selectedPathClass} ${hovered}' data-is-group="${layer.isGroup}" data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true">
+        <div class='layer-item ${selectedClass} ${selectedPathClass} ${hovered}' data-is-group="${hasChildren}" data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true">
           <div class='detail'>
             <label data-layout-title='${title}' style='padding-left: ${depthPadding}' > 
-              <div class='folder ${layer.collapsed ? 'collapsed' : ''}'>${layer.isGroup ? icon.arrow_right : ''}</div>
+              <div class='folder ${layer.collapsed ? 'collapsed' : ''}'>${hasChildren ? icon.arrow_right : ''}</div>
               <span class='icon' data-item-type="${layer.itemType}">${this.getIcon(layer)}</span> 
               <span class='name'>${name}</span>
             </label>
@@ -322,7 +330,6 @@ export default class LayerTreeProperty extends BaseProperty {
     this.$selection.select(id)
 
     this.command('refreshSelection');
-    // this.emit('refreshSelectionTool'); 
   }
 
   [CLICK('$layerList .layer-item label .folder')](e) {

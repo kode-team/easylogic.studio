@@ -5,7 +5,7 @@ export default {
     description: 'fit at the same width',
     execute: function (editor) {
 
-        console.log(editor.selection.isMany);
+        // console.log(editor.selection.isMany);
 
         if (editor.selection.isMany) {
             const rect = vertiesToRectangle(editor.selection.verties);

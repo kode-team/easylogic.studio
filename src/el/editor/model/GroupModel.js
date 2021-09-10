@@ -4,10 +4,6 @@ const layout_list  = ['flex', 'grid']
 
 export class GroupModel extends MovableModel {   
 
-    get isGroup () {
-        return Boolean(this.layers.length);
-    }
-
     isLayoutItem () {
         return this.parent.hasLayout();
     }
@@ -19,7 +15,27 @@ export class GroupModel extends MovableModel {
      * @returns {boolean}
      */
     hasLayout () {
-        return this.json.layout !== 'default';
+        const layout = this.json.layout || "default";
+        return true;
+    }
+
+    /**
+     * layout 체크 
+     * 
+     * @param {default|flex|grid} layout 
+     * @returns {boolean}
+     */
+    isLayout(layout) {
+        const localLayout = this.json.layout || "default";        
+        return localLayout === layout;
+    }
+
+    isInDefault () {
+        if  (!this.isLayoutItem()) return false; 
+
+        const parentLayout = this.parent.layout || 'default';
+                
+        return 'default' === parentLayout; 
     }
 
     isInGrid () {

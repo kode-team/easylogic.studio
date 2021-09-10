@@ -1,4 +1,5 @@
 import { DomDiff } from "./DomDiff";
+import { recoverVariable } from './registElement';
 
 /**
  * Dom 유틸리티 
@@ -97,7 +98,9 @@ export default class Dom {
    */
   data (key, value) {
     if (arguments.length === 1) {
-      return this.attr('data-' + key);
+      const value = this.attr('data-' + key)
+
+      return recoverVariable(value, false);
     } else if (arguments.length === 2) {
       return this.attr('data-' + key, value);
     }

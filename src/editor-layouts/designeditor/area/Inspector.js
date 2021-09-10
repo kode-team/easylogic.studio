@@ -32,21 +32,21 @@ export default class Inspector extends EditorElement {
               <object refClass="PositionProperty" />
               <object refClass="AppearanceProperty" />                                   
 
-              ${this.$menuManager.generate('inspector.tab.style')}                             
+              ${this.$injectManager.generate('inspector.tab.style')}                             
               <div class='empty'></div>
             </object>
 
             <object refClass="TabPanel" value="transition" title="${this.$i18n('inspector.tab.title.transition')}" icon=${variable(icon.flash_on)}>
-              ${this.$menuManager.generate('inspector.tab.transition')}              
+              ${this.$injectManager.generate('inspector.tab.transition')}              
               <div class='empty'></div>                
             </object>            
 
             <object refClass="TabPanel" value="code" title="${this.$i18n('inspector.tab.title.code')}" icon=${variable(icon.code)}>
-              ${this.$menuManager.generate('inspector.tab.code')}              
+              ${this.$injectManager.generate('inspector.tab.code')}              
               <div class='empty'></div>                
             </object>    
             
-            ${this.$menuManager.getTargetMenuItems('inspector.tab').map(it => {
+            ${this.$injectManager.getTargetMenuItems('inspector.tab').map(it => {
               const { value, title, loadElements } = it.class;
 
               return /*html*/`
@@ -54,7 +54,7 @@ export default class Inspector extends EditorElement {
                   ${loadElements.map(element => {
                     return /*html*/`<object refClass="${element}" />`
                   })}
-                  ${this.$menuManager.generate('inspector.tab.' + it.value)}              
+                  ${this.$injectManager.generate('inspector.tab.' + it.value)}              
                   <div class='empty'></div>                
                 </object> 
               `   

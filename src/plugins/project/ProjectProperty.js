@@ -1,9 +1,6 @@
-import BaseProperty from "./BaseProperty";
+import BaseProperty from "../../el/editor/ui/property/BaseProperty";
 import { LOAD, CLICK, PREVENT, STOP, FOCUSOUT, DOUBLECLICK, DOMDIFF, KEYDOWN, ENTER, SUBSCRIBE } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
-
-
-import { registElement } from "el/sapa/functions/registElement";
 
 import './ProjectProperty.scss';
 
@@ -33,17 +30,18 @@ export default class ProjectProperty extends BaseProperty {
   }
 
   [LOAD("$projectList") + DOMDIFF]() {
-    var projects = this.$editor.projects || [];
+    var projects = this.$model.projects || [];
     
 
-    return projects.map( (project, index) => {
-      var selected = project === this.$selection.currentProject ? 'selected' : '';
+    return projects.map( (projectId, index) => {
+      var selected = projectId === this.$selection.currentProject.id ? 'selected' : '';
+      const project = this.$model.get(projectId);
       return /*html*/`
         <div class='project-item ${selected}'>
           <div class='detail'>
-            <label data-index='${index}'>${project.name || 'New Project'}</label>
+            <label data-id='${projectId}'>${project.name || 'New Project'}</label>
             <div class="tools">
-              <button type="button" class="remove" data-index="${index}" title='Remove'>${icon.remove2}</button>
+              <button type="button" class="remove" data-id="${projectId}" title='Remove'>${icon.remove2}</button>
             </div>
           </div>
         </div>
@@ -81,40 +79,36 @@ export default class ProjectProperty extends BaseProperty {
 
   selectProject (project) {
 
-    if (project) {
-      this.$selection.selectProject(project)
+    // TODO: project 를 selection 할 때 히스토리에 추가해야함 
 
-      if (project.artboards.length) {
-        this.$selection.selectArtboard(project.artboards[0])
-        this.$selection.select();
-      }
+    if (project) {
+      this.$selection.selectProject(project.id)
     }
 
     this.refresh()       
     this.emit('refreshAllSelectProject');    
+    this.command('refreshSelection');    
   }
 
   [CLICK('$projectList .project-item label')] (e) {
-    var index = +e.$dt.attr('data-index')
+    var id = e.$dt.attr('data-id')
 
-    this.selectProject(this.$editor.projects[index])
+    this.selectProject(this.$model.get(id))
   }
 
 
   [CLICK('$projectList .project-item .remove')] (e) {
-    var index = +e.$dt.attr('data-index')
+    var id = e.$dt.attr('data-id')
 
-    this.$editor.projects.splice(index);
+    this.command('removeProject', 'remove project', id);
 
-    var project = this.$editor.projects[index] || this.$editor.projects[index - 1];
-
-    this.selectProject(project);
+    this.nextTick(() => {
+      this.refresh();
+    })
   }
 
-  [SUBSCRIBE('refreshProjectList')] () {
+  [SUBSCRIBE('refreshProjectList', 'refreshAll')] () {
     this.refresh();
   }
 
 }
-
-registElement({ ProjectProperty })

@@ -163,6 +163,9 @@ import left_hide from "./left_hide";
 import right_hide from "./right_hide";
 import pantool from "./pantool";
 import draw from "./draw";
+import flex from "./flex";
+import margin from "./margin";
+
 
 const alias = {
   fullscreen:  border_inner
@@ -171,6 +174,8 @@ const alias = {
 
 export default {
   ...alias,
+  flex,
+  margin,
   draw,
   pantool,
   left_hide,

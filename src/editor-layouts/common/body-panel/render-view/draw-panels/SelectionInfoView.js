@@ -6,6 +6,7 @@ import { vec3 } from "gl-matrix";
 import { END, MOVE } from "el/editor/types/event";
 import './SelectionInfoView.scss';
 import { Length } from 'el/editor/unit/Length';
+import { calculateAngle360 } from 'el/utils/math';
 
 export default class SelectionInfoView extends EditorElement {
 
@@ -48,24 +49,39 @@ export default class SelectionInfoView extends EditorElement {
     }
 
 
-    moveTo(newDist) {
+    moveTo(dist) {
 
         //////  snap 체크 하기 
         const snap = this.$snapManager.check(this.$selection.cachedRectVerties.map(v => {
-            return vec3.add([], v, newDist)
+            return vec3.add([], v, dist)
         }), 3);
 
-        const localDist = vec3.add([], snap, newDist);
+        const localDist = vec3.add([], snap, dist);
 
-        const currentMatrix = this.$selection.cachedCurrentItemMatrix;
-        const result = {
-            [it.id]: {
-                x: Length.px(currentMatrix.x + localDist[0]).floor(),          // 1px 단위로 위치 설정 
-                y: Length.px(currentMatrix.y + localDist[1]).floor(),
+        const result = {}
+        this.$selection.cachedItemMatrices.forEach(it => {
+
+            // newVerties 에 실제 움직인 좌표로 넣고 
+            const newVerties = it.verties.map(v => {
+                return vec3.add([], v, localDist)
+            })
+
+            // 첫번째 좌표 it.rectVerties[0] 과 
+            // 마지막 좌표 newVerties[0] 를 
+            // parentMatrixInverse 기준으로 다시 원복하고 거리를 잰다 
+            // 그게 실제적인 distance 이다. 
+            const newDist = vec3.subtract(
+                [], 
+                vec3.transformMat4([], newVerties[0], it.parentMatrixInverse), 
+                vec3.transformMat4([], it.verties[0], it.parentMatrixInverse)
+            )
+
+            result[it.id] = {
+                x: Length.px(it.x + newDist[0]).floor(),          // 1px 단위로 위치 설정 
+                y: Length.px(it.y + newDist[1]).floor(),
             }
-        }
-
-        this.$selection.reset(result);        
+        })
+        this.$selection.reset(result);
     }    
 
 
@@ -128,20 +144,28 @@ export default class SelectionInfoView extends EditorElement {
 
     [LOAD('$el') + DOMDIFF] () {
         return this.$selection.currentProject.artboards.map(it => {
-            return { title: it.name, id: it.id, rect: [
-                this.$viewport.applyVertex(it.verties[0]),
-                this.$viewport.applyVertex(it.verties[1]),
-            ]}
+            return { title: it.name, id: it.id, pointers: this.$viewport.applyVerties(it.verties) }
         }).map(it => this.makeArtboardTitleArea(it))
 
     }
 
-    makeArtboardTitleArea (it) {
+    createSize (pointers, artboardItem) {
+        const newPointer  = pointers[0];
+        const diff = vec3.subtract([], pointers[0], pointers[3]);
+        const angle = calculateAngle360(diff[0], diff[1]) - 90;
+
         return /*html*/`
-            <div class="artboard-title is-not-drag-area" 
-                 data-artboard-title-id="${it.id}" 
-                 style="left: ${it.rect[0][0]}px;top:${it.rect[0][1]}px;"
-            >${it.title}</div>`
+            <div 
+                class="artboard-title is-not-drag-area" 
+                data-artboard-title-id="${artboardItem.id}" 
+                style="transform-origin: 0% 0%; transform: translate3d( calc(${newPointer[0]}px), calc(${newPointer[1]}px), 0px) rotateZ(${angle}deg)" >
+                    <div style="transform: translateY(-100%);">${artboardItem.title}</div>
+            </div>
+        `
+    }
+
+    makeArtboardTitleArea (it) {
+        return this.createSize(it.pointers, it);
     }    
 
 } 

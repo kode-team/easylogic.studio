@@ -22,7 +22,7 @@ import { CursorManager } from "./CursorManager";
 import { AssetManager } from "./AssetManager"; 
 import { PluginManager } from "./PluginManager";
 import { RendererManager } from "./RendererManager";
-import { MenuItemManager } from "./MenuItemManager";
+import { InjectManager } from "./InjectManager";
 import { I18nManager } from "./I18nManager";
 import { ModelManager } from './ModelManager';
 
@@ -79,7 +79,7 @@ export class Editor {
     this.storageManager = new StorageManager(this);
     this.cursorManager = new CursorManager(this);
     this.assetManager = new AssetManager(this);
-    this.menuItemManager = new MenuItemManager(this);
+    this.injectManager = new InjectManager(this);
     this.components = new ComponentManager(this);
     this.pluginManager = new PluginManager(this);
     this.renderers = new RendererManager(this);
@@ -272,40 +272,40 @@ export class Editor {
     }
   }
 
-  /**
-   * project 리스트를 설정한다. 
-   * 
-   * @param {Item[]} projects 
-   */
-  load(projects = []) {
-    this.projects = projects;
-  }
+  // /**
+  //  * project 리스트를 설정한다. 
+  //  * 
+  //  * @param {Item[]} projects 
+  //  */
+  // load(projects = []) {
+  //   this.projects = projects;
+  // }
 
-  /**
-   * Project 추가 하기 
-   * add project 
-   *
-   * @param {Item} item
-   * @return {Item}
-   */
-  add(item) {
-    this.projects.push(item);
-    return item;
-  }
+  // /**
+  //  * Project 추가 하기 
+  //  * add project 
+  //  *
+  //  * @param {Item} item
+  //  * @return {Item}
+  //  */
+  // add(item) {
+  //   this.projects.push(item);
+  //   return item;
+  // }
 
-  /**
-   * remove Item  with all children
-   *
-   * @param {string} id
-   */
-  remove(index) {
-    this.projects.splice(index, 1);
-  }
+  // /**
+  //  * remove Item  with all children
+  //  *
+  //  * @param {string} id
+  //  */
+  // remove(index) {
+  //   this.projects.splice(index, 1);
+  // }
 
 
-  clear() {
-    this.projects = [];
-  }
+  // clear() {
+  //   this.projects = [];
+  // }
 
   /**
    * get project 
@@ -381,7 +381,7 @@ export class Editor {
   }
 
   registerMenuItem(target, obj) {
-    this.menuItemManager.registerMenuItem(target, obj);
+    this.injectManager.registerMenuItem(target, obj);
     this.registerElement(obj);
   }
 

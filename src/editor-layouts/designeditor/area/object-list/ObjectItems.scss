@@ -1,0 +1,15 @@
+.object-items {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    > * {
+        flex: 1 1 auto;
+        width: 100%;
+    }
+
+    > *:first-child {
+        max-height: 120px;
+        overflow: auto;
+    }
+}

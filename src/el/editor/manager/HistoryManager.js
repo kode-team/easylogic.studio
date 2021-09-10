@@ -102,7 +102,6 @@ export class HistoryManager {
      * undo 를 수행한다. 
      */
     undo() {
-
         if (this.currentIndex < -1) return;
 
         if (this.currentIndex === this.length) {

@@ -43,20 +43,17 @@ export default class ExportWindow extends BaseWindow {
                 </div>                        
             </div>
             <div class="tab-body" ref="$body">
-                <div class="tab-content selected" data-value="1">
-                    <pre ref='$html'></pre>
+                <div class="tab-content selected" data-value="1" ref="$html">
                 </div>
-                <div class='tab-content' data-value='2'>
-                    <pre ref='$css'></pre>
+                <div class='tab-content' data-value='2' ref="$css">
                 </div>                        
                 <div class="tab-content" data-value="4">
                     <pre ref='$assets'></pre>
                 </div>
-                <div class="tab-content" data-value="6">
-                    <pre ref='$svgimage'></pre>
+                <div class="tab-content" data-value="6" ref="$svgimage">
                 </div>                                                                       
                 <div class="tab-content" data-value="7">
-                    <div ref='$svgimagePreview'></div>
+                    <div ref='$svgimagePreview' style="display:grid;grid-template-columns: repeat(3, 1fr);"></div>
                 </div>                                                       
             </div>
       </div>
@@ -76,7 +73,6 @@ export default class ExportWindow extends BaseWindow {
 ${this.makeStyle(project)}
 ${project.layers.map(item => this.makeStyle(item)).join('\n')}
 `
-        this.refs.$css.text(css);
 
         // html code 
         var html = `
@@ -84,18 +80,41 @@ ${this.$editor.html.renderSVG(project)}
 ${this.$editor.html.render(project)}
         `
 
-        this.refs.$html.text(html);
-
         // export svg image 
-        const svgData = project.layers.map( item => {
+        var svgData = project.layers.map( item => {
             return this.$editor.svg.render(item);
         })
 
-        // svg code 
-        this.refs.$svgimage.text(svgData.join("\n\n"));
-
         // svg preview image 
-        this.refs.$svgimagePreview.html(Dom.createByHTML(`<div>${svgData.map(it => `<div>${it}</div>`).join("")}</div>`));
+        this.refs.$svgimagePreview.html(Dom.createByHTML(`<div>${svgData.map(it => `<div>${it}</div>`).join("")}</div>`).html());
+
+
+        if (shiki) {
+            shiki
+            .getHighlighter({
+                theme: 'light-plus'
+            })
+            .then(highlighter => {
+
+                if (html_beautify) {
+                    html = html_beautify(html, {indent: 2})
+
+                    const changedHtml = highlighter.codeToHtml(html, 'html')
+                    this.refs.$html.html(changedHtml);      
+
+                    css = html_beautify(css, {indent: 2})
+
+                    const changedCss = highlighter.codeToHtml(css, 'html')
+                    this.refs.$css.html(changedCss);            
+                    
+                    svgData = html_beautify(svgData.join(""), {indent: 2})
+
+                    const changedSvgData = highlighter.codeToHtml(svgData, 'html')
+                    this.refs.$svgimage.html(changedSvgData);            
+
+                }
+            })
+        }
 
     }
 

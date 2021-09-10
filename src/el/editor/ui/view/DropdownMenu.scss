@@ -1,0 +1,88 @@
+.dropdown-menu {
+    &:hover > ul {
+        display: block;
+    }
+
+    li {
+        padding: 8px;
+        position: relative;
+        color: var(--elf--font-color);
+        cursor: pointer;
+
+        > div, > a {
+            span {
+                float: right;
+            }
+            svg {
+                width: 16px;
+                height: 16px;
+                vertical-align: middle;
+            }
+            color: var(--elf--font-color);            
+        }
+
+        > a {
+            display: inline-block;
+            width:100%;
+            text-decoration: none;
+            color: var(--elf--font-color);
+        }
+
+        &.divider {
+            height: 1px;
+            line-height: 0px;
+            box-sizing: border-box;
+            padding:0px;
+            border-bottom: 1px solid var(--elf--border-color);
+
+            &:hover {
+                background-color: none;
+            }
+        }
+    }
+    
+
+    ul {
+        background-color: var(--elf--background-color);
+        border: 1px solid var(--elf--border-color);
+        display: none;
+        left: 0;
+        position: absolute;
+        top: 100%;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        width: 200px;
+        padding-bottom: 4px;
+    }
+    
+    ul ul {
+        left: 100%;
+        position: absolute;
+        top: 0;
+    }
+    
+    li:hover {
+        background-color: var(--elf--selected-color);
+        color: var(--elf--selected-font-color);
+
+        > div, > a {
+            color: var(--elf--selected-font-color);
+
+            svg {
+                path {
+                    fill: var(--elf--selected-font-color);
+                }
+
+            }
+        }
+
+        > ul {
+            color: var(--elf--font-color);
+        }
+    }
+    
+    li:hover > ul {
+        display: block;
+    }
+}

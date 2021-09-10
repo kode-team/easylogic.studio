@@ -29,11 +29,11 @@ export default class StatusBar extends EditorElement {
             <div class='elf--status-bar'>
                 <div class='tool-view left' ref='$leftTool'>
                     <object refClass="SwitchLeftPanel" />
-                    ${this.$menuManager.generate('statusbar.left')}                    
+                    ${this.$injectManager.generate('statusbar.left')}                    
                 </div>            
                 <div class='message-view' ref='$msg'></div>
                 <div class='tool-view' ref='$rightTool'>
-                    ${this.$menuManager.generate('statusbar.right')}
+                    ${this.$injectManager.generate('statusbar.right')}
                     <object refClass="LayoutSelector" />
                     <object refClass="ThemeSwitcher" />
                     <object refClass="LanguageSelector" />

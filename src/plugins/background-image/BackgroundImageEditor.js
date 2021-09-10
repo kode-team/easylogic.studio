@@ -52,7 +52,6 @@ export default class BackgroundImageEditor extends EditorElement {
     }
 
     setValue (value) {
-        console.log('aaaa', value);
         this.setState({
             value, 
             images : this.parseBackgroundImage(value)

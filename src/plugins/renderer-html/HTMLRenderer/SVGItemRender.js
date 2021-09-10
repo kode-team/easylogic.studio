@@ -35,21 +35,6 @@ export default class SVGItemRender extends LayerRender {
         `
     }
 
-    /**
-     * 
-     * @param {Item} item 
-     */
-    toDefString (item) {
-
-        const str = this.toDefInnerString(item).trim();
-
-        return /*html*/`
-            <defs>
-            ${str}
-            </defs>
-        `
-    }
-
     fillId (item) {
         return this.getInnerId(item, 'fill')
     }

@@ -19,12 +19,14 @@ export default {
     },
 
     selectInWorldPosition: function (editor, evt, item) {
-
-        if (editor.selection.hasPoint(editor.viewport.getWorldPosition(evt))) {
+        const point = editor.viewport.getWorldPosition(evt);
+        if (editor.selection.hasPoint(point) ||
+            editor.selection.hasChildrenPoint(point)
+        ) {
             editor.selection.select(item);
             editor.snapManager.clear();
-            editor.emit('refreshSelectionTool', true);                
-            editor.emit('history.refreshSelection');                    
+            editor.emit('refreshSelectionTool', true);
+            editor.emit('history.refreshSelection');
         }
     }
 }

@@ -85,7 +85,11 @@ export default class LayoutProperty extends BaseProperty {
     return 'layout'
   }
 
-  [SUBSCRIBE('refreshSelection') + IF('checkShow')]() {
+  hasChildren() {
+    return this.$selection.current.hasChildren();
+  }
+
+  [SUBSCRIBE('refreshSelection') + IF('checkShow') + IF("hasChildren")]() {
     this.refresh();
   }
 }

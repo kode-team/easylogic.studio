@@ -364,7 +364,6 @@ export default class SelectionToolView extends SelectionToolEvent {
     moveBottomVertex (distVector) {
         const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
-
             const [realDx, realDy] = this.calculateRealDist(item, 3, distVector)
 
             // 변형되는 넓이 높이 구하기 
@@ -488,6 +487,10 @@ export default class SelectionToolView extends SelectionToolEvent {
     renderPointers () {
 
         if (!this.$selection.cachedCurrentItemMatrix) {
+            return ;
+        }
+
+        if (this.$selection.isEmpty) {
             return ;
         }
 
@@ -636,10 +639,10 @@ export default class SelectionToolView extends SelectionToolEvent {
             size: this.createSize(pointers),
             point: [
                 // 4 모서리에서도 rotate 가 가능하도록 맞춤 
-                isArtBoard ? undefined : this.createRotatePointer (selectionPointers[0], 0),
-                isArtBoard ? undefined : this.createRotatePointer (selectionPointers[1], 1),
-                isArtBoard ? undefined : this.createRotatePointer (selectionPointers[2], 2),
-                isArtBoard ? undefined : this.createRotatePointer (selectionPointers[3], 3),
+                this.createRotatePointer (selectionPointers[0], 0),
+                this.createRotatePointer (selectionPointers[1], 1),
+                this.createRotatePointer (selectionPointers[2], 2),
+                this.createRotatePointer (selectionPointers[3], 3),
                 isArtBoard ? undefined : this.createRotatePointer (rotatePointer, 4, 'center center'),
                 this.createPointer (pointers[0], 1, rotate),
                 this.createPointer (pointers[1], 2, rotate),

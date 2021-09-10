@@ -1,7 +1,7 @@
 
 import UIElement from "el/sapa/UIElement";
 import { ConfigManager } from "el/editor/manager/ConfigManager";
-import { MenuItemManager } from "el/editor/manager/MenuItemManager";
+import { InjectManager } from "el/editor/manager/InjectManager";
 import { SelectionManager } from "el/editor/manager/SelectionManager";
 import { ViewportManager } from "el/editor/manager/ViewportManager";
 import { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "el/editor/types/event";
@@ -131,10 +131,10 @@ export class EditorElement extends UIElement {
     }
 
     /**
-     * @type {MenuItemManager}
+     * @type {InjectManager}
      */ 
-    get $menuManager() {
-        return this.$editor.menuItemManager;
+    get $injectManager() {
+        return this.$editor.injectManager;
     }
 
     get $model() {

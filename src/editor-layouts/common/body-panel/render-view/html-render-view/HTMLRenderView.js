@@ -35,7 +35,7 @@ export default class HTMLRenderView extends EditorElement {
             <div class='elf--element-view' ref='$body'>
                 <object refClass='StyleView' ref='$styleView' />
                 <div class='canvas-view' ref='$view'></div>
-                ${this.$menuManager.generate("render.view")}
+                ${this.$injectManager.generate("render.view")}
             </div>
         `
     }
@@ -323,20 +323,49 @@ export default class HTMLRenderView extends EditorElement {
 
     }
 
-    moveTo(newDist) {
+    /**
+     * 선택된 레이어 이동하기 
+     * 
+     * 1. 마우스 포인트로 이동한 거리 생성 
+     * 2. world 포인트로 이동한 거리 생성 
+     * 3. world 포인트로 snap 체크 
+     * 4. snap 만큼 이동 
+     * 5. 캐쉬된 개별 레어이의 verties 에 localDist 더함 
+     * 6. 처음 포인트와 새로운 포인트를 부모의 Matrix 의 역을 곱함 
+     * 7. 둘 사이의 차이를 구해서 실질적으로 움직인 dist 를 찾아냄 
+     * 
+     * @param {vec3} dist 
+     */
+    moveTo(dist) {
 
         //////  snap 체크 하기 
         const snap = this.$snapManager.check(this.$selection.cachedRectVerties.map(v => {
-            return vec3.add([], v, newDist)
+            return vec3.add([], v, dist)
         }), 3);
 
-        const localDist = vec3.add([], snap, newDist);
+        const localDist = vec3.add([], snap, dist);
 
         const result = {}
         this.$selection.cachedItemMatrices.forEach(it => {
+
+            // newVerties 에 실제 움직인 좌표로 넣고 
+            const newVerties = it.verties.map(v => {
+                return vec3.add([], v, localDist)
+            })
+
+            // 첫번째 좌표 it.rectVerties[0] 과 
+            // 마지막 좌표 newVerties[0] 를 
+            // parentMatrixInverse 기준으로 다시 원복하고 거리를 잰다 
+            // 그게 실제적인 distance 이다. 
+            const newDist = vec3.subtract(
+                [], 
+                vec3.transformMat4([], newVerties[0], it.parentMatrixInverse), 
+                vec3.transformMat4([], it.verties[0], it.parentMatrixInverse)
+            )
+
             result[it.id] = {
-                x: Length.px(it.x + localDist[0]).floor(),          // 1px 단위로 위치 설정 
-                y: Length.px(it.y + localDist[1]).floor(),
+                x: Length.px(it.x + newDist[0]).floor(),          // 1px 단위로 위치 설정 
+                y: Length.px(it.y + newDist[1]).floor(),
             }
         })
         this.$selection.reset(result);
@@ -481,23 +510,27 @@ export default class HTMLRenderView extends EditorElement {
 
     [SUBSCRIBE('refreshElementBoundSize')](parentObj) {
         if (parentObj) {
+
+            const hasChangedDimension = parentObj.changedBoxModel || parentObj.hasChangedField('box-model', 'width', 'height', 'layout', 'flex-layout', 'grid-layout');
+            
             parentObj.layers.forEach(it => {
-                if (it.isLayoutItem()) {
-                    var $el = this.getElement(it.id);
+                // if (it.isLayoutItem()) {
+                var $el = this.getElement(it.id);
 
-                    if ($el) {
-                        const { x, y, width, height } = $el.offsetRect();
+                if ($el && hasChangedDimension) {
+                    const { x, y, width, height } = $el.offsetRect();
 
-                        it.reset({
-                            x: Length.px(x),
-                            y: Length.px(y),
-                            width: Length.px(width),
-                            height: Length.px(height)
-                        })
+                    it.reset({
+                        x: Length.px(x),
+                        y: Length.px(y),
+                        width: Length.px(width),
+                        height: Length.px(height)
+                    })
 
-                        this.trigger('refreshSelectionStyleView', it, true);
-                    }
+                    this.updateElement(it, $el);
+                    this.trigger('refreshSelectionStyleView', it, true);
                 }
+                // }
 
                 this.trigger('refreshElementBoundSize', it);
             })
