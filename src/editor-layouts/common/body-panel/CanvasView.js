@@ -64,18 +64,46 @@ export default class CanvasView extends EditorElement {
       <div class='elf--page-container' tabIndex="-1" ref='$container'>
         <div class='page-view' ref="$pageView">
           <div class='page-lock scrollbar' ref='$lock'>            
+
+            <!-- 선택 영역 이벤트 설정  -->
             <object refClass="DragAreaView" ref="$dragAreaView" />               
+
+            <!-- HTML 렌더링 영역  --> 
             <object refClass='HTMLRenderView' ref='$elementView' />                                        
+
+            <!--  One Selection Tool --> 
             <object refClass='SelectionToolView' ref='$selectionTool' />
+
+            <!-- Group Selection Tool --> 
             <object refClass='GroupSelectionToolView' ref='$groupSelectionTool' />
+
+            <!-- 드래그 영역 그려주는 뷰 --> 
             <object refClass="DragAreaRectView" ref="$dragAreaRectView" />                  
+
+            <!-- Grid Layout 에서 사용되는 영역 그려주는 뷰 --> 
             <object refClass='GridLayoutLineView' ref='$gridLayoutLineView' />            
+
+            <!-- ArtBoard 의 title 부분 그려주는 뷰  -->
             <object refClass='SelectionInfoView' ref='$selectionInfoView' />                                                            
+
+            <!-- 스마트 가이드 라인 그려주는 뷰  -->
             <object refClass='GuideLineView' ref='$guideLineView' />            
+
+            <!-- Hover 된 레이어 영역을 그려주는 뷰 -->
             <object refClass='HoverView' ref='$hoverView' />     
+
+            <!-- 레이어를 추가 하기 위해서 드래그 하는 영역 뷰 -->
             <object refClass='LayerAppendView' ref='$objectAddView' />       
+
+            <!-- 패스 편집 에디터 뷰  -->
             <object refClass='PathEditorView' ref='$pathEditorView' />                 
+
+            <!-- 패스 드로잉 에디터 뷰 -->
             <object refClass='PathDrawView' ref='$pathDrawView' />            
+
+            <!-- 캔버스 영역에 그리기 도와주는 뷰 -->
+            ${this.$injectManager.generate('canvas.view')}              
+
           </div>
         </div>
         <object refClass='PageTools' />

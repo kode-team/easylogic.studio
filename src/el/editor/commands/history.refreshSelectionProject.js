@@ -5,19 +5,20 @@ export default {
     command: 'history.refreshSelectionPorject',
     description: `save project selection in history `,
     description_ko: 'Project Selection 정보를 갱신하면서 History 에 저장한다',
-    execute: function (editor, message = 'selection') {
-        const currentValues = editor.selection.ids; 
-        const projectId = editor.selection.currentProject?.id; 
-        const undoValues = editor.history.selectedIds
+    execute: function (editor, message = 'selection', projectId) {
+        const currentValues = [projectId]; 
+        const undoValues = [editor.selection.currentProject?.id]
 
-        // 이전 선택과 같으면 선택 히스토리는 쌓지 않는다. 
+        // 이전 프로젝트와 현재 프로젝트가 같으면 selection 을 갱신하지 않는다.
         if (isArrayEquals(currentValues, undoValues)) {
             return;
         }
 
+        editor.selection.selectProject(projectId);
+
         editor.history.add(message, this, {
-            currentValues: [currentValues, projectId],
-            undoValues: [undoValues, projectId]
+            currentValues,
+            undoValues
         })
 
         this.nextAction(editor);
@@ -25,25 +26,18 @@ export default {
 
     nextAction (editor) {
         editor.nextTick(() => {
-            editor.history.saveSelection()
-            editor.emit('refreshSelection');
-
-            editor.nextTick(() => {
-                editor.emit('refreshSelectionTool');
-            })
-
+            editor.emit("refreshAll");
+            editor.emit("refreshProjectList");
         })
     },
 
-    redo : function (editor, { currentValues: [ids, projectId] }) {
+    redo : function (editor, { currentValues: [projectId] }) {
         editor.selection.selectProject(projectId)
-        editor.selection.select(...ids)
 
         this.nextAction(editor);
     },
-    undo: function (editor, { undoValues: [ids, projectId] }) {
+    undo: function (editor, { undoValues: [projectId] }) {
         editor.selection.selectProject(projectId)
-        editor.selection.select(...ids)
 
         this.nextAction(editor);      
     }

@@ -50,8 +50,20 @@ export default class SelectionToolView extends SelectionToolEvent {
     }
 
     [SUBSCRIBE('keymap.keydown')] (e) {
-        if (e.shiftKey) {
+        const keyString = [
+            e.altKey    ? 'ALT'     : '',
+            e.ctrlKey   ? 'CTRL'    : '',
+            e.shiftKey  ? 'SHIFT'   : '',
+            e.metaKey   ? 'META'    : ''
+        ].join("");
+
+        if (e.shiftKey && keyString === 'SHIFT') {
             this.$el.attr('data-has-shift', 'true')
+        } else {
+            if (this.$el.attr('data-has-shift') === 'true') {
+                this.$el.attr('data-has-shift', '')
+            }
+
         }
     }
 

@@ -76,24 +76,14 @@ export default class ProjectProperty extends BaseProperty {
   }
 
 
-
-  selectProject (project) {
-
-    // TODO: project 를 selection 할 때 히스토리에 추가해야함 
-
-    if (project) {
-      this.$selection.selectProject(project.id)
-    }
-
-    this.refresh()       
-    this.emit('refreshAllSelectProject');    
-    this.command('refreshSelection');    
-  }
-
   [CLICK('$projectList .project-item label')] (e) {
     var id = e.$dt.attr('data-id')
 
-    this.selectProject(this.$model.get(id))
+    this.command('refreshSelectionPorject', "change project", id);
+
+    this.nextTick(() => {
+      this.refresh();
+    })
   }
 
 

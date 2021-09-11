@@ -5,6 +5,7 @@ import { InjectManager } from "el/editor/manager/InjectManager";
 import { SelectionManager } from "el/editor/manager/SelectionManager";
 import { ViewportManager } from "el/editor/manager/ViewportManager";
 import { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "el/editor/types/event";
+import { ModelManager } from "el/editor/manager/ModelManager";
 
 export class EditorElement extends UIElement {
 
@@ -137,6 +138,22 @@ export class EditorElement extends UIElement {
         return this.$editor.injectManager;
     }
 
+    /**
+     * 하위 호환성을 위해서 이름을 유지함 
+     * 
+     * @type {InjectManager}
+     */ 
+     get $menuManager() {
+        return this.$injectManager
+    }    
+
+
+    /**
+     * 모델 관리하는 Manager 객체 
+     * 
+     * @type {ModelManager}
+     * 
+     */
     get $model() {
         return this.$editor.modelManager;
     }
@@ -150,7 +167,6 @@ export class EditorElement extends UIElement {
      * @param {string} description 
      * @param {any[]} args 
      */
-
     command(command, description, ...args) {
         if (this.$editor.isPointerUp) {
             return this.emit(`history.${command}`, description, ...args);
