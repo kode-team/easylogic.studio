@@ -26,6 +26,13 @@ export default class SVGRender extends DomRender {
                 'background-color', 
                 'border-radius',
                 'transform-style',
+                'filter', 
+                'filter', 
+                'backdrop-filter', 
+                'box-shadow', 
+                'text-shadow',
+                'animation',  
+                'transition',                                
             ])
         }
     
