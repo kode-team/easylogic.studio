@@ -3,7 +3,7 @@ import { Transform } from "../property-parser/Transform";
 import { TransformOrigin } from "el/editor/property-parser/TransformOrigin";
 import { mat4, quat, vec3 } from "gl-matrix";
 import { calculateMatrix, calculateMatrixInverse, radianToDegree, round, vertiesMap } from "el/utils/math";
-import { isFunction } from "el/sapa/functions/func";
+import { isFunction, isUndefined } from "el/sapa/functions/func";
 import PathParser from "el/editor/parser/PathParser";
 import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties, toRectVerties } from "el/utils/collision";
 import { BaseAssetModel } from './BaseAssetModel';
@@ -454,11 +454,11 @@ export class MovableModel extends BaseAssetModel {
      * 3. Multiply by each of the transform functions in transform property from left to right
      * 4. Translate by the negated computed X, Y and Z values of transform-origin
      */    
-    getLocalTransformMatrix () {
+    getLocalTransformMatrix (width, height) {
         const origin = TransformOrigin.scale(
             this.json['transform-origin'] || '50% 50% 0px', 
-            this.screenWidth.value, 
-            this.screenHeight.value
+            isUndefined(width) ? this.screenWidth.value : width, 
+            isUndefined(height) ? this.screenHeight.value : height
         )
 
         // start with the identity matrix 
@@ -473,13 +473,11 @@ export class MovableModel extends BaseAssetModel {
         // 4. Translate by the negated computed X, Y and Z values of transform-origin        
         mat4.translate(view, view, vec3.negate([], origin));
 
-        // console.log('localMatrix', view);
-
         return view; 
     }      
 
-    getLocalTransformMatrixInverse () {
-        return mat4.invert([], this.getLocalTransformMatrix());
+    getLocalTransformMatrixInverse (width, height) {
+        return mat4.invert([], this.getLocalTransformMatrix(width, height));
     }
 
     /**
@@ -690,7 +688,6 @@ export class MovableModel extends BaseAssetModel {
             accumulatedMatrixInverse,
         }
     }
-
 
     /**
      * 

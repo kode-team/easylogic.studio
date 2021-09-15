@@ -362,6 +362,7 @@ export default class PathEditorView extends PathTransformEditor {
 
         this.emit(this.state.changeEvent, {
             d: parser.d,
+            matrix: this.state.matrix,
             box: this.state.box,
             totalLength: this.totalPathLength,
         })
@@ -756,7 +757,8 @@ export default class PathEditorView extends PathTransformEditor {
             this.changeMode('modify');
             // 마지막 지점에서 다시 renderpath 를 하게 되면 element 가 없어서 double 클릭을 인식 할 수가 없음. 
             // 그래서 삭제하니 이코드는 주석으로 그대로 나두자.      
-            // this.renderPath()        
+            // this.renderPath()      
+            this.updatePathLayer();  
 
         } else if (this.isMode('path')) {
 

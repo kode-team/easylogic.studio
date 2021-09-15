@@ -1,6 +1,10 @@
 import { Editor } from "el/editor/manager/Editor";
 import { Length } from "el/editor/unit/Length";
-import { vec3 } from "gl-matrix";
+import { mat4, vec3 } from "gl-matrix";
+import PathParser from 'el/editor/parser/PathParser';
+import { rectToVerties } from "el/utils/collision";
+import { vertiesMap, calculateMatrix, calculateMatrixInverse } from 'el/utils/math';
+import { Transform } from 'el/editor/property-parser/Transform';
 
 
 export default {
@@ -13,6 +17,7 @@ export default {
      * @param {Editor} editor 
      * @param {object} pathObject 
      * @param {string} pathObject.d    svg path 문자열 
+     * @param {object} pathObject.matrix    svg path 문자열 
      */
     execute: function (editor, pathObject) {
         const current = editor.selection.current;
@@ -21,26 +26,61 @@ export default {
                 const newPath = current.invertPath(pathObject.d);
     
                 // d 속성 (path 문자열) 을 설정한다. 
-                editor.emit('setAttributeForMulti', editor.selection.packByValue({
+                editor.command('setAttributeForMulti', "change local path", editor.selection.packByValue({
                     d: newPath.d,
                 }))
             } else {
+                const newPath = new PathParser(pathObject.d);
+                // 1. 로컬 좌표로 변환
+                newPath.transformMat4(pathObject.matrix.accumulatedMatrixInverse);
 
-                const newPath = current.invertPath(pathObject.d);
-                const bbox = newPath.getBBox();
-    
-                const newX = current.offsetX.value + bbox[0][0];
-                const newY = current.offsetY.value + bbox[0][1];
+                // 2. 로컬 좌표로 bbox 구하기 
+                let bbox = newPath.getBBox();
+
+                // 3. newWidth, newHeight 구하기 
                 const newWidth = vec3.distance(bbox[1], bbox[0]);
                 const newHeight = vec3.distance(bbox[3], bbox[0]);
-    
-                newPath.translate(-bbox[0][0], -bbox[0][1])        
+
+
+                // 4. bbxo 를 월드 좌표로 변환 
+                let oldBBox = vertiesMap(
+                    rectToVerties(bbox[0][0], bbox[0][1], newWidth, newHeight), 
+                    pathObject.matrix.accumulatedMatrix
+                );
+
+                // 5. 월드 좌표에서 로컬 transform 의 역행렬을 적용, 월드 좌표에서 translate 를 구함 
+                //    이 때 translate 를 모르기 때문에 origin 을 bbox를 중심으로 새로 구해서 적용 
+                let newBBox = vertiesMap(oldBBox, calculateMatrixInverse(
+                    mat4.fromTranslation([], oldBBox[4]),
+                    Transform.createTransformMatrix(
+                        Transform.parseStyle(pathObject.matrix.transform), 
+                        newWidth, 
+                        newHeight
+                    ),
+                    mat4.fromTranslation([], vec3.negate([], oldBBox[4])),
+                ));
+
+                // 6. 월드 좌표로 변환된 bbox 의 중심으로 새로운 matrix 를 구함
+                const worldMatrix = calculateMatrix(
+                    mat4.fromTranslation([], newBBox[0]),                      
+                    current.getLocalTransformMatrix(newWidth, newHeight),
+                );
+
+
+                // 7. 월드 좌표에서 부모의 상대 좌표로 변환 
+                const realXY = mat4.getTranslation([], calculateMatrix(
+                    pathObject.matrix.parentMatrixInverse,                    
+                    worldMatrix,                    
+                    mat4.invert([], current.getLocalTransformMatrix(newWidth, newHeight)),
+                ));
 
                 // d 속성 (path 문자열) 을 설정한다. 
-                editor.emit('setAttributeForMulti', editor.selection.packByValue({
-                    d: newPath.d,
-                    x: Length.px(newX),
-                    y: Length.px(newY),
+                editor.command('setAttributeForMulti', "change path", editor.selection.packByValue({
+                    // bbox 가 기존 좌표에서 움직인 상태 이기 때문에 
+                    // bbox 시작점만큼 이동해서 newWidth, newHeight 기준으로 path 를 맞춘다. 
+                    d: newPath.translate(-bbox[0][0], -bbox[0][1]).d,
+                    x: Length.px(realXY[0]),
+                    y: Length.px(realXY[1]),
                     width: Length.px(newWidth),
                     height: Length.px(newHeight)
                 }))

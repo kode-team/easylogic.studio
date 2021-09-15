@@ -46,6 +46,8 @@ export default class PositionProperty extends BaseProperty {
     const rotateZ = Transform.get(current.transform, 'rotateZ')
     if (rotateZ) {
       this.children.$rotate.setValue(rotateZ[0]);
+    } else {
+      this.children.$rotate.setValue(Length.deg(0));
     }
 
   }

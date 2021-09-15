@@ -23,11 +23,10 @@ export default {
 
             // d 속성은 자동으로 페스 에디터로 연결 
             if (current.d) {
-                // box 모드 
-                // box - x, y, width, height 고정된 상태로  path 정보만 변경 
                 editor.emit('showPathEditor', 'modify', {
                     box: 'canvas',
                     current,
+                    matrix: current.matrix,
                     d: current.accumulatedPath().d,
                     changeEvent: (data) => {
                         editor.emit('updatePathItem', data);

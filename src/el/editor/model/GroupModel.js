@@ -16,7 +16,7 @@ export class GroupModel extends MovableModel {
      */
     hasLayout () {
         const layout = this.json.layout || "default";
-        return true;
+        return layout !== "default";
     }
 
     /**
