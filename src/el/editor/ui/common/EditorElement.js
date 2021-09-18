@@ -6,6 +6,7 @@ import { SelectionManager } from "el/editor/manager/SelectionManager";
 import { ViewportManager } from "el/editor/manager/ViewportManager";
 import { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "el/editor/types/event";
 import { ModelManager } from "el/editor/manager/ModelManager";
+import { ShortCutManager } from "el/editor/manager/ShortCutManager";
 
 export class EditorElement extends UIElement {
 

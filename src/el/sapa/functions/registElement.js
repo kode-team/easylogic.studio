@@ -3,8 +3,11 @@ import { isString } from './func';
 
 const map = {};
 const __tempVariables = new Map();
+const __tempVariablesGroup = new Map();
 
-export const VARIABLE_SAPARATOR = "__ref__variable:";
+window.__tempVariables = __tempVariables;
+
+export const VARIABLE_SAPARATOR = "v:";
 
 
 /**
@@ -13,15 +16,33 @@ export const VARIABLE_SAPARATOR = "__ref__variable:";
  * @param {any} value
  * @returns {string} 참조 id 생성 
  */
-export function variable(value) {
+export function variable(value, groupId = '') {
     const id = `${VARIABLE_SAPARATOR}${uuidShort()}`;
 
     __tempVariables.set(id, value);
 
+    if (groupId) {
+        __tempVariablesGroup.has(groupId) || __tempVariablesGroup.set(groupId, new Set());
+        __tempVariablesGroup.get(groupId).add(id);
+    }
+
     return id;
 }
 
-
+/**
+ * groupId 로 지정된 변수를 초기화 해준다. 
+ * 
+ * @copilot
+ * @param {*} groupId 
+ */
+export function initializeGroupVariables(groupId) {
+    if (__tempVariablesGroup.has(groupId)) {
+        __tempVariablesGroup.get(groupId).forEach(id => {
+            __tempVariables.delete(id);
+        });
+        __tempVariablesGroup.delete(groupId);
+    }
+}
 
 /**
  * 참조 id 를 가지고 있는 variable 을 복구한다. 

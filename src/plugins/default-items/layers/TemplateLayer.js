@@ -36,6 +36,17 @@ export class TemplateLayer extends Component {
     return icon.auto_awesome;
   }
 
+
+  editable(editablePropertyName) {
+
+    switch (editablePropertyName) {
+      case "font":
+        return true;
+    }
+
+    return super.editable(editablePropertyName);
+  }  
+
   toCloneObject() {
     return {
       ...super.toCloneObject(),

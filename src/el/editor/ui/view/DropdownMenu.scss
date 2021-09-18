@@ -1,46 +1,95 @@
 .dropdown-menu {
+    &.opened > ul ,
     &:hover > ul {
         display: block;
     }
 
+    &.opened > .dropdown-menu-arrow ,
+    &:hover > .dropdown-menu-arrow {
+        display: block;
+    }
+
     li {
+        display: grid;
+        grid-template-columns: 16px 1fr 20px;
+        column-gap: 4px;        
         padding: 8px;
         position: relative;
         color: var(--elf--font-color);
         cursor: pointer;
 
-        > div, > a {
-            span {
-                float: right;
-            }
-            svg {
-                width: 16px;
-                height: 16px;
-                vertical-align: middle;
-            }
-            color: var(--elf--font-color);            
-        }
-
-        > a {
-            display: inline-block;
-            width:100%;
+        > * {
             text-decoration: none;
             color: var(--elf--font-color);
         }
 
+        &[disabled]  {
+            // pointer-events: none;
+            cursor: not-allowed;
+            user-select: none;
+
+            > * {
+                pointer-events: none;
+                color: var(--elf--disabled-font-color);
+            }
+
+        }
+
+        &[shortcut] {
+            grid-template-columns: 16px 1fr 0.5fr;
+
+            .shortcut {
+                text-align: right;
+            }
+        }
+
+        svg {
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+
+            path {
+                fill: currentColor;
+            }
+        }
+
+
         &.divider {
+            display: block;
             height: 1px;
             line-height: 0px;
             box-sizing: border-box;
             padding:0px;
-            border-bottom: 1px solid var(--elf--border-color);
-
-            &:hover {
-                background-color: none;
-            }
+            margin-top: 4px;
+            margin-bottom: 4px;
+            background-color: var(--elf--border-color);
         }
     }
     
+    &[data-direction="right"] {
+        > ul {
+            left: auto;
+            right: 0px;
+        }
+
+        > .dropdown-menu-arrow {
+            left: auto;
+            right: 50%;
+            transform: translateX(50%);            
+        }
+    }
+
+    &[data-direction="center"] {
+        > ul {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        > .dropdown-menu-arrow {
+            left: 50%;
+            transform: translateX(-50%);            
+        }        
+    }    
 
     ul {
         background-color: var(--elf--background-color);
@@ -48,12 +97,34 @@
         display: none;
         left: 0;
         position: absolute;
-        top: 100%;
+        top: calc(100% + 6px);
         list-style-type: none;
         margin: 0;
         padding: 0;
-        width: 200px;
+        width: 240px;
+        padding-top: 4px;        
         padding-bottom: 4px;
+    }
+
+    .dropdown-menu-arrow {
+        display: none;
+        position: absolute;
+        width: 7px;
+        height: 6px;
+        left: 50%;
+        transform: translateX(-50%);
+        top: calc(100% - 5px);
+        box-sizing: border-box;
+        // background-color: var(--elf--background-color);
+
+        svg {
+            width: 100%;
+            height: 100%;
+            path {
+                fill: var(--elf--background-color);
+                stroke: var(--elf--border-color);
+            }
+        }
     }
     
     ul ul {
@@ -63,19 +134,25 @@
     }
     
     li:hover {
-        background-color: var(--elf--selected-color);
-        color: var(--elf--selected-font-color);
 
-        > div, > a {
+        &:not(.divider):not([disabled]) {
+
+            background-color: var(--elf--selected-color);
             color: var(--elf--selected-font-color);
 
-            svg {
-                path {
-                    fill: var(--elf--selected-font-color);
+            > * {
+                color: var(--elf--selected-font-color);
+    
+                svg {
+                    path {
+                        fill: var(--elf--selected-font-color);
+                    }
+    
                 }
-
             }
+                
         }
+
 
         > ul {
             color: var(--elf--font-color);

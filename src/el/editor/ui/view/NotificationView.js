@@ -34,13 +34,13 @@ export default class NotificationView extends EditorElement {
     }
 
     [SUBSCRIBE('notify')] (type, title, description, duration = 1000) {
-        const $dom = Dom.createByHTML(this.getMessageTemplate(type, title, description, duration))
+        const $dom = Dom.createByHTML(this.getMessageTemplate(type, title, description, 1000))
     
         this.$el.prepend($dom)
 
         setTimeout(($dom) => {
             $dom.css('opacity', 0);
-        }, 100, $dom)
+        }, duration, $dom)
 
     }
 }

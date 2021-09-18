@@ -6,8 +6,6 @@ import Projects from "el/editor/ui/menu-items/Projects";
 import './ToolBar.scss';
 import { DropdownMenu } from "el/editor/ui/view/DropdownMenu";
 
-
-
 export default class ToolBar extends EditorElement {
 
     components() {
@@ -22,10 +20,9 @@ export default class ToolBar extends EditorElement {
         return /*html*/`
             <div class='elf--tool-bar'>
                 <div class='logo-item'>
-                    <object refClass="DropdownMenu">
+                    <object refClass="DropdownMenu" ref="$menu">
                         <label class='logo'></label>
                     </object>
-
                 </div>                 
                 <div class='left'>
                     <div class='elf--tool-menu'>

@@ -20,9 +20,9 @@ export default class Inspector extends EditorElement {
             ref="$tab" 
             ${variable({
               selectedValue: 'style',
-              onchange: this.subscribe((value) => {
+              onchange: (value) => {
                 this.$config.set("inspector.selectedValue", value);
-              })
+              }
             })}
           >
             <object refClass="TabPanel" value="style" title="${this.$i18n('inspector.tab.title.style')}" icon=${variable(icon.palette)}>
