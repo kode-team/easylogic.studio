@@ -27,9 +27,7 @@ export class Tabs extends EditorElement {
   
     template() {
       return /*html*/`
-        <div class="tab number-tab" ref="$tab">
-  
-        </div>
+        <div class="tab" ref="$tab"></div>
       `
     }
   
@@ -44,7 +42,7 @@ export class Tabs extends EditorElement {
           ${children.map(it => {
             return /*html*/`
               <div class="tab-item" data-value="${it.props.value}" title='${it.props.title}'>
-                <label class='icon'>${it.props.icon}</label>
+                <label class="title">${it.props.title}</label>
               </div>         
             `
           }).join('')}

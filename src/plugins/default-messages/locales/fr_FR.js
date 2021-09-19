@@ -286,7 +286,7 @@ export default {
 
     'inspector.tab.title.style': 'Style',
     'inspector.tab.title.component': 'Composant',
-    'inspector.tab.title.transition': 'Transition & Animation',
+    'inspector.tab.title.transition': 'Animation',
     'inspector.tab.title.asset': 'Eléments',
     'inspector.tab.title.text': 'Texte',
     'inspector.tab.title.code': 'Code',    

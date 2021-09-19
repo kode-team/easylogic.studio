@@ -4,6 +4,25 @@
     grid-column-gap: 4px;
     height: 24px;
 
+
+    &.focused {
+
+        .area {
+            
+            input[type="number"] {
+                border-color: var(--elf--selected-color);
+            }
+
+            .elf--select-editor {
+
+                select {
+                    border-color: var(--elf--selected-color) !important;
+                }
+            }
+        }
+    }
+
+
     &.has-label {
         grid-template-columns: 60px 1fr;
         grid-column-gap: 4px;

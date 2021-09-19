@@ -2,6 +2,8 @@
     display: grid;
     grid-template-columns: 60px 200px 1fr 200px;
     height: 100%;
+    background-color: var(--elf--header-background-color);
+    // border-bottom: 2px solid var(--elf--background-color);
 
     > div {
         text-align: center;

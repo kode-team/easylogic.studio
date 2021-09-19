@@ -1,5 +1,5 @@
 import { Length } from "el/editor/unit/Length";
-import { LOAD, INPUT } from "el/sapa/Event";
+import { LOAD, INPUT, FOCUS, BLUR } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
@@ -49,7 +49,9 @@ export default class NumberInputEditor extends EditorElement {
         var realValue = (+value).toString();
         
         return /*html*/`
-        <div class='elf--number-input-editor ${hasLabel} ${hasCompact} ${layoutClass}' data-selected-type='${type}'>
+        <div class='elf--number-input-editor ${hasLabel} ${hasCompact} ${layoutClass}' 
+            ref="$range"
+            data-selected-type='${type}'>
             ${label ? `<label>${label}</label>` : '' }
             <div class='range--editor-type' data-type='range'>
                 <div class='area'>
@@ -75,6 +77,15 @@ export default class NumberInputEditor extends EditorElement {
         this.setState(data, false)
         this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params)
     }
+
+
+    [FOCUS('$propertyNumber')] (e) {
+        this.refs.$range.addClass('focused');
+    }
+
+    [BLUR('$propertyNumber')] (e) {
+        this.refs.$range.removeClass('focused');
+    }    
 
     [INPUT('$propertyNumber')] (e) {
         var value = +this.getRef('$propertyNumber').value; 

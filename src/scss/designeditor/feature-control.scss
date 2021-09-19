@@ -15,24 +15,7 @@ $tab-height: 35px;
         .empty {
           height: 100px;
         }
-
-        > .tab {
-          > .tab-header {
-            height: $tab-height;
-
-            .tab-item {
-              padding: 0px 0px;
-            }
-          }
-          
-    
-          > .tab-body {
-            top: $tab-height;
-          }
-        }
       }
-
-
     }
   
   

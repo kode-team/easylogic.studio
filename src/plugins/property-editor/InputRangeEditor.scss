@@ -8,9 +8,18 @@ $border-radius: 3px;
     &.focused {
 
         .area {
-            box-shadow: 0 0 0 1px var(--elf--selected-color);
-        }
+            
+            input[type="number"] {
+                border-color: var(--elf--selected-color);
+            }
 
+            .elf--select-editor {
+
+                select {
+                    border-color: var(--elf--selected-color) !important;
+                }
+            }
+        }
     }
 
     &.has-label {

@@ -1,7 +1,7 @@
-$tab-header-height: 34px;
+$tab-header-height: 48px;
  
 
-$tab-horizontal-header-width: 60px;
+$tab-horizontal-header-width: 48px;
 $tab-horizontal-header-right-width: 60px;
 
 .tab {
@@ -37,32 +37,35 @@ $tab-horizontal-header-right-width: 60px;
           top: 0px;
           bottom: 0px;
           height: auto;
-          border-right: 1px solid var(--elf--border-color);
-          padding: 10px;
+          // border-right: 1px solid var(--elf--border-color);
+          // padding: 10px;
           box-sizing: border-box;
           overflow: visible;
+          background-color: var(--elf--header-background-color);
+          text-align: center;
 
           .tab-item {
             display: block;
-            width: 100%;
-            height: auto;
+            width: 48px;
+            height: 48px;
+            margin:0 auto;
             margin-bottom: 10px;
             position: relative;
-            border-radius: 2px;
-            background-color: transparent !important;
+            // border-radius: 2px;
+            background-color: var(--elf--header-background-color) !important;
             border-bottom: 0px !important;
+            border:0px;
 
             &:before {
               display: none;
             }
 
             &.selected {
-              background-color: var(--elf--selected-color) !important;
+              // background-color: var(--elf--background-color) !important;
               color: var(--elf--selected-font-color);              
 
               label {
-                height: auto;
-                color: var(--elf--selected-font-color);              
+                color: var(--elf--selected-color);              
 
               }
             }
@@ -74,7 +77,7 @@ $tab-horizontal-header-right-width: 60px;
 
             label {
               height: auto;
-              padding: 6px 0px;
+              padding: 12px 0px;
               svg {
                 width: 24px;
                 height: 24px;
@@ -239,23 +242,62 @@ $tab-horizontal-header-right-width: 60px;
       }
     }
 
+
     > .tab-item {
       flex: 1 1 auto;
-      display: inline-block;
-      font-size: 12px;
-      text-align: left;
+      text-align: center;
+      position: relative;
+      padding: 0px 0px 0px 0px;
       height: 100%;
-      padding: 6px 4px;
       cursor: pointer;
-      font-weight: bold;      
-      
-      &.small-font {
-        font-size: 11px;
-      }
 
       &.selected {
-        // background-color: transparent;
-        color: var(--elf--selected-font-color);
+        border-bottom: 2px solid var(--elf--selected-color);                   
+      }
+
+      &.selected,
+      &:hover {
+        label {
+          color: var(--elf--selected-color); 
+        }
+
+      }
+
+      label {
+        line-height: 24px;
+        height: 100%;
+        display: inline-block;
+        vertical-align: middle;
+        color: var(--elf--font-color);
+        font-size: 14px;
+        pointer-events: none;
+        box-sizing: border-box;
+        padding: 12px 0px;
+      }
+
+      &:first-child {
+        &:hover {
+          label {
+            left: 10px;
+          }
+        }
+      }
+
+      &:last-child {
+
+        &:hover {
+          label {
+            left: auto;
+            right: 10px;
+          }
+        }
+      }
+
+      &:hover {
+        label {
+          opacity: 1;            
+
+        }
       }
     }
   }

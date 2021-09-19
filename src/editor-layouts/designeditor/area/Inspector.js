@@ -25,7 +25,7 @@ export default class Inspector extends EditorElement {
               }
             })}
           >
-            <object refClass="TabPanel" value="style" title="${this.$i18n('inspector.tab.title.style')}" icon=${variable(icon.palette)}>
+            <object refClass="TabPanel" value="style" title="${this.$i18n('inspector.tab.title.style')}">
               <object refClass="AlignmentProperty" />
 
               <!-- Default Property --> 
@@ -36,12 +36,12 @@ export default class Inspector extends EditorElement {
               <div class='empty'></div>
             </object>
 
-            <object refClass="TabPanel" value="transition" title="${this.$i18n('inspector.tab.title.transition')}" icon=${variable(icon.flash_on)}>
+            <object refClass="TabPanel" value="transition" title="${this.$i18n('inspector.tab.title.transition')}">
               ${this.$injectManager.generate('inspector.tab.transition')}              
               <div class='empty'></div>                
             </object>            
 
-            <object refClass="TabPanel" value="code" title="${this.$i18n('inspector.tab.title.code')}" icon=${variable(icon.code)}>
+            <object refClass="TabPanel" value="code" title="${this.$i18n('inspector.tab.title.code')}">
               ${this.$injectManager.generate('inspector.tab.code')}              
               <div class='empty'></div>                
             </object>    

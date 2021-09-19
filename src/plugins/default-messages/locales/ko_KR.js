@@ -288,9 +288,9 @@ export default {
     'pattern.asset.property.title': '패턴', 
     'svgfilter.asset.property.title': 'SVG 필터',     
     
-    'inspector.tab.title.style': '스타일 속성',
+    'inspector.tab.title.style': '스타일',
     'inspector.tab.title.component': '컴포넌트 속성',
-    'inspector.tab.title.transition': '트랜지션과 애니메이션 속성',
+    'inspector.tab.title.transition': '애니메이션',
     'inspector.tab.title.asset': '에셋 관리자',
     'inspector.tab.title.text': '텍스트',    
     'inspector.tab.title.code': '코드',    
