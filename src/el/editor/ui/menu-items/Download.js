@@ -2,7 +2,7 @@ import MenuItem from "./MenuItem";
 
 export default class Download extends MenuItem {
   getIconString() {
-    return 'archive';
+    return 'source';
   }
   getTitle() {
     return this.$i18n('menu.item.download.title');
@@ -10,9 +10,5 @@ export default class Download extends MenuItem {
 
   clickButton(e) {
     this.emit('downloadJSON')
-  }
-
-  isHideTitle() {
-    return true;
   }
 }

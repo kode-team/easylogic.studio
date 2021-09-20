@@ -24,7 +24,7 @@ export default class ExportWindow extends BaseWindow {
 
     getBody() {
         return /*html*/`
-        <div class="tab number-tab" ref="$tab">
+        <div class="tab" ref="$tab">
             <div class="tab-header full" ref="$header">
                 <div class="tab-item selected" data-value="1">
                     <label>HTML</label>

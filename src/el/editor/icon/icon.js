@@ -165,6 +165,7 @@ import pantool from "./pantool";
 import draw from "./draw";
 import flex from "./flex";
 import margin from "./margin";
+import source from "./source";
 
 
 const alias = {
@@ -174,6 +175,7 @@ const alias = {
 
 export default {
   ...alias,
+  source,
   flex,
   margin,
   draw,

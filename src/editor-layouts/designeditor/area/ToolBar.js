@@ -5,11 +5,22 @@ import Projects from "el/editor/ui/menu-items/Projects";
 
 import './ToolBar.scss';
 import { DropdownMenu } from "el/editor/ui/view/DropdownMenu";
+import Undo from "el/editor/ui/menu-items/Undo";
+import Redo from "el/editor/ui/menu-items/Redo";
+import ExportView from 'el/editor/ui/menu-items/ExportView';
+import Download from 'el/editor/ui/menu-items/Download';
+import Save from 'el/editor/ui/menu-items/Save';
+
 
 export default class ToolBar extends EditorElement {
 
     components() {
         return {
+            ExportView,
+            Download,
+            Save,
+            Undo,
+            Redo,
             DropdownMenu,
             Projects,
             PageSubEditor,
@@ -28,7 +39,8 @@ export default class ToolBar extends EditorElement {
                     <div class='elf--tool-menu'>
                         <div class='items'>
                             <div class='draw-items'>
-                                <object refClass="Projects" />
+                                <object refClass="Undo" />
+                                <object refClass="Redo" />
                                 ${this.$injectManager.generate('toolbar.left')}
                             </div>
                         </div>
@@ -42,6 +54,9 @@ export default class ToolBar extends EditorElement {
                     <div class='elf--tool-menu'>
                         <div class='items'>
                             <div class='draw-items'>      
+                                <object refClass="ExportView" />
+                                <object refClass="Download" />
+                                <object refClass="Save" />
                                 ${this.$injectManager.generate('toolbar.right')}                             
                             </div>
                         </div>

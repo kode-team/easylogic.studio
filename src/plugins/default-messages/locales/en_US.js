@@ -33,7 +33,7 @@ export default {
     'app.confirm.message.artboard.items.removeArtboard' : 'Do you remove an artboard preview really?',
     'app.confirm.message.custom-component.items.removeCustomComponent' : 'Do you remove a custom component preview really?',
 
-    'menu.item.download.title': 'Download',
+    'menu.item.download.title': 'Source',
     'menu.item.save.title': 'Save',
     'menu.item.export.title': 'Export',
     'menu.item.codepen.title': 'CodePen',

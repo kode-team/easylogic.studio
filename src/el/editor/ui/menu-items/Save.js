@@ -14,8 +14,4 @@ export default class Save extends MenuItem {
       this.emit('notify',  'alert', 'Save', 'Save the content on localStorage', 2000);    
     });
   }
-
-  isHideTitle() {
-    return true;
-  }
 }
