@@ -345,7 +345,7 @@ export default class LayerAppendView extends EditorElement {
         this.$el.show();
         this.$el.focus();
         this.$snapManager.clear();        
-        this.emit('change.mode.view', 'CanvasView');
+        this.emit('push.mode.view', 'LayerAppendView');
     }
 
     [SUBSCRIBE('hideLayerAppendView')] () {
@@ -354,7 +354,7 @@ export default class LayerAppendView extends EditorElement {
             this.state.isShow = false;
             // this.refs.$area.empty()
             this.$el.hide();
-            this.emit('change.mode.view');               
+            this.emit('pop.mode.view', 'LayerAppendView');
         }
 
     }

@@ -96,12 +96,11 @@
             }
         }
 
-        &.modify,
-        &.canvas {
+        &.has-one-stroke-width {
             svg {
                 path {
                     &.object {
-                        // stroke: transparent;
+                        stroke: transparent;
                     }
                 }
             }
@@ -247,7 +246,7 @@
             stroke-width: 1; 
 
             &[data-guide='true'] {
-                stroke: var(--elf--path-guide-color);                 
+                stroke: var(--elf--path-segment-stroke-color);                 
                 pointer-events: none;
             }
 

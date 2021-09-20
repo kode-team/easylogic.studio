@@ -102,6 +102,9 @@ export class ModelManager {
 
     toJSON() {
         return {
+            version: this.version,
+            name: this.name,
+            description: this.description,
             projects: this.projects.map(id => this.get(id).toJSON())
         }
     }

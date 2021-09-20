@@ -1,7 +1,7 @@
 import { Length } from "el/editor/unit/Length";
 import icon from "el/editor/icon/icon";
 import { CSS_TO_STRING, OBJECT_TO_PROPERTY } from "el/utils/func";
-import { Component } from "el/editor/items/Component";
+import { Component } from "el/editor/model/Component";
 
 const faceKeys = [
   'front', 'back', 'left', 'right', 'top','bottom'

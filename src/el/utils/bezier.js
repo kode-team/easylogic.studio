@@ -162,7 +162,7 @@ export const getQuardDist = (sx, sy, cx1, cy1, ex, ey, count = 1000) => {
 }
 
 
-const makeCurveFunction = (curve, count = 100) => {
+const makeCurveFunction = (curve, count = 10) => {
     var obj = {
         minDist: Infinity,
         minT: 0
@@ -176,8 +176,8 @@ const makeCurveFunction = (curve, count = 100) => {
         var step = 1 / (count * 2)
         var t = obj.minT
         for(var i = 0; i < count; i++) {
-            checkDist(obj, curve, t - step, x, y);
-            checkDist(obj, curve, t + step, x, y);
+            checkDist(obj, curve, Math.max(0, t - step), x, y);
+            checkDist(obj, curve, Math.min(1, t + step), x, y);
             step /= 2;             
         }
 
@@ -185,15 +185,15 @@ const makeCurveFunction = (curve, count = 100) => {
     }
 }
 
-export const recoverBezier = (C1, C2, C3, C4, count = 100) => {
+export const recoverBezier = (C1, C2, C3, C4, count = 20) => {
     return makeCurveFunction(createBezier(C1, C2, C3, C4), count)
 }
 
-export const recoverBezierQuard = (C1, C2, C3, count = 100) => {
+export const recoverBezierQuard = (C1, C2, C3, count = 20) => {
     return makeCurveFunction(createBezierQuard(C1, C2, C3), count)
 }
 
-export const recoverBezierLine = (C1, C2, count = 100) => {
+export const recoverBezierLine = (C1, C2, count = 20) => {
     return makeCurveFunction(createBezierLine(C1, C2), count)    
 }
 
@@ -339,7 +339,9 @@ export const findRootForCurve = (points) => {
     if (distX < 0) {
         // NOOP
     } else if (distX === 0) {
-        const rootX = (-b[0]) / (2 * a[0])
+        let rootX = (-b[0]) / (2 * a[0])
+        if (isNaN(rootX)) rootX = 0;
+
         if (0 <= rootX && rootX <= 1) {
             roots.push(rootX);
         }
@@ -353,15 +355,19 @@ export const findRootForCurve = (points) => {
 
         if (0 <= rootX2 && rootX2 <= 1) {
             roots.push(rootX2);
-        }        
+        }
+
     }
     
     // y 
     const distY = b[1] * b[1] - 4 * a[1] * c[1];
+
     if (distY < 0) {
         // NOOP
     } else if (distY === 0) {
-        const rootY = (-b[1]) / (2 * a[1])
+        let rootY = (-b[1]) / (2 * a[1])
+        if (isNaN(rootY)) rootY = 0;
+
         if (0 <= rootY && rootY <= 1) {
             roots.push(rootY);
         }
@@ -370,11 +376,11 @@ export const findRootForCurve = (points) => {
         const rootY2 = (-b[1] - Math.sqrt(distY)) / (2 * a[1]);
 
         if (0 <= rootY1 && rootY1 <= 1) {
-            roots.push(rootY1);
+            roots.push(rootY1);       
         }
 
         if (0 <= rootY2 && rootY2 <= 1) {
-            roots.push(rootY2);
+            roots.push(rootY2);       
         }        
     }
 
@@ -393,6 +399,13 @@ export const getCurveBBox = (points) => {
     const xyPoints = points.map(p => {
         return {x: p[0], y: p[1]}
     })
+
+    // root 값이  0 으로만 이루어 져있으면 직선으로 간주하고 1 을 추가 해줌 
+    // 이렇게 하면 처음과 끝점 기준으로 bbox 를 잡을 수 있음. 
+    if (roots.length === 2 && roots[0] === 0 && roots[1] === 0) {
+        roots.push(1);
+    }
+
 
     return roots.map(t => {
         const {x, y} = getBezierPointOne(xyPoints, t);

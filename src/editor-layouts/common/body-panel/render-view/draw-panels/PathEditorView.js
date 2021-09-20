@@ -55,43 +55,45 @@ const PathCutter = class extends SegmentConvertor {
     calculatePointOnLine(d, clickPosition) {
         var parser = new PathParser(d);
 
-        if (parser.segments[1].command === 'C') {
-            var points = [
-                xy(parser.segments[0].values),
-                xy(parser.segments[1].values.slice(0, 2)),
-                xy(parser.segments[1].values.slice(2, 4)),
-                xy(parser.segments[1].values.slice(4, 6))
-            ]
+        return parser.getClosedPoint(clickPosition);
 
-            var curve = recoverBezier(...points, 200)
-            var t = curve(clickPosition.x, clickPosition.y);
+        // if (parser.segments[1].command === 'C') {
+        //     var points = [
+        //         xy(parser.segments[0].values),
+        //         xy(parser.segments[1].values.slice(0, 2)),
+        //         xy(parser.segments[1].values.slice(2, 4)),
+        //         xy(parser.segments[1].values.slice(4, 6))
+        //     ]
 
-            return getBezierPoints(points, t).first[3]
+        //     var curve = recoverBezier(...points, 20)
+        //     var t = curve(clickPosition.x, clickPosition.y);
 
-        } else if (parser.segments[1].command === 'Q') {
-            var points = [
-                xy(parser.segments[0].values),
-                xy(parser.segments[1].values.slice(0, 2)),
-                xy(parser.segments[1].values.slice(2, 4))
-            ]
+        //     return getBezierPoints(points, t).first[3]
 
-            var curve = recoverBezierQuard(...points, 200)
-            var t = curve(clickPosition.x, clickPosition.y);
+        // } else if (parser.segments[1].command === 'Q') {
+        //     var points = [
+        //         xy(parser.segments[0].values),
+        //         xy(parser.segments[1].values.slice(0, 2)),
+        //         xy(parser.segments[1].values.slice(2, 4))
+        //     ]
 
-            return getBezierPointsQuard(points, t).first[2]
-        } else if (parser.segments[1].command === 'L') {
-            var points = [
-                xy(parser.segments[0].values),
-                xy(parser.segments[1].values.slice(0, 2))
-            ]
+        //     var curve = recoverBezierQuard(...points, 20)
+        //     var t = curve(clickPosition.x, clickPosition.y);
 
-            var curve = recoverBezierLine(...points, 200)
-            var t = curve(clickPosition.x, clickPosition.y);
+        //     return getBezierPointsQuard(points, t).first[2]
+        // } else if (parser.segments[1].command === 'L') {
+        //     var points = [
+        //         xy(parser.segments[0].values),
+        //         xy(parser.segments[1].values.slice(0, 2))
+        //     ]
 
-            return getBezierPointsLine(points, t).first[1]
-        }
+        //     var curve = recoverBezierLine(...points, 20)
+        //     var t = curve(clickPosition.x, clickPosition.y);
 
-        return clickPosition;
+        //     return getBezierPointsLine(points, t).first[1]
+        // }
+
+        // return clickPosition;
     }
 
     [POINTERSTART('$view .split-path') + MOVE() + END()](e) {
@@ -457,7 +459,7 @@ export default class PathEditorView extends PathTransformEditor {
 
         this.emit('showPathManager', { mode: this.state.mode });
         this.emit('hidePathDrawEditor');
-        this.emit('change.mode.view', 'PathEditorView');
+        this.emit('push.mode.view', 'PathEditorView');
     }
 
     [SUBSCRIBE('hidePathEditor')]() {
@@ -469,7 +471,7 @@ export default class PathEditorView extends PathTransformEditor {
             this.$el.hide();
             // this.emit('finishPathEdit')
             this.emit('hidePathManager');
-            this.emit('change.mode.view');
+            this.emit('pop.mode.view', 'PathEditorView');
         }
 
     }
@@ -485,6 +487,8 @@ export default class PathEditorView extends PathTransformEditor {
     }
 
     [BIND('$view')]() {
+
+        const strokeWidth = Length.parse(this.state.current?.['stroke-width']).value || 0;
         return {
             class: {
                 'path': this.state.mode === 'path',
@@ -492,6 +496,7 @@ export default class PathEditorView extends PathTransformEditor {
                 'box': this.state.box === 'box',
                 'canvas': this.state.box === 'canvas',
                 'segment-move': this.state.mode === 'segment-move',
+                'has-one-stroke-width': strokeWidth === 1,
             },
 
             // 성능을 위해서 diff 알고리즘 사용 
@@ -587,19 +592,30 @@ export default class PathEditorView extends PathTransformEditor {
             x: e.xy.x - this.state.rect.x,
             y: e.xy.y - this.state.rect.y
         };
+
+        // canvas 클릭 여부 
         this.state.isOnCanvas = false;
 
         var $target = Dom.create(e.target);
 
         if ($target.hasClass('svg-editor-canvas') && !isPathMode) {
+            // canvas 를 클릭했을 때 설정 
             this.state.isOnCanvas = true;
-            // return false; 
         } else {
 
+            // path 를 클릭했을 때 설정
             this.pathGenerator.reselect()
+
+            // segment 인지 체크 
             this.state.isSegment = $target.attr('data-segment') === 'true';
+
+            // first segment 인지 체크 
             this.state.isFirstSegment = this.state.isSegment && $target.attr('data-is-first') === 'true';
 
+            // segment 를 클릭 했을 때 같은 위치에 있는 점을 같이 움직여야 한다. 
+            // 이건 기본적으로 합쳐지면 같이 움직이고 특수한 키를 누르면 다르게 움직인다. 
+            // 모드가 좀 다양해야 하는구나. 
+            // mode : samepointer, default
         }
 
         if (isPathMode) {

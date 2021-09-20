@@ -63,7 +63,7 @@ export default class SVGPathRender extends SVGItemRender {
     return /*html*/`    
 <div class="element-item ${itemType}" data-id="${id}" data-title="${name}">
   ${this.toDefString(item)}
-  <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+  <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" overflow="visible">
     <path 
       class="svg-path-item"
       d="${item.d}"

@@ -96,7 +96,7 @@ export default class PatternAssetsProperty extends BaseProperty {
     const pattern = e.$dt.attr('data-pattern')
 
     // view 에 따라 다른 속성을 가진다. 
-    if (this.$editor.modeView === 'CanvasView') { 
+    if (this.$modeView.isCurrentMode('CanvasView')) { 
       this.emit('addBackgroundImagePattern', pattern);
     } else {
       this.emit('setPatternAsset', pattern)

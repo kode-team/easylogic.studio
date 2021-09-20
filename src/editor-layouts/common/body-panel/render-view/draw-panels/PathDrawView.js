@@ -171,7 +171,7 @@ export default class PathDrawView extends EditorElement {
         });        
 
         this.emit('hidePathEditor');
-        this.emit('change.mode.view', 'PathDrawView');
+        this.emit('push.mode.view', 'PathDrawView');
     }
 
     [SUBSCRIBE('initPathDrawEditor')] () {
@@ -186,7 +186,7 @@ export default class PathDrawView extends EditorElement {
             this.$el.hide();
             // this.emit('finishPathEdit')
             this.emit('hideDrawManager');
-            this.emit('change.mode.view');        
+            this.emit('pop.mode.view', 'PathDrawView');
         }
 
     }

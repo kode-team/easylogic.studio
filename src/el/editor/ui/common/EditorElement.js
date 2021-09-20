@@ -7,6 +7,7 @@ import { ViewportManager } from "el/editor/manager/ViewportManager";
 import { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "el/editor/types/event";
 import { ModelManager } from "el/editor/manager/ModelManager";
 import { ShortCutManager } from "el/editor/manager/ShortCutManager";
+import { ModeViewManager } from "el/editor/manager/ModeViewManager";
 
 export class EditorElement extends UIElement {
 
@@ -157,6 +158,15 @@ export class EditorElement extends UIElement {
      */
     get $model() {
         return this.$editor.modelManager;
+    }
+
+    /**
+     * 현재 에디팅 모드를 관리하는 Manager 객체 
+     * 
+     * @type {ModeViewManager}
+     */
+    get $modeView() {
+        return this.$editor.modeViewManager;
     }
 
     /**

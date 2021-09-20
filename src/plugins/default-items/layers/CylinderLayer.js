@@ -2,7 +2,7 @@ import { CSS_TO_STRING, OBJECT_TO_PROPERTY, repeat } from "el/sapa/functions/fun
 import { getXYInCircle, getDist } from "el/utils/math";
 import { Length } from "el/editor/unit/Length";
 import icon from "el/editor/icon/icon";
-import { Component } from "el/editor/items/Component";
+import { Component } from "el/editor/model/Component";
 
 const customKeyValue = {
   'count': true, 

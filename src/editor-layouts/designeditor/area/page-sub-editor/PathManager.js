@@ -54,7 +54,7 @@ export default class PathManager extends EditorElement {
         </div>
 
         <div class='tools' ref='$util'>
-            <button type="button" data-value='reverse' title='${this.$i18n('path.manager.mode.transform')}' >${icon.swap_horiz}</button>
+            <button type="button" data-value='reverse' title='${this.$i18n('path.manager.mode.transform')}' >${icon.sync}</button>
         </div>        
         <div class='tools'>      
           <div>
@@ -166,7 +166,6 @@ export default class PathManager extends EditorElement {
       this.$el.show();
 
       this.emit('addStatusBarMessage', this.state.msg)
-      this.emit('change.mode.view', 'PathEditorView');
   }
 
   [SUBSCRIBE('hidePathManager')] () {

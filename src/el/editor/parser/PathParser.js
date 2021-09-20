@@ -1,5 +1,5 @@
 
-import { getBezierPointOneQuard, getCurveBBox } from "el/utils/bezier";
+import { getBezierPointOneQuard, getBezierPoints, getBezierPointsLine, getBezierPointsQuard, getCurveBBox, recoverBezier, recoverBezierLine, recoverBezierQuard } from "el/utils/bezier";
 import { isNotUndefined, clone } from "el/sapa/functions/func";
 import { degreeToRadian, round } from "el/utils/math";
 import { mat4, vec3 } from "gl-matrix";
@@ -8,7 +8,6 @@ import Point from "./Point";
 const REG_PARSE_NUMBER_FOR_PATH = /([mMlLvVhHcCsSqQtTaAzZ]([^mMlLvVhHcCsSqQtTaAzZ]*))/g;
 const splitReg = /[\b\t \,]/g;
 var numberReg = /-?[0-9]*\.?[0-9]+(?:e[-+]?\d+)?/ig
- 
 export default class PathParser {
 
     /**
@@ -372,19 +371,24 @@ export default class PathParser {
         return this.joinPath(this.transformMat4(mat4.fromScaling([], [sx, sy, 1]), true));        
     }    
 
-    rotate (angle, centerX, centerY) {
+    rotate (angle, centerX = 0, centerY = 0) {
+        const view = mat4.create();
+        mat4.multiply(view, view, mat4.fromTranslation([], [centerX, centerY, 0]))
+        mat4.multiply(view, view, mat4.fromZRotation([], degreeToRadian(angle)) )
+        mat4.multiply(view, view, mat4.fromTranslation([], vec3.negate([], [centerX, centerY, 0])))        
 
-        this.transformMat4(mat4.fromRotation([], degreeToRadian(angle), [centerX || 0, centerY || 0, 0]));
+        this.transformMat4(view);
         return this;        
     }
 
-    rotateTo (angle) {
-        return this.joinPath(
-                this.transformMat4(
-                    mat4.fromRotation([], degreeToRadian(angle), [centerX || 0, centerY || 0, 0]), 
-                    true
-                )
-            )
+    rotateTo (angle, centerX = 0, centerY = 0) {
+
+        const view = mat4.create();
+        mat4.multiply(view, view, mat4.fromTranslation([], [centerX, centerY, 0]))
+        mat4.multiply(view, view, mat4.fromZRotation([], degreeToRadian(angle)) )
+        mat4.multiply(view, view, mat4.fromTranslation([], vec3.negate([], [centerX, centerY, 0])))        
+
+        return this.joinPath(this.transformMat4(view,  true))
     }        
 
     reflectionOrigin () {
@@ -517,7 +521,6 @@ export default class PathParser {
                 maxY = Math.max(maxY, v[1])                
                 break; 
             case 'C':
-
                 getCurveBBox([
                     [prevSegment.values[prevSegment.values.length-2], prevSegment.values[prevSegment.values.length-1], 0],
                     [v[0], v[1], 0],
@@ -565,6 +568,82 @@ export default class PathParser {
             [maxX, maxY, 0],
             [minX, maxY, 0],
         ]
+    }
+
+    /**
+     * x, y 를 기준으로 가장 가까운 점을 찾는다. 
+     * 
+     * L, C, Q 를 대상으로만 한다. 
+     * 
+     * @param {{x: number, y: number}} param0 
+     * @param {number} count 
+     * @returns 
+     */
+    getClosedPoint ({x, y}, count = 20) {
+
+        let minDist = Number.MAX_SAFE_INTEGER;
+        let minPoint = null;
+        let targetPoint = null;
+
+        for(var i = 1, len = this.segments.length; i < len; i++) {
+
+            const segment = this.segments[i];
+
+            const prev = this.segments[i-1].values
+            const current = segment.values
+            const command = segment.command;
+
+    
+            if (command === 'C') {
+                var points = [
+                    {x: prev[0], y: prev[1]},
+                    {x: current[0], y: current[1]},
+                    {x: current[2], y: current[3]},
+                    {x: current[4], y: current[5]},
+                ]
+
+                var curve = recoverBezier(...points, count)
+                var t = curve(x, y);
+
+                targetPoint = getBezierPoints(points, t).first[3]
+
+            } else if (command === 'Q') {
+                var points = [
+                    {x: prev[0], y: prev[1]},
+                    {x: current[0], y: current[1]},
+                    {x: current[2], y: current[3]},
+                ]
+
+                var curve = recoverBezierQuard(...points, count)
+                var t = curve(x, y);
+
+                targetPoint = getBezierPointsQuard(points, t).first[2]
+            } else if (command === 'L') {
+                var points = [
+                    {x: prev[0], y: prev[1]},
+                    {x: current[0], y: current[1]},
+                ]
+
+                var curve = recoverBezierLine(...points, count)
+                var t = curve(x, y);
+
+                targetPoint = getBezierPointsLine(points, t).first[1]
+            } else {
+                targetPoint = null;
+            }
+             
+            if (targetPoint) {
+                var dist = Math.sqrt(Math.pow(targetPoint.x - x, 2) + Math.pow(targetPoint.y - y, 2))
+
+                if (dist < minDist) {
+                    minDist = dist;
+                    minPoint = targetPoint;
+                }
+            }
+
+        }
+
+        return minPoint ? minPoint : {x, y}
     }
     
     get d () {

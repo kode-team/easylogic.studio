@@ -132,7 +132,7 @@ export default class BrushDrawView extends EditorElement {
             ...obj
         }, false)    
 
-        this.emit('change.mode.view', 'PathDrawView');
+        this.emit('push.mode.view', 'PathDrawView');
     }
 
     getCurrentObject () {
@@ -181,7 +181,7 @@ export default class BrushDrawView extends EditorElement {
         this.$el.hide();
         // this.emit('finishPathEdit')
         this.emit('hideDrawManager');
-        this.emit('change.mode.view');        
+        this.emit('pop.mode.view', 'PathDrawView');        
     }
 
 

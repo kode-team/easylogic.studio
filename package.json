@@ -78,5 +78,14 @@
   "bugs": {
     "url": "https://github.com/easylogic/editor/issues"
   },
-  "homepage": "https://editor.easylogic.studio/"
+  "homepage": "https://editor.easylogic.studio/",
+  "jest": {
+    "moduleNameMapper": {
+      "^@assets(.*)$": "<rootDir>/src/assets$1",
+      "^el(.*)$": "<rootDir>/src/el$1",
+      "^export-library(.*)$": "<rootDir>/src/export-library$1",
+      "^plugins(.*)$": "<rootDir>/src/plugins$1",
+      "^designeditor(.*)$": "<rootDir>/editor-layouts/designeditor$1"
+    }
+  }
 }

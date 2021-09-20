@@ -25,6 +25,7 @@ import { RendererManager } from "./RendererManager";
 import { InjectManager } from "./InjectManager";
 import { I18nManager } from "./I18nManager";
 import { ModelManager } from './ModelManager';
+import { ModeViewManager } from './ModeViewManager';
 
 
 export const EDITOR_ID = "";
@@ -55,7 +56,6 @@ export class Editor {
     this.images = {}
     this.openRightPanel = true;
     this.mode = EDIT_MODE_SELECTION
-    this.modeView = 'CanvasView';
 
     this.loadManagers();
 
@@ -85,6 +85,7 @@ export class Editor {
     this.renderers = new RendererManager(this);
     this.i18n = new I18nManager(this);
     this.modelManager = new ModelManager(this);
+    this.modeViewManager = new ModeViewManager(this);
 
 
     this.initTheme();
@@ -157,10 +158,6 @@ export class Editor {
 
   changeMode(mode = EDIT_MODE_SELECTION) {
     this.mode = mode;   // add or selection  
-  }
-
-  changeModeView(modeView = 'CanvasView') {
-    this.modeView = modeView;
   }
 
   isMode(mode) {

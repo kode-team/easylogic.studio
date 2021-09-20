@@ -861,7 +861,7 @@ export class MovableModel extends BaseAssetModel {
     /** order by  */
 
     getIndex () {
-        var parentLayers = this.json.parent.layers;    
+        var parentLayers = this.parent.layers;    
         var startIndex = -1; 
         for(var i = 0, len = parentLayers.length; i < len; i++) {
             if (parentLayers[i] === this.ref) {
@@ -874,36 +874,36 @@ export class MovableModel extends BaseAssetModel {
     }
 
     setOrder (targetIndex) {
-        var parent = this.json.parent; 
+        var parent = this.parent; 
 
         var startIndex = this.getIndex()
 
         if (startIndex > -1) {
-        parent.layers[startIndex] = parent.layers[targetIndex]
-        parent.layers[targetIndex] = this.ref; 
+            parent.children[startIndex] = parent.children[targetIndex]
+            parent.children[targetIndex] = this.id; 
         }
     }
 
     // get next sibiling item 
     next () {
         if (this.isLast()) {
-        return this.ref; 
+            return this.ref; 
         }
 
         const index = this.getIndex();
 
-        return this.json.parent.layers[index+1];
+        return this.parent.layers[index+1];
     }
 
     // get prev sibiling item   
     prev () {
         if (this.isFirst()) {
-        return this.ref; 
+            return this.ref; 
         }
 
         const index = this.getIndex();
 
-        return this.json.parent.layers[index-1];    
+        return this.parent.layers[index-1];    
     }
 
     /**
@@ -913,14 +913,16 @@ export class MovableModel extends BaseAssetModel {
     orderNext() {   
 
         if (this.isLast()) {
-        // 마지막 일 때는  
-        // parent 의 next 의 첫번째 요소가 된다. 
-        if (this.json.parent.is('artboard')) {    // 부모가 artboard 이면  더이상 갈 곳이 없다. 
-            return; 
-        }
+            let next = this.parent.next();
 
-        this.json.parent.next().add(this, 'prepend')
-        return; 
+
+            if (next.enableHasChildren()) {
+                next.appendChild(this);          
+            } else {
+                next.appendAfter(this);
+            }
+
+            return; 
         }
 
         var startIndex = this.getIndex();
@@ -934,7 +936,7 @@ export class MovableModel extends BaseAssetModel {
     }
 
     isLast () {
-        return this.getIndex() === this.json.parent.layers.length-1
+        return this.getIndex() === this.parent.children.length - 1
     }
 
     /**
@@ -943,20 +945,18 @@ export class MovableModel extends BaseAssetModel {
      */  
     orderPrev () {
         if (this.isFirst()) {
-        // 처음 일 때는  
-        // parent 의 prev 의 마지막 요소가 된다.
+            const prev = this.parent.prev();
+            
+            if (prev) {
+                prev.appendBefore(this);
+            }
 
-        if (this.json.parent.is('artboard')) {    // 부모가 artboard 이면  더이상 갈 곳이 없다. 
             return; 
-        }
-
-        this.json.parent.prev().add(this)
-        return; 
         }
 
         var startIndex = this.getIndex();
         if (startIndex > 0) {
-        this.setOrder(startIndex - 1);
+            this.setOrder(startIndex - 1);
         }
     }
 

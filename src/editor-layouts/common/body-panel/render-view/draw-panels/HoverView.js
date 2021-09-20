@@ -1,6 +1,4 @@
-import Dom from "el/sapa/functions/Dom";
-
-import { CONFIG, SUBSCRIBE } from "el/sapa/Event";
+import { CONFIG, SUBSCRIBE, IF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import "./HoverView.scss";
@@ -15,8 +13,16 @@ export default class HoverView extends EditorElement {
         `
     }
 
-    [CONFIG('bodyEvent')]() {
+    checkModeView () {
+        return this.$modeView.isCurrentMode('CanvasView');
+    }
 
+    /**
+     * CanvasView 모드일 때만  HoverView 동작하도록 설정 
+     * 
+     * @returns 
+     */
+    [CONFIG('bodyEvent') + IF('checkModeView')]() {
         if (this.$config.get('hoverView') === false || this.$config.true("set.move.control.point")) {
             this.$selection.setHoverId('');
             this.renderHoverLayer()            

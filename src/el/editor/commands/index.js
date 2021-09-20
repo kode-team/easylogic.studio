@@ -54,7 +54,7 @@ import addBackgroundImageAsset from "./addBackgroundImageAsset";
 import keymapKeydown from "./keymap.keydown";
 import keymapKeyup from "./keymap.keyup";
 import removeLayer from "./removeLayer";
-import changeModeView from "./change.mode.view";
+import pushModeView from "./push.mode.view";
 import segmentMoveDown from "./segment.move.down";
 import segmentMoveUp from "./segment.move.up";
 import segmentMoveRight from "./segment.move.right";
@@ -106,11 +106,12 @@ import doubleclickItem from "./doubleclick.item";
 import update from "./model/update";
 import historyRemoveProject from "./history.removeProject";
 import historyRefreshSelectionProject from "./history.refreshSelectionProject";
+import popModeView from "./pop.mode.view";
 
 export default {
     // update model 
     update,
-
+    popModeView,
 
     doubleclickItem,
     openEditor,
@@ -149,7 +150,7 @@ export default {
     segmentMoveUp,
     segmentMoveRight,
     segmentMoveLeft,
-    changeModeView,
+    pushModeView,
     removeLayer,
     itemMoveDepthDown,
     itemMoveDepthUp,    
