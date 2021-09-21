@@ -1,4 +1,5 @@
 import { clone } from "el/sapa/functions/func";
+import { vec3 } from "gl-matrix";
 
 export default class Point {
     static isEqual(a, b, c) {
@@ -97,13 +98,10 @@ export default class Point {
     }
 
     static getReversePoint(start, end) {
-        var distX = (start.x -  end.x)
-        var distY = (start.y -  end.y)
 
-        return {
-            x: start.x + distX,
-            y: start.y + distY
-        }
+        const [x, y, z] = vec3.lerp([], [end.x, end.y, 0], [start.x, start.y, 0], 2);
+
+        return { x, y }
     }    
 
     static getIndexPoint (points, index) {
@@ -191,8 +189,9 @@ export default class Point {
         return point
     }
 
-    static getConnectedPoint (points, index) {
-        
+    static getConnectedPointList (points, index) {
+        const current = points[index];
+        return points.filter((p, i) => i !== index && Point.isEqual(p.startPoint, current.startPoint));
     }
 
     static getPrevPoint (points, index) {

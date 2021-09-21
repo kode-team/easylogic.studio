@@ -166,6 +166,7 @@ export default class PathGenerator {
         this.pathStringManager = new PathStringManager();
         this.guideLineManager = new PathStringManager();
         this.segmentManager = new SegmentManager();
+        this.points = [];
 
         this.initialize()
         this.initializeSelect();
@@ -173,6 +174,7 @@ export default class PathGenerator {
 
     initialize () {
         this.splitLines = [] 
+        // this.points = [];
         this.guideLineManager.reset();
         this.segmentManager.reset();
         this.pathStringManager.reset();
@@ -189,15 +191,23 @@ export default class PathGenerator {
     }
 
     get clonePoints() {
-        return [...this.state.points]
+        return [...this.points]
+    }
+
+    get length () {
+        return this.points.length;
+    }
+
+    setPoints(points = []) {
+        this.points = points;
     }
 
     selectInBox (box) {
         var list = [] 
-        var target = ['startPoint', 'endPoint', 'reversePoint']
-        this.state.points.forEach((point, index) => {
+        
+        this.points.forEach((point, index) => {
 
-            target.forEach(key => {
+            SEGMENT_DIRECTION.forEach(key => {
                 const p = point[key]
                 if (checkInArea(box, p)) {
                     list.push({ x: p.x, y: p.y,  key, index})
@@ -220,8 +230,8 @@ export default class PathGenerator {
 
     selectKeyIndex (key, index) {
 
-        if (this.state.points[index]) {
-            var point = this.state.points[index][key];
+        if (this.points[index]) {
+            var point = this.points[index][key];
             if (point && !this.isSelectedSegment(key, index)) {
                 this.select({x: point.x, y: point.y, key, index})
             }
@@ -231,7 +241,7 @@ export default class PathGenerator {
 
     reselect () {
         this.selectedPointList.forEach(it => {
-            var point = this.state.points[it.index][it.key];
+            var point = this.points[it.index][it.key];
             it.x = point.x;
             it.y = point.y;
         });
@@ -251,7 +261,7 @@ export default class PathGenerator {
     transformMat4 (transformMatrix) {
 
         this.transformPoints.forEach((p, index) => {
-            var realPoint = this.state.points[index];
+            var realPoint = this.points[index];
 
             Object.assign(realPoint.startPoint, this.commitTransformMatrix(p.startPoint, transformMatrix));
             Object.assign(realPoint.endPoint, this.commitTransformMatrix(p.endPoint, transformMatrix));
@@ -341,6 +351,29 @@ export default class PathGenerator {
         state.points.push(point);
     }
 
+    getPrevPoint(index) {
+        return Point.getPrevPoint(this.points, index)
+    }
+
+    getIndexPoint(index) {
+        return Point.getIndexPoint(this.points, index)
+    }
+
+    getNextPoint(index) {
+        return Point.getNextPoint(this.points, index)
+    }
+
+    getConnectedPointList(index) {
+        return Point.getConnectedPointList(this.points, index)
+    }
+
+    isFirst(segment) {
+        return Point.isFirst(segment);
+    }
+
+    getLastPoint(index) {
+        return Point.getLastPoint(this.points, index)
+    }
 
     /**
      * 패스의 segment 를 드래그 하기 전에 snap 이 될 좌표를 캐쉬한다. 
@@ -352,27 +385,27 @@ export default class PathGenerator {
     setCachePoint (index, segmentKey, verties = []) {
 
         var state = this.state; 
-        var { points } = state; 
 
         this.snapPointList = []     // 객체 처음 움직일 때 snap line 은 초기화 
-        state.selectedIndex = index; 
-        state.connectedPoint =  Point.getPrevPoint(points, index)
+        this.selectedIndex = index; 
+        state.connectedPoint =  this.getPrevPoint(index)
+        state.connectedPointList = clone(Point.getConnectedPointList(this.points, this.selectedIndex))
 
         if (state.connectedPoint && !state.connectedPoint.connected) {
             state.connectedPoint = null; 
         }
 
-        state.segment = Point.getIndexPoint(points, index)
+        state.segment = this.getIndexPoint(index)
 
         // 연결된 포인트인 경우 , 처음 지점 포인트를 가지고 온다. 
         if (state.segment.connected) {  
-            state.connectedPoint = Point.getNextPoint(points, index);
+            state.connectedPoint = this.getNextPoint(index);
         }
 
-        var isFirstSegment = Point.isFirst(state.segment)
+        var isFirstSegment = this.isFirst(state.segment)
 
         if (isFirstSegment) {
-            var lastPoint = Point.getLastPoint(points, index);
+            var lastPoint = this.getLastPoint(index);
 
             if (lastPoint.connected) {
                 state.connectedPoint = lastPoint;
@@ -388,27 +421,36 @@ export default class PathGenerator {
         }
 
         state.cachedPoints = [] 
-        points.filter(p => p && p != state.segment).forEach(p => {
+        this.points.filter(p => p && p != state.segment).forEach(p => {
             state.cachedPoints.push(p.startPoint, p.reversePoint, p.endPoint)
         })
 
-        state.cachedPoints.push.apply(state.cachedPoints, verties.map(it => {
-            const [x, y, z] = it; 
-            return {x, y, z}
-        }))
+
+
+        // state.cachedPoints.push.apply(state.cachedPoints, verties.map(it => {
+        //     const [x, y, z] = it; 
+        //     return {x, y, z}
+        // }))
 
     }
 
-    moveSegment (segmentKey, dx, dy) {
-        var state = this.state; 
+    moveSegment (segmentKey, dx, dy, originSegment = undefined) {
 
-        var originPoint = state.originalSegment[segmentKey]
-        var targetPoint = state.segment[segmentKey]
-
-        if (originPoint) {
-            targetPoint.x = originPoint.x + dx;
-            targetPoint.y = originPoint.y + dy;     
+        if (originSegment) {
+            const segment = this.points[originSegment.index][segmentKey]
+            segment.x = originSegment[segmentKey].x + dx;
+            segment.y = originSegment[segmentKey].y + dy;
+        } else {
+            var state = this.state; 
+            var originPoint = state.originalSegment[segmentKey]
+            var targetPoint = state.segment[segmentKey]
+    
+            if (originPoint) {
+                targetPoint.x = originPoint.x + dx;
+                targetPoint.y = originPoint.y + dy;     
+            }            
         }
+
     }
 
     calculateToCurve (point, nextPoint, prevPoint) {
@@ -434,9 +476,7 @@ export default class PathGenerator {
 
     convertToCurve (index) {
 
-
-        var {points} = this.state; 
-        var point = points[index];
+        var point = this.points[index];
 
         if (point.curve) {
             // curve 가 직선으로 
@@ -454,7 +494,7 @@ export default class PathGenerator {
                 }
             } else {
 
-                var nextPoint = Point.getNextPoint(points, index);
+                var nextPoint = this.getNextPoint(index);
 
                 if (nextPoint && nextPoint.command === 'M') {
                     // 다음이 처음일 때 
@@ -471,8 +511,8 @@ export default class PathGenerator {
         } else {
             point.curve = true; 
 
-            var prevPoint = Point.getPrevPoint(points, index);
-            var nextPoint = Point.getNextPoint(points, index);
+            var prevPoint = this.getPrevPoint(index);
+            var nextPoint = this.getNextPoint(index);
 
             if (nextPoint && nextPoint.index < index && nextPoint.command === 'M') {  
                 // 현재 포인트가 마지막 일 때 connected 상태를 보고 
@@ -480,7 +520,7 @@ export default class PathGenerator {
 
                 var firstPoint = nextPoint;
 
-                nextPoint = Point.getNextPoint(points, firstPoint.index);
+                nextPoint = this.getNextPoint(firstPoint.index);
 
                 this.calculateToCurve(point, nextPoint, prevPoint)
 
@@ -587,7 +627,7 @@ export default class PathGenerator {
         // 선택된 포인터를 옮길 때 
         // curve 에 연결된 endPoint와 reversePoint 를 같이 책임 질 것인가? 
         this.selectedPointList.forEach(it => {
-            var target = this.state.points[it.index][it.key]
+            var target = this.points[it.index][it.key]
             target.x = it.x + dx; 
             target.y = it.y + dy; 
         })
@@ -598,11 +638,11 @@ export default class PathGenerator {
         // 선택된 포인터를 옮길 때 
         // curve 에 연결된 endPoint와 reversePoint 를 같이 책임 질 것인가? 
         this.selectedPointList.forEach(it => {
-            var target = this.state.points[it.index][it.key]
+            var target = this.points[it.index][it.key]
             target.removed = true; 
         })
 
-        const pointGroup = Point.splitPoints(this.state.points)
+        const pointGroup = Point.splitPoints(this.points)
 
         // console.log(pointGroup)
 
@@ -623,7 +663,7 @@ export default class PathGenerator {
 
         // console.log(Point.splitPoints(newPoints));
 
-        this.state.points = newPoints;
+        this.points = newPoints;
 // 
         this.select();
     }    
@@ -658,6 +698,18 @@ export default class PathGenerator {
             this.moveSegment('startPoint', dx, dy);
             this.moveSegment('endPoint', dx, dy);
             this.moveSegment('reversePoint', dx, dy);
+
+            // altKey 가 눌러지지 않은 상태에서는 같은 연결 포인트들은 같이 움직인다. 
+            if (!e.altKey) {
+                // move 할 때 연결된 포인트도 움직이기
+                state.connectedPointList.forEach(it => {
+                    this.moveSegment('startPoint', dx, dy, it);
+                    this.moveSegment('endPoint', dx, dy, it);
+                    this.moveSegment('reversePoint', dx, dy, it);
+                });
+            }
+
+
         }
         connectedPoint && this.copySegment(state.segment, state.connectedPoint)
     }
@@ -708,7 +760,7 @@ export default class PathGenerator {
 
         allPoints.splice(firstIndex, 2, ...newPoints);
 
-        this.state.points = allPoints;
+        this.points = allPoints;
         
         return firstIndex + 1; 
     }
@@ -752,7 +804,7 @@ export default class PathGenerator {
             allPoints.splice(firstIndex, 2, ...newPoints);
         }
 
-        this.state.points = allPoints;
+        this.points = allPoints;
 
         return firstIndex + 1;         
 
@@ -773,7 +825,7 @@ export default class PathGenerator {
 
         allPoints.splice(firstIndex+1, 0, ...newPoints);
 
-        this.state.points = allPoints;
+        this.points = allPoints;
 
         return firstIndex + 1; 
 
@@ -1062,7 +1114,6 @@ export default class PathGenerator {
     }
 
     makePointGuide (points) {
-        var {selectedIndex} = this.state; 
         for(var index = 0, len = points.length; index < len; index++) {
             var currentIndex = index; 
             var current = points[currentIndex];
@@ -1087,7 +1138,7 @@ export default class PathGenerator {
     
             }
 
-            current.selected = selectedIndex === index;
+            current.selected = this.selectedIndex === index;
 
             // 각도를 표시 해준다. 
             // 쓸 곳이 없다. 
@@ -1224,8 +1275,8 @@ export default class PathGenerator {
     toSVGString () {
         return /*html*/`
         <svg width="100%" height="100%" class='svg-editor-canvas'>
-            ${this.guideLineManager.toString('guide', this.state.isPolygon)}
-            ${this.pathStringManager.toString('object', this.state.isPolygon)}
+            ${this.guideLineManager.toString('guide')}
+            ${this.pathStringManager.toString('object')}
             ${this.splitLines.join('')}
             ${this.makeSnapLines()}
             ${this.segmentManager.toString()}

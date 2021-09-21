@@ -65,4 +65,94 @@ test("path - closed point in curve", () => {
         "x": 8.843183593749998,
         "y": 11.422597656249998
     });
+});
+
+test("path - center pointer list", () => {
+    const path = new PathParser("M0,0 C20,30 50,40 100,100");
+    expect(path.getCenterPointers()).toStrictEqual([
+        { index: 0, pointer: [0, 0, 0]},
+        { index: 1, pointer: [100, 100, 0]}
+    ]);
+
+    path.reset("M0,0 C20,30 50,40 100,100 Q 20 30 70 70");
+    expect(path.getCenterPointers()).toStrictEqual([
+        { index: 0, pointer: [0, 0, 0]},
+        { index: 1, pointer: [100, 100, 0]},
+        { index: 2, pointer: [70, 70, 0]},
+    ]);    
+});
+
+test("path - same pointer list", () => {
+    const path = new PathParser("M0,0 C20,30 50,40 100,100 Q 20 30 70 70 L 100 100");    
+    expect(path.getSamePointers([100, 100, 0])).toStrictEqual([
+        { index: 1, pointer: [100, 100, 0]},
+        { index: 3, pointer: [100, 100, 0]}
+    ]);
+
+    expect(path.getSamePointers([100, 100, 0], 70)).toStrictEqual([
+        { index: 1, pointer: [100, 100, 0]},
+        { index: 2, pointer: [70, 70, 0]},
+        { index: 3, pointer: [100, 100, 0]}
+    ]);    
+})
+
+test("path group - two path group check", () => {
+    const path = new PathParser(`
+        M0,0 C20,30 50,40 100,100 Q 20 30 70 70 L 100 100
+        M10,10 C20,30 50,40 100,100 Q 20 30 70 70 L 100 100
+    `);
+
+    expect(path.getGroup()).toStrictEqual([
+        {
+            index: 0,
+            groupIndex: 0,
+            segments: [
+                { index: 0, segment: { "command": "M", "values": [0, 0] } },
+                { index: 1, segment: { "command": "C", "values": [20, 30, 50, 40, 100, 100] } },
+                { index: 2, segment: { "command": "Q", "values": [20, 30, 70, 70] } },
+                { index: 3, segment: { "command": "L", "values": [100, 100] } },
+            ]
+        },
+        {
+            index: 4,
+            groupIndex: 1,
+            segments: [
+                { index: 4, segment: { "command": "M", "values": [10, 10] } },
+                { index: 5, segment: { "command": "C", "values": [20, 30, 50, 40, 100, 100] } },
+                { index: 6, segment: { "command": "Q", "values": [20, 30, 70, 70] } },
+                { index: 7, segment: { "command": "L", "values": [100, 100] } },
+            ]
+        },        
+    ]);
+})
+
+test("path - create group path", () => {
+    const path = new PathParser(`
+        M0,0 C20,30 50,40 100,100 Q 20 30 70 70 L 100 100
+        M10,10 C20,30 50,40 100,100 Q 20 30 70 70 L 100 100
+    `);
+
+    expect(path.createGroupPath(0).d).toBe("M 0 0C 20 30 50 40 100 100Q 20 30 70 70L 100 100");
+    expect(path.createGroupPath(1).d).toBe("M 10 10C 20 30 50 40 100 100Q 20 30 70 70L 100 100");
+})
+
+test("path - split bezier curve path by point", () => {
+    const path = new PathParser(`
+        M0,0 C20,30 50,40 100,100 Q 20 30 70 70 L 100 100
+    `);
+
+    path.splitSegmentByPoint({ x: 10, y: 10 }, 20);
+
+    expect(path.d).toBe("M 0 0C 2.7499999999999996 4.124999999999999 5.689062499999999 7.871874999999999 8.843183593749998 11.422597656249998C 28.628125 33.6953125 56.875 48.25 100 100Q 20 30 70 70L 100 100");
+})
+
+
+test("path - split quard curve path by point", () => {
+    const path = new PathParser(`
+        M0,0 C20,30 50,40 100,100 Q 200 200 300 100
+    `);
+
+    path.splitSegmentByPoint({ x: 150, y: 150 }, 20);
+
+    expect(path.d).toBe("M 0 0C 20 30 50 40 100 100Q 127.5 127.5 155 139.875Q 227.5 172.5 300 100");
 })

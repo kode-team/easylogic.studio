@@ -14,8 +14,10 @@ import storeKey from './store.key';
 import areaWidth from './area.width';
 import styleCanvasBackgroundColor from "./style.canvas.background.color";
 import setMoveControlPoint from "./set.move.control.point";
+import setDragPathArea from "./set.drag.path.area";
 
 export default [
+    setDragPathArea,
     setMoveControlPoint,
     styleCanvasBackgroundColor,
     areaWidth,

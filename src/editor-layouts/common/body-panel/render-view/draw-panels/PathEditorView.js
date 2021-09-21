@@ -52,48 +52,18 @@ const SegmentConvertor = class extends EditorElement {
 
 const PathCutter = class extends SegmentConvertor {
 
+    /**
+     * 
+     * stroke 위의 점을 선택 할 수 있는지 체크 
+     * 
+     * @param {string} d 
+     * @param {{x: number, y: number}} clickPosition 
+     * @returns 
+     */
     calculatePointOnLine(d, clickPosition) {
         var parser = new PathParser(d);
 
         return parser.getClosedPoint(clickPosition);
-
-        // if (parser.segments[1].command === 'C') {
-        //     var points = [
-        //         xy(parser.segments[0].values),
-        //         xy(parser.segments[1].values.slice(0, 2)),
-        //         xy(parser.segments[1].values.slice(2, 4)),
-        //         xy(parser.segments[1].values.slice(4, 6))
-        //     ]
-
-        //     var curve = recoverBezier(...points, 20)
-        //     var t = curve(clickPosition.x, clickPosition.y);
-
-        //     return getBezierPoints(points, t).first[3]
-
-        // } else if (parser.segments[1].command === 'Q') {
-        //     var points = [
-        //         xy(parser.segments[0].values),
-        //         xy(parser.segments[1].values.slice(0, 2)),
-        //         xy(parser.segments[1].values.slice(2, 4))
-        //     ]
-
-        //     var curve = recoverBezierQuard(...points, 20)
-        //     var t = curve(clickPosition.x, clickPosition.y);
-
-        //     return getBezierPointsQuard(points, t).first[2]
-        // } else if (parser.segments[1].command === 'L') {
-        //     var points = [
-        //         xy(parser.segments[0].values),
-        //         xy(parser.segments[1].values.slice(0, 2))
-        //     ]
-
-        //     var curve = recoverBezierLine(...points, 20)
-        //     var t = curve(clickPosition.x, clickPosition.y);
-
-        //     return getBezierPointsLine(points, t).first[1]
-        // }
-
-        // return clickPosition;
     }
 
     [POINTERSTART('$view .split-path') + MOVE() + END()](e) {
@@ -127,7 +97,7 @@ const PathCutter = class extends SegmentConvertor {
 
             return;
         } else {
-
+            // split-path 를 클릭 하면 바로 패스를 분리시킨다. 
             if (parser.segments[1].command === 'C') {
                 var points = [
                     xy(parser.segments[0].values),
@@ -136,7 +106,7 @@ const PathCutter = class extends SegmentConvertor {
                     xy(parser.segments[1].values.slice(4, 6))
                 ]
 
-                var curve = recoverBezier(...points, 200)
+                var curve = recoverBezier(...points, 20)
                 var t = curve(clickPosition.x, clickPosition.y);
 
                 selectedSegmentIndex = this.pathGenerator.setPoint(getBezierPoints(points, t))
@@ -148,7 +118,7 @@ const PathCutter = class extends SegmentConvertor {
                     xy(parser.segments[1].values.slice(2, 4))
                 ]
 
-                var curve = recoverBezierQuard(...points, 200)
+                var curve = recoverBezierQuard(...points, 20)
                 var t = curve(clickPosition.x, clickPosition.y);
 
                 selectedSegmentIndex = this.pathGenerator.setPointQuard(getBezierPointsQuard(points, t))
@@ -158,7 +128,7 @@ const PathCutter = class extends SegmentConvertor {
                     xy(parser.segments[1].values.slice(0, 2))
                 ]
 
-                var curve = recoverBezierLine(...points, 200)
+                var curve = recoverBezierLine(...points, 20)
                 var t = curve(clickPosition.x, clickPosition.y);
 
                 selectedSegmentIndex = this.pathGenerator.setPointLine(getBezierPointsLine(points, t))
@@ -173,7 +143,7 @@ const PathCutter = class extends SegmentConvertor {
             this.changeMode('segment-move');
 
             // segment 캐쉬 
-            this.pathGenerator.setCachePoint(selectedSegmentIndex, 'startPoint', this.$viewport.applyVerties(this.$snapManager.getSnapPoints()));
+            this.pathGenerator.setCachePoint(selectedSegmentIndex, 'startPoint');
 
             // segment 선택 하기 
             this.pathGenerator.selectKeyIndex('startPoint', selectedSegmentIndex)
@@ -251,10 +221,6 @@ export default class PathEditorView extends PathTransformEditor {
             clickCount: 0,
             isSegment: false,
             isFirstSegment: false,
-            screenX: Length.z(),
-            screenY: Length.z(),
-            screenWidth: Length.z(),
-            screenHeight: Length.z()
         }
     }
 
@@ -293,7 +259,7 @@ export default class PathEditorView extends PathTransformEditor {
             this.addPathLayer();
         }
 
-        if (!this.state.current && this.state.points.length) {
+        if (!this.state.current && this.pathGenerator.length) {
             this.trigger('initPathEditorView');
         } else {
             this.trigger('hidePathEditor');
@@ -398,6 +364,11 @@ export default class PathEditorView extends PathTransformEditor {
             ...obj
         }, false)
 
+        if (obj?.points) {
+            this.pathGenerator.setPoints(obj.points || []);
+        }
+
+
         this.emit('changePathManager', this.state.mode);
     }
 
@@ -425,6 +396,13 @@ export default class PathEditorView extends PathTransformEditor {
         }
     }
 
+    /**
+     * Path 에디터 다시 그리기 
+     * 
+     * viewport 의 matrixInverse 를 적용하고 다시 정리한다. 
+     * 
+     * @param {{d: string}} obj 
+     */
     refresh(obj) {
 
         if (obj && obj.d) {
@@ -432,7 +410,7 @@ export default class PathEditorView extends PathTransformEditor {
             this.pathParser.transformMat4(this.$viewport.matrix);
             this.state.cachedMatrixInverse = this.$viewport.matrixInverse;
 
-            this.state.points = this.pathParser.convertGenerator();
+            this.pathGenerator.setPoints(this.pathParser.convertGenerator())
         }
 
         this.pathGenerator.initializeSelect();
@@ -594,13 +572,12 @@ export default class PathEditorView extends PathTransformEditor {
         };
 
         // canvas 클릭 여부 
-        this.state.isOnCanvas = false;
+        this.$config.set('set.drag.path.area', false);             
 
         var $target = Dom.create(e.target);
-
         if ($target.hasClass('svg-editor-canvas') && !isPathMode) {
-            // canvas 를 클릭했을 때 설정 
-            this.state.isOnCanvas = true;
+            // canvas 를 클릭했을 때 설정 , drag 를 할준비를 한다. 
+            this.$config.set('set.drag.path.area', true);             
         } else {
 
             // path 를 클릭했을 때 설정
@@ -624,7 +601,7 @@ export default class PathEditorView extends PathTransformEditor {
                 // 마지막 지점을 연결할 예정이기 때문에 
                 // startPoint 는  M 이었던 startPoint 로 정리된다. 
                 var index = +$target.attr('data-index')
-                this.state.startPoint = this.state.points[index].startPoint;
+                this.state.startPoint = this.pathGenerator.points[index].startPoint;
             } else {
                 this.state.startPoint = this.state.dragXY;
 
@@ -640,7 +617,7 @@ export default class PathEditorView extends PathTransformEditor {
                 this.changeMode('segment-move');
                 var [index, segmentKey] = $target.attrs('data-index', 'data-segment-point')
 
-                this.pathGenerator.setCachePoint(+index, segmentKey, this.$viewport.applyVerties(this.$snapManager.getSnapPoints()));
+                this.pathGenerator.setCachePoint(+index, segmentKey);
 
                 this.pathGenerator.selectKeyIndex(segmentKey, index)
             }
@@ -688,7 +665,7 @@ export default class PathEditorView extends PathTransformEditor {
     }
 
     move(dx, dy) {
-        if (this.state.isOnCanvas) {
+        if (this.$config.true('set.drag.path.area')) {
             // 드래그 상자 만들기 
             this.renderSelectBox(this.state.dragXY, dx, dy);
 
@@ -751,7 +728,7 @@ export default class PathEditorView extends PathTransformEditor {
 
     end(dx, dy) {
         this.$config.set('set.move.control.point', false);        
-        if (this.state.isOnCanvas) {
+        if (this.$config.true('set.drag.path.area')) {
             if (dx === 0 && dy === 0) {    // 아무것도 움직인게 없으면 편집 종료 
                 this.changeMode('modify');
                 this.trigger('hidePathEditor')

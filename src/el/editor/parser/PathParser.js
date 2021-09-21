@@ -4,6 +4,7 @@ import { isNotUndefined, clone } from "el/sapa/functions/func";
 import { degreeToRadian, round } from "el/utils/math";
 import { mat4, vec3 } from "gl-matrix";
 import Point from "./Point";
+import { Segment } from "./Segment";
 
 const REG_PARSE_NUMBER_FOR_PATH = /([mMlLvVhHcCsSqQtTaAzZ]([^mMlLvVhHcCsSqQtTaAzZ]*))/g;
 const splitReg = /[\b\t \,]/g;
@@ -14,34 +15,34 @@ export default class PathParser {
      * 
      * @param {string} pathString  SVG Path 문자열
      */
-    constructor (pathString = '') {
+    constructor(pathString = '') {
         this.reset(pathString);
     }
 
-    reset (pathString = '') {
-        this.segments =  [];
-        this.pathString = pathString; 
-        
+    reset(pathString = '') {
+        this.segments = [];
+        this.pathString = pathString;
+
         this.parse()
     }
 
-    resetSegments (segments) {
-        this.segments = segments || [] 
+    resetSegments(segments) {
+        this.segments = segments || []
         this.pathString = this.joinPath()
     }
-	
-    trim (str = '')  {
-        var arr = str.match(numberReg) || [] 
+
+    trim(str = '') {
+        var arr = str.match(numberReg) || []
         return arr.filter(it => it != '');
     }
 
-    parse () {
+    parse() {
         var arr = this.pathString.match(REG_PARSE_NUMBER_FOR_PATH) || [];
 
         this.segments = arr.map(s => {
             var command = s[0]
             var values = this.trim(s.replace(command, '')).map(it => +it);
-            
+
             return { command, values }
         });
 
@@ -50,90 +51,90 @@ export default class PathParser {
         // 물론 트랜스폼 하기 전에 절대 좌표로 구조를 맞추고 
         // 다시 돌아올 수도 있겠지만 불필요한 작업이 너무 많아질 수도 있다. 
         this.segments = this.segments.map((s, index) => {
-            switch(s.command) {
-            case 'c':
-            case 'm':
-            case 'l':
-            case 'q':
-            case 's':
-            case 't':
-            case 'v':
-            case 'h': 
-                var prev = this.segments[index-1]
-                var x = prev.values[prev.values.length -2 ]
-                var y = prev.values[prev.values.length -1 ]
+            switch (s.command) {
+                case 'c':
+                case 'm':
+                case 'l':
+                case 'q':
+                case 's':
+                case 't':
+                case 'v':
+                case 'h':
+                    var prev = this.segments[index - 1]
+                    var x = prev.values[prev.values.length - 2]
+                    var y = prev.values[prev.values.length - 1]
 
-                 for (var i = 0, len = s.values.length; i < len; i += 2) {
-                     s.values[i] += x
-                     s.values[i+1] += y
-                 }
+                    for (var i = 0, len = s.values.length; i < len; i += 2) {
+                        s.values[i] += x
+                        s.values[i + 1] += y
+                    }
 
-                return {
-                    command: s.command.toUpperCase(),
-                    values: [...s.values]
-                }; 
-            default: 
-                return s; 
+                    return {
+                        command: s.command.toUpperCase(),
+                        values: [...s.values]
+                    };
+                default:
+                    return s;
             }
         })
     }
 
-    convertGenerator () {
+    convertGenerator() {
 
-        var points = [] 
+        var points = []
 
-        for(var index = 0, len = this.segments.length; index < len; index++) {
+        for (var index = 0, len = this.segments.length; index < len; index++) {
             var s = this.segments[index]
-            var nextSegment = this.segments[index+1]
-            const {command, values} = s; 
+            var nextSegment = this.segments[index + 1]
+            const { command, values } = s;
 
-            if (command === 'M' ) {
+            if (command === 'M') {
                 var [x, y] = values
-                points.push({ 
-                    command, 
-                    originalCommand: command,                    
-                    startPoint: {x, y}, 
-                    endPoint: {x, y}, 
-                    reversePoint: {x, y},
+                points.push({
+                    command,
+                    originalCommand: command,
+                    startPoint: { x, y },
+                    endPoint: { x, y },
+                    reversePoint: { x, y },
                     curve: false
                 })
-            } else if (command === 'L') { 
+            } else if (command === 'L') {
                 var prevPoint = Point.getPrevPoint(points, points.length);
-                
+
                 if (prevPoint.curve) {
                     var [x, y] = values
-                    points.push({ 
-                        command, 
-                        originalCommand: command,                        
-                        startPoint: {x, y}, 
-                        endPoint: {x, y}, 
+                    points.push({
+                        command,
+                        originalCommand: command,
+                        startPoint: { x, y },
+                        endPoint: { x, y },
                         reversePoint: clone(prevPoint.endPoint),
                         curve: true
                     })
                 } else {
 
                     var [x, y] = values
-                    points.push({ 
-                        command, 
-                        originalCommand: command,                        
-                        startPoint: {x, y}, 
-                        endPoint: {x, y}, 
-                        reversePoint: { x, y},
+                    points.push({
+                        command,
+                        originalCommand: command,
+                        startPoint: { x, y },
+                        endPoint: { x, y },
+                        reversePoint: { x, y },
                         curve: false
                     })
                 }
 
             } else if (command === 'Q') {
-                var [cx1, cy1, x, y] = values; 
+                var [cx1, cy1, x, y] = values;
                 var prevPoint = Point.getPrevPoint(points, points.length);
 
                 if (prevPoint.curve) {  // 내가 Q 인데 앞의 포인트가  
-                    var startPoint = {x, y}                    
-                    var endPoint = {x, y}                    
-                    var reversePoint = {x, y}                    
+                    var startPoint = { x, y }
+                    var endPoint = { x, y }
+                    var reversePoint = { x, y }
                     points.push({
                         command: 'L',
-                        originalCommand: command,                        
+                        originalCommand: command,
                         startPoint,
                         endPoint,
                         reversePoint,
@@ -146,17 +147,17 @@ export default class PathParser {
 
 
                     if (nextSegment && nextSegment.command === 'L') {
-                        prevPoint.curve = true; 
+                        prevPoint.curve = true;
                         prevPoint.endPoint = { x: cx1, y: cy1 }
 
-                        var startPoint = {x, y}
-                        var reversePoint = { x, y} 
-                        var endPoint = {x, y}
-        
+                        var startPoint = { x, y }
+                        var reversePoint = { x, y }
+                        var endPoint = { x, y }
+
                         points.push({
-                            command: 'L', 
-                            originalCommand: command,                        
-                            curve: false, 
+                            command: 'L',
+                            originalCommand: command,
+                            curve: false,
                             startPoint,
                             endPoint,
                             reversePoint
@@ -164,14 +165,14 @@ export default class PathParser {
 
                     } else {
 
-                        var startPoint = {x, y}
-                        var reversePoint = { x: cx1, y: cy1} 
-                        var endPoint = {x, y}
-        
+                        var startPoint = { x, y }
+                        var reversePoint = { x: cx1, y: cy1 }
+                        var endPoint = { x, y }
+
                         points.push({
-                            command, 
-                            originalCommand: command,                        
-                            curve: true, 
+                            command,
+                            originalCommand: command,
+                            curve: true,
                             startPoint,
                             endPoint,
                             reversePoint
@@ -181,20 +182,20 @@ export default class PathParser {
 
                 }
             } else if (command === 'T') {
-                var [x, y] = values; 
+                var [x, y] = values;
                 // T 는 앞에 Q 가 있다는 소리 
                 // Q 의 Control Point 반대편에 Control Point 가 있다고 치고 생각하자. 
-                var prevSegment = segments[index-1]
+                var prevSegment = segments[index - 1]
 
                 if (prevSegment && prevSegment.command === 'Q') {
-                    var [cx1, cy1, sx, sy ] = prevSegment.values
+                    var [cx1, cy1, sx, sy] = prevSegment.values
 
                     var prevPoint = Point.getPrevPoint(points, points.length)
-                    prevPoint.endPoint = Point.getReversePoint({x: sx, y: sy}, {x: cx1, y: cy1});
+                    prevPoint.endPoint = Point.getReversePoint({ x: sx, y: sy }, { x: cx1, y: cy1 });
 
-                    var startPoint = {x, y}
-                    var endPoint = {x, y}                    
-                    var reversePoint = {x, y}                    
+                    var startPoint = { x, y }
+                    var endPoint = { x, y }
+                    var reversePoint = { x, y }
                     points.push({
                         command: 'L',
                         originalCommand: command,
@@ -207,42 +208,42 @@ export default class PathParser {
 
 
             } else if (command === 'C') {
-                
+
                 var prevPoint = Point.getPrevPoint(points, points.length)
 
-                var [cx1, cy1, cx2, cy2, x, y] = values;                 
-                var startPoint = {x, y}
-                var reversePoint = { x: cx2, y: cy2} 
-                var endPoint = {x, y}
+                var [cx1, cy1, cx2, cy2, x, y] = values;
+                var startPoint = { x, y }
+                var reversePoint = { x: cx2, y: cy2 }
+                var endPoint = { x, y }
 
                 points.push({
-                    command, 
-                    originalCommand: command,                    
-                    curve: true, 
+                    command,
+                    originalCommand: command,
+                    curve: true,
                     startPoint,
                     endPoint,
                     reversePoint
                 })
 
                 if (prevPoint) {
-                    prevPoint.curve = true; 
-                    prevPoint.endPoint = {x: cx1, y: cy1 } 
-                }    
+                    prevPoint.curve = true;
+                    prevPoint.endPoint = { x: cx1, y: cy1 }
+                }
             } else if (command === 'S') {
-                var [x, y] = values; 
+                var [x, y] = values;
                 // S 는 앞에 C,S 가 있다는 소리 
                 // S 의 Control Point 반대편에 Control Point 가 있다고 치고 생각하자. 
-                var prevSegment = segments[index-1]
+                var prevSegment = segments[index - 1]
 
                 if (prevSegment && prevSegment.command === 'C') {
-                    var [cx2, cy2, sx, sy ] = prevSegment.values
+                    var [cx2, cy2, sx, sy] = prevSegment.values
 
                     var prevPoint = Point.getPrevPoint(points, points.length)
                     prevPoint.endPoint = Point.getReversePoint(prevPoint.startPoint, prevPoint.reversePoint);
 
-                    var startPoint = {x, y}
-                    var endPoint = {x, y}                    
-                    var reversePoint = { x: cx2, y: cy2}  
+                    var startPoint = { x, y }
+                    var endPoint = { x, y }
+                    var reversePoint = { x: cx2, y: cy2 }
                     points.push({
                         command: 'Q',
                         originalCommand: command,
@@ -252,20 +253,20 @@ export default class PathParser {
                         curve: false
                     })
                 }
-                            
-                
+
+
             } else if (command === 'Z') {
                 var prevPoint = Point.getPrevPoint(points, points.length);
                 var firstPoint = Point.getFirstPoint(points, points.length);
 
                 if (Point.isEqual(prevPoint.startPoint, firstPoint.startPoint)) {
-                    prevPoint.connected = true; 
+                    prevPoint.connected = true;
 
                     prevPoint.endPoint = clone(firstPoint.endPoint)
                     firstPoint.reversePoint = clone(prevPoint.reversePoint)
                 }
 
-                prevPoint.close = true; 
+                prevPoint.close = true;
 
             }
         }
@@ -275,30 +276,29 @@ export default class PathParser {
         return points;
     }
 
-    length () {
+    length() {
         return this.segments.length;
     }
 
-	setSegments (index, seg) {
+    setSegments(index, seg) {
         this.segments[index] = seg;
     }
 
-	getSegments (index) {
+    getSegments(index) {
         if (isNotUndefined(index)) {
             return this.segments[index];
         }
         return this.segments;
     }
 
-	joinPath (segments) {
+    joinPath(segments) {
         var list = (segments || this.segments);
         return list.map(it => {
             return `${it.command} ${it.values.length ? it.values.join(' ') : ''}`
         }).join('')
     }
 
-    each (callback, isReturn = false) {
-
+    each(callback, isReturn = false) {
         var newSegments = this.segments.map((segment, index) => {
             return callback.call(this, segment, index);
         })
@@ -310,38 +310,38 @@ export default class PathParser {
         }
     }
 
-    _loop (m, isReturn = false) {
-        return this.each(function(segment) {
+    _loop(m, isReturn = false) {
+        return this.each(function (segment) {
             var v = segment.values;
             var c = segment.command;
 
-            switch(c) {
-            case 'M':
-            case 'L':
-                var result = m(v, 0);
-                segment.values = [result[0], result[1]];
-                break; 
-            case 'V':
-                var result = m([+v[0], 0]);
-                segment.values = [result[0]];                
-                break;
-            case 'H':
-                var result = m([0, +v[0]]);
-                segment.values = [result[1]];                
-                break; 
-            case 'C':
-            case 'S':
-            case 'T':
-            case 'Q':
-                for(var i = 0, len = v.length; i < len; i+=2) {
-                    var result = m(v, i);
-                    segment.values[i] = result[0];
-                    segment.values[i+1] = result[1];
-                }
-                break; 
-            case 'A':
+            switch (c) {
+                case 'M':
+                case 'L':
+                    var result = m(v, 0);
+                    segment.values = [result[0], result[1]];
+                    break;
+                case 'V':
+                    var result = m([+v[0], 0]);
+                    segment.values = [result[0]];
+                    break;
+                case 'H':
+                    var result = m([0, +v[0]]);
+                    segment.values = [result[1]];
+                    break;
+                case 'C':
+                case 'S':
+                case 'T':
+                case 'Q':
+                    for (var i = 0, len = v.length; i < len; i += 2) {
+                        var result = m(v, i);
+                        segment.values[i] = result[0];
+                        segment.values[i + 1] = result[1];
+                    }
+                    break;
+                case 'A':
 
-                break; 
+                    break;
             }
 
             return segment;
@@ -349,92 +349,92 @@ export default class PathParser {
         }, isReturn);
     }
 
-    clone () {
+    clone() {
         return new PathParser(this.joinPath());
     }
 
-    translate (tx, ty) {
+    translate(tx, ty) {
         this.transformMat4(mat4.fromTranslation([], [tx, ty, 0]));
         return this;
     }
 
-    translateTo (tx, ty) {
+    translateTo(tx, ty) {
         return this.joinPath(this.transformMat4(mat4.fromTranslation([], [tx, ty, 0]), true));
-    }    
+    }
 
-    scale (sx, sy) {
+    scale(sx, sy) {
         this.transformMat4(mat4.fromScaling([], [sx, sy, 1]));
         return this;
     }
 
-    scaleTo (sx, sy) {
-        return this.joinPath(this.transformMat4(mat4.fromScaling([], [sx, sy, 1]), true));        
-    }    
+    scaleTo(sx, sy) {
+        return this.joinPath(this.transformMat4(mat4.fromScaling([], [sx, sy, 1]), true));
+    }
 
-    rotate (angle, centerX = 0, centerY = 0) {
+    rotate(angle, centerX = 0, centerY = 0) {
         const view = mat4.create();
         mat4.multiply(view, view, mat4.fromTranslation([], [centerX, centerY, 0]))
-        mat4.multiply(view, view, mat4.fromZRotation([], degreeToRadian(angle)) )
-        mat4.multiply(view, view, mat4.fromTranslation([], vec3.negate([], [centerX, centerY, 0])))        
+        mat4.multiply(view, view, mat4.fromZRotation([], degreeToRadian(angle)))
+        mat4.multiply(view, view, mat4.fromTranslation([], vec3.negate([], [centerX, centerY, 0])))
 
         this.transformMat4(view);
-        return this;        
+        return this;
     }
 
-    rotateTo (angle, centerX = 0, centerY = 0) {
+    rotateTo(angle, centerX = 0, centerY = 0) {
 
         const view = mat4.create();
         mat4.multiply(view, view, mat4.fromTranslation([], [centerX, centerY, 0]))
-        mat4.multiply(view, view, mat4.fromZRotation([], degreeToRadian(angle)) )
-        mat4.multiply(view, view, mat4.fromTranslation([], vec3.negate([], [centerX, centerY, 0])))        
+        mat4.multiply(view, view, mat4.fromZRotation([], degreeToRadian(angle)))
+        mat4.multiply(view, view, mat4.fromTranslation([], vec3.negate([], [centerX, centerY, 0])))
 
-        return this.joinPath(this.transformMat4(view,  true))
-    }        
+        return this.joinPath(this.transformMat4(view, true))
+    }
 
-    reflectionOrigin () {
+    reflectionOrigin() {
         this.transformMat4(mat4.fromScaling([], [-1, -1, 0]))
-        return this;        
+        return this;
     }
 
-    reflectionOriginTo () {
+    reflectionOriginTo() {
         return this.joinPath(
-                    this.transformMat4(
-                        mat4.fromScaling([], [-1, -1, 0]), 
-                        true
-                    )
-                )
-    }            
-
-    flipX () {
-        this.transformMat4(mat4.fromScaling([], [1, -1, 0]))
-        return this;         
-    }
-
-    flipXTo () {
-        return this.joinPath(
-                    this.transformMat4(
-                        mat4.fromScaling([], [1, -1, 0]), 
-                        true
-                    )
-                )
-    }    
-
-    flipY () {
-        this.transformMat4(mat4.fromScaling([], [-1, 1, 0]))
-        return this;        
-    }
-
-    flipYTo () {
-        return this.joinPath(
-                this.transformMat4(
-                    mat4.fromScaling([], [-1, 1, 0]), 
-                    true
-                )
+            this.transformMat4(
+                mat4.fromScaling([], [-1, -1, 0]),
+                true
             )
-    }    
+        )
+    }
+
+    flipX() {
+        this.transformMat4(mat4.fromScaling([], [1, -1, 0]))
+        return this;
+    }
+
+    flipXTo() {
+        return this.joinPath(
+            this.transformMat4(
+                mat4.fromScaling([], [1, -1, 0]),
+                true
+            )
+        )
+    }
+
+    flipY() {
+        this.transformMat4(mat4.fromScaling([], [-1, 1, 0]))
+        return this;
+    }
+
+    flipYTo() {
+        return this.joinPath(
+            this.transformMat4(
+                mat4.fromScaling([], [-1, 1, 0]),
+                true
+            )
+        )
+    }
 
 
-    skewX (angle) {
+    skewX(angle) {
         this.transformMat4(
             mat4.fromValues(
                 1, Math.tan(degreeToRadian(angle)), 0, 0,
@@ -443,25 +443,25 @@ export default class PathParser {
                 0, 0, 0, 1
             )
         )
-        return this;        
+        return this;
     }
 
 
-    skewXTo (angle) {
-        return this.joinPath(        
-                    this.transformMat4(
-                        mat4.fromValues(
-                            1, Math.tan(degreeToRadian(angle)), 0, 0,
-                            0, 1, 0, 0,
-                            0, 0, 1, 0,
-                            0, 0, 0, 1
-                        ),
-                        true
-                    )
-                )
-    }        
+    skewXTo(angle) {
+        return this.joinPath(
+            this.transformMat4(
+                mat4.fromValues(
+                    1, Math.tan(degreeToRadian(angle)), 0, 0,
+                    0, 1, 0, 0,
+                    0, 0, 1, 0,
+                    0, 0, 0, 1
+                ),
+                true
+            )
+        )
+    }
 
-    skewY (angle) {
+    skewY(angle) {
         this.transformMat4(
             mat4.fromValues(
                 1, 0, 0, 0,
@@ -470,11 +470,11 @@ export default class PathParser {
                 0, 0, 0, 1
             )
         )
-        return this;        
+        return this;
     }
 
-    skewYTo (angle) {
-        return this.joinPath(        
+    skewYTo(angle) {
+        return this.joinPath(
             this.transformMat4(
                 mat4.fromValues(
                     1, 0, 0, 0,
@@ -485,77 +485,77 @@ export default class PathParser {
                 true
             )
         )
-    }    
-    
-    normalize () {
+    }
+
+    normalize() {
 
     }
 
-    getBBox () {
+    getBBox() {
 
         let minX = Number.MAX_SAFE_INTEGER, minY = Number.MAX_SAFE_INTEGER;
         let maxX = Number.MIN_SAFE_INTEGER, maxY = Number.MIN_SAFE_INTEGER;
 
-        this.each(function(segment, index) {
+        this.each(function (segment, index) {
             var v = segment.values;
             var c = segment.command;
-            const prevSegment = this.segments[index-1];
-            const accurancy = 1/10000;
+            const prevSegment = this.segments[index - 1];
+            const accurancy = 1 / 10000;
 
-            switch(c) {
-            case 'M': 
-            case 'L':
+            switch (c) {
+                case 'M':
+                case 'L':
 
-                minX = Math.min(minX, v[0])
-                maxX = Math.max(maxX, v[0])
+                    minX = Math.min(minX, v[0])
+                    maxX = Math.max(maxX, v[0])
 
-                minY = Math.min(minY, v[1])
-                maxY = Math.max(maxY, v[1])
-                break; 
-            case 'V':
-                minX = Math.min(minX, v[0])
-                maxX = Math.max(maxX, v[0])
-                break;
-            case 'H':
-                minY = Math.min(minY, v[1])
-                maxY = Math.max(maxY, v[1])                
-                break; 
-            case 'C':
-                getCurveBBox([
-                    [prevSegment.values[prevSegment.values.length-2], prevSegment.values[prevSegment.values.length-1], 0],
-                    [v[0], v[1], 0],
-                    [v[2], v[3], 0],
-                    [v[4], v[5], 0],
-                ]).forEach(p => {
-                    minX = Math.min(minX, p[0])
-                    maxX = Math.max(maxX, p[0])
-    
-                    minY = Math.min(minY, p[1])
-                    maxY = Math.max(maxY, p[1])
-                })
-                break;
-            case 'Q':
+                    minY = Math.min(minY, v[1])
+                    maxY = Math.max(maxY, v[1])
+                    break;
+                case 'V':
+                    minX = Math.min(minX, v[0])
+                    maxX = Math.max(maxX, v[0])
+                    break;
+                case 'H':
+                    minY = Math.min(minY, v[1])
+                    maxY = Math.max(maxY, v[1])
+                    break;
+                case 'C':
+                    getCurveBBox([
+                        [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
+                        [v[0], v[1], 0],
+                        [v[2], v[3], 0],
+                        [v[4], v[5], 0],
+                    ]).forEach(p => {
+                        minX = Math.min(minX, p[0])
+                        maxX = Math.max(maxX, p[0])
 
-                const newPoints = [
-                    [prevSegment.values[prevSegment.values.length-2], prevSegment.values[prevSegment.values.length-1], 0],
-                    [v[0], v[1], 0],
-                    [v[2], v[3], 0],
-                ].map(p => {
-                    return {x: p[0], y: p[1]}
-                })
-                for(var i = 0; i <= 1; i += accurancy) {
-                    const {x, y} = getBezierPointOneQuard(newPoints, i);
+                        minY = Math.min(minY, p[1])
+                        maxY = Math.max(maxY, p[1])
+                    })
+                    break;
+                case 'Q':
 
-                    minX = Math.min(minX, x)
-                    maxX = Math.max(maxX, x)
-    
-                    minY = Math.min(minY, y)
-                    maxY = Math.max(maxY, y)
-                }
-                break;                
-            case 'A':
+                    const newPoints = [
+                        [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
+                        [v[0], v[1], 0],
+                        [v[2], v[3], 0],
+                    ].map(p => {
+                        return { x: p[0], y: p[1] }
+                    })
+                    for (var i = 0; i <= 1; i += accurancy) {
+                        const { x, y } = getBezierPointOneQuard(newPoints, i);
 
-                break; 
+                        minX = Math.min(minX, x)
+                        maxX = Math.max(maxX, x)
+
+                        minY = Math.min(minY, y)
+                        maxY = Math.max(maxY, y)
+                    }
+                    break;
+                case 'A':
+
+                    break;
             }
 
             return segment;
@@ -579,74 +579,111 @@ export default class PathParser {
      * @param {number} count 
      * @returns 
      */
-    getClosedPoint ({x, y}, count = 20) {
+    getClosedPointInfo({ x, y }, count = 20) {
 
         let minDist = Number.MAX_SAFE_INTEGER;
-        let minPoint = null;
-        let targetPoint = null;
+        let targetInfo = {};
+        let info = {}
 
-        for(var i = 1, len = this.segments.length; i < len; i++) {
+        for (var i = 1, len = this.segments.length; i < len; i++) {
 
             const segment = this.segments[i];
 
-            const prev = this.segments[i-1].values
+            const prev = this.segments[i - 1].values
             const current = segment.values
             const command = segment.command;
+            const lastPoint = { x: prev[prev.length-2], y: prev[prev.length-1] }
 
-    
+
             if (command === 'C') {
                 var points = [
-                    {x: prev[0], y: prev[1]},
-                    {x: current[0], y: current[1]},
-                    {x: current[2], y: current[3]},
-                    {x: current[4], y: current[5]},
+                    lastPoint,
+                    { x: current[0], y: current[1] },
+                    { x: current[2], y: current[3] },
+                    { x: current[4], y: current[5] },
                 ]
 
                 var curve = recoverBezier(...points, count)
                 var t = curve(x, y);
 
-                targetPoint = getBezierPoints(points, t).first[3]
-
+                info = {
+                    segment,
+                    index: i,
+                    t,
+                    points,
+                    targetPoint: getBezierPoints(points, t).first[3]
+                }
             } else if (command === 'Q') {
                 var points = [
-                    {x: prev[0], y: prev[1]},
-                    {x: current[0], y: current[1]},
-                    {x: current[2], y: current[3]},
+                    lastPoint,
+                    { x: current[0], y: current[1] },
+                    { x: current[2], y: current[3] },
                 ]
 
                 var curve = recoverBezierQuard(...points, count)
                 var t = curve(x, y);
 
-                targetPoint = getBezierPointsQuard(points, t).first[2]
+                info = {
+                    segment,
+                    index: i,
+                    t,
+                    points,
+                    targetPoint: getBezierPointsQuard(points, t).first[2]
+                }                
             } else if (command === 'L') {
                 var points = [
-                    {x: prev[0], y: prev[1]},
-                    {x: current[0], y: current[1]},
+                    lastPoint,
+                    { x: current[0], y: current[1] },
                 ]
 
                 var curve = recoverBezierLine(...points, count)
                 var t = curve(x, y);
 
-                targetPoint = getBezierPointsLine(points, t).first[1]
-            } else {
-                targetPoint = null;
+                info = {
+                    segment,
+                    index: i,
+                    t,
+                    points,
+                    targetPoint: getBezierPointsLine(points, t).first[1]
+                }                                
             }
-             
-            if (targetPoint) {
-                var dist = Math.sqrt(Math.pow(targetPoint.x - x, 2) + Math.pow(targetPoint.y - y, 2))
+
+            if (info) {
+                var dist = Math.sqrt(Math.pow(info.targetPoint.x - x, 2) + Math.pow(info.targetPoint.y - y, 2))
 
                 if (dist < minDist) {
                     minDist = dist;
-                    minPoint = targetPoint;
+                    targetInfo = info; 
                 }
             }
 
         }
 
-        return minPoint ? minPoint : {x, y}
+        return targetInfo
     }
-    
-    get d () {
+
+
+    /**
+     * x, y 를 기준으로 가장 가까운 점을 찾는다. 
+     * 
+     * L, C, Q 를 대상으로만 한다. 
+     * 
+     * @param {{x: number, y: number}} param0 
+     * @param {number} count 
+     * @returns 
+     */
+    getClosedPoint({ x, y }, count = 20) {
+
+        const info = this.getClosedPointInfo({ x, y }, count);
+
+        if (info.targetPoint) {
+            return info.targetPoint;
+        }
+
+        return {x, y};
+    }
+
+    get d() {
         return this.toString()
     }
 
@@ -654,38 +691,38 @@ export default class PathParser {
         return this.joinPath()
     }
 
-    transformMat4(transformMatrix, isReturn = false ) {
-        return this.each(function(segment) {
+    transformMat4(transformMatrix, isReturn = false) {
+        return this.each(function (segment) {
             var v = segment.values;
             var c = segment.command;
 
-            switch(c) {
-            case 'M':
-            case 'L':
-                var result = vec3.transformMat4([], [v[0], v[1], 0], transformMatrix); 
-                segment.values = [result[0], result[1]]
-                break; 
-            case 'V':
-                var result = vec3.transformMat4([], [+v[0], 0, 0], transformMatrix)
-                segment.values = [result[0]];
-                break;
-            case 'H':
-                var result = vec3.transformMat4([], [0, +v[0], 0], transformMatrix)
-                segment.values = [result[1]];                
-                break; 
-            case 'C':
-            case 'S':
-            case 'T':
-            case 'Q':
-                for(var i = 0, len = v.length; i < len; i+=2) {
-                    var result = vec3.transformMat4([], [v[i], v[i+1], 0], transformMatrix)
-                    segment.values[i] = result[0];
-                    segment.values[i+1] = result[1];
-                }
-                break; 
-            case 'A':
+            switch (c) {
+                case 'M':
+                case 'L':
+                    var result = vec3.transformMat4([], [v[0], v[1], 0], transformMatrix);
+                    segment.values = [result[0], result[1]]
+                    break;
+                case 'V':
+                    var result = vec3.transformMat4([], [+v[0], 0, 0], transformMatrix)
+                    segment.values = [result[0]];
+                    break;
+                case 'H':
+                    var result = vec3.transformMat4([], [0, +v[0], 0], transformMatrix)
+                    segment.values = [result[1]];
+                    break;
+                case 'C':
+                case 'S':
+                case 'T':
+                case 'Q':
+                    for (var i = 0, len = v.length; i < len; i += 2) {
+                        var result = vec3.transformMat4([], [v[i], v[i + 1], 0], transformMatrix)
+                        segment.values[i] = result[0];
+                        segment.values[i + 1] = result[1];
+                    }
+                    break;
+                case 'A':
 
-                break; 
+                    break;
             }
 
             return segment;
@@ -693,60 +730,60 @@ export default class PathParser {
         }, isReturn);
     }
 
-    invert (transformMatrix) {
+    invert(transformMatrix) {
         this.transformMat4(mat4.invert([], transformMatrix));
     }
 
-    round (k = 1) {
-        this.each(function(segment) {
+    round(k = 1) {
+        this.each(function (segment) {
             segment.values = segment.values.map(it => round(it, k));
 
             return segment;
         });
 
-        return this; 
+        return this;
     }
 
-    reverseSegments (segments) {
+    reverseSegments(segments) {
         const newSegments = [];
-        let lastIndex = segments.length-1;
-        for(var i = lastIndex; i > 0; i--) {
+        let lastIndex = segments.length - 1;
+        for (var i = lastIndex; i > 0; i--) {
             const segment = segments[i];
             const v = segment.values;
             const c = segment.command;
-            const prevSegment = segments[i-1];
-            const lastX = prevSegment.values[prevSegment.values.length-2];
-            const lastY = prevSegment.values[prevSegment.values.length-1];
+            const prevSegment = segments[i - 1];
+            const lastX = prevSegment.values[prevSegment.values.length - 2];
+            const lastY = prevSegment.values[prevSegment.values.length - 1];
 
-            switch(c) {
-            case 'L':
+            switch (c) {
+                case 'L':
 
-                if (i === lastIndex) {        // last 일 경우 
-                    newSegments.push({command: 'M',values: [v[0], v[1]]})
-                }
+                    if (i === lastIndex) {        // last 일 경우 
+                        newSegments.push({ command: 'M', values: [v[0], v[1]] })
+                    }
 
-                newSegments.push({command: 'L',values: [lastX, lastY]})
-                break;                
-            case 'C':
+                    newSegments.push({ command: 'L', values: [lastX, lastY] })
+                    break;
+                case 'C':
 
-                if (i === lastIndex) {        // last 일 경우 
-                    newSegments.push({command: 'M',values: [v[4], v[5]]})
-                }
+                    if (i === lastIndex) {        // last 일 경우 
+                        newSegments.push({ command: 'M', values: [v[4], v[5]] })
+                    }
 
-                newSegments.push({command: 'C',values: [v[2], v[3], v[0], v[1], lastX, lastY]})
-                break;
-            case 'Q':
+                    newSegments.push({ command: 'C', values: [v[2], v[3], v[0], v[1], lastX, lastY] })
+                    break;
+                case 'Q':
 
-                if (i === lastIndex) {        // last 일 경우 
-                    newSegments.push({command: 'M',values: [v[2], v[3]]})
-                }
+                    if (i === lastIndex) {        // last 일 경우 
+                        newSegments.push({ command: 'M', values: [v[2], v[3]] })
+                    }
 
-                newSegments.push({command: 'Q',values: [v[0], v[1], lastX, lastY]})
-                break;
-            case 'Z':
-                newSegments.push(segment);
-                lastIndex = i - 1; 
-                break;
+                    newSegments.push({ command: 'Q', values: [v[0], v[1], lastX, lastY] })
+                    break;
+                case 'Z':
+                    newSegments.push(segment);
+                    lastIndex = i - 1;
+                    break;
             }
         }
 
@@ -761,7 +798,7 @@ export default class PathParser {
     /**
      * segments 를 M 기준으로 분리 시킨다. 
      */
-    splitSegments () {
+    splitSegments() {
 
         const groupSegments = []
         let newSegments = []
@@ -782,7 +819,7 @@ export default class PathParser {
      * 
      * M이 여러개일 경우는  group 별로 역순으로 정렬하고 합친다. 
      */
-    reverse () {
+    reverse() {
 
         const groupSegments = this.splitSegments();
         const newSegments = []
@@ -794,43 +831,238 @@ export default class PathParser {
         this.segments = newSegments;
     }
 
-    get verties () {
+    get verties() {
         let arr = []
 
         let lastValues = []
-        this.each(function(segment) {
+        this.each(function (segment) {
             var v = segment.values;
             var c = segment.command;
 
-            switch(c) {
-            case 'M':
-            case 'L':
-                arr.push([...segment.values, 0])
-                break; 
-            case 'V':
-                arr.push([ v[0], lastValues.pop(), 0 ])            
-                break;
-            case 'H':
-                lastValues.pop()
-                arr.push([ lastValues.pop(),  v[0], 0 ])                            
-                break; 
-            case 'C':
-            case 'S':
-            case 'T':
-            case 'Q':
-                for(var i = 0, len = v.length; i < len; i+=2) {
-                    arr.push([v[i], v[i+1], 0]);
-                }
-                break; 
-            case 'A':
+            switch (c) {
+                case 'M':
+                case 'L':
+                    arr.push([...segment.values, 0])
+                    break;
+                case 'V':
+                    arr.push([v[0], lastValues.pop(), 0])
+                    break;
+                case 'H':
+                    lastValues.pop()
+                    arr.push([lastValues.pop(), v[0], 0])
+                    break;
+                case 'C':
+                case 'S':
+                case 'T':
+                case 'Q':
+                    for (var i = 0, len = v.length; i < len; i += 2) {
+                        arr.push([v[i], v[i + 1], 0]);
+                    }
+                    break;
+                case 'A':
 
-                break; 
+                    break;
             }
 
-            lastValues = v; 
+            lastValues = v;
 
         });
 
         return arr;
     }
+
+    /**
+     * 컨트롤 포인트를 제외한 모든 점을 반환한다.
+     * 
+     * @returns {{index: number, pointer: vec3}[]}
+     */
+    getCenterPointers() {
+        let arr = []
+
+        let lastValues = []
+        this.segments.forEach((segment, index) => {
+            var v = segment.values;
+            var c = segment.command;
+
+            switch (c) {
+                case 'M':
+                case 'L':
+                    arr.push({
+                        index,
+                        pointer: [...segment.values, 0]
+                    })
+                    break;
+                case 'V':
+                    arr.push({
+                        index,
+                        pointer: [v[0], lastValues.pop(), 0]
+                    })
+                    break;
+                case 'H':
+                    lastValues.pop()
+                    arr.push({
+                        index,
+                        pointer: [lastValues.pop(), v[0], 0]
+                    })
+                    break;
+                case 'C':
+                case 'S':
+                case 'T':
+                case 'Q':
+                    arr.push({
+                        index,
+                        pointer: [v[v.length - 2], v[v.length - 1], 0]
+                    });
+                    break;
+                case 'A':
+
+                    break;
+            }
+
+            lastValues = clone(v);
+
+        });
+
+        return arr;
+
+    }
+
+    /**
+     * 주어진 포인트와 같은 포인트 리스트를 검색한다. 
+     * 
+     * @param {vec3} pointer 
+     * @param {number} [dist=0]
+     * @returns 
+     */
+    getSamePointers(pointer, dist = 0) {
+        return this.getCenterPointers().filter(p => {
+            if (vec3.distance(p.pointer, pointer) <= dist) {
+                return true;
+            }
+        });
+    }
+
+    /**
+     * segments 를 M 기준으로 분리 시킨다. 
+     */
+    getGroup() {
+
+        const groupSegments = []
+        let newSegments = []
+        this.segments.forEach((segment, index) => {
+            if (segment.command === 'M') {
+                newSegments = [{
+                    index,
+                    segment
+                }]
+                groupSegments.push({index, groupIndex: groupSegments.length, segments: newSegments});
+            } else {
+                newSegments.push({
+                    index,
+                    segment
+                });
+            }
+        })
+
+        return groupSegments;
+    }
+
+    /**
+     * groupPath 생성 
+     * 
+     * @param {number} index  group index
+     * @returns 
+     */
+    createGroupPath(index) {
+        const path = new PathParser();
+        path.resetSegments(this.getGroup()[index]?.segments?.map(it => {
+            return it.segment;
+        }) || []);
+
+        return path;
+    }
+
+
+    /**
+     * index 에 있는 segment 를 삭제하고 segments 로 다시 설정한다.
+     * 
+     * @param {number} index 
+     * @param  {object[]} segments 
+     */
+    replaceSegment (index, ...segments) {
+        const newSegments = [...this.segments];
+        newSegments.splice(index, 1, ...segments)
+
+        this.resetSegments(newSegments);
+    }
+
+    /**
+     * 특정 포인트로 segment 분리하기 
+     * 
+     * @param {{x: number, y: number}} pos 
+     * @param {number} [dist=0]
+     * @returns 
+     */
+    splitSegmentByPoint(pos, dist = 0) {
+        const closedPointInfo = this.getClosedPointInfo(pos, dist);
+
+        if (closedPointInfo && closedPointInfo.t > 0 && closedPointInfo.t < 1) {
+            switch(closedPointInfo.segment.command) {
+                case "C":
+                    var list = getBezierPoints(closedPointInfo.points, closedPointInfo.t);
+    
+                    var first = list.first;
+                    var firstSegment = Segment.C(first[1].x, first[1].y, first[2].x, first[2].y, first[3].x, first[3].y)
+
+                    var second = list.second;
+                    var secondSegment = Segment.C(second[1].x, second[1].y, second[2].x, second[2].y, second[3].x, second[3].y )
+            
+                    this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);
+                    break;
+                case "Q":
+                    var list = getBezierPointsQuard(closedPointInfo.points, closedPointInfo.t);
+
+                    var first = list.first;
+                    var firstSegment = Segment.Q(first[1].x, first[1].y, first[2].x, first[2].y)
+                    var second = list.second;
+                    var secondSegment = Segment.Q(second[1].x, second[1].y, second[2].x, second[2].y)
+            
+                    this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);
+                    break;
+                case "L":
+                    var list = getBezierPointsLine(closedPointInfo.points, closedPointInfo.t);
+
+                    var first = list.first;
+                    var firstSegment = Segment.L(first[1].x, first[1].y)
+                    var second = list.second;
+                    var secondSegment = Segment.L(second[1].x, second[1].y)
+
+                    this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);                    
+                    break;
+                default: 
+                    return;
+            }
+
+            return closedPointInfo;            
+        }
+
+        
+    }
+
+    toggleCurve (index) {
+        const current = this.segments[index]
+        const command = current.command;
+
+        // 직선일 경우 curve 가 될려면 어떻게 해야할까? 
+        if (command === 'L') {
+            const right = this.segments[index + 1];
+
+            // current: 직선, right: 직선 일 경우 
+            if (right.command === 'L') {
+                this.replaceSegment(index, Segment.C(current.x, current.y, right.x, right.y, right.x, right.y));
+            }
+
+        }
+    }
+
 }
