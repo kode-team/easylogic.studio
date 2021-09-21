@@ -330,7 +330,7 @@ export default class PathGenerator {
             close: true 
         }   
 
-        state.points.push(point);
+        this.points.push(point);
     }
 
     setLastPoint (startPoint) {
@@ -348,7 +348,7 @@ export default class PathGenerator {
             close: false 
         }   
 
-        state.points.push(point);
+        this.points.push(point);
     }
 
     getPrevPoint(index) {
@@ -716,7 +716,7 @@ export default class PathGenerator {
 
     moveEnd (dx, dy) {
         var state = this.state; 
-        var {points} = state; 
+        var points = this.points;
         var x = state.dragXY.x + dx // / editor.scale;
         var y = state.dragXY.y + dy //  / editor.scale;
         
@@ -1162,7 +1162,8 @@ export default class PathGenerator {
 
     makeMovePositionGuide () {
         var state = this.state; 
-        var {points, startPoint, moveXY, dragPoints, altKey, snapPointList} = state;
+        var {startPoint, moveXY, dragPoints, altKey, snapPointList} = state;
+        var points = this.points;
         if (moveXY) {
 
             /* moveXY 에도 snap 을 적용한다. */ 
