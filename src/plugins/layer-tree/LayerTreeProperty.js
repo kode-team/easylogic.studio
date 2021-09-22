@@ -1,8 +1,8 @@
-import { 
-  LOAD, CLICK, DOUBLECLICK, PREVENT, STOP, 
-  FOCUSOUT, DOMDIFF, DRAGSTART, KEYDOWN, 
-  DRAGOVER, DROP, BIND, DRAGEND, 
-  SUBSCRIBE, SUBSCRIBE_SELF, THROTTLE 
+import {
+  LOAD, CLICK, DOUBLECLICK, PREVENT, STOP,
+  FOCUSOUT, DOMDIFF, DRAGSTART, KEYDOWN,
+  DRAGOVER, DROP, BIND, DRAGEND,
+  SUBSCRIBE, SUBSCRIBE_SELF, THROTTLE
 } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { Length } from "el/editor/unit/Length";
@@ -72,17 +72,23 @@ export default class LayerTreeProperty extends BaseProperty {
       }
       this.state.lastDragOverItemDirection = 'after';
     } else {
-      offset = 0;
+      const targetItem = this.$model.get(this.state.lastDragOverItemId)
+      // 자식을 가지지 못하는 컴포넌트는 예외처리 
+      if (targetItem.enableHasChildren()) {
 
-      var top = this.state.lastDragOverPosition + offset - this.state.rootRect.top
+        offset = 0;
 
-      bound = {
-        top: Length.px(top),
-        height: Length.px(this.state.itemRect.height),
-        width: '100%',
-        left: '0px'
+        var top = this.state.lastDragOverPosition + offset - this.state.rootRect.top
+
+        bound = {
+          top: Length.px(top),
+          height: Length.px(this.state.itemRect.height),
+          width: '100%',
+          left: '0px'
+        }
+        this.state.lastDragOverItemDirection = 'self';
       }
-      this.state.lastDragOverItemDirection = 'self';
+
     }
 
     bound.display = this.state.hideDragPointer ? 'none' : 'block';
@@ -240,6 +246,8 @@ export default class LayerTreeProperty extends BaseProperty {
     var targetItem = this.$model.get(targetLayerId);
     var sourceItem = this.$model.get(sourceLayerId);
 
+    // 자식을 가지지 못하는 컴포넌트는 예외처리 
+    if (targetItem.enableHasChildren() === false) return;
     if (targetItem && targetItem.hasParent(sourceItem.id)) return;
 
     switch (this.state.lastDragOverItemDirection) {
