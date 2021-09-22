@@ -273,6 +273,46 @@ export const getBezierPointsQuard = (points, t) => {
     }
 }
 
+export const splitBezierPointsByCount = (points, count = 1) => {
+    var result = []
+
+    while(count > 0) {
+        const curve = getBezierPoints(points, 1/count);
+        result.push(curve.first)
+        points = curve.second;
+        count--;
+    }
+
+    return result;
+}
+
+export const splitBezierPointsQuardByCount = (points, count = 1) => {
+    var result = []
+
+    while(count > 0) {
+        const curve = getBezierPointsQuard(points, 1/count);
+        result.push(curve.first)
+        points = curve.second;
+        count--;
+    }
+
+    return result;
+}
+
+export const splitBezierPointsLineByCount = (points, count = 1) => {
+    var result = []
+
+    while(count > 0) {
+        const curve = getBezierPointsLine(points, 1/count);
+        result.push(curve.first)
+        points = curve.second;
+        count--;
+    }
+
+    return result;
+}
+
+
 export const getBezierPointsLine = (points, t) => {
 
     var p0 = interpolate(points[0], points[1], t);

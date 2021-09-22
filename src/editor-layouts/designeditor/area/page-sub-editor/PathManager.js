@@ -51,6 +51,8 @@ export default class PathManager extends EditorElement {
             <button type="button" data-value='flipX' title='${this.$i18n('path.manager.mode.flipX')}'>${icon.flip}</button>
             <button type="button" data-value='flipY' title='${this.$i18n('path.manager.mode.flipY')}'>${icon.flip}</button>
             <button type="button" data-value='flip' title='${this.$i18n('path.manager.mode.flipOrigin')}'>${icon.flip}</button>
+            <button type="button" data-value='2x'>2x</button>
+            <button type="button" data-value='3x'>3x</button>            
         </div>
 
         <div class='tools' ref='$util'>
@@ -131,7 +133,13 @@ export default class PathManager extends EditorElement {
   [CLICK('$flip button')] (e) {
     var transformType = e.$dt.attr('data-value');
 
-    this.emit('changePathTransform', transformType);    
+    if (transformType === '2x') {
+      this.emit('divideSegmentsByCount', 2);  
+    } else if (transformType === '3x') {
+        this.emit('divideSegmentsByCount', 3);        
+    } else {
+      this.emit('changePathTransform', transformType);    
+    }
   }
 
   [CLICK('$util button')] (e) {

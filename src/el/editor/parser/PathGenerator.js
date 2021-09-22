@@ -200,9 +200,11 @@ export default class PathGenerator {
 
     setPoints(points = []) {
         this.points = points;
+
+        this.snapPointList = [];
     }
 
-    selectInBox (box) {
+    selectInBox (box, isToggle = false) {
         var list = [] 
         
         this.points.forEach((point, index) => {
@@ -216,16 +218,78 @@ export default class PathGenerator {
 
         })
 
-        this.select(...list);
+        // toggle 옵션이 있을 때는 기존에 선택된 것을 제외하고 선택한다.
+        if (isToggle) {
+
+            // 선택된 포인트는 해제, 다른 포인트는 추가 
+            list = list.map(it => {
+                const selectedKey = this.makeSegmentKey(it)
+                return {...it, included: Boolean(this.selectedPointKeys[selectedKey])}
+            })
+
+            // included list 는 삭제             
+            const includedList = list.filter(it => it.included)
+
+            // not included list 는 추가            
+            const notIncludedList = list.filter(it => !it.included)
+
+            let uniqueList = [...this.selectedPointList]
+
+            // 선택된 포인트는 해제
+            if (includedList.length) {
+                uniqueList = this.selectedPointList.filter(it => {
+                    const oldKey = this.makeSegmentKey(it)
+
+                    return Boolean(
+                        includedList.find(includeNode => {
+                            return oldKey === this.makeSegmentKey(includeNode)
+                        })
+                    ) === false
+                })
+    
+            }
+
+            this.select(...uniqueList, ...notIncludedList)
+
+        } else {
+            this.select(...list);
+        }
+
+
+    }
+
+    makeSegmentKey (p) {
+        return `${p.key}_${p.index}`
     }
 
     select (...list) {
         this.selectedPointKeys = {}
-        this.selectedPointList = list;
+        this.selectedPointList = list.map(({x, y, key, index}) => ({x, y, key, index}));
         list.forEach(it => {
-            var key = `${it.key}_${it.index}`
+            var key = this.makeSegmentKey(it)
             this.selectedPointKeys[key] = true;
         }) 
+    }
+
+    /**
+     * 
+     * @param {*} point 
+     */
+    toggleSelect (key, index) {
+
+        if (this.points[index]) {
+            var point = this.points[index][key];
+
+            // 선택된게 아니면 추가 
+            if (point && !this.isSelectedSegment(key, index)) {
+                this.select(...this.selectedPointList, {x: point.x, y: point.y, key, index})
+            } else {
+                // 이미 선택되어 있다면 해제 
+                this.select(...this.selectedPointList.filter(it => {
+                    return it.key !== key || it.index !== index
+                }))
+            }
+        }
     }
 
     selectKeyIndex (key, index) {
@@ -234,7 +298,7 @@ export default class PathGenerator {
             var point = this.points[index][key];
             if (point && !this.isSelectedSegment(key, index)) {
                 this.select({x: point.x, y: point.y, key, index})
-            }
+            } 
         }
 
     }

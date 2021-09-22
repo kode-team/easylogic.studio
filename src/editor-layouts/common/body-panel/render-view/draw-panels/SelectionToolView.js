@@ -30,7 +30,7 @@ const SelectionToolEvent = class  extends EditorElement {
     }
 
     [SUBSCRIBE('updateViewport')] () { 
-        if (this.$selection.isOne) {        
+        if (this.$selection.isOne && this.$modeView.isCurrentMode('CanvasView')) {        
             this.initSelectionTool();
         }
     }    

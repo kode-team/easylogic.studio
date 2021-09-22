@@ -1,5 +1,5 @@
 
-import { getBezierPointOneQuard, getBezierPoints, getBezierPointsLine, getBezierPointsQuard, getCurveBBox, recoverBezier, recoverBezierLine, recoverBezierQuard } from "el/utils/bezier";
+import { getBezierPointOneQuard, getBezierPoints, getBezierPointsLine, getBezierPointsQuard, getCurveBBox, recoverBezier, recoverBezierLine, recoverBezierQuard, splitBezierPointsByCount, splitBezierPointsLineByCount, splitBezierPointsQuardByCount } from "el/utils/bezier";
 import { isNotUndefined, clone } from "el/sapa/functions/func";
 import { degreeToRadian, round } from "el/utils/math";
 import { mat4, vec3 } from "gl-matrix";
@@ -487,8 +487,151 @@ export default class PathParser {
         )
     }
 
+    /**
+     * 내부 path 를 모두 curve 로 변환한다. 
+     */
     normalize() {
 
+        const allSegments = []
+
+        const groupList = this.getGroup();
+
+        groupList.forEach(group => {
+
+            const newSegments = [];
+
+            group.segments.forEach(({ segment, index }) => {
+                const prevSegment = group.segments[index - 1]?.segment;
+
+                if (segment.command === 'M') {
+                    newSegments.push(segment);
+                    return;
+                } else if (segment.command === 'L') {
+                    newSegments.push({
+                        command: 'C',
+                        values: [
+                            prevSegment.values[0] + (segment.values[0] - prevSegment.values[0]) * 0.33,
+                            prevSegment.values[1] + (segment.values[1] - prevSegment.values[1]) * 0.33,
+                            prevSegment.values[0] + (segment.values[0] - prevSegment.values[0]) * 0.66,
+                            prevSegment.values[1] + (segment.values[1] - prevSegment.values[1]) * 0.66,
+                            segment.values[0],
+                            segment.values[1]
+                        ]
+                    });
+                    return;
+                } else if (segment.command === 'C') {
+                    newSegments.push(segment);
+                } else if (segment.command === 'Q') {
+                    newSegments.push({
+                        command: 'C',
+                        values: [
+                            segment.values[0],
+                            segment.values[1],
+                            segment.values[0],
+                            segment.values[1],
+                            segment.values[2],
+                            segment.values[3]
+                        ]
+                    });
+                } else if (segment.command === 'Z') {
+                    newSegments.push(segment);
+                }
+            })
+
+            allSegments.push(...newSegments);
+        })
+
+        const normalizedPath = new PathParser();
+        normalizedPath.resetSegments(allSegments);
+
+        return normalizedPath;
+    }
+
+    divideSegmentByCount(count = 1) {
+        const allSegments = [];
+        const groupList = this.getGroup();
+
+        groupList.forEach(group => {
+            const newSegments = [];
+            group.segments.forEach(({ segment, index }) => {
+                const prevSegment = group.segments[index - 1]?.segment;
+                const nextSegment = group.segments[index + 1]?.segment;
+
+                if (segment.command === 'M') {
+                    newSegments.push(segment);
+                    return;
+                } else if (segment.command === 'L') {
+
+                    const linePoints = splitBezierPointsLineByCount([
+                        {
+                            x: prevSegment.values[prevSegment.values.length - 2],
+                            y: prevSegment.values[prevSegment.values.length - 1]
+                        },
+                        {
+                            x: segment.values[0],
+                            y: segment.values[1]
+                        }
+                    ], count)
+                    
+                    linePoints.forEach(([start, end]) => {
+                        newSegments.push(Segment.L(end.x, end.y));
+                    })
+                } else if (segment.command === 'Q') {
+
+                    const quardPoints = splitBezierPointsQuardByCount([
+                        {
+                            x: prevSegment.values[prevSegment.values.length - 2],
+                            y: prevSegment.values[prevSegment.values.length - 1]
+                        },
+                        {
+                            x: segment.values[0],
+                            y: segment.values[1]
+                        },
+                        {
+                            x: segment.values[2],
+                            y: segment.values[3]
+                        }                        
+                    ], count)
+                    
+                    quardPoints.forEach(([start, middle, end]) => {
+                        newSegments.push(Segment.Q(middle.x, middle.y, end.x, end.y));
+                    })
+                } else if (segment.command === 'C') {
+
+                    const curvePoints = splitBezierPointsByCount([
+                        {
+                            x: prevSegment.values[prevSegment.values.length - 2],
+                            y: prevSegment.values[prevSegment.values.length - 1]
+                        },
+                        {
+                            x: segment.values[0],
+                            y: segment.values[1]
+                        },
+                        {
+                            x: segment.values[2],
+                            y: segment.values[3]
+                        },
+                        {
+                            x: segment.values[4],
+                            y: segment.values[5]
+                        }
+                    ], count)
+
+                    curvePoints.forEach(([start, c1, c2, end]) => {
+                        newSegments.push(Segment.C(c1.x, c1.y, c2.x, c2.y, end.x, end.y));
+                    })
+                } else if (segment.command === 'Z') {
+                    newSegments.push(segment);                    
+                }    
+            })
+
+            allSegments.push(...newSegments);            
+        })
+
+        const normalizedPath = new PathParser();
+        normalizedPath.resetSegments(allSegments);
+
+        return normalizedPath;
     }
 
     getBBox() {
@@ -592,7 +735,7 @@ export default class PathParser {
             const prev = this.segments[i - 1].values
             const current = segment.values
             const command = segment.command;
-            const lastPoint = { x: prev[prev.length-2], y: prev[prev.length-1] }
+            const lastPoint = { x: prev[prev.length - 2], y: prev[prev.length - 1] }
 
 
             if (command === 'C') {
@@ -629,7 +772,7 @@ export default class PathParser {
                     t,
                     points,
                     targetPoint: getBezierPointsQuard(points, t).first[2]
-                }                
+                }
             } else if (command === 'L') {
                 var points = [
                     lastPoint,
@@ -645,7 +788,7 @@ export default class PathParser {
                     t,
                     points,
                     targetPoint: getBezierPointsLine(points, t).first[1]
-                }                                
+                }
             }
 
             if (info) {
@@ -653,7 +796,7 @@ export default class PathParser {
 
                 if (dist < minDist) {
                     minDist = dist;
-                    targetInfo = info; 
+                    targetInfo = info;
                 }
             }
 
@@ -680,11 +823,11 @@ export default class PathParser {
             return info.targetPoint;
         }
 
-        return {x, y};
+        return { x, y };
     }
 
     get d() {
-        return this.toString()
+        return this.toString().trim();
     }
 
     toString() {
@@ -943,10 +1086,30 @@ export default class PathParser {
     }
 
     /**
+     * @typedef Segment
+     * @type {object}
+     * @property {string} command
+     * @property {number[]} values
+     */
+
+    /**
+     * @typedef SegmentGroup
+     * @type {object}
+     * @property {number} index 
+     * @property {number} groupIndex 
+     * @property {Segment[]} segments
+     */
+
+    /**
      * segments 를 M 기준으로 분리 시킨다. 
+     * 
+     * @returns {SegmentGroup[]}
      */
     getGroup() {
 
+        /**
+         * @type {SegmentGroup[]}
+         */
         const groupSegments = []
         let newSegments = []
         this.segments.forEach((segment, index) => {
@@ -955,7 +1118,7 @@ export default class PathParser {
                     index,
                     segment
                 }]
-                groupSegments.push({index, groupIndex: groupSegments.length, segments: newSegments});
+                groupSegments.push({ index, groupIndex: groupSegments.length, segments: newSegments });
             } else {
                 newSegments.push({
                     index,
@@ -989,7 +1152,7 @@ export default class PathParser {
      * @param {number} index 
      * @param  {object[]} segments 
      */
-    replaceSegment (index, ...segments) {
+    replaceSegment(index, ...segments) {
         const newSegments = [...this.segments];
         newSegments.splice(index, 1, ...segments)
 
@@ -1007,16 +1170,16 @@ export default class PathParser {
         const closedPointInfo = this.getClosedPointInfo(pos, dist);
 
         if (closedPointInfo && closedPointInfo.t > 0 && closedPointInfo.t < 1) {
-            switch(closedPointInfo.segment.command) {
+            switch (closedPointInfo.segment.command) {
                 case "C":
                     var list = getBezierPoints(closedPointInfo.points, closedPointInfo.t);
-    
+
                     var first = list.first;
                     var firstSegment = Segment.C(first[1].x, first[1].y, first[2].x, first[2].y, first[3].x, first[3].y)
 
                     var second = list.second;
-                    var secondSegment = Segment.C(second[1].x, second[1].y, second[2].x, second[2].y, second[3].x, second[3].y )
-            
+                    var secondSegment = Segment.C(second[1].x, second[1].y, second[2].x, second[2].y, second[3].x, second[3].y)
+
                     this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);
                     break;
                 case "Q":
@@ -1026,7 +1189,7 @@ export default class PathParser {
                     var firstSegment = Segment.Q(first[1].x, first[1].y, first[2].x, first[2].y)
                     var second = list.second;
                     var secondSegment = Segment.Q(second[1].x, second[1].y, second[2].x, second[2].y)
-            
+
                     this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);
                     break;
                 case "L":
@@ -1037,19 +1200,19 @@ export default class PathParser {
                     var second = list.second;
                     var secondSegment = Segment.L(second[1].x, second[1].y)
 
-                    this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);                    
+                    this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);
                     break;
-                default: 
+                default:
                     return;
             }
 
-            return closedPointInfo;            
+            return closedPointInfo;
         }
 
-        
+
     }
 
-    toggleCurve (index) {
+    toggleCurve(index) {
         const current = this.segments[index]
         const command = current.command;
 

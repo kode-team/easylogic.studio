@@ -194,6 +194,17 @@ const PathTransformEditor = class extends PathCutter {
                 break;
         }
     }
+
+
+    [SUBSCRIBE('divideSegmentsByCount')](count) {
+        const { d } = this.pathGenerator.toPath()
+
+        const pathParser = new PathParser(d);
+        const newPath = pathParser.divideSegmentByCount(count);
+        newPath.transformMat4(this.state.cachedMatrixInverse)
+
+        this.refresh({ d: newPath.d })
+    }
 }
 
 const FIELDS = ['fill', 'fill-opacity', 'stroke', 'stroke-width']
@@ -278,13 +289,13 @@ export default class PathEditorView extends PathTransformEditor {
         this.trigger('hidePathEditor');
     }
 
-    get totalPathLength() {
-        if (!this.refs.$view) return 0
-        var $obj = this.refs.$view.$('path.object');
-        if (!$obj) return 0;
+    // get totalPathLength() {
+    //     if (!this.refs.$view) return 0
+    //     var $obj = this.refs.$view.$('path.object');
+    //     if (!$obj) return 0;
 
-        return $obj.totalLength
-    }
+    //     return $obj.totalLength
+    // }
 
     makePathLayer() {
         var layer;
@@ -304,7 +315,7 @@ export default class PathEditorView extends PathTransformEditor {
             width: Length.px(newWidth),
             height: Length.px(newHeight),
             d: newPath.d,
-            totalLength: this.totalPathLength,
+            // totalLength: this.totalPathLength,
             fill: `#C4C4C4`
         }
 
@@ -332,7 +343,7 @@ export default class PathEditorView extends PathTransformEditor {
             d: parser.d,
             matrix: this.state.matrix,
             box: this.state.box,
-            totalLength: this.totalPathLength,
+            // totalLength: this.totalPathLength,
         })
     }
 
@@ -444,6 +455,7 @@ export default class PathEditorView extends PathTransformEditor {
 
         if (this.$el.isShow()) {
             this.pathParser.reset('');
+            this.pathGenerator.setPoints([]);
             this.setState(this.initState(), false)
             this.refs.$view.empty()
             this.$el.hide();
@@ -617,13 +629,121 @@ export default class PathEditorView extends PathTransformEditor {
                 this.changeMode('segment-move');
                 var [index, segmentKey] = $target.attrs('data-index', 'data-segment-point')
 
-                this.pathGenerator.setCachePoint(+index, segmentKey);
+                if (e.shiftKey) {
+                    // 선택된 segment 를 토글한다. 
+                    this.pathGenerator.toggleSelect(segmentKey, +index)
+                } else {
+                    // 포인트에 대한 캐쉬를 설정한다.
+                    this.pathGenerator.setCachePoint(+index, segmentKey);
 
-                this.pathGenerator.selectKeyIndex(segmentKey, index)
+                    // segment key 를 선택한다. 
+                    this.pathGenerator.selectKeyIndex(segmentKey, index)    
+                }
+
+                this.renderPath();
             }
         }
 
     }
+
+    move(dx, dy) {
+        var e = this.$config.get('bodyEvent')
+
+        if (this.$config.true('set.drag.path.area')) {
+            // 드래그 상자 만들기 
+            this.renderSelectBox(this.state.dragXY, dx, dy);
+
+        } else if (this.isMode('segment-move')) {
+
+            this.pathGenerator.move(dx, dy, e);
+
+            this.renderPath()
+
+            this.updatePathLayer();
+
+        } else if (this.isMode('path')) {
+            const dist = getDist(dx, dy, 0, 0);
+
+            if (dist >= 2) {
+                this.state.dragPoints = e.altKey ? false : true;
+            }
+        }
+    }
+
+    renderSegment(callback) {
+        if (this.pathGenerator.selectedLength) {
+            // reselect 로 이전 점들의 위치를 초기화 해줘야 한다. 꼭 
+            this.pathGenerator.reselect()
+            // reselect 로 이전 점들의 위치를 초기화 해줘야 한다. 꼭 
+
+            if (isFunction(callback)) callback();
+
+            this.renderPath();
+
+            this.updatePathLayer();
+        }
+    }
+
+
+    end(dx, dy) {
+        var e = this.$config.get('bodyEvent')        
+        this.$config.set('set.move.control.point', false);        
+        if (this.$config.true('set.drag.path.area')) {
+            if (dx === 0 && dy === 0) {    // 아무것도 움직인게 없으면 편집 종료 
+                this.changeMode('modify');
+                this.trigger('hidePathEditor')
+            } else {
+                // select box 에 있는 선택된 점들을 저장해둔다.
+                // mode -> segment-move 
+                this.changeMode('segment-move');
+                this.pathGenerator.selectInBox(this.getSelectBox(), e.shiftKey)
+                this.renderPath()
+                this.hideSelectBox();
+            }
+
+        } else if (this.isMode('modify')) {
+            // NOOP
+        } else if (this.isMode('segment-move')) {
+
+            this.changeMode('modify');
+            // 마지막 지점에서 다시 renderpath 를 하게 되면 element 가 없어서 double 클릭을 인식 할 수가 없음. 
+            // 그래서 삭제하니 이코드는 주석으로 그대로 나두자.      
+            // this.renderPath()      
+            this.updatePathLayer();  
+
+        } else if (this.isMode('path')) {
+
+            // isFirstSegment 말고
+            // segment 에 지정되면 종료하는걸로 해야할 듯 하다. 
+            // connectedPointList 를 자 구성해서 해보자. 
+            // connected 속성은 어떻게 적용되어야 할지  생각을 해보자. 
+            if (this.state.isFirstSegment) {
+                this.changeMode('modify');
+                this.pathGenerator.setConnectedPoint(dx, dy);
+
+                this.renderPath()
+
+                if (this.state.current) {
+                    this.refreshPathLayer();
+                } else {
+                    this.addPathLayer();
+                    this.trigger('initPathEditorView')
+                }
+            } else {
+                if (this.state.isSplitPath) {
+                    // NOOP 
+                } else {
+                    this.pathGenerator.moveEnd(dx, dy);
+                    this.state.clickCount++;
+
+                    this.renderPath()
+                }
+            }
+            this.state.isSplitPath = false;
+        }
+
+    }
+
 
     hideSelectBox() {
         this.refs.$segmentBox.css({
@@ -664,43 +784,6 @@ export default class PathEditorView extends PathTransformEditor {
         return rect;
     }
 
-    move(dx, dy) {
-        if (this.$config.true('set.drag.path.area')) {
-            // 드래그 상자 만들기 
-            this.renderSelectBox(this.state.dragXY, dx, dy);
-
-        } else if (this.isMode('segment-move')) {
-            var e = this.$config.get('bodyEvent')
-            this.pathGenerator.move(dx, dy, e);
-
-            this.renderPath()
-
-            this.updatePathLayer();
-
-        } else if (this.isMode('path')) {
-            const dist = getDist(dx, dy, 0, 0);
-
-            if (dist >= 2) {
-                var e = this.$config.get('bodyEvent');
-
-                this.state.dragPoints = e.altKey ? false : true;
-            }
-        }
-    }
-
-    renderSegment(callback) {
-        if (this.pathGenerator.selectedLength) {
-            // reselect 로 이전 점들의 위치를 초기화 해줘야 한다. 꼭 
-            this.pathGenerator.reselect()
-            // reselect 로 이전 점들의 위치를 초기화 해줘야 한다. 꼭 
-
-            if (isFunction(callback)) callback();
-
-            this.renderPath();
-
-            this.updatePathLayer();
-        }
-    }
 
     [SUBSCRIBE('deleteSegment')]() {
         // 특정 세그먼트만 삭제하기 
@@ -726,61 +809,5 @@ export default class PathEditorView extends PathTransformEditor {
         this.$el.focus();
     }
 
-    end(dx, dy) {
-        this.$config.set('set.move.control.point', false);        
-        if (this.$config.true('set.drag.path.area')) {
-            if (dx === 0 && dy === 0) {    // 아무것도 움직인게 없으면 편집 종료 
-                this.changeMode('modify');
-                this.trigger('hidePathEditor')
-            } else {
-                // 움직였으면 drag 상자를 기준으로 좌표를 검색해서 선택한다. 
-                // this.renderSelectBox(this.state.dragXY, dx, dy);
-                this.changeMode('segment-move');
-                this.pathGenerator.selectInBox(this.getSelectBox())
-                this.renderPath()
-                // 여기에 무엇을 할까? 
-                this.hideSelectBox();
-            }
-
-        } else if (this.isMode('modify')) {
-            // NOOP 
-
-        } else if (this.isMode('segment-move')) {
-
-            this.changeMode('modify');
-            // 마지막 지점에서 다시 renderpath 를 하게 되면 element 가 없어서 double 클릭을 인식 할 수가 없음. 
-            // 그래서 삭제하니 이코드는 주석으로 그대로 나두자.      
-            // this.renderPath()      
-            this.updatePathLayer();  
-
-        } else if (this.isMode('path')) {
-
-
-            if (this.state.isFirstSegment) {
-                this.changeMode('modify');
-                this.pathGenerator.setConnectedPoint(dx, dy);
-
-                this.renderPath()
-
-                if (this.state.current) {
-                    this.refreshPathLayer();
-                } else {
-                    this.addPathLayer();
-                    this.trigger('initPathEditorView')
-                }
-            } else {
-                if (this.state.isSplitPath) {
-                    // NOOP 
-                } else {
-                    this.pathGenerator.moveEnd(dx, dy);
-                    this.state.clickCount++;
-
-                    this.renderPath()
-                }
-            }
-            this.state.isSplitPath = false;
-        }
-
-    }
 
 }

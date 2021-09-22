@@ -156,3 +156,68 @@ test("path - split quard curve path by point", () => {
 
     expect(path.d).toBe("M 0 0C 20 30 50 40 100 100Q 127.5 127.5 155 139.875Q 227.5 172.5 300 100");
 })
+
+test("path - normalize , convert line to cubic bezier curve", () => {
+    const path = new PathParser(`M0,0 L 100 100`);
+    const path2 = path.normalize();
+
+    expect(path2.d).toBe("M 0 0C 33 33 66 66 100 100");
+})
+
+test("path - normalize , convert curve to cubic bezier curve", () => {
+    const path = new PathParser(`M0,0 C20,30 50,40 100,100`);
+    const path2 = path.normalize();
+
+    expect(path2.d).toBe("M 0 0C 20 30 50 40 100 100");
+})
+
+test("path - normalize , convert quard curve to cubic bezier curve", () => {
+    const path = new PathParser(`M0,0 Q200 200 300 100`);
+    const path2 = path.normalize();
+
+    expect(path2.d).toBe("M 0 0C 200 200 200 200 300 100");
+})
+
+test("path - normalize with Z, convert quard curve to cubic bezier curve", () => {
+    const path = new PathParser(`M0,0 Q200 200 300 100 Z`);
+    const path2 = path.normalize();
+
+    expect(path2.d).toBe("M 0 0C 200 200 200 200 300 100Z");
+})
+
+test("path - normalize with Z, convert quard curve to cubic bezier curve", () => {
+    const path = new PathParser(`M0,0 L 100 100C 20 30 50 40 100 100 Q200 200 300 100 Z`);
+    const path2 = path.normalize();
+
+    expect(path2.d).toBe("M 0 0C 33 33 66 66 100 100C 20 30 50 40 100 100C 200 200 200 200 300 100Z");
+})
+
+test("path - divide line segment by count", () => {
+    const path = new PathParser("M0, 0L50 50");
+
+    const path2 = path.divideSegmentByCount(5);
+
+    expect(path2.d).toBe("M 0 0L 10 10L 20 20L 30 30L 40 40L 50 50")
+
+
+})
+
+test("path - divide quard curve segment by count", () => {
+    const path = new PathParser("M0, 0 Q5 5 10 0");
+
+    const path2 = path.divideSegmentByCount(5);
+
+    expect(path2.d).toBe("M 0 0Q 1 1 2 1.6Q 3 2.2 4 2.4000000000000004Q 5 2.6 6 2.4Q 7 2.2 8 1.6Q 9 1 10 0")
+
+
+})
+
+test("path - divide bezier curve segment by count", () => {
+    const path = new PathParser("M0, 0 C 200 200 200 200 300 100");
+
+    const path2 = path.divideSegmentByCount(5);
+
+    expect(path2.d).toBe("M 0 0C 40 40 72 72 98.4 96.8C 124.80000000000001 121.6 145.60000000000002 139.2 163.20000000000002 150.39999999999998C 180.8 161.6 195.20000000000002 166.4 208.8 165.6C 222.4 164.8 235.2 158.4 249.6 147.2C 264 136 280 120 300 100")
+
+
+})
