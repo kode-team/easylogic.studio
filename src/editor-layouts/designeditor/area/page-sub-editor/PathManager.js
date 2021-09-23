@@ -43,6 +43,10 @@ export default class PathManager extends EditorElement {
   template() {
     return /*html*/`
       <div class='elf--path-manager'>
+        <div class="tools left" ref="$left">
+            <button type="button" class="primary" data-value='PathEditorDone' title='${this.$i18n('path.manager.mode.modify')}' >Done</button>
+        </div>
+
         <div class='tools' ref='$mode' data-selected-value='${this.state.mode}'>
             <button type="button" data-value='modify' title='${this.$i18n('path.manager.mode.modify')}' > ${icon.device_hub}</button>
             <button type="button" data-value='path' title='${this.$i18n('path.manager.mode.path')}' > ${icon.control_point}</button>
@@ -157,6 +161,12 @@ export default class PathManager extends EditorElement {
 
     this.refresh();
   }
+
+  [CLICK('$left button')] (e) {
+    var message = e.$dt.attr('data-value');
+
+    this.emit(message);  
+  }  
 
   updateData(obj = {}) {
 

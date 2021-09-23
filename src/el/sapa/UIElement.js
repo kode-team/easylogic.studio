@@ -126,7 +126,6 @@ class UIElement extends EventMachine {
     this.initializeStoreEvent();
   }
 
-
   /**
    * UIElement 기반으로 메세지를 호출 한다. 
    * 나 이외의 객체들에게 메세지를 전달한다. 

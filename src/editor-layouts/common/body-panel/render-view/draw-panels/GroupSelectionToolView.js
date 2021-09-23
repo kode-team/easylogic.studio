@@ -621,8 +621,9 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
             this.$viewport.applyVerties(selectionVerties),
         ]
 
-        const {line, point, size, elementLine} = this.createRenderPointers(...this.state.renderPointerList);
-        this.refs.$pointerRect.updateDiff(line + elementLine.join('') + point + size)
+        const {line, point, size, elementLine} = this.createRenderPointers(this.state.renderPointerList[0], this.state.renderPointerList[1]);
+
+        this.refs.$pointerRect.updateDiff(line + elementLine + point + size)
     }
 
 
@@ -636,6 +637,13 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         ></div>
         `
     }
+
+
+    createPointerSide (pointer, number, rotate, width, height) {
+        return /*html*/`
+        <div class='pointer' data-number="${number}" data-pointer="${pointer}" style="width: ${width}px; height: ${height}px;transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) rotateZ(${rotate||'0deg'})" ></div>
+        `
+    }    
 
     createRotatePointer (pointer, number, direction = 'center center') {
 
@@ -676,19 +684,21 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         </svg>`        
     }    
 
+    /**
+     * 연결된 path 를 그리기 위한 함수 
+     * 
+     * @param {vec3[]} pointers 
+     * @returns 
+     */
     createLine (pointers) {
         return /*html*/`
-        <svg class='line' overflow="visible">
-            <path 
-                d="
-                    M ${pointers[0][0]}, ${pointers[0][1]} 
-                    L ${pointers[1][0]}, ${pointers[1][1]} 
-                    L ${pointers[2][0]}, ${pointers[2][1]} 
-                    L ${pointers[3][0]}, ${pointers[3][1]} 
-                    L ${pointers[0][0]}, ${pointers[0][1]}
-                    Z
-                " />
-        </svg>`        
+            M ${pointers[0][0]}, ${pointers[0][1]} 
+            L ${pointers[1][0]}, ${pointers[1][1]} 
+            L ${pointers[2][0]}, ${pointers[2][1]} 
+            L ${pointers[3][0]}, ${pointers[3][1]} 
+            L ${pointers[0][0]}, ${pointers[0][1]}
+            Z
+        `        
     }
 
 
@@ -750,13 +760,21 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         const rotate = Length.deg(calculateAngle360(diff[0], diff[1]) - 90).round(1000);
 
         const rotatePointer = getRotatePointer(pointers, 30)
-        const dist = vec3.dist(pointers[0], pointers[2]);        
+        const dist = vec3.dist(pointers[0], pointers[2]);   
+        const width = vec3.dist(pointers[0], pointers[1]);   
+        const height = vec3.dist(pointers[0], pointers[3]);   
 
         return {
             line: this.createPointerRect(pointers, rotatePointer), 
-            elementLine: this.$selection.cachedItemMatrices.map((it, index) => {
-                return this.createLine(this.$viewport.applyVerties(it.originVerties));
-            }),
+            elementLine: `
+                <svg class='line' overflow="visible">
+                    <path 
+                        d="${this.$selection.items.map((it, index) => {
+                                return this.createLine(this.$viewport.applyVerties(it.originVerties));
+                            }).join("")}
+                        " />
+                </svg>
+            `,
             size: this.createSize(pointers),
             point: [
                 // 4모서리에서도 rotate 할 수 있도록 맞춤 
@@ -765,15 +783,16 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
                 this.createRotatePointer (selectionPointers[2], 2, 'top left'),
                 this.createRotatePointer (selectionPointers[3], 3, 'top right'),
                 this.createRotatePointer (rotatePointer, 4, 'center center'),                
+                
+                dist < 20 ? undefined : this.createPointerSide (vec3.lerp([], pointers[0], pointers[1], 0.5), 11, rotate, width, 5),
+                dist < 20 ? undefined : this.createPointerSide (vec3.lerp([], pointers[1], pointers[2], 0.5), 12, rotate, 5, height),
+                dist < 20 ? undefined : this.createPointerSide (vec3.lerp([], pointers[2], pointers[3], 0.5), 13, rotate, width, 5),
+                dist < 20 ? undefined : this.createPointerSide (vec3.lerp([], pointers[3], pointers[0], 0.5), 14, rotate, 5, height),
+
                 this.createPointer (pointers[0], 1, rotate),
                 this.createPointer (pointers[1], 2, rotate),
                 this.createPointer (pointers[2], 3, rotate),
-                this.createPointer (pointers[3], 4, rotate),
-                
-                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[0], pointers[1], 0.5), 11),
-                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[1], pointers[2], 0.5), 12),
-                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[2], pointers[3], 0.5), 13),
-                dist < 20 ? undefined : this.createPointer (vec3.lerp([], pointers[3], pointers[0], 0.5), 14),
+                this.createPointer (pointers[3], 4, rotate),                
             ].join('')
         }
     }

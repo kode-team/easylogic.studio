@@ -65,11 +65,12 @@ export class ModelManager {
         const children = obj.parent.children
         const index = children.indexOf(id);
 
-        obj.removed = true;
-        obj.removedIndex = index;
-        obj.removedLeftSibling = index > 0 ? children[index - 1] : null;
-        obj.removedRightSibling = index < children.length - 1 ? children[index + 1] : null;
-
+        obj.reset({
+            removed: true,
+            removedIndex: index,
+            removedLeftSibling: index > 0 ? children[index - 1] : null,
+            removedRightSibling: index < children.length - 1 ? children[index + 1] : null
+        })
     }
 
     // 삭제 표시 복구 
@@ -107,6 +108,16 @@ export class ModelManager {
             description: this.description,
             projects: this.projects.map(id => this.get(id).toJSON())
         }
+    }
+
+    /**
+     * BaseModel 에서 reset 으로 변경된 값을 지정해준다. 
+     * 
+     * @param {string} id 
+     * @param {object} obj 
+     */
+    setChanged(type, id, obj) {
+        this.editor.emit('changed', type, id, obj);
     }
 
     /**
@@ -217,8 +228,14 @@ export class ModelManager {
         return Object.values(objectList).filter(it => it.isNot('project'));
     }
 
+    /**
+     * 삭제되지 않은 아이템들을 리턴한다.
+     * 
+     * @param {string[]} ids 
+     * @returns 
+     */
     searchLiveItemsById(ids) {
-        return ids.map(id => this.get(id)).filter(it => Boolean(it.removed) === false);
+        return ids.map(id => this.get(id)).filter(it => !it.removed);
     }
 
     markRemove(ids = []) {
@@ -231,7 +248,6 @@ export class ModelManager {
         const index = this.projects.findIndex(it => it === id);
 
         this.projects.splice(index, 1);
-        console.log(this.get(id), id);
         this.get(id).removed = true;
         return index;
     }

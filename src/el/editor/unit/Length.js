@@ -247,16 +247,24 @@ export class Length {
   }
   toString() {
 
+    if (!this.__cached_string) {
+      this.__cached_string = this.getUnitText();
+    }
+
+    return this.__cached_string;
+  }
+
+  getUnitText() {
     switch(this.unit) {
-    case 'string':
-    case 'number':
-      return this.value + '' 
-    case 'var':
-        return `var(--${this.value})`
-    case 'calc':
-      return `calc(${this.value})`;
-    default:
-      return this.value + this.unit; 
+      case 'string':
+      case 'number':
+        return this.value + '' 
+      case 'var':
+          return `var(--${this.value})`
+      case 'calc':
+        return `calc(${this.value})`;
+      default:
+        return this.value + this.unit; 
     }
   }
 

@@ -112,11 +112,19 @@ export default class HTMLRenderer {
     }
 
     /**
+     * css 속성을 리턴해준다.
      * 
      * @param {BaseModel} item 
+     * @param {object} [omit={}] 제거할 필드 적용 
      */
-    toCSS (item) {
-        return this.to('toCSS', item); 
+    toCSS (item, omit = {}) {
+        const css = this.to('toCSS', item); 
+
+        Object.keys(omit).forEach(key => {
+            delete css[key];
+        })
+
+        return css;
     }
 
     /**

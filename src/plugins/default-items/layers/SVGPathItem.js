@@ -33,6 +33,7 @@ export class SVGPathItem extends SVGItem {
       this.cacheHeight = this.json.height.value;
     } else if (this.hasChangedField('width', 'height')) {
       this.json.d = this.cachePath.clone().scale(this.json.width.value/this.cacheWidth, this.json.height.value/this.cacheHeight).d;
+      this.modelManager.setChanged('reset', this.id, { d : this.json.d });
     }
   }
 

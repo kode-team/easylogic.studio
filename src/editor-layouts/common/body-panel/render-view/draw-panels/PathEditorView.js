@@ -262,7 +262,7 @@ export default class PathEditorView extends PathTransformEditor {
         }
     }
 
-    [KEYUP('document') + IF('isShow') + ENTER + PREVENT + STOP]() {
+    [SUBSCRIBE("PathEditorDone")]() {
         if (this.state.current) {
             this.refreshPathLayer();
             this.trigger('hidePathEditor');
@@ -276,7 +276,10 @@ export default class PathEditorView extends PathTransformEditor {
             this.trigger('hidePathEditor');
         }
 
+    }
 
+    [KEYUP('document') + IF('isShow') + ENTER + PREVENT + STOP]() {
+        this.trigger("PathEditorDone")
     }
 
     [KEYUP('document') + IF('isShow') + ESCAPE + PREVENT + STOP]() {

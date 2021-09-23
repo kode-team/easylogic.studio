@@ -14,6 +14,7 @@ import PageSubEditor from "./area/PageSubEditor";
 import designEditorPlugins from "plugins/design-editor-plugins";
 import LayerTab from "./area/LayerTab";
 import { END, MOVE } from "el/editor/types/event";
+import { isFunction } from 'el/sapa/functions/func';
 
 
 export default class DesignEditor extends BaseLayout {
@@ -240,5 +241,11 @@ export default class DesignEditor extends BaseLayout {
 
   [SUBSCRIBE('toggle.fullscreen')] () {
     this.$el.toggleFullscreen();
+  }
+
+  [SUBSCRIBE('getLayoutElement')] (callback) {
+    if (isFunction(callback)) {
+      callback(this.refs);
+    }
   }
 }

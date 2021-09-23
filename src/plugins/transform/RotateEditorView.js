@@ -1,5 +1,5 @@
 
-import { POINTERSTART, DOUBLECLICK, BIND, CLICK, SUBSCRIBE } from "el/sapa/Event";
+import { POINTERSTART, DOUBLECLICK, BIND, CLICK, SUBSCRIBE, IF } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
 import { Transform } from "el/editor/property-parser/Transform";
 import { calculateAnglePointDistance } from "el/utils/math";
@@ -222,7 +222,11 @@ export default class RotateEditorView extends EditorElement {
         this.refresh();
     }
 
-    [SUBSCRIBE('refreshSelectionStyleView')] () {
+    checkShow() {
+        return this.$selection.isOne;
+    }
+
+    [SUBSCRIBE('refreshSelectionStyleView') + IF('checkShow')] () {
         if (this.$selection.hasChangedField('transform')) {
             this.refresh();
         }

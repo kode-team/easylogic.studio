@@ -5,13 +5,17 @@ import { debounce, ifCheck, isFunction, throttle } from "./functions/func";
  * @class BaseStore
  * @description BaseStore is the base class for all stores.
  * 
- */ 
+ */
 export default class BaseStore {
   constructor(editor) {
     this.cachedCallback = {};
     this.callbacks = {};
-    this.commandes = [];
     this.editor = editor;
+    this.promiseProxy = new Proxy(this, {
+      get: (target, key) => {
+        return this.makePromiseEvent(key);
+      }
+    })
   }
 
   getCallbacks(event) {
@@ -23,12 +27,12 @@ export default class BaseStore {
   }
 
   setCallbacks(event, list = []) {
-    this.callbacks[event] = list; 
+    this.callbacks[event] = list;
   }
 
-  debug (...args) {
+  debug(...args) {
     if (this.editor && this.editor.config.get('debug')) {
-      console.debug(...args );
+      console.debug(...args);
     }
 
   }
@@ -48,9 +52,9 @@ export default class BaseStore {
    */
   on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false, beforeMethods = []) {
     var callback = originalCallback;
-    
-    if (debounceDelay > 0)  callback = debounce(originalCallback, debounceDelay);
-    else if (throttleDelay > 0)  callback = throttle(originalCallback, throttleDelay);
+
+    if (debounceDelay > 0) callback = debounce(originalCallback, debounceDelay);
+    else if (throttleDelay > 0) callback = throttle(originalCallback, throttleDelay);
 
     if (beforeMethods.length) {
       callback = ifCheck(callback, context, beforeMethods);
@@ -58,7 +62,7 @@ export default class BaseStore {
 
     this.getCallbacks(event).push({ event, callback, context, originalCallback, enableAllTrigger, enableSelfTrigger });
 
-    this.debug('add message event', event, context.sourceName );
+    this.debug('add message event', event, context.sourceName);
 
     return () => {
       this.off(event, originalCallback);
@@ -73,29 +77,83 @@ export default class BaseStore {
    */
   off(event, originalCallback) {
 
-    this.debug('off message event', event );
+    this.debug('off message event', event);
 
     if (arguments.length == 1) {
       this.setCallbacks(event);
-    } else if (arguments.length == 2) {      
+    } else if (arguments.length == 2) {
       this.setCallbacks(event, this.getCallbacks(event).filter(f => {
         return f.originalCallback !== originalCallback
       }));
     }
   }
 
-  offAll (context) {
+  offAll(context) {
 
     Object.keys(this.callbacks).forEach(event => {
       this.setCallbacks(event, this.getCallbacks(event).filter(f => {
-        return f.context !== context;  
+        return f.context !== context;
       }))
     })
-    this.debug('off all message', context.sourceName );
+    this.debug('off all message', context.sourceName);
   }
 
-  getCachedCallbacks (event) {
+  getCachedCallbacks(event) {
     return this.getCallbacks(event);
+  }
+
+  /**
+   * 메세지를 promise 형태로 쓸 수 있도록 proxy 객체를 리턴한다. 
+   * 
+   * @returns {Proxy}
+   */
+  get promise() {
+    return this.promiseProxy;
+  }
+
+  get p () {
+    return this.promise;
+  }
+
+  /**
+   * 등록된 메세지를 Promise 로 만들어준다. 
+   * 
+   * this.emit("message", 1, 2, 3); 
+   * 
+   * 형태로 사용하던 것을 
+   * 
+   * this.promise.message(1, 2, 3).then(() => { })
+   * 
+   * 또는 
+   * 
+   * var a = await this.promise.message(1, 2, 3);
+   * 
+   * 형태로 사용할 수 있다. 
+   * 
+   * 몇가지 상황에서 유용하다. 
+   * 
+   * 1. message 가 리턴 값을 가지고 있을 때 
+   * 2. message 가 동작 완료 후 다른 동작을 하고 싶을 때 
+   * 
+   * @param {string} event 
+   * @returns 
+   */
+  makePromiseEvent(event) {
+
+    var list = this.getCachedCallbacks(event);
+    const source = this.source;
+
+    return (...args) => Promise.all(
+      list.filter(f => {
+        return !f.enableSelfTrigger
+      }).filter(f => {
+        return f.enableAllTrigger || f.originalCallback.source !== source
+      }).map(f => {
+        return new Promise((resolve, reject) => {
+          resolve(f.callback.apply(f.context, args));
+        })
+      })
+    )
   }
 
   sendMessage(source, event, ...args) {
@@ -103,17 +161,16 @@ export default class BaseStore {
       var list = this.getCachedCallbacks(event);
       if (list) {
 
-        for(var i = 0, len = list.length; i < len; i++) {
+        for (var i = 0, len = list.length; i < len; i++) {
           const f = list[i];
           // console.log(source);
           if (f.enableSelfTrigger) continue;
 
           if (f.enableAllTrigger || f.originalCallback.source !== source) {
-            f.callback.apply(f.context, args)  
+            f.callback.apply(f.context, args)
           }
         }
       }
-
     });
   }
 
@@ -124,14 +181,14 @@ export default class BaseStore {
   }
 
   triggerMessage(source, event, ...args) {
-    Promise.resolve().then(() => {
+    // Promise.resolve().then(() => {
       var list = this.getCachedCallbacks(event);
 
       if (list) {
-        for(var i = 0, len = list.length; i < len; i++) {
+        for (var i = 0, len = list.length; i < len; i++) {
           const f = list[i];
           if (f.originalCallback.source === source) {
-            f.callback.apply(f.context, args)  
+            f.callback.apply(f.context, args)
           }
         }
       } else {
@@ -139,7 +196,7 @@ export default class BaseStore {
       }
 
 
-    });
+    // });
   }
 
   emit(event, ...args) {
@@ -157,7 +214,7 @@ export default class BaseStore {
    * 
    * @param {Function} callback  마이크로Task 형식으로 실행될 함수 
    */
-  nextTick (callback) {
+  nextTick(callback) {
     this.nextSendMessage(this.source, callback);
   }
 

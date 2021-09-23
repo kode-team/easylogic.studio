@@ -350,7 +350,16 @@ export default class PathParser {
     }
 
     clone() {
-        return new PathParser(this.joinPath());
+        const path = new PathParser();
+
+        path.resetSegments(this.segments.map(it => {
+            return {
+                command: it.command,
+                values: it.values.slice()
+            }
+        }));
+
+        return path;
     }
 
     translate(tx, ty) {

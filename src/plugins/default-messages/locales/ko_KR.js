@@ -253,6 +253,7 @@ export default {
     'perspective.origin.editor.originY': '중심점 Y',    
 
     'path.manager.msg': '편집을 종료할 때는 ESC 키나 Enter 키를 누르세요. 또는 화면을 클릭하시면 됩니다.',    
+    'path.manager.mode.done': '완료',    
     'path.manager.mode.modify': '점 편집',
     'path.manager.mode.path': '점 추가',
     'path.manager.mode.transform': '변형',

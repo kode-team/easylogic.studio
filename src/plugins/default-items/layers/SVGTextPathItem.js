@@ -38,6 +38,7 @@ export class SVGTextPathItem extends SVGItem {
       this.cacheHeight = this.json.height.value;      
     } else if (this.hasChangedField('width', 'height')) {
       this.json.d = this.cachePath.clone().scale(this.json.width.value/this.cacheWidth, this.json.height.value/this.cacheHeight).d;
+      this.modelManager.setChanged('reset', this.id, { d: this.json.d })
     }
   }
 
@@ -84,22 +85,5 @@ export class SVGTextPathItem extends SVGItem {
   getDefaultTitle() {
     return "TextPath";
   }
-
-  /**
-   * @deprecated 
-   * 
-   */   
-  toAnimationKeyframes (properties) {
-
-    var svgProperties = properties.filter(it => hasSVGProperty(it.property));
-    var svgPathProperties = properties.filter(it => hasSVGPathProperty(it.property));
-    var cssProperties = properties.filter(it => hasCSSProperty(it.property));
-
-    return [
-      { selector: `[data-id="${this.json.id}"]`, properties: cssProperties  },
-      { selector: `[data-id="${this.json.id}"] textPath`, properties: svgProperties },
-      { selector: `[data-id="${this.json.id}"] path`, properties: svgPathProperties }
-    ] 
-  } 
 
 }

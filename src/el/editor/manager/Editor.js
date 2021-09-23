@@ -269,51 +269,14 @@ export class Editor {
     }
   }
 
-  // /**
-  //  * project 리스트를 설정한다. 
-  //  * 
-  //  * @param {Item[]} projects 
-  //  */
-  // load(projects = []) {
-  //   this.projects = projects;
-  // }
-
-  // /**
-  //  * Project 추가 하기 
-  //  * add project 
-  //  *
-  //  * @param {Item} item
-  //  * @return {Item}
-  //  */
-  // add(item) {
-  //   this.projects.push(item);
-  //   return item;
-  // }
-
-  // /**
-  //  * remove Item  with all children
-  //  *
-  //  * @param {string} id
-  //  */
-  // remove(index) {
-  //   this.projects.splice(index, 1);
-  // }
-
-
-  // clear() {
-  //   this.projects = [];
-  // }
-
   /**
-   * get project 
+   * get model by id
    *
-   * @param {number} index
+   * @param {string} id
    */
-  get(index) {
-    return this.projects[index];
+  get(id) {
+    return this.modelManager.get(id);
   }
-
-
 
   replaceLocalUrltoRealUrl(str) {
 

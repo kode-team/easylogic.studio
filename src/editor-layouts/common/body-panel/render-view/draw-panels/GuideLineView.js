@@ -1,5 +1,5 @@
 
-import { BIND, SUBSCRIBE } from "el/sapa/Event";
+import { BIND, DEBOUNCE, SUBSCRIBE } from "el/sapa/Event";
 import { toRectVerties, vertiesToRectangle } from "el/utils/collision";
 import { makeGuidePoint } from "el/utils/math";
 import PathStringManager from "el/editor/parser/PathStringManager";
@@ -317,6 +317,8 @@ export default class GuideLineView extends EditorElement {
     }
 
     [SUBSCRIBE('refreshSelectionStyleView')]() {
+
+        if (this.$selection.isMany) return;
 
         const expect = this.$selection.hasChangedField('d', 'clip-path')
 

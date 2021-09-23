@@ -46,7 +46,7 @@ export default {
         const filtedIds = items.map(it => it.id);
 
         // 삭제 할 때는 modelManager 에서 mark 를 한다. 
-        editor.modelManager.markRemove(ids);        
+        editor.modelManager.markRemove(filtedIds);        
 
         //전체 삭제 
         items.forEach(item => item.remove())

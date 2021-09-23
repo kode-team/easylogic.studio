@@ -4,8 +4,23 @@ import commands from "../commands";
 export class CommandManager {
     constructor(editor) {
         this.$editor = editor;
-
+        this.promiseProxy = 
+        this.localCommands = {};
         this.loadCommands();
+
+        return new Proxy(this, {
+            get: (target, key) => {
+                var originMethod = target[key];
+                if (isFunction(originMethod)) {
+                  // method tracking
+                  return (...args) => {
+                    return originMethod.apply(target, args);
+                  };
+                } else {
+                    return this.makePromiseEvent(key);
+                }
+            }
+        })        
     }
 
 
@@ -28,22 +43,52 @@ export class CommandManager {
      */
     registerCommand(command, commandCallback) {
 
+        if (this.localCommands[command]) {
+            throw new Error(`command ${command} is already registered`);
+        }
+
         if (arguments.length === 2) {
             const callback = (...args) => {
-                commandCallback.call(this, this.$editor, ...args);
+                const result = commandCallback.call(this, this.$editor, ...args);
                 this.$editor.debug('command execute', this, ...args)
+
+                return result; 
             }
             callback.source = command;
+
+            // local command 에 등록 
+            this.localCommands[command] = callback;            
+
             return this.$editor.on(command, callback, this, 0);
 
         } else if (isObject(command)) {     // command object { command, title, description, debounce, execute }
             const callback = (...args) => {
-                command.execute.call(command, this.$editor, ...args);
+                const result = command.execute.call(command, this.$editor, ...args);
                 this.$editor.debug('command execute', command, ...args)
+
+                return result;
             }
             callback.source = command.command;
+
+            // local command 에 등록 
+            this.localCommands[command.command] = callback;            
+
             return this.$editor.on(command.command, callback, this, command.debounce || 0);
         }
 
     }
+
+    getCallback(command) {
+        return this.localCommands[command];
+    }
+
+    makePromiseEvent(command) {
+        const callback = this.getCallback(command);
+
+        if (callback) {
+            return (...args) => new Promise((resolve) => {
+                resolve(callback(...args));
+            })
+        }
+    }    
 }

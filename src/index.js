@@ -24,8 +24,8 @@ function startEditor() {
     },
     plugins: [
       function (editor) {
-        editor.on('changeValue', function (id, attrs) {
-          // console.log(id, attrs);
+        editor.on('changed', function (type, id, attrs) {
+          // console.log('changed', type, id, attrs);
         })
       }
     ]

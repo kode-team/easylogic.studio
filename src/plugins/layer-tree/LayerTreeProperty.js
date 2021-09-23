@@ -74,7 +74,7 @@ export default class LayerTreeProperty extends BaseProperty {
     } else {
       const targetItem = this.$model.get(this.state.lastDragOverItemId)
       // 자식을 가지지 못하는 컴포넌트는 예외처리 
-      if (targetItem.enableHasChildren()) {
+      if (targetItem?.enableHasChildren()) {
 
         offset = 0;
 
@@ -247,7 +247,7 @@ export default class LayerTreeProperty extends BaseProperty {
     var sourceItem = this.$model.get(sourceLayerId);
 
     // 자식을 가지지 못하는 컴포넌트는 예외처리 
-    if (targetItem.enableHasChildren() === false) return;
+    if (targetItem?.enableHasChildren() === false) return;
     if (targetItem && targetItem.hasParent(sourceItem.id)) return;
 
     switch (this.state.lastDragOverItemDirection) {

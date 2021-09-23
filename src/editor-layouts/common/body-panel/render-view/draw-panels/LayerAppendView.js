@@ -8,6 +8,7 @@ import Dom from "el/sapa/functions/Dom";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
 import "./LayerAppendView.scss";
+import { CSS_TO_STRING } from "el/utils/func";
 
 export default class LayerAppendView extends EditorElement {
 
@@ -36,7 +37,8 @@ export default class LayerAppendView extends EditorElement {
             pathManager: new PathStringManager(),
             rect: {},
             options: {},
-            containerItem: undefined
+            containerItem: undefined,
+            patternInfo: {}
         }
     }
 
@@ -89,14 +91,15 @@ export default class LayerAppendView extends EditorElement {
     }
 
     createLayerTemplate (width, height) {
-        const { type, text, color } = this.state;
+        const { type, text, color, inlineStyle } = this.state;
+
         switch(type) {
         case 'artboard':
-            return /*html*/`<div class='draw-item' style='background-color: white;'></div>`;
+            return /*html*/`<div class='draw-item' style='background-color: white; ${inlineStyle}'></div>`;
         case 'rect':
-            return /*html*/`<div class='draw-item' style='background-color: ${color};'></div>`
+            return /*html*/`<div class='draw-item' style='background-color: ${color}; ${inlineStyle}'></div>`
         case 'circle':
-            return /*html*/`<div class='draw-item' style='background-color: ${color}; border-radius: 100%;'></div>`
+            return /*html*/`<div class='draw-item' style='background-color: ${color}; border-radius: 100%; ${inlineStyle}'></div>`
         case 'text':
         case 'svg-text':
             return /*html*/`
@@ -142,7 +145,7 @@ export default class LayerAppendView extends EditorElement {
             </div>
             `      
         default:
-            return /*html*/`<div class='draw-item' style='outline: 1px solid blue;'></div>`        
+            return /*html*/`<div class='draw-item' style='outline: 1px solid blue; ${inlineStyle}'></div>`        
         }
     }
 
@@ -259,7 +262,7 @@ export default class LayerAppendView extends EditorElement {
 
     end (dx, dy) {
         const isAltKey = this.$config.get('bodyEvent').altKey;        
-        let { color, content, fontSize, areaVerties} = this.state; 
+        let { color, content, fontSize, areaVerties, patternInfo} = this.state; 
 
         // viewport 좌표를 world 좌표로 변환 
         const rectVerties = this.$viewport.applyVertiesInverse(areaVerties);
@@ -289,6 +292,7 @@ export default class LayerAppendView extends EditorElement {
             'background-color': color,
             'content': content,
             'font-size': fontSize,
+            ...patternInfo.attrs,
             ...this.state.options
         }
 
@@ -344,7 +348,19 @@ export default class LayerAppendView extends EditorElement {
         this.refs.$area.empty()
         this.$el.show();
         this.$el.focus();
-        this.$snapManager.clear();        
+        this.$snapManager.clear();       
+        this.state.inlineStyle = CSS_TO_STRING(this.$editor.html.toCSS(this.$model.createModel({
+            itemType: type,
+            ...options
+        }, false), {
+            top: true,
+            left: true,
+            width: true,
+            height: true,
+            transform: true,
+            "transform-origin": true,
+        }))
+
         this.emit('push.mode.view', 'LayerAppendView');
     }
 
@@ -454,4 +470,8 @@ export default class LayerAppendView extends EditorElement {
         this.state.containerItem = containerItem;        
         this.refs.$video.click();
     }        
+
+    [SUBSCRIBE('setPatternInfo')] (patternInfo) {
+        this.state.patternInfo = patternInfo;
+    }
 } 

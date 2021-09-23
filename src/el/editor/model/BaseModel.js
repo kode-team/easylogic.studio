@@ -22,12 +22,20 @@ export class BaseModel {
 
     this.ref = new Proxy(this, {
       get: (target, key) => {
+        if (this.getCache(key)) {
+          return this.getCache(key);
+        }
+
         var originMethod = target[key];
         if (isFunction(originMethod)) {
-          // method tracking
-          return (...args) => {
-            return originMethod.apply(target, args);
-          };
+
+          if (!this.getCache(key)) {
+            this.addCache(key, (...args) => {
+              return originMethod.apply(target, args);
+            });
+          }
+
+          return this.getCache(key);
         } else {
           // getter or json property
           return originMethod || target.json[key];
@@ -41,6 +49,9 @@ export class BaseModel {
         }
 
         return true;
+      },
+      deleteProperty: (target, key) => {
+        this.reset({ [key]: undefined });
       }
     });
 
@@ -156,9 +167,9 @@ export class BaseModel {
    * @returns {Item}
    */
   get parent() {
-    if (!this.parentId) return undefined;
+    if (!this.json.parentId) return undefined;
 
-    return this.modelManager.get(this.parentId);
+    return this.modelManager.get(this.json.parentId);
   }
 
   setParentId(parentId) {
@@ -332,14 +343,15 @@ export class BaseModel {
    */
   reset(obj) {
     // 변경된 값에 대해서 id 를 부여해보자. 
-    if (!obj.__changedId) obj.__changedId = uuid();
+    // if (!obj.__changedId) obj.__changedId = uuid();
 
-    if (this.lastChangedField.__changedId !== obj.__changedId) {
-      this.json = this.convert(Object.assign(this.json, obj));
-      this.lastChangedField = obj;
-      this.lastChangedFieldKeys = Object.keys(obj);
-      this.changed();
-    }
+    // if (this.lastChangedField.__changedId !== obj.__changedId) {
+    this.json = this.convert(Object.assign(this.json, obj));
+    this.lastChangedField = obj;
+    this.lastChangedFieldKeys = Object.keys(obj);
+    this.modelManager.setChanged('reset', this.id, obj);
+    this.changed();
+    // }
 
     return true;
   }
@@ -350,7 +362,7 @@ export class BaseModel {
    * @returns {boolean} 
    */ 
   hasChangedField(...args) {
-    return args.some(it => this.lastChangedFieldKeys.includes(it));
+    return args.some(it => this.lastChangedField[it] !== undefined);
   }
 
   /**

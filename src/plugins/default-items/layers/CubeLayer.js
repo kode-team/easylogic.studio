@@ -142,45 +142,6 @@ export class CubeLayer extends Component {
 
   }
 
-  /**
-   * @deprecated 
-   * 
-   */   
-  toAnimationKeyframes (properties) {
-   
-    var customProperties = []
-    var cssProperties = []
-    var nestedProperties = []
-
-    properties.forEach(p => {
-      if (p.property.includes('.color') || p.property.includes('.background')) {
-        customProperties.push(p);
-      } else if (cssKeyValue[p.property]) {
-        cssProperties.push(p);
-      } else if (nestedCssKeyValue[p.property]) {
-        nestedProperties.push(p);
-      }
-    })
-
-    var keyframes = [] 
-
-    if (cssProperties.length) {
-      keyframes.push({ selector: `[data-id="${this.json.id}"]`, properties: cssProperties })
-    }
-
-    if (nestedProperties.length) {
-      keyframes.push({ selector: `[data-id="${this.json.id}"] div`, properties: nestedProperties  })
-    }
-
-    if (customProperties.length) {
-      customProperties.forEach(c => {
-        this.setCustomKeyframes(keyframes, c);
-      })  
-    }
-    return keyframes
-  }    
-
-
   convert (json) {
     json = super.convert(json);
 

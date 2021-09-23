@@ -18,6 +18,7 @@ import content from "./content"
 import defaultConfigs from "./default-configs"
 import defaultItems from "./default-items"
 import defaultMessages from "./default-messages"
+import defaultPatterns from "./default-patterns"
 
 import exportResource from "./export-resource"
 import filter from "./filter"
@@ -55,12 +56,12 @@ import transition from "./transition"
 import video from "./video"
 
 
-
 export default [
 
     defaultConfigs,
     defaultMessages,
     defaultItems,
+    defaultPatterns,
 
     rendererHtml,
     rendererJson,

@@ -446,7 +446,7 @@ export default class EventMachine {
       const isDomDiff = Boolean(checker.filter(it => DOMDIFF.includes(it)).length);
 
       if (this.refs[elName]) {        
-        var newTemplate = await this[callbackName].call(this, ...args);
+        var newTemplate = await this[callbackName].apply(this, args);
 
         if (Array.isArray(newTemplate)) {
           newTemplate = newTemplate.join('');

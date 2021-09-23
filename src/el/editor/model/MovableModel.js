@@ -214,17 +214,17 @@ export class MovableModel extends BaseAssetModel {
         return this._cachedAreaPosition || this.getAreaPosition();
     }
 
-    getAreaPosition() {
+    getAreaPosition(areaSize = 100) {
         const rect = toRectVerties(this.getVerties());
 
         return {
             column: [
-                Math.ceil(rect[0][0] / 100), 
-                Math.ceil(rect[1][0] / 100)
+                Math.ceil(rect[0][0] / areaSize), 
+                Math.ceil(rect[1][0] / areaSize)
             ],
             row: [
-                Math.ceil(rect[0][1] / 100), 
-                Math.ceil(rect[3][1] / 100)
+                Math.ceil(rect[0][1] / areaSize), 
+                Math.ceil(rect[3][1] / areaSize)
             ]
         }
     }
@@ -542,31 +542,52 @@ export class MovableModel extends BaseAssetModel {
     getAccumulatedMatrix () {
         let transform = mat4.create();
 
-        let path = this.path.filter(p => p.is('project') === false);
-
-        for(let i = 0, len = path.length; i < len; i++) {
-
-            /**
-             * @type {MovableItem}
-             */
-            const current = path[i];
+        if (this.parent) {
+            mat4.multiply(transform, transform, this.parent.accumulatedMatrix);
 
             // multiply parent perspective 
-            if (current.parent && isFunction(current.parent.getPerspectiveMatrix)) {
-                const perspectiveMatrix = current.parent.getPerspectiveMatrix();
+            if (isFunction(this.parent.getPerspectiveMatrix)) {
+                const perspectiveMatrix = this.parent.getPerspectiveMatrix();
                 if (perspectiveMatrix) {
                     mat4.multiply(transform, transform, perspectiveMatrix)
                 }
             }       
 
-                        
-            const offsetX = current.offsetX.value;
-            const offsetY = current.offsetY.value; 
-            // 5. Translate by offset x, y
-            mat4.translate(transform, transform, [offsetX, offsetY, 0]);                   
-                    
-            mat4.multiply(transform, transform, current.localMatrix)            
         }
+                    
+        const offsetX = this.offsetX.value;
+        const offsetY = this.offsetY.value; 
+        // 5. Translate by offset x, y
+        mat4.translate(transform, transform, [offsetX, offsetY, 0]);                   
+                
+        mat4.multiply(transform, transform, this.localMatrix)             
+
+
+        // let path = this.path.filter(p => p.is('project') === false);
+
+        // for(let i = 0, len = path.length; i < len; i++) {
+
+        //     /**
+        //      * @type {MovableItem}
+        //      */
+        //     const current = path[i];
+
+        //     // multiply parent perspective 
+        //     if (current.parent && isFunction(current.parent.getPerspectiveMatrix)) {
+        //         const perspectiveMatrix = current.parent.getPerspectiveMatrix();
+        //         if (perspectiveMatrix) {
+        //             mat4.multiply(transform, transform, perspectiveMatrix)
+        //         }
+        //     }       
+
+                        
+        //     const offsetX = current.offsetX.value;
+        //     const offsetY = current.offsetY.value; 
+        //     // 5. Translate by offset x, y
+        //     mat4.translate(transform, transform, [offsetX, offsetY, 0]);                   
+                    
+        //     mat4.multiply(transform, transform, current.localMatrix)            
+        // }
 
         return transform;
     }

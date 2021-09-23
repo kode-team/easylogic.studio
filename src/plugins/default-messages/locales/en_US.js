@@ -250,6 +250,7 @@ export default {
     'perspective.origin.editor.originY': 'Origin Y',
 
     'path.manager.msg':  'Keydown ESC or Enter key to close editing',
+    'path.manager.mode.done': 'Done',
     'path.manager.mode.modify': 'Modify',
     'path.manager.mode.path': 'Path',
     'path.manager.mode.transform': 'Transform',  

@@ -168,4 +168,7 @@ export default class SelectionInfoView extends EditorElement {
         return this.createSize(it.pointers, it);
     }    
 
+    [SUBSCRIBE('refreshAll')] () {
+        this.refresh();
+    }
 } 

@@ -26,6 +26,20 @@
     }
 
     .tools {
+
+        &.left {
+          padding-left: 48px;
+          float: left;
+
+          button {
+            width: auto;
+            height: auto;
+            padding: 10px 18px;
+            border-radius: 4px;
+            text-decoration: none;
+          }
+        }
+
         height: 100%;        
         display: inline-block;
 

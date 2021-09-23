@@ -22,7 +22,7 @@ export default class KeyboardManager extends EditorElement {
     return true;
   }  
 
-  [KEYDOWN('document') + IF('isNotFormElement') + PREVENT] (e) {
+  [KEYDOWN('document') + IF('isNotFormElement')] (e) {
     this.emit('keymap.keydown', e);
   }
 

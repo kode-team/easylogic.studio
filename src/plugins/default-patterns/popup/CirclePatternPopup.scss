@@ -1,0 +1,28 @@
+  .elf--circle-pattern-popup {
+    display: grid;
+    grid-template-columns: 100px 100px 100px;
+    column-gap: 10px;
+    row-gap: 10px;
+
+    .pattern-item {
+      text-align: center;      
+      border-radius: 4px;
+      cursor: pointer;
+
+      &.selected {
+        background-color: var(--elf--selected-background-color);
+      }
+
+      &:hover {
+        background-color: var(--elf--selected-color);
+      }
+
+      .preview {
+        pointer-events: none;
+        svg {
+          width: 100%;
+        }
+      }
+    }
+
+  }

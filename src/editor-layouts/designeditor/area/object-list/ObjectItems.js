@@ -6,8 +6,12 @@ export default class ObjectItems extends EditorElement {
   template() {
     return /*html*/`
         <div class="object-items">
-          <object refClass="ProjectProperty" />
-          <object refClass="LayerTreeProperty" />
+          <div>
+            <object refClass="ProjectProperty" />
+          </div>
+          <div>
+            <object refClass="LayerTreeProperty" />
+          </div>
         </div>
     `;
   }

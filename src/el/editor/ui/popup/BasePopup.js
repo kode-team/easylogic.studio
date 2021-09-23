@@ -75,6 +75,18 @@ export default class BasePopup extends EditorElement {
       .show("inline-block");
   }
 
+  showByRect (rect) {
+    this.$el
+      .css({
+        top: Length.px(rect.top),
+        left: Length.px(rect.left),
+        width: Length.px(rect.width),
+        height: Length.px(rect.height),
+        'z-index': this.$editor.zIndex
+      })
+      .show("inline-block");
+  }
+
   hide () {
     this.$el.hide();
   }

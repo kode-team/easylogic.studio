@@ -35,28 +35,11 @@ export default class DomRender extends ItemRender {
    */
   toBackgroundImageCSS(item) {
 
-    if (item['background-image'] === '' && item.pattern === '') {
-      return ZERO_CONFIG
+    if (!item.cacheBackgroundImage) {
+      item.setBackgroundImageCache();
     }
 
-    let list = [];
-
-    if (item.pattern) {
-      const patternList = Pattern.parseStyle(item.pattern);
-      for(var i = 0, len = patternList.length; i < len; i++)   {
-        list.push.apply(list, BackgroundImage.parseStyle(STRING_TO_CSS(patternList[i].toCSS())))
-      }
-    }
-
-    if (item['background-image']) {
-      list.push.apply(list, BackgroundImage.parseStyle(STRING_TO_CSS(item['background-image'])))
-    }
-
-    if (list.length) {
-      return BackgroundImage.joinCSS(list);
-    }
-
-    return {}; 
+    return item.cacheBackgroundImage; 
   }
 
   /**
@@ -83,7 +66,7 @@ export default class DomRender extends ItemRender {
    * @param {Item} item 
    */
   toLayoutItemCSS(item) {
-    var parentLayout =  item.parent['layout'];
+    var parentLayout =  item.parent?.['layout'];
     var obj = {}
     if (parentLayout === 'flex') {
       // 부모가  layout 이  지정 됐을 때 자식item 들은 position: relative 기준으로 동작한다. , left, top 은  속성에서 삭제 
@@ -148,10 +131,11 @@ export default class DomRender extends ItemRender {
    */
   toBorderCSS(item) {
     if (item.hasChildren()) return {}; 
-    return this.toStringPropertyCSS(item, 'border')
+
+    return item.computed('border', (border) => {
+      return STRING_TO_CSS(border);
+    })
   }
-
-
 
   toKeyCSS (key) {
     if (!item[key]) return {} 
@@ -187,8 +171,8 @@ export default class DomRender extends ItemRender {
   toKeyListCSS (item, args = []) {
     let obj = {};
 
-    args.filter(it => isNotUndefined(item[it])).forEach( it => {
-        obj[it] = item[it]
+    args.filter(it => isNotUndefined(item.json[it])).forEach( it => {
+        obj[it] = item.json[it]
     })
 
     return obj;
@@ -213,53 +197,52 @@ export default class DomRender extends ItemRender {
 
     obj.visibility = (item.visible) ? 'visible' : 'hidden';
 
-    return {
-      ...obj,
-      ...{
-        'will-change': 'auto',
-        // 'content-visibility': 'auto',
-      },
-      ...this.toKeyListCSS(item, [
-        'position', 
+    let result = {}
 
-        // 'right',
-        // 'bottom', 
-        'width',
-        'height', 
-        'overflow', 
-        'z-index', 
-        'box-sizing',
-        'background-color', 
-        'color',  
-        'opacity', 
-        'mix-blend-mode',
-        'transform-origin', 
-        'transform-style', 
-        'perspective', 
-        'perspective-origin',
-        'font-size', 
-        'font-stretch', 
-        'line-height', 
-        'font-weight', 
-        'font-family', 
-        'font-style',
-        'text-align', 
-        'text-transform', 
-        'text-decoration',
-        'letter-spacing', 
-        'word-spacing', 
-        'text-indent',
-        'border-radius',
-        'filter', 
-        'backdrop-filter', 
-        'box-shadow', 
-        'text-shadow',
-        'offset-path', 
-        'animation',  
-        'transition',
-      ])
-    }
+    result = Object.assign(result, obj);
+    result = Object.assign(result, {
+      'will-change': 'auto'
+    });
+    result = Object.assign(result, this.toKeyListCSS(item, [
+      'position', 
 
+      // 'right',
+      // 'bottom', 
+      'width',
+      'height', 
+      'overflow', 
+      'z-index', 
+      'box-sizing',
+      'background-color', 
+      'color',  
+      'opacity', 
+      'mix-blend-mode',
+      'transform-origin', 
+      'transform-style', 
+      'perspective', 
+      'perspective-origin',
+      'font-size', 
+      'font-stretch', 
+      'line-height', 
+      'font-weight', 
+      'font-family', 
+      'font-style',
+      'text-align', 
+      'text-transform', 
+      'text-decoration',
+      'letter-spacing', 
+      'word-spacing', 
+      'text-indent',
+      'border-radius',
+      'filter', 
+      'backdrop-filter', 
+      'box-shadow', 
+      'text-shadow',
+      'offset-path', 
+      'animation',  
+      'transition',
+    ]));
+    return result;
   }
 
   /**
@@ -267,13 +250,19 @@ export default class DomRender extends ItemRender {
    * @param {Item} item 
    */
   toVariableCSS (item) {
-    let obj = {}
-    item.variable.split(';').filter(it => it.trim()).forEach(it => {
-      const [key, value] = it.split(':')
 
-      obj[`--${key}`] = value; 
+    const v = item.computed('variable', (v) => {
+      let obj = {}      
+      v.split(';').filter(it => it.trim()).forEach(it => {
+        const [key, value] = it.split(':')
+  
+        obj[`--${key}`] = value; 
+      })      
+
+      return obj;
     })
-    return obj;
+
+    return v;
   }
 
   /**
@@ -376,7 +365,11 @@ export default class DomRender extends ItemRender {
 
     if (item['clip-path'] === '') return '';
 
-    var obj = ClipPath.parseStyle(item['clip-path']);
+    if (!item.cacheClipPathObject) {
+      item.setClipPathCache();
+    }
+
+    var obj = item.cacheClipPathObject;
     var value = obj.value; 
 
     switch (obj.type) {
@@ -396,8 +389,13 @@ export default class DomRender extends ItemRender {
     if (Boolean(str) === false) {
       return null;
     }
+
+    if (!item.cacheClipPathObject) {
+      item.setClipPathCache();
+    }
+
     
-    var obj = ClipPath.parseStyle(str)
+    var obj = item.cacheClipPathObject;
 
     switch (obj.type) {
     case 'path': 

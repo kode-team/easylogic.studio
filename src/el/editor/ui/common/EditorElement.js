@@ -8,6 +8,7 @@ import { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "
 import { ModelManager } from "el/editor/manager/ModelManager";
 import { ShortCutManager } from "el/editor/manager/ShortCutManager";
 import { ModeViewManager } from "el/editor/manager/ModeViewManager";
+import { CommandManager } from "el/editor/manager/CommandManager";
 
 export class EditorElement extends UIElement {
 
@@ -48,7 +49,12 @@ export class EditorElement extends UIElement {
      * @override
      */
     get $editor() {
-        return this.parent.$editor;
+
+        if (!this.__cacheParentEditor) {
+            this.__cacheParentEditor = this.parent.$editor;
+        }
+
+        return this.__cacheParentEditor;
     }
 
     /**
@@ -88,6 +94,13 @@ export class EditorElement extends UIElement {
      */
     get $selection() {
         return this.$editor.selection;
+    }
+
+    /**
+     * @type {CommandManager}
+     */
+    get $commands () {
+        return this.$editor.commands;
     }
 
     /**

@@ -262,10 +262,10 @@ export default class DomRender extends ItemRender {
   toKeyListCSS (item, args = []) {
     let obj = {};
 
-    args.filter(it => isNotUndefined(item[it])).forEach( it => {
-        obj[it] = item[it]
+    args.filter(it => isNotUndefined(item.json[it])).forEach( it => {
+        obj[it] = item.json[it]
     })
-
+ 
     return obj;
   }
 
@@ -288,48 +288,49 @@ export default class DomRender extends ItemRender {
 
     obj.visibility = (item.visible) ? 'visible' : 'hidden';
 
-    return {
-      ...obj,
-      ...this.toKeyListCSS(item, [
-        'position', 
-        // 'right',
-        // 'bottom', 
-        'width',
-        'height', 
-        'overflow', 
-        'z-index', 
-        'box-sizing',
-        'background-color', 
-        'color',  
-        'opacity', 
-        'mix-blend-mode',
-        'transform-origin', 
-        'transform-style', 
-        'perspective', 
-        'perspective-origin',
-        'font-size', 
-        'font-stretch', 
-        'line-height', 
-        'font-weight', 
-        'font-family', 
-        'font-style',
-        'text-align', 
-        'text-transform', 
-        'text-decoration',
-        'letter-spacing', 
-        'word-spacing', 
-        'text-indent',
-        'border-radius',
-        'filter', 
-        'backdrop-filter', 
-        'box-shadow', 
-        'text-shadow',
-        'offset-path', 
-        'animation',  
-        'transition',
-      ])
-    }
+    const result = {}
 
+    result = Object.assign(result, obj);
+    result = Object.assign(result, this.toKeyListCSS(item, [
+      'position', 
+      // 'right',
+      // 'bottom', 
+      'width',
+      'height', 
+      'overflow', 
+      'z-index', 
+      'box-sizing',
+      'background-color', 
+      'color',  
+      'opacity', 
+      'mix-blend-mode',
+      'transform-origin', 
+      'transform-style', 
+      'perspective', 
+      'perspective-origin',
+      'font-size', 
+      'font-stretch', 
+      'line-height', 
+      'font-weight', 
+      'font-family', 
+      'font-style',
+      'text-align', 
+      'text-transform', 
+      'text-decoration',
+      'letter-spacing', 
+      'word-spacing', 
+      'text-indent',
+      'border-radius',
+      'filter', 
+      'backdrop-filter', 
+      'box-shadow', 
+      'text-shadow',
+      'offset-path', 
+      'animation',  
+      'transition',
+    ]));
+
+    return result;
   }
 
   /**

@@ -68,6 +68,10 @@ export class Project extends TimelineModel {
     return false;
   }
 
+  getAccumulatedMatrix() {
+    return mat4.create();
+  }
+
   getTransformMatrix () {
     return mat4.create();
   }

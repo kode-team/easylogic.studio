@@ -4,6 +4,9 @@ import { GroupModel } from "./GroupModel";
 import { Selector } from "../property-parser/Selector";
 import { ClipPath } from "el/editor/property-parser/ClipPath";
 import PathParser from "el/editor/parser/PathParser";
+import { Pattern } from 'el/editor/property-parser/Pattern';
+import { BackgroundImage } from 'el/editor/property-parser/BackgroundImage';
+import { STRING_TO_CSS } from "el/utils/func";
 
 
 const editableList = [
@@ -219,32 +222,6 @@ export class DomModel extends GroupModel {
     return results;
   }
 
-  // export animation keyframe
-  /**
-   * @deprecated 
-   * 
-   */
-  toAnimationKeyframes(properties) {
-    return [
-      { selector: `[data-id="${this.json.id}"]`, properties }
-    ]
-  }
-
-  toBound() {
-    var obj = {
-      x: this.json.x ? this.json.x.clone() : Length.z(),
-      y: this.json.y ? this.json.y.clone() : Length.z(),
-      width: this.json.width.clone(),
-      height: this.json.height.clone(),
-    }
-
-    obj.x2 = Length.px(obj.x.value + obj.width.value);
-    obj.y2 = Length.px(obj.y.value + obj.height.value);
-
-    return obj
-  }
-
-
   reset(obj) {
     const isChanged = super.reset(obj);
 
@@ -256,16 +233,53 @@ export class DomModel extends GroupModel {
       if (this.cacheClipPath) {
         const d = this.cacheClipPath.clone().scale(this.json.width.value / this.cacheClipPathWidth, this.json.height.value / this.cacheClipPathHeight).d;
         this.json['clip-path'] = `path(${d})`;
+
+        this.modelManager.setChanged('reset', this.id, { 'clip-path' : this.json['clip-path'] });
       }
 
+    } else if (this.hasChangedField('background-image', 'pattern')) {
+      this.setBackgroundImageCache()
     }
 
     return isChanged;
   }
 
+  setBackgroundImageCache() {
+
+    let list = [];
+
+    if (this.json.pattern) {
+
+      const patternList = this.computed('pattern', (pattern) => {
+        return Pattern.parseStyle(pattern).map(it => {
+          return BackgroundImage.parseStyle(STRING_TO_CSS(it.toCSS()))
+        });
+      })
+
+      for(var i = 0, len = patternList.length; i < len; i++)   {
+        list.push.apply(list, patternList[i]);
+      }
+    }
+
+    if (this.json['background-image']) {
+      const backgroundList = this.computed('background-image', (backgroundImage) => {
+        return BackgroundImage.parseStyle(STRING_TO_CSS(backgroundImage))
+      })
+
+      list.push.apply(list, backgroundList);
+    }
+
+    if (list.length) {
+      this.cacheBackgroundImage = BackgroundImage.joinCSS(list);
+    } else {
+      this.cacheBackgroundImage = {}
+    }
+  }
+
   setClipPathCache() {
     var obj = ClipPath.parseStyle(this.json['clip-path'])
 
+    this.cacheClipPathObject = obj;    
     if (obj.type === 'path') {
       this.cacheClipPath = new PathParser(obj.value.trim())
       this.cacheClipPathWidth = this.json.width.value;

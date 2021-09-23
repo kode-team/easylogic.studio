@@ -107,8 +107,8 @@
       position: absolute;
       left: 0px;
       top: 0px;
-      width: 9px;
-      height: 9px;
+      width: 12px;
+      height: 12px;
       box-sizing: border-box;
       background-color: white; 
       box-sizing: border-box;
@@ -118,10 +118,19 @@
         border-radius: 100%; 
         background-color: var(--elf--selected-color);
         pointer-events: none;
-        width: 5px;
-        height: 5px;
+        width: 6px;
+        height: 6px;
         z-index: 1000;
       }
+
+      &[data-number="11"],
+      &[data-number="12"],
+      &[data-number="13"], 
+      &[data-number="14"] {
+        background-color: transparent;
+        border:0px;
+      }
+
     }
 
     .size-pointer {

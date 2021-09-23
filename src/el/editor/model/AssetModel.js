@@ -70,17 +70,6 @@ export class AssetModel extends BaseModel {
   }  
 
 
-  // 모든 Assets 은  JSON 포맷만가진다. 따로 문자열화 하지 않는다. 
-  // {color, name, variable}
-  // {gradient,name,variable}
-  // {filters: [],id,name}
-  // {mimeType, original(data or url), local, name}
-
-  // 파싱은 
-  // var asset = AssetParser.parse(data);
-  // asset.color, name, variable 
-
-
   copyPropertyList(arr, index) {
     var copyObject = {...arr[index]};
     arr.splice(index, 0, copyObject);

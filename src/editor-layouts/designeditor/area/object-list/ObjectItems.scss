@@ -1,7 +1,10 @@
 .object-items {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+    position: absolute;
+    left: 0px ;
+    right: 0px;
+    bottom: 0px;
+    top: 0px;
+    display: block;
 
     > * {
         flex: 1 1 auto;
@@ -9,7 +12,78 @@
     }
 
     > *:first-child {
-        max-height: 120px;
-        overflow: auto;
+        position: absolute;
+        left: 0px;
+        right: 0px;
+        top: 0px;
+        height: 120px;
+
+
+        > .elf--property {
+            position: absolute !important; 
+            height: auto !important;
+            width: auto !important;
+            left: 0px ;
+            right: 0px;
+            bottom: 0px;
+            top: 0px;
+
+            > .property-title {
+                position: absolute;
+                display: block;
+                left: 0px;
+                right: 0px;
+                top: 0px;
+                height: 30px;
+            }
+
+            > .property-body {
+                position: absolute;
+                display: block;
+                left: 0px;
+                right: 0px;
+                top: 30px;
+                bottom: 0px;
+                overflow: auto;
+            }
+        }
+
+    }
+
+    > *:last-child {
+        position: absolute;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        top: 120px;
+
+        > .elf--property {
+            position: absolute !important; 
+            height: auto !important;
+            width: auto !important;
+            left: 0px ;
+            right: 0px;
+            bottom: 0px;
+            top: 0px;
+
+            > .property-title {
+                position: absolute;
+                display: block;
+                left: 0px;
+                right: 0px;
+                top: 0px;
+                height: 30px;
+            }
+
+            > .property-body {
+                position: absolute;
+                display: block;
+                left: 0px;
+                right: 0px;
+                top: 30px;
+                bottom: 0px;
+                overflow: auto;
+            }
+        }
     }
 }
