@@ -21,7 +21,7 @@ export default class PathParser {
 
     reset(pathString = '') {
         this.segments = [];
-        this.pathString = pathString;
+        this.pathString = pathString.trim();
 
         this.parse()
     }
@@ -29,6 +29,8 @@ export default class PathParser {
     resetSegments(segments) {
         this.segments = segments || []
         this.pathString = this.joinPath()
+
+        return this;
     }
 
     trim(str = '') {
@@ -531,13 +533,21 @@ export default class PathParser {
                 } else if (segment.command === 'C') {
                     newSegments.push(segment);
                 } else if (segment.command === 'Q') {
+                    prevSegment.values[0];
+
+
                     newSegments.push({
                         command: 'C',
                         values: [
-                            segment.values[0],
-                            segment.values[1],
-                            segment.values[0],
-                            segment.values[1],
+                            // C1 = Q0 + (2/3) (Q1 - Q0)
+                            prevSegment.values[0] + (2/3) (segment.values[0] - prevSegment.values[0]),
+                            prevSegment.values[1] + (2/3) (segment.values[1] - prevSegment.values[1]),
+
+                            // C2 = Q2 + (2/3) (Q1 - Q2)
+                            segment.values[2] + (2/3) (segment.values[0] - segment.values[2]),
+                            segment.values[3] + (2/3) (segment.values[1] - segment.values[3]),
+
+                            // C3 = Q2
                             segment.values[2],
                             segment.values[3]
                         ]
@@ -687,7 +697,7 @@ export default class PathParser {
                     })
                     break;
                 case 'Q':
-
+                    // TODO: 정상적으로 동작하지 않는 듯 하다. 
                     const newPoints = [
                         [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
                         [v[0], v[1], 0],
@@ -713,13 +723,25 @@ export default class PathParser {
             return segment;
         });
 
-
         return [
             [minX, minY, 0],
             [maxX, minY, 0],
             [maxX, maxY, 0],
             [minX, maxY, 0],
         ]
+    }
+
+    rect () {
+        const bbox = this.getBBox();
+
+        return {
+            x: bbox[0][0],
+            y: bbox[0][1],
+            width: vec3.distance(bbox[0], bbox[1]),
+            height: vec3.distance(bbox[0], bbox[3]),
+            right: bbox[0][0] + vec3.distance(bbox[0], bbox[1]),
+            bottom: bbox[0][1] + vec3.distance(bbox[0], bbox[3]),
+        }
     }
 
     /**
@@ -1235,6 +1257,38 @@ export default class PathParser {
             }
 
         }
+    }
+
+    /**
+     * convert to multi segment path list 
+     */
+    toMultiSegmentPathList() {
+        const paths = []
+
+        const group = this.getGroup();
+        group.forEach((group, index) => {
+            group.segments.forEach((s, index) => {
+                const prevSegment = group.segments[index - 1];
+                const lastValues = prevSegment?.segment?.values || [];
+                const lastX = lastValues[lastValues.length - 2];
+                const lastY = lastValues[lastValues.length - 1];
+                const values = s.segment.values;
+
+                if (s.segment.command === 'M') {
+                    // NOOP
+                } else if (s.segment.command === 'L') {
+                    paths.push(new PathParser(`M ${lastX} ${lastY}L ${values.join(' ')}`));
+                } else if (s.segment.command === 'C') {
+                    paths.push(new PathParser(`M ${lastX} ${lastY}C ${values.join(' ')}`));
+                } else if (s.segment.command === 'Q') {
+                    paths.push(new PathParser(`M ${lastX} ${lastY}Q ${values.join(' ')}`));
+                } else {
+                    // NOOP 
+                }
+            })
+        });
+
+        return paths;
     }
 
 }

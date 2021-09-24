@@ -4,6 +4,13 @@ export class InjectManager {
     this.menuItems = {}
   }
 
+  /**
+   * 
+   * 특정 영역에 들어갈 메뉴를 추가한다.
+   * 
+   * @param {string} target 
+   * @param {object} obj 
+   */
   registerMenuItem(target, obj) {
 
     if (!this.menuItems[target]) {

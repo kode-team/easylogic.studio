@@ -1,6 +1,7 @@
 .elf--tool-menu {
   color: var(--elf--selected-font-color);
-  padding: 8px 0px;
+  // padding: 8px 0px;
+  width: 100%;
 
   &.center{
     text-align: center;
@@ -19,7 +20,9 @@
 
 
     .draw-items {
-
+      height: 100%;
+      box-sizing: border-box;
+      padding: 8px 0px;
       &[data-selected-value="svg"] {
         [data-item="css"] {
           display: none;

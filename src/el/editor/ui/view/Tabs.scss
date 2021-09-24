@@ -29,7 +29,7 @@ $tab-horizontal-header-right-width: 60px;
 
     &.side-tab {
       &.side-tab-left {
-        .tab-header {
+        > .tab-header {
           position: absolute;
           display: block;
           left: 0px;
@@ -44,7 +44,7 @@ $tab-horizontal-header-right-width: 60px;
           background-color: var(--elf--header-background-color);
           text-align: center;
 
-          .tab-item {
+          > .tab-item {
             display: block;
             width: 48px;
             height: 48px;
@@ -94,7 +94,7 @@ $tab-horizontal-header-right-width: 60px;
           }
         }
 
-        .tab-body {
+        > .tab-body {
           left: $tab-horizontal-header-width;
           top: 0px;
           bottom: 0px;
@@ -103,13 +103,13 @@ $tab-horizontal-header-right-width: 60px;
       }
     }
 
-    .tab-header {
+    > .tab-header {
       cursor: pointer;
       overflow: hidden;
       color: var(--elf--font-color);
       
     }
-    .tab-content {
+    > .tab-content {
       display: none;
 
       &.selected {
@@ -117,7 +117,7 @@ $tab-horizontal-header-right-width: 60px;
       }
     }
 
-    .tab-body {
+    > .tab-body {
       top: 34px;
     }
 

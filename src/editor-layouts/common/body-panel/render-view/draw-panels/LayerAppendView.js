@@ -9,6 +9,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
 import "./LayerAppendView.scss";
 import { CSS_TO_STRING } from "el/utils/func";
+import PathParser from 'el/editor/parser/PathParser';
 
 export default class LayerAppendView extends EditorElement {
 
@@ -126,6 +127,20 @@ export default class LayerAppendView extends EditorElement {
                 </svg>
             </div>
             `
+        case 'svg-path':
+            const newD = this.state.d.clone().scale(width/this.state.bboxRect.width, height/this.state.bboxRect.height).d;
+            const options = this.state.options;
+            return /*html*/`
+            <div class='draw-item'>
+                <svg width="${width}" height="${height}" style="width:100%; height:100%;" overflow="visible">
+                    <path   d="${newD}" 
+                            stroke-width="${options['stroke-width'] || 1}" 
+                            stroke="${options['stroke'] || "black"}" 
+                            fill="${options['fill'] || 'transparent'}" 
+                    />
+                </svg>
+            </div>
+            `            
         case 'svg-textpath':
             return /*html*/`
             <div class='draw-item' style='outline: 1px solid blue;'>
@@ -302,6 +317,9 @@ export default class LayerAppendView extends EditorElement {
         case 'svg-textpath': 
             delete rect['background-color']; 
             break;         
+        case "svg-path":
+            rect['d'] = this.state.d.clone().scale(width/this.state.bboxRect.width, height/this.state.bboxRect.height).d;
+            break;
         default: 
             delete rect['content']; 
             break; 
@@ -360,6 +378,11 @@ export default class LayerAppendView extends EditorElement {
             transform: true,
             "transform-origin": true,
         }))
+
+        if (options.d) {
+            this.state.d = new PathParser(options.d);
+            this.state.bboxRect = this.state.d.rect();
+        }
 
         this.emit('push.mode.view', 'LayerAppendView');
     }

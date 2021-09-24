@@ -739,4 +739,8 @@ export class SelectionManager {
 
     return isChanged;
   }
+
+  is (...args) {
+    return this.current?.is(...args);
+  }
 }

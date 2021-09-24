@@ -440,12 +440,8 @@ export const getCurveBBox = (points) => {
         return {x: p[0], y: p[1]}
     })
 
-    // root 값이  0 으로만 이루어 져있으면 직선으로 간주하고 1 을 추가 해줌 
-    // 이렇게 하면 처음과 끝점 기준으로 bbox 를 잡을 수 있음. 
-    if (roots.length === 2 && roots[0] === 0 && roots[1] === 0) {
-        roots.push(1);
-    }
-
+    // root 에 t = 0, 1 을 항상 넣어준다. 
+    roots.push(0, 1);
 
     return roots.map(t => {
         const {x, y} = getBezierPointOne(xyPoints, t);

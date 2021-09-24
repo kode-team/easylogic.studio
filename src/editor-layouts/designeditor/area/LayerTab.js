@@ -46,10 +46,10 @@ export default class LayerTab extends EditorElement {
             </div>            
 
             ${this.$injectManager.getTargetMenuItems('leftbar.tab').map(it => {
-              const { value, title} = it.class;              
+              const { value, title} = it.class;      
               return /*html*/`
                 <div class='tab-item' data-value='${value}' data-direction="right"  data-tooltip="${title}">
-                  <label>${icon[it.class.icon] || it.class.icon}</label>
+                  <label>${icon[it.class.icon] || it.class.icon || title}</label>
                 </div>
               `
             })}
@@ -76,12 +76,9 @@ export default class LayerTab extends EditorElement {
               <object refClass="CustomAssets" />
             </div>
             ${this.$injectManager.getTargetMenuItems('leftbar.tab').map(it => {
-              const { value, title, loadElements } = it.class;
+              const { value } = it.class;
               return /*html*/`
                 <div class='tab-content' data-value='${value}'>
-                  ${loadElements.map(element => {
-                    return `<object refClass="${element}" />`
-                  }).join('\n')}
                   ${this.$injectManager.generate(`leftbar.tab.${value}`)}
                 </div>
               `

@@ -34,8 +34,7 @@ export default function newComponent (editor, itemType, obj, isSelected = true, 
             'background-color': undefined,
             fill: `#C4C4C4`,            
             d: PathStringManager.makeRect(0, 0, obj.width.value, obj.height.value),
-        }                
-
+        }             
     } else if (itemType === 'text') {
         obj = {
             width: Length.px(300),
