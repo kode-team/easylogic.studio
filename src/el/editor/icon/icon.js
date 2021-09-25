@@ -167,6 +167,7 @@ import flex from "./flex";
 import margin from "./margin";
 import source from "./source";
 import sync from "./sync";
+import outline from "./outline";
 
 
 const alias = {
@@ -176,6 +177,7 @@ const alias = {
 
 export default {
   ...alias,
+  outline,
   sync,
   source,
   flex,

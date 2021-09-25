@@ -31,6 +31,35 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
   /* canvas view 자체는 이벤트를 막고 내부에 있는 element-item 만 이벤트가 적용될 수 있도록 한다. */
   pointer-events: none; 
 
+  &[data-outline="true"] {
+
+    .element-item {
+      background-color: transparent !important;
+      border: 1px solid #595959 !important;
+      filter: none !important;
+      backdrop-filter: none !important;
+      background-image: none !important;
+      box-shadow: none !important;
+
+      &.svg-path {
+        border: 0px !important;
+      }
+
+      &.artboard {
+        border: 2px dashed #595959 !important;
+      }
+
+      svg {
+        path, polygon, rect, circle, ellipse, line, polyline, text {
+          fill: none !important;
+          stroke: #595959 !important;
+          stroke-width: 1px !important;
+        }
+      }
+    }
+
+  }
+
   svg.element-item {
     pointer-events: none;
 

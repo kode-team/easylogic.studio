@@ -121,8 +121,8 @@ export default class PathDrawView extends EditorElement {
 
             var layer = this.makePathLayer(pathRect)
             if (layer) {
-                this.$selection.select(layer);
-                this.trigger('hidePathDrawEditor')
+                // this.$selection.select(layer);
+                // this.trigger('hidePathDrawEditor')
                 this.emit('refreshAll')
             }
         }

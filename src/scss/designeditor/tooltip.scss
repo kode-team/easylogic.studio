@@ -29,6 +29,7 @@
     transform: translateX(-50%);
     z-index: 1000000;
     white-space: nowrap;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1);
   }
 
   &[data-direction="right"] {

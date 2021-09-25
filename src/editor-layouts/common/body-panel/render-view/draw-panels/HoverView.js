@@ -29,7 +29,10 @@ export default class HoverView extends EditorElement {
             return;
         }
 
-        const items = this.$selection.filteredLayers.filter(it => it.isNot('artboard'))
+        const items = this.$selection.filteredLayers.filter(it => {
+            const point = this.$viewport.getWorldPosition(this.$config.get('bodyEvent'));
+            return it.hasPoint(point[0], point[1]);
+        }).filter(it => it.isNot('artboard'))
 
         const id = items[0]?.id;
 

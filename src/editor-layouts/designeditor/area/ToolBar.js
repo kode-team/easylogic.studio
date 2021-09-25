@@ -11,12 +11,14 @@ import ExportView from 'el/editor/ui/menu-items/ExportView';
 import Download from 'el/editor/ui/menu-items/Download';
 import Save from 'el/editor/ui/menu-items/Save';
 import OpenPathEditor from "el/editor/ui/menu-items/OpenPathEditor";
+import Outline from "el/editor/ui/menu-items/Outline";
 
 
 export default class ToolBar extends EditorElement {
 
     components() {
         return {
+            Outline,
             OpenPathEditor,
             ExportView,
             Download,
@@ -43,6 +45,7 @@ export default class ToolBar extends EditorElement {
                             <div class='draw-items'>
                                 <object refClass="Undo" />
                                 <object refClass="Redo" />
+                                <object refClass="Outline" />                                
                                 <object refClass="OpenPathEditor" />
                                 ${this.$injectManager.generate('toolbar.left')}
                             </div>

@@ -54,17 +54,14 @@ export default class PathParser {
         // 다시 돌아올 수도 있겠지만 불필요한 작업이 너무 많아질 수도 있다. 
         this.segments = this.segments.map((s, index) => {
             switch (s.command) {
-                case 'c':
                 case 'm':
-                case 'l':
-                case 'q':
-                case 's':
-                case 't':
-                case 'v':
-                case 'h':
                     var prev = this.segments[index - 1]
-                    var x = prev.values[prev.values.length - 2]
-                    var y = prev.values[prev.values.length - 1]
+
+                    if (prev && (prev.command == 'z' || prev.command == 'Z')) {
+                        prev = this.segments[index - 2]
+                    }
+                    var x = prev?.values[prev.values.length - 2] || 0
+                    var y = prev?.values[prev.values.length - 1] || 0
 
                     for (var i = 0, len = s.values.length; i < len; i += 2) {
                         s.values[i] += x
@@ -75,6 +72,31 @@ export default class PathParser {
                         command: s.command.toUpperCase(),
                         values: [...s.values]
                     };
+                case 'c':
+                case 'l':
+                case 'q':
+                case 's':
+                case 't':
+                case 'v':
+                case 'h':
+                    var prev = this.segments[index - 1]
+                    var x = prev?.values[prev.values.length - 2] || 0
+                    var y = prev?.values[prev.values.length - 1] || 0
+
+                    for (var i = 0, len = s.values.length; i < len; i += 2) {
+                        s.values[i] += x
+                        s.values[i + 1] += y
+                    }
+
+                    return {
+                        command: s.command.toUpperCase(),
+                        values: [...s.values]
+                    };
+                case 'z':
+                    return {
+                        command: s.command.toUpperCase(),
+                        values: []
+                    }
                 default:
                     return s;
             }
@@ -855,6 +877,26 @@ export default class PathParser {
         }
 
         return { x, y };
+    }
+
+    /**
+     * 
+     * x, y 가 path 위에 있는 point 인지 확인함. 
+     * 
+     * @param {{x: number, y: number}} param0 
+     * @param {number} dist 
+     * @returns 
+     */
+    isPointInPath({ x, y }, dist = 1) {
+        const info = this.getClosedPointInfo({ x, y }, 20);
+
+        if (info.targetPoint) {
+            if (vec3.dist([info.targetPoint.x, info.targetPoint.y, 0], [x, y, 0]) <= dist) {
+                return true; 
+            }
+        }
+
+        return false;
     }
 
     get d() {

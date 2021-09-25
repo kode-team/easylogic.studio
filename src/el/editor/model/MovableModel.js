@@ -358,7 +358,7 @@ export class MovableModel extends BaseAssetModel {
     }
 
     /**
-     * 특정 위치가 객체를 가리키고 있는데 체크한다. 
+     * 월드 좌표 기준으로 특정 위치가 객체를 가리키고 있는데 체크한다. 
      * 
      * @param {number} x 
      * @param {number} y 

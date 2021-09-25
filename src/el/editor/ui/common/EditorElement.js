@@ -9,6 +9,7 @@ import { ModelManager } from "el/editor/manager/ModelManager";
 import { ShortCutManager } from "el/editor/manager/ShortCutManager";
 import { ModeViewManager } from "el/editor/manager/ModeViewManager";
 import { CommandManager } from "el/editor/manager/CommandManager";
+import { SnapManager } from "el/editor/manager/SnapManager";
 
 export class EditorElement extends UIElement {
 

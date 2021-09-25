@@ -19,6 +19,7 @@ export default class LayerAppendView extends EditorElement {
             <div class='area' ref='$area'></div>
             <div class='area-rect' ref='$areaRect'></div>
             <div class='area-pointer' ref='$mousePointer'></div>
+            <div class='area-pointer-view' ref='$mousePointerView'></div>            
             <input type='file' accept='image/*' multiple="true" ref='$file' class='embed-file-input'/>
             <input type='file' accept='video/*' multiple="true" ref='$video' class='embed-video-input'/>            
         </div>
@@ -64,12 +65,14 @@ export default class LayerAppendView extends EditorElement {
             this.state.targetPositionVertex = vec3.clone(this.state.target);            
             this.state.targetGuides = this.$snapManager.findGuideOne([this.state.target]);
         } else {
-            this.state.target = null; 
+            this.state.target = vec3.floor([], vertex); 
+            this.state.targetVertex = vec3.floor([], this.$viewport.applyVertex(this.state.target));
             this.state.targetGuides = [];
             this.state.targetPositionVertex = null;
         }
 
         this.bindData('$mousePointer')
+        this.bindData('$mousePointerView');
     }
 
     [POINTERSTART('$el') + MOVE() + END() + PREVENT + STOP] (e) {
@@ -190,19 +193,36 @@ export default class LayerAppendView extends EditorElement {
                 left: Length.px(areaVerties[2][0]),
                 top: Length.px(areaVerties[2][1]),
             },
-            innerHTML: `${width.value} x ${height.value}`
+            innerHTML: `x: ${Math.round(newVerties[0][0])}, y: ${Math.round(newVerties[0][1])}, ${width.value} x ${height.value}`
+        }
+    }
+
+    [BIND('$mousePointerView')] () {
+
+        const { areaVerties, showRectInfo} = this.state; 
+        const {target = vec3.create(), targetVertex = vec3.create()} = this.state; 
+
+        return {
+            style: {
+                display: !showRectInfo ? 'inline-block' : 'none',
+                left: Length.px(targetVertex[0]),
+                top: Length.px(targetVertex[1]),
+            },
+            innerHTML: `x: ${Math.round(target[0])}, y: ${Math.round(target[1])}`
         }
     }
 
     makeMousePointer () {
 
-        const target = this.state.target 
+        if (this.state.dragStart) return '';
+
+        const {target, targetVertex} = this.state; 
 
         if (!target) return '';
 
         const guides = (this.state.targetGuides || []).filter(Boolean);
 
-        if (guides.length === 0) return; 
+        // if (guides.length === 0) return; 
 
         return /*html*/`
         <svg width="100%" height="100%">
@@ -243,7 +263,7 @@ export default class LayerAppendView extends EditorElement {
             this.state.targetVertex = this.$viewport.applyVertex(newMousePoint);
             this.state.targetGuides = this.$snapManager.findGuideOne([newMousePoint]).filter(Boolean);
         } else {
-            this.state.target = null; 
+            this.state.target = undefined; 
             this.state.targetGuides = [];
         }
 
@@ -272,6 +292,7 @@ export default class LayerAppendView extends EditorElement {
         this.bindData('$area');
         this.bindData('$areaRect'); 
         this.bindData('$mousePointer')
+        this.bindData('$mousePointerView');
 
     }
 
@@ -285,7 +306,7 @@ export default class LayerAppendView extends EditorElement {
         // artboard 가 아닐 때만 parentArtBoard 가 존재 
         const parentArtBoard = this.$selection.getArtboardByPoint(rectVerties[0]);
 
-        const {x, y, width, height } = vertiesToRectangle(rectVerties);
+        let {x, y, width, height } = vertiesToRectangle(rectVerties);
         let hasArea = true; 
         if (width.value === 0 && height.value === 0) {
 
@@ -296,8 +317,8 @@ export default class LayerAppendView extends EditorElement {
                 hasArea = false; 
                 break;
             default:
-                width.set(100);
-                height.set(100);
+                width = Length.px(100)
+                height = Length.px(100)
                 break;
             }
         }
@@ -355,7 +376,7 @@ export default class LayerAppendView extends EditorElement {
 
         this.state.dragStart = false;        
         this.state.showRectInfo = false; 
-        this.state.target = null;
+        this.state.target = undefined;
         this.bindData('$areaRect');         
     }    
 
@@ -496,5 +517,11 @@ export default class LayerAppendView extends EditorElement {
 
     [SUBSCRIBE('setPatternInfo')] (patternInfo) {
         this.state.patternInfo = patternInfo;
+    }
+
+    [SUBSCRIBE('updateViewport')] () {
+        this.$snapManager.clear();       
+        this.bindData('$mousePointer')
+        this.bindData('$mousePointerView');
     }
 } 

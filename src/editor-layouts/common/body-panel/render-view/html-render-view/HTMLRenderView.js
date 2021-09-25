@@ -1,6 +1,6 @@
 import { vec3 } from "gl-matrix";
 
-import { BIND, POINTERSTART, IF, KEYUP, DOUBLECLICK, FOCUSOUT, SUBSCRIBE } from "el/sapa/Event";
+import { BIND, POINTERSTART, IF, KEYUP, DOUBLECLICK, FOCUSOUT, SUBSCRIBE, CONFIG } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
 import Dom from "el/sapa/functions/Dom";
 import { isFunction } from "el/sapa/functions/func";
@@ -34,10 +34,14 @@ export default class HTMLRenderView extends EditorElement {
         return /*html*/`
             <div class='elf--element-view' ref='$body'>
                 <object refClass='StyleView' ref='$styleView' />
-                <div class='canvas-view' ref='$view'></div>
+                <div class='canvas-view' ref='$view' data-outline="${this.$config.get('show.outline')}"></div>
                 ${this.$injectManager.generate("render.view")}
             </div>
         `
+    }
+
+    [CONFIG('show.outline')] () {
+        this.refs.$view.attr('data-outline', this.$config.get('show.outline'));
     }
 
     [SUBSCRIBE('refElement')](id, callback) {

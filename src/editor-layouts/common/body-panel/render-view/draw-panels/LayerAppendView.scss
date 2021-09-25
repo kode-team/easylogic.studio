@@ -35,6 +35,16 @@
         border-radius: 4px;        
     }
 
+    .area-pointer-view {
+        position: absolute;
+        display: inline-block;
+        transform: translate(5px, 5px);
+        background-color: var(--elf--selected-color);
+        color: var(--elf--selected-font-color);
+        padding: 2px 4px;
+        border-radius: 4px;        
+    }    
+
     .area-pointer {
         position: absolute;
         left: 0px;

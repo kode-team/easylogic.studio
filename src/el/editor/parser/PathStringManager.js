@@ -139,5 +139,35 @@ export default class PathStringManager {
         return manager.d;
     }
 
+    /**
+     * 다각형 그리기
+     * 
+     * @copilot
+     * @param {number} width 
+     * @param {number} height 
+     * @param {number} count 
+     * @returns 
+     */
+    static makePolygon (width, height, count = 3) {
+        var manager = new PathStringManager()
+        const centerX = width / 2;
+        const centerY = height / 2;
+
+        for(var i = 0; i < count; i++) {
+            var angle = (i / count) * Math.PI  * 2;
+            var x = Math.cos(angle) * centerX + centerX;
+            var y = Math.sin(angle) * centerY + centerY;
+            if (i === 0) {
+                manager.M({x, y})
+            } else {
+                manager.L({x, y});
+            }
+        }
+
+        manager.Z();
+
+        return manager.d;
+    }
+
 }
 

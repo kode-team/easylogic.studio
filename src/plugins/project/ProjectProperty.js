@@ -15,7 +15,7 @@ export default class ProjectProperty extends BaseProperty {
 
   getTools() {
     return /*html*/`
-      <button type='button' ref='$add' title="Add a project">${icon.add}</button>
+      <button type='button' ref='$add' data-tooltip="Add a project" data-direction="bottom right">${icon.add}</button>
     `
   }
 

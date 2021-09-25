@@ -15,8 +15,10 @@ import areaWidth from './area.width';
 import styleCanvasBackgroundColor from "./style.canvas.background.color";
 import setMoveControlPoint from "./set.move.control.point";
 import setDragPathArea from "./set.drag.path.area";
+import showOutline from "./show.outline";
 
 export default [
+    showOutline,
     setDragPathArea,
     setMoveControlPoint,
     styleCanvasBackgroundColor,
