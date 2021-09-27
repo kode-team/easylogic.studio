@@ -174,6 +174,12 @@ const alias = {
   fullscreen:  border_inner
 }
 
+export function iconUse(name) {
+  return /*html*/`
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><use href="#icon-${name}" /> </svg>
+  `
+}
+
 
 export default {
   ...alias,

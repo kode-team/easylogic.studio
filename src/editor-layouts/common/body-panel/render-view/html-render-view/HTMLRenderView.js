@@ -182,12 +182,15 @@ export default class HTMLRenderView extends EditorElement {
 
     [DOUBLECLICK('$view')](e) {
         const $item = Dom.create(e.target).closest('element-item');
-        const id = $item.attr('data-id');
 
-        this.nextTick(() => {
-            this.emit('doubleclick.item', e, id);
-        }, 100)
+        if ($item) {
+            const id = $item.attr('data-id');
 
+            this.nextTick(() => {
+                this.emit('doubleclick.item', e, id);
+            }, 100)
+    
+        }
     }
 
     /**
@@ -487,7 +490,13 @@ export default class HTMLRenderView extends EditorElement {
 
         const html = this.$editor.html.render(project, null, this.$editor) || '';
 
-        this.refs.$view.updateDiff(html)
+        this.refs.$view.updateDiff(html, undefined, {
+            checkPassed: (oldEl, newEl) => {
+                // data-id 가 동일하면 dom diff 를 하지 않고 넘겨버린다. 
+                const isPassed =  oldEl.getAttribute("data-id") === newEl.getAttribute("data-id")
+                return isPassed
+            }
+        })
 
         this.bindData('$view');
 

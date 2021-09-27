@@ -1,5 +1,5 @@
 import { Length } from "el/editor/unit/Length";
-import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './DrawManager.scss';
 import { variable } from "el/sapa/functions/registElement";
@@ -45,6 +45,9 @@ export default class DrawManager extends EditorElement {
   template() {
     return /*html*/`
       <div class='elf--draw-manager'>
+        <div class="tools left" ref="$left">
+            <button type="button" class="primary" data-value='DrawEditorDone' title='${this.$i18n('draw.manager.mode.modify')}' >Done</button>
+        </div>      
         <div class='tools'>   
           <div >        
             <label>${this.$i18n('draw.manager.tolerance')}</label>            
@@ -127,5 +130,12 @@ export default class DrawManager extends EditorElement {
   [SUBSCRIBE('hideDrawManager')] () {
       this.$el.hide();
   }
+
+
+  [CLICK('$left button')] (e) {
+    var message = e.$dt.attr('data-value');
+
+    this.emit(message);  
+  }    
 
 }

@@ -1,7 +1,7 @@
 
 import { POINTERSTART, CLICK, SUBSCRIBE } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import { EditorElement } from "../common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
 
@@ -16,7 +16,7 @@ export default class BasePopup extends EditorElement {
                 <label>${this.getTitle()}</label>
                 <span class="tools">
                   ${this.getTools()}
-                  <button type='button' class='close' ref='$close'>${icon.close}</button>
+                  <button type='button' class='close' ref='$close'>${iconUse("close")}</button>
                 </span>
             </div>
             <div class='popup-body'>${this.getBody()}</div>

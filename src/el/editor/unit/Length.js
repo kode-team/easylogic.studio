@@ -246,12 +246,7 @@ export class Length {
     return Length.string(obj);
   }
   toString() {
-
-    if (!this.__cached_string) {
-      this.__cached_string = this.getUnitText();
-    }
-
-    return this.__cached_string;
+    return this.getUnitText();
   }
 
   getUnitText() {

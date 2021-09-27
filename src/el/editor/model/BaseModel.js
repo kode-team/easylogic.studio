@@ -265,8 +265,13 @@ export class BaseModel {
     const value = this.json[key];
 
     // 캐쉬가 있으면 그대로 리턴
-    if (this.getCache(key) === value && this.getCache(parsedKey) && isForce === false) {
-      return this.getCache(parsedKey);
+    if (isForce) {
+      // NOOP 
+      // isForce 가 true 일 때는 캐쉬를 적용하지 않는다.
+    } else {
+      if (this.getCache(key) === value && this.getCache(parsedKey)) {
+        return this.getCache(parsedKey);
+      }
     }
 
     // isForce 가 true 이면 다시 캐쉬를 만든다. 

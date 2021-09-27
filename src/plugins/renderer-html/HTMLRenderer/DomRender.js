@@ -534,14 +534,12 @@ ${cssString}
   
     const tagName = elementType || 'div'
   
-    return /*html*/`    
-<${tagName} class="element-item ${itemType}" data-id="${id}" data-title="${name}">
+    return /*html*/`<${tagName} class="element-item ${itemType}" data-id="${id}" data-title="${name}">
   ${this.toDefString(item)}
   ${item.layers.map(it => {
     return renderer.render(it, renderer)
-  }).join('\n\t')}
-</${tagName}>
-    `
+  }).join('')}
+</${tagName}>`
   }
 
   toSVGFilter (item) {
@@ -555,9 +553,11 @@ ${cssString}
         'svgfilters', 
         (svgfilters) => {
           var filterString = svgfilters.map(svgfilter => {
-            var filters = svgfilter.filters.map(filter => SVGFilter.parse(filter))
-            return /*html*/`<filter id='${svgfilter.id}'>${filters.join('\n')}</filter>`  
-          }).join('\n\n')
+            return /*html*/`
+              <filter id='${svgfilter.id}'>
+                ${svgfilter.filters.map(filter => SVGFilter.parse(filter)).join('\n')}
+              </filter>`  
+          }).join('')
     
           return filterString;
         }, 

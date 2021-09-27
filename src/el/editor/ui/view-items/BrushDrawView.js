@@ -69,6 +69,10 @@ export default class BrushDrawView extends EditorElement {
         this.trigger('hideBrushDrawEditor');        
     }
 
+    [SUBSCRIBE("DrawEditorDone")] () {
+        this.trigger("hideBrushDrawEditor");
+    }
+
 
     get totalPathLength () {
         if (!this.refs.$view) return 0 

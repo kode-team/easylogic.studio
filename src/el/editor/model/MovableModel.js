@@ -64,7 +64,7 @@ export class MovableModel extends BaseAssetModel {
     reset(obj) {
         const isChanged = super.reset(obj);
         // transform 에 변경이 생기면 미리 캐슁해둔다. 
-        if (isChanged && this.hasChangedField('x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'transform-origin', 'perspective', 'perspective-origin')) {
+        if (isChanged && this.hasChangedField('children', 'x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'transform-origin', 'perspective', 'perspective-origin')) {
             this.refreshMatrixCache()
         }
 

@@ -14,6 +14,14 @@ export default class HoverView extends EditorElement {
     }
 
     checkModeView () {
+
+        const e = this.$config.get('bodyEvent');
+
+        // viewport 영역에 있을 때만 이벤트 발생 
+        if (!this.$viewport.checkInViewport(this.$viewport.getWorldPosition(e))) {
+            return false; 
+        }
+
         return this.$modeView.isCurrentMode('CanvasView');
     }
 

@@ -4,8 +4,7 @@ import {
 } from "el/sapa/Event";
 
 
-import icon from "el/editor/icon/icon";
-import { Transform } from "el/editor/property-parser/Transform";
+import icon, { iconUse } from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 var transformList = [
@@ -67,7 +66,7 @@ export default class TransformProperty extends BaseProperty {
         return `<option value='${transform}'>${label}</option>`;
       }).join('')}
       </select>
-      <button type="button" ref="$add" title="add Filter">${icon.add}</button>
+      <button type="button" ref="$add" title="add Filter">${iconUse('add')}</button>
     `
   }
   

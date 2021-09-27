@@ -272,8 +272,8 @@ export default class Dom {
   htmlDiff(fragment) {
     DomDiff(this, fragment);
   }
-  updateDiff (html, rootElement = 'div') {
-    DomDiff(this, Dom.create(rootElement).html(html))
+  updateDiff (html, rootElement = 'div', options = {}) {
+    DomDiff(this, Dom.create(rootElement).html(html), options)
   }
 
   updateSVGDiff (html, rootElement = 'div') {

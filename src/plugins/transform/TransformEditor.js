@@ -1,4 +1,4 @@
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import {
   LOAD,
   CLICK,
@@ -148,7 +148,7 @@ export default class TransformEditor extends EditorElement {
           <label draggable="true" >${this.$i18n('css.item.' + type)}</label>
           <div class="transform-menu">
             <button type="button" class="del" data-index="${index}">
-              ${icon.remove2}
+              ${iconUse("remove2")}
             </button>
           </div>
         </div>
@@ -189,7 +189,7 @@ export default class TransformEditor extends EditorElement {
           <div></div>
           <div class="transform-menu">
             <button type="button" class="del" data-index="${index}">
-              ${icon.remove2}
+              ${iconUse("remove2")}
             </button>
           </div>
         </div>

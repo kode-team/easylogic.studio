@@ -1,6 +1,6 @@
 
 import { CLICK, BIND, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import { Length } from "el/editor/unit/Length";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './PathManager.scss';
@@ -48,19 +48,19 @@ export default class PathManager extends EditorElement {
         </div>
 
         <div class='tools' ref='$mode' data-selected-value='${this.state.mode}'>
-            <button type="button" data-value='modify' title='${this.$i18n('path.manager.mode.modify')}' > ${icon.device_hub}</button>
-            <button type="button" data-value='path' title='${this.$i18n('path.manager.mode.path')}' > ${icon.control_point}</button>
+            <button type="button" data-value='modify' title='${this.$i18n('path.manager.mode.modify')}' > ${iconUse("device_hub")}</button>
+            <button type="button" data-value='path' title='${this.$i18n('path.manager.mode.path')}' > ${iconUse("control_point")}</button>
         </div>
         <div class='tools' ref='$flip'>
-            <button type="button" data-value='flipX' title='${this.$i18n('path.manager.mode.flipX')}'>${icon.flip}</button>
-            <button type="button" data-value='flipY' title='${this.$i18n('path.manager.mode.flipY')}'>${icon.flip}</button>
-            <button type="button" data-value='flip' title='${this.$i18n('path.manager.mode.flipOrigin')}'>${icon.flip}</button>
+            <button type="button" data-value='flipX' title='${this.$i18n('path.manager.mode.flipX')}'>${iconUse("flip")}</button>
+            <button type="button" data-value='flipY' title='${this.$i18n('path.manager.mode.flipY')}'>${iconUse("flip")}</button>
+            <button type="button" data-value='flip' title='${this.$i18n('path.manager.mode.flipOrigin')}'>${iconUse("flip")}</button>
             <button type="button" data-value='2x'>2x</button>
             <button type="button" data-value='3x'>3x</button>            
         </div>
 
         <div class='tools' ref='$util'>
-            <button type="button" data-value='reverse' title='${this.$i18n('path.manager.mode.transform')}' >${icon.sync}</button>
+            <button type="button" data-value='reverse' title='${this.$i18n('path.manager.mode.reverse')}' >${iconUse("sync")}</button>
         </div>        
         <div class='tools'>      
           <div>

@@ -268,23 +268,37 @@
             }
 
             &[data-is-first="true"] {
-                stroke: var(--elf--selected-color);
+                stroke: red;
                 z-index: 1;
             }
 
             &[data-is-second="true"] {
-                stroke: var(--elf--selected-color);
+                stroke: black;
                 z-index: 1;
             }            
 
             &[data-is-last="true"] {
-                stroke: var(--elf--selected-color);
+                stroke: rgb(15, 15, 15);
                 z-index: 1;
             }       
             
             &[data-selected='true'] {
                 fill: var(--elf--selected-color);
-                stroke: white;
+
+                &[data-is-first="true"] {
+                    fill: red;
+                }
+    
+                &[data-is-second="true"] {
+                    fill: black;
+                }            
+    
+                &[data-is-last="true"] {
+                    fill: green;
+                }     
+
+                
+                // stroke: white;
                 r: 5;
                 stroke-width: 2;
             }
@@ -292,7 +306,7 @@
             &[data-segment-point="endPoint"],
             &[data-segment-point="reversePoint"] {
                 &:not([data-selected='true']) {
-                    r: 4;
+                    r: 3;
                 }
             }
             

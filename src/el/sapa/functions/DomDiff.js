@@ -1,3 +1,5 @@
+import { isFunction } from 'el/sapa/functions/func';
+
 const setBooleanProp = (el, name, value) => {
     if (value) {
         el.setAttribute(name, name);
@@ -99,7 +101,7 @@ function getProps (attributes) {
     
 }
 
-function updateElement (parentElement, oldEl, newEl, i) {
+function updateElement (parentElement, oldEl, newEl, i, options = {}) {
 
     if (!oldEl) {
         // console.log('replace');        
@@ -120,8 +122,16 @@ function updateElement (parentElement, oldEl, newEl, i) {
         && newEl.nodeType !== Node.COMMENT_NODE
         && newEl.toString() !== "[object HTMLUnknownElement]"
     ) {
-        // console.log(newEl);
-        updateProps(oldEl, getProps(newEl.attributes), getProps(oldEl.attributes)); // added        
+
+        if (options.checkPassed && options.checkPassed(oldEl, newEl)) {
+            // NOOP 
+            // 정상적인 노드에서 checkPassed 가 true 이면 아무것도 하지 않는다. 
+            // 다만 자식의 속성은 변경해야한다. 
+        } else {
+            // console.log(newEl);
+            updateProps(oldEl, getProps(newEl.attributes), getProps(oldEl.attributes)); // added        
+        }
+
         var oldChildren = children(oldEl);
         var newChildren = children(newEl);
         var max = Math.max(oldChildren.length, newChildren.length);
@@ -151,7 +161,17 @@ const children = (el) => {
 }
 
 
-export function DomDiff (A, B) {
+/**
+ * 
+ * @param {*} A 
+ * @param {*} B 
+ * @param {object} options 
+ * @param {function} [options.checkPassed=undefined]
+ */
+export function DomDiff (A, B, options = {}) {
+
+    // initialize options parameter
+    options.checkPassed = isFunction(options.checkPassed) ? options.checkPassed : undefined;
 
     A = A.el || A; 
     B = B.el || B; 
@@ -161,6 +181,6 @@ export function DomDiff (A, B) {
 
     var len = Math.max(childrenA.length, childrenB.length);
     for (var i = 0; i < len; i++) {
-        updateElement(A, childrenA[i], childrenB[i], i);
+        updateElement(A, childrenA[i], childrenB[i], i, options);
     }
 }

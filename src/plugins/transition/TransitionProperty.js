@@ -8,7 +8,7 @@ import {
 
 
 
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import { Transition } from "el/editor/property-parser/Transition";
 import { curveToPath } from "el/utils/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
@@ -26,7 +26,7 @@ export default class TransitionProperty extends BaseProperty {
 
   getTools() {
     return /*html*/`
-        <button type="button" ref="$add" title="add Transition">${icon.add}</button>
+        <button type="button" ref="$add" title="add Transition">${iconUse("add")}</button>
     `;
   }
 
@@ -61,7 +61,7 @@ export default class TransitionProperty extends BaseProperty {
             </div>
             <div class='tools'>
                 <button type="button" class="del" data-index="${index}">
-                  ${icon.remove2}
+                  ${iconUse("remove2")}
                 </button>
             </div>
         </div>

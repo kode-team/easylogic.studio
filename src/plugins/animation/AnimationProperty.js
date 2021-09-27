@@ -7,7 +7,7 @@ import {
   SUBSCRIBE
 } from "el/sapa/Event";
 
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import { Animation } from "el/editor/property-parser/Animation";
 import { curveToPath } from "el/utils/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
@@ -24,7 +24,7 @@ export default class AnimationProperty extends BaseProperty {
 
   getTools() {
     return /*html*/`
-        <button type="button" ref="$add" title="add Fill">${icon.add}</button>
+        <button type="button" ref="$add" title="add Fill">${iconUse("add")}</button>
     `;
   }
 
@@ -65,14 +65,14 @@ export default class AnimationProperty extends BaseProperty {
                 <label class='direction' title='${this.$i18n('animation.property.direction')}'><small>${it.direction}</small></label>
                 <label class='fill-mode' title='${this.$i18n('animation.property.fill.mode')}'><small>${it.fillMode}</small></label>
                 <label class='play-state' title='${this.$i18n('animation.property.play.state')}' data-index='${index}' data-play-state-selected-value="${it.playState}">
-                  <small data-play-state-value='running'>${icon.play}</small>
-                  <small data-play-state-value='paused'>${icon.pause}</small>
+                  <small data-play-state-value='running'>${iconUse("play")}</small>
+                  <small data-play-state-value='paused'>${iconUse("pause")}</small>
                 </label>
               </div>
             </div>
             <div class='tools'>
                 <button type="button" class="del" data-index="${index}">
-                  ${icon.remove2}
+                  ${iconUse("remove2")}
                 </button>
             </div>
         </div>

@@ -8,6 +8,10 @@
   height: 100%;
   position: relative;
 
+  .tab > .tab-header {
+    height: 30px;
+  }
+
 
   .label {
     height: 20px;
@@ -233,8 +237,8 @@
             svg {
               width: 100%;
               height: 100%;
-              path  {
-                fill: var(--elf--font-color);
+              path,use,circle,rect,polygon,line,polyline,ellipse,text  {
+                fill: currentColor
               }
             }
           }          
@@ -273,7 +277,7 @@
               top: 50%;
               transform: translate(-50%, -50%);
 
-              path {
+              path,use,polygon,line,polyline,ellipse,text  {
                 fill: currentColor;
               }
             }

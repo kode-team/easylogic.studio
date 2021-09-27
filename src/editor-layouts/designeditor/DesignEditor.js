@@ -15,6 +15,7 @@ import designEditorPlugins from "plugins/design-editor-plugins";
 import LayerTab from "./area/LayerTab";
 import { END, MOVE } from "el/editor/types/event";
 import { isFunction } from 'el/sapa/functions/func';
+import IconManager from '../common/IconManager';
 
 
 export default class DesignEditor extends BaseLayout {
@@ -28,7 +29,8 @@ export default class DesignEditor extends BaseLayout {
       Inspector,
       BodyPanel,
       PopupManager,
-      KeyboardManager
+      KeyboardManager,
+      IconManager
     }
   }
 
@@ -73,7 +75,8 @@ export default class DesignEditor extends BaseLayout {
           <object refClass='StatusBar' />
           <object refClass="KeyboardManager" />                
         </div>
-        <object refClass="PopupManager" />                      
+        <object refClass="PopupManager" />
+        <object refClass="IconManager" />          
       </div>
     `;
   }

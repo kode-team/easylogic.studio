@@ -3,7 +3,7 @@ import {
   LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF
 } from "el/sapa/Event";
 
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 
@@ -43,7 +43,7 @@ export default class BackgroundImageProperty extends BaseProperty {
 
 
   getTools() {
-    return `<button type="button" ref='$add'>${icon.add}</button>`
+    return `<button type="button" ref='$add'>${iconUse("add")}</button>`
   }
 
   [CLICK('$add')] () {

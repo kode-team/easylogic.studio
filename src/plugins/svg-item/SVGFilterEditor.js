@@ -1,4 +1,4 @@
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import {
   LOAD,
   CLICK,
@@ -77,31 +77,31 @@ const SVGFilterTemplateList = [
 
 function getIcon(type) {
   switch(type) {
-  case 'SpecularLighting': return icon.specular;
-  case 'DiffuseLighting': return icon.diffuse;
+  case 'SpecularLighting': return iconUse("specular");
+  case 'DiffuseLighting': return iconUse("diffuse");
   case 'SourceGraphic': 
   case 'SourceAlpha': 
-    return icon.image;
+    return iconUse("image");
   case 'BackgroundImage':
   case 'BackgroundAlpha':
-    return icon.outline_image;
-  case 'Flood': return icon.palette;
-  case 'Image': return icon.landscape;
-  case 'GaussianBlur': return icon.blur;
-  case 'ColorMatrix': return icon.blur_linear;
-  case 'Turbulence': return icon.waves;
-  case 'Saturate': return icon.vintage;
-  case 'HueRotate': return icon.looks;
-  case 'LuminanceAlpha': return icon.opacity;
-  case 'DropShadow': return icon.shadow;
-  case 'Morphology': return icon.broken_image;
-  case 'ConvolveMatrix': return icon.camera_roll;
-  case 'Offset': return icon.transform;
-  case 'Tile': return icon.view_comfy;
-  case 'Blend': return icon.gradient;
-  case 'Composite': return icon.merge;
-  case 'Merge': return icon.settings_input_component;
-  case 'DisplacementMap': return icon.texture;
+    return iconUse("outline_image");
+  case 'Flood': return iconUse("palette");
+  case 'Image': return iconUse("landscape");
+  case 'GaussianBlur': return iconUse("blur");
+  case 'ColorMatrix': return iconUse("blur_linear");
+  case 'Turbulence': return iconUse("waves");
+  case 'Saturate': return iconUse("vintage");
+  case 'HueRotate': return iconUse("looks");
+  case 'LuminanceAlpha': return iconUse("opacity");
+  case 'DropShadow': return iconUse("shadow");
+  case 'Morphology': return iconUse("broken_image");
+  case 'ConvolveMatrix': return iconUse("camera_roll");
+  case 'Offset': return iconUse("transform");
+  case 'Tile': return iconUse("view_comfy");
+  case 'Blend': return iconUse("gradient");
+  case 'Composite': return iconUse("merge");
+  case 'Merge': return iconUse("settings_input_component");
+  case 'DisplacementMap': return iconUse("texture");
   }
 
   return ''; 
@@ -500,7 +500,7 @@ export default class SVGFilterEditor extends EditorElement {
       <div class="title">
         <label>${filter.type}</label>
         <div class="filter-menu">
-          <button type="button" class="del">${icon.remove}</button>
+          <button type="button" class="del">${iconUse("remove")}</button>
         </div>
       </div>
       <div class="filter-ui">
@@ -877,7 +877,7 @@ export default class SVGFilterEditor extends EditorElement {
           'selected': index ===  this.state.selectedIndex
         })}' data-type="${it.type}" data-index="${index}" data-filter-id="${it.id}" style='left: ${it.bound.x}px;top: ${it.bound.y}px;'>
           <div class='label'>${this.$i18n(it.type)}</div>
-          <div class='remove'>${icon.close}</div>
+          <div class='remove'>${iconUse("close")}</div>
           <div class='preview' data-source-type="${getSourceTypeString(it.type)}" data-filter-type='${it.type}'>${getIcon(it.type)}</div>
           <div class='in-list'>
             ${repeat(it.getInCount()).map((itIn, inIndex) => {
@@ -885,7 +885,7 @@ export default class SVGFilterEditor extends EditorElement {
             }).join('')}
           </div>
           
-          <div class='out' data-index="0">${icon.chevron_right}</div>
+          <div class='out' data-index="0">${iconUse("chevron_right")}</div>
           ${it.hasLight() ? /*html*/`<div class='light'  data-index="0"></div>` : ''}
         </div>
       `

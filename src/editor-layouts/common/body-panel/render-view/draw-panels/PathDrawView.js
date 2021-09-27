@@ -69,6 +69,11 @@ export default class PathDrawView extends EditorElement {
     }
 
 
+    [SUBSCRIBE("DrawEditorDone")] () {
+        this.trigger('hidePathDrawEditor');        
+    }
+
+
     get totalPathLength () {
         if (!this.refs.$view) return 0 
         var $obj = this.refs.$view.$('path.object');

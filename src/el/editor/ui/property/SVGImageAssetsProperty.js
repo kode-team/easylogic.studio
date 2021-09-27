@@ -1,7 +1,7 @@
 import BaseProperty from "./BaseProperty";
 import { LOAD, CLICK, INPUT, DEBOUNCE } from "el/sapa/Event";
 
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import { uuidShort } from "el/utils/math";
 import { registElement } from "el/sapa/functions/registElement";
 
@@ -30,8 +30,8 @@ export default class SVGImageAssetsProperty extends BaseProperty {
   getTools() {
     return `
       <div class='svgimage-list-tools' ref='$tool' data-view-mode='${this.state.mode}'>
-        <button type='button' data-value='list'>${icon.list} List</button>
-        <button type='button' data-value='grid'>${icon.grid} Grid</button>
+        <button type='button' data-value='list'>${iconUse("list")} List</button>
+        <button type='button' data-value='grid'>${iconUse("grid")} Grid</button>
       </div>
     `
   }
@@ -73,14 +73,14 @@ export default class SVGImageAssetsProperty extends BaseProperty {
             </div>
           </div>
           <div class='tools'>
-            <button type="button" class='copy'>${icon.copy}</button>          
-            <button type="button" class='remove'>${icon.remove}</button>
+            <button type="button" class='copy'>${iconUse("copy")}</button>          
+            <button type="button" class='remove'>${iconUse("remove")}</button>
           </div>
         </div>
       `
     })
 
-    results.push(`<div class='add-svgimage-item'><butto type="button">${icon.add}</button></div>`)
+    results.push(`<div class='add-svgimage-item'><button type="button">${iconUse("add")}</button></div>`)
 
     return results
   }

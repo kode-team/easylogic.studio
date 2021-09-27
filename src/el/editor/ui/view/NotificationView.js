@@ -1,5 +1,5 @@
 
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import Dom from "el/sapa/functions/Dom";
 import { TRANSITIONEND, CLICK, SUBSCRIBE } from "el/sapa/Event";
 import { EditorElement } from "../common/EditorElement";
@@ -28,7 +28,7 @@ export default class NotificationView extends EditorElement {
         <div class='item ${type}' style='transition-duration: ${duration}ms;'>
             <div class='title'>${title}</div> 
             <div class='description'>${description}</div>
-            <span class='icon'>${icon.close}</span>
+            <span class='icon'>${iconUse("close")}</span>
         </div>
     `
     }

@@ -182,21 +182,21 @@ test("path - normalize , convert quard curve to cubic bezier curve", () => {
     const path = new PathParser(`M0,0 Q200 200 300 100`);
     const path2 = path.normalize();
 
-    expect(path2.d).toBe("M 0 0C 200 200 200 200 300 100");
+    expect(path2.d).toBe("M 0 0C 133.33333333333331 133.33333333333331 233.33333333333334 166.66666666666666 300 100");
 })
 
 test("path - normalize with Z, convert quard curve to cubic bezier curve", () => {
     const path = new PathParser(`M0,0 Q200 200 300 100 Z`);
     const path2 = path.normalize();
 
-    expect(path2.d).toBe("M 0 0C 200 200 200 200 300 100Z");
+    expect(path2.d).toBe("M 0 0C 133.33333333333331 133.33333333333331 233.33333333333334 166.66666666666666 300 100Z");
 })
 
 test("path - normalize with Z, convert quard curve to cubic bezier curve", () => {
     const path = new PathParser(`M0,0 L 100 100C 20 30 50 40 100 100 Q200 200 300 100 Z`);
     const path2 = path.normalize();
 
-    expect(path2.d).toBe("M 0 0C 33 33 66 66 100 100C 20 30 50 40 100 100C 200 200 200 200 300 100Z");
+    expect(path2.d).toBe("M 0 0C 33 33 66 66 100 100C 20 30 50 40 100 100C 140 143.33333333333331 233.33333333333334 166.66666666666666 300 100Z");
 })
 
 test("path - divide line segment by count", () => {
@@ -227,4 +227,52 @@ test("path - divide bezier curve segment by count", () => {
     expect(path2.d).toBe("M 0 0C 40 40 72 72 98.4 96.8C 124.80000000000001 121.6 145.60000000000002 139.2 163.20000000000002 150.39999999999998C 180.8 161.6 195.20000000000002 166.4 208.8 165.6C 222.4 164.8 235.2 158.4 249.6 147.2C 264 136 280 120 300 100")
 
 
+})
+
+test("path - reverse", () => {
+    const path = new PathParser("M0, 0L50 50");
+
+    path.reverse();
+
+    expect(path.d).toBe("M 50 50L 0 0")
+})
+
+test("path - reverse with multi points", () => {
+    const path = new PathParser("M0, 0L50 50 L100 100 L 300 300");
+
+    path.reverse();
+
+    expect(path.d).toBe("M 300 300L 100 100L 50 50L 0 0")
+})
+
+test("path - reverse with Z", () => {
+    const path = new PathParser("M0, 0L50 50 L100 100 L 300 300 Z");
+
+    path.reverse();
+
+    expect(path.d).toBe("M 300 300L 100 100L 50 50L 0 0Z")
+})
+
+test("path - reverse with curve", () => {
+    const path = new PathParser("M0, 0L50 50 C100 100  300 300 100 100 Z");
+
+    path.reverse();
+
+    expect(path.d).toBe("M 100 100C 300 300 100 100 50 50L 0 0Z")
+})
+
+test("path - reverse with multi path", () => {
+    const path = new PathParser("M0, 0L50 50 C100 100  300 300 100 100 Z M 200, 300 L 400 500");
+
+    path.reverse();
+
+    expect(path.d).toBe("M 100 100C 300 300 100 100 50 50L 0 0Z M 400 500L 200 300")
+})
+
+test("path - reverse by groupIndex", () => {
+    const path = new PathParser("M0, 0L50 50 C100 100  300 300 100 100 Z M 200, 300 L 400 500");
+
+    path.reverse(1);
+
+    expect(path.d).toBe("M 0 0L 50 50C 100 100 300 300 100 100Z M 400 500L 200 300")
 })

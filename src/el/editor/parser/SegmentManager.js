@@ -156,13 +156,13 @@ export default class SegmentManager {
                     cy='${it.cy}' 
                     r='4'                     
                     class='curve' 
-                    data-selected='${it.selected}'                    
-                    data-is-last="${it.isLast}"                
-                    data-is-first="${it.isFirst}"      
-                    data-is-second="${it.isSecond}"                                  
-                    title="${it.segment} curve"                
-                    data-index='${it.index}' 
-                    data-segment-point='${it.segment}' 
+                    ${it.selected && `data-selected="true"`}
+                    ${it.isLast && `data-is-last="true"`}
+                    ${it.isFirst && `data-is-first="true"`}
+                    ${it.isSecond && `data-is-second="true"`}
+                    title="${it.segment} curve"  
+                    data-index='${it.index}'
+                    data-segment-point='${it.segment}'
                     data-segment="true" 
                 />`
             } else if (it.start) {

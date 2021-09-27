@@ -3,7 +3,7 @@ import {
   LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF
 } from "el/sapa/Event";
 
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { filter_list } from "./util";
 export default class BackdropFilterProperty extends BaseProperty {
@@ -40,7 +40,7 @@ export default class BackdropFilterProperty extends BaseProperty {
   getTools() {
     return /*html*/`
       <select ref="$filterSelect"></select>
-      <button type="button" ref="$add" title="add Filter">${icon.add}</button>
+      <button type="button" ref="$add" title="add Filter">${iconUse("add")}</button>
     `
   }
   

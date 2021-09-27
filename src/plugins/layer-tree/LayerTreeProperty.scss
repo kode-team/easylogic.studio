@@ -57,7 +57,7 @@
                 grid-template-columns: 20px 20px 1fr;
 
                 svg {
-                    path {
+                    path, use {
                         fill: currentColor;
                     }
                 }

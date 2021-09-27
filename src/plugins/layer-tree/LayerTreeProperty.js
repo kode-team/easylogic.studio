@@ -4,7 +4,7 @@ import {
   DRAGOVER, DROP, BIND, DRAGEND,
   SUBSCRIBE, SUBSCRIBE_SELF, THROTTLE
 } from "el/sapa/Event";
-import icon from "el/editor/icon/icon";
+import { iconUse } from "el/editor/icon/icon";
 import { Length } from "el/editor/unit/Length";
 import { KEY_CODE } from "el/editor/types/key";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
@@ -105,34 +105,30 @@ export default class LayerTreeProperty extends BaseProperty {
     if (item.hasChildren() && item.is('artboard') === false) {
 
       if (item.isLayout('flex')) {
-        return icon.flex;
+        return iconUse("flex");
       } else if (item.isLayout('grid')) {
-        return icon.grid
+        return iconUse("grid");
       }
 
-      return icon.margin
+      return iconUse("margin");
     }
 
     switch (item.itemType) {
       case 'artboard':
-        return icon.artboard;
+        return iconUse('artboard');
       case 'circle':
-        return icon.lens;
+        return iconUse('lens');
       case 'image':
-        return icon.image;
+        return iconUse('image');
       case 'text':
       case 'svg-text':
-        return icon.title;
+        return iconUse('title');
       case 'svg-textpath':
-        return icon.text_rotate;
+        return iconUse('text_rotate');
       case 'svg-path':
-        return icon.pentool
-      case 'cube':
-        return icon.cube;
-      case 'cylinder':
-        return icon.cylinder;
+        return iconUse('pentool');
       default:
-        return icon.rect
+        return iconUse('rect');
     }
   }
 
@@ -163,24 +159,24 @@ export default class LayerTreeProperty extends BaseProperty {
       const depthPadding = Length.px(depth * 20);
       const hasChildren = layer.hasChildren()
 
-      data.push(/*html*/`        
+      data[data.length] = /*html*/`        
         <div class='layer-item ${selectedClass} ${selectedPathClass} ${hovered}' data-is-group="${hasChildren}" data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true">
           <div class='detail'>
             <label data-layout-title='${title}' style='padding-left: ${depthPadding}' > 
-              <div class='folder ${layer.collapsed ? 'collapsed' : ''}'>${hasChildren ? icon.arrow_right : ''}</div>
+              <div class='folder ${layer.collapsed ? 'collapsed' : ''}'>${hasChildren ? iconUse('arrow_right') : ''}</div>
               <span class='icon' data-item-type="${layer.itemType}">${this.getIcon(layer)}</span> 
               <span class='name'>${name}</span>
             </label>
             <div class="tools">
-              <button type="button" class="lock" data-lock="${layer.lock}" title='Lock'>${layer.lock ? icon.lock : icon.lock_open}</button>
-              <button type="button" class="visible" data-visible="${layer.visible}" title='Visible'>${icon.visible}</button>
-              <button type="button" class="remove" title='Remove'>${icon.remove2}</button>                          
+              <button type="button" class="lock" data-lock="${layer.lock}" title='Lock'>${layer.lock ? iconUse('lock') : iconUse('lock_open')}</button>
+              <button type="button" class="visible" data-visible="${layer.visible}" title='Visible'>${iconUse('visible')}</button>
+              <button type="button" class="remove" title='Remove'>${iconUse('remove2')}</button>                          
             </div>
           </div>
         </div>
 
         ${this.makeLayerList(layer, depth + 1)}
-      `)
+      `;
     }
 
     return data.join(' ');
@@ -195,10 +191,13 @@ export default class LayerTreeProperty extends BaseProperty {
     var project = this.$selection.currentProject;
     if (!project) return ''
 
-    return this.makeLayerList(project, 0) + /*html*/`
-      <div class='layer-item ' data-depth="0" data-is-last="true">
-      </div>
-    `
+    return [
+      this.makeLayerList(project, 0), 
+      /*html*/`
+        <div class='layer-item ' data-depth="0" data-is-last="true">
+        </div>
+      `
+    ]
   }
 
   [DRAGSTART('$layerList .layer-item')](e) {

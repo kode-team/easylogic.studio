@@ -181,9 +181,16 @@ export default class PathGenerator {
  
     }
 
-    initializeSelect () {
+    initializeSelect (initPointList = []) {
         this.selectedPointKeys = {}
-        this.selectedPointList = [];               
+        this.selectedPointList = [];    
+        
+        // 초기화 하면서 선택된 포인트를 저장한다.
+        if (initPointList.length) {
+            this.select(...initPointList.map(p => {
+                return Point.getPoint(this.points, p)
+            }).filter(Boolean))
+        }
     }
 
     get state () {
@@ -264,7 +271,9 @@ export default class PathGenerator {
 
     select (...list) {
         this.selectedPointKeys = {}
-        this.selectedPointList = list.map(({x, y, key, index}) => ({x, y, key, index}));
+        this.selectedPointList = list.map(({x, y, key, index}) => ({
+            x, y, key, index: +index
+        }));
         list.forEach(it => {
             var key = this.makeSegmentKey(it)
             this.selectedPointKeys[key] = true;
@@ -293,7 +302,6 @@ export default class PathGenerator {
     }
 
     selectKeyIndex (key, index) {
-
         if (this.points[index]) {
             var point = this.points[index][key];
             if (point && !this.isSelectedSegment(key, index)) {
@@ -304,7 +312,7 @@ export default class PathGenerator {
     }
 
     reselect () {
-        this.selectedPointList.forEach(it => {
+        this.selectedPointList.filter(Boolean).forEach(it => {
             var point = this.points[it.index][it.key];
             it.x = point.x;
             it.y = point.y;
@@ -695,6 +703,58 @@ export default class PathGenerator {
             target.x = it.x + dx; 
             target.y = it.y + dy; 
         })
+    }
+
+    /**
+     * group list 리턴 
+     * 
+     * @returns {{point: any, index : number, groupIndex: number}}
+     */
+    get groupList() {
+        const groupList = [];
+        let groupIndex = 0;
+        this.points.forEach((point, index) => {
+            if (point.command === "M") {
+                groupList.push({point, index, groupIndex: groupIndex++ })
+            }
+        })
+
+        return groupList;
+    }
+
+    getGroup (groupList, pointIndex) {
+        const list = groupList.filter(group => group.point.index <= pointIndex);
+
+        return list.pop();
+    }
+
+    /** 
+     * 선택된 segment 의 group index list 구하기 
+     * 
+     * @returns {number[]}
+     */
+    get selectedGroupIndexList() {
+        const groupIndexList = new Set();
+        const groupList = this.groupList;
+
+
+        if (this.selectedPointList.length === 0) {
+            return groupList.map(group => group.groupIndex);
+        }
+
+        const points = this.selectedPointList;
+
+        points.forEach(it => {
+
+            const group = this.getGroup(groupList, it.index);
+
+            if (group) {
+                groupIndexList.add(group.groupIndex);
+            }
+
+        })
+
+        return [...groupIndexList];
     }
 
     removeSelectedSegment () {

@@ -557,17 +557,18 @@ export default class PathParser {
                 } else if (segment.command === 'Q') {
                     prevSegment.values[0];
 
+                    const twoOfThree = 2/3;
 
                     newSegments.push({
                         command: 'C',
                         values: [
                             // C1 = Q0 + (2/3) (Q1 - Q0)
-                            prevSegment.values[0] + (2/3) (segment.values[0] - prevSegment.values[0]),
-                            prevSegment.values[1] + (2/3) (segment.values[1] - prevSegment.values[1]),
+                            prevSegment.values[0] + twoOfThree*(segment.values[0] - prevSegment.values[0]),
+                            prevSegment.values[1] + twoOfThree*(segment.values[1] - prevSegment.values[1]),
 
                             // C2 = Q2 + (2/3) (Q1 - Q2)
-                            segment.values[2] + (2/3) (segment.values[0] - segment.values[2]),
-                            segment.values[3] + (2/3) (segment.values[1] - segment.values[3]),
+                            segment.values[2] + twoOfThree*(segment.values[0] - segment.values[2]),
+                            segment.values[3] + twoOfThree*(segment.values[1] - segment.values[3]),
 
                             // C3 = Q2
                             segment.values[2],
@@ -1034,17 +1035,31 @@ export default class PathParser {
      * path 의 segment 들을 역순으로 정렬한다. 
      * 
      * M이 여러개일 경우는  group 별로 역순으로 정렬하고 합친다. 
+     * 
+     * groupIndex 가 0이상 일때는 해당 group만 역순으로 정렬한다. 
+     * 
+     * @param {number} groupIndex 
+     * @returns {PathParser}
      */
-    reverse() {
-
+    reverse(...groupIndexList) {
         const groupSegments = this.splitSegments();
         const newSegments = []
 
-        groupSegments.forEach(segments => {
-            newSegments.push.apply(newSegments, this.reverseSegments(segments));
-        })
+        if (groupIndexList.length === 0) {
+            groupSegments.forEach((segments, index) => {
+                newSegments.push.apply(newSegments, this.reverseSegments(segments));
+            })
+        } else {
+            groupSegments.forEach((segments, index) => {
+                if (groupIndexList.includes(index)) {
+                    newSegments.push.apply(newSegments, this.reverseSegments(segments));
+                } else {
+                    newSegments.push.apply(newSegments, segments);
+                }
+            })
+        }
 
-        this.segments = newSegments;
+        this.resetSegments(newSegments);
     }
 
     get verties() {

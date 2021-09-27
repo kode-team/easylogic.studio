@@ -183,14 +183,14 @@ const PathTransformEditor = class extends PathCutter {
         switch (utilType) {
             case 'reverse':
                 // 이전 scale 로 복구 한 다음 새로운 path 를 설정한다. 
-
                 const { d } = this.pathGenerator.toPath()
 
                 const pathParser = new PathParser(d);
-                pathParser.reverse();
+                pathParser.reverse(...this.pathGenerator.selectedGroupIndexList);
                 pathParser.transformMat4(this.state.cachedMatrixInverse)
 
-                this.refresh({ d: pathParser.d })
+                this.refreshEditorView({ d: pathParser.d })
+                this.updatePathLayer();
                 break;
         }
     }
@@ -203,7 +203,7 @@ const PathTransformEditor = class extends PathCutter {
         const newPath = pathParser.divideSegmentByCount(count);
         newPath.transformMat4(this.state.cachedMatrixInverse)
 
-        this.refresh({ d: newPath.d })
+        this.refreshEditorView({ d: newPath.d })
     }
 }
 
@@ -275,7 +275,7 @@ export default class PathEditorView extends PathTransformEditor {
         } else {
             this.trigger('hidePathEditor');
         }
-
+ 
     }
 
     [KEYUP('document') + IF('isShow') + ENTER + PREVENT + STOP]() {
@@ -360,7 +360,7 @@ export default class PathEditorView extends PathTransformEditor {
         this.changeMode('modify');
 
         var layer = this.makePathLayer()
-        if (layer && layer.totalLength) {
+        if (layer) {
 
             this.$selection.select(layer);
             this.trigger('hidePathEditor')
@@ -406,7 +406,7 @@ export default class PathEditorView extends PathTransformEditor {
             const pathParser = new PathParser(d);
             pathParser.transformMat4(this.state.cachedMatrixInverse)
 
-            this.refresh({ d: pathParser.d })
+            this.refreshEditorView({ d: pathParser.d })
         }
     }
 
@@ -417,17 +417,20 @@ export default class PathEditorView extends PathTransformEditor {
      * 
      * @param {{d: string}} obj 
      */
-    refresh(obj) {
+    refreshEditorView(obj) {
 
+        let selectedPointList = [];
         if (obj && obj.d) {
             this.pathParser.reset(obj.d)
             this.pathParser.transformMat4(this.$viewport.matrix);
             this.state.cachedMatrixInverse = this.$viewport.matrixInverse;
 
+            selectedPointList =this.pathGenerator.selectedPointList;
+
             this.pathGenerator.setPoints(this.pathParser.convertGenerator())
         }
 
-        this.pathGenerator.initializeSelect();
+        this.pathGenerator.initializeSelect(selectedPointList);
         this.renderPath()
 
     }
@@ -443,7 +446,7 @@ export default class PathEditorView extends PathTransformEditor {
 
         this.changeMode(mode, obj);
 
-        this.refresh(obj);
+        this.refreshEditorView(obj);
 
         this.state.isShow = true;
         this.$el.show();

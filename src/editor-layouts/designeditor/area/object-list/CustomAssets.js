@@ -1,6 +1,6 @@
 
 import { CLICK, DRAGSTART, LOAD, SUBSCRIBE } from "el/sapa/Event";
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './CustomAssets.scss';
@@ -13,7 +13,7 @@ export default class CustomAssets extends EditorElement {
         <div class='custom-assets-tools'>
           <div class='title'><label>Custom Assets</label></div>
           <div class='tools'>
-            <button type="button" ref='$addCustomAsset'>${icon.add}</button>
+            <button type="button" ref='$addCustomAsset'>${iconUse('add')}</button>
           </div>
         </div>
         <div class='elf--asset-list' ref='$list'></div>
@@ -30,7 +30,7 @@ export default class CustomAssets extends EditorElement {
           <div class='tools'>
             <div class='title'>${it.component.name}</div>
             <div class='buttons'>
-              <button type="button" class='remove-asset-preview' data-preview-id="${it.id}">${icon.remove}</button>
+              <button type="button" class='remove-asset-preview' data-preview-id="${it.id}">${iconUse('remove')}</button>
             </div>
           </div>
         </div>

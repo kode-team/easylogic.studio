@@ -1,6 +1,6 @@
 
 import { CLICK } from "el/sapa/Event";
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import { EditorElement } from "../common/EditorElement";
 
 import './BaseWindow.scss';
@@ -8,14 +8,14 @@ import './BaseWindow.scss';
 export default class BaseWindow extends EditorElement {
 
   template() {
-    return `
+    return /*html*/`
       <div class='elf--window-background'>
         <div class='window ${this.getClassName()}'>
             <div class='window-title' ref="$title">
                 <label>${this.getTitle()}</label>
                 <span class="tools">
                   ${this.getTools()}
-                  <button type='button' class='close' ref='$close'>${icon.close}</button>
+                  <button type='button' class='close' ref='$close'>${iconUse("close")}</button>
                 </span>
             </div>
             <div class='window-body'>${this.getBody()}</div>

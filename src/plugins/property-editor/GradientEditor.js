@@ -3,7 +3,7 @@ import { LOAD, CLICK, POINTERSTART,  BIND, PREVENT, DOUBLECLICK, CHANGE, SUBSCRI
 import { Length } from "el/editor/unit/Length";
 import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import { clone } from "el/sapa/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
@@ -36,7 +36,7 @@ var imageTypeList = [
 ]
 
 var iconList = {
-  'image-resource': icon.photo
+  'image-resource': iconUse("photo")
 }
 
 var hasRadialPosition = {
@@ -94,14 +94,14 @@ export default class GradientEditor extends EditorElement  {
               <div class='gradient-view' ref='$gradientView' title='${this.$i18n('gradient.editor.drag.message')}'></div>
               <div class='drag-pointer' ref='$dragPosition'></div>
               <div class='preset-position'>
-                <div data-value='top' title='top'>${icon.chevron_right}</div>
-                <div data-value='right' title='right'>${icon.chevron_right}</div>
-                <div data-value='left' title='left'>${icon.chevron_right}</div>
-                <div data-value='bottom' title='bottom'>${icon.chevron_right}</div>
-                <div data-value='top left' title='top left'>${icon.chevron_right}</div>
-                <div data-value='top right' title='top right'>${icon.chevron_right}</div>
-                <div data-value='bottom left' title='bottom left'>${icon.chevron_right}</div>
-                <div data-value='bottom right' title='bottom right'>${icon.chevron_right}</div>                
+                <div data-value='top' title='top'>${iconUse("chevron_right")}</div>
+                <div data-value='right' title='right'>${iconUse("chevron_right")}</div>
+                <div data-value='left' title='left'>${iconUse("chevron_right")}</div>
+                <div data-value='bottom' title='bottom'>${iconUse("chevron_right")}</div>
+                <div data-value='top left' title='top left'>${iconUse("chevron_right")}</div>
+                <div data-value='top right' title='top right'>${iconUse("chevron_right")}</div>
+                <div data-value='bottom left' title='bottom left'>${iconUse("chevron_right")}</div>
+                <div data-value='bottom right' title='bottom right'>${iconUse("chevron_right")}</div>                
               </div>
               <div data-editor='image-loader'>
                 <input type='file' accept="image/*" ref='$file' />

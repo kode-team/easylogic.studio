@@ -3,7 +3,7 @@
 import { CLICK, PREVENT, STOP, SUBSCRIBE, CONFIG } from "el/sapa/Event";
 import { OBJECT_TO_CLASS } from "el/utils/func";
 
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './PageTools.scss';
@@ -13,7 +13,7 @@ export default class PageTools extends EditorElement {
   template() {
     return /*html*/`     
       <div class='elf--page-tools'>
-        <button type='button' ref='$minus'>${icon.remove2}</button>
+        <button type='button' ref='$minus'>${iconUse("remove2")}</button>
         <div class='select'>
           <object 
             refClass="NumberInputEditor" 
@@ -31,13 +31,13 @@ export default class PageTools extends EditorElement {
         />
         </div>
         <label>%</label>
-        <button type='button' ref='$plus'>${icon.add}</button>        
-        <button type='button' ref='$center' data-tooltip="Move to Center" data-direction="top">${icon.gps_fixed}</button>    
-        <button type='button' ref='$ruler' data-tooltip="Toggle Ruler" data-direction="top">${icon.straighten}</button>    
-        <button type='button' ref='$fullscreen' data-tooltip="FullScreen Canvas" data-direction="top">${icon.fullscreen}</button>                        
+        <button type='button' ref='$plus'>${iconUse("add")}</button>        
+        <button type='button' ref='$center' data-tooltip="Move to Center" data-direction="top">${iconUse("gps_fixed")}</button>    
+        <button type='button' ref='$ruler' data-tooltip="Toggle Ruler" data-direction="top">${iconUse("straighten")}</button>    
+        <button type='button' ref='$fullscreen' data-tooltip="FullScreen Canvas" data-direction="top">${iconUse("fullscreen")}</button>                        
         <button type='button' ref='$pantool' class="${OBJECT_TO_CLASS({
           on: this.$config.get('set.tool.hand')
-        })}" data-tooltip="Hand | H" data-direction="top">${icon.pantool}</button>   
+        })}" data-tooltip="Hand | H" data-direction="top">${iconUse("pantool")}</button>   
         ${this.$injectManager.generate('page.tools')}                             
       </div>
 

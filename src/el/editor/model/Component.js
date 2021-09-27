@@ -23,7 +23,7 @@ export class Component extends LayerModel {
         return class extends Component {
 
             getIcon() {
-                return iconString || icon.add;
+                return iconString || iconUse("add");
             }
 
             getDefaultObject() {

@@ -112,25 +112,20 @@ export default class Point {
         return points.filter(p => Point.isEqual(p.startPoint, p0))[0]
     }
 
+    /**
+     * points리스트에서 p0 의 index 를 구한다. 
+     * 
+     * 
+     * @param {array} points 
+     * @param {{x: number, y: number}} p0 
+     * @returns 
+     */
     static getIndex (points, p0) {
         var firstIndex = -1; 
         for(var i = 0, len = points.length; i < len; i++) {
             var p = points[i]
 
             if (Point.isEqual(p.startPoint, p0)) {
-                firstIndex = i; 
-                break; 
-            }
-        }
-        return firstIndex;
-    }
-
-    static getPointIndex (points, p0) {
-        var firstIndex = -1; 
-        for(var i = 0, len = points.length; i < len; i++) {
-            var p = points[i]
-
-            if (Point.isEqual(p, p0)) {
                 firstIndex = i; 
                 break; 
             }

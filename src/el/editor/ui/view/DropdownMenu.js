@@ -4,7 +4,7 @@ import { EditorElement } from '../common/EditorElement';
 import './DropdownMenu.scss';
 import { isFunction } from 'el/sapa/functions/func';
 import { initializeGroupVariables, variable } from 'el/sapa/functions/registElement';
-import icon from 'el/editor/icon/icon';
+import icon, { iconUse } from 'el/editor/icon/icon';
 import { LOAD } from 'el/sapa/Event';
 import { DOMDIFF } from 'el/sapa/Event';
 import { SUBSCRIBE_SELF } from 'el/sapa/Event';
@@ -49,7 +49,7 @@ export class DropdownMenu extends EditorElement {
           <li>
               <span class="icon">${it.icon ? it.icon : ''}</span>
               <label>${this.$i18n(it.title)}</label> 
-              <span>${icon.arrowRight}</span>
+              <span>${iconUse("arrowRight")}</span>
               <ul>
                   ${it.items.map(child => this.makeMenuItem(child)).join('')}
               </ul>
