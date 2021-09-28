@@ -109,7 +109,9 @@ export default class Point {
     }
 
     static getPoint (points, p0) {
-        return points.filter(p => Point.isEqual(p.startPoint, p0))[0]
+        return points.filter(p => {
+            return Point.isEqual(p.startPoint, p0)
+        })[0]
     }
 
     /**

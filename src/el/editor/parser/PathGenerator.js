@@ -188,7 +188,10 @@ export default class PathGenerator {
         // 초기화 하면서 선택된 포인트를 저장한다.
         if (initPointList.length) {
             this.select(...initPointList.map(p => {
-                return Point.getPoint(this.points, p)
+                const checkedPoint = Point.getPoint(this.points, p)
+                if (!checkedPoint) return undefined;
+
+                return {x: checkedPoint.startPoint.x, y: checkedPoint.startPoint.y, key: 'startPoint', index: checkedPoint.index}
             }).filter(Boolean))
         }
     }
@@ -311,11 +314,23 @@ export default class PathGenerator {
 
     }
 
+    /**
+     * index, key 정보를 기반으로 다시 select 를 수행한다. 
+     * 
+     * 이때 기존에 가지고 있던 x, y 는 사용하지 않는다. 
+     * 
+     * 최초 선택된 지점이랑 마지막 지점에서 위치는 바뀔 수 있기 때문에 index ,key 정보를 기준으로 x, y 를 다시 맞춰서 
+     * 
+     * select 를 구성한다. 
+     * 
+     */
     reselect () {
         this.selectedPointList.filter(Boolean).forEach(it => {
             var point = this.points[it.index][it.key];
-            it.x = point.x;
-            it.y = point.y;
+            if (point) {
+                it.x = point.x;
+                it.y = point.y;
+            }
         });
     }
 

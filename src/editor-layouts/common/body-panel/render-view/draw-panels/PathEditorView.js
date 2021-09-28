@@ -634,16 +634,17 @@ export default class PathEditorView extends PathTransformEditor {
             } else if (this.state.isSegment) {
                 this.changeMode('segment-move');
                 var [index, segmentKey] = $target.attrs('data-index', 'data-segment-point')
+                const localIndex = +index;
 
                 if (e.shiftKey) {
                     // 선택된 segment 를 토글한다. 
-                    this.pathGenerator.toggleSelect(segmentKey, +index)
+                    this.pathGenerator.toggleSelect(segmentKey, localIndex)
                 } else {
                     // 포인트에 대한 캐쉬를 설정한다.
-                    this.pathGenerator.setCachePoint(+index, segmentKey);
+                    this.pathGenerator.setCachePoint(localIndex, segmentKey);
 
                     // segment key 를 선택한다. 
-                    this.pathGenerator.selectKeyIndex(segmentKey, index)    
+                    this.pathGenerator.selectKeyIndex(segmentKey, localIndex)    
                 }
 
                 this.renderPath();
@@ -709,9 +710,12 @@ export default class PathEditorView extends PathTransformEditor {
 
         } else if (this.isMode('modify')) {
             // NOOP
+            this.pathGenerator.reselect()
+            // 마지막 선택 지점을 다시 select 한다. 
         } else if (this.isMode('segment-move')) {
 
             this.changeMode('modify');
+            this.pathGenerator.reselect();            
             // 마지막 지점에서 다시 renderpath 를 하게 되면 element 가 없어서 double 클릭을 인식 할 수가 없음. 
             // 그래서 삭제하니 이코드는 주석으로 그대로 나두자.      
             // this.renderPath()      

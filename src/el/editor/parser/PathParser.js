@@ -315,11 +315,18 @@ export default class PathParser {
         return this.segments;
     }
 
-    joinPath(segments) {
+    /**
+     * 편집하는 poinsts 에 대한 실제 SVG Path 를 출력한다. 
+     * 
+     * @param {array} [segments=this.segments] 
+     * @param {string} [split=""] 
+     * @returns 
+     */
+    joinPath(segments, split = '') {
         var list = (segments || this.segments);
         return list.map(it => {
             return `${it.command} ${it.values.length ? it.values.join(' ') : ''}`
-        }).join('')
+        }).join(split)
     }
 
     each(callback, isReturn = false) {
@@ -904,8 +911,8 @@ export default class PathParser {
         return this.toString().trim();
     }
 
-    toString() {
-        return this.joinPath()
+    toString(split = '') {
+        return this.joinPath(undefined, split);
     }
 
     transformMat4(transformMatrix, isReturn = false) {
@@ -976,26 +983,27 @@ export default class PathParser {
                 case 'L':
 
                     if (i === lastIndex) {        // last 일 경우 
-                        newSegments.push({ command: 'M', values: [v[0], v[1]] })
+                        newSegments.push(Segment.M(v[0], v[1]));
                     }
 
-                    newSegments.push({ command: 'L', values: [lastX, lastY] })
+                    newSegments.push(Segment.L(lastX, lastY))
                     break;
                 case 'C':
 
                     if (i === lastIndex) {        // last 일 경우 
-                        newSegments.push({ command: 'M', values: [v[4], v[5]] })
+                        newSegments.push(Segment.M(v[4], v[5]))
                     }
 
-                    newSegments.push({ command: 'C', values: [v[2], v[3], v[0], v[1], lastX, lastY] })
+                    newSegments.push(Segment.C(v[2], v[3], v[0], v[1], lastX, lastY))
                     break;
                 case 'Q':
-
                     if (i === lastIndex) {        // last 일 경우 
-                        newSegments.push({ command: 'M', values: [v[2], v[3]] })
+                        newSegments.push(Segment.M(v[2], v[3]))
+                        console.log(Segment.M(v[2], v[3]))
                     }
 
-                    newSegments.push({ command: 'Q', values: [v[0], v[1], lastX, lastY] })
+                    newSegments.push(Segment.Q(v[0], v[1], lastX, lastY))
+                    console.log(Segment.Q(v[0], v[1], lastX, lastY))
                     break;
                 case 'Z':
                     newSegments.push(segment);
