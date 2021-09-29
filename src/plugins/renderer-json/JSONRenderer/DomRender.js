@@ -44,6 +44,8 @@ export default class DomRender extends MovableRender {
         'grid-layout',         
         'animation',      
         'transition',  
+        'boolean-operation',
+        'boolean-path'
       ),
       selectors: item.selectors.map(selector => selector.clone()),
       svg: item.svg.map(svg => svg.clone())

@@ -1,6 +1,6 @@
 const webpack = require('webpack')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CopyPlugin = require('copy-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const alias = require('./alias');
 
 
@@ -50,6 +50,9 @@ module.exports = {
   optimization: {
     minimize: true
   },
+  node: {
+    fs: 'empty'
+  },  
   module: {
     rules: [
       {
@@ -139,14 +142,15 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "[name].css"
     }),
-    new CopyPlugin([
+    new CopyWebpackPlugin([
       { from: 'public', to: '.' },
       { from: 'index.d.ts', to: '.' },
-    ]),    
+      { from: 'node_modules/pathkit-wasm/bin/pathkit.wasm', to: '.' }, 
+    ]),                
     new webpack.BannerPlugin({
       banner: LICENSE,
       raw: true,
       entryOnly: true,
-    })   
+    }),
   ]
 };

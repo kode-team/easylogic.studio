@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest')
 const path = require('path');
-const CopyPlugin = require('copy-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const alias = require('./alias');
 
 
@@ -48,6 +48,9 @@ module.exports = {
     filename: '[name].js?[contenthash]'
   },
   resolve: { alias },  
+  node: {
+    fs: 'empty'
+  },  
   mode: 'development',
   module: {
     rules: [
@@ -144,8 +147,9 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "[name].css?[contenthash]"
     }),
-    new CopyPlugin([
+    new CopyWebpackPlugin([
       { from: 'public', to: '.' },
+      { from: 'node_modules/pathkit-wasm/bin/pathkit.wasm', to: '.' }      
     ]),    
     new webpack.BannerPlugin({
       banner: LICENSE,

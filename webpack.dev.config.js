@@ -16,6 +16,9 @@ module.exports = {
     path: __dirname + "/docs",
   },
   resolve: { alias },
+  node: {
+    fs: 'empty'
+  },
   module: {
     rules: [
       {
@@ -110,6 +113,9 @@ module.exports = {
     }),    
     new MiniCssExtractPlugin({
       filename: "[name].css"
-    })
+    }),
+    new CopyWebpackPlugin([
+      { from: 'node_modules/pathkit-wasm/bin/pathkit.wasm' }
+    ])    
   ]
 };

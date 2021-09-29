@@ -679,6 +679,16 @@ export class SelectionManager {
     });
   }
 
+  /**
+   * 선택된 영역의 자식인지 체크 한다. 
+   * 
+   * @param {string} childId 
+   * @returns 
+   */
+  checkChildren (childId) {
+    return this.cachedChildren.includes(childId);
+  }
+
   checkHover (itemOrId) {
     if (isString(itemOrId)) {
       return this.hoverId === itemOrId; 

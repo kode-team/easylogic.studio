@@ -421,6 +421,11 @@ export default class DomRender extends ItemRender {
     return item.id + 'inner-svg'
   }
 
+  booleanId(item) {
+    return item.id + 'boolean'
+  }
+
+
   /**
    * 
    * @param {Item} item 
@@ -539,7 +544,22 @@ ${cssString}
   ${item.layers.map(it => {
     return renderer.render(it, renderer)
   }).join('')}
+  ${this.renderVirtualArea(item, renderer)}
 </${tagName}>`
+  }
+
+  renderVirtualArea (item, renderer) {
+
+    if (item['boolean-path']) {
+      const layers = item.layers;
+      return /*html*/`
+        <svg data-id="${this.booleanId(item)}" width="100%" height="100%" style="position:absolute;left:0px;top:0px;pointer-events:none;">
+          <path d="${item['boolean-path']}" fill="yellow" stroke="${layers[0].stroke}" stroke-width="${layers[0]['stroke-width']}" />
+        </svg>
+      `
+    }
+
+    return "";
   }
 
   toSVGFilter (item) {
@@ -578,7 +598,18 @@ ${cssString}
    * @param {Item} item 
    */
   toNestedCSS(item) {
-    return []
+    const result = [];
+
+    if (item['boolean-operation'] !== 'none' && item['boolean-path']) {
+      result.push({
+        selector: `> .svg-path`,
+        css: {
+          'filter': 'grayscale(80%)'
+        }
+      })
+    }
+
+    return result;
   }
 
   /**
@@ -589,14 +620,34 @@ ${cssString}
    * @override
    */
   update (item, currentElement) {
-
     if (!currentElement) return; 
 
     let $svg = currentElement.el.$svg;
+    let $booleanSvg = currentElement.el.$booleanSvg;
 
     if (!$svg) { 
       currentElement.el.$svg = currentElement.$(`[data-id="${this.innerSVGId(item)}"]`);  
       $svg = currentElement.el.$svg
+
+      currentElement.el.$booleanSvg = currentElement.$(`[data-id="${this.booleanId(item)}"]`);
+      $booleanSvg = currentElement.el.$booleanSvg
+    }
+
+    if ($booleanSvg) {
+      const svgString = this.renderVirtualArea(item);
+
+      if (svgString) {
+        $booleanSvg.updateDiff(Dom.createByHTML(svgString).firstChild)
+      }      
+    } else {
+      const svgString = this.renderVirtualArea(item);
+
+      var a = Dom.createByHTML(svgString);
+
+      if (a) {
+        currentElement.append(a);
+      }
+
     }
 
     if ($svg) {

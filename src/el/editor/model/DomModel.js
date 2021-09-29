@@ -40,6 +40,7 @@ const editableList = [
   'animation',
   'transition',
   'pattern',
+  'boolean-operation'
 ]
 
 const editableKeys = {}
@@ -68,6 +69,8 @@ export class DomModel extends GroupModel {
       'grid-layout': 'display:grid;',
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
       // keyframes: [],
+      "boolean-operation": 'none',
+      "boolean-path": "",
       selectors: [],
       svg: [],
       ...obj
@@ -124,6 +127,7 @@ export class DomModel extends GroupModel {
         'padding-right',
         'padding-left',
         'padding-bottom',
+        'boolean-operation'
       ),
 
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
@@ -239,7 +243,25 @@ export class DomModel extends GroupModel {
 
     } else if (this.hasChangedField('background-image', 'pattern')) {
       this.setBackgroundImageCache()
+    } else if (this.hasChangedField('changedChildren', 'boolean-operation') || !this.json['boolean-path']) {
+      if (this.json.children?.length === 2) {
+
+        if (this.modelManager.editor.pathKitManager.has()) {
+          const paths = this.layers.filter(it => it.is('svg-path'))
+  
+          if (paths.length === 2) {
+            const newPath = this['boolean-operation'] != 'none' ?  this.booleanOperation() : "";
+    
+            this.json['boolean-path'] = newPath;
+          }
+        }
+  
+      }
+  
     }
+
+
+    
 
     return isChanged;
   }
@@ -304,5 +326,63 @@ export class DomModel extends GroupModel {
     }
 
   }
+
+  booleanOperation() {
+    const op = this.json['boolean-operation']
+    switch(op) {
+    case "intersection": return this.intersection();
+    case "union": return this.union();
+    case "difference": return this.difference();
+    case "xor": return this.xor();
+    }
+
+    return "";
+  }
+
+  intersection() {
+    const layers = this.layers; 
+
+    const newPath = this.modelManager.editor.pathKitManager.intersection(
+      layers[0].accumulatedPath().d,
+      layers[1].accumulatedPath().d
+    ) 
+
+    return this.invertPath(newPath).d;
+  }
+
+  union() {
+    const layers = this.layers; 
+
+    const newPath = this.modelManager.editor.pathKitManager.union(
+      layers[0].accumulatedPath().d,
+      layers[1].accumulatedPath().d
+    ) 
+
+    return this.invertPath(newPath).d;
+  }
+
+  difference() {
+    const layers = this.layers; 
+
+    const newPath = this.modelManager.editor.pathKitManager.difference(
+      layers[0].accumulatedPath().d,
+      layers[1].accumulatedPath().d
+    ) 
+
+    return this.invertPath(newPath).d;
+  }
+
+  xor() {
+    const layers = this.layers; 
+
+    const newPath = this.modelManager.editor.pathKitManager.xor(
+      layers[0].accumulatedPath().d,
+      layers[1].accumulatedPath().d
+    ) 
+
+    return this.invertPath(newPath).d;
+  }
+
+  
 
 }

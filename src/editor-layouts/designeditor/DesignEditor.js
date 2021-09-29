@@ -16,9 +16,17 @@ import LayerTab from "./area/LayerTab";
 import { END, MOVE } from "el/editor/types/event";
 import { isFunction } from 'el/sapa/functions/func';
 import IconManager from '../common/IconManager';
-
+import PathKitInit from "pathkit-wasm/bin/pathkit.js";
 
 export default class DesignEditor extends BaseLayout {
+
+  initialize() {
+    super.initialize();
+
+    (async () => {
+      this.$pathkit.registerPathKit(await PathKitInit());
+    })()
+  }
 
   components() {
     return {

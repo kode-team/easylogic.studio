@@ -11,7 +11,8 @@
     "@babel/runtime": "^7.13.10",
     "array-organizer": "^1.5.7",
     "gl-matrix": "^3.3.0",
-    "js-video-url-parser": "^0.4.3"
+    "js-video-url-parser": "^0.4.3",
+    "pathkit-wasm": "^0.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.13.15",

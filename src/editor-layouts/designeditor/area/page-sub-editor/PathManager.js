@@ -51,6 +51,9 @@ export default class PathManager extends EditorElement {
             <button type="button" data-value='modify' title='${this.$i18n('path.manager.mode.modify')}' > ${iconUse("device_hub")}</button>
             <button type="button" data-value='path' title='${this.$i18n('path.manager.mode.path')}' > ${iconUse("control_point")}</button>
         </div>
+        <div class='tools' ref='$util'>
+            <button type="button" data-value='reverse' title='${this.$i18n('path.manager.mode.reverse')}' >${iconUse("sync")}</button>
+        </div>                
         <div class='tools' ref='$flip'>
             <button type="button" data-value='flipX' title='${this.$i18n('path.manager.mode.flipX')}'>${iconUse("flip")}</button>
             <button type="button" data-value='flipY' title='${this.$i18n('path.manager.mode.flipY')}'>${iconUse("flip")}</button>
@@ -58,10 +61,6 @@ export default class PathManager extends EditorElement {
             <button type="button" data-value='2x'>2x</button>
             <button type="button" data-value='3x'>3x</button>            
         </div>
-
-        <div class='tools' ref='$util'>
-            <button type="button" data-value='reverse' title='${this.$i18n('path.manager.mode.reverse')}' >${iconUse("sync")}</button>
-        </div>        
         <div class='tools'>      
           <div>
             <object refClass="FillSingleEditor" ref="$fill" simple="true" label="${this.$i18n('svg.item.property.fill')}" key="fill" onchange="changeValue" />

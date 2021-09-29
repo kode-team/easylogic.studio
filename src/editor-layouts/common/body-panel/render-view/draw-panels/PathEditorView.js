@@ -417,7 +417,7 @@ export default class PathEditorView extends PathTransformEditor {
      * 
      * @param {{d: string}} obj 
      */
-    refreshEditorView(obj) {
+    refreshEditorView(obj, removeCache = false) {
 
         let selectedPointList = [];
         if (obj && obj.d) {
@@ -425,7 +425,7 @@ export default class PathEditorView extends PathTransformEditor {
             this.pathParser.transformMat4(this.$viewport.matrix);
             this.state.cachedMatrixInverse = this.$viewport.matrixInverse;
 
-            selectedPointList =this.pathGenerator.selectedPointList;
+            selectedPointList = (removeCache ? [] : this.pathGenerator.selectedPointList);
 
             this.pathGenerator.setPoints(this.pathParser.convertGenerator())
         }
@@ -446,7 +446,7 @@ export default class PathEditorView extends PathTransformEditor {
 
         this.changeMode(mode, obj);
 
-        this.refreshEditorView(obj);
+        this.refreshEditorView(obj, true);
 
         this.state.isShow = true;
         this.$el.show();

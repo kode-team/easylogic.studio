@@ -10,6 +10,7 @@ import { ShortCutManager } from "el/editor/manager/ShortCutManager";
 import { ModeViewManager } from "el/editor/manager/ModeViewManager";
 import { CommandManager } from "el/editor/manager/CommandManager";
 import { SnapManager } from "el/editor/manager/SnapManager";
+import { PathKitManager } from "el/editor/manager/PathKitManager";
 
 export class EditorElement extends UIElement {
 
@@ -181,6 +182,14 @@ export class EditorElement extends UIElement {
      */
     get $modeView() {
         return this.$editor.modeViewManager;
+    }
+
+    /**
+     * 
+     * @type {PathKitManager}
+     */
+    get $pathkit() {
+        return this.$editor.pathKitManager;
     }
 
     /**

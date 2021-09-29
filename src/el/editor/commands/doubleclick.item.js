@@ -5,6 +5,10 @@ export default {
 
         if (editor.selection.isOne && item) {
 
+            if (editor.selection.checkChildren(item.id) && item.is('svg-path')) {
+                editor.selection.select(item);
+            }
+
             if (editor.selection.check(item)) {
                 editor.emit('open.editor');
                 editor.emit('removeGuideLine');

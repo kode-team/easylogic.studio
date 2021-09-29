@@ -5,6 +5,7 @@ import artboard from "./artboard"
 import backdropFilter from "./backdrop-filter"
 import backgroundClip from "./background-clip"
 import backgroundImage from "./background-image"
+import boolean from "./boolean"
 import border from "./border"
 import borderImage from "./border-image"
 import borderRadius from "./border-radius"
@@ -74,6 +75,7 @@ export default [
 
     // inspector.tab.style    
     alignment,
+    boolean,
     artboard,
 
     // layout 

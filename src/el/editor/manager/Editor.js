@@ -26,6 +26,7 @@ import { InjectManager } from "./InjectManager";
 import { I18nManager } from "./I18nManager";
 import { ModelManager } from './ModelManager';
 import { ModeViewManager } from './ModeViewManager';
+import { PathKitManager } from "./PathKitManager";
 
 
 export const EDITOR_ID = "";
@@ -86,7 +87,7 @@ export class Editor {
     this.i18n = new I18nManager(this);
     this.modelManager = new ModelManager(this);
     this.modeViewManager = new ModeViewManager(this);
-
+    this.pathKitManager = new PathKitManager(this);
 
     this.initTheme();
     this.initPlugins();

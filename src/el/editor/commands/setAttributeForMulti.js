@@ -20,13 +20,20 @@ export default {
                 newAttrs[key] = isFunction(value) ? value(item) : value;
             })
 
-            messages.push({ id: item.id, attrs: newAttrs })
+            messages.push({ id: item.id, parentId: item.parentId, attrs: newAttrs })
         })
 
 
         // send message 
         messages.forEach(message => {
             editor.emit('update', message.id, message.attrs)   
+
+            // 부모가 project 아닐 때만 업데이트 메세지를 날린다. 
+            if (message.parentId && editor.get(message.parentId)?.isNot("project")) {
+                editor.emit('update', message.parentId, {
+                    'changedChildren': true
+                })
+            }
         })
 
     }
