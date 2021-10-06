@@ -333,6 +333,7 @@ export class DomModel extends GroupModel {
     case "intersection": return this.intersection();
     case "union": return this.union();
     case "difference": return this.difference();
+    case "reverse-difference": return this.reverseDifference();
     case "xor": return this.xor();
     }
 
@@ -372,6 +373,17 @@ export class DomModel extends GroupModel {
     return this.invertPath(newPath).d;
   }
 
+  reverseDifference() {
+    const layers = this.layers; 
+
+    const newPath = this.modelManager.editor.pathKitManager.reverseDifference(
+      layers[0].accumulatedPath().d,
+      layers[1].accumulatedPath().d
+    ) 
+
+    return this.invertPath(newPath).d;
+  }  
+
   xor() {
     const layers = this.layers; 
 
@@ -382,7 +394,5 @@ export class DomModel extends GroupModel {
 
     return this.invertPath(newPath).d;
   }
-
-  
 
 }

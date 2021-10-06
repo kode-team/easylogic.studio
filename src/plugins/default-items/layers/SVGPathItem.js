@@ -24,6 +24,18 @@ export class SVGPathItem extends SVGItem {
     return false; 
   }
 
+  reset(json) {
+    const isChanged = super.reset(json);
+
+    if (this.hasChangedField('d')) {
+      this.cachePath = new PathParser(this.json.d);
+      this.cacheWidth = this.json.width.value;
+      this.cacheHeight = this.json.height.value;
+    }
+
+    return isChanged;
+  }
+
   refreshMatrixCache() {
     super.refreshMatrixCache();
 
@@ -87,9 +99,9 @@ export class SVGPathItem extends SVGItem {
    */
   hasPoint (x, y) {
 
-    if (this.json['stroke-width']) {
-      return this.isPointInPath([x, y, 0]);
-    }
+    // if (this.json['stroke-width']) {
+    //   return this.isPointInPath([x, y, 0]);
+    // }
     // fill=transparent 일때는 안보이는 것으로 간주한다.
     // stroke 만 체크 
     // fill=transparent 가 아니라면 
@@ -97,5 +109,4 @@ export class SVGPathItem extends SVGItem {
 
     return super.hasPoint(x, y); 
   }
-
 }

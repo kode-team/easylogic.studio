@@ -508,17 +508,19 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         const verties = this.$selection.verties;
         const selectionVerties = this.$selection.selectionVerties;              
+        const parentVerties = this.$selection.current.parent.verties || [];              
         this.state.renderPointerList = [
             this.$viewport.applyVerties(verties),
             this.$viewport.applyVerties(selectionVerties),
+            this.$viewport.applyVerties(parentVerties),
         ]
 
 
         const pointers = this.createRenderPointers(...this.state.renderPointerList);
 
         if (pointers) {
-            const {line, point, size} = pointers;
-            this.refs.$pointerRect.updateDiff(line + point + size)
+            const {line, parentRect, point, size} = pointers;
+            this.refs.$pointerRect.updateDiff(line + parentRect + point + size)
         }
 
 
@@ -582,6 +584,25 @@ export default class SelectionToolView extends SelectionToolEvent {
         </svg>`
     }    
 
+    createParentRect(pointers = []) {
+        if (pointers.length === 0) return '';
+
+        return /*html*/`
+        <svg class='line' overflow="visible">
+            <path 
+                d="
+                    M ${pointers[0][0]}, ${pointers[0][1]} 
+                    L ${pointers[1][0]}, ${pointers[1][1]} 
+                    L ${pointers[2][0]}, ${pointers[2][1]} 
+                    L ${pointers[3][0]}, ${pointers[3][1]} 
+                    L ${pointers[0][0]}, ${pointers[0][1]}
+                    Z
+                " 
+                stroke="red"
+                />
+        </svg>`
+    }
+
     createSize (pointers) {
         const top = vec3.lerp([], pointers[0], pointers[1], 0.5);
         const right = vec3.lerp([], pointers[1], pointers[2], 0.5);
@@ -629,7 +650,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         `
     }
 
-    createRenderPointers(pointers, selectionPointers) {
+    createRenderPointers(pointers, selectionPointers, parentPointers) {
 
         const current = this.$selection.current; 
 
@@ -658,6 +679,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         return {
             line: this.createPointerRect(pointers, rotatePointer), 
             size: this.createSize(pointers),
+            parentRect: this.createParentRect(parentPointers),
             point: [
                 // 4 모서리에서도 rotate 가 가능하도록 맞춤 
                 this.createRotatePointer (selectionPointers[0], 0),

@@ -41,16 +41,24 @@ export default class BooleanProperty extends BaseProperty {
         <button type="button" data-value="union">Union</button>
         <button type="button" data-value="difference">Difference</button>
         <button type="button" data-value="xor">Xor</button>
+        <button type="button" data-value="simplify">Simplify</button>
       </div>
     `;
   }
 
   [CLICK('$buttons button')] (e) {
     const command = e.$dt.attr('data-value');
+    if (command === 'simplify') {
+      this.command("setAttributeForMulti", "change path string", this.$selection.packByValue({
+        "d": this.$pathkit.trim(this.$selection.current.d, 0.25, 0.75, true)
+      }))
+    } else {
 
-    this.command("setAttributeForMulti", "change boolean operation", this.$selection.packByValue({
-      "boolean-operation": command
-    }))
+      this.command("setAttributeForMulti", "change boolean operation", this.$selection.packByValue({
+        "boolean-operation": command
+      }))
+  
+    }
 
   }
 }

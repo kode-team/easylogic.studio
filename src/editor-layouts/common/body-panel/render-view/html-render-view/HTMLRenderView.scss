@@ -60,19 +60,19 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
 
   }
 
-  svg.element-item {
+  .element-item.svg-path {
     pointer-events: none;
 
     > * {
       pointer-events: stroke;
     }
 
-    > path {
+    > svg > path {
       pointer-events: stroke;
     }
         
 
-    > :not([fill='transparent']) {
+    > svg > :not([fill='transparent']) {
       pointer-events: visible;
     }
 

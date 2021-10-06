@@ -104,6 +104,10 @@ export default class LayerTreeProperty extends BaseProperty {
 
     if (item.hasChildren() && item.is('artboard') === false) {
 
+      if (item['boolean-operation'] !== 'none' && item['boolean-path']) {
+        return iconUse('dark')
+      }
+
       if (item.isLayout('flex')) {
         return iconUse("flex");
       } else if (item.isLayout('grid')) {

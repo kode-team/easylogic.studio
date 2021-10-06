@@ -125,7 +125,6 @@ export default class HTMLRenderView extends EditorElement {
 
             // selection 영역과 hover item 이 겹치면  hover item 을 선택한걸로 한다. 
             if (this.$selection.hasHoverItem()) {
-
                 // selection 영역이 동일하고 
                 // hover 된 id 가 부모가 아니면 
                 // hover 된 아이템을 선택하게 된다. 

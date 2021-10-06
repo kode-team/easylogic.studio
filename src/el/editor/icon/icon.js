@@ -168,6 +168,7 @@ import margin from "./margin";
 import source from "./source";
 import sync from "./sync";
 import outline from "./outline";
+import dark from "./dark";
 
 
 const alias = {
@@ -183,6 +184,7 @@ export function iconUse(name) {
 
 export default {
   ...alias,
+  dark,
   outline,
   sync,
   source,

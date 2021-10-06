@@ -7,6 +7,8 @@ export default {
 
             if (editor.selection.checkChildren(item.id) && item.is('svg-path')) {
                 editor.selection.select(item);
+                editor.emit('refreshSelection');                
+                editor.emit('refreshSelectionTool');
             }
 
             if (editor.selection.check(item)) {

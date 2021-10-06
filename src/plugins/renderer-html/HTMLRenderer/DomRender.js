@@ -200,9 +200,6 @@ export default class DomRender extends ItemRender {
     let result = {}
 
     result = Object.assign(result, obj);
-    result = Object.assign(result, {
-      'will-change': 'auto'
-    });
     result = Object.assign(result, this.toKeyListCSS(item, [
       'position', 
 
@@ -553,7 +550,7 @@ ${cssString}
     if (item['boolean-path']) {
       const layers = item.layers;
       return /*html*/`
-        <svg data-id="${this.booleanId(item)}" width="100%" height="100%" style="position:absolute;left:0px;top:0px;pointer-events:none;">
+        <svg data-id="${this.booleanId(item)}" width="100%" height="100%" style="position:absolute;left:0px;top:0px;pointer-events:none;overflow: visible;">
           <path d="${item['boolean-path']}" fill="yellow" stroke="${layers[0].stroke}" stroke-width="${layers[0]['stroke-width']}" />
         </svg>
       `
@@ -599,15 +596,6 @@ ${cssString}
    */
   toNestedCSS(item) {
     const result = [];
-
-    if (item['boolean-operation'] !== 'none' && item['boolean-path']) {
-      result.push({
-        selector: `> .svg-path`,
-        css: {
-          'filter': 'grayscale(80%)'
-        }
-      })
-    }
 
     return result;
   }
