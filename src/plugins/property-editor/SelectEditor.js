@@ -4,6 +4,12 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './SelectEditor.scss';
 export default class SelectEditor extends EditorElement {
 
+    initialize() {
+        super.initialize();
+    
+        this.notEventRedefine = true;
+    }
+
     initState() {
         var splitChar = this.props.split || ',';
 

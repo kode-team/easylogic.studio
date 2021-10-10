@@ -1,5 +1,6 @@
 export default {
     command: 'update',
+    description: 'Update the model',
     execute: function (editor, id = null, attrs = {}) {
 
         editor.emit('beforeUpdate', id, attrs);

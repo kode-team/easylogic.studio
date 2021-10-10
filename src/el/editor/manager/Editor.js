@@ -27,9 +27,8 @@ import { I18nManager } from "./I18nManager";
 import { ModelManager } from './ModelManager';
 import { ModeViewManager } from './ModeViewManager';
 import { PathKitManager } from "./PathKitManager";
+import { SegmentSelectionManager } from "./SegmentSelectionManager";
 
-
-export const EDITOR_ID = "";
 
 export const EDIT_MODE_SELECTION = 'SELECTION';
 export const EDIT_MODE_ADD = 'ADD';
@@ -73,6 +72,7 @@ export class Editor {
     this.commands = new CommandManager(this);
     this.shortcuts = new ShortCutManager(this);
     this.selection = new SelectionManager(this);
+    this.segmentSelection = new SegmentSelectionManager(this);
     this.timeline = new TimelineSelectionManager(this);
     this.history = new HistoryManager(this);
     this.keyboardManager = new KeyBoardManager(this);
@@ -227,7 +227,7 @@ export class Editor {
    * FIXME: command 는 자신과 동일한 command 를 재귀적으로 날릴 수 없다. (구현해야할듯 )
    **/
   emit(...args) {
-    this.store.source = "EDITOR_ID";
+    this.store.source = this.EDITOR_ID;
     this.store.emit(...args);
   }
 

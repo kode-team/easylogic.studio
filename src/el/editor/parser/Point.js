@@ -43,7 +43,7 @@ export default class Point {
         }
     }    
 
-    static simply (points, tolerance) {
+    static simply (points, tolerance = 10) {
 
         if (points.length <= 2) {
             return points;
@@ -58,7 +58,7 @@ export default class Point {
         // 간소화 포인트 계산 
         Point.DouglasPeuker(tolerance, points, 0, points.length-1);
 
-        return points.filter(it => Boolean(it.mark))
+        return points.filter(it => Boolean(it.mark));
     }
 
     static segmentDistance2(x, y, A, B) {

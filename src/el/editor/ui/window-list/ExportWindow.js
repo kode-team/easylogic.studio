@@ -32,29 +32,17 @@ export default class ExportWindow extends BaseWindow {
                 <div class="tab-item" data-value="2">
                     <label>CSS</label>
                 </div>                
-                <div class="tab-item" data-value="4">
-                    <label>Assets</label>
-                </div>                                             
                 <div class="tab-item" data-value="6">
                     <label>SVG Image</label>
                 </div>     
-                <div class="tab-item" data-value="7">
-                    <label>SVG Image Preview</label>
-                </div>                        
             </div>
             <div class="tab-body" ref="$body">
                 <div class="tab-content selected" data-value="1" ref="$html">
                 </div>
                 <div class='tab-content' data-value='2' ref="$css">
                 </div>                        
-                <div class="tab-content" data-value="4">
-                    <pre ref='$assets'></pre>
-                </div>
                 <div class="tab-content" data-value="6" ref="$svgimage">
                 </div>                                                                       
-                <div class="tab-content" data-value="7">
-                    <div ref='$svgimagePreview' style="display:grid;grid-template-columns: repeat(3, 1fr);"></div>
-                </div>                                                       
             </div>
       </div>
         `
@@ -84,10 +72,6 @@ ${this.$editor.html.render(project)}
         var svgData = project.layers.map( item => {
             return this.$editor.svg.render(item);
         })
-
-        // svg preview image 
-        this.refs.$svgimagePreview.html(Dom.createByHTML(`<div>${svgData.map(it => `<div>${it}</div>`).join("")}</div>`).html());
-
 
         if (shiki) {
             shiki
@@ -119,7 +103,7 @@ ${this.$editor.html.render(project)}
     }
 
     makeStyle (item) {
-        return this.$editor.html.toStyle(item);
+        return this.$editor.html.toExportStyle(item, null);
     }
 
     makeHTML (item) {

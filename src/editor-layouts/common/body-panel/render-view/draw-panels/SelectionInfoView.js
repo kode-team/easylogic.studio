@@ -10,6 +10,12 @@ import { calculateAngle360 } from 'el/utils/math';
 
 export default class SelectionInfoView extends EditorElement {
 
+    initialize() {
+        super.initialize();
+
+        this.notEventRedefine = true;
+    }
+
     template() {
         return /*html*/`<div class='elf--selection-info-view'></div>`
     }

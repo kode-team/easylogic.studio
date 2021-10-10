@@ -188,10 +188,11 @@ export default class PathGenerator {
         // 초기화 하면서 선택된 포인트를 저장한다.
         if (initPointList.length) {
             this.select(...initPointList.map(p => {
-                const checkedPoint = Point.getPoint(this.points, p)
+                console.log(this.points, p.index, p.key, this.points[p.index][p.key]);
+                const checkedPoint = this.points[p.index][p.key];
                 if (!checkedPoint) return undefined;
 
-                return {x: checkedPoint.startPoint.x, y: checkedPoint.startPoint.y, key: 'startPoint', index: checkedPoint.index}
+                return {x: checkedPoint.x, y: checkedPoint.y, key: p.key, index: checkedPoint.index}
             }).filter(Boolean))
         }
     }
@@ -326,7 +327,7 @@ export default class PathGenerator {
      */
     reselect () {
         this.selectedPointList.filter(Boolean).forEach(it => {
-            var point = this.points[it.index][it.key];
+            var point = this.points[it.index]?.[it.key];
             if (point) {
                 it.x = point.x;
                 it.y = point.y;
@@ -820,18 +821,21 @@ export default class PathGenerator {
             this.moveSelectedSegment(dx, dy);
         } else if (isCurveSegment) {
             if (e.shiftKey) {   
-                // 상대편 길이 동일하게 curve 움직이기 
+                // 해당 segment 먼저 움직이고                 
+                // 상대편 길이 동일하게 curve 움직이기                 
                 this.moveSegment(segmentKey, dx, dy);
+                var targetSegmentKey = segmentKey === 'endPoint' ? 'reversePoint' : 'endPoint'
+                state.segment[targetSegmentKey] = Point.getReversePoint(state.segment.startPoint, state.segment[segmentKey]);                                
+
             } else if (e.altKey) {  
+                // 나는 그대로 움직이고 상대편 벡터는 방향만 바꿔주기 
+                // 방향만 만들어주기 
                 this.moveSegment(segmentKey, dx, dy);
                 
                 // 상대편 rotate 하는데 
                 this.rotateSegment(segmentKey);                
             } else {    // Curve 만 움직이기 
-                // 해당 segment 먼저 움직이고 
                 this.moveSegment(segmentKey, dx, dy);
-                var targetSegmentKey = segmentKey === 'endPoint' ? 'reversePoint' : 'endPoint'
-                state.segment[targetSegmentKey] = Point.getReversePoint(state.segment.startPoint, state.segment[segmentKey]);                
             }
         } else {
             this.moveSegment('startPoint', dx, dy);
@@ -1064,7 +1068,7 @@ export default class PathGenerator {
     makeStartPointGuide (prevPoint, current, nextPoint, index) {
         current.startPoint.isFirst = true; 
 
-        this.pathStringManager.M(current.startPoint)        
+        // this.pathStringManager.M(current.startPoint)        
 
         if (current.curve === false) {
             this.segmentManager
@@ -1090,120 +1094,139 @@ export default class PathGenerator {
 
     }
 
-    makeMiddlePointGuideSegment (prevPoint, current, nextPoint, index) {
+    makeMiddlePointGuideSegment (prevPoint, current, nextPoint, index, isSiblingSelected) {
         var mng = this.segmentManager;
+
         if (current.curve === false) { 
             // 꼭지점
             if (prevPoint.curve === false) {
                 mng.addPoint({}, current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))   
-
-                if (!current.startPoint.isLast) {
-                    mng.addText(current.startPoint, index+1);
-                }
             } else {
 
-                mng
-                .addGuideLine(prevPoint.startPoint, prevPoint.endPoint)
-                .addCurvePoint(current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
+                if ( isSiblingSelected === false) {
+                    mng
+                    .addCurvePoint(current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
+                } else {
 
-
-                if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
-                    mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint', this.isSelectedSegment('endPoint', prevPoint.index));
-                }
-
-                if (!current.startPoint.isLast) {
-                    mng.addText(current.startPoint, index+1);
-                }
-        
+                    mng
+                    .addGuideLine(prevPoint.startPoint, prevPoint.endPoint)
+                    .addCurvePoint(current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
+    
+    
+                    if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
+                        mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint', this.isSelectedSegment('endPoint', prevPoint.index));
+                    }   
+                }           
+     
             }
 
 
         } else {    // 현재가 curve 일 때 
             if (prevPoint.curve === false) { 
 
-                if (Point.isEqual(current.reversePoint, current.startPoint)) {
-                    mng.addPoint({},current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
 
-                    if (!current.startPoint.isLast) {
-                        mng.addText(current.startPoint, index+1);
-                    }                                       
-                } else {
-                    mng
-                    .addGuideLine(current.startPoint, current.reversePoint)
-                    .addCurvePoint(current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
-
-                    if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
-                        mng.addCurvePoint(current.reversePoint, index, 'reversePoint', this.isSelectedSegment('reversePoint', index));     
+                if ( isSiblingSelected === false) {
+                    if (Point.isEqual(current.reversePoint, current.startPoint)) {
+                        mng.addPoint({},current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))            
+                    } else {
+                        mng
+                        .addCurvePoint(current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
                     }
-
-                    if (!current.startPoint.isLast) {
-                        mng.addText(current.startPoint, index+1);
+    
+                }         else {
+                    if (Point.isEqual(current.reversePoint, current.startPoint)) {
+                        mng.addPoint({},current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))            
+                    } else {
+                        mng
+                        .addGuideLine(current.startPoint, current.reversePoint)
+                        .addCurvePoint(current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
+    
+                        if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
+                            mng.addCurvePoint(current.reversePoint, index, 'reversePoint', this.isSelectedSegment('reversePoint', index));     
+                        }
                     }
-                }
+    
+                }        
+
 
 
             } else {
 
                 if (current.connected) {
-                    mng
-                    .addGuideLine(prevPoint.startPoint, prevPoint.endPoint)
-                    .addGuideLine(current.startPoint, current.reversePoint)
 
-                    if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
-                        mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint', this.isSelectedSegment('endPoint', prevPoint.index))
-                    }
 
-                    if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
-                        mng.addCurvePoint(current.reversePoint, index, 'reversePoint', this.isSelectedSegment('reversePoint', index));
-                    }
+                    if ( isSiblingSelected === false) {
+                        // NOOP
+                    }  else {
+                        mng
+                        .addGuideLine(prevPoint.startPoint, prevPoint.endPoint)
+                        .addGuideLine(current.startPoint, current.reversePoint)
+    
+                        if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
+                            mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint', this.isSelectedSegment('endPoint', prevPoint.index))
+                        }
+    
+                        if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
+                            mng.addCurvePoint(current.reversePoint, index, 'reversePoint', this.isSelectedSegment('reversePoint', index));
+                        }
+                    }        
+
+
                 } else {
-                    mng
-                    .addGuideLine(prevPoint.startPoint, prevPoint.endPoint)
-                    .addGuideLine(current.startPoint, current.reversePoint)
-                    .addCurvePoint(current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
 
-                    if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
-                        mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint', this.isSelectedSegment('endPoint', prevPoint.index))                        
+
+                    if ( isSiblingSelected === false) {
+                        mng
+                        .addCurvePoint(current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
+    
+                    } else {
+                        mng
+                        .addGuideLine(prevPoint.startPoint, prevPoint.endPoint)
+                        .addGuideLine(current.startPoint, current.reversePoint)
+                        .addCurvePoint(current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
+    
+                        if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
+                            mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, 'endPoint', this.isSelectedSegment('endPoint', prevPoint.index))                        
+                        }
+    
+                        if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
+                            mng.addCurvePoint(current.reversePoint, index, 'reversePoint', this.isSelectedSegment('reversePoint', index));
+                        }
+    
                     }
 
-                    if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
-                        mng.addCurvePoint(current.reversePoint, index, 'reversePoint', this.isSelectedSegment('reversePoint', index));
-                    }
-
-                    if (!current.startPoint.isLast) {
-                        mng.addText(current.startPoint, index+1);
-                    }                        
 
                 }
             }
         }
     }
 
-    makeMiddlePointGuideRealPath (prevPoint, current, nextPoint, index) {
-        var mng = this.pathStringManager;
-        if (current.curve === false) { 
-            // 꼭지점
-            if (prevPoint.curve === false) {
-                mng.L(current.startPoint)
-            } else {
-                mng.Q(prevPoint.endPoint, current.startPoint)        
-            }
-        } else {    // 현재가 curve 일 때 
-            if (prevPoint.curve === false) { 
-                if (Point.isEqual(current.reversePoint, current.startPoint)) {
-                    mng.L( current.startPoint);
-                } else {
-                    mng.Q( current.reversePoint, current.startPoint);
-                }
-            } else {
-                mng.C(prevPoint.endPoint, current.reversePoint, current.startPoint)
-            }
-        }
-    }
+    // makeMiddlePointGuideRealPath (prevPoint, current, nextPoint, index) {
+    //     return;
+    //     var mng = this.pathStringManager;
+    //     if (current.curve === false) { 
+    //         // 꼭지점
+    //         if (prevPoint.curve === false) {
+    //             mng.L(current.startPoint)
+    //         } else {
+    //             mng.Q(prevPoint.endPoint, current.startPoint)        
+    //         }
+    //     } else {    // 현재가 curve 일 때 
+    //         if (prevPoint.curve === false) { 
+    //             if (Point.isEqual(current.reversePoint, current.startPoint)) {
+    //                 mng.L( current.startPoint);
+    //             } else {
+    //                 mng.Q( current.reversePoint, current.startPoint);
+    //             }
+    //         } else {
+    //             mng.C(prevPoint.endPoint, current.reversePoint, current.startPoint)
+    //         }
+    //     }
+    // }
 
 
-    makeMiddlePointGuideSplitLine (prevPoint, current, nextPoint, index) {
-
+    makeMiddlePointGuideSplitLine (prevPoint, current, nextPoint, index, isSiblingSelected) {
+        const selected = isSiblingSelected ? 'selected' : '';
         if (current.curve === false) { 
             // 꼭지점
             if (prevPoint.curve === false) {
@@ -1211,14 +1234,14 @@ export default class PathGenerator {
                     new PathStringManager()
                         .M(prevPoint.startPoint)
                         .L(current.startPoint)
-                        .toString('split-path')
+                        .toString(`split-path ${selected}`)
                 )
             } else {
                 this.splitLines.push(
                     new PathStringManager()
                         .M(prevPoint.startPoint)
                         .Q(prevPoint.endPoint, current.startPoint)
-                        .toString('split-path')
+                        .toString(`split-path ${selected}`)
                 )        
             }
         } else {    // 현재가 curve 일 때 
@@ -1229,14 +1252,14 @@ export default class PathGenerator {
                         new PathStringManager()
                             .M(prevPoint.startPoint)
                             .L(current.startPoint)
-                            .toString('split-path')
+                            .toString(`split-path ${selected}`)
                     )                    
                 } else {
                     this.splitLines.push(
                         new PathStringManager()
                             .M(prevPoint.startPoint)
                             .Q(current.reversePoint, current.startPoint)
-                            .toString('split-path')
+                            .toString(`split-path ${selected}`)
                     )          
                 }
 
@@ -1246,7 +1269,7 @@ export default class PathGenerator {
                     new PathStringManager()
                         .M(prevPoint.startPoint)
                         .C(prevPoint.endPoint, current.reversePoint, current.startPoint)
-                        .toString('split-path')
+                        .toString(`split-path ${selected}`)
                 )
             }
         }
@@ -1286,9 +1309,20 @@ export default class PathGenerator {
             if (current.command === 'M') {
                 this.makeStartPointGuide(prevPoint, current, nextPoint, index);
             } else {
-                this.makeMiddlePointGuideRealPath(prevPoint, current, nextPoint, index);
-                this.makeMiddlePointGuideSplitLine(prevPoint, current, nextPoint, index);
-                this.makeMiddlePointGuideSegment(prevPoint, current, nextPoint, index);
+
+                var isSiblingSelected = Boolean(this.isSelectedSegment('endPoint', prevPoint?.index) || 
+                this.isSelectedSegment('startPoint', prevPoint?.index) || 
+                this.isSelectedSegment('reversePoint', prevPoint?.index) || 
+                this.isSelectedSegment('endPoint', nextPoint?.index) || 
+                this.isSelectedSegment('startPoint', nextPoint?.index) || 
+                this.isSelectedSegment('reversePoint', nextPoint?.index) ||                         
+                this.isSelectedSegment('endPoint', current?.index) || 
+                this.isSelectedSegment('startPoint', current?.index) || 
+                this.isSelectedSegment('reversePoint', current?.index))
+
+                // this.makeMiddlePointGuideRealPath(prevPoint, current, nextPoint, index);
+                this.makeMiddlePointGuideSplitLine(prevPoint, current, nextPoint, index, isSiblingSelected);
+                this.makeMiddlePointGuideSegment(prevPoint, current, nextPoint, index, isSiblingSelected);
             }
 
             if (current.close) {
@@ -1416,7 +1450,6 @@ export default class PathGenerator {
         return /*html*/`
         <svg width="100%" height="100%" class='svg-editor-canvas'>
             ${this.guideLineManager.toString('guide')}
-            ${this.pathStringManager.toString('object')}
             ${this.splitLines.join('')}
             ${this.makeSnapLines()}
             ${this.segmentManager.toString()}

@@ -11,11 +11,12 @@ const expectedProperties = [
   'pattern',
   'box-shadow',
   'layout',
-  // 'transform',
+  'transform',
   'transform-origin',
   'perspective',
   'perspective-origin',
   'backdrop-filter',
+  'box-model',
 ]
 
 const expectedPropertiesKeys = {}

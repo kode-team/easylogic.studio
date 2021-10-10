@@ -7,6 +7,9 @@ import { Length } from "el/editor/unit/Length";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import icon from "el/editor/icon/icon";
 import { Component } from 'el/editor/model/Component';
+import PathParser from "el/editor/parser/PathParser";
+import { Segment } from "el/editor/parser/Segment";
+import Point from "el/editor/parser/Point";
 
 
 export default {
@@ -17,6 +20,9 @@ export default {
     Component,
     MenuItem,
     BaseProperty,
+    PathParser,
+    Segment,
+    Point,
     icon,
     ...Event
 }

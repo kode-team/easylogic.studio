@@ -1,6 +1,6 @@
 
 import {
-  LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF
+  LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF, DEBOUNCE
 } from "el/sapa/Event";
 
 import icon, { iconUse } from "el/editor/icon/icon";
@@ -122,7 +122,7 @@ export default class BackdropFilterProperty extends BaseProperty {
     return "backdrop-filter";
   }
 
-  [SUBSCRIBE('refreshSelection') + IF('checkShow')] () {
+  [SUBSCRIBE('refreshSelection') + IF('checkShow') + DEBOUNCE(1000)] () {
     this.refresh();
   }
 }

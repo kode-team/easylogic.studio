@@ -1,7 +1,8 @@
 import { CONFIG, SUBSCRIBE, IF } from "el/sapa/Event";
+import Dom from 'el/sapa/functions/Dom';
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-
 import "./HoverView.scss";
+
 
 export default class HoverView extends EditorElement {
 
@@ -16,6 +17,15 @@ export default class HoverView extends EditorElement {
     checkModeView () {
 
         const e = this.$config.get('bodyEvent');
+
+        const $target = Dom.create(e.target);
+
+        // svg path container 이면 hover 하지 않는다. 
+        if ($target.hasClass('view-path-item')) {
+            this.$selection.setHoverId('');
+            this.renderHoverLayer()                
+            return false; 
+        }
 
         // viewport 영역에 있을 때만 이벤트 발생 
         if (!this.$viewport.checkInViewport(this.$viewport.getWorldPosition(e))) {

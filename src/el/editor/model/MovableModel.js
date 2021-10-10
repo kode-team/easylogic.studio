@@ -751,6 +751,58 @@ export class MovableModel extends BaseAssetModel {
         return this.invertPath(pathString).d;
     }
 
+    updatePath(d) {
+        const matrix = this.matrix;
+        const newPath = new PathParser(d);
+
+        // 2. 로컬 좌표로 bbox 구하기 
+        let bbox = newPath.getBBox();
+
+        // 3. newWidth, newHeight 구하기 
+        const newWidth = vec3.distance(bbox[1], bbox[0]);
+        const newHeight = vec3.distance(bbox[3], bbox[0]);
+
+        // 4. bbxo 를 월드 좌표로 변환 
+        let oldBBox = vertiesMap(
+            rectToVerties(bbox[0][0], bbox[0][1], newWidth, newHeight), 
+            matrix.accumulatedMatrix
+        );
+
+        // 5. 월드 좌표에서 로컬 transform 의 역행렬을 적용, 월드 좌표에서 translate 를 구함 
+        //    이 때 translate 를 모르기 때문에 origin 을 bbox를 중심으로 새로 구해서 적용 
+        let newBBox = vertiesMap(oldBBox, calculateMatrixInverse(
+            mat4.fromTranslation([], oldBBox[4]),
+            Transform.createTransformMatrix(
+                Transform.parseStyle(matrix.transform), 
+                newWidth, 
+                newHeight
+            ),
+            mat4.fromTranslation([], vec3.negate([], oldBBox[4])),
+        ));
+
+        // 6. 월드 좌표로 변환된 bbox 의 중심으로 새로운 matrix 를 구함
+        const worldMatrix = calculateMatrix(
+            mat4.fromTranslation([], newBBox[0]),                      
+            this.getLocalTransformMatrix(newWidth, newHeight),
+        );
+
+
+        // 7. 월드 좌표에서 부모의 상대 좌표로 변환 
+        const realXY = mat4.getTranslation([], calculateMatrix(
+            matrix.parentMatrixInverse,                    
+            worldMatrix,                    
+            mat4.invert([], this.getLocalTransformMatrix(newWidth, newHeight)),
+        ));
+
+        return {
+            d: newPath.translate(-bbox[0][0], -bbox[0][1]).d,
+            x: Length.px(realXY[0]),
+            y: Length.px(realXY[1]),
+            width: Length.px(newWidth),
+            height: Length.px(newHeight)
+        }
+    }
+
     /**
      * 나를 포함한 모든 layer 에 대해서 체크한다. 
      * 
@@ -934,13 +986,17 @@ export class MovableModel extends BaseAssetModel {
     orderNext() {   
 
         if (this.isLast()) {
-            let next = this.parent.next();
+
+            if (this.parent.next) {
+                let next = this.parent.next();
 
 
-            if (next.enableHasChildren()) {
-                next.appendChild(this);          
-            } else {
-                next.appendAfter(this);
+                if (next.enableHasChildren()) {
+                    next.appendChild(this);          
+                } else {
+                    next.appendAfter(this);
+                }
+    
             }
 
             return; 

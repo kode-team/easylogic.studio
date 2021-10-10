@@ -16,8 +16,12 @@ import styleCanvasBackgroundColor from "./style.canvas.background.color";
 import setMoveControlPoint from "./set.move.control.point";
 import setDragPathArea from "./set.drag.path.area";
 import showOutline from "./show.outline";
+import editorDesignMode from "./editor.design.mode";
+import editorLayoutMode from "./editor.layout.mode";
 
 export default [
+    editorLayoutMode,
+    editorDesignMode,
     showOutline,
     setDragPathArea,
     setMoveControlPoint,

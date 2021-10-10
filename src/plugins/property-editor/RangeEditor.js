@@ -11,6 +11,13 @@ import { variable } from 'el/sapa/functions/registElement';
 
 export default class RangeEditor extends EditorElement {
 
+
+    initialize() {
+        super.initialize();
+    
+        this.notEventRedefine = true;
+    }    
+
     initState() {
         var units = this.props.units || 'px,em,%';
         var value = Length.parse(this.props.value || Length.z());
@@ -33,10 +40,6 @@ export default class RangeEditor extends EditorElement {
 
     template () {
         return /*html*/`<div class='small-editor' ref='$body'></div>`
-    }
-
-    refresh() {
-        this.load();
     }
 
     [LOAD('$body')] () {
@@ -95,15 +98,15 @@ export default class RangeEditor extends EditorElement {
         })
     }
 
-    [FOCUS('$propertyNumber')] (e) {
+    [FOCUS('$body input[type="number"]')] (e) {
         this.refs.$rangeArea.addClass('focused');
     }
 
-    [BLUR('$propertyNumber')] (e) {
+    [BLUR('$body input[type="number"]')] (e) {
         this.refs.$rangeArea.removeClass('focused');
     }    
 
-    [CLICK('$remove')] (e) {
+    [CLICK('$body .remove')] (e) {
         this.updateData({
             value: ''
         })
@@ -121,9 +124,9 @@ export default class RangeEditor extends EditorElement {
         
     }
 
-    [INPUT('$propertyNumber')] (e) {
+    [INPUT('$body input[type="number"]')] (e) {
 
-        var value = +this.getRef('$propertyNumber').value; 
+        var value = +this.refs.$propertyNumber.value; 
         this.getRef('$property').val(value);
         
         this.initValue()
@@ -134,13 +137,11 @@ export default class RangeEditor extends EditorElement {
 
     }
 
-    [INPUT('$property')] (e) {
+    [INPUT('$body input[type="range"]')] (e) {
         this.trigger('changeRangeValue');
     }
 
-    [POINTERSTART('$property') + END()] () {
-
-    }
+    [POINTERSTART('$body input[type="range"]') + END()] () {}
 
     end() {
         this.trigger('changeRangeValue');

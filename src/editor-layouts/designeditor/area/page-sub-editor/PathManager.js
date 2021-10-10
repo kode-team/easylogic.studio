@@ -26,20 +26,6 @@ export default class PathManager extends EditorElement {
       }
   }
 
-
-  [SUBSCRIBE('refreshSelection')]() {
-
-    var current = this.$selection.current;
-
-    if (current) {
-      this.children.$fill.setValue(current['fill'] || 'rgba(0, 0, 0, 0)')
-      this.children.$stroke.setValue(current['stroke'] || 'rgba(0, 0, 0, 1)')
-      this.children.$fillOpacity.setValue(current['fill-opacity'] || Length.number(1))
-      this.children.$strokeWidth.setValue(current['stroke-width'] || Length.number(1))
-    }
-
-  }  
-
   template() {
     return /*html*/`
       <div class='elf--path-manager'>
@@ -61,67 +47,9 @@ export default class PathManager extends EditorElement {
             <button type="button" data-value='2x'>2x</button>
             <button type="button" data-value='3x'>3x</button>            
         </div>
-        <div class='tools'>      
-          <div>
-            <object refClass="FillSingleEditor" ref="$fill" simple="true" label="${this.$i18n('svg.item.property.fill')}" key="fill" onchange="changeValue" />
-          </div>
-          <div>
-            <object refClass="FillSingleEditor" ref="$stroke" simple="true" label="${this.$i18n('svg.item.property.stroke')}" key="stroke" onchange="changeValue" />
-          </div>      
-          <div >
-            <span 
-              refClass="NumberInputEditor" 
-              ref="$fillOpacity" 
-              label="${this.$i18n('svg.item.property.fillOpacity')}" 
-              key="fill-opacity" 
-              value="1"
-              min="0"
-              max="1"
-              step="0.01"
-              calc="false"
-              unit="number"
-              onchange="changeValue"
-            />
-          </div>   
-
-          <div>
-            <span 
-              refClass="NumberInputEditor" 
-              ref="$strokeWidth" 
-              label="${this.$i18n('svg.item.property.strokeWidth')}" 
-              key="stroke-width" 
-              onchange="changeValue"
-            />
-          </div>
-        </div>
       </div>    
     `;
   }
-
-
-  [SUBSCRIBE('setColorAsset')] ({ color }) {
-
-    if (this.$el.isShow()) {
-      this.setState({
-        stroke: color
-      }, false)
-      this.children.$stroke.setValue(color);
-      this.updateData({
-        stroke: color
-      })      
-
-      this.command('setAttributeForMulti', 'change color assets', this.$selection.packByValue({ stroke: color }))    
-    }
-
-  }
-
-  [SUBSCRIBE_SELF('changeValue')] (key, value, params) {
-    this.command('setAttributeForMulti', 'change path', this.$selection.packByValue({ [key]: value }))    
-
-    this.updateData({
-      [key]: value
-    })
-  }  
 
   [BIND('$mode')] () {
     return {

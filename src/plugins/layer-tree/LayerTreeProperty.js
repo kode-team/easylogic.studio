@@ -14,6 +14,13 @@ import './LayerTreeProperty.scss';
 const DRAG_START_CLASS = 'drag-start'
 
 export default class LayerTreeProperty extends BaseProperty {
+
+  initialize() {
+    super.initialize();
+
+    this.notEventRedefine = true;
+  }
+
   getTitle() {
     return this.$i18n('layer.tree.property.title')
   }

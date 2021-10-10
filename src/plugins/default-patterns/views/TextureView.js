@@ -13,19 +13,26 @@ export default class TextureView extends EditorElement {
   }
 
   template() {
+
+    const isItemMode = this.$config.get('editor.design.mode') === 'item';
+
     return /*html*/`<div class='elf--texture'>
       <object refClass="Tabs" 
         ref="$tab" 
         ${variable({
-          selectedValue: 'css',
+          selectedValue: isItemMode ? 'svg' : 'css',
           onchange: (value) => {
             this.$config.set("inspector.selectedValue", value);
           }
         })}
       >
-        <object refClass="TabPanel" value="css" title="CSS">
-          <object refClass="CSSTextureView" />
-        </object>
+
+        ${isItemMode ? '' : /*html*/`
+          <object refClass="TabPanel" value="css" title="CSS">
+            <object refClass="CSSTextureView" />
+          </object>
+        `}
+
 
         <object refClass="TabPanel" value="svg" title="SVG">
           <object refClass="SVGTextureView" />

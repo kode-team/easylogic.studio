@@ -118,7 +118,7 @@ export default class LayerAppendView extends EditorElement {
             return /*html*/`
             <div class='draw-item'>
                 <svg width="${width}" height="${height}" style="width:100%; height:100%;" overflow="visible">
-                    <path d="${PathStringManager.makeRect(0, 0, width, height)}" stroke-width="1" stroke="black" fill="transparent" />
+                    <path d="${PathParser.makeRect(0, 0, width, height).d}" stroke-width="1" stroke="black" fill="transparent" />
                 </svg>
             </div>
             `
@@ -126,7 +126,7 @@ export default class LayerAppendView extends EditorElement {
             return /*html*/`
             <div class='draw-item'>
                 <svg width="${width}" height="${height}" style="width:100%; height:100%;" overflow="visible">
-                    <path d="${PathStringManager.makeCircle(0, 0, width, height)}" stroke-width="1" stroke="black" fill="transparent" />
+                    <path d="${PathParser.makeCircle(0, 0, width, height).d}" stroke-width="1" stroke="black" fill="transparent" />
                 </svg>
             </div>
             `

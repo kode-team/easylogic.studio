@@ -1,4 +1,4 @@
-import { CLICK, SUBSCRIBE } from "el/sapa/Event";
+import { CLICK, CONFIG, SUBSCRIBE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import SelectTool from "el/editor/ui/menu-items/SelectTool";
 import AddArtboard from "el/editor/ui/menu-items/AddArtboard";
@@ -14,6 +14,8 @@ import AddSVGCircle from "el/editor/ui/menu-items/AddSVGCircle";
 import AddSVGTextPath from "el/editor/ui/menu-items/AddSVGTextPath";
 
 import './ToolMenu.scss'; 
+import AddBlankRect from "el/editor/ui/menu-items/AddBlankRect";
+
  
 export default class ToolMenu extends EditorElement {
 
@@ -23,6 +25,7 @@ export default class ToolMenu extends EditorElement {
       SelectTool,
       AddArtboard,
       AddRect,
+      AddBlankRect,
       AddCircle,
       AddText,
       AddImage,
@@ -40,12 +43,12 @@ export default class ToolMenu extends EditorElement {
     return /*html*/`
       <div class='elf--tool-menu center'>
         <div class='items'>
-          <div class='draw-items' ref='$items' data-selected-value="${this.$editor.layout}">
+          <div class='draw-items' ref='$items' data-selected-value="${this.$config.get('editor.layout.mode')}">
 
             <object refClass='SelectTool' />
-            <object refClass='AddArtboard' />
+            <object refClass='AddArtboard' />            
             <span data-item='css'>
-              <object refClass='AddRect' />
+              <object refClass='AddRect' />            
               <object refClass='AddCircle' />         
               <object refClass='AddText' />
               <object refClass='AddImage' />
@@ -54,6 +57,7 @@ export default class ToolMenu extends EditorElement {
             </span>            
             <span data-item='svg'>
               <div class='divider'></div>
+              <object refClass='AddBlankRect' />              
               <object refClass='AddDrawPath' />
               <object refClass='AddPath' />
               <object refClass='AddSVGRect' />
@@ -70,8 +74,8 @@ export default class ToolMenu extends EditorElement {
     `;
   }
 
-  [SUBSCRIBE('changedEditorlayout')] () {
-    this.refs.$items.attr('data-selected-value', this.$editor.layout)
+  [CONFIG('editor.layout.mode')] () {
+    this.refs.$items.attr('data-selected-value', this.$config.get('editor.layout.mode'))
   }
 
   [SUBSCRIBE('noneSelectMenu')] () {

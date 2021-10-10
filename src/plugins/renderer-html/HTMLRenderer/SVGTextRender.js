@@ -3,14 +3,14 @@ import { Item } from "el/editor/items/Item";
 import SVGItemRender from "./SVGItemRender";
 
 export default class SVGTextRender extends SVGItemRender {
-    
+
   /**
    * 
    * @param {Item} item
    * @param {Dom} currentElement 
    */
-  update (item, currentElement) {
-    var $text = currentElement.$('text'); 
+  update(item, currentElement) {
+    var $text = currentElement.$('text');
     if ($text) {
 
       if (item.hasChangedField('text')) {
@@ -22,8 +22,9 @@ export default class SVGTextRender extends SVGItemRender {
           textLength: item.textLength,
           lengthAdjust: item.lengthAdjust,
           startOffset: item.startOffset
-        })  
+        })
       }
+
 
       if (item.hasChangedField('fill')) {
         $textPath.setAttrNS({
@@ -35,25 +36,25 @@ export default class SVGTextRender extends SVGItemRender {
         $textPath.setAttrNS({
           stroke: this.toStrokeValue(item),
         })
-      }      
+      }
 
       if (item.hasChangedField('filter')) {
         $textPath.setAttrNS({
           filter: this.toFilterValue(item),
         })
-      }            
-  
+      }
     }
-    this.updateDefString(item, currentElement)
 
-  }    
+    super.update(item, currentElement)
 
-  shapeInsideId (item) {
+  }
+
+  shapeInsideId(item) {
     return this.getInnerId(item, 'shape-inside')
-  }    
+  }
 
-  render (item) {
-    var {id, textLength, lengthAdjust} = item; 
+  render(item) {
+    var { id, textLength, lengthAdjust } = item;
 
     return /*html*/`
   <svg class='element-item textpath' data-id="${id}">

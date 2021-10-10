@@ -149,12 +149,9 @@ export default class SegmentManager {
                 // return /*html*/ `
                 // <text x="${it.cx}" y="${it.cy}" dx="5" dy="-5" text-anchor="start">${it.text}</text>
                 // `                              
-            } else if (it.curve) {
+            } else if (it.curve && it.segment !== "startPoint") {
                 return /*html*/`
-                <circle 
-                    cx='${it.cx}' 
-                    cy='${it.cy}' 
-                    r='4'                     
+                <path stroke-width='1'
                     class='curve' 
                     ${it.selected && `data-selected="true"`}
                     ${it.isLast && `data-is-last="true"`}
@@ -164,6 +161,7 @@ export default class SegmentManager {
                     data-index='${it.index}'
                     data-segment-point='${it.segment}'
                     data-segment="true" 
+                    d="M ${it.cx} ${it.cy - 4}L ${it.cx + 4} ${it.cy} L ${it.cx} ${it.cy +4} L ${it.cx - 4} ${it.cy} Z"
                 />`
             } else if (it.start) {
                 return /*html*/`

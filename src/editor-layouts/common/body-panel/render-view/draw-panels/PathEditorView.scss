@@ -332,6 +332,19 @@
         path {
             fill: transparent;
 
+            &.curve {
+                fill: white;
+                stroke-width: 1;
+                cursor: move;
+                stroke: var(--elf--path-segment-stroke-color); 
+
+ 
+                &[data-selected='true'] {
+                    fill: var(--elf--selected-color);
+                    stroke: white;
+                }                
+            }
+
             &.guide {
                 fill: transparent;
                 stroke: var(--elf--selected-color);
@@ -352,13 +365,14 @@
             
             &.split-path {
                 fill: transparent;
-                stroke: transparent;
+                stroke: var(--elf--border-color);
                 pointer-events: stroke;
                 stroke-width: 2;
 
                 &:hover {
                     cursor: copy;
                     stroke: var(--elf--selected-color);
+                    stroke-width: 2;                    
                 }
             }
 

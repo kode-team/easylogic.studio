@@ -6,6 +6,14 @@ import './StrokeDashArrayEditor.scss';
 
 export default class StrokeDashArrayEditor extends EditorElement {
 
+
+  initialize() {
+    super.initialize();
+
+    this.notEventRedefine = true;
+  }  
+
+
   initState() {
 
     var value = this.generateValue(this.props.value || '')

@@ -7,6 +7,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { vec3 } from "gl-matrix";
 
 import './GuideLineView.scss';
+import PathParser from "el/editor/parser/PathParser";
 
 const ARROW_SIZE = 4; 
 
@@ -46,12 +47,12 @@ const rect = (rectVerties) => {
         stroke-width="1"
         stroke="red"
         stroke-dasharray="2 2"
-        d="${PathStringManager.makeRect(
+        d="${PathParser.makeRect(
             rectVerties[0][0],
             rectVerties[0][1],
             vec3.dist(rectVerties[0], rectVerties[1]),
             vec3.dist(rectVerties[0], rectVerties[3]),
-        )}
+        ).d}
         " 
     />
 `;    

@@ -3,7 +3,7 @@ import { EditorElement } from 'el/editor/ui/common/EditorElement';
 
 import './TextureView.scss';
 import PathParser from 'el/editor/parser/PathParser';
-import PathStringManager from "el/editor/parser/PathStringManager";
+// import PathStringManager from "el/editor/parser/PathStringManager";
 // import math from "./data/math";
 
 const svgPatterns = [
@@ -12,7 +12,7 @@ const svgPatterns = [
       'background-color': 'transparent',
       stroke: 'black',
       'stroke-width': 2,
-      d: PathStringManager.makeRect(0, 0, 100, 100)
+      d: PathParser.makeRect(0, 0, 100, 100).d
     }
   },
   {
@@ -20,7 +20,7 @@ const svgPatterns = [
       'background-color': 'transparent',
       stroke: 'black',
       'stroke-width': 2,
-      d: PathStringManager.makeLine(0, 0, 100, 100)
+      d: PathParser.makeLine(0, 0, 100, 100).d
     }
   },  
   {
@@ -28,7 +28,7 @@ const svgPatterns = [
       'background-color': 'transparent',
       stroke: 'black',
       'stroke-width': 2,
-      d: PathStringManager.makeLine(0, 100, 100, 0)
+      d: PathParser.makeLine(0, 100, 100, 0).d
     }
   },    
   {
@@ -46,7 +46,7 @@ const svgPatterns = [
       'stroke-width': 2,
       originWidth: 100,
       originHeight: 100,      
-      d: PathStringManager.makeCircle(0, 0, 100, 100)
+      d: PathParser.makeCircle(0, 0, 100, 100).d
     }
   },
   {
@@ -56,7 +56,7 @@ const svgPatterns = [
       'stroke-width': 2,
       originWidth: 100,
       originHeight: 100,      
-      d: PathStringManager.makePolygon(100, 100, 3)
+      d: PathParser.makePolygon(100, 100, 3).d
     }
   }, 
   {
@@ -66,7 +66,7 @@ const svgPatterns = [
       'stroke-width': 2,
       originWidth: 100,
       originHeight: 100,      
-      d: PathStringManager.makePolygon(100, 100, 4)
+      d: PathParser.makePolygon(100, 100, 4).d
     }
   }, 
   {
@@ -76,7 +76,7 @@ const svgPatterns = [
       'stroke-width': 2,
       originWidth: 100,
       originHeight: 100,      
-      d: PathStringManager.makePolygon(100, 100, 5)
+      d: PathParser.makePolygon(100, 100, 5).d
     }
   }, 
   
@@ -87,7 +87,7 @@ const svgPatterns = [
       'stroke-width': 2,
       originWidth: 100,
       originHeight: 100,      
-      d: PathStringManager.makePolygon(100, 100, 6)
+      d: PathParser.makePolygon(100, 100, 6).d
     }
   }, 
   
@@ -98,7 +98,7 @@ const svgPatterns = [
       'stroke-width': 2,
       originWidth: 100,
       originHeight: 100,
-      d: PathStringManager.makePolygon(100, 100, 7)
+      d: PathParser.makePolygon(100, 100, 7).d
     }
   },   
 
@@ -109,7 +109,7 @@ const svgPatterns = [
       'stroke-width': 2,
       originWidth: 100,
       originHeight: 100,
-      d: PathStringManager.makePolygon(100, 100, 12)
+      d: PathParser.makePolygon(100, 100, 12).d
     }
   },     
   // ...Object.entries(math.data).map(([name, data]) => {
@@ -143,7 +143,8 @@ export default class SVGTextureView extends EditorElement {
       let d = it.attrs.d; 
 
       if (d) {
-        const path = new PathParser(d);
+        
+        const path = PathParser.fromSVGString(d);
 
         if (it.attrs.originWidth) {
           const rect = path.rect();

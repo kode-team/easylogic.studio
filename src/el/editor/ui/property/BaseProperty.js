@@ -101,19 +101,19 @@ export default class BaseProperty extends EditorElement {
   //   }
   // }
 
-  [CLICK('$el .property-body .add-timeline-property') + PREVENT + STOP] (e) {
-    var property = e.$dt.attr('data-property')
-    var editor = e.$dt.attr('data-editor')
+  // [CLICK('$el .property-body .add-timeline-property') + PREVENT + STOP] (e) {
+  //   var property = e.$dt.attr('data-property')
+  //   var editor = e.$dt.attr('data-editor')
 
-    this.emit('addTimelineCurrentProperty', { property, editor })
-  }
+  //   this.emit('addTimelineCurrentProperty', { property, editor })
+  // }
 
-  [CLICK('$el .property-title .add-timeline-property') + PREVENT + STOP] (e) {
-    var property = e.$dt.attr('data-property')
-    var editor = e.$dt.attr('data-editor')
+  // [CLICK('$el .property-title .add-timeline-property') + PREVENT + STOP] (e) {
+  //   var property = e.$dt.attr('data-property')
+  //   var editor = e.$dt.attr('data-editor')
 
-    this.emit('addTimelineCurrentProperty', { property, editor })
-  }  
+  //   this.emit('addTimelineCurrentProperty', { property, editor })
+  // }  
 
   isPropertyShow() {
     return this.$el.hasClass("show");

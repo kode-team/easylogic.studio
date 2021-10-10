@@ -1,6 +1,6 @@
 import { EDIT_MODE_SELECTION } from "el/editor/manager/Editor";
 import { Length } from "el/editor/unit/Length";
-import PathStringManager from "el/editor/parser/PathStringManager";
+import PathParser from 'el/editor/parser/PathParser';
 
 /**
  * 
@@ -16,7 +16,7 @@ export default function newComponent (editor, itemType, obj, isSelected = true, 
             ...obj,
             'font-size': Length.parse(obj.height),
             textLength: '100%',
-            d: PathStringManager.makeLine(0, obj.height.value, obj.width.value, obj.height.value),
+            d: PathParser.makeLine(0, obj.height.value, obj.width.value, obj.height.value).d,
         }
     } else if (itemType === 'svg-circle') {
         itemType = 'svg-path';
@@ -24,7 +24,7 @@ export default function newComponent (editor, itemType, obj, isSelected = true, 
             ...obj,
             'background-color': undefined,            
             fill: `#C4C4C4`,            
-            d: PathStringManager.makeCircle(0, 0, obj.width.value, obj.height.value),
+            d: PathParser.makeCircle(0, 0, obj.width.value, obj.height.value).d,
         }        
 
     } else if (itemType === 'svg-rect') {
@@ -33,7 +33,7 @@ export default function newComponent (editor, itemType, obj, isSelected = true, 
             ...obj,
             'background-color': undefined,
             fill: `#C4C4C4`,            
-            d: PathStringManager.makeRect(0, 0, obj.width.value, obj.height.value),
+            d: PathParser.makeRect(0, 0, obj.width.value, obj.height.value).d,
         }             
     } else if (itemType === 'text') {
         obj = {

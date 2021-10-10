@@ -21,6 +21,22 @@ $range-track-height: 2px;
 $range-thumb-top: -5px; 
 $range-thumb-border-radius: 20px; 
 
+.designeditor {
+  &[data-design-mode="design"] {
+
+  }
+
+  &[data-design-mode="item"] {
+    .layout-middle {
+      bottom: 0px !important;
+    }
+
+    .elf--status-bar {
+      display: none !important;
+    }
+  }
+}
+
 .layout-main {
   position: absolute;
   left: 0px;

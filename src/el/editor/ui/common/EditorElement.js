@@ -98,6 +98,10 @@ export class EditorElement extends UIElement {
         return this.$editor.selection;
     }
 
+    get $segmentSelection() {
+        return this.$editor.segmentSelection;
+    }
+
     /**
      * @type {CommandManager}
      */

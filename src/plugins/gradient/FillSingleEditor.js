@@ -6,6 +6,13 @@ import './FillSingleEditor.scss';
 
 export default class FillSingleEditor extends EditorElement {
 
+
+    initialize() {
+        super.initialize();
+    
+        this.notEventRedefine = true;
+    }    
+
     initState() { 
         return {
             index: this.props.index,

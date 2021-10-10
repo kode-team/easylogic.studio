@@ -17,7 +17,7 @@ export class BaseModel {
    * @param {object} json 초기화 할 데이타 
    * @param {ModelManager} modelManager
    */
-  constructor(json = {}, modelManager) {
+  constructor(json = {}, modelManager) {    
     this.modelManager = modelManager;
 
     this.ref = new Proxy(this, {
@@ -56,7 +56,6 @@ export class BaseModel {
     });
 
     this.json = this.convert(Object.assign(this.getDefaultObject(), json));
-
     this.lastChangedField = {};
     this.lastChangedFieldKeys = [];
     this.cachedValue = {};

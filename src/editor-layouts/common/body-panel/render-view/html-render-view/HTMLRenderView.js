@@ -34,7 +34,11 @@ export default class HTMLRenderView extends EditorElement {
         return /*html*/`
             <div class='elf--element-view' ref='$body'>
                 <object refClass='StyleView' ref='$styleView' />
-                <div class='canvas-view' ref='$view' data-outline="${this.$config.get('show.outline')}"></div>
+                <div class='canvas-view' 
+                        data-renderer-id='${this.$editor.EDITOR_ID}' 
+                        ref='$view' 
+                        data-outline="${this.$config.get('show.outline')}"
+                ></div>
                 ${this.$injectManager.generate("render.view")}
             </div>
         `
@@ -119,6 +123,16 @@ export default class HTMLRenderView extends EditorElement {
             return false;
         }
 
+        // 전체 캔버스 영역을 클릭하면 selection 하지 않는다. 
+        const $target = Dom.create(e.target);
+        if ($target.hasClass('canvas-view')) {
+            return false;
+        }
+
+        // svg 영역이 클릭되면 클릭에서 제외한다.
+        if ($target.hasClass('view-path-item')) {
+            return false;
+        }        
 
         const mousePoint = this.$viewport.getWorldPosition(e);
         if (this.$selection.hasPoint(mousePoint)) {
@@ -137,16 +151,13 @@ export default class HTMLRenderView extends EditorElement {
             return true;
         }
 
+
         // hover item 이 있으면 클릭 대상이 있다고 간주한다. 
-        if (this.$selection.hasHoverItem()) {
+        if (this.$selection.hasHoverItem()) {            
             this.$selection.selectHoverItem();
             return true;
         }
 
-        const $target = Dom.create(e.target);
-        if ($target.hasClass('canvas-view')) {
-            return false;
-        }
 
         const $element = $target.closest('element-item');
 
@@ -180,6 +191,13 @@ export default class HTMLRenderView extends EditorElement {
     }
 
     [DOUBLECLICK('$view')](e) {
+
+        const $target = Dom.create(e.target);
+
+        if ($target.hasClass('view-path-item')) {
+            return false;
+        }
+
         const $item = Dom.create(e.target).closest('element-item');
 
         if ($item) {

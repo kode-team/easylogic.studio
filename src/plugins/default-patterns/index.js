@@ -20,7 +20,8 @@ import SVGTextureView from './views/SVGTextureView';
         TextureView: { 
             value: "texture",
             title: "Texture",
-            icon: texture
+            icon: texture,
+            designMode: ["design", "item"]
         }
     })
 

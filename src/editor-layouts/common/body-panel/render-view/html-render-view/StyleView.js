@@ -15,7 +15,7 @@ export default class StyleView extends EditorElement {
     return /*html*/`
     <div class='style-view' style='pointer-events: none; position: absolute;display:inline-block;left:-1000px;'>
       <div ref='$svgArea'></div>
-      <style type='text/css' ref='$styleView'></style>
+      <div type='text/css' ref='$styleView'></div>
     </div>
     `;
   }
@@ -23,7 +23,7 @@ export default class StyleView extends EditorElement {
   initialize() {
     super.initialize()
 
-    this.refs.$head = Dom.create(document.head)
+    this.refs.$styleView = Dom.create(document.head)
   }
 
   makeStyle (item) {
@@ -32,7 +32,7 @@ export default class StyleView extends EditorElement {
 
   refreshStyleHead () {
     var project = this.$selection.currentProject || new Project()
-    this.refs.$head.$$(`style[data-renderer-type="html"]`).forEach($style => $style.remove())
+    this.refs.$styleView.$$(`style[data-renderer-type="html"]`).forEach($style => $style.remove())
 
     // project setting 
     this.changeStyleHead(project)
@@ -47,7 +47,7 @@ export default class StyleView extends EditorElement {
     const styleTag = this.makeStyle(item)
 
     $temp.html(styleTag).children().forEach($item => {
-      this.refs.$head.append($item);
+      this.refs.$styleView.append($item);
     })
 
   }
@@ -63,7 +63,7 @@ export default class StyleView extends EditorElement {
     }).join(',');
 
     let isChanged = false; 
-    this.refs.$head.$$(selector).forEach(it => {
+    this.refs.$styleView.$$(selector).forEach(it => {
       if (item.isChanged(it.attr('data-timestamp'))) {
         isChanged = true;       
         it.remove();
@@ -137,7 +137,7 @@ export default class StyleView extends EditorElement {
     }
 
     if (removeStyleSelector.length) {
-      this.refs.$head.$$(removeStyleSelector).forEach(it => {
+      this.refs.$styleView.$$(removeStyleSelector).forEach(it => {
         it.remove();
       })  
     }
@@ -146,7 +146,7 @@ export default class StyleView extends EditorElement {
 
     var $fragment = TEMP_DIV.html(styleTags.join('')).createChildrenFragment()
 
-    this.refs.$head.append($fragment);
+    this.refs.$styleView.append($fragment);
   }  
 
   refresh() {

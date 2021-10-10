@@ -16,6 +16,7 @@ export default class PopupManager extends EditorElement {
     return /*html*/`
       <div class="popup-manger">
         <object refClass='ExportWindow' />
+        <object refClass='EmbedEditorWindow' />
         <object refClass='ProjectWindow' />
         <object refClass='ShortcutWindow' />
         <!-- LoginWindow / -->

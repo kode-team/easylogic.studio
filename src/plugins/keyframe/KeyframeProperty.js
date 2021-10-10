@@ -134,8 +134,12 @@ export default class KeyframeProperty extends BaseProperty {
     this.refresh();
   }
 
-  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)] () {
-    this.refreshShowIsNot(['project']);
+
+  [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)]() {
+    const current = this.$selection.current;
+    if (current && current.hasChangedField('keyframes')) {
+      this.refresh();
+    }
   }
 
 

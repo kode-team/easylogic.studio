@@ -514,7 +514,7 @@ export default class DomRender extends ItemRender {
    * @param {HtmlRenderer} renderer 
    */
   toStyle (item, renderer) {
-    const cssString = this.generateView(item, `.element-item[data-id='${item.id}']`)
+    const cssString = this.generateView(item, `[data-renderer-id='${renderer.id}'] .element-item[data-id='${item.id}']`)
     return /*html*/`
 <style type='text/css' data-renderer-type="html" data-id='${item.id}' data-timestamp='${item.timestamp}'>
 ${cssString}
@@ -523,6 +523,22 @@ ${cssString}
       return renderer.toStyle(it, renderer);
     }).join('')
   }
+
+  /**
+   * 
+   * @param {Item} item 
+   * @param {HtmlRenderer} renderer 
+   */
+   toExportStyle (item, renderer) {
+    const cssString = this.generateView(item, `.element-item[data-id='${item.id}']`)
+    return /*html*/`
+<style type='text/css' data-renderer-type="html" data-id='${item.id}' data-timestamp='${item.timestamp}'>
+${cssString}
+</style>
+    ` + item.layers.map(it => {
+      return renderer.toExportStyle(it, renderer);
+    }).join('')
+  }  
 
   /**
    * 처음 렌더링 할 때 

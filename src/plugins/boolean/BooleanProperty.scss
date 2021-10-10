@@ -1,7 +1,12 @@
 .elf--boolean-item {
-    display: flex; 
-    height: 24px;
+
+    // height: 24px;
     padding-top: 8px;
+
+    > div {
+      display: flex; 
+      padding: 4px 0px;
+    }
 
     button {
         flex: 1 1 auto;

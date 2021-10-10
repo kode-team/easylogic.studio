@@ -53,6 +53,26 @@ export default class ProjectRender extends DomRender {
 
     /**
      * 
+     * @param {Project} item 
+     */
+     toExportStyle (item) {
+        
+        const keyframeString = item.toKeyframeString();
+        const rootVariable = this.toRootVariableCSS(item);
+
+        return /*html*/`
+<style type='text/css' data-renderer-type="html" data-id='${item.id}'>
+    :root {
+        ${CSS_TO_STRING(rootVariable)}
+    }
+    /* keyframe */
+    ${keyframeString}
+</style>
+        `
+    }    
+
+    /**
+     * 
      * @param {Item} item 
      * @param {HTMLRenderer} renderer 
      */

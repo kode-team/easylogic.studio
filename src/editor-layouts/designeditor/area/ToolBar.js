@@ -60,9 +60,6 @@ export default class ToolBar extends EditorElement {
                     <div class='elf--tool-menu'>
                         <div class='items'>
                             <div class='draw-items'>      
-                                <object refClass="ExportView" />
-                                <object refClass="Download" />
-                                <object refClass="Save" />
                                 ${this.$injectManager.generate('toolbar.right')}                             
                             </div>
                         </div>

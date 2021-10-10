@@ -32,6 +32,8 @@ export default class BaseLayout extends EditorElement {
       this.$config.setAll(this.opt.config || {});
     }
 
+    console.log('base layout');
+
 
   }
 
@@ -172,14 +174,14 @@ export default class BaseLayout extends EditorElement {
     this.__ends.add({ func, context, xy });
   }
 
-  [POINTERSTART("document")](e) {
+  [POINTERSTART()](e) {
     var newPos = e.xy || EMPTY_POS;
 
     this.$config.set("bodyEvent", e);
     this.$config.set("pos", newPos);
   }
 
-  [POINTERMOVE("document")](e) {
+  [POINTERMOVE()](e) {
     var newPos = e.xy || EMPTY_POS;
 
     this.$config.set("bodyEvent", e);
@@ -190,7 +192,7 @@ export default class BaseLayout extends EditorElement {
     }
   }
 
-  [POINTEREND("document")](e) {
+  [POINTEREND()](e) {
 
     // var newPos = e.xy || EMPTY_POS;
     this.$config.set("bodyEvent", e);

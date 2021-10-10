@@ -48,6 +48,6 @@ export default class GridLayoutLineView extends EditorElement {
     }
 
     [SUBSCRIBE('updateViewport')] () {
-        this.refresh();
+        // this.refresh();
     }
 } 

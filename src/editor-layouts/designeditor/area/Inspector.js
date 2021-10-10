@@ -2,6 +2,7 @@
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { Tabs } from "el/editor/ui/view/Tabs";
+import { BIND } from "el/sapa/Event";
 import { variable } from 'el/sapa/functions/registElement';
 
 export default class Inspector extends EditorElement {
@@ -9,6 +10,19 @@ export default class Inspector extends EditorElement {
   components() {
     return {
       Tabs
+    }
+  }
+
+
+  afterRender() {
+    this.$el.toggle(this.$config.get('editor.design.mode') === 'design');
+  }
+
+  [BIND('$el')] () {
+    return {
+      style: {
+        display: this.$config.get('editor.design.mode') === 'design' ? 'block' : 'none'
+      }
     }
   }
 

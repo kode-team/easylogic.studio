@@ -84,10 +84,11 @@ export default class PathDrawView extends EditorElement {
 
     makePathLayer (pathRect) {
         var layer; 
-        // rect 기준으로 상대 좌표로 다시 변환 
-        const simplyPoints = Point.simply(this.state.points, this.state.tolerance)
-        const drawParser = new PathParser(PathStringManager.makePathByPoints(simplyPoints))
-        const newPath = new PathParser(PathGenerator.generatorPathString(drawParser.convertGenerator()));
+        // 점 개수 줄이기 
+        const newPath = PathParser.makePathByPoints(this.state.points)
+                                    .simplify(this.state.tolerance)
+                                    .smooth(30);
+
 
         newPath.transformMat4(this.$viewport.matrixInverse);
         const bbox = newPath.getBBox();
@@ -110,7 +111,6 @@ export default class PathDrawView extends EditorElement {
         FIELDS.forEach(key => {
             if (this.state[key]) Object.assign(pathItem, {[key]: this.state[key] })    
         });            
-
 
         const containerItem = this.$selection.currentProject;
 
@@ -253,6 +253,11 @@ export default class PathDrawView extends EditorElement {
 
     [BIND('$view')] () {
 
+        // 부드럽게 만들기
+        const newPath = PathParser.makePathByPoints(this.state.points)
+                                    .simplify(this.state.tolerance)
+                                    // .smooth(30);
+
         return {
             innerHTML: /*html*/`
             <svg width="100%" height="100%" class='svg-editor-canvas'>
@@ -265,7 +270,7 @@ export default class PathDrawView extends EditorElement {
                     stroke-width="${this.state['stroke-width']}"
                     stroke-linecap="${this.state['stroke-linecap']}"
                     stroke-linejoin="${this.state['stroke-linejoin']}"
-                    d="${PathStringManager.makePathByPoints(this.state.points)}" 
+                    d="${newPath.d}" 
                 />
             </svg>
             ` 

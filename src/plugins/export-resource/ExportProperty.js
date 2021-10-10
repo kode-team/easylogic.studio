@@ -11,11 +11,9 @@ export default class ExportProperty extends BaseProperty {
     return this.$i18n('export.property.title');
   }
 
-  [SUBSCRIBE('refreshSelection', 'refreshContent') + DEBOUNCE(100)]() {
-
-    this.refreshShowIsNot('project');
-
-  }  
+  isFirstShow() {
+    return true;
+  }
 
   getClassName() {
     return 'elf--export-property'

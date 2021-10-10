@@ -1,5 +1,5 @@
 
-import { POINTERSTART, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, DOUBLECLICK, ENTER, ESCAPE, DOUBLETAB, DELAY, SUBSCRIBE } from "el/sapa/Event";
+import { POINTERSTART, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, DOUBLECLICK, ENTER, ESCAPE, DOUBLETAB, DELAY, SUBSCRIBE, THROTTLE } from "el/sapa/Event";
 import PathGenerator from "el/editor/parser/PathGenerator";
 import Dom from "el/sapa/functions/Dom";
 import PathParser from "el/editor/parser/PathParser";
@@ -33,7 +33,7 @@ const SegmentConvertor = class extends EditorElement {
         this.refreshPathLayer()
     }
 
-    [DOUBLECLICK('$view [data-segment]')](e) {
+    [DOUBLECLICK('$view [data-segment]') + PREVENT](e) {
         var index = +e.$dt.attr('data-index')
 
         this.convertToCurve(index);
@@ -242,6 +242,7 @@ export default class PathEditorView extends PathTransformEditor {
     template() {
         return /*html*/`
         <div class='elf--path-editor-view' tabIndex="-1">
+            <style type="text/css" ref="$styleView"></style>
             <div class='path-container' ref='$view'></div>
             <div class='path-container split-panel'>
                 <svg width="100%" height="100%">
@@ -251,7 +252,6 @@ export default class PathEditorView extends PathTransformEditor {
             <div class='segment-box' ref='$segmentBox'></div>
         </div>`
     }
-
     isShow() {
         return this.state.isShow
     }
@@ -395,12 +395,13 @@ export default class PathEditorView extends PathTransformEditor {
         return this.state.mode === mode;
     }
 
-    [SUBSCRIBE('updateViewport')](newScale, oldScale) {
+    afterRender() {
+        this.$el.hide();
+    }
+
+    [SUBSCRIBE('updateViewport')]() {
 
         if (this.$el.isShow()) {
-
-            // 이전 scale 로 복구 한 다음 새로운 path 를 설정한다. 
-
             const { d } = this.pathGenerator.toPath()
 
             const pathParser = new PathParser(d);
@@ -430,7 +431,7 @@ export default class PathEditorView extends PathTransformEditor {
             this.pathGenerator.setPoints(this.pathParser.convertGenerator())
         }
 
-        this.pathGenerator.initializeSelect(selectedPointList);
+        // this.pathGenerator.initializeSelect(selectedPointList);
         this.renderPath()
 
     }
@@ -496,6 +497,7 @@ export default class PathEditorView extends PathTransformEditor {
             },
 
             // 성능을 위해서 diff 알고리즘 사용 
+            // diff 를 하지 않으면 이벤트가 종료 되기 때문에 diff 로 부분만 변경해줘야 함 
             htmlDiff: this.pathGenerator.makeSVGPath()
         }
     }

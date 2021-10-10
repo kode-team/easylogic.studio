@@ -3,21 +3,21 @@ import icon, { iconUse } from "el/editor/icon/icon";
 
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
-import ObjectItems from "./object-list/ObjectItems";
 import CustomAssets from "./object-list/CustomAssets";
 import LibraryItems from "./object-list/LibraryItems";
 import AssetItems from "./object-list/AssetItems";
+import SingleObjectItems from './object-list/SingleObjectItems';
 
 
 
-export default class LayerTab extends EditorElement {
+export default class ItemLayerTab extends EditorElement {
 
   components() {
     return {
       AssetItems,
       LibraryItems,
       CustomAssets,
-      ObjectItems,
+      SingleObjectItems,
     }
   }
 
@@ -26,19 +26,21 @@ export default class LayerTab extends EditorElement {
       selectedIndexValue: 2
     }
   }
+
   afterRender() {
-    this.$el.toggle(this.$config.get('editor.design.mode') === 'design');
+    this.$el.toggle(this.$config.get('editor.design.mode') === 'item');
   }
 
   [BIND('$el')] () {
     return {
       style: {
-        display: this.$config.get('editor.design.mode') === 'design' ? 'block' : 'none'
+        display: this.$config.get('editor.design.mode') === 'item' ? 'block' : 'none'
       }
     }
   }
 
   template() {
+
     return /*html*/`
       <div class='layer-tab'>
         <div class="tab number-tab side-tab side-tab-left" data-selected-value="2" ref="$tab">
@@ -46,17 +48,13 @@ export default class LayerTab extends EditorElement {
             <div class="tab-item selected" data-value="2" data-direction="right" data-tooltip="${this.$i18n('app.tab.title.layers')}">
               <label>${iconUse('layers')}</label>
             </div>            
-            <div class='tab-item' data-value='3' data-direction="right"  data-tooltip="${this.$i18n('app.tab.title.libraries')}">
-              <label>${iconUse("auto_awesome")}</label>
-            </div>                     
-            <div class='tab-item' data-value='5' data-direction="right"  data-tooltip="${this.$i18n('app.tab.title.assets')}">
-              <label>${iconUse("apps")}</label>
-            </div>   
             <div class='tab-item' data-value='6' data-direction="right"  data-tooltip="${this.$i18n('app.tab.title.components')}">
               <label>${iconUse("plugin")}</label>
             </div>            
 
-            ${this.$injectManager.getTargetMenuItems('leftbar.tab').map(it => {
+            ${this.$injectManager.getTargetMenuItems('leftbar.tab').filter(it => {
+              return it.class.designMode && it.class.designMode.includes('item');
+            }).map(it => {
               const { value, title} = it.class;   
               
               let iconString = it.class.icon;
@@ -73,25 +71,14 @@ export default class LayerTab extends EditorElement {
           </div>
           <div class="tab-body" ref="$body">
             <div class="tab-content selected" data-value="2">
-              <object refClass="ObjectItems" />
-            </div>
-            <div class='tab-content' data-value='3'>
-              <object refClass="LibraryItems" />
-            </div>            
-            <div class='tab-content' data-value='5'>
-              <object refClass="AssetItems" />            
-              <div class='assets'>
-                <object refClass="GradientAssetsProperty" />    
-                <object refClass="PatternAssetsProperty" />    
-                <object refClass="ImageAssetsProperty" />      
-                <object refClass="VideoAssetsProperty" />       
-                <object refClass="SVGFilterAssetsProperty" />                
-              </div>
+              <object refClass="SingleObjectItems" />
             </div>
             <div class='tab-content' data-value='6'>
               <object refClass="CustomAssets" />
             </div>
-            ${this.$injectManager.getTargetMenuItems('leftbar.tab').map(it => {
+            ${this.$injectManager.getTargetMenuItems('leftbar.tab').filter(it => {
+              return it.class.designMode && it.class.designMode.includes('item');
+            }).map(it => {
               const { value } = it.class;
               return /*html*/`
                 <div class='tab-content' data-value='${value}'>
