@@ -1,5 +1,4 @@
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-import PageSubEditor from "./PageSubEditor";
 import ToolMenu from "./tool-bar/ToolMenu";
 import Projects from "el/editor/ui/menu-items/Projects";
 
@@ -27,7 +26,6 @@ export default class ToolBar extends EditorElement {
             Redo,
             DropdownMenu,
             Projects,
-            PageSubEditor,
             ToolMenu
         }
     }
@@ -54,7 +52,6 @@ export default class ToolBar extends EditorElement {
                 </div>
                 <div class='center'>
                     <object refClass="ToolMenu" />
-                    <object refClass='PageSubEditor' />  
                 </div>
                 <div class='right'>
                     <div class='elf--tool-menu'>

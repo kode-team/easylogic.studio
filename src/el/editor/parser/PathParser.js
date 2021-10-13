@@ -376,6 +376,8 @@ export default class PathParser {
         } else {
             this.segments = newSegments;
         }
+
+        return this;
     }
 
     _loop(m, isReturn = false) {
@@ -577,7 +579,7 @@ export default class PathParser {
 
             const newSegments = [];
 
-            group.segments.forEach(({ segment, index }) => {
+            group.segments.forEach(({ segment }, index) => {
                 const prevSegment = group.segments[index - 1]?.segment;
 
                 if (segment.command === 'M') {
@@ -599,8 +601,6 @@ export default class PathParser {
                 } else if (segment.command === 'C') {
                     newSegments.push(segment);
                 } else if (segment.command === 'Q') {
-                    prevSegment.values[0];
-
                     const twoOfThree = 2 / 3;
 
                     newSegments.push({
@@ -633,13 +633,19 @@ export default class PathParser {
         return normalizedPath;
     }
 
+    /**
+     * count 에 의해 각각의 segment 를 나눈다. 
+     * 
+     * @param {number} count 
+     * @returns 
+     */
     divideSegmentByCount(count = 1) {
-        const allSegments = [];
+        let allSegments = [];
         const groupList = this.getGroup();
 
         groupList.forEach(group => {
             const newSegments = [];
-            group.segments.forEach(({ segment, index }) => {
+            group.segments.forEach(({ segment }, index) => {
                 const prevSegment = group.segments[index - 1]?.segment;
                 const nextSegment = group.segments[index + 1]?.segment;
 
@@ -711,13 +717,10 @@ export default class PathParser {
                 }
             })
 
-            allSegments.push(...newSegments);
+            allSegments = allSegments.concat(newSegments);
         })
 
-        const normalizedPath = new PathParser();
-        normalizedPath.resetSegments(allSegments);
-
-        return normalizedPath;
+        return PathParser.fromSegments(allSegments);
     }
 
     getBBox() {
@@ -948,6 +951,10 @@ export default class PathParser {
         return this.toString().trim();
     }
 
+    get closed () {
+        return this.segments.some(segment => segment.command === 'Z');
+    }
+
     toString(split = '') {
         return this.joinPath(undefined, split);
     }
@@ -963,17 +970,7 @@ export default class PathParser {
                     var result = vec3.transformMat4([], [v[0], v[1], 0], transformMatrix);
                     segment.values = [result[0], result[1]]
                     break;
-                case 'V':
-                    var result = vec3.transformMat4([], [+v[0], 0, 0], transformMatrix)
-                    segment.values = [result[0]];
-                    break;
-                case 'H':
-                    var result = vec3.transformMat4([], [0, +v[0], 0], transformMatrix)
-                    segment.values = [result[1]];
-                    break;
                 case 'C':
-                case 'S':
-                case 'T':
                 case 'Q':
                     for (var i = 0, len = v.length; i < len; i += 2) {
                         var result = vec3.transformMat4([], [v[i], v[i + 1], 0], transformMatrix)
@@ -989,6 +986,35 @@ export default class PathParser {
             return segment;
 
         }, isReturn);
+    }
+
+    transform (customTransformFunction = ([x, y, z]) => ([x, y, z])) {
+        return this.each(function (segment) {
+            var v = segment.values;
+            var c = segment.command;
+
+            switch (c) {
+                case 'M':
+                case 'L':
+                    var result = customTransformFunction([v[0], v[1], 0]);
+                    segment.values = [result[0], result[1]]
+                    break;
+                case 'C':
+                case 'Q':
+                    for (var i = 0, len = v.length; i < len; i += 2) {
+                        var result = customTransformFunction([v[i], v[i + 1], 0]);
+                        segment.values[i] = result[0];
+                        segment.values[i + 1] = result[1];
+                    }
+                    break;
+                case 'A':
+
+                    break;
+            }
+
+            return segment;
+
+        });
     }
 
     /**
@@ -1440,7 +1466,7 @@ export default class PathParser {
      * @returns 
      */
     smooth(error = 50) {
-        const newGroupSegments = [];
+        let newGroupSegments = [];
         const groupList = this.getGroup();
         groupList.forEach((group, groupIndex) => {
             const points = [
@@ -1463,13 +1489,14 @@ export default class PathParser {
 
             })
 
-            newGroupSegments.push(...newSegments);
+            if (group.segments[group.segments.length - 1].segment.command.toLowerCase() === 'z') {
+                newSegments.push(Segment.Z());
+            }
+
+            newGroupSegments = newGroupSegments.concat(newSegments);
         })
 
-        const path = new PathParser();
-        path.resetSegments(newGroupSegments);
-
-        return path;
+        return PathParser.fromSegments(newGroupSegments);
     }
 
     /**

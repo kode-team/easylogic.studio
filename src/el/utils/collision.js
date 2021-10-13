@@ -484,13 +484,23 @@ export function itemsToRectVerties (items = []) {
     return rectToVerties(minX, minY, maxX - minX, maxY - minY);
 }
 
-export function vertiesToRectangle (verties) {
-    const x = Length.px(verties[0][0]).floor();
-    const y = Length.px(verties[0][1]).floor();
-    const width = Length.px(vec3.dist(verties[0], verties[1])).floor();
-    const height = Length.px(vec3.dist(verties[0], verties[3])).floor();
+export function vertiesToRectangle (verties, hasLength = true) {
 
-    return {x, left: x, y, top: y, width, height}
+    if (hasLength) {
+        const x = Length.px(verties[0][0]).floor();
+        const y = Length.px(verties[0][1]).floor();
+        const width = Length.px(vec3.dist(verties[0], verties[1])).floor();
+        const height = Length.px(vec3.dist(verties[0], verties[3])).floor();
+    
+        return {x, left: x, y, top: y, width, height}
+    } else {
+        const x = verties[0][0];
+        const y = verties[0][1];
+        const width = vec3.dist(verties[0], verties[1]);
+        const height = vec3.dist(verties[0], verties[3]);
+    
+        return {x, left: x, y, top: y, width, height}        
+    }
 }
 
 export function toRectVertiesWithoutTransformOrigin (verties) {

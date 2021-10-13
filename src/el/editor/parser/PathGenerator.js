@@ -362,7 +362,6 @@ export default class PathGenerator {
 
         var {x, y, width, height} = this.transformRect;
 
-
         var view = mat4.create()
         mat4.translate(view, view, [x, y, 0]);          // 4. 다시 원래 위치로 옮긴다. 
 

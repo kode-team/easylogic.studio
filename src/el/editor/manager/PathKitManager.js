@@ -127,17 +127,39 @@ export class PathKitManager {
     return pathObject.simplify().toSVGString();
   }
 
+  convertLineJoin(lineJoin) {
+    const PathKit = this.pathkit;     
+    switch (lineJoin) {
+      case 'miter': return PathKit.StrokeJoin.MITER;
+      case 'round': return PathKit.StrokeJoin.ROUND;
+      case 'bevel': return PathKit.StrokeJoin.BEVEL;
+    }
+  }
+
+  convertLineCap(lineCap) {
+    const PathKit = this.pathkit;     
+    switch (lineCap) {
+      case 'butt': return PathKit.StrokeCap.BUTT;
+      case 'round': return PathKit.StrokeCap.ROUND;
+      case 'square': return PathKit.StrokeCap.SQUARE;
+    }
+  }
+
   stroke (path, opt = {width: 1, miter_limit: 4}) {
     const PathKit = this.pathkit;    
     const pathObject = PathKit.FromSVGString(path);
 
-    return pathObject.stroke({ opt }).toSVGString();
+    return pathObject.stroke({ 
+      width: opt['stroke-width'],
+      join: this.convertLineJoin(opt['stroke-linejoin']),
+      cap: this.convertLineCap(opt['stroke-linecap']),
+    }).simplify().toSVGString();
   }
 
   round(path, opt = {width: 1, miter_limit: 4}) {
     return this.stroke(path, {
       ...opt,
-      join: PathKit.StrokeJoin.ROUND
+      'stroke-linejoin': 'round'
     });
   }
 
@@ -166,8 +188,6 @@ export class PathKitManager {
   trim(path, startT, stopT, isComplement = false) {
     const PathKit = this.pathkit;   
     const pathObject = PathKit.FromSVGString(path);
-
-    console.log(pathObject.contains);
 
     return pathObject.trim(startT, stopT, isComplement).toSVGString();
   }

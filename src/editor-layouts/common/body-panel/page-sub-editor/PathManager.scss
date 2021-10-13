@@ -4,9 +4,9 @@
     outline: none;
     border-top: 0px;
     color: var(--elf--font-color);
-    background-color: var(--elf--header-background-color);
+    // background-color: var(--elf--header-background-color);
     height: 100%;
-    padding: 7px 0px;
+    padding: 2px 0px;
     overflow: hidden;
     white-space: nowrap;
     text-align: center;
@@ -28,13 +28,13 @@
     .tools {
 
         &.left {
-          padding-left: 48px;
+          padding-left: 4px;
           float: left;
 
           button {
             width: auto;
             height: auto;
-            padding: 10px 18px;
+            padding: 4px 10px;
             border-radius: 4px;
             text-decoration: none;
           }

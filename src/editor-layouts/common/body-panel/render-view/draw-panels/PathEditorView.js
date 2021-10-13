@@ -11,6 +11,7 @@ import { getDist } from "el/utils/math";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
 import './PathEditorView.scss';
+import { vertiesToRectangle } from "el/utils/collision";
 
 /**
  * convert array[x, y] to object{x, y} 
@@ -319,7 +320,7 @@ export default class PathEditorView extends PathTransformEditor {
             height: Length.px(newHeight),
             d: newPath.d,
             // totalLength: this.totalPathLength,
-            fill: `#C4C4C4`
+            fill: newPath.closed ? `#C4C4C4` : 'transparent'
         }
 
         FIELDS.forEach(key => {
@@ -529,17 +530,9 @@ export default class PathEditorView extends PathTransformEditor {
     getPathRect() {
         this.initRect(true);
 
-        var $obj = this.refs.$view.$('path.object')
+        const { d } = this.pathGenerator.toPath();
 
-        var pathRect = { x: 0, y: 0, width: 0, height: 0 }
-        if ($obj) {
-
-            pathRect = $obj.rect()
-            pathRect.x -= this.state.rect.x;
-            pathRect.y -= this.state.rect.y;
-        }
-
-        return pathRect;
+        return vertiesToRectangle(PathParser.fromSVGString(d).getBBox(), false);
     }
 
     resetTransformZone() {

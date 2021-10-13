@@ -205,8 +205,8 @@ export default class LayerAppendView extends EditorElement {
         return {
             style: {
                 display: !showRectInfo ? 'inline-block' : 'none',
-                left: Length.px(targetVertex[0]),
-                top: Length.px(targetVertex[1]),
+                left: Length.px(targetVertex[0] || -10000),
+                top: Length.px(targetVertex[1] || -10000),
             },
             innerHTML: `x: ${Math.round(target[0])}, y: ${Math.round(target[1])}`
         }

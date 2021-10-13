@@ -10,7 +10,7 @@ import KeyboardManager from "../common/KeyboardManager";
 import Inspector from "./area/Inspector";
 import StatusBar from './area/StatusBar';
 import ToolBar from "./area/ToolBar";
-import PageSubEditor from "./area/PageSubEditor";
+
 import designEditorPlugins from "plugins/design-editor-plugins";
 import LayerTab from "./area/LayerTab";
 import { END, MOVE } from "el/editor/types/event";
@@ -33,7 +33,6 @@ export default class DesignEditor extends BaseLayout {
     return {
       LayerTab,
       ItemLayerTab,
-      PageSubEditor,
       ToolBar,
       StatusBar,
       Inspector,
@@ -64,7 +63,6 @@ export default class DesignEditor extends BaseLayout {
         <div class="layout-main">
           <div class='layout-top' ref='$top'>
             <object refClass="ToolBar" />
-            <object refClass="PageSubEditor" />
           </div>
           <div class="layout-middle" ref='$middle'>      
             <div class="layout-body" ref='$bodyPanel'>

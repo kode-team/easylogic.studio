@@ -32,9 +32,6 @@ export default class BaseLayout extends EditorElement {
       this.$config.setAll(this.opt.config || {});
     }
 
-    console.log('base layout');
-
-
   }
 
   /**
@@ -142,7 +139,6 @@ export default class BaseLayout extends EditorElement {
           v.func.call(v.context, dx, dy, 'move', e.pressure);
         }
       });
-
       this.$config.set('lastPos', pos);
     }
     requestAnimationFrame(this.__funcBodyMoves);
