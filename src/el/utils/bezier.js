@@ -1,4 +1,5 @@
 import { vec3 } from "gl-matrix";
+import { getClosestPointBylineLine } from "./collision";
 import { getDist } from "./math";
 
 export const predefinedBezier = {
@@ -460,4 +461,59 @@ export const getQuardCurveBBox = (points) => {
         const {x, y} = getBezierPointOneQuard(xyPoints, t);
         return [x, y, 0]
     })
+}
+
+
+/**
+ * 
+ * @typedef Point
+ * @type {object}
+ * 
+ * @property {number} x
+ * @property {number} y
+ */
+
+/**
+ * 
+ * @typedef Curve
+ * @type {Point[]}
+ */
+
+/**
+ * direction (top -> right -> bottom -> left)
+ * 
+ * @param {Curve[]} bezierCurveList 
+ * @param {*} tList 
+ */
+export const getPointInCurveList = (bezierCurveList = [], tList= []) => {
+    const results = bezierCurveList.map((curve, index) => {
+        const t = tList[index];
+
+        const resultPoint = getBezierPointOne(curve, t);
+
+        return resultPoint;
+    })
+
+
+    const v1 = [
+        results[0],
+        results[2],
+    ]
+
+    const v2 = [
+        results[1],
+        results[3],
+    ]
+
+    return getClosestPointBylineLine(
+        v1[0].x,
+        v1[0].y,
+        v1[1].x,
+        v1[1].y,
+        v2[0].x,
+        v2[0].y,
+        v2[1].x,
+        v2[1].y,
+    )
+
 }

@@ -174,36 +174,27 @@ export function makeGuidePoint (sourceVerties, targetVerties) {
     }
 
     // x 구하기 
-
-    // source 가 왼쪽 그러므로 오른쪽 좌표 사용 , target 이 오른쪽 그러므로 왼쪽 좌표 사용 
     const leftCenter = vec3.lerp([], leftVerties[1], leftVerties[2], 0.5);
     const rightCenter = vec3.lerp([], rightVerties[0], rightVerties[3], 0.5);
 
     let pointList = [];
 
     if (rightVerties[0][1] <= leftCenter[1] && leftCenter[1] <= rightVerties[3][1]) {
-        // target 영역 안에 존재하면 중간점부터 그림 
-        // console.log("left ", rightVerties[0], leftVerties[3]);                        
         pointList.push(getTargetPointX(leftCenter, rightCenter, "x", null))
     } else if (rightVerties[0][1] <= leftVerties[1][1]) {
         if (rightVerties[3][0] <= leftVerties[1][0] && leftVerties[1][0] <= rightVerties[2][0]) {
-            // console.log("bottom left", rightVerties[3], leftVerties[1]);
             pointList.push(getTargetPointY(rightVerties[3], [rightVerties[3][0], leftVerties[1][1], leftVerties[1][2]], "y", null))
         } else {
-            // console.log("top left", leftVerties[1], rightCenter);
             pointList.push(getTargetPointX(leftVerties[1], rightCenter, "x", rightVerties[3]))
         }
 
     } else if (leftVerties[3][0] <= rightVerties[0][0] && rightVerties[0][0] <= leftVerties[2][0]) {
         pointList.push(getTargetPointY(leftVerties[3], rightVerties[0], "y"))
-    } else if (rightVerties[3][0] <= leftVerties[0][0] && leftVerties[0][0] <= rightVerties[2][0]) {
-        // console.log("bottom right", rightVerties[0], leftVerties[3]);            
+    } else if (rightVerties[3][0] <= leftVerties[0][0] && leftVerties[0][0] <= rightVerties[2][0]) {      
         pointList.push(getTargetPointY([rightVerties[0][0],leftVerties[3][1], leftVerties[3][2] ], rightVerties[0], "y"))
     } else if (rightVerties[3][0] <= leftVerties[1][0] && leftVerties[1][0] <= rightVerties[2][0]) {
-        // console.log("bottom left", rightVerties[3], leftVerties[1]);
         pointList.push(getTargetPointY(rightVerties[3], [rightVerties[3][0], leftVerties[1][1], leftVerties[1][2]], "y"))
     } else {
-        // console.log("last", leftVerties[2], rightCenter);            
         pointList.push(getTargetPointX(leftVerties[2], rightCenter, "x", rightVerties[0]))
     }
 

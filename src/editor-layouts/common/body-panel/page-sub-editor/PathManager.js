@@ -9,8 +9,10 @@ const MODES = {
   'segment-move': 'modify',
   'modify': 'modify',
   'path': 'path',
-} 
+  'transform': "transform",
+  'warp': 'warp'
 
+} 
 
 
 export default class PathManager extends EditorElement {
@@ -36,6 +38,7 @@ export default class PathManager extends EditorElement {
         <div class='tools' ref='$mode' data-selected-value='${this.state.mode}'>
             <button type="button" data-value='modify' title='${this.$i18n('path.manager.mode.modify')}' > ${iconUse("device_hub")}</button>
             <button type="button" data-value='path' title='${this.$i18n('path.manager.mode.path')}' > ${iconUse("control_point")}</button>
+            <button type="button" data-value='transform' title='${this.$i18n('path.manager.mode.transform')}' > ${iconUse("transform")}</button>             
         </div>
         <div class='tools' ref='$util'>
             <button type="button" data-value='reverse' title='${this.$i18n('path.manager.mode.reverse')}' >${iconUse("sync")}</button>

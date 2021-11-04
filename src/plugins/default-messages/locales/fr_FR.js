@@ -252,6 +252,7 @@ export default {
     'path.manager.mode.done': 'Done',    
     'path.manager.mode.modify': 'Modifier',
     'path.manager.mode.path': 'Chemin',
+    'path.manager.mode.warp': 'Warp',        
     'path.manager.mode.transform': 'Transformer',   
     'path.manager.mode.reverse': 'Reverse',         
     'path.manager.mode.flipX': 'Retouner X',    

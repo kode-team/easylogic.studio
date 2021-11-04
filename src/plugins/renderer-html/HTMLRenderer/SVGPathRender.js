@@ -46,6 +46,18 @@ export default class SVGPathRender extends SVGItemRender {
           'fill-rule': item['fill-rule'] || 'nonezero',
         })          
       }
+
+      if (item.hasChangedField('stroke-linejoin')){
+        $path.setAttrNS({
+          'stroke-linejoin': item['stroke-linejoin'],
+        })          
+      }
+
+      if (item.hasChangedField('stroke-linecap')){
+        $path.setAttrNS({
+          'stroke-linecap': item['stroke-linecap'],
+        })          
+      }
     }
 
     super.update(item, currentElement)

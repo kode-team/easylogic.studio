@@ -3,6 +3,7 @@ import { EditorElement } from 'el/editor/ui/common/EditorElement';
 
 import './TextureView.scss';
 import PathParser from 'el/editor/parser/PathParser';
+import { repeat } from "el/utils/func";
 // import PathStringManager from "el/editor/parser/PathStringManager";
 // import math from "./data/math";
 
@@ -112,6 +113,26 @@ const svgPatterns = [
       d: PathParser.makePolygon(100, 100, 12).d
     }
   },     
+  {
+    itemType: "svg-path", name: "star - 5", attrs: {
+      'background-color': 'transparent',
+      stroke: 'black',
+      'stroke-width': 2,
+      originWidth: 100,
+      originHeight: 100,
+      d: PathParser.makeStar(100, 100, 5, .5).d
+    }
+  },    
+  {
+    itemType: "svg-path", name: "curved star - 5", attrs: {
+      'background-color': 'transparent',
+      stroke: 'black',
+      'stroke-width': 2,
+      originWidth: 100,
+      originHeight: 100,
+      d: PathParser.makeCurvedStar(100, 100, 5, .5).d
+    }
+  },           
   // ...Object.entries(math.data).map(([name, data]) => {
   //   console.log(data);
   //   return {

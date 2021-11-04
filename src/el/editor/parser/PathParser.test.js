@@ -324,3 +324,13 @@ test("path - custom transform", () => {
 
     expect(newPath.d).toBe("M 0 0L 2.5 0.6224599710942241L 5 1.2297540583215234L 7.5 1.8070858859667351L 10 2.340389091761849L 10 4.840389091761849L 10 7.340389091761849L 10 9.84038909176185L 10 12.34038909176185L 7.5 11.807085885966735L 5 11.229754058321523L 2.5 10.622459971094225L 0 10")
 })
+
+test("path - total length", () => {
+    const path = new PathParser("M 0 0 L 10 0 L 10 10 L 0 10");
+
+    expect(path.length).toBe(30);
+
+    const path2 = new PathParser("M0, 0L50 50 C100 100  300 300 100 100 Z M 200, 300 L 400 500");
+
+    expect(path2.length).toBe(670.7408127300578);    
+})

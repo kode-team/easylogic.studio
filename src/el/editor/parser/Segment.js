@@ -64,6 +64,24 @@ export class Segment {
     }
 
     /**
+     * Arc
+     * 
+     * @param {number} rx 
+     * @param {number} ry 
+     * @param {number} xrot 
+     * @param {number} laf 
+     * @param {number} sf 
+     * @param {number} x 
+     * @param {number} y 
+     * @returns 
+     */
+    static A(rx, ry, xrot, laf, sf, x, y) {
+        return {
+            command: 'A', values: [rx, ry, xrot, laf, sf, x, y]
+        }
+    }
+
+    /**
      * Close Path
      * 
      * @returns 

@@ -12,6 +12,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
 import './PathEditorView.scss';
 import { vertiesToRectangle } from "el/utils/collision";
+import { MeshTransform } from "el/editor/parser/MeshTransform";
 
 /**
  * convert array[x, y] to object{x, y} 
@@ -349,6 +350,7 @@ export default class PathEditorView extends PathTransformEditor {
             box: this.state.box,
             // totalLength: this.totalPathLength,
         })
+
     }
 
     /**
@@ -389,6 +391,7 @@ export default class PathEditorView extends PathTransformEditor {
 
     [SUBSCRIBE('changePathManager')](obj) {
         this.setState({ ...obj, clickCount: 0 }, false);
+
         this.renderPath()
     }
 
@@ -450,6 +453,7 @@ export default class PathEditorView extends PathTransformEditor {
 
         this.refreshEditorView(obj, true);
 
+        this.transformMode = mode;
         this.state.isShow = true;
         this.$el.show();
         this.$el.focus();
@@ -490,7 +494,8 @@ export default class PathEditorView extends PathTransformEditor {
         return {
             class: {
                 'path': this.state.mode === 'path',
-                'modify': this.state.mode === 'modify',
+                'modify': this.state.mode === 'modify',           
+                'transform': this.state.mode === 'transform',
                 'box': this.state.box === 'box',
                 'canvas': this.state.box === 'canvas',
                 'segment-move': this.state.mode === 'segment-move',

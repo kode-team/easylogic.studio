@@ -43,7 +43,7 @@
         height: 100%;        
         display: inline-block;
 
-        @each $modeType in modify, path, draw, transform {
+        @each $modeType in modify, path, warp, transform {
             &[data-selected-value="#{$modeType}"] {
               button[data-value="#{$modeType}"] {
                 color: var(--elf--selected-color);

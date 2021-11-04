@@ -169,6 +169,8 @@ import source from "./source";
 import sync from "./sync";
 import outline from "./outline";
 import dark from "./dark";
+import wave from "./wave";
+
 
 
 const alias = {
@@ -184,6 +186,7 @@ export function iconUse(name) {
 
 export default {
   ...alias,
+  wave,
   dark,
   outline,
   sync,
