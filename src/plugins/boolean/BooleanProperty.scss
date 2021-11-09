@@ -1,11 +1,16 @@
 .elf--boolean-item {
 
     // height: 24px;
-    padding-top: 8px;
+    padding: 0px 4px;
+    padding-top: 8px;    
 
     > div {
-      display: flex; 
+      display: grid;
+      grid-template-columns: 1fr 1fr; 
+      grid-column-gap: 10px;
       padding: 4px 0px;
+      height: 30px;
+      text-align: left;
     }
 
     button {
@@ -15,11 +20,17 @@
         background-image: none;
         border:0px;
         box-shadow: none;
+        text-align: left;
 
         &[data-no-title="true"] {
             .title {
                 display: none; 
             }
+        }
+
+        svg {
+          width: 20px;
+          height: 20px;
         }
   
       }
@@ -28,18 +39,5 @@
         font-size: 9px;
         color: #999;
         // display: none;
-      }
-  
-      .icon {
-        margin: 0 auto;
-        width: 16px;
-        height: 16px;
-        color: var(--elf--selected-color) !important;        
-  
-        svg {
-          width: 100%;
-          height: 100%;
-        }
-  
       }
 }

@@ -40,7 +40,8 @@ export default class Inspector extends EditorElement {
             })}
           >
             <object refClass="TabPanel" value="style" title="${this.$i18n('inspector.tab.title.style')}">
-              <object refClass="AlignmentProperty" />
+              <object refClass="AlignmentProperty" />            
+              <object refClass="DepthProperty" />
               <object refClass="BooleanProperty" />              
 
               <!-- Default Property --> 

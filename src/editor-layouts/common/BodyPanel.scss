@@ -7,13 +7,14 @@
     right: 0px;
 
     .submenu-area {
+        display: inline-block;
         position: absolute;
-        left: 0px;
-        right: 0px;
         height: 40px;
-        top: 0px;
+        top: 40px;
+        left: 50%;
         box-sizing: border-box;
-        border-bottom: 1px solid var(--elf--border-color);
+        z-index: 2;
+        transform: translateX(-50%);
     }
 
     .editing-area {
@@ -21,7 +22,7 @@
         left: 0px;
         right: 0px;
         bottom: 0px;
-        top: 40px;
+        top: 0px;
     }
 
     &:not(.ruler) {

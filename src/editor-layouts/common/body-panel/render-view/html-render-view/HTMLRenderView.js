@@ -129,11 +129,6 @@ export default class HTMLRenderView extends EditorElement {
             return false;
         }
 
-        // svg 영역이 클릭되면 클릭에서 제외한다.
-        if ($target.hasClass('view-path-item')) {
-            return false;
-        }        
-
         const mousePoint = this.$viewport.getWorldPosition(e);
         if (this.$selection.hasPoint(mousePoint)) {
 
@@ -191,12 +186,6 @@ export default class HTMLRenderView extends EditorElement {
     }
 
     [DOUBLECLICK('$view')](e) {
-
-        const $target = Dom.create(e.target);
-
-        if ($target.hasClass('view-path-item')) {
-            return false;
-        }
 
         const $item = Dom.create(e.target).closest('element-item');
 
@@ -569,6 +558,19 @@ export default class HTMLRenderView extends EditorElement {
 
     [SUBSCRIBE('updateViewport')]() {
         this.bindData('$view');
+    }
+
+    /**
+     * 기본 커서 제어 
+     */
+    [CONFIG('bodyEvent')]() {
+
+        // TODO: 커서를 제어하는 element 가 아니면 기본 커서로 지정해야할 듯 
+        const number = Dom.create(this.$config.get('bodyEvent').target).data('number')
+
+        if (!number) {
+            this.emit('recoverCursor')
+        }
     }
 
 }

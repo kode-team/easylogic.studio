@@ -324,6 +324,59 @@ export const getBezierPointsLine = (points, t) => {
     }
 }
 
+/**
+ * convert line to bezier curve
+ * 
+ * @param {vec3[]} points 
+ * @returns 
+ */
+export const normalizeCurveForLine = (points) => {
+
+    return [
+        vec3.clone(points[0]),
+        [ 
+            points[0][0] + (points[1][0] - points[0][0]) * 0.33,
+            points[0][1] + (points[1][1] - points[0][1]) * 0.33,
+            0,
+        ],
+        [
+            points[0][0] + (points[1][0] - points[0][0]) * 0.66,
+            points[0][1] + (points[1][1] - points[0][1]) * 0.66,
+            0
+        ],
+        vec3.clone(points[1]),
+    ]
+}
+
+/**
+ * convert quadratic bezier curve to bezier curve
+ * 
+ * @param {vec3[]} points 
+ * @returns 
+ */
+export const normalizeCurveForQuard = (points) => {
+    const twoOfThree = 2 / 3;
+
+    return [
+        vec3.clone(points[0]),
+
+        [
+            // C1 = Q0 + (2/3) (Q1 - Q0)
+            points[0][0] + twoOfThree * (points[1][0] - points[0][0]),
+            points[0][1] + twoOfThree * (points[1][1] - points[0][1]),
+            0,
+        ],
+
+        [
+            // C2 = Q2 + (2/3) (Q1 - Q2)
+            points[2][0] + twoOfThree * (points[1][0] - points[2][0]),
+            points[2][1] + twoOfThree * (points[1][1] - points[2][1]),
+        ],
+
+        vec3.clone(points[2]),
+    ]
+}
+
 
 export const calculateA = (points) => {
     // a = 3 * (-p0 + 3*p1 - 3*p2 + p3)

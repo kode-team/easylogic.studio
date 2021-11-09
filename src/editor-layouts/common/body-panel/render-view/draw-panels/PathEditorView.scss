@@ -244,6 +244,7 @@
 
         line {
             stroke-width: 1; 
+            content-visibility: auto;
 
             &[data-guide='true'] {
                 stroke: var(--elf--path-segment-stroke-color);                 
@@ -262,6 +263,7 @@
             stroke: var(--elf--path-guide-color); 
             stroke-width: 1;
             cursor: move;
+            content-visibility: auto;
 
             &.curve {
                 stroke: var(--elf--path-segment-stroke-color); 
@@ -331,6 +333,7 @@
 
         path {
             fill: transparent;
+            content-visibility: auto;
 
             &.curve {
                 fill: white;

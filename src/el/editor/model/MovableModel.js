@@ -2,7 +2,7 @@ import { Length } from "el/editor/unit/Length";
 import { Transform } from "../property-parser/Transform";
 import { TransformOrigin } from "el/editor/property-parser/TransformOrigin";
 import { mat4, quat, vec3 } from "gl-matrix";
-import { calculateMatrix, calculateMatrixInverse, radianToDegree, round, vertiesMap } from "el/utils/math";
+import { area, calculateMatrix, calculateMatrixInverse, radianToDegree, round, vertiesMap } from "el/utils/math";
 import { isFunction, isUndefined } from "el/sapa/functions/func";
 import PathParser from "el/editor/parser/PathParser";
 import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties, toRectVerties } from "el/utils/collision";
@@ -148,7 +148,16 @@ export class MovableModel extends BaseAssetModel {
     }
 
     setCacheAreaPosition() {
-        this._cachedAreaPosition = this.getAreaPosition();
+        this._cachedAreaPosition = this.getAreaPosition(this._cachedAreaWidth);
+    }
+
+    setCacheAreaWidth(areaWidth) {
+
+        if (this._cachedAreaWidth !== areaWidth) {
+            this._cachedAreaWidth = areaWidth;
+
+            this.setCacheAreaPosition();
+        }
     }
 
     //////////////////////
@@ -211,21 +220,18 @@ export class MovableModel extends BaseAssetModel {
     }    
 
     get areaPosition() {
-        return this._cachedAreaPosition || this.getAreaPosition();
+        return this._cachedAreaPosition || this.getAreaPosition(this._cachedAreaWidth);
     }
 
     getAreaPosition(areaSize = 100) {
         const rect = toRectVerties(this.getVerties());
 
+        const [startRow, startColumn] = area(rect[0][0], rect[0][1], areaSize);
+        const [endRow, endColumn] = area(rect[2][0], rect[2][1], areaSize);
+
         return {
-            column: [
-                Math.ceil(rect[0][0] / areaSize), 
-                Math.ceil(rect[1][0] / areaSize)
-            ],
-            row: [
-                Math.ceil(rect[0][1] / areaSize), 
-                Math.ceil(rect[3][1] / areaSize)
-            ]
+            column: [ startColumn, endColumn ],
+            row: [ startRow, endRow ]
         }
     }
 
@@ -364,6 +370,18 @@ export class MovableModel extends BaseAssetModel {
      * @param {number} y 
      */
     hasPoint (x, y) {
+        return this.isPointInRect(x, y);
+    }
+
+    /**
+     * 
+     * x, y 가 verties 영역안에 있는지 체크 
+     * 
+     * @param {number} x 
+     * @param {number} y 
+     * @returns 
+     */
+    isPointInRect(x, y) {
         return polyPoint(this.originVerties, x, y)
     }
 
@@ -740,6 +758,16 @@ export class MovableModel extends BaseAssetModel {
         path.transformMat4(this.accumulatedMatrixInverse)    
     
         return path; 
+    }
+
+    /**
+     * 주어진 Point 를 로컬 좌표로 변환
+     * 
+     * @param {vec3} point 
+     * @returns {vec3}
+     */
+    invertPoint (point) {
+        return vec3.transformMat4([], point, this.accumulatedMatrixInverse);
     }
 
     /**

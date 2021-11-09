@@ -1,12 +1,19 @@
 
 import PathGenerator from './PathGenerator';
 import PathParser from './PathParser';
+
+let pathEditor = {}
+
+beforeEach(() => {
+    pathEditor = {}
+});
+
 test("create PathGenerator", () => {
-    expect(new PathGenerator()).toBeInstanceOf(PathGenerator);
+    expect(new PathGenerator(pathEditor)).toBeInstanceOf(PathGenerator);
 })
 
 test("set selectedIndex", () => {
-    const pathGenerator = new PathGenerator();
+    const pathGenerator = new PathGenerator(pathEditor);
     pathGenerator.selectedIndex = 1;
     expect(pathGenerator.selectedIndex).toBe(1);
 })

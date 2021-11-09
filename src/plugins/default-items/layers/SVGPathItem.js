@@ -83,30 +83,4 @@ export class SVGPathItem extends SVGItem {
   getDefaultTitle() {
     return "Path";
   }
-
-  isPointInPath (point) {
-
-    const localPoint = vec3.transformMat4([], point, this.accumulatedMatrixInverse);
-
-    return this.cachePath.isPointInPath({ x: localPoint[0], y: localPoint[1] }, this.json['stroke-width'] || 0);
-  }
-
-  /**
-   * 
-   * @param {number} x 
-   * @param {number} y 
-   * @returns 
-   */
-  hasPoint (x, y) {
-
-    // if (this.json['stroke-width']) {
-    //   return this.isPointInPath([x, y, 0]);
-    // }
-    // fill=transparent 일때는 안보이는 것으로 간주한다.
-    // stroke 만 체크 
-    // fill=transparent 가 아니라면 
-    // fill 전체 영역 체크 
-
-    return super.hasPoint(x, y); 
-  }
 }

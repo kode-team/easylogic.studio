@@ -9,12 +9,14 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.13.10",
+    "@emotion/css": "^11.5.0",
     "array-organizer": "^1.5.7",
     "fit-curve": "^0.2.0",
     "gl-matrix": "^3.3.0",
     "js-video-url-parser": "^0.4.3",
     "pathkit-wasm": "^0.7.0",
-    "svg-arc-to-cubic-bezier": "^3.2.0"
+    "svg-arc-to-cubic-bezier": "^3.2.0",
+    "yorkie-js-sdk": "^0.1.8"
   },
   "devDependencies": {
     "@babel/core": "^7.13.15",

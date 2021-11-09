@@ -22,12 +22,13 @@ export default class SVGItemProperty extends BaseProperty {
     var current = this.$selection.current;
 
     if (current) {
+
       this.children.$fill.setValue(current['fill'] || 'rgba(0, 0, 0, 0)')
       this.children.$stroke.setValue(current['stroke'] || 'rgba(0, 0, 0, 1)')
       this.children.$fillOpacity.setValue(current['fill-opacity'] || Length.number(1))
-      this.children.$strokeWidth.setValue(current['stroke-width'] || Length.number(1))
-      this.children.$fillRule.setValue(current['fill-rule'] || 'nonzero')
-      this.children.$strokeDashOffset.setValue(current['stroke-dashoffset'] || Length.number(0))
+      this.children.$strokeWidth.setValue(current['stroke-width'] || Length.number(0))
+      this.children.$fillRule.setValue(current['fill-rule'])
+      this.children.$strokeDashOffset.setValue(current['stroke-dashoffset'] || 0)
       this.children.$strokeDashArray.setValue(current['stroke-dasharray'] || ' ')
       this.children.$strokeLineCap.setValue(current['stroke-linecap'] || 'butt')
       this.children.$strokeLineJoin.setValue(current['stroke-linejoin'] || 'miter')

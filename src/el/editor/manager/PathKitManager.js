@@ -149,11 +149,39 @@ export class PathKitManager {
     const PathKit = this.pathkit;    
     const pathObject = PathKit.FromSVGString(path);
 
-    return pathObject.stroke({ 
+
+
+    if (opt['stroke-dasharray'].trim()) {
+      console.log(opt['stroke-dasharray'])
+      const arr = opt['stroke-dasharray'].trim().split(" ").map(it => +it)
+
+      if (arr.length >= 2) {
+
+        console.log(+opt['stroke-dashoffset']);
+
+        pathObject.dash(arr[0], arr[1], +(opt['stroke-dashoffset'] || 0))        
+
+        const newPathObject = pathObject.stroke({ 
+          width: opt['stroke-width'],
+          join: this.convertLineJoin(opt['stroke-linejoin']),
+          cap: this.convertLineCap(opt['stroke-linecap']),
+        })
+        // fill 타입이 있어야 채워질 수 있는데.
+        newPathObject.setFillType(PathKit.FillType.WINDING);
+
+        
+        return newPathObject.simplify().toSVGString();
+      }  
+    }
+
+    let newPathObject = pathObject.stroke({ 
       width: opt['stroke-width'],
       join: this.convertLineJoin(opt['stroke-linejoin']),
       cap: this.convertLineCap(opt['stroke-linecap']),
-    }).simplify().toSVGString();
+    })
+
+
+    return newPathObject.simplify().toSVGString();
   }
 
   round(path, opt = {width: 1, miter_limit: 4}) {

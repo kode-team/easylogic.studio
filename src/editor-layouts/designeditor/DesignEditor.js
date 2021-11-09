@@ -1,4 +1,4 @@
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, BIND, SUBSCRIBE, CONFIG } from "el/sapa/Event";
+import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, BIND, SUBSCRIBE, CONFIG, SUBSCRIBE_SELF } from "el/sapa/Event";
 
 import { Length } from "el/editor/unit/Length";
 
@@ -19,6 +19,9 @@ import IconManager from '../common/IconManager';
 import PathKitInit from "pathkit-wasm/bin/pathkit.js";
 import ItemLayerTab from "./area/ItemLayerTab";
 import SingleInspector from './area/SingleInspector';
+
+// import './web-component/MyElement';
+
 export default class DesignEditor extends BaseLayout {
 
   initialize() {
@@ -87,7 +90,7 @@ export default class DesignEditor extends BaseLayout {
           <object refClass="KeyboardManager" />                
         </div>
         <object refClass="PopupManager" />
-        <object refClass="IconManager" />          
+        <object refClass="IconManager" />        
       </div>
     `;
   }

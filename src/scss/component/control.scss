@@ -12,6 +12,7 @@
       height: 30px;
       border-radius: 50%;
       box-sizing: border-box;
+      background-color: white;
     }
 
     > .color {
@@ -80,6 +81,7 @@
 
     > .empty {
       @include transparent-background();
+      background-color: white;
     }
 
     .drag-bar,

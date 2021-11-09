@@ -20,6 +20,7 @@ import defaultConfigs from "./default-configs"
 import defaultItems from "./default-items"
 import defaultMessages from "./default-messages"
 import defaultPatterns from "./default-patterns"
+import depth from "./depth"
 
 import exportResource from "./export-resource"
 import filter from "./filter"
@@ -74,6 +75,7 @@ export default [
     gradient,
 
     // inspector.tab.style    
+    depth,
     alignment,
     boolean,
     artboard,

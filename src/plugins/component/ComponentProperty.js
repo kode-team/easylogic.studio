@@ -1,7 +1,7 @@
 import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { isString } from "el/sapa/functions/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
-import { spreadVariable } from "el/sapa/functions/registElement";
+import { variable } from "el/sapa/functions/registElement";
 
 export default class ComponentProperty extends BaseProperty {
 
@@ -11,8 +11,8 @@ export default class ComponentProperty extends BaseProperty {
 
   isShow () {
     var current = this.$selection.current;
-
-    if (current && current.is('component')) {
+    const inspector = this.$editor.components.createInspector(current);
+    if (current && (current.is('component') || inspector.length > 0)) {
       return true; 
     }
 
@@ -51,7 +51,7 @@ export default class ComponentProperty extends BaseProperty {
         <div>  
           <object 
             refClass="${selfEditor}" 
-            ${spreadVariable({
+            ${variable({
               ...selfEditorOptions,
               onchange: 'changeComponentProperty',
               ref: `${key}${index}`,
@@ -64,7 +64,7 @@ export default class ComponentProperty extends BaseProperty {
       return Object.keys(selfEditor).map(selfEditorKey => {
         return /*html*/`
           <div>
-            <object refClass="${selfEditorKey}" ${spreadVariable({
+            <object refClass="${selfEditorKey}" ${variable({
               ...selfEditorOptions,
               onchange: 'changeComponentProperty',
               ref: `${key}${index}${selfEditorKey}`,
@@ -81,15 +81,10 @@ export default class ComponentProperty extends BaseProperty {
     var current = this.$selection.current;
 
     if (!current) return ''; 
-
-    if (current && !current.is('component')) {
-      return ''; 
-    }
-
+    
     const inspector = this.$editor.components.createInspector(current);
 
     var self = inspector.map((it, index)=> {
-
       if (isString(it)) {
         return /*html*/`
           <div class='property-item is-label'> 

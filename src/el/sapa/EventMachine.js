@@ -31,6 +31,7 @@ const REF_CLASS_PROPERTY = `[${REF_CLASS}]`
 
 export default class EventMachine {
   constructor(opt, props) {
+
     this.state = {};
     this.prevState = {};
     this.refs = {};
@@ -55,9 +56,6 @@ export default class EventMachine {
     this.props = props;
     this.source = uuid();
     this.sourceName = this.constructor.name;  
-
-
-
   }
 
   initComponents() {
@@ -122,10 +120,16 @@ export default class EventMachine {
   /**
    * 객체를 다시 그릴 때 사용한다. 
    * 
-   * @param {*} props 
+   * @param {KeyValue} props 
+   * @param {Dom} [$container=null] $container 가 존재하면 render 를 같이 한다. 
    * @protected
    */
-  _reload(props) {
+  _reload(props, $container = null) {
+
+    if ($container) {
+      this.render($container);
+    }
+
     this.props = props;
     this.state = {}; 
     this.setState(this.initState(), false);

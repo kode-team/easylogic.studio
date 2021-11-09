@@ -2,7 +2,7 @@ import {
   LOAD, CLICK, DOUBLECLICK, PREVENT, STOP,
   FOCUSOUT, DOMDIFF, DRAGSTART, KEYDOWN,
   DRAGOVER, DROP, BIND, DRAGEND,
-  SUBSCRIBE, SUBSCRIBE_SELF, THROTTLE
+  SUBSCRIBE, SUBSCRIBE_SELF, THROTTLE, CONFIG
 } from "el/sapa/Event";
 import { iconUse } from "el/editor/icon/icon";
 import { Length } from "el/editor/unit/Length";
@@ -10,6 +10,7 @@ import { KEY_CODE } from "el/editor/types/key";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './LayerTreeProperty.scss';
+import Dom from 'el/sapa/functions/Dom';
 
 const DRAG_START_CLASS = 'drag-start'
 
@@ -381,7 +382,10 @@ export default class LayerTreeProperty extends BaseProperty {
 
     this.command('removeLayer', 'remove a layer', [id]);
 
-    // this.refresh();
+    this.nextTick(() => {
+      this.refresh();
+    }, 1000)
+
 
     // this.emit('refreshArtboard');
   }
@@ -466,6 +470,15 @@ export default class LayerTreeProperty extends BaseProperty {
 
   [SUBSCRIBE('changeItemLayout')]() {
     this.refresh();
+  }
+
+  [CONFIG('bodyEvent')]() {
+    const $target = Dom.create(this.$config.get('bodyEvent').target);
+    const $layerItem = $target.closest('layer-item');
+
+    if ($layerItem) {
+      this.emit('refreshHoverView', $layerItem.data('layer-id'));
+    }
   }
 
 

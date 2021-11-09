@@ -620,4 +620,13 @@ export class BaseModel {
   hasParent(parentId) {
     return this.modelManager.hasParent(this.id, parentId);
   }
+
+  /**
+   * 특정 itemType 으로 데이타 변환 
+   * 
+   * @param {string} itemType 
+   */
+  to(itemType) {
+
+  }
 }

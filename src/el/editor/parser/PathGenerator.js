@@ -165,8 +165,9 @@ export default class PathGenerator {
         this.pathEditor = pathEditor;
         this.pathStringManager = new PathStringManager();
         this.guideLineManager = new PathStringManager();
-        this.segmentManager = new SegmentManager();
+        this.segmentManager = new SegmentManager(this.pathEditor.$viewport);
         this.points = [];
+        this.cachedSegmentKeys = {}
 
         this.initialize()
         this.initializeSelect();
@@ -188,7 +189,6 @@ export default class PathGenerator {
         // 초기화 하면서 선택된 포인트를 저장한다.
         if (initPointList.length) {
             this.select(...initPointList.map(p => {
-                console.log(this.points, p.index, p.key, this.points[p.index][p.key]);
                 const checkedPoint = this.points[p.index][p.key];
                 if (!checkedPoint) return undefined;
 
@@ -284,6 +284,19 @@ export default class PathGenerator {
         }) 
     }
 
+    getCacheSegmentKey (segmentKey, index) {
+
+        if (!this.cachedSegmentKeys[segmentKey]) {
+            this.cachedSegmentKeys[segmentKey] = {}
+        }
+
+        if (!this.cachedSegmentKeys[segmentKey][index]) {
+            this.cachedSegmentKeys[segmentKey][index] =  this.makeSegmentKey({key: segmentKey, index})
+        }
+
+        return this.cachedSegmentKeys[segmentKey][index];
+    }
+
     /**
      * 
      * @param {*} point 
@@ -336,7 +349,7 @@ export default class PathGenerator {
     }
 
     isSelectedSegment (segment, index) {
-        var key = `${segment}_${index}`
+        var key = this.getCacheSegmentKey(segment, index);
         return this.selectedPointKeys[key]
     }
 
@@ -981,7 +994,7 @@ export default class PathGenerator {
 
         this.initialize();
 
-        this.makePointGuide(this.clonePoints)
+        this.makePointGuide(this.points)
 
         this.makeMovePositionGuide();
 
@@ -1223,12 +1236,24 @@ export default class PathGenerator {
     //     }
     // }
 
+    checkInViewport (point) {
+        const vertext = this.pathEditor.$viewport.applyVertexInverse ([point.x, point.y, 0]);
+        return this.pathEditor.$viewport.checkInViewport(vertext);
+    }
+
 
     makeMiddlePointGuideSplitLine (prevPoint, current, nextPoint, index, isSiblingSelected) {
         const selected = isSiblingSelected ? 'selected' : '';
+
         if (current.curve === false) { 
             // 꼭지점
             if (prevPoint.curve === false) {
+
+                if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(current.startPoint)) === false) {
+                    return;
+                }
+
+
                 this.splitLines.push(
                     new PathStringManager()
                         .M(prevPoint.startPoint)
@@ -1236,6 +1261,11 @@ export default class PathGenerator {
                         .toString(`split-path ${selected}`)
                 )
             } else {
+
+                if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(prevPoint.endPoint)|| this.checkInViewport(current.startPoint)) === false) {
+                    return;
+                }
+
                 this.splitLines.push(
                     new PathStringManager()
                         .M(prevPoint.startPoint)
@@ -1246,7 +1276,13 @@ export default class PathGenerator {
         } else {    // 현재가 curve 일 때 
             if (prevPoint.curve === false) { 
 
+
                 if (Point.isEqual(current.reversePoint, current.startPoint)) {
+
+                    if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(current.startPoint)) === false) {
+                        return;
+                    }    
+
                     this.splitLines.push(
                         new PathStringManager()
                             .M(prevPoint.startPoint)
@@ -1254,6 +1290,11 @@ export default class PathGenerator {
                             .toString(`split-path ${selected}`)
                     )                    
                 } else {
+
+                    if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(current.reversePoint)|| this.checkInViewport(current.startPoint)) === false) {
+                        return;
+                    }
+
                     this.splitLines.push(
                         new PathStringManager()
                             .M(prevPoint.startPoint)
@@ -1264,6 +1305,16 @@ export default class PathGenerator {
 
 
             } else {
+
+                if ((
+                    this.checkInViewport(prevPoint.startPoint) 
+                    || this.checkInViewport(prevPoint.endPoint)
+                    || this.checkInViewport(current.reversePoint)
+                    || this.checkInViewport(current.startPoint)
+                ) === false) {
+                    return;
+                }
+
                 this.splitLines.push(
                     new PathStringManager()
                         .M(prevPoint.startPoint)

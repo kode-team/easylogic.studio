@@ -5,6 +5,13 @@ export function round(n, k) {
     return Math.round(n * k) / k;
 }
 
+export function area(x, y, areaWidth = 100) {
+    const column = x < 0 ? Math.floor(x/areaWidth) : Math.ceil(x/areaWidth); 
+    const row = y < 0 ? Math.floor(y/areaWidth) : Math.ceil(y/areaWidth); 
+
+    return [row, column]
+}
+
 
 export function degreeToRadian(degrees) {
     return degrees * (Math.PI / 180);

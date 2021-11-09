@@ -380,6 +380,12 @@ export default class LayerAppendView extends EditorElement {
         this.bindData('$areaRect');         
     }    
 
+    /**
+     * 그려지는 layer type 을 지정합시다. 
+     * 
+     * @param {string} type 
+     * @param {object} options 
+     */
     [SUBSCRIBE('showLayerAppendView')] (type, options = {}) {
         this.state.type = type; 
         this.state.options = options; 

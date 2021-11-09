@@ -18,15 +18,6 @@ export default class HoverView extends EditorElement {
 
         const e = this.$config.get('bodyEvent');
 
-        const $target = Dom.create(e.target);
-
-        // svg path container 이면 hover 하지 않는다. 
-        if ($target.hasClass('view-path-item')) {
-            this.$selection.setHoverId('');
-            this.renderHoverLayer()                
-            return false; 
-        }
-
         // viewport 영역에 있을 때만 이벤트 발생 
         if (!this.$viewport.checkInViewport(this.$viewport.getWorldPosition(e))) {
             return false; 
@@ -47,8 +38,10 @@ export default class HoverView extends EditorElement {
             return;
         }
 
-        const items = this.$selection.filteredLayers.filter(it => {
+        const filteredList = this.$selection.filteredLayers;
+        const items = filteredList.filter(it => {
             const point = this.$viewport.getWorldPosition(this.$config.get('bodyEvent'));
+            
             return it.hasPoint(point[0], point[1]);
         }).filter(it => it.isNot('artboard'))
 
@@ -62,6 +55,12 @@ export default class HoverView extends EditorElement {
             if (this.$selection.setHoverId(id)) {
                 this.renderHoverLayer()
             }
+        }
+    }
+
+    [SUBSCRIBE('refreshHoverView')](id) {
+        if (this.$selection.setHoverId(id)) {
+            this.renderHoverLayer()
         }
     }
 

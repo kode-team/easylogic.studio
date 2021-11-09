@@ -116,6 +116,7 @@ $range-thumb-border-radius: 20px;
         --elf--input-border-color: #{$input-border-color};       
         --elf--input-font-color: #{$input-font-color};         
         --elf--input-sub-font-color: #{$input-sub-font-color};
+        --elf--input-height: #{$input-height};
         --elf--border-color: #{$border-color};
         --elf--selection-tool-border-color: #{$selection-tool-border-color};        
         --elf--selected-color: #{$selected-color};
@@ -157,7 +158,7 @@ $range-thumb-border-radius: 20px;
         --elf--tooltip-background-color: #{$tooltip-background-color};
         --elf--tooltip-font-color: #{$tooltip-font-color};     
         --elf--tab-header-background-color: #{$tab-header-background-color};            
-    }   
+    }    
 
     &[data-theme='light'] {
         @import './themes/designeditor/light.scss';
@@ -167,7 +168,8 @@ $range-thumb-border-radius: 20px;
         --elf--input-background-color: #{$input-background-color};
         --elf--input-border-color: #{$input-border-color};       
         --elf--input-font-color: #{$input-font-color};         
-        --elf--input-sub-font-color: #{$input-sub-font-color};        
+        --elf--input-sub-font-color: #{$input-sub-font-color}; 
+        --elf--input-height: #{$input-height};               
         --elf--border-color: #{$border-color};
         --elf--selection-tool-border-color: #{$selection-tool-border-color};                
         --elf--selected-color: #{$selected-color};   

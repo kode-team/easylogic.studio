@@ -1,13 +1,7 @@
 
 
 .elf--page-subeditor {
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    // height: 35px;
-    // text-align: center; 
+    display: inline-block;
+    position: relative;
     font-size: 12px;
-    pointer-events: none;
 }

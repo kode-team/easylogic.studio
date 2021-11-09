@@ -6,13 +6,19 @@
     }
   }
 
+  &[data-tooltip-dy] {
+    &:after {
+      top: 170%;
+    }
+  }
+
   &:after {
     pointer-events: none;
     content: attr(data-tooltip);
     display: block;
     text-align: center;
     color: var(--elf--tooltip-font-color);
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 400;
     background-color: var(--elf--tooltip-background-color);
     box-sizing: border-box;

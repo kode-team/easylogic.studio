@@ -22,8 +22,8 @@ export class ModelManager {
     /**
      * document 로드 하기 
      */
-    load(doc = {}) {
-        const newDoc = this.editor.loadItem('model') || doc;
+    load(doc = undefined) {
+        const newDoc = doc || this.editor.loadItem('model');
 
         this.items.clear();
         this.version = newDoc?.version;
@@ -106,7 +106,9 @@ export class ModelManager {
             version: this.version,
             name: this.name,
             description: this.description,
-            projects: this.projects.map(id => this.get(id).toJSON())
+            projects: this.projects.map(id => {
+                return this.get(id).toJSON()
+            })
         }
     }
 

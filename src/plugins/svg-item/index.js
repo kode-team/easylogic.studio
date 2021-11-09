@@ -29,4 +29,54 @@ export default function (editor) {
     editor.registerMenuItem('popup', {
         SVGFilterPopup
     })
+
+    editor.registerInspector('polygon', (item) => {
+        return [
+            {
+                key: 'count',
+                editor: 'NumberRangeEditor',
+                editorOptions: {
+                    label: 'Count',
+                    min: 3,
+                    max: 100,
+                    step: 1
+                }, 
+                defaultValue: item.count
+            },
+            {
+                key: 'button',
+                editor: 'Button',
+                editorOptions: {
+                    label: 'Copy ',
+                    text: 'as path',
+                    action: "copy.path"
+                }
+            }
+        ]
+    })
+
+    editor.registerInspector('star', (item) => {
+        return [
+            {
+                key: 'count',
+                editor: 'NumberRangeEditor',
+                editorOptions: {
+                    label: 'Count',
+                    min: 1,
+                    max: 100,
+                    step: 1
+                }
+            },
+            {
+                key: 'radius',
+                editor: 'NumberRangeEditor',
+                editorOptions: {
+                    label: 'Inner Radius',
+                    min: 0,
+                    max: 1,
+                    step: 0.01
+                }
+            }            
+        ]
+    })
 }

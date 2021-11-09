@@ -21,6 +21,7 @@ export default class SingleInspector extends EditorElement {
       <div class="feature-control inspector">
         <div>
               <object refClass="AlignmentProperty" />
+              <object refClass="DepthProperty" />              
               <object refClass="BooleanProperty" />              
 
               <!-- Default Property --> 

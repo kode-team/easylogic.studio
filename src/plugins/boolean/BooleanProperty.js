@@ -12,6 +12,7 @@ import { CLICK } from "el/sapa/Event";
 import './BooleanProperty.scss';
 import PathParser from '../../el/editor/parser/PathParser';
 import { Length } from 'el/editor/unit/Length';
+import { iconUse } from 'el/editor/icon/icon';
 
 export default class BooleanProperty extends BaseProperty {
 
@@ -40,18 +41,20 @@ export default class BooleanProperty extends BaseProperty {
     return /*html*/`
       <div class="elf--boolean-item" ref="$buttons">
         <div>
-          <button type="button" data-value="intersection">Intersect</button>
-          <button type="button" data-value="union">Union</button>
-          <button type="button" data-value="difference">Difference</button>
-          <button type="button" data-value="xor">Xor</button>
+          <button type="button" data-value="union">${iconUse("boolean_union", "", {width: 30, height: 30})} Union</button>        
+          <button type="button" data-value="intersection">${iconUse("boolean_intersection", "", {width: 30, height: 30})} Intersection</button>        
         </div>
         <div>
-          <button type="button" data-value="simplify">Simplify</button> 
-          <button type="button" data-value="smooth">Smooth</button> 
-          <button type="button" data-value="transform">transform</button> 
+          <button type="button" data-value="difference">${iconUse("boolean_difference", "", {width: 30, height: 30})} Difference</button>        
+          <button type="button" data-value="xor">${iconUse("boolean_xor", "", {width: 30, height: 30})} Exclude</button>        
         </div>
         <div>
-          <button type="button" data-value="stroke">stroke to path</button> 
+          <button type="button" data-value="simplify">${iconUse('grid3x3', "", {width: 24, height: 24})} Simplify</button>        
+          <button type="button" data-value="flatten">${iconUse('flatten', "", {width: 24, height: 24})} Flatten</button>                  
+        </div>
+        <div>
+          <button type="button" data-value="smooth">${iconUse('smooth', "", {width: 24, height: 24})} Smooth Path</button>                
+          <button type="button" data-value="stroke">${iconUse('stroke_to_path', "", {width: 24, height: 24})} Stroke to path</button> 
         </div>        
       </div>
     `;
@@ -63,26 +66,28 @@ export default class BooleanProperty extends BaseProperty {
 
     if (command === 'stroke') {
 
+      const attrs = current.attrs('d', 'stroke-width', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linejoin', 'stroke-linecap');
+      const pathAttrs = current.convertStrokeToPath()
 
-      const attrs = current.attrs('d', 'stroke-width', 'stroke', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linejoin', 'stroke-linecap');
-      const newD = this.$pathkit.stroke(attrs.d, {
+      const newD = this.$pathkit.stroke(current.d || attrs.d, {
         'stroke-width': Length.parse(attrs['stroke-width']).value,
         'stroke-linejoin': attrs['stroke-linejoin'],
-        'stroke-linecap': attrs['stroke-linecap']
+        'stroke-linecap': attrs['stroke-linecap'],
+        'stroke-dasharray': attrs['stroke-dasharray'],
+        'stroke-dashoffset': attrs['stroke-dashoffset'],        
+        'fill-rule': 'nonezero',
       });
 
+      pathAttrs['fill-rule'] = 'nonzero';
 
-      this.$selection.copy();
-      this.$selection.paste();
-      this.emit('refreshAll');
+
+      this.command('addLayer', `add layer - path`, this.$editor.createModel(pathAttrs), pathAttrs, true, current.parent)      
 
       this.nextTick(() => {
         const newCurrent = this.$selection.current;
 
         this.command("setAttributeForMulti", "change path string", this.$selection.packByValue({
           ...newCurrent.updatePath(newD),
-          'stroke-width': 1,
-          fill: attrs['stroke']
         }))      
       })
 
@@ -112,6 +117,27 @@ export default class BooleanProperty extends BaseProperty {
             .d
           )
       ))  
+    } else if (command === 'flatten') {
+
+      let newPath = PathParser.fromSVGString();
+      this.$selection.each((item) => {
+        newPath.addPath(item.accumulatedPath());
+      });
+
+      newPath = current.invertPath(newPath.d);
+
+      const newLayerAttrs = current.toCloneObject();
+      delete newLayerAttrs.id;
+
+      this.command('addLayer', `add layer - path`, this.$editor.createModel(newLayerAttrs), newLayerAttrs, true, current.parent)            
+
+      this.nextTick(() => {
+        const newCurrent = this.$selection.current;
+
+        this.command("setAttributeForMulti", "change path string", this.$selection.packByValue({
+          ...newCurrent.updatePath(newPath.d),
+        }))      
+      })
     } else {
 
       this.command("setAttributeForMulti", "change boolean operation", this.$selection.packByValue({

@@ -50,7 +50,7 @@ export default class DrawManager extends EditorElement {
         </div>      
         <div class='tools'>   
           <div >        
-            <label>${this.$i18n('draw.manager.tolerance')}</label>            
+            <label data-tooltip="${this.$i18n('draw.manager.tolerance')}">T</label>            
             <object refClass="NumberInputEditor"  
               ref='$tolerance' 
               key='tolerance' 
@@ -64,7 +64,13 @@ export default class DrawManager extends EditorElement {
           </div>              
           <div >
             <label>${this.$i18n('svg.item.property.stroke')}</label>          
-            <object refClass="FillSingleEditor" ref='$stroke' simple="true" value="${this.state.stroke}" key='stroke' onchange="changeValue" />
+            <object refClass="FillSingleEditor" 
+              ref='$stroke' 
+              simple="true" 
+              value="${this.state.stroke}" 
+              key='stroke' 
+              onchange="changeValue" 
+            />
           </div>
 
           <div >
@@ -78,7 +84,7 @@ export default class DrawManager extends EditorElement {
           
 
           <div>
-            <label>${this.$i18n('svg.item.property.lineCap')}</label>          
+            <label data-tooltip="${this.$i18n('svg.item.property.lineCap')}">Cap</label>          
             <object refClass="SelectEditor" 
               ref='$strokeLineCap' 
               key="stroke-linecap" 
@@ -88,7 +94,7 @@ export default class DrawManager extends EditorElement {
             />
           </div> 
           <div>
-            <label>${this.$i18n('svg.item.property.lineJoin')}</label>          
+            <label data-tooltip="${this.$i18n('svg.item.property.lineJoin')}">Join</label>          
             <object refClass="SelectEditor"  
               ref='$strokeLineJoin' 
               key="stroke-linejoin" 
@@ -109,7 +115,6 @@ export default class DrawManager extends EditorElement {
   }  
 
   updateData(obj = {}) {
-
     this.setState(obj, false)
     this.state.instance.trigger(this.state.changeEvent, obj);
   }

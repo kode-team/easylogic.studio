@@ -20,8 +20,9 @@
         top: 1px;
         width: 26px;
         height: 26px;
-        border-radius: 2px;
+        border-radius: 100%;
         box-sizing: border-box;
+        background-color: white;
       }
 
       > .color {
@@ -31,20 +32,24 @@
       > .hue {
         position: relative;
         padding: 2px 2px 2px 0px;
-        margin: 0px 28px 0px 0px;
+        margin: 0px 32px 0px 0px;
 
         > .hue-container {
-          border-radius: 0px;
+          border-radius: 12px;
         }
       }
 
       > .opacity {
         position: relative;
         padding: 2px 2px 2px 0px;
-        margin: 0px 28px 0px 0px;
+        margin: 0px 32px 0px 0px;
 
         > .opacity-container {
-          border-radius: 0px;
+          border-radius: 12px;
+
+          .color-bar {
+            border-radius: 12px;
+          }
         }
       }
 
@@ -53,24 +58,28 @@
         border-radius: 0px;
         top: 50%;
         left: 0px;
-        width: 2px;
-        height: 80%;
+        width: 12px;
+        height: 12px;
         transform: translateX(-50%) translateY(-50%);
-        border-radius: 1px;
+        border-radius: 50%;
         bottom: 1px !important;
+        background-color: white;
+        border: 1px solid #fff;
+        box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.5);
 
-        &.first {
-          left: 0px;
-          transform: translateX(50%) translateY(-50%) !important;
-        }
+        // &.first {
+        //   left: 0px;
+        //   transform: translateX(0%) translateY(-50%) !important;
+        // }
 
-        &.last {
-          transform: translateX(-150%) translateY(-50%) !important;
-        }
+        // &.last {
+        //   transform: translateX(-100%) translateY(-50%) !important;
+        // }
       }
     }
 
     > .information {
+      margin-top: 5px;
       .information-change {
         display: none;
       }

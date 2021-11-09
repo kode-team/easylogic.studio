@@ -34,21 +34,22 @@ export default class PathManager extends EditorElement {
         <div class="tools left" ref="$left">
             <button type="button" class="primary" data-value='PathEditorDone' title='${this.$i18n('path.manager.mode.modify')}' >Done</button>
         </div>
-
         <div class='tools' ref='$mode' data-selected-value='${this.state.mode}'>
-            <button type="button" data-value='modify' title='${this.$i18n('path.manager.mode.modify')}' > ${iconUse("device_hub")}</button>
-            <button type="button" data-value='path' title='${this.$i18n('path.manager.mode.path')}' > ${iconUse("control_point")}</button>
-            <button type="button" data-value='transform' title='${this.$i18n('path.manager.mode.transform')}' > ${iconUse("transform")}</button>             
+            <button type="button" data-value='modify' data-tooltip='${this.$i18n('path.manager.mode.modify')}' > ${iconUse("device_hub")}</button>
+            <button type="button" data-value='path' data-tooltip='${this.$i18n('path.manager.mode.path')}' > ${iconUse("control_point")}</button>
+            <button type="button" data-value='transform' data-tooltip='${this.$i18n('path.manager.mode.transform')}' > ${iconUse("transform")}</button>             
         </div>
+        <div class="split"></div>        
         <div class='tools' ref='$util'>
-            <button type="button" data-value='reverse' title='${this.$i18n('path.manager.mode.reverse')}' >${iconUse("sync")}</button>
-        </div>                
+            <button type="button" data-value='reverse' data-tooltip='${this.$i18n('path.manager.mode.reverse')}' >${iconUse("sync")}</button>
+        </div>                        
         <div class='tools' ref='$flip'>
-            <button type="button" data-value='flipX' title='${this.$i18n('path.manager.mode.flipX')}'>${iconUse("flip")}</button>
-            <button type="button" data-value='flipY' title='${this.$i18n('path.manager.mode.flipY')}'>${iconUse("flip")}</button>
-            <button type="button" data-value='flip' title='${this.$i18n('path.manager.mode.flipOrigin')}'>${iconUse("flip")}</button>
-            <button type="button" data-value='2x'>2x</button>
-            <button type="button" data-value='3x'>3x</button>            
+            <button type="button" data-value='flipX' data-tooltip='${this.$i18n('path.manager.mode.flipX')}'>${iconUse("flip")}</button>
+            <button type="button" data-value='flipY' data-tooltip='${this.$i18n('path.manager.mode.flipY')}'>${iconUse("flip", "rotate(90 12 12)")}</button>
+            <button type="button" data-value='flip' data-tooltip='${this.$i18n('path.manager.mode.flipOrigin')}'>${iconUse("flip", "rotate(45 12 12)")}</button>
+            <div class="split"></div>            
+            <button type="button" data-value='2x' data-tooltip="divide segment by 2 times">2x</button>
+            <button type="button" data-value='3x' data-tooltip="divide segment by 3 times">3x</button>            
         </div>
       </div>    
     `;

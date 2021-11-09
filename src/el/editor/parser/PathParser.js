@@ -1,5 +1,5 @@
 
-import { getBezierPointOneQuard, getBezierPoints, getBezierPointsLine, getBezierPointsQuard, getCurveBBox, getCurveDist, getPointInCurveList, getQuardDist, recoverBezier, recoverBezierLine, recoverBezierQuard, splitBezierPointsByCount, splitBezierPointsLineByCount, splitBezierPointsQuardByCount } from "el/utils/bezier";
+import { getBezierPointOneQuard, getBezierPoints, getBezierPointsLine, getBezierPointsQuard, getCurveBBox, getCurveDist, getPointInCurveList, getQuardDist, normalizeCurveForLine, normalizeCurveForQuard, recoverBezier, recoverBezierLine, recoverBezierQuard, splitBezierPointsByCount, splitBezierPointsLineByCount, splitBezierPointsQuardByCount } from "el/utils/bezier";
 import { isNotUndefined, clone } from "el/sapa/functions/func";
 import { degreeToRadian, getDist, round } from "el/utils/math";
 import { mat4, vec2, vec3 } from "gl-matrix";
@@ -646,37 +646,37 @@ export default class PathParser {
                     newSegments.push(segment);
                     return;
                 } else if (segment.command === 'L') {
+
+                    const localCurve = normalizeCurveForLine([
+                        [prevSegment.values[prevSegment.values.length-2], prevSegment.values[prevSegment.values.length-1], 0],
+                        [segment.values[0], segment.values[1], 0]
+                    ])
+
                     newSegments.push({
                         command: 'C',
                         values: [
-                            prevSegment.values[0] + (segment.values[0] - prevSegment.values[0]) * 0.33,
-                            prevSegment.values[1] + (segment.values[1] - prevSegment.values[1]) * 0.33,
-                            prevSegment.values[0] + (segment.values[0] - prevSegment.values[0]) * 0.66,
-                            prevSegment.values[1] + (segment.values[1] - prevSegment.values[1]) * 0.66,
-                            segment.values[0],
-                            segment.values[1]
+                            localCurve[1][0], localCurve[1][1],
+                            localCurve[2][0], localCurve[2][1],
+                            localCurve[3][0], localCurve[3][1],
                         ]
                     });
                     return;
                 } else if (segment.command === 'C') {
                     newSegments.push(segment);
                 } else if (segment.command === 'Q') {
-                    const twoOfThree = 2 / 3;
+
+                    const localCurve = normalizeCurveForQuard([
+                        [prevSegment.values[prevSegment.values.length-2], prevSegment.values[prevSegment.values.length-1], 0],
+                        [segment.values[0], segment.values[1], 0],
+                        [segment.values[2], segment.values[3], 0],
+                    ])
 
                     newSegments.push({
                         command: 'C',
                         values: [
-                            // C1 = Q0 + (2/3) (Q1 - Q0)
-                            prevSegment.values[0] + twoOfThree * (segment.values[0] - prevSegment.values[0]),
-                            prevSegment.values[1] + twoOfThree * (segment.values[1] - prevSegment.values[1]),
-
-                            // C2 = Q2 + (2/3) (Q1 - Q2)
-                            segment.values[2] + twoOfThree * (segment.values[0] - segment.values[2]),
-                            segment.values[3] + twoOfThree * (segment.values[1] - segment.values[3]),
-
-                            // C3 = Q2
-                            segment.values[2],
-                            segment.values[3]
+                            localCurve[1][0], localCurve[1][1],
+                            localCurve[2][0], localCurve[2][1],
+                            localCurve[3][0], localCurve[3][1],
                         ]
                     });
                 } else if (segment.command === 'Z') {
@@ -826,7 +826,6 @@ export default class PathParser {
             var v = segment.values;
             var c = segment.command;
             const prevSegment = this.segments[index - 1];
-            const accurancy = 1 / 10000;
 
             switch (c) {
                 case 'M':
@@ -838,14 +837,6 @@ export default class PathParser {
                     minY = Math.min(minY, v[1])
                     maxY = Math.max(maxY, v[1])
                     break;
-                case 'V':
-                    minX = Math.min(minX, v[0])
-                    maxX = Math.max(maxX, v[0])
-                    break;
-                case 'H':
-                    minY = Math.min(minY, v[1])
-                    maxY = Math.max(maxY, v[1])
-                    break;
                 case 'C':
                     getCurveBBox([
                         [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
@@ -853,6 +844,7 @@ export default class PathParser {
                         [v[2], v[3], 0],
                         [v[4], v[5], 0],
                     ]).forEach(p => {
+
                         minX = Math.min(minX, p[0])
                         maxX = Math.max(maxX, p[0])
 
@@ -861,22 +853,21 @@ export default class PathParser {
                     })
                     break;
                 case 'Q':
-                    const newPoints = [
-                        [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
-                        [v[0], v[1], 0],
-                        [v[2], v[3], 0],
-                    ].map(p => {
-                        return { x: p[0], y: p[1] }
-                    })
-                    for (var i = 0; i <= 1; i += accurancy) {
-                        const { x, y } = getBezierPointOneQuard(newPoints, i);
+                    getCurveBBox(
+                        normalizeCurveForQuard([
+                            [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
+                            [v[0], v[1], 0],
+                            [v[2], v[3], 0]
+                        ])
+                    ).forEach(p => {
 
-                        minX = Math.min(minX, x)
-                        maxX = Math.max(maxX, x)
+                        minX = Math.min(minX, p[0])
+                        maxX = Math.max(maxX, p[0])
 
-                        minY = Math.min(minY, y)
-                        maxY = Math.max(maxY, y)
-                    }
+                        minY = Math.min(minY, p[1])
+                        maxY = Math.max(maxY, p[1])
+                    })                
+
                     break;
                 case 'A':
 
@@ -2013,8 +2004,8 @@ export default class PathParser {
     static makePolygon(width, height, count = 3) {
         const segments = []
 
-        const centerX = width / 2;
-        const centerY = height / 2;
+        const centerX = 1 / 2;
+        const centerY = 1 / 2;
 
         for (var i = 0; i < count; i++) {
             var angle = (i / count) * Math.PI * 2 - Math.PI / 2;
@@ -2029,14 +2020,14 @@ export default class PathParser {
 
         segments.push(Segment.Z())
 
-        return PathParser.fromSegments(segments);
+        return PathParser.fromSegments(segments).scale(width, height);
     }
 
     static makeStar(width, height, count = 5, radius = 0.5) {
         const segments = []
 
-        const centerX = width / 2;
-        const centerY = height / 2;
+        const centerX = 1 / 2;
+        const centerY = 1 / 2;
 
         const outerRadius = Math.min(centerX, centerY);
         const innerRadius = outerRadius * radius;
@@ -2060,7 +2051,7 @@ export default class PathParser {
         segments.push(Segment.L(firstX, firstY))
         segments.push(Segment.Z())
 
-        return PathParser.fromSegments(segments);
+        return PathParser.fromSegments(segments).scale(width, height);
     }
 
     static makeCurvedStar(width, height, count = 5, radius = 0.5, tension = 0.5) {

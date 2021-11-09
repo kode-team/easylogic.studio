@@ -1,13 +1,13 @@
 @import '../../scss/mixins.scss';
 
 .elf--fill-single-editor {
-    height: 20px;
+    height: var(--elf--input-height);
     width: 100%;
     display: grid;
-
+    grid-template-columns: 1fr;
 
     &.has-label {
-        grid-template-columns: 70px 24px 1fr;
+        grid-template-columns: 70px 1fr;
         grid-column-gap: 2px;
 
         label {
@@ -18,6 +18,16 @@
             font-size: 11px;
         }
     }       
+
+    .area {
+        display: grid;
+        grid-template-columns: 24px 1fr;
+        grid-column-gap: 2px;
+        background-color: var(--elf--input-background-color);
+        height: 100%;
+        border-radius: 4px;
+        padding: 3px;
+    }
     
     .preview {
         display: inline-block;
@@ -41,6 +51,7 @@
             border-radius: 2px;           
             overflow: hidden; 
             @include transparent-background();  
+            background-color: white;
             // box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
 
             .color-view {

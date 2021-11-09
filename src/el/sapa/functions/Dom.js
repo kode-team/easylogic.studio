@@ -229,6 +229,11 @@ export default class Dom {
     return this;
   }
 
+  replaceClass(oldClass, newClass) {
+    this.el.classList.replace(oldClass, newClass);
+    return this;
+  }
+
   hasClass(cls) {
     if (!this.el.classList) return false;
     return this.el.classList.contains(cls);

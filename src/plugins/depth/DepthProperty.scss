@@ -1,0 +1,45 @@
+.elf--depth-item {
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr);
+    grid-column-gap: 2px;
+    height: 24px;
+    padding-top: 8px;
+    text-align: center;
+    justify-items: center;    
+
+    button {
+        width: 20px;
+        height: 10px;
+        background-color: transparent;
+        background-image: none;
+        border:0px;
+        box-shadow: none;
+        text-align: center;
+
+        &[data-no-title="true"] {
+            .title {
+                display: none; 
+            }
+        }
+  
+      }
+  
+      .title {
+        font-size: 9px;
+        color: #999;
+        // display: none;
+      }
+  
+      .icon {
+        margin: 0 auto;
+        width: 16px;
+        height: 16px;
+        color: var(--elf--selected-color) !important;        
+  
+        svg {
+          width: 100%;
+          height: 100%;
+        }
+  
+      }
+}

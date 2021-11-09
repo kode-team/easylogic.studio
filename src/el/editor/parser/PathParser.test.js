@@ -196,7 +196,7 @@ test("path - normalize with Z, convert quard curve to cubic bezier curve", () =>
     const path = new PathParser(`M0,0 L 100 100C 20 30 50 40 100 100 Q200 200 300 100 Z`);
     const path2 = path.normalize();
 
-    expect(path2.d).toBe("M 0 0C 33 33 66 66 100 100C 20 30 50 40 100 100C 140 143.33333333333331 233.33333333333334 166.66666666666666 300 100Z");
+    expect(path2.d).toBe("M 0 0C 33 33 66 66 100 100C 20 30 50 40 100 100C 166.66666666666666 166.66666666666666 233.33333333333334 166.66666666666666 300 100Z");
 })
 
 test("path - divide line segment by count", () => {

@@ -80,6 +80,7 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
 
   .element-item {
     pointer-events: all;
+    contain: size;
     // will-change: auto;
     &[contenteditable="true"] {
       // margin: 0px;

@@ -322,9 +322,8 @@ export class ViewportManager {
     get width () { return this.maxX - this.minX; }
 
     checkInViewport (pointVertex) {
-        const [x, y, z] = pointVertex;
-        const xInViewport = this.minX < x && x < this.maxX;
-        const yInViewport = this.minY < y && y < this.maxY;
+        const xInViewport = this.minX < pointVertex[0] && pointVertex[0] < this.maxX;
+        const yInViewport = this.minY < pointVertex[1] && pointVertex[1] < this.maxY;
         return xInViewport && yInViewport;
     }
 

@@ -127,6 +127,10 @@ export function isNotString(value) {
     return isString(value) === false;
 }
 
+export function isArray(value) {
+    return Array.isArray(value);
+}
+
 export function isObject(value) {
     return typeof value == 'object' && !Array.isArray(value) && !isNumber(value) && !isString(value) && value !== null;
 }

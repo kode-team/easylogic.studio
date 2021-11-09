@@ -15,6 +15,8 @@ import AddSVGTextPath from "el/editor/ui/menu-items/AddSVGTextPath";
 
 import './ToolMenu.scss'; 
 import AddBlankRect from "el/editor/ui/menu-items/AddBlankRect";
+import AddSVGPolygon from '../../../../el/editor/ui/menu-items/AddSVGPolygon';
+import AddSVGStar from '../../../../el/editor/ui/menu-items/AddSVGStar';
 
  
 export default class ToolMenu extends EditorElement {
@@ -33,6 +35,8 @@ export default class ToolMenu extends EditorElement {
       AddDrawPath,
       AddPath,
       AddSVGRect,
+      AddSVGPolygon,
+      AddSVGStar,
       AddSVGCircle,
       AddSVGTextPath,
     }
@@ -64,7 +68,8 @@ export default class ToolMenu extends EditorElement {
               <object refClass='AddSVGCircle' />            
               <!-- <AddSVGText /> -->
               <object refClass='AddSVGTextPath' />
-              <object refClass='AddPolygon' />
+              <object refClass='AddSVGPolygon' />
+              <object refClass='AddSVGStar' />
               ${this.$injectManager.generate('tool.menu.svg')}              
             </span>
           </div>

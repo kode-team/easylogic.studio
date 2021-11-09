@@ -51,7 +51,7 @@ const svgPatterns = [
     }
   },
   {
-    itemType: "svg-path", name: "polygon - 3", attrs: {
+    itemType: "polygon", name: "polygon - 3", attrs: {
       'background-color': 'transparent',
       stroke: 'black',
       'stroke-width': 2,

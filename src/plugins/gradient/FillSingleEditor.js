@@ -92,16 +92,18 @@ export default class FillSingleEditor extends EditorElement {
         return /*html*/`
             <div class='elf--fill-single-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : '' }            
-                <div class='preview' ref='$preview'>
-                    <div class='mini-view'>
+                <div class="area">
+                    <div class='preview' ref='$preview'>
+                        <div class='mini-view'>
 
-                        <svg class='color-view' ref='$miniView'>
-                            <defs ref='$fillView'></defs>
-                            <rect x="0" y="0" width="100%" height="100%" ref='$fillColor' fill='url(#${this.fillId})' />
-                        </svg>
+                            <svg class='color-view' ref='$miniView'>
+                                <defs ref='$fillView'></defs>
+                                <rect x="0" y="0" width="100%" height="100%" ref='$fillColor' fill='url(#${this.fillId})' />
+                            </svg>
+                        </div>
                     </div>
+                    <div class='colors ${simple ? 'simple' : ''}' ref='$colors'></div>
                 </div>
-                <div class='colors ${simple ? 'simple' : ''}' ref='$colors'></div>
             </div>
         `
     }

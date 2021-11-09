@@ -26,6 +26,7 @@ import StrokeDashArrayEditor from "./StrokeDashArrayEditor";
 import TextAreaEditor from "./TextAreaEditor";
 import TextEditor from "./TextEditor";
 import VarEditor from "./VarEditor";
+import Button from './Button';
 
 /**
  * 
@@ -33,6 +34,7 @@ import VarEditor from "./VarEditor";
  */
 export default function (editor) {
     editor.registerElement({
+        Button,
         IconListViewEditor,
         TextAreaEditor,
         TextEditor,
@@ -60,5 +62,5 @@ export default function (editor) {
         InputRangeEditor,
         ColorAssetsEditor,
         FontSelectEditor
-    })
+    });
 }

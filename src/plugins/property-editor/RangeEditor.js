@@ -106,12 +106,6 @@ export default class RangeEditor extends EditorElement {
         this.refs.$rangeArea.removeClass('focused');
     }    
 
-    [CLICK('$body .remove')] (e) {
-        this.updateData({
-            value: ''
-        })
-    }
-
     updateData (data) {
         this.setState(data, false)
         this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params)

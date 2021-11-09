@@ -51,6 +51,8 @@ export default class BaseLayout extends EditorElement {
 
     this.$el.attr('data-theme', this.$editor.theme);
     this.$el.addClass(navigator.userAgent.includes('Windows') ? 'ua-window' : 'ua-default')
+
+    this.trigger("initialize")
   }
 
   initialize() {

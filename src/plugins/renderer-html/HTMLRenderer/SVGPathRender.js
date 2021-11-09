@@ -13,9 +13,10 @@ export default class SVGPathRender extends SVGItemRender {
 
     if (!currentElement) return; 
 
-    var $path = currentElement.$('path');
+    const $path = currentElement.$('path');
 
     if ($path) {
+
       if (item.hasChangedField('width', 'height', 'd')) {
         $path.setAttrNS({
           'd':  item.d,
