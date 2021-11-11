@@ -1,6 +1,17 @@
 import { clone } from "el/sapa/functions/func";
 import { vec3 } from "gl-matrix";
 
+
+/**
+ * 상수 정리 
+ * 
+ * startPoint : 시작점
+ * endPoint : 끝점
+ * reversePoint : 역방향으로 이동할 점
+ * 
+ * 
+ */
+
 export default class Point {
     static isEqual(a, b, c) {
         if (arguments.length === 2) {
@@ -134,6 +145,69 @@ export default class Point {
         }
         return firstIndex;
     }
+
+    static getGroupList (points) {
+
+        const groupList = [];
+        let groupIndex = 0;
+        points.forEach((point, index) => {
+            if (point.command === "M") {
+                groupList.push({ point, index, groupIndex: groupIndex++ })
+            }
+        })
+
+        return groupList;
+
+    }
+
+    static  getSplitedGroupList(points) {
+        const localPoints = clone(points);
+        const splitedGroupList = [];
+
+        for(var i = 0, groupIndex = -1, len = localPoints.length ; i < len; i++) {
+            const point = localPoints[i];
+            if (point.command === "M") {
+                groupIndex++;
+                splitedGroupList[groupIndex] = {
+                    startPointIndex: i,
+                    point,
+                    points: []
+                }
+            } 
+
+            splitedGroupList[groupIndex].points.push(point);
+        }
+
+        return splitedGroupList;
+    }
+
+    static getGroup(groupList, pointIndex) {
+        const list = groupList.filter(group => group.point.index <= pointIndex);
+
+        return list.pop();
+    }
+
+    /**
+     * group 리스트를 구하고 
+     * 내가 어디 속해 있는지 구해서 
+     * Prev 를 정해야할 듯 
+     * 
+     * @param {*} points 
+     * @param {*} index 
+     * @returns 
+     */
+    static getGroupIndex (points, index) {
+        var groupIndex = -1; 
+        for(var i = 0, len = points.length; i < len; i++) {
+            if (points[i].command === 'M') {
+                groupIndex++;
+            }
+
+            if (points[i].index === index) {
+                return groupIndex; 
+            }
+        }
+    }
     
     static getLastPoint (points, index) {
 
@@ -217,7 +291,7 @@ export default class Point {
             nextPoint.index = index + 1; 
         }
 
-        if (currentPoint.connected) {
+        if (currentPoint.connected || currentPoint.close) {
             nextPoint = Point.getFirstPoint(points, index);
         }
 

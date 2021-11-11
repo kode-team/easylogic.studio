@@ -230,7 +230,7 @@ export class DomModel extends GroupModel {
     const isChanged = super.reset(obj);
 
     // transform 에 변경이 생기면 미리 캐슁해둔다. 
-    if (isChanged && this.hasChangedField('clip-path')) {
+    if (this.hasChangedField('clip-path')) {
       this.setClipPathCache()
     } else if (this.hasChangedField('width', 'height')) {
 

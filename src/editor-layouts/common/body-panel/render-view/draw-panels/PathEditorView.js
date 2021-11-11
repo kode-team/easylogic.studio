@@ -245,6 +245,16 @@ export default class PathEditorView extends PathTransformEditor {
         return /*html*/`
         <div class='elf--path-editor-view' tabIndex="-1">
             <style type="text/css" ref="$styleView"></style>
+            <svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'>
+                <defs>
+                    <pattern id='stripe' patternUnits='userSpaceOnUse' width='20' height='33' patternTransform='scale(1) rotate(135)'>
+                        <path d='M0 8h20z'   stroke-width='1' stroke='#07A3FB' fill='none'/>
+                        <path d='M0 16h20z'   stroke-width='1' stroke='#07A3FB' fill='none'/>
+                        <path d='M0 24h20z'   stroke-width='1' stroke='#07A3FB' fill='none'/>
+                        <path d='M0 32h20z'   stroke-width='1' stroke='#07A3FB' fill='none'/>
+                    </pattern>
+                </defs>    
+            </svg>
             <div class='path-container' ref='$view'></div>
             <div class='path-container split-panel'>
                 <svg width="100%" height="100%">
@@ -441,6 +451,8 @@ export default class PathEditorView extends PathTransformEditor {
     }
 
     [SUBSCRIBE('showPathEditor')](mode = 'path', obj = {}) {
+        this.state.isShow = true;
+        this.transformMode = mode;
 
         if (mode === 'move') {
             obj.current = null;
@@ -453,8 +465,7 @@ export default class PathEditorView extends PathTransformEditor {
 
         this.refreshEditorView(obj, true);
 
-        this.transformMode = mode;
-        this.state.isShow = true;
+
         this.$el.show();
         this.$el.focus();
 
@@ -490,6 +501,8 @@ export default class PathEditorView extends PathTransformEditor {
 
     [BIND('$view')]() {
 
+        const path = this.state.isShow ? this.pathGenerator.makeSVGPath() : ''
+
         const strokeWidth = Length.parse(this.state.current?.['stroke-width']).value || 0;
         return {
             class: {
@@ -504,7 +517,7 @@ export default class PathEditorView extends PathTransformEditor {
 
             // 성능을 위해서 diff 알고리즘 사용 
             // diff 를 하지 않으면 이벤트가 종료 되기 때문에 diff 로 부분만 변경해줘야 함 
-            htmlDiff: this.pathGenerator.makeSVGPath()
+            htmlDiff: path
         }
     }
 
@@ -595,7 +608,11 @@ export default class PathEditorView extends PathTransformEditor {
         var $target = Dom.create(e.target);
         if ($target.hasClass('svg-editor-canvas') && !isPathMode) {
             // canvas 를 클릭했을 때 설정 , drag 를 할준비를 한다. 
-            this.$config.set('set.drag.path.area', true);             
+            this.$config.set('set.drag.path.area', true);    
+            this.state.isGroupSegment = false;
+            this.state.selectedGroupIndex = "";
+            this.state.selectedPointIndex = "";
+
         } else {
 
             // path 를 클릭했을 때 설정
@@ -606,6 +623,17 @@ export default class PathEditorView extends PathTransformEditor {
 
             // first segment 인지 체크 
             this.state.isFirstSegment = this.state.isSegment && $target.attr('data-is-first') === 'true';
+
+            this.state.isGroupSegment = $target.hasClass('path-area');
+
+            if (this.state.isGroupSegment) {
+                this.state.selectedGroupIndex = +$target.data('group-index');
+                this.state.selectedPointIndex = +$target.data('point-index');                
+            } else {
+                this.state.selectedGroupIndex = "";
+                this.state.selectedPointIndex = "";
+            }
+
 
             // segment 를 클릭 했을 때 같은 위치에 있는 점을 같이 움직여야 한다. 
             // 이건 기본적으로 합쳐지면 같이 움직이고 특수한 키를 누르면 다르게 움직인다. 
@@ -622,16 +650,13 @@ export default class PathEditorView extends PathTransformEditor {
                 this.state.startPoint = this.pathGenerator.points[index].startPoint;
             } else {
                 this.state.startPoint = this.state.dragXY;
-
             }
             this.state.dragPoints = false
             this.state.endPoint = null;
 
 
         } else {
-            if (this.isOnCanvas) {
-                this.renderSelectBox(this.state.dragXY);
-            } else if (this.state.isSegment) {
+            if (this.state.isSegment) {
                 this.changeMode('segment-move');
                 var [index, segmentKey] = $target.attrs('data-index', 'data-segment-point')
                 const localIndex = +index;
@@ -648,6 +673,11 @@ export default class PathEditorView extends PathTransformEditor {
                 }
 
                 this.renderPath();
+            } else if (this.state.isGroupSegment) {
+                this.changeMode('segment-move');                
+                this.pathGenerator.selectGroup(this.state.selectedGroupIndex);
+
+                this.renderPath();                
             }
         }
 
@@ -695,6 +725,12 @@ export default class PathEditorView extends PathTransformEditor {
     end(dx, dy) {
         var e = this.$config.get('bodyEvent')        
         this.$config.set('set.move.control.point', false);        
+        
+        // group 일 때는 드래그가 끝난 이후에 selection 을 초기화한다. 그래야 segment 를 선택할 수 있다. 
+        if (this.state.isGroupSegment) {
+            this.pathGenerator.select();
+        }
+
         if (this.$config.true('set.drag.path.area')) {
             if (dx === 0 && dy === 0) {    // 아무것도 움직인게 없으면 편집 종료 
                 this.changeMode('modify');
@@ -715,10 +751,10 @@ export default class PathEditorView extends PathTransformEditor {
         } else if (this.isMode('segment-move')) {
 
             this.changeMode('modify');
+
             this.pathGenerator.reselect();            
-            // 마지막 지점에서 다시 renderpath 를 하게 되면 element 가 없어서 double 클릭을 인식 할 수가 없음. 
-            // 그래서 삭제하니 이코드는 주석으로 그대로 나두자.      
-            // this.renderPath()      
+
+            this.renderPath()      
             this.updatePathLayer();  
 
         } else if (this.isMode('path')) {
@@ -747,6 +783,7 @@ export default class PathEditorView extends PathTransformEditor {
                     this.state.clickCount++;
 
                     this.renderPath()
+                    this.pathGenerator.reselect();
                 }
             }
             this.state.isSplitPath = false;
@@ -796,18 +833,24 @@ export default class PathEditorView extends PathTransformEditor {
 
 
     [SUBSCRIBE('deleteSegment')]() {
-        // 특정 세그먼트만 삭제하기 
-        this.renderSegment(() => {
-            this.pathGenerator.removeSelectedSegment();
-        })
+        this.pathGenerator.reselect()
+
+        this.pathGenerator.removeSelectedSegment();
+
+        this.renderPath();
+        this.updatePathLayer();
+
     }
 
     [SUBSCRIBE('moveSegment')](dx, dy) {
+        // path 를 클릭했을 때 설정
+        this.pathGenerator.reselect()
 
-        // segment 만 움직이기 
-        this.renderSegment(() => {
-            this.pathGenerator.moveSelectedSegment(dx, dy);
-        })
+        this.pathGenerator.moveSelectedSegment(dx, dy);
+
+        this.renderPath();
+        this.updatePathLayer();
+
     }
 
 

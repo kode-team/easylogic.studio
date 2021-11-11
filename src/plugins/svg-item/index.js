@@ -58,6 +58,15 @@ export default function (editor) {
     editor.registerInspector('star', (item) => {
         return [
             {
+                key: 'isCurve',
+                editor: 'ToggleCheckBox',
+                editorOptions: {
+                    label: 'Curve',
+                    // toggleLabels: ['Curve', 'Not Curve'],
+                    defaultValue: item.isCurve,
+                }
+            },
+            {
                 key: 'count',
                 editor: 'NumberRangeEditor',
                 editorOptions: {
@@ -72,11 +81,21 @@ export default function (editor) {
                 editor: 'NumberRangeEditor',
                 editorOptions: {
                     label: 'Inner Radius',
+                    min: -1,
+                    max: 1,
+                    step: 0.01
+                }
+            },
+            {
+                key: 'tension',
+                editor: 'NumberRangeEditor',
+                editorOptions: {
+                    label: 'Tension',
                     min: 0,
                     max: 1,
                     step: 0.01
                 }
-            }            
+            }                        
         ]
     })
 }

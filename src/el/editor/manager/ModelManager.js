@@ -56,6 +56,7 @@ export class ModelManager {
 
     set(id, item) {
         this.items.set(id, item);
+        this.setChanged('set', id, item);        
     }
 
     // 삭제 표시 
@@ -71,6 +72,8 @@ export class ModelManager {
             removedLeftSibling: index > 0 ? children[index - 1] : null,
             removedRightSibling: index < children.length - 1 ? children[index + 1] : null
         })
+
+        this.setChanged('remove', id);
     }
 
     // 삭제 표시 복구 
@@ -95,6 +98,8 @@ export class ModelManager {
         delete obj.removedLeftSibling;
         delete obj.removedRightSibling;
         delete obj.removedIndex;
+
+        this.setChanged('recover', id);    
     }
 
     clear() {
@@ -123,13 +128,17 @@ export class ModelManager {
     }
 
     /**
-     * 자식 아이템을 삭제한다. 
+     * 부모에서 자식 아이템을 삭제한다. 
      * 
+     * @param {string} rootId
+     * @param {string} childId
      */
     removeChild(rootId, childId) {
 
         const obj = this.get(rootId)
         obj.children = obj.children.filter(it => it !== childId)
+
+        this.setChanged('removeChild', rootId, { childId });            
     }
 
     /**
@@ -244,6 +253,8 @@ export class ModelManager {
         ids.forEach(id => {
             this.remove(id);
         });
+
+        this.setChanged('markRemove', ids, {isLayer: true});                
     }
 
     markRemoveProject (id) {
@@ -251,6 +262,8 @@ export class ModelManager {
 
         this.projects.splice(index, 1);
         this.get(id).removed = true;
+
+        this.setChanged('markRemoveProject', [id], {isProject: true});        
         return index;
     }
 
@@ -258,11 +271,15 @@ export class ModelManager {
         ids.forEach(id => {
             this.recover(id);
         });
+
+        this.setChanged('unmarkRemove', ids, {isLayer: true});
     }
 
     unmarkRemoveProject (id, index) {
         this.projects.splice(index, 0, id);
         this.get(id).removed = false;
+
+        this.setChanged('unmarkRemoveProject', [id], {removed: true, isProject: true});        
     }
 
     /**

@@ -64,11 +64,11 @@ export class MovableModel extends BaseAssetModel {
     reset(obj) {
         const isChanged = super.reset(obj);
         // transform 에 변경이 생기면 미리 캐슁해둔다. 
-        if (isChanged && this.hasChangedField('children', 'x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'transform-origin', 'perspective', 'perspective-origin')) {
+        if (this.hasChangedField('children', 'x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'transform-origin', 'perspective', 'perspective-origin')) {
             this.refreshMatrixCache()
         }
 
-        if (isChanged && this.hasChangedField('width', 'height') && this.hasLayout()) {
+        if (this.hasChangedField('width', 'height') && this.hasLayout()) {
             this.applyLayout();
         }
 
@@ -98,7 +98,8 @@ export class MovableModel extends BaseAssetModel {
     }
 
     refreshMatrixCache() {
-    
+        // this.modelManager.setChanged('refreshMatrixCache', this.id, { start: true })        
+
         this.setCacheItemTransformMatrix();
         this.setCacheLocalTransformMatrix();                                         
         this.setCacheAccumulatedMatrix();   
@@ -113,6 +114,8 @@ export class MovableModel extends BaseAssetModel {
         this.layers.forEach(it => {
             it.refreshMatrixCache();
         })
+
+        // this.modelManager.setChanged('refreshMatrixCache', this.id, { end: true })                
     }
 
     setCacheItemTransformMatrix() {
@@ -382,6 +385,7 @@ export class MovableModel extends BaseAssetModel {
      * @returns 
      */
     isPointInRect(x, y) {
+        // console.log('rect', this.originVerties, x, y)
         return polyPoint(this.originVerties, x, y)
     }
 
@@ -898,6 +902,8 @@ export class MovableModel extends BaseAssetModel {
      */
     resetMatrix (childItem) {
 
+        this.modelManager.setChanged('resetMatrix', this.id, { start: true, childItemId: childItem?.id })
+
         // 새로운 offset 좌표는 아래와 같이 구한다. 
         // [newParentMatrix] * [newTranslate] * [newItemTransform] = [newAccumulatedMatrix]
 
@@ -957,6 +963,8 @@ export class MovableModel extends BaseAssetModel {
 
         childItem.refreshMatrixCache();
 
+        this.modelManager.setChanged('resetMatrix', this.id, { end: true, childItemId: childItem?.id })        
+
     }
 
     /** order by  */
@@ -982,6 +990,8 @@ export class MovableModel extends BaseAssetModel {
         if (startIndex > -1) {
             parent.children[startIndex] = parent.children[targetIndex]
             parent.children[targetIndex] = this.id; 
+
+            this.modelManager.setChanged('setOrder', this.id, {targetIndex, startIndex, parentId: parent.id})
         }
     }
 

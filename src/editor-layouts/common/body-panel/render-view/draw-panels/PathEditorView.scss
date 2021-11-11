@@ -335,6 +335,15 @@
             fill: transparent;
             content-visibility: auto;
 
+            &.path-area {
+                stroke-width: 0;
+
+                &:hover,
+                &.selected {
+                    fill: url(#stripe);
+                }
+            }
+
             &.curve {
                 fill: white;
                 stroke-width: 1;
@@ -391,7 +400,8 @@
             stroke: var(--elf--selected-color);
             stroke-width: 0.5;
             pointer-events: none;
-            display: none;
+            font-size: 20px;
+            font-weight: bold;
         }
     }
 }

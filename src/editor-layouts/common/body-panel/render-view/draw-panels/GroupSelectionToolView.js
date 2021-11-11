@@ -50,29 +50,6 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         `
     }
 
-
-    [SUBSCRIBE('keymap.keydown')] (e) {
-        const keyString = [
-            e.altKey    ? 'ALT'     : '',
-            e.ctrlKey   ? 'CTRL'    : '',
-            e.shiftKey  ? 'SHIFT'   : '',
-            e.metaKey   ? 'META'    : ''
-        ].join("");
-
-        if (e.shiftKey && keyString === 'SHIFT') {
-            this.$el.attr('data-has-shift', 'true')
-        } else {
-            if (this.$el.attr('data-has-shift') === 'true') {
-                this.$el.attr('data-has-shift', '')
-            }
-
-        }
-    }
-
-    [SUBSCRIBE('keymap.keyup')] (e) {
-        this.$el.attr('data-has-shift', '')
-    }        
-
     toggleEditingPath (isEditingPath) {
         this.refs.$selectionView.toggleClass('editing-path', isEditingPath);
     }
@@ -777,11 +754,13 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
             `,
             size: this.createSize(pointers),
             point: [
+                // 모서리 영역은 사용하지 않음 , 클릭하는 시점에 다른 도구가 selection 되지 않는 문제가 있어서 
+                // 추후 UI 를 다르게 만들어야할 듯 
                 // 4모서리에서도 rotate 할 수 있도록 맞춤 
-                this.createRotatePointer (selectionPointers[0], 0, 'bottom right'),
-                this.createRotatePointer (selectionPointers[1], 1, 'bottom left'),
-                this.createRotatePointer (selectionPointers[2], 2, 'top left'),
-                this.createRotatePointer (selectionPointers[3], 3, 'top right'),
+                // this.createRotatePointer (selectionPointers[0], 0, 'bottom right'),
+                // this.createRotatePointer (selectionPointers[1], 1, 'bottom left'),
+                // this.createRotatePointer (selectionPointers[2], 2, 'top left'),
+                // this.createRotatePointer (selectionPointers[3], 3, 'top right'),
                 this.createRotatePointer (rotatePointer, 4, 'center center'),                
                 
                 dist < 20 ? undefined : this.createPointerSide (vec3.lerp([], pointers[0], pointers[1], 0.5), 11, rotate, width, 5),

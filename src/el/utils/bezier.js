@@ -360,18 +360,19 @@ export const normalizeCurveForQuard = (points) => {
     return [
         vec3.clone(points[0]),
 
-        [
+        vec3.fromValues(
             // C1 = Q0 + (2/3) (Q1 - Q0)
             points[0][0] + twoOfThree * (points[1][0] - points[0][0]),
             points[0][1] + twoOfThree * (points[1][1] - points[0][1]),
             0,
-        ],
+        ),
 
-        [
+        vec3.fromValues(
             // C2 = Q2 + (2/3) (Q1 - Q2)
             points[2][0] + twoOfThree * (points[1][0] - points[2][0]),
             points[2][1] + twoOfThree * (points[1][1] - points[2][1]),
-        ],
+            0,
+        ),
 
         vec3.clone(points[2]),
     ]

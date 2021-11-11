@@ -129,28 +129,29 @@ export default class HTMLRenderView extends EditorElement {
             return false;
         }
 
-        const mousePoint = this.$viewport.getWorldPosition(e);
-        if (this.$selection.hasPoint(mousePoint)) {
-
-            // selection 영역과 hover item 이 겹치면  hover item 을 선택한걸로 한다. 
-            if (this.$selection.hasHoverItem()) {
-                // selection 영역이 동일하고 
-                // hover 된 id 가 부모가 아니면 
-                // hover 된 아이템을 선택하게 된다. 
-                if (this.$selection.hasParent(/*parentId*/this.$selection.hoverId) === false) {
-                    this.$selection.selectHoverItem();
+        if (!e.shiftKey) {
+            const mousePoint = this.$viewport.getWorldPosition(e);
+            if (this.$selection.hasPoint(mousePoint)) {
+    
+                // selection 영역과 hover item 이 겹치면  hover item 을 선택한걸로 한다. 
+                if (this.$selection.hasHoverItem()) {
+                    // selection 영역이 동일하고 
+                    // hover 된 id 가 부모가 아니면 
+                    // hover 된 아이템을 선택하게 된다. 
+                    if (this.$selection.hasParent(/*parentId*/this.$selection.hoverId) === false) {
+                        this.$selection.selectHoverItem();
+                    }
+    
                 }
-
+    
+                return true;
             }
 
-            return true;
-        }
-
-
-        // hover item 이 있으면 클릭 대상이 있다고 간주한다. 
-        if (this.$selection.hasHoverItem()) {            
-            this.$selection.selectHoverItem();
-            return true;
+            // hover item 이 있으면 클릭 대상이 있다고 간주한다. 
+            if (this.$selection.hasHoverItem()) { 
+                this.$selection.selectHoverItem();
+                return true;
+            }
         }
 
 
@@ -219,6 +220,7 @@ export default class HTMLRenderView extends EditorElement {
         }
 
 
+
         let isInSelectedArea = this.$selection.hasPoint(this.initMousePoint)
         const $target = Dom.create(e.target);
 
@@ -257,7 +259,6 @@ export default class HTMLRenderView extends EditorElement {
             }
 
         } else {
-
             if (isInSelectedArea) {
                 // 이미 selection 영역안에 있으면 그대로 드래그 할 수 있도록 맞춘다. 
             } else {

@@ -7,7 +7,7 @@ import SameHeight from "el/editor/ui/menu-items/SameHeight";
 import SameWidth from "el/editor/ui/menu-items/SameWidth";
 import TopAlign from "el/editor/ui/menu-items/TopAlign";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
-import { CLICK } from "el/sapa/Event";
+import { CLICK, SUBSCRIBE } from "el/sapa/Event";
 
 import './BooleanProperty.scss';
 import PathParser from '../../el/editor/parser/PathParser';
@@ -81,16 +81,10 @@ export default class BooleanProperty extends BaseProperty {
       pathAttrs['fill-rule'] = 'nonzero';
 
 
-      this.command('addLayer', `add layer - path`, this.$editor.createModel(pathAttrs), pathAttrs, true, current.parent)      
-
-      this.nextTick(() => {
-        const newCurrent = this.$selection.current;
-
-        this.command("setAttributeForMulti", "change path string", this.$selection.packByValue({
-          ...newCurrent.updatePath(newD),
-        }))      
-      })
-
+      this.command('addLayer', `add layer - path`, this.$editor.createModel({
+        ...pathAttrs,
+        ...current.updatePath(newD),        
+      }), true, current.parent)      
 
     } else if (command === 'transform') {
       this.command("setAttributeForMulti", "change path string", this.$selection.packByValue(
@@ -129,15 +123,10 @@ export default class BooleanProperty extends BaseProperty {
       const newLayerAttrs = current.toCloneObject();
       delete newLayerAttrs.id;
 
-      this.command('addLayer', `add layer - path`, this.$editor.createModel(newLayerAttrs), newLayerAttrs, true, current.parent)            
-
-      this.nextTick(() => {
-        const newCurrent = this.$selection.current;
-
-        this.command("setAttributeForMulti", "change path string", this.$selection.packByValue({
-          ...newCurrent.updatePath(newPath.d),
-        }))      
-      })
+      this.command('addLayer', `add layer - path`, this.$editor.createModel({
+        ...newLayerAttrs,
+        ...current.updatePath(newPath.d),
+      }), true, current.parent)
     } else {
 
       this.command("setAttributeForMulti", "change boolean operation", this.$selection.packByValue({
@@ -152,5 +141,11 @@ export default class BooleanProperty extends BaseProperty {
       this.emit("refreshSelectionTool");
     });    
 
+  }
+
+  [SUBSCRIBE('refreshSelection')] () {
+    this.refreshShow(() => {
+      return this.$selection.is('svg-path', 'polygon', 'star');
+    })
   }
 }

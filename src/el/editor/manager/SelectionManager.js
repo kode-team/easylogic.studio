@@ -761,4 +761,8 @@ export class SelectionManager {
   is (...args) {
     return this.current?.is(...args);
   }
+
+  isAll (...args) {
+    return this.items.every(it => args.includes(it.itemType));
+  }
 }

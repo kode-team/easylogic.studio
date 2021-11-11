@@ -15,7 +15,7 @@ export default class SVGStarRender extends SVGItemRender {
     var $path = currentElement.$('path');
 
     if ($path) {
-      if (item.hasChangedField('width', 'height', 'count', 'radius')) {
+      if (item.hasChangedField('width', 'height', 'count', 'radius', 'isCurve', 'tension')) {
         $path.setAttrNS({
           'd':  item.d,
         })  

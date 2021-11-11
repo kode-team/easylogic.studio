@@ -119,7 +119,8 @@ export class SVGItem extends LayerModel {
       return this.isPointInFill(x, y);
     }
 
-    return super.hasPoint(x, y); 
+    // svg item 쪽에서는 결과가 없으면 그냥 false 를 리턴해서 체크가 안되도록 해야한다. 
+    return false;
   }  
 
 

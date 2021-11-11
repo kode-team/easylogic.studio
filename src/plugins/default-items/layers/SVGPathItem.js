@@ -28,9 +28,13 @@ export class SVGPathItem extends SVGItem {
     const isChanged = super.reset(json);
 
     if (this.hasChangedField('d')) {
+      // d 속성이 변경 될 때 성능을 위해서 PathParser 로 미리 객체를 생성해준다. 
+      // 이때 width, height 를 같이 해둬야 한다. 
       this.cachePath = new PathParser(this.json.d);
       this.cacheWidth = this.json.width.value;
       this.cacheHeight = this.json.height.value;
+
+      // this.modelManager.setChanged('resetCache', this.id, { path: this.cachePath, width: this.cacheWidth, height: this.cacheHeight });
     }
 
     return isChanged;
@@ -47,6 +51,8 @@ export class SVGPathItem extends SVGItem {
       this.json.d = this.cachePath.clone().scale(this.json.width.value/this.cacheWidth, this.json.height.value/this.cacheHeight).d;
       this.modelManager.setChanged('reset', this.id, { d : this.json.d });
     }
+
+    // this.modelManager.setChanged('refreshMatrixCache', this.id, { start: true, redefined: true })                
   }
 
   setCache () {

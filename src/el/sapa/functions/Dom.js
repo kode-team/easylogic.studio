@@ -266,7 +266,7 @@ export default class Dom {
     }
 
     if (typeof html === 'string') {
-      this.el.innerHTML = html;
+      Object.assign(this.el, { innerHTML: html });
     } else {
       this.empty().append(html);
     }

@@ -20,6 +20,15 @@ export class SVGPolygonItem extends SVGItem {
     });
   }
 
+
+  convert(json) {
+    json = super.convert(json);
+
+    if (json.count) json.count = +(json.count);
+
+    return json;
+  }  
+
   enableHasChildren() {
     return false; 
   }

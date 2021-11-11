@@ -49,28 +49,6 @@ export default class SelectionToolView extends SelectionToolEvent {
         `
     }
 
-    [SUBSCRIBE('keymap.keydown')] (e) {
-        const keyString = [
-            e.altKey    ? 'ALT'     : '',
-            e.ctrlKey   ? 'CTRL'    : '',
-            e.shiftKey  ? 'SHIFT'   : '',
-            e.metaKey   ? 'META'    : ''
-        ].join("");
-
-        if (e.shiftKey && keyString === 'SHIFT') {
-            this.$el.attr('data-has-shift', 'true')
-        } else {
-            if (this.$el.attr('data-has-shift') === 'true') {
-                this.$el.attr('data-has-shift', '')
-            }
-
-        }
-    }
-
-    [SUBSCRIBE('keymap.keyup')] (e) {
-        this.$el.attr('data-has-shift', '')
-    }    
-
     toggleEditingPath (isEditingPath) {
         this.$el.toggleClass('editing-path', isEditingPath);
     }
@@ -682,10 +660,10 @@ export default class SelectionToolView extends SelectionToolEvent {
             parentRect: this.createParentRect(parentPointers),
             point: [
                 // 4 모서리에서도 rotate 가 가능하도록 맞춤 
-                this.createRotatePointer (selectionPointers[0], 0),
-                this.createRotatePointer (selectionPointers[1], 1),
-                this.createRotatePointer (selectionPointers[2], 2),
-                this.createRotatePointer (selectionPointers[3], 3),
+                // this.createRotatePointer (selectionPointers[0], 0),
+                // this.createRotatePointer (selectionPointers[1], 1),
+                // this.createRotatePointer (selectionPointers[2], 2),
+                // this.createRotatePointer (selectionPointers[3], 3),
                 isArtBoard ? undefined : this.createRotatePointer (rotatePointer, 4, 'center center'),
 
                 dist < 20 ? undefined : this.createPointerSide (vec3.lerp([], pointers[0], pointers[1], 0.5), 11, rotate, width, 5),

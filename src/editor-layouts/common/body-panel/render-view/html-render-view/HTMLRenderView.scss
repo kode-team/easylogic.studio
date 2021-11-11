@@ -102,10 +102,17 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
 
     > svg {
 
-      &:hover {
-        > path{
-          stroke: rgb(64, 64, 252);
+      path,rect,circle,ellipse,line,polygon,polyline {
+        &:hover {
+            stroke: rgb(64, 64, 252);
         }
+      }
+      &:hover {
+        // hover 할 때 선이 선택된것 처럼 느껴질려면 아래 코드를 사용한다.
+        // 다만 이건 항상 깜빡깜빨 거릴 수 있다. 
+        // > path{
+        //   stroke: rgb(64, 64, 252);
+        // }
 
         > text {
           fill: rgb(64, 64, 252);

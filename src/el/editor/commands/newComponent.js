@@ -3,11 +3,14 @@ import { Length } from "el/editor/unit/Length";
 import PathParser from 'el/editor/parser/PathParser';
 
 /**
+ * 새로운 객체 생성 
+ * 
+ * 백그라운드를 적용해주거나 기본 속성을 적용
  * 
  * @param {Editor} editor 
- * @param {*} itemType 
- * @param {*} obj 
- * @param {*} isSelected 
+ * @param {string} itemType 
+ * @param {KeyValue} obj 
+ * @param {boolean} isSelected 
  * @param {Item} [containerItem=undefined]  상위 부모 객체 
  */
 export default function newComponent (editor, itemType, obj, isSelected = true, containerItem = undefined) {
@@ -48,10 +51,9 @@ export default function newComponent (editor, itemType, obj, isSelected = true, 
         }        
     } 
 
-    editor.command('addLayer', `add layer - ${itemType}`, editor.createModel({
-        itemType, 
-        ...obj,
-    }), obj, isSelected, containerItem)
+    const newObjAttrs = { itemType, ...obj };
+
+    editor.command('addLayer', `add layer - ${itemType}`, editor.createModel(newObjAttrs), isSelected, containerItem)
 
     editor.changeMode(EDIT_MODE_SELECTION);
     

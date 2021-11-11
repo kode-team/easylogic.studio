@@ -40,8 +40,6 @@ export default {
         // // 지우기 전 객체를 모두 clone 한다. 
         let items = editor.selection.itemsByIds(ids || editor.selection.ids);
 
-        console.log(items, ids);
-
         // items 중에  자식/부모의 관게의 객체가 있으면 자식은 필터링 한다. 
         items = filterChildren(items);
 

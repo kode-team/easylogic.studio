@@ -50,6 +50,7 @@ These are only needed for PathKit.FromCmds().
 
 */
 
+import { Length } from 'el/editor/unit/Length';
 
 export class PathKitManager {
   constructor(editor) {
@@ -150,36 +151,22 @@ export class PathKitManager {
     const pathObject = PathKit.FromSVGString(path);
 
 
-
     if (opt['stroke-dasharray'].trim()) {
-      console.log(opt['stroke-dasharray'])
       const arr = opt['stroke-dasharray'].trim().split(" ").map(it => +it)
 
       if (arr.length >= 2) {
-
-        console.log(+opt['stroke-dashoffset']);
-
-        pathObject.dash(arr[0], arr[1], +(opt['stroke-dashoffset'] || 0))        
-
-        const newPathObject = pathObject.stroke({ 
-          width: opt['stroke-width'],
-          join: this.convertLineJoin(opt['stroke-linejoin']),
-          cap: this.convertLineCap(opt['stroke-linecap']),
-        })
-        // fill 타입이 있어야 채워질 수 있는데.
-        newPathObject.setFillType(PathKit.FillType.WINDING);
-
-        
-        return newPathObject.simplify().toSVGString();
+        pathObject.dash(arr[0], arr[1], +(opt['stroke-dashoffset'] || 0))
       }  
     }
 
     let newPathObject = pathObject.stroke({ 
-      width: opt['stroke-width'],
+      width: Length.parse(opt['stroke-width']).value,
       join: this.convertLineJoin(opt['stroke-linejoin']),
       cap: this.convertLineCap(opt['stroke-linecap']),
     })
 
+    // fill 타입이 있어야 채워질 수 있는데.
+    newPathObject.setFillType(PathKit.FillType.WINDING);    
 
     return newPathObject.simplify().toSVGString();
   }

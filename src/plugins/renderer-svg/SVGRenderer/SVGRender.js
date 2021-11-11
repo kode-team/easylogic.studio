@@ -102,6 +102,7 @@ export default class SVGRender extends DomRender {
     y="${y.value}"
     width="${width.value}"
     height="${height.value}"
+    viewBox="0 0 ${width.value} ${height.value}"
     overflow="visible"
 >
     ${this.toDefString(item)}

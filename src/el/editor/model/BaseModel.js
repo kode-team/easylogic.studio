@@ -173,6 +173,8 @@ export class BaseModel {
 
   setParentId(parentId) {
     this.json.parentId = parentId;
+
+    this.modelManager.setChanged('setParentId', this.id, { parentId });        
   }
 
   /**
@@ -341,21 +343,30 @@ export class BaseModel {
   }
 
   /**
+   * check object values 
+   * 
+   * @param {KeyValue} obj 
+   * @returns 
+   */
+  isChangedValue(obj) {
+    return true;
+  }
+
+  /**
    * set json content
    *
    * @param {object} obj
    */
   reset(obj) {
-    // 변경된 값에 대해서 id 를 부여해보자. 
-    // if (!obj.__changedId) obj.__changedId = uuid();
+    const isChanged = this.isChangedValue(obj);
 
-    // if (this.lastChangedField.__changedId !== obj.__changedId) {
-    this.json = this.convert(Object.assign(this.json, obj));
-    this.lastChangedField = obj;
-    this.lastChangedFieldKeys = Object.keys(obj);
-    this.modelManager.setChanged('reset', this.id, obj);
-    this.changed();
-    // }
+    if (isChanged) {
+      this.json = this.convert(Object.assign(this.json, obj));
+      this.lastChangedField = obj;
+      this.lastChangedFieldKeys = Object.keys(obj);
+      this.modelManager.setChanged('reset', this.id, obj);
+      this.changed();
+    }
 
     return true;
   }
@@ -425,6 +436,7 @@ export class BaseModel {
       if (Boolean(hasId) === false) {
         // 아이디가 없는 경우 다시 아이디 넣어주기 
         this.json.children.push(layer.id);
+        this.modelManager.setChanged('appendChild', this.id, {child: layer.id, oldParentId: layer.parentId});
       }
 
       return layer;
@@ -470,7 +482,7 @@ export class BaseModel {
     layer.setParentId(this.id);
     this.json.children.splice(index, 0, layer.id);
     // this.project.addIndexItem(layer);
-
+    this.modelManager.setChanged('insertChild', this.id, {childId: layer.id, index: 0})
     return layer;
   }
 

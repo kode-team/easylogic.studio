@@ -201,6 +201,7 @@ export default class EventMachine {
    */
   parseTemplate(html, isLoad) {
 
+    /////////////////////////////////////////////////////////////////
     //FIXME: html string, element 형태 모두 array 로 받을 수 있도록 해보자. 
     if (Array.isArray(html)) {
       html = html.join('');
@@ -208,7 +209,7 @@ export default class EventMachine {
 
     html = html.trim();
     const list = TEMP_DIV.html(html).children();
-    /////////////////////////////////
+    ///////////////////////////////////////////////////////////////
 
     for(var i = 0, len = list.length; i < len; i++) {
       const $el = list[i];

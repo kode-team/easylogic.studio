@@ -408,6 +408,8 @@ export default class PathParser {
         }).join(split)
     }
 
+    
+
     each(callback, isReturn = false) {
         var newSegments = this.segments.map((segment, index) => {
             return callback.call(this, segment, index);
@@ -490,6 +492,16 @@ export default class PathParser {
 
     scaleTo(sx, sy) {
         return this.joinPath(this.transformMat4(mat4.fromScaling([], [sx, sy, 1]), true));
+    }
+
+    scaleWith(width, height) {
+        const newPath = this.clone();
+        const rect = vertiesToRectangle(newPath.getBBox());
+        newPath.translate(-rect.x, -rect.y);
+        
+        const scale = Math.min(width / rect.width, height / rect.height);
+        
+        return newPath.scale(scale, scale).translate(width/2 - (rect.width/2*scale), height/2 - (rect.height/2*scale));
     }
 
     rotate(angle, centerX = 0, centerY = 0) {
@@ -853,14 +865,14 @@ export default class PathParser {
                     })
                     break;
                 case 'Q':
-                    getCurveBBox(
-                        normalizeCurveForQuard([
-                            [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
-                            [v[0], v[1], 0],
-                            [v[2], v[3], 0]
-                        ])
-                    ).forEach(p => {
 
+                    const curve = normalizeCurveForQuard([
+                        [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
+                        [v[0], v[1], 0],
+                        [v[2], v[3], 0]
+                    ])
+
+                    getCurveBBox(curve).forEach(p => {
                         minX = Math.min(minX, p[0])
                         maxX = Math.max(maxX, p[0])
 
@@ -1031,50 +1043,6 @@ export default class PathParser {
         return false;
     }
 
-    get d() {
-        return this.toString().trim();
-    }
-
-    get closed () {
-        return this.segments.some(segment => segment.command === 'Z') && vec2.equals(this.lastPoint, this.firstPoint);
-    }
-
-    get opened() {
-        return !this.closed;
-    }
-
-
-
-    get length () {
-        let totalLength = 0;
-
-        const group = this.getGroup();
-        group.forEach((group, index) => {
-
-            group.segments.forEach((s, index) => {
-                const prevSegment = group.segments[index - 1];
-                const lastValues = prevSegment?.segment?.values || [];
-                const lastX = lastValues[lastValues.length - 2];
-                const lastY = lastValues[lastValues.length - 1];
-                const values = s.segment.values;
-
-                if (s.segment.command === 'M') {
-                    // NOOP
-                } else if (s.segment.command === 'L') {
-
-                    totalLength += getDist(lastX, lastY, values[0], values[1]);
-                } else if (s.segment.command === 'C') {
-                    totalLength += getCurveDist(lastX, lastY, values[0], values[1], values[2], values[3], values[4], values[5]);
-                } else if (s.segment.command === 'Q') {
-                    totalLength += getQuardDist(lastX, lastY, values[0], values[1], values[2], values[3]);
-                } else {
-                    // NOOP 
-                }
-            })
-        });
-
-        return totalLength;
-    }
 
     toString(split = '') {
         return this.joinPath(undefined, split);
@@ -1264,73 +1232,6 @@ export default class PathParser {
         this.resetSegments(newSegments);
     }
 
-    /**
-     * 모든 점을 수집한다. 
-     * 
-     * @returns {vec3[]}
-     */
-    get verties() {
-        let arr = []
-
-        let lastValues = []
-        this.each(function (segment) {
-            var v = segment.values;
-            var c = segment.command;
-
-            switch (c) {
-                case 'M':
-                case 'L':
-                    arr.push([...segment.values, 0])
-                    break;
-                case 'V':
-                    arr.push([v[0], lastValues.pop(), 0])
-                    break;
-                case 'H':
-                    lastValues.pop()
-                    arr.push([lastValues.pop(), v[0], 0])
-                    break;
-                case 'C':
-                case 'S':
-                case 'T':
-                case 'Q':
-                    for (var i = 0, len = v.length; i < len; i += 2) {
-                        arr.push([v[i], v[i + 1], 0]);
-                    }
-                    break;
-                case 'A':
-
-                    break;
-            }
-
-            lastValues = v;
-
-        });
-
-        return arr;
-    }
-
-    get pathVerties () {
-        const pathVerties = []
-        this.segments.forEach((segment, segmentIndex) => {
-
-            if (segment.values.length > 0) {
-                const arr = segment.values;
-                for(var i = 0, len = arr.length; i < len; i += 2) {
-                    pathVerties.push({
-                        segmentIndex,
-                        valueIndex: i,
-                        x: arr[i],
-                        y: arr[i+1],
-                    })
-                }
-            }
-
-
-        })
-
-
-        return pathVerties;
-    }
 
     /**
      * 컨트롤 포인트를 제외한 모든 점을 반환한다.
@@ -1465,6 +1366,12 @@ export default class PathParser {
         }) || []);
 
         return path;
+    }
+
+    toPathList() {
+        return this.getGroup().map(group => {
+            return PathParser.fromSegments(group.segments.map(it => it.segment));
+        });
     }
 
 
@@ -1858,6 +1765,130 @@ export default class PathParser {
         return this.drawCircleWithRect(cx - radius, cy - radius, radius * 2, radius * 2);   
     }
 
+
+    drawArc(rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y) {
+
+        const [x1, y1] = this.lastPoint;
+
+        return this.addPath(PathParser.arcToCurve(x1, y1, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y))
+    }    
+
+
+    /**
+     * 모든 점을 수집한다. 
+     * 
+     * @returns {vec3[]}
+     */
+     get verties() {
+        let arr = []
+
+        let lastValues = []
+        this.each(function (segment) {
+            var v = segment.values;
+            var c = segment.command;
+
+            switch (c) {
+                case 'M':
+                case 'L':
+                    arr.push([...segment.values, 0])
+                    break;
+                case 'V':
+                    arr.push([v[0], lastValues.pop(), 0])
+                    break;
+                case 'H':
+                    lastValues.pop()
+                    arr.push([lastValues.pop(), v[0], 0])
+                    break;
+                case 'C':
+                case 'S':
+                case 'T':
+                case 'Q':
+                    for (var i = 0, len = v.length; i < len; i += 2) {
+                        arr.push([v[i], v[i + 1], 0]);
+                    }
+                    break;
+                case 'A':
+
+                    break;
+            }
+
+            lastValues = v;
+
+        });
+
+        return arr;
+    }
+
+    get pathVerties () {
+        const pathVerties = []
+        this.segments.forEach((segment, segmentIndex) => {
+
+            if (segment.values.length > 0) {
+                const arr = segment.values;
+                for(var i = 0, len = arr.length; i < len; i += 2) {
+                    pathVerties.push({
+                        segmentIndex,
+                        valueIndex: i,
+                        x: arr[i],
+                        y: arr[i+1],
+                    })
+                }
+            }
+
+
+        })
+
+
+        return pathVerties;
+    }    
+
+
+    get d() {
+        return this.toString().trim();
+    }
+
+    get closed () {
+        return this.segments.some(segment => segment.command === 'Z') && vec2.equals(this.lastPoint, this.firstPoint);
+    }
+
+    get opened() {
+        return !this.closed;
+    }
+
+
+
+    get length () {
+        let totalLength = 0;
+
+        const group = this.getGroup();
+        group.forEach((group, index) => {
+
+            group.segments.forEach((s, index) => {
+                const prevSegment = group.segments[index - 1];
+                const lastValues = prevSegment?.segment?.values || [];
+                const lastX = lastValues[lastValues.length - 2];
+                const lastY = lastValues[lastValues.length - 1];
+                const values = s.segment.values;
+
+                if (s.segment.command === 'M') {
+                    // NOOP
+                } else if (s.segment.command === 'L') {
+
+                    totalLength += getDist(lastX, lastY, values[0], values[1]);
+                } else if (s.segment.command === 'C') {
+                    totalLength += getCurveDist(lastX, lastY, values[0], values[1], values[2], values[3], values[4], values[5]);
+                } else if (s.segment.command === 'Q') {
+                    totalLength += getQuardDist(lastX, lastY, values[0], values[1], values[2], values[3]);
+                } else {
+                    // NOOP 
+                }
+            })
+        });
+
+        return totalLength;
+    }
+
+
     get lastSegment() {
         const segment = this.segments[this.segments.length - 1];
 
@@ -1893,14 +1924,22 @@ export default class PathParser {
         ];
     }
 
-    drawArc(rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y) {
-
-        const [x1, y1] = this.lastPoint;
-
-        return this.addPath(PathParser.arcToCurve(x1, y1, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y))
-    }
 
     // static method 
+
+    /**
+     * PathParser 리스트를 결합해서 하나의 새로운 PathParser 를 만들어낸다. 
+     * 
+     * @param {PathParser[]}} pathList 
+     * @returns 
+     */
+    static joinPathList (pathList = []) {
+        const newPath = PathParser.fromSVGString();
+        pathList.forEach(path => {
+            newPath.addPath(path);            
+        })
+        return newPath;
+    }
 
     static fromSegments(segments) {
         const path = new PathParser();

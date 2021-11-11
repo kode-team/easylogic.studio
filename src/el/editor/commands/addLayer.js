@@ -1,6 +1,6 @@
 import _doForceRefreshSelection from "./_doForceRefreshSelection";
 
-export default function addLayer (editor, layer, rect = {}, isSelected = true, containerItem) {
+export default function addLayer (editor, layer, isSelected = true, containerItem) {
 
     if (!containerItem) {
         containerItem = editor.selection.current || editor.selection.currentProject
