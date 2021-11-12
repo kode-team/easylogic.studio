@@ -1,5 +1,5 @@
 
-import { getBezierPointOneQuard, getBezierPoints, getBezierPointsLine, getBezierPointsQuard, getCurveBBox, getCurveDist, getPointInCurveList, getQuardDist, normalizeCurveForLine, normalizeCurveForQuard, recoverBezier, recoverBezierLine, recoverBezierQuard, splitBezierPointsByCount, splitBezierPointsLineByCount, splitBezierPointsQuardByCount } from "el/utils/bezier";
+import { getBezierPointOneQuard, getBezierPoints, getBezierPointsLine, getBezierPointsQuard, getCurveBBox, getCurveDist, getPointInCurveList, getQuardDist, normalizeCurveForLine, normalizeCurveForQuard, polygonalForCurve, recoverBezier, recoverBezierLine, recoverBezierQuard, splitBezierPointsByCount, splitBezierPointsLineByCount, splitBezierPointsQuardByCount } from "el/utils/bezier";
 import { isNotUndefined, clone } from "el/sapa/functions/func";
 import { degreeToRadian, getDist, round } from "el/utils/math";
 import { mat4, vec2, vec3 } from "gl-matrix";
@@ -701,6 +701,57 @@ export default class PathParser {
 
         return PathParser.fromSegments(allSegments);
     }
+
+    polygonal() {
+        const pathList = this.toPathList();
+
+        pathList.forEach(path => {
+            const newSegments = [];
+            
+            path.segments.forEach((segment, index) => {
+
+                const prevSegment = path.segments[index - 1];
+
+                if (segment.command === 'M') {
+                    newSegments.push(segment);
+                } else if (segment.command === 'L') {
+                    newSegments.push(segment);
+                } else if (segment.command === 'C') { 
+                    newSegments.push(
+                        ...polygonalForCurve(
+                            [prevSegment.values[prevSegment.values.length-2], prevSegment.values[prevSegment.values.length-1], 0],
+                            [segment.values[0], segment.values[1], 0],
+                            [segment.values[2], segment.values[3], 0],
+                            [segment.values[4], segment.values[5], 0]
+                        ).map(point => ({
+                            command: 'L',
+                            values: [point[0], point[1], 0]
+                        }))
+                    );
+                } else if (segment.command === 'Q') {
+                    newSegments.push(
+                        ...polygonalForCurve(
+                            ...normalizeCurveForQuard([
+                                [prevSegment.values[prevSegment.values.length-2], prevSegment.values[prevSegment.values.length-1], 0],
+                                [segment.values[0], segment.values[1], 0],
+                                [segment.values[2], segment.values[3], 0]
+                            ])
+                        ).map(point => ({
+                            command: 'L',
+                            values: [point[0], point[1], 0]
+                        }))
+                    );
+                } else if (segment.command === 'Z') {
+                    newSegments.push(segment);
+                }
+            })
+
+            path.resetSegments(newSegments);
+        })
+
+        return PathParser.joinPathList(pathList);
+    }
+
 
     divideSegmentByLength(length = 100)  {
         
@@ -1887,6 +1938,48 @@ export default class PathParser {
 
         return totalLength;
     }
+
+    get lengthList () {
+        let totalLengthList = [];
+
+        const group = this.getGroup();
+        group.forEach((group, groupIndex) => {
+
+            group.segments.forEach((s, index) => {
+                const prevSegment = group.segments[index - 1];
+                const lastValues = prevSegment?.segment?.values || [];
+                const lastX = lastValues[lastValues.length - 2];
+                const lastY = lastValues[lastValues.length - 1];
+                const values = s.segment.values;
+
+                if (s.segment.command === 'M') {
+                    // NOOP
+                } else if (s.segment.command === 'L') {
+                    totalLengthList.push({
+                        groupIndex,
+                        segmentIndex: index,
+                        length: getDist(lastX, lastY, values[0], values[1])
+                    });
+                } else if (s.segment.command === 'C') {
+                    totalLengthList.push({
+                        groupIndex,
+                        segmentIndex: index,
+                        length: getCurveDist(lastX, lastY, values[0], values[1], values[2], values[3], values[4], values[5])
+                    });                    
+                } else if (s.segment.command === 'Q') {
+                    totalLengthList.push({
+                        groupIndex,
+                        segmentIndex: index,
+                        length: getQuardDist(lastX, lastY, values[0], values[1], values[2], values[3])
+                    });                                        
+                } else {
+                    // NOOP 
+                }
+            })
+        });
+
+        return totalLengthList;
+    }    
 
 
     get lastSegment() {

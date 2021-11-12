@@ -234,6 +234,7 @@ export default class PathEditorView extends PathTransformEditor {
             clickCount: 0,
             isSegment: false,
             isFirstSegment: false,
+            current: null,
         }
     }
 
@@ -275,10 +276,12 @@ export default class PathEditorView extends PathTransformEditor {
     }
 
     [SUBSCRIBE("PathEditorDone")]() {
+        console.log(this.state.current);
         if (this.state.current) {
             this.refreshPathLayer();
             this.trigger('hidePathEditor');
         } else {
+            console.log('no current path')
             this.addPathLayer();
         }
 
@@ -373,7 +376,10 @@ export default class PathEditorView extends PathTransformEditor {
         this.changeMode('modify');
 
         var layer = this.makePathLayer()
+        console.log(layer);        
         if (layer) {
+
+
 
             this.$selection.select(layer);
             this.trigger('hidePathEditor')

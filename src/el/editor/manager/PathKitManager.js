@@ -160,7 +160,7 @@ export class PathKitManager {
     }
 
     let newPathObject = pathObject.stroke({ 
-      width: Length.parse(opt['stroke-width']).value,
+      width: +opt['stroke-width'],
       join: this.convertLineJoin(opt['stroke-linejoin']),
       cap: this.convertLineCap(opt['stroke-linecap']),
     })

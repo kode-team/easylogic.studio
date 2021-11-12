@@ -120,6 +120,24 @@ const checkDist = (obj, curve, t, x, y) => {
     }        
 }
 
+export const getPolygonalDist = (points = []) => {
+    let total = 0;
+    let len = points.length;
+
+    points.forEach((point, index) => {
+        var next = points[(index + 1)]
+
+        if (!next) {
+            return;
+        }
+
+        var dist = vec3.dist(vec3.fromValues(point.x, point.y, 0), vec3.fromValues(next.x, next.y, 0));
+        total += dist;
+    })
+
+    return total;
+}
+
 export const getCurveDist = (sx, sy, cx1, cy1, cx2, cy2, ex, ey, count = 1000) => {
     var curve = createBezier(
         {x: sx, y: sy},
@@ -376,6 +394,49 @@ export const normalizeCurveForQuard = (points) => {
 
         vec3.clone(points[2]),
     ]
+}
+
+/**
+ * curve 의 length 를 기반으로 polygon 을 만든다. 
+ * 
+ * 샘플링을 10개부터 시작해서 길이의 차이가 0.25보다 작아질 때까지 계속 샘플링을 증가시킨다.
+ * 
+ * @param {vec3} c1 
+ * @param {vec3} c2 
+ * @param {vec3} c3 
+ * @param {vec3} c4 
+ * @param {number} count 
+ * @returns 
+ */
+export const polygonalForCurve = (c1, c2, c3, c4, count = 1000) => {
+    const totalLength = getCurveDist(c1[0], c1[1], c2[0], c2[1], c3[0], c3[1], c4[0], c4[1], count);
+
+    let samplingCount = 10;
+    let samplingStep = totalLength / samplingCount;
+    let lastLength = 0;
+    let points = [];
+
+    const bezierPoints = [c1, c2, c3, c4].map(point => ({x: point[0], y: point[1]}))
+
+    do {
+        points = [];
+        let currentLength = 0;
+    
+        for(let i = 0; i <= samplingCount; i++) {
+            const nextPoint = getBezierPointOne(bezierPoints, currentLength / totalLength);
+            points.push(nextPoint);
+            currentLength += samplingStep;
+        }
+    
+        lastLength = getPolygonalDist(points);
+
+        samplingCount += samplingCount * (totalLength - lastLength) / totalLength;
+        samplingStep = totalLength / samplingCount;
+
+    } while (totalLength - lastLength > 0.25);
+
+    return points.map(point => vec3.fromValues(point.x, point.y, 0));
+
 }
 
 

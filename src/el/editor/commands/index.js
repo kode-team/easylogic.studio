@@ -107,9 +107,11 @@ import update from "./model/update";
 import historyRemoveProject from "./history.removeProject";
 import historyRefreshSelectionProject from "./history.refreshSelectionProject";
 import popModeView from "./pop.mode.view";
+import copyPath from "./copy.path";
 
 export default {
     // update model 
+    copyPath,
     update,
     popModeView,
 

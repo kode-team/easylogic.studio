@@ -56,7 +56,7 @@ export default function (editor) {
     })
 
     editor.registerInspector('star', (item) => {
-        return [
+        return [         
             {
                 key: 'isCurve',
                 editor: 'ToggleCheckBox',
@@ -95,7 +95,17 @@ export default function (editor) {
                     max: 1,
                     step: 0.01
                 }
-            }                        
+            },
+            {
+                key: 'button',
+                editor: 'Button',
+                editorOptions: {
+                    label: 'Copy ',
+                    text: 'as path',
+                    action: "copy.path"
+                }
+            }       
+
         ]
     })
 }

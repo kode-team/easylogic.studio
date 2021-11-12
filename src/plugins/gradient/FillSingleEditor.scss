@@ -5,6 +5,7 @@
     width: 100%;
     display: grid;
     grid-template-columns: 1fr;
+    cursor: pointer;
 
     &.has-label {
         grid-template-columns: 70px 1fr;

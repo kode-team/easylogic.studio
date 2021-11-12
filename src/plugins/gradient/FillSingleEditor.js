@@ -109,7 +109,7 @@ export default class FillSingleEditor extends EditorElement {
     }
 
 
-    [CLICK("$preview")](e) {
+    [CLICK()](e) {
         this.viewGradientPopup();
     }
 

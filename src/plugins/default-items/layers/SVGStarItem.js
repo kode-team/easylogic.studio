@@ -40,12 +40,14 @@ export class SVGStarItem extends SVGItem {
   get d() {
     const {width, height, count, radius, tension, isCurve} = this.json;
 
+    let newPath = "";
     if (isCurve) {
-      return PathParser.makeCurvedStar(width.value, height.value, count, radius, tension).d;
+      newPath = PathParser.makeCurvedStar(width.value, height.value, count, radius, tension).d;
     } else {
-      return PathParser.makeStar(width.value, height.value, count, radius).d;
+      newPath = PathParser.makeStar(width.value, height.value, count, radius).d;
     }
 
+    return newPath;
   }
  
 
@@ -59,4 +61,16 @@ export class SVGStarItem extends SVGItem {
   getDefaultTitle() {
     return "Star";
   }
+
+  toSVGPath() {
+    const attrs = this.toCloneObject();
+
+    delete attrs.id;
+    delete attrs.itemType;
+
+    return {
+      ...attrs,
+      d: this.d,
+    };
+  }  
 }

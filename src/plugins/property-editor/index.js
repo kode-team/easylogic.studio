@@ -26,8 +26,6 @@ import StrokeDashArrayEditor from "./StrokeDashArrayEditor";
 import TextAreaEditor from "./TextAreaEditor";
 import TextEditor from "./TextEditor";
 import VarEditor from "./VarEditor";
-import Button from './Button';
-import ToggleCheckBox from './ToggleCheckBox';
 
 /**
  * 
@@ -35,8 +33,6 @@ import ToggleCheckBox from './ToggleCheckBox';
  */
 export default function (editor) {
     editor.registerElement({
-        ToggleCheckBox,
-        Button,
         IconListViewEditor,
         TextAreaEditor,
         TextEditor,

@@ -23,11 +23,11 @@
         display: block; 
         font-size: 13px;
         height: 100%;
-        
+
         button {
             display: inline-block;
             border: 1px solid var(--elf--input-border-color);
-            background-color: var(--elf--input-background-color);
+            background-color: var(--elf--selected-color);
             height: 100%;
             width : 100%;
             border-radius: 4px;

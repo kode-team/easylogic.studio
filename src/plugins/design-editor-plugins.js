@@ -5,6 +5,7 @@ import artboard from "./artboard"
 import backdropFilter from "./backdrop-filter"
 import backgroundClip from "./background-clip"
 import backgroundImage from "./background-image"
+import baseEditor from "./base-editor"
 import boolean from "./boolean"
 import border from "./border"
 import borderImage from "./border-image"
@@ -70,6 +71,7 @@ export default [
     rendererSvg,
 
     // common editor 
+    baseEditor,
     propertyEditor,
     color,
     gradient,

@@ -49,13 +49,17 @@ export default class BooleanProperty extends BaseProperty {
           <button type="button" data-value="xor">${iconUse("boolean_xor", "", {width: 30, height: 30})} Exclude</button>        
         </div>
         <div>
-          <button type="button" data-value="simplify">${iconUse('grid3x3', "", {width: 24, height: 24})} Simplify</button>        
+          <button type="button" data-value="simplify">${iconUse('grid3x3', "", {width: 24, height: 24})} Self Intersection</button>        
           <button type="button" data-value="flatten">${iconUse('flatten', "", {width: 24, height: 24})} Flatten</button>                  
         </div>
         <div>
           <button type="button" data-value="smooth">${iconUse('smooth', "", {width: 24, height: 24})} Smooth Path</button>                
           <button type="button" data-value="stroke">${iconUse('stroke_to_path', "", {width: 24, height: 24})} Stroke to path</button> 
         </div>        
+        <div>
+          <button type="button" data-value="polygonal">${iconUse('smooth', "", {width: 24, height: 24})} Polygonal</button>                
+          <button type="button" data-value="normalize">${iconUse('stroke_to_path', "", {width: 24, height: 24})} Normalize</button> 
+        </div>                
       </div>
     `;
   }
@@ -106,11 +110,20 @@ export default class BooleanProperty extends BaseProperty {
           PathParser
             .fromSVGString(current.d)
             .divideSegmentByCount(5)
-            .simplify(10)
+            .simplify(2)
             .cardinalSplines()
             .d
           )
       ))  
+    } else if (command === 'polygonal') {
+      this.command("setAttributeForMulti", "polygonal path string", this.$selection.packByValue(
+        current.updatePath(
+          PathParser
+            .fromSVGString(current.d)
+            .polygonal()
+            .d
+          )
+      ))        
     } else if (command === 'flatten') {
 
       let newPath = PathParser.fromSVGString();
