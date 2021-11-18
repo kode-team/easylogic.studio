@@ -104,7 +104,18 @@
                     }
                 }
             }
-        }        
+        }    
+        
+        &.is-control {
+            svg {
+                path {
+                    // &.split-path,
+                    &.path-area {
+                        display: none;
+                    }
+                }
+            }
+        }
     }
 
     .path-tool {
@@ -377,9 +388,9 @@
             
             &.split-path {
                 fill: transparent;
-                stroke: var(--elf--border-color);
+                stroke: #959595;
                 pointer-events: stroke;
-                stroke-width: 2;
+                stroke-width: 1;
 
                 &:hover {
                     cursor: copy;

@@ -1894,6 +1894,11 @@ export default class PathParser {
     }    
 
 
+    /**
+     * SVG Path 를 문자열로 리턴해준다. 
+     * 
+     * @returns {string}
+     */
     get d() {
         return this.toString().trim();
     }
@@ -2111,7 +2116,7 @@ export default class PathParser {
      * @param {vec3[]} verties 
      * @returns {PathParser}
      */
-    static makePathByVerties(verties = []) {
+    static makePathByVerties(verties = [], isClosed = true) {
         const segments = verties.map((v, index) => {
             if (index === 0) {
                 return Segment.M(v[0], v[1]);
@@ -2119,7 +2124,10 @@ export default class PathParser {
                 return Segment.L(v[0], v[1]);
             }
         })
-        segments.push(Segment.Z());
+
+        if (isClosed) {
+            segments.push(Segment.Z());
+        }
 
         return PathParser.fromSegments(segments);
     }
@@ -2150,6 +2158,8 @@ export default class PathParser {
             }
         }
 
+
+        segments.push(Segment.L(segments[0].values[0], segments[0].values[1]));
         segments.push(Segment.Z())
 
         return PathParser.fromSegments(segments).scale(width, height);

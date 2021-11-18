@@ -1,5 +1,5 @@
 import { Editor } from "el/editor/manager/Editor";
-import BooleanProperty from "./BooleanProperty";
+import PathToolProperty from "./PathToolProperty";
 
 
 /**
@@ -8,6 +8,6 @@ import BooleanProperty from "./BooleanProperty";
  */
 export default function (editor) {
     editor.registerElement({
-        BooleanProperty
+        PathToolProperty
     })
 }

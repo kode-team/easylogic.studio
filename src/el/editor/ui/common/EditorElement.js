@@ -11,6 +11,7 @@ import { ModeViewManager } from "el/editor/manager/ModeViewManager";
 import { CommandManager } from "el/editor/manager/CommandManager";
 import { SnapManager } from "el/editor/manager/SnapManager";
 import { PathKitManager } from "el/editor/manager/PathKitManager";
+import { VisibleManager } from "el/editor/manager/VisibleManager";
 
 export class EditorElement extends UIElement {
 
@@ -177,6 +178,17 @@ export class EditorElement extends UIElement {
      */
     get $model() {
         return this.$editor.modelManager;
+    }
+
+    get $lockManager() {
+        return this.$editor.lockManager;
+    }
+
+    /**
+     * @type {VisibleManager}
+     */
+    get $visibleManager() {
+        return this.$editor.visibleManager;
     }
 
     /**

@@ -2,7 +2,7 @@ import { uuid } from "el/utils/math";
 
 import { Item } from "el/editor/items/Item";
 import BaseStore from "el/sapa/BaseStore";
-import { registElement } from "el/sapa/functions/registElement";
+import { registAlias, registElement } from "el/sapa/functions/registElement";
 import { isString } from "el/sapa/functions/func";
 
 import theme from "el/editor/ui/theme";
@@ -28,6 +28,8 @@ import { ModelManager } from './ModelManager';
 import { ModeViewManager } from './ModeViewManager';
 import { PathKitManager } from "./PathKitManager";
 import { SegmentSelectionManager } from "./SegmentSelectionManager";
+import { LockManager } from "./LockManager";
+import { VisibleManager } from "./VisibleManager";
 
 
 export const EDIT_MODE_SELECTION = 'SELECTION';
@@ -88,8 +90,9 @@ export class Editor {
     this.modelManager = new ModelManager(this);
     this.modeViewManager = new ModeViewManager(this);
     this.pathKitManager = new PathKitManager(this);
+    this.lockManager = new LockManager(this);
+    this.visibleManager = new VisibleManager(this);
 
-    this.initTheme();
     this.initPlugins();
     this.initStorage();
   }
@@ -136,25 +139,12 @@ export class Editor {
     this.user = user;
   }
 
-  initTheme() {
-    var theme = DEFAULT_THEME
-
-    if (window.localStorage) {
-      theme = window.localStorage.getItem('easylogic.studio.theme')
-
-      theme = ['dark', 'light'].includes(theme) ? theme : DEFAULT_THEME;
-    }
-
-    this.theme = theme || DEFAULT_THEME
-    window.localStorage.setItem('easylogic.studio.theme', this.theme);
-  }
-
   initPlugins(options = {}) {
     this.pluginManager.initializePlugin(options);
   }
 
   themeValue(key, defaultValue = '') {
-    return theme[this.theme][key] || defaultValue;
+    return theme[this.config.get('editor.theme')][key] || defaultValue;
   }
 
   changeMode(mode = EDIT_MODE_SELECTION) {
@@ -167,18 +157,6 @@ export class Editor {
 
   isAddMode() {
     return this.isMode(EDIT_MODE_ADD)
-  }
-
-  /**
-   * Theme 을 변경한다. 
-   * 
-   * @param {string} theme 
-   */
-  changeTheme(theme) {
-    theme = ['light', 'toon'].includes(theme) ? theme : 'dark';
-
-    this.theme = theme;
-    window.localStorage.setItem('easylogic.studio.theme', theme);
   }
 
   // 팝업의 zindex 를 계속 높여 주어 
@@ -339,6 +317,17 @@ export class Editor {
    */
   registerElement(obj) {
     registElement(obj);
+  }
+
+  /**
+   * register alias
+   * 
+   * @param {KeyValue} obj 
+   */
+  registerAlias(obj) {
+    Object.entries(obj).forEach(([key, value]) => {
+      registAlias(key, value);
+    })
   }
 
   registerMenuItem(target, obj) {

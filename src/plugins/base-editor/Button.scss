@@ -12,7 +12,7 @@
             text-align: left;
             vertical-align: middle;
             padding: 7px 0px 2px 0px;
-            font-size: 11px;
+            font-size: var(--elf--input-font-size);
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;            
@@ -26,8 +26,9 @@
 
         button {
             display: inline-block;
-            border: 1px solid var(--elf--input-border-color);
+            border: 0px;
             background-color: var(--elf--selected-color);
+            color: var(--elf--selected-font-color);
             height: 100%;
             width : 100%;
             border-radius: 4px;

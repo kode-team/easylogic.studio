@@ -18,9 +18,7 @@ export default class Dom {
  
       attr = attr || {};
 
-      for (var k in attr) {
-        el.setAttribute(k, attr[k]);
-      }
+      Object.assign(el, attr);
 
       this.el = el;
     }

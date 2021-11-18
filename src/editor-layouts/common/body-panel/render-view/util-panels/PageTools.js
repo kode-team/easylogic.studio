@@ -94,24 +94,30 @@ export default class PageTools extends EditorElement {
 
     const current = this.$selection.get(itemId);
 
-    const pathList = PathParser.fromSVGString(current.accumulatedPath().d).toPathList()
+    if (current.editablePath) {
+      this.emit('open.editor', current);
+    } else {
 
-    this.emit('showPathEditor', 'modify', {
-      box: 'canvas',
-      current,
-      matrix: current.matrix,
-      d: pathList[pathIndex].d,
-      changeEvent: (data) => {
+      const pathList = PathParser.fromSVGString(current.accumulatedPath().d).toPathList()
 
-        pathList[pathIndex].reset(data.d);
+      this.emit('showPathEditor', 'modify', {
+        box: 'canvas',
+        current,
+        matrix: current.matrix,
+        d: pathList[pathIndex].d,
+        changeEvent: (data) => {
+  
+          pathList[pathIndex].reset(data.d);
+  
+          const newPathD = current.invertPath(PathParser.joinPathList(pathList).d).d;
+  
+          this.command("setAttributeForMulti", "modify sub path", {
+            [itemId]: current.updatePath(newPathD)
+          });
+        }
+      })
+    }
 
-        const newPathD = current.invertPath(PathParser.joinPathList(pathList).d).d;
-
-        this.command("setAttributeForMulti", "modify sub path", {
-          [itemId]: current.updatePath(newPathD)
-        });
-      }
-    })
     this.emit('hideSelectionToolView');
   }
 
@@ -133,6 +139,7 @@ export default class PageTools extends EditorElement {
     const buttons = [];
 
     this.$selection.items.forEach(item => {
+
       const list = PathParser.fromSVGString(item.accumulatedPath().d).toPathList()
 
       list.forEach((path, index) => {
@@ -142,6 +149,7 @@ export default class PageTools extends EditorElement {
           path
         })
       })
+
     })
 
     return buttons.map((it) => {

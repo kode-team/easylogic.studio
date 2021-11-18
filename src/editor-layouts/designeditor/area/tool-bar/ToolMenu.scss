@@ -89,7 +89,7 @@
         &[data-no-title="true"] {
           height: 30px;
           .title {
-            display: none;
+            visibility: hidden;
           }
         }
 

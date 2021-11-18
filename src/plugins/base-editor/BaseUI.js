@@ -34,9 +34,5 @@ export default class BaseUI extends EditorElement {
             this.parent.trigger(this.props.onchange, key, value, params);
         }
     }
-
-    [CLICK('$el button')] () {
-        this.sendEvent();
-    }
   
 }

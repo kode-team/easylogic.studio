@@ -1,5 +1,4 @@
 import { LOAD, CLICK } from "el/sapa/Event";
-import { isFunction, isArray, isString } from "el/sapa/functions/func";
 import BaseUI from './BaseUI';
 import './Button.scss';
 

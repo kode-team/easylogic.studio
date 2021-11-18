@@ -139,6 +139,12 @@ export default class LayerTreeProperty extends BaseProperty {
         return iconUse('text_rotate');
       case 'svg-path':
         return iconUse('pentool');
+      case 'polygon':
+        return iconUse('polygon');        
+      case 'star':
+        return iconUse('star');        
+      case 'spline':
+        return iconUse('smooth');        
       default:
         return iconUse('rect');
     }
@@ -170,6 +176,8 @@ export default class LayerTreeProperty extends BaseProperty {
       const isHide = layer.isTreeItemHide()
       const depthPadding = Length.px(depth * 20);
       const hasChildren = layer.hasChildren()
+      const lock = this.$lockManager.get(layer.id);
+      const visible = this.$visibleManager.get(layer.id);
 
       data[data.length] = /*html*/`        
         <div class='layer-item ${selectedClass} ${selectedPathClass} ${hovered}' data-is-group="${hasChildren}" data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true">
@@ -180,8 +188,8 @@ export default class LayerTreeProperty extends BaseProperty {
               <span class='name'>${name}</span>
             </label>
             <div class="tools">
-              <button type="button" class="lock" data-lock="${layer.lock}" title='Lock'>${layer.lock ? iconUse('lock') : iconUse('lock_open')}</button>
-              <button type="button" class="visible" data-visible="${layer.visible}" title='Visible'>${iconUse('visible')}</button>
+              <button type="button" class="lock" data-lock="${lock}" title='Lock'>${lock ? iconUse('lock') : iconUse('lock_open')}</button>
+              <button type="button" class="visible" data-visible="${visible}" title='Visible'>${iconUse('visible')}</button>
               <button type="button" class="remove" title='Remove'>${iconUse('remove2')}</button>                          
             </div>
           </div>
@@ -368,15 +376,16 @@ export default class LayerTreeProperty extends BaseProperty {
     var $item = e.$dt.closest('layer-item')
     var id = $item.attr('data-layer-id');
 
-    var item = this.$model.get(id);
-    e.$dt.attr('data-visible', !item.visible);
+    this.$visibleManager.toggle(id);
 
-    this.command('setAttributeForMulti', 'change visible for layer', this.$selection.packByValue({ visible: !item.visible }, item.id))
+    var visible = this.$visibleManager.get(id);
+    e.$dt.attr('data-visible', visible);
+
+    this.emit('refreshVisibleView');
+
   }
 
   [CLICK('$layerList .layer-item .remove')](e) {
-    var project = this.$selection.currentProject
-
     var $item = e.$dt.closest('layer-item')
     var id = $item.attr('data-layer-id');
 
@@ -395,16 +404,15 @@ export default class LayerTreeProperty extends BaseProperty {
     var $item = e.$dt.closest('layer-item')
     var id = $item.attr('data-layer-id');
 
-    var item = this.$model.get(id);
-    var lastLock = !item.lock;
+    this.$lockManager.toggle(id);
+    var lastLock = this.$lockManager.get(id);
     e.$dt.attr('data-lock', lastLock);
 
+    // 클릭한게 lock 이고, selection 에 포함 되어 있으면 selection 영역에서 제외한다. 
     if (lastLock) {
       this.$selection.removeById(id);
-      this.emit('history.refreshSelection');
+      this.emit('refreshSelection');
     }
-
-    this.command('setAttributeForMulti', 'change lock for layer', this.$selection.packByValue({ lock: lastLock }, item.id))
   }
 
 

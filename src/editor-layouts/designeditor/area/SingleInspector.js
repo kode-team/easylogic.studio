@@ -22,7 +22,7 @@ export default class SingleInspector extends EditorElement {
         <div>
               <object refClass="AlignmentProperty" />
               <object refClass="DepthProperty" />              
-              <object refClass="BooleanProperty" />              
+              <object refClass="PathToolProperty" />              
 
               <!-- Default Property --> 
               <object refClass="PositionProperty" />

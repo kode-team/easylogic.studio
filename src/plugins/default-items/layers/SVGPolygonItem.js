@@ -42,7 +42,7 @@ export class SVGPolygonItem extends SVGItem {
   toCloneObject() {
     return {
       ...super.toCloneObject(),
-      ...this.attrs('d', 'count')
+      ...this.attrs('count')
     }
   }
 
@@ -56,17 +56,5 @@ export class SVGPolygonItem extends SVGItem {
 
     return this.cachePath.isPointInPath({ x: localPoint[0], y: localPoint[1] }, this.json['stroke-width'] || 0);
   }  
-
-  toSVGPath() {
-    const attrs = this.toCloneObject();
-
-    delete attrs.id;
-    delete attrs.itemType;
-
-    return {
-      ...attrs,
-      d: this.d,
-    };
-  }
 
 }

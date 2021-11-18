@@ -36,7 +36,7 @@ export default class BaseProperty extends EditorElement {
   }
 
   setTitle (title) {
-    this.refs.$propertyTitle.text(title);
+    this.refs.$propertyTitle.html(title);
   }
 
   hasKeyframe () {

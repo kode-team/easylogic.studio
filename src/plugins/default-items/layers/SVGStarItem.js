@@ -16,7 +16,7 @@ export class SVGStarItem extends SVGItem {
       'stroke-width': 1,
       d: '',        // 이건 최종 결과물로만 쓰고 나머지는 모두 segments 로만 사용한다. 
       isCurve: false,
-      count: 3,     // outer radius
+      count: 5,     // outer radius
       radius: 0.5,  // inner radius rate 
       tension: 0.5,   // 각도 간격
       ...obj
@@ -62,15 +62,4 @@ export class SVGStarItem extends SVGItem {
     return "Star";
   }
 
-  toSVGPath() {
-    const attrs = this.toCloneObject();
-
-    delete attrs.id;
-    delete attrs.itemType;
-
-    return {
-      ...attrs,
-      d: this.d,
-    };
-  }  
 }

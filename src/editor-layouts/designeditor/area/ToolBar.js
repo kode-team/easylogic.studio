@@ -11,12 +11,14 @@ import Download from 'el/editor/ui/menu-items/Download';
 import Save from 'el/editor/ui/menu-items/Save';
 import OpenPathEditor from "el/editor/ui/menu-items/OpenPathEditor";
 import Outline from "el/editor/ui/menu-items/Outline";
+import ThemeChanger from "el/editor/ui/menu-items/ThemeChanger";
 
 
 export default class ToolBar extends EditorElement {
 
     components() {
         return {
+            ThemeChanger,
             Outline,
             OpenPathEditor,
             ExportView,
@@ -57,6 +59,7 @@ export default class ToolBar extends EditorElement {
                     <div class='elf--tool-menu'>
                         <div class='items'>
                             <div class='draw-items'>      
+                                <object refClass="ThemeChanger" />                            
                                 ${this.$injectManager.generate('toolbar.right')}                             
                             </div>
                         </div>

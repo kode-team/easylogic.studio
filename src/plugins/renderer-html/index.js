@@ -6,6 +6,7 @@ import CubeRender from "./HTMLRenderer/CubeRender";
 import ImageRender from "./HTMLRenderer/ImageRender";
 import ProjectRender from "./HTMLRenderer/ProjectRender";
 import RectRender from "./HTMLRenderer/RectRender";
+import SplineRender from "./HTMLRenderer/SplineRender";
 import SVGPathRender from "./HTMLRenderer/SVGPathRender";
 import SVGPolygonRender from "./HTMLRenderer/SVGPolygonRender";
 import SVGStarRender from "./HTMLRenderer/SVGStarRender";
@@ -36,6 +37,7 @@ export default function (editor) {
     editor.registerRenderer('html', 'svg-path', new SVGPathRender());
     editor.registerRenderer('html', 'polygon', new SVGPolygonRender());
     editor.registerRenderer('html', 'star', new SVGStarRender());
+    editor.registerRenderer('html', 'spline', new SplineRender());
     editor.registerRenderer('html', 'svg-text', new SVGTextRender());
     editor.registerRenderer('html', 'svg-textpath', new SVGTextPathRender());
     editor.registerRenderer('html', 'cube', new CubeRender());

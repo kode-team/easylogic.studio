@@ -1,5 +1,7 @@
 import { Editor } from "el/editor/manager/Editor";
 import ComponentProperty from "./ComponentProperty";
+import ComponentPopup from './ComponentPopup';
+
 
 /**
  * 
@@ -7,6 +9,10 @@ import ComponentProperty from "./ComponentProperty";
  */
 export default function (editor) {
     editor.registerMenuItem('inspector.tab.style', {
-        ComponentProperty
+        ComponentProperty,
+    })
+
+    editor.registerMenuItem('popup', {
+        ComponentPopup
     })
 }

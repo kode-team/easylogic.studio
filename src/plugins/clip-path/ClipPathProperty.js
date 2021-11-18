@@ -4,6 +4,8 @@ import { ClipPath } from "el/editor/property-parser/ClipPath";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './ClipPathProperty.scss';
+import PathParser from "el/editor/parser/PathParser";
+import { vertiesToRectangle } from "el/utils/collision";
 
 var clipPathList = [
   'circle',
@@ -47,16 +49,43 @@ export default class ClipPathProperty extends BaseProperty {
     `;
   }
 
-  makeClipPathTemplate(clippath) {
+  makeClipPathTemplate(clippath, func) {
+
+    const isPath =  clippath === 'path';
+    let newPathString = '';
+    if (isPath) {
+      const pathString = func.split('(')[1].split(')')[0];
+
+      let pathObject = PathParser.fromSVGString(pathString);
+      const bbox = pathObject.getBBox();
+      const rectangle = vertiesToRectangle(bbox)
+
+      const rate = 260 / rectangle.width;
+      const hRate = 150 / rectangle.height;
+
+      const lastRate = Math.min(rate, hRate);
+
+      pathObject = pathObject.translate(-bbox[0][0], -bbox[0][1]).scale(lastRate, lastRate);
+      
+      const newBBox = pathObject.getBBox();
+      const newRectangle = vertiesToRectangle(newBBox);
+      
+      newPathString = pathObject.translate(260/2 - newRectangle.width/2, 0).d;
+    }
+
     return /*html*/`
-      <div class='clippath-item'>
-        <div class='title'>
-          <div class='name'>${clippath}</div>
+      <div>
+        <div class='clippath-item'>
+          <div class='title'>
+            <div class='name'>${clippath}</div>
+          </div>
+          <div class='tools'>
+            <button type="button" class="del">${icon.remove2}</button>
+          </div>        
         </div>
-        <div class='tools'>
-          <button type="button" class="del">${icon.remove2}</button>
-        </div>        
+        ${isPath ? `<svg><path d="${newPathString}" fill="transparent" stroke="currentColor" /></svg>` : ''}
       </div>
+
     `
   }
 
@@ -97,7 +126,7 @@ export default class ClipPathProperty extends BaseProperty {
     if (!current) return '';
     if (!current['clip-path']) return ''
 
-    return this.makeClipPathTemplate(current['clip-path'].split('(')[0]);
+    return this.makeClipPathTemplate(current['clip-path'].split('(')[0], current['clip-path']);
   }
 
   [CLICK("$add")]() {

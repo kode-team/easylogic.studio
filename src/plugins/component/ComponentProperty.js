@@ -1,9 +1,15 @@
 import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
-import { isString } from "el/sapa/functions/func";
+import { isFunction, isString } from "el/sapa/functions/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { variable } from "el/sapa/functions/registElement";
 
+import './ComponentProperty.scss';
+
 export default class ComponentProperty extends BaseProperty {
+
+  getClassName() {
+    return 'component-property';
+  }
 
   getTitle() {
     return "Component";
@@ -91,9 +97,17 @@ export default class ComponentProperty extends BaseProperty {
             <label class='label string-label'>${it}</label>
           </div>`
       } else {
+
+
+        let defaultValue = current[it.key] || it.defaultValue
+      
+        if (isFunction(it.convertDefaultValue)) {
+          defaultValue = it.convertDefaultValue(current, it.key)
+        }
+
         return /*html*/`
           <div class='property-item'> 
-            ${this.getPropertyEditor(index, it.key, current[it.key] || it.defaultValue, it.editor, it.editorOptions)}
+            ${this.getPropertyEditor(index, it.key, defaultValue, it.editor, it.editorOptions)}
           </div>
         `
       }

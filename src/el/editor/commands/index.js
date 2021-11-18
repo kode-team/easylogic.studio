@@ -10,7 +10,6 @@ import addLayer from "./addLayer";
 import newComponent from "./newComponent";
 import clipboardCopy from "./clipboard.copy";
 import clipboardPaste from "./clipboard.paste";
-import switchTheme from "./switchTheme";
 import showExportView from "./showExportView";
 import updateScale from "./updateScale";
 import fileDropItems from "./fileDropItems";
@@ -201,7 +200,7 @@ export default {
     fileDropItems,
     updateScale,
     showExportView,
-    switchTheme,
+    // switchTheme,
     clipboardPaste,
     clipboardCopy,
     addArtBoard,

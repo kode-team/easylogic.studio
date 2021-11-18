@@ -35,7 +35,11 @@ const SegmentConvertor = class extends EditorElement {
         this.refreshPathLayer()
     }
 
-    [DOUBLECLICK('$view [data-segment]') + PREVENT](e) {
+    isEditableSegment () {
+        return this.state.disableCurve === false;
+    }
+
+    [DOUBLECLICK('$view [data-segment]') + IF('isEditableSegment') + PREVENT](e) {
         var index = +e.$dt.attr('data-index')
 
         this.convertToCurve(index);
@@ -229,6 +233,8 @@ export default class PathEditorView extends PathTransformEditor {
         return {
             changeEvent: 'updatePathItem',
             isShow: false,
+            isControl: false,
+            disableCurve: false,
             points: [],
             mode: 'path',
             clickCount: 0,
@@ -276,12 +282,10 @@ export default class PathEditorView extends PathTransformEditor {
     }
 
     [SUBSCRIBE("PathEditorDone")]() {
-        console.log(this.state.current);
         if (this.state.current) {
             this.refreshPathLayer();
             this.trigger('hidePathEditor');
         } else {
-            console.log('no current path')
             this.addPathLayer();
         }
 
@@ -491,6 +495,7 @@ export default class PathEditorView extends PathTransformEditor {
             // this.emit('finishPathEdit')
             this.emit('hidePathManager');
             this.emit('pop.mode.view', 'PathEditorView');
+            this.emit('refreshSelectionTool');
         }
 
     }
@@ -498,6 +503,7 @@ export default class PathEditorView extends PathTransformEditor {
 
     [SUBSCRIBE('hideAddViewLayer')]() {
         this.state.isShow = false;
+        this.state.isControl = false;
         this.pathParser.reset('');
         this.setState(this.initState(), false)
         this.refs.$view.empty()
@@ -518,6 +524,7 @@ export default class PathEditorView extends PathTransformEditor {
                 'box': this.state.box === 'box',
                 'canvas': this.state.box === 'canvas',
                 'segment-move': this.state.mode === 'segment-move',
+                'is-control': this.state.isControl,
                 'has-one-stroke-width': strokeWidth === 1,
             },
 

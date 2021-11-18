@@ -11,4 +11,9 @@ export default function (editor) {
         ToggleCheckBox,
         Button,
     });
+
+    editor.registerAlias({
+        'toggle-checkbox': 'ToggleCheckBox',
+        'button': 'Button',
+    })
 }

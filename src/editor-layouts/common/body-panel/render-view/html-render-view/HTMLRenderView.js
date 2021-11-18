@@ -378,10 +378,11 @@ export default class HTMLRenderView extends EditorElement {
             )
 
             result[it.id] = {
-                x: Length.px(it.x + newDist[0]).floor(),          // 1px 단위로 위치 설정 
-                y: Length.px(it.y + newDist[1]).floor(),
+                x: Length.px(Math.floor(it.x + newDist[0])),          // 1px 단위로 위치 설정 
+                y: Length.px(Math.floor(it.y + newDist[1])),
             }
         })
+
         this.$selection.reset(result);
     }
 

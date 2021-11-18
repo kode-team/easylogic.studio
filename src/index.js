@@ -17,15 +17,15 @@ function startEditor() {
       },
       plugins: [
         function (editor) {
-          editor.on('changed', (...args) => {
+          editor.on('changed', (method, id, attrs) => {
+
+            // attrs = JSON.parse(JSON.stringify(attrs));
 
             // if (editor.isPointerUp) {
-            //   console.log('up', 'changed', ...args)
+            //   console.log('up', 'changed', method, id, attrs)
             // } else {
-            //   console.log('down', 'changed', ...args)
+            //   console.log('down', 'changed', method, id, attrs)
             // }
-
-
           })
         }
       ]

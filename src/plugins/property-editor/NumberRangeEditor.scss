@@ -15,7 +15,7 @@
             text-align: left;
             vertical-align: middle;
             padding: 7px 0px 2px 0px;
-            font-size: 11px;
+            font-size: var(--elf--input-font-size);
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;            

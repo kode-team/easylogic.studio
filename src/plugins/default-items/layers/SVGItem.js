@@ -179,4 +179,17 @@ export class SVGItem extends LayerModel {
       y: Length.parse(attrs.y).add(distY)      
     }
   }  
+
+
+  toSVGPath() {
+    const attrs = this.toCloneObject();
+
+    delete attrs.id;
+    delete attrs.itemType;
+
+    return {
+      ...attrs,
+      d: this.d,
+    };
+  }  
 }

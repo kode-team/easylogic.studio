@@ -1,4 +1,4 @@
-import { clone, isFunction, isNumber, isUndefined } from "el/sapa/functions/func";
+import { clone, isFunction, isNotUndefined, isNumber, isUndefined } from "el/sapa/functions/func";
 import { uuid } from "el/utils/math";
 import { ModelManager } from "../manager/ModelManager";
 
@@ -59,6 +59,7 @@ export class BaseModel {
     this.lastChangedField = {};
     this.lastChangedFieldKeys = [];
     this.cachedValue = {};
+    this.timestamp = 0;
 
     return this.ref;
   }
@@ -82,11 +83,11 @@ export class BaseModel {
   }
 
   isChanged(timestamp) {
-    return this.json.timestamp != Number(timestamp);
+    return this.timestamp != Number(timestamp);
   }
 
   changed() {
-    this.json.timestamp = this.json._timestamp + performance.now();
+    this.timestamp += performance.now();
   }
 
   /***********************************
@@ -222,6 +223,14 @@ export class BaseModel {
     return this.modelManager.getPath(this.id, this.ref);
   }
 
+  get lock() {
+    return this.modelManager.editor.lockManager.get(this.id);
+  }
+
+  get visible() {
+    return this.modelManager.editor.visibleManager.get(this.id);
+  }
+
   /**
    * id 기반 문자열 id 생성
    * 
@@ -323,7 +332,7 @@ export class BaseModel {
 
   toCloneObject(isDeep = true) {
     var json = this.attrs(
-      'itemType', 'name', 'elementType', 'type', 'visible', 'lock', 'selected', 'parentId'
+      'itemType', 'name', 'elementType', 'type', 'selected', 'parentId'
     )
 
     if (isDeep) {
@@ -389,10 +398,7 @@ export class BaseModel {
     var id = uuid()
     return {
       id,
-      _timestamp: Date.now(),
-      _time: performance.now(),
-      visible: true,  // 보이기 여부 설정 
-      lock: false,    // 편집을 막고 
+      // visible: true,  // 보이기 여부 설정 
       // selected: false,  // 선택 여부 체크 
       children: [],   // 하위 객체를 저장한다. 
       offsetInParent: 1,  // 부모에서 자신의 위치를 숫자로 나타낸다. 
@@ -409,7 +415,9 @@ export class BaseModel {
     const result = {}
 
     args.forEach(field => {
-      result[field] = clone(this.json[field])
+      if (isNotUndefined(this.json[field])) {
+        result[field] = clone(this.json[field])
+      }
     })
 
     return result;

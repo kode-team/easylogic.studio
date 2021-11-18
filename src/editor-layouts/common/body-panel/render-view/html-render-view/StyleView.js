@@ -1,10 +1,11 @@
 
 
-import { LOAD, DOMDIFF, SUBSCRIBE } from "el/sapa/Event";
+import { BIND, SUBSCRIBE } from "el/sapa/Event";
 import Dom from "el/sapa/functions/Dom";
 import { Project } from "plugins/default-items/layers/Project";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { isArray, isString } from "el/sapa/functions/func";
+import { isString } from "el/sapa/functions/func";
+
 
 
 const TEMP_DIV = Dom.create('div')     
@@ -15,7 +16,7 @@ export default class StyleView extends EditorElement {
     return /*html*/`
     <div class='style-view' style='pointer-events: none; position: absolute;display:inline-block;left:-1000px;'>
       <div ref='$svgArea'></div>
-      <div type='text/css' ref='$styleView'></div>
+      <style ref="$innerStyleView" type="text/css"></style>
     </div>
     `;
   }
@@ -152,5 +153,19 @@ export default class StyleView extends EditorElement {
   refresh() {
     this.load();
     this.refreshStyleHead();
+  }
+
+  [BIND('$innerStyleView')] () {
+    return {
+      html: `${this.$visibleManager.list.map(id => {
+        return `[data-id="${id}"]`
+      }).join(',')} { 
+        display: none;
+      }`
+    }
+  }
+
+  [SUBSCRIBE('refreshVisibleView')] () {
+    this.bindData('$innerStyleView');
   }
 }

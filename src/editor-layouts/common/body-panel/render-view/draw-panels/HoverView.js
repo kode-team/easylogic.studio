@@ -77,8 +77,6 @@ export default class HoverView extends EditorElement {
         if (items.length === 0) {
             this.refs.$hoverRect.updateDiff('')
             this.emit('removeGuideLine');
-
-
         } else {
 
             // refresh hover view 
@@ -97,9 +95,13 @@ export default class HoverView extends EditorElement {
 
     createPointerLine(pointers) {
         if (pointers.length === 0) return '';
+
+        const current = this.$selection.hoverItems[0];
+
         return /*html*/`
-        <svg class='line' overflow="visible">
+        <svg overflow="visible">
             <path 
+                class='line' 
                 d="
                     M ${pointers[0][0]}, ${pointers[0][1]} 
                     L ${pointers[1][0]}, ${pointers[1][1]} 
@@ -108,7 +110,9 @@ export default class HoverView extends EditorElement {
                     L ${pointers[0][0]}, ${pointers[0][1]}
                     Z
                 " 
-                />
+            />
+            <rect height="20" width="${current.itemType.length * 8}" x="${pointers[0][0]-1}" y="${pointers[0][1] - 20}"></rect>
+            <text x="${pointers[0][0]}" y="${pointers[0][1]}" dx="5" dy="-5">${current.itemType}</text>
         </svg>`
     }
 

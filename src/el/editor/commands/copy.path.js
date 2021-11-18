@@ -11,13 +11,18 @@ export default {
 
             let newPath = PathParser.fromSVGString(current.d);
 
-            const newLayerAttrs = current.toSVGPath();
+            try {
+                const newLayerAttrs = current.toSVGPath();
 
-            editor.command('addLayer', `copy path`, editor.createModel({
-                itemType: 'svg-path',
-                ...newLayerAttrs,
-                ...current.updatePath(newPath.d),
-            }), true, current.parent)
+                editor.command('addLayer', `copy path`, editor.createModel({
+                    itemType: 'svg-path',
+                    ...newLayerAttrs,
+                    ...current.updatePath(newPath.d),
+                }), true, current.parent)
+            } catch (e) {
+                console.error(e);
+            }
+
         }
     }
 }

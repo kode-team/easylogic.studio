@@ -195,8 +195,6 @@ export default class DomRender extends ItemRender {
       }
     }
 
-    obj.visibility = (item.visible) ? 'visible' : 'hidden';
-
     let result = {}
 
     result = Object.assign(result, obj);

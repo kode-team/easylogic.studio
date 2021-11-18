@@ -18,10 +18,12 @@ import setDragPathArea from "./set.drag.path.area";
 import showOutline from "./show.outline";
 import editorDesignMode from "./editor.design.mode";
 import editorLayoutMode from "./editor.layout.mode";
+import editorTheme from "./editor.theme";
 
 export default [
     editorLayoutMode,
     editorDesignMode,
+    editorTheme,
     showOutline,
     setDragPathArea,
     setMoveControlPoint,

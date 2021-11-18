@@ -55,6 +55,28 @@ export default function (editor) {
         ]
     })
 
+    editor.registerInspector('spline', (item) => {
+        return [ 
+            {
+                key: 'boundary',
+                editor: 'SelectIconEditor',
+                editorOptions: {
+                    label: 'Boundary',
+                    options: ["clamped", "open", "closed" ]
+                }
+            },
+            {
+                key: 'button',
+                editor: 'Button',
+                editorOptions: {
+                    label: 'Copy ',
+                    text: 'as path',
+                    action: "copy.path"
+                }
+            }
+        ]
+    })
+
     editor.registerInspector('star', (item) => {
         return [         
             {

@@ -9,12 +9,12 @@ import TopAlign from "el/editor/ui/menu-items/TopAlign";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { CLICK, SUBSCRIBE } from "el/sapa/Event";
 
-import './BooleanProperty.scss';
+import './PathToolProperty.scss';
 import PathParser from '../../el/editor/parser/PathParser';
 import { Length } from 'el/editor/unit/Length';
 import { iconUse } from 'el/editor/icon/icon';
 
-export default class BooleanProperty extends BaseProperty {
+export default class PathToolProperty extends BaseProperty {
 
   components() {
     return {
@@ -58,7 +58,7 @@ export default class BooleanProperty extends BaseProperty {
         </div>        
         <div>
           <button type="button" data-value="polygonal">${iconUse('smooth', "", {width: 24, height: 24})} Polygonal</button>                
-          <button type="button" data-value="normalize">${iconUse('stroke_to_path', "", {width: 24, height: 24})} Normalize</button> 
+          <button type="button" data-value="normalize">${iconUse('stroke_to_path', "", {width: 24, height: 24})} Curve</button> 
         </div>                
       </div>
     `;
@@ -104,13 +104,22 @@ export default class BooleanProperty extends BaseProperty {
       this.command("setAttributeForMulti", "change path string", this.$selection.packByValue(
         current.updatePath(this.$pathkit.simplify(current.d))
       ))
+    } else if (command === 'normalize') {
+      this.command("setAttributeForMulti", "smooth path string", this.$selection.packByValue(
+        current.updatePath(
+          PathParser
+            .fromSVGString(current.d)
+            .normalize()
+            .d
+          )
+      ))  
     } else if (command === 'smooth') {
       this.command("setAttributeForMulti", "smooth path string", this.$selection.packByValue(
         current.updatePath(
           PathParser
             .fromSVGString(current.d)
             .divideSegmentByCount(5)
-            .simplify(2)
+            .simplify(0.1)
             .cardinalSplines()
             .d
           )

@@ -44,26 +44,29 @@
             pointer-events: none;
         }
 
-        button:first-child {
-            color: var(--elf--selected-font-color);
-        }        
+        &[data-checked='true'] {
+
+            button[value='true'] {
+                color: var(--elf--selected-font-color);
+            }
+        }
 
         &[data-checked='false'] {
             &:before {
                 left: 50%;
             }
 
-            button:not(:first-child) {
+            button[value='false'] {
                 color: var(--elf--selected-font-color);
             }
-        }
+        }        
 
         > * {
             z-index: 1;
         }
 
         button {
-            color: var(--elf--selected-font-color);
+            color: var(--elf--font-color);
             box-sizing: border-box;
             display: inline-block;
             padding: 4px 8px;

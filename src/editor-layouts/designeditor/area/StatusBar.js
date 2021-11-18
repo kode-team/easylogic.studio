@@ -3,7 +3,6 @@ import { BIND, SUBSCRIBE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import LanguageSelector from "./status-bar/LanguageSelector";
-import ThemeSwitcher from "./status-bar/ThemeSwitcher";
 import LayoutSelector from "./status-bar/LayoutSelector";
 import VersionView from "./status-bar/VersionView";
 import SwitchLeftPanel from "./status-bar/SwitchLeftPanel";
@@ -17,7 +16,6 @@ export default class StatusBar extends EditorElement {
     components() {
         return {
             LanguageSelector,
-            ThemeSwitcher,
             LayoutSelector,
             VersionView,
             SwitchLeftPanel,
@@ -35,7 +33,6 @@ export default class StatusBar extends EditorElement {
                 <div class='tool-view' ref='$rightTool'>
                     ${this.$injectManager.generate('statusbar.right')}
                     <object refClass="LayoutSelector" />
-                    <object refClass="ThemeSwitcher" />
                     <object refClass="LanguageSelector" />
                     <object refClass="VersionView" />
                     <object refClass="SwitchRightPanel" />                    
