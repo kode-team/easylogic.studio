@@ -33,9 +33,9 @@ export default class BaseStore {
   }
 
   debug(...args) {
-    if (this.editor && this.editor.config.get('debug')) {
-      console.debug(...args);
-    }
+    // if (this.editor && this.editor.config.get('debug')) {
+    //   console.debug(...args);
+    // }
 
   }
 

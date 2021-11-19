@@ -107,6 +107,9 @@ import historyRemoveProject from "./history.removeProject";
 import historyRefreshSelectionProject from "./history.refreshSelectionProject";
 import popModeView from "./pop.mode.view";
 import copyPath from "./copy.path";
+import itemMoveDepthFirst from "./item.move.depth.first";
+import itemMoveDepthLast from "./item.move.depth.last";
+
 
 export default {
     // update model 
@@ -155,6 +158,8 @@ export default {
     removeLayer,
     itemMoveDepthDown,
     itemMoveDepthUp,    
+    itemMoveDepthFirst,
+    itemMoveDepthLast,
     keymapKeydown,
     keymapKeyup,
     scaleMinus,

@@ -231,6 +231,10 @@ export class BaseModel {
     return this.modelManager.editor.visibleManager.get(this.id);
   }
 
+  get childrenLength() {
+    return this.json.children.length;
+  }
+
   /**
    * id 기반 문자열 id 생성
    * 

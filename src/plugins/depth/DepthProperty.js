@@ -1,13 +1,19 @@
+import OrderDown from "el/editor/ui/menu-items/OrderDown";
+import OrderFirst from "el/editor/ui/menu-items/OrderFirst";
+import OrderLast from "el/editor/ui/menu-items/OrderLast";
+import OrderTop from "el/editor/ui/menu-items/OrderTop";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
-import OrderTop from '../../el/editor/ui/menu-items/OrderTop';
-import './DepthProperty.scss';
-import OrderDown from '../../el/editor/ui/menu-items/OrderDown';
 
+import './DepthProperty.scss';
 
 export default class DepthProperty extends BaseProperty {
 
   components() {
     return {
+      OrderTop,
+      OrderDown,
+      OrderFirst,
+      OrderLast,      
       OrderTop,
       OrderDown
     }
@@ -26,6 +32,8 @@ export default class DepthProperty extends BaseProperty {
       <div class="elf--depth-item">
         <object refClass="OrderTop" />
         <object refClass="OrderDown" />
+        <object refClass="OrderFirst" />
+        <object refClass="OrderLast" />        
       </div>
     `;
   }

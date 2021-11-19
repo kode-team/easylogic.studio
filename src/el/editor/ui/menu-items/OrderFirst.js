@@ -1,15 +1,15 @@
 import MenuItem from "./MenuItem";
    
-export default class OrderTop extends MenuItem {
+export default class OrderFirst extends MenuItem {
   getIconString() {
     return 'to_front';
   }
 
   getTitle() {
-    return "To Front";
+    return "To First";
   }
 
   clickButton(e) {
-    this.emit('item.move.depth.up');
+    this.emit('item.move.depth.first');
   }
 }

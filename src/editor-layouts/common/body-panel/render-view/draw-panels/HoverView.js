@@ -32,7 +32,8 @@ export default class HoverView extends EditorElement {
      * @returns 
      */
     [CONFIG('bodyEvent') + IF('checkModeView')]() {
-        if (this.$config.get('hoverView') === false || this.$config.true("set.move.control.point")) {
+
+        if (this.$config.true("set.move.control.point")) {
             this.$selection.setHoverId('');
             this.renderHoverLayer()            
             return;
@@ -41,7 +42,7 @@ export default class HoverView extends EditorElement {
         const filteredList = this.$selection.filteredLayers;
         const items = filteredList.filter(it => {
             const point = this.$viewport.getWorldPosition(this.$config.get('bodyEvent'));
-            
+
             return it.hasPoint(point[0], point[1]);
         }).filter(it => it.isNot('artboard'))
 

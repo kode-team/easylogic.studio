@@ -1082,7 +1082,7 @@ export class MovableModel extends BaseAssetModel {
 
     // 부모의 마지막으로 보내기 
     orderLast () {
-        this.setOrder(this.json.parent.layers.length-1)
+        this.setOrder(this.parent.childrenLength - 1)
     }
 
     //TODO: 전체중에 처음으로 보내기 

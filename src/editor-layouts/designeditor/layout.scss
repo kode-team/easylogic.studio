@@ -47,7 +47,7 @@ $range-thumb-border-radius: 20px;
 
   .layout-top {
     height: $top-size;
-    // border-bottom: 1px solid var(--elf--border-color);
+    border-bottom: 1px solid var(--elf--border-color);
     box-sizing: border-box;    
     z-index: 10000;
     position: absolute;

@@ -223,9 +223,9 @@ export class Editor {
   }
 
   debug(...args) {
-    if (this.config.get('debug')) {
-      console.log(...args);
-    }
+    // if (this.config.get('debug')) {
+    //   console.log(...args);
+    // }
   }
 
   command(command, message, ...args) {

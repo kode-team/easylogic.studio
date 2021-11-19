@@ -64,13 +64,15 @@ export class ConfigManager {
     }
 
     init (key, value) {
-        this.config.set(key, value, false);
+        this.set(key, value, false);
     }
 
     save () {
         const obj = {};
-        this.config.forEach((value, key) => {
-            obj[key] = value;
+
+
+        this.configList.filter(it => it.storage !== 'none').forEach(it => {
+            obj[it.key] = this.get(it.key);
         });
 
         this.editor.saveItem('config', obj);

@@ -52,10 +52,15 @@ export default class HTMLRenderView extends EditorElement {
         isFunction(callback) && callback(this.getElement(id))
     }
 
+    /**
+     * 캐쉬된 element 를 모두 삭제함 
+     * 캐쉬된 element 는  몇 가지 용도에 의해서 update 할 때 실제 객체를 넘겨주게 되어 있음. 
+     * 
+     * 1. HTMLRenderView 는 html element 로 렌더링을 하기 때문에 렌더링 주체를 가지고 있어야 함. 
+     * 2. svg 관련 객체의 경우 element 를 가지고 내부의 path 를 조회해서 좌표가 존재하는지 체크할 수 있어야 함. 
+     */
     clearElementAll() {
-        this.$selection.each(item => {
-            this.clearElement(item.id);
-        });
+        this.state.cachedCurrentElement = {};
     }
 
     clearElement(id) {

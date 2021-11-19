@@ -9,7 +9,9 @@ export default class SVGItemRender extends LayerRender {
     update (item, currentElement) {
 
         // element 를 캐쉬 해두기 
-        if (!item.getCache("pathElement")) {
+        if (item.getCache("element") !== currentElement) {
+            item.addCache("element", currentElement);
+            
             const $path = currentElement.$('path');            
             item.addCache("svgElement", $path.parent().el)
             item.addCache("pathElement", $path.el);

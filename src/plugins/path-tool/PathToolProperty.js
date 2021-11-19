@@ -57,7 +57,7 @@ export default class PathToolProperty extends BaseProperty {
           <button type="button" data-value="stroke">${iconUse('stroke_to_path', "", {width: 24, height: 24})} Stroke to path</button> 
         </div>        
         <div>
-          <button type="button" data-value="polygonal">${iconUse('smooth', "", {width: 24, height: 24})} Polygonal</button>                
+          <button type="button" data-value="polygonal">${iconUse('highlight_at', "", {width: 24, height: 24})} Polygonal</button>                
           <button type="button" data-value="normalize">${iconUse('stroke_to_path', "", {width: 24, height: 24})} Curve</button> 
         </div>                
       </div>

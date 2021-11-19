@@ -178,7 +178,9 @@ import boolean_xor from "./boolean_xor";
 import flatten from "./flatten";
 import smooth from "./smooth";
 import stroke_to_path from "./stroke_to_path";
-
+import highlight_at from "./highlight_at";
+import to_front from "./to_front";
+import to_back from "./to_back";
 
 const alias = {
   fullscreen:  border_inner
@@ -193,6 +195,9 @@ export function iconUse(name, transform = "", opt = { width: 24, height: 24 }) {
 
 export default {
   ...alias,
+  to_back,
+  to_front,
+  highlight_at,
   grid3x3,
   stroke_to_path,
   smooth,
