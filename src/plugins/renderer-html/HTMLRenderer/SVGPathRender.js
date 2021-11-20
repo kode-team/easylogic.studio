@@ -1,5 +1,4 @@
 import Dom from "el/sapa/functions/Dom";
-import { OBJECT_TO_CLASS } from "el/utils/func";
 import { Item } from "el/editor/items/Item";
 import SVGItemRender from "./SVGItemRender";
 
@@ -13,7 +12,7 @@ export default class SVGPathRender extends SVGItemRender {
 
     if (!currentElement) return; 
 
-    var $path = currentElement.$('path');
+    const $path = currentElement.$('path');
 
     if ($path) {
 
@@ -22,7 +21,6 @@ export default class SVGPathRender extends SVGItemRender {
           'd':  item.d,
         })  
       } 
-      
       if (item.hasChangedField('fill')){
         $path.setAttrNS({
           'fill': this.toFillValue(item),
@@ -49,10 +47,20 @@ export default class SVGPathRender extends SVGItemRender {
         })          
       }
 
+      if (item.hasChangedField('stroke-linejoin')){
+        $path.setAttrNS({
+          'stroke-linejoin': item['stroke-linejoin'],
+        })          
+      }
 
+      if (item.hasChangedField('stroke-linecap')){
+        $path.setAttrNS({
+          'stroke-linecap': item['stroke-linecap'],
+        })          
+      }
     }
 
-    this.updateDefString(item, currentElement)
+    super.update(item, currentElement)
 
   }    
 
@@ -63,7 +71,7 @@ export default class SVGPathRender extends SVGItemRender {
     return /*html*/`    
 <div class="element-item ${itemType}" data-id="${id}" data-title="${name}">
   ${this.toDefString(item)}
-  <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" overflow="visible">
+  <svg xmlns="http://www.w3.org/2000/svg" class="view-path-item" width="100%" height="100%" overflow="visible">
     <path 
       class="svg-path-item"
       d="${item.d}"
@@ -71,6 +79,8 @@ export default class SVGPathRender extends SVGItemRender {
       filter="${this.toFilterValue(item)}"
       fill="${this.toFillValue(item)}"
       stroke="${this.toStrokeValue(item)}"
+      stroke-linejoin="${item['stroke-linejoin']}"
+      stroke-linecap="${item['stroke-linecap']}"
     />
   </svg>
 </div>

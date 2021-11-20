@@ -31,8 +31,8 @@ export default {
                 }))
             } else {
                 const newPath = new PathParser(pathObject.d);
-                // 1. 로컬 좌표로 변환
-                newPath.transformMat4(pathObject.matrix.accumulatedMatrixInverse);
+                    // 1. 로컬 좌표로 변환
+                    newPath.transformMat4(pathObject.matrix.accumulatedMatrixInverse);
 
                 // 2. 로컬 좌표로 bbox 구하기 
                 let bbox = newPath.getBBox();

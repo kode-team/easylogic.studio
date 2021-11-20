@@ -6,6 +6,7 @@ import VerticalRuler from "./body-panel/VerticalRuler";
 import CanvasView from "./body-panel/CanvasView";
 
 import './BodyPanel.scss';
+import PageSubEditor from './body-panel/PageSubEditor';
 
 export default class BodyPanel extends EditorElement {
 
@@ -13,16 +14,22 @@ export default class BodyPanel extends EditorElement {
     return {
       CanvasView,
       VerticalRuler,
-      HorizontalRuler
+      HorizontalRuler,
+      PageSubEditor
     }
   }
 
   template() {
     return /*html*/`
       <div class="elf--body-panel">
-        <object refClass='HorizontalRuler' />
-        <object refClass='VerticalRuler' />
-        <object refClass='CanvasView' />        
+        <div class="submenu-area">
+          <object refClass="PageSubEditor" />
+        </div>
+        <div class='editing-area'>
+          <object refClass='HorizontalRuler' />
+          <object refClass='VerticalRuler' />
+          <object refClass='CanvasView' />        
+        </div>
       </div>
     `;
   }

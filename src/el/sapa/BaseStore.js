@@ -1,5 +1,6 @@
 import EventMachine from "./EventMachine";
 import { debounce, ifCheck, isFunction, throttle } from "./functions/func";
+import { uuidShort } from 'el/utils/math';
 
 /**
  * @class BaseStore
@@ -8,6 +9,7 @@ import { debounce, ifCheck, isFunction, throttle } from "./functions/func";
  */
 export default class BaseStore {
   constructor(editor) {
+    this.id = uuidShort();
     this.cachedCallback = {};
     this.callbacks = {};
     this.editor = editor;
@@ -31,9 +33,9 @@ export default class BaseStore {
   }
 
   debug(...args) {
-    if (this.editor && this.editor.config.get('debug')) {
-      console.debug(...args);
-    }
+    // if (this.editor && this.editor.config.get('debug')) {
+    //   console.debug(...args);
+    // }
 
   }
 

@@ -29,7 +29,8 @@ export default {
             editor.emit('update', message.id, message.attrs)   
 
             // 부모가 project 아닐 때만 업데이트 메세지를 날린다. 
-            if (message.parentId && editor.get(message.parentId)?.isNot("project")) {
+            const parent = editor.get(message.parentId)
+            if (message.parentId && parent?.isNot("project") && parent.children.length >= 2) {
                 editor.emit('update', message.parentId, {
                     'changedChildren': true
                 })

@@ -6,13 +6,22 @@ import './StrokeDashArrayEditor.scss';
 
 export default class StrokeDashArrayEditor extends EditorElement {
 
+
+  initialize() {
+    super.initialize();
+
+    this.notEventRedefine = true;
+  }  
+
+
   initState() {
 
     var value = this.generateValue(this.props.value || '')
     
     return {
       label: this.props.label || '',
-      value
+      value,
+      count: 1,
     }
   }
 
@@ -60,12 +69,14 @@ export default class StrokeDashArrayEditor extends EditorElement {
 
   [LOAD('$body')] () {
 
+    this.state.count++;
+
     return this.state.value.map( (value, index) =>  {
       var num = index + 1; 
       return /*html*/`
         <div class='dasharray-item'>
           <object refClass="NumberRangeEditor"  
-            ref='$${num}' 
+            ref='$dash-${this.state.count}-${num}' 
             label='${num}'
             key='${index}' 
             value="${value}" 

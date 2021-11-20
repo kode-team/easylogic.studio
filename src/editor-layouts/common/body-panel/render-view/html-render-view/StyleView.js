@@ -1,10 +1,11 @@
 
 
-import { LOAD, DOMDIFF, SUBSCRIBE } from "el/sapa/Event";
+import { BIND, SUBSCRIBE } from "el/sapa/Event";
 import Dom from "el/sapa/functions/Dom";
 import { Project } from "plugins/default-items/layers/Project";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-import { isArray, isString } from "el/sapa/functions/func";
+import { isString } from "el/sapa/functions/func";
+
 
 
 const TEMP_DIV = Dom.create('div')     
@@ -15,7 +16,7 @@ export default class StyleView extends EditorElement {
     return /*html*/`
     <div class='style-view' style='pointer-events: none; position: absolute;display:inline-block;left:-1000px;'>
       <div ref='$svgArea'></div>
-      <style type='text/css' ref='$styleView'></style>
+      <style ref="$innerStyleView" type="text/css"></style>
     </div>
     `;
   }
@@ -23,7 +24,7 @@ export default class StyleView extends EditorElement {
   initialize() {
     super.initialize()
 
-    this.refs.$head = Dom.create(document.head)
+    this.refs.$styleView = Dom.create(document.head)
   }
 
   makeStyle (item) {
@@ -32,7 +33,7 @@ export default class StyleView extends EditorElement {
 
   refreshStyleHead () {
     var project = this.$selection.currentProject || new Project()
-    this.refs.$head.$$(`style[data-renderer-type="html"]`).forEach($style => $style.remove())
+    this.refs.$styleView.$$(`style[data-renderer-type="html"]`).forEach($style => $style.remove())
 
     // project setting 
     this.changeStyleHead(project)
@@ -47,7 +48,7 @@ export default class StyleView extends EditorElement {
     const styleTag = this.makeStyle(item)
 
     $temp.html(styleTag).children().forEach($item => {
-      this.refs.$head.append($item);
+      this.refs.$styleView.append($item);
     })
 
   }
@@ -63,7 +64,7 @@ export default class StyleView extends EditorElement {
     }).join(',');
 
     let isChanged = false; 
-    this.refs.$head.$$(selector).forEach(it => {
+    this.refs.$styleView.$$(selector).forEach(it => {
       if (item.isChanged(it.attr('data-timestamp'))) {
         isChanged = true;       
         it.remove();
@@ -137,7 +138,7 @@ export default class StyleView extends EditorElement {
     }
 
     if (removeStyleSelector.length) {
-      this.refs.$head.$$(removeStyleSelector).forEach(it => {
+      this.refs.$styleView.$$(removeStyleSelector).forEach(it => {
         it.remove();
       })  
     }
@@ -146,11 +147,25 @@ export default class StyleView extends EditorElement {
 
     var $fragment = TEMP_DIV.html(styleTags.join('')).createChildrenFragment()
 
-    this.refs.$head.append($fragment);
+    this.refs.$styleView.append($fragment);
   }  
 
   refresh() {
     this.load();
     this.refreshStyleHead();
+  }
+
+  [BIND('$innerStyleView')] () {
+    return {
+      html: `${this.$visibleManager.list.map(id => {
+        return `[data-id="${id}"]`
+      }).join(',')} { 
+        display: none;
+      }`
+    }
+  }
+
+  [SUBSCRIBE('refreshVisibleView')] () {
+    this.bindData('$innerStyleView');
   }
 }

@@ -2,7 +2,7 @@ $border-radius: 3px;
 .elf--input-range-editor {
     display: grid;
     grid-template-columns: 1fr;
-    height: 24px;
+    height: var(--elf--input-height);
     border-radius: $border-radius;
 
     &.focused {
@@ -10,7 +10,7 @@ $border-radius: 3px;
         .area {
             
             input[type="number"] {
-                border-color: var(--elf--selected-color);
+                border-color: var(--elf--selected-color) !important;
             }
 
             .elf--select-editor {
@@ -41,6 +41,7 @@ $border-radius: 3px;
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
+            line-height: 1.6;
 
             svg {
                 width: 20px;
@@ -73,7 +74,7 @@ $border-radius: 3px;
     
     .range--editor-type {
         vertical-align: middle;
-        height: 24px;
+        height: 100%;
 
         .area {
             font-size: 13px;
@@ -100,6 +101,10 @@ $border-radius: 3px;
                 border-bottom-left-radius: $border-radius;
                 border-top-right-radius: 0px;
                 border-bottom-right-radius: 0px;                
+
+                border-bottom: 1px solid var(--elf--input-border-color);
+                border-top: 1px solid var(--elf--input-border-color);
+                border-left: 1px solid var(--elf--input-border-color);                                     
             }
 
             .elf--select-editor {
@@ -119,9 +124,9 @@ $border-radius: 3px;
                     padding: 0px 4px;             
                     border-left:0px;
                     color: var(--elf--input-sub-font-color);
-                    border-bottom: 1px solid var(--elf--border-color);
-                    border-top: 1px solid var(--elf--border-color);
-                    border-right: 1px solid var(--elf--border-color);                     
+                    border-bottom: 1px solid var(--elf--input-border-color);
+                    border-top: 1px solid var(--elf--input-border-color);
+                    border-right: 1px solid var(--elf--input-border-color);                     
                 }
             }
         }

@@ -1,4 +1,4 @@
-import { CLICK, KEYUP, INPUT, IF } from 'el/sapa/Event'
+import { CLICK, KEYUP, INPUT, IF, PASTE } from 'el/sapa/Event'
 import { EditorElement } from 'el/editor/ui/common/EditorElement';
 
 export default class ColorInformation extends EditorElement {
@@ -155,8 +155,15 @@ export default class ColorInformation extends EditorElement {
         var code = this.refs.$hexCode.val();
     
         if(code.charAt(0) == '#' && (code.length == 7 || code.length === 9)) {
-            this.parent.initColor(code)
-            this.emit('lastUpdateColor')
+            this.parent.lastUpdateColor(code);
+        }
+    }
+
+    [PASTE('$hexCode') + IF('hasValue')] (e) {
+        var code = this.refs.$hexCode.val();
+
+        if(code.charAt(0) == '#' && (code.length == 7 || code.length === 9)) {
+            this.parent.lastUpdateColor(code);
         }
     }
     

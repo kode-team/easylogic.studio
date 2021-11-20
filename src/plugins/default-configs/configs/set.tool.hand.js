@@ -3,5 +3,6 @@ export default {
     defaultValue: false,
     title: "Hand tool",
     description: "Hand tool is on",
-    type: "boolean"
+    type: "boolean",
+    storage: 'none'
 }

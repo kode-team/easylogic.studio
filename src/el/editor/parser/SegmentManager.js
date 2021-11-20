@@ -1,127 +1,169 @@
+import { getDist } from "el/utils/math";
+
 export default class SegmentManager {
-    constructor () {
-        this.segmentList = [] 
-    }
 
-    reset () {
+    /**
+     * 
+     * @param {ViewportManager} viewport 
+     */
+    constructor(viewport) {
+        this.viewport = viewport
         this.segmentList = []
-        return this;         
+    }
+
+    reset() {
+        this.segmentList = []
+        return this;
+    }
+
+    checkInViewport(point) {
+        const vertext = this.viewport.applyVertexInverse([point.x, point.y, 0]);
+
+        return this.viewport.checkInViewport(vertext);
     }
 
 
-    addLine (a, b) {
-        this.segmentList.push({
-            line: true,
-            x1: a.x,
-            y1: a.y,
-            x2: b.x,
-            y2: b.y            
-        })
-        return this;         
+    addLine(a, b) {
+
+        if (getDist(a.x, a.y, b.x, b.y) < 1) return this;        
+
+        if (this.checkInViewport(a) || this.checkInViewport(b)) {
+
+            this.segmentList.push({
+                line: true,
+                x1: a.x,
+                y1: a.y,
+                x2: b.x,
+                y2: b.y
+            })
+
+        }
+        return this;
     }
 
-    addGuideLine (a, b) {
+    addGuideLine(a, b) {
+
+        if (getDist(a.x, a.y, b.x, b.y) < 1) return this;
+
+        if (this.checkInViewport(a) || this.checkInViewport(b)) {        
+            this.segmentList.push({
+                line: true,
+                guide: true,
+                x1: a.x,
+                y1: a.y,
+                x2: b.x,
+                y2: b.y
+            })
+        }
+        return this;
+    }
+
+
+    addDistanceLine(a, b) {
+
+        if (getDist(a.x, a.y, b.x, b.y) < 1) return this;
+
         this.segmentList.push({
             line: true,
-            guide: true, 
+            distance: true,
             x1: a.x,
             y1: a.y,
             x2: b.x,
-            y2: b.y            
+            y2: b.y
         })
-        return this;         
-    }    
+        return this;
+    }
 
-
-    addDistanceLine (a, b) {
-        this.segmentList.push({
-            line: true,
-            distance: true, 
-            x1: a.x,
-            y1: a.y,
-            x2: b.x,
-            y2: b.y            
-        })
-        return this;         
-    }        
-
-    addDistanceAngle (center, rx, ry, degree, last, line) {
+    addDistanceAngle(center, rx, ry, degree, last, line) {
         this.segmentList.push({
             angle: true,
-            rx, 
-            ry, 
+            rx,
+            ry,
             line,
             degree,
-            center, 
+            center,
             last
         })
-        return this;         
-    }            
+        return this;
+    }
 
     addPoint(obj, point, index, segment, selected = false) {
-        this.segmentList.push({
-            ...obj,
-            cx: point.x,
-            cy: point.y,
-            selected,
-            index,
-            segment,
-            isFirst: point.isFirst,
-            isLast: point.isLast,
-            isSecond: point.isSecond
 
-        })
+        if (this.checkInViewport(point)) {
 
-        return this; 
+            this.segmentList.push({
+                ...obj,
+                cx: point.x,
+                cy: point.y,
+                selected,
+                index,
+                segment,
+                isFirst: point.isFirst,
+                isLast: point.isLast,
+                isSecond: point.isSecond
+
+            })
+        }
+
+
+        return this;
     }
 
 
     addStartPoint(obj, point) {
-        this.segmentList.push({
-            ...obj,
-            cx: point.x,
-            cy: point.y,
-            start: true 
-        })
+        if (this.checkInViewport(point)) {
 
-        return this; 
-    }    
+            this.segmentList.push({
+                ...obj,
+                cx: point.x,
+                cy: point.y,
+                start: true
+            })
 
-    addCurvePoint (point, index, segment, selected = false) {
+        }
 
-        this.segmentList.push({
-            curve: true, 
-            cx: point.x,
-            cy: point.y,
-            index,
-            selected,
-            segment,
-            isFirst: point.isFirst,
-            isLast: point.isLast,
-            isSecond: point.isSecond
-        })     
-
-        return this; 
+        return this;
     }
 
-    addText (point, text) {
+    addCurvePoint(point, index, segment, selected = false) {
+
+        if (this.checkInViewport(point)) {
+
+
+            this.segmentList.push({
+                curve: true,
+                cx: point.x,
+                cy: point.y,
+                index,
+                selected,
+                segment,
+                isFirst: point.isFirst,
+                isLast: point.isLast,
+                isSecond: point.isSecond
+            })
+        }
+
+        return this;
+    }
+
+    addText(point, text) {
         this.segmentList.push({
             type: 'text',
             cx: point.x,
             cy: point.y,
-            text: text + ""  
+            text: text + ""
         })
 
         return this;
     }
 
-    toString () {
+    toString() {
 
         this.segmentList.sort((a, b) => {
             if (a.line && !b.line) {
-                return -1; 
+                return -1;
             } else if (!a.line && b.line) {
-                return 1; 
+                return 1;
             }
             return 0;
         })
@@ -145,16 +187,13 @@ export default class SegmentManager {
                     x1='${it.x1}' x2='${it.x2}' y1='${it.y1}' y2='${it.y2}' 
                 />`
             } else if (it.text) {
-                return'';
+                return '';
                 // return /*html*/ `
                 // <text x="${it.cx}" y="${it.cy}" dx="5" dy="-5" text-anchor="start">${it.text}</text>
                 // `                              
-            } else if (it.curve) {
+            } else if (it.curve && it.segment !== "startPoint") {
                 return /*html*/`
-                <circle 
-                    cx='${it.cx}' 
-                    cy='${it.cy}' 
-                    r='4'                     
+                <path stroke-width='1'
                     class='curve' 
                     ${it.selected && `data-selected="true"`}
                     ${it.isLast && `data-is-last="true"`}
@@ -164,6 +203,7 @@ export default class SegmentManager {
                     data-index='${it.index}'
                     data-segment-point='${it.segment}'
                     data-segment="true" 
+                    d="M ${it.cx} ${it.cy - 4}L ${it.cx + 4} ${it.cy} L ${it.cx} ${it.cy + 4} L ${it.cx - 4} ${it.cy} Z"
                 />`
             } else if (it.start) {
                 return /*html*/`
@@ -175,7 +215,7 @@ export default class SegmentManager {
                     data-selected='${it.selected}'
                     title="Center"
                     data-start="true" 
-                />`    
+                />`
             } else {
                 return /*html*/`
                 <circle 
@@ -191,7 +231,7 @@ export default class SegmentManager {
                     data-index='${it.index}' 
                     data-segment-point='${it.segment}' 
                     data-segment="true" 
-                />`  
+                />`
             }
 
         }).join('');

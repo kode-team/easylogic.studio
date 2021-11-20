@@ -32,6 +32,7 @@
       padding: 4px;
       width: 24px;
       height: 24px;
+      position: relative;
   
       &.on {
         background-color: var(--elf--selected-color);
@@ -40,6 +41,19 @@
   
       svg {
         pointer-events: none;
+      }
+
+      &[data-path-index="0"] {
+        &:after {
+          position: absolute;
+          content: "";
+          width: 4px;
+          height: 4px;
+          background-color: var(--elf--selected-color);
+          left: 10px;
+          top: 100%;
+          border-radius: 100%;
+        }
       }
     }
   

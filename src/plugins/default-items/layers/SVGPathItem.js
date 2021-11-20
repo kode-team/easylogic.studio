@@ -24,6 +24,22 @@ export class SVGPathItem extends SVGItem {
     return false; 
   }
 
+  reset(json) {
+    const isChanged = super.reset(json);
+
+    if (this.hasChangedField('d')) {
+      // d 속성이 변경 될 때 성능을 위해서 PathParser 로 미리 객체를 생성해준다. 
+      // 이때 width, height 를 같이 해둬야 한다. 
+      this.cachePath = new PathParser(this.json.d);
+      this.cacheWidth = this.json.width.value;
+      this.cacheHeight = this.json.height.value;
+
+      // this.modelManager.setChanged('resetCache', this.id, { path: this.cachePath, width: this.cacheWidth, height: this.cacheHeight });
+    }
+
+    return isChanged;
+  }
+
   refreshMatrixCache() {
     super.refreshMatrixCache();
 
@@ -35,6 +51,8 @@ export class SVGPathItem extends SVGItem {
       this.json.d = this.cachePath.clone().scale(this.json.width.value/this.cacheWidth, this.json.height.value/this.cacheHeight).d;
       this.modelManager.setChanged('reset', this.id, { d : this.json.d });
     }
+
+    // this.modelManager.setChanged('refreshMatrixCache', this.id, { start: true, redefined: true })                
   }
 
   setCache () {
@@ -71,31 +89,4 @@ export class SVGPathItem extends SVGItem {
   getDefaultTitle() {
     return "Path";
   }
-
-  isPointInPath (point) {
-
-    const localPoint = vec3.transformMat4([], point, this.accumulatedMatrixInverse);
-
-    return this.cachePath.isPointInPath({ x: localPoint[0], y: localPoint[1] }, this.json['stroke-width'] || 0);
-  }
-
-  /**
-   * 
-   * @param {number} x 
-   * @param {number} y 
-   * @returns 
-   */
-  hasPoint (x, y) {
-
-    if (this.json['stroke-width']) {
-      return this.isPointInPath([x, y, 0]);
-    }
-    // fill=transparent 일때는 안보이는 것으로 간주한다.
-    // stroke 만 체크 
-    // fill=transparent 가 아니라면 
-    // fill 전체 영역 체크 
-
-    return super.hasPoint(x, y); 
-  }
-
 }

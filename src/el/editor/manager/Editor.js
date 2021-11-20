@@ -2,7 +2,7 @@ import { uuid } from "el/utils/math";
 
 import { Item } from "el/editor/items/Item";
 import BaseStore from "el/sapa/BaseStore";
-import { registElement } from "el/sapa/functions/registElement";
+import { registAlias, registElement } from "el/sapa/functions/registElement";
 import { isString } from "el/sapa/functions/func";
 
 import theme from "el/editor/ui/theme";
@@ -27,9 +27,10 @@ import { I18nManager } from "./I18nManager";
 import { ModelManager } from './ModelManager';
 import { ModeViewManager } from './ModeViewManager';
 import { PathKitManager } from "./PathKitManager";
+import { SegmentSelectionManager } from "./SegmentSelectionManager";
+import { LockManager } from "./LockManager";
+import { VisibleManager } from "./VisibleManager";
 
-
-export const EDITOR_ID = "";
 
 export const EDIT_MODE_SELECTION = 'SELECTION';
 export const EDIT_MODE_ADD = 'ADD';
@@ -73,6 +74,7 @@ export class Editor {
     this.commands = new CommandManager(this);
     this.shortcuts = new ShortCutManager(this);
     this.selection = new SelectionManager(this);
+    this.segmentSelection = new SegmentSelectionManager(this);
     this.timeline = new TimelineSelectionManager(this);
     this.history = new HistoryManager(this);
     this.keyboardManager = new KeyBoardManager(this);
@@ -88,8 +90,9 @@ export class Editor {
     this.modelManager = new ModelManager(this);
     this.modeViewManager = new ModeViewManager(this);
     this.pathKitManager = new PathKitManager(this);
+    this.lockManager = new LockManager(this);
+    this.visibleManager = new VisibleManager(this);
 
-    this.initTheme();
     this.initPlugins();
     this.initStorage();
   }
@@ -136,25 +139,12 @@ export class Editor {
     this.user = user;
   }
 
-  initTheme() {
-    var theme = DEFAULT_THEME
-
-    if (window.localStorage) {
-      theme = window.localStorage.getItem('easylogic.studio.theme')
-
-      theme = ['dark', 'light'].includes(theme) ? theme : DEFAULT_THEME;
-    }
-
-    this.theme = theme || DEFAULT_THEME
-    window.localStorage.setItem('easylogic.studio.theme', this.theme);
-  }
-
   initPlugins(options = {}) {
     this.pluginManager.initializePlugin(options);
   }
 
   themeValue(key, defaultValue = '') {
-    return theme[this.theme][key] || defaultValue;
+    return theme[this.config.get('editor.theme')][key] || defaultValue;
   }
 
   changeMode(mode = EDIT_MODE_SELECTION) {
@@ -167,18 +157,6 @@ export class Editor {
 
   isAddMode() {
     return this.isMode(EDIT_MODE_ADD)
-  }
-
-  /**
-   * Theme 을 변경한다. 
-   * 
-   * @param {string} theme 
-   */
-  changeTheme(theme) {
-    theme = ['light', 'toon'].includes(theme) ? theme : 'dark';
-
-    this.theme = theme;
-    window.localStorage.setItem('easylogic.studio.theme', theme);
   }
 
   // 팝업의 zindex 를 계속 높여 주어 
@@ -227,7 +205,7 @@ export class Editor {
    * FIXME: command 는 자신과 동일한 command 를 재귀적으로 날릴 수 없다. (구현해야할듯 )
    **/
   emit(...args) {
-    this.store.source = "EDITOR_ID";
+    this.store.source = this.EDITOR_ID;
     this.store.emit(...args);
   }
 
@@ -245,9 +223,9 @@ export class Editor {
   }
 
   debug(...args) {
-    if (this.config.get('debug')) {
-      console.log(...args);
-    }
+    // if (this.config.get('debug')) {
+    //   console.log(...args);
+    // }
   }
 
   command(command, message, ...args) {
@@ -339,6 +317,17 @@ export class Editor {
    */
   registerElement(obj) {
     registElement(obj);
+  }
+
+  /**
+   * register alias
+   * 
+   * @param {KeyValue} obj 
+   */
+  registerAlias(obj) {
+    Object.entries(obj).forEach(([key, value]) => {
+      registAlias(key, value);
+    })
   }
 
   registerMenuItem(target, obj) {

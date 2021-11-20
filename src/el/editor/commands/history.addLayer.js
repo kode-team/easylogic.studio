@@ -3,14 +3,13 @@ import _doForceRefreshSelection from "./_doForceRefreshSelection";
 export default {
     command: 'history.addLayer',
     description: 'add layer in history ',
-    execute: function (editor, message, layer, rect = {}, isSelected = true, containerItem) {
+    execute: function (editor, message, layer, isSelected = true, containerItem) {
 
-        editor.emit('addLayer', layer, rect, isSelected, containerItem)
+        editor.emit('addLayer', layer, isSelected, containerItem)
 
         editor.nextTick(() => {
             editor.history.add(message, this, {
-                // 이미 변환이 된 객체(즉, screenX, screenY 가  적용된 객체라 rect 로 영역을 다시 지정하지 않는다. )
-                currentValues: [layer, {}, isSelected, layer.parent],
+                currentValues: [layer, isSelected, containerItem],
                 undoValues: [layer.id],
             })
         })

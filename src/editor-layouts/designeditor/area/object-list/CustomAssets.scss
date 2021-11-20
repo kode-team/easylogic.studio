@@ -29,40 +29,58 @@
         right: 0px;
         bottom: 0px;
         overflow: auto;
+
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-column-gap: 10px;
-        grid-auto-rows: minmax(10px, 190px);  
-        grid-row-gap: 10px;      
+        grid-template-columns: 1fr 1fr 1fr;
+        column-gap: 10px;
+        row-gap: 10px;
+        padding: 10px;        
+
         box-sizing: border-box;
         padding: 10px 10px;        
 
         .asset-preview {
-            padding-top: 10px;
-            border-radius: 2px;
-            box-shadow: 0 0 0 1px var(--elf--selected-color);
+            // pointer-events: none;
+            width: 80px;
+            height: 80px;
+            border-radius: 4px;
+            box-sizing: border-box;
+            padding: 5px;
+            background-color: #ececec20;
 
+            position: relative;
 
             .tools {
-                display: grid;
-                grid-template-columns: 1fr 20px;
-                grid-column-gap: 2px;
-                padding: 0px 10px 2px;
+
+                position: absolute;
+                bottom:0px;
+                left:0px;
+                right:0px;
+                display: none;
+                padding: 2px;
                 box-sizing: border-box;
+                opacity: 1;
+                transition: opacity 0.2s;
+                background-color: rgba(0, 0, 0, 0.4);
 
                 .title {
                     text-align: left;
-                    vertical-align: middle;                    
+                    vertical-align: middle;          
+                    color: var(--elf--selected-font-color);
+                    display: inline-block;                    
                 }
 
                 .buttons {
-                    text-align: right;
-                    vertical-align: middle;
+                    display: inline-block;
                 }
             }
 
             &:hover {
                 background-color: var(--elf--selected-color);
+                box-shadow: 0 0 0 1px var(--elf--selected-color);
+                .tools {
+                    opacity: 1;
+                }
             }
 
             .thumbnail {
@@ -70,7 +88,7 @@
             }
             img {
                 width: 100%;
-                height: 150px;
+                // height: 150px;
                 object-fit: contain;
             }
         }

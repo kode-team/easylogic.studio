@@ -3,5 +3,6 @@ export default {
     defaultValue: false,
     title: "Drag path area",
     description: "Drag path area",
-    type: "boolean"
+    type: "boolean",
+    storage: 'none'
 }

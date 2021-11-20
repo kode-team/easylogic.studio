@@ -1,9 +1,15 @@
 import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
-import { isString } from "el/sapa/functions/func";
+import { isFunction, isString } from "el/sapa/functions/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
-import { spreadVariable } from "el/sapa/functions/registElement";
+import { variable } from "el/sapa/functions/registElement";
+
+import './ComponentProperty.scss';
 
 export default class ComponentProperty extends BaseProperty {
+
+  getClassName() {
+    return 'component-property';
+  }
 
   getTitle() {
     return "Component";
@@ -11,8 +17,8 @@ export default class ComponentProperty extends BaseProperty {
 
   isShow () {
     var current = this.$selection.current;
-
-    if (current && current.is('component')) {
+    const inspector = this.$editor.components.createInspector(current);
+    if (current && (current.is('component') || inspector.length > 0)) {
       return true; 
     }
 
@@ -51,7 +57,7 @@ export default class ComponentProperty extends BaseProperty {
         <div>  
           <object 
             refClass="${selfEditor}" 
-            ${spreadVariable({
+            ${variable({
               ...selfEditorOptions,
               onchange: 'changeComponentProperty',
               ref: `${key}${index}`,
@@ -64,7 +70,7 @@ export default class ComponentProperty extends BaseProperty {
       return Object.keys(selfEditor).map(selfEditorKey => {
         return /*html*/`
           <div>
-            <object refClass="${selfEditorKey}" ${spreadVariable({
+            <object refClass="${selfEditorKey}" ${variable({
               ...selfEditorOptions,
               onchange: 'changeComponentProperty',
               ref: `${key}${index}${selfEditorKey}`,
@@ -81,24 +87,27 @@ export default class ComponentProperty extends BaseProperty {
     var current = this.$selection.current;
 
     if (!current) return ''; 
-
-    if (current && !current.is('component')) {
-      return ''; 
-    }
-
+    
     const inspector = this.$editor.components.createInspector(current);
 
     var self = inspector.map((it, index)=> {
-
       if (isString(it)) {
         return /*html*/`
           <div class='property-item is-label'> 
             <label class='label string-label'>${it}</label>
           </div>`
       } else {
+
+
+        let defaultValue = current[it.key] || it.defaultValue
+      
+        if (isFunction(it.convertDefaultValue)) {
+          defaultValue = it.convertDefaultValue(current, it.key)
+        }
+
         return /*html*/`
           <div class='property-item'> 
-            ${this.getPropertyEditor(index, it.key, current[it.key] || it.defaultValue, it.editor, it.editorOptions)}
+            ${this.getPropertyEditor(index, it.key, defaultValue, it.editor, it.editorOptions)}
           </div>
         `
       }

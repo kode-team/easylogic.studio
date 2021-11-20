@@ -79,15 +79,15 @@ export default class NumberInputEditor extends EditorElement {
     }
 
 
-    [FOCUS('$propertyNumber')] (e) {
+    [FOCUS('$body input[type=number]')] (e) {
         this.refs.$range.addClass('focused');
     }
 
-    [BLUR('$propertyNumber')] (e) {
+    [BLUR('$body input[type=number]')] (e) {
         this.refs.$range.removeClass('focused');
     }    
 
-    [INPUT('$propertyNumber')] (e) {
+    [INPUT('$body input[type=number]')] (e) {
         var value = +this.getRef('$propertyNumber').value; 
 
         this.updateData({ 

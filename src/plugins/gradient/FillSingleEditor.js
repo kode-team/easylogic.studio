@@ -6,6 +6,13 @@ import './FillSingleEditor.scss';
 
 export default class FillSingleEditor extends EditorElement {
 
+
+    initialize() {
+        super.initialize();
+    
+        this.notEventRedefine = true;
+    }    
+
     initState() { 
         return {
             index: this.props.index,
@@ -85,22 +92,24 @@ export default class FillSingleEditor extends EditorElement {
         return /*html*/`
             <div class='elf--fill-single-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : '' }            
-                <div class='preview' ref='$preview'>
-                    <div class='mini-view'>
+                <div class="area">
+                    <div class='preview' ref='$preview'>
+                        <div class='mini-view'>
 
-                        <svg class='color-view' ref='$miniView'>
-                            <defs ref='$fillView'></defs>
-                            <rect x="0" y="0" width="100%" height="100%" ref='$fillColor' fill='url(#${this.fillId})' />
-                        </svg>
+                            <svg class='color-view' ref='$miniView'>
+                                <defs ref='$fillView'></defs>
+                                <rect x="0" y="0" width="100%" height="100%" ref='$fillColor' fill='url(#${this.fillId})' />
+                            </svg>
+                        </div>
                     </div>
+                    <div class='colors ${simple ? 'simple' : ''}' ref='$colors'></div>
                 </div>
-                <div class='colors ${simple ? 'simple' : ''}' ref='$colors'></div>
             </div>
         `
     }
 
 
-    [CLICK("$preview")](e) {
+    [CLICK()](e) {
         this.viewGradientPopup();
     }
 

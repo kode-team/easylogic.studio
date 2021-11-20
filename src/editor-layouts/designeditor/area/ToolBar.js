@@ -1,5 +1,4 @@
 import { EditorElement } from "el/editor/ui/common/EditorElement";
-import PageSubEditor from "./PageSubEditor";
 import ToolMenu from "./tool-bar/ToolMenu";
 import Projects from "el/editor/ui/menu-items/Projects";
 
@@ -12,12 +11,14 @@ import Download from 'el/editor/ui/menu-items/Download';
 import Save from 'el/editor/ui/menu-items/Save';
 import OpenPathEditor from "el/editor/ui/menu-items/OpenPathEditor";
 import Outline from "el/editor/ui/menu-items/Outline";
+import ThemeChanger from "el/editor/ui/menu-items/ThemeChanger";
 
 
 export default class ToolBar extends EditorElement {
 
     components() {
         return {
+            ThemeChanger,
             Outline,
             OpenPathEditor,
             ExportView,
@@ -27,7 +28,6 @@ export default class ToolBar extends EditorElement {
             Redo,
             DropdownMenu,
             Projects,
-            PageSubEditor,
             ToolMenu
         }
     }
@@ -54,15 +54,12 @@ export default class ToolBar extends EditorElement {
                 </div>
                 <div class='center'>
                     <object refClass="ToolMenu" />
-                    <object refClass='PageSubEditor' />  
                 </div>
                 <div class='right'>
                     <div class='elf--tool-menu'>
                         <div class='items'>
                             <div class='draw-items'>      
-                                <object refClass="ExportView" />
-                                <object refClass="Download" />
-                                <object refClass="Save" />
+                                <object refClass="ThemeChanger" />                            
                                 ${this.$injectManager.generate('toolbar.right')}                             
                             </div>
                         </div>

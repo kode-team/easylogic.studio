@@ -52,6 +52,7 @@ import align_left from "./align_left";
 import align_right from "./align_right";
 import list from "./list";
 import grid from "./grid";
+import grid3x3 from "./grid3x3";
 import expand from "./expand";
 import brush from "./brush";
 import dahaze from "./dahaze";
@@ -168,21 +169,45 @@ import margin from "./margin";
 import source from "./source";
 import sync from "./sync";
 import outline from "./outline";
-
+import dark from "./dark";
+import wave from "./wave";
+import boolean_union from "./boolean_union";
+import boolean_difference from "./boolean_difference";
+import boolean_intersection from "./boolean_intersection";
+import boolean_xor from "./boolean_xor";
+import flatten from "./flatten";
+import smooth from "./smooth";
+import stroke_to_path from "./stroke_to_path";
+import highlight_at from "./highlight_at";
+import to_front from "./to_front";
+import to_back from "./to_back";
 
 const alias = {
   fullscreen:  border_inner
 }
 
-export function iconUse(name) {
+export function iconUse(name, transform = "", opt = { width: 24, height: 24 }) {
   return /*html*/`
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><use href="#icon-${name}" /> </svg>
+    <svg viewBox="0 0 ${opt.width} ${opt.height}" xmlns="http://www.w3.org/2000/svg"><use href="#icon-${name}" transform="${transform}" /> </svg>
   `
 }
 
 
 export default {
   ...alias,
+  to_back,
+  to_front,
+  highlight_at,
+  grid3x3,
+  stroke_to_path,
+  smooth,
+  flatten,
+  boolean_union,
+  boolean_difference,
+  boolean_intersection,
+  boolean_xor,
+  wave,
+  dark,
   outline,
   sync,
   source,

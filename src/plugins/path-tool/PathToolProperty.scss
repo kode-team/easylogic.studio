@@ -1,0 +1,43 @@
+.elf--boolean-item {
+
+    // height: 24px;
+    padding: 0px 5px;
+    padding-top: 8px;    
+
+    > div {
+      display: grid;
+      grid-template-columns: 1fr 1fr; 
+      grid-column-gap: 10px;
+      padding: 4px 0px;
+      height: 30px;
+      text-align: left;
+    }
+
+    button {
+        flex: 1 1 auto;
+        width: auto;
+        background-color: transparent;
+        background-image: none;
+        border:0px;
+        box-shadow: none;
+        text-align: left;
+
+        &[data-no-title="true"] {
+            .title {
+                display: none; 
+            }
+        }
+
+        svg {
+          width: 20px;
+          height: 20px;
+        }
+  
+      }
+  
+      .title {
+        font-size: 9px;
+        color: #999;
+        // display: none;
+      }
+}

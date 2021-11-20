@@ -1,4 +1,5 @@
 import { vec3 } from "gl-matrix";
+import { getClosestPointBylineLine } from "./collision";
 import { getDist } from "./math";
 
 export const predefinedBezier = {
@@ -117,6 +118,24 @@ const checkDist = (obj, curve, t, x, y) => {
         obj.minDist = dist; 
         obj.minT = t; 
     }        
+}
+
+export const getPolygonalDist = (points = []) => {
+    let total = 0;
+    let len = points.length;
+
+    points.forEach((point, index) => {
+        var next = points[(index + 1)]
+
+        if (!next) {
+            return;
+        }
+
+        var dist = vec3.dist(vec3.fromValues(point.x, point.y, 0), vec3.fromValues(next.x, next.y, 0));
+        total += dist;
+    })
+
+    return total;
 }
 
 export const getCurveDist = (sx, sy, cx1, cy1, cx2, cy2, ex, ey, count = 1000) => {
@@ -323,6 +342,103 @@ export const getBezierPointsLine = (points, t) => {
     }
 }
 
+/**
+ * convert line to bezier curve
+ * 
+ * @param {vec3[]} points 
+ * @returns 
+ */
+export const normalizeCurveForLine = (points) => {
+
+    return [
+        vec3.clone(points[0]),
+        [ 
+            points[0][0] + (points[1][0] - points[0][0]) * 0.33,
+            points[0][1] + (points[1][1] - points[0][1]) * 0.33,
+            0,
+        ],
+        [
+            points[0][0] + (points[1][0] - points[0][0]) * 0.66,
+            points[0][1] + (points[1][1] - points[0][1]) * 0.66,
+            0
+        ],
+        vec3.clone(points[1]),
+    ]
+}
+
+/**
+ * convert quadratic bezier curve to bezier curve
+ * 
+ * @param {vec3[]} points 
+ * @returns 
+ */
+export const normalizeCurveForQuard = (points) => {
+    const twoOfThree = 2 / 3;
+
+    return [
+        vec3.clone(points[0]),
+
+        vec3.fromValues(
+            // C1 = Q0 + (2/3) (Q1 - Q0)
+            points[0][0] + twoOfThree * (points[1][0] - points[0][0]),
+            points[0][1] + twoOfThree * (points[1][1] - points[0][1]),
+            0,
+        ),
+
+        vec3.fromValues(
+            // C2 = Q2 + (2/3) (Q1 - Q2)
+            points[2][0] + twoOfThree * (points[1][0] - points[2][0]),
+            points[2][1] + twoOfThree * (points[1][1] - points[2][1]),
+            0,
+        ),
+
+        vec3.clone(points[2]),
+    ]
+}
+
+/**
+ * curve 의 length 를 기반으로 polygon 을 만든다. 
+ * 
+ * 샘플링을 10개부터 시작해서 길이의 차이가 0.25보다 작아질 때까지 계속 샘플링을 증가시킨다.
+ * 
+ * @param {vec3} c1 
+ * @param {vec3} c2 
+ * @param {vec3} c3 
+ * @param {vec3} c4 
+ * @param {number} count 
+ * @returns 
+ */
+export const polygonalForCurve = (c1, c2, c3, c4, count = 1000) => {
+    const totalLength = getCurveDist(c1[0], c1[1], c2[0], c2[1], c3[0], c3[1], c4[0], c4[1], count);
+
+    let samplingCount = 10;
+    let samplingStep = totalLength / samplingCount;
+    let lastLength = 0;
+    let points = [];
+
+    const bezierPoints = [c1, c2, c3, c4].map(point => ({x: point[0], y: point[1]}))
+
+    do {
+        points = [];
+        let currentLength = 0;
+    
+        for(let i = 0; i <= samplingCount; i++) {
+            const nextPoint = getBezierPointOne(bezierPoints, currentLength / totalLength);
+            points.push(nextPoint);
+            currentLength += samplingStep;
+        }
+    
+        lastLength = getPolygonalDist(points);
+
+        samplingCount += samplingCount * (totalLength - lastLength) / totalLength;
+        samplingStep = totalLength / samplingCount;
+
+    } while (totalLength - lastLength > 0.25);
+
+    return points.map(point => vec3.fromValues(point.x, point.y, 0));
+
+}
+
 
 export const calculateA = (points) => {
     // a = 3 * (-p0 + 3*p1 - 3*p2 + p3)
@@ -460,4 +576,59 @@ export const getQuardCurveBBox = (points) => {
         const {x, y} = getBezierPointOneQuard(xyPoints, t);
         return [x, y, 0]
     })
+}
+
+
+/**
+ * 
+ * @typedef Point
+ * @type {object}
+ * 
+ * @property {number} x
+ * @property {number} y
+ */
+
+/**
+ * 
+ * @typedef Curve
+ * @type {Point[]}
+ */
+
+/**
+ * direction (top -> right -> bottom -> left)
+ * 
+ * @param {Curve[]} bezierCurveList 
+ * @param {*} tList 
+ */
+export const getPointInCurveList = (bezierCurveList = [], tList= []) => {
+    const results = bezierCurveList.map((curve, index) => {
+        const t = tList[index];
+
+        const resultPoint = getBezierPointOne(curve, t);
+
+        return resultPoint;
+    })
+
+
+    const v1 = [
+        results[0],
+        results[2],
+    ]
+
+    const v2 = [
+        results[1],
+        results[3],
+    ]
+
+    return getClosestPointBylineLine(
+        v1[0].x,
+        v1[0].y,
+        v1[1].x,
+        v1[1].y,
+        v2[0].x,
+        v2[0].y,
+        v2[1].x,
+        v2[1].y,
+    )
+
 }

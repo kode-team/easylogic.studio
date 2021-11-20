@@ -10,7 +10,6 @@ import addLayer from "./addLayer";
 import newComponent from "./newComponent";
 import clipboardCopy from "./clipboard.copy";
 import clipboardPaste from "./clipboard.paste";
-import switchTheme from "./switchTheme";
 import showExportView from "./showExportView";
 import updateScale from "./updateScale";
 import fileDropItems from "./fileDropItems";
@@ -107,9 +106,21 @@ import update from "./model/update";
 import historyRemoveProject from "./history.removeProject";
 import historyRefreshSelectionProject from "./history.refreshSelectionProject";
 import popModeView from "./pop.mode.view";
+import copyPath from "./copy.path";
+import itemMoveDepthFirst from "./item.move.depth.first";
+import itemMoveDepthLast from "./item.move.depth.last";
+import convertStrokeToPath from "./convert.stroke.to.path";
+import convertSimplifyPath from "./convert.simplify.path";
+import convertNormalizePath from "./convert.normalize.path";
+import convertSmoothPath from "./convert.smooth.path";
+import convertPolygonalPath from "./convert.polygonal.path";
+import convertFlattenPath from "./convert.flatten.path";
+import convertPathOperation from "./convert.path.operation";
+
 
 export default {
     // update model 
+    copyPath,
     update,
     popModeView,
 
@@ -138,6 +149,13 @@ export default {
     moveSelectionToCenter,
 
     // command 
+    convertPathOperation,
+    convertFlattenPath,
+    convertPolygonalPath,
+    convertSmoothPath,
+    convertNormalizePath,
+    convertStrokeToPath,
+    convertSimplifyPath,
     groupItem,
     ungroupItem,
     setEditorLayout,
@@ -154,6 +172,8 @@ export default {
     removeLayer,
     itemMoveDepthDown,
     itemMoveDepthUp,    
+    itemMoveDepthFirst,
+    itemMoveDepthLast,
     keymapKeydown,
     keymapKeyup,
     scaleMinus,
@@ -199,7 +219,7 @@ export default {
     fileDropItems,
     updateScale,
     showExportView,
-    switchTheme,
+    // switchTheme,
     clipboardPaste,
     clipboardCopy,
     addArtBoard,

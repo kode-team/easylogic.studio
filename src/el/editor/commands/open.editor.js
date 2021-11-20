@@ -12,17 +12,32 @@ export default {
      * @param {object} pathObject 
      * @param {string} pathObject.d    svg path 문자열 
      */
-    execute: function (editor) {
+    execute: function (editor, current) {
 
-        if (editor.selection.isOne === false) return;
+        if (!current && editor.selection.isOne === false) return;
 
-        var current = editor.selection.current;
+        current = current || editor.selection.current;
 
         if (current) {
-            // current.setCache();
 
             // d 속성은 자동으로 페스 에디터로 연결 
-            if (current.d) {
+            if (current.editablePath) {
+                editor.emit('showPathEditor', 'modify', {
+                    box: 'canvas',
+                    current,
+                    matrix: current.matrix,
+                    isControl: true,
+                    disableCurve: true,
+                    d: current.editablePath,
+                    changeEvent: (data) => {
+
+                        editor.command('setAttributeForMulti', 'change editable path', editor.selection.packByValue({
+                            ...current.recoverEditablePath(data.d),
+                        }, [current.id]));
+                    }
+                })
+                editor.emit('hideSelectionToolView');            
+            } else if (current.d) {
                 editor.emit('showPathEditor', 'modify', {
                     box: 'canvas',
                     current,

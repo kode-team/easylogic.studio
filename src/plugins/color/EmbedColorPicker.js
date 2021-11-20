@@ -24,7 +24,7 @@ export default class EmbedColorPicker extends EditorElement {
       `
     }
 
-    [SUBSCRIBE_SELF('localChangeColor')](key, color) {
+    [SUBSCRIBE_SELF('localChangeColor')](key, color) {      
       this.parent.trigger(this.props.onchange, color);
     }
 

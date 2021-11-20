@@ -11,6 +11,17 @@
         width: 100%;
     }
 
+    &.single {
+        > * {
+            position: absolute;
+            left: 0px !important;
+            right: 0px !important;
+            top: 0px !important;
+            height: 100% !important;
+        }
+    }
+
+
     > *:first-child {
         position: absolute;
         left: 0px;

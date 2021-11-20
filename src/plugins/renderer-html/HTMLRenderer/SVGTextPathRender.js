@@ -3,14 +3,14 @@ import { Item } from "el/editor/items/Item";
 import SVGItemRender from "./SVGItemRender";
 
 export default class SVGTextPathRender extends SVGItemRender {
-    
+
 
   /**
    * 
    * @param {Item} item 
    * @param {Dom} currentElement 
    */
-  update (item, currentElement) {
+  update(item, currentElement) {
 
     var $path = currentElement.$('path.svg-path-item');
 
@@ -29,7 +29,7 @@ export default class SVGTextPathRender extends SVGItemRender {
       }
     }
 
-    var $textPath = currentElement.$('textPath'); 
+    var $textPath = currentElement.$('textPath');
     if ($textPath) {
 
       if (item.hasChangedField('text')) {
@@ -41,7 +41,7 @@ export default class SVGTextPathRender extends SVGItemRender {
           textLength: item.textLength,
           lengthAdjust: item.lengthAdjust,
           startOffset: item.startOffset
-        })  
+        })
       }
 
       if (item.hasChangedField('fill')) {
@@ -54,22 +54,22 @@ export default class SVGTextPathRender extends SVGItemRender {
         $textPath.setAttrNS({
           stroke: this.toStrokeValue(item),
         })
-      }      
+      }
 
       if (item.hasChangedField('filter')) {
         $textPath.setAttrNS({
           filter: this.toFilterValue(item),
         })
-      }            
-  
+      }
+
     }
 
-    this.updateDefString(item, currentElement)
+    super.update(item, currentElement)
 
     item.totalLength = $path.totalLength
-  }    
+  }
 
-  toDefInnerString (item) {
+  toDefInnerString(item) {
     return /*html*/`
         ${this.toPathSVG(item)}
         ${this.toFillSVG(item)}
@@ -77,18 +77,18 @@ export default class SVGTextPathRender extends SVGItemRender {
     `
   }
 
-  toPathId (item) {
+  toPathId(item) {
     return this.getInnerId(item, 'path')
   }
 
-  toPathSVG (item) {
+  toPathSVG(item) {
     return /*html*/`
     <path class="svg-path-item" id="${this.toPathId(item)}" d="${item.d}" fill="none" />
     `
   }
 
-  render (item) {
-    var {id, textLength, lengthAdjust, startOffset} = item; 
+  render(item) {
+    var { id, textLength, lengthAdjust, startOffset } = item;
     const pathId = `#${this.toPathId(item)}`
     return /*html*/`
       <svg class='element-item textpath' data-id="${id}">

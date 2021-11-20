@@ -21,12 +21,14 @@ $range-thumb-color:  $selected-color;
 $range-track-color:  rgb(97, 97, 97);
 $range-thumb-border-color: rgba(0, 0, 0, 0.8);
 
-$input-background-color: transparent;
-$input-border-color:#2b2b2b;
+$input-background-color: #383838;
+$input-border-color:#383838;
 $input-font-color: #ececec;
 $input-sub-font-color: #7a7a7a;
+$input-height: 30px;
+$input-font-size: 13px;
 
-$divider-color:  rgb(97, 97, 97);
+$divider-color:  rgb(97, 97, 97); 
 
 // tab 
 $tab-background-color: $background-color; 

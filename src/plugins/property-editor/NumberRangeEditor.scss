@@ -2,10 +2,10 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-column-gap: 4px;
-    height: 24px;
+    height: var(--elf--input-height);
 
     &.has-label {
-        grid-template-columns: 70px 1fr;
+        grid-template-columns: 64px 1fr;
         grid-column-gap: 2px;
         &.is-removable {
             grid-template-columns: 70px 1fr 12px;
@@ -15,7 +15,7 @@
             text-align: left;
             vertical-align: middle;
             padding: 7px 0px 2px 0px;
-            font-size: 11px;
+            font-size: var(--elf--input-font-size);
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;            
@@ -44,12 +44,12 @@
 
     .range--editor-type {
         vertical-align: middle;
-        height: 24px;        
+        height: 100%;        
 
         .area {
             display: grid; 
-            grid-template-columns: 1fr 80px;
-            grid-column-gap: 3px;
+            grid-template-columns: 1fr 1fr;
+            grid-column-gap: 4px;
             font-size: 13px;
             height: 100%;
             
@@ -61,19 +61,16 @@
 
             input {
                 width: 100%;
+                height: 100%;
                 &[type='number'] {
                     border-radius: 3px;
+                    border: 1px solid var(--elf--input-border-color);                    
                     &.focused {
                         box-shadow: 0 0 0 1px var(--elf--selected-color);
                     }                
                 }
 
 
-            }
-
-            select {
-                width: 100%;
-                color: var(--elf--input-sub-font-color);
             }
         }
     }

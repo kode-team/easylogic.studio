@@ -176,11 +176,15 @@ export default class GradientEditor extends EditorElement  {
     this.updateData();
   }
 
-  [POINTERSTART('$gradientView') + MOVE('moveDragPosition')]  (e) {
+  [POINTERSTART('$gradientView') + MOVE('moveDragPosition') + END('moveEndDragPosition')]  (e) {
     var parent = this.refs.$dragPosition.parent();
     this.containerRect = parent.rect();
     this.startXY = e.xy; 
+    this.$config.set('set.move.control.point', true);
+  }
 
+  moveEndDragPosition(dx, dy) {
+    this.$config.set('set.move.control.point', false);
   }
 
   moveDragPosition (dx, dy) {

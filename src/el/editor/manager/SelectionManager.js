@@ -1,9 +1,10 @@
-import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties, toRectVerties} from "el/utils/collision";
+import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties, targetItemsToRectVerties, toRectVerties} from "el/utils/collision";
 import { Item } from "el/editor/items/Item";
 import { Project } from "plugins/default-items/layers/Project";
 import { Length } from "el/editor/unit/Length";
 import { vec3 } from "gl-matrix";
 import { clone, isFunction, isString, isUndefined, isObject } from "el/sapa/functions/func";
+import { area } from "el/utils/math";
 
 export class SelectionManager {
   constructor(editor) {
@@ -40,9 +41,11 @@ export class SelectionManager {
     const pos = this.$editor.viewport.getWorldPosition();
 
     this.pos = pos; 
-    this.column = Math.ceil(pos[0]/areaWidth); 
-    this.row = Math.ceil(pos[1]/areaWidth); 
 
+    const [row, column] = area(pos[0], pos[1], areaWidth);
+
+    this.row = row;    
+    this.column = column;
   }
 
   get modelManager() {
@@ -120,9 +123,16 @@ export class SelectionManager {
    * @returns {Item[]}
    */ 
   get filteredLayers () {
-
+    const areaWidth = this.$editor.config.get('area.width');
     return this.currentProject.filteredAllLayers((item) => {
-      const areaPosition = item.areaPosition;
+
+      if (item.is('project')) return false;
+
+
+      // 설정된 areaWidth 를 기준으로 areaPosition(column, row) 을 구한다.
+      const areaPosition = item.getAreaPosition(areaWidth);
+
+      // console.log(item.itemType, item.id, areaPosition);
 
       if (!areaPosition) {
         return false;
@@ -133,7 +143,8 @@ export class SelectionManager {
       return (column[0] <= this.column && this.column <= column[1]) && 
              (row[0] <= this.row && this.row <= row[1]);
     }).filter(item => {
-      return item.hasPoint(this.pos[0], this.pos[1])
+      // 사각형 영역에 포함되는지 체크 
+      return item.isPointInRect(this.pos[0], this.pos[1])
     }).map(item => this.modelManager.findGroupItem(item.id));
 
   }
@@ -513,6 +524,17 @@ export class SelectionManager {
     }
   }
 
+  get targetVerties () {
+
+    if (this.isOne) {    // 하나 일 때랑 
+      return this.current.targetVerties;
+    } else {
+      return targetItemsToRectVerties(this.items);
+    }
+  }
+
+
+
 
   get originVerties () {
     return this.rectVerties.filter((_, index) => index < 4);
@@ -752,5 +774,9 @@ export class SelectionManager {
 
   is (...args) {
     return this.current?.is(...args);
+  }
+
+  isAll (...args) {
+    return this.items.every(it => args.includes(it.itemType));
   }
 }

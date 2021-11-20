@@ -3,5 +3,6 @@ export default {
     defaultValue: false,
     title: "Moving Control Point",
     description: "Moving Control Point",
-    type: "boolean"
+    type: "boolean",
+    storage: 'none'
 }

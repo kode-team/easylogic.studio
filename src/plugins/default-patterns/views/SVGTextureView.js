@@ -3,8 +3,10 @@ import { EditorElement } from 'el/editor/ui/common/EditorElement';
 
 import './TextureView.scss';
 import PathParser from 'el/editor/parser/PathParser';
-import PathStringManager from "el/editor/parser/PathStringManager";
+import { repeat } from "el/utils/func";
+// import PathStringManager from "el/editor/parser/PathStringManager";
 // import math from "./data/math";
+import { Length } from 'el/editor/unit/Length';
 
 const svgPatterns = [
   {
@@ -12,7 +14,7 @@ const svgPatterns = [
       'background-color': 'transparent',
       stroke: 'black',
       'stroke-width': 2,
-      d: PathStringManager.makeRect(0, 0, 100, 100)
+      d: PathParser.makeRect(0, 0, 80, 80).d
     }
   },
   {
@@ -20,7 +22,7 @@ const svgPatterns = [
       'background-color': 'transparent',
       stroke: 'black',
       'stroke-width': 2,
-      d: PathStringManager.makeLine(0, 0, 100, 100)
+      d: PathParser.makeLine(0, 0, 80, 80).d
     }
   },  
   {
@@ -28,90 +30,122 @@ const svgPatterns = [
       'background-color': 'transparent',
       stroke: 'black',
       'stroke-width': 2,
-      d: PathStringManager.makeLine(0, 100, 100, 0)
+      fill: '#ececec',      
+      d: PathParser.makeLine(0, 80, 80, 0).d
     }
   },    
-  {
-    itemType: "svg-path", name: "triangle", attrs: {
-      'background-color': 'transparent',
-      stroke: 'black',
-      'stroke-width': 2,
-      d: "M 50 0 L 100 100 L 0 100 Z"
-    }
-  },
   {
     itemType: "svg-path", name: "circle", attrs: {
       'background-color': 'transparent',
       stroke: 'black',
       'stroke-width': 2,
-      originWidth: 100,
-      originHeight: 100,      
-      d: PathStringManager.makeCircle(0, 0, 100, 100)
+      fill: '#ececec',      
+      originWidth: 80,
+      originHeight: 80,      
+      d: PathParser.makeCircle(0, 0, 80, 80).d
     }
   },
   {
-    itemType: "svg-path", name: "polygon - 3", attrs: {
+    itemType: "polygon", name: "polygon - 3", attrs: {
       'background-color': 'transparent',
       stroke: 'black',
       'stroke-width': 2,
-      originWidth: 100,
-      originHeight: 100,      
-      d: PathStringManager.makePolygon(100, 100, 3)
+      fill: '#ececec',      
+      count: 3,
+      originWidth: 80,
+      originHeight: 80,      
+      d: PathParser.makePolygon(80, 80, 3).d
     }
   }, 
   {
-    itemType: "svg-path", name: "polygon - 4", attrs: {
+    itemType: "polygon", name: "polygon - 4", attrs: {
       'background-color': 'transparent',
       stroke: 'black',
       'stroke-width': 2,
-      originWidth: 100,
-      originHeight: 100,      
-      d: PathStringManager.makePolygon(100, 100, 4)
+      fill: '#ececec',      
+      count: 4,      
+      originWidth: 80,
+      originHeight: 80,      
+      d: PathParser.makePolygon(80, 80, 4).d
     }
   }, 
   {
-    itemType: "svg-path", name: "polygon - 4", attrs: {
+    itemType: "polygon", name: "polygon - 4", attrs: {
       'background-color': 'transparent',
       stroke: 'black',
       'stroke-width': 2,
-      originWidth: 100,
-      originHeight: 100,      
-      d: PathStringManager.makePolygon(100, 100, 5)
-    }
-  }, 
-  
-  {
-    itemType: "svg-path", name: "polygon - 4", attrs: {
-      'background-color': 'transparent',
-      stroke: 'black',
-      'stroke-width': 2,
-      originWidth: 100,
-      originHeight: 100,      
-      d: PathStringManager.makePolygon(100, 100, 6)
+      fill: '#ececec',      
+      count: 5,      
+      originWidth: 80,
+      originHeight: 80,      
+      d: PathParser.makePolygon(80, 80, 5).d
     }
   }, 
   
   {
-    itemType: "svg-path", name: "polygon - 4", attrs: {
+    itemType: "polygon", name: "polygon - 4", attrs: {
       'background-color': 'transparent',
       stroke: 'black',
       'stroke-width': 2,
-      originWidth: 100,
-      originHeight: 100,
-      d: PathStringManager.makePolygon(100, 100, 7)
+      fill: '#ececec',      
+      count: 6,      
+      originWidth: 80,
+      originHeight: 80,      
+      d: PathParser.makePolygon(80, 80, 6).d
+    }
+  }, 
+  
+  {
+    itemType: "polygon", name: "polygon - 4", attrs: {
+      'background-color': 'transparent',
+      stroke: 'black',
+      'stroke-width': 2,
+      fill: '#ececec',      
+      count: 7,      
+      originWidth: 80,
+      originHeight: 80,
+      d: PathParser.makePolygon(80, 80, 7).d
     }
   },   
 
   {
-    itemType: "svg-path", name: "polygon - 4", attrs: {
+    itemType: "polygon", name: "polygon - 4", attrs: {
       'background-color': 'transparent',
       stroke: 'black',
       'stroke-width': 2,
-      originWidth: 100,
-      originHeight: 100,
-      d: PathStringManager.makePolygon(100, 100, 12)
+      fill: '#ececec',      
+      count: 12,      
+      originWidth: 80,
+      originHeight: 80,
+      d: PathParser.makePolygon(80, 80, 12).d
     }
   },     
+  {
+    itemType: "star", name: "star - 5", attrs: {
+      'background-color': 'transparent',
+      stroke: 'black',
+      'stroke-width': 2,
+      fill: '#ececec',      
+      originWidth: 80,
+      originHeight: 80,
+      count: 5,
+      radius: 0.5,
+      d: PathParser.makeStar(80, 80, 5, .5).d
+    }
+  },    
+  {
+    itemType: "star", name: "curved star - 5", attrs: {
+      'background-color': 'transparent',
+      stroke: 'black',
+      'stroke-width': 2,
+      fill: '#ececec',
+      originWidth: 80,
+      originHeight: 80,
+      count: 5,
+      radius: .5,
+      d: PathParser.makeCurvedStar(80, 80, 5, .5).d
+    }
+  },           
   // ...Object.entries(math.data).map(([name, data]) => {
   //   console.log(data);
   //   return {
@@ -143,11 +177,12 @@ export default class SVGTextureView extends EditorElement {
       let d = it.attrs.d; 
 
       if (d) {
-        const path = new PathParser(d);
+        
+        const path = PathParser.fromSVGString(d);
 
         if (it.attrs.originWidth) {
           const rect = path.rect();
-          path.scale(70/it.attrs.originWidth, 70/it.attrs.originHeight)
+          path.scale(60/it.attrs.originWidth, 60/it.attrs.originHeight)
         } else {
           const rect = path.rect();
           path.scale(70/rect.width, 70/rect.height)
@@ -158,8 +193,8 @@ export default class SVGTextureView extends EditorElement {
 
       const svg = this.$editor.svg.render(this.$model.createModel({
         itemType: it.itemType,
-        width: 80, 
-        height: 80,
+        width: Length.px(80), 
+        height: Length.px(80),
         ...it.attrs,
         d
       }, false))

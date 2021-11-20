@@ -18,9 +18,7 @@ export default class Dom {
  
       attr = attr || {};
 
-      for (var k in attr) {
-        el.setAttribute(k, attr[k]);
-      }
+      Object.assign(el, attr);
 
       this.el = el;
     }
@@ -229,6 +227,11 @@ export default class Dom {
     return this;
   }
 
+  replaceClass(oldClass, newClass) {
+    this.el.classList.replace(oldClass, newClass);
+    return this;
+  }
+
   hasClass(cls) {
     if (!this.el.classList) return false;
     return this.el.classList.contains(cls);
@@ -261,7 +264,7 @@ export default class Dom {
     }
 
     if (typeof html === 'string') {
-      this.el.innerHTML = html;
+      Object.assign(this.el, { innerHTML: html });
     } else {
       this.empty().append(html);
     }

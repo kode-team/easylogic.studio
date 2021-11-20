@@ -29,12 +29,12 @@
           background-color: transparent; 
         }          
 
-        .pointer[data-number="11"], 
-        .pointer[data-number="12"], 
-        .pointer[data-number="13"], 
-        .pointer[data-number="14"] {
-          display: none;
-        }
+        // .pointer[data-number="11"], 
+        // .pointer[data-number="12"], 
+        // .pointer[data-number="13"], 
+        // .pointer[data-number="14"] {
+        //   // display: none;
+        // }
       }
     }    
 
@@ -107,8 +107,8 @@
       position: absolute;
       left: 0px;
       top: 0px;
-      width: 12px;
-      height: 12px;
+      width: 10px;
+      height: 10px;
       box-sizing: border-box;
       background-color: white; 
       box-sizing: border-box;

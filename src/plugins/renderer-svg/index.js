@@ -6,7 +6,10 @@ import IFrameRender from "./SVGRenderer/IFrameRender";
 import ImageRender from "./SVGRenderer/ImageRender";
 import ProjectRender from "./SVGRenderer/ProjectRender";
 import RectRender from "./SVGRenderer/RectRender";
+import SplineRender from "./SVGRenderer/SplineRender";
 import SVGPathRender from "./SVGRenderer/SVGPathRender";
+import SVGPolygonRender from "./SVGRenderer/SVGPolygonRender";
+import SVGStarRender from "./SVGRenderer/SVGStarRender";
 import SVGTextPathRender from "./SVGRenderer/SVGTextPathRender";
 import SVGTextRender from "./SVGRenderer/SVGTextRender";
 import TemplateRender from "./SVGRenderer/TemplateRender";
@@ -33,6 +36,9 @@ export default function (editor) {
     editor.registerRenderer('svg', 'video', new VideoRender());
     editor.registerRenderer('svg', 'text', new TextRender());
     editor.registerRenderer('svg', 'svg-path', new SVGPathRender());
+    editor.registerRenderer('svg', 'polygon', new SVGPolygonRender());
+    editor.registerRenderer('svg', 'star', new SVGStarRender());
+    editor.registerRenderer('svg', 'spline', new SplineRender());
     editor.registerRenderer('svg', 'svg-text', new SVGTextRender());
     editor.registerRenderer('svg', 'svg-textpath', new SVGTextPathRender());
 }

@@ -18,6 +18,7 @@
     }
 
 
+
     &:not([data-selected-editor*='static-gradient']),
     &:not([data-selected-editor*='image-resource'])
      {
@@ -27,6 +28,17 @@
         [data-editor='tools'] {
             display: grid;
         }
+    }
+
+    &[data-selected-editor="static-gradient"] {
+        .gradient-preview,
+        .gradient-steps {
+            display: none; 
+        }
+
+        [data-editor='tools'] {
+            display: none;
+        }        
     }
 
     [data-editor='image-loader'] {

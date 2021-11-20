@@ -10,6 +10,13 @@ import { filter_list } from "./util";
 
 export default class FilterProperty extends BaseProperty {
 
+
+  initialize() {
+    super.initialize();
+
+    this.notEventRedefine = true;
+  }  
+
   getTitle () {
     return this.$i18n('filter.property.title');
   }
@@ -17,6 +24,10 @@ export default class FilterProperty extends BaseProperty {
 
   hasKeyframe () {
     return true; 
+  }
+
+  isFirstShow() {
+    return true;
   }
 
   afterRender() {
@@ -124,7 +135,7 @@ export default class FilterProperty extends BaseProperty {
     return "filter";
   }
 
-  [SUBSCRIBE('refreshSelection') + IF('checkShow')] () {
+  [SUBSCRIBE('refreshSelection') + IF('checkShow') + DEBOUNCE(1000)] () {
     this.refresh();
   }
 

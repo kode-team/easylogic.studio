@@ -29,6 +29,6 @@ export default class LayoutSelector extends EditorElement {
     }
 
     [SUBSCRIBE_SELF('changeEditorLayoutValue')] (key, layout) {
-        this.emit('setEditorLayout', layout);
+        this.$config.set('editor.layout.mode', layout);
     }
 }

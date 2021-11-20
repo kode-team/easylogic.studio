@@ -1,4 +1,4 @@
-import { clone, isFunction, isNumber, isUndefined } from "el/sapa/functions/func";
+import { clone, isFunction, isNotUndefined, isNumber, isUndefined } from "el/sapa/functions/func";
 import { uuid } from "el/utils/math";
 import { ModelManager } from "../manager/ModelManager";
 
@@ -17,7 +17,7 @@ export class BaseModel {
    * @param {object} json 초기화 할 데이타 
    * @param {ModelManager} modelManager
    */
-  constructor(json = {}, modelManager) {
+  constructor(json = {}, modelManager) {    
     this.modelManager = modelManager;
 
     this.ref = new Proxy(this, {
@@ -56,10 +56,10 @@ export class BaseModel {
     });
 
     this.json = this.convert(Object.assign(this.getDefaultObject(), json));
-
     this.lastChangedField = {};
     this.lastChangedFieldKeys = [];
     this.cachedValue = {};
+    this.timestamp = 0;
 
     return this.ref;
   }
@@ -83,11 +83,11 @@ export class BaseModel {
   }
 
   isChanged(timestamp) {
-    return this.json.timestamp != Number(timestamp);
+    return this.timestamp != Number(timestamp);
   }
 
   changed() {
-    this.json.timestamp = this.json._timestamp + performance.now();
+    this.timestamp += performance.now();
   }
 
   /***********************************
@@ -174,6 +174,8 @@ export class BaseModel {
 
   setParentId(parentId) {
     this.json.parentId = parentId;
+
+    this.modelManager.setChanged('setParentId', this.id, { parentId });        
   }
 
   /**
@@ -219,6 +221,18 @@ export class BaseModel {
    */
   get path() {
     return this.modelManager.getPath(this.id, this.ref);
+  }
+
+  get lock() {
+    return this.modelManager.editor.lockManager.get(this.id);
+  }
+
+  get visible() {
+    return this.modelManager.editor.visibleManager.get(this.id);
+  }
+
+  get childrenLength() {
+    return this.json.children.length;
   }
 
   /**
@@ -322,7 +336,7 @@ export class BaseModel {
 
   toCloneObject(isDeep = true) {
     var json = this.attrs(
-      'itemType', 'name', 'elementType', 'type', 'visible', 'lock', 'selected', 'parentId'
+      'itemType', 'name', 'elementType', 'type', 'selected', 'parentId'
     )
 
     if (isDeep) {
@@ -342,21 +356,30 @@ export class BaseModel {
   }
 
   /**
+   * check object values 
+   * 
+   * @param {KeyValue} obj 
+   * @returns 
+   */
+  isChangedValue(obj) {
+    return true;
+  }
+
+  /**
    * set json content
    *
    * @param {object} obj
    */
   reset(obj) {
-    // 변경된 값에 대해서 id 를 부여해보자. 
-    // if (!obj.__changedId) obj.__changedId = uuid();
+    const isChanged = this.isChangedValue(obj);
 
-    // if (this.lastChangedField.__changedId !== obj.__changedId) {
-    this.json = this.convert(Object.assign(this.json, obj));
-    this.lastChangedField = obj;
-    this.lastChangedFieldKeys = Object.keys(obj);
-    this.modelManager.setChanged('reset', this.id, obj);
-    this.changed();
-    // }
+    if (isChanged) {
+      this.json = this.convert(Object.assign(this.json, obj));
+      this.lastChangedField = obj;
+      this.lastChangedFieldKeys = Object.keys(obj);
+      this.modelManager.setChanged('reset', this.id, obj);
+      this.changed();
+    }
 
     return true;
   }
@@ -379,10 +402,7 @@ export class BaseModel {
     var id = uuid()
     return {
       id,
-      _timestamp: Date.now(),
-      _time: performance.now(),
-      visible: true,  // 보이기 여부 설정 
-      lock: false,    // 편집을 막고 
+      // visible: true,  // 보이기 여부 설정 
       // selected: false,  // 선택 여부 체크 
       children: [],   // 하위 객체를 저장한다. 
       offsetInParent: 1,  // 부모에서 자신의 위치를 숫자로 나타낸다. 
@@ -399,7 +419,9 @@ export class BaseModel {
     const result = {}
 
     args.forEach(field => {
-      result[field] = clone(this.json[field])
+      if (isNotUndefined(this.json[field])) {
+        result[field] = clone(this.json[field])
+      }
     })
 
     return result;
@@ -426,6 +448,7 @@ export class BaseModel {
       if (Boolean(hasId) === false) {
         // 아이디가 없는 경우 다시 아이디 넣어주기 
         this.json.children.push(layer.id);
+        this.modelManager.setChanged('appendChild', this.id, {child: layer.id, oldParentId: layer.parentId});
       }
 
       return layer;
@@ -471,7 +494,7 @@ export class BaseModel {
     layer.setParentId(this.id);
     this.json.children.splice(index, 0, layer.id);
     // this.project.addIndexItem(layer);
-
+    this.modelManager.setChanged('insertChild', this.id, {childId: layer.id, index: 0})
     return layer;
   }
 
@@ -620,5 +643,14 @@ export class BaseModel {
    */
   hasParent(parentId) {
     return this.modelManager.hasParent(this.id, parentId);
+  }
+
+  /**
+   * 특정 itemType 으로 데이타 변환 
+   * 
+   * @param {string} itemType 
+   */
+  to(itemType) {
+
   }
 }

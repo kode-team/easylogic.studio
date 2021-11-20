@@ -20,6 +20,7 @@ export class DropdownMenu extends EditorElement {
           { title: 'menu.item.shortcuts.title', command: 'showShortcutWindow' },
           '-',
           { title: 'menu.item.export.title', command: 'showExportView' },
+          { title: 'menu.item.export.title', command: 'showEmbedEditorWindow' },
           { title: 'menu.item.download.title', command: 'downloadJSON' },
           { title: 'menu.item.save.title', command: 'saveJSON', nextTick: () => {
             this.emit('notify',  'alert', 'Save', 'Save the content on localStorage', 2000);    

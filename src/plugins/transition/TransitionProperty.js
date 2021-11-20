@@ -16,6 +16,14 @@ import BaseProperty from "el/editor/ui/property/BaseProperty";
 import './TransitionProperty.scss';
 
 export default class TransitionProperty extends BaseProperty {
+
+
+  initialize() {
+    super.initialize();
+
+    this.notEventRedefine = true;
+  }  
+
   getTitle() {
     return this.$i18n('transition.property.title');
   }

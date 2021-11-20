@@ -1,4 +1,4 @@
-import { CLICK } from "el/sapa/Event";
+import { BIND, CLICK } from "el/sapa/Event";
 import icon, { iconUse } from "el/editor/icon/icon";
 
 import { EditorElement } from "el/editor/ui/common/EditorElement";
@@ -24,6 +24,17 @@ export default class LayerTab extends EditorElement {
   initState() {
     return {
       selectedIndexValue: 2
+    }
+  }
+  afterRender() {
+    this.$el.toggle(this.$config.get('editor.design.mode') === 'design');
+  }
+
+  [BIND('$el')] () {
+    return {
+      style: {
+        display: this.$config.get('editor.design.mode') === 'design' ? 'block' : 'none'
+      }
     }
   }
 

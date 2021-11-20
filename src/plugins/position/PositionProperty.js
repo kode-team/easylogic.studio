@@ -68,13 +68,13 @@ export default class PositionProperty extends BaseProperty {
             <div class='group'>
               <span class='add-timeline-property' data-property='x'></span>
             </div>
-            <object refClass='InputRangeEditor' ref='$x' compact="true" label="X" key='x' min="-1000" max='1000' onchange='changRangeEditor' />
+            <object refClass='InputRangeEditor' ref='$x' compact="true" label="X" key='x' min="-100000" max='100000' onchange='changRangeEditor' />
           </div>
           <div class='property-item animation-property-item' style='padding: 0px;'>
             <div class='group'>
               <span class='add-timeline-property' data-property='y'></span>
             </div>
-            <object refClass='InputRangeEditor' ref='$y' compact="true"  label="Y" key='y' min="-1000" max='1000' onchange='changRangeEditor' />
+            <object refClass='InputRangeEditor' ref='$y' compact="true"  label="Y" key='y' min="-10000" max='10000' onchange='changRangeEditor' />
           </div>
         </div>
         <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; padding-top: 10px;'>

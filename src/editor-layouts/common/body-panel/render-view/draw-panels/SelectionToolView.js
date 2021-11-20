@@ -49,28 +49,6 @@ export default class SelectionToolView extends SelectionToolEvent {
         `
     }
 
-    [SUBSCRIBE('keymap.keydown')] (e) {
-        const keyString = [
-            e.altKey    ? 'ALT'     : '',
-            e.ctrlKey   ? 'CTRL'    : '',
-            e.shiftKey  ? 'SHIFT'   : '',
-            e.metaKey   ? 'META'    : ''
-        ].join("");
-
-        if (e.shiftKey && keyString === 'SHIFT') {
-            this.$el.attr('data-has-shift', 'true')
-        } else {
-            if (this.$el.attr('data-has-shift') === 'true') {
-                this.$el.attr('data-has-shift', '')
-            }
-
-        }
-    }
-
-    [SUBSCRIBE('keymap.keyup')] (e) {
-        this.$el.attr('data-has-shift', '')
-    }    
-
     toggleEditingPath (isEditingPath) {
         this.$el.toggleClass('editing-path', isEditingPath);
     }
@@ -508,17 +486,19 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         const verties = this.$selection.verties;
         const selectionVerties = this.$selection.selectionVerties;              
+        const parentVerties = this.$selection.current.parent.verties || [];              
         this.state.renderPointerList = [
             this.$viewport.applyVerties(verties),
             this.$viewport.applyVerties(selectionVerties),
+            this.$viewport.applyVerties(parentVerties),
         ]
 
 
         const pointers = this.createRenderPointers(...this.state.renderPointerList);
 
         if (pointers) {
-            const {line, point, size} = pointers;
-            this.refs.$pointerRect.updateDiff(line + point + size)
+            const {line, parentRect, point, size} = pointers;
+            this.refs.$pointerRect.updateDiff(line + parentRect + point + size)
         }
 
 
@@ -582,6 +562,25 @@ export default class SelectionToolView extends SelectionToolEvent {
         </svg>`
     }    
 
+    createParentRect(pointers = []) {
+        if (pointers.length === 0) return '';
+
+        return /*html*/`
+        <svg class='line' overflow="visible">
+            <path 
+                d="
+                    M ${pointers[0][0]}, ${pointers[0][1]} 
+                    L ${pointers[1][0]}, ${pointers[1][1]} 
+                    L ${pointers[2][0]}, ${pointers[2][1]} 
+                    L ${pointers[3][0]}, ${pointers[3][1]} 
+                    L ${pointers[0][0]}, ${pointers[0][1]}
+                    Z
+                " 
+                stroke="red"
+                />
+        </svg>`
+    }
+
     createSize (pointers) {
         const top = vec3.lerp([], pointers[0], pointers[1], 0.5);
         const right = vec3.lerp([], pointers[1], pointers[2], 0.5);
@@ -629,7 +628,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         `
     }
 
-    createRenderPointers(pointers, selectionPointers) {
+    createRenderPointers(pointers, selectionPointers, parentPointers) {
 
         const current = this.$selection.current; 
 
@@ -658,12 +657,13 @@ export default class SelectionToolView extends SelectionToolEvent {
         return {
             line: this.createPointerRect(pointers, rotatePointer), 
             size: this.createSize(pointers),
+            parentRect: '', //this.createParentRect(parentPointers),
             point: [
                 // 4 모서리에서도 rotate 가 가능하도록 맞춤 
-                this.createRotatePointer (selectionPointers[0], 0),
-                this.createRotatePointer (selectionPointers[1], 1),
-                this.createRotatePointer (selectionPointers[2], 2),
-                this.createRotatePointer (selectionPointers[3], 3),
+                // this.createRotatePointer (selectionPointers[0], 0),
+                // this.createRotatePointer (selectionPointers[1], 1),
+                // this.createRotatePointer (selectionPointers[2], 2),
+                // this.createRotatePointer (selectionPointers[3], 3),
                 isArtBoard ? undefined : this.createRotatePointer (rotatePointer, 4, 'center center'),
 
                 dist < 20 ? undefined : this.createPointerSide (vec3.lerp([], pointers[0], pointers[1], 0.5), 11, rotate, width, 5),

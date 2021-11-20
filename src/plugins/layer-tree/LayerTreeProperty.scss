@@ -7,6 +7,9 @@
         color: var(--elf--list-item-font-color);
         padding: 5px !important; 
         margin-bottom: 0px !important;
+        content-visibility: auto;
+        contain: style;
+        height: 30px;
 
         &[data-is-hide="true"] {
             display: none; 

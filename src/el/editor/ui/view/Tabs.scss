@@ -1,7 +1,7 @@
 $tab-header-height: 48px;
  
 
-$tab-horizontal-header-width: 48px;
+$tab-horizontal-header-width: 60px;
 $tab-horizontal-header-right-width: 60px;
 
 .tab {
@@ -37,7 +37,7 @@ $tab-horizontal-header-right-width: 60px;
           top: 0px;
           bottom: 0px;
           height: auto;
-          // border-right: 1px solid var(--elf--border-color);
+          border-right: 1px solid var(--elf--border-color);
           // padding: 10px;
           box-sizing: border-box;
           overflow: visible;
@@ -62,7 +62,10 @@ $tab-horizontal-header-right-width: 60px;
 
             &.selected {
               // background-color: var(--elf--background-color) !important;
-              color: var(--elf--selected-font-color);              
+              color: var(--elf--selected-font-color);        
+              border-left: 4px solid var(--elf--selected-color);
+              margin-left: 0;
+              padding-left: 10px;                    
 
               label {
                 color: var(--elf--selected-color);              

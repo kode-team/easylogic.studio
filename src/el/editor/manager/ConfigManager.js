@@ -4,6 +4,17 @@ export class ConfigManager {
         this.editor = editor;
         this.configList = [];
         this.config = new Map();
+
+        // this.load();
+    }
+
+    load () {
+        const obj = this.editor.loadItem('config') || {};
+
+        Object.keys(obj).forEach(key => {
+            this.config.set(key, obj[key]);
+        })
+
     }
     
     /**
@@ -38,14 +49,33 @@ export class ConfigManager {
         return this.config.get(key);
     }
 
-    set (key, value) {
+    set (key, value, isSave = true) {
         const oldValue = this.config.get(key);
 
         if (oldValue !== value) {
             //todo: type 체크
             this.config.set(key, value); 
             this.editor.emit("config:" + key, value, oldValue);
+
+            if (isSave) {
+                this.save();
+            }
         }
+    }
+
+    init (key, value) {
+        this.set(key, value, false);
+    }
+
+    save () {
+        const obj = {};
+
+
+        this.configList.filter(it => it.storage !== 'none').forEach(it => {
+            obj[it.key] = this.get(it.key);
+        });
+
+        this.editor.saveItem('config', obj);
     }
 
     setAll (obj) {

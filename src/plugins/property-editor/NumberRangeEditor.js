@@ -8,6 +8,13 @@ import './NumberRangeEditor.scss';
 
 export default class NumberRangeEditor extends EditorElement {
 
+
+    initialize() {
+        super.initialize();
+    
+        this.notEventRedefine = true;
+    }    
+
     initState() {
         var value = Length.parse(this.props.value || Length.number(0));
         value = value.toUnit('number');
@@ -50,8 +57,12 @@ export default class NumberRangeEditor extends EditorElement {
             ${label ? `<label title="${label}">${label}</label>` : '' }
             <div class='range--editor-type' data-type='range'>
                 <div class='area'>
-                    <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" />
-                    <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" tabIndex="1" />
+                    <div>
+                        <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" />
+                    </div>
+                    <div>
+                        <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" tabIndex="1" />
+                    </div>
                 </div>
             </div>
             <button type='button' class='remove' ref='$remove' title='Remove'>${icon.remove}</button>
@@ -86,11 +97,11 @@ export default class NumberRangeEditor extends EditorElement {
         })
     }
 
-    [FOCUS('$propertyNumber')] (e) {
+    [FOCUS('$body input[type="number"]')] (e) {
         this.refs.$propertyNumber.addClass('focused');
     } 
 
-    [BLUR('$propertyNumber')] (e) {
+    [BLUR('$body input[type="number"]')] (e) {
         this.refs.$propertyNumber.removeClass('focused');
     }
 
@@ -105,9 +116,9 @@ export default class NumberRangeEditor extends EditorElement {
         this.parent.trigger(this.props.onchange, this.props.key, this.getValue(), this.props.params)
     }
 
-    [INPUT('$propertyNumber')] (e) {
+    [INPUT('$body input[type="number"]')] (e) {
 
-        var value = +this.getRef('$propertyNumber').value; 
+        var value = +this.refs.$propertyNumber.value; 
         this.getRef('$property').val(value);
 
         this.updateData({ 
@@ -116,16 +127,16 @@ export default class NumberRangeEditor extends EditorElement {
 
     }
 
-    [INPUT('$property')] () {
+    [INPUT('$body input[type="range"]')] () {
         this.trigger('changeRangeValue');
     }
 
 
-    [POINTERSTART('$property') + END('moveRange')] () {
+    [POINTERSTART('$body input[type="range"]') + END()] () {
 
     }
 
-    moveRange () {
+    end () {
         this.trigger('changeRangeValue');
     }
 

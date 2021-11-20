@@ -82,7 +82,10 @@ export default class AnimationProperty extends BaseProperty {
   }
 
   [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)]() {
-    this.refreshShowIsNot('project');
+    const current = this.$selection.current;
+    if (current && current.hasChangedField('animation')) {
+      this.refresh();
+    }
     this.emit("hideAnimationPropertyPopup");
   }
 

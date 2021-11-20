@@ -34,7 +34,11 @@ export default class HTMLRenderView extends EditorElement {
         return /*html*/`
             <div class='elf--element-view' ref='$body'>
                 <object refClass='StyleView' ref='$styleView' />
-                <div class='canvas-view' ref='$view' data-outline="${this.$config.get('show.outline')}"></div>
+                <div class='canvas-view' 
+                        data-renderer-id='${this.$editor.EDITOR_ID}' 
+                        ref='$view' 
+                        data-outline="${this.$config.get('show.outline')}"
+                ></div>
                 ${this.$injectManager.generate("render.view")}
             </div>
         `
@@ -48,10 +52,15 @@ export default class HTMLRenderView extends EditorElement {
         isFunction(callback) && callback(this.getElement(id))
     }
 
+    /**
+     * 캐쉬된 element 를 모두 삭제함 
+     * 캐쉬된 element 는  몇 가지 용도에 의해서 update 할 때 실제 객체를 넘겨주게 되어 있음. 
+     * 
+     * 1. HTMLRenderView 는 html element 로 렌더링을 하기 때문에 렌더링 주체를 가지고 있어야 함. 
+     * 2. svg 관련 객체의 경우 element 를 가지고 내부의 path 를 조회해서 좌표가 존재하는지 체크할 수 있어야 함. 
+     */
     clearElementAll() {
-        this.$selection.each(item => {
-            this.clearElement(item.id);
-        });
+        this.state.cachedCurrentElement = {};
     }
 
     clearElement(id) {
@@ -119,35 +128,37 @@ export default class HTMLRenderView extends EditorElement {
             return false;
         }
 
-
-        const mousePoint = this.$viewport.getWorldPosition(e);
-        if (this.$selection.hasPoint(mousePoint)) {
-
-            // selection 영역과 hover item 이 겹치면  hover item 을 선택한걸로 한다. 
-            if (this.$selection.hasHoverItem()) {
-
-                // selection 영역이 동일하고 
-                // hover 된 id 가 부모가 아니면 
-                // hover 된 아이템을 선택하게 된다. 
-                if (this.$selection.hasParent(/*parentId*/this.$selection.hoverId) === false) {
-                    this.$selection.selectHoverItem();
-                }
-
-            }
-
-            return true;
-        }
-
-        // hover item 이 있으면 클릭 대상이 있다고 간주한다. 
-        if (this.$selection.hasHoverItem()) {
-            this.$selection.selectHoverItem();
-            return true;
-        }
-
+        // 전체 캔버스 영역을 클릭하면 selection 하지 않는다. 
         const $target = Dom.create(e.target);
         if ($target.hasClass('canvas-view')) {
             return false;
         }
+
+        if (!e.shiftKey) {
+            const mousePoint = this.$viewport.getWorldPosition(e);
+            if (this.$selection.hasPoint(mousePoint)) {
+    
+                // selection 영역과 hover item 이 겹치면  hover item 을 선택한걸로 한다. 
+                if (this.$selection.hasHoverItem()) {
+                    // selection 영역이 동일하고 
+                    // hover 된 id 가 부모가 아니면 
+                    // hover 된 아이템을 선택하게 된다. 
+                    if (this.$selection.hasParent(/*parentId*/this.$selection.hoverId) === false) {
+                        this.$selection.selectHoverItem();
+                    }
+    
+                }
+    
+                return true;
+            }
+
+            // hover item 이 있으면 클릭 대상이 있다고 간주한다. 
+            if (this.$selection.hasHoverItem()) { 
+                this.$selection.selectHoverItem();
+                return true;
+            }
+        }
+
 
         const $element = $target.closest('element-item');
 
@@ -181,6 +192,7 @@ export default class HTMLRenderView extends EditorElement {
     }
 
     [DOUBLECLICK('$view')](e) {
+
         const $item = Dom.create(e.target).closest('element-item');
 
         if ($item) {
@@ -211,6 +223,7 @@ export default class HTMLRenderView extends EditorElement {
 
             return;
         }
+
 
 
         let isInSelectedArea = this.$selection.hasPoint(this.initMousePoint)
@@ -251,7 +264,6 @@ export default class HTMLRenderView extends EditorElement {
             }
 
         } else {
-
             if (isInSelectedArea) {
                 // 이미 selection 영역안에 있으면 그대로 드래그 할 수 있도록 맞춘다. 
             } else {
@@ -371,10 +383,11 @@ export default class HTMLRenderView extends EditorElement {
             )
 
             result[it.id] = {
-                x: Length.px(it.x + newDist[0]).floor(),          // 1px 단위로 위치 설정 
-                y: Length.px(it.y + newDist[1]).floor(),
+                x: Length.px(Math.floor(it.x + newDist[0])),          // 1px 단위로 위치 설정 
+                y: Length.px(Math.floor(it.y + newDist[1])),
             }
         })
+
         this.$selection.reset(result);
     }
 
@@ -552,6 +565,19 @@ export default class HTMLRenderView extends EditorElement {
 
     [SUBSCRIBE('updateViewport')]() {
         this.bindData('$view');
+    }
+
+    /**
+     * 기본 커서 제어 
+     */
+    [CONFIG('bodyEvent')]() {
+
+        // TODO: 커서를 제어하는 element 가 아니면 기본 커서로 지정해야할 듯 
+        const number = Dom.create(this.$config.get('bodyEvent').target).data('number')
+
+        if (!number) {
+            this.emit('recoverCursor')
+        }
     }
 
 }

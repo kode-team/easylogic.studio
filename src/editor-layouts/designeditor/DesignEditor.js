@@ -1,4 +1,4 @@
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, BIND, SUBSCRIBE, CONFIG } from "el/sapa/Event";
+import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, BIND, SUBSCRIBE, CONFIG, SUBSCRIBE_SELF } from "el/sapa/Event";
 
 import { Length } from "el/editor/unit/Length";
 
@@ -10,13 +10,17 @@ import KeyboardManager from "../common/KeyboardManager";
 import Inspector from "./area/Inspector";
 import StatusBar from './area/StatusBar';
 import ToolBar from "./area/ToolBar";
-import PageSubEditor from "./area/PageSubEditor";
+
 import designEditorPlugins from "plugins/design-editor-plugins";
 import LayerTab from "./area/LayerTab";
 import { END, MOVE } from "el/editor/types/event";
 import { isFunction } from 'el/sapa/functions/func';
 import IconManager from '../common/IconManager';
 import PathKitInit from "pathkit-wasm/bin/pathkit.js";
+import ItemLayerTab from "./area/ItemLayerTab";
+import SingleInspector from './area/SingleInspector';
+
+// import './web-component/MyElement';
 
 export default class DesignEditor extends BaseLayout {
 
@@ -31,10 +35,11 @@ export default class DesignEditor extends BaseLayout {
   components() {
     return {
       LayerTab,
-      PageSubEditor,
+      ItemLayerTab,
       ToolBar,
       StatusBar,
       Inspector,
+      SingleInspector,
       BodyPanel,
       PopupManager,
       KeyboardManager,
@@ -61,7 +66,6 @@ export default class DesignEditor extends BaseLayout {
         <div class="layout-main">
           <div class='layout-top' ref='$top'>
             <object refClass="ToolBar" />
-            <object refClass="PageSubEditor" />
           </div>
           <div class="layout-middle" ref='$middle'>      
             <div class="layout-body" ref='$bodyPanel'>
@@ -69,9 +73,11 @@ export default class DesignEditor extends BaseLayout {
             </div>                           
             <div class='layout-left' ref='$leftPanel'>
               <object refClass='LayerTab' />
+              <object refClass='ItemLayerTab' />
             </div>
             <div class="layout-right" ref='$rightPanel'>
               <object refClass='Inspector' />
+              <object refClass="SingleInspector" />
             </div>
 
             <div class='layout-footer' ref='$footerPanel'>
@@ -84,9 +90,15 @@ export default class DesignEditor extends BaseLayout {
           <object refClass="KeyboardManager" />                
         </div>
         <object refClass="PopupManager" />
-        <object refClass="IconManager" />          
+        <object refClass="IconManager" />        
       </div>
     `;
+  }
+
+  [BIND('$el')] () {
+    return {
+      'data-design-mode': this.$config.get('editor.design.mode')
+    }
   }
 
   [BIND('$splitter')] () {
@@ -198,6 +210,7 @@ export default class DesignEditor extends BaseLayout {
 
   refresh () {
 
+    this.bindData('$el');
     this.bindData('$splitter');
     this.bindData('$headerPanel');    
     this.bindData('$leftPanel');
@@ -207,7 +220,7 @@ export default class DesignEditor extends BaseLayout {
     this.bindData('$bodyPanel');  
     this.bindData('$footerPanel');        
     
-    this.emit('resizeEditor');
+    this.emit('resizeEditor');    
   }
 
   [CONFIG('show.left.panel')]() {
@@ -223,6 +236,10 @@ export default class DesignEditor extends BaseLayout {
       this.emit('resizeCanvas');
     })
   }  
+
+  [CONFIG('editor.design.mode')] () {
+    this.bindData('$el');
+  }
 
 
   [SUBSCRIBE('toggleFooter')] (isShow) {

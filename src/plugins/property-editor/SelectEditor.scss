@@ -3,7 +3,7 @@
     grid-template-columns: 1fr;
     grid-column-gap: 4px;
     position: relative;
-    height: 24px;
+    height: var(--elf--input-height);
     box-sizing: border-box;
 
     select {

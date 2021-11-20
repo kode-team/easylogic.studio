@@ -22,8 +22,8 @@ export class ModelManager {
     /**
      * document 로드 하기 
      */
-    load(doc = {}) {
-        const newDoc = this.editor.loadItem('model') || doc;
+    load(doc = undefined) {
+        const newDoc = doc || this.editor.loadItem('model');
 
         this.items.clear();
         this.version = newDoc?.version;
@@ -56,6 +56,7 @@ export class ModelManager {
 
     set(id, item) {
         this.items.set(id, item);
+        this.setChanged('set', id, item);        
     }
 
     // 삭제 표시 
@@ -71,6 +72,8 @@ export class ModelManager {
             removedLeftSibling: index > 0 ? children[index - 1] : null,
             removedRightSibling: index < children.length - 1 ? children[index + 1] : null
         })
+
+        this.setChanged('remove', id);
     }
 
     // 삭제 표시 복구 
@@ -95,6 +98,8 @@ export class ModelManager {
         delete obj.removedLeftSibling;
         delete obj.removedRightSibling;
         delete obj.removedIndex;
+
+        this.setChanged('recover', id);    
     }
 
     clear() {
@@ -106,7 +111,9 @@ export class ModelManager {
             version: this.version,
             name: this.name,
             description: this.description,
-            projects: this.projects.map(id => this.get(id).toJSON())
+            projects: this.projects.map(id => {
+                return this.get(id).toJSON()
+            })
         }
     }
 
@@ -121,13 +128,17 @@ export class ModelManager {
     }
 
     /**
-     * 자식 아이템을 삭제한다. 
+     * 부모에서 자식 아이템을 삭제한다. 
      * 
+     * @param {string} rootId
+     * @param {string} childId
      */
     removeChild(rootId, childId) {
 
         const obj = this.get(rootId)
         obj.children = obj.children.filter(it => it !== childId)
+
+        this.setChanged('removeChild', rootId, { childId });            
     }
 
     /**
@@ -201,7 +212,7 @@ export class ModelManager {
         }
 
         // 상위가 project 나 artboard 이면 현재 객체를 최상위로 본다. 
-        if (obj.parent && (obj.parent.is('project') || obj.parent.is('artboard'))) {
+        if (obj.parent && (obj.parent.is('project') || obj.parent.is('artboard') || obj.parent['boolean-path'])) {
             return obj;
         }
 
@@ -242,6 +253,8 @@ export class ModelManager {
         ids.forEach(id => {
             this.remove(id);
         });
+
+        this.setChanged('markRemove', ids, {isLayer: true});                
     }
 
     markRemoveProject (id) {
@@ -249,6 +262,8 @@ export class ModelManager {
 
         this.projects.splice(index, 1);
         this.get(id).removed = true;
+
+        this.setChanged('markRemoveProject', [id], {isProject: true});        
         return index;
     }
 
@@ -256,11 +271,15 @@ export class ModelManager {
         ids.forEach(id => {
             this.recover(id);
         });
+
+        this.setChanged('unmarkRemove', ids, {isLayer: true});
     }
 
     unmarkRemoveProject (id, index) {
         this.projects.splice(index, 0, id);
         this.get(id).removed = false;
+
+        this.setChanged('unmarkRemoveProject', [id], {removed: true, isProject: true});        
     }
 
     /**

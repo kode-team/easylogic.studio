@@ -40,6 +40,8 @@ export class SVGTextPathItem extends SVGItem {
       this.json.d = this.cachePath.clone().scale(this.json.width.value/this.cacheWidth, this.json.height.value/this.cacheHeight).d;
       this.modelManager.setChanged('reset', this.id, { d: this.json.d })
     }
+
+    // this.modelManager.setChanged('refreshMatrixCache', this.id, { start: true, redefined: true })            
   }
 
 

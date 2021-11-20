@@ -64,6 +64,10 @@ export default class HTMLRenderer {
         this.editor = editor;
     }
 
+    get id() {
+        return this.editor.EDITOR_ID;
+    }
+
     getDefaultRendererInstance () {
         return this.editor.getRendererInstance('html', 'rect');
     }
@@ -171,6 +175,22 @@ export default class HTMLRenderer {
 
         return this.getDefaultRendererInstance().toStyle(item, renderer || this);        
     }
+
+    /**
+     * 
+     * 렌더링 될 style 태그를 리턴한다. 
+     * 
+     * @param {BaseModel} item 
+     */
+     toExportStyle (item, renderer) {
+        const currentRenderer = this.getRendererInstance(item);
+
+        if (isFunction(currentRenderer.toExportStyle)) {
+            return currentRenderer.toExportStyle(item, renderer || this);
+        }
+
+        return this.getDefaultRendererInstance().toExportStyle(item, renderer || this);        
+    }    
 
     /**
      * 

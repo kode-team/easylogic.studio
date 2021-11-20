@@ -104,7 +104,18 @@
                     }
                 }
             }
-        }        
+        }    
+        
+        &.is-control {
+            svg {
+                path {
+                    // &.split-path,
+                    &.path-area {
+                        display: none;
+                    }
+                }
+            }
+        }
     }
 
     .path-tool {
@@ -244,6 +255,7 @@
 
         line {
             stroke-width: 1; 
+            content-visibility: auto;
 
             &[data-guide='true'] {
                 stroke: var(--elf--path-segment-stroke-color);                 
@@ -262,6 +274,7 @@
             stroke: var(--elf--path-guide-color); 
             stroke-width: 1;
             cursor: move;
+            content-visibility: auto;
 
             &.curve {
                 stroke: var(--elf--path-segment-stroke-color); 
@@ -331,6 +344,29 @@
 
         path {
             fill: transparent;
+            content-visibility: auto;
+
+            &.path-area {
+                stroke-width: 0;
+
+                &:hover,
+                &.selected {
+                    fill: url(#stripe);
+                }
+            }
+
+            &.curve {
+                fill: white;
+                stroke-width: 1;
+                cursor: move;
+                stroke: var(--elf--path-segment-stroke-color); 
+
+ 
+                &[data-selected='true'] {
+                    fill: var(--elf--selected-color);
+                    stroke: white;
+                }                
+            }
 
             &.guide {
                 fill: transparent;
@@ -352,13 +388,14 @@
             
             &.split-path {
                 fill: transparent;
-                stroke: transparent;
+                stroke: #959595;
                 pointer-events: stroke;
-                stroke-width: 2;
+                stroke-width: 1;
 
                 &:hover {
                     cursor: copy;
                     stroke: var(--elf--selected-color);
+                    stroke-width: 2;                    
                 }
             }
 
@@ -374,7 +411,8 @@
             stroke: var(--elf--selected-color);
             stroke-width: 0.5;
             pointer-events: none;
-            display: none;
+            font-size: 20px;
+            font-weight: bold;
         }
     }
 }

@@ -47,6 +47,11 @@ var specList = {
 
 export default class FilterEditor extends EditorElement {
 
+  initialize() {
+    super.initialize();
+
+    this.notEventRedefine = true;
+  }
 
   initState() {
     return {
@@ -404,8 +409,8 @@ export default class FilterEditor extends EditorElement {
     this.modifyFilter();
   }
 
-  [SUBSCRIBE('refreshSVGArea') + DEBOUNCE(1000)] () {
-    this.load('$filterSelect');
-    this.load('$filterList');
-  }
+  // [SUBSCRIBE('refreshSVGArea') + DEBOUNCE(1000)] () {
+  //   this.load('$filterSelect');
+  //   this.load('$filterList');
+  // }
 }

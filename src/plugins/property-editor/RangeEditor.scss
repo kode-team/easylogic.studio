@@ -3,7 +3,7 @@ $border-radius: 3px;
     display: grid;
     grid-template-columns: 1fr;
     grid-column-gap: 4px;
-    height: 24px;
+    height: var(--elf--input-height);
 
     &.has-label {
         grid-template-columns: 70px 1fr;
@@ -61,9 +61,9 @@ $border-radius: 3px;
     .range--editor-type {
         display: grid;
         vertical-align: middle;
-        grid-template-columns: 1fr 80px;     
-        grid-column-gap: 4px;
-        height: 24px;                   
+        grid-template-columns: 1fr 1fr;     
+        grid-column-gap: 2px;
+        height: 100%;                   
 
         .area {
             display: grid; 
@@ -72,6 +72,7 @@ $border-radius: 3px;
             font-size: 13px;
             border-radius: $border-radius;
             border: 1px solid transparent;
+            
 
 
             &.focused {
@@ -99,9 +100,9 @@ $border-radius: 3px;
                 height: 100%;                
                 padding: 2px 2px;      
                 border-right: 0px;         
-                border-bottom: 1px solid var(--elf--border-color);
-                border-left: 1px solid var(--elf--border-color);
-                border-top: 1px solid var(--elf--border-color);
+                border-bottom: 1px solid var(--elf--input-border-color);
+                border-left: 1px solid var(--elf--input-border-color);
+                border-top: 1px solid var(--elf--input-border-color);
                 text-align: left;
                 background-color: var(--elf--input-background-color);
                 border-top-left-radius: $border-radius;
@@ -135,9 +136,9 @@ $border-radius: 3px;
                     border-bottom-right-radius: $border-radius;
                     border-top-left-radius: 0px;
                     border-bottom-left-radius: 0px;                                        
-                    border-bottom: 1px solid var(--elf--border-color);
-                    border-top: 1px solid var(--elf--border-color);
-                    border-right: 1px solid var(--elf--border-color);                     
+                    border-bottom: 1px solid var(--elf--input-border-color);
+                    border-top: 1px solid var(--elf--input-border-color);
+                    border-right: 1px solid var(--elf--input-border-color);
                 }
             }
         }

@@ -5,7 +5,8 @@ import artboard from "./artboard"
 import backdropFilter from "./backdrop-filter"
 import backgroundClip from "./background-clip"
 import backgroundImage from "./background-image"
-import boolean from "./boolean"
+import baseEditor from "./base-editor"
+import pathTool from "./path-tool"
 import border from "./border"
 import borderImage from "./border-image"
 import borderRadius from "./border-radius"
@@ -20,6 +21,7 @@ import defaultConfigs from "./default-configs"
 import defaultItems from "./default-items"
 import defaultMessages from "./default-messages"
 import defaultPatterns from "./default-patterns"
+import depth from "./depth"
 
 import exportResource from "./export-resource"
 import filter from "./filter"
@@ -69,13 +71,15 @@ export default [
     rendererSvg,
 
     // common editor 
+    baseEditor,
     propertyEditor,
     color,
     gradient,
 
     // inspector.tab.style    
+    depth,
     alignment,
-    boolean,
+    pathTool,
     artboard,
 
     // layout 

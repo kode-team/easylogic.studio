@@ -1,8 +1,8 @@
 .elf--number-input-editor {
     display: grid;
     grid-template-columns: 1fr;
-    grid-column-gap: 4px;
-    height: 24px;
+    // grid-column-gap: 4px;
+    height: var(--elf--input-height);
 
 
     &.focused {
@@ -25,7 +25,6 @@
 
     &.has-label {
         grid-template-columns: 60px 1fr;
-        grid-column-gap: 4px;
 
         &.compact {
             grid-template-columns: 30px 1fr;
@@ -52,7 +51,7 @@
 
     .range--editor-type {
         vertical-align: middle;
-        height: 24px;
+        height: 100%;
         .area {
             display: grid; 
             grid-template-columns: 1fr;
@@ -70,6 +69,7 @@
                 width: 100%;
                 &[type='number'] {
                     border-radius: 3px;
+                    border: 1px solid var(--elf--input-border-color);
                     &.focused {
                         box-shadow: 0 0 0 1px var(--elf--selected-color);
                     }                

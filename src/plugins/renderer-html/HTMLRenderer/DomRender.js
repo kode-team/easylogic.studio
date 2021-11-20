@@ -195,14 +195,9 @@ export default class DomRender extends ItemRender {
       }
     }
 
-    obj.visibility = (item.visible) ? 'visible' : 'hidden';
-
     let result = {}
 
     result = Object.assign(result, obj);
-    result = Object.assign(result, {
-      'will-change': 'auto'
-    });
     result = Object.assign(result, this.toKeyListCSS(item, [
       'position', 
 
@@ -517,7 +512,7 @@ export default class DomRender extends ItemRender {
    * @param {HtmlRenderer} renderer 
    */
   toStyle (item, renderer) {
-    const cssString = this.generateView(item, `.element-item[data-id='${item.id}']`)
+    const cssString = this.generateView(item, `[data-renderer-id='${renderer.id}'] .element-item[data-id='${item.id}']`)
     return /*html*/`
 <style type='text/css' data-renderer-type="html" data-id='${item.id}' data-timestamp='${item.timestamp}'>
 ${cssString}
@@ -526,6 +521,22 @@ ${cssString}
       return renderer.toStyle(it, renderer);
     }).join('')
   }
+
+  /**
+   * 
+   * @param {Item} item 
+   * @param {HtmlRenderer} renderer 
+   */
+   toExportStyle (item, renderer) {
+    const cssString = this.generateView(item, `.element-item[data-id='${item.id}']`)
+    return /*html*/`
+<style type='text/css' data-renderer-type="html" data-id='${item.id}' data-timestamp='${item.timestamp}'>
+${cssString}
+</style>
+    ` + item.layers.map(it => {
+      return renderer.toExportStyle(it, renderer);
+    }).join('')
+  }  
 
   /**
    * 처음 렌더링 할 때 
@@ -553,7 +564,7 @@ ${cssString}
     if (item['boolean-path']) {
       const layers = item.layers;
       return /*html*/`
-        <svg data-id="${this.booleanId(item)}" width="100%" height="100%" style="position:absolute;left:0px;top:0px;pointer-events:none;">
+        <svg data-id="${this.booleanId(item)}" width="100%" height="100%" style="position:absolute;left:0px;top:0px;pointer-events:none;overflow: visible;">
           <path d="${item['boolean-path']}" fill="yellow" stroke="${layers[0].stroke}" stroke-width="${layers[0]['stroke-width']}" />
         </svg>
       `
@@ -600,15 +611,6 @@ ${cssString}
   toNestedCSS(item) {
     const result = [];
 
-    if (item['boolean-operation'] !== 'none' && item['boolean-path']) {
-      result.push({
-        selector: `> .svg-path`,
-        css: {
-          'filter': 'grayscale(80%)'
-        }
-      })
-    }
-
     return result;
   }
 
@@ -646,6 +648,7 @@ ${cssString}
 
       if (a) {
         currentElement.append(a);
+        currentElement.el.$booleanSvg = currentElement.$(`[data-id="${this.booleanId(item)}"]`);  
       }
 
     }

@@ -253,6 +253,7 @@ export default {
     'path.manager.mode.done': 'Done',
     'path.manager.mode.modify': 'Modify',
     'path.manager.mode.path': 'Path',
+    'path.manager.mode.warp': 'Warp',      
     'path.manager.mode.transform': 'Transform',  
     'path.manager.mode.reverse': 'Reverse',               
     'path.manager.mode.flipX': 'Flip X',    

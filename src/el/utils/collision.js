@@ -109,6 +109,43 @@ export function rectRect (rx1, ry1, rw1, rh1, rx2, ry2, rw2, rh2) {
 }
 
 /**
+ * 두 사각형의 교차점 구하기 
+ * 
+ * @param {*} rx1 
+ * @param {*} ry1 
+ * @param {*} rw1 
+ * @param {*} rh1 
+ * @param {*} rx2 
+ * @param {*} ry2 
+ * @param {*} rw2 
+ * @param {*} rh2 
+ * @returns 
+ */
+export function intersectRectRect(rx1, ry1, rw1, rh1, rx2, ry2, rw2, rh2) {
+    const b1 = rectToVerties(rx1, ry1, rw1, rh1);
+    const b2 = rectToVerties(rx2, ry2, rw2, rh2);
+
+    const startPoint = [
+        Math.max(b1[0][0], b2[0][0]),
+        Math.max(b1[0][1], b2[0][1]),
+        Math.max(b1[0][2], b2[0][2]),
+    ]
+
+    const endPoint = [
+        Math.min(b1[2][0], b2[2][0]),
+        Math.min(b1[2][1], b2[2][1]),
+        Math.min(b1[2][2], b2[2][2]),
+    ]
+
+    const minX = Math.min(startPoint[0], endPoint[0])
+    const minY = Math.min(startPoint[1], endPoint[1])
+    const maxX = Math.max(startPoint[0], endPoint[0])
+    const maxY = Math.max(startPoint[1], endPoint[1])
+
+    return rectToVerties(minX, minY, maxX - minX, maxY - minY);
+}
+
+/**
  * 
  * @param {number} cx 
  * @param {number} cy 
@@ -216,9 +253,18 @@ export function getClosestPointBylineCircle (x1, y1, x2, y2, cx, cy, r) {
 }
 
 
-export function lineLine (x1, y1, x2, y2, x3, y3, x4, y4) {
-    const A = ((x4 - x3) * (y1 - y3) - (y4 - y3)*(x1 - x3))  / ((y4-y3) * (x2-x1) - (x4-x3) * (y2 - y1))
-    const B = ((x2 - x1) * (y1 - y3) - (y2 - y1)*(x1 - x3))  / ((y4-y3) * (x2-x1) - (x4-x3) * (y2 - y1))
+export function lineLine (x1, y1, x2, y2, x3, y3, x4, y4, epsilon = 0.1) {
+
+    // 선분의 끝이 겹치는 경우는 끝점을 바로 리턴해준다. 
+    if (linePoint(x1, y1, x2, y2, x3, y3)) return true;
+    else if (linePoint(x1, y1, x2, y2, x4, y4)) return true;
+    else if (linePoint(x3, y3, x4, y4, x1, y1)) return [x1, y1];
+    else if (linePoint(x3, y3, x4, y4, x2, y2)) return [x2, y2];
+
+    // 선분 끝점이 겹치지 않는 경우만 체크한다.     
+
+    let A = ((x4 - x3) * (y1 - y3) - (y4 - y3)*(x1 - x3))  / ((y4-y3) * (x2-x1) - (x4-x3) * (y2 - y1))
+    let B = ((x2 - x1) * (y1 - y3) - (y2 - y1)*(x1 - x3))  / ((y4-y3) * (x2-x1) - (x4-x3) * (y2 - y1))
 
     return (0 <= A && A <= 1 && 0 <= B && B <= 1)
 }
@@ -235,17 +281,28 @@ export function lineLine (x1, y1, x2, y2, x3, y3, x4, y4) {
  * @param {number} y3 
  * @param {number} x4 
  * @param {number} y4 
+ * 
+ * @returns {number[]}
  */
-export function getClosestPointBylineLine(x1, y1, x2, y2, x3, y3, x4, y4) {
-    const A = ((x4 - x3) * (y1 - y3) - (y4 - y3)*(x1 - x3))  / ((y4-y3) * (x2-x1) - (x4-x3) * (y2 - y1))
-    const B = ((x2 - x1) * (y1 - y3) - (y2 - y1)*(x1 - x3))  / ((y4-y3) * (x2-x1) - (x4-x3) * (y2 - y1))
+export function getClosestPointBylineLine(x1, y1, x2, y2, x3, y3, x4, y4, epsilon = 0.001) {
+
+    // 선분의 끝이 겹치는 경우는 끝점을 바로 리턴해준다. 
+    if (linePoint(x1, y1, x2, y2, x3, y3)) return [x3, y3];
+    else if (linePoint(x1, y1, x2, y2, x4, y4)) return [x4, y4];
+    else if (linePoint(x3, y3, x4, y4, x1, y1)) return [x1, y1];
+    else if (linePoint(x3, y3, x4, y4, x2, y2)) return [x2, y2];
+
+    // 선분 끝점이 겹치지 않는 경우만 체크한다. 
+    let A = ((x4 - x3) * (y1 - y3) - (y4 - y3)*(x1 - x3))  / ((y4-y3) * (x2-x1) - (x4-x3) * (y2 - y1))
+    let B = ((x2 - x1) * (y1 - y3) - (y2 - y1)*(x1 - x3))  / ((y4-y3) * (x2-x1) - (x4-x3) * (y2 - y1))
 
     if (0 <= A && A <= 1 && 0 <= B && B <= 1) {
         return [
             x1 + A * (x2 - x1),
-            y1 + B * (y2 - y1)
+            y1 + A * (y2 - y1)
         ]
     }
+
     return []
 }
 
@@ -313,6 +370,19 @@ export function polyPoint (verties = [], px, py) {
     let isCollision = false; 
 
     const len = verties.length
+
+    for (let i = 0; i < len; i++) {
+        const v1 = verties[i];
+        const v2 = verties[(i + 1) % len];
+
+        if (linePoint(v1[0], v1[1], v2[0], v2[1], px, py)) {
+            isCollision = true;
+            break;
+        }
+    }
+
+    if (isCollision) return true;
+
     verties.forEach((vector, index) => {
         const [cx, cy] = vector; 
         const [nx, ny] = verties[(index+1)%len];
@@ -484,13 +554,59 @@ export function itemsToRectVerties (items = []) {
     return rectToVerties(minX, minY, maxX - minX, maxY - minY);
 }
 
-export function vertiesToRectangle (verties) {
-    const x = Length.px(verties[0][0]).floor();
-    const y = Length.px(verties[0][1]).floor();
-    const width = Length.px(vec3.dist(verties[0], verties[1])).floor();
-    const height = Length.px(vec3.dist(verties[0], verties[3])).floor();
+export function targetItemsToRectVerties (items = []) {
+    let minX = Number.MAX_SAFE_INTEGER;
+    let minY = Number.MAX_SAFE_INTEGER;
+    let maxX = Number.MIN_SAFE_INTEGER;
+    let maxY = Number.MIN_SAFE_INTEGER;
 
-    return {x, left: x, y, top: y, width, height}
+    const xList = [];
+    const yList = [];
+
+    items.forEach(item => {
+        item.targetVerties.forEach(vector => {
+            xList.push(vector[0]);
+            yList.push(vector[1])
+        });
+    })
+
+    minX = Math.min.apply(Math, xList);
+    maxX = Math.max.apply(Math, xList);
+    minY = Math.min.apply(Math, yList);
+    maxY = Math.max.apply(Math, yList);
+
+    if (minX === Number.MAX_SAFE_INTEGER) minX = 0;
+    if (minY === Number.MAX_SAFE_INTEGER) minY = 0;
+    if (maxX === Number.MIN_SAFE_INTEGER) maxX = 0;
+    if (maxY === Number.MIN_SAFE_INTEGER) maxY = 0;   
+    
+    return rectToVerties(minX, minY, maxX - minX, maxY - minY);
+}
+
+/**
+ * verties -> rect
+ * 
+ * @param {vec3[]} verties 
+ * @param {boolean} [hasLength=true] 
+ * @returns 
+ */
+export function vertiesToRectangle (verties, hasLength = true) {
+
+    if (hasLength) {
+        const x = Length.px(verties[0][0]).floor();
+        const y = Length.px(verties[0][1]).floor();
+        const width = Length.px(vec3.dist(verties[0], verties[1])).floor();
+        const height = Length.px(vec3.dist(verties[0], verties[3])).floor();
+    
+        return {x, left: x, y, top: y, width, height}
+    } else {
+        const x = verties[0][0];
+        const y = verties[0][1];
+        const width = vec3.dist(verties[0], verties[1]);
+        const height = vec3.dist(verties[0], verties[3]);
+    
+        return {x, left: x, y, top: y, width, height}        
+    }
 }
 
 export function toRectVertiesWithoutTransformOrigin (verties) {

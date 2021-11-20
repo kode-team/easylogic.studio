@@ -1,3 +1,4 @@
+import BaseStore from "./BaseStore";
 import { CHECK_SAPARATOR, CHECK_SUBSCRIBE_PATTERN, SAPARATOR, SUBSCRIBE_SAPARATOR } from "./Event";
 import EventMachine from "./EventMachine";
 import { isFunction, splitMethodByKeyword } from "./functions/func";
@@ -16,7 +17,12 @@ class UIElement extends EventMachine {
   constructor(opt, props = {}) {
     super(opt, props);
 
-    this.__UID = new Set();
+    // messaging store 설정 
+    if (props.store) {
+      this.__storeInstance = props.store;
+    } else {
+      this.__storeInstance = new BaseStore()      
+    }
 
     this.created();
 
@@ -25,6 +31,20 @@ class UIElement extends EventMachine {
     this.initializeStoreEvent();
 
   }
+
+
+  setStore (storeInstance) {
+    this.__storeInstance = storeInstance;
+  }
+
+  /**
+   * 메세징 루트를 재정의 할 수 있음. 
+   * 
+   * @override
+   */
+  get $store() {
+    return this.__storeInstance || this.parent.$store;
+  }    
 
   /**
    * UIElement 가 생성될 때 호출되는 메소드 
@@ -185,12 +205,12 @@ class UIElement extends EventMachine {
    * @param {string} message 이벤트 메세지 이름 
    * @param {Function} callback 메세지 지정시 실행될 함수
    */ 
-  on (message, callback) {
-    this.$store.on(message, callback);
+  on (message, callback, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false) {
+    this.$store.on(message, callback, this.source, debounceDelay, throttleDelay, enableAllTrigger, enableSelfTrigger);
   }
 
   off (message, callback) {
-    this.$store.off(message, callback);
+    this.$store.off(message, callback, this.source);
   }
 
   /**

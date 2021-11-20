@@ -256,6 +256,7 @@ export default {
     'path.manager.mode.done': '완료',    
     'path.manager.mode.modify': '점 편집',
     'path.manager.mode.path': '점 추가',
+    'path.manager.mode.warp': '워프',    
     'path.manager.mode.transform': '변형',
     'path.manager.mode.reverse': '순서변경',    
     'path.manager.mode.flipX': 'X축 회전',    

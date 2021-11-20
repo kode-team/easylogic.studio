@@ -2,7 +2,7 @@ import { Length } from "el/editor/unit/Length";
 import { Transform } from "../property-parser/Transform";
 import { TransformOrigin } from "el/editor/property-parser/TransformOrigin";
 import { mat4, quat, vec3 } from "gl-matrix";
-import { calculateMatrix, calculateMatrixInverse, radianToDegree, round, vertiesMap } from "el/utils/math";
+import { area, calculateMatrix, calculateMatrixInverse, radianToDegree, round, vertiesMap } from "el/utils/math";
 import { isFunction, isUndefined } from "el/sapa/functions/func";
 import PathParser from "el/editor/parser/PathParser";
 import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties, toRectVerties } from "el/utils/collision";
@@ -64,11 +64,11 @@ export class MovableModel extends BaseAssetModel {
     reset(obj) {
         const isChanged = super.reset(obj);
         // transform 에 변경이 생기면 미리 캐슁해둔다. 
-        if (isChanged && this.hasChangedField('children', 'x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'transform-origin', 'perspective', 'perspective-origin')) {
+        if (this.hasChangedField('children', 'x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'transform-origin', 'perspective', 'perspective-origin')) {
             this.refreshMatrixCache()
         }
 
-        if (isChanged && this.hasChangedField('width', 'height') && this.hasLayout()) {
+        if (this.hasChangedField('width', 'height') && this.hasLayout()) {
             this.applyLayout();
         }
 
@@ -98,7 +98,8 @@ export class MovableModel extends BaseAssetModel {
     }
 
     refreshMatrixCache() {
-    
+        // this.modelManager.setChanged('refreshMatrixCache', this.id, { start: true })        
+
         this.setCacheItemTransformMatrix();
         this.setCacheLocalTransformMatrix();                                         
         this.setCacheAccumulatedMatrix();   
@@ -113,6 +114,8 @@ export class MovableModel extends BaseAssetModel {
         this.layers.forEach(it => {
             it.refreshMatrixCache();
         })
+
+        // this.modelManager.setChanged('refreshMatrixCache', this.id, { end: true })                
     }
 
     setCacheItemTransformMatrix() {
@@ -148,7 +151,16 @@ export class MovableModel extends BaseAssetModel {
     }
 
     setCacheAreaPosition() {
-        this._cachedAreaPosition = this.getAreaPosition();
+        this._cachedAreaPosition = this.getAreaPosition(this._cachedAreaWidth);
+    }
+
+    setCacheAreaWidth(areaWidth) {
+
+        if (this._cachedAreaWidth !== areaWidth) {
+            this._cachedAreaWidth = areaWidth;
+
+            this.setCacheAreaPosition();
+        }
     }
 
     //////////////////////
@@ -211,21 +223,18 @@ export class MovableModel extends BaseAssetModel {
     }    
 
     get areaPosition() {
-        return this._cachedAreaPosition || this.getAreaPosition();
+        return this._cachedAreaPosition || this.getAreaPosition(this._cachedAreaWidth);
     }
 
     getAreaPosition(areaSize = 100) {
         const rect = toRectVerties(this.getVerties());
 
+        const [startRow, startColumn] = area(rect[0][0], rect[0][1], areaSize);
+        const [endRow, endColumn] = area(rect[2][0], rect[2][1], areaSize);
+
         return {
-            column: [
-                Math.ceil(rect[0][0] / areaSize), 
-                Math.ceil(rect[1][0] / areaSize)
-            ],
-            row: [
-                Math.ceil(rect[0][1] / areaSize), 
-                Math.ceil(rect[3][1] / areaSize)
-            ]
+            column: [ startColumn, endColumn ],
+            row: [ startRow, endRow ]
         }
     }
 
@@ -345,6 +354,10 @@ export class MovableModel extends BaseAssetModel {
         })
     }
 
+    get angle () {
+        return Transform.get(this.json.transform, 'rotateZ')[0]?.value;
+    }
+
     /**
      * 충돌 체크 
      * 
@@ -364,6 +377,19 @@ export class MovableModel extends BaseAssetModel {
      * @param {number} y 
      */
     hasPoint (x, y) {
+        return this.isPointInRect(x, y);
+    }
+
+    /**
+     * 
+     * x, y 가 verties 영역안에 있는지 체크 
+     * 
+     * @param {number} x 
+     * @param {number} y 
+     * @returns 
+     */
+    isPointInRect(x, y) {
+        // console.log('rect', this.originVerties, x, y)
         return polyPoint(this.originVerties, x, y)
     }
 
@@ -743,12 +769,74 @@ export class MovableModel extends BaseAssetModel {
     }
 
     /**
+     * 주어진 Point 를 로컬 좌표로 변환
+     * 
+     * @param {vec3} point 
+     * @returns {vec3}
+     */
+    invertPoint (point) {
+        return vec3.transformMat4([], point, this.accumulatedMatrixInverse);
+    }
+
+    /**
      * pathString 의 좌표를 기준 좌표로 돌린다. 
      * 
      * @param {string} pathString   svg path string 
      */
     invertPathString (pathString = '') {
         return this.invertPath(pathString).d;
+    }
+
+    updatePath(d) {
+        const matrix = this.matrix;
+        const newPath = new PathParser(d);
+
+        // 2. 로컬 좌표로 bbox 구하기 
+        let bbox = newPath.getBBox();
+
+        // 3. newWidth, newHeight 구하기 
+        const newWidth = vec3.distance(bbox[1], bbox[0]);
+        const newHeight = vec3.distance(bbox[3], bbox[0]);
+
+        // 4. bbxo 를 월드 좌표로 변환 
+        let oldBBox = vertiesMap(
+            rectToVerties(bbox[0][0], bbox[0][1], newWidth, newHeight), 
+            matrix.accumulatedMatrix
+        );
+
+        // 5. 월드 좌표에서 로컬 transform 의 역행렬을 적용, 월드 좌표에서 translate 를 구함 
+        //    이 때 translate 를 모르기 때문에 origin 을 bbox를 중심으로 새로 구해서 적용 
+        let newBBox = vertiesMap(oldBBox, calculateMatrixInverse(
+            mat4.fromTranslation([], oldBBox[4]),
+            Transform.createTransformMatrix(
+                Transform.parseStyle(matrix.transform), 
+                newWidth, 
+                newHeight
+            ),
+            mat4.fromTranslation([], vec3.negate([], oldBBox[4])),
+        ));
+
+        // 6. 월드 좌표로 변환된 bbox 의 중심으로 새로운 matrix 를 구함
+        const worldMatrix = calculateMatrix(
+            mat4.fromTranslation([], newBBox[0]),                      
+            this.getLocalTransformMatrix(newWidth, newHeight),
+        );
+
+
+        // 7. 월드 좌표에서 부모의 상대 좌표로 변환 
+        const realXY = mat4.getTranslation([], calculateMatrix(
+            matrix.parentMatrixInverse,                    
+            worldMatrix,                    
+            mat4.invert([], this.getLocalTransformMatrix(newWidth, newHeight)),
+        ));
+
+        return {
+            d: newPath.translate(-bbox[0][0], -bbox[0][1]).d,
+            x: Length.px(realXY[0]),
+            y: Length.px(realXY[1]),
+            width: Length.px(newWidth),
+            height: Length.px(newHeight)
+        }
     }
 
     /**
@@ -818,6 +906,8 @@ export class MovableModel extends BaseAssetModel {
      */
     resetMatrix (childItem) {
 
+        this.modelManager.setChanged('resetMatrix', this.id, { start: true, childItemId: childItem?.id })
+
         // 새로운 offset 좌표는 아래와 같이 구한다. 
         // [newParentMatrix] * [newTranslate] * [newItemTransform] = [newAccumulatedMatrix]
 
@@ -877,6 +967,8 @@ export class MovableModel extends BaseAssetModel {
 
         childItem.refreshMatrixCache();
 
+        this.modelManager.setChanged('resetMatrix', this.id, { end: true, childItemId: childItem?.id })        
+
     }
 
     /** order by  */
@@ -902,6 +994,8 @@ export class MovableModel extends BaseAssetModel {
         if (startIndex > -1) {
             parent.children[startIndex] = parent.children[targetIndex]
             parent.children[targetIndex] = this.id; 
+
+            this.modelManager.setChanged('setOrder', this.id, {targetIndex, startIndex, parentId: parent.id})
         }
     }
 
@@ -934,13 +1028,17 @@ export class MovableModel extends BaseAssetModel {
     orderNext() {   
 
         if (this.isLast()) {
-            let next = this.parent.next();
+
+            if (this.parent.next) {
+                let next = this.parent.next();
 
 
-            if (next.enableHasChildren()) {
-                next.appendChild(this);          
-            } else {
-                next.appendAfter(this);
+                if (next.enableHasChildren()) {
+                    next.appendChild(this);          
+                } else {
+                    next.appendAfter(this);
+                }
+    
             }
 
             return; 
@@ -988,7 +1086,7 @@ export class MovableModel extends BaseAssetModel {
 
     // 부모의 마지막으로 보내기 
     orderLast () {
-        this.setOrder(this.json.parent.layers.length-1)
+        this.setOrder(this.parent.childrenLength - 1)
     }
 
     //TODO: 전체중에 처음으로 보내기 

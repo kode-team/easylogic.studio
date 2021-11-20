@@ -45,7 +45,7 @@ export default class DragAreaRectView extends EditorElement {
 
     [SUBSCRIBE('startDragAreaView')]() {
         this.initMousePoint = this.$viewport.getWorldPosition();
-        this.$config.set("hoverView", false);
+        this.$config.init("set.move.control.point", true);
 
         this.dragRect = {
             left: Length.px(this.initMousePoint[0]),
@@ -144,7 +144,7 @@ export default class DragAreaRectView extends EditorElement {
     [SUBSCRIBE('endDragAreaView')] () {
         const targetMousePoint = this.$viewport.getWorldPosition();
         const newDist = vec3.floor([], vec3.subtract([], targetMousePoint, this.initMousePoint));        
-        this.$config.set("hoverView", true);
+        this.$config.init("set.move.control.point", false);
     
         if (newDist[0] === 0 && newDist[1] === 0) {
             this.$selection.empty();

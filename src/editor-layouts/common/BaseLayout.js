@@ -1,5 +1,5 @@
 
-import { DEBOUNCE, POINTEREND, POINTERMOVE, POINTERSTART, RESIZE, SUBSCRIBE, SUBSCRIBE_ALL } from "el/sapa/Event";
+import { CONFIG, DEBOUNCE, POINTEREND, POINTERMOVE, POINTERSTART, RESIZE, SUBSCRIBE, SUBSCRIBE_ALL } from "el/sapa/Event";
 import { debounce, isObject } from "el/sapa/functions/func";
 import { getDist } from "el/utils/math";
 import { Editor } from "el/editor/manager/Editor";
@@ -26,11 +26,15 @@ export default class BaseLayout extends EditorElement {
     // initialize plugin list 
     this.$editor.initPlugins();
 
+    // load saved config
+    this.$config.load();
+
     // register other configs 
     // 플러그인이 모두 로드 된 다음 커스텀 config 를 설정합니다.     
     if (isObject(this.opt.config)) {
       this.$config.setAll(this.opt.config || {});
     }
+
 
 
   }
@@ -50,8 +54,10 @@ export default class BaseLayout extends EditorElement {
   afterRender() {
     super.afterRender();
 
-    this.$el.attr('data-theme', this.$editor.theme);
+    this.$el.attr('data-theme', this.$config.get('editor.theme'));
     this.$el.addClass(navigator.userAgent.includes('Windows') ? 'ua-window' : 'ua-default')
+
+    this.trigger("initialize")
   }
 
   initialize() {
@@ -62,8 +68,10 @@ export default class BaseLayout extends EditorElement {
 
     // load default data 
     this.emit('load.json', this.opt.data);
+  }
 
-
+  [CONFIG('editor.theme')] () {
+    this.$el.attr('data-theme', this.$config.get('editor.theme'));
   }
 
   /**
@@ -99,9 +107,9 @@ export default class BaseLayout extends EditorElement {
   }
 
   __loopBodyMoves() {
-    var pos = this.$config.get("pos");
+    var pos = this.pos;
     var e = this.$config.get('bodyEvent');
-    var lastPos = this.$config.get("lastPos") || DEFAULT_POS;
+    var lastPos = this.lastPos || DEFAULT_POS;
     var isNotEqualLastPos = !(lastPos.x === pos.x && lastPos.y === pos.y);
 
     if (isNotEqualLastPos && this.__firstMove.size) {
@@ -140,14 +148,13 @@ export default class BaseLayout extends EditorElement {
           v.func.call(v.context, dx, dy, 'move', e.pressure);
         }
       });
-
-      this.$config.set('lastPos', pos);
+      this.lastPos = pos;
     }
     requestAnimationFrame(this.__funcBodyMoves);
   }
 
   __removeBodyMoves() {
-    var pos = this.$config.get("pos");
+    var pos = this.lastPos;
     var e = this.$config.get("bodyEvent");
     if (pos) {
       this.__ends.forEach(v => {
@@ -172,25 +179,25 @@ export default class BaseLayout extends EditorElement {
     this.__ends.add({ func, context, xy });
   }
 
-  [POINTERSTART("document")](e) {
+  [POINTERSTART()](e) {
     var newPos = e.xy || EMPTY_POS;
 
-    this.$config.set("bodyEvent", e);
-    this.$config.set("pos", newPos);
+    this.$config.init("bodyEvent", e);
+    this.pos = newPos;
   }
 
-  [POINTERMOVE("document")](e) {
+  [POINTERMOVE()](e) {
     var newPos = e.xy || EMPTY_POS;
 
-    this.$config.set("bodyEvent", e);
-    this.$config.set("pos", newPos);
+    this.$config.init("bodyEvent", e);
+    this.pos = newPos;
 
     if (!this.__requestId) {
       this.__requestId = requestAnimationFrame(this.__funcBodyMoves);
     }
   }
 
-  [POINTEREND("document")](e) {
+  [POINTEREND()](e) {
 
     // var newPos = e.xy || EMPTY_POS;
     this.$config.set("bodyEvent", e);
@@ -210,10 +217,6 @@ export default class BaseLayout extends EditorElement {
 
   [SUBSCRIBE('refreshAllSelectProject')] () {      
     this.emit('refreshArtboard')
-  }
-
-  [SUBSCRIBE('changeTheme')] () {
-    this.$el.attr('data-theme', this.$editor.theme);
   }
 
   [SUBSCRIBE('changed.locale')] () {

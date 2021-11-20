@@ -2,6 +2,7 @@ import { uuidShort } from "./uuid";
 import { isString } from './func';
 
 const map = {};
+const aliasMap = {}
 const __tempVariables = new Map();
 const __tempVariablesGroup = new Map();
 
@@ -101,6 +102,14 @@ export function registElement(classes = {}) {
     })
 }
 
+export function registAlias(a, b) {
+    aliasMap[a] = b;
+}
+
+export function retriveAlias(key) {
+    return aliasMap[key];
+}
+
 export function retriveElement(className) {
-    return map[className];
+    return map[retriveAlias(className) || className];
 }

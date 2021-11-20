@@ -12,6 +12,9 @@ import { SVGTextPathItem } from "./layers/SVGTextPathItem";
 import { TemplateLayer } from "./layers/TemplateLayer";
 import { TextLayer } from "./layers/TextLayer";
 // import { VideoLayer } from "./layers/VideoLayer";
+import { SVGPolygonItem } from './layers/SVGPolygonItem';
+import { SVGStarItem } from "./layers/SVGStarItem";
+import { SplineItem } from "./layers/SplineItem";
 
 /**
  * 
@@ -31,4 +34,7 @@ export default function (editor) {
     editor.registerItem("svg-textpath", SVGTextPathItem);
     editor.registerItem("template", TemplateLayer);
     // editor.registerItem("video", VideoLayer);
+    editor.registerItem("polygon", SVGPolygonItem)
+    editor.registerItem("star", SVGStarItem)
+    editor.registerItem("spline", SplineItem)
 }
