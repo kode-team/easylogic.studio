@@ -1,4 +1,4 @@
-import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties, toRectVerties} from "el/utils/collision";
+import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties, targetItemsToRectVerties, toRectVerties} from "el/utils/collision";
 import { Item } from "el/editor/items/Item";
 import { Project } from "plugins/default-items/layers/Project";
 import { Length } from "el/editor/unit/Length";
@@ -128,8 +128,11 @@ export class SelectionManager {
 
       if (item.is('project')) return false;
 
+
       // 설정된 areaWidth 를 기준으로 areaPosition(column, row) 을 구한다.
       const areaPosition = item.getAreaPosition(areaWidth);
+
+      // console.log(item.itemType, item.id, areaPosition);
 
       if (!areaPosition) {
         return false;
@@ -520,6 +523,17 @@ export class SelectionManager {
       return this.rectVerties;
     }
   }
+
+  get targetVerties () {
+
+    if (this.isOne) {    // 하나 일 때랑 
+      return this.current.targetVerties;
+    } else {
+      return targetItemsToRectVerties(this.items);
+    }
+  }
+
+
 
 
   get originVerties () {

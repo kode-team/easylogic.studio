@@ -244,24 +244,28 @@ export class DomModel extends GroupModel {
     } else if (this.hasChangedField('background-image', 'pattern')) {
       this.setBackgroundImageCache()
     } else if (this.hasChangedField('changedChildren', 'boolean-operation') || !this.json['boolean-path']) {
-      if (this.json.children?.length === 2) {
 
-        if (this.modelManager.editor.pathKitManager.has()) {
-          const paths = this.layers.filter(it => it.is('svg-path'))
-  
-          if (paths.length === 2) {
-            const newPath = this['boolean-operation'] != 'none' ?  this.booleanOperation() : "";
+      // 자식이 변경이 되었을 때 
+      if (this.json['boolean-operation'] !== 'none') {
+        if (this.json.children?.length === 2) {
+
+          if (this.modelManager.editor.pathKitManager.has()) {
+            const paths = this.layers.filter(it => it.d)
     
-            this.json['boolean-path'] = newPath;
+            if (paths.length === 2) {
+              // path 를 다시 생성하는데 
+              const newPath = this['boolean-operation'] != 'none' ?  this.booleanOperation() : "";
+      
+              this.json['boolean-path'] = newPath;
+            }
           }
-        }
-  
-      }
-  
-    }
-
-
     
+        }
+
+      }
+
+  
+    }    
 
     return isChanged;
   }

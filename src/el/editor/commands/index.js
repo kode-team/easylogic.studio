@@ -109,6 +109,13 @@ import popModeView from "./pop.mode.view";
 import copyPath from "./copy.path";
 import itemMoveDepthFirst from "./item.move.depth.first";
 import itemMoveDepthLast from "./item.move.depth.last";
+import convertStrokeToPath from "./convert.stroke.to.path";
+import convertSimplifyPath from "./convert.simplify.path";
+import convertNormalizePath from "./convert.normalize.path";
+import convertSmoothPath from "./convert.smooth.path";
+import convertPolygonalPath from "./convert.polygonal.path";
+import convertFlattenPath from "./convert.flatten.path";
+import convertPathOperation from "./convert.path.operation";
 
 
 export default {
@@ -142,6 +149,13 @@ export default {
     moveSelectionToCenter,
 
     // command 
+    convertPathOperation,
+    convertFlattenPath,
+    convertPolygonalPath,
+    convertSmoothPath,
+    convertNormalizePath,
+    convertStrokeToPath,
+    convertSimplifyPath,
     groupItem,
     ungroupItem,
     setEditorLayout,

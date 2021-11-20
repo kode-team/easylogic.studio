@@ -657,7 +657,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         return {
             line: this.createPointerRect(pointers, rotatePointer), 
             size: this.createSize(pointers),
-            parentRect: this.createParentRect(parentPointers),
+            parentRect: '', //this.createParentRect(parentPointers),
             point: [
                 // 4 모서리에서도 rotate 가 가능하도록 맞춤 
                 // this.createRotatePointer (selectionPointers[0], 0),

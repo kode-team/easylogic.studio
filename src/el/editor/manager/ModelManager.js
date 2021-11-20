@@ -212,7 +212,7 @@ export class ModelManager {
         }
 
         // 상위가 project 나 artboard 이면 현재 객체를 최상위로 본다. 
-        if (obj.parent && (obj.parent.is('project') || obj.parent.is('artboard'))) {
+        if (obj.parent && (obj.parent.is('project') || obj.parent.is('artboard') || obj.parent['boolean-path'])) {
             return obj;
         }
 

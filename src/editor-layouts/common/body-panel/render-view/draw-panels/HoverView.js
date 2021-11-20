@@ -2,6 +2,7 @@ import { CONFIG, SUBSCRIBE, IF } from "el/sapa/Event";
 import Dom from 'el/sapa/functions/Dom';
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import "./HoverView.scss";
+import { toRectVerties, vertiesToRectangle } from "el/utils/collision";
 
 
 export default class HoverView extends EditorElement {
@@ -40,7 +41,7 @@ export default class HoverView extends EditorElement {
         }
 
         const filteredList = this.$selection.filteredLayers;
-        const items = filteredList.filter(it => {
+        const items = filteredList.filter(it => !it['boolean-path']).filter(it => {
             const point = this.$viewport.getWorldPosition(this.$config.get('bodyEvent'));
 
             return it.hasPoint(point[0], point[1]);
@@ -82,7 +83,7 @@ export default class HoverView extends EditorElement {
 
             // refresh hover view 
             const verties = items[0].verties;
-            
+
             const line = this.createPointerLine(this.$viewport.applyVerties(verties));
 
             this.refs.$hoverRect.updateDiff(line)
@@ -99,6 +100,8 @@ export default class HoverView extends EditorElement {
 
         const current = this.$selection.hoverItems[0];
 
+        const verties = toRectVerties(pointers);
+
         return /*html*/`
         <svg overflow="visible">
             <path 
@@ -112,8 +115,8 @@ export default class HoverView extends EditorElement {
                     Z
                 " 
             />
-            <rect height="20" width="${current.itemType.length * 8}" x="${pointers[0][0]-1}" y="${pointers[0][1] - 20}"></rect>
-            <text x="${pointers[0][0]}" y="${pointers[0][1]}" dx="5" dy="-5">${current.itemType}</text>
+            <rect height="20" width="${current.itemType.length * 8}" x="${verties[0][0]-1}" y="${verties[0][1] - 20}"></rect>
+            <text x="${verties[0][0]}" y="${verties[0][1]}" dx="5" dy="-5">${current.itemType}</text>
         </svg>`
     }
 

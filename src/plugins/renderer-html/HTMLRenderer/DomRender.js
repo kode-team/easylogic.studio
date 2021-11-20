@@ -648,6 +648,7 @@ ${cssString}
 
       if (a) {
         currentElement.append(a);
+        currentElement.el.$booleanSvg = currentElement.$(`[data-id="${this.booleanId(item)}"]`);  
       }
 
     }

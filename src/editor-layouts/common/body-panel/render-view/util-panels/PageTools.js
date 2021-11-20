@@ -92,7 +92,7 @@ export default class PageTools extends EditorElement {
     const itemId = e.$dt.data('item-id');
     const pathIndex = e.$dt.data('path-index');
 
-    const current = this.$selection.get(itemId);
+    const current = this.$editor.get(itemId);
 
     if (current.editablePath) {
       this.emit('open.editor', current);
@@ -138,18 +138,21 @@ export default class PageTools extends EditorElement {
 
     const buttons = [];
 
-    this.$selection.items.forEach(item => {
+    this.$selection.items.forEach(selectedItem => {
 
-      const list = PathParser.fromSVGString(item.accumulatedPath().d).toPathList()
+      selectedItem.allLayers.forEach(item => {
 
-      list.forEach((path, index) => {
-        buttons.push({
-          item,
-          index,
-          path
+        const list = PathParser.fromSVGString(item.accumulatedPath().d).toPathList()
+
+        list.forEach((path, index) => {
+          buttons.push({
+            item,
+            index,
+            path
+          })
         })
-      })
 
+      });
     })
 
     return buttons.map((it) => {

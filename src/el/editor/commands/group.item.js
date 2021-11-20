@@ -1,6 +1,6 @@
 export default {
     command : 'group.item',
-    execute: function (editor) {
+    execute: function (editor, opt = {}) {
 
         if (editor.selection.length === 0) return; 
 
@@ -28,7 +28,8 @@ export default {
             // 객체 생성             
             const groupLayer = editor.createModel({
                 itemType: 'rect',
-                ...editor.selection.itemRect
+                ...editor.selection.itemRect,
+                ...opt,
             })
 
             // 마지막, 레이어 상으로는 가장 위 레이어 옆으로 추가 

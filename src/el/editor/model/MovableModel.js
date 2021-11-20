@@ -354,6 +354,10 @@ export class MovableModel extends BaseAssetModel {
         })
     }
 
+    get angle () {
+        return Transform.get(this.json.transform, 'rotateZ')[0]?.value;
+    }
+
     /**
      * 충돌 체크 
      * 

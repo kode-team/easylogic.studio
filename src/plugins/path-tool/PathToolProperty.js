@@ -69,104 +69,28 @@ export default class PathToolProperty extends BaseProperty {
     const command = e.$dt.data('value');
 
     if (command === 'stroke') {
-
-      const attrs = current.attrs('d', 'stroke-width', 'stroke-dasharray', 'stroke-dashoffset', 'stroke-linejoin', 'stroke-linecap');
-      const pathAttrs = current.convertStrokeToPath()
-
-      const newD = this.$pathkit.stroke(current.d || attrs.d, {
-        'stroke-width': Length.parse(attrs['stroke-width']).value,
-        'stroke-linejoin': attrs['stroke-linejoin'],
-        'stroke-linecap': attrs['stroke-linecap'],
-        'stroke-dasharray': attrs['stroke-dasharray'],
-        'stroke-dashoffset': attrs['stroke-dashoffset'],        
-        'fill-rule': 'nonezero',
-      });
-
-      pathAttrs['fill-rule'] = 'nonzero';
-
-
-      this.command('addLayer', `add layer - path`, this.$editor.createModel({
-        ...pathAttrs,
-        ...current.updatePath(newD),        
-      }), true, current.parent)      
-
-    } else if (command === 'transform') {
-      this.command("setAttributeForMulti", "change path string", this.$selection.packByValue(
-        current.updatePath(
-          PathParser
-            .fromSVGString(current.d)
-            .divideSegmentByCount(4)
-            .transform(([x, y, z]) => [x + y * Math.sin(y / 16), y + 4 * Math.sin(x / 16), z])
-            .d
-          )
-      ))
+      this.emit('convert.stroke.to.path');
     } else if (command === 'simplify') {
-      this.command("setAttributeForMulti", "change path string", this.$selection.packByValue(
-        current.updatePath(this.$pathkit.simplify(current.d))
-      ))
+      this.emit('convert.simplify.path');
     } else if (command === 'normalize') {
-      this.command("setAttributeForMulti", "smooth path string", this.$selection.packByValue(
-        current.updatePath(
-          PathParser
-            .fromSVGString(current.d)
-            .normalize()
-            .d
-          )
-      ))  
+      this.emit('convert.normalize.path');
     } else if (command === 'smooth') {
-      this.command("setAttributeForMulti", "smooth path string", this.$selection.packByValue(
-        current.updatePath(
-          PathParser
-            .fromSVGString(current.d)
-            .divideSegmentByCount(5)
-            .simplify(0.1)
-            .cardinalSplines()
-            .d
-          )
-      ))  
+      this.emit('convert.smooth.path');
     } else if (command === 'polygonal') {
-      this.command("setAttributeForMulti", "polygonal path string", this.$selection.packByValue(
-        current.updatePath(
-          PathParser
-            .fromSVGString(current.d)
-            .polygonal()
-            .d
-          )
-      ))        
+      this.emit('convert.polygonal.path');
     } else if (command === 'flatten') {
-
-      let newPath = PathParser.fromSVGString();
-      this.$selection.each((item) => {
-        newPath.addPath(item.accumulatedPath());
-      });
-
-      newPath = current.invertPath(newPath.d);
-
-      const newLayerAttrs = current.toCloneObject();
-      delete newLayerAttrs.id;
-
-      this.command('addLayer', `add layer - path`, this.$editor.createModel({
-        ...newLayerAttrs,
-        ...current.updatePath(newPath.d),
-      }), true, current.parent)
+      this.emit('convert.flatten.path');
     } else {
-
-      this.command("setAttributeForMulti", "change boolean operation", this.$selection.packByValue({
-        "boolean-operation": command
-      }))
-  
+      this.emit('convert.path.operation', command);  
     }
-
-    this.nextTick(() => {
-      this.$selection.reselect();
-      this.emit("refreshSelection");
-      this.emit("refreshSelectionTool");
-    });    
 
   }
 
   [SUBSCRIBE('refreshSelection')] () {
     this.refreshShow(() => {
+
+      if (this.$selection.length === 1 && this.$selection.current['boolean-path']) return true;
+
       return this.$selection.is('svg-path', 'polygon', 'star');
     })
   }

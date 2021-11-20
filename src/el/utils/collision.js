@@ -554,6 +554,35 @@ export function itemsToRectVerties (items = []) {
     return rectToVerties(minX, minY, maxX - minX, maxY - minY);
 }
 
+export function targetItemsToRectVerties (items = []) {
+    let minX = Number.MAX_SAFE_INTEGER;
+    let minY = Number.MAX_SAFE_INTEGER;
+    let maxX = Number.MIN_SAFE_INTEGER;
+    let maxY = Number.MIN_SAFE_INTEGER;
+
+    const xList = [];
+    const yList = [];
+
+    items.forEach(item => {
+        item.targetVerties.forEach(vector => {
+            xList.push(vector[0]);
+            yList.push(vector[1])
+        });
+    })
+
+    minX = Math.min.apply(Math, xList);
+    maxX = Math.max.apply(Math, xList);
+    minY = Math.min.apply(Math, yList);
+    maxY = Math.max.apply(Math, yList);
+
+    if (minX === Number.MAX_SAFE_INTEGER) minX = 0;
+    if (minY === Number.MAX_SAFE_INTEGER) minY = 0;
+    if (maxX === Number.MIN_SAFE_INTEGER) maxX = 0;
+    if (maxY === Number.MIN_SAFE_INTEGER) maxY = 0;   
+    
+    return rectToVerties(minX, minY, maxX - minX, maxY - minY);
+}
+
 /**
  * verties -> rect
  * 
