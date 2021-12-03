@@ -367,7 +367,15 @@ export default class EventMachine {
   parseComponentList($el) {
 
     const children = []
-    let targets = $el.$$(REF_CLASS_PROPERTY);
+
+    // 하위에 refclass 를 가진 element 중에 마지막 지점인 컴포넌트만 조회한다. 
+    // 부모에 refclass 를 가지고 있는 경우는 그 다음 컴포넌트로 넘겨서 생성한다. 
+    // 이렇게 하지 않으면 최상위 부모에서 모든 하위 refclass 를 컴포넌트로 생성해버리는 문제가 생긴다. 
+    let targets = $el.$$(REF_CLASS_PROPERTY).filter(it => {
+      return it.path().filter(a =>{
+        return a.attr(REF_CLASS)
+      }).length === 1
+    })
 
     targets.forEach($dom => {
       children.push(this._getComponentInfo($dom));
@@ -390,7 +398,7 @@ export default class EventMachine {
     })
 
     keyEach(this.children, (key, obj) => {
-      if (obj && obj.clean()) {
+      if (obj &&  obj.clean()) {
         delete this.children[key]
       }
     })

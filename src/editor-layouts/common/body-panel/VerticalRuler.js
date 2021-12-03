@@ -1,4 +1,4 @@
-import { LOAD, DOMDIFF, SUBSCRIBE, DEBOUNCE, THROTTLE } from "el/sapa/Event";
+import { LOAD, DOMDIFF, SUBSCRIBE, DEBOUNCE, THROTTLE, CONFIG, BIND } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './VerticalRuler.scss';
 
@@ -10,6 +10,11 @@ export default class VerticalRuler extends EditorElement {
             <div class="elf--vertical-ruler">
                 <div class='vertical-ruler-container' ref='$layerRuler'></div>                                        
                 <div class='vertical-ruler-container' ref='$body'></div>
+                <div class='vertical-ruler-container'>
+                    <svg width="100%" height="100%" overflow="hidden">
+                        <path data-mouse="true" d="" stroke="transparent" ref="$cursor" />
+                    </svg>
+                </div>                
             </div>
         `
     }
@@ -20,6 +25,12 @@ export default class VerticalRuler extends EditorElement {
 
     refreshCanvasSize () {
         this.state.rect = this.$el.rect();
+    }   
+    
+    initializeRect () {
+        if (!this.state.rect || this.state.rect.width == 0) {
+            this.state.rect = this.$el.rect();
+        }
     }    
 
     makeLine (pathString,  baseNumber, minY, maxY, realHeight, height, epsilon = 3, lineWidth = 30, expect = 10) {
@@ -183,6 +194,28 @@ export default class VerticalRuler extends EditorElement {
         `
     }    
 
+
+    makeRulerCursor() {
+        const targetMousePoint = this.$viewport.getWorldPosition();
+        const {minY,maxY, height: realHeight} = this.$viewport;
+
+        this.initializeRect();
+
+        const height = this.state.rect.height;
+
+        const distY = (targetMousePoint[1] - minY)
+
+        const y = distY === 0 ? 0 : (distY/realHeight) * height;
+
+        return `M 0 ${y - 0.5} L 20 ${y - 0.5}`;
+    }
+
+    [BIND('$cursor')] () {
+        return {
+            d: this.makeRulerCursor(),
+        }
+    }    
+
     refresh() {
         if (this.$config.get('show.ruler')) {
             this.load();
@@ -209,5 +242,10 @@ export default class VerticalRuler extends EditorElement {
 
     [SUBSCRIBE('resize.window', 'resizeCanvas')] () {
         this.refreshCanvasSize();
-    }        
+    }      
+    
+
+    [CONFIG('bodyEvent')] () {
+        this.bindData('$cursor');
+    }    
 }

@@ -181,6 +181,7 @@ import stroke_to_path from "./stroke_to_path";
 import highlight_at from "./highlight_at";
 import to_front from "./to_front";
 import to_back from "./to_back";
+import light from "./light";
 
 const alias = {
   fullscreen:  border_inner
@@ -195,6 +196,7 @@ export function iconUse(name, transform = "", opt = { width: 24, height: 24 }) {
 
 export default {
   ...alias,
+  light,
   to_back,
   to_front,
   highlight_at,

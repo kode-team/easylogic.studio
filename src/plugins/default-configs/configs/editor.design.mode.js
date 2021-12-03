@@ -3,5 +3,6 @@ export default {
     defaultValue: "design",
     title: "Editor Design Mode ",
     description: "Set editor's design mode",
-    type: "string"
+    options: ['design', 'item'],
+    type: "select"
 }

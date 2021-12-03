@@ -11,7 +11,7 @@ export default class SVGItemRender extends LayerRender {
         // element 를 캐쉬 해두기 
         if (item.getCache("element") !== currentElement) {
             item.addCache("element", currentElement);
-            
+
             const $path = currentElement.$('path');            
             item.addCache("svgElement", $path.parent().el)
             item.addCache("pathElement", $path.el);
@@ -61,14 +61,26 @@ export default class SVGItemRender extends LayerRender {
     cachedStroke(item) {
 
         return item.computed('stroke', (value) => {
-            return SVGFill.parseImage(value || 'black')
+
+            if (item.isBooleanItem) {
+                return SVGFill.parseImage('transparent')
+            } else {
+                return SVGFill.parseImage(value || 'black')
+            }
+
         });
     }
 
     cachedFill(item) {
 
         return item.computed('fill', (value) => {
-            return SVGFill.parseImage(value || 'black')
+
+            if (item.isBooleanItem) {
+                return SVGFill.parseImage('transparent')
+            } else {
+                return SVGFill.parseImage(value || 'black')
+            }
+
         });
     }     
 
@@ -122,13 +134,14 @@ export default class SVGItemRender extends LayerRender {
      * @param {Item} item 
      */
     toDefaultCSS(item) {
-        return {
-            ...super.toDefaultCSS(item),
-            ...this.toKeyListCSS(item, [
+        return Object.assign(
+            {}, 
+            super.toDefaultCSS(item),
+            this.toKeyListCSS(item, [
                 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray', 'stroke-dashoffset',
                 'fill-opacity', 'fill-rule', 'text-anchor'
             ])
-        }
+        );
     }
 
     /**

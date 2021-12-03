@@ -1,6 +1,14 @@
 .elf--color-assets-editor {
     padding: 4px 0px;
     margin-top: 10px;
+
+
+    &.is-open {
+        .color-list {
+            display: grid;
+        }
+    }
+
     .color-assets-head {
         display: grid; 
         grid-template-columns: 30px 1fr;
@@ -17,7 +25,7 @@
 
     .color-list {
         margin-top: 10px;
-        display: grid;
+        display: none;
         grid-template-columns: repeat(8, 1fr);
         grid-column-gap: 10px;
         grid-row-gap: 10px;

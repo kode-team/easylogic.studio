@@ -243,7 +243,7 @@ export class DomModel extends GroupModel {
 
     } else if (this.hasChangedField('background-image', 'pattern')) {
       this.setBackgroundImageCache()
-    } else if (this.hasChangedField('changedChildren', 'boolean-operation') || !this.json['boolean-path']) {
+    } else if (this.hasChangedField('changedChildren', 'boolean-operation') || !this.isBooleanPath) {
 
       // 자식이 변경이 되었을 때 
       if (this.json['boolean-operation'] !== 'none') {
@@ -257,6 +257,8 @@ export class DomModel extends GroupModel {
               const newPath = this['boolean-operation'] != 'none' ?  this.booleanOperation() : "";
       
               this.json['boolean-path'] = newPath;
+
+              this.modelManager.setChanged('reset', this.id, { 'boolean-path' : newPath });              
             }
           }
     

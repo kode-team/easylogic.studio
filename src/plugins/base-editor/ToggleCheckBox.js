@@ -5,7 +5,7 @@ import './ToggleCheckBox.scss';
 
 const DEFAULT_LABELS = ['True', 'False']
 
-export default class CheckBox extends BaseUI {
+export default class ToggleCheckBox extends BaseUI {
 
 
     initialize() {
@@ -17,7 +17,7 @@ export default class CheckBox extends BaseUI {
     initState() {
         return {
             label: this.props.label || '',
-            checked: this.props.checked || false,
+            checked: this.props.value || false,
             toggleLabels: this.props.toggleLabels || DEFAULT_LABELS
         }
     }
@@ -50,16 +50,12 @@ export default class CheckBox extends BaseUI {
         }
     }
 
-    setValue(checked, isTrigger = true) {
+    setValue(checked) {
         this.setState({
             checked,
         }, false)
 
         this.bindData('$area');   
-        
-        if (isTrigger) {
-            this.trigger('change');
-        }
     }
 
     getValue() {
@@ -67,7 +63,8 @@ export default class CheckBox extends BaseUI {
     }
 
     [CLICK('$el button')] (e) {
-        this.setValue(e.$dt.value === 'true', true);
+        this.setValue(e.$dt.value === 'true');
+        this.trigger('change');
     }
 
     [SUBSCRIBE_SELF('change')] () {

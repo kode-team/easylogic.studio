@@ -187,6 +187,11 @@ export class ViewportManager {
 
     getWorldPosition(e) {
         e = e || this.editor.config.get('bodyEvent')
+
+        if (!e) {
+            return this.createWorldPosition(0, 0);
+        }
+
         return this.createWorldPosition(e.clientX, e.clientY);
     }
 

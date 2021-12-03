@@ -20,7 +20,7 @@ export default class MenuItem extends EditorElement {
             ${this.isDisabled() ? 'disabled' : ''}
             data-direction="${this.getDirection()}"
         >
-            <div class="icon ${this.getIcon()}">${icon[this.getIconString()] || this.getIconString() || ''}</div>
+            <div class="icon ${this.getIcon()}" ref="$icon">${icon[this.getIconString()] || this.getIconString() || ''}</div>
             <div class="title">${this.getTitle()}</div>
         </button>
         `
@@ -50,6 +50,10 @@ export default class MenuItem extends EditorElement {
 
     getIcon() {
         return DEFAULT_ICON;
+    }
+
+    setIcon(iconString) {
+        this.refs.$icon.html(icon[iconString] || iconString || "");
     }
 
     getIconString() {

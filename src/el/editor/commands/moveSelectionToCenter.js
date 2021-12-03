@@ -17,10 +17,12 @@ export default {
         let areaVerties = []
 
         if (editor.selection.isEmpty) {
-          areaVerties = editor.selection.currentProject.rectVerties;
+          areaVerties = itemsToRectVerties(editor.selection.currentProject.layers);
         } else {
           areaVerties = itemsToRectVerties(editor.selection.items);
         }
+
+        console.log(areaVerties);
     
         editor.emit('moveToCenter', areaVerties, withScale);        
     }

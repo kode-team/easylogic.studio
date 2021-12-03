@@ -112,7 +112,7 @@ export default class LayerTreeProperty extends BaseProperty {
 
     if (item.hasChildren() && item.is('artboard') === false) {
 
-      if (item['boolean-operation'] !== 'none' && item['boolean-path']) {
+      if (item['boolean-operation'] !== 'none' && item.isBooleanPath) {
         return iconUse('dark')
       }
 

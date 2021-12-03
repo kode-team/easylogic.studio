@@ -497,8 +497,8 @@ export default class SelectionToolView extends SelectionToolEvent {
         const pointers = this.createRenderPointers(...this.state.renderPointerList);
 
         if (pointers) {
-            const {line, parentRect, point, size} = pointers;
-            this.refs.$pointerRect.updateDiff(line + parentRect + point + size)
+            const {line, parentRect, point, size, visiblePath} = pointers;
+            this.refs.$pointerRect.updateDiff(line + parentRect + point + size + visiblePath)
         }
 
 
@@ -628,6 +628,29 @@ export default class SelectionToolView extends SelectionToolEvent {
         `
     }
 
+    createVisiblePath () {
+        const current = this.$selection.current;
+        if (!current) return '';
+
+        if (!current.isBooleanItem) {
+            return '';
+        }
+
+        const newPath = current.accumulatedPath();
+        newPath.transformMat4(this.$viewport.matrix);
+
+        return /*html*/`
+        <svg class='line' overflow="visible">
+            <path
+                d="${newPath.d}"
+                stroke="red"
+                stroke-width="2"
+                fill="none"
+                />
+        </svg>
+        `;
+    }
+
     createRenderPointers(pointers, selectionPointers, parentPointers) {
 
         const current = this.$selection.current; 
@@ -658,6 +681,7 @@ export default class SelectionToolView extends SelectionToolEvent {
             line: this.createPointerRect(pointers, rotatePointer), 
             size: this.createSize(pointers),
             parentRect: '', //this.createParentRect(parentPointers),
+            visiblePath: this.createVisiblePath(),
             point: [
                 // 4 모서리에서도 rotate 가 가능하도록 맞춤 
                 // this.createRotatePointer (selectionPointers[0], 0),

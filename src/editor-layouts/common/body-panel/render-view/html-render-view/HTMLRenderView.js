@@ -176,7 +176,7 @@ export default class HTMLRenderView extends EditorElement {
 
                 // artboard 가 자식이 있으면 움직이지 않음 
                 if (item.is('artboard') && item.hasChildren()) {
-                    this.$config.set('set.dragarea.mode', true);
+                    this.$config.init('set.dragarea.mode', true);
                     return true;
                 }
 
@@ -217,7 +217,7 @@ export default class HTMLRenderView extends EditorElement {
         + END('calculateEndedElement')
     ](e) {
         this.initMousePoint = this.$viewport.getWorldPosition(e);
-
+        this.$config.init('set.move.control.point', true);
         if (this.$config.get('set.dragarea.mode')) {
             this.emit('startDragAreaView');    
 
@@ -399,10 +399,11 @@ export default class HTMLRenderView extends EditorElement {
     calculateEndedElement(dx, dy) {
         const targetMousePoint = this.$viewport.getWorldPosition();
         const newDist = vec3.dist(targetMousePoint, this.initMousePoint);
+        this.$config.init('set.move.control.point', false);
 
         if (this.$config.get('set.dragarea.mode')) {
             this.emit('endDragAreaView');
-            this.$config.set('set.dragarea.mode', false)
+            this.$config.init('set.dragarea.mode', false)
             return; 
         }
 
@@ -418,6 +419,10 @@ export default class HTMLRenderView extends EditorElement {
                 "move item",
                 this.$selection.pack('x', 'y')
             );
+
+            // boolean path 의 조정이 끝나면 
+            // box 를 재구성한다. 
+            this.command('recoverBooleanPath', 'recover boolean path');
         }
 
         this.emit('refreshSelectionTool', true);

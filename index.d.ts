@@ -1120,6 +1120,15 @@ declare module "@easylogic/editor" {
 
     }
 
+    export interface ObjectPropertyProps {
+        title: string;
+        editableProperty?: string;
+        action?: string|Function;
+        inspector?: Function;
+    }
+    export class ObjectProperty {
+        static create(json: ObjectPropertyProps): BaseProperty;
+    }
 
     export class MenuItem extends EditorElement {
 

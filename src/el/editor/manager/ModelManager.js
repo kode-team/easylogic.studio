@@ -22,7 +22,7 @@ export class ModelManager {
     /**
      * document 로드 하기 
      */
-    load(doc = undefined) {
+    load(doc = undefined, context = { origin: '*'}) {
         const newDoc = doc || this.editor.loadItem('model');
 
         this.items.clear();
@@ -212,7 +212,7 @@ export class ModelManager {
         }
 
         // 상위가 project 나 artboard 이면 현재 객체를 최상위로 본다. 
-        if (obj.parent && (obj.parent.is('project') || obj.parent.is('artboard') || obj.parent['boolean-path'])) {
+        if (obj.parent && (obj.parent.is('project') || obj.parent.is('artboard') || obj.isBooleanItem)) {
             return obj;
         }
 
@@ -288,7 +288,7 @@ export class ModelManager {
      * @param {object} itemObject 
      * @returns {Item}
      */
-    createModel(itemObject, isRegister = true) {
+    createModel(itemObject, isRegister = true, context = { origin: '*'}) {
         const layers = itemObject.layers;
         delete itemObject.layers;
         let item;
@@ -301,7 +301,7 @@ export class ModelManager {
                 ...itemObject,
             });
 
-            item.setModelManager(this);
+            item.setModelManagerd(this);
         }
 
         // Item 을 생성하면  아이템의 id 를 등록한다. 
@@ -316,7 +316,7 @@ export class ModelManager {
 
 
         const children = (layers || []).map(it => {
-            return this.createModel({ ...it, parentId: item.id });
+            return this.createModel({ ...it, parentId: item.id }, true, context);
         })
 
         // 하위 아이템들은 생성된 이후에 id 문자열 리스트로만 관리된다.  
@@ -324,7 +324,7 @@ export class ModelManager {
             children: children.map(it => {
                 return it.id
             })
-        });
+        }, context);
 
 
         return item;

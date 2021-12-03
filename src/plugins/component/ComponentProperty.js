@@ -51,37 +51,6 @@ export default class ComponentProperty extends BaseProperty {
     `;
   }
 
-  getPropertyEditor (index, key, value, selfEditor, selfEditorOptions) {
-    if (isString(selfEditor)) {
-      return /*html*/`
-        <div>  
-          <object 
-            refClass="${selfEditor}" 
-            ${variable({
-              ...selfEditorOptions,
-              onchange: 'changeComponentProperty',
-              ref: `${key}${index}`,
-              key,
-              value
-            })} 
-          />
-        </div>`
-    } else {
-      return Object.keys(selfEditor).map(selfEditorKey => {
-        return /*html*/`
-          <div>
-            <object refClass="${selfEditorKey}" ${variable({
-              ...selfEditorOptions,
-              onchange: 'changeComponentProperty',
-              ref: `${key}${index}${selfEditorKey}`,
-              key,
-              value
-            })} />
-          </div>`
-      }).join('');
-    }
-  }
-
   [LOAD('$body')] () {
 
     var current = this.$selection.current;
@@ -90,40 +59,25 @@ export default class ComponentProperty extends BaseProperty {
     
     const inspector = this.$editor.components.createInspector(current);
 
-    var self = inspector.map((it, index)=> {
-      if (isString(it)) {
-        return /*html*/`
-          <div class='property-item is-label'> 
-            <label class='label string-label'>${it}</label>
-          </div>`
-      } else {
 
-
-        let defaultValue = current[it.key] || it.defaultValue
+    inspector.forEach(it => {
+      let defaultValue = current[it.key] || it.defaultValue
       
-        if (isFunction(it.convertDefaultValue)) {
-          defaultValue = it.convertDefaultValue(current, it.key)
-        }
-
-        return /*html*/`
-          <div class='property-item'> 
-            ${this.getPropertyEditor(index, it.key, defaultValue, it.editor, it.editorOptions)}
-          </div>
-        `
+      if (isFunction(it.convertDefaultValue)) {
+        defaultValue = it.convertDefaultValue(current, it.key)
       }
-
+      
+      it.defaultValue = defaultValue;
     })
 
-    return self; 
+    return /*html*/`
+      <object refClass="ComponentEditor" inspector=${variable(inspector)} onchange="changeComponentProperty" />
+    `
   }
 
   [SUBSCRIBE_SELF('changeComponentProperty')] (key, value) {
-
-    const current = this.$selection.current;
-    const inspector = this.$editor.components.createInspector(current);    
-    const convert = inspector.find(it => it.key === key)?.convert;
-    const realValueObject = convert ? convert(current, key, value) : { [key] : value }
-
-    this.command("setAttributeForMulti", 'change component : ' + key, this.$selection.packByValue(realValueObject))
+    this.command("setAttributeForMulti", 'change component : ' + key, this.$selection.packByValue({
+      [key] : value
+    }))
   }
 }

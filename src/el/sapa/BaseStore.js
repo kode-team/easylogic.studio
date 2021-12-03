@@ -1,5 +1,5 @@
 import EventMachine from "./EventMachine";
-import { debounce, ifCheck, isFunction, throttle } from "./functions/func";
+import { debounce, ifCheck, isArray, isFunction, isNotUndefined, throttle } from "./functions/func";
 import { uuidShort } from 'el/utils/math';
 
 /**
@@ -159,20 +159,47 @@ export default class BaseStore {
   }
 
   sendMessage(source, event, ...args) {
+    this.sendMessageList(source, [
+      [event, ...args]
+    ]);
+  }
+
+  /**
+   * 
+   * run multi messages
+   * 
+   * message.callback can has a return value.  
+   * 
+   * if return value is false then message will be skip.
+   * if return value is function then message will be skip after run return function.
+   * 
+   * @param {string} source 
+   * @param {Command[]} messages 
+   */
+  sendMessageList(source, messages = []) {
     Promise.resolve().then(() => {
-      var list = this.getCachedCallbacks(event);
-      if (list) {
+      messages.forEach(([event, ...args]) => {
+        var list = this.getCachedCallbacks(event);
+        if (list) {
 
-        for (var i = 0, len = list.length; i < len; i++) {
-          const f = list[i];
-          // console.log(source);
-          if (f.enableSelfTrigger) continue;
+          const runnableFunctions = list
+            .filter(f => !f.enableSelfTrigger)
+            .filter(f => f.enableAllTrigger || f.originalCallback.source !== source)
 
-          if (f.enableAllTrigger || f.originalCallback.source !== source) {
-            f.callback.apply(f.context, args)
+          for (const f of runnableFunctions) {
+            const result = f.callback.apply(f.context, args)
+
+            if (isNotUndefined(result)) {
+              if (result === false) {
+                return;
+              } else if (isFunction(result)) {
+                result();
+                return;
+              }
+            }
           }
         }
-      }
+      });
     });
   }
 
@@ -183,28 +210,28 @@ export default class BaseStore {
   }
 
   triggerMessage(source, event, ...args) {
-    // Promise.resolve().then(() => {
+    Promise.resolve().then(() => {
       var list = this.getCachedCallbacks(event);
 
       if (list) {
-        for (var i = 0, len = list.length; i < len; i++) {
-          const f = list[i];
-          if (f.originalCallback.source === source) {
+
+        const runnableFunctions = list.filter(f => f.originalCallback.source === source)
+
+        runnableFunctions.forEach(f => {
             f.callback.apply(f.context, args)
-          }
-        }
+        });
       } else {
         console.warn(event, ' is not valid event');
       }
-
-
-    // });
+    });
   }
 
   emit(event, ...args) {
 
     if (isFunction(event)) {
       event(...args);
+    } else if (isArray(event)) {
+      this.sendMessageList(this.source, event);
     } else {
       this.sendMessage(this.source, event, ...args);
     }

@@ -773,7 +773,7 @@ export class SelectionManager {
   }
 
   is (...args) {
-    return this.current?.is(...args);
+    return args.includes(this.current?.itemType);
   }
 
   isAll (...args) {

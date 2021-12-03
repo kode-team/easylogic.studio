@@ -82,8 +82,15 @@ export default class DragAreaRectView extends EditorElement {
                     }
                 })
 
+                // boolean-path 의 자식은 드래그로 선택하지 않음. 
+                items = items.filter(it => {
+                    return it.isDragSelectable
+                });       
+
                 if (items.length > 1) {
-                    items = items.filter(it => it.is('artboard') === false);
+                    items = items.filter(it => {
+                        return it.is('artboard') === false
+                    })
                 }
             }   
         }
@@ -134,6 +141,7 @@ export default class DragAreaRectView extends EditorElement {
         }
 
         const selectedItems = this.getSelectedItems(rect, toRectVertiesWithoutTransformOrigin([startVertex, endVertex]))
+
 
         if (this.$selection.selectByGroup(...selectedItems)) {
             this.emit('refreshSelection')

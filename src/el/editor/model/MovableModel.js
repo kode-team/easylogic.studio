@@ -43,6 +43,18 @@ export class MovableModel extends BaseAssetModel {
         return false; 
     }
 
+    get isDragSelectable() {
+        return true;
+    }
+
+    get isBooleanPath() {
+        return Boolean(this.json['boolean-path']);
+    }
+
+    get isBooleanItem() {
+        return false;
+    }
+
     toCloneObject(isDeep = true) {
         return {
             ...super.toCloneObject(isDeep),

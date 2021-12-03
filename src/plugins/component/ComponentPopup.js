@@ -1,5 +1,5 @@
-import { BIND, DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
-import { isFunction, isString } from "el/sapa/functions/func";
+import { BIND, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { isFunction } from "el/sapa/functions/func";
 import { variable } from "el/sapa/functions/registElement";
 import { Length } from 'el/editor/unit/Length';
 import BasePopup from "el/editor/ui/popup/BasePopup";
@@ -35,20 +35,6 @@ export default class ComponentPopup extends BasePopup {
     `;
   }
 
-  getPropertyEditor (index, inspectorItem) {
-    return /*html*/`
-        <object 
-          refClass="${inspectorItem.editor}" 
-          ${variable({
-            onchange: 'changeComponent',
-            ref: `${inspectorItem.key}${index}`,
-            key: inspectorItem.key,
-            ...inspectorItem.editorOptions,            
-          })} 
-        />
-      `
-  }
-
   [BIND('$body')] () {
     return {
       style: {
@@ -60,25 +46,9 @@ export default class ComponentPopup extends BasePopup {
   [LOAD('$body')] () {    
     const inspector = this.state.inspector;
 
-    var self = inspector.map((it, index)=> {
-      if (isString(it)) {
-        return /*html*/`
-          <div class='popup-item is-label'> 
-            <label class='label string-label'>${it}</label>
-          </div>`
-      } else {
-
-
-        return /*html*/`
-          <div class='popup-item'> 
-            ${this.getPropertyEditor(index, it)}
-          </div>
-        `
-      }
-
-    })
-
-    return self; 
+    return /*html*/`
+      <object refClass="ComponentEditor" inspector=${variable(inspector)} onchange="changeComponent" />
+    `
   }
 
   [SUBSCRIBE_SELF('changeComponent')] (key, value) {

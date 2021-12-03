@@ -23,6 +23,15 @@
 
       path {
         stroke: var(--elf--font-color);
+
+        &[data-selected="true"] {
+          stroke: transparent;
+        }
+
+        &[data-mouse="true"] {
+          stroke: var(--elf--selected-color);
+          stroke-width: 2;
+        }
       }
     }
   }

@@ -36,18 +36,26 @@ export class SVGItem extends LayerModel {
       overflow: 'visible',         
       stroke: 'black',
       'stroke-width': 1,
-      'svgfilter': '',
       fill: 'transparent',
-      'fill-rule': '',
-      'fill-opacity': '',
-      'stroke-linecap': '',
-      'stroke-linejoin': '',      
-      'stroke-dashoffset': 0, 
-      'stroke-dasharray': ' ',
+      'fill-rule': 'nonzero',
       'text-anchor': 'start',
       ...obj
     });
   }
+
+  /**
+   * svg item 의 경우 부모가 boolean 연산을 수행할 때 
+   * drag 로 하위 패스를 선택하지 못하도록 막는다. 
+   */
+  get isDragSelectable() {
+    return this.isBooleanItem === false;
+  }
+
+  get isBooleanItem() {
+    return Boolean(this.parent['boolean-path']);
+  }
+
+
 
   editable(editablePropertyName) {
 

@@ -18,7 +18,7 @@ export default class FillSingleEditor extends EditorElement {
             index: this.props.index,
             label: this.props.label,      
             simple: this.props.simple === 'true' ? true : false,       
-            image: SVGFill.parseImage(this.props.image || 'transparent')
+            image: SVGFill.parseImage(this.props.value || this.props.image || 'transparent')
         }
     }
 

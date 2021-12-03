@@ -561,7 +561,7 @@ ${cssString}
 
   renderVirtualArea (item, renderer) {
 
-    if (item['boolean-path']) {
+    if (item.isBooleanPath) {
       const layers = item.layers;
       return /*html*/`
         <svg data-id="${this.booleanId(item)}" width="100%" height="100%" style="position:absolute;left:0px;top:0px;pointer-events:none;overflow: visible;">

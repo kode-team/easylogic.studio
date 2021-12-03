@@ -369,15 +369,20 @@ export class BaseModel {
    * set json content
    *
    * @param {object} obj
+   * @param {{origin: string}} context
    */
-  reset(obj) {
+  reset(obj, context = {origin: '*'}) {
     const isChanged = this.isChangedValue(obj);
 
     if (isChanged) {
       this.json = this.convert(Object.assign(this.json, obj));
       this.lastChangedField = obj;
       this.lastChangedFieldKeys = Object.keys(obj);
-      this.modelManager.setChanged('reset', this.id, obj);
+
+      if (context.origin === '*') {
+        this.modelManager.setChanged('reset', this.id, obj);
+      }
+      
       this.changed();
     }
 

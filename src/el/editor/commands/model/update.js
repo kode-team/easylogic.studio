@@ -1,20 +1,30 @@
 export default {
     command: 'update',
     description: 'Update the model',
-    execute: function (editor, id = null, attrs = {}) {
 
-        editor.emit('beforeUpdate', id, attrs);
+    /**
+     * 
+     * @param {Editor} editor 
+     * @param {*} id 
+     * @param {*} attrs 
+     * @param {*} context 
+     */
+    execute: function (editor, id = null, attrs = {}, context = { origin: '*'}) {
+
+        const maker = editor.createCommandMaker();
+        // maker.emit('beforeUpdate', id, attrs);
 
         const item = editor.modelManager.get(id);
 
         if (item) {
-            const isChanged = item.reset(attrs);
+            const isChanged = item.reset(attrs, context);
 
             if (isChanged) {
-                editor.emit('refreshElement', item);
+                maker.emit('refreshElement', item);
             }
         }
 
-        editor.emit('afterUpdate', id, attrs);        
+        // maker.emit('afterUpdate', id, attrs);        
+        maker.run();
     }
 }

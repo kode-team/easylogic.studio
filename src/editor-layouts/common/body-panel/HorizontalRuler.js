@@ -1,4 +1,4 @@
-import { DEBOUNCE, DOMDIFF, LOAD, SUBSCRIBE, THROTTLE } from "el/sapa/Event";
+import { BIND, CONFIG, DEBOUNCE, DOMDIFF, LOAD, SUBSCRIBE, THROTTLE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './HorizontalRuler.scss';
 
@@ -10,6 +10,11 @@ export default class HorizontalRuler extends EditorElement {
             <div class="elf--horizontal-ruler">
                 <div class='horizontal-ruler-container' ref='$layerRuler'></div>                            
                 <div class='horizontal-ruler-container' ref='$ruler'></div>
+                <div class='horizontal-ruler-container'>
+                    <svg width="100%" width="100%" overflow="hidden">
+                        <path data-mouse="true" d="" stroke="transparent" ref="$cursor" />
+                    </svg>
+                </div>
             </div>
         `
     }
@@ -21,6 +26,12 @@ export default class HorizontalRuler extends EditorElement {
     refreshCanvasSize () {
         this.state.rect = this.$el.rect();
     }    
+
+    initializeRect () {
+        if (!this.state.rect || this.state.rect.width == 0) {
+            this.state.rect = this.$el.rect();
+        }
+    }
 
     makeLine (pathString,  baseNumber, minX, maxX, realWidth, width, epsilon = 3, lineWidth = 30, expect = 10) {
         let startX = minX - (minX % baseNumber); 
@@ -112,10 +123,10 @@ export default class HorizontalRuler extends EditorElement {
         const secondX = ((currentMaxX - minX)/realWidth) * width; 
 
         return `
-            M ${firstX} 15 
+            M ${firstX} 12 
             L ${firstX} 20 
             L ${secondX} 20 
-            L ${secondX} 15 
+            L ${secondX} 12 
             Z
         `
     }
@@ -162,9 +173,8 @@ export default class HorizontalRuler extends EditorElement {
 
     [LOAD('$ruler') + DOMDIFF] () { 
 
-        if (!this.state.rect || this.state.rect.width == 0) {
-            this.state.rect = this.$el.rect();
-        }
+        this.initializeRect();
+
 
         return /*html*/`
             <svg width="100%" width="100%" overflow="hidden">
@@ -175,17 +185,35 @@ export default class HorizontalRuler extends EditorElement {
     }
 
     [LOAD('$layerRuler') + DOMDIFF] () { 
-
-        if (!this.state.rect || this.state.rect.width == 0) {
-            this.state.rect = this.$el.rect();
-        }
+        this.initializeRect();
 
         return /*html*/`
             <svg width="100%" width="100%" overflow="hidden">
-                <path d="${this.makeRulerForCurrent()}" fill="rgba(100, 255, 255, 0.5)" />
+                <path data-selected="true" d="${this.makeRulerForCurrent()}" fill="rgba(100, 255, 255, 0.5)" stroke="transparent" />
             </svg>
         `
     }  
+
+    makeRulerCursor() {
+        const targetMousePoint = this.$viewport.getWorldPosition();
+        const {minX,maxX, width: realWidth} = this.$viewport;
+
+        this.initializeRect();
+
+        const width = this.state.rect.width;
+
+        const distX = (targetMousePoint[0] - minX)
+
+        const x = distX === 0 ? 0 : (distX/realWidth) * width;
+
+        return `M ${x - 0.5} 0 L ${x - 0.5} 20`;
+    }
+
+    [BIND('$cursor')] () {
+        return {
+            d: this.makeRulerCursor(),
+        }
+    }
     
     refresh() {
 
@@ -213,4 +241,8 @@ export default class HorizontalRuler extends EditorElement {
     [SUBSCRIBE('resize.window', 'resizeCanvas')] () {
         this.refreshCanvasSize();
     }    
+
+    [CONFIG('bodyEvent')] () {
+        this.bindData('$cursor');
+    }
 }

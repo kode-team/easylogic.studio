@@ -30,6 +30,7 @@ import { PathKitManager } from "./PathKitManager";
 import { SegmentSelectionManager } from "./SegmentSelectionManager";
 import { LockManager } from "./LockManager";
 import { VisibleManager } from "./VisibleManager";
+import { CommandMaker } from "./CommandMaker";
 
 
 export const EDIT_MODE_SELECTION = 'SELECTION';
@@ -109,6 +110,10 @@ export class Editor {
   getI18nMessage(key, params = {}, locale) {
     return this.i18n.get(key, params, locale || this.locale)
   }
+
+  $i18n(key, params = {}, locale) {
+    return this.getI18nMessage(key, params, locale);
+  }  
 
   hasI18nkey(key, locale) {
     return this.i18n.hasKey(key, locale || this.locale)
@@ -308,6 +313,10 @@ export class Editor {
 
   loadItem(key) {
     return JSON.parse(window.localStorage.getItem(`${this.storeKey}.${key}`) || JSON.stringify(""))
+  }
+
+  createCommandMaker() {
+    return new CommandMaker(this);
   }
 
   /**

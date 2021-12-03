@@ -41,7 +41,7 @@ export default class HoverView extends EditorElement {
         }
 
         const filteredList = this.$selection.filteredLayers;
-        const items = filteredList.filter(it => !it['boolean-path']).filter(it => {
+        const items = filteredList.filter(it => !it.isBooleanPath).filter(it => {
             const point = this.$viewport.getWorldPosition(this.$config.get('bodyEvent'));
 
             return it.hasPoint(point[0], point[1]);
@@ -72,6 +72,26 @@ export default class HoverView extends EditorElement {
     }
 
 
+    createVisiblePath (current) {
+        if (!current.isBooleanItem) {
+            return '';
+        }
+
+        const newPath = current.accumulatedPath();
+        newPath.transformMat4(this.$viewport.matrix);
+
+        return /*html*/`
+        <svg overflow="visible">
+            <path
+                d="${newPath.d}"
+                stroke="red"
+                stroke-width="2"
+                fill="none"
+                />
+        </svg>
+        `;
+    }
+
     renderHoverLayer() {
 
         const items = this.$selection.hoverItems;
@@ -81,15 +101,23 @@ export default class HoverView extends EditorElement {
             this.emit('removeGuideLine');
         } else {
 
-            // refresh hover view 
-            const verties = items[0].verties;
+            if (items[0].isBooleanItem) {
+                const line = this.createVisiblePath(items[0]);
 
-            const line = this.createPointerLine(this.$viewport.applyVerties(verties));
+                this.refs.$hoverRect.updateDiff(line)
+                this.emit('removeGuideLine');
+            } else {
 
-            this.refs.$hoverRect.updateDiff(line)
+                // refresh hover view 
+                const verties = items[0].verties;
 
+                const line = this.createPointerLine(this.$viewport.applyVerties(verties));
 
-            this.emit('refreshGuideLineByTarget', [items[0].verties]);
+                this.refs.$hoverRect.updateDiff(line)
+
+                this.emit('refreshGuideLineByTarget', [items[0].verties]);
+            }
+
 
         }
     }

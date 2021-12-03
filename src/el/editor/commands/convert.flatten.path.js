@@ -10,7 +10,7 @@ export default {
 
         let newPath;
 
-        if (current['boolean-path']) {
+        if (current.isBooleanPath) {
           newPath = current.accumulatedPath(current['boolean-path']);
           newPath = current.invertPath(newPath.d);
 

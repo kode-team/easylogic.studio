@@ -57,7 +57,7 @@ export default class CanvasView extends EditorElement {
       this.trigger('resizeCanvas');
       this.emit('moveSelectionToCenter', false);
       this.refreshCursor();
-    })
+    }, 10)
   }
   template() {
     return/*html*/`

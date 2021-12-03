@@ -119,7 +119,7 @@ export default class Dom {
    */
   attr(key, value) {
     if (arguments.length == 1) {
-      return this.el.getAttribute(key);
+      return this.el.getAttribute && this.el.getAttribute(key);
     }
 
     // 동일한 속성 값이 있다면 변경하지 않는다. 

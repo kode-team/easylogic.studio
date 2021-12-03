@@ -54,7 +54,7 @@ export default class PathToolProperty extends BaseProperty {
         </div>
         <div>
           <button type="button" data-value="smooth">${iconUse('smooth', "", {width: 24, height: 24})} Smooth Path</button>                
-          <button type="button" data-value="stroke">${iconUse('stroke_to_path', "", {width: 24, height: 24})} Stroke to path</button> 
+          <button type="button" data-value="stroke">${iconUse('stroke_to_path', "", {width: 24, height: 24})} Outline Path</button> 
         </div>        
         <div>
           <button type="button" data-value="polygonal">${iconUse('highlight_at', "", {width: 24, height: 24})} Polygonal</button>                
@@ -88,8 +88,7 @@ export default class PathToolProperty extends BaseProperty {
 
   [SUBSCRIBE('refreshSelection')] () {
     this.refreshShow(() => {
-
-      if (this.$selection.length === 1 && this.$selection.current['boolean-path']) return true;
+      if (this.$selection.length === 1 && this.$selection.current.isBooleanPath) return true;
 
       return this.$selection.is('svg-path', 'polygon', 'star');
     })

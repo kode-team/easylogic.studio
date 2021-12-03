@@ -67,21 +67,21 @@ export default class DragAreaView extends EditorElement {
             if (this.$selection.current.is('artboard')) {
                 if (this.$selection.current.hasChildren()) {
                     // drag 모드로 변신 
-                    this.$config.set('set.dragarea.mode', true);
-                    this.$config.set('set.move.mode', false);
+                    this.$config.init('set.dragarea.mode', true);
+                    this.$config.init('set.move.mode', false);
 
                     return true;
                 } else {
                     // 움직임 
-                    this.$config.set('set.dragarea.mode', false);
-                    this.$config.set('set.move.mode', true);
+                    this.$config.init('set.dragarea.mode', false);
+                    this.$config.init('set.move.mode', true);
 
                     return true;
                 }
             } else {
                 // 움직임 
-                this.$config.set('set.dragarea.mode', false);
-                this.$config.set('set.move.mode', true);
+                this.$config.init('set.dragarea.mode', false);
+                this.$config.init('set.move.mode', true);
                 return true;
             }
         }
@@ -90,13 +90,13 @@ export default class DragAreaView extends EditorElement {
 
         if (this.mouseOverItem) {
             // move 모드로 변신 
-            this.$config.set('set.dragarea.mode', false);
-            this.$config.set('set.move.mode', true);
+            this.$config.init('set.dragarea.mode', false);
+            this.$config.init('set.move.mode', true);
 
         } else {
             // drag 모드로 변신 
-            this.$config.set('set.dragarea.mode', true);
-            this.$config.set('set.move.mode', false);
+            this.$config.init('set.dragarea.mode', true);
+            this.$config.init('set.move.mode', false);
 
         }
 
@@ -181,82 +181,82 @@ export default class DragAreaView extends EditorElement {
         } else if (this.$config.get('set.move.mode')) {
             // 움직임 처리 
 
-            // layout item 은 움직이지 않고 layout 이 좌표를 그리도록 한다. 
-            if (this.$selection.isLayoutItem) {
-                return;
-            }
+            // // layout item 은 움직이지 않고 layout 이 좌표를 그리도록 한다. 
+            // if (this.$selection.isLayoutItem) {
+            //     return;
+            // }
 
-            const targetMousePoint = this.$viewport.getWorldPosition();
+            // const targetMousePoint = this.$viewport.getWorldPosition();
 
-            const newDist = vec3.floor([], vec3.subtract([], targetMousePoint, this.initMousePoint));
+            // const newDist = vec3.floor([], vec3.subtract([], targetMousePoint, this.initMousePoint));
 
-            this.moveTo(newDist);
+            // this.moveTo(newDist);
 
-            // 최종 위치에서 ArtBoard 변경하기 
-            if (this.$selection.changeArtBoard()) {
-                this.initMousePoint = targetMousePoint;
-                this.$selection.reselect();
-                this.$snapManager.clear();
+            // // 최종 위치에서 ArtBoard 변경하기 
+            // if (this.$selection.changeArtBoard()) {
+            //     this.initMousePoint = targetMousePoint;
+            //     this.$selection.reselect();
+            //     this.$snapManager.clear();
 
-                this.emit('refreshAllCanvas')
+            //     this.emit('refreshAllCanvas')
 
-                // ArtBoard 변경 이후에 LayerTreeView 업데이트
-                this.emit('refreshLayerTreeView')
-            }
+            //     // ArtBoard 변경 이후에 LayerTreeView 업데이트
+            //     this.emit('refreshLayerTreeView')
+            // }
 
-            this.emit('setAttributeForMulti', this.$selection.pack('x', 'y'));
-            this.emit('refreshSelectionTool', true);
+            // this.emit('setAttributeForMulti', this.$selection.pack('x', 'y'));
+            // this.emit('refreshSelectionTool', true);
         }
 
     }
 
 
-    moveTo(distVector) {
+    // moveTo(distVector) {
 
-        distVector = vec3.floor([], distVector);
-
-
-
-        //////  snap 체크 하기 
-        const snap = this.$snapManager.check(this.$selection.cachedRectVerties.map(v => {
-            return vec3.add([], v, distVector)
-        }), 3);
-
-        // dist 거리 계산 
-        const localDist = vec3.add([], snap, distVector);
+    //     distVector = vec3.floor([], distVector);
 
 
-        const result = {}
-        this.$selection.cachedItemMatrices.forEach(it => {
 
-            // newVerties 에 실제 움직인 좌표로 넣고 
-            const newVerties = it.verties.map(v => {
-                return vec3.add([], v, localDist)
-            })
+    //     //////  snap 체크 하기 
+    //     const snap = this.$snapManager.check(this.$selection.cachedRectVerties.map(v => {
+    //         return vec3.add([], v, distVector)
+    //     }), 3);
 
-            // 첫번째 좌표 it.rectVerties[0] 과 
-            // 마지막 좌표 newVerties[0] 를 
-            // parentMatrixInverse 기준으로 다시 원복하고 거리를 잰다 
-            // 그게 실제적인 distance 이다. 
-            const newDist = vec3.subtract(
-                [], 
-                vec3.transformMat4([], newVerties[0], it.parentMatrixInverse), 
-                vec3.transformMat4([], it.verties[0], it.parentMatrixInverse)
-            )
+    //     // dist 거리 계산 
+    //     const localDist = vec3.add([], snap, distVector);
 
-            result[it.id] = {
-                x: Length.px(it.x + newDist[0]).round(1000),          // 1px 단위로 위치 설정 
-                y: Length.px(it.y + newDist[1]).round(1000),
-            }
-        });
 
-        this.$selection.reset(result);
-    }
+    //     const result = {}
+    //     this.$selection.cachedItemMatrices.forEach(it => {
 
-    [SUBSCRIBE('selectionToolView.moveTo')](newDist) {
-        this.moveTo(newDist);
-        this.emit('refreshSelectionTool', true);
-    }
+    //         // newVerties 에 실제 움직인 좌표로 넣고 
+    //         const newVerties = it.verties.map(v => {
+    //             return vec3.add([], v, localDist)
+    //         })
+
+    //         // 첫번째 좌표 it.rectVerties[0] 과 
+    //         // 마지막 좌표 newVerties[0] 를 
+    //         // parentMatrixInverse 기준으로 다시 원복하고 거리를 잰다 
+    //         // 그게 실제적인 distance 이다. 
+    //         const newDist = vec3.subtract(
+    //             [], 
+    //             vec3.transformMat4([], newVerties[0], it.parentMatrixInverse), 
+    //             vec3.transformMat4([], it.verties[0], it.parentMatrixInverse)
+    //         )
+
+    //         result[it.id] = {
+    //             x: Length.px(it.x + newDist[0]).round(1000),          // 1px 단위로 위치 설정 
+    //             y: Length.px(it.y + newDist[1]).round(1000),
+    //         }
+    //     });
+
+    //     this.$selection.reset(result);
+    // }
+
+    // [SUBSCRIBE('selectionToolView.moveTo')](newDist) {
+    //     this.moveTo(newDist);
+    //     this.emit('refreshSelectionTool', true);
+    // }
 
     moveEndPointer() {
 
@@ -264,32 +264,32 @@ export default class DragAreaView extends EditorElement {
             this.emit('endDragAreaView');
         } else if (this.$config.get('set.move.mode')) {
 
-            const targetMousePoint = this.$viewport.getWorldPosition();
-            const newDist = vec3.floor([], vec3.subtract([], targetMousePoint, this.initMousePoint));
+            // const targetMousePoint = this.$viewport.getWorldPosition();
+            // const newDist = vec3.floor([], vec3.subtract([], targetMousePoint, this.initMousePoint));
 
 
 
-            if (newDist < 1) {
-                if (this.$selection.current.isSVG()) {
-                    this.emit('open.editor');
-                    this.emit('removeGuideLine');
-                    return;
-                }
-            } else {
-                this.$selection.reselect();
-                this.$snapManager.clear();
-                // this.emit('removeGuideLine');
-                this.command(
-                    'setAttributeForMulti',
-                    "move item",
-                    this.$selection.pack('x', 'y')
-                );
-            }
+            // if (newDist < 1) {
+            //     if (this.$selection.current.isSVG()) {
+            //         this.emit('open.editor');
+            //         this.emit('removeGuideLine');
+            //         return;
+            //     }
+            // } else {
+            //     this.$selection.reselect();
+            //     this.$snapManager.clear();
+            //     // this.emit('removeGuideLine');
+            //     this.command(
+            //         'setAttributeForMulti',
+            //         "move item",
+            //         this.$selection.pack('x', 'y')
+            //     );
+            // }
 
-            this.emit('refreshSelectionTool', true);
+            // this.emit('refreshSelectionTool', true);
         }
-        this.$config.set('set.dragarea.mode', false)
-        this.$config.set('set.move.mode', false)
+        this.$config.init('set.dragarea.mode', false)
+        this.$config.init('set.move.mode', false)
 
     }
 }

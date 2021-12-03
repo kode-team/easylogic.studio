@@ -8,14 +8,18 @@
       ]
     },
     "development": {
-      "presets": ["@babel/preset-env"],
+      "presets": [
+        ["@babel/preset-env"]
+      ],
       "plugins": [
         "@babel/transform-runtime",
         "@babel/plugin-proposal-optional-chaining"
       ]
     },
     "production": {
-      "presets": ["@babel/preset-env"],
+      "presets": [
+        ["@babel/preset-env"]
+      ],
       "plugins": [
         "@babel/transform-runtime",
         "@babel/plugin-proposal-optional-chaining"
