@@ -98,6 +98,46 @@ $range-thumb-border-radius: 20px;
 
     }
 
+    > .left-arrow {
+      position: absolute;
+      left: $left-size;
+      width: 8px;
+      top: 0px;
+      bottom: 0px;
+      cursor: ew-resize;
+      transition: background-color 0.05s linear;
+      display: flex;
+      justify-items: center;
+      align-items: center;
+      pointer-events: none;
+
+      button {
+        pointer-events: all;
+        color: var(--elf--font-color);
+      }
+
+    }
+
+    > .right-arrow {
+      position: absolute;
+      right: $right-size;
+      width: 8px;
+      top: 0px;
+      bottom: 0px;
+      cursor: ew-resize;
+      transition: background-color 0.05s linear;
+      display: flex;
+      justify-items: center;
+      align-items: center;
+      pointer-events: none;
+
+      button {
+        pointer-events: all;
+        color: var(--elf--font-color);
+      }
+
+    }    
+
     > button {
       position: absolute;
       width: 12px;

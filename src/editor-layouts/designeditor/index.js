@@ -4,6 +4,8 @@ import DesignEditor from "./DesignEditor";
 import * as App from 'el/sapa/App'
 import exportLibrary from "export-library/";
 
+/** @module editor-layouts/designeditor */
+
 export default {
   createDesignEditor(opts = { type: "white" }) {
 

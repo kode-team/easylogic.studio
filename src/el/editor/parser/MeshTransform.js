@@ -213,7 +213,7 @@ export class MeshTransform {
      * 변환된 Path 정보를 pathVectorMap 에 적용한다.    
      * 
      * @param {PathParser} path 
-     * @returns 
+     * @returns {MeshTransform}
      */
     transformByPath(path) {
         path.forEachGroup((group, groupIndex) => {
@@ -303,7 +303,7 @@ export class MeshTransform {
      * @param {Function} leftCurveFunction 
      * @param {Function} rightCurveFunction 
      * @param {Function} bottomCurveFunction 
-     * @returns 
+     * @returns {vec3[]}
      */
     calculateCubicInterpolate(pv, topCurveFunction, leftCurveFunction, rightCurveFunction, bottomCurveFunction) {
 

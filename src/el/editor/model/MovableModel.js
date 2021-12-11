@@ -398,7 +398,7 @@ export class MovableModel extends BaseAssetModel {
      * 
      * @param {number} x 
      * @param {number} y 
-     * @returns 
+     * @returns {boolean}
      */
     isPointInRect(x, y) {
         // console.log('rect', this.originVerties, x, y)

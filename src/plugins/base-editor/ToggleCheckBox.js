@@ -17,8 +17,9 @@ export default class ToggleCheckBox extends BaseUI {
     initState() {
         return {
             label: this.props.label || '',
-            checked: this.props.value || false,
-            toggleLabels: this.props.toggleLabels || DEFAULT_LABELS
+            checked: this.props.value || "false",
+            toggleLabels: this.props.toggleLabels || DEFAULT_LABELS,
+            toggleValues: this.props.toggleValues || ["true", "false"],
         }
     }
 
@@ -31,22 +32,33 @@ export default class ToggleCheckBox extends BaseUI {
         var { label, checked } = this.state
 
         var hasLabel = !!label ? 'has-label' : ''
-        var isChecked = checked ? 'true' : 'false'
-        var [first, second] = this.state.toggleLabels;
         return /*html*/`
         <div class='elf--toggle-checkbox ${hasLabel}'>
             ${label ? `<label title="${label}">${label}</label>` : '' }
-            <div class='area' ref="$area" data-checked="${isChecked}">
-                <div><button type="button" value="true">${first}</button></div>
-                <div><button type="button" value="false">${second}</button></div>
+            <div class='area' ref="$area">
+                ${this.state.toggleValues.map((it, index) => {
+                    return /*html*/`
+                        <div>
+                            <button type="button" data-index="${index}" value="${it}">${this.state.toggleLabels[index]}</button>
+                        </div>`
+                }).join('')}
             </div>
         </div>
     `
     }
 
     [BIND('$area')] () {
+
+        const selectedIndex = this.state.toggleValues.findIndex(v => v === this.state.checked)
+        const unit = 100 / this.state.toggleValues.length;
         return {
-            'data-checked': this.state.checked ? 'true' : 'false'
+            'data-selected-index': selectedIndex,
+            cssText: `
+                --unit-count: ${this.state.toggleValues.length};
+                --button-font-size: ${13 - (this.state.toggleValues.length)}px ;
+                --selected-button-size: ${(1/this.state.toggleValues.length)*100}%;
+                --selected-button-position: ${selectedIndex*unit}%;
+            `, 
         }
     }
 
@@ -63,7 +75,7 @@ export default class ToggleCheckBox extends BaseUI {
     }
 
     [CLICK('$el button')] (e) {
-        this.setValue(e.$dt.value === 'true');
+        this.setValue(e.$dt.value);
         this.trigger('change');
     }
 

@@ -1,7 +1,4 @@
-@mixin transparent-background ($pixel: 11px, $pixelColor: #8b8b8b) {
-
-    $half: $pixel / 2; 
-    
+@mixin transparent-background ($pixel: 11px, $pixelColor: #8b8b8b, $half: 5.5px) {
 
     background-color: transparent;
     background-image:
@@ -11,28 +8,4 @@
       linear-gradient(-45deg, transparent 75%, $pixelColor 75%);
     background-size:$pixel $pixel;
     background-position: 0 0, 0 $half, $half (-1 * $half), (-1 * $half) 0px;
-}
-
-
-@mixin title-background () {
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, var(--elf--selected-color) 10%, rgba(var(--elf--selected-color), 0) 60%);
-    color: white; 
-}
-
-@mixin arrow_top ($pixel, $color) {
-    width: 0; 
-    height: 0; 
-    border-left: $pixel solid transparent;
-    border-right: $pixel solid transparent;    
-    border-bottom: $pixel solid $color;
-    pointer-events: none;
-}
-
-@mixin arrow_bottom ($pixel, $color) {
-    width: 0; 
-    height: 0; 
-    border-left: $pixel solid transparent;
-    border-right: $pixel solid transparent;    
-    border-top: $pixel solid $color;
-    pointer-events: none;
 }

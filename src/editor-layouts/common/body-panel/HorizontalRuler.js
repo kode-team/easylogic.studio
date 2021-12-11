@@ -123,10 +123,10 @@ export default class HorizontalRuler extends EditorElement {
         const secondX = ((currentMaxX - minX)/realWidth) * width; 
 
         return `
-            M ${firstX} 12 
+            M ${firstX} 0 
             L ${firstX} 20 
             L ${secondX} 20 
-            L ${secondX} 12 
+            L ${secondX} 0 
             Z
         `
     }

@@ -331,7 +331,7 @@ export default class EventMachine {
    * component 정보 얻어오기 
    * 
    * @param {Dom} $dom 
-   * @returns 
+   * @returns {Object}
    */
   _getComponentInfo ($dom) {
 
@@ -365,6 +365,8 @@ export default class EventMachine {
    * @return {object[]}
    */ 
   parseComponentList($el) {
+
+    if (!$el) return [];
 
     const children = []
 
@@ -457,8 +459,8 @@ export default class EventMachine {
       checker = checker.map(it => it.trim())
       
       const isDomDiff = Boolean(checker.filter(it => DOMDIFF.includes(it)).length);
-
-      if (this.refs[elName]) {        
+      const refTarget = this.refs[elName];
+      if (refTarget) {        
         var newTemplate = await this[callbackName].apply(this, args);
 
         if (Array.isArray(newTemplate)) {
@@ -468,9 +470,11 @@ export default class EventMachine {
         // create fragment 
         const fragment = this.parseTemplate(html`${newTemplate}`, true);
         if (isDomDiff) {
-          this.refs[elName].htmlDiff(fragment);
+          refTarget.htmlDiff(fragment);
         } else {
-          this.refs[elName].html(fragment);
+          if (refTarget) { 
+            refTarget.html(fragment);
+          }
         }
 
       }

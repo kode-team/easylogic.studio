@@ -321,6 +321,12 @@ export class ViewportManager {
     get maxX () { return this.verties[2][0]; }
     get minY () { return this.verties[0][1]; }
     get maxY () { return this.verties[2][1]; }    
+
+    /**
+     * center position in viewport as world
+     * 
+     * @returns {vec3}
+     */
     get center () { return this.verties[4]; }
 
     get height () { return this.maxY - this.minY; }

@@ -1,4 +1,4 @@
-import icon, { iconUse } from "el/editor/icon/icon";
+import { iconUse } from "el/editor/icon/icon";
 import {
   LOAD,
   CLICK,
@@ -7,7 +7,6 @@ import {
   PREVENT,
   DROP,
   DRAGSTART,
-  SUBSCRIBE,
   SUBSCRIBE_SELF
 } from "el/sapa/Event";
 
@@ -18,7 +17,7 @@ import PathStringManager from "el/editor/parser/PathStringManager";
 import svgFilterPreset from "./editor/svg-filter-preset";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './SVGFilterEditor.scss';
-import { mapjoin, OBJECT_TO_CLASS, repeat } from "el/utils/func";
+import { mapjoin, repeat } from "el/utils/func";
 import { clone, isFunction, keyMapJoin } from "el/sapa/functions/func";
 import { END, MOVE } from "el/editor/types/event";
 
@@ -872,10 +871,10 @@ export default class SVGFilterEditor extends EditorElement {
 
     return this.state.filters.map((it, index) => {
 
+      const selectedClass = index ===  this.state.selectedIndex ? 'selected' : '';
+
       return /*html*/`
-        <div class='filter-node ${OBJECT_TO_CLASS({
-          'selected': index ===  this.state.selectedIndex
-        })}' data-type="${it.type}" data-index="${index}" data-filter-id="${it.id}" style='left: ${it.bound.x}px;top: ${it.bound.y}px;'>
+        <div class='filter-node ${selectedClass}' data-type="${it.type}" data-index="${index}" data-filter-id="${it.id}" style='left: ${it.bound.x}px;top: ${it.bound.y}px;'>
           <div class='label'>${this.$i18n(it.type)}</div>
           <div class='remove'>${iconUse("close")}</div>
           <div class='preview' data-source-type="${getSourceTypeString(it.type)}" data-filter-type='${it.type}'>${getIcon(it.type)}</div>

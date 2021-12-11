@@ -59,10 +59,6 @@ export default class SelectEditor extends EditorElement {
         this.refresh()
     }
 
-    refresh(reload = false) {
-        this.load();
-    }
-
     [BIND('$options')]() {
         return {
             'data-count': this.state.options.length.toString()

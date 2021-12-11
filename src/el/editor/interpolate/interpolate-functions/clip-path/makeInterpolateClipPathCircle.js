@@ -1,5 +1,5 @@
-import { makeInterpolateBoolean } from "../makeInterpolateBoolean";
-import { makeInterpolateLength } from "../makeInterpolateLength";
+import { makeInterpolateBoolean } from "../makeInterpolateBoolean"
+import { makeInterpolateLength } from "../makeInterpolateLength"
 
 export function makeInterpolateClipPathCircle (layer, property, s, e) {
 

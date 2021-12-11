@@ -12,7 +12,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
 import './PathEditorView.scss';
 import { vertiesToRectangle } from "el/utils/collision";
-import { MeshTransform } from "el/editor/parser/MeshTransform";
+import { PathEditorModifyMode } from "./path-editor-mode/PathEditorModifyMode";
 
 /**
  * convert array[x, y] to object{x, y} 
@@ -63,8 +63,8 @@ const PathCutter = class extends SegmentConvertor {
      * stroke 위의 점을 선택 할 수 있는지 체크 
      * 
      * @param {string} d 
-     * @param {{x: number, y: number}} clickPosition 
-     * @returns 
+     * @param {Object} clickPosition 
+     * @returns {Object}
      */
     calculatePointOnLine(d, clickPosition) {
         var parser = new PathParser(d);
@@ -81,13 +81,10 @@ const PathCutter = class extends SegmentConvertor {
         };
         var selectedSegmentIndex = -1;
 
-        if (this.state.mode === 'path') {
+        if (this.isMode('path')) {
 
             // this.changeMode('modify');
-            this.state.dragXY = {
-                x: e.xy.x - this.state.rect.x,
-                y: e.xy.y - this.state.rect.y
-            };
+            this.state.dragXY = clickPosition;
             this.state.startPoint = this.state.dragXY;
             this.pathGenerator.setLastPoint(this.state.startPoint);
             this.state.isSplitPath = true;
@@ -103,6 +100,10 @@ const PathCutter = class extends SegmentConvertor {
 
             return;
         } else {
+
+            // 이벤트 체크만 하고 실제로는 pathParser 에서 분리 처리를 한다. 
+            // 그런 다음 segmentIndex 를 전달해준다. 
+
             // split-path 를 클릭 하면 바로 패스를 분리시킨다. 
             if (parser.segments[1].command === 'C') {
                 var points = [
@@ -138,6 +139,11 @@ const PathCutter = class extends SegmentConvertor {
                 var t = curve(clickPosition.x, clickPosition.y);
 
                 selectedSegmentIndex = this.pathGenerator.setPointLine(getBezierPointsLine(points, t))
+
+                // 직선을 분할 할 때 altKey 여부를 체크해서 곡선을 만든다. 
+                if (e.altKey) {
+                    this.pathGenerator.convertToCurve(selectedSegmentIndex);
+                }
             }
 
 
@@ -192,6 +198,7 @@ const PathTransformEditor = class extends PathCutter {
                 const { d } = this.pathGenerator.toPath()
 
                 const pathParser = new PathParser(d);
+
                 pathParser.reverse(...this.pathGenerator.selectedGroupIndexList);
                 pathParser.transformMat4(this.state.cachedMatrixInverse)
 
@@ -227,6 +234,10 @@ export default class PathEditorView extends PathTransformEditor {
 
         this.pathParser = new PathParser();
         this.pathGenerator = new PathGenerator(this)
+
+        this.modes = {
+            modify: new PathEditorModifyMode(this),
+        }
     }
 
     initState() {
@@ -380,11 +391,7 @@ export default class PathEditorView extends PathTransformEditor {
         this.changeMode('modify');
 
         var layer = this.makePathLayer()
-        console.log(layer);        
         if (layer) {
-
-
-
             this.$selection.select(layer);
             this.trigger('hidePathEditor')
             this.emit('refreshAll')
@@ -623,8 +630,8 @@ export default class PathEditorView extends PathTransformEditor {
             // canvas 를 클릭했을 때 설정 , drag 를 할준비를 한다. 
             this.$config.set('set.drag.path.area', true);    
             this.state.isGroupSegment = false;
-            this.state.selectedGroupIndex = "";
-            this.state.selectedPointIndex = "";
+            this.state.selectedGroupIndex = -1;
+            this.state.selectedPointIndex = -1;
 
         } else {
 
@@ -643,8 +650,8 @@ export default class PathEditorView extends PathTransformEditor {
                 this.state.selectedGroupIndex = +$target.data('group-index');
                 this.state.selectedPointIndex = +$target.data('point-index');                
             } else {
-                this.state.selectedGroupIndex = "";
-                this.state.selectedPointIndex = "";
+                this.state.selectedGroupIndex = -1;
+                this.state.selectedPointIndex = -1;
             }
 
 

@@ -116,6 +116,8 @@ import convertSmoothPath from "./convert.smooth.path";
 import convertPolygonalPath from "./convert.polygonal.path";
 import convertFlattenPath from "./convert.flatten.path";
 import convertPathOperation from "./convert.path.operation";
+import switchPath from "./switch.path";
+import selectAll from "./select.all";
 
 
 export default {
@@ -123,7 +125,9 @@ export default {
     copyPath,
     update,
     popModeView,
+    switchPath,
 
+    selectAll,
     doubleclickItem,
     openEditor,
     refreshHistory,

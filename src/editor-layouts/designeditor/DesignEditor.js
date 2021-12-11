@@ -16,11 +16,11 @@ import LayerTab from "./area/LayerTab";
 import { END, MOVE } from "el/editor/types/event";
 import { isFunction } from 'el/sapa/functions/func';
 import IconManager from '../common/IconManager';
-import PathKitInit from "pathkit-wasm/bin/pathkit.js";
+import PathKitInit from "pathkit-wasm/bin/pathkit";
 import ItemLayerTab from "./area/ItemLayerTab";
 import SingleInspector from './area/SingleInspector';
-
-// import './web-component/MyElement';
+import SwitchLeftPanel from './area/status-bar/SwitchLeftPanel';
+import SwitchRightPanel from './area/status-bar/SwitchRightPanel';
 
 export default class DesignEditor extends BaseLayout {
 
@@ -29,6 +29,7 @@ export default class DesignEditor extends BaseLayout {
 
     (async () => {
       this.$pathkit.registerPathKit(await PathKitInit());
+  
     })()
   }
 
@@ -43,10 +44,17 @@ export default class DesignEditor extends BaseLayout {
       BodyPanel,
       PopupManager,
       KeyboardManager,
-      IconManager
+      IconManager,
+      SwitchLeftPanel,
+      SwitchRightPanel,
     }
   }
 
+  /**
+   * 
+   * @protected
+   * @returns {function[]}
+   */
   getPlugins() {
     return designEditorPlugins
   }
@@ -73,8 +81,7 @@ export default class DesignEditor extends BaseLayout {
               <object refClass="BodyPanel" ref="$bodyPanelView" />
             </div>                           
             <div class='layout-left' ref='$leftPanel'>
-              <object refClass='LayerTab' />
-              <object refClass='ItemLayerTab' />
+              ${designMode === 'item' ? "<object refClass='ItemLayerTab' />" : "<object refClass='LayerTab' />"}
             </div>
             <div class="layout-right" ref='$rightPanel'>
               ${designMode === 'item' ? '<object refClass="SingleInspector" />' : '<object refClass="Inspector" />'}
@@ -83,7 +90,13 @@ export default class DesignEditor extends BaseLayout {
               <div class='footer-splitter' ref='$footerSplitter' title="${this.$i18n('timeline.property.resize')}"></div>
               <object refClass='TimelineProperty' />
             </div>   
-            <div class='splitter' ref='$splitter'></div>
+            <div class='left-arrow' ref='$leftArrow'>
+              <object refClass="SwitchLeftPanel" />
+            </div>
+            <div class='splitter' ref='$splitter'></div>            
+            <div class='right-arrow' ref='$rightArrow'>
+              <object refClass="SwitchRightPanel" />
+            </div>            
           </div>
           <object refClass='StatusBar' />
           <object refClass="KeyboardManager" />                
@@ -101,15 +114,30 @@ export default class DesignEditor extends BaseLayout {
   }
 
   [BIND('$splitter')] () {
-    let left = `${this.state.leftSize}px`    
+    let left = this.state.leftSize
     if (this.$config.false('show.left.panel')) {
-      left = `0px`
+      left = 0
     }
 
     return {
-      style: { left }
+      style: { 
+        left: Length.px(left) 
+      }
     }
   }
+
+  [BIND('$leftArrow')] () {
+    let left = this.state.leftSize
+    if (this.$config.false('show.left.panel')) {
+      left = 0
+    }
+
+    return {
+      style: { 
+        left: Length.px(left)
+      }
+    }
+  }  
 
   [BIND('$leftPanel')] () {
     let left = `0px`    
@@ -125,33 +153,55 @@ export default class DesignEditor extends BaseLayout {
   }  
 
   [BIND('$rightPanel')] () {
-    let right = `0px`    
+    let right = 0    
     let bottom = Length.px(this.state.bottomSize);    
     if (this.$config.false('show.right.panel')) {
-      right = `-${this.state.rightSize}px`    
+      right = -this.state.rightSize
     }
 
     return {
-      style: { right, bottom }
+      style: { 
+        right: Length.px(right), 
+        bottom 
+      }
+    }
+  }    
+
+  [BIND('$rightArrow')] () {
+    let right = 6    
+    let bottom = Length.px(this.state.bottomSize);    
+    if (this.$config.true('show.right.panel')) {
+      right = this.state.rightSize + 6
+    }
+
+    return {
+      style: { 
+        right: Length.px(right), 
+        bottom 
+      }
     }
   }    
 
   [BIND('$bodyPanel')] () {
    
-    let left = `${this.state.leftSize}px`
-    let right = `${this.state.rightSize}px`
-    let bottom = `${this.state.bottomSize}px`
+    let left = this.state.leftSize
+    let right = this.state.rightSize
+    let bottom = this.state.bottomSize
 
     if (this.$config.false('show.left.panel')) {
-      left = `0px`
+      left = 0
     }
 
     if (this.$config.false('show.right.panel')) {
-      right = `0px`
+      right = 0
     }
 
     return {
-      style: { left, right, bottom }
+      style: { 
+        left: Length.px(left).add(14), 
+        right: Length.px(right).add(14), 
+        bottom: Length.px(bottom)
+      }
     }
   }  
   
@@ -211,6 +261,8 @@ export default class DesignEditor extends BaseLayout {
 
     this.bindData('$el');
     this.bindData('$splitter');
+    this.bindData('$leftArrow');
+    this.bindData('$rightArrow');
     this.bindData('$headerPanel');    
     this.bindData('$leftPanel');
     this.bindData('$rightPanel');

@@ -1,5 +1,4 @@
 import Dom from "el/sapa/functions/Dom";
-import { OBJECT_TO_CLASS } from "el/utils/func";
 import { Item } from "el/editor/items/Item";
 import SVGItemRender from "./SVGItemRender";
 

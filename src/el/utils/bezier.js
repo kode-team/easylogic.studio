@@ -320,9 +320,10 @@ export const splitBezierPointsQuardByCount = (points, count = 1) => {
 
 export const splitBezierPointsLineByCount = (points, count = 1) => {
     var result = []
-
+    const unit = 1/count;
+    
     while(count > 0) {
-        const curve = getBezierPointsLine(points, 1/count);
+        const curve = getBezierPointsLine(points, unit);
         result.push(curve.first)
         points = curve.second;
         count--;
@@ -346,7 +347,7 @@ export const getBezierPointsLine = (points, t) => {
  * convert line to bezier curve
  * 
  * @param {vec3[]} points 
- * @returns 
+ * @returns {vec3[]}
  */
 export const normalizeCurveForLine = (points) => {
 
@@ -370,7 +371,7 @@ export const normalizeCurveForLine = (points) => {
  * convert quadratic bezier curve to bezier curve
  * 
  * @param {vec3[]} points 
- * @returns 
+ * @returns {vec3[]}
  */
 export const normalizeCurveForQuard = (points) => {
     const twoOfThree = 2 / 3;
@@ -406,7 +407,7 @@ export const normalizeCurveForQuard = (points) => {
  * @param {vec3} c3 
  * @param {vec3} c4 
  * @param {number} count 
- * @returns 
+ * @returns {vec3[]}
  */
 export const polygonalForCurve = (c1, c2, c3, c4, count = 1000) => {
     const totalLength = getCurveDist(c1[0], c1[1], c2[0], c2[1], c3[0], c3[1], c4[0], c4[1], count);

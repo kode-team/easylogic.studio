@@ -1,4 +1,4 @@
-import { itemsToRectVerties } from "el/utils/collision";
+import { itemsToRectVerties, rectToVerties } from "el/utils/collision";
 import { Editor } from "el/editor/manager/Editor";
 
 export default {
@@ -17,13 +17,18 @@ export default {
         let areaVerties = []
 
         if (editor.selection.isEmpty) {
-          areaVerties = itemsToRectVerties(editor.selection.currentProject.layers);
+
+          if (editor.selection.currentProject.layers.length > 0) {
+            areaVerties = itemsToRectVerties(editor.selection.currentProject.layers);
+          } else {
+            areaVerties = rectToVerties(0, 0, 100, 100);
+          }
+
+
         } else {
           areaVerties = itemsToRectVerties(editor.selection.items);
         }
 
-        console.log(areaVerties);
-    
         editor.emit('moveToCenter', areaVerties, withScale);        
     }
 

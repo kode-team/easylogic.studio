@@ -252,13 +252,17 @@ export class DomModel extends GroupModel {
           if (this.modelManager.editor.pathKitManager.has()) {
             const paths = this.layers.filter(it => it.d)
     
-            if (paths.length === 2) {
+            if (paths.length >= 2) {
               // path 를 다시 생성하는데 
               const newPath = this['boolean-operation'] != 'none' ?  this.booleanOperation() : "";
       
               this.json['boolean-path'] = newPath;
 
               this.modelManager.setChanged('reset', this.id, { 'boolean-path' : newPath });              
+            } else {
+
+              this.json['boolean-path'] = undefined;              
+              this.modelManager.setChanged('reset', this.id, { 'boolean-path' : undefined });              
             }
           }
     

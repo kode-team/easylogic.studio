@@ -11,6 +11,28 @@
     border-radius: 4px;
     padding-left: 54px;
 
+
+    button {
+      font-size: 13px;
+      margin: 0 2px;
+      text-decoration: underline;
+      width: auto;
+      height: auto;
+      vertical-align: middle;
+      white-space: nowrap;
+      display: inline-block;
+      box-sizing: border-box;
+      width: 34px;
+      height: 34px;
+
+      svg {
+        width: 20px;
+        height: 20px;
+        vertical-align: middle;
+      }
+
+    }    
+
     .text {
         display: inline-block;
     }
@@ -23,6 +45,39 @@
         width: 3px;
         margin-right: 2px;
         border-right: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .subpath {
+      display: inline-block;
+      position: absolute;
+      left: 0px;
+      top: calc(100% + 2px);
+      right: 0px;
+      background-color: var(--elf--background-color);
+      padding: 4px 2px;
+
+      text-align: left;
+      border-radius: 4px;
+
+      button {
+        font-size: 13px;
+        margin: 0 2px;
+        text-decoration: underline;
+        vertical-align: middle;
+        white-space: nowrap;
+        display: inline-block;
+        box-sizing: border-box;
+        width: 24px;
+        height: 24px;
+  
+        svg {
+          width: 24px;
+          height: 24px;
+          vertical-align: middle;
+        }
+  
+      }    
+  
     }
 
     .tools {
@@ -53,25 +108,6 @@
               button[data-value="#{$modeType}"] {
                 color: var(--elf--selected-color);
               }
-            }
-        }
-
-        button {
-            font-size: 13px;
-            margin: 0 2px;
-            text-decoration: underline;
-            width: auto;
-            height: auto;
-            vertical-align: middle;
-            white-space: nowrap;
-            display: inline-block;
-            box-sizing: border-box;
-            width: 34px;
-            height: 34px;
-
-            svg {
-                width: 20px;
-                height: 20px;
             }
         }
 

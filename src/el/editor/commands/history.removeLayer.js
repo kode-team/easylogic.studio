@@ -35,7 +35,7 @@ export default {
      * @param {string} message 
      * @param {string[]|undefined} ids 
      */
-    execute: function (editor, message, ids) {
+    execute: function (editor, message, ids = undefined) {
 
         // // 지우기 전 객체를 모두 clone 한다. 
         let items = editor.selection.itemsByIds(ids || editor.selection.ids);

@@ -119,34 +119,6 @@ export default class CanvasView extends EditorElement {
     }
   }
 
-
-  /**
-   * @debug 
-   */
-  makeViewportConsole() {
-
-    if (!this.$viewport.verties) return '';
-    const mouse = this.$viewport.pos;
-
-    return /*html*/`
-      <div style='background-color: rgba(0, 0, 0, 0.5); color: white;position:absolute;left:0px;top:0px;bottom:0px;right:0px;pointer-events:none;'>
-        <div style='position:absolute;width:1px;height:100%;top:0px;left:50%;transform:translateX(-50%);background-color:black;'></div>  
-        <div style='position:absolute;height:1px;width:100%;top:50%;transform:translateY(-50%);background-color:black;'></div>                
-        <div style='position:absolute;display:inline-block;left:0px;top:50%;transform:translateY(-50%);'>${Math.floor(this.$viewport.minX)}</div>
-        <div style='position:absolute;display:inline-block;right:0px;top:50%;transform:translateY(-50%);'>${Math.floor(this.$viewport.maxX)}</div>
-        <div style='position:absolute;display:inline-block;left:50%;top:0px;transform:translateX(-50%)'>${Math.floor(this.$viewport.minY)}</div>
-        <div style='position:absolute;display:inline-block;left:50%;bottom:0px;transform:translateX(-50%)'>${Math.floor(this.$viewport.maxY)}</div>
-        <div style='position:absolute;top:50%;left:50%;display:inline-block;'>${this.$viewport.transformOrigin.map(it => Math.floor(it)).join(', ')}</div>
-        <div style='position:absolute;left:${mouse[0]}%;top:${mouse[1]}%;display:inline-block;'>
-          mouse: ${this.$viewport.mouse.map(it => Math.floor(it)).join(', ')} <br />
-          translate: ${this.$viewport.translate.join(', ')} <br />          
-          zoom : ${this.$viewport.zoomFactor} <br />
-        </div>                  
-
-      </div>
-    `
-  }
-
   // space 키가 눌러져 있을 때만 실행한다. 
   checkSpace(e) {
     // hand 툴이 on 되어 있으면 항상 드래그 모드가 된다. 
@@ -250,7 +222,7 @@ export default class CanvasView extends EditorElement {
    * 그런 다음 scale 을 한다. 
    * // 내 마우스 위치를 
    * 
-   * @param {*} e 
+   * @private
    */
   [WHEEL('$lock') + PREVENT](e) {
 

@@ -271,7 +271,7 @@ export class BaseModel {
    * 
    * @param {string} key attirbute field name
    * @param {Function} newValueCallback cache 에 적용할 값을 구하는 함수
-   * @returns 
+   * @returns {any}
    */
   computed(key, newValueCallback, isForce = false) {
     const cachedKey = `__cachedKey_${key}`
@@ -311,8 +311,6 @@ export class BaseModel {
    * action
    *
    **********************************/
-
-
   generateListNumber() {
     this.layers.forEach((it, index) => {
       it.no = index;
@@ -336,7 +334,7 @@ export class BaseModel {
 
   toCloneObject(isDeep = true) {
     var json = this.attrs(
-      'itemType', 'name', 'elementType', 'type', 'selected', 'parentId'
+      'itemType', 'name', 'elementType', 'type', 'selected', 'parentId', 'children'
     )
 
     if (isDeep) {
@@ -359,7 +357,7 @@ export class BaseModel {
    * check object values 
    * 
    * @param {KeyValue} obj 
-   * @returns 
+   * @returns {boolean}
    */
   isChangedValue(obj) {
     return true;
@@ -426,6 +424,8 @@ export class BaseModel {
     args.forEach(field => {
       if (isNotUndefined(this.json[field])) {
         result[field] = clone(this.json[field])
+      } else if (isNotUndefined(this[field])) {
+        result[field] = clone(this[field])
       }
     })
 

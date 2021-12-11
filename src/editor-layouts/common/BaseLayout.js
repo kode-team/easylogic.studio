@@ -80,6 +80,7 @@ export default class BaseLayout extends EditorElement {
    * 이걸 하는 이유는 target 별 용량을 줄이기 위한 것이다. 
    * 예를 들어 editor 는 전체 용량을 다 차지해도 되지만 player 는 렌더링 부분만 필요하기 때문에 그렇다. 
    * 
+   * @protected
    * @override
    * @returns 
    */

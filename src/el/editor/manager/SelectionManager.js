@@ -18,10 +18,6 @@ export class SelectionManager {
      * @property {Project} project Project Item 
      */
     this.project = null;
-    /**
-     * @property {Item[]} items Item List
-     */
-    // this.items = [];
     this.itemKeys = {} 
     this.hoverId = ''; 
     this.hoverItems = []    
@@ -705,7 +701,7 @@ export class SelectionManager {
    * 선택된 영역의 자식인지 체크 한다. 
    * 
    * @param {string} childId 
-   * @returns 
+   * @returns {boolean}
    */
   checkChildren (childId) {
     return this.cachedChildren.includes(childId);

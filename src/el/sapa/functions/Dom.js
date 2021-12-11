@@ -115,7 +115,7 @@ export default class Dom {
    * set -> Dom.create(targetElement).attr('key', value);
    * 
    * @param {string} key 
-   * @param {[string]} value 
+   * @param {string[]} value 
    */
   attr(key, value) {
     if (arguments.length == 1) {

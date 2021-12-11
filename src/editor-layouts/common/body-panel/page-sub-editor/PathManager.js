@@ -51,6 +51,9 @@ export default class PathManager extends EditorElement {
             <button type="button" data-value='2x' data-tooltip="divide segment by 2 times">2x</button>
             <button type="button" data-value='3x' data-tooltip="divide segment by 3 times">3x</button>            
         </div>
+        <div class="subpath" style="display:none">
+          <button type="button" data-value="path" data-pathtype="rect">${iconUse("rect", "", {width: 24, height: 24})}</button>
+        </div>
       </div>    
     `;
   }

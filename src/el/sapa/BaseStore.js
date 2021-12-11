@@ -138,7 +138,7 @@ export default class BaseStore {
    * 2. message 가 동작 완료 후 다른 동작을 하고 싶을 때 
    * 
    * @param {string} event 
-   * @returns 
+   * @returns {Promise}
    */
   makePromiseEvent(event) {
 

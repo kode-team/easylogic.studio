@@ -182,6 +182,10 @@ import highlight_at from "./highlight_at";
 import to_front from "./to_front";
 import to_back from "./to_back";
 import light from "./light";
+import unfold from "./unfold";
+import outline_shape from "./outline_shape";
+import switch_left from "./switch_left";
+import switch_right from "./switch_right";
 
 const alias = {
   fullscreen:  border_inner
@@ -196,6 +200,10 @@ export function iconUse(name, transform = "", opt = { width: 24, height: 24 }) {
 
 export default {
   ...alias,
+  switch_right,
+  switch_left,
+  outline_shape,
+  unfold,
   light,
   to_back,
   to_front,

@@ -122,10 +122,10 @@ export default class VerticalRuler extends EditorElement {
         const secondY = ((currentMaxY - minY)/realHeight) * height; 
 
         return `
-            M 15 ${firstY}
+            M 0 ${firstY}
             L 20 ${firstY}
             L 20 ${secondY}
-            L 15 ${secondY}
+            L 0 ${secondY}
             Z
         `
     }
@@ -189,7 +189,7 @@ export default class VerticalRuler extends EditorElement {
 
         return /*html*/`
             <svg width="100%" height="100%" overflow="hidden">
-                <path d="${this.makeRulerForCurrent()}" fill="rgba(100, 255, 255, 0.5)" />
+                <path data-selected="true"  d="${this.makeRulerForCurrent()}" fill="rgba(100, 255, 255, 0.5)" stroke="transparent" />
             </svg>
         `
     }    

@@ -278,39 +278,60 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.moveItem (this.$model.get(item.id), lastStartVertex, newWidth, newHeight);
     }
 
+    /**
+     * 
+     * width, height 를 변경한다. 
+     * 
+     * shiftKey : width, height 를 동일한 비율로 변경한다. 
+     * altKey: width, height 를 width 로 맞춰서 변경한다. 
+     * 
+     * @param {vec3} distVector 
+     */
     moveBottomRightVertex (distVector) {
+        const {shiftKey, altKey, ctrlKey, metaKey} = this.$config.get('bodyEvent');
         const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 2, distVector)
 
-            if (this.$config.get('bodyEvent').shiftKey) {
+            let directionNewVector = vec3.fromValues(0, 0, 0);            
+            if (metaKey) {
+                realDx = realDx * 2;
+                realDy = realDy * 2;
+            }
+
+            if (shiftKey) {
                 realDy = realDx * item.height/item.width;
             }                
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width + realDx;
-            const newHeight = item.height + realDy;
+            const newHeight = altKey ? newWidth : item.height + realDy;
 
-            this.moveDirectionVertex(item, newWidth, newHeight, 'to top left', [0, 0, 0])
+            if (metaKey) {
+                directionNewVector = vec3.fromValues(realDx/2, realDy/2, 0);
+            }
+
+            this.moveDirectionVertex(item, newWidth, newHeight, 'to top left', directionNewVector)
 
         }
     }
 
 
     moveTopRightVertex (distVector) {
+        const {shiftKey, altKey} = this.$config.get('bodyEvent');
         const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 1, distVector)
 
-            if (this.$config.get('bodyEvent').shiftKey) {
+            if (shiftKey) {
                 realDy = -(realDx * item.height/item.width);
             }
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width + realDx;
-            const newHeight = item.height - realDy;
+            const newHeight = altKey ? newWidth : item.height - realDy;
 
             this.moveDirectionVertex(item, newWidth, newHeight, 'to bottom left', [0, newHeight, 0])       
         }
@@ -318,95 +339,157 @@ export default class SelectionToolView extends SelectionToolEvent {
 
 
     moveTopLeftVertex (distVector) {
+        const {shiftKey, altKey, metaKey} = this.$config.get('bodyEvent');
         const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
             let [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
 
-            if (this.$config.get('bodyEvent').shiftKey) {
+            if (metaKey) {
+                realDx = realDx * 2;
+                realDy = realDy * 2;
+            }
+
+            if (shiftKey) {
                 realDy = realDx * item.height/item.width;
             }
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width - realDx;
-            const newHeight = item.height - realDy;            
+            const newHeight = altKey ? newWidth : item.height - realDy;            
 
-            this.moveDirectionVertex(item, newWidth, newHeight, 'to bottom right', [newWidth, newHeight, 0])            
+            let directionNewVector = vec3.fromValues(newWidth, newHeight, 0);            
+            
+            if (metaKey) {
+                directionNewVector = vec3.fromValues(newWidth+realDx/2, newHeight+realDy/2, 0);
+            }
+
+            this.moveDirectionVertex(item, newWidth, newHeight, 'to bottom right', directionNewVector)            
         }
     }
 
 
     moveTopVertex (distVector) {
+        const {shiftKey, altKey, metaKey} = this.$config.get('bodyEvent');        
         const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
 
-            const [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
+            let [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
+
+            if (metaKey) {
+                realDy = realDy * 2;
+            }
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width;
             const newHeight = item.height - realDy;
 
-            this.moveDirectionVertex(item, newWidth, newHeight, 'to bottom', [newWidth/2, newHeight, 0]);  
+            let directionNewVector = vec3.fromValues(newWidth/2, newHeight, 0);            
+            
+            if (metaKey) {
+                directionNewVector = vec3.fromValues(newWidth/2, newHeight+realDy/2, 0);
+            }
+
+            this.moveDirectionVertex(item, newWidth, newHeight, 'to bottom', directionNewVector);  
         }
     }    
 
 
 
     moveBottomVertex (distVector) {
+        const {shiftKey, altKey, metaKey} = this.$config.get('bodyEvent');              
         const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
-            const [realDx, realDy] = this.calculateRealDist(item, 3, distVector)
+            let [realDx, realDy] = this.calculateRealDist(item, 3, distVector)
+
+            if (metaKey) {
+                realDy = realDy * 2;
+            }
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width;
             const newHeight = item.height + realDy;
 
-            this.moveDirectionVertex(item, newWidth, newHeight, 'to top', [newWidth/2, 0, 0]);
+
+            let directionNewVector = vec3.fromValues(newWidth/2, 0, 0);            
+            
+            if (metaKey) {
+                directionNewVector = vec3.fromValues(newWidth/2, realDy/2, 0);
+            }
+
+
+            this.moveDirectionVertex(item, newWidth, newHeight, 'to top', directionNewVector);
         }
     }    
 
 
     moveRightVertex (distVector) {
+        const {shiftKey, altKey, metaKey} = this.$config.get('bodyEvent');             
         const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
 
-            const [realDx, realDy] = this.calculateRealDist(item, 1, distVector)
+            let [realDx, realDy] = this.calculateRealDist(item, 1, distVector)
+
+            if (metaKey) {
+                realDx = realDx * 2;
+            }
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width + realDx;
             const newHeight = item.height;
 
-            this.moveDirectionVertex(item, newWidth, newHeight, 'to left', [0, newHeight/2, 0]);            
+            let directionNewVector = vec3.fromValues(0, newHeight/2, 0);            
+            
+            if (metaKey) {
+                directionNewVector = vec3.fromValues(realDx/2, newHeight/2, 0);
+            }
+
+            this.moveDirectionVertex(item, newWidth, newHeight, 'to left', directionNewVector);            
         }
     }       
     
     moveLeftVertex (distVector) {
+        const {shiftKey, altKey, metaKey} = this.$config.get('bodyEvent');             
         const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
 
-            const [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
+            let [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
+
+            if (metaKey) {
+                realDx = realDx * 2;
+            }
+
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width - realDx;
             const newHeight = item.height;
 
-            this.moveDirectionVertex(item, newWidth, newHeight, 'to right', [newWidth, newHeight/2, 0]);
+
+            let directionNewVector = vec3.fromValues(newWidth, newHeight/2, 0);            
+            
+            if (metaKey) {
+                directionNewVector = vec3.fromValues(newWidth + realDx/2, newHeight/2, 0);
+            }
+
+
+            this.moveDirectionVertex(item, newWidth, newHeight, 'to right', directionNewVector);
         }
     }           
 
 
     moveBottomLeftVertex (distVector) {
+        const {shiftKey, altKey} = this.$config.get('bodyEvent');
         const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 3, distVector)
 
-            if (this.$config.get('bodyEvent').shiftKey) {
+            if (shiftKey) {
                 realDy = -(realDx * item.height/item.width);
             }            
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width - realDx;
-            const newHeight = item.height + realDy;
+            const newHeight = altKey ? newWidth : item.height + realDy;
 
             this.moveDirectionVertex(item, newWidth, newHeight, 'to top right', [newWidth, 0, 0]);
         }
@@ -608,7 +691,10 @@ export default class SelectionToolView extends SelectionToolEvent {
         const diff = vec3.subtract([], item.data.start, item.data.end);
         const angle = calculateAngle360(diff[0], diff[1]) + 90;
 
-        let text = `${round(width, 100)} x ${round(height, 100)}`;
+        const widthPx = round(width, 100);
+        const heightPx = round(height, 100);
+
+        let text = widthPx === heightPx ? `WH: ${widthPx}` : `${round(width, 100)} x ${round(height, 100)}`;
 
         if (this.state.isRotate) {
             const rotateZ = Transform.get(this.$selection.current.transform, 'rotateZ')

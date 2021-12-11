@@ -47,6 +47,7 @@ import addArtboard from "./add.artboard";
 import setToolHand from "./set.tool.hand";
 import itemRotateMetaLeft from "./item.rotate.meta.left";
 import itemRotateMetaRight from "./item.rotate.meta.right";
+import selectAll from "./select.all";
 
 
 
@@ -58,6 +59,7 @@ export default [
     setToolHand,
     itemRotateMetaLeft,
     itemRotateMetaRight,    
+    selectAll,    
     
     // add layer 
     selectView,

@@ -33,7 +33,7 @@ export class InjectManager {
    * target 별 Object 를 나열해준다. 
    * 
    * @param {string} target 
-   * @returns 
+   * @returns {string}
    */
   generate(target, hasRef = false) {
     return this.getTargetMenuItems(target).map(it => {

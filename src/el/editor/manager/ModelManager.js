@@ -243,7 +243,7 @@ export class ModelManager {
      * 삭제되지 않은 아이템들을 리턴한다.
      * 
      * @param {string[]} ids 
-     * @returns 
+     * @returns {BaseModel[]}
      */
     searchLiveItemsById(ids) {
         return ids.map(id => this.get(id)).filter(it => !it.removed);
@@ -301,7 +301,7 @@ export class ModelManager {
                 ...itemObject,
             });
 
-            item.setModelManagerd(this);
+            item.setModelManager(this);
         }
 
         // Item 을 생성하면  아이템의 id 를 등록한다. 
@@ -499,7 +499,7 @@ export class ModelManager {
      */
     clone(rootId, isDeep = true) {
         const obj = this.get(rootId);
-        const json = obj.toCloneObject(rootId, isDeep)
+        const json = obj.toCloneObject(isDeep)
 
         const item = this.createModel(json);
         item.setParentId(obj.parentId)
@@ -520,6 +520,28 @@ export class ModelManager {
 
         // 다시 넣는다면 offset 도 지정을 다시 해야함 
         layer.offsetInParent = this.json.children[last-1].offset + 0.1;
+    }
+
+    /**
+     * 모델을 특정 itemType 의 인스턴스로 만들어준다.
+     * 
+     * @param {string} rootId 
+     * @param {string} itemType 
+     */
+    replaceByType(rootId, itemType) {
+        const item = this.get(rootId)
+        
+        if (item) {
+            const json = item.toCloneObject(false)
+
+            // itemType 을 삭제 
+            delete json.itemType;
+
+            const newInstance = this.components.createComponent(itemType, json);
+            newInstance.setModelManager(this);
+
+            this.set(rootId, newInstance);
+        };
     }
 
 

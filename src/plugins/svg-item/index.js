@@ -35,6 +35,14 @@ export default function (editor) {
     editor.registerInspector('svg-item', current => {
         return [
             {
+              key: 'edit',
+              editor: 'Button',
+              editorOptions: {
+                text: 'Edit',
+                action: ['open.editor', current]
+              },
+            },
+            {
               key: 'fill',
               editor: 'FillSingleEditor',
               editorOptions: {
@@ -55,16 +63,17 @@ export default function (editor) {
             },
             {
               key: 'fill-rule',
-              editor: 'SelectIconEditor',
+              editor: 'ToggleCheckBox',
               editorOptions: {
                 label: editor.$i18n('svg.item.property.fillRule'),
-                options: ["nonzero","evenodd" ]
+                toggleLabels: ["NONZERO","EVENODD" ],
+                toggleValues: ["nonzero","evenodd" ]
               },
               defaultValue: current['fill-rule'] || "nonzero"
             },
             {
               key: 'stroke',
-              editor: 'FillSingleEditor',
+              editor: 'fill-single',
               editorOptions: {
                 label: editor.$i18n('svg.item.property.stroke'),
               },
@@ -99,21 +108,23 @@ export default function (editor) {
             },
             {
               key: 'stroke-linecap',
-              editor: 'SelectIconEditor',
+              editor: 'ToggleCheckBox',
               editorOptions: {
                 label: editor.$i18n('svg.item.property.lineCap'),
-                options: ["butt","round","square"]
+                toggleLabels: ["BUTT","ROUND","SQUARE"],
+                toggleValues: ["butt","round","square"],
               },
-              defaultValue: current['stroke-linecap'] 
+              defaultValue: current['stroke-linecap'] || "butt"
             },
             {
               key: 'stroke-linejoin',
-              editor: 'SelectIconEditor',
+              editor: 'ToggleCheckBox',
               editorOptions: {
                 label: editor.$i18n('svg.item.property.lineJoin'),
-                options: ["miter","bevel","round"]
+                toggleLabels: ["MITER","BEVEL","ROUND"],
+                toggleValues: ["miter","bevel","round"]
               },
-              defaultValue: current['stroke-linejoin']
+              defaultValue: current['stroke-linejoin'] || "miter"
             },
             {
               key: 'mix-blend-mode',

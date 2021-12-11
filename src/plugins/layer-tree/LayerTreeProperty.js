@@ -162,7 +162,7 @@ export default class LayerTreeProperty extends BaseProperty {
       var selectedPathClass = this.$selection.hasPathOf(layer) ? 'selected-path' : '';
       var selectedClass = this.$selection.check(layer) ? 'selected' : '';
       var hovered = this.$selection.checkHover(layer) ? 'hovered' : '';
-      var name = layer.name;
+      var name = layer.isBooleanPath ? layer['boolean-operation'] : layer.name;
 
       if (layer.is('text')) {
         name = layer.text || layer.name

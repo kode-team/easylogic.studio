@@ -20,49 +20,66 @@
     }
 
     .area {
+        --selected-button-size: 50%;
+        --selected-button-position: 0%;
+        --unit-count: 2;        
+        --button-font-size: 13px;
         display: block; 
         font-size: 13px;
         height: 100%;
         position: relative;
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(var(--unit-count), 1fr);
         background-color: var(--elf--input-background-color);
         border-radius: 4px;
         padding: 2px;
+        font-size: var(--button-font-size);
+
+        > div {
+            width: 100%;
+            display: inline-block; 
+            position: relative;
+        }
 
         &:before {
             content: "";
             display: block;
-            width: 50%;
+            width: var(--selected-button-size);
             height: 26px;
             border-radius: 4px;
             background-color: var(--elf--selected-font-color);
             box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.1);
             position: absolute;
-            left: 2px;
+            left: var(--selected-button-position);
             top: 2px;
             transition: left 0.2s ease-in-out;
             z-index: 0;
             pointer-events: none;
         }
 
-        &[data-checked='true'] {
-
-            button[value='true'] {
+        &[data-selected-index='0'] {
+            button[data-index='0'] {
                 font-weight: bold;
             }
         }
 
-        &[data-checked='false'] {
-            &:before {
-                left: calc(50% - 2px);
-            }
-
-
-            button[value='false'] {
+        &[data-selected-index='1'] {
+            button[data-index='1'] {
                 font-weight: bold;
-            }            
+            }
+        }
+        
+        &[data-selected-index='2'] {
+            button[data-index='2'] {
+                font-weight: bold;
+            }
         }        
+
+        &[data-selected-index='3'] {
+            button[data-index='3'] {
+                font-weight: bold;
+            }
+        }                
 
         > * {
             z-index: 1;
@@ -70,6 +87,7 @@
 
         button {
             color: var(--elf--input-sub-font-color);
+            font-size: var(--button-font-size);
             box-sizing: border-box;
             display: inline-block;
             padding: 4px 8px;

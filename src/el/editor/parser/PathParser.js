@@ -1,6 +1,6 @@
 
-import { getBezierPointOneQuard, getBezierPoints, getBezierPointsLine, getBezierPointsQuard, getCurveBBox, getCurveDist, getPointInCurveList, getQuardDist, normalizeCurveForLine, normalizeCurveForQuard, polygonalForCurve, recoverBezier, recoverBezierLine, recoverBezierQuard, splitBezierPointsByCount, splitBezierPointsLineByCount, splitBezierPointsQuardByCount } from "el/utils/bezier";
-import { isNotUndefined, clone } from "el/sapa/functions/func";
+import { getBezierPoints, getBezierPointsLine, getBezierPointsQuard, getCurveBBox, getCurveDist, getQuardDist, normalizeCurveForLine, normalizeCurveForQuard, polygonalForCurve, recoverBezier, recoverBezierLine, recoverBezierQuard, splitBezierPointsByCount, splitBezierPointsLineByCount, splitBezierPointsQuardByCount } from "el/utils/bezier";
+import { isNotUndefined, clone, isNumber } from "el/sapa/functions/func";
 import { degreeToRadian, getDist, round } from "el/utils/math";
 import { mat4, vec2, vec3 } from "gl-matrix";
 import Point from "./Point";
@@ -399,7 +399,7 @@ export default class PathParser {
      * 
      * @param {array} [segments=this.segments] 
      * @param {string} [split=""] 
-     * @returns 
+     * @returns {string}
      */
     joinPath(segments, split = '') {
         var list = (segments || this.segments);
@@ -794,9 +794,11 @@ export default class PathParser {
      * count 에 의해 각각의 segment 를 나눈다. 
      * 
      * @param {number} count 
-     * @returns 
+     * @returns {PathParser}
      */
     divideSegmentByCount(count = 1) {
+
+    
         let allSegments = [];
         const groupList = this.getGroup();
 
@@ -808,7 +810,6 @@ export default class PathParser {
 
                 if (segment.command === 'M') {
                     newSegments.push(segment);
-                    return;
                 } else if (segment.command === 'L') {
 
                     const linePoints = splitBezierPointsLineByCount([
@@ -870,6 +871,24 @@ export default class PathParser {
                         newSegments.push(Segment.C(c1.x, c1.y, c2.x, c2.y, end.x, end.y));
                     })
                 } else if (segment.command === 'Z') {
+
+                    // const firstSegment = group.segments[0].segment;
+
+                    // const linePoints = splitBezierPointsLineByCount([
+                    //     {
+                    //         x: prevSegment.values[prevSegment.values.length - 2],
+                    //         y: prevSegment.values[prevSegment.values.length - 1]
+                    //     },
+                    //     {
+                    //         x: firstSegment.values[firstSegment.values.length - 2],
+                    //         y: firstSegment.values[firstSegment.values.length - 2],
+                    //     }
+                    // ], count)
+
+                    // linePoints.forEach(([start, end]) => {
+                    //     newSegments.push(Segment.L(end.x, end.y));
+                    // })                    
+
                     newSegments.push(segment);
                 }
             })
@@ -968,7 +987,7 @@ export default class PathParser {
      * 
      * @param {{x: number, y: number}} param0 
      * @param {number} count 
-     * @returns 
+     * @returns {Object}
      */
     getClosedPointInfo({ x, y }, count = 20) {
 
@@ -1061,7 +1080,7 @@ export default class PathParser {
      * 
      * @param {{x: number, y: number}} param0 
      * @param {number} count 
-     * @returns 
+     * @returns {Object}
      */
     getClosedPoint({ x, y }, count = 20) {
 
@@ -1080,7 +1099,7 @@ export default class PathParser {
      * 
      * @param {{x: number, y: number}} param0 
      * @param {number} dist 
-     * @returns 
+     * @returns {boolean}
      */
     isPointInPath({ x, y }, dist = 1) {
         const info = this.getClosedPointInfo({ x, y }, 20);
@@ -1097,6 +1116,10 @@ export default class PathParser {
 
     toString(split = '') {
         return this.joinPath(undefined, split);
+    }
+
+    toSVGString() {
+        return this.d;
     }
 
     transformMat4(transformMatrix, isReturn = false) {
@@ -1160,7 +1183,7 @@ export default class PathParser {
      * 좌표 역변환 
      * 
      * @param {mat4} transformMatrix 
-     * @returns 
+     * @returns {PathParser}
      */
     invert(transformMatrix) {
         this.transformMat4(mat4.invert([], transformMatrix));
@@ -1171,7 +1194,7 @@ export default class PathParser {
      * 좌표 숫자를 rounding 한다. 
      * 
      * @param {number} [k=1] round number 계수  
-     * @returns 
+     * @returns {PathParser}
      */
     round(k = 1) {
         this.each(function (segment) {
@@ -1280,14 +1303,31 @@ export default class PathParser {
             })
         }
 
-        this.resetSegments(newSegments);
+        return this.resetSegments(newSegments);
+    }
+
+    /**
+     * 
+     * @param {Function} func 
+     * @returns {string}
+     */
+    reversePathStringByFunc(func) {
+        const pathList = this.toPathList().map((p, index) => {
+            if (func(p, index)) {
+              return p.reverse()
+            }
+      
+            return p;
+          });
+      
+          return PathParser.joinPathList(pathList).toSVGString();
     }
 
 
     /**
      * 컨트롤 포인트를 제외한 모든 점을 반환한다.
      * 
-     * @returns {{index: number, pointer: vec3}[]}
+     * @returns {Object[]}
      */
     getCenterPointers() {
         let arr = []
@@ -1349,7 +1389,7 @@ export default class PathParser {
      * 
      * @param {vec3} pointer 
      * @param {number} [dist=0]
-     * @returns 
+     * @returns {boolean}
      */
     getSamePointers(pointer, dist = 0) {
         return this.getCenterPointers().filter(p => {
@@ -1408,7 +1448,7 @@ export default class PathParser {
      * groupPath 생성 
      * 
      * @param {number} index  group index
-     * @returns 
+     * @returns {PathParser}
      */
     createGroupPath(index) {
         const path = new PathParser();
@@ -1444,7 +1484,7 @@ export default class PathParser {
      * 
      * @param {{x: number, y: number}} pos 
      * @param {number} [dist=0]
-     * @returns 
+     * @returns {Object}
      */
     splitSegmentByPoint(pos, dist = 0) {
         const closedPointInfo = this.getClosedPointInfo(pos, dist);
@@ -1488,8 +1528,6 @@ export default class PathParser {
 
             return closedPointInfo;
         }
-
-
     }
 
     /**
@@ -1533,7 +1571,7 @@ export default class PathParser {
      * pathkit 에 있는 simplify 는 group 화 되어 있는 path 를 합쳐주는거라서 이 알고리즘이랑 다름. 
      * 
      * @param {number} tolerance 
-     * @returns 
+     * @returns {PathParser}
      */
     simplify(tolerance = 0.1) {
         const newGroupSegments = [];
@@ -1573,7 +1611,7 @@ export default class PathParser {
      * convert points to curve 
      * 
      * @param {number} error count
-     * @returns 
+     * @returns {PathParser}
      */
     smooth(error = 50) {
         let newGroupSegments = [];
@@ -1782,7 +1820,7 @@ export default class PathParser {
      * @param {number} y 
      * @param {number} width 
      * @param {number} height 
-     * @returns 
+     * @returns {PathParser}
      */
     drawCircleWithRect (x, y, width, height = width) {
 
@@ -1810,7 +1848,7 @@ export default class PathParser {
      * @param {number} cx 
      * @param {number} cy 
      * @param {number} radius 
-     * @returns 
+     * @returns {PathParser}
      */
     drawCircle(cx, cy, radius) {
         return this.drawCircleWithRect(cx - radius, cy - radius, radius * 2, radius * 2);   
@@ -2029,7 +2067,7 @@ export default class PathParser {
      * PathParser 리스트를 결합해서 하나의 새로운 PathParser 를 만들어낸다. 
      * 
      * @param {PathParser[]}} pathList 
-     * @returns 
+     * @returns {PathParser}
      */
     static joinPathList (pathList = []) {
         const newPath = PathParser.fromSVGString();
@@ -2093,7 +2131,7 @@ export default class PathParser {
     /**
      * make path by points 
      * 
-     * @param {{x: number, y: number}[]} points 
+     * @param {Object[]} points 
      * @returns {PathParser}
      */
     static makePathByPoints(points = []) {

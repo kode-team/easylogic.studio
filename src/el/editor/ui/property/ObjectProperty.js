@@ -12,7 +12,7 @@ export default class ObjectProperty {
    * @param {string} [json.editableProperty] editable property name
    * @param {string|Function} [json.action] action name or function
    * @param {Function} [json.inspector] inspector create function
-   * @returns 
+   * @returns {BaseProperty}
    */
   static create (json) {
     return class extends BaseProperty {

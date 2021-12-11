@@ -107,7 +107,7 @@ export class SplineItem extends SVGItem {
       verties.push(vec3.clone(pt));
     }
 
-    return PathParser.makePathByVerties(verties, false).d;
+    return PathParser.makePathByVerties(verties, false).round(1000).d;
   }
  
 

@@ -1,5 +1,6 @@
 import { CLICK, KEYUP, INPUT, IF, PASTE } from 'el/sapa/Event'
 import { EditorElement } from 'el/editor/ui/common/EditorElement';
+import { iconUse } from 'el/editor/icon/icon';
 
 export default class ColorInformation extends EditorElement {
 
@@ -7,7 +8,9 @@ export default class ColorInformation extends EditorElement {
         return /*html*/`
         <div class="information hex">
             <div ref="$informationChange" class="information-change">
-                <button ref="$formatChangeButton" type="button" class="format-change-button arrow-button"></button>
+                <button ref="$formatChangeButton" type="button" class="format-change-button">
+                    ${iconUse("unfold")}
+                </button>
             </div>
             <div class="information-item hex">
                 <div class="input-field hex">

@@ -107,7 +107,7 @@ export class SVGItem extends LayerModel {
    * 
    * @param {number} x 
    * @param {number} y 
-   * @returns 
+   * @returns {boolean}
    */
    hasPoint (x, y) {
 
@@ -137,7 +137,7 @@ export class SVGItem extends LayerModel {
    * 
    * @param {*} x 
    * @param {*} y 
-   * @returns 
+   * @returns {boolean}
    */
   isPointInFill(x, y) {
     const svgEl = this.getCache("svgElement")
@@ -155,6 +155,13 @@ export class SVGItem extends LayerModel {
     return false;
   }
 
+
+  /**
+   * 
+   * @param {number} x 
+   * @param {number} y 
+   * @returns {boolean}
+   */
   isPointInStroke(x, y) {
     const svgEl = this.getCache("svgElement")
     const pathEl = this.getCache("pathElement")
@@ -171,6 +178,12 @@ export class SVGItem extends LayerModel {
     return false;
   }
 
+  /**
+   * 
+   * @param {number} distX 
+   * @param {number} distY 
+   * @returns {Object}
+   */
   convertStrokeToPath(distX = 10, distY = 10) {
 
     const attrs = this.attrs('width', 'parentId', 'height', 'x', 'y', 'transform');        
@@ -189,6 +202,10 @@ export class SVGItem extends LayerModel {
   }  
 
 
+  /**
+   * 
+   * @returns {Object}
+   */
   toSVGPath() {
     const attrs = this.toCloneObject();
 

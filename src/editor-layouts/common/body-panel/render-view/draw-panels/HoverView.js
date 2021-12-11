@@ -29,8 +29,6 @@ export default class HoverView extends EditorElement {
 
     /**
      * CanvasView 모드일 때만  HoverView 동작하도록 설정 
-     * 
-     * @returns 
      */
     [CONFIG('bodyEvent') + IF('checkModeView')]() {
 

@@ -1,7 +1,6 @@
 import { Length } from "el/editor/unit/Length";
 import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
-import { OBJECT_TO_CLASS } from "el/utils/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './CSSPropertyEditor.scss';
@@ -29,11 +28,13 @@ export default class CSSPropertyEditor extends EditorElement {
 
 
   template() {
+
+
+    const hideTitleClass = this.state.hideTitle ? 'hide-title' : '';
+    const hideRefreshClass = this.state.hideRefresh ? 'hide-refresh' : '';
+
     return /*html*/`
-      <div class='elf--css-property-editor ${OBJECT_TO_CLASS({ 
-        'hide-title': this.state.hideTitle, 
-        'hide-refresh': this.state.hideRefresh 
-      })}'>
+      <div class='elf--css-property-editor ${hideTitleClass} ${hideRefreshClass}'>
         <div class='title'>
           <label>${this.$i18n('css.property.editor.properties')}</label>
           <div class='tools'>

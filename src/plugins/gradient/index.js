@@ -16,6 +16,13 @@ export default function (editor) {
         FillEditor,
         GradientSingleEditor,
     })
+
+    editor.registerAlias({
+        'fill-single': 'FillSingleEditor',
+        'fill': 'FillEditor',
+        'gradient-single': 'GradientSingleEditor',
+    })
+
     editor.registerMenuItem('popup', {
         FillPickerPopup,
         GradientPickerPopup

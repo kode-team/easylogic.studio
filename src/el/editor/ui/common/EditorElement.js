@@ -111,14 +111,14 @@ export class EditorElement extends UIElement {
     }
 
     /**
-     * @type {ViewportManager} $viewport
+     * @type {ViewportManager}
      */
     get $viewport() {
         return this.$editor.viewport;
     }
 
     /**
-     * @type {SnapManager} $snapManager
+     * @type {SnapManager}
      */
     get $snapManager() {
         return this.$editor.snapManager;
@@ -133,21 +133,21 @@ export class EditorElement extends UIElement {
     }
 
     /**
-     * @type {ShortCutManager} $shortcuts
+     * @type {ShortCutManager}
      */
     get $shortcuts() {
         return this.$editor.shortcuts;
     }
 
     /**
-     * @type {KeyBoardManager} $keyboardManager
+     * @type {KeyBoardManager}
      */
     get $keyboardManager() {
         return this.$editor.keyboardManager;
     }
 
     /**
-     * @type {StorageManager} $storageManager
+     * @type {StorageManager}
      */
     get $storageManager() {
         return this.$editor.storageManager;

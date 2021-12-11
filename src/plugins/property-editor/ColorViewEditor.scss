@@ -57,7 +57,7 @@
                 border-top-right-radius: 0px;
                 border-bottom-right-radius: 0px;
                 overflow: hidden; 
-                @include transparent-background(13px, rgb(199, 199, 199));  
+                @include transparent-background(13px, rgb(199, 199, 199), 6.5px);  
                 box-sizing: border-box;
                 box-shadow: 1px 0 0 0px var(--elf--border-color);
     

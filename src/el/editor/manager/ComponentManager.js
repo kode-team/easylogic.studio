@@ -50,7 +50,7 @@ export class ComponentManager {
    * 
    * @param {string} itemType 
    * @param {Item} item 
-   * @returns 
+   * @returns {Object[]}
    */
   createInspector (item, name = '') {
     const inspector = this.getInspector(name || item.itemType);

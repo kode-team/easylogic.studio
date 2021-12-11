@@ -1,4 +1,4 @@
-import { CLICK } from "el/sapa/Event";
+import { CLICK, CONFIG, LOAD } from "el/sapa/Event";
 import icon, { iconUse } from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
@@ -8,11 +8,12 @@ export default class SwitchLeftPanel extends EditorElement {
 
     template () {
         return /*html*/`
-        <button class="elf--switch-left-panel" data-tooltip="Toggle left panel" data-direction="top left">${iconUse("left_hide")}</button>
+            <button class="elf--switch-left-panel" data-tooltip="Toggle left panel" data-direction="top left">${iconUse("switch_left")}</button>
         `
     }
 
     [CLICK()] () {
         this.$config.toggle('show.left.panel');
     }
+
 }
