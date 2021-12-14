@@ -40,6 +40,7 @@ export default class DomRender extends MovableRender {
         'overflow',
         'opacity',
         'rotate',
+        'layout',
         'flex-layout',      
         'grid-layout',         
         'animation',      

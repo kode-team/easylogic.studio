@@ -111,7 +111,7 @@ export default function (editor) {
               editor: 'ToggleCheckBox',
               editorOptions: {
                 label: editor.$i18n('svg.item.property.lineCap'),
-                toggleLabels: ["BUTT","ROUND","SQUARE"],
+                toggleLabels: ["line_cap_butt","line_cap_round","line_cap_square" ],
                 toggleValues: ["butt","round","square"],
               },
               defaultValue: current['stroke-linecap'] || "butt"
@@ -121,8 +121,8 @@ export default function (editor) {
               editor: 'ToggleCheckBox',
               editorOptions: {
                 label: editor.$i18n('svg.item.property.lineJoin'),
-                toggleLabels: ["MITER","BEVEL","ROUND"],
-                toggleValues: ["miter","bevel","round"]
+                toggleLabels: ["line_join_miter", "line_join_round","line_join_bevel"],
+                toggleValues: ["miter","round","bevel"]
               },
               defaultValue: current['stroke-linejoin'] || "miter"
             },
@@ -131,7 +131,6 @@ export default function (editor) {
               editor: 'BlendSelectEditor',
               editorOptions: {
                 label: editor.$i18n('svg.item.property.blend'),
-                options: ["butt","round","square"]
               },
               defaultValue: current['mix-blend-mode']
             },

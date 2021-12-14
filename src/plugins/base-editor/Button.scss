@@ -28,13 +28,13 @@
             display: inline-block;
             border: 0px;
             background-color: var(--elf--input-border-color);
-            color: var(--elf--input-sub-font-color);
+            color: var(--elf--selected-color);
             height: 100%;
             width : 100%;
             border-radius: 4px;
 
             &:hover {
-                background-color: var(--elf--selected-color);
+                background-color: var(--elf--selected-color-2);
                 color: var(--elf--selected-font-color);
             }
         }

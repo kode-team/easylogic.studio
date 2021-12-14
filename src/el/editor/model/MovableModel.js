@@ -73,8 +73,8 @@ export class MovableModel extends BaseAssetModel {
         return json; 
     }
 
-    reset(obj) {
-        const isChanged = super.reset(obj);
+    reset(obj, context = {origin: '*'}) {
+        const isChanged = super.reset(obj, context);
         // transform 에 변경이 생기면 미리 캐슁해둔다. 
         if (this.hasChangedField('children', 'x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'transform-origin', 'perspective', 'perspective-origin')) {
             this.refreshMatrixCache()
@@ -300,6 +300,7 @@ export class MovableModel extends BaseAssetModel {
         return this.json.y.toPx(this.screenHeight.value);  
     }
     
+    
     get screenWidth () { 
         if (this.is('project') || !this.parent) {
             return ZERO;  
@@ -367,7 +368,7 @@ export class MovableModel extends BaseAssetModel {
     }
 
     get angle () {
-        return Transform.get(this.json.transform, 'rotateZ')[0]?.value;
+        return Transform.get(this.json.transform, 'rotateZ')?.[0]?.value;
     }
 
     /**
@@ -660,11 +661,11 @@ export class MovableModel extends BaseAssetModel {
         return vertiesMap(model, this.accumulatedMatrix)
     }
 
-    selectionVerties () {
-        let selectionModel = rectToVerties(-6, -6, this.screenWidth.value+12, this.screenHeight.value+12, this.json['transform-origin']);
+    // selectionVerties () {
+    //     let selectionModel = rectToVerties(-6, -6, this.screenWidth.value+12, this.screenHeight.value+12, this.json['transform-origin']);
         
-        return vertiesMap(selectionModel, this.accumulatedMatrix)
-    }    
+    //     return vertiesMap(selectionModel, this.accumulatedMatrix)
+    // }    
 
     rectVerties () {
         return this.verties.filter((_, index) => index < 4)

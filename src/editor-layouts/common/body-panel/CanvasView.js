@@ -9,17 +9,8 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import HTMLRenderView from "./render-view/html-render-view/HTMLRenderView";
 import PageTools from "./render-view/util-panels/PageTools";
 
-import LayerAppendView from "./render-view/draw-panels/LayerAppendView";
-import PathDrawView from "./render-view/draw-panels/PathDrawView";
-import PathEditorView from "./render-view/draw-panels/PathEditorView";
-import HoverView from "./render-view/draw-panels/HoverView";
-import GuideLineView from "./render-view/draw-panels/GuideLineView";
-import SelectionInfoView from "./render-view/draw-panels/SelectionInfoView";
-import GridLayoutLineView from "./render-view/draw-panels/GridLayoutLineView";
 import DragAreaView from "./render-view/draw-panels/DragAreaView";
 import DragAreaRectView from "./render-view/draw-panels/DragAreaRectView";
-import SelectionToolView from "./render-view/draw-panels/SelectionToolView";
-import GroupSelectionToolView from "./render-view/draw-panels/GroupSelectionToolView";
 
 
 import './CanvasView.scss';
@@ -29,18 +20,9 @@ export default class CanvasView extends EditorElement {
 
   components() {
     return {
-      SelectionToolView,
-      GroupSelectionToolView,
       PageTools,
-      GridLayoutLineView,
       DragAreaRectView,
       HTMLRenderView,
-      SelectionInfoView,
-      LayerAppendView,
-      PathEditorView,
-      PathDrawView,
-      HoverView,
-      GuideLineView,
       DragAreaView
     }
   }
@@ -66,40 +48,13 @@ export default class CanvasView extends EditorElement {
           <div class='page-lock scrollbar' ref='$lock'>            
 
             <!-- 선택 영역 이벤트 설정  -->
-            <object refClass="DragAreaView" ref="$dragAreaView" />               
+            <object refClass="DragAreaView" />
 
             <!-- HTML 렌더링 영역  --> 
-            <object refClass='HTMLRenderView' ref='$elementView' />                                        
-
-            <!--  One Selection Tool --> 
-            <object refClass='SelectionToolView' ref='$selectionTool' />
-
-            <!-- Group Selection Tool --> 
-            <object refClass='GroupSelectionToolView' ref='$groupSelectionTool' />
+            <object refClass='HTMLRenderView' />
 
             <!-- 드래그 영역 그려주는 뷰 --> 
-            <object refClass="DragAreaRectView" ref="$dragAreaRectView" />                  
-
-            <!-- Grid Layout 에서 사용되는 영역 그려주는 뷰 --> 
-            <object refClass='GridLayoutLineView' ref='$gridLayoutLineView' />            
-
-            <!-- ArtBoard 의 title 부분 그려주는 뷰  -->
-            <object refClass='SelectionInfoView' ref='$selectionInfoView' />                                                            
-
-            <!-- 스마트 가이드 라인 그려주는 뷰  -->
-            <object refClass='GuideLineView' ref='$guideLineView' />            
-
-            <!-- Hover 된 레이어 영역을 그려주는 뷰 -->
-            <object refClass='HoverView' ref='$hoverView' />     
-
-            <!-- 레이어를 추가 하기 위해서 드래그 하는 영역 뷰 -->
-            <object refClass='LayerAppendView' ref='$objectAddView' />       
-
-            <!-- 패스 편집 에디터 뷰  -->
-            <object refClass='PathEditorView' ref='$pathEditorView' />                 
-
-            <!-- 패스 드로잉 에디터 뷰 -->
-            <object refClass='PathDrawView' ref='$pathDrawView' />            
+            <object refClass="DragAreaRectView" ref="$dragAreaRectView" />                                                                            
 
             <!-- 캔버스 영역에 그리기 도와주는 뷰 -->
             ${this.$injectManager.generate('canvas.view')}              
@@ -221,8 +176,6 @@ export default class CanvasView extends EditorElement {
    * transform-origin 을 현재 보고 있는 시점의 좌표로 맞출 수 있어야 한다. 
    * 그런 다음 scale 을 한다. 
    * // 내 마우스 위치를 
-   * 
-   * @private
    */
   [WHEEL('$lock') + PREVENT](e) {
 

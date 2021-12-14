@@ -5,7 +5,7 @@
     height: var(--elf--input-height);
 
     &.has-label {
-        grid-template-columns: 64px 1fr;
+        grid-template-columns: 70px 1fr;
         grid-column-gap: 2px;
 
         label {
@@ -47,7 +47,7 @@
             width: var(--selected-button-size);
             height: 26px;
             border-radius: 4px;
-            background-color: var(--elf--selected-font-color);
+            background-color: var(--elf--selected-color-2);
             box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.1);
             position: absolute;
             left: var(--selected-button-position);
@@ -60,24 +60,28 @@
         &[data-selected-index='0'] {
             button[data-index='0'] {
                 font-weight: bold;
+                color: var(--elf--selected-font-color);
             }
         }
 
         &[data-selected-index='1'] {
             button[data-index='1'] {
                 font-weight: bold;
+                color: var(--elf--selected-font-color);                
             }
         }
         
         &[data-selected-index='2'] {
             button[data-index='2'] {
                 font-weight: bold;
+                color: var(--elf--selected-font-color);                
             }
         }        
 
         &[data-selected-index='3'] {
             button[data-index='3'] {
                 font-weight: bold;
+                color: var(--elf--selected-font-color);                
             }
         }                
 

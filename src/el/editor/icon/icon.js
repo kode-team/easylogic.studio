@@ -186,6 +186,13 @@ import unfold from "./unfold";
 import outline_shape from "./outline_shape";
 import switch_left from "./switch_left";
 import switch_right from "./switch_right";
+import line_cap_butt from "./line_cap_butt";
+import line_cap_round from "./line_cap_round";
+import line_cap_square from "./line_cap_square";
+import line_join_bevel from "./line_join_bevel";
+import line_join_round from "./line_join_round";
+import line_join_miter from "./line_join_miter";
+
 
 const alias = {
   fullscreen:  border_inner
@@ -193,13 +200,21 @@ const alias = {
 
 export function iconUse(name, transform = "", opt = { width: 24, height: 24 }) {
   return /*html*/`
-    <svg viewBox="0 0 ${opt.width} ${opt.height}" xmlns="http://www.w3.org/2000/svg"><use href="#icon-${name}" transform="${transform}" /> </svg>
+    <svg viewBox="0 0 ${opt.width} ${opt.height}" xmlns="http://www.w3.org/2000/svg">
+      <use href="#icon-${name}" transform="${transform}" width="${opt.width}" height="${opt.height}" /> 
+    </svg>
   `
 }
 
 
 export default {
   ...alias,
+  line_cap_butt,
+  line_cap_round,
+  line_cap_square,
+  line_join_bevel,
+  line_join_round,
+  line_join_miter,  
   switch_right,
   switch_left,
   outline_shape,

@@ -3,14 +3,14 @@
 $border-color: #595959;
 $selected-border-color: #3a89f0;
 $selected-color: #03a9f4;
-$selected-color-2: #202223;
+$selected-color-2: #206bb5;
 
 $selection-tool-border-color: #3a89f0;
 
 $background-color: #262626;
 $header-background-color: #363636;
 $selected-background-color: #535353; 
-$font-color: #ffffff;
+$font-color: #ececec;
 $disabled-font-color: #8a8a8a;
 $selected-font-color: rgb(255, 255, 255);
 $menu-item-title-font-color: #949494;
@@ -21,8 +21,8 @@ $range-thumb-color:  $selected-color;
 $range-track-color:  rgb(97, 97, 97);
 $range-thumb-border-color: rgba(0, 0, 0, 0.8);
 
-$input-background-color: #383838;
-$input-border-color:#383838;
+$input-background-color: #181a1f;
+$input-border-color:#151517;
 $input-font-color: #ececec;
 $input-sub-font-color: #7a7a7a;
 $input-height: 30px;
@@ -41,8 +41,8 @@ $tab-selected-border-color: black;
 $tab-border-color: $border-color;
 
 // property 
-$property-border-color: $border-color;
-$property-background-color: #3c3c3c;
+$property-border-color: #0b0b0b;
+$property-background-color: #22282c;
 $property-title-background-color: #161616;
 
 // list 
@@ -87,5 +87,5 @@ $drag-area-rect-background-color: rgba(107, 188, 255, 0.214);
 $rotate-x-border-color: rgb(104, 104, 247);
 $rotate-y-border-color: rgb(112, 197, 112);
 
-$tooltip-background-color: rgba($selected-color, 0.9);
+$tooltip-background-color: $selected-color;
 $tooltip-font-color: $selected-font-color;

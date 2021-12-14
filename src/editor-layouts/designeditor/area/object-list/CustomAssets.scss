@@ -56,12 +56,12 @@
                 bottom:0px;
                 left:0px;
                 right:0px;
-                display: none;
+                // display: none;
                 padding: 2px;
                 box-sizing: border-box;
                 opacity: 1;
                 transition: opacity 0.2s;
-                background-color: rgba(0, 0, 0, 0.4);
+                background-color: rgba(0, 0, 0, 0);
 
                 .title {
                     text-align: left;

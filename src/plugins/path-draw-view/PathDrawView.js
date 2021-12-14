@@ -34,10 +34,6 @@ export default class PathDrawView extends EditorElement {
             'stroke-linecap': 'round',
             'stroke-linejoin': 'round',
             tolerance: 1,
-            screenX: Length.z(),
-            screenY: Length.z(),
-            screenWidth: Length.z(),
-            screenHeight: Length.z()
         }
     }
 
@@ -151,10 +147,6 @@ export default class PathDrawView extends EditorElement {
         return {
             current,
             d: current.d,
-            screenX: current.screenX,
-            screenY: current.screenY,
-            screenWidth: current.screenWidth,
-            screenHeight: current.screenHeight,
         }
     }
 

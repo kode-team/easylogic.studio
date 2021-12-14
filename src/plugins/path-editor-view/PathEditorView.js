@@ -12,7 +12,6 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
 import './PathEditorView.scss';
 import { vertiesToRectangle } from "el/utils/collision";
-import { PathEditorModifyMode } from "./path-editor-mode/PathEditorModifyMode";
 
 /**
  * convert array[x, y] to object{x, y} 
@@ -234,10 +233,6 @@ export default class PathEditorView extends PathTransformEditor {
 
         this.pathParser = new PathParser();
         this.pathGenerator = new PathGenerator(this)
-
-        this.modes = {
-            modify: new PathEditorModifyMode(this),
-        }
     }
 
     initState() {

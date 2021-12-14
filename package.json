@@ -23,17 +23,16 @@
     "nurbs": "^1.1.1",
     "pathkit-wasm": "^0.7.0",
     "svg-arc-to-cubic-bezier": "^3.2.0",
-    "yorkie-js-sdk": "^0.1.8"
+    "yorkie-js-sdk": "^0.1.11"
   },
   "devDependencies": {
+    "adorable-css": "^0.4.8",
     "autoprefixer": "^9.8.6",
     "cssnano": "^5.0.12",
     "jest": "^24.8.0",
     "jest-cli": "^24.8.0",
     "jest-report": "^0.1.11",
-    "jsdoc": "^3.6.7",
     "postcss": "^8.4.4",
-    "postcss-loader": "^3.0.0",
     "release-it": "^14.6.2",
     "rollup-plugin-copy": "^3.4.0",
     "sass": "^1.44.0",
@@ -50,8 +49,7 @@
     "watch": "webpack --mode=production --watch --progress --config=webpack.dist.config.js",
     "build": "npm run vite:prod; npm run vite:dist",
     "dev": "npm run vite:dev",
-    "test": "NODE_ENV=test jest --watch",
-    "docs": "jsdoc ./src/ -r -d documentation/"
+    "test": "NODE_ENV=test jest --watch"
   },
   "repository": {
     "type": "git",

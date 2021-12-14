@@ -211,53 +211,6 @@ export default class DragAreaView extends EditorElement {
     }
 
 
-    // moveTo(distVector) {
-
-    //     distVector = vec3.floor([], distVector);
-
-
-
-    //     //////  snap 체크 하기 
-    //     const snap = this.$snapManager.check(this.$selection.cachedRectVerties.map(v => {
-    //         return vec3.add([], v, distVector)
-    //     }), 3);
-
-    //     // dist 거리 계산 
-    //     const localDist = vec3.add([], snap, distVector);
-
-
-    //     const result = {}
-    //     this.$selection.cachedItemMatrices.forEach(it => {
-
-    //         // newVerties 에 실제 움직인 좌표로 넣고 
-    //         const newVerties = it.verties.map(v => {
-    //             return vec3.add([], v, localDist)
-    //         })
-
-    //         // 첫번째 좌표 it.rectVerties[0] 과 
-    //         // 마지막 좌표 newVerties[0] 를 
-    //         // parentMatrixInverse 기준으로 다시 원복하고 거리를 잰다 
-    //         // 그게 실제적인 distance 이다. 
-    //         const newDist = vec3.subtract(
-    //             [], 
-    //             vec3.transformMat4([], newVerties[0], it.parentMatrixInverse), 
-    //             vec3.transformMat4([], it.verties[0], it.parentMatrixInverse)
-    //         )
-
-    //         result[it.id] = {
-    //             x: Length.px(it.x + newDist[0]).round(1000),          // 1px 단위로 위치 설정 
-    //             y: Length.px(it.y + newDist[1]).round(1000),
-    //         }
-    //     });
-
-    //     this.$selection.reset(result);
-    // }
-
-    // [SUBSCRIBE('selectionToolView.moveTo')](newDist) {
-    //     this.moveTo(newDist);
-    //     this.emit('refreshSelectionTool', true);
-    // }
-
     moveEndPointer() {
 
         if (this.$config.get('set.dragarea.mode')) {

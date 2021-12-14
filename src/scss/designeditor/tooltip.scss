@@ -31,7 +31,7 @@
     left: 50%;
     top: 110%;
     transform: translateX(-50%);
-    z-index: 1000000;
+    z-index: 10000000;
     white-space: nowrap;
     box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1);
   }
@@ -59,7 +59,7 @@
       position: absolute;
       right: auto;
       left: 50%;
-      top: 100%;
+      top: var(--elf--toggle-checkbox-tooltip-bottom-top, 100%);
       transform: translateX(-50%);
     }
   }
@@ -69,7 +69,7 @@
       position: absolute;
       right: auto;
       left: 50%;
-      top: 0%;
+      top: var(----elf--toggle-checkbox-tooltip-top, 0%);
       transform: translateX(-50%) translateY(-150%);
     }
   }

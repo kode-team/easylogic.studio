@@ -69,7 +69,7 @@ export default class DesignEditor extends BaseLayout {
   }
 
   template() {
-    const designMode = this.$config.get('editor.design.mode')
+    const isItemMode = this.$config.is('editor.design.mode', 'item')
     return /*html*/`
       <div class="designeditor">
         <div class="layout-main">
@@ -81,10 +81,10 @@ export default class DesignEditor extends BaseLayout {
               <object refClass="BodyPanel" ref="$bodyPanelView" />
             </div>                           
             <div class='layout-left' ref='$leftPanel'>
-              ${designMode === 'item' ? "<object refClass='ItemLayerTab' />" : "<object refClass='LayerTab' />"}
+              ${isItemMode ? "<object refClass='ItemLayerTab' />" : "<object refClass='LayerTab' />"}
             </div>
             <div class="layout-right" ref='$rightPanel'>
-              ${designMode === 'item' ? '<object refClass="SingleInspector" />' : '<object refClass="Inspector" />'}
+              ${isItemMode ? '<object refClass="SingleInspector" />' : '<object refClass="Inspector" />'}
             </div>
             <div class='layout-footer' ref='$footerPanel'>
               <div class='footer-splitter' ref='$footerSplitter' title="${this.$i18n('timeline.property.resize')}"></div>

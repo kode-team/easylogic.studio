@@ -31,6 +31,7 @@ import { SegmentSelectionManager } from "./SegmentSelectionManager";
 import { LockManager } from "./LockManager";
 import { VisibleManager } from "./VisibleManager";
 import { CommandMaker } from "./CommandMaker";
+import { ClipboardManager } from './ClipboardManager';
 
 
 export const EDIT_MODE_SELECTION = 'SELECTION';
@@ -93,6 +94,7 @@ export class Editor {
     this.pathKitManager = new PathKitManager(this);
     this.lockManager = new LockManager(this);
     this.visibleManager = new VisibleManager(this);
+    this.clipboard = new ClipboardManager(this);
 
     this.initPlugins();
     this.initStorage();

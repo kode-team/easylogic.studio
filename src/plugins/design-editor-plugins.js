@@ -57,6 +57,15 @@ import transform from "./transform"
 import transformOrigin from "./transform-origin"
 import transition from "./transition"
 import video from "./video"
+import pathDrawView from "./path-draw-view"
+import pathEditorView from "./path-editor-view"
+import layerAppendView from "./layer-append-view"
+import hoverView from "./hover-view"
+import guideLineView from "./guide-line-view"
+import selectionInfoView from "./selection-info-view"
+import selectionToolView from "./selection-tool-view"
+
+
 
 
 export default [
@@ -147,4 +156,14 @@ export default [
     // todo: timeline,
     //timeline
     project,
+
+    // canvas tool
+    selectionToolView,
+    selectionInfoView,    
+    guideLineView,    
+    layerAppendView,
+    hoverView,
+    pathDrawView,
+    pathEditorView,    
+
 ]

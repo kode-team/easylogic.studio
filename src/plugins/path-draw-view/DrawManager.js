@@ -50,7 +50,7 @@ export default class DrawManager extends EditorElement {
         </div>      
         <div class='tools'>   
           <div >        
-            <label data-tooltip="${this.$i18n('draw.manager.tolerance')}">T</label>            
+            <label data-tooltip="${this.$i18n('draw.manager.tolerance')}">Tolerance</label>            
             <object refClass="NumberInputEditor"  
               ref='$tolerance' 
               key='tolerance' 

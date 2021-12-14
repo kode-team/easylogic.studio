@@ -92,6 +92,7 @@ export default class NumberRangeEditor extends EditorElement {
     }
 
     setValue (value) {
+        console.log(value);
         this.setState({
             value: Length.parse(value)
         })

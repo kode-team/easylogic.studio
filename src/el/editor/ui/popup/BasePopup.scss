@@ -1,10 +1,10 @@
 .elf--popup {
     position: absolute;
     display: none;
-    
+
     z-index: 1000;
     background-color: var(--elf--popup-background-color);
-    border-radius: 2px;
+    border-radius: 4px;
     box-shadow: 0px 1px 5px 0 rgba(0, 0, 0, 0.5);
     // padding: 10px 10px;
     color: var(--elf--font-color);

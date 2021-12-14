@@ -179,8 +179,8 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
             const diff = vec3.subtract([], pointer, this.state.renderPointerList[0][4]);
             const angle = calculateAngle360(diff[0], diff[1]);
-            let iconAngle = Math.floor(angle)  - 135
-            this.emit('refreshCursor', 'open_in_full', `rotate(${iconAngle} 12 12)`)
+            let iconAngle = Math.floor(angle)
+            this.emit('refreshCursor', 'open_in_full', `rotate(${iconAngle} 8 8)`)
         } else {
             this.emit('recoverCursor');
         }
@@ -296,8 +296,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
                 y: Length.px(newY + realDy),
                 width: Length.px(newWidth),
                 height: Length.px(newHeight)
-            })
-            // instance.recover();              
+            }) 
         }            
     }
 
@@ -589,16 +588,14 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         if (!this.groupItem) return;
 
         const verties = (this.state.dragging) ? this.groupItem.verties : this.$selection.verties;
-        const selectionVerties = this.groupItem.selectionVerties();
 
         if (verties.length === 0) return;
 
         this.state.renderPointerList = [
             this.$viewport.applyVerties(verties),
-            this.$viewport.applyVerties(selectionVerties),
         ]
 
-        const {line, point, size, elementLine} = this.createRenderPointers(this.state.renderPointerList[0], this.state.renderPointerList[1]);
+        const {line, point, size, elementLine} = this.createRenderPointers(this.state.renderPointerList[0]);
 
         this.refs.$pointerRect.updateDiff(line + elementLine + point + size)
     }
@@ -725,8 +722,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         `
     }    
 
-    createRenderPointers(pointers, selectionPointers) {
-        const isPointerMove = this.$editor.isPointerMove;
+    createRenderPointers(pointers) {
         const diff = vec3.subtract(
             [], 
             vec3.lerp([], pointers[0], pointers[1], 0.5), 

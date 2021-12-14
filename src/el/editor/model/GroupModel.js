@@ -1,4 +1,5 @@
 import { MovableModel } from "./MovableModel";
+import { rectToVerties } from 'el/utils/collision';
 
 const layout_list  = ['flex', 'grid']
 
@@ -50,4 +51,18 @@ export class GroupModel extends MovableModel {
         return 'flex' === this.parent.layout 
     }
 
+    /**
+     * padding 을 제외한 내부 content 영역을 verties 로 리턴한다. 
+     * 
+     */
+    get contentBox () {
+
+        const x = this['padding-left'] || 0;
+        const y = this['padding-top'] || 0;
+
+        const width = this.screenWidth.value - (this['padding-left'] || 0) - (this['padding-right'] || 0);
+        const height = this.screenHeight.value - (this['padding-top'] || 0) - (this['padding-bottom'] || 0);
+
+        return rectToVerties(x, y, width, height)
+    }
 }

@@ -1,6 +1,8 @@
 import { LOAD, CLICK, SUBSCRIBE_SELF, BIND } from "el/sapa/Event";
 import BaseUI from './BaseUI';
 import './ToggleCheckBox.scss';
+import icon, { iconUse } from 'el/editor/icon/icon';
+
 
 
 const DEFAULT_LABELS = ['True', 'False']
@@ -19,6 +21,7 @@ export default class ToggleCheckBox extends BaseUI {
             label: this.props.label || '',
             checked: this.props.value || "false",
             toggleLabels: this.props.toggleLabels || DEFAULT_LABELS,
+            toggleTitles: this.props.toggleTitles || [],
             toggleValues: this.props.toggleValues || ["true", "false"],
         }
     }
@@ -37,9 +40,17 @@ export default class ToggleCheckBox extends BaseUI {
             ${label ? `<label title="${label}">${label}</label>` : '' }
             <div class='area' ref="$area">
                 ${this.state.toggleValues.map((it, index) => {
+
+                    let label = this.state.toggleLabels[index];
+                    let title = this.state.toggleTitles[index];
+
+                    if (icon[label]) {
+                        label = iconUse(label, "", {width: 30, height: 30});
+                    }
+
                     return /*html*/`
                         <div>
-                            <button type="button" data-index="${index}" value="${it}">${this.state.toggleLabels[index]}</button>
+                            <button type="button" data-index="${index}" value="${it}" data-tooltip="${title || it}" data-direction="top" style="--elf--toggle-checkbox-tooltip-top: -20%;" >${ label}</button>
                         </div>`
                 }).join('')}
             </div>

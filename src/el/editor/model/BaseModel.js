@@ -613,6 +613,9 @@ export class BaseModel {
   copyItem(childItemId, dist = 10) {
     const childItem = this.modelManager.get(childItemId);
     var child = childItem.clone()
+
+    console.log(child);
+
     child.renameWithCount()
     child.move([dist, dist, 0])
 

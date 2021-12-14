@@ -13,7 +13,6 @@ export default {
      * @param {number} dy
      */
     execute: function (editor, moveItems = []) {
-
         const itemsMap = {}
 
         moveItems.forEach(it => {

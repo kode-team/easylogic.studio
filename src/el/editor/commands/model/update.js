@@ -11,20 +11,14 @@ export default {
      */
     execute: function (editor, id = null, attrs = {}, context = { origin: '*'}) {
 
-        const maker = editor.createCommandMaker();
-        // maker.emit('beforeUpdate', id, attrs);
-
         const item = editor.modelManager.get(id);
 
         if (item) {
             const isChanged = item.reset(attrs, context);
 
             if (isChanged) {
-                maker.emit('refreshElement', item);
+                editor.emit('refreshElement', item);
             }
         }
-
-        // maker.emit('afterUpdate', id, attrs);        
-        maker.run();
     }
 }

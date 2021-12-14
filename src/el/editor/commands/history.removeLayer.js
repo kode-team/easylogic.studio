@@ -59,9 +59,16 @@ export default {
 
         editor.nextTick(() =>  {
             editor.selection.removeById(filtedIds)
-            editor.emit('refreshAll')
-            editor.emit('removeGuideLine');
+
+            const commandMaker = editor.createCommandMaker();
+
+            commandMaker.emit('refreshAllElementBoundSize')
+            commandMaker.emit('refreshAll')
+            commandMaker.emit('removeGuideLine');
+            commandMaker.run();
+            
             editor.nextTick(() => {
+    
                 editor.history.saveSelection()  
             })
         })        

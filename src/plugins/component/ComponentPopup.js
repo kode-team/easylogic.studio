@@ -10,7 +10,7 @@ import './ComponentPopup.scss';
 export default class ComponentPopup extends BasePopup {
 
   getClassName() {
-    return 'component-property';
+    return 'component-property w(800)';
   }
 
   getTitle() {

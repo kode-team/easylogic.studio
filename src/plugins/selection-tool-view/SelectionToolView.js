@@ -142,11 +142,11 @@ export default class SelectionToolView extends SelectionToolEvent {
 
             const diff = vec3.subtract([], pointer, this.state.renderPointerList[0][4]);
             const angle = calculateAngle360(diff[0], diff[1]);
-            let iconAngle = Math.floor(angle)  - 135;
-            this.emit('refreshCursor', 'open_in_full', `rotate(${iconAngle} 12 12)`)
+            let iconAngle = Math.floor(angle);
+            this.emit('refreshCursor', 'open_in_full', `rotate(${iconAngle} 8 8)`)
         } else {
             this.emit('recoverCursor');
-        }
+        } 
 
     }
 
@@ -519,6 +519,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         }    
 
         this.emit('setAttributeForMulti', this.$selection.pack('x', 'y', 'width', 'height'));
+   
 
         this.state.dragging = true; 
     }
@@ -568,16 +569,12 @@ export default class SelectionToolView extends SelectionToolEvent {
         }
 
         const verties = this.$selection.verties;
-        const selectionVerties = this.$selection.selectionVerties;              
-        const parentVerties = this.$selection.current.parent.verties || [];              
         this.state.renderPointerList = [
             this.$viewport.applyVerties(verties),
-            this.$viewport.applyVerties(selectionVerties),
-            this.$viewport.applyVerties(parentVerties),
         ]
 
 
-        const pointers = this.createRenderPointers(...this.state.renderPointerList);
+        const pointers = this.createRenderPointers(this.state.renderPointerList[0]);
 
         if (pointers) {
             const {line, parentRect, point, size, visiblePath} = pointers;
@@ -737,7 +734,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         `;
     }
 
-    createRenderPointers(pointers, selectionPointers, parentPointers) {
+    createRenderPointers(pointers) {
 
         const current = this.$selection.current; 
 

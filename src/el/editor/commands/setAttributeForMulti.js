@@ -9,7 +9,6 @@ export default {
      * @param {object} multiAttrs  아이디 기반의 속성 리스트  { [id] : { key: value }, .... }
      */
     execute: function (editor, multiAttrs = {}, context = {origin: '*'}) {
-
         const messages = []
 
         Object.entries(multiAttrs).forEach(([id, attrs]) => {
@@ -31,13 +30,11 @@ export default {
 
         // send message 
         messages.forEach(message => {
-            // editor.emit('update', message.id, message.attrs, context)   
             commandMaker.emit('update', message.id, message.attrs, context);
 
             // 부모가 project 아닐 때만 업데이트 메세지를 날린다. 
             const parent = editor.get(message.parentId)
             if (message.parentId && parent?.isNot("project") && parent.children.length >= 2) {
-                // editor.emit('update', message.parentId, { 'changedChildren': true }, context)
                 commandMaker.emit('update', message.parentId, { 'changedChildren': true }, context)
             }
         })

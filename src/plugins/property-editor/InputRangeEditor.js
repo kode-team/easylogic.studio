@@ -85,7 +85,7 @@ export default class InputRangeEditor extends EditorElement {
         }, false)
 
         this.refs.$propertyNumber.val(this.state.value.value); 
-        this.refs.$unit.val(this.state.value.unit)
+        this.children.$unit.setValue(this.state.value.unit)
     }
 
     [FOCUS('$propertyNumber')] (e) {

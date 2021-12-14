@@ -1,8 +1,8 @@
 export default {
     command : 'history.setAttributeForMulti',
-    execute: function (editor, message, multiAttrs = {}) {
+    execute: function (editor, message, multiAttrs = {}, context = {origin: '*'}) {
 
-        editor.emit('setAttributeForMulti', multiAttrs)
+        editor.emit('setAttributeForMulti', multiAttrs, context)
 
         editor.history.add(message, this, {
             currentValues: [multiAttrs],

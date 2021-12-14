@@ -391,10 +391,10 @@ export default class HTMLRenderView extends EditorElement {
         this.$selection.reset(result);
     }
 
-    [SUBSCRIBE('selectionToolView.moveTo')](newDist) {
-        this.moveTo(newDist);
-        this.emit('refreshSelectionTool', true);
-    }
+    // [SUBSCRIBE('selectionToolView.moveTo')](newDist) {
+    //     this.moveTo(newDist);
+    //     this.emit('refreshSelectionTool', true);
+    // }
 
     calculateEndedElement(dx, dy) {
         const targetMousePoint = this.$viewport.getWorldPosition();
@@ -530,7 +530,6 @@ export default class HTMLRenderView extends EditorElement {
     }
 
     [SUBSCRIBE('refreshAllElementBoundSize')]() {
-
         var selectionList = this.$selection.items.map(it => it.is('artboard') ? it : it.parent)
 
         var list = [...new Set(selectionList)];
@@ -542,13 +541,13 @@ export default class HTMLRenderView extends EditorElement {
     [SUBSCRIBE('refreshElementBoundSize')](parentObj) {
         if (parentObj) {
 
-            const hasChangedDimension = parentObj.changedBoxModel || parentObj.hasChangedField('box-model', 'width', 'height', 'layout', 'flex-layout', 'grid-layout');
+            const hasChangedDimension = parentObj.changedBoxModel || parentObj.hasChangedField('children', 'box-model', 'width', 'height', 'layout', 'flex-layout', 'grid-layout');
             
             parentObj.layers.forEach(it => {
                 // if (it.isLayoutItem()) {
                 var $el = this.getElement(it.id);
 
-                if ($el && hasChangedDimension) {
+                if ($el && hasChangedDimension && it.isLayoutItem()) {
                     const { x, y, width, height } = $el.offsetRect();
 
                     it.reset({

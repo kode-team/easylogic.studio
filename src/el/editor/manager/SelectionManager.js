@@ -511,15 +511,6 @@ export class SelectionManager {
     }
   }
 
-  get selectionVerties () {
-
-    if (this.isOne) {    // 하나 일 때랑 
-      return this.current.selectionVerties();
-    } else {
-      return this.rectVerties;
-    }
-  }
-
   get targetVerties () {
 
     if (this.isOne) {    // 하나 일 때랑 
@@ -641,7 +632,6 @@ export class SelectionManager {
   }
 
   reset (obj) {
-
     Object.entries(obj).forEach(([id, attrs]) => {
       this.get(id)?.reset(attrs);
     })
@@ -660,11 +650,19 @@ export class SelectionManager {
     this.empty();
   }
 
+  /**
+   * @deprecated
+   */  
   copy () {
+    console.warn('copy is deprecated');
     this.copyItems = this.items.map(item => item)
   }  
 
+  /**
+   * @deprecated
+   */
   paste() {
+    console.warn('paste is deprecated. use copy and paste')
     this.select(...this.copyItems.map(item => item.copy(10)));
     this.copy()
   }
