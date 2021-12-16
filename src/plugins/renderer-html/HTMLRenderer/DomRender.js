@@ -88,10 +88,15 @@ export default class DomRender extends ItemRender {
     }
 
     if (parentLayout === 'flex') {
-      obj = {
-        ...obj, 
-        ...STRING_TO_CSS(item['flex-layout-item'])
-      }      
+
+      let itemInfo = item['flex-layout-item'];
+
+      if (itemInfo === 'auto') {
+        obj['flex'] = 'auto'
+      } else {
+        obj = Object.assign(obj, STRING_TO_CSS(itemInfo));
+      }
+
     } else if (parentLayout  === 'grid') {
       obj = {
         ...obj, 
@@ -178,6 +183,27 @@ export default class DomRender extends ItemRender {
     return obj;
   }
 
+  toSizeCSS(item) {
+    const obj = {}
+
+    if (item.right && item.right.unit !== 'auto') {
+      // NOOP
+    } else {
+      obj.width = item.width;
+    }
+
+    if (item.bottom && item.bottom.unit !== 'auto') {
+      // NOOP
+    } else {
+      obj.height = item.height;
+    }
+
+
+    return {
+      ...obj,
+    }
+  }
+
   /**
    * 
    * @param {Item} item 
@@ -193,6 +219,14 @@ export default class DomRender extends ItemRender {
       if (item.y)  {
         obj.top = item.y ;
       }
+
+      if (item.right) {
+        obj.right = item.right;
+      }
+
+      if (item.bottom) {
+        obj.bottom = item.bottom;
+      }
     }
 
     let result = {}
@@ -203,8 +237,8 @@ export default class DomRender extends ItemRender {
 
       // 'right',
       // 'bottom', 
-      'width',
-      'height', 
+      // 'width',
+      // 'height', 
       'overflow', 
       'z-index', 
       'box-sizing',
@@ -494,6 +528,7 @@ export default class DomRender extends ItemRender {
       {},
       this.toVariableCSS(item),
       this.toDefaultCSS(item),
+      this.toSizeCSS(item),
       this.toClipPathCSS(item),
       this.toWebkitCSS(item), 
       this.toTextClipCSS(item),      

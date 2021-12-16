@@ -60,6 +60,7 @@ export default class FlexLayoutEditor extends EditorElement {
                     key='flex-direction'
                     value="${this.state['flex-direction'] || 'row'}"
                     options="${this.getDirectionOptions()}"
+                    icons=${variable(['view_week', 'table_rows', 'view_week_reverse', 'table_rows' ])}
                     onchange='changeKeyValue'
                 />
             </div>
@@ -69,6 +70,7 @@ export default class FlexLayoutEditor extends EditorElement {
                     key='flex-wrap'
                     value="${this.state['flex-wrap'] || 'wrap'}"
                     options="${this.getWrapOptions()}"
+                    icons=${variable([, 'wrap_text', ])}
                     onchange='changeKeyValue'
                 />
             </div>
@@ -78,6 +80,7 @@ export default class FlexLayoutEditor extends EditorElement {
                     key='justify-content'
                     value="${this.state['justify-content'] || 'flex-start'}"
                     options="${this.getJustifyContentOptions()}"
+                    icons=${variable(['start', 'end', 'center', 'horizontal_distribute'])}                                        
                     onchange='changeKeyValue'
                 />
             </div>
@@ -87,6 +90,7 @@ export default class FlexLayoutEditor extends EditorElement {
                     key='align-items'
                     value="${this.state['align-items'] || 'flex-start'}"
                     options="${this.getAlignItemsOptions()}"
+                    icons=${variable(['vertical_align_top', 'vertical_align_bottom', 'vertical_align_center'])}                    
                     onchange='changeKeyValue'
                 />
             </div>

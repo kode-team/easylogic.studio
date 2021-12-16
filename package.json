@@ -26,11 +26,13 @@
     "yorkie-js-sdk": "^0.1.11"
   },
   "devDependencies": {
+    "@swc/core": "^1.2.120",
+    "@swc/jest": "^0.2.15",
     "adorable-css": "^0.4.8",
     "autoprefixer": "^9.8.6",
     "cssnano": "^5.0.12",
-    "jest": "^24.8.0",
-    "jest-cli": "^24.8.0",
+    "jest": "^27.4.5",
+    "jest-cli": "^27.4.5",
     "jest-report": "^0.1.11",
     "postcss": "^8.4.4",
     "release-it": "^14.6.2",
@@ -49,7 +51,7 @@
     "watch": "webpack --mode=production --watch --progress --config=webpack.dist.config.js",
     "build": "npm run vite:prod; npm run vite:dist",
     "dev": "npm run vite:dev",
-    "test": "NODE_ENV=test jest --watch"
+    "test": "NODE_ENV=test jest --watch --detectOpenHandles"
   },
   "repository": {
     "type": "git",
@@ -69,12 +71,27 @@
   },
   "homepage": "https://editor.easylogic.studio/",
   "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "jsx",
+      "ts",
+      "tsx",
+      "json"
+    ],
+    "transform": {
+      "^.+\\.(t|j)sx?$": [
+        "@swc/jest"
+      ]
+    },
+    "testEnvironment": "jsdom",
+    "testMatch": [
+      "<rootDir>/**/*.test.js"
+    ],
     "moduleNameMapper": {
-      "^@assets(.*)$": "<rootDir>/src/assets$1",
       "^el(.*)$": "<rootDir>/src/el$1",
       "^export-library(.*)$": "<rootDir>/src/export-library$1",
-      "^plugins(.*)$": "<rootDir>/src/plugins$1",
-      "^designeditor(.*)$": "<rootDir>/editor-layouts/designeditor$1"
+      "^plugins(.*)$": "<rootDir>/src/plugins$1"
     }
   }
 }

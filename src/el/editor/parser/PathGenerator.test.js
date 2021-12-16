@@ -20,7 +20,7 @@ test("set selectedIndex", () => {
 
 test("set convert PathGenerator", () => {
     const path = new PathParser("M0,0 C20,30 50,40 100,100 Q 20 30 70 70 L 100 100");
-    const pathGenerator = new PathGenerator();
+    const pathGenerator = new PathGenerator(pathEditor);
     pathGenerator.setPoints(path.convertGenerator())
 
     expect(pathGenerator.points.length).toBe(4);
@@ -32,7 +32,7 @@ test("set convert PathGenerator", () => {
 
 test("get connected point list", () => {
     const path = new PathParser("M0,0 C20,30 50,40 100,100 Q 20 30 70 70 L 100 100 L 300 300 L 100 200 L 100 100");
-    const pathGenerator = new PathGenerator();
+    const pathGenerator = new PathGenerator(pathEditor);
     pathGenerator.setPoints(path.convertGenerator())
 
     const connectedPointList = pathGenerator.getConnectedPointList(1);

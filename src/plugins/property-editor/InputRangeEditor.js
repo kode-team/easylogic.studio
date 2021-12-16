@@ -9,7 +9,7 @@ import './InputRangeEditor.scss';
 export default class InputRangeEditor extends EditorElement {
 
     initState() {
-        var units =  this.props.units || 'px,em,%';
+        var units =  this.props.units || 'px,em,%,auto';
         var value = Length.parse(this.props.value || Length.z());
         let label = this.props.label || ''; 
 
@@ -27,6 +27,7 @@ export default class InputRangeEditor extends EditorElement {
             key: this.props.key,
             params: this.props.params || '',
             layout: this.props.layout || '',
+            disabled: this.props.disabled === 'true',
             units,
             value
         }
@@ -38,7 +39,7 @@ export default class InputRangeEditor extends EditorElement {
 
     [LOAD('$body')] () {
 
-        var { min, max, step, label, compact, removable, layout } = this.state
+        var { min, max, step, label, compact, removable, layout, disabled } = this.state
 
         var value = +this.state.value.value.toString()
 
@@ -58,6 +59,7 @@ export default class InputRangeEditor extends EditorElement {
                 'has-label': !!label,
                 'compact': !!compact,
                 'is-removable': removable,
+                'disabled': disabled,
                 [layoutClass] : true 
             })}"
         >
@@ -82,11 +84,25 @@ export default class InputRangeEditor extends EditorElement {
     setValue (value) {
         this.setState({
             value: Length.parse(value)
-        }, false)
+        })
 
-        this.refs.$propertyNumber.val(this.state.value.value); 
-        this.children.$unit.setValue(this.state.value.unit)
+        // console.log(this.state.value.value);
+
+        // this.refs.$propertyNumber.val(this.state.value.value); 
+        // this.children.$unit.setValue(this.state.value.unit)
     }
+
+    disabled () {
+        this.setState({
+            disabled: true
+        })
+    }
+
+    enabled () {
+        this.setState({
+            disabled: false
+        })
+    }    
 
     [FOCUS('$propertyNumber')] (e) {
         this.refs.$range.addClass('focused');

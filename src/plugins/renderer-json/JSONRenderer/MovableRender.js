@@ -6,7 +6,7 @@ export default class MovableRender extends BaseAssetRender {
     return {
       ...(await super.toCloneObject(item, renderer)),
       ...item.attrs(
-        'x', 'y', 'width', 'height', 'transform', 'transform-origin',
+        'x', 'y', 'right','bottom', 'width', 'height', 'transform', 'transform-origin',
       )
     }
   }

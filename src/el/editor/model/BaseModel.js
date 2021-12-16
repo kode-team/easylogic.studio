@@ -167,13 +167,13 @@ export class BaseModel {
    * @returns {Item}
    */
   get parent() {
-    if (!this.json.parentId) return undefined;
+    if (!this.parentId) return undefined;
 
-    return this.modelManager.get(this.json.parentId);
+    return this.modelManager.get(this.parentId);
   }
 
   setParentId(parentId) {
-    this.json.parentId = parentId;
+    this.reset({ parentId });
 
     this.modelManager.setChanged('setParentId', this.id, { parentId });        
   }
@@ -409,6 +409,7 @@ export class BaseModel {
       // selected: false,  // 선택 여부 체크 
       children: [],   // 하위 객체를 저장한다. 
       offsetInParent: 1,  // 부모에서 자신의 위치를 숫자로 나타낸다. 
+      parentId: '',  // 부모 객체의 id
       ...obj
     };
   }
@@ -567,7 +568,7 @@ export class BaseModel {
   }
 
   expectJSON(key) {
-    if (key === 'parent') return false;
+    // if (key === 'parent') return false;
     if (isUndefined(this.json[key])) return false;
 
     return true;
@@ -613,8 +614,6 @@ export class BaseModel {
   copyItem(childItemId, dist = 10) {
     const childItem = this.modelManager.get(childItemId);
     var child = childItem.clone()
-
-    console.log(child);
 
     child.renameWithCount()
     child.move([dist, dist, 0])

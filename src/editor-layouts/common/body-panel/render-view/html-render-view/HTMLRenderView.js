@@ -1,11 +1,11 @@
 import { vec3 } from "gl-matrix";
 
-import { BIND, POINTERSTART, IF, KEYUP, DOUBLECLICK, FOCUSOUT, SUBSCRIBE, CONFIG } from "el/sapa/Event";
+import { BIND, POINTERSTART, IF, KEYUP, DOUBLECLICK, FOCUSOUT, SUBSCRIBE, CONFIG, DEBOUNCE } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
 import Dom from "el/sapa/functions/Dom";
 import { isFunction } from "el/sapa/functions/func";
 import { KEY_CODE } from "el/editor/types/key";
-import { END, FIRSTMOVE, MOVE } from "el/editor/types/event";
+import { END, MOVE } from "el/editor/types/event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import StyleView from "./StyleView";
 
@@ -529,7 +529,7 @@ export default class HTMLRenderView extends EditorElement {
         })
     }
 
-    [SUBSCRIBE('refreshAllElementBoundSize')]() {
+    [SUBSCRIBE('refreshAllElementBoundSize') + DEBOUNCE(100)]() {
         var selectionList = this.$selection.items.map(it => it.is('artboard') ? it : it.parent)
 
         var list = [...new Set(selectionList)];
@@ -541,7 +541,17 @@ export default class HTMLRenderView extends EditorElement {
     [SUBSCRIBE('refreshElementBoundSize')](parentObj) {
         if (parentObj) {
 
-            const hasChangedDimension = parentObj.changedBoxModel || parentObj.hasChangedField('children', 'box-model', 'width', 'height', 'layout', 'flex-layout', 'grid-layout');
+            const hasChangedDimension = parentObj.changedBoxModel || parentObj.hasChangedField(
+                'children', 
+                'box-model', 
+                'width', 
+                'height', 
+                'layout', 
+                'flex-layout', 
+                'grid-layout', 
+                'grid-layout-item', 
+                'flex-layout-item'
+            );
             
             parentObj.layers.forEach(it => {
                 // if (it.isLayoutItem()) {
@@ -559,6 +569,7 @@ export default class HTMLRenderView extends EditorElement {
 
                     this.updateElement(it, $el);
                     this.trigger('refreshSelectionStyleView', it, true);
+                    this.emit('refreshSelectionTool', true);
                 }
                 // }
 

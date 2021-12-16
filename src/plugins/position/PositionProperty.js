@@ -1,7 +1,8 @@
-import { IF, SUBSCRIBE, SUBSCRIBE_SELF, THROTTLE } from "el/sapa/Event";
+import { CLICK, IF, SUBSCRIBE, SUBSCRIBE_SELF, THROTTLE } from "el/sapa/Event";
 import { Transform } from "el/editor/property-parser/Transform";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { Length } from "el/editor/unit/Length";
+import { iconUse } from 'el/editor/icon/icon';
 
 const DEFAULT_SIZE = Length.z();
 
@@ -25,6 +26,8 @@ export default class PositionProperty extends BaseProperty {
     return current.hasChangedField(
       'x', 
       'y', 
+      'right',
+      'bottom',
       'width', 
       'height', 
       'transform', 
@@ -63,39 +66,39 @@ export default class PositionProperty extends BaseProperty {
   getBody() {
     return /*html*/`
       <div class="position-item" ref="$positionItem" style='padding: 5px 10px;'>
-        <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px;'>
-          <div class='property-item animation-property-item' style='padding: 0px;'>
-            <div class='group'>
-              <span class='add-timeline-property' data-property='x'></span>
-            </div>
-            <object refClass='InputRangeEditor' ref='$x' compact="true" label="X" key='x' min="-100000" max='100000' onchange='changRangeEditor' />
+        <div style='display: grid;grid-template-columns: 1fr 100px; grid-column-gap: 10px; padding-top: 10px;'>
+          <div class='property-item' style='padding: 0px;'>
+            <object refClass='InputRangeEditor' ref='$x' label="X" key='x' min="-100000" max='100000' onchange='changRangeEditor' />
           </div>
+          <div class='property-item' style='padding: 0px;'>
+            <button type="button" data-command="start-x">${iconUse('start', null, {width: 30, height: 30})}</button>
+          </div>          
+        </div>
+        <div style='display: grid;grid-template-columns: 1fr 100px; grid-column-gap: 10px; padding-top: 10px;'>
           <div class='property-item animation-property-item' style='padding: 0px;'>
-            <div class='group'>
-              <span class='add-timeline-property' data-property='y'></span>
-            </div>
-            <object refClass='InputRangeEditor' ref='$y' compact="true"  label="Y" key='y' min="-10000" max='10000' onchange='changRangeEditor' />
+            <object refClass='InputRangeEditor' ref='$y' label="Y" key='y' min="-10000" max='10000' onchange='changRangeEditor' />
           </div>
         </div>
+        <div style='display: grid;grid-template-columns: 1fr 100px; grid-column-gap: 10px; padding-top: 10px;'>
+          <div class='property-item animation-property-item' style='padding: 0px;'>
+            <object refClass='InputRangeEditor' ref='$right' label="Right" key='right' min="-100000" max='100000' onchange='changRangeEditor' />
+          </div>
+        </div>
+        <div style='display: grid;grid-template-columns: 1fr 100px; grid-column-gap: 10px; padding-top: 10px;'>
+          <div class='property-item animation-property-item' style='padding: 0px;'>
+            <object refClass='InputRangeEditor' ref='$bottom' label="Bottom" key='bottom' min="-10000" max='10000' onchange='changRangeEditor' />
+          </div>
+        </div>        
         <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; padding-top: 10px;'>
           <div class='property-item animation-property-item' style='padding:0px'>
-            <div class='group'>
-              <span class='add-timeline-property' data-property='width'></span>
-            </div>
             <object refClass='InputRangeEditor' ref='$width' compact="true"  label="${this.$i18n('position.property.width')}" key='width' min="0" max='3000' onchange='changRangeEditor' />
           </div>
           <div class='property-item animation-property-item' style='padding:0px'>
-            <div class='group'>
-              <span class='add-timeline-property' data-property='height'></span>      
-            </div>
             <object refClass='InputRangeEditor' ref='$height' compact="true"  label="${this.$i18n('position.property.height')}" key='height' min="0" max='3000' onchange='changRangeEditor' />
           </div>      
         </div> 
         <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; padding-top: 10px;'>
           <div class='property-item animation-property-item'>
-            <div class='group'>
-              <span class='add-timeline-property' data-property='rotate'></span>
-            </div>
             <object refClass='InputRangeEditor' 
               ref='$rotate' 
               key='rotateZ' 
@@ -109,9 +112,6 @@ export default class PositionProperty extends BaseProperty {
           </div>        
 
           <div class='property-item animation-property-item'>
-            <div class='group'>
-              <span class='add-timeline-property' data-property='opacity'></span>
-            </div>
             <object refClass="NumberInputEditor"
               ref='$opacity' 
               key='opacity' 
@@ -139,8 +139,24 @@ export default class PositionProperty extends BaseProperty {
       if (rotateZ) {
         this.children.$rotate.setValue(rotateZ[0]);
       }      
+
+      if (current.parent.is('project')) {
+        this.children.$right.disabled();
+        this.children.$bottom.disabled();        
+      } else {
+        this.children.$right.enabled();
+        this.children.$bottom.enabled();        
+
+        this.children.$right.setValue(current.right);
+        this.children.$bottom.setValue(current.bottom);
+      }
     }
 
+  }
+
+  [CLICK('$positionItem button[data-command]')](e) {
+    const command = e.$dt.data('command');
+    console.log(command)
   }
 
 
@@ -152,6 +168,7 @@ export default class PositionProperty extends BaseProperty {
 
     this.nextTick(() => {
       this.emit('refreshAllElementBoundSize')
+      this.emit("refreshSelectionTool", true);
     })
 
   }

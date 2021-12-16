@@ -7,8 +7,6 @@ export default class DomRender extends MovableRender {
       ...(await super.toCloneObject(item, renderer)),
       ...item.attrs(
         'position',
-        'right',
-        'bottom',
         'rootVariable',
         'variable',
         'transform',

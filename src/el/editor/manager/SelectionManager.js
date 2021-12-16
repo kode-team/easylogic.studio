@@ -477,12 +477,12 @@ export class SelectionManager {
       } 
       // artboard 가 아닌데 자식을 가지고 있을 때는 자식을 포함 
       // TODO: layout 을 가지고 있는 경우 어떻게 해야할지 정해야함 
-      else if (it.hasChildren()) {
-        const list = this.modelManager.getAllLayers(it.id).map(it => it.matrix);
+      // else if (it.hasChildren()) {
+      //   const list = this.modelManager.getAllLayers(it.id).map(it => it.matrix);
 
-        this.cachedChildren.push(...list.map(it => it.id))
-        this.cachedItemMatrices.push(...list);
-      } 
+      //   this.cachedChildren.push(...list.map(it => it.id))
+      //   this.cachedItemMatrices.push(...list);
+      // } 
       // 그 외는 아트보드처럼 자신만 포함 
       else {
         this.cachedItemMatrices.push(it.matrix);

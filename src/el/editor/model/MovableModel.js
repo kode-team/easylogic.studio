@@ -58,7 +58,7 @@ export class MovableModel extends BaseAssetModel {
     toCloneObject(isDeep = true) {
         return {
             ...super.toCloneObject(isDeep),
-            ...this.attrs('x', 'y', 'width', 'height', 'transform', 'rotate', 'rotateZ')
+            ...this.attrs('x', 'y', 'right', 'bottom', 'width', 'height', 'transform', 'rotate', 'rotateZ')
         }
     }
 
@@ -70,18 +70,27 @@ export class MovableModel extends BaseAssetModel {
         json.width = Length.parse(json.width);
         json.height = Length.parse(json.height);
 
+        if (json.right) {
+            json.right = Length.parse(json.right);
+        }
+
+        if (json.bottom) {
+            json.bottom = Length.parse(json.bottom);
+        }        
+
         return json; 
     }
 
     reset(obj, context = {origin: '*'}) {
         const isChanged = super.reset(obj, context);
+
+        if (this.hasChangedField('width', 'height')) {
+            this.applyLayout();
+        }
+
         // transform 에 변경이 생기면 미리 캐슁해둔다. 
         if (this.hasChangedField('children', 'x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'transform-origin', 'perspective', 'perspective-origin')) {
             this.refreshMatrixCache()
-        }
-
-        if (this.hasChangedField('width', 'height') && this.hasLayout()) {
-            this.applyLayout();
         }
 
         return isChanged;
@@ -96,6 +105,42 @@ export class MovableModel extends BaseAssetModel {
                 }
             }
         }
+
+        // 크기에 따른 right 위치를 재조정한다. 
+        // screenWidth 를 다시 맞출 수 있도록 한다. 
+        if (this.hasChangedField('width')) {
+            const {right, width} = this.json;
+            if (right && right.unit !== 'auto' ) {
+                const parentWidth = this.parent.screenWidth.value;                 
+                const newX = this.offsetX.value;
+                const newWidth = width.toPx(parentWidth).value;
+                const newRightRate = 1 - (newX + newWidth) / parentWidth
+
+                if (right.isPercent()) {
+                    this.json.right = Length.percent(newRightRate * 100)
+                } else {
+                    this.json.right = Length.px(parentWidth * newRightRate)
+                }
+            }
+        }
+
+        if (this.hasChangedField('height')) {
+            const {bottom, height} = this.json;
+            if (bottom && bottom.unit !== 'auto' ) {
+                const parentHeight = this.parent.screenHeight.value;                 
+                const newY = this.offsetY.value;
+                const newHeight = height.toPx(parentHeight).value;
+                const newBottomRate = 1 - (newY + newHeight) / parentHeight
+
+                if (bottom.isPercent()) {
+                    this.json.bottom = Length.percent(newBottomRate * 100)
+                } else {
+                    this.json.bottom = Length.px(parentHeight * newBottomRate)
+                }
+            }
+        }        
+
+
     }
 
     /**
@@ -290,14 +335,32 @@ export class MovableModel extends BaseAssetModel {
         if (!this.parent) {
             return this.json.x || ZERO;
         }        
-        return this.json.x.toPx(this.screenWidth.value);  
+
+        if (this.is('project')) {
+            return ZERO;
+        }
+        
+        if (this.parent.is('project')) {
+            return this.json.x.toPx();
+        }        
+
+        return this.json.x.toPx(this.parent.screenWidth.value);  
     }
 
     get offsetY () { 
         if (!this.parent) {
             return this.json.y || ZERO;
+        }
+
+        if (this.is('project')) {
+            return ZERO;
+        }
+        
+        if (this.parent.is('project')) {
+            return this.json.y.toPx();
         }        
-        return this.json.y.toPx(this.screenHeight.value);  
+        
+        return this.json.y.toPx(this.parent.screenHeight.value);  
     }
     
     
@@ -312,6 +375,16 @@ export class MovableModel extends BaseAssetModel {
 
         if (this.is('artboard')) {
             return this.json.width.toPx();  
+        }
+
+        if (this.json.right && this.json.right.unit !== 'auto') {
+            const parentWidth = this.parent.screenWidth.value
+
+
+            const right = this.json.right.toPx(parentWidth);
+            const rightPos = parentWidth - right;
+            
+            return Length.px(rightPos - this.offsetX.value);
         }
 
         return this.json.width.toPx(this.parent.screenWidth.value);  
@@ -329,6 +402,17 @@ export class MovableModel extends BaseAssetModel {
         if (this.is('artboard')) {
             return this.json.height.toPx();  
         }
+
+        if (this.json.bottom && this.json.bottom.unit !== 'auto') {
+            const parentHeight = this.parent.screenHeight.value
+
+
+            const top = this.json.bottom.toPx(parentHeight);
+            const topPos = parentHeight - top;
+            
+            return Length.px(topPos - this.offsetY.value);
+        }
+
 
 
         return this.json.height.toPx(this.parent.screenHeight.value);  
@@ -402,7 +486,6 @@ export class MovableModel extends BaseAssetModel {
      * @returns {boolean}
      */
     isPointInRect(x, y) {
-        // console.log('rect', this.originVerties, x, y)
         return polyPoint(this.originVerties, x, y)
     }
 

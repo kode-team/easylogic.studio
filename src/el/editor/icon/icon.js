@@ -192,6 +192,17 @@ import line_cap_square from "./line_cap_square";
 import line_join_bevel from "./line_join_bevel";
 import line_join_round from "./line_join_round";
 import line_join_miter from "./line_join_miter";
+import vertical_align_bottom from "./vertical_align_bottom";
+import vertical_align_top from "./vertical_align_top";
+import vertical_align_center from "./vertical_align_center";
+import start from "./start";
+import wrap_text from "./wrap_text";
+import end from "./end";
+import table_rows from "./table_rows";
+import view_week from "./view_week";
+import view_week_reverse from "./view_week_reverse";
+
+
 
 
 const alias = {
@@ -209,6 +220,15 @@ export function iconUse(name, transform = "", opt = { width: 24, height: 24 }) {
 
 export default {
   ...alias,
+  view_week_reverse,
+  view_week,
+  table_rows,
+  wrap_text,
+  start,
+  end,
+  vertical_align_center,
+  vertical_align_bottom,
+  vertical_align_top,
   line_cap_butt,
   line_cap_round,
   line_cap_square,

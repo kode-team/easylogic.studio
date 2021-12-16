@@ -29,8 +29,8 @@ export default class SelectIconEditor extends EditorElement {
                             return { value, text }
                         });
 
-        var icons = (this.props.icons || '').split(splitChar).map(it => it.trim());
-        var colors = (this.props.colors || '').split(splitChar).map(it => it.trim());
+        var icons = this.props.icons || [];
+        var colors = this.props.colors || [];
 
         var value = this.props.value || '';
 
