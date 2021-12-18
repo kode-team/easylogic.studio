@@ -1,5 +1,6 @@
+import { Length } from "el/editor/unit/Length";
 import urlParser from "js-video-url-parser";
-import { Length } from "../unit/Length";
+
 
 export default {
     command: 'convertPasteText',

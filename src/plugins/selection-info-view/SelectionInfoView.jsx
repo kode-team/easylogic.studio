@@ -17,7 +17,7 @@ export default class SelectionInfoView extends EditorElement {
     }
 
     template() {
-        return /*html*/`<div class='elf--selection-info-view'></div>`
+        return <div class='elf--selection-info-view'></div>
     }
 
     /**
@@ -160,14 +160,19 @@ export default class SelectionInfoView extends EditorElement {
         const diff = vec3.subtract([], pointers[0], pointers[3]);
         const angle = calculateAngle360(diff[0], diff[1]) - 90;
 
-        return /*html*/`
+        return (
             <div 
                 class="artboard-title is-not-drag-area" 
-                data-artboard-title-id="${artboardItem.id}" 
-                style="transform-origin: 0% 0%; transform: translate3d( calc(${newPointer[0]}px), calc(${newPointer[1]}px), 0px) rotateZ(${angle}deg)" >
-                    <div style="transform: translateY(-100%);">${artboardItem.title}</div>
+                data-artboard-title-id={artboardItem.id} 
+                style={{
+                    "transform-origin": "0% 0%",
+                    "transform": `translate3d( calc(${newPointer[0]}px), calc(${newPointer[1]}px), 0px) rotateZ(${angle}deg)`  
+                }} >
+                    <div style="transform: translateY(-100%);">{artboardItem.title}</div>
             </div>
-        `
+        )
+
+        
     }
 
     makeArtboardTitleArea (it) {

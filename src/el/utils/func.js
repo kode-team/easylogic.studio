@@ -42,11 +42,19 @@ export function STRING_TO_CSS(str = '', splitChar = ';', keySplitChar = ':') {
 }
 
 export function OBJECT_TO_PROPERTY(obj) {
-    return Object.keys(obj).map(key => {
+    const target = obj || {};
+
+    return Object.keys(target).map(key => {
 
         if (key === 'class') {
             if (isObject(obj[key])) {
                 return `${key}="${OBJECT_TO_CLASS(obj[key])}"`
+            }
+        }
+
+        if (key === 'style') {
+            if (isObject(obj[key])) {
+                return `${key}="${CSS_TO_STRING(obj[key])}"`
             }
         }
 

@@ -1,5 +1,6 @@
 import { Editor } from "el/editor/manager/Editor";
-import { ClipPath } from "../property-parser/ClipPath";
+import { ClipPath } from "el/editor/property-parser/ClipPath";
+
 
 export default {
     command: 'open.editor',

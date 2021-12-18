@@ -1,6 +1,7 @@
 import { Editor } from "el/editor/manager/Editor";
+import { Transform } from "el/editor/property-parser/Transform";
 import { Length } from "el/editor/unit/Length";
-import { Transform } from "../property-parser/Transform";
+
 import _doForceRefreshSelection from "./_doForceRefreshSelection";
 
 export default {

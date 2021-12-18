@@ -5,6 +5,8 @@ import * as App from "./App";
 import Dom from "./functions/Dom";
 import EventMachine from "./EventMachine";
 import UIElement from "./UIElement";
+import { createElement } from "./functions/jsx";
+
 
 
 export default {
@@ -12,6 +14,7 @@ export default {
   Color,
   HueColor,
   ColorNames,
+  createElement,
   Dom,
   EventMachine,
   UIElement,

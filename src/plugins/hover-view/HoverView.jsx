@@ -1,18 +1,16 @@
 import { CONFIG, SUBSCRIBE, IF } from "el/sapa/Event";
-import Dom from 'el/sapa/functions/Dom';
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import "./HoverView.scss";
-import { toRectVerties, vertiesToRectangle } from "el/utils/collision";
-
+import { toRectVerties} from "el/utils/collision";
 
 export default class HoverView extends EditorElement {
 
     template() {
-        return /*html*/`
-            <div class='elf--hover-view'>
-                <div class='elf--hover-rect' ref='$hoverRect'></div>            
+        return (
+            <div class="elf--hover-view">
+                <div class="elf--hover-rect" ref="$hoverRect" />
             </div>
-        `
+        )
     }
 
     checkModeView () {

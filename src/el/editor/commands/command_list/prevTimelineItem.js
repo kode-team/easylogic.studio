@@ -1,5 +1,6 @@
-import _currentProject from "./_currentProject";
+
 import { timecode } from "el/utils/time";
+import _currentProject from "./_currentProject";
 
 export default {
     command: 'prevTimelineItem',

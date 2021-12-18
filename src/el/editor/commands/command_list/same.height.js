@@ -1,5 +1,5 @@
+import { Editor } from "el/editor/manager/Editor";
 import { vertiesToRectangle } from "el/utils/collision";
-import { Editor } from "../manager/Editor";
 
 export default {
     command : 'same.height',

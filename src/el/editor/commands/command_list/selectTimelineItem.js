@@ -1,13 +1,14 @@
-import _currentProject from "./_currentProject";
-
 export default {
     command: 'selectTimelineItem',
     execute: function (editor, selectedId) {
-        _currentProject(editor, (project, timeline) => {
+
+        const project = editor.selection.currentProject;
+
+        if (project) {
             project.selectTimeline(selectedId);                
             editor.emit('refreshTimeline');
             editor.emit('selectTimeline');            
-        })
+        }
     }
 
 }

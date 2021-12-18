@@ -200,7 +200,6 @@ export default class EventMachine {
    * @param {Boolean} [isLoad=false] 
    */
   parseTemplate(html, isLoad) {
-
     /////////////////////////////////////////////////////////////////
     //FIXME: html string, element 형태 모두 array 로 받을 수 있도록 해보자. 
     if (Array.isArray(html)) {
