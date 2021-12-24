@@ -216,7 +216,11 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         this.$selection.reselect();
         this.initMatrix(true);
         this.cachedGroupItem = this.groupItem.matrix;
-        this.$config.set('set.move.control.point', true);                
+        this.$config.set('set.move.control.point', true);        
+
+        // 자식 아이템을 캐슁한다. 
+        // 시작할때 한번만 캐슁해야한다. 
+        this.$selection.startToCacheChildren();
     }
 
     calculateNewOffsetMatrixInverse (vertextOffset, width, height, origin, itemMatrix) {
@@ -512,20 +516,35 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         this.state.dragging = false;               
         this.initMatrix(true);
         this.nextTick(() => {
+
+            this.$selection.recoverChildren();
+
             this.command(
                 'setAttributeForMulti', 
                 'move selection pointer',
                 this.$selection.pack('x', 'y', 'width', 'height', 'transform')
             );  
+
+            this.emit('recoverBooleanPath');
         })        
+    }
+
+    show () {
+        this.$el.show();
+        this.state.show = true; 
+    }
+
+    hide () {
+        this.$el.hide();
+        this.state.show = false; 
     }
 
     initSelectionTool(isInitializeMatrix = false) {
 
         if (this.$el.isHide() && this.$selection.isMany) {
-            this.$el.show();
+            this.show();
         } else {
-            if (this.$el.isShow() && this.$selection.isMany === false) this.$el.hide();
+            if (this.$el.isShow() && this.$selection.isMany === false) this.hide();
         }
 
         this.initMatrix(isInitializeMatrix);
@@ -775,7 +794,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
 
     checkShow() {
-        if (this.$selection.isMany) {
+        if (this.state.show && this.$selection.isMany) {
             if (this.$selection.hasChangedField('x', 'y', 'width', 'height', 'transform', 'transform-origin', 'perspective', 'perspective-origin')) {            
                 return true; 
             }
@@ -789,6 +808,6 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
     }
 
     [SUBSCRIBE('hideSelectionToolView')] () {
-        this.$el.hide();
+        this.hide();
     }
 } 

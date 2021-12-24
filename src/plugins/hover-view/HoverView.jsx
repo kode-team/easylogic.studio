@@ -2,13 +2,14 @@ import { CONFIG, SUBSCRIBE, IF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import "./HoverView.scss";
 import { toRectVerties} from "el/utils/collision";
+import "@adorable.css"
 
 export default class HoverView extends EditorElement {
 
     template() {
         return (
-            <div class="elf--hover-view">
-                <div class="elf--hover-rect" ref="$hoverRect" />
+            <div class="elf--hover-view sepia(0.2)">
+                <div class="elf--hover-rect" ref="$hoverRect"></div>
             </div>
         )
     }
@@ -37,13 +38,19 @@ export default class HoverView extends EditorElement {
         }
 
         const filteredList = this.$selection.filteredLayers;
-        const items = filteredList.filter(it => !it.isBooleanPath).filter(it => {
-            const point = this.$viewport.getWorldPosition(this.$config.get('bodyEvent'));
+        const point = this.$viewport.getWorldPosition(this.$config.get('bodyEvent'));
 
-            return it.hasPoint(point[0], point[1]);
-        }).filter(it => it.isNot('artboard'))
+        const items = filteredList.filter(it => it.hasPoint(point[0], point[1])).filter(it => it.isNot('artboard'))
 
-        const id = items[0]?.id;
+        // 그룹에 속해 있으면 삭제한다. 
+        const hoverItems = this.$model.convertGroupItems(items);
+
+        // 계층 구조에서 마지막 객체를 선택 
+        let id = hoverItems[0]?.id;
+
+        if (this.$selection.isEmpty) {
+            id = hoverItems[hoverItems.length - 1]?.id;
+        }
 
         if (!id) {
             this.$selection.setHoverId('');
@@ -69,7 +76,7 @@ export default class HoverView extends EditorElement {
 
 
     createVisiblePath (current) {
-        if (!current.isBooleanItem) {
+        if (!current.is('boolean-path')) {
             return '';
         }
 
@@ -97,32 +104,23 @@ export default class HoverView extends EditorElement {
             this.emit('removeGuideLine');
         } else {
 
-            if (items[0].isBooleanItem) {
-                const line = this.createVisiblePath(items[0]);
+            // refresh hover view 
+            const verties = items[0].verties;
 
-                this.refs.$hoverRect.updateDiff(line)
-                this.emit('removeGuideLine');
-            } else {
+            const title = items[0].is('boolean-path') ? items[0]['boolean-operation'] : items[0].itemType;
 
-                // refresh hover view 
-                const verties = items[0].verties;
+            const line = this.createPointerLine(this.$viewport.applyVerties(verties), title);
 
-                const line = this.createPointerLine(this.$viewport.applyVerties(verties));
+            this.refs.$hoverRect.updateDiff(line)
 
-                this.refs.$hoverRect.updateDiff(line)
-
-                this.emit('refreshGuideLineByTarget', [items[0].verties]);
-            }
-
+            this.emit('refreshGuideLineByTarget', [items[0].verties]);
 
         }
     }
 
 
-    createPointerLine(pointers) {
+    createPointerLine(pointers, title) {
         if (pointers.length === 0) return '';
-
-        const current = this.$selection.hoverItems[0];
 
         const verties = toRectVerties(pointers);
 
@@ -139,8 +137,8 @@ export default class HoverView extends EditorElement {
                     Z
                 " 
             />
-            <rect height="20" width="${current.itemType.length * 8}" x="${verties[0][0]-1}" y="${verties[0][1] - 20}"></rect>
-            <text x="${verties[0][0]}" y="${verties[0][1]}" dx="5" dy="-5">${current.itemType}</text>
+            <rect height="20" width="${title.length * 8}" x="${verties[0][0]-1}" y="${verties[0][1] - 20}"></rect>
+            <text x="${verties[0][0]}" y="${verties[0][1]}" dx="5" dy="-5">${title}</text>
         </svg>`
     }
 

@@ -142,15 +142,19 @@ export default class PageTools extends EditorElement {
 
       selectedItem.allLayers.forEach(item => {
 
-        const list = PathParser.fromSVGString(item.accumulatedPath().d).toPathList()
+        if (item.isNot('boolean-path')) {
+          const list = PathParser.fromSVGString(item.accumulatedPath().d).toPathList()
 
-        list.forEach((path, index) => {
-          buttons.push({
-            item,
-            index,
-            path
+          list.forEach((path, index) => {
+            buttons.push({
+              item,
+              index,
+              path
+            })
           })
-        })
+  
+        }
+
 
       });
     })

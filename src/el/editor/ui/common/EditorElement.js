@@ -12,6 +12,7 @@ import { CommandManager } from "el/editor/manager/CommandManager";
 import { SnapManager } from "el/editor/manager/SnapManager";
 import { PathKitManager } from "el/editor/manager/PathKitManager";
 import { VisibleManager } from "el/editor/manager/VisibleManager";
+import { IconManager } from "el/editor/manager/IconManager";
 
 export class EditorElement extends UIElement {
 
@@ -206,6 +207,14 @@ export class EditorElement extends UIElement {
      */
     get $pathkit() {
         return this.$editor.pathKitManager;
+    }
+
+    /**
+     * 
+     * @type {IconManager}
+     */
+    get $icon () {
+        return this.$editor.iconManager;
     }
 
     /**

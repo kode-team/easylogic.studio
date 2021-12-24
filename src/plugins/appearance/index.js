@@ -7,7 +7,7 @@ import ObjectProperty from 'el/editor/ui/property/ObjectProperty';
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerElement({
+    editor.registerMenuItem('inspector.tab.style', {
         AppearanceProperty: ObjectProperty.create({
             title: editor.$i18n('background.color.property.title'),
             editableProperty: "appearance",

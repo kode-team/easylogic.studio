@@ -1,5 +1,3 @@
-
-import { Length } from 'el/editor/unit/Length';
 export default {
     command: 'switch.path',
     execute: async (editor, text) => {
@@ -7,7 +5,7 @@ export default {
 
         if (!current) return;
 
-        if (current.isBooleanPath || current.isBooleanItem) {
+        if (current.is('boolean-path') || current.isBooleanItem) {
           let parent = current;
 
           if (current.isBooleanItem) {
@@ -22,9 +20,15 @@ export default {
             children: parent.children.reverse()
           }))
 
-          editor.selection.select(current);
-          editor.emit('refreshSelection');
-          editor.emit('refreshSelectionTool');
+          editor.nextTick(() => {
+
+            editor.emit('recoverBooleanPath');
+
+            editor.selection.select(current);
+            editor.emit('refreshSelection');
+            editor.emit('refreshSelectionTool');
+  
+          });
 
 
         }

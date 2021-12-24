@@ -8,7 +8,7 @@ export default {
         reader.onload = (e) => {
             var datauri = e.target.result;
             var local = URL.createObjectURL(item);
-
+            
             var project = editor.selection.currentProject;
 
             if (project) {

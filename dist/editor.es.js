@@ -4,7 +4,7 @@ var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __defNormalProp = (obj2, key, value) => key in obj2 ? __defProp(obj2, key, { enumerable: true, configurable: true, writable: true, value }) : obj2[key] = value;
 var __spreadValues = (a, b) => {
   for (var prop in b || (b = {}))
     if (__hasOwnProp.call(b, prop))
@@ -338,7 +338,7 @@ var Event$1 = /* @__PURE__ */ Object.freeze({
   normalizeWheelEvent,
   "default": Event
 });
-function collectProps(root, expectMethod = {}) {
+function collectProps(root, filterFunction = () => true) {
   let p = root;
   let results = [];
   do {
@@ -346,9 +346,7 @@ function collectProps(root, expectMethod = {}) {
     if (isObject2 === false) {
       break;
     }
-    const names2 = Object.getOwnPropertyNames(p).filter((name2) => {
-      return root && isFunction(root[name2]) && !expectMethod[name2];
-    });
+    const names2 = Object.getOwnPropertyNames(p).filter(filterFunction);
     results.push.apply(results, names2);
   } while (p = Object.getPrototypeOf(p));
   return results;
@@ -388,18 +386,18 @@ function ifCheck(callback, context, checkMethods) {
     }
   };
 }
-function keyEach(obj, callback) {
-  Object.keys(obj).forEach((key, index2) => {
-    callback(key, obj[key], index2);
+function keyEach(obj2, callback) {
+  Object.keys(obj2).forEach((key, index2) => {
+    callback(key, obj2[key], index2);
   });
 }
-function keyMap(obj, callback) {
-  return Object.keys(obj).map((key, index2) => {
-    return callback(key, obj[key], index2);
+function keyMap(obj2, callback) {
+  return Object.keys(obj2).map((key, index2) => {
+    return callback(key, obj2[key], index2);
   });
 }
-function keyMapJoin(obj, callback, joinString = "") {
-  return keyMap(obj, callback).join(joinString);
+function keyMapJoin(obj2, callback, joinString = "") {
+  return keyMap(obj2, callback).join(joinString);
 }
 function isUndefined(value) {
   return typeof value == "undefined" || value === null;
@@ -431,18 +429,18 @@ function isZero(num) {
 function isNotZero(num) {
   return !isZero(num);
 }
-function clone$1(obj) {
-  if (isUndefined(obj))
+function clone$1(obj2) {
+  if (isUndefined(obj2))
     return void 0;
-  return JSON.parse(JSON.stringify(obj));
+  return JSON.parse(JSON.stringify(obj2));
 }
-function combineKeyArray(obj) {
-  Object.keys(obj).forEach((key) => {
-    if (Array.isArray(obj[key])) {
-      obj[key] = obj[key].join(", ");
+function combineKeyArray(obj2) {
+  Object.keys(obj2).forEach((key) => {
+    if (Array.isArray(obj2[key])) {
+      obj2[key] = obj2[key].join(", ");
     }
   });
-  return obj;
+  return obj2;
 }
 const short_tag_regexp = /\<(\w*)([^\>]*)\/\>/gim;
 const HTML_TAG = {
@@ -1454,8 +1452,8 @@ function getXYInCircle(angle, radius, centerX = 0, centerY = 0) {
 function getDist(x2, y2, centerX = 0, centerY = 0) {
   return distance([x2, y2], [centerX, centerY]);
 }
-function getPointBetweenVerties(start2, end, pointDist = 0) {
-  return lerp([], start2, end, 1 + pointDist / dist(start2, end));
+function getPointBetweenVerties(start2, end2, pointDist = 0) {
+  return lerp([], start2, end2, 1 + pointDist / dist(start2, end2));
 }
 function vertiesMap(verties, transformView) {
   if (verties.length === 1) {
@@ -1854,11 +1852,11 @@ class Length {
   static calc(str) {
     return new Length(str, "calc");
   }
-  static parse(obj) {
-    obj = obj || Length.number(0);
-    if (isString(obj)) {
-      obj = obj.trim();
-      var arr = obj.replace(REG_CSS_UNIT$1, "$1 $2").split(" ");
+  static parse(obj2) {
+    obj2 = obj2 || Length.number(0);
+    if (isString(obj2)) {
+      obj2 = obj2.trim();
+      var arr = obj2.replace(REG_CSS_UNIT$1, "$1 $2").split(" ");
       var isNumberString = +arr[0] == arr[0];
       if (isNumberString) {
         return new Length(+arr[0], arr[1]);
@@ -1866,88 +1864,88 @@ class Length {
         return new Length(arr[0]);
       }
     }
-    if (obj instanceof Length) {
-      return obj;
-    } else if (obj.unit) {
-      if (obj.unit == "%" || obj.unit == "percent") {
+    if (obj2 instanceof Length) {
+      return obj2;
+    } else if (obj2.unit) {
+      if (obj2.unit == "%" || obj2.unit == "percent") {
         var value = 0;
-        if (isNotUndefined(obj.percent)) {
-          value = obj.percent;
-        } else if (isNotUndefined(obj.value)) {
-          value = obj.value;
+        if (isNotUndefined(obj2.percent)) {
+          value = obj2.percent;
+        } else if (isNotUndefined(obj2.value)) {
+          value = obj2.value;
         }
         return Length.percent(value);
-      } else if (obj.unit == "px") {
+      } else if (obj2.unit == "px") {
         var value = 0;
-        if (isNotUndefined(obj.px)) {
-          value = obj.px;
-        } else if (isNotUndefined(obj.value)) {
-          value = obj.value;
+        if (isNotUndefined(obj2.px)) {
+          value = obj2.px;
+        } else if (isNotUndefined(obj2.value)) {
+          value = obj2.value;
         }
         return Length.px(value);
-      } else if (obj.unit == "em") {
+      } else if (obj2.unit == "em") {
         var value = 0;
-        if (isNotUndefined(obj.em)) {
-          value = obj.em;
-        } else if (isNotUndefined(obj.value)) {
-          value = obj.value;
+        if (isNotUndefined(obj2.em)) {
+          value = obj2.em;
+        } else if (isNotUndefined(obj2.value)) {
+          value = obj2.value;
         }
         return Length.em(value);
-      } else if (obj.unit == "deg") {
+      } else if (obj2.unit == "deg") {
         var value = 0;
-        if (isNotUndefined(obj.deg)) {
-          value = obj.deg;
-        } else if (isNotUndefined(obj.value)) {
-          value = obj.value;
+        if (isNotUndefined(obj2.deg)) {
+          value = obj2.deg;
+        } else if (isNotUndefined(obj2.value)) {
+          value = obj2.value;
         }
         return Length.deg(value);
-      } else if (obj.unit == "turn") {
+      } else if (obj2.unit == "turn") {
         var value = 0;
-        if (isNotUndefined(obj.deg)) {
-          value = obj.turn;
-        } else if (isNotUndefined(obj.value)) {
-          value = obj.value;
+        if (isNotUndefined(obj2.deg)) {
+          value = obj2.turn;
+        } else if (isNotUndefined(obj2.value)) {
+          value = obj2.value;
         }
         return Length.turn(value);
-      } else if (obj.unit == "s") {
+      } else if (obj2.unit == "s") {
         var value = 0;
-        if (isNotUndefined(obj.second)) {
-          value = obj.second;
-        } else if (isNotUndefined(obj.value)) {
-          value = obj.value;
+        if (isNotUndefined(obj2.second)) {
+          value = obj2.second;
+        } else if (isNotUndefined(obj2.value)) {
+          value = obj2.value;
         }
         return Length.second(value);
-      } else if (obj.unit == "ms") {
+      } else if (obj2.unit == "ms") {
         var value = 0;
-        if (isNotUndefined(obj.ms)) {
-          value = obj.ms;
-        } else if (isNotUndefined(obj.value)) {
-          value = obj.value;
+        if (isNotUndefined(obj2.ms)) {
+          value = obj2.ms;
+        } else if (isNotUndefined(obj2.value)) {
+          value = obj2.value;
         }
         return Length.ms(value);
-      } else if (obj.unit == "number") {
+      } else if (obj2.unit == "number") {
         var value = 0;
-        if (isNotUndefined(obj.value)) {
-          value = obj.value;
+        if (isNotUndefined(obj2.value)) {
+          value = obj2.value;
         }
         return Length.number(value);
-      } else if (obj.unit == "--") {
+      } else if (obj2.unit == "--") {
         var value = 0;
-        if (isNotUndefined(obj.value)) {
-          value = obj.value;
+        if (isNotUndefined(obj2.value)) {
+          value = obj2.value;
         }
         return Length.var(value);
-      } else if (obj.unit === "" || obj.unit === "string") {
+      } else if (obj2.unit === "" || obj2.unit === "string") {
         var value = "";
-        if (isNotUndefined(obj.str)) {
-          value = obj.str;
-        } else if (isNotUndefined(obj.value)) {
-          value = obj.value;
+        if (isNotUndefined(obj2.str)) {
+          value = obj2.str;
+        } else if (isNotUndefined(obj2.value)) {
+          value = obj2.value;
         }
         return Length.string(value);
       }
     }
-    return Length.string(obj);
+    return Length.string(obj2);
   }
   toString() {
     return this.getUnitText();
@@ -2014,23 +2012,23 @@ class Length {
     this.value = value;
     return this;
   }
-  add(obj) {
-    this.value += +obj;
+  add(obj2) {
+    this.value += +obj2;
     return this;
   }
-  sub(obj) {
-    return this.add(-1 * obj);
+  sub(obj2) {
+    return this.add(-1 * obj2);
   }
-  mul(obj) {
-    this.value *= +obj;
+  mul(obj2) {
+    this.value *= +obj2;
     return this;
   }
-  div(obj) {
-    this.value /= +obj;
+  div(obj2) {
+    this.value /= +obj2;
     return this;
   }
-  mod(obj) {
-    this.value %= +obj;
+  mod(obj2) {
+    this.value %= +obj2;
     return this;
   }
   clone() {
@@ -2083,6 +2081,9 @@ class Length {
   }
   toPx(maxValue, fontSize = 16) {
     if (this.isPercent()) {
+      if (isUndefined(maxValue)) {
+        return this;
+      }
       return Length.px(this.value / 100 * maxValue);
     } else if (this.isPx()) {
       return this.clone();
@@ -2176,18 +2177,22 @@ class Length {
   isZero() {
     return this.value === 0;
   }
+  changeUnitValue(px, maxValue) {
+    const unit = this.unit;
+    return Length.px(px).to(unit, maxValue);
+  }
 }
 Length.auto = Length.string("auto");
 const identity$2 = () => true;
-function _traverse(obj, filterCallback = identity$2) {
+function _traverse(obj2, filterCallback = identity$2) {
   var results = [];
-  let len2 = obj.layers.length;
+  let len2 = obj2.layers.length;
   for (let start2 = len2; start2--; ) {
-    let it = obj.layers[start2];
+    let it = obj2.layers[start2];
     results.push(..._traverse(it.ref, filterCallback));
   }
-  if (filterCallback(obj)) {
-    results.push(obj);
+  if (filterCallback(obj2)) {
+    results.push(obj2);
   }
   return results;
 }
@@ -2367,13 +2372,13 @@ class Item {
     item2.setParent(this.json.parent);
     return item2;
   }
-  reset(obj) {
-    if (!obj.__changedId)
-      obj.__changedId = uuid$1();
-    if (this.lastChangedField.__changedId !== obj.__changedId) {
-      this.json = this.convert(Object.assign(this.json, obj));
-      this.lastChangedField = obj;
-      this.lastChangedFieldKeys = Object.keys(obj);
+  reset(obj2) {
+    if (!obj2.__changedId)
+      obj2.__changedId = uuid$1();
+    if (this.lastChangedField.__changedId !== obj2.__changedId) {
+      this.json = this.convert(Object.assign(this.json, obj2));
+      this.lastChangedField = obj2;
+      this.lastChangedFieldKeys = Object.keys(obj2);
       this.changed();
     }
     return true;
@@ -2381,7 +2386,7 @@ class Item {
   hasChangedField(...args2) {
     return args2.some((it) => this.lastChangedFieldKeys.includes(it));
   }
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     var id = uuidShort$1();
     return __spreadValues({
       id,
@@ -2391,7 +2396,7 @@ class Item {
       lock: false,
       selected: false,
       layers: []
-    }, obj);
+    }, obj2);
   }
   attrs(...args2) {
     const result = {};
@@ -2689,11 +2694,17 @@ function recoverVariable(id, removeVariable = true) {
   }
   return value;
 }
+function getVariable(idOrValue) {
+  if (__tempVariables.has(idOrValue)) {
+    return __tempVariables.get(idOrValue);
+  }
+  return idOrValue;
+}
 function hasVariable(id) {
   return __tempVariables.has(id);
 }
-function spreadVariable(obj) {
-  return Object.entries(obj).map(([key, value]) => {
+function spreadVariable(obj2) {
+  return Object.entries(obj2).map(([key, value]) => {
     return `${key}=${variable$4(value)}`;
   }).join(" ");
 }
@@ -2752,22 +2763,22 @@ class Dom {
   static body() {
     return Dom.create(document.body);
   }
-  setAttr(obj) {
-    Object.keys(obj).forEach((key) => {
-      this.attr(key, obj[key]);
+  setAttr(obj2) {
+    Object.keys(obj2).forEach((key) => {
+      this.attr(key, obj2[key]);
     });
     return this;
   }
-  setAttrNS(obj, namespace = "http://www.w3.org/2000/svg") {
-    Object.keys(obj).forEach((key) => {
-      this.attr(key, obj[key], namespace);
+  setAttrNS(obj2, namespace = "http://www.w3.org/2000/svg") {
+    Object.keys(obj2).forEach((key) => {
+      this.attr(key, obj2[key], namespace);
     });
     return this;
   }
-  setProp(obj) {
-    Object.keys(obj).forEach((key) => {
-      if (this.el[key] != obj[key]) {
-        this.el[key] = obj[key];
+  setProp(obj2) {
+    Object.keys(obj2).forEach((key) => {
+      if (this.el[key] != obj2[key]) {
+        this.el[key] = obj2[key];
       }
     });
     return this;
@@ -2852,6 +2863,9 @@ class Dom {
     } else {
       return [this];
     }
+  }
+  get $parent() {
+    return this.parent();
   }
   parent() {
     return Dom.create(this.el.parentNode);
@@ -3011,11 +3025,11 @@ class Dom {
   }
   getComputedStyle(...list2) {
     var css = getComputedStyle(this.el);
-    var obj = {};
+    var obj2 = {};
     list2.forEach((it) => {
-      obj[it] = css[it];
+      obj2[it] = css[it];
     });
-    return obj;
+    return obj2;
   }
   getStyleList(...list2) {
     var style = {};
@@ -3468,8 +3482,8 @@ class DomEventHandler extends BaseHandler {
     }
   }
   removeEventAll() {
-    this.getBindings().forEach((obj) => {
-      this.removeDomEvent(obj);
+    this.getBindings().forEach((obj2) => {
+      this.removeDomEvent(obj2);
     });
     this.initBindings();
   }
@@ -3482,8 +3496,8 @@ class DomEventHandler extends BaseHandler {
     }
     return this._bindings;
   }
-  addBinding(obj) {
-    this.getBindings().push(obj);
+  addBinding(obj2) {
+    this.getBindings().push(obj2);
   }
   initBindings() {
     this._bindings = [];
@@ -3797,6 +3811,9 @@ class EventMachine {
     this.initializeProperty(opt, props2);
     this.initComponents();
   }
+  get target() {
+    return this.$el.el;
+  }
   initializeProperty(opt, props2 = {}) {
     this.opt = opt || {};
     this.parent = this.opt;
@@ -3828,8 +3845,8 @@ class EventMachine {
       [key]: !this.state[key]
     }, isLoad);
   }
-  apply(obj) {
-    return spreadVariable(obj);
+  apply(obj2) {
+    return spreadVariable(obj2);
   }
   _reload(props2, $container = null) {
     if ($container) {
@@ -3893,52 +3910,63 @@ class EventMachine {
     }
     return TEMP_DIV$1.createChildrenFragment();
   }
-  parseProperty($dom) {
+  parsePropertyInfo($dom) {
     let props2 = {};
     for (var t of $dom.el.attributes) {
       if (hasVariable(t.nodeName)) {
-        const recoveredValue = recoverVariable(t.nodeName);
+        const recoveredValue = getVariable(t.nodeName);
         if (isObject(recoveredValue)) {
           props2 = Object.assign(props2, recoveredValue);
         } else {
-          props2[t.nodeName] = recoverVariable(t.nodeValue);
+          props2[t.nodeName] = getVariable(t.nodeValue);
         }
       } else {
-        props2[t.nodeName] = recoverVariable(t.nodeValue);
+        props2[t.nodeName] = getVariable(t.nodeValue);
       }
     }
-    props2.content = $dom.html();
-    if (props2.content) {
+    const content2 = $dom.html();
+    if (content2) {
+      props2.content = content2;
       props2.contentChildren = this.parseContent(props2.content);
     }
     return props2;
   }
-  parseSourceName(obj) {
-    if (obj.parent) {
-      return [obj.sourceName, ...this.parseSourceName(obj.parent)];
+  parseSourceName(obj2) {
+    if (obj2.parent) {
+      return [obj2.sourceName, ...this.parseSourceName(obj2.parent)];
     }
-    return [obj.sourceName];
+    return [obj2.sourceName];
   }
   getEventMachineComponent(refClassName) {
     var EventMachineComponent = retriveElement(refClassName) || this.childComponents[refClassName];
     return EventMachineComponent;
   }
-  renderComponent({ $dom, refName, EventMachineComponent, props: props2 }) {
+  createInstanceForComponent(EventMachineComponent, targetElement, props2) {
+    if (EventMachineComponent.__proto__.name === "ProxyComponent") {
+      return new EventMachineComponent({ target: targetElement, props: props2 });
+    }
+    return new EventMachineComponent(this, props2);
+  }
+  renderComponent({ $dom, refName, component: component2, props: props2 }) {
     var _a;
     var instance = null;
     if (this.children[refName]) {
       instance = this.children[refName];
       instance._reload(props2);
     } else {
-      instance = new EventMachineComponent(this, props2);
+      instance = this.createInstanceForComponent(component2, $dom.$parent.el, props2);
       this.children[refName || instance.id] = instance;
-      instance.render();
+      if (isFunction(instance.render)) {
+        instance.render();
+      }
     }
     if (instance.renderTarget) {
       (_a = instance.$el) == null ? void 0 : _a.appendTo(instance.renderTarget);
       $dom.remove();
-    } else {
+    } else if (instance.$el) {
       $dom.replace(instance.$el);
+    } else {
+      $dom.remove();
     }
   }
   parseContent(html2, filteredRefClass = []) {
@@ -3950,14 +3978,14 @@ class EventMachine {
     const refClass = $dom.attr(REF_CLASS);
     const EventMachineComponent = this.getEventMachineComponent(refClass);
     if (EventMachineComponent) {
-      let props2 = this.parseProperty($dom);
+      let props2 = this.parsePropertyInfo($dom);
       let refName = $dom.attr(REFERENCE_PROPERTY);
       return {
         $dom,
         refClass,
         props: props2,
         refName,
-        EventMachineComponent
+        component: EventMachineComponent
       };
     } else {
       return {
@@ -3967,6 +3995,8 @@ class EventMachine {
     }
   }
   parseComponentList($el) {
+    if (!$el)
+      return [];
     const children2 = [];
     let targets = $el.$$(REF_CLASS_PROPERTY).filter((it) => {
       return it.path().filter((a) => {
@@ -3988,8 +4018,8 @@ class EventMachine {
         this.renderComponent(comp);
       }
     });
-    keyEach(this.children, (key, obj) => {
-      if (obj && obj.clean()) {
+    keyEach(this.children, (key, obj2) => {
+      if (isFunction(obj2 == null ? void 0 : obj2.clean) && obj2.clean()) {
         delete this.children[key];
       }
     });
@@ -3997,7 +4027,9 @@ class EventMachine {
   clean() {
     if (this.$el && !this.$el.hasParent()) {
       keyEach(this.children, (key, child) => {
-        child.clean();
+        if (isFunction(child == null ? void 0 : child.clean)) {
+          child.clean();
+        }
       });
       this.destroy();
       this.$el = null;
@@ -4027,16 +4059,19 @@ class EventMachine {
       var [elName, ...checker] = methodName.split(CHECK_SAPARATOR).map((it) => it.trim());
       checker = checker.map((it) => it.trim());
       const isDomDiff = Boolean(checker.filter((it) => DOMDIFF.includes(it)).length);
-      if (this.refs[elName]) {
+      const refTarget = this.refs[elName];
+      if (refTarget) {
         var newTemplate = await this[callbackName].apply(this, args2);
         if (Array.isArray(newTemplate)) {
           newTemplate = newTemplate.join("");
         }
         const fragment = this.parseTemplate(html`${newTemplate}`, true);
         if (isDomDiff) {
-          this.refs[elName].htmlDiff(fragment);
+          refTarget.htmlDiff(fragment);
         } else {
-          this.refs[elName].html(fragment);
+          if (refTarget) {
+            refTarget.html(fragment);
+          }
         }
       }
     });
@@ -4214,7 +4249,7 @@ class BaseStore {
     Promise.resolve().then(() => {
       messages.forEach(([event, ...args2]) => {
         var list2 = this.getCachedCallbacks(event);
-        if (list2) {
+        if (list2 && list2.length) {
           const runnableFunctions = list2.filter((f) => !f.enableSelfTrigger).filter((f) => f.enableAllTrigger || f.originalCallback.source !== source2);
           for (const f of runnableFunctions) {
             const result = f.callback.apply(f.context, args2);
@@ -4227,6 +4262,8 @@ class BaseStore {
               }
             }
           }
+        } else {
+          console.warn(`message event ${event} is not exist.`);
         }
       });
     });
@@ -4721,7 +4758,7 @@ function makeTimer(opt) {
     timer2.lastTime = elapsed;
     timer2.tick(elapsed, timer2);
     if (timer2.elapsed === timer2.duration) {
-      end();
+      end2();
     } else {
       frameStart();
     }
@@ -4729,7 +4766,7 @@ function makeTimer(opt) {
   const frameStart = () => {
     timer2.id = requestAnimationFrame(tick);
   };
-  const end = () => {
+  const end2 = () => {
     timer2.endCallback(timer2.elapsed, timer2);
     timer2.iterationStartCount++;
     if (timer2.iterationStartCount > timer2.iterationCount) {
@@ -4881,12 +4918,12 @@ const createBezierLine = (C1, C2) => {
     return getBezierPointOneLine(points2, t);
   };
 };
-const checkDist = (obj, curve, t, x2, y2) => {
+const checkDist = (obj2, curve, t, x2, y2) => {
   var p = curve(t);
   var dist2 = getDist(x2, y2, p.x, p.y);
-  if (dist2 < obj.minDist) {
-    obj.minDist = dist2;
-    obj.minT = t;
+  if (dist2 < obj2.minDist) {
+    obj2.minDist = dist2;
+    obj2.minT = t;
   }
 };
 const getPolygonalDist = (points2 = []) => {
@@ -4927,22 +4964,22 @@ const getQuardDist = (sx, sy, cx1, cy1, ex, ey, count = 1e3) => {
   return total;
 };
 const makeCurveFunction = (curve, count = 10) => {
-  var obj = {
+  var obj2 = {
     minDist: Infinity,
     minT: 0
   };
   return function(x2, y2) {
     for (var i = 0; i <= count; i++) {
-      checkDist(obj, curve, i / count, x2, y2);
+      checkDist(obj2, curve, i / count, x2, y2);
     }
     var step2 = 1 / (count * 2);
-    var t = obj.minT;
+    var t = obj2.minT;
     for (var i = 0; i < count; i++) {
-      checkDist(obj, curve, Math.max(0, t - step2), x2, y2);
-      checkDist(obj, curve, Math.min(1, t + step2), x2, y2);
+      checkDist(obj2, curve, Math.max(0, t - step2), x2, y2);
+      checkDist(obj2, curve, Math.min(1, t + step2), x2, y2);
       step2 /= 2;
     }
-    return obj.minT;
+    return obj2.minT;
   };
 };
 const recoverBezier = (C1, C2, C3, C4, count = 20) => {
@@ -5032,7 +5069,6 @@ const splitBezierPointsQuardByCount = (points2, count = 1) => {
 };
 const splitBezierPointsLineByCount = (points2, count = 1) => {
   var result = [];
-  console.log(points2, count);
   const unit = 1 / count;
   while (count > 0) {
     const curve = getBezierPointsLine(points2, unit);
@@ -5238,7 +5274,7 @@ function makeInterpolateLength(layer2, property, startNumber, endNumber, refType
 }
 class BorderRadius {
   static parseStyle(str = "") {
-    var obj = {
+    var obj2 = {
       isAll: true,
       "border-radius": Length.z(),
       "border-top-left-radius": Length.z(),
@@ -5248,16 +5284,16 @@ class BorderRadius {
     };
     var arr = str.split(" ").filter((it) => Length.parse(it));
     if (arr.length === 1) {
-      obj.isAll = true;
-      obj["border-radius"] = arr[0];
+      obj2.isAll = true;
+      obj2["border-radius"] = arr[0];
     } else {
-      obj.isAll = false;
-      obj["border-top-left-radius"] = arr[0];
-      obj["border-top-right-radius"] = arr[1];
-      obj["border-bottom-right-radius"] = arr[2];
-      obj["border-bottom-left-radius"] = arr[3];
+      obj2.isAll = false;
+      obj2["border-top-left-radius"] = arr[0];
+      obj2["border-top-right-radius"] = arr[1];
+      obj2["border-bottom-right-radius"] = arr[2];
+      obj2["border-bottom-left-radius"] = arr[3];
     }
-    return obj;
+    return obj2;
   }
 }
 const getBorderRadiusList = (radiusValue) => {
@@ -5291,66 +5327,66 @@ function makeInterpolateBorderRadius(layer2, property, startValue, endValue) {
     return list2.map((it) => it(rate, t)).join(" ");
   };
 }
-function format(obj, type, defaultColor = "rgba(0, 0, 0, 0)") {
-  if (Array.isArray(obj)) {
-    obj = { r: obj[0], g: obj[1], b: obj[2], a: obj[3] };
+function format(obj2, type, defaultColor = "rgba(0, 0, 0, 0)") {
+  if (Array.isArray(obj2)) {
+    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
   }
   if (type == "hex") {
-    return hex(obj);
+    return hex(obj2);
   } else if (type == "rgb") {
-    return rgb(obj, defaultColor);
+    return rgb(obj2, defaultColor);
   } else if (type == "hsl") {
-    return hsl(obj);
+    return hsl(obj2);
   }
-  return obj;
+  return obj2;
 }
-function hex(obj) {
-  if (Array.isArray(obj)) {
-    obj = { r: obj[0], g: obj[1], b: obj[2], a: obj[3] };
+function hex(obj2) {
+  if (Array.isArray(obj2)) {
+    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
   }
-  var r = obj.r.toString(16);
-  if (obj.r < 16)
+  var r = obj2.r.toString(16);
+  if (obj2.r < 16)
     r = "0" + r;
-  var g = obj.g.toString(16);
-  if (obj.g < 16)
+  var g = obj2.g.toString(16);
+  if (obj2.g < 16)
     g = "0" + g;
-  var b = obj.b.toString(16);
-  if (obj.b < 16)
+  var b = obj2.b.toString(16);
+  if (obj2.b < 16)
     b = "0" + b;
-  if (obj.a == 1 || typeof obj.a === "undefined") {
+  if (obj2.a == 1 || typeof obj2.a === "undefined") {
     return `#${r}${g}${b}`;
   } else {
-    const alpha2 = Math.ceil(obj.a * 255);
+    const alpha2 = Math.ceil(obj2.a * 255);
     var a = alpha2.toString(16);
     if (alpha2 < 16)
       a = "0" + a;
     return `#${r}${g}${b}${a}`;
   }
 }
-function rgb(obj, defaultColor = "rgba(0, 0, 0, 0)") {
-  if (Array.isArray(obj)) {
-    obj = { r: obj[0], g: obj[1], b: obj[2], a: obj[3] };
+function rgb(obj2, defaultColor = "rgba(0, 0, 0, 0)") {
+  if (Array.isArray(obj2)) {
+    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
   }
-  if (typeof obj === "undefined") {
+  if (typeof obj2 === "undefined") {
     return void 0;
   }
-  if (obj.a == 1 || typeof obj.a === "undefined") {
-    if (isNaN(obj.r)) {
+  if (obj2.a == 1 || typeof obj2.a === "undefined") {
+    if (isNaN(obj2.r)) {
       return defaultColor;
     }
-    return `rgb(${obj.r},${obj.g},${obj.b})`;
+    return `rgb(${obj2.r},${obj2.g},${obj2.b})`;
   } else {
-    return `rgba(${obj.r},${obj.g},${obj.b},${obj.a})`;
+    return `rgba(${obj2.r},${obj2.g},${obj2.b},${obj2.a})`;
   }
 }
-function hsl(obj) {
-  if (Array.isArray(obj)) {
-    obj = { r: obj[0], g: obj[1], b: obj[2], a: obj[3] };
+function hsl(obj2) {
+  if (Array.isArray(obj2)) {
+    obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
   }
-  if (obj.a == 1 || typeof obj.a === "undefined") {
-    return `hsl(${obj.h},${obj.s}%,${obj.l}%)`;
+  if (obj2.a == 1 || typeof obj2.a === "undefined") {
+    return `hsl(${obj2.h},${obj2.s}%,${obj2.l}%)`;
   } else {
-    return `hsla(${obj.h},${obj.s}%,${obj.l}%,${obj.a})`;
+    return `hsla(${obj2.h},${obj2.s}%,${obj2.l}%,${obj2.a})`;
   }
 }
 var formatter = /* @__PURE__ */ Object.freeze({
@@ -5400,7 +5436,7 @@ function randomItem(...args2) {
 function repeat$1(count) {
   return [...Array(count)];
 }
-function CSS_TO_STRING(style, postfix = "") {
+function CSS_TO_STRING$1(style, postfix = "") {
   var newStyle = style || {};
   return Object.keys(newStyle).filter((key) => isNotUndefined(newStyle[key])).map((key) => `${key}: ${newStyle[key]}`).join(";" + postfix);
 }
@@ -5417,25 +5453,31 @@ function STRING_TO_CSS(str = "", splitChar = ";", keySplitChar = ":") {
   });
   return style;
 }
-function OBJECT_TO_PROPERTY(obj) {
-  return Object.keys(obj).map((key) => {
+function OBJECT_TO_PROPERTY$1(obj2) {
+  const target = obj2 || {};
+  return Object.keys(target).map((key) => {
     if (key === "class") {
-      if (isObject(obj[key])) {
-        return `${key}="${OBJECT_TO_CLASS(obj[key])}"`;
+      if (isObject(obj2[key])) {
+        return `${key}="${OBJECT_TO_CLASS$1(obj2[key])}"`;
       }
     }
-    if (isBoolean(obj[key]) || isUndefined(obj[key]) || obj[key] === "undefined") {
-      if (obj[key]) {
+    if (key === "style") {
+      if (isObject(obj2[key])) {
+        return `${key}="${CSS_TO_STRING$1(obj2[key])}"`;
+      }
+    }
+    if (isBoolean(obj2[key]) || isUndefined(obj2[key]) || obj2[key] === "undefined") {
+      if (obj2[key]) {
         return key;
       } else {
         return "";
       }
     }
-    return `${key}="${obj[key]}"`;
+    return `${key}="${obj2[key]}"`;
   }).join(" ");
 }
-function OBJECT_TO_CLASS(obj) {
-  return Object.keys(obj).filter((k) => obj[k]).map((key) => {
+function OBJECT_TO_CLASS$1(obj2) {
+  return Object.keys(obj2).filter((k) => obj2[k]).map((key) => {
     return key;
   }).join(" ");
 }
@@ -5445,7 +5487,7 @@ function TAG_TO_STRING(str) {
 function mapjoin(arr, callback, joinString = "") {
   return arr.map(callback).join(joinString);
 }
-function isArrayEquals(A, B) {
+function isArrayEquals$1(A, B) {
   const s = new Set([...A, ...B]);
   return s.size === A.length && s.size === B.length;
 }
@@ -5473,22 +5515,22 @@ var func = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   randomItem,
   repeat: repeat$1,
-  CSS_TO_STRING,
+  CSS_TO_STRING: CSS_TO_STRING$1,
   STRING_TO_CSS,
-  OBJECT_TO_PROPERTY,
-  OBJECT_TO_CLASS,
+  OBJECT_TO_PROPERTY: OBJECT_TO_PROPERTY$1,
+  OBJECT_TO_CLASS: OBJECT_TO_CLASS$1,
   TAG_TO_STRING,
   mapjoin,
-  isArrayEquals,
+  isArrayEquals: isArrayEquals$1,
   curveToPath,
   curveToPointLine
 });
 class PropertyItem extends Item {
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return __spreadValues({
       selected: false,
       layers: []
-    }, obj);
+    }, obj2);
   }
   isAttribute() {
     return true;
@@ -5497,7 +5539,7 @@ class PropertyItem extends Item {
     return {};
   }
   toString() {
-    return CSS_TO_STRING(this.toCSS());
+    return CSS_TO_STRING$1(this.toCSS());
   }
 }
 const color_names = { aliceblue: "rgb(240, 248, 255)", antiquewhite: "rgb(250, 235, 215)", aqua: "rgb(0, 255, 255)", aquamarine: "rgb(127, 255, 212)", azure: "rgb(240, 255, 255)", beige: "rgb(245, 245, 220)", bisque: "rgb(255, 228, 196)", black: "rgb(0, 0, 0)", blanchedalmond: "rgb(255, 235, 205)", blue: "rgb(0, 0, 255)", blueviolet: "rgb(138, 43, 226)", brown: "rgb(165, 42, 42)", burlywood: "rgb(222, 184, 135)", cadetblue: "rgb(95, 158, 160)", chartreuse: "rgb(127, 255, 0)", chocolate: "rgb(210, 105, 30)", coral: "rgb(255, 127, 80)", cornflowerblue: "rgb(100, 149, 237)", cornsilk: "rgb(255, 248, 220)", crimson: "rgb(237, 20, 61)", cyan: "rgb(0, 255, 255)", darkblue: "rgb(0, 0, 139)", darkcyan: "rgb(0, 139, 139)", darkgoldenrod: "rgb(184, 134, 11)", darkgray: "rgb(169, 169, 169)", darkgrey: "rgb(169, 169, 169)", darkgreen: "rgb(0, 100, 0)", darkkhaki: "rgb(189, 183, 107)", darkmagenta: "rgb(139, 0, 139)", darkolivegreen: "rgb(85, 107, 47)", darkorange: "rgb(255, 140, 0)", darkorchid: "rgb(153, 50, 204)", darkred: "rgb(139, 0, 0)", darksalmon: "rgb(233, 150, 122)", darkseagreen: "rgb(143, 188, 143)", darkslateblue: "rgb(72, 61, 139)", darkslategray: "rgb(47, 79, 79)", darkslategrey: "rgb(47, 79, 79)", darkturquoise: "rgb(0, 206, 209)", darkviolet: "rgb(148, 0, 211)", deeppink: "rgb(255, 20, 147)", deepskyblue: "rgb(0, 191, 255)", dimgray: "rgb(105, 105, 105)", dimgrey: "rgb(105, 105, 105)", dodgerblue: "rgb(30, 144, 255)", firebrick: "rgb(178, 34, 34)", floralwhite: "rgb(255, 250, 240)", forestgreen: "rgb(34, 139, 34)", fuchsia: "rgb(255, 0, 255)", gainsboro: "rgb(220, 220, 220)", ghostwhite: "rgb(248, 248, 255)", gold: "rgb(255, 215, 0)", goldenrod: "rgb(218, 165, 32)", gray: "rgb(128, 128, 128)", grey: "rgb(128, 128, 128)", green: "rgb(0, 128, 0)", greenyellow: "rgb(173, 255, 47)", honeydew: "rgb(240, 255, 240)", hotpink: "rgb(255, 105, 180)", indianred: "rgb(205, 92, 92)", indigo: "rgb(75, 0, 130)", ivory: "rgb(255, 255, 240)", khaki: "rgb(240, 230, 140)", lavender: "rgb(230, 230, 250)", lavenderblush: "rgb(255, 240, 245)", lawngreen: "rgb(124, 252, 0)", lemonchiffon: "rgb(255, 250, 205)", lightblue: "rgb(173, 216, 230)", lightcoral: "rgb(240, 128, 128)", lightcyan: "rgb(224, 255, 255)", lightgoldenrodyellow: "rgb(250, 250, 210)", lightgreen: "rgb(144, 238, 144)", lightgray: "rgb(211, 211, 211)", lightgrey: "rgb(211, 211, 211)", lightpink: "rgb(255, 182, 193)", lightsalmon: "rgb(255, 160, 122)", lightseagreen: "rgb(32, 178, 170)", lightskyblue: "rgb(135, 206, 250)", lightslategray: "rgb(119, 136, 153)", lightslategrey: "rgb(119, 136, 153)", lightsteelblue: "rgb(176, 196, 222)", lightyellow: "rgb(255, 255, 224)", lime: "rgb(0, 255, 0)", limegreen: "rgb(50, 205, 50)", linen: "rgb(250, 240, 230)", magenta: "rgb(255, 0, 255)", maroon: "rgb(128, 0, 0)", mediumaquamarine: "rgb(102, 205, 170)", mediumblue: "rgb(0, 0, 205)", mediumorchid: "rgb(186, 85, 211)", mediumpurple: "rgb(147, 112, 219)", mediumseagreen: "rgb(60, 179, 113)", mediumslateblue: "rgb(123, 104, 238)", mediumspringgreen: "rgb(0, 250, 154)", mediumturquoise: "rgb(72, 209, 204)", mediumvioletred: "rgb(199, 21, 133)", midnightblue: "rgb(25, 25, 112)", mintcream: "rgb(245, 255, 250)", mistyrose: "rgb(255, 228, 225)", moccasin: "rgb(255, 228, 181)", navajowhite: "rgb(255, 222, 173)", navy: "rgb(0, 0, 128)", oldlace: "rgb(253, 245, 230)", olive: "rgb(128, 128, 0)", olivedrab: "rgb(107, 142, 35)", orange: "rgb(255, 165, 0)", orangered: "rgb(255, 69, 0)", orchid: "rgb(218, 112, 214)", palegoldenrod: "rgb(238, 232, 170)", palegreen: "rgb(152, 251, 152)", paleturquoise: "rgb(175, 238, 238)", palevioletred: "rgb(219, 112, 147)", papayawhip: "rgb(255, 239, 213)", peachpuff: "rgb(255, 218, 185)", peru: "rgb(205, 133, 63)", pink: "rgb(255, 192, 203)", plum: "rgb(221, 160, 221)", powderblue: "rgb(176, 224, 230)", purple: "rgb(128, 0, 128)", rebeccapurple: "rgb(102, 51, 153)", red: "rgb(255, 0, 0)", rosybrown: "rgb(188, 143, 143)", royalblue: "rgb(65, 105, 225)", saddlebrown: "rgb(139, 69, 19)", salmon: "rgb(250, 128, 114)", sandybrown: "rgb(244, 164, 96)", seagreen: "rgb(46, 139, 87)", seashell: "rgb(255, 245, 238)", sienna: "rgb(160, 82, 45)", silver: "rgb(192, 192, 192)", skyblue: "rgb(135, 206, 235)", slateblue: "rgb(106, 90, 205)", slategray: "rgb(112, 128, 144)", slategrey: "rgb(112, 128, 144)", snow: "rgb(255, 250, 250)", springgreen: "rgb(0, 255, 127)", steelblue: "rgb(70, 130, 180)", tan: "rgb(210, 180, 140)", teal: "rgb(0, 128, 128)", thistle: "rgb(216, 191, 216)", tomato: "rgb(255, 99, 71)", turquoise: "rgb(64, 224, 208)", violet: "rgb(238, 130, 238)", wheat: "rgb(245, 222, 179)", white: "rgb(255, 255, 255)", whitesmoke: "rgb(245, 245, 245)", yellow: "rgb(255, 255, 0)", yellowgreen: "rgb(154, 205, 50)", transparent: "rgba(0, 0, 0, 0)", currentColor: "currentColor" };
@@ -5845,9 +5887,9 @@ function parse(str) {
       for (var i = 0, len2 = arr.length; i < len2; i++) {
         arr[i] = parseInt(trim(arr[i]), 10);
       }
-      var obj = { type: "rgb", r: arr[0], g: arr[1], b: arr[2], a: 1 };
-      obj = __spreadValues(__spreadValues({}, obj), RGBtoHSL(obj));
-      return obj;
+      var obj2 = { type: "rgb", r: arr[0], g: arr[1], b: arr[2], a: 1 };
+      obj2 = __spreadValues(__spreadValues({}, obj2), RGBtoHSL(obj2));
+      return obj2;
     } else if (str.indexOf("rgba(") > -1) {
       var arr = str.replace("rgba(", "").replace(")", "").split(",");
       for (var i = 0, len2 = arr.length; i < len2; i++) {
@@ -5857,17 +5899,17 @@ function parse(str) {
           arr[i] = parseInt(trim(arr[i]), 10);
         }
       }
-      var obj = { type: "rgb", r: arr[0], g: arr[1], b: arr[2], a: arr[3] };
-      obj = __spreadValues(__spreadValues({}, obj), RGBtoHSL(obj));
-      return obj;
+      var obj2 = { type: "rgb", r: arr[0], g: arr[1], b: arr[2], a: arr[3] };
+      obj2 = __spreadValues(__spreadValues({}, obj2), RGBtoHSL(obj2));
+      return obj2;
     } else if (str.indexOf("hsl(") > -1) {
       var arr = str.replace("hsl(", "").replace(")", "").split(",");
       for (var i = 0, len2 = arr.length; i < len2; i++) {
         arr[i] = parseFloat(trim(arr[i]));
       }
-      var obj = { type: "hsl", h: arr[0], s: arr[1], l: arr[2], a: 1 };
-      obj = __spreadValues(__spreadValues({}, obj), HSLtoRGB(obj));
-      return obj;
+      var obj2 = { type: "hsl", h: arr[0], s: arr[1], l: arr[2], a: 1 };
+      obj2 = __spreadValues(__spreadValues({}, obj2), HSLtoRGB(obj2));
+      return obj2;
     } else if (str.indexOf("hsla(") > -1) {
       var arr = str.replace("hsla(", "").replace(")", "").split(",");
       for (var i = 0, len2 = arr.length; i < len2; i++) {
@@ -5877,9 +5919,9 @@ function parse(str) {
           arr[i] = parseInt(trim(arr[i]), 10);
         }
       }
-      var obj = { type: "hsl", h: arr[0], s: arr[1], l: arr[2], a: arr[3] };
-      obj = __spreadValues(__spreadValues({}, obj), HSLtoRGB(obj));
-      return obj;
+      var obj2 = { type: "hsl", h: arr[0], s: arr[1], l: arr[2], a: arr[3] };
+      obj2 = __spreadValues(__spreadValues({}, obj2), HSLtoRGB(obj2));
+      return obj2;
     } else if (str.indexOf("#") == 0) {
       str = str.replace("#", "");
       var arr = [];
@@ -5899,26 +5941,26 @@ function parse(str) {
           arr.push(parseInt(str.substr(i, 2), 16));
         }
       }
-      var obj = { type: "hex", r: arr[0], g: arr[1], b: arr[2], a };
-      obj = __spreadValues(__spreadValues({}, obj), RGBtoHSL(obj));
-      return obj;
+      var obj2 = { type: "hex", r: arr[0], g: arr[1], b: arr[2], a };
+      obj2 = __spreadValues(__spreadValues({}, obj2), RGBtoHSL(obj2));
+      return obj2;
     }
   } else if (isNumber(str)) {
     if (0 <= str && str <= 16777215) {
       const r = (str & 16711680) >> 16;
       const g = (str & 65280) >> 8;
       const b = (str & 255) >> 0;
-      var obj = { type: "hex", r, g, b, a: 1 };
-      obj = __spreadValues(__spreadValues({}, obj), RGBtoHSL(obj));
-      return obj;
+      var obj2 = { type: "hex", r, g, b, a: 1 };
+      obj2 = __spreadValues(__spreadValues({}, obj2), RGBtoHSL(obj2));
+      return obj2;
     } else if (0 <= str && str <= 4294967295) {
       const r = (str & 4278190080) >> 24;
       const g = (str & 16711680) >> 16;
       const b = (str & 65280) >> 8;
       const a2 = (str & 255) / 255;
-      var obj = { type: "hex", r, g, b, a: a2 };
-      obj = __spreadValues(__spreadValues({}, obj), RGBtoHSL(obj));
-      return obj;
+      var obj2 = { type: "hex", r, g, b, a: a2 };
+      obj2 = __spreadValues(__spreadValues({}, obj2), RGBtoHSL(obj2));
+      return obj2;
     }
   }
   return str;
@@ -5991,8 +6033,8 @@ var parser = /* @__PURE__ */ Object.freeze({
   parseGradient
 });
 class BoxShadow extends PropertyItem {
-  static parse(obj) {
-    return new BoxShadow(obj);
+  static parse(obj2) {
+    return new BoxShadow(obj2);
   }
   static parseStyle(str) {
     var boxShadows = [];
@@ -6139,8 +6181,8 @@ var fromYCrCb = /* @__PURE__ */ Object.freeze({
   YCrCbtoRGB
 });
 function interpolateRGB(startColor, endColor, t = 0.5, exportFormat = "hex") {
-  var obj = interpolateRGBObject(startColor, endColor, t);
-  return format(obj, exportFormat);
+  var obj2 = interpolateRGBObject(startColor, endColor, t);
+  return format(obj2, exportFormat);
 }
 function interpolateRGBObject(startColor, endColor, t = 0.5) {
   const startColorAlpha = typeof startColor.a === "undefined" ? 1 : startColor.a;
@@ -6350,8 +6392,8 @@ function makeInterpolateRotate(layer2, property, startNumber, endNumber) {
   };
 }
 class TextShadow extends PropertyItem {
-  static parse(obj) {
-    return new TextShadow(obj);
+  static parse(obj2) {
+    return new TextShadow(obj2);
   }
   static parseStyle(str = "") {
     var results = convertMatches(str);
@@ -6431,11 +6473,11 @@ function makeInterpolateTextShadow(layer2, property, startValue, endValue) {
   };
 }
 class ImageResource extends PropertyItem {
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return __spreadValues({
       itemType: "image-resource",
       type: "image"
-    }, obj);
+    }, obj2);
   }
   isGradient() {
     return false;
@@ -6632,12 +6674,12 @@ class Gradient extends ImageResource {
   toString() {
     return "none";
   }
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return __spreadValues({
       itemType: "image-resource",
       type: "gradient",
       colorsteps: []
-    }, obj);
+    }, obj2);
   }
   toCloneObject() {
     return __spreadProps(__spreadValues({}, super.toCloneObject()), {
@@ -6786,12 +6828,12 @@ class StaticGradient extends Gradient {
 }
 const IMAGE_LIST$1 = ["jpg", "jpeg", "png", "gif", "svg"];
 class URLImageResource extends ImageResource {
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       type: "url",
       url: "",
       datauri: ""
-    }, obj));
+    }, obj2));
   }
   toCloneObject() {
     return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("url", "datauri"));
@@ -6832,11 +6874,11 @@ const DEFINED_ANGLES$2 = {
   "to top left": "315"
 };
 class LinearGradient$1 extends Gradient {
-  getDefaultObject(obj) {
+  getDefaultObject(obj2) {
     return super.getDefaultObject(__spreadValues({
       type: "linear-gradient",
       angle: 0
-    }, obj));
+    }, obj2));
   }
   toCloneObject() {
     return __spreadProps(__spreadValues({}, super.toCloneObject()), {
@@ -6914,12 +6956,12 @@ const DEFINED_POSITIONS$1 = {
   ["bottom"]: true
 };
 class RadialGradient extends Gradient {
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       type: "radial-gradient",
       radialType: "ellipse",
       radialPosition: [Position.CENTER, Position.CENTER]
-    }, obj));
+    }, obj2));
   }
   toCloneObject() {
     return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("radialType", "radialPosition"));
@@ -7008,12 +7050,12 @@ const DEFINED_ANGLES$1 = {
   "to top left": 315
 };
 class ConicGradient extends Gradient {
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       type: "conic-gradient",
       angle: 0,
       radialPosition: [Position.CENTER, Position.CENTER]
-    }, obj));
+    }, obj2));
   }
   toCloneObject() {
     return __spreadProps(__spreadValues({}, super.toCloneObject()), {
@@ -7300,13 +7342,13 @@ class BackgroundImage extends PropertyItem {
     }).join(";");
   }
   toBackgroundCSS() {
-    var obj = this.toCSS();
+    var obj2 = this.toCSS();
     return {
-      "background": `${obj["background-image"]} `
+      "background": `${obj2["background-image"]} `
     };
   }
-  static parse(obj) {
-    return new BackgroundImage(obj);
+  static parse(obj2) {
+    return new BackgroundImage(obj2);
   }
   static parseImage(str) {
     var results = convertMatches(str);
@@ -7435,14 +7477,14 @@ class BackgroundImage extends PropertyItem {
     return combineKeyArray(results);
   }
   static join(list2) {
-    return CSS_TO_STRING(BackgroundImage.toPropertyCSS(list2.map((it) => BackgroundImage.parse(it))));
+    return CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(list2.map((it) => BackgroundImage.parse(it))));
   }
   static joinCSS(list2) {
     return BackgroundImage.toPropertyCSS(list2.map((it) => BackgroundImage.parse(it)));
   }
 }
 function makeInterpolateColorStep(layer2, property, startColorStep, endColorStep) {
-  var obj = {
+  var obj2 = {
     cut: makeInterpolateBoolean(layer2, property, startColorStep.cut, endColorStep.cut),
     percent: makeInterpolateNumber$1(layer2, property, startColorStep.percent, endColorStep.percent),
     px: makeInterpolateNumber$1(layer2, property, startColorStep.px, endColorStep.px),
@@ -7452,12 +7494,12 @@ function makeInterpolateColorStep(layer2, property, startColorStep, endColorStep
   };
   return (rate, t) => {
     return new ColorStep({
-      cut: obj.cut(rate, t),
-      percent: obj.percent(rate, t),
-      px: obj.px(rate, t),
-      em: obj.em(rate, t),
-      unit: obj.unit(rate, t),
-      color: obj.color(rate, t)
+      cut: obj2.cut(rate, t),
+      percent: obj2.percent(rate, t),
+      px: obj2.px(rate, t),
+      em: obj2.em(rate, t),
+      unit: obj2.unit(rate, t),
+      color: obj2.color(rate, t)
     });
   };
 }
@@ -7478,14 +7520,14 @@ function makeInterpolateColorStepList(layer2, property, startColorsteps = [], en
   };
 }
 function makeInterpolateLinearGradient(layer2, property, s, e) {
-  var obj = {
+  var obj2 = {
     angle: makeInterpolateNumber$1(layer2, property, s.angle, e.angle),
     colorsteps: makeInterpolateColorStepList(layer2, property, s.colorsteps, e.colorsteps)
   };
   return (rate, t) => {
-    var colorsteps = obj.colorsteps(rate, t);
+    var colorsteps = obj2.colorsteps(rate, t);
     return new LinearGradient$1({
-      angle: obj.angle(rate, t),
+      angle: obj2.angle(rate, t),
       colorsteps
     });
   };
@@ -7493,10 +7535,10 @@ function makeInterpolateLinearGradient(layer2, property, s, e) {
 function makeInterpolateRepeatingLinearGradient(layer2, property, s, e) {
   var func2 = makeInterpolateLinearGradient(layer2, property, s, e);
   return (rate, t) => {
-    var obj = func2(rate, t);
+    var obj2 = func2(rate, t);
     var results = new RepeatingLinearGradient({
-      angle: obj.angle,
-      colorsteps: obj.colorsteps
+      angle: obj2.angle,
+      colorsteps: obj2.colorsteps
     });
     return results;
   };
@@ -7529,7 +7571,7 @@ function makeInterpolateRadialGradient(layer2, property, s, e) {
   s.radialPosition[1] = convertPercent(s.radialPosition[1], "height");
   e.radialPosition[0] = convertPercent(e.radialPosition[0], "width");
   e.radialPosition[1] = convertPercent(e.radialPosition[1], "height");
-  var obj = {
+  var obj2 = {
     radialType: makeInterpolateString(layer2, property, s.radialType, e.radialType),
     radialPositionX: makeInterpolateLength(layer2, property, s.radialPosition[0], e.radialPosition[0], "width", "self"),
     radialPositionY: makeInterpolateLength(layer2, property, s.radialPosition[1], e.radialPosition[1], "height", "self"),
@@ -7537,12 +7579,12 @@ function makeInterpolateRadialGradient(layer2, property, s, e) {
   };
   return (rate, t) => {
     var results = new RadialGradient({
-      radialType: obj.radialType(rate, t),
+      radialType: obj2.radialType(rate, t),
       radialPosition: [
-        obj.radialPositionX(rate, t),
-        obj.radialPositionY(rate, t)
+        obj2.radialPositionX(rate, t),
+        obj2.radialPositionY(rate, t)
       ],
-      colorsteps: obj.colorsteps(rate, t)
+      colorsteps: obj2.colorsteps(rate, t)
     });
     return results;
   };
@@ -7550,16 +7592,16 @@ function makeInterpolateRadialGradient(layer2, property, s, e) {
 function makeInterpolateRepeatingRadialGradient(layer2, property, s, e) {
   var func2 = makeInterpolateRadialGradient(layer2, property, s, e);
   return (rate, t) => {
-    var obj = func2(rate, t);
+    var obj2 = func2(rate, t);
     return new RepeatingRadialGradient({
-      radialType: obj.radialType,
-      radialPosition: obj.radialPosition,
-      colorsteps: obj.colorsteps
+      radialType: obj2.radialType,
+      radialPosition: obj2.radialPosition,
+      colorsteps: obj2.colorsteps
     });
   };
 }
 function makeInterpolateConicGradient(layer2, property, s, e) {
-  var obj = {
+  var obj2 = {
     angle: makeInterpolateNumber$1(layer2, property, s.angle, e.angle),
     radialPositionX: makeInterpolateLength(layer2, property, s.radialPosition[0], e.radialPosition[0], "width", "self"),
     radialPositionY: makeInterpolateLength(layer2, property, s.radialPosition[1], e.radialPosition[1], "height", "self"),
@@ -7567,59 +7609,59 @@ function makeInterpolateConicGradient(layer2, property, s, e) {
   };
   return (rate, t) => {
     return new ConicGradient({
-      angle: obj.angle(rate, t),
-      radialPosition: [obj.radialPositionX(rate, t), obj.radialPositionY(rate, t)],
-      colorsteps: obj.colorsteps(rate, t)
+      angle: obj2.angle(rate, t),
+      radialPosition: [obj2.radialPositionX(rate, t), obj2.radialPositionY(rate, t)],
+      colorsteps: obj2.colorsteps(rate, t)
     });
   };
 }
 function makeInterpolateRepeatingConicGradient(layer2, property, s, e) {
   var func2 = makeInterpolateConicGradient(layer2, property, s, e);
   return (rate, t) => {
-    var obj = func2(rate, t);
+    var obj2 = func2(rate, t);
     return new RepeatingConicGradient({
-      angle: obj.angle,
-      radialPosition: obj.radialPosition,
-      colorsteps: obj.colorsteps
+      angle: obj2.angle,
+      radialPosition: obj2.radialPosition,
+      colorsteps: obj2.colorsteps
     });
   };
 }
 function makeInterpolateImageResource(layer2, property, s, e) {
-  var obj = {
+  var obj2 = {
     image: (rate, t) => {
       return t;
     }
   };
   if (s.type === "url" || e.type === "url") {
-    obj.image = makeInterpolateBoolean(layer2, property, s, e);
+    obj2.image = makeInterpolateBoolean(layer2, property, s, e);
   } else {
     if (s.type != e.type) {
-      obj.image = makeInterpolateBoolean(layer2, property, s, e);
+      obj2.image = makeInterpolateBoolean(layer2, property, s, e);
     } else {
       switch (s.type) {
         case "linear-gradient":
-          obj.image = makeInterpolateLinearGradient(layer2, property, s, e);
+          obj2.image = makeInterpolateLinearGradient(layer2, property, s, e);
           break;
         case "repeating-linear-gradient":
-          obj.image = makeInterpolateRepeatingLinearGradient(layer2, property, s, e);
+          obj2.image = makeInterpolateRepeatingLinearGradient(layer2, property, s, e);
           break;
         case "radial-gradient":
-          obj.image = makeInterpolateRadialGradient(layer2, property, s, e);
+          obj2.image = makeInterpolateRadialGradient(layer2, property, s, e);
           break;
         case "repeating-radial-gradient":
-          obj.image = makeInterpolateRepeatingRadialGradient(layer2, property, s, e);
+          obj2.image = makeInterpolateRepeatingRadialGradient(layer2, property, s, e);
           break;
         case "conic-gradient":
-          obj.image = makeInterpolateConicGradient(layer2, property, s, e);
+          obj2.image = makeInterpolateConicGradient(layer2, property, s, e);
           break;
         case "repeating-conic-gradient":
-          obj.image = makeInterpolateRepeatingConicGradient(layer2, property, s, e);
+          obj2.image = makeInterpolateRepeatingConicGradient(layer2, property, s, e);
           break;
       }
     }
   }
   return (rate, t) => {
-    return obj.image(rate, t);
+    return obj2.image(rate, t);
   };
 }
 function makeInterpolateBackgroundImage(layer2, property, startValue, endValue) {
@@ -7683,21 +7725,21 @@ function makeInterpolateBackgroundImage(layer2, property, startValue, endValue) 
 }
 const FILTER_REG = /((blur|drop\-shadow|hue\-rotate|invert|brightness|contrast|opacity|saturate|sepia|url)\(([^\)]*)\))/gi;
 class Filter extends PropertyItem {
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "filter"
-    }, obj));
+    }, obj2));
   }
   toString() {
     return `${this.json.type}(${this.json.value || ""})`;
   }
-  static parse(obj) {
-    var FilterClass = FilterClassName[obj.type];
+  static parse(obj2) {
+    var FilterClass = FilterClassName[obj2.type];
     if (FilterClass) {
-      return new FilterClass(obj);
+      return new FilterClass(obj2);
     } else {
       return new URLSvgFilter({
-        value: obj.value
+        value: obj2.value
       });
     }
   }
@@ -7981,13 +8023,13 @@ const FilterClassName = {
   svg: URLSvgFilter
 };
 function makeInterpolateFilterItem(layer2, property, startValue, endValue) {
-  var obj = {
+  var obj2 = {
     type: makeInterpolateString(layer2, property, startValue.type, endValue.type),
     value: makeInterpolateBoolean(layer2, property, startValue.value, endValue.value)
   };
   switch (startValue.type) {
     case "blur":
-      obj.value = makeInterpolateLength(layer2, property, startValue.value, endValue.value);
+      obj2.value = makeInterpolateLength(layer2, property, startValue.value, endValue.value);
       break;
     case "grayscale":
     case "invert":
@@ -7997,31 +8039,31 @@ function makeInterpolateFilterItem(layer2, property, startValue, endValue) {
     case "saturate":
     case "sepia":
     case "hue-rotate":
-      obj.value = makeInterpolateNumber$1(layer2, property, startValue.value.value, endValue.value.value, startValue.value.unit);
+      obj2.value = makeInterpolateNumber$1(layer2, property, startValue.value.value, endValue.value.value, startValue.value.unit);
       break;
     case "drop-shadow":
-      obj.offsetX = makeInterpolateLength(layer2, property, startValue.offsetX, endValue.offsetX, "width", "self");
-      obj.offsetY = makeInterpolateLength(layer2, property, startValue.offsetY, endValue.offsetY, "height", "self");
-      obj.blurRadius = makeInterpolateLength(layer2, property, startValue.blurRadius, endValue.blurRadius, "width", "self");
-      obj.spreadRadius = makeInterpolateLength(layer2, property, startValue.spreadRadius, endValue.spreadRadius, "width", "self");
-      obj.color = makeInterpolateColor(layer2, property, startValue.color, endValue.color);
+      obj2.offsetX = makeInterpolateLength(layer2, property, startValue.offsetX, endValue.offsetX, "width", "self");
+      obj2.offsetY = makeInterpolateLength(layer2, property, startValue.offsetY, endValue.offsetY, "height", "self");
+      obj2.blurRadius = makeInterpolateLength(layer2, property, startValue.blurRadius, endValue.blurRadius, "width", "self");
+      obj2.spreadRadius = makeInterpolateLength(layer2, property, startValue.spreadRadius, endValue.spreadRadius, "width", "self");
+      obj2.color = makeInterpolateColor(layer2, property, startValue.color, endValue.color);
       break;
   }
   return (rate, t) => {
-    var type = obj.type(rate, t);
+    var type = obj2.type(rate, t);
     if (type === "drop-shadow") {
       return {
-        type: obj.type(rate, t),
-        offsetX: obj.offsetX(rate, t),
-        offsetY: obj.offsetY(rate, t),
-        blurRadius: obj.blurRadius(rate, t),
-        spreadRadius: obj.spreadRadius(rate, t),
-        color: obj.color(rate, t)
+        type: obj2.type(rate, t),
+        offsetX: obj2.offsetX(rate, t),
+        offsetY: obj2.offsetY(rate, t),
+        blurRadius: obj2.blurRadius(rate, t),
+        spreadRadius: obj2.spreadRadius(rate, t),
+        color: obj2.color(rate, t)
       };
     } else {
       return {
-        type: obj.type(rate, t),
-        value: obj.value(rate, t)
+        type: obj2.type(rate, t),
+        value: obj2.value(rate, t)
       };
     }
   };
@@ -8080,12 +8122,12 @@ class DirectionLength {
 }
 const CLIPPATH_REG = /(content\-box|padding\-box|border\-box|margin\-box|view\-box|stroke\-box|fill\-box|none|(inset|circle|ellipse|polygon|path|svg|url)(\(([^\)]*)\))?)/gi;
 class ClipPath extends PropertyItem {
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "clip-path",
       type: "none",
       value: ""
-    }, obj));
+    }, obj2));
   }
   toCloneObject() {
     return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("value"));
@@ -8117,14 +8159,14 @@ class ClipPath extends PropertyItem {
       "clip-path": this.toString()
     };
   }
-  static toCSS(obj) {
-    return new ClipPath(obj).toCSS();
+  static toCSS(obj2) {
+    return new ClipPath(obj2).toCSS();
   }
-  static toString(obj) {
-    return ClipPath.toCSS(obj)["clip-path"];
+  static toString(obj2) {
+    return ClipPath.toCSS(obj2)["clip-path"];
   }
-  static parse(obj) {
-    return new ClipPath(obj);
+  static parse(obj2) {
+    return new ClipPath(obj2);
   }
   static parseStyle(str) {
     var clippath = {};
@@ -8226,22 +8268,22 @@ class ClipPath extends PropertyItem {
   }
 }
 function makeInterpolateClipPathCircle(layer2, property, s, e) {
-  var obj = {};
+  var obj2 = {};
   if (s.radius === "closest-side" || s.radius === "farthest-side" || e.radius === "closest-side" || e.radius === "farthest-side") {
-    obj.radius = makeInterpolateBoolean(layer2, property, s.radius, e.radius);
+    obj2.radius = makeInterpolateBoolean(layer2, property, s.radius, e.radius);
   } else {
     if (s.radius.unit === e.radius.unit) {
-      obj.radius = makeInterpolateNumber(layer2, property, s.radius.value, e.radius.value, s.radius.unit);
+      obj2.radius = makeInterpolateNumber(layer2, property, s.radius.value, e.radius.value, s.radius.unit);
     } else {
-      obj.radius = makeInterpolateLength(layer2, property, s.radius, e.radius, "width", "self");
+      obj2.radius = makeInterpolateLength(layer2, property, s.radius, e.radius, "width", "self");
     }
   }
-  obj.x = makeInterpolateLength(layer2, property, s.x, e.x, "width", "self");
-  obj.y = makeInterpolateLength(layer2, property, s.y, e.y, "height", "self");
+  obj2.x = makeInterpolateLength(layer2, property, s.x, e.x, "width", "self");
+  obj2.y = makeInterpolateLength(layer2, property, s.y, e.y, "height", "self");
   return (rate, t) => {
-    var radius = obj.radius(rate, t);
-    var x2 = obj.x(rate, t);
-    var y2 = obj.y(rate, t);
+    var radius = obj2.radius(rate, t);
+    var x2 = obj2.x(rate, t);
+    var y2 = obj2.y(rate, t);
     var results = `${x2} ${y2}`;
     var radiusString = radius + "";
     if (radiusString.includes("closest-side")) {
@@ -8253,17 +8295,17 @@ function makeInterpolateClipPathCircle(layer2, property, s, e) {
   };
 }
 function makeInterpolateClipPathEllipse(layer2, property, s, e) {
-  var obj = {
+  var obj2 = {
     radiusX: makeInterpolateLength(layer2, property, s.radiusX, e.radiusX, "width", "self"),
     radiusY: makeInterpolateLength(layer2, property, s.radiusY, e.radiusY, "height", "self"),
     x: makeInterpolateLength(layer2, property, s.x, e.x, "width", "self"),
     y: makeInterpolateLength(layer2, property, s.y, e.y, "height", "self")
   };
   return (rate, t) => {
-    var radiusX = obj.radiusX(rate, t);
-    var radiusY = obj.radiusY(rate, t);
-    var x2 = obj.x(rate, t);
-    var y2 = obj.y(rate, t);
+    var radiusX = obj2.radiusX(rate, t);
+    var radiusY = obj2.radiusY(rate, t);
+    var x2 = obj2.x(rate, t);
+    var y2 = obj2.y(rate, t);
     return `${radiusX} ${radiusY} at ${x2} ${y2}`;
   };
 }
@@ -8297,7 +8339,7 @@ function makeInterpolateClipPathPolygon(layer2, property, s, e) {
   };
 }
 function makeInterpolateClipPathInset(layer2, property, s, e) {
-  var obj = {
+  var obj2 = {
     top: makeInterpolateNumber$1(layer2, property, s.top.value, e.top.value, s.top.unit),
     left: makeInterpolateNumber$1(layer2, property, s.left.value, e.left.value, s.left.unit),
     right: makeInterpolateNumber$1(layer2, property, s.right.value, e.right.value, s.right.unit),
@@ -8309,15 +8351,15 @@ function makeInterpolateClipPathInset(layer2, property, s, e) {
     bottomRadius: makeInterpolateNumber$1(layer2, property, s.bottomRadius.value, e.bottomRadius.value, s.bottomRadius.unit)
   };
   return (rate, t) => {
-    var top2 = obj.top(rate, t);
-    var right2 = obj.right(rate, t);
-    var bottom2 = obj.bottom(rate, t);
-    var left2 = obj.left(rate, t);
-    var round2 = obj.round(rate, t);
-    var topRadius = obj.topRadius(rate, t);
-    var leftRadius = obj.leftRadius(rate, t);
-    var bottomRadius = obj.bottomRadius(rate, t);
-    var rightRadius = obj.rightRadius(rate, t);
+    var top2 = obj2.top(rate, t);
+    var right2 = obj2.right(rate, t);
+    var bottom2 = obj2.bottom(rate, t);
+    var left2 = obj2.left(rate, t);
+    var round2 = obj2.round(rate, t);
+    var topRadius = obj2.topRadius(rate, t);
+    var leftRadius = obj2.leftRadius(rate, t);
+    var bottomRadius = obj2.bottomRadius(rate, t);
+    var rightRadius = obj2.rightRadius(rate, t);
     var position2 = [top2, right2, bottom2, left2].join(" ");
     var radius = [topRadius, rightRadius, bottomRadius, leftRadius].join(" ");
     var results = `${position2} ${round2 && radius.trim() ? `round ${radius}` : ""}`;
@@ -8327,7 +8369,7 @@ function makeInterpolateClipPathInset(layer2, property, s, e) {
 function makeInterpolateClipPath(layer2, property, startValue, endValue) {
   var startObject = ClipPath.parseStyle(startValue);
   var endObject = ClipPath.parseStyle(endValue);
-  var obj = {
+  var obj2 = {
     type: makeInterpolateBoolean(layer2, property, startObject.type, startObject.type),
     value: makeInterpolateBoolean(layer2, property, startValue, endValue)
   };
@@ -8336,33 +8378,33 @@ function makeInterpolateClipPath(layer2, property, startValue, endValue) {
       case "circle":
         startObject.value = ClipPath.parseStyleForCircle(startObject.value);
         endObject.value = ClipPath.parseStyleForCircle(endObject.value);
-        obj.value = makeInterpolateClipPathCircle(layer2, property, startObject.value, endObject.value);
+        obj2.value = makeInterpolateClipPathCircle(layer2, property, startObject.value, endObject.value);
         break;
       case "ellipse":
         startObject.value = ClipPath.parseStyleForEllipse(startObject.value);
         endObject.value = ClipPath.parseStyleForEllipse(endObject.value);
-        obj.value = makeInterpolateClipPathEllipse(layer2, property, startObject.value, endObject.value);
+        obj2.value = makeInterpolateClipPathEllipse(layer2, property, startObject.value, endObject.value);
         break;
       case "inset":
         startObject.value = ClipPath.parseStyleForInset(startObject.value);
         endObject.value = ClipPath.parseStyleForInset(endObject.value);
-        obj.value = makeInterpolateClipPathInset(layer2, property, startObject.value, endObject.value);
+        obj2.value = makeInterpolateClipPathInset(layer2, property, startObject.value, endObject.value);
         break;
       case "polygon":
         startObject.value = ClipPath.parseStyleForPolygon(startObject.value);
         endObject.value = ClipPath.parseStyleForPolygon(endObject.value);
-        obj.value = makeInterpolateClipPathPolygon(layer2, property, startObject.value, endObject.value);
+        obj2.value = makeInterpolateClipPathPolygon(layer2, property, startObject.value, endObject.value);
         break;
       case "path":
         startObject.value = ClipPath.parseStyleForPath(startObject.value);
         endObject.value = ClipPath.parseStyleForPath(endObject.value);
-        obj.value = makeInterpolateClipPathPath(layer2, property, startObject.value, endObject.value);
+        obj2.value = makeInterpolateClipPathPath(layer2, property, startObject.value, endObject.value);
         break;
     }
   }
   return (rate, t) => {
-    var type = obj.type(rate, t);
-    var value = obj.value(rate, t);
+    var type = obj2.type(rate, t);
+    var value = obj2.value(rate, t);
     if (type === "none") {
       return type;
     }
@@ -8426,14 +8468,14 @@ class Transform extends PropertyItem {
     return Transform.join(Transform.parseStyle(transform2, false).filter((it) => filterFunction(it)));
   }
   static replace(transform2, valueObject) {
-    var obj = Transform.parseStyle(transform2, false);
-    var tObject = obj.find((t) => t.type === valueObject.type);
+    var obj2 = Transform.parseStyle(transform2, false);
+    var tObject = obj2.find((t) => t.type === valueObject.type);
     if (tObject) {
       tObject.value = valueObject.value;
     } else {
-      obj.push(valueObject);
+      obj2.push(valueObject);
     }
-    return Transform.join(obj);
+    return Transform.join(obj2);
   }
   static replaceAll(oldTransform, newTransform) {
     var oldT = Transform.parseStyle(oldTransform, false);
@@ -8636,7 +8678,7 @@ class Transform extends PropertyItem {
   }
 }
 function makeInterpolateTransformLength(layer2, property, startValue, endValue) {
-  var obj = {
+  var obj2 = {
     type: makeInterpolateBoolean(layer2, property, startValue.type, endValue.type)
   };
   var value = [];
@@ -8650,16 +8692,16 @@ function makeInterpolateTransformLength(layer2, property, startValue, endValue) 
       value.push(makeInterpolateLength(layer2, property, startValue.value[i] || startValue.value[i - 1] || startValue.value[i - 2], endValue.value[i] || endValue.value[i - 1] || endValue.value[i - 2], startValue.type));
     }
   }
-  obj.value = value;
+  obj2.value = value;
   return (rate, t) => {
     return {
-      type: obj.type(rate, t),
-      value: obj.value.map((it) => it(rate, t))
+      type: obj2.type(rate, t),
+      value: obj2.value.map((it) => it(rate, t))
     };
   };
 }
 function makeInterpolateTransformNumber(layer2, property, startValue, endValue) {
-  var obj = {
+  var obj2 = {
     type: makeInterpolateBoolean(layer2, property, startValue.type, endValue.type)
   };
   var value = [];
@@ -8675,10 +8717,10 @@ function makeInterpolateTransformNumber(layer2, property, startValue, endValue) 
       value.push(makeInterpolateNumber$1(layer2, property, ss, ee));
     }
   }
-  obj.value = value;
+  obj2.value = value;
   return (rate, t) => {
-    var value2 = obj.value.map((it) => it(rate, t));
-    var type = obj.type(rate, t);
+    var value2 = obj2.value.map((it) => it(rate, t));
+    var type = obj2.type(rate, t);
     if (type.includes("matrix") || type.includes("scale")) {
       value2 = value2.map((it) => {
         return Length.number(it);
@@ -8688,7 +8730,7 @@ function makeInterpolateTransformNumber(layer2, property, startValue, endValue) 
   };
 }
 function makeInterpolateTransformRotate(layer2, property, startValue, endValue) {
-  var obj = {
+  var obj2 = {
     type: makeInterpolateBoolean(layer2, property, startValue.type, endValue.type)
   };
   var value = [];
@@ -8702,11 +8744,11 @@ function makeInterpolateTransformRotate(layer2, property, startValue, endValue) 
       value.push(makeInterpolateRotate(layer2, property, startValue.value[i] || startValue.value[i - 1] || startValue.value[i - 2], endValue.value[i] || endValue.value[i - 1] || startValue.value[i - 2]));
     }
   }
-  obj.value = value;
+  obj2.value = value;
   return (rate, t) => {
     var results = {
-      type: obj.type(rate, t),
-      value: obj.value.map((it) => it(rate, t))
+      type: obj2.type(rate, t),
+      value: obj2.value.map((it) => it(rate, t))
     };
     return results;
   };
@@ -8878,8 +8920,8 @@ class Point {
   static isLine(point2) {
     return Point.isInLine(point2.endPoint, point2.startPoint, point2, reversePoint);
   }
-  static getReversePoint(start2, end) {
-    const [x2, y2, z] = lerp([], [end.x, end.y, 0], [start2.x, start2.y, 0], 2);
+  static getReversePoint(start2, end2) {
+    const [x2, y2, z] = lerp([], [end2.x, end2.y, 0], [start2.x, start2.y, 0], 2);
     return { x: x2, y: y2 };
   }
   static getIndexPoint(points2, index2) {
@@ -10116,8 +10158,8 @@ class PathParser {
               y: segment.values[1]
             }
           ], count);
-          linePoints.forEach(([start2, end]) => {
-            newSegments.push(Segment.L(end.x, end.y));
+          linePoints.forEach(([start2, end2]) => {
+            newSegments.push(Segment.L(end2.x, end2.y));
           });
         } else if (segment.command === "Q") {
           const quardPoints = splitBezierPointsQuardByCount([
@@ -10134,8 +10176,8 @@ class PathParser {
               y: segment.values[3]
             }
           ], count);
-          quardPoints.forEach(([start2, middle2, end]) => {
-            newSegments.push(Segment.Q(middle2.x, middle2.y, end.x, end.y));
+          quardPoints.forEach(([start2, middle2, end2]) => {
+            newSegments.push(Segment.Q(middle2.x, middle2.y, end2.x, end2.y));
           });
         } else if (segment.command === "C") {
           const curvePoints = splitBezierPointsByCount([
@@ -10156,8 +10198,8 @@ class PathParser {
               y: segment.values[5]
             }
           ], count);
-          curvePoints.forEach(([start2, c1, c2, end]) => {
-            newSegments.push(Segment.C(c1.x, c1.y, c2.x, c2.y, end.x, end.y));
+          curvePoints.forEach(([start2, c1, c2, end2]) => {
+            newSegments.push(Segment.C(c1.x, c1.y, c2.x, c2.y, end2.x, end2.y));
           });
         } else if (segment.command === "Z") {
           newSegments.push(segment);
@@ -10440,6 +10482,15 @@ class PathParser {
       });
     }
     return this.resetSegments(newSegments);
+  }
+  reversePathStringByFunc(func2) {
+    const pathList = this.toPathList().map((p, index2) => {
+      if (func2(p, index2)) {
+        return p.reverse();
+      }
+      return p;
+    });
+    return PathParser.joinPathList(pathList).toSVGString();
   }
   getCenterPointers() {
     let arr = [];
@@ -11239,14 +11290,14 @@ function makeInterpolatePolygon(layer2, property, startValue, endValue) {
   };
 }
 function makeInterpolateLine(x1, y1, x2, y2) {
-  var obj = {
+  var obj2 = {
     x: makeInterpolateNumber$1("", "", x1, x2),
     y: makeInterpolateNumber$1("", "", y1, y2)
   };
   return (rate, t) => {
     var results = {
-      x: obj.x(rate, t),
-      y: obj.y(rate, t)
+      x: obj2.x(rate, t),
+      y: obj2.y(rate, t)
     };
     return results;
   };
@@ -11491,22 +11542,22 @@ function makeInterpolateOffsetPath(layer2, property, startValue, endValue, artbo
       if (t > 1) {
         t -= 1;
       }
-      var obj = interpolateList[0];
+      var obj2 = interpolateList[0];
       if (t === 0) {
-        obj = interpolateList[0];
+        obj2 = interpolateList[0];
       } else if (t === 1) {
-        obj = interpolateList[interpolateList.length - 1];
+        obj2 = interpolateList[interpolateList.length - 1];
       }
       var arr = interpolateList.find((it) => {
         return it.startT <= t && t < it.endT;
       });
       if (arr) {
-        obj = arr;
+        obj2 = arr;
       }
-      var newT = (t - obj.startT) / (obj.endT - obj.startT);
+      var newT = (t - obj2.startT) / (obj2.endT - obj2.startT);
       var newRate = timing(newT);
-      return __spreadProps(__spreadValues({}, obj.interpolate(newRate, newT, timing)), {
-        totalLength: obj.totalLength
+      return __spreadProps(__spreadValues({}, obj2.interpolate(newRate, newT, timing)), {
+        totalLength: obj2.totalLength
       });
     };
   }
@@ -11514,20 +11565,20 @@ function makeInterpolateOffsetPath(layer2, property, startValue, endValue, artbo
     var arr = (layer2["transform-origin"] || "50% 50%").split(" ").map((it) => Length.parse(it));
     var tx = arr[0].toPx(layer2.width.value);
     var ty = arr[1].toPx(layer2.height.value);
-    var obj = innerInterpolate(rate, t, timing);
+    var obj2 = innerInterpolate(rate, t, timing);
     var results = {
-      x: obj.x + screenX - tx.value,
-      y: obj.y + screenY - ty.value
+      x: obj2.x + screenX - tx.value,
+      y: obj2.y + screenY - ty.value
     };
     layer2.setScreenX(results.x);
     layer2.setScreenY(results.y);
     if (startObject.rotateStatus === "element")
       ;
     else {
-      var current = obj;
+      var current = obj2;
       var distValue = 0;
       if (t < 1) {
-        distValue = 1 / obj.totalLength;
+        distValue = 1 / obj2.totalLength;
       }
       var next = innerInterpolate(rate + distValue, t + distValue, timing);
       var angle = calculateAngle(next.x - current.x, next.y - current.y);
@@ -11686,8 +11737,8 @@ function createCurveFunction(timing) {
   };
 }
 class Offset extends PropertyItem {
-  static parse(obj) {
-    return new Offset(obj);
+  static parse(obj2) {
+    return new Offset(obj2);
   }
   getDefaultObject() {
     return super.getDefaultObject({
@@ -11706,7 +11757,7 @@ class Offset extends PropertyItem {
     return json;
   }
   toCSSText() {
-    return `${this.json.offset} ${CSS_TO_STRING(this.toCSS())}`;
+    return `${this.json.offset} ${CSS_TO_STRING$1(this.toCSS())}`;
   }
   createProperty(data = {}) {
     return this.addProperty(__spreadValues({
@@ -11741,19 +11792,19 @@ class Offset extends PropertyItem {
     Object.assign(this.json.properties[+index2], __spreadValues({}, data));
   }
   toCSS() {
-    var obj = {};
+    var obj2 = {};
     this.json.properties.forEach((it) => {
-      obj = __spreadValues(__spreadValues({}, obj), it.toCSS());
+      obj2 = __spreadValues(__spreadValues({}, obj2), it.toCSS());
     });
-    return obj;
+    return obj2;
   }
   toString() {
     return this.toCSSText();
   }
 }
 class Keyframe extends PropertyItem {
-  static parse(obj) {
-    return new Keyframe(obj);
+  static parse(obj2) {
+    return new Keyframe(obj2);
   }
   static parseStyle(style) {
     var keyframes = [];
@@ -11940,12 +11991,12 @@ class ComponentManager {
   getInspector(name2) {
     return this.inspectors[name2];
   }
-  createComponent(itemType, obj = {}) {
+  createComponent(itemType, obj2 = {}) {
     var ComponentClass = this.getComponentClass(itemType);
     if (!ComponentClass) {
       throw new Error(`${itemType} type is not valid.`);
     }
-    return new ComponentClass(obj);
+    return new ComponentClass(obj2);
   }
   createInspector(item2, name2 = "") {
     const inspector = this.getInspector(name2 || item2.itemType);
@@ -11999,10 +12050,10 @@ class ModelManager {
     this.setChanged("set", id, item2);
   }
   remove(id) {
-    const obj = this.items.get(id);
-    const children2 = obj.parent.children;
+    const obj2 = this.items.get(id);
+    const children2 = obj2.parent.children;
     const index2 = children2.indexOf(id);
-    obj.reset({
+    obj2.reset({
       removed: true,
       removedIndex: index2,
       removedLeftSibling: index2 > 0 ? children2[index2 - 1] : null,
@@ -12011,19 +12062,19 @@ class ModelManager {
     this.setChanged("remove", id);
   }
   recover(id) {
-    const obj = this.items.get(id);
+    const obj2 = this.items.get(id);
     const parent = this.getParent(id);
-    if (!obj.removedLeftSibling && obj.removedRightSibling) {
-      parent.children.splice(parent.children.findIndex((it) => obj.removedRightSibling) - 1, 0, id);
-    } else if (obj.removedLeftSibling && !obj.removedRightSibling) {
-      parent.children.splice(parent.children.findIndex((it) => obj.removedLeftSibling) + 1, 0, id);
+    if (!obj2.removedLeftSibling && obj2.removedRightSibling) {
+      parent.children.splice(parent.children.findIndex((it) => obj2.removedRightSibling) - 1, 0, id);
+    } else if (obj2.removedLeftSibling && !obj2.removedRightSibling) {
+      parent.children.splice(parent.children.findIndex((it) => obj2.removedLeftSibling) + 1, 0, id);
     } else {
-      parent.children.splice(obj.removedIndex, 0, id);
+      parent.children.splice(obj2.removedIndex, 0, id);
     }
-    delete obj.removed;
-    delete obj.removedLeftSibling;
-    delete obj.removedRightSibling;
-    delete obj.removedIndex;
+    delete obj2.removed;
+    delete obj2.removedLeftSibling;
+    delete obj2.removedRightSibling;
+    delete obj2.removedIndex;
     this.setChanged("recover", id);
   }
   clear() {
@@ -12039,19 +12090,19 @@ class ModelManager {
       })
     };
   }
-  setChanged(type, id, obj) {
-    this.editor.emit("changed", type, id, obj);
+  setChanged(type, id, obj2) {
+    this.editor.emit("changed", type, id, obj2);
   }
   removeChild(rootId, childId) {
-    const obj = this.get(rootId);
-    obj.children = obj.children.filter((it) => it !== childId);
+    const obj2 = this.get(rootId);
+    obj2.children = obj2.children.filter((it) => it !== childId);
     this.setChanged("removeChild", rootId, { childId });
   }
   hasParent(rootId, parentId) {
-    const obj = this.get(rootId);
-    const isParent = obj.parentId === parentId;
-    if (!isParent && obj.parent.is("project") === false)
-      return this.hasParent(obj.parentId, parentId);
+    const obj2 = this.get(rootId);
+    const isParent = obj2.parentId === parentId;
+    if (!isParent && obj2.parent.is("project") === false)
+      return this.hasParent(obj2.parentId, parentId);
     return isParent;
   }
   get components() {
@@ -12061,8 +12112,8 @@ class ModelManager {
     return this.get(id);
   }
   searchLayers(rootId, childId) {
-    const obj = this.get(rootId);
-    return this.get(obj.children.find((it) => it === childId));
+    const obj2 = this.get(rootId);
+    return this.get(obj2.children.find((it) => it === childId));
   }
   searchItemsById(ids) {
     return ids.map((id) => this.get(id));
@@ -12074,20 +12125,20 @@ class ModelManager {
     });
   }
   findGroupItem(rootId) {
-    const obj = this.get(rootId);
-    if (obj.hasChildren()) {
-      return obj;
+    const obj2 = this.get(rootId);
+    if (obj2.hasChildren()) {
+      return obj2;
     }
-    if (obj.parent && (obj.parent.is("project") || obj.parent.is("artboard") || obj.isBooleanItem)) {
-      return obj;
+    if (obj2.parent && (obj2.parent.is("project") || obj2.parent.is("artboard") || obj2.isBooleanItem)) {
+      return obj2;
     }
-    return obj.parent && this.findGroupItem(obj.parentId);
+    return obj2.parent && this.findGroupItem(obj2.parentId);
   }
   convertGroupItems(items) {
     const objectList = {};
     items.forEach((item2) => {
-      const groupItem2 = this.findGroupItem(item2.id) || item2;
-      objectList[groupItem2.id] = groupItem2;
+      const groupItem = this.findGroupItem(item2.id) || item2;
+      objectList[groupItem.id] = groupItem;
     });
     return Object.values(objectList).filter((it) => it.isNot("project"));
   }
@@ -12147,33 +12198,33 @@ class ModelManager {
   }
   getAllLayers(rootId, filterCallback = identity$1) {
     var results = [];
-    const obj = this.get(rootId);
-    let len2 = obj.children.length;
+    const obj2 = this.get(rootId);
+    let len2 = obj2.children.length;
     for (let start2 = len2; start2--; ) {
-      let id = obj.children[start2];
+      let id = obj2.children[start2];
       results.push(...this.getAllLayers(id, filterCallback));
     }
-    if (isFunction(filterCallback) && filterCallback(obj)) {
-      results.push(obj);
+    if (isFunction(filterCallback) && filterCallback(obj2)) {
+      results.push(obj2);
     }
     return results;
   }
   getLayers(rootId, defaultRef = null) {
     var _a;
-    const obj = this.get(rootId) || defaultRef;
-    return (_a = obj == null ? void 0 : obj.children) == null ? void 0 : _a.map((childId) => this.get(childId));
+    const obj2 = this.get(rootId) || defaultRef;
+    return (_a = obj2 == null ? void 0 : obj2.children) == null ? void 0 : _a.map((childId) => this.get(childId));
   }
   eachLayers(rootId, callback) {
-    const obj = this.get(rootId);
-    let len2 = obj.children.length;
+    const obj2 = this.get(rootId);
+    let len2 = obj2.children.length;
     for (let start2 = len2; start2--; ) {
-      let id = obj.children[start2];
+      let id = obj2.children[start2];
       callback(this.get(id));
     }
   }
   mapLayers(rootId, callback) {
-    const obj = this.get(rootId);
-    return obj.children.map((childId) => {
+    const obj2 = this.get(rootId);
+    return obj2.children.map((childId) => {
       return callback(this.get(childId));
     });
   }
@@ -12188,10 +12239,10 @@ class ModelManager {
     return this.getDepth(parent.id) + 1;
   }
   getRoot(rootId) {
-    const obj = this.get(rootId);
+    const obj2 = this.get(rootId);
     const parent = this.getParent(rootId);
     if (!parent)
-      return obj;
+      return obj2;
     let localParent = parent;
     do {
       const nextParent = this.getParent(localParent.id);
@@ -12202,12 +12253,12 @@ class ModelManager {
     } while (localParent);
   }
   getPath(rootId, defaultRef = null) {
-    const obj = this.get(rootId) || defaultRef;
+    const obj2 = this.get(rootId) || defaultRef;
     const parent = this.getParent(rootId);
     if (!parent)
-      return [obj];
+      return [obj2];
     const list2 = this.getPath(parent.id);
-    list2.push(obj);
+    list2.push(obj2);
     return list2;
   }
   getModelTypeInPath(rootId, itemType) {
@@ -12223,17 +12274,17 @@ class ModelManager {
     return this.getModelTypeInPath(rootId, "artboard");
   }
   is(rootId, checkItemType) {
-    const obj = this.get(rootId);
-    return checkItemType === obj.itemType;
+    const obj2 = this.get(rootId);
+    return checkItemType === obj2.itemType;
   }
   isNot(rootId, checkItemType) {
     return this.is(rootId, checkItemType) === false;
   }
   attrs(rootId, ...args2) {
-    const obj = this.get(rootId);
+    const obj2 = this.get(rootId);
     const result = {};
     args2.forEach((field) => {
-      result[field] = clone$1(obj[field]);
+      result[field] = clone$1(obj2[field]);
     });
     return result;
   }
@@ -12242,21 +12293,31 @@ class ModelManager {
     return ((_a = this.get(rootId)) == null ? void 0 : _a.children.length) > 0;
   }
   clone(rootId, isDeep = true) {
-    const obj = this.get(rootId);
-    const json = obj.toCloneObject(rootId, isDeep);
+    const obj2 = this.get(rootId);
+    const json = obj2.toCloneObject(isDeep);
     const item2 = this.createModel(json);
-    item2.setParentId(obj.parentId);
+    item2.setParentId(obj2.parentId);
     return item2;
   }
-  reset(rootId, obj) {
+  reset(rootId, obj2) {
     var _a;
-    return (_a = this.get(rootId)) == null ? void 0 : _a.reset(obj);
+    return (_a = this.get(rootId)) == null ? void 0 : _a.reset(obj2);
   }
   appendChild(rootId, childId) {
     this.get(rootId);
     this.get(childId);
     this.json.children.push(layer.id);
     layer.offsetInParent = this.json.children[last - 1].offset + 0.1;
+  }
+  replaceByType(rootId, itemType) {
+    const item2 = this.get(rootId);
+    if (item2) {
+      const json = item2.toCloneObject(false);
+      delete json.itemType;
+      const newInstance = this.components.createComponent(itemType, json);
+      newInstance.setModelManager(this);
+      this.set(rootId, newInstance);
+    }
   }
 }
 class BaseModel {
@@ -12310,7 +12371,7 @@ class BaseModel {
     return this.timestamp != Number(timestamp);
   }
   changed() {
-    this.timestamp += performance.now();
+    this.timestamp += Date.now();
   }
   get title() {
     return this.json.name || this.getDefaultTitle();
@@ -12348,12 +12409,12 @@ class BaseModel {
     return this.json.parentId;
   }
   get parent() {
-    if (!this.json.parentId)
+    if (!this.parentId)
       return void 0;
-    return this.modelManager.get(this.json.parentId);
+    return this.modelManager.get(this.parentId);
   }
   setParentId(parentId) {
-    this.json.parentId = parentId;
+    this.reset({ parentId });
     this.modelManager.setChanged("setParentId", this.id, { parentId });
   }
   get depth() {
@@ -12370,12 +12431,6 @@ class BaseModel {
   }
   get path() {
     return this.modelManager.getPath(this.id, this.ref);
-  }
-  get lock() {
-    return this.modelManager.editor.lockManager.get(this.id);
-  }
-  get visible() {
-    return this.modelManager.editor.visibleManager.get(this.id);
   }
   get childrenLength() {
     return this.json.children.length;
@@ -12433,7 +12488,7 @@ class BaseModel {
   setCache() {
   }
   toCloneObject(isDeep = true) {
-    var json = this.attrs("itemType", "name", "elementType", "type", "selected", "parentId");
+    var json = this.attrs("itemType", "name", "elementType", "type", "selected", "parentId", "children");
     if (isDeep) {
       json.layers = this.json.children.map((childId) => {
         return this.modelManager.clone(childId, isDeep);
@@ -12444,17 +12499,17 @@ class BaseModel {
   clone(isDeep = true) {
     return this.modelManager.clone(this.id, isDeep);
   }
-  isChangedValue(obj) {
+  isChangedValue(obj2) {
     return true;
   }
-  reset(obj, context = { origin: "*" }) {
-    const isChanged = this.isChangedValue(obj);
+  reset(obj2, context = { origin: "*" }) {
+    const isChanged = this.isChangedValue(obj2);
     if (isChanged) {
-      this.json = this.convert(Object.assign(this.json, obj));
-      this.lastChangedField = obj;
-      this.lastChangedFieldKeys = Object.keys(obj);
+      this.json = this.convert(Object.assign(this.json, obj2));
+      this.lastChangedField = obj2;
+      this.lastChangedFieldKeys = Object.keys(obj2);
       if (context.origin === "*") {
-        this.modelManager.setChanged("reset", this.id, obj);
+        this.modelManager.setChanged("reset", this.id, obj2);
       }
       this.changed();
     }
@@ -12463,19 +12518,20 @@ class BaseModel {
   hasChangedField(...args2) {
     return args2.some((it) => this.lastChangedField[it] !== void 0);
   }
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     var id = uuid$1();
     return __spreadValues({
       id,
       children: [],
-      offsetInParent: 1
-    }, obj);
+      offsetInParent: 1,
+      parentId: ""
+    }, obj2);
   }
   attrs(...args2) {
     const result = {};
     args2.forEach((field) => {
-      if (isNotUndefined(this.json[field])) {
-        result[field] = clone$1(this.json[field]);
+      if (isNotUndefined(this.ref[field])) {
+        result[field] = clone$1(this.ref[field]);
       }
     });
     return result;
@@ -12547,8 +12603,6 @@ class BaseModel {
     return Boolean(collapsedList.filter(Boolean).length);
   }
   expectJSON(key) {
-    if (key === "parent")
-      return false;
     if (isUndefined(this.json[key]))
       return false;
     return true;
@@ -12599,7 +12653,7 @@ class BaseModel {
   }
 }
 class AssetModel extends BaseModel {
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       comments: [],
       colors: [],
@@ -12612,7 +12666,7 @@ class AssetModel extends BaseModel {
       videos: [],
       videoKeys: [],
       audios: []
-    }, obj));
+    }, obj2));
   }
   addKeyframe(keyframe2) {
     this.json.keyframes.push(keyframe2);
@@ -12667,9 +12721,9 @@ class AssetModel extends BaseModel {
   getColor(name2) {
     return this.json.colors.filter((item2) => item2.name === name2)[0];
   }
-  addColor(obj) {
-    this.json.colors.push(obj);
-    return obj;
+  addColor(obj2) {
+    this.json.colors.push(obj2);
+    return obj2;
   }
   createColor(data = {}) {
     return this.addColor(data);
@@ -12695,6 +12749,12 @@ class AssetModel extends BaseModel {
       return void 0;
     return image2.local;
   }
+  getImageDataURIById(id) {
+    const image2 = this.json.imageKeys[id];
+    if (!image2)
+      return void 0;
+    return image2.original;
+  }
   refreshImageKeys() {
     let imageKeys = {};
     this.json.images.forEach((it) => {
@@ -12704,10 +12764,10 @@ class AssetModel extends BaseModel {
       imageKeys
     });
   }
-  addImage(obj) {
-    this.json.images.push(obj);
+  addImage(obj2) {
+    this.json.images.push(obj2);
     this.refreshImageKeys();
-    return obj;
+    return obj2;
   }
   createImage(data = {}) {
     return this.addImage(data);
@@ -12741,10 +12801,10 @@ class AssetModel extends BaseModel {
       videoKeys
     });
   }
-  addVideo(obj) {
-    this.json.videos.push(obj);
+  addVideo(obj2) {
+    this.json.videos.push(obj2);
     this.refreshVideoKeys();
-    return obj;
+    return obj2;
   }
   createVideo(data = {}) {
     return this.addVideo(data);
@@ -12767,9 +12827,9 @@ class AssetModel extends BaseModel {
   getGradient(name2) {
     return this.json.gradients.filter((item2) => item2.name === name2)[0];
   }
-  addGradient(obj = {}) {
-    this.json.gradients.push(obj);
-    return obj;
+  addGradient(obj2 = {}) {
+    this.json.gradients.push(obj2);
+    return obj2;
   }
   createGradient(data = {}) {
     return this.addGradient(data);
@@ -12795,8 +12855,8 @@ class AssetModel extends BaseModel {
   setSVGFilterValue(index2, value) {
     this.json.svgfilters[index2] = __spreadValues(__spreadValues({}, this.json.svgfilters[index2]), value);
   }
-  addSVGFilter(obj = {}) {
-    this.json.svgfilters.push(obj);
+  addSVGFilter(obj2 = {}) {
+    this.json.svgfilters.push(obj2);
     var index2 = this.json.svgfilters.length - 1;
     return index2;
   }
@@ -12823,8 +12883,8 @@ class AssetModel extends BaseModel {
   setSVGImageValue(index2, value) {
     this.json.svgimages[index2] = __spreadValues(__spreadValues({}, this.json.svgimages[index2]), value);
   }
-  addSVGImage(obj = {}) {
-    this.json.svgimages.push(obj);
+  addSVGImage(obj2 = {}) {
+    this.json.svgimages.push(obj2);
     var index2 = this.json.svgimages.length - 1;
     return index2;
   }
@@ -12833,24 +12893,24 @@ class AssetModel extends BaseModel {
   }
 }
 class TimelineModel extends AssetModel {
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       timeline: [],
       compiledTimeline: {}
-    }, obj));
+    }, obj2));
   }
   expectJSON(key) {
     if (key === "compiledTimeline")
       return false;
     return super.expectJSON(key);
   }
-  setTimelineInfo(obj) {
+  setTimelineInfo(obj2) {
     var timeline = this.getSelectedTimeline();
     if (!timeline)
       return;
     ["speed", "iterationCount", "direction"].forEach((key) => {
-      if (isNotUndefined(obj[key])) {
-        timeline[key] = obj[key];
+      if (isNotUndefined(obj2[key])) {
+        timeline[key] = obj2[key];
       }
     });
   }
@@ -13268,13 +13328,13 @@ class TimelineModel extends AssetModel {
       var times = p.keyframes.filter((it) => it.time === time);
       if (!times.length) {
         value = isUndefined(value) || value === "" ? this.getDefaultPropertyValue(property) : value;
-        var obj = { id: uuidShort$1(), layerId, property, time, value, timing: timing || "linear", editor };
-        p.keyframes.push(obj);
+        var obj2 = { id: uuidShort$1(), layerId, property, time, value, timing: timing || "linear", editor };
+        p.keyframes.push(obj2);
         p.keyframes.sort((a, b) => {
           return a.time > b.time ? 1 : -1;
         });
         this.compiledTimingFunction(layerId, property);
-        return obj;
+        return obj2;
       }
     }
   }
@@ -13363,20 +13423,20 @@ class Project extends TimelineModel {
     return null;
   }
   toRootVariableCSS() {
-    var obj = {};
+    var obj2 = {};
     this.json.rootVariable.split(";").filter((it) => it.trim()).forEach((it) => {
       var [key, value] = it.split(":");
-      obj[`--${key}`] = value;
+      obj2[`--${key}`] = value;
     });
-    return obj;
+    return obj2;
   }
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "project",
       name: "new Project",
       description: "",
       rootVariable: ""
-    }, obj));
+    }, obj2));
   }
   toCloneObject() {
     return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("name", "description", "rootVariable"));
@@ -13451,6 +13511,9 @@ class SelectionManager {
   }
   get modelManager() {
     return this.$editor.modelManager;
+  }
+  get lockManager() {
+    return this.$editor.lockManager;
   }
   get items() {
     return this.modelManager.searchLiveItemsById(this.ids);
@@ -13572,7 +13635,9 @@ class SelectionManager {
     return ids.map((it) => it.id || it).filter(Boolean);
   }
   selectByGroup(...ids) {
-    var list2 = this.modelManager.searchItemsById(this.filterIds(ids || [])).filter((it) => !it.lock);
+    var list2 = this.modelManager.searchItemsById(this.filterIds(ids || [])).filter((it) => {
+      return !this.lockManager.get(it.id);
+    });
     const newSelectedItems = this.modelManager.convertGroupItems(list2);
     return this.select(...newSelectedItems.map((it) => it.id));
   }
@@ -13703,10 +13768,6 @@ class SelectionManager {
     this.items.forEach((it) => {
       if (it.is("artboard")) {
         this.cachedItemMatrices.push(it.matrix);
-      } else if (it.hasChildren()) {
-        const list2 = this.modelManager.getAllLayers(it.id).map((it2) => it2.matrix);
-        this.cachedChildren.push(...list2.map((it2) => it2.id));
-        this.cachedItemMatrices.push(...list2);
       } else {
         this.cachedItemMatrices.push(it.matrix);
       }
@@ -13717,16 +13778,19 @@ class SelectionManager {
     this.cachedCurrentItemMatrix = this.current.matrix;
     this.cachedCurrentChildrenItemMatrices = this.modelManager.getAllLayers(this.current.id).map((it) => it.matrix);
   }
+  startToCacheChildren() {
+    this.items.forEach((item2) => {
+      item2.startToCacheChildren();
+    });
+  }
+  recoverChildren() {
+    this.items.forEach((item2) => {
+      item2.recoverChildren();
+    });
+  }
   get verties() {
     if (this.isOne) {
       return this.current.verties;
-    } else {
-      return this.rectVerties;
-    }
-  }
-  get selectionVerties() {
-    if (this.isOne) {
-      return this.current.selectionVerties();
     } else {
       return this.rectVerties;
     }
@@ -13773,6 +13837,23 @@ class SelectionManager {
     });
     return data;
   }
+  packByIds(ids, ...keys2) {
+    let data = {};
+    let localItems = [];
+    if (ids === null) {
+      localItems = this.items;
+    } else if (isString(ids) || Array.isArray(ids)) {
+      localItems = this.itemsByIds(ids);
+    }
+    const valueObject = {};
+    keys2.forEach((it) => {
+      valueObject[it] = true;
+    });
+    localItems.forEach((item2) => {
+      data[item2.id] = item2.attrs(...keys2);
+    });
+    return data;
+  }
   packByValue(valueObject, ids = null) {
     let data = {};
     let localItems = [];
@@ -13804,8 +13885,8 @@ class SelectionManager {
     }
     return this.items;
   }
-  reset(obj) {
-    Object.entries(obj).forEach(([id, attrs]) => {
+  reset(obj2) {
+    Object.entries(obj2).forEach(([id, attrs]) => {
       var _a;
       (_a = this.get(id)) == null ? void 0 : _a.reset(attrs);
     });
@@ -13821,9 +13902,11 @@ class SelectionManager {
     this.empty();
   }
   copy() {
+    console.warn("copy is deprecated");
     this.copyItems = this.items.map((item2) => item2);
   }
   paste() {
+    console.warn("paste is deprecated. use copy and paste");
     this.select(...this.copyItems.map((item2) => item2.copy(10)));
     this.copy();
   }
@@ -13895,13 +13978,18 @@ class SelectionManager {
     return this.items.every((it) => args2.includes(it.itemType));
   }
 }
-function refreshElement(editor, current) {
-  editor.emit("refreshSelectionStyleView", current);
-  editor.emit("refreshElementBoundSize", editor.selection.getRootItem(current));
+function _currentProject(editor, callback) {
+  var project2 = editor.selection.currentProject;
+  if (project2) {
+    var timeline = project2.getSelectedTimeline();
+    callback && callback(project2, timeline);
+  }
 }
-function refreshProject(editor, current) {
-  editor.emit("refreshStyleView", current, true);
-}
+var __glob_0_0$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": _currentProject
+});
 function _doForceRefreshSelection(editor) {
   editor.emit("noneSelectMenu");
   editor.nextTick(() => {
@@ -13909,48 +13997,12 @@ function _doForceRefreshSelection(editor) {
     editor.emit("refreshSelectionTool");
   });
 }
-function resizeArtBoard(editor, size2 = "") {
-  var current = editor.selection.current;
-  if (current && current.is("artboard")) {
-    if (!size2.trim())
-      return;
-    var [width2, height] = size2.split("x");
-    width2 = Length.px(+width2);
-    height = Length.px(+height);
-    current.reset({ width: width2, height });
-    editor.selection.select(current);
-    _doForceRefreshSelection(editor);
-  }
-}
-function convertPath(editor, pathString2, rect2 = null) {
-  var current = editor.selection.current;
-  if (current) {
-    if (current.is("svg-path", "svg-brush", "svg-textpath")) {
-      var d = pathString2;
-      if (rect2) {
-        var parser2 = new PathParser(pathString2);
-        parser2.scale(current.width.value / rect2.width, current.height.value / rect2.height);
-        d = parser2.d;
-      }
-      editor.command("setAttributeForMulti", "set attribute -d", editor.selection.packByValue({ d }, current.id));
-    } else if (current["clip-path"].includes("path")) {
-      var d = pathString2;
-      if (rect2) {
-        var parser2 = new PathParser(pathString2);
-        parser2.scale(current.width.value / rect2.width, current.height.value / rect2.height);
-        d = parser2.d;
-      }
-      editor.command("setAttributeForMulti", "change clip path", editor.selection.packByValue({ "clip-path": `path(${d})` }, current.id));
-    }
-  }
-}
-function addImage(editor, rect2 = {}, containerItem = void 0) {
-  editor.emit("newComponent", "image", rect2, true, containerItem);
-}
-function addVideo(editor, rect2 = {}, containerItem = void 0) {
-  editor.emit("newComponent", "video", rect2, true, containerItem);
-}
-function addArtBoard(editor, obj = {}, center2 = null) {
+var __glob_0_1$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": _doForceRefreshSelection
+});
+function addArtBoard(editor, obj2 = {}, center2 = null) {
   var project2 = editor.selection.currentProject;
   if (!project2) {
     project2 = editor.add(editor.createModel({ itemType: "project" }));
@@ -13962,7 +14014,7 @@ function addArtBoard(editor, obj = {}, center2 = null) {
     y: Length.px(200),
     width: Length.px(375),
     height: Length.px(667)
-  }, obj)));
+  }, obj2)));
   if (center2) {
     artboard2.reset({
       x: Length.px(0),
@@ -13973,798 +14025,24 @@ function addArtBoard(editor, obj = {}, center2 = null) {
   editor.selection.select(artboard2);
   _doForceRefreshSelection(editor);
 }
-function addProject(editor, obj = {}) {
-  var project2 = editor.createModel(__spreadValues({
-    itemType: "project"
-  }, obj));
-  editor.selection.selectProject(project2);
-  _doForceRefreshSelection(editor);
-}
-function addLayer(editor, layer2, isSelected = true, containerItem) {
-  if (!containerItem) {
-    containerItem = editor.selection.current || editor.selection.currentProject;
-  }
-  if (containerItem) {
-    if (containerItem.isNot("project") && !containerItem.enableHasChildren()) {
-      containerItem = containerItem.parent;
-    }
-    containerItem.appendChild(layer2);
-    if (isSelected) {
-      editor.selection.select(layer2);
-    }
-    _doForceRefreshSelection(editor);
-  }
-}
-function newComponent(editor, itemType, obj, isSelected = true, containerItem = void 0) {
-  if (itemType === "svg-textpath") {
-    obj = __spreadProps(__spreadValues({}, obj), {
-      "font-size": Length.parse(obj.height),
-      textLength: "100%",
-      d: PathParser.makeLine(0, obj.height.value, obj.width.value, obj.height.value).d
-    });
-  } else if (itemType === "svg-circle") {
-    itemType = "svg-path";
-    obj = __spreadProps(__spreadValues({}, obj), {
-      "background-color": void 0,
-      fill: `#C4C4C4`,
-      d: PathParser.makeCircle(0, 0, obj.width.value, obj.height.value).d
-    });
-  } else if (itemType === "svg-rect") {
-    itemType = "svg-path";
-    obj = __spreadProps(__spreadValues({}, obj), {
-      "background-color": void 0,
-      fill: `#C4C4C4`,
-      d: PathParser.makeRect(0, 0, obj.width.value, obj.height.value).d
-    });
-  } else if (itemType === "text") {
-    obj = __spreadValues({
-      width: Length.px(300),
-      height: Length.px(50)
-    }, obj);
-  } else if (itemType === "artboard") {
-    obj = __spreadProps(__spreadValues({}, obj), {
-      "background-color": "white"
-    });
-  }
-  const newObjAttrs = __spreadValues({ itemType }, obj);
-  editor.command("addLayer", `add layer - ${itemType}`, editor.createModel(newObjAttrs), isSelected, containerItem);
-  editor.changeMode(EDIT_MODE_SELECTION);
-}
-var clipboardCopy$1 = {
-  command: "clipboard.copy",
-  title: "Copy",
-  description: "Copy",
-  execute: function(editor, obj) {
-    editor.selection.copy();
+var __glob_0_2$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addArtBoard
+});
+var addBackgroundColor = {
+  command: "addBackgroundColor",
+  execute: function(editor, color2, id = null) {
+    editor.command("setAttributeForMulti", "add background color", editor.selection.packByValue({
+      "background-color": color2
+    }, id));
   }
 };
-var clipboardPaste$1 = {
-  command: "clipboard.paste",
-  execute: async function(editor, event) {
-    if (editor.selection.length && editor.selection.copyItems.length) {
-      editor.selection.paste();
-      editor.emit("refreshAll");
-    } else {
-      var text2 = await navigator.clipboard.readText();
-      if (text2) {
-        editor.emit("convertPasteText", text2);
-      }
-    }
-  }
-};
-var showExportView = {
-  command: "showExportView",
-  execute: function(editor) {
-    editor.emit("showExportWindow");
-  }
-};
-var updateScale = {
-  command: "updateScale",
-  execute: function(editor, scale2) {
-    const oldScale = editor.viewport.scale;
-    editor.viewport.setScale(scale2);
-    editor.emit("updateViewport", scale2, oldScale);
-  }
-};
-var fileDropItems = {
-  command: "fileDropItems",
-  execute: function(editor, items = []) {
-    editor.emit("updateResource", items);
-  }
-};
-var updateResource = {
-  command: "updateResource",
-  execute: function(editor, items) {
-    items.forEach((item2) => {
-      switch (item2.type) {
-        case "image/svg+xml":
-        case "image/png":
-        case "image/gif":
-        case "image/jpg":
-        case "image/jpeg":
-          editor.emit("updateImage", item2);
-          break;
-        case "text/plain":
-        case "text/html":
-          editor.emit("addText", {
-            content: item2.data
-          });
-          break;
-        case "text/uri-list":
-          editor.emit("updateUriList", item2);
-          break;
-      }
-    });
-  }
-};
-var updateImage = {
-  command: "updateImage",
-  execute: function(editor, imageFileOrBlob, rect2, containerItem) {
-    var reader = new FileReader();
-    reader.onload = (e) => {
-      var datauri = e.target.result;
-      var local = URL.createObjectURL(imageFileOrBlob);
-      editor.emit("addImageAssetItem", {
-        id: uuidShort$1(),
-        type: imageFileOrBlob.type,
-        name: imageFileOrBlob.name,
-        original: datauri,
-        local
-      }, rect2, containerItem);
-    };
-    reader.readAsDataURL(imageFileOrBlob);
-  }
-};
-var updateVideo = {
-  command: "updateVideo",
-  execute: function(editor, item2, rect2, containerItem = void 0) {
-    var reader = new FileReader();
-    reader.onload = (e) => {
-      var datauri = e.target.result;
-      var local = URL.createObjectURL(item2);
-      editor.emit("addVideoAssetItem", {
-        id: uuidShort$1(),
-        type: item2.type,
-        name: item2.name,
-        original: datauri,
-        local
-      }, rect2, containerItem);
-    };
-    reader.readAsDataURL(item2);
-  }
-};
-function loadOriginalImage(obj, callback) {
-  var img = new Image();
-  img.onload = () => {
-    var info = {
-      id: obj.id,
-      local: obj.local,
-      naturalWidth: Length.px(img.naturalWidth),
-      naturalHeight: Length.px(img.naturalHeight),
-      width: Length.px(img.naturalWidth),
-      height: Length.px(img.naturalHeight)
-    };
-    callback && callback(info, img);
-  };
-  img.onerror = (e) => {
-    console.log(e, e.message);
-  };
-  img.src = obj.local;
-}
-var addImageAssetItem = {
-  command: "addImageAssetItem",
-  execute: function(editor, imageObject, rect2 = {}, containerItem = void 0) {
-    var project2 = editor.selection.currentProject;
-    if (project2) {
-      project2.createImage(imageObject);
-      editor.emit("addImageAsset");
-      loadOriginalImage(imageObject, (info) => {
-        const rate = rect2.width.value / info.width.value;
-        const width2 = rect2.width;
-        const height = Length.px(info.height.value * rate);
-        editor.emit("addImage", __spreadProps(__spreadValues(__spreadValues({
-          src: imageObject.id
-        }, info), rect2), {
-          width: width2,
-          height
-        }), containerItem);
-        editor.changeMode(EDIT_MODE_SELECTION);
-      });
-    }
-  }
-};
-function loadOriginalVideo(obj, callback) {
-  var video2 = document.createElement("video");
-  video2.onloadeddata = () => {
-    var info = {
-      local: obj.local,
-      naturalWidth: Length.px(video2.videoWidth),
-      naturalHeight: Length.px(video2.videoHeight),
-      width: Length.px(video2.videoWidth),
-      height: Length.px(video2.videoHeight),
-      duration: video2.duration,
-      playTime: `0:1:${video2.duration}`,
-      volume: video2.volume,
-      muted: video2.muted,
-      placebackRate: video2.playbackRate
-    };
-    callback && callback(info, video2);
-  };
-  video2.src = obj.local;
-}
-var addVideoAssetItem = {
-  command: "addVideoAssetItem",
-  execute: function(editor, videoObject, rect2 = {}, containerItem = void 0) {
-    var project2 = editor.selection.currentProject;
-    if (project2) {
-      project2.createVideo(videoObject);
-      editor.emit("addVideoAsset");
-      loadOriginalVideo(videoObject, (info) => {
-        editor.emit("addVideo", __spreadValues(__spreadValues({ src: videoObject.id }, info), rect2), containerItem);
-        editor.changeMode(EDIT_MODE_SELECTION);
-      });
-    }
-  }
-};
-var dropImageUrl = {
-  command: "dropImageUrl",
-  execute: function(editor, imageUrl) {
-    loadOriginalImage({ local: imageUrl }, (info) => {
-      editor.emit("addImage", __spreadValues({ src: info.local }, info));
-      editor.changeMode(EDIT_MODE_SELECTION);
-    });
-  }
-};
-var addSVGFilterAssetItem = {
-  command: "addSVGFilterAssetItem",
-  execute: function(editor, callback) {
-    var project2 = editor.selection.currentProject;
-    if (project2) {
-      var id = uuidShort$1();
-      var index2 = project2.createSVGFilter({ id, filters: [] });
-      callback && callback(index2, id);
-    }
-  }
-};
-var updateImageAssetItem = {
-  command: "updateImageAssetItem",
-  execute: function(editor, item2, callback) {
-    var reader = new FileReader();
-    reader.onload = (e) => {
-      var datauri = e.target.result;
-      var local = URL.createObjectURL(item2);
-      var project2 = editor.selection.currentProject;
-      if (project2) {
-        const image2 = project2.createImage({
-          id: uuidShort$1(),
-          type: item2.type,
-          name: item2.name,
-          original: datauri,
-          local
-        });
-        editor.emit("addImageAsset");
-        isFunction(callback) && callback(image2.id);
-      }
-    };
-    reader.readAsDataURL(item2);
-  }
-};
-var updateVideoAssetItem = {
-  command: "updateVideoAssetItem",
-  execute: function(editor, item2, callback) {
-    var reader = new FileReader();
-    reader.onload = (e) => {
-      var datauri = e.target.result;
-      var local = URL.createObjectURL(item2);
-      var project2 = editor.selection.currentProject;
-      if (project2) {
-        project2.createVideo({
-          id: uuidShort$1(),
-          type: item2.type,
-          name: item2.name,
-          original: datauri,
-          local
-        });
-        editor.emit("addVideoAsset");
-        isFunction(callback) && callback(local);
-      }
-    };
-    reader.readAsDataURL(item2);
-  }
-};
-class AssetParser {
-  static parse(datauri, enableParselocal = false) {
-    var [_, data] = datauri.split("data:");
-    var [mediaType, ...content2] = data.split(",");
-    var [mimeType, encoding] = mediaType.split(";");
-    content2 = content2.join(",");
-    return {
-      mimeType,
-      local: enableParselocal && AssetParser.getLink(mimeType, encoding, content2)
-    };
-  }
-  static getLink(mimeType, encoding, content2) {
-    if (encoding === "base64") {
-      var binary = atob(content2);
-      var len2 = binary.length;
-      var unit8Array = new Uint8Array(len2);
-      for (var i = 0; i < len2; i++) {
-        unit8Array[i] = binary.charCodeAt(i);
-      }
-      var blob = new Blob([unit8Array], { type: mimeType });
-      return URL.createObjectURL(blob);
-    }
-    return "";
-  }
-}
-var updateUriList = {
-  command: "updateUriList",
-  execute: function(editor, item2) {
-    var datauri = item2.data;
-    if (datauri.indexOf("data:") > -1) {
-      var info = AssetParser.parse(datauri, true);
-      switch (info.mimeType) {
-        case "image/png":
-        case "image/gif":
-        case "image/jpg":
-        case "image/jpeg":
-          editor.emit("addImageAssetItem", {
-            id: uuidShort$1(),
-            type: info.mimeType,
-            name: "",
-            original: datauri,
-            local: info.local
-          });
-          break;
-      }
-    } else {
-      var ext = item2.data.split(".").pop();
-      var name2 = item2.data.split("/").pop();
-      switch (ext) {
-        case "png":
-        case "jpg":
-        case "gif":
-        case "svg":
-          editor.emit("addImageAssetItem", {
-            id: uuidShort$1(),
-            type: "image/" + ext,
-            name: name2,
-            original: item2.data,
-            local: item2.data
-          });
-          break;
-      }
-    }
-  }
-};
-function downloadFile(datauri, filename = "easylogic.json") {
-  var a = document.createElement("a");
-  a.href = datauri;
-  a.download = filename;
-  a.click();
-}
-var downloadJSON = {
-  command: "downloadJSON",
-  execute: function(editor, filename) {
-    var json = JSON.stringify(editor.modelManager.toJSON());
-    var datauri = "data:application/json;base64," + window.btoa(unescape(encodeURIComponent(json)));
-    downloadFile(datauri, filename || "easylogic.json");
-  }
-};
-var ExportManager = {
-  makeProjectStyle(item2) {
-    const keyframeString = item2.toKeyframeString();
-    const rootVariable = item2.toRootVariableCSS();
-    return `
-      :root {
-        ${CSS_TO_STRING(rootVariable)}
-      }
-      /* keyframe */
-      ${keyframeString}
-    `;
-  },
-  makeStyle(item2, appendCSS = "") {
-    if (item2.is("project")) {
-      return this.makeProjectStyle(item2);
-    }
-    const cssString = item2.generateView(`[data-id='${item2.id}']`, appendCSS);
-    return `
-    ${cssString}
-    ` + item2.layers.map((it) => {
-      return this.makeStyle(it);
-    }).join("");
-  },
-  makeSvg(project2) {
-    const SVGString = project2.toSVGString ? project2.toSVGString() : "";
-    return `
-      ${SVGString ? `<svg width="0" height="0">${SVGString}</svg>` : ""}
-    `;
-  },
-  generateSVG(editor, rootItem) {
-    return editor.replaceLocalUrltoRealUrl(editor.svg.render(rootItem));
-  }
-};
-var downloadSVG = {
-  command: "downloadSVG",
-  execute: function(editor) {
-    const item2 = editor.selection.current;
-    if (item2) {
-      var svgString = ExportManager.generateSVG(editor, item2).trim();
-      var datauri = "data:image/svg+xml;base64," + window.btoa(svgString);
-      var filename = item2.id;
-      downloadFile(datauri, filename);
-    }
-  }
-};
-function createImagePng(img, callback, imageType = "image/png") {
-  var canvas = Dom.create("canvas");
-  var { width: width2, height } = img;
-  canvas.resize({ width: width2, height });
-  canvas.drawImage(img);
-  callback && callback(canvas.toDataURL(imageType));
-}
-var downloadPNG = {
-  command: "downloadPNG",
-  execute: function(editor, callbackCommand = "") {
-    const item2 = editor.selection.current;
-    if (item2) {
-      const svgString = ExportManager.generateSVG(editor, item2).trim();
-      const datauri = "data:image/svg+xml;base64," + window.btoa(svgString);
-      const filename = item2.id;
-      loadOriginalImage({ local: datauri }, (info, img) => {
-        createImagePng(img, (pngDataUri) => {
-          downloadFile(pngDataUri, filename);
-          if (callbackCommand) {
-            editor.emit(callbackCommand, pngDataUri);
-          }
-        });
-      });
-    }
-  }
-};
-var saveJSON = {
-  command: "saveJSON",
-  execute: function(editor) {
-    editor.saveItem("model", editor.modelManager.toJSON());
-  }
-};
-var loadJSON = {
-  command: "load.json",
-  execute: function(editor, json, context = { origin: "*" }) {
-    editor.modelManager.load(json, context);
-    _doForceRefreshSelection(editor);
-  }
-};
-var setLocale = {
-  command: "setLocale",
-  execute: function(editor, locale) {
-    editor.setLocale(locale);
-    editor.emit("changed.locale");
-  }
-};
-function _currentProject(editor, callback) {
-  var project2 = editor.selection.currentProject;
-  if (project2) {
-    var timeline = project2.getSelectedTimeline();
-    callback && callback(project2, timeline);
-  }
-}
-var addTimelineProperty = {
-  command: "addTimelineProperty",
-  execute: function(editor, layerList, options2 = { timing: "linear" }) {
-    _currentProject(editor, (project2, timeline) => {
-      if (Array.isArray(layerList) === false) {
-        layerList = [layerList];
-      }
-      var list2 = [];
-      layerList.forEach((layerId) => {
-        var keyframeObj = {
-          layerId,
-          property: options2.property,
-          value: options2.value + "",
-          timing: options2.timing,
-          editor: options2.editor
-        };
-        var obj = project2.addTimelineKeyframe(keyframeObj);
-        if (obj) {
-          list2.push(obj);
-        }
-      });
-      editor.timeline.select(...list2);
-      editor.emit("refreshTimeline");
-      editor.emit("refreshSelectedOffset");
-    });
-  }
-};
-var refreshSelectedOffset = {
-  command: "refreshSelectedOffset",
-  execute: function(editor) {
-    var offset = editor.timeline.items[0];
-    if (offset) {
-      editor.emit("refreshOffsetValue", offset);
-    }
-  }
-};
-var setTimelineOffset = {
-  command: "setTimelineOffset",
-  debounce: 100,
-  execute: function(editor, obj) {
-    _currentProject(editor, (project2, timeline) => {
-      project2.setTimelineKeyframeOffsetValue(obj.layerId, obj.property, obj.id, obj.value, obj.timing, obj.time);
-      editor.emit("refreshTimeline");
-    });
-  }
-};
-var addTimelineCurrentProperty = {
-  command: "addTimelineCurrentProperty",
-  execute: function(editor, options2 = { timing: "linear" }) {
-    _currentProject(editor, (project2, timeline) => {
-      var list2 = [];
-      editor.selection.each((item2) => {
-        var keyframeObj = {
-          layerId: item2.id,
-          property: options2.property,
-          value: item2[options2.property] + "",
-          timing: options2.timing,
-          editor: options2.editor
-        };
-        var obj = project2.addTimelineKeyframe(keyframeObj);
-        if (obj) {
-          list2.push(obj);
-        }
-      });
-      editor.timeline.select(...list2);
-      editor.emit("refreshTimeline");
-      editor.emit("refreshSelectedOffset");
-    });
-  }
-};
-var removeTimelineProperty = {
-  command: "removeTimelineProperty",
-  execute: function(editor, layerId, property) {
-    _currentProject(editor, (project2, timeline) => {
-      project2.removeTimelineProperty(layerId, property);
-      editor.timeline.empty();
-      editor.emit("refreshTimeline");
-      editor.emit("refreshSelectedOffset");
-    });
-  }
-};
-var deleteTimelineKeyframe = {
-  command: "deleteTimelineKeyframe",
-  execute: function(editor) {
-    _currentProject(editor, (project2, timeline) => {
-      editor.timeline.each((item2) => {
-        project2.deleteTimelineKeyframe(item2.layerId, item2.property, item2.id);
-      });
-      editor.timeline.empty();
-      editor.emit("refreshTimeline");
-      editor.emit("refreshSelectedOffset");
-    });
-  }
-};
-var selectTimelineItem = {
-  command: "selectTimelineItem",
-  execute: function(editor, selectedId) {
-    _currentProject(editor, (project2, timeline) => {
-      project2.selectTimeline(selectedId);
-      editor.emit("refreshTimeline");
-      editor.emit("selectTimeline");
-    });
-  }
-};
-var removeTimeline = {
-  command: "removeTimeline",
-  execute: function(editor, layerId) {
-    _currentProject(editor, (project2, timeline) => {
-      project2.removeTimeline(layerId);
-      editor.timeline.empty();
-      editor.emit("refreshTimeline");
-      editor.emit("refreshSelectedOffset");
-    });
-  }
-};
-var removeAnimationItem = {
-  command: "removeAnimationItem",
-  execute: function(editor, id) {
-    _currentProject(editor, (project2, timeline) => {
-      project2.removeAnimation(id);
-      editor.timeline.empty();
-      editor.emit("refreshTimeline");
-      editor.emit("removeAnimation");
-    });
-  }
-};
-var addTimelineKeyframe = {
-  command: "addTimelineKeyframe",
-  execute: function(editor, options2 = { timing: "linear" }) {
-    _currentProject(editor, (project2, timeline) => {
-      var item2 = editor.modelManager.get(options2.layerId);
-      var keyframeObj = {
-        layerId: options2.layerId,
-        property: options2.property,
-        time: options2.time,
-        value: item2[options2.property] + "",
-        timing: options2.timing,
-        editor: options2.editor
-      };
-      var obj = project2.addTimelineKeyframe(keyframeObj);
-      editor.timeline.select(obj);
-      editor.emit("refreshTimeline");
-      editor.emit("refreshSelectedOffset");
-    });
-  }
-};
-var copyTimelineProperty = {
-  command: "copyTimelineProperty",
-  execute: function(editor, layerId, property, newTime = null) {
-    _currentProject(editor, (project2, timeline) => {
-      project2.copyTimelineKeyframe(layerId, property, newTime);
-      editor.emit("refreshTimeline");
-    });
-  }
-};
-var playTimelineItem = {
-  command: "playTimelineItem",
-  description: "Play button action",
-  execute: function(editor, speed2 = 1, iterationCount = 1, direction = "normal") {
-    editor.selection.empty();
-    editor.emit("refreshSelection");
-    editor.changeMode("play");
-    editor.emit("afterChangeMode");
-    _currentProject(editor, (project2, timeline) => {
-      var lastTime = project2.getSelectedTimelineLastTime();
-      if (editor.timer) {
-        editor.timer.stop();
-      } else {
-        editor.timer = makeTimer({
-          elapsed: timeline.currentTime * 1e3,
-          speed: speed2,
-          duration: lastTime * 1e3,
-          iterationCount,
-          direction
-        });
-      }
-      editor.timer.play({
-        duration: lastTime * 1e3,
-        elapsed: timeline.currentTime * 1e3,
-        speed: speed2,
-        iterationCount,
-        direction,
-        tick: (elapsed, timer2) => {
-          project2.seek(timecode(timeline.fps, elapsed / 1e3));
-          editor.emit("playTimeline");
-        },
-        last: (elapsed, timer2) => {
-          project2.seek(timecode(timeline.fps, elapsed / 1e3));
-          editor.emit("playTimeline");
-          editor.nextTick(() => {
-            editor.emit("stopTimeline");
-            editor.changeMode("SELECTION");
-            editor.emit("afterChangeMode");
-          });
-        },
-        stop: (elapsed, timer2) => {
-          project2.stop(timecode(timeline.fps, elapsed / 1e3));
-          editor.emit("stopTimeline");
-          editor.changeMode("SELECTION");
-          editor.emit("afterChangeMode");
-        }
-      });
-    });
-  }
-};
-var prevTimelineItem = {
-  command: "prevTimelineItem",
-  execute: function(editor) {
-    _currentProject(editor, (project2, timeline) => {
-      var prevTime = project2.getSelectedTimelinePrevTime();
-      project2.setTimelineCurrentTime(timecode(timeline.fps, prevTime));
-      project2.seek();
-      editor.emit("playTimeline");
-      editor.changeMode("SELECTION");
-      editor.emit("afterChangeMode");
-    });
-  }
-};
-var firstTimelineItem = {
-  command: "firstTimelineItem",
-  execute: function(editor) {
-    _currentProject(editor, (project2, timeline) => {
-      var firstTime = project2.getSelectedTimelineFirstTime();
-      project2.setTimelineCurrentTime(timecode(timeline.fps, firstTime));
-      project2.seek();
-      editor.emit("playTimeline");
-      editor.changeMode("SELECTION");
-      editor.emit("afterChangeMode");
-    });
-  }
-};
-var nextTimelineItem = {
-  command: "nextTimelineItem",
-  execute: function(editor) {
-    _currentProject(editor, (project2, timeline) => {
-      var nextTime = project2.getSelectedTimelineNextTime();
-      project2.setTimelineCurrentTime(timecode(timeline.fps, nextTime));
-      project2.seek();
-      editor.emit("playTimeline");
-      editor.changeMode("SELECTION");
-      editor.emit("afterChangeMode");
-    });
-  }
-};
-var lastTimelineItem = {
-  command: "lastTimelineItem",
-  execute: function(editor) {
-    _currentProject(editor, (project2, timeline) => {
-      var lastTime = project2.getSelectedTimelineLastTime();
-      project2.setTimelineCurrentTime(timecode(timeline.fps, lastTime));
-      project2.seek();
-      editor.emit("playTimeline");
-      editor.changeMode("SELECTION");
-      editor.emit("afterChangeMode");
-    });
-  }
-};
-var pauseTimelineItem = {
-  command: "pauseTimelineItem",
-  execute: function(editor) {
-    if (editor.timer) {
-      editor.timer.stop();
-    }
-  }
-};
-var addTimelineItem = {
-  command: "addTimelineItem",
-  execute: function(editor, layerId) {
-    _currentProject(editor, (project2, timeline) => {
-      if (layerId) {
-        project2.addTimelineLayer(layerId);
-      } else {
-        project2.addTimeline();
-      }
-      editor.emit("refreshTimeline");
-      editor.emit("addTimeline");
-    });
-  }
-};
-var dropAsset = {
-  command: "drop.asset",
-  execute: async function(editor, obj, id = null) {
-    if (obj.color) {
-      editor.emit("addBackgroundColor", obj.color, id);
-    } else if (obj.gradient) {
-      editor.emit("addBackgroundImageGradient", obj.gradient, id);
-    } else if (obj.pattern) {
-      editor.emit("addBackgroundImagePattern", obj.pattern, id);
-    } else if (obj.imageUrl) {
-      editor.emit("addBackgroundImageAsset", obj.imageUrl, id);
-    } else if (obj.asset) {
-      const assetData = await editor.storageManager.getCustomAsset(obj.asset.id);
-      if (assetData) {
-        editor.emit("addArtBoard", assetData, obj.asset.center);
-      }
-    }
-    _doForceRefreshSelection(editor);
-  }
-};
-var addBackgroundImageGradient = {
-  command: "addBackgroundImageGradient",
-  execute: function(editor, gradient2, id = null) {
-    var items = editor.selection.itemsByIds(id);
-    let itemsMap = {};
-    items.forEach((item2) => {
-      let images = BackgroundImage.parseStyle(STRING_TO_CSS(item2["background-image"]));
-      images.unshift(new BackgroundImage({
-        image: BackgroundImage.parseImage(gradient2)
-      }));
-      itemsMap[item2.id] = {
-        "background-image": BackgroundImage.join(images)
-      };
-    });
-    editor.emit("history.setAttributeForMulti", "add gradient", itemsMap);
-  }
-};
+var __glob_0_3$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addBackgroundColor
+});
 var addBackgroundImageAsset = {
   command: "addBackgroundImageAsset",
   execute: function(editor, url, id = null) {
@@ -14782,72 +14060,33 @@ var addBackgroundImageAsset = {
     editor.emit("history.setAttributeForMulti", "add background image", itemsMap);
   }
 };
-var keymapKeydown = {
-  command: "keymap.keydown",
-  execute: function(editor, e) {
-    editor.keyboardManager.add(e.code, e.keyCode);
-    editor.shortcuts.execute(e, "keydown");
-  }
-};
-var keymapKeyup = {
-  command: "keymap.keyup",
-  execute: function(editor, e) {
-    editor.keyboardManager.remove(e.key, e.keyCode);
-    editor.shortcuts.execute(e, "keyup");
-  }
-};
-var removeLayer$1 = {
-  command: "removeLayer",
-  execute: function(editor, ids = void 0) {
-    editor.selection.itemsByIds(ids || editor.selection.ids).forEach((item2) => {
-      item2.remove();
+var __glob_0_4$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addBackgroundImageAsset
+});
+var addBackgroundImageGradient = {
+  command: "addBackgroundImageGradient",
+  execute: function(editor, gradient2, id = null) {
+    var items = editor.selection.itemsByIds(id);
+    let itemsMap = {};
+    items.forEach((item2) => {
+      let images = BackgroundImage.parseStyle(STRING_TO_CSS(item2["background-image"]));
+      images.unshift(new BackgroundImage({
+        image: BackgroundImage.parseImage(gradient2)
+      }));
+      itemsMap[item2.id] = {
+        "background-image": BackgroundImage.join(images)
+      };
     });
-    editor.selection.empty();
-    editor.nextTick(() => {
-      editor.emit("refreshAll");
-    });
+    editor.emit("history.setAttributeForMulti", "add gradient", itemsMap);
   }
 };
-var pushModeView = {
-  command: "push.mode.view",
-  execute: function(editor, modeView = "CanvasView") {
-    editor.modeViewManager.pushMode(modeView);
-  }
-};
-var segmentMoveDown = {
-  command: "segment.move.down",
-  execute: function(editor, obj = { dy: 1 }) {
-    const dy = +obj.dy;
-    editor.emit("moveSegment", 0, dy);
-  }
-};
-var segmentMoveUp = {
-  command: "segment.move.up",
-  execute: function(editor, obj = { dy: 1 }) {
-    const dy = +obj.dy;
-    editor.emit("moveSegment", 0, -1 * dy);
-  }
-};
-var segmentMoveRight = {
-  command: "segment.move.right",
-  execute: function(editor, obj = { dx: 1 }) {
-    const dx = +obj.dx;
-    editor.emit("moveSegment", dx, 0);
-  }
-};
-var segmentMoveLeft = {
-  command: "segment.move.left",
-  execute: function(editor, obj = { dx: 1 }) {
-    const dx = +obj.dx;
-    editor.emit("moveSegment", -1 * dx, 0);
-  }
-};
-var segmentDelete$1 = {
-  command: "segment.delete",
-  execute: function(editor, current) {
-    editor.emit("deleteSegment");
-  }
-};
+var __glob_0_5$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addBackgroundImageGradient
+});
 const MAX_CACHE_COUNT = 1e3;
 const cachedPatternMap = new Map();
 class PatternCache {
@@ -14866,18 +14105,18 @@ class PatternCache {
 }
 const PATTERN_REG = /((check|grid|dot|cross\-dot|diagonal\-line|vertical\-line|horizontal\-line|)\(([^\)]*)\))/gi;
 class Pattern extends PropertyItem {
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "pattern"
-    }, obj));
+    }, obj2));
   }
   toString() {
     return `${this.json.type}(${this.json.value || ""})`;
   }
-  static parse(obj) {
-    var PatternClass = PatternClassName[obj.type];
+  static parse(obj2) {
+    var PatternClass = PatternClassName[obj2.type];
     if (PatternClass) {
-      return new PatternClass(obj);
+      return new PatternClass(obj2);
     }
   }
   static parseStyle(pattern) {
@@ -15112,195 +14351,107 @@ var addBackgroundImagePattern = {
     editor.emit("history.setAttributeForMulti", "add pattern", itemsMap);
   }
 };
-var addBackgroundColor = {
-  command: "addBackgroundColor",
-  execute: function(editor, color2, id = null) {
-    editor.command("setAttributeForMulti", "add background color", editor.selection.packByValue({
-      "background-color": color2
-    }, id));
+var __glob_0_6$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addBackgroundImagePattern
+});
+function addCustomComponent(editor, obj2 = {}, center2 = null) {
+  var project2 = editor.selection.currentProject;
+  var customComponent = project2.appendChild(editor.createModel(__spreadValues({
+    x: Length.px(300),
+    y: Length.px(200),
+    width: Length.px(375),
+    height: Length.px(667)
+  }, obj2)));
+  if (center2) {
+    customComponent.reset({
+      x: Length.px(0),
+      y: Length.px(0)
+    });
+    customComponent.moveByCenter(center2);
   }
-};
-var scaleMinus$1 = {
-  command: "scale.minus",
-  execute: function(editor) {
-    const oldScale = editor.viewport.scale;
-    editor.viewport.setScale(editor.viewport.scale - 0.25);
-    editor.emit("updateViewport", editor.viewport.scale, oldScale);
-  }
-};
-var scalePlus$1 = {
-  command: "scale.plus",
-  execute: function(editor) {
-    const oldScale = editor.viewport.scale;
-    editor.viewport.setScale(editor.viewport.scale + 0.25);
-    editor.emit("updateViewport", editor.viewport.scale, oldScale);
-  }
-};
-function resetSelection(editor) {
-  editor.nextTick(() => {
-    editor.emit("refreshSelectionTool");
-  });
+  editor.selection.select(customComponent);
+  _doForceRefreshSelection(editor);
 }
-var sortCenter = {
-  command: "sort.center",
-  execute: function(editor) {
-    if (editor.selection.isOne) {
-      const current = editor.selection.current;
-      if (current.parent.is("project"))
-        ;
-      else if (current.artboard) {
-        const distX = getVertiesCenterX(current.artboard.verties) - getVertiesCenterX(editor.selection.verties);
-        editor.emit("moveLayer", distX, 0);
-      }
-    } else if (editor.selection.isMany) {
-      let maxRightX = getVertiesCenterX(editor.selection.verties);
-      editor.emit("moveLayerForItems", editor.selection.map((item2) => {
-        let itemRightX = getVertiesCenterX(item2.verties);
-        return { item: item2, dist: [maxRightX - itemRightX, 0, 0] };
-      }));
-    }
-  }
-};
-var sortLeft = {
-  command: "sort.left",
-  execute: function(editor) {
-    if (editor.selection.isOne) {
-      const current = editor.selection.current;
-      if (current.parent.is("project"))
-        ;
-      else if (current.artboard) {
-        const distX = getVertiesMinX(current.artboard.verties) - getVertiesMinX(editor.selection.verties);
-        editor.emit("moveLayer", distX, 0);
-      }
-    } else if (editor.selection.isMany) {
-      let maxRightX = getVertiesMinX(editor.selection.verties);
-      editor.emit("moveLayerForItems", editor.selection.map((item2) => {
-        let itemRightX = getVertiesMinX(item2.verties);
-        return { item: item2, dist: [maxRightX - itemRightX, 0, 0] };
-      }));
-    }
-  }
-};
-var sortMiddle = {
-  command: "sort.middle",
-  execute: function(editor) {
-    if (editor.selection.isOne) {
-      const current = editor.selection.current;
-      if (current.parent.is("project"))
-        ;
-      else if (current.artboard) {
-        const distY = getVertiesCenterY(current.artboard.verties) - getVertiesCenterY(editor.selection.verties);
-        editor.emit("moveLayer", 0, distY);
-      }
-    } else if (editor.selection.isMany) {
-      let maxRightY = getVertiesCenterY(editor.selection.verties);
-      editor.emit("moveLayerForItems", editor.selection.map((item2) => {
-        let itemRightY = getVertiesCenterY(item2.verties);
-        return { item: item2, dist: [0, maxRightY - itemRightY, 0, 0] };
-      }));
-    }
-  }
-};
-var sortBottom = {
-  command: "sort.bottom",
-  execute: function(editor) {
-    if (editor.selection.isOne) {
-      const current = editor.selection.current;
-      if (current.parent.is("project"))
-        ;
-      else if (current.artboard) {
-        const distY = getVertiesMaxY(current.artboard.verties) - getVertiesMaxY(editor.selection.verties);
-        editor.emit("moveLayer", 0, distY);
-      }
-    } else if (editor.selection.isMany) {
-      let maxRightY = getVertiesMaxY(editor.selection.verties);
-      editor.emit("moveLayerForItems", editor.selection.map((item2) => {
-        let itemRightY = getVertiesMaxY(item2.verties);
-        return { item: item2, dist: [0, maxRightY - itemRightY, 0, 0] };
-      }));
-    }
-  }
-};
-var sortTop = {
-  command: "sort.top",
-  execute: function(editor) {
-    if (editor.selection.isOne) {
-      const current = editor.selection.current;
-      if (current.parent.is("project"))
-        ;
-      else if (current.artboard) {
-        const distY = getVertiesMinY(current.artboard.verties) - getVertiesMinY(editor.selection.verties);
-        editor.emit("moveLayer", 0, distY);
-      }
-    } else if (editor.selection.isMany) {
-      let maxRightY = getVertiesMinY(editor.selection.verties);
-      editor.emit("moveLayerForItems", editor.selection.map((item2) => {
-        let itemRightY = getVertiesMinY(item2.verties);
-        return { item: item2, dist: [0, maxRightY - itemRightY, 0, 0] };
-      }));
-    }
-  }
-};
-var sortRight = {
-  command: "sort.right",
-  execute: function(editor) {
-    if (editor.selection.isOne) {
-      const current = editor.selection.current;
-      if (current.parent.is("project"))
-        ;
-      else if (current.artboard) {
-        const distX = getVertiesMaxX(current.artboard.verties) - getVertiesMaxX(editor.selection.verties);
-        editor.emit("moveLayer", distX, 0);
-      }
-    } else if (editor.selection.isMany) {
-      let maxRightX = getVertiesMaxX(editor.selection.verties);
-      editor.emit("moveLayerForItems", editor.selection.map((item2) => {
-        let itemRightX = getVertiesMaxX(item2.verties);
-        return { item: item2, dist: [maxRightX - itemRightX, 0, 0] };
-      }));
-    }
-  }
-};
-var sameWidth = {
-  command: "same.width",
-  description: "fit at the same width",
-  execute: function(editor) {
-    if (editor.selection.isMany) {
-      const rect2 = vertiesToRectangle(editor.selection.verties);
-      editor.command("setAttributeForMulti", "fit at the same width", editor.selection.packByValue({
-        x: rect2.x,
-        width: rect2.width
-      }));
-    }
-  }
-};
-var sameHeight = {
-  command: "same.height",
-  description: "fit at the same height",
-  execute: function(editor) {
-    var len2 = editor.selection.length;
-    if (len2 == 1)
-      ;
-    else if (len2 > 1) {
-      const rect2 = vertiesToRectangle(editor.selection.verties);
-      editor.command("setAttributeForMulti", "fit at the same height", editor.selection.packByValue({
-        y: rect2.y,
-        height: rect2.height
-      }));
-    }
-  }
-};
-function refreshArtboard(editor) {
-  editor.emit("refreshLayerTreeView");
-  editor.emit("refreshAllCanvas");
-  editor.emit("refreshStyleView");
-  editor.emit("refreshSelectionStyleView");
-  editor.emit("refreshAllElementBoundSize");
-  editor.emit("refreshSelection");
-  editor.nextTick(() => {
-    editor.emit("refreshSelectionTool", true);
-  });
+var __glob_0_7$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addCustomComponent
+});
+function addImage(editor, rect2 = {}, containerItem = void 0) {
+  editor.emit("newComponent", "image", rect2, true, containerItem);
 }
+var __glob_0_8$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addImage
+});
+function loadOriginalImage(obj2, callback) {
+  var img = new Image();
+  img.onload = () => {
+    var info = {
+      id: obj2.id,
+      local: obj2.local,
+      naturalWidth: Length.px(img.naturalWidth),
+      naturalHeight: Length.px(img.naturalHeight),
+      width: Length.px(img.naturalWidth),
+      height: Length.px(img.naturalHeight)
+    };
+    callback && callback(info, img);
+  };
+  img.onerror = (e) => {
+    console.log(e, e.message);
+  };
+  img.src = obj2.local;
+}
+var addImageAssetItem = {
+  command: "addImageAssetItem",
+  execute: function(editor, imageObject, rect2 = {}, containerItem = void 0) {
+    var project2 = editor.selection.currentProject;
+    if (project2) {
+      project2.createImage(imageObject);
+      editor.emit("addImageAsset");
+      loadOriginalImage(imageObject, (info) => {
+        const rate = rect2.width.value / info.width.value;
+        const width2 = rect2.width;
+        const height = Length.px(info.height.value * rate);
+        editor.emit("addImage", __spreadProps(__spreadValues(__spreadValues({
+          src: imageObject.id
+        }, info), rect2), {
+          width: width2,
+          height
+        }), containerItem);
+        editor.changeMode(EDIT_MODE_SELECTION);
+      });
+    }
+  }
+};
+var __glob_0_9$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addImageAssetItem
+});
+function addLayer(editor, layer2, isSelected = true, containerItem) {
+  if (!containerItem) {
+    containerItem = editor.selection.current || editor.selection.currentProject;
+  }
+  if (containerItem) {
+    if (containerItem.isNot("project") && !containerItem.enableHasChildren()) {
+      containerItem = containerItem.parent;
+    }
+    containerItem.appendChild(layer2);
+    if (isSelected) {
+      editor.selection.select(layer2);
+    }
+    _doForceRefreshSelection(editor);
+  }
+}
+var __glob_0_10$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addLayer
+});
 async function addLayerView(editor, type, data = {}) {
   editor.selection.empty();
   await editor.emit("refreshSelectionTool");
@@ -15316,411 +14467,461 @@ async function addLayerView(editor, type, data = {}) {
     await editor.emit("showLayerAppendView", type, data);
   }
 }
-var setEditorLayout = {
-  command: "setEditorLayout",
-  execute: function(editor, layout2) {
-    editor.setLayout(layout2);
-    editor.emit("changedEditorlayout");
-  }
-};
-var itemMoveDepthDown$1 = {
-  command: "item.move.depth.down",
-  execute: function(editor) {
-    const current = editor.selection.current;
-    if (current) {
-      current.orderPrev();
-    }
-    _doForceRefreshSelection(editor);
-  }
-};
-var itemMoveDepthUp$1 = {
-  command: "item.move.depth.up",
-  execute: function(editor) {
-    const current = editor.selection.current;
-    if (current) {
-      current.orderNext();
-    }
-    _doForceRefreshSelection(editor);
-  }
-};
-var groupItem$1 = {
-  command: "group.item",
-  execute: function(editor, opt = {}) {
-    if (editor.selection.length === 0)
-      return;
-    const project2 = editor.selection.currentProject;
-    if (project2) {
-      project2.generateListNumber();
-      const list2 = editor.selection.map((item2) => {
-        return { depth: item2.depth, item: item2 };
-      });
-      list2.sort((a, b) => {
-        if (a.depth === b.depth) {
-          return a.no > b.no ? -1 : 1;
-        }
-        return a.depth > b.depth ? 1 : -1;
-      });
-      const groupLayer = editor.createModel(__spreadValues(__spreadValues({
-        itemType: "rect"
-      }, editor.selection.itemRect), opt));
-      list2[0].item.appendAfter(groupLayer);
-      list2.forEach(({ item: item2 }) => {
-        groupLayer.appendChild(item2);
-      });
-      editor.selection.select(groupLayer);
-      editor.emit("refreshAll");
-    }
-  }
-};
-var ungroupItem$1 = {
-  command: "ungroup.item",
-  execute: function(editor) {
-    if (editor.selection.length === 0)
-      return;
-    const current = editor.selection.current;
-    if (current) {
-      let groupLayer = current;
-      let layers2 = [...groupLayer.layers];
-      layers2.reverse();
-      layers2.forEach((child) => {
-        groupLayer.appendBefore(child);
-      });
-      editor.selection.select(...layers2);
-      editor.emit("refreshAll");
-    }
-  }
-};
-var historyRedo$1 = {
-  command: "history.redo",
-  execute: function(editor) {
-    editor.history.redo();
-  }
-};
-var historyUndo$1 = {
-  command: "history.undo",
-  execute: function(editor) {
-    editor.history.undo();
-  }
-};
-var historyRefreshSelection = {
-  command: "history.refreshSelection",
-  description: `save selection in history `,
-  description_ko: "Selection \uC815\uBCF4\uB97C \uAC31\uC2E0\uD558\uBA74\uC11C History \uC5D0 \uC800\uC7A5\uD55C\uB2E4",
-  execute: function(editor, message = "selection") {
-    var _a;
-    const currentValues = editor.selection.ids;
-    const projectId = (_a = editor.selection.currentProject) == null ? void 0 : _a.id;
-    const undoValues = editor.history.selectedIds;
-    if (isArrayEquals(currentValues, undoValues)) {
-      return;
-    }
-    editor.history.add(message, this, {
-      currentValues: [currentValues, projectId],
-      undoValues: [undoValues, projectId]
-    });
-    this.nextAction(editor);
-  },
-  nextAction(editor) {
-    editor.nextTick(() => {
-      editor.history.saveSelection();
-      editor.emit("refreshSelection");
-      editor.nextTick(() => {
-        editor.emit("refreshSelectionTool");
-      });
-    });
-  },
-  redo: function(editor, { currentValues: [ids, projectId] }) {
-    editor.selection.selectProject(projectId);
-    editor.selection.select(...ids);
-    this.nextAction(editor);
-  },
-  undo: function(editor, { undoValues: [ids, projectId] }) {
-    editor.selection.selectProject(projectId);
-    editor.selection.select(...ids);
-    this.nextAction(editor);
-  }
-};
-var setAttributeForMulti = {
-  command: "setAttributeForMulti",
-  execute: function(editor, multiAttrs = {}, context = { origin: "*" }) {
-    const messages = [];
-    Object.entries(multiAttrs).forEach(([id, attrs]) => {
-      const item2 = editor.modelManager.get(id);
-      const newAttrs = {};
-      Object.entries(attrs).forEach(([key, value]) => {
-        newAttrs[key] = isFunction(value) ? value(item2) : value;
-      });
-      messages.push({ id: item2.id, parentId: item2.parentId, attrs: newAttrs });
-    });
-    if (messages.length == 0) {
-      return;
-    }
-    const commandMaker = editor.createCommandMaker();
-    messages.forEach((message) => {
-      commandMaker.emit("update", message.id, message.attrs, context);
-      const parent = editor.get(message.parentId);
-      if (message.parentId && (parent == null ? void 0 : parent.isNot("project")) && parent.children.length >= 2) {
-        commandMaker.emit("update", message.parentId, { "changedChildren": true }, context);
-      }
-    });
-    commandMaker.run();
-  }
-};
-var historySetAttributeForMulti = {
-  command: "history.setAttributeForMulti",
-  execute: function(editor, message, multiAttrs = {}) {
-    editor.emit("setAttributeForMulti", multiAttrs);
-    editor.history.add(message, this, {
-      currentValues: [multiAttrs],
-      undoValues: editor.history.getUndoValuesForMulti(multiAttrs)
-    });
-    editor.nextTick(() => {
-      editor.history.saveSelection();
-    });
-  },
-  redo: function(editor, { currentValues }) {
-    editor.emit("setAttributeForMulti", ...currentValues);
-    editor.nextTick(() => {
-      editor.selection.reselect();
-      editor.emit("refreshAll");
-    });
-  },
-  undo: function(editor, { undoValues }) {
-    const ids = Object.keys(undoValues);
-    const items = editor.selection.itemsByIds(ids);
-    items.forEach((item2) => {
-      item2.reset(undoValues[item2.id]);
-    });
-    editor.selection.reselect();
-    editor.nextTick(() => {
-      editor.emit("refreshAll");
-    });
-  }
-};
-var historyAddLayer = {
-  command: "history.addLayer",
-  description: "add layer in history ",
-  execute: function(editor, message, layer2, isSelected = true, containerItem) {
-    editor.emit("addLayer", layer2, isSelected, containerItem);
-    editor.nextTick(() => {
-      editor.history.add(message, this, {
-        currentValues: [layer2, isSelected, containerItem],
-        undoValues: [layer2.id]
-      });
-    });
-    editor.nextTick(() => {
-      editor.history.saveSelection();
-    });
-  },
-  redo: function(editor, { currentValues }) {
-    editor.emit("addLayer", ...currentValues);
-    editor.nextTick(() => {
-      editor.emit("refreshAll");
-    });
-  },
-  undo: function(editor, { undoValues }) {
-    const ids = undoValues;
-    const items = editor.selection.itemsByIds(ids);
-    items.forEach((item2) => {
-      if (item2) {
-        item2.remove();
-      }
-    });
-    editor.nextTick(() => {
-      editor.selection.empty();
-      editor.emit("refreshAll");
-    });
-  }
-};
-function filterChildren(items = []) {
-  return items.filter((item2) => {
-    let total = 0;
-    item2.path.forEach((treeItem) => {
-      total += items.filter((it) => it.id === treeItem.id).length ? 1 : 0;
-    });
-    return total === 1;
-  });
+var __glob_0_11$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addLayerView
+});
+function addProject(editor, obj2 = {}) {
+  var project2 = editor.createModel(__spreadValues({
+    itemType: "project"
+  }, obj2));
+  editor.selection.selectProject(project2);
+  _doForceRefreshSelection(editor);
 }
-var historyRemoveLayer = {
-  command: "history.removeLayer",
-  description: "remove layer",
-  execute: function(editor, message, ids) {
-    let items = editor.selection.itemsByIds(ids || editor.selection.ids);
-    items = filterChildren(items);
-    const filtedIds = items.map((it) => it.id);
-    editor.modelManager.markRemove(filtedIds);
-    items.forEach((item2) => item2.remove());
-    editor.history.add(message, this, {
-      currentValues: [filtedIds],
-      undoValues: filtedIds
-    });
-    editor.nextTick(() => {
-      editor.selection.removeById(filtedIds);
-      editor.emit("refreshAll");
-      editor.emit("removeGuideLine");
-      editor.nextTick(() => {
-        editor.history.saveSelection();
+var __glob_0_12$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addProject
+});
+var addSVGFilterAssetItem = {
+  command: "addSVGFilterAssetItem",
+  execute: function(editor, callback) {
+    var project2 = editor.selection.currentProject;
+    if (project2) {
+      var id = uuidShort$1();
+      var index2 = project2.createSVGFilter({ id, filters: [] });
+      callback && callback(index2, id);
+    }
+  }
+};
+var __glob_0_13$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addSVGFilterAssetItem
+});
+function addText(editor, rect2 = {}) {
+  editor.emit("newComponent", "text", __spreadValues({
+    content: "Insert a text",
+    width: Length.px(300),
+    height: Length.px(50),
+    "font-size": Length.px(30)
+  }, rect2), rect2);
+}
+var __glob_0_14$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addText
+});
+var addTimelineCurrentProperty = {
+  command: "addTimelineCurrentProperty",
+  execute: function(editor, options2 = { timing: "linear" }) {
+    _currentProject(editor, (project2, timeline) => {
+      var list2 = [];
+      editor.selection.each((item2) => {
+        var keyframeObj = {
+          layerId: item2.id,
+          property: options2.property,
+          value: item2[options2.property] + "",
+          timing: options2.timing,
+          editor: options2.editor
+        };
+        var obj2 = project2.addTimelineKeyframe(keyframeObj);
+        if (obj2) {
+          list2.push(obj2);
+        }
       });
-    });
-  },
-  redo: function(editor, { currentValues }) {
-    const ids = currentValues[0];
-    let items = editor.selection.itemsByIds(ids || editor.selection.ids);
-    items = filterChildren(items);
-    editor.modelManager.markRemove(items.map((it) => it.id));
-    items.forEach((item2) => item2.remove());
-    editor.nextTick(() => {
-      editor.emit("refreshAll");
-    });
-  },
-  undo: function(editor, { undoValues: recoverIds }) {
-    editor.modelManager.unmarkRemove(recoverIds);
-    editor.nextTick(() => {
-      editor.emit("refreshAll");
+      editor.timeline.select(...list2);
+      editor.emit("refreshTimeline");
+      editor.emit("refreshSelectedOffset");
     });
   }
 };
-var updatePathItem = {
-  command: "updatePathItem",
-  description: "Update path string for selected svg path item",
-  execute: function(editor, pathObject) {
-    const current = editor.selection.current;
-    if (current) {
-      if (pathObject.box === "box") {
-        const newPath = current.invertPath(pathObject.d);
-        editor.command("setAttributeForMulti", "change local path", editor.selection.packByValue({
-          d: newPath.d
-        }));
+var __glob_0_15$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addTimelineCurrentProperty
+});
+var addTimelineItem = {
+  command: "addTimelineItem",
+  execute: function(editor, layerId) {
+    _currentProject(editor, (project2, timeline) => {
+      if (layerId) {
+        project2.addTimelineLayer(layerId);
       } else {
-        const newPath = new PathParser(pathObject.d);
-        newPath.transformMat4(pathObject.matrix.accumulatedMatrixInverse);
-        let bbox = newPath.getBBox();
-        const newWidth = distance$1(bbox[1], bbox[0]);
-        const newHeight = distance$1(bbox[3], bbox[0]);
-        let oldBBox = vertiesMap(rectToVerties(bbox[0][0], bbox[0][1], newWidth, newHeight), pathObject.matrix.accumulatedMatrix);
-        let newBBox = vertiesMap(oldBBox, calculateMatrixInverse(fromTranslation([], oldBBox[4]), Transform.createTransformMatrix(Transform.parseStyle(pathObject.matrix.transform), newWidth, newHeight), fromTranslation([], negate([], oldBBox[4]))));
-        const worldMatrix = calculateMatrix(fromTranslation([], newBBox[0]), current.getLocalTransformMatrix(newWidth, newHeight));
-        const realXY = getTranslation([], calculateMatrix(pathObject.matrix.parentMatrixInverse, worldMatrix, invert([], current.getLocalTransformMatrix(newWidth, newHeight))));
-        editor.command("setAttributeForMulti", "change path", editor.selection.packByValue({
-          d: newPath.translate(-bbox[0][0], -bbox[0][1]).d,
-          x: Length.px(realXY[0]),
-          y: Length.px(realXY[1]),
-          width: Length.px(newWidth),
-          height: Length.px(newHeight)
-        }));
+        project2.addTimeline();
+      }
+      editor.emit("refreshTimeline");
+      editor.emit("addTimeline");
+    });
+  }
+};
+var __glob_0_16$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addTimelineItem
+});
+var addTimelineKeyframe = {
+  command: "addTimelineKeyframe",
+  execute: function(editor, options2 = { timing: "linear" }) {
+    _currentProject(editor, (project2, timeline) => {
+      var item2 = editor.modelManager.get(options2.layerId);
+      var keyframeObj = {
+        layerId: options2.layerId,
+        property: options2.property,
+        time: options2.time,
+        value: item2[options2.property] + "",
+        timing: options2.timing,
+        editor: options2.editor
+      };
+      var obj2 = project2.addTimelineKeyframe(keyframeObj);
+      editor.timeline.select(obj2);
+      editor.emit("refreshTimeline");
+      editor.emit("refreshSelectedOffset");
+    });
+  }
+};
+var __glob_0_17$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addTimelineKeyframe
+});
+var addTimelineProperty = {
+  command: "addTimelineProperty",
+  execute: function(editor, layerList, options2 = { timing: "linear" }) {
+    _currentProject(editor, (project2, timeline) => {
+      if (Array.isArray(layerList) === false) {
+        layerList = [layerList];
+      }
+      var list2 = [];
+      layerList.forEach((layerId) => {
+        var keyframeObj = {
+          layerId,
+          property: options2.property,
+          value: options2.value + "",
+          timing: options2.timing,
+          editor: options2.editor
+        };
+        var obj2 = project2.addTimelineKeyframe(keyframeObj);
+        if (obj2) {
+          list2.push(obj2);
+        }
+      });
+      editor.timeline.select(...list2);
+      editor.emit("refreshTimeline");
+      editor.emit("refreshSelectedOffset");
+    });
+  }
+};
+var __glob_0_18$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addTimelineProperty
+});
+function addVideo(editor, rect2 = {}, containerItem = void 0) {
+  editor.emit("newComponent", "video", rect2, true, containerItem);
+}
+var __glob_0_19$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addVideo
+});
+function loadOriginalVideo(obj2, callback) {
+  var video2 = document.createElement("video");
+  video2.onloadeddata = () => {
+    var info = {
+      local: obj2.local,
+      naturalWidth: Length.px(video2.videoWidth),
+      naturalHeight: Length.px(video2.videoHeight),
+      width: Length.px(video2.videoWidth),
+      height: Length.px(video2.videoHeight),
+      duration: video2.duration,
+      playTime: `0:1:${video2.duration}`,
+      volume: video2.volume,
+      muted: video2.muted,
+      placebackRate: video2.playbackRate
+    };
+    callback && callback(info, video2);
+  };
+  video2.src = obj2.local;
+}
+var addVideoAssetItem = {
+  command: "addVideoAssetItem",
+  execute: function(editor, videoObject, rect2 = {}, containerItem = void 0) {
+    var project2 = editor.selection.currentProject;
+    if (project2) {
+      project2.createVideo(videoObject);
+      editor.emit("addVideoAsset");
+      loadOriginalVideo(videoObject, (info) => {
+        editor.emit("addVideo", __spreadValues(__spreadValues({ src: videoObject.id }, info), rect2), containerItem);
+        editor.changeMode(EDIT_MODE_SELECTION);
+      });
+    }
+  }
+};
+var __glob_0_20$3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addVideoAssetItem
+});
+var clipboard_copy$1 = {
+  command: "clipboard.copy",
+  title: "Copy",
+  description: "Copy",
+  execute: function(editor) {
+    editor.clipboard.push({
+      type: "copy",
+      data: editor.selection.ids
+    });
+  }
+};
+var __glob_0_21$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": clipboard_copy$1
+});
+var clipboard_paste$1 = {
+  command: "clipboard.paste",
+  execute: async function(editor, event) {
+    if (!editor.clipboard.isEmpty) {
+      const data = editor.clipboard.pop();
+      if (data.type == "copy") {
+        const ids = data.data;
+        const items = await editor.json.renderAll(ids.map((it) => editor.get(it)));
+        const newIds = [];
+        const length2 = items.length;
+        items.forEach((itemJSON) => {
+          const referenceId = itemJSON.referenceId;
+          const sourceItem = editor.get(referenceId);
+          const model = editor.createModel(itemJSON);
+          model.renameWithCount();
+          model.move([10, 10, 0]);
+          if (length2 === 1) {
+            sourceItem.appendBefore(model);
+          } else {
+            sourceItem.parent.appendChild(model);
+          }
+          newIds.push(model.id);
+        });
+        editor.selection.select(...newIds);
+        editor.emit("refreshAll");
+      }
+    } else {
+      var text2 = await navigator.clipboard.readText();
+      if (text2) {
+        editor.emit("convertPasteText", text2);
       }
     }
   }
 };
-var updateClipPath = {
-  command: "updateClipPath",
-  description: "update clip-path property ",
-  execute: function(editor, pathObject) {
-    editor.command("setAttributeForMulti", "change clip-path", editor.selection.packByValue({
-      "clip-path": `path(${pathObject.d})`
-    }));
-  }
-};
-var moveLayer = {
-  command: "moveLayer",
-  description: "move layer by keydown with matrix ",
-  execute: function(editor, dx = 0, dy = 0) {
-    editor.command("setAttributeForMulti", "item move down", editor.selection.packByValue({
-      x: (item2) => Length.px(item2.offsetX.value + dx),
-      y: (item2) => Length.px(item2.offsetY.value + dy)
-    }));
-    editor.nextTick(() => {
-      editor.selection.reselect();
-      editor.emit("refreshAll");
-    });
-  }
-};
-var moveToCenter = {
-  command: "moveToCenter",
-  description: "Move Layer to Center on Viewport",
-  execute: function(editor, areaVerties, withScale = false) {
-    if (areaVerties) {
-      editor.viewport.moveLayerToCenter(areaVerties, withScale ? -0.2 : 0, withScale);
-    }
-  }
-};
-var moveLayerForItems = {
-  command: "moveLayerForItems",
-  description: "mova layer by multi items ",
-  execute: function(editor, moveItems = []) {
-    const itemsMap = {};
-    moveItems.forEach((it) => {
-      itemsMap[it.item.id] = {
-        x: Length.px(it.item.offsetX.value + it.dist[0]).round(),
-        y: Length.px(it.item.offsetY.value + it.dist[1]).round()
-      };
-    });
-    editor.emit("history.setAttributeForMulti", "item move down", itemsMap);
-    editor.nextTick(() => {
-      editor.selection.reselect();
-      editor.emit("refreshAll");
-    });
-  }
-};
-var moveSelectionToCenter = {
-  command: "moveSelectionToCenter",
-  description: "Move selection project or artboards to center on Viewport",
-  execute: function(editor, withScale = true) {
-    let areaVerties = [];
-    if (editor.selection.isEmpty) {
-      areaVerties = itemsToRectVerties(editor.selection.currentProject.layers);
+var __glob_0_22$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": clipboard_paste$1
+});
+var convert_flatten_path = {
+  command: "convert.flatten.path",
+  description: "flatten selected multi path",
+  execute: (editor) => {
+    const current = editor.selection.current;
+    if (!current)
+      return;
+    let newPath;
+    if (current.is("boolean-path") || current.isBooleanItem) {
+      let parent = current;
+      if (current.isBooleanItem) {
+        parent = current.parent;
+      }
+      newPath = parent.accumulatedPath(parent["boolean-path"]);
+      newPath = parent.invertPath(newPath.d);
+      const newLayerAttrs = parent.layers[0].toCloneObject();
+      delete newLayerAttrs.id;
+      delete newLayerAttrs.parentId;
+      delete newLayerAttrs.transform;
+      delete newLayerAttrs["boolean-path"];
+      delete newLayerAttrs["boolean-operation"];
+      const parentParent = parent.parent;
+      const newRectInfo = parent.updatePath(newPath.d);
+      editor.command("removeLayer", "remove selected layers", [parent.id]);
+      editor.nextTick(() => {
+        editor.command("addLayer", `add layer - path`, editor.createModel(__spreadValues(__spreadValues({}, newLayerAttrs), newRectInfo)), true, parentParent);
+      });
     } else {
-      areaVerties = itemsToRectVerties(editor.selection.items);
+      newPath = PathParser.fromSVGString();
+      editor.selection.each((item2) => {
+        newPath.addPath(item2.accumulatedPath());
+      });
+      newPath = current.invertPath(newPath.d);
+      const parent = current.parent;
+      const newPathInfo = current.updatePath(newPath.d);
+      const newLayerAttrs = current.toCloneObject();
+      delete newLayerAttrs.id;
+      editor.command("removeLayer", "remove selected layers");
+      editor.nextTick(() => {
+        editor.command("addLayer", `add layer - path`, editor.createModel(__spreadValues(__spreadValues({}, newLayerAttrs), newPathInfo)), true, parent);
+      });
     }
-    editor.emit("moveToCenter", areaVerties, withScale);
   }
 };
-var savePNG = {
-  command: "savePNG",
-  execute: function(editor, callbackCommand = "") {
-    const item2 = editor.selection.current;
-    if (item2) {
-      const svgString = ExportManager.generateSVG(editor, item2).trim();
-      const datauri = "data:image/svg+xml;base64," + window.btoa(svgString);
-      loadOriginalImage({ local: datauri }, (info, img) => {
-        createImagePng(img, (pngDataUri) => {
-          if (callbackCommand) {
-            editor.emit(callbackCommand, pngDataUri);
-          }
+var __glob_0_23$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": convert_flatten_path
+});
+var convert_normalize_path = {
+  command: "convert.normalize.path",
+  description: "convert segments to bezier curve",
+  execute: (editor) => {
+    const current = editor.selection.current;
+    if (!current)
+      return;
+    editor.command("setAttributeForMulti", "smooth path string", editor.selection.packByValue(current.updatePath(PathParser.fromSVGString(current.d).normalize().d)));
+  }
+};
+var __glob_0_24$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": convert_normalize_path
+});
+var convert_path_operation = {
+  command: "convert.path.operation",
+  description: "apply path boolean operation",
+  execute: (editor, booleanOperation) => {
+    var _a;
+    const current = editor.selection.current;
+    if (!current)
+      return;
+    const changeBooleanOperation = (booleanOperation2) => {
+      editor.command("setAttributeForMulti", "change boolean operation", editor.selection.packByValue({
+        "boolean-operation": booleanOperation2
+      }));
+      recoverBooleanPath2();
+    };
+    const recoverBooleanPath2 = () => {
+      editor.nextTick(() => {
+        editor.emit("recoverBooleanPath");
+        editor.nextTick(() => {
+          editor.emit("refreshSelection");
+          editor.emit("refreshSelectionTool");
         });
       });
+    };
+    if (current.is("boolean-path") || current.isBooleanItem) {
+      let parent = current;
+      if (current.isBooleanItem) {
+        parent = current.parent;
+      }
+      editor.selection.select(parent);
+      changeBooleanOperation(booleanOperation);
+    } else {
+      if ((_a = editor.selection.current) == null ? void 0 : _a.isNot("boolean-path")) {
+        editor.emit("group.item", {
+          itemType: "boolean-path",
+          title: "Intersection"
+        });
+      }
+      editor.nextTick(() => {
+        var _a2;
+        if ((_a2 = editor.selection.current) == null ? void 0 : _a2.is("boolean-path")) {
+          changeBooleanOperation(booleanOperation);
+        }
+      }, 10);
     }
   }
 };
-var refreshCursor = {
-  command: "refreshCursor",
-  execute: function(editor, iconType, ...args2) {
-    editor.emit("changeIconView", iconType, ...args2);
+var __glob_0_25$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": convert_path_operation
+});
+var convert_polygonal_path = {
+  command: "convert.polygonal.path",
+  description: "convert path to polygonal path",
+  execute: (editor) => {
+    const current = editor.selection.current;
+    if (!current)
+      return;
+    editor.command("setAttributeForMulti", "polygonal path string", editor.selection.packByValue(current.updatePath(PathParser.fromSVGString(current.d).polygonal().d)));
   }
 };
-var recoverCursor = {
-  command: "recoverCursor",
-  execute: function(editor) {
-    editor.emit("changeIconView", "auto");
+var __glob_0_26$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": convert_polygonal_path
+});
+var convert_simplify_path = {
+  command: "convert.simplify.path",
+  execute: (editor) => {
+    const current = editor.selection.current;
+    if (!current)
+      return;
+    editor.command("setAttributeForMulti", "change path string", editor.selection.packByValue(current.updatePath(editor.pathKitManager.simplify(current.d))));
   }
 };
+var __glob_0_27$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": convert_simplify_path
+});
+var convert_smooth_path = {
+  command: "convert.smooth.path",
+  description: "convert path to smooth",
+  execute: (editor, divideCount = 5, tolerance = 0.1, tension = 0.5) => {
+    const current = editor.selection.current;
+    if (!current)
+      return;
+    const smoothedPath = PathParser.fromSVGString(current.d).divideSegmentByCount(divideCount).simplify(tolerance).cardinalSplines(tension).d;
+    editor.command("setAttributeForMulti", "smooth path string", editor.selection.packByValue(current.updatePath(smoothedPath)));
+  }
+};
+var __glob_0_28$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": convert_smooth_path
+});
+var convert_stroke_to_path = {
+  command: "convert.stroke.to.path",
+  execute: async (editor, text2) => {
+    const current = editor.selection.current;
+    if (!current)
+      return;
+    const attrs = current.attrs("d", "stroke-width", "stroke-dasharray", "stroke-dashoffset", "stroke-linejoin", "stroke-linecap");
+    const pathAttrs = current.convertStrokeToPath();
+    let newD = editor.pathKitManager.stroke(current.d || attrs.d, {
+      "stroke-width": Length.parse(attrs["stroke-width"]).value,
+      "stroke-linejoin": attrs["stroke-linejoin"],
+      "stroke-linecap": attrs["stroke-linecap"],
+      "stroke-dasharray": attrs["stroke-dasharray"],
+      "stroke-dashoffset": attrs["stroke-dashoffset"],
+      "fill-rule": "nonezero"
+    });
+    pathAttrs["fill-rule"] = "nonzero";
+    newD = PathParser.fromSVGString(newD).reversePathStringByFunc((_, index2) => index2 % 2 === 0);
+    editor.command("addLayer", `add layer - path`, editor.createModel(__spreadValues(__spreadValues({}, pathAttrs), current.updatePath(newD))), true, current.parent);
+  }
+};
+var __glob_0_29$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": convert_stroke_to_path
+});
 var jsVideoUrlParser = { exports: {} };
 (function(module, exports) {
   (function(global2, factory) {
     module.exports = factory();
   })(commonjsGlobal, function() {
-    function _typeof(obj) {
+    function _typeof(obj2) {
       "@babel/helpers - typeof";
       if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-        _typeof = function(obj2) {
-          return typeof obj2;
+        _typeof = function(obj3) {
+          return typeof obj3;
         };
       } else {
-        _typeof = function(obj2) {
-          return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+        _typeof = function(obj3) {
+          return obj3 && typeof Symbol === "function" && obj3.constructor === Symbol && obj3 !== Symbol.prototype ? "symbol" : typeof obj3;
         };
       }
-      return _typeof(obj);
+      return _typeof(obj2);
     }
     var getQueryParams = function getQueryParams2(qs) {
       if (typeof qs !== "string") {
@@ -16821,110 +16022,94 @@ var convertPasteText = {
     }
   }
 };
-function addCustomComponent(editor, obj = {}, center2 = null) {
-  var project2 = editor.selection.currentProject;
-  var customComponent = project2.appendChild(editor.createModel(__spreadValues({
-    x: Length.px(300),
-    y: Length.px(200),
-    width: Length.px(375),
-    height: Length.px(667)
-  }, obj)));
-  if (center2) {
-    customComponent.reset({
-      x: Length.px(0),
-      y: Length.px(0)
-    });
-    customComponent.moveByCenter(center2);
+var __glob_0_30$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": convertPasteText
+});
+function convertPath(editor, pathString2, rect2 = null) {
+  var current = editor.selection.current;
+  if (current) {
+    if (current.is("svg-path", "svg-brush", "svg-textpath")) {
+      var d = pathString2;
+      if (rect2) {
+        var parser2 = new PathParser(pathString2);
+        parser2.scale(current.width.value / rect2.width, current.height.value / rect2.height);
+        d = parser2.d;
+      }
+      editor.command("setAttributeForMulti", "set attribute -d", editor.selection.packByValue({ d }, current.id));
+    } else if (current["clip-path"].includes("path")) {
+      var d = pathString2;
+      if (rect2) {
+        var parser2 = new PathParser(pathString2);
+        parser2.scale(current.width.value / rect2.width, current.height.value / rect2.height);
+        d = parser2.d;
+      }
+      editor.command("setAttributeForMulti", "change clip path", editor.selection.packByValue({ "clip-path": `path(${d})` }, current.id));
+    }
   }
-  editor.selection.select(customComponent);
-  _doForceRefreshSelection(editor);
 }
-var toggleToolHand = {
-  command: "toggleToolHand",
+var __glob_0_31$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": convertPath
+});
+var copy_path = {
+  command: "copy.path",
+  description: "copy as path for item with path string(d attribute)",
   execute: function(editor) {
-    editor.config.toggle("set.tool.hand");
-  }
-};
-var rotateLayer = {
-  command: "rotateLayer",
-  description: "rotate layer by keydown with matrix ",
-  execute: function(editor, distAngle = 0) {
-    editor.command("setAttributeForMulti", "change rotate", editor.selection.packByValue({
-      transform: (item2) => Transform.addTransform(item2.transform, `rotateZ(${Length.deg(distAngle).round(1e3)})`)
-    }));
-    editor.nextTick(() => {
-      editor.selection.reselect();
-      editor.emit("refreshAll");
-    });
-  }
-};
-function refreshHistory(editor) {
-  editor.emit("saveJSON");
-}
-var openEditor = {
-  command: "open.editor",
-  description: "Open custom editor for item  when doubleclick is fired",
-  execute: function(editor, current) {
-    if (!current && editor.selection.isOne === false)
-      return;
-    current = current || editor.selection.current;
+    const current = editor.selection.current;
     if (current) {
-      if (current.editablePath) {
-        editor.emit("showPathEditor", "modify", {
-          box: "canvas",
-          current,
-          matrix: current.matrix,
-          isControl: true,
-          disableCurve: true,
-          d: current.editablePath,
-          changeEvent: (data) => {
-            editor.command("setAttributeForMulti", "change editable path", editor.selection.packByValue(__spreadValues({}, current.recoverEditablePath(data.d)), [current.id]));
-          }
-        });
-        editor.emit("hideSelectionToolView");
-      } else if (current.d) {
-        editor.emit("showPathEditor", "modify", {
-          box: "canvas",
-          current,
-          matrix: current.matrix,
-          d: current.accumulatedPath().d,
-          changeEvent: (data) => {
-            editor.emit("updatePathItem", data);
-          }
-        });
-        editor.emit("hideSelectionToolView");
-      } else if (current["clip-path"]) {
-        var obj = ClipPath.parseStyle(current["clip-path"]);
-        if (obj.type === "path") {
-          var d = current.accumulatedPath(current.clipPathString).d;
-          var mode = d ? "modify" : "path";
-          editor.emit("showPathEditor", mode, {
-            changeEvent: (data) => {
-              const resultPath = current.invertPath(data.d).d;
-              editor.command("setAttributeForMulti", "change clip-path", editor.selection.packByValue({
-                "clip-path": `path(${resultPath})`
-              }));
-            },
-            current,
-            d
-          });
-          editor.emit("hideSelectionToolView");
-        } else if (obj.type === "svg")
-          ;
-        else {
-          editor.emit("showClipPathPopup", {
-            "clip-path": current["clip-path"],
-            changeEvent: function(data) {
-              editor.command("setAttributeForMulti", "change clip-path", editor.selection.packByValue(data));
-            }
-          });
-        }
-      } else
-        ;
+      let newPath = PathParser.fromSVGString(current.d);
+      try {
+        const newLayerAttrs = current.toSVGPath();
+        editor.command("addLayer", `copy path`, editor.createModel(__spreadValues(__spreadValues({
+          itemType: "svg-path"
+        }, newLayerAttrs), current.updatePath(newPath.d))), true, current.parent);
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
 };
-var doubleclickItem = {
+var __glob_0_32$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": copy_path
+});
+var copyTimelineProperty = {
+  command: "copyTimelineProperty",
+  execute: function(editor, layerId, property, newTime = null) {
+    _currentProject(editor, (project2, timeline) => {
+      project2.copyTimelineKeyframe(layerId, property, newTime);
+      editor.emit("refreshTimeline");
+    });
+  }
+};
+var __glob_0_33$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": copyTimelineProperty
+});
+var deleteTimelineKeyframe = {
+  command: "deleteTimelineKeyframe",
+  execute: function(editor) {
+    _currentProject(editor, (project2, timeline) => {
+      editor.timeline.each((item2) => {
+        project2.deleteTimelineKeyframe(item2.layerId, item2.property, item2.id);
+      });
+      editor.timeline.empty();
+      editor.emit("refreshTimeline");
+      editor.emit("refreshSelectedOffset");
+    });
+  }
+};
+var __glob_0_34$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": deleteTimelineKeyframe
+});
+var doubleclick_item = {
   command: "doubleclick.item",
   execute: function(editor, evt, id) {
     const item2 = editor.modelManager.get(id);
@@ -16954,22 +16139,438 @@ var doubleclickItem = {
     }
   }
 };
-var update = {
-  command: "update",
-  description: "Update the model",
-  execute: function(editor, id = null, attrs = {}, context = { origin: "*" }) {
-    const maker = editor.createCommandMaker();
-    const item2 = editor.modelManager.get(id);
-    if (item2) {
-      const isChanged = item2.reset(attrs, context);
-      if (isChanged) {
-        maker.emit("refreshElement", item2);
-      }
-    }
-    maker.run();
+var __glob_0_35$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": doubleclick_item
+});
+function downloadFile(datauri, filename = "easylogic.json") {
+  var a = document.createElement("a");
+  a.href = datauri;
+  a.download = filename;
+  a.click();
+}
+var downloadJSON = {
+  command: "downloadJSON",
+  execute: function(editor, filename) {
+    var json = JSON.stringify(editor.modelManager.toJSON());
+    var datauri = "data:application/json;base64," + window.btoa(unescape(encodeURIComponent(json)));
+    downloadFile(datauri, filename || "easylogic.json");
   }
 };
-var historyRemoveProject = {
+var __glob_0_36$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": downloadJSON
+});
+function createImagePng(img, callback, imageType = "image/png") {
+  var canvas = Dom.create("canvas");
+  var { width: width2, height } = img;
+  canvas.resize({ width: width2, height });
+  canvas.drawImage(img);
+  callback && callback(canvas.toDataURL(imageType));
+}
+var ExportManager = {
+  makeProjectStyle(item2) {
+    const keyframeString = item2.toKeyframeString();
+    const rootVariable = item2.toRootVariableCSS();
+    return `
+      :root {
+        ${CSS_TO_STRING$1(rootVariable)}
+      }
+      /* keyframe */
+      ${keyframeString}
+    `;
+  },
+  makeStyle(item2, appendCSS = "") {
+    if (item2.is("project")) {
+      return this.makeProjectStyle(item2);
+    }
+    const cssString = item2.generateView(`[data-id='${item2.id}']`, appendCSS);
+    return `
+    ${cssString}
+    ` + item2.layers.map((it) => {
+      return this.makeStyle(it);
+    }).join("");
+  },
+  makeSvg(project2) {
+    const SVGString = project2.toSVGString ? project2.toSVGString() : "";
+    return `
+      ${SVGString ? `<svg width="0" height="0">${SVGString}</svg>` : ""}
+    `;
+  },
+  generateSVG(editor, rootItem) {
+    return editor.replaceLocalUrltoRealUrl(editor.svg.render(rootItem));
+  }
+};
+var downloadPNG = {
+  command: "downloadPNG",
+  execute: function(editor, callbackCommand = "") {
+    const item2 = editor.selection.current;
+    if (item2) {
+      const svgString = ExportManager.generateSVG(editor, item2).trim();
+      const datauri = "data:image/svg+xml;base64," + window.btoa(svgString);
+      const filename = item2.id;
+      loadOriginalImage({ local: datauri }, (info, img) => {
+        createImagePng(img, (pngDataUri) => {
+          downloadFile(pngDataUri, filename);
+          if (callbackCommand) {
+            editor.emit(callbackCommand, pngDataUri);
+          }
+        });
+      });
+    }
+  }
+};
+var __glob_0_37$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": downloadPNG
+});
+var downloadSVG = {
+  command: "downloadSVG",
+  execute: function(editor) {
+    const item2 = editor.selection.current;
+    if (item2) {
+      var svgString = ExportManager.generateSVG(editor, item2).trim();
+      var datauri = "data:image/svg+xml;base64," + window.btoa(svgString);
+      var filename = item2.id;
+      downloadFile(datauri, filename);
+    }
+  }
+};
+var __glob_0_38$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": downloadSVG
+});
+var drop_asset = {
+  command: "drop.asset",
+  execute: async function(editor, obj2, id = null) {
+    if (obj2.color) {
+      editor.emit("addBackgroundColor", obj2.color, id);
+    } else if (obj2.gradient) {
+      editor.emit("addBackgroundImageGradient", obj2.gradient, id);
+    } else if (obj2.pattern) {
+      editor.emit("addBackgroundImagePattern", obj2.pattern, id);
+    } else if (obj2.imageUrl) {
+      editor.emit("addBackgroundImageAsset", obj2.imageUrl, id);
+    } else if (obj2.asset) {
+      const assetData = await editor.storageManager.getCustomAsset(obj2.asset.id);
+      if (assetData) {
+        editor.emit("addArtBoard", assetData, obj2.asset.center);
+      }
+    }
+    _doForceRefreshSelection(editor);
+  }
+};
+var __glob_0_39$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": drop_asset
+});
+var dropImageUrl = {
+  command: "dropImageUrl",
+  execute: function(editor, imageUrl) {
+    loadOriginalImage({ local: imageUrl }, (info) => {
+      editor.emit("addImage", __spreadValues({ src: info.local }, info));
+      editor.changeMode(EDIT_MODE_SELECTION);
+    });
+  }
+};
+var __glob_0_40$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": dropImageUrl
+});
+var fileDropItems = {
+  command: "fileDropItems",
+  execute: function(editor, items = []) {
+    editor.emit("updateResource", items);
+  }
+};
+var __glob_0_41$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": fileDropItems
+});
+var firstTimelineItem = {
+  command: "firstTimelineItem",
+  execute: function(editor) {
+    _currentProject(editor, (project2, timeline) => {
+      var firstTime = project2.getSelectedTimelineFirstTime();
+      project2.setTimelineCurrentTime(timecode(timeline.fps, firstTime));
+      project2.seek();
+      editor.emit("playTimeline");
+      editor.changeMode("SELECTION");
+      editor.emit("afterChangeMode");
+    });
+  }
+};
+var __glob_0_42$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": firstTimelineItem
+});
+var group_item$1 = {
+  command: "group.item",
+  execute: function(editor, opt = {}) {
+    if (editor.selection.length === 0)
+      return;
+    const project2 = editor.selection.currentProject;
+    if (project2) {
+      project2.generateListNumber();
+      const list2 = editor.selection.map((item2) => {
+        return { depth: item2.depth, item: item2 };
+      });
+      list2.sort((a, b) => {
+        if (a.depth === b.depth) {
+          return a.no > b.no ? -1 : 1;
+        }
+        return a.depth > b.depth ? 1 : -1;
+      });
+      const groupLayer = editor.createModel(__spreadValues(__spreadValues({
+        itemType: "rect"
+      }, editor.selection.itemRect), opt));
+      list2[0].item.appendAfter(groupLayer);
+      list2.forEach(({ item: item2 }) => {
+        groupLayer.appendChild(item2);
+      });
+      editor.selection.select(groupLayer);
+      editor.emit("refreshAll");
+    }
+  }
+};
+var __glob_0_43$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": group_item$1
+});
+var history_addLayer = {
+  command: "history.addLayer",
+  description: "add layer in history ",
+  execute: function(editor, message, layer2, isSelected = true, containerItem) {
+    editor.emit("addLayer", layer2, isSelected, containerItem);
+    editor.nextTick(() => {
+      editor.history.add(message, this, {
+        currentValues: [layer2, isSelected, containerItem],
+        undoValues: [layer2.id]
+      });
+    });
+    editor.nextTick(() => {
+      editor.history.saveSelection();
+    });
+  },
+  redo: function(editor, { currentValues }) {
+    editor.emit("addLayer", ...currentValues);
+    editor.nextTick(() => {
+      editor.emit("refreshAll");
+    });
+  },
+  undo: function(editor, { undoValues }) {
+    const ids = undoValues;
+    const items = editor.selection.itemsByIds(ids);
+    items.forEach((item2) => {
+      if (item2) {
+        item2.remove();
+      }
+    });
+    editor.nextTick(() => {
+      editor.selection.empty();
+      editor.emit("refreshAll");
+    });
+  }
+};
+var __glob_0_44$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": history_addLayer
+});
+var history_group_item = {
+  command: "history.group.item",
+  description: "History Group Item",
+  execute: function(editor, message = "selection") {
+    var _a;
+    const currentValues = editor.selection.ids;
+    const projectId = (_a = editor.selection.currentProject) == null ? void 0 : _a.id;
+    const undoValues = editor.history.selectedIds;
+    if (isArrayEquals(currentValues, undoValues)) {
+      return;
+    }
+    editor.history.add(message, this, {
+      currentValues: {
+        ids: currentValues,
+        projectId
+      },
+      undoValues: {
+        ids: undoValues,
+        projectId
+      }
+    });
+  },
+  redo: function(editor, { currentValues: [ids, projectId] }) {
+  },
+  undo: function(editor, { undoValues: [ids, projectId] }) {
+  }
+};
+var __glob_0_45$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": history_group_item
+});
+var history_redo$1 = {
+  command: "history.redo",
+  execute: function(editor) {
+    editor.history.redo();
+  }
+};
+var __glob_0_46$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": history_redo$1
+});
+var history_refreshSelection = {
+  command: "history.refreshSelection",
+  description: `save selection in history `,
+  description_ko: "Selection \uC815\uBCF4\uB97C \uAC31\uC2E0\uD558\uBA74\uC11C History \uC5D0 \uC800\uC7A5\uD55C\uB2E4",
+  execute: function(editor, message = "selection") {
+    var _a;
+    const currentValues = editor.selection.ids;
+    const projectId = (_a = editor.selection.currentProject) == null ? void 0 : _a.id;
+    const undoValues = editor.history.selectedIds;
+    if (isArrayEquals$1(currentValues, undoValues)) {
+      return;
+    }
+    editor.history.add(message, this, {
+      currentValues: [currentValues, projectId],
+      undoValues: [undoValues, projectId]
+    });
+    this.nextAction(editor);
+  },
+  nextAction(editor) {
+    editor.nextTick(() => {
+      editor.history.saveSelection();
+      editor.emit("refreshSelection");
+      editor.nextTick(() => {
+        editor.emit("refreshSelectionTool");
+      });
+    });
+  },
+  redo: function(editor, { currentValues: [ids, projectId] }) {
+    editor.selection.selectProject(projectId);
+    editor.selection.select(...ids);
+    this.nextAction(editor);
+  },
+  undo: function(editor, { undoValues: [ids, projectId] }) {
+    editor.selection.selectProject(projectId);
+    editor.selection.select(...ids);
+    this.nextAction(editor);
+  }
+};
+var __glob_0_47$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": history_refreshSelection
+});
+var history_refreshSelectionProject = {
+  command: "history.refreshSelectionPorject",
+  description: `save project selection in history `,
+  description_ko: "Project Selection \uC815\uBCF4\uB97C \uAC31\uC2E0\uD558\uBA74\uC11C History \uC5D0 \uC800\uC7A5\uD55C\uB2E4",
+  execute: function(editor, message = "selection", projectId) {
+    var _a;
+    const currentValues = [projectId];
+    const undoValues = [(_a = editor.selection.currentProject) == null ? void 0 : _a.id];
+    if (isArrayEquals$1(currentValues, undoValues)) {
+      return;
+    }
+    editor.selection.selectProject(projectId);
+    editor.history.add(message, this, {
+      currentValues,
+      undoValues
+    });
+    this.nextAction(editor);
+  },
+  nextAction(editor) {
+    editor.nextTick(() => {
+      editor.emit("refreshAll");
+      editor.emit("refreshProjectList");
+    });
+  },
+  redo: function(editor, { currentValues: [projectId] }) {
+    editor.selection.selectProject(projectId);
+    this.nextAction(editor);
+  },
+  undo: function(editor, { undoValues: [projectId] }) {
+    editor.selection.selectProject(projectId);
+    this.nextAction(editor);
+  }
+};
+var __glob_0_48$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": history_refreshSelectionProject
+});
+function filterChildren(items = []) {
+  return items.filter((item2) => {
+    let total = 0;
+    item2.path.forEach((treeItem) => {
+      total += items.filter((it) => it.id === treeItem.id).length ? 1 : 0;
+    });
+    return total === 1;
+  });
+}
+var history_removeLayer = {
+  command: "history.removeLayer",
+  description: "remove layer",
+  execute: function(editor, message, ids = void 0) {
+    let items = editor.selection.itemsByIds(ids || editor.selection.ids);
+    items = filterChildren(items);
+    const filtedIds = items.map((it) => it.id);
+    editor.modelManager.markRemove(filtedIds);
+    const parentIds = items.map((it) => it.parentId);
+    items.forEach((item2) => item2.remove());
+    editor.history.add(message, this, {
+      currentValues: [filtedIds, parentIds],
+      undoValues: filtedIds
+    });
+    editor.nextTick(() => {
+      editor.selection.removeById(filtedIds);
+      const commandMaker = editor.createCommandMaker();
+      commandMaker.emit("refreshAllElementBoundSize");
+      commandMaker.emit("refreshAll");
+      commandMaker.emit("removeGuideLine");
+      parentIds.forEach((parentId) => {
+        commandMaker.emit("update", parentId, { "changedChildren": true });
+      });
+      commandMaker.run();
+      editor.nextTick(() => {
+        editor.history.saveSelection();
+      });
+    });
+  },
+  redo: function(editor, { currentValues }) {
+    const ids = currentValues[0];
+    let items = editor.selection.itemsByIds(ids || editor.selection.ids);
+    items = filterChildren(items);
+    editor.modelManager.markRemove(items.map((it) => it.id));
+    items.forEach((item2) => item2.remove());
+    editor.nextTick(() => {
+      editor.emit("refreshAll");
+    });
+  },
+  undo: function(editor, { undoValues: recoverIds }) {
+    editor.modelManager.unmarkRemove(recoverIds);
+    editor.nextTick(() => {
+      editor.emit("refreshAll");
+    });
+  }
+};
+var __glob_0_49$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": history_removeLayer
+});
+var history_removeProject = {
   command: "history.removeProject",
   description: "remove project",
   execute: function(editor, message, projectId) {
@@ -17001,64 +16602,74 @@ var historyRemoveProject = {
     });
   }
 };
-var historyRefreshSelectionProject = {
-  command: "history.refreshSelectionPorject",
-  description: `save project selection in history `,
-  description_ko: "Project Selection \uC815\uBCF4\uB97C \uAC31\uC2E0\uD558\uBA74\uC11C History \uC5D0 \uC800\uC7A5\uD55C\uB2E4",
-  execute: function(editor, message = "selection", projectId) {
-    var _a;
-    const currentValues = [projectId];
-    const undoValues = [(_a = editor.selection.currentProject) == null ? void 0 : _a.id];
-    if (isArrayEquals(currentValues, undoValues)) {
-      return;
-    }
-    editor.selection.selectProject(projectId);
+var __glob_0_50$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": history_removeProject
+});
+var history_setAttributeForMulti = {
+  command: "history.setAttributeForMulti",
+  execute: function(editor, message, multiAttrs = {}, context = { origin: "*" }) {
+    editor.emit("setAttributeForMulti", multiAttrs, context);
     editor.history.add(message, this, {
-      currentValues,
-      undoValues
+      currentValues: [multiAttrs],
+      undoValues: editor.history.getUndoValuesForMulti(multiAttrs)
     });
-    this.nextAction(editor);
+    editor.nextTick(() => {
+      editor.history.saveSelection();
+    });
   },
-  nextAction(editor) {
+  redo: function(editor, { currentValues }) {
+    editor.emit("setAttributeForMulti", ...currentValues);
+    editor.nextTick(() => {
+      editor.selection.reselect();
+      editor.emit("refreshAll");
+    });
+  },
+  undo: function(editor, { undoValues }) {
+    const ids = Object.keys(undoValues);
+    const items = editor.selection.itemsByIds(ids);
+    items.forEach((item2) => {
+      item2.reset(undoValues[item2.id]);
+    });
+    editor.selection.reselect();
     editor.nextTick(() => {
       editor.emit("refreshAll");
-      editor.emit("refreshProjectList");
     });
-  },
-  redo: function(editor, { currentValues: [projectId] }) {
-    editor.selection.selectProject(projectId);
-    this.nextAction(editor);
-  },
-  undo: function(editor, { undoValues: [projectId] }) {
-    editor.selection.selectProject(projectId);
-    this.nextAction(editor);
   }
 };
-var popModeView = {
-  command: "pop.mode.view",
-  execute: function(editor, modeView = void 0) {
-    editor.modeViewManager.popMode(modeView);
+var __glob_0_51$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": history_setAttributeForMulti
+});
+var history_undo$1 = {
+  command: "history.undo",
+  execute: function(editor) {
+    editor.history.undo();
   }
 };
-var copyPath = {
-  command: "copy.path",
-  description: "copy as path for item with path string(d attribute)",
+var __glob_0_52$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": history_undo$1
+});
+var item_move_depth_down$1 = {
+  command: "item.move.depth.down",
   execute: function(editor) {
     const current = editor.selection.current;
     if (current) {
-      let newPath = PathParser.fromSVGString(current.d);
-      try {
-        const newLayerAttrs = current.toSVGPath();
-        editor.command("addLayer", `copy path`, editor.createModel(__spreadValues(__spreadValues({
-          itemType: "svg-path"
-        }, newLayerAttrs), current.updatePath(newPath.d))), true, current.parent);
-      } catch (e) {
-        console.error(e);
-      }
+      current.orderPrev();
     }
+    _doForceRefreshSelection(editor);
   }
 };
-var itemMoveDepthFirst = {
+var __glob_0_53$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_move_depth_down$1
+});
+var item_move_depth_first = {
   command: "item.move.depth.first",
   execute: function(editor) {
     const current = editor.selection.current;
@@ -17068,7 +16679,12 @@ var itemMoveDepthFirst = {
     _doForceRefreshSelection(editor);
   }
 };
-var itemMoveDepthLast = {
+var __glob_0_54$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_move_depth_first
+});
+var item_move_depth_last = {
   command: "item.move.depth.last",
   execute: function(editor) {
     const current = editor.selection.current;
@@ -17078,139 +16694,1060 @@ var itemMoveDepthLast = {
     _doForceRefreshSelection(editor);
   }
 };
-var convertStrokeToPath = {
-  command: "convert.stroke.to.path",
-  execute: async (editor, text2) => {
+var __glob_0_55$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_move_depth_last
+});
+var item_move_depth_up$1 = {
+  command: "item.move.depth.up",
+  execute: function(editor) {
     const current = editor.selection.current;
-    if (!current)
-      return;
-    const attrs = current.attrs("d", "stroke-width", "stroke-dasharray", "stroke-dashoffset", "stroke-linejoin", "stroke-linecap");
-    const pathAttrs = current.convertStrokeToPath();
-    const newD = editor.pathKitManager.stroke(current.d || attrs.d, {
-      "stroke-width": Length.parse(attrs["stroke-width"]).value,
-      "stroke-linejoin": attrs["stroke-linejoin"],
-      "stroke-linecap": attrs["stroke-linecap"],
-      "stroke-dasharray": attrs["stroke-dasharray"],
-      "stroke-dashoffset": attrs["stroke-dashoffset"],
-      "fill-rule": "nonezero"
+    if (current) {
+      current.orderNext();
+    }
+    _doForceRefreshSelection(editor);
+  }
+};
+var __glob_0_56$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_move_depth_up$1
+});
+var keymap_keydown = {
+  command: "keymap.keydown",
+  execute: function(editor, e) {
+    editor.keyboardManager.add(e.code, e.keyCode);
+    editor.shortcuts.execute(e, "keydown");
+  }
+};
+var __glob_0_57$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": keymap_keydown
+});
+var keymap_keyup = {
+  command: "keymap.keyup",
+  execute: function(editor, e) {
+    editor.keyboardManager.remove(e.key, e.keyCode);
+    editor.shortcuts.execute(e, "keyup");
+  }
+};
+var __glob_0_58$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": keymap_keyup
+});
+var lastTimelineItem = {
+  command: "lastTimelineItem",
+  execute: function(editor) {
+    _currentProject(editor, (project2, timeline) => {
+      var lastTime = project2.getSelectedTimelineLastTime();
+      project2.setTimelineCurrentTime(timecode(timeline.fps, lastTime));
+      project2.seek();
+      editor.emit("playTimeline");
+      editor.changeMode("SELECTION");
+      editor.emit("afterChangeMode");
     });
-    pathAttrs["fill-rule"] = "nonzero";
-    editor.command("addLayer", `add layer - path`, editor.createModel(__spreadValues(__spreadValues({}, pathAttrs), current.updatePath(newD))), true, current.parent);
   }
 };
-var convertSimplifyPath = {
-  command: "convert.simplify.path",
-  execute: (editor) => {
-    const current = editor.selection.current;
-    if (!current)
-      return;
-    editor.command("setAttributeForMulti", "change path string", editor.selection.packByValue(current.updatePath(editor.pathKitManager.simplify(current.d))));
+var __glob_0_59$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": lastTimelineItem
+});
+var load_json = {
+  command: "load.json",
+  execute: function(editor, json, context = { origin: "*" }) {
+    editor.modelManager.load(json, context);
+    _doForceRefreshSelection(editor);
   }
 };
-var convertNormalizePath = {
-  command: "convert.normalize.path",
-  description: "convert segments to bezier curve",
-  execute: (editor) => {
-    const current = editor.selection.current;
-    if (!current)
-      return;
-    editor.command("setAttributeForMulti", "smooth path string", editor.selection.packByValue(current.updatePath(PathParser.fromSVGString(current.d).normalize().d)));
+var __glob_0_60$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": load_json
+});
+var moveLayer = {
+  command: "moveLayer",
+  description: "move layer by keydown with matrix ",
+  execute: function(editor, dx = 0, dy = 0) {
+    editor.command("setAttributeForMulti", "item move down", editor.selection.packByValue({
+      x: (item2) => Length.px(item2.offsetX.value + dx),
+      y: (item2) => Length.px(item2.offsetY.value + dy)
+    }));
+    editor.nextTick(() => {
+      editor.selection.reselect();
+      editor.emit("refreshAll");
+    });
   }
 };
-var convertSmoothPath = {
-  command: "convert.smooth.path",
-  description: "convert path to smooth",
-  execute: (editor, divideCount = 5, tolerance = 0.1, tension = 0.5) => {
-    const current = editor.selection.current;
-    if (!current)
-      return;
-    const smoothedPath = PathParser.fromSVGString(current.d).divideSegmentByCount(divideCount).simplify(tolerance).cardinalSplines(tension).d;
-    editor.command("setAttributeForMulti", "smooth path string", editor.selection.packByValue(current.updatePath(smoothedPath)));
+var __glob_0_61$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": moveLayer
+});
+var moveLayerForItems = {
+  command: "moveLayerForItems",
+  description: "mova layer by multi items ",
+  execute: function(editor, moveItems = []) {
+    const itemsMap = {};
+    moveItems.forEach((it) => {
+      itemsMap[it.item.id] = {
+        x: Length.px(it.item.offsetX.value + it.dist[0]).round(),
+        y: Length.px(it.item.offsetY.value + it.dist[1]).round()
+      };
+    });
+    editor.emit("history.setAttributeForMulti", "item move down", itemsMap);
+    editor.nextTick(() => {
+      editor.selection.reselect();
+      editor.emit("refreshAll");
+    });
   }
 };
-var convertPolygonalPath = {
-  command: "convert.polygonal.path",
-  description: "convert path to polygonal path",
-  execute: (editor) => {
-    const current = editor.selection.current;
-    if (!current)
-      return;
-    editor.command("setAttributeForMulti", "polygonal path string", editor.selection.packByValue(current.updatePath(PathParser.fromSVGString(current.d).polygonal().d)));
-  }
-};
-var convertFlattenPath = {
-  command: "convert.flatten.path",
-  description: "flatten selected multi path",
-  execute: (editor) => {
-    const current = editor.selection.current;
-    if (!current)
-      return;
-    let newPath;
-    if (current.isBooleanPath || current.isBooleanItem) {
-      let parent = current;
-      if (current.isBooleanItem) {
-        parent = current.parent;
+var __glob_0_62$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": moveLayerForItems
+});
+var moveSelectionToCenter = {
+  command: "moveSelectionToCenter",
+  description: "Move selection project or artboards to center on Viewport",
+  execute: function(editor, withScale = true) {
+    let areaVerties = [];
+    if (editor.selection.isEmpty) {
+      if (editor.selection.currentProject.layers.length > 0) {
+        areaVerties = itemsToRectVerties(editor.selection.currentProject.layers);
+      } else {
+        areaVerties = rectToVerties(0, 0, 100, 100);
       }
-      newPath = parent.accumulatedPath(parent["boolean-path"]);
-      newPath = parent.invertPath(newPath.d);
-      const newLayerAttrs = parent.layers[0].toCloneObject();
-      delete newLayerAttrs.id;
-      delete newLayerAttrs.parentId;
-      delete newLayerAttrs.transform;
-      editor.command("addLayer", `add layer - path`, editor.createModel(__spreadValues(__spreadValues({}, newLayerAttrs), parent.updatePath(newPath.d))), true, parent.parent);
     } else {
-      newPath = PathParser.fromSVGString();
-      editor.selection.each((item2) => {
-        newPath.addPath(item2.accumulatedPath());
-      });
-      newPath = current.invertPath(newPath.d);
-      const newLayerAttrs = current.toCloneObject();
-      delete newLayerAttrs.id;
-      editor.command("addLayer", `add layer - path`, editor.createModel(__spreadValues(__spreadValues({}, newLayerAttrs), current.updatePath(newPath.d))), true, current.parent);
+      areaVerties = itemsToRectVerties(editor.selection.items);
+    }
+    editor.emit("moveToCenter", areaVerties, withScale);
+  }
+};
+var __glob_0_63$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": moveSelectionToCenter
+});
+var moveToCenter = {
+  command: "moveToCenter",
+  description: "Move Layer to Center on Viewport",
+  execute: function(editor, areaVerties, withScale = false) {
+    if (areaVerties) {
+      editor.viewport.moveLayerToCenter(areaVerties, withScale ? -0.2 : 0, withScale);
     }
   }
 };
-var convertPathOperation = {
-  command: "convert.path.operation",
-  description: "apply path boolean operation",
-  execute: (editor, booleanOperation) => {
-    var _a;
-    const current = editor.selection.current;
-    if (!current)
+var __glob_0_64$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": moveToCenter
+});
+function newComponent(editor, itemType, obj2, isSelected = true, containerItem = void 0) {
+  if (itemType === "svg-textpath") {
+    obj2 = __spreadProps(__spreadValues({}, obj2), {
+      "font-size": Length.parse(obj2.height),
+      textLength: "100%",
+      d: PathParser.makeLine(0, obj2.height.value, obj2.width.value, obj2.height.value).d
+    });
+  } else if (itemType === "svg-circle") {
+    itemType = "svg-path";
+    obj2 = __spreadProps(__spreadValues({}, obj2), {
+      "background-color": void 0,
+      fill: `#C4C4C4`,
+      d: PathParser.makeCircle(0, 0, obj2.width.value, obj2.height.value).d
+    });
+  } else if (itemType === "svg-rect") {
+    itemType = "svg-path";
+    obj2 = __spreadProps(__spreadValues({}, obj2), {
+      "background-color": void 0,
+      fill: `#C4C4C4`,
+      d: PathParser.makeRect(0, 0, obj2.width.value, obj2.height.value).d
+    });
+  } else if (itemType === "text") {
+    obj2 = __spreadValues({
+      width: Length.px(300),
+      height: Length.px(50)
+    }, obj2);
+  } else if (itemType === "artboard") {
+    obj2 = __spreadProps(__spreadValues({}, obj2), {
+      "background-color": "white"
+    });
+  }
+  const newObjAttrs = __spreadValues({ itemType }, obj2);
+  editor.command("addLayer", `add layer - ${itemType}`, editor.createModel(newObjAttrs), isSelected, containerItem);
+  editor.changeMode(EDIT_MODE_SELECTION);
+}
+var __glob_0_65$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": newComponent
+});
+var nextTimelineItem = {
+  command: "nextTimelineItem",
+  execute: function(editor) {
+    _currentProject(editor, (project2, timeline) => {
+      var nextTime = project2.getSelectedTimelineNextTime();
+      project2.setTimelineCurrentTime(timecode(timeline.fps, nextTime));
+      project2.seek();
+      editor.emit("playTimeline");
+      editor.changeMode("SELECTION");
+      editor.emit("afterChangeMode");
+    });
+  }
+};
+var __glob_0_66$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": nextTimelineItem
+});
+var open_editor = {
+  command: "open.editor",
+  description: "Open custom editor for item  when doubleclick is fired",
+  execute: function(editor, current) {
+    if (!current && editor.selection.isOne === false)
       return;
-    if (current.isBooleanPath || current.isBooleanItem) {
-      let parent = current;
-      if (current.isBooleanItem) {
-        parent = current.parent;
-      }
-      editor.selection.select(parent);
-      editor.command("setAttributeForMulti", "change boolean operation", editor.selection.packByValue({
-        "boolean-operation": booleanOperation
-      }));
-    } else {
-      if ((_a = editor.selection.current) == null ? void 0 : _a.isNot("rect")) {
-        editor.emit("group.item", {
-          title: "Intersection"
+    current = current || editor.selection.current;
+    if (current) {
+      if (current.editablePath) {
+        editor.emit("showPathEditor", "modify", {
+          box: "canvas",
+          current,
+          matrix: current.matrix,
+          isControl: true,
+          disableCurve: true,
+          d: current.editablePath,
+          changeEvent: (data) => {
+            editor.command("setAttributeForMulti", "change editable path", editor.selection.packByValue(__spreadValues({}, current.recoverEditablePath(data.d)), [current.id]));
+            editor.nextTick(() => {
+              if (editor.isPointerUp) {
+                editor.emit("recoverBooleanPath");
+              }
+            });
+          }
+        });
+        editor.emit("hideSelectionToolView");
+      } else if (current.d) {
+        editor.emit("showPathEditor", "modify", {
+          box: "canvas",
+          current,
+          matrix: current.matrix,
+          d: current.accumulatedPath().d,
+          changeEvent: (data) => {
+            editor.emit("updatePathItem", data);
+            editor.nextTick(() => {
+              if (editor.isPointerUp) {
+                editor.emit("recoverBooleanPath");
+              }
+            });
+          }
+        });
+        editor.emit("hideSelectionToolView");
+      } else if (current["clip-path"]) {
+        var obj2 = ClipPath.parseStyle(current["clip-path"]);
+        if (obj2.type === "path") {
+          var d = current.accumulatedPath(current.clipPathString).d;
+          var mode = d ? "modify" : "path";
+          editor.emit("showPathEditor", mode, {
+            changeEvent: (data) => {
+              const resultPath = current.invertPath(data.d).d;
+              editor.command("setAttributeForMulti", "change clip-path", editor.selection.packByValue({
+                "clip-path": `path(${resultPath})`
+              }));
+            },
+            current,
+            d
+          });
+          editor.emit("hideSelectionToolView");
+        } else if (obj2.type === "svg")
+          ;
+        else {
+          editor.emit("showClipPathPopup", {
+            "clip-path": current["clip-path"],
+            changeEvent: function(data) {
+              editor.command("setAttributeForMulti", "change clip-path", editor.selection.packByValue(data));
+            }
+          });
+        }
+      } else
+        ;
+    }
+  }
+};
+var __glob_0_67$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": open_editor
+});
+var pauseTimelineItem = {
+  command: "pauseTimelineItem",
+  execute: function(editor) {
+    if (editor.timer) {
+      editor.timer.stop();
+    }
+  }
+};
+var __glob_0_68$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": pauseTimelineItem
+});
+var playTimelineItem = {
+  command: "playTimelineItem",
+  description: "Play button action",
+  execute: function(editor, speed2 = 1, iterationCount = 1, direction = "normal") {
+    editor.selection.empty();
+    editor.emit("refreshSelection");
+    editor.changeMode("play");
+    editor.emit("afterChangeMode");
+    _currentProject(editor, (project2, timeline) => {
+      var lastTime = project2.getSelectedTimelineLastTime();
+      if (editor.timer) {
+        editor.timer.stop();
+      } else {
+        editor.timer = makeTimer({
+          elapsed: timeline.currentTime * 1e3,
+          speed: speed2,
+          duration: lastTime * 1e3,
+          iterationCount,
+          direction
         });
       }
-      editor.nextTick(() => {
-        var _a2;
-        if ((_a2 = editor.selection.current) == null ? void 0 : _a2.is("rect")) {
-          editor.command("setAttributeForMulti", "change boolean operation", editor.selection.packByValue({
-            "boolean-operation": booleanOperation
-          }));
+      editor.timer.play({
+        duration: lastTime * 1e3,
+        elapsed: timeline.currentTime * 1e3,
+        speed: speed2,
+        iterationCount,
+        direction,
+        tick: (elapsed, timer2) => {
+          project2.seek(timecode(timeline.fps, elapsed / 1e3));
+          editor.emit("playTimeline");
+        },
+        last: (elapsed, timer2) => {
+          project2.seek(timecode(timeline.fps, elapsed / 1e3));
+          editor.emit("playTimeline");
+          editor.nextTick(() => {
+            editor.emit("stopTimeline");
+            editor.changeMode("SELECTION");
+            editor.emit("afterChangeMode");
+          });
+        },
+        stop: (elapsed, timer2) => {
+          project2.stop(timecode(timeline.fps, elapsed / 1e3));
+          editor.emit("stopTimeline");
+          editor.changeMode("SELECTION");
+          editor.emit("afterChangeMode");
         }
-      }, 10);
+      });
+    });
+  }
+};
+var __glob_0_69$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": playTimelineItem
+});
+var pop_mode_view = {
+  command: "pop.mode.view",
+  execute: function(editor, modeView = void 0) {
+    editor.modeViewManager.popMode(modeView);
+  }
+};
+var __glob_0_70$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": pop_mode_view
+});
+var prevTimelineItem = {
+  command: "prevTimelineItem",
+  execute: function(editor) {
+    _currentProject(editor, (project2, timeline) => {
+      var prevTime = project2.getSelectedTimelinePrevTime();
+      project2.setTimelineCurrentTime(timecode(timeline.fps, prevTime));
+      project2.seek();
+      editor.emit("playTimeline");
+      editor.changeMode("SELECTION");
+      editor.emit("afterChangeMode");
+    });
+  }
+};
+var __glob_0_71$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": prevTimelineItem
+});
+var push_mode_view = {
+  command: "push.mode.view",
+  execute: function(editor, modeView = "CanvasView") {
+    editor.modeViewManager.pushMode(modeView);
+  }
+};
+var __glob_0_72$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": push_mode_view
+});
+var recoverBooleanPath = {
+  command: "recoverBooleanPath",
+  description: "recover box rectangle for boolean path result",
+  execute: function(editor) {
+    const current = editor.selection.current;
+    let booleanContainer;
+    if (current && current.isBooleanItem) {
+      booleanContainer = current.parent;
+    } else if (current && current.is("boolean-path")) {
+      booleanContainer = current;
+    }
+    if (booleanContainer) {
+      const isBooleanItem = typeof current.isBooleanItem === "boolean" && current.isBooleanItem;
+      const booleanPath = booleanContainer.d;
+      if (!booleanPath) {
+        return;
+      }
+      const layersCache = booleanContainer.layers.map((it) => {
+        return {
+          item: it,
+          matrix: it.matrix
+        };
+      });
+      const newBooleanContainerRect = booleanContainer.updatePath(booleanPath);
+      delete newBooleanContainerRect.d;
+      booleanContainer.reset(newBooleanContainerRect);
+      layersCache.forEach((it) => {
+        it.item.reset(booleanContainer.recoverMatrix(it.matrix));
+      });
+      const ids = [...layersCache.map((it) => it.item.id), booleanContainer.id];
+      const data = editor.selection.packByIds(ids, "x", "y", "width", "height");
+      editor.command("setAttributeForMulti", "fit boolean path", data, { origin: "*", doNotChildrenScale: isBooleanItem });
     }
   }
 };
-var switchPath = {
+var __glob_0_73$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": recoverBooleanPath
+});
+var recoverCursor = {
+  command: "recoverCursor",
+  execute: function(editor) {
+    editor.emit("changeIconView", "auto");
+  }
+};
+var __glob_0_74$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": recoverCursor
+});
+function refreshArtboard(editor) {
+  editor.emit("refreshLayerTreeView");
+  editor.emit("refreshAllCanvas");
+  editor.emit("refreshStyleView");
+  editor.emit("refreshSelectionStyleView");
+  editor.emit("refreshAllElementBoundSize");
+  editor.emit("refreshSelection");
+  editor.nextTick(() => {
+    editor.emit("refreshSelectionTool", true);
+  });
+}
+var __glob_0_75$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": refreshArtboard
+});
+var refreshCursor = {
+  command: "refreshCursor",
+  execute: function(editor, iconType, ...args2) {
+    editor.emit("changeIconView", iconType, ...args2);
+  }
+};
+var __glob_0_76$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": refreshCursor
+});
+function refreshElement(editor, current) {
+  editor.emit("refreshSelectionStyleView", current);
+  editor.emit("refreshElementBoundSize", editor.selection.getRootItem(current));
+}
+var __glob_0_77$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": refreshElement
+});
+function refreshHistory(editor) {
+  editor.emit("saveJSON");
+}
+var __glob_0_78$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": refreshHistory
+});
+function refreshProject(editor, current) {
+  editor.emit("refreshStyleView", current, true);
+}
+var __glob_0_79$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": refreshProject
+});
+var refreshSelectedOffset = {
+  command: "refreshSelectedOffset",
+  execute: function(editor) {
+    var offset = editor.timeline.items[0];
+    if (offset) {
+      editor.emit("refreshOffsetValue", offset);
+    }
+  }
+};
+var __glob_0_80$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": refreshSelectedOffset
+});
+var removeAnimationItem = {
+  command: "removeAnimationItem",
+  execute: function(editor, id) {
+    const project2 = editor.selection.currentProject;
+    if (project2) {
+      project2.removeAnimationItem(id);
+      editor.timeline.empty();
+      editor.emit("refreshTimeline");
+      editor.emit("removeAnimation");
+    }
+  }
+};
+var __glob_0_81$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": removeAnimationItem
+});
+var removeLayer$1 = {
+  command: "removeLayer",
+  execute: function(editor, ids = void 0) {
+    editor.selection.itemsByIds(ids || editor.selection.ids).forEach((item2) => {
+      item2.remove();
+    });
+    editor.selection.empty();
+    editor.nextTick(() => {
+      editor.emit("refreshAll");
+    });
+  }
+};
+var __glob_0_82$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": removeLayer$1
+});
+var removeTimeline = {
+  command: "removeTimeline",
+  execute: function(editor, layerId) {
+    const project2 = editor.selection.currentProject;
+    if (project2) {
+      project2.removeTimeline(layerId);
+      editor.timeline.empty();
+      editor.emit("refreshTimeline");
+      editor.emit("refreshSelectedOffset");
+    }
+  }
+};
+var __glob_0_83$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": removeTimeline
+});
+var removeTimelineProperty = {
+  command: "removeTimelineProperty",
+  execute: function(editor, layerId, property) {
+    const project2 = editor.selection.currentProject;
+    if (project2) {
+      project2.removeTimelineProperty(layerId, property);
+      editor.timeline.empty();
+      editor.emit("refreshTimeline");
+      editor.emit("refreshSelectedOffset");
+    }
+  }
+};
+var __glob_0_84$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": removeTimelineProperty
+});
+function resetSelection(editor) {
+  editor.nextTick(() => {
+    editor.emit("refreshSelectionTool");
+  });
+}
+var __glob_0_85$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": resetSelection
+});
+function resizeArtBoard(editor, size2 = "") {
+  var current = editor.selection.current;
+  if (current && current.is("artboard")) {
+    if (!size2.trim())
+      return;
+    var [width2, height] = size2.split("x");
+    width2 = Length.px(+width2);
+    height = Length.px(+height);
+    current.reset({ width: width2, height });
+    editor.selection.select(current);
+    _doForceRefreshSelection(editor);
+  }
+}
+var __glob_0_86$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": resizeArtBoard
+});
+var rotateLayer = {
+  command: "rotateLayer",
+  description: "rotate layer by keydown with matrix ",
+  execute: function(editor, distAngle = 0) {
+    editor.command("setAttributeForMulti", "change rotate", editor.selection.packByValue({
+      transform: (item2) => Transform.addTransform(item2.transform, `rotateZ(${Length.deg(distAngle).round(1e3)})`)
+    }));
+    editor.nextTick(() => {
+      editor.selection.reselect();
+      editor.emit("refreshAll");
+    });
+  }
+};
+var __glob_0_87$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": rotateLayer
+});
+var same_height$1 = {
+  command: "same.height",
+  description: "fit at the same height",
+  execute: function(editor) {
+    var len2 = editor.selection.length;
+    if (len2 == 1)
+      ;
+    else if (len2 > 1) {
+      const rect2 = vertiesToRectangle(editor.selection.verties);
+      editor.command("setAttributeForMulti", "fit at the same height", editor.selection.packByValue({
+        y: rect2.y,
+        height: rect2.height
+      }));
+    }
+  }
+};
+var __glob_0_88$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": same_height$1
+});
+var same_width$1 = {
+  command: "same.width",
+  description: "fit at the same width",
+  execute: function(editor) {
+    if (editor.selection.isMany) {
+      const rect2 = vertiesToRectangle(editor.selection.verties);
+      editor.command("setAttributeForMulti", "fit at the same width", editor.selection.packByValue({
+        x: rect2.x,
+        width: rect2.width
+      }));
+    }
+  }
+};
+var __glob_0_89$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": same_width$1
+});
+var saveJSON = {
+  command: "saveJSON",
+  execute: function(editor) {
+    editor.saveItem("model", editor.modelManager.toJSON());
+  }
+};
+var __glob_0_90$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": saveJSON
+});
+var savePNG = {
+  command: "savePNG",
+  execute: function(editor, callbackCommand = "") {
+    const item2 = editor.selection.current;
+    if (item2) {
+      const svgString = ExportManager.generateSVG(editor, item2).trim();
+      const datauri = "data:image/svg+xml;base64," + window.btoa(svgString);
+      loadOriginalImage({ local: datauri }, (info, img) => {
+        createImagePng(img, (pngDataUri) => {
+          if (callbackCommand) {
+            editor.emit(callbackCommand, pngDataUri);
+          }
+        });
+      });
+    }
+  }
+};
+var __glob_0_91$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": savePNG
+});
+var scale_minus$1 = {
+  command: "scale.minus",
+  execute: function(editor) {
+    const oldScale = editor.viewport.scale;
+    editor.viewport.setScale(editor.viewport.scale - 0.25);
+    editor.emit("updateViewport", editor.viewport.scale, oldScale);
+  }
+};
+var __glob_0_92$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": scale_minus$1
+});
+var scale_plus$1 = {
+  command: "scale.plus",
+  execute: function(editor) {
+    const oldScale = editor.viewport.scale;
+    editor.viewport.setScale(editor.viewport.scale + 0.25);
+    editor.emit("updateViewport", editor.viewport.scale, oldScale);
+  }
+};
+var __glob_0_93$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": scale_plus$1
+});
+var segment_delete$1 = {
+  command: "segment.delete",
+  execute: function(editor, current) {
+    editor.emit("deleteSegment");
+  }
+};
+var __glob_0_94$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": segment_delete$1
+});
+var segment_move_down = {
+  command: "segment.move.down",
+  execute: function(editor, obj2 = { dy: 1 }) {
+    const dy = +obj2.dy;
+    editor.emit("moveSegment", 0, dy);
+  }
+};
+var __glob_0_95$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": segment_move_down
+});
+var segment_move_left = {
+  command: "segment.move.left",
+  execute: function(editor, obj2 = { dx: 1 }) {
+    const dx = +obj2.dx;
+    editor.emit("moveSegment", -1 * dx, 0);
+  }
+};
+var __glob_0_96$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": segment_move_left
+});
+var segment_move_right = {
+  command: "segment.move.right",
+  execute: function(editor, obj2 = { dx: 1 }) {
+    const dx = +obj2.dx;
+    editor.emit("moveSegment", dx, 0);
+  }
+};
+var __glob_0_97$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": segment_move_right
+});
+var segment_move_up = {
+  command: "segment.move.up",
+  execute: function(editor, obj2 = { dy: 1 }) {
+    const dy = +obj2.dy;
+    editor.emit("moveSegment", 0, -1 * dy);
+  }
+};
+var __glob_0_98$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": segment_move_up
+});
+var select_all$1 = {
+  command: "select.all",
+  execute: function(editor) {
+    var project2 = editor.selection.currentProject;
+    if (project2) {
+      editor.selection.select(...project2.layers);
+      editor.emit("history.refreshSelection");
+    }
+  }
+};
+var __glob_0_99$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": select_all$1
+});
+var selectTimelineItem = {
+  command: "selectTimelineItem",
+  execute: function(editor, selectedId) {
+    const project2 = editor.selection.currentProject;
+    if (project2) {
+      project2.selectTimeline(selectedId);
+      editor.emit("refreshTimeline");
+      editor.emit("selectTimeline");
+    }
+  }
+};
+var __glob_0_100$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": selectTimelineItem
+});
+var setAttributeForMulti = {
+  command: "setAttributeForMulti",
+  execute: function(editor, multiAttrs = {}, context = { origin: "*" }) {
+    const messages = [];
+    Object.entries(multiAttrs).forEach(([id, attrs]) => {
+      const item2 = editor.modelManager.get(id);
+      const newAttrs = {};
+      Object.entries(attrs).forEach(([key, value]) => {
+        newAttrs[key] = isFunction(value) ? value(item2) : value;
+      });
+      messages.push({ id: item2.id, parentId: item2.parentId, attrs: newAttrs });
+    });
+    if (messages.length == 0) {
+      return;
+    }
+    const commandMaker = editor.createCommandMaker();
+    messages.forEach((message) => {
+      commandMaker.emit("update", message.id, message.attrs, context);
+      const parent = editor.get(message.parentId);
+      if (message.parentId && (parent == null ? void 0 : parent.isNot("project")) && parent.children.length >= 1) {
+        commandMaker.emit("update", message.parentId, { "changedChildren": true }, context);
+      }
+    });
+    commandMaker.run();
+  }
+};
+var __glob_0_101$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": setAttributeForMulti
+});
+var setEditorLayout = {
+  command: "setEditorLayout",
+  execute: function(editor, layout2) {
+    editor.setLayout(layout2);
+    editor.emit("changedEditorlayout");
+  }
+};
+var __glob_0_102$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": setEditorLayout
+});
+var setLocale = {
+  command: "setLocale",
+  execute: function(editor, locale) {
+    editor.setLocale(locale);
+    editor.emit("changed.locale");
+  }
+};
+var __glob_0_103$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": setLocale
+});
+var setTimelineOffset = {
+  command: "setTimelineOffset",
+  debounce: 100,
+  execute: function(editor, obj2) {
+    const project2 = editor.selection.currentProject;
+    if (project2) {
+      project2.setTimelineKeyframeOffsetValue(obj2.layerId, obj2.property, obj2.id, obj2.value, obj2.timing, obj2.time);
+      editor.emit("refreshTimeline");
+    }
+  }
+};
+var __glob_0_104$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": setTimelineOffset
+});
+var showExportView = {
+  command: "showExportView",
+  execute: function(editor) {
+    editor.emit("showExportWindow");
+  }
+};
+var __glob_0_105$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": showExportView
+});
+var sort_bottom = {
+  command: "sort.bottom",
+  execute: function(editor) {
+    if (editor.selection.isOne) {
+      const current = editor.selection.current;
+      if (current.parent.is("project"))
+        ;
+      else if (current.artboard) {
+        const distY = getVertiesMaxY(current.artboard.verties) - getVertiesMaxY(editor.selection.verties);
+        editor.emit("moveLayer", 0, distY);
+      }
+    } else if (editor.selection.isMany) {
+      let maxRightY = getVertiesMaxY(editor.selection.verties);
+      editor.emit("moveLayerForItems", editor.selection.map((item2) => {
+        let itemRightY = getVertiesMaxY(item2.verties);
+        return { item: item2, dist: [0, maxRightY - itemRightY, 0, 0] };
+      }));
+    }
+  }
+};
+var __glob_0_106$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": sort_bottom
+});
+var sort_center = {
+  command: "sort.center",
+  execute: function(editor) {
+    if (editor.selection.isOne) {
+      const current = editor.selection.current;
+      if (current.parent.is("project"))
+        ;
+      else if (current.artboard) {
+        const distX = getVertiesCenterX(current.artboard.verties) - getVertiesCenterX(editor.selection.verties);
+        editor.emit("moveLayer", distX, 0);
+      }
+    } else if (editor.selection.isMany) {
+      let maxRightX = getVertiesCenterX(editor.selection.verties);
+      editor.emit("moveLayerForItems", editor.selection.map((item2) => {
+        let itemRightX = getVertiesCenterX(item2.verties);
+        return { item: item2, dist: [maxRightX - itemRightX, 0, 0] };
+      }));
+    }
+  }
+};
+var __glob_0_107$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": sort_center
+});
+var sort_left = {
+  command: "sort.left",
+  execute: function(editor) {
+    if (editor.selection.isOne) {
+      const current = editor.selection.current;
+      if (current.parent.is("project"))
+        ;
+      else if (current.artboard) {
+        const distX = getVertiesMinX(current.artboard.verties) - getVertiesMinX(editor.selection.verties);
+        editor.emit("moveLayer", distX, 0);
+      }
+    } else if (editor.selection.isMany) {
+      let maxRightX = getVertiesMinX(editor.selection.verties);
+      editor.emit("moveLayerForItems", editor.selection.map((item2) => {
+        let itemRightX = getVertiesMinX(item2.verties);
+        return { item: item2, dist: [maxRightX - itemRightX, 0, 0] };
+      }));
+    }
+  }
+};
+var __glob_0_108$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": sort_left
+});
+var sort_middle = {
+  command: "sort.middle",
+  execute: function(editor) {
+    if (editor.selection.isOne) {
+      const current = editor.selection.current;
+      if (current.parent.is("project"))
+        ;
+      else if (current.artboard) {
+        const distY = getVertiesCenterY(current.artboard.verties) - getVertiesCenterY(editor.selection.verties);
+        editor.emit("moveLayer", 0, distY);
+      }
+    } else if (editor.selection.isMany) {
+      let maxRightY = getVertiesCenterY(editor.selection.verties);
+      editor.emit("moveLayerForItems", editor.selection.map((item2) => {
+        let itemRightY = getVertiesCenterY(item2.verties);
+        return { item: item2, dist: [0, maxRightY - itemRightY, 0, 0] };
+      }));
+    }
+  }
+};
+var __glob_0_109$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": sort_middle
+});
+var sort_right = {
+  command: "sort.right",
+  execute: function(editor) {
+    if (editor.selection.isOne) {
+      const current = editor.selection.current;
+      if (current.parent.is("project"))
+        ;
+      else if (current.artboard) {
+        const distX = getVertiesMaxX(current.artboard.verties) - getVertiesMaxX(editor.selection.verties);
+        editor.emit("moveLayer", distX, 0);
+      }
+    } else if (editor.selection.isMany) {
+      let maxRightX = getVertiesMaxX(editor.selection.verties);
+      editor.emit("moveLayerForItems", editor.selection.map((item2) => {
+        let itemRightX = getVertiesMaxX(item2.verties);
+        return { item: item2, dist: [maxRightX - itemRightX, 0, 0] };
+      }));
+    }
+  }
+};
+var __glob_0_110$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": sort_right
+});
+var sort_top = {
+  command: "sort.top",
+  execute: function(editor) {
+    if (editor.selection.isOne) {
+      const current = editor.selection.current;
+      if (current.parent.is("project"))
+        ;
+      else if (current.artboard) {
+        const distY = getVertiesMinY(current.artboard.verties) - getVertiesMinY(editor.selection.verties);
+        editor.emit("moveLayer", 0, distY);
+      }
+    } else if (editor.selection.isMany) {
+      let maxRightY = getVertiesMinY(editor.selection.verties);
+      editor.emit("moveLayerForItems", editor.selection.map((item2) => {
+        let itemRightY = getVertiesMinY(item2.verties);
+        return { item: item2, dist: [0, maxRightY - itemRightY, 0, 0] };
+      }));
+    }
+  }
+};
+var __glob_0_111$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": sort_top
+});
+var switch_path = {
   command: "switch.path",
   execute: async (editor, text2) => {
     const current = editor.selection.current;
     if (!current)
       return;
-    if (current.isBooleanPath || current.isBooleanItem) {
+    if (current.is("boolean-path") || current.isBooleanItem) {
       let parent = current;
       if (current.isBooleanItem) {
         parent = current.parent;
@@ -17220,134 +17757,344 @@ var switchPath = {
         "boolean-operation": parent["boolean-operation"],
         children: parent.children.reverse()
       }));
-      editor.selection.select(current);
-      editor.emit("refreshSelection");
-      editor.emit("refreshSelectionTool");
+      editor.nextTick(() => {
+        editor.emit("recoverBooleanPath");
+        editor.selection.select(current);
+        editor.emit("refreshSelection");
+        editor.emit("refreshSelectionTool");
+      });
     }
   }
 };
-var commands = {
-  copyPath,
-  update,
-  popModeView,
-  switchPath,
-  doubleclickItem,
-  openEditor,
-  refreshHistory,
-  convertPasteText,
-  refreshCursor,
-  recoverCursor,
-  toggleToolHand,
-  rotateLayer,
-  historyAddLayer,
-  historyRemoveLayer,
-  historyRemoveProject,
-  historySetAttributeForMulti,
-  historyRefreshSelection,
-  historyRefreshSelectionProject,
-  historyRedo: historyRedo$1,
-  historyUndo: historyUndo$1,
-  moveLayer,
-  moveLayerForItems,
-  moveToCenter,
-  moveSelectionToCenter,
-  convertPathOperation,
-  convertFlattenPath,
-  convertPolygonalPath,
-  convertSmoothPath,
-  convertNormalizePath,
-  convertStrokeToPath,
-  convertSimplifyPath,
-  groupItem: groupItem$1,
-  ungroupItem: ungroupItem$1,
-  setEditorLayout,
-  refreshArtboard,
-  resetSelection,
-  addBackgroundColor,
-  addBackgroundImagePattern,
-  segmentDelete: segmentDelete$1,
-  segmentMoveDown,
-  segmentMoveUp,
-  segmentMoveRight,
-  segmentMoveLeft,
-  pushModeView,
-  removeLayer: removeLayer$1,
-  itemMoveDepthDown: itemMoveDepthDown$1,
-  itemMoveDepthUp: itemMoveDepthUp$1,
-  itemMoveDepthFirst,
-  itemMoveDepthLast,
-  keymapKeydown,
-  keymapKeyup,
-  scaleMinus: scaleMinus$1,
-  scalePlus: scalePlus$1,
-  dropAsset,
-  addBackgroundImageAsset,
-  addBackgroundImageGradient,
-  addTimelineItem,
-  pauseTimelineItem,
-  lastTimelineItem,
-  nextTimelineItem,
-  firstTimelineItem,
-  prevTimelineItem,
-  playTimelineItem,
-  copyTimelineProperty,
-  addTimelineKeyframe,
-  removeAnimationItem,
-  removeTimeline,
-  selectTimelineItem,
-  deleteTimelineKeyframe,
-  removeTimelineProperty,
-  addTimelineCurrentProperty,
-  setTimelineOffset,
-  refreshSelectedOffset,
-  addTimelineProperty,
-  setLocale,
-  loadJSON,
-  saveJSON,
-  savePNG,
-  downloadPNG,
-  downloadSVG,
-  downloadJSON,
-  updateUriList,
-  updateImageAssetItem,
-  updateVideoAssetItem,
-  addSVGFilterAssetItem,
-  dropImageUrl,
-  addImageAssetItem,
-  addVideoAssetItem,
-  updateImage,
-  updateVideo,
-  updateResource,
-  fileDropItems,
-  updateScale,
-  showExportView,
-  clipboardPaste: clipboardPaste$1,
-  clipboardCopy: clipboardCopy$1,
-  addArtBoard,
-  addCustomComponent,
-  addImage,
-  addVideo,
-  addLayer,
-  addLayerView,
-  addProject,
-  convertPath,
-  newComponent,
-  refreshElement,
-  refreshProject,
-  resizeArtBoard,
-  setAttributeForMulti,
-  sortBottom,
-  sortCenter,
-  sortLeft,
-  sortMiddle,
-  sortBottom,
-  sortTop,
-  sortRight,
-  sameWidth,
-  sameHeight,
-  updatePathItem,
-  updateClipPath
+var __glob_0_112$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": switch_path
+});
+var toggle_tool_hand = {
+  command: "toggleToolHand",
+  execute: function(editor) {
+    editor.config.toggle("set.tool.hand");
+  }
 };
+var __glob_0_113$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": toggle_tool_hand
+});
+var ungroup_item$1 = {
+  command: "ungroup.item",
+  execute: function(editor) {
+    if (editor.selection.length === 0)
+      return;
+    const current = editor.selection.current;
+    if (current) {
+      let groupLayer = current;
+      let layers2 = [...groupLayer.layers];
+      layers2.reverse();
+      layers2.forEach((child) => {
+        groupLayer.appendBefore(child);
+      });
+      editor.selection.select(...layers2);
+      editor.emit("refreshAll");
+    }
+  }
+};
+var __glob_0_114$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": ungroup_item$1
+});
+var updateClipPath = {
+  command: "updateClipPath",
+  description: "update clip-path property ",
+  execute: function(editor, pathObject) {
+    editor.command("setAttributeForMulti", "change clip-path", editor.selection.packByValue({
+      "clip-path": `path(${pathObject.d})`
+    }));
+  }
+};
+var __glob_0_115$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": updateClipPath
+});
+var updateImage = {
+  command: "updateImage",
+  execute: function(editor, imageFileOrBlob, rect2, containerItem) {
+    var reader = new FileReader();
+    reader.onload = (e) => {
+      var datauri = e.target.result;
+      var local = URL.createObjectURL(imageFileOrBlob);
+      editor.emit("addImageAssetItem", {
+        id: uuidShort$1(),
+        type: imageFileOrBlob.type,
+        name: imageFileOrBlob.name,
+        original: datauri,
+        local
+      }, rect2, containerItem);
+    };
+    reader.readAsDataURL(imageFileOrBlob);
+  }
+};
+var __glob_0_116$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": updateImage
+});
+var updateImageAssetItem = {
+  command: "updateImageAssetItem",
+  execute: function(editor, item2, callback) {
+    var reader = new FileReader();
+    reader.onload = (e) => {
+      var datauri = e.target.result;
+      var local = URL.createObjectURL(item2);
+      var project2 = editor.selection.currentProject;
+      if (project2) {
+        const image2 = project2.createImage({
+          id: uuidShort$1(),
+          type: item2.type,
+          name: item2.name,
+          original: datauri,
+          local
+        });
+        editor.emit("addImageAsset");
+        isFunction(callback) && callback(image2.id);
+      }
+    };
+    reader.readAsDataURL(item2);
+  }
+};
+var __glob_0_117$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": updateImageAssetItem
+});
+var updatePathItem = {
+  command: "updatePathItem",
+  description: "Update path string for selected svg path item",
+  execute: function(editor, pathObject) {
+    const current = editor.selection.current;
+    if (current) {
+      if (pathObject.box === "box") {
+        const newPath = current.invertPath(pathObject.d);
+        editor.command("setAttributeForMulti", "change local path", editor.selection.packByValue({
+          d: newPath.d
+        }));
+      } else {
+        const newPath = new PathParser(pathObject.d);
+        newPath.transformMat4(pathObject.matrix.accumulatedMatrixInverse);
+        let bbox = newPath.getBBox();
+        const newWidth = distance$1(bbox[1], bbox[0]);
+        const newHeight = distance$1(bbox[3], bbox[0]);
+        let oldBBox = vertiesMap(rectToVerties(bbox[0][0], bbox[0][1], newWidth, newHeight), pathObject.matrix.accumulatedMatrix);
+        let newBBox = vertiesMap(oldBBox, calculateMatrixInverse(fromTranslation([], oldBBox[4]), Transform.createTransformMatrix(Transform.parseStyle(pathObject.matrix.transform), newWidth, newHeight), fromTranslation([], negate([], oldBBox[4]))));
+        const worldMatrix = calculateMatrix(fromTranslation([], newBBox[0]), current.getLocalTransformMatrix(newWidth, newHeight));
+        const realXY = getTranslation([], calculateMatrix(pathObject.matrix.parentMatrixInverse, worldMatrix, invert([], current.getLocalTransformMatrix(newWidth, newHeight))));
+        editor.command("setAttributeForMulti", "change path", editor.selection.packByValue({
+          d: newPath.translate(-bbox[0][0], -bbox[0][1]).d,
+          x: Length.px(realXY[0]),
+          y: Length.px(realXY[1]),
+          width: Length.px(newWidth),
+          height: Length.px(newHeight)
+        }));
+      }
+    }
+  }
+};
+var __glob_0_118$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": updatePathItem
+});
+var updateResource = {
+  command: "updateResource",
+  execute: function(editor, items) {
+    items.forEach((item2) => {
+      switch (item2.type) {
+        case "image/svg+xml":
+        case "image/png":
+        case "image/gif":
+        case "image/jpg":
+        case "image/jpeg":
+          editor.emit("updateImage", item2);
+          break;
+        case "text/plain":
+        case "text/html":
+          editor.emit("addText", {
+            content: item2.data
+          });
+          break;
+        case "text/uri-list":
+          editor.emit("updateUriList", item2);
+          break;
+      }
+    });
+  }
+};
+var __glob_0_119$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": updateResource
+});
+var updateScale = {
+  command: "updateScale",
+  execute: function(editor, scale2) {
+    const oldScale = editor.viewport.scale;
+    editor.viewport.setScale(scale2);
+    editor.emit("updateViewport", scale2, oldScale);
+  }
+};
+var __glob_0_120$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": updateScale
+});
+class AssetParser {
+  static parse(datauri, enableParselocal = false) {
+    var [_, data] = datauri.split("data:");
+    var [mediaType, ...content2] = data.split(",");
+    var [mimeType, encoding] = mediaType.split(";");
+    content2 = content2.join(",");
+    return {
+      mimeType,
+      local: enableParselocal && AssetParser.getLink(mimeType, encoding, content2)
+    };
+  }
+  static getLink(mimeType, encoding, content2) {
+    if (encoding === "base64") {
+      var binary = atob(content2);
+      var len2 = binary.length;
+      var unit8Array = new Uint8Array(len2);
+      for (var i = 0; i < len2; i++) {
+        unit8Array[i] = binary.charCodeAt(i);
+      }
+      var blob = new Blob([unit8Array], { type: mimeType });
+      return URL.createObjectURL(blob);
+    }
+    return "";
+  }
+}
+var updateUriList = {
+  command: "updateUriList",
+  execute: function(editor, item2) {
+    var datauri = item2.data;
+    if (datauri.indexOf("data:") > -1) {
+      var info = AssetParser.parse(datauri, true);
+      switch (info.mimeType) {
+        case "image/png":
+        case "image/gif":
+        case "image/jpg":
+        case "image/jpeg":
+          editor.emit("addImageAssetItem", {
+            id: uuidShort$1(),
+            type: info.mimeType,
+            name: "",
+            original: datauri,
+            local: info.local
+          });
+          break;
+      }
+    } else {
+      var ext = item2.data.split(".").pop();
+      var name2 = item2.data.split("/").pop();
+      switch (ext) {
+        case "png":
+        case "jpg":
+        case "gif":
+        case "svg":
+          editor.emit("addImageAssetItem", {
+            id: uuidShort$1(),
+            type: "image/" + ext,
+            name: name2,
+            original: item2.data,
+            local: item2.data
+          });
+          break;
+      }
+    }
+  }
+};
+var __glob_0_121$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": updateUriList
+});
+var updateVideo = {
+  command: "updateVideo",
+  execute: function(editor, item2, rect2, containerItem = void 0) {
+    var reader = new FileReader();
+    reader.onload = (e) => {
+      var datauri = e.target.result;
+      var local = URL.createObjectURL(item2);
+      editor.emit("addVideoAssetItem", {
+        id: uuidShort$1(),
+        type: item2.type,
+        name: item2.name,
+        original: datauri,
+        local
+      }, rect2, containerItem);
+    };
+    reader.readAsDataURL(item2);
+  }
+};
+var __glob_0_122$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": updateVideo
+});
+var updateVideoAssetItem = {
+  command: "updateVideoAssetItem",
+  execute: function(editor, item2, callback) {
+    var reader = new FileReader();
+    reader.onload = (e) => {
+      var datauri = e.target.result;
+      var local = URL.createObjectURL(item2);
+      var project2 = editor.selection.currentProject;
+      if (project2) {
+        project2.createVideo({
+          id: uuidShort$1(),
+          type: item2.type,
+          name: item2.name,
+          original: datauri,
+          local
+        });
+        editor.emit("addVideoAsset");
+        isFunction(callback) && callback(local);
+      }
+    };
+    reader.readAsDataURL(item2);
+  }
+};
+var __glob_0_123$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": updateVideoAssetItem
+});
+var update = {
+  command: "update",
+  description: "Update the model",
+  execute: function(editor, id = null, attrs = {}, context = { origin: "*" }) {
+    const item2 = editor.modelManager.get(id);
+    if (item2) {
+      const isChanged = item2.reset(attrs, context);
+      if (isChanged) {
+        editor.emit("refreshElement", item2);
+      }
+    }
+  }
+};
+var __glob_0_124$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": update
+});
+const modules$3 = { "./command_list/_currentProject.js": __glob_0_0$3, "./command_list/_doForceRefreshSelection.js": __glob_0_1$3, "./command_list/addArtBoard.js": __glob_0_2$3, "./command_list/addBackgroundColor.js": __glob_0_3$3, "./command_list/addBackgroundImageAsset.js": __glob_0_4$3, "./command_list/addBackgroundImageGradient.js": __glob_0_5$3, "./command_list/addBackgroundImagePattern.js": __glob_0_6$3, "./command_list/addCustomComponent.js": __glob_0_7$3, "./command_list/addImage.js": __glob_0_8$3, "./command_list/addImageAssetItem.js": __glob_0_9$3, "./command_list/addLayer.js": __glob_0_10$3, "./command_list/addLayerView.js": __glob_0_11$3, "./command_list/addProject.js": __glob_0_12$3, "./command_list/addSVGFilterAssetItem.js": __glob_0_13$3, "./command_list/addText.js": __glob_0_14$3, "./command_list/addTimelineCurrentProperty.js": __glob_0_15$3, "./command_list/addTimelineItem.js": __glob_0_16$3, "./command_list/addTimelineKeyframe.js": __glob_0_17$3, "./command_list/addTimelineProperty.js": __glob_0_18$3, "./command_list/addVideo.js": __glob_0_19$3, "./command_list/addVideoAssetItem.js": __glob_0_20$3, "./command_list/clipboard.copy.js": __glob_0_21$2, "./command_list/clipboard.paste.js": __glob_0_22$2, "./command_list/convert.flatten.path.js": __glob_0_23$2, "./command_list/convert.normalize.path.js": __glob_0_24$2, "./command_list/convert.path.operation.js": __glob_0_25$2, "./command_list/convert.polygonal.path.js": __glob_0_26$2, "./command_list/convert.simplify.path.js": __glob_0_27$2, "./command_list/convert.smooth.path.js": __glob_0_28$2, "./command_list/convert.stroke.to.path.js": __glob_0_29$2, "./command_list/convertPasteText.js": __glob_0_30$2, "./command_list/convertPath.js": __glob_0_31$2, "./command_list/copy.path.js": __glob_0_32$2, "./command_list/copyTimelineProperty.js": __glob_0_33$2, "./command_list/deleteTimelineKeyframe.js": __glob_0_34$2, "./command_list/doubleclick.item.js": __glob_0_35$2, "./command_list/downloadJSON.js": __glob_0_36$2, "./command_list/downloadPNG.js": __glob_0_37$2, "./command_list/downloadSVG.js": __glob_0_38$2, "./command_list/drop.asset.js": __glob_0_39$2, "./command_list/dropImageUrl.js": __glob_0_40$2, "./command_list/fileDropItems.js": __glob_0_41$2, "./command_list/firstTimelineItem.js": __glob_0_42$2, "./command_list/group.item.js": __glob_0_43$2, "./command_list/history.addLayer.js": __glob_0_44$2, "./command_list/history.group.item.js": __glob_0_45$2, "./command_list/history.redo.js": __glob_0_46$2, "./command_list/history.refreshSelection.js": __glob_0_47$2, "./command_list/history.refreshSelectionProject.js": __glob_0_48$2, "./command_list/history.removeLayer.js": __glob_0_49$2, "./command_list/history.removeProject.js": __glob_0_50$2, "./command_list/history.setAttributeForMulti.js": __glob_0_51$1, "./command_list/history.undo.js": __glob_0_52$1, "./command_list/item.move.depth.down.js": __glob_0_53$1, "./command_list/item.move.depth.first.js": __glob_0_54$1, "./command_list/item.move.depth.last.js": __glob_0_55$1, "./command_list/item.move.depth.up.js": __glob_0_56$1, "./command_list/keymap.keydown.js": __glob_0_57$1, "./command_list/keymap.keyup.js": __glob_0_58$1, "./command_list/lastTimelineItem.js": __glob_0_59$1, "./command_list/load.json.js": __glob_0_60$1, "./command_list/moveLayer.js": __glob_0_61$1, "./command_list/moveLayerForItems.js": __glob_0_62$1, "./command_list/moveSelectionToCenter.js": __glob_0_63$1, "./command_list/moveToCenter.js": __glob_0_64$1, "./command_list/newComponent.js": __glob_0_65$1, "./command_list/nextTimelineItem.js": __glob_0_66$1, "./command_list/open.editor.js": __glob_0_67$1, "./command_list/pauseTimelineItem.js": __glob_0_68$1, "./command_list/playTimelineItem.js": __glob_0_69$1, "./command_list/pop.mode.view.js": __glob_0_70$1, "./command_list/prevTimelineItem.js": __glob_0_71$1, "./command_list/push.mode.view.js": __glob_0_72$1, "./command_list/recoverBooleanPath.js": __glob_0_73$1, "./command_list/recoverCursor.js": __glob_0_74$1, "./command_list/refreshArtboard.js": __glob_0_75$1, "./command_list/refreshCursor.js": __glob_0_76$1, "./command_list/refreshElement.js": __glob_0_77$1, "./command_list/refreshHistory.js": __glob_0_78$1, "./command_list/refreshProject.js": __glob_0_79$1, "./command_list/refreshSelectedOffset.js": __glob_0_80$1, "./command_list/removeAnimationItem.js": __glob_0_81$1, "./command_list/removeLayer.js": __glob_0_82$1, "./command_list/removeTimeline.js": __glob_0_83$1, "./command_list/removeTimelineProperty.js": __glob_0_84$1, "./command_list/resetSelection.js": __glob_0_85$1, "./command_list/resizeArtBoard.js": __glob_0_86$1, "./command_list/rotateLayer.js": __glob_0_87$1, "./command_list/same.height.js": __glob_0_88$1, "./command_list/same.width.js": __glob_0_89$1, "./command_list/saveJSON.js": __glob_0_90$1, "./command_list/savePNG.js": __glob_0_91$1, "./command_list/scale.minus.js": __glob_0_92$1, "./command_list/scale.plus.js": __glob_0_93$1, "./command_list/segment.delete.js": __glob_0_94$1, "./command_list/segment.move.down.js": __glob_0_95$1, "./command_list/segment.move.left.js": __glob_0_96$1, "./command_list/segment.move.right.js": __glob_0_97$1, "./command_list/segment.move.up.js": __glob_0_98$1, "./command_list/select.all.js": __glob_0_99$1, "./command_list/selectTimelineItem.js": __glob_0_100$1, "./command_list/setAttributeForMulti.js": __glob_0_101$1, "./command_list/setEditorLayout.js": __glob_0_102$1, "./command_list/setLocale.js": __glob_0_103$1, "./command_list/setTimelineOffset.js": __glob_0_104$1, "./command_list/showExportView.js": __glob_0_105$1, "./command_list/sort.bottom.js": __glob_0_106$1, "./command_list/sort.center.js": __glob_0_107$1, "./command_list/sort.left.js": __glob_0_108$1, "./command_list/sort.middle.js": __glob_0_109$1, "./command_list/sort.right.js": __glob_0_110$1, "./command_list/sort.top.js": __glob_0_111$1, "./command_list/switch.path.js": __glob_0_112$1, "./command_list/toggle.tool.hand.js": __glob_0_113$1, "./command_list/ungroup.item.js": __glob_0_114$1, "./command_list/updateClipPath.js": __glob_0_115$1, "./command_list/updateImage.js": __glob_0_116$1, "./command_list/updateImageAssetItem.js": __glob_0_117$1, "./command_list/updatePathItem.js": __glob_0_118$1, "./command_list/updateResource.js": __glob_0_119$1, "./command_list/updateScale.js": __glob_0_120$1, "./command_list/updateUriList.js": __glob_0_121$1, "./command_list/updateVideo.js": __glob_0_122$1, "./command_list/updateVideoAssetItem.js": __glob_0_123$1, "./command_list/model/update.js": __glob_0_124$1 };
+const obj$1 = {};
+Object.entries(modules$3).forEach(([key, value]) => {
+  key = key.replace("./command_list/", "").replace(".js", "");
+  obj$1[key] = value.default;
+});
 class CommandManager {
   constructor(editor) {
     this.$editor = editor;
@@ -17367,11 +18114,11 @@ class CommandManager {
     });
   }
   loadCommands() {
-    Object.keys(commands).forEach((command) => {
-      if (isFunction(commands[command])) {
-        this.registerCommand(command, commands[command]);
+    Object.keys(obj$1).forEach((command) => {
+      if (isFunction(obj$1[command])) {
+        this.registerCommand(command, obj$1[command]);
       } else {
-        this.registerCommand(commands[command]);
+        this.registerCommand(obj$1[command]);
       }
     });
   }
@@ -17427,14 +18174,116 @@ function os() {
   }
   return osInfo.name;
 }
-var clipboardCopy = {
+var add_artboard = {
+  category: "Tool",
+  key: "a",
+  command: "addLayerView",
+  args: ["artboard"],
+  description: "Add ArtBoard",
+  when: "CanvasView"
+};
+var __glob_0_0$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": add_artboard
+});
+var add_brush = {
+  category: "Tool",
+  key: "b",
+  command: "addLayerView",
+  args: ["brush"],
+  description: "Draw SVG Path"
+};
+var __glob_0_1$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": add_brush
+});
+var add_circle$1 = {
+  category: "Tool",
+  key: "o",
+  command: "addLayerView",
+  args: ["circle"],
+  description: "Add circle layer"
+};
+var __glob_0_2$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": add_circle$1
+});
+var add_circle_l = {
+  category: "Tool",
+  key: "l",
+  command: "addLayerView",
+  args: ["circle"],
+  description: "Add circle layer"
+};
+var __glob_0_3$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": add_circle_l
+});
+var add_path = {
+  category: "Tool",
+  key: "p",
+  command: "addLayerView",
+  args: ["path"],
+  description: "Add SVG Path layer"
+};
+var __glob_0_4$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": add_path
+});
+var add_rect = {
+  category: "Tool",
+  key: "r",
+  command: "addLayerView",
+  args: ["rect"],
+  description: "Add rect layer"
+};
+var __glob_0_5$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": add_rect
+});
+var add_rect_m = {
+  category: "Tool",
+  key: "m",
+  command: "addLayerView",
+  args: ["rect"],
+  description: "Add rect layer"
+};
+var __glob_0_6$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": add_rect_m
+});
+var add_text = {
+  category: "Tool",
+  key: "t",
+  command: "addLayerView",
+  args: ["text"],
+  description: "Add text layer"
+};
+var __glob_0_7$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": add_text
+});
+var clipboard_copy = {
   category: "Edit",
   key: "cmd+c",
   command: "clipboard.copy",
   description: "Copy objects",
   when: "CanvasView"
 };
-var clipboardPaste = {
+var __glob_0_8$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": clipboard_copy
+});
+var clipboard_paste = {
   category: "Edit",
   key: "cmd+v",
   win: "ctrl+v",
@@ -17442,79 +18291,51 @@ var clipboardPaste = {
   description: "Paste selected objects",
   when: "CanvasView"
 };
-var itemMoveShiftLeft = {
-  category: "Layer",
-  key: "Shift+ArrowLeft",
-  command: "moveLayer",
-  description: "move 10px to left",
-  args: [-10, 0],
+var __glob_0_9$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": clipboard_paste
+});
+var group_item = {
+  category: "Group",
+  key: "cmd+g",
+  win: "ctrl+g",
+  command: "group.item",
+  description: "Grouping selected items",
   when: "CanvasView"
 };
-var itemMoveKeyLeft = {
-  category: "Layer",
-  key: "ArrowLeft",
-  command: "moveLayer",
-  description: "move 1px to left",
-  args: [-1, 0],
+var __glob_0_10$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": group_item
+});
+var history_redo = {
+  category: "History",
+  key: "cmd+shift+z",
+  win: "ctrl+shift+z",
+  command: "history.redo",
+  description: "redoing in history",
   when: "CanvasView"
 };
-var itemMoveKeyRight = {
-  category: "Layer",
-  key: "ArrowRight",
-  command: "moveLayer",
-  description: "move 1px to right",
-  args: [1, 0],
+var __glob_0_11$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": history_redo
+});
+var history_undo = {
+  category: "History",
+  key: "cmd+z",
+  win: "ctrl+z",
+  command: "history.undo",
+  description: "undoing in history",
   when: "CanvasView"
 };
-var itemMoveKeyDown = {
-  category: "Layer",
-  key: "ArrowDown",
-  command: "moveLayer",
-  description: "move 1px to down",
-  args: [0, 1],
-  when: "CanvasView"
-};
-var itemMoveKeyUp = {
-  category: "Layer",
-  key: "ArrowUp",
-  command: "moveLayer",
-  description: "move 1px to up",
-  args: [0, -1],
-  when: "CanvasView"
-};
-var itemMoveShiftDown = {
-  category: "Layer",
-  key: "Shift+ArrowDown",
-  command: "moveLayer",
-  description: "move 10px to down",
-  args: [0, 10],
-  when: "CanvasView"
-};
-var itemMoveShiftRight = {
-  category: "Layer",
-  key: "Shift+ArrowRight",
-  command: "moveLayer",
-  description: "move 10px to right",
-  args: [10, 0],
-  when: "CanvasView"
-};
-var itemMoveShiftUp = {
-  category: "Layer",
-  key: "Shift+ArrowUp",
-  command: "moveLayer",
-  description: "move 10px to up",
-  args: [0, -10],
-  when: "CanvasView"
-};
-var itemMoveAltLeft = {
-  category: "Layer",
-  key: "Alt+ArrowLeft",
-  command: "moveLayer",
-  description: "move 5px to left",
-  args: [-5, 0],
-  when: "CanvasView"
-};
-var itemMoveAltDown = {
+var __glob_0_12$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": history_undo
+});
+var item_move_alt_down = {
   category: "Layer",
   key: "Alt+ArrowDown",
   command: "moveLayer",
@@ -17522,7 +18343,25 @@ var itemMoveAltDown = {
   args: [0, 5],
   when: "CanvasView"
 };
-var itemMoveAltRight = {
+var __glob_0_13$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_move_alt_down
+});
+var item_move_alt_left = {
+  category: "Layer",
+  key: "Alt+ArrowLeft",
+  command: "moveLayer",
+  description: "move 5px to left",
+  args: [-5, 0],
+  when: "CanvasView"
+};
+var __glob_0_14$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_move_alt_left
+});
+var item_move_alt_right = {
   category: "Layer",
   key: "Alt+ArrowRight",
   command: "moveLayer",
@@ -17530,7 +18369,12 @@ var itemMoveAltRight = {
   args: [5, 0],
   when: "CanvasView"
 };
-var itemMoveAltUp = {
+var __glob_0_15$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_move_alt_right
+});
+var item_move_alt_up = {
   category: "Layer",
   key: "Alt+ArrowUp",
   command: "moveLayer",
@@ -17538,6 +18382,165 @@ var itemMoveAltUp = {
   args: [0, -5],
   when: "CanvasView"
 };
+var __glob_0_16$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_move_alt_up
+});
+var item_move_depth_down = {
+  category: "Layer",
+  key: "ctrl+[",
+  command: "item.move.depth.down",
+  description: "move layer to below",
+  when: "CanvasView"
+};
+var __glob_0_17$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_move_depth_down
+});
+var item_move_depth_up = {
+  category: "Layer",
+  key: "ctrl+]",
+  command: "item.move.depth.up",
+  description: "move layer to above",
+  when: "CanvasView"
+};
+var __glob_0_18$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_move_depth_up
+});
+var item_move_key_down = {
+  category: "Layer",
+  key: "ArrowDown",
+  command: "moveLayer",
+  description: "move 1px to down",
+  args: [0, 1],
+  when: "CanvasView"
+};
+var __glob_0_19$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_move_key_down
+});
+var item_move_key_left = {
+  category: "Layer",
+  key: "ArrowLeft",
+  command: "moveLayer",
+  description: "move 1px to left",
+  args: [-1, 0],
+  when: "CanvasView"
+};
+var __glob_0_20$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_move_key_left
+});
+var item_move_key_right = {
+  category: "Layer",
+  key: "ArrowRight",
+  command: "moveLayer",
+  description: "move 1px to right",
+  args: [1, 0],
+  when: "CanvasView"
+};
+var __glob_0_21$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_move_key_right
+});
+var item_move_key_up = {
+  category: "Layer",
+  key: "ArrowUp",
+  command: "moveLayer",
+  description: "move 1px to up",
+  args: [0, -1],
+  when: "CanvasView"
+};
+var __glob_0_22$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_move_key_up
+});
+var item_move_shift_down = {
+  category: "Layer",
+  key: "Shift+ArrowDown",
+  command: "moveLayer",
+  description: "move 10px to down",
+  args: [0, 10],
+  when: "CanvasView"
+};
+var __glob_0_23$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_move_shift_down
+});
+var item_move_shift_left = {
+  category: "Layer",
+  key: "Shift+ArrowLeft",
+  command: "moveLayer",
+  description: "move 10px to left",
+  args: [-10, 0],
+  when: "CanvasView"
+};
+var __glob_0_24$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_move_shift_left
+});
+var item_move_shift_right = {
+  category: "Layer",
+  key: "Shift+ArrowRight",
+  command: "moveLayer",
+  description: "move 10px to right",
+  args: [10, 0],
+  when: "CanvasView"
+};
+var __glob_0_25$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_move_shift_right
+});
+var item_move_shift_up = {
+  category: "Layer",
+  key: "Shift+ArrowUp",
+  command: "moveLayer",
+  description: "move 10px to up",
+  args: [0, -10],
+  when: "CanvasView"
+};
+var __glob_0_26$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_move_shift_up
+});
+var item_rotate_meta_left = {
+  category: "Layer",
+  key: "Meta+ArrowLeft",
+  command: "rotateLayer",
+  description: "rotate to left",
+  args: [-5],
+  when: "CanvasView"
+};
+var __glob_0_27$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_rotate_meta_left
+});
+var item_rotate_meta_right = {
+  category: "Layer",
+  key: "Meta+ArrowRight",
+  command: "rotateLayer",
+  description: "rotate to right",
+  args: [5],
+  when: "CanvasView"
+};
+var __glob_0_28$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": item_rotate_meta_right
+});
 var removeLayer = {
   category: "Layer",
   key: "Backspace",
@@ -17546,193 +18549,11 @@ var removeLayer = {
   args: ["Delete selected items"],
   when: "CanvasView"
 };
-var segmentMoveKeyDown = {
-  category: "Path",
-  key: "ArrowDown",
-  command: "segment.move.down",
-  description: "move 1px to down",
-  args: [{ dy: 1 }],
-  when: "PathEditorView"
-};
-var segmentMoveKeyUp = {
-  category: "Path",
-  key: "ArrowUp",
-  command: "segment.move.up",
-  description: "move 1px to up",
-  args: [{ dy: 1 }],
-  when: "PathEditorView"
-};
-var segmentMoveKeyRight = {
-  category: "Path",
-  key: "ArrowRight",
-  command: "segment.move.right",
-  description: "move 1px to right",
-  args: [{ dx: 1 }],
-  when: "PathEditorView"
-};
-var segmentMoveKeyLeft = {
-  category: "Path",
-  key: "ArrowLeft",
-  command: "segment.move.left",
-  description: "move 1px to left",
-  args: [{ dx: 1 }],
-  when: "PathEditorView"
-};
-var segmentMoveShiftDown = {
-  category: "Path",
-  key: "Shift+ArrowDown",
-  command: "segment.move.down",
-  description: "move 10px to down",
-  args: [{ dy: 10 }],
-  when: "PathEditorView"
-};
-var segmentMoveShiftUp = {
-  category: "Path",
-  key: "Shift+ArrowUp",
-  command: "segment.move.up",
-  description: "move 10px to up",
-  args: [{ dy: 10 }],
-  when: "PathEditorView"
-};
-var segmentMoveShiftLeft = {
-  category: "Path",
-  key: "Shift+ArrowLeft",
-  command: "segment.move.left",
-  description: "move 10px to left",
-  args: [{ dx: 10 }],
-  when: "PathEditorView"
-};
-var segmentMoveAltDown = {
-  category: "Path",
-  key: "Alt+ArrowDown",
-  command: "segment.move.down",
-  description: "move 5px to down",
-  args: [{ dy: 5 }],
-  when: "PathEditorView"
-};
-var segmentMoveAltUp = {
-  category: "Path",
-  key: "Alt+ArrowUp",
-  command: "segment.move.up",
-  description: "move 5px to up ",
-  args: [{ dy: 5 }],
-  when: "PathEditorView"
-};
-var segmentMoveAltLeft = {
-  category: "Path",
-  key: "Alt+ArrowLeft",
-  command: "segment.move.left",
-  description: "move 5px to left",
-  args: [{ dx: 5 }],
-  when: "PathEditorView"
-};
-var segmentMoveAltRight = {
-  category: "Path",
-  key: "Alt+ArrowRight",
-  command: "segment.move.right",
-  description: "move 5px to right",
-  args: [{ dx: 5 }],
-  when: "PathEditorView"
-};
-var segmentMoveShiftRight = {
-  category: "Path",
-  key: "Shift+ArrowRight",
-  command: "segment.move.right",
-  description: "move 10px to right",
-  args: [{ dx: 10 }],
-  when: "PathEditorView"
-};
-var segmentDelete = {
-  category: "Path",
-  key: "Backspace",
-  command: "segment.delete",
-  description: "Delete selected segment",
-  when: "PathEditorView"
-};
-var scaleMinus = {
-  category: "Tool",
-  key: "Minus",
-  command: "scale.minus",
-  description: "Minus scale",
-  when: "CanvasView"
-};
-var scalePlus = {
-  category: "Tool",
-  key: "Equal",
-  command: "scale.plus",
-  description: "Plus scale",
-  when: "CanvasView"
-};
-var addRect = {
-  category: "Tool",
-  key: "r",
-  command: "addLayerView",
-  args: ["rect"],
-  description: "Add rect layer"
-};
-var selectView = {
-  category: "Tool",
-  key: "v",
-  command: "addLayerView",
-  args: "select",
-  description: "Selection"
-};
-var addRectM = {
-  category: "Tool",
-  key: "m",
-  command: "addLayerView",
-  args: ["rect"],
-  description: "Add rect layer"
-};
-var addCircle = {
-  category: "Tool",
-  key: "o",
-  command: "addLayerView",
-  args: ["circle"],
-  description: "Add circle layer"
-};
-var addCircleL = {
-  category: "Tool",
-  key: "l",
-  command: "addLayerView",
-  args: ["circle"],
-  description: "Add circle layer"
-};
-var addText = {
-  category: "Tool",
-  key: "t",
-  command: "addLayerView",
-  args: ["text"],
-  description: "Add text layer"
-};
-var addPath = {
-  category: "Tool",
-  key: "p",
-  command: "addLayerView",
-  args: ["path"],
-  description: "Add SVG Path layer"
-};
-var addBrush = {
-  category: "Tool",
-  key: "b",
-  command: "addLayerView",
-  args: ["brush"],
-  description: "Draw SVG Path"
-};
-var itemMoveDepthUp = {
-  category: "Layer",
-  key: "ctrl+]",
-  command: "item.move.depth.up",
-  description: "move layer to above",
-  when: "CanvasView"
-};
-var itemMoveDepthDown = {
-  category: "Layer",
-  key: "ctrl+[",
-  command: "item.move.depth.down",
-  description: "move layer to below",
-  when: "CanvasView"
-};
+var __glob_0_29$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": removeLayer
+});
 var removeLayerByDeleteKey = {
   category: "Layer",
   key: "Delete",
@@ -17741,15 +18562,251 @@ var removeLayerByDeleteKey = {
   args: ["Delete selected items"],
   when: "CanvasView"
 };
-var groupItem = {
-  category: "Group",
-  key: "cmd+g",
-  win: "ctrl+g",
-  command: "group.item",
-  description: "Grouping selected items",
+var __glob_0_30$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": removeLayerByDeleteKey
+});
+var scale_minus = {
+  category: "Tool",
+  key: "Minus",
+  command: "scale.minus",
+  description: "Minus scale",
   when: "CanvasView"
 };
-var ungroupItem = {
+var __glob_0_31$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": scale_minus
+});
+var scale_plus = {
+  category: "Tool",
+  key: "Equal",
+  command: "scale.plus",
+  description: "Plus scale",
+  when: "CanvasView"
+};
+var __glob_0_32$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": scale_plus
+});
+var segment_delete = {
+  category: "Path",
+  key: "Backspace",
+  command: "segment.delete",
+  description: "Delete selected segment",
+  when: "PathEditorView"
+};
+var __glob_0_33$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": segment_delete
+});
+var segment_move_alt_down = {
+  category: "Path",
+  key: "Alt+ArrowDown",
+  command: "segment.move.down",
+  description: "move 5px to down",
+  args: [{ dy: 5 }],
+  when: "PathEditorView"
+};
+var __glob_0_34$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": segment_move_alt_down
+});
+var segment_move_alt_left = {
+  category: "Path",
+  key: "Alt+ArrowLeft",
+  command: "segment.move.left",
+  description: "move 5px to left",
+  args: [{ dx: 5 }],
+  when: "PathEditorView"
+};
+var __glob_0_35$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": segment_move_alt_left
+});
+var segment_move_alt_right = {
+  category: "Path",
+  key: "Alt+ArrowRight",
+  command: "segment.move.right",
+  description: "move 5px to right",
+  args: [{ dx: 5 }],
+  when: "PathEditorView"
+};
+var __glob_0_36$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": segment_move_alt_right
+});
+var segment_move_alt_up = {
+  category: "Path",
+  key: "Alt+ArrowUp",
+  command: "segment.move.up",
+  description: "move 5px to up ",
+  args: [{ dy: 5 }],
+  when: "PathEditorView"
+};
+var __glob_0_37$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": segment_move_alt_up
+});
+var segment_move_key_down = {
+  category: "Path",
+  key: "ArrowDown",
+  command: "segment.move.down",
+  description: "move 1px to down",
+  args: [{ dy: 1 }],
+  when: "PathEditorView"
+};
+var __glob_0_38$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": segment_move_key_down
+});
+var segment_move_key_left = {
+  category: "Path",
+  key: "ArrowLeft",
+  command: "segment.move.left",
+  description: "move 1px to left",
+  args: [{ dx: 1 }],
+  when: "PathEditorView"
+};
+var __glob_0_39$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": segment_move_key_left
+});
+var segment_move_key_right = {
+  category: "Path",
+  key: "ArrowRight",
+  command: "segment.move.right",
+  description: "move 1px to right",
+  args: [{ dx: 1 }],
+  when: "PathEditorView"
+};
+var __glob_0_40$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": segment_move_key_right
+});
+var segment_move_key_up = {
+  category: "Path",
+  key: "ArrowUp",
+  command: "segment.move.up",
+  description: "move 1px to up",
+  args: [{ dy: 1 }],
+  when: "PathEditorView"
+};
+var __glob_0_41$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": segment_move_key_up
+});
+var segment_move_shift_down = {
+  category: "Path",
+  key: "Shift+ArrowDown",
+  command: "segment.move.down",
+  description: "move 10px to down",
+  args: [{ dy: 10 }],
+  when: "PathEditorView"
+};
+var __glob_0_42$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": segment_move_shift_down
+});
+var segment_move_shift_left = {
+  category: "Path",
+  key: "Shift+ArrowLeft",
+  command: "segment.move.left",
+  description: "move 10px to left",
+  args: [{ dx: 10 }],
+  when: "PathEditorView"
+};
+var __glob_0_43$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": segment_move_shift_left
+});
+var segment_move_shift_right = {
+  category: "Path",
+  key: "Shift+ArrowRight",
+  command: "segment.move.right",
+  description: "move 10px to right",
+  args: [{ dx: 10 }],
+  when: "PathEditorView"
+};
+var __glob_0_44$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": segment_move_shift_right
+});
+var segment_move_shift_up = {
+  category: "Path",
+  key: "Shift+ArrowUp",
+  command: "segment.move.up",
+  description: "move 10px to up",
+  args: [{ dy: 10 }],
+  when: "PathEditorView"
+};
+var __glob_0_45$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": segment_move_shift_up
+});
+var select_all = {
+  category: "Tool",
+  key: "CMD+A",
+  win: "CTRL+A",
+  command: "select.all",
+  description: "Selection all layers"
+};
+var __glob_0_46$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": select_all
+});
+var select_view = {
+  category: "Tool",
+  key: "v",
+  command: "addLayerView",
+  args: "select",
+  description: "Selection"
+};
+var __glob_0_47$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": select_view
+});
+var set_tool_hand = {
+  category: "Tools",
+  key: "h",
+  command: "toggleToolHand",
+  description: "set hand tool on",
+  when: "CanvasView"
+};
+var __glob_0_48$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": set_tool_hand
+});
+var show_pan = {
+  category: "Tool",
+  key: "space",
+  command: "showPan",
+  description: "Show panning area"
+};
+var __glob_0_49$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": show_pan
+});
+var ungroup_item = {
   category: "Group",
   key: "shift+cmd+g",
   win: "shift+ctrl+g",
@@ -17757,104 +18814,13 @@ var ungroupItem = {
   description: "Ungrouping selected group layer",
   when: "CanvasView"
 };
-var historyUndo = {
-  category: "History",
-  key: "cmd+z",
-  win: "ctrl+z",
-  command: "history.undo",
-  description: "undoing in history",
-  when: "CanvasView"
-};
-var historyRedo = {
-  category: "History",
-  key: "cmd+shift+z",
-  win: "ctrl+shift+z",
-  command: "history.redo",
-  description: "redoing in history",
-  when: "CanvasView"
-};
-var addArtboard = {
-  category: "Tool",
-  key: "a",
-  command: "addLayerView",
-  args: ["artboard"],
-  description: "Add ArtBoard",
-  when: "CanvasView"
-};
-var setToolHand$1 = {
-  category: "Tools",
-  key: "h",
-  command: "toggleToolHand",
-  description: "set hand tool on",
-  when: "CanvasView"
-};
-var itemRotateMetaLeft = {
-  category: "Layer",
-  key: "Meta+ArrowLeft",
-  command: "rotateLayer",
-  description: "rotate to left",
-  args: [-5],
-  when: "CanvasView"
-};
-var itemRotateMetaRight = {
-  category: "Layer",
-  key: "Meta+ArrowRight",
-  command: "rotateLayer",
-  description: "rotate to right",
-  args: [5],
-  when: "CanvasView"
-};
-var shortcuts = [
-  historyUndo,
-  historyRedo,
-  setToolHand$1,
-  itemRotateMetaLeft,
-  itemRotateMetaRight,
-  selectView,
-  addArtboard,
-  addRect,
-  addRectM,
-  addCircle,
-  addCircleL,
-  addText,
-  addPath,
-  addBrush,
-  groupItem,
-  ungroupItem,
-  segmentMoveKeyDown,
-  segmentMoveKeyUp,
-  segmentMoveKeyRight,
-  segmentMoveKeyLeft,
-  segmentMoveShiftDown,
-  segmentMoveShiftUp,
-  segmentMoveShiftLeft,
-  segmentMoveShiftRight,
-  segmentMoveAltDown,
-  segmentMoveAltUp,
-  segmentMoveAltLeft,
-  segmentMoveAltRight,
-  segmentDelete,
-  itemMoveKeyLeft,
-  itemMoveKeyRight,
-  itemMoveKeyDown,
-  itemMoveKeyUp,
-  itemMoveShiftDown,
-  itemMoveShiftRight,
-  itemMoveShiftUp,
-  itemMoveShiftLeft,
-  itemMoveAltLeft,
-  itemMoveAltDown,
-  itemMoveAltRight,
-  itemMoveAltUp,
-  itemMoveDepthUp,
-  itemMoveDepthDown,
-  removeLayer,
-  removeLayerByDeleteKey,
-  scaleMinus,
-  scalePlus,
-  clipboardCopy,
-  clipboardPaste
-];
+var __glob_0_50$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": ungroup_item
+});
+const modules$2 = { "./shortcuts_list/add.artboard.js": __glob_0_0$2, "./shortcuts_list/add.brush.js": __glob_0_1$2, "./shortcuts_list/add.circle.js": __glob_0_2$2, "./shortcuts_list/add.circle.l.js": __glob_0_3$2, "./shortcuts_list/add.path.js": __glob_0_4$2, "./shortcuts_list/add.rect.js": __glob_0_5$2, "./shortcuts_list/add.rect.m.js": __glob_0_6$2, "./shortcuts_list/add.text.js": __glob_0_7$2, "./shortcuts_list/clipboard.copy.js": __glob_0_8$2, "./shortcuts_list/clipboard.paste.js": __glob_0_9$2, "./shortcuts_list/group.item.js": __glob_0_10$2, "./shortcuts_list/history.redo.js": __glob_0_11$2, "./shortcuts_list/history.undo.js": __glob_0_12$2, "./shortcuts_list/item.move.alt.down.js": __glob_0_13$2, "./shortcuts_list/item.move.alt.left.js": __glob_0_14$2, "./shortcuts_list/item.move.alt.right.js": __glob_0_15$2, "./shortcuts_list/item.move.alt.up.js": __glob_0_16$2, "./shortcuts_list/item.move.depth.down.js": __glob_0_17$2, "./shortcuts_list/item.move.depth.up.js": __glob_0_18$2, "./shortcuts_list/item.move.key.down.js": __glob_0_19$2, "./shortcuts_list/item.move.key.left.js": __glob_0_20$2, "./shortcuts_list/item.move.key.right.js": __glob_0_21$1, "./shortcuts_list/item.move.key.up.js": __glob_0_22$1, "./shortcuts_list/item.move.shift.down.js": __glob_0_23$1, "./shortcuts_list/item.move.shift.left.js": __glob_0_24$1, "./shortcuts_list/item.move.shift.right.js": __glob_0_25$1, "./shortcuts_list/item.move.shift.up.js": __glob_0_26$1, "./shortcuts_list/item.rotate.meta.left.js": __glob_0_27$1, "./shortcuts_list/item.rotate.meta.right.js": __glob_0_28$1, "./shortcuts_list/removeLayer.js": __glob_0_29$1, "./shortcuts_list/removeLayerByDeleteKey.js": __glob_0_30$1, "./shortcuts_list/scale.minus.js": __glob_0_31$1, "./shortcuts_list/scale.plus.js": __glob_0_32$1, "./shortcuts_list/segment.delete.js": __glob_0_33$1, "./shortcuts_list/segment.move.alt.down.js": __glob_0_34$1, "./shortcuts_list/segment.move.alt.left.js": __glob_0_35$1, "./shortcuts_list/segment.move.alt.right.js": __glob_0_36$1, "./shortcuts_list/segment.move.alt.up.js": __glob_0_37$1, "./shortcuts_list/segment.move.key.down.js": __glob_0_38$1, "./shortcuts_list/segment.move.key.left.js": __glob_0_39$1, "./shortcuts_list/segment.move.key.right.js": __glob_0_40$1, "./shortcuts_list/segment.move.key.up.js": __glob_0_41$1, "./shortcuts_list/segment.move.shift.down.js": __glob_0_42$1, "./shortcuts_list/segment.move.shift.left.js": __glob_0_43$1, "./shortcuts_list/segment.move.shift.right.js": __glob_0_44$1, "./shortcuts_list/segment.move.shift.up.js": __glob_0_45$1, "./shortcuts_list/select.all.js": __glob_0_46$1, "./shortcuts_list/select.view.js": __glob_0_47$1, "./shortcuts_list/set.tool.hand.js": __glob_0_48$1, "./shortcuts_list/show.pan.js": __glob_0_49$1, "./shortcuts_list/ungroup.item.js": __glob_0_50$1 };
+var shortcuts = Object.values(modules$2).map((it) => it.default);
 const KEY_CODE = {
   "backspace": 8,
   "tab": 9,
@@ -18041,9 +19007,9 @@ class ShortCutManager {
     return command.whenFunction();
   }
   execute(e, eventType = "keydown") {
-    let commands2 = this.checkShortCut(this.makeKeyCodeString(e), this.makeKeyString(e), this.makeCodeString(e));
-    if (commands2) {
-      const filteredCommands = commands2.filter((it) => it.eventType === eventType).filter((it) => this.checkWhen(it));
+    let commands = this.checkShortCut(this.makeKeyCodeString(e), this.makeKeyString(e), this.makeCodeString(e));
+    if (commands) {
+      const filteredCommands = commands.filter((it) => it.eventType === eventType).filter((it) => this.checkWhen(it));
       if (filteredCommands.length) {
         e.preventDefault();
       }
@@ -18060,9 +19026,9 @@ class ConfigManager {
     this.config = new Map();
   }
   load() {
-    const obj = this.editor.loadItem("config") || {};
-    Object.keys(obj).forEach((key) => {
-      this.config.set(key, obj[key]);
+    const obj2 = this.editor.loadItem("config") || {};
+    Object.keys(obj2).forEach((key) => {
+      this.config.set(key, obj2[key]);
     });
   }
   get(key) {
@@ -18086,15 +19052,15 @@ class ConfigManager {
     this.set(key, value, false);
   }
   save() {
-    const obj = {};
+    const obj2 = {};
     this.configList.filter((it) => it.storage !== "none").forEach((it) => {
-      obj[it.key] = this.get(it.key);
+      obj2[it.key] = this.get(it.key);
     });
-    this.editor.saveItem("config", obj);
+    this.editor.saveItem("config", obj2);
   }
-  setAll(obj) {
-    Object.keys(obj).forEach((key) => {
-      this.set(key, obj[key]);
+  setAll(obj2) {
+    Object.keys(obj2).forEach((key) => {
+      this.set(key, obj2[key]);
     });
   }
   getType(key) {
@@ -18147,7 +19113,7 @@ class HistoryManager {
   createCommand(commandString) {
     return this.$editor.isPointerUp ? `history.${commandString}` : commandString;
   }
-  saveSelection(obj = {}) {
+  saveSelection(obj2 = {}) {
     this.selection = this.$editor.selection.toCloneObject();
   }
   getUndoValues(attrs = {}) {
@@ -18623,86 +19589,261 @@ function _icon_template(tpl, opt) {
             xmlns="http://www.w3.org/2000/svg" 
             width="${defaultOpts.width}" 
             height="${defaultOpts.height}" 
-            viewBox="0 0 ${defaultOpts.width} ${defaultOpts.height}">${tpl}</svg>`;
+            viewBox="0 0 ${defaultOpts.viewBoxWidth || defaultOpts.width} ${defaultOpts.viewBoxHeight || defaultOpts.height}">${tpl}</svg>`;
 }
-var chevron_right = _icon_template(`
-    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/>
-`);
-var create_folder = _icon_template(`
-    <path d="M22 6H12l-2-2H2v16h20V6zm-3 8h-3v3h-2v-3h-3v-2h3V9h2v3h3v2z"/>
-`);
-var add_box = _icon_template(`<path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>`);
-var visible = _icon_template(`<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>`);
-var remove = _icon_template(`<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>`);
-var copy = _icon_template(`<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm-1 4l6 6v10c0 1.1-.9 2-2 2H7.99C6.89 23 6 22.1 6 21l.01-14c0-1.1.89-2 1.99-2h7zm-1 7h5.5L14 6.5V12z"/>`);
-var lock = _icon_template(`<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>`);
-var undo = _icon_template(`<path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/>`);
-var redo = _icon_template(`<path d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"/>`);
-var save = _icon_template(`<path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z"/><path fill="none" d="M0 0h24v24H0z"/>`);
-var exportIcon = _icon_template(`<path d="M9 3L5 6.99h3V14h2V6.99h3L9 3zm7 14.01V10h-2v7.01h-3L15 21l4-3.99h-3z"/>`);
+var __glob_0_0$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": _icon_template
+});
+var account_tree = _icon_template(`<path d="M22 11V3h-7v3H9V3H2v8h7V8h2v10h4v3h7v-8h-7v3h-2V8h2v3z"/>`);
+var __glob_0_1$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": account_tree
+});
 var add = _icon_template(`<path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>`);
-var add_note = _icon_template(`<path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 14h-3v3h-2v-3H8v-2h3v-3h2v3h3v2zm-3-7V3.5L18.5 9H13z"/>`);
-var publish = _icon_template(`<path d="M5 4v2h14V4H5zm0 10h4v6h6v-6h4l-7-7-7 7z"/>`);
-var folder = _icon_template(`<path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>`);
-var artboard$1 = _icon_template(`<path d="M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z"/>`);
-var image$1 = _icon_template(`<path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>`);
-var setting = _icon_template(`<path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/>`);
-var remove2 = _icon_template(`<path d="M19 13H5v-2h14v2z"/>`);
-var repeat = _icon_template(`<path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/>`);
-var screen = _icon_template(`<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>`);
-var arrowRight = _icon_template(`<path d="M10 17l5-5-5-5v10z"/>`);
-var check$1 = _icon_template(`<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>`);
-var border_all = _icon_template(`<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 16H6c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1h12c.55 0 1 .45 1 1v12c0 .55-.45 1-1 1z"/>`);
-var border_inner = _icon_template(`<path d="M3 5v3c0 .55.45 1 1 1s1-.45 1-1V6c0-.55.45-1 1-1h2c.55 0 1-.45 1-1s-.45-1-1-1H5c-1.1 0-2 .9-2 2zm1 10c-.55 0-1 .45-1 1v3c0 1.1.9 2 2 2h3c.55 0 1-.45 1-1s-.45-1-1-1H6c-.55 0-1-.45-1-1v-2c0-.55-.45-1-1-1zm15 3c0 .55-.45 1-1 1h-2c-.55 0-1 .45-1 1s.45 1 1 1h3c1.1 0 2-.9 2-2v-3c0-.55-.45-1-1-1s-1 .45-1 1v2zm0-15h-3c-.55 0-1 .45-1 1s.45 1 1 1h2c.55 0 1 .45 1 1v2c0 .55.45 1 1 1s1-.45 1-1V5c0-1.1-.9-2-2-2z"/>`);
-var paint = _icon_template(`<path d="M18 4V3c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h12c.55 0 1-.45 1-1V6h1v4H9v11c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-9h8V4h-3z"/>`);
-var title = _icon_template(`<path d="M5 4v3h5.5v12h3V7H19V4z"/>`);
-var timer = _icon_template(`<path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>`);
-var chevron_left = _icon_template(`<path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>`);
-var input = _icon_template(`<path d="M21 3.01H3c-1.1 0-2 .9-2 2V9h2V4.99h18v14.03H3V15H1v4.01c0 1.1.9 1.98 2 1.98h18c1.1 0 2-.88 2-1.98v-14c0-1.11-.9-2-2-2zM11 16l4-4-4-4v3H1v2h10v3z"/>`);
-var filter$1 = _icon_template(`<path d="M18.7 12.4c-.28-.16-.57-.29-.86-.4.29-.11.58-.24.86-.4 1.92-1.11 2.99-3.12 3-5.19-1.79-1.03-4.07-1.11-6 0-.28.16-.54.35-.78.54.05-.31.08-.63.08-.95 0-2.22-1.21-4.15-3-5.19C10.21 1.85 9 3.78 9 6c0 .32.03.64.08.95-.24-.2-.5-.39-.78-.55-1.92-1.11-4.2-1.03-6 0 0 2.07 1.07 4.08 3 5.19.28.16.57.29.86.4-.29.11-.58.24-.86.4-1.92 1.11-2.99 3.12-3 5.19 1.79 1.03 4.07 1.11 6 0 .28-.16.54-.35.78-.54-.05.32-.08.64-.08.96 0 2.22 1.21 4.15 3 5.19 1.79-1.04 3-2.97 3-5.19 0-.32-.03-.64-.08-.95.24.2.5.38.78.54 1.92 1.11 4.2 1.03 6 0-.01-2.07-1.08-4.08-3-5.19zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>`);
-var play = _icon_template(`<path d="M8 5v14l11-7z"/>`);
-var pause = _icon_template(`<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`);
-var autorenew = _icon_template(`<path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/>`);
-var code = _icon_template(`<path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>`);
-var build = _icon_template(`<path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>`);
-var close = _icon_template(`<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>`);
-var gradient$1 = _icon_template('<path d="M11 9h2v2h-2zm-2 2h2v2H9zm4 0h2v2h-2zm2-2h2v2h-2zM7 9h2v2H7zm12-6H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 18H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm2-7h-2v2h2v2h-2v-2h-2v2h-2v-2h-2v2H9v-2H7v2H5v-2h2v-2H5V5h14v6z"/>');
-var transform$2 = _icon_template(`<path d="M22 18v-2H8V4h2L7 1 4 4h2v2H2v2h4v8c0 1.1.9 2 2 2h8v2h-2l3 3 3-3h-2v-2h4zM10 8h6v6h2V8c0-1.1-.9-2-2-2h-6v2z"/>`);
-var scatter = _icon_template(`<g fill="#010101"><circle cx="7" cy="14" r="3"/><circle cx="11" cy="6" r="3"/><circle cx="16.6" cy="17.6" r="3"/></g>`);
-var shape = _icon_template(`<path d="M23 7V1h-6v2H7V1H1v6h2v10H1v6h6v-2h10v2h6v-6h-2V7h2zM3 3h2v2H3V3zm2 18H3v-2h2v2zm12-2H7v-2H5V7h2V5h10v2h2v10h-2v2zm4 2h-2v-2h2v2zM19 5V3h2v2h-2z"/>`);
-var ballot = _icon_template(`<clipPath><use xlink:href="#a" overflow="visible"/></clipPath><path fill-rule="evenodd" clip-rule="evenodd" d="M13 9.5h5v-2h-5v2zm0 7h5v-2h-5v2zm6 4.5H5c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2zM6 11h5V6H6v5zm1-4h3v3H7V7zM6 18h5v-5H6v5zm1-4h3v3H7v-3z"/>`);
+var __glob_0_2$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": add
+});
+var add_box = _icon_template(`<path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>`);
+var __glob_0_3$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": add_box
+});
 var add_circle = _icon_template(`<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>`);
-var lock_open = _icon_template(`<path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>`);
-var outline_image = _icon_template(`<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54-1.96-2.36L6.5 17h11l-3.54-4.71z"/>`);
-var edit = _icon_template(`<path d="M3 17.46v3.04c0 .28.22.5.5.5h3.04c.13 0 .26-.05.35-.15L17.81 9.94l-3.75-3.75L3.15 17.1c-.1.1-.15.22-.15.36zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>`);
-var size = _icon_template(`<path d="M21 15h2v2h-2v-2zm0-4h2v2h-2v-2zm2 8h-2v2c1 0 2-1 2-2zM13 3h2v2h-2V3zm8 4h2v2h-2V7zm0-4v2h2c0-1-1-2-2-2zM1 7h2v2H1V7zm16-4h2v2h-2V3zm0 16h2v2h-2v-2zM3 3C2 3 1 4 1 5h2V3zm6 0h2v2H9V3zM5 3h2v2H5V3zm-4 8v8c0 1.1.9 2 2 2h12V11H1zm2 8l2.5-3.21 1.79 2.15 2.5-3.22L13 19H3z"/>`);
-var color$1 = _icon_template(`<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>`);
+var __glob_0_4$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": add_circle
+});
+var add_note = _icon_template(`<path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 14h-3v3h-2v-3H8v-2h3v-3h2v3h3v2zm-3-7V3.5L18.5 9H13z"/>`);
+var __glob_0_5$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": add_note
+});
 var align_center = _icon_template(`<path d="M7 15v2h10v-2H7zm-4 6h18v-2H3v2zm0-8h18v-2H3v2zm4-6v2h10V7H7zM3 3v2h18V3H3z"/>`);
+var __glob_0_6$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": align_center
+});
+var align_horizontal_center = _icon_template(`<polygon points="11,2 13,2 13,7 21,7 21,10 13,10 13,14 18,14 18,17 13,17 13,22 11,22 11,17 6,17 6,14 11,14 11,10 3,10 3,7 11,7"/>`);
+var __glob_0_7$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": align_horizontal_center
+});
+var align_horizontal_left = _icon_template(`<path d="M4,22H2V2h2V22z M22,7H6v3h16V7z M16,14H6v3h10V14z"/>`);
+var __glob_0_8$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": align_horizontal_left
+});
+var align_horizontal_right = _icon_template(`<path d="M20,2h2v20h-2V2z M2,10h16V7H2V10z M8,17h10v-3H8V17z"/>`);
+var __glob_0_9$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": align_horizontal_right
+});
 var align_justify = _icon_template(`<path d="M3 21h18v-2H3v2zm0-4h18v-2H3v2zm0-4h18v-2H3v2zm0-4h18V7H3v2zm0-6v2h18V3H3z"/>`);
+var __glob_0_10$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": align_justify
+});
 var align_left = _icon_template(`<path d="M15 15H3v2h12v-2zm0-8H3v2h12V7zM3 13h18v-2H3v2zm0 8h18v-2H3v2zM3 3v2h18V3H3z"/>`);
+var __glob_0_11$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": align_left
+});
 var align_right = _icon_template(`<path d="M3 21h18v-2H3v2zm6-4h12v-2H9v2zm-6-4h18v-2H3v2zm6-4h12V7H9v2zM3 3v2h18V3H3z"/>`);
-var list = _icon_template(`<path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"/>`);
-var grid$1 = _icon_template(`<path d="M3,3v8h8V3H3z M9,9H5V5h4V9z M3,13v8h8v-8H3z M9,19H5v-4h4V19z M13,3v8h8V3H13z M19,9h-4V5h4V9z M13,13v8h8v-8H13z M19,19h-4v-4h4V19z"/>`);
-var grid3x3 = _icon_template(`<path d="M20,10V8h-4V4h-2v4h-4V4H8v4H4v2h4v4H4v2h4v4h2v-4h4v4h2v-4h4v-2h-4v-4H20z M14,14h-4v-4h4V14z"/>`);
-var expand = _icon_template(`<path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>`);
-var brush = _icon_template(`<path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34c-.39-.39-1.02-.39-1.41 0L9 12.25 11.75 15l8.96-8.96c.39-.39.39-1.02 0-1.41z"/>`);
-var dahaze = _icon_template(`<path d="M2 15.5v2h20v-2H2zm0-5v2h20v-2H2zm0-5v2h20v-2H2z"/>`);
-var star = _icon_template(`<path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>`);
-var polygon = _icon_template(`<path d="M17,15.7V13H19V17L10,21L3,14L7,5H11V7H8.3L5.4,13.6L10.4,18.6L17,15.7M22,5V7H19V10H17V7H14V5H17V2H19V5H22Z" />`);
-var cube = _icon_template(`<path d="M21 16.5a1 1 0 0 1-.527.881l-7.907 4.443a.996.996 0 0 1-1.132 0l-7.907-4.443A1 1 0 0 1 3 16.5v-9a1 1 0 0 1 .527-.881l7.907-4.443a.995.995 0 0 1 1.132 0l7.907 4.443A1 1 0 0 1 21 7.5v9zM12 4.15L6.042 7.5l5.96 3.35 5.958-3.35-5.958-3.35zM5 15.916l6 3.372V12.58L5 9.209v6.706zm14 0V9.209l-6 3.372v6.707l6-3.373z" />`);
-var color_lens = _icon_template(`<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>`);
-var circle = _icon_template(`<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>`);
-var rect$1 = _icon_template(`<path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>`);
-var note = _icon_template(`<path d="M17 10H7v2h10v-2zm2-7h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zm-5-5H7v2h7v-2z"/>`);
-var skip_next = _icon_template(`<path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>`);
-var skip_prev = _icon_template(`<path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>`);
-var fast_forward = _icon_template(`<path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/>`);
-var fast_rewind = _icon_template(`<path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/>`);
+var __glob_0_12$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": align_right
+});
+var align_vertical_bottom = _icon_template(`<path d="M22,22H2v-2h20V22z M10,2H7v16h3V2z M17,8h-3v10h3V8z"/>`);
+var __glob_0_13$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": align_vertical_bottom
+});
+var align_vertical_center = _icon_template(`<polygon points="22,11 17,11 17,6 14,6 14,11 10,11 10,3 7,3 7,11 1.84,11 1.84,13 7,13 7,21 10,21 10,13 14,13 14,18 17,18 17,13 22,13"/>`);
+var __glob_0_14$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": align_vertical_center
+});
+var align_vertical_top = _icon_template(`<path d="M22,2v2H2V2H22z M7,22h3V6H7V22z M14,16h3V6h-3V16z"/>`);
+var __glob_0_15$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": align_vertical_top
+});
 var alternate = _icon_template(`<path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/>`);
+var __glob_0_16$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": alternate
+});
 var alternate_reverse = _icon_template(`<path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z" />`);
-var speed = _icon_template(`<path d="M20.38 8.57l-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44zm-9.79 6.84a2 2 0 0 0 2.83 0l5.66-8.49-8.49 5.66a2 2 0 0 0 0 2.83z"/>`);
-var replay = _icon_template(`<defs><path id="a" d="M0 0h24v24H0V0z"/></defs><clipPath id="b"><use xlink:href="#a" overflow="visible"/></clipPath><path d="M12 5V1L7 6l5 5V7c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8zm-1.1 11H10v-3.3L9 13v-.7l1.8-.6h.1V16zm4.3-1.8c0 .3 0 .6-.1.8l-.3.6s-.3.3-.5.3-.4.1-.6.1-.4 0-.6-.1-.3-.2-.5-.3-.2-.3-.3-.6-.1-.5-.1-.8v-.7c0-.3 0-.6.1-.8l.3-.6s.3-.3.5-.3.4-.1.6-.1.4 0 .6.1c.2.1.3.2.5.3s.2.3.3.6.1.5.1.8v.7zm-.9-.8v-.5s-.1-.2-.1-.3-.1-.1-.2-.2-.2-.1-.3-.1-.2 0-.3.1l-.2.2s-.1.2-.1.3v2s.1.2.1.3.1.1.2.2.2.1.3.1.2 0 .3-.1l.2-.2s.1-.2.1-.3v-1.5z" clip-path="url(#b)"/>`);
-var shuffle = _icon_template(`<path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/>`);
+var __glob_0_17$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": alternate_reverse
+});
+var apps = _icon_template(`<path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/>`);
+var __glob_0_18$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": apps
+});
+var archive = _icon_template(`<path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM12 17.5L6.5 12H10v-2h4v2h3.5L12 17.5zM5.12 5l.81-1h12l.94 1H5.12z"/>`);
+var __glob_0_19$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": archive
+});
+var arrowLeft = _icon_template(`<path d="M14 7l-5 5 5 5V7z"/>`);
+var __glob_0_20$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": arrowLeft
+});
+var arrowRight = _icon_template(`<path d="M10 17l5-5-5-5v10z"/>`);
+var __glob_0_21 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": arrowRight
+});
+var arrow_right = _icon_template(`<path d="M10 17l5-5-5-5v10z"/>`);
+var __glob_0_22 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": arrow_right
+});
+var artboard$1 = _icon_template(`<path d="M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z"/>`);
+var __glob_0_23 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": artboard$1
+});
+var auto_awesome = _icon_template(`<path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>`);
+var __glob_0_24 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": auto_awesome
+});
+var autorenew = _icon_template(`<path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/>`);
+var __glob_0_25 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": autorenew
+});
+var ballot = _icon_template(`<clipPath><use xlink:href="#a" overflow="visible"/></clipPath><path fill-rule="evenodd" clip-rule="evenodd" d="M13 9.5h5v-2h-5v2zm0 7h5v-2h-5v2zm6 4.5H5c-1.1 0-2-.9-2-2V5c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2zM6 11h5V6H6v5zm1-4h3v3H7V7zM6 18h5v-5H6v5zm1-4h3v3H7v-3z"/>`);
+var __glob_0_26 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": ballot
+});
+var bar_chart = _icon_template(`<path d="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"/>`);
+var __glob_0_27 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": bar_chart
+});
+var blur = _icon_template(`<path d="M6 13c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0 4c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0-8c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm-3 .5c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zM6 5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm15 5.5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zM14 7c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0-3.5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zm-11 10c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm7 7c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm0-17c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zM10 7c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 5.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm8 .5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0 4c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0-8c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0-4c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm3 8.5c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zM14 17c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0 3.5c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm-4-12c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0 8.5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm4-4.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-4c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/>`);
+var __glob_0_28 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": blur
+});
+var blur_linear = _icon_template(`<path d="M5 17.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM9 13c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0-4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zM3 21h18v-2H3v2zM5 9.5c.83 0 1.5-.67 1.5-1.5S5.83 6.5 5 6.5 3.5 7.17 3.5 8 4.17 9.5 5 9.5zm0 4c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM9 17c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm8-.5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zM3 3v2h18V3H3zm14 5.5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zm0 4c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zM13 9c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1z"/>`);
+var __glob_0_29 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": blur_linear
+});
+var boolean_difference = _icon_template(`<path d="M 20 10L 30 10L 30 30L 10 30L 10 20L 20 20L 20 10Z M 0 0L 20 0L 20 20L 0 20L 0 0Z  M 2 2L 2 18L 18 18L 18 2L 2 2Z" />`, { width: 30, height: 30 });
+var __glob_0_30 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": boolean_difference
+});
+var boolean_intersection = _icon_template(`<path d="
+    M 10 10L 30 10L 30 30L 10 30L 10 10Z 
+    M 20 12L 18 18L 12 18L 12 28L 28 28L 28 12L 12 12Z 
+    M 0 0L 20 0L 20 20L 0 20L 0 0Z  
+    M 2 2L 2 18L 18 18L 18 2L 2 2Z
+" />`, { width: 30, height: 30 });
+var __glob_0_31 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": boolean_intersection
+});
+var boolean_union = _icon_template(`<path d="M 0 0L 20 0L 20 20L 0 20L 0 0Z M 10 10L 30 10L 30 30L 10 30L 10 10Z"/>`, { width: 30, height: 30 });
+var __glob_0_32 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": boolean_union
+});
+var boolean_xor = _icon_template(`<path d="
+    M 10 10L 30 10L 30 30L 10 30L 10 10Z
+    M 0 0L 20 0L 20 20L 0 20L 0 0Z 
+" fill-rule="evenodd"/>`, { width: 30, height: 30 });
+var __glob_0_33 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": boolean_xor
+});
+var border_all = _icon_template(`<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 16H6c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1h12c.55 0 1 .45 1 1v12c0 .55-.45 1-1 1z"/>`);
+var __glob_0_34 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": border_all
+});
+var border_inner = _icon_template(`<path d="M3 5v3c0 .55.45 1 1 1s1-.45 1-1V6c0-.55.45-1 1-1h2c.55 0 1-.45 1-1s-.45-1-1-1H5c-1.1 0-2 .9-2 2zm1 10c-.55 0-1 .45-1 1v3c0 1.1.9 2 2 2h3c.55 0 1-.45 1-1s-.45-1-1-1H6c-.55 0-1-.45-1-1v-2c0-.55-.45-1-1-1zm15 3c0 .55-.45 1-1 1h-2c-.55 0-1 .45-1 1s.45 1 1 1h3c1.1 0 2-.9 2-2v-3c0-.55-.45-1-1-1s-1 .45-1 1v2zm0-15h-3c-.55 0-1 .45-1 1s.45 1 1 1h2c.55 0 1 .45 1 1v2c0 .55.45 1 1 1s1-.45 1-1V5c0-1.1-.9-2-2-2z"/>`);
+var __glob_0_35 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": border_inner
+});
+var bottom = _icon_template(`<path d="M4,20 L20,20Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />`);
+var __glob_0_36 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": bottom
+});
+var broken_image = _icon_template(`<path d="M21 5v6.59l-3-3.01-4 4.01-4-4-4 4-3-3.01V5c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2zm-3 6.42l3 3.01V19c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2v-6.58l3 2.99 4-4 4 4 4-3.99z"/>`);
+var __glob_0_37 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": broken_image
+});
+var brush = _icon_template(`<path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34c-.39-.39-1.02-.39-1.41 0L9 12.25 11.75 15l8.96-8.96c.39-.39.39-1.02 0-1.41z"/>`);
+var __glob_0_38 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": brush
+});
+var build = _icon_template(`<path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>`);
+var __glob_0_39 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": build
+});
+var camera_roll = _icon_template(`<path d="M14 5c0-1.1-.9-2-2-2h-1V2c0-.55-.45-1-1-1H6c-.55 0-1 .45-1 1v1H4c-1.1 0-2 .9-2 2v15c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2h8V5h-8zm-2 13h-2v-2h2v2zm0-9h-2V7h2v2zm4 9h-2v-2h2v2zm0-9h-2V7h2v2zm4 9h-2v-2h2v2zm0-9h-2V7h2v2z"/>`);
+var __glob_0_40 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": camera_roll
+});
 var cat = _icon_template(`
 <path d="M712.4846,631.2673c-8.3777-59.9758-44.6997-121.2822-117.7703-198.7816
 	c-51.7295-54.8649-72.0865-105.7791-55.8514-139.6883c12.4393-25.9817,42.587-35.8935,65.343-34.1103
@@ -18751,38 +19892,249 @@ var cat = _icon_template(`
 	c10.0879-20.4091-1.0878-32.4358-4.9794-35.7968c9.66-2.4378,21.5306-2.5917,36.0081,1.4018
 	C400.7746,158.6876,395.8536,185.0439,369.7458,193.0825z"/>
 `);
-var refresh = _icon_template(`<path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>`);
-var gps_fixed = _icon_template(`<path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>`);
-var file_copy = _icon_template(`<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm-1 4l6 6v10c0 1.1-.9 2-2 2H7.99C6.89 23 6 22.1 6 21l.01-14c0-1.1.89-2 1.99-2h7zm-1 7h5.5L14 6.5V12z"/>`);
-var archive = _icon_template(`<path d="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM12 17.5L6.5 12H10v-2h4v2h3.5L12 17.5zM5.12 5l.81-1h12l.94 1H5.12z"/>`);
-var storage = _icon_template(`<path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>`);
-var doc = _icon_template(`<path d="M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z"/>`);
-var flash_on = _icon_template(`<path d="M7 2v11h3v9l7-12h-4l4-8z"/>`);
-var view_list = _icon_template(`<path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"/>`);
-var near_me = _icon_template(`<path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/>`);
-var photo = _icon_template(`<path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>`);
-var specular = _icon_template(`<path d="M3.55 18.54l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8zM11 22.45h2V19.5h-2v2.95zM4 10.5H1v2h3v-2zm11-4.19V1.5H9v4.81C7.21 7.35 6 9.28 6 11.5c0 3.31 2.69 6 6 6s6-2.69 6-6c0-2.22-1.21-4.15-3-5.19zm5 4.19v2h3v-2h-3zm-2.76 7.66l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4z"/>`);
-var diffuse = _icon_template(`<path d="M5 14.5h14v-6H5v6zM11 .55V3.5h2V.55h-2zm8.04 2.5l-1.79 1.79 1.41 1.41 1.8-1.79-1.42-1.41zM13 22.45V19.5h-2v2.95h2zm7.45-3.91l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zM3.55 4.46l1.79 1.79 1.41-1.41-1.79-1.79-1.41 1.41zm1.41 15.49l1.79-1.8-1.41-1.41-1.79 1.79 1.41 1.42z"/>`);
-var palette = _icon_template(`<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>`);
-var landscape = _icon_template(`<path d="M14 6l-3.75 5 2.85 3.8-1.6 1.2C9.81 13.75 7 10 7 10l-6 8h22L14 6z"/>`);
-var blur = _icon_template(`<path d="M6 13c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0 4c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0-8c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm-3 .5c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zM6 5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm15 5.5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zM14 7c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0-3.5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zm-11 10c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm7 7c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm0-17c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zM10 7c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 5.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm8 .5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0 4c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0-8c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0-4c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm3 8.5c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zM14 17c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm0 3.5c-.28 0-.5.22-.5.5s.22.5.5.5.5-.22.5-.5-.22-.5-.5-.5zm-4-12c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0 8.5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1zm4-4.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-4c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/>`);
-var blur_linear = _icon_template(`<path d="M5 17.5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM9 13c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0-4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zM3 21h18v-2H3v2zM5 9.5c.83 0 1.5-.67 1.5-1.5S5.83 6.5 5 6.5 3.5 7.17 3.5 8 4.17 9.5 5 9.5zm0 4c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5zM9 17c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm8-.5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zM3 3v2h18V3H3zm14 5.5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zm0 4c.28 0 .5-.22.5-.5s-.22-.5-.5-.5-.5.22-.5.5.22.5.5.5zM13 9c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1zm0 4c.55 0 1-.45 1-1s-.45-1-1-1-1 .45-1 1 .45 1 1 1z"/>`);
-var waves = _icon_template(`<path d="M17 16.99c-1.35 0-2.2.42-2.95.8-.65.33-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.95c1.35 0 2.2-.42 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.42 2.95-.8c.65-.33 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm0-4.45c-1.35 0-2.2.43-2.95.8-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.32-1.17.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm2.95-8.08c-.75-.38-1.58-.8-2.95-.8s-2.2.42-2.95.8c-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.37-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.93c1.35 0 2.2-.43 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V5.04c-.9 0-1.4-.25-2.05-.58zM17 8.09c-1.35 0-2.2.43-2.95.8-.65.35-1.15.6-2.05.6s-1.4-.25-2.05-.6c-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.35-1.15.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.32 1.18-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V9.49c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8z"/>`);
-var vintage = _icon_template(`<path d="M18.7 12.4c-.28-.16-.57-.29-.86-.4.29-.11.58-.24.86-.4 1.92-1.11 2.99-3.12 3-5.19-1.79-1.03-4.07-1.11-6 0-.28.16-.54.35-.78.54.05-.31.08-.63.08-.95 0-2.22-1.21-4.15-3-5.19C10.21 1.85 9 3.78 9 6c0 .32.03.64.08.95-.24-.2-.5-.39-.78-.55-1.92-1.11-4.2-1.03-6 0 0 2.07 1.07 4.08 3 5.19.28.16.57.29.86.4-.29.11-.58.24-.86.4-1.92 1.11-2.99 3.12-3 5.19 1.79 1.03 4.07 1.11 6 0 .28-.16.54-.35.78-.54-.05.32-.08.64-.08.96 0 2.22 1.21 4.15 3 5.19 1.79-1.04 3-2.97 3-5.19 0-.32-.03-.64-.08-.95.24.2.5.38.78.54 1.92 1.11 4.2 1.03 6 0-.01-2.07-1.08-4.08-3-5.19zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>`);
-var looks = _icon_template(`<path d="M12 10c-3.86 0-7 3.14-7 7h2c0-2.76 2.24-5 5-5s5 2.24 5 5h2c0-3.86-3.14-7-7-7zm0-4C5.93 6 1 10.93 1 17h2c0-4.96 4.04-9 9-9s9 4.04 9 9h2c0-6.07-4.93-11-11-11z"/>`);
-var opacity = _icon_template(`<path d="M17.66 8L12 2.35 6.34 8C4.78 9.56 4 11.64 4 13.64s.78 4.11 2.34 5.67 3.61 2.35 5.66 2.35 4.1-.79 5.66-2.35S20 15.64 20 13.64 19.22 9.56 17.66 8zM6 14c.01-2 .62-3.27 1.76-4.4L12 5.27l4.24 4.38C17.38 10.77 17.99 12 18 14H6z"/>`);
-var shadow$1 = _icon_template(`<path d="M15.96 10.29l-2.75 3.54-1.96-2.36L8.5 15h11l-3.54-4.71zM3 5H1v16c0 1.1.9 2 2 2h16v-2H3V5zm18-4H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 16H7V3h14v14z"/>`);
-var broken_image = _icon_template(`<path d="M21 5v6.59l-3-3.01-4 4.01-4-4-4 4-3-3.01V5c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2zm-3 6.42l3 3.01V19c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2v-6.58l3 2.99 4-4 4 4 4-3.99z"/>`);
-var camera_roll = _icon_template(`<path d="M14 5c0-1.1-.9-2-2-2h-1V2c0-.55-.45-1-1-1H6c-.55 0-1 .45-1 1v1H4c-1.1 0-2 .9-2 2v15c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2h8V5h-8zm-2 13h-2v-2h2v2zm0-9h-2V7h2v2zm4 9h-2v-2h2v2zm0-9h-2V7h2v2zm4 9h-2v-2h2v2zm0-9h-2V7h2v2z"/>`);
-var view_comfy = _icon_template(`<path d="M3 9h4V5H3v4zm0 5h4v-4H3v4zm5 0h4v-4H8v4zm5 0h4v-4h-4v4zM8 9h4V5H8v4zm5-4v4h4V5h-4zm5 9h4v-4h-4v4zM3 19h4v-4H3v4zm5 0h4v-4H8v4zm5 0h4v-4h-4v4zm5 0h4v-4h-4v4zm0-14v4h4V5h-4z"/>`);
-var settings_input_component = _icon_template(`<path d="M5 2c0-.55-.45-1-1-1s-1 .45-1 1v4H1v6h6V6H5V2zm4 14c0 1.3.84 2.4 2 2.82V23h2v-4.18c1.16-.41 2-1.51 2-2.82v-2H9v2zm-8 0c0 1.3.84 2.4 2 2.82V23h2v-4.18C6.16 18.4 7 17.3 7 16v-2H1v2zM21 6V2c0-.55-.45-1-1-1s-1 .45-1 1v4h-2v6h6V6h-2zm-8-4c0-.55-.45-1-1-1s-1 .45-1 1v4H9v6h6V6h-2V2zm4 14c0 1.3.84 2.4 2 2.82V23h2v-4.18c1.16-.41 2-1.51 2-2.82v-2h-6v2z"/>`);
-var merge = _icon_template(`<path d="M17 20.41L18.41 19 15 15.59 13.59 17 17 20.41zM7.5 8H11v5.59L5.59 19 7 20.41l6-6V8h3.5L12 3.5 7.5 8z"/>`);
-var texture$1 = _icon_template(`<path d="M19.51 3.08L3.08 19.51c.09.34.27.65.51.9.25.24.56.42.9.51L20.93 4.49c-.19-.69-.73-1.23-1.42-1.41zM11.88 3L3 11.88v2.83L14.71 3h-2.83zM5 3c-1.1 0-2 .9-2 2v2l4-4H5zm14 18c.55 0 1.05-.22 1.41-.59.37-.36.59-.86.59-1.41v-2l-4 4h2zm-9.71 0h2.83L21 12.12V9.29L9.29 21z"/>`);
-var account_tree = _icon_template(`<path d="M22 11V3h-7v3H9V3H2v8h7V8h2v10h4v3h7v-8h-7v3h-2V8h2v3z"/>`);
-var format_shapes = _icon_template(`<path d="M23 7V1h-6v2H7V1H1v6h2v10H1v6h6v-2h10v2h6v-6h-2V7h2zM3 3h2v2H3V3zm2 18H3v-2h2v2zm12-2H7v-2H5V7h2V5h10v2h2v10h-2v2zm4 2h-2v-2h2v2zM19 5V3h2v2h-2zm-5.27 9h-3.49l-.73 2H7.89l3.4-9h1.4l3.41 9h-1.63l-.74-2zm-3.04-1.26h2.61L12 8.91l-1.31 3.83z"/>`);
-var flip = _icon_template(`<path d="M15 21h2v-2h-2v2zm4-12h2V7h-2v2zM3 5v14c0 1.1.9 2 2 2h4v-2H5V5h4V3H5c-1.1 0-2 .9-2 2zm16-2v2h2c0-1.1-.9-2-2-2zm-8 20h2V1h-2v22zm8-6h2v-2h-2v2zM15 5h2V3h-2v2zm4 8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2z"/>`);
-var flipY = _icon_template(`<path d="M15 21h2v-2h-2v2zm4-12h2V7h-2v2zM3 5v14c0 1.1.9 2 2 2h4v-2H5V5h4V3H5c-1.1 0-2 .9-2 2zm16-2v2h2c0-1.1-.9-2-2-2zm-8 20h2V1h-2v22zm8-6h2v-2h-2v2zM15 5h2V3h-2v2zm4 8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2z"/>`);
+var __glob_0_41 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": cat
+});
+var center = _icon_template(`
+    <path d="M12,4 L12,20Z M6,10 L18,10 L18,14 L6,14Z" stroke-width="1" />
+`);
+var __glob_0_42 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": center
+});
+var chart = _icon_template(`<path d="M9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4zm2.5 2.1h-15V5h15v14.1zm0-16.1h-15c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>`);
+var __glob_0_43 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": chart
+});
+var check$1 = _icon_template(`<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>`);
+var __glob_0_44 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": check$1
+});
+var chevron_left = _icon_template(`<path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>`);
+var __glob_0_45 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": chevron_left
+});
+var chevron_right = _icon_template(`
+    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/>
+`);
+var __glob_0_46 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": chevron_right
+});
+var circle = _icon_template(`<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>`);
+var __glob_0_47 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": circle
+});
+var close = _icon_template(`<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>`);
+var __glob_0_48 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": close
+});
+var code = _icon_template(`<path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>`);
+var __glob_0_49 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": code
+});
+var color$1 = _icon_template(`<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>`);
+var __glob_0_50 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": color$1
+});
+var color_lens = _icon_template(`<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>`);
+var __glob_0_51 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": color_lens
+});
 var control_point = _icon_template(`<path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>`);
+var __glob_0_52 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": control_point
+});
+var copy = _icon_template(`<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm-1 4l6 6v10c0 1.1-.9 2-2 2H7.99C6.89 23 6 22.1 6 21l.01-14c0-1.1.89-2 1.99-2h7zm-1 7h5.5L14 6.5V12z"/>`);
+var __glob_0_53 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": copy
+});
+var create_folder = _icon_template(`
+    <path d="M22 6H12l-2-2H2v16h20V6zm-3 8h-3v3h-2v-3h-3v-2h3V9h2v3h3v2z"/>
+`);
+var __glob_0_54 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": create_folder
+});
+var cube = _icon_template(`<path d="M21 16.5a1 1 0 0 1-.527.881l-7.907 4.443a.996.996 0 0 1-1.132 0l-7.907-4.443A1 1 0 0 1 3 16.5v-9a1 1 0 0 1 .527-.881l7.907-4.443a.995.995 0 0 1 1.132 0l7.907 4.443A1 1 0 0 1 21 7.5v9zM12 4.15L6.042 7.5l5.96 3.35 5.958-3.35-5.958-3.35zM5 15.916l6 3.372V12.58L5 9.209v6.706zm14 0V9.209l-6 3.372v6.707l6-3.373z" />`);
+var __glob_0_55 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": cube
+});
+var cylinder = _icon_template(`
+<g class="cylinder">
+<path d="M 12 0 C 7.636719 0 3 1.226562 3 3.5 L 3 20.5 C 3 22.773438 7.636719 24 12 24 C 16.363281 24 21 22.773438 21 20.5 L 21 3.5 C 21 1.226562 16.363281 0 12 0 Z M 20 19.121094 C 19.921875 19.140625 19.84375 19.171875 19.78125 19.230469 C 19.574219 19.414062 19.554688 19.726562 19.738281 19.933594 C 19.914062 20.128906 20 20.320312 20 20.5 C 20 21.542969 16.957031 23 12 23 C 7.042969 23 4 21.542969 4 20.5 C 4 20.320312 4.085938 20.128906 4.261719 19.933594 C 4.445312 19.726562 4.425781 19.410156 4.21875 19.226562 C 4.15625 19.171875 4.078125 19.140625 4 19.121094 L 4 5.160156 C 5.59375 6.363281 8.863281 7 12 7 C 15.136719 7 18.40625 6.363281 20 5.160156 Z M 12 6 C 7.042969 6 4 4.542969 4 3.5 C 4 2.457031 7.042969 1 12 1 C 16.957031 1 20 2.457031 20 3.5 C 20 4.542969 16.957031 6 12 6 Z M 12 6 "/>
+</g>
+`);
+var __glob_0_56 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": cylinder
+});
+var dahaze = _icon_template(`<path d="M2 15.5v2h20v-2H2zm0-5v2h20v-2H2zm0-5v2h20v-2H2z"/>`);
+var __glob_0_57 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": dahaze
+});
+var dark = _icon_template(`<path d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/>`);
+var __glob_0_58 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": dark
+});
+var delete_forever = _icon_template(`<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/>`);
+var __glob_0_59 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": delete_forever
+});
+var device_hub = _icon_template(`<path d="M17 16l-4-4V8.82C14.16 8.4 15 7.3 15 6c0-1.66-1.34-3-3-3S9 4.34 9 6c0 1.3.84 2.4 2 2.82V12l-4 4H3v5h5v-3.05l4-4.2 4 4.2V21h5v-5h-4z"/>`);
+var __glob_0_60 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": device_hub
+});
+var diffuse = _icon_template(`<path d="M5 14.5h14v-6H5v6zM11 .55V3.5h2V.55h-2zm8.04 2.5l-1.79 1.79 1.41 1.41 1.8-1.79-1.42-1.41zM13 22.45V19.5h-2v2.95h2zm7.45-3.91l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zM3.55 4.46l1.79 1.79 1.41-1.41-1.79-1.79-1.41 1.41zm1.41 15.49l1.79-1.8-1.41-1.41-1.79 1.79 1.41 1.42z"/>`);
+var __glob_0_61 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": diffuse
+});
+var doc = _icon_template(`<path d="M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z"/>`);
+var __glob_0_62 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": doc
+});
+var draw = _icon_template(`<path d="M18.85,10.39l1.06-1.06c0.78-0.78,0.78-2.05,0-2.83L18.5,5.09c-0.78-0.78-2.05-0.78-2.83,0l-1.06,1.06L18.85,10.39z M14.61,11.81L7.41,19H6v-1.41l7.19-7.19L14.61,11.81z M13.19,7.56L4,16.76V21h4.24l9.19-9.19L13.19,7.56L13.19,7.56z M19,17.5 c0,2.19-2.54,3.5-5,3.5c-0.55,0-1-0.45-1-1s0.45-1,1-1c1.54,0,3-0.73,3-1.5c0-0.47-0.48-0.87-1.23-1.2l1.48-1.48 C18.32,15.45,19,16.29,19,17.5z M4.58,13.35C3.61,12.79,3,12.06,3,11c0-1.8,1.89-2.63,3.56-3.36C7.59,7.18,9,6.56,9,6 c0-0.41-0.78-1-2-1C5.74,5,5.2,5.61,5.17,5.64C4.82,6.05,4.19,6.1,3.77,5.76C3.36,5.42,3.28,4.81,3.62,4.38C3.73,4.24,4.76,3,7,3 c2.24,0,4,1.32,4,3c0,1.87-1.93,2.72-3.64,3.47C6.42,9.88,5,10.5,5,11c0,0.31,0.43,0.6,1.07,0.86L4.58,13.35z" />`);
+var __glob_0_63 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": draw
+});
+var edit = _icon_template(`<path d="M3 17.46v3.04c0 .28.22.5.5.5h3.04c.13 0 .26-.05.35-.15L17.81 9.94l-3.75-3.75L3.15 17.1c-.1.1-.15.22-.15.36zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>`);
+var __glob_0_64 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": edit
+});
+var end = _icon_template(`<path transform="translate(24,0) scale(-1, 1)" d="M14.59,7.41L18.17,11H6v2h12.17l-3.59,3.59L16,18l6-6l-6-6L14.59,7.41z M2,6v12h2V6H2z"/>`);
+var __glob_0_65 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": end
+});
+var exit_to_app = _icon_template(`<path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>`);
+var __glob_0_66 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": exit_to_app
+});
+var expand = _icon_template(`<path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>`);
+var __glob_0_67 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": expand
+});
+var _export = _icon_template(`<path d="M9 3L5 6.99h3V14h2V6.99h3L9 3zm7 14.01V10h-2v7.01h-3L15 21l4-3.99h-3z"/>`);
+var __glob_0_68 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": _export
+});
+var face = _icon_template(`<path d="M9 11.75c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25zm6 0c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-.29.02-.58.05-.86 2.36-1.05 4.23-2.98 5.21-5.37C11.07 8.33 14.05 10 17.42 10c.78 0 1.53-.09 2.25-.26.21.71.33 1.47.33 2.26 0 4.41-3.59 8-8 8z"/>`);
+var __glob_0_69 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": face
+});
+var fast_forward = _icon_template(`<path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/>`);
+var __glob_0_70 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": fast_forward
+});
+var fast_rewind = _icon_template(`<path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/>`);
+var __glob_0_71 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": fast_rewind
+});
+var file_copy = _icon_template(`<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm-1 4l6 6v10c0 1.1-.9 2-2 2H7.99C6.89 23 6 22.1 6 21l.01-14c0-1.1.89-2 1.99-2h7zm-1 7h5.5L14 6.5V12z"/>`);
+var __glob_0_72 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": file_copy
+});
+var filter$1 = _icon_template(`<path d="M18.7 12.4c-.28-.16-.57-.29-.86-.4.29-.11.58-.24.86-.4 1.92-1.11 2.99-3.12 3-5.19-1.79-1.03-4.07-1.11-6 0-.28.16-.54.35-.78.54.05-.31.08-.63.08-.95 0-2.22-1.21-4.15-3-5.19C10.21 1.85 9 3.78 9 6c0 .32.03.64.08.95-.24-.2-.5-.39-.78-.55-1.92-1.11-4.2-1.03-6 0 0 2.07 1.07 4.08 3 5.19.28.16.57.29.86.4-.29.11-.58.24-.86.4-1.92 1.11-2.99 3.12-3 5.19 1.79 1.03 4.07 1.11 6 0 .28-.16.54-.35.78-.54-.05.32-.08.64-.08.96 0 2.22 1.21 4.15 3 5.19 1.79-1.04 3-2.97 3-5.19 0-.32-.03-.64-.08-.95.24.2.5.38.78.54 1.92 1.11 4.2 1.03 6 0-.01-2.07-1.08-4.08-3-5.19zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>`);
+var __glob_0_73 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": filter$1
+});
+var flag = _icon_template(`<path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/>`);
+var __glob_0_74 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": flag
+});
+var flash_on = _icon_template(`<path d="M7 2v11h3v9l7-12h-4l4-8z"/>`);
+var __glob_0_75 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": flash_on
+});
+var flatten = _icon_template(`<path d="M4,9v2h16V9H4z M16,4l-1.41-1.41L13,4.17V1h-2v3.19L9.39,2.61L8,4l4,4L16,4z M4,14h16v-2H4V14z M8,19l1.39,1.39L11,18.81 V22h2v-3.17l1.59,1.59L16,19l-4-4L8,19z"/>`);
+var __glob_0_76 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": flatten
+});
+var flex = _icon_template(`<path d="M3,5v14h18V5H3z M8.33,17H5V7h3.33V17z M13.67,17h-3.33V7h3.33V17z M19,17h-3.33V7H19V17z"/>`);
+var __glob_0_77 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": flex
+});
+var flip = _icon_template(`<path d="M15 21h2v-2h-2v2zm4-12h2V7h-2v2zM3 5v14c0 1.1.9 2 2 2h4v-2H5V5h4V3H5c-1.1 0-2 .9-2 2zm16-2v2h2c0-1.1-.9-2-2-2zm-8 20h2V1h-2v22zm8-6h2v-2h-2v2zM15 5h2V3h-2v2zm4 8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2z"/>`);
+var __glob_0_78 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": flip
+});
+var flipY = _icon_template(`<path d="M15 21h2v-2h-2v2zm4-12h2V7h-2v2zM3 5v14c0 1.1.9 2 2 2h4v-2H5V5h4V3H5c-1.1 0-2 .9-2 2zm16-2v2h2c0-1.1-.9-2-2-2zm-8 20h2V1h-2v22zm8-6h2v-2h-2v2zM15 5h2V3h-2v2zm4 8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2z"/>`);
+var __glob_0_79 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": flipY
+});
 var flip_camera = _icon_template(`
     <path d="M9,12c0,1.66,1.34,3,3,3s3-1.34,3-3s-1.34-3-3-3S9,10.34,9,12z"/>
     <path d="M8,10V8H5.09C6.47,5.61,9.05,4,12,4c3.72,0,6.85,2.56,7.74,6h2.06c-0.93-4.56-4.96-8-9.8-8C8.73,2,5.82,3.58,4,6.01V4H2v6
@@ -18790,325 +20142,828 @@ var flip_camera = _icon_template(`
     <path d="M16,14v2h2.91c-1.38,2.39-3.96,4-6.91,4c-3.72,0-6.85-2.56-7.74-6H2.2c0.93,4.56,4.96,8,9.8,8c3.27,0,6.18-1.58,8-4.01V20
         h2v-6H16z"/>
 `);
-var device_hub = _icon_template(`<path d="M17 16l-4-4V8.82C14.16 8.4 15 7.3 15 6c0-1.66-1.34-3-3-3S9 4.34 9 6c0 1.3.84 2.4 2 2.82V12l-4 4H3v5h5v-3.05l4-4.2 4 4.2V21h5v-5h-4z"/>`);
-var text_rotate = _icon_template(`<path d="M12.75 3h-1.5L6.5 14h2.1l.9-2.2h5l.9 2.2h2.1L12.75 3zm-2.62 7L12 4.98 13.87 10h-3.74zm10.37 8l-3-3v2H5v2h12.5v2l3-3z"/>`);
-var cylinder = _icon_template(`
-<g class="cylinder">
-<path d="M 12 0 C 7.636719 0 3 1.226562 3 3.5 L 3 20.5 C 3 22.773438 7.636719 24 12 24 C 16.363281 24 21 22.773438 21 20.5 L 21 3.5 C 21 1.226562 16.363281 0 12 0 Z M 20 19.121094 C 19.921875 19.140625 19.84375 19.171875 19.78125 19.230469 C 19.574219 19.414062 19.554688 19.726562 19.738281 19.933594 C 19.914062 20.128906 20 20.320312 20 20.5 C 20 21.542969 16.957031 23 12 23 C 7.042969 23 4 21.542969 4 20.5 C 4 20.320312 4.085938 20.128906 4.261719 19.933594 C 4.445312 19.726562 4.425781 19.410156 4.21875 19.226562 C 4.15625 19.171875 4.078125 19.140625 4 19.121094 L 4 5.160156 C 5.59375 6.363281 8.863281 7 12 7 C 15.136719 7 18.40625 6.363281 20 5.160156 Z M 12 6 C 7.042969 6 4 4.542969 4 3.5 C 4 2.457031 7.042969 1 12 1 C 16.957031 1 20 2.457031 20 3.5 C 20 4.542969 16.957031 6 12 6 Z M 12 6 "/>
-</g>
-`);
-var underline = _icon_template(`<path d="M12 17c3.31 0 6-2.69 6-6V3h-2.5v8c0 1.93-1.57 3.5-3.5 3.5S8.5 12.93 8.5 11V3H6v8c0 3.31 2.69 6 6 6zm-7 2v2h14v-2H5z"/>`);
-var strikethrough = _icon_template(`<defs><path id="a" d="M0 0h24v24H0V0z"/></defs><clipPath id="b"><use xlink:href="#a" overflow="visible"/></clipPath><path clip-path="url(#b)" d="M7.24 8.75c-.26-.48-.39-1.03-.39-1.67 0-.61.13-1.16.4-1.67.26-.5.63-.93 1.11-1.29.48-.35 1.05-.63 1.7-.83.66-.19 1.39-.29 2.18-.29.81 0 1.54.11 2.21.34.66.22 1.23.54 1.69.94.47.4.83.88 1.08 1.43.25.55.38 1.15.38 1.81h-3.01c0-.31-.05-.59-.15-.85-.09-.27-.24-.49-.44-.68-.2-.19-.45-.33-.75-.44-.3-.1-.66-.16-1.06-.16-.39 0-.74.04-1.03.13-.29.09-.53.21-.72.36-.19.16-.34.34-.44.55-.1.21-.15.43-.15.66 0 .48.25.88.74 1.21.38.25.77.48 1.41.7H7.39c-.05-.08-.11-.17-.15-.25zM21 12v-2H3v2h9.62c.18.07.4.14.55.2.37.17.66.34.87.51.21.17.35.36.43.57.07.2.11.43.11.69 0 .23-.05.45-.14.66-.09.2-.23.38-.42.53-.19.15-.42.26-.71.35-.29.08-.63.13-1.01.13-.43 0-.83-.04-1.18-.13s-.66-.23-.91-.42c-.25-.19-.45-.44-.59-.75-.14-.31-.25-.76-.25-1.21H6.4c0 .55.08 1.13.24 1.58.16.45.37.85.65 1.21.28.35.6.66.98.92.37.26.78.48 1.22.65.44.17.9.3 1.38.39.48.08.96.13 1.44.13.8 0 1.53-.09 2.18-.28s1.21-.45 1.67-.79c.46-.34.82-.77 1.07-1.27s.38-1.07.38-1.71c0-.6-.1-1.14-.31-1.61-.05-.11-.11-.23-.17-.33H21z"/>`);
+var __glob_0_80 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": flip_camera
+});
+var folder = _icon_template(`<path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>`);
+var __glob_0_81 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": folder
+});
+var format_shapes = _icon_template(`<path d="M23 7V1h-6v2H7V1H1v6h2v10H1v6h6v-2h10v2h6v-6h-2V7h2zM3 3h2v2H3V3zm2 18H3v-2h2v2zm12-2H7v-2H5V7h2V5h10v2h2v10h-2v2zm4 2h-2v-2h2v2zM19 5V3h2v2h-2zm-5.27 9h-3.49l-.73 2H7.89l3.4-9h1.4l3.41 9h-1.63l-.74-2zm-3.04-1.26h2.61L12 8.91l-1.31 3.83z"/>`);
+var __glob_0_82 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": format_shapes
+});
+var fullscreen = _icon_template(`<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>`);
+var __glob_0_83 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": fullscreen
+});
+var gps_fixed = _icon_template(`<path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>`);
+var __glob_0_84 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": gps_fixed
+});
+var gradient$1 = _icon_template('<path d="M11 9h2v2h-2zm-2 2h2v2H9zm4 0h2v2h-2zm2-2h2v2h-2zM7 9h2v2H7zm12-6H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 18H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm2-7h-2v2h2v2h-2v-2h-2v2h-2v-2h-2v2H9v-2H7v2H5v-2h2v-2H5V5h14v6z"/>');
+var __glob_0_85 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": gradient$1
+});
+var grid$1 = _icon_template(`<path d="M3,3v8h8V3H3z M9,9H5V5h4V9z M3,13v8h8v-8H3z M9,19H5v-4h4V19z M13,3v8h8V3H13z M19,9h-4V5h4V9z M13,13v8h8v-8H13z M19,19h-4v-4h4V19z"/>`);
+var __glob_0_86 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": grid$1
+});
+var grid3x3 = _icon_template(`<path d="M20,10V8h-4V4h-2v4h-4V4H8v4H4v2h4v4H4v2h4v4h2v-4h4v4h2v-4h4v-2h-4v-4H20z M14,14h-4v-4h4V14z"/>`);
+var __glob_0_87 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": grid3x3
+});
+var group = _icon_template(`
+        <path d="M3 5h2V3c-1.1 0-2 .9-2 2zm0 8h2v-2H3v2zm4 8h2v-2H7v2zM3 9h2V7H3v2zm10-6h-2v2h2V3zm6 0v2h2c0-1.1-.9-2-2-2zM5 21v-2H3c0 1.1.9 2 2 2zm-2-4h2v-2H3v2zM9 3H7v2h2V3zm2 18h2v-2h-2v2zm8-8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2zm0-12h2V7h-2v2zm0 8h2v-2h-2v2zm-4 4h2v-2h-2v2zm0-16h2V3h-2v2zM7 17h10V7H7v10zm2-8h6v6H9V9z"/>
+    `);
+var __glob_0_88 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": group
+});
+var highlight_at = _icon_template(`<path d="M17,5h-2V3h2V5z M15,15v6l2.29-2.29L19.59,21L21,19.59l-2.29-2.29L21,15H15z M19,9h2V7h-2V9z M19,13h2v-2h-2V13z M11,21h2 v-2h-2V21z M7,5h2V3H7V5z M3,17h2v-2H3V17z M5,21v-2H3C3,20.1,3.9,21,5,21z M19,3v2h2C21,3.9,20.1,3,19,3z M11,5h2V3h-2V5z M3,9h2 V7H3V9z M7,21h2v-2H7V21z M3,13h2v-2H3V13z M3,5h2V3C3.9,3,3,3.9,3,5z"/>`);
+var __glob_0_89 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": highlight_at
+});
+var horizontal_distribute = _icon_template(`<path d="M4,22H2V2h2V22z M22,2h-2v20h2V2z M13.5,7h-3v10h3V7z"/>`);
+var __glob_0_90 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": horizontal_distribute
+});
+var horizontal_rule = _icon_template(`<rect fill-rule="evenodd" height="2" width="16" x="4" y="11"/>`);
+var __glob_0_91 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": horizontal_rule
+});
+var image$1 = _icon_template(`<path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>`);
+var __glob_0_92 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": image$1
+});
+var input = _icon_template(`<path d="M21 3.01H3c-1.1 0-2 .9-2 2V9h2V4.99h18v14.03H3V15H1v4.01c0 1.1.9 1.98 2 1.98h18c1.1 0 2-.88 2-1.98v-14c0-1.11-.9-2-2-2zM11 16l4-4-4-4v3H1v2h10v3z"/>`);
+var __glob_0_93 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": input
+});
 var italic = _icon_template(`<path d="M10 4v3h2.21l-3.42 8H6v3h8v-3h-2.21l3.42-8H18V4z"/>`);
-var local_library = _icon_template(`<path d="M12 11.55C9.64 9.35 6.48 8 3 8v11c3.48 0 6.64 1.35 9 3.55 2.36-2.19 5.52-3.55 9-3.55V8c-3.48 0-6.64 1.35-9 3.55zM12 8c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3z"/>`);
-var lens = _icon_template(`<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>`);
-var flag = _icon_template(`<path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/>`);
-var left = _icon_template(`<path d="M2,4 L2,20Z M6,10 L16,10 L16,14 L6,14Z" stroke-width="1" />`);
-var center = _icon_template(`
-    <path d="M12,4 L12,20Z M6,10 L18,10 L18,14 L6,14Z" stroke-width="1" />
-`);
-var right = _icon_template(`<path d="M20,4 L20,20Z M6,10 L16,10 L16,14 L6,14Z" stroke-width="1" />`);
-var top = _icon_template(`<path d="M4,4 L20,4Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />`);
-var bottom = _icon_template(`<path d="M4,20 L20,20Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />`);
-var middle = _icon_template(`<path d="M4,12 L20,12Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />`);
-var same_width = _icon_template(`
-    <path d="M20,4 L20,20Z M2,4 L2,20Z M6,10 L16,10 L16,14 L6,14Z" stroke-width="1" />
-`);
-var same_height = _icon_template(`
-    <path d="M4,4 L20,4Z M4,20 L20,20Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />
-`);
-var local_movie = _icon_template(`<path d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/>`);
+var __glob_0_94 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": italic
+});
 var keyboard = _icon_template(`<path d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z"/>`);
-var apps = _icon_template(`<path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/>`);
-var outline_rect = _icon_template(`<path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>`);
-var outline_circle = _icon_template(`<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>`);
+var __glob_0_95 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": keyboard
+});
+var landscape = _icon_template(`<path d="M14 6l-3.75 5 2.85 3.8-1.6 1.2C9.81 13.75 7 10 7 10l-6 8h22L14 6z"/>`);
+var __glob_0_96 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": landscape
+});
 var launch = _icon_template(`
         <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
     `);
+var __glob_0_97 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": launch
+});
+var layers = _icon_template(`<path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/>`);
+var __glob_0_98 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": layers
+});
+var left = _icon_template(`<path d="M2,4 L2,20Z M6,10 L16,10 L16,14 L6,14Z" stroke-width="1" />`);
+var __glob_0_99 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": left
+});
+var left_hide = _icon_template(`<path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"/>`);
+var __glob_0_100 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": left_hide
+});
+var lens = _icon_template(`<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>`);
+var __glob_0_101 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": lens
+});
+var light = _icon_template(`<path d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/>`);
+var __glob_0_102 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": light
+});
+var line_cap_butt = _icon_template(`
+        <rect class="base" width="13" height="12" x="3" y="2" fill="transparent" fill-rule="nonzero"></rect>
+        <path fill="currentColor" fill-rule="nonzero" d="M3.5,6.06300874 C4.20280365,6.2438979 4.7561021,6.79719635 4.93699126,7.5 L16,7.5 L16,8.5 L4.93699126,8.5 C4.7561021,9.20280365 4.20280365,9.7561021 3.5,9.93699126 L3.5,13.5 L16,13.5 L16,14.5 L2.5,14.5 L2.5,9.93699126 C1.63738639,9.71496986 1,8.93191971 1,8 C1,7.06808029 1.63738639,6.28503014 2.5,6.06300874 L2.5,1.5 L16,1.5 L16,2.5 L3.5,2.5 L3.5,6.06300874 Z"></path>
+    `, { width: 18, height: 16 });
+var __glob_0_103 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": line_cap_butt
+});
+var line_cap_round = _icon_template(`
+        <path class="base" fill="transparent" fill-rule="nonzero" d="M8,2 L16,2 L16,14 L8,14 C4.6862915,14 2,11.3137085 2,8 L2,8 C2,4.6862915 4.6862915,2 8,2 Z"></path>
+        <path fill="currentColor" fill-rule="nonzero" d="M9.93699126,8.5 C9.71496986,9.36261361 8.93191971,10 8,10 C6.8954305,10 6,9.1045695 6,8 C6,6.8954305 6.8954305,6 8,6 C8.93191971,6 9.71496986,6.63738639 9.93699126,7.5 L16,7.5 L16,8.5 L9.93699126,8.5 Z M16,13.5 L16,14.5 L8,14.5 C4.41014913,14.5 1.5,11.5898509 1.5,8 C1.5,4.41014913 4.41014913,1.5 8,1.5 L16,1.5 L16,2.5 L8,2.5 C4.96243388,2.5 2.5,4.96243388 2.5,8 C2.5,11.0375661 4.96243388,13.5 8,13.5 L16,13.5 Z"></path>
+    `, { width: 18, height: 16 });
+var __glob_0_104 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": line_cap_round
+});
+var line_cap_square = _icon_template(`
+        <rect class="base" width="14" height="12" x="2" y="2" fill="transparent" fill-rule="nonzero"></rect>
+        <path fill="currentColor" fill-rule="nonzero" d="M9.93699126,8.5 C9.71496986,9.36261361 8.93191971,10 8,10 C6.8954305,10 6,9.1045695 6,8 C6,6.8954305 6.8954305,6 8,6 C8.93191971,6 9.71496986,6.63738639 9.93699126,7.5 L16,7.5 L16,8.5 L9.93699126,8.5 Z M2.5,13.5 L16,13.5 L16,14.5 L1.5,14.5 L1.5,1.5 L16,1.5 L16,2.5 L2.5,2.5 L2.5,13.5 Z"></path>
+    `, { width: 18, height: 16 });
+var __glob_0_105 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": line_cap_square
+});
+var line_chart = _icon_template(`<path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/>`);
+var __glob_0_106 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": line_chart
+});
+var line_join_bevel = _icon_template(`<g fill="none" fill-rule="evenodd"><polygon class="base" fill="transparent" fill-rule="nonzero" points="2 14.5 2 7.538 7.382 1.5 16 1.5 16 14.5"></polygon><path fill="currentColor" fill-rule="nonzero" d="M2.96551724,7.95245414 L2.96551724,14.5 L2,14.5 L2,7.53775146 L7.38172454,1.5 L16,1.5 L16,2.46 L7.76471206,2.46 L2.96551724,7.95245414 Z M10.9369913,9 C10.7561021,9.70280365 10.2028036,10.2561021 9.5,10.4369913 L9.5,14.5 L8.5,14.5 L8.5,10.4369913 C7.63738639,10.2149699 7,9.43191971 7,8.5 C7,7.3954305 7.8954305,6.5 9,6.5 C9.93191971,6.5 10.7149699,7.13738639 10.9369913,8 L16,8 L16,9 L10.9369913,9 Z"></path></g>`, { width: 18, height: 16 });
+var __glob_0_107 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": line_join_bevel
+});
+var line_join_miter = _icon_template(`<g fill="none" fill-rule="evenodd"><rect class="base" width="14" height="13" x="2" y="1.5" fill="transparent" fill-rule="nonzero"></rect><path fill="currentColor" fill-rule="nonzero" d="M10.9369913,9 C10.7561021,9.70280365 10.2028036,10.2561021 9.5,10.4369913 L9.5,14.5 L8.5,14.5 L8.5,10.4369913 C7.63738639,10.2149699 7,9.43191971 7,8.5 C7,7.3954305 7.8954305,6.5 9,6.5 C9.93191971,6.5 10.7149699,7.13738639 10.9369913,8 L16,8 L16,9 L10.9369913,9 Z M3,2.5 L3,14.5 L2,14.5 L2,1.5 L16,1.5 L16,2.5 L3,2.5 Z"></path></g>`, { width: 18, height: 16 });
+var __glob_0_108 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": line_join_miter
+});
+var line_join_round = _icon_template(`<g fill="none" fill-rule="evenodd"><path class="base" fill="transparent" fill-rule="nonzero" d="M9,1.5 L16,1.5 L16,14.5 L2,14.5 L2,8.5 C2,4.63400675 5.13400675,1.5 9,1.5 Z"></path><path fill="currentColor" fill-rule="nonzero" d="M2.96551724,14.5 L2,14.5 L2,7.74 C2,4.29374316 4.80979916,1.5 8.27586207,1.5 L16,1.5 L16,2.46 L8.27586207,2.46 C5.3430396,2.46 2.96551724,4.82393652 2.96551724,7.74 L2.96551724,14.5 Z M10.9369913,9 C10.7561021,9.70280365 10.2028036,10.2561021 9.5,10.4369913 L9.5,14.5 L8.5,14.5 L8.5,10.4369913 C7.63738639,10.2149699 7,9.43191971 7,8.5 C7,7.3954305 7.8954305,6.5 9,6.5 C9.93191971,6.5 10.7149699,7.13738639 10.9369913,8 L16,8 L16,9 L10.9369913,9 Z"></path></g>`, { width: 18, height: 16 });
+var __glob_0_109 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": line_join_round
+});
+var list = _icon_template(`<path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"/>`);
+var __glob_0_110 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": list
+});
+var local_library = _icon_template(`<path d="M12 11.55C9.64 9.35 6.48 8 3 8v11c3.48 0 6.64 1.35 9 3.55 2.36-2.19 5.52-3.55 9-3.55V8c-3.48 0-6.64 1.35-9 3.55zM12 8c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3z"/>`);
+var __glob_0_111 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": local_library
+});
+var local_movie = _icon_template(`<path d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/>`);
+var __glob_0_112 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": local_movie
+});
+var lock = _icon_template(`<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>`);
+var __glob_0_113 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": lock
+});
+var lock_open = _icon_template(`<path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>`);
+var __glob_0_114 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": lock_open
+});
+var looks = _icon_template(`<path d="M12 10c-3.86 0-7 3.14-7 7h2c0-2.76 2.24-5 5-5s5 2.24 5 5h2c0-3.86-3.14-7-7-7zm0-4C5.93 6 1 10.93 1 17h2c0-4.96 4.04-9 9-9s9 4.04 9 9h2c0-6.07-4.93-11-11-11z"/>`);
+var __glob_0_115 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": looks
+});
+var margin = _icon_template(`<path d="M3,3v18h18V3H3z M19,19H5V5h14V19z M11,7h2v2h-2V7z M7,7h2v2H7V7z M15,7h2v2h-2V7z M7,11h2v2H7V11z M11,11h2v2h-2V11z M15,11h2v2h-2V11z"/>`);
+var __glob_0_116 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": margin
+});
+var merge = _icon_template(`<path d="M17 20.41L18.41 19 15 15.59 13.59 17 17 20.41zM7.5 8H11v5.59L5.59 19 7 20.41l6-6V8h3.5L12 3.5 7.5 8z"/>`);
+var __glob_0_117 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": merge
+});
+var middle = _icon_template(`<path d="M4,12 L20,12Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />`);
+var __glob_0_118 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": middle
+});
+var navigation = _icon_template(`<path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>`);
+var __glob_0_119 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": navigation
+});
+var near_me = _icon_template(`<path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/>`);
+var __glob_0_120 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": near_me
+});
+var note = _icon_template(`<path d="M17 10H7v2h10v-2zm2-7h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zm-5-5H7v2h7v-2z"/>`);
+var __glob_0_121 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": note
+});
+var opacity = _icon_template(`<path d="M17.66 8L12 2.35 6.34 8C4.78 9.56 4 11.64 4 13.64s.78 4.11 2.34 5.67 3.61 2.35 5.66 2.35 4.1-.79 5.66-2.35S20 15.64 20 13.64 19.22 9.56 17.66 8zM6 14c.01-2 .62-3.27 1.76-4.4L12 5.27l4.24 4.38C17.38 10.77 17.99 12 18 14H6z"/>`);
+var __glob_0_122 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": opacity
+});
+function open_in_full(transform2 = "") {
+  return _icon_template(`
+        <g transform='${transform2}'><path fill='#fff' d='M2.6 5.6L0 8.3 2.6 11l1.2-1.2-.5-.5h9.4l-.5.5 1.2 1.2L16 8.3l-2.6-2.7-1.2 1.2.5.5H3.3l.5-.5-1.2-1.2z'/><path fill='#231f20' d='M5.1 279h-4v1h5v-5h-1zm5 0v5h-5v1h5v5h1v-5h5v-1h-5v-5z'/><path fill='#fff' d='M.6 278.5h4v-4h2v6h-6zm4.5.5h-4v1h5v-5h-1zm4.5-.5h2v5h5v2h-5v5h-2v-5h-5v-2h5zm.5 5.5h-5v1h5v5h1v-5h5v-1h-5v-5h-1z'/><path fill='#000' d='M2.6 6.3l-2 2 2 2 .6-.5-1-1H14l-1 1 .5.5 2-2-2-2-.5.5 1 1H2.1l1-1-.5-.5z'/></g>
+    `, { width: 24, height: 24, viewBoxWidth: 16, viewBoxHeight: 16 });
+}
+var __glob_0_123 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": open_in_full
+});
+var outline = _icon_template(`
+    <path d="M19.77 4.93l1.4 1.4L8.43 19.07l-5.6-5.6 1.4-1.4 4.2 4.2L19.77 4.93m0-2.83L8.43 13.44l-4.2-4.2L0 13.47l8.43 8.43L24 6.33 19.77 2.1z"/>
+`);
+var __glob_0_124 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": outline
+});
+var outline_circle = _icon_template(`<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>`);
+var __glob_0_125 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": outline_circle
+});
+var outline_image = _icon_template(`<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54-1.96-2.36L6.5 17h11l-3.54-4.71z"/>`);
+var __glob_0_126 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": outline_image
+});
+var outline_rect = _icon_template(`<path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>`);
+var __glob_0_127 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": outline_rect
+});
+var outline_shape = _icon_template(`<path d="M2 12C2 6.48 6.48 2 12 2s10 4.48 10 10-4.48 10-10 10S2 17.52 2 12zm10 6c3.31 0 6-2.69 6-6s-2.69-6-6-6-6 2.69-6 6 2.69 6 6 6z"/>`);
+var __glob_0_128 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": outline_shape
+});
+var paint = _icon_template(`<path d="M18 4V3c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h12c.55 0 1-.45 1-1V6h1v4H9v11c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-9h8V4h-3z"/>`);
+var __glob_0_129 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": paint
+});
+var palette = _icon_template(`<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>`);
+var __glob_0_130 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": palette
+});
+var pantool = _icon_template(`<path d="M18 24h-6.55c-1.08 0-2.14-.45-2.89-1.23l-7.3-7.61 2.07-1.83c.62-.55 1.53-.66 2.26-.27L8 14.34V4.79c0-1.38 1.12-2.5 2.5-2.5.17 0 .34.02.51.05.09-1.3 1.17-2.33 2.49-2.33.86 0 1.61.43 2.06 1.09.29-.12.61-.18.94-.18 1.38 0 2.5 1.12 2.5 2.5v.28c.16-.03.33-.05.5-.05 1.38 0 2.5 1.12 2.5 2.5V20c0 2.21-1.79 4-4 4zM4.14 15.28l5.86 6.1c.38.39.9.62 1.44.62H18c1.1 0 2-.9 2-2V6.15c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12h-2V3.42c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12h-2V2.51c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12h-2V4.79c0-.28-.22-.5-.5-.5s-.5.23-.5.5v12.87l-5.35-2.83-.51.45z"/>`);
+var __glob_0_131 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": pantool
+});
+var pause = _icon_template(`<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`);
+var __glob_0_132 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": pause
+});
 var pentool = _icon_template(`
     <g transform="translate(4.000003875248012, 4.000001937624006)">
         <path stroke="currentColor" d="M 7.501491970838878 -0.0000015572448855733659Q 14.336036333057622 7.389304433496911 15.674208571053226 11.025537025755131Q 17.012380809048864 14.661769618013372 12.854180922821438 14.544928811787997L 12.854180922821438 16.99999278410904L 3.2146550430021494 16.99999278410904L 3.2146550430021494 14.544928811787997Q -0.8480130988910353 14.661769618013372 0.22369613306813782 11.025537025755131Q 1.295405365027311 7.389304433496911 7.501491970838878 -0.0000015572448855733659Z M 7.501491970838878 -0.0000015572448855733659M 7.043097362212707 10.615180199186797L 7.043097362212707 2.029497238417552Q 2.4235653311211847 7.389304433496911 1.2143202542326725 11.099378313047254Q 0.22369613306813782 14.380813978493594 4.269842778971384 13.709709450113499L 4.269842778971384 16.233605781316655L 11.751764459057853 16.233605781316655L 11.751764459057853 13.709709450113499Q 15.84146041516868 14.140123940309786 14.670231046646997 10.775846698306177Q 14.195747591990225 9.593976493057127 8.077664264490855 2.029497238417552L 8.077664264490855 10.615180199186797L 7.043097362212707 10.615180199186797Z"/>
     </g>
 `);
-var video$1 = _icon_template(`
-        <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
-    `);
-var volume_down = _icon_template(`
-        <path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"/>
-    `);
-var volume_up = _icon_template(`
-    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-`);
-var volume_off = _icon_template(`
-    <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
-`);
-var arrowLeft = _icon_template(`<path d="M14 7l-5 5 5 5V7z"/>`);
-var group = _icon_template(`
-        <path d="M3 5h2V3c-1.1 0-2 .9-2 2zm0 8h2v-2H3v2zm4 8h2v-2H7v2zM3 9h2V7H3v2zm10-6h-2v2h2V3zm6 0v2h2c0-1.1-.9-2-2-2zM5 21v-2H3c0 1.1.9 2 2 2zm-2-4h2v-2H3v2zM9 3H7v2h2V3zm2 18h2v-2h-2v2zm8-8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2zm0-12h2V7h-2v2zm0 8h2v-2h-2v2zm-4 4h2v-2h-2v2zm0-16h2V3h-2v2zM7 17h10V7H7v10zm2-8h6v6H9V9z"/>
-    `);
-var arrow_right = _icon_template(`<path d="M10 17l5-5-5-5v10z"/>`);
-var layers = _icon_template(`<path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/>`);
-var align_horizontal_center = _icon_template(`<polygon points="11,2 13,2 13,7 21,7 21,10 13,10 13,14 18,14 18,17 13,17 13,22 11,22 11,17 6,17 6,14 11,14 11,10 3,10 3,7 11,7"/>`);
-var align_horizontal_left = _icon_template(`<path d="M4,22H2V2h2V22z M22,7H6v3h16V7z M16,14H6v3h10V14z"/>`);
-var align_horizontal_right = _icon_template(`<path d="M20,2h2v20h-2V2z M2,10h16V7H2V10z M8,17h10v-3H8V17z"/>`);
-var align_vertical_bottom = _icon_template(`<path d="M22,22H2v-2h20V22z M10,2H7v16h3V2z M17,8h-3v10h3V8z"/>`);
-var align_vertical_center = _icon_template(`<polygon points="22,11 17,11 17,6 14,6 14,11 10,11 10,3 7,3 7,11 1.84,11 1.84,13 7,13 7,21 10,21 10,13 14,13 14,18 17,18 17,13 22,13"/>`);
-var align_vertical_top = _icon_template(`<path d="M22,2v2H2V2H22z M7,22h3V6H7V22z M14,16h3V6h-3V16z"/>`);
-var swap_horiz = _icon_template(`<path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"/>`);
-var rotate_left = _icon_template(`<path d="M7.11 8.53L5.7 7.11C4.8 8.27 4.24 9.61 4.07 11h2.02c.14-.87.49-1.72 1.02-2.47zM6.09 13H4.07c.17 1.39.72 2.73 1.62 3.89l1.41-1.42c-.52-.75-.87-1.59-1.01-2.47zm1.01 5.32c1.16.9 2.51 1.44 3.9 1.61V17.9c-.87-.15-1.71-.49-2.46-1.03L7.1 18.32zM13 4.07V1L8.45 5.55 13 10V6.09c2.84.48 5 2.94 5 5.91s-2.16 5.43-5 5.91v2.02c3.95-.49 7-3.85 7-7.93s-3.05-7.44-7-7.93z"/>`);
-function open_in_full(transform2 = "") {
-  return _icon_template(`
-        <polygon points="21,11 21,3 13,3 16.29,6.29 6.29,16.29 3,13 3,21 11,21 7.71,17.71 17.71,7.71" transform='${transform2}' fill="white" stroke='white' stroke-width="2" />
-        <polygon points="21,11 21,3 13,3 16.29,6.29 6.29,16.29 3,13 3,21 11,21 7.71,17.71 17.71,7.71" transform='${transform2}' stroke='black' stroke-width="0.5" />        
-    `, { width: 24, height: 24 });
-}
+var __glob_0_133 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": pentool
+});
+var photo = _icon_template(`<path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>`);
+var __glob_0_134 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": photo
+});
+var play = _icon_template(`<path d="M8 5v14l11-7z"/>`);
+var __glob_0_135 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": play
+});
+var plugin = _icon_template(`<path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm15 0h-2v3h-3v2h3v3h2v-3h3v-2h-3z"/>`);
+var __glob_0_136 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": plugin
+});
+var polygon = _icon_template(`<path d="M17,15.7V13H19V17L10,21L3,14L7,5H11V7H8.3L5.4,13.6L10.4,18.6L17,15.7M22,5V7H19V10H17V7H14V5H17V2H19V5H22Z" />`);
+var __glob_0_137 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": polygon
+});
+var publish = _icon_template(`<path d="M5 4v2h14V4H5zm0 10h4v6h6v-6h4l-7-7-7 7z"/>`);
+var __glob_0_138 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": publish
+});
+var rect$1 = _icon_template(`<path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>`);
+var __glob_0_139 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": rect$1
+});
+var redo = _icon_template(`<path d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"/>`);
+var __glob_0_140 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": redo
+});
+var refresh = _icon_template(`<path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>`);
+var __glob_0_141 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": refresh
+});
+var remove = _icon_template(`<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>`);
+var __glob_0_142 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": remove
+});
+var remove2 = _icon_template(`<path d="M19 13H5v-2h14v2z"/>`);
+var __glob_0_143 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": remove2
+});
+var repeat = _icon_template(`<path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/>`);
+var __glob_0_144 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": repeat
+});
+var replay = _icon_template(`<defs><path id="a" d="M0 0h24v24H0V0z"/></defs><clipPath id="b"><use xlink:href="#a" overflow="visible"/></clipPath><path d="M12 5V1L7 6l5 5V7c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8zm-1.1 11H10v-3.3L9 13v-.7l1.8-.6h.1V16zm4.3-1.8c0 .3 0 .6-.1.8l-.3.6s-.3.3-.5.3-.4.1-.6.1-.4 0-.6-.1-.3-.2-.5-.3-.2-.3-.3-.6-.1-.5-.1-.8v-.7c0-.3 0-.6.1-.8l.3-.6s.3-.3.5-.3.4-.1.6-.1.4 0 .6.1c.2.1.3.2.5.3s.2.3.3.6.1.5.1.8v.7zm-.9-.8v-.5s-.1-.2-.1-.3-.1-.1-.2-.2-.2-.1-.3-.1-.2 0-.3.1l-.2.2s-.1.2-.1.3v2s.1.2.1.3.1.1.2.2.2.1.3.1.2 0 .3-.1l.2-.2s.1-.2.1-.3v-1.5z" clip-path="url(#b)"/>`);
+var __glob_0_145 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": replay
+});
+var right = _icon_template(`<path d="M20,4 L20,20Z M6,10 L16,10 L16,14 L6,14Z" stroke-width="1" />`);
+var __glob_0_146 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": right
+});
+var right_hide = _icon_template(`<path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"/>`);
+var __glob_0_147 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": right_hide
+});
 var rotate = _icon_template(`
         <path d="M7.11 8.53L5.7 7.11C4.8 8.27 4.24 9.61 4.07 11h2.02c.14-.87.49-1.72 1.02-2.47zM6.09 13H4.07c.17 1.39.72 2.73 1.62 3.89l1.41-1.42c-.52-.75-.87-1.59-1.01-2.47zm1.01 5.32c1.16.9 2.51 1.44 3.9 1.61V17.9c-.87-.15-1.71-.49-2.46-1.03L7.1 18.32zM13 4.07V1L8.45 5.55 13 10V6.09c2.84.48 5 2.94 5 5.91s-2.16 5.43-5 5.91v2.02c3.95-.49 7-3.85 7-7.93s-3.05-7.44-7-7.93z" stroke='white' stroke-width="0.5" />
     `);
-var vertical_distribute = _icon_template(`<path d="M22,2v2H2V2H22z M7,10.5v3h10v-3H7z M2,20v2h20v-2H2z"/>`);
-var horizontal_distribute = _icon_template(`<path d="M4,22H2V2h2V22z M22,2h-2v20h2V2z M13.5,7h-3v10h3V7z"/>`);
-var delete_forever = _icon_template(`<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/>`);
-var horizontal_rule = _icon_template(`<rect fill-rule="evenodd" height="2" width="16" x="4" y="11"/>`);
-var navigation = _icon_template(`<path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>`);
-var web = _icon_template(`<path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"/>`);
-var auto_awesome = _icon_template(`<path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>`);
-var plugin = _icon_template(`<path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm15 0h-2v3h-3v2h3v3h2v-3h3v-2h-3z"/>`);
-var straighten = _icon_template(`<path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h2v4h2V8h2v4h2V8h2v4h2V8h2v4h2V8h2v8z"/>`);
-var left_hide = _icon_template(`<path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"/>`);
-var right_hide = _icon_template(`<path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"/>`);
-var pantool = _icon_template(`<path d="M18 24h-6.55c-1.08 0-2.14-.45-2.89-1.23l-7.3-7.61 2.07-1.83c.62-.55 1.53-.66 2.26-.27L8 14.34V4.79c0-1.38 1.12-2.5 2.5-2.5.17 0 .34.02.51.05.09-1.3 1.17-2.33 2.49-2.33.86 0 1.61.43 2.06 1.09.29-.12.61-.18.94-.18 1.38 0 2.5 1.12 2.5 2.5v.28c.16-.03.33-.05.5-.05 1.38 0 2.5 1.12 2.5 2.5V20c0 2.21-1.79 4-4 4zM4.14 15.28l5.86 6.1c.38.39.9.62 1.44.62H18c1.1 0 2-.9 2-2V6.15c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12h-2V3.42c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12h-2V2.51c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12h-2V4.79c0-.28-.22-.5-.5-.5s-.5.23-.5.5v12.87l-5.35-2.83-.51.45z"/>`);
-var draw = _icon_template(`<path d="M18.85,10.39l1.06-1.06c0.78-0.78,0.78-2.05,0-2.83L18.5,5.09c-0.78-0.78-2.05-0.78-2.83,0l-1.06,1.06L18.85,10.39z M14.61,11.81L7.41,19H6v-1.41l7.19-7.19L14.61,11.81z M13.19,7.56L4,16.76V21h4.24l9.19-9.19L13.19,7.56L13.19,7.56z M19,17.5 c0,2.19-2.54,3.5-5,3.5c-0.55,0-1-0.45-1-1s0.45-1,1-1c1.54,0,3-0.73,3-1.5c0-0.47-0.48-0.87-1.23-1.2l1.48-1.48 C18.32,15.45,19,16.29,19,17.5z M4.58,13.35C3.61,12.79,3,12.06,3,11c0-1.8,1.89-2.63,3.56-3.36C7.59,7.18,9,6.56,9,6 c0-0.41-0.78-1-2-1C5.74,5,5.2,5.61,5.17,5.64C4.82,6.05,4.19,6.1,3.77,5.76C3.36,5.42,3.28,4.81,3.62,4.38C3.73,4.24,4.76,3,7,3 c2.24,0,4,1.32,4,3c0,1.87-1.93,2.72-3.64,3.47C6.42,9.88,5,10.5,5,11c0,0.31,0.43,0.6,1.07,0.86L4.58,13.35z" />`);
-var flex = _icon_template(`<path d="M3,5v14h18V5H3z M8.33,17H5V7h3.33V17z M13.67,17h-3.33V7h3.33V17z M19,17h-3.33V7H19V17z"/>`);
-var margin = _icon_template(`<path d="M3,3v18h18V3H3z M19,19H5V5h14V19z M11,7h2v2h-2V7z M7,7h2v2H7V7z M15,7h2v2h-2V7z M7,11h2v2H7V11z M11,11h2v2h-2V11z M15,11h2v2h-2V11z"/>`);
-var source = _icon_template(`<path d="M20,6h-8l-2-2H4C2.9,4,2.01,4.9,2.01,6L2,18c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V8C22,6.9,21.1,6,20,6z M20,18L4,18V6h5.17 l2,2H20V18z M18,12H6v-2h12V12z M14,16H6v-2h8V16z"/>`);
-var sync = _icon_template(`<path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>`);
-var outline = _icon_template(`
-    <path d="M19.77 4.93l1.4 1.4L8.43 19.07l-5.6-5.6 1.4-1.4 4.2 4.2L19.77 4.93m0-2.83L8.43 13.44l-4.2-4.2L0 13.47l8.43 8.43L24 6.33 19.77 2.1z"/>
+var __glob_0_148 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": rotate
+});
+var rotate_left = _icon_template(`<path d="M7.11 8.53L5.7 7.11C4.8 8.27 4.24 9.61 4.07 11h2.02c.14-.87.49-1.72 1.02-2.47zM6.09 13H4.07c.17 1.39.72 2.73 1.62 3.89l1.41-1.42c-.52-.75-.87-1.59-1.01-2.47zm1.01 5.32c1.16.9 2.51 1.44 3.9 1.61V17.9c-.87-.15-1.71-.49-2.46-1.03L7.1 18.32zM13 4.07V1L8.45 5.55 13 10V6.09c2.84.48 5 2.94 5 5.91s-2.16 5.43-5 5.91v2.02c3.95-.49 7-3.85 7-7.93s-3.05-7.44-7-7.93z"/>`);
+var __glob_0_149 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": rotate_left
+});
+var same_height = _icon_template(`
+    <path d="M4,4 L20,4Z M4,20 L20,20Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />
 `);
-var dark = _icon_template(`<path d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/>`);
-var wave = _icon_template(`<path d="M17 16.99c-1.35 0-2.2.42-2.95.8-.65.33-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.95c1.35 0 2.2-.42 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.42 2.95-.8c.65-.33 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm0-4.45c-1.35 0-2.2.43-2.95.8-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.32-1.17.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm2.95-8.08c-.75-.38-1.58-.8-2.95-.8s-2.2.42-2.95.8c-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.37-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.93c1.35 0 2.2-.43 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V5.04c-.9 0-1.4-.25-2.05-.58zM17 8.09c-1.35 0-2.2.43-2.95.8-.65.35-1.15.6-2.05.6s-1.4-.25-2.05-.6c-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.35-1.15.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.32 1.18-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V9.49c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8z"/>`);
-var boolean_union = _icon_template(`<path d="M 0 0L 20 0L 20 20L 0 20L 0 0Z M 10 10L 30 10L 30 30L 10 30L 10 10Z"/>`, { width: 30, height: 30 });
-var boolean_difference = _icon_template(`<path d="M 20 10L 30 10L 30 30L 10 30L 10 20L 20 20L 20 10Z M 0 0L 20 0L 20 20L 0 20L 0 0Z  M 2 2L 2 18L 18 18L 18 2L 2 2Z" />`, { width: 30, height: 30 });
-var boolean_intersection = _icon_template(`<path d="
-    M 10 10L 30 10L 30 30L 10 30L 10 10Z 
-    M 20 12L 18 18L 12 18L 12 28L 28 28L 28 12L 12 12Z 
-    M 0 0L 20 0L 20 20L 0 20L 0 0Z  
-    M 2 2L 2 18L 18 18L 18 2L 2 2Z
-" />`, { width: 30, height: 30 });
-var boolean_xor = _icon_template(`<path d="
-    M 10 10L 30 10L 30 30L 10 30L 10 10Z
-    M 0 0L 20 0L 20 20L 0 20L 0 0Z 
-" fill-rule="evenodd"/>`, { width: 30, height: 30 });
-var flatten = _icon_template(`<path d="M4,9v2h16V9H4z M16,4l-1.41-1.41L13,4.17V1h-2v3.19L9.39,2.61L8,4l4,4L16,4z M4,14h16v-2H4V14z M8,19l1.39,1.39L11,18.81 V22h2v-3.17l1.59,1.59L16,19l-4-4L8,19z"/>`);
+var __glob_0_150 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": same_height
+});
+var same_width = _icon_template(`
+    <path d="M20,4 L20,20Z M2,4 L2,20Z M6,10 L16,10 L16,14 L6,14Z" stroke-width="1" />
+`);
+var __glob_0_151 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": same_width
+});
+var save = _icon_template(`<path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z"/><path fill="none" d="M0 0h24v24H0z"/>`);
+var __glob_0_152 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": save
+});
+var scatter = _icon_template(`<g fill="#010101"><circle cx="7" cy="14" r="3"/><circle cx="11" cy="6" r="3"/><circle cx="16.6" cy="17.6" r="3"/></g>`);
+var __glob_0_153 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": scatter
+});
+var screen = _icon_template(`<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>`);
+var __glob_0_154 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": screen
+});
+var setting = _icon_template(`<path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/>`);
+var __glob_0_155 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": setting
+});
+var settings_input_component = _icon_template(`<path d="M5 2c0-.55-.45-1-1-1s-1 .45-1 1v4H1v6h6V6H5V2zm4 14c0 1.3.84 2.4 2 2.82V23h2v-4.18c1.16-.41 2-1.51 2-2.82v-2H9v2zm-8 0c0 1.3.84 2.4 2 2.82V23h2v-4.18C6.16 18.4 7 17.3 7 16v-2H1v2zM21 6V2c0-.55-.45-1-1-1s-1 .45-1 1v4h-2v6h6V6h-2zm-8-4c0-.55-.45-1-1-1s-1 .45-1 1v4H9v6h6V6h-2V2zm4 14c0 1.3.84 2.4 2 2.82V23h2v-4.18c1.16-.41 2-1.51 2-2.82v-2h-6v2z"/>`);
+var __glob_0_156 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": settings_input_component
+});
+var shadow$1 = _icon_template(`<path d="M15.96 10.29l-2.75 3.54-1.96-2.36L8.5 15h11l-3.54-4.71zM3 5H1v16c0 1.1.9 2 2 2h16v-2H3V5zm18-4H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 16H7V3h14v14z"/>`);
+var __glob_0_157 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": shadow$1
+});
+var shape = _icon_template(`<path d="M23 7V1h-6v2H7V1H1v6h2v10H1v6h6v-2h10v2h6v-6h-2V7h2zM3 3h2v2H3V3zm2 18H3v-2h2v2zm12-2H7v-2H5V7h2V5h10v2h2v10h-2v2zm4 2h-2v-2h2v2zM19 5V3h2v2h-2z"/>`);
+var __glob_0_158 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": shape
+});
+var shuffle = _icon_template(`<path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/>`);
+var __glob_0_159 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": shuffle
+});
+var size = _icon_template(`<path d="M21 15h2v2h-2v-2zm0-4h2v2h-2v-2zm2 8h-2v2c1 0 2-1 2-2zM13 3h2v2h-2V3zm8 4h2v2h-2V7zm0-4v2h2c0-1-1-2-2-2zM1 7h2v2H1V7zm16-4h2v2h-2V3zm0 16h2v2h-2v-2zM3 3C2 3 1 4 1 5h2V3zm6 0h2v2H9V3zM5 3h2v2H5V3zm-4 8v8c0 1.1.9 2 2 2h12V11H1zm2 8l2.5-3.21 1.79 2.15 2.5-3.22L13 19H3z"/>`);
+var __glob_0_160 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": size
+});
+var skip_next = _icon_template(`<path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>`);
+var __glob_0_161 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": skip_next
+});
+var skip_prev = _icon_template(`<path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>`);
+var __glob_0_162 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": skip_prev
+});
 var smooth = _icon_template(`<path d="M4.59 6.89c.7-.71 1.4-1.35 1.71-1.22.5.2 0 1.03-.3 1.52-.25.42-2.86 3.89-2.86 6.31 0 1.28.48 2.34 1.34 2.98.75.56 1.74.73 2.64.46 1.07-.31 1.95-1.4 3.06-2.77 1.21-1.49 2.83-3.44 4.08-3.44 1.63 0 1.65 1.01 1.76 1.79-3.78.64-5.38 3.67-5.38 5.37 0 1.7 1.44 3.09 3.21 3.09 1.63 0 4.29-1.33 4.69-6.1H21v-2.5h-2.47c-.15-1.65-1.09-4.2-4.03-4.2-2.25 0-4.18 1.91-4.94 2.84-.58.73-2.06 2.48-2.29 2.72-.25.3-.68.84-1.11.84-.45 0-.72-.83-.36-1.92.35-1.09 1.4-2.86 1.85-3.52.78-1.14 1.3-1.92 1.3-3.28C8.95 3.69 7.31 3 6.44 3 5.12 3 3.97 4 3.72 4.25c-.36.36-.66.66-.88.93l1.75 1.71zm9.29 11.66c-.31 0-.74-.26-.74-.72 0-.6.73-2.2 2.87-2.76-.3 2.69-1.43 3.48-2.13 3.48z"/>`);
+var __glob_0_163 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": smooth
+});
+var source = _icon_template(`<path d="M20,6h-8l-2-2H4C2.9,4,2.01,4.9,2.01,6L2,18c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V8C22,6.9,21.1,6,20,6z M20,18L4,18V6h5.17 l2,2H20V18z M18,12H6v-2h12V12z M14,16H6v-2h8V16z"/>`);
+var __glob_0_164 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": source
+});
+var specular = _icon_template(`<path d="M3.55 18.54l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8zM11 22.45h2V19.5h-2v2.95zM4 10.5H1v2h3v-2zm11-4.19V1.5H9v4.81C7.21 7.35 6 9.28 6 11.5c0 3.31 2.69 6 6 6s6-2.69 6-6c0-2.22-1.21-4.15-3-5.19zm5 4.19v2h3v-2h-3zm-2.76 7.66l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4z"/>`);
+var __glob_0_165 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": specular
+});
+var speed = _icon_template(`<path d="M20.38 8.57l-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44zm-9.79 6.84a2 2 0 0 0 2.83 0l5.66-8.49-8.49 5.66a2 2 0 0 0 0 2.83z"/>`);
+var __glob_0_166 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": speed
+});
+var star = _icon_template(`<path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>`);
+var __glob_0_167 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": star
+});
+var start$1 = _icon_template(`<path d="M14.59,7.41L18.17,11H6v2h12.17l-3.59,3.59L16,18l6-6l-6-6L14.59,7.41z M2,6v12h2V6H2z"/>`);
+var __glob_0_168 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": start$1
+});
+var storage = _icon_template(`<path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>`);
+var __glob_0_169 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": storage
+});
+var straighten = _icon_template(`<path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h2v4h2V8h2v4h2V8h2v4h2V8h2v4h2V8h2v8z"/>`);
+var __glob_0_170 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": straighten
+});
+var strikethrough = _icon_template(`<defs><path id="a" d="M0 0h24v24H0V0z"/></defs><clipPath id="b"><use xlink:href="#a" overflow="visible"/></clipPath><path clip-path="url(#b)" d="M7.24 8.75c-.26-.48-.39-1.03-.39-1.67 0-.61.13-1.16.4-1.67.26-.5.63-.93 1.11-1.29.48-.35 1.05-.63 1.7-.83.66-.19 1.39-.29 2.18-.29.81 0 1.54.11 2.21.34.66.22 1.23.54 1.69.94.47.4.83.88 1.08 1.43.25.55.38 1.15.38 1.81h-3.01c0-.31-.05-.59-.15-.85-.09-.27-.24-.49-.44-.68-.2-.19-.45-.33-.75-.44-.3-.1-.66-.16-1.06-.16-.39 0-.74.04-1.03.13-.29.09-.53.21-.72.36-.19.16-.34.34-.44.55-.1.21-.15.43-.15.66 0 .48.25.88.74 1.21.38.25.77.48 1.41.7H7.39c-.05-.08-.11-.17-.15-.25zM21 12v-2H3v2h9.62c.18.07.4.14.55.2.37.17.66.34.87.51.21.17.35.36.43.57.07.2.11.43.11.69 0 .23-.05.45-.14.66-.09.2-.23.38-.42.53-.19.15-.42.26-.71.35-.29.08-.63.13-1.01.13-.43 0-.83-.04-1.18-.13s-.66-.23-.91-.42c-.25-.19-.45-.44-.59-.75-.14-.31-.25-.76-.25-1.21H6.4c0 .55.08 1.13.24 1.58.16.45.37.85.65 1.21.28.35.6.66.98.92.37.26.78.48 1.22.65.44.17.9.3 1.38.39.48.08.96.13 1.44.13.8 0 1.53-.09 2.18-.28s1.21-.45 1.67-.79c.46-.34.82-.77 1.07-1.27s.38-1.07.38-1.71c0-.6-.1-1.14-.31-1.61-.05-.11-.11-.23-.17-.33H21z"/>`);
+var __glob_0_171 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": strikethrough
+});
 var stroke_to_path = _icon_template(`<path d="M20 4h-4l-4-4-4 4H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H4V6h4.52l3.52-3.5L15.52 6H20v14zM6 18h12V8H6v10zm2-8h8v6H8v-6z"/>`);
-var highlight_at = _icon_template(`<path d="M17,5h-2V3h2V5z M15,15v6l2.29-2.29L19.59,21L21,19.59l-2.29-2.29L21,15H15z M19,9h2V7h-2V9z M19,13h2v-2h-2V13z M11,21h2 v-2h-2V21z M7,5h2V3H7V5z M3,17h2v-2H3V17z M5,21v-2H3C3,20.1,3.9,21,5,21z M19,3v2h2C21,3.9,20.1,3,19,3z M11,5h2V3h-2V5z M3,9h2 V7H3V9z M7,21h2v-2H7V21z M3,13h2v-2H3V13z M3,5h2V3C3.9,3,3,3.9,3,5z"/>`);
-var to_front = _icon_template(`<path d="M 0 0L 14 0L 14 14L 0 14L 0 0Z M 16 16L 30 16L 30 30L 16 30L 16 16Z"/><path d="M 7 7L 22 7L 22 22L 7 22L 7 7Z" style="fill:white !important;"/>`, { width: 30, height: 30 });
-var to_back = _icon_template(`<path d="M 7 7L 22 7L 22 22L 7 22L 7 7Z" style="fill:white !important;"/><path d="M 0 0L 14 0L 14 14L 0 14L 0 0Z M 16 16L 30 16L 30 30L 16 30L 16 16Z"/>`, { width: 30, height: 30 });
-var light = _icon_template(`<path d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/>`);
-var unfold = _icon_template(`<path d="M12 5.83L15.17 9l1.41-1.41L12 3 7.41 7.59 8.83 9 12 5.83zm0 12.34L8.83 15l-1.41 1.41L12 21l4.59-4.59L15.17 15 12 18.17z"/>`);
-var outline_shape = _icon_template(`<path d="M2 12C2 6.48 6.48 2 12 2s10 4.48 10 10-4.48 10-10 10S2 17.52 2 12zm10 6c3.31 0 6-2.69 6-6s-2.69-6-6-6-6 2.69-6 6 2.69 6 6 6z"/>`);
+var __glob_0_172 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": stroke_to_path
+});
+var swap_horiz = _icon_template(`<path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"/>`);
+var __glob_0_173 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": swap_horiz
+});
 var switch_left = _icon_template(`<path d="M8.5,8.62v6.76L5.12,12L8.5,8.62 M10,5l-7,7l7,7V5L10,5z M14,5v14l7-7L14,5z"/>`);
+var __glob_0_174 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": switch_left
+});
 var switch_right = _icon_template(`<path d="M15.5,15.38V8.62L18.88,12L15.5,15.38 M14,19l7-7l-7-7V19L14,19z M10,19V5l-7,7L10,19z"/>`);
-const alias = {
-  fullscreen: border_inner
-};
+var __glob_0_175 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": switch_right
+});
+var sync = _icon_template(`<path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>`);
+var __glob_0_176 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": sync
+});
+var table_rows = _icon_template(`<path d="M19,3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M19,5v3H5V5H19z M19,10v4H5v-4H19z M5,19v-3h14v3H5z"/>`);
+var __glob_0_177 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": table_rows
+});
+var text_rotate = _icon_template(`<path d="M12.75 3h-1.5L6.5 14h2.1l.9-2.2h5l.9 2.2h2.1L12.75 3zm-2.62 7L12 4.98 13.87 10h-3.74zm10.37 8l-3-3v2H5v2h12.5v2l3-3z"/>`);
+var __glob_0_178 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": text_rotate
+});
+var texture$1 = _icon_template(`<path d="M19.51 3.08L3.08 19.51c.09.34.27.65.51.9.25.24.56.42.9.51L20.93 4.49c-.19-.69-.73-1.23-1.42-1.41zM11.88 3L3 11.88v2.83L14.71 3h-2.83zM5 3c-1.1 0-2 .9-2 2v2l4-4H5zm14 18c.55 0 1.05-.22 1.41-.59.37-.36.59-.86.59-1.41v-2l-4 4h2zm-9.71 0h2.83L21 12.12V9.29L9.29 21z"/>`);
+var __glob_0_179 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": texture$1
+});
+var timer = _icon_template(`<path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>`);
+var __glob_0_180 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": timer
+});
+var title = _icon_template(`<path d="M5 4v3h5.5v12h3V7H19V4z"/>`);
+var __glob_0_181 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": title
+});
+var to_back = _icon_template(`<path d="M 7 7L 22 7L 22 22L 7 22L 7 7Z" style="fill:white !important;"/><path d="M 0 0L 14 0L 14 14L 0 14L 0 0Z M 16 16L 30 16L 30 30L 16 30L 16 16Z"/>`, { width: 30, height: 30 });
+var __glob_0_182 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": to_back
+});
+var to_front = _icon_template(`<path d="M 0 0L 14 0L 14 14L 0 14L 0 0Z M 16 16L 30 16L 30 30L 16 30L 16 16Z"/><path d="M 7 7L 22 7L 22 22L 7 22L 7 7Z" style="fill:white !important;"/>`, { width: 30, height: 30 });
+var __glob_0_183 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": to_front
+});
+var top = _icon_template(`<path d="M4,4 L20,4Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />`);
+var __glob_0_184 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": top
+});
+var transform$2 = _icon_template(`<path d="M22 18v-2H8V4h2L7 1 4 4h2v2H2v2h4v8c0 1.1.9 2 2 2h8v2h-2l3 3 3-3h-2v-2h4zM10 8h6v6h2V8c0-1.1-.9-2-2-2h-6v2z"/>`);
+var __glob_0_185 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": transform$2
+});
+var underline = _icon_template(`<path d="M12 17c3.31 0 6-2.69 6-6V3h-2.5v8c0 1.93-1.57 3.5-3.5 3.5S8.5 12.93 8.5 11V3H6v8c0 3.31 2.69 6 6 6zm-7 2v2h14v-2H5z"/>`);
+var __glob_0_186 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": underline
+});
+var undo = _icon_template(`<path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/>`);
+var __glob_0_187 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": undo
+});
+var unfold = _icon_template(`<path d="M12 5.83L15.17 9l1.41-1.41L12 3 7.41 7.59 8.83 9 12 5.83zm0 12.34L8.83 15l-1.41 1.41L12 21l4.59-4.59L15.17 15 12 18.17z"/>`);
+var __glob_0_188 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": unfold
+});
+var vertical_align_bottom = _icon_template(`<path d="M16 13h-3V3h-2v10H8l4 4 4-4zM4 19v2h16v-2H4z"/>`);
+var __glob_0_189 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": vertical_align_bottom
+});
+var vertical_align_center = _icon_template(`<path d="M8 19h3v4h2v-4h3l-4-4-4 4zm8-14h-3V1h-2v4H8l4 4 4-4zM4 11v2h16v-2H4z"/>`);
+var __glob_0_190 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": vertical_align_center
+});
+var vertical_align_top = _icon_template(`<path d="M8 11h3v10h2V11h3l-4-4-4 4zM4 3v2h16V3H4z"/>`);
+var __glob_0_191 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": vertical_align_top
+});
+var vertical_distribute = _icon_template(`<path d="M22,2v2H2V2H22z M7,10.5v3h10v-3H7z M2,20v2h20v-2H2z"/>`);
+var __glob_0_192 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": vertical_distribute
+});
+var video$1 = _icon_template(`
+        <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
+    `);
+var __glob_0_193 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": video$1
+});
+var view_comfy = _icon_template(`<path d="M3 9h4V5H3v4zm0 5h4v-4H3v4zm5 0h4v-4H8v4zm5 0h4v-4h-4v4zM8 9h4V5H8v4zm5-4v4h4V5h-4zm5 9h4v-4h-4v4zM3 19h4v-4H3v4zm5 0h4v-4H8v4zm5 0h4v-4h-4v4zm5 0h4v-4h-4v4zm0-14v4h4V5h-4z"/>`);
+var __glob_0_194 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": view_comfy
+});
+var view_list = _icon_template(`<path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"/>`);
+var __glob_0_195 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": view_list
+});
+var view_week = _icon_template(`<path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M8,18H4V6h4V18z M14,18h-4V6h4V18z M20,18h-4V6h4V18z"/>`);
+var __glob_0_196 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": view_week
+});
+var view_week_reverse = _icon_template(`<path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M8,18H4V6h4V18z M14,18h-4V6h4V18z M20,18h-4V6h4V18z M0,12 L24,12"/>`);
+var __glob_0_197 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": view_week_reverse
+});
+var vintage = _icon_template(`<path d="M18.7 12.4c-.28-.16-.57-.29-.86-.4.29-.11.58-.24.86-.4 1.92-1.11 2.99-3.12 3-5.19-1.79-1.03-4.07-1.11-6 0-.28.16-.54.35-.78.54.05-.31.08-.63.08-.95 0-2.22-1.21-4.15-3-5.19C10.21 1.85 9 3.78 9 6c0 .32.03.64.08.95-.24-.2-.5-.39-.78-.55-1.92-1.11-4.2-1.03-6 0 0 2.07 1.07 4.08 3 5.19.28.16.57.29.86.4-.29.11-.58.24-.86.4-1.92 1.11-2.99 3.12-3 5.19 1.79 1.03 4.07 1.11 6 0 .28-.16.54-.35.78-.54-.05.32-.08.64-.08.96 0 2.22 1.21 4.15 3 5.19 1.79-1.04 3-2.97 3-5.19 0-.32-.03-.64-.08-.95.24.2.5.38.78.54 1.92 1.11 4.2 1.03 6 0-.01-2.07-1.08-4.08-3-5.19zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>`);
+var __glob_0_198 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": vintage
+});
+var visible = _icon_template(`<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>`);
+var __glob_0_199 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": visible
+});
+var volume_down = _icon_template(`
+        <path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"/>
+    `);
+var __glob_0_200 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": volume_down
+});
+var volume_off = _icon_template(`
+    <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+`);
+var __glob_0_201 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": volume_off
+});
+var volume_up = _icon_template(`
+    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+`);
+var __glob_0_202 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": volume_up
+});
+var wave = _icon_template(`<path d="M17 16.99c-1.35 0-2.2.42-2.95.8-.65.33-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.95c1.35 0 2.2-.42 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.42 2.95-.8c.65-.33 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm0-4.45c-1.35 0-2.2.43-2.95.8-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.32-1.17.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm2.95-8.08c-.75-.38-1.58-.8-2.95-.8s-2.2.42-2.95.8c-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.37-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.93c1.35 0 2.2-.43 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V5.04c-.9 0-1.4-.25-2.05-.58zM17 8.09c-1.35 0-2.2.43-2.95.8-.65.35-1.15.6-2.05.6s-1.4-.25-2.05-.6c-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.35-1.15.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.32 1.18-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V9.49c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8z"/>`);
+var __glob_0_203 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": wave
+});
+var waves = _icon_template(`<path d="M17 16.99c-1.35 0-2.2.42-2.95.8-.65.33-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.95c1.35 0 2.2-.42 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.42 2.95-.8c.65-.33 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm0-4.45c-1.35 0-2.2.43-2.95.8-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.32-1.17.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm2.95-8.08c-.75-.38-1.58-.8-2.95-.8s-2.2.42-2.95.8c-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.37-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.93c1.35 0 2.2-.43 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V5.04c-.9 0-1.4-.25-2.05-.58zM17 8.09c-1.35 0-2.2.43-2.95.8-.65.35-1.15.6-2.05.6s-1.4-.25-2.05-.6c-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.35-1.15.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.32 1.18-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V9.49c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8z"/>`);
+var __glob_0_204 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": waves
+});
+var web = _icon_template(`<path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"/>`);
+var __glob_0_205 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": web
+});
+var wrap_text = _icon_template(`<path d="M4 19h6v-2H4v2zM20 5H4v2h16V5zm-3 6H4v2h13.25c1.1 0 2 .9 2 2s-.9 2-2 2H15v-2l-3 3 3 3v-2h2c2.21 0 4-1.79 4-4s-1.79-4-4-4z"/>`);
+var __glob_0_206 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": wrap_text
+});
+const modules$1 = { "./icon_list/_icon_template.js": __glob_0_0$1, "./icon_list/account_tree.js": __glob_0_1$1, "./icon_list/add.js": __glob_0_2$1, "./icon_list/add_box.js": __glob_0_3$1, "./icon_list/add_circle.js": __glob_0_4$1, "./icon_list/add_note.js": __glob_0_5$1, "./icon_list/align_center.js": __glob_0_6$1, "./icon_list/align_horizontal_center.js": __glob_0_7$1, "./icon_list/align_horizontal_left.js": __glob_0_8$1, "./icon_list/align_horizontal_right.js": __glob_0_9$1, "./icon_list/align_justify.js": __glob_0_10$1, "./icon_list/align_left.js": __glob_0_11$1, "./icon_list/align_right.js": __glob_0_12$1, "./icon_list/align_vertical_bottom.js": __glob_0_13$1, "./icon_list/align_vertical_center.js": __glob_0_14$1, "./icon_list/align_vertical_top.js": __glob_0_15$1, "./icon_list/alternate.js": __glob_0_16$1, "./icon_list/alternate_reverse.js": __glob_0_17$1, "./icon_list/apps.js": __glob_0_18$1, "./icon_list/archive.js": __glob_0_19$1, "./icon_list/arrowLeft.js": __glob_0_20$1, "./icon_list/arrowRight.js": __glob_0_21, "./icon_list/arrow_right.js": __glob_0_22, "./icon_list/artboard.js": __glob_0_23, "./icon_list/auto_awesome.js": __glob_0_24, "./icon_list/autorenew.js": __glob_0_25, "./icon_list/ballot.js": __glob_0_26, "./icon_list/bar_chart.js": __glob_0_27, "./icon_list/blur.js": __glob_0_28, "./icon_list/blur_linear.js": __glob_0_29, "./icon_list/boolean_difference.js": __glob_0_30, "./icon_list/boolean_intersection.js": __glob_0_31, "./icon_list/boolean_union.js": __glob_0_32, "./icon_list/boolean_xor.js": __glob_0_33, "./icon_list/border_all.js": __glob_0_34, "./icon_list/border_inner.js": __glob_0_35, "./icon_list/bottom.js": __glob_0_36, "./icon_list/broken_image.js": __glob_0_37, "./icon_list/brush.js": __glob_0_38, "./icon_list/build.js": __glob_0_39, "./icon_list/camera_roll.js": __glob_0_40, "./icon_list/cat.js": __glob_0_41, "./icon_list/center.js": __glob_0_42, "./icon_list/chart.js": __glob_0_43, "./icon_list/check.js": __glob_0_44, "./icon_list/chevron_left.js": __glob_0_45, "./icon_list/chevron_right.js": __glob_0_46, "./icon_list/circle.js": __glob_0_47, "./icon_list/close.js": __glob_0_48, "./icon_list/code.js": __glob_0_49, "./icon_list/color.js": __glob_0_50, "./icon_list/color_lens.js": __glob_0_51, "./icon_list/control_point.js": __glob_0_52, "./icon_list/copy.js": __glob_0_53, "./icon_list/create_folder.js": __glob_0_54, "./icon_list/cube.js": __glob_0_55, "./icon_list/cylinder.js": __glob_0_56, "./icon_list/dahaze.js": __glob_0_57, "./icon_list/dark.js": __glob_0_58, "./icon_list/delete_forever.js": __glob_0_59, "./icon_list/device_hub.js": __glob_0_60, "./icon_list/diffuse.js": __glob_0_61, "./icon_list/doc.js": __glob_0_62, "./icon_list/draw.js": __glob_0_63, "./icon_list/edit.js": __glob_0_64, "./icon_list/end.js": __glob_0_65, "./icon_list/exit_to_app.js": __glob_0_66, "./icon_list/expand.js": __glob_0_67, "./icon_list/export.js": __glob_0_68, "./icon_list/face.js": __glob_0_69, "./icon_list/fast_forward.js": __glob_0_70, "./icon_list/fast_rewind.js": __glob_0_71, "./icon_list/file_copy.js": __glob_0_72, "./icon_list/filter.js": __glob_0_73, "./icon_list/flag.js": __glob_0_74, "./icon_list/flash_on.js": __glob_0_75, "./icon_list/flatten.js": __glob_0_76, "./icon_list/flex.js": __glob_0_77, "./icon_list/flip.js": __glob_0_78, "./icon_list/flipY.js": __glob_0_79, "./icon_list/flip_camera.js": __glob_0_80, "./icon_list/folder.js": __glob_0_81, "./icon_list/format_shapes.js": __glob_0_82, "./icon_list/fullscreen.js": __glob_0_83, "./icon_list/gps_fixed.js": __glob_0_84, "./icon_list/gradient.js": __glob_0_85, "./icon_list/grid.js": __glob_0_86, "./icon_list/grid3x3.js": __glob_0_87, "./icon_list/group.js": __glob_0_88, "./icon_list/highlight_at.js": __glob_0_89, "./icon_list/horizontal_distribute.js": __glob_0_90, "./icon_list/horizontal_rule.js": __glob_0_91, "./icon_list/image.js": __glob_0_92, "./icon_list/input.js": __glob_0_93, "./icon_list/italic.js": __glob_0_94, "./icon_list/keyboard.js": __glob_0_95, "./icon_list/landscape.js": __glob_0_96, "./icon_list/launch.js": __glob_0_97, "./icon_list/layers.js": __glob_0_98, "./icon_list/left.js": __glob_0_99, "./icon_list/left_hide.js": __glob_0_100, "./icon_list/lens.js": __glob_0_101, "./icon_list/light.js": __glob_0_102, "./icon_list/line_cap_butt.js": __glob_0_103, "./icon_list/line_cap_round.js": __glob_0_104, "./icon_list/line_cap_square.js": __glob_0_105, "./icon_list/line_chart.js": __glob_0_106, "./icon_list/line_join_bevel.js": __glob_0_107, "./icon_list/line_join_miter.js": __glob_0_108, "./icon_list/line_join_round.js": __glob_0_109, "./icon_list/list.js": __glob_0_110, "./icon_list/local_library.js": __glob_0_111, "./icon_list/local_movie.js": __glob_0_112, "./icon_list/lock.js": __glob_0_113, "./icon_list/lock_open.js": __glob_0_114, "./icon_list/looks.js": __glob_0_115, "./icon_list/margin.js": __glob_0_116, "./icon_list/merge.js": __glob_0_117, "./icon_list/middle.js": __glob_0_118, "./icon_list/navigation.js": __glob_0_119, "./icon_list/near_me.js": __glob_0_120, "./icon_list/note.js": __glob_0_121, "./icon_list/opacity.js": __glob_0_122, "./icon_list/open_in_full.js": __glob_0_123, "./icon_list/outline.js": __glob_0_124, "./icon_list/outline_circle.js": __glob_0_125, "./icon_list/outline_image.js": __glob_0_126, "./icon_list/outline_rect.js": __glob_0_127, "./icon_list/outline_shape.js": __glob_0_128, "./icon_list/paint.js": __glob_0_129, "./icon_list/palette.js": __glob_0_130, "./icon_list/pantool.js": __glob_0_131, "./icon_list/pause.js": __glob_0_132, "./icon_list/pentool.js": __glob_0_133, "./icon_list/photo.js": __glob_0_134, "./icon_list/play.js": __glob_0_135, "./icon_list/plugin.js": __glob_0_136, "./icon_list/polygon.js": __glob_0_137, "./icon_list/publish.js": __glob_0_138, "./icon_list/rect.js": __glob_0_139, "./icon_list/redo.js": __glob_0_140, "./icon_list/refresh.js": __glob_0_141, "./icon_list/remove.js": __glob_0_142, "./icon_list/remove2.js": __glob_0_143, "./icon_list/repeat.js": __glob_0_144, "./icon_list/replay.js": __glob_0_145, "./icon_list/right.js": __glob_0_146, "./icon_list/right_hide.js": __glob_0_147, "./icon_list/rotate.js": __glob_0_148, "./icon_list/rotate_left.js": __glob_0_149, "./icon_list/same_height.js": __glob_0_150, "./icon_list/same_width.js": __glob_0_151, "./icon_list/save.js": __glob_0_152, "./icon_list/scatter.js": __glob_0_153, "./icon_list/screen.js": __glob_0_154, "./icon_list/setting.js": __glob_0_155, "./icon_list/settings_input_component.js": __glob_0_156, "./icon_list/shadow.js": __glob_0_157, "./icon_list/shape.js": __glob_0_158, "./icon_list/shuffle.js": __glob_0_159, "./icon_list/size.js": __glob_0_160, "./icon_list/skip_next.js": __glob_0_161, "./icon_list/skip_prev.js": __glob_0_162, "./icon_list/smooth.js": __glob_0_163, "./icon_list/source.js": __glob_0_164, "./icon_list/specular.js": __glob_0_165, "./icon_list/speed.js": __glob_0_166, "./icon_list/star.js": __glob_0_167, "./icon_list/start.js": __glob_0_168, "./icon_list/storage.js": __glob_0_169, "./icon_list/straighten.js": __glob_0_170, "./icon_list/strikethrough.js": __glob_0_171, "./icon_list/stroke_to_path.js": __glob_0_172, "./icon_list/swap_horiz.js": __glob_0_173, "./icon_list/switch_left.js": __glob_0_174, "./icon_list/switch_right.js": __glob_0_175, "./icon_list/sync.js": __glob_0_176, "./icon_list/table_rows.js": __glob_0_177, "./icon_list/text_rotate.js": __glob_0_178, "./icon_list/texture.js": __glob_0_179, "./icon_list/timer.js": __glob_0_180, "./icon_list/title.js": __glob_0_181, "./icon_list/to_back.js": __glob_0_182, "./icon_list/to_front.js": __glob_0_183, "./icon_list/top.js": __glob_0_184, "./icon_list/transform.js": __glob_0_185, "./icon_list/underline.js": __glob_0_186, "./icon_list/undo.js": __glob_0_187, "./icon_list/unfold.js": __glob_0_188, "./icon_list/vertical_align_bottom.js": __glob_0_189, "./icon_list/vertical_align_center.js": __glob_0_190, "./icon_list/vertical_align_top.js": __glob_0_191, "./icon_list/vertical_distribute.js": __glob_0_192, "./icon_list/video.js": __glob_0_193, "./icon_list/view_comfy.js": __glob_0_194, "./icon_list/view_list.js": __glob_0_195, "./icon_list/view_week.js": __glob_0_196, "./icon_list/view_week_reverse.js": __glob_0_197, "./icon_list/vintage.js": __glob_0_198, "./icon_list/visible.js": __glob_0_199, "./icon_list/volume_down.js": __glob_0_200, "./icon_list/volume_off.js": __glob_0_201, "./icon_list/volume_up.js": __glob_0_202, "./icon_list/wave.js": __glob_0_203, "./icon_list/waves.js": __glob_0_204, "./icon_list/web.js": __glob_0_205, "./icon_list/wrap_text.js": __glob_0_206 };
+const obj = {};
+Object.entries(modules$1).forEach(([key, value]) => {
+  key = key.replace("./icon_list/", "").replace(".js", "");
+  obj[key] = value.default;
+});
 function iconUse$1(name2, transform2 = "", opt = { width: 24, height: 24 }) {
   return `
-    <svg viewBox="0 0 ${opt.width} ${opt.height}" xmlns="http://www.w3.org/2000/svg"><use href="#icon-${name2}" transform="${transform2}" /> </svg>
+    <svg viewBox="0 0 ${opt.width} ${opt.height}" xmlns="http://www.w3.org/2000/svg">
+      <use href="#icon-${name2}" transform="${transform2 || ""}" width="${opt.width}" height="${opt.height}" /> 
+    </svg>
   `;
 }
-var icon$1 = __spreadProps(__spreadValues({}, alias), {
-  switch_right,
-  switch_left,
-  outline_shape,
-  unfold,
-  light,
-  to_back,
-  to_front,
-  highlight_at,
-  grid3x3,
-  stroke_to_path,
-  smooth,
-  flatten,
-  boolean_union,
-  boolean_difference,
-  boolean_intersection,
-  boolean_xor,
-  wave,
-  dark,
-  outline,
-  sync,
-  source,
-  flex,
-  margin,
-  draw,
-  pantool,
-  left_hide,
-  right_hide,
-  straighten,
-  plugin,
-  auto_awesome,
-  web,
-  navigation,
-  delete_forever,
-  horizontal_rule,
-  open_in_full,
-  rotate,
-  align_horizontal_center,
-  align_horizontal_left,
-  align_horizontal_right,
-  align_vertical_bottom,
-  align_vertical_center,
-  align_vertical_top,
-  vertical_distribute,
-  horizontal_distribute,
-  rotate_left,
-  swap_horiz,
-  arrow_right,
-  group,
-  volume_down,
-  arrowLeft,
-  volume_up,
-  volume_off,
-  pentool,
-  launch,
-  apps,
-  outline_rect,
-  outline_circle,
-  keyboard,
-  local_movie,
-  same_height,
-  same_width,
-  layers,
-  middle,
-  bottom,
-  top,
-  right,
-  center,
-  left,
-  flag,
-  lens,
-  local_library,
-  italic,
-  strikethrough,
-  underline,
-  cylinder,
-  text_rotate,
-  device_hub,
-  control_point,
-  flip_camera,
-  flipY,
-  flip,
-  account_tree,
-  format_shapes,
-  merge,
-  texture: texture$1,
-  settings_input_component,
-  view_comfy,
-  camera_roll,
-  broken_image,
-  shadow: shadow$1,
-  opacity,
-  looks,
-  vintage,
-  waves,
-  blur_linear,
-  blur,
-  landscape,
-  palette,
-  diffuse,
-  specular,
-  photo,
-  near_me,
-  view_list,
-  flash_on,
-  doc,
-  storage,
-  archive,
-  file_copy,
-  gps_fixed,
-  refresh,
-  cat,
-  shuffle,
-  replay,
-  speed,
-  alternate_reverse,
-  alternate,
-  note,
-  rect: rect$1,
-  circle,
-  color_lens,
-  cube,
-  polygon,
-  star,
-  dahaze,
-  brush,
-  expand,
-  list,
-  grid: grid$1,
-  align_center,
-  align_justify,
-  align_left,
-  align_right,
-  color: color$1,
-  size,
-  edit,
-  outline_image,
-  ballot,
-  shape,
-  scatter,
-  transform: transform$2,
-  gradient: gradient$1,
-  close,
-  build,
-  code,
-  autorenew,
-  play,
-  pause,
-  skip_next,
-  skip_prev,
-  fast_forward,
-  fast_rewind,
-  filter: filter$1,
-  input,
-  timer,
-  title,
-  paint,
-  border_all,
-  border_inner,
-  check: check$1,
-  video: video$1,
-  arrowRight,
-  screen,
-  repeat,
-  remove2,
-  setting,
-  image: image$1,
-  artboard: artboard$1,
-  folder,
-  publish,
-  add_note,
-  add,
-  save,
-  export: exportIcon,
-  redo,
-  undo,
-  lock,
-  lock_open,
-  remove,
-  copy,
-  visible,
-  add_box,
-  add_circle,
-  create_folder,
-  chevron_right,
-  chevron_left
-});
+function iconUseForPath(pathString2, opt = { width: 24, height: 24 }) {
+  return `
+    <svg viewBox="0 0 ${opt.width} ${opt.height}" xmlns="http://www.w3.org/2000/svg">
+      <path d="${pathString2}" style="fill:${opt.fill || "transparent"};stroke:${opt.stroke || "white"}" stroke-width="1" />
+    </svg>
+  `;
+}
 class CursorManager {
   async load(iconName = "default", ...args2) {
-    if (icon$1[iconName]) {
-      const iconContent = isFunction(icon$1[iconName]) ? icon$1[iconName].call(icon$1[iconName], ...args2) : icon$1[iconName];
+    if (obj[iconName]) {
+      const iconContent = isFunction(obj[iconName]) ? obj[iconName].call(obj[iconName], ...args2) : obj[iconName];
       const blob = new Blob([iconContent], { type: "image/svg+xml" });
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -19216,14 +21071,14 @@ class InjectManager {
     this.editor = editor;
     this.menuItems = {};
   }
-  registerMenuItem(target, obj) {
+  registerMenuItem(target, obj2 = {}) {
     if (!this.menuItems[target]) {
       this.menuItems[target] = [];
     }
-    Object.keys(obj).forEach((refClass) => {
+    Object.keys(obj2).forEach((refClass) => {
       this.menuItems[target].push({
         refClass,
-        class: obj[refClass]
+        class: obj2[refClass]
       });
     });
   }
@@ -19321,7 +21176,7 @@ class PathKitManager {
     const PathKit = this.pathkit;
     if (!PathKit)
       return;
-    return this.booleanOperation(first, second2, PathKit.PathOp.INTERSECT);
+    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.INTERSECT));
   }
   union(first, second2) {
     const PathKit = this.pathkit;
@@ -19333,26 +21188,22 @@ class PathKitManager {
     const PathKit = this.pathkit;
     if (!PathKit)
       return;
-    return this.booleanOperation(first, second2, PathKit.PathOp.DIFFERENCE);
+    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.DIFFERENCE));
   }
   reverseDifference(first, second2) {
     const PathKit = this.pathkit;
     if (!PathKit)
       return;
-    return this.booleanOperation(first, second2, PathKit.PathOp.REVERSE_DIFFERENCE);
+    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.REVERSE_DIFFERENCE));
   }
   xor(first, second2) {
     const PathKit = this.pathkit;
     if (!PathKit)
       return;
-    const pathString2 = this.booleanOperation(first, second2, PathKit.PathOp.XOR);
-    const pathList = PathParser.fromSVGString(pathString2).toPathList().map((p, index2) => {
-      if (index2 % 2 === 0) {
-        return p.reverse();
-      }
-      return p;
-    });
-    return PathParser.joinPathList(pathList).toSVGString();
+    return this.reversePathString(this.booleanOperation(first, second2, PathKit.PathOp.XOR));
+  }
+  reversePathString(pathString2) {
+    return PathParser.fromSVGString(pathString2).reversePathStringByFunc((_, index2) => index2 % 2 === 0);
   }
   isValidPath(path) {
     const PathKit = this.pathkit;
@@ -19550,6 +21401,46 @@ class CommandMaker {
     this.editor.emit(this.commands);
   }
 }
+class ClipboardManager {
+  constructor(editor) {
+    this.editor = editor;
+    this.clipboard = [];
+  }
+  get length() {
+    return this.clipboard.length;
+  }
+  clear() {
+    this.clipboard = [];
+  }
+  get isEmpty() {
+    return this.clipboard.length == 0;
+  }
+  push(data) {
+    this.clipboard.push(data);
+  }
+  pop() {
+    return this.clipboard.pop();
+  }
+}
+class IconManager$1 {
+  constructor(editor) {
+    this.editor = editor;
+    this.iconMap = {};
+  }
+  get(itemType, item2) {
+    const icon2 = this.iconMap[itemType];
+    if (isFunction(icon2)) {
+      return icon2(item2);
+    }
+    return iconUse$1(icon2 || item2.getIcon());
+  }
+  set(itemType, value) {
+    this.iconMap[itemType] = value;
+  }
+  registerIcon(itemType, iconOrFunction) {
+    this.set(itemType, iconOrFunction);
+  }
+}
 const EDIT_MODE_SELECTION = "SELECTION";
 const EDIT_MODE_ADD = "ADD";
 class Editor {
@@ -19590,6 +21481,8 @@ class Editor {
     this.pathKitManager = new PathKitManager(this);
     this.lockManager = new LockManager(this);
     this.visibleManager = new VisibleManager(this);
+    this.clipboard = new ClipboardManager(this);
+    this.iconManager = new IconManager$1(this);
     this.initPlugins();
     this.initStorage();
   }
@@ -19736,17 +21629,17 @@ class Editor {
   createCommandMaker() {
     return new CommandMaker(this);
   }
-  registerElement(obj) {
-    registElement(obj);
+  registerElement(obj2) {
+    registElement(obj2);
   }
-  registerAlias(obj) {
-    Object.entries(obj).forEach(([key, value]) => {
+  registerAlias(obj2) {
+    Object.entries(obj2).forEach(([key, value]) => {
       registAlias(key, value);
     });
   }
-  registerMenuItem(target, obj) {
-    this.injectManager.registerMenuItem(target, obj);
-    this.registerElement(obj);
+  registerMenuItem(target, obj2 = {}) {
+    this.injectManager.registerMenuItem(target, obj2);
+    this.registerElement(obj2);
   }
   registerComponent(name2, component2) {
     this.components.registerComponent(name2, component2);
@@ -19801,10 +21694,16 @@ class Editor {
       this.registerI18nMessage(locale, messages2);
     });
   }
+  registerIcon(itemType, iconOrFunction) {
+    this.iconManager.registerIcon(itemType, iconOrFunction);
+  }
 }
 const ADD_BODY_FIRST_MOUSEMOVE = "add/body/first/mousemove";
 const ADD_BODY_MOUSEMOVE = "add/body/mousemove";
 const ADD_BODY_MOUSEUP = "add/body/mouseup";
+const FIRSTMOVE = (method = "move") => {
+  return AFTER(`bodyMouseFirstMove ${method}`);
+};
 const MOVE = (method = "move") => {
   return AFTER(`bodyMouseMove ${method}`);
 };
@@ -19988,6 +21887,9 @@ class EditorElement extends UIElement {
   }
   get $pathkit() {
     return this.$editor.pathKitManager;
+  }
+  get $icon() {
+    return this.$editor.iconManager;
   }
   command(command, description, ...args2) {
     if (this.$editor.isPointerUp) {
@@ -20604,12 +22506,12 @@ class StyleView extends EditorElement {
   [SUBSCRIBE("refreshSVGArea")]() {
     this.load("$svgArea");
   }
-  [SUBSCRIBE("refreshSelectionStyleView")](obj = null) {
-    var ids = obj;
-    if (Array.isArray(obj)) {
-      ids = obj;
-    } else if (obj !== null) {
-      ids = [obj];
+  [SUBSCRIBE("refreshSelectionStyleView")](obj2 = null) {
+    var ids = obj2;
+    if (Array.isArray(obj2)) {
+      ids = obj2;
+    } else if (obj2 !== null) {
+      ids = [obj2];
     }
     let items = [];
     if (!ids) {
@@ -20781,7 +22683,7 @@ class HTMLRenderView extends EditorElement {
       }, 100);
     }
   }
-  [POINTERSTART("$view") + IF("checkEditMode") + MOVE("calculateMovedElement") + END("calculateEndedElement")](e) {
+  [POINTERSTART("$view") + IF("checkEditMode") + MOVE("calculateMovedElement") + FIRSTMOVE("calculateFirstMovedElement") + END("calculateEndedElement")](e) {
     this.initMousePoint = this.$viewport.getWorldPosition(e);
     this.$config.init("set.move.control.point", true);
     if (this.$config.get("set.dragarea.mode")) {
@@ -20841,6 +22743,9 @@ class HTMLRenderView extends EditorElement {
     this.$snapManager.clear();
     this.emit("refreshSelectionTool", true);
   }
+  calculateFirstMovedElement() {
+    this.emit("hideSelectionToolView");
+  }
   calculateMovedElement() {
     if (this.$config.get("set.dragarea.mode")) {
       this.emit("moveDragAreaView");
@@ -20861,7 +22766,6 @@ class HTMLRenderView extends EditorElement {
       this.emit("refreshLayerTreeView");
     }
     this.emit("setAttributeForMulti", this.$selection.pack("x", "y"));
-    this.emit("refreshSelectionTool", true);
   }
   moveTo(dist2) {
     const snap = this.$snapManager.check(this.$selection.cachedRectVerties.map((v) => {
@@ -20881,10 +22785,6 @@ class HTMLRenderView extends EditorElement {
     });
     this.$selection.reset(result);
   }
-  [SUBSCRIBE("selectionToolView.moveTo")](newDist) {
-    this.moveTo(newDist);
-    this.emit("refreshSelectionTool", true);
-  }
   calculateEndedElement(dx, dy) {
     const targetMousePoint = this.$viewport.getWorldPosition();
     const newDist = dist(targetMousePoint, this.initMousePoint);
@@ -20900,9 +22800,14 @@ class HTMLRenderView extends EditorElement {
       this.$selection.reselect();
       this.$snapManager.clear();
       this.command("setAttributeForMulti", "move item", this.$selection.pack("x", "y"));
-      this.command("recoverBooleanPath", "recover boolean path");
+      this.nextTick(() => {
+        this.emit("recoverBooleanPath");
+      });
     }
-    this.emit("refreshSelectionTool", true);
+    this.nextTick(() => {
+      this.emit("refreshSelection");
+      this.emit("refreshSelectionTool", true);
+    }, 100);
   }
   [BIND("$body")]() {
     const { canvasWidth: canvasWidth2, canvasHeight: canvasHeight2 } = this.$editor;
@@ -20927,8 +22832,8 @@ class HTMLRenderView extends EditorElement {
       }
     };
   }
-  [SUBSCRIBE("refreshSelectionStyleView")](obj) {
-    var items = obj ? [obj] : this.$selection.items;
+  [SUBSCRIBE("refreshSelectionStyleView")](obj2) {
+    var items = obj2 ? [obj2] : this.$selection.items;
     items.forEach((current) => {
       this.updateElement(current);
     });
@@ -20971,7 +22876,7 @@ class HTMLRenderView extends EditorElement {
       this.trigger("updateAllCanvas", item2);
     });
   }
-  [SUBSCRIBE("refreshAllElementBoundSize")]() {
+  [SUBSCRIBE("refreshAllElementBoundSize") + DEBOUNCE(100)]() {
     var selectionList = this.$selection.items.map((it) => it.is("artboard") ? it : it.parent);
     var list2 = [...new Set(selectionList)];
     list2.forEach((it) => {
@@ -20980,10 +22885,10 @@ class HTMLRenderView extends EditorElement {
   }
   [SUBSCRIBE("refreshElementBoundSize")](parentObj) {
     if (parentObj) {
-      const hasChangedDimension = parentObj.changedBoxModel || parentObj.hasChangedField("box-model", "width", "height", "layout", "flex-layout", "grid-layout");
+      const hasChangedDimension = parentObj.changedBoxModel || parentObj.hasChangedField("children", "box-model", "width", "height", "layout", "flex-layout", "grid-layout", "grid-layout-item", "flex-layout-item");
       parentObj.layers.forEach((it) => {
         var $el = this.getElement(it.id);
-        if ($el && hasChangedDimension) {
+        if ($el && hasChangedDimension && it.isLayoutItem()) {
           const { x: x2, y: y2, width: width2, height } = $el.offsetRect();
           it.reset({
             x: Length.px(x2),
@@ -20993,6 +22898,7 @@ class HTMLRenderView extends EditorElement {
           });
           this.updateElement(it, $el);
           this.trigger("refreshSelectionStyleView", it, true);
+          this.emit("refreshSelectionTool", true);
         }
         this.trigger("refreshElementBoundSize", it);
       });
@@ -21035,7 +22941,7 @@ class PageTools extends EditorElement {
         <button type='button' ref='$center' data-tooltip="Move to Center" data-direction="top">${iconUse$1("gps_fixed")}</button>    
         <button type='button' ref='$ruler' data-tooltip="Toggle Ruler" data-direction="top">${iconUse$1("straighten")}</button>    
         <button type='button' ref='$fullscreen' data-tooltip="FullScreen Canvas" data-direction="top">${iconUse$1("fullscreen")}</button>                        
-        <button type='button' ref='$pantool' class="${OBJECT_TO_CLASS({
+        <button type='button' ref='$pantool' class="${OBJECT_TO_CLASS$1({
       on: this.$config.get("set.tool.hand")
     })}" data-tooltip="Hand | H" data-direction="top">${iconUse$1("pantool")}</button>   
         <span class="divider">|</span>
@@ -21113,14 +23019,16 @@ class PageTools extends EditorElement {
     const buttons = [];
     this.$selection.items.forEach((selectedItem) => {
       selectedItem.allLayers.forEach((item2) => {
-        const list2 = PathParser.fromSVGString(item2.accumulatedPath().d).toPathList();
-        list2.forEach((path, index2) => {
-          buttons.push({
-            item: item2,
-            index: index2,
-            path
+        if (item2.isNot("boolean-path")) {
+          const list2 = PathParser.fromSVGString(item2.accumulatedPath().d).toPathList();
+          list2.forEach((path, index2) => {
+            buttons.push({
+              item: item2,
+              index: index2,
+              path
+            });
           });
-        });
+        }
       });
     });
     return buttons.map((it) => {
@@ -21133,3264 +23041,6 @@ class PageTools extends EditorElement {
         </button>
       `;
     });
-  }
-}
-var LayerAppendView$1 = "";
-class LayerAppendView extends EditorElement {
-  template() {
-    return `
-        <div class='elf--layer-append-view'>
-            <div class='area' ref='$area'></div>
-            <div class='area-rect' ref='$areaRect'></div>
-            <div class='area-pointer' ref='$mousePointer'></div>
-            <div class='area-pointer-view' ref='$mousePointerView'></div>            
-            <input type='file' accept='image/*' multiple="true" ref='$file' class='embed-file-input'/>
-            <input type='file' accept='video/*' multiple="true" ref='$video' class='embed-video-input'/>            
-        </div>
-        `;
-  }
-  initState() {
-    return {
-      dragStart: false,
-      width: 0,
-      height: 0,
-      color: "black",
-      fontSize: 30,
-      showRectInfo: false,
-      areaVerties: rectToVerties(0, 0, 0, 0),
-      content: "Insert a text",
-      pathManager: new PathStringManager(),
-      rect: {},
-      options: {},
-      containerItem: void 0,
-      patternInfo: {}
-    };
-  }
-  get scale() {
-    return this.$viewport.scale;
-  }
-  checkNotDragStart() {
-    return Boolean(this.state.dragStart) === false;
-  }
-  [POINTERMOVE("$el") + IF("checkNotDragStart")](e) {
-    const vertex = this.$viewport.getWorldPosition(e);
-    const newVertex = this.$snapManager.checkPoint(vertex);
-    if (equals$1(newVertex, vertex) === false) {
-      this.state.target = newVertex;
-      this.state.targetVertex = this.$viewport.applyVertex(this.state.target);
-      this.state.targetPositionVertex = clone(this.state.target);
-      this.state.targetGuides = this.$snapManager.findGuideOne([this.state.target]);
-    } else {
-      this.state.target = floor([], vertex);
-      this.state.targetVertex = floor([], this.$viewport.applyVertex(this.state.target));
-      this.state.targetGuides = [];
-      this.state.targetPositionVertex = null;
-    }
-    this.bindData("$mousePointer");
-    this.bindData("$mousePointerView");
-  }
-  [POINTERSTART("$el") + MOVE() + END() + PREVENT + STOP](e) {
-    this.initMousePoint = this.state.targetPositionVertex ? this.state.targetPositionVertex : this.$viewport.getWorldPosition(e);
-    this.state.dragStart = true;
-    this.state.color = "#C4C4C4";
-    this.state.text = "";
-    const minX = this.initMousePoint[0];
-    const minY = this.initMousePoint[1];
-    const verties = rectToVerties(minX, minY, 0, 0);
-    this.state.areaVerties = this.$viewport.applyVerties(verties);
-    this.bindData("$area");
-    this.bindData("$areaRect");
-  }
-  createLayerTemplate(width2, height) {
-    const { type, text: text2, color: color2, inlineStyle } = this.state;
-    switch (type) {
-      case "artboard":
-        return `<div class='draw-item' style='background-color: white; ${inlineStyle}'></div>`;
-      case "rect":
-        return `<div class='draw-item' style='background-color: ${color2}; ${inlineStyle}'></div>`;
-      case "circle":
-        return `<div class='draw-item' style='background-color: ${color2}; border-radius: 100%; ${inlineStyle}'></div>`;
-      case "text":
-      case "svg-text":
-        return `
-                <div 
-                    class='draw-item' 
-                    
-                    style='font-size: 30px;outline: 1px solid blue;white-space:nowrap'
-                >
-                    <p contenteditable="true" style="margin:0px;display: inline-block;outline:none;" ></p>
-                </div>`;
-      case "svg-rect":
-        return `
-            <div class='draw-item'>
-                <svg width="${width2}" height="${height}" style="width:100%; height:100%;" overflow="visible">
-                    <path d="${PathParser.makeRect(0, 0, width2, height).d}" stroke-width="1" stroke="black" fill="transparent" />
-                </svg>
-            </div>
-            `;
-      case "svg-circle":
-        return `
-            <div class='draw-item'>
-                <svg width="${width2}" height="${height}" style="width:100%; height:100%;" overflow="visible">
-                    <path d="${PathParser.makeCircle(0, 0, width2, height).d}" stroke-width="1" stroke="black" fill="transparent" />
-                </svg>
-            </div>
-            `;
-      case "svg-path":
-        const newD = this.state.d.clone().scale(width2 / this.state.bboxRect.width, height / this.state.bboxRect.height).d;
-        const options2 = this.state.options;
-        return `
-            <div class='draw-item'>
-                <svg width="${width2}" height="${height}" style="width:100%; height:100%;" overflow="visible">
-                    <path   d="${newD}" 
-                            stroke-width="${options2["stroke-width"] || 1}" 
-                            stroke="${options2["stroke"] || "black"}" 
-                            fill="${options2["fill"] || "transparent"}" 
-                    />
-                </svg>
-            </div>
-            `;
-      case "polygon":
-        const options22 = this.state.options;
-        return `
-                <div class='draw-item'>
-                    <svg width="${width2}" height="${height}" style="width:100%; height:100%;" overflow="visible">
-                        <path   d="${PathParser.makePolygon(width2, height, options22.count).d}" 
-                                stroke-width="${options22["stroke-width"] || 1}" 
-                                stroke="${options22["stroke"] || "black"}" 
-                                fill="${options22["fill"] || "transparent"}" 
-                        />
-                    </svg>
-                </div>
-                `;
-      case "star":
-        const options3 = this.state.options;
-        return `
-                    <div class='draw-item'>
-                        <svg width="${width2}" height="${height}" style="width:100%; height:100%;" overflow="visible">
-                            <path   d="${PathParser.makeStar(width2, height, options3.count, options3.radius, options3.tension).d}" 
-                                    stroke-width="${options3["stroke-width"] || 1}" 
-                                    stroke="${options3["stroke"] || "black"}" 
-                                    fill="${options3["fill"] || "transparent"}" 
-                            />
-                        </svg>
-                    </div>
-                    `;
-      case "svg-textpath":
-        return `
-            <div class='draw-item' style='outline: 1px solid blue;'>
-                <svg width="${width2}" height="${height}" style="width:100%; height:100%;font-size: ${height}px;" overflow="visible">
-                    <defs>
-                        <path id='layer-add-path' d="${PathStringManager.makeLine(0, height, width2, height)}" />
-                    </defs>
-                    <text>
-                        <textPath 
-                          xlink:href="#layer-add-path"
-                          textLength="100%"
-                          lengthAdjust="spacingAndGlyphs"
-                          startOffset="0em"
-                        >${text2}</textPath>
-                    </text>
-                </svg>
-            </div>
-            `;
-      default:
-        return `<div class='draw-item' style='outline: 1px solid blue; ${inlineStyle}'></div>`;
-    }
-  }
-  [BIND("$area")]() {
-    const { areaVerties } = this.state;
-    const { left: left2, top: top2, width: width2, height } = vertiesToRectangle(areaVerties);
-    return {
-      style: { left: left2, top: top2, width: width2, height },
-      innerHTML: this.createLayerTemplate(width2.value, height.value)
-    };
-  }
-  [BIND("$areaRect")]() {
-    const { areaVerties, showRectInfo } = this.state;
-    const newVerties = this.$viewport.applyVertiesInverse(areaVerties);
-    const { width: width2, height } = vertiesToRectangle(newVerties);
-    return {
-      style: {
-        display: showRectInfo ? "inline-block" : "none",
-        left: Length.px(areaVerties[2][0]),
-        top: Length.px(areaVerties[2][1])
-      },
-      innerHTML: `x: ${Math.round(newVerties[0][0])}, y: ${Math.round(newVerties[0][1])}, ${width2.value} x ${height.value}`
-    };
-  }
-  [BIND("$mousePointerView")]() {
-    const { areaVerties, showRectInfo } = this.state;
-    const { target = create$4(), targetVertex = create$4() } = this.state;
-    return {
-      style: {
-        display: !showRectInfo ? "inline-block" : "none",
-        left: Length.px(targetVertex[0] || -1e4),
-        top: Length.px(targetVertex[1] || -1e4)
-      },
-      innerHTML: `x: ${Math.round(target[0])}, y: ${Math.round(target[1])}`
-    };
-  }
-  makeMousePointer() {
-    if (this.state.dragStart)
-      return "";
-    const { target, targetVertex } = this.state;
-    if (!target)
-      return "";
-    const guides = (this.state.targetGuides || []).filter(Boolean);
-    return `
-        <svg width="100%" height="100%">
-            ${guides.map((guide) => {
-      this.state.pathManager.reset();
-      guide = this.$viewport.applyVerties([guide[0], guide[1]]);
-      return this.state.pathManager.M({ x: guide[0][0], y: guide[0][1] }).L({ x: guide[1][0], y: guide[1][1] }).X({ x: guide[0][0], y: guide[0][1] }).X({ x: guide[1][0], y: guide[1][1] }).toString("layer-add-snap-pointer");
-    }).join("\n")}
-        </svg>
-    `;
-  }
-  [BIND("$mousePointer")]() {
-    const html2 = this.makeMousePointer();
-    return {
-      innerHTML: html2
-    };
-  }
-  move() {
-    const e = this.$config.get("bodyEvent");
-    const targetMousePoint = this.$viewport.getWorldPosition();
-    const newMousePoint = this.$snapManager.checkPoint(targetMousePoint);
-    if (equals$1(newMousePoint, targetMousePoint) === false) {
-      this.state.target = newMousePoint;
-      this.state.targetVertex = this.$viewport.applyVertex(newMousePoint);
-      this.state.targetGuides = this.$snapManager.findGuideOne([newMousePoint]).filter(Boolean);
-    } else {
-      this.state.target = void 0;
-      this.state.targetGuides = [];
-    }
-    const isShiftKey = e.shiftKey;
-    const minX = Math.min(newMousePoint[0], this.initMousePoint[0]);
-    const minY = Math.min(newMousePoint[1], this.initMousePoint[1]);
-    const maxX = Math.max(newMousePoint[0], this.initMousePoint[0]);
-    const maxY = Math.max(newMousePoint[1], this.initMousePoint[1]);
-    let dx = maxX - minX;
-    let dy = maxY - minY;
-    if (isShiftKey) {
-      dy = dx;
-    }
-    const verties = rectToVerties(minX, minY, dx, dy);
-    this.state.areaVerties = this.$viewport.applyVerties(verties);
-    this.state.showRectInfo = true;
-    this.bindData("$area");
-    this.bindData("$areaRect");
-    this.bindData("$mousePointer");
-    this.bindData("$mousePointerView");
-  }
-  end(dx, dy) {
-    const isAltKey = this.$config.get("bodyEvent").altKey;
-    let { color: color2, content: content2, fontSize, areaVerties, patternInfo } = this.state;
-    const rectVerties = this.$viewport.applyVertiesInverse(areaVerties);
-    const parentArtBoard = this.$selection.getArtboardByPoint(rectVerties[0]);
-    let { x: x2, y: y2, width: width2, height } = vertiesToRectangle(rectVerties);
-    let hasArea = true;
-    if (width2.value === 0 && height.value === 0) {
-      switch (this.state.type) {
-        case "text":
-          content2 = "";
-          height.set(this.state.fontSize);
-          hasArea = false;
-          break;
-        default:
-          width2 = Length.px(100);
-          height = Length.px(100);
-          break;
-      }
-    }
-    var rect2 = __spreadValues(__spreadValues({
-      x: x2,
-      y: y2,
-      width: width2,
-      height,
-      "background-color": color2,
-      "content": content2,
-      "font-size": fontSize
-    }, patternInfo.attrs), this.state.options);
-    switch (this.state.type) {
-      case "text":
-      case "svg-text":
-      case "svg-textpath":
-        delete rect2["background-color"];
-        break;
-      case "svg-path":
-        rect2["d"] = this.state.d.clone().scale(width2 / this.state.bboxRect.width, height / this.state.bboxRect.height).d;
-        break;
-      default:
-        delete rect2["content"];
-        break;
-    }
-    switch (this.state.type) {
-      case "image":
-        this.trigger("openImage", rect2, parentArtBoard);
-        break;
-      case "video":
-        this.trigger("openVideo", rect2, parentArtBoard);
-        break;
-      case "audio":
-        this.trigger("openAudio", rect2, parentArtBoard);
-        break;
-      case "text":
-        if (hasArea) {
-          rect2["font-size"] = Length.px(this.state.fontSize / this.$viewport.scale);
-        } else {
-          const scaledFontSize = this.state.fontSize / this.$viewport.scale;
-          const $drawItem = this.refs.$area.$(".draw-item > p");
-          $drawItem.parent().css("height", `${scaledFontSize}px`);
-          $drawItem.parent().css("font-size", `${scaledFontSize}px`);
-          $drawItem.select();
-          $drawItem.focus();
-          return;
-        }
-      default:
-        this.emit("newComponent", this.state.type, rect2, true, parentArtBoard);
-        break;
-    }
-    if (!isAltKey) {
-      this.trigger("hideLayerAppendView");
-    }
-    this.state.dragStart = false;
-    this.state.showRectInfo = false;
-    this.state.target = void 0;
-    this.bindData("$areaRect");
-  }
-  [SUBSCRIBE("showLayerAppendView")](type, options2 = {}) {
-    this.state.type = type;
-    this.state.options = options2;
-    this.state.isShow = true;
-    this.refs.$area.empty();
-    this.$el.show();
-    this.$el.focus();
-    this.$snapManager.clear();
-    this.state.inlineStyle = CSS_TO_STRING(this.$editor.html.toCSS(this.$model.createModel(__spreadValues({
-      itemType: type
-    }, options2), false), {
-      top: true,
-      left: true,
-      width: true,
-      height: true,
-      transform: true,
-      "transform-origin": true
-    }));
-    if (options2.d) {
-      this.state.d = new PathParser(options2.d);
-      this.state.bboxRect = this.state.d.rect();
-    }
-    this.emit("push.mode.view", "LayerAppendView");
-  }
-  [SUBSCRIBE("hideLayerAppendView")]() {
-    if (this.$el.isShow()) {
-      this.state.isShow = false;
-      this.$el.hide();
-      this.emit("pop.mode.view", "LayerAppendView");
-    }
-  }
-  [SUBSCRIBE("hideAddViewLayer")]() {
-    this.state.isShow = false;
-    this.$el.hide();
-  }
-  isShow() {
-    return this.state.isShow;
-  }
-  [KEYDOWN("document") + IF("isShow") + ESCAPE + ENTER + PREVENT + STOP](e) {
-  }
-  [KEYUP("document") + IF("isShow") + ESCAPE + ENTER + PREVENT + STOP](e) {
-    switch (this.state.type) {
-      case "text":
-        const $t = Dom.create(e.target);
-        let { fontSize, areaVerties } = this.state;
-        const rectVerties = this.$viewport.applyVertiesInverse(areaVerties);
-        const { x: x2, y: y2 } = vertiesToRectangle(rectVerties);
-        const { width: width2, height } = $t.rect();
-        const text2 = $t.text();
-        if (text2.length === 0) {
-          break;
-        }
-        const [
-          [newWidth, newHeight, newFontSize]
-        ] = this.$viewport.applyScaleVertiesInverse([
-          [width2, height, fontSize]
-        ]);
-        const rect2 = {
-          x: x2,
-          y: y2,
-          width: Length.px(newWidth),
-          height: Length.px(newHeight),
-          "content": text2.trim(),
-          "font-size": Length.px(newFontSize)
-        };
-        const parentArtBoard = this.$selection.getArtboardByPoint(rectVerties[0]);
-        this.emit("newComponent", this.state.type, rect2, true, parentArtBoard);
-        break;
-    }
-    this.state.dragStart = false;
-    this.state.showRectInfo = false;
-    this.state.target = null;
-    this.bindData("$areaRect");
-    this.trigger("hideLayerAppendView");
-  }
-  [KEYUP("$el") + IF("isShow")](e) {
-    switch (this.state.type) {
-      case "text":
-        const $t = Dom.create(e.target);
-        $t.rect();
-        break;
-    }
-  }
-  [CHANGE("$file")](e) {
-    this.refs.$file.files.forEach((item2) => {
-      this.emit("updateImage", item2, this.state.rect, this.state.containerItem);
-    });
-  }
-  [CHANGE("$video")](e) {
-    this.refs.$video.files.forEach((item2) => {
-      this.emit("updateVideo", item2, this.state.rect, this.state.containerItem);
-    });
-  }
-  [SUBSCRIBE("openImage")](rect2, containerItem) {
-    this.state.rect = rect2;
-    this.state.containerItem = containerItem;
-    this.refs.$file.click();
-  }
-  [SUBSCRIBE("openVideo")](rect2, containerItem) {
-    this.state.rect = rect2;
-    this.state.containerItem = containerItem;
-    this.refs.$video.click();
-  }
-  [SUBSCRIBE("setPatternInfo")](patternInfo) {
-    this.state.patternInfo = patternInfo;
-  }
-  [SUBSCRIBE("updateViewport")]() {
-    this.$snapManager.clear();
-    this.bindData("$mousePointer");
-    this.bindData("$mousePointerView");
-  }
-}
-class SegmentManager {
-  constructor(viewport) {
-    this.viewport = viewport;
-    this.segmentList = [];
-  }
-  reset() {
-    this.segmentList = [];
-    return this;
-  }
-  checkInViewport(point2) {
-    const vertext = this.viewport.applyVertexInverse([point2.x, point2.y, 0]);
-    return this.viewport.checkInViewport(vertext);
-  }
-  addLine(a, b) {
-    if (getDist(a.x, a.y, b.x, b.y) < 1)
-      return this;
-    if (this.checkInViewport(a) || this.checkInViewport(b)) {
-      this.segmentList.push({
-        line: true,
-        x1: a.x,
-        y1: a.y,
-        x2: b.x,
-        y2: b.y
-      });
-    }
-    return this;
-  }
-  addGuideLine(a, b) {
-    if (getDist(a.x, a.y, b.x, b.y) < 1)
-      return this;
-    if (this.checkInViewport(a) || this.checkInViewport(b)) {
-      this.segmentList.push({
-        line: true,
-        guide: true,
-        x1: a.x,
-        y1: a.y,
-        x2: b.x,
-        y2: b.y
-      });
-    }
-    return this;
-  }
-  addDistanceLine(a, b) {
-    if (getDist(a.x, a.y, b.x, b.y) < 1)
-      return this;
-    this.segmentList.push({
-      line: true,
-      distance: true,
-      x1: a.x,
-      y1: a.y,
-      x2: b.x,
-      y2: b.y
-    });
-    return this;
-  }
-  addDistanceAngle(center2, rx, ry, degree, last2, line2) {
-    this.segmentList.push({
-      angle: true,
-      rx,
-      ry,
-      line: line2,
-      degree,
-      center: center2,
-      last: last2
-    });
-    return this;
-  }
-  addPoint(obj, point2, index2, segment, selected = false) {
-    if (this.checkInViewport(point2)) {
-      this.segmentList.push(__spreadProps(__spreadValues({}, obj), {
-        cx: point2.x,
-        cy: point2.y,
-        selected,
-        index: index2,
-        segment,
-        isFirst: point2.isFirst,
-        isLast: point2.isLast,
-        isSecond: point2.isSecond
-      }));
-    }
-    return this;
-  }
-  addStartPoint(obj, point2) {
-    if (this.checkInViewport(point2)) {
-      this.segmentList.push(__spreadProps(__spreadValues({}, obj), {
-        cx: point2.x,
-        cy: point2.y,
-        start: true
-      }));
-    }
-    return this;
-  }
-  addCurvePoint(point2, index2, segment, selected = false) {
-    if (this.checkInViewport(point2)) {
-      this.segmentList.push({
-        curve: true,
-        cx: point2.x,
-        cy: point2.y,
-        index: index2,
-        selected,
-        segment,
-        isFirst: point2.isFirst,
-        isLast: point2.isLast,
-        isSecond: point2.isSecond
-      });
-    }
-    return this;
-  }
-  addText(point2, text2) {
-    this.segmentList.push({
-      type: "text",
-      cx: point2.x,
-      cy: point2.y,
-      text: text2 + ""
-    });
-    return this;
-  }
-  toString() {
-    this.segmentList.sort((a, b) => {
-      if (a.line && !b.line) {
-        return -1;
-      } else if (!a.line && b.line) {
-        return 1;
-      }
-      return 0;
-    });
-    return this.segmentList.map((it) => {
-      if (it.angle) {
-        return `
-                <path stroke-width='1' 
-                    data-distance='true'
-                    fill="rgba(0,0,0,0.5)"
-                    d="M ${it.center.x},${it.center.y} A ${it.rx} ${it.ry},${it.degree},0,0,${it.last.x} ${it.last.y} L${it.line.x} ${it.line.y} Z"
-                />`;
-      } else if (it.line) {
-        return `
-                <line stroke-width='1' 
-                    data-segment="true"
-                    data-is-last="${it.isLast}"                
-                    data-guide='${it.guide}'
-                    data-distance='${it.distance}'
-                    x1='${it.x1}' x2='${it.x2}' y1='${it.y1}' y2='${it.y2}' 
-                />`;
-      } else if (it.text) {
-        return "";
-      } else if (it.curve && it.segment !== "startPoint") {
-        return `
-                <path stroke-width='1'
-                    class='curve' 
-                    ${it.selected && `data-selected="true"`}
-                    ${it.isLast && `data-is-last="true"`}
-                    ${it.isFirst && `data-is-first="true"`}
-                    ${it.isSecond && `data-is-second="true"`}
-                    title="${it.segment} curve"  
-                    data-index='${it.index}'
-                    data-segment-point='${it.segment}'
-                    data-segment="true" 
-                    d="M ${it.cx} ${it.cy - 4}L ${it.cx + 4} ${it.cy} L ${it.cx} ${it.cy + 4} L ${it.cx - 4} ${it.cy} Z"
-                />`;
-      } else if (it.start) {
-        return `
-                <circle 
-                    cx='${it.cx}' 
-                    cy='${it.cy}' 
-                    r='4'                    
-                    class='segment'
-                    data-selected='${it.selected}'
-                    title="Center"
-                    data-start="true" 
-                />`;
-      } else {
-        return `
-                <circle 
-                    cx='${it.cx}' 
-                    cy='${it.cy}' 
-                    r='4'                    
-                    class='segment'
-                    data-selected='${it.selected}'
-                    title="${it.segment}"
-                    data-is-last="${it.isLast}"
-                    data-is-first="${it.isFirst}"
-                    data-is-second="${it.isSecond}"
-                    data-index='${it.index}' 
-                    data-segment-point='${it.segment}' 
-                    data-segment="true" 
-                />`;
-      }
-    }).join("");
-  }
-}
-const SEGMENT_DIRECTION = ["startPoint", "endPoint", "reversePoint"];
-function calculateSnapPoint(points2, sourceKey, target, distanceValue, dist2) {
-  var checkedPointList = points2.filter((p) => {
-    if (!p)
-      return false;
-    return Math.abs(p[sourceKey] - target) <= dist2;
-  }).map((p) => {
-    return { dist: Math.abs(p[sourceKey] - target), point: p };
-  });
-  checkedPointList.sort((a, b) => {
-    return a.dist < b.dist ? -1 : 1;
-  });
-  var point2 = null;
-  if (checkedPointList.length) {
-    point2 = checkedPointList[0].point;
-    distanceValue += point2[sourceKey] - target;
-  }
-  return { point: point2, distanceValue };
-}
-function calculateMovePointSnap(points2, moveXY, dist2 = 1) {
-  var snapPointX = calculatePointDist(points2, "x", moveXY.x, dist2);
-  var snapPointY = calculatePointDist(points2, "y", moveXY.y, dist2);
-  var snapEndPoint = __spreadValues({}, moveXY);
-  if (snapPointX) {
-    snapEndPoint.x = snapPointX.x;
-  }
-  if (snapPointY) {
-    snapEndPoint.y = snapPointY.y;
-  }
-  var snapPointList = [];
-  if (snapPointX) {
-    snapPointList.push({ startPoint: snapPointX, endPoint: snapEndPoint });
-  }
-  if (snapPointY) {
-    snapPointList.push({ startPoint: snapPointY, endPoint: snapEndPoint });
-  }
-  return { snapPointList, moveXY: snapEndPoint };
-}
-function calculatePointDist(points2, sourceKey, target, dist2) {
-  var checkedPointList = [];
-  var arr = SEGMENT_DIRECTION;
-  points2.filter((p) => p).forEach((p) => {
-    arr.filter((key) => p[key]).forEach((key) => {
-      var point2 = p[key];
-      var tempDist = Math.abs(point2[sourceKey] - target);
-      if (tempDist <= dist2) {
-        checkedPointList.push({ dist: tempDist, point: point2 });
-      }
-    });
-  });
-  checkedPointList.sort((a, b) => {
-    return a.dist > b.dist ? 1 : -1;
-  });
-  return checkedPointList.length ? checkedPointList[0].point : null;
-}
-function toPath(points2, minX, minY, scale2 = 1) {
-  var d = [];
-  for (var index2 = 0, len2 = points2.length; index2 < len2; index2++) {
-    var currentIndex = index2;
-    var current = points2[currentIndex];
-    if (!current)
-      continue;
-    if (current.command === "M") {
-      d.push({ command: "M", values: [current.startPoint] });
-    } else {
-      var prevPoint = Point.getPrevPoint(points2, index2);
-      if (current.curve === false) {
-        if (prevPoint.curve === false) {
-          d.push({ command: "L", values: [current.startPoint] });
-        } else {
-          d.push({ command: "Q", values: [prevPoint.endPoint, current.startPoint] });
-        }
-      } else {
-        if (prevPoint.curve === false) {
-          if (Point.isEqual(current.reversePoint, current.startPoint)) {
-            d.push({ command: "L", values: [current.startPoint] });
-          } else {
-            d.push({ command: "Q", values: [current.reversePoint, current.startPoint] });
-          }
-        } else {
-          d.push({ command: "C", values: [prevPoint.endPoint, current.reversePoint, current.startPoint] });
-        }
-      }
-    }
-    if (current.close) {
-      d.push({ command: "Z" });
-    }
-  }
-  var dString = d.map((segment) => {
-    return calculateRelativePosition(minX, minY, segment, scale2);
-  }).join(" ");
-  return {
-    d: dString
-  };
-}
-function calculateRelativePosition(minX, minY, segment, scale2 = 1) {
-  var { command, values } = segment;
-  switch (command) {
-    case "Z":
-      return "Z";
-    default:
-      var str = values.map((v) => {
-        var tx = v.x - minX === 0 ? 0 : (v.x - minX) / scale2;
-        var ty = v.y - minY === 0 ? 0 : (v.y - minY) / scale2;
-        return `${tx} ${ty}`;
-      }).join(" ");
-      return `${command} ${str}`;
-  }
-}
-function checkInArea(area2, point2) {
-  if (area2.x2.value < point2.x) {
-    return false;
-  }
-  if (area2.y2.value < point2.y) {
-    return false;
-  }
-  if (area2.x.value > point2.x) {
-    return false;
-  }
-  if (area2.y.value > point2.y) {
-    return false;
-  }
-  return true;
-}
-class PathGenerator {
-  static generatorPathString(points2, minX = 0, minY = 0, scale2 = 1) {
-    return toPath(points2, minX, minY, scale2).d;
-  }
-  constructor(pathEditor) {
-    this.pathEditor = pathEditor;
-    this.pathStringManager = new PathStringManager();
-    this.guideLineManager = new PathStringManager();
-    this.segmentManager = new SegmentManager(this.pathEditor.$viewport);
-    this.points = [];
-    this.cachedSegmentKeys = {};
-    this.initialize();
-    this.initializeSelect();
-  }
-  initialize() {
-    this.splitLines = [];
-    this.guideLineManager.reset();
-    this.segmentManager.reset();
-    this.pathStringManager.reset();
-  }
-  initializeSelect(initPointList = []) {
-    this.selectedPointKeys = {};
-    this.selectedPointList = [];
-    if (initPointList.length) {
-      this.select(...initPointList.map((p) => {
-        const checkedPoint = this.points[p.index][p.key];
-        if (!checkedPoint)
-          return void 0;
-        return { x: checkedPoint.x, y: checkedPoint.y, key: p.key, index: checkedPoint.index };
-      }).filter(Boolean));
-    }
-  }
-  get state() {
-    return this.pathEditor.state;
-  }
-  get clonePoints() {
-    return [...this.points];
-  }
-  get length() {
-    return this.points.length;
-  }
-  setPoints(points2 = []) {
-    this.points = points2;
-    this.snapPointList = [];
-    if (this.points.length === 0) {
-      this.select();
-      this.selectGroup(-1);
-    }
-  }
-  selectInBox(box, isToggle = false) {
-    var list2 = [];
-    this.points.forEach((point2, index2) => {
-      SEGMENT_DIRECTION.forEach((key) => {
-        const p = point2[key];
-        if (checkInArea(box, p)) {
-          list2.push({ x: p.x, y: p.y, key, index: index2 });
-        }
-      });
-    });
-    if (isToggle) {
-      list2 = list2.map((it) => {
-        const selectedKey = this.makeSegmentKey(it);
-        return __spreadProps(__spreadValues({}, it), { included: Boolean(this.selectedPointKeys[selectedKey]) });
-      });
-      const includedList = list2.filter((it) => it.included);
-      const notIncludedList = list2.filter((it) => !it.included);
-      let uniqueList = [...this.selectedPointList];
-      if (includedList.length) {
-        uniqueList = this.selectedPointList.filter((it) => {
-          const oldKey = this.makeSegmentKey(it);
-          return Boolean(includedList.find((includeNode) => {
-            return oldKey === this.makeSegmentKey(includeNode);
-          })) === false;
-        });
-      }
-      this.select(...uniqueList, ...notIncludedList);
-    } else {
-      this.select(...list2);
-    }
-  }
-  makeSegmentKey(p) {
-    return `${p.key}_${p.index}`;
-  }
-  select(...list2) {
-    this.selectedPointKeys = {};
-    this.selectedPointList = list2.map(({ x: x2, y: y2, key, index: index2 }) => ({
-      x: x2,
-      y: y2,
-      key,
-      index: +index2
-    }));
-    list2.forEach((it) => {
-      var key = this.makeSegmentKey(it);
-      this.selectedPointKeys[key] = true;
-    });
-  }
-  convertPointsToSelectionList(points2) {
-    var list2 = [];
-    points2.forEach((point2) => {
-      SEGMENT_DIRECTION.forEach((key) => {
-        const { x: x2, y: y2 } = point2[key];
-        list2.push({ x: x2, y: y2, key, index: point2.index });
-      });
-    });
-    return list2;
-  }
-  selectGroup(groupIndex) {
-    const group2 = this.splitedGroupList[groupIndex];
-    if (group2) {
-      this.select(...this.convertPointsToSelectionList(group2.points));
-    } else {
-      this.select();
-    }
-  }
-  getCacheSegmentKey(segmentKey, index2) {
-    if (!this.cachedSegmentKeys[segmentKey]) {
-      this.cachedSegmentKeys[segmentKey] = {};
-    }
-    if (!this.cachedSegmentKeys[segmentKey][index2]) {
-      this.cachedSegmentKeys[segmentKey][index2] = this.makeSegmentKey({ key: segmentKey, index: index2 });
-    }
-    return this.cachedSegmentKeys[segmentKey][index2];
-  }
-  toggleSelect(key, index2) {
-    if (this.points[index2]) {
-      var point2 = this.points[index2][key];
-      if (point2 && !this.isSelectedSegment(key, index2)) {
-        this.select(...this.selectedPointList, { x: point2.x, y: point2.y, key, index: index2 });
-      } else {
-        this.select(...this.selectedPointList.filter((it) => {
-          return it.key !== key || it.index !== index2;
-        }));
-      }
-    }
-  }
-  selectKeyIndex(key, index2) {
-    if (this.points[index2]) {
-      var point2 = this.points[index2][key];
-      if (point2 && !this.isSelectedSegment(key, index2)) {
-        console.log("fdsjaklfdsjklf");
-        this.select({ x: point2.x, y: point2.y, key, index: index2 });
-      }
-    }
-  }
-  reselect() {
-    this.selectedPointList.filter(Boolean).forEach((it) => {
-      var _a;
-      var point2 = (_a = this.points[it.index]) == null ? void 0 : _a[it.key];
-      if (point2) {
-        it.x = point2.x;
-        it.y = point2.y;
-      }
-    });
-  }
-  isSelectedSegment(segment, index2) {
-    var key = this.getCacheSegmentKey(segment, index2);
-    return this.selectedPointKeys[key];
-  }
-  commitTransformMatrix(point2, transformMatrix) {
-    var result = transformMat4([], [point2.x, point2.y, 0], transformMatrix);
-    return { x: result[0], y: result[1] };
-  }
-  transformMat4(transformMatrix) {
-    this.transformPoints.forEach((p, index2) => {
-      var realPoint = this.points[index2];
-      Object.assign(realPoint.startPoint, this.commitTransformMatrix(p.startPoint, transformMatrix));
-      Object.assign(realPoint.endPoint, this.commitTransformMatrix(p.endPoint, transformMatrix));
-      Object.assign(realPoint.reversePoint, this.commitTransformMatrix(p.reversePoint, transformMatrix));
-    });
-  }
-  transform(type, dx = 0, dy = 0) {
-    var { x: x2, y: y2, width: width2, height } = this.transformRect;
-    var view = create$5();
-    translate(view, view, [x2, y2, 0]);
-    switch (type) {
-      case "flipX":
-        scale$1(view, view, [-1, 1, 1]);
-        translate(view, view, [-width2, 0, 0]);
-        break;
-      case "flipY":
-        scale$1(view, view, [1, -1, 1]);
-        translate(view, view, [0, -height, 0]);
-        break;
-      case "flip":
-        scale$1(view, view, [-1, -1, 1]);
-        translate(view, view, [-width2, -height, 0]);
-        break;
-    }
-    translate(view, view, [-x2, -y2, 0]);
-    this.transformMat4(view);
-  }
-  initTransform(rect2) {
-    this.transformRect = clone$1(rect2);
-    this.transformPoints = this.clonePoints.map((p) => {
-      return {
-        startPoint: clone$1(p.startPoint),
-        endPoint: clone$1(p.endPoint),
-        reversePoint: clone$1(p.reversePoint)
-      };
-    });
-  }
-  setConnectedPoint(dx, dy) {
-    var state = this.state;
-    var x2 = state.dragXY.x + dx;
-    var y2 = state.dragXY.y + dy;
-    var endPoint = { x: x2, y: y2 };
-    var reversePoint2 = { x: x2, y: y2 };
-    if (state.dragPoints) {
-      state.reversePoint = Point.getReversePoint(state.startPoint, endPoint);
-    }
-    var point2 = {
-      startPoint: state.startPoint,
-      endPoint,
-      curve: !!state.dragPoints,
-      reversePoint: reversePoint2,
-      connected: true,
-      close: true
-    };
-    this.points.push(point2);
-  }
-  setLastPoint(startPoint) {
-    var endPoint = clone$1(startPoint);
-    var reversePoint2 = clone$1(startPoint);
-    var point2 = {
-      startPoint,
-      endPoint,
-      curve: false,
-      reversePoint: reversePoint2,
-      connected: false,
-      close: false
-    };
-    this.points.push(point2);
-  }
-  getPrevPoint(index2) {
-    return Point.getPrevPoint(this.points, index2);
-  }
-  getIndexPoint(index2) {
-    return Point.getIndexPoint(this.points, index2);
-  }
-  getNextPoint(index2) {
-    return Point.getNextPoint(this.points, index2);
-  }
-  getConnectedPointList(index2) {
-    return Point.getConnectedPointList(this.points, index2);
-  }
-  isFirst(segment) {
-    return Point.isFirst(segment);
-  }
-  getLastPoint(index2) {
-    return Point.getLastPoint(this.points, index2);
-  }
-  setCachePoint(index2, segmentKey, verties = []) {
-    var state = this.state;
-    this.snapPointList = [];
-    this.selectedIndex = index2;
-    state.connectedPoint = this.getPrevPoint(index2);
-    state.connectedPointList = clone$1(Point.getConnectedPointList(this.points, this.selectedIndex));
-    if (state.connectedPoint && !state.connectedPoint.connected) {
-      state.connectedPoint = null;
-    }
-    state.segment = this.getIndexPoint(index2);
-    if (state.segment.connected) {
-      state.connectedPoint = this.getNextPoint(index2);
-    }
-    var isFirstSegment = this.isFirst(state.segment);
-    if (isFirstSegment) {
-      var lastPoint = this.getLastPoint(index2);
-      if (lastPoint.connected) {
-        state.connectedPoint = lastPoint;
-      }
-    }
-    state.segmentKey = segmentKey;
-    state.isCurveSegment = state.segment.curve && state.segmentKey != "startPoint";
-    state.originalSegment = clone$1(state.segment);
-    if (state.connectedPoint) {
-      state.originalConnectedPoint = clone$1(state.connectedPoint);
-    }
-    state.cachedPoints = [];
-    this.points.filter((p) => p && p != state.segment).forEach((p) => {
-      state.cachedPoints.push(p.startPoint, p.reversePoint, p.endPoint);
-    });
-  }
-  moveSegment(segmentKey, dx, dy, originSegment = void 0) {
-    if (originSegment) {
-      const segment = this.points[originSegment.index][segmentKey];
-      segment.x = originSegment[segmentKey].x + dx;
-      segment.y = originSegment[segmentKey].y + dy;
-    } else {
-      var state = this.state;
-      var originPoint = state.originalSegment[segmentKey];
-      var targetPoint = state.segment[segmentKey];
-      if (originPoint) {
-        targetPoint.x = originPoint.x + dx;
-        targetPoint.y = originPoint.y + dy;
-      }
-    }
-  }
-  calculateToCurve(point2, nextPoint, prevPoint) {
-    var centerX = (nextPoint.startPoint.x + prevPoint.startPoint.x) / 2;
-    var centerY = (nextPoint.startPoint.y + prevPoint.startPoint.y) / 2;
-    var dx = (nextPoint.startPoint.x - centerX) / 2;
-    var dy = (nextPoint.startPoint.y - centerY) / 2;
-    point2.endPoint = {
-      x: point2.startPoint.x + dx,
-      y: point2.startPoint.y + dy
-    };
-    point2.reversePoint = {
-      x: point2.startPoint.x - dx,
-      y: point2.startPoint.y - dy
-    };
-    return { dx, dy };
-  }
-  convertToCurve(index2) {
-    var point2 = this.points[index2];
-    if (point2.curve) {
-      point2.curve = false;
-      point2.reversePoint = clone$1(point2.startPoint);
-      point2.endPoint = clone$1(point2.startPoint);
-      if (point2.command === "M") {
-        var lastPoint = Point.getPrevPoint(points, point2.index);
-        if (lastPoint.connected) {
-          lastPoint.curve = false;
-          lastPoint.reversePoint = clone$1(lastPoint.startPoint);
-          lastPoint.endPoint = clone$1(lastPoint.startPoint);
-        }
-      } else {
-        var nextPoint = this.getNextPoint(index2);
-        if (nextPoint && nextPoint.command === "M") {
-          var firstPoint = nextPoint;
-          firstPoint.curve = false;
-          firstPoint.reversePoint = clone$1(firstPoint.startPoint);
-          firstPoint.endPoint = clone$1(firstPoint.startPoint);
-        }
-      }
-    } else {
-      point2.curve = true;
-      var prevPoint = this.getPrevPoint(index2);
-      var nextPoint = this.getNextPoint(index2);
-      if (nextPoint && nextPoint.index < index2 && nextPoint.command === "M") {
-        var firstPoint = nextPoint;
-        nextPoint = this.getNextPoint(firstPoint.index);
-        this.calculateToCurve(point2, nextPoint, prevPoint);
-        firstPoint.curve = true;
-        firstPoint.endPoint = clone$1(point2.endPoint);
-        firstPoint.reversePoint = clone$1(point2.reversePoint);
-      } else if (nextPoint && nextPoint.index > index2 && nextPoint.command !== "M") {
-        this.calculateToCurve(point2, nextPoint, prevPoint);
-      } else if (!nextPoint && prevPoint) {
-        var centerX = (point2.startPoint.x - prevPoint.startPoint.x) / 3;
-        var centerY = (point2.startPoint.y - prevPoint.startPoint.y) / 3;
-        point2.endPoint = { x: point2.startPoint.x + centerX, y: point2.startPoint.y + centerY };
-        point2.reversePoint = Point.getReversePoint(point2.startPoint, point2.endPoint);
-      } else if (!prevPoint && nextPoint) {
-        var centerX = (point2.startPoint.x - nextPoint.startPoint.x) / 3;
-        var centerY = (point2.startPoint.y - nextPoint.startPoint.y) / 3;
-        point2.endPoint = { x: point2.startPoint.x + centerX, y: point2.startPoint.y + centerY };
-        point2.reverse = Point.getReversePoint(point2.startPoint, point2.endPoint);
-      }
-    }
-  }
-  moveCurveSegment(segmentKey, dx, dy) {
-    var state = this.state;
-    this.moveSegment(segmentKey, dx, dy);
-    var targetSegmentKey = segmentKey === "endPoint" ? "reversePoint" : "endPoint";
-    state.segment[targetSegmentKey] = Point.getReversePoint(state.segment.startPoint, state.segment[segmentKey]);
-  }
-  rotateSegmentTarget(segmentKey, target) {
-    var state = this.state;
-    if (state.originalSegment && state.segment) {
-      var { x: cx, y: cy } = state.originalSegment.startPoint;
-      var { x: rx, y: ry } = state.segment[segmentKey];
-      var { x: tx, y: ty } = state.originalSegment[target];
-      var { x: x2, y: y2 } = getXYInCircle(calculateAngle360(rx - cx, ry - cy), getDist(tx, ty, cx, cy), cx, cy);
-      state.segment[target] = { x: x2, y: y2 };
-    }
-  }
-  rotateSegment(segmentKey) {
-    this.rotateSegmentTarget(segmentKey, segmentKey === "endPoint" ? "reversePoint" : "endPoint");
-  }
-  calculateSnap(segmentKey, dx, dy, dist2 = 1) {
-    var state = this.state;
-    var cachedPoints = state.cachedPoints;
-    var original = state.originalSegment[segmentKey];
-    if (!segmentKey) {
-      return { dx, dy, snapPointList: [] };
-    }
-    var realX = original.x + dx;
-    var realY = original.y + dy;
-    var { point: snapPointX, distanceValue: dx } = calculateSnapPoint(cachedPoints, "x", realX, dx, dist2);
-    var { point: snapPointY, distanceValue: dy } = calculateSnapPoint(cachedPoints, "y", realY, dy, dist2);
-    var snapEndPoint = {
-      x: original.x + dx,
-      y: original.y + dy
-    };
-    var snapPointList = [];
-    if (snapPointX) {
-      snapPointList.push({ startPoint: snapPointX, endPoint: snapEndPoint });
-    }
-    if (snapPointY) {
-      snapPointList.push({ startPoint: snapPointY, endPoint: snapEndPoint });
-    }
-    return { dx, dy, snapPointList };
-  }
-  copySegment(from, to) {
-    to.startPoint = clone$1(from.startPoint);
-    to.endPoint = clone$1(from.endPoint);
-    to.reversePoint = clone$1(from.reversePoint);
-  }
-  get selectedLength() {
-    return this.selectedPointList.length;
-  }
-  moveSelectedSegment(dx, dy) {
-    console.log(this.selectedPointList);
-    if (this.selectedPointList.length > 0) {
-      this.selectedPointList.forEach((it) => {
-        var target = this.points[it.index][it.key];
-        target.x = it.x + dx;
-        target.y = it.y + dy;
-      });
-    } else if (this.selectedGroup) {
-      this.moveSelectedGroup(dx, dy);
-    }
-  }
-  moveSelectedGroup(dx, dy) {
-    this.selectedGroup.points.forEach((it) => {
-      const target = this.points[it.index];
-      target.startPoint.x = it.startPoint.x + dx;
-      target.startPoint.y = it.startPoint.y + dy;
-      target.endPoint.x = it.endPoint.x + dx;
-      target.endPoint.y = it.endPoint.y + dy;
-      target.reversePoint.x = it.reversePoint.x + dx;
-      target.reversePoint.y = it.reversePoint.y + dy;
-    });
-  }
-  get selectedGroup() {
-    return this.splitedGroupList[this.state.selectedGroupIndex];
-  }
-  get splitedGroupList() {
-    return Point.getSplitedGroupList(this.points);
-  }
-  get groupList() {
-    return Point.getGroupList(this.points);
-  }
-  getGroup(groupList, pointIndex) {
-    return Point.getGroup(groupList, pointIndex);
-  }
-  get selectedGroupIndexList() {
-    const groupIndexList = new Set();
-    const groupList = this.groupList;
-    if (this.selectedPointList.length === 0 && this.state.selectedGroupIndex < 0) {
-      return groupList.map((group2) => group2.groupIndex);
-    }
-    const points2 = this.selectedPointList;
-    points2.forEach((it) => {
-      const group2 = this.getGroup(groupList, it.index);
-      if (group2) {
-        groupIndexList.add(group2.groupIndex);
-      }
-    });
-    return [...new Set([...groupIndexList, this.state.selectedGroupIndex])];
-  }
-  removeSelectedSegment() {
-    this.selectedPointList.forEach((it) => {
-      var target = this.points[it.index][it.key];
-      target.removed = true;
-    });
-    const pointGroup = Point.splitPoints(this.points);
-    const newPoints = Point.recoverPoints(pointGroup.map((points2) => {
-      return points2.filter((p) => !p.startPoint.removed).map((p) => {
-        if (p.endPoint.removed) {
-          p.endPoint = clone$1(p.startPoint);
-        }
-        if (p.reversePoint.removed) {
-          p.reversePoint = clone$1(p.startPoint);
-        }
-        if (Point.isEqual(p.endPoint, p.startPoint, p.reversePoint)) {
-          p.command = "L";
-          p.curve = false;
-        }
-        return p;
-      });
-    }));
-    this.points = newPoints;
-    this.select();
-  }
-  move(dx, dy, e) {
-    var state = this.state;
-    var { isCurveSegment, segmentKey, connectedPoint } = state;
-    if (this.selectedPointList.length > 1) {
-      this.moveSelectedSegment(dx, dy);
-    } else if (this.selectedPointList.length === 1) {
-      var { dx, dy, snapPointList } = this.calculateSnap(segmentKey, dx, dy, 3);
-      this.snapPointList = snapPointList || [];
-      if (isCurveSegment) {
-        if (e.shiftKey) {
-          this.moveSegment(segmentKey, dx, dy);
-          var targetSegmentKey = segmentKey === "endPoint" ? "reversePoint" : "endPoint";
-          state.segment[targetSegmentKey] = Point.getReversePoint(state.segment.startPoint, state.segment[segmentKey]);
-        } else if (e.altKey) {
-          this.moveSegment(segmentKey, dx, dy);
-          this.rotateSegment(segmentKey);
-        } else {
-          this.moveSegment(segmentKey, dx, dy);
-        }
-      } else {
-        this.moveSegment("startPoint", dx, dy);
-        this.moveSegment("endPoint", dx, dy);
-        this.moveSegment("reversePoint", dx, dy);
-        if (!e.altKey) {
-          state.connectedPointList.forEach((it) => {
-            this.moveSegment("startPoint", dx, dy, it);
-            this.moveSegment("endPoint", dx, dy, it);
-            this.moveSegment("reversePoint", dx, dy, it);
-          });
-        }
-      }
-      connectedPoint && this.copySegment(state.segment, state.connectedPoint);
-    } else if (this.state.selectedGroupIndex > -1) {
-      this.moveSelectedGroup(dx, dy);
-    }
-  }
-  moveEnd(dx, dy) {
-    var state = this.state;
-    var points2 = this.points;
-    var x2 = state.dragXY.x + dx;
-    var y2 = state.dragXY.y + dy;
-    var endPoint = { x: x2, y: y2 };
-    var reversePoint2 = { x: x2, y: y2 };
-    if (state.dragPoints) {
-      reversePoint2 = Point.getReversePoint(state.startPoint, endPoint);
-    }
-    points2.push({
-      command: state.clickCount === 0 ? "M" : "",
-      startPoint: state.startPoint,
-      endPoint,
-      curve: !!state.dragPoints,
-      reversePoint: reversePoint2
-    });
-    state.startPoint = null;
-    state.dragPoints = false;
-    state.moveXY = null;
-  }
-  setPoint(obj) {
-    var p0 = obj.first[0];
-    var p1 = obj.second[obj.second.length - 1];
-    var allPoints = this.clonePoints;
-    var firstItem = Point.getPoint(allPoints, p0);
-    var secondItem = Point.getPoint(allPoints, p1);
-    var newPoints = [
-      __spreadProps(__spreadValues({}, firstItem), { endPoint: obj.first[1] }),
-      { startPoint: obj.first[3], reversePoint: obj.first[2], curve: true, endPoint: obj.second[1] },
-      __spreadProps(__spreadValues({}, secondItem), { reversePoint: obj.second[2] })
-    ];
-    var firstIndex = Point.getIndex(allPoints, p0);
-    allPoints.splice(firstIndex, 2, ...newPoints);
-    this.points = allPoints;
-    return firstIndex + 1;
-  }
-  setPointQuard(obj) {
-    var p0 = obj.first[0];
-    var p1 = obj.second[obj.second.length - 1];
-    var allPoints = this.clonePoints;
-    var firstItem = Point.getPoint(allPoints, p0);
-    var secondItem = Point.getPoint(allPoints, p1);
-    if (firstItem.curve && secondItem.curve === false) {
-      var newPoints = [
-        __spreadProps(__spreadValues({}, firstItem), { endPoint: firstItem.startPoint }),
-        { startPoint: obj.first[2], reversePoint: obj.first[1], curve: true, endPoint: obj.second[1] }
-      ];
-      var firstIndex = Point.getIndex(allPoints, p0);
-      allPoints.splice(firstIndex, 1, ...newPoints);
-    } else {
-      var newPoints = [
-        __spreadValues({}, firstItem),
-        { startPoint: obj.first[2], reversePoint: obj.first[1], curve: true, endPoint: obj.second[1] },
-        __spreadProps(__spreadValues({}, secondItem), { reversePoint: obj.second[1], curve: true })
-      ];
-      var firstIndex = Point.getIndex(allPoints, p0);
-      allPoints.splice(firstIndex, 2, ...newPoints);
-    }
-    this.points = allPoints;
-    return firstIndex + 1;
-  }
-  setPointLine(obj) {
-    var p0 = obj.first[0];
-    var allPoints = this.clonePoints;
-    var newPoints = [
-      { command: "L", startPoint: obj.first[1], curve: false, endPoint: obj.first[1], reversePoint: obj.first[1] }
-    ];
-    var firstIndex = Point.getIndex(allPoints, p0);
-    allPoints.splice(firstIndex + 1, 0, ...newPoints);
-    this.points = allPoints;
-    return firstIndex + 1;
-  }
-  toPath(minX = 0, minY = 0, scale2 = 1) {
-    return toPath(this.clonePoints, minX, minY, scale2);
-  }
-  makeSVGPath() {
-    this.initialize();
-    this.makePointGuide(this.points);
-    this.makeMovePositionGuide();
-    return this.toSVGString();
-  }
-  makeTriangleDistancePointGuide(first, second2) {
-    var minX = Math.min(first.startPoint.x, second2.startPoint.x);
-    var maxX = Math.max(first.startPoint.x, second2.startPoint.x);
-    var minY = Math.min(first.startPoint.y, second2.startPoint.y);
-    var maxY = Math.max(first.startPoint.y, second2.startPoint.y);
-    if (first.startPoint.x < second2.startPoint.x && first.startPoint.y < second2.startPoint.y) {
-      this.segmentManager.addDistanceLine({ x: minX, y: minY }, { x: maxX, y: minY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
-      var centerX = minX;
-      var centerY = minY;
-      var angle = calculateAngle360(maxX - minX, maxY - minY) - 180;
-      var dist2 = 20;
-      var { x: x2, y: y2 } = getXYInCircle(0, dist2, centerX, centerY);
-      var last2 = getXYInCircle(angle, dist2, centerX, centerY);
-      this.segmentManager.addDistanceAngle(last2, dist2, dist2, angle, { x: x2, y: y2 }, { x: x2 - dist2, y: y2 });
-    } else if (first.startPoint.x < second2.startPoint.x && first.startPoint.y > second2.startPoint.y) {
-      this.segmentManager.addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
-    } else if (first.startPoint.x > second2.startPoint.x && first.startPoint.y > second2.startPoint.y) {
-      this.segmentManager.addDistanceLine({ x: minX, y: minY }, { x: minX, y: maxY }).addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY });
-    } else if (first.startPoint.x > second2.startPoint.x && first.startPoint.y < second2.startPoint.y) {
-      this.segmentManager.addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
-    }
-  }
-  makeDistancePointGuide(prevPoint, current, nextPoint, index2) {
-    if (current.selected) {
-      if (prevPoint) {
-        this.makeTriangleDistancePointGuide(prevPoint, current);
-      }
-      if (nextPoint) {
-        this.makeTriangleDistancePointGuide(current, nextPoint);
-      }
-    }
-  }
-  makeStartPointGuide(prevPoint, current, nextPoint, index2) {
-    current.startPoint.isFirst = true;
-    if (current.curve === false) {
-      this.segmentManager.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
-    } else {
-      this.segmentManager.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2)).addGuideLine(current.startPoint, current.endPoint);
-      if (Point.isEqual(current.startPoint, current.endPoint) === false) {
-        this.segmentManager.addCurvePoint(current.endPoint, index2, "endPoint", this.isSelectedSegment("endPoint", index2));
-      }
-    }
-  }
-  makeMiddlePointGuideSegment(prevPoint, current, nextPoint, index2, isSiblingSelected) {
-    var mng = this.segmentManager;
-    if (current.curve === false) {
-      if (prevPoint.curve === false) {
-        mng.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
-      } else {
-        if (isSiblingSelected === false) {
-          mng.addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
-        } else {
-          mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
-          if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
-            mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, "endPoint", this.isSelectedSegment("endPoint", prevPoint.index));
-          }
-        }
-      }
-    } else {
-      if (prevPoint.curve === false) {
-        if (isSiblingSelected === false) {
-          if (Point.isEqual(current.reversePoint, current.startPoint)) {
-            mng.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
-          } else {
-            mng.addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
-          }
-        } else {
-          if (Point.isEqual(current.reversePoint, current.startPoint)) {
-            mng.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
-          } else {
-            mng.addGuideLine(current.startPoint, current.reversePoint).addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
-            if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
-              mng.addCurvePoint(current.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
-            }
-          }
-        }
-      } else {
-        if (current.connected) {
-          if (isSiblingSelected === false)
-            ;
-          else {
-            mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addGuideLine(current.startPoint, current.reversePoint);
-            if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
-              mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, "endPoint", this.isSelectedSegment("endPoint", prevPoint.index));
-            }
-            if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
-              mng.addCurvePoint(current.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
-            }
-          }
-        } else {
-          if (isSiblingSelected === false) {
-            mng.addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
-          } else {
-            mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addGuideLine(current.startPoint, current.reversePoint).addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
-            if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
-              mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, "endPoint", this.isSelectedSegment("endPoint", prevPoint.index));
-            }
-            if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
-              mng.addCurvePoint(current.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
-            }
-          }
-        }
-      }
-    }
-  }
-  checkInViewport(point2) {
-    const vertext = this.pathEditor.$viewport.applyVertexInverse([point2.x, point2.y, 0]);
-    return this.pathEditor.$viewport.checkInViewport(vertext);
-  }
-  makeMiddlePointGuideSplitLine(prevPoint, current, nextPoint, index2, isSiblingSelected) {
-    const selected = isSiblingSelected ? "selected" : "";
-    if (current.curve === false) {
-      if (prevPoint.curve === false) {
-        if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(current.startPoint)) === false) {
-          return;
-        }
-        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).L(current.startPoint).toString(`split-path ${selected}`));
-      } else {
-        if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(prevPoint.endPoint) || this.checkInViewport(current.startPoint)) === false) {
-          return;
-        }
-        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).Q(prevPoint.endPoint, current.startPoint).toString(`split-path ${selected}`));
-      }
-    } else {
-      if (prevPoint.curve === false) {
-        if (Point.isEqual(current.reversePoint, current.startPoint)) {
-          if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(current.startPoint)) === false) {
-            return;
-          }
-          this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).L(current.startPoint).toString(`split-path ${selected}`));
-        } else {
-          if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(current.reversePoint) || this.checkInViewport(current.startPoint)) === false) {
-            return;
-          }
-          this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).Q(current.reversePoint, current.startPoint).toString(`split-path ${selected}`));
-        }
-      } else {
-        if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(prevPoint.endPoint) || this.checkInViewport(current.reversePoint) || this.checkInViewport(current.startPoint)) === false) {
-          return;
-        }
-        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).C(prevPoint.endPoint, current.reversePoint, current.startPoint).toString(`split-path ${selected}`));
-      }
-    }
-  }
-  makePointGuide(points2) {
-    for (var index2 = 0, len2 = points2.length; index2 < len2; index2++) {
-      var currentIndex = index2;
-      var current = points2[currentIndex];
-      if (!current)
-        continue;
-      var nextPoint = Point.getNextPoint(points2, index2);
-      var prevPoint = Point.getPrevPoint(points2, index2);
-      if (prevPoint && prevPoint.command === "M") {
-        if (current.startPoint) {
-          current.startPoint.isSecond = true;
-        }
-      }
-      if (current.startPoint) {
-        if (nextPoint) {
-          current.startPoint.isLast = nextPoint.command === "M";
-        } else {
-          current.startPoint.isLast = index2 === len2 - 1;
-        }
-      }
-      current.selected = this.selectedIndex === index2;
-      if (current.command === "M") {
-        this.makeStartPointGuide(prevPoint, current, nextPoint, index2);
-      } else {
-        var isSiblingSelected = Boolean(this.isSelectedSegment("endPoint", prevPoint == null ? void 0 : prevPoint.index) || this.isSelectedSegment("startPoint", prevPoint == null ? void 0 : prevPoint.index) || this.isSelectedSegment("reversePoint", prevPoint == null ? void 0 : prevPoint.index) || this.isSelectedSegment("endPoint", nextPoint == null ? void 0 : nextPoint.index) || this.isSelectedSegment("startPoint", nextPoint == null ? void 0 : nextPoint.index) || this.isSelectedSegment("reversePoint", nextPoint == null ? void 0 : nextPoint.index) || this.isSelectedSegment("endPoint", current == null ? void 0 : current.index) || this.isSelectedSegment("startPoint", current == null ? void 0 : current.index) || this.isSelectedSegment("reversePoint", current == null ? void 0 : current.index));
-        this.makeMiddlePointGuideSplitLine(prevPoint, current, nextPoint, index2, isSiblingSelected);
-        this.makeMiddlePointGuideSegment(prevPoint, current, nextPoint, index2, isSiblingSelected);
-      }
-      if (current.close) {
-        this.pathStringManager.Z();
-      }
-    }
-  }
-  makeMovePositionGuide() {
-    var state = this.state;
-    var { startPoint, moveXY, dragPoints, altKey, snapPointList, isGroupSegment } = state;
-    var points2 = this.points;
-    if (moveXY) {
-      snapPointList = snapPointList || [];
-      var {
-        snapPointList: movePointSnapPointList,
-        moveXY: newMoveXY
-      } = calculateMovePointSnap(points2, moveXY, 3);
-      snapPointList.push.apply(snapPointList, movePointSnapPointList);
-      state.moveXY = newMoveXY;
-      moveXY = newMoveXY;
-      this.snapPointList = snapPointList;
-      var prev = points2[points2.length - 1];
-      if (dragPoints && !isGroupSegment) {
-        if (!prev) {
-          var { x: x2, y: y2 } = Point.getReversePoint(startPoint, moveXY);
-          this.guideLineManager.M(moveXY).L(startPoint).L({ x: x2, y: y2 });
-          this.segmentManager.addCurvePoint(startPoint).addCurvePoint(moveXY).addCurvePoint({ x: x2, y: y2 });
-        } else if (prev.curve) {
-          var { x: x2, y: y2 } = Point.getReversePoint(startPoint, moveXY);
-          this.guideLineManager.M(prev.startPoint).C(prev.endPoint, { x: x2, y: y2 }, startPoint);
-          this.segmentManager.addGuideLine(prev.startPoint, prev.endPoint).addGuideLine(startPoint, { x: x2, y: y2 }).addGuideLine(startPoint, moveXY).addCurvePoint(prev.endPoint).addCurvePoint({ x: x2, y: y2 }).addCurvePoint(moveXY).addPoint(false, startPoint);
-        } else if (prev.curve === false) {
-          var { x: x2, y: y2 } = Point.getReversePoint(startPoint, moveXY);
-          this.guideLineManager.M(prev.startPoint).Q({ x: x2, y: y2 }, startPoint);
-          this.segmentManager.addGuideLine(moveXY, { x: x2, y: y2 }).addPoint(false, startPoint).addCurvePoint({ x: x2, y: y2 }).addCurvePoint(moveXY);
-        }
-      } else {
-        if (!prev)
-          ;
-        else if (prev.curve) {
-          this.guideLineManager.M(prev.startPoint).Q(prev.endPoint, moveXY);
-          this.segmentManager.addGuideLine(prev.endPoint, prev.startPoint).addCurvePoint(prev.endPoint);
-        } else {
-          if (!prev.close) {
-            this.guideLineManager.M(prev.startPoint).L(moveXY);
-            this.segmentManager.addPoint(false, prev.startPoint);
-          }
-        }
-      }
-    }
-  }
-  makeSnapLines() {
-    var snapLines = [];
-    if (this.snapPointList) {
-      var snapPath = new PathStringManager();
-      snapLines = this.snapPointList.map((snapPoint) => {
-        snapPath.reset();
-        return snapPath.M(snapPoint.startPoint).L(snapPoint.endPoint).X(snapPoint.startPoint).toString("snap-path");
-      });
-    }
-    return snapLines.join("");
-  }
-  makePathArea() {
-    const pathList = this.splitedGroupList.map(({ startPointIndex, points: points2 }, groupIndex) => {
-      const d = PathGenerator.generatorPathString(points2);
-      const verties = toRectVerties(PathParser.fromSVGString(d).getBBox());
-      return {
-        points: points2,
-        startPointIndex,
-        groupIndex,
-        center: verties[4],
-        d
-      };
-    });
-    const pathCount = pathList.length;
-    return `
-            <g>
-               ${pathList.map((it) => {
-      const { center: center2 } = it;
-      const [x2, y2] = center2;
-      const selected = this.state.selectedGroupIndex === it.groupIndex;
-      return `
-                        <path class="path-area ${selected ? "selected" : ""}" 
-                            d="${it.d}" 
-                            data-point-index="${it.startPointIndex}" 
-                            data-group-index="${it.groupIndex}" 
-                        />
-
-                        ${pathCount > 1 && `
-                            <text class="path-area-text" x="${x2}" y="${y2}" >${it.groupIndex + 1}</text>
-                        `}
-                    `;
-    }).join("")}
-            </g>
-        `;
-  }
-  toSVGString() {
-    return `
-        <svg width="100%" height="100%" class='svg-editor-canvas'>
-            ${this.guideLineManager.toString("guide")}
-            ${this.splitLines.join("")}
-            ${this.makeSnapLines()}
-            ${this.makePathArea()}
-            ${this.segmentManager.toString()}
-        </svg>
-        `;
-  }
-}
-class SVGGradient extends Gradient {
-  toString() {
-    return "";
-  }
-  toSVGString(id) {
-    return "";
-  }
-  toFillValue(id) {
-    return "";
-  }
-}
-class SVGLinearGradient extends SVGGradient {
-  getDefaultObject(obj) {
-    return super.getDefaultObject(__spreadValues({
-      type: "linear-gradient",
-      x1: "0%",
-      y1: "0%",
-      x2: "100%",
-      y2: "0%",
-      spreadMethod: "pad"
-    }, obj));
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("x1", "y1", "x2", "y2", "spreadMethod"));
-  }
-  toString() {
-    if (this.colorsteps.length === 0)
-      return "";
-    var colorString = this.getColorString();
-    var { x1, y1, x2, y2, spreadMethod } = this.json;
-    var opt = [x1, y1, x2, y2, spreadMethod].join(" ");
-    var result = `${this.json.type}(${opt}, ${colorString})`;
-    return result;
-  }
-  toSVGString(id) {
-    var { x1, y1, x2, y2, spreadMethod } = this.json;
-    return `
-        <linearGradient 
-            id="${id}"
-            x1="${x1}"
-            x2="${x2}"
-            y1="${y1}"
-            y2="${y2}"
-            spreadMethod="${spreadMethod}"
-          >
-          ${this.colorsteps.map((it) => {
-      return `<stop offset="${it.percent}%"  stop-color="${it.color}" ></stop>`;
-    }).join("\n")}
-        </linearGradient>
-      `;
-  }
-  toFillValue(id) {
-    return `url(#${id})`;
-  }
-  static toLinearGradient(colorsteps) {
-    if (colorsteps.length === 0) {
-      return "none";
-    }
-    var gradient2 = new LinearGradient({
-      angle: "to right",
-      colorsteps
-    });
-    return gradient2 + "";
-  }
-  static parse(str) {
-    var results = convertMatches(str);
-    var opt = {};
-    var colorsteps = [];
-    results.str.split("(")[1].split(")")[0].split(",").map((it) => it.trim()).forEach((newValue, index2) => {
-      if (newValue.includes("@")) {
-        newValue = reverseMatches(newValue, results.matches);
-        colorsteps.push.apply(colorsteps, ColorStep.parse(newValue));
-      } else {
-        var [x1, y1, x2, y2, spreadMethod] = newValue.split(" ");
-        opt.x1 = Length.parse(x1);
-        opt.y1 = Length.parse(y1);
-        opt.x2 = Length.parse(x2);
-        opt.y2 = Length.parse(y2);
-        opt.spreadMethod = spreadMethod || "pad";
-      }
-    });
-    return new SVGLinearGradient(__spreadProps(__spreadValues({}, opt), { colorsteps }));
-  }
-}
-class SVGRadialGradient extends SVGGradient {
-  getDefaultObject(obj = {}) {
-    return super.getDefaultObject(__spreadValues({
-      type: "radial-gradient",
-      cx: "50%",
-      cy: "50%",
-      r: "50%",
-      fx: "50%",
-      fy: "50%",
-      fr: "0%",
-      spreadMethod: "pad"
-    }, obj));
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("cx", "cy", "r", "fx", "fy", "fr", "spreadMethod"));
-  }
-  toString() {
-    if (this.colorsteps.length === 0)
-      return "";
-    var colorString = this.getColorString();
-    var { cx, cy, r, fx, fy, fr, spreadMethod } = this.json;
-    var opt = [cx, cy, r, fx, fy, fr, spreadMethod].join(" ");
-    var result = `${this.json.type}(${opt}, ${colorString})`;
-    return result;
-  }
-  toSVGString(id) {
-    var { cx, cy, r, fx, fy, fr, spreadMethod } = this.json;
-    return `
-<radialGradient ${OBJECT_TO_PROPERTY({ id, cx, cy, r, fx, fy, fr, spreadMethod })} >
-  ${this.colorsteps.map((it) => {
-      return `<stop offset="${it.percent}%"  stop-color="${it.color}" />`;
-    }).join("\n")}
-</radialGradient>
-`;
-  }
-  toFillValue(id) {
-    return `url(#${id})`;
-  }
-  static parse(str) {
-    var results = convertMatches(str);
-    var opt = {};
-    var colorsteps = [];
-    results.str.split("(")[1].split(")")[0].split(",").map((it) => it.trim()).forEach((newValue, index2) => {
-      if (newValue.includes("@")) {
-        newValue = reverseMatches(newValue, results.matches);
-        colorsteps.push.apply(colorsteps, ColorStep.parse(newValue));
-      } else {
-        var [cx, cy, r, fx, fy, fr, spreadMethod] = newValue.split(" ");
-        opt.cx = cx;
-        opt.cy = cy;
-        opt.r = r;
-        opt.fx = fx;
-        opt.fy = fy;
-        opt.fr = fr;
-        opt.spreadMethod = spreadMethod || "pad";
-      }
-    });
-    return new SVGRadialGradient(__spreadProps(__spreadValues({}, opt), { colorsteps }));
-  }
-}
-class SVGStaticGradient extends SVGGradient {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "static-gradient",
-      static: true,
-      colorsteps: [
-        new ColorStep({ color: "red", percent: 0, index: 0 }),
-        new ColorStep({ color: "red", percent: 100, index: 1 })
-      ]
-    });
-  }
-  toCloneObject() {
-    return __spreadProps(__spreadValues({}, super.toCloneObject()), {
-      static: true
-    });
-  }
-  static create(color2 = "transparent") {
-    return new SVGStaticGradient({
-      colorsteps: [
-        new ColorStep({ color: color2, percent: 0, index: 0 }),
-        new ColorStep({ color: color2, percent: 100, index: 0 })
-      ]
-    });
-  }
-  setColor(color2) {
-    this.colorsteps.forEach((it) => {
-      it.color = color2;
-    });
-  }
-  toString() {
-    var color2 = this.json.colorsteps[0].color;
-    return color2;
-  }
-  toSVGString() {
-    return "";
-  }
-  toFillValue() {
-    return this.toString();
-  }
-  isStatic() {
-    return true;
-  }
-}
-const IMAGE_LIST = ["jpg", "jpeg", "png", "gif", "svg"];
-class SVGImageResource extends ImageResource {
-  getDefaultObject(obj = {}) {
-    return super.getDefaultObject(__spreadValues({
-      type: "url",
-      url: "",
-      datauri: "",
-      patternUnits: "userSpaceOnUse",
-      patternWidth: "100%",
-      patternHeight: "100%",
-      imageX: "0%",
-      imageY: "0%",
-      imageWidth: "100%",
-      imageHeight: "100%"
-    }, obj));
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("url", "datauri", "patternUnits", "patternWidth", "patternHeight", "imageX", "imageY", "imageWidth", "imageHeight"));
-  }
-  static parse(str) {
-    var content2 = str.split("(")[1].split(")")[0];
-    var [url, props2] = content2.trim().split("#");
-    if (!props2) {
-      return new SVGImageResource({ url });
-    }
-    var [patternUnits, patternWidth, patternHeight, imageX, imageY, imageWidth, imageHeight] = props2.split(",");
-    return new SVGImageResource({ patternUnits, patternWidth, patternHeight, imageX, imageY, imageWidth, imageHeight, url });
-  }
-  isUrl() {
-    return true;
-  }
-  static isImageFile(fileExt) {
-    return IMAGE_LIST.includes(fileExt);
-  }
-  toString() {
-    var json = this.json;
-    var {
-      patternUnits,
-      patternWidth,
-      patternHeight,
-      imageX,
-      imageY,
-      imageWidth,
-      imageHeight,
-      url
-    } = json;
-    var string = [
-      patternUnits,
-      patternWidth,
-      patternHeight,
-      imageX,
-      imageY,
-      imageWidth,
-      imageHeight
-    ].join(",").trim();
-    return `url(${url}#${string})`;
-  }
-  toSVGString(id) {
-    var {
-      patternUnits,
-      patternWidth: width2,
-      patternHeight: height,
-      imageX,
-      imageY,
-      imageWidth,
-      imageHeight
-    } = this.json;
-    return `
-  <pattern ${OBJECT_TO_PROPERTY({ id, patternUnits, width: width2, height })} >
-    <image xlink:href="${this.json.url}" ${OBJECT_TO_PROPERTY({
-      x: imageX,
-      y: imageY,
-      width: imageWidth,
-      height: imageHeight,
-      preserveAspectRatio: "none"
-    })} />
-  </pattern>
-      `;
-  }
-  toFillValue(id) {
-    return `url(#${id})`;
-  }
-}
-const reg = /((linear\-gradient|radial\-gradient|url)\(([^\)]*)\))/gi;
-class SVGFill extends PropertyItem {
-  addImageResource(imageResource) {
-    this.clear("image-resource");
-    return this.addItem("image-resource", imageResource);
-  }
-  addGradient(gradient2) {
-    return this.addImageResource(gradient2);
-  }
-  setImageUrl(data) {
-    if (!data.images)
-      return;
-    if (!data.images.length)
-      return;
-    this.reset({
-      type: "image",
-      image: SVGFill.createImage(data.images[0])
-    });
-  }
-  static createImage(url) {
-    return new SVGLImageResource({ url });
-  }
-  setGradient(data) {
-    this.reset({
-      type: data.type,
-      image: SVGFill.createGradient(data, this.json.image)
-    });
-  }
-  static createGradient(data, gradient2) {
-    const colorsteps = data.colorsteps || gradient2.colorsteps;
-    let json = gradient2.toJSON();
-    delete json.itemType;
-    delete json.type;
-    switch (data.type) {
-      case "linear-gradient":
-        return new SVGLinearGradient(__spreadProps(__spreadValues({}, json), { colorsteps }));
-      case "radial-gradient":
-        return new SVGRadialGradient(__spreadProps(__spreadValues({}, json), { colorsteps }));
-      default:
-        return new SVGStaticGradient(__spreadProps(__spreadValues({}, json), { colorsteps }));
-    }
-  }
-  get image() {
-    return this.json.image;
-  }
-  set image(image2) {
-    this.json.image = image2;
-  }
-  static parse(obj) {
-    return new SVGFill(obj);
-  }
-  static parseImage(str) {
-    var results = convertMatches(str);
-    let image2 = null;
-    var matchResult = results.str.match(reg);
-    if (!matchResult) {
-      return SVGStaticGradient.create(str || "transparent");
-    }
-    matchResult.forEach((value, index2) => {
-      value = reverseMatches(value, results.matches);
-      if (value.includes("linear")) {
-        image2 = SVGLinearGradient.parse(value);
-      } else if (value.includes("radial")) {
-        image2 = SVGRadialGradient.parse(value);
-      } else if (value.includes("url")) {
-        image2 = SVGImageResource.parse(value);
-      } else {
-        image2 = SVGStaticGradient.parse(value);
-      }
-    });
-    return image2;
-  }
-  static changeImageType(options2) {
-    switch (options2.type) {
-      case "linear-gradient":
-        return new SVGLinearGradient(options2);
-      case "radial-gradient":
-        return new SVGRadialGradient(options2);
-      case "image-resource":
-      case "url":
-        return new SVGImageResource(options2);
-      default:
-        return new SVGStaticGradient(options2);
-    }
-  }
-}
-var PathDrawView$1 = "";
-const FIELDS$1 = ["fill", "fill-opacity", "stroke", "stroke-width", "stroke-linecap", "stroke-linejoin"];
-class PathDrawView extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.pathParser = new PathParser();
-  }
-  initState() {
-    return {
-      points: [],
-      $target: null,
-      fill: "transparent",
-      stroke: "black",
-      "fill-opacity": null,
-      "stroke-width": 2,
-      "stroke-linecap": "round",
-      "stroke-linejoin": "round",
-      tolerance: 1,
-      screenX: Length.z(),
-      screenY: Length.z(),
-      screenWidth: Length.z(),
-      screenHeight: Length.z()
-    };
-  }
-  [SUBSCRIBE("changeDrawManager")](obj) {
-    this.setState(__spreadValues({}, obj), false);
-  }
-  get scale() {
-    return this.$viewport.scale;
-  }
-  template() {
-    return `
-        <div class='elf--path-draw-view' tabIndex="-1">
-            <div class='path-draw-container' ref='$view'></div>
-        </div>`;
-  }
-  initRect(isForce = false) {
-    if (!this.state.rect || isForce) {
-      this.state.rect = this.$el.rect();
-    }
-  }
-  [KEYUP("document") + IF("isShow") + ESCAPE + ENTER + PREVENT + STOP]() {
-    this.trigger("hidePathDrawEditor");
-  }
-  [SUBSCRIBE("DrawEditorDone")]() {
-    this.trigger("hidePathDrawEditor");
-  }
-  get totalPathLength() {
-    if (!this.refs.$view)
-      return 0;
-    var $obj = this.refs.$view.$("path.object");
-    if (!$obj)
-      return 0;
-    return $obj.totalLength;
-  }
-  makePathLayer(pathRect) {
-    var layer2;
-    const newPath = PathParser.makePathByPoints(this.state.points).simplify(this.state.tolerance).smooth(30);
-    newPath.transformMat4(this.$viewport.matrixInverse);
-    const bbox = newPath.getBBox();
-    const newWidth = distance$1(bbox[1], bbox[0]);
-    const newHeight = distance$1(bbox[3], bbox[0]);
-    newPath.translate(-bbox[0][0], -bbox[0][1]);
-    const pathItem = {
-      itemType: "svg-path",
-      x: Length.px(bbox[0][0]),
-      y: Length.px(bbox[0][1]),
-      width: Length.px(newWidth),
-      height: Length.px(newHeight),
-      d: newPath.d,
-      totalLength: this.totalPathLength
-    };
-    FIELDS$1.forEach((key) => {
-      if (this.state[key])
-        Object.assign(pathItem, { [key]: this.state[key] });
-    });
-    const containerItem = this.$selection.currentProject;
-    layer2 = containerItem.appendChild(this.$editor.createModel(pathItem));
-    return layer2;
-  }
-  addPathLayer() {
-    var pathRect = this.getPathRect();
-    if (pathRect.width !== 0 && pathRect.height !== 0) {
-      var layer2 = this.makePathLayer(pathRect);
-      if (layer2) {
-        this.emit("refreshAll");
-      }
-    }
-  }
-  changeMode(obj) {
-    this.setState(__spreadValues(__spreadValues({}, this.initState()), obj), false);
-  }
-  getCurrentObject() {
-    var current = this.state.current;
-    if (!current) {
-      return null;
-    }
-    return {
-      current,
-      d: current.d,
-      screenX: current.screenX,
-      screenY: current.screenY,
-      screenWidth: current.screenWidth,
-      screenHeight: current.screenHeight
-    };
-  }
-  [SUBSCRIBE("showPathDrawEditor")](obj = {}) {
-    this.changeMode(obj);
-    this.$el.show();
-    this.$el.focus();
-    this.emit("showDrawManager", {
-      instance: this,
-      fill: this.state.fill,
-      stroke: this.state.stroke,
-      "fill-opacity": this.state["fill-opacity"],
-      "stroke-width": this.state["stroke-width"],
-      "stroke-linecap": this.state["stroke-linecap"],
-      "stroke-linejoin": this.state["stroke-linejoin"]
-    });
-    this.emit("hidePathEditor");
-    this.emit("push.mode.view", "PathDrawView");
-  }
-  [SUBSCRIBE("initPathDrawEditor")]() {
-    this.pathParser.reset("");
-    this.refs.$view.empty();
-  }
-  [SUBSCRIBE("hidePathDrawEditor")]() {
-    if (this.$el.isShow()) {
-      this.trigger("initPathDrawEditor");
-      this.$el.hide();
-      this.emit("hideDrawManager");
-      this.emit("pop.mode.view", "PathDrawView");
-    }
-  }
-  [SUBSCRIBE("hideAddViewLayer")]() {
-    this.$el.hide();
-    this.emit("hideDrawManager");
-  }
-  getInnerId(postfix = "") {
-    return "draw-manager-" + postfix;
-  }
-  get toFillSVG() {
-    return SVGFill.parseImage(this.state.fill || "transparent").toSVGString(this.fillId);
-  }
-  get toStrokeSVG() {
-    return SVGFill.parseImage(this.state.stroke || "black").toSVGString(this.strokeId);
-  }
-  get toDefInnerString() {
-    return `
-            ${this.toFillSVG}
-            ${this.toStrokeSVG}
-        `;
-  }
-  get toDefString() {
-    var str = this.toDefInnerString.trim();
-    return `
-            <defs>
-            ${str}
-            </defs>
-        `;
-  }
-  get fillId() {
-    return this.getInnerId("fill");
-  }
-  get strokeId() {
-    return this.getInnerId("stroke");
-  }
-  get toFillValue() {
-    return SVGFill.parseImage(this.state.fill || "transparent").toFillValue(this.fillId);
-  }
-  get toStrokeValue() {
-    return SVGFill.parseImage(this.state.stroke || "black").toFillValue(this.strokeId);
-  }
-  [BIND("$view")]() {
-    const newPath = PathParser.makePathByPoints(this.state.points).simplify(this.state.tolerance);
-    return {
-      innerHTML: `
-            <svg width="100%" height="100%" class='svg-editor-canvas'>
-                ${this.toDefString}
-                <path 
-                    class='object' 
-                    fill="${this.toFillValue}"
-                    stroke="${this.toStrokeValue}"
-                    fill-opacity="${this.state["fill-opacity"]}"
-                    stroke-width="${this.state["stroke-width"]}"
-                    stroke-linecap="${this.state["stroke-linecap"]}"
-                    stroke-linejoin="${this.state["stroke-linejoin"]}"
-                    d="${newPath.d}" 
-                />
-            </svg>
-            `
-    };
-  }
-  renderPath() {
-    this.bindData("$view");
-  }
-  [SUBSCRIBE("resizeEditor")]() {
-    this.initRect(true);
-  }
-  getPathRect() {
-    this.initRect(true);
-    var $obj = this.refs.$view.$("path.object");
-    var pathRect = { x: Length.z(), y: Length.z(), width: Length.z(), height: Length.z() };
-    if ($obj) {
-      pathRect = $obj.rect();
-      pathRect.x -= this.state.rect.x;
-      pathRect.y -= this.state.rect.y;
-    }
-    return pathRect;
-  }
-  [POINTERSTART("$view") + MOVE() + END()](e) {
-    this.initRect();
-    this.state.altKey = false;
-    this.state.startXY = {
-      x: e.xy.x - this.state.rect.x,
-      y: e.xy.y - this.state.rect.y
-    };
-    this.state.points = [this.state.startXY];
-  }
-  move(dx, dy, eventType, pressure) {
-    this.state.points.push({
-      x: this.state.startXY.x + dx,
-      y: this.state.startXY.y + dy,
-      pressure
-    });
-    this.renderPath();
-  }
-  end(dx, dy) {
-    this.addPathLayer();
-    this.trigger("initPathDrawEditor");
-  }
-}
-var PathEditorView$1 = "";
-function xy([x2, y2]) {
-  return { x: x2, y: y2 };
-}
-const SegmentConvertor = class extends EditorElement {
-  convertToCurve(index2) {
-    this.pathGenerator.convertToCurve(index2);
-    this.renderPath();
-    this.refreshPathLayer();
-  }
-  isEditableSegment() {
-    return this.state.disableCurve === false;
-  }
-  [DOUBLECLICK("$view [data-segment]") + IF("isEditableSegment") + PREVENT](e) {
-    var index2 = +e.$dt.attr("data-index");
-    this.convertToCurve(index2);
-  }
-  [DOUBLETAB("$view [data-segment]") + PREVENT + DELAY(300)](e) {
-    var index2 = +e.$dt.attr("data-index");
-    this.convertToCurve(index2);
-  }
-};
-const PathCutter = class extends SegmentConvertor {
-  calculatePointOnLine(d, clickPosition) {
-    var parser2 = new PathParser(d);
-    return parser2.getClosedPoint(clickPosition);
-  }
-  [POINTERSTART("$view .split-path") + MOVE() + END()](e) {
-    this.initRect();
-    var parser2 = new PathParser(e.$dt.attr("d"));
-    var clickPosition = {
-      x: e.xy.x - this.state.rect.x,
-      y: e.xy.y - this.state.rect.y
-    };
-    var selectedSegmentIndex = -1;
-    if (this.state.mode === "path") {
-      this.state.dragXY = {
-        x: e.xy.x - this.state.rect.x,
-        y: e.xy.y - this.state.rect.y
-      };
-      this.state.startPoint = this.state.dragXY;
-      this.pathGenerator.setLastPoint(this.state.startPoint);
-      this.state.isSplitPath = true;
-      this.renderPath();
-      if (this.state.current) {
-        this.refreshPathLayer();
-      } else {
-        this.addPathLayer();
-        this.trigger("initPathEditorView");
-      }
-      return;
-    } else {
-      if (parser2.segments[1].command === "C") {
-        var points2 = [
-          xy(parser2.segments[0].values),
-          xy(parser2.segments[1].values.slice(0, 2)),
-          xy(parser2.segments[1].values.slice(2, 4)),
-          xy(parser2.segments[1].values.slice(4, 6))
-        ];
-        var curve = recoverBezier(...points2, 20);
-        var t = curve(clickPosition.x, clickPosition.y);
-        selectedSegmentIndex = this.pathGenerator.setPoint(getBezierPoints(points2, t));
-      } else if (parser2.segments[1].command === "Q") {
-        var points2 = [
-          xy(parser2.segments[0].values),
-          xy(parser2.segments[1].values.slice(0, 2)),
-          xy(parser2.segments[1].values.slice(2, 4))
-        ];
-        var curve = recoverBezierQuard(...points2, 20);
-        var t = curve(clickPosition.x, clickPosition.y);
-        selectedSegmentIndex = this.pathGenerator.setPointQuard(getBezierPointsQuard(points2, t));
-      } else if (parser2.segments[1].command === "L") {
-        var points2 = [
-          xy(parser2.segments[0].values),
-          xy(parser2.segments[1].values.slice(0, 2))
-        ];
-        var curve = recoverBezierLine(...points2, 20);
-        var t = curve(clickPosition.x, clickPosition.y);
-        selectedSegmentIndex = this.pathGenerator.setPointLine(getBezierPointsLine(points2, t));
-      }
-      this.renderPath();
-      this.refreshPathLayer();
-      this.changeMode("segment-move");
-      this.pathGenerator.setCachePoint(selectedSegmentIndex, "startPoint");
-      this.pathGenerator.selectKeyIndex("startPoint", selectedSegmentIndex);
-    }
-  }
-};
-const PathTransformEditor = class extends PathCutter {
-  [SUBSCRIBE("changePathTransform")](transformMoveType) {
-    this.resetTransformZone();
-    var { width: width2, height } = this.state.transformZoneRect;
-    this.pathGenerator.initTransform(this.state.transformZoneRect);
-    switch (transformMoveType) {
-      case "flipX":
-        this.pathGenerator.transform("flipX", width2, 0);
-        break;
-      case "flipY":
-        this.pathGenerator.transform("flipY", 0, height);
-        break;
-      case "flip":
-        this.pathGenerator.transform("flip", width2, height);
-    }
-    this.renderPath();
-    this.refreshPathLayer();
-  }
-  [SUBSCRIBE("changePathUtil")](utilType) {
-    switch (utilType) {
-      case "reverse":
-        const { d } = this.pathGenerator.toPath();
-        const pathParser = new PathParser(d);
-        console.log(this.pathGenerator.selectedGroupIndexList);
-        pathParser.reverse(...this.pathGenerator.selectedGroupIndexList);
-        pathParser.transformMat4(this.state.cachedMatrixInverse);
-        this.refreshEditorView({ d: pathParser.d });
-        this.updatePathLayer();
-        break;
-    }
-  }
-  [SUBSCRIBE("divideSegmentsByCount")](count) {
-    const { d } = this.pathGenerator.toPath();
-    const pathParser = new PathParser(d);
-    const newPath = pathParser.divideSegmentByCount(count);
-    newPath.transformMat4(this.state.cachedMatrixInverse);
-    this.refreshEditorView({ d: newPath.d });
-  }
-};
-const FIELDS = ["fill", "fill-opacity", "stroke", "stroke-width"];
-class PathEditorView extends PathTransformEditor {
-  initialize() {
-    super.initialize();
-    this.pathParser = new PathParser();
-    this.pathGenerator = new PathGenerator(this);
-  }
-  initState() {
-    return {
-      changeEvent: "updatePathItem",
-      isShow: false,
-      isControl: false,
-      disableCurve: false,
-      points: [],
-      mode: "path",
-      clickCount: 0,
-      isSegment: false,
-      isFirstSegment: false,
-      current: null
-    };
-  }
-  get scale() {
-    return this.$viewport.scale;
-  }
-  template() {
-    return `
-        <div class='elf--path-editor-view' tabIndex="-1">
-            <style type="text/css" ref="$styleView"></style>
-            <svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'>
-                <defs>
-                    <pattern id='stripe' patternUnits='userSpaceOnUse' width='20' height='33' patternTransform='scale(1) rotate(135)'>
-                        <path d='M0 8h20z'   stroke-width='1' stroke='#07A3FB' fill='none'/>
-                        <path d='M0 16h20z'   stroke-width='1' stroke='#07A3FB' fill='none'/>
-                        <path d='M0 24h20z'   stroke-width='1' stroke='#07A3FB' fill='none'/>
-                        <path d='M0 32h20z'   stroke-width='1' stroke='#07A3FB' fill='none'/>
-                    </pattern>
-                </defs>    
-            </svg>
-            <div class='path-container' ref='$view'></div>
-            <div class='path-container split-panel'>
-                <svg width="100%" height="100%">
-                    <circle ref='$splitCircle' class='split-circle' />
-                </svg>
-            </div>
-            <div class='segment-box' ref='$segmentBox'></div>
-        </div>`;
-  }
-  isShow() {
-    return this.state.isShow;
-  }
-  initRect(isForce = false) {
-    if (!this.state.rect || isForce) {
-      this.state.rect = this.$el.rect();
-    }
-  }
-  [SUBSCRIBE("PathEditorDone")]() {
-    if (this.state.current) {
-      this.refreshPathLayer();
-      this.trigger("hidePathEditor");
-    } else {
-      this.addPathLayer();
-    }
-    if (!this.state.current && this.pathGenerator.length) {
-      this.trigger("initPathEditorView");
-    } else {
-      this.trigger("hidePathEditor");
-    }
-  }
-  [KEYUP("document") + IF("isShow") + ENTER + PREVENT + STOP]() {
-    this.trigger("PathEditorDone");
-  }
-  [KEYUP("document") + IF("isShow") + ESCAPE + PREVENT + STOP]() {
-    if (this.state.current) {
-      this.refreshPathLayer();
-    } else {
-      this.addPathLayer();
-    }
-    this.trigger("hidePathEditor");
-  }
-  makePathLayer() {
-    var layer2;
-    const newPath = new PathParser(this.pathGenerator.toPath().d);
-    newPath.transformMat4(this.$viewport.matrixInverse);
-    const bbox = newPath.getBBox();
-    const newWidth = distance$1(bbox[1], bbox[0]);
-    const newHeight = distance$1(bbox[3], bbox[0]);
-    newPath.translate(-bbox[0][0], -bbox[0][1]);
-    const pathItem = {
-      itemType: "svg-path",
-      x: Length.px(bbox[0][0]),
-      y: Length.px(bbox[0][1]),
-      width: Length.px(newWidth),
-      height: Length.px(newHeight),
-      d: newPath.d,
-      fill: newPath.closed ? `#C4C4C4` : "transparent"
-    };
-    FIELDS.forEach((key) => {
-      if (this.state[key]) {
-        pathItem[key] = this.state[key];
-      }
-    });
-    const containerItem = this.$selection.getArtboardByPoint(bbox[0]) || this.$selection.currentProject;
-    layer2 = containerItem.appendChild(this.$editor.createModel(pathItem));
-    return layer2;
-  }
-  updatePathLayer() {
-    var { d } = this.pathGenerator.toPath();
-    var parser2 = new PathParser(d);
-    parser2.transformMat4(this.$viewport.matrixInverse);
-    this.emit(this.state.changeEvent, {
-      d: parser2.d,
-      matrix: this.state.matrix,
-      box: this.state.box
-    });
-  }
-  addPathLayer() {
-    this.changeMode("modify");
-    var layer2 = this.makePathLayer();
-    console.log(layer2);
-    if (layer2) {
-      this.$selection.select(layer2);
-      this.trigger("hidePathEditor");
-      this.emit("refreshAll");
-    }
-  }
-  changeMode(mode, obj) {
-    this.setState(__spreadValues({
-      mode,
-      clickCount: 0,
-      moveXY: null
-    }, obj), false);
-    if (obj == null ? void 0 : obj.points) {
-      this.pathGenerator.setPoints(obj.points || []);
-    }
-    this.emit("changePathManager", this.state.mode);
-  }
-  [SUBSCRIBE("changePathManager")](obj) {
-    this.setState(__spreadProps(__spreadValues({}, obj), { clickCount: 0 }), false);
-    this.renderPath();
-  }
-  isMode(mode) {
-    return this.state.mode === mode;
-  }
-  afterRender() {
-    this.$el.hide();
-  }
-  [SUBSCRIBE("updateViewport")]() {
-    if (this.$el.isShow()) {
-      const { d } = this.pathGenerator.toPath();
-      const pathParser = new PathParser(d);
-      pathParser.transformMat4(this.state.cachedMatrixInverse);
-      this.refreshEditorView({ d: pathParser.d });
-    }
-  }
-  refreshEditorView(obj, removeCache = false) {
-    if (obj && obj.d) {
-      this.pathParser.reset(obj.d);
-      this.pathParser.transformMat4(this.$viewport.matrix);
-      this.state.cachedMatrixInverse = this.$viewport.matrixInverse;
-      removeCache ? [] : this.pathGenerator.selectedPointList;
-      this.pathGenerator.setPoints(this.pathParser.convertGenerator());
-    }
-    this.renderPath();
-  }
-  [SUBSCRIBE("showPathEditor")](mode = "path", obj = {}) {
-    this.state.isShow = true;
-    this.transformMode = mode;
-    if (mode === "move") {
-      obj.current = null;
-      obj.points = [];
-    }
-    obj.box = obj.box || "canvas";
-    this.changeMode(mode, obj);
-    this.refreshEditorView(obj, true);
-    this.$el.show();
-    this.$el.focus();
-    this.emit("showPathManager", { mode: this.state.mode });
-    this.emit("hidePathDrawEditor");
-    this.emit("push.mode.view", "PathEditorView");
-  }
-  [SUBSCRIBE("hidePathEditor")]() {
-    if (this.$el.isShow()) {
-      this.pathParser.reset("");
-      this.pathGenerator.setPoints([]);
-      this.setState(this.initState(), false);
-      this.refs.$view.empty();
-      this.$el.hide();
-      this.emit("hidePathManager");
-      this.emit("pop.mode.view", "PathEditorView");
-      this.emit("refreshSelectionTool");
-    }
-  }
-  [SUBSCRIBE("hideAddViewLayer")]() {
-    this.state.isShow = false;
-    this.state.isControl = false;
-    this.pathParser.reset("");
-    this.setState(this.initState(), false);
-    this.refs.$view.empty();
-    this.$el.hide();
-    this.emit("hidePathManager");
-  }
-  [BIND("$view")]() {
-    var _a;
-    const path = this.state.isShow ? this.pathGenerator.makeSVGPath() : "";
-    const strokeWidth = Length.parse((_a = this.state.current) == null ? void 0 : _a["stroke-width"]).value || 0;
-    return {
-      class: {
-        "path": this.state.mode === "path",
-        "modify": this.state.mode === "modify",
-        "transform": this.state.mode === "transform",
-        "box": this.state.box === "box",
-        "canvas": this.state.box === "canvas",
-        "segment-move": this.state.mode === "segment-move",
-        "is-control": this.state.isControl,
-        "has-one-stroke-width": strokeWidth === 1
-      },
-      htmlDiff: path
-    };
-  }
-  [BIND("$splitCircle")]() {
-    if (this.state.splitXY) {
-      return {
-        cx: this.state.splitXY.x,
-        cy: this.state.splitXY.y,
-        r: 5
-      };
-    } else {
-      return {
-        r: 0
-      };
-    }
-  }
-  refreshPathLayer() {
-    this.updatePathLayer();
-  }
-  renderPath() {
-    this.bindData("$view");
-  }
-  getPathRect() {
-    this.initRect(true);
-    const { d } = this.pathGenerator.toPath();
-    return vertiesToRectangle(PathParser.fromSVGString(d).getBBox(), false);
-  }
-  resetTransformZone() {
-    var rect2 = this.getPathRect();
-    this.state.transformZoneRect = rect2;
-  }
-  [POINTERMOVE("$view") + PREVENT](e) {
-    this.initRect();
-    if (this.isMode("path") && this.state.rect) {
-      this.state.moveXY = {
-        x: e.xy.x - this.state.rect.x,
-        y: e.xy.y - this.state.rect.y
-      };
-      this.state.altKey = e.altKey;
-      this.renderPath();
-    } else {
-      var $target = Dom.create(e.target);
-      var isSplitPath = $target.hasClass("split-path");
-      if (isSplitPath) {
-        this.state.splitXY = this.calculatePointOnLine($target.attr("d"), {
-          x: e.xy.x - this.state.rect.x,
-          y: e.xy.y - this.state.rect.y
-        });
-      } else {
-        this.state.splitXY = null;
-      }
-      this.bindData("$splitCircle");
-      this.state.altKey = false;
-    }
-  }
-  [POINTERSTART("$view :not(.split-path)") + PREVENT + STOP + MOVE() + END()](e) {
-    this.initRect();
-    this.state.altKey = false;
-    var isPathMode = this.isMode("path");
-    this.$config.set("set.move.control.point", true);
-    this.state.dragXY = {
-      x: e.xy.x - this.state.rect.x,
-      y: e.xy.y - this.state.rect.y
-    };
-    this.$config.set("set.drag.path.area", false);
-    var $target = Dom.create(e.target);
-    if ($target.hasClass("svg-editor-canvas") && !isPathMode) {
-      this.$config.set("set.drag.path.area", true);
-      this.state.isGroupSegment = false;
-      this.state.selectedGroupIndex = "";
-      this.state.selectedPointIndex = "";
-    } else {
-      this.pathGenerator.reselect();
-      this.state.isSegment = $target.attr("data-segment") === "true";
-      this.state.isFirstSegment = this.state.isSegment && $target.attr("data-is-first") === "true";
-      this.state.isGroupSegment = $target.hasClass("path-area");
-      if (this.state.isGroupSegment) {
-        this.state.selectedGroupIndex = +$target.data("group-index");
-        this.state.selectedPointIndex = +$target.data("point-index");
-      } else {
-        this.state.selectedGroupIndex = "";
-        this.state.selectedPointIndex = "";
-      }
-    }
-    if (isPathMode) {
-      if (this.state.isFirstSegment) {
-        var index2 = +$target.attr("data-index");
-        this.state.startPoint = this.pathGenerator.points[index2].startPoint;
-      } else {
-        this.state.startPoint = this.state.dragXY;
-      }
-      this.state.dragPoints = false;
-      this.state.endPoint = null;
-    } else {
-      if (this.state.isSegment) {
-        this.changeMode("segment-move");
-        var [index2, segmentKey] = $target.attrs("data-index", "data-segment-point");
-        const localIndex = +index2;
-        if (e.shiftKey) {
-          this.pathGenerator.toggleSelect(segmentKey, localIndex);
-        } else {
-          this.pathGenerator.setCachePoint(localIndex, segmentKey);
-          this.pathGenerator.selectKeyIndex(segmentKey, localIndex);
-        }
-        this.renderPath();
-      } else if (this.state.isGroupSegment) {
-        this.changeMode("segment-move");
-        this.pathGenerator.selectGroup(this.state.selectedGroupIndex);
-        this.renderPath();
-      }
-    }
-  }
-  move(dx, dy) {
-    var e = this.$config.get("bodyEvent");
-    if (this.$config.true("set.drag.path.area")) {
-      this.renderSelectBox(this.state.dragXY, dx, dy);
-    } else if (this.isMode("segment-move")) {
-      this.pathGenerator.move(dx, dy, e);
-      this.renderPath();
-      this.updatePathLayer();
-    } else if (this.isMode("path")) {
-      const dist2 = getDist(dx, dy, 0, 0);
-      if (dist2 >= 2) {
-        this.state.dragPoints = e.altKey ? false : true;
-      }
-    }
-  }
-  renderSegment(callback) {
-    if (this.pathGenerator.selectedLength) {
-      this.pathGenerator.reselect();
-      if (isFunction(callback))
-        callback();
-      this.renderPath();
-      this.updatePathLayer();
-    }
-  }
-  end(dx, dy) {
-    var e = this.$config.get("bodyEvent");
-    this.$config.set("set.move.control.point", false);
-    if (this.state.isGroupSegment) {
-      this.pathGenerator.select();
-    }
-    if (this.$config.true("set.drag.path.area")) {
-      if (dx === 0 && dy === 0) {
-        this.changeMode("modify");
-        this.trigger("hidePathEditor");
-      } else {
-        this.changeMode("segment-move");
-        this.pathGenerator.selectInBox(this.getSelectBox(), e.shiftKey);
-        this.renderPath();
-        this.hideSelectBox();
-      }
-    } else if (this.isMode("modify")) {
-      this.pathGenerator.reselect();
-    } else if (this.isMode("segment-move")) {
-      this.changeMode("modify");
-      this.pathGenerator.reselect();
-      this.renderPath();
-      this.updatePathLayer();
-    } else if (this.isMode("path")) {
-      if (this.state.isFirstSegment) {
-        this.changeMode("modify");
-        this.pathGenerator.setConnectedPoint(dx, dy);
-        this.renderPath();
-        if (this.state.current) {
-          this.refreshPathLayer();
-        } else {
-          this.addPathLayer();
-          this.trigger("initPathEditorView");
-        }
-      } else {
-        if (this.state.isSplitPath)
-          ;
-        else {
-          this.pathGenerator.moveEnd(dx, dy);
-          this.state.clickCount++;
-          this.renderPath();
-          this.pathGenerator.reselect();
-        }
-      }
-      this.state.isSplitPath = false;
-    }
-  }
-  hideSelectBox() {
-    this.refs.$segmentBox.css({
-      left: Length.px(-1e5)
-    });
-  }
-  renderSelectBox(startXY = null, dx = 0, dy = 0) {
-    var obj = {
-      left: Length.px(startXY.x + (dx < 0 ? dx : 0)),
-      top: Length.px(startXY.y + (dy < 0 ? dy : 0)),
-      width: Length.px(Math.abs(dx)),
-      height: Length.px(Math.abs(dy))
-    };
-    this.refs.$segmentBox.css(obj);
-  }
-  getSelectBox() {
-    var [x2, y2, width2, height] = this.refs.$segmentBox.styles("left", "top", "width", "height").map((it) => Length.parse(it));
-    var rect2 = {
-      x: x2,
-      y: y2,
-      width: width2,
-      height
-    };
-    rect2.x2 = Length.px(rect2.x.value + rect2.width.value);
-    rect2.y2 = Length.px(rect2.y.value + rect2.height.value);
-    return rect2;
-  }
-  [SUBSCRIBE("deleteSegment")]() {
-    this.pathGenerator.reselect();
-    this.pathGenerator.removeSelectedSegment();
-    this.renderPath();
-    this.updatePathLayer();
-  }
-  [SUBSCRIBE("moveSegment")](dx, dy) {
-    this.pathGenerator.reselect();
-    this.pathGenerator.moveSelectedSegment(dx, dy);
-    this.renderPath();
-    this.updatePathLayer();
-  }
-  [SUBSCRIBE("initPathEditorView")]() {
-    this.pathParser.reset("");
-    this.setState(this.initState(), false);
-    this.state.isShow = true;
-    this.refs.$view.empty();
-    this.$el.focus();
-  }
-}
-var HoverView$1 = "";
-class HoverView extends EditorElement {
-  template() {
-    return `
-            <div class='elf--hover-view'>
-                <div class='elf--hover-rect' ref='$hoverRect'></div>            
-            </div>
-        `;
-  }
-  checkModeView() {
-    const e = this.$config.get("bodyEvent");
-    if (!this.$viewport.checkInViewport(this.$viewport.getWorldPosition(e))) {
-      return false;
-    }
-    return this.$modeView.isCurrentMode("CanvasView");
-  }
-  [CONFIG("bodyEvent") + IF("checkModeView")]() {
-    var _a;
-    if (this.$config.true("set.move.control.point")) {
-      this.$selection.setHoverId("");
-      this.renderHoverLayer();
-      return;
-    }
-    const filteredList = this.$selection.filteredLayers;
-    const items = filteredList.filter((it) => !it.isBooleanPath).filter((it) => {
-      const point2 = this.$viewport.getWorldPosition(this.$config.get("bodyEvent"));
-      return it.hasPoint(point2[0], point2[1]);
-    }).filter((it) => it.isNot("artboard"));
-    const id = (_a = items[0]) == null ? void 0 : _a.id;
-    if (!id) {
-      this.$selection.setHoverId("");
-      this.renderHoverLayer();
-    } else {
-      if (this.$selection.setHoverId(id)) {
-        this.renderHoverLayer();
-      }
-    }
-  }
-  [SUBSCRIBE("refreshHoverView")](id) {
-    if (this.$selection.setHoverId(id)) {
-      this.renderHoverLayer();
-    }
-  }
-  [SUBSCRIBE("updateViewport")]() {
-    this.$selection.setHoverId("");
-    this.renderHoverLayer();
-  }
-  createVisiblePath(current) {
-    if (!current.isBooleanItem) {
-      return "";
-    }
-    const newPath = current.accumulatedPath();
-    newPath.transformMat4(this.$viewport.matrix);
-    return `
-        <svg overflow="visible">
-            <path
-                d="${newPath.d}"
-                stroke="red"
-                stroke-width="2"
-                fill="none"
-                />
-        </svg>
-        `;
-  }
-  renderHoverLayer() {
-    const items = this.$selection.hoverItems;
-    if (items.length === 0) {
-      this.refs.$hoverRect.updateDiff("");
-      this.emit("removeGuideLine");
-    } else {
-      if (items[0].isBooleanItem) {
-        const line2 = this.createVisiblePath(items[0]);
-        this.refs.$hoverRect.updateDiff(line2);
-        this.emit("removeGuideLine");
-      } else {
-        const verties = items[0].verties;
-        const line2 = this.createPointerLine(this.$viewport.applyVerties(verties));
-        this.refs.$hoverRect.updateDiff(line2);
-        this.emit("refreshGuideLineByTarget", [items[0].verties]);
-      }
-    }
-  }
-  createPointerLine(pointers) {
-    if (pointers.length === 0)
-      return "";
-    const current = this.$selection.hoverItems[0];
-    const verties = toRectVerties(pointers);
-    return `
-        <svg overflow="visible">
-            <path 
-                class='line' 
-                d="
-                    M ${pointers[0][0]}, ${pointers[0][1]} 
-                    L ${pointers[1][0]}, ${pointers[1][1]} 
-                    L ${pointers[2][0]}, ${pointers[2][1]} 
-                    L ${pointers[3][0]}, ${pointers[3][1]} 
-                    L ${pointers[0][0]}, ${pointers[0][1]}
-                    Z
-                " 
-            />
-            <rect height="20" width="${current.itemType.length * 8}" x="${verties[0][0] - 1}" y="${verties[0][1] - 20}"></rect>
-            <text x="${verties[0][0]}" y="${verties[0][1]}" dx="5" dy="-5">${current.itemType}</text>
-        </svg>`;
-  }
-}
-var GuideLineView$1 = "";
-const line = (source2, target, className = "base-line") => {
-  return `<line x1="${source2[0]}" y1="${source2[1]}" x2="${target[0]}" y2="${target[1]}" class='${className}' />`;
-};
-const text$1 = (t, target, className = "base-line") => {
-  const text2 = `${Math.floor(t)}`;
-  const unitWidth = 13;
-  const unitHeight = 16;
-  const width2 = text2.length * unitWidth;
-  const height = unitHeight;
-  return `
-    
-        <rect x="${target[0] - width2 / 4}" y="${target[1] - unitHeight - 2}" width="${width2}" height="${height}" rx="2" ry="2" fill="#00a9f4" />
-        <text x="${target[0]}" y="${target[1]}" dy="-5" font-size="16">${text2}</text>
-    `;
-};
-const hLineByPoint = (target, source2) => {
-  return line(target, source2);
-};
-const vLineByPoint = (target, source2) => {
-  return line(target, source2);
-};
-const rect = (rectVerties) => {
-  return `
-    <path 
-        class="base-rect"
-        fill="none"
-        stroke-width="1"
-        stroke="red"
-        stroke-dasharray="2 2"
-        d="${PathParser.makeRect(rectVerties[0][0], rectVerties[0][1], dist(rectVerties[0], rectVerties[1]), dist(rectVerties[0], rectVerties[3])).d}
-        " 
-    />
-`;
-};
-const point = (target, dist2 = 3, direction = "left") => {
-  if (direction === "left") {
-    return `
-        <path 
-            class="arrow"
-            d="
-                M ${target[0] + dist2} ${target[1] - dist2}
-                L ${target[0]} ${target[1]}
-                L ${target[0] + dist2} ${target[1] + dist2}
-            " 
-        />
-    `;
-  }
-  if (direction === "right") {
-    return `
-        <path 
-            class="arrow"
-            d="
-                M ${target[0] - dist2} ${target[1] - dist2}
-                L ${target[0]} ${target[1]}
-                L ${target[0] - dist2} ${target[1] + dist2}
-            " 
-        />
-    `;
-  }
-  if (direction === "up") {
-    return `
-        <path 
-            class="arrow"
-            d="
-                M ${target[0] - dist2} ${target[1] + dist2}
-                L ${target[0]} ${target[1]}
-                L ${target[0] + dist2} ${target[1] + dist2}
-            " 
-        />
-    `;
-  }
-  if (direction === "down") {
-    return `
-        <path 
-            class="arrow"
-            d="
-                M ${target[0] - dist2} ${target[1] - dist2}
-                L ${target[0]} ${target[1]}
-                L ${target[0] + dist2} ${target[1] - dist2}
-            " 
-        />
-    `;
-  }
-  return `
-        <path 
-            stroke-width="1"
-            d="
-                M ${target[0] - dist2} ${target[1] - dist2}
-                L ${target[0] + dist2} ${target[1] + dist2}
-                M ${target[0] - dist2} ${target[1] + dist2}
-                L ${target[0] + dist2} ${target[1] - dist2}
-            " 
-        />
-    `;
-};
-class GuideLineView extends EditorElement {
-  template() {
-    return `
-            <svg class='elf--guide-line-view' ref="$guide" width="100%" height="100%" ></svg>
-            `;
-  }
-  initState() {
-    return {
-      list: []
-    };
-  }
-  [BIND("$guide")]() {
-    return {
-      svgDiff: `<g>${this.createGuideLine(this.state.list)}</g>`
-    };
-  }
-  createGuideLine(list2) {
-    var images = [];
-    var texts = [];
-    list2 = list2.filter(Boolean);
-    for (var i = 0, len2 = list2.length; i < len2; i++) {
-      const [source2, target, axis, dist2, newTarget, sourceVerties, targetVerties, isInvert] = list2[i];
-      const localDist = Math.floor(dist2);
-      const localSourceVertex = this.$viewport.applyVertex(source2);
-      const localTargetVertex = this.$viewport.applyVertex(target);
-      let localNewTargetVertex;
-      if (newTarget) {
-        localNewTargetVertex = this.$viewport.applyVerties([newTarget])[0];
-      }
-      if (axis === "x") {
-        if (localDist > 0) {
-          images.push(line(localSourceVertex, localTargetVertex, "dash-line"));
-        }
-        if (localNewTargetVertex) {
-          images.push(line(localTargetVertex, localNewTargetVertex, "dash-line"));
-        }
-        if (localDist > 0) {
-          texts.push(text$1(localDist, lerp([], localSourceVertex, localTargetVertex, 0.5)));
-        }
-      }
-      if (axis === "y") {
-        if (localDist > 0) {
-          images.push(line(localSourceVertex, localTargetVertex, "dash-line"));
-        }
-        if (localNewTargetVertex) {
-          images.push(line(localTargetVertex, localNewTargetVertex, "dash-line"));
-        }
-        if (localDist > 0) {
-          texts.push(text$1(localDist, add$1([], lerp([], localSourceVertex, localTargetVertex, 0.5), [20, 0, 0])));
-        }
-      }
-      if (axis === "x") {
-        images.push(hLineByPoint(localTargetVertex, localSourceVertex));
-      }
-      if (axis === "y") {
-        images.push(vLineByPoint(localTargetVertex, localSourceVertex));
-      }
-      if (this.state.hasVerties) {
-        images.push(point(localSourceVertex, 3, "vertex"));
-        images.push(point(localTargetVertex, 3, "vertex"));
-      }
-      if (sourceVerties) {
-        if (this.$selection.isOne && this.$editor.isPointerDown || this.$selection.isMany && !this.$editor.isPointerMove) {
-          images.push(rect(this.$viewport.applyVerties(sourceVerties)));
-        }
-      }
-      if (targetVerties) {
-        images.push(rect(this.$viewport.applyVerties(targetVerties)));
-      }
-    }
-    return [...images, ...texts].join("");
-  }
-  removeGuideLine() {
-    this.setState({
-      list: []
-    });
-  }
-  setGuideLine(list2, hasVerties = false) {
-    this.setState({
-      list: list2,
-      hasVerties
-    });
-  }
-  [SUBSCRIBE("removeGuideLine", "refreshSelection")]() {
-    this.removeGuideLine();
-  }
-  [SUBSCRIBE("refreshGuideLineByTarget")](targetVertiesList = []) {
-    return this.refreshSmartGuides(targetVertiesList);
-  }
-  [SUBSCRIBE("updateViewport")]() {
-    this.refresh();
-  }
-  refreshSmartGuides(targetVertiesList) {
-    if (this.$selection.isEmpty)
-      return;
-    const sourceVerties = toRectVerties(this.$selection.verties);
-    let targetList;
-    if (targetVertiesList) {
-      targetList = targetVertiesList.map((it) => toRectVerties(it));
-    } else {
-      const targets = this.$selection.snapTargetLayers.map((target) => {
-        const rectVerties = toRectVerties(target.verties);
-        return { targetVerties: rectVerties, dist: dist(rectVerties[4], sourceVerties[4]) };
-      });
-      targets.sort((a, b) => {
-        return a.dist - b.dist;
-      });
-      targetList = targets.map((target) => target.targetVerties);
-    }
-    const xList = targetList.map((targetVerties) => makeGuidePoint(sourceVerties, targetVerties));
-    xList.sort((a, b) => {
-      return a[3] - b[3];
-    });
-    const list2 = [xList[0], xList[1]].filter(Boolean);
-    this.setGuideLine(list2);
-  }
-  refreshSmartGuidesForVerties() {
-    const guides = this.$snapManager.findGuide(this.$selection.verties);
-    this.setGuideLine(guides, true);
-  }
-  [SUBSCRIBE("refreshSelectionStyleView")]() {
-    if (this.$selection.isMany)
-      return;
-    const expect = this.$selection.hasChangedField("d", "clip-path");
-    if (!expect && this.$selection.hasChangedField("x", "y", "width", "height", "transform", "transform-origin")) {
-      this.refreshSmartGuidesForVerties();
-    }
-  }
-}
-var SelectionInfoView$1 = "";
-class SelectionInfoView extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
-  template() {
-    return `<div class='elf--selection-info-view'></div>`;
-  }
-  [POINTERSTART("$el [data-artboard-title-id]") + LEFT_BUTTON + MOVE("calculateMovedElement") + END("calculateEndedElement")](e) {
-    this.startXY = e.xy;
-    this.initMousePoint = this.$viewport.getWorldPosition(e);
-    const id = e.$dt.attr("data-artboard-title-id");
-    this.$selection.select(id);
-    if (e.altKey) {
-      this.$selection.selectAfterCopy();
-      this.emit("refreshAllCanvas");
-      this.emit("refreshLayerTreeView");
-    }
-    this.initializeDragSelection();
-    this.emit("history.refreshSelection");
-    this.$config.set("set.move.control.point", true);
-  }
-  initializeDragSelection() {
-    this.$selection.reselect();
-    this.$snapManager.clear();
-    this.emit("refreshSelectionTool");
-  }
-  moveTo(dist2) {
-    const snap = this.$snapManager.check(this.$selection.cachedRectVerties.map((v) => {
-      return add$1([], v, dist2);
-    }), 3);
-    const localDist = add$1([], snap, dist2);
-    const result = {};
-    this.$selection.cachedItemMatrices.forEach((it) => {
-      const newVerties = it.verties.map((v) => {
-        return add$1([], v, localDist);
-      });
-      const newDist = subtract([], transformMat4([], newVerties[0], it.parentMatrixInverse), transformMat4([], it.verties[0], it.parentMatrixInverse));
-      result[it.id] = {
-        x: Length.px(it.x + newDist[0]).floor(),
-        y: Length.px(it.y + newDist[1]).floor()
-      };
-    });
-    this.$selection.reset(result);
-  }
-  calculateMovedElement() {
-    const targetMousePoint = this.$viewport.getWorldPosition();
-    const newDist = floor([], subtract([], targetMousePoint, this.initMousePoint));
-    this.moveTo(newDist);
-    this.emit("setAttributeForMulti", this.$selection.pack("x", "y"));
-    this.emit("refreshSelectionStyleView");
-    this.emit("refreshSelectionTool", false);
-    this.refresh();
-  }
-  [SUBSCRIBE("refreshItemName")](id, title2) {
-    var _a;
-    this.emit("setAttributeForMulti", {
-      [id]: { name: title2 }
-    });
-    (_a = this.$el.$(`[data-artboard-title-id='${id}']`)) == null ? void 0 : _a.text(title2);
-  }
-  calculateEndedElement(dx, dy) {
-    this.command("setAttributeForMulti", "move item", this.$selection.pack("x", "y"));
-    this.emit("refreshSelectionTool", true);
-    this.$config.set("set.move.control.point", false);
-  }
-  [SUBSCRIBE("updateViewport")]() {
-    this.refresh();
-  }
-  [SUBSCRIBE("refreshSelectionStyleView")]() {
-    if (this.$selection.current) {
-      if (this.$selection.current.is("artboard")) {
-        if (this.$selection.hasChangedField("x", "y", "width", "height", "transform", "transform-origin")) {
-          this.refresh();
-        }
-      }
-    }
-  }
-  [LOAD("$el") + DOMDIFF]() {
-    return this.$selection.currentProject.artboards.map((it) => {
-      return { title: it.name, id: it.id, pointers: this.$viewport.applyVerties(it.verties) };
-    }).map((it) => this.makeArtboardTitleArea(it));
-  }
-  createSize(pointers, artboardItem) {
-    const newPointer = pointers[0];
-    const diff = subtract([], pointers[0], pointers[3]);
-    const angle = calculateAngle360(diff[0], diff[1]) - 90;
-    return `
-            <div 
-                class="artboard-title is-not-drag-area" 
-                data-artboard-title-id="${artboardItem.id}" 
-                style="transform-origin: 0% 0%; transform: translate3d( calc(${newPointer[0]}px), calc(${newPointer[1]}px), 0px) rotateZ(${angle}deg)" >
-                    <div style="transform: translateY(-100%);">${artboardItem.title}</div>
-            </div>
-        `;
-  }
-  makeArtboardTitleArea(it) {
-    return this.createSize(it.pointers, it);
-  }
-  [SUBSCRIBE("refreshAll")]() {
-    this.refresh();
-  }
-}
-class GridLayoutLineView extends EditorElement {
-  template() {
-    return `<div class='grid-layout-line-view' style='width:100%;height:100%;pointer-events:none;'></div>`;
-  }
-  [LOAD("$el")]() {
-    var len2 = this.$selection.length;
-    if (len2 !== 1) {
-      return "";
-    }
-    var current = this.$selection.current;
-    if (current.isInGrid()) {
-      var layoutContainer = current.parent;
-      var left2 = layoutContainer.screenX;
-      var top2 = layoutContainer.screenY;
-      var width2 = layoutContainer.width;
-      var height = layoutContainer.height;
-      var grid2 = this.$editor.html.toGridLayoutCSS(layoutContainer);
-      return `<div style='${CSS_TO_STRING(__spreadValues({ position: "absolute", left: left2, top: top2, width: width2, height, border: "1px solid black" }, grid2))}'>
-                ${layoutContainer.layers.map((it) => {
-        var layoutItemCSS = this.$editor.html.toLayoutItemCSS(it);
-        return `<div style='${CSS_TO_STRING(__spreadProps(__spreadValues({}, layoutItemCSS), { "border": "1px solid dashed" }))}'></div>`;
-      }).join("")}
-            </div>`;
-    }
-    return `<div></div>`;
-  }
-  [SUBSCRIBE("refreshGridLayoutLine", "refreshSelectionTool", "refreshSelection")]() {
-    this.refresh();
-  }
-  [SUBSCRIBE("updateViewport")]() {
   }
 }
 var DragAreaView$1 = "";
@@ -24591,8 +23241,8 @@ class DragAreaRectView extends EditorElement {
     const startVertex = floor([], this.initMousePoint);
     const endVertex = floor([], add$1([], this.initMousePoint, newDist));
     const start2 = this.$viewport.applyVertex(startVertex);
-    const end = this.$viewport.applyVertex(endVertex);
-    const locaRect = toRectVerties([start2, end]);
+    const end2 = this.$viewport.applyVertex(endVertex);
+    const locaRect = toRectVerties([start2, end2]);
     this.dragRect = {
       left: Length.px(locaRect[0][0]),
       top: Length.px(locaRect[0][1]),
@@ -24627,1039 +23277,13 @@ class DragAreaRectView extends EditorElement {
     this.emit("removeGuideLine");
   }
 }
-var SelectionView = "";
-var directionType$1 = {
-  1: "to top left",
-  2: "to top right",
-  3: "to bottom right",
-  4: "to bottom left",
-  11: "to top",
-  12: "to right",
-  13: "to bottom",
-  14: "to left"
-};
-const SelectionToolEvent$1 = class extends EditorElement {
-  [SUBSCRIBE("refreshSelectionTool")](isShow = true) {
-    this.initSelectionTool(isShow);
-  }
-  [SUBSCRIBE("updateViewport")]() {
-    if (this.$selection.isOne && this.$modeView.isCurrentMode("CanvasView")) {
-      this.initSelectionTool();
-    }
-  }
-};
-class SelectionToolView extends SelectionToolEvent$1 {
-  template() {
-    return `
-            <div class='elf--selection-view one-selection-view' ref='$selectionView' style='display:none' >
-                <div class='pointer-rect' ref='$pointerRect'></div>
-            </div>
-        `;
-  }
-  toggleEditingPath(isEditingPath) {
-    this.$el.toggleClass("editing-path", isEditingPath);
-  }
-  [POINTERSTART("$pointerRect .rotate-pointer") + MOVE("rotateVertex") + END("rotateEndVertex")](e) {
-    this.state.moveType = "rotate";
-    this.initMousePoint = this.$viewport.getWorldPosition(e);
-    this.$selection.reselect();
-    this.verties = clone$1(this.$selection.verties);
-    this.$snapManager.clear();
-    this.rotateTargetNumber = +e.$dt.attr("data-number");
-    this.refreshRotatePointerIcon();
-    this.state.dragging = true;
-    this.state.isRotate = true;
-    this.$config.set("set.move.control.point", true);
-  }
-  rotateVertex() {
-    const targetMousePoint = this.$viewport.getWorldPosition();
-    const distVector = subtract([], targetMousePoint, this.initMousePoint);
-    const targetRotatePointer = this.rotateTargetNumber === 4 ? getRotatePointer(this.verties, 34) : this.verties[this.rotateTargetNumber];
-    var distAngle = Math.floor(calculateAngleForVec3(targetRotatePointer, this.verties[4], distVector));
-    let currentMatrix = this.$selection.cachedCurrentItemMatrix;
-    const instance = this.$selection.current;
-    if (instance) {
-      let newTransform = Transform.addTransform(currentMatrix.transform, `rotateZ(${Length.deg(distAngle).round(1e3)})`);
-      if (this.$config.get("bodyEvent").shiftKey) {
-        const newRotateX = Transform.get(newTransform, "rotateZ");
-        if (newRotateX[0]) {
-          const angle = newRotateX[0].value - newRotateX[0].value % this.$config.get("fixed.angle");
-          newTransform = Transform.rotateZ(newTransform, Length.deg(angle));
-        }
-      }
-      instance.reset({
-        transform: newTransform
-      });
-    }
-    this.state.dragging = true;
-    this.command("setAttributeForMulti", "change rotate", this.$selection.pack("transform"));
-  }
-  rotateEndVertex() {
-    this.state.dragging = false;
-    this.state.isRotate = false;
-    this.emit("recoverCursor");
-    this.$config.set("set.move.control.point", false);
-    this.verties = null;
-    this.nextTick(() => {
-      this.command("setAttributeForMulti", "change rotate", this.$selection.pack("transform"));
-    });
-  }
-  refreshRotatePointerIcon(e) {
-    this.emit("refreshCursor", "rotate");
-  }
-  refreshPointerIcon(e) {
-    const dataPointer = e.$dt.data("pointer");
-    if (dataPointer) {
-      const pointer = dataPointer.split(",").map((it) => Number(it));
-      const diff = subtract([], pointer, this.state.renderPointerList[0][4]);
-      const angle = calculateAngle360(diff[0], diff[1]);
-      let iconAngle = Math.floor(angle) - 135;
-      this.emit("refreshCursor", "open_in_full", `rotate(${iconAngle} 12 12)`);
-    } else {
-      this.emit("recoverCursor");
-    }
-  }
-  checkPointerIsNotMoved(e) {
-    return Boolean(this.state.dragging) === false;
-  }
-  [POINTEROVER("$pointerRect .rotate-pointer") + IF("checkPointerIsNotMoved")](e) {
-    this.refreshRotatePointerIcon(e);
-  }
-  [POINTEROVER("$pointerRect .pointer") + IF("checkPointerIsNotMoved")](e) {
-    this.refreshPointerIcon(e);
-  }
-  [POINTEROUT("$pointerRect .pointer,.rotate-pointer") + IF("checkPointerIsNotMoved")](e) {
-    this.emit("recoverCursor");
-  }
-  [POINTERSTART("$pointerRect .pointer") + MOVE("moveVertex") + END("moveEndVertex")](e) {
-    this.refreshPointerIcon(e);
-    this.state.dragging = true;
-    const num = +e.$dt.attr("data-number");
-    const direction = directionType$1[`${num}`];
-    this.initMousePoint = this.$viewport.getWorldPosition(e);
-    this.state.moveType = direction;
-    this.state.moveTarget = num;
-    this.$selection.reselect();
-    this.$snapManager.clear();
-    this.verties = this.$selection.verties;
-    const rotateZ2 = Transform.get(this.$selection.current.transform, "rotateZ");
-    this.hasRotate = rotateZ2 && rotateZ2.length && rotateZ2[0].value != 0;
-    this.$config.set("set.move.control.point", true);
-  }
-  calculateNewOffsetMatrixInverse(vertexOffset, width2, height, origin2, itemMatrix) {
-    const center2 = subtract([], TransformOrigin.scale(origin2, width2, height), vertexOffset);
-    return calculateMatrixInverse(fromTranslation([], vertexOffset), fromTranslation([], center2), itemMatrix, fromTranslation([], negate([], center2)));
-  }
-  calculateDistance(vertex, distVector, reverseMatrix) {
-    const currentVertex = clone(vertex);
-    const snap = this.$snapManager.check([
-      add$1([], currentVertex, distVector)
-    ]);
-    const nextVertex = add$1([], currentVertex, add$1([], distVector, snap));
-    var currentResult = transformMat4([], currentVertex, reverseMatrix);
-    var nextResult = transformMat4([], nextVertex, reverseMatrix);
-    const realDist = add$1([], nextResult, negate([], currentResult));
-    return realDist;
-  }
-  calculateRealDist(item2, vertexIndex, distVector) {
-    return this.calculateDistance(item2.verties[vertexIndex], distVector, item2.accumulatedMatrixInverse);
-  }
-  moveItem(instance, lastStartVertex, newWidth, newHeight) {
-    if (instance) {
-      const data = {
-        x: Length.px(lastStartVertex[0] + (newWidth < 0 ? newWidth : 0)),
-        y: Length.px(lastStartVertex[1] + (newHeight < 0 ? newHeight : 0)),
-        width: Length.px(Math.abs(newWidth)),
-        height: Length.px(Math.abs(newHeight))
-      };
-      if (this.hasRotate)
-        ;
-      else {
-        data.x = data.x.floor();
-        data.y = data.y.floor();
-        data.width = data.width.floor();
-        data.height = data.height.floor();
-      }
-      instance.reset(data);
-    }
-  }
-  moveDirectionVertex(item2, newWidth, newHeight, direction, directionNewVector) {
-    const view = calculateMatrix(item2.directionMatrix[direction], this.calculateNewOffsetMatrixInverse(directionNewVector, newWidth, newHeight, item2.originalTransformOrigin, item2.itemMatrix));
-    const lastStartVertex = getTranslation([], view);
-    this.moveItem(this.$model.get(item2.id), lastStartVertex, newWidth, newHeight);
-  }
-  moveBottomRightVertex(distVector) {
-    const { shiftKey, altKey, ctrlKey, metaKey } = this.$config.get("bodyEvent");
-    const item2 = this.$selection.cachedCurrentItemMatrix;
-    if (item2) {
-      let [realDx, realDy] = this.calculateRealDist(item2, 2, distVector);
-      let directionNewVector = fromValues(0, 0, 0);
-      if (metaKey) {
-        realDx = realDx * 2;
-        realDy = realDy * 2;
-      }
-      if (shiftKey) {
-        realDy = realDx * item2.height / item2.width;
-      }
-      const newWidth = item2.width + realDx;
-      const newHeight = altKey ? newWidth : item2.height + realDy;
-      if (metaKey) {
-        directionNewVector = fromValues(realDx / 2, realDy / 2, 0);
-      }
-      this.moveDirectionVertex(item2, newWidth, newHeight, "to top left", directionNewVector);
-    }
-  }
-  moveTopRightVertex(distVector) {
-    const { shiftKey, altKey } = this.$config.get("bodyEvent");
-    const item2 = this.$selection.cachedCurrentItemMatrix;
-    if (item2) {
-      let [realDx, realDy] = this.calculateRealDist(item2, 1, distVector);
-      if (shiftKey) {
-        realDy = -(realDx * item2.height / item2.width);
-      }
-      const newWidth = item2.width + realDx;
-      const newHeight = altKey ? newWidth : item2.height - realDy;
-      this.moveDirectionVertex(item2, newWidth, newHeight, "to bottom left", [0, newHeight, 0]);
-    }
-  }
-  moveTopLeftVertex(distVector) {
-    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
-    const item2 = this.$selection.cachedCurrentItemMatrix;
-    if (item2) {
-      let [realDx, realDy] = this.calculateRealDist(item2, 0, distVector);
-      if (metaKey) {
-        realDx = realDx * 2;
-        realDy = realDy * 2;
-      }
-      if (shiftKey) {
-        realDy = realDx * item2.height / item2.width;
-      }
-      const newWidth = item2.width - realDx;
-      const newHeight = altKey ? newWidth : item2.height - realDy;
-      let directionNewVector = fromValues(newWidth, newHeight, 0);
-      if (metaKey) {
-        directionNewVector = fromValues(newWidth + realDx / 2, newHeight + realDy / 2, 0);
-      }
-      this.moveDirectionVertex(item2, newWidth, newHeight, "to bottom right", directionNewVector);
-    }
-  }
-  moveTopVertex(distVector) {
-    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
-    const item2 = this.$selection.cachedCurrentItemMatrix;
-    if (item2) {
-      let [realDx, realDy] = this.calculateRealDist(item2, 0, distVector);
-      if (metaKey) {
-        realDy = realDy * 2;
-      }
-      const newWidth = item2.width;
-      const newHeight = item2.height - realDy;
-      let directionNewVector = fromValues(newWidth / 2, newHeight, 0);
-      if (metaKey) {
-        directionNewVector = fromValues(newWidth / 2, newHeight + realDy / 2, 0);
-      }
-      this.moveDirectionVertex(item2, newWidth, newHeight, "to bottom", directionNewVector);
-    }
-  }
-  moveBottomVertex(distVector) {
-    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
-    const item2 = this.$selection.cachedCurrentItemMatrix;
-    if (item2) {
-      let [realDx, realDy] = this.calculateRealDist(item2, 3, distVector);
-      if (metaKey) {
-        realDy = realDy * 2;
-      }
-      const newWidth = item2.width;
-      const newHeight = item2.height + realDy;
-      let directionNewVector = fromValues(newWidth / 2, 0, 0);
-      if (metaKey) {
-        directionNewVector = fromValues(newWidth / 2, realDy / 2, 0);
-      }
-      this.moveDirectionVertex(item2, newWidth, newHeight, "to top", directionNewVector);
-    }
-  }
-  moveRightVertex(distVector) {
-    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
-    const item2 = this.$selection.cachedCurrentItemMatrix;
-    if (item2) {
-      let [realDx, realDy] = this.calculateRealDist(item2, 1, distVector);
-      if (metaKey) {
-        realDx = realDx * 2;
-      }
-      const newWidth = item2.width + realDx;
-      const newHeight = item2.height;
-      let directionNewVector = fromValues(0, newHeight / 2, 0);
-      if (metaKey) {
-        directionNewVector = fromValues(realDx / 2, newHeight / 2, 0);
-      }
-      this.moveDirectionVertex(item2, newWidth, newHeight, "to left", directionNewVector);
-    }
-  }
-  moveLeftVertex(distVector) {
-    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
-    const item2 = this.$selection.cachedCurrentItemMatrix;
-    if (item2) {
-      let [realDx, realDy] = this.calculateRealDist(item2, 0, distVector);
-      if (metaKey) {
-        realDx = realDx * 2;
-      }
-      const newWidth = item2.width - realDx;
-      const newHeight = item2.height;
-      let directionNewVector = fromValues(newWidth, newHeight / 2, 0);
-      if (metaKey) {
-        directionNewVector = fromValues(newWidth + realDx / 2, newHeight / 2, 0);
-      }
-      this.moveDirectionVertex(item2, newWidth, newHeight, "to right", directionNewVector);
-    }
-  }
-  moveBottomLeftVertex(distVector) {
-    const { shiftKey, altKey } = this.$config.get("bodyEvent");
-    const item2 = this.$selection.cachedCurrentItemMatrix;
-    if (item2) {
-      let [realDx, realDy] = this.calculateRealDist(item2, 3, distVector);
-      if (shiftKey) {
-        realDy = -(realDx * item2.height / item2.width);
-      }
-      const newWidth = item2.width - realDx;
-      const newHeight = altKey ? newWidth : item2.height + realDy;
-      this.moveDirectionVertex(item2, newWidth, newHeight, "to top right", [newWidth, 0, 0]);
-    }
-  }
-  moveVertex() {
-    const targetMousePoint = this.$viewport.getWorldPosition();
-    const distVector = subtract([], targetMousePoint, this.initMousePoint);
-    if (this.state.moveType === "to top left") {
-      this.moveTopLeftVertex(distVector);
-    } else if (this.state.moveType === "to top") {
-      this.moveTopVertex(distVector);
-    } else if (this.state.moveType === "to right") {
-      this.moveRightVertex(distVector);
-    } else if (this.state.moveType === "to bottom") {
-      this.moveBottomVertex(distVector);
-    } else if (this.state.moveType === "to left") {
-      this.moveLeftVertex(distVector);
-    } else if (this.state.moveType === "to top right") {
-      this.moveTopRightVertex(distVector);
-    } else if (this.state.moveType === "to bottom right") {
-      this.moveBottomRightVertex(distVector);
-    } else if (this.state.moveType === "to bottom left") {
-      this.moveBottomLeftVertex(distVector);
-    }
-    this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "width", "height"));
-    this.state.dragging = true;
-  }
-  moveEndVertex() {
-    this.state.dragging = false;
-    this.emit("recoverCursor");
-    this.$selection.reselect();
-    this.$config.set("set.move.control.point", false);
-    this.nextTick(() => {
-      this.command("setAttributeForMulti", "move selection pointer", this.$selection.pack("x", "y", "width", "height"));
-    });
-  }
-  initSelectionTool(isShow = true) {
-    if (this.$el.isShow() && this.$selection.isOne === false) {
-      this.$el.hide();
-    } else if (this.$el.isHide() && this.$selection.isOne) {
-      this.$el.show();
-    }
-    this.makeSelectionTool();
-  }
-  makeSelectionTool() {
-    this.renderPointers();
-  }
-  renderPointers() {
-    if (!this.$selection.cachedCurrentItemMatrix) {
-      return;
-    }
-    if (this.$selection.isEmpty) {
-      return;
-    }
-    const verties = this.$selection.verties;
-    const selectionVerties = this.$selection.selectionVerties;
-    const parentVerties = this.$selection.current.parent.verties || [];
-    this.state.renderPointerList = [
-      this.$viewport.applyVerties(verties),
-      this.$viewport.applyVerties(selectionVerties),
-      this.$viewport.applyVerties(parentVerties)
-    ];
-    const pointers = this.createRenderPointers(...this.state.renderPointerList);
-    if (pointers) {
-      const { line: line2, parentRect, point: point2, size: size2, visiblePath } = pointers;
-      this.refs.$pointerRect.updateDiff(line2 + parentRect + point2 + size2 + visiblePath);
-    }
-  }
-  createPointer(pointer, number, rotate2) {
-    return `
-        <div class='pointer' data-number="${number}" data-pointer="${pointer}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) rotateZ(${rotate2 || "0deg"})" ></div>
-        `;
-  }
-  createPointerSide(pointer, number, rotate2, width2, height) {
-    return `
-        <div class='pointer' data-number="${number}" data-pointer="${pointer}" style="width: ${width2}px; height: ${height}px;transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) rotateZ(${rotate2 || "0deg"})" ></div>
-        `;
-  }
-  createRotatePointer(pointer, number, direction) {
-    if (pointer.length === 0)
-      return "";
-    if (number < 4) {
-      return `
-            <div class='rotate-pointer no-fill' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) scale(1.8);" ></div>
-            `;
-    }
-    return `
-        <div class='rotate-pointer' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px)" ></div>
-        `;
-  }
-  createPointerRect(pointers, rotatePointer, parentVector) {
-    if (pointers.length === 0)
-      return "";
-    const current = this.$selection.current;
-    const isArtBoard = current && current.is("artboard");
-    let line2 = "";
-    if (!isArtBoard) {
-      const centerPointer = lerp([], pointers[0], pointers[1], 0.5);
-      line2 += `
-                M ${centerPointer[0]},${centerPointer[1]} 
-                L ${rotatePointer[0]},${rotatePointer[1]} 
-            `;
-    }
-    return `
-        <svg class='line' overflow="visible">
-            <path 
-                d="
-                    M ${pointers[0][0]}, ${pointers[0][1]} 
-                    L ${pointers[1][0]}, ${pointers[1][1]} 
-                    L ${pointers[2][0]}, ${pointers[2][1]} 
-                    L ${pointers[3][0]}, ${pointers[3][1]} 
-                    L ${pointers[0][0]}, ${pointers[0][1]}
-                    ${line2}
-                    Z
-                " />
-        </svg>`;
-  }
-  createParentRect(pointers = []) {
-    if (pointers.length === 0)
-      return "";
-    return `
-        <svg class='line' overflow="visible">
-            <path 
-                d="
-                    M ${pointers[0][0]}, ${pointers[0][1]} 
-                    L ${pointers[1][0]}, ${pointers[1][1]} 
-                    L ${pointers[2][0]}, ${pointers[2][1]} 
-                    L ${pointers[3][0]}, ${pointers[3][1]} 
-                    L ${pointers[0][0]}, ${pointers[0][1]}
-                    Z
-                " 
-                stroke="red"
-                />
-        </svg>`;
-  }
-  createSize(pointers) {
-    const top2 = lerp([], pointers[0], pointers[1], 0.5);
-    const right2 = lerp([], pointers[1], pointers[2], 0.5);
-    const bottom2 = lerp([], pointers[2], pointers[3], 0.5);
-    const left2 = lerp([], pointers[3], pointers[0], 0.5);
-    const list2 = [
-      { start: top2, end: bottom2 },
-      { start: right2, end: left2 },
-      { start: bottom2, end: top2 },
-      { start: left2, end: right2 }
-    ].map((it, index2) => {
-      return { index: index2, data: it };
-    });
-    list2.sort((a, b) => {
-      return a.data.start[1] > b.data.start[1] ? -1 : 1;
-    });
-    const item2 = list2[0];
-    const newPointer = lerp([], item2.data.end, item2.data.start, 1 + 16 / dist(item2.data.start, item2.data.end));
-    const width2 = this.$selection.current.width.value;
-    const height = this.$selection.current.height.value;
-    const diff = subtract([], item2.data.start, item2.data.end);
-    const angle = calculateAngle360(diff[0], diff[1]) + 90;
-    const widthPx = round(width2, 100);
-    const heightPx = round(height, 100);
-    let text2 = widthPx === heightPx ? `WH: ${widthPx}` : `${round(width2, 100)} x ${round(height, 100)}`;
-    if (this.state.isRotate) {
-      const rotateZ2 = Transform.get(this.$selection.current.transform, "rotateZ");
-      if (rotateZ2) {
-        text2 = `${round(rotateZ2[0].value, 1e3)}\xB0`;
-      }
-    }
-    return `
-            <div 
-                data-layout="${this.$selection.current.layout}"
-                class='size-pointer' 
-                style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >
-               ${text2}
-            </div>
-        `;
-  }
-  createVisiblePath() {
-    const current = this.$selection.current;
-    if (!current)
-      return "";
-    if (!current.isBooleanItem) {
-      return "";
-    }
-    const newPath = current.accumulatedPath();
-    newPath.transformMat4(this.$viewport.matrix);
-    return `
-        <svg class='line' overflow="visible">
-            <path
-                d="${newPath.d}"
-                stroke="red"
-                stroke-width="2"
-                fill="none"
-                />
-        </svg>
-        `;
-  }
-  createRenderPointers(pointers, selectionPointers, parentPointers) {
-    const current = this.$selection.current;
-    if (current && current.is("text")) {
-      if (current.width.value === 0 && current.height.value === 0) {
-        return;
-      }
-    }
-    const isArtBoard = current && current.is("artboard");
-    const diff = subtract([], lerp([], pointers[0], pointers[1], 0.5), lerp([], pointers[0], pointers[2], 0.5));
-    const rotate2 = Length.deg(calculateAngle360(diff[0], diff[1]) + 90).round(1e3);
-    const rotatePointer = getRotatePointer(pointers, 34);
-    const dist$1 = dist(pointers[0], pointers[2]);
-    const width2 = dist(pointers[0], pointers[1]);
-    const height = dist(pointers[0], pointers[3]);
-    return {
-      line: this.createPointerRect(pointers, rotatePointer),
-      size: this.createSize(pointers),
-      parentRect: "",
-      visiblePath: this.createVisiblePath(),
-      point: [
-        isArtBoard ? void 0 : this.createRotatePointer(rotatePointer, 4, "center center"),
-        dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[0], pointers[1], 0.5), 11, rotate2, width2, 5),
-        dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[1], pointers[2], 0.5), 12, rotate2, 5, height),
-        dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[2], pointers[3], 0.5), 13, rotate2, width2, 5),
-        dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[3], pointers[0], 0.5), 14, rotate2, 5, height),
-        this.createPointer(pointers[0], 1, rotate2),
-        this.createPointer(pointers[1], 2, rotate2),
-        this.createPointer(pointers[2], 3, rotate2),
-        this.createPointer(pointers[3], 4, rotate2),
-        this.createPointer(pointers[4], 5, rotate2)
-      ].join("")
-    };
-  }
-  checkShow() {
-    if (this.$selection.isOne) {
-      if (this.$selection.hasChangedField("x", "y", "width", "height", "transform", "transform-origin", "perspective", "perspective-origin")) {
-        return true;
-      }
-    }
-    return false;
-  }
-  [SUBSCRIBE("refreshSelectionStyleView") + IF("checkShow")]() {
-    this.renderPointers();
-  }
-  [SUBSCRIBE("hideSelectionToolView")]() {
-    this.$el.hide();
-  }
-}
-var directionType = {
-  1: "to top left",
-  2: "to top right",
-  3: "to bottom right",
-  4: "to bottom left",
-  11: "to top",
-  12: "to right",
-  13: "to bottom",
-  14: "to left"
-};
-const SelectionToolEvent = class extends EditorElement {
-  [SUBSCRIBE("refreshSelectionTool")](isInitializeMatrix = true) {
-    this.initSelectionTool(isInitializeMatrix);
-  }
-  [SUBSCRIBE("updateViewport")](isInitializeMatrix = true) {
-    if (this.$selection.isMany) {
-      this.initSelectionTool(isInitializeMatrix);
-    }
-  }
-};
-class GroupSelectionToolView extends SelectionToolEvent {
-  template() {
-    return `
-            <div class='elf--selection-view group-selection-view' ref='$selectionView'  style='display:none' >
-                <div class='pointer-rect' ref='$pointerRect'></div>        
-            </div>
-        `;
-  }
-  toggleEditingPath(isEditingPath) {
-    this.refs.$selectionView.toggleClass("editing-path", isEditingPath);
-  }
-  [POINTERSTART("$pointerRect .rotate-pointer") + MOVE("rotateVertex") + END("rotateEndVertex")](e) {
-    this.state.moveType = "rotate";
-    this.initMousePoint = this.$viewport.getWorldPosition(e);
-    this.verties = this.groupItem.verties;
-    this.rotateTargetNumber = +e.$dt.attr("data-number");
-    this.refreshRotatePointerIcon();
-    this.state.dragging = true;
-    this.state.isRotate = true;
-    this.$config.set("set.move.control.point", true);
-  }
-  rotateVertex() {
-    const targetMousePoint = this.$viewport.getWorldPosition();
-    const distVector = subtract([], targetMousePoint, this.initMousePoint);
-    const targetRotatePointer = this.rotateTargetNumber === 4 ? getRotatePointer(this.verties, 34) : this.verties[this.rotateTargetNumber];
-    var distAngle = Math.floor(calculateAngleForVec3(targetRotatePointer, this.verties[4], distVector));
-    if (this.$config.get("bodyEvent").shiftKey) {
-      distAngle = distAngle - distAngle % this.$config.get("fixed.angle");
-    }
-    this.localAngle = this.angle + distAngle;
-    this.groupItem.reset({
-      transform: Transform.rotateZ(this.groupItem.transform, Length.deg(this.localAngle))
-    });
-    const selectionMatrix = calculateRotationOriginMat4(distAngle, this.verties[4]);
-    let cachedItemMatrices = this.$selection.cachedItemMatrices;
-    if (this.$selection.length === 1) {
-      cachedItemMatrices = cachedItemMatrices.filter((it) => it.id === this.$selection.current.id);
-    }
-    cachedItemMatrices.forEach((item2) => {
-      const newVerties = vertiesMap(item2.verties, multiply$1([], item2.parentMatrixInverse, selectionMatrix));
-      const rotatePointer = getRotatePointer(newVerties, 34);
-      var lastAngle = calculateAngle(rotatePointer[0] - newVerties[4][0], rotatePointer[1] - newVerties[4][1]) - 270;
-      const newTranslate = transformMat4([], newVerties[0], calculateRotationOriginMat4(-lastAngle, newVerties[4]));
-      const instance = this.$model.get(item2.id);
-      if (instance) {
-        instance.reset({
-          x: Length.px(newTranslate[0]),
-          y: Length.px(newTranslate[1]),
-          transform: Transform.rotateZ(item2.transform, Length.deg(lastAngle))
-        });
-      }
-    });
-    this.state.dragging = true;
-    this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "width", "height", "transform"));
-  }
-  rotateEndVertex() {
-    this.state.dragging = false;
-    this.state.isRotate = false;
-    this.emit("recoverCursor");
-    this.$config.set("set.move.control.point", false);
-    this.$selection.reselect();
-    this.initMatrix(true);
-    this.nextTick(() => {
-      this.command("setAttributeForMulti", "rotate selection pointer", this.$selection.pack("x", "y", "width", "height", "transform"));
-    });
-  }
-  refreshRotatePointerIcon(e) {
-    this.emit("refreshCursor", "rotate");
-  }
-  refreshPointerIcon(e) {
-    const dataPointer = e.$dt.data("pointer");
-    if (dataPointer) {
-      const pointer = dataPointer.split(",").map((it) => Number(it));
-      const diff = subtract([], pointer, this.state.renderPointerList[0][4]);
-      const angle = calculateAngle360(diff[0], diff[1]);
-      let iconAngle = Math.floor(angle) - 135;
-      this.emit("refreshCursor", "open_in_full", `rotate(${iconAngle} 12 12)`);
-    } else {
-      this.emit("recoverCursor");
-    }
-  }
-  checkPointerIsNotMoved(e) {
-    return Boolean(this.state.dragging) === false;
-  }
-  [POINTEROVER("$pointerRect .rotate-pointer") + IF("checkPointerIsNotMoved") + PREVENT](e) {
-    this.refreshRotatePointerIcon(e);
-  }
-  [POINTEROVER("$pointerRect .pointer") + IF("checkPointerIsNotMoved") + PREVENT](e) {
-    this.refreshPointerIcon(e);
-  }
-  [POINTEROUT("$pointerRect .pointer,.rotate-pointer") + IF("checkPointerIsNotMoved") + PREVENT](e) {
-    this.emit("recoverCursor");
-  }
-  [POINTERSTART("$pointerRect .pointer") + PREVENT + MOVE("moveVertex") + END("moveEndVertex")](e) {
-    this.refreshPointerIcon(e);
-    this.state.dragging = true;
-    const num = +e.$dt.attr("data-number");
-    this.state.moveType = directionType[`${num}`];
-    this.initMousePoint = this.$viewport.getWorldPosition(e);
-    this.$selection.reselect();
-    this.initMatrix(true);
-    this.cachedGroupItem = this.groupItem.matrix;
-    this.$config.set("set.move.control.point", true);
-  }
-  calculateNewOffsetMatrixInverse(vertextOffset, width2, height, origin2, itemMatrix) {
-    const center2 = add$1([], TransformOrigin.scale(origin2, width2, height), negate([], vertextOffset));
-    return calculateMatrixInverse(fromTranslation([], vertextOffset), fromTranslation([], center2), itemMatrix, fromTranslation([], negate([], center2)));
-  }
-  calculateDistance(vertext, distVector, reverseMatrix) {
-    const currentVertex = clone(vertext);
-    const snap = this.$snapManager.check([
-      add$1([], currentVertex, distVector)
-    ]);
-    const nextVertex = add$1([], currentVertex, add$1([], distVector, snap));
-    var currentResult = transformMat4([], currentVertex, reverseMatrix);
-    var nextResult = transformMat4([], nextVertex, reverseMatrix);
-    const realDist = floor([], add$1([], nextResult, negate([], currentResult)));
-    return realDist;
-  }
-  calculateRealDist(item2, vertextIndex, distVector) {
-    return this.calculateDistance(item2.verties[vertextIndex], distVector, item2.accumulatedMatrixInverse);
-  }
-  moveGroupItem(lastStartVertex, newWidth, newHeight) {
-    this.groupItem.reset({
-      x: Length.px(lastStartVertex[0] + (newWidth < 0 ? newWidth : 0)).round(1e3),
-      y: Length.px(lastStartVertex[1] + (newHeight < 0 ? newHeight : 0)).round(1e3),
-      width: Length.px(Math.abs(newWidth)).round(1e3),
-      height: Length.px(Math.abs(newHeight)).round(1e3)
-    });
-  }
-  moveItemForGroup(it, newVerties, realDx = 0, realDy = 0) {
-    const transformViewInverse = calculateMatrixInverse(fromTranslation([], newVerties[4]), it.itemMatrix, fromTranslation([], negate([], newVerties[4])));
-    const [newX, newY] = transformMat4([], newVerties[0], transformViewInverse);
-    const newWidth = distance$1(newVerties[0], newVerties[1]);
-    const newHeight = distance$1(newVerties[0], newVerties[3]);
-    const instance = this.$model.get(it.id);
-    if (instance) {
-      instance.reset({
-        x: Length.px(newX + realDx),
-        y: Length.px(newY + realDy),
-        width: Length.px(newWidth),
-        height: Length.px(newHeight)
-      });
-    }
-  }
-  recoverItemForGroup(groupItem2, scaleX, scaleY, realDx = 0, realDy = 0) {
-    const accumulatedMatrix = groupItem2.accumulatedMatrix;
-    const accumulatedMatrixInverse = groupItem2.accumulatedMatrixInverse;
-    this.$selection.cachedItemMatrices.forEach((it) => {
-      const localView = calculateMatrix(it.parentMatrixInverse, accumulatedMatrix, fromTranslation([], [realDx, realDy, 0]), fromScaling([], [scaleX, scaleY, 1]), accumulatedMatrixInverse);
-      const newVerties = vertiesMap(it.verties, localView);
-      this.moveItemForGroup(it, newVerties);
-    });
-  }
-  moveBottomRightVertex(distVector) {
-    const groupItem2 = this.cachedGroupItem;
-    let [realDx, realDy] = this.calculateRealDist(groupItem2, 2, distVector);
-    if (this.$config.get("bodyEvent").shiftKey) {
-      realDy = realDx * groupItem2.height / groupItem2.width;
-    }
-    const newWidth = groupItem2.width + realDx;
-    const newHeight = groupItem2.height + realDy;
-    this.moveDirectionVertex(groupItem2, 0, 0, newWidth, newHeight, "to top left", [0, 0, 0]);
-  }
-  moveTopRightVertex(distVector) {
-    const groupItem2 = this.cachedGroupItem;
-    let [realDx, realDy] = this.calculateRealDist(groupItem2, 1, distVector);
-    if (this.$config.get("bodyEvent").shiftKey) {
-      realDy = -(realDx * groupItem2.height / groupItem2.width);
-    }
-    const newWidth = groupItem2.width + realDx;
-    const newHeight = groupItem2.height - realDy;
-    this.moveDirectionVertex(groupItem2, 0, realDy, newWidth, newHeight, "to bottom left", [0, newHeight, 0]);
-  }
-  moveDirectionVertex(groupItem2, realDx, realDy, newWidth, newHeight, direction, directionNewVector) {
-    const scaleX = newWidth / groupItem2.width;
-    const scaleY = newHeight / groupItem2.height;
-    if (scaleX >= 0 && scaleY >= 0) {
-      const view = calculateMatrix(groupItem2.directionMatrix[direction], this.calculateNewOffsetMatrixInverse(directionNewVector, newWidth, newHeight, groupItem2.originalTransformOrigin, groupItem2.itemMatrix));
-      const lastStartVertex = getTranslation([], view);
-      this.moveGroupItem(lastStartVertex, newWidth, newHeight);
-      this.recoverItemForGroup(groupItem2, scaleX, scaleY, realDx, realDy);
-    }
-  }
-  moveTopVertex(distVector) {
-    const groupItem2 = this.cachedGroupItem;
-    const [realDx, realDy] = this.calculateRealDist(groupItem2, 0, distVector);
-    const newWidth = groupItem2.width;
-    const newHeight = groupItem2.height - realDy;
-    this.moveDirectionVertex(groupItem2, 0, realDy, newWidth, newHeight, "to bottom", [newWidth / 2, newHeight, 0]);
-  }
-  moveBottomVertex(distVector) {
-    const groupItem2 = this.cachedGroupItem;
-    const [realDx, realDy] = this.calculateRealDist(groupItem2, 2, distVector);
-    const newWidth = groupItem2.width;
-    const newHeight = groupItem2.height + realDy;
-    this.moveDirectionVertex(groupItem2, 0, 0, newWidth, newHeight, "to top", [newWidth / 2, 0, 0]);
-  }
-  moveTopLeftVertex(distVector) {
-    const groupItem2 = this.cachedGroupItem;
-    let [realDx, realDy] = this.calculateRealDist(groupItem2, 0, distVector);
-    if (this.$config.get("bodyEvent").shiftKey) {
-      realDy = realDx * groupItem2.height / groupItem2.width;
-    }
-    const newWidth = groupItem2.width - realDx;
-    const newHeight = groupItem2.height - realDy;
-    this.moveDirectionVertex(groupItem2, realDx, realDy, newWidth, newHeight, "to bottom right", [newWidth, newHeight, 0]);
-  }
-  moveLeftVertex(distVector) {
-    const groupItem2 = this.cachedGroupItem;
-    const [realDx, realDy] = this.calculateRealDist(groupItem2, 0, distVector);
-    const newWidth = groupItem2.width - realDx;
-    const newHeight = groupItem2.height;
-    this.moveDirectionVertex(groupItem2, realDx, 0, newWidth, newHeight, "to right", [newWidth, newHeight / 2, 0]);
-  }
-  moveRightVertex(distVector) {
-    const groupItem2 = this.cachedGroupItem;
-    const [realDx, realDy] = this.calculateRealDist(groupItem2, 2, distVector);
-    const newWidth = groupItem2.width + realDx;
-    const newHeight = groupItem2.height;
-    this.moveDirectionVertex(groupItem2, 0, 0, newWidth, newHeight, "to left", [0, newHeight / 2, 0]);
-  }
-  moveBottomLeftVertex(distVector) {
-    const groupItem2 = this.cachedGroupItem;
-    let [realDx, realDy] = this.calculateRealDist(groupItem2, 3, distVector);
-    if (this.$config.get("bodyEvent").shiftKey) {
-      realDy = -(realDx * groupItem2.height / groupItem2.width);
-    }
-    const newWidth = groupItem2.width - realDx;
-    const newHeight = groupItem2.height + realDy;
-    this.moveDirectionVertex(groupItem2, realDx, 0, newWidth, newHeight, "to top right", [newWidth, 0, 0]);
-  }
-  moveVertex() {
-    const targetMousePoint = this.$viewport.getWorldPosition();
-    const distVector = subtract([], targetMousePoint, this.initMousePoint);
-    if (this.state.moveType === "to bottom right") {
-      this.moveBottomRightVertex(distVector);
-    } else if (this.state.moveType === "to top right") {
-      this.moveTopRightVertex(distVector);
-    } else if (this.state.moveType === "to top left") {
-      this.moveTopLeftVertex(distVector);
-    } else if (this.state.moveType === "to bottom left") {
-      this.moveBottomLeftVertex(distVector);
-    } else if (this.state.moveType === "to top") {
-      this.moveTopVertex(distVector);
-    } else if (this.state.moveType === "to left") {
-      this.moveLeftVertex(distVector);
-    } else if (this.state.moveType === "to right") {
-      this.moveRightVertex(distVector);
-    } else if (this.state.moveType === "to bottom") {
-      this.moveBottomVertex(distVector);
-    }
-    this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "width", "height", "transform"));
-    this.state.dragging = true;
-  }
-  moveEndVertex(dx, dy) {
-    this.state.dragging = false;
-    this.emit("recoverCursor");
-    this.$config.set("set.move.control.point", false);
-    this.$selection.reselect();
-    this.state.dragging = false;
-    this.initMatrix(true);
-    this.nextTick(() => {
-      this.command("setAttributeForMulti", "move selection pointer", this.$selection.pack("x", "y", "width", "height", "transform"));
-    });
-  }
-  initSelectionTool(isInitializeMatrix = false) {
-    if (this.$el.isHide() && this.$selection.isMany) {
-      this.$el.show();
-    } else {
-      if (this.$el.isShow() && this.$selection.isMany === false)
-        this.$el.hide();
-    }
-    this.initMatrix(isInitializeMatrix);
-    this.makeSelectionTool();
-  }
-  get item() {
-    const verties = this.verties || rectToVerties(0, 0, 0, 0);
-    if (!this.state.newArtBoard) {
-      this.state.newArtBoard = this.$editor.createModel({ itemType: "artboard" }, false);
-    }
-    this.state.newArtBoard.reset({
-      parentId: this.$selection.currentProject.id,
-      x: Length.px(verties[0][0]),
-      y: Length.px(verties[0][1]),
-      width: Length.px(dist(verties[0], verties[1])),
-      height: Length.px(dist(verties[0], verties[3])),
-      transform: ""
-    });
-    return this.state.newArtBoard;
-  }
-  initMatrix(isInitializeMatrix = false) {
-    if (isInitializeMatrix && this.$selection.isMany) {
-      this.verties = clone$1(this.$selection.verties);
-      this.angle = 0;
-      this.localAngle = this.angle;
-      this.groupItem = this.item;
-      this.cachedGroupItem = this.item.matrix;
-    }
-  }
-  makeSelectionTool() {
-    this.renderPointers();
-  }
-  renderPointers() {
-    if (!this.groupItem)
-      return;
-    const verties = this.state.dragging ? this.groupItem.verties : this.$selection.verties;
-    const selectionVerties = this.groupItem.selectionVerties();
-    if (verties.length === 0)
-      return;
-    this.state.renderPointerList = [
-      this.$viewport.applyVerties(verties),
-      this.$viewport.applyVerties(selectionVerties)
-    ];
-    const { line: line2, point: point2, size: size2, elementLine } = this.createRenderPointers(this.state.renderPointerList[0], this.state.renderPointerList[1]);
-    this.refs.$pointerRect.updateDiff(line2 + elementLine + point2 + size2);
-  }
-  createPointer(pointer, number, rotate2) {
-    return `
-        <div    
-            class='pointer' 
-            data-number="${number}" 
-            data-pointer="${pointer}" 
-            style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) rotateZ(${rotate2 || "0deg"})" 
-        ></div>
-        `;
-  }
-  createPointerSide(pointer, number, rotate2, width2, height) {
-    return `
-        <div class='pointer' data-number="${number}" data-pointer="${pointer}" style="width: ${width2}px; height: ${height}px;transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) rotateZ(${rotate2 || "0deg"})" ></div>
-        `;
-  }
-  createRotatePointer(pointer, number, direction = "center center") {
-    if (pointer.length === 0)
-      return "";
-    if (number < 4) {
-      return `
-            <div class='rotate-pointer no-fill' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) scale(1.8);" ></div>
-            `;
-    }
-    return `
-        <div class='rotate-pointer' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px)" ></div>
-        `;
-  }
-  createPointerRect(pointers, rotatePointer) {
-    if (pointers.length === 0)
-      return "";
-    const centerPointer = lerp([], pointers[0], pointers[1], 0.5);
-    const line2 = `
-            M ${centerPointer[0]},${centerPointer[1]} 
-            L ${rotatePointer[0]}, ${rotatePointer[1]} 
-        `;
-    return `
-        <svg class='line' overflow="visible">
-            <path 
-                d="
-                    M ${pointers[0][0]}, ${pointers[0][1]} 
-                    L ${pointers[1][0]}, ${pointers[1][1]} 
-                    L ${pointers[2][0]}, ${pointers[2][1]} 
-                    L ${pointers[3][0]}, ${pointers[3][1]} 
-                    L ${pointers[0][0]}, ${pointers[0][1]}
-                    ${line2}
-                    Z
-                " />
-        </svg>`;
-  }
-  createLine(pointers) {
-    return `
-            M ${pointers[0][0]}, ${pointers[0][1]} 
-            L ${pointers[1][0]}, ${pointers[1][1]} 
-            L ${pointers[2][0]}, ${pointers[2][1]} 
-            L ${pointers[3][0]}, ${pointers[3][1]} 
-            L ${pointers[0][0]}, ${pointers[0][1]}
-            Z
-        `;
-  }
-  createSize(pointers) {
-    const top2 = lerp([], pointers[0], pointers[1], 0.5);
-    const right2 = lerp([], pointers[1], pointers[2], 0.5);
-    const bottom2 = lerp([], pointers[2], pointers[3], 0.5);
-    const left2 = lerp([], pointers[3], pointers[0], 0.5);
-    const list2 = [
-      { start: top2, end: bottom2 },
-      { start: right2, end: left2 },
-      { start: bottom2, end: top2 },
-      { start: left2, end: right2 }
-    ].map((it, index2) => {
-      return { index: index2, data: it };
-    });
-    list2.sort((a, b) => {
-      return a.data.start[1] > b.data.start[1] ? -1 : 1;
-    });
-    const item2 = list2[0];
-    const newPointer = lerp([], item2.data.end, item2.data.start, 1 + 16 / dist(item2.data.start, item2.data.end));
-    const width2 = this.groupItem.width.value;
-    const height = this.groupItem.height.value;
-    const diff = subtract([], item2.data.start, item2.data.end);
-    const angle = calculateAngle360(diff[0], diff[1]) + 90;
-    let text2 = `${round(width2, 100)} x ${round(height, 100)}`;
-    if (this.state.isRotate) {
-      const rotateZ2 = Transform.get(this.groupItem.transform, "rotateZ");
-      if (rotateZ2) {
-        text2 = `${rotateZ2[0].value}\xB0`;
-      }
-    }
-    return `
-            <div 
-                class='size-pointer' 
-                style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >
-               ${text2}
-            </div>
-        `;
-  }
-  createRenderPointers(pointers, selectionPointers) {
-    this.$editor.isPointerMove;
-    const diff = subtract([], lerp([], pointers[0], pointers[1], 0.5), lerp([], pointers[0], pointers[2], 0.5));
-    const rotate2 = Length.deg(calculateAngle360(diff[0], diff[1]) - 90).round(1e3);
-    const rotatePointer = getRotatePointer(pointers, 30);
-    const dist$1 = dist(pointers[0], pointers[2]);
-    const width2 = dist(pointers[0], pointers[1]);
-    const height = dist(pointers[0], pointers[3]);
-    return {
-      line: this.createPointerRect(pointers, rotatePointer),
-      elementLine: `
-                <svg class='line' overflow="visible">
-                    <path 
-                        d="${this.$selection.items.map((it, index2) => {
-        return this.createLine(this.$viewport.applyVerties(it.originVerties));
-      }).join("")}
-                        " />
-                </svg>
-            `,
-      size: this.createSize(pointers),
-      point: [
-        this.createRotatePointer(rotatePointer, 4, "center center"),
-        dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[0], pointers[1], 0.5), 11, rotate2, width2, 5),
-        dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[1], pointers[2], 0.5), 12, rotate2, 5, height),
-        dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[2], pointers[3], 0.5), 13, rotate2, width2, 5),
-        dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[3], pointers[0], 0.5), 14, rotate2, 5, height),
-        this.createPointer(pointers[0], 1, rotate2),
-        this.createPointer(pointers[1], 2, rotate2),
-        this.createPointer(pointers[2], 3, rotate2),
-        this.createPointer(pointers[3], 4, rotate2)
-      ].join("")
-    };
-  }
-  checkShow() {
-    if (this.$selection.isMany) {
-      if (this.$selection.hasChangedField("x", "y", "width", "height", "transform", "transform-origin", "perspective", "perspective-origin")) {
-        return true;
-      }
-    }
-    return false;
-  }
-  [SUBSCRIBE("refreshSelectionStyleView") + IF("checkShow")]() {
-    this.renderPointers();
-  }
-  [SUBSCRIBE("hideSelectionToolView")]() {
-    this.$el.hide();
-  }
-}
 var CanvasView$1 = "";
 class CanvasView extends EditorElement {
   components() {
     return {
-      SelectionToolView,
-      GroupSelectionToolView,
       PageTools,
-      GridLayoutLineView,
       DragAreaRectView,
       HTMLRenderView,
-      SelectionInfoView,
-      LayerAppendView,
-      PathEditorView,
-      PathDrawView,
-      HoverView,
-      GuideLineView,
       DragAreaView
     };
   }
@@ -25683,40 +23307,13 @@ class CanvasView extends EditorElement {
           <div class='page-lock scrollbar' ref='$lock'>            
 
             <!-- \uC120\uD0DD \uC601\uC5ED \uC774\uBCA4\uD2B8 \uC124\uC815  -->
-            <object refClass="DragAreaView" ref="$dragAreaView" />               
+            <object refClass="DragAreaView" />
 
             <!-- HTML \uB80C\uB354\uB9C1 \uC601\uC5ED  --> 
-            <object refClass='HTMLRenderView' ref='$elementView' />                                        
-
-            <!--  One Selection Tool --> 
-            <object refClass='SelectionToolView' ref='$selectionTool' />
-
-            <!-- Group Selection Tool --> 
-            <object refClass='GroupSelectionToolView' ref='$groupSelectionTool' />
+            <object refClass='HTMLRenderView' />
 
             <!-- \uB4DC\uB798\uADF8 \uC601\uC5ED \uADF8\uB824\uC8FC\uB294 \uBDF0 --> 
-            <object refClass="DragAreaRectView" ref="$dragAreaRectView" />                  
-
-            <!-- Grid Layout \uC5D0\uC11C \uC0AC\uC6A9\uB418\uB294 \uC601\uC5ED \uADF8\uB824\uC8FC\uB294 \uBDF0 --> 
-            <object refClass='GridLayoutLineView' ref='$gridLayoutLineView' />            
-
-            <!-- ArtBoard \uC758 title \uBD80\uBD84 \uADF8\uB824\uC8FC\uB294 \uBDF0  -->
-            <object refClass='SelectionInfoView' ref='$selectionInfoView' />                                                            
-
-            <!-- \uC2A4\uB9C8\uD2B8 \uAC00\uC774\uB4DC \uB77C\uC778 \uADF8\uB824\uC8FC\uB294 \uBDF0  -->
-            <object refClass='GuideLineView' ref='$guideLineView' />            
-
-            <!-- Hover \uB41C \uB808\uC774\uC5B4 \uC601\uC5ED\uC744 \uADF8\uB824\uC8FC\uB294 \uBDF0 -->
-            <object refClass='HoverView' ref='$hoverView' />     
-
-            <!-- \uB808\uC774\uC5B4\uB97C \uCD94\uAC00 \uD558\uAE30 \uC704\uD574\uC11C \uB4DC\uB798\uADF8 \uD558\uB294 \uC601\uC5ED \uBDF0 -->
-            <object refClass='LayerAppendView' ref='$objectAddView' />       
-
-            <!-- \uD328\uC2A4 \uD3B8\uC9D1 \uC5D0\uB514\uD130 \uBDF0  -->
-            <object refClass='PathEditorView' ref='$pathEditorView' />                 
-
-            <!-- \uD328\uC2A4 \uB4DC\uB85C\uC789 \uC5D0\uB514\uD130 \uBDF0 -->
-            <object refClass='PathDrawView' ref='$pathDrawView' />            
+            <object refClass="DragAreaRectView" ref="$dragAreaRectView" />                                                                            
 
             <!-- \uCE94\uBC84\uC2A4 \uC601\uC5ED\uC5D0 \uADF8\uB9AC\uAE30 \uB3C4\uC640\uC8FC\uB294 \uBDF0 -->
             ${this.$injectManager.generate("canvas.view")}              
@@ -25733,28 +23330,6 @@ class CanvasView extends EditorElement {
         "--elf--canvas-background-color": this.$config.get("style.canvas.background.color")
       }
     };
-  }
-  makeViewportConsole() {
-    if (!this.$viewport.verties)
-      return "";
-    const mouse = this.$viewport.pos;
-    return `
-      <div style='background-color: rgba(0, 0, 0, 0.5); color: white;position:absolute;left:0px;top:0px;bottom:0px;right:0px;pointer-events:none;'>
-        <div style='position:absolute;width:1px;height:100%;top:0px;left:50%;transform:translateX(-50%);background-color:black;'></div>  
-        <div style='position:absolute;height:1px;width:100%;top:50%;transform:translateY(-50%);background-color:black;'></div>                
-        <div style='position:absolute;display:inline-block;left:0px;top:50%;transform:translateY(-50%);'>${Math.floor(this.$viewport.minX)}</div>
-        <div style='position:absolute;display:inline-block;right:0px;top:50%;transform:translateY(-50%);'>${Math.floor(this.$viewport.maxX)}</div>
-        <div style='position:absolute;display:inline-block;left:50%;top:0px;transform:translateX(-50%)'>${Math.floor(this.$viewport.minY)}</div>
-        <div style='position:absolute;display:inline-block;left:50%;bottom:0px;transform:translateX(-50%)'>${Math.floor(this.$viewport.maxY)}</div>
-        <div style='position:absolute;top:50%;left:50%;display:inline-block;'>${this.$viewport.transformOrigin.map((it) => Math.floor(it)).join(", ")}</div>
-        <div style='position:absolute;left:${mouse[0]}%;top:${mouse[1]}%;display:inline-block;'>
-          mouse: ${this.$viewport.mouse.map((it) => Math.floor(it)).join(", ")} <br />
-          translate: ${this.$viewport.translate.join(", ")} <br />          
-          zoom : ${this.$viewport.zoomFactor} <br />
-        </div>                  
-
-      </div>
-    `;
   }
   checkSpace(e) {
     if (this.$config.get("set.tool.hand")) {
@@ -25867,239 +23442,12 @@ class CanvasView extends EditorElement {
   }
 }
 var BodyPanel$1 = "";
-var DrawManager$1 = "";
-class DrawManager extends EditorElement {
-  initState() {
-    return {
-      tolerance: 1,
-      stroke: "black",
-      "stroke-width": 2,
-      "stroke-linecap": "round",
-      "stroke-linejoin": "round",
-      msg: this.$i18n("path.manager.msg")
-    };
-  }
-  [SUBSCRIBE("refreshSelection")]() {
-    var current = this.$selection.current;
-    if (current) {
-      this.children.$stroke.setValue(current["stroke"] || "rgba(0, 0, 0, 1)");
-      this.children.$strokeWidth.setValue(current["stroke-width"] || Length.number(1));
-    }
-  }
-  [SUBSCRIBE("setColorAsset")]({ color: color2 }) {
-    if (this.$el.isShow()) {
-      this.setState({
-        stroke: color2
-      }, false);
-      this.children.$stroke.setValue(color2);
-      this.updateData({
-        stroke: color2
-      });
-    }
-  }
-  template() {
-    return `
-      <div class='elf--draw-manager'>
-        <div class="tools left" ref="$left">
-            <button type="button" class="primary" data-value='DrawEditorDone' title='${this.$i18n("draw.manager.mode.modify")}' >Done</button>
-        </div>      
-        <div class='tools'>   
-          <div >        
-            <label data-tooltip="${this.$i18n("draw.manager.tolerance")}">T</label>            
-            <object refClass="NumberInputEditor"  
-              ref='$tolerance' 
-              key='tolerance' 
-              value="1" 
-              min="0"
-              max="100"
-              step="0.01"
-              unit="number" 
-              onchange="changeValue" 
-            />
-          </div>              
-          <div >
-            <label>${this.$i18n("svg.item.property.stroke")}</label>          
-            <object refClass="FillSingleEditor" 
-              ref='$stroke' 
-              simple="true" 
-              value="${this.state.stroke}" 
-              key='stroke' 
-              onchange="changeValue" 
-            />
-          </div>
-
-          <div >
-            <label>${this.$i18n("svg.item.property.strokeWidth")}</label>          
-            <object refClass="NumberInputEditor"  
-              ref='$strokeWidth' 
-              key="stroke-width" 
-              value="${this.state["stroke-width"]}"              
-              onchange="changeValue" />
-          </div>      
-          
-
-          <div>
-            <label data-tooltip="${this.$i18n("svg.item.property.lineCap")}">Cap</label>          
-            <object refClass="SelectEditor" 
-              ref='$strokeLineCap' 
-              key="stroke-linecap" 
-              value="${this.state["stroke-linecap"]}"                   
-              options=${variable$4(["butt", "round", "square"])} 
-              onchange="changeValue" 
-            />
-          </div> 
-          <div>
-            <label data-tooltip="${this.$i18n("svg.item.property.lineJoin")}">Join</label>          
-            <object refClass="SelectEditor"  
-              ref='$strokeLineJoin' 
-              key="stroke-linejoin" 
-              value="${this.state["stroke-linejoin"]}"                                 
-              options=${variable$4(["miter", "bevel", "round"])}
-              onchange="changeValue" 
-            />
-          </div>
-        </div>
-      </div>    
-    `;
-  }
-  [SUBSCRIBE_SELF("changeValue")](key, value, params) {
-    this.updateData({
-      [key]: value
-    });
-  }
-  updateData(obj = {}) {
-    this.setState(obj, false);
-    this.state.instance.trigger(this.state.changeEvent, obj);
-  }
-  [SUBSCRIBE("changePathManager")](mode) {
-    this.setState({ mode });
-  }
-  [SUBSCRIBE("showDrawManager")](obj = {}) {
-    obj.changeEvent = obj.changeEvent || "changeDrawManager";
-    this.setState(obj);
-    this.$el.show();
-    this.emit("addStatusBarMessage", this.state.msg);
-    this.emit("hidePathManager");
-  }
-  [SUBSCRIBE("hideDrawManager")]() {
-    this.$el.hide();
-  }
-  [CLICK("$left button")](e) {
-    var message = e.$dt.attr("data-value");
-    this.emit(message);
-  }
-}
-var PathManager$1 = "";
-const MODES = {
-  "segment-move": "modify",
-  "modify": "modify",
-  "path": "path",
-  "transform": "transform",
-  "warp": "warp"
-};
-class PathManager extends EditorElement {
-  initState() {
-    return {
-      mode: "move",
-      fill: null,
-      stroke: null,
-      "fill-opacity": null,
-      "stroke-width": null,
-      msg: this.$i18n("path.manager.msg")
-    };
-  }
-  template() {
-    return `
-      <div class='elf--path-manager'>
-        <div class="tools left" ref="$left">
-            <button type="button" class="primary" data-value='PathEditorDone' title='${this.$i18n("path.manager.mode.modify")}' >Done</button>
-        </div>
-        <div class='tools' ref='$mode' data-selected-value='${this.state.mode}'>
-            <button type="button" data-value='modify' data-tooltip='${this.$i18n("path.manager.mode.modify")}' > ${iconUse$1("device_hub")}</button>
-            <button type="button" data-value='path' data-tooltip='${this.$i18n("path.manager.mode.path")}' > ${iconUse$1("control_point")}</button>
-            <button type="button" data-value='transform' data-tooltip='${this.$i18n("path.manager.mode.transform")}' > ${iconUse$1("transform")}</button>             
-        </div>
-        <div class="split"></div>        
-        <div class='tools' ref='$util'>
-            <button type="button" data-value='reverse' data-tooltip='${this.$i18n("path.manager.mode.reverse")}' >${iconUse$1("sync")}</button>
-        </div>                        
-        <div class='tools' ref='$flip'>
-            <button type="button" data-value='flipX' data-tooltip='${this.$i18n("path.manager.mode.flipX")}'>${iconUse$1("flip")}</button>
-            <button type="button" data-value='flipY' data-tooltip='${this.$i18n("path.manager.mode.flipY")}'>${iconUse$1("flip", "rotate(90 12 12)")}</button>
-            <button type="button" data-value='flip' data-tooltip='${this.$i18n("path.manager.mode.flipOrigin")}'>${iconUse$1("flip", "rotate(45 12 12)")}</button>
-            <div class="split"></div>            
-            <button type="button" data-value='2x' data-tooltip="divide segment by 2 times">2x</button>
-            <button type="button" data-value='3x' data-tooltip="divide segment by 3 times">3x</button>            
-        </div>
-        <div class="subpath" style="display:none">
-          <button type="button" data-value="path" data-pathtype="rect">${iconUse$1("rect", "", { width: 24, height: 24 })}</button>
-        </div>
-      </div>    
-    `;
-  }
-  [BIND("$mode")]() {
-    return {
-      "data-selected-value": MODES[this.state.mode]
-    };
-  }
-  refresh() {
-    this.bindData("$mode");
-  }
-  [CLICK("$flip button")](e) {
-    var transformType = e.$dt.attr("data-value");
-    if (transformType === "2x") {
-      this.emit("divideSegmentsByCount", 2);
-    } else if (transformType === "3x") {
-      this.emit("divideSegmentsByCount", 3);
-    } else {
-      this.emit("changePathTransform", transformType);
-    }
-  }
-  [CLICK("$util button")](e) {
-    var utilType = e.$dt.attr("data-value");
-    this.emit("changePathUtil", utilType);
-  }
-  [CLICK("$mode button")](e) {
-    var mode = e.$dt.attr("data-value");
-    this.updateData({
-      mode
-    });
-    this.refresh();
-  }
-  [CLICK("$left button")](e) {
-    var message = e.$dt.attr("data-value");
-    this.emit(message);
-  }
-  updateData(obj = {}) {
-    this.setState(obj, false);
-    this.emit(this.state.changeEvent, obj);
-  }
-  [SUBSCRIBE("changePathManager")](mode) {
-    this.setState({ mode });
-  }
-  [SUBSCRIBE("showPathManager")](obj = {}) {
-    obj.changeEvent = obj.changeEvent || "changePathManager";
-    this.setState(obj);
-    this.$el.show();
-    this.emit("addStatusBarMessage", this.state.msg);
-  }
-  [SUBSCRIBE("hidePathManager")]() {
-    this.$el.hide();
-  }
-}
 var PageSubEditor$1 = "";
 class PageSubEditor extends EditorElement {
-  components() {
-    return {
-      PathManager,
-      DrawManager
-    };
-  }
   template() {
     return `
       <div class='elf--page-subeditor'>
-        <object refClass='PathManager' />
-        <object refClass='DrawManager' />
+        ${this.$injectManager.generate("page.subeditor.view")}         
       </div>
     `;
   }
@@ -26506,9 +23854,52 @@ class KeyboardManager extends EditorElement {
     this.emit("keymap.keyup", e);
   }
 }
+function CSS_TO_STRING(style, postfix = "") {
+  var newStyle = style || {};
+  return Object.keys(newStyle).filter((key) => isNotUndefined(newStyle[key])).map((key) => `${key}: ${newStyle[key]}`).join(";" + postfix);
+}
+function OBJECT_TO_PROPERTY(obj2) {
+  const target = obj2 || {};
+  return Object.keys(target).map((key) => {
+    if (key === "class") {
+      if (isObject(obj2[key])) {
+        return `${key}="${OBJECT_TO_CLASS(obj2[key])}"`;
+      }
+    }
+    if (key === "style") {
+      if (isObject(obj2[key])) {
+        return `${key}="${CSS_TO_STRING(obj2[key])}"`;
+      }
+    }
+    if (isBoolean(obj2[key]) || isUndefined(obj2[key]) || obj2[key] === "undefined") {
+      if (obj2[key]) {
+        return key;
+      } else {
+        return "";
+      }
+    }
+    return `${key}="${obj2[key]}"`;
+  }).join(" ");
+}
+function OBJECT_TO_CLASS(obj2) {
+  return Object.keys(obj2).filter((k) => obj2[k]).map((key) => {
+    return key;
+  }).join(" ");
+}
+function createElementJsx(Component2, props2, ...children2) {
+  children2 = children2.flat(Infinity).join("");
+  if (typeof Component2 !== "string") {
+    const ComponentName = Component2.name;
+    registElement({
+      [ComponentName]: Component2
+    });
+    return `<object refClass="${ComponentName}" ${variable$4(props2)}>${children2}</object>`;
+  } else {
+    return `<${Component2} ${OBJECT_TO_PROPERTY(props2)}>${children2}</${Component2}>`;
+  }
+}
 class TabPanel extends EditorElement {
   initState() {
-    this.props.selected === "true" ? true : false;
     return {
       value: this.props.value || ""
     };
@@ -26516,20 +23907,14 @@ class TabPanel extends EditorElement {
   template() {
     const { content: content2 } = this.props;
     const { value } = this.state;
-    return `
-        <div class="tab-content scrollbar" data-value="${value}">
-          ${content2}
-        </div>
-      `;
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "tab-content scrollbar",
+      "data-value": value
+    }, content2);
   }
 }
 var Tabs$1 = "";
 class Tabs extends EditorElement {
-  components() {
-    return {
-      TabPanel
-    };
-  }
   afterRender() {
     setTimeout(() => {
       this.setValue(this.state.selectedValue);
@@ -26547,24 +23932,24 @@ class Tabs extends EditorElement {
       `;
   }
   [LOAD("$tab")]() {
-    const { content: content2 } = this.props;
-    const contentChildren = this.parseContent(content2);
-    const children2 = contentChildren.filter((it) => it.refClass === "TabPanel");
-    return `
-        <div class="tab-header" ref="$header">
-          ${children2.map((it) => {
-      return `
-              <div class="tab-item" data-value="${it.props.value}" title='${it.props.title}'>
-                <label class="title">${it.props.title}</label>
-              </div>         
-            `;
-    }).join("")}
-        </div>    
-  
-        <div class="tab-body" ref="$body">
-          ${content2}
-        </div>
-      `;
+    const { content: content2, contentChildren } = this.props;
+    const children2 = contentChildren.filter((it) => it.component === TabPanel);
+    return [
+      /* @__PURE__ */ createElementJsx("div", {
+        class: "tab-header",
+        ref: "$header"
+      }, children2.map((it) => /* @__PURE__ */ createElementJsx("div", {
+        class: "tab-item",
+        "data-value": it.props.value,
+        title: it.props.title
+      }, /* @__PURE__ */ createElementJsx("label", {
+        class: "title"
+      }, it.props.title)))),
+      /* @__PURE__ */ createElementJsx("div", {
+        class: "tab-body",
+        ref: "$body"
+      }, content2)
+    ];
   }
   [CLICK("$header .tab-item:not(.empty-item)")](e) {
     var selectedValue = e.$dt.attr("data-value");
@@ -26585,11 +23970,6 @@ class Tabs extends EditorElement {
   }
 }
 class Inspector extends EditorElement {
-  components() {
-    return {
-      Tabs
-    };
-  }
   afterRender() {
     this.$el.toggle(this.$config.get("editor.design.mode") === "design");
   }
@@ -26601,58 +23981,39 @@ class Inspector extends EditorElement {
     };
   }
   template() {
-    return `
-      <div class="feature-control inspector">
-        <div>
-          <object refClass="Tabs" 
-            ref="$tab" 
-            ${variable$4({
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "feature-control inspector"
+    }, /* @__PURE__ */ createElementJsx("div", null, /* @__PURE__ */ createElementJsx(Tabs, {
+      ref: "$tab",
       selectedValue: "style",
       onchange: (value) => {
         this.$config.set("inspector.selectedValue", value);
       }
-    })}
-          >
-            <object refClass="TabPanel" value="style" title="${this.$i18n("inspector.tab.title.style")}">
-              <object refClass="AlignmentProperty" />            
-              <object refClass="DepthProperty" />
-              <object refClass="PathToolProperty" />              
-
-              <!-- Default Property --> 
-              <object refClass="PositionProperty" />
-              <object refClass="AppearanceProperty" />                                   
-
-              ${this.$injectManager.generate("inspector.tab.style")}                             
-              <div class='empty'></div>
-            </object>
-
-            <object refClass="TabPanel" value="transition" title="${this.$i18n("inspector.tab.title.transition")}">
-              ${this.$injectManager.generate("inspector.tab.transition")}              
-              <div class='empty'></div>                
-            </object>            
-
-            <object refClass="TabPanel" value="code" title="${this.$i18n("inspector.tab.title.code")}">
-              ${this.$injectManager.generate("inspector.tab.code")}              
-              <div class='empty'></div>                
-            </object>    
-            
-            ${this.$injectManager.getTargetMenuItems("inspector.tab").map((it) => {
+    }, /* @__PURE__ */ createElementJsx(TabPanel, {
+      value: "style",
+      title: this.$i18n("inspector.tab.title.style")
+    }, this.$injectManager.generate("inspector.tab.style"), /* @__PURE__ */ createElementJsx("div", {
+      class: "empty"
+    })), /* @__PURE__ */ createElementJsx(TabPanel, {
+      value: "transition",
+      title: this.$i18n("inspector.tab.title.transition")
+    }, this.$injectManager.generate("inspector.tab.transition"), /* @__PURE__ */ createElementJsx("div", {
+      class: "empty"
+    })), /* @__PURE__ */ createElementJsx(TabPanel, {
+      value: "code",
+      title: this.$i18n("inspector.tab.title.code")
+    }, this.$injectManager.generate("inspector.tab.code"), /* @__PURE__ */ createElementJsx("div", {
+      class: "empty"
+    })), this.$injectManager.getTargetMenuItems("inspector.tab").map((it) => {
       const { value, title: title2, loadElements } = it.class;
-      return `
-                <object refClass="TabPanel" value="${value}" title="${title2}" icon=${variable$4(it.icon)}>
-                  ${loadElements.map((element) => {
-        return `<object refClass="${element}" />`;
-      })}
-                  ${this.$injectManager.generate("inspector.tab." + it.value)}              
-                  <div class='empty'></div>                
-                </object> 
-              `;
-    })}
-          </object>
-          </div>
-        </div>
-      </div>
-    `;
+      return /* @__PURE__ */ createElementJsx(TabPanel, {
+        value,
+        title: title2,
+        icon: it.icon
+      }, loadElements.map((element) => craeteElement(element)), this.$injectManager.generate("inspector.tab." + it.value), /* @__PURE__ */ createElementJsx("div", {
+        class: "empty"
+      }));
+    }))));
   }
 }
 class LanguageSelector extends EditorElement {
@@ -26770,7 +24131,7 @@ class MenuItem extends EditorElement {
             ${this.isDisabled() ? "disabled" : ""}
             data-direction="${this.getDirection()}"
         >
-            <div class="icon ${this.getIcon()}" ref="$icon">${icon$1[this.getIconString()] || this.getIconString() || ""}</div>
+            <div class="icon ${this.getIcon()}" ref="$icon">${obj[this.getIconString()] || this.getIconString() || ""}</div>
             <div class="title">${this.getTitle()}</div>
         </button>
         `;
@@ -26796,7 +24157,7 @@ class MenuItem extends EditorElement {
     return DEFAULT_ICON;
   }
   setIcon(iconString) {
-    this.refs.$icon.html(icon$1[iconString] || iconString || "");
+    this.refs.$icon.html(obj[iconString] || iconString || "");
   }
   getIconString() {
     return DEFAULT_ICON;
@@ -27330,29 +24691,6 @@ class Save extends MenuItem {
     });
   }
 }
-class OpenPathEditor extends MenuItem {
-  getIconString() {
-    return "shape";
-  }
-  getTitle() {
-    return "Edit";
-  }
-  isHideTitle() {
-    return true;
-  }
-  clickButton(e) {
-    this.emit("open.editor");
-  }
-  [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
-    var _a, _b;
-    const enablePathEditing = this.$selection.is("svg-path", "svg-textpath") || ((_b = (_a = this.$selection.current) == null ? void 0 : _a.cacheClipPathObject) == null ? void 0 : _b.type) === "path";
-    if (enablePathEditing) {
-      this.$el.show("inline-block");
-    } else {
-      this.$el.hide();
-    }
-  }
-}
 class Outline extends MenuItem {
   getIconString() {
     return "outline";
@@ -27396,7 +24734,6 @@ class ToolBar extends EditorElement {
     return {
       ThemeChanger,
       Outline,
-      OpenPathEditor,
       ExportView,
       Download,
       Save,
@@ -27422,7 +24759,6 @@ class ToolBar extends EditorElement {
                                 <object refClass="Undo" />
                                 <object refClass="Redo" />
                                 <object refClass="Outline" />                                
-                                <object refClass="OpenPathEditor" />
                                 ${this.$injectManager.generate("toolbar.left")}
                             </div>
                         </div>
@@ -27740,7 +25076,7 @@ class AlignmentProperty extends BaseProperty {
   }
 }
 function alignment(editor) {
-  editor.registerElement({
+  editor.registerMenuItem("inspector.tab.style", {
     AlignmentProperty
   });
 }
@@ -27780,8 +25116,8 @@ function customParseReverseMatches(str, matches2) {
 }
 const ANIMATION_TIMING_REG = /((cubic-bezier|steps)\(([^\)]*)\))/gi;
 class Animation extends PropertyItem {
-  static parse(obj) {
-    return new Animation(obj);
+  static parse(obj2) {
+    return new Animation(obj2);
   }
   getDefaultObject() {
     return {
@@ -28376,7 +25712,7 @@ class ObjectProperty {
   }
 }
 function appearance(editor) {
-  editor.registerElement({
+  editor.registerMenuItem("inspector.tab.style", {
     AppearanceProperty: ObjectProperty.create({
       title: editor.$i18n("background.color.property.title"),
       editableProperty: "appearance",
@@ -28712,11 +26048,11 @@ const names$1 = {
   image: "Image",
   "static-gradient": "Static",
   "linear-gradient": "Linear",
-  "repeating-linear-gradient": `${icon$1.repeat} Linear`,
+  "repeating-linear-gradient": `${obj.repeat} Linear`,
   "radial-gradient": "Radial",
-  "repeating-radial-gradient": `${icon$1.repeat} Radial`,
+  "repeating-radial-gradient": `${obj.repeat} Radial`,
   "conic-gradient": "Conic",
-  "repeating-conic-gradient": `${icon$1.repeat} Conic`
+  "repeating-conic-gradient": `${obj.repeat} Conic`
 };
 const types = {
   image: "image",
@@ -28756,7 +26092,7 @@ class BackgroundImageEditor extends EditorElement {
                 <div class='label ${labelClass}'>
                     <label>${this.props.title || ""}</label>
                     <div class='tools'>
-                        <button type="button" ref='$add'>${icon$1.add} ${this.props.title ? "" : "Add"}</button>
+                        <button type="button" ref='$add'>${obj.add} ${this.props.title ? "" : "Add"}</button>
                     </div>
                 </div>
                 <div class='fill-list' ref='$fillList'></div>
@@ -28816,7 +26152,7 @@ class BackgroundImageEditor extends EditorElement {
                       ${this.templateForBlendMode(index2, it.blendMode)}
                     </div>
                     <div class='tools'>
-                      <button type="button" class='remove' data-index='${index2}'>${icon$1.remove2}</button>
+                      <button type="button" class='remove' data-index='${index2}'>${obj.remove2}</button>
                     </div>
                   </div>
                 </div>
@@ -28825,7 +26161,7 @@ class BackgroundImageEditor extends EditorElement {
     });
   }
   modifyBackgroundImage() {
-    var value = CSS_TO_STRING(BackgroundImage.toPropertyCSS(this.state.images));
+    var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.images));
     this.parent.trigger(this.props.onchange, this.props.key, value);
   }
   [SUBSCRIBE("add")]() {
@@ -29114,8 +26450,8 @@ class BackgroundPositionEditor extends EditorElement {
   modifyValue(value) {
     this.parent.trigger(this.props.onchange, this.props.key, value, this.state.index);
   }
-  setValue(obj) {
-    this.setState(__spreadValues({}, obj));
+  setValue(obj2) {
+    this.setState(__spreadValues({}, obj2));
   }
   [BIND("$miniView")]() {
     return {
@@ -29232,6 +26568,7 @@ class ToggleCheckBox extends BaseUI {
       label: this.props.label || "",
       checked: this.props.value || "false",
       toggleLabels: this.props.toggleLabels || DEFAULT_LABELS,
+      toggleTitles: this.props.toggleTitles || [],
       toggleValues: this.props.toggleValues || ["true", "false"]
     };
   }
@@ -29246,10 +26583,18 @@ class ToggleCheckBox extends BaseUI {
             ${label ? `<label title="${label}">${label}</label>` : ""}
             <div class='area' ref="$area">
                 ${this.state.toggleValues.map((it, index2) => {
-      return `
-                        <div>
-                            <button type="button" data-index="${index2}" value="${it}">${this.state.toggleLabels[index2]}</button>
-                        </div>`;
+      let label2 = this.state.toggleLabels[index2];
+      this.state.toggleTitles[index2];
+      if (obj[label2]) {
+        label2 = iconUse$1(label2, "", { width: 30, height: 30 });
+      }
+      return createElementJsx("div", null, createElementJsx("button", {
+        type: "button",
+        class: `${it === checked ? "checked" : ""}`,
+        "data-index": index2,
+        value: it,
+        style: "--elf--toggle-checkbox-tooltip-top: -20%;"
+      }, label2));
     }).join("")}
             </div>
         </div>
@@ -29271,8 +26616,7 @@ class ToggleCheckBox extends BaseUI {
   setValue(checked) {
     this.setState({
       checked
-    }, false);
-    this.bindData("$area");
+    });
   }
   getValue() {
     return this.state.checked;
@@ -29355,14 +26699,14 @@ class PathToolProperty extends BaseProperty {
   }
   [SUBSCRIBE("refreshSelection")]() {
     this.refreshShow(() => {
-      if (this.$selection.length === 1 && this.$selection.current.isBooleanPath)
+      if (this.$selection.length === 1 && this.$selection.is("boolean-path"))
         return true;
       return this.$selection.is("svg-path", "polygon", "star");
     });
   }
 }
 function pathTool(editor) {
-  editor.registerElement({
+  editor.registerMenuItem("inspector.tab.style", {
     PathToolProperty
   });
 }
@@ -29401,16 +26745,16 @@ class Border {
       width: width2
     };
   }
-  static joinValue(obj) {
-    return `${obj.width} ${obj.style || "solid"} ${obj.color}`;
+  static joinValue(obj2) {
+    return `${obj2.width} ${obj2.style || "solid"} ${obj2.color}`;
   }
-  static join(obj) {
+  static join(obj2) {
     var arr = [
-      obj["border"] ? `border: ${obj["border"]}` : "",
-      obj["border-top"] ? `border-top: ${obj["border-top"]}` : "",
-      obj["border-left"] ? `border-left: ${obj["border-left"]}` : "",
-      obj["border-right"] ? `border-right: ${obj["border-right"]}` : "",
-      obj["border-bottom"] ? `border-bottom: ${obj["border-bottom"]}` : ""
+      obj2["border"] ? `border: ${obj2["border"]}` : "",
+      obj2["border-top"] ? `border-top: ${obj2["border-top"]}` : "",
+      obj2["border-left"] ? `border-left: ${obj2["border-left"]}` : "",
+      obj2["border-right"] ? `border-right: ${obj2["border-right"]}` : "",
+      obj2["border-bottom"] ? `border-bottom: ${obj2["border-bottom"]}` : ""
     ].filter((it) => it);
     return arr.join(";");
   }
@@ -29435,8 +26779,8 @@ class BorderEditor extends EditorElement {
       borders
     };
   }
-  updateData(obj) {
-    this.setState(obj, false);
+  updateData(obj2) {
+    this.setState(obj2, false);
     this.parent.trigger(this.props.onchange, this.props.key, this.getValue(), this.props.params);
   }
   getValue() {
@@ -29533,8 +26877,8 @@ class BorderValueEditor extends EditorElement {
       value: Border.parseValue(this.props.value)
     };
   }
-  updateData(obj) {
-    this.setState(obj, false);
+  updateData(obj2) {
+    this.setState(obj2, false);
     this.parent.trigger(this.props.onchange, this.props.key, this.getValue(), this.props.params);
   }
   getValue() {
@@ -29592,11 +26936,11 @@ const names = {
   image: "Image",
   "static-gradient": "Static",
   "linear-gradient": "Linear",
-  "repeating-linear-gradient": `${icon$1.repeat} Linear`,
+  "repeating-linear-gradient": `${obj.repeat} Linear`,
   "radial-gradient": "Radial",
-  "repeating-radial-gradient": `${icon$1.repeat} Radial`,
+  "repeating-radial-gradient": `${obj.repeat} Radial`,
   "conic-gradient": "Conic",
-  "repeating-conic-gradient": `${icon$1.repeat} Conic`
+  "repeating-conic-gradient": `${obj.repeat} Conic`
 };
 class BorderImageProperty extends BaseProperty {
   getTitle() {
@@ -29672,9 +27016,9 @@ class BorderImageProperty extends BaseProperty {
       <div class="property-item border-image-item" ref='$borderImageView'></div>    
       <div class="property-item border-slice-item">
         <div class="slice-selector" data-selected-value="all" ref="$selector">
-          <button type="button" data-value="all">${icon$1.border_all}</button>
+          <button type="button" data-value="all">${obj.border_all}</button>
           <button type="button" data-value="partitial">
-            ${icon$1.border_inner}
+            ${obj.border_inner}
           </button>
         </div>
         <div class="slice-value">
@@ -29895,9 +27239,9 @@ class BorderRadiusEditor extends EditorElement {
     return `
       <div class="property-item border-radius-item">
         <div class="radius-selector" data-selected-value="${selectedValue}" ref="$selector">
-          <button type="button" data-value="all">${icon$1.border_all}</button>
+          <button type="button" data-value="all">${obj.border_all}</button>
           <button type="button" data-value="partitial">
-            ${icon$1.border_inner}
+            ${obj.border_inner}
           </button>
         </div>
         <div class="radius-value">
@@ -30096,7 +27440,7 @@ class BoxShadowEditor extends EditorElement {
         <div class='label ${labelClass}' >
             <label>${this.props.title || ""}</label>
             <div class='tools'>
-              <button type="button" ref="$add" title="add Box Shadow">${icon$1.add}</button> ${this.props.title ? "" : "Add"}
+              <button type="button" ref="$add" title="add Box Shadow">${obj.add}</button> ${this.props.title ? "" : "Add"}
             </div>
         </div>
         <div class='box-shadow-list' ref='$shadowList'></div>
@@ -30111,14 +27455,14 @@ class BoxShadowEditor extends EditorElement {
             <div class='color-view' style="background-color: ${shadow2.color}">
             </div>
           </div>
-          <div class="inset" data-value="${shadow2.inset}">${icon$1.check}</div>
+          <div class="inset" data-value="${shadow2.inset}">${obj.check}</div>
           <div class="offset-x">${shadow2.offsetX}</div>
           <div class="offset-y">${shadow2.offsetY}</div>
           <div class="blur-radius">${shadow2.blurRadius}</div>
           <div class="spread-radius">${shadow2.spreadRadius}</div>
           <div class="tools">
             <button type="button" class="remove" data-index="${index2}">
-              ${icon$1.remove2}
+              ${obj.remove2}
             </button>
           </div>
         </div>
@@ -30212,7 +27556,7 @@ class BoxShadowProperty extends BaseProperty {
     `;
   }
   getTools() {
-    return `<button type="button" ref='$add'>${icon$1.add}</button>`;
+    return `<button type="button" ref='$add'>${obj.add}</button>`;
   }
   [CLICK("$add")]() {
     this.children.$boxshadow.trigger("add");
@@ -30726,8 +28070,8 @@ class PolygonEditor extends EditorElement {
                     <label>Y</label><input type='number' class='y' value="${it.y.value.toString()}" /><span>%</span>
                 </div>
                 <div class='tools'>
-                    <button type="button" class='copy' data-index="${index2}">${icon$1.copy}</button>
-                    <button type="button" class='remove' data-index="${index2}">${icon$1.remove2}</button>
+                    <button type="button" class='copy' data-index="${index2}">${obj.copy}</button>
+                    <button type="button" class='remove' data-index="${index2}">${obj.remove2}</button>
                 </div>
             </div>
             `;
@@ -31076,7 +28420,7 @@ class ClipPathProperty extends BaseProperty {
       return `<option value='${it}'>${it}</option>`;
     }).join("")}
       </select>
-      <button type="button" ref="$add" title="add Clip Path">${icon$1.add}</button>
+      <button type="button" ref="$add" title="add Clip Path">${obj.add}</button>
     `;
   }
   makeClipPathTemplate(clippath, func2) {
@@ -31102,7 +28446,7 @@ class ClipPathProperty extends BaseProperty {
             <div class='name'>${clippath}</div>
           </div>
           <div class='tools'>
-            <button type="button" class="del">${icon$1.remove2}</button>
+            <button type="button" class="del">${obj.remove2}</button>
           </div>        
         </div>
         ${isPath ? `<svg><path d="${newPathString}" fill="transparent" stroke="currentColor" /></svg>` : ""}
@@ -31162,8 +28506,8 @@ class ClipPathProperty extends BaseProperty {
     var current = this.$selection.current;
     if (!current)
       return;
-    var obj = ClipPath.parseStyle(current["clip-path"]);
-    switch (obj.type) {
+    var obj2 = ClipPath.parseStyle(current["clip-path"]);
+    switch (obj2.type) {
       case "path":
         var d = current.accumulatedPath(current.clipPathString).d;
         var mode = d ? "modify" : "path";
@@ -31327,10 +28671,10 @@ class Opacity extends EditorElement {
     rgb2.a = 0;
     const start2 = Color.format(rgb2, "rgb");
     rgb2.a = 1;
-    const end = Color.format(rgb2, "rgb");
+    const end2 = Color.format(rgb2, "rgb");
     return {
       style: {
-        background: `linear-gradient(to right, ${start2}, ${end})`
+        background: `linear-gradient(to right, ${start2}, ${end2})`
       }
     };
   }
@@ -31690,10 +29034,10 @@ function checkHueColor(p) {
 function initHueColors() {
   for (var i = 0, len2 = hue_color.length; i < len2; i++) {
     var hue = hue_color[i];
-    var obj = Color.parse(hue.rgb);
-    hue.r = obj.r;
-    hue.g = obj.g;
-    hue.b = obj.b;
+    var obj2 = Color.parse(hue.rgb);
+    hue.r = obj2.r;
+    hue.g = obj2.g;
+    hue.b = obj2.b;
   }
 }
 initHueColors();
@@ -32037,7 +29381,7 @@ class ComponentProperty extends BaseProperty {
 var ComponentPopup$1 = "";
 class ComponentPopup extends BasePopup {
   getClassName() {
-    return "component-property";
+    return "component-property w(800)";
   }
   getTitle() {
     return "Component";
@@ -32126,9 +29470,9 @@ class ComponentEditor extends EditorElement {
     });
     return self2;
   }
-  setValue(obj = {}) {
-    Object.keys(obj).forEach((key) => {
-      const value = obj[key];
+  setValue(obj2 = {}) {
+    Object.keys(obj2).forEach((key) => {
+      const value = obj2[key];
       this.eachChildren((child) => {
         if (child.setValue && child.props.key === key) {
           child.setValue(value);
@@ -32382,11 +29726,11 @@ function defaultConfigs(editor) {
   });
 }
 class BaseAssetModel extends BaseModel {
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       svgfilters: [],
       keyframes: []
-    }, obj));
+    }, obj2));
   }
   addKeyframe(keyframe2) {
     this.json.keyframes.push(keyframe2);
@@ -32443,8 +29787,8 @@ class BaseAssetModel extends BaseModel {
   setSVGFilterValue(index2, value) {
     this.json.svgfilters[index2] = __spreadValues(__spreadValues({}, this.json.svgfilters[index2]), value);
   }
-  addSVGFilter(obj = {}) {
-    this.json.svgfilters.push(obj);
+  addSVGFilter(obj2 = {}) {
+    this.json.svgfilters.push(obj2);
     var index2 = this.json.svgfilters.length - 1;
     return index2;
   }
@@ -32474,14 +29818,46 @@ class MovableModel extends BaseAssetModel {
   get isDragSelectable() {
     return true;
   }
-  get isBooleanPath() {
-    return Boolean(this.json["boolean-path"]);
-  }
   get isBooleanItem() {
+    return void 0;
+  }
+  get resizableWitChildren() {
     return false;
   }
+  startToCacheChildren() {
+    if (!this.resizableWitChildren)
+      return;
+    this.cachedSize = {
+      width: this.json.width.clone(),
+      height: this.json.height.clone()
+    };
+    this.cachedLayerMatrix = this.layers.map((item2) => {
+      return {
+        item: item2,
+        matrix: item2.matrix
+      };
+    });
+  }
+  recoverChildren() {
+    if (!this.resizableWitChildren)
+      return;
+    const obj2 = {
+      width: this.json.width.clone(),
+      height: this.json.height.clone()
+    };
+    const scaleX = obj2.width.value / this.cachedSize.width.value;
+    const scaleY = obj2.height.value / this.cachedSize.height.value;
+    this.cachedLayerMatrix.forEach(({ item: item2, matrix }) => {
+      item2.reset({
+        x: item2.x.changeUnitValue(matrix.x * scaleX, obj2.width.value),
+        y: item2.y.changeUnitValue(matrix.y * scaleY, obj2.height.value),
+        width: item2.width.changeUnitValue(matrix.width * scaleX, obj2.width.value),
+        height: item2.height.changeUnitValue(matrix.height * scaleY, obj2.height.value)
+      });
+    });
+  }
   toCloneObject(isDeep = true) {
-    return __spreadValues(__spreadValues({}, super.toCloneObject(isDeep)), this.attrs("x", "y", "width", "height", "transform", "rotate", "rotateZ"));
+    return __spreadValues(__spreadValues({}, super.toCloneObject(isDeep)), this.attrs("x", "y", "right", "bottom", "width", "height", "transform", "rotate", "rotateZ"));
   }
   convert(json) {
     json = super.convert(json);
@@ -32489,15 +29865,21 @@ class MovableModel extends BaseAssetModel {
     json.y = Length.parse(json.y);
     json.width = Length.parse(json.width);
     json.height = Length.parse(json.height);
+    if (json.right) {
+      json.right = Length.parse(json.right);
+    }
+    if (json.bottom) {
+      json.bottom = Length.parse(json.bottom);
+    }
     return json;
   }
-  reset(obj) {
-    const isChanged = super.reset(obj);
+  reset(obj2, context = { origin: "*" }) {
+    const isChanged = super.reset(obj2, context);
+    if (this.hasChangedField("width", "height")) {
+      this.applyLayout();
+    }
     if (this.hasChangedField("children", "x", "y", "width", "height", "transform", "rotateZ", "rotate", "transform-origin", "perspective", "perspective-origin")) {
       this.refreshMatrixCache();
-    }
-    if (this.hasChangedField("width", "height") && this.hasLayout()) {
-      this.applyLayout();
     }
     return isChanged;
   }
@@ -32506,6 +29888,34 @@ class MovableModel extends BaseAssetModel {
       if (this.isLayout("default")) {
         if (this.hasChangedField("width", "height"))
           ;
+      }
+    }
+    if (this.hasChangedField("width")) {
+      const { right: right2, width: width2 } = this.json;
+      if (right2 && right2.unit !== "auto") {
+        const parentWidth = this.parent.screenWidth.value;
+        const newX = this.offsetX.value;
+        const newWidth = width2.toPx(parentWidth).value;
+        const newRightRate = 1 - (newX + newWidth) / parentWidth;
+        if (right2.isPercent()) {
+          this.json.right = Length.percent(newRightRate * 100);
+        } else {
+          this.json.right = Length.px(parentWidth * newRightRate);
+        }
+      }
+    }
+    if (this.hasChangedField("height")) {
+      const { bottom: bottom2, height } = this.json;
+      if (bottom2 && bottom2.unit !== "auto") {
+        const parentHeight = this.parent.screenHeight.value;
+        const newY = this.offsetY.value;
+        const newHeight = height.toPx(parentHeight).value;
+        const newBottomRate = 1 - (newY + newHeight) / parentHeight;
+        if (bottom2.isPercent()) {
+          this.json.bottom = Length.percent(newBottomRate * 100);
+        } else {
+          this.json.bottom = Length.px(parentHeight * newBottomRate);
+        }
       }
     }
   }
@@ -32642,13 +30052,25 @@ class MovableModel extends BaseAssetModel {
     if (!this.parent) {
       return this.json.x || ZERO;
     }
-    return this.json.x.toPx(this.screenWidth.value);
+    if (this.is("project")) {
+      return ZERO;
+    }
+    if (this.parent.is("project")) {
+      return this.json.x.toPx();
+    }
+    return this.json.x.toPx(this.parent.screenWidth.value);
   }
   get offsetY() {
     if (!this.parent) {
       return this.json.y || ZERO;
     }
-    return this.json.y.toPx(this.screenHeight.value);
+    if (this.is("project")) {
+      return ZERO;
+    }
+    if (this.parent.is("project")) {
+      return this.json.y.toPx();
+    }
+    return this.json.y.toPx(this.parent.screenHeight.value);
   }
   get screenWidth() {
     if (this.is("project") || !this.parent) {
@@ -32659,6 +30081,12 @@ class MovableModel extends BaseAssetModel {
     }
     if (this.is("artboard")) {
       return this.json.width.toPx();
+    }
+    if (this.json.right && this.json.right.unit !== "auto") {
+      const parentWidth = this.parent.screenWidth.value;
+      const right2 = this.json.right.toPx(parentWidth);
+      const rightPos = parentWidth - right2;
+      return Length.px(rightPos - this.offsetX.value);
     }
     return this.json.width.toPx(this.parent.screenWidth.value);
   }
@@ -32671,6 +30099,12 @@ class MovableModel extends BaseAssetModel {
     }
     if (this.is("artboard")) {
       return this.json.height.toPx();
+    }
+    if (this.json.bottom && this.json.bottom.unit !== "auto") {
+      const parentHeight = this.parent.screenHeight.value;
+      const top2 = this.json.bottom.toPx(parentHeight);
+      const topPos = parentHeight - top2;
+      return Length.px(topPos - this.offsetY.value);
     }
     return this.json.height.toPx(this.parent.screenHeight.value);
   }
@@ -32698,8 +30132,8 @@ class MovableModel extends BaseAssetModel {
     });
   }
   get angle() {
-    var _a;
-    return (_a = Transform.get(this.json.transform, "rotateZ")[0]) == null ? void 0 : _a.value;
+    var _a, _b;
+    return (_b = (_a = Transform.get(this.json.transform, "rotateZ")) == null ? void 0 : _a[0]) == null ? void 0 : _b.value;
   }
   checkInArea(areaVerties) {
     return polyPoly(areaVerties, this.originVerties);
@@ -32743,7 +30177,8 @@ class MovableModel extends BaseAssetModel {
   }
   getItemTransformMatrix() {
     var _a;
-    const list2 = Transform.parseStyle((_a = this.json) == null ? void 0 : _a["transform"]);
+    const transform2 = ((_a = this.json) == null ? void 0 : _a["transform"]) || "50% 50% 0px";
+    const list2 = Transform.parseStyle(transform2);
     const width2 = this.screenWidth.value;
     const height = this.screenHeight.value;
     return Transform.createTransformMatrix(list2, width2, height);
@@ -32835,10 +30270,6 @@ class MovableModel extends BaseAssetModel {
     let model = rectToVerties(0, 0, width2 || this.screenWidth.value, height || this.screenHeight.value, this.json["transform-origin"]);
     return vertiesMap(model, this.accumulatedMatrix);
   }
-  selectionVerties() {
-    let selectionModel = rectToVerties(-6, -6, this.screenWidth.value + 12, this.screenHeight.value + 12, this.json["transform-origin"]);
-    return vertiesMap(selectionModel, this.accumulatedMatrix);
-  }
   rectVerties() {
     return this.verties.filter((_, index2) => index2 < 4);
   }
@@ -32863,6 +30294,8 @@ class MovableModel extends BaseAssetModel {
     const height = this.screenHeight.value;
     const originalTransform = this.json.transform;
     const originalTransformOrigin = this.json["transform-origin"] || "50% 50% 0%";
+    const transformOriginMatrix = this.getTransformOriginMatrix();
+    const transformOriginMatrixInverse = this.getTransformOriginMatrixInverse();
     const parentMatrix = this.parent.accumulatedMatrix;
     const parentMatrixInverse = this.parent.accumulatedMatrixInverse;
     const localMatrix = this.localMatrix;
@@ -32904,7 +30337,9 @@ class MovableModel extends BaseAssetModel {
       itemMatrix,
       itemMatrixInverse,
       accumulatedMatrix,
-      accumulatedMatrixInverse
+      accumulatedMatrixInverse,
+      transformOriginMatrix,
+      transformOriginMatrixInverse
     };
   }
   pathVerties() {
@@ -32972,8 +30407,30 @@ class MovableModel extends BaseAssetModel {
   getTransformOriginMatrixInverse() {
     return invert([], this.getTransformOriginMatrix());
   }
+  recoverMatrix(newChildMatrix) {
+    const matrix = calculateMatrix(this.accumulatedMatrixInverse, newChildMatrix.accumulatedMatrix);
+    const newScaleTransform = Transform.fromScale(getScaling([], matrix).map((it) => round(it, 1e3)));
+    const q = getRotation([], matrix);
+    const axis = [];
+    const rad = getAxisAngle(axis, q);
+    const newRotateTransform = [
+      { angle: axis[0] ? radianToDegree(rad * axis[0]) : 0, type: "rotateX" },
+      { angle: axis[1] ? radianToDegree(rad * axis[1]) : 0, type: "rotateY" },
+      { angle: axis[2] ? radianToDegree(rad * axis[2]) : 0, type: "rotateZ" }
+    ].filter((it) => it.angle !== 0).map((it) => `${it.type}(${Length.deg(it.angle % 360)})`).join(" ");
+    const newChildItemTransform = Transform.replaceAll(newChildMatrix.transform, `${newScaleTransform} ${newRotateTransform}`);
+    const list2 = Transform.parseStyle(newChildItemTransform);
+    const width2 = newChildMatrix.width.value;
+    const height = newChildMatrix.height.value;
+    const newTransformMatrix = Transform.createTransformMatrix(list2, width2, height);
+    const [x2, y2, z] = getTranslation([], calculateMatrix(matrix, calculateMatrixInverse(newChildMatrix.transformOriginMatrix, newTransformMatrix, newChildMatrix.transformOriginMatrixInverse)));
+    return {
+      x: Length.px(x2),
+      y: Length.px(y2),
+      transform: newChildItemTransform
+    };
+  }
   resetMatrix(childItem) {
-    this.modelManager.setChanged("resetMatrix", this.id, { start: true, childItemId: childItem == null ? void 0 : childItem.id });
     const matrix = calculateMatrix(this.accumulatedMatrixInverse, childItem.accumulatedMatrix);
     const newScaleTransform = Transform.fromScale(getScaling([], matrix).map((it) => round(it, 1e3)));
     const q = getRotation([], matrix);
@@ -32986,8 +30443,8 @@ class MovableModel extends BaseAssetModel {
     ].filter((it) => it.angle !== 0).map((it) => `${it.type}(${Length.deg(it.angle % 360)})`).join(" ");
     const newChildItemTransform = Transform.replaceAll(childItem.transform, `${newScaleTransform} ${newRotateTransform}`);
     const list2 = Transform.parseStyle(newChildItemTransform);
-    const width2 = childItem.screenWidth.value;
-    const height = childItem.screenHeight.value;
+    const width2 = childItem.width.value;
+    const height = childItem.height.value;
     const newTransformMatrix = Transform.createTransformMatrix(list2, width2, height);
     const [x2, y2, z] = getTranslation([], calculateMatrix(matrix, calculateMatrixInverse(childItem.getTransformOriginMatrix(), newTransformMatrix, childItem.getTransformOriginMatrixInverse())));
     childItem.reset({
@@ -33107,17 +30564,24 @@ class GroupModel extends MovableModel {
       return false;
     return this.parent.layout === "flex";
   }
+  get contentBox() {
+    const x2 = this["padding-left"] || 0;
+    const y2 = this["padding-top"] || 0;
+    const width2 = this.screenWidth.value - (this["padding-left"] || 0) - (this["padding-right"] || 0);
+    const height = this.screenHeight.value - (this["padding-top"] || 0) - (this["padding-bottom"] || 0);
+    return rectToVerties(x2, y2, width2, height);
+  }
 }
 class Selector extends PropertyItem {
-  static parse(obj) {
-    return new Selector(obj);
+  static parse(obj2) {
+    return new Selector(obj2);
   }
-  getDefaultObject(obj) {
+  getDefaultObject(obj2) {
     return super.getDefaultObject(__spreadValues({
       itemType: "selector",
       selector: "",
       properties: []
-    }, obj));
+    }, obj2));
   }
   toCloneObject() {
     return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("selector", "properties"));
@@ -33206,7 +30670,7 @@ editableList.forEach(function(key) {
   editableKeys[key] = true;
 });
 class DomModel extends GroupModel {
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       "position": "absolute",
       "x": Length.z(),
@@ -33223,11 +30687,9 @@ class DomModel extends GroupModel {
       "layout": "default",
       "flex-layout": "display:flex;",
       "grid-layout": "display:grid;",
-      "boolean-operation": "none",
-      "boolean-path": "",
       selectors: [],
       svg: []
-    }, obj));
+    }, obj2));
   }
   toCloneObject() {
     var json = this.json;
@@ -33293,9 +30755,8 @@ class DomModel extends GroupModel {
     });
     return results;
   }
-  reset(obj) {
-    var _a;
-    const isChanged = super.reset(obj);
+  reset(obj2, context = { origin: "*" }) {
+    const isChanged = super.reset(obj2, context);
     if (this.hasChangedField("clip-path")) {
       this.setClipPathCache();
     } else if (this.hasChangedField("width", "height")) {
@@ -33306,22 +30767,6 @@ class DomModel extends GroupModel {
       }
     } else if (this.hasChangedField("background-image", "pattern")) {
       this.setBackgroundImageCache();
-    } else if (this.hasChangedField("changedChildren", "boolean-operation") || !this.isBooleanPath) {
-      if (this.json["boolean-operation"] !== "none") {
-        if (((_a = this.json.children) == null ? void 0 : _a.length) === 2) {
-          if (this.modelManager.editor.pathKitManager.has()) {
-            const paths = this.layers.filter((it) => it.d);
-            if (paths.length >= 2) {
-              const newPath = this["boolean-operation"] != "none" ? this.booleanOperation() : "";
-              this.json["boolean-path"] = newPath;
-              this.modelManager.setChanged("reset", this.id, { "boolean-path": newPath });
-            } else {
-              this.json["boolean-path"] = void 0;
-              this.modelManager.setChanged("reset", this.id, { "boolean-path": void 0 });
-            }
-          }
-        }
-      }
     }
     return isChanged;
   }
@@ -33350,10 +30795,10 @@ class DomModel extends GroupModel {
     }
   }
   setClipPathCache() {
-    var obj = ClipPath.parseStyle(this.json["clip-path"]);
-    this.cacheClipPathObject = obj;
-    if (obj.type === "path") {
-      this.cacheClipPath = new PathParser(obj.value.trim());
+    var obj2 = ClipPath.parseStyle(this.json["clip-path"]);
+    this.cacheClipPathObject = obj2;
+    if (obj2.type === "path") {
+      this.cacheClipPath = new PathParser(obj2.value.trim());
       this.cacheClipPathWidth = this.json.width.value;
       this.cacheClipPathHeight = this.json.height.value;
     }
@@ -33370,71 +30815,30 @@ class DomModel extends GroupModel {
       return this.cacheClipPath.clone().scale(this.json.width.value / this.cacheClipPathWidth, this.json.height.value / this.cacheClipPathHeight).d;
     }
   }
-  booleanOperation() {
-    const op = this.json["boolean-operation"];
-    switch (op) {
-      case "intersection":
-        return this.intersection();
-      case "union":
-        return this.union();
-      case "difference":
-        return this.difference();
-      case "reverse-difference":
-        return this.reverseDifference();
-      case "xor":
-        return this.xor();
-    }
-    return "";
-  }
-  intersection() {
-    const layers2 = this.layers;
-    const newPath = this.modelManager.editor.pathKitManager.intersection(layers2[0].accumulatedPath().d, layers2[1].accumulatedPath().d);
-    return this.invertPath(newPath).d;
-  }
-  union() {
-    const layers2 = this.layers;
-    const newPath = this.modelManager.editor.pathKitManager.union(layers2[0].accumulatedPath().d, layers2[1].accumulatedPath().d);
-    return this.invertPath(newPath).d;
-  }
-  difference() {
-    const layers2 = this.layers;
-    const newPath = this.modelManager.editor.pathKitManager.difference(layers2[0].accumulatedPath().d, layers2[1].accumulatedPath().d);
-    return this.invertPath(newPath).d;
-  }
-  reverseDifference() {
-    const layers2 = this.layers;
-    const newPath = this.modelManager.editor.pathKitManager.reverseDifference(layers2[0].accumulatedPath().d, layers2[1].accumulatedPath().d);
-    return this.invertPath(newPath).d;
-  }
-  xor() {
-    const layers2 = this.layers;
-    const newPath = this.modelManager.editor.pathKitManager.xor(layers2[0].accumulatedPath().d, layers2[1].accumulatedPath().d);
-    return this.invertPath(newPath).d;
-  }
 }
 class LayerModel extends DomModel {
   static getIcon() {
-    return icon$1.rect;
+    return obj.rect;
   }
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "layer",
       name: "New Layer",
       tagName: "div"
-    }, obj));
+    }, obj2));
   }
   getDefaultTitle() {
     return "Layer";
   }
   getIcon() {
-    return icon$1.rect;
+    return obj.rect;
   }
   toCloneObject() {
     return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("tagName"));
   }
 }
 class ArtBoard extends LayerModel {
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "artboard",
       name: "New ArtBoard",
@@ -33442,7 +30846,7 @@ class ArtBoard extends LayerModel {
       height: Length.px(1e3),
       "background-color": "white",
       "transform-style": "flat"
-    }, obj));
+    }, obj2));
   }
   toCloneObject() {
     return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("name"));
@@ -33451,7 +30855,7 @@ class ArtBoard extends LayerModel {
     return "ArtBoard";
   }
   getIcon() {
-    return icon$1.artboard;
+    return obj.artboard;
   }
   editable(editablePropertyName) {
     switch (editablePropertyName) {
@@ -33470,14 +30874,14 @@ class ArtBoard extends LayerModel {
 }
 class CircleLayer extends LayerModel {
   getIcon() {
-    return icon$1.lens;
+    return obj.lens;
   }
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "circle",
       name: "New Circle",
       "border-radius": "100%"
-    }, obj));
+    }, obj2));
   }
   getDefaultTitle() {
     return "Circle";
@@ -33485,15 +30889,15 @@ class CircleLayer extends LayerModel {
 }
 class ImageLayer extends LayerModel {
   getIcon() {
-    return icon$1.image;
+    return obj.image;
   }
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "image",
       name: "New Image",
       elementType: "image",
       src: ""
-    }, obj));
+    }, obj2));
   }
   enableHasChildren() {
     return false;
@@ -33502,7 +30906,7 @@ class ImageLayer extends LayerModel {
     return "Image";
   }
   getIcon() {
-    return icon$1.image;
+    return obj.image;
   }
   toCloneObject() {
     return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("src"));
@@ -33516,13 +30920,13 @@ class ImageLayer extends LayerModel {
 }
 class RectLayer extends LayerModel {
   getIcon() {
-    return icon$1.rect;
+    return obj.rect;
   }
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "rect",
       name: "New Rect"
-    }, obj));
+    }, obj2));
   }
   getDefaultTitle() {
     return "Rect";
@@ -33550,7 +30954,7 @@ expectedProperties.forEach((key) => {
   expectedPropertiesKeys[key] = true;
 });
 class SVGItem extends LayerModel {
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "svg",
       name: "New SVG",
@@ -33561,13 +30965,13 @@ class SVGItem extends LayerModel {
       fill: "transparent",
       "fill-rule": "nonzero",
       "text-anchor": "start"
-    }, obj));
+    }, obj2));
   }
   get isDragSelectable() {
     return this.isBooleanItem === false;
   }
   get isBooleanItem() {
-    return Boolean(this.parent["boolean-path"]);
+    return Boolean(this.parent.is("boolean-path"));
   }
   editable(editablePropertyName) {
     if (expectedPropertiesKeys[editablePropertyName]) {
@@ -33589,9 +30993,10 @@ class SVGItem extends LayerModel {
     return true;
   }
   hasPoint(x2, y2) {
-    const fill = this.json.fill;
-    const fillOpacity = this.json["fill-opacity"];
-    const strokeWidth = this.json["stroke-width"];
+    const obj2 = this.attrs("fill", "stroke", "fill-opacity", "stroke-width");
+    const fill = obj2.fill;
+    const fillOpacity = obj2["fill-opacity"];
+    const strokeWidth = obj2["stroke-width"];
     const isTransparent = fill === "transparent" || fillOpacity === 0 || Color.parse(fill).a === 0;
     const isZeroStroke = strokeWidth === 0;
     if (isTransparent) {
@@ -33626,12 +31031,11 @@ class SVGItem extends LayerModel {
     return false;
   }
   convertStrokeToPath(distX = 10, distY = 10) {
-    const attrs = this.attrs("width", "parentId", "height", "x", "y", "transform");
-    const localFill = this.json.stroke;
+    const attrs = this.attrs("name", "width", "parentId", "height", "x", "y", "transform", "stroke");
+    attrs.fill = attrs.stroke;
+    delete attrs.stroke;
     return __spreadProps(__spreadValues({
       itemType: "svg-path",
-      name: this.json.name,
-      fill: localFill,
       "fill-rule": "evenodd"
     }, attrs), {
       x: Length.parse(attrs.x).add(distX),
@@ -33649,22 +31053,22 @@ class SVGItem extends LayerModel {
 }
 class SVGPathItem extends SVGItem {
   getIcon() {
-    return icon$1.edit;
+    return obj.edit;
   }
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "svg-path",
       name: "New Path",
       "stroke-width": 1,
       d: "",
       totalLength: 0
-    }, obj));
+    }, obj2));
   }
   enableHasChildren() {
     return false;
   }
-  reset(json) {
-    const isChanged = super.reset(json);
+  reset(json, context = { origin: "*" }) {
+    const isChanged = super.reset(json, context);
     if (this.hasChangedField("d")) {
       this.cachePath = new PathParser(this.json.d);
       this.cacheWidth = this.json.width.value;
@@ -33711,9 +31115,9 @@ class SVGPathItem extends SVGItem {
 }
 class SVGTextItem extends SVGItem {
   getIcon() {
-    return icon$1.title;
+    return obj.title;
   }
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "svg-text",
       name: "New Text",
@@ -33727,7 +31131,7 @@ class SVGTextItem extends SVGItem {
       "shape-subtract": "",
       "shape-margin": "",
       "shape-padding": ""
-    }, obj));
+    }, obj2));
   }
   enableHasChildren() {
     return false;
@@ -33746,9 +31150,9 @@ class SVGTextItem extends SVGItem {
 }
 class SVGTextPathItem extends SVGItem {
   getIcon() {
-    return icon$1.text_rotate;
+    return obj.text_rotate;
   }
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "svg-textpath",
       name: "New TextPath",
@@ -33759,7 +31163,7 @@ class SVGTextPathItem extends SVGItem {
       textLength: Length.em(0),
       lengthAdjust: "spacingAndGlyphs",
       startOffset: Length.em(0)
-    }, obj));
+    }, obj2));
   }
   enableHasChildren() {
     return false;
@@ -33839,16 +31243,16 @@ const DEFAULT_TEMPLATE = `
 `;
 class TemplateLayer extends Component {
   getIcon() {
-    return icon$1.auto_awesome;
+    return obj.auto_awesome;
   }
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "template",
       name: "New Template",
       engine: "dom",
       template: DEFAULT_TEMPLATE,
       params: []
-    }, obj));
+    }, obj2));
   }
   enableHasChildren() {
     return false;
@@ -33857,7 +31261,7 @@ class TemplateLayer extends Component {
     return "Template";
   }
   getIcon() {
-    return icon$1.auto_awesome;
+    return obj.auto_awesome;
   }
   editable(editablePropertyName) {
     switch (editablePropertyName) {
@@ -33872,15 +31276,15 @@ class TemplateLayer extends Component {
 }
 class TextLayer extends LayerModel {
   getIcon() {
-    return icon$1.title;
+    return obj.title;
   }
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "text",
       name: "New Text",
       elementType: "p",
       content: ""
-    }, obj));
+    }, obj2));
   }
   enableHasChildren() {
     return false;
@@ -33920,15 +31324,15 @@ class TextLayer extends LayerModel {
 }
 class SVGPolygonItem extends SVGItem {
   getIcon() {
-    return icon$1.edit;
+    return obj.edit;
   }
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "polygon",
       name: "New Polygon",
       "stroke-width": 1,
       count: 3
-    }, obj));
+    }, obj2));
   }
   convert(json) {
     json = super.convert(json);
@@ -33937,6 +31341,9 @@ class SVGPolygonItem extends SVGItem {
     return json;
   }
   enableHasChildren() {
+    return false;
+  }
+  get editablePath() {
     return false;
   }
   get d() {
@@ -33956,9 +31363,9 @@ class SVGPolygonItem extends SVGItem {
 }
 class SVGStarItem extends SVGItem {
   getIcon() {
-    return icon$1.star;
+    return obj.star;
   }
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "star",
       name: "New Star",
@@ -33968,7 +31375,7 @@ class SVGStarItem extends SVGItem {
       count: 5,
       radius: 0.5,
       tension: 0.5
-    }, obj));
+    }, obj2));
   }
   convert(json) {
     json = super.convert(json);
@@ -35017,9 +32424,9 @@ function nurbs(points2, degree, knots, weights, boundary, opts) {
 var nurbs_1 = nurbs;
 class SplineItem extends SVGItem {
   getIcon() {
-    return icon$1.star;
+    return obj.star;
   }
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "spline",
       name: "New Spline",
@@ -35028,7 +32435,7 @@ class SplineItem extends SVGItem {
       traceCount: 100,
       degree: 2,
       boundary: "clamped"
-    }, obj));
+    }, obj2));
   }
   enableHasChildren() {
     return false;
@@ -35104,6 +32511,152 @@ class SplineItem extends SVGItem {
     return "BSpline";
   }
 }
+class BooleanPathItem extends SVGPathItem {
+  getIcon() {
+    return obj.edit;
+  }
+  getDefaultObject(obj2 = {}) {
+    return super.getDefaultObject(__spreadValues({
+      itemType: "boolean-path",
+      name: "New Boolean Path",
+      "stroke-width": 1,
+      d: "",
+      "boolean-operation": "none"
+    }, obj2));
+  }
+  enableHasChildren() {
+    return true;
+  }
+  reset(json, context = { origin: "*" }) {
+    var _a;
+    const isChanged = super.reset(json, context);
+    if (!this.cachePath) {
+      this.setCache();
+    }
+    if (this.hasChangedField("changedChildren", "boolean-operation")) {
+      if (this.json.children.length === 1) {
+        const newPath = this.layers[0].accumulatedPath().d;
+        this.json.d = this.invertPath(newPath).d;
+        this.setCache();
+        this.modelManager.setChanged("reset", this.id, { d: newPath });
+      } else if (this.json["boolean-operation"] !== "none") {
+        if (((_a = this.json.children) == null ? void 0 : _a.length) >= 2) {
+          if (this.modelManager.editor.pathKitManager.has()) {
+            const paths = this.layers.filter((it) => it.d);
+            if (paths.length >= 2) {
+              const newPath = this.doBooleanOperation();
+              this.json.d = newPath;
+              this.setCache();
+              this.modelManager.setChanged("reset", this.id, { d: newPath });
+            } else {
+              this.json.d = void 0;
+              this.removeCache();
+              this.modelManager.setChanged("reset", this.id, { d: void 0 });
+            }
+          }
+        }
+      }
+    }
+    return isChanged;
+  }
+  get resizableWitChildren() {
+    return true;
+  }
+  getFieldValueByBooleanOperation(field) {
+    const layers2 = this.layers;
+    if (layers2.length === 0) {
+      return;
+    } else if (layers2.length === 1) {
+      return layers2[0][field];
+    }
+    const op = this["boolean-operation"];
+    switch (op) {
+      case "difference":
+        return layers2[1][field];
+    }
+    return layers2[0][field];
+  }
+  get fill() {
+    return this.getFieldValueByBooleanOperation("fill");
+  }
+  get stroke() {
+    return this.getFieldValueByBooleanOperation("stroke");
+  }
+  setCache() {
+    super.setCache();
+    this.cachePath = new PathParser(this.json.d);
+    this.cacheWidth = this.json.width.value;
+    this.cacheHeight = this.json.height.value;
+  }
+  removeCache() {
+    super.removeCache();
+    this.cachePath = void 0;
+    this.cacheWidth = void 0;
+    this.cacheHeight = void 0;
+  }
+  toCloneObject() {
+    return __spreadProps(__spreadValues({}, super.toCloneObject()), {
+      d: this.json.d
+    });
+  }
+  getDefaultTitle() {
+    return "Path";
+  }
+  doBooleanOperation() {
+    const op = this.json["boolean-operation"];
+    switch (op) {
+      case "intersection":
+        return this.intersection();
+      case "union":
+        return this.union();
+      case "difference":
+        return this.difference();
+      case "reverse-difference":
+        return this.reverseDifference();
+      case "xor":
+        return this.xor();
+    }
+    return "";
+  }
+  getPathList() {
+    return this.layers.map((it) => it.accumulatedPath().d);
+  }
+  intersection() {
+    const [first, ...rest] = this.getPathList();
+    const newPath = rest.reduce((path1, path2) => {
+      return this.modelManager.editor.pathKitManager.intersection(path1, path2);
+    }, first);
+    return this.invertPath(newPath).d;
+  }
+  union() {
+    const [first, ...rest] = this.getPathList();
+    const newPath = rest.reduce((path1, path2) => {
+      return this.modelManager.editor.pathKitManager.union(path1, path2);
+    }, first);
+    return this.invertPath(newPath).d;
+  }
+  difference() {
+    const [first, ...rest] = this.getPathList();
+    const newPath = rest.reduce((path1, path2) => {
+      return this.modelManager.editor.pathKitManager.difference(path1, path2);
+    }, first);
+    return this.invertPath(newPath).d;
+  }
+  reverseDifference() {
+    const [first, ...rest] = this.getPathList();
+    const newPath = rest.reduce((path1, path2) => {
+      return this.modelManager.editor.pathKitManager.reverseDifference(path1, path2);
+    }, first);
+    return this.invertPath(newPath).d;
+  }
+  xor() {
+    const [first, ...rest] = this.getPathList();
+    const newPath = rest.reduce((path1, path2) => {
+      return this.modelManager.editor.pathKitManager.xor(path1, path2);
+    }, first);
+    return this.invertPath(newPath).d;
+  }
+}
 function defaultItems(editor) {
   editor.registerItem("project", Project);
   editor.registerItem("artboard", ArtBoard);
@@ -35111,6 +32664,7 @@ function defaultItems(editor) {
   editor.registerItem("circle", CircleLayer);
   editor.registerItem("image", ImageLayer);
   editor.registerItem("text", TextLayer);
+  editor.registerItem("boolean-path", BooleanPathItem);
   editor.registerItem("svg-path", SVGPathItem);
   editor.registerItem("svg-text", SVGTextItem);
   editor.registerItem("svg-textpath", SVGTextPathItem);
@@ -36747,7 +34301,7 @@ class DepthProperty extends BaseProperty {
   }
 }
 function depth(editor) {
-  editor.registerElement({
+  editor.registerMenuItem("inspector.tab.style", {
     DepthProperty
   });
 }
@@ -36766,11 +34320,11 @@ class ExportProperty extends BaseProperty {
     return `
         <div class='export-item svg'>
           <label>SVG</label>
-          <button ref='$svg'>${icon$1.archive} ${this.$i18n("export.property.download")}</button>
+          <button ref='$svg'>${obj.archive} ${this.$i18n("export.property.download")}</button>
         </div>
         <div class='export-item png'>
           <label>PNG</label>
-          <button ref='$png'>${icon$1.archive} ${this.$i18n("export.property.download")}</button>
+          <button ref='$png'>${obj.archive} ${this.$i18n("export.property.download")}</button>
         </div> 
       `;
   }
@@ -36832,7 +34386,7 @@ class FilterProperty extends BaseProperty {
     return `
       <select ref="$filterSelect">      
       </select>
-      <button type="button" ref="$add" title="add Filter">${icon$1.add}</button>
+      <button type="button" ref="$add" title="add Filter">${obj.add}</button>
     `;
   }
   [CLICK("$add")]() {
@@ -37088,6 +34642,370 @@ function fontSpacing(editor) {
     FontSpacingProperty
   });
 }
+class SVGGradient extends Gradient {
+  toString() {
+    return "";
+  }
+  toSVGString(id) {
+    return "";
+  }
+  toFillValue(id) {
+    return "";
+  }
+}
+class SVGLinearGradient extends SVGGradient {
+  getDefaultObject(obj2) {
+    return super.getDefaultObject(__spreadValues({
+      type: "linear-gradient",
+      x1: "0%",
+      y1: "0%",
+      x2: "100%",
+      y2: "0%",
+      spreadMethod: "pad"
+    }, obj2));
+  }
+  toCloneObject() {
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("x1", "y1", "x2", "y2", "spreadMethod"));
+  }
+  toString() {
+    if (this.colorsteps.length === 0)
+      return "";
+    var colorString = this.getColorString();
+    var { x1, y1, x2, y2, spreadMethod } = this.json;
+    var opt = [x1, y1, x2, y2, spreadMethod].join(" ");
+    var result = `${this.json.type}(${opt}, ${colorString})`;
+    return result;
+  }
+  toSVGString(id) {
+    var { x1, y1, x2, y2, spreadMethod } = this.json;
+    return `
+        <linearGradient 
+            id="${id}"
+            x1="${x1}"
+            x2="${x2}"
+            y1="${y1}"
+            y2="${y2}"
+            spreadMethod="${spreadMethod}"
+          >
+          ${this.colorsteps.map((it) => {
+      return `<stop offset="${it.percent}%"  stop-color="${it.color}" ></stop>`;
+    }).join("\n")}
+        </linearGradient>
+      `;
+  }
+  toFillValue(id) {
+    return `url(#${id})`;
+  }
+  static toLinearGradient(colorsteps) {
+    if (colorsteps.length === 0) {
+      return "none";
+    }
+    var gradient2 = new LinearGradient({
+      angle: "to right",
+      colorsteps
+    });
+    return gradient2 + "";
+  }
+  static parse(str) {
+    var results = convertMatches(str);
+    var opt = {};
+    var colorsteps = [];
+    results.str.split("(")[1].split(")")[0].split(",").map((it) => it.trim()).forEach((newValue, index2) => {
+      if (newValue.includes("@")) {
+        newValue = reverseMatches(newValue, results.matches);
+        colorsteps.push.apply(colorsteps, ColorStep.parse(newValue));
+      } else {
+        var [x1, y1, x2, y2, spreadMethod] = newValue.split(" ");
+        opt.x1 = Length.parse(x1);
+        opt.y1 = Length.parse(y1);
+        opt.x2 = Length.parse(x2);
+        opt.y2 = Length.parse(y2);
+        opt.spreadMethod = spreadMethod || "pad";
+      }
+    });
+    return new SVGLinearGradient(__spreadProps(__spreadValues({}, opt), { colorsteps }));
+  }
+}
+class SVGRadialGradient extends SVGGradient {
+  getDefaultObject(obj2 = {}) {
+    return super.getDefaultObject(__spreadValues({
+      type: "radial-gradient",
+      cx: "50%",
+      cy: "50%",
+      r: "50%",
+      fx: "50%",
+      fy: "50%",
+      fr: "0%",
+      spreadMethod: "pad"
+    }, obj2));
+  }
+  toCloneObject() {
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("cx", "cy", "r", "fx", "fy", "fr", "spreadMethod"));
+  }
+  toString() {
+    if (this.colorsteps.length === 0)
+      return "";
+    var colorString = this.getColorString();
+    var { cx, cy, r, fx, fy, fr, spreadMethod } = this.json;
+    var opt = [cx, cy, r, fx, fy, fr, spreadMethod].join(" ");
+    var result = `${this.json.type}(${opt}, ${colorString})`;
+    return result;
+  }
+  toSVGString(id) {
+    var { cx, cy, r, fx, fy, fr, spreadMethod } = this.json;
+    return `
+<radialGradient ${OBJECT_TO_PROPERTY$1({ id, cx, cy, r, fx, fy, fr, spreadMethod })} >
+  ${this.colorsteps.map((it) => {
+      return `<stop offset="${it.percent}%"  stop-color="${it.color}" />`;
+    }).join("\n")}
+</radialGradient>
+`;
+  }
+  toFillValue(id) {
+    return `url(#${id})`;
+  }
+  static parse(str) {
+    var results = convertMatches(str);
+    var opt = {};
+    var colorsteps = [];
+    results.str.split("(")[1].split(")")[0].split(",").map((it) => it.trim()).forEach((newValue, index2) => {
+      if (newValue.includes("@")) {
+        newValue = reverseMatches(newValue, results.matches);
+        colorsteps.push.apply(colorsteps, ColorStep.parse(newValue));
+      } else {
+        var [cx, cy, r, fx, fy, fr, spreadMethod] = newValue.split(" ");
+        opt.cx = cx;
+        opt.cy = cy;
+        opt.r = r;
+        opt.fx = fx;
+        opt.fy = fy;
+        opt.fr = fr;
+        opt.spreadMethod = spreadMethod || "pad";
+      }
+    });
+    return new SVGRadialGradient(__spreadProps(__spreadValues({}, opt), { colorsteps }));
+  }
+}
+class SVGStaticGradient extends SVGGradient {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "static-gradient",
+      static: true,
+      colorsteps: [
+        new ColorStep({ color: "red", percent: 0, index: 0 }),
+        new ColorStep({ color: "red", percent: 100, index: 1 })
+      ]
+    });
+  }
+  toCloneObject() {
+    return __spreadProps(__spreadValues({}, super.toCloneObject()), {
+      static: true
+    });
+  }
+  static create(color2 = "transparent") {
+    return new SVGStaticGradient({
+      colorsteps: [
+        new ColorStep({ color: color2, percent: 0, index: 0 }),
+        new ColorStep({ color: color2, percent: 100, index: 0 })
+      ]
+    });
+  }
+  setColor(color2) {
+    this.colorsteps.forEach((it) => {
+      it.color = color2;
+    });
+  }
+  toString() {
+    var color2 = this.json.colorsteps[0].color;
+    return color2;
+  }
+  toSVGString() {
+    return "";
+  }
+  toFillValue() {
+    return this.toString();
+  }
+  isStatic() {
+    return true;
+  }
+}
+const IMAGE_LIST = ["jpg", "jpeg", "png", "gif", "svg"];
+class SVGImageResource extends ImageResource {
+  getDefaultObject(obj2 = {}) {
+    return super.getDefaultObject(__spreadValues({
+      type: "url",
+      url: "",
+      datauri: "",
+      patternUnits: "userSpaceOnUse",
+      patternWidth: "100%",
+      patternHeight: "100%",
+      imageX: "0%",
+      imageY: "0%",
+      imageWidth: "100%",
+      imageHeight: "100%"
+    }, obj2));
+  }
+  toCloneObject() {
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("url", "datauri", "patternUnits", "patternWidth", "patternHeight", "imageX", "imageY", "imageWidth", "imageHeight"));
+  }
+  static parse(str) {
+    var content2 = str.split("(")[1].split(")")[0];
+    var [url, props2] = content2.trim().split("#");
+    if (!props2) {
+      return new SVGImageResource({ url });
+    }
+    var [patternUnits, patternWidth, patternHeight, imageX, imageY, imageWidth, imageHeight] = props2.split(",");
+    return new SVGImageResource({ patternUnits, patternWidth, patternHeight, imageX, imageY, imageWidth, imageHeight, url });
+  }
+  isUrl() {
+    return true;
+  }
+  static isImageFile(fileExt) {
+    return IMAGE_LIST.includes(fileExt);
+  }
+  toString() {
+    var json = this.json;
+    var {
+      patternUnits,
+      patternWidth,
+      patternHeight,
+      imageX,
+      imageY,
+      imageWidth,
+      imageHeight,
+      url
+    } = json;
+    var string = [
+      patternUnits,
+      patternWidth,
+      patternHeight,
+      imageX,
+      imageY,
+      imageWidth,
+      imageHeight
+    ].join(",").trim();
+    return `url(${url}#${string})`;
+  }
+  toSVGString(id, item2 = {}) {
+    var {
+      patternUnits,
+      patternWidth,
+      patternHeight,
+      imageX,
+      imageY,
+      imageWidth,
+      imageHeight
+    } = this.json;
+    const localPatternWidth = Length.parse(patternWidth);
+    const localPatternHeight = Length.parse(patternHeight);
+    const localImageX = Length.parse(imageX);
+    const localImageY = Length.parse(imageY);
+    const localImageWidth = Length.parse(imageWidth);
+    const localImageHeight = Length.parse(imageHeight);
+    const width2 = item2.width ? localPatternWidth.toPx(item2.width).value : localPatternWidth;
+    const height = item2.height ? localPatternHeight.toPx(item2.height).value : localPatternHeight;
+    return `
+  <pattern ${OBJECT_TO_PROPERTY$1({ id, patternUnits, width: width2, height })} >
+    <image xlink:href="${this.json.datauri || this.json.url}" ${OBJECT_TO_PROPERTY$1({
+      x: localImageX.toPx(item2.width).value,
+      y: localImageY.toPx(item2.height).value,
+      width: localImageWidth.toPx(item2.width).value,
+      height: localImageHeight.toPx(item2.height).value,
+      preserveAspectRatio: "none"
+    })} />
+  </pattern>
+      `;
+  }
+  toFillValue(id) {
+    return `url(#${id})`;
+  }
+}
+const reg = /((linear\-gradient|radial\-gradient|url)\(([^\)]*)\))/gi;
+class SVGFill extends PropertyItem {
+  addImageResource(imageResource) {
+    this.clear("image-resource");
+    return this.addItem("image-resource", imageResource);
+  }
+  addGradient(gradient2) {
+    return this.addImageResource(gradient2);
+  }
+  setImageUrl(data) {
+    if (!data.images)
+      return;
+    if (!data.images.length)
+      return;
+    this.reset({
+      type: "image",
+      image: SVGFill.createImage(data.images[0])
+    });
+  }
+  static createImage(url) {
+    return new SVGLImageResource({ url });
+  }
+  setGradient(data) {
+    this.reset({
+      type: data.type,
+      image: SVGFill.createGradient(data, this.json.image)
+    });
+  }
+  static createGradient(data, gradient2) {
+    const colorsteps = data.colorsteps || gradient2.colorsteps;
+    let json = gradient2.toJSON();
+    delete json.itemType;
+    delete json.type;
+    switch (data.type) {
+      case "linear-gradient":
+        return new SVGLinearGradient(__spreadProps(__spreadValues({}, json), { colorsteps }));
+      case "radial-gradient":
+        return new SVGRadialGradient(__spreadProps(__spreadValues({}, json), { colorsteps }));
+      default:
+        return new SVGStaticGradient(__spreadProps(__spreadValues({}, json), { colorsteps }));
+    }
+  }
+  get image() {
+    return this.json.image;
+  }
+  set image(image2) {
+    this.json.image = image2;
+  }
+  static parse(obj2) {
+    return new SVGFill(obj2);
+  }
+  static parseImage(str) {
+    var results = convertMatches(str);
+    let image2 = null;
+    var matchResult = results.str.match(reg);
+    if (!matchResult) {
+      return SVGStaticGradient.create(str || "transparent");
+    }
+    matchResult.forEach((value, index2) => {
+      value = reverseMatches(value, results.matches);
+      if (value.includes("linear")) {
+        image2 = SVGLinearGradient.parse(value);
+      } else if (value.includes("radial")) {
+        image2 = SVGRadialGradient.parse(value);
+      } else if (value.includes("url")) {
+        image2 = SVGImageResource.parse(value);
+      } else {
+        image2 = SVGStaticGradient.parse(value);
+      }
+    });
+    return image2;
+  }
+  static changeImageType(options2) {
+    switch (options2.type) {
+      case "linear-gradient":
+        return new SVGLinearGradient(options2);
+      case "radial-gradient":
+        return new SVGRadialGradient(options2);
+      case "image-resource":
+      case "url":
+        return new SVGImageResource(options2);
+      default:
+        return new SVGStaticGradient(options2);
+    }
+  }
+}
 var FillEditor$1 = "";
 const imageTypeList$1 = [
   "static-gradient",
@@ -37096,7 +35014,7 @@ const imageTypeList$1 = [
   "image-resource"
 ];
 const iconList$1 = {
-  "image-resource": icon$1.photo
+  "image-resource": obj.photo
 };
 const presetPosition$1 = {
   top: { x1: "0%", y1: "100%", x2: "0%", y2: "0%" },
@@ -37183,14 +35101,14 @@ class FillEditor extends EditorElement {
                 <circle r='5' data-type='f' ref='$fPoint' />
               </svg>              
               <div class='preset-position'>
-                <div data-value='top' title='top'>${icon$1.chevron_right}</div>
-                <div data-value='right' title='right'>${icon$1.chevron_right}</div>
-                <div data-value='left' title='left'>${icon$1.chevron_right}</div>
-                <div data-value='bottom' title='bottom'>${icon$1.chevron_right}</div>
-                <div data-value='top left' title='top left'>${icon$1.chevron_right}</div>
-                <div data-value='top right' title='top right'>${icon$1.chevron_right}</div>
-                <div data-value='bottom left' title='bottom left'>${icon$1.chevron_right}</div>
-                <div data-value='bottom right' title='bottom right'>${icon$1.chevron_right}</div>                
+                <div data-value='top' title='top'>${obj.chevron_right}</div>
+                <div data-value='right' title='right'>${obj.chevron_right}</div>
+                <div data-value='left' title='left'>${obj.chevron_right}</div>
+                <div data-value='bottom' title='bottom'>${obj.chevron_right}</div>
+                <div data-value='top left' title='top left'>${obj.chevron_right}</div>
+                <div data-value='top right' title='top right'>${obj.chevron_right}</div>
+                <div data-value='bottom left' title='bottom left'>${obj.chevron_right}</div>
+                <div data-value='bottom right' title='bottom right'>${obj.chevron_right}</div>                
               </div>
               <div data-editor='image-loader'>
                 <input type='file' accept="image/*" ref='$file' />
@@ -37263,8 +35181,8 @@ class FillEditor extends EditorElement {
     var project2 = this.$selection.currentProject;
     if (project2) {
       [...e.target.files].forEach((item2) => {
-        this.emit("updateImageAssetItem", item2, (local) => {
-          this.trigger("setImageUrl", local);
+        this.emit("updateImageAssetItem", item2, (imageId) => {
+          this.trigger("setImageUrl", project2.getImageValueById(imageId), project2.getImageDataURIById(imageId));
         });
       });
     }
@@ -37473,6 +35391,9 @@ class FillEditor extends EditorElement {
     return this.id + "fill";
   }
   [BIND("$gradientView")]() {
+    if (this.refs.$gradientView.html() !== "") {
+      return false;
+    }
     return {
       innerHTML: `
         <svg x="0" y="0" width="100%" height="100%">
@@ -37540,9 +35461,6 @@ class FillEditor extends EditorElement {
     this.refresh();
     this.updateData();
   }
-  refresh() {
-    this.load();
-  }
   getLinearGradient() {
     var { image: image2 } = this.state;
     return `linear-gradient(to right, ${Gradient.toColorString(image2.colorsteps)})`;
@@ -37560,10 +35478,10 @@ class FillEditor extends EditorElement {
       }
     }
   }
-  [SUBSCRIBE("setImageUrl")](url) {
+  [SUBSCRIBE("setImageUrl")](url, datauri) {
     if (this.state.image) {
       this.state.url = url;
-      this.state.image.reset({ url });
+      this.state.image.reset({ url, datauri });
       this.refresh();
       this.updateData();
     }
@@ -37676,9 +35594,12 @@ class FillPickerPopup extends BasePopup {
         </div>
         <div class='box'>
           <div class='colorpicker'>
-            <object refClass="EmbedColorPicker" ref='$color' onchange=${this.subscribe((color2) => {
-      this.trigger("changeColor", color2);
-    })} />                    
+            <object refClass="EmbedColorPicker" ${variable$4({
+      ref: "$color",
+      onchange: (color2) => {
+        this.trigger("changeColor", color2);
+      }
+    })}/>                    
           </div>
           <div class='assetpicker'>
             <object refClass="ImageAssetPicker" ref='$asset' onchange='changeImageUrl' />
@@ -37723,7 +35644,9 @@ class FillPickerPopup extends BasePopup {
     this.show(240);
     data.changeEvent = data.changeEvent || "changeFillPopup";
     data.params = params;
-    this.trigger("selectColorStep", data.image.colorsteps[0].color);
+    if (data.image.isGradient()) {
+      this.trigger("selectColorStep", data.image.colorsteps[0].color);
+    }
     this.setState(data);
   }
   [SUBSCRIBE("selectColorStep")](color2) {
@@ -37851,8 +35774,8 @@ class GradientSingleEditor extends EditorElement {
   modifyValue(value) {
     this.parent.trigger(this.props.onchange, this.props.key, value, this.state.index);
   }
-  setValue(obj) {
-    this.setState(__spreadValues({}, obj));
+  setValue(obj2) {
+    this.setState(__spreadValues({}, obj2));
   }
   [BIND("$miniView")]() {
     return {
@@ -38139,7 +36062,7 @@ class HistoryProperty extends BaseProperty {
       }
       return `
         <div class='history-item'>
-          <span>${index2 === this.$editor.history.currentIndex ? icon$1.arrowRight : ""}</span>
+          <span>${index2 === this.$editor.history.currentIndex ? obj.arrowRight : ""}</span>
           <span>${it.message}</span>
         </div>
       `;
@@ -38217,9 +36140,9 @@ const DEFAULT_ATTRIBUTES = {
   yChannelSelector: true
 };
 class BaseSVGFilter extends PropertyItem {
-  static parse(obj) {
-    var FilterClass = SVGFilterClassName[obj.type];
-    return new FilterClass(obj);
+  static parse(obj2) {
+    var FilterClass = SVGFilterClassName[obj2.type];
+    return new FilterClass(obj2);
   }
   hasLight() {
     return false;
@@ -38230,7 +36153,7 @@ class BaseSVGFilter extends PropertyItem {
   isSource() {
     return false;
   }
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     var id = uuidShort$1();
     return super.getDefaultObject(__spreadValues({
       itemType: "svgfilter",
@@ -38238,7 +36161,7 @@ class BaseSVGFilter extends PropertyItem {
       in: [],
       bound: { x: 100, y: 100, targetX: 0, targetY: 0 },
       connected: []
-    }, obj));
+    }, obj2));
   }
   getInCount() {
     return 0;
@@ -38465,15 +36388,15 @@ class TurbulenceSVGFilter extends BaseSVGFilter {
       seed: TurbulenceSVGFilter.spec.seed.defaultValue
     });
   }
-  convert(obj) {
-    obj.baseFrequency = Length.parse(obj.baseFrequency);
-    obj.numOctaves = Length.parse(obj.numOctaves);
-    obj.seed = Length.parse(obj.seed);
-    return obj;
+  convert(obj2) {
+    obj2.baseFrequency = Length.parse(obj2.baseFrequency);
+    obj2.numOctaves = Length.parse(obj2.numOctaves);
+    obj2.seed = Length.parse(obj2.seed);
+    return obj2;
   }
   toString() {
     var { filterType, baseFrequency, numOctaves, seed } = this.json;
-    return `<feTurbulence ${OBJECT_TO_PROPERTY({
+    return `<feTurbulence ${OBJECT_TO_PROPERTY$1({
       type: filterType,
       baseFrequency,
       numOctaves,
@@ -38523,9 +36446,9 @@ class DisplacementMapSVGFilter extends BaseSVGFilter {
   getInCount() {
     return 2;
   }
-  convert(obj) {
-    obj.scale = Length.parse(obj.scale);
-    return obj;
+  convert(obj2) {
+    obj2.scale = Length.parse(obj2.scale);
+    return obj2;
   }
   toString() {
     var { scale: scale2 } = this.json;
@@ -38637,10 +36560,10 @@ class GaussianBlurSVGFilter extends BaseSVGFilter {
   getInCount() {
     return 1;
   }
-  convert(obj) {
-    obj.stdDeviationX = Length.parse(obj.stdDeviationX);
-    obj.stdDeviationY = Length.parse(obj.stdDeviationY);
-    return obj;
+  convert(obj2) {
+    obj2.stdDeviationX = Length.parse(obj2.stdDeviationX);
+    obj2.stdDeviationY = Length.parse(obj2.stdDeviationY);
+    return obj2;
   }
   toString() {
     var { stdDeviationX, stdDeviationY, edgeMode } = this.json;
@@ -38696,7 +36619,7 @@ class FloodSVGFilter extends BaseSVGFilter {
   }
   toString() {
     const { opacity: opacity2, color: color2, x: x2, y: y2, width: width2, height } = this.json;
-    return `<feFlood ${OBJECT_TO_PROPERTY({
+    return `<feFlood ${OBJECT_TO_PROPERTY$1({
       x: x2,
       y: y2,
       width: width2,
@@ -38785,10 +36708,10 @@ class ComponentTransferSVGFilter extends BaseSVGFilter {
     b = this.parse(b);
     a = this.parse(a);
     return `<feComponentTransfer ${this.getDefaultAttribute()} >
-      ${r && `<feFuncR ${OBJECT_TO_PROPERTY(r)} />`}
-      ${g && `<feFuncG ${OBJECT_TO_PROPERTY(g)} />`}
-      ${b && `<feFuncB ${OBJECT_TO_PROPERTY(b)} />`}
-      ${a && `<feFuncA ${OBJECT_TO_PROPERTY(a)} />`}
+      ${r && `<feFuncR ${OBJECT_TO_PROPERTY$1(r)} />`}
+      ${g && `<feFuncG ${OBJECT_TO_PROPERTY$1(g)} />`}
+      ${b && `<feFuncB ${OBJECT_TO_PROPERTY$1(b)} />`}
+      ${a && `<feFuncA ${OBJECT_TO_PROPERTY$1(a)} />`}
     </feComponentTransfe>`;
   }
 }
@@ -38830,7 +36753,7 @@ class DistantLightSVGFilter extends BaseSVGFilter {
   }
   toLightString() {
     var { azimuth, elevation } = this.json;
-    return `<feDistantLight ${OBJECT_TO_PROPERTY({
+    return `<feDistantLight ${OBJECT_TO_PROPERTY$1({
       azimuth,
       elevation
     })} />`;
@@ -38871,7 +36794,7 @@ class PointLightSVGFilter extends BaseSVGFilter {
   }
   toLightString() {
     var { x: x2, y: y2, z } = this.json;
-    return `<fePointLight ${OBJECT_TO_PROPERTY({
+    return `<fePointLight ${OBJECT_TO_PROPERTY$1({
       x: x2,
       y: y2,
       z
@@ -38925,7 +36848,7 @@ class SpotLightSVGFilter extends BaseSVGFilter {
   }
   toLightString() {
     var { x: x2, y: y2, z, pointsAtX, pointsAtY, pointsAtZ, specularExponent, limitingConeAngle } = this.json;
-    return `<feSpotLight ${OBJECT_TO_PROPERTY({
+    return `<feSpotLight ${OBJECT_TO_PROPERTY$1({
       x: x2,
       y: y2,
       z,
@@ -39024,7 +36947,7 @@ class DiffuseLightingSVGFilter extends BaseSVGFilter {
   }
   toString() {
     var { surfaceScale, diffuseConstant, lightingColor } = this.json;
-    return `<feDiffuseLighting ${OBJECT_TO_PROPERTY({
+    return `<feDiffuseLighting ${OBJECT_TO_PROPERTY$1({
       surfaceScale,
       diffuseConstant,
       "lighting-color": lightingColor
@@ -39078,7 +37001,7 @@ class SpecularLightingSVGFilter extends BaseSVGFilter {
   }
   toString() {
     var { surfaceScale, specularConstant, specularExponent, lightingColor } = this.json;
-    return `<feSpecularLighting ${OBJECT_TO_PROPERTY({
+    return `<feSpecularLighting ${OBJECT_TO_PROPERTY$1({
       surfaceScale,
       specularConstant,
       specularExponent,
@@ -39136,7 +37059,7 @@ class OffsetSVGFilter extends BaseSVGFilter {
   toString() {
     var { dx, dy } = this.json;
     return `<feOffset 
-      ${OBJECT_TO_PROPERTY({
+      ${OBJECT_TO_PROPERTY$1({
       dx,
       dy
     })}  ${this.getDefaultAttribute()} />`;
@@ -39172,7 +37095,7 @@ class BlendSVGFilter extends BaseSVGFilter {
   }
   toString() {
     var { mode } = this.json;
-    return `<feBlend ${OBJECT_TO_PROPERTY({
+    return `<feBlend ${OBJECT_TO_PROPERTY$1({
       mode
     })} ${this.getDefaultAttribute()} />`;
   }
@@ -39188,10 +37111,10 @@ BlendSVGFilter.spec = {
   }
 };
 class SourceSVGFilter extends BaseSVGFilter {
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       type: "Source"
-    }, obj));
+    }, obj2));
   }
   isSource() {
     return true;
@@ -39258,7 +37181,7 @@ class DropShadowSVGFilter extends BaseSVGFilter {
   }
   toString() {
     var { dx, dy, stdDeviation, color: color2, opacity: opacity2 } = this.json;
-    return `<feDropShadow ${OBJECT_TO_PROPERTY({
+    return `<feDropShadow ${OBJECT_TO_PROPERTY$1({
       dx,
       dy,
       stdDeviation,
@@ -39392,7 +37315,7 @@ class TileSVGFilter extends BaseSVGFilter {
   }
   toString() {
     const { x: x2, y: y2, width: width2, height } = this.json;
-    return `<feTile ${OBJECT_TO_PROPERTY({
+    return `<feTile ${OBJECT_TO_PROPERTY$1({
       x: x2,
       y: y2,
       width: width2,
@@ -39456,7 +37379,7 @@ class ImageSVGFilter extends BaseSVGFilter {
   }
   toString() {
     const { src, x: x2, y: y2, width: width2, height, alignment: alignment2, scaleing } = this.json;
-    return `<feImage ${OBJECT_TO_PROPERTY({
+    return `<feImage ${OBJECT_TO_PROPERTY$1({
       x: x2,
       y: y2,
       width: width2,
@@ -39521,15 +37444,15 @@ const SVG_FILTER_COMMON_ATTRIBUTES = [
   "result"
 ];
 class SVGFilter extends PropertyItem {
-  static parse(obj) {
-    var FilterClass = SVGFilterClassName[obj.type];
-    return new FilterClass(obj);
+  static parse(obj2) {
+    var FilterClass = SVGFilterClassName[obj2.type];
+    return new FilterClass(obj2);
   }
-  getDefaultObject(obj = {}) {
+  getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "svgfilter",
       result: ""
-    }, obj));
+    }, obj2));
   }
   getDefaultAttribute() {
     return SVG_FILTER_COMMON_ATTRIBUTES.map((key) => {
@@ -39630,15 +37553,15 @@ class DomRender$1 extends ItemRender$1 {
   toLayoutItemCSS(item2) {
     var _a;
     var parentLayout = (_a = item2.parent) == null ? void 0 : _a["layout"];
-    var obj = {};
+    var obj2 = {};
     if (parentLayout === "flex") {
-      obj = {
+      obj2 = {
         position: "relative",
         left: "auto !important",
         top: "auto !important"
       };
     } else if (parentLayout === "grid") {
-      obj = {
+      obj2 = {
         position: "relative",
         left: "auto !important",
         top: "auto !important",
@@ -39647,11 +37570,16 @@ class DomRender$1 extends ItemRender$1 {
       };
     }
     if (parentLayout === "flex") {
-      obj = __spreadValues(__spreadValues({}, obj), STRING_TO_CSS(item2["flex-layout-item"]));
+      let itemInfo = item2["flex-layout-item"];
+      if (itemInfo === "auto") {
+        obj2["flex"] = "auto";
+      } else {
+        obj2 = Object.assign(obj2, STRING_TO_CSS(itemInfo));
+      }
     } else if (parentLayout === "grid") {
-      obj = __spreadValues(__spreadValues({}, obj), STRING_TO_CSS(item2["grid-layout-item"]));
+      obj2 = __spreadValues(__spreadValues({}, obj2), STRING_TO_CSS(item2["grid-layout-item"]));
     }
-    return obj;
+    return obj2;
   }
   toFlexLayoutCSS(item2) {
     return __spreadValues({
@@ -39678,48 +37606,66 @@ class DomRender$1 extends ItemRender$1 {
     };
   }
   toBoxModelCSS(item2) {
-    let obj = {};
+    let obj2 = {};
     if (item2["margin-top"])
-      obj["margin-top"] = item2["margin-top"];
+      obj2["margin-top"] = item2["margin-top"];
     if (item2["margin-bottom"])
-      obj["margin-bottom"] = item2["margin-bottom"];
+      obj2["margin-bottom"] = item2["margin-bottom"];
     if (item2["margin-left"])
-      obj["margin-left"] = item2["margin-left"];
+      obj2["margin-left"] = item2["margin-left"];
     if (item2["margin-right"])
-      obj["margin-right"] = item2["margin-right"];
+      obj2["margin-right"] = item2["margin-right"];
     if (item2["padding-top"])
-      obj["padding-top"] = item2["padding-top"];
+      obj2["padding-top"] = item2["padding-top"];
     if (item2["padding-bottom"])
-      obj["padding-bottom"] = item2["padding-bottom"];
+      obj2["padding-bottom"] = item2["padding-bottom"];
     if (item2["padding-left"])
-      obj["padding-left"] = item2["padding-left"];
+      obj2["padding-left"] = item2["padding-left"];
     if (item2["padding-right"])
-      obj["padding-right"] = item2["padding-right"];
-    return obj;
+      obj2["padding-right"] = item2["padding-right"];
+    return obj2;
   }
   toKeyListCSS(item2, args2 = []) {
-    let obj = {};
+    let obj2 = {};
     args2.filter((it) => isNotUndefined(item2.json[it])).forEach((it) => {
-      obj[it] = item2.json[it];
+      obj2[it] = item2.json[it];
     });
-    return obj;
+    return obj2;
+  }
+  toSizeCSS(item2) {
+    const obj2 = {};
+    if (item2.right && item2.right.unit !== "auto")
+      ;
+    else {
+      obj2.width = item2.width;
+    }
+    if (item2.bottom && item2.bottom.unit !== "auto")
+      ;
+    else {
+      obj2.height = item2.height;
+    }
+    return __spreadValues({}, obj2);
   }
   toDefaultCSS(item2) {
-    let obj = {};
+    let obj2 = {};
     if (item2.isAbsolute) {
       if (item2.x) {
-        obj.left = item2.x;
+        obj2.left = item2.x;
       }
       if (item2.y) {
-        obj.top = item2.y;
+        obj2.top = item2.y;
+      }
+      if (item2.right) {
+        obj2.right = item2.right;
+      }
+      if (item2.bottom) {
+        obj2.bottom = item2.bottom;
       }
     }
     let result = {};
-    result = Object.assign(result, obj);
+    result = Object.assign(result, obj2);
     result = Object.assign(result, this.toKeyListCSS(item2, [
       "position",
-      "width",
-      "height",
       "overflow",
       "z-index",
       "box-sizing",
@@ -39756,25 +37702,25 @@ class DomRender$1 extends ItemRender$1 {
   }
   toVariableCSS(item2) {
     const v = item2.computed("variable", (v2) => {
-      let obj = {};
+      let obj2 = {};
       v2.split(";").filter((it) => it.trim()).forEach((it) => {
         const [key, value] = it.split(":");
-        obj[`--${key}`] = value;
+        obj2[`--${key}`] = value;
       });
-      return obj;
+      return obj2;
     });
     return v;
   }
   toRootVariableCSS(item2) {
-    let obj = {};
+    let obj2 = {};
     item2.rootVariable.split(";").filter((it) => it.trim()).forEach((it) => {
       const [key, value] = it.split(":");
-      obj[`--${key}`] = value;
+      obj2[`--${key}`] = value;
     });
-    return obj;
+    return obj2;
   }
   toRootVariableString(item2) {
-    return CSS_TO_STRING(this.toRootVariableCSS(item2));
+    return CSS_TO_STRING$1(this.toRootVariableCSS(item2));
   }
   toWebkitCSS(item2) {
     var results = {};
@@ -39818,9 +37764,9 @@ class DomRender$1 extends ItemRender$1 {
     if (!item2.cacheClipPathObject) {
       item2.setClipPathCache();
     }
-    var obj = item2.cacheClipPathObject;
-    var value = obj.value;
-    switch (obj.type) {
+    var obj2 = item2.cacheClipPathObject;
+    var value = obj2.value;
+    switch (obj2.type) {
       case "path":
         return `<clipPath id="${this.clipPathId(item2)}"><path d="${item2.clipPathString}" /></clipPath>`;
       case "svg":
@@ -39836,10 +37782,10 @@ class DomRender$1 extends ItemRender$1 {
     if (!item2.cacheClipPathObject) {
       item2.setClipPathCache();
     }
-    var obj = item2.cacheClipPathObject;
-    switch (obj.type) {
+    var obj2 = item2.cacheClipPathObject;
+    switch (obj2.type) {
       case "path":
-        if (obj.value) {
+        if (obj2.value) {
           str = `url(#${this.clipPathId(item2)})`;
         }
         break;
@@ -39876,12 +37822,12 @@ class DomRender$1 extends ItemRender$1 {
   generateView(item2, prefix = "", appendCSS = "") {
     var cssString = `
   ${prefix} {  /* ${item2.itemType} */
-      ${CSS_TO_STRING(this.toCSS(item2), "\n    ")}; 
+      ${CSS_TO_STRING$1(this.toCSS(item2), "\n    ")}; 
       ${appendCSS}
   }
   ${this.toNestedCSS(item2).map((it) => {
       return `${prefix} ${it.selector} { 
-        ${it.cssText ? it.cssText : CSS_TO_STRING(it.css || {}, "\n		")}; 
+        ${it.cssText ? it.cssText : CSS_TO_STRING$1(it.css || {}, "\n		")}; 
     }`;
     }).join("\n")}
   ${this.toSelectorString(item2, prefix)}
@@ -39889,7 +37835,7 @@ class DomRender$1 extends ItemRender$1 {
     return cssString;
   }
   toCSS(item2) {
-    return Object.assign({}, this.toVariableCSS(item2), this.toDefaultCSS(item2), this.toClipPathCSS(item2), this.toWebkitCSS(item2), this.toTextClipCSS(item2), this.toBoxModelCSS(item2), this.toBorderCSS(item2), this.toBackgroundImageCSS(item2), this.toLayoutCSS(item2), this.toTransformCSS(item2), this.toLayoutItemCSS(item2));
+    return Object.assign({}, this.toVariableCSS(item2), this.toDefaultCSS(item2), this.toSizeCSS(item2), this.toClipPathCSS(item2), this.toWebkitCSS(item2), this.toTextClipCSS(item2), this.toBoxModelCSS(item2), this.toBorderCSS(item2), this.toBackgroundImageCSS(item2), this.toLayoutCSS(item2), this.toTransformCSS(item2), this.toLayoutItemCSS(item2));
   }
   toStyle(item2, renderer) {
     const cssString = this.generateView(item2, `[data-renderer-id='${renderer.id}'] .element-item[data-id='${item2.id}']`);
@@ -39912,26 +37858,14 @@ ${cssString}
     }).join("");
   }
   render(item2, renderer) {
-    var { elementType, id, name: name2, itemType } = item2;
+    var { elementType, id, name: name2, itemType, isBooleanItem } = item2;
     const tagName = elementType || "div";
-    return `<${tagName} class="element-item ${itemType}" data-id="${id}" data-title="${name2}">
+    return `<${tagName} class="element-item ${itemType}" data-is-boolean-item="${isBooleanItem}" data-id="${id}" data-title="${name2}">
   ${this.toDefString(item2)}
   ${item2.layers.map((it) => {
       return renderer.render(it, renderer);
     }).join("")}
-  ${this.renderVirtualArea(item2, renderer)}
 </${tagName}>`;
-  }
-  renderVirtualArea(item2, renderer) {
-    if (item2.isBooleanPath) {
-      const layers2 = item2.layers;
-      return `
-        <svg data-id="${this.booleanId(item2)}" width="100%" height="100%" style="position:absolute;left:0px;top:0px;pointer-events:none;overflow: visible;">
-          <path d="${item2["boolean-path"]}" fill="yellow" stroke="${layers2[0].stroke}" stroke-width="${layers2[0]["stroke-width"]}" />
-        </svg>
-      `;
-    }
-    return "";
   }
   toSVGFilter(item2) {
     var filterString = item2.computedValue("svgfilters");
@@ -39958,25 +37892,15 @@ ${cssString}
     if (!currentElement)
       return;
     let $svg = currentElement.el.$svg;
-    let $booleanSvg = currentElement.el.$booleanSvg;
+    currentElement.el.$booleanSvg;
     if (!$svg) {
       currentElement.el.$svg = currentElement.$(`[data-id="${this.innerSVGId(item2)}"]`);
       $svg = currentElement.el.$svg;
       currentElement.el.$booleanSvg = currentElement.$(`[data-id="${this.booleanId(item2)}"]`);
-      $booleanSvg = currentElement.el.$booleanSvg;
+      currentElement.el.$booleanSvg;
     }
-    if ($booleanSvg) {
-      const svgString = this.renderVirtualArea(item2);
-      if (svgString) {
-        $booleanSvg.updateDiff(Dom.createByHTML(svgString).firstChild);
-      }
-    } else {
-      const svgString = this.renderVirtualArea(item2);
-      var a = Dom.createByHTML(svgString);
-      if (a) {
-        currentElement.append(a);
-        currentElement.el.$booleanSvg = currentElement.$(`[data-id="${this.booleanId(item2)}"]`);
-      }
+    if (currentElement.data("is-boolean-item") !== `${item2.isBooleanItem}`) {
+      currentElement.attr("data-is-boolean-item", item2.isBooleanItem);
     }
     if ($svg) {
       const defString = this.toDefInnerString(item2);
@@ -40021,7 +37945,7 @@ class ImageProperty extends BaseProperty {
       <div>
         <label> ${this.$i18n("image.property.origin")} </label> 
         <span ref='$sizeInfo'></span> 
-        <button type="button" ref='$resize'>${icon$1.size}</button>
+        <button type="button" ref='$resize'>${obj.size}</button>
       </div>
       <div>
         <object refClass="SelectEditor"  ref='$select' label="${this.$i18n("image.property.size")}" key='size' value='' options='${image_size.join(",")}' onchange='changeImageSize' />
@@ -40163,10 +38087,8 @@ class ImageSelectPopup extends BasePopup {
     `;
   }
   [LOAD("$imageBox") + DOMDIFF]() {
-    var project2 = this.$selection.currentProject || { images: [] };
-    return project2.images.map((image2, index2) => {
-      return `<div class='image-item' ><img src='${image2.local}' data-id="${image2.id}" /></div>`;
-    });
+    this.$selection.currentProject || { images: [] };
+    return "";
   }
   [CLICK("$imageBox .image-item")](e) {
     var $img = e.$dt.$("img");
@@ -40284,7 +38206,7 @@ class KeyframeProperty extends BaseProperty {
   }
   getTools() {
     return `
-      <button type="button" ref="$add" title="add Filter">${icon$1.add}</button>
+      <button type="button" ref="$add" title="add Filter">${obj.add}</button>
     `;
   }
   makeProperty(property) {
@@ -40320,10 +38242,10 @@ class KeyframeProperty extends BaseProperty {
           <div class='name'>${keyframe2.name}</div>
           <div class='tools'>
             <div class='group'>
-              <button type="button" data-type='list'>${icon$1.list}</button>
-              <button type="button" data-type='code'>${icon$1.code}</button>
+              <button type="button" data-type='list'>${obj.list}</button>
+              <button type="button" data-type='code'>${obj.code}</button>
             </div>
-            <button type="button" class="del" data-index="${index2}">${icon$1.remove2}</button>
+            <button type="button" class="del" data-index="${index2}">${obj.remove2}</button>
           </div>
         </div>
         <div class='offset-list'>
@@ -40718,10 +38640,11 @@ class LayerTreeProperty extends BaseProperty {
     };
   }
   getIcon(item2) {
+    if (item2.d) {
+      const path = PathParser.fromSVGString(item2.accumulatedPath().d);
+      return iconUseForPath(path.scaleWith(24, 24).d, { width: 24, height: 24 });
+    }
     if (item2.hasChildren() && item2.is("artboard") === false) {
-      if (item2["boolean-operation"] !== "none" && item2.isBooleanPath) {
-        return iconUse$1("dark");
-      }
       if (item2.isLayout("flex")) {
         return iconUse$1("flex");
       } else if (item2.isLayout("grid")) {
@@ -40729,29 +38652,7 @@ class LayerTreeProperty extends BaseProperty {
       }
       return iconUse$1("margin");
     }
-    switch (item2.itemType) {
-      case "artboard":
-        return iconUse$1("artboard");
-      case "circle":
-        return iconUse$1("lens");
-      case "image":
-        return iconUse$1("image");
-      case "text":
-      case "svg-text":
-        return iconUse$1("title");
-      case "svg-textpath":
-        return iconUse$1("text_rotate");
-      case "svg-path":
-        return iconUse$1("pentool");
-      case "polygon":
-        return iconUse$1("polygon");
-      case "star":
-        return iconUse$1("star");
-      case "spline":
-        return iconUse$1("smooth");
-      default:
-        return iconUse$1("rect");
-    }
+    return this.$icon.get(item2.itemType, item2);
   }
   makeLayerList(parentObject, depth2 = 0) {
     if (!parentObject.layers)
@@ -40763,7 +38664,7 @@ class LayerTreeProperty extends BaseProperty {
       var selectedPathClass = this.$selection.hasPathOf(layer2) ? "selected-path" : "";
       var selectedClass = this.$selection.check(layer2) ? "selected" : "";
       var hovered = this.$selection.checkHover(layer2) ? "hovered" : "";
-      var name2 = layer2.isBooleanPath ? layer2["boolean-operation"] : layer2.name;
+      var name2 = layer2.is("boolean-path") ? layer2["boolean-operation"] : layer2.name;
       if (layer2.is("text")) {
         name2 = layer2.text || layer2.name;
       }
@@ -40866,6 +38767,9 @@ class LayerTreeProperty extends BaseProperty {
       hideDragPointer: true
     });
     this.emit("refreshAll");
+    this.nextTick(() => {
+      this.emit("recoverBooleanPath");
+    }, 10);
   }
   [DOUBLECLICK("$layerList .layer-item")](e) {
     this.startInputEditing(e.$dt.$(".name"));
@@ -41040,7 +38944,7 @@ class FlexLayoutEditor extends EditorElement {
     this.setState(__spreadValues({}, STRING_TO_CSS(value)));
   }
   getValue() {
-    return CSS_TO_STRING(this.state);
+    return CSS_TO_STRING$1(this.state);
   }
   modifyData() {
     this.parent.trigger(this.props.onchange, this.props.key, this.getValue());
@@ -41053,6 +38957,7 @@ class FlexLayoutEditor extends EditorElement {
                     key='flex-direction'
                     value="${this.state["flex-direction"] || "row"}"
                     options="${this.getDirectionOptions()}"
+                    icons=${variable$4(["view_week", "table_rows", "view_week_reverse", "table_rows"])}
                     onchange='changeKeyValue'
                 />
             </div>
@@ -41062,6 +38967,7 @@ class FlexLayoutEditor extends EditorElement {
                     key='flex-wrap'
                     value="${this.state["flex-wrap"] || "wrap"}"
                     options="${this.getWrapOptions()}"
+                    icons=${variable$4([, "wrap_text"])}
                     onchange='changeKeyValue'
                 />
             </div>
@@ -41071,6 +38977,7 @@ class FlexLayoutEditor extends EditorElement {
                     key='justify-content'
                     value="${this.state["justify-content"] || "flex-start"}"
                     options="${this.getJustifyContentOptions()}"
+                    icons=${variable$4(["start", "end", "center", "horizontal_distribute"])}                                        
                     onchange='changeKeyValue'
                 />
             </div>
@@ -41080,6 +38987,7 @@ class FlexLayoutEditor extends EditorElement {
                     key='align-items'
                     value="${this.state["align-items"] || "flex-start"}"
                     options="${this.getAlignItemsOptions()}"
+                    icons=${variable$4(["vertical_align_top", "vertical_align_bottom", "vertical_align_center"])}                    
                     onchange='changeKeyValue'
                 />
             </div>
@@ -41114,7 +39022,7 @@ class FlexLayoutItemEditor extends EditorElement {
     this.setState(STRING_TO_CSS(value));
   }
   getValue() {
-    return CSS_TO_STRING(this.state);
+    return CSS_TO_STRING$1(this.state);
   }
   modifyData() {
     this.parent.trigger(this.props.onchange, this.props.key, this.getValue());
@@ -41245,7 +39153,7 @@ class FlexLayoutItemProperty extends BaseProperty {
     grow = this.getFlexItemValue(grow);
     shrink = this.getFlexItemValue(shrink);
     basis = this.getFlexItemValue(basis);
-    return CSS_TO_STRING({
+    return CSS_TO_STRING$1({
       flex: `${grow} ${shrink} ${basis}`
     });
   }
@@ -41360,8 +39268,8 @@ class GridBoxEditor extends EditorElement {
                         onchange="changeKeyValue" />
                 </div>
                 <div class='tools'>
-                    <button type="button" class='copy'>${icon$1.copy}</button>                
-                    <button type="button" class='remove'>${icon$1.remove2}</button>
+                    <button type="button" class='copy'>${obj.copy}</button>                
+                    <button type="button" class='remove'>${obj.remove2}</button>
                 </div>
             </div>
         `;
@@ -41378,7 +39286,7 @@ class GridBoxEditor extends EditorElement {
                     <div class='item header'>
                         <div class='repeat'>
                             <label>${this.state.label} </label>
-                            <button type='button' ref='$add'>${icon$1.add}</button>
+                            <button type='button' ref='$add'>${obj.add}</button>
                         </div>
                         <div class='count'>${this.$i18n("grid.box.editor.count")}</div>
                         <div class='value'>${this.$i18n("grid.box.editor.value")}</div>
@@ -41484,7 +39392,7 @@ class GridLayoutEditor extends EditorElement {
     this.setState(__spreadValues({}, STRING_TO_CSS(value)));
   }
   getValue() {
-    return CSS_TO_STRING(this.state);
+    return CSS_TO_STRING$1(this.state);
   }
   modifyData() {
     this.parent.trigger(this.props.onchange, this.props.key, this.getValue());
@@ -41547,7 +39455,7 @@ class GridLayoutItemEditor extends EditorElement {
     this.setState(STRING_TO_CSS(value));
   }
   getValue() {
-    return CSS_TO_STRING(this.state);
+    return CSS_TO_STRING$1(this.state);
   }
   modifyData() {
     this.parent.trigger(this.props.onchange, this.props.key, this.getValue());
@@ -41634,11 +39542,11 @@ class GridLayoutItemProperty extends BaseProperty {
   [LOAD("$body")]() {
     var current = this.$selection.current || { "grid-layout-item": "none" };
     var valueType = current["grid-layout-item"] || "none";
-    var obj = {};
+    var obj2 = {};
     if (["none"].includes(valueType) === false) {
-      obj = STRING_TO_CSS(current["grid-layout-item"]);
+      obj2 = STRING_TO_CSS(current["grid-layout-item"]);
     }
-    if (Object.keys(obj).length > 0) {
+    if (Object.keys(obj2).length > 0) {
       valueType = "value";
     }
     return `
@@ -41662,19 +39570,19 @@ class GridLayoutItemProperty extends BaseProperty {
           <div class='value-item'>
             <label>${this.$i18n("grid.layout.item.property.column")}</label>
             <div>
-              <object refClass="NumberInputEditor"  ref='$columnStart' key="grid-column-start" value="${obj["grid-column-start"] || "0"}" min='0' onchange='changeGridItem' />
+              <object refClass="NumberInputEditor"  ref='$columnStart' key="grid-column-start" value="${obj2["grid-column-start"] || "0"}" min='0' onchange='changeGridItem' />
             </div>
             <div>
-              <object refClass="NumberInputEditor"  ref='$columnEnd' key="grid-column-end" value="${obj["grid-column-end"] || "0"}" min='0' onchange='changeGridItem' />
+              <object refClass="NumberInputEditor"  ref='$columnEnd' key="grid-column-end" value="${obj2["grid-column-end"] || "0"}" min='0' onchange='changeGridItem' />
             </div>            
           </div>
           <div class='value-item'>
             <label>${this.$i18n("grid.layout.item.property.row")}</label>
             <div>
-              <object refClass="NumberInputEditor"  ref='$rowStart' key="grid-row-start" value="${obj["grid-row-start"] || "0"}" min='0' onchange='changeGridItem' />
+              <object refClass="NumberInputEditor"  ref='$rowStart' key="grid-row-start" value="${obj2["grid-row-start"] || "0"}" min='0' onchange='changeGridItem' />
             </div>
             <div>
-              <object refClass="NumberInputEditor"  ref='$rowEnd' key="grid-row-end" value="${obj["grid-row-end"] || "0"}" min='0' onchange='changeGridItem' />
+              <object refClass="NumberInputEditor"  ref='$rowEnd' key="grid-row-end" value="${obj2["grid-row-end"] || "0"}" min='0' onchange='changeGridItem' />
             </div>            
           </div>          
         </div>
@@ -41682,13 +39590,13 @@ class GridLayoutItemProperty extends BaseProperty {
     `;
   }
   getGridValue() {
-    var obj = {
+    var obj2 = {
       "grid-column-start": this.children.$columnStart.getValue(),
       "grid-column-end": this.children.$columnEnd.getValue(),
       "grid-row-start": this.children.$rowStart.getValue(),
       "grid-row-end": this.children.$rowEnd.getValue()
     };
-    return CSS_TO_STRING(obj);
+    return CSS_TO_STRING$1(obj2);
   }
   [SUBSCRIBE_SELF("changeGridItem")](key, value) {
     this.command("setAttributeForMulti", "change grid layout item", this.$selection.packByValue({
@@ -41857,7 +39765,7 @@ class DefaultLayoutItemProperty extends BaseProperty {
     grow = this.getDefaultItemValue(grow);
     shrink = this.getDefaultItemValue(shrink);
     basis = this.getDefaultItemValue(basis);
-    return CSS_TO_STRING({
+    return CSS_TO_STRING$1({
       flex: `${grow} ${shrink} ${basis}`
     });
   }
@@ -42049,7 +39957,7 @@ class PatternAssetsProperty extends BaseProperty {
       return "";
     }
     var results = preset.execute().map((item2, index2) => {
-      const cssText = CSS_TO_STRING(Pattern.toCSS(item2.pattern));
+      const cssText = CSS_TO_STRING$1(Pattern.toCSS(item2.pattern));
       return `
         <div class='pattern-item' data-index="${index2}" data-pattern="${item2.pattern}">
           <div class='preview' title="${item2.title}" draggable="true">
@@ -42094,7 +40002,7 @@ class PatternEditor extends EditorElement {
                 <div class='label ${labelClass}'>
                     <label>${this.props.title || ""}</label>
                     <div class='tools'>
-                        <button type="button" ref='$add'>${icon$1.add} ${this.props.title ? "" : "Add"}</button>
+                        <button type="button" ref='$add'>${obj.add} ${this.props.title ? "" : "Add"}</button>
                     </div>
                 </div>
                 <div class='pattern-list' ref='$patternList'></div>
@@ -42125,7 +40033,7 @@ class PatternEditor extends EditorElement {
                     lineHeight="${it.lineHeight}"
                     onchange='changePatternSizeInfo' />
                 <div class='tools'>
-                    <button type="button" class='remove' title='Remove a pattern' data-index='${index2}'>${icon$1.remove}</button>
+                    <button type="button" class='remove' title='Remove a pattern' data-index='${index2}'>${obj.remove}</button>
                 </div>
             </div>
             `;
@@ -42439,7 +40347,7 @@ class PatternProperty extends BaseProperty {
     return `
       <select ref="$patternSelect">      
       </select>
-      <button type="button" ref="$add" title="add Pattern">${icon$1.add}</button>
+      <button type="button" ref="$add" title="add Pattern">${obj.add}</button>
     `;
   }
   [CLICK("$add")]() {
@@ -42502,20 +40410,20 @@ class PatternSizeEditor extends EditorElement {
   modifyValue(value) {
     this.parent.trigger(this.props.onchange, this.props.key, value, this.state.index);
   }
-  setValue(obj) {
-    this.setState(__spreadValues({}, obj));
+  setValue(obj2) {
+    this.setState(__spreadValues({}, obj2));
   }
   [BIND("$miniView")]() {
-    let obj = __spreadValues({}, this.state);
+    let obj2 = __spreadValues({}, this.state);
     if (this.state.width.value > 80) {
-      obj.width = Length.px(80);
-      obj.x = Length.px(obj.x.value / this.state.width.value / 80);
+      obj2.width = Length.px(80);
+      obj2.x = Length.px(obj2.x.value / this.state.width.value / 80);
     }
     if (this.state.height.value > 80) {
-      obj.height = Length.px(80);
-      obj.y = Length.px(this.state.y.value / this.state.height.value / 80);
+      obj2.height = Length.px(80);
+      obj2.y = Length.px(this.state.y.value / this.state.height.value / 80);
     }
-    const pattern = Pattern.parse(obj);
+    const pattern = Pattern.parse(obj2);
     return {
       cssText: pattern.toCSS()
     };
@@ -42566,7 +40474,7 @@ class PerspectiveProperty extends BaseProperty {
   }
   getTools() {
     return `
-        <button type="button" class="remove" ref='$remove'>${icon$1.remove}</button>
+        <button type="button" class="remove" ref='$remove'>${obj.remove}</button>
     `;
   }
   [CLICK("$remove")]() {
@@ -42619,7 +40527,7 @@ const origin$1 = {
 class PerspectiveOriginEditor extends EditorElement {
   initState() {
     var arr = this.props.value.split(" ");
-    var obj = {
+    var obj2 = {
       isAll: true,
       "perspective-origin": Length.z(),
       "perspective-origin-x": Length.z(),
@@ -42627,17 +40535,17 @@ class PerspectiveOriginEditor extends EditorElement {
     };
     if (this.props.value) {
       if (arr.length === 1) {
-        obj["isAll"] = true;
-        obj["perspective-origin"] = Length.parse(arr[0]);
-        obj["perspective-origin-x"] = Length.parse(arr[0]);
-        obj["perspective-origin-y"] = Length.parse(arr[0]);
+        obj2["isAll"] = true;
+        obj2["perspective-origin"] = Length.parse(arr[0]);
+        obj2["perspective-origin-x"] = Length.parse(arr[0]);
+        obj2["perspective-origin-y"] = Length.parse(arr[0]);
       } else if (arr.length == 2) {
-        obj["isAll"] = false;
-        obj["perspective-origin-x"] = Length.parse(arr[0]);
-        obj["perspective-origin-y"] = Length.parse(arr[1]);
+        obj2["isAll"] = false;
+        obj2["perspective-origin-x"] = Length.parse(arr[0]);
+        obj2["perspective-origin-y"] = Length.parse(arr[1]);
       }
     }
-    return obj;
+    return obj2;
   }
   template() {
     return `
@@ -42680,9 +40588,9 @@ class PerspectiveOriginEditor extends EditorElement {
     return `
       <div class="property-item perspective-origin-item">
         <div class="radius-selector" data-selected-value="${selectedValue}" ref="$selector">
-          <button type="button" data-value="all">${icon$1.border_all}</button>
+          <button type="button" data-value="all">${obj.border_all}</button>
           <button type="button" data-value="partitial">
-            ${icon$1.border_inner}
+            ${obj.border_inner}
           </button>
         </div>
         <div class="radius-value">
@@ -42749,7 +40657,7 @@ class PerspectiveOriginProperty extends BaseProperty {
   }
   getTools() {
     return `
-        <button type="button" class="remove" ref='$remove'>${icon$1.remove}</button>
+        <button type="button" class="remove" ref='$remove'>${obj.remove}</button>
     `;
   }
   [CLICK("$remove")]() {
@@ -42804,7 +40712,7 @@ class PositionProperty extends BaseProperty {
     var current = this.$selection.current;
     if (!current)
       return false;
-    return current.hasChangedField("x", "y", "width", "height", "transform", "rotateZ", "rotate", "opacity");
+    return current.hasChangedField("x", "y", "right", "bottom", "width", "height", "transform", "rotateZ", "rotate", "opacity");
   }
   [SUBSCRIBE("refreshSelectionStyleView") + IF("checkChangedValue") + THROTTLE(10)]() {
     var current = this.$selection.current;
@@ -42831,39 +40739,39 @@ class PositionProperty extends BaseProperty {
   getBody() {
     return `
       <div class="position-item" ref="$positionItem" style='padding: 5px 10px;'>
-        <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px;'>
-          <div class='property-item animation-property-item' style='padding: 0px;'>
-            <div class='group'>
-              <span class='add-timeline-property' data-property='x'></span>
-            </div>
-            <object refClass='InputRangeEditor' ref='$x' compact="true" label="X" key='x' min="-100000" max='100000' onchange='changRangeEditor' />
+        <div style='display: grid;grid-template-columns: 1fr 100px; grid-column-gap: 10px; padding-top: 10px;'>
+          <div class='property-item' style='padding: 0px;'>
+            <object refClass='InputRangeEditor' ref='$x' label="X" key='x' min="-100000" max='100000' onchange='changRangeEditor' />
           </div>
+          <div class='property-item' style='padding: 0px;'>
+            <button type="button" data-command="start-x">${iconUse$1("start", null, { width: 30, height: 30 })}</button>
+          </div>          
+        </div>
+        <div style='display: grid;grid-template-columns: 1fr 100px; grid-column-gap: 10px; padding-top: 10px;'>
           <div class='property-item animation-property-item' style='padding: 0px;'>
-            <div class='group'>
-              <span class='add-timeline-property' data-property='y'></span>
-            </div>
-            <object refClass='InputRangeEditor' ref='$y' compact="true"  label="Y" key='y' min="-10000" max='10000' onchange='changRangeEditor' />
+            <object refClass='InputRangeEditor' ref='$y' label="Y" key='y' min="-10000" max='10000' onchange='changRangeEditor' />
           </div>
         </div>
+        <div style='display: grid;grid-template-columns: 1fr 100px; grid-column-gap: 10px; padding-top: 10px;'>
+          <div class='property-item animation-property-item' style='padding: 0px;'>
+            <object refClass='InputRangeEditor' ref='$right' label="Right" key='right' min="-100000" max='100000' onchange='changRangeEditor' />
+          </div>
+        </div>
+        <div style='display: grid;grid-template-columns: 1fr 100px; grid-column-gap: 10px; padding-top: 10px;'>
+          <div class='property-item animation-property-item' style='padding: 0px;'>
+            <object refClass='InputRangeEditor' ref='$bottom' label="Bottom" key='bottom' min="-10000" max='10000' onchange='changRangeEditor' />
+          </div>
+        </div>        
         <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; padding-top: 10px;'>
           <div class='property-item animation-property-item' style='padding:0px'>
-            <div class='group'>
-              <span class='add-timeline-property' data-property='width'></span>
-            </div>
             <object refClass='InputRangeEditor' ref='$width' compact="true"  label="${this.$i18n("position.property.width")}" key='width' min="0" max='3000' onchange='changRangeEditor' />
           </div>
           <div class='property-item animation-property-item' style='padding:0px'>
-            <div class='group'>
-              <span class='add-timeline-property' data-property='height'></span>      
-            </div>
             <object refClass='InputRangeEditor' ref='$height' compact="true"  label="${this.$i18n("position.property.height")}" key='height' min="0" max='3000' onchange='changRangeEditor' />
           </div>      
         </div> 
         <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; padding-top: 10px;'>
           <div class='property-item animation-property-item'>
-            <div class='group'>
-              <span class='add-timeline-property' data-property='rotate'></span>
-            </div>
             <object refClass='InputRangeEditor' 
               ref='$rotate' 
               key='rotateZ' 
@@ -42877,9 +40785,6 @@ class PositionProperty extends BaseProperty {
           </div>        
 
           <div class='property-item animation-property-item'>
-            <div class='group'>
-              <span class='add-timeline-property' data-property='opacity'></span>
-            </div>
             <object refClass="NumberInputEditor"
               ref='$opacity' 
               key='opacity' 
@@ -42906,7 +40811,20 @@ class PositionProperty extends BaseProperty {
       if (rotateZ2) {
         this.children.$rotate.setValue(rotateZ2[0]);
       }
+      if (current.parent.is("project")) {
+        this.children.$right.disabled();
+        this.children.$bottom.disabled();
+      } else {
+        this.children.$right.enabled();
+        this.children.$bottom.enabled();
+        this.children.$right.setValue(current.right);
+        this.children.$bottom.setValue(current.bottom);
+      }
     }
+  }
+  [CLICK("$positionItem button[data-command]")](e) {
+    const command = e.$dt.data("command");
+    console.log(command);
   }
   [SUBSCRIBE_SELF("changRangeEditor")](key, value) {
     this.command("setAttributeForMulti", "change position or size", this.$selection.packByValue({
@@ -42914,6 +40832,7 @@ class PositionProperty extends BaseProperty {
     }));
     this.nextTick(() => {
       this.emit("refreshAllElementBoundSize");
+      this.emit("refreshSelectionTool", true);
     });
   }
   [SUBSCRIBE_SELF("changeRotate")](key, rotate2) {
@@ -42928,7 +40847,7 @@ class PositionProperty extends BaseProperty {
   }
 }
 function position(editor) {
-  editor.registerElement({
+  editor.registerMenuItem("inspector.tab.style", {
     PositionProperty
   });
 }
@@ -42942,7 +40861,7 @@ class ProjectProperty extends BaseProperty {
   }
   getTools() {
     return `
-      <button type='button' ref='$add' data-tooltip="Add a project" data-direction="bottom right">${icon$1.add}</button>
+      <button type='button' ref='$add' data-tooltip="Add a project" data-direction="bottom right">${obj.add}</button>
     `;
   }
   [CLICK("$add")]() {
@@ -42963,7 +40882,7 @@ class ProjectProperty extends BaseProperty {
           <div class='detail'>
             <label data-id='${projectId}'>${project2.name || "New Project"}</label>
             <div class="tools">
-              <button type="button" class="remove" data-id="${projectId}" title='Remove'>${icon$1.remove2}</button>
+              <button type="button" class="remove" data-id="${projectId}" title='Remove'>${obj.remove2}</button>
             </div>
           </div>
         </div>
@@ -43058,9 +40977,6 @@ class SelectEditor extends EditorElement {
     this.state.value = value + "";
     this.refs.$options.val(this.state.value);
     this.refresh();
-  }
-  refresh(reload = false) {
-    this.load();
   }
   [BIND("$options")]() {
     return {
@@ -43169,152 +41085,37 @@ class ClipPathEditor extends EditorElement {
     });
   }
 }
-var random = {
-  title: "random",
-  key: "random",
-  execute: function(count = 42) {
-    const colorList = Color.randomByCount(count).map((color2) => {
-      return { color: color2 };
-    });
-    colorList.sort((a, b) => {
-      const localA = Color.parse(a.color);
-      const localB = Color.parse(b.color);
-      return localA.h > localB.h ? 1 : -1;
-    });
-    return colorList;
-  }
-};
 const colors$k = [
-  "#ffebee",
-  "#ffcdd2",
-  "#ef9a9a",
-  "#e57373",
-  "#ef5350",
-  "#f44336",
-  "#e53935",
-  "#d32f2f",
-  "#c62828",
-  "#b71c1c",
-  "#f44336",
-  "#ff8a80",
-  "#ff5252",
-  "#ff1744",
-  "#d50000"
+  "#FFF8E1",
+  "#FFECB3",
+  "#FFE082",
+  "#FFD54F",
+  "#FFCA28",
+  "#FFC107",
+  "#FFB300",
+  "#FFA000",
+  "#FF8F00",
+  "#FF6F00",
+  "#FFE57F",
+  "#FFD740",
+  "#FFC400",
+  "#FFAB00"
 ].map((color2) => {
   return { color: color2 };
 });
-var materialRed = {
-  title: "material red",
-  key: "material-red",
+var materialAmber = {
+  title: "material amber",
+  key: "material-amber",
   execute: function() {
     return colors$k;
   }
 };
+var __glob_0_0 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialAmber
+});
 const colors$j = [
-  "#fce4ec",
-  "#f8bbd0",
-  "#f48fb1",
-  "#f06292",
-  "#ec407a",
-  "#e91e63",
-  "#d81b60",
-  "#c2185b",
-  "#ad1457",
-  "#880e4f",
-  "#e91e63",
-  "#ff80ab",
-  "#ff4081",
-  "#f50057",
-  "#c51162"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialPink = {
-  title: "material pink",
-  key: "material-pink",
-  execute: function() {
-    return colors$j;
-  }
-};
-const colors$i = [
-  "#f3e5f5",
-  "#e1bee7",
-  "#ce93d8",
-  "#ba68c8",
-  "#ab47bc",
-  "#9c27b0",
-  "#8e24aa",
-  "#7b1fa2",
-  "#6a1b9a",
-  "#4a148c",
-  "#9c27b0",
-  "#ea80fc",
-  "#e040fb",
-  "#d500f9",
-  "#aa00ff"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialPurple = {
-  title: "material purple",
-  key: "material-purple",
-  execute: function() {
-    return colors$i;
-  }
-};
-const colors$h = [
-  "#ede7f6",
-  "#d1c4e9",
-  "#b39ddb",
-  "#9575cd",
-  "#7e57c2",
-  "#673ab7",
-  "#5e35b1",
-  "#512da8",
-  "#4527a0",
-  "#311b92",
-  "#673ab7",
-  "#b388ff",
-  "#7c4dff",
-  "#651fff",
-  "#6200ea"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialDeeppurple = {
-  title: "material deep purple",
-  key: "material-deeppurple",
-  execute: function() {
-    return colors$h;
-  }
-};
-const colors$g = [
-  "#e8eaf6",
-  "#c5cae9",
-  "#9fa8da",
-  "#7986cb",
-  "#5c6bc0",
-  "#3f51b5",
-  "#3949ab",
-  "#303f9f",
-  "#283593",
-  "#1a237e",
-  "#3f51b5",
-  "#8c9eff",
-  "#536dfe",
-  "#3d5afe",
-  "#304ffe"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialIndigo = {
-  title: "material indigo",
-  key: "material-indigo",
-  execute: function() {
-    return colors$g;
-  }
-};
-const colors$f = [
   "#e3f2fd",
   "#bbdefb",
   "#90caf9",
@@ -43337,36 +41138,67 @@ var materialBlue = {
   title: "material blue",
   key: "material-blue",
   execute: function() {
-    return colors$f;
+    return colors$j;
   }
 };
-const colors$e = [
-  "#e1f5fe",
-  "#b3e5fc",
-  "#81d4fa",
-  "#4fc3f7",
-  "#29b6f6",
-  "#03a9f4",
-  "#039be5",
-  "#0288d1",
-  "#0277bd",
-  "#01579b",
-  "#03a9f4",
-  "#80d8ff",
-  "#40c4ff",
-  "#00b0ff",
-  "#0091ea"
+var __glob_0_1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialBlue
+});
+const colors$i = [
+  "#ECEFF1",
+  "#CFD8DC",
+  "#B0BEC5",
+  "#90A4AE",
+  "#78909C",
+  "#607D8B",
+  "#546E7A",
+  "#455A64",
+  "#37474F",
+  "#263238"
 ].map((color2) => {
   return { color: color2 };
 });
-var materialLightblue = {
-  title: "material light blue",
-  key: "material-lightblue",
+var materialBluegray = {
+  title: "material bluegray",
+  key: "material-bluegray",
   execute: function() {
-    return colors$e;
+    return colors$i;
   }
 };
-const colors$d = [
+var __glob_0_2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialBluegray
+});
+const colors$h = [
+  "#EFEBE9",
+  "#D7CCC8",
+  "#BCAAA4",
+  "#A1887F",
+  "#8D6E63",
+  "#795548",
+  "#6D4C41",
+  "#5D4037",
+  "#4E342E",
+  "#3E2723"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialBrown = {
+  title: "material brown",
+  key: "material-brown",
+  execute: function() {
+    return colors$h;
+  }
+};
+var __glob_0_3 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialBrown
+});
+const colors$g = [
   "#e0f7fa",
   "#b2ebf2",
   "#80deea",
@@ -43389,10 +41221,377 @@ var materialCyan = {
   title: "material cyan",
   key: "material-cyan",
   execute: function() {
+    return colors$g;
+  }
+};
+var __glob_0_4 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialCyan
+});
+const colors$f = [
+  "#FBE9E7",
+  "#FFCCBC",
+  "#FFAB91",
+  "#FF8A65",
+  "#FF7043",
+  "#FF5722",
+  "#F4511E",
+  "#E64A19",
+  "#D84315",
+  "#BF360C",
+  "#FF9E80",
+  "#FF6E40",
+  "#FF3D00",
+  "#DD2C00"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialDeeporange = {
+  title: "material deep orange",
+  key: "material-deeporange",
+  execute: function() {
+    return colors$f;
+  }
+};
+var __glob_0_5 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialDeeporange
+});
+const colors$e = [
+  "#ede7f6",
+  "#d1c4e9",
+  "#b39ddb",
+  "#9575cd",
+  "#7e57c2",
+  "#673ab7",
+  "#5e35b1",
+  "#512da8",
+  "#4527a0",
+  "#311b92",
+  "#673ab7",
+  "#b388ff",
+  "#7c4dff",
+  "#651fff",
+  "#6200ea"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialDeeppurple = {
+  title: "material deep purple",
+  key: "material-deeppurple",
+  execute: function() {
+    return colors$e;
+  }
+};
+var __glob_0_6 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialDeeppurple
+});
+const colors$d = [
+  "#FAFAFA",
+  "#F5F5F5",
+  "#EEEEEE",
+  "#E0E0E0",
+  "#BDBDBD",
+  "#9E9E9E",
+  "#757575",
+  "#616161",
+  "#424242",
+  "#212121"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialGray = {
+  title: "material gray",
+  key: "material-gray",
+  execute: function() {
     return colors$d;
   }
 };
+var __glob_0_7 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialGray
+});
 const colors$c = [
+  "#E8F5E9",
+  "#C8E6C9",
+  "#A5D6A7",
+  "#81C784",
+  "#66BB6A",
+  "#4CAF50",
+  "#43A047",
+  "#388E3C",
+  "#2E7D32",
+  "#1B5E20",
+  "#B9F6CA",
+  "#69F0AE",
+  "#00E676",
+  "#00C853"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialGreen = {
+  title: "material green",
+  key: "material-green",
+  execute: function() {
+    return colors$c;
+  }
+};
+var __glob_0_8 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialGreen
+});
+const colors$b = [
+  "#e8eaf6",
+  "#c5cae9",
+  "#9fa8da",
+  "#7986cb",
+  "#5c6bc0",
+  "#3f51b5",
+  "#3949ab",
+  "#303f9f",
+  "#283593",
+  "#1a237e",
+  "#3f51b5",
+  "#8c9eff",
+  "#536dfe",
+  "#3d5afe",
+  "#304ffe"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialIndigo = {
+  title: "material indigo",
+  key: "material-indigo",
+  execute: function() {
+    return colors$b;
+  }
+};
+var __glob_0_9 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialIndigo
+});
+const colors$a = [
+  "#e1f5fe",
+  "#b3e5fc",
+  "#81d4fa",
+  "#4fc3f7",
+  "#29b6f6",
+  "#03a9f4",
+  "#039be5",
+  "#0288d1",
+  "#0277bd",
+  "#01579b",
+  "#03a9f4",
+  "#80d8ff",
+  "#40c4ff",
+  "#00b0ff",
+  "#0091ea"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialLightblue = {
+  title: "material light blue",
+  key: "material-lightblue",
+  execute: function() {
+    return colors$a;
+  }
+};
+var __glob_0_10 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialLightblue
+});
+const colors$9 = [
+  "#F1F8E9",
+  "#DCEDC8",
+  "#C5E1A5",
+  "#AED581",
+  "#9CCC65",
+  "#8BC34A",
+  "#7CB342",
+  "#689F38",
+  "#558B2F",
+  "#33691E",
+  "#CCFF90",
+  "#B2FF59",
+  "#76FF03",
+  "#64DD17"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialLightgreen = {
+  title: "material lightgreen",
+  key: "material-lightgreen",
+  execute: function() {
+    return colors$9;
+  }
+};
+var __glob_0_11 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialLightgreen
+});
+const colors$8 = [
+  "#F9FBE7",
+  "#F0F4C3",
+  "#E6EE9C",
+  "#DCE775",
+  "#D4E157",
+  "#CDDC39",
+  "#C0CA33",
+  "#AFB42B",
+  "#9E9D24",
+  "#827717",
+  "#F4FF81",
+  "#EEFF41",
+  "#C6FF00",
+  "#AEEA00"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialLime = {
+  title: "material lime",
+  key: "material-lime",
+  execute: function() {
+    return colors$8;
+  }
+};
+var __glob_0_12 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialLime
+});
+const colors$7 = [
+  "#FFF3E0",
+  "#FFE0B2",
+  "#FFCC80",
+  "#FFB74D",
+  "#FFA726",
+  "#FF9800",
+  "#FB8C00",
+  "#F57C00",
+  "#EF6C00",
+  "#E65100",
+  "#FFD180",
+  "#FFAB40",
+  "#FF9100",
+  "#FF6D00"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialOrange = {
+  title: "material orange",
+  key: "material-orange",
+  execute: function() {
+    return colors$7;
+  }
+};
+var __glob_0_13 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialOrange
+});
+const colors$6 = [
+  "#fce4ec",
+  "#f8bbd0",
+  "#f48fb1",
+  "#f06292",
+  "#ec407a",
+  "#e91e63",
+  "#d81b60",
+  "#c2185b",
+  "#ad1457",
+  "#880e4f",
+  "#e91e63",
+  "#ff80ab",
+  "#ff4081",
+  "#f50057",
+  "#c51162"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialPink = {
+  title: "material pink",
+  key: "material-pink",
+  execute: function() {
+    return colors$6;
+  }
+};
+var __glob_0_14 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialPink
+});
+const colors$5 = [
+  "#f3e5f5",
+  "#e1bee7",
+  "#ce93d8",
+  "#ba68c8",
+  "#ab47bc",
+  "#9c27b0",
+  "#8e24aa",
+  "#7b1fa2",
+  "#6a1b9a",
+  "#4a148c",
+  "#9c27b0",
+  "#ea80fc",
+  "#e040fb",
+  "#d500f9",
+  "#aa00ff"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialPurple = {
+  title: "material purple",
+  key: "material-purple",
+  execute: function() {
+    return colors$5;
+  }
+};
+var __glob_0_15 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialPurple
+});
+const colors$4 = [
+  "#ffebee",
+  "#ffcdd2",
+  "#ef9a9a",
+  "#e57373",
+  "#ef5350",
+  "#f44336",
+  "#e53935",
+  "#d32f2f",
+  "#c62828",
+  "#b71c1c",
+  "#f44336",
+  "#ff8a80",
+  "#ff5252",
+  "#ff1744",
+  "#d50000"
+].map((color2) => {
+  return { color: color2 };
+});
+var materialRed = {
+  title: "material red",
+  key: "material-red",
+  execute: function() {
+    return colors$4;
+  }
+};
+var __glob_0_16 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialRed
+});
+const colors$3 = [
   "#e0f2f1",
   "#b2dfdb",
   "#80cbc4",
@@ -43415,85 +41614,15 @@ var materialTeal = {
   title: "material teal",
   key: "material-teal",
   execute: function() {
-    return colors$c;
+    return colors$3;
   }
 };
-const colors$b = [
-  "#E8F5E9",
-  "#C8E6C9",
-  "#A5D6A7",
-  "#81C784",
-  "#66BB6A",
-  "#4CAF50",
-  "#43A047",
-  "#388E3C",
-  "#2E7D32",
-  "#1B5E20",
-  "#B9F6CA",
-  "#69F0AE",
-  "#00E676",
-  "#00C853"
-].map((color2) => {
-  return { color: color2 };
+var __glob_0_17 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialTeal
 });
-var materialGreen = {
-  title: "material green",
-  key: "material-green",
-  execute: function() {
-    return colors$b;
-  }
-};
-const colors$a = [
-  "#F1F8E9",
-  "#DCEDC8",
-  "#C5E1A5",
-  "#AED581",
-  "#9CCC65",
-  "#8BC34A",
-  "#7CB342",
-  "#689F38",
-  "#558B2F",
-  "#33691E",
-  "#CCFF90",
-  "#B2FF59",
-  "#76FF03",
-  "#64DD17"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialLightgreen = {
-  title: "material lightgreen",
-  key: "material-lightgreen",
-  execute: function() {
-    return colors$a;
-  }
-};
-const colors$9 = [
-  "#F9FBE7",
-  "#F0F4C3",
-  "#E6EE9C",
-  "#DCE775",
-  "#D4E157",
-  "#CDDC39",
-  "#C0CA33",
-  "#AFB42B",
-  "#9E9D24",
-  "#827717",
-  "#F4FF81",
-  "#EEFF41",
-  "#C6FF00",
-  "#AEEA00"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialLime = {
-  title: "material lime",
-  key: "material-lime",
-  execute: function() {
-    return colors$9;
-  }
-};
-const colors$8 = [
+const colors$2 = [
   "#FFFDE7",
   "#FFF9C4",
   "#FFF59D",
@@ -43515,147 +41644,14 @@ var materialYellow = {
   title: "material yellow",
   key: "material-yellow",
   execute: function() {
-    return colors$8;
-  }
-};
-const colors$7 = [
-  "#FFF8E1",
-  "#FFECB3",
-  "#FFE082",
-  "#FFD54F",
-  "#FFCA28",
-  "#FFC107",
-  "#FFB300",
-  "#FFA000",
-  "#FF8F00",
-  "#FF6F00",
-  "#FFE57F",
-  "#FFD740",
-  "#FFC400",
-  "#FFAB00"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialAmber = {
-  title: "material amber",
-  key: "material-amber",
-  execute: function() {
-    return colors$7;
-  }
-};
-const colors$6 = [
-  "#FFF3E0",
-  "#FFE0B2",
-  "#FFCC80",
-  "#FFB74D",
-  "#FFA726",
-  "#FF9800",
-  "#FB8C00",
-  "#F57C00",
-  "#EF6C00",
-  "#E65100",
-  "#FFD180",
-  "#FFAB40",
-  "#FF9100",
-  "#FF6D00"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialOrange = {
-  title: "material orange",
-  key: "material-orange",
-  execute: function() {
-    return colors$6;
-  }
-};
-const colors$5 = [
-  "#FBE9E7",
-  "#FFCCBC",
-  "#FFAB91",
-  "#FF8A65",
-  "#FF7043",
-  "#FF5722",
-  "#F4511E",
-  "#E64A19",
-  "#D84315",
-  "#BF360C",
-  "#FF9E80",
-  "#FF6E40",
-  "#FF3D00",
-  "#DD2C00"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialDeeporange = {
-  title: "material deep orange",
-  key: "material-deeporange",
-  execute: function() {
-    return colors$5;
-  }
-};
-const colors$4 = [
-  "#EFEBE9",
-  "#D7CCC8",
-  "#BCAAA4",
-  "#A1887F",
-  "#8D6E63",
-  "#795548",
-  "#6D4C41",
-  "#5D4037",
-  "#4E342E",
-  "#3E2723"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialBrown = {
-  title: "material brown",
-  key: "material-brown",
-  execute: function() {
-    return colors$4;
-  }
-};
-const colors$3 = [
-  "#FAFAFA",
-  "#F5F5F5",
-  "#EEEEEE",
-  "#E0E0E0",
-  "#BDBDBD",
-  "#9E9E9E",
-  "#757575",
-  "#616161",
-  "#424242",
-  "#212121"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialGray = {
-  title: "material gray",
-  key: "material-gray",
-  execute: function() {
-    return colors$3;
-  }
-};
-const colors$2 = [
-  "#ECEFF1",
-  "#CFD8DC",
-  "#B0BEC5",
-  "#90A4AE",
-  "#78909C",
-  "#607D8B",
-  "#546E7A",
-  "#455A64",
-  "#37474F",
-  "#263238"
-].map((color2) => {
-  return { color: color2 };
-});
-var materialBluegray = {
-  title: "material bluegray",
-  key: "material-bluegray",
-  execute: function() {
     return colors$2;
   }
 };
+var __glob_0_18 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": materialYellow
+});
 const colors$1 = [
   "#f8f9fa",
   "#f1f3f5",
@@ -43678,29 +41674,33 @@ var opencolorGray = {
     return colors$1;
   }
 };
-var colors = [
-  random,
-  opencolorGray,
-  materialRed,
-  materialPink,
-  materialPurple,
-  materialDeeppurple,
-  materialIndigo,
-  materialBlue,
-  materialLightblue,
-  materialCyan,
-  materialTeal,
-  materialGreen,
-  materialLightgreen,
-  materialLime,
-  materialYellow,
-  materialAmber,
-  materialOrange,
-  materialDeeporange,
-  materialBrown,
-  materialGray,
-  materialBluegray
-];
+var __glob_0_19 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": opencolorGray
+});
+var random = {
+  title: "random",
+  key: "random",
+  execute: function(count = 42) {
+    const colorList = Color.randomByCount(count).map((color2) => {
+      return { color: color2 };
+    });
+    colorList.sort((a, b) => {
+      const localA = Color.parse(a.color);
+      const localB = Color.parse(b.color);
+      return localA.h > localB.h ? 1 : -1;
+    });
+    return colorList;
+  }
+};
+var __glob_0_20 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": random
+});
+const modules = { "./colors_list/material-amber.js": __glob_0_0, "./colors_list/material-blue.js": __glob_0_1, "./colors_list/material-bluegray.js": __glob_0_2, "./colors_list/material-brown.js": __glob_0_3, "./colors_list/material-cyan.js": __glob_0_4, "./colors_list/material-deeporange.js": __glob_0_5, "./colors_list/material-deeppurple.js": __glob_0_6, "./colors_list/material-gray.js": __glob_0_7, "./colors_list/material-green.js": __glob_0_8, "./colors_list/material-indigo.js": __glob_0_9, "./colors_list/material-lightblue.js": __glob_0_10, "./colors_list/material-lightgreen.js": __glob_0_11, "./colors_list/material-lime.js": __glob_0_12, "./colors_list/material-orange.js": __glob_0_13, "./colors_list/material-pink.js": __glob_0_14, "./colors_list/material-purple.js": __glob_0_15, "./colors_list/material-red.js": __glob_0_16, "./colors_list/material-teal.js": __glob_0_17, "./colors_list/material-yellow.js": __glob_0_18, "./colors_list/opencolor-gray.js": __glob_0_19, "./colors_list/random.js": __glob_0_20 };
+var colors = Object.values(modules).map((it) => it.default);
 var ColorAssetsEditor$1 = "";
 class ColorAssetsEditor extends EditorElement {
   initState() {
@@ -43949,7 +41949,7 @@ class CSSPropertyEditor extends EditorElement {
           <label>${this.$i18n("css.property.editor.properties")}</label>
           <div class='tools'>
             ${this.makePropertySelect()}
-            <button type="button" ref='$addProperty'>${icon$1.add}</button>
+            <button type="button" ref='$addProperty'>${obj.add}</button>
           </div>
         </div>
         <div class='input grid-1 css-property-list' ref='$property'></div>
@@ -44389,12 +42389,12 @@ class CSSPropertyEditor extends EditorElement {
           <div class='title'>
             <label>${it.key}</label>
             <div class='tools'>
-              <button type="button" class='remove' data-index="${index2}">${icon$1.remove2}</button>
+              <button type="button" class='remove' data-index="${index2}">${obj.remove2}</button>
             </div>
           </div>
           <div class='title-2'>
             <div class='tools'>
-              <label><button type="button" class='refresh' data-index="${index2}">${icon$1.refresh}</button> Refresh</label>
+              <label><button type="button" class='refresh' data-index="${index2}">${obj.refresh}</button> Refresh</label>
             </div>
           </div>
           <div class='value-editor'>
@@ -44443,9 +42443,9 @@ class CubicBezierEditor extends EditorElement {
     return `
             <div class='elf--cubic-bezier-editor'>
                 <div class='predefined'>
-                    <div class='left' ref='$left'>${icon$1.chevron_left}</div>
+                    <div class='left' ref='$left'>${obj.chevron_left}</div>
                     <div class='predefined-text' ref='$text'></div>
-                    <div class='right' ref='$right'>${icon$1.chevron_right}</div>
+                    <div class='right' ref='$right'>${obj.chevron_right}</div>
                 </div>
                 <div class='animation'>
                     <canvas 
@@ -44712,9 +42712,9 @@ class DirectionEditor extends EditorElement {
     return `
       <div class="property-item direction-item">
         <div class="radius-selector" data-selected-value="${selectedValue}" ref="$selector">
-          <button type="button" data-value="all">${icon$1.border_all}</button>
+          <button type="button" data-value="all">${obj.border_all}</button>
           <button type="button" data-value="partitial">
-            ${icon$1.border_inner}
+            ${obj.border_inner}
           </button>
         </div>
         <div class="radius-value">
@@ -44795,7 +42795,7 @@ class FilterEditor extends EditorElement {
               <label>${this.props.title || ""}</label>
               <div class='tools'>
                 <select ref="$filterSelect"></select>
-                <button type="button" ref="$add" title="add Filter">${icon$1.add}</button>
+                <button type="button" ref="$add" title="add Filter">${obj.add}</button>
               </div>
           </div>
           <div class='filter-list' ref='$filterList'></div>
@@ -44833,7 +42833,7 @@ class FilterEditor extends EditorElement {
           <label>${this.$i18n("filter.property.drop-shadow")}</label>
           <div class="filter-menu">
             <button type="button" class="del" data-index="${index2}">
-              ${icon$1.remove2}
+              ${obj.remove2}
             </button>
           </div>
         </div>
@@ -44923,7 +42923,7 @@ class FilterEditor extends EditorElement {
         `}          
           <div class="filter-menu">
             <button type="button" class="del" data-index="${index2}">
-              ${icon$1.remove2}
+              ${obj.remove2}
             </button>
           </div>
         </div>
@@ -45479,8 +43479,8 @@ class IconListViewEditor extends EditorElement {
     };
   }
   [LOAD("$body")]() {
-    return Object.keys(icon$1).map((key) => {
-      var html2 = icon$1[key];
+    return Object.keys(obj).map((key) => {
+      var html2 = obj[key];
       var selected = key === this.state.value ? "selected" : "";
       return `<div class='list-view-item ${selected}'  data-key='${key}'>${html2}</div>`;
     });
@@ -45550,11 +43550,11 @@ class InputArrayEditor extends EditorElement {
 var InputRangeEditor$1 = "";
 class InputRangeEditor extends EditorElement {
   initState() {
-    var units = this.props.units || "px,em,%";
+    var units = this.props.units || "px,em,%,auto";
     var value = Length.parse(this.props.value || Length.z());
     let label = this.props.label || "";
-    if (icon$1[label]) {
-      label = icon$1[label];
+    if (obj[label]) {
+      label = obj[label];
     }
     return {
       removable: this.props.removable === "true",
@@ -45566,6 +43566,7 @@ class InputRangeEditor extends EditorElement {
       key: this.props.key,
       params: this.props.params || "",
       layout: this.props.layout || "",
+      disabled: this.props.disabled === "true",
       units,
       value
     };
@@ -45574,7 +43575,7 @@ class InputRangeEditor extends EditorElement {
     return `<div class='small-editor' ref='$body'></div>`;
   }
   [LOAD("$body")]() {
-    var { min, max, step: step2, label, compact, removable, layout: layout2 } = this.state;
+    var { min, max, step: step2, label, compact, removable, layout: layout2, disabled } = this.state;
     var value = +this.state.value.value.toString();
     if (isNaN(value)) {
       value = 0;
@@ -45584,11 +43585,12 @@ class InputRangeEditor extends EditorElement {
     return `
         <div 
             ref="$range",
-            class="${OBJECT_TO_CLASS({
+            class="${OBJECT_TO_CLASS$1({
       "elf--input-range-editor": true,
       "has-label": !!label,
       "compact": !!compact,
       "is-removable": removable,
+      "disabled": disabled,
       [layoutClass]: true
     })}"
         >
@@ -45601,7 +43603,7 @@ class InputRangeEditor extends EditorElement {
                     
                 </div>
             </div>
-            <button type='button' class='remove' ref='$remove' title='Remove'>${icon$1.remove}</button>
+            <button type='button' class='remove' ref='$remove' title='Remove'>${obj.remove}</button>
         </div>
     `;
   }
@@ -45611,9 +43613,17 @@ class InputRangeEditor extends EditorElement {
   setValue(value) {
     this.setState({
       value: Length.parse(value)
-    }, false);
-    this.refs.$propertyNumber.val(this.state.value.value);
-    this.refs.$unit.val(this.state.value.unit);
+    });
+  }
+  disabled() {
+    this.setState({
+      disabled: true
+    });
+  }
+  enabled() {
+    this.setState({
+      disabled: false
+    });
   }
   [FOCUS("$propertyNumber")](e) {
     this.refs.$range.addClass("focused");
@@ -45694,7 +43704,7 @@ class RangeEditor extends EditorElement {
     return `
         <div 
             ref="$range"
-            class="${OBJECT_TO_CLASS({
+            class="${OBJECT_TO_CLASS$1({
       "elf--range--editor": true,
       "has-label": !!label,
       "compact": !!compact,
@@ -45707,10 +43717,10 @@ class RangeEditor extends EditorElement {
                 <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step2}" /> 
                 <div class='area' ref='$rangeArea'>
                     <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step2}" tabIndex="1" />
-                    <object refClass="SelectEditor"  ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options=${variable$4(units)} onchange='changeUnit' />
+                    <object refClass="SelectEditor"  ref='$unit' key='unit' value="${this.state.value.unit}" options=${variable$4(units)} onchange='changeUnit' />
                 </div>
             </div>
-            <button type='button' class='remove thin' ref='$remove' title='Remove'>${icon$1.remove}</button>
+            <button type='button' class='remove thin' ref='$remove' title='Remove'>${obj.remove}</button>
         </div>
     `;
   }
@@ -45788,10 +43798,10 @@ class IterationCountEditor extends RangeEditor {
 var MediaProgressEditor$1 = "";
 class MediaProgressEditor extends EditorElement {
   initState() {
-    const [start2, end, duration] = (this.props.value || "").split(":");
+    const [start2, end2, duration] = (this.props.value || "").split(":");
     return {
       start: +(start2 || 0),
-      end: +(end || 1),
+      end: +(end2 || 1),
       duration: +(duration || 1)
     };
   }
@@ -45803,7 +43813,7 @@ class MediaProgressEditor extends EditorElement {
     this.children.$e.setMax(this.state.duration);
   }
   template() {
-    const { start: start2, end, duration } = this.state;
+    const { start: start2, end: end2, duration } = this.state;
     return `
             <div class='elf--media-progress-editor'>
                 <div class='drag-area'>
@@ -45832,7 +43842,7 @@ class MediaProgressEditor extends EditorElement {
                         min="0" 
                         max="${duration}" 
                         step="0.001" 
-                        value="${end * duration}" 
+                        value="${end2 * duration}" 
                         onchange="changeValue" 
                     />
                 </div>                
@@ -45887,23 +43897,23 @@ class MediaProgressEditor extends EditorElement {
   }
   [BIND("$bar")]() {
     const start2 = this.state.start || 0;
-    const end = this.state.end || 1;
+    const end2 = this.state.end || 1;
     return {
       style: {
         left: Length.percent(start2 * 100),
-        width: Length.percent((end - start2) * 100)
+        width: Length.percent((end2 - start2) * 100)
       }
     };
   }
   getValue() {
-    const { start: start2, end, duration } = this.state;
-    return `${start2}:${end}:${duration}`;
+    const { start: start2, end: end2, duration } = this.state;
+    return `${start2}:${end2}:${duration}`;
   }
   setValue(value) {
-    const [start2, end, duration] = value.split(":");
+    const [start2, end2, duration] = value.split(":");
     this.setState({
       start: Number(start2),
-      end: Number(end),
+      end: Number(end2),
       duration: Number(duration)
     });
   }
@@ -45918,8 +43928,8 @@ class NumberInputEditor extends EditorElement {
     var value = Length.parse(this.props.value || Length.number(0));
     value = value.toUnit("number");
     let label = this.props.label || "";
-    if (icon$1[label]) {
-      label = icon$1[label];
+    if (obj[label]) {
+      label = obj[label];
     }
     return {
       label,
@@ -46033,7 +44043,7 @@ class NumberRangeEditor extends EditorElement {
                     </div>
                 </div>
             </div>
-            <button type='button' class='remove' ref='$remove' title='Remove'>${icon$1.remove}</button>
+            <button type='button' class='remove' ref='$remove' title='Remove'>${obj.remove}</button>
         </div>
     `;
   }
@@ -46054,6 +44064,7 @@ class NumberRangeEditor extends EditorElement {
     return this.state.value;
   }
   setValue(value) {
+    console.log(value);
     this.setState({
       value: Length.parse(value)
     });
@@ -46277,8 +44288,8 @@ class SelectIconEditor extends EditorElement {
       const [value2, text2] = it.split(":");
       return { value: value2, text: text2 };
     });
-    var icons = (this.props.icons || "").split(splitChar).map((it) => it.trim());
-    var colors2 = (this.props.colors || "").split(splitChar).map((it) => it.trim());
+    var icons = this.props.icons || [];
+    var colors2 = this.props.colors || [];
     var value = this.props.value || "";
     return {
       label: this.props.label || "",
@@ -46323,22 +44334,22 @@ class SelectIconEditor extends EditorElement {
       var isSelected = value === this.state.value;
       var selected = isSelected ? "selected" : "";
       if (it.value === "") {
-        var label = icon$1.close;
+        var label = obj.close;
         title2 = "close";
       } else {
         var iconKey = this.state.icons[index2];
-        if (icon$1[iconKey]) {
+        if (obj[iconKey]) {
           iconClass = "icon";
         }
         title2 = label;
-        label = icon$1[iconKey] || label || iconKey || it.text || it.value;
+        label = obj[iconKey] || label || iconKey || it.text || it.value;
       }
       var color2 = this.state.colors[index2];
       var css = {};
       if (isSelected && color2) {
         css["background-color"] = color2;
       }
-      return `<div class='select-icon-item ${selected} ${iconClass}' style='${CSS_TO_STRING(css)}' data-value="${value}" title='${title2}'>${label}</div>`;
+      return `<div class='select-icon-item ${selected} ${iconClass}' style='${CSS_TO_STRING$1(css)}' data-value="${value}" title='${title2}'>${label}</div>`;
     });
   }
   [CLICK("$options .select-icon-item")](e) {
@@ -46374,7 +44385,7 @@ class StrokeDashArrayEditor extends EditorElement {
       <div class='elf--stroke-dasharray-editor'>
         <div class='tools ${hasLabel ? "has-label" : ""}'>
           ${hasLabel ? `<label class='label'>${label}</label>` : ""}
-          <label ref='$add'>${icon$1.add} ${this.$i18n("stroke.dasharray.editor.add")}</label>
+          <label ref='$add'>${obj.add} ${this.$i18n("stroke.dasharray.editor.add")}</label>
         </div>      
         <div ref='$body'></div>
       </div>
@@ -46415,7 +44426,7 @@ class StrokeDashArrayEditor extends EditorElement {
             step="1"
             onchange="changeRangeEditor" 
           />
-          <button type="button" data-index="${index2}" class='delete'>${icon$1.remove2}</button>
+          <button type="button" data-index="${index2}" class='delete'>${obj.remove2}</button>
         </div>
       `;
     });
@@ -46554,7 +44565,7 @@ class VarEditor extends EditorElement {
             <div class='label ${labelClass}' >
                 <label>${this.props.title || ""}</label>
                 <div class='tools'>
-                    <button type="button" ref="$add" title="add Var">${icon$1.add}</button>
+                    <button type="button" ref="$add" title="add Var">${obj.add}</button>
                 </div>
             </div>
             <div class='var-list' ref='$varList'></div>
@@ -46583,7 +44594,7 @@ class VarEditor extends EditorElement {
                     </div>
                     <div class="tools">
                         <button type="button" class="del" data-index="${index2}">
-                        ${icon$1.remove2}
+                        ${obj.remove2}
                         </button>
                     </div>
                 </div>
@@ -46797,11 +44808,11 @@ class HTMLRenderer {
     }
     const currentProject = item2.top;
     let keyframeCode = modifyNewLine(filterKeyName(currentProject ? currentProject.toKeyframeString() : ""));
-    let rootVariable = currentProject ? CSS_TO_STRING(currentProject.toRootVariableCSS()) : "";
+    let rootVariable = currentProject ? CSS_TO_STRING$1(currentProject.toRootVariableCSS()) : "";
     const current = item2;
-    const cssCode = filterKeyName(current ? TAG_TO_STRING(CSS_TO_STRING(this.toCSS(current))) : "");
+    const cssCode = filterKeyName(current ? TAG_TO_STRING(CSS_TO_STRING$1(this.toCSS(current))) : "");
     const nestedCssCode = current ? this.toNestedCSS(current).map((it) => {
-      var cssText = it.cssText ? it.cssText : CSS_TO_STRING(it.css);
+      var cssText = it.cssText ? it.cssText : CSS_TO_STRING$1(it.css);
       return `${it.selector} { 
     ${filterKeyName(TAG_TO_STRING(cssText), "&nbsp;&nbsp;")}
     }`;
@@ -46863,13 +44874,13 @@ const faceKeys = [
 ];
 class CubeRender extends LayerRender$1 {
   toDefaultCSS(item2) {
-    let obj = {};
+    let obj2 = {};
     if (item2.x)
-      obj.left = item2.x;
+      obj2.left = item2.x;
     if (item2.y)
-      obj.top = item2.y;
-    obj.visibility = item2.visible ? "visible" : "hidden";
-    return __spreadValues(__spreadValues({}, obj), this.toKeyListCSS(item2, [
+      obj2.top = item2.y;
+    obj2.visibility = item2.visible ? "visible" : "hidden";
+    return __spreadValues(__spreadValues({}, obj2), this.toKeyListCSS(item2, [
       "position",
       "right",
       "bottom",
@@ -46913,7 +44924,7 @@ class CubeRender extends LayerRender$1 {
           right: 0px;
           opacity: 1;
           pointer-events: none;
-          ${CSS_TO_STRING(css)}
+          ${CSS_TO_STRING$1(css)}
         `.trim()
       },
       {
@@ -47034,12 +45045,12 @@ class ImageRender$2 extends LayerRender$1 {
 }
 class ProjectRender$2 extends DomRender$1 {
   toRootVariableCSS(item2) {
-    let obj = {};
+    let obj2 = {};
     item2.rootVariable.split(";").filter((it) => it.trim()).forEach((it) => {
       var [key, value] = it.split(":");
-      obj[`--${key}`] = value;
+      obj2[`--${key}`] = value;
     });
-    return obj;
+    return obj2;
   }
   toCSS(item2) {
     return Object.assign({}, ...this.toRootVariableCSS(item2));
@@ -47050,7 +45061,7 @@ class ProjectRender$2 extends DomRender$1 {
     return `
 <style type='text/css' data-renderer-type="html" data-id='${item2.id}'>
     :root {
-        ${CSS_TO_STRING(rootVariable)}
+        ${CSS_TO_STRING$1(rootVariable)}
     }
     /* keyframe */
     ${keyframeString}
@@ -47063,7 +45074,7 @@ class ProjectRender$2 extends DomRender$1 {
     return `
 <style type='text/css' data-renderer-type="html" data-id='${item2.id}'>
     :root {
-        ${CSS_TO_STRING(rootVariable)}
+        ${CSS_TO_STRING$1(rootVariable)}
     }
     /* keyframe */
     ${keyframeString}
@@ -47083,13 +45094,16 @@ class RectRender$2 extends LayerRender$1 {
 }
 class SVGItemRender$2 extends LayerRender$1 {
   update(item2, currentElement) {
+    this.updateElementCache(item2, currentElement);
+    super.update(item2, currentElement);
+  }
+  updateElementCache(item2, currentElement) {
     if (item2.getCache("element") !== currentElement) {
       item2.addCache("element", currentElement);
       const $path = currentElement.$("path");
       item2.addCache("svgElement", $path.parent().el);
       item2.addCache("pathElement", $path.el);
     }
-    super.update(item2, currentElement);
   }
   updateDefString(item2, currentElement) {
     var $defs = currentElement.$("defs");
@@ -47133,12 +45147,18 @@ class SVGItemRender$2 extends LayerRender$1 {
   toFillSVG(item2) {
     var _a;
     const fillValue = this.cachedFill(item2);
-    return (_a = fillValue == null ? void 0 : fillValue.toSVGString) == null ? void 0 : _a.call(fillValue, this.fillId(item2));
+    return (_a = fillValue == null ? void 0 : fillValue.toSVGString) == null ? void 0 : _a.call(fillValue, this.fillId(item2), {
+      width: item2.width.value,
+      height: item2.height.value
+    });
   }
   toStrokeSVG(item2) {
     var _a;
     const strokeValue = this.cachedStroke(item2);
-    return (_a = strokeValue == null ? void 0 : strokeValue.toSVGString) == null ? void 0 : _a.call(strokeValue, this.strokeId(item2));
+    return (_a = strokeValue == null ? void 0 : strokeValue.toSVGString) == null ? void 0 : _a.call(strokeValue, this.strokeId(item2), {
+      width: item2.width.value,
+      height: item2.height.value
+    });
   }
   toFillValue(item2) {
     var _a;
@@ -47647,6 +45667,124 @@ class VideoRender$2 extends LayerRender$1 {
     super.update(item2, currentElement);
   }
 }
+class BooleanPathRender$2 extends SVGItemRender$2 {
+  toFillSVG(item2) {
+    const layers2 = item2.layers;
+    const op = item2["boolean-operation"];
+    switch (op) {
+      case "difference":
+        return SVGFill.parseImage(layers2[1].fill || "transparent").toSVGString(this.fillId(item2));
+    }
+    return SVGFill.parseImage(layers2[0].fill || "transparent").toSVGString(this.fillId(item2));
+  }
+  toStrokeSVG(item2) {
+    const layers2 = item2.layers;
+    const op = item2["boolean-operation"];
+    switch (op) {
+      case "difference":
+        return SVGFill.parseImage(layers2[1].stroke || "transparent").toSVGString(this.strokeId(item2));
+    }
+    return SVGFill.parseImage(layers2[0].stroke || "black").toSVGString(this.strokeId(item2));
+  }
+  toFillValue(item2) {
+    var _a, _b;
+    const layers2 = item2.layers;
+    const op = item2["boolean-operation"];
+    switch (op) {
+      case "difference":
+        return SVGFill.parseImage(layers2[1].fill || "transparent").toSVGString(this.fillId(item2));
+    }
+    return (_b = (_a = SVGFill.parseImage(layers2[0].fill || "transparent")).toFillValue) == null ? void 0 : _b.call(_a, this.fillId(item2));
+  }
+  toFillOpacityValue(item2) {
+    return Color.parse(item2.fill || "transparent").a;
+  }
+  toStrokeValue(item2) {
+    var _a, _b, _c, _d;
+    const layers2 = item2.layers;
+    const op = item2["boolean-operation"];
+    switch (op) {
+      case "difference":
+        return (_b = (_a = SVGFill.parseImage(layers2[1].stroke || "transparent")).toFillValue) == null ? void 0 : _b.call(_a, this.strokeId(item2));
+    }
+    return (_d = (_c = SVGFill.parseImage(layers2[0].stroke || "black")).toFillValue) == null ? void 0 : _d.call(_c, this.strokeId(item2));
+  }
+  update(item2, currentElement) {
+    if (!currentElement)
+      return;
+    const $path = currentElement.$(`[data-boolean-path-id="${item2.id}"]`);
+    if ($path) {
+      if (item2.hasChangedField("changedChildren", "d", "boolean-operation", "width", "height")) {
+        $path.setAttrNS({
+          "d": item2.d
+        });
+      }
+      if (item2.hasChangedField("fill")) {
+        $path.setAttrNS({
+          "fill": this.toFillValue(item2)
+        });
+      }
+      if (item2.hasChangedField("stroke")) {
+        $path.setAttrNS({
+          "stroke": this.toStrokeValue(item2)
+        });
+      }
+      if (item2.hasChangedField("filter")) {
+        $path.setAttrNS({
+          "filter": this.toFilterValue(item2)
+        });
+      }
+      if (item2.hasChangedField("fill-rule")) {
+        $path.setAttrNS({
+          "fill-rule": item2["fill-rule"] || "nonezero"
+        });
+      }
+      if (item2.hasChangedField("stroke-linejoin")) {
+        $path.setAttrNS({
+          "stroke-linejoin": item2["stroke-linejoin"]
+        });
+      }
+      if (item2.hasChangedField("stroke-linecap")) {
+        $path.setAttrNS({
+          "stroke-linecap": item2["stroke-linecap"]
+        });
+      }
+    }
+    super.update(item2, currentElement);
+  }
+  updateElementCache(item2, currentElement) {
+    if (item2.getCache("element") !== currentElement) {
+      item2.addCache("element", currentElement);
+      const $path = currentElement.$(`[data-boolean-path-id="${item2.id}"]`);
+      item2.addCache("svgElement", $path.parent().el);
+      item2.addCache("pathElement", $path.el);
+    }
+  }
+  render(item2, renderer) {
+    var { id, name: name2, itemType } = item2;
+    return `    
+<div class="element-item ${itemType}" data-id="${id}" data-title="${name2}">
+  ${this.toDefString(item2)}
+  ${item2.layers.map((it) => {
+      return renderer.render(it, renderer);
+    }).join("")}
+  <svg xmlns="http://www.w3.org/2000/svg" class="boolean-path-item" width="100%" height="100%" overflow="visible">
+    <path 
+      class="svg-path-item"
+      d="${item2.d}"
+      data-boolean-path-id="${id}" 
+      fill-rule="${item2["fill-rule"]}"
+      filter="${this.toFilterValue(item2)}"
+      fill="${this.toFillValue(item2)}"
+      stroke="${this.toStrokeValue(item2)}"
+      stroke-linejoin="${item2["stroke-linejoin"]}"
+      stroke-linecap="${item2["stroke-linecap"]}"
+    />
+  </svg>
+</div>
+    `;
+  }
+}
 function rendererHtml(editor) {
   editor.registerRendererType("html", new HTMLRenderer(editor));
   editor.registerRenderer("html", "project", new ProjectRender$2());
@@ -47656,6 +45794,7 @@ function rendererHtml(editor) {
   editor.registerRenderer("html", "image", new ImageRender$2());
   editor.registerRenderer("html", "text", new TextRender$2());
   editor.registerRenderer("html", "video", new VideoRender$2());
+  editor.registerRenderer("html", "boolean-path", new BooleanPathRender$2());
   editor.registerRenderer("html", "svg-path", new SVGPathRender$2());
   editor.registerRenderer("html", "polygon", new SVGPolygonRender$2());
   editor.registerRenderer("html", "star", new SVGStarRender$2());
@@ -47683,6 +45822,11 @@ class JSONRenderer {
       return await currentRenderer.render(item2, renderer || this);
     }
   }
+  async renderAll(items, renderer) {
+    return await Promise.all(items.map(async (it) => {
+      return await this.render(it, renderer);
+    }));
+  }
   async getResourceDataURI(item2, renderer) {
   }
 }
@@ -47709,12 +45853,12 @@ class BaseAssetRender extends ItemRender {
 }
 class MovableRender extends BaseAssetRender {
   async toCloneObject(item2, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item2, renderer)), item2.attrs("x", "y", "width", "height"));
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item2, renderer)), item2.attrs("x", "y", "right", "bottom", "width", "height", "transform", "transform-origin"));
   }
 }
 class DomRender extends MovableRender {
   async toCloneObject(item2, renderer) {
-    return __spreadProps(__spreadValues(__spreadValues({}, await super.toCloneObject(item2, renderer)), item2.attrs("position", "right", "bottom", "rootVariable", "variable", "transform", "filter", "backdrop-filter", "background-color", "background-image", "text-clip", "border-radius", "border", "box-shadow", "text-shadow", "clip-path", "color", "font-size", "font-stretch", "line-height", "text-align", "text-transform", "text-decoration", "letter-spacing", "word-spacing", "text-indent", "perspective-origin", "transform-origin", "transform-style", "perspective", "mix-blend-mode", "overflow", "opacity", "rotate", "flex-layout", "grid-layout", "animation", "transition", "boolean-operation", "boolean-path")), {
+    return __spreadProps(__spreadValues(__spreadValues({}, await super.toCloneObject(item2, renderer)), item2.attrs("position", "rootVariable", "variable", "transform", "filter", "backdrop-filter", "background-color", "background-image", "text-clip", "border-radius", "border", "box-shadow", "text-shadow", "clip-path", "color", "font-size", "font-stretch", "line-height", "text-align", "text-transform", "text-decoration", "letter-spacing", "word-spacing", "text-indent", "perspective-origin", "transform-origin", "transform-style", "perspective", "mix-blend-mode", "overflow", "opacity", "rotate", "layout", "flex-layout", "grid-layout", "animation", "transition", "boolean-operation", "boolean-path")), {
       selectors: item2.selectors.map((selector2) => selector2.clone()),
       svg: item2.svg.map((svg) => svg.clone())
     });
@@ -47814,6 +45958,11 @@ class SplineRender$1 extends SVGItemRender$1 {
     return __spreadValues(__spreadValues({}, await super.toCloneObject(item2, renderer)), item2.attrs("points", "boundary"));
   }
 }
+class BooleanPathRender$1 extends SVGItemRender$1 {
+  async toCloneObject(item2, renderer) {
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item2, renderer)), item2.attrs("d", "boolean-operation"));
+  }
+}
 function rendererJson(editor) {
   editor.registerRendererType("json", new JSONRenderer(editor));
   editor.registerRenderer("json", "project", new ProjectRender$1());
@@ -47826,6 +45975,7 @@ function rendererJson(editor) {
   editor.registerRenderer("json", "text", new TextRender$1());
   editor.registerRenderer("json", "video", new VideoRender$1());
   editor.registerRenderer("json", "svg-path", new SVGPathRender$1());
+  editor.registerRenderer("json", "boolean-path", new BooleanPathRender$1());
   editor.registerRenderer("json", "polygon", new SVGPolygonRender$1());
   editor.registerRenderer("json", "star", new SVGStarRender$1());
   editor.registerRenderer("json", "spline", new SplineRender$1());
@@ -47967,7 +46117,7 @@ class SVGRender extends DomRender$1 {
     height="${height.value}"
     overflow="visible"
 >
-    <${tagName} xmlns="http://www.w3.org/1999/xhtml" style="${CSS_TO_STRING(css)};width:100%;height:100%;"></${tagName}>
+    <${tagName} xmlns="http://www.w3.org/1999/xhtml" style="${CSS_TO_STRING$1(css)};width:100%;height:100%;"></${tagName}>
 </foreignObject>    
 ${item2.layers.map((it) => {
         return renderer.render(it, renderer);
@@ -47996,7 +46146,7 @@ ${encoding ? `<?xml version="1.0"?>` : ""}
     width="${width2.value}"
     height="${height.value}"
     viewBox="0 0 ${width2.value} ${height.value}"
-    style="${CSS_TO_STRING(css)}"
+    style="${CSS_TO_STRING$1(css)}"
 >
     ${this.toDefString(item2)}
     ${item2.layers.map((it) => {
@@ -48031,7 +46181,7 @@ class IFrameRender extends SVGLayerRender {
           xmlns="http://www.w3.org/1999/xhtml"
           width="100%" 
           height="100%" 
-          style="border:0px;width:100%;height:100%;pointer-events:none; ${CSS_TO_STRING(css)}" 
+          style="border:0px;width:100%;height:100%;pointer-events:none; ${CSS_TO_STRING$1(css)}" 
           src="${url}"
       ></iframe>
   </foreignObject>              
@@ -48055,7 +46205,7 @@ class ImageRender extends SVGLayerRender {
                 height="${height.value}"
             >
                 <div xmlns="http://www.w3.org/1999/xhtml">
-                    <img src='${this.getUrl(item2)}' style="width:100%;height:100%; ${CSS_TO_STRING(css)}"  />
+                    <img src='${this.getUrl(item2)}' style="width:100%;height:100%; ${CSS_TO_STRING$1(css)}"  />
                 </div>
             </foreignObject>              
           `;
@@ -48152,14 +46302,14 @@ class SplineRender extends SVGItemRender {
     var { d } = item2;
     return this.wrappedRender(item2, () => {
       return `
-<path ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
+<path ${OBJECT_TO_PROPERTY$1(__spreadProps(__spreadValues({
         "class": "spline-item",
         d,
         filter: this.toFilterValue(item2),
         fill: this.toFillValue(item2),
         stroke: this.toStrokeValue(item2)
       }, this.toSVGAttribute(item2)), {
-        style: CSS_TO_STRING(this.toCSS(item2))
+        style: CSS_TO_STRING$1(this.toCSS(item2))
       }))} />
     `;
     });
@@ -48185,14 +46335,14 @@ class SVGPathRender extends SVGItemRender {
     var { d } = item2;
     return this.wrappedRender(item2, () => {
       return `
-<path ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
+<path ${OBJECT_TO_PROPERTY$1(__spreadProps(__spreadValues({
         "class": "svg-path-item",
         d,
         filter: this.toFilterValue(item2),
         fill: this.toFillValue(item2),
         stroke: this.toStrokeValue(item2)
       }, this.toSVGAttribute(item2)), {
-        style: CSS_TO_STRING(this.toCSS(item2))
+        style: CSS_TO_STRING$1(this.toCSS(item2))
       }))} />
     `;
     });
@@ -48217,14 +46367,14 @@ class SVGPolygonRender extends SVGItemRender {
     var { d } = item2;
     return this.wrappedRender(item2, () => {
       return `
-<path ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
+<path ${OBJECT_TO_PROPERTY$1(__spreadProps(__spreadValues({
         "class": "polygon-item",
         d,
         filter: this.toFilterValue(item2),
         fill: this.toFillValue(item2),
         stroke: this.toStrokeValue(item2)
       }, this.toSVGAttribute(item2)), {
-        style: CSS_TO_STRING(this.toCSS(item2))
+        style: CSS_TO_STRING$1(this.toCSS(item2))
       }))} />
     `;
     });
@@ -48249,14 +46399,14 @@ class SVGStarRender extends SVGItemRender {
     var { d } = item2;
     return this.wrappedRender(item2, () => {
       return `
-<path ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
+<path ${OBJECT_TO_PROPERTY$1(__spreadProps(__spreadValues({
         "class": "star-item",
         d,
         filter: this.toFilterValue(item2),
         fill: this.toFillValue(item2),
         stroke: this.toStrokeValue(item2)
       }, this.toSVGAttribute(item2)), {
-        style: CSS_TO_STRING(this.toCSS(item2))
+        style: CSS_TO_STRING$1(this.toCSS(item2))
       }))} />
     `;
     });
@@ -48307,7 +46457,7 @@ class SVGTextPathRender extends SVGItemRender {
     return this.wrappedRender(item2, () => {
       const { textLength, lengthAdjust, startOffset } = item2;
       return `
-        <textPath ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
+        <textPath ${OBJECT_TO_PROPERTY$1(__spreadProps(__spreadValues({
         "xlink:href": `#${this.toPathId(item2)}`,
         textLength,
         lengthAdjust,
@@ -48316,7 +46466,7 @@ class SVGTextPathRender extends SVGItemRender {
         fill: this.toFillValue(item2),
         stroke: this.toStrokeValue(item2)
       }, this.toSVGAttribute(item2)), {
-        style: CSS_TO_STRING(this.toCSS(item2))
+        style: CSS_TO_STRING$1(this.toCSS(item2))
       }))} >${item2.text}</textPath>
       `;
     });
@@ -48344,7 +46494,7 @@ class SVGTextRender extends SVGItemRender {
     var { id, textLength, lengthAdjust } = item2;
     return this.wrappedRender(item2, () => {
       return `
-        <text ${OBJECT_TO_PROPERTY(__spreadProps(__spreadValues({
+        <text ${OBJECT_TO_PROPERTY$1(__spreadProps(__spreadValues({
         "class": "svg-text-item",
         textLength,
         lengthAdjust,
@@ -48352,7 +46502,7 @@ class SVGTextRender extends SVGItemRender {
         fill: this.toFillValue(item2),
         stroke: this.toStrokeValue(item2)
       }, this.toSVGAttribute(item2)), {
-        style: CSS_TO_STRING(this.toCSS(item2))
+        style: CSS_TO_STRING$1(this.toCSS(item2))
       }))} >${item2.text}</text>
       `;
     });
@@ -48415,7 +46565,7 @@ class TextRender extends SVGLayerRender {
     return this.wrappedRender(item2, () => {
       return `
             <foreignObject width="${width2.value}" height="${height.value}">
-                <p xmlns="http://www.w3.org/1999/xhtml" style="${CSS_TO_STRING(css)}">${content2}</p>
+                <p xmlns="http://www.w3.org/1999/xhtml" style="${CSS_TO_STRING$1(css)}">${content2}</p>
             </foreignObject>              
           `;
     });
@@ -48459,9 +46609,43 @@ class VideoRender extends SVGLayerRender {
                     loop="${loop}"
                     crossorigin="${crossorigin}"
                     autoplay="${autoplay}"
-                    style="${CSS_TO_STRING(css)};width:100%;height:100%;"></video>
+                    style="${CSS_TO_STRING$1(css)};width:100%;height:100%;"></video>
             </foreignObject>    
             `;
+    });
+  }
+}
+class BooleanPathRender extends SVGItemRender {
+  update(item2, currentElement) {
+    if (!currentElement)
+      return;
+    const $path = currentElement.$(`[data-boolean-path-id="${item2.id}"]`);
+    if ($path) {
+      $path.setAttr({
+        "d": item2.d,
+        "filter": this.toFilterValue(item2),
+        "fill": this.toFillValue(item2),
+        "stroke": this.toStrokeValue(item2)
+      });
+      item2.totalLength = $path.totalLength;
+    }
+    this.updateDefString(item2, currentElement);
+  }
+  render(item2) {
+    var { d } = item2;
+    return this.wrappedRender(item2, () => {
+      return `
+<path ${OBJECT_TO_PROPERTY$1(__spreadProps(__spreadValues({
+        "class": "boolean-path-item",
+        "data-boolean-path-id": item2.id,
+        d,
+        filter: this.toFilterValue(item2),
+        fill: this.toFillValue(item2),
+        stroke: this.toStrokeValue(item2)
+      }, this.toSVGAttribute(item2)), {
+        style: CSS_TO_STRING$1(this.toCSS(item2))
+      }))} />
+    `;
     });
   }
 }
@@ -48476,6 +46660,7 @@ function rendererSvg(editor) {
   editor.registerRenderer("svg", "iframe", new IFrameRender());
   editor.registerRenderer("svg", "video", new VideoRender());
   editor.registerRenderer("svg", "text", new TextRender());
+  editor.registerRenderer("svg", "boolean-path", new BooleanPathRender());
   editor.registerRenderer("svg", "svg-path", new SVGPathRender());
   editor.registerRenderer("svg", "polygon", new SVGPolygonRender());
   editor.registerRenderer("svg", "star", new SVGStarRender());
@@ -48570,7 +46755,7 @@ class SelectorProperty extends BaseProperty {
       <div style='display:inline-block;'>
         <object refClass="SelectEditor"  ref='$select' key='selector' icon="true" none-value="selector" options=${variable$4(selectorList)} />
       </div>
-      <button type="button" ref="$add" title="add Selector">${icon$1.add}</button>
+      <button type="button" ref="$add" title="add Selector">${obj.add}</button>
     `;
   }
   makeSelectorTemplate(selector2, index2) {
@@ -48582,7 +46767,7 @@ class SelectorProperty extends BaseProperty {
             <span>${selector2.selector || `&lt;${this.$i18n("selector.property.none")}&gt;`}</span>
           </div>
           <div class='tools'>
-              <button type="button" class="del" data-index="${index2}">${icon$1.remove2}</button>
+              <button type="button" class="del" data-index="${index2}">${obj.remove2}</button>
           </div>
         </div>
       </div>
@@ -48746,13 +46931,13 @@ class SVGFilterAssetsProperty extends BaseProperty {
             </div>
           </div>
           <div class='tools'>
-            <button type="button" class='copy'>${icon$1.copy}</button>          
-            <button type="button" class='remove'>${icon$1.remove}</button>
+            <button type="button" class='copy'>${obj.copy}</button>          
+            <button type="button" class='remove'>${obj.remove}</button>
           </div>
         </div>
       `;
     });
-    results.push(`<div class='add-svgfilter-item'><button type="button">${icon$1.add}</button></div>`);
+    results.push(`<div class='add-svgfilter-item'><button type="button">${obj.add}</button></div>`);
     return results;
   }
   executeSVGFilter(callback, isRefresh = true, isEmit = true) {
@@ -48792,9 +46977,9 @@ class SVGFilterAssetsProperty extends BaseProperty {
   [INPUT("$svgfilterList input")](e) {
     var $item = e.$dt.closest("svgfilter-item");
     var index2 = +$item.attr("data-index");
-    var obj = e.$dt.attrKeyValue("data-key");
+    var obj2 = e.$dt.attrKeyValue("data-key");
     this.executeSVGFilter((project2) => {
-      project2.setSVGFilterValue(index2, obj);
+      project2.setSVGFilterValue(index2, obj2);
       this.emit("refreshSVGArea");
     }, false);
   }
@@ -50422,8 +48607,8 @@ class SVGFilterSelectEditor extends EditorElement {
             <div class='elf--svg-filter-select-editor ${hasLabel}'>
                 ${label ? `<label>${label}</label>` : ""}
                 <select ref='$options'></select>
-                <button type='button' class='open thin' ref='$open' title='Open SVG Filter Editor'>${icon$1.fullscreen}</button>
-                <button type='button' class='remove thin' ref='$remove' title='Remove'>${icon$1.remove}</button>
+                <button type='button' class='open thin' ref='$open' title='Open SVG Filter Editor'>${obj.fullscreen}</button>
+                <button type='button' class='remove thin' ref='$remove' title='Remove'>${obj.remove}</button>
             </div>
         `;
   }
@@ -50559,6 +48744,14 @@ function svgItem(editor) {
   editor.registerInspector("svg-item", (current) => {
     return [
       {
+        key: "edit",
+        editor: "Button",
+        editorOptions: {
+          text: "Edit",
+          action: ["open.editor", current]
+        }
+      },
+      {
         key: "fill",
         editor: "FillSingleEditor",
         editorOptions: {
@@ -50627,7 +48820,7 @@ function svgItem(editor) {
         editor: "ToggleCheckBox",
         editorOptions: {
           label: editor.$i18n("svg.item.property.lineCap"),
-          toggleLabels: ["BUTT", "ROUND", "SQUARE"],
+          toggleLabels: ["line_cap_butt", "line_cap_round", "line_cap_square"],
           toggleValues: ["butt", "round", "square"]
         },
         defaultValue: current["stroke-linecap"] || "butt"
@@ -50637,8 +48830,8 @@ function svgItem(editor) {
         editor: "ToggleCheckBox",
         editorOptions: {
           label: editor.$i18n("svg.item.property.lineJoin"),
-          toggleLabels: ["MITER", "BEVEL", "ROUND"],
-          toggleValues: ["miter", "bevel", "round"]
+          toggleLabels: ["line_join_miter", "line_join_round", "line_join_bevel"],
+          toggleValues: ["miter", "round", "bevel"]
         },
         defaultValue: current["stroke-linejoin"] || "miter"
       },
@@ -50646,8 +48839,7 @@ function svgItem(editor) {
         key: "mix-blend-mode",
         editor: "BlendSelectEditor",
         editorOptions: {
-          label: editor.$i18n("svg.item.property.blend"),
-          options: ["butt", "round", "square"]
+          label: editor.$i18n("svg.item.property.blend")
         },
         defaultValue: current["mix-blend-mode"]
       }
@@ -50943,7 +49135,7 @@ class TextProperty extends BaseProperty {
     this.command("setAttributeForMulti", `change text property : ${key}`, this.$selection.packByValue({ [key]: value }));
   }
 }
-function text(editor) {
+function text$1(editor) {
   editor.registerMenuItem("inspector.tab.style", {
     TextProperty
   });
@@ -51059,7 +49251,7 @@ class TextShadowEditor extends EditorElement {
         <div class='label ${labelClass}' >
             <label>${this.props.title || ""}</label>        
             <div class='tools'>
-              <button type="button" ref="$add" title="add Text Shadow">${icon$1.add}</button>
+              <button type="button" ref="$add" title="add Text Shadow">${obj.add}</button>
             </div>
         </div>
         <div class='text-shadow-list' ref='$shadowList'></div>
@@ -51079,7 +49271,7 @@ class TextShadowEditor extends EditorElement {
           <div class="blur-radius">${shadow2.blurRadius}</div>
           <div class="tools">
             <button type="button" class="remove" data-index="${index2}">
-              ${icon$1.remove2}
+              ${obj.remove2}
             </button>
           </div>
         </div>
@@ -51164,7 +49356,7 @@ class TextShadowProperty extends BaseProperty {
     return "text-shadow";
   }
   getTools() {
-    return `<button type="button" ref='$add'>${icon$1.add}</button>`;
+    return `<button type="button" ref='$add'>${obj.add}</button>`;
   }
   [CLICK("$add")]() {
     this.children.$textshadow.trigger("add");
@@ -51353,7 +49545,7 @@ class RotateEditorView extends EditorElement {
                 </div>                
                 <div class='rotate-z' ref='$rotateZ'>
                     <div class='handle-line'></div>                
-                    <div class='handle icon' ref='$handle'>${icon$1.gps_fixed}</div>
+                    <div class='handle icon' ref='$handle'>${obj.gps_fixed}</div>
                 </div>                
             </div>
         `;
@@ -51560,7 +49752,7 @@ class TransformEditor extends EditorElement {
       return `<option value='${transform2}'>${label}</option>`;
     }).join("")}
                 </select>
-                <button type="button" ref="$add" title="add Transform">${icon$1.add}</button>
+                <button type="button" ref="$add" title="add Transform">${obj.add}</button>
               </div>
           </div>
           <div class='transform-list' ref='$transformList'></div>
@@ -51959,7 +50151,7 @@ const origin = {
 class TransformOriginEditor extends EditorElement {
   initState() {
     var arr = this.props.value.split(" ");
-    var obj = {
+    var obj2 = {
       isAll: false,
       "transform-origin": Length.percent(50),
       "transform-origin-x": Length.percent(50),
@@ -51967,17 +50159,17 @@ class TransformOriginEditor extends EditorElement {
     };
     if (this.props.value) {
       if (arr.length === 1) {
-        obj["isAll"] = true;
-        obj["transform-origin"] = Length.parse(arr[0]);
-        obj["transform-origin-x"] = Length.parse(arr[0]);
-        obj["transform-origin-y"] = Length.parse(arr[0]);
+        obj2["isAll"] = true;
+        obj2["transform-origin"] = Length.parse(arr[0]);
+        obj2["transform-origin-x"] = Length.parse(arr[0]);
+        obj2["transform-origin-y"] = Length.parse(arr[0]);
       } else if (arr.length == 2) {
-        obj["isAll"] = false;
-        obj["transform-origin-x"] = Length.parse(arr[0]);
-        obj["transform-origin-y"] = Length.parse(arr[1]);
+        obj2["isAll"] = false;
+        obj2["transform-origin-x"] = Length.parse(arr[0]);
+        obj2["transform-origin-y"] = Length.parse(arr[1]);
       }
     }
-    return obj;
+    return obj2;
   }
   template() {
     return `
@@ -52097,8 +50289,8 @@ class TransformOriginProperty extends BaseProperty {
 }
 const TRANSITION_TIMING_REG = /((cubic-bezier|steps)\(([^\)]*)\))/gi;
 class Transition extends PropertyItem {
-  static parse(obj) {
-    return new Transition(obj);
+  static parse(obj2) {
+    return new Transition(obj2);
   }
   getDefaultObject() {
     return {
@@ -52537,8 +50729,8 @@ class VideoProperty extends BaseProperty {
     var duration = (current.playTime || "0:1:1").split(":").pop();
     return `
         <div ref='$tools' class='play-control' data-selected-value="${this.state.status}">
-          <button type="button" data-value="play" >${icon$1.play} ${this.$i18n("video.property.play")}</button>
-          <button type="button" data-value="pause">${icon$1.pause}  ${this.$i18n("video.property.pause")}</button>      
+          <button type="button" data-value="play" >${obj.play} ${this.$i18n("video.property.play")}</button>
+          <button type="button" data-value="pause">${obj.pause}  ${this.$i18n("video.property.pause")}</button>      
           <div>
             <object refClass="NumberRangeEditor"  ref='$currentTime' min="0" max="${duration}" value="${currentTime}" step="0.001" onchange="changeCurrentTime" />
           </div>
@@ -52549,9 +50741,9 @@ class VideoProperty extends BaseProperty {
             ${this.$i18n("video.property.volume")}
           </div>
           <div ref='$volume_control' class='volume-control' data-selected-value='${this.volumeStatus}'>
-            <span data-value='muted'>${icon$1.volume_off}</span>
-            <span data-value='down'>${icon$1.volume_down}</span>
-            <span data-value='up'>${icon$1.volume_up}</span>
+            <span data-value='muted'>${obj.volume_off}</span>
+            <span data-value='down'>${obj.volume_down}</span>
+            <span data-value='up'>${obj.volume_up}</span>
             <input type="range" ref='$volume' min="0" max="1" step="0.001" value="${this.state.volume}" />
           </div>          
         </div>
@@ -52657,8 +50849,4176 @@ function video(editor) {
     VideoProperty
   });
 }
+class SegmentManager {
+  constructor(viewport) {
+    this.viewport = viewport;
+    this.segmentList = [];
+  }
+  reset() {
+    this.segmentList = [];
+    return this;
+  }
+  checkInViewport(point2) {
+    const vertext = this.viewport.applyVertexInverse([point2.x, point2.y, 0]);
+    return this.viewport.checkInViewport(vertext);
+  }
+  addLine(a, b) {
+    if (getDist(a.x, a.y, b.x, b.y) < 1)
+      return this;
+    if (this.checkInViewport(a) || this.checkInViewport(b)) {
+      this.segmentList.push({
+        line: true,
+        x1: a.x,
+        y1: a.y,
+        x2: b.x,
+        y2: b.y
+      });
+    }
+    return this;
+  }
+  addGuideLine(a, b) {
+    if (getDist(a.x, a.y, b.x, b.y) < 1)
+      return this;
+    if (this.checkInViewport(a) || this.checkInViewport(b)) {
+      this.segmentList.push({
+        line: true,
+        guide: true,
+        x1: a.x,
+        y1: a.y,
+        x2: b.x,
+        y2: b.y
+      });
+    }
+    return this;
+  }
+  addDistanceLine(a, b) {
+    if (getDist(a.x, a.y, b.x, b.y) < 1)
+      return this;
+    this.segmentList.push({
+      line: true,
+      distance: true,
+      x1: a.x,
+      y1: a.y,
+      x2: b.x,
+      y2: b.y
+    });
+    return this;
+  }
+  addDistanceAngle(center2, rx, ry, degree, last2, line2) {
+    this.segmentList.push({
+      angle: true,
+      rx,
+      ry,
+      line: line2,
+      degree,
+      center: center2,
+      last: last2
+    });
+    return this;
+  }
+  addPoint(obj2, point2, index2, segment, selected = false) {
+    if (this.checkInViewport(point2)) {
+      this.segmentList.push(__spreadProps(__spreadValues({}, obj2), {
+        cx: point2.x,
+        cy: point2.y,
+        selected,
+        index: index2,
+        segment,
+        isFirst: point2.isFirst,
+        isLast: point2.isLast,
+        isSecond: point2.isSecond
+      }));
+    }
+    return this;
+  }
+  addStartPoint(obj2, point2) {
+    if (this.checkInViewport(point2)) {
+      this.segmentList.push(__spreadProps(__spreadValues({}, obj2), {
+        cx: point2.x,
+        cy: point2.y,
+        start: true
+      }));
+    }
+    return this;
+  }
+  addCurvePoint(point2, index2, segment, selected = false) {
+    if (this.checkInViewport(point2)) {
+      this.segmentList.push({
+        curve: true,
+        cx: point2.x,
+        cy: point2.y,
+        index: index2,
+        selected,
+        segment,
+        isFirst: point2.isFirst,
+        isLast: point2.isLast,
+        isSecond: point2.isSecond
+      });
+    }
+    return this;
+  }
+  addText(point2, text2) {
+    this.segmentList.push({
+      type: "text",
+      cx: point2.x,
+      cy: point2.y,
+      text: text2 + ""
+    });
+    return this;
+  }
+  toString() {
+    this.segmentList.sort((a, b) => {
+      if (a.line && !b.line) {
+        return -1;
+      } else if (!a.line && b.line) {
+        return 1;
+      }
+      return 0;
+    });
+    return this.segmentList.map((it) => {
+      if (it.angle) {
+        return `
+                <path stroke-width='1' 
+                    data-distance='true'
+                    fill="rgba(0,0,0,0.5)"
+                    d="M ${it.center.x},${it.center.y} A ${it.rx} ${it.ry},${it.degree},0,0,${it.last.x} ${it.last.y} L${it.line.x} ${it.line.y} Z"
+                />`;
+      } else if (it.line) {
+        return `
+                <line stroke-width='1' 
+                    data-segment="true"
+                    data-is-last="${it.isLast}"                
+                    data-guide='${it.guide}'
+                    data-distance='${it.distance}'
+                    x1='${it.x1}' x2='${it.x2}' y1='${it.y1}' y2='${it.y2}' 
+                />`;
+      } else if (it.text) {
+        return "";
+      } else if (it.curve && it.segment !== "startPoint") {
+        return `
+                <path stroke-width='1'
+                    class='curve' 
+                    ${it.selected && `data-selected="true"`}
+                    ${it.isLast && `data-is-last="true"`}
+                    ${it.isFirst && `data-is-first="true"`}
+                    ${it.isSecond && `data-is-second="true"`}
+                    title="${it.segment} curve"  
+                    data-index='${it.index}'
+                    data-segment-point='${it.segment}'
+                    data-segment="true" 
+                    d="M ${it.cx} ${it.cy - 4}L ${it.cx + 4} ${it.cy} L ${it.cx} ${it.cy + 4} L ${it.cx - 4} ${it.cy} Z"
+                />`;
+      } else if (it.start) {
+        return `
+                <circle 
+                    cx='${it.cx}' 
+                    cy='${it.cy}' 
+                    r='4'                    
+                    class='segment'
+                    data-selected='${it.selected}'
+                    title="Center"
+                    data-start="true" 
+                />`;
+      } else {
+        return `
+                <circle 
+                    cx='${it.cx}' 
+                    cy='${it.cy}' 
+                    r='4'                    
+                    class='segment'
+                    data-selected='${it.selected}'
+                    title="${it.segment}"
+                    data-is-last="${it.isLast}"
+                    data-is-first="${it.isFirst}"
+                    data-is-second="${it.isSecond}"
+                    data-index='${it.index}' 
+                    data-segment-point='${it.segment}' 
+                    data-segment="true" 
+                />`;
+      }
+    }).join("");
+  }
+}
+const SEGMENT_DIRECTION = ["startPoint", "endPoint", "reversePoint"];
+function calculateSnapPoint(points2, sourceKey, target, distanceValue, dist2) {
+  var checkedPointList = points2.filter((p) => {
+    if (!p)
+      return false;
+    return Math.abs(p[sourceKey] - target) <= dist2;
+  }).map((p) => {
+    return { dist: Math.abs(p[sourceKey] - target), point: p };
+  });
+  checkedPointList.sort((a, b) => {
+    return a.dist < b.dist ? -1 : 1;
+  });
+  var point2 = null;
+  if (checkedPointList.length) {
+    point2 = checkedPointList[0].point;
+    distanceValue += point2[sourceKey] - target;
+  }
+  return { point: point2, distanceValue };
+}
+function calculateMovePointSnap(points2, moveXY, dist2 = 1) {
+  var snapPointX = calculatePointDist(points2, "x", moveXY.x, dist2);
+  var snapPointY = calculatePointDist(points2, "y", moveXY.y, dist2);
+  var snapEndPoint = __spreadValues({}, moveXY);
+  if (snapPointX) {
+    snapEndPoint.x = snapPointX.x;
+  }
+  if (snapPointY) {
+    snapEndPoint.y = snapPointY.y;
+  }
+  var snapPointList = [];
+  if (snapPointX) {
+    snapPointList.push({ startPoint: snapPointX, endPoint: snapEndPoint });
+  }
+  if (snapPointY) {
+    snapPointList.push({ startPoint: snapPointY, endPoint: snapEndPoint });
+  }
+  return { snapPointList, moveXY: snapEndPoint };
+}
+function calculatePointDist(points2, sourceKey, target, dist2) {
+  var checkedPointList = [];
+  var arr = SEGMENT_DIRECTION;
+  points2.filter((p) => p).forEach((p) => {
+    arr.filter((key) => p[key]).forEach((key) => {
+      var point2 = p[key];
+      var tempDist = Math.abs(point2[sourceKey] - target);
+      if (tempDist <= dist2) {
+        checkedPointList.push({ dist: tempDist, point: point2 });
+      }
+    });
+  });
+  checkedPointList.sort((a, b) => {
+    return a.dist > b.dist ? 1 : -1;
+  });
+  return checkedPointList.length ? checkedPointList[0].point : null;
+}
+function toPath(points2, minX, minY, scale2 = 1) {
+  var d = [];
+  for (var index2 = 0, len2 = points2.length; index2 < len2; index2++) {
+    var currentIndex = index2;
+    var current = points2[currentIndex];
+    if (!current)
+      continue;
+    if (current.command === "M") {
+      d.push({ command: "M", values: [current.startPoint] });
+    } else {
+      var prevPoint = Point.getPrevPoint(points2, index2);
+      if (current.curve === false) {
+        if (prevPoint.curve === false) {
+          d.push({ command: "L", values: [current.startPoint] });
+        } else {
+          d.push({ command: "Q", values: [prevPoint.endPoint, current.startPoint] });
+        }
+      } else {
+        if (prevPoint.curve === false) {
+          if (Point.isEqual(current.reversePoint, current.startPoint)) {
+            d.push({ command: "L", values: [current.startPoint] });
+          } else {
+            d.push({ command: "Q", values: [current.reversePoint, current.startPoint] });
+          }
+        } else {
+          d.push({ command: "C", values: [prevPoint.endPoint, current.reversePoint, current.startPoint] });
+        }
+      }
+    }
+    if (current.close) {
+      d.push({ command: "Z" });
+    }
+  }
+  var dString = d.map((segment) => {
+    return calculateRelativePosition(minX, minY, segment, scale2);
+  }).join(" ");
+  return {
+    d: dString
+  };
+}
+function calculateRelativePosition(minX, minY, segment, scale2 = 1) {
+  var { command, values } = segment;
+  switch (command) {
+    case "Z":
+      return "Z";
+    default:
+      var str = values.map((v) => {
+        var tx = v.x - minX === 0 ? 0 : (v.x - minX) / scale2;
+        var ty = v.y - minY === 0 ? 0 : (v.y - minY) / scale2;
+        return `${tx} ${ty}`;
+      }).join(" ");
+      return `${command} ${str}`;
+  }
+}
+function checkInArea(area2, point2) {
+  if (area2.x2.value < point2.x) {
+    return false;
+  }
+  if (area2.y2.value < point2.y) {
+    return false;
+  }
+  if (area2.x.value > point2.x) {
+    return false;
+  }
+  if (area2.y.value > point2.y) {
+    return false;
+  }
+  return true;
+}
+class PathGenerator {
+  static generatorPathString(points2, minX = 0, minY = 0, scale2 = 1) {
+    return toPath(points2, minX, minY, scale2).d;
+  }
+  constructor(pathEditor) {
+    this.pathEditor = pathEditor;
+    this.pathStringManager = new PathStringManager();
+    this.guideLineManager = new PathStringManager();
+    this.segmentManager = new SegmentManager(this.pathEditor.$viewport);
+    this.points = [];
+    this.cachedSegmentKeys = {};
+    this.initialize();
+    this.initializeSelect();
+  }
+  initialize() {
+    this.splitLines = [];
+    this.guideLineManager.reset();
+    this.segmentManager.reset();
+    this.pathStringManager.reset();
+  }
+  initializeSelect(initPointList = []) {
+    this.selectedPointKeys = {};
+    this.selectedPointList = [];
+    if (initPointList.length) {
+      this.select(...initPointList.map((p) => {
+        const checkedPoint = this.points[p.index][p.key];
+        if (!checkedPoint)
+          return void 0;
+        return { x: checkedPoint.x, y: checkedPoint.y, key: p.key, index: checkedPoint.index };
+      }).filter(Boolean));
+    }
+  }
+  get state() {
+    return this.pathEditor.state;
+  }
+  get clonePoints() {
+    return [...this.points];
+  }
+  get length() {
+    return this.points.length;
+  }
+  setPoints(points2 = []) {
+    this.points = points2;
+    this.snapPointList = [];
+    if (this.points.length === 0) {
+      this.select();
+      this.selectGroup(-1);
+    }
+  }
+  selectInBox(box, isToggle = false) {
+    var list2 = [];
+    this.points.forEach((point2, index2) => {
+      SEGMENT_DIRECTION.forEach((key) => {
+        const p = point2[key];
+        if (checkInArea(box, p)) {
+          list2.push({ x: p.x, y: p.y, key, index: index2 });
+        }
+      });
+    });
+    if (isToggle) {
+      list2 = list2.map((it) => {
+        const selectedKey = this.makeSegmentKey(it);
+        return __spreadProps(__spreadValues({}, it), { included: Boolean(this.selectedPointKeys[selectedKey]) });
+      });
+      const includedList = list2.filter((it) => it.included);
+      const notIncludedList = list2.filter((it) => !it.included);
+      let uniqueList = [...this.selectedPointList];
+      if (includedList.length) {
+        uniqueList = this.selectedPointList.filter((it) => {
+          const oldKey = this.makeSegmentKey(it);
+          return Boolean(includedList.find((includeNode) => {
+            return oldKey === this.makeSegmentKey(includeNode);
+          })) === false;
+        });
+      }
+      this.select(...uniqueList, ...notIncludedList);
+    } else {
+      this.select(...list2);
+    }
+  }
+  makeSegmentKey(p) {
+    return `${p.key}_${p.index}`;
+  }
+  select(...list2) {
+    this.selectedPointKeys = {};
+    this.selectedPointList = list2.map(({ x: x2, y: y2, key, index: index2 }) => ({
+      x: x2,
+      y: y2,
+      key,
+      index: +index2
+    }));
+    list2.forEach((it) => {
+      var key = this.makeSegmentKey(it);
+      this.selectedPointKeys[key] = true;
+    });
+  }
+  convertPointsToSelectionList(points2) {
+    var list2 = [];
+    points2.forEach((point2) => {
+      SEGMENT_DIRECTION.forEach((key) => {
+        const { x: x2, y: y2 } = point2[key];
+        list2.push({ x: x2, y: y2, key, index: point2.index });
+      });
+    });
+    return list2;
+  }
+  selectGroup(groupIndex) {
+    const group2 = this.splitedGroupList[groupIndex];
+    if (group2) {
+      this.select(...this.convertPointsToSelectionList(group2.points));
+    } else {
+      this.select();
+    }
+  }
+  getCacheSegmentKey(segmentKey, index2) {
+    if (!this.cachedSegmentKeys[segmentKey]) {
+      this.cachedSegmentKeys[segmentKey] = {};
+    }
+    if (!this.cachedSegmentKeys[segmentKey][index2]) {
+      this.cachedSegmentKeys[segmentKey][index2] = this.makeSegmentKey({ key: segmentKey, index: index2 });
+    }
+    return this.cachedSegmentKeys[segmentKey][index2];
+  }
+  toggleSelect(key, index2) {
+    if (this.points[index2]) {
+      var point2 = this.points[index2][key];
+      if (point2 && !this.isSelectedSegment(key, index2)) {
+        this.select(...this.selectedPointList, { x: point2.x, y: point2.y, key, index: index2 });
+      } else {
+        this.select(...this.selectedPointList.filter((it) => {
+          return it.key !== key || it.index !== index2;
+        }));
+      }
+    }
+  }
+  selectKeyIndex(key, index2) {
+    if (this.points[index2]) {
+      var point2 = this.points[index2][key];
+      if (point2 && !this.isSelectedSegment(key, index2)) {
+        this.select({ x: point2.x, y: point2.y, key, index: index2 });
+      }
+    }
+  }
+  reselect() {
+    this.selectedPointList.filter(Boolean).forEach((it) => {
+      var _a;
+      var point2 = (_a = this.points[it.index]) == null ? void 0 : _a[it.key];
+      if (point2) {
+        it.x = point2.x;
+        it.y = point2.y;
+      }
+    });
+  }
+  isSelectedSegment(segment, index2) {
+    var key = this.getCacheSegmentKey(segment, index2);
+    return this.selectedPointKeys[key];
+  }
+  commitTransformMatrix(point2, transformMatrix) {
+    var result = transformMat4([], [point2.x, point2.y, 0], transformMatrix);
+    return { x: result[0], y: result[1] };
+  }
+  transformMat4(transformMatrix) {
+    this.transformPoints.forEach((p, index2) => {
+      var realPoint = this.points[index2];
+      Object.assign(realPoint.startPoint, this.commitTransformMatrix(p.startPoint, transformMatrix));
+      Object.assign(realPoint.endPoint, this.commitTransformMatrix(p.endPoint, transformMatrix));
+      Object.assign(realPoint.reversePoint, this.commitTransformMatrix(p.reversePoint, transformMatrix));
+    });
+  }
+  transform(type, dx = 0, dy = 0) {
+    var { x: x2, y: y2, width: width2, height } = this.transformRect;
+    var view = create$5();
+    translate(view, view, [x2, y2, 0]);
+    switch (type) {
+      case "flipX":
+        scale$1(view, view, [-1, 1, 1]);
+        translate(view, view, [-width2, 0, 0]);
+        break;
+      case "flipY":
+        scale$1(view, view, [1, -1, 1]);
+        translate(view, view, [0, -height, 0]);
+        break;
+      case "flip":
+        scale$1(view, view, [-1, -1, 1]);
+        translate(view, view, [-width2, -height, 0]);
+        break;
+    }
+    translate(view, view, [-x2, -y2, 0]);
+    this.transformMat4(view);
+  }
+  initTransform(rect2) {
+    this.transformRect = clone$1(rect2);
+    this.transformPoints = this.clonePoints.map((p) => {
+      return {
+        startPoint: clone$1(p.startPoint),
+        endPoint: clone$1(p.endPoint),
+        reversePoint: clone$1(p.reversePoint)
+      };
+    });
+  }
+  setConnectedPoint(dx, dy) {
+    var state = this.state;
+    var x2 = state.dragXY.x + dx;
+    var y2 = state.dragXY.y + dy;
+    var endPoint = { x: x2, y: y2 };
+    var reversePoint2 = { x: x2, y: y2 };
+    if (state.dragPoints) {
+      state.reversePoint = Point.getReversePoint(state.startPoint, endPoint);
+    }
+    var point2 = {
+      startPoint: state.startPoint,
+      endPoint,
+      curve: !!state.dragPoints,
+      reversePoint: reversePoint2,
+      connected: true,
+      close: true
+    };
+    this.points.push(point2);
+  }
+  setLastPoint(startPoint) {
+    var endPoint = clone$1(startPoint);
+    var reversePoint2 = clone$1(startPoint);
+    var point2 = {
+      startPoint,
+      endPoint,
+      curve: false,
+      reversePoint: reversePoint2,
+      connected: false,
+      close: false
+    };
+    this.points.push(point2);
+  }
+  getPrevPoint(index2) {
+    return Point.getPrevPoint(this.points, index2);
+  }
+  getIndexPoint(index2) {
+    return Point.getIndexPoint(this.points, index2);
+  }
+  getNextPoint(index2) {
+    return Point.getNextPoint(this.points, index2);
+  }
+  getConnectedPointList(index2) {
+    return Point.getConnectedPointList(this.points, index2);
+  }
+  isFirst(segment) {
+    return Point.isFirst(segment);
+  }
+  getLastPoint(index2) {
+    return Point.getLastPoint(this.points, index2);
+  }
+  setCachePoint(index2, segmentKey, verties = []) {
+    var state = this.state;
+    this.snapPointList = [];
+    this.selectedIndex = index2;
+    state.connectedPoint = this.getPrevPoint(index2);
+    state.connectedPointList = clone$1(Point.getConnectedPointList(this.points, this.selectedIndex));
+    if (state.connectedPoint && !state.connectedPoint.connected) {
+      state.connectedPoint = null;
+    }
+    state.segment = this.getIndexPoint(index2);
+    if (state.segment.connected) {
+      state.connectedPoint = this.getNextPoint(index2);
+    }
+    var isFirstSegment = this.isFirst(state.segment);
+    if (isFirstSegment) {
+      var lastPoint = this.getLastPoint(index2);
+      if (lastPoint.connected) {
+        state.connectedPoint = lastPoint;
+      }
+    }
+    state.segmentKey = segmentKey;
+    state.isCurveSegment = state.segment.curve && state.segmentKey != "startPoint";
+    state.originalSegment = clone$1(state.segment);
+    if (state.connectedPoint) {
+      state.originalConnectedPoint = clone$1(state.connectedPoint);
+    }
+    state.cachedPoints = [];
+    this.points.filter((p) => p && p != state.segment).forEach((p) => {
+      state.cachedPoints.push(p.startPoint, p.reversePoint, p.endPoint);
+    });
+  }
+  moveSegment(segmentKey, dx, dy, originSegment = void 0) {
+    if (originSegment) {
+      const segment = this.points[originSegment.index][segmentKey];
+      segment.x = originSegment[segmentKey].x + dx;
+      segment.y = originSegment[segmentKey].y + dy;
+    } else {
+      var state = this.state;
+      var originPoint = state.originalSegment[segmentKey];
+      var targetPoint = state.segment[segmentKey];
+      if (originPoint) {
+        targetPoint.x = originPoint.x + dx;
+        targetPoint.y = originPoint.y + dy;
+      }
+    }
+  }
+  calculateToCurve(point2, nextPoint, prevPoint) {
+    var centerX = (nextPoint.startPoint.x + prevPoint.startPoint.x) / 2;
+    var centerY = (nextPoint.startPoint.y + prevPoint.startPoint.y) / 2;
+    var dx = (nextPoint.startPoint.x - centerX) / 2;
+    var dy = (nextPoint.startPoint.y - centerY) / 2;
+    point2.endPoint = {
+      x: point2.startPoint.x + dx,
+      y: point2.startPoint.y + dy
+    };
+    point2.reversePoint = {
+      x: point2.startPoint.x - dx,
+      y: point2.startPoint.y - dy
+    };
+    return { dx, dy };
+  }
+  convertToCurve(index2) {
+    var point2 = this.points[index2];
+    if (point2.curve) {
+      point2.curve = false;
+      point2.reversePoint = clone$1(point2.startPoint);
+      point2.endPoint = clone$1(point2.startPoint);
+      if (point2.command === "M") {
+        var lastPoint = Point.getPrevPoint(points, point2.index);
+        if (lastPoint.connected) {
+          lastPoint.curve = false;
+          lastPoint.reversePoint = clone$1(lastPoint.startPoint);
+          lastPoint.endPoint = clone$1(lastPoint.startPoint);
+        }
+      } else {
+        var nextPoint = this.getNextPoint(index2);
+        if (nextPoint && nextPoint.command === "M") {
+          var firstPoint = nextPoint;
+          firstPoint.curve = false;
+          firstPoint.reversePoint = clone$1(firstPoint.startPoint);
+          firstPoint.endPoint = clone$1(firstPoint.startPoint);
+        }
+      }
+    } else {
+      point2.curve = true;
+      var prevPoint = this.getPrevPoint(index2);
+      var nextPoint = this.getNextPoint(index2);
+      if (nextPoint && nextPoint.index < index2 && nextPoint.command === "M") {
+        var firstPoint = nextPoint;
+        nextPoint = this.getNextPoint(firstPoint.index);
+        this.calculateToCurve(point2, nextPoint, prevPoint);
+        firstPoint.curve = true;
+        firstPoint.endPoint = clone$1(point2.endPoint);
+        firstPoint.reversePoint = clone$1(point2.reversePoint);
+      } else if (nextPoint && nextPoint.index > index2 && nextPoint.command !== "M") {
+        this.calculateToCurve(point2, nextPoint, prevPoint);
+      } else if (!nextPoint && prevPoint) {
+        var centerX = (point2.startPoint.x - prevPoint.startPoint.x) / 3;
+        var centerY = (point2.startPoint.y - prevPoint.startPoint.y) / 3;
+        point2.endPoint = { x: point2.startPoint.x + centerX, y: point2.startPoint.y + centerY };
+        point2.reversePoint = Point.getReversePoint(point2.startPoint, point2.endPoint);
+      } else if (!prevPoint && nextPoint) {
+        var centerX = (point2.startPoint.x - nextPoint.startPoint.x) / 3;
+        var centerY = (point2.startPoint.y - nextPoint.startPoint.y) / 3;
+        point2.endPoint = { x: point2.startPoint.x + centerX, y: point2.startPoint.y + centerY };
+        point2.reverse = Point.getReversePoint(point2.startPoint, point2.endPoint);
+      }
+    }
+  }
+  moveCurveSegment(segmentKey, dx, dy) {
+    var state = this.state;
+    this.moveSegment(segmentKey, dx, dy);
+    var targetSegmentKey = segmentKey === "endPoint" ? "reversePoint" : "endPoint";
+    state.segment[targetSegmentKey] = Point.getReversePoint(state.segment.startPoint, state.segment[segmentKey]);
+  }
+  rotateSegmentTarget(segmentKey, target) {
+    var state = this.state;
+    if (state.originalSegment && state.segment) {
+      var { x: cx, y: cy } = state.originalSegment.startPoint;
+      var { x: rx, y: ry } = state.segment[segmentKey];
+      var { x: tx, y: ty } = state.originalSegment[target];
+      var { x: x2, y: y2 } = getXYInCircle(calculateAngle360(rx - cx, ry - cy), getDist(tx, ty, cx, cy), cx, cy);
+      state.segment[target] = { x: x2, y: y2 };
+    }
+  }
+  rotateSegment(segmentKey) {
+    this.rotateSegmentTarget(segmentKey, segmentKey === "endPoint" ? "reversePoint" : "endPoint");
+  }
+  calculateSnap(segmentKey, dx, dy, dist2 = 1) {
+    var state = this.state;
+    var cachedPoints = state.cachedPoints;
+    var original = state.originalSegment[segmentKey];
+    if (!segmentKey) {
+      return { dx, dy, snapPointList: [] };
+    }
+    var realX = original.x + dx;
+    var realY = original.y + dy;
+    var { point: snapPointX, distanceValue: dx } = calculateSnapPoint(cachedPoints, "x", realX, dx, dist2);
+    var { point: snapPointY, distanceValue: dy } = calculateSnapPoint(cachedPoints, "y", realY, dy, dist2);
+    var snapEndPoint = {
+      x: original.x + dx,
+      y: original.y + dy
+    };
+    var snapPointList = [];
+    if (snapPointX) {
+      snapPointList.push({ startPoint: snapPointX, endPoint: snapEndPoint });
+    }
+    if (snapPointY) {
+      snapPointList.push({ startPoint: snapPointY, endPoint: snapEndPoint });
+    }
+    return { dx, dy, snapPointList };
+  }
+  copySegment(from, to) {
+    to.startPoint = clone$1(from.startPoint);
+    to.endPoint = clone$1(from.endPoint);
+    to.reversePoint = clone$1(from.reversePoint);
+  }
+  get selectedLength() {
+    return this.selectedPointList.length;
+  }
+  moveSelectedSegment(dx, dy) {
+    if (this.selectedPointList.length > 0) {
+      this.selectedPointList.forEach((it) => {
+        var target = this.points[it.index][it.key];
+        target.x = it.x + dx;
+        target.y = it.y + dy;
+      });
+    } else if (this.selectedGroup) {
+      this.moveSelectedGroup(dx, dy);
+    }
+  }
+  moveSelectedGroup(dx, dy) {
+    this.selectedGroup.points.forEach((it) => {
+      const target = this.points[it.index];
+      target.startPoint.x = it.startPoint.x + dx;
+      target.startPoint.y = it.startPoint.y + dy;
+      target.endPoint.x = it.endPoint.x + dx;
+      target.endPoint.y = it.endPoint.y + dy;
+      target.reversePoint.x = it.reversePoint.x + dx;
+      target.reversePoint.y = it.reversePoint.y + dy;
+    });
+  }
+  get selectedGroup() {
+    return this.splitedGroupList[this.state.selectedGroupIndex];
+  }
+  get splitedGroupList() {
+    return Point.getSplitedGroupList(this.points);
+  }
+  get groupList() {
+    return Point.getGroupList(this.points);
+  }
+  getGroup(groupList, pointIndex) {
+    return Point.getGroup(groupList, pointIndex);
+  }
+  get selectedGroupIndexList() {
+    const groupIndexList = new Set();
+    const groupList = this.groupList;
+    if (this.selectedPointList.length === 0 && this.state.selectedGroupIndex < 0) {
+      return groupList.map((group2) => group2.groupIndex);
+    }
+    const points2 = this.selectedPointList;
+    points2.forEach((it) => {
+      const group2 = this.getGroup(groupList, it.index);
+      if (group2) {
+        groupIndexList.add(group2.groupIndex);
+      }
+    });
+    return [...new Set([...groupIndexList, this.state.selectedGroupIndex])];
+  }
+  removeSelectedSegment() {
+    this.selectedPointList.forEach((it) => {
+      var target = this.points[it.index][it.key];
+      target.removed = true;
+    });
+    const pointGroup = Point.splitPoints(this.points);
+    const newPoints = Point.recoverPoints(pointGroup.map((points2) => {
+      return points2.filter((p) => !p.startPoint.removed).map((p) => {
+        if (p.endPoint.removed) {
+          p.endPoint = clone$1(p.startPoint);
+        }
+        if (p.reversePoint.removed) {
+          p.reversePoint = clone$1(p.startPoint);
+        }
+        if (Point.isEqual(p.endPoint, p.startPoint, p.reversePoint)) {
+          p.command = "L";
+          p.curve = false;
+        }
+        return p;
+      });
+    }));
+    this.points = newPoints;
+    this.select();
+  }
+  move(dx, dy, e) {
+    var state = this.state;
+    var { isCurveSegment, segmentKey, connectedPoint } = state;
+    if (this.selectedPointList.length > 1) {
+      this.moveSelectedSegment(dx, dy);
+    } else if (this.selectedPointList.length === 1) {
+      var { dx, dy, snapPointList } = this.calculateSnap(segmentKey, dx, dy, 3);
+      this.snapPointList = snapPointList || [];
+      if (isCurveSegment) {
+        if (e.shiftKey) {
+          this.moveSegment(segmentKey, dx, dy);
+          var targetSegmentKey = segmentKey === "endPoint" ? "reversePoint" : "endPoint";
+          state.segment[targetSegmentKey] = Point.getReversePoint(state.segment.startPoint, state.segment[segmentKey]);
+        } else if (e.altKey) {
+          this.moveSegment(segmentKey, dx, dy);
+          this.rotateSegment(segmentKey);
+        } else {
+          this.moveSegment(segmentKey, dx, dy);
+        }
+      } else {
+        this.moveSegment("startPoint", dx, dy);
+        this.moveSegment("endPoint", dx, dy);
+        this.moveSegment("reversePoint", dx, dy);
+        if (!e.altKey) {
+          state.connectedPointList.forEach((it) => {
+            this.moveSegment("startPoint", dx, dy, it);
+            this.moveSegment("endPoint", dx, dy, it);
+            this.moveSegment("reversePoint", dx, dy, it);
+          });
+        }
+      }
+      connectedPoint && this.copySegment(state.segment, state.connectedPoint);
+    } else if (this.state.selectedGroupIndex > -1) {
+      this.moveSelectedGroup(dx, dy);
+    }
+  }
+  moveEnd(dx, dy) {
+    var state = this.state;
+    var points2 = this.points;
+    var x2 = state.dragXY.x + dx;
+    var y2 = state.dragXY.y + dy;
+    var endPoint = { x: x2, y: y2 };
+    var reversePoint2 = { x: x2, y: y2 };
+    if (state.dragPoints) {
+      reversePoint2 = Point.getReversePoint(state.startPoint, endPoint);
+    }
+    points2.push({
+      command: state.clickCount === 0 ? "M" : "",
+      startPoint: state.startPoint,
+      endPoint,
+      curve: !!state.dragPoints,
+      reversePoint: reversePoint2
+    });
+    state.startPoint = null;
+    state.dragPoints = false;
+    state.moveXY = null;
+  }
+  setPoint(obj2) {
+    var p0 = obj2.first[0];
+    var p1 = obj2.second[obj2.second.length - 1];
+    var allPoints = this.clonePoints;
+    var firstItem = Point.getPoint(allPoints, p0);
+    var secondItem = Point.getPoint(allPoints, p1);
+    var newPoints = [
+      __spreadProps(__spreadValues({}, firstItem), { endPoint: obj2.first[1] }),
+      { startPoint: obj2.first[3], reversePoint: obj2.first[2], curve: true, endPoint: obj2.second[1] },
+      __spreadProps(__spreadValues({}, secondItem), { reversePoint: obj2.second[2] })
+    ];
+    var firstIndex = Point.getIndex(allPoints, p0);
+    allPoints.splice(firstIndex, 2, ...newPoints);
+    this.points = allPoints;
+    return firstIndex + 1;
+  }
+  setPointQuard(obj2) {
+    var p0 = obj2.first[0];
+    var p1 = obj2.second[obj2.second.length - 1];
+    var allPoints = this.clonePoints;
+    var firstItem = Point.getPoint(allPoints, p0);
+    var secondItem = Point.getPoint(allPoints, p1);
+    if (firstItem.curve && secondItem.curve === false) {
+      var newPoints = [
+        __spreadProps(__spreadValues({}, firstItem), { endPoint: firstItem.startPoint }),
+        { startPoint: obj2.first[2], reversePoint: obj2.first[1], curve: true, endPoint: obj2.second[1] }
+      ];
+      var firstIndex = Point.getIndex(allPoints, p0);
+      allPoints.splice(firstIndex, 1, ...newPoints);
+    } else {
+      var newPoints = [
+        __spreadValues({}, firstItem),
+        { startPoint: obj2.first[2], reversePoint: obj2.first[1], curve: true, endPoint: obj2.second[1] },
+        __spreadProps(__spreadValues({}, secondItem), { reversePoint: obj2.second[1], curve: true })
+      ];
+      var firstIndex = Point.getIndex(allPoints, p0);
+      allPoints.splice(firstIndex, 2, ...newPoints);
+    }
+    this.points = allPoints;
+    return firstIndex + 1;
+  }
+  setPointLine(obj2) {
+    var p0 = obj2.first[0];
+    var allPoints = this.clonePoints;
+    var newPoints = [
+      { command: "L", startPoint: obj2.first[1], curve: false, endPoint: obj2.first[1], reversePoint: obj2.first[1] }
+    ];
+    var firstIndex = Point.getIndex(allPoints, p0);
+    allPoints.splice(firstIndex + 1, 0, ...newPoints);
+    this.points = allPoints;
+    return firstIndex + 1;
+  }
+  toPath(minX = 0, minY = 0, scale2 = 1) {
+    return toPath(this.clonePoints, minX, minY, scale2);
+  }
+  makeSVGPath() {
+    this.initialize();
+    this.makePointGuide(this.points);
+    this.makeMovePositionGuide();
+    return this.toSVGString();
+  }
+  makeTriangleDistancePointGuide(first, second2) {
+    var minX = Math.min(first.startPoint.x, second2.startPoint.x);
+    var maxX = Math.max(first.startPoint.x, second2.startPoint.x);
+    var minY = Math.min(first.startPoint.y, second2.startPoint.y);
+    var maxY = Math.max(first.startPoint.y, second2.startPoint.y);
+    if (first.startPoint.x < second2.startPoint.x && first.startPoint.y < second2.startPoint.y) {
+      this.segmentManager.addDistanceLine({ x: minX, y: minY }, { x: maxX, y: minY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
+      var centerX = minX;
+      var centerY = minY;
+      var angle = calculateAngle360(maxX - minX, maxY - minY) - 180;
+      var dist2 = 20;
+      var { x: x2, y: y2 } = getXYInCircle(0, dist2, centerX, centerY);
+      var last2 = getXYInCircle(angle, dist2, centerX, centerY);
+      this.segmentManager.addDistanceAngle(last2, dist2, dist2, angle, { x: x2, y: y2 }, { x: x2 - dist2, y: y2 });
+    } else if (first.startPoint.x < second2.startPoint.x && first.startPoint.y > second2.startPoint.y) {
+      this.segmentManager.addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
+    } else if (first.startPoint.x > second2.startPoint.x && first.startPoint.y > second2.startPoint.y) {
+      this.segmentManager.addDistanceLine({ x: minX, y: minY }, { x: minX, y: maxY }).addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY });
+    } else if (first.startPoint.x > second2.startPoint.x && first.startPoint.y < second2.startPoint.y) {
+      this.segmentManager.addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
+    }
+  }
+  makeDistancePointGuide(prevPoint, current, nextPoint, index2) {
+    if (current.selected) {
+      if (prevPoint) {
+        this.makeTriangleDistancePointGuide(prevPoint, current);
+      }
+      if (nextPoint) {
+        this.makeTriangleDistancePointGuide(current, nextPoint);
+      }
+    }
+  }
+  makeStartPointGuide(prevPoint, current, nextPoint, index2) {
+    current.startPoint.isFirst = true;
+    if (current.curve === false) {
+      this.segmentManager.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+    } else {
+      this.segmentManager.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2)).addGuideLine(current.startPoint, current.endPoint);
+      if (Point.isEqual(current.startPoint, current.endPoint) === false) {
+        this.segmentManager.addCurvePoint(current.endPoint, index2, "endPoint", this.isSelectedSegment("endPoint", index2));
+      }
+    }
+  }
+  makeMiddlePointGuideSegment(prevPoint, current, nextPoint, index2, isSiblingSelected) {
+    var mng = this.segmentManager;
+    if (current.curve === false) {
+      if (prevPoint.curve === false) {
+        mng.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+      } else {
+        if (isSiblingSelected === false) {
+          mng.addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+        } else {
+          mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+          if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
+            mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, "endPoint", this.isSelectedSegment("endPoint", prevPoint.index));
+          }
+        }
+      }
+    } else {
+      if (prevPoint.curve === false) {
+        if (isSiblingSelected === false) {
+          if (Point.isEqual(current.reversePoint, current.startPoint)) {
+            mng.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+          } else {
+            mng.addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+          }
+        } else {
+          if (Point.isEqual(current.reversePoint, current.startPoint)) {
+            mng.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+          } else {
+            mng.addGuideLine(current.startPoint, current.reversePoint).addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+            if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
+              mng.addCurvePoint(current.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
+            }
+          }
+        }
+      } else {
+        if (current.connected) {
+          if (isSiblingSelected === false)
+            ;
+          else {
+            mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addGuideLine(current.startPoint, current.reversePoint);
+            if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
+              mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, "endPoint", this.isSelectedSegment("endPoint", prevPoint.index));
+            }
+            if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
+              mng.addCurvePoint(current.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
+            }
+          }
+        } else {
+          if (isSiblingSelected === false) {
+            mng.addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+          } else {
+            mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addGuideLine(current.startPoint, current.reversePoint).addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+            if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
+              mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, "endPoint", this.isSelectedSegment("endPoint", prevPoint.index));
+            }
+            if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
+              mng.addCurvePoint(current.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
+            }
+          }
+        }
+      }
+    }
+  }
+  checkInViewport(point2) {
+    const vertext = this.pathEditor.$viewport.applyVertexInverse([point2.x, point2.y, 0]);
+    return this.pathEditor.$viewport.checkInViewport(vertext);
+  }
+  makeMiddlePointGuideSplitLine(prevPoint, current, nextPoint, index2, isSiblingSelected) {
+    const selected = isSiblingSelected ? "selected" : "";
+    if (current.curve === false) {
+      if (prevPoint.curve === false) {
+        if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(current.startPoint)) === false) {
+          return;
+        }
+        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).L(current.startPoint).toString(`split-path ${selected}`));
+      } else {
+        if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(prevPoint.endPoint) || this.checkInViewport(current.startPoint)) === false) {
+          return;
+        }
+        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).Q(prevPoint.endPoint, current.startPoint).toString(`split-path ${selected}`));
+      }
+    } else {
+      if (prevPoint.curve === false) {
+        if (Point.isEqual(current.reversePoint, current.startPoint)) {
+          if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(current.startPoint)) === false) {
+            return;
+          }
+          this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).L(current.startPoint).toString(`split-path ${selected}`));
+        } else {
+          if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(current.reversePoint) || this.checkInViewport(current.startPoint)) === false) {
+            return;
+          }
+          this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).Q(current.reversePoint, current.startPoint).toString(`split-path ${selected}`));
+        }
+      } else {
+        if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(prevPoint.endPoint) || this.checkInViewport(current.reversePoint) || this.checkInViewport(current.startPoint)) === false) {
+          return;
+        }
+        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).C(prevPoint.endPoint, current.reversePoint, current.startPoint).toString(`split-path ${selected}`));
+      }
+    }
+  }
+  makePointGuide(points2) {
+    for (var index2 = 0, len2 = points2.length; index2 < len2; index2++) {
+      var currentIndex = index2;
+      var current = points2[currentIndex];
+      if (!current)
+        continue;
+      var nextPoint = Point.getNextPoint(points2, index2);
+      var prevPoint = Point.getPrevPoint(points2, index2);
+      if (prevPoint && prevPoint.command === "M") {
+        if (current.startPoint) {
+          current.startPoint.isSecond = true;
+        }
+      }
+      if (current.startPoint) {
+        if (nextPoint) {
+          current.startPoint.isLast = nextPoint.command === "M";
+        } else {
+          current.startPoint.isLast = index2 === len2 - 1;
+        }
+      }
+      current.selected = this.selectedIndex === index2;
+      if (current.command === "M") {
+        this.makeStartPointGuide(prevPoint, current, nextPoint, index2);
+      } else {
+        var isSiblingSelected = Boolean(this.isSelectedSegment("endPoint", prevPoint == null ? void 0 : prevPoint.index) || this.isSelectedSegment("startPoint", prevPoint == null ? void 0 : prevPoint.index) || this.isSelectedSegment("reversePoint", prevPoint == null ? void 0 : prevPoint.index) || this.isSelectedSegment("endPoint", nextPoint == null ? void 0 : nextPoint.index) || this.isSelectedSegment("startPoint", nextPoint == null ? void 0 : nextPoint.index) || this.isSelectedSegment("reversePoint", nextPoint == null ? void 0 : nextPoint.index) || this.isSelectedSegment("endPoint", current == null ? void 0 : current.index) || this.isSelectedSegment("startPoint", current == null ? void 0 : current.index) || this.isSelectedSegment("reversePoint", current == null ? void 0 : current.index));
+        this.makeMiddlePointGuideSplitLine(prevPoint, current, nextPoint, index2, isSiblingSelected);
+        this.makeMiddlePointGuideSegment(prevPoint, current, nextPoint, index2, isSiblingSelected);
+      }
+      if (current.close) {
+        this.pathStringManager.Z();
+      }
+    }
+  }
+  makeMovePositionGuide() {
+    var state = this.state;
+    var { startPoint, moveXY, dragPoints, altKey, snapPointList, isGroupSegment } = state;
+    var points2 = this.points;
+    if (moveXY) {
+      snapPointList = snapPointList || [];
+      var {
+        snapPointList: movePointSnapPointList,
+        moveXY: newMoveXY
+      } = calculateMovePointSnap(points2, moveXY, 3);
+      snapPointList.push.apply(snapPointList, movePointSnapPointList);
+      state.moveXY = newMoveXY;
+      moveXY = newMoveXY;
+      this.snapPointList = snapPointList;
+      var prev = points2[points2.length - 1];
+      if (dragPoints && !isGroupSegment) {
+        if (!prev) {
+          var { x: x2, y: y2 } = Point.getReversePoint(startPoint, moveXY);
+          this.guideLineManager.M(moveXY).L(startPoint).L({ x: x2, y: y2 });
+          this.segmentManager.addCurvePoint(startPoint).addCurvePoint(moveXY).addCurvePoint({ x: x2, y: y2 });
+        } else if (prev.curve) {
+          var { x: x2, y: y2 } = Point.getReversePoint(startPoint, moveXY);
+          this.guideLineManager.M(prev.startPoint).C(prev.endPoint, { x: x2, y: y2 }, startPoint);
+          this.segmentManager.addGuideLine(prev.startPoint, prev.endPoint).addGuideLine(startPoint, { x: x2, y: y2 }).addGuideLine(startPoint, moveXY).addCurvePoint(prev.endPoint).addCurvePoint({ x: x2, y: y2 }).addCurvePoint(moveXY).addPoint(false, startPoint);
+        } else if (prev.curve === false) {
+          var { x: x2, y: y2 } = Point.getReversePoint(startPoint, moveXY);
+          this.guideLineManager.M(prev.startPoint).Q({ x: x2, y: y2 }, startPoint);
+          this.segmentManager.addGuideLine(moveXY, { x: x2, y: y2 }).addPoint(false, startPoint).addCurvePoint({ x: x2, y: y2 }).addCurvePoint(moveXY);
+        }
+      } else {
+        if (!prev)
+          ;
+        else if (prev.curve) {
+          this.guideLineManager.M(prev.startPoint).Q(prev.endPoint, moveXY);
+          this.segmentManager.addGuideLine(prev.endPoint, prev.startPoint).addCurvePoint(prev.endPoint);
+        } else {
+          if (!prev.close) {
+            this.guideLineManager.M(prev.startPoint).L(moveXY);
+            this.segmentManager.addPoint(false, prev.startPoint);
+          }
+        }
+      }
+    }
+  }
+  makeSnapLines() {
+    var snapLines = [];
+    if (this.snapPointList) {
+      var snapPath = new PathStringManager();
+      snapLines = this.snapPointList.map((snapPoint) => {
+        snapPath.reset();
+        return snapPath.M(snapPoint.startPoint).L(snapPoint.endPoint).X(snapPoint.startPoint).toString("snap-path");
+      });
+    }
+    return snapLines.join("");
+  }
+  makePathArea() {
+    const pathList = this.splitedGroupList.map(({ startPointIndex, points: points2 }, groupIndex) => {
+      const d = PathGenerator.generatorPathString(points2);
+      const verties = toRectVerties(PathParser.fromSVGString(d).getBBox());
+      return {
+        points: points2,
+        startPointIndex,
+        groupIndex,
+        center: verties[4],
+        d
+      };
+    });
+    const pathCount = pathList.length;
+    return `
+            <g>
+               ${pathList.map((it) => {
+      const { center: center2 } = it;
+      const [x2, y2] = center2;
+      const selected = this.state.selectedGroupIndex === it.groupIndex;
+      return `
+                        <path class="path-area ${selected ? "selected" : ""}" 
+                            d="${it.d}" 
+                            data-point-index="${it.startPointIndex}" 
+                            data-group-index="${it.groupIndex}" 
+                        />
+
+                        ${pathCount > 1 && `
+                            <text class="path-area-text" x="${x2}" y="${y2}" >${it.groupIndex + 1}</text>
+                        `}
+                    `;
+    }).join("")}
+            </g>
+        `;
+  }
+  toSVGString() {
+    return `
+        <svg width="100%" height="100%" class='svg-editor-canvas'>
+            ${this.guideLineManager.toString("guide")}
+            ${this.splitLines.join("")}
+            ${this.makeSnapLines()}
+            ${this.makePathArea()}
+            ${this.segmentManager.toString()}
+        </svg>
+        `;
+  }
+}
+var PathDrawView$1 = "";
+const FIELDS$1 = ["fill", "fill-opacity", "stroke", "stroke-width", "stroke-linecap", "stroke-linejoin"];
+class PathDrawView extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.pathParser = new PathParser();
+  }
+  initState() {
+    return {
+      points: [],
+      $target: null,
+      fill: "transparent",
+      stroke: "black",
+      "fill-opacity": null,
+      "stroke-width": 2,
+      "stroke-linecap": "round",
+      "stroke-linejoin": "round",
+      tolerance: 1
+    };
+  }
+  [SUBSCRIBE("changeDrawManager")](obj2) {
+    this.setState(__spreadValues({}, obj2), false);
+  }
+  get scale() {
+    return this.$viewport.scale;
+  }
+  template() {
+    return `
+        <div class='elf--path-draw-view' tabIndex="-1">
+            <div class='path-draw-container' ref='$view'></div>
+        </div>`;
+  }
+  initRect(isForce = false) {
+    if (!this.state.rect || isForce) {
+      this.state.rect = this.$el.rect();
+    }
+  }
+  [KEYUP("document") + IF("isShow") + ESCAPE + ENTER + PREVENT + STOP]() {
+    this.trigger("hidePathDrawEditor");
+  }
+  [SUBSCRIBE("DrawEditorDone")]() {
+    this.trigger("hidePathDrawEditor");
+  }
+  get totalPathLength() {
+    if (!this.refs.$view)
+      return 0;
+    var $obj = this.refs.$view.$("path.object");
+    if (!$obj)
+      return 0;
+    return $obj.totalLength;
+  }
+  makePathLayer(pathRect) {
+    var layer2;
+    const newPath = PathParser.makePathByPoints(this.state.points).simplify(this.state.tolerance).smooth(30);
+    newPath.transformMat4(this.$viewport.matrixInverse);
+    const bbox = newPath.getBBox();
+    const newWidth = distance$1(bbox[1], bbox[0]);
+    const newHeight = distance$1(bbox[3], bbox[0]);
+    newPath.translate(-bbox[0][0], -bbox[0][1]);
+    const pathItem = {
+      itemType: "svg-path",
+      x: Length.px(bbox[0][0]),
+      y: Length.px(bbox[0][1]),
+      width: Length.px(newWidth),
+      height: Length.px(newHeight),
+      d: newPath.d,
+      totalLength: this.totalPathLength
+    };
+    FIELDS$1.forEach((key) => {
+      if (this.state[key])
+        Object.assign(pathItem, { [key]: this.state[key] });
+    });
+    const containerItem = this.$selection.currentProject;
+    layer2 = containerItem.appendChild(this.$editor.createModel(pathItem));
+    return layer2;
+  }
+  addPathLayer() {
+    var pathRect = this.getPathRect();
+    if (pathRect.width !== 0 && pathRect.height !== 0) {
+      var layer2 = this.makePathLayer(pathRect);
+      if (layer2) {
+        this.emit("refreshAll");
+      }
+    }
+  }
+  changeMode(obj2) {
+    this.setState(__spreadValues(__spreadValues({}, this.initState()), obj2), false);
+  }
+  getCurrentObject() {
+    var current = this.state.current;
+    if (!current) {
+      return null;
+    }
+    return {
+      current,
+      d: current.d
+    };
+  }
+  [SUBSCRIBE("showPathDrawEditor")](obj2 = {}) {
+    this.changeMode(obj2);
+    this.$el.show();
+    this.$el.focus();
+    this.emit("showDrawManager", {
+      instance: this,
+      fill: this.state.fill,
+      stroke: this.state.stroke,
+      "fill-opacity": this.state["fill-opacity"],
+      "stroke-width": this.state["stroke-width"],
+      "stroke-linecap": this.state["stroke-linecap"],
+      "stroke-linejoin": this.state["stroke-linejoin"]
+    });
+    this.emit("hidePathEditor");
+    this.emit("push.mode.view", "PathDrawView");
+  }
+  [SUBSCRIBE("initPathDrawEditor")]() {
+    this.pathParser.reset("");
+    this.refs.$view.empty();
+  }
+  [SUBSCRIBE("hidePathDrawEditor")]() {
+    if (this.$el.isShow()) {
+      this.trigger("initPathDrawEditor");
+      this.$el.hide();
+      this.emit("hideDrawManager");
+      this.emit("pop.mode.view", "PathDrawView");
+    }
+  }
+  [SUBSCRIBE("hideAddViewLayer")]() {
+    this.$el.hide();
+    this.emit("hideDrawManager");
+  }
+  getInnerId(postfix = "") {
+    return "draw-manager-" + postfix;
+  }
+  get toFillSVG() {
+    return SVGFill.parseImage(this.state.fill || "transparent").toSVGString(this.fillId);
+  }
+  get toStrokeSVG() {
+    return SVGFill.parseImage(this.state.stroke || "black").toSVGString(this.strokeId);
+  }
+  get toDefInnerString() {
+    return `
+            ${this.toFillSVG}
+            ${this.toStrokeSVG}
+        `;
+  }
+  get toDefString() {
+    var str = this.toDefInnerString.trim();
+    return `
+            <defs>
+            ${str}
+            </defs>
+        `;
+  }
+  get fillId() {
+    return this.getInnerId("fill");
+  }
+  get strokeId() {
+    return this.getInnerId("stroke");
+  }
+  get toFillValue() {
+    return SVGFill.parseImage(this.state.fill || "transparent").toFillValue(this.fillId);
+  }
+  get toStrokeValue() {
+    return SVGFill.parseImage(this.state.stroke || "black").toFillValue(this.strokeId);
+  }
+  [BIND("$view")]() {
+    const newPath = PathParser.makePathByPoints(this.state.points).simplify(this.state.tolerance);
+    return {
+      innerHTML: `
+            <svg width="100%" height="100%" class='svg-editor-canvas'>
+                ${this.toDefString}
+                <path 
+                    class='object' 
+                    fill="${this.toFillValue}"
+                    stroke="${this.toStrokeValue}"
+                    fill-opacity="${this.state["fill-opacity"]}"
+                    stroke-width="${this.state["stroke-width"]}"
+                    stroke-linecap="${this.state["stroke-linecap"]}"
+                    stroke-linejoin="${this.state["stroke-linejoin"]}"
+                    d="${newPath.d}" 
+                />
+            </svg>
+            `
+    };
+  }
+  renderPath() {
+    this.bindData("$view");
+  }
+  [SUBSCRIBE("resizeEditor")]() {
+    this.initRect(true);
+  }
+  getPathRect() {
+    this.initRect(true);
+    var $obj = this.refs.$view.$("path.object");
+    var pathRect = { x: Length.z(), y: Length.z(), width: Length.z(), height: Length.z() };
+    if ($obj) {
+      pathRect = $obj.rect();
+      pathRect.x -= this.state.rect.x;
+      pathRect.y -= this.state.rect.y;
+    }
+    return pathRect;
+  }
+  [POINTERSTART("$view") + MOVE() + END()](e) {
+    this.initRect();
+    this.state.altKey = false;
+    this.state.startXY = {
+      x: e.xy.x - this.state.rect.x,
+      y: e.xy.y - this.state.rect.y
+    };
+    this.state.points = [this.state.startXY];
+  }
+  move(dx, dy, eventType, pressure) {
+    this.state.points.push({
+      x: this.state.startXY.x + dx,
+      y: this.state.startXY.y + dy,
+      pressure
+    });
+    this.renderPath();
+  }
+  end(dx, dy) {
+    this.addPathLayer();
+    this.trigger("initPathDrawEditor");
+  }
+}
+var DrawManager$1 = "";
+class DrawManager extends EditorElement {
+  initState() {
+    return {
+      tolerance: 1,
+      stroke: "black",
+      "stroke-width": 2,
+      "stroke-linecap": "round",
+      "stroke-linejoin": "round",
+      msg: this.$i18n("path.manager.msg")
+    };
+  }
+  [SUBSCRIBE("refreshSelection")]() {
+    var current = this.$selection.current;
+    if (current) {
+      this.children.$stroke.setValue(current["stroke"] || "rgba(0, 0, 0, 1)");
+      this.children.$strokeWidth.setValue(current["stroke-width"] || Length.number(1));
+    }
+  }
+  [SUBSCRIBE("setColorAsset")]({ color: color2 }) {
+    if (this.$el.isShow()) {
+      this.setState({
+        stroke: color2
+      }, false);
+      this.children.$stroke.setValue(color2);
+      this.updateData({
+        stroke: color2
+      });
+    }
+  }
+  template() {
+    return `
+      <div class='elf--draw-manager'>
+        <div class="tools left" ref="$left">
+            <button type="button" class="primary" data-value='DrawEditorDone' title='${this.$i18n("draw.manager.mode.modify")}' >Done</button>
+        </div>      
+        <div class='tools'>   
+          <div >        
+            <label data-tooltip="${this.$i18n("draw.manager.tolerance")}">Tolerance</label>            
+            <object refClass="NumberInputEditor"  
+              ref='$tolerance' 
+              key='tolerance' 
+              value="1" 
+              min="0"
+              max="100"
+              step="0.01"
+              unit="number" 
+              onchange="changeValue" 
+            />
+          </div>              
+          <div >
+            <label>${this.$i18n("svg.item.property.stroke")}</label>          
+            <object refClass="FillSingleEditor" 
+              ref='$stroke' 
+              simple="true" 
+              value="${this.state.stroke}" 
+              key='stroke' 
+              onchange="changeValue" 
+            />
+          </div>
+
+          <div >
+            <label>${this.$i18n("svg.item.property.strokeWidth")}</label>          
+            <object refClass="NumberInputEditor"  
+              ref='$strokeWidth' 
+              key="stroke-width" 
+              value="${this.state["stroke-width"]}"              
+              onchange="changeValue" />
+          </div>      
+          
+
+          <div>
+            <label data-tooltip="${this.$i18n("svg.item.property.lineCap")}">Cap</label>          
+            <object refClass="SelectEditor" 
+              ref='$strokeLineCap' 
+              key="stroke-linecap" 
+              value="${this.state["stroke-linecap"]}"                   
+              options=${variable$4(["butt", "round", "square"])} 
+              onchange="changeValue" 
+            />
+          </div> 
+          <div>
+            <label data-tooltip="${this.$i18n("svg.item.property.lineJoin")}">Join</label>          
+            <object refClass="SelectEditor"  
+              ref='$strokeLineJoin' 
+              key="stroke-linejoin" 
+              value="${this.state["stroke-linejoin"]}"                                 
+              options=${variable$4(["miter", "bevel", "round"])}
+              onchange="changeValue" 
+            />
+          </div>
+        </div>
+      </div>    
+    `;
+  }
+  [SUBSCRIBE_SELF("changeValue")](key, value, params) {
+    this.updateData({
+      [key]: value
+    });
+  }
+  updateData(obj2 = {}) {
+    this.setState(obj2, false);
+    this.state.instance.trigger(this.state.changeEvent, obj2);
+  }
+  [SUBSCRIBE("changePathManager")](mode) {
+    this.setState({ mode });
+  }
+  [SUBSCRIBE("showDrawManager")](obj2 = {}) {
+    obj2.changeEvent = obj2.changeEvent || "changeDrawManager";
+    this.setState(obj2);
+    this.$el.show();
+    this.emit("addStatusBarMessage", this.state.msg);
+    this.emit("hidePathManager");
+  }
+  [SUBSCRIBE("hideDrawManager")]() {
+    this.$el.hide();
+  }
+  [CLICK("$left button")](e) {
+    var message = e.$dt.attr("data-value");
+    this.emit(message);
+  }
+}
+function pathDrawView(editor) {
+  editor.registerMenuItem("canvas.view", {
+    PathDrawView
+  });
+  editor.registerMenuItem("page.subeditor.view", {
+    DrawManager
+  });
+}
+var PathEditorView$1 = "";
+function xy([x2, y2]) {
+  return { x: x2, y: y2 };
+}
+const SegmentConvertor = class extends EditorElement {
+  convertToCurve(index2) {
+    this.pathGenerator.convertToCurve(index2);
+    this.renderPath();
+    this.refreshPathLayer();
+  }
+  isEditableSegment() {
+    return this.state.disableCurve === false;
+  }
+  [DOUBLECLICK("$view [data-segment]") + IF("isEditableSegment") + PREVENT](e) {
+    var index2 = +e.$dt.attr("data-index");
+    this.convertToCurve(index2);
+  }
+  [DOUBLETAB("$view [data-segment]") + PREVENT + DELAY(300)](e) {
+    var index2 = +e.$dt.attr("data-index");
+    this.convertToCurve(index2);
+  }
+};
+const PathCutter = class extends SegmentConvertor {
+  calculatePointOnLine(d, clickPosition) {
+    var parser2 = new PathParser(d);
+    return parser2.getClosedPoint(clickPosition);
+  }
+  [POINTERSTART("$view .split-path") + MOVE() + END()](e) {
+    this.initRect();
+    var parser2 = new PathParser(e.$dt.attr("d"));
+    var clickPosition = {
+      x: e.xy.x - this.state.rect.x,
+      y: e.xy.y - this.state.rect.y
+    };
+    var selectedSegmentIndex = -1;
+    if (this.isMode("path")) {
+      this.state.dragXY = clickPosition;
+      this.state.startPoint = this.state.dragXY;
+      this.pathGenerator.setLastPoint(this.state.startPoint);
+      this.state.isSplitPath = true;
+      this.renderPath();
+      if (this.state.current) {
+        this.refreshPathLayer();
+      } else {
+        this.addPathLayer();
+        this.trigger("initPathEditorView");
+      }
+      return;
+    } else {
+      if (parser2.segments[1].command === "C") {
+        var points2 = [
+          xy(parser2.segments[0].values),
+          xy(parser2.segments[1].values.slice(0, 2)),
+          xy(parser2.segments[1].values.slice(2, 4)),
+          xy(parser2.segments[1].values.slice(4, 6))
+        ];
+        var curve = recoverBezier(...points2, 20);
+        var t = curve(clickPosition.x, clickPosition.y);
+        selectedSegmentIndex = this.pathGenerator.setPoint(getBezierPoints(points2, t));
+      } else if (parser2.segments[1].command === "Q") {
+        var points2 = [
+          xy(parser2.segments[0].values),
+          xy(parser2.segments[1].values.slice(0, 2)),
+          xy(parser2.segments[1].values.slice(2, 4))
+        ];
+        var curve = recoverBezierQuard(...points2, 20);
+        var t = curve(clickPosition.x, clickPosition.y);
+        selectedSegmentIndex = this.pathGenerator.setPointQuard(getBezierPointsQuard(points2, t));
+      } else if (parser2.segments[1].command === "L") {
+        var points2 = [
+          xy(parser2.segments[0].values),
+          xy(parser2.segments[1].values.slice(0, 2))
+        ];
+        var curve = recoverBezierLine(...points2, 20);
+        var t = curve(clickPosition.x, clickPosition.y);
+        selectedSegmentIndex = this.pathGenerator.setPointLine(getBezierPointsLine(points2, t));
+        if (e.altKey) {
+          this.pathGenerator.convertToCurve(selectedSegmentIndex);
+        }
+      }
+      this.renderPath();
+      this.refreshPathLayer();
+      this.changeMode("segment-move");
+      this.pathGenerator.setCachePoint(selectedSegmentIndex, "startPoint");
+      this.pathGenerator.selectKeyIndex("startPoint", selectedSegmentIndex);
+    }
+  }
+};
+const PathTransformEditor = class extends PathCutter {
+  [SUBSCRIBE("changePathTransform")](transformMoveType) {
+    this.resetTransformZone();
+    var { width: width2, height } = this.state.transformZoneRect;
+    this.pathGenerator.initTransform(this.state.transformZoneRect);
+    switch (transformMoveType) {
+      case "flipX":
+        this.pathGenerator.transform("flipX", width2, 0);
+        break;
+      case "flipY":
+        this.pathGenerator.transform("flipY", 0, height);
+        break;
+      case "flip":
+        this.pathGenerator.transform("flip", width2, height);
+    }
+    this.renderPath();
+    this.refreshPathLayer();
+  }
+  [SUBSCRIBE("changePathUtil")](utilType) {
+    switch (utilType) {
+      case "reverse":
+        const { d } = this.pathGenerator.toPath();
+        const pathParser = new PathParser(d);
+        pathParser.reverse(...this.pathGenerator.selectedGroupIndexList);
+        pathParser.transformMat4(this.state.cachedMatrixInverse);
+        this.refreshEditorView({ d: pathParser.d });
+        this.updatePathLayer();
+        break;
+    }
+  }
+  [SUBSCRIBE("divideSegmentsByCount")](count) {
+    const { d } = this.pathGenerator.toPath();
+    const pathParser = new PathParser(d);
+    const newPath = pathParser.divideSegmentByCount(count);
+    newPath.transformMat4(this.state.cachedMatrixInverse);
+    this.refreshEditorView({ d: newPath.d });
+  }
+};
+const FIELDS = ["fill", "fill-opacity", "stroke", "stroke-width"];
+class PathEditorView extends PathTransformEditor {
+  initialize() {
+    super.initialize();
+    this.pathParser = new PathParser();
+    this.pathGenerator = new PathGenerator(this);
+  }
+  initState() {
+    return {
+      changeEvent: "updatePathItem",
+      isShow: false,
+      isControl: false,
+      disableCurve: false,
+      points: [],
+      mode: "path",
+      clickCount: 0,
+      isSegment: false,
+      isFirstSegment: false,
+      current: null
+    };
+  }
+  get scale() {
+    return this.$viewport.scale;
+  }
+  template() {
+    return `
+        <div class='elf--path-editor-view' tabIndex="-1">
+            <style type="text/css" ref="$styleView"></style>
+            <svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'>
+                <defs>
+                    <pattern id='stripe' patternUnits='userSpaceOnUse' width='20' height='33' patternTransform='scale(1) rotate(135)'>
+                        <path d='M0 8h20z'   stroke-width='1' stroke='#07A3FB' fill='none'/>
+                        <path d='M0 16h20z'   stroke-width='1' stroke='#07A3FB' fill='none'/>
+                        <path d='M0 24h20z'   stroke-width='1' stroke='#07A3FB' fill='none'/>
+                        <path d='M0 32h20z'   stroke-width='1' stroke='#07A3FB' fill='none'/>
+                    </pattern>
+                </defs>    
+            </svg>
+            <div class='path-container' ref='$view'></div>
+            <div class='path-container split-panel'>
+                <svg width="100%" height="100%">
+                    <circle ref='$splitCircle' class='split-circle' />
+                </svg>
+            </div>
+            <div class='segment-box' ref='$segmentBox'></div>
+        </div>`;
+  }
+  isShow() {
+    return this.state.isShow;
+  }
+  initRect(isForce = false) {
+    if (!this.state.rect || isForce) {
+      this.state.rect = this.$el.rect();
+    }
+  }
+  [SUBSCRIBE("PathEditorDone")]() {
+    if (this.state.current) {
+      this.refreshPathLayer();
+      this.trigger("hidePathEditor");
+    } else {
+      this.addPathLayer();
+    }
+    if (!this.state.current && this.pathGenerator.length) {
+      this.trigger("initPathEditorView");
+    } else {
+      this.trigger("hidePathEditor");
+    }
+  }
+  [KEYUP("document") + IF("isShow") + ENTER + PREVENT + STOP]() {
+    this.trigger("PathEditorDone");
+  }
+  [KEYUP("document") + IF("isShow") + ESCAPE + PREVENT + STOP]() {
+    if (this.state.current) {
+      this.refreshPathLayer();
+    } else {
+      this.addPathLayer();
+    }
+    this.trigger("hidePathEditor");
+  }
+  makePathLayer() {
+    var layer2;
+    const newPath = new PathParser(this.pathGenerator.toPath().d);
+    newPath.transformMat4(this.$viewport.matrixInverse);
+    const bbox = newPath.getBBox();
+    const newWidth = distance$1(bbox[1], bbox[0]);
+    const newHeight = distance$1(bbox[3], bbox[0]);
+    newPath.translate(-bbox[0][0], -bbox[0][1]);
+    const pathItem = {
+      itemType: "svg-path",
+      x: Length.px(bbox[0][0]),
+      y: Length.px(bbox[0][1]),
+      width: Length.px(newWidth),
+      height: Length.px(newHeight),
+      d: newPath.d,
+      fill: newPath.closed ? `#C4C4C4` : "transparent"
+    };
+    FIELDS.forEach((key) => {
+      if (this.state[key]) {
+        pathItem[key] = this.state[key];
+      }
+    });
+    const containerItem = this.$selection.getArtboardByPoint(bbox[0]) || this.$selection.currentProject;
+    layer2 = containerItem.appendChild(this.$editor.createModel(pathItem));
+    return layer2;
+  }
+  updatePathLayer() {
+    var { d } = this.pathGenerator.toPath();
+    var parser2 = new PathParser(d);
+    parser2.transformMat4(this.$viewport.matrixInverse);
+    this.emit(this.state.changeEvent, {
+      d: parser2.d,
+      matrix: this.state.matrix,
+      box: this.state.box
+    });
+  }
+  addPathLayer() {
+    this.changeMode("modify");
+    var layer2 = this.makePathLayer();
+    if (layer2) {
+      this.$selection.select(layer2);
+      this.trigger("hidePathEditor");
+      this.emit("refreshAll");
+    }
+  }
+  changeMode(mode, obj2) {
+    this.setState(__spreadValues({
+      mode,
+      clickCount: 0,
+      moveXY: null
+    }, obj2), false);
+    if (obj2 == null ? void 0 : obj2.points) {
+      this.pathGenerator.setPoints(obj2.points || []);
+    }
+    this.emit("changePathManager", this.state.mode);
+  }
+  [SUBSCRIBE("changePathManager")](obj2) {
+    this.setState(__spreadProps(__spreadValues({}, obj2), { clickCount: 0 }), false);
+    this.renderPath();
+  }
+  isMode(mode) {
+    return this.state.mode === mode;
+  }
+  afterRender() {
+    this.$el.hide();
+  }
+  [SUBSCRIBE("updateViewport")]() {
+    if (this.$el.isShow()) {
+      const { d } = this.pathGenerator.toPath();
+      const pathParser = new PathParser(d);
+      pathParser.transformMat4(this.state.cachedMatrixInverse);
+      this.refreshEditorView({ d: pathParser.d });
+    }
+  }
+  refreshEditorView(obj2, removeCache = false) {
+    if (obj2 && obj2.d) {
+      this.pathParser.reset(obj2.d);
+      this.pathParser.transformMat4(this.$viewport.matrix);
+      this.state.cachedMatrixInverse = this.$viewport.matrixInverse;
+      removeCache ? [] : this.pathGenerator.selectedPointList;
+      this.pathGenerator.setPoints(this.pathParser.convertGenerator());
+    }
+    this.renderPath();
+  }
+  [SUBSCRIBE("showPathEditor")](mode = "path", obj2 = {}) {
+    this.state.isShow = true;
+    this.transformMode = mode;
+    if (mode === "move") {
+      obj2.current = null;
+      obj2.points = [];
+    }
+    obj2.box = obj2.box || "canvas";
+    this.changeMode(mode, obj2);
+    this.refreshEditorView(obj2, true);
+    this.$el.show();
+    this.$el.focus();
+    this.emit("showPathManager", { mode: this.state.mode });
+    this.emit("hidePathDrawEditor");
+    this.emit("push.mode.view", "PathEditorView");
+  }
+  [SUBSCRIBE("hidePathEditor")]() {
+    if (this.$el.isShow()) {
+      this.pathParser.reset("");
+      this.pathGenerator.setPoints([]);
+      this.setState(this.initState(), false);
+      this.refs.$view.empty();
+      this.$el.hide();
+      this.emit("hidePathManager");
+      this.emit("pop.mode.view", "PathEditorView");
+      this.emit("refreshSelectionTool");
+    }
+  }
+  [SUBSCRIBE("hideAddViewLayer")]() {
+    this.state.isShow = false;
+    this.state.isControl = false;
+    this.pathParser.reset("");
+    this.setState(this.initState(), false);
+    this.refs.$view.empty();
+    this.$el.hide();
+    this.emit("hidePathManager");
+  }
+  [BIND("$view")]() {
+    var _a;
+    const path = this.state.isShow ? this.pathGenerator.makeSVGPath() : "";
+    const strokeWidth = Length.parse((_a = this.state.current) == null ? void 0 : _a["stroke-width"]).value || 0;
+    return {
+      class: {
+        "path": this.state.mode === "path",
+        "modify": this.state.mode === "modify",
+        "transform": this.state.mode === "transform",
+        "box": this.state.box === "box",
+        "canvas": this.state.box === "canvas",
+        "segment-move": this.state.mode === "segment-move",
+        "is-control": this.state.isControl,
+        "has-one-stroke-width": strokeWidth === 1
+      },
+      htmlDiff: path
+    };
+  }
+  [BIND("$splitCircle")]() {
+    if (this.state.splitXY) {
+      return {
+        cx: this.state.splitXY.x,
+        cy: this.state.splitXY.y,
+        r: 5
+      };
+    } else {
+      return {
+        r: 0
+      };
+    }
+  }
+  refreshPathLayer() {
+    this.updatePathLayer();
+  }
+  renderPath() {
+    this.bindData("$view");
+  }
+  getPathRect() {
+    this.initRect(true);
+    const { d } = this.pathGenerator.toPath();
+    return vertiesToRectangle(PathParser.fromSVGString(d).getBBox(), false);
+  }
+  resetTransformZone() {
+    var rect2 = this.getPathRect();
+    this.state.transformZoneRect = rect2;
+  }
+  [POINTERMOVE("$view") + PREVENT](e) {
+    this.initRect();
+    if (this.isMode("path") && this.state.rect) {
+      this.state.moveXY = {
+        x: e.xy.x - this.state.rect.x,
+        y: e.xy.y - this.state.rect.y
+      };
+      this.state.altKey = e.altKey;
+      this.renderPath();
+    } else {
+      var $target = Dom.create(e.target);
+      var isSplitPath = $target.hasClass("split-path");
+      if (isSplitPath) {
+        this.state.splitXY = this.calculatePointOnLine($target.attr("d"), {
+          x: e.xy.x - this.state.rect.x,
+          y: e.xy.y - this.state.rect.y
+        });
+      } else {
+        this.state.splitXY = null;
+      }
+      this.bindData("$splitCircle");
+      this.state.altKey = false;
+    }
+  }
+  [POINTERSTART("$view :not(.split-path)") + PREVENT + STOP + MOVE() + END()](e) {
+    this.initRect();
+    this.state.altKey = false;
+    var isPathMode = this.isMode("path");
+    this.$config.set("set.move.control.point", true);
+    this.state.dragXY = {
+      x: e.xy.x - this.state.rect.x,
+      y: e.xy.y - this.state.rect.y
+    };
+    this.$config.set("set.drag.path.area", false);
+    var $target = Dom.create(e.target);
+    if ($target.hasClass("svg-editor-canvas") && !isPathMode) {
+      this.$config.set("set.drag.path.area", true);
+      this.state.isGroupSegment = false;
+      this.state.selectedGroupIndex = -1;
+      this.state.selectedPointIndex = -1;
+    } else {
+      this.pathGenerator.reselect();
+      this.state.isSegment = $target.attr("data-segment") === "true";
+      this.state.isFirstSegment = this.state.isSegment && $target.attr("data-is-first") === "true";
+      this.state.isGroupSegment = $target.hasClass("path-area");
+      if (this.state.isGroupSegment) {
+        this.state.selectedGroupIndex = +$target.data("group-index");
+        this.state.selectedPointIndex = +$target.data("point-index");
+      } else {
+        this.state.selectedGroupIndex = -1;
+        this.state.selectedPointIndex = -1;
+      }
+    }
+    if (isPathMode) {
+      if (this.state.isFirstSegment) {
+        var index2 = +$target.attr("data-index");
+        this.state.startPoint = this.pathGenerator.points[index2].startPoint;
+      } else {
+        this.state.startPoint = this.state.dragXY;
+      }
+      this.state.dragPoints = false;
+      this.state.endPoint = null;
+    } else {
+      if (this.state.isSegment) {
+        this.changeMode("segment-move");
+        var [index2, segmentKey] = $target.attrs("data-index", "data-segment-point");
+        const localIndex = +index2;
+        if (e.shiftKey) {
+          this.pathGenerator.toggleSelect(segmentKey, localIndex);
+        } else {
+          this.pathGenerator.setCachePoint(localIndex, segmentKey);
+          this.pathGenerator.selectKeyIndex(segmentKey, localIndex);
+        }
+        this.renderPath();
+      } else if (this.state.isGroupSegment) {
+        this.changeMode("segment-move");
+        this.pathGenerator.selectGroup(this.state.selectedGroupIndex);
+        this.renderPath();
+      }
+    }
+  }
+  move(dx, dy) {
+    var e = this.$config.get("bodyEvent");
+    if (this.$config.true("set.drag.path.area")) {
+      this.renderSelectBox(this.state.dragXY, dx, dy);
+    } else if (this.isMode("segment-move")) {
+      this.pathGenerator.move(dx, dy, e);
+      this.renderPath();
+      this.updatePathLayer();
+    } else if (this.isMode("path")) {
+      const dist2 = getDist(dx, dy, 0, 0);
+      if (dist2 >= 2) {
+        this.state.dragPoints = e.altKey ? false : true;
+      }
+    }
+  }
+  renderSegment(callback) {
+    if (this.pathGenerator.selectedLength) {
+      this.pathGenerator.reselect();
+      if (isFunction(callback))
+        callback();
+      this.renderPath();
+      this.updatePathLayer();
+    }
+  }
+  end(dx, dy) {
+    var e = this.$config.get("bodyEvent");
+    this.$config.set("set.move.control.point", false);
+    if (this.state.isGroupSegment) {
+      this.pathGenerator.select();
+    }
+    if (this.$config.true("set.drag.path.area")) {
+      if (dx === 0 && dy === 0) {
+        this.changeMode("modify");
+        this.trigger("hidePathEditor");
+      } else {
+        this.changeMode("segment-move");
+        this.pathGenerator.selectInBox(this.getSelectBox(), e.shiftKey);
+        this.renderPath();
+        this.hideSelectBox();
+      }
+    } else if (this.isMode("modify")) {
+      this.pathGenerator.reselect();
+    } else if (this.isMode("segment-move")) {
+      this.changeMode("modify");
+      this.pathGenerator.reselect();
+      this.renderPath();
+      this.updatePathLayer();
+    } else if (this.isMode("path")) {
+      if (this.state.isFirstSegment) {
+        this.changeMode("modify");
+        this.pathGenerator.setConnectedPoint(dx, dy);
+        this.renderPath();
+        if (this.state.current) {
+          this.refreshPathLayer();
+        } else {
+          this.addPathLayer();
+          this.trigger("initPathEditorView");
+        }
+      } else {
+        if (this.state.isSplitPath)
+          ;
+        else {
+          this.pathGenerator.moveEnd(dx, dy);
+          this.state.clickCount++;
+          this.renderPath();
+          this.pathGenerator.reselect();
+        }
+      }
+      this.state.isSplitPath = false;
+    }
+  }
+  hideSelectBox() {
+    this.refs.$segmentBox.css({
+      left: Length.px(-1e5)
+    });
+  }
+  renderSelectBox(startXY = null, dx = 0, dy = 0) {
+    var obj2 = {
+      left: Length.px(startXY.x + (dx < 0 ? dx : 0)),
+      top: Length.px(startXY.y + (dy < 0 ? dy : 0)),
+      width: Length.px(Math.abs(dx)),
+      height: Length.px(Math.abs(dy))
+    };
+    this.refs.$segmentBox.css(obj2);
+  }
+  getSelectBox() {
+    var [x2, y2, width2, height] = this.refs.$segmentBox.styles("left", "top", "width", "height").map((it) => Length.parse(it));
+    var rect2 = {
+      x: x2,
+      y: y2,
+      width: width2,
+      height
+    };
+    rect2.x2 = Length.px(rect2.x.value + rect2.width.value);
+    rect2.y2 = Length.px(rect2.y.value + rect2.height.value);
+    return rect2;
+  }
+  [SUBSCRIBE("deleteSegment")]() {
+    this.pathGenerator.reselect();
+    this.pathGenerator.removeSelectedSegment();
+    this.renderPath();
+    this.updatePathLayer();
+  }
+  [SUBSCRIBE("moveSegment")](dx, dy) {
+    this.pathGenerator.reselect();
+    this.pathGenerator.moveSelectedSegment(dx, dy);
+    this.renderPath();
+    this.updatePathLayer();
+  }
+  [SUBSCRIBE("initPathEditorView")]() {
+    this.pathParser.reset("");
+    this.setState(this.initState(), false);
+    this.state.isShow = true;
+    this.refs.$view.empty();
+    this.$el.focus();
+  }
+}
+var PathManager$1 = "";
+const MODES = {
+  "segment-move": "modify",
+  "modify": "modify",
+  "path": "path",
+  "transform": "transform",
+  "warp": "warp"
+};
+class PathManager extends EditorElement {
+  initState() {
+    return {
+      mode: "move",
+      fill: null,
+      stroke: null,
+      "fill-opacity": null,
+      "stroke-width": null,
+      msg: this.$i18n("path.manager.msg")
+    };
+  }
+  template() {
+    return `
+      <div class='elf--path-manager'>
+        <div class="tools left" ref="$left">
+            <button type="button" class="primary" data-value='PathEditorDone' title='${this.$i18n("path.manager.mode.modify")}' >Done</button>
+        </div>
+        <div class='tools' ref='$mode' data-selected-value='${this.state.mode}'>
+            <button type="button" data-value='modify' data-tooltip='${this.$i18n("path.manager.mode.modify")}' > ${iconUse$1("device_hub")}</button>
+            <button type="button" data-value='path' data-tooltip='${this.$i18n("path.manager.mode.path")}' > ${iconUse$1("control_point")}</button>
+            <button type="button" data-value='transform' data-tooltip='${this.$i18n("path.manager.mode.transform")}' > ${iconUse$1("transform")}</button>             
+        </div>
+        <div class="split"></div>        
+        <div class='tools' ref='$util'>
+            <button type="button" data-value='reverse' data-tooltip='${this.$i18n("path.manager.mode.reverse")}' >${iconUse$1("sync")}</button>
+        </div>                        
+        <div class='tools' ref='$flip'>
+            <button type="button" data-value='flipX' data-tooltip='${this.$i18n("path.manager.mode.flipX")}'>${iconUse$1("flip")}</button>
+            <button type="button" data-value='flipY' data-tooltip='${this.$i18n("path.manager.mode.flipY")}'>${iconUse$1("flip", "rotate(90 12 12)")}</button>
+            <button type="button" data-value='flip' data-tooltip='${this.$i18n("path.manager.mode.flipOrigin")}'>${iconUse$1("flip", "rotate(45 12 12)")}</button>
+            <div class="split"></div>            
+            <button type="button" data-value='2x' data-tooltip="divide segment by 2 times">2x</button>
+            <button type="button" data-value='3x' data-tooltip="divide segment by 3 times">3x</button>            
+        </div>
+        <div class="subpath" style="display:none">
+          <button type="button" data-value="path" data-pathtype="rect">${iconUse$1("rect", "", { width: 24, height: 24 })}</button>
+        </div>
+      </div>    
+    `;
+  }
+  [BIND("$mode")]() {
+    return {
+      "data-selected-value": MODES[this.state.mode]
+    };
+  }
+  refresh() {
+    this.bindData("$mode");
+  }
+  [CLICK("$flip button")](e) {
+    var transformType = e.$dt.attr("data-value");
+    if (transformType === "2x") {
+      this.emit("divideSegmentsByCount", 2);
+    } else if (transformType === "3x") {
+      this.emit("divideSegmentsByCount", 3);
+    } else {
+      this.emit("changePathTransform", transformType);
+    }
+  }
+  [CLICK("$util button")](e) {
+    var utilType = e.$dt.attr("data-value");
+    this.emit("changePathUtil", utilType);
+  }
+  [CLICK("$mode button")](e) {
+    var mode = e.$dt.attr("data-value");
+    this.updateData({
+      mode
+    });
+    this.refresh();
+  }
+  [CLICK("$left button")](e) {
+    var message = e.$dt.attr("data-value");
+    this.emit(message);
+  }
+  updateData(obj2 = {}) {
+    this.setState(obj2, false);
+    this.emit(this.state.changeEvent, obj2);
+  }
+  [SUBSCRIBE("changePathManager")](mode) {
+    this.setState({ mode });
+  }
+  [SUBSCRIBE("showPathManager")](obj2 = {}) {
+    obj2.changeEvent = obj2.changeEvent || "changePathManager";
+    this.setState(obj2);
+    this.$el.show();
+    this.emit("addStatusBarMessage", this.state.msg);
+  }
+  [SUBSCRIBE("hidePathManager")]() {
+    this.$el.hide();
+  }
+}
+function pathEditorView(editor) {
+  editor.registerMenuItem("canvas.view", {
+    PathEditorView
+  });
+  editor.registerMenuItem("page.subeditor.view", {
+    PathManager
+  });
+}
+var LayerAppendView$1 = "";
+class LayerAppendView extends EditorElement {
+  template() {
+    return `
+        <div class='elf--layer-append-view'>
+            <div class='area' ref='$area'></div>
+            <div class='area-rect' ref='$areaRect'></div>
+            <div class='area-pointer' ref='$mousePointer'></div>
+            <div class='area-pointer-view' ref='$mousePointerView'></div>            
+            <input type='file' accept='image/*' multiple="true" ref='$file' class='embed-file-input'/>
+            <input type='file' accept='video/*' multiple="true" ref='$video' class='embed-video-input'/>            
+        </div>
+        `;
+  }
+  initState() {
+    return {
+      dragStart: false,
+      width: 0,
+      height: 0,
+      color: "black",
+      fontSize: 30,
+      showRectInfo: false,
+      areaVerties: rectToVerties(0, 0, 0, 0),
+      content: "Insert a text",
+      pathManager: new PathStringManager(),
+      rect: {},
+      options: {},
+      containerItem: void 0,
+      patternInfo: {}
+    };
+  }
+  get scale() {
+    return this.$viewport.scale;
+  }
+  checkNotDragStart() {
+    return Boolean(this.state.dragStart) === false;
+  }
+  [POINTERMOVE("$el") + IF("checkNotDragStart")](e) {
+    const vertex = this.$viewport.getWorldPosition(e);
+    const newVertex = this.$snapManager.checkPoint(vertex);
+    if (equals$1(newVertex, vertex) === false) {
+      this.state.target = newVertex;
+      this.state.targetVertex = this.$viewport.applyVertex(this.state.target);
+      this.state.targetPositionVertex = clone(this.state.target);
+      this.state.targetGuides = this.$snapManager.findGuideOne([this.state.target]);
+    } else {
+      this.state.target = floor([], vertex);
+      this.state.targetVertex = floor([], this.$viewport.applyVertex(this.state.target));
+      this.state.targetGuides = [];
+      this.state.targetPositionVertex = null;
+    }
+    this.bindData("$mousePointer");
+    this.bindData("$mousePointerView");
+  }
+  [POINTERSTART("$el") + MOVE() + END() + PREVENT + STOP](e) {
+    this.initMousePoint = this.state.targetPositionVertex ? this.state.targetPositionVertex : this.$viewport.getWorldPosition(e);
+    this.state.dragStart = true;
+    this.state.color = "#C4C4C4";
+    this.state.text = "";
+    const minX = this.initMousePoint[0];
+    const minY = this.initMousePoint[1];
+    const verties = rectToVerties(minX, minY, 0, 0);
+    this.state.areaVerties = this.$viewport.applyVerties(verties);
+    this.bindData("$area");
+    this.bindData("$areaRect");
+  }
+  createLayerTemplate(width2, height) {
+    const { type, text: text2, color: color2, inlineStyle } = this.state;
+    switch (type) {
+      case "artboard":
+        return `<div class='draw-item' style='background-color: white; ${inlineStyle}'></div>`;
+      case "rect":
+        return `<div class='draw-item' style='background-color: ${color2}; ${inlineStyle}'></div>`;
+      case "circle":
+        return `<div class='draw-item' style='background-color: ${color2}; border-radius: 100%; ${inlineStyle}'></div>`;
+      case "text":
+      case "svg-text":
+        return `
+                <div 
+                    class='draw-item' 
+                    
+                    style='font-size: 30px;outline: 1px solid blue;white-space:nowrap'
+                >
+                    <p contenteditable="true" style="margin:0px;display: inline-block;outline:none;" ></p>
+                </div>`;
+      case "svg-rect":
+        return `
+            <div class='draw-item'>
+                <svg width="${width2}" height="${height}" style="width:100%; height:100%;" overflow="visible">
+                    <path d="${PathParser.makeRect(0, 0, width2, height).d}" stroke-width="1" stroke="black" fill="transparent" />
+                </svg>
+            </div>
+            `;
+      case "svg-circle":
+        return `
+            <div class='draw-item'>
+                <svg width="${width2}" height="${height}" style="width:100%; height:100%;" overflow="visible">
+                    <path d="${PathParser.makeCircle(0, 0, width2, height).d}" stroke-width="1" stroke="black" fill="transparent" />
+                </svg>
+            </div>
+            `;
+      case "svg-path":
+        const newD = this.state.d.clone().scale(width2 / this.state.bboxRect.width, height / this.state.bboxRect.height).d;
+        const options2 = this.state.options;
+        return `
+            <div class='draw-item'>
+                <svg width="${width2}" height="${height}" style="width:100%; height:100%;" overflow="visible">
+                    <path   d="${newD}" 
+                            stroke-width="${options2["stroke-width"] || 1}" 
+                            stroke="${options2["stroke"] || "black"}" 
+                            fill="${options2["fill"] || "transparent"}" 
+                    />
+                </svg>
+            </div>
+            `;
+      case "polygon":
+        const options22 = this.state.options;
+        return `
+                <div class='draw-item'>
+                    <svg width="${width2}" height="${height}" style="width:100%; height:100%;" overflow="visible">
+                        <path   d="${PathParser.makePolygon(width2, height, options22.count).d}" 
+                                stroke-width="${options22["stroke-width"] || 1}" 
+                                stroke="${options22["stroke"] || "black"}" 
+                                fill="${options22["fill"] || "transparent"}" 
+                        />
+                    </svg>
+                </div>
+                `;
+      case "star":
+        const options3 = this.state.options;
+        return `
+                    <div class='draw-item'>
+                        <svg width="${width2}" height="${height}" style="width:100%; height:100%;" overflow="visible">
+                            <path   d="${PathParser.makeStar(width2, height, options3.count, options3.radius, options3.tension).d}" 
+                                    stroke-width="${options3["stroke-width"] || 1}" 
+                                    stroke="${options3["stroke"] || "black"}" 
+                                    fill="${options3["fill"] || "transparent"}" 
+                            />
+                        </svg>
+                    </div>
+                    `;
+      case "svg-textpath":
+        return `
+            <div class='draw-item' style='outline: 1px solid blue;'>
+                <svg width="${width2}" height="${height}" style="width:100%; height:100%;font-size: ${height}px;" overflow="visible">
+                    <defs>
+                        <path id='layer-add-path' d="${PathStringManager.makeLine(0, height, width2, height)}" />
+                    </defs>
+                    <text>
+                        <textPath 
+                          xlink:href="#layer-add-path"
+                          textLength="100%"
+                          lengthAdjust="spacingAndGlyphs"
+                          startOffset="0em"
+                        >${text2}</textPath>
+                    </text>
+                </svg>
+            </div>
+            `;
+      default:
+        return `<div class='draw-item' style='outline: 1px solid blue; ${inlineStyle}'></div>`;
+    }
+  }
+  [BIND("$area")]() {
+    const { areaVerties } = this.state;
+    const { left: left2, top: top2, width: width2, height } = vertiesToRectangle(areaVerties);
+    return {
+      style: { left: left2, top: top2, width: width2, height },
+      innerHTML: this.createLayerTemplate(width2.value, height.value)
+    };
+  }
+  [BIND("$areaRect")]() {
+    const { areaVerties, showRectInfo } = this.state;
+    const newVerties = this.$viewport.applyVertiesInverse(areaVerties);
+    const { width: width2, height } = vertiesToRectangle(newVerties);
+    return {
+      style: {
+        display: showRectInfo ? "inline-block" : "none",
+        left: Length.px(areaVerties[2][0]),
+        top: Length.px(areaVerties[2][1])
+      },
+      innerHTML: `x: ${Math.round(newVerties[0][0])}, y: ${Math.round(newVerties[0][1])}, ${width2.value} x ${height.value}`
+    };
+  }
+  [BIND("$mousePointerView")]() {
+    const { areaVerties, showRectInfo } = this.state;
+    const { target = create$4(), targetVertex = create$4() } = this.state;
+    return {
+      style: {
+        display: !showRectInfo ? "inline-block" : "none",
+        left: Length.px(targetVertex[0] || -1e4),
+        top: Length.px(targetVertex[1] || -1e4)
+      },
+      innerHTML: `x: ${Math.round(target[0])}, y: ${Math.round(target[1])}`
+    };
+  }
+  makeMousePointer() {
+    if (this.state.dragStart)
+      return "";
+    const { target, targetVertex } = this.state;
+    if (!target)
+      return "";
+    const guides = (this.state.targetGuides || []).filter(Boolean);
+    return `
+        <svg width="100%" height="100%">
+            ${guides.map((guide) => {
+      this.state.pathManager.reset();
+      guide = this.$viewport.applyVerties([guide[0], guide[1]]);
+      return this.state.pathManager.M({ x: guide[0][0], y: guide[0][1] }).L({ x: guide[1][0], y: guide[1][1] }).X({ x: guide[0][0], y: guide[0][1] }).X({ x: guide[1][0], y: guide[1][1] }).toString("layer-add-snap-pointer");
+    }).join("\n")}
+        </svg>
+    `;
+  }
+  [BIND("$mousePointer")]() {
+    const html2 = this.makeMousePointer();
+    return {
+      innerHTML: html2
+    };
+  }
+  move() {
+    const e = this.$config.get("bodyEvent");
+    const targetMousePoint = this.$viewport.getWorldPosition();
+    const newMousePoint = this.$snapManager.checkPoint(targetMousePoint);
+    if (equals$1(newMousePoint, targetMousePoint) === false) {
+      this.state.target = newMousePoint;
+      this.state.targetVertex = this.$viewport.applyVertex(newMousePoint);
+      this.state.targetGuides = this.$snapManager.findGuideOne([newMousePoint]).filter(Boolean);
+    } else {
+      this.state.target = void 0;
+      this.state.targetGuides = [];
+    }
+    const isShiftKey = e.shiftKey;
+    const minX = Math.min(newMousePoint[0], this.initMousePoint[0]);
+    const minY = Math.min(newMousePoint[1], this.initMousePoint[1]);
+    const maxX = Math.max(newMousePoint[0], this.initMousePoint[0]);
+    const maxY = Math.max(newMousePoint[1], this.initMousePoint[1]);
+    let dx = maxX - minX;
+    let dy = maxY - minY;
+    if (isShiftKey) {
+      dy = dx;
+    }
+    const verties = rectToVerties(minX, minY, dx, dy);
+    this.state.areaVerties = this.$viewport.applyVerties(verties);
+    this.state.showRectInfo = true;
+    this.bindData("$area");
+    this.bindData("$areaRect");
+    this.bindData("$mousePointer");
+    this.bindData("$mousePointerView");
+  }
+  end(dx, dy) {
+    const isAltKey = this.$config.get("bodyEvent").altKey;
+    let { color: color2, content: content2, fontSize, areaVerties, patternInfo } = this.state;
+    const rectVerties = this.$viewport.applyVertiesInverse(areaVerties);
+    const parentArtBoard = this.$selection.getArtboardByPoint(rectVerties[0]);
+    let { x: x2, y: y2, width: width2, height } = vertiesToRectangle(rectVerties);
+    let hasArea = true;
+    if (width2.value === 0 && height.value === 0) {
+      switch (this.state.type) {
+        case "text":
+          content2 = "";
+          height.set(this.state.fontSize);
+          hasArea = false;
+          break;
+        default:
+          width2 = Length.px(100);
+          height = Length.px(100);
+          break;
+      }
+    }
+    var rect2 = __spreadValues(__spreadValues({
+      x: x2,
+      y: y2,
+      width: width2,
+      height,
+      "background-color": color2,
+      "content": content2,
+      "font-size": fontSize
+    }, patternInfo.attrs), this.state.options);
+    switch (this.state.type) {
+      case "text":
+      case "svg-text":
+      case "svg-textpath":
+        delete rect2["background-color"];
+        break;
+      case "svg-path":
+        rect2["d"] = this.state.d.clone().scale(width2 / this.state.bboxRect.width, height / this.state.bboxRect.height).d;
+        break;
+      default:
+        delete rect2["content"];
+        break;
+    }
+    switch (this.state.type) {
+      case "image":
+        this.trigger("openImage", rect2, parentArtBoard);
+        break;
+      case "video":
+        this.trigger("openVideo", rect2, parentArtBoard);
+        break;
+      case "audio":
+        this.trigger("openAudio", rect2, parentArtBoard);
+        break;
+      case "text":
+        if (hasArea) {
+          rect2["font-size"] = Length.px(this.state.fontSize / this.$viewport.scale);
+        } else {
+          const scaledFontSize = this.state.fontSize / this.$viewport.scale;
+          const $drawItem = this.refs.$area.$(".draw-item > p");
+          $drawItem.parent().css("height", `${scaledFontSize}px`);
+          $drawItem.parent().css("font-size", `${scaledFontSize}px`);
+          $drawItem.select();
+          $drawItem.focus();
+          return;
+        }
+      default:
+        this.emit("newComponent", this.state.type, rect2, true, parentArtBoard);
+        break;
+    }
+    if (!isAltKey) {
+      this.trigger("hideLayerAppendView");
+    }
+    this.state.dragStart = false;
+    this.state.showRectInfo = false;
+    this.state.target = void 0;
+    this.bindData("$areaRect");
+  }
+  [SUBSCRIBE("showLayerAppendView")](type, options2 = {}) {
+    this.state.type = type;
+    this.state.options = options2;
+    this.state.isShow = true;
+    this.refs.$area.empty();
+    this.$el.show();
+    this.$el.focus();
+    this.$snapManager.clear();
+    this.state.inlineStyle = CSS_TO_STRING$1(this.$editor.html.toCSS(this.$model.createModel(__spreadValues({
+      itemType: type
+    }, options2), false), {
+      top: true,
+      left: true,
+      width: true,
+      height: true,
+      transform: true,
+      "transform-origin": true
+    }));
+    if (options2.d) {
+      this.state.d = new PathParser(options2.d);
+      this.state.bboxRect = this.state.d.rect();
+    }
+    this.emit("push.mode.view", "LayerAppendView");
+  }
+  [SUBSCRIBE("hideLayerAppendView")]() {
+    if (this.$el.isShow()) {
+      this.state.isShow = false;
+      this.$el.hide();
+      this.emit("pop.mode.view", "LayerAppendView");
+    }
+  }
+  [SUBSCRIBE("hideAddViewLayer")]() {
+    this.state.isShow = false;
+    this.$el.hide();
+  }
+  isShow() {
+    return this.state.isShow;
+  }
+  [KEYDOWN("document") + IF("isShow") + ESCAPE + ENTER + PREVENT + STOP](e) {
+  }
+  [KEYUP("document") + IF("isShow") + ESCAPE + ENTER + PREVENT + STOP](e) {
+    switch (this.state.type) {
+      case "text":
+        const $t = Dom.create(e.target);
+        let { fontSize, areaVerties } = this.state;
+        const rectVerties = this.$viewport.applyVertiesInverse(areaVerties);
+        const { x: x2, y: y2 } = vertiesToRectangle(rectVerties);
+        const { width: width2, height } = $t.rect();
+        const text2 = $t.text();
+        if (text2.length === 0) {
+          break;
+        }
+        const [
+          [newWidth, newHeight, newFontSize]
+        ] = this.$viewport.applyScaleVertiesInverse([
+          [width2, height, fontSize]
+        ]);
+        const rect2 = {
+          x: x2,
+          y: y2,
+          width: Length.px(newWidth),
+          height: Length.px(newHeight),
+          "content": text2.trim(),
+          "font-size": Length.px(newFontSize)
+        };
+        const parentArtBoard = this.$selection.getArtboardByPoint(rectVerties[0]);
+        this.emit("newComponent", this.state.type, rect2, true, parentArtBoard);
+        break;
+    }
+    this.state.dragStart = false;
+    this.state.showRectInfo = false;
+    this.state.target = null;
+    this.bindData("$areaRect");
+    this.trigger("hideLayerAppendView");
+  }
+  [KEYUP("$el") + IF("isShow")](e) {
+    switch (this.state.type) {
+      case "text":
+        const $t = Dom.create(e.target);
+        $t.rect();
+        break;
+    }
+  }
+  [CHANGE("$file")](e) {
+    this.refs.$file.files.forEach((item2) => {
+      this.emit("updateImage", item2, this.state.rect, this.state.containerItem);
+    });
+  }
+  [CHANGE("$video")](e) {
+    this.refs.$video.files.forEach((item2) => {
+      this.emit("updateVideo", item2, this.state.rect, this.state.containerItem);
+    });
+  }
+  [SUBSCRIBE("openImage")](rect2, containerItem) {
+    this.state.rect = rect2;
+    this.state.containerItem = containerItem;
+    this.refs.$file.click();
+  }
+  [SUBSCRIBE("openVideo")](rect2, containerItem) {
+    this.state.rect = rect2;
+    this.state.containerItem = containerItem;
+    this.refs.$video.click();
+  }
+  [SUBSCRIBE("setPatternInfo")](patternInfo) {
+    this.state.patternInfo = patternInfo;
+  }
+  [SUBSCRIBE("updateViewport")]() {
+    this.$snapManager.clear();
+    this.bindData("$mousePointer");
+    this.bindData("$mousePointerView");
+  }
+}
+function layerAppendView(editor) {
+  editor.registerMenuItem("canvas.view", {
+    LayerAppendView
+  });
+}
+var HoverView$1 = "";
+var _adorable = "";
+class HoverView extends EditorElement {
+  template() {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--hover-view sepia(0.2)"
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--hover-rect",
+      ref: "$hoverRect"
+    }));
+  }
+  checkModeView() {
+    const e = this.$config.get("bodyEvent");
+    if (!this.$viewport.checkInViewport(this.$viewport.getWorldPosition(e))) {
+      return false;
+    }
+    return this.$modeView.isCurrentMode("CanvasView");
+  }
+  [CONFIG("bodyEvent") + IF("checkModeView")]() {
+    var _a, _b;
+    if (this.$config.true("set.move.control.point")) {
+      this.$selection.setHoverId("");
+      this.renderHoverLayer();
+      return;
+    }
+    const filteredList = this.$selection.filteredLayers;
+    const point2 = this.$viewport.getWorldPosition(this.$config.get("bodyEvent"));
+    const items = filteredList.filter((it) => it.hasPoint(point2[0], point2[1])).filter((it) => it.isNot("artboard"));
+    const hoverItems = this.$model.convertGroupItems(items);
+    let id = (_a = hoverItems[0]) == null ? void 0 : _a.id;
+    if (this.$selection.isEmpty) {
+      id = (_b = hoverItems[hoverItems.length - 1]) == null ? void 0 : _b.id;
+    }
+    if (!id) {
+      this.$selection.setHoverId("");
+      this.renderHoverLayer();
+    } else {
+      if (this.$selection.setHoverId(id)) {
+        this.renderHoverLayer();
+      }
+    }
+  }
+  [SUBSCRIBE("refreshHoverView")](id) {
+    if (this.$selection.setHoverId(id)) {
+      this.renderHoverLayer();
+    }
+  }
+  [SUBSCRIBE("updateViewport")]() {
+    this.$selection.setHoverId("");
+    this.renderHoverLayer();
+  }
+  createVisiblePath(current) {
+    if (!current.is("boolean-path")) {
+      return "";
+    }
+    const newPath = current.accumulatedPath();
+    newPath.transformMat4(this.$viewport.matrix);
+    return `
+        <svg overflow="visible">
+            <path
+                d="${newPath.d}"
+                stroke="red"
+                stroke-width="2"
+                fill="none"
+                />
+        </svg>
+        `;
+  }
+  renderHoverLayer() {
+    const items = this.$selection.hoverItems;
+    if (items.length === 0) {
+      this.refs.$hoverRect.updateDiff("");
+      this.emit("removeGuideLine");
+    } else {
+      const verties = items[0].verties;
+      const title2 = items[0].is("boolean-path") ? items[0]["boolean-operation"] : items[0].itemType;
+      const line2 = this.createPointerLine(this.$viewport.applyVerties(verties), title2);
+      this.refs.$hoverRect.updateDiff(line2);
+      this.emit("refreshGuideLineByTarget", [items[0].verties]);
+    }
+  }
+  createPointerLine(pointers, title2) {
+    if (pointers.length === 0)
+      return "";
+    const verties = toRectVerties(pointers);
+    return `
+        <svg overflow="visible">
+            <path 
+                class='line' 
+                d="
+                    M ${pointers[0][0]}, ${pointers[0][1]} 
+                    L ${pointers[1][0]}, ${pointers[1][1]} 
+                    L ${pointers[2][0]}, ${pointers[2][1]} 
+                    L ${pointers[3][0]}, ${pointers[3][1]} 
+                    L ${pointers[0][0]}, ${pointers[0][1]}
+                    Z
+                " 
+            />
+            <rect height="20" width="${title2.length * 8}" x="${verties[0][0] - 1}" y="${verties[0][1] - 20}"></rect>
+            <text x="${verties[0][0]}" y="${verties[0][1]}" dx="5" dy="-5">${title2}</text>
+        </svg>`;
+  }
+}
+function hoverView(editor) {
+  editor.registerMenuItem("canvas.view", {
+    HoverView
+  });
+}
+var GuideLineView$1 = "";
+const line = (source2, target, className = "base-line") => {
+  return `<line x1="${source2[0]}" y1="${source2[1]}" x2="${target[0]}" y2="${target[1]}" class='${className}' />`;
+};
+const text = (t, target, className = "base-line") => {
+  const text2 = `${Math.floor(t)}`;
+  const unitWidth = 13;
+  const unitHeight = 16;
+  const width2 = text2.length * unitWidth;
+  const height = unitHeight;
+  return `
+    
+        <rect x="${target[0] - width2 / 4}" y="${target[1] - unitHeight - 2}" width="${width2}" height="${height}" rx="2" ry="2" fill="#00a9f4" />
+        <text x="${target[0]}" y="${target[1]}" dy="-5" font-size="16">${text2}</text>
+    `;
+};
+const hLineByPoint = (target, source2) => {
+  return line(target, source2);
+};
+const vLineByPoint = (target, source2) => {
+  return line(target, source2);
+};
+const rect = (rectVerties) => {
+  return `
+    <path 
+        class="base-rect"
+        fill="none"
+        stroke-width="1"
+        stroke="red"
+        stroke-dasharray="2 2"
+        d="${PathParser.makeRect(rectVerties[0][0], rectVerties[0][1], dist(rectVerties[0], rectVerties[1]), dist(rectVerties[0], rectVerties[3])).d}
+        " 
+    />
+`;
+};
+const point = (target, dist2 = 3, direction = "left") => {
+  if (direction === "left") {
+    return `
+        <path 
+            class="arrow"
+            d="
+                M ${target[0] + dist2} ${target[1] - dist2}
+                L ${target[0]} ${target[1]}
+                L ${target[0] + dist2} ${target[1] + dist2}
+            " 
+        />
+    `;
+  }
+  if (direction === "right") {
+    return `
+        <path 
+            class="arrow"
+            d="
+                M ${target[0] - dist2} ${target[1] - dist2}
+                L ${target[0]} ${target[1]}
+                L ${target[0] - dist2} ${target[1] + dist2}
+            " 
+        />
+    `;
+  }
+  if (direction === "up") {
+    return `
+        <path 
+            class="arrow"
+            d="
+                M ${target[0] - dist2} ${target[1] + dist2}
+                L ${target[0]} ${target[1]}
+                L ${target[0] + dist2} ${target[1] + dist2}
+            " 
+        />
+    `;
+  }
+  if (direction === "down") {
+    return `
+        <path 
+            class="arrow"
+            d="
+                M ${target[0] - dist2} ${target[1] - dist2}
+                L ${target[0]} ${target[1]}
+                L ${target[0] + dist2} ${target[1] - dist2}
+            " 
+        />
+    `;
+  }
+  return `
+        <path 
+            stroke-width="1"
+            d="
+                M ${target[0] - dist2} ${target[1] - dist2}
+                L ${target[0] + dist2} ${target[1] + dist2}
+                M ${target[0] - dist2} ${target[1] + dist2}
+                L ${target[0] + dist2} ${target[1] - dist2}
+            " 
+        />
+    `;
+};
+class GuideLineView extends EditorElement {
+  template() {
+    return `
+            <svg class='elf--guide-line-view' ref="$guide" width="100%" height="100%" ></svg>
+            `;
+  }
+  initState() {
+    return {
+      list: []
+    };
+  }
+  [BIND("$guide")]() {
+    return {
+      svgDiff: `<g>${this.createGuideLine(this.state.list)}</g>`
+    };
+  }
+  createGuideLine(list2) {
+    var images = [];
+    var texts = [];
+    list2 = list2.filter(Boolean);
+    for (var i = 0, len2 = list2.length; i < len2; i++) {
+      const [source2, target, axis, dist2, newTarget, sourceVerties, targetVerties, isInvert] = list2[i];
+      const localDist = Math.floor(dist2);
+      const localSourceVertex = this.$viewport.applyVertex(source2);
+      const localTargetVertex = this.$viewport.applyVertex(target);
+      let localNewTargetVertex;
+      if (newTarget) {
+        localNewTargetVertex = this.$viewport.applyVerties([newTarget])[0];
+      }
+      if (axis === "x") {
+        if (localDist > 0) {
+          images.push(line(localSourceVertex, localTargetVertex, "dash-line"));
+        }
+        if (localNewTargetVertex) {
+          images.push(line(localTargetVertex, localNewTargetVertex, "dash-line"));
+        }
+        if (localDist > 0) {
+          texts.push(text(localDist, lerp([], localSourceVertex, localTargetVertex, 0.5)));
+        }
+      }
+      if (axis === "y") {
+        if (localDist > 0) {
+          images.push(line(localSourceVertex, localTargetVertex, "dash-line"));
+        }
+        if (localNewTargetVertex) {
+          images.push(line(localTargetVertex, localNewTargetVertex, "dash-line"));
+        }
+        if (localDist > 0) {
+          texts.push(text(localDist, add$1([], lerp([], localSourceVertex, localTargetVertex, 0.5), [20, 0, 0])));
+        }
+      }
+      if (axis === "x") {
+        images.push(hLineByPoint(localTargetVertex, localSourceVertex));
+      }
+      if (axis === "y") {
+        images.push(vLineByPoint(localTargetVertex, localSourceVertex));
+      }
+      if (this.state.hasVerties) {
+        images.push(point(localSourceVertex, 3, "vertex"));
+        images.push(point(localTargetVertex, 3, "vertex"));
+      }
+      if (sourceVerties) {
+        if (this.$selection.isOne && this.$editor.isPointerDown || this.$selection.isMany && !this.$editor.isPointerMove) {
+          images.push(rect(this.$viewport.applyVerties(sourceVerties)));
+        }
+      }
+      if (targetVerties) {
+        images.push(rect(this.$viewport.applyVerties(targetVerties)));
+      }
+    }
+    return [...images, ...texts].join("");
+  }
+  removeGuideLine() {
+    this.setState({
+      list: []
+    });
+  }
+  setGuideLine(list2, hasVerties = false) {
+    this.setState({
+      list: list2,
+      hasVerties
+    });
+  }
+  [SUBSCRIBE("removeGuideLine", "refreshSelection")]() {
+    this.removeGuideLine();
+  }
+  [SUBSCRIBE("refreshGuideLineByTarget")](targetVertiesList = []) {
+    return this.refreshSmartGuides(targetVertiesList);
+  }
+  [SUBSCRIBE("updateViewport")]() {
+    this.refresh();
+  }
+  refreshSmartGuides(targetVertiesList) {
+    if (this.$selection.isEmpty)
+      return;
+    const sourceVerties = toRectVerties(this.$selection.verties);
+    let targetList;
+    if (targetVertiesList) {
+      targetList = targetVertiesList.map((it) => toRectVerties(it));
+    } else {
+      const targets = this.$selection.snapTargetLayers.map((target) => {
+        const rectVerties = toRectVerties(target.verties);
+        return { targetVerties: rectVerties, dist: dist(rectVerties[4], sourceVerties[4]) };
+      });
+      targets.sort((a, b) => {
+        return a.dist - b.dist;
+      });
+      targetList = targets.map((target) => target.targetVerties);
+    }
+    const xList = targetList.map((targetVerties) => makeGuidePoint(sourceVerties, targetVerties));
+    xList.sort((a, b) => {
+      return a[3] - b[3];
+    });
+    const list2 = [xList[0], xList[1]].filter(Boolean);
+    this.setGuideLine(list2);
+  }
+  refreshSmartGuidesForVerties() {
+    const guides = this.$snapManager.findGuide(this.$selection.verties);
+    this.setGuideLine(guides, true);
+  }
+  [SUBSCRIBE("refreshSelectionStyleView")]() {
+    if (this.$selection.isMany)
+      return;
+    const expect = this.$selection.hasChangedField("d", "clip-path");
+    if (!expect && this.$selection.hasChangedField("x", "y", "width", "height", "transform", "transform-origin")) {
+      this.refreshSmartGuidesForVerties();
+    }
+  }
+}
+function guideLineView(editor) {
+  editor.registerMenuItem("canvas.view", {
+    GuideLineView
+  });
+}
+var SelectionInfoView$1 = "";
+class SelectionInfoView extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
+  template() {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--selection-info-view"
+    });
+  }
+  [POINTERSTART("$el [data-artboard-title-id]") + LEFT_BUTTON + MOVE("calculateMovedElement") + END("calculateEndedElement")](e) {
+    this.startXY = e.xy;
+    this.initMousePoint = this.$viewport.getWorldPosition(e);
+    const id = e.$dt.attr("data-artboard-title-id");
+    this.$selection.select(id);
+    if (e.altKey) {
+      this.$selection.selectAfterCopy();
+      this.emit("refreshAllCanvas");
+      this.emit("refreshLayerTreeView");
+    }
+    this.initializeDragSelection();
+    this.emit("history.refreshSelection");
+    this.$config.set("set.move.control.point", true);
+  }
+  initializeDragSelection() {
+    this.$selection.reselect();
+    this.$snapManager.clear();
+    this.emit("refreshSelectionTool");
+  }
+  moveTo(dist2) {
+    const snap = this.$snapManager.check(this.$selection.cachedRectVerties.map((v) => {
+      return add$1([], v, dist2);
+    }), 3);
+    const localDist = add$1([], snap, dist2);
+    const result = {};
+    this.$selection.cachedItemMatrices.forEach((it) => {
+      const newVerties = it.verties.map((v) => {
+        return add$1([], v, localDist);
+      });
+      const newDist = subtract([], transformMat4([], newVerties[0], it.parentMatrixInverse), transformMat4([], it.verties[0], it.parentMatrixInverse));
+      result[it.id] = {
+        x: Length.px(it.x + newDist[0]).floor(),
+        y: Length.px(it.y + newDist[1]).floor()
+      };
+    });
+    this.$selection.reset(result);
+  }
+  calculateMovedElement() {
+    const targetMousePoint = this.$viewport.getWorldPosition();
+    const newDist = floor([], subtract([], targetMousePoint, this.initMousePoint));
+    this.moveTo(newDist);
+    this.emit("setAttributeForMulti", this.$selection.pack("x", "y"));
+    this.emit("refreshSelectionStyleView");
+    this.emit("refreshSelectionTool", false);
+    this.refresh();
+  }
+  [SUBSCRIBE("refreshItemName")](id, title2) {
+    var _a;
+    this.emit("setAttributeForMulti", {
+      [id]: { name: title2 }
+    });
+    (_a = this.$el.$(`[data-artboard-title-id='${id}']`)) == null ? void 0 : _a.text(title2);
+  }
+  calculateEndedElement(dx, dy) {
+    this.command("setAttributeForMulti", "move item", this.$selection.pack("x", "y"));
+    this.emit("refreshSelectionTool", true);
+    this.$config.set("set.move.control.point", false);
+  }
+  [SUBSCRIBE("updateViewport")]() {
+    this.refresh();
+  }
+  [SUBSCRIBE("refreshSelectionStyleView")]() {
+    if (this.$selection.current) {
+      if (this.$selection.current.is("artboard")) {
+        if (this.$selection.hasChangedField("x", "y", "width", "height", "transform", "transform-origin")) {
+          this.refresh();
+        }
+      }
+    }
+  }
+  [LOAD("$el") + DOMDIFF]() {
+    return this.$selection.currentProject.artboards.map((it) => {
+      return { title: it.name, id: it.id, pointers: this.$viewport.applyVerties(it.verties) };
+    }).map((it) => this.makeArtboardTitleArea(it));
+  }
+  createSize(pointers, artboardItem) {
+    const newPointer = pointers[0];
+    const diff = subtract([], pointers[0], pointers[3]);
+    const angle = calculateAngle360(diff[0], diff[1]) - 90;
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "artboard-title is-not-drag-area",
+      "data-artboard-title-id": artboardItem.id,
+      style: {
+        "transform-origin": "0% 0%",
+        "transform": `translate3d( calc(${newPointer[0]}px), calc(${newPointer[1]}px), 0px) rotateZ(${angle}deg)`
+      }
+    }, /* @__PURE__ */ createElementJsx("div", {
+      style: "transform: translateY(-100%);"
+    }, artboardItem.title));
+  }
+  makeArtboardTitleArea(it) {
+    return this.createSize(it.pointers, it);
+  }
+  [SUBSCRIBE("refreshAll")]() {
+    this.refresh();
+  }
+}
+function selectionInfoView(editor) {
+  editor.registerMenuItem("canvas.view", {
+    SelectionInfoView
+  });
+}
+var SelectionView = "";
+var directionType$1 = {
+  1: "to top left",
+  2: "to top right",
+  3: "to bottom right",
+  4: "to bottom left",
+  11: "to top",
+  12: "to right",
+  13: "to bottom",
+  14: "to left"
+};
+const SelectionToolEvent$1 = class extends EditorElement {
+  [SUBSCRIBE("refreshSelectionTool")](isShow = true) {
+    this.initSelectionTool(isShow);
+  }
+  [SUBSCRIBE("updateViewport")]() {
+    if (this.$selection.isOne && this.$modeView.isCurrentMode("CanvasView")) {
+      this.initSelectionTool();
+    }
+  }
+};
+class SelectionToolView extends SelectionToolEvent$1 {
+  template() {
+    return `
+            <div class='elf--selection-view one-selection-view' ref='$selectionView' style='display:none' >
+                <div class='pointer-rect' ref='$pointerRect'></div>
+            </div>
+        `;
+  }
+  toggleEditingPath(isEditingPath) {
+    this.$el.toggleClass("editing-path", isEditingPath);
+  }
+  [POINTERSTART("$pointerRect .rotate-pointer") + MOVE("rotateVertex") + END("rotateEndVertex")](e) {
+    this.state.moveType = "rotate";
+    this.initMousePoint = this.$viewport.getWorldPosition(e);
+    this.$selection.reselect();
+    this.verties = clone$1(this.$selection.verties);
+    this.$snapManager.clear();
+    this.rotateTargetNumber = +e.$dt.attr("data-number");
+    this.refreshRotatePointerIcon();
+    this.state.dragging = true;
+    this.state.isRotate = true;
+    this.$config.set("set.move.control.point", true);
+  }
+  rotateVertex() {
+    const targetMousePoint = this.$viewport.getWorldPosition();
+    const distVector = subtract([], targetMousePoint, this.initMousePoint);
+    const targetRotatePointer = this.rotateTargetNumber === 4 ? getRotatePointer(this.verties, 34) : this.verties[this.rotateTargetNumber];
+    var distAngle = Math.floor(calculateAngleForVec3(targetRotatePointer, this.verties[4], distVector));
+    let currentMatrix = this.$selection.cachedCurrentItemMatrix;
+    const instance = this.$selection.current;
+    if (instance) {
+      let newTransform = Transform.addTransform(currentMatrix.transform, `rotateZ(${Length.deg(distAngle).round(1e3)})`);
+      if (this.$config.get("bodyEvent").shiftKey) {
+        const newRotateX = Transform.get(newTransform, "rotateZ");
+        if (newRotateX[0]) {
+          const angle = newRotateX[0].value - newRotateX[0].value % this.$config.get("fixed.angle");
+          newTransform = Transform.rotateZ(newTransform, Length.deg(angle));
+        }
+      }
+      instance.reset({
+        transform: newTransform
+      });
+    }
+    this.state.dragging = true;
+    this.command("setAttributeForMulti", "change rotate", this.$selection.pack("transform"));
+  }
+  rotateEndVertex() {
+    this.state.dragging = false;
+    this.state.isRotate = false;
+    this.emit("recoverCursor");
+    this.$config.set("set.move.control.point", false);
+    this.verties = null;
+    this.nextTick(() => {
+      this.command("setAttributeForMulti", "change rotate", this.$selection.pack("transform"));
+    });
+  }
+  refreshRotatePointerIcon(e) {
+    this.emit("refreshCursor", "rotate");
+  }
+  refreshPointerIcon(e) {
+    const dataPointer = e.$dt.data("pointer");
+    if (dataPointer) {
+      const pointer = dataPointer.split(",").map((it) => Number(it));
+      const diff = subtract([], pointer, this.state.renderPointerList[0][4]);
+      const angle = calculateAngle360(diff[0], diff[1]);
+      let iconAngle = Math.floor(angle);
+      this.emit("refreshCursor", "open_in_full", `rotate(${iconAngle} 8 8)`);
+    } else {
+      this.emit("recoverCursor");
+    }
+  }
+  checkPointerIsNotMoved(e) {
+    return Boolean(this.state.dragging) === false;
+  }
+  [POINTEROVER("$pointerRect .rotate-pointer") + IF("checkPointerIsNotMoved")](e) {
+    this.refreshRotatePointerIcon(e);
+  }
+  [POINTEROVER("$pointerRect .pointer") + IF("checkPointerIsNotMoved")](e) {
+    this.refreshPointerIcon(e);
+  }
+  [POINTEROUT("$pointerRect .pointer,.rotate-pointer") + IF("checkPointerIsNotMoved")](e) {
+    this.emit("recoverCursor");
+  }
+  [POINTERSTART("$pointerRect .pointer") + MOVE("moveVertex") + END("moveEndVertex")](e) {
+    this.refreshPointerIcon(e);
+    this.state.dragging = true;
+    const num = +e.$dt.attr("data-number");
+    const direction = directionType$1[`${num}`];
+    this.initMousePoint = this.$viewport.getWorldPosition(e);
+    this.state.moveType = direction;
+    this.state.moveTarget = num;
+    this.$selection.reselect();
+    this.$snapManager.clear();
+    this.verties = this.$selection.verties;
+    const rotateZ2 = Transform.get(this.$selection.current.transform, "rotateZ");
+    this.hasRotate = rotateZ2 && rotateZ2.length && rotateZ2[0].value != 0;
+    this.$config.set("set.move.control.point", true);
+    this.$selection.startToCacheChildren();
+  }
+  calculateNewOffsetMatrixInverse(vertexOffset, width2, height, origin2, itemMatrix) {
+    const center2 = subtract([], TransformOrigin.scale(origin2, width2, height), vertexOffset);
+    return calculateMatrixInverse(fromTranslation([], vertexOffset), fromTranslation([], center2), itemMatrix, fromTranslation([], negate([], center2)));
+  }
+  calculateDistance(vertex, distVector, reverseMatrix) {
+    const currentVertex = clone(vertex);
+    const snap = this.$snapManager.check([
+      add$1([], currentVertex, distVector)
+    ]);
+    const nextVertex = add$1([], currentVertex, add$1([], distVector, snap));
+    var currentResult = transformMat4([], currentVertex, reverseMatrix);
+    var nextResult = transformMat4([], nextVertex, reverseMatrix);
+    const realDist = add$1([], nextResult, negate([], currentResult));
+    return realDist;
+  }
+  calculateRealDist(item2, vertexIndex, distVector) {
+    return this.calculateDistance(item2.verties[vertexIndex], distVector, item2.accumulatedMatrixInverse);
+  }
+  moveItem(instance, lastStartVertex, newWidth, newHeight) {
+    if (instance) {
+      const data = {
+        x: Length.px(lastStartVertex[0] + (newWidth < 0 ? newWidth : 0)),
+        y: Length.px(lastStartVertex[1] + (newHeight < 0 ? newHeight : 0)),
+        width: Length.px(Math.abs(newWidth)),
+        height: Length.px(Math.abs(newHeight))
+      };
+      if (this.hasRotate)
+        ;
+      else {
+        data.x = data.x.floor();
+        data.y = data.y.floor();
+        data.width = data.width.floor();
+        data.height = data.height.floor();
+      }
+      instance.reset(data);
+    }
+  }
+  moveDirectionVertex(item2, newWidth, newHeight, direction, directionNewVector) {
+    const view = calculateMatrix(item2.directionMatrix[direction], this.calculateNewOffsetMatrixInverse(directionNewVector, newWidth, newHeight, item2.originalTransformOrigin, item2.itemMatrix));
+    const lastStartVertex = getTranslation([], view);
+    this.moveItem(this.$model.get(item2.id), lastStartVertex, newWidth, newHeight);
+  }
+  moveBottomRightVertex(distVector) {
+    const { shiftKey, altKey, ctrlKey, metaKey } = this.$config.get("bodyEvent");
+    const item2 = this.$selection.cachedCurrentItemMatrix;
+    if (item2) {
+      let [realDx, realDy] = this.calculateRealDist(item2, 2, distVector);
+      let directionNewVector = fromValues(0, 0, 0);
+      if (metaKey) {
+        realDx = realDx * 2;
+        realDy = realDy * 2;
+      }
+      if (shiftKey) {
+        realDy = realDx * item2.height / item2.width;
+      }
+      const newWidth = item2.width + realDx;
+      const newHeight = altKey ? newWidth : item2.height + realDy;
+      if (metaKey) {
+        directionNewVector = fromValues(realDx / 2, realDy / 2, 0);
+      }
+      this.moveDirectionVertex(item2, newWidth, newHeight, "to top left", directionNewVector);
+    }
+  }
+  moveTopRightVertex(distVector) {
+    const { shiftKey, altKey } = this.$config.get("bodyEvent");
+    const item2 = this.$selection.cachedCurrentItemMatrix;
+    if (item2) {
+      let [realDx, realDy] = this.calculateRealDist(item2, 1, distVector);
+      if (shiftKey) {
+        realDy = -(realDx * item2.height / item2.width);
+      }
+      const newWidth = item2.width + realDx;
+      const newHeight = altKey ? newWidth : item2.height - realDy;
+      this.moveDirectionVertex(item2, newWidth, newHeight, "to bottom left", [0, newHeight, 0]);
+    }
+  }
+  moveTopLeftVertex(distVector) {
+    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
+    const item2 = this.$selection.cachedCurrentItemMatrix;
+    if (item2) {
+      let [realDx, realDy] = this.calculateRealDist(item2, 0, distVector);
+      if (metaKey) {
+        realDx = realDx * 2;
+        realDy = realDy * 2;
+      }
+      if (shiftKey) {
+        realDy = realDx * item2.height / item2.width;
+      }
+      const newWidth = item2.width - realDx;
+      const newHeight = altKey ? newWidth : item2.height - realDy;
+      let directionNewVector = fromValues(newWidth, newHeight, 0);
+      if (metaKey) {
+        directionNewVector = fromValues(newWidth + realDx / 2, newHeight + realDy / 2, 0);
+      }
+      this.moveDirectionVertex(item2, newWidth, newHeight, "to bottom right", directionNewVector);
+    }
+  }
+  moveTopVertex(distVector) {
+    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
+    const item2 = this.$selection.cachedCurrentItemMatrix;
+    if (item2) {
+      let [realDx, realDy] = this.calculateRealDist(item2, 0, distVector);
+      if (metaKey) {
+        realDy = realDy * 2;
+      }
+      const newWidth = item2.width;
+      const newHeight = item2.height - realDy;
+      let directionNewVector = fromValues(newWidth / 2, newHeight, 0);
+      if (metaKey) {
+        directionNewVector = fromValues(newWidth / 2, newHeight + realDy / 2, 0);
+      }
+      this.moveDirectionVertex(item2, newWidth, newHeight, "to bottom", directionNewVector);
+    }
+  }
+  moveBottomVertex(distVector) {
+    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
+    const item2 = this.$selection.cachedCurrentItemMatrix;
+    if (item2) {
+      let [realDx, realDy] = this.calculateRealDist(item2, 3, distVector);
+      if (metaKey) {
+        realDy = realDy * 2;
+      }
+      const newWidth = item2.width;
+      const newHeight = item2.height + realDy;
+      let directionNewVector = fromValues(newWidth / 2, 0, 0);
+      if (metaKey) {
+        directionNewVector = fromValues(newWidth / 2, realDy / 2, 0);
+      }
+      this.moveDirectionVertex(item2, newWidth, newHeight, "to top", directionNewVector);
+    }
+  }
+  moveRightVertex(distVector) {
+    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
+    const item2 = this.$selection.cachedCurrentItemMatrix;
+    if (item2) {
+      let [realDx, realDy] = this.calculateRealDist(item2, 1, distVector);
+      if (metaKey) {
+        realDx = realDx * 2;
+      }
+      const newWidth = item2.width + realDx;
+      const newHeight = item2.height;
+      let directionNewVector = fromValues(0, newHeight / 2, 0);
+      if (metaKey) {
+        directionNewVector = fromValues(realDx / 2, newHeight / 2, 0);
+      }
+      this.moveDirectionVertex(item2, newWidth, newHeight, "to left", directionNewVector);
+    }
+  }
+  moveLeftVertex(distVector) {
+    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
+    const item2 = this.$selection.cachedCurrentItemMatrix;
+    if (item2) {
+      let [realDx, realDy] = this.calculateRealDist(item2, 0, distVector);
+      if (metaKey) {
+        realDx = realDx * 2;
+      }
+      const newWidth = item2.width - realDx;
+      const newHeight = item2.height;
+      let directionNewVector = fromValues(newWidth, newHeight / 2, 0);
+      if (metaKey) {
+        directionNewVector = fromValues(newWidth + realDx / 2, newHeight / 2, 0);
+      }
+      this.moveDirectionVertex(item2, newWidth, newHeight, "to right", directionNewVector);
+    }
+  }
+  moveBottomLeftVertex(distVector) {
+    const { shiftKey, altKey } = this.$config.get("bodyEvent");
+    const item2 = this.$selection.cachedCurrentItemMatrix;
+    if (item2) {
+      let [realDx, realDy] = this.calculateRealDist(item2, 3, distVector);
+      if (shiftKey) {
+        realDy = -(realDx * item2.height / item2.width);
+      }
+      const newWidth = item2.width - realDx;
+      const newHeight = altKey ? newWidth : item2.height + realDy;
+      this.moveDirectionVertex(item2, newWidth, newHeight, "to top right", [newWidth, 0, 0]);
+    }
+  }
+  moveVertex() {
+    const targetMousePoint = this.$viewport.getWorldPosition();
+    const distVector = subtract([], targetMousePoint, this.initMousePoint);
+    if (this.state.moveType === "to top left") {
+      this.moveTopLeftVertex(distVector);
+    } else if (this.state.moveType === "to top") {
+      this.moveTopVertex(distVector);
+    } else if (this.state.moveType === "to right") {
+      this.moveRightVertex(distVector);
+    } else if (this.state.moveType === "to bottom") {
+      this.moveBottomVertex(distVector);
+    } else if (this.state.moveType === "to left") {
+      this.moveLeftVertex(distVector);
+    } else if (this.state.moveType === "to top right") {
+      this.moveTopRightVertex(distVector);
+    } else if (this.state.moveType === "to bottom right") {
+      this.moveBottomRightVertex(distVector);
+    } else if (this.state.moveType === "to bottom left") {
+      this.moveBottomLeftVertex(distVector);
+    }
+    this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "width", "height"));
+    this.state.dragging = true;
+  }
+  moveEndVertex() {
+    this.state.dragging = false;
+    this.emit("recoverCursor");
+    this.$selection.reselect();
+    this.$config.set("set.move.control.point", false);
+    this.nextTick(() => {
+      this.$selection.recoverChildren();
+      this.command("setAttributeForMulti", "move selection pointer", this.$selection.pack("x", "y", "width", "height"));
+      this.emit("recoverBooleanPath");
+    });
+  }
+  show() {
+    this.$el.show();
+    this.state.show = true;
+  }
+  hide() {
+    this.$el.hide();
+    this.state.show = false;
+  }
+  initSelectionTool(isShow = true) {
+    if (this.$el.isShow() && this.$selection.isOne === false) {
+      this.hide();
+    } else if (this.$el.isHide() && this.$selection.isOne) {
+      this.show();
+    }
+    this.makeSelectionTool();
+  }
+  makeSelectionTool() {
+    this.renderPointers();
+  }
+  renderPointers() {
+    if (!this.$selection.cachedCurrentItemMatrix) {
+      return;
+    }
+    if (this.$selection.isEmpty) {
+      return;
+    }
+    const verties = this.$selection.verties;
+    this.state.renderPointerList = [
+      this.$viewport.applyVerties(verties)
+    ];
+    const pointers = this.createRenderPointers(this.state.renderPointerList[0]);
+    if (pointers) {
+      const { line: line2, parentRect, point: point2, size: size2, visiblePath } = pointers;
+      this.refs.$pointerRect.updateDiff(line2 + parentRect + point2 + size2 + visiblePath);
+    }
+  }
+  createPointer(pointer, number, rotate2) {
+    return `
+        <div class='pointer' data-number="${number}" data-pointer="${pointer}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) rotateZ(${rotate2 || "0deg"})" ></div>
+        `;
+  }
+  createPointerSide(pointer, number, rotate2, width2, height) {
+    return `
+        <div class='pointer' data-number="${number}" data-pointer="${pointer}" style="width: ${width2}px; height: ${height}px;transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) rotateZ(${rotate2 || "0deg"})" ></div>
+        `;
+  }
+  createRotatePointer(pointer, number, direction) {
+    if (pointer.length === 0)
+      return "";
+    if (number < 4) {
+      return `
+            <div class='rotate-pointer no-fill' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) scale(1.8);" ></div>
+            `;
+    }
+    return `
+        <div class='rotate-pointer' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px)" ></div>
+        `;
+  }
+  createPointerRect(pointers, rotatePointer, parentVector) {
+    if (pointers.length === 0)
+      return "";
+    const current = this.$selection.current;
+    const isArtBoard = current && current.is("artboard");
+    let line2 = "";
+    if (!isArtBoard) {
+      const centerPointer = lerp([], pointers[0], pointers[1], 0.5);
+      line2 += `
+                M ${centerPointer[0]},${centerPointer[1]} 
+                L ${rotatePointer[0]},${rotatePointer[1]} 
+            `;
+    }
+    return `
+        <svg class='line' overflow="visible">
+            <path 
+                d="
+                    M ${pointers[0][0]}, ${pointers[0][1]} 
+                    L ${pointers[1][0]}, ${pointers[1][1]} 
+                    L ${pointers[2][0]}, ${pointers[2][1]} 
+                    L ${pointers[3][0]}, ${pointers[3][1]} 
+                    L ${pointers[0][0]}, ${pointers[0][1]}
+                    ${line2}
+                    Z
+                " />
+        </svg>`;
+  }
+  createParentRect(pointers = []) {
+    if (pointers.length === 0)
+      return "";
+    return `
+        <svg class='line' overflow="visible">
+            <path 
+                d="
+                    M ${pointers[0][0]}, ${pointers[0][1]} 
+                    L ${pointers[1][0]}, ${pointers[1][1]} 
+                    L ${pointers[2][0]}, ${pointers[2][1]} 
+                    L ${pointers[3][0]}, ${pointers[3][1]} 
+                    L ${pointers[0][0]}, ${pointers[0][1]}
+                    Z
+                " 
+                stroke="red"
+                />
+        </svg>`;
+  }
+  createSize(pointers) {
+    const top2 = lerp([], pointers[0], pointers[1], 0.5);
+    const right2 = lerp([], pointers[1], pointers[2], 0.5);
+    const bottom2 = lerp([], pointers[2], pointers[3], 0.5);
+    const left2 = lerp([], pointers[3], pointers[0], 0.5);
+    const list2 = [
+      { start: top2, end: bottom2 },
+      { start: right2, end: left2 },
+      { start: bottom2, end: top2 },
+      { start: left2, end: right2 }
+    ].map((it, index2) => {
+      return { index: index2, data: it };
+    });
+    list2.sort((a, b) => {
+      return a.data.start[1] > b.data.start[1] ? -1 : 1;
+    });
+    const item2 = list2[0];
+    const newPointer = lerp([], item2.data.end, item2.data.start, 1 + 16 / dist(item2.data.start, item2.data.end));
+    const width2 = this.$selection.current.width.value;
+    const height = this.$selection.current.height.value;
+    const diff = subtract([], item2.data.start, item2.data.end);
+    const angle = calculateAngle360(diff[0], diff[1]) + 90;
+    const widthPx = round(width2, 100);
+    const heightPx = round(height, 100);
+    let text2 = widthPx === heightPx ? `WH: ${widthPx}` : `${round(width2, 100)} x ${round(height, 100)}`;
+    if (this.state.isRotate) {
+      const rotateZ2 = Transform.get(this.$selection.current.transform, "rotateZ");
+      if (rotateZ2) {
+        text2 = `${round(rotateZ2[0].value, 1e3)}\xB0`;
+      }
+    }
+    return `
+            <div 
+                data-layout="${this.$selection.current.layout}"
+                class='size-pointer' 
+                style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >
+               ${text2}
+            </div>
+        `;
+  }
+  createVisiblePath() {
+    const current = this.$selection.current;
+    if (!current)
+      return "";
+    if (!current.isBooleanItem) {
+      return "";
+    }
+    const newPath = current.accumulatedPath();
+    newPath.transformMat4(this.$viewport.matrix);
+    return `
+        <svg class='line' overflow="visible">
+            <path
+                d="${newPath.d}"
+                stroke="red"
+                stroke-width="2"
+                fill="none"
+                />
+        </svg>
+        `;
+  }
+  createRenderPointers(pointers) {
+    const current = this.$selection.current;
+    if (current && current.is("text")) {
+      if (current.width.value === 0 && current.height.value === 0) {
+        return;
+      }
+    }
+    const isArtBoard = current && current.is("artboard");
+    const diff = subtract([], lerp([], pointers[0], pointers[1], 0.5), lerp([], pointers[0], pointers[2], 0.5));
+    const rotate2 = Length.deg(calculateAngle360(diff[0], diff[1]) + 90).round(1e3);
+    const rotatePointer = getRotatePointer(pointers, 34);
+    const dist$1 = dist(pointers[0], pointers[2]);
+    const width2 = dist(pointers[0], pointers[1]);
+    const height = dist(pointers[0], pointers[3]);
+    return {
+      line: this.createPointerRect(pointers, rotatePointer),
+      size: this.createSize(pointers),
+      parentRect: "",
+      visiblePath: this.createVisiblePath(),
+      point: [
+        isArtBoard ? void 0 : this.createRotatePointer(rotatePointer, 4, "center center"),
+        dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[0], pointers[1], 0.5), 11, rotate2, width2, 5),
+        dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[1], pointers[2], 0.5), 12, rotate2, 5, height),
+        dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[2], pointers[3], 0.5), 13, rotate2, width2, 5),
+        dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[3], pointers[0], 0.5), 14, rotate2, 5, height),
+        this.createPointer(pointers[0], 1, rotate2),
+        this.createPointer(pointers[1], 2, rotate2),
+        this.createPointer(pointers[2], 3, rotate2),
+        this.createPointer(pointers[3], 4, rotate2),
+        this.createPointer(pointers[4], 5, rotate2)
+      ].join("")
+    };
+  }
+  checkShow() {
+    if (this.state.show && this.$selection.isOne) {
+      if (this.$selection.hasChangedField("x", "y", "width", "height", "transform", "transform-origin", "perspective", "perspective-origin")) {
+        return true;
+      }
+    }
+    return false;
+  }
+  [SUBSCRIBE("refreshSelectionStyleView") + IF("checkShow")]() {
+    this.renderPointers();
+  }
+  [SUBSCRIBE("hideSelectionToolView")]() {
+    this.hide();
+  }
+}
+var directionType = {
+  1: "to top left",
+  2: "to top right",
+  3: "to bottom right",
+  4: "to bottom left",
+  11: "to top",
+  12: "to right",
+  13: "to bottom",
+  14: "to left"
+};
+const SelectionToolEvent = class extends EditorElement {
+  [SUBSCRIBE("refreshSelectionTool")](isInitializeMatrix = true) {
+    this.initSelectionTool(isInitializeMatrix);
+  }
+  [SUBSCRIBE("updateViewport")](isInitializeMatrix = true) {
+    if (this.$selection.isMany) {
+      this.initSelectionTool(isInitializeMatrix);
+    }
+  }
+};
+class GroupSelectionToolView extends SelectionToolEvent {
+  template() {
+    return `
+            <div class='elf--selection-view group-selection-view' ref='$selectionView'  style='display:none' >
+                <div class='pointer-rect' ref='$pointerRect'></div>        
+            </div>
+        `;
+  }
+  toggleEditingPath(isEditingPath) {
+    this.refs.$selectionView.toggleClass("editing-path", isEditingPath);
+  }
+  [POINTERSTART("$pointerRect .rotate-pointer") + MOVE("rotateVertex") + END("rotateEndVertex")](e) {
+    this.state.moveType = "rotate";
+    this.initMousePoint = this.$viewport.getWorldPosition(e);
+    this.verties = this.groupItem.verties;
+    this.rotateTargetNumber = +e.$dt.attr("data-number");
+    this.refreshRotatePointerIcon();
+    this.state.dragging = true;
+    this.state.isRotate = true;
+    this.$config.set("set.move.control.point", true);
+  }
+  rotateVertex() {
+    const targetMousePoint = this.$viewport.getWorldPosition();
+    const distVector = subtract([], targetMousePoint, this.initMousePoint);
+    const targetRotatePointer = this.rotateTargetNumber === 4 ? getRotatePointer(this.verties, 34) : this.verties[this.rotateTargetNumber];
+    var distAngle = Math.floor(calculateAngleForVec3(targetRotatePointer, this.verties[4], distVector));
+    if (this.$config.get("bodyEvent").shiftKey) {
+      distAngle = distAngle - distAngle % this.$config.get("fixed.angle");
+    }
+    this.localAngle = this.angle + distAngle;
+    this.groupItem.reset({
+      transform: Transform.rotateZ(this.groupItem.transform, Length.deg(this.localAngle))
+    });
+    const selectionMatrix = calculateRotationOriginMat4(distAngle, this.verties[4]);
+    let cachedItemMatrices = this.$selection.cachedItemMatrices;
+    if (this.$selection.length === 1) {
+      cachedItemMatrices = cachedItemMatrices.filter((it) => it.id === this.$selection.current.id);
+    }
+    cachedItemMatrices.forEach((item2) => {
+      const newVerties = vertiesMap(item2.verties, multiply$1([], item2.parentMatrixInverse, selectionMatrix));
+      const rotatePointer = getRotatePointer(newVerties, 34);
+      var lastAngle = calculateAngle(rotatePointer[0] - newVerties[4][0], rotatePointer[1] - newVerties[4][1]) - 270;
+      const newTranslate = transformMat4([], newVerties[0], calculateRotationOriginMat4(-lastAngle, newVerties[4]));
+      const instance = this.$model.get(item2.id);
+      if (instance) {
+        instance.reset({
+          x: Length.px(newTranslate[0]),
+          y: Length.px(newTranslate[1]),
+          transform: Transform.rotateZ(item2.transform, Length.deg(lastAngle))
+        });
+      }
+    });
+    this.state.dragging = true;
+    this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "width", "height", "transform"));
+  }
+  rotateEndVertex() {
+    this.state.dragging = false;
+    this.state.isRotate = false;
+    this.emit("recoverCursor");
+    this.$config.set("set.move.control.point", false);
+    this.$selection.reselect();
+    this.initMatrix(true);
+    this.nextTick(() => {
+      this.command("setAttributeForMulti", "rotate selection pointer", this.$selection.pack("x", "y", "width", "height", "transform"));
+    });
+  }
+  refreshRotatePointerIcon(e) {
+    this.emit("refreshCursor", "rotate");
+  }
+  refreshPointerIcon(e) {
+    const dataPointer = e.$dt.data("pointer");
+    if (dataPointer) {
+      const pointer = dataPointer.split(",").map((it) => Number(it));
+      const diff = subtract([], pointer, this.state.renderPointerList[0][4]);
+      const angle = calculateAngle360(diff[0], diff[1]);
+      let iconAngle = Math.floor(angle);
+      this.emit("refreshCursor", "open_in_full", `rotate(${iconAngle} 8 8)`);
+    } else {
+      this.emit("recoverCursor");
+    }
+  }
+  checkPointerIsNotMoved(e) {
+    return Boolean(this.state.dragging) === false;
+  }
+  [POINTEROVER("$pointerRect .rotate-pointer") + IF("checkPointerIsNotMoved") + PREVENT](e) {
+    this.refreshRotatePointerIcon(e);
+  }
+  [POINTEROVER("$pointerRect .pointer") + IF("checkPointerIsNotMoved") + PREVENT](e) {
+    this.refreshPointerIcon(e);
+  }
+  [POINTEROUT("$pointerRect .pointer,.rotate-pointer") + IF("checkPointerIsNotMoved") + PREVENT](e) {
+    this.emit("recoverCursor");
+  }
+  [POINTERSTART("$pointerRect .pointer") + PREVENT + MOVE("moveVertex") + END("moveEndVertex")](e) {
+    this.refreshPointerIcon(e);
+    this.state.dragging = true;
+    const num = +e.$dt.attr("data-number");
+    this.state.moveType = directionType[`${num}`];
+    this.initMousePoint = this.$viewport.getWorldPosition(e);
+    this.$selection.reselect();
+    this.initMatrix(true);
+    this.cachedGroupItem = this.groupItem.matrix;
+    this.$config.set("set.move.control.point", true);
+    this.$selection.startToCacheChildren();
+  }
+  calculateNewOffsetMatrixInverse(vertextOffset, width2, height, origin2, itemMatrix) {
+    const center2 = add$1([], TransformOrigin.scale(origin2, width2, height), negate([], vertextOffset));
+    return calculateMatrixInverse(fromTranslation([], vertextOffset), fromTranslation([], center2), itemMatrix, fromTranslation([], negate([], center2)));
+  }
+  calculateDistance(vertext, distVector, reverseMatrix) {
+    const currentVertex = clone(vertext);
+    const snap = this.$snapManager.check([
+      add$1([], currentVertex, distVector)
+    ]);
+    const nextVertex = add$1([], currentVertex, add$1([], distVector, snap));
+    var currentResult = transformMat4([], currentVertex, reverseMatrix);
+    var nextResult = transformMat4([], nextVertex, reverseMatrix);
+    const realDist = floor([], add$1([], nextResult, negate([], currentResult)));
+    return realDist;
+  }
+  calculateRealDist(item2, vertextIndex, distVector) {
+    return this.calculateDistance(item2.verties[vertextIndex], distVector, item2.accumulatedMatrixInverse);
+  }
+  moveGroupItem(lastStartVertex, newWidth, newHeight) {
+    this.groupItem.reset({
+      x: Length.px(lastStartVertex[0] + (newWidth < 0 ? newWidth : 0)).round(1e3),
+      y: Length.px(lastStartVertex[1] + (newHeight < 0 ? newHeight : 0)).round(1e3),
+      width: Length.px(Math.abs(newWidth)).round(1e3),
+      height: Length.px(Math.abs(newHeight)).round(1e3)
+    });
+  }
+  moveItemForGroup(it, newVerties, realDx = 0, realDy = 0) {
+    const transformViewInverse = calculateMatrixInverse(fromTranslation([], newVerties[4]), it.itemMatrix, fromTranslation([], negate([], newVerties[4])));
+    const [newX, newY] = transformMat4([], newVerties[0], transformViewInverse);
+    const newWidth = distance$1(newVerties[0], newVerties[1]);
+    const newHeight = distance$1(newVerties[0], newVerties[3]);
+    const instance = this.$model.get(it.id);
+    if (instance) {
+      instance.reset({
+        x: Length.px(newX + realDx),
+        y: Length.px(newY + realDy),
+        width: Length.px(newWidth),
+        height: Length.px(newHeight)
+      });
+    }
+  }
+  recoverItemForGroup(groupItem, scaleX, scaleY, realDx = 0, realDy = 0) {
+    const accumulatedMatrix = groupItem.accumulatedMatrix;
+    const accumulatedMatrixInverse = groupItem.accumulatedMatrixInverse;
+    this.$selection.cachedItemMatrices.forEach((it) => {
+      const localView = calculateMatrix(it.parentMatrixInverse, accumulatedMatrix, fromTranslation([], [realDx, realDy, 0]), fromScaling([], [scaleX, scaleY, 1]), accumulatedMatrixInverse);
+      const newVerties = vertiesMap(it.verties, localView);
+      this.moveItemForGroup(it, newVerties);
+    });
+  }
+  moveBottomRightVertex(distVector) {
+    const groupItem = this.cachedGroupItem;
+    let [realDx, realDy] = this.calculateRealDist(groupItem, 2, distVector);
+    if (this.$config.get("bodyEvent").shiftKey) {
+      realDy = realDx * groupItem.height / groupItem.width;
+    }
+    const newWidth = groupItem.width + realDx;
+    const newHeight = groupItem.height + realDy;
+    this.moveDirectionVertex(groupItem, 0, 0, newWidth, newHeight, "to top left", [0, 0, 0]);
+  }
+  moveTopRightVertex(distVector) {
+    const groupItem = this.cachedGroupItem;
+    let [realDx, realDy] = this.calculateRealDist(groupItem, 1, distVector);
+    if (this.$config.get("bodyEvent").shiftKey) {
+      realDy = -(realDx * groupItem.height / groupItem.width);
+    }
+    const newWidth = groupItem.width + realDx;
+    const newHeight = groupItem.height - realDy;
+    this.moveDirectionVertex(groupItem, 0, realDy, newWidth, newHeight, "to bottom left", [0, newHeight, 0]);
+  }
+  moveDirectionVertex(groupItem, realDx, realDy, newWidth, newHeight, direction, directionNewVector) {
+    const scaleX = newWidth / groupItem.width;
+    const scaleY = newHeight / groupItem.height;
+    if (scaleX >= 0 && scaleY >= 0) {
+      const view = calculateMatrix(groupItem.directionMatrix[direction], this.calculateNewOffsetMatrixInverse(directionNewVector, newWidth, newHeight, groupItem.originalTransformOrigin, groupItem.itemMatrix));
+      const lastStartVertex = getTranslation([], view);
+      this.moveGroupItem(lastStartVertex, newWidth, newHeight);
+      this.recoverItemForGroup(groupItem, scaleX, scaleY, realDx, realDy);
+    }
+  }
+  moveTopVertex(distVector) {
+    const groupItem = this.cachedGroupItem;
+    const [realDx, realDy] = this.calculateRealDist(groupItem, 0, distVector);
+    const newWidth = groupItem.width;
+    const newHeight = groupItem.height - realDy;
+    this.moveDirectionVertex(groupItem, 0, realDy, newWidth, newHeight, "to bottom", [newWidth / 2, newHeight, 0]);
+  }
+  moveBottomVertex(distVector) {
+    const groupItem = this.cachedGroupItem;
+    const [realDx, realDy] = this.calculateRealDist(groupItem, 2, distVector);
+    const newWidth = groupItem.width;
+    const newHeight = groupItem.height + realDy;
+    this.moveDirectionVertex(groupItem, 0, 0, newWidth, newHeight, "to top", [newWidth / 2, 0, 0]);
+  }
+  moveTopLeftVertex(distVector) {
+    const groupItem = this.cachedGroupItem;
+    let [realDx, realDy] = this.calculateRealDist(groupItem, 0, distVector);
+    if (this.$config.get("bodyEvent").shiftKey) {
+      realDy = realDx * groupItem.height / groupItem.width;
+    }
+    const newWidth = groupItem.width - realDx;
+    const newHeight = groupItem.height - realDy;
+    this.moveDirectionVertex(groupItem, realDx, realDy, newWidth, newHeight, "to bottom right", [newWidth, newHeight, 0]);
+  }
+  moveLeftVertex(distVector) {
+    const groupItem = this.cachedGroupItem;
+    const [realDx, realDy] = this.calculateRealDist(groupItem, 0, distVector);
+    const newWidth = groupItem.width - realDx;
+    const newHeight = groupItem.height;
+    this.moveDirectionVertex(groupItem, realDx, 0, newWidth, newHeight, "to right", [newWidth, newHeight / 2, 0]);
+  }
+  moveRightVertex(distVector) {
+    const groupItem = this.cachedGroupItem;
+    const [realDx, realDy] = this.calculateRealDist(groupItem, 2, distVector);
+    const newWidth = groupItem.width + realDx;
+    const newHeight = groupItem.height;
+    this.moveDirectionVertex(groupItem, 0, 0, newWidth, newHeight, "to left", [0, newHeight / 2, 0]);
+  }
+  moveBottomLeftVertex(distVector) {
+    const groupItem = this.cachedGroupItem;
+    let [realDx, realDy] = this.calculateRealDist(groupItem, 3, distVector);
+    if (this.$config.get("bodyEvent").shiftKey) {
+      realDy = -(realDx * groupItem.height / groupItem.width);
+    }
+    const newWidth = groupItem.width - realDx;
+    const newHeight = groupItem.height + realDy;
+    this.moveDirectionVertex(groupItem, realDx, 0, newWidth, newHeight, "to top right", [newWidth, 0, 0]);
+  }
+  moveVertex() {
+    const targetMousePoint = this.$viewport.getWorldPosition();
+    const distVector = subtract([], targetMousePoint, this.initMousePoint);
+    if (this.state.moveType === "to bottom right") {
+      this.moveBottomRightVertex(distVector);
+    } else if (this.state.moveType === "to top right") {
+      this.moveTopRightVertex(distVector);
+    } else if (this.state.moveType === "to top left") {
+      this.moveTopLeftVertex(distVector);
+    } else if (this.state.moveType === "to bottom left") {
+      this.moveBottomLeftVertex(distVector);
+    } else if (this.state.moveType === "to top") {
+      this.moveTopVertex(distVector);
+    } else if (this.state.moveType === "to left") {
+      this.moveLeftVertex(distVector);
+    } else if (this.state.moveType === "to right") {
+      this.moveRightVertex(distVector);
+    } else if (this.state.moveType === "to bottom") {
+      this.moveBottomVertex(distVector);
+    }
+    this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "width", "height", "transform"));
+    this.state.dragging = true;
+  }
+  moveEndVertex(dx, dy) {
+    this.state.dragging = false;
+    this.emit("recoverCursor");
+    this.$config.set("set.move.control.point", false);
+    this.$selection.reselect();
+    this.state.dragging = false;
+    this.initMatrix(true);
+    this.nextTick(() => {
+      this.$selection.recoverChildren();
+      this.command("setAttributeForMulti", "move selection pointer", this.$selection.pack("x", "y", "width", "height", "transform"));
+      this.emit("recoverBooleanPath");
+    });
+  }
+  show() {
+    this.$el.show();
+    this.state.show = true;
+  }
+  hide() {
+    this.$el.hide();
+    this.state.show = false;
+  }
+  initSelectionTool(isInitializeMatrix = false) {
+    if (this.$el.isHide() && this.$selection.isMany) {
+      this.show();
+    } else {
+      if (this.$el.isShow() && this.$selection.isMany === false)
+        this.hide();
+    }
+    this.initMatrix(isInitializeMatrix);
+    this.makeSelectionTool();
+  }
+  get item() {
+    const verties = this.verties || rectToVerties(0, 0, 0, 0);
+    if (!this.state.newArtBoard) {
+      this.state.newArtBoard = this.$editor.createModel({ itemType: "artboard" }, false);
+    }
+    this.state.newArtBoard.reset({
+      parentId: this.$selection.currentProject.id,
+      x: Length.px(verties[0][0]),
+      y: Length.px(verties[0][1]),
+      width: Length.px(dist(verties[0], verties[1])),
+      height: Length.px(dist(verties[0], verties[3])),
+      transform: ""
+    });
+    return this.state.newArtBoard;
+  }
+  initMatrix(isInitializeMatrix = false) {
+    if (isInitializeMatrix && this.$selection.isMany) {
+      this.verties = clone$1(this.$selection.verties);
+      this.angle = 0;
+      this.localAngle = this.angle;
+      this.groupItem = this.item;
+      this.cachedGroupItem = this.item.matrix;
+    }
+  }
+  makeSelectionTool() {
+    this.renderPointers();
+  }
+  renderPointers() {
+    if (!this.groupItem)
+      return;
+    const verties = this.state.dragging ? this.groupItem.verties : this.$selection.verties;
+    if (verties.length === 0)
+      return;
+    this.state.renderPointerList = [
+      this.$viewport.applyVerties(verties)
+    ];
+    const { line: line2, point: point2, size: size2, elementLine } = this.createRenderPointers(this.state.renderPointerList[0]);
+    this.refs.$pointerRect.updateDiff(line2 + elementLine + point2 + size2);
+  }
+  createPointer(pointer, number, rotate2) {
+    return `
+        <div    
+            class='pointer' 
+            data-number="${number}" 
+            data-pointer="${pointer}" 
+            style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) rotateZ(${rotate2 || "0deg"})" 
+        ></div>
+        `;
+  }
+  createPointerSide(pointer, number, rotate2, width2, height) {
+    return `
+        <div class='pointer' data-number="${number}" data-pointer="${pointer}" style="width: ${width2}px; height: ${height}px;transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) rotateZ(${rotate2 || "0deg"})" ></div>
+        `;
+  }
+  createRotatePointer(pointer, number, direction = "center center") {
+    if (pointer.length === 0)
+      return "";
+    if (number < 4) {
+      return `
+            <div class='rotate-pointer no-fill' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px) scale(1.8);" ></div>
+            `;
+    }
+    return `
+        <div class='rotate-pointer' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px)" ></div>
+        `;
+  }
+  createPointerRect(pointers, rotatePointer) {
+    if (pointers.length === 0)
+      return "";
+    const centerPointer = lerp([], pointers[0], pointers[1], 0.5);
+    const line2 = `
+            M ${centerPointer[0]},${centerPointer[1]} 
+            L ${rotatePointer[0]}, ${rotatePointer[1]} 
+        `;
+    return `
+        <svg class='line' overflow="visible">
+            <path 
+                d="
+                    M ${pointers[0][0]}, ${pointers[0][1]} 
+                    L ${pointers[1][0]}, ${pointers[1][1]} 
+                    L ${pointers[2][0]}, ${pointers[2][1]} 
+                    L ${pointers[3][0]}, ${pointers[3][1]} 
+                    L ${pointers[0][0]}, ${pointers[0][1]}
+                    ${line2}
+                    Z
+                " />
+        </svg>`;
+  }
+  createLine(pointers) {
+    return `
+            M ${pointers[0][0]}, ${pointers[0][1]} 
+            L ${pointers[1][0]}, ${pointers[1][1]} 
+            L ${pointers[2][0]}, ${pointers[2][1]} 
+            L ${pointers[3][0]}, ${pointers[3][1]} 
+            L ${pointers[0][0]}, ${pointers[0][1]}
+            Z
+        `;
+  }
+  createSize(pointers) {
+    const top2 = lerp([], pointers[0], pointers[1], 0.5);
+    const right2 = lerp([], pointers[1], pointers[2], 0.5);
+    const bottom2 = lerp([], pointers[2], pointers[3], 0.5);
+    const left2 = lerp([], pointers[3], pointers[0], 0.5);
+    const list2 = [
+      { start: top2, end: bottom2 },
+      { start: right2, end: left2 },
+      { start: bottom2, end: top2 },
+      { start: left2, end: right2 }
+    ].map((it, index2) => {
+      return { index: index2, data: it };
+    });
+    list2.sort((a, b) => {
+      return a.data.start[1] > b.data.start[1] ? -1 : 1;
+    });
+    const item2 = list2[0];
+    const newPointer = lerp([], item2.data.end, item2.data.start, 1 + 16 / dist(item2.data.start, item2.data.end));
+    const width2 = this.groupItem.width.value;
+    const height = this.groupItem.height.value;
+    const diff = subtract([], item2.data.start, item2.data.end);
+    const angle = calculateAngle360(diff[0], diff[1]) + 90;
+    let text2 = `${round(width2, 100)} x ${round(height, 100)}`;
+    if (this.state.isRotate) {
+      const rotateZ2 = Transform.get(this.groupItem.transform, "rotateZ");
+      if (rotateZ2) {
+        text2 = `${rotateZ2[0].value}\xB0`;
+      }
+    }
+    return `
+            <div 
+                class='size-pointer' 
+                style="transform: translate3d( calc(${newPointer[0]}px - 50%), calc(${newPointer[1]}px - 50%), 0px) rotateZ(${angle}deg)" >
+               ${text2}
+            </div>
+        `;
+  }
+  createRenderPointers(pointers) {
+    const diff = subtract([], lerp([], pointers[0], pointers[1], 0.5), lerp([], pointers[0], pointers[2], 0.5));
+    const rotate2 = Length.deg(calculateAngle360(diff[0], diff[1]) - 90).round(1e3);
+    const rotatePointer = getRotatePointer(pointers, 30);
+    const dist$1 = dist(pointers[0], pointers[2]);
+    const width2 = dist(pointers[0], pointers[1]);
+    const height = dist(pointers[0], pointers[3]);
+    return {
+      line: this.createPointerRect(pointers, rotatePointer),
+      elementLine: `
+                <svg class='line' overflow="visible">
+                    <path 
+                        d="${this.$selection.items.map((it, index2) => {
+        return this.createLine(this.$viewport.applyVerties(it.originVerties));
+      }).join("")}
+                        " />
+                </svg>
+            `,
+      size: this.createSize(pointers),
+      point: [
+        this.createRotatePointer(rotatePointer, 4, "center center"),
+        dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[0], pointers[1], 0.5), 11, rotate2, width2, 5),
+        dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[1], pointers[2], 0.5), 12, rotate2, 5, height),
+        dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[2], pointers[3], 0.5), 13, rotate2, width2, 5),
+        dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[3], pointers[0], 0.5), 14, rotate2, 5, height),
+        this.createPointer(pointers[0], 1, rotate2),
+        this.createPointer(pointers[1], 2, rotate2),
+        this.createPointer(pointers[2], 3, rotate2),
+        this.createPointer(pointers[3], 4, rotate2)
+      ].join("")
+    };
+  }
+  checkShow() {
+    if (this.state.show && this.$selection.isMany) {
+      if (this.$selection.hasChangedField("x", "y", "width", "height", "transform", "transform-origin", "perspective", "perspective-origin")) {
+        return true;
+      }
+    }
+    return false;
+  }
+  [SUBSCRIBE("refreshSelectionStyleView") + IF("checkShow")]() {
+    this.renderPointers();
+  }
+  [SUBSCRIBE("hideSelectionToolView")]() {
+    this.hide();
+  }
+}
+function selectionToolView(editor) {
+  editor.registerMenuItem("canvas.view", {
+    SelectionToolView,
+    GroupSelectionToolView
+  });
+}
+function defaultIcons(editor) {
+  editor.registerIcon("artboard", "artboard");
+  editor.registerIcon("circle", "lens");
+  editor.registerIcon("image", "image");
+  editor.registerIcon("text", "title");
+  editor.registerIcon("svg-text", "title");
+  editor.registerIcon("boolean-path", "pentool");
+  editor.registerIcon("svg-path", "pentool");
+  editor.registerIcon("polygon", "polygon");
+  editor.registerIcon("star", "star");
+  editor.registerIcon("spline", "smooth");
+  editor.registerIcon("rect", "rect");
+}
 var designEditorPlugins = [
   defaultConfigs,
+  defaultIcons,
   defaultMessages,
   defaultItems,
   defaultPatterns,
@@ -52686,7 +55046,7 @@ var designEditorPlugins = [
   borderRadius,
   svgText,
   font,
-  text,
+  text$1,
   textShadow,
   fontSpacing,
   content,
@@ -52712,7 +55072,14 @@ var designEditorPlugins = [
   selector,
   codeview,
   history,
-  project
+  project,
+  selectionToolView,
+  selectionInfoView,
+  guideLineView,
+  layerAppendView,
+  hoverView,
+  pathDrawView,
+  pathEditorView
 ];
 var ObjectItems$1 = "";
 class ObjectItems extends EditorElement {
@@ -52753,7 +55120,7 @@ class CustomAssets extends EditorElement {
           <div class='tools'>
             <div class='title'>${it.component.name}</div>
             <div class='buttons'>
-              <button type="button" class='remove-asset-preview' data-tooltip="remove asset" data-preview-id="${it.id}">${iconUse$1("remove")}</button>
+              <button type="button" class='remove-asset-preview' title="remove asset" data-preview-id="${it.id}">${iconUse$1("remove")}</button>
             </div>
           </div>
         </div>
@@ -52848,7 +55215,7 @@ class LayerTab extends EditorElement {
             ${this.$injectManager.getTargetMenuItems("leftbar.tab").map((it) => {
       const { value, title: title2 } = it.class;
       let iconString = it.class.icon;
-      if (icon$1[it.class.icon]) {
+      if (obj[it.class.icon]) {
         iconString = iconUse$1(it.class.icon);
       }
       return `
@@ -52910,7 +55277,7 @@ class IconManager extends EditorElement {
     `;
   }
   [LOAD("$list")]() {
-    return Object.entries(icon$1).map(([key, value]) => {
+    return Object.entries(obj).map(([key, value]) => {
       if (isString(value) === false)
         return "";
       return value.replace(/\<svg/g, `<svg id="icon-${key}"`);
@@ -54718,7 +57085,7 @@ class ItemLayerTab extends EditorElement {
     }).map((it) => {
       const { value, title: title2 } = it.class;
       let iconString = it.class.icon;
-      if (icon$1[it.class.icon]) {
+      if (obj[it.class.icon]) {
         iconString = iconUse$1(it.class.icon);
       }
       return `
@@ -54848,7 +57215,7 @@ class DesignEditor extends BaseLayout {
     };
   }
   template() {
-    const designMode = this.$config.get("editor.design.mode");
+    const isItemMode = this.$config.is("editor.design.mode", "item");
     return `
       <div class="designeditor">
         <div class="layout-main">
@@ -54860,10 +57227,10 @@ class DesignEditor extends BaseLayout {
               <object refClass="BodyPanel" ref="$bodyPanelView" />
             </div>                           
             <div class='layout-left' ref='$leftPanel'>
-              ${designMode === "item" ? "<object refClass='ItemLayerTab' />" : "<object refClass='LayerTab' />"}
+              ${isItemMode ? "<object refClass='ItemLayerTab' />" : "<object refClass='LayerTab' />"}
             </div>
             <div class="layout-right" ref='$rightPanel'>
-              ${designMode === "item" ? '<object refClass="SingleInspector" />' : '<object refClass="Inspector" />'}
+              ${isItemMode ? '<object refClass="SingleInspector" />' : '<object refClass="Inspector" />'}
             </div>
             <div class='layout-footer' ref='$footerPanel'>
               <div class='footer-splitter' ref='$footerSplitter' title="${this.$i18n("timeline.property.resize")}"></div>
@@ -55067,7 +57434,7 @@ var exportLibrary = __spreadValues({
   PathParser,
   Segment,
   Point,
-  icon: icon$1
+  icon: obj
 }, Event$1);
 var App = __spreadValues({
   createDesignEditor(opts = { type: "white" }) {

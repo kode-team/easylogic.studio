@@ -32,6 +32,11 @@ export class SVGPolygonItem extends SVGItem {
     return false; 
   }
 
+  get editablePath() {
+    // editing 막기 
+    return false; 
+  }
+
   get d() {
     const {width, height, count} = this.json;
 

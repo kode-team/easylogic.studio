@@ -81,7 +81,7 @@ export class PathKitManager {
   intersection(first, second) {
     const PathKit = this.pathkit;
     if (!PathKit) return;    
-    return this.booleanOperation(first, second, PathKit.PathOp.INTERSECT);
+    return this.reversePathString(this.booleanOperation(first, second, PathKit.PathOp.INTERSECT));
   }
 
   union(first, second) {
@@ -93,20 +93,22 @@ export class PathKitManager {
   difference(first, second) {
     const PathKit = this.pathkit;
     if (!PathKit) return;    
-    return this.booleanOperation(first, second, PathKit.PathOp.DIFFERENCE);
+    return this.reversePathString(this.booleanOperation(first, second, PathKit.PathOp.DIFFERENCE));
   }
 
   reverseDifference(first, second) {
     const PathKit = this.pathkit;
     if (!PathKit) return;    
-    return this.booleanOperation(first, second, PathKit.PathOp.REVERSE_DIFFERENCE);
+    return this.reversePathString(this.booleanOperation(first, second, PathKit.PathOp.REVERSE_DIFFERENCE));
   }
 
   xor(first, second) {
     const PathKit = this.pathkit;
     if (!PathKit) return;
-    const pathString = this.booleanOperation(first, second, PathKit.PathOp.XOR);
+    return this.reversePathString(this.booleanOperation(first, second, PathKit.PathOp.XOR));
+  }
 
+  reversePathString(pathString) {
     // xor 의 경우 변환하면 path 가 2개 이상 나올 수 있는데 
     // 이때 내부의 영역도 하나의 패스로 나오기 때문에  
     // svg 에서 제대로 표시를 해줄려면 특정 구간은 역순으로 나열 해줘야 한다. 

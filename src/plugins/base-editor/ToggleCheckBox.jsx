@@ -48,10 +48,18 @@ export default class ToggleCheckBox extends BaseUI {
                         label = iconUse(label, "", {width: 30, height: 30});
                     }
 
-                    return /*html*/`
+                    return (
                         <div>
-                            <button type="button" data-index="${index}" value="${it}" data-tooltip="${title || it}" data-direction="top" style="--elf--toggle-checkbox-tooltip-top: -20%;" >${ label}</button>
-                        </div>`
+                            <button 
+                                type="button" 
+                                class={`${it === checked ? 'checked' : ''}`}
+                                data-index={index} 
+                                value={it} 
+                                style="--elf--toggle-checkbox-tooltip-top: -20%;" 
+                            >{label}</button>
+                        </div>
+                    )
+
                 }).join('')}
             </div>
         </div>
@@ -76,9 +84,7 @@ export default class ToggleCheckBox extends BaseUI {
     setValue(checked) {
         this.setState({
             checked,
-        }, false)
-
-        this.bindData('$area');   
+        })
     }
 
     getValue() {

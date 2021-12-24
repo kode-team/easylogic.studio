@@ -52,7 +52,7 @@ export class SVGItem extends LayerModel {
   }
 
   get isBooleanItem() {
-    return Boolean(this.parent['boolean-path']);
+    return Boolean(this.parent.is('boolean-path'));
   }
 
 
@@ -110,10 +110,11 @@ export class SVGItem extends LayerModel {
    * @returns {boolean}
    */
    hasPoint (x, y) {
+    const obj = this.attrs('fill', 'stroke', 'fill-opacity', 'stroke-width');
 
-    const fill = this.json.fill;
-    const fillOpacity = this.json['fill-opacity'];
-    const strokeWidth = this.json['stroke-width'];
+    const fill = obj.fill;
+    const fillOpacity = obj['fill-opacity'];
+    const strokeWidth = obj['stroke-width'];
 
     const isTransparent = fill === 'transparent' || fillOpacity === 0 || Color.parse(fill).a === 0;
     const isZeroStroke = strokeWidth === 0;
@@ -186,15 +187,14 @@ export class SVGItem extends LayerModel {
    */
   convertStrokeToPath(distX = 10, distY = 10) {
 
-    const attrs = this.attrs('width', 'parentId', 'height', 'x', 'y', 'transform');        
-    const localFill = this.json.stroke
+    const attrs = this.attrs('name', 'width', 'parentId', 'height', 'x', 'y', 'transform', 'stroke');        
+
+    attrs.fill = attrs.stroke;
+    delete attrs.stroke;
 
     return {
       itemType: 'svg-path',
-      name: this.json.name,
-      fill: localFill,
       'fill-rule': 'evenodd',
-      // 'stroke': 'transparent',
       ...attrs,
       x: Length.parse(attrs.x).add(distX),
       y: Length.parse(attrs.y).add(distY)      

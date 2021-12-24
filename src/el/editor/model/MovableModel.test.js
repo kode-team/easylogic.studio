@@ -2,6 +2,7 @@ import { MovableModel } from './MovableModel';
 import { Length } from 'el/editor/unit/Length';
 import { ModelManager } from 'el/editor/manager/ModelManager';
 import { vertiesToRectangle } from 'el/utils/collision';
+import { beforeAll, expect, test, vi } from 'vitest';
 
 let modelManager;
 
@@ -9,10 +10,10 @@ const registerModel = (model) => {
     modelManager.set(model.id, model);
 }
 
-beforeEach(() => {
+beforeAll(() => {
 
     const editor = {
-        emit: jest.fn(() => true)
+        emit: vi.fn(() => true)
     }
 
     modelManager = new ModelManager(editor);

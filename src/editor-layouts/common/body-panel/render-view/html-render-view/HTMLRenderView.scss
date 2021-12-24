@@ -96,6 +96,27 @@ $editor-canvas-background-color: rgba(236, 236, 236, 0.3);
       outline: none;
     }    
 
+    &[data-is-boolean-item="true"] {
+      background-color: transparent !important;
+      border: 1px solid #595959 !important;
+      filter: none !important;
+      backdrop-filter: none !important;
+      background-image: none !important;
+      box-shadow: none !important;
+
+      &.svg-path {
+        border: 0px !important;
+      }
+
+      svg {
+        path, polygon, rect, circle, ellipse, line, polyline, text {
+          fill: none !important;
+          stroke: transparent !important;
+          stroke-width: 1px !important;
+        }
+      }
+    }
+
     &.artboard {
       box-shadow: 0 8px 6px -6px black;      
     }

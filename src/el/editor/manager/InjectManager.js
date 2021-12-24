@@ -11,7 +11,7 @@ export class InjectManager {
    * @param {string} target 
    * @param {object} obj 
    */
-  registerMenuItem(target, obj) {
+  registerMenuItem(target, obj = {}) {
 
     if (!this.menuItems[target]) {
       this.menuItems[target] = []

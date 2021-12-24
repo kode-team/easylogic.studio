@@ -48,6 +48,10 @@ export class SelectionManager {
     return this.$editor.modelManager;
   }
 
+  get lockManager () {
+    return this.$editor.lockManager;
+  }
+
   get items () {
     return this.modelManager.searchLiveItemsById(this.ids);
   }
@@ -258,7 +262,9 @@ export class SelectionManager {
   // group 을 선택할 때 사용한다. 
   selectByGroup(...ids) {
 
-    var list = this.modelManager.searchItemsById(this.filterIds(ids || [])).filter(it => !it.lock)
+    var list = this.modelManager.searchItemsById(this.filterIds(ids || [])).filter(it => {
+      return !this.lockManager.get(it.id)
+    })
 
     // 상위 group 이 있다면 group 을 기준으로 selection 을 맞춘다. 
     const newSelectedItems = this.modelManager.convertGroupItems(list);
@@ -502,6 +508,18 @@ export class SelectionManager {
     this.cachedCurrentChildrenItemMatrices = this.modelManager.getAllLayers(this.current.id).map(it => it.matrix);
   }
 
+  startToCacheChildren() {
+    this.items.forEach(item => {
+      item.startToCacheChildren()
+    })
+  }
+
+  recoverChildren() {
+    this.items.forEach(item => {
+      item.recoverChildren()
+    })
+  }
+
   get verties () {
 
     if (this.isOne) {    // 하나 일 때랑 
@@ -585,7 +603,35 @@ export class SelectionManager {
   }
 
   /**
-   * 특정 영역의 값에 대한 패키징 한다. 
+   * id 리스트로 특정 값의 객체를 만들어준다. 
+   * 
+   * @param {string[]} ids 
+   * @param  {...string} keys 
+   * @returns 
+   */
+  packByIds (ids, ...keys) {
+    let data = {};
+    let localItems = []
+    if (ids === null) {
+      localItems = this.items;
+    } else if (isString(ids) || Array.isArray(ids)){
+      localItems = this.itemsByIds(ids);
+    }
+
+    const valueObject = {}
+    keys.forEach(it => {
+      valueObject[it] = true
+    })
+
+    localItems.forEach(item => {
+      data[item.id] = item.attrs(...keys);
+    })
+
+    return data;
+  }
+
+  /**
+   * 특정 값에 대한 패키징 한다. 
    * 
    * @param {object} valueObject
    * @returns {Object} 

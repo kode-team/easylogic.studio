@@ -15,6 +15,7 @@ import { TextLayer } from "./layers/TextLayer";
 import { SVGPolygonItem } from './layers/SVGPolygonItem';
 import { SVGStarItem } from "./layers/SVGStarItem";
 import { SplineItem } from "./layers/SplineItem";
+import { BooleanPathItem } from "./layers/BooleanPathItem";
 
 /**
  * 
@@ -29,6 +30,7 @@ export default function (editor) {
     // editor.registerItem("cylinder", CylinderLayer);
     editor.registerItem("image", ImageLayer);
     editor.registerItem("text", TextLayer);
+    editor.registerItem("boolean-path", BooleanPathItem);
     editor.registerItem("svg-path", SVGPathItem);
     editor.registerItem("svg-text", SVGTextItem);
     editor.registerItem("svg-textpath", SVGTextPathItem);

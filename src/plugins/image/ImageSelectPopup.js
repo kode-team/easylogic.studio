@@ -49,9 +49,11 @@ export default class ImageSelectPopup extends BasePopup {
   [LOAD('$imageBox') + DOMDIFF] () {
     var project = this.$selection.currentProject || { images: [] }
 
-    return project.images.map( (image, index) => {
-      return /*html*/`<div class='image-item' ><img src='${image.local}' data-id="${image.id}" /></div>`
-    })
+    return "";
+
+    // return project.images.map( (image, index) => {
+    //   return /*html*/`<div class='image-item' ><img src='${image.local}' data-id="${image.id}" /></div>`
+    // })
   }
 
   [CLICK('$imageBox .image-item')] (e) {

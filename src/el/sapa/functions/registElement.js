@@ -71,6 +71,14 @@ export function recoverVariable(id, removeVariable = true) {
     return value;
 }
 
+export function getVariable(idOrValue) {
+    if (__tempVariables.has(idOrValue)) {
+        return __tempVariables.get(idOrValue);
+    }
+
+    return idOrValue;
+}
+
 export function hasVariable(id) {
     return __tempVariables.has(id);
 }

@@ -581,31 +581,16 @@ ${cssString}
    * @override
    */
   render (item, renderer) {
-    var {elementType, id, name, itemType} = item;
+    var {elementType, id, name, itemType, isBooleanItem} = item;
   
     const tagName = elementType || 'div'
   
-    return /*html*/`<${tagName} class="element-item ${itemType}" data-id="${id}" data-title="${name}">
+    return /*html*/`<${tagName} class="element-item ${itemType}" data-is-boolean-item="${isBooleanItem}" data-id="${id}" data-title="${name}">
   ${this.toDefString(item)}
   ${item.layers.map(it => {
     return renderer.render(it, renderer)
   }).join('')}
-  ${this.renderVirtualArea(item, renderer)}
 </${tagName}>`
-  }
-
-  renderVirtualArea (item, renderer) {
-
-    if (item.isBooleanPath) {
-      const layers = item.layers;
-      return /*html*/`
-        <svg data-id="${this.booleanId(item)}" width="100%" height="100%" style="position:absolute;left:0px;top:0px;pointer-events:none;overflow: visible;">
-          <path d="${item['boolean-path']}" fill="yellow" stroke="${layers[0].stroke}" stroke-width="${layers[0]['stroke-width']}" />
-        </svg>
-      `
-    }
-
-    return "";
   }
 
   toSVGFilter (item) {
@@ -670,22 +655,8 @@ ${cssString}
       $booleanSvg = currentElement.el.$booleanSvg
     }
 
-    if ($booleanSvg) {
-      const svgString = this.renderVirtualArea(item);
-
-      if (svgString) {
-        $booleanSvg.updateDiff(Dom.createByHTML(svgString).firstChild)
-      }      
-    } else {
-      const svgString = this.renderVirtualArea(item);
-
-      var a = Dom.createByHTML(svgString);
-
-      if (a) {
-        currentElement.append(a);
-        currentElement.el.$booleanSvg = currentElement.$(`[data-id="${this.booleanId(item)}"]`);  
-      }
-
+    if (currentElement.data('is-boolean-item') !== `${item.isBooleanItem}`) {
+      currentElement.attr('data-is-boolean-item', item.isBooleanItem)
     }
 
     if ($svg) {

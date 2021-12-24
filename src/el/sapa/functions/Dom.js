@@ -214,6 +214,10 @@ export default class Dom {
 
   }
 
+  get $parent() {
+    return this.parent();
+  }
+
   parent() {
     return Dom.create(this.el.parentNode);
   }

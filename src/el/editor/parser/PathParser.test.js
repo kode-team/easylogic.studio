@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import PathParser from './PathParser';
 
 test("create PathParser", () => {
@@ -29,13 +30,13 @@ test("path rotate", () => {
 
 test("path bbox for point", () => {
     const path = new PathParser("M0,0 L4,0 L4,4 L0,4");
-    expect(path.getBBox()).toStrictEqual([[0, 0, 0], [4, 0, 0], [4, 4, 0], [0, 4, 0]]);
+    expect(path.getBBox()).toEqual([[0, 0, 0], [4, 0, 0], [4, 4, 0], [0, 4, 0]]);
 })
 
 test("path bbox for curve", () => {
     const path = new PathParser("M0,0 C 10 10, 20 20, 30 30");
 
-    expect(path.getBBox()).toStrictEqual([[0, 0, 0], [30, 0, 0], [30, 30, 0], [0, 30, 0]]);
+    expect(path.getBBox()).toEqual([[0, 0, 0], [30, 0, 0], [30, 30, 0], [0, 30, 0]]);
 })
 
 test("path bbox for multi segment", () => {
@@ -53,7 +54,7 @@ test("path reset", () => {
 
 test("path segment list", () => {
     const path = new PathParser("M0,0 L4,0 L4,4 L0,4");
-    expect(path.segments).toStrictEqual([
+    expect(path.segments).toEqual([
         { "command": "M", "values": [0, 0] },
         { "command": "L", "values": [4, 0] },
         { "command": "L", "values": [4, 4] },
@@ -63,12 +64,12 @@ test("path segment list", () => {
 
 test("path - closed point in line", () => {
     const path = new PathParser("M0,0 L4,0 L4,4 L0,4");
-    expect(path.getClosedPoint({ x: 10, y: 10 }, 20)).toStrictEqual({ "x": 4, "y": 4 });
+    expect(path.getClosedPoint({ x: 10, y: 10 }, 20)).toEqual({ "x": 4, "y": 4 });
 })
 
 test("path - closed point in curve", () => {
     const path = new PathParser("M0,0 C20,30 50,40 100,100");
-    expect(path.getClosedPoint({ x: 10, y: 10 }, 20)).toStrictEqual({
+    expect(path.getClosedPoint({ x: 10, y: 10 }, 20)).toEqual({
         "x": 8.843183593749998,
         "y": 11.422597656249998
     });
@@ -76,13 +77,13 @@ test("path - closed point in curve", () => {
 
 test("path - center pointer list", () => {
     const path = new PathParser("M0,0 C20,30 50,40 100,100");
-    expect(path.getCenterPointers()).toStrictEqual([
+    expect(path.getCenterPointers()).toEqual([
         { index: 0, pointer: [0, 0, 0]},
         { index: 1, pointer: [100, 100, 0]}
     ]);
 
     path.reset("M0,0 C20,30 50,40 100,100 Q 20 30 70 70");
-    expect(path.getCenterPointers()).toStrictEqual([
+    expect(path.getCenterPointers()).toEqual([
         { index: 0, pointer: [0, 0, 0]},
         { index: 1, pointer: [100, 100, 0]},
         { index: 2, pointer: [70, 70, 0]},
@@ -91,12 +92,12 @@ test("path - center pointer list", () => {
 
 test("path - same pointer list", () => {
     const path = new PathParser("M0,0 C20,30 50,40 100,100 Q 20 30 70 70 L 100 100");    
-    expect(path.getSamePointers([100, 100, 0])).toStrictEqual([
+    expect(path.getSamePointers([100, 100, 0])).toEqual([
         { index: 1, pointer: [100, 100, 0]},
         { index: 3, pointer: [100, 100, 0]}
     ]);
 
-    expect(path.getSamePointers([100, 100, 0], 70)).toStrictEqual([
+    expect(path.getSamePointers([100, 100, 0], 70)).toEqual([
         { index: 1, pointer: [100, 100, 0]},
         { index: 2, pointer: [70, 70, 0]},
         { index: 3, pointer: [100, 100, 0]}
@@ -109,7 +110,7 @@ test("path group - two path group check", () => {
         M10,10 C20,30 50,40 100,100 Q 20 30 70 70 L 100 100
     `);
 
-    expect(path.getGroup()).toStrictEqual([
+    expect(path.getGroup()).toEqual([
         {
             index: 0,
             groupIndex: 0,

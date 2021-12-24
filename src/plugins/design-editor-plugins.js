@@ -64,6 +64,7 @@ import hoverView from "./hover-view"
 import guideLineView from "./guide-line-view"
 import selectionInfoView from "./selection-info-view"
 import selectionToolView from "./selection-tool-view"
+import defaultIcons from "./default-icons"
 
 
 
@@ -71,9 +72,11 @@ import selectionToolView from "./selection-tool-view"
 export default [
 
     defaultConfigs,
+    defaultIcons,
     defaultMessages,
     defaultItems,
     defaultPatterns,
+
 
     rendererHtml,
     rendererJson,

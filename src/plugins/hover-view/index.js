@@ -7,6 +7,6 @@ import HoverView from './HoverView';
  */
 export default function (editor) {
     editor.registerMenuItem('canvas.view', {
-        HoverView         
+        HoverView
     })
 }

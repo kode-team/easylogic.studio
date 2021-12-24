@@ -1,10 +1,11 @@
 
+import { beforeAll, expect, test } from 'vitest';
 import PathGenerator from './PathGenerator';
 import PathParser from './PathParser';
 
 let pathEditor = {}
 
-beforeEach(() => {
+beforeAll(() => {
     pathEditor = {}
 });
 
@@ -37,5 +38,5 @@ test("get connected point list", () => {
 
     const connectedPointList = pathGenerator.getConnectedPointList(1);
     expect(connectedPointList.length).toBe(2);
-    expect(connectedPointList[0].startPoint).toStrictEqual({x: 100, y: 100});
+    expect(connectedPointList[0].startPoint).toEqual({x: 100, y: 100});
 })

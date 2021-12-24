@@ -18,7 +18,7 @@ import {
 
 import DomEventHandler from "./handler/DomEventHandler";
 import BindHandler from "./handler/BindHandler";
-import { hasVariable, recoverVariable, retriveElement, spreadVariable, variable } from "./functions/registElement";
+import { getVariable, hasVariable, recoverVariable, retriveElement, spreadVariable, variable } from "./functions/registElement";
 import { uuid } from "./functions/uuid";
 import { isObject } from 'el/sapa/functions/func';
 
@@ -27,6 +27,8 @@ const TEMP_DIV = Dom.create("div");
 const QUERY_PROPERTY = `[${REFERENCE_PROPERTY}]`;
 const REF_CLASS = 'refclass';
 const REF_CLASS_PROPERTY = `[${REF_CLASS}]`
+
+
 
 
 export default class EventMachine {
@@ -45,6 +47,12 @@ export default class EventMachine {
     this.initComponents();
   }
 
+  /**
+   * for svelte variable 
+   */
+  get target() {
+    return this.$el.el;
+  }
 
   /**
    * UIElement instance 에 필요한 기본 속성 설정 
@@ -242,7 +250,19 @@ export default class EventMachine {
     return TEMP_DIV.createChildrenFragment();
   }
 
-  parseProperty ($dom) {
+  /**
+   * $dom 에 있는 props, children 정보만 가지고 온다. 
+   * 
+   * 이것을 가지고 오는 이유는  중첩된 컴포넌트 내에서 하위 컴포넌트를 찾기 위해서이다.
+   * 
+   * ps.
+   * 
+   * 조회만 하기 때문에 getVariable()로 값만 조회한다. 
+   * 
+   * @param {Dom} $dom 
+   * @returns 
+   */
+  parsePropertyInfo ($dom) {
     let props = {};
 
     // parse properties 
@@ -250,22 +270,22 @@ export default class EventMachine {
 
       // 속성값이 없고, 속성 이름이 참조 변수 일 때는  그대로 보여준다. 
       if (hasVariable(t.nodeName)) {
-        const recoveredValue = recoverVariable(t.nodeName);
-
+        const recoveredValue = getVariable(t.nodeName);
         if (isObject(recoveredValue)) {
-          props = Object.assign(props, recoveredValue)
+          props = Object.assign(props, recoveredValue)     
         } else {
-          props[t.nodeName] = recoverVariable(t.nodeValue);                    
+          props[t.nodeName] = getVariable(t.nodeValue);                    
         }
 
       } else {
-        props[t.nodeName] = recoverVariable(t.nodeValue);          
+        props[t.nodeName] = getVariable(t.nodeValue);          
       }
     }
 
     // 하위 html 문자열을 props.content 로 저장한다. 
-    props.content = $dom.html()
-    if (props.content) {
+    const content = $dom.html()
+    if (content) {
+      props.content = content;
       props.contentChildren = this.parseContent(props.content)
     }
 
@@ -287,29 +307,50 @@ export default class EventMachine {
     return EventMachineComponent;
   }
 
-  renderComponent({ $dom, refName, EventMachineComponent, props }) {
+
+  createInstanceForComponent (EventMachineComponent, targetElement, props) {
+    // external component 
+    if (EventMachineComponent.__proto__.name === 'ProxyComponent') {
+      return new EventMachineComponent({target: targetElement, props});
+    }
+
+    // return sapa component 
+    return new EventMachineComponent(this, props);
+  }  
+
+  renderComponent({ $dom, refName, component, props }) {
     var instance = null; 
 
     // 동일한 refName 의 EventMachine 이 존재하면  해당 컴포넌트는 다시 그려진다. 
     // 루트 element 는 변경되지 않는다. 
     if (this.children[refName]) {
+
+      // FIXME: svelte 컴포넌트를 어떻게 재로드 할지 고민해야함 
       instance = this.children[refName] 
       instance._reload(props);
     } else {
-      // 기존의 refName 이 존재하지 않으면 Component 를 생성해서 element 를 교체한다. 
-      instance = new EventMachineComponent(this, props);
+      instance = this.createInstanceForComponent(component, $dom.$parent.el, props);
 
       this.children[refName || instance.id] = instance;
 
-      instance.render();
+      if (isFunction(instance.render)) {
+        instance.render();
+      } else {
+        // NOOP
+        // console.log(instance);
+      }
+
     }
     
 
     if (instance.renderTarget) {
       instance.$el?.appendTo(instance.renderTarget);
       $dom.remove();
-    } else {
+    } else if (instance.$el) {
       $dom.replace(instance.$el);     
+    } else {
+      // renderTarget 과 유사하지만 appendTo 를 하지 않는다.
+      $dom.remove();
     }
   }
 
@@ -338,9 +379,9 @@ export default class EventMachine {
     const EventMachineComponent = this.getEventMachineComponent(refClass)
 
     if (EventMachineComponent) {
-      let props = this.parseProperty($dom);
+      let props = this.parsePropertyInfo($dom);
 
-      // create component 
+      // get component class name
       let refName = $dom.attr(REFERENCE_PROPERTY);
 
       return { 
@@ -348,7 +389,7 @@ export default class EventMachine {
         refClass,
         props,
         refName,
-        EventMachineComponent
+        component: EventMachineComponent
       }
     } else {
       return {
@@ -399,7 +440,7 @@ export default class EventMachine {
     })
 
     keyEach(this.children, (key, obj) => {
-      if (obj &&  obj.clean()) {
+      if (isFunction(obj?.clean) &&  obj.clean()) {
         delete this.children[key]
       }
     })
@@ -409,7 +450,9 @@ export default class EventMachine {
     if (this.$el && !this.$el.hasParent()) {
 
       keyEach(this.children, (key, child) => {
-        child.clean();
+        if (isFunction(child?.clean)) {
+          child.clean();
+        }
       })
 
       this.destroy();  

@@ -49,10 +49,12 @@ export default {
         editor.modelManager.markRemove(filtedIds);        
 
         //전체 삭제 
+        const parentIds = items.map(it => it.parentId);
+
         items.forEach(item => item.remove())
 
         editor.history.add(message, this, {
-            currentValues: [filtedIds],
+            currentValues: [filtedIds, parentIds],
             undoValues: filtedIds,
         })
 
@@ -65,6 +67,10 @@ export default {
             commandMaker.emit('refreshAllElementBoundSize')
             commandMaker.emit('refreshAll')
             commandMaker.emit('removeGuideLine');
+
+            parentIds.forEach(parentId => {
+                commandMaker.emit('update', parentId, { 'changedChildren': true })            
+            });
             commandMaker.run();
             
             editor.nextTick(() => {

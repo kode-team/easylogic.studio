@@ -5,7 +5,7 @@ import { Length } from "el/editor/unit/Length";
 import Dom from "el/sapa/functions/Dom";
 import { isFunction } from "el/sapa/functions/func";
 import { KEY_CODE } from "el/editor/types/key";
-import { END, MOVE } from "el/editor/types/event";
+import { END, FIRSTMOVE, MOVE } from "el/editor/types/event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import StyleView from "./StyleView";
 
@@ -214,6 +214,7 @@ export default class HTMLRenderView extends EditorElement {
      */
     [POINTERSTART('$view') + IF('checkEditMode')
         + MOVE('calculateMovedElement')
+        + FIRSTMOVE('calculateFirstMovedElement')
         + END('calculateEndedElement')
     ](e) {
         this.initMousePoint = this.$viewport.getWorldPosition(e);
@@ -306,6 +307,10 @@ export default class HTMLRenderView extends EditorElement {
         this.emit('refreshSelectionTool', true);
     }
 
+    calculateFirstMovedElement () {
+        this.emit('hideSelectionToolView');
+    }
+
     calculateMovedElement() {
 
         if (this.$config.get('set.dragarea.mode')) {
@@ -338,7 +343,7 @@ export default class HTMLRenderView extends EditorElement {
         }
 
         this.emit('setAttributeForMulti', this.$selection.pack('x', 'y'));
-        this.emit('refreshSelectionTool', true);
+        // this.emit('refreshSelectionTool', true);
 
     }
 
@@ -391,11 +396,6 @@ export default class HTMLRenderView extends EditorElement {
         this.$selection.reset(result);
     }
 
-    // [SUBSCRIBE('selectionToolView.moveTo')](newDist) {
-    //     this.moveTo(newDist);
-    //     this.emit('refreshSelectionTool', true);
-    // }
-
     calculateEndedElement(dx, dy) {
         const targetMousePoint = this.$viewport.getWorldPosition();
         const newDist = vec3.dist(targetMousePoint, this.initMousePoint);
@@ -420,12 +420,18 @@ export default class HTMLRenderView extends EditorElement {
                 this.$selection.pack('x', 'y')
             );
 
-            // boolean path 의 조정이 끝나면 
-            // box 를 재구성한다. 
-            this.command('recoverBooleanPath', 'recover boolean path');
+            this.nextTick(() => {
+                // boolean path 의 조정이 끝나면 
+                // box 를 재구성한다. 
+                this.emit('recoverBooleanPath');
+            })
+
         }
 
-        this.emit('refreshSelectionTool', true);
+        this.nextTick(() => {
+            this.emit('refreshSelection');
+            this.emit('refreshSelectionTool', true)   
+        }, 100);
     }
 
     [BIND('$body')]() {

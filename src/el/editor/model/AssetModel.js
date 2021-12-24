@@ -163,6 +163,13 @@ export class AssetModel extends BaseModel {
     return image.local;
   }
 
+  getImageDataURIById (id) {
+    const image = this.json.imageKeys[id]
+    if (!image) return undefined;
+
+    return image.original;
+  }
+
   refreshImageKeys() {
     let imageKeys = {}
     this.json.images.forEach(it => {

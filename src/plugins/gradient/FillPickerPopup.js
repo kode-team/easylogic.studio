@@ -8,6 +8,7 @@ import BasePopup from "el/editor/ui/popup/BasePopup";
 import './GradientPickerPopup';
 
 import { html } from "el/sapa/functions/func";
+import { variable } from 'el/sapa/functions/registElement';
 
 export default class FillPickerPopup extends BasePopup {
 
@@ -40,9 +41,12 @@ export default class FillPickerPopup extends BasePopup {
         </div>
         <div class='box'>
           <div class='colorpicker'>
-            <object refClass="EmbedColorPicker" ref='$color' onchange=${this.subscribe((color) => { 
-              this.trigger('changeColor', color);
-            })} />                    
+            <object refClass="EmbedColorPicker" ${variable({
+              ref: '$color',
+              onchange: (color) => {
+                this.trigger('changeColor', color);
+              }
+            })}/>                    
           </div>
           <div class='assetpicker'>
             <object refClass="ImageAssetPicker" ref='$asset' onchange='changeImageUrl' />
@@ -101,7 +105,11 @@ export default class FillPickerPopup extends BasePopup {
     data.changeEvent = data.changeEvent || 'changeFillPopup'
     // data.image = data.gradient
     data.params = params;
-    this.trigger('selectColorStep', data.image.colorsteps[0].color);
+
+    if (data.image.isGradient()) {
+      this.trigger('selectColorStep', data.image.colorsteps[0].color);
+    }
+
     this.setState(data);
   }
 

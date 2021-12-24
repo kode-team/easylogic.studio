@@ -1,5 +1,6 @@
 import { ImageResource } from "./ImageResource";
 import { OBJECT_TO_PROPERTY } from "el/utils/func";
+import { Length } from "el/editor/unit/Length";
 
 const IMAGE_LIST = ["jpg", "jpeg", "png", "gif", "svg"];
 
@@ -109,21 +110,37 @@ export class SVGImageResource extends ImageResource {
     return `url(${url}#${string})`;
   }
 
-  toSVGString(id) {
+  toSVGString(id, item = {}) {
       var {
         patternUnits, 
-        patternWidth: width, 
-        patternHeight: height,
+        patternWidth, 
+        patternHeight,
         imageX,
         imageY,
         imageWidth,
         imageHeight
       } = this.json;    
 
+      const localPatternWidth = Length.parse(patternWidth);
+      const localPatternHeight = Length.parse(patternHeight);
+
+      const localImageX = Length.parse(imageX);
+      const localImageY = Length.parse(imageY);
+
+      const localImageWidth = Length.parse(imageWidth);
+      const localImageHeight = Length.parse(imageHeight);
+
+      const width = item.width ? localPatternWidth.toPx(item.width).value : localPatternWidth;
+      const height = item.height ? localPatternHeight.toPx(item.height).value : localPatternHeight;
+
       return /*html*/`
   <pattern ${OBJECT_TO_PROPERTY({ id, patternUnits, width, height })} >
-    <image xlink:href="${this.json.url}" ${OBJECT_TO_PROPERTY({
-      x: imageX, y: imageY, width: imageWidth, height: imageHeight, preserveAspectRatio: "none"
+    <image xlink:href="${this.json.datauri || this.json.url}" ${OBJECT_TO_PROPERTY({
+      x: localImageX.toPx(item.width).value, 
+      y: localImageY.toPx(item.height).value, 
+      width: localImageWidth.toPx(item.width).value, 
+      height: localImageHeight.toPx(item.height).value, 
+      preserveAspectRatio: "none"
     })} />
   </pattern>
       `

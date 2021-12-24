@@ -377,6 +377,11 @@ export class Length {
 
   toPx(maxValue, fontSize = 16) {
     if (this.isPercent()) {
+
+      if (isUndefined(maxValue)) {
+        return this;
+      }
+
       return Length.px((this.value / 100) * maxValue);
     } else if (this.isPx()) {
       return this.clone();
@@ -489,6 +494,19 @@ export class Length {
   isZero() {
     return this.value === 0;
   }
+
+  /**
+   * px 값으로 먼저 바꾸고 원래 있던 단위 값으로 maxValue 기준으로 다시 변경한다. 
+   * 
+   * @param {number} px 
+   * @param {number} maxValue 
+   * @returns {Length}
+   */
+  changeUnitValue (px, maxValue) {
+    const unit = this.unit;
+    return Length.px(px).to(unit, maxValue);
+  }
+
 }
 
 Length.auto = Length.string("auto");

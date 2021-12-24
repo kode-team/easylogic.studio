@@ -10,7 +10,7 @@ export default {
 
         let newPath;
 
-        if (current.isBooleanPath || current.isBooleanItem) {
+        if (current.is('boolean-path') || current.isBooleanItem) {
           let parent = current;
           if (current.isBooleanItem) {
             parent = current.parent;
@@ -23,11 +23,20 @@ export default {
           delete newLayerAttrs.id;
           delete newLayerAttrs.parentId;
           delete newLayerAttrs.transform;
-    
-          editor.command('addLayer', `add layer - path`, editor.createModel({
-            ...newLayerAttrs,
-            ...parent.updatePath(newPath.d),
-          }), true, parent.parent)            
+          delete newLayerAttrs['boolean-path'];
+          delete newLayerAttrs['boolean-operation'];
+
+          const parentParent = parent.parent;
+          const newRectInfo = parent.updatePath(newPath.d)
+
+          editor.command("removeLayer", "remove selected layers", [parent.id]);
+          editor.nextTick(() => {
+            editor.command('addLayer', `add layer - path`, editor.createModel({
+              ...newLayerAttrs,
+              ...newRectInfo,
+            }), true, parentParent)            
+          })
+
         } else {
 
           newPath = PathParser.fromSVGString();

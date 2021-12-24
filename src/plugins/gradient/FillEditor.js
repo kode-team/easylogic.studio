@@ -182,8 +182,9 @@ export default class FillEditor extends EditorElement  {
     var project = this.$selection.currentProject;
     if (project) {
       [...e.target.files].forEach(item => {
-        this.emit('updateImageAssetItem', item, (local) => {
-          this.trigger('setImageUrl', local);
+        this.emit('updateImageAssetItem', item, (imageId) => {
+
+          this.trigger('setImageUrl', project.getImageValueById(imageId), project.getImageDataURIById(imageId));
         });
       })
     }
@@ -457,6 +458,11 @@ export default class FillEditor extends EditorElement  {
   }
 
   [BIND('$gradientView')] () {
+
+    if (this.refs.$gradientView.html() !== '') {
+      return false;
+    }
+
     return {
       innerHTML : /*html*/`
         <svg x="0" y="0" width="100%" height="100%">
@@ -551,11 +557,6 @@ export default class FillEditor extends EditorElement  {
     this.updateData();    
   }
 
-
-  refresh() {
-    this.load();
-  }
-
   getLinearGradient () {
 
     var { image } = this.state; 
@@ -582,11 +583,11 @@ export default class FillEditor extends EditorElement  {
   }
 
 
-  [SUBSCRIBE('setImageUrl')] (url) {
+  [SUBSCRIBE('setImageUrl')] (url, datauri) {
 
     if (this.state.image) {
       this.state.url = url; 
-      this.state.image.reset({ url });
+      this.state.image.reset({ url, datauri });
       this.refresh();
       this.updateData();
     }

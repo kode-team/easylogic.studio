@@ -1,6 +1,6 @@
 {
   "name": "@easylogic/editor",
-  "version": "0.11.29",
+  "version": "0.12.0",
   "description": "Fantastic Web Design Tool ",
   "types": "./dist/index.d.ts",
   "files": [
@@ -15,7 +15,6 @@
     }
   },
   "dependencies": {
-    "@emotion/css": "^11.5.0",
     "array-organizer": "^1.5.7",
     "fit-curve": "^0.2.0",
     "gl-matrix": "^3.3.0",
@@ -26,11 +25,13 @@
     "yorkie-js-sdk": "^0.1.11"
   },
   "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.32",
     "@swc/core": "^1.2.120",
     "@swc/jest": "^0.2.15",
-    "adorable-css": "^0.4.8",
+    "adorable-css": "^0.5.2",
     "autoprefixer": "^9.8.6",
-    "cssnano": "^5.0.12",
+    "cssnano": "^5.0.13",
+    "happy-dom": "^2.25.1",
     "jest": "^27.4.5",
     "jest-cli": "^27.4.5",
     "jest-report": "^0.1.11",
@@ -38,9 +39,11 @@
     "release-it": "^14.6.2",
     "rollup-plugin-copy": "^3.4.0",
     "sass": "^1.44.0",
+    "svelte": "^3.44.3",
     "vite": "^2.6.14",
     "vite-plugin-copy": "^0.1.6",
-    "vite-plugin-replace": "^0.1.1"
+    "vite-plugin-replace": "^0.1.1",
+    "vitest": "0.0.107"
   },
   "scripts": {
     "vite:dev": "vite --config=vite.config.js",
@@ -49,9 +52,11 @@
     "release": "release-it *",
     "copy:resource": "cp CNAME docs/",
     "watch": "webpack --mode=production --watch --progress --config=webpack.dist.config.js",
-    "build": "npm run vite:prod; npm run vite:dist",
+    "build": "npm run vite:prod && npm run vite:dist",
     "dev": "npm run vite:dev",
-    "test": "NODE_ENV=test jest --watch --detectOpenHandles"
+    "test": "NODE_ENV=test jest --watch --detectOpenHandles",
+    "vitest": "vitest",
+    "coverage": "vitest --coverage"
   },
   "repository": {
     "type": "git",
@@ -77,6 +82,7 @@
       "jsx",
       "ts",
       "tsx",
+      "svelte",
       "json"
     ],
     "transform": {

@@ -180,7 +180,7 @@ export default class BaseStore {
     Promise.resolve().then(() => {
       messages.forEach(([event, ...args]) => {
         var list = this.getCachedCallbacks(event);
-        if (list) {
+        if (list && list.length) {
 
           const runnableFunctions = list
             .filter(f => !f.enableSelfTrigger)
@@ -198,6 +198,8 @@ export default class BaseStore {
               }
             }
           }
+        } else {
+          console.warn(`message event ${event} is not exist.`)
         }
       });
     });

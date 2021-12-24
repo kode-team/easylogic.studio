@@ -5,12 +5,6 @@ import { TabPanel } from './TabPanel';
 import './Tabs.scss';
 
 export class Tabs extends EditorElement {
-    components() {
-      return {
-        TabPanel
-      }
-    }
-  
     afterRender() {
       setTimeout(() => {
         this.setValue(this.state.selectedValue);
@@ -32,26 +26,22 @@ export class Tabs extends EditorElement {
     }
   
     [LOAD('$tab')]() {
-      const { content } = this.props;
-      const contentChildren = this.parseContent(content)
-  
-      const children = contentChildren.filter(it => it.refClass === 'TabPanel');
-  
-      return /*html*/`
+      const { content, contentChildren } = this.props;
+      const children = contentChildren.filter(it => it.component === TabPanel);
+
+      return [
         <div class="tab-header" ref="$header">
-          ${children.map(it => {
-            return /*html*/`
-              <div class="tab-item" data-value="${it.props.value}" title='${it.props.title}'>
-                <label class="title">${it.props.title}</label>
-              </div>         
-            `
-          }).join('')}
-        </div>    
-  
+          {children.map(it => (
+            <div class="tab-item" data-value={it.props.value} title={it.props.title}>
+                <label class="title">{it.props.title}</label>
+            </div>         
+          ))}
+        </div>,
         <div class="tab-body" ref="$body">
-          ${content}
+          {content}
         </div>
-      `
+      ];
+      
     }
   
     [CLICK("$header .tab-item:not(.empty-item)")](e) {

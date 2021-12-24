@@ -32,6 +32,7 @@ import { LockManager } from "./LockManager";
 import { VisibleManager } from "./VisibleManager";
 import { CommandMaker } from "./CommandMaker";
 import { ClipboardManager } from './ClipboardManager';
+import { IconManager } from './IconManager';
 
 
 export const EDIT_MODE_SELECTION = 'SELECTION';
@@ -95,6 +96,7 @@ export class Editor {
     this.lockManager = new LockManager(this);
     this.visibleManager = new VisibleManager(this);
     this.clipboard = new ClipboardManager(this);
+    this.iconManager = new IconManager(this);
 
     this.initPlugins();
     this.initStorage();
@@ -341,7 +343,7 @@ export class Editor {
     })
   }
 
-  registerMenuItem(target, obj) {
+  registerMenuItem(target, obj = {}) {
     this.injectManager.registerMenuItem(target, obj);
     this.registerElement(obj);
   }
@@ -433,4 +435,8 @@ export class Editor {
       this.registerI18nMessage(locale, messages);
     });
   }  
+
+  registerIcon (itemType, iconOrFunction) {
+    this.iconManager.registerIcon(itemType, iconOrFunction);
+  }
 }

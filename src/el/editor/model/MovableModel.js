@@ -47,12 +47,56 @@ export class MovableModel extends BaseAssetModel {
         return true;
     }
 
-    get isBooleanPath() {
-        return Boolean(this.json['boolean-path']);
+    get isBooleanItem() {
+        return undefined;
     }
 
-    get isBooleanItem() {
+    /**
+     * 데이타를 변경하는 시점에 자식도 같이 변경할지 결정한다.
+     */
+    get resizableWitChildren() {
         return false;
+    }
+
+    startToCacheChildren() {
+
+        if (!this.resizableWitChildren) return;
+
+        this.cachedSize = {
+            width: this.json.width.clone(),
+            height: this.json.height.clone()
+        }
+        this.cachedLayerMatrix = this.layers.map(item => {
+            return {
+                item, matrix: item.matrix
+            }
+        })
+    }
+
+    /**
+     * 상위 레이어에 맞게 자식 레이어의 공간(x,y,width,height)를 변경한다.
+     */
+     recoverChildren() {
+
+        if (!this.resizableWitChildren) return;
+
+        const obj = {
+            width: this.json.width.clone(),
+            height: this.json.height.clone()
+        }
+
+        const scaleX = obj.width.value / this.cachedSize.width.value;
+        const scaleY = obj.height.value / this.cachedSize.height.value;
+
+        this.cachedLayerMatrix.forEach(({ item, matrix }) => {
+
+            item.reset({ 
+                x: item.x.changeUnitValue(matrix.x * scaleX, obj.width.value),
+                y: item.y.changeUnitValue(matrix.y * scaleY, obj.height.value),
+                width: item.width.changeUnitValue(matrix.width * scaleX, obj.width.value),
+                height: item.height.changeUnitValue(matrix.height * scaleY, obj.height.value)
+            })
+        })
     }
 
     toCloneObject(isDeep = true) {
@@ -155,6 +199,7 @@ export class MovableModel extends BaseAssetModel {
     }
 
     refreshMatrixCache() {
+        // return;
         // this.modelManager.setChanged('refreshMatrixCache', this.id, { start: true })        
 
         this.setCacheItemTransformMatrix();
@@ -557,7 +602,8 @@ export class MovableModel extends BaseAssetModel {
     }
 
     getItemTransformMatrix () {
-        const list = Transform.parseStyle(this.json?.['transform']);
+        const transform = this.json?.['transform'] || '50% 50% 0px'
+        const list = Transform.parseStyle(transform);
         const width = this.screenWidth.value;
         const height = this.screenHeight.value;
 
@@ -780,6 +826,9 @@ export class MovableModel extends BaseAssetModel {
         const originalTransform = this.json.transform;
         const originalTransformOrigin = this.json['transform-origin'] || '50% 50% 0%';
 
+        const transformOriginMatrix = this.getTransformOriginMatrix ();
+        const transformOriginMatrixInverse = this.getTransformOriginMatrixInverse ();
+
         // load cached matrix 
         const parentMatrix = this.parent.accumulatedMatrix;
         const parentMatrixInverse = this.parent.accumulatedMatrixInverse;
@@ -789,6 +838,8 @@ export class MovableModel extends BaseAssetModel {
         const itemMatrixInverse = this.itemMatrixInverse;
         const accumulatedMatrix = this.accumulatedMatrix;
         const accumulatedMatrixInverse = this.accumulatedMatrixInverse;
+
+
 
         const directionMatrix = {
             'to top left': this.getDirectionTopLeftMatrix(width, height),
@@ -829,6 +880,8 @@ export class MovableModel extends BaseAssetModel {
             itemMatrixInverse,
             accumulatedMatrix,  // parentMatrix * offset translate * localMatrix , 축적된 matrix 
             accumulatedMatrixInverse,
+            transformOriginMatrix,  // transform origin 에 대한 matrix 
+            transformOriginMatrixInverse,
         }
     }
 
@@ -883,6 +936,14 @@ export class MovableModel extends BaseAssetModel {
         return this.invertPath(pathString).d;
     }
 
+    /**
+     * 로컬 좌표 path (d)로 새로운 bbox 를 구한다. 
+     * 
+     * A -> B 로 옮겨갈 때 부모 기준으로 새로운 bbox 위치를 구할 수 있다. 
+     * 
+     * @param {string} d 
+     * @returns 
+     */
     updatePath(d) {
         const matrix = this.matrix;
         const newPath = new PathParser(d);
@@ -990,6 +1051,75 @@ export class MovableModel extends BaseAssetModel {
     }    
 
     /**
+     * 내부 자식들의 좌표를 재구성하는 방법 
+     * 
+     * 현재 부모가 rect의 정보가 변경되었을 때 
+     * world 좌표에서 부모를 기준으로 새로운 변환된 matrix 를 구한다. 
+     * 
+     * @param {object} newChildMatrix 
+     */
+     recoverMatrix (newChildMatrix) {
+
+        // 새로운 offset 좌표는 아래와 같이 구한다. 
+        // [newParentMatrix] * [newTranslate] * [newItemTransform] = [newAccumulatedMatrix]
+
+        // [newTranslate] * [newItemTransform] = [newParentMatrix * -1] * [newAccumulatedMatrix]
+        const matrix = calculateMatrix(
+            this.accumulatedMatrixInverse,
+            newChildMatrix.accumulatedMatrix,
+        )
+
+        // scale 구하기 
+        const newScaleTransform = Transform.fromScale(mat4.getScaling([], matrix).map(it => round(it, 1000)));
+
+        // 회전 영역 먼저 구하기 
+        const q = mat4.getRotation([], matrix);
+
+        const axis = []
+        const rad = quat.getAxisAngle(axis, q)
+
+        const newRotateTransform = [
+            { angle : axis[0] ? radianToDegree(rad * axis[0]) : 0, type: 'rotateX' },
+            { angle : axis[1] ? radianToDegree(rad * axis[1]) : 0, type: 'rotateY' },
+            { angle : axis[2] ? radianToDegree(rad * axis[2]) : 0, type: 'rotateZ' },
+        ]
+        .filter(it => it.angle !== 0)
+        .map(it => `${it.type}(${Length.deg(it.angle % 360)})`).join(' ');
+
+        // 새로 변환될 item transform 정의 
+        const newChildItemTransform = Transform.replaceAll(newChildMatrix.transform, `${newScaleTransform} ${newRotateTransform}`)
+
+        const list = Transform.parseStyle(newChildItemTransform);
+        const width = newChildMatrix.width.value;
+        const height = newChildMatrix.height.value;
+
+        const newTransformMatrix = Transform.createTransformMatrix(list, width, height);
+
+        // 새로 변환될 item transform 정의 
+        // [newLocalMatrix] * [
+        //     [origin] * [newTransformMatrix] * [origin * -1]
+        //      * -1 
+        // ]
+        // 
+        const [x, y, z] = mat4.getTranslation([], calculateMatrix(
+            matrix,
+            calculateMatrixInverse(
+                newChildMatrix.transformOriginMatrix,
+                newTransformMatrix,
+                newChildMatrix.transformOriginMatrixInverse,
+            )
+        ));
+
+        return {
+            x: Length.px(x),
+            y: Length.px(y),
+            transform: newChildItemTransform            
+        }
+    }    
+
+    /**
+     * 부모가 바뀌는 시점에 사용 , world 좌표를 기준으로 한다. 
+     * 
      * 새로운 부모를 기준으로 childItem 의 transform 을 맞춘다. 
      * 
      * 1. childItem 의 accumulatedMatrix 를 구한다. 
@@ -1002,11 +1132,8 @@ export class MovableModel extends BaseAssetModel {
      */
     resetMatrix (childItem) {
 
-        this.modelManager.setChanged('resetMatrix', this.id, { start: true, childItemId: childItem?.id })
-
         // 새로운 offset 좌표는 아래와 같이 구한다. 
         // [newParentMatrix] * [newTranslate] * [newItemTransform] = [newAccumulatedMatrix]
-
         // [newTranslate] * [newItemTransform] = [newParentMatrix * -1] * [newAccumulatedMatrix]
         const matrix = calculateMatrix(
             this.accumulatedMatrixInverse,
@@ -1034,8 +1161,8 @@ export class MovableModel extends BaseAssetModel {
         const newChildItemTransform = Transform.replaceAll(childItem.transform, `${newScaleTransform} ${newRotateTransform}`)
 
         const list = Transform.parseStyle(newChildItemTransform);
-        const width = childItem.screenWidth.value;
-        const height = childItem.screenHeight.value;
+        const width = childItem.width.value;
+        const height = childItem.height.value;
 
         const newTransformMatrix = Transform.createTransformMatrix(list, width, height);
 
@@ -1054,11 +1181,10 @@ export class MovableModel extends BaseAssetModel {
             )
         ));
 
-
         childItem.reset({
             x: Length.px(x),
             y: Length.px(y),
-            transform: newChildItemTransform
+            transform: newChildItemTransform            
         })
 
         childItem.refreshMatrixCache();

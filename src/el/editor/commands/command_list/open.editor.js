@@ -1,5 +1,6 @@
 import { Editor } from "el/editor/manager/Editor";
 import { ClipPath } from "el/editor/property-parser/ClipPath";
+import { isBoolean } from "el/sapa/functions/func";
 
 
 export default {
@@ -35,6 +36,14 @@ export default {
                         editor.command('setAttributeForMulti', 'change editable path', editor.selection.packByValue({
                             ...current.recoverEditablePath(data.d),
                         }, [current.id]));
+
+                        editor.nextTick(() => {
+                            if (editor.isPointerUp) {
+                                // boolean path 의 조정이 끝나면 
+                                // box 를 재구성한다. 
+                                editor.emit('recoverBooleanPath');
+                            }
+                        })        
                     }
                 })
                 editor.emit('hideSelectionToolView');            
@@ -46,6 +55,14 @@ export default {
                     d: current.accumulatedPath().d,
                     changeEvent: (data) => {
                         editor.emit('updatePathItem', data);
+
+                        editor.nextTick(() => {
+                            if (editor.isPointerUp) {
+                                // boolean path 의 조정이 끝나면 
+                                // box 를 재구성한다. 
+                                editor.emit('recoverBooleanPath');
+                            }
+                        })
                     }
                 })
                 editor.emit('hideSelectionToolView');

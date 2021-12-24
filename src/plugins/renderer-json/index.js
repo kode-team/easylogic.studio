@@ -15,6 +15,7 @@ import VideoRender from "./JSONRenderer/VideoRender";
 import SVGPolygonRender from './JSONRenderer/SVGPolygonRender';
 import SVGStarRender from "./JSONRenderer/SVGStarRender";
 import SplineRender from "./JSONRenderer/SplineRender";
+import BooleanPathRender from './JSONRenderer/BooleanPathRender';
 
 /**
  * 
@@ -36,6 +37,7 @@ export default function (editor) {
     editor.registerRenderer('json', 'text', new TextRender());
     editor.registerRenderer('json', 'video', new VideoRender());
     editor.registerRenderer('json', 'svg-path', new SVGPathRender());
+    editor.registerRenderer('json', 'boolean-path', new BooleanPathRender());
     editor.registerRenderer('json', 'polygon', new SVGPolygonRender());
     editor.registerRenderer('json', 'star', new SVGStarRender());
     editor.registerRenderer('json', 'spline', new SplineRender());

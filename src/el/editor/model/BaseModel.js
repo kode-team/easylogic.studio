@@ -87,7 +87,7 @@ export class BaseModel {
   }
 
   changed() {
-    this.timestamp += performance.now();
+    this.timestamp += Date.now();
   }
 
   /***********************************
@@ -223,13 +223,13 @@ export class BaseModel {
     return this.modelManager.getPath(this.id, this.ref);
   }
 
-  get lock() {
-    return this.modelManager.editor.lockManager.get(this.id);
-  }
+  // get lock() {
+  //   return this.modelManager.editor.lockManager.get(this.id);
+  // }
 
-  get visible() {
-    return this.modelManager.editor.visibleManager.get(this.id);
-  }
+  // get visible() {
+  //   return this.modelManager.editor.visibleManager.get(this.id);
+  // }
 
   get childrenLength() {
     return this.json.children.length;
@@ -423,11 +423,9 @@ export class BaseModel {
     const result = {}
 
     args.forEach(field => {
-      if (isNotUndefined(this.json[field])) {
-        result[field] = clone(this.json[field])
-      } else if (isNotUndefined(this[field])) {
-        result[field] = clone(this[field])
-      }
+      if (isNotUndefined(this.ref[field])) {
+        result[field] = clone(this.ref[field])
+      } 
     })
 
     return result;

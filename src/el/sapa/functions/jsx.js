@@ -48,19 +48,20 @@ function OBJECT_TO_CLASS(obj) {
 }
 
 
-export function createElement (Component, props, ...children) {
+export function createElementJsx (Component, props, ...children) {
 
-    if (typeof Component === 'function') {
-        return Component(props, children);
-    } else if (typeof Component !== 'string') {
+    // 모든 children 을 하나로 모은다. 
+    children = children.flat(Infinity).join('');
+
+    if (typeof Component !== 'string') {
         const ComponentName = Component.name;
         registElement({
             [ComponentName]: Component
         })
 
-        return /*html*/`<object refClass="${ComponentName}" ${variable(props)}>${children.join('')}</object>`;
+        return /*html*/`<object refClass="${ComponentName}" ${variable(props)}>${children}</object>`;
     } else {
-        return /*html*/`<${Component} ${OBJECT_TO_PROPERTY(props)}>${children.join('')}</${Component}>`;
+        return /*html*/`<${Component} ${OBJECT_TO_PROPERTY(props)}>${children}</${Component}>`;
     }
 
 

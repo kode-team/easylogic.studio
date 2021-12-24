@@ -24,8 +24,8 @@ export class SVGPathItem extends SVGItem {
     return false; 
   }
 
-  reset(json) {
-    const isChanged = super.reset(json);
+  reset(json, context = {origin: '*'}) {
+    const isChanged = super.reset(json, context);
 
     if (this.hasChangedField('d')) {
       // d 속성이 변경 될 때 성능을 위해서 PathParser 로 미리 객체를 생성해준다. 
