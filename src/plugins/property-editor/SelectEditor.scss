@@ -1,38 +1,88 @@
 .elf--select-editor {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-column-gap: 4px;
-    position: relative;
-    height: var(--elf--input-height);
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-column-gap: 4px;
+  position: relative;
+  height: var(--elf--input-height);
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  padding: 2px 4px;
+
+  &:hover:not(.focused):not(.drag) {
+    border-color: var(--elf--input-sub-font-color);
+
+    .selected-value {
+      display: grid; 
+      grid-template-columns: 1fr 20px;
+    }
+  }
+
+  select {
+    font-size: 11px;
+    // border: 1px solid var(--elf--input-border-color);
+    appearance: none;
+    border: 0px;
+    color: var(--elf--input-font-color);
+    height: 24px;
+  }
+
+  .selected-value {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    height: 100%;
+    pointer-events: none;
+    background-color: var(--elf--property-background-color);
     box-sizing: border-box;
+    // line-height: 2;
+    padding: 4px 2px;
+    color: var(--elf--input-font-color);
+    // padding: 2px 4px;
+    svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
 
-    select {
-        font-size: 11px;
-        border: 1px solid var(--elf--input-border-color);
-        background-color: var(--elf--input-background-color);        
-        &:focus-within {
-            border: 1px solid var(--elf--selected-color);
-        }
     }
 
-    &.has-label {
-        grid-template-columns: 70px 1fr;
-        grid-column-gap: 2px;
-
-        label {
-            text-align: left;
-            vertical-align: middle;
-            padding: 6px 4px 2px 0px;
-            font-size: 11px;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            
-        }
-
-        select {
-            width: 100%;
-            height: 100%;
-        }
+    .expand {
+      vertical-align: middle;
     }
+
+    .value {
+      padding: 3px 0px;
+    }
+  }
+
+  &.has-label {
+    grid-template-columns: 70px 1fr;
+    grid-column-gap: 2px;
+
+    label {
+      text-align: left;
+      vertical-align: middle;
+      padding: 6px 4px 2px 0px;
+      font-size: 11px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+
+
+    .editor-view {
+        position: relative;
+    }
+
+    .selected-value {
+      position: absolute;
+      height: 100%;
+
+      select {
+        width: 100%;
+        height: 24px;
+      }
+    }
+  }
 }

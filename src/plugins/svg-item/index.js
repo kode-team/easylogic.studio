@@ -1,4 +1,5 @@
 import { Editor } from "el/editor/manager/Editor";
+import { StrokeLineCap, StrokeLineJoin } from "el/editor/types/model";
 import ObjectProperty from "el/editor/ui/property/ObjectProperty";
 import ColorMatrixEditor from "./editor/ColorMatrixEditor";
 import FuncFilterEditor from "./editor/FuncFilterEditor";
@@ -112,9 +113,9 @@ export default function (editor) {
               editorOptions: {
                 label: editor.$i18n('svg.item.property.lineCap'),
                 toggleLabels: ["line_cap_butt","line_cap_round","line_cap_square" ],
-                toggleValues: ["butt","round","square"],
+                toggleValues: [StrokeLineCap.BUTT, StrokeLineJoin.ROUND, StrokeLineCap.SQUARE],
               },
-              defaultValue: current['stroke-linecap'] || "butt"
+              defaultValue: current['stroke-linecap'] || StrokeLineCap.BUTT
             },
             {
               key: 'stroke-linejoin',
@@ -122,9 +123,9 @@ export default function (editor) {
               editorOptions: {
                 label: editor.$i18n('svg.item.property.lineJoin'),
                 toggleLabels: ["line_join_miter", "line_join_round","line_join_bevel"],
-                toggleValues: ["miter","round","bevel"]
+                toggleValues: [StrokeLineJoin.MITER, StrokeLineJoin.ROUND, StrokeLineJoin.BEVEL]
               },
-              defaultValue: current['stroke-linejoin'] || "miter"
+              defaultValue: current['stroke-linejoin'] || StrokeLineJoin.MITER
             },
             {
               key: 'mix-blend-mode',

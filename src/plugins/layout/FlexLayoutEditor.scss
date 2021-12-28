@@ -1,0 +1,15 @@
+.flex-layout-item {
+    margin-top: 4px;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 50px;
+    padding-right: 10px;
+
+    * {
+        vertical-align: middle;
+        font-size: 13px;
+    }
+}

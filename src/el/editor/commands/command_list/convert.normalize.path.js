@@ -8,7 +8,7 @@ export default {
 
         if (!current) return;
 
-        editor.command("setAttributeForMulti", "smooth path string", editor.selection.packByValue(
+        editor.command("setAttributeForMulti", "normalize path string", editor.selection.packByValue(
           current.updatePath(PathParser.fromSVGString(current.d).normalize().d)
         ))  
     }

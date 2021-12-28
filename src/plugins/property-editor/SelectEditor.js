@@ -2,6 +2,8 @@ import { LOAD, CHANGE, BIND } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './SelectEditor.scss';
+import { iconUse } from "el/editor/icon/icon";
+import { BlendMode } from "el/editor/types/model";
 export default class SelectEditor extends EditorElement {
 
     initialize() {
@@ -38,13 +40,19 @@ export default class SelectEditor extends EditorElement {
     }
 
     template() {
-        var { label, tabIndex } = this.state;
+        var { label, tabIndex, value = BlendMode.NORMAL } = this.state;
         var hasLabel = !!label ? 'has-label' : ''
         var hasTabIndex = !!tabIndex ? 'tabIndex="1"' : ''
         return /*html*/`
             <div class='elf--select-editor ${hasLabel}'>
                 ${label ? `<label title="${label}">${label}</label>` : ''}
-                <select ref='$options' ${hasTabIndex}></select>
+                <div class="editor-view">
+                    <select ref='$options' ${hasTabIndex}></select>
+                    <div class='selected-value'>
+                        <span class='value' ref="$selectedValue">${value}</span>
+                        <span class='expand' ref='$expand'>${iconUse('expand_more')}</span>
+                    </div>
+                </div>
             </div>
         `
     }
@@ -62,6 +70,12 @@ export default class SelectEditor extends EditorElement {
     [BIND('$options')]() {
         return {
             'data-count': this.state.options.length.toString()
+        }
+    }
+
+    [BIND('$selectedValue')]() {
+        return {
+            text: this.state.options.find(it => it.value === this.state.value)?.text
         }
     }
 
@@ -89,6 +103,8 @@ export default class SelectEditor extends EditorElement {
         this.updateData({
             value: this.refs.$options.value
         })
+
+        this.bindData('$selectedValue');
     }
 
 

@@ -1,6 +1,7 @@
 import { Editor } from "el/editor/manager/Editor";
 import Button from './Button';
 import ToggleCheckBox from './ToggleCheckBox';
+import ToggleButton from './ToggleButton';
 
 /**
  * 
@@ -9,11 +10,13 @@ import ToggleCheckBox from './ToggleCheckBox';
 export default function (editor) {
     editor.registerElement({
         ToggleCheckBox,
+        ToggleButton,
         Button,
     });
 
     editor.registerAlias({
         'toggle-checkbox': 'ToggleCheckBox',
+        'toggle-button': 'ToggleButton',
         'button': 'Button',
     })
 }

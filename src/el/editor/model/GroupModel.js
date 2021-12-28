@@ -32,8 +32,6 @@ export class GroupModel extends MovableModel {
     }
 
     isInDefault () {
-        if  (!this.isLayoutItem()) return false; 
-
         const parentLayout = this.parent.layout || 'default';
                 
         return 'default' === parentLayout; 

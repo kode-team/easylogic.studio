@@ -5,7 +5,7 @@ import { clone } from "el/sapa/functions/func";
 import { mat4, vec3 } from "gl-matrix";
 import { Transform } from "el/editor/property-parser/Transform";
 import { TransformOrigin } from "el/editor/property-parser/TransformOrigin";
-import { calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, makeGuidePoint, round } from "el/utils/math";
+import { calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, makeGuidePoint, round, vertiesMap } from "el/utils/math";
 import { getRotatePointer } from "el/utils/collision";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
@@ -22,6 +22,15 @@ var directionType = {
     13: 'to bottom',
     14: 'to left',
 }
+
+/**
+ * 선택된 영역을 그리는 뷰
+ * 
+ * key 
+ * shift: height/width 동일한 비율로 변경 
+ * alt: scale * 2 변경 
+ * meta: width, height 를 같은 크기로 변경 
+ */
 
 const SelectionToolEvent = class extends EditorElement {
 
@@ -209,21 +218,23 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         // 1. 움직이는 vertex 를 구한다. 
         const currentVertex = vec3.clone(vertex);
+        const moveVertext = vec3.add([], currentVertex, distVector)
 
         // 2. dx, dy 만큼 옮긴 vertex 를 구한다.        
         // - dx, dy 를 계산하기 전에 먼저 snap 을 실행한 다음 최종 dx, dy 를 구한다      
         const snap = this.$snapManager.check([
-            vec3.add([], currentVertex, distVector)
+            moveVertext
         ]);
 
-        const nextVertex = vec3.add([], currentVertex, vec3.add([], distVector, snap));
+        const nextVertex = vec3.add([], moveVertext, snap);
 
         // 3. invert matrix 를 실행해서  기본 좌표로 복귀한다.             
-        var currentResult = vec3.transformMat4([], currentVertex, reverseMatrix);
-        var nextResult = vec3.transformMat4([], nextVertex, reverseMatrix);
+        // var currentResult = vec3.transformMat4([], currentVertex, reverseMatrix);62849
+        // var nextResult = vec3.transformMat4([], nextVertex, reverseMatrix);
+        const [currentResult, nextResult ] = vertiesMap([currentVertex, nextVertex], reverseMatrix);
 
         // 4. 복귀한 좌표에서 차이점을 구한다. 
-        const realDist = vec3.add([], nextResult, vec3.negate([], currentResult))
+        const realDist = vec3.subtract([], nextResult, currentResult)
 
         return realDist
     }
@@ -284,19 +295,20 @@ export default class SelectionToolView extends SelectionToolEvent {
      * width, height 를 변경한다. 
      * 
      * shiftKey : width, height 를 동일한 비율로 변경한다. 
-     * altKey: width, height 를 width 로 맞춰서 변경한다. 
+     * metaKey: width, height 를 width 로 맞춰서 변경한다. 
+     * altKey: scale  을 2배로 변경한다.
      * 
      * @param {vec3} distVector 
      */
     moveBottomRightVertex(distVector) {
-        const { shiftKey, altKey, ctrlKey, metaKey } = this.$config.get('bodyEvent');
+        const { shiftKey, altKey, metaKey } = this.$config.get('bodyEvent');
         const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 2, distVector)
 
             let directionNewVector = vec3.fromValues(0, 0, 0);
-            if (metaKey) {
+            if (altKey) {
                 realDx = realDx * 2;
                 realDy = realDy * 2;
             }
@@ -307,9 +319,9 @@ export default class SelectionToolView extends SelectionToolEvent {
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width + realDx;
-            const newHeight = altKey ? newWidth : item.height + realDy;
+            const newHeight = metaKey ? newWidth : item.height + realDy;
 
-            if (metaKey) {
+            if (altKey) {
                 directionNewVector = vec3.fromValues(realDx / 2, realDy / 2, 0);
             }
 
@@ -320,11 +332,17 @@ export default class SelectionToolView extends SelectionToolEvent {
 
 
     moveTopRightVertex(distVector) {
-        const { shiftKey, altKey } = this.$config.get('bodyEvent');
+        const { shiftKey, altKey, metaKey } = this.$config.get('bodyEvent');
         const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 1, distVector)
+
+
+            if (altKey) {
+                realDx = realDx * 2;
+                realDy = realDy * 2;
+            }
 
             if (shiftKey) {
                 realDy = -(realDx * item.height / item.width);
@@ -332,9 +350,14 @@ export default class SelectionToolView extends SelectionToolEvent {
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width + realDx;
-            const newHeight = altKey ? newWidth : item.height - realDy;
+            const newHeight = metaKey ? newWidth : item.height - realDy;
 
-            this.moveDirectionVertex(item, newWidth, newHeight, 'to bottom left', [0, newHeight, 0])
+            let directionNewVector = vec3.fromValues(0, newHeight, 0);   
+            if (altKey) {
+                directionNewVector = vec3.fromValues(realDx / 2, newHeight + realDy / 2, 0);
+            }
+
+            this.moveDirectionVertex(item, newWidth, newHeight, 'to bottom left', directionNewVector)
         }
     }
 
@@ -345,7 +368,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         if (item) {
             let [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
 
-            if (metaKey) {
+            if (altKey) {
                 realDx = realDx * 2;
                 realDy = realDy * 2;
             }
@@ -356,11 +379,11 @@ export default class SelectionToolView extends SelectionToolEvent {
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width - realDx;
-            const newHeight = altKey ? newWidth : item.height - realDy;
+            const newHeight = metaKey ? newWidth : item.height - realDy;
 
             let directionNewVector = vec3.fromValues(newWidth, newHeight, 0);
 
-            if (metaKey) {
+            if (altKey) {
                 directionNewVector = vec3.fromValues(newWidth + realDx / 2, newHeight + realDy / 2, 0);
             }
 
@@ -370,13 +393,13 @@ export default class SelectionToolView extends SelectionToolEvent {
 
 
     moveTopVertex(distVector) {
-        const { shiftKey, altKey, metaKey } = this.$config.get('bodyEvent');
+        const { altKey } = this.$config.get('bodyEvent');
         const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
 
-            if (metaKey) {
+            if (altKey) {
                 realDy = realDy * 2;
             }
 
@@ -386,7 +409,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
             let directionNewVector = vec3.fromValues(newWidth / 2, newHeight, 0);
 
-            if (metaKey) {
+            if (altKey) {
                 directionNewVector = vec3.fromValues(newWidth / 2, newHeight + realDy / 2, 0);
             }
 
@@ -397,12 +420,12 @@ export default class SelectionToolView extends SelectionToolEvent {
 
 
     moveBottomVertex(distVector) {
-        const { shiftKey, altKey, metaKey } = this.$config.get('bodyEvent');
+        const { altKey } = this.$config.get('bodyEvent');
         const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
             let [realDx, realDy] = this.calculateRealDist(item, 3, distVector)
 
-            if (metaKey) {
+            if (altKey) {
                 realDy = realDy * 2;
             }
 
@@ -413,7 +436,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
             let directionNewVector = vec3.fromValues(newWidth / 2, 0, 0);
 
-            if (metaKey) {
+            if (altKey) {
                 directionNewVector = vec3.fromValues(newWidth / 2, realDy / 2, 0);
             }
 
@@ -424,13 +447,13 @@ export default class SelectionToolView extends SelectionToolEvent {
 
 
     moveRightVertex(distVector) {
-        const { shiftKey, altKey, metaKey } = this.$config.get('bodyEvent');
+        const { altKey } = this.$config.get('bodyEvent');
         const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 1, distVector)
 
-            if (metaKey) {
+            if (altKey) {
                 realDx = realDx * 2;
             }
 
@@ -440,7 +463,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
             let directionNewVector = vec3.fromValues(0, newHeight / 2, 0);
 
-            if (metaKey) {
+            if (altKey) {
                 directionNewVector = vec3.fromValues(realDx / 2, newHeight / 2, 0);
             }
 
@@ -449,13 +472,13 @@ export default class SelectionToolView extends SelectionToolEvent {
     }
 
     moveLeftVertex(distVector) {
-        const { shiftKey, altKey, metaKey } = this.$config.get('bodyEvent');
+        const { altKey } = this.$config.get('bodyEvent');
         const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
 
-            if (metaKey) {
+            if (altKey) {
                 realDx = realDx * 2;
             }
 
@@ -467,7 +490,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
             let directionNewVector = vec3.fromValues(newWidth, newHeight / 2, 0);
 
-            if (metaKey) {
+            if (altKey) {
                 directionNewVector = vec3.fromValues(newWidth + realDx / 2, newHeight / 2, 0);
             }
 
@@ -478,11 +501,16 @@ export default class SelectionToolView extends SelectionToolEvent {
 
 
     moveBottomLeftVertex(distVector) {
-        const { shiftKey, altKey } = this.$config.get('bodyEvent');
+        const { shiftKey, altKey, metaKey } = this.$config.get('bodyEvent');
         const item = this.$selection.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 3, distVector)
+
+            if (altKey) {
+                realDx = realDx * 2;
+                realDy = realDy * 2;
+            }
 
             if (shiftKey) {
                 realDy = -(realDx * item.height / item.width);
@@ -490,9 +518,14 @@ export default class SelectionToolView extends SelectionToolEvent {
 
             // 변형되는 넓이 높이 구하기 
             const newWidth = item.width - realDx;
-            const newHeight = altKey ? newWidth : item.height + realDy;
+            const newHeight = metaKey ? newWidth : item.height + realDy;
 
-            this.moveDirectionVertex(item, newWidth, newHeight, 'to top right', [newWidth, 0, 0]);
+            let directionNewVector = vec3.fromValues(newWidth, 0, 0);
+            if (altKey) {
+                directionNewVector = vec3.fromValues(newWidth + realDx / 2, realDy / 2, 0);
+            }
+
+            this.moveDirectionVertex(item, newWidth, newHeight, 'to top right', directionNewVector);
         }
     }
 
@@ -519,8 +552,10 @@ export default class SelectionToolView extends SelectionToolEvent {
             this.moveBottomLeftVertex(distVector);
         }
 
+        this.$selection.recoverChildren();              
         this.emit('setAttributeForMulti', this.$selection.pack('x', 'y', 'width', 'height'));
-
+        this.emit('refreshAllElementBoundSize')
+  
 
         this.state.dragging = true;
     }
@@ -751,6 +786,10 @@ export default class SelectionToolView extends SelectionToolEvent {
                 />
         </svg>
         `;
+    }
+
+    removeNaN(value) {
+        return value.replace(/NaN/g, '0');
     }
 
     createRenderPointers(pointers) {

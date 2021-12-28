@@ -71,14 +71,14 @@ export default class DomRender extends ItemRender {
     if (parentLayout === 'flex') {
       // 부모가  layout 이  지정 됐을 때 자식item 들은 position: relative 기준으로 동작한다. , left, top 은  속성에서 삭제 
       obj = {
-        position: 'relative',
+        position: 'static',
         left: 'auto !important',
         top: 'auto !important',
       }
     } else if (parentLayout === 'grid') {
       // 부모가  layout 이  지정 됐을 때 자식item 들은 position: relative 기준으로 동작한다. , left, top 은  속성에서 삭제 
       obj = {
-        position: 'relative',
+        position: 'static',
         left: 'auto !important',
         top: 'auto !important',
         width: 'auto !important',
@@ -88,19 +88,24 @@ export default class DomRender extends ItemRender {
     }
 
     if (parentLayout === 'flex') {
-
-      let itemInfo = item['flex-layout-item'];
-
-      if (itemInfo === 'auto') {
-        obj['flex'] = 'auto'
-      } else {
-        obj = Object.assign(obj, STRING_TO_CSS(itemInfo));
+      obj = {
+        ...obj,
+        ...item.attrs(
+          'flex-basis', 
+          'flex-grow', 
+          'flex-shrink', 
+          'order'
+        )
       }
-
     } else if (parentLayout  === 'grid') {
       obj = {
         ...obj, 
-        ...STRING_TO_CSS(item['grid-layout-item'])
+        ...item.attrs(
+          'grid-column-start', 
+          'grid-column-end', 
+          'grid-row-start', 
+          'grid-row-end'
+        )
       }
     }
 
@@ -115,7 +120,14 @@ export default class DomRender extends ItemRender {
   toFlexLayoutCSS(item) {
     return {
       display: 'flex',
-      ...this.toStringPropertyCSS(item, 'flex-layout')
+      ...item.attrs(
+        'flex-direction', 
+        'flex-wrap', 
+        'justify-content', 
+        'align-items', 
+        'align-content',
+        'gap'
+      )
     }
   }  
 
@@ -126,7 +138,16 @@ export default class DomRender extends ItemRender {
   toGridLayoutCSS(item) {
     return {
       display: 'grid',
-      ...this.toStringPropertyCSS(item, 'grid-layout')
+      ...item.attrs(
+        'grid-template-columns', 
+        'grid-template-rows', 
+        'grid-template-areas', 
+        'grid-auto-columns', 
+        'grid-auto-rows', 
+        'grid-auto-flow', 
+        'gap', 
+        'grid-gap'
+      )
     }
   }  
 
@@ -188,12 +209,21 @@ export default class DomRender extends ItemRender {
 
     if (item.right && item.right.unit !== 'auto') {
       // NOOP
+
+      if (!item.x) {
+        obj.width = item.width;
+      }
+
     } else {
       obj.width = item.width;
     }
 
     if (item.bottom && item.bottom.unit !== 'auto') {
       // NOOP
+      if (!item.y) {
+        obj.height = item.height;      
+      }
+
     } else {
       obj.height = item.height;
     }
@@ -468,7 +498,7 @@ export default class DomRender extends ItemRender {
    * @param {Item} item 
    */
   toDefString (item) {
-    var str = this.toDefInnerString(item)
+    var str = this.toDefInnerString(item).trim()
 
     return str ? /*html*/`
     <svg class='inner-svg-element' style="display:block" data-id="${this.innerSVGId(item)}" width="0" height="0">

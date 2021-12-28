@@ -106,11 +106,12 @@ export default class FillPickerPopup extends BasePopup {
     // data.image = data.gradient
     data.params = params;
 
+    this.setState(data);    
+
     if (data.image.isGradient()) {
       this.trigger('selectColorStep', data.image.colorsteps[0].color);
     }
 
-    this.setState(data);
   }
 
   [SUBSCRIBE("selectColorStep")](color) {

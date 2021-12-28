@@ -17,29 +17,29 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './TransformEditor.scss';
 import { isNotUndefined } from "el/sapa/functions/func";
+import { TransformValue } from "el/editor/types/model";
 
 var transformList = [
-  'perspective',  
-  'rotate',
-  'rotateX',
-  'rotateY',
-  'rotateZ',
-  'rotate3d',    
-  'skew',
-  'skewX',    
-  'skewY',   
-  'translate',
-  'translateX',  
-  'translateY',
-  'translateZ',
-  'translate3d',
-  'scale',
-  'scaleX',
-  'scaleY',
-  'scaleZ',
-  'scale3d',
-  'matrix',
-  'matrix3d',  
+  TransformValue.PERSPECTIVE,  
+  TransformValue.ROTATE,
+  TransformValue.ROTATE_X,
+  TransformValue.ROTATE_Y,
+  TransformValue.ROTATE_Z,  
+  TransformValue.SKEW,
+  TransformValue.SKEW_X,
+  TransformValue.SKEW_Y,  
+  TransformValue.TRANSLATE,
+  TransformValue.TRANSLATE_X,
+  TransformValue.TRANSLATE_Y,
+  TransformValue.TRANSLATE_Z,  
+  TransformValue.TRANSLATE_3D,  
+  TransformValue.SCALE,
+  TransformValue.SCALE_X,
+  TransformValue.SCALE_Y,
+  TransformValue.SCALE_Z,  
+  TransformValue.SCALE_3D,  
+  TransformValue.MATRIX,
+  TransformValue.MATRIX_3D,
 ];
 
 const labels = {

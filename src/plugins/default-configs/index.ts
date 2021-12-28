@@ -8,7 +8,7 @@ import configs from "./configs";
  * 
  * @param {Editor} editor
  */
-export default function (editor) {
+export default function (editor: Editor): void {
 
     configs.forEach(config => {
         editor.registerConfig(config);

@@ -1,26 +1,23 @@
 import { SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { variable } from 'el/sapa/functions/registElement';
+import { TextDecoration, TextTransform } from "el/editor/types/model";
 
 
-const textTransformOptions = "none,uppercase:AG,lowercase:ag,capitalize:Ag".split(',').map(it => {
-  const [value, text] = it.split(':');
+const textTransformOptions = [
+  { value: TextTransform.NONE, text: "None" },
+  { value: TextTransform.CAPITALIZE, text: "Ag" },
+  { value: TextTransform.UPPERCASE, text: "AG" },
+  { value: TextTransform.LOWERCASE, text: "ag" },
+]
 
-  return {
-    value, text
-  }
-});
-
-
-const textDecorationOptions = "none,underline,overline:O,line-through".split(',').map(it => {
-  const [value, text] = it.split(':');
-
-  return {
-    value, text
-  }
-});
-
-
+const textDecorationOptions = [
+  { value: TextDecoration.NONE, text: 'None' },
+  { value: TextDecoration.UNDERLINE, text: 'Underline' },
+  { value: TextDecoration.OVERLINE, text: 'Overline' },
+  { value: TextDecoration.LINE_THROUGH, text: 'Line-through' },
+  { value: TextDecoration.BLINK, text: 'Blink' }
+]
 
 export default class TextProperty extends BaseProperty {
 

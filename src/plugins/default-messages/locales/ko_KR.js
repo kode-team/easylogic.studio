@@ -392,7 +392,9 @@ export default {
     'layout.property.title': '레이아웃',
     'layout.property.flex': '플렉스 박스',
     'layout.property.grid': '그리드',
-    'layout.property.default': '기본 좌표',    
+    'layout.property.default': '기본 좌표',   
+    
+    'default.layout.item.property.title.constraints': 'Constraints',        
 
     'flex.layout.editor.row': '행',
     'flex.layout.editor.column': '열',

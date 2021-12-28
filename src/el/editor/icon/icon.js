@@ -17,5 +17,17 @@ export function iconUseForPath(pathString, opt = { width: 24, height: 24 }) {
   `
 }
 
+export function iconMake(svgString, opt = { width: 24, height: 24 }) {
+  return /*html*/`
+    <svg viewBox="0 0 ${opt.width} ${opt.height}" xmlns="http://www.w3.org/2000/svg">
+      ${svgString}
+    </svg>
+  `
+}
+
+export function iconBlank() {
+  return iconMake(/*html*/`<path d="M0 0h24v24H0z" fill="none" fill-opacity="0"/>`);
+}
+
 
 export default icons_list;

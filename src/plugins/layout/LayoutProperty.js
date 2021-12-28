@@ -1,20 +1,15 @@
 
 import { IF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF} from "el/sapa/Event";
+import { variable } from 'el/sapa/functions/registElement';
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './LayoutProperty.scss';
-import { variable } from 'el/sapa/functions/registElement';
+
 
 export default class LayoutProperty extends BaseProperty {
 
   getTitle() {
     return this.$i18n('layout.property.title');
-  }
-
-  getLayoutOptions () {
-    return variable(['default', 'flex', 'grid'].map(it => {
-        return { value: it, text: this.$i18n(`layout.property.${it}`) }
-    }));
   }
 
   getClassName() {
@@ -23,23 +18,37 @@ export default class LayoutProperty extends BaseProperty {
 
   getBody() {
     return /*html*/`
-        <div class='property-item' ref='$layoutType'></div>
+        <div class='property-item' ref='$layoutProperty'></div>
       `;
   }  
 
-  [LOAD('$layoutType')] () {
+  getTools() {
+    return /*html*/`
+      <div ref='$layoutType'></div>
+    `
+  }
+
+  [LOAD('$layoutType')] (){
+    const current = this.$selection.current;
+
+    if (!current) return '';
+
+    return /*html*/`
+      <object refClass="SelectIconEditor" ${variable({
+        ref: '$layout',
+        key: 'layout',
+        value: current.layout,
+        options: ['default', 'flex', 'grid'],
+        icons: ['layout_default','layout_flex','layout_grid'],
+        onchange: "changeLayoutType"
+      })}
+      />
+    `
+  }  
+
+  [LOAD('$layoutProperty')] () {
     var current = this.$selection.current || { layout : 'default' }
     return /*html*/`
-      <div class='layout-select'>
-        <object refClass="SelectIconEditor" 
-          ref='$layout' 
-          key='layout' 
-          icon="true" 
-          value="${current.layout}"
-          options="${this.getLayoutOptions()}"  
-          colors=",green,red"
-          onchange="changeLayoutType" />
-      </div>
       <div class='layout-list' ref='$layoutList'>
         <div data-value='default' class='${current.layout === 'default' ? 'selected': ''}'></div>
         <div data-value='flex' class='${current.layout === 'flex' ? 'selected': ''}'>
@@ -53,6 +62,7 @@ export default class LayoutProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF('changeLayoutInfo')] (key, value) {
+    console.log(key, value);
     this.command('setAttributeForMulti', 'change layout info', this.$selection.packByValue({ 
       [key]: value
     }))
@@ -85,11 +95,11 @@ export default class LayoutProperty extends BaseProperty {
     return 'layout'
   }
 
-  hasChildren() {
-    return this.$selection.current.hasChildren();
+  enableHasChildren() {
+    return this.$selection.current.enableHasChildren();
   }
 
-  [SUBSCRIBE('refreshSelection') + IF('checkShow') + IF("hasChildren")]() {
+  [SUBSCRIBE('refreshSelection') + IF('checkShow') + IF("enableHasChildren")]() {
     this.refresh();
   }
 }

@@ -391,6 +391,8 @@ export default {
     'layout.property.grid': 'Grid',
     'layout.property.default': 'Default',
 
+    'default.layout.item.property.title.constraints': 'Constraints',    
+
     'flex.layout.editor.row': 'Row',
     'flex.layout.editor.column': 'column',
     'flex.layout.editor.row-reverse': 'Row Reverse',
@@ -410,7 +412,7 @@ export default {
     'flex.layout.editor.align-items': 'Align Items',
     'flex.layout.editor.align-content': 'Align Content',    
 
-    'flex.layout.item.property.title': 'Layout Item Detail',
+    'flex.layout.item.property.title': 'Flex Item Detail',
     'flex.layout.item.property.grow': 'Flex Grow',
     'flex.layout.item.property.shrink': 'Flex Shrink',
     'flex.layout.item.property.basis': 'Flex Basis',

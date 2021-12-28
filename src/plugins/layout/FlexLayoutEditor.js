@@ -1,7 +1,9 @@
-import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { CLICK, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { CSS_TO_STRING, STRING_TO_CSS } from "el/utils/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { variable } from 'el/sapa/functions/registElement';
+
+import "./FlexLayoutEditor.scss";
 
 export default class FlexLayoutEditor extends EditorElement {
 
@@ -11,7 +13,7 @@ export default class FlexLayoutEditor extends EditorElement {
     } 
     
     getWrapOptions () {
-        return this.makeOptionsFunction('nowrap,wrap,wrap-reverse')
+        return this.makeOptionsFunction('nowrap,wrap')
     }
 
     getJustifyContentOptions () {
@@ -48,49 +50,53 @@ export default class FlexLayoutEditor extends EditorElement {
         return CSS_TO_STRING(this.state)
     }
 
-    modifyData() {
-        this.parent.trigger(this.props.onchange, this.props.key, this.getValue())
+    modifyData(key, value) {
+        this.parent.trigger(this.props.onchange, key, value)
     }
 
     [LOAD('$body')] () {
         return /*html*/`
             <div class='flex-layout-item'>
-                <div class='label'><label>${this.$i18n('flex.layout.editor.direction')}</label></div>
-                <object refClass="SelectIconEditor" 
-                    key='flex-direction'
-                    value="${this.state['flex-direction'] || 'row'}"
-                    options="${this.getDirectionOptions()}"
-                    icons=${variable(['view_week', 'table_rows', 'view_week_reverse', 'table_rows' ])}
-                    onchange='changeKeyValue'
-                />
+                <div class="grid-2">
+                    <div>
+
+                        <object refClass="SelectIconEditor" 
+                            key='flex-direction'
+                            value="${this.state['flex-direction'] || 'row'}"
+                            options="${this.getDirectionOptions()}"
+                            icons=${variable(['east', 'south', 'west', 'north'])}
+                            onchange='changeKeyValue'
+                        />
+                    </div>
+
+                    <div>
+                        <label>
+                            <input type="checkbox" ${this.state['flex-wrap'] === 'wrap' ? 'checked' : ''} ref="$wrap" /> Wrap
+                        </label>
+                    </div>
+                </div>
+
             </div>
             <div class='flex-layout-item'>
-                <div class='label'><label>${this.$i18n('flex.layout.editor.wrap')}</label></div>
-                <object refClass="SelectIconEditor" 
-                    key='flex-wrap'
-                    value="${this.state['flex-wrap'] || 'wrap'}"
-                    options="${this.getWrapOptions()}"
-                    icons=${variable([, 'wrap_text', ])}
-                    onchange='changeKeyValue'
-                />
+
             </div>
             <div class='flex-layout-item'>
-                <div class='label'><label>${this.$i18n('flex.layout.editor.justify-content')}</label></div>
                 <object refClass="SelectIconEditor" 
                     key='justify-content'
+                    label="${this.$i18n('flex.layout.editor.justify-content')}"
                     value="${this.state['justify-content'] || 'flex-start'}"
                     options="${this.getJustifyContentOptions()}"
-                    icons=${variable(['start', 'end', 'center', 'horizontal_distribute'])}                                        
+                    icons=${variable(['start', 'end', 'center', 'horizontal_distribute', 'justify_content_space_around'])}
                     onchange='changeKeyValue'
                 />
             </div>
             <div class='flex-layout-item'>
-                <div class='label'><label>${this.$i18n('flex.layout.editor.align-items')}</label></div>
                 <object refClass="SelectIconEditor" 
+                    label="${this.$i18n('flex.layout.editor.align-items')}"
                     key='align-items'
                     value="${this.state['align-items'] || 'flex-start'}"
                     options="${this.getAlignItemsOptions()}"
-                    icons=${variable(['vertical_align_top', 'vertical_align_bottom', 'vertical_align_center'])}                    
+                    icons=${variable(['vertical_align_top', 'vertical_align_bottom', 'vertical_align_center', 'vertical_align_baseline', 'vertical_align_stretch'])}
                     onchange='changeKeyValue'
                 />
             </div>
@@ -119,6 +125,15 @@ export default class FlexLayoutEditor extends EditorElement {
             [key]: value
         }, false)
 
-        this.modifyData();
+        this.modifyData(key, value);
+    }
+
+    [CLICK('$wrap')] () {
+        const checked = !this.refs.$wrap.checked();
+
+        this.setState({
+            'flex-wrap': checked ? 'wrap' : 'nowrap'
+        }, false)
+        this.modifyData('flex-wrap', checked ? 'wrap' : 'nowrap')
     }
 }

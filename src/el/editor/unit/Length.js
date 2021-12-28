@@ -389,6 +389,8 @@ export class Length {
       return Length.px(((this.value / 100) * maxValue) / 16);
     } else if (this.isString()) {
       return this.stringToPx(maxValue);
+    } else if (this.isNumber()) {
+      return Length.px(this.value).toPx(maxValue);
     }
   }
 

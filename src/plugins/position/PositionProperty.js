@@ -4,6 +4,8 @@ import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { Length } from "el/editor/unit/Length";
 import { iconUse } from 'el/editor/icon/icon';
 
+import "./PositionProperty.scss";
+
 const DEFAULT_SIZE = Length.z();
 
 export default class PositionProperty extends BaseProperty {
@@ -66,39 +68,24 @@ export default class PositionProperty extends BaseProperty {
   getBody() {
     return /*html*/`
       <div class="position-item" ref="$positionItem" style='padding: 5px 10px;'>
-        <div style='display: grid;grid-template-columns: 1fr 100px; grid-column-gap: 10px; padding-top: 10px;'>
+        <div class="grid-layout">
           <div class='property-item' style='padding: 0px;'>
-            <object refClass='InputRangeEditor' ref='$x' label="X" key='x' min="-100000" max='100000' onchange='changRangeEditor' />
+            <object refClass='NumberInputEditor' ref='$x' compact="true" label="X" key='x' min="-100000" max='100000' onchange='changRangeEditor' />
           </div>
-          <div class='property-item' style='padding: 0px;'>
-            <button type="button" data-command="start-x">${iconUse('start', null, {width: 30, height: 30})}</button>
+          <div style='padding: 0px;'>
+            <object refClass='NumberInputEditor' ref='$y' compact="true" label="Y" key='y' min="-10000" max='10000' onchange='changRangeEditor' />
           </div>          
         </div>
-        <div style='display: grid;grid-template-columns: 1fr 100px; grid-column-gap: 10px; padding-top: 10px;'>
-          <div class='property-item animation-property-item' style='padding: 0px;'>
-            <object refClass='InputRangeEditor' ref='$y' label="Y" key='y' min="-10000" max='10000' onchange='changRangeEditor' />
+        <div class="grid-layout">
+          <div >
+            <object refClass='NumberInputEditor' ref='$width' compact="true"  label="${this.$i18n('position.property.width')}" key='width' min="0" max='3000' onchange='changRangeEditor' />
           </div>
-        </div>
-        <div style='display: grid;grid-template-columns: 1fr 100px; grid-column-gap: 10px; padding-top: 10px;'>
-          <div class='property-item animation-property-item' style='padding: 0px;'>
-            <object refClass='InputRangeEditor' ref='$right' label="Right" key='right' min="-100000" max='100000' onchange='changRangeEditor' />
-          </div>
-        </div>
-        <div style='display: grid;grid-template-columns: 1fr 100px; grid-column-gap: 10px; padding-top: 10px;'>
-          <div class='property-item animation-property-item' style='padding: 0px;'>
-            <object refClass='InputRangeEditor' ref='$bottom' label="Bottom" key='bottom' min="-10000" max='10000' onchange='changRangeEditor' />
-          </div>
-        </div>        
-        <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; padding-top: 10px;'>
-          <div class='property-item animation-property-item' style='padding:0px'>
-            <object refClass='InputRangeEditor' ref='$width' compact="true"  label="${this.$i18n('position.property.width')}" key='width' min="0" max='3000' onchange='changRangeEditor' />
-          </div>
-          <div class='property-item animation-property-item' style='padding:0px'>
-            <object refClass='InputRangeEditor' ref='$height' compact="true"  label="${this.$i18n('position.property.height')}" key='height' min="0" max='3000' onchange='changRangeEditor' />
+          <div >
+            <object refClass='NumberInputEditor' ref='$height' compact="true"  label="${this.$i18n('position.property.height')}" key='height' min="0" max='3000' onchange='changRangeEditor' />
           </div>      
         </div> 
-        <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; padding-top: 10px;'>
-          <div class='property-item animation-property-item'>
+        <div class="grid-layout">
+          <div>
             <object refClass='InputRangeEditor' 
               ref='$rotate' 
               key='rotateZ' 
@@ -111,7 +98,7 @@ export default class PositionProperty extends BaseProperty {
               onchange="changeRotate" />
           </div>        
 
-          <div class='property-item animation-property-item'>
+          <div>
             <object refClass="NumberInputEditor"
               ref='$opacity' 
               key='opacity' 
@@ -139,17 +126,6 @@ export default class PositionProperty extends BaseProperty {
       if (rotateZ) {
         this.children.$rotate.setValue(rotateZ[0]);
       }      
-
-      if (current.parent.is('project')) {
-        this.children.$right.disabled();
-        this.children.$bottom.disabled();        
-      } else {
-        this.children.$right.enabled();
-        this.children.$bottom.enabled();        
-
-        this.children.$right.setValue(current.right);
-        this.children.$bottom.setValue(current.bottom);
-      }
     }
 
   }

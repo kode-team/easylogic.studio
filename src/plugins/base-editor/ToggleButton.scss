@@ -1,0 +1,70 @@
+.elf--toggle-button {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-gap: 4px;
+    height: var(--elf--input-height);
+
+    &.has-label {
+        grid-template-columns: 70px 1fr;
+        grid-column-gap: 2px;
+
+        label {
+            text-align: left;
+            vertical-align: middle;
+            padding: 7px 0px 2px 0px;
+            // font-size: 11px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;            
+        }
+    }
+
+    .area {
+        display: block; 
+        font-size: 13px;
+        height: 100%;
+        position: relative;
+        background-color: var(--elf--input-background-color);
+        border-radius: 4px;
+        padding: 2px;
+
+        > div {
+            width: 100%;
+            display: none; 
+            position: relative;
+            border-radius: 4px;            
+
+            &.visible {
+                display: inline-block;
+            }
+
+            &.checked {
+                background-color: var(--elf--selected-color-2);             
+                color: var(--elf--selected-font-color);                                      
+            }
+        }
+
+        button {
+            color: var(--elf--input-font-color);
+            box-sizing: border-box;
+            padding: 2px 4px;
+            text-align: center;
+            vertical-align: middle;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+
+            &.checked {
+                font-weight: bold;
+                color: var(--elf--selected-font-color);                     
+            }
+
+            svg {
+                width: 16px;
+                height: 16px;
+
+
+            }
+        }
+    }
+}

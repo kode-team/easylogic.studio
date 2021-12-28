@@ -13,6 +13,7 @@ import './HTMLRenderView.scss';
 
 export default class HTMLRenderView extends EditorElement {
 
+    /** initialize setting */
     components() {
         return {
             StyleView,
@@ -30,6 +31,7 @@ export default class HTMLRenderView extends EditorElement {
         }
     }
 
+    /** template */
     template() {
         return /*html*/`
             <div class='elf--element-view' ref='$body'>
@@ -44,6 +46,41 @@ export default class HTMLRenderView extends EditorElement {
         `
     }
 
+
+    [BIND('$body')]() {
+        const { canvasWidth, canvasHeight } = this.$editor;
+
+        var width = Length.px(canvasWidth);
+        var height = Length.px(canvasHeight);
+
+        return {
+            'tabIndex': -1,
+            style: {
+                width,
+                height,
+            }
+        }
+    }
+
+    [BIND('$view')]() {
+
+        const { translate, transformOrigin: origin, scale } = this.$viewport;
+
+        const transform = `translate(${translate[0]}px, ${translate[1]}px) scale(${scale || 1})`;
+        const transformOrigin = `${origin[0]}px ${origin[1]}px`
+
+        return {
+            style: {
+                'transform-origin': transformOrigin,
+                transform
+            }
+        }
+    }
+
+
+    /**
+     * initialize message 
+     */
     [CONFIG('show.outline')] () {
         this.refs.$view.attr('data-outline', this.$config.get('show.outline'));
     }
@@ -51,6 +88,69 @@ export default class HTMLRenderView extends EditorElement {
     [SUBSCRIBE('refElement')](id, callback) {
         isFunction(callback) && callback(this.getElement(id))
     }
+
+
+    // 객체를 부분 업데이트 하기 위한 메소드 
+    [SUBSCRIBE('refreshSelectionStyleView')](obj) {
+        this.refreshSelectionStyleView(obj);
+    }    
+
+
+    [SUBSCRIBE('updateViewport')]() {
+        this.bindData('$view');
+    }
+
+    /**
+     * 기본 커서 제어 
+     */
+    [CONFIG('bodyEvent')]() {
+
+        // TODO: 커서를 제어하는 element 가 아니면 기본 커서로 지정해야할 듯 
+        const number = Dom.create(this.$config.get('bodyEvent').target).data('number')
+
+        if (!number) {
+            this.emit('recoverCursor')
+        }
+    }    
+
+    [SUBSCRIBE('refreshAllElementBoundSize')]() {
+        this.refreshAllElementBoundSize();
+    }
+
+    [SUBSCRIBE('refreshElementBoundSize')] (parentObj) {
+        this.refreshElementBoundSize(parentObj);
+    }    
+
+
+    [SUBSCRIBE('updateAllCanvas')](parentLayer) {
+        this.updateAllCanvas(parentLayer);
+    }
+
+    /**
+     * canvas 전체 다시 그리기 
+     */
+     [SUBSCRIBE('refreshAllCanvas')]() {
+        this.refreshAllCanvas();
+    }    
+
+
+    [SUBSCRIBE('playTimeline', 'moveTimeline')]() {
+
+        const project = this.$selection.currentProject;
+        var timeline = project.getSelectedTimeline();
+
+        if (timeline) {
+            timeline.animations.map(it => this.$model.get(it.id)).forEach(current => {
+                this.updateTimelineElement(current, true, false);
+            })
+        }
+
+    }
+
+
+    /**
+     * Interfaction (Dom Event)
+     */
 
     /**
      * 캐쉬된 element 를 모두 삭제함 
@@ -257,7 +357,7 @@ export default class HTMLRenderView extends EditorElement {
             if (this.$selection.isEmpty === false) {
                 // 선택된 모든 객체 카피하기 
                 this.$selection.selectAfterCopy();
-                this.trigger('refreshAllCanvas')
+                this.refreshAllCanvas()
                 this.emit('refreshLayerTreeView')
 
                 this.initializeDragSelection();
@@ -319,9 +419,9 @@ export default class HTMLRenderView extends EditorElement {
         }
 
         // layout item 은 움직이지 않고 layout 이 좌표를 그리도록 한다. 
-        if (this.$selection.isLayoutItem) {
-            return;
-        }
+        // if (this.$selection.isLayoutItem) {
+        //     return;
+        // }
 
         const targetMousePoint = this.$viewport.getWorldPosition();
 
@@ -336,13 +436,18 @@ export default class HTMLRenderView extends EditorElement {
             this.$snapManager.clear();
             this.clearElementAll();
 
-            this.trigger('refreshAllCanvas')
+            this.refreshAllCanvas()
 
             // ArtBoard 변경 이후에 LayerTreeView 업데이트
             this.emit('refreshLayerTreeView')
         }
 
-        this.emit('setAttributeForMulti', this.$selection.pack('x', 'y'));
+        this.emit('setAttributeForMulti', this.$selection.packByValue({
+            'x': (item) => item.x , 
+            'y': (item) => item.y ,
+            'right': undefined,
+            'bottom': undefined,
+        }));
         // this.emit('refreshSelectionTool', true);
 
     }
@@ -434,40 +539,9 @@ export default class HTMLRenderView extends EditorElement {
         }, 100);
     }
 
-    [BIND('$body')]() {
-        const { canvasWidth, canvasHeight } = this.$editor;
-
-        var width = Length.px(canvasWidth);
-        var height = Length.px(canvasHeight);
-
-        return {
-            'tabIndex': -1,
-            style: {
-                width,
-                height,
-            }
-        }
-    }
-
-    [BIND('$view')]() {
-
-        const { translate, transformOrigin: origin, scale } = this.$viewport;
-
-        const transform = `translate(${translate[0]}px, ${translate[1]}px) scale(${scale || 1})`;
-        const transformOrigin = `${origin[0]}px ${origin[1]}px`
-
-        return {
-            style: {
-                'transform-origin': transformOrigin,
-                transform
-            }
-        }
-    }
 
 
-
-    // 객체를 부분 업데이트 하기 위한 메소드 
-    [SUBSCRIBE('refreshSelectionStyleView')](obj) {
+    refreshSelectionStyleView(obj) {
         var items = obj ? [obj] : this.$selection.items;
 
         items.forEach(current => {
@@ -490,23 +564,8 @@ export default class HTMLRenderView extends EditorElement {
 
     }
 
-    [SUBSCRIBE('playTimeline', 'moveTimeline')]() {
 
-        const project = this.$selection.currentProject;
-        var timeline = project.getSelectedTimeline();
-
-        if (timeline) {
-            timeline.animations.map(it => this.$model.get(it.id)).forEach(current => {
-                this.updateTimelineElement(current, true, false);
-            })
-        }
-
-    }
-
-    /**
-     * canvas 전체 다시 그리기 
-     */
-    [SUBSCRIBE('refreshAllCanvas')]() {
+    refreshAllCanvas() {
 
         this.clearElementAll();
 
@@ -525,47 +584,44 @@ export default class HTMLRenderView extends EditorElement {
         this.bindData('$view');
 
         // 최초 전체 객체를 돌면서 update 함수를 실행해줄 트리거가 필요하다. 
-        this.trigger('updateAllCanvas', project);
+        this.updateAllCanvas(project);
     }
 
-    [SUBSCRIBE('updateAllCanvas')](parentLayer) {
+    updateAllCanvas(parentLayer) {
         parentLayer.layers.forEach(item => {
             this.updateElement(item, this.getElement(item.id));
-            this.trigger('updateAllCanvas', item);
+            this.updateAllCanvas(item);
         })
     }
 
-    [SUBSCRIBE('refreshAllElementBoundSize') + DEBOUNCE(100)]() {
+
+    
+    refreshAllElementBoundSize() {
         var selectionList = this.$selection.items.map(it => it.is('artboard') ? it : it.parent)
 
         var list = [...new Set(selectionList)];
         list.forEach(it => {
-            this.trigger('refreshElementBoundSize', it);
+            this.refreshElementBoundSize(it);
         })
     }
 
-    [SUBSCRIBE('refreshElementBoundSize')](parentObj) {
+
+    refreshElementBoundSize(parentObj) {
         if (parentObj) {
 
-            const hasChangedDimension = parentObj.changedBoxModel || parentObj.hasChangedField(
+            const hasChangedDimension = parentObj.changedLayout || parentObj.hasChangedField(
                 'children', 
                 'box-model', 
                 'width', 
                 'height', 
-                'layout', 
-                'flex-layout', 
-                'grid-layout', 
-                'grid-layout-item', 
-                'flex-layout-item'
-            );
+            )
             
             parentObj.layers.forEach(it => {
-                // if (it.isLayoutItem()) {
                 var $el = this.getElement(it.id);
 
-                if ($el && hasChangedDimension && it.isLayoutItem()) {
+                // layout item 만 rect 를 새롭게 갱신한다. 
+                if ($el && (hasChangedDimension &&  it.isLayoutItem())) {
                     const { x, y, width, height } = $el.offsetRect();
-
                     it.reset({
                         x: Length.px(x),
                         y: Length.px(y),
@@ -574,31 +630,18 @@ export default class HTMLRenderView extends EditorElement {
                     })
 
                     this.updateElement(it, $el);
-                    this.trigger('refreshSelectionStyleView', it, true);
-                    this.emit('refreshSelectionTool', true);
-                }
-                // }
 
-                this.trigger('refreshElementBoundSize', it);
+                    this.refreshSelectionStyleView(it);
+                    if (this.$config.false('set.move.control.point')) {
+                        this.emit('refreshSelectionTool', true);
+                    }
+
+                }
+
+                this.refreshElementBoundSize(it);
             })
         }
     }
 
-    [SUBSCRIBE('updateViewport')]() {
-        this.bindData('$view');
-    }
-
-    /**
-     * 기본 커서 제어 
-     */
-    [CONFIG('bodyEvent')]() {
-
-        // TODO: 커서를 제어하는 element 가 아니면 기본 커서로 지정해야할 듯 
-        const number = Dom.create(this.$config.get('bodyEvent').target).data('number')
-
-        if (!number) {
-            this.emit('recoverCursor')
-        }
-    }
 
 }

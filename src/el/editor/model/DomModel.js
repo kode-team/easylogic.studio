@@ -69,6 +69,8 @@ export class DomModel extends GroupModel {
       'grid-layout': 'display:grid;',
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
       // keyframes: [],
+      "constraints-vertical": "min",
+      "constraints-horizontal": "min",
       selectors: [],
       svg: [],
       ...obj
@@ -125,7 +127,8 @@ export class DomModel extends GroupModel {
         'padding-right',
         'padding-left',
         'padding-bottom',
-        'boolean-operation'
+        'constraints-horizontal',
+        'constraints-vertical',
       ),
 
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
@@ -159,6 +162,26 @@ export class DomModel extends GroupModel {
       'margin-top', 'margin-left', 'margin-bottom', 'margin-right', 
       'padding-top', 'padding-left', 'padding-right', 'padding-bottom'
     )
+  }
+
+  get changedFlexLayout() {
+    return this.hasChangedField(
+      'flex-direction', 'flex-wrap', 'justify-content', 'align-items', 'align-content',
+      'order', 'flex-basis', 'flex-grow', 'flex-shrink', 'flex-flow'
+    )
+  }
+
+  get changedGridLayout() {
+    return this.hasChangedField(
+      'grid-template-rows', 'grid-template-columns', 'grid-template-areas',
+      'grid-auto-rows', 'grid-auto-columns', 'grid-auto-flow',
+      'grid-row-gap', 'grid-column-gap', 'grid-row-start', 'grid-row-end',
+      'grid-column-start', 'grid-column-end', 'grid-area'
+    )
+  }
+
+  get changedLayout() {
+    return this.hasChangedField('layout') || this.changedBoxModel || this.changedFlexLayout || this.changedGridLayout
   }
 
 

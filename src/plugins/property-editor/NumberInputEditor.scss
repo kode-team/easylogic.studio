@@ -3,23 +3,23 @@
     grid-template-columns: 1fr;
     // grid-column-gap: 4px;
     height: var(--elf--input-height);
-
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    padding: 4px 4px;
+    border-radius: 2px;
 
     &.focused {
+        border-color: var(--elf--selected-color);
+        border-width: 2px;
+    }
 
-        .area {
-            
-            input[type="number"] {
-                border-color: var(--elf--selected-color);
-            }
+    &.drag {
+        border-color: var(--elf--selected-color);
+        border-width: 1px;
+    }
 
-            .elf--select-editor {
-
-                select {
-                    border-color: var(--elf--selected-color) !important;
-                }
-            }
-        }
+    &:hover:not(.focused):not(.drag) {
+        border-color: var(--elf--input-sub-font-color);        
     }
 
 
@@ -38,6 +38,7 @@
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
+            cursor: ew-resize;
         }
 
         &.block {
@@ -67,18 +68,10 @@
 
             input {
                 width: 100%;
-                &[type='number'] {
-                    border-radius: 3px;
-                    border: 1px solid var(--elf--input-border-color);
-                    &.focused {
-                        box-shadow: 0 0 0 1px var(--elf--selected-color);
-                    }                
-                }                
-            }
-
-            select {
-                width: 100%;
-                color: var(--elf--input-sub-font-color);
+                padding-left: 2px;
+                background-color: transparent;
+                border:0px;
+                appearance: none;
             }
         }
     }

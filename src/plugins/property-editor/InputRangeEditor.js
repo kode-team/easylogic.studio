@@ -1,11 +1,12 @@
 
 import { Length } from "el/editor/unit/Length";
-import { LOAD, INPUT, CLICK, FOCUS, BLUR, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { LOAD, INPUT, CLICK, FOCUS, BLUR, SUBSCRIBE, SUBSCRIBE_SELF, POINTERSTART, FOCUSIN, FOCUSOUT } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { OBJECT_TO_CLASS } from "el/utils/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './InputRangeEditor.scss';
+import { END, MOVE } from "el/editor/types/event";
 export default class InputRangeEditor extends EditorElement {
 
     initState() {
@@ -50,6 +51,7 @@ export default class InputRangeEditor extends EditorElement {
         var layoutClass = layout;
 
         var realValue = (+value).toString();
+        const units = this.state.units.split(',').filter(Boolean);
 
         return /*html*/`
         <div 
@@ -68,7 +70,19 @@ export default class InputRangeEditor extends EditorElement {
                 <div class='area'>
                     <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" tabIndex="1" />
                     
-                    <object refClass="SelectEditor"  ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options="${this.state.units}" onchange='changeUnit' />
+                    ${
+                        units.length === 1 ? 
+                        `<span class='unit'>${units[0]}</span>` : 
+                        /*html*/`
+                            <object refClass="SelectEditor"  
+                                ref='$unit' 
+                                key='unit' 
+                                value="${this.state.selectedUnit || this.state.value.unit}" 
+                                options="${this.state.units}" 
+                                onchange='changeUnit' 
+                            />`
+                    }
+                    
                     
                 </div>
             </div>
@@ -102,14 +116,6 @@ export default class InputRangeEditor extends EditorElement {
         this.setState({
             disabled: false
         })
-    }    
-
-    [FOCUS('$propertyNumber')] (e) {
-        this.refs.$range.addClass('focused');
-    }
-
-    [BLUR('$propertyNumber')] (e) {
-        this.refs.$range.removeClass('focused');
     }
 
 
@@ -149,4 +155,36 @@ export default class InputRangeEditor extends EditorElement {
             value: this.state.value.toUnit(value)
         })
     }
+
+
+
+    [FOCUSIN('$body input[type=number]')] (e) {
+        this.refs.$range.addClass('focused');
+        e.$dt.select();
+    }
+
+    [FOCUSOUT('$body input[type=number]')] (e) {
+        this.refs.$range.removeClass('focused');
+    }    
+
+    [POINTERSTART('$range label') + MOVE('moveDrag') + END('moveDragEnd')] (e) {
+        this.refs.$range.addClass('drag');
+
+        this.initValue = +this.refs.$propertyNumber.value;
+        this.initUnit = this.state.value.unit;
+        this.initUnits = this.state.units.split(',').filter(Boolean);
+    }
+
+    moveDrag (dx, dy) {
+        this.updateData({ 
+            value: new Length(this.initValue + Math.floor(dx), this.children.$unit?.getValue() || this.initUnits[0])
+        });
+        this.refs.$propertyNumber.val(this.state.value.value)
+
+        
+    }
+
+    moveDragEnd() {
+        this.refs.$range.removeClass('drag');
+    }    
 }

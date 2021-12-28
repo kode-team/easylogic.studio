@@ -1,9 +1,10 @@
 import { Length } from "el/editor/unit/Length";
-import { LOAD, INPUT, FOCUS, BLUR } from "el/sapa/Event";
+import { LOAD, INPUT, FOCUS, BLUR, FOCUSIN, FOCUSOUT, POINTERSTART } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './NumberInputEditor.scss';
+import { END, MOVE } from "el/editor/types/event";
 
 export default class NumberInputEditor extends EditorElement {
 
@@ -79,11 +80,12 @@ export default class NumberInputEditor extends EditorElement {
     }
 
 
-    [FOCUS('$body input[type=number]')] (e) {
+    [FOCUSIN('$body input[type=number]')] (e) {
         this.refs.$range.addClass('focused');
+        e.$dt.select();
     }
 
-    [BLUR('$body input[type=number]')] (e) {
+    [FOCUSOUT('$body input[type=number]')] (e) {
         this.refs.$range.removeClass('focused');
     }    
 
@@ -94,5 +96,22 @@ export default class NumberInputEditor extends EditorElement {
             value: this.state.value.set(value)
         });
 
+    }
+
+    [POINTERSTART('$range label') + MOVE('moveDrag') + END('moveDragEnd')] (e) {
+        this.refs.$range.addClass('drag');
+
+        this.initValue = +this.refs.$propertyNumber.value;
+    }
+
+    moveDrag (dx, dy) {
+        this.updateData({ 
+            value: Length.px(this.initValue + Math.floor(dx))
+        });
+        this.refs.$propertyNumber.val(this.state.value.value)
+    }
+
+    moveDragEnd() {
+        this.refs.$range.removeClass('drag');
     }
 }

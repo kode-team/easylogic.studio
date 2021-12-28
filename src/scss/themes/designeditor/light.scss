@@ -6,7 +6,7 @@ $border-color: #e5e5e5;
 $border-color-2: #f6fafc;
 $selected-border-color: #609de2;
 $selected-color: #66baff;
-$selected-color-2: #85ccf8;
+$selected-color-2: #e6e6e6;
 
 $selection-tool-border-color: #3a89f0;
 
@@ -36,14 +36,14 @@ $divider-color:  rgb(207, 207, 207);
 $input-background-color: #ededf0;
 $input-border-color: $border-color;
 $input-border-radius: 0px;
-$input-font-color: #3f3f3f;
+$input-font-color: #333;
 $input-sub-font-color: #7a7a7a;
 $input-height: 30px;
 $input-font-size: 13px;
 
 // property 
 $property-title-color:  white;
-$property-border-color: $border-color;
+$property-border-color: #e5e5e5;
 $property-title-background-color: $background-color;
 $property-background-color: $background-color;
 $property-border-top-color: $border-color;

@@ -390,6 +390,8 @@ export default {
     'layout.property.grid': 'Grille',
     'layout.property.default': 'Défaut',
 
+    'default.layout.item.property.title.constraints': 'Constraints',        
+
     'flex.layout.editor.row': 'Ligne',
     'flex.layout.editor.column': 'Colonne',
     'flex.layout.editor.row-reverse': 'Inverse ligne',

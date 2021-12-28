@@ -2091,6 +2091,8 @@ class Length {
       return Length.px(this.value / 100 * maxValue / 16);
     } else if (this.isString()) {
       return this.stringToPx(maxValue);
+    } else if (this.isNumber()) {
+      return Length.px(this.value).toPx(maxValue);
     }
   }
   toDeg() {
@@ -3984,7 +3986,7 @@ class EventMachine {
         $dom,
         refClass,
         props: props2,
-        refName,
+        refName: refName || props2.ref,
         component: EventMachineComponent
       };
     } else {
@@ -14775,7 +14777,7 @@ var convert_normalize_path = {
     const current = editor.selection.current;
     if (!current)
       return;
-    editor.command("setAttributeForMulti", "smooth path string", editor.selection.packByValue(current.updatePath(PathParser.fromSVGString(current.d).normalize().d)));
+    editor.command("setAttributeForMulti", "normalize path string", editor.selection.packByValue(current.updatePath(PathParser.fromSVGString(current.d).normalize().d)));
   }
 };
 var __glob_0_24$2 = /* @__PURE__ */ Object.freeze({
@@ -20039,98 +20041,110 @@ var __glob_0_63 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": draw
 });
-var edit = _icon_template(`<path d="M3 17.46v3.04c0 .28.22.5.5.5h3.04c.13 0 .26-.05.35-.15L17.81 9.94l-3.75-3.75L3.15 17.1c-.1.1-.15.22-.15.36zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>`);
+var east = _icon_template(`<path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z"/>`);
 var __glob_0_64 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": east
+});
+var edit = _icon_template(`<path d="M3 17.46v3.04c0 .28.22.5.5.5h3.04c.13 0 .26-.05.35-.15L17.81 9.94l-3.75-3.75L3.15 17.1c-.1.1-.15.22-.15.36zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>`);
+var __glob_0_65 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": edit
 });
 var end = _icon_template(`<path transform="translate(24,0) scale(-1, 1)" d="M14.59,7.41L18.17,11H6v2h12.17l-3.59,3.59L16,18l6-6l-6-6L14.59,7.41z M2,6v12h2V6H2z"/>`);
-var __glob_0_65 = /* @__PURE__ */ Object.freeze({
+var __glob_0_66 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": end
 });
 var exit_to_app = _icon_template(`<path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>`);
-var __glob_0_66 = /* @__PURE__ */ Object.freeze({
+var __glob_0_67 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": exit_to_app
 });
 var expand = _icon_template(`<path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>`);
-var __glob_0_67 = /* @__PURE__ */ Object.freeze({
+var __glob_0_68 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": expand
 });
+var expand_more = _icon_template(`<path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/>`);
+var __glob_0_69 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": expand_more
+});
 var _export = _icon_template(`<path d="M9 3L5 6.99h3V14h2V6.99h3L9 3zm7 14.01V10h-2v7.01h-3L15 21l4-3.99h-3z"/>`);
-var __glob_0_68 = /* @__PURE__ */ Object.freeze({
+var __glob_0_70 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": _export
 });
 var face = _icon_template(`<path d="M9 11.75c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25zm6 0c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-.29.02-.58.05-.86 2.36-1.05 4.23-2.98 5.21-5.37C11.07 8.33 14.05 10 17.42 10c.78 0 1.53-.09 2.25-.26.21.71.33 1.47.33 2.26 0 4.41-3.59 8-8 8z"/>`);
-var __glob_0_69 = /* @__PURE__ */ Object.freeze({
+var __glob_0_71 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": face
 });
 var fast_forward = _icon_template(`<path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/>`);
-var __glob_0_70 = /* @__PURE__ */ Object.freeze({
+var __glob_0_72 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": fast_forward
 });
 var fast_rewind = _icon_template(`<path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/>`);
-var __glob_0_71 = /* @__PURE__ */ Object.freeze({
+var __glob_0_73 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": fast_rewind
 });
 var file_copy = _icon_template(`<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm-1 4l6 6v10c0 1.1-.9 2-2 2H7.99C6.89 23 6 22.1 6 21l.01-14c0-1.1.89-2 1.99-2h7zm-1 7h5.5L14 6.5V12z"/>`);
-var __glob_0_72 = /* @__PURE__ */ Object.freeze({
+var __glob_0_74 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": file_copy
 });
 var filter$1 = _icon_template(`<path d="M18.7 12.4c-.28-.16-.57-.29-.86-.4.29-.11.58-.24.86-.4 1.92-1.11 2.99-3.12 3-5.19-1.79-1.03-4.07-1.11-6 0-.28.16-.54.35-.78.54.05-.31.08-.63.08-.95 0-2.22-1.21-4.15-3-5.19C10.21 1.85 9 3.78 9 6c0 .32.03.64.08.95-.24-.2-.5-.39-.78-.55-1.92-1.11-4.2-1.03-6 0 0 2.07 1.07 4.08 3 5.19.28.16.57.29.86.4-.29.11-.58.24-.86.4-1.92 1.11-2.99 3.12-3 5.19 1.79 1.03 4.07 1.11 6 0 .28-.16.54-.35.78-.54-.05.32-.08.64-.08.96 0 2.22 1.21 4.15 3 5.19 1.79-1.04 3-2.97 3-5.19 0-.32-.03-.64-.08-.95.24.2.5.38.78.54 1.92 1.11 4.2 1.03 6 0-.01-2.07-1.08-4.08-3-5.19zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>`);
-var __glob_0_73 = /* @__PURE__ */ Object.freeze({
+var __glob_0_75 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": filter$1
 });
 var flag = _icon_template(`<path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/>`);
-var __glob_0_74 = /* @__PURE__ */ Object.freeze({
+var __glob_0_76 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flag
 });
 var flash_on = _icon_template(`<path d="M7 2v11h3v9l7-12h-4l4-8z"/>`);
-var __glob_0_75 = /* @__PURE__ */ Object.freeze({
+var __glob_0_77 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flash_on
 });
 var flatten = _icon_template(`<path d="M4,9v2h16V9H4z M16,4l-1.41-1.41L13,4.17V1h-2v3.19L9.39,2.61L8,4l4,4L16,4z M4,14h16v-2H4V14z M8,19l1.39,1.39L11,18.81 V22h2v-3.17l1.59,1.59L16,19l-4-4L8,19z"/>`);
-var __glob_0_76 = /* @__PURE__ */ Object.freeze({
+var __glob_0_78 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flatten
 });
 var flex = _icon_template(`<path d="M3,5v14h18V5H3z M8.33,17H5V7h3.33V17z M13.67,17h-3.33V7h3.33V17z M19,17h-3.33V7H19V17z"/>`);
-var __glob_0_77 = /* @__PURE__ */ Object.freeze({
+var __glob_0_79 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flex
 });
 var flip = _icon_template(`<path d="M15 21h2v-2h-2v2zm4-12h2V7h-2v2zM3 5v14c0 1.1.9 2 2 2h4v-2H5V5h4V3H5c-1.1 0-2 .9-2 2zm16-2v2h2c0-1.1-.9-2-2-2zm-8 20h2V1h-2v22zm8-6h2v-2h-2v2zM15 5h2V3h-2v2zm4 8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2z"/>`);
-var __glob_0_78 = /* @__PURE__ */ Object.freeze({
+var __glob_0_80 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flip
 });
 var flipY = _icon_template(`<path d="M15 21h2v-2h-2v2zm4-12h2V7h-2v2zM3 5v14c0 1.1.9 2 2 2h4v-2H5V5h4V3H5c-1.1 0-2 .9-2 2zm16-2v2h2c0-1.1-.9-2-2-2zm-8 20h2V1h-2v22zm8-6h2v-2h-2v2zM15 5h2V3h-2v2zm4 8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2z"/>`);
-var __glob_0_79 = /* @__PURE__ */ Object.freeze({
+var __glob_0_81 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flipY
@@ -20142,49 +20156,49 @@ var flip_camera = _icon_template(`
     <path d="M16,14v2h2.91c-1.38,2.39-3.96,4-6.91,4c-3.72,0-6.85-2.56-7.74-6H2.2c0.93,4.56,4.96,8,9.8,8c3.27,0,6.18-1.58,8-4.01V20
         h2v-6H16z"/>
 `);
-var __glob_0_80 = /* @__PURE__ */ Object.freeze({
+var __glob_0_82 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flip_camera
 });
 var folder = _icon_template(`<path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>`);
-var __glob_0_81 = /* @__PURE__ */ Object.freeze({
+var __glob_0_83 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": folder
 });
 var format_shapes = _icon_template(`<path d="M23 7V1h-6v2H7V1H1v6h2v10H1v6h6v-2h10v2h6v-6h-2V7h2zM3 3h2v2H3V3zm2 18H3v-2h2v2zm12-2H7v-2H5V7h2V5h10v2h2v10h-2v2zm4 2h-2v-2h2v2zM19 5V3h2v2h-2zm-5.27 9h-3.49l-.73 2H7.89l3.4-9h1.4l3.41 9h-1.63l-.74-2zm-3.04-1.26h2.61L12 8.91l-1.31 3.83z"/>`);
-var __glob_0_82 = /* @__PURE__ */ Object.freeze({
+var __glob_0_84 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": format_shapes
 });
 var fullscreen = _icon_template(`<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>`);
-var __glob_0_83 = /* @__PURE__ */ Object.freeze({
+var __glob_0_85 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": fullscreen
 });
 var gps_fixed = _icon_template(`<path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>`);
-var __glob_0_84 = /* @__PURE__ */ Object.freeze({
+var __glob_0_86 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": gps_fixed
 });
 var gradient$1 = _icon_template('<path d="M11 9h2v2h-2zm-2 2h2v2H9zm4 0h2v2h-2zm2-2h2v2h-2zM7 9h2v2H7zm12-6H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 18H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm2-7h-2v2h2v2h-2v-2h-2v2h-2v-2h-2v2H9v-2H7v2H5v-2h2v-2H5V5h14v6z"/>');
-var __glob_0_85 = /* @__PURE__ */ Object.freeze({
+var __glob_0_87 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": gradient$1
 });
 var grid$1 = _icon_template(`<path d="M3,3v8h8V3H3z M9,9H5V5h4V9z M3,13v8h8v-8H3z M9,19H5v-4h4V19z M13,3v8h8V3H13z M19,9h-4V5h4V9z M13,13v8h8v-8H13z M19,19h-4v-4h4V19z"/>`);
-var __glob_0_86 = /* @__PURE__ */ Object.freeze({
+var __glob_0_88 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": grid$1
 });
 var grid3x3 = _icon_template(`<path d="M20,10V8h-4V4h-2v4h-4V4H8v4H4v2h4v4H4v2h4v4h2v-4h4v4h2v-4h4v-2h-4v-4H20z M14,14h-4v-4h4V14z"/>`);
-var __glob_0_87 = /* @__PURE__ */ Object.freeze({
+var __glob_0_89 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": grid3x3
@@ -20192,55 +20206,61 @@ var __glob_0_87 = /* @__PURE__ */ Object.freeze({
 var group = _icon_template(`
         <path d="M3 5h2V3c-1.1 0-2 .9-2 2zm0 8h2v-2H3v2zm4 8h2v-2H7v2zM3 9h2V7H3v2zm10-6h-2v2h2V3zm6 0v2h2c0-1.1-.9-2-2-2zM5 21v-2H3c0 1.1.9 2 2 2zm-2-4h2v-2H3v2zM9 3H7v2h2V3zm2 18h2v-2h-2v2zm8-8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2zm0-12h2V7h-2v2zm0 8h2v-2h-2v2zm-4 4h2v-2h-2v2zm0-16h2V3h-2v2zM7 17h10V7H7v10zm2-8h6v6H9V9z"/>
     `);
-var __glob_0_88 = /* @__PURE__ */ Object.freeze({
+var __glob_0_90 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": group
 });
 var highlight_at = _icon_template(`<path d="M17,5h-2V3h2V5z M15,15v6l2.29-2.29L19.59,21L21,19.59l-2.29-2.29L21,15H15z M19,9h2V7h-2V9z M19,13h2v-2h-2V13z M11,21h2 v-2h-2V21z M7,5h2V3H7V5z M3,17h2v-2H3V17z M5,21v-2H3C3,20.1,3.9,21,5,21z M19,3v2h2C21,3.9,20.1,3,19,3z M11,5h2V3h-2V5z M3,9h2 V7H3V9z M7,21h2v-2H7V21z M3,13h2v-2H3V13z M3,5h2V3C3.9,3,3,3.9,3,5z"/>`);
-var __glob_0_89 = /* @__PURE__ */ Object.freeze({
+var __glob_0_91 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": highlight_at
 });
 var horizontal_distribute = _icon_template(`<path d="M4,22H2V2h2V22z M22,2h-2v20h2V2z M13.5,7h-3v10h3V7z"/>`);
-var __glob_0_90 = /* @__PURE__ */ Object.freeze({
+var __glob_0_92 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": horizontal_distribute
 });
 var horizontal_rule = _icon_template(`<rect fill-rule="evenodd" height="2" width="16" x="4" y="11"/>`);
-var __glob_0_91 = /* @__PURE__ */ Object.freeze({
+var __glob_0_93 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": horizontal_rule
 });
 var image$1 = _icon_template(`<path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>`);
-var __glob_0_92 = /* @__PURE__ */ Object.freeze({
+var __glob_0_94 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": image$1
 });
 var input = _icon_template(`<path d="M21 3.01H3c-1.1 0-2 .9-2 2V9h2V4.99h18v14.03H3V15H1v4.01c0 1.1.9 1.98 2 1.98h18c1.1 0 2-.88 2-1.98v-14c0-1.11-.9-2-2-2zM11 16l4-4-4-4v3H1v2h10v3z"/>`);
-var __glob_0_93 = /* @__PURE__ */ Object.freeze({
+var __glob_0_95 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": input
 });
 var italic = _icon_template(`<path d="M10 4v3h2.21l-3.42 8H6v3h8v-3h-2.21l3.42-8H18V4z"/>`);
-var __glob_0_94 = /* @__PURE__ */ Object.freeze({
+var __glob_0_96 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": italic
 });
+var justify_content_space_around = _icon_template(`<path d="M15,7v10H9V7H15z M21,5h-3v14h3V5z M17,5H7v14h10V5z M6,5H3v14h3V5z"/>`);
+var __glob_0_97 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": justify_content_space_around
+});
 var keyboard = _icon_template(`<path d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z"/>`);
-var __glob_0_95 = /* @__PURE__ */ Object.freeze({
+var __glob_0_98 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": keyboard
 });
 var landscape = _icon_template(`<path d="M14 6l-3.75 5 2.85 3.8-1.6 1.2C9.81 13.75 7 10 7 10l-6 8h22L14 6z"/>`);
-var __glob_0_96 = /* @__PURE__ */ Object.freeze({
+var __glob_0_99 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": landscape
@@ -20248,37 +20268,55 @@ var __glob_0_96 = /* @__PURE__ */ Object.freeze({
 var launch = _icon_template(`
         <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
     `);
-var __glob_0_97 = /* @__PURE__ */ Object.freeze({
+var __glob_0_100 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": launch
 });
 var layers = _icon_template(`<path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/>`);
-var __glob_0_98 = /* @__PURE__ */ Object.freeze({
+var __glob_0_101 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": layers
 });
+var layout_default = _icon_template(`<path d="M19 7h-8v6h8V7zm-2 4h-4V9h4v2zm4-8H3c-1.1 0-2 .9-2 2v14c0 1.1.9 1.98 2 1.98h18c1.1 0 2-.88 2-1.98V5c0-1.1-.9-2-2-2zm0 16.01H3V4.98h18v14.03z"/>`);
+var __glob_0_102 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": layout_default
+});
+var layout_flex = _icon_template(`<path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M8,18H4V6h4V18z M14,18h-4V6h4V18z M20,18h-4V6h4V18z"/>`);
+var __glob_0_103 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": layout_flex
+});
+var layout_grid = _icon_template(`<path d="M3,3v8h8V3H3z M9,9H5V5h4V9z M3,13v8h8v-8H3z M9,19H5v-4h4V19z M13,3v8h8V3H13z M19,9h-4V5h4V9z M13,13v8h8v-8H13z M19,19h-4v-4h4V19z"/>`);
+var __glob_0_104 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": layout_grid
+});
 var left = _icon_template(`<path d="M2,4 L2,20Z M6,10 L16,10 L16,14 L6,14Z" stroke-width="1" />`);
-var __glob_0_99 = /* @__PURE__ */ Object.freeze({
+var __glob_0_105 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": left
 });
 var left_hide = _icon_template(`<path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"/>`);
-var __glob_0_100 = /* @__PURE__ */ Object.freeze({
+var __glob_0_106 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": left_hide
 });
 var lens = _icon_template(`<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>`);
-var __glob_0_101 = /* @__PURE__ */ Object.freeze({
+var __glob_0_107 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": lens
 });
 var light = _icon_template(`<path d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/>`);
-var __glob_0_102 = /* @__PURE__ */ Object.freeze({
+var __glob_0_108 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": light
@@ -20287,7 +20325,7 @@ var line_cap_butt = _icon_template(`
         <rect class="base" width="13" height="12" x="3" y="2" fill="transparent" fill-rule="nonzero"></rect>
         <path fill="currentColor" fill-rule="nonzero" d="M3.5,6.06300874 C4.20280365,6.2438979 4.7561021,6.79719635 4.93699126,7.5 L16,7.5 L16,8.5 L4.93699126,8.5 C4.7561021,9.20280365 4.20280365,9.7561021 3.5,9.93699126 L3.5,13.5 L16,13.5 L16,14.5 L2.5,14.5 L2.5,9.93699126 C1.63738639,9.71496986 1,8.93191971 1,8 C1,7.06808029 1.63738639,6.28503014 2.5,6.06300874 L2.5,1.5 L16,1.5 L16,2.5 L3.5,2.5 L3.5,6.06300874 Z"></path>
     `, { width: 18, height: 16 });
-var __glob_0_103 = /* @__PURE__ */ Object.freeze({
+var __glob_0_109 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_cap_butt
@@ -20296,7 +20334,7 @@ var line_cap_round = _icon_template(`
         <path class="base" fill="transparent" fill-rule="nonzero" d="M8,2 L16,2 L16,14 L8,14 C4.6862915,14 2,11.3137085 2,8 L2,8 C2,4.6862915 4.6862915,2 8,2 Z"></path>
         <path fill="currentColor" fill-rule="nonzero" d="M9.93699126,8.5 C9.71496986,9.36261361 8.93191971,10 8,10 C6.8954305,10 6,9.1045695 6,8 C6,6.8954305 6.8954305,6 8,6 C8.93191971,6 9.71496986,6.63738639 9.93699126,7.5 L16,7.5 L16,8.5 L9.93699126,8.5 Z M16,13.5 L16,14.5 L8,14.5 C4.41014913,14.5 1.5,11.5898509 1.5,8 C1.5,4.41014913 4.41014913,1.5 8,1.5 L16,1.5 L16,2.5 L8,2.5 C4.96243388,2.5 2.5,4.96243388 2.5,8 C2.5,11.0375661 4.96243388,13.5 8,13.5 L16,13.5 Z"></path>
     `, { width: 18, height: 16 });
-var __glob_0_104 = /* @__PURE__ */ Object.freeze({
+var __glob_0_110 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_cap_round
@@ -20305,109 +20343,121 @@ var line_cap_square = _icon_template(`
         <rect class="base" width="14" height="12" x="2" y="2" fill="transparent" fill-rule="nonzero"></rect>
         <path fill="currentColor" fill-rule="nonzero" d="M9.93699126,8.5 C9.71496986,9.36261361 8.93191971,10 8,10 C6.8954305,10 6,9.1045695 6,8 C6,6.8954305 6.8954305,6 8,6 C8.93191971,6 9.71496986,6.63738639 9.93699126,7.5 L16,7.5 L16,8.5 L9.93699126,8.5 Z M2.5,13.5 L16,13.5 L16,14.5 L1.5,14.5 L1.5,1.5 L16,1.5 L16,2.5 L2.5,2.5 L2.5,13.5 Z"></path>
     `, { width: 18, height: 16 });
-var __glob_0_105 = /* @__PURE__ */ Object.freeze({
+var __glob_0_111 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_cap_square
 });
 var line_chart = _icon_template(`<path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/>`);
-var __glob_0_106 = /* @__PURE__ */ Object.freeze({
+var __glob_0_112 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_chart
 });
 var line_join_bevel = _icon_template(`<g fill="none" fill-rule="evenodd"><polygon class="base" fill="transparent" fill-rule="nonzero" points="2 14.5 2 7.538 7.382 1.5 16 1.5 16 14.5"></polygon><path fill="currentColor" fill-rule="nonzero" d="M2.96551724,7.95245414 L2.96551724,14.5 L2,14.5 L2,7.53775146 L7.38172454,1.5 L16,1.5 L16,2.46 L7.76471206,2.46 L2.96551724,7.95245414 Z M10.9369913,9 C10.7561021,9.70280365 10.2028036,10.2561021 9.5,10.4369913 L9.5,14.5 L8.5,14.5 L8.5,10.4369913 C7.63738639,10.2149699 7,9.43191971 7,8.5 C7,7.3954305 7.8954305,6.5 9,6.5 C9.93191971,6.5 10.7149699,7.13738639 10.9369913,8 L16,8 L16,9 L10.9369913,9 Z"></path></g>`, { width: 18, height: 16 });
-var __glob_0_107 = /* @__PURE__ */ Object.freeze({
+var __glob_0_113 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_join_bevel
 });
 var line_join_miter = _icon_template(`<g fill="none" fill-rule="evenodd"><rect class="base" width="14" height="13" x="2" y="1.5" fill="transparent" fill-rule="nonzero"></rect><path fill="currentColor" fill-rule="nonzero" d="M10.9369913,9 C10.7561021,9.70280365 10.2028036,10.2561021 9.5,10.4369913 L9.5,14.5 L8.5,14.5 L8.5,10.4369913 C7.63738639,10.2149699 7,9.43191971 7,8.5 C7,7.3954305 7.8954305,6.5 9,6.5 C9.93191971,6.5 10.7149699,7.13738639 10.9369913,8 L16,8 L16,9 L10.9369913,9 Z M3,2.5 L3,14.5 L2,14.5 L2,1.5 L16,1.5 L16,2.5 L3,2.5 Z"></path></g>`, { width: 18, height: 16 });
-var __glob_0_108 = /* @__PURE__ */ Object.freeze({
+var __glob_0_114 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_join_miter
 });
 var line_join_round = _icon_template(`<g fill="none" fill-rule="evenodd"><path class="base" fill="transparent" fill-rule="nonzero" d="M9,1.5 L16,1.5 L16,14.5 L2,14.5 L2,8.5 C2,4.63400675 5.13400675,1.5 9,1.5 Z"></path><path fill="currentColor" fill-rule="nonzero" d="M2.96551724,14.5 L2,14.5 L2,7.74 C2,4.29374316 4.80979916,1.5 8.27586207,1.5 L16,1.5 L16,2.46 L8.27586207,2.46 C5.3430396,2.46 2.96551724,4.82393652 2.96551724,7.74 L2.96551724,14.5 Z M10.9369913,9 C10.7561021,9.70280365 10.2028036,10.2561021 9.5,10.4369913 L9.5,14.5 L8.5,14.5 L8.5,10.4369913 C7.63738639,10.2149699 7,9.43191971 7,8.5 C7,7.3954305 7.8954305,6.5 9,6.5 C9.93191971,6.5 10.7149699,7.13738639 10.9369913,8 L16,8 L16,9 L10.9369913,9 Z"></path></g>`, { width: 18, height: 16 });
-var __glob_0_109 = /* @__PURE__ */ Object.freeze({
+var __glob_0_115 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_join_round
 });
 var list = _icon_template(`<path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"/>`);
-var __glob_0_110 = /* @__PURE__ */ Object.freeze({
+var __glob_0_116 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": list
 });
 var local_library = _icon_template(`<path d="M12 11.55C9.64 9.35 6.48 8 3 8v11c3.48 0 6.64 1.35 9 3.55 2.36-2.19 5.52-3.55 9-3.55V8c-3.48 0-6.64 1.35-9 3.55zM12 8c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3z"/>`);
-var __glob_0_111 = /* @__PURE__ */ Object.freeze({
+var __glob_0_117 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": local_library
 });
 var local_movie = _icon_template(`<path d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/>`);
-var __glob_0_112 = /* @__PURE__ */ Object.freeze({
+var __glob_0_118 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": local_movie
 });
 var lock = _icon_template(`<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>`);
-var __glob_0_113 = /* @__PURE__ */ Object.freeze({
+var __glob_0_119 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": lock
 });
 var lock_open = _icon_template(`<path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>`);
-var __glob_0_114 = /* @__PURE__ */ Object.freeze({
+var __glob_0_120 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": lock_open
 });
 var looks = _icon_template(`<path d="M12 10c-3.86 0-7 3.14-7 7h2c0-2.76 2.24-5 5-5s5 2.24 5 5h2c0-3.86-3.14-7-7-7zm0-4C5.93 6 1 10.93 1 17h2c0-4.96 4.04-9 9-9s9 4.04 9 9h2c0-6.07-4.93-11-11-11z"/>`);
-var __glob_0_115 = /* @__PURE__ */ Object.freeze({
+var __glob_0_121 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": looks
 });
 var margin = _icon_template(`<path d="M3,3v18h18V3H3z M19,19H5V5h14V19z M11,7h2v2h-2V7z M7,7h2v2H7V7z M15,7h2v2h-2V7z M7,11h2v2H7V11z M11,11h2v2h-2V11z M15,11h2v2h-2V11z"/>`);
-var __glob_0_116 = /* @__PURE__ */ Object.freeze({
+var __glob_0_122 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": margin
 });
 var merge = _icon_template(`<path d="M17 20.41L18.41 19 15 15.59 13.59 17 17 20.41zM7.5 8H11v5.59L5.59 19 7 20.41l6-6V8h3.5L12 3.5 7.5 8z"/>`);
-var __glob_0_117 = /* @__PURE__ */ Object.freeze({
+var __glob_0_123 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": merge
 });
 var middle = _icon_template(`<path d="M4,12 L20,12Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />`);
-var __glob_0_118 = /* @__PURE__ */ Object.freeze({
+var __glob_0_124 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": middle
 });
 var navigation = _icon_template(`<path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>`);
-var __glob_0_119 = /* @__PURE__ */ Object.freeze({
+var __glob_0_125 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": navigation
 });
 var near_me = _icon_template(`<path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/>`);
-var __glob_0_120 = /* @__PURE__ */ Object.freeze({
+var __glob_0_126 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": near_me
 });
+var north = _icon_template(`<path d="M5,9l1.41,1.41L11,5.83V22H13V5.83l4.59,4.59L19,9l-7-7L5,9z"/>`);
+var __glob_0_127 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": north
+});
 var note = _icon_template(`<path d="M17 10H7v2h10v-2zm2-7h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zm-5-5H7v2h7v-2z"/>`);
-var __glob_0_121 = /* @__PURE__ */ Object.freeze({
+var __glob_0_128 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": note
 });
+var nowrap = _icon_template(`<path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/>`);
+var __glob_0_129 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": nowrap
+});
 var opacity = _icon_template(`<path d="M17.66 8L12 2.35 6.34 8C4.78 9.56 4 11.64 4 13.64s.78 4.11 2.34 5.67 3.61 2.35 5.66 2.35 4.1-.79 5.66-2.35S20 15.64 20 13.64 19.22 9.56 17.66 8zM6 14c.01-2 .62-3.27 1.76-4.4L12 5.27l4.24 4.38C17.38 10.77 17.99 12 18 14H6z"/>`);
-var __glob_0_122 = /* @__PURE__ */ Object.freeze({
+var __glob_0_130 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": opacity
@@ -20417,7 +20467,7 @@ function open_in_full(transform2 = "") {
         <g transform='${transform2}'><path fill='#fff' d='M2.6 5.6L0 8.3 2.6 11l1.2-1.2-.5-.5h9.4l-.5.5 1.2 1.2L16 8.3l-2.6-2.7-1.2 1.2.5.5H3.3l.5-.5-1.2-1.2z'/><path fill='#231f20' d='M5.1 279h-4v1h5v-5h-1zm5 0v5h-5v1h5v5h1v-5h5v-1h-5v-5z'/><path fill='#fff' d='M.6 278.5h4v-4h2v6h-6zm4.5.5h-4v1h5v-5h-1zm4.5-.5h2v5h5v2h-5v5h-2v-5h-5v-2h5zm.5 5.5h-5v1h5v5h1v-5h5v-1h-5v-5h-1z'/><path fill='#000' d='M2.6 6.3l-2 2 2 2 .6-.5-1-1H14l-1 1 .5.5 2-2-2-2-.5.5 1 1H2.1l1-1-.5-.5z'/></g>
     `, { width: 24, height: 24, viewBoxWidth: 16, viewBoxHeight: 16 });
 }
-var __glob_0_123 = /* @__PURE__ */ Object.freeze({
+var __glob_0_131 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": open_in_full
@@ -20425,55 +20475,55 @@ var __glob_0_123 = /* @__PURE__ */ Object.freeze({
 var outline = _icon_template(`
     <path d="M19.77 4.93l1.4 1.4L8.43 19.07l-5.6-5.6 1.4-1.4 4.2 4.2L19.77 4.93m0-2.83L8.43 13.44l-4.2-4.2L0 13.47l8.43 8.43L24 6.33 19.77 2.1z"/>
 `);
-var __glob_0_124 = /* @__PURE__ */ Object.freeze({
+var __glob_0_132 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": outline
 });
 var outline_circle = _icon_template(`<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>`);
-var __glob_0_125 = /* @__PURE__ */ Object.freeze({
+var __glob_0_133 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": outline_circle
 });
 var outline_image = _icon_template(`<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54-1.96-2.36L6.5 17h11l-3.54-4.71z"/>`);
-var __glob_0_126 = /* @__PURE__ */ Object.freeze({
+var __glob_0_134 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": outline_image
 });
 var outline_rect = _icon_template(`<path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>`);
-var __glob_0_127 = /* @__PURE__ */ Object.freeze({
+var __glob_0_135 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": outline_rect
 });
 var outline_shape = _icon_template(`<path d="M2 12C2 6.48 6.48 2 12 2s10 4.48 10 10-4.48 10-10 10S2 17.52 2 12zm10 6c3.31 0 6-2.69 6-6s-2.69-6-6-6-6 2.69-6 6 2.69 6 6 6z"/>`);
-var __glob_0_128 = /* @__PURE__ */ Object.freeze({
+var __glob_0_136 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": outline_shape
 });
 var paint = _icon_template(`<path d="M18 4V3c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h12c.55 0 1-.45 1-1V6h1v4H9v11c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-9h8V4h-3z"/>`);
-var __glob_0_129 = /* @__PURE__ */ Object.freeze({
+var __glob_0_137 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": paint
 });
 var palette = _icon_template(`<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>`);
-var __glob_0_130 = /* @__PURE__ */ Object.freeze({
+var __glob_0_138 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": palette
 });
 var pantool = _icon_template(`<path d="M18 24h-6.55c-1.08 0-2.14-.45-2.89-1.23l-7.3-7.61 2.07-1.83c.62-.55 1.53-.66 2.26-.27L8 14.34V4.79c0-1.38 1.12-2.5 2.5-2.5.17 0 .34.02.51.05.09-1.3 1.17-2.33 2.49-2.33.86 0 1.61.43 2.06 1.09.29-.12.61-.18.94-.18 1.38 0 2.5 1.12 2.5 2.5v.28c.16-.03.33-.05.5-.05 1.38 0 2.5 1.12 2.5 2.5V20c0 2.21-1.79 4-4 4zM4.14 15.28l5.86 6.1c.38.39.9.62 1.44.62H18c1.1 0 2-.9 2-2V6.15c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12h-2V3.42c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12h-2V2.51c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12h-2V4.79c0-.28-.22-.5-.5-.5s-.5.23-.5.5v12.87l-5.35-2.83-.51.45z"/>`);
-var __glob_0_131 = /* @__PURE__ */ Object.freeze({
+var __glob_0_139 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pantool
 });
 var pause = _icon_template(`<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`);
-var __glob_0_132 = /* @__PURE__ */ Object.freeze({
+var __glob_0_140 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pause
@@ -20483,91 +20533,91 @@ var pentool = _icon_template(`
         <path stroke="currentColor" d="M 7.501491970838878 -0.0000015572448855733659Q 14.336036333057622 7.389304433496911 15.674208571053226 11.025537025755131Q 17.012380809048864 14.661769618013372 12.854180922821438 14.544928811787997L 12.854180922821438 16.99999278410904L 3.2146550430021494 16.99999278410904L 3.2146550430021494 14.544928811787997Q -0.8480130988910353 14.661769618013372 0.22369613306813782 11.025537025755131Q 1.295405365027311 7.389304433496911 7.501491970838878 -0.0000015572448855733659Z M 7.501491970838878 -0.0000015572448855733659M 7.043097362212707 10.615180199186797L 7.043097362212707 2.029497238417552Q 2.4235653311211847 7.389304433496911 1.2143202542326725 11.099378313047254Q 0.22369613306813782 14.380813978493594 4.269842778971384 13.709709450113499L 4.269842778971384 16.233605781316655L 11.751764459057853 16.233605781316655L 11.751764459057853 13.709709450113499Q 15.84146041516868 14.140123940309786 14.670231046646997 10.775846698306177Q 14.195747591990225 9.593976493057127 8.077664264490855 2.029497238417552L 8.077664264490855 10.615180199186797L 7.043097362212707 10.615180199186797Z"/>
     </g>
 `);
-var __glob_0_133 = /* @__PURE__ */ Object.freeze({
+var __glob_0_141 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pentool
 });
 var photo = _icon_template(`<path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>`);
-var __glob_0_134 = /* @__PURE__ */ Object.freeze({
+var __glob_0_142 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": photo
 });
 var play = _icon_template(`<path d="M8 5v14l11-7z"/>`);
-var __glob_0_135 = /* @__PURE__ */ Object.freeze({
+var __glob_0_143 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": play
 });
 var plugin = _icon_template(`<path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm15 0h-2v3h-3v2h3v3h2v-3h3v-2h-3z"/>`);
-var __glob_0_136 = /* @__PURE__ */ Object.freeze({
+var __glob_0_144 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": plugin
 });
-var polygon = _icon_template(`<path d="M17,15.7V13H19V17L10,21L3,14L7,5H11V7H8.3L5.4,13.6L10.4,18.6L17,15.7M22,5V7H19V10H17V7H14V5H17V2H19V5H22Z" />`);
-var __glob_0_137 = /* @__PURE__ */ Object.freeze({
+var polygon = _icon_template(`<path d="M17.2,3H6.8l-5.2,9l5.2,9h10.4l5.2-9L17.2,3z M16.05,19H7.95l-4.04-7l4.04-7h8.09l4.04,7L16.05,19z"/>`);
+var __glob_0_145 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": polygon
 });
 var publish = _icon_template(`<path d="M5 4v2h14V4H5zm0 10h4v6h6v-6h4l-7-7-7 7z"/>`);
-var __glob_0_138 = /* @__PURE__ */ Object.freeze({
+var __glob_0_146 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": publish
 });
 var rect$1 = _icon_template(`<path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>`);
-var __glob_0_139 = /* @__PURE__ */ Object.freeze({
+var __glob_0_147 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": rect$1
 });
 var redo = _icon_template(`<path d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"/>`);
-var __glob_0_140 = /* @__PURE__ */ Object.freeze({
+var __glob_0_148 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": redo
 });
 var refresh = _icon_template(`<path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>`);
-var __glob_0_141 = /* @__PURE__ */ Object.freeze({
+var __glob_0_149 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": refresh
 });
 var remove = _icon_template(`<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>`);
-var __glob_0_142 = /* @__PURE__ */ Object.freeze({
+var __glob_0_150 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": remove
 });
 var remove2 = _icon_template(`<path d="M19 13H5v-2h14v2z"/>`);
-var __glob_0_143 = /* @__PURE__ */ Object.freeze({
+var __glob_0_151 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": remove2
 });
 var repeat = _icon_template(`<path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/>`);
-var __glob_0_144 = /* @__PURE__ */ Object.freeze({
+var __glob_0_152 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": repeat
 });
 var replay = _icon_template(`<defs><path id="a" d="M0 0h24v24H0V0z"/></defs><clipPath id="b"><use xlink:href="#a" overflow="visible"/></clipPath><path d="M12 5V1L7 6l5 5V7c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8zm-1.1 11H10v-3.3L9 13v-.7l1.8-.6h.1V16zm4.3-1.8c0 .3 0 .6-.1.8l-.3.6s-.3.3-.5.3-.4.1-.6.1-.4 0-.6-.1-.3-.2-.5-.3-.2-.3-.3-.6-.1-.5-.1-.8v-.7c0-.3 0-.6.1-.8l.3-.6s.3-.3.5-.3.4-.1.6-.1.4 0 .6.1c.2.1.3.2.5.3s.2.3.3.6.1.5.1.8v.7zm-.9-.8v-.5s-.1-.2-.1-.3-.1-.1-.2-.2-.2-.1-.3-.1-.2 0-.3.1l-.2.2s-.1.2-.1.3v2s.1.2.1.3.1.1.2.2.2.1.3.1.2 0 .3-.1l.2-.2s.1-.2.1-.3v-1.5z" clip-path="url(#b)"/>`);
-var __glob_0_145 = /* @__PURE__ */ Object.freeze({
+var __glob_0_153 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": replay
 });
 var right = _icon_template(`<path d="M20,4 L20,20Z M6,10 L16,10 L16,14 L6,14Z" stroke-width="1" />`);
-var __glob_0_146 = /* @__PURE__ */ Object.freeze({
+var __glob_0_154 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": right
 });
 var right_hide = _icon_template(`<path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"/>`);
-var __glob_0_147 = /* @__PURE__ */ Object.freeze({
+var __glob_0_155 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": right_hide
@@ -20575,13 +20625,13 @@ var __glob_0_147 = /* @__PURE__ */ Object.freeze({
 var rotate = _icon_template(`
         <path d="M7.11 8.53L5.7 7.11C4.8 8.27 4.24 9.61 4.07 11h2.02c.14-.87.49-1.72 1.02-2.47zM6.09 13H4.07c.17 1.39.72 2.73 1.62 3.89l1.41-1.42c-.52-.75-.87-1.59-1.01-2.47zm1.01 5.32c1.16.9 2.51 1.44 3.9 1.61V17.9c-.87-.15-1.71-.49-2.46-1.03L7.1 18.32zM13 4.07V1L8.45 5.55 13 10V6.09c2.84.48 5 2.94 5 5.91s-2.16 5.43-5 5.91v2.02c3.95-.49 7-3.85 7-7.93s-3.05-7.44-7-7.93z" stroke='white' stroke-width="0.5" />
     `);
-var __glob_0_148 = /* @__PURE__ */ Object.freeze({
+var __glob_0_156 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": rotate
 });
 var rotate_left = _icon_template(`<path d="M7.11 8.53L5.7 7.11C4.8 8.27 4.24 9.61 4.07 11h2.02c.14-.87.49-1.72 1.02-2.47zM6.09 13H4.07c.17 1.39.72 2.73 1.62 3.89l1.41-1.42c-.52-.75-.87-1.59-1.01-2.47zm1.01 5.32c1.16.9 2.51 1.44 3.9 1.61V17.9c-.87-.15-1.71-.49-2.46-1.03L7.1 18.32zM13 4.07V1L8.45 5.55 13 10V6.09c2.84.48 5 2.94 5 5.91s-2.16 5.43-5 5.91v2.02c3.95-.49 7-3.85 7-7.93s-3.05-7.44-7-7.93z"/>`);
-var __glob_0_149 = /* @__PURE__ */ Object.freeze({
+var __glob_0_157 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": rotate_left
@@ -20589,7 +20639,7 @@ var __glob_0_149 = /* @__PURE__ */ Object.freeze({
 var same_height = _icon_template(`
     <path d="M4,4 L20,4Z M4,20 L20,20Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />
 `);
-var __glob_0_150 = /* @__PURE__ */ Object.freeze({
+var __glob_0_158 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": same_height
@@ -20597,253 +20647,274 @@ var __glob_0_150 = /* @__PURE__ */ Object.freeze({
 var same_width = _icon_template(`
     <path d="M20,4 L20,20Z M2,4 L2,20Z M6,10 L16,10 L16,14 L6,14Z" stroke-width="1" />
 `);
-var __glob_0_151 = /* @__PURE__ */ Object.freeze({
+var __glob_0_159 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": same_width
 });
 var save = _icon_template(`<path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z"/><path fill="none" d="M0 0h24v24H0z"/>`);
-var __glob_0_152 = /* @__PURE__ */ Object.freeze({
+var __glob_0_160 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": save
 });
 var scatter = _icon_template(`<g fill="#010101"><circle cx="7" cy="14" r="3"/><circle cx="11" cy="6" r="3"/><circle cx="16.6" cy="17.6" r="3"/></g>`);
-var __glob_0_153 = /* @__PURE__ */ Object.freeze({
+var __glob_0_161 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": scatter
 });
 var screen = _icon_template(`<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>`);
-var __glob_0_154 = /* @__PURE__ */ Object.freeze({
+var __glob_0_162 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": screen
 });
 var setting = _icon_template(`<path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/>`);
-var __glob_0_155 = /* @__PURE__ */ Object.freeze({
+var __glob_0_163 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": setting
 });
 var settings_input_component = _icon_template(`<path d="M5 2c0-.55-.45-1-1-1s-1 .45-1 1v4H1v6h6V6H5V2zm4 14c0 1.3.84 2.4 2 2.82V23h2v-4.18c1.16-.41 2-1.51 2-2.82v-2H9v2zm-8 0c0 1.3.84 2.4 2 2.82V23h2v-4.18C6.16 18.4 7 17.3 7 16v-2H1v2zM21 6V2c0-.55-.45-1-1-1s-1 .45-1 1v4h-2v6h6V6h-2zm-8-4c0-.55-.45-1-1-1s-1 .45-1 1v4H9v6h6V6h-2V2zm4 14c0 1.3.84 2.4 2 2.82V23h2v-4.18c1.16-.41 2-1.51 2-2.82v-2h-6v2z"/>`);
-var __glob_0_156 = /* @__PURE__ */ Object.freeze({
+var __glob_0_164 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": settings_input_component
 });
 var shadow$1 = _icon_template(`<path d="M15.96 10.29l-2.75 3.54-1.96-2.36L8.5 15h11l-3.54-4.71zM3 5H1v16c0 1.1.9 2 2 2h16v-2H3V5zm18-4H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 16H7V3h14v14z"/>`);
-var __glob_0_157 = /* @__PURE__ */ Object.freeze({
+var __glob_0_165 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": shadow$1
 });
 var shape = _icon_template(`<path d="M23 7V1h-6v2H7V1H1v6h2v10H1v6h6v-2h10v2h6v-6h-2V7h2zM3 3h2v2H3V3zm2 18H3v-2h2v2zm12-2H7v-2H5V7h2V5h10v2h2v10h-2v2zm4 2h-2v-2h2v2zM19 5V3h2v2h-2z"/>`);
-var __glob_0_158 = /* @__PURE__ */ Object.freeze({
+var __glob_0_166 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": shape
 });
 var shuffle = _icon_template(`<path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/>`);
-var __glob_0_159 = /* @__PURE__ */ Object.freeze({
+var __glob_0_167 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": shuffle
 });
 var size = _icon_template(`<path d="M21 15h2v2h-2v-2zm0-4h2v2h-2v-2zm2 8h-2v2c1 0 2-1 2-2zM13 3h2v2h-2V3zm8 4h2v2h-2V7zm0-4v2h2c0-1-1-2-2-2zM1 7h2v2H1V7zm16-4h2v2h-2V3zm0 16h2v2h-2v-2zM3 3C2 3 1 4 1 5h2V3zm6 0h2v2H9V3zM5 3h2v2H5V3zm-4 8v8c0 1.1.9 2 2 2h12V11H1zm2 8l2.5-3.21 1.79 2.15 2.5-3.22L13 19H3z"/>`);
-var __glob_0_160 = /* @__PURE__ */ Object.freeze({
+var __glob_0_168 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": size
 });
 var skip_next = _icon_template(`<path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>`);
-var __glob_0_161 = /* @__PURE__ */ Object.freeze({
+var __glob_0_169 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": skip_next
 });
 var skip_prev = _icon_template(`<path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>`);
-var __glob_0_162 = /* @__PURE__ */ Object.freeze({
+var __glob_0_170 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": skip_prev
 });
 var smooth = _icon_template(`<path d="M4.59 6.89c.7-.71 1.4-1.35 1.71-1.22.5.2 0 1.03-.3 1.52-.25.42-2.86 3.89-2.86 6.31 0 1.28.48 2.34 1.34 2.98.75.56 1.74.73 2.64.46 1.07-.31 1.95-1.4 3.06-2.77 1.21-1.49 2.83-3.44 4.08-3.44 1.63 0 1.65 1.01 1.76 1.79-3.78.64-5.38 3.67-5.38 5.37 0 1.7 1.44 3.09 3.21 3.09 1.63 0 4.29-1.33 4.69-6.1H21v-2.5h-2.47c-.15-1.65-1.09-4.2-4.03-4.2-2.25 0-4.18 1.91-4.94 2.84-.58.73-2.06 2.48-2.29 2.72-.25.3-.68.84-1.11.84-.45 0-.72-.83-.36-1.92.35-1.09 1.4-2.86 1.85-3.52.78-1.14 1.3-1.92 1.3-3.28C8.95 3.69 7.31 3 6.44 3 5.12 3 3.97 4 3.72 4.25c-.36.36-.66.66-.88.93l1.75 1.71zm9.29 11.66c-.31 0-.74-.26-.74-.72 0-.6.73-2.2 2.87-2.76-.3 2.69-1.43 3.48-2.13 3.48z"/>`);
-var __glob_0_163 = /* @__PURE__ */ Object.freeze({
+var __glob_0_171 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": smooth
 });
 var source = _icon_template(`<path d="M20,6h-8l-2-2H4C2.9,4,2.01,4.9,2.01,6L2,18c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V8C22,6.9,21.1,6,20,6z M20,18L4,18V6h5.17 l2,2H20V18z M18,12H6v-2h12V12z M14,16H6v-2h8V16z"/>`);
-var __glob_0_164 = /* @__PURE__ */ Object.freeze({
+var __glob_0_172 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": source
 });
+var south = _icon_template(`<path d="M19,15l-1.41-1.41L13,18.17V2H11v16.17l-4.59-4.59L5,15l7,7L19,15z"/>`);
+var __glob_0_173 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": south
+});
 var specular = _icon_template(`<path d="M3.55 18.54l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8zM11 22.45h2V19.5h-2v2.95zM4 10.5H1v2h3v-2zm11-4.19V1.5H9v4.81C7.21 7.35 6 9.28 6 11.5c0 3.31 2.69 6 6 6s6-2.69 6-6c0-2.22-1.21-4.15-3-5.19zm5 4.19v2h3v-2h-3zm-2.76 7.66l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4z"/>`);
-var __glob_0_165 = /* @__PURE__ */ Object.freeze({
+var __glob_0_174 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": specular
 });
 var speed = _icon_template(`<path d="M20.38 8.57l-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44zm-9.79 6.84a2 2 0 0 0 2.83 0l5.66-8.49-8.49 5.66a2 2 0 0 0 0 2.83z"/>`);
-var __glob_0_166 = /* @__PURE__ */ Object.freeze({
+var __glob_0_175 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": speed
 });
 var star = _icon_template(`<path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>`);
-var __glob_0_167 = /* @__PURE__ */ Object.freeze({
+var __glob_0_176 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": star
 });
 var start$1 = _icon_template(`<path d="M14.59,7.41L18.17,11H6v2h12.17l-3.59,3.59L16,18l6-6l-6-6L14.59,7.41z M2,6v12h2V6H2z"/>`);
-var __glob_0_168 = /* @__PURE__ */ Object.freeze({
+var __glob_0_177 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": start$1
 });
 var storage = _icon_template(`<path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>`);
-var __glob_0_169 = /* @__PURE__ */ Object.freeze({
+var __glob_0_178 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": storage
 });
 var straighten = _icon_template(`<path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h2v4h2V8h2v4h2V8h2v4h2V8h2v4h2V8h2v8z"/>`);
-var __glob_0_170 = /* @__PURE__ */ Object.freeze({
+var __glob_0_179 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": straighten
 });
 var strikethrough = _icon_template(`<defs><path id="a" d="M0 0h24v24H0V0z"/></defs><clipPath id="b"><use xlink:href="#a" overflow="visible"/></clipPath><path clip-path="url(#b)" d="M7.24 8.75c-.26-.48-.39-1.03-.39-1.67 0-.61.13-1.16.4-1.67.26-.5.63-.93 1.11-1.29.48-.35 1.05-.63 1.7-.83.66-.19 1.39-.29 2.18-.29.81 0 1.54.11 2.21.34.66.22 1.23.54 1.69.94.47.4.83.88 1.08 1.43.25.55.38 1.15.38 1.81h-3.01c0-.31-.05-.59-.15-.85-.09-.27-.24-.49-.44-.68-.2-.19-.45-.33-.75-.44-.3-.1-.66-.16-1.06-.16-.39 0-.74.04-1.03.13-.29.09-.53.21-.72.36-.19.16-.34.34-.44.55-.1.21-.15.43-.15.66 0 .48.25.88.74 1.21.38.25.77.48 1.41.7H7.39c-.05-.08-.11-.17-.15-.25zM21 12v-2H3v2h9.62c.18.07.4.14.55.2.37.17.66.34.87.51.21.17.35.36.43.57.07.2.11.43.11.69 0 .23-.05.45-.14.66-.09.2-.23.38-.42.53-.19.15-.42.26-.71.35-.29.08-.63.13-1.01.13-.43 0-.83-.04-1.18-.13s-.66-.23-.91-.42c-.25-.19-.45-.44-.59-.75-.14-.31-.25-.76-.25-1.21H6.4c0 .55.08 1.13.24 1.58.16.45.37.85.65 1.21.28.35.6.66.98.92.37.26.78.48 1.22.65.44.17.9.3 1.38.39.48.08.96.13 1.44.13.8 0 1.53-.09 2.18-.28s1.21-.45 1.67-.79c.46-.34.82-.77 1.07-1.27s.38-1.07.38-1.71c0-.6-.1-1.14-.31-1.61-.05-.11-.11-.23-.17-.33H21z"/>`);
-var __glob_0_171 = /* @__PURE__ */ Object.freeze({
+var __glob_0_180 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": strikethrough
 });
 var stroke_to_path = _icon_template(`<path d="M20 4h-4l-4-4-4 4H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H4V6h4.52l3.52-3.5L15.52 6H20v14zM6 18h12V8H6v10zm2-8h8v6H8v-6z"/>`);
-var __glob_0_172 = /* @__PURE__ */ Object.freeze({
+var __glob_0_181 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": stroke_to_path
 });
 var swap_horiz = _icon_template(`<path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"/>`);
-var __glob_0_173 = /* @__PURE__ */ Object.freeze({
+var __glob_0_182 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": swap_horiz
 });
 var switch_left = _icon_template(`<path d="M8.5,8.62v6.76L5.12,12L8.5,8.62 M10,5l-7,7l7,7V5L10,5z M14,5v14l7-7L14,5z"/>`);
-var __glob_0_174 = /* @__PURE__ */ Object.freeze({
+var __glob_0_183 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": switch_left
 });
 var switch_right = _icon_template(`<path d="M15.5,15.38V8.62L18.88,12L15.5,15.38 M14,19l7-7l-7-7V19L14,19z M10,19V5l-7,7L10,19z"/>`);
-var __glob_0_175 = /* @__PURE__ */ Object.freeze({
+var __glob_0_184 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": switch_right
 });
 var sync = _icon_template(`<path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>`);
-var __glob_0_176 = /* @__PURE__ */ Object.freeze({
+var __glob_0_185 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sync
 });
 var table_rows = _icon_template(`<path d="M19,3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M19,5v3H5V5H19z M19,10v4H5v-4H19z M5,19v-3h14v3H5z"/>`);
-var __glob_0_177 = /* @__PURE__ */ Object.freeze({
+var __glob_0_186 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": table_rows
 });
 var text_rotate = _icon_template(`<path d="M12.75 3h-1.5L6.5 14h2.1l.9-2.2h5l.9 2.2h2.1L12.75 3zm-2.62 7L12 4.98 13.87 10h-3.74zm10.37 8l-3-3v2H5v2h12.5v2l3-3z"/>`);
-var __glob_0_178 = /* @__PURE__ */ Object.freeze({
+var __glob_0_187 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": text_rotate
 });
 var texture$1 = _icon_template(`<path d="M19.51 3.08L3.08 19.51c.09.34.27.65.51.9.25.24.56.42.9.51L20.93 4.49c-.19-.69-.73-1.23-1.42-1.41zM11.88 3L3 11.88v2.83L14.71 3h-2.83zM5 3c-1.1 0-2 .9-2 2v2l4-4H5zm14 18c.55 0 1.05-.22 1.41-.59.37-.36.59-.86.59-1.41v-2l-4 4h2zm-9.71 0h2.83L21 12.12V9.29L9.29 21z"/>`);
-var __glob_0_179 = /* @__PURE__ */ Object.freeze({
+var __glob_0_188 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": texture$1
 });
 var timer = _icon_template(`<path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>`);
-var __glob_0_180 = /* @__PURE__ */ Object.freeze({
+var __glob_0_189 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": timer
 });
 var title = _icon_template(`<path d="M5 4v3h5.5v12h3V7H19V4z"/>`);
-var __glob_0_181 = /* @__PURE__ */ Object.freeze({
+var __glob_0_190 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": title
 });
 var to_back = _icon_template(`<path d="M 7 7L 22 7L 22 22L 7 22L 7 7Z" style="fill:white !important;"/><path d="M 0 0L 14 0L 14 14L 0 14L 0 0Z M 16 16L 30 16L 30 30L 16 30L 16 16Z"/>`, { width: 30, height: 30 });
-var __glob_0_182 = /* @__PURE__ */ Object.freeze({
+var __glob_0_191 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": to_back
 });
 var to_front = _icon_template(`<path d="M 0 0L 14 0L 14 14L 0 14L 0 0Z M 16 16L 30 16L 30 30L 16 30L 16 16Z"/><path d="M 7 7L 22 7L 22 22L 7 22L 7 7Z" style="fill:white !important;"/>`, { width: 30, height: 30 });
-var __glob_0_183 = /* @__PURE__ */ Object.freeze({
+var __glob_0_192 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": to_front
 });
 var top = _icon_template(`<path d="M4,4 L20,4Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />`);
-var __glob_0_184 = /* @__PURE__ */ Object.freeze({
+var __glob_0_193 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": top
 });
 var transform$2 = _icon_template(`<path d="M22 18v-2H8V4h2L7 1 4 4h2v2H2v2h4v8c0 1.1.9 2 2 2h8v2h-2l3 3 3-3h-2v-2h4zM10 8h6v6h2V8c0-1.1-.9-2-2-2h-6v2z"/>`);
-var __glob_0_185 = /* @__PURE__ */ Object.freeze({
+var __glob_0_194 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": transform$2
 });
 var underline = _icon_template(`<path d="M12 17c3.31 0 6-2.69 6-6V3h-2.5v8c0 1.93-1.57 3.5-3.5 3.5S8.5 12.93 8.5 11V3H6v8c0 3.31 2.69 6 6 6zm-7 2v2h14v-2H5z"/>`);
-var __glob_0_186 = /* @__PURE__ */ Object.freeze({
+var __glob_0_195 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": underline
 });
 var undo = _icon_template(`<path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/>`);
-var __glob_0_187 = /* @__PURE__ */ Object.freeze({
+var __glob_0_196 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": undo
 });
 var unfold = _icon_template(`<path d="M12 5.83L15.17 9l1.41-1.41L12 3 7.41 7.59 8.83 9 12 5.83zm0 12.34L8.83 15l-1.41 1.41L12 21l4.59-4.59L15.17 15 12 18.17z"/>`);
-var __glob_0_188 = /* @__PURE__ */ Object.freeze({
+var __glob_0_197 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": unfold
 });
+var vertical_align_baseline = _icon_template(`<path d="M16,18v2H8v-2H16z M11,7.99V16h2V7.99h3L12,4L8,7.99H11z"/>`);
+var __glob_0_198 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": vertical_align_baseline
+});
 var vertical_align_bottom = _icon_template(`<path d="M16 13h-3V3h-2v10H8l4 4 4-4zM4 19v2h16v-2H4z"/>`);
-var __glob_0_189 = /* @__PURE__ */ Object.freeze({
+var __glob_0_199 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vertical_align_bottom
 });
 var vertical_align_center = _icon_template(`<path d="M8 19h3v4h2v-4h3l-4-4-4 4zm8-14h-3V1h-2v4H8l4 4 4-4zM4 11v2h16v-2H4z"/>`);
-var __glob_0_190 = /* @__PURE__ */ Object.freeze({
+var __glob_0_200 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vertical_align_center
 });
+var vertical_align_stretch = _icon_template(`
+    <path d="M19,13H5c-1.1,0-2,0.9-2,2v4c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2v-4C21,13.9,20.1,13,19,13z M19,19H5v-4h14V19z"/>
+    <path d="M19,3H5C3.9,3,3,3.9,3,5v4c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M19,9H5V5h14V9z"/>
+`);
+var __glob_0_201 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": vertical_align_stretch
+});
 var vertical_align_top = _icon_template(`<path d="M8 11h3v10h2V11h3l-4-4-4 4zM4 3v2h16V3H4z"/>`);
-var __glob_0_191 = /* @__PURE__ */ Object.freeze({
+var __glob_0_202 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vertical_align_top
 });
 var vertical_distribute = _icon_template(`<path d="M22,2v2H2V2H22z M7,10.5v3h10v-3H7z M2,20v2h20v-2H2z"/>`);
-var __glob_0_192 = /* @__PURE__ */ Object.freeze({
+var __glob_0_203 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vertical_distribute
@@ -20851,43 +20922,43 @@ var __glob_0_192 = /* @__PURE__ */ Object.freeze({
 var video$1 = _icon_template(`
         <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
     `);
-var __glob_0_193 = /* @__PURE__ */ Object.freeze({
+var __glob_0_204 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": video$1
 });
 var view_comfy = _icon_template(`<path d="M3 9h4V5H3v4zm0 5h4v-4H3v4zm5 0h4v-4H8v4zm5 0h4v-4h-4v4zM8 9h4V5H8v4zm5-4v4h4V5h-4zm5 9h4v-4h-4v4zM3 19h4v-4H3v4zm5 0h4v-4H8v4zm5 0h4v-4h-4v4zm5 0h4v-4h-4v4zm0-14v4h4V5h-4z"/>`);
-var __glob_0_194 = /* @__PURE__ */ Object.freeze({
+var __glob_0_205 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": view_comfy
 });
 var view_list = _icon_template(`<path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"/>`);
-var __glob_0_195 = /* @__PURE__ */ Object.freeze({
+var __glob_0_206 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": view_list
 });
 var view_week = _icon_template(`<path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M8,18H4V6h4V18z M14,18h-4V6h4V18z M20,18h-4V6h4V18z"/>`);
-var __glob_0_196 = /* @__PURE__ */ Object.freeze({
+var __glob_0_207 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": view_week
 });
 var view_week_reverse = _icon_template(`<path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M8,18H4V6h4V18z M14,18h-4V6h4V18z M20,18h-4V6h4V18z M0,12 L24,12"/>`);
-var __glob_0_197 = /* @__PURE__ */ Object.freeze({
+var __glob_0_208 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": view_week_reverse
 });
 var vintage = _icon_template(`<path d="M18.7 12.4c-.28-.16-.57-.29-.86-.4.29-.11.58-.24.86-.4 1.92-1.11 2.99-3.12 3-5.19-1.79-1.03-4.07-1.11-6 0-.28.16-.54.35-.78.54.05-.31.08-.63.08-.95 0-2.22-1.21-4.15-3-5.19C10.21 1.85 9 3.78 9 6c0 .32.03.64.08.95-.24-.2-.5-.39-.78-.55-1.92-1.11-4.2-1.03-6 0 0 2.07 1.07 4.08 3 5.19.28.16.57.29.86.4-.29.11-.58.24-.86.4-1.92 1.11-2.99 3.12-3 5.19 1.79 1.03 4.07 1.11 6 0 .28-.16.54-.35.78-.54-.05.32-.08.64-.08.96 0 2.22 1.21 4.15 3 5.19 1.79-1.04 3-2.97 3-5.19 0-.32-.03-.64-.08-.95.24.2.5.38.78.54 1.92 1.11 4.2 1.03 6 0-.01-2.07-1.08-4.08-3-5.19zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>`);
-var __glob_0_198 = /* @__PURE__ */ Object.freeze({
+var __glob_0_209 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vintage
 });
 var visible = _icon_template(`<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>`);
-var __glob_0_199 = /* @__PURE__ */ Object.freeze({
+var __glob_0_210 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": visible
@@ -20895,7 +20966,7 @@ var __glob_0_199 = /* @__PURE__ */ Object.freeze({
 var volume_down = _icon_template(`
         <path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"/>
     `);
-var __glob_0_200 = /* @__PURE__ */ Object.freeze({
+var __glob_0_211 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": volume_down
@@ -20903,7 +20974,7 @@ var __glob_0_200 = /* @__PURE__ */ Object.freeze({
 var volume_off = _icon_template(`
     <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
 `);
-var __glob_0_201 = /* @__PURE__ */ Object.freeze({
+var __glob_0_212 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": volume_off
@@ -20911,36 +20982,42 @@ var __glob_0_201 = /* @__PURE__ */ Object.freeze({
 var volume_up = _icon_template(`
     <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
 `);
-var __glob_0_202 = /* @__PURE__ */ Object.freeze({
+var __glob_0_213 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": volume_up
 });
 var wave = _icon_template(`<path d="M17 16.99c-1.35 0-2.2.42-2.95.8-.65.33-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.95c1.35 0 2.2-.42 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.42 2.95-.8c.65-.33 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm0-4.45c-1.35 0-2.2.43-2.95.8-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.32-1.17.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm2.95-8.08c-.75-.38-1.58-.8-2.95-.8s-2.2.42-2.95.8c-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.37-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.93c1.35 0 2.2-.43 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V5.04c-.9 0-1.4-.25-2.05-.58zM17 8.09c-1.35 0-2.2.43-2.95.8-.65.35-1.15.6-2.05.6s-1.4-.25-2.05-.6c-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.35-1.15.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.32 1.18-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V9.49c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8z"/>`);
-var __glob_0_203 = /* @__PURE__ */ Object.freeze({
+var __glob_0_214 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": wave
 });
 var waves = _icon_template(`<path d="M17 16.99c-1.35 0-2.2.42-2.95.8-.65.33-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.95c1.35 0 2.2-.42 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.42 2.95-.8c.65-.33 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm0-4.45c-1.35 0-2.2.43-2.95.8-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.32-1.17.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm2.95-8.08c-.75-.38-1.58-.8-2.95-.8s-2.2.42-2.95.8c-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.37-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.93c1.35 0 2.2-.43 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V5.04c-.9 0-1.4-.25-2.05-.58zM17 8.09c-1.35 0-2.2.43-2.95.8-.65.35-1.15.6-2.05.6s-1.4-.25-2.05-.6c-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.35-1.15.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.32 1.18-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V9.49c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8z"/>`);
-var __glob_0_204 = /* @__PURE__ */ Object.freeze({
+var __glob_0_215 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": waves
 });
 var web = _icon_template(`<path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"/>`);
-var __glob_0_205 = /* @__PURE__ */ Object.freeze({
+var __glob_0_216 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": web
 });
+var west = _icon_template(`<path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z"/>`);
+var __glob_0_217 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": west
+});
 var wrap_text = _icon_template(`<path d="M4 19h6v-2H4v2zM20 5H4v2h16V5zm-3 6H4v2h13.25c1.1 0 2 .9 2 2s-.9 2-2 2H15v-2l-3 3 3 3v-2h2c2.21 0 4-1.79 4-4s-1.79-4-4-4z"/>`);
-var __glob_0_206 = /* @__PURE__ */ Object.freeze({
+var __glob_0_218 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": wrap_text
 });
-const modules$1 = { "./icon_list/_icon_template.js": __glob_0_0$1, "./icon_list/account_tree.js": __glob_0_1$1, "./icon_list/add.js": __glob_0_2$1, "./icon_list/add_box.js": __glob_0_3$1, "./icon_list/add_circle.js": __glob_0_4$1, "./icon_list/add_note.js": __glob_0_5$1, "./icon_list/align_center.js": __glob_0_6$1, "./icon_list/align_horizontal_center.js": __glob_0_7$1, "./icon_list/align_horizontal_left.js": __glob_0_8$1, "./icon_list/align_horizontal_right.js": __glob_0_9$1, "./icon_list/align_justify.js": __glob_0_10$1, "./icon_list/align_left.js": __glob_0_11$1, "./icon_list/align_right.js": __glob_0_12$1, "./icon_list/align_vertical_bottom.js": __glob_0_13$1, "./icon_list/align_vertical_center.js": __glob_0_14$1, "./icon_list/align_vertical_top.js": __glob_0_15$1, "./icon_list/alternate.js": __glob_0_16$1, "./icon_list/alternate_reverse.js": __glob_0_17$1, "./icon_list/apps.js": __glob_0_18$1, "./icon_list/archive.js": __glob_0_19$1, "./icon_list/arrowLeft.js": __glob_0_20$1, "./icon_list/arrowRight.js": __glob_0_21, "./icon_list/arrow_right.js": __glob_0_22, "./icon_list/artboard.js": __glob_0_23, "./icon_list/auto_awesome.js": __glob_0_24, "./icon_list/autorenew.js": __glob_0_25, "./icon_list/ballot.js": __glob_0_26, "./icon_list/bar_chart.js": __glob_0_27, "./icon_list/blur.js": __glob_0_28, "./icon_list/blur_linear.js": __glob_0_29, "./icon_list/boolean_difference.js": __glob_0_30, "./icon_list/boolean_intersection.js": __glob_0_31, "./icon_list/boolean_union.js": __glob_0_32, "./icon_list/boolean_xor.js": __glob_0_33, "./icon_list/border_all.js": __glob_0_34, "./icon_list/border_inner.js": __glob_0_35, "./icon_list/bottom.js": __glob_0_36, "./icon_list/broken_image.js": __glob_0_37, "./icon_list/brush.js": __glob_0_38, "./icon_list/build.js": __glob_0_39, "./icon_list/camera_roll.js": __glob_0_40, "./icon_list/cat.js": __glob_0_41, "./icon_list/center.js": __glob_0_42, "./icon_list/chart.js": __glob_0_43, "./icon_list/check.js": __glob_0_44, "./icon_list/chevron_left.js": __glob_0_45, "./icon_list/chevron_right.js": __glob_0_46, "./icon_list/circle.js": __glob_0_47, "./icon_list/close.js": __glob_0_48, "./icon_list/code.js": __glob_0_49, "./icon_list/color.js": __glob_0_50, "./icon_list/color_lens.js": __glob_0_51, "./icon_list/control_point.js": __glob_0_52, "./icon_list/copy.js": __glob_0_53, "./icon_list/create_folder.js": __glob_0_54, "./icon_list/cube.js": __glob_0_55, "./icon_list/cylinder.js": __glob_0_56, "./icon_list/dahaze.js": __glob_0_57, "./icon_list/dark.js": __glob_0_58, "./icon_list/delete_forever.js": __glob_0_59, "./icon_list/device_hub.js": __glob_0_60, "./icon_list/diffuse.js": __glob_0_61, "./icon_list/doc.js": __glob_0_62, "./icon_list/draw.js": __glob_0_63, "./icon_list/edit.js": __glob_0_64, "./icon_list/end.js": __glob_0_65, "./icon_list/exit_to_app.js": __glob_0_66, "./icon_list/expand.js": __glob_0_67, "./icon_list/export.js": __glob_0_68, "./icon_list/face.js": __glob_0_69, "./icon_list/fast_forward.js": __glob_0_70, "./icon_list/fast_rewind.js": __glob_0_71, "./icon_list/file_copy.js": __glob_0_72, "./icon_list/filter.js": __glob_0_73, "./icon_list/flag.js": __glob_0_74, "./icon_list/flash_on.js": __glob_0_75, "./icon_list/flatten.js": __glob_0_76, "./icon_list/flex.js": __glob_0_77, "./icon_list/flip.js": __glob_0_78, "./icon_list/flipY.js": __glob_0_79, "./icon_list/flip_camera.js": __glob_0_80, "./icon_list/folder.js": __glob_0_81, "./icon_list/format_shapes.js": __glob_0_82, "./icon_list/fullscreen.js": __glob_0_83, "./icon_list/gps_fixed.js": __glob_0_84, "./icon_list/gradient.js": __glob_0_85, "./icon_list/grid.js": __glob_0_86, "./icon_list/grid3x3.js": __glob_0_87, "./icon_list/group.js": __glob_0_88, "./icon_list/highlight_at.js": __glob_0_89, "./icon_list/horizontal_distribute.js": __glob_0_90, "./icon_list/horizontal_rule.js": __glob_0_91, "./icon_list/image.js": __glob_0_92, "./icon_list/input.js": __glob_0_93, "./icon_list/italic.js": __glob_0_94, "./icon_list/keyboard.js": __glob_0_95, "./icon_list/landscape.js": __glob_0_96, "./icon_list/launch.js": __glob_0_97, "./icon_list/layers.js": __glob_0_98, "./icon_list/left.js": __glob_0_99, "./icon_list/left_hide.js": __glob_0_100, "./icon_list/lens.js": __glob_0_101, "./icon_list/light.js": __glob_0_102, "./icon_list/line_cap_butt.js": __glob_0_103, "./icon_list/line_cap_round.js": __glob_0_104, "./icon_list/line_cap_square.js": __glob_0_105, "./icon_list/line_chart.js": __glob_0_106, "./icon_list/line_join_bevel.js": __glob_0_107, "./icon_list/line_join_miter.js": __glob_0_108, "./icon_list/line_join_round.js": __glob_0_109, "./icon_list/list.js": __glob_0_110, "./icon_list/local_library.js": __glob_0_111, "./icon_list/local_movie.js": __glob_0_112, "./icon_list/lock.js": __glob_0_113, "./icon_list/lock_open.js": __glob_0_114, "./icon_list/looks.js": __glob_0_115, "./icon_list/margin.js": __glob_0_116, "./icon_list/merge.js": __glob_0_117, "./icon_list/middle.js": __glob_0_118, "./icon_list/navigation.js": __glob_0_119, "./icon_list/near_me.js": __glob_0_120, "./icon_list/note.js": __glob_0_121, "./icon_list/opacity.js": __glob_0_122, "./icon_list/open_in_full.js": __glob_0_123, "./icon_list/outline.js": __glob_0_124, "./icon_list/outline_circle.js": __glob_0_125, "./icon_list/outline_image.js": __glob_0_126, "./icon_list/outline_rect.js": __glob_0_127, "./icon_list/outline_shape.js": __glob_0_128, "./icon_list/paint.js": __glob_0_129, "./icon_list/palette.js": __glob_0_130, "./icon_list/pantool.js": __glob_0_131, "./icon_list/pause.js": __glob_0_132, "./icon_list/pentool.js": __glob_0_133, "./icon_list/photo.js": __glob_0_134, "./icon_list/play.js": __glob_0_135, "./icon_list/plugin.js": __glob_0_136, "./icon_list/polygon.js": __glob_0_137, "./icon_list/publish.js": __glob_0_138, "./icon_list/rect.js": __glob_0_139, "./icon_list/redo.js": __glob_0_140, "./icon_list/refresh.js": __glob_0_141, "./icon_list/remove.js": __glob_0_142, "./icon_list/remove2.js": __glob_0_143, "./icon_list/repeat.js": __glob_0_144, "./icon_list/replay.js": __glob_0_145, "./icon_list/right.js": __glob_0_146, "./icon_list/right_hide.js": __glob_0_147, "./icon_list/rotate.js": __glob_0_148, "./icon_list/rotate_left.js": __glob_0_149, "./icon_list/same_height.js": __glob_0_150, "./icon_list/same_width.js": __glob_0_151, "./icon_list/save.js": __glob_0_152, "./icon_list/scatter.js": __glob_0_153, "./icon_list/screen.js": __glob_0_154, "./icon_list/setting.js": __glob_0_155, "./icon_list/settings_input_component.js": __glob_0_156, "./icon_list/shadow.js": __glob_0_157, "./icon_list/shape.js": __glob_0_158, "./icon_list/shuffle.js": __glob_0_159, "./icon_list/size.js": __glob_0_160, "./icon_list/skip_next.js": __glob_0_161, "./icon_list/skip_prev.js": __glob_0_162, "./icon_list/smooth.js": __glob_0_163, "./icon_list/source.js": __glob_0_164, "./icon_list/specular.js": __glob_0_165, "./icon_list/speed.js": __glob_0_166, "./icon_list/star.js": __glob_0_167, "./icon_list/start.js": __glob_0_168, "./icon_list/storage.js": __glob_0_169, "./icon_list/straighten.js": __glob_0_170, "./icon_list/strikethrough.js": __glob_0_171, "./icon_list/stroke_to_path.js": __glob_0_172, "./icon_list/swap_horiz.js": __glob_0_173, "./icon_list/switch_left.js": __glob_0_174, "./icon_list/switch_right.js": __glob_0_175, "./icon_list/sync.js": __glob_0_176, "./icon_list/table_rows.js": __glob_0_177, "./icon_list/text_rotate.js": __glob_0_178, "./icon_list/texture.js": __glob_0_179, "./icon_list/timer.js": __glob_0_180, "./icon_list/title.js": __glob_0_181, "./icon_list/to_back.js": __glob_0_182, "./icon_list/to_front.js": __glob_0_183, "./icon_list/top.js": __glob_0_184, "./icon_list/transform.js": __glob_0_185, "./icon_list/underline.js": __glob_0_186, "./icon_list/undo.js": __glob_0_187, "./icon_list/unfold.js": __glob_0_188, "./icon_list/vertical_align_bottom.js": __glob_0_189, "./icon_list/vertical_align_center.js": __glob_0_190, "./icon_list/vertical_align_top.js": __glob_0_191, "./icon_list/vertical_distribute.js": __glob_0_192, "./icon_list/video.js": __glob_0_193, "./icon_list/view_comfy.js": __glob_0_194, "./icon_list/view_list.js": __glob_0_195, "./icon_list/view_week.js": __glob_0_196, "./icon_list/view_week_reverse.js": __glob_0_197, "./icon_list/vintage.js": __glob_0_198, "./icon_list/visible.js": __glob_0_199, "./icon_list/volume_down.js": __glob_0_200, "./icon_list/volume_off.js": __glob_0_201, "./icon_list/volume_up.js": __glob_0_202, "./icon_list/wave.js": __glob_0_203, "./icon_list/waves.js": __glob_0_204, "./icon_list/web.js": __glob_0_205, "./icon_list/wrap_text.js": __glob_0_206 };
+const modules$1 = { "./icon_list/_icon_template.js": __glob_0_0$1, "./icon_list/account_tree.js": __glob_0_1$1, "./icon_list/add.js": __glob_0_2$1, "./icon_list/add_box.js": __glob_0_3$1, "./icon_list/add_circle.js": __glob_0_4$1, "./icon_list/add_note.js": __glob_0_5$1, "./icon_list/align_center.js": __glob_0_6$1, "./icon_list/align_horizontal_center.js": __glob_0_7$1, "./icon_list/align_horizontal_left.js": __glob_0_8$1, "./icon_list/align_horizontal_right.js": __glob_0_9$1, "./icon_list/align_justify.js": __glob_0_10$1, "./icon_list/align_left.js": __glob_0_11$1, "./icon_list/align_right.js": __glob_0_12$1, "./icon_list/align_vertical_bottom.js": __glob_0_13$1, "./icon_list/align_vertical_center.js": __glob_0_14$1, "./icon_list/align_vertical_top.js": __glob_0_15$1, "./icon_list/alternate.js": __glob_0_16$1, "./icon_list/alternate_reverse.js": __glob_0_17$1, "./icon_list/apps.js": __glob_0_18$1, "./icon_list/archive.js": __glob_0_19$1, "./icon_list/arrowLeft.js": __glob_0_20$1, "./icon_list/arrowRight.js": __glob_0_21, "./icon_list/arrow_right.js": __glob_0_22, "./icon_list/artboard.js": __glob_0_23, "./icon_list/auto_awesome.js": __glob_0_24, "./icon_list/autorenew.js": __glob_0_25, "./icon_list/ballot.js": __glob_0_26, "./icon_list/bar_chart.js": __glob_0_27, "./icon_list/blur.js": __glob_0_28, "./icon_list/blur_linear.js": __glob_0_29, "./icon_list/boolean_difference.js": __glob_0_30, "./icon_list/boolean_intersection.js": __glob_0_31, "./icon_list/boolean_union.js": __glob_0_32, "./icon_list/boolean_xor.js": __glob_0_33, "./icon_list/border_all.js": __glob_0_34, "./icon_list/border_inner.js": __glob_0_35, "./icon_list/bottom.js": __glob_0_36, "./icon_list/broken_image.js": __glob_0_37, "./icon_list/brush.js": __glob_0_38, "./icon_list/build.js": __glob_0_39, "./icon_list/camera_roll.js": __glob_0_40, "./icon_list/cat.js": __glob_0_41, "./icon_list/center.js": __glob_0_42, "./icon_list/chart.js": __glob_0_43, "./icon_list/check.js": __glob_0_44, "./icon_list/chevron_left.js": __glob_0_45, "./icon_list/chevron_right.js": __glob_0_46, "./icon_list/circle.js": __glob_0_47, "./icon_list/close.js": __glob_0_48, "./icon_list/code.js": __glob_0_49, "./icon_list/color.js": __glob_0_50, "./icon_list/color_lens.js": __glob_0_51, "./icon_list/control_point.js": __glob_0_52, "./icon_list/copy.js": __glob_0_53, "./icon_list/create_folder.js": __glob_0_54, "./icon_list/cube.js": __glob_0_55, "./icon_list/cylinder.js": __glob_0_56, "./icon_list/dahaze.js": __glob_0_57, "./icon_list/dark.js": __glob_0_58, "./icon_list/delete_forever.js": __glob_0_59, "./icon_list/device_hub.js": __glob_0_60, "./icon_list/diffuse.js": __glob_0_61, "./icon_list/doc.js": __glob_0_62, "./icon_list/draw.js": __glob_0_63, "./icon_list/east.js": __glob_0_64, "./icon_list/edit.js": __glob_0_65, "./icon_list/end.js": __glob_0_66, "./icon_list/exit_to_app.js": __glob_0_67, "./icon_list/expand.js": __glob_0_68, "./icon_list/expand_more.js": __glob_0_69, "./icon_list/export.js": __glob_0_70, "./icon_list/face.js": __glob_0_71, "./icon_list/fast_forward.js": __glob_0_72, "./icon_list/fast_rewind.js": __glob_0_73, "./icon_list/file_copy.js": __glob_0_74, "./icon_list/filter.js": __glob_0_75, "./icon_list/flag.js": __glob_0_76, "./icon_list/flash_on.js": __glob_0_77, "./icon_list/flatten.js": __glob_0_78, "./icon_list/flex.js": __glob_0_79, "./icon_list/flip.js": __glob_0_80, "./icon_list/flipY.js": __glob_0_81, "./icon_list/flip_camera.js": __glob_0_82, "./icon_list/folder.js": __glob_0_83, "./icon_list/format_shapes.js": __glob_0_84, "./icon_list/fullscreen.js": __glob_0_85, "./icon_list/gps_fixed.js": __glob_0_86, "./icon_list/gradient.js": __glob_0_87, "./icon_list/grid.js": __glob_0_88, "./icon_list/grid3x3.js": __glob_0_89, "./icon_list/group.js": __glob_0_90, "./icon_list/highlight_at.js": __glob_0_91, "./icon_list/horizontal_distribute.js": __glob_0_92, "./icon_list/horizontal_rule.js": __glob_0_93, "./icon_list/image.js": __glob_0_94, "./icon_list/input.js": __glob_0_95, "./icon_list/italic.js": __glob_0_96, "./icon_list/justify_content_space_around.js": __glob_0_97, "./icon_list/keyboard.js": __glob_0_98, "./icon_list/landscape.js": __glob_0_99, "./icon_list/launch.js": __glob_0_100, "./icon_list/layers.js": __glob_0_101, "./icon_list/layout_default.js": __glob_0_102, "./icon_list/layout_flex.js": __glob_0_103, "./icon_list/layout_grid.js": __glob_0_104, "./icon_list/left.js": __glob_0_105, "./icon_list/left_hide.js": __glob_0_106, "./icon_list/lens.js": __glob_0_107, "./icon_list/light.js": __glob_0_108, "./icon_list/line_cap_butt.js": __glob_0_109, "./icon_list/line_cap_round.js": __glob_0_110, "./icon_list/line_cap_square.js": __glob_0_111, "./icon_list/line_chart.js": __glob_0_112, "./icon_list/line_join_bevel.js": __glob_0_113, "./icon_list/line_join_miter.js": __glob_0_114, "./icon_list/line_join_round.js": __glob_0_115, "./icon_list/list.js": __glob_0_116, "./icon_list/local_library.js": __glob_0_117, "./icon_list/local_movie.js": __glob_0_118, "./icon_list/lock.js": __glob_0_119, "./icon_list/lock_open.js": __glob_0_120, "./icon_list/looks.js": __glob_0_121, "./icon_list/margin.js": __glob_0_122, "./icon_list/merge.js": __glob_0_123, "./icon_list/middle.js": __glob_0_124, "./icon_list/navigation.js": __glob_0_125, "./icon_list/near_me.js": __glob_0_126, "./icon_list/north.js": __glob_0_127, "./icon_list/note.js": __glob_0_128, "./icon_list/nowrap.js": __glob_0_129, "./icon_list/opacity.js": __glob_0_130, "./icon_list/open_in_full.js": __glob_0_131, "./icon_list/outline.js": __glob_0_132, "./icon_list/outline_circle.js": __glob_0_133, "./icon_list/outline_image.js": __glob_0_134, "./icon_list/outline_rect.js": __glob_0_135, "./icon_list/outline_shape.js": __glob_0_136, "./icon_list/paint.js": __glob_0_137, "./icon_list/palette.js": __glob_0_138, "./icon_list/pantool.js": __glob_0_139, "./icon_list/pause.js": __glob_0_140, "./icon_list/pentool.js": __glob_0_141, "./icon_list/photo.js": __glob_0_142, "./icon_list/play.js": __glob_0_143, "./icon_list/plugin.js": __glob_0_144, "./icon_list/polygon.js": __glob_0_145, "./icon_list/publish.js": __glob_0_146, "./icon_list/rect.js": __glob_0_147, "./icon_list/redo.js": __glob_0_148, "./icon_list/refresh.js": __glob_0_149, "./icon_list/remove.js": __glob_0_150, "./icon_list/remove2.js": __glob_0_151, "./icon_list/repeat.js": __glob_0_152, "./icon_list/replay.js": __glob_0_153, "./icon_list/right.js": __glob_0_154, "./icon_list/right_hide.js": __glob_0_155, "./icon_list/rotate.js": __glob_0_156, "./icon_list/rotate_left.js": __glob_0_157, "./icon_list/same_height.js": __glob_0_158, "./icon_list/same_width.js": __glob_0_159, "./icon_list/save.js": __glob_0_160, "./icon_list/scatter.js": __glob_0_161, "./icon_list/screen.js": __glob_0_162, "./icon_list/setting.js": __glob_0_163, "./icon_list/settings_input_component.js": __glob_0_164, "./icon_list/shadow.js": __glob_0_165, "./icon_list/shape.js": __glob_0_166, "./icon_list/shuffle.js": __glob_0_167, "./icon_list/size.js": __glob_0_168, "./icon_list/skip_next.js": __glob_0_169, "./icon_list/skip_prev.js": __glob_0_170, "./icon_list/smooth.js": __glob_0_171, "./icon_list/source.js": __glob_0_172, "./icon_list/south.js": __glob_0_173, "./icon_list/specular.js": __glob_0_174, "./icon_list/speed.js": __glob_0_175, "./icon_list/star.js": __glob_0_176, "./icon_list/start.js": __glob_0_177, "./icon_list/storage.js": __glob_0_178, "./icon_list/straighten.js": __glob_0_179, "./icon_list/strikethrough.js": __glob_0_180, "./icon_list/stroke_to_path.js": __glob_0_181, "./icon_list/swap_horiz.js": __glob_0_182, "./icon_list/switch_left.js": __glob_0_183, "./icon_list/switch_right.js": __glob_0_184, "./icon_list/sync.js": __glob_0_185, "./icon_list/table_rows.js": __glob_0_186, "./icon_list/text_rotate.js": __glob_0_187, "./icon_list/texture.js": __glob_0_188, "./icon_list/timer.js": __glob_0_189, "./icon_list/title.js": __glob_0_190, "./icon_list/to_back.js": __glob_0_191, "./icon_list/to_front.js": __glob_0_192, "./icon_list/top.js": __glob_0_193, "./icon_list/transform.js": __glob_0_194, "./icon_list/underline.js": __glob_0_195, "./icon_list/undo.js": __glob_0_196, "./icon_list/unfold.js": __glob_0_197, "./icon_list/vertical_align_baseline.js": __glob_0_198, "./icon_list/vertical_align_bottom.js": __glob_0_199, "./icon_list/vertical_align_center.js": __glob_0_200, "./icon_list/vertical_align_stretch.js": __glob_0_201, "./icon_list/vertical_align_top.js": __glob_0_202, "./icon_list/vertical_distribute.js": __glob_0_203, "./icon_list/video.js": __glob_0_204, "./icon_list/view_comfy.js": __glob_0_205, "./icon_list/view_list.js": __glob_0_206, "./icon_list/view_week.js": __glob_0_207, "./icon_list/view_week_reverse.js": __glob_0_208, "./icon_list/vintage.js": __glob_0_209, "./icon_list/visible.js": __glob_0_210, "./icon_list/volume_down.js": __glob_0_211, "./icon_list/volume_off.js": __glob_0_212, "./icon_list/volume_up.js": __glob_0_213, "./icon_list/wave.js": __glob_0_214, "./icon_list/waves.js": __glob_0_215, "./icon_list/web.js": __glob_0_216, "./icon_list/west.js": __glob_0_217, "./icon_list/wrap_text.js": __glob_0_218 };
 const obj = {};
 Object.entries(modules$1).forEach(([key, value]) => {
   key = key.replace("./icon_list/", "").replace(".js", "");
@@ -20959,6 +21036,16 @@ function iconUseForPath(pathString2, opt = { width: 24, height: 24 }) {
       <path d="${pathString2}" style="fill:${opt.fill || "transparent"};stroke:${opt.stroke || "white"}" stroke-width="1" />
     </svg>
   `;
+}
+function iconMake(svgString, opt = { width: 24, height: 24 }) {
+  return `
+    <svg viewBox="0 0 ${opt.width} ${opt.height}" xmlns="http://www.w3.org/2000/svg">
+      ${svgString}
+    </svg>
+  `;
+}
+function iconBlank() {
+  return iconMake(`<path d="M0 0h24v24H0z" fill="none" fill-opacity="0"/>`);
 }
 class CursorManager {
   async load(iconName = "default", ...args2) {
@@ -22586,11 +22673,67 @@ class HTMLRenderView extends EditorElement {
             </div>
         `;
   }
+  [BIND("$body")]() {
+    const { canvasWidth: canvasWidth2, canvasHeight: canvasHeight2 } = this.$editor;
+    var width2 = Length.px(canvasWidth2);
+    var height = Length.px(canvasHeight2);
+    return {
+      "tabIndex": -1,
+      style: {
+        width: width2,
+        height
+      }
+    };
+  }
+  [BIND("$view")]() {
+    const { translate: translate2, transformOrigin: origin2, scale: scale2 } = this.$viewport;
+    const transform2 = `translate(${translate2[0]}px, ${translate2[1]}px) scale(${scale2 || 1})`;
+    const transformOrigin = `${origin2[0]}px ${origin2[1]}px`;
+    return {
+      style: {
+        "transform-origin": transformOrigin,
+        transform: transform2
+      }
+    };
+  }
   [CONFIG("show.outline")]() {
     this.refs.$view.attr("data-outline", this.$config.get("show.outline"));
   }
   [SUBSCRIBE("refElement")](id, callback) {
     isFunction(callback) && callback(this.getElement(id));
+  }
+  [SUBSCRIBE("refreshSelectionStyleView")](obj2) {
+    this.refreshSelectionStyleView(obj2);
+  }
+  [SUBSCRIBE("updateViewport")]() {
+    this.bindData("$view");
+  }
+  [CONFIG("bodyEvent")]() {
+    const number = Dom.create(this.$config.get("bodyEvent").target).data("number");
+    if (!number) {
+      this.emit("recoverCursor");
+    }
+  }
+  [SUBSCRIBE("refreshAllElementBoundSize")]() {
+    this.refreshAllElementBoundSize();
+  }
+  [SUBSCRIBE("refreshElementBoundSize")](parentObj) {
+    this.refreshElementBoundSize(parentObj);
+  }
+  [SUBSCRIBE("updateAllCanvas")](parentLayer) {
+    this.updateAllCanvas(parentLayer);
+  }
+  [SUBSCRIBE("refreshAllCanvas")]() {
+    this.refreshAllCanvas();
+  }
+  [SUBSCRIBE("playTimeline", "moveTimeline")]() {
+    const project2 = this.$selection.currentProject;
+    var timeline = project2.getSelectedTimeline();
+    if (timeline) {
+      timeline.animations.map((it) => this.$model.get(it.id)).forEach((current) => {
+        this.updateTimelineElement(current, true, false);
+      });
+    }
   }
   clearElementAll() {
     this.state.cachedCurrentElement = {};
@@ -22710,7 +22853,7 @@ class HTMLRenderView extends EditorElement {
       }
       if (this.$selection.isEmpty === false) {
         this.$selection.selectAfterCopy();
-        this.trigger("refreshAllCanvas");
+        this.refreshAllCanvas();
         this.emit("refreshLayerTreeView");
         this.initializeDragSelection();
         this.emit("history.refreshSelection");
@@ -22751,9 +22894,6 @@ class HTMLRenderView extends EditorElement {
       this.emit("moveDragAreaView");
       return;
     }
-    if (this.$selection.isLayoutItem) {
-      return;
-    }
     const targetMousePoint = this.$viewport.getWorldPosition();
     const newDist = floor([], subtract([], targetMousePoint, this.initMousePoint));
     this.moveTo(newDist);
@@ -22762,10 +22902,15 @@ class HTMLRenderView extends EditorElement {
       this.$selection.reselect();
       this.$snapManager.clear();
       this.clearElementAll();
-      this.trigger("refreshAllCanvas");
+      this.refreshAllCanvas();
       this.emit("refreshLayerTreeView");
     }
-    this.emit("setAttributeForMulti", this.$selection.pack("x", "y"));
+    this.emit("setAttributeForMulti", this.$selection.packByValue({
+      "x": (item2) => item2.x,
+      "y": (item2) => item2.y,
+      "right": void 0,
+      "bottom": void 0
+    }));
   }
   moveTo(dist2) {
     const snap = this.$snapManager.check(this.$selection.cachedRectVerties.map((v) => {
@@ -22809,30 +22954,7 @@ class HTMLRenderView extends EditorElement {
       this.emit("refreshSelectionTool", true);
     }, 100);
   }
-  [BIND("$body")]() {
-    const { canvasWidth: canvasWidth2, canvasHeight: canvasHeight2 } = this.$editor;
-    var width2 = Length.px(canvasWidth2);
-    var height = Length.px(canvasHeight2);
-    return {
-      "tabIndex": -1,
-      style: {
-        width: width2,
-        height
-      }
-    };
-  }
-  [BIND("$view")]() {
-    const { translate: translate2, transformOrigin: origin2, scale: scale2 } = this.$viewport;
-    const transform2 = `translate(${translate2[0]}px, ${translate2[1]}px) scale(${scale2 || 1})`;
-    const transformOrigin = `${origin2[0]}px ${origin2[1]}px`;
-    return {
-      style: {
-        "transform-origin": transformOrigin,
-        transform: transform2
-      }
-    };
-  }
-  [SUBSCRIBE("refreshSelectionStyleView")](obj2) {
+  refreshSelectionStyleView(obj2) {
     var items = obj2 ? [obj2] : this.$selection.items;
     items.forEach((current) => {
       this.updateElement(current);
@@ -22848,16 +22970,7 @@ class HTMLRenderView extends EditorElement {
       this.$editor.html.update(item2, this.getElement(item2.id), this.$editor);
     }
   }
-  [SUBSCRIBE("playTimeline", "moveTimeline")]() {
-    const project2 = this.$selection.currentProject;
-    var timeline = project2.getSelectedTimeline();
-    if (timeline) {
-      timeline.animations.map((it) => this.$model.get(it.id)).forEach((current) => {
-        this.updateTimelineElement(current, true, false);
-      });
-    }
-  }
-  [SUBSCRIBE("refreshAllCanvas")]() {
+  refreshAllCanvas() {
     this.clearElementAll();
     const project2 = this.$selection.currentProject;
     const html2 = this.$editor.html.render(project2, null, this.$editor) || "";
@@ -22868,27 +22981,27 @@ class HTMLRenderView extends EditorElement {
       }
     });
     this.bindData("$view");
-    this.trigger("updateAllCanvas", project2);
+    this.updateAllCanvas(project2);
   }
-  [SUBSCRIBE("updateAllCanvas")](parentLayer) {
+  updateAllCanvas(parentLayer) {
     parentLayer.layers.forEach((item2) => {
       this.updateElement(item2, this.getElement(item2.id));
-      this.trigger("updateAllCanvas", item2);
+      this.updateAllCanvas(item2);
     });
   }
-  [SUBSCRIBE("refreshAllElementBoundSize") + DEBOUNCE(100)]() {
+  refreshAllElementBoundSize() {
     var selectionList = this.$selection.items.map((it) => it.is("artboard") ? it : it.parent);
     var list2 = [...new Set(selectionList)];
     list2.forEach((it) => {
-      this.trigger("refreshElementBoundSize", it);
+      this.refreshElementBoundSize(it);
     });
   }
-  [SUBSCRIBE("refreshElementBoundSize")](parentObj) {
+  refreshElementBoundSize(parentObj) {
     if (parentObj) {
-      const hasChangedDimension = parentObj.changedBoxModel || parentObj.hasChangedField("children", "box-model", "width", "height", "layout", "flex-layout", "grid-layout", "grid-layout-item", "flex-layout-item");
+      const hasChangedDimension = parentObj.changedLayout || parentObj.hasChangedField("children", "box-model", "width", "height");
       parentObj.layers.forEach((it) => {
         var $el = this.getElement(it.id);
-        if ($el && hasChangedDimension && it.isLayoutItem()) {
+        if ($el && (hasChangedDimension && it.isLayoutItem())) {
           const { x: x2, y: y2, width: width2, height } = $el.offsetRect();
           it.reset({
             x: Length.px(x2),
@@ -22897,20 +23010,13 @@ class HTMLRenderView extends EditorElement {
             height: Length.px(height)
           });
           this.updateElement(it, $el);
-          this.trigger("refreshSelectionStyleView", it, true);
-          this.emit("refreshSelectionTool", true);
+          this.refreshSelectionStyleView(it);
+          if (this.$config.false("set.move.control.point")) {
+            this.emit("refreshSelectionTool", true);
+          }
         }
-        this.trigger("refreshElementBoundSize", it);
+        this.refreshElementBoundSize(it);
       });
-    }
-  }
-  [SUBSCRIBE("updateViewport")]() {
-    this.bindData("$view");
-  }
-  [CONFIG("bodyEvent")]() {
-    const number = Dom.create(this.$config.get("bodyEvent").target).data("number");
-    if (!number) {
-      this.emit("recoverCursor");
     }
   }
 }
@@ -25670,6 +25776,106 @@ function animation(editor) {
     AnimationPropertyPopup
   });
 }
+const ConstraintsDirection = {
+  HORIZONTAL: "constraints-horizontal",
+  VERTICAL: "constraints-vertical"
+};
+const Constraints = {
+  MIN: "min",
+  MAX: "max",
+  STRETCH: "stretch",
+  SCALE: "scale",
+  CENTER: "center"
+};
+const BooleanOperation = {
+  DIFFERENCE: "difference",
+  INTERSECTION: "intersection",
+  UNION: "union",
+  REVERSE_DIFFERENCE: "reverse-difference",
+  XOR: "xor"
+};
+const StrokeLineCap = {
+  BUTT: "butt",
+  ROUND: "round",
+  SQUARE: "square"
+};
+const StrokeLineJoin = {
+  MITER: "miter",
+  ROUND: "round",
+  BEVEL: "bevel"
+};
+const BlendMode = {
+  NORMAL: "normal",
+  MULTIPLY: "multiply",
+  SCREEN: "screen",
+  OVERLAY: "overlay",
+  DARKEN: "darken",
+  LIGHTEN: "lighten",
+  COLOR_DODGE: "color-dodge",
+  COLOR_BURN: "color-burn",
+  HARD_LIGHT: "hard-light",
+  SOFT_LIGHT: "soft-light",
+  DIFFERENCE: "difference",
+  EXCLUSION: "exclusion",
+  HUE: "hue",
+  SATURATION: "saturation",
+  COLOR: "color",
+  LUMINOSITY: "luminosity"
+};
+const TextDecoration = {
+  NONE: "none",
+  UNDERLINE: "underline",
+  OVERLINE: "overline",
+  LINE_THROUGH: "line-through",
+  BLINK: "blink"
+};
+const TextTransform = {
+  NONE: "none",
+  CAPITALIZE: "capitalize",
+  UPPERCASE: "uppercase",
+  LOWERCASE: "lowercase"
+};
+const Overflow = {
+  VISIBLE: "visible",
+  HIDDEN: "hidden",
+  SCROLL: "scroll",
+  AUTO: "auto"
+};
+const BorderStyle = {
+  NONE: "none",
+  HIDDEN: "hidden",
+  DOTTED: "dotted",
+  DASHED: "dashed",
+  SOLID: "solid",
+  DOUBLE: "double",
+  GROOVE: "groove",
+  RIDGE: "ridge",
+  INSET: "inset",
+  OUTSET: "outset"
+};
+const TransformValue = {
+  NONE: "none",
+  PERSPECTIVE: "perspective",
+  TRANSLATE: "translate",
+  TRANSLATE_X: "translateX",
+  TRANSLATE_Y: "translateY",
+  TRANSLATE_Z: "translateZ",
+  TRANSLATE_3D: "translate3d",
+  SCALE: "scale",
+  SCALE_X: "scaleX",
+  SCALE_Y: "scaleY",
+  SCALE_Z: "scaleZ",
+  SCALE_3D: "scale3d",
+  ROTATE: "rotate",
+  ROTATE_X: "rotateX",
+  ROTATE_Y: "rotateY",
+  ROTATE_Z: "rotateZ",
+  SKEW: "skew",
+  SKEW_X: "skewX",
+  SKEW_Y: "skewY",
+  MATRIX: "matrix",
+  MATRIX_3D: "matrix3d"
+};
 class ObjectProperty {
   static create(json) {
     return class extends BaseProperty {
@@ -25739,7 +25945,7 @@ function appearance(editor) {
             editor: "select",
             editorOptions: {
               label: editor.$i18n("background.color.property.overflow"),
-              options: ["visible", "hidden", "scroll", "auto"].map((it) => {
+              options: [Overflow.VISIBLE, Overflow.HIDDEN, Overflow.SCROLL, Overflow.AUTO].map((it) => {
                 return { value: it, text: editor.$i18n(`background.color.property.overflow.${it}`) };
               })
             },
@@ -26557,7 +26763,7 @@ class Button extends BaseUI {
   }
 }
 var ToggleCheckBox$1 = "";
-const DEFAULT_LABELS = ["True", "False"];
+const DEFAULT_LABELS$1 = ["True", "False"];
 class ToggleCheckBox extends BaseUI {
   initialize() {
     super.initialize();
@@ -26567,7 +26773,7 @@ class ToggleCheckBox extends BaseUI {
     return {
       label: this.props.label || "",
       checked: this.props.value || "false",
-      toggleLabels: this.props.toggleLabels || DEFAULT_LABELS,
+      toggleLabels: this.props.toggleLabels || DEFAULT_LABELS$1,
       toggleTitles: this.props.toggleTitles || [],
       toggleValues: this.props.toggleValues || ["true", "false"]
     };
@@ -26629,13 +26835,89 @@ class ToggleCheckBox extends BaseUI {
     this.sendEvent();
   }
 }
+var ToggleButton$1 = "";
+const DEFAULT_LABELS = ["True", "False"];
+class ToggleButton extends BaseUI {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
+  initState() {
+    return {
+      label: this.props.label || "",
+      checkedValue: this.props.checkedValue || this.props.value,
+      checked: this.props.value || "false",
+      toggleLabels: this.props.toggleLabels || DEFAULT_LABELS,
+      toggleTitles: this.props.toggleTitles || [],
+      toggleValues: this.props.toggleValues || ["true", "false"]
+    };
+  }
+  template() {
+    return `<div class='small-editor button' ref='$body'></div>`;
+  }
+  [LOAD("$body")]() {
+    var { label, checked, checkedValue } = this.state;
+    var hasLabel = !!label ? "has-label" : "";
+    return `
+        <div class='elf--toggle-button ${hasLabel}'>
+            ${label ? `<label title="${label}">${label}</label>` : ""}
+            <div class='area' ref="$area">
+                ${this.state.toggleValues.map((it, index2) => {
+      let label2 = this.state.toggleLabels[index2];
+      let title2 = this.state.toggleTitles[index2] || label2;
+      if (obj[label2]) {
+        label2 = iconUse$1(label2, "", { width: 30, height: 30 });
+      }
+      return createElementJsx("div", {
+        class: `${it === checked ? "visible" : ""} ${it === checkedValue ? "checked" : ""}`
+      }, createElementJsx("button", {
+        type: "button",
+        "data-index": index2,
+        class: it === checkedValue ? "checked" : "",
+        value: it,
+        title: title2,
+        style: "--elf--toggle-checkbox-tooltip-top: -20%;"
+      }, label2));
+    }).join("")}
+            </div>
+        </div>
+    `;
+  }
+  [BIND("$area")]() {
+    const selectedIndex = this.state.toggleValues.findIndex((v) => v === this.state.checked);
+    return {
+      "data-selected-index": selectedIndex
+    };
+  }
+  setValue(checked) {
+    this.setState({
+      checked
+    });
+  }
+  getValue() {
+    return this.state.checked;
+  }
+  [CLICK("$el button")](e) {
+    const value = e.$dt.value;
+    const selectedIndex = this.state.toggleValues.findIndex((v) => v === value);
+    const nextValue = this.state.toggleValues[(selectedIndex + 1) % this.state.toggleValues.length];
+    console.log(value, nextValue);
+    this.setValue(nextValue);
+    this.trigger("change");
+  }
+  [SUBSCRIBE_SELF("change")]() {
+    this.sendEvent();
+  }
+}
 function baseEditor(editor) {
   editor.registerElement({
     ToggleCheckBox,
+    ToggleButton,
     Button
   });
   editor.registerAlias({
     "toggle-checkbox": "ToggleCheckBox",
+    "toggle-button": "ToggleButton",
     "button": "Button"
   });
 }
@@ -26663,9 +26945,6 @@ class PathToolProperty extends BaseProperty {
     return `
       <div class="elf--boolean-item" ref="$buttons">
         <div>
-          <button type="button" data-command="switch.path">${iconUse$1("sync", "", { width: 30, height: 30 })} Switch path</button>        
-        </div>      
-        <div>
           <button type="button" data-command="convert.path.operation" data-args="union">${iconUse$1("boolean_union", "", { width: 30, height: 30 })} Union</button>        
           <button type="button" data-command="convert.path.operation" data-args="intersection">${iconUse$1("boolean_intersection", "", { width: 30, height: 30 })} Intersection</button>        
         </div>
@@ -26673,17 +26952,19 @@ class PathToolProperty extends BaseProperty {
           <button type="button" data-command="convert.path.operation" data-args="difference">${iconUse$1("boolean_difference", "", { width: 30, height: 30 })} Subtract</button>        
           <button type="button" data-command="convert.path.operation" data-args="xor">${iconUse$1("boolean_xor", "", { width: 30, height: 30 })} Exclude</button>        
         </div>
+        <div class="divider"></div>
         <div>
           <button type="button" data-command="convert.simplify.path">${iconUse$1("grid3x3", "", { width: 24, height: 24 })} Self Intersection</button>        
           <button type="button" data-command="convert.flatten.path">${iconUse$1("flatten", "", { width: 24, height: 24 })} Flatten</button>                  
         </div>
         <div>
-          <button type="button" data-command="convert.smooth.path">${iconUse$1("smooth", "", { width: 24, height: 24 })} Smooth Path</button>                
+          <!--<button type="button" data-command="convert.smooth.path">${iconUse$1("smooth", "", { width: 24, height: 24 })} Smooth Path</button>-->                
+          <button type="button" data-command="switch.path">${iconUse$1("sync", "", { width: 30, height: 30 })} Switch path</button>                  
           <button type="button" data-command="convert.stroke.to.path">${iconUse$1("outline_shape", "", { width: 24, height: 24 })} Outline Path</button> 
         </div>        
         <div>
           <button type="button" data-command="convert.polygonal.path">${iconUse$1("highlight_at", "", { width: 24, height: 24 })} Polygonal</button>                
-          <button type="button" data-command="convert.normalize.path">${iconUse$1("stroke_to_path", "", { width: 24, height: 24 })} Curve</button> 
+          <button type="button" data-command="convert.normalize.path">${iconUse$1("stroke_to_path", "", { width: 24, height: 24 })} Normalize</button> 
         </div>                
       </div>
     `;
@@ -26860,16 +27141,16 @@ class BorderProperty extends BaseProperty {
 }
 var BorderValueEditor$1 = "";
 const borderStyleList = [
-  "none",
-  "hidden",
-  "dotted",
-  "dashed",
-  "solid",
-  "double",
-  "groove",
-  "ridge",
-  "inset",
-  "outset"
+  BorderStyle.NONE,
+  BorderStyle.HIDDEN,
+  BorderStyle.SOLID,
+  BorderStyle.DASHED,
+  BorderStyle.DOTTED,
+  BorderStyle.DOUBLE,
+  BorderStyle.GROOVE,
+  BorderStyle.RIDGE,
+  BorderStyle.INSET,
+  BorderStyle.OUTSET
 ].join(",");
 class BorderValueEditor extends EditorElement {
   initState() {
@@ -26925,13 +27206,13 @@ function border(editor) {
     BorderProperty
   });
 }
-const typeList$4 = [
+const typeList$3 = [
   { key: "top", title: "Top" },
   { key: "bottom", title: "Bottom" },
   { key: "left", title: "Left" },
   { key: "right", title: "Right" }
 ];
-const keyList$3 = typeList$4.map((it) => it.key);
+const keyList$2 = typeList$3.map((it) => it.key);
 const names = {
   image: "Image",
   "static-gradient": "Static",
@@ -27005,7 +27286,7 @@ class BorderImageProperty extends BaseProperty {
   }
   [SUBSCRIBE_SELF("changeBorderImage")](key, value) {
     if (key === "border-image-slice") {
-      keyList$3.forEach((type) => {
+      keyList$2.forEach((type) => {
         this.children[`$${type}Slice`].setValue(value);
       });
     }
@@ -27031,7 +27312,7 @@ class BorderImageProperty extends BaseProperty {
         style="display: none;"
       >
         <div class="slice-setting-box" ref="$sliceSettingBox">
-          ${typeList$4.map((it) => {
+          ${typeList$3.map((it) => {
       return `
               <div>
                 <label class='title'>${it.title}</label>
@@ -27187,7 +27468,7 @@ class BorderImageProperty extends BaseProperty {
         }
       });
     } else {
-      keyList$3.forEach((type2) => {
+      keyList$2.forEach((type2) => {
         borderImage2.slice[type2] = this.children[`$${type2}Slice`].getValue();
         borderImage2.width[type2] = this.children[`$${type2}Width`].getValue();
       });
@@ -27211,13 +27492,13 @@ function borderImage(editor) {
   });
 }
 var BorderRadiusEditor$1 = "";
-const typeList$3 = [
+const typeList$2 = [
   { key: "border-top-left-radius", title: "topLeft" },
   { key: "border-top-right-radius", title: "topRight" },
   { key: "border-bottom-right-radius", title: "bottomRight" },
   { key: "border-bottom-left-radius", title: "bottomLeft" }
 ];
-const keyList$2 = typeList$3.map((it) => it.key);
+const keyList$1 = typeList$2.map((it) => it.key);
 class BorderRadiusEditor extends EditorElement {
   initState() {
     return BorderRadius.parseStyle(this.props.value);
@@ -27227,7 +27508,7 @@ class BorderRadiusEditor extends EditorElement {
   }
   [SUBSCRIBE_SELF("changeBorderRadius")](key, value) {
     if (key === "border-radius") {
-      keyList$2.forEach((type) => {
+      keyList$1.forEach((type) => {
         this.children[`$${type}`].setValue(value.clone());
       });
     }
@@ -27254,7 +27535,7 @@ class BorderRadiusEditor extends EditorElement {
         style="display: none;"
       >
         <div class="radius-setting-box" ref="$radiusSettingBox">
-          ${typeList$3.map((it) => {
+          ${typeList$2.map((it) => {
       var value = this.state[it.key];
       var label = this.$i18n("border.radius.editor." + it.title);
       return `
@@ -27280,7 +27561,7 @@ class BorderRadiusEditor extends EditorElement {
       this.state["border-radius"] = this.children[`$all`].getValue();
     } else {
       this.state.isAll = false;
-      keyList$2.forEach((key) => {
+      keyList$1.forEach((key) => {
         this.state[key] = this.children[`$${key}`].getValue();
       });
     }
@@ -27291,7 +27572,7 @@ class BorderRadiusEditor extends EditorElement {
     if (this.state.isAll) {
       value = this.state["border-radius"] + "";
     } else {
-      value = keyList$2.map((key) => `${this.state[key]}`).join(" ");
+      value = keyList$1.map((key) => `${this.state[key]}`).join(" ");
     }
     this.parent.trigger(this.props.onchange, value);
   }
@@ -29825,35 +30106,86 @@ class MovableModel extends BaseAssetModel {
     return false;
   }
   startToCacheChildren() {
-    if (!this.resizableWitChildren)
-      return;
     this.cachedSize = {
       width: this.json.width.clone(),
       height: this.json.height.clone()
     };
     this.cachedLayerMatrix = this.layers.map((item2) => {
+      item2.startToCacheChildren();
       return {
         item: item2,
-        matrix: item2.matrix
+        matrix: item2.matrix,
+        constraints: {
+          horizontal: item2["constraints-horizontal"],
+          vertical: item2["constraints-vertical"]
+        }
       };
     });
   }
   recoverChildren() {
-    if (!this.resizableWitChildren)
-      return;
     const obj2 = {
       width: this.json.width.clone(),
       height: this.json.height.clone()
     };
     const scaleX = obj2.width.value / this.cachedSize.width.value;
     const scaleY = obj2.height.value / this.cachedSize.height.value;
-    this.cachedLayerMatrix.forEach(({ item: item2, matrix }) => {
-      item2.reset({
-        x: item2.x.changeUnitValue(matrix.x * scaleX, obj2.width.value),
-        y: item2.y.changeUnitValue(matrix.y * scaleY, obj2.height.value),
-        width: item2.width.changeUnitValue(matrix.width * scaleX, obj2.width.value),
-        height: item2.height.changeUnitValue(matrix.height * scaleY, obj2.height.value)
-      });
+    this.cachedLayerMatrix.forEach(({ item: item2, matrix, constraints }) => {
+      const { x: x2, y: y2, width: width2, height } = matrix;
+      const left2 = x2;
+      const right2 = this.cachedSize.width.value - x2 - width2;
+      const top2 = y2;
+      const bottom2 = this.cachedSize.height.value - y2 - height;
+      const localObj = {};
+      switch (constraints.horizontal) {
+        case Constraints.MIN:
+          localObj.x = Length.px(left2);
+          localObj.right = void 0;
+          break;
+        case Constraints.MAX:
+          localObj.right = Length.px(right2);
+          localObj.x = void 0;
+          break;
+        case Constraints.STRETCH:
+          localObj.right = Length.px(right2);
+          localObj.x = Length.px(left2);
+          break;
+        case Constraints.SCALE:
+          localObj.width = item2.width.changeUnitValue(matrix.width * scaleX, obj2.width.value);
+          localObj.x = item2.x.changeUnitValue(matrix.x * scaleX, obj2.width.value);
+          localObj.right = void 0;
+          break;
+        case Constraints.CENTER:
+          const scaleNew = (matrix.x + matrix.width / 2) / this.cachedSize.width.value;
+          localObj.x = item2.x.changeUnitValue(scaleNew * obj2.width.value - matrix.width / 2, obj2.width.value);
+          localObj.right = void 0;
+          break;
+      }
+      switch (constraints.vertical) {
+        case Constraints.MIN:
+          localObj.y = Length.px(top2);
+          localObj.bottom = void 0;
+          break;
+        case Constraints.MAX:
+          localObj.bottom = Length.px(bottom2);
+          localObj.y = void 0;
+          break;
+        case Constraints.STRETCH:
+          localObj.bottom = Length.px(bottom2);
+          localObj.y = Length.px(top2);
+          break;
+        case Constraints.SCALE:
+          localObj.height = item2.height.changeUnitValue(matrix.height * scaleY, obj2.height.value);
+          localObj.y = item2.y.changeUnitValue(matrix.y * scaleY, obj2.height.value);
+          localObj.bottom = void 0;
+          break;
+        case Constraints.CENTER:
+          const scaleNew = (matrix.y + matrix.height / 2) / this.cachedSize.height.value;
+          localObj.y = item2.y.changeUnitValue(scaleNew * obj2.height.value - matrix.height / 2, obj2.height.value);
+          localObj.bottom = void 0;
+          break;
+      }
+      item2.reset(localObj);
+      item2.recoverChildren();
     });
   }
   toCloneObject(isDeep = true) {
@@ -29861,10 +30193,18 @@ class MovableModel extends BaseAssetModel {
   }
   convert(json) {
     json = super.convert(json);
-    json.x = Length.parse(json.x);
-    json.y = Length.parse(json.y);
-    json.width = Length.parse(json.width);
-    json.height = Length.parse(json.height);
+    if (json.x) {
+      json.x = Length.parse(json.x);
+    }
+    if (json.y) {
+      json.y = Length.parse(json.y);
+    }
+    if (json.width) {
+      json.width = Length.parse(json.width);
+    }
+    if (json.height) {
+      json.height = Length.parse(json.height);
+    }
     if (json.right) {
       json.right = Length.parse(json.right);
     }
@@ -30055,10 +30395,14 @@ class MovableModel extends BaseAssetModel {
     if (this.is("project")) {
       return ZERO;
     }
-    if (this.parent.is("project")) {
+    if (this.parent.is("project") && this.json.x) {
       return this.json.x.toPx();
     }
-    return this.json.x.toPx(this.parent.screenWidth.value);
+    if (this.json.x) {
+      return this.json.x.toPx(this.parent.screenWidth.value);
+    }
+    const parentWidth = this.parent.screenWidth.value;
+    return Length.px(parentWidth - this.json.right.toPx(parentWidth).value - this.json.width.toPx(parentWidth).value);
   }
   get offsetY() {
     if (!this.parent) {
@@ -30067,10 +30411,14 @@ class MovableModel extends BaseAssetModel {
     if (this.is("project")) {
       return ZERO;
     }
-    if (this.parent.is("project")) {
+    if (this.parent.is("project") && this.json.y) {
       return this.json.y.toPx();
     }
-    return this.json.y.toPx(this.parent.screenHeight.value);
+    if (this.json.y) {
+      return this.json.y.toPx(this.parent.screenHeight.value);
+    }
+    const parentHeight = this.parent.screenHeight.value;
+    return Length.px(parentHeight - this.json.bottom.toPx(parentHeight).value - this.screenHeight.value);
   }
   get screenWidth() {
     if (this.is("project") || !this.parent) {
@@ -30082,7 +30430,7 @@ class MovableModel extends BaseAssetModel {
     if (this.is("artboard")) {
       return this.json.width.toPx();
     }
-    if (this.json.right && this.json.right.unit !== "auto") {
+    if (this.json.x && this.json.right && this.json.right.unit !== "auto") {
       const parentWidth = this.parent.screenWidth.value;
       const right2 = this.json.right.toPx(parentWidth);
       const rightPos = parentWidth - right2;
@@ -30100,7 +30448,7 @@ class MovableModel extends BaseAssetModel {
     if (this.is("artboard")) {
       return this.json.height.toPx();
     }
-    if (this.json.bottom && this.json.bottom.unit !== "auto") {
+    if (this.json.y && this.json.bottom && this.json.bottom.unit !== "auto") {
       const parentHeight = this.parent.screenHeight.value;
       const top2 = this.json.bottom.toPx(parentHeight);
       const topPos = parentHeight - top2;
@@ -30120,6 +30468,11 @@ class MovableModel extends BaseAssetModel {
       x: Length.px(newCenter[0] - matrix.width / 2),
       y: Length.px(newCenter[1] - matrix.height / 2)
     });
+  }
+  resize(width2, height) {
+    this.startToCacheChildren();
+    this.reset({ width: width2, height });
+    this.recoverChildren();
   }
   setAngle(angle = 0) {
     this.reset({
@@ -30549,8 +30902,6 @@ class GroupModel extends MovableModel {
     return localLayout === layout2;
   }
   isInDefault() {
-    if (!this.isLayoutItem())
-      return false;
     const parentLayout = this.parent.layout || "default";
     return parentLayout === "default";
   }
@@ -30687,13 +31038,15 @@ class DomModel extends GroupModel {
       "layout": "default",
       "flex-layout": "display:flex;",
       "grid-layout": "display:grid;",
+      "constraints-vertical": "min",
+      "constraints-horizontal": "min",
       selectors: [],
       svg: []
     }, obj2));
   }
   toCloneObject() {
     var json = this.json;
-    return __spreadProps(__spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("position", "rootVariable", "variable", "transform", "filter", "backdrop-filter", "background-color", "background-image", "text-clip", "border-radius", "border", "box-shadow", "text-shadow", "clip-path", "color", "font-size", "font-stretch", "line-height", "text-align", "text-transform", "text-decoration", "letter-spacing", "word-spacing", "text-indent", "perspective-origin", "transform-origin", "transform-style", "perspective", "mix-blend-mode", "overflow", "opacity", "flex-layout", "grid-layout", "animation", "transition", "margin-top", "margin-left", "margin-right", "margin-bottom", "padding-top", "padding-right", "padding-left", "padding-bottom", "boolean-operation")), {
+    return __spreadProps(__spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("position", "rootVariable", "variable", "transform", "filter", "backdrop-filter", "background-color", "background-image", "text-clip", "border-radius", "border", "box-shadow", "text-shadow", "clip-path", "color", "font-size", "font-stretch", "line-height", "text-align", "text-transform", "text-decoration", "letter-spacing", "word-spacing", "text-indent", "perspective-origin", "transform-origin", "transform-style", "perspective", "mix-blend-mode", "overflow", "opacity", "flex-layout", "grid-layout", "animation", "transition", "margin-top", "margin-left", "margin-right", "margin-bottom", "padding-top", "padding-right", "padding-left", "padding-bottom", "constraints-horizontal", "constraints-vertical")), {
       selectors: json.selectors.map((selector2) => selector2.clone()),
       svg: json.svg.map((svg) => svg.clone())
     });
@@ -30713,6 +31066,15 @@ class DomModel extends GroupModel {
   }
   get changedBoxModel() {
     return this.hasChangedField("margin-top", "margin-left", "margin-bottom", "margin-right", "padding-top", "padding-left", "padding-right", "padding-bottom");
+  }
+  get changedFlexLayout() {
+    return this.hasChangedField("flex-direction", "flex-wrap", "justify-content", "align-items", "align-content", "order", "flex-basis", "flex-grow", "flex-shrink", "flex-flow");
+  }
+  get changedGridLayout() {
+    return this.hasChangedField("grid-template-rows", "grid-template-columns", "grid-template-areas", "grid-auto-rows", "grid-auto-columns", "grid-auto-flow", "grid-row-gap", "grid-column-gap", "grid-row-start", "grid-row-end", "grid-column-start", "grid-column-end", "grid-area");
+  }
+  get changedLayout() {
+    return this.hasChangedField("layout") || this.changedBoxModel || this.changedFlexLayout || this.changedGridLayout;
   }
   addSelector(selector2) {
     this.json.selectors.push(selector2);
@@ -32562,6 +32924,36 @@ class BooleanPathItem extends SVGPathItem {
   get resizableWitChildren() {
     return true;
   }
+  startToCacheChildren() {
+    this.cachedSize = {
+      width: this.json.width.clone(),
+      height: this.json.height.clone()
+    };
+    this.cachedLayerMatrix = this.layers.map((item2) => {
+      item2.startToCacheChildren();
+      return {
+        item: item2,
+        matrix: item2.matrix
+      };
+    });
+  }
+  recoverChildren() {
+    const obj2 = {
+      width: this.json.width.clone(),
+      height: this.json.height.clone()
+    };
+    const scaleX = obj2.width.value / this.cachedSize.width.value;
+    const scaleY = obj2.height.value / this.cachedSize.height.value;
+    this.cachedLayerMatrix.forEach(({ item: item2, matrix, constraints }) => {
+      item2.reset({
+        x: item2.x.changeUnitValue(matrix.x * scaleX, obj2.width.value),
+        y: item2.y.changeUnitValue(matrix.y * scaleY, obj2.height.value),
+        width: item2.width.changeUnitValue(matrix.width * scaleX, obj2.width.value),
+        height: item2.height.changeUnitValue(matrix.height * scaleY, obj2.height.value)
+      });
+      item2.recoverChildren();
+    });
+  }
   getFieldValueByBooleanOperation(field) {
     const layers2 = this.layers;
     if (layers2.length === 0) {
@@ -32571,7 +32963,7 @@ class BooleanPathItem extends SVGPathItem {
     }
     const op = this["boolean-operation"];
     switch (op) {
-      case "difference":
+      case BooleanOperation.DIFFERENCE:
         return layers2[1][field];
     }
     return layers2[0][field];
@@ -32605,15 +32997,15 @@ class BooleanPathItem extends SVGPathItem {
   doBooleanOperation() {
     const op = this.json["boolean-operation"];
     switch (op) {
-      case "intersection":
+      case BooleanOperation.INTERSECTION:
         return this.intersection();
-      case "union":
+      case BooleanOperation.UNION:
         return this.union();
-      case "difference":
+      case BooleanOperation.DIFFERENCE:
         return this.difference();
-      case "reverse-difference":
+      case BooleanOperation.REVERSE_DIFFERENCE:
         return this.reverseDifference();
-      case "xor":
+      case BooleanOperation.XOR:
         return this.xor();
     }
     return "";
@@ -32998,6 +33390,7 @@ var en_US = {
   "layout.property.flex": "Flex Box",
   "layout.property.grid": "Grid",
   "layout.property.default": "Default",
+  "default.layout.item.property.title.constraints": "Constraints",
   "flex.layout.editor.row": "Row",
   "flex.layout.editor.column": "column",
   "flex.layout.editor.row-reverse": "Row Reverse",
@@ -33016,7 +33409,7 @@ var en_US = {
   "flex.layout.editor.justify-content": "Justify Content",
   "flex.layout.editor.align-items": "Align Items",
   "flex.layout.editor.align-content": "Align Content",
-  "flex.layout.item.property.title": "Layout Item Detail",
+  "flex.layout.item.property.title": "Flex Item Detail",
   "flex.layout.item.property.grow": "Flex Grow",
   "flex.layout.item.property.shrink": "Flex Shrink",
   "flex.layout.item.property.basis": "Flex Basis",
@@ -33402,6 +33795,7 @@ var ko_KR = {
   "layout.property.flex": "\uD50C\uB809\uC2A4 \uBC15\uC2A4",
   "layout.property.grid": "\uADF8\uB9AC\uB4DC",
   "layout.property.default": "\uAE30\uBCF8 \uC88C\uD45C",
+  "default.layout.item.property.title.constraints": "Constraints",
   "flex.layout.editor.row": "\uD589",
   "flex.layout.editor.column": "\uC5F4",
   "flex.layout.editor.row-reverse": "\uC5ED\uBC29\uD5A5 \uD589",
@@ -33808,6 +34202,7 @@ var fr_FR = {
   "layout.property.flex": "Bo\xEEte Flex",
   "layout.property.grid": "Grille",
   "layout.property.default": "D\xE9faut",
+  "default.layout.item.property.title.constraints": "Constraints",
   "flex.layout.editor.row": "Ligne",
   "flex.layout.editor.column": "Colonne",
   "flex.layout.editor.row-reverse": "Inverse ligne",
@@ -35644,10 +36039,10 @@ class FillPickerPopup extends BasePopup {
     this.show(240);
     data.changeEvent = data.changeEvent || "changeFillPopup";
     data.params = params;
+    this.setState(data);
     if (data.image.isGradient()) {
       this.trigger("selectColorStep", data.image.colorsteps[0].color);
     }
-    this.setState(data);
   }
   [SUBSCRIBE("selectColorStep")](color2) {
     this.children.$color.setValue(color2);
@@ -36076,1850 +36471,6 @@ function history(editor) {
   editor.registerMenuItem("inspector.tab.history", {
     HistoryProperty
   });
-}
-class AddIFrame extends MenuItem {
-  getIconString() {
-    return "web";
-  }
-  getTitle() {
-    return this.props.title || "IFrame";
-  }
-  clickButton(e) {
-    this.emit("addLayerView", "iframe");
-  }
-  [SUBSCRIBE("addLayerView")](type) {
-    this.setSelected(type === "iframe");
-  }
-  isHideTitle() {
-    return true;
-  }
-}
-class IFrameProperty extends BaseProperty {
-  getClassName() {
-    return "item";
-  }
-  getTitle() {
-    return this.$i18n("iframe.property.title");
-  }
-  getBody() {
-    return `
-      <div ref='$body' style='padding-top: 3px;'>
-        <object refClass="TextEditor" ref="$input" label="URL" key="url" onchange="changeText" />
-      </div>
-    `;
-  }
-  refresh() {
-    const current = this.$selection.current;
-    if (current) {
-      this.children.$input.setValue(current.url);
-    }
-  }
-  [SUBSCRIBE_SELF("changeText") + DEBOUNCE(100)](key, value) {
-    var current = this.$selection.current;
-    if (current) {
-      current.reset({
-        [key]: value
-      });
-      this.command("setAttributeForMulti", "change iframe url", this.$selection.packByValue({
-        [key]: value
-      }));
-    }
-  }
-  [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
-    this.refreshShow(["iframe"]);
-  }
-}
-class ItemRender$1 {
-  getInnerId(item2, postfix = "") {
-    return item2.id + postfix;
-  }
-}
-const Primitive = "SourceGraphic,SourceAlpha,BackgroundImage,BackgroundAlpha,FillPaint,StrokePaint".split(",");
-const DEFAULT_ATTRIBUTES = {
-  xChannelSelector: true,
-  yChannelSelector: true
-};
-class BaseSVGFilter extends PropertyItem {
-  static parse(obj2) {
-    var FilterClass = SVGFilterClassName[obj2.type];
-    return new FilterClass(obj2);
-  }
-  hasLight() {
-    return false;
-  }
-  isLight() {
-    return false;
-  }
-  isSource() {
-    return false;
-  }
-  getDefaultObject(obj2 = {}) {
-    var id = uuidShort$1();
-    return super.getDefaultObject(__spreadValues({
-      itemType: "svgfilter",
-      id,
-      in: [],
-      bound: { x: 100, y: 100, targetX: 0, targetY: 0 },
-      connected: []
-    }, obj2));
-  }
-  getInCount() {
-    return 0;
-  }
-  setIn(index2, target) {
-    this.json.in[index2] = { id: target.id, type: target.type };
-  }
-  setConnected(target) {
-    var f = this.json.connected.filter((c2) => c2.id === target.id);
-    if (f.length === 0) {
-      this.json.connected.push({ id: target.id });
-    }
-  }
-  convert(json) {
-    if (typeof json.in === "string") {
-      json.in = JSON.parse(json.in);
-    }
-    if (typeof json.bound === "string") {
-      json.bound = JSON.parse(json.bound);
-    }
-    if (typeof json.connected === "string") {
-      json.connected = JSON.parse(json.connected);
-    }
-    return json;
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("id", "in", "bound", "connected"));
-  }
-  getDefaultAttribute() {
-    var list2 = [];
-    if (this.json.connected.length) {
-      list2.push(`result="${this.json.id}result"`);
-    }
-    Object.keys(DEFAULT_ATTRIBUTES).filter((key) => {
-      return !!this.json[key];
-    }).forEach((key) => {
-      list2.push(`${key}="${this.json[key]}"`);
-    });
-    return list2.join(" ") + " " + this.getSourceInAttribute();
-  }
-  hasInIndex() {
-    return false;
-  }
-  getSourceInAttribute(inList) {
-    return (inList || this.json.in).map((it, index2) => {
-      if (!it)
-        return "";
-      var indexString = index2 === 0 ? "" : index2 + 1 + "";
-      if (!this.hasInIndex()) {
-        indexString = "";
-      }
-      if (Primitive.includes(it.type)) {
-        return `in${indexString}="${it.type}"`;
-      }
-      return `in${indexString}="${it.id}result"`;
-    }).join(" ");
-  }
-  toString() {
-    var { type, value } = this.json;
-    return `<fe${type} value="${value}" ${this.getDefaultAttribute()} />`;
-  }
-}
-class RotaMatrixSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "RotaMatrix",
-      hueRotate: RotaMatrixSVGFilter.spec.hueRotate.defaultValue
-    });
-  }
-  convert(json) {
-    json.hueRotate = Length.parse(json.hueRotate);
-    return json;
-  }
-  toString() {
-    var { id, hueRotate } = this.json;
-    return `
-      <feColorMatrix type="hueRotate" result="romatrix-${id}"  values="${hueRotate}"/>
-      <feColorMatrix type="matrix" in="romatrix-${id}" in2="SourceGraphic"  ${this.getDefaultAttribute()} values="-1 2 -3 0 -.5 2 1 0 0 0 0 3 1 0 0 0 0 1 1 0"/>
-    `;
-  }
-}
-RotaMatrixSVGFilter.spec = {
-  hueRotate: {
-    title: "hue-rotate",
-    inputType: "number-range",
-    min: 0,
-    max: 360,
-    step: 1,
-    defaultValue: Length.number(0)
-  }
-};
-class MergeSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "Merge"
-    });
-  }
-  getInCount() {
-    return 3;
-  }
-  getDefaultAttribute() {
-    var list2 = [];
-    if (this.json.connected.length) {
-      list2.push(`result="${this.json.id}result"`);
-    }
-    return list2.join(" ");
-  }
-  toString() {
-    var { in: inList } = this.json;
-    return `
-    <feMerge  ${this.getDefaultAttribute()} >
-      ${inList.map((it) => {
-      return `<feMergeNode ${this.getSourceInAttribute([it])} />`;
-    }).join("")}
-    </feMerge>`;
-  }
-}
-MergeSVGFilter.spec = {};
-class CompositeSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "Composite",
-      operator: CompositeSVGFilter.spec.operator.defaultValue,
-      k1: CompositeSVGFilter.spec.k1.defaultValue,
-      k2: CompositeSVGFilter.spec.k2.defaultValue,
-      k3: CompositeSVGFilter.spec.k3.defaultValue,
-      k4: CompositeSVGFilter.spec.k4.defaultValue
-    });
-  }
-  getInCount() {
-    return 2;
-  }
-  toString() {
-    var { operator, k1, k2, k3, k4 } = this.json;
-    var kNumbers = "";
-    if (operator === "arithmetic") {
-      kNumbers = ` k1="${k1}" k2="${k2}" k3="${k3}" k4="${k4}" `;
-    }
-    return `<feComposite operator="${operator}" ${kNumbers}  ${this.getDefaultAttribute()} />`;
-  }
-  hasInIndex() {
-    return true;
-  }
-}
-CompositeSVGFilter.spec = {
-  operator: {
-    title: "operator",
-    inputType: "select",
-    options: "over,in,out,atop,xor,arithmetic",
-    defaultValue: "over"
-  },
-  k1: {
-    title: "k1",
-    inputType: "number-range",
-    min: 0,
-    max: 1,
-    step: 0.01,
-    defaultValue: Length.number(0)
-  },
-  k2: {
-    title: "k2",
-    inputType: "number-range",
-    min: 0,
-    max: 1,
-    step: 0.01,
-    defaultValue: Length.number(0)
-  },
-  k3: {
-    title: "k3",
-    inputType: "number-range",
-    min: 0,
-    max: 1,
-    step: 0.01,
-    defaultValue: Length.number(0)
-  },
-  k4: {
-    title: "k4",
-    inputType: "number-range",
-    min: 0,
-    max: 1,
-    step: 0.01,
-    defaultValue: Length.number(0)
-  }
-};
-class MorphologySVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "Morphology",
-      operator: MorphologySVGFilter.spec.operator.defaultValue,
-      radius: MorphologySVGFilter.spec.radius.defaultValue
-    });
-  }
-  getInCount() {
-    return 1;
-  }
-  toString() {
-    var { operator, radius } = this.json;
-    return `<feMorphology operator="${operator}" radius="${radius}"  ${this.getDefaultAttribute()} />`;
-  }
-}
-MorphologySVGFilter.spec = {
-  operator: {
-    title: "Operator",
-    inputType: "select",
-    options: "erode,dilate",
-    defaultValue: "erode"
-  },
-  radius: {
-    title: "Radius",
-    inputType: "number-range",
-    min: 0,
-    max: 100,
-    step: 1,
-    defaultValue: Length.number(0)
-  }
-};
-class TurbulenceSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "Turbulence",
-      filterType: TurbulenceSVGFilter.spec.filterType.defaultValue,
-      baseFrequency: TurbulenceSVGFilter.spec.baseFrequency.defaultValue,
-      numOctaves: TurbulenceSVGFilter.spec.numOctaves.defaultValue,
-      seed: TurbulenceSVGFilter.spec.seed.defaultValue
-    });
-  }
-  convert(obj2) {
-    obj2.baseFrequency = Length.parse(obj2.baseFrequency);
-    obj2.numOctaves = Length.parse(obj2.numOctaves);
-    obj2.seed = Length.parse(obj2.seed);
-    return obj2;
-  }
-  toString() {
-    var { filterType, baseFrequency, numOctaves, seed } = this.json;
-    return `<feTurbulence ${OBJECT_TO_PROPERTY$1({
-      type: filterType,
-      baseFrequency,
-      numOctaves,
-      seed
-    })}   ${this.getDefaultAttribute()} />`;
-  }
-}
-TurbulenceSVGFilter.spec = {
-  filterType: {
-    title: "Type",
-    inputType: "select",
-    options: "fractalNoise,turbulence",
-    defaultValue: "turbulence"
-  },
-  baseFrequency: {
-    title: "Frequency",
-    inputType: "number-range",
-    min: 0,
-    max: 1,
-    step: 0.01,
-    defaultValue: Length.number(0)
-  },
-  numOctaves: {
-    title: "Octaves",
-    inputType: "number-range",
-    min: 1,
-    max: 10,
-    step: 1,
-    defaultValue: Length.number(1)
-  },
-  seed: {
-    title: "Seed",
-    inputType: "number-range",
-    min: 0,
-    max: 1e4,
-    step: 1,
-    defaultValue: Length.number(0)
-  }
-};
-class DisplacementMapSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "DisplacementMap",
-      scale: DisplacementMapSVGFilter.spec.scale.defaultValue
-    });
-  }
-  getInCount() {
-    return 2;
-  }
-  convert(obj2) {
-    obj2.scale = Length.parse(obj2.scale);
-    return obj2;
-  }
-  toString() {
-    var { scale: scale2 } = this.json;
-    var scaleOption = scale2.value ? `scale="${scale2}"` : "";
-    return `<feDisplacementMap ${scaleOption}  ${this.getDefaultAttribute()} />`;
-  }
-  hasInIndex() {
-    return true;
-  }
-}
-DisplacementMapSVGFilter.spec = {
-  scale: {
-    title: "scale",
-    inputType: "number-range",
-    min: 0,
-    max: 5e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  }
-};
-class ColorMatrixSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "ColorMatrix",
-      values: ColorMatrixSVGFilter.spec.values.defaultValue
-    });
-  }
-  getInCount() {
-    return 1;
-  }
-  toString() {
-    var { values } = this.json;
-    var valueString = values.join(" ");
-    return `<feColorMatrix type="matrix" values="${valueString}"  ${this.getDefaultAttribute()} />`;
-  }
-}
-ColorMatrixSVGFilter.spec = {
-  values: {
-    title: "values",
-    inputType: "color-matrix",
-    column: 5,
-    defaultValue: [
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0
-    ]
-  }
-};
-class ConvolveMatrixSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "ConvolveMatrix",
-      kernelMatrix: ConvolveMatrixSVGFilter.spec.kernelMatrix.defaultValue
-    });
-  }
-  getInCount() {
-    return 1;
-  }
-  toString() {
-    var { kernelMatrix } = this.json;
-    var valueString = kernelMatrix.join(" ");
-    return `<feConvolveMatrix kernelMatrix="${valueString}"  ${this.getDefaultAttribute()} />`;
-  }
-}
-ConvolveMatrixSVGFilter.spec = {
-  kernelMatrix: {
-    title: "kernelMatrix",
-    inputType: "input-array",
-    column: 3,
-    defaultValue: [
-      1,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      1
-    ]
-  }
-};
-class GaussianBlurSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "GaussianBlur",
-      stdDeviationX: GaussianBlurSVGFilter.spec.stdDeviationX.defaultValue,
-      stdDeviationY: GaussianBlurSVGFilter.spec.stdDeviationY.defaultValue,
-      edgeMode: GaussianBlurSVGFilter.spec.edgeMode.defaultValue
-    });
-  }
-  getInCount() {
-    return 1;
-  }
-  convert(obj2) {
-    obj2.stdDeviationX = Length.parse(obj2.stdDeviationX);
-    obj2.stdDeviationY = Length.parse(obj2.stdDeviationY);
-    return obj2;
-  }
-  toString() {
-    var { stdDeviationX, stdDeviationY, edgeMode } = this.json;
-    var stdDeviation = `${stdDeviationX} ${stdDeviationY}`;
-    if (stdDeviationX === stdDeviationY) {
-      stdDeviation = stdDeviationX;
-    }
-    return `<feGaussianBlur  stdDeviation="${stdDeviation}" edgeMode="${edgeMode}"  ${this.getDefaultAttribute()} />`;
-  }
-}
-GaussianBlurSVGFilter.spec = {
-  stdDeviationX: {
-    title: "X",
-    inputType: "number-range",
-    min: 0,
-    max: 100,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  stdDeviationY: {
-    title: "Y",
-    inputType: "number-range",
-    min: 0,
-    max: 100,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  edgeMode: {
-    title: "edge",
-    inputType: "select",
-    options: "none,duplicate,wrap",
-    defaultValue: "none"
-  }
-};
-class FloodSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "Flood",
-      x: FloodSVGFilter.spec.x.defaultValue,
-      y: FloodSVGFilter.spec.y.defaultValue,
-      width: FloodSVGFilter.spec.width.defaultValue,
-      height: FloodSVGFilter.spec.height.defaultValue,
-      color: FloodSVGFilter.spec.color.defaultValue,
-      opacity: FloodSVGFilter.spec.opacity.defaultValue
-    });
-  }
-  convert(json) {
-    json.x = Length.parse(json.x);
-    json.y = Length.parse(json.y);
-    json.width = Length.parse(json.width);
-    json.height = Length.parse(json.height);
-    return json;
-  }
-  toString() {
-    const { opacity: opacity2, color: color2, x: x2, y: y2, width: width2, height } = this.json;
-    return `<feFlood ${OBJECT_TO_PROPERTY$1({
-      x: x2,
-      y: y2,
-      width: width2,
-      height
-    })} flood-opacity="${opacity2}" flood-color="${color2}" ${this.getDefaultAttribute()} />`;
-  }
-}
-FloodSVGFilter.spec = {
-  x: {
-    title: "X",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  y: {
-    title: "Y",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  width: {
-    title: "width",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  height: {
-    title: "height",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  opacity: {
-    title: "opacity",
-    inputType: "number-range",
-    min: 0,
-    max: 1,
-    step: 0.01,
-    defaultValue: Length.number(0)
-  },
-  color: {
-    title: "color",
-    inputType: "color",
-    defaultValue: "rgba(0, 0, 0, 1)"
-  }
-};
-class ComponentTransferSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "ComponentTransfer",
-      r: ComponentTransferSVGFilter.spec.r.defaultValue,
-      g: ComponentTransferSVGFilter.spec.g.defaultValue,
-      b: ComponentTransferSVGFilter.spec.b.defaultValue,
-      a: ComponentTransferSVGFilter.spec.a.defaultValue
-    });
-  }
-  getInCount() {
-    return 1;
-  }
-  parse(value) {
-    var [type, ...values] = value.split(" ");
-    if (type === "table" || type === "discrete") {
-      return { type, tableValues: values.join(" ") };
-    }
-    if (type === "linear") {
-      var [slop, intercept] = values;
-      return { type, slop, intercept };
-    } else if (type === "gamma") {
-      var [amplitude, exponent, offset] = values;
-      return { type, amplitude, exponent, offset };
-    }
-    return { type };
-  }
-  toString() {
-    var { r, g, b, a } = this.json;
-    r = this.parse(r);
-    g = this.parse(g);
-    b = this.parse(b);
-    a = this.parse(a);
-    return `<feComponentTransfer ${this.getDefaultAttribute()} >
-      ${r && `<feFuncR ${OBJECT_TO_PROPERTY$1(r)} />`}
-      ${g && `<feFuncG ${OBJECT_TO_PROPERTY$1(g)} />`}
-      ${b && `<feFuncB ${OBJECT_TO_PROPERTY$1(b)} />`}
-      ${a && `<feFuncA ${OBJECT_TO_PROPERTY$1(a)} />`}
-    </feComponentTransfe>`;
-  }
-}
-ComponentTransferSVGFilter.spec = {
-  r: {
-    title: "R",
-    inputType: "FuncFilter",
-    defaultValue: "identity"
-  },
-  g: {
-    title: "G",
-    inputType: "FuncFilter",
-    defaultValue: "identity"
-  },
-  b: {
-    title: "B",
-    inputType: "FuncFilter",
-    defaultValue: "identity"
-  },
-  a: {
-    title: "A",
-    inputType: "FuncFilter",
-    defaultValue: "identity"
-  }
-};
-class DistantLightSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "DistantLight",
-      azimuth: DistantLightSVGFilter.spec.azimuth.defaultValue,
-      elevation: DistantLightSVGFilter.spec.elevation.defaultValue
-    });
-  }
-  isLight() {
-    return true;
-  }
-  toString() {
-    return "";
-  }
-  toLightString() {
-    var { azimuth, elevation } = this.json;
-    return `<feDistantLight ${OBJECT_TO_PROPERTY$1({
-      azimuth,
-      elevation
-    })} />`;
-  }
-}
-DistantLightSVGFilter.spec = {
-  azimuth: {
-    title: "azimuth",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  elevation: {
-    title: "elevation",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  }
-};
-class PointLightSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "PointLight",
-      x: PointLightSVGFilter.spec.x.defaultValue,
-      y: PointLightSVGFilter.spec.y.defaultValue,
-      z: PointLightSVGFilter.spec.z.defaultValue
-    });
-  }
-  isLight() {
-    return true;
-  }
-  toString() {
-    return "";
-  }
-  toLightString() {
-    var { x: x2, y: y2, z } = this.json;
-    return `<fePointLight ${OBJECT_TO_PROPERTY$1({
-      x: x2,
-      y: y2,
-      z
-    })} />`;
-  }
-}
-PointLightSVGFilter.spec = {
-  x: {
-    title: "x",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  y: {
-    title: "y",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  z: {
-    title: "z",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  }
-};
-class SpotLightSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "SpotLight",
-      x: SpotLightSVGFilter.spec.x.defaultValue,
-      y: SpotLightSVGFilter.spec.x.defaultValue,
-      z: SpotLightSVGFilter.spec.x.defaultValue,
-      pointsAtX: SpotLightSVGFilter.spec.pointsAtX.defaultValue,
-      pointsAtY: SpotLightSVGFilter.spec.pointsAtY.defaultValue,
-      pointsAtZ: SpotLightSVGFilter.spec.pointsAtZ.defaultValue,
-      specularExponent: SpotLightSVGFilter.spec.specularExponent.defaultValue,
-      limitingConeAngle: SpotLightSVGFilter.spec.limitingConeAngle.defaultValue
-    });
-  }
-  isLight() {
-    return true;
-  }
-  toString() {
-  }
-  toLightString() {
-    var { x: x2, y: y2, z, pointsAtX, pointsAtY, pointsAtZ, specularExponent, limitingConeAngle } = this.json;
-    return `<feSpotLight ${OBJECT_TO_PROPERTY$1({
-      x: x2,
-      y: y2,
-      z,
-      pointsAtX,
-      pointsAtY,
-      pointsAtZ,
-      specularExponent,
-      limitingConeAngle
-    })} />`;
-  }
-}
-SpotLightSVGFilter.spec = {
-  x: {
-    title: "x",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  y: {
-    title: "y",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  z: {
-    title: "z",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  pointsAtX: {
-    title: "pointsAtX",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  pointsAtY: {
-    title: "pointsAtY",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  pointsAtZ: {
-    title: "pointsAtZ",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  specularExponent: {
-    title: "specularExponent",
-    inputType: "number-range",
-    min: 0,
-    max: 100,
-    step: 1,
-    defaultValue: Length.number(1)
-  },
-  limitingConeAngle: {
-    title: "limitingConeAngle",
-    inputType: "number-range",
-    min: 0,
-    max: 100,
-    step: 1,
-    defaultValue: Length.number(1)
-  }
-};
-class DiffuseLightingSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "DiffuseLighting",
-      surfaceScale: DiffuseLightingSVGFilter.spec.surfaceScale.defaultValue,
-      lightingColor: DiffuseLightingSVGFilter.spec.lightingColor.defaultValue,
-      diffuseConstant: DiffuseLightingSVGFilter.spec.diffuseConstant.defaultValue,
-      lightInfo: ""
-    });
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("surfaceScale", "lightingColor", "diffuseConstant", "lightInfo"));
-  }
-  hasLight() {
-    return true;
-  }
-  getInCount() {
-    return 1;
-  }
-  toString() {
-    var { surfaceScale, diffuseConstant, lightingColor } = this.json;
-    return `<feDiffuseLighting ${OBJECT_TO_PROPERTY$1({
-      surfaceScale,
-      diffuseConstant,
-      "lighting-color": lightingColor
-    })}  ${this.getDefaultAttribute()} >
-      ${this.json.lightInfo}
-    </feDiffuseLighting>`;
-  }
-}
-DiffuseLightingSVGFilter.spec = {
-  surfaceScale: {
-    title: "surfaceScale",
-    inputType: "number-range",
-    min: 0,
-    max: 100,
-    step: 1,
-    defaultValue: Length.number(1)
-  },
-  diffuseConstant: {
-    title: "diffuseConstant",
-    inputType: "number-range",
-    min: 0,
-    max: 100,
-    step: 1,
-    defaultValue: Length.number(1)
-  },
-  lightingColor: {
-    title: "Lighting Color",
-    inputType: "color",
-    defaultValue: "rgba(0, 0, 0, 1)"
-  }
-};
-class SpecularLightingSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "SpecularLighting",
-      surfaceScale: SpecularLightingSVGFilter.spec.surfaceScale.defaultValue,
-      lightingColor: SpecularLightingSVGFilter.spec.lightingColor.defaultValue,
-      specularConstant: SpecularLightingSVGFilter.spec.specularConstant.defaultValue,
-      specularExponent: SpecularLightingSVGFilter.spec.specularExponent.defaultValue,
-      lightInfo: ""
-    });
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("surfaceScale", "lightingColor", "specularConstant", "specularExponent", "lightInfo"));
-  }
-  hasLight() {
-    return true;
-  }
-  getInCount() {
-    return 1;
-  }
-  toString() {
-    var { surfaceScale, specularConstant, specularExponent, lightingColor } = this.json;
-    return `<feSpecularLighting ${OBJECT_TO_PROPERTY$1({
-      surfaceScale,
-      specularConstant,
-      specularExponent,
-      "lighting-color": lightingColor
-    })}  ${this.getDefaultAttribute()} >
-      ${this.json.lightInfo}
-    </feSpecularLighting>`;
-  }
-  getSourceInAttribute() {
-    return "";
-  }
-}
-SpecularLightingSVGFilter.spec = {
-  surfaceScale: {
-    title: "surfaceScale",
-    inputType: "number-range",
-    min: 0,
-    max: 100,
-    step: 1,
-    defaultValue: Length.number(1)
-  },
-  specularConstant: {
-    title: "Constant",
-    inputType: "number-range",
-    min: 0,
-    max: 100,
-    step: 1,
-    defaultValue: Length.number(1)
-  },
-  specularExponent: {
-    title: "Exponent",
-    inputType: "number-range",
-    min: 0,
-    max: 100,
-    step: 1,
-    defaultValue: Length.number(1)
-  },
-  lightingColor: {
-    title: "Lighting Color",
-    inputType: "color",
-    defaultValue: "rgba(0, 0, 0, 1)"
-  }
-};
-class OffsetSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "Offset",
-      dx: OffsetSVGFilter.spec.dx.defaultValue,
-      dy: OffsetSVGFilter.spec.dy.defaultValue
-    });
-  }
-  getInCount() {
-    return 1;
-  }
-  toString() {
-    var { dx, dy } = this.json;
-    return `<feOffset 
-      ${OBJECT_TO_PROPERTY$1({
-      dx,
-      dy
-    })}  ${this.getDefaultAttribute()} />`;
-  }
-}
-OffsetSVGFilter.spec = {
-  dx: {
-    title: "dx",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  dy: {
-    title: "dy",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  }
-};
-class BlendSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "Blend",
-      mode: BlendSVGFilter.spec.mode.defaultValue
-    });
-  }
-  getInCount() {
-    return 2;
-  }
-  toString() {
-    var { mode } = this.json;
-    return `<feBlend ${OBJECT_TO_PROPERTY$1({
-      mode
-    })} ${this.getDefaultAttribute()} />`;
-  }
-  hasInIndex() {
-    return true;
-  }
-}
-BlendSVGFilter.spec = {
-  mode: {
-    title: "mode",
-    inputType: "blend",
-    defaultValue: "normal"
-  }
-};
-class SourceSVGFilter extends BaseSVGFilter {
-  getDefaultObject(obj2 = {}) {
-    return super.getDefaultObject(__spreadValues({
-      type: "Source"
-    }, obj2));
-  }
-  isSource() {
-    return true;
-  }
-  toString() {
-    return "";
-  }
-}
-class SourceGraphicSVGFilter extends SourceSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "SourceGraphic"
-    });
-  }
-}
-class SourceAlphaSVGFilter extends SourceSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "SourceAlpha"
-    });
-  }
-}
-class BackgroundImageSVGFilter extends SourceSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "BackgroundImage"
-    });
-  }
-}
-class BackgroundAlphaSVGFilter extends SourceSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "BackgroundAlpha"
-    });
-  }
-}
-class FillPaintSVGFilter extends SourceSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "FillPaint"
-    });
-  }
-}
-class StrokePaintSVGFilter extends SourceSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "StrokePaint"
-    });
-  }
-}
-class DropShadowSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "DropShadow",
-      dx: DropShadowSVGFilter.spec.dx.defaultValue,
-      dy: DropShadowSVGFilter.spec.dy.defaultValue,
-      stdDeviation: DropShadowSVGFilter.spec.stdDeviation.defaultValue,
-      color: DropShadowSVGFilter.spec.color.defaultValue,
-      opacity: DropShadowSVGFilter.spec.opacity.defaultValue
-    });
-  }
-  getInCount() {
-    return 1;
-  }
-  toString() {
-    var { dx, dy, stdDeviation, color: color2, opacity: opacity2 } = this.json;
-    return `<feDropShadow ${OBJECT_TO_PROPERTY$1({
-      dx,
-      dy,
-      stdDeviation,
-      "flood-color": color2,
-      "flood-opacity": opacity2
-    })}  ${this.getDefaultAttribute()} />`;
-  }
-}
-DropShadowSVGFilter.spec = {
-  dx: {
-    title: "dx",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  dy: {
-    title: "dy",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  stdDeviation: {
-    title: "stdDeviation",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 0.1,
-    defaultValue: Length.number(0)
-  },
-  opacity: {
-    title: "opacity",
-    inputType: "number-range",
-    min: 0,
-    max: 1,
-    step: 0.01,
-    defaultValue: Length.number(1)
-  },
-  color: {
-    title: "color",
-    inputType: "color",
-    defaultValue: "rgba(0, 0, 0, 1)"
-  }
-};
-class SaturateSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "Saturate",
-      values: SaturateSVGFilter.spec.values.defaultValue
-    });
-  }
-  getInCount() {
-    return 1;
-  }
-  toString() {
-    var { values } = this.json;
-    return `<feColorMatrix type="saturate" values="${values}"  ${this.getDefaultAttribute()} />`;
-  }
-}
-SaturateSVGFilter.spec = {
-  values: {
-    title: "values",
-    inputType: "number-range",
-    min: -1,
-    max: 1,
-    step: 0.01,
-    defaultValue: Length.number(0)
-  }
-};
-class HueRotateSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "HueRotate",
-      values: HueRotateSVGFilter.spec.values.defaultValue
-    });
-  }
-  getInCount() {
-    return 1;
-  }
-  toString() {
-    var { values } = this.json;
-    return `<feColorMatrix type="hueRotate" values="${values}"  ${this.getDefaultAttribute()} />`;
-  }
-}
-HueRotateSVGFilter.spec = {
-  values: {
-    title: "values",
-    inputType: "number-range",
-    min: 0,
-    max: 360,
-    step: 0.1,
-    defaultValue: Length.number(0)
-  }
-};
-class LuminanceAlphaSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "LuminanceAlpha"
-    });
-  }
-  getInCount() {
-    return 1;
-  }
-  toString() {
-    return `<feColorMatrix type="luminanceToAlpha" ${this.getDefaultAttribute()} />`;
-  }
-}
-LuminanceAlphaSVGFilter.spec = {};
-class TileSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "Tile",
-      x: TileSVGFilter.spec.x.defaultValue,
-      y: TileSVGFilter.spec.y.defaultValue,
-      width: TileSVGFilter.spec.width.defaultValue,
-      height: TileSVGFilter.spec.height.defaultValue
-    });
-  }
-  getInCount() {
-    return 1;
-  }
-  convert(json) {
-    json.x = Length.parse(json.x);
-    json.y = Length.parse(json.y);
-    json.width = Length.parse(json.width);
-    json.height = Length.parse(json.height);
-    return json;
-  }
-  toString() {
-    const { x: x2, y: y2, width: width2, height } = this.json;
-    return `<feTile ${OBJECT_TO_PROPERTY$1({
-      x: x2,
-      y: y2,
-      width: width2,
-      height
-    })} ${this.getDefaultAttribute()} />`;
-  }
-}
-TileSVGFilter.spec = {
-  x: {
-    title: "X",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  y: {
-    title: "Y",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  width: {
-    title: "width",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  height: {
-    title: "height",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  }
-};
-class ImageSVGFilter extends BaseSVGFilter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "Image",
-      x: ImageSVGFilter.spec.x.defaultValue,
-      y: ImageSVGFilter.spec.y.defaultValue,
-      width: ImageSVGFilter.spec.width.defaultValue,
-      height: ImageSVGFilter.spec.height.defaultValue,
-      src: ImageSVGFilter.spec.src.defaultValue,
-      alignment: ImageSVGFilter.spec.alignment.defaultValue,
-      scaleing: ImageSVGFilter.spec.scaleing.defaultValue
-    });
-  }
-  convert(json) {
-    json.x = Length.parse(json.x);
-    json.y = Length.parse(json.y);
-    json.width = Length.parse(json.width);
-    json.height = Length.parse(json.height);
-    return json;
-  }
-  toString() {
-    const { src, x: x2, y: y2, width: width2, height, alignment: alignment2, scaleing } = this.json;
-    return `<feImage ${OBJECT_TO_PROPERTY$1({
-      x: x2,
-      y: y2,
-      width: width2,
-      height,
-      "xlink:href": src,
-      preserveAspectRatio: `${alignment2} ${scaleing}`
-    })} ${this.getDefaultAttribute()} />`;
-  }
-}
-ImageSVGFilter.spec = {
-  x: {
-    title: "X",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  y: {
-    title: "Y",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  width: {
-    title: "width",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  height: {
-    title: "height",
-    inputType: "number-range",
-    min: 0,
-    max: 1e3,
-    step: 1,
-    defaultValue: Length.number(0)
-  },
-  alignment: {
-    title: "alignment",
-    inputType: "select",
-    options: "xMinYMin,xMidYMin,xMaxYMin,xMinYMid,xMidYMid,xMaxYMid,xMinYMax,xMidYMax,xMaxYMax",
-    defaultValue: "xMidYMid"
-  },
-  scaleing: {
-    title: "scaleing",
-    inputType: "select",
-    options: "meet,slice",
-    defaultValue: "meet"
-  },
-  src: {
-    title: "Image",
-    inputType: "ImageSelectEditor",
-    defaultValue: ""
-  }
-};
-const SVG_FILTER_COMMON_ATTRIBUTES = [
-  "result"
-];
-class SVGFilter extends PropertyItem {
-  static parse(obj2) {
-    var FilterClass = SVGFilterClassName[obj2.type];
-    return new FilterClass(obj2);
-  }
-  getDefaultObject(obj2 = {}) {
-    return super.getDefaultObject(__spreadValues({
-      itemType: "svgfilter",
-      result: ""
-    }, obj2));
-  }
-  getDefaultAttribute() {
-    return SVG_FILTER_COMMON_ATTRIBUTES.map((key) => {
-      return `${key}="${this.json[key]}"`;
-    }).join(" ");
-  }
-  toString() {
-    var { type, value } = this.json;
-    return `<fe${type} value="${value}" ${this.getDefaultAttribute()} />`;
-  }
-}
-const SVGFilterClassName = {
-  Image: ImageSVGFilter,
-  Tile: TileSVGFilter,
-  Saturate: SaturateSVGFilter,
-  HueRotate: HueRotateSVGFilter,
-  LuminanceAlpha: LuminanceAlphaSVGFilter,
-  DropShadow: DropShadowSVGFilter,
-  SourceGraphic: SourceGraphicSVGFilter,
-  SourceAlpha: SourceAlphaSVGFilter,
-  BackgroundImage: BackgroundImageSVGFilter,
-  BackgroundAlpha: BackgroundAlphaSVGFilter,
-  FillPaint: FillPaintSVGFilter,
-  StrokePaint: StrokePaintSVGFilter,
-  ComponentTransfer: ComponentTransferSVGFilter,
-  DistantLight: DistantLightSVGFilter,
-  PointLight: PointLightSVGFilter,
-  SpotLight: SpotLightSVGFilter,
-  DiffuseLighting: DiffuseLightingSVGFilter,
-  SpecularLighting: SpecularLightingSVGFilter,
-  Blend: BlendSVGFilter,
-  Offset: OffsetSVGFilter,
-  RotaMatrix: RotaMatrixSVGFilter,
-  GaussianBlur: GaussianBlurSVGFilter,
-  Flood: FloodSVGFilter,
-  Merge: MergeSVGFilter,
-  Composite: CompositeSVGFilter,
-  Morphology: MorphologySVGFilter,
-  Turbulence: TurbulenceSVGFilter,
-  DisplacementMap: DisplacementMapSVGFilter,
-  ColorMatrix: ColorMatrixSVGFilter,
-  ConvolveMatrix: ConvolveMatrixSVGFilter
-};
-const SVGFilterSpecList = {
-  Image: ImageSVGFilter.spec,
-  Tile: TileSVGFilter.spec,
-  DropShadow: DropShadowSVGFilter.spec,
-  Saturate: SaturateSVGFilter.spec,
-  HueRotate: HueRotateSVGFilter.spec,
-  LuminanceAlpha: LuminanceAlphaSVGFilter.spec,
-  Offset: OffsetSVGFilter.spec,
-  ComponentTransfer: ComponentTransferSVGFilter.spec,
-  SpecularLighting: SpecularLightingSVGFilter.spec,
-  SpotLight: SpotLightSVGFilter.spec,
-  PointLight: PointLightSVGFilter.spec,
-  DistantLight: DistantLightSVGFilter.spec,
-  DiffuseLighting: DiffuseLightingSVGFilter.spec,
-  Blend: BlendSVGFilter.spec,
-  RotaMatrix: RotaMatrixSVGFilter.spec,
-  Merge: MergeSVGFilter.spec,
-  GaussianBlur: GaussianBlurSVGFilter.spec,
-  Flood: FloodSVGFilter.spec,
-  Morphology: MorphologySVGFilter.spec,
-  Composite: CompositeSVGFilter.spec,
-  Turbulence: TurbulenceSVGFilter.spec,
-  DisplacementMap: DisplacementMapSVGFilter.spec,
-  ColorMatrix: ColorMatrixSVGFilter.spec,
-  ConvolveMatrix: ConvolveMatrixSVGFilter.spec
-};
-const ZERO_CONFIG = {};
-const WEBKIT_ATTRIBUTE_FOR_CSS = [
-  "text-fill-color",
-  "text-stroke-color",
-  "text-stroke-width",
-  "background-clip"
-];
-class DomRender$1 extends ItemRender$1 {
-  toStringPropertyCSS(item2, field) {
-    return STRING_TO_CSS(item2[field]);
-  }
-  toBackgroundImageCSS(item2) {
-    if (!item2.cacheBackgroundImage) {
-      item2.setBackgroundImageCache();
-    }
-    return item2.cacheBackgroundImage;
-  }
-  toLayoutCSS(item2) {
-    const layout2 = item2.layout;
-    if (item2.hasLayout()) {
-      if (layout2 === "flex") {
-        return this.toFlexLayoutCSS(item2);
-      } else if (layout2 === "grid") {
-        return this.toGridLayoutCSS(item2);
-      }
-    }
-    return {};
-  }
-  toLayoutItemCSS(item2) {
-    var _a;
-    var parentLayout = (_a = item2.parent) == null ? void 0 : _a["layout"];
-    var obj2 = {};
-    if (parentLayout === "flex") {
-      obj2 = {
-        position: "relative",
-        left: "auto !important",
-        top: "auto !important"
-      };
-    } else if (parentLayout === "grid") {
-      obj2 = {
-        position: "relative",
-        left: "auto !important",
-        top: "auto !important",
-        width: "auto !important",
-        height: "auto !important"
-      };
-    }
-    if (parentLayout === "flex") {
-      let itemInfo = item2["flex-layout-item"];
-      if (itemInfo === "auto") {
-        obj2["flex"] = "auto";
-      } else {
-        obj2 = Object.assign(obj2, STRING_TO_CSS(itemInfo));
-      }
-    } else if (parentLayout === "grid") {
-      obj2 = __spreadValues(__spreadValues({}, obj2), STRING_TO_CSS(item2["grid-layout-item"]));
-    }
-    return obj2;
-  }
-  toFlexLayoutCSS(item2) {
-    return __spreadValues({
-      display: "flex"
-    }, this.toStringPropertyCSS(item2, "flex-layout"));
-  }
-  toGridLayoutCSS(item2) {
-    return __spreadValues({
-      display: "grid"
-    }, this.toStringPropertyCSS(item2, "grid-layout"));
-  }
-  toBorderCSS(item2) {
-    if (item2.hasChildren())
-      return {};
-    return item2.computed("border", (border2) => {
-      return STRING_TO_CSS(border2);
-    });
-  }
-  toKeyCSS(key) {
-    if (!item[key])
-      return {};
-    return {
-      [key]: item[key]
-    };
-  }
-  toBoxModelCSS(item2) {
-    let obj2 = {};
-    if (item2["margin-top"])
-      obj2["margin-top"] = item2["margin-top"];
-    if (item2["margin-bottom"])
-      obj2["margin-bottom"] = item2["margin-bottom"];
-    if (item2["margin-left"])
-      obj2["margin-left"] = item2["margin-left"];
-    if (item2["margin-right"])
-      obj2["margin-right"] = item2["margin-right"];
-    if (item2["padding-top"])
-      obj2["padding-top"] = item2["padding-top"];
-    if (item2["padding-bottom"])
-      obj2["padding-bottom"] = item2["padding-bottom"];
-    if (item2["padding-left"])
-      obj2["padding-left"] = item2["padding-left"];
-    if (item2["padding-right"])
-      obj2["padding-right"] = item2["padding-right"];
-    return obj2;
-  }
-  toKeyListCSS(item2, args2 = []) {
-    let obj2 = {};
-    args2.filter((it) => isNotUndefined(item2.json[it])).forEach((it) => {
-      obj2[it] = item2.json[it];
-    });
-    return obj2;
-  }
-  toSizeCSS(item2) {
-    const obj2 = {};
-    if (item2.right && item2.right.unit !== "auto")
-      ;
-    else {
-      obj2.width = item2.width;
-    }
-    if (item2.bottom && item2.bottom.unit !== "auto")
-      ;
-    else {
-      obj2.height = item2.height;
-    }
-    return __spreadValues({}, obj2);
-  }
-  toDefaultCSS(item2) {
-    let obj2 = {};
-    if (item2.isAbsolute) {
-      if (item2.x) {
-        obj2.left = item2.x;
-      }
-      if (item2.y) {
-        obj2.top = item2.y;
-      }
-      if (item2.right) {
-        obj2.right = item2.right;
-      }
-      if (item2.bottom) {
-        obj2.bottom = item2.bottom;
-      }
-    }
-    let result = {};
-    result = Object.assign(result, obj2);
-    result = Object.assign(result, this.toKeyListCSS(item2, [
-      "position",
-      "overflow",
-      "z-index",
-      "box-sizing",
-      "background-color",
-      "color",
-      "opacity",
-      "mix-blend-mode",
-      "transform-origin",
-      "transform-style",
-      "perspective",
-      "perspective-origin",
-      "font-size",
-      "font-stretch",
-      "line-height",
-      "font-weight",
-      "font-family",
-      "font-style",
-      "text-align",
-      "text-transform",
-      "text-decoration",
-      "letter-spacing",
-      "word-spacing",
-      "text-indent",
-      "border-radius",
-      "filter",
-      "backdrop-filter",
-      "box-shadow",
-      "text-shadow",
-      "offset-path",
-      "animation",
-      "transition"
-    ]));
-    return result;
-  }
-  toVariableCSS(item2) {
-    const v = item2.computed("variable", (v2) => {
-      let obj2 = {};
-      v2.split(";").filter((it) => it.trim()).forEach((it) => {
-        const [key, value] = it.split(":");
-        obj2[`--${key}`] = value;
-      });
-      return obj2;
-    });
-    return v;
-  }
-  toRootVariableCSS(item2) {
-    let obj2 = {};
-    item2.rootVariable.split(";").filter((it) => it.trim()).forEach((it) => {
-      const [key, value] = it.split(":");
-      obj2[`--${key}`] = value;
-    });
-    return obj2;
-  }
-  toRootVariableString(item2) {
-    return CSS_TO_STRING$1(this.toRootVariableCSS(item2));
-  }
-  toWebkitCSS(item2) {
-    var results = {};
-    WEBKIT_ATTRIBUTE_FOR_CSS.forEach((key) => {
-      results[`-webkit-${key}`] = item2[key];
-    });
-    return results;
-  }
-  toTextClipCSS(item2) {
-    let results = {};
-    if (item2["text-clip"] === "text") {
-      results["-webkit-background-clip"] = "text";
-      results["-webkit-text-fill-color"] = "transparent";
-      results["color"] = "transparent";
-    }
-    return results;
-  }
-  toTransformCSS(item2) {
-    if (item2.transform === "") {
-      return ZERO_CONFIG;
-    }
-    const results = {
-      transform: item2["transform"]
-    };
-    if (results.transform === "rotateZ(0deg)") {
-      delete results.transform;
-    }
-    return {
-      transform: results.transform
-    };
-  }
-  toDefInnerString(item2) {
-    return `
-      ${this.toClipPath(item2)}
-      ${this.toSVGFilter(item2)}
-    `.trim();
-  }
-  toClipPath(item2) {
-    if (item2["clip-path"] === "")
-      return "";
-    if (!item2.cacheClipPathObject) {
-      item2.setClipPathCache();
-    }
-    var obj2 = item2.cacheClipPathObject;
-    var value = obj2.value;
-    switch (obj2.type) {
-      case "path":
-        return `<clipPath id="${this.clipPathId(item2)}"><path d="${item2.clipPathString}" /></clipPath>`;
-      case "svg":
-        return `<clipPath id="${this.clipPathId(item2)}">${value}</clipPath>`;
-    }
-    return ``;
-  }
-  toClipPathCSS(item2) {
-    let str = item2["clip-path"];
-    if (Boolean(str) === false) {
-      return null;
-    }
-    if (!item2.cacheClipPathObject) {
-      item2.setClipPathCache();
-    }
-    var obj2 = item2.cacheClipPathObject;
-    switch (obj2.type) {
-      case "path":
-        if (obj2.value) {
-          str = `url(#${this.clipPathId(item2)})`;
-        }
-        break;
-      case "svg":
-        str = `url(#${this.clipPathId(item2)})`;
-        break;
-    }
-    return {
-      "clip-path": str
-    };
-  }
-  innerSVGId(item2) {
-    return item2.id + "inner-svg";
-  }
-  booleanId(item2) {
-    return item2.id + "boolean";
-  }
-  clipPathId(item2) {
-    return item2.id + "clip-path";
-  }
-  toDefString(item2) {
-    var str = this.toDefInnerString(item2);
-    return str ? `
-    <svg class='inner-svg-element' style="display:block" data-id="${this.innerSVGId(item2)}" width="0" height="0">
-      <defs>
-        ${str}
-      </defs>
-    </svg>
-    ` : "";
-  }
-  toSelectorString(item2, prefix = "") {
-    return item2.selectors.map((selector2) => selector2.toString(prefix)).join("\n\n");
-  }
-  generateView(item2, prefix = "", appendCSS = "") {
-    var cssString = `
-  ${prefix} {  /* ${item2.itemType} */
-      ${CSS_TO_STRING$1(this.toCSS(item2), "\n    ")}; 
-      ${appendCSS}
-  }
-  ${this.toNestedCSS(item2).map((it) => {
-      return `${prefix} ${it.selector} { 
-        ${it.cssText ? it.cssText : CSS_TO_STRING$1(it.css || {}, "\n		")}; 
-    }`;
-    }).join("\n")}
-  ${this.toSelectorString(item2, prefix)}
-    `;
-    return cssString;
-  }
-  toCSS(item2) {
-    return Object.assign({}, this.toVariableCSS(item2), this.toDefaultCSS(item2), this.toSizeCSS(item2), this.toClipPathCSS(item2), this.toWebkitCSS(item2), this.toTextClipCSS(item2), this.toBoxModelCSS(item2), this.toBorderCSS(item2), this.toBackgroundImageCSS(item2), this.toLayoutCSS(item2), this.toTransformCSS(item2), this.toLayoutItemCSS(item2));
-  }
-  toStyle(item2, renderer) {
-    const cssString = this.generateView(item2, `[data-renderer-id='${renderer.id}'] .element-item[data-id='${item2.id}']`);
-    return `
-<style type='text/css' data-renderer-type="html" data-id='${item2.id}' data-timestamp='${item2.timestamp}'>
-${cssString}
-</style>
-    ` + item2.layers.map((it) => {
-      return renderer.toStyle(it, renderer);
-    }).join("");
-  }
-  toExportStyle(item2, renderer) {
-    const cssString = this.generateView(item2, `.element-item[data-id='${item2.id}']`);
-    return `
-<style type='text/css' data-renderer-type="html" data-id='${item2.id}' data-timestamp='${item2.timestamp}'>
-${cssString}
-</style>
-    ` + item2.layers.map((it) => {
-      return renderer.toExportStyle(it, renderer);
-    }).join("");
-  }
-  render(item2, renderer) {
-    var { elementType, id, name: name2, itemType, isBooleanItem } = item2;
-    const tagName = elementType || "div";
-    return `<${tagName} class="element-item ${itemType}" data-is-boolean-item="${isBooleanItem}" data-id="${id}" data-title="${name2}">
-  ${this.toDefString(item2)}
-  ${item2.layers.map((it) => {
-      return renderer.render(it, renderer);
-    }).join("")}
-</${tagName}>`;
-  }
-  toSVGFilter(item2) {
-    var filterString = item2.computedValue("svgfilters");
-    if (item2.hasChangedField("svgfilters") || !filterString) {
-      filterString = item2.computed("svgfilters", (svgfilters) => {
-        var filterString2 = svgfilters.map((svgfilter) => {
-          return `
-              <filter id='${svgfilter.id}'>
-                ${svgfilter.filters.map((filter2) => SVGFilter.parse(filter2)).join("\n")}
-              </filter>`;
-        }).join("");
-        return filterString2;
-      }, true);
-    }
-    return filterString;
-  }
-  renderSVG(item2, renderer) {
-  }
-  toNestedCSS(item2) {
-    const result = [];
-    return result;
-  }
-  update(item2, currentElement) {
-    if (!currentElement)
-      return;
-    let $svg = currentElement.el.$svg;
-    currentElement.el.$booleanSvg;
-    if (!$svg) {
-      currentElement.el.$svg = currentElement.$(`[data-id="${this.innerSVGId(item2)}"]`);
-      $svg = currentElement.el.$svg;
-      currentElement.el.$booleanSvg = currentElement.$(`[data-id="${this.booleanId(item2)}"]`);
-      currentElement.el.$booleanSvg;
-    }
-    if (currentElement.data("is-boolean-item") !== `${item2.isBooleanItem}`) {
-      currentElement.attr("data-is-boolean-item", item2.isBooleanItem);
-    }
-    if ($svg) {
-      const defString = this.toDefInnerString(item2);
-      if (defString) {
-        var $defs = $svg.$("defs");
-        $defs.updateSVGDiff(`<defs>${defString}</defs>`);
-      }
-    } else {
-      const defString = this.toDefString(item2);
-      if (defString) {
-        var a = Dom.createByHTML(defString);
-        if (a) {
-          currentElement.prepend(a);
-        }
-      }
-    }
-  }
-}
-class LayerRender$1 extends DomRender$1 {
 }
 const image_size = [
   "",
@@ -38916,12 +37467,13 @@ function layerTree(editor) {
     LayerTreeProperty
   });
 }
+var FlexLayoutEditor$1 = "";
 class FlexLayoutEditor extends EditorElement {
   getDirectionOptions() {
     return this.makeOptionsFunction("row,column,row-reverse,column-reverse");
   }
   getWrapOptions() {
-    return this.makeOptionsFunction("nowrap,wrap,wrap-reverse");
+    return this.makeOptionsFunction("nowrap,wrap");
   }
   getJustifyContentOptions() {
     return this.makeOptionsFunction("flex-start,flex-end,center,space-between,space-around");
@@ -38946,48 +37498,52 @@ class FlexLayoutEditor extends EditorElement {
   getValue() {
     return CSS_TO_STRING$1(this.state);
   }
-  modifyData() {
-    this.parent.trigger(this.props.onchange, this.props.key, this.getValue());
+  modifyData(key, value) {
+    this.parent.trigger(this.props.onchange, key, value);
   }
   [LOAD("$body")]() {
     return `
             <div class='flex-layout-item'>
-                <div class='label'><label>${this.$i18n("flex.layout.editor.direction")}</label></div>
-                <object refClass="SelectIconEditor" 
-                    key='flex-direction'
-                    value="${this.state["flex-direction"] || "row"}"
-                    options="${this.getDirectionOptions()}"
-                    icons=${variable$4(["view_week", "table_rows", "view_week_reverse", "table_rows"])}
-                    onchange='changeKeyValue'
-                />
+                <div class="grid-2">
+                    <div>
+
+                        <object refClass="SelectIconEditor" 
+                            key='flex-direction'
+                            value="${this.state["flex-direction"] || "row"}"
+                            options="${this.getDirectionOptions()}"
+                            icons=${variable$4(["east", "south", "west", "north"])}
+                            onchange='changeKeyValue'
+                        />
+                    </div>
+
+                    <div>
+                        <label>
+                            <input type="checkbox" ${this.state["flex-wrap"] === "wrap" ? "checked" : ""} ref="$wrap" /> Wrap
+                        </label>
+                    </div>
+                </div>
+
             </div>
             <div class='flex-layout-item'>
-                <div class='label'><label>${this.$i18n("flex.layout.editor.wrap")}</label></div>
-                <object refClass="SelectIconEditor" 
-                    key='flex-wrap'
-                    value="${this.state["flex-wrap"] || "wrap"}"
-                    options="${this.getWrapOptions()}"
-                    icons=${variable$4([, "wrap_text"])}
-                    onchange='changeKeyValue'
-                />
+
             </div>
             <div class='flex-layout-item'>
-                <div class='label'><label>${this.$i18n("flex.layout.editor.justify-content")}</label></div>
                 <object refClass="SelectIconEditor" 
                     key='justify-content'
+                    label="${this.$i18n("flex.layout.editor.justify-content")}"
                     value="${this.state["justify-content"] || "flex-start"}"
                     options="${this.getJustifyContentOptions()}"
-                    icons=${variable$4(["start", "end", "center", "horizontal_distribute"])}                                        
+                    icons=${variable$4(["start", "end", "center", "horizontal_distribute", "justify_content_space_around"])}
                     onchange='changeKeyValue'
                 />
             </div>
             <div class='flex-layout-item'>
-                <div class='label'><label>${this.$i18n("flex.layout.editor.align-items")}</label></div>
                 <object refClass="SelectIconEditor" 
+                    label="${this.$i18n("flex.layout.editor.align-items")}"
                     key='align-items'
                     value="${this.state["align-items"] || "flex-start"}"
                     options="${this.getAlignItemsOptions()}"
-                    icons=${variable$4(["vertical_align_top", "vertical_align_bottom", "vertical_align_center"])}                    
+                    icons=${variable$4(["vertical_align_top", "vertical_align_bottom", "vertical_align_center", "vertical_align_baseline", "vertical_align_stretch"])}
                     onchange='changeKeyValue'
                 />
             </div>
@@ -39011,7 +37567,14 @@ class FlexLayoutEditor extends EditorElement {
     this.setState({
       [key]: value
     }, false);
-    this.modifyData();
+    this.modifyData(key, value);
+  }
+  [CLICK("$wrap")]() {
+    const checked = !this.refs.$wrap.checked();
+    this.setState({
+      "flex-wrap": checked ? "wrap" : "nowrap"
+    }, false);
+    this.modifyData("flex-wrap", checked ? "wrap" : "nowrap");
   }
 }
 class FlexLayoutItemEditor extends EditorElement {
@@ -39108,13 +37671,13 @@ class FlexLayoutItemProperty extends BaseProperty {
   }
   [LOAD("$body")]() {
     var current = this.$selection.current || { "flex-layout-item": "none" };
-    var valueType = current["flex-layout-item"] || "none";
+    var valueType2 = current["flex-layout-item"] || "none";
     var arr = [];
-    if (["none", "auto"].includes(valueType) === false) {
-      arr = valueType.split(" ");
+    if (["none", "auto"].includes(valueType2) === false) {
+      arr = valueType2.split(" ");
     }
     if (arr.length > 0) {
-      valueType = "value";
+      valueType2 = "value";
     }
     return `
       <div class='layout-select'>
@@ -39122,7 +37685,7 @@ class FlexLayoutItemProperty extends BaseProperty {
         ref='$layout' 
         key='layout' 
         icon="true" 
-        value="${valueType}"
+        value="${valueType2}"
         options="${this.getLayoutOptions()}"  
         onchange="changeLayoutType" />
       </div>
@@ -39144,7 +37707,10 @@ class FlexLayoutItemProperty extends BaseProperty {
     `;
   }
   getFlexItemValue(value) {
-    return value.unit === "auto" ? "auto" : value + "";
+    if ((value == null ? void 0 : value.isString()) && value.unit === "" && value.value !== "auto") {
+      return 0;
+    }
+    return value.unit === "auto" ? "auto" : value;
   }
   getFlexValue() {
     var grow = this.children.$grow.getValue();
@@ -39153,26 +37719,23 @@ class FlexLayoutItemProperty extends BaseProperty {
     grow = this.getFlexItemValue(grow);
     shrink = this.getFlexItemValue(shrink);
     basis = this.getFlexItemValue(basis);
-    return CSS_TO_STRING$1({
-      flex: `${grow} ${shrink} ${basis}`
-    });
+    return {
+      "flex-grow": grow,
+      "flex-shrink": shrink,
+      "flex-basis": basis
+    };
   }
   [SUBSCRIBE_SELF("changeFlexItem")](key, value) {
     this.command("setAttributeForMulti", "change flex layout", this.$selection.packByValue({
-      "flex-layout-item": this.getFlexValue()
+      [key]: value
     }));
     this.nextTick(() => {
       this.emit("refreshAllElementBoundSize");
     });
   }
   [SUBSCRIBE_SELF("changeLayoutType")](key, value) {
-    var valueType = this.children.$layout.getValue();
-    var value = valueType;
-    if (valueType === "value") {
-      value = this.getFlexValue();
-    }
     this.command("setAttributeForMulti", "change flex layout", this.$selection.packByValue({
-      "flex-layout-item": value
+      "flex": value
     }));
     this.refs.$layoutList.attr("data-selected-value", valueType);
     this.nextTick(() => {
@@ -39541,13 +38104,13 @@ class GridLayoutItemProperty extends BaseProperty {
   }
   [LOAD("$body")]() {
     var current = this.$selection.current || { "grid-layout-item": "none" };
-    var valueType = current["grid-layout-item"] || "none";
+    var valueType2 = current["grid-layout-item"] || "none";
     var obj2 = {};
-    if (["none"].includes(valueType) === false) {
+    if (["none"].includes(valueType2) === false) {
       obj2 = STRING_TO_CSS(current["grid-layout-item"]);
     }
     if (Object.keys(obj2).length > 0) {
-      valueType = "value";
+      valueType2 = "value";
     }
     return `
       <div class='layout-select'>
@@ -39555,11 +38118,11 @@ class GridLayoutItemProperty extends BaseProperty {
         ref='$layout' 
         key='layout' 
         icon="true" 
-        value="${valueType}"
+        value="${valueType2}"
         options="${this.getLayoutOptions()}"  
         onchange="changeLayoutType" />
       </div>
-      <div class='layout-list' ref='$layoutList' data-selected-value='${valueType}'>
+      <div class='layout-list' ref='$layoutList' data-selected-value='${valueType2}'>
         <div data-value='none'></div>
         <div data-value='value'>
           <div class='value-item'>
@@ -39607,15 +38170,15 @@ class GridLayoutItemProperty extends BaseProperty {
     });
   }
   [SUBSCRIBE_SELF("changeLayoutType")](key, value) {
-    var valueType = this.children.$layout.getValue();
-    var value = valueType;
-    if (valueType === "value") {
+    var valueType2 = this.children.$layout.getValue();
+    var value = valueType2;
+    if (valueType2 === "value") {
       value = this.getGridValue();
     }
     this.command("setAttributeForMulti", "change grid layout item", this.$selection.packByValue({
       "grid-layout-item": value
     }));
-    this.refs.$layoutList.attr("data-selected-value", valueType);
+    this.refs.$layoutList.attr("data-selected-value", valueType2);
     this.nextTick(() => {
       this.emit("refreshAllElementBoundSize");
     });
@@ -39632,32 +38195,38 @@ class LayoutProperty extends BaseProperty {
   getTitle() {
     return this.$i18n("layout.property.title");
   }
-  getLayoutOptions() {
-    return variable$4(["default", "flex", "grid"].map((it) => {
-      return { value: it, text: this.$i18n(`layout.property.${it}`) };
-    }));
-  }
   getClassName() {
     return "elf--layout-property";
   }
   getBody() {
     return `
-        <div class='property-item' ref='$layoutType'></div>
+        <div class='property-item' ref='$layoutProperty'></div>
       `;
   }
+  getTools() {
+    return `
+      <div ref='$layoutType'></div>
+    `;
+  }
   [LOAD("$layoutType")]() {
+    const current = this.$selection.current;
+    if (!current)
+      return "";
+    return `
+      <object refClass="SelectIconEditor" ${variable$4({
+      ref: "$layout",
+      key: "layout",
+      value: current.layout,
+      options: ["default", "flex", "grid"],
+      icons: ["layout_default", "layout_flex", "layout_grid"],
+      onchange: "changeLayoutType"
+    })}
+      />
+    `;
+  }
+  [LOAD("$layoutProperty")]() {
     var current = this.$selection.current || { layout: "default" };
     return `
-      <div class='layout-select'>
-        <object refClass="SelectIconEditor" 
-          ref='$layout' 
-          key='layout' 
-          icon="true" 
-          value="${current.layout}"
-          options="${this.getLayoutOptions()}"  
-          colors=",green,red"
-          onchange="changeLayoutType" />
-      </div>
       <div class='layout-list' ref='$layoutList'>
         <div data-value='default' class='${current.layout === "default" ? "selected" : ""}'></div>
         <div data-value='flex' class='${current.layout === "flex" ? "selected" : ""}'>
@@ -39670,6 +38239,7 @@ class LayoutProperty extends BaseProperty {
     `;
   }
   [SUBSCRIBE_SELF("changeLayoutInfo")](key, value) {
+    console.log(key, value);
     this.command("setAttributeForMulti", "change layout info", this.$selection.packByValue({
       [key]: value
     }));
@@ -39693,103 +38263,124 @@ class LayoutProperty extends BaseProperty {
   get editableProperty() {
     return "layout";
   }
-  hasChildren() {
-    return this.$selection.current.hasChildren();
+  enableHasChildren() {
+    return this.$selection.current.enableHasChildren();
   }
-  [SUBSCRIBE("refreshSelection") + IF("checkShow") + IF("hasChildren")]() {
+  [SUBSCRIBE("refreshSelection") + IF("checkShow") + IF("enableHasChildren")]() {
     this.refresh();
   }
 }
 var DefaultLayoutItemProperty$1 = "";
 class DefaultLayoutItemProperty extends BaseProperty {
   getTitle() {
-    return this.$i18n("flex.layout.item.property.title");
+    return this.$i18n("default.layout.item.property.title.constraints");
   }
   getClassName() {
-    return "elf--flex-layout-item-property";
-  }
-  getLayoutOptions() {
-    return variable$4(["none", "auto", "value"].map((it) => {
-      return { value: it, text: this.$i18n(`flex.layout.item.property.${it}`) };
-    }));
+    return "elf--default-layout-item-property";
   }
   getBody() {
     return `
-        <div class='property-item' ref='$body'></div>
+        <div class='property-item' ref='$body'>
+          <div class="constraints">
+            <div ref="$constraintsInfo"></div>
+            <div ref="$constraintsInfoInput"></div>
+          </div>
+        </div>
       `;
   }
-  [LOAD("$body")]() {
-    var current = this.$selection.current || { "flex-layout-item": "none" };
-    var valueType = current["flex-layout-item"] || "none";
-    var arr = [];
-    if (["none", "auto"].includes(valueType) === false) {
-      arr = valueType.split(" ");
-    }
-    if (arr.length > 0) {
-      valueType = "value";
-    }
+  [LOAD("$constraintsInfo") + DOMDIFF]() {
+    var current = this.$selection.current || {};
+    const h = current["constraints-horizontal"] || Constraints.MIN;
+    const v = current["constraints-vertical"] || Constraints.MIN;
     return `
-      <div class='layout-select'>
-        <object refClass="SelectIconEditor" 
-        ref='$layout' 
-        key='layout' 
-        icon="true" 
-        value="${valueType}"
-        options="${this.getLayoutOptions()}"  
-        onchange="changeLayoutType" />
-      </div>
-      <div class='layout-list' ref='$layoutList' data-selected-value='${current.layout}'>
-        <div data-value='none'></div>
-        <div data-value='auto'></div>
-        <div data-value='value'>
-          <div class='value-item'>
-            <object refClass="RangeEditor"  ref='$grow' label='${this.$i18n("flex.layout.item.property.grow")}' key="flex-grow" value="${arr[0]}" min='0' max='1' step='0.01' units=",auto" onchange='changeDefaultItem' />
-          </div>
-          <div class='value-item'>
-            <object refClass="RangeEditor"  ref='$shrink' label='${this.$i18n("flex.layout.item.property.shrink")}' key="flex-shrink" value="${arr[1]}" min='0' max='1' step='0.01' units=",auto" onchange='changeDefaultItem' />
-          </div>
-          <div class='value-item'>
-            <object refClass="RangeEditor"  ref='$basis' label='${this.$i18n("flex.layout.item.property.basis")}' key="flex-basis" value="${arr[2]}" min='0' units="px,em,%,auto" onchange='changeDefaultItem' />
-          </div>                    
-        </div>
+      <div class="constraints-box">
+        <div class='item' data-value='min' data-selected="${h === Constraints.MIN || h === Constraints.STRETCH}" data-key='${ConstraintsDirection.HORIZONTAL}'></div>
+        <div class='item' data-value='max' data-selected="${h === Constraints.MAX || h === Constraints.STRETCH}" data-key='${ConstraintsDirection.HORIZONTAL}'></div>
+        <div class='item' data-value='center' data-selected="${h === Constraints.CENTER}" data-key='${ConstraintsDirection.HORIZONTAL}'></div>
+        <div class='item' data-value='min' data-selected="${v === Constraints.MIN || v === Constraints.STRETCH}" data-key='${ConstraintsDirection.VERTICAL}'></div>
+        <div class='item' data-value='max' data-selected="${v === Constraints.MAX || v === Constraints.STRETCH}" data-key='${ConstraintsDirection.VERTICAL}'></div>
+        <div class='item' data-value='center' data-selected="${v === Constraints.CENTER}" data-key='${ConstraintsDirection.VERTICAL}'></div>            
+        <div class="rect"></div>
       </div>
     `;
   }
-  getDefaultItemValue(value) {
-    return value.unit === "auto" ? "auto" : value + "";
+  [LOAD("$constraintsInfoInput")]() {
+    var current = this.$selection.current || {};
+    current["constraints-horizontal"] || Constraints.MIN;
+    current["constraints-vertical"] || Constraints.MIN;
+    return `
+      <div class="has-label-grid">
+        <label data-direction="horizontal"></label>
+        <object refClass="SelectEditor" ${variable$4({
+      ref: "$constraintsHorizontal",
+      key: "constraints-horizontal",
+      value: (current == null ? void 0 : current["constraints-horizontal"]) || "min",
+      options: [
+        { value: "min", "text": "Left" },
+        { value: "max", "text": "Right" },
+        { value: "stretch", "text": "Left and Right" },
+        { value: "scale", "text": "Scale" },
+        { value: "center", "text": "Center" }
+      ],
+      onchange: "changeConstraints"
+    })} />
+      </div>
+
+      <div class="has-label-grid">
+      <label data-direction="vertical"></label>
+        <object refClass="SelectEditor" ${variable$4({
+      ref: "$constraintsVertical",
+      key: "constraints-vertical",
+      value: (current == null ? void 0 : current["constraints-vertical"]) || "min",
+      options: [
+        { value: "min", "text": "Top" },
+        { value: "max", "text": "Bottom" },
+        { value: "stretch", "text": "Top and Bottom" },
+        { value: "scale", "text": "Scale" },
+        { value: "center", "text": "Center" }
+      ],
+      onchange: "changeConstraints"
+    })} />          
+      </div>
+    `;
   }
-  getDefaultValue() {
-    var grow = this.children.$grow.getValue();
-    var shrink = this.children.$shrink.getValue();
-    var basis = this.children.$basis.getValue();
-    grow = this.getDefaultItemValue(grow);
-    shrink = this.getDefaultItemValue(shrink);
-    basis = this.getDefaultItemValue(basis);
-    return CSS_TO_STRING$1({
-      flex: `${grow} ${shrink} ${basis}`
-    });
-  }
-  [SUBSCRIBE_SELF("changeDefaultItem")](key, value) {
-    this.command("setAttributeForMulti", "change flex layout", this.$selection.packByValue({
-      "flex-layout-item": this.getDefaultValue()
-    }));
-    this.nextTick(() => {
-      this.emit("refreshAllElementBoundSize");
-    });
-  }
-  [SUBSCRIBE_SELF("changeLayoutType")](key, value) {
-    var valueType = this.children.$layout.getValue();
-    var value = valueType;
-    if (valueType === "value") {
-      value = this.getDefaultValue();
+  [CLICK("$constraintsInfo .item")](e) {
+    const [value, key] = e.$dt.attrs("data-value", "data-key");
+    const current = this.$selection.current || {};
+    const h = current["constraints-horizontal"];
+    if (key === ConstraintsDirection.HORIZONTAL) {
+      let newConstraints = value;
+      if (h === Constraints.MAX) {
+        if (e.shiftKey && value === Constraints.MIN) {
+          newConstraints = Constraints.STRETCH;
+        }
+      } else if (h === Constraints.MIN) {
+        if (e.shiftKey && value === Constraints.MAX) {
+          newConstraints = Constraints.STRETCH;
+        }
+      }
+      this.trigger("changeConstraints", "constraints-horizontal", newConstraints);
+    } else if (key === ConstraintsDirection.VERTICAL) {
+      let newConstraints = value;
+      if (h === Constraints.MAX) {
+        if (e.shiftKey && value === Constraints.MIN) {
+          newConstraints = Constraints.STRETCH;
+        }
+      } else if (h === Constraints.MIN) {
+        if (e.shiftKey && value === Constraints.MAX) {
+          newConstraints = Constraints.STRETCH;
+        }
+      }
+      this.trigger("changeConstraints", "constraints-vertical", newConstraints);
     }
-    this.command("setAttributeForMulti", "change flex layout", this.$selection.packByValue({
-      "flex-layout-item": value
+  }
+  [SUBSCRIBE_SELF("changeConstraints")](key, value) {
+    this.command("setAttributeForMulti", "apply constraints", this.$selection.packByValue({
+      [key]: value
     }));
-    this.refs.$layoutList.attr("data-selected-value", valueType);
     this.nextTick(() => {
-      this.emit("refreshAllElementBoundSize");
-    });
+      this.refresh();
+    }, 100);
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow(() => {
@@ -40508,12 +39099,12 @@ function perspective(editor) {
   });
 }
 var PerspectiveOriginEditor$1 = "";
-const typeList$2 = [
+const typeList$1 = [
   { key: "perspective-origin-x", title: "X" },
   { key: "perspective-origin-y", title: "Y" }
 ];
-const keyList$1 = typeList$2.map((it) => it.key);
-const origin$1 = {
+const keyList = typeList$1.map((it) => it.key);
+const origin = {
   top: "50% 0%",
   "top left": "0% 0%",
   "top right": "100% 0%",
@@ -40568,7 +39159,7 @@ class PerspectiveOriginEditor extends EditorElement {
   [CLICK("$direction .pos")](e) {
     var direct = e.$dt.attr("data-value");
     this.state.isAll = false;
-    var [x2, y2] = origin$1[direct].split(" ");
+    var [x2, y2] = origin[direct].split(" ");
     this.state["perspective-origin-x"] = Length.parse(x2);
     this.state["perspective-origin-y"] = Length.parse(y2);
     this.refresh();
@@ -40576,7 +39167,7 @@ class PerspectiveOriginEditor extends EditorElement {
   }
   [SUBSCRIBE_SELF("changePerspectiveOrigin")](key, value) {
     if (key === "perspective-origin") {
-      keyList$1.forEach((type) => {
+      keyList.forEach((type) => {
         this.children[`$${type}`].setValue(value.toString());
       });
     }
@@ -40603,7 +39194,7 @@ class PerspectiveOriginEditor extends EditorElement {
         style="display: none;"
       >
         <div class="radius-setting-box" ref="$radiusSettingBox">
-          ${typeList$2.map((it) => {
+          ${typeList$1.map((it) => {
       var label = this.$i18n(it.title);
       return `
               <div>
@@ -40622,7 +39213,7 @@ class PerspectiveOriginEditor extends EditorElement {
       this.state["perspective-origin"] = this.children[`$all`].getValue();
     } else {
       this.state.isAll = false;
-      keyList$1.forEach((key) => {
+      keyList.forEach((key) => {
         this.state[key] = this.children[`$${key}`].getValue();
       });
     }
@@ -40697,6 +39288,7 @@ function perspectiveOrigin(editor) {
     PerspectiveOriginProperty
   });
 }
+var PositionProperty$1 = "";
 const DEFAULT_SIZE = Length.z();
 class PositionProperty extends BaseProperty {
   getTitle() {
@@ -40739,39 +39331,24 @@ class PositionProperty extends BaseProperty {
   getBody() {
     return `
       <div class="position-item" ref="$positionItem" style='padding: 5px 10px;'>
-        <div style='display: grid;grid-template-columns: 1fr 100px; grid-column-gap: 10px; padding-top: 10px;'>
+        <div class="grid-layout">
           <div class='property-item' style='padding: 0px;'>
-            <object refClass='InputRangeEditor' ref='$x' label="X" key='x' min="-100000" max='100000' onchange='changRangeEditor' />
+            <object refClass='NumberInputEditor' ref='$x' compact="true" label="X" key='x' min="-100000" max='100000' onchange='changRangeEditor' />
           </div>
-          <div class='property-item' style='padding: 0px;'>
-            <button type="button" data-command="start-x">${iconUse$1("start", null, { width: 30, height: 30 })}</button>
+          <div style='padding: 0px;'>
+            <object refClass='NumberInputEditor' ref='$y' compact="true" label="Y" key='y' min="-10000" max='10000' onchange='changRangeEditor' />
           </div>          
         </div>
-        <div style='display: grid;grid-template-columns: 1fr 100px; grid-column-gap: 10px; padding-top: 10px;'>
-          <div class='property-item animation-property-item' style='padding: 0px;'>
-            <object refClass='InputRangeEditor' ref='$y' label="Y" key='y' min="-10000" max='10000' onchange='changRangeEditor' />
+        <div class="grid-layout">
+          <div >
+            <object refClass='NumberInputEditor' ref='$width' compact="true"  label="${this.$i18n("position.property.width")}" key='width' min="0" max='3000' onchange='changRangeEditor' />
           </div>
-        </div>
-        <div style='display: grid;grid-template-columns: 1fr 100px; grid-column-gap: 10px; padding-top: 10px;'>
-          <div class='property-item animation-property-item' style='padding: 0px;'>
-            <object refClass='InputRangeEditor' ref='$right' label="Right" key='right' min="-100000" max='100000' onchange='changRangeEditor' />
-          </div>
-        </div>
-        <div style='display: grid;grid-template-columns: 1fr 100px; grid-column-gap: 10px; padding-top: 10px;'>
-          <div class='property-item animation-property-item' style='padding: 0px;'>
-            <object refClass='InputRangeEditor' ref='$bottom' label="Bottom" key='bottom' min="-10000" max='10000' onchange='changRangeEditor' />
-          </div>
-        </div>        
-        <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; padding-top: 10px;'>
-          <div class='property-item animation-property-item' style='padding:0px'>
-            <object refClass='InputRangeEditor' ref='$width' compact="true"  label="${this.$i18n("position.property.width")}" key='width' min="0" max='3000' onchange='changRangeEditor' />
-          </div>
-          <div class='property-item animation-property-item' style='padding:0px'>
-            <object refClass='InputRangeEditor' ref='$height' compact="true"  label="${this.$i18n("position.property.height")}" key='height' min="0" max='3000' onchange='changRangeEditor' />
+          <div >
+            <object refClass='NumberInputEditor' ref='$height' compact="true"  label="${this.$i18n("position.property.height")}" key='height' min="0" max='3000' onchange='changRangeEditor' />
           </div>      
         </div> 
-        <div style='display: grid;grid-template-columns: repeat(2, 1fr); grid-column-gap: 10px; padding-top: 10px;'>
-          <div class='property-item animation-property-item'>
+        <div class="grid-layout">
+          <div>
             <object refClass='InputRangeEditor' 
               ref='$rotate' 
               key='rotateZ' 
@@ -40784,7 +39361,7 @@ class PositionProperty extends BaseProperty {
               onchange="changeRotate" />
           </div>        
 
-          <div class='property-item animation-property-item'>
+          <div>
             <object refClass="NumberInputEditor"
               ref='$opacity' 
               key='opacity' 
@@ -40810,15 +39387,6 @@ class PositionProperty extends BaseProperty {
       const rotateZ2 = Transform.get(current.transform, "rotateZ");
       if (rotateZ2) {
         this.children.$rotate.setValue(rotateZ2[0]);
-      }
-      if (current.parent.is("project")) {
-        this.children.$right.disabled();
-        this.children.$bottom.disabled();
-      } else {
-        this.children.$right.enabled();
-        this.children.$bottom.enabled();
-        this.children.$right.setValue(current.right);
-        this.children.$bottom.setValue(current.bottom);
       }
     }
   }
@@ -40960,13 +39528,19 @@ class SelectEditor extends EditorElement {
     };
   }
   template() {
-    var { label, tabIndex } = this.state;
+    var { label, tabIndex, value = BlendMode.NORMAL } = this.state;
     var hasLabel = !!label ? "has-label" : "";
     var hasTabIndex = !!tabIndex ? 'tabIndex="1"' : "";
     return `
             <div class='elf--select-editor ${hasLabel}'>
                 ${label ? `<label title="${label}">${label}</label>` : ""}
-                <select ref='$options' ${hasTabIndex}></select>
+                <div class="editor-view">
+                    <select ref='$options' ${hasTabIndex}></select>
+                    <div class='selected-value'>
+                        <span class='value' ref="$selectedValue">${value}</span>
+                        <span class='expand' ref='$expand'>${iconUse$1("expand_more")}</span>
+                    </div>
+                </div>
             </div>
         `;
   }
@@ -40981,6 +39555,12 @@ class SelectEditor extends EditorElement {
   [BIND("$options")]() {
     return {
       "data-count": this.state.options.length.toString()
+    };
+  }
+  [BIND("$selectedValue")]() {
+    var _a;
+    return {
+      text: (_a = this.state.options.find((it) => it.value === this.state.value)) == null ? void 0 : _a.text
     };
   }
   [LOAD("$options")]() {
@@ -41002,6 +39582,7 @@ class SelectEditor extends EditorElement {
     this.updateData({
       value: this.refs.$options.value
     });
+    this.bindData("$selectedValue");
   }
   updateData(data) {
     this.setState(data, false);
@@ -41009,22 +39590,22 @@ class SelectEditor extends EditorElement {
   }
 }
 const blend_list = [
-  "normal",
-  "multiply",
-  "screen",
-  "overlay",
-  "darken",
-  "lighten",
-  "color-dodge",
-  "color-burn",
-  "hard-light",
-  "soft-light",
-  "difference",
-  "exclusion",
-  "hue",
-  "saturation",
-  "color",
-  "luminosity"
+  BlendMode.NORMAL,
+  BlendMode.MULTIPLY,
+  BlendMode.SCREEN,
+  BlendMode.OVERLAY,
+  BlendMode.DARKEN,
+  BlendMode.LIGHTEN,
+  BlendMode.COLOR_DODGE,
+  BlendMode.COLOR_BURN,
+  BlendMode.HARD_LIGHT,
+  BlendMode.SOFT_LIGHT,
+  BlendMode.DIFFERENCE,
+  BlendMode.EXCLUSION,
+  BlendMode.HUE,
+  BlendMode.SATURATION,
+  BlendMode.COLOR,
+  BlendMode.LUMINOSITY
 ];
 class BlendSelectEditor extends SelectEditor {
   getBlendList() {
@@ -42673,7 +41254,7 @@ class CubicBezierEditor extends EditorElement {
   }
 }
 var DirectionEditor$1 = "";
-const typeList$1 = [
+const typeList = [
   { key: "top", title: "Top" },
   { key: "right", title: "Right" },
   { key: "bottom", title: "Bottom" },
@@ -42696,7 +41277,7 @@ class DirectionEditor extends EditorElement {
   }
   [SUBSCRIBE("changeBorderRadius")](key, value) {
     if (key === "all") {
-      typeList$1.forEach((it) => {
+      typeList.forEach((it) => {
         this.state[it.key] = value.clone();
         this.children[`$${it.key}`].setValue(value.clone());
       });
@@ -42727,7 +41308,7 @@ class DirectionEditor extends EditorElement {
         style="${display}"
       >
         <div class="radius-setting-box">
-          ${typeList$1.map((it) => {
+          ${typeList.map((it) => {
       var value = this.state[it.key];
       return `
               <div>
@@ -43582,6 +42163,7 @@ class InputRangeEditor extends EditorElement {
     }
     var layoutClass = layout2;
     var realValue = (+value).toString();
+    const units = this.state.units.split(",").filter(Boolean);
     return `
         <div 
             ref="$range",
@@ -43599,7 +42181,15 @@ class InputRangeEditor extends EditorElement {
                 <div class='area'>
                     <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step2}" tabIndex="1" />
                     
-                    <object refClass="SelectEditor"  ref='$unit' key='unit' value="${this.state.selectedUnit || this.state.value.unit}" options="${this.state.units}" onchange='changeUnit' />
+                    ${units.length === 1 ? `<span class='unit'>${units[0]}</span>` : `
+                            <object refClass="SelectEditor"  
+                                ref='$unit' 
+                                key='unit' 
+                                value="${this.state.selectedUnit || this.state.value.unit}" 
+                                options="${this.state.units}" 
+                                onchange='changeUnit' 
+                            />`}
+                    
                     
                 </div>
             </div>
@@ -43624,12 +42214,6 @@ class InputRangeEditor extends EditorElement {
     this.setState({
       disabled: false
     });
-  }
-  [FOCUS("$propertyNumber")](e) {
-    this.refs.$range.addClass("focused");
-  }
-  [BLUR("$propertyNumber")](e) {
-    this.refs.$range.removeClass("focused");
   }
   [CLICK("$remove")](e) {
     this.updateData({
@@ -43657,6 +42241,29 @@ class InputRangeEditor extends EditorElement {
     this.updateData({
       value: this.state.value.toUnit(value)
     });
+  }
+  [FOCUSIN("$body input[type=number]")](e) {
+    this.refs.$range.addClass("focused");
+    e.$dt.select();
+  }
+  [FOCUSOUT("$body input[type=number]")](e) {
+    this.refs.$range.removeClass("focused");
+  }
+  [POINTERSTART("$range label") + MOVE("moveDrag") + END("moveDragEnd")](e) {
+    this.refs.$range.addClass("drag");
+    this.initValue = +this.refs.$propertyNumber.value;
+    this.initUnit = this.state.value.unit;
+    this.initUnits = this.state.units.split(",").filter(Boolean);
+  }
+  moveDrag(dx, dy) {
+    var _a;
+    this.updateData({
+      value: new Length(this.initValue + Math.floor(dx), ((_a = this.children.$unit) == null ? void 0 : _a.getValue()) || this.initUnits[0])
+    });
+    this.refs.$propertyNumber.val(this.state.value.value);
+  }
+  moveDragEnd() {
+    this.refs.$range.removeClass("drag");
   }
 }
 var RangeEditor$1 = "";
@@ -43982,10 +42589,11 @@ class NumberInputEditor extends EditorElement {
     this.setState(data, false);
     this.parent.trigger(this.props.onchange, this.props.key, this.state.value, this.props.params);
   }
-  [FOCUS("$body input[type=number]")](e) {
+  [FOCUSIN("$body input[type=number]")](e) {
     this.refs.$range.addClass("focused");
+    e.$dt.select();
   }
-  [BLUR("$body input[type=number]")](e) {
+  [FOCUSOUT("$body input[type=number]")](e) {
     this.refs.$range.removeClass("focused");
   }
   [INPUT("$body input[type=number]")](e) {
@@ -43993,6 +42601,19 @@ class NumberInputEditor extends EditorElement {
     this.updateData({
       value: this.state.value.set(value)
     });
+  }
+  [POINTERSTART("$range label") + MOVE("moveDrag") + END("moveDragEnd")](e) {
+    this.refs.$range.addClass("drag");
+    this.initValue = +this.refs.$propertyNumber.value;
+  }
+  moveDrag(dx, dy) {
+    this.updateData({
+      value: Length.px(this.initValue + Math.floor(dx))
+    });
+    this.refs.$propertyNumber.val(this.state.value.value);
+  }
+  moveDragEnd() {
+    this.refs.$range.removeClass("drag");
   }
 }
 var NumberRangeEditor$1 = "";
@@ -44334,8 +42955,13 @@ class SelectIconEditor extends EditorElement {
       var isSelected = value === this.state.value;
       var selected = isSelected ? "selected" : "";
       if (it.value === "") {
-        var label = obj.close;
+        var label = "";
         title2 = "close";
+        if (isNotUndefined(this.state.icons[index2])) {
+          iconClass = "icon";
+          label = iconBlank();
+          value = "__blank__";
+        }
       } else {
         var iconKey = this.state.icons[index2];
         if (obj[iconKey]) {
@@ -44354,6 +42980,8 @@ class SelectIconEditor extends EditorElement {
   }
   [CLICK("$options .select-icon-item")](e) {
     var value = e.$dt.attr("data-value");
+    if (!value || value === "__blank__")
+      return;
     this.updateData({
       value
     });
@@ -44845,6 +43473,1795 @@ ${rootVariable ? `<div>
         `;
   }
 }
+class ItemRender$1 {
+  getInnerId(item2, postfix = "") {
+    return item2.id + postfix;
+  }
+}
+const Primitive = "SourceGraphic,SourceAlpha,BackgroundImage,BackgroundAlpha,FillPaint,StrokePaint".split(",");
+const DEFAULT_ATTRIBUTES = {
+  xChannelSelector: true,
+  yChannelSelector: true
+};
+class BaseSVGFilter extends PropertyItem {
+  static parse(obj2) {
+    var FilterClass = SVGFilterClassName[obj2.type];
+    return new FilterClass(obj2);
+  }
+  hasLight() {
+    return false;
+  }
+  isLight() {
+    return false;
+  }
+  isSource() {
+    return false;
+  }
+  getDefaultObject(obj2 = {}) {
+    var id = uuidShort$1();
+    return super.getDefaultObject(__spreadValues({
+      itemType: "svgfilter",
+      id,
+      in: [],
+      bound: { x: 100, y: 100, targetX: 0, targetY: 0 },
+      connected: []
+    }, obj2));
+  }
+  getInCount() {
+    return 0;
+  }
+  setIn(index2, target) {
+    this.json.in[index2] = { id: target.id, type: target.type };
+  }
+  setConnected(target) {
+    var f = this.json.connected.filter((c2) => c2.id === target.id);
+    if (f.length === 0) {
+      this.json.connected.push({ id: target.id });
+    }
+  }
+  convert(json) {
+    if (typeof json.in === "string") {
+      json.in = JSON.parse(json.in);
+    }
+    if (typeof json.bound === "string") {
+      json.bound = JSON.parse(json.bound);
+    }
+    if (typeof json.connected === "string") {
+      json.connected = JSON.parse(json.connected);
+    }
+    return json;
+  }
+  toCloneObject() {
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("id", "in", "bound", "connected"));
+  }
+  getDefaultAttribute() {
+    var list2 = [];
+    if (this.json.connected.length) {
+      list2.push(`result="${this.json.id}result"`);
+    }
+    Object.keys(DEFAULT_ATTRIBUTES).filter((key) => {
+      return !!this.json[key];
+    }).forEach((key) => {
+      list2.push(`${key}="${this.json[key]}"`);
+    });
+    return list2.join(" ") + " " + this.getSourceInAttribute();
+  }
+  hasInIndex() {
+    return false;
+  }
+  getSourceInAttribute(inList) {
+    return (inList || this.json.in).map((it, index2) => {
+      if (!it)
+        return "";
+      var indexString = index2 === 0 ? "" : index2 + 1 + "";
+      if (!this.hasInIndex()) {
+        indexString = "";
+      }
+      if (Primitive.includes(it.type)) {
+        return `in${indexString}="${it.type}"`;
+      }
+      return `in${indexString}="${it.id}result"`;
+    }).join(" ");
+  }
+  toString() {
+    var { type, value } = this.json;
+    return `<fe${type} value="${value}" ${this.getDefaultAttribute()} />`;
+  }
+}
+class RotaMatrixSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "RotaMatrix",
+      hueRotate: RotaMatrixSVGFilter.spec.hueRotate.defaultValue
+    });
+  }
+  convert(json) {
+    json.hueRotate = Length.parse(json.hueRotate);
+    return json;
+  }
+  toString() {
+    var { id, hueRotate } = this.json;
+    return `
+      <feColorMatrix type="hueRotate" result="romatrix-${id}"  values="${hueRotate}"/>
+      <feColorMatrix type="matrix" in="romatrix-${id}" in2="SourceGraphic"  ${this.getDefaultAttribute()} values="-1 2 -3 0 -.5 2 1 0 0 0 0 3 1 0 0 0 0 1 1 0"/>
+    `;
+  }
+}
+RotaMatrixSVGFilter.spec = {
+  hueRotate: {
+    title: "hue-rotate",
+    inputType: "number-range",
+    min: 0,
+    max: 360,
+    step: 1,
+    defaultValue: Length.number(0)
+  }
+};
+class MergeSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "Merge"
+    });
+  }
+  getInCount() {
+    return 3;
+  }
+  getDefaultAttribute() {
+    var list2 = [];
+    if (this.json.connected.length) {
+      list2.push(`result="${this.json.id}result"`);
+    }
+    return list2.join(" ");
+  }
+  toString() {
+    var { in: inList } = this.json;
+    return `
+    <feMerge  ${this.getDefaultAttribute()} >
+      ${inList.map((it) => {
+      return `<feMergeNode ${this.getSourceInAttribute([it])} />`;
+    }).join("")}
+    </feMerge>`;
+  }
+}
+MergeSVGFilter.spec = {};
+class CompositeSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "Composite",
+      operator: CompositeSVGFilter.spec.operator.defaultValue,
+      k1: CompositeSVGFilter.spec.k1.defaultValue,
+      k2: CompositeSVGFilter.spec.k2.defaultValue,
+      k3: CompositeSVGFilter.spec.k3.defaultValue,
+      k4: CompositeSVGFilter.spec.k4.defaultValue
+    });
+  }
+  getInCount() {
+    return 2;
+  }
+  toString() {
+    var { operator, k1, k2, k3, k4 } = this.json;
+    var kNumbers = "";
+    if (operator === "arithmetic") {
+      kNumbers = ` k1="${k1}" k2="${k2}" k3="${k3}" k4="${k4}" `;
+    }
+    return `<feComposite operator="${operator}" ${kNumbers}  ${this.getDefaultAttribute()} />`;
+  }
+  hasInIndex() {
+    return true;
+  }
+}
+CompositeSVGFilter.spec = {
+  operator: {
+    title: "operator",
+    inputType: "select",
+    options: "over,in,out,atop,xor,arithmetic",
+    defaultValue: "over"
+  },
+  k1: {
+    title: "k1",
+    inputType: "number-range",
+    min: 0,
+    max: 1,
+    step: 0.01,
+    defaultValue: Length.number(0)
+  },
+  k2: {
+    title: "k2",
+    inputType: "number-range",
+    min: 0,
+    max: 1,
+    step: 0.01,
+    defaultValue: Length.number(0)
+  },
+  k3: {
+    title: "k3",
+    inputType: "number-range",
+    min: 0,
+    max: 1,
+    step: 0.01,
+    defaultValue: Length.number(0)
+  },
+  k4: {
+    title: "k4",
+    inputType: "number-range",
+    min: 0,
+    max: 1,
+    step: 0.01,
+    defaultValue: Length.number(0)
+  }
+};
+class MorphologySVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "Morphology",
+      operator: MorphologySVGFilter.spec.operator.defaultValue,
+      radius: MorphologySVGFilter.spec.radius.defaultValue
+    });
+  }
+  getInCount() {
+    return 1;
+  }
+  toString() {
+    var { operator, radius } = this.json;
+    return `<feMorphology operator="${operator}" radius="${radius}"  ${this.getDefaultAttribute()} />`;
+  }
+}
+MorphologySVGFilter.spec = {
+  operator: {
+    title: "Operator",
+    inputType: "select",
+    options: "erode,dilate",
+    defaultValue: "erode"
+  },
+  radius: {
+    title: "Radius",
+    inputType: "number-range",
+    min: 0,
+    max: 100,
+    step: 1,
+    defaultValue: Length.number(0)
+  }
+};
+class TurbulenceSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "Turbulence",
+      filterType: TurbulenceSVGFilter.spec.filterType.defaultValue,
+      baseFrequency: TurbulenceSVGFilter.spec.baseFrequency.defaultValue,
+      numOctaves: TurbulenceSVGFilter.spec.numOctaves.defaultValue,
+      seed: TurbulenceSVGFilter.spec.seed.defaultValue
+    });
+  }
+  convert(obj2) {
+    obj2.baseFrequency = Length.parse(obj2.baseFrequency);
+    obj2.numOctaves = Length.parse(obj2.numOctaves);
+    obj2.seed = Length.parse(obj2.seed);
+    return obj2;
+  }
+  toString() {
+    var { filterType, baseFrequency, numOctaves, seed } = this.json;
+    return `<feTurbulence ${OBJECT_TO_PROPERTY$1({
+      type: filterType,
+      baseFrequency,
+      numOctaves,
+      seed
+    })}   ${this.getDefaultAttribute()} />`;
+  }
+}
+TurbulenceSVGFilter.spec = {
+  filterType: {
+    title: "Type",
+    inputType: "select",
+    options: "fractalNoise,turbulence",
+    defaultValue: "turbulence"
+  },
+  baseFrequency: {
+    title: "Frequency",
+    inputType: "number-range",
+    min: 0,
+    max: 1,
+    step: 0.01,
+    defaultValue: Length.number(0)
+  },
+  numOctaves: {
+    title: "Octaves",
+    inputType: "number-range",
+    min: 1,
+    max: 10,
+    step: 1,
+    defaultValue: Length.number(1)
+  },
+  seed: {
+    title: "Seed",
+    inputType: "number-range",
+    min: 0,
+    max: 1e4,
+    step: 1,
+    defaultValue: Length.number(0)
+  }
+};
+class DisplacementMapSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "DisplacementMap",
+      scale: DisplacementMapSVGFilter.spec.scale.defaultValue
+    });
+  }
+  getInCount() {
+    return 2;
+  }
+  convert(obj2) {
+    obj2.scale = Length.parse(obj2.scale);
+    return obj2;
+  }
+  toString() {
+    var { scale: scale2 } = this.json;
+    var scaleOption = scale2.value ? `scale="${scale2}"` : "";
+    return `<feDisplacementMap ${scaleOption}  ${this.getDefaultAttribute()} />`;
+  }
+  hasInIndex() {
+    return true;
+  }
+}
+DisplacementMapSVGFilter.spec = {
+  scale: {
+    title: "scale",
+    inputType: "number-range",
+    min: 0,
+    max: 5e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  }
+};
+class ColorMatrixSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "ColorMatrix",
+      values: ColorMatrixSVGFilter.spec.values.defaultValue
+    });
+  }
+  getInCount() {
+    return 1;
+  }
+  toString() {
+    var { values } = this.json;
+    var valueString = values.join(" ");
+    return `<feColorMatrix type="matrix" values="${valueString}"  ${this.getDefaultAttribute()} />`;
+  }
+}
+ColorMatrixSVGFilter.spec = {
+  values: {
+    title: "values",
+    inputType: "color-matrix",
+    column: 5,
+    defaultValue: [
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0
+    ]
+  }
+};
+class ConvolveMatrixSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "ConvolveMatrix",
+      kernelMatrix: ConvolveMatrixSVGFilter.spec.kernelMatrix.defaultValue
+    });
+  }
+  getInCount() {
+    return 1;
+  }
+  toString() {
+    var { kernelMatrix } = this.json;
+    var valueString = kernelMatrix.join(" ");
+    return `<feConvolveMatrix kernelMatrix="${valueString}"  ${this.getDefaultAttribute()} />`;
+  }
+}
+ConvolveMatrixSVGFilter.spec = {
+  kernelMatrix: {
+    title: "kernelMatrix",
+    inputType: "input-array",
+    column: 3,
+    defaultValue: [
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1
+    ]
+  }
+};
+class GaussianBlurSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "GaussianBlur",
+      stdDeviationX: GaussianBlurSVGFilter.spec.stdDeviationX.defaultValue,
+      stdDeviationY: GaussianBlurSVGFilter.spec.stdDeviationY.defaultValue,
+      edgeMode: GaussianBlurSVGFilter.spec.edgeMode.defaultValue
+    });
+  }
+  getInCount() {
+    return 1;
+  }
+  convert(obj2) {
+    obj2.stdDeviationX = Length.parse(obj2.stdDeviationX);
+    obj2.stdDeviationY = Length.parse(obj2.stdDeviationY);
+    return obj2;
+  }
+  toString() {
+    var { stdDeviationX, stdDeviationY, edgeMode } = this.json;
+    var stdDeviation = `${stdDeviationX} ${stdDeviationY}`;
+    if (stdDeviationX === stdDeviationY) {
+      stdDeviation = stdDeviationX;
+    }
+    return `<feGaussianBlur  stdDeviation="${stdDeviation}" edgeMode="${edgeMode}"  ${this.getDefaultAttribute()} />`;
+  }
+}
+GaussianBlurSVGFilter.spec = {
+  stdDeviationX: {
+    title: "X",
+    inputType: "number-range",
+    min: 0,
+    max: 100,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  stdDeviationY: {
+    title: "Y",
+    inputType: "number-range",
+    min: 0,
+    max: 100,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  edgeMode: {
+    title: "edge",
+    inputType: "select",
+    options: "none,duplicate,wrap",
+    defaultValue: "none"
+  }
+};
+class FloodSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "Flood",
+      x: FloodSVGFilter.spec.x.defaultValue,
+      y: FloodSVGFilter.spec.y.defaultValue,
+      width: FloodSVGFilter.spec.width.defaultValue,
+      height: FloodSVGFilter.spec.height.defaultValue,
+      color: FloodSVGFilter.spec.color.defaultValue,
+      opacity: FloodSVGFilter.spec.opacity.defaultValue
+    });
+  }
+  convert(json) {
+    json.x = Length.parse(json.x);
+    json.y = Length.parse(json.y);
+    json.width = Length.parse(json.width);
+    json.height = Length.parse(json.height);
+    return json;
+  }
+  toString() {
+    const { opacity: opacity2, color: color2, x: x2, y: y2, width: width2, height } = this.json;
+    return `<feFlood ${OBJECT_TO_PROPERTY$1({
+      x: x2,
+      y: y2,
+      width: width2,
+      height
+    })} flood-opacity="${opacity2}" flood-color="${color2}" ${this.getDefaultAttribute()} />`;
+  }
+}
+FloodSVGFilter.spec = {
+  x: {
+    title: "X",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  y: {
+    title: "Y",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  width: {
+    title: "width",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  height: {
+    title: "height",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  opacity: {
+    title: "opacity",
+    inputType: "number-range",
+    min: 0,
+    max: 1,
+    step: 0.01,
+    defaultValue: Length.number(0)
+  },
+  color: {
+    title: "color",
+    inputType: "color",
+    defaultValue: "rgba(0, 0, 0, 1)"
+  }
+};
+class ComponentTransferSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "ComponentTransfer",
+      r: ComponentTransferSVGFilter.spec.r.defaultValue,
+      g: ComponentTransferSVGFilter.spec.g.defaultValue,
+      b: ComponentTransferSVGFilter.spec.b.defaultValue,
+      a: ComponentTransferSVGFilter.spec.a.defaultValue
+    });
+  }
+  getInCount() {
+    return 1;
+  }
+  parse(value) {
+    var [type, ...values] = value.split(" ");
+    if (type === "table" || type === "discrete") {
+      return { type, tableValues: values.join(" ") };
+    }
+    if (type === "linear") {
+      var [slop, intercept] = values;
+      return { type, slop, intercept };
+    } else if (type === "gamma") {
+      var [amplitude, exponent, offset] = values;
+      return { type, amplitude, exponent, offset };
+    }
+    return { type };
+  }
+  toString() {
+    var { r, g, b, a } = this.json;
+    r = this.parse(r);
+    g = this.parse(g);
+    b = this.parse(b);
+    a = this.parse(a);
+    return `<feComponentTransfer ${this.getDefaultAttribute()} >
+      ${r && `<feFuncR ${OBJECT_TO_PROPERTY$1(r)} />`}
+      ${g && `<feFuncG ${OBJECT_TO_PROPERTY$1(g)} />`}
+      ${b && `<feFuncB ${OBJECT_TO_PROPERTY$1(b)} />`}
+      ${a && `<feFuncA ${OBJECT_TO_PROPERTY$1(a)} />`}
+    </feComponentTransfe>`;
+  }
+}
+ComponentTransferSVGFilter.spec = {
+  r: {
+    title: "R",
+    inputType: "FuncFilter",
+    defaultValue: "identity"
+  },
+  g: {
+    title: "G",
+    inputType: "FuncFilter",
+    defaultValue: "identity"
+  },
+  b: {
+    title: "B",
+    inputType: "FuncFilter",
+    defaultValue: "identity"
+  },
+  a: {
+    title: "A",
+    inputType: "FuncFilter",
+    defaultValue: "identity"
+  }
+};
+class DistantLightSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "DistantLight",
+      azimuth: DistantLightSVGFilter.spec.azimuth.defaultValue,
+      elevation: DistantLightSVGFilter.spec.elevation.defaultValue
+    });
+  }
+  isLight() {
+    return true;
+  }
+  toString() {
+    return "";
+  }
+  toLightString() {
+    var { azimuth, elevation } = this.json;
+    return `<feDistantLight ${OBJECT_TO_PROPERTY$1({
+      azimuth,
+      elevation
+    })} />`;
+  }
+}
+DistantLightSVGFilter.spec = {
+  azimuth: {
+    title: "azimuth",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  elevation: {
+    title: "elevation",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  }
+};
+class PointLightSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "PointLight",
+      x: PointLightSVGFilter.spec.x.defaultValue,
+      y: PointLightSVGFilter.spec.y.defaultValue,
+      z: PointLightSVGFilter.spec.z.defaultValue
+    });
+  }
+  isLight() {
+    return true;
+  }
+  toString() {
+    return "";
+  }
+  toLightString() {
+    var { x: x2, y: y2, z } = this.json;
+    return `<fePointLight ${OBJECT_TO_PROPERTY$1({
+      x: x2,
+      y: y2,
+      z
+    })} />`;
+  }
+}
+PointLightSVGFilter.spec = {
+  x: {
+    title: "x",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  y: {
+    title: "y",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  z: {
+    title: "z",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  }
+};
+class SpotLightSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "SpotLight",
+      x: SpotLightSVGFilter.spec.x.defaultValue,
+      y: SpotLightSVGFilter.spec.x.defaultValue,
+      z: SpotLightSVGFilter.spec.x.defaultValue,
+      pointsAtX: SpotLightSVGFilter.spec.pointsAtX.defaultValue,
+      pointsAtY: SpotLightSVGFilter.spec.pointsAtY.defaultValue,
+      pointsAtZ: SpotLightSVGFilter.spec.pointsAtZ.defaultValue,
+      specularExponent: SpotLightSVGFilter.spec.specularExponent.defaultValue,
+      limitingConeAngle: SpotLightSVGFilter.spec.limitingConeAngle.defaultValue
+    });
+  }
+  isLight() {
+    return true;
+  }
+  toString() {
+  }
+  toLightString() {
+    var { x: x2, y: y2, z, pointsAtX, pointsAtY, pointsAtZ, specularExponent, limitingConeAngle } = this.json;
+    return `<feSpotLight ${OBJECT_TO_PROPERTY$1({
+      x: x2,
+      y: y2,
+      z,
+      pointsAtX,
+      pointsAtY,
+      pointsAtZ,
+      specularExponent,
+      limitingConeAngle
+    })} />`;
+  }
+}
+SpotLightSVGFilter.spec = {
+  x: {
+    title: "x",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  y: {
+    title: "y",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  z: {
+    title: "z",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  pointsAtX: {
+    title: "pointsAtX",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  pointsAtY: {
+    title: "pointsAtY",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  pointsAtZ: {
+    title: "pointsAtZ",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  specularExponent: {
+    title: "specularExponent",
+    inputType: "number-range",
+    min: 0,
+    max: 100,
+    step: 1,
+    defaultValue: Length.number(1)
+  },
+  limitingConeAngle: {
+    title: "limitingConeAngle",
+    inputType: "number-range",
+    min: 0,
+    max: 100,
+    step: 1,
+    defaultValue: Length.number(1)
+  }
+};
+class DiffuseLightingSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "DiffuseLighting",
+      surfaceScale: DiffuseLightingSVGFilter.spec.surfaceScale.defaultValue,
+      lightingColor: DiffuseLightingSVGFilter.spec.lightingColor.defaultValue,
+      diffuseConstant: DiffuseLightingSVGFilter.spec.diffuseConstant.defaultValue,
+      lightInfo: ""
+    });
+  }
+  toCloneObject() {
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("surfaceScale", "lightingColor", "diffuseConstant", "lightInfo"));
+  }
+  hasLight() {
+    return true;
+  }
+  getInCount() {
+    return 1;
+  }
+  toString() {
+    var { surfaceScale, diffuseConstant, lightingColor } = this.json;
+    return `<feDiffuseLighting ${OBJECT_TO_PROPERTY$1({
+      surfaceScale,
+      diffuseConstant,
+      "lighting-color": lightingColor
+    })}  ${this.getDefaultAttribute()} >
+      ${this.json.lightInfo}
+    </feDiffuseLighting>`;
+  }
+}
+DiffuseLightingSVGFilter.spec = {
+  surfaceScale: {
+    title: "surfaceScale",
+    inputType: "number-range",
+    min: 0,
+    max: 100,
+    step: 1,
+    defaultValue: Length.number(1)
+  },
+  diffuseConstant: {
+    title: "diffuseConstant",
+    inputType: "number-range",
+    min: 0,
+    max: 100,
+    step: 1,
+    defaultValue: Length.number(1)
+  },
+  lightingColor: {
+    title: "Lighting Color",
+    inputType: "color",
+    defaultValue: "rgba(0, 0, 0, 1)"
+  }
+};
+class SpecularLightingSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "SpecularLighting",
+      surfaceScale: SpecularLightingSVGFilter.spec.surfaceScale.defaultValue,
+      lightingColor: SpecularLightingSVGFilter.spec.lightingColor.defaultValue,
+      specularConstant: SpecularLightingSVGFilter.spec.specularConstant.defaultValue,
+      specularExponent: SpecularLightingSVGFilter.spec.specularExponent.defaultValue,
+      lightInfo: ""
+    });
+  }
+  toCloneObject() {
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("surfaceScale", "lightingColor", "specularConstant", "specularExponent", "lightInfo"));
+  }
+  hasLight() {
+    return true;
+  }
+  getInCount() {
+    return 1;
+  }
+  toString() {
+    var { surfaceScale, specularConstant, specularExponent, lightingColor } = this.json;
+    return `<feSpecularLighting ${OBJECT_TO_PROPERTY$1({
+      surfaceScale,
+      specularConstant,
+      specularExponent,
+      "lighting-color": lightingColor
+    })}  ${this.getDefaultAttribute()} >
+      ${this.json.lightInfo}
+    </feSpecularLighting>`;
+  }
+  getSourceInAttribute() {
+    return "";
+  }
+}
+SpecularLightingSVGFilter.spec = {
+  surfaceScale: {
+    title: "surfaceScale",
+    inputType: "number-range",
+    min: 0,
+    max: 100,
+    step: 1,
+    defaultValue: Length.number(1)
+  },
+  specularConstant: {
+    title: "Constant",
+    inputType: "number-range",
+    min: 0,
+    max: 100,
+    step: 1,
+    defaultValue: Length.number(1)
+  },
+  specularExponent: {
+    title: "Exponent",
+    inputType: "number-range",
+    min: 0,
+    max: 100,
+    step: 1,
+    defaultValue: Length.number(1)
+  },
+  lightingColor: {
+    title: "Lighting Color",
+    inputType: "color",
+    defaultValue: "rgba(0, 0, 0, 1)"
+  }
+};
+class OffsetSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "Offset",
+      dx: OffsetSVGFilter.spec.dx.defaultValue,
+      dy: OffsetSVGFilter.spec.dy.defaultValue
+    });
+  }
+  getInCount() {
+    return 1;
+  }
+  toString() {
+    var { dx, dy } = this.json;
+    return `<feOffset 
+      ${OBJECT_TO_PROPERTY$1({
+      dx,
+      dy
+    })}  ${this.getDefaultAttribute()} />`;
+  }
+}
+OffsetSVGFilter.spec = {
+  dx: {
+    title: "dx",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  dy: {
+    title: "dy",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  }
+};
+class BlendSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "Blend",
+      mode: BlendSVGFilter.spec.mode.defaultValue
+    });
+  }
+  getInCount() {
+    return 2;
+  }
+  toString() {
+    var { mode } = this.json;
+    return `<feBlend ${OBJECT_TO_PROPERTY$1({
+      mode
+    })} ${this.getDefaultAttribute()} />`;
+  }
+  hasInIndex() {
+    return true;
+  }
+}
+BlendSVGFilter.spec = {
+  mode: {
+    title: "mode",
+    inputType: "blend",
+    defaultValue: "normal"
+  }
+};
+class SourceSVGFilter extends BaseSVGFilter {
+  getDefaultObject(obj2 = {}) {
+    return super.getDefaultObject(__spreadValues({
+      type: "Source"
+    }, obj2));
+  }
+  isSource() {
+    return true;
+  }
+  toString() {
+    return "";
+  }
+}
+class SourceGraphicSVGFilter extends SourceSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "SourceGraphic"
+    });
+  }
+}
+class SourceAlphaSVGFilter extends SourceSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "SourceAlpha"
+    });
+  }
+}
+class BackgroundImageSVGFilter extends SourceSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "BackgroundImage"
+    });
+  }
+}
+class BackgroundAlphaSVGFilter extends SourceSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "BackgroundAlpha"
+    });
+  }
+}
+class FillPaintSVGFilter extends SourceSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "FillPaint"
+    });
+  }
+}
+class StrokePaintSVGFilter extends SourceSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "StrokePaint"
+    });
+  }
+}
+class DropShadowSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "DropShadow",
+      dx: DropShadowSVGFilter.spec.dx.defaultValue,
+      dy: DropShadowSVGFilter.spec.dy.defaultValue,
+      stdDeviation: DropShadowSVGFilter.spec.stdDeviation.defaultValue,
+      color: DropShadowSVGFilter.spec.color.defaultValue,
+      opacity: DropShadowSVGFilter.spec.opacity.defaultValue
+    });
+  }
+  getInCount() {
+    return 1;
+  }
+  toString() {
+    var { dx, dy, stdDeviation, color: color2, opacity: opacity2 } = this.json;
+    return `<feDropShadow ${OBJECT_TO_PROPERTY$1({
+      dx,
+      dy,
+      stdDeviation,
+      "flood-color": color2,
+      "flood-opacity": opacity2
+    })}  ${this.getDefaultAttribute()} />`;
+  }
+}
+DropShadowSVGFilter.spec = {
+  dx: {
+    title: "dx",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  dy: {
+    title: "dy",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  stdDeviation: {
+    title: "stdDeviation",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 0.1,
+    defaultValue: Length.number(0)
+  },
+  opacity: {
+    title: "opacity",
+    inputType: "number-range",
+    min: 0,
+    max: 1,
+    step: 0.01,
+    defaultValue: Length.number(1)
+  },
+  color: {
+    title: "color",
+    inputType: "color",
+    defaultValue: "rgba(0, 0, 0, 1)"
+  }
+};
+class SaturateSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "Saturate",
+      values: SaturateSVGFilter.spec.values.defaultValue
+    });
+  }
+  getInCount() {
+    return 1;
+  }
+  toString() {
+    var { values } = this.json;
+    return `<feColorMatrix type="saturate" values="${values}"  ${this.getDefaultAttribute()} />`;
+  }
+}
+SaturateSVGFilter.spec = {
+  values: {
+    title: "values",
+    inputType: "number-range",
+    min: -1,
+    max: 1,
+    step: 0.01,
+    defaultValue: Length.number(0)
+  }
+};
+class HueRotateSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "HueRotate",
+      values: HueRotateSVGFilter.spec.values.defaultValue
+    });
+  }
+  getInCount() {
+    return 1;
+  }
+  toString() {
+    var { values } = this.json;
+    return `<feColorMatrix type="hueRotate" values="${values}"  ${this.getDefaultAttribute()} />`;
+  }
+}
+HueRotateSVGFilter.spec = {
+  values: {
+    title: "values",
+    inputType: "number-range",
+    min: 0,
+    max: 360,
+    step: 0.1,
+    defaultValue: Length.number(0)
+  }
+};
+class LuminanceAlphaSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "LuminanceAlpha"
+    });
+  }
+  getInCount() {
+    return 1;
+  }
+  toString() {
+    return `<feColorMatrix type="luminanceToAlpha" ${this.getDefaultAttribute()} />`;
+  }
+}
+LuminanceAlphaSVGFilter.spec = {};
+class TileSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "Tile",
+      x: TileSVGFilter.spec.x.defaultValue,
+      y: TileSVGFilter.spec.y.defaultValue,
+      width: TileSVGFilter.spec.width.defaultValue,
+      height: TileSVGFilter.spec.height.defaultValue
+    });
+  }
+  getInCount() {
+    return 1;
+  }
+  convert(json) {
+    json.x = Length.parse(json.x);
+    json.y = Length.parse(json.y);
+    json.width = Length.parse(json.width);
+    json.height = Length.parse(json.height);
+    return json;
+  }
+  toString() {
+    const { x: x2, y: y2, width: width2, height } = this.json;
+    return `<feTile ${OBJECT_TO_PROPERTY$1({
+      x: x2,
+      y: y2,
+      width: width2,
+      height
+    })} ${this.getDefaultAttribute()} />`;
+  }
+}
+TileSVGFilter.spec = {
+  x: {
+    title: "X",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  y: {
+    title: "Y",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  width: {
+    title: "width",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  height: {
+    title: "height",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  }
+};
+class ImageSVGFilter extends BaseSVGFilter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "Image",
+      x: ImageSVGFilter.spec.x.defaultValue,
+      y: ImageSVGFilter.spec.y.defaultValue,
+      width: ImageSVGFilter.spec.width.defaultValue,
+      height: ImageSVGFilter.spec.height.defaultValue,
+      src: ImageSVGFilter.spec.src.defaultValue,
+      alignment: ImageSVGFilter.spec.alignment.defaultValue,
+      scaleing: ImageSVGFilter.spec.scaleing.defaultValue
+    });
+  }
+  convert(json) {
+    json.x = Length.parse(json.x);
+    json.y = Length.parse(json.y);
+    json.width = Length.parse(json.width);
+    json.height = Length.parse(json.height);
+    return json;
+  }
+  toString() {
+    const { src, x: x2, y: y2, width: width2, height, alignment: alignment2, scaleing } = this.json;
+    return `<feImage ${OBJECT_TO_PROPERTY$1({
+      x: x2,
+      y: y2,
+      width: width2,
+      height,
+      "xlink:href": src,
+      preserveAspectRatio: `${alignment2} ${scaleing}`
+    })} ${this.getDefaultAttribute()} />`;
+  }
+}
+ImageSVGFilter.spec = {
+  x: {
+    title: "X",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  y: {
+    title: "Y",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  width: {
+    title: "width",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  height: {
+    title: "height",
+    inputType: "number-range",
+    min: 0,
+    max: 1e3,
+    step: 1,
+    defaultValue: Length.number(0)
+  },
+  alignment: {
+    title: "alignment",
+    inputType: "select",
+    options: "xMinYMin,xMidYMin,xMaxYMin,xMinYMid,xMidYMid,xMaxYMid,xMinYMax,xMidYMax,xMaxYMax",
+    defaultValue: "xMidYMid"
+  },
+  scaleing: {
+    title: "scaleing",
+    inputType: "select",
+    options: "meet,slice",
+    defaultValue: "meet"
+  },
+  src: {
+    title: "Image",
+    inputType: "ImageSelectEditor",
+    defaultValue: ""
+  }
+};
+const SVG_FILTER_COMMON_ATTRIBUTES = [
+  "result"
+];
+class SVGFilter extends PropertyItem {
+  static parse(obj2) {
+    var FilterClass = SVGFilterClassName[obj2.type];
+    return new FilterClass(obj2);
+  }
+  getDefaultObject(obj2 = {}) {
+    return super.getDefaultObject(__spreadValues({
+      itemType: "svgfilter",
+      result: ""
+    }, obj2));
+  }
+  getDefaultAttribute() {
+    return SVG_FILTER_COMMON_ATTRIBUTES.map((key) => {
+      return `${key}="${this.json[key]}"`;
+    }).join(" ");
+  }
+  toString() {
+    var { type, value } = this.json;
+    return `<fe${type} value="${value}" ${this.getDefaultAttribute()} />`;
+  }
+}
+const SVGFilterClassName = {
+  Image: ImageSVGFilter,
+  Tile: TileSVGFilter,
+  Saturate: SaturateSVGFilter,
+  HueRotate: HueRotateSVGFilter,
+  LuminanceAlpha: LuminanceAlphaSVGFilter,
+  DropShadow: DropShadowSVGFilter,
+  SourceGraphic: SourceGraphicSVGFilter,
+  SourceAlpha: SourceAlphaSVGFilter,
+  BackgroundImage: BackgroundImageSVGFilter,
+  BackgroundAlpha: BackgroundAlphaSVGFilter,
+  FillPaint: FillPaintSVGFilter,
+  StrokePaint: StrokePaintSVGFilter,
+  ComponentTransfer: ComponentTransferSVGFilter,
+  DistantLight: DistantLightSVGFilter,
+  PointLight: PointLightSVGFilter,
+  SpotLight: SpotLightSVGFilter,
+  DiffuseLighting: DiffuseLightingSVGFilter,
+  SpecularLighting: SpecularLightingSVGFilter,
+  Blend: BlendSVGFilter,
+  Offset: OffsetSVGFilter,
+  RotaMatrix: RotaMatrixSVGFilter,
+  GaussianBlur: GaussianBlurSVGFilter,
+  Flood: FloodSVGFilter,
+  Merge: MergeSVGFilter,
+  Composite: CompositeSVGFilter,
+  Morphology: MorphologySVGFilter,
+  Turbulence: TurbulenceSVGFilter,
+  DisplacementMap: DisplacementMapSVGFilter,
+  ColorMatrix: ColorMatrixSVGFilter,
+  ConvolveMatrix: ConvolveMatrixSVGFilter
+};
+const SVGFilterSpecList = {
+  Image: ImageSVGFilter.spec,
+  Tile: TileSVGFilter.spec,
+  DropShadow: DropShadowSVGFilter.spec,
+  Saturate: SaturateSVGFilter.spec,
+  HueRotate: HueRotateSVGFilter.spec,
+  LuminanceAlpha: LuminanceAlphaSVGFilter.spec,
+  Offset: OffsetSVGFilter.spec,
+  ComponentTransfer: ComponentTransferSVGFilter.spec,
+  SpecularLighting: SpecularLightingSVGFilter.spec,
+  SpotLight: SpotLightSVGFilter.spec,
+  PointLight: PointLightSVGFilter.spec,
+  DistantLight: DistantLightSVGFilter.spec,
+  DiffuseLighting: DiffuseLightingSVGFilter.spec,
+  Blend: BlendSVGFilter.spec,
+  RotaMatrix: RotaMatrixSVGFilter.spec,
+  Merge: MergeSVGFilter.spec,
+  GaussianBlur: GaussianBlurSVGFilter.spec,
+  Flood: FloodSVGFilter.spec,
+  Morphology: MorphologySVGFilter.spec,
+  Composite: CompositeSVGFilter.spec,
+  Turbulence: TurbulenceSVGFilter.spec,
+  DisplacementMap: DisplacementMapSVGFilter.spec,
+  ColorMatrix: ColorMatrixSVGFilter.spec,
+  ConvolveMatrix: ConvolveMatrixSVGFilter.spec
+};
+const ZERO_CONFIG = {};
+const WEBKIT_ATTRIBUTE_FOR_CSS = [
+  "text-fill-color",
+  "text-stroke-color",
+  "text-stroke-width",
+  "background-clip"
+];
+class DomRender$1 extends ItemRender$1 {
+  toStringPropertyCSS(item2, field) {
+    return STRING_TO_CSS(item2[field]);
+  }
+  toBackgroundImageCSS(item2) {
+    if (!item2.cacheBackgroundImage) {
+      item2.setBackgroundImageCache();
+    }
+    return item2.cacheBackgroundImage;
+  }
+  toLayoutCSS(item2) {
+    const layout2 = item2.layout;
+    if (item2.hasLayout()) {
+      if (layout2 === "flex") {
+        return this.toFlexLayoutCSS(item2);
+      } else if (layout2 === "grid") {
+        return this.toGridLayoutCSS(item2);
+      }
+    }
+    return {};
+  }
+  toLayoutItemCSS(item2) {
+    var _a;
+    var parentLayout = (_a = item2.parent) == null ? void 0 : _a["layout"];
+    var obj2 = {};
+    if (parentLayout === "flex") {
+      obj2 = {
+        position: "static",
+        left: "auto !important",
+        top: "auto !important"
+      };
+    } else if (parentLayout === "grid") {
+      obj2 = {
+        position: "static",
+        left: "auto !important",
+        top: "auto !important",
+        width: "auto !important",
+        height: "auto !important"
+      };
+    }
+    if (parentLayout === "flex") {
+      obj2 = __spreadValues(__spreadValues({}, obj2), item2.attrs("flex-basis", "flex-grow", "flex-shrink", "order"));
+    } else if (parentLayout === "grid") {
+      obj2 = __spreadValues(__spreadValues({}, obj2), item2.attrs("grid-column-start", "grid-column-end", "grid-row-start", "grid-row-end"));
+    }
+    return obj2;
+  }
+  toFlexLayoutCSS(item2) {
+    return __spreadValues({
+      display: "flex"
+    }, item2.attrs("flex-direction", "flex-wrap", "justify-content", "align-items", "align-content", "gap"));
+  }
+  toGridLayoutCSS(item2) {
+    return __spreadValues({
+      display: "grid"
+    }, item2.attrs("grid-template-columns", "grid-template-rows", "grid-template-areas", "grid-auto-columns", "grid-auto-rows", "grid-auto-flow", "gap", "grid-gap"));
+  }
+  toBorderCSS(item2) {
+    if (item2.hasChildren())
+      return {};
+    return item2.computed("border", (border2) => {
+      return STRING_TO_CSS(border2);
+    });
+  }
+  toKeyCSS(key) {
+    if (!item[key])
+      return {};
+    return {
+      [key]: item[key]
+    };
+  }
+  toBoxModelCSS(item2) {
+    let obj2 = {};
+    if (item2["margin-top"])
+      obj2["margin-top"] = item2["margin-top"];
+    if (item2["margin-bottom"])
+      obj2["margin-bottom"] = item2["margin-bottom"];
+    if (item2["margin-left"])
+      obj2["margin-left"] = item2["margin-left"];
+    if (item2["margin-right"])
+      obj2["margin-right"] = item2["margin-right"];
+    if (item2["padding-top"])
+      obj2["padding-top"] = item2["padding-top"];
+    if (item2["padding-bottom"])
+      obj2["padding-bottom"] = item2["padding-bottom"];
+    if (item2["padding-left"])
+      obj2["padding-left"] = item2["padding-left"];
+    if (item2["padding-right"])
+      obj2["padding-right"] = item2["padding-right"];
+    return obj2;
+  }
+  toKeyListCSS(item2, args2 = []) {
+    let obj2 = {};
+    args2.filter((it) => isNotUndefined(item2.json[it])).forEach((it) => {
+      obj2[it] = item2.json[it];
+    });
+    return obj2;
+  }
+  toSizeCSS(item2) {
+    const obj2 = {};
+    if (item2.right && item2.right.unit !== "auto") {
+      if (!item2.x) {
+        obj2.width = item2.width;
+      }
+    } else {
+      obj2.width = item2.width;
+    }
+    if (item2.bottom && item2.bottom.unit !== "auto") {
+      if (!item2.y) {
+        obj2.height = item2.height;
+      }
+    } else {
+      obj2.height = item2.height;
+    }
+    return __spreadValues({}, obj2);
+  }
+  toDefaultCSS(item2) {
+    let obj2 = {};
+    if (item2.isAbsolute) {
+      if (item2.x) {
+        obj2.left = item2.x;
+      }
+      if (item2.y) {
+        obj2.top = item2.y;
+      }
+      if (item2.right) {
+        obj2.right = item2.right;
+      }
+      if (item2.bottom) {
+        obj2.bottom = item2.bottom;
+      }
+    }
+    let result = {};
+    result = Object.assign(result, obj2);
+    result = Object.assign(result, this.toKeyListCSS(item2, [
+      "position",
+      "overflow",
+      "z-index",
+      "box-sizing",
+      "background-color",
+      "color",
+      "opacity",
+      "mix-blend-mode",
+      "transform-origin",
+      "transform-style",
+      "perspective",
+      "perspective-origin",
+      "font-size",
+      "font-stretch",
+      "line-height",
+      "font-weight",
+      "font-family",
+      "font-style",
+      "text-align",
+      "text-transform",
+      "text-decoration",
+      "letter-spacing",
+      "word-spacing",
+      "text-indent",
+      "border-radius",
+      "filter",
+      "backdrop-filter",
+      "box-shadow",
+      "text-shadow",
+      "offset-path",
+      "animation",
+      "transition"
+    ]));
+    return result;
+  }
+  toVariableCSS(item2) {
+    const v = item2.computed("variable", (v2) => {
+      let obj2 = {};
+      v2.split(";").filter((it) => it.trim()).forEach((it) => {
+        const [key, value] = it.split(":");
+        obj2[`--${key}`] = value;
+      });
+      return obj2;
+    });
+    return v;
+  }
+  toRootVariableCSS(item2) {
+    let obj2 = {};
+    item2.rootVariable.split(";").filter((it) => it.trim()).forEach((it) => {
+      const [key, value] = it.split(":");
+      obj2[`--${key}`] = value;
+    });
+    return obj2;
+  }
+  toRootVariableString(item2) {
+    return CSS_TO_STRING$1(this.toRootVariableCSS(item2));
+  }
+  toWebkitCSS(item2) {
+    var results = {};
+    WEBKIT_ATTRIBUTE_FOR_CSS.forEach((key) => {
+      results[`-webkit-${key}`] = item2[key];
+    });
+    return results;
+  }
+  toTextClipCSS(item2) {
+    let results = {};
+    if (item2["text-clip"] === "text") {
+      results["-webkit-background-clip"] = "text";
+      results["-webkit-text-fill-color"] = "transparent";
+      results["color"] = "transparent";
+    }
+    return results;
+  }
+  toTransformCSS(item2) {
+    if (item2.transform === "") {
+      return ZERO_CONFIG;
+    }
+    const results = {
+      transform: item2["transform"]
+    };
+    if (results.transform === "rotateZ(0deg)") {
+      delete results.transform;
+    }
+    return {
+      transform: results.transform
+    };
+  }
+  toDefInnerString(item2) {
+    return `
+      ${this.toClipPath(item2)}
+      ${this.toSVGFilter(item2)}
+    `.trim();
+  }
+  toClipPath(item2) {
+    if (item2["clip-path"] === "")
+      return "";
+    if (!item2.cacheClipPathObject) {
+      item2.setClipPathCache();
+    }
+    var obj2 = item2.cacheClipPathObject;
+    var value = obj2.value;
+    switch (obj2.type) {
+      case "path":
+        return `<clipPath id="${this.clipPathId(item2)}"><path d="${item2.clipPathString}" /></clipPath>`;
+      case "svg":
+        return `<clipPath id="${this.clipPathId(item2)}">${value}</clipPath>`;
+    }
+    return ``;
+  }
+  toClipPathCSS(item2) {
+    let str = item2["clip-path"];
+    if (Boolean(str) === false) {
+      return null;
+    }
+    if (!item2.cacheClipPathObject) {
+      item2.setClipPathCache();
+    }
+    var obj2 = item2.cacheClipPathObject;
+    switch (obj2.type) {
+      case "path":
+        if (obj2.value) {
+          str = `url(#${this.clipPathId(item2)})`;
+        }
+        break;
+      case "svg":
+        str = `url(#${this.clipPathId(item2)})`;
+        break;
+    }
+    return {
+      "clip-path": str
+    };
+  }
+  innerSVGId(item2) {
+    return item2.id + "inner-svg";
+  }
+  booleanId(item2) {
+    return item2.id + "boolean";
+  }
+  clipPathId(item2) {
+    return item2.id + "clip-path";
+  }
+  toDefString(item2) {
+    var str = this.toDefInnerString(item2).trim();
+    return str ? `
+    <svg class='inner-svg-element' style="display:block" data-id="${this.innerSVGId(item2)}" width="0" height="0">
+      <defs>
+        ${str}
+      </defs>
+    </svg>
+    ` : "";
+  }
+  toSelectorString(item2, prefix = "") {
+    return item2.selectors.map((selector2) => selector2.toString(prefix)).join("\n\n");
+  }
+  generateView(item2, prefix = "", appendCSS = "") {
+    var cssString = `
+  ${prefix} {  /* ${item2.itemType} */
+      ${CSS_TO_STRING$1(this.toCSS(item2), "\n    ")}; 
+      ${appendCSS}
+  }
+  ${this.toNestedCSS(item2).map((it) => {
+      return `${prefix} ${it.selector} { 
+        ${it.cssText ? it.cssText : CSS_TO_STRING$1(it.css || {}, "\n		")}; 
+    }`;
+    }).join("\n")}
+  ${this.toSelectorString(item2, prefix)}
+    `;
+    return cssString;
+  }
+  toCSS(item2) {
+    return Object.assign({}, this.toVariableCSS(item2), this.toDefaultCSS(item2), this.toSizeCSS(item2), this.toClipPathCSS(item2), this.toWebkitCSS(item2), this.toTextClipCSS(item2), this.toBoxModelCSS(item2), this.toBorderCSS(item2), this.toBackgroundImageCSS(item2), this.toLayoutCSS(item2), this.toTransformCSS(item2), this.toLayoutItemCSS(item2));
+  }
+  toStyle(item2, renderer) {
+    const cssString = this.generateView(item2, `[data-renderer-id='${renderer.id}'] .element-item[data-id='${item2.id}']`);
+    return `
+<style type='text/css' data-renderer-type="html" data-id='${item2.id}' data-timestamp='${item2.timestamp}'>
+${cssString}
+</style>
+    ` + item2.layers.map((it) => {
+      return renderer.toStyle(it, renderer);
+    }).join("");
+  }
+  toExportStyle(item2, renderer) {
+    const cssString = this.generateView(item2, `.element-item[data-id='${item2.id}']`);
+    return `
+<style type='text/css' data-renderer-type="html" data-id='${item2.id}' data-timestamp='${item2.timestamp}'>
+${cssString}
+</style>
+    ` + item2.layers.map((it) => {
+      return renderer.toExportStyle(it, renderer);
+    }).join("");
+  }
+  render(item2, renderer) {
+    var { elementType, id, name: name2, itemType, isBooleanItem } = item2;
+    const tagName = elementType || "div";
+    return `<${tagName} class="element-item ${itemType}" data-is-boolean-item="${isBooleanItem}" data-id="${id}" data-title="${name2}">
+  ${this.toDefString(item2)}
+  ${item2.layers.map((it) => {
+      return renderer.render(it, renderer);
+    }).join("")}
+</${tagName}>`;
+  }
+  toSVGFilter(item2) {
+    var filterString = item2.computedValue("svgfilters");
+    if (item2.hasChangedField("svgfilters") || !filterString) {
+      filterString = item2.computed("svgfilters", (svgfilters) => {
+        var filterString2 = svgfilters.map((svgfilter) => {
+          return `
+              <filter id='${svgfilter.id}'>
+                ${svgfilter.filters.map((filter2) => SVGFilter.parse(filter2)).join("\n")}
+              </filter>`;
+        }).join("");
+        return filterString2;
+      }, true);
+    }
+    return filterString;
+  }
+  renderSVG(item2, renderer) {
+  }
+  toNestedCSS(item2) {
+    const result = [];
+    return result;
+  }
+  update(item2, currentElement) {
+    if (!currentElement)
+      return;
+    let $svg = currentElement.el.$svg;
+    currentElement.el.$booleanSvg;
+    if (!$svg) {
+      currentElement.el.$svg = currentElement.$(`[data-id="${this.innerSVGId(item2)}"]`);
+      $svg = currentElement.el.$svg;
+      currentElement.el.$booleanSvg = currentElement.$(`[data-id="${this.booleanId(item2)}"]`);
+      currentElement.el.$booleanSvg;
+    }
+    if (currentElement.data("is-boolean-item") !== `${item2.isBooleanItem}`) {
+      currentElement.attr("data-is-boolean-item", item2.isBooleanItem);
+    }
+    if ($svg) {
+      const defString = this.toDefInnerString(item2);
+      if (defString) {
+        var $defs = $svg.$("defs");
+        $defs.updateSVGDiff(`<defs>${defString}</defs>`);
+      }
+    } else {
+      const defString = this.toDefString(item2);
+      if (defString) {
+        var a = Dom.createByHTML(defString);
+        if (a) {
+          currentElement.prepend(a);
+        }
+      }
+    }
+  }
+}
 class ArtBoardRender$2 extends DomRender$1 {
   render(item2, renderer) {
     var { elementType, id, name: name2, itemType } = item2;
@@ -44861,6 +45278,8 @@ class ArtBoardRender$2 extends DomRender$1 {
   toBorderCSS(item2) {
     return {};
   }
+}
+class LayerRender$1 extends DomRender$1 {
 }
 class CircleRender$2 extends LayerRender$1 {
 }
@@ -45672,7 +46091,7 @@ class BooleanPathRender$2 extends SVGItemRender$2 {
     const layers2 = item2.layers;
     const op = item2["boolean-operation"];
     switch (op) {
-      case "difference":
+      case BooleanOperation.DIFFERENCE:
         return SVGFill.parseImage(layers2[1].fill || "transparent").toSVGString(this.fillId(item2));
     }
     return SVGFill.parseImage(layers2[0].fill || "transparent").toSVGString(this.fillId(item2));
@@ -45681,7 +46100,7 @@ class BooleanPathRender$2 extends SVGItemRender$2 {
     const layers2 = item2.layers;
     const op = item2["boolean-operation"];
     switch (op) {
-      case "difference":
+      case BooleanOperation.DIFFERENCE:
         return SVGFill.parseImage(layers2[1].stroke || "transparent").toSVGString(this.strokeId(item2));
     }
     return SVGFill.parseImage(layers2[0].stroke || "black").toSVGString(this.strokeId(item2));
@@ -45691,7 +46110,7 @@ class BooleanPathRender$2 extends SVGItemRender$2 {
     const layers2 = item2.layers;
     const op = item2["boolean-operation"];
     switch (op) {
-      case "difference":
+      case BooleanOperation.DIFFERENCE:
         return SVGFill.parseImage(layers2[1].fill || "transparent").toSVGString(this.fillId(item2));
     }
     return (_b = (_a = SVGFill.parseImage(layers2[0].fill || "transparent")).toFillValue) == null ? void 0 : _b.call(_a, this.fillId(item2));
@@ -45704,7 +46123,7 @@ class BooleanPathRender$2 extends SVGItemRender$2 {
     const layers2 = item2.layers;
     const op = item2["boolean-operation"];
     switch (op) {
-      case "difference":
+      case BooleanOperation.DIFFERENCE:
         return (_b = (_a = SVGFill.parseImage(layers2[1].stroke || "transparent")).toFillValue) == null ? void 0 : _b.call(_a, this.strokeId(item2));
     }
     return (_d = (_c = SVGFill.parseImage(layers2[0].stroke || "black")).toFillValue) == null ? void 0 : _d.call(_c, this.strokeId(item2));
@@ -45858,7 +46277,7 @@ class MovableRender extends BaseAssetRender {
 }
 class DomRender extends MovableRender {
   async toCloneObject(item2, renderer) {
-    return __spreadProps(__spreadValues(__spreadValues({}, await super.toCloneObject(item2, renderer)), item2.attrs("position", "rootVariable", "variable", "transform", "filter", "backdrop-filter", "background-color", "background-image", "text-clip", "border-radius", "border", "box-shadow", "text-shadow", "clip-path", "color", "font-size", "font-stretch", "line-height", "text-align", "text-transform", "text-decoration", "letter-spacing", "word-spacing", "text-indent", "perspective-origin", "transform-origin", "transform-style", "perspective", "mix-blend-mode", "overflow", "opacity", "rotate", "layout", "flex-layout", "grid-layout", "animation", "transition", "boolean-operation", "boolean-path")), {
+    return __spreadProps(__spreadValues(__spreadValues({}, await super.toCloneObject(item2, renderer)), item2.attrs("position", "rootVariable", "variable", "transform", "filter", "backdrop-filter", "background-color", "background-image", "text-clip", "border-radius", "border", "box-shadow", "text-shadow", "clip-path", "color", "font-size", "font-stretch", "line-height", "text-align", "text-transform", "text-decoration", "letter-spacing", "word-spacing", "text-indent", "perspective-origin", "transform-origin", "transform-style", "perspective", "mix-blend-mode", "overflow", "opacity", "rotate", "layout", "flex-layout", "grid-layout", "animation", "transition", "constraints-horizontal", "constraints-vertical")), {
       selectors: item2.selectors.map((selector2) => selector2.clone()),
       svg: item2.svg.map((svg) => svg.clone())
     });
@@ -48821,9 +49240,9 @@ function svgItem(editor) {
         editorOptions: {
           label: editor.$i18n("svg.item.property.lineCap"),
           toggleLabels: ["line_cap_butt", "line_cap_round", "line_cap_square"],
-          toggleValues: ["butt", "round", "square"]
+          toggleValues: [StrokeLineCap.BUTT, StrokeLineJoin.ROUND, StrokeLineCap.SQUARE]
         },
-        defaultValue: current["stroke-linecap"] || "butt"
+        defaultValue: current["stroke-linecap"] || StrokeLineCap.BUTT
       },
       {
         key: "stroke-linejoin",
@@ -48831,9 +49250,9 @@ function svgItem(editor) {
         editorOptions: {
           label: editor.$i18n("svg.item.property.lineJoin"),
           toggleLabels: ["line_join_miter", "line_join_round", "line_join_bevel"],
-          toggleValues: ["miter", "round", "bevel"]
+          toggleValues: [StrokeLineJoin.MITER, StrokeLineJoin.ROUND, StrokeLineJoin.BEVEL]
         },
-        defaultValue: current["stroke-linejoin"] || "miter"
+        defaultValue: current["stroke-linejoin"] || StrokeLineJoin.MITER
       },
       {
         key: "mix-blend-mode",
@@ -49067,20 +49486,19 @@ function svgText(editor) {
     SVGTextProperty
   });
 }
-const textTransformOptions = "none,uppercase:AG,lowercase:ag,capitalize:Ag".split(",").map((it) => {
-  const [value, text2] = it.split(":");
-  return {
-    value,
-    text: text2
-  };
-});
-const textDecorationOptions = "none,underline,overline:O,line-through".split(",").map((it) => {
-  const [value, text2] = it.split(":");
-  return {
-    value,
-    text: text2
-  };
-});
+const textTransformOptions = [
+  { value: TextTransform.NONE, text: "None" },
+  { value: TextTransform.CAPITALIZE, text: "Ag" },
+  { value: TextTransform.UPPERCASE, text: "AG" },
+  { value: TextTransform.LOWERCASE, text: "ag" }
+];
+const textDecorationOptions = [
+  { value: TextDecoration.NONE, text: "None" },
+  { value: TextDecoration.UNDERLINE, text: "Underline" },
+  { value: TextDecoration.OVERLINE, text: "Overline" },
+  { value: TextDecoration.LINE_THROUGH, text: "Line-through" },
+  { value: TextDecoration.BLINK, text: "Blink" }
+];
 class TextProperty extends BaseProperty {
   getTitle() {
     return this.$i18n("text.property.title");
@@ -49685,27 +50103,26 @@ class RotateEditorView extends EditorElement {
 }
 var TransformEditor$1 = "";
 var transformList$1 = [
-  "perspective",
-  "rotate",
-  "rotateX",
-  "rotateY",
-  "rotateZ",
-  "rotate3d",
-  "skew",
-  "skewX",
-  "skewY",
-  "translate",
-  "translateX",
-  "translateY",
-  "translateZ",
-  "translate3d",
-  "scale",
-  "scaleX",
-  "scaleY",
-  "scaleZ",
-  "scale3d",
-  "matrix",
-  "matrix3d"
+  TransformValue.PERSPECTIVE,
+  TransformValue.ROTATE,
+  TransformValue.ROTATE_X,
+  TransformValue.ROTATE_Y,
+  TransformValue.ROTATE_Z,
+  TransformValue.SKEW,
+  TransformValue.SKEW_X,
+  TransformValue.SKEW_Y,
+  TransformValue.TRANSLATE,
+  TransformValue.TRANSLATE_X,
+  TransformValue.TRANSLATE_Y,
+  TransformValue.TRANSLATE_Z,
+  TransformValue.TRANSLATE_3D,
+  TransformValue.SCALE,
+  TransformValue.SCALE_X,
+  TransformValue.SCALE_Y,
+  TransformValue.SCALE_Z,
+  TransformValue.SCALE_3D,
+  TransformValue.MATRIX,
+  TransformValue.MATRIX_3D
 ];
 const labels = {
   "scale": ["X", "Y"],
@@ -50129,163 +50546,6 @@ function transform(editor) {
   editor.registerMenuItem("inspector.tab.style", {
     TransformProperty
   });
-}
-var TransformOriginEditor$1 = "";
-const typeList = [
-  { key: "transform-origin-x", title: "X" },
-  { key: "transform-origin-y", title: "Y" },
-  { key: "transform-origin-z", title: "Z" }
-];
-const keyList = typeList.map((it) => it.key);
-const origin = {
-  top: "50% 0%",
-  "top left": "0% 0%",
-  "top right": "100% 0%",
-  left: "0% 50%",
-  center: "50% 50%",
-  right: "100% 50%",
-  bottom: "50% 100%",
-  "bottom left": "0% 100%",
-  "bottom right": "100% 100%"
-};
-class TransformOriginEditor extends EditorElement {
-  initState() {
-    var arr = this.props.value.split(" ");
-    var obj2 = {
-      isAll: false,
-      "transform-origin": Length.percent(50),
-      "transform-origin-x": Length.percent(50),
-      "transform-origin-y": Length.percent(50)
-    };
-    if (this.props.value) {
-      if (arr.length === 1) {
-        obj2["isAll"] = true;
-        obj2["transform-origin"] = Length.parse(arr[0]);
-        obj2["transform-origin-x"] = Length.parse(arr[0]);
-        obj2["transform-origin-y"] = Length.parse(arr[0]);
-      } else if (arr.length == 2) {
-        obj2["isAll"] = false;
-        obj2["transform-origin-x"] = Length.parse(arr[0]);
-        obj2["transform-origin-y"] = Length.parse(arr[1]);
-      }
-    }
-    return obj2;
-  }
-  template() {
-    return `
-      <div class='elf--transform-origin-editor'>
-        <div class='direction' ref='$direction'>
-          <div class='pos' data-value='top left'></div>        
-          <div class='pos' data-value='top'></div>
-          <div class='pos' data-value='top right'></div>
-          <div class='pos' data-value='left'></div>
-          <div class='pos' data-value='center'></div>
-          <div class='pos' data-value='right'></div>
-          <div class='pos' data-value='bottom left'></div>                   
-          <div class='pos' data-value='bottom'></div>
-          <div class='pos' data-value='bottom right'></div>
-        </div>
-        <div ref='$body'></div>
-      </div>
-    `;
-  }
-  [CLICK("$direction .pos")](e) {
-    var direct = e.$dt.attr("data-value");
-    this.state.isAll = false;
-    var [x2, y2] = origin[direct].split(" ");
-    this.state["transform-origin-x"] = Length.parse(x2);
-    this.state["transform-origin-y"] = Length.parse(y2);
-    this.refresh();
-    this.modifyTransformOrigin();
-  }
-  [SUBSCRIBE_SELF("changeTransformOrigin")](key, value) {
-    if (key === "transform-origin") {
-      keyList.forEach((type) => {
-        this.children[`$${type}`].setValue(value.toString());
-      });
-    }
-    if (key === "transform-origin-z") {
-      this.state[key] = value;
-    }
-    this.setTransformOrigin();
-  }
-  [LOAD("$body")]() {
-    return `
-      <div class="full transform-origin-item" ref="$partitialSetting" >
-        <div class="radius-setting-box" ref="$radiusSettingBox">
-          ${typeList.map((it) => {
-      return `
-              <div>
-                  <object refClass="RangeEditor"  ref='$${it.key}' compact="true" label='${it.title}' key='${it.key}' value="${this.state[it.key]}" onchange='changeTransformOrigin' />
-              </div>  
-            `;
-    }).join("")}
-        </div>
-      </div>
-    `;
-  }
-  setTransformOrigin() {
-    var type = this.refs.$selector.attr("data-selected-value");
-    if (type === "all") {
-      this.state.isAll = true;
-      this.state["transform-origin"] = this.children[`$all`].getValue();
-    } else {
-      this.state.isAll = false;
-      keyList.forEach((key) => {
-        this.state[key] = this.children[`$${key}`].getValue();
-      });
-    }
-    this.modifyTransformOrigin();
-  }
-  modifyTransformOrigin() {
-    var value = `${this.state["transform-origin-x"]} ${this.state["transform-origin-y"]} ${this.state["transform-origin-z"] || "0px"}`;
-    this.parent.trigger(this.props.onchange, this.props.key, value);
-  }
-  [CLICK("$selector button")](e) {
-    var type = e.$dt.attr("data-value");
-    this.refs.$selector.attr("data-selected-value", type);
-    if (type === "all") {
-      this.refs.$partitialSetting.hide();
-    } else {
-      this.refs.$partitialSetting.show("grid");
-    }
-    this.setTransformOrigin();
-  }
-}
-class TransformOriginProperty extends BaseProperty {
-  getTitle() {
-    return this.$i18n("transform.origin.property.title");
-  }
-  hasKeyframe() {
-    return true;
-  }
-  getKeyframeProperty() {
-    return "transform-origin";
-  }
-  [CLICK("$remove")]() {
-    this.trigger("changeTransformOrigin", "");
-  }
-  getBody() {
-    return `
-      <div class="property-item full transform-origin-item" ref='$body'></div>
-    `;
-  }
-  [LOAD("$body")]() {
-    var current = this.$selection.current || {};
-    var value = current["transform-origin"] || "";
-    return `<object refClass="TransformOriginEditor" ref='$1' value='${value}' onchange='changeTransformOrigin' />`;
-  }
-  get editableProperty() {
-    return "transform-origin";
-  }
-  [SUBSCRIBE("refreshSelection") + DEBOUNCE(100) + IF("checkShow")]() {
-    this.refresh();
-  }
-  [SUBSCRIBE_SELF("changeTransformOrigin")](key, value) {
-    this.command("setAttributeForMulti", "change transform-origin", this.$selection.packByValue({
-      "transform-origin": value
-    }));
-  }
 }
 const TRANSITION_TIMING_REG = /((cubic-bezier|steps)\(([^\)]*)\))/gi;
 class Transition extends PropertyItem {
@@ -54091,13 +54351,13 @@ class SelectionToolView extends SelectionToolEvent$1 {
   }
   calculateDistance(vertex, distVector, reverseMatrix) {
     const currentVertex = clone(vertex);
+    const moveVertext = add$1([], currentVertex, distVector);
     const snap = this.$snapManager.check([
-      add$1([], currentVertex, distVector)
+      moveVertext
     ]);
-    const nextVertex = add$1([], currentVertex, add$1([], distVector, snap));
-    var currentResult = transformMat4([], currentVertex, reverseMatrix);
-    var nextResult = transformMat4([], nextVertex, reverseMatrix);
-    const realDist = add$1([], nextResult, negate([], currentResult));
+    const nextVertex = add$1([], moveVertext, snap);
+    const [currentResult, nextResult] = vertiesMap([currentVertex, nextVertex], reverseMatrix);
+    const realDist = subtract([], nextResult, currentResult);
     return realDist;
   }
   calculateRealDist(item2, vertexIndex, distVector) {
@@ -54128,12 +54388,12 @@ class SelectionToolView extends SelectionToolEvent$1 {
     this.moveItem(this.$model.get(item2.id), lastStartVertex, newWidth, newHeight);
   }
   moveBottomRightVertex(distVector) {
-    const { shiftKey, altKey, ctrlKey, metaKey } = this.$config.get("bodyEvent");
+    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
     const item2 = this.$selection.cachedCurrentItemMatrix;
     if (item2) {
       let [realDx, realDy] = this.calculateRealDist(item2, 2, distVector);
       let directionNewVector = fromValues(0, 0, 0);
-      if (metaKey) {
+      if (altKey) {
         realDx = realDx * 2;
         realDy = realDy * 2;
       }
@@ -54141,24 +54401,32 @@ class SelectionToolView extends SelectionToolEvent$1 {
         realDy = realDx * item2.height / item2.width;
       }
       const newWidth = item2.width + realDx;
-      const newHeight = altKey ? newWidth : item2.height + realDy;
-      if (metaKey) {
+      const newHeight = metaKey ? newWidth : item2.height + realDy;
+      if (altKey) {
         directionNewVector = fromValues(realDx / 2, realDy / 2, 0);
       }
       this.moveDirectionVertex(item2, newWidth, newHeight, "to top left", directionNewVector);
     }
   }
   moveTopRightVertex(distVector) {
-    const { shiftKey, altKey } = this.$config.get("bodyEvent");
+    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
     const item2 = this.$selection.cachedCurrentItemMatrix;
     if (item2) {
       let [realDx, realDy] = this.calculateRealDist(item2, 1, distVector);
+      if (altKey) {
+        realDx = realDx * 2;
+        realDy = realDy * 2;
+      }
       if (shiftKey) {
         realDy = -(realDx * item2.height / item2.width);
       }
       const newWidth = item2.width + realDx;
-      const newHeight = altKey ? newWidth : item2.height - realDy;
-      this.moveDirectionVertex(item2, newWidth, newHeight, "to bottom left", [0, newHeight, 0]);
+      const newHeight = metaKey ? newWidth : item2.height - realDy;
+      let directionNewVector = fromValues(0, newHeight, 0);
+      if (altKey) {
+        directionNewVector = fromValues(realDx / 2, newHeight + realDy / 2, 0);
+      }
+      this.moveDirectionVertex(item2, newWidth, newHeight, "to bottom left", directionNewVector);
     }
   }
   moveTopLeftVertex(distVector) {
@@ -54166,7 +54434,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
     const item2 = this.$selection.cachedCurrentItemMatrix;
     if (item2) {
       let [realDx, realDy] = this.calculateRealDist(item2, 0, distVector);
-      if (metaKey) {
+      if (altKey) {
         realDx = realDx * 2;
         realDy = realDy * 2;
       }
@@ -54174,93 +54442,101 @@ class SelectionToolView extends SelectionToolEvent$1 {
         realDy = realDx * item2.height / item2.width;
       }
       const newWidth = item2.width - realDx;
-      const newHeight = altKey ? newWidth : item2.height - realDy;
+      const newHeight = metaKey ? newWidth : item2.height - realDy;
       let directionNewVector = fromValues(newWidth, newHeight, 0);
-      if (metaKey) {
+      if (altKey) {
         directionNewVector = fromValues(newWidth + realDx / 2, newHeight + realDy / 2, 0);
       }
       this.moveDirectionVertex(item2, newWidth, newHeight, "to bottom right", directionNewVector);
     }
   }
   moveTopVertex(distVector) {
-    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
+    const { altKey } = this.$config.get("bodyEvent");
     const item2 = this.$selection.cachedCurrentItemMatrix;
     if (item2) {
       let [realDx, realDy] = this.calculateRealDist(item2, 0, distVector);
-      if (metaKey) {
+      if (altKey) {
         realDy = realDy * 2;
       }
       const newWidth = item2.width;
       const newHeight = item2.height - realDy;
       let directionNewVector = fromValues(newWidth / 2, newHeight, 0);
-      if (metaKey) {
+      if (altKey) {
         directionNewVector = fromValues(newWidth / 2, newHeight + realDy / 2, 0);
       }
       this.moveDirectionVertex(item2, newWidth, newHeight, "to bottom", directionNewVector);
     }
   }
   moveBottomVertex(distVector) {
-    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
+    const { altKey } = this.$config.get("bodyEvent");
     const item2 = this.$selection.cachedCurrentItemMatrix;
     if (item2) {
       let [realDx, realDy] = this.calculateRealDist(item2, 3, distVector);
-      if (metaKey) {
+      if (altKey) {
         realDy = realDy * 2;
       }
       const newWidth = item2.width;
       const newHeight = item2.height + realDy;
       let directionNewVector = fromValues(newWidth / 2, 0, 0);
-      if (metaKey) {
+      if (altKey) {
         directionNewVector = fromValues(newWidth / 2, realDy / 2, 0);
       }
       this.moveDirectionVertex(item2, newWidth, newHeight, "to top", directionNewVector);
     }
   }
   moveRightVertex(distVector) {
-    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
+    const { altKey } = this.$config.get("bodyEvent");
     const item2 = this.$selection.cachedCurrentItemMatrix;
     if (item2) {
       let [realDx, realDy] = this.calculateRealDist(item2, 1, distVector);
-      if (metaKey) {
+      if (altKey) {
         realDx = realDx * 2;
       }
       const newWidth = item2.width + realDx;
       const newHeight = item2.height;
       let directionNewVector = fromValues(0, newHeight / 2, 0);
-      if (metaKey) {
+      if (altKey) {
         directionNewVector = fromValues(realDx / 2, newHeight / 2, 0);
       }
       this.moveDirectionVertex(item2, newWidth, newHeight, "to left", directionNewVector);
     }
   }
   moveLeftVertex(distVector) {
-    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
+    const { altKey } = this.$config.get("bodyEvent");
     const item2 = this.$selection.cachedCurrentItemMatrix;
     if (item2) {
       let [realDx, realDy] = this.calculateRealDist(item2, 0, distVector);
-      if (metaKey) {
+      if (altKey) {
         realDx = realDx * 2;
       }
       const newWidth = item2.width - realDx;
       const newHeight = item2.height;
       let directionNewVector = fromValues(newWidth, newHeight / 2, 0);
-      if (metaKey) {
+      if (altKey) {
         directionNewVector = fromValues(newWidth + realDx / 2, newHeight / 2, 0);
       }
       this.moveDirectionVertex(item2, newWidth, newHeight, "to right", directionNewVector);
     }
   }
   moveBottomLeftVertex(distVector) {
-    const { shiftKey, altKey } = this.$config.get("bodyEvent");
+    const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
     const item2 = this.$selection.cachedCurrentItemMatrix;
     if (item2) {
       let [realDx, realDy] = this.calculateRealDist(item2, 3, distVector);
+      if (altKey) {
+        realDx = realDx * 2;
+        realDy = realDy * 2;
+      }
       if (shiftKey) {
         realDy = -(realDx * item2.height / item2.width);
       }
       const newWidth = item2.width - realDx;
-      const newHeight = altKey ? newWidth : item2.height + realDy;
-      this.moveDirectionVertex(item2, newWidth, newHeight, "to top right", [newWidth, 0, 0]);
+      const newHeight = metaKey ? newWidth : item2.height + realDy;
+      let directionNewVector = fromValues(newWidth, 0, 0);
+      if (altKey) {
+        directionNewVector = fromValues(newWidth + realDx / 2, realDy / 2, 0);
+      }
+      this.moveDirectionVertex(item2, newWidth, newHeight, "to top right", directionNewVector);
     }
   }
   moveVertex() {
@@ -54283,7 +54559,9 @@ class SelectionToolView extends SelectionToolEvent$1 {
     } else if (this.state.moveType === "to bottom left") {
       this.moveBottomLeftVertex(distVector);
     }
+    this.$selection.recoverChildren();
     this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "width", "height"));
+    this.emit("refreshAllElementBoundSize");
     this.state.dragging = true;
   }
   moveEndVertex() {
@@ -54459,6 +54737,9 @@ class SelectionToolView extends SelectionToolEvent$1 {
                 />
         </svg>
         `;
+  }
+  removeNaN(value) {
+    return value.replace(/NaN/g, "0");
   }
   createRenderPointers(pointers) {
     const current = this.$selection.current;
@@ -55031,15 +55312,12 @@ var designEditorPlugins = [
   gradient,
   depth,
   alignment,
-  pathTool,
-  artboard,
-  boxModel,
   position,
   layout,
-  transform,
+  boxModel,
+  pathTool,
+  artboard,
   appearance,
-  perspective,
-  perspectiveOrigin,
   component,
   backgroundImage,
   border,
@@ -55054,6 +55332,9 @@ var designEditorPlugins = [
   textClip,
   video,
   image,
+  transform,
+  perspective,
+  perspectiveOrigin,
   patternAsset,
   svgFilterAsset,
   svgItem,

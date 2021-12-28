@@ -388,7 +388,8 @@ export default class EventMachine {
         $dom,
         refClass,
         props,
-        refName,
+        // variable 로 props 를 지정했을 수도 있기 때문에 props.ref 도 같이 사용한다. 
+        refName: refName || props.ref, 
         component: EventMachineComponent
       }
     } else {

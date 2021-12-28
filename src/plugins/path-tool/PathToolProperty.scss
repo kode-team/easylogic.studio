@@ -11,6 +11,14 @@
       padding: 4px 0px;
       height: 30px;
       text-align: left;
+
+      &.divider {
+        height: 1px;
+        padding: 0px;
+        font-size: 0px;
+        background-color: var(--elf--property-border-color);
+        margin: 10px 0px;
+      }
     }
 
     button {

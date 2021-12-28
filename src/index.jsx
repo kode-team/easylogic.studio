@@ -33,4 +33,4 @@ function startEditor() {
   })
 }
 
-window.EasylogicEditor = startEditor();
+window.EasylogicEditor = startEditor(); 

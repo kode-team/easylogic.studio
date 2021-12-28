@@ -4,6 +4,7 @@ $border-radius: 3px;
     grid-template-columns: 1fr;
     height: var(--elf--input-height);
     border-radius: $border-radius;
+    border: 1px solid transparent;
 
     &.disabled {
         label {
@@ -19,21 +20,19 @@ $border-radius: 3px;
         }
     }
 
+
     &.focused {
+        border-color: var(--elf--selected-color);
+        border-width: 2px;
+    }
 
-        .area {
-            
-            input[type="number"] {
-                border-color: var(--elf--selected-color) !important;
-            }
+    &.drag {
+        border-color: var(--elf--selected-color);
+        border-width: 1px;
+    }
 
-            .elf--select-editor {
-
-                select {
-                    border-color: var(--elf--selected-color) !important;
-                }
-            }
-        }
+    &:hover:not(.focused):not(.drag) {
+        border-color: var(--elf--input-sub-font-color);
     }
 
     &.has-label {
@@ -56,6 +55,7 @@ $border-radius: 3px;
             text-overflow: ellipsis;
             overflow: hidden;
             line-height: 1.6;
+            cursor: ew-resize;
 
             svg {
                 width: 20px;
@@ -93,7 +93,7 @@ $border-radius: 3px;
         .area {
             font-size: 13px;
             display: grid;
-            grid-template-columns: 1fr 30px;
+            grid-template-columns: 1fr 24px;
             height: 100%;
             border-radius: 3px;
             
@@ -108,40 +108,28 @@ $border-radius: 3px;
             }
 
             input[type=number] {        
-                height: 100%;                 
-                padding: 2px 2px;      
-                border-right: 0px;
-                border-top-left-radius: $border-radius;
-                border-bottom-left-radius: $border-radius;
-                border-top-right-radius: 0px;
-                border-bottom-right-radius: 0px;                
-
-                border-bottom: 1px solid var(--elf--input-border-color);
-                border-top: 1px solid var(--elf--input-border-color);
-                border-left: 1px solid var(--elf--input-border-color);                                     
+                width: 100%;
+                padding-left: 2px;
+                background-color: transparent;
+                border:0px;
+                appearance: none;         
+                vertical-align: middle;        
             }
 
             .elf--select-editor {
 
                 select {
-                    border-top-left-radius: 0px;
-                    border-bottom-left-radius: 0px;                                    
-                    border-top-right-radius: $border-radius;
-                    border-bottom-right-radius: $border-radius;
-                    border-top-left-radius: 0px;
-                    border-bottom-left-radius: 0px;                    
-                    background-color: var(--elf--input-background-color);
-                    appearance: none;
-                    text-align: center;
-                    height: 100%;
-                    
-                    padding: 0px 4px;             
-                    border-left:0px;
+                    background-color: transparent;
+                    height: 24px;
                     color: var(--elf--input-sub-font-color);
-                    border-bottom: 1px solid var(--elf--input-border-color);
-                    border-top: 1px solid var(--elf--input-border-color);
-                    border-right: 1px solid var(--elf--input-border-color);                     
+                    border: 0px;
                 }
+            }
+
+            .unit {
+                vertical-align: middle;
+                display: inline-block;
+                line-height: 2;
             }
         }
 

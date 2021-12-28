@@ -51,11 +51,9 @@
     "vite:prod": "vite build --config=vite.prod.config.js && npm run copy:resource",
     "release": "release-it *",
     "copy:resource": "cp CNAME docs/",
-    "watch": "webpack --mode=production --watch --progress --config=webpack.dist.config.js",
     "build": "npm run vite:prod && npm run vite:dist",
     "dev": "npm run vite:dev",
-    "test": "NODE_ENV=test jest --watch --detectOpenHandles",
-    "vitest": "vitest",
+    "test": "vitest",
     "coverage": "vitest --coverage"
   },
   "repository": {

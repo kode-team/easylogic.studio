@@ -72,7 +72,12 @@ export default class FlexLayoutItemProperty extends BaseProperty {
   }
 
   getFlexItemValue  (value) {
-    return value.unit === 'auto' ? 'auto' : value + "";
+
+    if (value?.isString() && value.unit === '' &&  value.value !== 'auto') {
+      return 0;
+    }
+
+    return value.unit === 'auto' ? 'auto' : value;
   }
 
   getFlexValue () {
@@ -85,15 +90,17 @@ export default class FlexLayoutItemProperty extends BaseProperty {
     shrink = this.getFlexItemValue(shrink);
     basis = this.getFlexItemValue(basis);
 
-    return CSS_TO_STRING({
-      flex: `${grow} ${shrink} ${basis}`
-    })
+    return {
+      'flex-grow': grow,
+      'flex-shrink': shrink,
+      'flex-basis': basis
+    }
   }
 
   [SUBSCRIBE_SELF('changeFlexItem')] (key, value) {
 
     this.command('setAttributeForMulti', 'change flex layout', this.$selection.packByValue({ 
-      'flex-layout-item': this.getFlexValue()
+      [key]: value
     }))
 
     this.nextTick(() => {
@@ -102,16 +109,8 @@ export default class FlexLayoutItemProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF('changeLayoutType')] (key, value) {
-
-    var valueType = this.children.$layout.getValue()
-    var value = valueType;
-
-    if (valueType === 'value') {
-      value = this.getFlexValue()
-    }
-
     this.command('setAttributeForMulti', 'change flex layout', this.$selection.packByValue({ 
-      'flex-layout-item': value
+      'flex': value
     }))
 
     // 타입 변화에 따른 하위 아이템들의 설정을 바꿔야 한다. 

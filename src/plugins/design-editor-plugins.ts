@@ -91,19 +91,15 @@ export default [
     // inspector.tab.style    
     depth,
     alignment,
-    pathTool,
-    artboard,
+    position,        
+    layout,   
+
 
     // layout 
     boxModel,
-    position,    
-    layout,    
-    transform,
-    // transformOrigin,    
+    pathTool,         
+    artboard,    
     appearance,
-    perspective,
-    perspectiveOrigin,
-
     // iframe,
     component,
     backgroundImage,
@@ -123,7 +119,13 @@ export default [
 
     // resource    
     video,
-    image,
+    image,    
+    transform,   
+    // transformOrigin,         
+    perspective,
+    perspectiveOrigin,
+
+
 
 
     patternAsset,

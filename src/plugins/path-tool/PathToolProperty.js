@@ -41,9 +41,6 @@ export default class PathToolProperty extends BaseProperty {
     return /*html*/`
       <div class="elf--boolean-item" ref="$buttons">
         <div>
-          <button type="button" data-command="switch.path">${iconUse("sync", "", {width: 30, height: 30})} Switch path</button>        
-        </div>      
-        <div>
           <button type="button" data-command="convert.path.operation" data-args="union">${iconUse("boolean_union", "", {width: 30, height: 30})} Union</button>        
           <button type="button" data-command="convert.path.operation" data-args="intersection">${iconUse("boolean_intersection", "", {width: 30, height: 30})} Intersection</button>        
         </div>
@@ -51,17 +48,19 @@ export default class PathToolProperty extends BaseProperty {
           <button type="button" data-command="convert.path.operation" data-args="difference">${iconUse("boolean_difference", "", {width: 30, height: 30})} Subtract</button>        
           <button type="button" data-command="convert.path.operation" data-args="xor">${iconUse("boolean_xor", "", {width: 30, height: 30})} Exclude</button>        
         </div>
+        <div class="divider"></div>
         <div>
           <button type="button" data-command="convert.simplify.path">${iconUse('grid3x3', "", {width: 24, height: 24})} Self Intersection</button>        
           <button type="button" data-command="convert.flatten.path">${iconUse('flatten', "", {width: 24, height: 24})} Flatten</button>                  
         </div>
         <div>
-          <button type="button" data-command="convert.smooth.path">${iconUse('smooth', "", {width: 24, height: 24})} Smooth Path</button>                
+          <!--<button type="button" data-command="convert.smooth.path">${iconUse('smooth', "", {width: 24, height: 24})} Smooth Path</button>-->                
+          <button type="button" data-command="switch.path">${iconUse("sync", "", {width: 30, height: 30})} Switch path</button>                  
           <button type="button" data-command="convert.stroke.to.path">${iconUse('outline_shape', "", {width: 24, height: 24})} Outline Path</button> 
         </div>        
         <div>
           <button type="button" data-command="convert.polygonal.path">${iconUse('highlight_at', "", {width: 24, height: 24})} Polygonal</button>                
-          <button type="button" data-command="convert.normalize.path">${iconUse('stroke_to_path', "", {width: 24, height: 24})} Curve</button> 
+          <button type="button" data-command="convert.normalize.path">${iconUse('stroke_to_path', "", {width: 24, height: 24})} Normalize</button> 
         </div>                
       </div>
     `;

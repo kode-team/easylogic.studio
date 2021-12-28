@@ -1,8 +1,7 @@
 import PathParser from "el/editor/parser/PathParser";
 import icon from "el/editor/icon/icon";
 import { SVGPathItem } from './SVGPathItem';
-import { isUndefined } from 'el/sapa/functions/func';
-import { Length } from "el/editor/unit/Length";
+import { BooleanOperation } from "el/editor/types/model";
 
 
 export class BooleanPathItem extends SVGPathItem {
@@ -68,45 +67,6 @@ export class BooleanPathItem extends SVGPathItem {
       }
     }
 
-    // if (this.hasChangedField('width', 'height') ) {
-
-    //   if (context.doNotChildrenScale) {
-    //     // this.setCache();      
-    //   } else {
-    //     // boolean path 의 크기(width, height)가 변경이 되면 
-    //     // 하위 layers 들의 크기도 같이 변경 된다. 
-    //     // 이건 layout 과 상관 없이 처리된다. 
-    //     const scaleX = isUndefined(this.cacheWidth) ? 1 : this.json.width.value/this.cacheWidth;
-    //     const scaleY = isUndefined(this.cacheHeight) ? 1 : this.json.height.value/this.cacheHeight;
-
-    //     // 비율이 동일할때는 자식을 변경하지 않는다. 
-    //     if (scaleX === 1 && scaleY === 1) {
-    //       return;
-    //     }
-
-    //     console.log(scaleX, scaleY);
-
-    //     // 비율이 동일하지 않으면 자식을 변경할 수 있다. 
-    //     this.cacheLayers.forEach(it => {
-
-    //       const matrix = it.matrix;
-
-    //       const x = Length.px(matrix.x * scaleX);
-    //       const y = Length.px(matrix.y * scaleY);
-    //       const width = Length.px(matrix.width * scaleX);
-    //       const height = Length.px(matrix.height * scaleY);
-
-    //       // 변경 이후에 
-    //       it.item.reset({
-    //         x, y, width, height
-    //       })
-
-    //       // 변화에 대한 메세지를 남긴다. 
-    //       this.modelManager.setChanged('reset', it.id, { x, y, width, height });        
-    //     })
-    //   }
-    // }
-
     return isChanged;
   }
 
@@ -116,6 +76,51 @@ export class BooleanPathItem extends SVGPathItem {
   get resizableWitChildren () {
     return true;
   }
+
+
+  startToCacheChildren() {
+
+    // if (!this.resizableWitChildren) return;
+
+    this.cachedSize = {
+        width: this.json.width.clone(),
+        height: this.json.height.clone()
+    }
+    this.cachedLayerMatrix = this.layers.map(item => {
+        item.startToCacheChildren();
+
+        return {
+            item, matrix: item.matrix
+        }
+    })
+}
+
+/**
+ * 상위 레이어에 맞게 자식 레이어의 공간(x,y,width,height)를 변경한다.
+ */
+ recoverChildren() {
+
+    // if (!this.resizableWitChildren) return;
+
+    const obj = {
+        width: this.json.width.clone(),
+        height: this.json.height.clone()
+    }
+
+    const scaleX = obj.width.value / this.cachedSize.width.value;
+    const scaleY = obj.height.value / this.cachedSize.height.value;
+
+    this.cachedLayerMatrix.forEach(({ item, matrix, constraints }) => {
+        item.reset({ 
+            x: item.x.changeUnitValue(matrix.x * scaleX, obj.width.value),
+            y: item.y.changeUnitValue(matrix.y * scaleY, obj.height.value),
+            width: item.width.changeUnitValue(matrix.width * scaleX, obj.width.value),
+            height: item.height.changeUnitValue(matrix.height * scaleY, obj.height.value),
+        })
+
+        item.recoverChildren();
+    })
+}  
     
 
   getFieldValueByBooleanOperation(field) {
@@ -130,11 +135,8 @@ export class BooleanPathItem extends SVGPathItem {
     const op = this['boolean-operation']
 
     switch(op) {
-      case "difference": return layers[1][field];
-      case "intersection": break;
-      case "union": break;
-      case "reverse-difference": break;
-      case "xor": break;
+      case BooleanOperation.DIFFERENCE: return layers[1][field];
+      default: break;
     }
 
     return layers[0][field];     
@@ -179,11 +181,11 @@ export class BooleanPathItem extends SVGPathItem {
   doBooleanOperation() {
     const op = this.json['boolean-operation']
     switch(op) {
-    case "intersection": return this.intersection();
-    case "union": return this.union();
-    case "difference": return this.difference();
-    case "reverse-difference": return this.reverseDifference();
-    case "xor": return this.xor();
+    case BooleanOperation.INTERSECTION: return this.intersection();
+    case BooleanOperation.UNION: return this.union();
+    case BooleanOperation.DIFFERENCE: return this.difference();
+    case BooleanOperation.REVERSE_DIFFERENCE: return this.reverseDifference();
+    case BooleanOperation.XOR: return this.xor();
     }
 
     return "";

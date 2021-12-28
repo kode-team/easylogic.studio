@@ -1,7 +1,7 @@
 
 import { LOAD, CLICK, DOMDIFF } from "el/sapa/Event";
-import icon from "el/editor/icon/icon";
-import { isString } from "el/sapa/functions/func";
+import icon, { iconBlank, iconMake } from "el/editor/icon/icon";
+import { isNotUndefined, isString } from "el/sapa/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './SelectIconEditor.scss';
@@ -86,8 +86,15 @@ export default class SelectIconEditor extends EditorElement {
             var isSelected = value === this.state.value; 
             var selected = isSelected ? 'selected' : '' 
             if (it.value === '') {
-                var label = icon.close
+                var label = ""
                 title = 'close'
+
+                if (isNotUndefined(this.state.icons[index])) {
+                    iconClass = 'icon'
+                    label = iconBlank()
+                    value = '__blank__'
+                }
+
             } else {
                 var iconKey = this.state.icons[index];
 
@@ -112,6 +119,8 @@ export default class SelectIconEditor extends EditorElement {
     [CLICK('$options .select-icon-item')] (e) {
 
         var value = e.$dt.attr('data-value')
+
+        if (!value || value === '__blank__') return;
 
         this.updateData({
             value

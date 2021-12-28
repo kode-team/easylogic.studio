@@ -20,7 +20,7 @@
         outline: none;
         line-height: 1;
         background-color: transparent;
-        height: 30px;
+        height: 24px;
         // border: 1px solid var(--elf--border-color);
         box-sizing: border-box;
         // padding: 2px;
@@ -51,15 +51,16 @@
                 top: 50%;
                 display: inline-block;
                 transform: translate(-50%, -50%);
-                width: 20px;
-                height: 20px;
+                width: 16px;
+                height: 16px;
                 vertical-align: middle;
             }
 
             &.selected {
                 background-color: var(--elf--selected-color-2);
-                color: var(--elf--selected-font-color);
-                border-radius: 3px;                            
+                color: var(--elf--font-color);
+                // color: var(--elf--selected-font-color);
+                // border-radius: 3px;                            
             }
 
             &.icon {

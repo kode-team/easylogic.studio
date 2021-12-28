@@ -3,6 +3,7 @@ import { Item } from "el/editor/items/Item";
 import SVGItemRender from "./SVGItemRender";
 import { SVGFill } from 'el/editor/property-parser/SVGFill';
 import Color from "el/utils/Color";
+import { BooleanOperation } from "el/editor/types/model";
 
 export default class BooleanPathRender extends SVGItemRender {
     
@@ -13,11 +14,8 @@ export default class BooleanPathRender extends SVGItemRender {
     const op = item['boolean-operation']
 
     switch(op) {
-      case "difference": return SVGFill.parseImage(layers[1].fill || 'transparent').toSVGString(this.fillId(item));      
-      case "intersection": break;
-      case "union": break;
-      case "reverse-difference": break;
-      case "xor": break;
+      case BooleanOperation.DIFFERENCE: return SVGFill.parseImage(layers[1].fill || 'transparent').toSVGString(this.fillId(item));      
+      default: break;
     }
 
     return SVGFill.parseImage(layers[0].fill || 'transparent').toSVGString(this.fillId(item));
@@ -28,11 +26,8 @@ export default class BooleanPathRender extends SVGItemRender {
     const op = item['boolean-operation']
 
     switch(op) {
-      case "difference": return SVGFill.parseImage(layers[1].stroke || 'transparent').toSVGString(this.strokeId(item));      
-      case "intersection": break;
-      case "union": break;
-      case "reverse-difference": break;
-      case "xor": break;
+      case BooleanOperation.DIFFERENCE: return SVGFill.parseImage(layers[1].stroke || 'transparent').toSVGString(this.strokeId(item));      
+      default: break;
     }
 
     return SVGFill.parseImage(layers[0].stroke || 'black').toSVGString(this.strokeId(item));
@@ -44,11 +39,8 @@ export default class BooleanPathRender extends SVGItemRender {
     const op = item['boolean-operation']
 
     switch(op) {
-      case "difference": return SVGFill.parseImage(layers[1].fill || 'transparent').toSVGString(this.fillId(item));      
-      case "intersection": break;
-      case "union": break;
-      case "reverse-difference": break;
-      case "xor": break;
+      case BooleanOperation.DIFFERENCE: return SVGFill.parseImage(layers[1].fill || 'transparent').toSVGString(this.fillId(item));      
+      default: break;
     }
 
     return SVGFill.parseImage(layers[0].fill || 'transparent').toFillValue?.(this.fillId(item)); 
@@ -63,11 +55,8 @@ export default class BooleanPathRender extends SVGItemRender {
     const op = item['boolean-operation']
 
     switch(op) {
-      case "difference": return SVGFill.parseImage(layers[1].stroke || 'transparent').toFillValue?.(this.strokeId(item)); 
-      case "intersection": break;
-      case "union": break;
-      case "reverse-difference": break;
-      case "xor": break;
+      case BooleanOperation.DIFFERENCE: return SVGFill.parseImage(layers[1].stroke || 'transparent').toFillValue?.(this.strokeId(item)); 
+      default: break;
     }
 
     return SVGFill.parseImage(layers[0].stroke || 'black').toFillValue?.(this.strokeId(item)); 

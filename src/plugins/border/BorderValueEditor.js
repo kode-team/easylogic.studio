@@ -4,18 +4,19 @@ import { SUBSCRIBE_SELF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './BorderValueEditor.scss';
+import { BorderStyle } from "el/editor/types/model";
 
 const borderStyleList = [
-  "none",
-  "hidden",
-  "dotted",
-  "dashed",
-  "solid",
-  "double",
-  "groove",
-  "ridge",
-  "inset",
-  "outset"
+  BorderStyle.NONE,
+  BorderStyle.HIDDEN,
+  BorderStyle.SOLID,
+  BorderStyle.DASHED,
+  BorderStyle.DOTTED,
+  BorderStyle.DOUBLE,
+  BorderStyle.GROOVE,
+  BorderStyle.RIDGE,
+  BorderStyle.INSET,
+  BorderStyle.OUTSET
 ].join(',');
 
 
