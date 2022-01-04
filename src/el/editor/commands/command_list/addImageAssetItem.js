@@ -17,9 +17,9 @@ export default {
             loadOriginalImage(imageObject, (info) => {
 
                 // width 랑 같은 비율로 맞추기 
-                const rate = rect.width.value/info.width.value;
+                const rate = rect.width/info.width;
                 const width = rect.width;
-                const height = Length.px(info.height.value * rate); 
+                const height = info.height * rate; 
 
                 editor.emit('addImage', {
                     src: imageObject.id, 

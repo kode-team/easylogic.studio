@@ -32,16 +32,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
   [LOAD('$body')] () {
     var current = this.$selection.current || { 'flex-layout-item' : 'none' }
 
-    var valueType = current['flex-layout-item'] || 'none';
-
-    var arr = [] 
-    if (['none', 'auto'].includes(valueType) === false) {
-      arr  = valueType.split(' ');
-    }
-
-    if (arr.length > 0) {
-      valueType = 'value'
-    }
+    const valueType = 'value';
 
     return /*html*/`
       <div class='layout-select'>
@@ -53,18 +44,18 @@ export default class FlexLayoutItemProperty extends BaseProperty {
         options="${this.getLayoutOptions()}"  
         onchange="changeLayoutType" />
       </div>
-      <div class='layout-list' ref='$layoutList' data-selected-value='${current.layout}'>
+      <div class='layout-list' ref='$layoutList' data-selected-value='${valueType}'>
         <div data-value='none'></div>
         <div data-value='auto'></div>
         <div data-value='value'>
           <div class='value-item'>
-            <object refClass="RangeEditor"  ref='$grow' label='${this.$i18n('flex.layout.item.property.grow')}' key="flex-grow" value="${arr[0]}" min='0' max='1' step='0.01' units=",auto" onchange='changeFlexItem' />
+            <object refClass="RangeEditor"  ref='$grow' label='${this.$i18n('flex.layout.item.property.grow')}' key="flex-grow" value="${current['flex-grow']}" min='0' max='1' step='0.01' units=",auto" onchange='changeFlexItem' />
           </div>
           <div class='value-item'>
-            <object refClass="RangeEditor"  ref='$shrink' label='${this.$i18n('flex.layout.item.property.shrink')}' key="flex-shrink" value="${arr[1]}" min='0' max='1' step='0.01' units=",auto" onchange='changeFlexItem' />
+            <object refClass="RangeEditor"  ref='$shrink' label='${this.$i18n('flex.layout.item.property.shrink')}' key="flex-shrink" value="${current['flex-shrink']}" min='0' max='1' step='0.01' units=",auto" onchange='changeFlexItem' />
           </div>
           <div class='value-item'>
-            <object refClass="RangeEditor"  ref='$basis' label='${this.$i18n('flex.layout.item.property.basis')}' key="flex-basis" value="${arr[2]}" min='0' units="px,em,%,auto" onchange='changeFlexItem' />
+            <object refClass="RangeEditor"  ref='$basis' label='${this.$i18n('flex.layout.item.property.basis')}' key="flex-basis" value="${current['flex-basis']}" min='0' units="px,em,%,auto" onchange='changeFlexItem' />
           </div>                    
         </div>
       </div>
@@ -105,6 +96,7 @@ export default class FlexLayoutItemProperty extends BaseProperty {
 
     this.nextTick(() => {
       this.emit('refreshAllElementBoundSize')    
+      this.emit('refreshSelectionTool', true);      
     })
   }
 

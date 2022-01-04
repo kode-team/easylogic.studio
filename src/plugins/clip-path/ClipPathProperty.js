@@ -1,5 +1,5 @@
 import { CLICK, LOAD, PREVENT, SUBSCRIBE, IF } from "el/sapa/Event";
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import { ClipPath } from "el/editor/property-parser/ClipPath";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
@@ -40,12 +40,14 @@ export default class ClipPathProperty extends BaseProperty {
 
   getTools() {
     return /*html*/`
-      <select ref="$clipPathSelect">      
-        ${clipPathList.map(it => {
-      return `<option value='${it}'>${it}</option>`
-    }).join('')}
-      </select>
-      <button type="button" ref="$add" title="add Clip Path">${icon.add}</button>
+      <div ref="$tools" class="add-tools">
+        <button type="button" data-value='circle' data-tooltip="Circle">${iconUse('outline_circle')}</button>
+        <button type="button" data-value='ellipse' data-tooltip="Circle">${iconUse('outline_circle')}</button>
+        <button type="button" data-value='inset' data-tooltip="Circle">${iconUse('outline_rect')}</button>
+        <button type="button" data-value='polygon' data-tooltip="Circle">${iconUse('polygon')}</button>
+        <button type="button" data-value='path' data-tooltip="Circle">${iconUse('pentool')}</button>
+        <button type="button" data-value='svg' data-tooltip="Circle">${iconUse('image')}</button>
+      </div>
     `;
   }
 
@@ -129,7 +131,7 @@ export default class ClipPathProperty extends BaseProperty {
     return this.makeClipPathTemplate(current['clip-path'].split('(')[0], current['clip-path']);
   }
 
-  [CLICK("$add")]() {
+  [CLICK("$tools [data-value]")](e) {
 
     var current = this.$selection.current;
 
@@ -140,12 +142,12 @@ export default class ClipPathProperty extends BaseProperty {
     }
 
     if (current) {
-      current['clip-path'] = this.refs.$clipPathSelect.value;
 
+      current.reset({
+        'clip-path': e.$dt.data('value')
+      })
 
-      this.command("setAttributeForMulti", 'change clip-path', this.$selection.packByValue({
-        'clip-path': this.refs.$clipPathSelect.value
-      }));
+      this.command("setAttributeForMulti", 'change clip-path', this.$selection.pack('clip-path'));
     }
 
     this.refresh();
@@ -159,7 +161,7 @@ export default class ClipPathProperty extends BaseProperty {
 
     switch (obj.type) {
       case 'path':
-        var d = current.accumulatedPath(current.clipPathString).d
+        var d = current.absolutePath(current.clipPathString).d
         var mode = d ? 'modify' : 'path'
 
         this.emit('showPathEditor', mode, {

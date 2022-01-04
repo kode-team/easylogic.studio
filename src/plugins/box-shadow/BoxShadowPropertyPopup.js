@@ -15,10 +15,10 @@ export default class BoxShadowPropertyPopup extends BasePopup {
     return {
       color: 'rgba(0, 0, 0, 1)',
       inset: false,
-      offsetX: Length.z(),
-      offsetY: Length.z(),
-      blurRadius: Length.z(),
-      spreadRadius: Length.z()
+      offsetX: 0,
+      offsetY: 0,
+      blurRadius: 0,
+      spreadRadius: 0
     };
   }
 
@@ -139,8 +139,8 @@ export default class BoxShadowPropertyPopup extends BasePopup {
     this.getRef("$offsetY").val(y);
 
     this.updateData({
-      offsetX: Length.px(x),
-      offsetY: Length.px(y)
+      offsetX: x,
+      offsetY: y
     });
 
     this.refreshPointer();

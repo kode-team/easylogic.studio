@@ -91,8 +91,8 @@ export function makeInterpolateOffsetPath(layer, property, startValue, endValue,
         // apply tranform-origin in real time 
 
         var arr = (layer['transform-origin'] || '50% 50%').split(' ').map(it => Length.parse(it))
-        var tx = arr[0].toPx(layer.width.value);
-        var ty = arr[1].toPx(layer.height.value);
+        var tx = arr[0].toPx(layer.width);
+        var ty = arr[1].toPx(layer.height);
 
         var obj = innerInterpolate(rate, t, timing); 
 

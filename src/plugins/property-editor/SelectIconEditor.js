@@ -20,7 +20,7 @@ export default class SelectIconEditor extends EditorElement {
         var options = Array.isArray(this.props.options) 
                         ? this.props.options.map(it => {
                             if (isString(it)) {
-                                return { value: it }
+                                return { value: it, text: it }
                             }
                             return it;  
                         })
@@ -112,7 +112,12 @@ export default class SelectIconEditor extends EditorElement {
                 css['background-color'] = color; 
             }
             
-            return /*html*/`<div class='select-icon-item ${selected} ${iconClass}' style='${CSS_TO_STRING(css)}' data-value="${value}" title='${title}'>${label}</div>`
+            return /*html*/`
+                <div class='select-icon-item ${selected} ${iconClass}' 
+                    style='${CSS_TO_STRING(css)}' 
+                    data-value="${value}" 
+                    data-tooltip='${title}'
+                >${label}</div>`
         })
     }
 

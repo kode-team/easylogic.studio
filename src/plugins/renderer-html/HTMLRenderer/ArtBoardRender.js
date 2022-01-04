@@ -10,17 +10,15 @@ export default class ArtBoardRender extends DomRender {
    * @override
    */
   render (item, renderer) {
-    var {elementType, id, name, itemType} = item;
-  
-    const tagName = elementType || 'div'
+    var {id} = item;
   
     return /*html*/`    
-      <${tagName} class="element-item artboard" data-id="${id}">
+      <div class="element-item artboard" data-id="${id}">
         ${this.toDefString(item)}
         ${item.layers.map(it => {
           return renderer.render(it, renderer)
         }).join('\n\t')}
-      </${tagName}>
+      </div>
     `
   }
 

@@ -20,7 +20,7 @@ export default class RangeEditor extends EditorElement {
 
     initState() {
         var units = this.props.units || 'px,em,%';
-        var value = Length.parse(this.props.value || Length.z());
+        var value = Length.parse(this.props.value || 0);
 
         return {
             removable: this.props.removable === 'true',

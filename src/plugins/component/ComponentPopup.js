@@ -38,7 +38,7 @@ export default class ComponentPopup extends BasePopup {
   [BIND('$body')] () {
     return {
       style: {
-        width: Length.px(this.state.width || 250),
+        width: this.state.width || 250,
       }
     }
   }

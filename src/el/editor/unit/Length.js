@@ -109,13 +109,13 @@ export class Length {
   }
 
   static z () {
-    return Length.px(0);
+    return 0;
   }
 
   /**
    * return calc()  css fuction string
    *
-   * Length.calc(`${Length.percent(100)} - ${Length.px(10)}`)
+   * Length.calc(`${Length.percent(100)} - ${10)}`
    *
    * @param {*} str
    */
@@ -159,7 +159,7 @@ export class Length {
           value = obj.value;
         }
 
-        return Length.px(value);
+        return value;
       } else if (obj.unit == "em") {
         var value = 0;
 
@@ -318,6 +318,14 @@ export class Length {
 
   getUnitName() {
     return this.unit === "%" ? "percent" : this.unit;
+  }
+
+  get isAuto () {
+    return this.value === 'auto' || this.unit === 'auto'
+  }
+
+  get isNotAuto () {
+    return !this.isAuto
   }
 
   toJSON() {

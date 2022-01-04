@@ -9,8 +9,8 @@ export default function resizeArtBoard (editor, size = '') {
 
         var [width, height] = size.split('x')
 
-        width = Length.px(+width);
-        height = Length.px(+height);
+        width = +width;
+        height = +height;
 
         current.reset({ width, height });
         editor.selection.select(current);

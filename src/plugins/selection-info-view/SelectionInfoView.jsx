@@ -5,7 +5,6 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { vec3 } from "gl-matrix";
 import { END, MOVE } from "el/editor/types/event";
 import './SelectionInfoView.scss';
-import { Length } from 'el/editor/unit/Length';
 import { calculateAngle360 } from 'el/utils/math';
 
 export default class SelectionInfoView extends EditorElement {
@@ -83,8 +82,8 @@ export default class SelectionInfoView extends EditorElement {
             )
 
             result[it.id] = {
-                x: Length.px(it.x + newDist[0]).floor(),          // 1px 단위로 위치 설정 
-                y: Length.px(it.y + newDist[1]).floor(),
+                x: Math.floor(it.x + newDist[0]),          // 1px 단위로 위치 설정 
+                y: Math.floor(it.y + newDist[1]),
             }
         })
         this.$selection.reset(result);

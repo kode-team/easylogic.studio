@@ -8,6 +8,8 @@ export default class Redo extends MenuItem {
     return "Redo";
   }
 
+  isHideTitle() {return true;}
+
   clickButton(e) {
     this.emit('history.redo');
   }

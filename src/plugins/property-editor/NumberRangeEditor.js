@@ -5,6 +5,7 @@ import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
 import './NumberRangeEditor.scss';
+import { OBJECT_TO_CLASS } from "el/utils/func";
 
 export default class NumberRangeEditor extends EditorElement {
 
@@ -20,6 +21,8 @@ export default class NumberRangeEditor extends EditorElement {
         value = value.toUnit('number');
         return {
             removable: this.props.removable === 'true',
+            compact: this.props.compact === 'true',
+            wide: this.props.wide === 'true',            
             clamp: this.props.clamp === 'true',
             label: this.props.label || '',
             min: +this.props.min || 0,
@@ -33,12 +36,12 @@ export default class NumberRangeEditor extends EditorElement {
     }
 
     template () {
-        return `<div class='small-editor' ref='$body'></div>`
+        return /*html*/`<div class='small-editor' ref='$body'></div>`
     }
 
     [LOAD('$body')] () {
 
-        var { min, max, step, label, type, removable, layout } = this.state
+        var { min, max, step, label, removable, layout, compact, wide, disabled } = this.state
 
         var value = +this.state.value.value.toString()
 
@@ -46,14 +49,22 @@ export default class NumberRangeEditor extends EditorElement {
             value = 0
         }
 
-        var hasLabel = !!label ? 'has-label' : ''
-        var isRemovable = removable ? 'is-removable' : '';
         var layoutClass = layout;
 
         var realValue = (+value).toString();
         
         return /*html*/`
-        <div class='elf--number-range-editor ${hasLabel} ${isRemovable} ${layoutClass}' data-selected-type='${type}'>
+        <div 
+            class="${OBJECT_TO_CLASS({
+                'elf--number-range-editor': true,
+                'has-label': !!label,
+                'compact': !!compact,
+                'wide': !!wide,
+                'is-removable': removable,
+                'disabled': disabled,
+                [layoutClass] : true 
+            })}"
+        >
             ${label ? `<label title="${label}">${label}</label>` : '' }
             <div class='range--editor-type' data-type='range'>
                 <div class='area'>

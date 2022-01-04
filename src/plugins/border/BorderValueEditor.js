@@ -5,6 +5,8 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './BorderValueEditor.scss';
 import { BorderStyle } from "el/editor/types/model";
+import { iconUse } from "el/editor/icon/icon";
+import { variable } from 'el/sapa/functions/registElement';
 
 const borderStyleList = [
   BorderStyle.NONE,
@@ -46,7 +48,9 @@ export default class BorderValueEditor extends EditorElement {
 
   refresh () {
 
-    this.children.$width.setValue(this.state.value.width || Length.z())
+    const width = Length.parse(this.state.value.width === 'undefined' ? 0 : this.state.value.width);
+
+    this.children.$width.setValue(width.value || 0)
     this.children.$style.setValue(this.state.value.style || 'solid')
     this.children.$color.setValue(this.state.value.color || 'rgba(0, 0, 0, 1)')
   }
@@ -57,15 +61,36 @@ export default class BorderValueEditor extends EditorElement {
     return /*html*/`
       <div class="elf--border-value-editor">
         <div class='editor-area'>
-          <object refClass="RangeEditor" ref='$width' min="0" max="100" step="1" key='width' value="${width}" onchange='changeKeyValue' />
-        </div>
-        <div class='editor-area'>
-          <object refClass="SelectEditor"  ref='$style' key='style' options='${borderStyleList}' value="${style || 'solid'}" onchange="changeKeyValue" />
-        </div>
-        <div class='editor-area'>
-          <object refClass="ColorSingleEditor" ref='$color' key='color' value="${color|| 'rgba(0, 0, 0, 1)'}"  onchange="changeKeyValue" />
-        </div>
+          <object refClass="NumberInputEditor" ${variable({
+            label: iconUse("line_weight"),
+            compact: true,
+            ref: '$width',
+            min: 0,
+            max: 100,
+            step: 1,
+            key: "width", 
+            value: width,
+            onchange: 'changeKeyValue' 
+          })}/>        
+          <object refClass="SelectEditor" ${variable({
+            ref: '$style',
+            key: 'style',
+            label: iconUse('line_style'),
+            title: 'Style',
+            compact: true,
+            options: borderStyleList,
+            value: style || 'solid',
+            onchange: "changeKeyValue",
 
+          })} />
+          <object refClass="ColorViewEditor" ${variable({
+            ref: '$color',
+            key: 'color',
+            mini: true,
+            value: color|| 'rgba(0, 0, 0, 1)',
+            onchange: "changeKeyValue"
+          })} />          
+        </div>
       </div>
     `;
   }

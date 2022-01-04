@@ -36,7 +36,7 @@ export class BooleanPathItem extends SVGPathItem {
 
 
       if (this.json.children.length === 1) {
-        const newPath = this.layers[0].accumulatedPath().d;
+        const newPath = this.layers[0].absolutePath().d;
         this.json.d = this.invertPath(newPath).d;
         this.setCache();
 
@@ -107,15 +107,15 @@ export class BooleanPathItem extends SVGPathItem {
         height: this.json.height.clone()
     }
 
-    const scaleX = obj.width.value / this.cachedSize.width.value;
-    const scaleY = obj.height.value / this.cachedSize.height.value;
+    const scaleX = obj.width / this.cachedSize.width;
+    const scaleY = obj.height / this.cachedSize.height;
 
     this.cachedLayerMatrix.forEach(({ item, matrix, constraints }) => {
         item.reset({ 
-            x: item.x.changeUnitValue(matrix.x * scaleX, obj.width.value),
-            y: item.y.changeUnitValue(matrix.y * scaleY, obj.height.value),
-            width: item.width.changeUnitValue(matrix.width * scaleX, obj.width.value),
-            height: item.height.changeUnitValue(matrix.height * scaleY, obj.height.value),
+            x: item.x.changeUnitValue(matrix.x * scaleX, obj.width),
+            y: item.y.changeUnitValue(matrix.y * scaleY, obj.height),
+            width: item.width.changeUnitValue(matrix.width * scaleX, obj.width),
+            height: item.height.changeUnitValue(matrix.height * scaleY, obj.height),
         })
 
         item.recoverChildren();
@@ -154,8 +154,8 @@ export class BooleanPathItem extends SVGPathItem {
     super.setCache();
 
     this.cachePath = new PathParser(this.json.d);
-    this.cacheWidth = this.json.width.value;
-    this.cacheHeight = this.json.height.value;    
+    this.cacheWidth = this.json.width;
+    this.cacheHeight = this.json.height;    
   }
 
   removeCache () {
@@ -192,7 +192,7 @@ export class BooleanPathItem extends SVGPathItem {
   }
 
   getPathList() {
-    return this.layers.map(it => it.accumulatedPath().d);
+    return this.layers.map(it => it.absolutePath().d);
   }
 
   intersection() {

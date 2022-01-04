@@ -3,22 +3,76 @@
     grid-template-columns: 1fr;
     grid-column-gap: 4px;
     height: var(--elf--input-height);
+    border-radius: 2px;
+    border: 1px solid transparent;
+
+    &.disabled {
+        label {
+            color: var(--elf--selected-color);
+        }
+
+        > * {
+            pointer-events: none;
+        }
+
+        input {
+            color: var(--elf--input-sub-font-color);
+        }
+    }
+
+
+    &.focused {
+        border-color: var(--elf--selected-color);
+        border-width: 1px;
+        --elf--input-range-border-color: var(--elf--input-border-color);        
+    }
+
+    &.drag {
+        border-color: var(--elf--selected-color);
+        border-width: 1px;
+        --elf--input-range-border-color: var(--elf--input-border-color);        
+    }
+
+    &:hover:not(.focused):not(.drag) {
+        border-color: var(--elf--input-border-color);
+        --elf--input-range-border-color: var(--elf--input-border-color);
+    }
 
     &.has-label {
-        grid-template-columns: 64px 1fr;
+        grid-template-columns: 70px 1fr;
         grid-column-gap: 2px;
         &.is-removable {
             grid-template-columns: 70px 1fr 12px;
         }
 
+        &.compact {
+            grid-template-columns: 30px 1fr;
+        }
+
+
+        &.wide {
+            grid-template-columns: 1fr 1fr;
+        }               
+
         label {
             text-align: left;
             vertical-align: middle;
-            padding: 7px 0px 2px 0px;
-            font-size: var(--elf--input-font-size);
+            padding: 0px;
+            padding-left: 2px;
             white-space: nowrap;
             text-overflow: ellipsis;
-            overflow: hidden;            
+            overflow: hidden;     
+            line-height: 2;
+            cursor: ew-resize;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+
+            svg {
+                width: 20px;
+                height: 20px;
+                vertical-align: middle;
+            }            
         }
 
         &.block {
@@ -48,9 +102,9 @@
 
         .area {
             display: grid; 
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             grid-column-gap: 4px;
-            font-size: 13px;
+            border-radius: 3px;
             height: 100%;
             
             span {
@@ -63,14 +117,11 @@
                 width: 100%;
                 height: 100%;
                 &[type='number'] {
-                    border-radius: 3px;
-                    border: 1px solid var(--elf--input-border-color);                    
-                    &.focused {
-                        box-shadow: 0 0 0 1px var(--elf--selected-color);
-                    }                
+                    background-color: transparent;
+                    border:0px;
+                    appearance: none;         
+                    vertical-align: middle;   
                 }
-
-
             }
         }
     }

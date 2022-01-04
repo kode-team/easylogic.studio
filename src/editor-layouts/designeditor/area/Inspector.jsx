@@ -32,7 +32,7 @@ export default class Inspector extends EditorElement {
           >
             <TabPanel
               value="style"
-              title={this.$i18n("inspector.tab.title.style")}
+              title={this.$i18n("inspector.tab.title.design")}
             >
               {this.$injectManager.generate("inspector.tab.style")}
               <div class="empty"></div>

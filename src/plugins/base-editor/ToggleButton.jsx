@@ -18,7 +18,6 @@ export default class ToggleButton extends BaseUI {
 
     initState() {
         return {
-            label: this.props.label || '',
             checkedValue: this.props.checkedValue || this.props.value,
             checked: this.props.value || "false",
             toggleLabels: this.props.toggleLabels || DEFAULT_LABELS,
@@ -33,12 +32,9 @@ export default class ToggleButton extends BaseUI {
 
     [LOAD('$body')] () {
 
-        var { label, checked, checkedValue } = this.state
-
-        var hasLabel = !!label ? 'has-label' : ''
+        var { checked, checkedValue } = this.state
         return /*html*/`
-        <div class='elf--toggle-button ${hasLabel}'>
-            ${label ? `<label title="${label}">${label}</label>` : '' }
+        <div class='elf--toggle-button'>
             <div class='area' ref="$area">
                 ${this.state.toggleValues.map((it, index) => {
 
@@ -91,7 +87,7 @@ export default class ToggleButton extends BaseUI {
         const selectedIndex = this.state.toggleValues.findIndex(v => v === value)
 
         const nextValue = this.state.toggleValues[(selectedIndex + 1) % this.state.toggleValues.length];
-        console.log(value, nextValue);
+
         this.setValue(nextValue);
         this.trigger('change');
     }

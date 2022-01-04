@@ -80,10 +80,10 @@ export default class BoxShadowEditor extends EditorElement {
 
   [SUBSCRIBE('add')] () {
     this.state.boxShadows.push(new BoxShadow({
-      offsetX: Length.px(2),
-      offsetY: Length.px(2),
-      blurRadius: Length.px(3),
-      spreadRadius: Length.px(1)
+      offsetX: 2,
+      offsetY: 2,
+      blurRadius: 3,
+      spreadRadius: 1
     }))
 
     this.refresh();

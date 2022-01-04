@@ -252,10 +252,10 @@ export const SketchUtil = {
     }
 
     return {
-      x: Length.px(obj.frame.x + distX),
-      y: Length.px(obj.frame.y + distY),
-      width: Length.px(obj.frame.width),
-      height: Length.px(obj.frame.height),
+      x: obj.frame.x + distX,
+      y: obj.frame.y + distY,
+      width: obj.frame.width,
+      height: obj.frame.height,
     }
 
   },

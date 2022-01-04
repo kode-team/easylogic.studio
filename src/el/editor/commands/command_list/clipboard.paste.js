@@ -37,8 +37,9 @@ export default {
                         // 하나 일 때는 sourceItem 옆으로 생성하기 
                         sourceItem.appendBefore(model);
                     } else {
-                        // 원본 부모의 마지막에 생성하기                        
-                        sourceItem.parent.appendChild(model);
+                        sourceItem.appendAfter(model);
+                        // // 원본 부모의 마지막에 생성하기                        
+                        // sourceItem.parent.appendChild(model);
                     }
                     
 

@@ -34,10 +34,10 @@ export default class BrushDrawView extends EditorElement {
             'stroke-linecap': 'round',
             'stroke-linejoin': 'round',
             tolerance: 1,
-            screenX: Length.z(),
-            screenY: Length.z(),
-            screenWidth: Length.z(),
-            screenHeight: Length.z()
+            screenX: 0,
+            screenY: 0,
+            screenWidth: 0,
+            screenHeight: 0
         }
     }
 
@@ -98,8 +98,8 @@ export default class BrushDrawView extends EditorElement {
             const d = PathGenerator.generatorPathString(parser.convertGenerator(), x, y, this.scale);
 
             layer = project.add(new SVGBrushItem({
-                width: Length.px(width),
-                height: Length.px(height),
+                width: width,
+                height: height,
                 d,
                 totalLength: this.totalPathLength
             }))
@@ -262,7 +262,7 @@ export default class BrushDrawView extends EditorElement {
 
         var $obj = this.refs.$view.$('path.object')
 
-        var pathRect = {x: Length.z(), y: Length.z(),  width: Length.z(), height: Length.z()}
+        var pathRect = {x: 0, y: 0,  width: 0, height: 0}
         if ($obj) {
 
             pathRect = $obj.rect()

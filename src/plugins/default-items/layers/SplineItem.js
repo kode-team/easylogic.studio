@@ -37,7 +37,7 @@ export class SplineItem extends SVGItem {
         this.setCache();
       }
 
-      this.json.points = this.cachePath.clone().scale(this.json.width.value/this.cacheWidth, this.json.height.value/this.cacheHeight).verties;
+      this.json.points = this.cachePath.clone().scale(this.json.width/this.cacheWidth, this.json.height/this.cacheHeight).verties;
       this.modelManager.setChanged('reset', this.id, { points : this.json.points });
     }
   }
@@ -47,8 +47,8 @@ export class SplineItem extends SVGItem {
     super.setCache();
 
     this.cachePath = PathParser.makePathByVerties(this.json.points);
-    this.cacheWidth = this.json.width.value;
-    this.cacheHeight = this.json.height.value;    
+    this.cacheWidth = this.json.width;
+    this.cacheHeight = this.json.height;    
   }  
 
 
@@ -57,10 +57,10 @@ export class SplineItem extends SVGItem {
     let {width, height, points } = this.json;
 
     if (!points || points.length  == 0) {
-      points = [ [0, height.value], [0, 0], [width.value, 0], [width.value, height.value] ];
+      points = [ [0, height], [0, 0], [width, 0], [width, height] ];
     } 
 
-    return this.accumulatedPath(PathParser.makePathByVerties(points).d).d;
+    return this.absolutePath(PathParser.makePathByVerties(points).d).d;
   }
 
   recoverEditablePath(d) {
@@ -86,7 +86,7 @@ export class SplineItem extends SVGItem {
     if (!boundary) { boundary = this.json.boundary }
 
     if (!points || points.length  == 0) {
-      points = [ [0, height.value], [0, 0], [width.value, 0], [width.value, height.value] ];
+      points = [ [0, height], [0, 0], [width, 0], [width, height] ];
     } 
 
     const curve = nurbs({

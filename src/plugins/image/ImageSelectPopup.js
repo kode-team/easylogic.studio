@@ -61,10 +61,10 @@ export default class ImageSelectPopup extends BasePopup {
 
     this.updateData({
       value: $img.attr('data-id'),
-      naturalWidth: Length.px($img.naturalWidth),
-      naturalHeight: Length.px($img.naturalHeight), 
-      width: Length.px($img.naturalWidth),
-      height: Length.px($img.naturalHeight)
+      naturalWidth: $img.naturalWidth,
+      naturalHeight: $img.naturalHeight, 
+      width: $img.naturalWidth,
+      height: $img.naturalHeight
     });
 
     this.trigger('hideImageSelectPopup')

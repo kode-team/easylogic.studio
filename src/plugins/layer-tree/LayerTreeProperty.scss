@@ -30,18 +30,6 @@
             }
         }
 
-        &[data-layout="grid"] {
-            .icon {
-                color: red;
-            }
-        }
-
-        &[data-layout="flex"] {
-            .icon {
-                color: green;
-            }
-        }
-
         .detail {
             display: grid;
             grid-template-columns: 1fr 60px;
@@ -54,7 +42,6 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
-                font-size: 12px;
                 vertical-align: middle;
                 display: grid;
                 grid-template-columns: 20px 20px 1fr;

@@ -1,6 +1,6 @@
 import { vec3 } from "gl-matrix";
 
-import { BIND, POINTERSTART, IF, KEYUP, DOUBLECLICK, FOCUSOUT, SUBSCRIBE, CONFIG, DEBOUNCE } from "el/sapa/Event";
+import { BIND, POINTERSTART, IF, KEYUP, DOUBLECLICK, FOCUSOUT, SUBSCRIBE, CONFIG, DEBOUNCE, RAF, THROTTLE } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
 import Dom from "el/sapa/functions/Dom";
 import { isFunction } from "el/sapa/functions/func";
@@ -23,10 +23,10 @@ export default class HTMLRenderView extends EditorElement {
     initState() {
         return {
             mode: 'selection',
-            x: Length.z(),
-            y: Length.z(),
-            width: Length.px(10000),
-            height: Length.px(10000),
+            x: 0,
+            y: 0,
+            width: 10000,
+            height: 10000,
             cachedCurrentElement: {},
         }
     }
@@ -50,8 +50,8 @@ export default class HTMLRenderView extends EditorElement {
     [BIND('$body')]() {
         const { canvasWidth, canvasHeight } = this.$editor;
 
-        var width = Length.px(canvasWidth);
-        var height = Length.px(canvasHeight);
+        var width = canvasWidth;
+        var height = canvasHeight;
 
         return {
             'tabIndex': -1,
@@ -198,13 +198,27 @@ export default class HTMLRenderView extends EditorElement {
         //FIXME: matrix에 기반한 좌표 연산이 필요하다. 
 
         var arr = []
-        this.$selection.items.filter(it => it.id === id).forEach(it => {
-            it.reset({
+        this.$selection.items.filter(it => it.id === id).forEach(item => {
+            item.reset({
                 content,
                 text,
             })
-            arr.push({ id: it.id, content, text })
+            arr.push({ id: item.id, content, text })
+
+            var $el = this.getElement(item.id);
+
+            const { x, y, width, height } = $el.offsetRect();
+            item.reset({
+                x: x,
+                y: y,
+                width: width,
+                height: height
+            })
+
+            this.emit('refreshSelectionStyleView', item);
         })
+
+
 
         this.emit('refreshContent', arr);
 
@@ -419,9 +433,9 @@ export default class HTMLRenderView extends EditorElement {
         }
 
         // layout item 은 움직이지 않고 layout 이 좌표를 그리도록 한다. 
-        // if (this.$selection.isLayoutItem) {
-        //     return;
-        // }
+        if (this.$selection.isLayoutItem) {
+            return;
+        }
 
         const targetMousePoint = this.$viewport.getWorldPosition();
 
@@ -440,6 +454,7 @@ export default class HTMLRenderView extends EditorElement {
 
             // ArtBoard 변경 이후에 LayerTreeView 업데이트
             this.emit('refreshLayerTreeView')
+            this.refreshAllElementBoundSize();
         }
 
         this.emit('setAttributeForMulti', this.$selection.packByValue({
@@ -493,8 +508,8 @@ export default class HTMLRenderView extends EditorElement {
             )
 
             result[it.id] = {
-                x: Length.px(Math.floor(it.x + newDist[0])),          // 1px 단위로 위치 설정 
-                y: Length.px(Math.floor(it.y + newDist[1])),
+                x: Math.floor(it.x + newDist[0]),          // 1px 단위로 위치 설정 
+                y: Math.floor(it.y + newDist[1]),
             }
         })
 
@@ -590,7 +605,7 @@ export default class HTMLRenderView extends EditorElement {
     updateAllCanvas(parentLayer) {
         parentLayer.layers.forEach(item => {
             this.updateElement(item, this.getElement(item.id));
-            this.updateAllCanvas(item);
+            this.updateAllCanvas(item);            
         })
     }
 
@@ -609,6 +624,7 @@ export default class HTMLRenderView extends EditorElement {
     refreshElementBoundSize(parentObj) {
         if (parentObj) {
 
+
             const hasChangedDimension = parentObj.changedLayout || parentObj.hasChangedField(
                 'children', 
                 'box-model', 
@@ -619,28 +635,31 @@ export default class HTMLRenderView extends EditorElement {
             parentObj.layers.forEach(it => {
                 var $el = this.getElement(it.id);
 
-                // layout item 만 rect 를 새롭게 갱신한다. 
-                if ($el && (hasChangedDimension &&  it.isLayoutItem())) {
+                // layout item 만 rect 를 새롭게 갱신한다. x
+                if ($el && (hasChangedDimension ||  it.isLayoutItem())) {
                     const { x, y, width, height } = $el.offsetRect();
-                    it.reset({
-                        x: Length.px(x),
-                        y: Length.px(y),
-                        width: Length.px(width),
-                        height: Length.px(height)
-                    })
 
-                    this.updateElement(it, $el);
+                    if (width > 0 && height > 0 ) {
+                        it.reset({ x, y, width, height })
 
-                    this.refreshSelectionStyleView(it);
-                    if (this.$config.false('set.move.control.point')) {
-                        this.emit('refreshSelectionTool', true);
+                        this.updateElement(it, $el);
+    
+                        this.refreshSelectionStyleView(it);
+                        // if (this.$config.false('set.move.control.point')) {
+                        //     this.emit('refreshSelectionTool', true);
+                        // }
                     }
+
 
                 }
 
                 this.refreshElementBoundSize(it);
             })
         }
+    }
+
+    [RAF + THROTTLE(100)]() {
+        this.refreshAllElementBoundSize();
     }
 
 

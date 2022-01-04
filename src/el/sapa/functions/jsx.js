@@ -47,7 +47,6 @@ function OBJECT_TO_CLASS(obj) {
     }).join(' ');
 }
 
-
 export function createElementJsx (Component, props, ...children) {
 
     // 모든 children 을 하나로 모은다. 

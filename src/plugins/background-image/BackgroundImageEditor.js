@@ -75,7 +75,7 @@ export default class BackgroundImageEditor extends EditorElement {
 
     templateForBlendMode(index, blendMode) {
         return /*html*/`
-        <div class='popup-item'>
+        <div>
           <object refClass="BlendSelectEditor" 
                 ref='$blend_${index}' 
                 key='blendMode' 

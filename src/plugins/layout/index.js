@@ -9,6 +9,7 @@ import GridLayoutItemEditor from "./GridLayoutItemEditor";
 import GridLayoutItemProperty from "./GridLayoutItemProperty";
 import LayoutProperty from "./LayoutProperty";
 import DefaultLayoutItemProperty from './DefaultLayoutItemProperty';
+import ResizingProperty from './ResizingProperty';
 
 /**
  * 
@@ -26,6 +27,7 @@ export default function (editor) {
 
     editor.registerMenuItem('inspector.tab.style', {
         LayoutProperty,        
+        ResizingProperty,
         DefaultLayoutItemProperty,
         GridLayoutItemProperty,
         FlexLayoutItemProperty,

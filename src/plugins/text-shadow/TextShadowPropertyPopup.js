@@ -14,9 +14,9 @@ export default class TextShadowPropertyPopup extends BasePopup {
   initState() {
     return {
       color: 'rgba(0, 0, 0, 1)',  
-      offsetX: Length.z(),
-      offsetY: Length.z(),
-      blurRadius: Length.z()
+      offsetX: 0,
+      offsetY: 0,
+      blurRadius: 0
     };
   }
 
@@ -113,8 +113,8 @@ export default class TextShadowPropertyPopup extends BasePopup {
     y = Math.floor(y);
 
     this.updateData({
-      offsetX: Length.px(x),
-      offsetY: Length.px(y)
+      offsetX: x,
+      offsetY: y
     });
 
     this.children.$offsetX.setValue(this.state.offsetX);

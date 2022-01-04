@@ -10,15 +10,6 @@ export default class BorderProperty extends BaseProperty {
     return this.$i18n('border.property.title');  
   }
 
-
-  hasKeyframe () {
-    return true; 
-  }
-
-  getKeyframeProperty () {
-    return 'border'
-  }
-
   getBody() {
     return /*html*/`<div class="property-item full border-item" ref='$body'></div>`;
   }
@@ -37,6 +28,7 @@ export default class BorderProperty extends BaseProperty {
   }
 
   [SUBSCRIBE('refreshSelection') + DEBOUNCE(100) + IF('checkShow')]() {
+
     this.refresh();
   }  
 

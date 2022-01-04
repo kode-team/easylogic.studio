@@ -12,10 +12,10 @@ export default class DragAreaView extends EditorElement {
     initState() {
         return {
             mode: 'selection',
-            x: Length.z(),
-            y: Length.z(),
-            width: Length.px(10000),
-            height: Length.px(10000),
+            x: 0,
+            y: 0,
+            width: 10000,
+            height: 10000,
             cachedCurrentElement: {},
             html: '',
         }

@@ -5,7 +5,6 @@
 
     > input {
       position: absolute;
-      font-size: 10px;
       height: 20px;
       bottom: 20px;
       padding: 0 0 0 2px;
@@ -53,7 +52,6 @@
 
         > .title {
           text-align:center;
-          font-size:12px;
           color:#a9a9a9;
           padding-top:2px;
         }
@@ -63,7 +61,6 @@
           width:100%;
           padding:3px;
           height: 21px;
-          font-size:11px;
           color: #333;
           box-sizing: border-box;
           user-select: text;
@@ -103,7 +100,6 @@
           padding: 2px;
           box-sizing: border-box;
           text-align:center;
-          font-size: 11px;
         }
       }
     }

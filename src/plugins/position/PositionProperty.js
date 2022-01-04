@@ -2,11 +2,11 @@ import { CLICK, IF, SUBSCRIBE, SUBSCRIBE_SELF, THROTTLE } from "el/sapa/Event";
 import { Transform } from "el/editor/property-parser/Transform";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { Length } from "el/editor/unit/Length";
-import { iconUse } from 'el/editor/icon/icon';
 
 import "./PositionProperty.scss";
+import { variable } from 'el/sapa/functions/registElement';
 
-const DEFAULT_SIZE = Length.z();
+const DEFAULT_SIZE = 0;
 
 export default class PositionProperty extends BaseProperty {
   getTitle() {
@@ -26,16 +26,18 @@ export default class PositionProperty extends BaseProperty {
     if (!current) return false;
 
     return current.hasChangedField(
-      'x', 
-      'y', 
+      'x',
+      'y',
       'right',
       'bottom',
-      'width', 
-      'height', 
-      'transform', 
-      'rotateZ', 
-      'rotate', 
-      'opacity'
+      'width',
+      'height',
+      'transform',
+      'rotateZ',
+      'rotate',
+      'opacity',
+      'constraints-horizontal',
+      'constriants-vertical'
     );
   }
 
@@ -43,8 +45,8 @@ export default class PositionProperty extends BaseProperty {
     var current = this.$selection.current;
     if (!current) return '';
 
-    this.children.$x.setValue(current.x || DEFAULT_SIZE);
-    this.children.$y.setValue(current.y || DEFAULT_SIZE);
+    this.children.$x.setValue(current.offsetX || DEFAULT_SIZE);
+    this.children.$y.setValue(current.offsetY || DEFAULT_SIZE);
     this.children.$width.setValue(current.width || DEFAULT_SIZE);
     this.children.$height.setValue(current.height || DEFAULT_SIZE);
     this.children.$opacity.setValue(current['opacity'] || '1')
@@ -69,20 +71,48 @@ export default class PositionProperty extends BaseProperty {
     return /*html*/`
       <div class="position-item" ref="$positionItem" style='padding: 5px 10px;'>
         <div class="grid-layout">
-          <div class='property-item' style='padding: 0px;'>
-            <object refClass='NumberInputEditor' ref='$x' compact="true" label="X" key='x' min="-100000" max='100000' onchange='changRangeEditor' />
-          </div>
-          <div style='padding: 0px;'>
-            <object refClass='NumberInputEditor' ref='$y' compact="true" label="Y" key='y' min="-10000" max='10000' onchange='changRangeEditor' />
-          </div>          
+            <object refClass='NumberInputEditor' ${variable({
+      ref: '$x',
+      compact: true,
+      label: "X",
+      key: 'x',
+      min: -100000,
+      max: 100000,
+      trigger: "enter",
+      onchange: 'changRangeEditor'
+    })} />
+            <object refClass='NumberInputEditor' ${variable({
+      ref: '$y',
+      compact: true,
+      trigger: "enter",
+      label: "Y",
+      key: 'y',
+      min: -10000,
+      max: 10000,
+      onchange: 'changRangeEditor'
+    })} />      
         </div>
-        <div class="grid-layout">
-          <div >
-            <object refClass='NumberInputEditor' ref='$width' compact="true"  label="${this.$i18n('position.property.width')}" key='width' min="0" max='3000' onchange='changRangeEditor' />
-          </div>
-          <div >
-            <object refClass='NumberInputEditor' ref='$height' compact="true"  label="${this.$i18n('position.property.height')}" key='height' min="0" max='3000' onchange='changRangeEditor' />
-          </div>      
+        <div class="grid-layout">          
+          <object refClass='NumberInputEditor' ${variable({
+      ref: '$width',
+      compact: true,
+      trigger: "enter",
+      label: 'W',
+      key: 'width',
+      min: 0,
+      max: 3000,
+      onchange: 'changRangeEditor'
+    })} />
+          <object refClass='NumberInputEditor' ${variable({
+      ref: '$height',
+      compact: true,
+      trigger: "enter",
+      label: 'H',
+      key: 'height',
+      min: 0,
+      max: 3000,
+      onchange: 'changRangeEditor'
+    })}  />
         </div> 
         <div class="grid-layout">
           <div>
@@ -117,15 +147,15 @@ export default class PositionProperty extends BaseProperty {
   refresh() {
     const current = this.$selection.current;
     if (current) {
-      this.children.$x.setValue(current.x);
-      this.children.$y.setValue(current.y);
+      this.children.$x.setValue(current.offsetX);
+      this.children.$y.setValue(current.offsetY);
       this.children.$width.setValue(current.width);
       this.children.$height.setValue(current.height);
       this.children.$opacity.setValue(current['opacity'] || '1')
       const rotateZ = Transform.get(current.transform, 'rotateZ')
       if (rotateZ) {
         this.children.$rotate.setValue(rotateZ[0]);
-      }      
+      }
     }
 
   }
@@ -138,6 +168,8 @@ export default class PositionProperty extends BaseProperty {
 
   [SUBSCRIBE_SELF('changRangeEditor')](key, value) {
 
+    // FIXME: key 가 width, height 일 때는 개별 transform 을 모두 적용한 상태로 맞춰야 한다. 
+    // FIXME: selection tool view 에 있는 right, bottom 기능을 자체적으로 구현해야한다. 
     this.command('setAttributeForMulti', 'change position or size', this.$selection.packByValue({
       [key]: value
     }))
@@ -151,7 +183,7 @@ export default class PositionProperty extends BaseProperty {
 
   [SUBSCRIBE_SELF('changeRotate')](key, rotate) {
     this.command('setAttributeForMulti', "change rotate", this.$selection.packByValue({
-      transform: (item) => Transform.rotateZ(item.transform, rotate)
+      angle: rotate.value
     }))
   }
 

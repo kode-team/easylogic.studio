@@ -2,30 +2,22 @@
     padding: 4px 0px;
     margin-top: 10px;
 
-
-    &.is-open {
-        .color-list {
-            display: grid;
-        }
-    }
-
     .color-assets-head {
         display: grid; 
-        grid-template-columns: 30px 1fr;
+        grid-template-columns: 1fr;
         grid-column-gap: 5px;
 
         label {
             display: inline-block;
             vertical-align: middle;
             line-height: 1.5;
-            font-size: 12px;
             padding: 4px 0px;
         }
     }
 
     .color-list {
         margin-top: 10px;
-        display: none;
+        display: grid;
         grid-template-columns: repeat(8, 1fr);
         grid-column-gap: 10px;
         grid-row-gap: 10px;

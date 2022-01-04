@@ -51,7 +51,7 @@ export default {
             // 여기까지 하면 container 의 위치는 맞춰줬는데 , 아래에 있는 아이템들은 위치를 바꿔줘야 함
             // 부모의 rect 를 기준으로 자식의 위치를 변경한다.             
             layersCache.forEach(it => {
-                it.item.reset(booleanContainer.recoverMatrix(it.matrix));
+                booleanContainer.resetMatrix(it.item);
             })
 
             // 모든 값이 업데이트 되면 현재 값을 history 에 저장한다. 

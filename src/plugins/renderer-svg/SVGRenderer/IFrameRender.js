@@ -34,8 +34,8 @@ export default class IFrameRender extends SVGLayerRender {
         return this.wrappedRender(item, () => {
           return /*html*/`
   <foreignObject
-      width="${width.value}"
-      height="${height.value}"
+      width="${width}"
+      height="${height}"
   >
       <iframe 
           xmlns="http://www.w3.org/1999/xhtml"

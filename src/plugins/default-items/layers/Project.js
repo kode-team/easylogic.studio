@@ -1,12 +1,8 @@
 
 import { mat4 } from "gl-matrix";
-import { Length } from "el/editor/unit/Length";
 import { calculateMatrix } from "el/utils/math";
 import { itemsToRectVerties } from "el/utils/collision";
 import { TimelineModel } from "el/editor/model/TimelineModel";
-
-const OFFSET_X = Length.z();
-const OFFSET_Y = Length.z();
 
 const identity = mat4.create();
 
@@ -16,31 +12,31 @@ export class Project extends TimelineModel {
     return "New Project";
   }
 
-  get isAbsolute  (){
+  get isAbsolute() {
     return false;
-  }  
+  }
 
-  get parent () {
+  get parent() {
     return null;
   }
 
-  toRootVariableCSS () {
+  toRootVariableCSS() {
     var obj = {}
     this.json.rootVariable.split(';').filter(it => it.trim()).forEach(it => {
       var [key, value] = it.split(':')
 
-      obj[`--${key}`] = value; 
+      obj[`--${key}`] = value;
     })
 
     return obj;
-  }  
+  }
 
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: "project",
       name: 'new Project',
       description: '',
-      rootVariable: '',            
+      rootVariable: '',
       ...obj
     });
   }
@@ -52,27 +48,36 @@ export class Project extends TimelineModel {
     }
   }
 
-  get artboards () {
+  get artboards() {
     return (this.layers || []).filter(it => it.is('artboard'));
   }
 
-  get offsetX () {
-    return OFFSET_X;
+  get offsetX() {
+    return 0;
   }
 
-  get offsetY () {
-    return OFFSET_Y;
-  }  
+  get offsetY() {
+    return 0;
+  }
+
+
+  get screenWidth() {
+    return 0;
+  }
+
+  get screenHeight() {
+    return 0;
+  }
 
   hasLayout() {
     return false;
   }
 
-  getAccumulatedMatrix() {
+  getAbsoluteMatrix() {
     return mat4.create();
   }
 
-  getTransformMatrix () {
+  getTransformMatrix() {
     return mat4.create();
   }
   /**
@@ -82,38 +87,38 @@ export class Project extends TimelineModel {
    * 
    * @param {Item} childItem 
    */
-  resetMatrix (childItem) {
+  resetMatrix(childItem) {
 
     const [x, y] = mat4.getTranslation([], calculateMatrix(
-        childItem.accumulatedMatrix,
-        childItem.localMatrixInverse
+      childItem.absoluteMatrix,
+      childItem.localMatrixInverse
     ));
 
     childItem.reset({
-        x: Length.px(x),
-        y: Length.px(y),
+      x: x,
+      y: y,
     })
   }
 
-  get rectVerties () {
+  get rectVerties() {
     return this.layers?.length ? itemsToRectVerties(this.layers) : null;
   }
 
-  get accumulatedMatrix () {
+  get absoluteMatrix() {
     return identity;
   }
 
-  get accumulatedMatrixInverse() {
+  get absoluteMatrixInverse() {
     return identity;
   }
 
-  get contentBox () {
+  get contentBox() {
     return {
-        left: 0,
-        top: 0,
-        width: 0,
-        height: 0
+      left: 0,
+      top: 0,
+      width: 0,
+      height: 0
     }
-}
+  }
 
 }

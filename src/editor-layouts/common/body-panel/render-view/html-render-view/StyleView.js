@@ -12,6 +12,12 @@ const TEMP_DIV = Dom.create('div')
 
 export default class StyleView extends EditorElement {
 
+  initState() {
+    return {
+      lastChangedList: {}
+    }
+  }
+
   template() {
     return /*html*/`
     <div class='style-view' style='pointer-events: none; position: absolute;display:inline-block;left:-1000px;'>
@@ -65,9 +71,12 @@ export default class StyleView extends EditorElement {
 
     let isChanged = false; 
     this.refs.$styleView.$$(selector).forEach(it => {
-      if (item.isChanged(it.attr('data-timestamp'))) {
+      const renderItem = this.$model.get(it.data('id'));
+
+      if (renderItem.isChanged(this.state.lastChangedList[renderItem.id])) {
         isChanged = true;       
         it.remove();
+        this.state.lastChangedList[renderItem.id] = renderItem.timestamp;
       }
     })
 

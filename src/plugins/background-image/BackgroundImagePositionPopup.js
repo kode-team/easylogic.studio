@@ -18,10 +18,10 @@ export default class BackgroundImagePositionPopup extends BasePopup {
     return {
       size: this.props.size || 'auto',
       repeat: this.props.repeat || 'repeat',
-      x: this.props.x || Length.z(),
-      y: this.props.y || Length.z(),
-      width: this.props.width || Length.z(),
-      height: this.props.height || Length.z(),
+      x: this.props.x || 0,
+      y: this.props.y || 0,
+      width: this.props.width || 0,
+      height: this.props.height || 0,
       blendMode: this.props.blendMode,
     }
   }
@@ -35,7 +35,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
  
   templateForSize() {
     return /*html*/`
-      <div class='popup-item'>
+      <div class=''>
         <object refClass="SelectEditor"  
           label="${this.$i18n('background.image.position.popup.size')}" 
           ref='$size' 
@@ -53,10 +53,10 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
   templateForX() {
     return /*html*/`
-      <div class='popup-item'>
-        <object refClass="RangeEditor"  
+      <div class=''>
+        <object refClass="InputRangeEditor"  
             label="X"
-            calc="false"            
+            compact="true"          
             ref="$x" 
             key="x"
             value="${this.state.x}"
@@ -69,10 +69,10 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
   templateForY() {
     return /*html*/`
-      <div class='popup-item'>
-        <object refClass="RangeEditor"  
+      <div class=''>
+        <object refClass="InputRangeEditor"  
             label="Y" 
-            calc="false"       
+            compact="true"          
             ref="$y" 
             key="y"
             value="${this.state.y}"            
@@ -85,10 +85,10 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
   templateForWidth() {
     return /*html*/`
-    <div class='popup-item'>
-      <object refClass="RangeEditor"  
-          label="${this.$i18n('background.image.position.popup.width')}"   
-          calc="false"             
+    <div class=''>
+      <object refClass="InputRangeEditor"  
+          label="W"
+          compact="true"          
           ref="$width" 
           key="width"
           value="${this.state.width}"          
@@ -101,10 +101,10 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
   templateForHeight() {
     return /*html*/`
-    <div class='popup-item'>
-      <object refClass="RangeEditor"  
-          label="${this.$i18n('background.image.position.popup.height')}"
-          calc="false"          
+    <div class=''>
+      <object refClass="InputRangeEditor"  
+          label="H"
+          compact="true"          
           ref="$height" 
           key="height"
           value="${this.state.height}"          
@@ -116,7 +116,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
   templateForRepeat() {
     return /*html*/`
-    <div class='popup-item grid-2'>
+    <div class='grid'>
       <label>${this.$i18n('background.image.position.popup.repeat')}</label>
       <div class='repeat-list' ref="$repeat" data-value='${this.state.repeat}'>
           <button type="button" value='no-repeat' title="${this.$i18n('background.image.position.popup.type.no-repeat')}"></button>
@@ -147,11 +147,15 @@ export default class BackgroundImagePositionPopup extends BasePopup {
       <div class='box'>
 
         <div class='background-property'>
-          ${this.templateForSize()}        
-          ${this.templateForX()}
-          ${this.templateForY()}
-          ${this.templateForWidth()}
-          ${this.templateForHeight()}
+          ${this.templateForSize()}      
+          <div class="grid-2">            
+            ${this.templateForX()}
+            ${this.templateForY()}
+          </div>
+          <div class="grid-2">            
+            ${this.templateForWidth()}
+            ${this.templateForHeight()}
+          </div>
           ${this.templateForRepeat()}
         </div>
       </div>

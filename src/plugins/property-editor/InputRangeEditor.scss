@@ -1,9 +1,8 @@
-$border-radius: 3px;
 .elf--input-range-editor {
     display: grid;
     grid-template-columns: 1fr;
     height: var(--elf--input-height);
-    border-radius: $border-radius;
+    border-radius: 2px;
     border: 1px solid transparent;
 
     &.disabled {
@@ -23,43 +22,58 @@ $border-radius: 3px;
 
     &.focused {
         border-color: var(--elf--selected-color);
-        border-width: 2px;
+        border-width: 1px;
+        --elf--input-range-border-color: var(--elf--input-border-color);        
     }
 
     &.drag {
         border-color: var(--elf--selected-color);
         border-width: 1px;
+        --elf--input-range-border-color: var(--elf--input-border-color);        
     }
 
     &:hover:not(.focused):not(.drag) {
-        border-color: var(--elf--input-sub-font-color);
+        border-color: var(--elf--input-border-color);
+        --elf--input-range-border-color: var(--elf--input-border-color);
     }
 
     &.has-label {
-        grid-template-columns: 60px 1fr;
+        grid-template-columns: 70px 1fr;
 
         &.compact {
             grid-template-columns: 30px 1fr;
         }
 
+        &.wide {
+            grid-template-columns: 1fr 1fr;
+
+            .range--editor-type {
+                .area {
+                    grid-template-columns: 1fr 40px;
+                }
+            }
+        }        
+
         &.is-removable {
-            grid-template-columns: 60px 1fr 12px;
+            grid-template-columns: 70px 1fr 12px;
         }
 
         label {
             text-align: left;
             vertical-align: middle;
-            padding: 4px 0px 2px 0px;
-            font-size: 13px;
+            padding:0px;
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
-            line-height: 1.6;
+            line-height: 2;
             cursor: ew-resize;
+            display: flex;
+            justify-content: center;
+            align-items: center;
 
             svg {
-                width: 20px;
-                height: 20px;
+                width: 24px;
+                height: 24px;
                 vertical-align: middle;
             }
         }
@@ -91,9 +105,8 @@ $border-radius: 3px;
         height: 100%;
 
         .area {
-            font-size: 13px;
             display: grid;
-            grid-template-columns: 1fr 24px;
+            grid-template-columns: 1fr 40px;
             height: 100%;
             border-radius: 3px;
             
@@ -117,6 +130,12 @@ $border-radius: 3px;
             }
 
             .elf--select-editor {
+                height: calc(var(--elf--input-height) - 2px);
+                border-left: 1px solid var(--elf--input-range-border-color);
+                &:hover {
+                    border: 0px !important;
+                    box-shadow: none !important;
+                }
 
                 select {
                     background-color: transparent;

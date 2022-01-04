@@ -74,6 +74,12 @@ function changed(node1, node2) {
 }
 
 function hasPassed(node1) {
+
+    // <!-- comment -->  형태의 주석일 때는 그냥 패스 
+    if (node1?.nodeType === 8) {
+        return true;
+    }
+
     return (
         (node1.nodeType !== Node.TEXT_NODE && node1.getAttribute('data-domdiff-pass') === 'true') 
     ) 
@@ -102,7 +108,6 @@ function getProps (attributes) {
 }
 
 function updateElement (parentElement, oldEl, newEl, i, options = {}) {
-
     if (!oldEl) {
         // console.log('replace');        
         parentElement.appendChild(newEl.cloneNode(true));

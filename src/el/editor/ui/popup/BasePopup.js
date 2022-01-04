@@ -50,6 +50,8 @@ export default class BasePopup extends EditorElement {
     this.x = Length.parse(this.$el.css('left'))
     this.y = Length.parse(this.$el.css('top'))
 
+    console.log(this.x, this.y);
+
   }
 
   movePopupTitle (dx, dy) {
@@ -67,13 +69,13 @@ export default class BasePopup extends EditorElement {
     var top = this.$el.css('top')
     var left = this.$el.css('left')
 
-    var realTop = top !== 'auto' ? Length.parse(top) : Length.px(110)
-    var realLeft = left !== 'auto' ? Length.parse(left) : Length.px(document.body.clientWidth - rightPosition - popupPadding - width)
+    var realTop = top !== 'auto' ? Length.parse(top) : 110
+    var realLeft = left !== 'auto' ? Length.parse(left) : document.body.clientWidth - rightPosition - popupPadding - width
 
     this.$el
       .css({
-        top: realTop,
-        left: realLeft,
+        top: Length.px(realTop),
+        left: Length.px(realLeft),
         'z-index': this.$editor.zIndex
       })
       .show("inline-block");
@@ -106,8 +108,8 @@ export default class BasePopup extends EditorElement {
 
   moveResizer (dx, dy) {
     this.$el.css({
-      width: Length.px(Math.min(this.width.value + dx, 1000)),
-      height: Length.px(Math.min(this.height.value + dy, 700)),
+      width: Math.min(this.width + dx, 1000),
+      height: Math.min(this.height + dy, 700),
     })
   }
 

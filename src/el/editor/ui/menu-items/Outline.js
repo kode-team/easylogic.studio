@@ -9,8 +9,13 @@ export default class Outline extends MenuItem {
     return "Outline";
   }
 
+  isHideTitle() {
+    return true;
+  }
+
   clickButton(e) {
     this.$config.toggle('show.outline');
+    this.emit('addLayerView', 'select');
   }
 
   [CONFIG('show.outline')] (isShow) {

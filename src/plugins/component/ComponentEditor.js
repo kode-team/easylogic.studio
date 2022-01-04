@@ -19,10 +19,34 @@ export default class ComponentEditor extends EditorElement {
     `;
   }
 
-  getPropertyEditor (index, childEditor) {
+  getPropertyEditor(index, childEditor) {
+
+    if (childEditor.type === 'column') {
+
+      const size = (childEditor.size || [2]).join('-');
+
+      return /*html*/`
+        <div class='column column-${size}' >
+          ${childEditor.columns.map((it, itemIndex) => {
+            if (it === '-') {
+              return /*html*/`<div class="column-item"></div>`;
+            } else if (it.type === 'label') { 
+              return /*html*/`<div class="column-item">
+                <label>${it.label}</label>
+              </div>`;
+            }
+
+            return /*html*/`
+              <div class='column-item'>
+                ${this.getPropertyEditor(`${index}${itemIndex}`, it)}
+              </div>
+            `
+          }).join('')}  
+        </div>
+      `
+    }
 
     return /*html*/`
-      <div>  
         <object 
           refClass="${childEditor.editor}" 
           ${variable({
@@ -33,32 +57,37 @@ export default class ComponentEditor extends EditorElement {
             value: childEditor.defaultValue
           })} 
         />
-      </div>
     `
+
+
+
   }
 
-  [LOAD('$body')] () {
+  [LOAD('$body')]() {
     const inspector = this.state.inspector;
-    var self = inspector.map((it, index)=> {
-      if (isString(it)) { // label, title 
+    var self = inspector.map((it, index) => {
+      if (isString(it) || it.type === 'label') { // label, title 
+
+        const title = it.label || it;
+
         return /*html*/`
-          <div class='property-item is-label'> 
-            <label class='label string-label'>${it}</label>
+          <div class='component-item'> 
+            <label>${title}</label>
           </div>`
       } else {
         return /*html*/`
-          <div class='property-item'> 
-            ${this.getPropertyEditor(index, it)}
-          </div>
-        `
+            <div class='component-item'> 
+              ${this.getPropertyEditor(index, it)}
+            </div>
+          `
       }
 
     })
 
-    return self; 
+    return self;
   }
 
-  setValue (obj = {}) {
+  setValue(obj = {}) {
     const result = {}
 
     Object.keys(obj).forEach(key => {
@@ -73,7 +102,7 @@ export default class ComponentEditor extends EditorElement {
     });
   }
 
-  getValue () {
+  getValue() {
     const result = {}
     this.eachChildren(child => {
       if (child.getValue) {
@@ -84,7 +113,7 @@ export default class ComponentEditor extends EditorElement {
     return result;
   }
 
-  [SUBSCRIBE_SELF('changeComponentValue')] (key, value) {
+  [SUBSCRIBE_SELF('changeComponentValue')](key, value) {
     this.parent.trigger(this.props.onchange, key, value);
   }
 }

@@ -37,9 +37,9 @@ export default class ArtBoardRender extends SVGRender {
 ${encoding ? `<?xml version="1.0"?>` : ''}
 <svg 
     xmlns="http://www.w3.org/2000/svg"
-    width="${width.value}"
-    height="${height.value}"
-    viewBox="0 0 ${width.value} ${height.value}"
+    width="${width}"
+    height="${height}"
+    viewBox="0 0 ${width} ${height}"
     style="${CSS_TO_STRING(css)}"
 >
     ${this.toDefString(item)}

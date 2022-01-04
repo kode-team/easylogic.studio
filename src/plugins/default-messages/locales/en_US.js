@@ -9,9 +9,9 @@ export default {
     'app.lang.fr_FR': 'Français',
     'app.label.lang': 'Language',
 
-    'app.layout.all': 'All',
-    'app.layout.css': 'CSS',
-    'app.layout.svg': 'SVG',
+    'app.layout.all': 'Layout',
+    'app.layout.css': 'CSS Mode',
+    'app.layout.svg': 'SVG Mode',
     'app.label.layout': 'Menu Layout',
 
 
@@ -42,6 +42,7 @@ export default {
     'menu.item.github.title': 'Github',
     'menu.item.learn.title': 'Learn',       
     'menu.item.projects.title': 'Projects',
+    'menu.item.language.title': 'Language',
 
     'project.property.title' : 'Project',
     'project.information.property.title': 'Project information',   
@@ -201,6 +202,7 @@ export default {
     'svg.item.property.lineCap': 'Line Cap',
     'svg.item.property.lineJoin': 'Line Join',
     'svg.item.property.filter': 'Filter',
+    'svg.item.property.blend': 'Blend Mode',
 
 
     'border.editor.all': 'All',     
@@ -287,7 +289,7 @@ export default {
     'svgfilter.asset.property.title': 'SVG Filter',
 
 
-    'inspector.tab.title.style': 'Style',
+    'inspector.tab.title.design': 'Design',
     'inspector.tab.title.component': 'Component',
     'inspector.tab.title.transition': 'Animation',
     'inspector.tab.title.asset': 'Assets',
@@ -390,6 +392,7 @@ export default {
     'layout.property.flex': 'Flex Box',
     'layout.property.grid': 'Grid',
     'layout.property.default': 'Default',
+    'layout.property.resizing.title': 'Resizing',
 
     'default.layout.item.property.title.constraints': 'Constraints',    
 

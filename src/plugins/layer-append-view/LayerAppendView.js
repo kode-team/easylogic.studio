@@ -1,6 +1,5 @@
 
 import { POINTERSTART, BIND, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP, POINTERMOVE, CHANGE, SUBSCRIBE, KEYDOWN } from "el/sapa/Event";
-import { Length } from "el/editor/unit/Length";
 import PathStringManager from "el/editor/parser/PathStringManager";
 import { rectToVerties, vertiesToRectangle } from "el/utils/collision";
 import { vec3 } from "gl-matrix";
@@ -10,6 +9,7 @@ import { END, MOVE } from "el/editor/types/event";
 import "./LayerAppendView.scss";
 import { CSS_TO_STRING } from "el/utils/func";
 import PathParser from 'el/editor/parser/PathParser';
+import { EditingMode } from 'el/editor/types/editor';
 
 export default class LayerAppendView extends EditorElement {
 
@@ -200,8 +200,13 @@ export default class LayerAppendView extends EditorElement {
         const { left, top, width, height } = vertiesToRectangle(areaVerties);
 
         return {
-            style: { left, top, width, height },
-            innerHTML: this.createLayerTemplate(width.value, height.value)
+            style: { 
+                left, 
+                top, 
+                width, 
+                height
+            },
+            innerHTML: this.createLayerTemplate(width, height)
         }
     }
 
@@ -216,10 +221,10 @@ export default class LayerAppendView extends EditorElement {
         return {
             style: {
                 display: showRectInfo ? 'inline-block' : 'none',
-                left: Length.px(areaVerties[2][0]),
-                top: Length.px(areaVerties[2][1]),
+                left: areaVerties[2][0],
+                top: areaVerties[2][1],
             },
-            innerHTML: `x: ${Math.round(newVerties[0][0])}, y: ${Math.round(newVerties[0][1])}, ${width.value} x ${height.value}`
+            innerHTML: `x: ${Math.round(newVerties[0][0])}, y: ${Math.round(newVerties[0][1])}, ${Math.round(width)} x ${Math.round(height)}`
         }
     }
 
@@ -231,8 +236,8 @@ export default class LayerAppendView extends EditorElement {
         return {
             style: {
                 display: !showRectInfo ? 'inline-block' : 'none',
-                left: Length.px(targetVertex[0] || -10000),
-                top: Length.px(targetVertex[1] || -10000),
+                left: targetVertex[0] || -10000,
+                top: targetVertex[1] || -10000,
             },
             innerHTML: `x: ${Math.round(target[0])}, y: ${Math.round(target[1])}`
         }
@@ -334,7 +339,7 @@ export default class LayerAppendView extends EditorElement {
 
         let { x, y, width, height } = vertiesToRectangle(rectVerties);
         let hasArea = true;
-        if (width.value === 0 && height.value === 0) {
+        if (width === 0 && height === 0) {
 
             switch (this.state.type) {
                 case "text":
@@ -343,14 +348,17 @@ export default class LayerAppendView extends EditorElement {
                     hasArea = false;
                     break;
                 default:
-                    width = Length.px(100)
-                    height = Length.px(100)
+                    width = 100
+                    height = 100
                     break;
             }
         }
 
         var rect = {
-            x, y, width, height,
+            x: Math.floor(x), 
+            y: Math.floor(y), 
+            width: Math.floor(width), 
+            height: Math.floor(height),
             'background-color': color,
             'content': content,
             'font-size': fontSize,
@@ -381,7 +389,7 @@ export default class LayerAppendView extends EditorElement {
                 if (hasArea) {
                     // NOOP
                     // newComponent 를 그대로 실행한다. 
-                    rect['font-size'] = Length.px(this.state.fontSize / this.$viewport.scale);
+                    rect['font-size'] = this.state.fontSize / this.$viewport.scale;
                 } else {
                     const scaledFontSize = this.state.fontSize / this.$viewport.scale;
                     const $drawItem = this.refs.$area.$(".draw-item > p");
@@ -420,10 +428,13 @@ export default class LayerAppendView extends EditorElement {
         this.$el.show();
         this.$el.focus();
         this.$snapManager.clear();
-        this.state.inlineStyle = CSS_TO_STRING(this.$editor.html.toCSS(this.$model.createModel({
+
+        const model = this.$model.createModel({
             itemType: type,
-            ...options
-        }, false), {
+            ...options,
+        }, false)
+
+        this.state.inlineStyle = CSS_TO_STRING(this.$editor.html.toCSS(model, {
             top: true,
             left: true,
             width: true,
@@ -447,6 +458,7 @@ export default class LayerAppendView extends EditorElement {
             // this.refs.$area.empty()
             this.$el.hide();
             this.emit('pop.mode.view', 'LayerAppendView');
+            this.$config.set('editing.mode', EditingMode.SELECT);
         }
 
     }
@@ -492,10 +504,10 @@ export default class LayerAppendView extends EditorElement {
                 const rect = {
                     x,
                     y,
-                    width: Length.px(newWidth),
-                    height: Length.px(newHeight),
+                    width: newWidth,
+                    height: newHeight,
                     'content': text.trim(),
-                    'font-size': Length.px(newFontSize),
+                    'font-size': newFontSize,
                 }
 
                 // artboard 가 아닐 때만 parentArtBoard 가 존재 

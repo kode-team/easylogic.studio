@@ -47,11 +47,6 @@ export default class BorderEditor extends EditorElement {
     this.refresh();
   }
 
-  refresh () {
-    this.load();
-
-  }
-
 
   [LOAD('$editorArea')] () {
     return borderTypeList.map(type => {
@@ -69,12 +64,6 @@ export default class BorderEditor extends EditorElement {
   template() {
     return /*html*/`
       <div class="elf--border-editor">
-        <div class='header'>
-          <div></div>
-          <label>${this.$i18n('border.editor.width')}</label>
-          <label>${this.$i18n('border.editor.style')}</label>
-          <label>${this.$i18n('border.editor.color')}</label>
-        </div>
         <div class='editor-area' ref='$editorArea'>
 
         </div>

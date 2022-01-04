@@ -18,21 +18,23 @@ export default class SelectEditor extends EditorElement {
         var options = Array.isArray(this.props.options)
             ? this.props.options.map(it => {
                 if (typeof (it) === 'string') {
-                    return { value: it }
+                    return { value: it, text: it }
                 }
                 return it;
             })
             : (this.props.options || '').split(splitChar).map(it => it.trim()).map(it => {
                 const [value, text] = it.split(':');
-                return { value, text }
+                return { value, text: text || value }
             });
 
         var value = this.props.value;
         var tabIndex = this.props.tabindex;
+        var title = this.props.title;
 
         return {
             splitChar,
             label: this.props.label || '',
+            title,
             options,
             value,
             tabIndex
@@ -40,12 +42,14 @@ export default class SelectEditor extends EditorElement {
     }
 
     template() {
-        var { label, tabIndex, value = BlendMode.NORMAL } = this.state;
+        var { label, title, tabIndex, value = BlendMode.NORMAL } = this.state;
         var hasLabel = !!label ? 'has-label' : ''
         var hasTabIndex = !!tabIndex ? 'tabIndex="1"' : ''
+        var compact = !!this.props.compact ? 'compact': '';
+        
         return /*html*/`
-            <div class='elf--select-editor ${hasLabel}'>
-                ${label ? `<label title="${label}">${label}</label>` : ''}
+            <div class='elf--select-editor ${hasLabel} ${compact}'>
+                ${label ? `<label title="${title}">${label}</label>` : ''}
                 <div class="editor-view">
                     <select ref='$options' ${hasTabIndex}></select>
                     <div class='selected-value'>
@@ -93,7 +97,8 @@ export default class SelectEditor extends EditorElement {
                 value = '';
             }
             var selected = value === this.state.value ? 'selected' : ''
-            return `<option ${selected} value="${value}">${label}</option>`
+            const disabled = it.disabled ? 'disabled' : '';
+            return `<option ${selected} value="${value}" ${disabled}>${label}</option>`
         })
 
         return arr;

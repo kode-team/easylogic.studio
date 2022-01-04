@@ -1,7 +1,6 @@
 import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties, targetItemsToRectVerties, toRectVerties} from "el/utils/collision";
 import { Item } from "el/editor/items/Item";
 import { Project } from "plugins/default-items/layers/Project";
-import { Length } from "el/editor/unit/Length";
 import { vec3 } from "gl-matrix";
 import { clone, isFunction, isString, isUndefined, isObject } from "el/sapa/functions/func";
 import { area } from "el/utils/math";
@@ -145,7 +144,9 @@ export class SelectionManager {
     }).filter(item => {
       // 사각형 영역에 포함되는지 체크 
       return item.isPointInRect(this.pos[0], this.pos[1])
-    }).map(item => this.modelManager.findGroupItem(item.id));
+    })
+    
+    // .map(item => this.modelManager.findGroupItem(item.id));
 
   }
 
@@ -482,13 +483,12 @@ export class SelectionManager {
         this.cachedItemMatrices.push(it.matrix);
       } 
       // artboard 가 아닌데 자식을 가지고 있을 때는 자식을 포함 
-      // TODO: layout 을 가지고 있는 경우 어떻게 해야할지 정해야함 
-      // else if (it.hasChildren()) {
-      //   const list = this.modelManager.getAllLayers(it.id).map(it => it.matrix);
+      else if (it.hasChildren()) {
+        const list = this.modelManager.getAllLayers(it.id).map(it => it.matrix);
 
-      //   this.cachedChildren.push(...list.map(it => it.id))
-      //   this.cachedItemMatrices.push(...list);
-      // } 
+        this.cachedChildren.push(...list.map(it => it.id))
+        this.cachedItemMatrices.push(...list);
+      } 
       // 그 외는 아트보드처럼 자신만 포함 
       else {
         this.cachedItemMatrices.push(it.matrix);
@@ -561,10 +561,10 @@ export class SelectionManager {
   get itemRect () {
     const verties = this.verties;
     return {
-      x: Length.px(verties[0][0]),
-      y: Length.px(verties[0][1]),
-      width: Length.px(vec3.distance(verties[0], verties[1])),
-      height: Length.px(vec3.distance(verties[0], verties[3])),      
+      x: verties[0][0],
+      y: verties[0][1],
+      width: vec3.distance(verties[0], verties[1]),
+      height: vec3.distance(verties[0], verties[3]),      
     }
   } 
 

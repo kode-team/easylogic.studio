@@ -25,20 +25,20 @@ test("create MovableModel", () => {
 
 test("create MovableModel with size", () => {
     const model = new MovableModel({
-        width: Length.px(100),
-        height: Length.px(200)
+        width: 100,
+        height: 200
     });
-    expect(model.width).toEqual(Length.px(100));
-    expect(model.height).toEqual(Length.px(200));
+    expect(model.width).toEqual(100);
+    expect(model.height).toEqual(200);
 })
 
 test("create MovableModel with position", () => {
     const model = new MovableModel({
         x: Length.percent(100),
-        y: Length.px(200)
+        y: 200
     });
     expect(model.x).toEqual(Length.percent(100));
-    expect(model.y).toEqual(Length.px(200));
+    expect(model.y).toEqual(200);
 })
 
 test("create project", () => {
@@ -47,8 +47,8 @@ test("create project", () => {
     });
 
     expect(model.itemType).toEqual('project');
-    expect(model.screenWidth).toEqual(Length.px(0));
-    expect(model.screenHeight).toEqual(Length.px(0));
+    expect(model.screenWidth).toEqual(0);
+    expect(model.screenHeight).toEqual(0);
 })
 
 test("create artboard", () => {
@@ -65,8 +65,8 @@ test("create artboard", () => {
 
 
     expect(model.itemType).toEqual('artboard');
-    expect(model.screenWidth).toEqual(Length.px(0));
-    expect(model.screenHeight).toEqual(Length.px(0));
+    expect(model.screenWidth).toEqual(0);
+    expect(model.screenHeight).toEqual(0);
     expect(model.parentId).toEqual(project.id);
 })
 
@@ -74,10 +74,10 @@ test("create movable in artboard", () => {
 
     const project = new MovableModel({
         itemType: 'project',
-        x: Length.px(0),
-        y: Length.px(0),
-        width: Length.px(0),
-        height: Length.px(0)
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0
     }, modelManager);
 
     registerModel(project);    
@@ -85,10 +85,10 @@ test("create movable in artboard", () => {
 
     const artboard = new MovableModel({
         itemType: 'artboard',
-        x: Length.px(100),
-        y: Length.px(200),
-        width: Length.px(300),
-        height: Length.px(400)
+        x: 100,
+        y: 200,
+        width: 300,
+        height: 400
     }, modelManager);
 
     registerModel(artboard);
@@ -98,10 +98,10 @@ test("create movable in artboard", () => {
 
     const model = new MovableModel({
         itemType: 'rect',
-        x: Length.px(300),
-        y: Length.px(300),
-        width: Length.px(300),
-        height: Length.px(400)   
+        x: 300,
+        y: 300,
+        width: 300,
+        height: 400   
     }, modelManager)
 
     registerModel(model);    
@@ -110,13 +110,13 @@ test("create movable in artboard", () => {
 
     expect(model.parentId).toEqual(artboard.id);    
     // appendChild 하는 시점에 artboard 의 상대 좌표로 변경 
-    expect(model.offsetX).toEqual(Length.px(200));      
-    expect(model.screenWidth).toEqual(Length.px(300));
-    expect(model.screenHeight).toEqual(Length.px(400));
+    expect(model.offsetX).toEqual(200);      
+    expect(model.screenWidth).toEqual(300);
+    expect(model.screenHeight).toEqual(400);
 
     // world 좌표 기준으로 바꿔서 체크 
     const rect = vertiesToRectangle(model.verties)
-    expect(rect.left).toEqual(Length.px(300));
-    expect(rect.top).toEqual(Length.px(300));
+    expect(rect.left).toEqual(300);
+    expect(rect.top).toEqual(300);
 })
 

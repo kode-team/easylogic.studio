@@ -96,7 +96,7 @@ BlurFilter.spec = {
   step: 1,
   unit: 'px',
   units: ["px", "em"],
-  defaultValue: Length.z()
+  defaultValue: 0
 };
 
 export class URLSvgFilter extends Filter {
@@ -308,7 +308,7 @@ DropshadowFilter.spec = {
     min: -100,
     max: 100,
     step: 1,
-    defaultValue: Length.z(),
+    defaultValue: 0,
     unit: 'px',
     units: ["px", "em"]
   },
@@ -318,7 +318,7 @@ DropshadowFilter.spec = {
     min: -100,
     max: 100,
     step: 1,
-    defaultValue: Length.z(),
+    defaultValue: 0,
     unit: 'px',
     units: ["px", "em"]
   },
@@ -328,7 +328,7 @@ DropshadowFilter.spec = {
     min: 0,
     max: 100,
     step: 1,
-    defaultValue: Length.z(),
+    defaultValue: 0,
     unit: 'px',
     units: ["px", "em", "%"]
   },

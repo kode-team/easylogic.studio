@@ -17,13 +17,17 @@ $status-bar-height: 30px;
   }
 
   .tool-view {
+    display: flex;
     text-align: right;
-    padding: 5px 5px;
+    padding: 0px 5px;
     text-align: right;
+    gap: 10px;
+    &.right {
+      justify-content: flex-end;
 
-    &.left {
-      text-align: left;
     }
+
+
 
     > div {
       display: inline-block;
@@ -35,6 +39,7 @@ $status-bar-height: 30px;
   .version-view {
     background-color: transparent !important;
     text-align: center;
+    line-height: 2;
   }
 
   .status-selector {
@@ -52,7 +57,6 @@ $status-bar-height: 30px;
 
       .elf--select-editor {
         height: 100%;
-        width: 50px;
         color: var(--elf--font-color);
       }
     }

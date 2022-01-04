@@ -5,6 +5,7 @@ export const makeEventChecker = (value, split = CHECK_SAPARATOR) => {
 
 // event name regular expression
 export const CHECK_DOM_EVENT_PATTERN = /domevent (.*)/gi;
+export const CHECK_CALLBACK_PATTERN = /callback (.*)/gi;
 export const CHECK_LOAD_PATTERN = /load (.*)/gi;
 export const CHECK_BIND_PATTERN = /bind (.*)/gi;
 export const CHECK_SUBSCRIBE_PATTERN = /subscribe (.*)/gi;
@@ -27,6 +28,7 @@ export const ON = EVENT
 export const NAME_SAPARATOR = ":";
 export const CHECK_SAPARATOR = "|";
 export const DOM_EVENT_SAPARATOR = `${MAGIC_METHOD}domevent `;
+export const CALLBACK_SAPARATOR = `${MAGIC_METHOD}callback `;
 export const LOAD_SAPARATOR = `${MAGIC_METHOD}load `;
 export const BIND_SAPARATOR = `${MAGIC_METHOD}bind `;
 export const SUBSCRIBE_SAPARATOR = `${MAGIC_METHOD}subscribe `;
@@ -44,6 +46,10 @@ const DOM_EVENT_MAKE = (...keys) => {
 
 const SUBSCRIBE_EVENT_MAKE = (...args) => {
   return SUBSCRIBE_SAPARATOR + args.join(CHECK_SAPARATOR);
+}
+
+const CALLBACK_EVENT_MAKE = (...args) => {
+  return CALLBACK_SAPARATOR + args.join(CHECK_SAPARATOR);
 }
 
 
@@ -117,6 +123,10 @@ export const SUBSCRIBE = SUBSCRIBE_EVENT_MAKE;
 export const SUBSCRIBE_ALL = (...args) => SUBSCRIBE_EVENT_MAKE(...args, ALL_TRIGGER);
 export const SUBSCRIBE_SELF = (...args) => SUBSCRIBE_EVENT_MAKE(...args, SELF_TRIGGER);
 export const CONFIG = (config, ...args) => SUBSCRIBE_EVENT_MAKE(`config:${config}`, ...args);
+
+export const CALLBACK = CALLBACK_EVENT_MAKE;
+export const RAF = CALLBACK('requestAnimationFrame');
+
 export const CUSTOM = DOM_EVENT_MAKE;
 export const CLICK = DOM_EVENT_MAKE("click");
 export const DOUBLECLICK = DOM_EVENT_MAKE("dblclick");

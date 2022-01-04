@@ -1,25 +1,32 @@
-import { Length } from "el/editor/unit/Length";
-import { LOAD, INPUT, FOCUS, BLUR, FOCUSIN, FOCUSOUT, POINTERSTART } from "el/sapa/Event";
+import { LOAD, INPUT, FOCUSIN, FOCUSOUT, POINTERSTART, KEYUP, ENTER, IF } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './NumberInputEditor.scss';
 import { END, MOVE } from "el/editor/types/event";
+import { round } from "el/utils/math";
+import { OBJECT_TO_CLASS } from "el/utils/func";
+import { isBoolean } from "el/sapa/functions/func";
 
 export default class NumberInputEditor extends EditorElement {
 
     initState() {
-        var value = Length.parse(this.props.value || Length.number(0));
-
-        value = value.toUnit('number');
+        var value = +this.props.value;
         let label = this.props.label || ''; 
 
         if (icon[label]) {
             label = icon[label];
         }        
+
+        const compact = isBoolean(this.props.compact) ? this.props.compact : this.props.compact === 'true';
+        const wide = isBoolean(this.props.wide) ? this.props.wide : this.props.wide === 'true';        
+        const trigger = this.props.trigger || "input";
+
         return {
             label,
-            compact: this.props.compact === 'true',            
+            compact,     
+            wide,            
+            trigger,
             min: +this.props.min || 0,
             max: +this.props.max || 100,
             step: +this.props.step || 1,
@@ -35,22 +42,29 @@ export default class NumberInputEditor extends EditorElement {
     }
 
     [LOAD('$body')] () {
-        var { min, max, step, label, type, layout, compact } = this.state
+        var { min, max, step, label,  type, layout, compact, wide, disabled, removable } = this.state
 
-        var value = +this.state.value.value.toString()
+        var value = this.state.value
 
         if (isNaN(value)) {
             value = 0
         }
 
-        var hasLabel = !!label ? 'has-label' : ''
-        var hasCompact = !!compact ? 'compact' : ''        
         var layoutClass = layout;
 
         var realValue = (+value).toString();
         
         return /*html*/`
-        <div class='elf--number-input-editor ${hasLabel} ${hasCompact} ${layoutClass}' 
+        <div 
+            class="${OBJECT_TO_CLASS({
+                'elf--number-input-editor': true,
+                'has-label': !!label,
+                'compact': !!compact,
+                'wide': !!wide,
+                'is-removable': removable,
+                'disabled': disabled,
+                [layoutClass] : true 
+            })}"
             ref="$range"
             data-selected-type='${type}'>
             ${label ? `<label>${label}</label>` : '' }
@@ -69,9 +83,9 @@ export default class NumberInputEditor extends EditorElement {
 
     setValue (value) {
         this.setState({
-            value: Length.parse(value)
+            value
         }, false)
-        this.refs.$propertyNumber.val(this.state.value.value)
+        this.refs.$propertyNumber.val(this.state.value)
     }
 
     updateData (data) {
@@ -89,26 +103,46 @@ export default class NumberInputEditor extends EditorElement {
         this.refs.$range.removeClass('focused');
     }    
 
-    [INPUT('$body input[type=number]')] (e) {
-        var value = +this.getRef('$propertyNumber').value; 
+    updateValue (e) {
+        var value = +e.$dt.value; 
 
         this.updateData({ 
-            value: this.state.value.set(value)
+            value
         });
-
     }
 
-    [POINTERSTART('$range label') + MOVE('moveDrag') + END('moveDragEnd')] (e) {
+    isTriggerInput () {
+        return this.state.trigger === 'input';
+    }
+
+    isTriggerEnter () {
+        return this.state.trigger === 'enter';
+    }
+
+
+    [INPUT('$body input[type=number]') + IF('isTriggerInput')] (e) {
+        this.updateValue(e);
+        // e.$dt.select();            
+    }
+
+    [KEYUP('$body input[type=number]') + IF('isTriggerEnter') + ENTER] (e) {
+        this.updateValue(e);
+        e.$dt.select();            
+    }
+
+    [POINTERSTART('$body label') + MOVE('moveDrag') + END('moveDragEnd')] (e) {
         this.refs.$range.addClass('drag');
 
         this.initValue = +this.refs.$propertyNumber.value;
     }
 
     moveDrag (dx, dy) {
+        let newValue = round(this.initValue + dx * this.state.step, 1/this.state.step);
+        newValue = Math.min(this.state.max, Math.max(this.state.min, newValue));
         this.updateData({ 
-            value: Length.px(this.initValue + Math.floor(dx))
+            value: newValue
         });
-        this.refs.$propertyNumber.val(this.state.value.value)
+        this.refs.$propertyNumber.val(this.state.value)
     }
 
     moveDragEnd() {

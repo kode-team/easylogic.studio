@@ -23,7 +23,7 @@ export class Display extends PropertyItem {
 
       justifyContent: "flex-start",
 
-      gap: Length.z(),
+      gap: 0,
 
       rowGap: Length.percent(1),
 

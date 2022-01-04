@@ -88,12 +88,12 @@ export class BasePattern extends Pattern {
   getDefaultObject() {
     return super.getDefaultObject({
       type: "base",
-      x: Length.z(),
-      y: Length.z(),
-      width: Length.px(20),
-      height: Length.px(20),
-      lineWidth: Length.px(1),
-      lineHeight: Length.px(1),       
+      x: 0,
+      y: 0,
+      width: 20,
+      height: 20,
+      lineWidth: 1,
+      lineHeight: 1,       
       foreColor: 'black',
       backColor: 'white',
       blendMode: 'normal'
@@ -158,7 +158,7 @@ export class GridPattern extends BasePattern {
 
     return `
       background-image: linear-gradient(${foreColor} ${lineHeight}, ${backColor} ${lineHeight}),linear-gradient(to right, ${foreColor} ${lineWidth}, ${backColor} ${lineWidth});
-      background-size: ${width.value/2}px ${height.value/2}px, ${width.value/2}px ${height.value/2}px;      
+      background-size: ${width/2}px ${height/2}px, ${width/2}px ${height/2}px;      
       background-blend-mode: ${blendMode}, ${blendMode};      
     `
   }  
@@ -181,7 +181,7 @@ export class DotPattern extends BasePattern {
 
     return `
       background-image: radial-gradient(${foreColor} ${lineWidth}, ${backColor} ${lineWidth});
-      background-size: ${width.value/2}px ${height.value/2}px;          
+      background-size: ${width/2}px ${height/2}px;          
       background-blend-mode: ${blendMode};      
     `
 

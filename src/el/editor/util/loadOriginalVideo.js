@@ -6,10 +6,10 @@ export default function loadOriginalVideo(obj, callback) {
 
         var info = {
             local: obj.local,
-            naturalWidth: Length.px(video.videoWidth),
-            naturalHeight: Length.px(video.videoHeight), 
-            width: Length.px(video.videoWidth),
-            height: Length.px(video.videoHeight),
+            naturalWidth: video.videoWidth,
+            naturalHeight: video.videoHeight, 
+            width: video.videoWidth,
+            height: video.videoHeight,
             duration: video.duration,
             playTime: `0:1:${video.duration}`,
             volume: video.volume,

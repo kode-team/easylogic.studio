@@ -114,15 +114,11 @@ export class ViewportManager {
      * @param {number} rect.height
      */
     refreshCanvasSize (rect) {
+
         
         if (this.canvasSize) {
     
-            this.canvasSize = {
-                x: rect.x ,
-                y: rect.y ,
-                width: rect.width,
-                height: rect.height 
-            }
+            this.canvasSize = rect
 
             this.cachedViewport = rectToVerties(0, 0, this.canvasSize.width, this.canvasSize.height)
             const newVerties = vec3.transformMat4(
@@ -154,12 +150,7 @@ export class ViewportManager {
             this.setTransformOrigin(newTransformOrigin)            
     
         } else {
-            this.canvasSize = {
-                x: rect.x,
-                y: rect.y,
-                width: rect.width,
-                height: rect.height
-            }
+            this.canvasSize = rect;
         
             this.cachedViewport = rectToVerties(0, 0, this.canvasSize.width, this.canvasSize.height)
     
@@ -375,6 +366,17 @@ export class ViewportManager {
         return this.applyVertiesInverse(rectToVertiesForArea(x, y, width, height));
     }
 
+    zoomIn (zoomFactor = 0.01) {
+        this.setScale(this.scale + zoomFactor);
+        this.editor.emit('updateViewport');
+    }
 
+    zoomOut (zoomFactor = 0.01) {
+        this.zoomIn(-zoomFactor);
+    }    
 
+    zoomDefault () {
+        this.setScale(1);
+        this.editor.emit('updateViewport');
+    }        
 }

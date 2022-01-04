@@ -1,5 +1,5 @@
 import { Editor } from "el/editor/manager/Editor";
-import { Length } from "el/editor/unit/Length";
+import { round } from "el/utils/math";
 import _doForceRefreshSelection from "./_doForceRefreshSelection";
 
 export default {
@@ -17,8 +17,8 @@ export default {
 
         moveItems.forEach(it => {
             itemsMap[it.item.id] = {
-                x: Length.px(it.item.offsetX.value + it.dist[0]).round(),
-                y: Length.px(it.item.offsetY.value + it.dist[1]).round() 
+                x: round(it.item.offsetX + it.dist[0]),
+                y: round(it.item.offsetY + it.dist[1])
             }
         })
 

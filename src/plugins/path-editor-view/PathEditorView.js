@@ -338,10 +338,10 @@ export default class PathEditorView extends PathTransformEditor {
 
         const pathItem = {
             itemType: 'svg-path',
-            x: Length.px(bbox[0][0]),
-            y: Length.px(bbox[0][1]),
-            width: Length.px(newWidth),
-            height: Length.px(newHeight),
+            x: bbox[0][0],
+            y: bbox[0][1],
+            width: newWidth,
+            height: newHeight,
             d: newPath.d,
             // totalLength: this.totalPathLength,
             fill: newPath.closed ? `#C4C4C4` : 'transparent'
@@ -809,17 +809,17 @@ export default class PathEditorView extends PathTransformEditor {
 
     hideSelectBox() {
         this.refs.$segmentBox.css({
-            left: Length.px(-100000)
+            left: -100000
         })
     }
 
     renderSelectBox(startXY = null, dx = 0, dy = 0) {
 
         var obj = {
-            left: Length.px(startXY.x + (dx < 0 ? dx : 0)),
-            top: Length.px(startXY.y + (dy < 0 ? dy : 0)),
-            width: Length.px(Math.abs(dx)),
-            height: Length.px(Math.abs(dy))
+            left: startXY.x + (dx < 0 ? dx : 0),
+            top: startXY.y + (dy < 0 ? dy : 0),
+            width: Math.abs(dx),
+            height: Math.abs(dy)
         }
 
         this.refs.$segmentBox.css(obj)
@@ -840,8 +840,8 @@ export default class PathEditorView extends PathTransformEditor {
             height
         }
 
-        rect.x2 = Length.px(rect.x.value + rect.width.value);
-        rect.y2 = Length.px(rect.y.value + rect.height.value);
+        rect.x2 = rect.x.value + rect.width;
+        rect.y2 = rect.y.value + rect.height;
 
         return rect;
     }

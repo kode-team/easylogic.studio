@@ -290,7 +290,7 @@ export class Editor {
    * itemObject (객체)를 가지고 itemType 에 따른  실제 Component 객체를 생성해준다. 
    * 
    * @param {object} itemObject 
-   * @param {Boolean} isRecoverPosition 
+   * @param {Boolean} [isRecoverPosition=true]
    */
   createModel(itemObject, isRegister = true) {
     return this.modelManager.createModel(itemObject, isRegister);
@@ -438,5 +438,14 @@ export class Editor {
 
   registerIcon (itemType, iconOrFunction) {
     this.iconManager.registerIcon(itemType, iconOrFunction);
+  }
+
+  /**
+   * 
+   * @param {string} id 
+   * @returns {BaseModel}
+   */
+  get (id) {
+    return this.modelManager.get(id);
   }
 }

@@ -1,3 +1,5 @@
+import { clone } from "el/sapa/functions/func";
+
 /**
  * @method format
  *
@@ -33,6 +35,12 @@ export function format(obj, type, defaultColor = 'rgba(0, 0, 0, 0)') {
     }
 
     return obj;
+}
+
+export function formatWithoutAlpha(obj, type, defaultColor = 'rgba(0, 0, 0, 0)') {
+    const newColorObj = clone(obj);
+    newColorObj.a = 1; 
+    return format(newColorObj, type, defaultColor);
 }
 
 export function hex(obj) {

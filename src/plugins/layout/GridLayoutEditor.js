@@ -48,6 +48,7 @@ export default class GridLayoutEditor extends EditorElement {
             <div class='grid-layout-item'>
                 <object refClass="GridGapEditor" 
                     label='${this.$i18n('grid.layout.editor.column.gap')}'
+                    ref='$columnGap'
                     key='grid-column-gap'
                     value="${this.state['grid-column-gap'] || ''}"
                     onchange='changeKeyValue'
@@ -64,7 +65,8 @@ export default class GridLayoutEditor extends EditorElement {
             </div>            
             <div class='grid-layout-item'>
                 <object refClass="GridGapEditor" 
-                    label='${this.$i18n('grid.layout.editor.row.gap')}'                
+                    label='${this.$i18n('grid.layout.editor.row.gap')}'      
+                    ref='$rowGap'          
                     key='grid-row-gap'
                     value="${this.state['grid-row-gap'] || ''}"
                     onchange='changeKeyValue'

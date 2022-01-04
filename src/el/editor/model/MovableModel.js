@@ -3,16 +3,29 @@ import { Transform } from "../property-parser/Transform";
 import { TransformOrigin } from "el/editor/property-parser/TransformOrigin";
 import { mat4, quat, vec3 } from "gl-matrix";
 import { area, calculateMatrix, calculateMatrixInverse, radianToDegree, round, vertiesMap } from "el/utils/math";
-import { isFunction, isUndefined } from "el/sapa/functions/func";
+import { isFunction, isNotUndefined, isUndefined } from "el/sapa/functions/func";
 import PathParser from "el/editor/parser/PathParser";
 import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties, toRectVerties } from "el/utils/collision";
 import { BaseAssetModel } from './BaseAssetModel';
-import { Constraints } from "../types/model";
+import { Constraints, ConstraintsDirection } from "../types/model";
 
 
 
-const ZERO = Length.z()
+const ZERO = 0
 export class MovableModel extends BaseAssetModel {
+
+    getDefaultObject(obj = {}) {
+        return super.getDefaultObject({
+            angle: 0,
+            ...obj
+          });
+    }
+
+    ////////////////////////////////////
+    //
+    // getter fields
+    //
+    ///////////////////////////////////
 
     /**
      * @returns {boolean} wheather item is absolute position 
@@ -58,298 +71,9 @@ export class MovableModel extends BaseAssetModel {
         return false;
     }
 
-    startToCacheChildren() {
-
-        // if (!this.resizableWitChildren) return;
-
-        this.cachedSize = {
-            width: this.json.width.clone(),
-            height: this.json.height.clone()
-        }
-        this.cachedLayerMatrix = this.layers.map(item => {
-            item.startToCacheChildren();
-
-            return {
-                item,
-                matrix: item.matrix, constraints: {
-                    horizontal: item['constraints-horizontal'],
-                    vertical: item['constraints-vertical']
-                }
-
-            }
-        })
+    get transform() {
+        return `rotateZ(${Length.deg(this.json.angle)})`;
     }
-
-    /**
-     * 상위 레이어에 맞게 자식 레이어의 공간(x,y,width,height)를 변경한다.
-     */
-    recoverChildren() {
-
-        // if (!this.resizableWitChildren) return;
-
-        const obj = {
-            width: this.json.width.clone(),
-            height: this.json.height.clone()
-        }
-
-        const scaleX = obj.width.value / this.cachedSize.width.value;
-        const scaleY = obj.height.value / this.cachedSize.height.value;
-
-        this.cachedLayerMatrix.forEach(({ item, matrix, constraints }) => {
-            const { x, y, width, height } = matrix;
-
-            const left = x;
-            const right = this.cachedSize.width.value - x - width;
-            const top = y;
-            const bottom = this.cachedSize.height.value - y - height;
-
-            const localObj = {}
-
-            // constraints horizontal
-            switch (constraints.horizontal) {
-                case Constraints.MIN:
-                    localObj.x = Length.px(left);
-                    localObj.right = undefined;
-                    break;
-                case Constraints.MAX:
-                    localObj.right = Length.px(right);
-                    localObj.x = undefined;
-                    break;
-                case Constraints.STRETCH:
-                    localObj.right = Length.px(right);
-                    localObj.x = Length.px(left);
-                    break;
-                case Constraints.SCALE:
-                    localObj.width = item.width.changeUnitValue(matrix.width * scaleX, obj.width.value)
-                    localObj.x = item.x.changeUnitValue(matrix.x * scaleX, obj.width.value);
-                    localObj.right = undefined;
-                    break;
-                case Constraints.CENTER:
-                    const scaleNew = (matrix.x + matrix.width / 2) / this.cachedSize.width.value;
-
-                    localObj.x = item.x.changeUnitValue(scaleNew * obj.width.value - matrix.width / 2, obj.width.value);
-                    localObj.right = undefined
-                    break;
-            }
-
-            // constraints vertical
-            switch (constraints.vertical) {
-                case Constraints.MIN:
-                    localObj.y = Length.px(top);
-                    localObj.bottom = undefined;
-                    break;
-                case Constraints.MAX:
-                    localObj.bottom = Length.px(bottom);
-                    localObj.y = undefined;
-                    break;
-
-                case Constraints.STRETCH:
-                    localObj.bottom = Length.px(bottom);
-                    localObj.y = Length.px(top);
-                    break;
-                case Constraints.SCALE:
-                    localObj.height = item.height.changeUnitValue(matrix.height * scaleY, obj.height.value)
-                    localObj.y = item.y.changeUnitValue(matrix.y * scaleY, obj.height.value);
-                    localObj.bottom = undefined;
-                    break;
-                case Constraints.CENTER:
-
-                    const scaleNew = (matrix.y + matrix.height / 2) / this.cachedSize.height.value;
-
-                    localObj.y = item.y.changeUnitValue(scaleNew * obj.height.value - matrix.height / 2, obj.height.value);
-                    localObj.bottom = undefined
-                    break;
-            }
-
-            item.reset(localObj)
-
-            item.recoverChildren();
-        })
-    }
-
-    toCloneObject(isDeep = true) {
-        return {
-            ...super.toCloneObject(isDeep),
-            ...this.attrs('x', 'y', 'right', 'bottom', 'width', 'height', 'transform', 'rotate', 'rotateZ')
-        }
-    }
-
-    convert(json) {
-        json = super.convert(json);
-
-        if (json.x) {
-            json.x = Length.parse(json.x);
-        }
-
-        if (json.y) {
-            json.y = Length.parse(json.y);
-        }
-
-        if (json.width) {
-            json.width = Length.parse(json.width);
-        }
-
-        if (json.height) {
-            json.height = Length.parse(json.height);
-        }
-
-        if (json.right) {
-            json.right = Length.parse(json.right);
-        }
-
-        if (json.bottom) {
-            json.bottom = Length.parse(json.bottom);
-        }
-
-        return json;
-    }
-
-    reset(obj, context = { origin: '*' }) {
-        const isChanged = super.reset(obj, context);
-
-        if (this.hasChangedField('width', 'height')) {
-            this.applyLayout();
-        }
-
-        // transform 에 변경이 생기면 미리 캐슁해둔다. 
-        if (this.hasChangedField('children', 'x', 'y', 'width', 'height', 'transform', 'rotateZ', 'rotate', 'transform-origin', 'perspective', 'perspective-origin')) {
-            this.refreshMatrixCache()
-        }
-
-        return isChanged;
-    }
-
-    applyLayout() {
-        if (this.hasLayout()) {
-            if (this.isLayout('default')) {
-                // 부모 크기가 변경될때 자식도 변경된다. 
-                if (this.hasChangedField('width', 'height')) {
-
-                }
-            }
-        }
-
-        // 크기에 따른 right 위치를 재조정한다. 
-        // screenWidth 를 다시 맞출 수 있도록 한다. 
-        if (this.hasChangedField('width')) {
-            const { right, width } = this.json;
-            if (right && right.unit !== 'auto') {
-                const parentWidth = this.parent.screenWidth.value;
-                const newX = this.offsetX.value;
-                const newWidth = width.toPx(parentWidth).value;
-                const newRightRate = 1 - (newX + newWidth) / parentWidth
-
-                if (right.isPercent()) {
-                    this.json.right = Length.percent(newRightRate * 100)
-                } else {
-                    this.json.right = Length.px(parentWidth * newRightRate)
-                }
-            }
-        }
-
-        if (this.hasChangedField('height')) {
-            const { bottom, height } = this.json;
-            if (bottom && bottom.unit !== 'auto') {
-                const parentHeight = this.parent.screenHeight.value;
-                const newY = this.offsetY.value;
-                const newHeight = height.toPx(parentHeight).value;
-                const newBottomRate = 1 - (newY + newHeight) / parentHeight
-
-                if (bottom.isPercent()) {
-                    this.json.bottom = Length.percent(newBottomRate * 100)
-                } else {
-                    this.json.bottom = Length.px(parentHeight * newBottomRate)
-                }
-            }
-        }
-
-
-    }
-
-    /**
-     * 부모가 변경되면 matrix 를 다시 캐쉬 한다. 
-     * 
-     * @param {BaseModel} otherParent 
-     */
-    setParentId(otherParentId) {
-        super.setParentId(otherParentId);
-
-        this.refreshMatrixCache();
-    }
-
-    refreshMatrixCache() {
-        // return;
-        // this.modelManager.setChanged('refreshMatrixCache', this.id, { start: true })        
-
-        this.setCacheItemTransformMatrix();
-        this.setCacheLocalTransformMatrix();
-        this.setCacheAccumulatedMatrix();
-        this.setCacheLocalVerties();
-        this.setCacheVerties();
-        this.setCacheGuideVerties();
-        this.setCacheAreaPosition();
-
-        // 자식이 있을 때는 자식의 matrix 를 자동으로 변경해서 캐슁을 다시 한다. 
-        // 이걸 자동으로 하게 되면 remote 로 데이타를 변경할 수가 없으니 각자 클라이언트가 하는걸로 해야할 듯 하다. 
-        // 자식이 몇개가 될지 알수 없는 상태에서 불특정 다수의 데이타를 모두 보내기가 만만치 않을수도 있음. 
-        this.layers.forEach(it => {
-            it.refreshMatrixCache();
-        })
-
-        // this.modelManager.setChanged('refreshMatrixCache', this.id, { end: true })                
-    }
-
-    setCacheItemTransformMatrix() {
-        this._cachedItemTransform = this.getItemTransformMatrix();
-        this._cachedItemTransformInverse = mat4.invert([], this._cachedItemTransform);
-    }
-
-    setCacheLocalTransformMatrix() {
-        this._cachedLocalTransform = this.getLocalTransformMatrix();
-        this._cachedLocalTransformInverse = mat4.invert([], this._cachedLocalTransform);
-
-        this._cachedTransformWithTranslate = this.getTransformWithTranslate(this);
-        this._cachedTransformWithTranslateInverse = mat4.invert([], this._cachedTransformWithTranslate);
-        this._cachedTransformWithTranslateTranspose = mat4.transpose([], this._cachedTransformWithTranslate);
-    }
-
-    setCacheAccumulatedMatrix() {
-        this._cachedAccumulatedMatrix = this.getAccumulatedMatrix();
-        this._cachedAccumulatedMatrixInverse = mat4.invert([], this._cachedAccumulatedMatrix);
-    }
-
-    setCacheVerties() {
-        this._cachedVerties = this.getVerties();
-        this._cachedVertiesWithoutTransformOrigin = this.rectVerties();
-    }
-
-    setCacheLocalVerties() {
-        this._cachedLocalVerties = this.getLocalVerties();
-    }
-
-    setCacheGuideVerties() {
-        this._cachedGuideVerties = this.getGuideVerties();
-    }
-
-    setCacheAreaPosition() {
-        this._cachedAreaPosition = this.getAreaPosition(this._cachedAreaWidth);
-    }
-
-    setCacheAreaWidth(areaWidth) {
-
-        if (this._cachedAreaWidth !== areaWidth) {
-            this._cachedAreaWidth = areaWidth;
-
-            this.setCacheAreaPosition();
-        }
-    }
-
-    //////////////////////
-    //
-    // getters 
-    //
-    ///////////////////////
-
 
     get localMatrix() {
         return this._cachedLocalTransform || this.getLocalTransformMatrix()
@@ -379,12 +103,12 @@ export class MovableModel extends BaseAssetModel {
         return this._cachedItemTransformInverse || this.getItemTransformMatrixInverse()
     }
 
-    get accumulatedMatrix() {
-        return this._cachedAccumulatedMatrix || this.getAccumulatedMatrix()
+    get absoluteMatrix() {
+        return this._cachedAbsoluteMatrix || this.getAbsoluteMatrix()
     }
 
-    get accumulatedMatrixInverse() {
-        return this._cachedAccumulatedMatrixInverse || this.getAccumulatedMatrixInverse()
+    get absoluteMatrixInverse() {
+        return this._cachedAbsoluteMatrixInverse || this.getAbsoluteMatrixInverse()
     }
 
     get verties() {
@@ -407,8 +131,58 @@ export class MovableModel extends BaseAssetModel {
         return this._cachedAreaPosition || this.getAreaPosition(this._cachedAreaWidth);
     }
 
+    get offsetX() {
+        return this.json.x;
+    }
+
+    get offsetY() {
+        return this.json.y;
+    }
+
+
+    get screenWidth() {
+        return this.json.width;
+    }
+
+    get screenHeight() {
+        return this.json.height;
+    }
+
+    get y() { return this.json.y; }
+    get x() { return this.json.x; }
+    get width() { return this.json.width; }
+    get height() { return this.json.height; }
+    get angle() { return this.json.angle; }
+
+    /** translate vector */
+    get translate () { return [0, 0, 0] }
+
+    /** scale vector */
+    get scale () { return [1, 1, 1] }
+
+    /** rotate vector */
+    get rotate () { return [0, 0, degreeToRadian(angle)] }
+
+    /** origin vector */
+    get origin () {
+        return TransformOrigin.scale(
+            this.json['transform-origin'] || '50% 50% 0px',
+            this.screenWidth,
+            this.screenHeight
+        )
+    }
+
+    /** quaternion(사원수) */
+    get quat () {
+        return quat.fromEuler(quat.create(), 0, 0, this.angle)
+    }
+
+
+
     getAreaPosition(areaSize = 100) {
-        const rect = toRectVerties(this.getVerties());
+        const verties = this.getVerties();
+
+        const rect = toRectVerties(verties);
 
         const [startRow, startColumn] = area(rect[0][0], rect[0][1], areaSize);
         const [endRow, endColumn] = area(rect[2][0], rect[2][1], areaSize);
@@ -420,138 +194,101 @@ export class MovableModel extends BaseAssetModel {
     }
 
 
-    setScreenX(value) {
-        var absoluteX = 0;
-        if (this.isChild) {
-            absoluteX = this.json.parent.screenX.value;
+    toCloneObject(isDeep = true) {
+        return {
+            ...super.toCloneObject(isDeep),
+            ...this.attrs('x', 'y', 'right', 'bottom', 'width', 'height', 'angle')
         }
-
-        this.json.x.set(value - absoluteX);
-        this.changed();
-    }
-    setScreenY(value) {
-        var absoluteY = 0;
-        if (this.isChild) {
-            absoluteY = this.json.parent.screenY.value;
-        }
-        this.json.y.set(value - absoluteY);
-        this.changed();
     }
 
-    get screenX() {
+    reset(obj, context = { origin: '*' }) {
+        const isChanged = super.reset(obj, context);
 
-        if (this.isChild) {
-            return Length.px(this.json.parent.screenX.value + this.json.x.value);
+        // transform 에 변경이 생기면 미리 캐슁해둔다. 
+        if (this.hasChangedField('children', 'x', 'y', 'width', 'height', 'angle', 'transform-origin', 'perspective', 'perspective-origin')) {
+            this.refreshMatrixCache()
         }
 
-        return this.json.x || Length.z()
-    }
-    get screenY() {
-
-        if (this.isChild) {
-            return Length.px(this.json.parent.screenY.value + this.json.y.value);
-        }
-        return this.json.y || Length.z()
+        return isChanged;
     }
 
 
-    get offsetX() {
-        if (!this.parent) {
-            return this.json.x || ZERO;
-        }
+    /**
+     * 부모가 변경되면 matrix 를 다시 캐쉬 한다. 
+     * 
+     * @param {BaseModel} otherParent 
+     */
+    setParentId(otherParentId) {
+        super.setParentId(otherParentId);
 
-        if (this.is('project')) {
-            return ZERO;
-        }
-
-        if (this.parent.is('project') && this.json.x) {
-            return this.json.x.toPx();
-        }
-
-        if (this.json.x) {
-            return this.json.x.toPx(this.parent.screenWidth.value);
-        }
-
-        const parentWidth = this.parent.screenWidth.value
-
-        return Length.px(parentWidth - this.json.right.toPx(parentWidth).value - this.json.width.toPx(parentWidth).value);
+        this.refreshMatrixCache();
     }
 
-    get offsetY() {
-        if (!this.parent) {
-            return this.json.y || ZERO;
-        }
+    refreshMatrixCache() {
+        // return;
+        // this.modelManager.setChanged('refreshMatrixCache', this.id, { start: true })        
 
-        if (this.is('project')) {
-            return ZERO;
-        }
+        this.setCacheItemTransformMatrix();
+        this.setCacheLocalTransformMatrix();
+        this.setCacheAbsoluteMatrix();
+        this.setCacheLocalVerties();
+        this.setCacheVerties();
+        this.setCacheGuideVerties();
+        this.setCacheAreaPosition();
 
-        if (this.parent.is('project') && this.json.y) {
-            return this.json.y.toPx();
-        }
+        // 자식이 있을 때는 자식의 matrix 를 자동으로 변경해서 캐슁을 다시 한다. 
+        // 이걸 자동으로 하게 되면 remote 로 데이타를 변경할 수가 없으니 각자 클라이언트가 하는걸로 해야할 듯 하다. 
+        // 자식이 몇개가 될지 알수 없는 상태에서 불특정 다수의 데이타를 모두 보내기가 만만치 않을수도 있음. 
+        this.layers.forEach(it => {
+            it.refreshMatrixCache();
+        })
 
-        if (this.json.y) {
-            return this.json.y.toPx(this.parent.screenHeight.value);
-        }
-
-        const parentHeight = this.parent.screenHeight.value
-
-        return Length.px(parentHeight - this.json.bottom.toPx(parentHeight).value - this.screenHeight.value);
+        // this.modelManager.setChanged('refreshMatrixCache', this.id, { end: true })                
     }
 
-
-    get screenWidth() {
-        if (this.is('project') || !this.parent) {
-            return ZERO;
-        }
-
-        if (this.parent.is('project')) {
-            return this.json.width.toPx();
-        }
-
-        if (this.is('artboard')) {
-            return this.json.width.toPx();
-        }
-
-        if (this.json.x && this.json.right && this.json.right.unit !== 'auto') {
-            const parentWidth = this.parent.screenWidth.value
-
-
-            const right = this.json.right.toPx(parentWidth);
-            const rightPos = parentWidth - right;
-
-            return Length.px(rightPos - this.offsetX.value);
-        }
-
-        return this.json.width.toPx(this.parent.screenWidth.value);
+    setCacheItemTransformMatrix() {
+        this._cachedItemTransform = this.getItemTransformMatrix();
+        this._cachedItemTransformInverse = mat4.invert([], this._cachedItemTransform);
     }
 
-    get screenHeight() {
-        if (this.is('project') || !this.parent) {
-            return ZERO;
+    setCacheLocalTransformMatrix() {
+        this._cachedLocalTransform = this.getLocalTransformMatrix();
+        this._cachedLocalTransformInverse = mat4.invert([], this._cachedLocalTransform);
+
+        this._cachedTransformWithTranslate = this.getTransformWithTranslate(this);
+        this._cachedTransformWithTranslateInverse = mat4.invert([], this._cachedTransformWithTranslate);
+        this._cachedTransformWithTranslateTranspose = mat4.transpose([], this._cachedTransformWithTranslate);
+    }
+
+    setCacheAbsoluteMatrix() {
+        this._cachedAbsoluteMatrix = this.getAbsoluteMatrix();
+        this._cachedAbsoluteMatrixInverse = mat4.invert([], this._cachedAbsoluteMatrix);
+    }
+
+    setCacheVerties() {
+        this._cachedVerties = this.getVerties();
+        this._cachedVertiesWithoutTransformOrigin = this.rectVerties();
+    }
+
+    setCacheLocalVerties() {
+        this._cachedLocalVerties = this.getLocalVerties();
+    }
+
+    setCacheGuideVerties() {
+        this._cachedGuideVerties = this.getGuideVerties();
+    }
+
+    setCacheAreaPosition() {
+        this._cachedAreaPosition = this.getAreaPosition(this._cachedAreaWidth || 100);
+    }
+
+    setCacheAreaWidth(areaWidth) {
+
+        if (this._cachedAreaWidth !== areaWidth) {
+            this._cachedAreaWidth = areaWidth;
+
+            this.setCacheAreaPosition();
         }
-
-        if (this.parent.is('project')) {
-            return this.json.height.toPx();
-        }
-
-        if (this.is('artboard')) {
-            return this.json.height.toPx();
-        }
-
-        if (this.json.y && this.json.bottom && this.json.bottom.unit !== 'auto') {
-            const parentHeight = this.parent.screenHeight.value
-
-
-            const top = this.json.bottom.toPx(parentHeight);
-            const topPos = parentHeight - top;
-
-            return Length.px(topPos - this.offsetY.value);
-        }
-
-
-
-        return this.json.height.toPx(this.parent.screenHeight.value);
     }
 
     /**
@@ -561,19 +298,24 @@ export class MovableModel extends BaseAssetModel {
      */
     move(distVector = [0, 0, 0]) {
         this.reset({
-            x: Length.px(this.offsetX.value + distVector[0]).round(),          // 1px 단위로 위치 설정 
-            y: Length.px(this.offsetY.value + distVector[1]).round(),
+            x: round(this.offsetX + distVector[0]),          // 1px 단위로 위치 설정 
+            y: round(this.offsetY + distVector[1]),
         })
     }
 
     moveByCenter(newCenter = [0, 0, 0]) {
-        const matrix = this.matrix;
-
         this.reset({
-            x: Length.px(newCenter[0] - matrix.width / 2),
-            y: Length.px(newCenter[1] - matrix.height / 2)
+            x: newCenter[0] - this.screenWidth / 2,
+            y: newCenter[1] - this.screenHeight / 2
         })
     }
+
+    /**
+     * 크기가 변경 될 때 자식의 후속처리를 한다. 
+     */
+    startToCacheChildren() { }
+
+    recoverChildren() { }
 
     /**
      * constraint 조건과 같이 resize 하기  
@@ -589,18 +331,12 @@ export class MovableModel extends BaseAssetModel {
 
     setAngle(angle = 0) {
         this.reset({
-            transform: Transform.replaceAll(this.transform, `rotateZ(${Length.deg(angle)})`)
+            angle
         })
     }
 
     addAngle(angle = 0) {
-        this.reset({
-            transform: Transform.addTransform(this.transform, `rotateZ(${Length.deg(angle)})`)
-        })
-    }
-
-    get angle() {
-        return Transform.get(this.json.transform, 'rotateZ')?.[0]?.value;
+        this.setAngle(this.angle + angle);
     }
 
     /**
@@ -652,7 +388,7 @@ export class MovableModel extends BaseAssetModel {
 
     getPerspectiveMatrix() {
 
-        const hasPerspective = this.json['perspective'] || Transform.get(this.json['transform'] || '', 'perspective')
+        const hasPerspective = this.json['perspective'];
 
         if (!hasPerspective) {
             return undefined;
@@ -663,8 +399,8 @@ export class MovableModel extends BaseAssetModel {
             perspectiveOriginY = Length.percent(50),
         ] = TransformOrigin.parseStyle(this.json['perspective-origin'])
 
-        const width = this.screenWidth.value;
-        const height = this.screenHeight.value
+        const width = this.screenWidth;
+        const height = this.screenHeight
 
         perspectiveOriginX = perspectiveOriginX.toPx(width).value
         perspectiveOriginY = perspectiveOriginY.toPx(height).value
@@ -678,16 +414,7 @@ export class MovableModel extends BaseAssetModel {
 
         // 3. Multiply by the matrix that would be obtained from the perspective() transform function, 
         // where the length is provided by the value of the perspective property
-        const perspective = Transform.get(this.json['transform'], 'perspective')
-
-        if (perspective.length) {
-            mat4.multiply(view, view, mat4.fromValues(
-                1, 0, 0, 0,
-                0, 1, 0, 0,
-                0, 0, 1, 0,
-                0, 0, -1 / perspective[0].value, 1
-            ))
-        } else if (this.json['perspective'] && this.json['perspective'] != 'none') {
+        if (this.json['perspective'] && this.json['perspective'] != 'none') {
             mat4.multiply(view, view, mat4.fromValues(
                 1, 0, 0, 0,
                 0, 1, 0, 0,
@@ -705,10 +432,9 @@ export class MovableModel extends BaseAssetModel {
     }
 
     getItemTransformMatrix() {
-        const transform = this.json?.['transform'] || '50% 50% 0px'
-        const list = Transform.parseStyle(transform);
-        const width = this.screenWidth.value;
-        const height = this.screenHeight.value;
+        const list = Transform.parseStyle(this.transform);
+        const width = this.screenWidth;
+        const height = this.screenHeight;
 
         return Transform.createTransformMatrix(list, width, height);
     }
@@ -726,10 +452,11 @@ export class MovableModel extends BaseAssetModel {
      * 4. Translate by the negated computed X, Y and Z values of transform-origin
      */
     getLocalTransformMatrix(width, height) {
+
         const origin = TransformOrigin.scale(
             this.json['transform-origin'] || '50% 50% 0px',
-            isUndefined(width) ? this.screenWidth.value : width,
-            isUndefined(height) ? this.screenHeight.value : height
+            isUndefined(width) ? this.screenWidth : width,
+            isUndefined(height) ? this.screenHeight : height
         )
 
         // start with the identity matrix 
@@ -758,8 +485,8 @@ export class MovableModel extends BaseAssetModel {
      * @param {ReadOnlyVec3} center 
      */
     getDirectionTransformMatrix(vertexOffset, width, height) {
-        const x = this.offsetX.value;
-        const y = this.offsetY.value;
+        const x = this.offsetX;
+        const y = this.offsetY;
 
         const center = vec3.add([], TransformOrigin.scale(
             this.json['transform-origin'] || '50% 50% 0px',
@@ -810,11 +537,11 @@ export class MovableModel extends BaseAssetModel {
         return this.getDirectionTransformMatrix([width / 2, height, 0], width, height)
     }
 
-    getAccumulatedMatrix() {
+    getAbsoluteMatrix() {
         let transform = mat4.create();
 
         if (this.parent) {
-            mat4.multiply(transform, transform, this.parent.accumulatedMatrix);
+            mat4.multiply(transform, transform, this.parent.absoluteMatrix);
 
             // multiply parent perspective 
             if (isFunction(this.parent.getPerspectiveMatrix)) {
@@ -826,39 +553,20 @@ export class MovableModel extends BaseAssetModel {
 
         }
 
-        const offsetX = this.offsetX.value;
-        const offsetY = this.offsetY.value;
+        mat4.multiply(transform, transform, this.getRelativeMatrix());
+
+        return transform;
+    }
+
+    getRelativeMatrix() {
+        let transform = mat4.create();
+
+        const offsetX = this.offsetX;
+        const offsetY = this.offsetY;
+
         // 5. Translate by offset x, y
         mat4.translate(transform, transform, [offsetX, offsetY, 0]);
-
         mat4.multiply(transform, transform, this.localMatrix)
-
-
-        // let path = this.path.filter(p => p.is('project') === false);
-
-        // for(let i = 0, len = path.length; i < len; i++) {
-
-        //     /**
-        //      * @type {MovableItem}
-        //      */
-        //     const current = path[i];
-
-        //     // multiply parent perspective 
-        //     if (current.parent && isFunction(current.parent.getPerspectiveMatrix)) {
-        //         const perspectiveMatrix = current.parent.getPerspectiveMatrix();
-        //         if (perspectiveMatrix) {
-        //             mat4.multiply(transform, transform, perspectiveMatrix)
-        //         }
-        //     }       
-
-
-        //     const offsetX = current.offsetX.value;
-        //     const offsetY = current.offsetY.value; 
-        //     // 5. Translate by offset x, y
-        //     mat4.translate(transform, transform, [offsetX, offsetY, 0]);                   
-
-        //     mat4.multiply(transform, transform, current.localMatrix)            
-        // }
 
         return transform;
     }
@@ -867,8 +575,9 @@ export class MovableModel extends BaseAssetModel {
         item = item || this;
         let view = mat4.create();
 
-        const offsetX = item.offsetX.value;
-        const offsetY = item.offsetY.value;
+        const offsetX = item.offsetX;
+        const offsetY = item.offsetY;
+
         // 5. Translate by offset x, y
         mat4.translate(view, view, [offsetX, offsetY, 0]);
 
@@ -877,27 +586,29 @@ export class MovableModel extends BaseAssetModel {
         return view;
     }
 
-    getAccumulatedMatrixInverse() {
-        return mat4.invert([], this.getAccumulatedMatrix());
+    getAbsoluteMatrixInverse() {
+        return mat4.invert([], this.getAbsoluteMatrix());
     }
 
     getLocalVerties(width, height) {
-        let model = rectToVerties(0, 0, width || this.screenWidth.value, height || this.screenHeight.value, this.json['transform-origin']);
+
+        width = isNotUndefined(width) ? width : this.screenWidth;
+        height = isNotUndefined(height) ? height : this.screenHeight;
+
+        let model = rectToVerties(0, 0, width, height, this.json['transform-origin']);
 
         return model;
     }
 
     getVerties(width, height) {
-        let model = rectToVerties(0, 0, width || this.screenWidth.value, height || this.screenHeight.value, this.json['transform-origin']);
 
-        return vertiesMap(model, this.accumulatedMatrix)
+        width = isNotUndefined(width) ? width : this.screenWidth;
+        height = isNotUndefined(height) ? height : this.screenHeight;
+
+        let model = rectToVerties(0, 0, width, height, this.json['transform-origin']);
+
+        return vertiesMap(model, this.absoluteMatrix)
     }
-
-    // selectionVerties () {
-    //     let selectionModel = rectToVerties(-6, -6, this.screenWidth.value+12, this.screenHeight.value+12, this.json['transform-origin']);
-
-    //     return vertiesMap(selectionModel, this.accumulatedMatrix)
-    // }    
 
     rectVerties() {
         return this.verties.filter((_, index) => index < 4)
@@ -922,25 +633,27 @@ export class MovableModel extends BaseAssetModel {
 
     get matrix() {
         const id = this.id;
-        const x = this.offsetX.value;
-        const y = this.offsetY.value;
-        const width = this.screenWidth.value;
-        const height = this.screenHeight.value;
-        const originalTransform = this.json.transform;
+        const x = this.offsetX;
+        const y = this.offsetY;
+        const width = this.screenWidth;
+        const height = this.screenHeight;
+        const originalTransform = this.transform;
         const originalTransformOrigin = this.json['transform-origin'] || '50% 50% 0%';
 
         const transformOriginMatrix = this.getTransformOriginMatrix();
         const transformOriginMatrixInverse = this.getTransformOriginMatrixInverse();
 
         // load cached matrix 
-        const parentMatrix = this.parent.accumulatedMatrix;
-        const parentMatrixInverse = this.parent.accumulatedMatrixInverse;
+        const parentMatrix = this.parent.absoluteMatrix;
+        const parentMatrixInverse = this.parent.absoluteMatrixInverse;
         const localMatrix = this.localMatrix
         const localMatrixInverse = this.localMatrixInverse;
         const itemMatrix = this.itemMatrix;
         const itemMatrixInverse = this.itemMatrixInverse;
-        const accumulatedMatrix = this.accumulatedMatrix;
-        const accumulatedMatrixInverse = this.accumulatedMatrixInverse;
+        const absoluteMatrix = this.absoluteMatrix;
+        const absoluteMatrixInverse = this.absoluteMatrixInverse;
+        const relativeMatrix = this.relativeMatrix;
+        const relativeMatrixInverse = this.relativeMatrixInverse;
 
 
 
@@ -981,19 +694,13 @@ export class MovableModel extends BaseAssetModel {
             localMatrixInverse,
             itemMatrix,     // 자기 자신의 matrix without translate offset(x,y)
             itemMatrixInverse,
-            accumulatedMatrix,  // parentMatrix * offset translate * localMatrix , 축적된 matrix 
-            accumulatedMatrixInverse,
+            absoluteMatrix,  // parentMatrix * offset translate * localMatrix , 축적된 matrix 
+            absoluteMatrixInverse,
+            relativeMatrix,  // [offsetX, offsetY, 0] * localMatrix , 축적된 matrix
+            relativeMatrixInverse,
             transformOriginMatrix,  // transform origin 에 대한 matrix 
             transformOriginMatrixInverse,
         }
-    }
-
-    /**
-     * 
-     * @returns {vec3[]} 패스의 verties 
-     */
-    pathVerties() {
-        return this.accumulatedPath().verties;
     }
 
     /**
@@ -1001,12 +708,12 @@ export class MovableModel extends BaseAssetModel {
      * 
      * @returns {PathParser} 
      */
-    accumulatedPath(pathString = '') {
+    absolutePath(pathString = '') {
 
         const d = pathString || this.d;
 
         const pathParser = new PathParser(d)
-        pathParser.transformMat4(this.accumulatedMatrix);
+        pathParser.transformMat4(this.absoluteMatrix);
 
         return pathParser;
     }
@@ -1015,7 +722,7 @@ export class MovableModel extends BaseAssetModel {
     // svg container 의 matrix 의 inverse matrix 를 곱해서 재계산 한다.     
     invertPath(pathString = '') {
         const path = new PathParser(pathString)
-        path.transformMat4(this.accumulatedMatrixInverse)
+        path.transformMat4(this.absoluteMatrixInverse)
 
         return path;
     }
@@ -1027,7 +734,7 @@ export class MovableModel extends BaseAssetModel {
      * @returns {vec3}
      */
     invertPoint(point) {
-        return vec3.transformMat4([], point, this.accumulatedMatrixInverse);
+        return vec3.transformMat4([], point, this.absoluteMatrixInverse);
     }
 
     /**
@@ -1061,7 +768,7 @@ export class MovableModel extends BaseAssetModel {
         // 4. bbxo 를 월드 좌표로 변환 
         let oldBBox = vertiesMap(
             rectToVerties(bbox[0][0], bbox[0][1], newWidth, newHeight),
-            matrix.accumulatedMatrix
+            matrix.absoluteMatrix
         );
 
         // 5. 월드 좌표에서 로컬 transform 의 역행렬을 적용, 월드 좌표에서 translate 를 구함 
@@ -1092,10 +799,10 @@ export class MovableModel extends BaseAssetModel {
 
         return {
             d: newPath.translate(-bbox[0][0], -bbox[0][1]).d,
-            x: Length.px(realXY[0]),
-            y: Length.px(realXY[1]),
-            width: Length.px(newWidth),
-            height: Length.px(newHeight)
+            x: realXY[0],
+            y: realXY[1],
+            width: newWidth,
+            height: newHeight
         }
     }
 
@@ -1141,11 +848,12 @@ export class MovableModel extends BaseAssetModel {
         return items;
     }
 
+
     getTransformOriginMatrix() {
         return mat4.fromTranslation([], TransformOrigin.scale(
             this.json['transform-origin'] || '50% 50% 0px',
-            this.screenWidth.value,
-            this.screenHeight.value
+            this.screenWidth,
+            this.screenHeight
         ))
     }
 
@@ -1164,39 +872,23 @@ export class MovableModel extends BaseAssetModel {
     recoverMatrix(newChildMatrix) {
 
         // 새로운 offset 좌표는 아래와 같이 구한다. 
-        // [newParentMatrix] * [newTranslate] * [newItemTransform] = [newAccumulatedMatrix]
+        // [newParentMatrix] * [newTranslate] * [newItemTransform] = [newAbsoluteMatrix]
 
-        // [newTranslate] * [newItemTransform] = [newParentMatrix * -1] * [newAccumulatedMatrix]
+        // [newTranslate] * [newItemTransform] = [newParentMatrix * -1] * [newAbsoluteMatrix]
         const matrix = calculateMatrix(
-            this.accumulatedMatrixInverse,
-            newChildMatrix.accumulatedMatrix,
+            this.absoluteMatrixInverse,
+            newChildMatrix.absoluteMatrix,
         )
-
-        // scale 구하기 
-        const newScaleTransform = Transform.fromScale(mat4.getScaling([], matrix).map(it => round(it, 1000)));
 
         // 회전 영역 먼저 구하기 
         const q = mat4.getRotation([], matrix);
 
         const axis = []
         const rad = quat.getAxisAngle(axis, q)
+        const angle = axis[2] ? radianToDegree(rad * axis[2]) : 0;
 
-        const newRotateTransform = [
-            { angle: axis[0] ? radianToDegree(rad * axis[0]) : 0, type: 'rotateX' },
-            { angle: axis[1] ? radianToDegree(rad * axis[1]) : 0, type: 'rotateY' },
-            { angle: axis[2] ? radianToDegree(rad * axis[2]) : 0, type: 'rotateZ' },
-        ]
-            .filter(it => it.angle !== 0)
-            .map(it => `${it.type}(${Length.deg(it.angle % 360)})`).join(' ');
-
-        // 새로 변환될 item transform 정의 
-        const newChildItemTransform = Transform.replaceAll(newChildMatrix.transform, `${newScaleTransform} ${newRotateTransform}`)
-
-        const list = Transform.parseStyle(newChildItemTransform);
-        const width = newChildMatrix.width.value;
-        const height = newChildMatrix.height.value;
-
-        const newTransformMatrix = Transform.createTransformMatrix(list, width, height);
+        const newTransformMatrix = mat4.create();
+        mat4.fromRotation(newTransformMatrix, rad, axis);
 
         // 새로 변환될 item transform 정의 
         // [newLocalMatrix] * [
@@ -1213,11 +905,7 @@ export class MovableModel extends BaseAssetModel {
             )
         ));
 
-        return {
-            x: Length.px(x),
-            y: Length.px(y),
-            transform: newChildItemTransform
-        }
+        return { x, y, angle }
     }
 
     /**
@@ -1225,8 +913,8 @@ export class MovableModel extends BaseAssetModel {
      * 
      * 새로운 부모를 기준으로 childItem 의 transform 을 맞춘다. 
      * 
-     * 1. childItem 의 accumulatedMatrix 를 구한다. 
-     * 2. 새로운 부모를 기준으로 좌표를 다시 맞춘다.   parentItem.accumulatedMatrixInverse 
+     * 1. childItem 의 absoluteMatrix 를 구한다. 
+     * 2. 새로운 부모를 기준으로 좌표를 다시 맞춘다.   parentItem.absoluteMatrixInverse 
      * 
      * childItem 의 좌표를 새로운 parent 로 맞출 때는  
      * itemMatrix (rotateZ) 를 먼저 구하고 offset 을 다시 구하는 순서로 간다. 
@@ -1236,38 +924,22 @@ export class MovableModel extends BaseAssetModel {
     resetMatrix(childItem) {
 
         // 새로운 offset 좌표는 아래와 같이 구한다. 
-        // [newParentMatrix] * [newTranslate] * [newItemTransform] = [newAccumulatedMatrix]
-        // [newTranslate] * [newItemTransform] = [newParentMatrix * -1] * [newAccumulatedMatrix]
+        // [newParentMatrix] * [newTranslate] * [newItemTransform] = [newAbsoluteMatrix]
+        // [newTranslate] * [newItemTransform] = [newParentMatrix * -1] * [newAbsoluteMatrix]
         const matrix = calculateMatrix(
-            this.accumulatedMatrixInverse,
-            childItem.accumulatedMatrix,
+            this.absoluteMatrixInverse,
+            childItem.absoluteMatrix,
         )
-
-        // scale 구하기 
-        const newScaleTransform = Transform.fromScale(mat4.getScaling([], matrix).map(it => round(it, 1000)));
 
         // 회전 영역 먼저 구하기 
         const q = mat4.getRotation([], matrix);
 
         const axis = []
         const rad = quat.getAxisAngle(axis, q)
+        const angle = axis[2] ? radianToDegree(rad * axis[2]) : 0 
 
-        const newRotateTransform = [
-            { angle: axis[0] ? radianToDegree(rad * axis[0]) : 0, type: 'rotateX' },
-            { angle: axis[1] ? radianToDegree(rad * axis[1]) : 0, type: 'rotateY' },
-            { angle: axis[2] ? radianToDegree(rad * axis[2]) : 0, type: 'rotateZ' },
-        ]
-            .filter(it => it.angle !== 0)
-            .map(it => `${it.type}(${Length.deg(it.angle % 360)})`).join(' ');
-
-        // 새로 변환될 item transform 정의 
-        const newChildItemTransform = Transform.replaceAll(childItem.transform, `${newScaleTransform} ${newRotateTransform}`)
-
-        const list = Transform.parseStyle(newChildItemTransform);
-        const width = childItem.width.value;
-        const height = childItem.height.value;
-
-        const newTransformMatrix = Transform.createTransformMatrix(list, width, height);
+        const newTransformMatrix = mat4.create();
+        mat4.fromRotation(newTransformMatrix, rad, axis);
 
         // 새로 변환될 item transform 정의 
         // [newLocalMatrix] * [
@@ -1284,13 +956,7 @@ export class MovableModel extends BaseAssetModel {
             )
         ));
 
-        childItem.reset({
-            x: Length.px(x),
-            y: Length.px(y),
-            transform: newChildItemTransform
-        })
-
-        childItem.refreshMatrixCache();
+        childItem.reset({ x, y, angle })
 
         this.modelManager.setChanged('resetMatrix', this.id, { end: true, childItemId: childItem?.id })
 

@@ -1,8 +1,6 @@
 import { CONFIG, SUBSCRIBE, IF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import "./HoverView.scss";
-import { toRectVerties} from "el/utils/collision";
-import "@adorable.css"
 
 export default class HoverView extends EditorElement {
 
@@ -43,13 +41,18 @@ export default class HoverView extends EditorElement {
         const items = filteredList.filter(it => it.hasPoint(point[0], point[1])).filter(it => it.isNot('artboard'))
 
         // 그룹에 속해 있으면 삭제한다. 
-        const hoverItems = this.$model.convertGroupItems(items);
+        let hoverItems = items; //this.$model.convertGroupItems(items);
 
         // 계층 구조에서 마지막 객체를 선택 
         let id = hoverItems[0]?.id;
 
         if (this.$selection.isEmpty) {
             id = hoverItems[hoverItems.length - 1]?.id;
+        } else if (this.$selection.isOne) {
+            const pathIds = this.$selection.current.pathIds;
+            hoverItems = hoverItems.filter(it => pathIds.includes(it.id) === false )
+
+            id = hoverItems[0]?.id;
         }
 
         if (!id) {
@@ -80,7 +83,7 @@ export default class HoverView extends EditorElement {
             return '';
         }
 
-        const newPath = current.accumulatedPath();
+        const newPath = current.absolutePath();
         newPath.transformMat4(this.$viewport.matrix);
 
         return /*html*/`
@@ -119,10 +122,8 @@ export default class HoverView extends EditorElement {
     }
 
 
-    createPointerLine(pointers, title) {
+    createPointerLine(pointers) {
         if (pointers.length === 0) return '';
-
-        const verties = toRectVerties(pointers);
 
         return /*html*/`
         <svg overflow="visible">
@@ -137,8 +138,6 @@ export default class HoverView extends EditorElement {
                     Z
                 " 
             />
-            <rect height="20" width="${title.length * 8}" x="${verties[0][0]-1}" y="${verties[0][1] - 20}"></rect>
-            <text x="${verties[0][0]}" y="${verties[0][1]}" dx="5" dy="-5">${title}</text>
         </svg>`
     }
 

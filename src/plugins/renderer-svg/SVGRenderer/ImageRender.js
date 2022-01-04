@@ -31,8 +31,8 @@ export default class ImageRender extends SVGLayerRender {
         return this.wrappedRender(item, () => {
           return /*html*/`
             <foreignObject
-                width="${width.value}"
-                height="${height.value}"
+                width="${width}"
+                height="${height}"
             >
                 <div xmlns="http://www.w3.org/1999/xhtml">
                     <img src='${this.getUrl(item)}' style="width:100%;height:100%; ${CSS_TO_STRING(css)}"  />

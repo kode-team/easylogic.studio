@@ -69,8 +69,8 @@ export default class PolygonEditor extends EditorElement {
             var {x, y}  = e.xy; 
     
             this.appendValue({
-                x: Length.px(x - this.areaRect.left),
-                y: Length.px(y - this.areaRect.top)
+                x: x - this.areaRect.left,
+                y: y - this.areaRect.top
             })
     
             this.refresh();
@@ -152,8 +152,8 @@ export default class PolygonEditor extends EditorElement {
             y = this.areaRect.bottom; 
         }        
 
-        var left = Length.px(x - this.areaRect.x)
-        var top = Length.px(y - this.areaRect.y)
+        var left = x - this.areaRect.x
+        var top = y - this.areaRect.y
 
         this.$target.css({
             left, top 
@@ -205,8 +205,8 @@ export default class PolygonEditor extends EditorElement {
         var {x, y}= this.state.value[index]
 
         this.state.value.splice(index+1, 0, {
-            x: Length.px(x.value + 10),
-            y: Length.px(y.value + 10)
+            x: x.value + 10,
+            y: y.value + 10
         });
         this.parent.trigger(this.props.onchange, this.props.key, this.toClipPathValueString(), this.props.params)        
     }    

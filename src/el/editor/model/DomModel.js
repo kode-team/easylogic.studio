@@ -7,6 +7,7 @@ import PathParser from "el/editor/parser/PathParser";
 import { Pattern } from 'el/editor/property-parser/Pattern';
 import { BackgroundImage } from 'el/editor/property-parser/BackgroundImage';
 import { STRING_TO_CSS } from "el/utils/func";
+import { Constraints, Layout } from "../types/model";
 
 
 const editableList = [
@@ -52,25 +53,24 @@ export class DomModel extends GroupModel {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       'position': 'absolute',
-      'x': Length.z(),
-      'y': Length.z(),
+      'x': 0,
+      'y': 0,
       'rootVariable': '',
       'variable': '',
-      'width': Length.px(300),
-      'height': Length.px(300),
+      'width': 300,
+      'height': 300,
       'color': "black",
-      // 'font-size': Length.px(13),
+      // 'font-size': 13,
       'overflow': 'visible',
       'opacity': 1,
-      'z-index': Length.auto,
       'transform-style': 'preserve-3d',
-      'layout': 'default',
+      'layout': Layout.DEFAULT,
       'flex-layout': 'display:flex;',
       'grid-layout': 'display:grid;',
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
       // keyframes: [],
-      "constraints-vertical": "min",
-      "constraints-horizontal": "min",
+      "constraints-vertical": Constraints.MIN,
+      "constraints-horizontal": Constraints.MIN,
       selectors: [],
       svg: [],
       ...obj
@@ -95,6 +95,10 @@ export class DomModel extends GroupModel {
         'text-clip',
         'border-radius',
         'border',
+        'border-top',
+        'border-left',
+        'border-right',
+        'border-bottom',
         'box-shadow',
         'text-shadow',
         'clip-path',
@@ -256,7 +260,7 @@ export class DomModel extends GroupModel {
     } else if (this.hasChangedField('width', 'height')) {
 
       if (this.cacheClipPath) {
-        const d = this.cacheClipPath.clone().scale(this.json.width.value / this.cacheClipPathWidth, this.json.height.value / this.cacheClipPathHeight).d;
+        const d = this.cacheClipPath.clone().scale(this.json.width / this.cacheClipPathWidth, this.json.height / this.cacheClipPathHeight).d;
         this.json['clip-path'] = `path(${d})`;
 
         this.modelManager.setChanged('reset', this.id, { 'clip-path' : this.json['clip-path'] });
@@ -299,6 +303,7 @@ export class DomModel extends GroupModel {
     } else {
       this.cacheBackgroundImage = {}
     }
+
   }
 
   setClipPathCache() {
@@ -307,8 +312,8 @@ export class DomModel extends GroupModel {
     this.cacheClipPathObject = obj;    
     if (obj.type === 'path') {
       this.cacheClipPath = new PathParser(obj.value.trim())
-      this.cacheClipPathWidth = this.json.width.value;
-      this.cacheClipPathHeight = this.json.height.value;
+      this.cacheClipPathWidth = this.json.width;
+      this.cacheClipPathHeight = this.json.height;
     }
   }
 
@@ -325,7 +330,7 @@ export class DomModel extends GroupModel {
     }
 
     if (this.cacheClipPath) {
-      return this.cacheClipPath.clone().scale(this.json.width.value / this.cacheClipPathWidth, this.json.height.value / this.cacheClipPathHeight).d;
+      return this.cacheClipPath.clone().scale(this.json.width / this.cacheClipPathWidth, this.json.height / this.cacheClipPathHeight).d;
     }
 
   }

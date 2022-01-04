@@ -10,9 +10,9 @@ export default {
 
             if (current.parent.is('project')) {
                 // 상위 객체가 project 이면 움직이지 않는다. 
-            } else if (current.artboard) {
-                // 선택된 객체가 하나이고 artboard 가 존재하면 artboard 를 기준으로 잡는다. 
-                const distX = getVertiesMinX(current.artboard.verties) - getVertiesMinX(editor.selection.verties);
+            } else {
+                const parent = current.parent;
+                const distX = getVertiesMinX(parent.verties) - getVertiesMinX(editor.selection.verties);
                 editor.emit('moveLayer', distX, 0);
             }
 

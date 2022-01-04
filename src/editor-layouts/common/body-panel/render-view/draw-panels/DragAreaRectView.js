@@ -13,10 +13,10 @@ export default class DragAreaRectView extends EditorElement {
     initState() {
         return {
             mode: 'selection',
-            x: Length.z(),
-            y: Length.z(),
-            width: Length.px(10000),
-            height: Length.px(10000),
+            x: 0,
+            y: 0,
+            width: 10000,
+            height: 10000,
             cachedCurrentElement: {},
             html: '',
         }
@@ -35,11 +35,11 @@ export default class DragAreaRectView extends EditorElement {
     }
 
     [SUBSCRIBE('initDrawAreaView')]() {
-        this.refs.$dragAreaRect.css({
+        this.trigger('drawAreaView', {
             left: Length.px(-10000),
-            top: Length.z(),
-            width: Length.z(),
-            height: Length.z()
+            top: Length.px(0),
+            width: Length.px(0),
+            height: Length.px(0)
         });
     }
 
@@ -50,8 +50,8 @@ export default class DragAreaRectView extends EditorElement {
         this.dragRect = {
             left: Length.px(this.initMousePoint[0]),
             top: Length.px(this.initMousePoint[1]),
-            width: Length.z(),
-            height: Length.z()
+            width: Length.px(0),
+            height: Length.px(0)
         }
 
         this.trigger('drawAreaView', this.dragRect);
@@ -124,20 +124,25 @@ export default class DragAreaRectView extends EditorElement {
         const locaRect = toRectVerties([start, end]);
 
         this.dragRect = {
-            left: Length.px(locaRect[0][0]),
-            top: Length.px(locaRect[0][1]),
-            width: Length.px(Math.abs(locaRect[1][0] - locaRect[0][0])),
-            height: Length.px(Math.abs(locaRect[3][1] - locaRect[0][1]))
+            left: locaRect[0][0],
+            top: locaRect[0][1],
+            width: Math.abs(locaRect[1][0] - locaRect[0][0]),
+            height: Math.abs(locaRect[3][1] - locaRect[0][1])
         }
 
-        this.trigger('drawAreaView', this.dragRect);
+        this.trigger('drawAreaView', {
+            left: Length.px(this.dragRect.left),
+            top: Length.px(this.dragRect.top),
+            width: Length.px(this.dragRect.width),
+            height: Length.px(this.dragRect.height)
+        });
 
         var { left: x, top: y, width, height } = this.dragRect
         var rect = {
-            x: x.value,
-            y: y.value,
-            width: width.value,
-            height: height.value
+            x,
+            y,
+            width,
+            height
         }
 
         const selectedItems = this.getSelectedItems(rect, toRectVertiesWithoutTransformOrigin([startVertex, endVertex]))

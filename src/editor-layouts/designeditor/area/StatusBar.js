@@ -24,7 +24,7 @@ export default class StatusBar extends EditorElement {
                     ${this.$injectManager.generate('statusbar.left')}                    
                 </div>            
                 <div class='message-view' ref='$msg'></div>
-                <div class='tool-view' ref='$rightTool'>
+                <div class='tool-view right' ref='$rightTool'>
                     ${this.$injectManager.generate('statusbar.right')}
                     <object refClass="LayoutSelector" />
                     <object refClass="LanguageSelector" />

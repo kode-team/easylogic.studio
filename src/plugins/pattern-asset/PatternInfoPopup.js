@@ -4,8 +4,13 @@ import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
+import "./PatternInfoPopup.scss";
 
 export default class PatternInfoPopup extends BasePopup {
+
+  getClassName() {
+    return "pattern-info-popup"
+  }
 
   getTitle() {
     return this.$i18n('pattern.info.popup.title')
@@ -15,12 +20,12 @@ export default class PatternInfoPopup extends BasePopup {
 
     return {
       type: this.props.type || 'grid',
-      x: this.props.x || Length.z(),
-      y: this.props.y || Length.z(),
-      width: this.props.width || Length.z(),
-      height: this.props.height || Length.z(),
-      lineWidth: this.props.lineWidth || Length.px(1),
-      lineHeight: this.props.lineHeight || Length.px(1),
+      x: this.props.x || 0,
+      y: this.props.y || 0,
+      width: this.props.width || 0,
+      height: this.props.height || 0,
+      lineWidth: this.props.lineWidth || 1,
+      lineHeight: this.props.lineHeight || 1,
       foreColor: this.props.foreColor || 'black',
       backColor: this.props.backColor || 'transparent',
       blendMode: this.props.blendMode || 'normal'
@@ -54,10 +59,9 @@ export default class PatternInfoPopup extends BasePopup {
     }
 
     return /*html*/`
-      <div class='popup-item'>
-        <object refClass="RangeEditor"  
+      <div class=''>
+        <object refClass="InputRangeEditor"  
             label="${label}"
-            calc="false"            
             ref="$x" 
             key="x"
             value="${this.state.x}"
@@ -72,10 +76,9 @@ export default class PatternInfoPopup extends BasePopup {
   templateForY() {
     if (this.hasNotY()) return '';            
     return /*html*/`
-      <div class='popup-item'>
-        <object refClass="RangeEditor"  
+      <div class=''>
+        <object refClass="InputRangeEditor"  
             label="Y" 
-            calc="false"       
             ref="$y" 
             key="y"
             value="${this.state.y}"            
@@ -89,10 +92,9 @@ export default class PatternInfoPopup extends BasePopup {
   templateForWidth() {
 
     return /*html*/`
-    <div class='popup-item'>
-      <object refClass="RangeEditor"  
+    <div class=''>
+      <object refClass="InputRangeEditor"  
           label="${this.$i18n('pattern.info.popup.width')}"   
-          calc="false"             
           ref="$width" 
           key="width"
           value="${this.state.width}"          
@@ -105,10 +107,9 @@ export default class PatternInfoPopup extends BasePopup {
 
   templateForHeight() {
     return /*html*/`
-    <div class='popup-item'>
-      <object refClass="RangeEditor"  
+    <div class=''>
+      <object refClass="InputRangeEditor"  
           label="${this.$i18n('pattern.info.popup.height')}"
-          calc="false"          
           ref="$height" 
           key="height"
           value="${this.state.height}"          
@@ -139,10 +140,9 @@ export default class PatternInfoPopup extends BasePopup {
     if (this.hasNotLineWidth()) return '';    
 
     return /*html*/`
-    <div class='popup-item'>
-      <object refClass="RangeEditor"  
+    <div class=''>
+      <object refClass="InputRangeEditor"  
           label="${this.$i18n('pattern.info.popup.lineWidth')}"   
-          calc="false"             
           ref="$lineWidth" 
           key="lineWidth"
           value="${this.state.lineWidth}"          
@@ -156,10 +156,9 @@ export default class PatternInfoPopup extends BasePopup {
   templateForLineHeight() {
     if (this.hasNotLineHeight()) return '';        
     return /*html*/`
-    <div class='popup-item'>
-      <object refClass="RangeEditor"  
+    <div class=''>
+      <object refClass="InputRangeEditor"  
           label="${this.$i18n('pattern.info.popup.lineHeight')}"
-          calc="false"          
           ref="$lineHeight" 
           key="lineHeight"
           value="${this.state.lineHeight}"          
@@ -171,7 +170,7 @@ export default class PatternInfoPopup extends BasePopup {
 
   templateForForeColor() {
     return /*html*/`
-      <div class='popup-item'>
+      <div class=''>
         <object refClass="ColorViewEditor" 
             ref='$foreColor' 
             label="${this.$i18n('pattern.info.popup.foreColor')}" 
@@ -184,11 +183,11 @@ export default class PatternInfoPopup extends BasePopup {
 
   templateForBackColor() {
     return /*html*/`
-      <div class='popup-item'>
+      <div class=''>
         <object refClass="ColorViewEditor" 
             ref='$backColor' 
             label="${this.$i18n('pattern.info.popup.backColor')}" 
-            key='backColor' 
+            key='backColor'           
             value="${this.state.backColor}"
             onchange="changeRangeEditor" />
       </div>
@@ -199,7 +198,7 @@ export default class PatternInfoPopup extends BasePopup {
   templateForBlendMode() {
 
     return /*html*/`
-    <div class='popup-item'>
+    <div class=''>
       <object refClass="BlendSelectEditor" 
             ref='$blend' 
             key='blendMode' 
@@ -221,18 +220,25 @@ export default class PatternInfoPopup extends BasePopup {
     return /*html*/`
       
       <div class='box'>
-
-        <div class='background-property'>      
-          ${this.templateForWidth()}
-          ${this.templateForHeight()}        
-          ${this.templateForLineWidth()}
-          ${this.templateForLineHeight()}                  
-          ${this.templateForX()}
-          ${this.templateForY()}
-          ${this.templateForForeColor()}
-          ${this.templateForBackColor()}
-          ${this.templateForBlendMode()}
-        </div>
+          <div>
+            ${this.templateForWidth()}
+            ${this.templateForHeight()}        
+          </div>
+          <div>
+            ${this.templateForLineWidth()}
+            ${this.templateForLineHeight()}                  
+          </div>
+          <div>
+            ${this.templateForX()}
+            ${this.templateForY()}
+          </div>
+          <div>
+            ${this.templateForForeColor()}
+            ${this.templateForBackColor()}
+          </div>
+          <div>
+            ${this.templateForBlendMode()}
+          </div>
       </div>
     `
   }
@@ -245,7 +251,7 @@ export default class PatternInfoPopup extends BasePopup {
 
     this.setState(data.data);
 
-    this.show(460);
+    this.show(300);
   }
 
 

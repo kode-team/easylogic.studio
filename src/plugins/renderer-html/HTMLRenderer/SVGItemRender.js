@@ -90,16 +90,16 @@ export default class SVGItemRender extends LayerRender {
     toFillSVG (item) {
         const fillValue = this.cachedFill(item);
         return fillValue?.toSVGString?.(this.fillId(item), {
-            width: item.width.value,
-            height: item.height.value
+            width: item.width,
+            height: item.height
         });
     }
 
     toStrokeSVG (item) { 
         const strokeValue = this.cachedStroke(item);
         return strokeValue?.toSVGString?.(this.strokeId(item), {
-            width: item.width.value,
-            height: item.height.value
+            width: item.width,
+            height: item.height
         });
     }  
 
@@ -147,9 +147,12 @@ export default class SVGItemRender extends LayerRender {
             {}, 
             super.toDefaultCSS(item),
             this.toKeyListCSS(item, [
-                'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray', 'stroke-dashoffset',
+                'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dashoffset',
                 'fill-opacity', 'fill-rule', 'text-anchor'
-            ])
+            ]),
+            {
+                'stroke-dasharray': item['stroke-dasharray']?.join(' '),
+            }
         );
     }
 

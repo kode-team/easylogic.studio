@@ -120,7 +120,7 @@ export default [
     // resource    
     video,
     image,    
-    transform,   
+    // transform,   
     // transformOrigin,         
     perspective,
     perspectiveOrigin,

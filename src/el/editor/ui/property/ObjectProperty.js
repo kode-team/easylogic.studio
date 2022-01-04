@@ -28,6 +28,16 @@ export default class ObjectProperty {
       get editableProperty() {
         return json.editableProperty;
       }
+
+      refresh() {
+
+        const current = this.$selection.current;
+
+        if (current) {
+          this.setTitle(current.getDefaultTitle() || current.itemType || current.name);
+          this.load();
+        }
+      }
     
       [SUBSCRIBE('refreshSelection') + IF('checkShow')]() {
           this.refresh();
@@ -41,7 +51,7 @@ export default class ObjectProperty {
         const inspector = isFunction(json.inspector) ?  json.inspector(current) :  this.$editor.components.createInspector(current, json.editableProperty);
     
         return /*html*/`
-          <object refClass="ComponentEditor" inspector=${variable(inspector)} onchange="changeComponentProperty" />
+          <object refClass="ComponentEditor" ref="$comp" inspector=${variable(inspector)} onchange="changeComponentProperty" />
         `
       }
     

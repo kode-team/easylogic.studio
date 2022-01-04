@@ -32,10 +32,14 @@
         .fill-item {
           // margin-top: 5px;
           display: grid;
-          grid-template-columns: 24px 24px 1fr;
+          grid-template-columns: 30px 30px 1fr;
           grid-column-gap: 5px;
-          text-align: center;
-          padding: 6px 0px;
+          // text-align: center;
+          margin-bottom: 6px;
+
+          >div {
+            height: 100%;
+          }
 
           &.selected {
             background-color: var(--elf--border-color);
@@ -77,6 +81,9 @@
           .preview {
             display: grid;
             cursor: pointer;
+            height: 100%;
+            padding: 3px 4px;
+            width: 32px;
       
             .mini-view {
               display: block;
@@ -102,6 +109,7 @@
             display: inline-block;
             vertical-align: middle;
             text-align: left;
+            line-height: 2;
             
             padding: 4px 0px;
       

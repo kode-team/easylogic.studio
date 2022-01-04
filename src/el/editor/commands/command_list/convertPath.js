@@ -13,7 +13,7 @@ export default function convertPath (editor, pathString, rect = null) {
 
             if (rect) {
                 var parser = new PathParser(pathString)
-                parser.scale(current.width.value/rect.width, current.height.value/rect.height)
+                parser.scale(current.width/rect.width, current.height/rect.height)
 
                 d = parser.d; 
             }
@@ -25,7 +25,7 @@ export default function convertPath (editor, pathString, rect = null) {
 
             if (rect) {
                 var parser = new PathParser(pathString)
-                parser.scale(current.width.value/rect.width, current.height.value/rect.height)
+                parser.scale(current.width/rect.width, current.height/rect.height)
 
                 d = parser.d; 
             }

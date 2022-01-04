@@ -14,7 +14,6 @@ export default class LayoutSelector extends EditorElement {
 
         return /*html*/`
             <div class='status-selector'>
-                <label>${this.$i18n('app.label.layout')}</label>
                 <div class='item'>
                     <object refClass="SelectEditor"  
                         ref='$locale' 

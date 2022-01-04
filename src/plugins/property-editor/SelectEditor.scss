@@ -6,24 +6,33 @@
   height: var(--elf--input-height);
   box-sizing: border-box;
   border: 1px solid transparent;
-  padding: 2px 4px;
+  //   padding: 2px 4px;
+  //   vertical-align: middle;
 
   &:hover:not(.focused):not(.drag) {
-    border-color: var(--elf--input-sub-font-color);
+    border-color: var(--elf--input-border-color);
 
     .selected-value {
-      display: grid; 
+      display: grid;
       grid-template-columns: 1fr 20px;
     }
   }
 
+  &.compact {
+    select {
+        opacity: 1;
+    }
+  }
+
   select {
-    font-size: 11px;
-    // border: 1px solid var(--elf--input-border-color);
     appearance: none;
     border: 0px;
     color: var(--elf--input-font-color);
     height: 24px;
+    vertical-align: middle;
+    width: 100%;
+    background-color: transparent;
+    opacity: 0;
   }
 
   .selected-value {
@@ -33,25 +42,35 @@
     top: 0px;
     height: 100%;
     pointer-events: none;
-    background-color: var(--elf--property-background-color);
+    background-color: var(--elf--input-background-color);
     box-sizing: border-box;
-    // line-height: 2;
-    padding: 4px 2px;
+    line-height: 2;
+
+    padding: 0px 2px;
     color: var(--elf--input-font-color);
-    // padding: 2px 4px;
+    display: flex;
+
     svg {
       width: 16px;
       height: 16px;
       fill: currentColor;
-
     }
 
     .expand {
       vertical-align: middle;
+      box-sizing: border-box;
+      padding-top: 3px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
     }
 
     .value {
-      padding: 3px 0px;
+      padding: 0px 0px;
+      text-align: left;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
     }
   }
 
@@ -59,25 +78,37 @@
     grid-template-columns: 70px 1fr;
     grid-column-gap: 2px;
 
+    &.compact {
+      grid-template-columns: 30px 1fr;
+    }
+
     label {
       text-align: left;
       vertical-align: middle;
-      padding: 6px 4px 2px 0px;
-      font-size: 11px;
+      padding: 0px 4px 0px 2px;
+
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
+      line-height: 2;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;      
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
     }
 
-
-
     .editor-view {
-        position: relative;
+      position: relative;
     }
 
     .selected-value {
       position: absolute;
       height: 100%;
+      text-align: left;
 
       select {
         width: 100%;

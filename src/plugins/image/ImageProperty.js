@@ -44,7 +44,7 @@ export default class ImageProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF('changeImageSize')] (key, value) {
-    var [width, height] = value.split('x').map(it => Length.px(it))
+    var [width, height] = value.split('x').map(it => it)
 
     this.command('setAttributeForMulti', 'resize image', this.$selection.packByValue({ 
       width, height

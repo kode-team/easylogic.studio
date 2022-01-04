@@ -19,10 +19,10 @@ export default {
             const height = 200; 
 
             editor.emit('newComponent', 'iframe', {
-              x: Length.px(center[0] - width/2),
-              y: Length.px(center[1] - height/2),
-              width: Length.px(width),
-              height: Length.px(height),
+              x: center[0] - width/2,
+              y: center[1] - height/2,
+              width: width,
+              height: height,
               'background-color': 'transparent',
               url: embedUrl
             });

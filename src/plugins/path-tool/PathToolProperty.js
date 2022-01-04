@@ -10,8 +10,6 @@ import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { CLICK, SUBSCRIBE } from "el/sapa/Event";
 
 import './PathToolProperty.scss';
-import PathParser from '../../el/editor/parser/PathParser';
-import { Length } from 'el/editor/unit/Length';
 import { iconUse } from 'el/editor/icon/icon';
 
 export default class PathToolProperty extends BaseProperty {
@@ -49,19 +47,22 @@ export default class PathToolProperty extends BaseProperty {
           <button type="button" data-command="convert.path.operation" data-args="xor">${iconUse("boolean_xor", "", {width: 30, height: 30})} Exclude</button>        
         </div>
         <div class="divider"></div>
+        <!--div>
+          <button type="button" data-command="convert.no.transform.path">${iconUse('grid3x3', "", {width: 24, height: 24})} No Transform</button>        
+        </div-->
         <div>
           <button type="button" data-command="convert.simplify.path">${iconUse('grid3x3', "", {width: 24, height: 24})} Self Intersection</button>        
           <button type="button" data-command="convert.flatten.path">${iconUse('flatten', "", {width: 24, height: 24})} Flatten</button>                  
-        </div>
+        </div>        
         <div>
           <!--<button type="button" data-command="convert.smooth.path">${iconUse('smooth', "", {width: 24, height: 24})} Smooth Path</button>-->                
           <button type="button" data-command="switch.path">${iconUse("sync", "", {width: 30, height: 30})} Switch path</button>                  
           <button type="button" data-command="convert.stroke.to.path">${iconUse('outline_shape', "", {width: 24, height: 24})} Outline Path</button> 
         </div>        
-        <div>
+        <!--div>
           <button type="button" data-command="convert.polygonal.path">${iconUse('highlight_at', "", {width: 24, height: 24})} Polygonal</button>                
           <button type="button" data-command="convert.normalize.path">${iconUse('stroke_to_path', "", {width: 24, height: 24})} Normalize</button> 
-        </div>                
+        </div-->                
       </div>
     `;
   }

@@ -47,6 +47,7 @@ export default class FuncFilterEditor extends EditorElement {
         return /*html*/`
         <object refClass="SelectEditor"  
             label="${label}" 
+            ref="$type"
             key="type" 
             value="${this.state.type}" 
             options=${variable(["identity","table","discrete","linear","gamma"])} 

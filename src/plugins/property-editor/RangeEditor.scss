@@ -30,7 +30,6 @@ $border-radius: 3px;
             text-align: left;
             vertical-align: middle;
             padding: 7px 0px 2px 0px;
-            font-size: 11px;
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;            
@@ -68,8 +67,6 @@ $border-radius: 3px;
         .area {
             display: grid; 
             grid-template-columns: 1fr 24px;
-            // grid-column-gap: 3px;
-            font-size: 13px;
             border-radius: $border-radius;
             border: 1px solid transparent;
             

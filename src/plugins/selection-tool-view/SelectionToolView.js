@@ -1,16 +1,18 @@
 
-import { POINTERSTART, POINTEROVER, POINTEROUT, IF, PREVENT, SUBSCRIBE } from "el/sapa/Event";
+import { POINTERSTART, POINTEROVER, POINTEROUT, IF, SUBSCRIBE } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
 import { clone } from "el/sapa/functions/func";
 import { mat4, vec3 } from "gl-matrix";
 import { Transform } from "el/editor/property-parser/Transform";
 import { TransformOrigin } from "el/editor/property-parser/TransformOrigin";
-import { calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, makeGuidePoint, round, vertiesMap } from "el/utils/math";
+import { calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, round, vertiesMap } from "el/utils/math";
 import { getRotatePointer } from "el/utils/collision";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
 
 import './SelectionView.scss';
+import { objectFloor } from "el/utils/func";
+import { ResizingMode } from "el/editor/types/model";
 
 var directionType = {
     1: 'to top left',
@@ -76,6 +78,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.state.dragging = true;
         this.state.isRotate = true;
         this.$config.set('set.move.control.point', true);
+        this.initAngle = this.$selection.current.angle;
     }
 
     rotateVertex() {
@@ -90,33 +93,20 @@ export default class SelectionToolView extends SelectionToolEvent {
             distVector
         ));
 
-        // 캐쉬된 matrix 중에 current 에 해당하는 것만 실행을 한다. 
-        // 나머지는 부모의 좌표가 변경 됐기 때문에 자식의 좌표를 자동으로 변경한다. 
-        let currentMatrix = this.$selection.cachedCurrentItemMatrix;
         const instance = this.$selection.current;
+        let newAngle = this.initAngle + distAngle;
 
         if (instance) {
-
-            let newTransform = Transform.addTransform(currentMatrix.transform, `rotateZ(${Length.deg(distAngle).round(1000)})`)
-
             if (this.$config.get('bodyEvent').shiftKey) {
-                const newRotateX = Transform.get(newTransform, 'rotateZ');
-
-                if (newRotateX[0]) {
-                    const angle = newRotateX[0].value - newRotateX[0].value % this.$config.get('fixed.angle');
-
-                    newTransform = Transform.rotateZ(newTransform, Length.deg(angle));
-                }
-
+                newAngle -= newAngle % this.$config.get('fixed.angle');
             }
 
-            instance.reset({
-                transform: newTransform
-            })
+            instance.angle = newAngle;
         }
 
         this.state.dragging = true;
-        this.command('setAttributeForMulti', 'change rotate', this.$selection.pack('transform'));
+        // this.renderPointers();
+        this.command('setAttributeForMulti', 'change rotate', this.$selection.pack('angle'));
     }
 
     rotateEndVertex() {
@@ -131,7 +121,7 @@ export default class SelectionToolView extends SelectionToolEvent {
             this.command(
                 'setAttributeForMulti',
                 'change rotate',
-                this.$selection.pack('transform')
+                this.$selection.pack('angle')
             );
         })
     }
@@ -190,8 +180,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.$snapManager.clear();
         this.verties = this.$selection.verties;
 
-        const rotateZ = Transform.get(this.$selection.current.transform, 'rotateZ');
-        this.hasRotate = rotateZ && rotateZ.length && rotateZ[0].value != 0
+        this.hasRotate = this.$selection.current.angle !== 0;
 
         this.$config.set('set.move.control.point', true);
 
@@ -243,36 +232,36 @@ export default class SelectionToolView extends SelectionToolEvent {
         return this.calculateDistance(
             item.verties[vertexIndex],    // top center 
             distVector,
-            item.accumulatedMatrixInverse
+            item.absoluteMatrixInverse
         );
     }
 
-    moveItem(instance, lastStartVertex, newWidth, newHeight) {
+    moveItem(instance, lastStartVertex, newWidth, newHeight, options = {}) {
 
         if (instance) {
 
-            const data = {
-                x: Length.px(lastStartVertex[0] + (newWidth < 0 ? newWidth : 0)),
-                y: Length.px(lastStartVertex[1] + (newHeight < 0 ? newHeight : 0)),
-                width: Length.px(Math.abs(newWidth)),
-                height: Length.px(Math.abs(newHeight)),
+            let data = {
+                x: lastStartVertex[0] + (newWidth < 0 ? newWidth : 0),
+                y: lastStartVertex[1] + (newHeight < 0 ? newHeight : 0),
+                width: Math.abs(newWidth),
+                height: Math.abs(newHeight),
             }
 
             if (this.hasRotate) {
                 // noop 
             } else {
-                data.x = data.x.floor();
-                data.y = data.y.floor();
-                data.width = data.width.floor();
-                data.height = data.height.floor();
+                data = objectFloor(data);
             }
 
-            instance.reset(data)
+            instance.reset({
+                ...data,
+                ...options
+            })
         }
 
     }
 
-    moveDirectionVertex(item, newWidth, newHeight, direction, directionNewVector) {
+    moveDirectionVertex(item, newWidth, newHeight, direction, directionNewVector, options = {}) {
 
         // 마지막 offset x, y 를 구해보자. 
         const view = calculateMatrix(
@@ -287,7 +276,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
         const lastStartVertex = mat4.getTranslation([], view);
 
-        this.moveItem(this.$model.get(item.id), lastStartVertex, newWidth, newHeight);
+        this.moveItem(this.$model.get(item.id), lastStartVertex, newWidth, newHeight, options);
     }
 
     /**
@@ -325,7 +314,10 @@ export default class SelectionToolView extends SelectionToolEvent {
                 directionNewVector = vec3.fromValues(realDx / 2, realDy / 2, 0);
             }
 
-            this.moveDirectionVertex(item, newWidth, newHeight, 'to top left', directionNewVector)
+            this.moveDirectionVertex(item, newWidth, newHeight, 'to top left', directionNewVector, {
+                resizingVertical: ResizingMode.FIXED,
+                resizingHorizontal: ResizingMode.FIXED,
+            })
 
         }
     }
@@ -357,7 +349,10 @@ export default class SelectionToolView extends SelectionToolEvent {
                 directionNewVector = vec3.fromValues(realDx / 2, newHeight + realDy / 2, 0);
             }
 
-            this.moveDirectionVertex(item, newWidth, newHeight, 'to bottom left', directionNewVector)
+            this.moveDirectionVertex(item, newWidth, newHeight, 'to bottom left', directionNewVector, {
+                resizingVertical: ResizingMode.FIXED,
+                resizingHorizontal: ResizingMode.FIXED,
+            })
         }
     }
 
@@ -387,7 +382,10 @@ export default class SelectionToolView extends SelectionToolEvent {
                 directionNewVector = vec3.fromValues(newWidth + realDx / 2, newHeight + realDy / 2, 0);
             }
 
-            this.moveDirectionVertex(item, newWidth, newHeight, 'to bottom right', directionNewVector)
+            this.moveDirectionVertex(item, newWidth, newHeight, 'to bottom right', directionNewVector, {
+                resizingHorizontal: ResizingMode.FIXED,
+                resizingVertical: ResizingMode.FIXED,
+            })
         }
     }
 
@@ -413,7 +411,9 @@ export default class SelectionToolView extends SelectionToolEvent {
                 directionNewVector = vec3.fromValues(newWidth / 2, newHeight + realDy / 2, 0);
             }
 
-            this.moveDirectionVertex(item, newWidth, newHeight, 'to bottom', directionNewVector);
+            this.moveDirectionVertex(item, newWidth, newHeight, 'to bottom', directionNewVector, {
+                resizingVertical: ResizingMode.FIXED,
+            })
         }
     }
 
@@ -441,7 +441,9 @@ export default class SelectionToolView extends SelectionToolEvent {
             }
 
 
-            this.moveDirectionVertex(item, newWidth, newHeight, 'to top', directionNewVector);
+            this.moveDirectionVertex(item, newWidth, newHeight, 'to top', directionNewVector, {
+                resizingVertical: ResizingMode.FIXED,
+            })
         }
     }
 
@@ -467,7 +469,9 @@ export default class SelectionToolView extends SelectionToolEvent {
                 directionNewVector = vec3.fromValues(realDx / 2, newHeight / 2, 0);
             }
 
-            this.moveDirectionVertex(item, newWidth, newHeight, 'to left', directionNewVector);
+            this.moveDirectionVertex(item, newWidth, newHeight, 'to left', directionNewVector, {
+                resizingHorizontal: ResizingMode.FIXED,
+            })
         }
     }
 
@@ -495,7 +499,9 @@ export default class SelectionToolView extends SelectionToolEvent {
             }
 
 
-            this.moveDirectionVertex(item, newWidth, newHeight, 'to right', directionNewVector);
+            this.moveDirectionVertex(item, newWidth, newHeight, 'to right', directionNewVector, {
+                resizingHorizontal: ResizingMode.FIXED,
+            })
         }
     }
 
@@ -525,7 +531,10 @@ export default class SelectionToolView extends SelectionToolEvent {
                 directionNewVector = vec3.fromValues(newWidth + realDx / 2, realDy / 2, 0);
             }
 
-            this.moveDirectionVertex(item, newWidth, newHeight, 'to top right', directionNewVector);
+            this.moveDirectionVertex(item, newWidth, newHeight, 'to top right', directionNewVector, {
+                resizingVertical: ResizingMode.FIXED,
+                resizingHorizontal: ResizingMode.FIXED,
+            })
         }
     }
 
@@ -553,9 +562,11 @@ export default class SelectionToolView extends SelectionToolEvent {
         }
 
         this.$selection.recoverChildren();              
-        this.emit('setAttributeForMulti', this.$selection.pack('x', 'y', 'width', 'height'));
-        this.emit('refreshAllElementBoundSize')
-  
+        this.emit('setAttributeForMulti', this.$selection.pack('x', 'y', 'width', 'height', 'resizingHorizontal', 'resizingVertical'));
+        this.nextTick(() => {
+            this.emit('refreshSelection');
+            this.emit('refreshAllElementBoundSize')
+        })
 
         this.state.dragging = true;
     }
@@ -623,10 +634,14 @@ export default class SelectionToolView extends SelectionToolEvent {
         }
 
         const verties = this.$selection.verties;
+
+        if (vec3.dist(verties[0], verties[1]) === 0) {
+            return;
+        }
+
         this.state.renderPointerList = [
             this.$viewport.applyVerties(verties),
         ]
-
 
         const pointers = this.createRenderPointers(this.state.renderPointerList[0]);
 
@@ -737,8 +752,8 @@ export default class SelectionToolView extends SelectionToolEvent {
         const item = list[0];
 
         const newPointer = vec3.lerp([], item.data.end, item.data.start, 1 + 16 / vec3.dist(item.data.start, item.data.end))
-        const width = this.$selection.current.width.value
-        const height = this.$selection.current.height.value
+        const width = this.$selection.current.width
+        const height = this.$selection.current.height
         const diff = vec3.subtract([], item.data.start, item.data.end);
         const angle = calculateAngle360(diff[0], diff[1]) + 90;
 
@@ -773,7 +788,7 @@ export default class SelectionToolView extends SelectionToolEvent {
             return '';
         }
 
-        const newPath = current.accumulatedPath();
+        const newPath = current.absolutePath();
         newPath.transformMat4(this.$viewport.matrix);
 
         return /*html*/`
@@ -797,21 +812,15 @@ export default class SelectionToolView extends SelectionToolEvent {
         const current = this.$selection.current;
 
         if (current && current.is("text")) {
-            if (current.width.value === 0 && current.height.value === 0) {
+            if (current.width === 0 && current.height === 0) {
                 return;
             }
         }
 
         const isArtBoard = current && current.is('artboard');
 
-        const diff = vec3.subtract(
-            [],
-            vec3.lerp([], pointers[0], pointers[1], 0.5),
-            vec3.lerp([], pointers[0], pointers[2], 0.5),
-        );
-
         //TODO: 여기서는 법선벡터를 구하게 되면 식이 훨씬 간단해진다. 
-        const rotate = Length.deg(calculateAngle360(diff[0], diff[1]) + 90).round(1000);
+        const rotate = Length.deg(current.angle).round(1000);
 
         const rotatePointer = getRotatePointer(pointers, 34)
         const dist = vec3.dist(pointers[0], pointers[2]);
@@ -849,7 +858,13 @@ export default class SelectionToolView extends SelectionToolEvent {
     checkShow() {
 
         if (this.state.show && this.$selection.isOne) {
-            if (this.$selection.hasChangedField('x', 'y', 'width', 'height', 'transform', 'transform-origin', 'perspective', 'perspective-origin')) {
+            if (this.$selection.hasChangedField(
+                'x', 'y', 'width', 'height', 'angle', 
+                'constraints-horizontal', 'constraints-vertical',
+                'resizingHorizontal','resizingVertical', 
+                'transform-origin', 'perspective', 
+                'perspective-origin'
+            )) {
                 return true;
             }
         }

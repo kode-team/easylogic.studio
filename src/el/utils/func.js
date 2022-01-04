@@ -1,4 +1,4 @@
-import { isBoolean, isNotUndefined, isObject, isUndefined } from "el/sapa/functions/func";
+import { clone, isBoolean, isNotUndefined, isObject, isUndefined } from "el/sapa/functions/func";
 import { getPredefinedCubicBezier } from "./bezier";
 import { randomNumber } from "./create";
 
@@ -112,3 +112,19 @@ export const curveToPointLine = (timingFunction, width = 30, height = 30) => {
         L ${currentBezier[2] * width} ${currentBezier[3] == 1 ? 0 : (1 - currentBezier[3]) * height}
     `
 }
+
+const valueFunctionIdentity = (v) => v
+export const valueMap = (obj, valueFunction = valueFunctionIdentity) => {
+    const newObj = clone(obj);
+
+    Object.keys(newObj).forEach(key => {
+        newObj[key] = valueFunction(newObj[key]);
+    })
+
+    return newObj;
+}
+
+export const objectFloor = (obj) => valueMap(obj, Math.floor);
+export const objectCeil = (obj) => valueMap(obj, Math.ceil);
+export const objectRound = (obj) => valueMap(obj, Math.round);
+export const objectRoundTo = (obj, to) => valueMap(obj, (v) => Math.round(v / to) * to)

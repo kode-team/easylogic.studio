@@ -12,7 +12,7 @@ export default class TextAreaEditor extends EditorElement {
 
         return {
             label: this.props.label || '',
-            height: Length.px(100),
+            height: 100,
             value
         }
     }

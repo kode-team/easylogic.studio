@@ -9,7 +9,7 @@ import KeyboardManager from "../common/KeyboardManager";
 
 import Inspector from "./area/Inspector";
 import StatusBar from './area/StatusBar';
-import ToolBar from "./area/ToolBar";
+import ToolBar from "./area/tool-bar/ToolBar";
 
 import designEditorPlugins from "plugins/design-editor-plugins";
 import LayerTab from "./area/LayerTab";
@@ -98,7 +98,6 @@ export default class DesignEditor extends BaseLayout {
               <object refClass="SwitchRightPanel" />
             </div>            
           </div>
-          <object refClass='StatusBar' />
           <object refClass="KeyboardManager" />                
         </div>
         <object refClass="PopupManager" />
@@ -121,7 +120,7 @@ export default class DesignEditor extends BaseLayout {
 
     return {
       style: { 
-        left: Length.px(left) 
+        left: left 
       }
     }
   }
@@ -134,15 +133,15 @@ export default class DesignEditor extends BaseLayout {
 
     return {
       style: { 
-        left: Length.px(left)
+        left: left
       }
     }
   }  
 
   [BIND('$leftPanel')] () {
     let left = `0px`    
-    let width = Length.px(this.state.leftSize);
-    let bottom = Length.px(this.state.bottomSize);
+    let width = this.state.leftSize;
+    let bottom = this.state.bottomSize;
     if (this.$config.false('show.left.panel')) {
       left = `-${this.state.leftSize}px`    
     }
@@ -154,14 +153,14 @@ export default class DesignEditor extends BaseLayout {
 
   [BIND('$rightPanel')] () {
     let right = 0    
-    let bottom = Length.px(this.state.bottomSize);    
+    let bottom = this.state.bottomSize;    
     if (this.$config.false('show.right.panel')) {
       right = -this.state.rightSize
     }
 
     return {
       style: { 
-        right: Length.px(right), 
+        right: right, 
         bottom 
       }
     }
@@ -169,14 +168,14 @@ export default class DesignEditor extends BaseLayout {
 
   [BIND('$rightArrow')] () {
     let right = 6    
-    let bottom = Length.px(this.state.bottomSize);    
+    let bottom = this.state.bottomSize;    
     if (this.$config.true('show.right.panel')) {
       right = this.state.rightSize + 6
     }
 
     return {
       style: { 
-        right: Length.px(right), 
+        right: right, 
         bottom 
       }
     }
@@ -198,9 +197,9 @@ export default class DesignEditor extends BaseLayout {
 
     return {
       style: { 
-        left: Length.px(left).add(14), 
-        right: Length.px(right).add(14), 
-        bottom: Length.px(bottom)
+        left: left+14, 
+        right: right+14, 
+        bottom: bottom
       }
     }
   }  
@@ -208,7 +207,7 @@ export default class DesignEditor extends BaseLayout {
 
   [BIND('$footerPanel')] () {
    
-    let height = Length.px(this.state.bottomSize);
+    let height = this.state.bottomSize;
  
     return {
       style: { height }

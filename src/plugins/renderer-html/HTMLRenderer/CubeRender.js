@@ -67,8 +67,8 @@ export default class CubeRender extends LayerRender {
     var rate = item.rate.value; 
     var width = item.width; 
     var height = item.height; 
-    var halfWidth = width.value/2
-    var halfHeight = height.value/2
+    var halfWidth = width/2
+    var halfHeight = height/2
     var backfaceVisibility = item['backface-visibility']
     var css = {
       ...this.toKeyListCSS(item, [

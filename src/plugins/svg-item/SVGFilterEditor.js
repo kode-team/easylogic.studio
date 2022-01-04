@@ -856,8 +856,8 @@ export default class SVGFilterEditor extends EditorElement {
         })
   
         this.$target.css({
-          left: Length.px(filter.bound.x),
-          top: Length.px(filter.bound.y),
+          left: filter.bound.x,
+          top: filter.bound.y,
         })
         
         this.load('$connectedLinePanel');

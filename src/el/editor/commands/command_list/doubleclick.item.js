@@ -1,11 +1,11 @@
 export default {
     command: 'doubleclick.item',
     execute: function (editor, evt, id) {
-        const item = editor.modelManager.get(id);
+        const item = editor.get(id);
 
         if (editor.selection.isOne && item) {
 
-            if (editor.selection.checkChildren(item.id) && item.is('svg-path')) {
+            if (editor.selection.checkChildren(item.id)) {
                 editor.selection.select(item);
                 editor.emit('refreshSelection');                
                 editor.emit('refreshSelectionTool');

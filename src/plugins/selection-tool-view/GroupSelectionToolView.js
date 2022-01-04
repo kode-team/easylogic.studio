@@ -89,7 +89,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         this.localAngle = this.angle + distAngle;
 
         this.groupItem.reset({
-            transform: Transform.rotateZ(this.groupItem.transform, Length.deg(this.localAngle) ) 
+            angle: this.localAngle
         })
 
         const selectionMatrix = calculateRotationOriginMat4(distAngle, this.verties[4])
@@ -129,9 +129,9 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
             if (instance) {
                 instance.reset({
-                    x: Length.px(newTranslate[0]), 
-                    y: Length.px(newTranslate[1]),
-                    transform: Transform.rotateZ(item.transform, Length.deg(lastAngle) ) 
+                    x: newTranslate[0], 
+                    y: newTranslate[1],
+                    angle: lastAngle
                 })
             }
 
@@ -141,7 +141,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         this.emit(
             'setAttributeForMulti', 
-            this.$selection.pack('x', 'y', 'width', 'height', 'transform')
+            this.$selection.pack('x', 'y', 'width', 'height', 'angle')
         );                    
     }
 
@@ -159,7 +159,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
             this.command(
                 'setAttributeForMulti', 
                 'rotate selection pointer',
-                this.$selection.pack('x', 'y', 'width', 'height', 'transform')
+                this.$selection.pack('x', 'y', 'width', 'height', 'angle')
             );  
         })                
     }
@@ -266,17 +266,17 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         return this.calculateDistance(
             item.verties[vertextIndex],    // top center 
             distVector, 
-            item.accumulatedMatrixInverse
+            item.absoluteMatrixInverse
         );
     } 
 
     moveGroupItem (lastStartVertex, newWidth, newHeight) {
 
         this.groupItem.reset({
-            x: Length.px(lastStartVertex[0] + (newWidth < 0 ? newWidth : 0)).round(1000),
-            y: Length.px(lastStartVertex[1] + (newHeight < 0 ? newHeight : 0)).round(1000),
-            width: Length.px(Math.abs(newWidth)).round(1000),
-            height: Length.px(Math.abs(newHeight)).round(1000),
+            x: round(lastStartVertex[0] + (newWidth < 0 ? newWidth : 0), 1000),
+            y: round(lastStartVertex[1] + (newHeight < 0 ? newHeight : 0), 1000),
+            width: round(Math.abs(newWidth), 1000),
+            height: round(Math.abs(newHeight), 1000)
         })    
     }   
     
@@ -296,27 +296,27 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         if (instance) {
             instance.reset({
-                x: Length.px(newX + realDx), 
-                y: Length.px(newY + realDy),
-                width: Length.px(newWidth),
-                height: Length.px(newHeight)
+                x: newX + realDx, 
+                y: newY + realDy,
+                width: newWidth,
+                height: newHeight
             }) 
         }            
     }
 
     recoverItemForGroup (groupItem, scaleX, scaleY, realDx = 0, realDy = 0) {
 
-        const accumulatedMatrix = groupItem.accumulatedMatrix;
-        const accumulatedMatrixInverse = groupItem.accumulatedMatrixInverse;
+        const absoluteMatrix = groupItem.absoluteMatrix;
+        const absoluteMatrixInverse = groupItem.absoluteMatrixInverse;
 
         this.$selection.cachedItemMatrices.forEach(it => {
 
             const localView = calculateMatrix(
                 it.parentMatrixInverse,         // 5. 해당 객체의 parent 를 기준으로 좌표를 만들면 된다. 
-                accumulatedMatrix,    // 4. 원래의 좌표로 다시 만들고 
+                absoluteMatrix,    // 4. 원래의 좌표로 다시 만들고 
                 mat4.fromTranslation([], [realDx, realDy, 0]),      // 3. dx, dy 가 - 일 경우 실제로 움직이고
                 mat4.fromScaling([], [scaleX, scaleY, 1]),  // 2. scale 을 먼저 실행한다음 
-                accumulatedMatrixInverse          // 1. 기본 좌표로 돌리고 
+                absoluteMatrixInverse          // 1. 기본 좌표로 돌리고 
             )
 
             const newVerties = vertiesMap(it.verties, localView);
@@ -502,7 +502,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         this.emit(
             'setAttributeForMulti', 
-            this.$selection.pack('x', 'y', 'width', 'height', 'transform')
+            this.$selection.pack('x', 'y', 'width', 'height')
         );          
 
         this.state.dragging = true; 
@@ -522,7 +522,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
             this.command(
                 'setAttributeForMulti', 
                 'move selection pointer',
-                this.$selection.pack('x', 'y', 'width', 'height', 'transform')
+                this.$selection.pack('x', 'y', 'width', 'height')
             );  
 
             this.emit('recoverBooleanPath');
@@ -563,11 +563,10 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
 
         this.state.newArtBoard.reset({
             parentId: this.$selection.currentProject.id,
-            x: Length.px(verties[0][0]),
-            y: Length.px(verties[0][1]),
-            width: Length.px(vec3.dist(verties[0], verties[1])),
-            height: Length.px(vec3.dist(verties[0], verties[3])),
-            transform: '', // 새로운 그룹을 지정할 때는 transform 은 항상 초기화 된다. 
+            x: verties[0][0],
+            y: verties[0][1],
+            width: vec3.dist(verties[0], verties[1]),
+            height: vec3.dist(verties[0], verties[3]),
         })
 
         return this.state.newArtBoard; 
@@ -717,15 +716,15 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
         const item = list[0];
 
         const newPointer  = vec3.lerp([], item.data.end, item.data.start, 1 + 16/vec3.dist(item.data.start, item.data.end))
-        const width = this.groupItem.width.value
-        const height = this.groupItem.height.value
+        const width = this.groupItem.width
+        const height = this.groupItem.height
         const diff = vec3.subtract([], item.data.start, item.data.end);
         const angle = calculateAngle360(diff[0], diff[1]) + 90;
 
         let text = `${round(width, 100)} x ${round(height, 100)}`;
 
         if (this.state.isRotate) {
-            const rotateZ = Transform.get(this.groupItem.transform, 'rotateZ')
+            const rotateZ = this.groupItem.angle;
 
             if (rotateZ) {
                 text = `${rotateZ[0].value}°`

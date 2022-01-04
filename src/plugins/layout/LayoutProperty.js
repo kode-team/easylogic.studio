@@ -4,6 +4,7 @@ import { variable } from 'el/sapa/functions/registElement';
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './LayoutProperty.scss';
+import { CSS_TO_STRING } from "el/utils/func";
 
 
 export default class LayoutProperty extends BaseProperty {
@@ -18,7 +19,7 @@ export default class LayoutProperty extends BaseProperty {
 
   getBody() {
     return /*html*/`
-        <div class='property-item' ref='$layoutProperty'></div>
+        <div ref='$layoutProperty'></div>
       `;
   }  
 
@@ -52,7 +53,19 @@ export default class LayoutProperty extends BaseProperty {
       <div class='layout-list' ref='$layoutList'>
         <div data-value='default' class='${current.layout === 'default' ? 'selected': ''}'></div>
         <div data-value='flex' class='${current.layout === 'flex' ? 'selected': ''}'>
-          <object refClass="FlexLayoutEditor" ref='$flex' key='flex-layout' value="${current['flex-layout'] || ''}" onchange='changeLayoutInfo' />
+          <object refClass="FlexLayoutEditor" ${variable({
+            ref: '$flex',
+            key: 'flex-layout',
+            value: {
+              'flex-direction': current['flex-direction'],
+              'flex-wrap': current['flex-wrap'],
+              'justify-content': current['justify-content'],
+              'align-items': current['align-items'],
+              'align-content': current['align-content'],
+              gap: current.gap
+            },
+            onchange: 'changeLayoutInfo'
+          })}  />
         </div>
         <div data-value='grid' class='${current.layout === 'grid' ? 'selected': ''}'>
           <object refClass="GridLayoutEditor" ref='$grid' key='grid-layout' value="${current['grid-layout'] || ''}" onchange='changeLayoutInfo' />
@@ -62,10 +75,17 @@ export default class LayoutProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF('changeLayoutInfo')] (key, value) {
-    console.log(key, value);
-    this.command('setAttributeForMulti', 'change layout info', this.$selection.packByValue({ 
-      [key]: value
-    }))
+
+    if (key === 'padding') {
+      this.command('setAttributeForMulti', 'change padding', this.$selection.packByValue(value))
+  
+    } else {
+
+      this.command('setAttributeForMulti', 'change layout info', this.$selection.packByValue({ 
+        [key]: value
+      }))
+  
+    }
 
     this.nextTick(() => {
       this.emit('refreshAllElementBoundSize');    
@@ -79,6 +99,8 @@ export default class LayoutProperty extends BaseProperty {
       [key]: value
     }))
 
+    this.updateTitle();    
+
     this.command('setAttributeForMulti', 'change layout type', this.$selection.packByValue({ 
       [key]: value
     }))
@@ -87,6 +109,7 @@ export default class LayoutProperty extends BaseProperty {
       this.refresh();
       this.emit('refreshAllElementBoundSize');
       this.emit('changeItemLayout')
+      this.emit('refreshSelection');
     })
 
   }
@@ -99,7 +122,12 @@ export default class LayoutProperty extends BaseProperty {
     return this.$selection.current.enableHasChildren();
   }
 
+  updateTitle () {
+    this.setTitle(this.$selection.current.layout + " Layout");
+  }
+
   [SUBSCRIBE('refreshSelection') + IF('checkShow') + IF("enableHasChildren")]() {
+    this.updateTitle();
     this.refresh();
   }
 }

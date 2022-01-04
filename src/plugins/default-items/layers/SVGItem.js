@@ -39,6 +39,8 @@ export class SVGItem extends LayerModel {
       fill: 'transparent',
       'fill-rule': 'nonzero',
       'text-anchor': 'start',
+      'stroke-dasharray': [],
+      'stroke-dashoffset': 0,
       ...obj
     });
   }

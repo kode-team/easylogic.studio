@@ -193,8 +193,8 @@ export default class SVGTextureView extends EditorElement {
 
       const svg = this.$editor.svg.render(this.$model.createModel({
         itemType: it.itemType,
-        width: Length.px(80), 
-        height: Length.px(80),
+        width: 80, 
+        height: 80,
         ...it.attrs,
         d
       }, false))

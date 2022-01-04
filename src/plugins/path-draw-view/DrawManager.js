@@ -23,8 +23,8 @@ export default class DrawManager extends EditorElement {
     var current = this.$selection.current;
 
     if (current) {
-      this.children.$stroke.setValue(current['stroke'] || 'rgba(0, 0, 0, 1)')
-      this.children.$strokeWidth.setValue(current['stroke-width'] || Length.number(1))
+      this.children.$stroke?.setValue(current['stroke'] || 'rgba(0, 0, 0, 1)')
+      this.children.$strokeWidth?.setValue(current['stroke-width'] || Length.number(1))
     }
 
   }  

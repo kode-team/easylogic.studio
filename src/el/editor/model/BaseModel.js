@@ -38,7 +38,7 @@ export class BaseModel {
           return this.getCache(key);
         } else {
           // getter or json property
-          return originMethod || target.json[key];
+          return isNotUndefined(originMethod) ? originMethod : target.json[key];
         }
       },
       set: (target, key, value) => {
@@ -221,6 +221,10 @@ export class BaseModel {
    */
   get path() {
     return this.modelManager.getPath(this.id, this.ref);
+  }
+
+  get pathIds() {
+    return this.path.map(it => it.id);
   }
 
   // get lock() {
@@ -607,6 +611,16 @@ export class BaseModel {
 
   findIndex(item) {
     return this.json.children.indexOf(item.id);
+  }
+
+  /**
+   * find a model by id 
+   * 
+   * @param {string} id 
+   * @returns {BaseModel}
+   */
+  find(id) {
+    return this.modelManager.get(id);
   }
 
   copyItem(childItemId, dist = 10) {

@@ -45,14 +45,14 @@ export default class PatternSizeEditor extends EditorElement {
             ...this.state,
         }        
 
-        if (this.state.width.value > 80) {
-            obj.width = Length.px(80);
-            obj.x = Length.px(obj.x.value / this.state.width.value/80)
+        if (this.state.width > 80) {
+            obj.width = 80;
+            obj.x = obj.x.value / this.state.width/80
         }
 
-        if (this.state.height.value > 80) {
-            obj.height = Length.px(80);
-            obj.y = Length.px(this.state.y.value / this.state.height.value/80)
+        if (this.state.height > 80) {
+            obj.height = 80;
+            obj.y = this.state.y.value / this.state.height/80
         }        
 
 

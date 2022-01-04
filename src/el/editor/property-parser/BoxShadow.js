@@ -51,10 +51,10 @@ export class BoxShadow extends PropertyItem {
     return super.getDefaultObject({
       itemType: "box-shadow",
       inset: false,
-      offsetX: Length.z(),
-      offsetY: Length.z(),
-      blurRadius: Length.z(),
-      spreadRadius: Length.z(),
+      offsetX: 0,
+      offsetY: 0,
+      blurRadius: 0,
+      spreadRadius: 0,
       color: "rgba(0, 0, 0, 1)"
     });
   }

@@ -121,16 +121,14 @@ export default class GradientEditor extends EditorElement  {
                 </div>
             </div>
             <div class='tools' data-editor='tools'>
-              <label>Offset</label>
-              <object refClass='InputRangeEditor' ref='$range' calc="false" key='length' onchange='changeColorStepOffset' />
-            </div>
+                <label for='gradientConnected${this.id}'>Connected <input type='checkbox'  id='gradientConnected${this.id}' ref='$cut' checked /></label>
+            </div>            
             <div class='tools' data-editor='tools'>
-              <label for='gradientConnected${this.id}'>connected </label>
-              <input type='checkbox'  id='gradientConnected${this.id}' ref='$cut' checked />
+              <object refClass='InputRangeEditor' label="Offset" ref='$range' calc="false" key='length' onchange='changeColorStepOffset' />
             </div>
             <div class='sub-editor' ref='$subEditor'> 
               <div data-editor='angle'>
-                <object refClass="RangeEditor" label='Angle' ref='$angle' calc="false" units="deg" min="-720" max="720" key='angle' onchange='changeKeyValue' />
+                <object refClass="InputRangeEditor" label='Angle' ref='$angle' calc="false" units="deg" min="-720" max="720" key='angle' onchange='changeKeyValue' />
               </div>
               <div data-editor='centerX'>
                 <object refClass="RangeEditor" label='Center X' ref='$radialPositionX' calc="false" value="50%"  key='radialPositionX' onchange='changeKeyValue' />

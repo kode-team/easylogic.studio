@@ -390,7 +390,7 @@
                 fill: transparent;
                 stroke: #959595;
                 pointer-events: stroke;
-                stroke-width: 1;
+                stroke-width: 2;
 
                 &:hover {
                     cursor: copy;
@@ -411,7 +411,6 @@
             stroke: var(--elf--selected-color);
             stroke-width: 0.5;
             pointer-events: none;
-            font-size: 20px;
             font-weight: bold;
         }
     }

@@ -96,10 +96,10 @@ export default class PathDrawView extends EditorElement {
 
         const pathItem = {
             itemType: 'svg-path',
-            x: Length.px(bbox[0][0]),
-            y: Length.px(bbox[0][1]),
-            width: Length.px(newWidth),
-            height: Length.px(newHeight),
+            x: bbox[0][0],
+            y: bbox[0][1],
+            width: newWidth,
+            height: newHeight,
             d: newPath.d,
             totalLength: this.totalPathLength
         }
@@ -282,7 +282,7 @@ export default class PathDrawView extends EditorElement {
 
         var $obj = this.refs.$view.$('path.object')
 
-        var pathRect = {x: Length.z(), y: Length.z(),  width: Length.z(), height: Length.z()}
+        var pathRect = {x: 0, y: 0,  width: 0, height: 0}
         if ($obj) {
 
             pathRect = $obj.rect()

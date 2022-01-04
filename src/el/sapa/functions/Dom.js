@@ -263,17 +263,24 @@ export default class Dom {
   }
 
   html(html) {
-    if (typeof html === 'undefined') {
-      return this.el.innerHTML;
+
+    try {
+      if (typeof html === 'undefined') {
+        return this.el.innerHTML;
+      }
+  
+      if (typeof html === 'string') {
+        Object.assign(this.el, { innerHTML: html });
+      } else {
+        this.empty().append(html);
+      }
+
+      return this;  
+    } catch (e) {
+      console.log(e);
+      return this;
     }
 
-    if (typeof html === 'string') {
-      Object.assign(this.el, { innerHTML: html });
-    } else {
-      this.empty().append(html);
-    }
-
-    return this;
   }
 
   htmlDiff(fragment) {

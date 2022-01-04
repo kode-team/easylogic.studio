@@ -30,7 +30,7 @@ export default class GradientAssetsProperty extends BaseProperty {
 
   [LOAD('$tools')]() {
     return /*html*/`
-      <object refClass="SelectEditor"  key="preset" value="${this.state.preset}" options=${variable(options)} onchange="changePreset"  />
+      <object refClass="SelectEditor" ref='$preset'  key="preset" value="${this.state.preset}" options=${variable(options)} onchange="changePreset"  />
     `
   }  
 

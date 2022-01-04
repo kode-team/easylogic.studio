@@ -30,6 +30,7 @@ export default class FlexLayoutItemEditor extends EditorElement {
                 <div class='label'><label>${this.$i18n('flex.layout.item.editor.direction')}</label></div>
                 <object refClass="SelectIconEditor" 
                     key='flex-direction'
+                    ref='$flexDirection'
                     value="${this.state['flex-direction'] || 'row'}"
                     options="${getDirectionOptions()}"
                     onchange='changeKeyValue'
@@ -39,6 +40,7 @@ export default class FlexLayoutItemEditor extends EditorElement {
                 <div class='label'><label>${this.$i18n('flex.layout.item.editor.wrap')}</label></div>
                 <object refClass="SelectIconEditor" 
                     key='flex-wrap'
+                    ref='$flex-wrap'
                     value="${this.state['flex-wrap'] || 'wrap'}"
                     options="${getWrapOptions()}"
                     onchange='changeKeyValue'
@@ -48,6 +50,7 @@ export default class FlexLayoutItemEditor extends EditorElement {
                 <div class='label'><label>${this.$i18n('flex.layout.item.editor.justify-content')}</label></div>
                 <object refClass="SelectIconEditor" 
                     key='justify-content'
+                    ref="$justifyContent"
                     value="${this.state['justify-content']}"
                     options="${getJustifyContentOptions()}"
                     onchange='changeKeyValue'
@@ -57,6 +60,7 @@ export default class FlexLayoutItemEditor extends EditorElement {
                 <div class='label'><label>${this.$i18n('flex.layout.item.editor.align-items')}</label></div>
                 <object refClass="SelectIconEditor" 
                     key='align-items'
+                    ref='$alignItems'
                     value="${this.state['align-items']}"
                     options="${getAlignItemsOptions()}"
                     onchange='changeKeyValue'
@@ -66,6 +70,7 @@ export default class FlexLayoutItemEditor extends EditorElement {
                 <div class='label'><label>${this.$i18n('flex.layout.item.editor.align-content')}</label></div>
                 <object refClass="SelectIconEditor" 
                     key='align-content'
+                    ref='$alignContent'
                     value="${this.state['align-content']}"
                     options="${getAlignContentOptions()}"
                     onchange='changeKeyValue'

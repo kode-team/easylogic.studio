@@ -15,8 +15,8 @@ export default {
     execute: function (editor, dx = 0, dy = 0) {
 
         editor.command('setAttributeForMulti', 'item move down', editor.selection.packByValue({
-            x: (item) => Length.px(item.offsetX.value + dx),
-            y: (item) => Length.px(item.offsetY.value + dy),
+            x: (item) => item.offsetX + dx,
+            y: (item) => item.offsetY + dy,
         }));     
 
         editor.nextTick(() =>{

@@ -9,9 +9,9 @@ export default {
     'app.lang.fr_FR': 'Français',
     'app.label.lang': 'Langue',
 
-    'app.layout.all': 'All',
-    'app.layout.css': 'CSS',
-    'app.layout.svg': 'SVG',
+    'app.layout.all': 'Layout',
+    'app.layout.css': 'CSS Mode',
+    'app.layout.svg': 'SVG Mode',
     'app.label.layout': 'Menu Layout',
 
     'app.theme.dark': 'Sombre',
@@ -200,6 +200,7 @@ export default {
     'svg.item.property.lineCap': 'Chapeau Ligne',
     'svg.item.property.lineJoin': 'Jonction ligne',
     'svg.item.property.filter': 'Filtre',
+    'svg.item.property.blend': 'Blend Mode',    
 
 
     'border.editor.all': 'Tout',     
@@ -286,7 +287,7 @@ export default {
     'svgfilter.asset.property.title': 'Filtre SVG',
 
 
-    'inspector.tab.title.style': 'Style',
+    'inspector.tab.title.design': 'Design',
     'inspector.tab.title.component': 'Composant',
     'inspector.tab.title.transition': 'Animation',
     'inspector.tab.title.asset': 'Eléments',
@@ -388,7 +389,7 @@ export default {
     'layout.property.title': 'Disposition',
     'layout.property.flex': 'Boîte Flex',
     'layout.property.grid': 'Grille',
-    'layout.property.default': 'Défaut',
+    'layout.property.default': 'Défaut',    
 
     'default.layout.item.property.title.constraints': 'Constraints',        
 

@@ -9,7 +9,6 @@
       display: none;
     }
     label {
-      font-size: 12px;
       padding-left: 5px;
       vertical-align: middle;
    
@@ -51,7 +50,6 @@
         }
   
         label {
-          // font-size: 12px;
           padding: 5px 0px;
           cursor: move;
           text-overflow: ellipsis;
@@ -88,7 +86,6 @@
         margin-bottom: 5px;
 
         label {
-          font-size: 11px;
           color: var(--elf--font-color);
         }
 

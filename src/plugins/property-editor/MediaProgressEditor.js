@@ -103,7 +103,7 @@ export default class MediaProgressEditor extends EditorElement {
         this.rect = this.refs.$progress.rect();
         this.pos = Length.parse(this.refs.$end.css('left')).toPx(this.rect.width);
         this.min = Length.parse(this.refs.$start.css('left')).toPx(this.rect.width);
-        this.max = Length.px(this.rect.width);
+        this.max = this.rect.width;
     }
 
     moveStartForEnd (dx, dy) {

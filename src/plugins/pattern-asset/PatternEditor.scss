@@ -7,7 +7,6 @@
       display: none; 
     }
     label {
-      font-size: 12px;
       padding-left: 5px;
       vertical-align: middle;
    
@@ -21,10 +20,11 @@
   }
 
     .pattern-list {
-        display: grid;
-        grid-template-columns: 60px 60px 60px 60px;
-        grid-column-gap: 1px;
-        grid-row-gap: 1px;
+        display: flex;
+        column-gap: 4px;
+        row-gap: 4px;
+        flex-wrap: wrap;
+        padding-bottom: 10px;
       
         .pattern-item {
           // margin-top: 5px;

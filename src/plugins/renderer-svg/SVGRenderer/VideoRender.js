@@ -35,8 +35,8 @@ export default class VideoRender extends SVGLayerRender {
         return this.wrappedRender(item, ()=> {
             return /*html*/`
             <foreignObject 
-                width="${width.value}"
-                height="${height.value}"
+                width="${width}"
+                height="${height}"
                 overflow="visible"
             >
                 <video 

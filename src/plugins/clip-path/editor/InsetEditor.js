@@ -148,8 +148,8 @@ export default class InsetEditor extends EditorElement {
         this.refs.$clipArea.css({
             left: leftX,
             top: topY,
-            width: Length.px(rightX.value - leftX.value),
-            height: Length.px(bottomY.value - topY.value)
+            width: rightX.value - leftX.value,
+            height: bottomY.value - topY.value
         })
 
         this.bindData('$clipAreaView')
@@ -163,10 +163,10 @@ export default class InsetEditor extends EditorElement {
         this.startXY = e.xy; 
 
         this.clipRect = {
-            left: Length.parse(this.$target.css('left')),
-            top: Length.parse(this.$target.css('top')),
-            width: Length.parse(this.$target.css('width')),
-            height: Length.parse(this.$target.css('height')),
+            left: Length.parse(this.$target.css('left')).value,
+            top: Length.parse(this.$target.css('top')).value,
+            width: Length.parse(this.$target.css('width')).value,
+            height: Length.parse(this.$target.css('height')).value,
         }
 
     }
@@ -174,8 +174,8 @@ export default class InsetEditor extends EditorElement {
    
     moveClipArea (dx, dy) {
 
-        var clipWidth = this.clipRect.width.value;
-        var clipHeight = this.clipRect.height.value;
+        var clipWidth = this.clipRect.width;
+        var clipHeight = this.clipRect.height;
         var x = this.clipRect.left.value + dx;
         var y = this.clipRect.top.value + dy;
 
@@ -191,14 +191,14 @@ export default class InsetEditor extends EditorElement {
             y = this.areaRect.height - clipHeight; 
         }        
 
-        var left = Length.px(x)
-        var top = Length.px(y)
+        var left = x
+        var top = y
 
         this.updateData({ 
-            top : top.toPercent(this.areaRect.height).round(100),
+            top : Length.px(top).toPercent(this.areaRect.height).round(100),
             bottom : Length.px(this.areaRect.height -  (y + clipHeight) ).toPercent(this.areaRect.height).round(100),
             right : Length.px(this.areaRect.width - (x + clipWidth)).toPercent(this.areaRect.width).round(100),
-            left : left.toPercent(this.areaRect.width).round(100) 
+            left : Length.px(left).toPercent(this.areaRect.width).round(100) 
         })
 
 
@@ -231,24 +231,24 @@ export default class InsetEditor extends EditorElement {
             y = this.areaRect.bottom; 
         }        
 
-        var left = Length.px(x - this.areaRect.x)
-        var top = Length.px(y - this.areaRect.y)
+        var left = x - this.areaRect.x
+        var top = y - this.areaRect.y
 
         if (this.type === 'top') {
             this.updateData({ 
-                top : top.toPercent(this.areaRect.height).round(100) 
+                top : Length.px(top).toPercent(this.areaRect.height).round(100) 
             })            
         } else if (this.type === 'bottom') {
             this.updateData({ 
-                bottom : Length.px(this.areaRect.height -  top.value).toPercent(this.areaRect.height).round(100) 
+                bottom : Length.px(this.areaRect.height -  top).toPercent(this.areaRect.height).round(100)
             })
         } else if (this.type === 'right') {
             this.updateData({ 
-                right : Length.px(this.areaRect.width - left.value).toPercent(this.areaRect.width).round(100) 
+                right : Length.px(this.areaRect.width - left).toPercent(this.areaRect.width).round(100)
             })                                    
         } else if (this.type === 'left') {
             this.updateData({ 
-                left : left.toPercent(this.areaRect.width).round(100) 
+                left : Length.px(left).toPercent(this.areaRect.width).round(100) 
             })
         }
 

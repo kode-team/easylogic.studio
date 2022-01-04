@@ -78,9 +78,12 @@ export default class SVGRender extends DomRender {
         return {
             ...this.toDefaultCSS(item),
             ...this.toKeyListCSS(item, [
-                'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray', 'stroke-dashoffset',
+                'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dashoffset',
                 'fill-opacity', 'fill-rule', 'text-anchor'
-            ])
+            ]),
+            ...{
+                'stroke-dasharray': item['stroke-dasharray']?.join(' '),
+            }
         }
     }
 
@@ -100,9 +103,9 @@ export default class SVGRender extends DomRender {
     data-id="${id}"
     x="${x.value}"
     y="${y.value}"
-    width="${width.value}"
-    height="${height.value}"
-    viewBox="0 0 ${width.value} ${height.value}"
+    width="${width}"
+    height="${height}"
+    viewBox="0 0 ${width} ${height}"
     overflow="visible"
 >
     ${this.toDefString(item)}
@@ -125,8 +128,8 @@ export default class SVGRender extends DomRender {
         return this.wrappedRender(item, ()=> {
             return /*html*/`
 <foreignObject 
-    width="${width.value}"
-    height="${height.value}"
+    width="${width}"
+    height="${height}"
     overflow="visible"
 >
     <${tagName} xmlns="http://www.w3.org/1999/xhtml" style="${CSS_TO_STRING(css)};width:100%;height:100%;"></${tagName}>

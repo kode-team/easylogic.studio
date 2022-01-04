@@ -18,7 +18,6 @@ export default class LanguageSelector extends EditorElement {
 
         return /*html*/`
             <div class='status-selector'>
-                <label>${this.$i18n('app.label.lang')}</label>
                 <div class='item'>
                     <object refClass="SelectEditor"  
                         ref='$locale' 

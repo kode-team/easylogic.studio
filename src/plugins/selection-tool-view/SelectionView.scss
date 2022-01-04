@@ -142,7 +142,6 @@
       color: var(--elf--selected-font-color);
       padding: 2px 4px;
       border-radius: 4px;
-      font-size: 12px;
       
       &[data-layout="grid"] {
         background-color: red;
@@ -295,7 +294,6 @@
         transition: opacity 0.3s linear;
         
         padding: 4px 10px;
-        font-size: 12px;
         pointer-events: none;
       }
   
@@ -330,7 +328,6 @@
         span {
           vertical-align: middle;
           color: var(--elf--selected-font-color);
-          font-size: 11px;
         }
   
       }

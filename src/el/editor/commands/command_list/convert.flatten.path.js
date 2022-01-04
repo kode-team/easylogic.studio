@@ -16,7 +16,7 @@ export default {
             parent = current.parent;
           }
 
-          newPath = parent.accumulatedPath(parent['boolean-path']);
+          newPath = parent.absolutePath(parent['boolean-path']);
           newPath = parent.invertPath(newPath.d);
 
           const newLayerAttrs = parent.layers[0].toCloneObject();
@@ -41,7 +41,7 @@ export default {
 
           newPath = PathParser.fromSVGString();
           editor.selection.each((item) => {
-            newPath.addPath(item.accumulatedPath());
+            newPath.addPath(item.absolutePath());
           });
     
           newPath = current.invertPath(newPath.d);

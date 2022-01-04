@@ -32,7 +32,7 @@ export default {
             } else {
                 const newPath = new PathParser(pathObject.d);
                     // 1. 로컬 좌표로 변환
-                    newPath.transformMat4(pathObject.matrix.accumulatedMatrixInverse);
+                    newPath.transformMat4(pathObject.matrix.absoluteMatrixInverse);
 
                 // 2. 로컬 좌표로 bbox 구하기 
                 let bbox = newPath.getBBox();
@@ -45,7 +45,7 @@ export default {
                 // 4. bbxo 를 월드 좌표로 변환 
                 let oldBBox = vertiesMap(
                     rectToVerties(bbox[0][0], bbox[0][1], newWidth, newHeight), 
-                    pathObject.matrix.accumulatedMatrix
+                    pathObject.matrix.absoluteMatrix
                 );
 
                 // 5. 월드 좌표에서 로컬 transform 의 역행렬을 적용, 월드 좌표에서 translate 를 구함 
@@ -79,10 +79,10 @@ export default {
                     // bbox 가 기존 좌표에서 움직인 상태 이기 때문에 
                     // bbox 시작점만큼 이동해서 newWidth, newHeight 기준으로 path 를 맞춘다. 
                     d: newPath.translate(-bbox[0][0], -bbox[0][1]).d,
-                    x: Length.px(realXY[0]),
-                    y: Length.px(realXY[1]),
-                    width: Length.px(newWidth),
-                    height: Length.px(newHeight)
+                    x: realXY[0],
+                    y: realXY[1],
+                    width: newWidth,
+                    height: newHeight
                 }))
             }
 

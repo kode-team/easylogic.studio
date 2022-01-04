@@ -52,17 +52,41 @@ export default {
                     box: 'canvas',
                     current,
                     matrix: current.matrix,
-                    d: current.accumulatedPath().d,
+                    d: current.absolutePath().d,
                     changeEvent: (data) => {
-                        editor.emit('updatePathItem', data);
+                        const newCurrent = editor.selection.current;
 
-                        editor.nextTick(() => {
-                            if (editor.isPointerUp) {
-                                // boolean path 의 조정이 끝나면 
-                                // box 를 재구성한다. 
-                                editor.emit('recoverBooleanPath');
-                            }
-                        })
+                        // .d 속성을 가진 것 중에 svg-path 가 아닌 것이 있는 상태로 변경되었을 경우
+                        // svg-path 로 바로 변환시켜준다. 
+                        if (newCurrent.isSVG() && newCurrent.isNot('svg-path')) {
+                            const newPathData = newCurrent.toSVGPath();
+                            const newPath = editor.createModel({
+                                itemType: 'svg-path',
+                                ...newPathData
+                            })
+
+                            editor.selection.select(newPath);
+
+                            newCurrent.appendAfter(newPath);
+
+                            editor.nextTick(() => {
+                                editor.emit("removeLayer", [newCurrent.id]);
+                                editor.emit('updatePathItem', data);
+                            })                            
+                        } else {
+                            editor.emit('updatePathItem', data);
+
+                            editor.nextTick(() => {
+                                if (editor.isPointerUp) {
+                                    // boolean path 의 조정이 끝나면 
+                                    // box 를 재구성한다. 
+                                    editor.emit('recoverBooleanPath');
+                                }
+                            })
+                        }
+
+
+
                     }
                 })
                 editor.emit('hideSelectionToolView');
@@ -70,7 +94,7 @@ export default {
                 var obj = ClipPath.parseStyle(current['clip-path'])
 
                 if (obj.type === 'path') {
-                    var d = current.accumulatedPath(current.clipPathString).d
+                    var d = current.absolutePath(current.clipPathString).d
                     var mode = d ? 'modify' : 'path'
 
                     editor.emit('showPathEditor', mode, {

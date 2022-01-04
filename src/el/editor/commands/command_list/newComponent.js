@@ -1,5 +1,4 @@
 import { EDIT_MODE_SELECTION } from "el/editor/manager/Editor";
-import { Length } from "el/editor/unit/Length";
 import PathParser from 'el/editor/parser/PathParser';
 
 /**
@@ -17,9 +16,9 @@ export default function newComponent (editor, itemType, obj, isSelected = true, 
     if (itemType === 'svg-textpath') {
         obj = {
             ...obj,
-            'font-size': Length.parse(obj.height),
+            'font-size': obj.height,
             textLength: '100%',
-            d: PathParser.makeLine(0, obj.height.value, obj.width.value, obj.height.value).d,
+            d: PathParser.makeLine(0, obj.height, obj.width, obj.height).d,
         }
     } else if (itemType === 'svg-circle') {
         itemType = 'svg-path';
@@ -27,7 +26,7 @@ export default function newComponent (editor, itemType, obj, isSelected = true, 
             ...obj,
             'background-color': undefined,            
             fill: `#C4C4C4`,            
-            d: PathParser.makeCircle(0, 0, obj.width.value, obj.height.value).d,
+            d: PathParser.makeCircle(0, 0, obj.width, obj.height).d,
         }        
 
     } else if (itemType === 'svg-rect') {
@@ -36,12 +35,12 @@ export default function newComponent (editor, itemType, obj, isSelected = true, 
             ...obj,
             'background-color': undefined,
             fill: `#C4C4C4`,            
-            d: PathParser.makeRect(0, 0, obj.width.value, obj.height.value).d,
+            d: PathParser.makeRect(0, 0, obj.width, obj.height).d,
         }             
     } else if (itemType === 'text') {
         obj = {
-            width: Length.px(300),
-            height: Length.px(50),            
+            width: 300,
+            height: 50,            
             ...obj,
         }        
     } else if (itemType === 'artboard') {

@@ -61,7 +61,7 @@ export function makeInterpolateLength(layer, property, startNumber, endNumber, r
         return rollbackRealAttributeValue(
             layer, 
             property, 
-            Length.px(realStartValue.value + (realEndValue.value - realStartValue.value) * rate), 
+            realStartValue.value + (realEndValue.value - realStartValue.value) * rate, 
             s.unit, 
             refType,
             refElement

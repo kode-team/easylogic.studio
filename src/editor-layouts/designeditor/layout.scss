@@ -1,6 +1,6 @@
 
 $pointer-color: #4075d6;
-$top-size: 50px;
+$top-size: 48px;
 $tool-size: 0px;
 $left-size: 340px;
 $left-layer-panel: 70px; 
@@ -12,8 +12,8 @@ $timeline-property-size: 270px;
 $timeline-header-size: 40px;
 $timeline-size: 300px;
 $show-timeline-animation: all 0.05s linear;
-$footer-height: 30px; 
-$status-bar-height: 30px;
+$footer-height: 0px; 
+$status-bar-height: 0px;
 // base 
 $range-thumb-width: 12px;
 $range-thumb-height: 12px;
@@ -22,9 +22,6 @@ $range-thumb-top: -5px;
 $range-thumb-border-radius: 20px; 
 
 .designeditor {
-  &[data-design-mode="design"] {
-
-  }
 
   &[data-design-mode="item"] {
     .layout-middle {
@@ -47,7 +44,7 @@ $range-thumb-border-radius: 20px;
 
   .layout-top {
     height: $top-size;
-    border-bottom: 1px solid var(--elf--border-color);
+    // border-bottom: 1px solid var(--elf--border-color);
     box-sizing: border-box;    
     z-index: 10000;
     position: absolute;
@@ -78,7 +75,7 @@ $range-thumb-border-radius: 20px;
       background-color: var(--elf--header-background-color);
       color: var(--elf--selected-font-color);
       box-sizing: border-box;
-      border-bottom: 1px solid var(--elf--border-color);
+      // border-bottom: 1px solid var(--elf--border-color);
     }
   
 
@@ -168,19 +165,12 @@ $range-thumb-border-radius: 20px;
       bottom: 0px;
       right: 0px;
       overflow: hidden;
-      // border-top: 1px solid var(--elf--border-color);
       background-color: var(--elf--background-color);
-      // transition: $show-timeline-animation;
       z-index: 10000;
 
       .footer-splitter {
         display: none;
       }
-
-      // .managed-tool {
-      //   background-color: var(--elf--background-color);
-      //   padding: 2px 0px;
-      // }
     }    
 
     .layout-left {
@@ -193,9 +183,8 @@ $range-thumb-border-radius: 20px;
       
       display: flex;
       flex-direction: column;
-      border-right: 1px solid var(--elf--border-color);
+      border-right: 1px solid var(--elf--layout-border-color);
       box-sizing: border-box;
-      // transition: bottom 0.05s linear;
     }
 
     .layout-right {
@@ -210,7 +199,7 @@ $range-thumb-border-radius: 20px;
       flex-direction: column;
       overflow: auto;
       // transition: bottom 0.05s linear;
-      border-left: 1px solid var(--elf--border-color);      
+      border-left: 1px solid var(--elf--layout-border-color);      
     }
 
     .layout-body {

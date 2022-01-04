@@ -18,17 +18,17 @@ export default function addArtBoard (editor, obj = {}, center = null) {
 
     var artboard = project.appendChild(editor.createModel({
         itemType: 'artboard',
-        x: Length.px(300),
-        y: Length.px(200),
-        width: Length.px(375),
-        height: Length.px(667),
+        x: 300,
+        y: 200,
+        width: 375,
+        height: 667,
         ...obj
     }))
 
     if (center) {
         artboard.reset({
-            x: Length.px(0),
-            y: Length.px(0),
+            x: 0,
+            y: 0,
         })
         artboard.moveByCenter(center);
     }

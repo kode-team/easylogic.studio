@@ -21,6 +21,7 @@ import BindHandler from "./handler/BindHandler";
 import { getVariable, hasVariable, recoverVariable, retriveElement, spreadVariable, variable } from "./functions/registElement";
 import { uuid } from "./functions/uuid";
 import { isObject } from 'el/sapa/functions/func';
+import CallbackHandler from "./handler/CallbackHandler";
 
 const REFERENCE_PROPERTY = "ref";
 const TEMP_DIV = Dom.create("div");
@@ -41,10 +42,15 @@ export default class EventMachine {
     this._bindings = [];
     this.id = uuid();    
     this.handlers = this.initializeHandler()
+    this._localTimestamp = 0;
 
     this.initializeProperty(opt, props);
 
     this.initComponents();
+  }
+
+  get _timestamp() {
+    return this._localTimestamp++;
   }
 
   /**
@@ -73,7 +79,8 @@ export default class EventMachine {
   initializeHandler () {
     return [
       new BindHandler(this),
-      new DomEventHandler(this)
+      new DomEventHandler(this),
+      new CallbackHandler(this)
     ]
   }
 
@@ -327,14 +334,17 @@ export default class EventMachine {
 
       // FIXME: svelte 컴포넌트를 어떻게 재로드 할지 고민해야함 
       instance = this.children[refName] 
+      instance.__timestamp = this._localTimestamp;
       instance._reload(props);
     } else {
       instance = this.createInstanceForComponent(component, $dom.$parent.el, props);
+      instance.__timestamp = this._localTimestamp;
 
       this.children[refName || instance.id] = instance;
 
       if (isFunction(instance.render)) {
         instance.render();
+
       } else {
         // NOOP
         // console.log(instance);
@@ -349,6 +359,7 @@ export default class EventMachine {
     } else if (instance.$el) {
       $dom.replace(instance.$el);     
     } else {
+      // EventMachine 의 renderTarget 또는 $el 이 없으면
       // renderTarget 과 유사하지만 appendTo 를 하지 않는다.
       $dom.remove();
     }
@@ -405,7 +416,7 @@ export default class EventMachine {
    * 
    * @return {object[]}
    */ 
-  parseComponentList($el) {
+   getComponentInfoList($el) {
 
     if (!$el) return [];
 
@@ -430,7 +441,7 @@ export default class EventMachine {
   parseComponent() {
     const $el = this.$el;
 
-    const componentList = this.parseComponentList($el);
+    const componentList = this.getComponentInfoList($el);
 
     componentList.forEach(comp => {
       if (comp.notUsed) {
@@ -440,9 +451,9 @@ export default class EventMachine {
       }  
     })
 
-    keyEach(this.children, (key, obj) => {
-      if (isFunction(obj?.clean) &&  obj.clean()) {
-        delete this.children[key]
+    keyEach(this.children, (key, child) => {
+      if (child.__timestamp !== this._localTimestamp) {
+        child.clean();
       }
     })
   }
@@ -471,6 +482,9 @@ export default class EventMachine {
   }
 
   _afterLoad () {
+
+    // timestamp 기록 
+    this._timestamp;
 
     this.runHandlers('initialize');
 

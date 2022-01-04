@@ -20,6 +20,7 @@
     "gl-matrix": "^3.3.0",
     "js-video-url-parser": "^0.4.3",
     "nurbs": "^1.1.1",
+    "open-color": "^1.9.1",
     "pathkit-wasm": "^0.7.0",
     "svg-arc-to-cubic-bezier": "^3.2.0",
     "yorkie-js-sdk": "^0.1.11"

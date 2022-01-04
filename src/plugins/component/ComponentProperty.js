@@ -71,7 +71,7 @@ export default class ComponentProperty extends BaseProperty {
     })
 
     return /*html*/`
-      <object refClass="ComponentEditor" inspector=${variable(inspector)} onchange="changeComponentProperty" />
+      <object refClass="ComponentEditor" ref="$comp" inspector=${variable(inspector)} onchange="changeComponentProperty" />
     `
   }
 

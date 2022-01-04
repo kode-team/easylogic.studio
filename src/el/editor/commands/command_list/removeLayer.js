@@ -3,11 +3,14 @@ export default {
     execute: function (editor, ids = undefined) {
 
         // console.log(removeLayer);
-        editor.selection.itemsByIds(ids || editor.selection.ids).forEach(item => {
+        const currentIds = ids || editor.selection.ids
+        const removedIds = []
+        editor.selection.itemsByIds(currentIds).forEach(item => {
+            removedIds.push(item.id)
             item.remove();
         })
 
-        editor.selection.empty();
+        editor.selection.removeById(removedIds);
 
         editor.nextTick(() => {
             editor.emit('refreshAll')

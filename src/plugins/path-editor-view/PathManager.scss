@@ -13,7 +13,6 @@
 
 
     button {
-      font-size: 13px;
       margin: 0 2px;
       text-decoration: underline;
       width: auto;
@@ -60,7 +59,6 @@
       border-radius: 4px;
 
       button {
-        font-size: 13px;
         margin: 0 2px;
         text-decoration: underline;
         vertical-align: middle;
@@ -139,10 +137,8 @@
           .fill-single-editor {
             display: inline-block;
             vertical-align: middle;
-            font-size: 16px;
 
             label {
-              font-size: 13px !important;
               vertical-align: middle;
             }
             .preview {

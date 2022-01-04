@@ -29,6 +29,7 @@ export default class GridLayoutItemEditor extends EditorElement {
                 <div class='label'><label>${this.$i18n('grid.layout.item.editor.direction')}</label></div>
                 <object refClass="SelectIconEditor" 
                     key='grid-direction'
+                    ref='$gridDirection'
                     value="${this.state['grid-direction'] || 'row'}"
                     options="${getDirectionOptions()}"
                     onchange='changeKeyValue'
@@ -38,6 +39,7 @@ export default class GridLayoutItemEditor extends EditorElement {
                 <div class='label'><label>${this.$i18n('grid.layout.item.editor.wrap')}</label></div>
                 <object refClass="SelectIconEditor" 
                     key='grid-wrap'
+                    ref='$grid-wrap'
                     value="${this.state['grid-wrap'] || 'wrap'}"
                     options="${getWrapOptions()}"
                     onchange='changeKeyValue'
@@ -47,6 +49,7 @@ export default class GridLayoutItemEditor extends EditorElement {
                 <div class='label'><label>${this.$i18n('grid.layout.item.editor.justify-content')}</label></div>
                 <object refClass="SelectIconEditor" 
                     key='justify-content'
+                    ref="$justifyContent"
                     value="${this.state['justify-content']}"
                     options="${getJustifyContentOptions()}"
                     onchange='changeKeyValue'
@@ -56,6 +59,7 @@ export default class GridLayoutItemEditor extends EditorElement {
                 <div class='label'><label>${this.$i18n('grid.layout.item.editor.align-items')}</label></div>
                 <object refClass="SelectIconEditor" 
                     key='align-items'
+                    ref='$alignItems'
                     value="${this.state['align-items']}"
                     options="${getAlignItemsOptions()}"
                     onchange='changeKeyValue'
@@ -65,6 +69,7 @@ export default class GridLayoutItemEditor extends EditorElement {
                 <div class='label'><label>${this.$i18n('grid.layout.item.editor.align-content')}</label></div>
                 <object refClass="SelectIconEditor" 
                     key='align-content'
+                    ref="$alignContent"
                     value="${this.state['align-content']}"
                     options="${getAlignContentOptions()}"
                     onchange='changeKeyValue'

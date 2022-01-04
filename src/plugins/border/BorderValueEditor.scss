@@ -26,14 +26,19 @@
 
 .elf--border-value-editor {
   display: grid;
-  grid-template-columns: 2fr 1fr 30px;
+  grid-template-columns: 1fr;
   grid-column-gap: 4px;
 
   label {
     text-align: left;
     vertical-align: middle;
     padding: 6px 4px 2px 0px;
-    
-    font-size: 11px;    
+
+  }
+
+  .editor-area {
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
   }
 }

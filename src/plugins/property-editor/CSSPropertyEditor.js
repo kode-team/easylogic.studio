@@ -77,7 +77,7 @@ export default class CSSPropertyEditor extends EditorElement {
         case 'opacity':
           return 1; 
         default: 
-          return Length.z();
+          return 0;
       }
   }
 

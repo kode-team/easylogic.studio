@@ -45,7 +45,7 @@ export default class DomRender extends ItemRender {
     paint.setStrokeWidth(borderWidth);
     paint.setAntiAlias(true);
 
-    const strokeRect = CanvasKit.XYWHRect(halfBorderWidth,halfBorderWidth,item.screenWidth.value-borderWidth,item.screenHeight.value-borderWidth)
+    const strokeRect = CanvasKit.XYWHRect(halfBorderWidth,halfBorderWidth,item.screenWidth-borderWidth,item.screenHeight-borderWidth)
 
     // console.log(stroke);
     canvas.drawRect(strokeRect, paint);    
@@ -81,7 +81,7 @@ export default class DomRender extends ItemRender {
     this.setTransform(canvas, item);
 
 
-    const backgroundRect = CanvasKit.XYWHRect(0,0,item.screenWidth.value,item.screenHeight.value)
+    const backgroundRect = CanvasKit.XYWHRect(0,0,item.screenWidth,item.screenHeight)
 
     canvas.drawRect(backgroundRect, this.toFillPaint(item, renderer));    
 
