@@ -5,6 +5,7 @@ import { Length } from "el/editor/unit/Length";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import "./PatternInfoPopup.scss";
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class PatternInfoPopup extends BasePopup {
 
@@ -55,68 +56,64 @@ export default class PatternInfoPopup extends BasePopup {
 
     if (this.state.type === 'diagonal-line') {
       label = this.$i18n('pattern.info.popup.rotate')
-      units = 'deg' 
+      units = ['deg']
     }
 
-    return /*html*/`
-      <div class=''>
-        <object refClass="InputRangeEditor"  
-            label="${label}"
-            ref="$x" 
-            key="x"
-            value="${this.state.x}"
-            min="0" max="1000" step="1"
-            units="${units}"
-            onchange="changeRangeEditor"
-        />
-      </div>
-    `;
+    return createComponent("InputRangeEditor", {  
+      label,
+      ref: "$x",
+      key: "x",
+      // compact: true,
+      value: this.state.x,
+      min: 0,
+      max: 1000,
+      step: 1,
+      units,
+      onchange: "changeRangeEditor"
+  });
   }
 
   templateForY() {
-    if (this.hasNotY()) return '';            
-    return /*html*/`
-      <div class=''>
-        <object refClass="InputRangeEditor"  
-            label="Y" 
-            ref="$y" 
-            key="y"
-            value="${this.state.y}"            
-            min="0" max="1000" step="1"
-            onchange="changeRangeEditor"
-        />
-      </div>
-    `;
+    if (this.hasNotY()) return '<div></div>';            
+    return createComponent("InputRangeEditor", {  
+        label: "Y",
+        ref: "$y",
+        key: "y",
+        // compact: true,
+        value: this.state.y,
+        min: 0,
+        max: 1000,
+        step: 1,
+        onchange: "changeRangeEditor"
+    });
   }
 
   templateForWidth() {
-
-    return /*html*/`
-    <div class=''>
-      <object refClass="InputRangeEditor"  
-          label="${this.$i18n('pattern.info.popup.width')}"   
-          ref="$width" 
-          key="width"
-          value="${this.state.width}"          
-          min="0" max="500" step="1" 
-          onchange="changeRangeEditor"
-      />
-    </div>
-    `;
+    return createComponent("InputRangeEditor"  , {
+      label: this.$i18n('pattern.info.popup.width'),
+      ref: "$width",
+      key: "width",
+      // compact: true,      
+      value: this.state.width,
+      min: 0,
+      max: 500,
+      step: 1,
+      onchange: "changeRangeEditor"
+});
   }
 
   templateForHeight() {
-    return /*html*/`
-    <div class=''>
-      <object refClass="InputRangeEditor"  
-          label="${this.$i18n('pattern.info.popup.height')}"
-          ref="$height" 
-          key="height"
-          value="${this.state.height}"          
-          min="0" max="500" step="1" onchange="changeRangeEditor"
-      />
-    </div>
-    `;
+    return createComponent("InputRangeEditor"  , {
+          label: this.$i18n('pattern.info.popup.height'),
+          ref: "$height",
+          // compact: true,          
+          key: "height",
+          value: this.state.height,
+          min: 0,
+          max: 500,
+          step: 1,
+          onchange: "changeRangeEditor"
+    });
   }
 
   hasNotLineWidth () {
@@ -137,61 +134,56 @@ export default class PatternInfoPopup extends BasePopup {
 
   templateForLineWidth() {
 
-    if (this.hasNotLineWidth()) return '';    
+    if (this.hasNotLineWidth()) return '<div></div>';    
 
-    return /*html*/`
-    <div class=''>
-      <object refClass="InputRangeEditor"  
-          label="${this.$i18n('pattern.info.popup.lineWidth')}"   
-          ref="$lineWidth" 
-          key="lineWidth"
-          value="${this.state.lineWidth}"          
-          min="0" max="500" step="1" 
-          onchange="changeRangeEditor"
-      />
-    </div>
-    `;
+    return createComponent("InputRangeEditor", {
+      label: this.$i18n('pattern.info.popup.lineWidth'),
+      ref: "$lineWidth",
+      key: "lineWidth",
+      value: this.state.lineWidth,
+      // compact: true,
+      min: 0,
+      max: 500,
+      step: 1,
+      onchange: "changeRangeEditor"
+})
   }
 
   templateForLineHeight() {
-    if (this.hasNotLineHeight()) return '';        
-    return /*html*/`
-    <div class=''>
-      <object refClass="InputRangeEditor"  
-          label="${this.$i18n('pattern.info.popup.lineHeight')}"
-          ref="$lineHeight" 
-          key="lineHeight"
-          value="${this.state.lineHeight}"          
-          min="0" max="500" step="1" onchange="changeRangeEditor"
-      />
-    </div>
-    `;
+    if (this.hasNotLineHeight()) return '<div></div>';        
+    return createComponent("InputRangeEditor", {
+          label: this.$i18n('pattern.info.popup.lineHeight'),
+          ref: "$lineHeight",
+          key: "lineHeight",
+          value: this.state.lineHeight,
+          // compact: true,
+          min: 0,
+          max: 500,
+          step: 1,
+          onchange: "changeRangeEditor"
+    })
   }  
 
   templateForForeColor() {
-    return /*html*/`
-      <div class=''>
-        <object refClass="ColorViewEditor" 
-            ref='$foreColor' 
-            label="${this.$i18n('pattern.info.popup.foreColor')}" 
-            key='foreColor' 
-            value="${this.state.foreColor}"
-            onchange="changeRangeEditor" />
-      </div>
-    `
+    return createComponent("ColorViewEditor" , {
+      ref: '$foreColor',
+      label: this.$i18n('pattern.info.popup.foreColor'),
+      key: 'foreColor',
+      compact: true,      
+      value: this.state.foreColor,
+      onchange: "changeRangeEditor"
+    })
   }
 
   templateForBackColor() {
-    return /*html*/`
-      <div class=''>
-        <object refClass="ColorViewEditor" 
-            ref='$backColor' 
-            label="${this.$i18n('pattern.info.popup.backColor')}" 
-            key='backColor'           
-            value="${this.state.backColor}"
-            onchange="changeRangeEditor" />
-      </div>
-    `
+    return createComponent("ColorViewEditor" , {
+      ref: '$backColor',
+      label: this.$i18n('pattern.info.popup.backColor'),
+      key: 'backColor',
+      compact: true,
+      value: this.state.backColor,
+      onchange: "changeRangeEditor"
+    })    
   }
 
 
@@ -220,19 +212,19 @@ export default class PatternInfoPopup extends BasePopup {
     return /*html*/`
       
       <div class='box'>
-          <div>
+          <div class='grid-2'>
             ${this.templateForWidth()}
             ${this.templateForHeight()}        
           </div>
-          <div>
+          <div class='grid-2'>
             ${this.templateForLineWidth()}
             ${this.templateForLineHeight()}                  
           </div>
-          <div>
+          <div class='grid-2'>
             ${this.templateForX()}
             ${this.templateForY()}
           </div>
-          <div>
+          <div class="grid-2">
             ${this.templateForForeColor()}
             ${this.templateForBackColor()}
           </div>
@@ -251,7 +243,7 @@ export default class PatternInfoPopup extends BasePopup {
 
     this.setState(data.data);
 
-    this.show(300);
+    this.show(400);
   }
 
 

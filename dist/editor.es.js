@@ -23666,7 +23666,7 @@ class HTMLRenderView extends EditorElement {
   refreshElementBoundSize(parentObj) {
     if (parentObj) {
       if (parentObj.hasChildren() === false) {
-        if (parentObj.hasChangedField("width", "height") === false) {
+        if (parentObj.hasChangedField("width", "height", "border") === false) {
           return;
         }
         var $el = this.getElement(parentObj.id);
@@ -27947,7 +27947,7 @@ class Border {
       } else if (Color.isColor(value)) {
         color2 = value;
       } else {
-        width2 = value;
+        width2 = Length.parse(value).value;
       }
     });
     return {
@@ -40010,64 +40010,57 @@ class PatternInfoPopup extends BasePopup {
     let units = "";
     if (this.state.type === "diagonal-line") {
       label = this.$i18n("pattern.info.popup.rotate");
-      units = "deg";
+      units = ["deg"];
     }
-    return `
-      <div class=''>
-        <object refClass="InputRangeEditor"  
-            label="${label}"
-            ref="$x" 
-            key="x"
-            value="${this.state.x}"
-            min="0" max="1000" step="1"
-            units="${units}"
-            onchange="changeRangeEditor"
-        />
-      </div>
-    `;
+    return createComponent("InputRangeEditor", {
+      label,
+      ref: "$x",
+      key: "x",
+      value: this.state.x,
+      min: 0,
+      max: 1e3,
+      step: 1,
+      units,
+      onchange: "changeRangeEditor"
+    });
   }
   templateForY() {
     if (this.hasNotY())
-      return "";
-    return `
-      <div class=''>
-        <object refClass="InputRangeEditor"  
-            label="Y" 
-            ref="$y" 
-            key="y"
-            value="${this.state.y}"            
-            min="0" max="1000" step="1"
-            onchange="changeRangeEditor"
-        />
-      </div>
-    `;
+      return "<div></div>";
+    return createComponent("InputRangeEditor", {
+      label: "Y",
+      ref: "$y",
+      key: "y",
+      value: this.state.y,
+      min: 0,
+      max: 1e3,
+      step: 1,
+      onchange: "changeRangeEditor"
+    });
   }
   templateForWidth() {
-    return `
-    <div class=''>
-      <object refClass="InputRangeEditor"  
-          label="${this.$i18n("pattern.info.popup.width")}"   
-          ref="$width" 
-          key="width"
-          value="${this.state.width}"          
-          min="0" max="500" step="1" 
-          onchange="changeRangeEditor"
-      />
-    </div>
-    `;
+    return createComponent("InputRangeEditor", {
+      label: this.$i18n("pattern.info.popup.width"),
+      ref: "$width",
+      key: "width",
+      value: this.state.width,
+      min: 0,
+      max: 500,
+      step: 1,
+      onchange: "changeRangeEditor"
+    });
   }
   templateForHeight() {
-    return `
-    <div class=''>
-      <object refClass="InputRangeEditor"  
-          label="${this.$i18n("pattern.info.popup.height")}"
-          ref="$height" 
-          key="height"
-          value="${this.state.height}"          
-          min="0" max="500" step="1" onchange="changeRangeEditor"
-      />
-    </div>
-    `;
+    return createComponent("InputRangeEditor", {
+      label: this.$i18n("pattern.info.popup.height"),
+      ref: "$height",
+      key: "height",
+      value: this.state.height,
+      min: 0,
+      max: 500,
+      step: 1,
+      onchange: "changeRangeEditor"
+    });
   }
   hasNotLineWidth() {
     return ["check"].includes(this.state.type);
@@ -40083,58 +40076,51 @@ class PatternInfoPopup extends BasePopup {
   }
   templateForLineWidth() {
     if (this.hasNotLineWidth())
-      return "";
-    return `
-    <div class=''>
-      <object refClass="InputRangeEditor"  
-          label="${this.$i18n("pattern.info.popup.lineWidth")}"   
-          ref="$lineWidth" 
-          key="lineWidth"
-          value="${this.state.lineWidth}"          
-          min="0" max="500" step="1" 
-          onchange="changeRangeEditor"
-      />
-    </div>
-    `;
+      return "<div></div>";
+    return createComponent("InputRangeEditor", {
+      label: this.$i18n("pattern.info.popup.lineWidth"),
+      ref: "$lineWidth",
+      key: "lineWidth",
+      value: this.state.lineWidth,
+      min: 0,
+      max: 500,
+      step: 1,
+      onchange: "changeRangeEditor"
+    });
   }
   templateForLineHeight() {
     if (this.hasNotLineHeight())
-      return "";
-    return `
-    <div class=''>
-      <object refClass="InputRangeEditor"  
-          label="${this.$i18n("pattern.info.popup.lineHeight")}"
-          ref="$lineHeight" 
-          key="lineHeight"
-          value="${this.state.lineHeight}"          
-          min="0" max="500" step="1" onchange="changeRangeEditor"
-      />
-    </div>
-    `;
+      return "<div></div>";
+    return createComponent("InputRangeEditor", {
+      label: this.$i18n("pattern.info.popup.lineHeight"),
+      ref: "$lineHeight",
+      key: "lineHeight",
+      value: this.state.lineHeight,
+      min: 0,
+      max: 500,
+      step: 1,
+      onchange: "changeRangeEditor"
+    });
   }
   templateForForeColor() {
-    return `
-      <div class=''>
-        <object refClass="ColorViewEditor" 
-            ref='$foreColor' 
-            label="${this.$i18n("pattern.info.popup.foreColor")}" 
-            key='foreColor' 
-            value="${this.state.foreColor}"
-            onchange="changeRangeEditor" />
-      </div>
-    `;
+    return createComponent("ColorViewEditor", {
+      ref: "$foreColor",
+      label: this.$i18n("pattern.info.popup.foreColor"),
+      key: "foreColor",
+      compact: true,
+      value: this.state.foreColor,
+      onchange: "changeRangeEditor"
+    });
   }
   templateForBackColor() {
-    return `
-      <div class=''>
-        <object refClass="ColorViewEditor" 
-            ref='$backColor' 
-            label="${this.$i18n("pattern.info.popup.backColor")}" 
-            key='backColor'           
-            value="${this.state.backColor}"
-            onchange="changeRangeEditor" />
-      </div>
-    `;
+    return createComponent("ColorViewEditor", {
+      ref: "$backColor",
+      label: this.$i18n("pattern.info.popup.backColor"),
+      key: "backColor",
+      compact: true,
+      value: this.state.backColor,
+      onchange: "changeRangeEditor"
+    });
   }
   templateForBlendMode() {
     return `
@@ -40158,19 +40144,19 @@ class PatternInfoPopup extends BasePopup {
     return `
       
       <div class='box'>
-          <div>
+          <div class='grid-2'>
             ${this.templateForWidth()}
             ${this.templateForHeight()}        
           </div>
-          <div>
+          <div class='grid-2'>
             ${this.templateForLineWidth()}
             ${this.templateForLineHeight()}                  
           </div>
-          <div>
+          <div class='grid-2'>
             ${this.templateForX()}
             ${this.templateForY()}
           </div>
-          <div>
+          <div class="grid-2">
             ${this.templateForForeColor()}
             ${this.templateForBackColor()}
           </div>
@@ -40185,7 +40171,7 @@ class PatternInfoPopup extends BasePopup {
     this.state.params = params;
     this.state.instance = data.instance;
     this.setState(data.data);
-    this.show(300);
+    this.show(400);
   }
 }
 var PatternProperty$1 = "";

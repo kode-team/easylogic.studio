@@ -32,10 +32,10 @@
         grid-template-columns: 70px 1fr;
 
         &.compact {
-            grid-template-columns: 70px 1fr;
+            grid-template-columns: 40px 1fr;
 
             .color-code {
-                grid-template-columns: 26px 1fr 30px;
+                grid-template-columns: 26px 1fr 40px;
             }
         }
 
