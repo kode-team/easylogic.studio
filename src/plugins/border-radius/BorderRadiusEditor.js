@@ -5,6 +5,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './BorderRadiusEditor.scss';
 import { variable } from 'el/sapa/functions/registElement';
+import { createComponent } from "el/sapa/functions/jsx";
 
 const typeList = [
   { key: "border-top-left-radius", title: "topLeft", label: 'TL' },
@@ -51,7 +52,7 @@ export default class BorderRadiusEditor extends EditorElement {
     return /*html*/`
       <div class="border-radius-item">
         <div class="radius-value">
-          <object refClass="InputRangeEditor" ${variable({
+          ${createComponent("InputRangeEditor", {
             label: iconUse('outline_rect'),
             ref: '$all',
             compact: "true",
@@ -59,7 +60,7 @@ export default class BorderRadiusEditor extends EditorElement {
             value: borderRadius,
             min: 0,
             onchange: 'changeBorderRadius'
-          })}  />
+          })}
         </div>
         <div></div>
 

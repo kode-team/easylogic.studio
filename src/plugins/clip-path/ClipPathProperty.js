@@ -7,15 +7,6 @@ import './ClipPathProperty.scss';
 import PathParser from "el/editor/parser/PathParser";
 import { vertiesToRectangle } from "el/utils/collision";
 
-var clipPathList = [
-  'circle',
-  'ellipse',
-  'inset',
-  'polygon',
-  'path',
-  'svg'
-];
-
 export default class ClipPathProperty extends BaseProperty {
   getTitle() {
     return this.$i18n('clippath.property.title');
@@ -42,11 +33,11 @@ export default class ClipPathProperty extends BaseProperty {
     return /*html*/`
       <div ref="$tools" class="add-tools">
         <button type="button" data-value='circle' data-tooltip="Circle">${iconUse('outline_circle')}</button>
-        <button type="button" data-value='ellipse' data-tooltip="Circle">${iconUse('outline_circle')}</button>
-        <button type="button" data-value='inset' data-tooltip="Circle">${iconUse('outline_rect')}</button>
-        <button type="button" data-value='polygon' data-tooltip="Circle">${iconUse('polygon')}</button>
-        <button type="button" data-value='path' data-tooltip="Circle">${iconUse('pentool')}</button>
-        <button type="button" data-value='svg' data-tooltip="Circle">${iconUse('image')}</button>
+        <button type="button" data-value='ellipse' data-tooltip="Ellipse">${iconUse('outline_circle')}</button>
+        <button type="button" data-value='inset' data-tooltip="Inset">${iconUse('outline_rect')}</button>
+        <button type="button" data-value='polygon' data-tooltip="Polygon">${iconUse('polygon')}</button>
+        <button type="button" data-value='path' data-tooltip="Path">${iconUse('pentool')}</button>
+        <button type="button" data-value='svg' data-tooltip="SVG">${iconUse('image')}</button>
       </div>
     `;
   }
@@ -78,6 +69,7 @@ export default class ClipPathProperty extends BaseProperty {
     return /*html*/`
       <div>
         <div class='clippath-item'>
+          <label>${iconUse('drag_indicator')}</label>
           <div class='title'>
             <div class='name'>${clippath}</div>
           </div>

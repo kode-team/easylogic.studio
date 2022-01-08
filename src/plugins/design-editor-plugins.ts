@@ -26,7 +26,6 @@ import depth from "./depth"
 import exportResource from "./export-resource"
 import filter from "./filter"
 import font from "./font"
-import fontSpacing from "./font-spacing"
 import gradient from "./gradient"
 import gradientAsset from "./gradient-asset"
 import history from "./history"
@@ -49,8 +48,6 @@ import svgFilterAsset from "./svg-filter-asset"
 import svgItem from "./svg-item"
 import svgText from "./svg-text"
 import text from "./text"
-import textClip from "./text-clip"
-import textFill from "./text-fill"
 import textShadow from "./text-shadow"
 // import timeline from "./timeline"
 import transform from "./transform"
@@ -98,23 +95,24 @@ export default [
     // layout 
     boxModel,
     pathTool,         
-    artboard,    
-    appearance,
-    // iframe,
-    component,
-    backgroundImage,
-    // border 
-    border,
-    borderRadius,
-
+    artboard,  
+    
+    // text
     svgText,
     font,
     text,
     textShadow,
-    fontSpacing,
     content,
-    textFill,
-    textClip,     
+    
+
+    appearance,
+    // iframe,
+    component,
+    backgroundImage,
+    patternAsset,    
+    // border 
+    border,
+    borderRadius,
 
 
     // resource    
@@ -128,7 +126,6 @@ export default [
 
 
 
-    patternAsset,
     svgFilterAsset,
 
     svgItem,

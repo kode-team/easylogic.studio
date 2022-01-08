@@ -10,7 +10,7 @@ export default class TextShadowEditor extends EditorElement {
   initState() {
 
     return {
-      hideLabel: this.props['hide-label'] === 'true' ? true : false, 
+      hideLabel: this.props.hideLabel === 'true' ? true : false, 
       selectedIndex: -1,
       textShadows: this.props.value
     }
@@ -22,12 +22,6 @@ export default class TextShadowEditor extends EditorElement {
 
     return /*html*/`
       <div class="elf--text-shadow-editor" >
-        <div class='label ${labelClass}' >
-            <label>${this.props.title||''}</label>        
-            <div class='tools'>
-              <button type="button" ref="$add" title="add Text Shadow">${icon.add}</button>
-            </div>
-        </div>
         <div class='text-shadow-list' ref='$shadowList'></div>
       </div>
     `;

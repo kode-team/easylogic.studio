@@ -4,6 +4,7 @@ import { LOAD, POINTERSTART, SUBSCRIBE } from "el/sapa/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 import { MOVE } from "el/editor/types/event";
 import './TextShadowPropertyPopup.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class TextShadowPropertyPopup extends BasePopup {
 
@@ -40,21 +41,44 @@ export default class TextShadowPropertyPopup extends BasePopup {
           ></div>
         </div>
         <div class='popup-item'>
-          <object refClass="RangeEditor"  ref='$offsetX' label='Offset X' key='offsetX' min="-100" max='100' value='${this.state.offsetX}' onchange='changeShadow' />
+          ${createComponent("RangeEditor", {
+            ref: '$offsetX',
+            label: 'Offset X',
+            key: 'offsetX',
+            min: -100,
+            max: 100,
+            value: this.state.offsetX,
+            onchange: 'changeShadow'
+          })}
         </div>
         <div class='popup-item'>
-          <object refClass="RangeEditor"  ref='$offsetY' label="Offset Y" key='offsetY' min="-100" max='100' value='${this.state.offsetY}' onchange='changeShadow' />
+          ${createComponent("RangeEditor", {
+            ref: '$offsetY',
+            label: 'Offset Y',
+            key: 'offsetY',
+            min: -100,
+            max: 100,
+            value: this.state.offsetY,
+            onchange: 'changeShadow'
+          })}        
         </div>
         <div class='popup-item'>
-          <object refClass="RangeEditor"  ref='$blurRadius' label="Blur Radius" key='blurRadius' value='${this.state.blurRadius}' onchange='changeShadow' />
+        ${createComponent("RangeEditor", {
+          ref: '$blurRadius',
+          label: 'Blur Radius',
+          key: 'blurRadius',
+          value: this.state.blurRadius,
+          onchange: 'changeShadow'
+        })}                
         </div>
         <div class='popup-item'>
-          <object refClass="ColorViewEditor" 
-              ref='$foreColor' 
-              label="color" 
-              key='color' 
-              value="${this.state.color}"
-              onchange="changeShadow" />
+          ${createComponent("ColorViewEditor", {
+            ref: '$foreColor',
+            label: "color", 
+            key: 'color', 
+            value: this.state.color,
+            onchange: 'changeShadow'
+          })}                
         </div>        
       </div>
     `;

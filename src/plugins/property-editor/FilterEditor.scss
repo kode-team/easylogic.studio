@@ -41,16 +41,22 @@
         margin-bottom: 5px;
       }
   
-      .title {
+      > .title {
         display: grid;
-        grid-template-columns: 70px 1fr 18px;
+        grid-template-columns: 20px 1fr 30px;
 
-        &.drop-shadow {
-          grid-template-columns: 1fr 18px;
+        > .sub-title {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
         }
   
-        label {
-          padding: 5px 0px;
+        > label {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          // padding: 5px 0px;
           cursor: move;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -60,30 +66,30 @@
 
         .svg-filter-edit {
           cursor: pointer;
-          line-height: 2.2;
-
-          // &:before {
-          //   content: 'o';
-          //   text-transform: uppercase;
-          //   padding: 0px 2px;
-          //   border-radius: 3px;
-          //   margin-right: 2px;
-          //   vertical-align: middle;
-          //   background-color: var(--elf--selected-color);
-          //   color: var(--elf--selected-font-color);
-          // }
         }
   
         .filter-menu {
           text-align: right;
           padding:4px 0px;
           box-sizing: border-box;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          &:hover {
+            background-color: var(--elf--input-inactive-color);
+          }
         }
+      }
+
+      .filter-ui-list {
+        padding-left: 20px;
+        pointer-events: all;
       }
   
       .filter-ui {
         vertical-align: middle;
-        margin-bottom: 5px;
+        // margin-bottom: 5px;
 
         label {
           color: var(--elf--font-color);

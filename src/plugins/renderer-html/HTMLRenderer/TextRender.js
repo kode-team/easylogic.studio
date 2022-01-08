@@ -1,5 +1,6 @@
 import Dom from "el/sapa/functions/Dom";
 import LayerRender from "./LayerRender";
+import { Overflow } from 'el/editor/types/model';
 
 export default class TextRender extends LayerRender {
 
@@ -12,6 +13,11 @@ export default class TextRender extends LayerRender {
         let css = super.toCSS(item)
 
         css.margin = css.margin || '0px'
+
+        if (item.overflow !== Overflow.SCROLL) {
+            css.height = 'auto'
+        }
+
 
         return css
     }

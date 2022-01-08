@@ -1,7 +1,6 @@
 import { vec3 } from "gl-matrix";
 
-import { BIND, POINTERSTART, IF, KEYUP, DOUBLECLICK, FOCUSOUT, SUBSCRIBE, CONFIG, DEBOUNCE, RAF, THROTTLE } from "el/sapa/Event";
-import { Length } from "el/editor/unit/Length";
+import { BIND, POINTERSTART, IF, KEYUP, DOUBLECLICK, FOCUSOUT, SUBSCRIBE, CONFIG, DEBOUNCE } from "el/sapa/Event";
 import Dom from "el/sapa/functions/Dom";
 import { isFunction } from "el/sapa/functions/func";
 import { KEY_CODE } from "el/editor/types/key";
@@ -10,6 +9,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import StyleView from "./StyleView";
 
 import './HTMLRenderView.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class HTMLRenderView extends EditorElement {
 
@@ -35,7 +35,7 @@ export default class HTMLRenderView extends EditorElement {
     template() {
         return /*html*/`
             <div class='elf--element-view' ref='$body'>
-                <object refClass='StyleView' ref='$styleView' />
+                ${createComponent('StyleView', { ref: '$styleView'})}
                 <div class='canvas-view' 
                         data-renderer-id='${this.$editor.EDITOR_ID}' 
                         ref='$view' 
@@ -207,12 +207,10 @@ export default class HTMLRenderView extends EditorElement {
 
             var $el = this.getElement(item.id);
 
-            const { x, y, width, height } = $el.offsetRect();
+            const { width, height } = $el.offsetRect();
             item.reset({
-                x: x,
-                y: y,
-                width: width,
-                height: height
+                width,
+                height
             })
 
             this.emit('refreshSelectionStyleView', item);
@@ -612,7 +610,13 @@ export default class HTMLRenderView extends EditorElement {
 
     
     refreshAllElementBoundSize() {
-        var selectionList = this.$selection.items.map(it => it.is('artboard') ? it : it.parent)
+        var selectionList = this.$selection.items.map(it => {
+            if (it.is('artboard')) {
+                return it; 
+            }
+
+            return it.parent;
+        })
 
         var list = [...new Set(selectionList)];
         list.forEach(it => {
@@ -624,7 +628,30 @@ export default class HTMLRenderView extends EditorElement {
     refreshElementBoundSize(parentObj) {
         if (parentObj) {
 
+            if (parentObj.hasChildren() === false) {
+                // 크기 변경이 없으면 bound size 를 수정하지 않는다. 
+                // 다른 레이아웃으로 들어가게 되면 크기의 변경이 있을 수도 있다. 
+                // 그 때는 레이아웃 기준으로 bound size 를 다시 잡을거라 괜찮다. 
+                if (parentObj.hasChangedField('width', 'height') === false) {
+                    return;
+                }
 
+                var $el = this.getElement(parentObj.id);                
+                const { x, y, width, height } = $el.offsetRect();
+
+                if (width > 0 && height > 0 ) {
+                    parentObj.reset({ x, y, width, height })
+
+                    // this.updateElement(parentObj, $el);
+                    this.emit('refreshSelectionStyleView', parentObj);                    
+                }
+
+
+                return;
+            }
+
+
+            // FIXME: text component 도 같이 업데이트 해준다.
             const hasChangedDimension = parentObj.changedLayout || parentObj.hasChangedField(
                 'children', 
                 'box-model', 
@@ -635,7 +662,10 @@ export default class HTMLRenderView extends EditorElement {
             parentObj.layers.forEach(it => {
                 var $el = this.getElement(it.id);
 
-                // layout item 만 rect 를 새롭게 갱신한다. x
+                // offset 크기를 정하는건 따로 정의를 해야할 듯 
+                // 매번 offsetRect 를 구하는건 비효율적이다.
+                // 하지만 레이아웃이 적용이 되어 있기 때문에 selection 표현을 위해서는 어쩔 수 없다. 
+                // 그럼 drag 하는 상태처럼 selection 을 드래그 하는 동안은 그냥 막을까? 
                 if ($el && (hasChangedDimension ||  it.isLayoutItem())) {
                     const { x, y, width, height } = $el.offsetRect();
 
@@ -646,7 +676,7 @@ export default class HTMLRenderView extends EditorElement {
     
                         this.refreshSelectionStyleView(it);
                         // if (this.$config.false('set.move.control.point')) {
-                        //     this.emit('refreshSelectionTool', true);
+                            // this.emit('refreshSelectionTool', true);
                         // }
                     }
 
@@ -657,10 +687,5 @@ export default class HTMLRenderView extends EditorElement {
             })
         }
     }
-
-    [RAF + THROTTLE(100)]() {
-        this.refreshAllElementBoundSize();
-    }
-
 
 }

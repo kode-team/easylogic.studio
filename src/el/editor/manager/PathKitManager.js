@@ -52,6 +52,7 @@ These are only needed for PathKit.FromCmds().
 
 import { Length } from 'el/editor/unit/Length';
 import PathParser from 'el/editor/parser/PathParser';
+import { isArray } from 'el/sapa/functions/func';
 
 export class PathKitManager {
   constructor(editor) {
@@ -159,8 +160,8 @@ export class PathKitManager {
     const pathObject = PathKit.FromSVGString(path);
 
 
-    if (opt['stroke-dasharray'] && opt['stroke-dasharray'].trim()) {
-      const arr = opt['stroke-dasharray'].trim().split(" ").map(it => +it)
+    if (isArray(opt['stroke-dasharray'])) {
+      const arr = opt['stroke-dasharray'];
 
       if (arr.length >= 2) {
         pathObject.dash(arr[0], arr[1], +(opt['stroke-dashoffset'] || 0))

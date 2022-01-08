@@ -2,7 +2,7 @@ import { LOAD, CHANGE, BIND } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './SelectEditor.scss';
-import { iconUse } from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import { BlendMode } from "el/editor/types/model";
 export default class SelectEditor extends EditorElement {
 
@@ -46,6 +46,10 @@ export default class SelectEditor extends EditorElement {
         var hasLabel = !!label ? 'has-label' : ''
         var hasTabIndex = !!tabIndex ? 'tabIndex="1"' : ''
         var compact = !!this.props.compact ? 'compact': '';
+
+        if (icon[label]) {
+            label = iconUse(label);
+        }
         
         return /*html*/`
             <div class='elf--select-editor ${hasLabel} ${compact}'>

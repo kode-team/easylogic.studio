@@ -565,7 +565,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.emit('setAttributeForMulti', this.$selection.pack('x', 'y', 'width', 'height', 'resizingHorizontal', 'resizingVertical'));
         this.nextTick(() => {
             this.emit('refreshSelection');
-            this.emit('refreshAllElementBoundSize')
+            // this.emit('refreshAllElementBoundSize')
         })
 
         this.state.dragging = true;

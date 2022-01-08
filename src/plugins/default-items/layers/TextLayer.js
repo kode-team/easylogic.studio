@@ -4,9 +4,9 @@ import { LayerModel } from "el/editor/model/LayerModel";
 
 export class TextLayer extends LayerModel {
 
-  getIcon () {
+  getIcon() {
     return icon.title;
-  }  
+  }
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       itemType: 'text',
@@ -17,12 +17,12 @@ export class TextLayer extends LayerModel {
     });
   }
   enableHasChildren() {
-    return false; 
+    return false;
   }
 
   getDefaultTitle() {
     return "Text";
-  } 
+  }
 
   toCloneObject() {
     return {
@@ -35,6 +35,14 @@ export class TextLayer extends LayerModel {
   editable(editablePropertyName) {
 
     switch (editablePropertyName) {
+      case 'svg-item':
+      case 'box-shadow':
+      case 'transform':
+      case 'transform-origin':
+      case 'perspective':
+      case 'perspective-origin':
+      case 'layout':
+        return false;      
       case "font":
       case "font-spacing":
       case "text-style":
@@ -43,19 +51,12 @@ export class TextLayer extends LayerModel {
       case 'text-clip':
       case 'background-image':
       case 'box-model':
-        return true;
-      case 'svg-item':
       case 'border':
       case 'border-radius':
       case 'backdrop-filter':
       case 'background-image':
       case 'pattern':
-      case 'box-shadow':
-      case 'transform':
-      case 'transform-origin':
-      case 'perspective':
-      case 'perspective-origin':
-        return false;
+        return true;
     }
 
     return super.editable(editablePropertyName);

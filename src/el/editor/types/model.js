@@ -170,3 +170,8 @@ export const ResizingMode = {
     HUG_CONTENT: "hug-content",             // width, height 설정을 fit-content 로 맞춘다. 또는 적용하지 않는다. (default)
     FILL_CONTAINER: "fill-container",       // flex-grow: 1 설정으로 고정 
 }
+
+export const TextClip = {
+    NONE: "none",
+    TEXT: "text"
+}

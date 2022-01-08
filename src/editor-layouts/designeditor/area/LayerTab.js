@@ -7,6 +7,8 @@ import ObjectItems from "./object-list/ObjectItems";
 import CustomAssets from "./object-list/CustomAssets";
 import LibraryItems from "./object-list/LibraryItems";
 import AssetItems from "./object-list/AssetItems";
+import { createComponent } from "el/sapa/functions/jsx";
+
 
 
 
@@ -73,23 +75,23 @@ export default class LayerTab extends EditorElement {
           </div>
           <div class="tab-body" ref="$body">
             <div class="tab-content selected" data-value="2">
-              <object refClass="ObjectItems" />
+              ${createComponent("ObjectItems")}
             </div>
             <div class='tab-content' data-value='3'>
-              <object refClass="LibraryItems" />
+              ${createComponent("LibraryItems")}
             </div>            
             <div class='tab-content' data-value='5'>
-              <object refClass="AssetItems" />            
+              ${createComponent("AssetItems")}            
               <div class='assets'>
-                <object refClass="GradientAssetsProperty" />    
-                <object refClass="PatternAssetsProperty" />    
-                <object refClass="ImageAssetsProperty" />      
-                <object refClass="VideoAssetsProperty" />       
-                <object refClass="SVGFilterAssetsProperty" />                
+                ${createComponent("GradientAssetsProperty")}
+                ${createComponent("PatternAssetsProperty")}
+                ${createComponent("ImageAssetsProperty")}
+                ${createComponent("VideoAssetsProperty")}
+                ${/*createComponent("SVGFilterAssetsProperty")*/""}
               </div>
             </div>
             <div class='tab-content' data-value='6'>
-              <object refClass="CustomAssets" />
+              ${createComponent("CustomAssets")}
             </div>
             ${this.$injectManager.getTargetMenuItems('leftbar.tab').map(it => {
               const { value } = it.class;

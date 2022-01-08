@@ -68,8 +68,9 @@
             line-height: 2;
             cursor: ew-resize;
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
+            padding-left: 4px;
 
             svg {
                 width: 24px;
@@ -118,6 +119,7 @@
 
             input,select {
                 width: 100%;
+                font-size: 11px;
             }
 
             input[type=number] {        

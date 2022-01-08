@@ -6,6 +6,7 @@ import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import './SVGFilterPopup.scss';
 import { variable } from "el/sapa/functions/registElement";
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class SVGFilterPopup extends BasePopup {
 
@@ -22,13 +23,13 @@ export default class SVGFilterPopup extends BasePopup {
     return {
       changeEvent: 'changeSVGFilterPopup',
       id: '',
-      preview: true, 
+      preview: true,
       filters: []
     };
   }
 
   updateData(opt) {
-    this.setState(opt, false); 
+    this.setState(opt, false);
     this.emit(this.state.changeEvent, this.state);
   }
 
@@ -41,31 +42,28 @@ export default class SVGFilterPopup extends BasePopup {
     </div>`;
   }
 
-  [LOAD('$editor')] () {
+  [LOAD('$editor')]() {
 
-    return /*html*/`
-      <object refClass="SVGFilterEditor" 
-        ref='$filter' 
-        title='Filter Type' 
-        key="filter" 
-        value="${variable(this.state.filters)}"
-        onchange=${this.subscribe((key, filters) => {
-            this.updateData({
-              filters
-            })
-          })
-        } 
-      />
-    `
+    return createComponent("SVGFilterEditor", {
+      ref: '$filter',
+      title: 'Filter Type',
+      key: "filter",
+      value: this.state.filters,
+      onchange: (key, filters) => {
+        this.updateData({
+          filters
+        })
+      }
+    })
 
   }
-  
+
   [SUBSCRIBE("showSVGFilterPopup")](data) {
-    data.filters = data.filters.map( it => {
+    data.filters = data.filters.map(it => {
       return SVGFilter.parse(it);
     })
 
-    data.preview = isNotUndefined(data.preview) ? data.preview : true; 
+    data.preview = isNotUndefined(data.preview) ? data.preview : true;
 
     this.setState(data);
 

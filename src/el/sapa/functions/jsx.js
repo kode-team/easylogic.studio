@@ -1,4 +1,4 @@
-import { isBoolean, isNotUndefined, isObject, isUndefined } from './func';
+import { isArray, isBoolean, isNotUndefined, isObject, isString, isUndefined } from './func';
 import { registElement, variable } from './registElement';
 
 
@@ -47,10 +47,46 @@ function OBJECT_TO_CLASS(obj) {
     }).join(' ');
 }
 
+export function createComponent(ComponentName, props = {}, children = []) {
+    // 모든 children 을 하나로 모은다. 
+    children = children.flat(Infinity).join('');
+    
+    const targetVariable = Object.keys(props).length ? variable(props) : "";
+
+    return /*html*/`<object refClass="${ComponentName}" ${targetVariable}>${children}</object>`;
+}
+
+export function createComponentList (...args) {
+    return args.map(it => {
+        let ComponentName;
+        let props = {}
+        let children = []
+        if (isString(it)) {
+            ComponentName = it;
+        } else if (isArray(it)) {
+            [ComponentName, props = {}, children = []] = it;
+        }
+
+        if (children.length) {
+            return createComponent(ComponentName, props, createComponentList(children));
+        }
+
+        return createComponent(ComponentName, props);
+
+    }).join('\n');
+}
+
+export function createElement(Component, props, children = []) {
+    // 모든 children 을 하나로 모은다. 
+    children = children.flat(Infinity);
+
+    return /*html*/`<${Component} ${OBJECT_TO_PROPERTY(props)}>${children.join(' ')}</${Component}>`;
+}
+
 export function createElementJsx (Component, props, ...children) {
 
     // 모든 children 을 하나로 모은다. 
-    children = children.flat(Infinity).join('');
+    children = children.flat(Infinity);
 
     if (typeof Component !== 'string') {
         const ComponentName = Component.name;
@@ -58,9 +94,10 @@ export function createElementJsx (Component, props, ...children) {
             [ComponentName]: Component
         })
 
-        return /*html*/`<object refClass="${ComponentName}" ${variable(props)}>${children}</object>`;
+        return createComponent(ComponentName, props, children);
     } else {
-        return /*html*/`<${Component} ${OBJECT_TO_PROPERTY(props)}>${children}</${Component}>`;
+        return createElement(Component, props, children)
+
     }
 
 

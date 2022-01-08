@@ -2,10 +2,10 @@
 import { CLICK, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
-import { Length } from "el/editor/unit/Length";
-
 import './BackgroundImagePositionPopup.scss';
 import { variable } from 'el/sapa/functions/registElement';
+import { createComponent } from "el/sapa/functions/jsx";
+
 
 export default class BackgroundImagePositionPopup extends BasePopup {
 
@@ -35,14 +35,15 @@ export default class BackgroundImagePositionPopup extends BasePopup {
  
   templateForSize() {
     return /*html*/`
-      <div class=''>
-        <object refClass="SelectEditor"  
-          label="${this.$i18n('background.image.position.popup.size')}" 
-          ref='$size' 
-          key='size' 
-          value="${this.state.size}" 
-          options=${variable(["contain","cover","auto" ])}
-          onchange="changeRangeEditor" />      
+      <div>
+        ${createComponent("SelectEditor", {
+          label: this.$i18n('background.image.position.popup.size'),
+          ref: '$size',
+          key: 'size',
+          value: this.state.size,
+          options: ["contain","cover","auto" ],
+          onchange: "changeRangeEditor"
+        })}
       </div>
     `;
   }
@@ -53,31 +54,37 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
   templateForX() {
     return /*html*/`
-      <div class=''>
-        <object refClass="InputRangeEditor"  
-            label="X"
-            compact="true"          
-            ref="$x" 
-            key="x"
-            value="${this.state.x}"
-            min="-1000" max="1000" step="1"
-            onchange="changeRangeEditor"
-        />
+      <div>
+        ${createComponent("InputRangeEditor", {
+          label: "X",
+          compact: true,
+          ref: "$x",
+          key: "x",
+          value: this.state.x,
+          min: -1000,
+          max: 1000,
+          step: 1,
+          onchange: "changeRangeEditor"
+        })}
       </div>
     `;
   }
 
   templateForY() {
     return /*html*/`
-      <div class=''>
-        <object refClass="InputRangeEditor"  
-            label="Y" 
-            compact="true"          
-            ref="$y" 
-            key="y"
-            value="${this.state.y}"            
-            min="-1000" max="1000" step="1"
-            onchange="changeRangeEditor"
+      <div >
+        <object refClass="InputRangeEditor" ${variable({
+          label: "Y",
+          compact: true,
+          ref: "$y",
+          key: "y",
+          value: this.state.y,
+          min: -1000,
+          max: 1000,
+          step: 1,
+          onchange: "changeRangeEditor"
+        })}  
+          
         />
       </div>
     `;
@@ -85,15 +92,19 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
   templateForWidth() {
     return /*html*/`
-    <div class=''>
-      <object refClass="InputRangeEditor"  
-          label="W"
-          compact="true"          
-          ref="$width" 
-          key="width"
-          value="${this.state.width}"          
-          min="0" max="500" step="1" 
-          onchange="changeRangeEditor"
+    <div >
+      <object refClass="InputRangeEditor" ${variable({
+        label: "W",
+        compact: true,
+        ref: "$width",
+        key: "width",
+        value: this.state.width,
+        min:0,
+        max: 500,
+        step: 1,
+        onchange: "changeRangeEditor"
+      })} 
+        
       />
     </div>
     `;
@@ -101,14 +112,19 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
   templateForHeight() {
     return /*html*/`
-    <div class=''>
-      <object refClass="InputRangeEditor"  
-          label="H"
-          compact="true"          
-          ref="$height" 
-          key="height"
-          value="${this.state.height}"          
-          min="0" max="500" step="1" onchange="changeRangeEditor"
+    <div >
+      <object refClass="InputRangeEditor" ${variable({
+        label: "H",
+        compact: true,
+        ref: "$height",
+        key: "height",
+        value: this.state.height,
+        min:0, 
+        max:500,
+        step: 1,
+        onchange: "changeRangeEditor"
+      })} 
+
       />
     </div>
     `;

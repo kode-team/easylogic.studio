@@ -1,6 +1,7 @@
 .elf--select-icon-editor {
     border: 1px solid transparent;
     height: var(--elf--input-height);
+    display: grid;
 
     &:hover {
         border-color: var(--elf--input-border-color);

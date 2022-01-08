@@ -7,9 +7,6 @@ import { isFunction, isNotUndefined, isUndefined } from "el/sapa/functions/func"
 import PathParser from "el/editor/parser/PathParser";
 import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties, toRectVerties } from "el/utils/collision";
 import { BaseAssetModel } from './BaseAssetModel';
-import { Constraints, ConstraintsDirection } from "../types/model";
-
-
 
 const ZERO = 0
 export class MovableModel extends BaseAssetModel {

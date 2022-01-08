@@ -10,6 +10,8 @@ import { END, MOVE } from "el/editor/types/event";
 
 import './GradientEditor.scss';
 import { variable } from 'el/sapa/functions/registElement';
+import { createComponent } from "el/sapa/functions/jsx";
+
 
 var radialTypeList = [
   'circle',
@@ -124,11 +126,24 @@ export default class GradientEditor extends EditorElement  {
                 <label for='gradientConnected${this.id}'>Connected <input type='checkbox'  id='gradientConnected${this.id}' ref='$cut' checked /></label>
             </div>            
             <div class='tools' data-editor='tools'>
-              <object refClass='InputRangeEditor' label="Offset" ref='$range' calc="false" key='length' onchange='changeColorStepOffset' />
+                ${createComponent('InputRangeEditor', {
+                  label: "Offset",
+                  ref: '$range',
+                  key: 'length',
+                  onchange: 'changeColorStepOffset' 
+                })}
             </div>
             <div class='sub-editor' ref='$subEditor'> 
               <div data-editor='angle'>
-                <object refClass="InputRangeEditor" label='Angle' ref='$angle' calc="false" units="deg" min="-720" max="720" key='angle' onchange='changeKeyValue' />
+                ${createComponent("InputRangeEditor",  {
+                  label: 'Angle',
+                  ref: '$angle',
+                  units: "deg",
+                   min: -720,
+                   max: 720,
+                   key: 'angle',
+                   onchange: 'changeKeyValue' 
+                })}
               </div>
               <div data-editor='centerX'>
                 <object refClass="RangeEditor" label='Center X' ref='$radialPositionX' calc="false" value="50%"  key='radialPositionX' onchange='changeKeyValue' />

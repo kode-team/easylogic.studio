@@ -12,7 +12,7 @@ export default class PatternEditor extends EditorElement {
 
     initState() {
         return {
-            hideLabel: this.props['hide-label'] === 'true' ? true: false,
+            hideLabel: this.props.hideLabel,
             value: this.props.value, 
             patterns : this.parsePattern(this.props.value)
         }
@@ -33,12 +33,6 @@ export default class PatternEditor extends EditorElement {
         var labelClass = this.state.hideLabel ? 'hide' : '';
         return /*html*/`
             <div class='elf--pattern-editor' >
-                <div class='label ${labelClass}'>
-                    <label>${this.props.title||''}</label>
-                    <div class='tools'>
-                        <button type="button" ref='$add'>${icon.add} ${this.props.title ? '' : 'Add'}</button>
-                    </div>
-                </div>
                 <div class='pattern-list' ref='$patternList'></div>
             </div>
         `

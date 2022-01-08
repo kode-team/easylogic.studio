@@ -16,13 +16,14 @@ export default function (editor) {
                 return [
                     {
                       type: 'column', 
-                      size: [3, 1],
+                      size: [2, 1],
                       columns: [
                         {
                           key: 'background-color',
                           editor: 'color-view',
                           editorOptions: {
                             compact: true,
+                            format: true,
                           },
                           defaultValue: current['background-color']        
                         },
@@ -30,6 +31,7 @@ export default function (editor) {
                           key: 'mix-blend-mode',
                           editor: 'blend-select',
                           editorOptions: {
+                            label: 'tonality',
                             compact: true,
                           },
                           defaultValue: current['mix-blend-mode']

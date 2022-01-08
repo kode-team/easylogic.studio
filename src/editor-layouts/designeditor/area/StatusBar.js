@@ -7,6 +7,7 @@ import LayoutSelector from "./status-bar/LayoutSelector";
 import VersionView from "./status-bar/VersionView";
 
 import './StatusBar.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class StatusBar extends EditorElement {
 
@@ -26,9 +27,8 @@ export default class StatusBar extends EditorElement {
                 <div class='message-view' ref='$msg'></div>
                 <div class='tool-view right' ref='$rightTool'>
                     ${this.$injectManager.generate('statusbar.right')}
-                    <object refClass="LayoutSelector" />
-                    <object refClass="LanguageSelector" />
-                    <object refClass="VersionView" />
+                    ${createComponent("LayoutSelector")}
+                    ${createComponent("VersionView")}
                 </div>
             </div>
         `

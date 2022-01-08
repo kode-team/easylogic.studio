@@ -12,7 +12,6 @@ export default class SVGRender extends DomRender {
             overflow: 'visible',
             ...this.toKeyListCSS(item, [
                 'font-size', 
-                'font-stretch', 
                 'line-height', 
                 'font-weight', 
                 'font-family', 

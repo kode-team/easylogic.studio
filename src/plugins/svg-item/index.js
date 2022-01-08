@@ -26,6 +26,7 @@ export default function (editor) {
     SVGItemProperty: ObjectProperty.create({
       title: editor.$i18n('svg.item.property.title'),
       editableProperty: 'svg-item',
+      preventUpdate: true     // 마우스를 드래그 하는 동안은 업데이트 하지 않음. 
     })
   })
 

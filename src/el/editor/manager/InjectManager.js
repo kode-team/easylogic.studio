@@ -1,3 +1,5 @@
+import { createComponent } from "el/sapa/functions/jsx";
+
 export class InjectManager {
   constructor(editor) {
     this.editor = editor;
@@ -37,10 +39,13 @@ export class InjectManager {
    */
   generate(target, hasRef = false) {
     return this.getTargetMenuItems(target).map(it => {
+      const props = {}
 
-      const refString = hasRef ? `ref="$${it.refClass}"` : "";
+      if (hasRef) {
+        props.ref = `$${it.refClass}`
+      }
 
-      return /*html*/`<object refClass="${it.refClass}" ${refString} />`
+      return createComponent(it.refClass, props);
     }).join('\n')
   }
 };

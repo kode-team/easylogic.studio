@@ -1,14 +1,10 @@
 .elf--property {
-    // padding: 5px 10px;
+    --property-order: 1000;
     border-bottom: 1px solid var(--elf--property-border-color);  
-    // background-color: var(--elf--property-background-color);
-    // margin: 0px 5px;
-    // border-radius: 4px;
-    // color: var(--elf--font-color); 
     display: none; 
     box-shadow: 0 0 2px 0 rgba(255, 255, 255, 0.001);
     margin-bottom: 4px;
-  
+    order: var(--property-order);  
   
     &:first-child { 
       border-top: 0px;
@@ -25,7 +21,6 @@
   
       .property-title {
         flex: none; 
-        // height: 30px;
       }
   
       .property-body {

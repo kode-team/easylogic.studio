@@ -10,3 +10,10 @@ export const EditingMode = {
     DRAW: 'draw',
     PATH: 'path',
 }
+
+export const DesignMode = {
+    EDIT: 'edit',
+    PREVIEW: 'preview',
+    DESIGN: 'design',
+    ITEM: 'item',
+}

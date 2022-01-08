@@ -18,6 +18,7 @@
   .grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    column-gap: 10px;
 
     label {
       padding-right: 2px;

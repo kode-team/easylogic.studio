@@ -1,24 +1,23 @@
 import { Length } from "el/editor/unit/Length";
-import { POINTERSTART, LOAD, CLICK, BIND, PREVENT, ALT } from "el/sapa/Event";
+import { POINTERSTART, LOAD, CLICK, BIND, PREVENT, ALT, SHIFT } from "el/sapa/Event";
 import Dom from "el/sapa/functions/Dom";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { MOVE } from "el/editor/types/event";
+import { createComponent } from "el/sapa/functions/jsx";
+import polygon from "el/editor/preset/clip-path/polygon";
 
 
 export default class PolygonEditor extends EditorElement {
 
     parseValue (str = '') {
 
-        var maxWidth = 220;
-        var maxHeight = 220;
-
         return str.split(',').filter(it => it.trim()).map(it => {
            var [x, y] = it.trim().split(' ')
 
            return { 
-               x: Length.parse(x).toPx(maxWidth), 
-               y: Length.parse(y).toPx(maxHeight) 
+               x: Length.parse(x), 
+               y: Length.parse(y) 
             }
         })
     }
@@ -31,34 +30,30 @@ export default class PolygonEditor extends EditorElement {
 
     template() {
 
+        const polygonList = polygon.execute();
+
         return /*html*/`
         <div class='clip-path-editor polygon-editor'>
+            ${createComponent('SelectEditor', {
+                ref: '$polygonSelect',
+                options: ['', ...polygonList.map(it => it.name)],
+                onchange: (key, value) => {
+
+                    const polygon = polygonList.find(it => it.name === value)
+
+                    if (polygon) {
+                        this.updateData({ value: this.parseValue(polygon.polygon) });
+                        this.refresh();
+                    }
+
+                }
+            })}
             <div class='drag-area' ref='$area'>
                 <div class='pointer-list' ref='$list'></div>
                 <div class='clip-area polygon' ref='$clipArea'></div>            
             </div>
-            <div class='pointer-input' ref='$inputList'></div>
         </div>
     `
-    }
-    
-    [LOAD('$inputList')] () {
-        return this.state.value.map( (it, index) => {
-            return /*html*/`
-            <div class='pointer-item' data-index="${index}">
-                <div class='input-item'>
-                    <label>X</label><input type='number' class='x' value="${it.x.value.toString()}" /><span>%</span>
-                </div>
-                <div class='input-item'>
-                    <label>Y</label><input type='number' class='y' value="${it.y.value.toString()}" /><span>%</span>
-                </div>
-                <div class='tools'>
-                    <button type="button" class='copy' data-index="${index}">${icon.copy}</button>
-                    <button type="button" class='remove' data-index="${index}">${icon.remove2}</button>
-                </div>
-            </div>
-            `
-        })
     }
 
     [CLICK('$area') + PREVENT] (e) {
@@ -69,30 +64,14 @@ export default class PolygonEditor extends EditorElement {
             var {x, y}  = e.xy; 
     
             this.appendValue({
-                x: x - this.areaRect.left,
-                y: y - this.areaRect.top
+                x: Length.px(x - this.areaRect.left).toPercent(this.areaRect.width),
+                y: Length.px(y - this.areaRect.top).toPercent(this.areaRect.height)
             })
     
             this.refresh();
         }
 
     }
-
-    [CLICK('$inputList .pointer-item .remove')] (e) {
-        var index = +e.$dt.attr('data-index')
-
-        this.removeValue(index);
-
-        this.refresh()
-    }
-
-    [CLICK('$inputList .pointer-item .copy')] (e) {
-        var index = +e.$dt.attr('data-index')
-
-        this.copyValue(index);
-
-        this.refresh()
-    }    
 
     [BIND('$clipArea')] () {
         return {
@@ -122,6 +101,14 @@ export default class PolygonEditor extends EditorElement {
         this.refresh();
     }
 
+    [CLICK('$area .drag-pointer') + SHIFT + PREVENT] (e) {
+        var index = +e.$dt.attr('data-index');
+
+        this.copyValue(index);
+
+        this.refresh();
+    }    
+
     [POINTERSTART('$area .drag-pointer') + MOVE()] (e) {
 
         this.selectedIndex = +e.$dt.attr('data-index');
@@ -130,10 +117,6 @@ export default class PolygonEditor extends EditorElement {
         this.startXY = e.xy; 
         
         this.$value = this.state.value[this.selectedIndex]
-
-        var $inputList = this.refs.$inputList;
-        this.$x = $inputList.$(`.pointer-item[data-index="${this.selectedIndex}"] input.x`)
-        this.$y = $inputList.$(`.pointer-item[data-index="${this.selectedIndex}"] input.y`)
     }
 
     move (dx, dy) {
@@ -152,8 +135,8 @@ export default class PolygonEditor extends EditorElement {
             y = this.areaRect.bottom; 
         }        
 
-        var left = x - this.areaRect.x
-        var top = y - this.areaRect.y
+        var left = Length.percent((x - this.areaRect.x) / this.areaRect.width * 100)
+        var top = Length.percent((y - this.areaRect.y) / this.areaRect.height * 100)
 
         this.$target.css({
             left, top 
@@ -165,22 +148,12 @@ export default class PolygonEditor extends EditorElement {
         })
 
 
-        var maxWidth = 220;
-        var maxHeight = 220;
-
-        this.$x.val(left.toPercent(maxWidth).round(10).value)
-        this.$y.val(top.toPercent(maxHeight).round(10).value)
-
         this.bindData('$clipArea')
     }
 
     toClipPathValueString () {
-
-        var maxWidth = 220;
-        var maxHeight = 220;
-
         return this.state.value.map(it => {
-            return `${it.x.toPercent(maxWidth).round(10)} ${it.y.toPercent(maxHeight).round(10)}`
+            return `${it.x.round(10)} ${it.y.round(10)}`
         }).join(',');
     }
 
@@ -205,8 +178,8 @@ export default class PolygonEditor extends EditorElement {
         var {x, y}= this.state.value[index]
 
         this.state.value.splice(index+1, 0, {
-            x: x.value + 10,
-            y: y.value + 10
+            x: x.clone().add(0.1),
+            y: y.clone().add(0.1),
         });
         this.parent.trigger(this.props.onchange, this.props.key, this.toClipPathValueString(), this.props.params)        
     }    

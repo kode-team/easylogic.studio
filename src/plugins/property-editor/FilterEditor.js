@@ -1,4 +1,4 @@
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import {
   LOAD,
   CLICK,
@@ -30,6 +30,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './FilterEditor.scss';
 import { variable } from 'el/sapa/functions/registElement';
+import { createComponent, createComponentList } from "el/sapa/functions/jsx";
 
 var specList = {
   blur: BlurFilter.spec,
@@ -55,29 +56,21 @@ export default class FilterEditor extends EditorElement {
 
   initState() {
     return {
-      hideLabel: this.props['hide-label'] === 'true' ? true : false, 
+      hideLabel: this.props.hideLabel === 'true' ? true : false,
       filters: Filter.parseStyle(this.props.value)
     }
   }
 
   template() {
-    var labelClass = this.state.hideLabel ? 'hide' : '';
     return /*html*/`
       <div class='elf--filter-editor filter-list'>
-          <div class='label ${labelClass}' >
-              <label>${this.props.title || ''}</label>
-              <div class='tools'>
-                <select ref="$filterSelect"></select>
-                <button type="button" ref="$add" title="add Filter">${icon.add}</button>
-              </div>
-          </div>
           <div class='filter-list' ref='$filterList'></div>
       </div>`;
   }
 
-  [LOAD('$filterSelect')] () {
-    var list = filter_list.map(it => { 
-      return {title: it, value: it}
+  [LOAD('$filterSelect')]() {
+    var list = filter_list.map(it => {
+      return { title: it, value: it }
     })
 
     var svgFilterList = this.getSVGFilterList()
@@ -87,7 +80,7 @@ export default class FilterEditor extends EditorElement {
     if (svgFilterList.length) {
       totalList = [
         ...list,
-        { title: '-------' , value: ''},
+        { title: '-------', value: '' },
         ...svgFilterList
       ]
     } else {
@@ -97,8 +90,8 @@ export default class FilterEditor extends EditorElement {
     }
 
     return totalList.map(it => {
-      var {title, value} = it;
-      
+      var { title, value } = it;
+
       return `<option value='${value}'>${title}</option>`
     })
   }
@@ -110,51 +103,56 @@ export default class FilterEditor extends EditorElement {
   makeDropShadowFilterTemplate(spec, filter, index) {
     return /*html*/`
       <div class="filter-item">
-        <div class="title drop-shadow" draggable="true" data-index="${index}">
-          <label>${this.$i18n('filter.property.drop-shadow')}</label>
+        <div class="title drop-shadow">
+          <label draggable="true"  data-index="${index}">${iconUse('drag_indicator')}</label>
+          <span class='sub-title'>${this.$i18n('filter.property.drop-shadow')}</span>
           <div class="filter-menu">
-            <button type="button" class="del" data-index="${index}">
-              ${icon.remove2}
-            </button>
+            <button type="button" class="del" data-index="${index}">${iconUse('remove2')}</button>
           </div>
         </div>
-
-        <div class="filter-ui drop-shadow-color">
-          <object refClass="ColorViewEditor" 
-            label="${this.$i18n(`filter.property.drop-shadow.color`)}" 
-            ref='$dropShadowColorView${index}' 
-            params="${index}" 
-            value="${filter.color}" 
-            on-change-value="changeDropShadowColor" />
+        <div class="filter-ui-list">
+          ${createComponentList(
+              ["ColorViewEditor", {
+                // label: this.$i18n(`filter.property.drop-shadow.color`),
+                ref: `$dropShadowColorView${index}`,
+                params: index,
+                compact: true,
+                value: filter.color,
+                onchange: "changeDropShadowColor"
+              }],
+              ...['offsetX', 'offsetY', 'blurRadius'].map(key => {
+                return [
+                  "InputRangeEditor",
+                  {
+                    ref: `$${key}${index}`,
+                    label: this.$i18n(`filter.property.drop-shadow.${key}`),
+                    key: index,               
+                    min: spec[key].min,
+                    max: spec[key].max,
+                    step: spec[key].step,
+                    params: key,
+                    value: filter[key].value || spec[key].defaultValue,
+                    units: spec[key].units,
+                    onchange: "changeRangeEditor"
+                  }]
+              })
+      )}
         </div>
 
-        ${["offsetX", "offsetY", "blurRadius"].map(key => {
-          return /*html*/`        
-            <div class="filter-ui drop-shadow">
-                <object refClass="RangeEditor"  
-                  ref='$${key}${index}' 
-                  label="${this.$i18n(`filter.property.drop-shadow.${key}`)}"
-                  key="${index}" 
-                  min="${spec[key].min}"
-                  min="${spec[key].max}"
-                  params="${key}" 
-                  value="${filter[key].value}" units="${spec[key].units.join(',')}" onchange="changeRangeEditor" />
-            </div>`;
-        }).join('')}
       </div>
     `;
   }
 
-  getSVGFilterList () {
-     
+  getSVGFilterList() {
+
     var current = this.$selection.current;
-    var arr = [] 
+    var arr = []
 
     if (current) {
       arr = current.svgfilters
         .map(it => {
           return {
-            title : `svg - #${it.id}`,
+            title: `svg - #${it.id}`,
             value: it.id
           }
         })
@@ -163,12 +161,12 @@ export default class FilterEditor extends EditorElement {
     return arr
   }
 
-  makeOneFilterEditor (index, filter, spec) {
+  makeOneFilterEditor(index, filter, spec) {
 
     if (filter.type === 'svg') {
 
       var options = ''
-      
+
       var current = this.$selection.current;
 
       if (current) {
@@ -177,37 +175,35 @@ export default class FilterEditor extends EditorElement {
         })
       }
 
-      return /*html*/`
-      <object refClass="SelectEditor"  
-        ref='$select${index}' 
-        key="${index}" 
-        label="SVG Filter"
-        value="${filter.value}" 
-        options=${variable(['', ...options])}
-        onchange="changeRangeEditor"  />`
+      return createComponent("SelectEditor", {
+        ref: `$select${index}`,
+        key: index,
+        label: "SVG Filter",
+        value: filter.value,
+        options: ['', ...options],
+        onchange: "changeRangeEditor"
+      })
     }
 
-    return /*html*/`
-      <object refClass="RangeEditor"  
-        ref='$range${index}_${filter.type}' 
-        key="${index}" 
-        min='${spec.min}'
-        max='${spec.max}'
-        value="${filter.value}" 
-        units="${spec.units.join(',')}"   
-        onchange="changeRangeEditor" />
-      `
+    return createComponent("InputRangeEditor", {
+      ref: `$range${index}_${filter.type}`,
+      label: this.$i18n('filter.property.' + filter.type),
+      key: index,
+      min: spec.min,
+      max: spec.max,
+      value: filter.value,
+      units: spec.units,
+      onchange: "changeRangeEditor"
+    })
+
   }
 
   makeOneFilterTemplate(spec, filter, index) {
 
-    var isSVG = filter.type === 'svg'
-    var title = `${this.$i18n('filter.property.' + filter.type)}`
-
     return /*html*/`
       <div class="filter-item" data-index="${index}">
         <div class="title" >
-          <label draggable="true" data-index="${index}" title="${isSVG ? '' : title}">${title}</label>
+          <label draggable="true" data-index="${index}">${iconUse('drag_indicator')}</label>
           ${filter.type != 'svg' ? /*html*/`
           <div class="filter-ui">
             ${this.makeOneFilterEditor(index, filter, spec)}
@@ -219,7 +215,7 @@ export default class FilterEditor extends EditorElement {
         `}          
           <div class="filter-menu">
             <button type="button" class="del" data-index="${index}">
-              ${icon.remove2}
+              ${iconUse('remove2')}
             </button>
           </div>
         </div>
@@ -250,14 +246,11 @@ export default class FilterEditor extends EditorElement {
   }
 
 
-  [DRAGSTART("$filterList .filter-item .title label")](e) {
+  [DRAGSTART("$filterList .filter-item > .title > label")](e) {
     this.startIndex = +e.$dt.attr("data-index");
   }
 
-
-  [DRAGOVER("$filterList .filter-item .title label") + PREVENT](e) {}
-
-
+  [DRAGOVER("$filterList .filter-item > .title > label") + PREVENT](e) { }
 
   sortItem(arr, startIndex, targetIndex) {
     arr.splice(
@@ -268,7 +261,7 @@ export default class FilterEditor extends EditorElement {
   }
 
   sortFilter(startIndex, targetIndex) {
-      this.sortItem(this.state.filters, startIndex, targetIndex);
+    this.sortItem(this.state.filters, startIndex, targetIndex);
   }
 
   [DROP("$filterList .filter-item") + PREVENT](e) {
@@ -283,7 +276,7 @@ export default class FilterEditor extends EditorElement {
     this.modifyFilter()
   }
 
-  modifyFilter () {
+  modifyFilter() {
     var value = this.state.filters.join(' ');
 
     this.parent.trigger(this.props.onchange, this.props.key, value, this.props.params);
@@ -293,13 +286,13 @@ export default class FilterEditor extends EditorElement {
     return Filter.parse({ ...opt, type });
   }
 
-  [CLICK('$filterList .svg-filter-edit')] (e) {
+  [CLICK('$filterList .svg-filter-edit')](e) {
     var index = +e.$dt.attr('data-index');
 
     var filter = this.state.filters[index];
 
-    var current = this.$selection.current; 
-    
+    var current = this.$selection.current;
+
     if (current) {
       var svgfilterIndex = current.getSVGFilterIndex(filter.value?.value?.replace('#', ''));
       this.trigger('openSVGFilterPopup', svgfilterIndex);
@@ -309,24 +302,24 @@ export default class FilterEditor extends EditorElement {
 
 
   [SUBSCRIBE('openSVGFilterPopup')](index) {
-    const current = this.$selection.current || { svgfilters: [] } 
+    const current = this.$selection.current || { svgfilters: [] }
     const svgfilter = current.svgfilters[index];
 
     this.emit("showSVGFilterPopup", {
-        changeEvent: (params) => {
-          var current = this.$selection.current;
+      changeEvent: (params) => {
+        var current = this.$selection.current;
 
-          if (current) {
-            current.setSVGFilterValue(params.index, {
-              filters: params.filters
-            });
+        if (current) {
+          current.setSVGFilterValue(params.index, {
+            filters: params.filters
+          });
 
-            this.command("setAttributeForMulti", 'change filter', this.$selection.pack('svgfilters', 'filter'));
-          }          
-        },
-        index,
-        preview: false,
-        filters: svgfilter.filters 
+          this.command("setAttributeForMulti", 'change filter', this.$selection.pack('svgfilters', 'filter'));
+        }
+      },
+      index,
+      preview: false,
+      filters: svgfilter.filters
     });
   }
 
@@ -336,7 +329,7 @@ export default class FilterEditor extends EditorElement {
 
 
       // 비어있는 필터를 하나 생성하고 
-      const index = this.$selection.current.createSVGFilter({ 
+      const index = this.$selection.current.createSVGFilter({
         filters: []
       })
 
@@ -350,7 +343,7 @@ export default class FilterEditor extends EditorElement {
 
       // 화면 다시 그리고 
       this.refresh();
-  
+
       // 필터 리스트 수정하고 
       this.modifyFilter()
 
@@ -362,11 +355,11 @@ export default class FilterEditor extends EditorElement {
       this.state.filters.push(this.makeFilter(filterType))
 
       this.refresh();
-  
+
       this.modifyFilter()
     }
 
-  }  
+  }
 
   [CLICK("$add")]() {
     var filterType = this.refs.$filterSelect.value;
@@ -394,17 +387,17 @@ export default class FilterEditor extends EditorElement {
 
   }
 
-  [SUBSCRIBE_SELF('changeRangeEditor')] (key, value, params) {
+  [SUBSCRIBE_SELF('changeRangeEditor')](key, value, params) {
     if (params) {
-      this.state.filters[+key].reset({ 
-        [params]: value 
+      this.state.filters[+key].reset({
+        [params]: value
       });
     } else {
-      this.state.filters[+key].reset({ 
-        value 
+      this.state.filters[+key].reset({
+        value
       });
     }
-    
+
 
     this.modifyFilter();
   }

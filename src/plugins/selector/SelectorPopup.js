@@ -3,6 +3,7 @@ import { INPUT, SUBSCRIBE } from "el/sapa/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import './SelectorPopup.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class SelectorPopup extends BasePopup {
 
@@ -34,7 +35,10 @@ export default class SelectorPopup extends BasePopup {
 
 
   templateForProperty() {
-    return /*html*/`<object refClass="CSSPropertyEditor" ref='$propertyEditor' onchange='changePropertyEditor' />`
+    return createComponent("CSSPropertyEditor", { 
+      ref: '$propertyEditor',
+      onchange: 'changePropertyEditor'
+    });
   }    
 
 

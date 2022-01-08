@@ -1,4 +1,4 @@
-import { CLICK, PREVENT, STOP } from "el/sapa/Event";
+import { BIND } from "el/sapa/Event";
 import { isFunction } from "el/sapa/functions/func";
 
 import { EditorElement } from "../common/EditorElement";
@@ -33,6 +33,14 @@ export default class BaseProperty extends EditorElement {
             ${ this.getFooter() ? `<div class='property-footer'>${this.getFooter()}</div>` : ''}
         </div>
         `;
+  }
+
+  [BIND('$el')] () {
+    return {
+      style: {
+        '--property-order': this.order,
+      }
+    }
   }
 
   setTitle (title) {
@@ -204,6 +212,13 @@ export default class BaseProperty extends EditorElement {
 
   get editableProperty() {
     return '';
+  }
+
+  /**
+   * inspector 에서 표시 순서를 정할 수 있다. 
+   */
+  get order () {
+    return 1000;
   }
 
   checkShow() {

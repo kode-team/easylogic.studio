@@ -2928,12 +2928,17 @@ class Dom {
   path() {
     if (!this.el)
       return [];
-    const $parentNode = this.parent();
-    if ($parentNode) {
-      return [...$parentNode.path(), this];
-    } else {
-      return [this];
+    let pathList = [this];
+    let $parentNode = this.parent();
+    if (!$parentNode.el)
+      return pathList;
+    while ($parentNode) {
+      pathList.unshift($parentNode);
+      $parentNode = $parentNode.parent();
+      if (!$parentNode.el)
+        break;
     }
+    return pathList;
   }
   get $parent() {
     return this.parent();
@@ -8031,7 +8036,7 @@ BlurFilter.spec = {
   step: 1,
   unit: "px",
   units: ["px", "em"],
-  defaultValue: 0
+  defaultValue: "0px"
 };
 class URLSvgFilter extends Filter {
   getDefaultObject() {
@@ -8213,7 +8218,7 @@ DropshadowFilter.spec = {
     min: -100,
     max: 100,
     step: 1,
-    defaultValue: 0,
+    defaultValue: "0px",
     unit: "px",
     units: ["px", "em"]
   },
@@ -8223,7 +8228,7 @@ DropshadowFilter.spec = {
     min: -100,
     max: 100,
     step: 1,
-    defaultValue: 0,
+    defaultValue: "0px",
     unit: "px",
     units: ["px", "em"]
   },
@@ -8233,7 +8238,7 @@ DropshadowFilter.spec = {
     min: 0,
     max: 100,
     step: 1,
-    defaultValue: 0,
+    defaultValue: "0px",
     unit: "px",
     units: ["px", "em", "%"]
   },
@@ -11914,7 +11919,6 @@ function makeInterpolate(layer2, property, startValue, endValue, editorString, a
       return makeInterpolateLength(layer2, property, startValue, endValue, "height");
     case "perspective":
     case "font-size":
-    case "font-stretch":
     case "font-weight":
     case "text-stroke-width":
     case "RangeEditor":
@@ -14712,6 +14716,12 @@ const EditingMode = {
   DRAW: "draw",
   PATH: "path"
 };
+const DesignMode = {
+  EDIT: "edit",
+  PREVIEW: "preview",
+  DESIGN: "design",
+  ITEM: "item"
+};
 async function addLayerView(editor, type, data = {}) {
   editor.selection.empty();
   await editor.emit("refreshSelectionTool");
@@ -17480,7 +17490,11 @@ var __glob_0_77$1 = /* @__PURE__ */ Object.freeze({
 });
 function refreshElement(editor, current) {
   editor.emit("refreshSelectionStyleView", current);
-  editor.emit("refreshElementBoundSize", editor.selection.getRootItem(current));
+  if (current.isLayoutItem() || current.parent.is("boolean-path")) {
+    editor.emit("refreshElementBoundSize", current.parent);
+  } else {
+    editor.emit("refreshElementBoundSize", current);
+  }
 }
 var __glob_0_78$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -17814,9 +17828,16 @@ var setAttributeForMulti = {
     const commandMaker = editor.createCommandMaker();
     messages.forEach((message) => {
       commandMaker.emit("update", message.id, message.attrs, context);
-      const parent = editor.get(message.parentId);
-      if (message.parentId && (parent == null ? void 0 : parent.isNot("project")) && parent.children.length >= 1) {
-        commandMaker.emit("update", message.parentId, { "changedChildren": true }, context);
+      const item2 = editor.get(message.id);
+      if (item2.is("artboard")) {
+        return;
+      }
+      const parent = item2.parent;
+      if (item2.isLayoutItem() || parent.is("boolean-path")) {
+        const parent2 = editor.get(message.parentId);
+        if (message.parentId && (parent2 == null ? void 0 : parent2.isNot("project")) && parent2.children.length >= 1) {
+          commandMaker.emit("update", message.parentId, { "changedChildren": true }, context);
+        }
       }
     });
     commandMaker.run();
@@ -20407,116 +20428,122 @@ var __glob_0_62 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": doc
 });
-var draw = _icon_template(`<path d="M18.85,10.39l1.06-1.06c0.78-0.78,0.78-2.05,0-2.83L18.5,5.09c-0.78-0.78-2.05-0.78-2.83,0l-1.06,1.06L18.85,10.39z M14.61,11.81L7.41,19H6v-1.41l7.19-7.19L14.61,11.81z M13.19,7.56L4,16.76V21h4.24l9.19-9.19L13.19,7.56L13.19,7.56z M19,17.5 c0,2.19-2.54,3.5-5,3.5c-0.55,0-1-0.45-1-1s0.45-1,1-1c1.54,0,3-0.73,3-1.5c0-0.47-0.48-0.87-1.23-1.2l1.48-1.48 C18.32,15.45,19,16.29,19,17.5z M4.58,13.35C3.61,12.79,3,12.06,3,11c0-1.8,1.89-2.63,3.56-3.36C7.59,7.18,9,6.56,9,6 c0-0.41-0.78-1-2-1C5.74,5,5.2,5.61,5.17,5.64C4.82,6.05,4.19,6.1,3.77,5.76C3.36,5.42,3.28,4.81,3.62,4.38C3.73,4.24,4.76,3,7,3 c2.24,0,4,1.32,4,3c0,1.87-1.93,2.72-3.64,3.47C6.42,9.88,5,10.5,5,11c0,0.31,0.43,0.6,1.07,0.86L4.58,13.35z" />`);
+var drag_indicator = _icon_template(`<path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>`);
 var __glob_0_63 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": drag_indicator
+});
+var draw = _icon_template(`<path d="M18.85,10.39l1.06-1.06c0.78-0.78,0.78-2.05,0-2.83L18.5,5.09c-0.78-0.78-2.05-0.78-2.83,0l-1.06,1.06L18.85,10.39z M14.61,11.81L7.41,19H6v-1.41l7.19-7.19L14.61,11.81z M13.19,7.56L4,16.76V21h4.24l9.19-9.19L13.19,7.56L13.19,7.56z M19,17.5 c0,2.19-2.54,3.5-5,3.5c-0.55,0-1-0.45-1-1s0.45-1,1-1c1.54,0,3-0.73,3-1.5c0-0.47-0.48-0.87-1.23-1.2l1.48-1.48 C18.32,15.45,19,16.29,19,17.5z M4.58,13.35C3.61,12.79,3,12.06,3,11c0-1.8,1.89-2.63,3.56-3.36C7.59,7.18,9,6.56,9,6 c0-0.41-0.78-1-2-1C5.74,5,5.2,5.61,5.17,5.64C4.82,6.05,4.19,6.1,3.77,5.76C3.36,5.42,3.28,4.81,3.62,4.38C3.73,4.24,4.76,3,7,3 c2.24,0,4,1.32,4,3c0,1.87-1.93,2.72-3.64,3.47C6.42,9.88,5,10.5,5,11c0,0.31,0.43,0.6,1.07,0.86L4.58,13.35z" />`);
+var __glob_0_64 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": draw
 });
 var east = _icon_template(`<path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z"/>`);
-var __glob_0_64 = /* @__PURE__ */ Object.freeze({
+var __glob_0_65 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": east
 });
 var edit = _icon_template(`<path d="M3 17.46v3.04c0 .28.22.5.5.5h3.04c.13 0 .26-.05.35-.15L17.81 9.94l-3.75-3.75L3.15 17.1c-.1.1-.15.22-.15.36zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>`);
-var __glob_0_65 = /* @__PURE__ */ Object.freeze({
+var __glob_0_66 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": edit
 });
 var end = _icon_template(`<path transform="translate(24,0) scale(-1, 1)" d="M14.59,7.41L18.17,11H6v2h12.17l-3.59,3.59L16,18l6-6l-6-6L14.59,7.41z M2,6v12h2V6H2z"/>`);
-var __glob_0_66 = /* @__PURE__ */ Object.freeze({
+var __glob_0_67 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": end
 });
 var exit_to_app = _icon_template(`<path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>`);
-var __glob_0_67 = /* @__PURE__ */ Object.freeze({
+var __glob_0_68 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": exit_to_app
 });
 var expand = _icon_template(`<path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>`);
-var __glob_0_68 = /* @__PURE__ */ Object.freeze({
+var __glob_0_69 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": expand
 });
 var expand_more = _icon_template(`<path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/>`);
-var __glob_0_69 = /* @__PURE__ */ Object.freeze({
+var __glob_0_70 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": expand_more
 });
 var _export = _icon_template(`<path d="M9 3L5 6.99h3V14h2V6.99h3L9 3zm7 14.01V10h-2v7.01h-3L15 21l4-3.99h-3z"/>`);
-var __glob_0_70 = /* @__PURE__ */ Object.freeze({
+var __glob_0_71 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": _export
 });
 var face = _icon_template(`<path d="M9 11.75c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25zm6 0c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-.29.02-.58.05-.86 2.36-1.05 4.23-2.98 5.21-5.37C11.07 8.33 14.05 10 17.42 10c.78 0 1.53-.09 2.25-.26.21.71.33 1.47.33 2.26 0 4.41-3.59 8-8 8z"/>`);
-var __glob_0_71 = /* @__PURE__ */ Object.freeze({
+var __glob_0_72 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": face
 });
 var fast_forward = _icon_template(`<path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/>`);
-var __glob_0_72 = /* @__PURE__ */ Object.freeze({
+var __glob_0_73 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": fast_forward
 });
 var fast_rewind = _icon_template(`<path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/>`);
-var __glob_0_73 = /* @__PURE__ */ Object.freeze({
+var __glob_0_74 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": fast_rewind
 });
 var file_copy = _icon_template(`<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm-1 4l6 6v10c0 1.1-.9 2-2 2H7.99C6.89 23 6 22.1 6 21l.01-14c0-1.1.89-2 1.99-2h7zm-1 7h5.5L14 6.5V12z"/>`);
-var __glob_0_74 = /* @__PURE__ */ Object.freeze({
+var __glob_0_75 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": file_copy
 });
 var filter$1 = _icon_template(`<path d="M18.7 12.4c-.28-.16-.57-.29-.86-.4.29-.11.58-.24.86-.4 1.92-1.11 2.99-3.12 3-5.19-1.79-1.03-4.07-1.11-6 0-.28.16-.54.35-.78.54.05-.31.08-.63.08-.95 0-2.22-1.21-4.15-3-5.19C10.21 1.85 9 3.78 9 6c0 .32.03.64.08.95-.24-.2-.5-.39-.78-.55-1.92-1.11-4.2-1.03-6 0 0 2.07 1.07 4.08 3 5.19.28.16.57.29.86.4-.29.11-.58.24-.86.4-1.92 1.11-2.99 3.12-3 5.19 1.79 1.03 4.07 1.11 6 0 .28-.16.54-.35.78-.54-.05.32-.08.64-.08.96 0 2.22 1.21 4.15 3 5.19 1.79-1.04 3-2.97 3-5.19 0-.32-.03-.64-.08-.95.24.2.5.38.78.54 1.92 1.11 4.2 1.03 6 0-.01-2.07-1.08-4.08-3-5.19zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>`);
-var __glob_0_75 = /* @__PURE__ */ Object.freeze({
+var __glob_0_76 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": filter$1
 });
 var flag = _icon_template(`<path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/>`);
-var __glob_0_76 = /* @__PURE__ */ Object.freeze({
+var __glob_0_77 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flag
 });
 var flash_on = _icon_template(`<path d="M7 2v11h3v9l7-12h-4l4-8z"/>`);
-var __glob_0_77 = /* @__PURE__ */ Object.freeze({
+var __glob_0_78 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flash_on
 });
 var flatten = _icon_template(`<path d="M4,9v2h16V9H4z M16,4l-1.41-1.41L13,4.17V1h-2v3.19L9.39,2.61L8,4l4,4L16,4z M4,14h16v-2H4V14z M8,19l1.39,1.39L11,18.81 V22h2v-3.17l1.59,1.59L16,19l-4-4L8,19z"/>`);
-var __glob_0_78 = /* @__PURE__ */ Object.freeze({
+var __glob_0_79 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flatten
 });
 var flex = _icon_template(`<path d="M3,5v14h18V5H3z M8.33,17H5V7h3.33V17z M13.67,17h-3.33V7h3.33V17z M19,17h-3.33V7H19V17z"/>`);
-var __glob_0_79 = /* @__PURE__ */ Object.freeze({
+var __glob_0_80 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flex
 });
 var flip = _icon_template(`<path d="M15 21h2v-2h-2v2zm4-12h2V7h-2v2zM3 5v14c0 1.1.9 2 2 2h4v-2H5V5h4V3H5c-1.1 0-2 .9-2 2zm16-2v2h2c0-1.1-.9-2-2-2zm-8 20h2V1h-2v22zm8-6h2v-2h-2v2zM15 5h2V3h-2v2zm4 8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2z"/>`);
-var __glob_0_80 = /* @__PURE__ */ Object.freeze({
+var __glob_0_81 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flip
 });
 var flipY = _icon_template(`<path d="M15 21h2v-2h-2v2zm4-12h2V7h-2v2zM3 5v14c0 1.1.9 2 2 2h4v-2H5V5h4V3H5c-1.1 0-2 .9-2 2zm16-2v2h2c0-1.1-.9-2-2-2zm-8 20h2V1h-2v22zm8-6h2v-2h-2v2zM15 5h2V3h-2v2zm4 8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2z"/>`);
-var __glob_0_81 = /* @__PURE__ */ Object.freeze({
+var __glob_0_82 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flipY
@@ -20528,49 +20555,79 @@ var flip_camera = _icon_template(`
     <path d="M16,14v2h2.91c-1.38,2.39-3.96,4-6.91,4c-3.72,0-6.85-2.56-7.74-6H2.2c0.93,4.56,4.96,8,9.8,8c3.27,0,6.18-1.58,8-4.01V20
         h2v-6H16z"/>
 `);
-var __glob_0_82 = /* @__PURE__ */ Object.freeze({
+var __glob_0_83 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flip_camera
 });
 var folder = _icon_template(`<path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>`);
-var __glob_0_83 = /* @__PURE__ */ Object.freeze({
+var __glob_0_84 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": folder
 });
+var font_download = _icon_template(`<path d="M9.93 13.5h4.14L12 7.98zM20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-4.05 16.5l-1.14-3H9.17l-1.12 3H5.96l5.11-13h1.86l5.11 13h-2.09z"/>`);
+var __glob_0_85 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": font_download
+});
+var format_bold = _icon_template(`<path d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4H7v14h7.04c2.09 0 3.71-1.7 3.71-3.79 0-1.52-.86-2.82-2.15-3.42zM10 6.5h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9H10v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z"/>`);
+var __glob_0_86 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": format_bold
+});
+var format_indent = _icon_template(`<path d="M3 21h18v-2H3v2zM3 8v8l4-4-4-4zm8 9h10v-2H11v2zM3 3v2h18V3H3zm8 6h10V7H11v2zm0 4h10v-2H11v2z"/>`);
+var __glob_0_87 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": format_indent
+});
+var format_line_spacing = _icon_template(`<path d="M6 7h2.5L5 3.5 1.5 7H4v10H1.5L5 20.5 8.5 17H6V7zm4-2v2h12V5H10zm0 14h12v-2H10v2zm0-6h12v-2H10v2z"/>`);
+var __glob_0_88 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": format_line_spacing
+});
 var format_shapes = _icon_template(`<path d="M23 7V1h-6v2H7V1H1v6h2v10H1v6h6v-2h10v2h6v-6h-2V7h2zM3 3h2v2H3V3zm2 18H3v-2h2v2zm12-2H7v-2H5V7h2V5h10v2h2v10h-2v2zm4 2h-2v-2h2v2zM19 5V3h2v2h-2zm-5.27 9h-3.49l-.73 2H7.89l3.4-9h1.4l3.41 9h-1.63l-.74-2zm-3.04-1.26h2.61L12 8.91l-1.31 3.83z"/>`);
-var __glob_0_84 = /* @__PURE__ */ Object.freeze({
+var __glob_0_89 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": format_shapes
 });
+var format_size = _icon_template(`<path d="M9 4v3h5v12h3V7h5V4H9zm-6 8h3v7h3v-7h3V9H3v3z"/>`);
+var __glob_0_90 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": format_size
+});
 var fullscreen = _icon_template(`<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>`);
-var __glob_0_85 = /* @__PURE__ */ Object.freeze({
+var __glob_0_91 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": fullscreen
 });
 var gps_fixed = _icon_template(`<path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>`);
-var __glob_0_86 = /* @__PURE__ */ Object.freeze({
+var __glob_0_92 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": gps_fixed
 });
 var gradient$1 = _icon_template('<path d="M11 9h2v2h-2zm-2 2h2v2H9zm4 0h2v2h-2zm2-2h2v2h-2zM7 9h2v2H7zm12-6H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 18H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm2-7h-2v2h2v2h-2v-2h-2v2h-2v-2h-2v2H9v-2H7v2H5v-2h2v-2H5V5h14v6z"/>');
-var __glob_0_87 = /* @__PURE__ */ Object.freeze({
+var __glob_0_93 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": gradient$1
 });
 var grid$1 = _icon_template(`<path d="M3,3v8h8V3H3z M9,9H5V5h4V9z M3,13v8h8v-8H3z M9,19H5v-4h4V19z M13,3v8h8V3H13z M19,9h-4V5h4V9z M13,13v8h8v-8H13z M19,19h-4v-4h4V19z"/>`);
-var __glob_0_88 = /* @__PURE__ */ Object.freeze({
+var __glob_0_94 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": grid$1
 });
 var grid3x3 = _icon_template(`<path d="M20,10V8h-4V4h-2v4h-4V4H8v4H4v2h4v4H4v2h4v4h2v-4h4v4h2v-4h4v-2h-4v-4H20z M14,14h-4v-4h4V14z"/>`);
-var __glob_0_89 = /* @__PURE__ */ Object.freeze({
+var __glob_0_95 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": grid3x3
@@ -20578,49 +20635,49 @@ var __glob_0_89 = /* @__PURE__ */ Object.freeze({
 var group = _icon_template(`
         <path d="M3 5h2V3c-1.1 0-2 .9-2 2zm0 8h2v-2H3v2zm4 8h2v-2H7v2zM3 9h2V7H3v2zm10-6h-2v2h2V3zm6 0v2h2c0-1.1-.9-2-2-2zM5 21v-2H3c0 1.1.9 2 2 2zm-2-4h2v-2H3v2zM9 3H7v2h2V3zm2 18h2v-2h-2v2zm8-8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2zm0-12h2V7h-2v2zm0 8h2v-2h-2v2zm-4 4h2v-2h-2v2zm0-16h2V3h-2v2zM7 17h10V7H7v10zm2-8h6v6H9V9z"/>
     `);
-var __glob_0_90 = /* @__PURE__ */ Object.freeze({
+var __glob_0_96 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": group
 });
 var height = _icon_template(`<polygon points="13,6.99 16,6.99 12,3 8,6.99 11,6.99 11,17.01 8,17.01 12,21 16,17.01 13,17.01"/>`);
-var __glob_0_91 = /* @__PURE__ */ Object.freeze({
+var __glob_0_97 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": height
 });
 var highlight_at = _icon_template(`<path d="M17,5h-2V3h2V5z M15,15v6l2.29-2.29L19.59,21L21,19.59l-2.29-2.29L21,15H15z M19,9h2V7h-2V9z M19,13h2v-2h-2V13z M11,21h2 v-2h-2V21z M7,5h2V3H7V5z M3,17h2v-2H3V17z M5,21v-2H3C3,20.1,3.9,21,5,21z M19,3v2h2C21,3.9,20.1,3,19,3z M11,5h2V3h-2V5z M3,9h2 V7H3V9z M7,21h2v-2H7V21z M3,13h2v-2H3V13z M3,5h2V3C3.9,3,3,3.9,3,5z"/>`);
-var __glob_0_92 = /* @__PURE__ */ Object.freeze({
+var __glob_0_98 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": highlight_at
 });
 var horizontal_distribute = _icon_template(`<path d="M4,22H2V2h2V22z M22,2h-2v20h2V2z M13.5,7h-3v10h3V7z"/>`);
-var __glob_0_93 = /* @__PURE__ */ Object.freeze({
+var __glob_0_99 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": horizontal_distribute
 });
 var horizontal_rule = _icon_template(`<rect fill-rule="evenodd" height="2" width="16" x="4" y="11"/>`);
-var __glob_0_94 = /* @__PURE__ */ Object.freeze({
+var __glob_0_100 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": horizontal_rule
 });
 var image$1 = _icon_template(`<path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>`);
-var __glob_0_95 = /* @__PURE__ */ Object.freeze({
+var __glob_0_101 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": image$1
 });
 var input = _icon_template(`<path d="M21 3.01H3c-1.1 0-2 .9-2 2V9h2V4.99h18v14.03H3V15H1v4.01c0 1.1.9 1.98 2 1.98h18c1.1 0 2-.88 2-1.98v-14c0-1.11-.9-2-2-2zM11 16l4-4-4-4v3H1v2h10v3z"/>`);
-var __glob_0_96 = /* @__PURE__ */ Object.freeze({
+var __glob_0_102 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": input
 });
 var italic = _icon_template(`<path d="M10 4v3h2.21l-3.42 8H6v3h8v-3h-2.21l3.42-8H18V4z"/>`);
-var __glob_0_97 = /* @__PURE__ */ Object.freeze({
+var __glob_0_103 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": italic
@@ -20633,7 +20690,7 @@ var join_full = _icon_template(`
     </g>
 </g>
 `);
-var __glob_0_98 = /* @__PURE__ */ Object.freeze({
+var __glob_0_104 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": join_full
@@ -20642,49 +20699,49 @@ var join_right = _icon_template(`
 <ellipse cx="12" cy="12" rx="3" ry="5.74"/>
 <path d="M16.5,12c0,0.97-0.23,4.16-3.03,6.5C14.25,18.81,15.1,19,16,19c3.86,0,7-3.14,7-7s-3.14-7-7-7c-0.9,0-1.75,0.19-2.53,0.5 C16.27,7.84,16.5,11.03,16.5,12z"/></g><g><path d="M8,19c0.9,0,1.75-0.19,2.53-0.5c-0.61-0.51-1.1-1.07-1.49-1.63C8.71,16.95,8.36,17,8,17c-2.76,0-5-2.24-5-5s2.24-5,5-5 c0.36,0,0.71,0.05,1.04,0.13c0.39-0.56,0.88-1.12,1.49-1.63C9.75,5.19,8.9,5,8,5c-3.86,0-7,3.14-7,7S4.14,19,8,19z"/>
 `);
-var __glob_0_99 = /* @__PURE__ */ Object.freeze({
+var __glob_0_105 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": join_right
 });
 var justify_content_space_around = _icon_template(`<path d="M15,7v10H9V7H15z M21,5h-3v14h3V5z M17,5H7v14h10V5z M6,5H3v14h3V5z"/>`);
-var __glob_0_100 = /* @__PURE__ */ Object.freeze({
+var __glob_0_106 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": justify_content_space_around
 });
 var keyboard = _icon_template(`<path d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z"/>`);
-var __glob_0_101 = /* @__PURE__ */ Object.freeze({
+var __glob_0_107 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": keyboard
 });
 var keyboard_arrow_down = _icon_template(`<path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>`);
-var __glob_0_102 = /* @__PURE__ */ Object.freeze({
+var __glob_0_108 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": keyboard_arrow_down
 });
 var keyboard_arrow_left = _icon_template(`<path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>`);
-var __glob_0_103 = /* @__PURE__ */ Object.freeze({
+var __glob_0_109 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": keyboard_arrow_left
 });
 var keyboard_arrow_right = _icon_template(`<path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>`);
-var __glob_0_104 = /* @__PURE__ */ Object.freeze({
+var __glob_0_110 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": keyboard_arrow_right
 });
 var keyboard_arrow_up = _icon_template(`<path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6 1.41 1.41z"/>`);
-var __glob_0_105 = /* @__PURE__ */ Object.freeze({
+var __glob_0_111 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": keyboard_arrow_up
 });
 var landscape = _icon_template(`<path d="M14 6l-3.75 5 2.85 3.8-1.6 1.2C9.81 13.75 7 10 7 10l-6 8h22L14 6z"/>`);
-var __glob_0_106 = /* @__PURE__ */ Object.freeze({
+var __glob_0_112 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": landscape
@@ -20692,55 +20749,55 @@ var __glob_0_106 = /* @__PURE__ */ Object.freeze({
 var launch = _icon_template(`
         <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
     `);
-var __glob_0_107 = /* @__PURE__ */ Object.freeze({
+var __glob_0_113 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": launch
 });
 var layers = _icon_template(`<path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/>`);
-var __glob_0_108 = /* @__PURE__ */ Object.freeze({
+var __glob_0_114 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": layers
 });
 var layout_default = _icon_template(`<path d="M19 7h-8v6h8V7zm-2 4h-4V9h4v2zm4-8H3c-1.1 0-2 .9-2 2v14c0 1.1.9 1.98 2 1.98h18c1.1 0 2-.88 2-1.98V5c0-1.1-.9-2-2-2zm0 16.01H3V4.98h18v14.03z"/>`);
-var __glob_0_109 = /* @__PURE__ */ Object.freeze({
+var __glob_0_115 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": layout_default
 });
 var layout_flex = _icon_template(`<path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M8,18H4V6h4V18z M14,18h-4V6h4V18z M20,18h-4V6h4V18z"/>`);
-var __glob_0_110 = /* @__PURE__ */ Object.freeze({
+var __glob_0_116 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": layout_flex
 });
 var layout_grid = _icon_template(`<path d="M3,3v8h8V3H3z M9,9H5V5h4V9z M3,13v8h8v-8H3z M9,19H5v-4h4V19z M13,3v8h8V3H13z M19,9h-4V5h4V9z M13,13v8h8v-8H13z M19,19h-4v-4h4V19z"/>`);
-var __glob_0_111 = /* @__PURE__ */ Object.freeze({
+var __glob_0_117 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": layout_grid
 });
 var left = _icon_template(`<path d="M2,4 L2,20Z M6,10 L16,10 L16,14 L6,14Z" stroke-width="1" />`);
-var __glob_0_112 = /* @__PURE__ */ Object.freeze({
+var __glob_0_118 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": left
 });
 var left_hide = _icon_template(`<path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"/>`);
-var __glob_0_113 = /* @__PURE__ */ Object.freeze({
+var __glob_0_119 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": left_hide
 });
 var lens = _icon_template(`<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>`);
-var __glob_0_114 = /* @__PURE__ */ Object.freeze({
+var __glob_0_120 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": lens
 });
 var light = _icon_template(`<path d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/>`);
-var __glob_0_115 = /* @__PURE__ */ Object.freeze({
+var __glob_0_121 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": light
@@ -20749,7 +20806,7 @@ var line_cap_butt = _icon_template(`
         <rect class="base" width="13" height="12" x="3" y="2" fill="transparent" fill-rule="nonzero"></rect>
         <path fill="currentColor" fill-rule="nonzero" d="M3.5,6.06300874 C4.20280365,6.2438979 4.7561021,6.79719635 4.93699126,7.5 L16,7.5 L16,8.5 L4.93699126,8.5 C4.7561021,9.20280365 4.20280365,9.7561021 3.5,9.93699126 L3.5,13.5 L16,13.5 L16,14.5 L2.5,14.5 L2.5,9.93699126 C1.63738639,9.71496986 1,8.93191971 1,8 C1,7.06808029 1.63738639,6.28503014 2.5,6.06300874 L2.5,1.5 L16,1.5 L16,2.5 L3.5,2.5 L3.5,6.06300874 Z"></path>
     `, { width: 18, height: 16 });
-var __glob_0_116 = /* @__PURE__ */ Object.freeze({
+var __glob_0_122 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_cap_butt
@@ -20758,7 +20815,7 @@ var line_cap_round = _icon_template(`
         <path class="base" fill="transparent" fill-rule="nonzero" d="M8,2 L16,2 L16,14 L8,14 C4.6862915,14 2,11.3137085 2,8 L2,8 C2,4.6862915 4.6862915,2 8,2 Z"></path>
         <path fill="currentColor" fill-rule="nonzero" d="M9.93699126,8.5 C9.71496986,9.36261361 8.93191971,10 8,10 C6.8954305,10 6,9.1045695 6,8 C6,6.8954305 6.8954305,6 8,6 C8.93191971,6 9.71496986,6.63738639 9.93699126,7.5 L16,7.5 L16,8.5 L9.93699126,8.5 Z M16,13.5 L16,14.5 L8,14.5 C4.41014913,14.5 1.5,11.5898509 1.5,8 C1.5,4.41014913 4.41014913,1.5 8,1.5 L16,1.5 L16,2.5 L8,2.5 C4.96243388,2.5 2.5,4.96243388 2.5,8 C2.5,11.0375661 4.96243388,13.5 8,13.5 L16,13.5 Z"></path>
     `, { width: 18, height: 16 });
-var __glob_0_117 = /* @__PURE__ */ Object.freeze({
+var __glob_0_123 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_cap_round
@@ -20767,133 +20824,133 @@ var line_cap_square = _icon_template(`
         <rect class="base" width="14" height="12" x="2" y="2" fill="transparent" fill-rule="nonzero"></rect>
         <path fill="currentColor" fill-rule="nonzero" d="M9.93699126,8.5 C9.71496986,9.36261361 8.93191971,10 8,10 C6.8954305,10 6,9.1045695 6,8 C6,6.8954305 6.8954305,6 8,6 C8.93191971,6 9.71496986,6.63738639 9.93699126,7.5 L16,7.5 L16,8.5 L9.93699126,8.5 Z M2.5,13.5 L16,13.5 L16,14.5 L1.5,14.5 L1.5,1.5 L16,1.5 L16,2.5 L2.5,2.5 L2.5,13.5 Z"></path>
     `, { width: 18, height: 16 });
-var __glob_0_118 = /* @__PURE__ */ Object.freeze({
+var __glob_0_124 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_cap_square
 });
 var line_chart = _icon_template(`<path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/>`);
-var __glob_0_119 = /* @__PURE__ */ Object.freeze({
+var __glob_0_125 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_chart
 });
 var line_join_bevel = _icon_template(`<g fill="none" fill-rule="evenodd"><polygon class="base" fill="transparent" fill-rule="nonzero" points="2 14.5 2 7.538 7.382 1.5 16 1.5 16 14.5"></polygon><path fill="currentColor" fill-rule="nonzero" d="M2.96551724,7.95245414 L2.96551724,14.5 L2,14.5 L2,7.53775146 L7.38172454,1.5 L16,1.5 L16,2.46 L7.76471206,2.46 L2.96551724,7.95245414 Z M10.9369913,9 C10.7561021,9.70280365 10.2028036,10.2561021 9.5,10.4369913 L9.5,14.5 L8.5,14.5 L8.5,10.4369913 C7.63738639,10.2149699 7,9.43191971 7,8.5 C7,7.3954305 7.8954305,6.5 9,6.5 C9.93191971,6.5 10.7149699,7.13738639 10.9369913,8 L16,8 L16,9 L10.9369913,9 Z"></path></g>`, { width: 18, height: 16 });
-var __glob_0_120 = /* @__PURE__ */ Object.freeze({
+var __glob_0_126 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_join_bevel
 });
 var line_join_miter = _icon_template(`<g fill="none" fill-rule="evenodd"><rect class="base" width="14" height="13" x="2" y="1.5" fill="transparent" fill-rule="nonzero"></rect><path fill="currentColor" fill-rule="nonzero" d="M10.9369913,9 C10.7561021,9.70280365 10.2028036,10.2561021 9.5,10.4369913 L9.5,14.5 L8.5,14.5 L8.5,10.4369913 C7.63738639,10.2149699 7,9.43191971 7,8.5 C7,7.3954305 7.8954305,6.5 9,6.5 C9.93191971,6.5 10.7149699,7.13738639 10.9369913,8 L16,8 L16,9 L10.9369913,9 Z M3,2.5 L3,14.5 L2,14.5 L2,1.5 L16,1.5 L16,2.5 L3,2.5 Z"></path></g>`, { width: 18, height: 16 });
-var __glob_0_121 = /* @__PURE__ */ Object.freeze({
+var __glob_0_127 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_join_miter
 });
 var line_join_round = _icon_template(`<g fill="none" fill-rule="evenodd"><path class="base" fill="transparent" fill-rule="nonzero" d="M9,1.5 L16,1.5 L16,14.5 L2,14.5 L2,8.5 C2,4.63400675 5.13400675,1.5 9,1.5 Z"></path><path fill="currentColor" fill-rule="nonzero" d="M2.96551724,14.5 L2,14.5 L2,7.74 C2,4.29374316 4.80979916,1.5 8.27586207,1.5 L16,1.5 L16,2.46 L8.27586207,2.46 C5.3430396,2.46 2.96551724,4.82393652 2.96551724,7.74 L2.96551724,14.5 Z M10.9369913,9 C10.7561021,9.70280365 10.2028036,10.2561021 9.5,10.4369913 L9.5,14.5 L8.5,14.5 L8.5,10.4369913 C7.63738639,10.2149699 7,9.43191971 7,8.5 C7,7.3954305 7.8954305,6.5 9,6.5 C9.93191971,6.5 10.7149699,7.13738639 10.9369913,8 L16,8 L16,9 L10.9369913,9 Z"></path></g>`, { width: 18, height: 16 });
-var __glob_0_122 = /* @__PURE__ */ Object.freeze({
+var __glob_0_128 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_join_round
 });
 var line_style = _icon_template(`<path d="M3 16h5v-2H3v2zm6.5 0h5v-2h-5v2zm6.5 0h5v-2h-5v2zM3 20h2v-2H3v2zm4 0h2v-2H7v2zm4 0h2v-2h-2v2zm4 0h2v-2h-2v2zm4 0h2v-2h-2v2zM3 12h8v-2H3v2zm10 0h8v-2h-8v2zM3 4v4h18V4H3z"/>`);
-var __glob_0_123 = /* @__PURE__ */ Object.freeze({
+var __glob_0_129 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_style
 });
 var line_weight = _icon_template(`<path d="M3 17h18v-2H3v2zm0 3h18v-1H3v1zm0-7h18v-3H3v3zm0-9v4h18V4H3z"/>`);
-var __glob_0_124 = /* @__PURE__ */ Object.freeze({
+var __glob_0_130 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_weight
 });
 var list = _icon_template(`<path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"/>`);
-var __glob_0_125 = /* @__PURE__ */ Object.freeze({
+var __glob_0_131 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": list
 });
 var local_library = _icon_template(`<path d="M12 11.55C9.64 9.35 6.48 8 3 8v11c3.48 0 6.64 1.35 9 3.55 2.36-2.19 5.52-3.55 9-3.55V8c-3.48 0-6.64 1.35-9 3.55zM12 8c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3z"/>`);
-var __glob_0_126 = /* @__PURE__ */ Object.freeze({
+var __glob_0_132 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": local_library
 });
 var local_movie = _icon_template(`<path d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/>`);
-var __glob_0_127 = /* @__PURE__ */ Object.freeze({
+var __glob_0_133 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": local_movie
 });
 var lock = _icon_template(`<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>`);
-var __glob_0_128 = /* @__PURE__ */ Object.freeze({
+var __glob_0_134 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": lock
 });
 var lock_open = _icon_template(`<path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>`);
-var __glob_0_129 = /* @__PURE__ */ Object.freeze({
+var __glob_0_135 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": lock_open
 });
 var looks = _icon_template(`<path d="M12 10c-3.86 0-7 3.14-7 7h2c0-2.76 2.24-5 5-5s5 2.24 5 5h2c0-3.86-3.14-7-7-7zm0-4C5.93 6 1 10.93 1 17h2c0-4.96 4.04-9 9-9s9 4.04 9 9h2c0-6.07-4.93-11-11-11z"/>`);
-var __glob_0_130 = /* @__PURE__ */ Object.freeze({
+var __glob_0_136 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": looks
 });
 var margin = _icon_template(`<path d="M3,3v18h18V3H3z M19,19H5V5h14V19z M11,7h2v2h-2V7z M7,7h2v2H7V7z M15,7h2v2h-2V7z M7,11h2v2H7V11z M11,11h2v2h-2V11z M15,11h2v2h-2V11z"/>`);
-var __glob_0_131 = /* @__PURE__ */ Object.freeze({
+var __glob_0_137 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": margin
 });
 var merge = _icon_template(`<path d="M17 20.41L18.41 19 15 15.59 13.59 17 17 20.41zM7.5 8H11v5.59L5.59 19 7 20.41l6-6V8h3.5L12 3.5 7.5 8z"/>`);
-var __glob_0_132 = /* @__PURE__ */ Object.freeze({
+var __glob_0_138 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": merge
 });
 var middle = _icon_template(`<path d="M4,12 L20,12Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />`);
-var __glob_0_133 = /* @__PURE__ */ Object.freeze({
+var __glob_0_139 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": middle
 });
 var navigation = _icon_template(`<path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" transform="rotate(-30 12 12)" stroke-width="1" fill="transparent"/>`);
-var __glob_0_134 = /* @__PURE__ */ Object.freeze({
+var __glob_0_140 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": navigation
 });
 var near_me = _icon_template(`<path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/>`);
-var __glob_0_135 = /* @__PURE__ */ Object.freeze({
+var __glob_0_141 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": near_me
 });
 var north = _icon_template(`<path d="M5,9l1.41,1.41L11,5.83V22H13V5.83l4.59,4.59L19,9l-7-7L5,9z"/>`);
-var __glob_0_136 = /* @__PURE__ */ Object.freeze({
+var __glob_0_142 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": north
 });
 var note = _icon_template(`<path d="M17 10H7v2h10v-2zm2-7h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zm-5-5H7v2h7v-2z"/>`);
-var __glob_0_137 = /* @__PURE__ */ Object.freeze({
+var __glob_0_143 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": note
 });
 var nowrap = _icon_template(`<path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/>`);
-var __glob_0_138 = /* @__PURE__ */ Object.freeze({
+var __glob_0_144 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": nowrap
 });
 var opacity = _icon_template(`<path d="M17.66 8L12 2.35 6.34 8C4.78 9.56 4 11.64 4 13.64s.78 4.11 2.34 5.67 3.61 2.35 5.66 2.35 4.1-.79 5.66-2.35S20 15.64 20 13.64 19.22 9.56 17.66 8zM6 14c.01-2 .62-3.27 1.76-4.4L12 5.27l4.24 4.38C17.38 10.77 17.99 12 18 14H6z"/>`);
-var __glob_0_139 = /* @__PURE__ */ Object.freeze({
+var __glob_0_145 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": opacity
@@ -20903,7 +20960,7 @@ function open_in_full(transform2 = "") {
         <g transform='${transform2}'><path fill='#fff' d='M2.6 5.6L0 8.3 2.6 11l1.2-1.2-.5-.5h9.4l-.5.5 1.2 1.2L16 8.3l-2.6-2.7-1.2 1.2.5.5H3.3l.5-.5-1.2-1.2z'/><path fill='#231f20' d='M5.1 279h-4v1h5v-5h-1zm5 0v5h-5v1h5v5h1v-5h5v-1h-5v-5z'/><path fill='#fff' d='M.6 278.5h4v-4h2v6h-6zm4.5.5h-4v1h5v-5h-1zm4.5-.5h2v5h5v2h-5v5h-2v-5h-5v-2h5zm.5 5.5h-5v1h5v5h1v-5h5v-1h-5v-5h-1z'/><path fill='#000' d='M2.6 6.3l-2 2 2 2 .6-.5-1-1H14l-1 1 .5.5 2-2-2-2-.5.5 1 1H2.1l1-1-.5-.5z'/></g>
     `, { width: 24, height: 24, viewBoxWidth: 16, viewBoxHeight: 16 });
 }
-var __glob_0_140 = /* @__PURE__ */ Object.freeze({
+var __glob_0_146 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": open_in_full
@@ -20911,91 +20968,91 @@ var __glob_0_140 = /* @__PURE__ */ Object.freeze({
 var outline = _icon_template(`
     <path d="M19.77 4.93l1.4 1.4L8.43 19.07l-5.6-5.6 1.4-1.4 4.2 4.2L19.77 4.93m0-2.83L8.43 13.44l-4.2-4.2L0 13.47l8.43 8.43L24 6.33 19.77 2.1z"/>
 `);
-var __glob_0_141 = /* @__PURE__ */ Object.freeze({
+var __glob_0_147 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": outline
 });
 var outline_circle = _icon_template(`<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>`);
-var __glob_0_142 = /* @__PURE__ */ Object.freeze({
+var __glob_0_148 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": outline_circle
 });
 var outline_image = _icon_template(`<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54-1.96-2.36L6.5 17h11l-3.54-4.71z"/>`);
-var __glob_0_143 = /* @__PURE__ */ Object.freeze({
+var __glob_0_149 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": outline_image
 });
 var outline_rect = _icon_template(`<path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>`);
-var __glob_0_144 = /* @__PURE__ */ Object.freeze({
+var __glob_0_150 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": outline_rect
 });
 var outline_shape = _icon_template(`<path d="M2 12C2 6.48 6.48 2 12 2s10 4.48 10 10-4.48 10-10 10S2 17.52 2 12zm10 6c3.31 0 6-2.69 6-6s-2.69-6-6-6-6 2.69-6 6 2.69 6 6 6z"/>`);
-var __glob_0_145 = /* @__PURE__ */ Object.freeze({
+var __glob_0_151 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": outline_shape
 });
 var padding = _icon_template(`<path d="M3 5h2V3c-1.1 0-2 .9-2 2zm0 8h2v-2H3v2zm4 8h2v-2H7v2zM3 9h2V7H3v2zm10-6h-2v2h2V3zm6 0v2h2c0-1.1-.9-2-2-2zM5 21v-2H3c0 1.1.9 2 2 2zm-2-4h2v-2H3v2zM9 3H7v2h2V3zm2 18h2v-2h-2v2zm8-8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2zm0-12h2V7h-2v2zm0 8h2v-2h-2v2zm-4 4h2v-2h-2v2zm0-16h2V3h-2v2zM7 17h10V7H7v10zm2-8h6v6H9V9z"/>`);
-var __glob_0_146 = /* @__PURE__ */ Object.freeze({
+var __glob_0_152 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": padding
 });
 var paint = _icon_template(`<path d="M18 4V3c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h12c.55 0 1-.45 1-1V6h1v4H9v11c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-9h8V4h-3z"/>`);
-var __glob_0_147 = /* @__PURE__ */ Object.freeze({
+var __glob_0_153 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": paint
 });
 var palette = _icon_template(`<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>`);
-var __glob_0_148 = /* @__PURE__ */ Object.freeze({
+var __glob_0_154 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": palette
 });
 var pantool = _icon_template(`<path d="M18 24h-6.55c-1.08 0-2.14-.45-2.89-1.23l-7.3-7.61 2.07-1.83c.62-.55 1.53-.66 2.26-.27L8 14.34V4.79c0-1.38 1.12-2.5 2.5-2.5.17 0 .34.02.51.05.09-1.3 1.17-2.33 2.49-2.33.86 0 1.61.43 2.06 1.09.29-.12.61-.18.94-.18 1.38 0 2.5 1.12 2.5 2.5v.28c.16-.03.33-.05.5-.05 1.38 0 2.5 1.12 2.5 2.5V20c0 2.21-1.79 4-4 4zM4.14 15.28l5.86 6.1c.38.39.9.62 1.44.62H18c1.1 0 2-.9 2-2V6.15c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12h-2V3.42c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12h-2V2.51c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12h-2V4.79c0-.28-.22-.5-.5-.5s-.5.23-.5.5v12.87l-5.35-2.83-.51.45z"/>`);
-var __glob_0_149 = /* @__PURE__ */ Object.freeze({
+var __glob_0_155 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pantool
 });
 var pattern_check = _icon_template(`<path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/>`);
-var __glob_0_150 = /* @__PURE__ */ Object.freeze({
+var __glob_0_156 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pattern_check
 });
 var pattern_cross_dot = _icon_template(`<path d="M6,13c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S6.55,13,6,13z M6,17c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1 S6.55,17,6,17z M6,9c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S6.55,9,6,9z M3,9.5c-0.28,0-0.5,0.22-0.5,0.5s0.22,0.5,0.5,0.5 s0.5-0.22,0.5-0.5S3.28,9.5,3,9.5z M6,5C5.45,5,5,5.45,5,6s0.45,1,1,1s1-0.45,1-1S6.55,5,6,5z M21,10.5c0.28,0,0.5-0.22,0.5-0.5 S21.28,9.5,21,9.5s-0.5,0.22-0.5,0.5S20.72,10.5,21,10.5z M14,7c0.55,0,1-0.45,1-1s-0.45-1-1-1s-1,0.45-1,1S13.45,7,14,7z M14,3.5 c0.28,0,0.5-0.22,0.5-0.5S14.28,2.5,14,2.5S13.5,2.72,13.5,3S13.72,3.5,14,3.5z M3,13.5c-0.28,0-0.5,0.22-0.5,0.5 s0.22,0.5,0.5,0.5s0.5-0.22,0.5-0.5S3.28,13.5,3,13.5z M10,20.5c-0.28,0-0.5,0.22-0.5,0.5s0.22,0.5,0.5,0.5s0.5-0.22,0.5-0.5 S10.28,20.5,10,20.5z M10,3.5c0.28,0,0.5-0.22,0.5-0.5S10.28,2.5,10,2.5S9.5,2.72,9.5,3S9.72,3.5,10,3.5z M10,7c0.55,0,1-0.45,1-1 s-0.45-1-1-1S9,5.45,9,6S9.45,7,10,7z M10,12.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5S10.83,12.5,10,12.5z M18,13c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S18.55,13,18,13z M18,17c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1 S18.55,17,18,17z M18,9c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S18.55,9,18,9z M18,5c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1 S18.55,5,18,5z M21,13.5c-0.28,0-0.5,0.22-0.5,0.5s0.22,0.5,0.5,0.5s0.5-0.22,0.5-0.5S21.28,13.5,21,13.5z M14,17 c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S14.55,17,14,17z M14,20.5c-0.28,0-0.5,0.22-0.5,0.5s0.22,0.5,0.5,0.5s0.5-0.22,0.5-0.5 S14.28,20.5,14,20.5z M10,8.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5S10.83,8.5,10,8.5z M10,17 c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S10.55,17,10,17z M14,12.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5 S14.83,12.5,14,12.5z M14,8.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5S14.83,8.5,14,8.5z"/>`);
-var __glob_0_151 = /* @__PURE__ */ Object.freeze({
+var __glob_0_157 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pattern_cross_dot
 });
 var pattern_dot = _icon_template(`<path d="M6,13c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S6.55,13,6,13z M6,17c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1 S6.55,17,6,17z M6,9c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S6.55,9,6,9z M3,9.5c-0.28,0-0.5,0.22-0.5,0.5s0.22,0.5,0.5,0.5 s0.5-0.22,0.5-0.5S3.28,9.5,3,9.5z M6,5C5.45,5,5,5.45,5,6s0.45,1,1,1s1-0.45,1-1S6.55,5,6,5z M21,10.5c0.28,0,0.5-0.22,0.5-0.5 S21.28,9.5,21,9.5s-0.5,0.22-0.5,0.5S20.72,10.5,21,10.5z M14,7c0.55,0,1-0.45,1-1s-0.45-1-1-1s-1,0.45-1,1S13.45,7,14,7z M14,3.5 c0.28,0,0.5-0.22,0.5-0.5S14.28,2.5,14,2.5S13.5,2.72,13.5,3S13.72,3.5,14,3.5z M3,13.5c-0.28,0-0.5,0.22-0.5,0.5 s0.22,0.5,0.5,0.5s0.5-0.22,0.5-0.5S3.28,13.5,3,13.5z M10,20.5c-0.28,0-0.5,0.22-0.5,0.5s0.22,0.5,0.5,0.5s0.5-0.22,0.5-0.5 S10.28,20.5,10,20.5z M10,3.5c0.28,0,0.5-0.22,0.5-0.5S10.28,2.5,10,2.5S9.5,2.72,9.5,3S9.72,3.5,10,3.5z M10,7c0.55,0,1-0.45,1-1 s-0.45-1-1-1S9,5.45,9,6S9.45,7,10,7z M10,12.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5S10.83,12.5,10,12.5z M18,13c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S18.55,13,18,13z M18,17c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1 S18.55,17,18,17z M18,9c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S18.55,9,18,9z M18,5c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1 S18.55,5,18,5z M21,13.5c-0.28,0-0.5,0.22-0.5,0.5s0.22,0.5,0.5,0.5s0.5-0.22,0.5-0.5S21.28,13.5,21,13.5z M14,17 c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S14.55,17,14,17z M14,20.5c-0.28,0-0.5,0.22-0.5,0.5s0.22,0.5,0.5,0.5s0.5-0.22,0.5-0.5 S14.28,20.5,14,20.5z M10,8.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5S10.83,8.5,10,8.5z M10,17 c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S10.55,17,10,17z M14,12.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5 S14.83,12.5,14,12.5z M14,8.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5S14.83,8.5,14,8.5z"/>`);
-var __glob_0_152 = /* @__PURE__ */ Object.freeze({
+var __glob_0_158 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pattern_dot
 });
 var pattern_grid = _icon_template(`<path d="M22,7V5h-3V2h-2v3h-4V2h-2v3H7V2H5v3H2v2h3v4H2v2h3v4H2v2h3v3h2v-3h4v3h2v-3h4v3h2v-3h3v-2h-3v-4h3v-2h-3V7H22z M7,7h4v4 H7V7z M7,17v-4h4v4H7z M17,17h-4v-4h4V17z M17,11h-4V7h4V11z"/>`);
-var __glob_0_153 = /* @__PURE__ */ Object.freeze({
+var __glob_0_159 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pattern_grid
 });
 var pattern_horizontal_line = _icon_template(`<path d="M3 15h18v-2H3v2zm0 4h18v-2H3v2zm0-8h18V9H3v2zm0-6v2h18V5H3z"/>`);
-var __glob_0_154 = /* @__PURE__ */ Object.freeze({
+var __glob_0_160 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pattern_horizontal_line
 });
 var pause = _icon_template(`<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`);
-var __glob_0_155 = /* @__PURE__ */ Object.freeze({
+var __glob_0_161 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pause
@@ -21005,97 +21062,97 @@ var pentool = _icon_template(`
         <path stroke="currentColor" d="M 7.501491970838878 -0.0000015572448855733659Q 14.336036333057622 7.389304433496911 15.674208571053226 11.025537025755131Q 17.012380809048864 14.661769618013372 12.854180922821438 14.544928811787997L 12.854180922821438 16.99999278410904L 3.2146550430021494 16.99999278410904L 3.2146550430021494 14.544928811787997Q -0.8480130988910353 14.661769618013372 0.22369613306813782 11.025537025755131Q 1.295405365027311 7.389304433496911 7.501491970838878 -0.0000015572448855733659Z M 7.501491970838878 -0.0000015572448855733659M 7.043097362212707 10.615180199186797L 7.043097362212707 2.029497238417552Q 2.4235653311211847 7.389304433496911 1.2143202542326725 11.099378313047254Q 0.22369613306813782 14.380813978493594 4.269842778971384 13.709709450113499L 4.269842778971384 16.233605781316655L 11.751764459057853 16.233605781316655L 11.751764459057853 13.709709450113499Q 15.84146041516868 14.140123940309786 14.670231046646997 10.775846698306177Q 14.195747591990225 9.593976493057127 8.077664264490855 2.029497238417552L 8.077664264490855 10.615180199186797L 7.043097362212707 10.615180199186797Z"/>
     </g>
 `);
-var __glob_0_156 = /* @__PURE__ */ Object.freeze({
+var __glob_0_162 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pentool
 });
 var photo = _icon_template(`<path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>`);
-var __glob_0_157 = /* @__PURE__ */ Object.freeze({
+var __glob_0_163 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": photo
 });
 var play = _icon_template(`<path d="M8 5v14l11-7z"/>`);
-var __glob_0_158 = /* @__PURE__ */ Object.freeze({
+var __glob_0_164 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": play
 });
 var plugin = _icon_template(`<path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm15 0h-2v3h-3v2h3v3h2v-3h3v-2h-3z"/>`);
-var __glob_0_159 = /* @__PURE__ */ Object.freeze({
+var __glob_0_165 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": plugin
 });
-var polygon = _icon_template(`<path d="M17.2,3H6.8l-5.2,9l5.2,9h10.4l5.2-9L17.2,3z M16.05,19H7.95l-4.04-7l4.04-7h8.09l4.04,7L16.05,19z"/>`);
-var __glob_0_160 = /* @__PURE__ */ Object.freeze({
+var polygon$1 = _icon_template(`<path d="M17.2,3H6.8l-5.2,9l5.2,9h10.4l5.2-9L17.2,3z M16.05,19H7.95l-4.04-7l4.04-7h8.09l4.04,7L16.05,19z"/>`);
+var __glob_0_166 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
-  "default": polygon
+  "default": polygon$1
 });
 var power_input = _icon_template(`<path d="M2 9v2h19V9H2zm0 6h5v-2H2v2zm7 0h5v-2H9v2zm7 0h5v-2h-5v2z"/>`);
-var __glob_0_161 = /* @__PURE__ */ Object.freeze({
+var __glob_0_167 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": power_input
 });
 var publish = _icon_template(`<path d="M5 4v2h14V4H5zm0 10h4v6h6v-6h4l-7-7-7 7z"/>`);
-var __glob_0_162 = /* @__PURE__ */ Object.freeze({
+var __glob_0_168 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": publish
 });
 var rect$1 = _icon_template(`<path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>`);
-var __glob_0_163 = /* @__PURE__ */ Object.freeze({
+var __glob_0_169 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": rect$1
 });
 var redo = _icon_template(`<path d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"/>`);
-var __glob_0_164 = /* @__PURE__ */ Object.freeze({
+var __glob_0_170 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": redo
 });
 var refresh = _icon_template(`<path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>`);
-var __glob_0_165 = /* @__PURE__ */ Object.freeze({
+var __glob_0_171 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": refresh
 });
 var remove = _icon_template(`<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>`);
-var __glob_0_166 = /* @__PURE__ */ Object.freeze({
+var __glob_0_172 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": remove
 });
 var remove2 = _icon_template(`<path d="M19 13H5v-2h14v2z"/>`);
-var __glob_0_167 = /* @__PURE__ */ Object.freeze({
+var __glob_0_173 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": remove2
 });
 var repeat = _icon_template(`<path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/>`);
-var __glob_0_168 = /* @__PURE__ */ Object.freeze({
+var __glob_0_174 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": repeat
 });
 var replay = _icon_template(`<defs><path id="a" d="M0 0h24v24H0V0z"/></defs><clipPath id="b"><use xlink:href="#a" overflow="visible"/></clipPath><path d="M12 5V1L7 6l5 5V7c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8zm-1.1 11H10v-3.3L9 13v-.7l1.8-.6h.1V16zm4.3-1.8c0 .3 0 .6-.1.8l-.3.6s-.3.3-.5.3-.4.1-.6.1-.4 0-.6-.1-.3-.2-.5-.3-.2-.3-.3-.6-.1-.5-.1-.8v-.7c0-.3 0-.6.1-.8l.3-.6s.3-.3.5-.3.4-.1.6-.1.4 0 .6.1c.2.1.3.2.5.3s.2.3.3.6.1.5.1.8v.7zm-.9-.8v-.5s-.1-.2-.1-.3-.1-.1-.2-.2-.2-.1-.3-.1-.2 0-.3.1l-.2.2s-.1.2-.1.3v2s.1.2.1.3.1.1.2.2.2.1.3.1.2 0 .3-.1l.2-.2s.1-.2.1-.3v-1.5z" clip-path="url(#b)"/>`);
-var __glob_0_169 = /* @__PURE__ */ Object.freeze({
+var __glob_0_175 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": replay
 });
 var right = _icon_template(`<path d="M20,4 L20,20Z M6,10 L16,10 L16,14 L6,14Z" stroke-width="1" />`);
-var __glob_0_170 = /* @__PURE__ */ Object.freeze({
+var __glob_0_176 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": right
 });
 var right_hide = _icon_template(`<path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"/>`);
-var __glob_0_171 = /* @__PURE__ */ Object.freeze({
+var __glob_0_177 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": right_hide
@@ -21103,19 +21160,19 @@ var __glob_0_171 = /* @__PURE__ */ Object.freeze({
 var rotate = _icon_template(`
         <path d="M7.11 8.53L5.7 7.11C4.8 8.27 4.24 9.61 4.07 11h2.02c.14-.87.49-1.72 1.02-2.47zM6.09 13H4.07c.17 1.39.72 2.73 1.62 3.89l1.41-1.42c-.52-.75-.87-1.59-1.01-2.47zm1.01 5.32c1.16.9 2.51 1.44 3.9 1.61V17.9c-.87-.15-1.71-.49-2.46-1.03L7.1 18.32zM13 4.07V1L8.45 5.55 13 10V6.09c2.84.48 5 2.94 5 5.91s-2.16 5.43-5 5.91v2.02c3.95-.49 7-3.85 7-7.93s-3.05-7.44-7-7.93z" stroke='white' stroke-width="0.5" />
     `);
-var __glob_0_172 = /* @__PURE__ */ Object.freeze({
+var __glob_0_178 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": rotate
 });
 var rotate_left = _icon_template(`<path d="M7.11 8.53L5.7 7.11C4.8 8.27 4.24 9.61 4.07 11h2.02c.14-.87.49-1.72 1.02-2.47zM6.09 13H4.07c.17 1.39.72 2.73 1.62 3.89l1.41-1.42c-.52-.75-.87-1.59-1.01-2.47zm1.01 5.32c1.16.9 2.51 1.44 3.9 1.61V17.9c-.87-.15-1.71-.49-2.46-1.03L7.1 18.32zM13 4.07V1L8.45 5.55 13 10V6.09c2.84.48 5 2.94 5 5.91s-2.16 5.43-5 5.91v2.02c3.95-.49 7-3.85 7-7.93s-3.05-7.44-7-7.93z"/>`);
-var __glob_0_173 = /* @__PURE__ */ Object.freeze({
+var __glob_0_179 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": rotate_left
 });
 var round = _icon_template(`<path d="M19 19h2v2h-2v-2zm0-2h2v-2h-2v2zM3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm0-4h2V3H3v2zm4 0h2V3H7v2zm8 16h2v-2h-2v2zm-4 0h2v-2h-2v2zm4 0h2v-2h-2v2zm-8 0h2v-2H7v2zm-4 0h2v-2H3v2zM21 8c0-2.76-2.24-5-5-5h-5v2h5c1.65 0 3 1.35 3 3v5h2V8z"/>`);
-var __glob_0_174 = /* @__PURE__ */ Object.freeze({
+var __glob_0_180 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": round
@@ -21123,7 +21180,7 @@ var __glob_0_174 = /* @__PURE__ */ Object.freeze({
 var same_height = _icon_template(`
     <path d="M4,4 L20,4Z M4,20 L20,20Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />
 `);
-var __glob_0_175 = /* @__PURE__ */ Object.freeze({
+var __glob_0_181 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": same_height
@@ -21131,259 +21188,265 @@ var __glob_0_175 = /* @__PURE__ */ Object.freeze({
 var same_width = _icon_template(`
     <path d="M20,4 L20,20Z M2,4 L2,20Z M6,10 L16,10 L16,14 L6,14Z" stroke-width="1" />
 `);
-var __glob_0_176 = /* @__PURE__ */ Object.freeze({
+var __glob_0_182 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": same_width
 });
 var save = _icon_template(`<path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z"/><path fill="none" d="M0 0h24v24H0z"/>`);
-var __glob_0_177 = /* @__PURE__ */ Object.freeze({
+var __glob_0_183 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": save
 });
 var scatter = _icon_template(`<g fill="#010101"><circle cx="7" cy="14" r="3"/><circle cx="11" cy="6" r="3"/><circle cx="16.6" cy="17.6" r="3"/></g>`);
-var __glob_0_178 = /* @__PURE__ */ Object.freeze({
+var __glob_0_184 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": scatter
 });
 var screen = _icon_template(`<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>`);
-var __glob_0_179 = /* @__PURE__ */ Object.freeze({
+var __glob_0_185 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": screen
 });
 var setting = _icon_template(`<path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/>`);
-var __glob_0_180 = /* @__PURE__ */ Object.freeze({
+var __glob_0_186 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": setting
 });
 var settings_input_component = _icon_template(`<path d="M5 2c0-.55-.45-1-1-1s-1 .45-1 1v4H1v6h6V6H5V2zm4 14c0 1.3.84 2.4 2 2.82V23h2v-4.18c1.16-.41 2-1.51 2-2.82v-2H9v2zm-8 0c0 1.3.84 2.4 2 2.82V23h2v-4.18C6.16 18.4 7 17.3 7 16v-2H1v2zM21 6V2c0-.55-.45-1-1-1s-1 .45-1 1v4h-2v6h6V6h-2zm-8-4c0-.55-.45-1-1-1s-1 .45-1 1v4H9v6h6V6h-2V2zm4 14c0 1.3.84 2.4 2 2.82V23h2v-4.18c1.16-.41 2-1.51 2-2.82v-2h-6v2z"/>`);
-var __glob_0_181 = /* @__PURE__ */ Object.freeze({
+var __glob_0_187 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": settings_input_component
 });
 var shadow$1 = _icon_template(`<path d="M15.96 10.29l-2.75 3.54-1.96-2.36L8.5 15h11l-3.54-4.71zM3 5H1v16c0 1.1.9 2 2 2h16v-2H3V5zm18-4H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 16H7V3h14v14z"/>`);
-var __glob_0_182 = /* @__PURE__ */ Object.freeze({
+var __glob_0_188 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": shadow$1
 });
 var shape = _icon_template(`<path d="M23 7V1h-6v2H7V1H1v6h2v10H1v6h6v-2h10v2h6v-6h-2V7h2zM3 3h2v2H3V3zm2 18H3v-2h2v2zm12-2H7v-2H5V7h2V5h10v2h2v10h-2v2zm4 2h-2v-2h2v2zM19 5V3h2v2h-2z"/>`);
-var __glob_0_183 = /* @__PURE__ */ Object.freeze({
+var __glob_0_189 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": shape
 });
 var shuffle = _icon_template(`<path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/>`);
-var __glob_0_184 = /* @__PURE__ */ Object.freeze({
+var __glob_0_190 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": shuffle
 });
 var size = _icon_template(`<path d="M21 15h2v2h-2v-2zm0-4h2v2h-2v-2zm2 8h-2v2c1 0 2-1 2-2zM13 3h2v2h-2V3zm8 4h2v2h-2V7zm0-4v2h2c0-1-1-2-2-2zM1 7h2v2H1V7zm16-4h2v2h-2V3zm0 16h2v2h-2v-2zM3 3C2 3 1 4 1 5h2V3zm6 0h2v2H9V3zM5 3h2v2H5V3zm-4 8v8c0 1.1.9 2 2 2h12V11H1zm2 8l2.5-3.21 1.79 2.15 2.5-3.22L13 19H3z"/>`);
-var __glob_0_185 = /* @__PURE__ */ Object.freeze({
+var __glob_0_191 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": size
 });
 var skip_next = _icon_template(`<path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>`);
-var __glob_0_186 = /* @__PURE__ */ Object.freeze({
+var __glob_0_192 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": skip_next
 });
 var skip_prev = _icon_template(`<path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>`);
-var __glob_0_187 = /* @__PURE__ */ Object.freeze({
+var __glob_0_193 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": skip_prev
 });
 var smooth = _icon_template(`<path d="M4.59 6.89c.7-.71 1.4-1.35 1.71-1.22.5.2 0 1.03-.3 1.52-.25.42-2.86 3.89-2.86 6.31 0 1.28.48 2.34 1.34 2.98.75.56 1.74.73 2.64.46 1.07-.31 1.95-1.4 3.06-2.77 1.21-1.49 2.83-3.44 4.08-3.44 1.63 0 1.65 1.01 1.76 1.79-3.78.64-5.38 3.67-5.38 5.37 0 1.7 1.44 3.09 3.21 3.09 1.63 0 4.29-1.33 4.69-6.1H21v-2.5h-2.47c-.15-1.65-1.09-4.2-4.03-4.2-2.25 0-4.18 1.91-4.94 2.84-.58.73-2.06 2.48-2.29 2.72-.25.3-.68.84-1.11.84-.45 0-.72-.83-.36-1.92.35-1.09 1.4-2.86 1.85-3.52.78-1.14 1.3-1.92 1.3-3.28C8.95 3.69 7.31 3 6.44 3 5.12 3 3.97 4 3.72 4.25c-.36.36-.66.66-.88.93l1.75 1.71zm9.29 11.66c-.31 0-.74-.26-.74-.72 0-.6.73-2.2 2.87-2.76-.3 2.69-1.43 3.48-2.13 3.48z"/>`);
-var __glob_0_188 = /* @__PURE__ */ Object.freeze({
+var __glob_0_194 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": smooth
 });
 var source = _icon_template(`<path d="M20,6h-8l-2-2H4C2.9,4,2.01,4.9,2.01,6L2,18c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V8C22,6.9,21.1,6,20,6z M20,18L4,18V6h5.17 l2,2H20V18z M18,12H6v-2h12V12z M14,16H6v-2h8V16z"/>`);
-var __glob_0_189 = /* @__PURE__ */ Object.freeze({
+var __glob_0_195 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": source
 });
 var south = _icon_template(`<path d="M19,15l-1.41-1.41L13,18.17V2H11v16.17l-4.59-4.59L5,15l7,7L19,15z"/>`);
-var __glob_0_190 = /* @__PURE__ */ Object.freeze({
+var __glob_0_196 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": south
 });
 var space = _icon_template(`<path d="M18 9v4H6V9H4v6h16V9h-2z"/>`);
-var __glob_0_191 = /* @__PURE__ */ Object.freeze({
+var __glob_0_197 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": space
 });
 var specular = _icon_template(`<path d="M3.55 18.54l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8zM11 22.45h2V19.5h-2v2.95zM4 10.5H1v2h3v-2zm11-4.19V1.5H9v4.81C7.21 7.35 6 9.28 6 11.5c0 3.31 2.69 6 6 6s6-2.69 6-6c0-2.22-1.21-4.15-3-5.19zm5 4.19v2h3v-2h-3zm-2.76 7.66l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4z"/>`);
-var __glob_0_192 = /* @__PURE__ */ Object.freeze({
+var __glob_0_198 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": specular
 });
 var speed = _icon_template(`<path d="M20.38 8.57l-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44zm-9.79 6.84a2 2 0 0 0 2.83 0l5.66-8.49-8.49 5.66a2 2 0 0 0 0 2.83z"/>`);
-var __glob_0_193 = /* @__PURE__ */ Object.freeze({
+var __glob_0_199 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": speed
 });
 var star = _icon_template(`<path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>`);
-var __glob_0_194 = /* @__PURE__ */ Object.freeze({
+var __glob_0_200 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": star
 });
 var start$1 = _icon_template(`<path d="M14.59,7.41L18.17,11H6v2h12.17l-3.59,3.59L16,18l6-6l-6-6L14.59,7.41z M2,6v12h2V6H2z"/>`);
-var __glob_0_195 = /* @__PURE__ */ Object.freeze({
+var __glob_0_201 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": start$1
 });
 var storage = _icon_template(`<path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>`);
-var __glob_0_196 = /* @__PURE__ */ Object.freeze({
+var __glob_0_202 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": storage
 });
 var straighten = _icon_template(`<path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h2v4h2V8h2v4h2V8h2v4h2V8h2v4h2V8h2v8z"/>`);
-var __glob_0_197 = /* @__PURE__ */ Object.freeze({
+var __glob_0_203 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": straighten
 });
 var strikethrough = _icon_template(`<defs><path id="a" d="M0 0h24v24H0V0z"/></defs><clipPath id="b"><use xlink:href="#a" overflow="visible"/></clipPath><path clip-path="url(#b)" d="M7.24 8.75c-.26-.48-.39-1.03-.39-1.67 0-.61.13-1.16.4-1.67.26-.5.63-.93 1.11-1.29.48-.35 1.05-.63 1.7-.83.66-.19 1.39-.29 2.18-.29.81 0 1.54.11 2.21.34.66.22 1.23.54 1.69.94.47.4.83.88 1.08 1.43.25.55.38 1.15.38 1.81h-3.01c0-.31-.05-.59-.15-.85-.09-.27-.24-.49-.44-.68-.2-.19-.45-.33-.75-.44-.3-.1-.66-.16-1.06-.16-.39 0-.74.04-1.03.13-.29.09-.53.21-.72.36-.19.16-.34.34-.44.55-.1.21-.15.43-.15.66 0 .48.25.88.74 1.21.38.25.77.48 1.41.7H7.39c-.05-.08-.11-.17-.15-.25zM21 12v-2H3v2h9.62c.18.07.4.14.55.2.37.17.66.34.87.51.21.17.35.36.43.57.07.2.11.43.11.69 0 .23-.05.45-.14.66-.09.2-.23.38-.42.53-.19.15-.42.26-.71.35-.29.08-.63.13-1.01.13-.43 0-.83-.04-1.18-.13s-.66-.23-.91-.42c-.25-.19-.45-.44-.59-.75-.14-.31-.25-.76-.25-1.21H6.4c0 .55.08 1.13.24 1.58.16.45.37.85.65 1.21.28.35.6.66.98.92.37.26.78.48 1.22.65.44.17.9.3 1.38.39.48.08.96.13 1.44.13.8 0 1.53-.09 2.18-.28s1.21-.45 1.67-.79c.46-.34.82-.77 1.07-1.27s.38-1.07.38-1.71c0-.6-.1-1.14-.31-1.61-.05-.11-.11-.23-.17-.33H21z"/>`);
-var __glob_0_198 = /* @__PURE__ */ Object.freeze({
+var __glob_0_204 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": strikethrough
 });
 var stroke_to_path = _icon_template(`<path d="M20 4h-4l-4-4-4 4H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H4V6h4.52l3.52-3.5L15.52 6H20v14zM6 18h12V8H6v10zm2-8h8v6H8v-6z"/>`);
-var __glob_0_199 = /* @__PURE__ */ Object.freeze({
+var __glob_0_205 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": stroke_to_path
 });
 var swap_horiz = _icon_template(`<path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"/>`);
-var __glob_0_200 = /* @__PURE__ */ Object.freeze({
+var __glob_0_206 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": swap_horiz
 });
 var switch_left = _icon_template(`<path d="M8.5,8.62v6.76L5.12,12L8.5,8.62 M10,5l-7,7l7,7V5L10,5z M14,5v14l7-7L14,5z"/>`);
-var __glob_0_201 = /* @__PURE__ */ Object.freeze({
+var __glob_0_207 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": switch_left
 });
 var switch_right = _icon_template(`<path d="M15.5,15.38V8.62L18.88,12L15.5,15.38 M14,19l7-7l-7-7V19L14,19z M10,19V5l-7,7L10,19z"/>`);
-var __glob_0_202 = /* @__PURE__ */ Object.freeze({
+var __glob_0_208 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": switch_right
 });
 var sync = _icon_template(`<path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>`);
-var __glob_0_203 = /* @__PURE__ */ Object.freeze({
+var __glob_0_209 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sync
 });
 var table_rows = _icon_template(`<path d="M19,3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M19,5v3H5V5H19z M19,10v4H5v-4H19z M5,19v-3h14v3H5z"/>`);
-var __glob_0_204 = /* @__PURE__ */ Object.freeze({
+var __glob_0_210 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": table_rows
 });
 var text_rotate = _icon_template(`<path d="M12.75 3h-1.5L6.5 14h2.1l.9-2.2h5l.9 2.2h2.1L12.75 3zm-2.62 7L12 4.98 13.87 10h-3.74zm10.37 8l-3-3v2H5v2h12.5v2l3-3z"/>`);
-var __glob_0_205 = /* @__PURE__ */ Object.freeze({
+var __glob_0_211 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": text_rotate
 });
 var texture$1 = _icon_template(`<path d="M19.51 3.08L3.08 19.51c.09.34.27.65.51.9.25.24.56.42.9.51L20.93 4.49c-.19-.69-.73-1.23-1.42-1.41zM11.88 3L3 11.88v2.83L14.71 3h-2.83zM5 3c-1.1 0-2 .9-2 2v2l4-4H5zm14 18c.55 0 1.05-.22 1.41-.59.37-.36.59-.86.59-1.41v-2l-4 4h2zm-9.71 0h2.83L21 12.12V9.29L9.29 21z"/>`);
-var __glob_0_206 = /* @__PURE__ */ Object.freeze({
+var __glob_0_212 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": texture$1
 });
 var timer = _icon_template(`<path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>`);
-var __glob_0_207 = /* @__PURE__ */ Object.freeze({
+var __glob_0_213 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": timer
 });
 var title = _icon_template(`<path d="M5 4v3h5.5v12h3V7H19V4z"/>`);
-var __glob_0_208 = /* @__PURE__ */ Object.freeze({
+var __glob_0_214 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": title
 });
 var to_back = _icon_template(`<path d="M 7 7L 22 7L 22 22L 7 22L 7 7Z" style="fill:white !important;"/><path d="M 0 0L 14 0L 14 14L 0 14L 0 0Z M 16 16L 30 16L 30 30L 16 30L 16 16Z"/>`, { width: 30, height: 30 });
-var __glob_0_209 = /* @__PURE__ */ Object.freeze({
+var __glob_0_215 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": to_back
 });
 var to_front = _icon_template(`<path d="M 0 0L 14 0L 14 14L 0 14L 0 0Z M 16 16L 30 16L 30 30L 16 30L 16 16Z"/><path d="M 7 7L 22 7L 22 22L 7 22L 7 7Z" style="fill:white !important;"/>`, { width: 30, height: 30 });
-var __glob_0_210 = /* @__PURE__ */ Object.freeze({
+var __glob_0_216 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": to_front
 });
+var tonality = _icon_template(`<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c1.03.13 2 .45 2.87.93H13v-.93zM13 7h5.24c.25.31.48.65.68 1H13V7zm0 3h6.74c.08.33.15.66.19 1H13v-1zm0 9.93V19h2.87c-.87.48-1.84.8-2.87.93zM18.24 17H13v-1h5.92c-.2.35-.43.69-.68 1zm1.5-3H13v-1h6.93c-.04.34-.11.67-.19 1z"/>`);
+var __glob_0_217 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": tonality
+});
 var top = _icon_template(`<path d="M4,4 L20,4Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />`);
-var __glob_0_211 = /* @__PURE__ */ Object.freeze({
+var __glob_0_218 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": top
 });
 var transform$1 = _icon_template(`<path d="M22 18v-2H8V4h2L7 1 4 4h2v2H2v2h4v8c0 1.1.9 2 2 2h8v2h-2l3 3 3-3h-2v-2h4zM10 8h6v6h2V8c0-1.1-.9-2-2-2h-6v2z"/>`);
-var __glob_0_212 = /* @__PURE__ */ Object.freeze({
+var __glob_0_219 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": transform$1
 });
 var underline = _icon_template(`<path d="M12 17c3.31 0 6-2.69 6-6V3h-2.5v8c0 1.93-1.57 3.5-3.5 3.5S8.5 12.93 8.5 11V3H6v8c0 3.31 2.69 6 6 6zm-7 2v2h14v-2H5z"/>`);
-var __glob_0_213 = /* @__PURE__ */ Object.freeze({
+var __glob_0_220 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": underline
 });
 var undo = _icon_template(`<path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/>`);
-var __glob_0_214 = /* @__PURE__ */ Object.freeze({
+var __glob_0_221 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": undo
 });
 var unfold = _icon_template(`<path d="M12 5.83L15.17 9l1.41-1.41L12 3 7.41 7.59 8.83 9 12 5.83zm0 12.34L8.83 15l-1.41 1.41L12 21l4.59-4.59L15.17 15 12 18.17z"/>`);
-var __glob_0_215 = /* @__PURE__ */ Object.freeze({
+var __glob_0_222 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": unfold
 });
 var vertical_align_baseline = _icon_template(`<path d="M16,18v2H8v-2H16z M11,7.99V16h2V7.99h3L12,4L8,7.99H11z"/>`);
-var __glob_0_216 = /* @__PURE__ */ Object.freeze({
+var __glob_0_223 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vertical_align_baseline
 });
 var vertical_align_bottom = _icon_template(`<path d="M16 13h-3V3h-2v10H8l4 4 4-4zM4 19v2h16v-2H4z"/>`);
-var __glob_0_217 = /* @__PURE__ */ Object.freeze({
+var __glob_0_224 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vertical_align_bottom
 });
 var vertical_align_center = _icon_template(`<path d="M8 19h3v4h2v-4h3l-4-4-4 4zm8-14h-3V1h-2v4H8l4 4 4-4zM4 11v2h16v-2H4z"/>`);
-var __glob_0_218 = /* @__PURE__ */ Object.freeze({
+var __glob_0_225 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vertical_align_center
@@ -21392,19 +21455,19 @@ var vertical_align_stretch = _icon_template(`
     <path d="M19,13H5c-1.1,0-2,0.9-2,2v4c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2v-4C21,13.9,20.1,13,19,13z M19,19H5v-4h14V19z"/>
     <path d="M19,3H5C3.9,3,3,3.9,3,5v4c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M19,9H5V5h14V9z"/>
 `);
-var __glob_0_219 = /* @__PURE__ */ Object.freeze({
+var __glob_0_226 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vertical_align_stretch
 });
 var vertical_align_top = _icon_template(`<path d="M8 11h3v10h2V11h3l-4-4-4 4zM4 3v2h16V3H4z"/>`);
-var __glob_0_220 = /* @__PURE__ */ Object.freeze({
+var __glob_0_227 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vertical_align_top
 });
 var vertical_distribute = _icon_template(`<path d="M22,2v2H2V2H22z M7,10.5v3h10v-3H7z M2,20v2h20v-2H2z"/>`);
-var __glob_0_221 = /* @__PURE__ */ Object.freeze({
+var __glob_0_228 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vertical_distribute
@@ -21412,43 +21475,49 @@ var __glob_0_221 = /* @__PURE__ */ Object.freeze({
 var video$1 = _icon_template(`
         <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
     `);
-var __glob_0_222 = /* @__PURE__ */ Object.freeze({
+var __glob_0_229 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": video$1
 });
 var view_comfy = _icon_template(`<path d="M3 9h4V5H3v4zm0 5h4v-4H3v4zm5 0h4v-4H8v4zm5 0h4v-4h-4v4zM8 9h4V5H8v4zm5-4v4h4V5h-4zm5 9h4v-4h-4v4zM3 19h4v-4H3v4zm5 0h4v-4H8v4zm5 0h4v-4h-4v4zm5 0h4v-4h-4v4zm0-14v4h4V5h-4z"/>`);
-var __glob_0_223 = /* @__PURE__ */ Object.freeze({
+var __glob_0_230 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": view_comfy
 });
 var view_list = _icon_template(`<path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"/>`);
-var __glob_0_224 = /* @__PURE__ */ Object.freeze({
+var __glob_0_231 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": view_list
 });
 var view_week = _icon_template(`<path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M8,18H4V6h4V18z M14,18h-4V6h4V18z M20,18h-4V6h4V18z"/>`);
-var __glob_0_225 = /* @__PURE__ */ Object.freeze({
+var __glob_0_232 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": view_week
 });
 var view_week_reverse = _icon_template(`<path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M8,18H4V6h4V18z M14,18h-4V6h4V18z M20,18h-4V6h4V18z M0,12 L24,12"/>`);
-var __glob_0_226 = /* @__PURE__ */ Object.freeze({
+var __glob_0_233 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": view_week_reverse
 });
+var vignette = _icon_template(`<path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 15c-4.42 0-8-2.69-8-6s3.58-6 8-6 8 2.69 8 6-3.58 6-8 6z"/>`);
+var __glob_0_234 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": vignette
+});
 var vintage = _icon_template(`<path d="M18.7 12.4c-.28-.16-.57-.29-.86-.4.29-.11.58-.24.86-.4 1.92-1.11 2.99-3.12 3-5.19-1.79-1.03-4.07-1.11-6 0-.28.16-.54.35-.78.54.05-.31.08-.63.08-.95 0-2.22-1.21-4.15-3-5.19C10.21 1.85 9 3.78 9 6c0 .32.03.64.08.95-.24-.2-.5-.39-.78-.55-1.92-1.11-4.2-1.03-6 0 0 2.07 1.07 4.08 3 5.19.28.16.57.29.86.4-.29.11-.58.24-.86.4-1.92 1.11-2.99 3.12-3 5.19 1.79 1.03 4.07 1.11 6 0 .28-.16.54-.35.78-.54-.05.32-.08.64-.08.96 0 2.22 1.21 4.15 3 5.19 1.79-1.04 3-2.97 3-5.19 0-.32-.03-.64-.08-.95.24.2.5.38.78.54 1.92 1.11 4.2 1.03 6 0-.01-2.07-1.08-4.08-3-5.19zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>`);
-var __glob_0_227 = /* @__PURE__ */ Object.freeze({
+var __glob_0_235 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vintage
 });
 var visible = _icon_template(`<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>`);
-var __glob_0_228 = /* @__PURE__ */ Object.freeze({
+var __glob_0_236 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": visible
@@ -21456,7 +21525,7 @@ var __glob_0_228 = /* @__PURE__ */ Object.freeze({
 var volume_down = _icon_template(`
         <path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"/>
     `);
-var __glob_0_229 = /* @__PURE__ */ Object.freeze({
+var __glob_0_237 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": volume_down
@@ -21464,7 +21533,7 @@ var __glob_0_229 = /* @__PURE__ */ Object.freeze({
 var volume_off = _icon_template(`
     <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
 `);
-var __glob_0_230 = /* @__PURE__ */ Object.freeze({
+var __glob_0_238 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": volume_off
@@ -21472,54 +21541,54 @@ var __glob_0_230 = /* @__PURE__ */ Object.freeze({
 var volume_up = _icon_template(`
     <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
 `);
-var __glob_0_231 = /* @__PURE__ */ Object.freeze({
+var __glob_0_239 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": volume_up
 });
 var wave = _icon_template(`<path d="M17 16.99c-1.35 0-2.2.42-2.95.8-.65.33-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.95c1.35 0 2.2-.42 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.42 2.95-.8c.65-.33 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm0-4.45c-1.35 0-2.2.43-2.95.8-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.32-1.17.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm2.95-8.08c-.75-.38-1.58-.8-2.95-.8s-2.2.42-2.95.8c-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.37-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.93c1.35 0 2.2-.43 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V5.04c-.9 0-1.4-.25-2.05-.58zM17 8.09c-1.35 0-2.2.43-2.95.8-.65.35-1.15.6-2.05.6s-1.4-.25-2.05-.6c-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.35-1.15.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.32 1.18-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V9.49c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8z"/>`);
-var __glob_0_232 = /* @__PURE__ */ Object.freeze({
+var __glob_0_240 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": wave
 });
 var waves = _icon_template(`<path d="M17 16.99c-1.35 0-2.2.42-2.95.8-.65.33-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.95c1.35 0 2.2-.42 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.42 2.95-.8c.65-.33 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm0-4.45c-1.35 0-2.2.43-2.95.8-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.32-1.17.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm2.95-8.08c-.75-.38-1.58-.8-2.95-.8s-2.2.42-2.95.8c-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.37-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.93c1.35 0 2.2-.43 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V5.04c-.9 0-1.4-.25-2.05-.58zM17 8.09c-1.35 0-2.2.43-2.95.8-.65.35-1.15.6-2.05.6s-1.4-.25-2.05-.6c-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.35-1.15.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.32 1.18-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V9.49c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8z"/>`);
-var __glob_0_233 = /* @__PURE__ */ Object.freeze({
+var __glob_0_241 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": waves
 });
 var web = _icon_template(`<path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"/>`);
-var __glob_0_234 = /* @__PURE__ */ Object.freeze({
+var __glob_0_242 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": web
 });
 var west = _icon_template(`<path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z"/>`);
-var __glob_0_235 = /* @__PURE__ */ Object.freeze({
+var __glob_0_243 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": west
 });
 var width$1 = _icon_template(`<polygon transform="rotate(90 12 12)" points="13,6.99 16,6.99 12,3 8,6.99 11,6.99 11,17.01 8,17.01 12,21 16,17.01 13,17.01"/>`);
-var __glob_0_236 = /* @__PURE__ */ Object.freeze({
+var __glob_0_244 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": width$1
 });
 var wrap = _icon_template(`<path d="M11 9l1.42 1.42L8.83 14H18V4h2v12H8.83l3.59 3.58L11 21l-6-6 6-6z"/>`);
-var __glob_0_237 = /* @__PURE__ */ Object.freeze({
+var __glob_0_245 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": wrap
 });
 var wrap_text = _icon_template(`<path d="M4 19h6v-2H4v2zM20 5H4v2h16V5zm-3 6H4v2h13.25c1.1 0 2 .9 2 2s-.9 2-2 2H15v-2l-3 3 3 3v-2h2c2.21 0 4-1.79 4-4s-1.79-4-4-4z"/>`);
-var __glob_0_238 = /* @__PURE__ */ Object.freeze({
+var __glob_0_246 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": wrap_text
 });
-const modules$2 = { "./icon_list/_icon_template.js": __glob_0_0$2, "./icon_list/account_tree.js": __glob_0_1$2, "./icon_list/add.js": __glob_0_2$2, "./icon_list/add_box.js": __glob_0_3$2, "./icon_list/add_circle.js": __glob_0_4$2, "./icon_list/add_note.js": __glob_0_5$2, "./icon_list/align_center.js": __glob_0_6$2, "./icon_list/align_horizontal_center.js": __glob_0_7$2, "./icon_list/align_horizontal_left.js": __glob_0_8$2, "./icon_list/align_horizontal_right.js": __glob_0_9$2, "./icon_list/align_justify.js": __glob_0_10$2, "./icon_list/align_left.js": __glob_0_11$2, "./icon_list/align_right.js": __glob_0_12$2, "./icon_list/align_vertical_bottom.js": __glob_0_13$2, "./icon_list/align_vertical_center.js": __glob_0_14$2, "./icon_list/align_vertical_top.js": __glob_0_15$2, "./icon_list/alternate.js": __glob_0_16$2, "./icon_list/alternate_reverse.js": __glob_0_17$2, "./icon_list/apps.js": __glob_0_18$2, "./icon_list/archive.js": __glob_0_19$2, "./icon_list/arrowLeft.js": __glob_0_20$2, "./icon_list/arrowRight.js": __glob_0_21$1, "./icon_list/arrow_right.js": __glob_0_22$1, "./icon_list/artboard.js": __glob_0_23$1, "./icon_list/auto_awesome.js": __glob_0_24, "./icon_list/autorenew.js": __glob_0_25, "./icon_list/ballot.js": __glob_0_26, "./icon_list/bar_chart.js": __glob_0_27, "./icon_list/blur.js": __glob_0_28, "./icon_list/blur_linear.js": __glob_0_29, "./icon_list/boolean_difference.js": __glob_0_30, "./icon_list/boolean_intersection.js": __glob_0_31, "./icon_list/boolean_union.js": __glob_0_32, "./icon_list/boolean_xor.js": __glob_0_33, "./icon_list/border_all.js": __glob_0_34, "./icon_list/border_inner.js": __glob_0_35, "./icon_list/bottom.js": __glob_0_36, "./icon_list/broken_image.js": __glob_0_37, "./icon_list/brush.js": __glob_0_38, "./icon_list/build.js": __glob_0_39, "./icon_list/camera_roll.js": __glob_0_40, "./icon_list/cat.js": __glob_0_41, "./icon_list/center.js": __glob_0_42, "./icon_list/chart.js": __glob_0_43, "./icon_list/check.js": __glob_0_44, "./icon_list/chevron_left.js": __glob_0_45, "./icon_list/chevron_right.js": __glob_0_46, "./icon_list/circle.js": __glob_0_47, "./icon_list/close.js": __glob_0_48, "./icon_list/code.js": __glob_0_49, "./icon_list/color.js": __glob_0_50, "./icon_list/color_lens.js": __glob_0_51, "./icon_list/control_point.js": __glob_0_52, "./icon_list/copy.js": __glob_0_53, "./icon_list/create_folder.js": __glob_0_54, "./icon_list/cube.js": __glob_0_55, "./icon_list/cylinder.js": __glob_0_56, "./icon_list/dahaze.js": __glob_0_57, "./icon_list/dark.js": __glob_0_58, "./icon_list/delete_forever.js": __glob_0_59, "./icon_list/device_hub.js": __glob_0_60, "./icon_list/diffuse.js": __glob_0_61, "./icon_list/doc.js": __glob_0_62, "./icon_list/draw.js": __glob_0_63, "./icon_list/east.js": __glob_0_64, "./icon_list/edit.js": __glob_0_65, "./icon_list/end.js": __glob_0_66, "./icon_list/exit_to_app.js": __glob_0_67, "./icon_list/expand.js": __glob_0_68, "./icon_list/expand_more.js": __glob_0_69, "./icon_list/export.js": __glob_0_70, "./icon_list/face.js": __glob_0_71, "./icon_list/fast_forward.js": __glob_0_72, "./icon_list/fast_rewind.js": __glob_0_73, "./icon_list/file_copy.js": __glob_0_74, "./icon_list/filter.js": __glob_0_75, "./icon_list/flag.js": __glob_0_76, "./icon_list/flash_on.js": __glob_0_77, "./icon_list/flatten.js": __glob_0_78, "./icon_list/flex.js": __glob_0_79, "./icon_list/flip.js": __glob_0_80, "./icon_list/flipY.js": __glob_0_81, "./icon_list/flip_camera.js": __glob_0_82, "./icon_list/folder.js": __glob_0_83, "./icon_list/format_shapes.js": __glob_0_84, "./icon_list/fullscreen.js": __glob_0_85, "./icon_list/gps_fixed.js": __glob_0_86, "./icon_list/gradient.js": __glob_0_87, "./icon_list/grid.js": __glob_0_88, "./icon_list/grid3x3.js": __glob_0_89, "./icon_list/group.js": __glob_0_90, "./icon_list/height.js": __glob_0_91, "./icon_list/highlight_at.js": __glob_0_92, "./icon_list/horizontal_distribute.js": __glob_0_93, "./icon_list/horizontal_rule.js": __glob_0_94, "./icon_list/image.js": __glob_0_95, "./icon_list/input.js": __glob_0_96, "./icon_list/italic.js": __glob_0_97, "./icon_list/join_full.js": __glob_0_98, "./icon_list/join_right.js": __glob_0_99, "./icon_list/justify_content_space_around.js": __glob_0_100, "./icon_list/keyboard.js": __glob_0_101, "./icon_list/keyboard_arrow_down.js": __glob_0_102, "./icon_list/keyboard_arrow_left.js": __glob_0_103, "./icon_list/keyboard_arrow_right.js": __glob_0_104, "./icon_list/keyboard_arrow_up.js": __glob_0_105, "./icon_list/landscape.js": __glob_0_106, "./icon_list/launch.js": __glob_0_107, "./icon_list/layers.js": __glob_0_108, "./icon_list/layout_default.js": __glob_0_109, "./icon_list/layout_flex.js": __glob_0_110, "./icon_list/layout_grid.js": __glob_0_111, "./icon_list/left.js": __glob_0_112, "./icon_list/left_hide.js": __glob_0_113, "./icon_list/lens.js": __glob_0_114, "./icon_list/light.js": __glob_0_115, "./icon_list/line_cap_butt.js": __glob_0_116, "./icon_list/line_cap_round.js": __glob_0_117, "./icon_list/line_cap_square.js": __glob_0_118, "./icon_list/line_chart.js": __glob_0_119, "./icon_list/line_join_bevel.js": __glob_0_120, "./icon_list/line_join_miter.js": __glob_0_121, "./icon_list/line_join_round.js": __glob_0_122, "./icon_list/line_style.js": __glob_0_123, "./icon_list/line_weight.js": __glob_0_124, "./icon_list/list.js": __glob_0_125, "./icon_list/local_library.js": __glob_0_126, "./icon_list/local_movie.js": __glob_0_127, "./icon_list/lock.js": __glob_0_128, "./icon_list/lock_open.js": __glob_0_129, "./icon_list/looks.js": __glob_0_130, "./icon_list/margin.js": __glob_0_131, "./icon_list/merge.js": __glob_0_132, "./icon_list/middle.js": __glob_0_133, "./icon_list/navigation.js": __glob_0_134, "./icon_list/near_me.js": __glob_0_135, "./icon_list/north.js": __glob_0_136, "./icon_list/note.js": __glob_0_137, "./icon_list/nowrap.js": __glob_0_138, "./icon_list/opacity.js": __glob_0_139, "./icon_list/open_in_full.js": __glob_0_140, "./icon_list/outline.js": __glob_0_141, "./icon_list/outline_circle.js": __glob_0_142, "./icon_list/outline_image.js": __glob_0_143, "./icon_list/outline_rect.js": __glob_0_144, "./icon_list/outline_shape.js": __glob_0_145, "./icon_list/padding.js": __glob_0_146, "./icon_list/paint.js": __glob_0_147, "./icon_list/palette.js": __glob_0_148, "./icon_list/pantool.js": __glob_0_149, "./icon_list/pattern_check.js": __glob_0_150, "./icon_list/pattern_cross_dot.js": __glob_0_151, "./icon_list/pattern_dot.js": __glob_0_152, "./icon_list/pattern_grid.js": __glob_0_153, "./icon_list/pattern_horizontal_line.js": __glob_0_154, "./icon_list/pause.js": __glob_0_155, "./icon_list/pentool.js": __glob_0_156, "./icon_list/photo.js": __glob_0_157, "./icon_list/play.js": __glob_0_158, "./icon_list/plugin.js": __glob_0_159, "./icon_list/polygon.js": __glob_0_160, "./icon_list/power_input.js": __glob_0_161, "./icon_list/publish.js": __glob_0_162, "./icon_list/rect.js": __glob_0_163, "./icon_list/redo.js": __glob_0_164, "./icon_list/refresh.js": __glob_0_165, "./icon_list/remove.js": __glob_0_166, "./icon_list/remove2.js": __glob_0_167, "./icon_list/repeat.js": __glob_0_168, "./icon_list/replay.js": __glob_0_169, "./icon_list/right.js": __glob_0_170, "./icon_list/right_hide.js": __glob_0_171, "./icon_list/rotate.js": __glob_0_172, "./icon_list/rotate_left.js": __glob_0_173, "./icon_list/round.js": __glob_0_174, "./icon_list/same_height.js": __glob_0_175, "./icon_list/same_width.js": __glob_0_176, "./icon_list/save.js": __glob_0_177, "./icon_list/scatter.js": __glob_0_178, "./icon_list/screen.js": __glob_0_179, "./icon_list/setting.js": __glob_0_180, "./icon_list/settings_input_component.js": __glob_0_181, "./icon_list/shadow.js": __glob_0_182, "./icon_list/shape.js": __glob_0_183, "./icon_list/shuffle.js": __glob_0_184, "./icon_list/size.js": __glob_0_185, "./icon_list/skip_next.js": __glob_0_186, "./icon_list/skip_prev.js": __glob_0_187, "./icon_list/smooth.js": __glob_0_188, "./icon_list/source.js": __glob_0_189, "./icon_list/south.js": __glob_0_190, "./icon_list/space.js": __glob_0_191, "./icon_list/specular.js": __glob_0_192, "./icon_list/speed.js": __glob_0_193, "./icon_list/star.js": __glob_0_194, "./icon_list/start.js": __glob_0_195, "./icon_list/storage.js": __glob_0_196, "./icon_list/straighten.js": __glob_0_197, "./icon_list/strikethrough.js": __glob_0_198, "./icon_list/stroke_to_path.js": __glob_0_199, "./icon_list/swap_horiz.js": __glob_0_200, "./icon_list/switch_left.js": __glob_0_201, "./icon_list/switch_right.js": __glob_0_202, "./icon_list/sync.js": __glob_0_203, "./icon_list/table_rows.js": __glob_0_204, "./icon_list/text_rotate.js": __glob_0_205, "./icon_list/texture.js": __glob_0_206, "./icon_list/timer.js": __glob_0_207, "./icon_list/title.js": __glob_0_208, "./icon_list/to_back.js": __glob_0_209, "./icon_list/to_front.js": __glob_0_210, "./icon_list/top.js": __glob_0_211, "./icon_list/transform.js": __glob_0_212, "./icon_list/underline.js": __glob_0_213, "./icon_list/undo.js": __glob_0_214, "./icon_list/unfold.js": __glob_0_215, "./icon_list/vertical_align_baseline.js": __glob_0_216, "./icon_list/vertical_align_bottom.js": __glob_0_217, "./icon_list/vertical_align_center.js": __glob_0_218, "./icon_list/vertical_align_stretch.js": __glob_0_219, "./icon_list/vertical_align_top.js": __glob_0_220, "./icon_list/vertical_distribute.js": __glob_0_221, "./icon_list/video.js": __glob_0_222, "./icon_list/view_comfy.js": __glob_0_223, "./icon_list/view_list.js": __glob_0_224, "./icon_list/view_week.js": __glob_0_225, "./icon_list/view_week_reverse.js": __glob_0_226, "./icon_list/vintage.js": __glob_0_227, "./icon_list/visible.js": __glob_0_228, "./icon_list/volume_down.js": __glob_0_229, "./icon_list/volume_off.js": __glob_0_230, "./icon_list/volume_up.js": __glob_0_231, "./icon_list/wave.js": __glob_0_232, "./icon_list/waves.js": __glob_0_233, "./icon_list/web.js": __glob_0_234, "./icon_list/west.js": __glob_0_235, "./icon_list/width.js": __glob_0_236, "./icon_list/wrap.js": __glob_0_237, "./icon_list/wrap_text.js": __glob_0_238 };
+const modules$2 = { "./icon_list/_icon_template.js": __glob_0_0$2, "./icon_list/account_tree.js": __glob_0_1$2, "./icon_list/add.js": __glob_0_2$2, "./icon_list/add_box.js": __glob_0_3$2, "./icon_list/add_circle.js": __glob_0_4$2, "./icon_list/add_note.js": __glob_0_5$2, "./icon_list/align_center.js": __glob_0_6$2, "./icon_list/align_horizontal_center.js": __glob_0_7$2, "./icon_list/align_horizontal_left.js": __glob_0_8$2, "./icon_list/align_horizontal_right.js": __glob_0_9$2, "./icon_list/align_justify.js": __glob_0_10$2, "./icon_list/align_left.js": __glob_0_11$2, "./icon_list/align_right.js": __glob_0_12$2, "./icon_list/align_vertical_bottom.js": __glob_0_13$2, "./icon_list/align_vertical_center.js": __glob_0_14$2, "./icon_list/align_vertical_top.js": __glob_0_15$2, "./icon_list/alternate.js": __glob_0_16$2, "./icon_list/alternate_reverse.js": __glob_0_17$2, "./icon_list/apps.js": __glob_0_18$2, "./icon_list/archive.js": __glob_0_19$2, "./icon_list/arrowLeft.js": __glob_0_20$2, "./icon_list/arrowRight.js": __glob_0_21$1, "./icon_list/arrow_right.js": __glob_0_22$1, "./icon_list/artboard.js": __glob_0_23$1, "./icon_list/auto_awesome.js": __glob_0_24, "./icon_list/autorenew.js": __glob_0_25, "./icon_list/ballot.js": __glob_0_26, "./icon_list/bar_chart.js": __glob_0_27, "./icon_list/blur.js": __glob_0_28, "./icon_list/blur_linear.js": __glob_0_29, "./icon_list/boolean_difference.js": __glob_0_30, "./icon_list/boolean_intersection.js": __glob_0_31, "./icon_list/boolean_union.js": __glob_0_32, "./icon_list/boolean_xor.js": __glob_0_33, "./icon_list/border_all.js": __glob_0_34, "./icon_list/border_inner.js": __glob_0_35, "./icon_list/bottom.js": __glob_0_36, "./icon_list/broken_image.js": __glob_0_37, "./icon_list/brush.js": __glob_0_38, "./icon_list/build.js": __glob_0_39, "./icon_list/camera_roll.js": __glob_0_40, "./icon_list/cat.js": __glob_0_41, "./icon_list/center.js": __glob_0_42, "./icon_list/chart.js": __glob_0_43, "./icon_list/check.js": __glob_0_44, "./icon_list/chevron_left.js": __glob_0_45, "./icon_list/chevron_right.js": __glob_0_46, "./icon_list/circle.js": __glob_0_47, "./icon_list/close.js": __glob_0_48, "./icon_list/code.js": __glob_0_49, "./icon_list/color.js": __glob_0_50, "./icon_list/color_lens.js": __glob_0_51, "./icon_list/control_point.js": __glob_0_52, "./icon_list/copy.js": __glob_0_53, "./icon_list/create_folder.js": __glob_0_54, "./icon_list/cube.js": __glob_0_55, "./icon_list/cylinder.js": __glob_0_56, "./icon_list/dahaze.js": __glob_0_57, "./icon_list/dark.js": __glob_0_58, "./icon_list/delete_forever.js": __glob_0_59, "./icon_list/device_hub.js": __glob_0_60, "./icon_list/diffuse.js": __glob_0_61, "./icon_list/doc.js": __glob_0_62, "./icon_list/drag_indicator.js": __glob_0_63, "./icon_list/draw.js": __glob_0_64, "./icon_list/east.js": __glob_0_65, "./icon_list/edit.js": __glob_0_66, "./icon_list/end.js": __glob_0_67, "./icon_list/exit_to_app.js": __glob_0_68, "./icon_list/expand.js": __glob_0_69, "./icon_list/expand_more.js": __glob_0_70, "./icon_list/export.js": __glob_0_71, "./icon_list/face.js": __glob_0_72, "./icon_list/fast_forward.js": __glob_0_73, "./icon_list/fast_rewind.js": __glob_0_74, "./icon_list/file_copy.js": __glob_0_75, "./icon_list/filter.js": __glob_0_76, "./icon_list/flag.js": __glob_0_77, "./icon_list/flash_on.js": __glob_0_78, "./icon_list/flatten.js": __glob_0_79, "./icon_list/flex.js": __glob_0_80, "./icon_list/flip.js": __glob_0_81, "./icon_list/flipY.js": __glob_0_82, "./icon_list/flip_camera.js": __glob_0_83, "./icon_list/folder.js": __glob_0_84, "./icon_list/font_download.js": __glob_0_85, "./icon_list/format_bold.js": __glob_0_86, "./icon_list/format_indent.js": __glob_0_87, "./icon_list/format_line_spacing.js": __glob_0_88, "./icon_list/format_shapes.js": __glob_0_89, "./icon_list/format_size.js": __glob_0_90, "./icon_list/fullscreen.js": __glob_0_91, "./icon_list/gps_fixed.js": __glob_0_92, "./icon_list/gradient.js": __glob_0_93, "./icon_list/grid.js": __glob_0_94, "./icon_list/grid3x3.js": __glob_0_95, "./icon_list/group.js": __glob_0_96, "./icon_list/height.js": __glob_0_97, "./icon_list/highlight_at.js": __glob_0_98, "./icon_list/horizontal_distribute.js": __glob_0_99, "./icon_list/horizontal_rule.js": __glob_0_100, "./icon_list/image.js": __glob_0_101, "./icon_list/input.js": __glob_0_102, "./icon_list/italic.js": __glob_0_103, "./icon_list/join_full.js": __glob_0_104, "./icon_list/join_right.js": __glob_0_105, "./icon_list/justify_content_space_around.js": __glob_0_106, "./icon_list/keyboard.js": __glob_0_107, "./icon_list/keyboard_arrow_down.js": __glob_0_108, "./icon_list/keyboard_arrow_left.js": __glob_0_109, "./icon_list/keyboard_arrow_right.js": __glob_0_110, "./icon_list/keyboard_arrow_up.js": __glob_0_111, "./icon_list/landscape.js": __glob_0_112, "./icon_list/launch.js": __glob_0_113, "./icon_list/layers.js": __glob_0_114, "./icon_list/layout_default.js": __glob_0_115, "./icon_list/layout_flex.js": __glob_0_116, "./icon_list/layout_grid.js": __glob_0_117, "./icon_list/left.js": __glob_0_118, "./icon_list/left_hide.js": __glob_0_119, "./icon_list/lens.js": __glob_0_120, "./icon_list/light.js": __glob_0_121, "./icon_list/line_cap_butt.js": __glob_0_122, "./icon_list/line_cap_round.js": __glob_0_123, "./icon_list/line_cap_square.js": __glob_0_124, "./icon_list/line_chart.js": __glob_0_125, "./icon_list/line_join_bevel.js": __glob_0_126, "./icon_list/line_join_miter.js": __glob_0_127, "./icon_list/line_join_round.js": __glob_0_128, "./icon_list/line_style.js": __glob_0_129, "./icon_list/line_weight.js": __glob_0_130, "./icon_list/list.js": __glob_0_131, "./icon_list/local_library.js": __glob_0_132, "./icon_list/local_movie.js": __glob_0_133, "./icon_list/lock.js": __glob_0_134, "./icon_list/lock_open.js": __glob_0_135, "./icon_list/looks.js": __glob_0_136, "./icon_list/margin.js": __glob_0_137, "./icon_list/merge.js": __glob_0_138, "./icon_list/middle.js": __glob_0_139, "./icon_list/navigation.js": __glob_0_140, "./icon_list/near_me.js": __glob_0_141, "./icon_list/north.js": __glob_0_142, "./icon_list/note.js": __glob_0_143, "./icon_list/nowrap.js": __glob_0_144, "./icon_list/opacity.js": __glob_0_145, "./icon_list/open_in_full.js": __glob_0_146, "./icon_list/outline.js": __glob_0_147, "./icon_list/outline_circle.js": __glob_0_148, "./icon_list/outline_image.js": __glob_0_149, "./icon_list/outline_rect.js": __glob_0_150, "./icon_list/outline_shape.js": __glob_0_151, "./icon_list/padding.js": __glob_0_152, "./icon_list/paint.js": __glob_0_153, "./icon_list/palette.js": __glob_0_154, "./icon_list/pantool.js": __glob_0_155, "./icon_list/pattern_check.js": __glob_0_156, "./icon_list/pattern_cross_dot.js": __glob_0_157, "./icon_list/pattern_dot.js": __glob_0_158, "./icon_list/pattern_grid.js": __glob_0_159, "./icon_list/pattern_horizontal_line.js": __glob_0_160, "./icon_list/pause.js": __glob_0_161, "./icon_list/pentool.js": __glob_0_162, "./icon_list/photo.js": __glob_0_163, "./icon_list/play.js": __glob_0_164, "./icon_list/plugin.js": __glob_0_165, "./icon_list/polygon.js": __glob_0_166, "./icon_list/power_input.js": __glob_0_167, "./icon_list/publish.js": __glob_0_168, "./icon_list/rect.js": __glob_0_169, "./icon_list/redo.js": __glob_0_170, "./icon_list/refresh.js": __glob_0_171, "./icon_list/remove.js": __glob_0_172, "./icon_list/remove2.js": __glob_0_173, "./icon_list/repeat.js": __glob_0_174, "./icon_list/replay.js": __glob_0_175, "./icon_list/right.js": __glob_0_176, "./icon_list/right_hide.js": __glob_0_177, "./icon_list/rotate.js": __glob_0_178, "./icon_list/rotate_left.js": __glob_0_179, "./icon_list/round.js": __glob_0_180, "./icon_list/same_height.js": __glob_0_181, "./icon_list/same_width.js": __glob_0_182, "./icon_list/save.js": __glob_0_183, "./icon_list/scatter.js": __glob_0_184, "./icon_list/screen.js": __glob_0_185, "./icon_list/setting.js": __glob_0_186, "./icon_list/settings_input_component.js": __glob_0_187, "./icon_list/shadow.js": __glob_0_188, "./icon_list/shape.js": __glob_0_189, "./icon_list/shuffle.js": __glob_0_190, "./icon_list/size.js": __glob_0_191, "./icon_list/skip_next.js": __glob_0_192, "./icon_list/skip_prev.js": __glob_0_193, "./icon_list/smooth.js": __glob_0_194, "./icon_list/source.js": __glob_0_195, "./icon_list/south.js": __glob_0_196, "./icon_list/space.js": __glob_0_197, "./icon_list/specular.js": __glob_0_198, "./icon_list/speed.js": __glob_0_199, "./icon_list/star.js": __glob_0_200, "./icon_list/start.js": __glob_0_201, "./icon_list/storage.js": __glob_0_202, "./icon_list/straighten.js": __glob_0_203, "./icon_list/strikethrough.js": __glob_0_204, "./icon_list/stroke_to_path.js": __glob_0_205, "./icon_list/swap_horiz.js": __glob_0_206, "./icon_list/switch_left.js": __glob_0_207, "./icon_list/switch_right.js": __glob_0_208, "./icon_list/sync.js": __glob_0_209, "./icon_list/table_rows.js": __glob_0_210, "./icon_list/text_rotate.js": __glob_0_211, "./icon_list/texture.js": __glob_0_212, "./icon_list/timer.js": __glob_0_213, "./icon_list/title.js": __glob_0_214, "./icon_list/to_back.js": __glob_0_215, "./icon_list/to_front.js": __glob_0_216, "./icon_list/tonality.js": __glob_0_217, "./icon_list/top.js": __glob_0_218, "./icon_list/transform.js": __glob_0_219, "./icon_list/underline.js": __glob_0_220, "./icon_list/undo.js": __glob_0_221, "./icon_list/unfold.js": __glob_0_222, "./icon_list/vertical_align_baseline.js": __glob_0_223, "./icon_list/vertical_align_bottom.js": __glob_0_224, "./icon_list/vertical_align_center.js": __glob_0_225, "./icon_list/vertical_align_stretch.js": __glob_0_226, "./icon_list/vertical_align_top.js": __glob_0_227, "./icon_list/vertical_distribute.js": __glob_0_228, "./icon_list/video.js": __glob_0_229, "./icon_list/view_comfy.js": __glob_0_230, "./icon_list/view_list.js": __glob_0_231, "./icon_list/view_week.js": __glob_0_232, "./icon_list/view_week_reverse.js": __glob_0_233, "./icon_list/vignette.js": __glob_0_234, "./icon_list/vintage.js": __glob_0_235, "./icon_list/visible.js": __glob_0_236, "./icon_list/volume_down.js": __glob_0_237, "./icon_list/volume_off.js": __glob_0_238, "./icon_list/volume_up.js": __glob_0_239, "./icon_list/wave.js": __glob_0_240, "./icon_list/waves.js": __glob_0_241, "./icon_list/web.js": __glob_0_242, "./icon_list/west.js": __glob_0_243, "./icon_list/width.js": __glob_0_244, "./icon_list/wrap.js": __glob_0_245, "./icon_list/wrap_text.js": __glob_0_246 };
 const obj = {};
 Object.entries(modules$2).forEach(([key, value]) => {
   key = key.replace("./icon_list/", "").replace(".js", "");
@@ -21653,6 +21722,75 @@ class RendererManager {
     return typedRenderer[name2];
   }
 }
+function CSS_TO_STRING(style, postfix = "") {
+  var newStyle = style || {};
+  return Object.keys(newStyle).filter((key) => isNotUndefined(newStyle[key])).map((key) => `${key}: ${newStyle[key]}`).join(";" + postfix);
+}
+function OBJECT_TO_PROPERTY(obj2) {
+  const target = obj2 || {};
+  return Object.keys(target).map((key) => {
+    if (key === "class") {
+      if (isObject(obj2[key])) {
+        return `${key}="${OBJECT_TO_CLASS(obj2[key])}"`;
+      }
+    }
+    if (key === "style") {
+      if (isObject(obj2[key])) {
+        return `${key}="${CSS_TO_STRING(obj2[key])}"`;
+      }
+    }
+    if (isBoolean(obj2[key]) || isUndefined(obj2[key]) || obj2[key] === "undefined") {
+      if (obj2[key]) {
+        return key;
+      } else {
+        return "";
+      }
+    }
+    return `${key}="${obj2[key]}"`;
+  }).join(" ");
+}
+function OBJECT_TO_CLASS(obj2) {
+  return Object.keys(obj2).filter((k) => obj2[k]).map((key) => {
+    return key;
+  }).join(" ");
+}
+function createComponent(ComponentName, props2 = {}, children2 = []) {
+  children2 = children2.flat(Infinity).join("");
+  const targetVariable = Object.keys(props2).length ? variable$4(props2) : "";
+  return `<object refClass="${ComponentName}" ${targetVariable}>${children2}</object>`;
+}
+function createComponentList(...args2) {
+  return args2.map((it) => {
+    let ComponentName;
+    let props2 = {};
+    let children2 = [];
+    if (isString(it)) {
+      ComponentName = it;
+    } else if (isArray(it)) {
+      [ComponentName, props2 = {}, children2 = []] = it;
+    }
+    if (children2.length) {
+      return createComponent(ComponentName, props2, createComponentList(children2));
+    }
+    return createComponent(ComponentName, props2);
+  }).join("\n");
+}
+function createElement(Component2, props2, children2 = []) {
+  children2 = children2.flat(Infinity);
+  return `<${Component2} ${OBJECT_TO_PROPERTY(props2)}>${children2.join(" ")}</${Component2}>`;
+}
+function createElementJsx(Component2, props2, ...children2) {
+  children2 = children2.flat(Infinity);
+  if (typeof Component2 !== "string") {
+    const ComponentName = Component2.name;
+    registElement({
+      [ComponentName]: Component2
+    });
+    return createComponent(ComponentName, props2, children2);
+  } else {
+    return createElement(Component2, props2, children2);
+  }
+}
 class InjectManager {
   constructor(editor) {
     this.editor = editor;
@@ -21674,8 +21812,11 @@ class InjectManager {
   }
   generate(target, hasRef = false) {
     return this.getTargetMenuItems(target).map((it) => {
-      const refString = hasRef ? `ref="$${it.refClass}"` : "";
-      return `<object refClass="${it.refClass}" ${refString} />`;
+      const props2 = {};
+      if (hasRef) {
+        props2.ref = `$${it.refClass}`;
+      }
+      return createComponent(it.refClass, props2);
     }).join("\n");
   }
 }
@@ -21827,8 +21968,8 @@ class PathKitManager {
   stroke(path, opt = { width: 1, miter_limit: 4 }) {
     const PathKit = this.pathkit;
     const pathObject = PathKit.FromSVGString(path);
-    if (opt["stroke-dasharray"] && opt["stroke-dasharray"].trim()) {
-      const arr = opt["stroke-dasharray"].trim().split(" ").map((it) => +it);
+    if (isArray(opt["stroke-dasharray"])) {
+      const arr = opt["stroke-dasharray"];
       if (arr.length >= 2) {
         pathObject.dash(arr[0], arr[1], +(opt["stroke-dashoffset"] || 0));
       }
@@ -23173,7 +23314,7 @@ class HTMLRenderView extends EditorElement {
   template() {
     return `
             <div class='elf--element-view' ref='$body'>
-                <object refClass='StyleView' ref='$styleView' />
+                ${createComponent("StyleView", { ref: "$styleView" })}
                 <div class='canvas-view' 
                         data-renderer-id='${this.$editor.EDITOR_ID}' 
                         ref='$view' 
@@ -23279,10 +23420,8 @@ class HTMLRenderView extends EditorElement {
       });
       arr.push({ id: item2.id, content: content2, text: text2 });
       var $el = this.getElement(item2.id);
-      const { x: x2, y: y2, width: width2, height: height2 } = $el.offsetRect();
+      const { width: width2, height: height2 } = $el.offsetRect();
       item2.reset({
-        x: x2,
-        y: y2,
         width: width2,
         height: height2
       });
@@ -23513,7 +23652,12 @@ class HTMLRenderView extends EditorElement {
     });
   }
   refreshAllElementBoundSize() {
-    var selectionList = this.$selection.items.map((it) => it.is("artboard") ? it : it.parent);
+    var selectionList = this.$selection.items.map((it) => {
+      if (it.is("artboard")) {
+        return it;
+      }
+      return it.parent;
+    });
     var list2 = [...new Set(selectionList)];
     list2.forEach((it) => {
       this.refreshElementBoundSize(it);
@@ -23521,23 +23665,32 @@ class HTMLRenderView extends EditorElement {
   }
   refreshElementBoundSize(parentObj) {
     if (parentObj) {
+      if (parentObj.hasChildren() === false) {
+        if (parentObj.hasChangedField("width", "height") === false) {
+          return;
+        }
+        var $el = this.getElement(parentObj.id);
+        const { x: x2, y: y2, width: width2, height: height2 } = $el.offsetRect();
+        if (width2 > 0 && height2 > 0) {
+          parentObj.reset({ x: x2, y: y2, width: width2, height: height2 });
+          this.emit("refreshSelectionStyleView", parentObj);
+        }
+        return;
+      }
       const hasChangedDimension = parentObj.changedLayout || parentObj.hasChangedField("children", "box-model", "width", "height");
       parentObj.layers.forEach((it) => {
-        var $el = this.getElement(it.id);
-        if ($el && (hasChangedDimension || it.isLayoutItem())) {
-          const { x: x2, y: y2, width: width2, height: height2 } = $el.offsetRect();
+        var $el2 = this.getElement(it.id);
+        if ($el2 && (hasChangedDimension || it.isLayoutItem())) {
+          const { x: x2, y: y2, width: width2, height: height2 } = $el2.offsetRect();
           if (width2 > 0 && height2 > 0) {
             it.reset({ x: x2, y: y2, width: width2, height: height2 });
-            this.updateElement(it, $el);
+            this.updateElement(it, $el2);
             this.refreshSelectionStyleView(it);
           }
         }
         this.refreshElementBoundSize(it);
       });
     }
-  }
-  [RAF + THROTTLE(100)]() {
-    this.refreshAllElementBoundSize();
   }
 }
 var PageTools$1 = "";
@@ -23547,20 +23700,19 @@ class PageTools extends EditorElement {
       <div class='elf--page-tools'>
         <button type='button' ref='$minus'>${iconUse$1("remove2")}</button>
         <div class='select'>
-          <object 
-            refClass="NumberInputEditor" 
-            ref='$scaleInput' 
-            min='10' 
-            max='240' 
-            step="1" 
-            key="scale" 
-            value="${this.$viewport.scale * 100}" 
-            onchange=${this.subscribe((key, scale2) => {
-      this.$viewport.setScale(scale2 / 100);
-      this.emit("updateViewport");
-      this.trigger("updateViewport");
-    }, 1e3)}
-        />
+          ${createComponent("NumberInputEditor", {
+      ref: "$scaleInput",
+      min: 10,
+      max: 240,
+      step: 1,
+      key: "scale",
+      value: this.$viewport.scale * 100,
+      onchange: this.subscribe((key, scale2) => {
+        this.$viewport.setScale(scale2 / 100);
+        this.emit("updateViewport");
+        this.trigger("updateViewport");
+      }, 1e3)
+    })}
         </div>
         <label>%</label>
         <button type='button' ref='$plus'>${iconUse$1("add")}</button>        
@@ -23938,20 +24090,26 @@ class CanvasView extends EditorElement {
           <div class='page-lock scrollbar' ref='$lock'>            
 
             <!-- \uC120\uD0DD \uC601\uC5ED \uC774\uBCA4\uD2B8 \uC124\uC815  -->
-            <object refClass="DragAreaView" />
+            ${createComponent("DragAreaView", {
+      ref: "$dragAreaView"
+    })}
 
             <!-- HTML \uB80C\uB354\uB9C1 \uC601\uC5ED  --> 
-            <object refClass='HTMLRenderView' />
+            ${createComponent("HTMLRenderView", {
+      ref: "$htmlRenderView"
+    })}
 
             <!-- \uB4DC\uB798\uADF8 \uC601\uC5ED \uADF8\uB824\uC8FC\uB294 \uBDF0 --> 
-            <object refClass="DragAreaRectView" ref="$dragAreaRectView" />                                                                            
+            ${createComponent("DragAreaRectView", {
+      ref: "$dragAreaRectView"
+    })}
 
             <!-- \uCE94\uBC84\uC2A4 \uC601\uC5ED\uC5D0 \uADF8\uB9AC\uAE30 \uB3C4\uC640\uC8FC\uB294 \uBDF0 -->
             ${this.$injectManager.generate("canvas.view")}              
 
           </div>
         </div>
-        <object refClass='PageTools' />
+        ${createComponent("PageTools")}
       </div>
     `;
   }
@@ -24096,12 +24254,12 @@ class BodyPanel extends EditorElement {
     return `
       <div class="elf--body-panel">
         <div class="submenu-area">
-          <object refClass="PageSubEditor" />
+          ${createComponent("PageSubEditor")}
         </div>
         <div class='editing-area'>
-          <object refClass='HorizontalRuler' />
-          <object refClass='VerticalRuler' />
-          <object refClass='CanvasView' />        
+          ${createComponent("HorizontalRuler")}
+          ${createComponent("VerticalRuler")}
+          ${createComponent("CanvasView")}
         </div>
       </div>
     `;
@@ -24450,14 +24608,11 @@ class PopupManager extends EditorElement {
   template() {
     return `
       <div class="popup-manger">
-        <object refClass='ExportWindow' />
-        <object refClass='EmbedEditorWindow' />
-        <object refClass='ProjectWindow' />
-        <object refClass='ShortcutWindow' />
-        <!-- LoginWindow / -->
-        <!-- SignWindow / -->
-        <!-- ImageFileView / -->
-        <object refClass='NotificationView' />
+        ${createComponent("ExportWindow")}
+        ${createComponent("EmbedEditorWindow")}
+        ${createComponent("ProjectWindow")}
+        ${createComponent("ShortcutWindow")}
+        ${createComponent("NotificationView")}
         ${this.$injectManager.generate("popup")}
       </div>
     `;
@@ -24483,50 +24638,6 @@ class KeyboardManager extends EditorElement {
   }
   [KEYUP("document") + IF("isNotFormElement")](e2) {
     this.emit("keymap.keyup", e2);
-  }
-}
-function CSS_TO_STRING(style, postfix = "") {
-  var newStyle = style || {};
-  return Object.keys(newStyle).filter((key) => isNotUndefined(newStyle[key])).map((key) => `${key}: ${newStyle[key]}`).join(";" + postfix);
-}
-function OBJECT_TO_PROPERTY(obj2) {
-  const target = obj2 || {};
-  return Object.keys(target).map((key) => {
-    if (key === "class") {
-      if (isObject(obj2[key])) {
-        return `${key}="${OBJECT_TO_CLASS(obj2[key])}"`;
-      }
-    }
-    if (key === "style") {
-      if (isObject(obj2[key])) {
-        return `${key}="${CSS_TO_STRING(obj2[key])}"`;
-      }
-    }
-    if (isBoolean(obj2[key]) || isUndefined(obj2[key]) || obj2[key] === "undefined") {
-      if (obj2[key]) {
-        return key;
-      } else {
-        return "";
-      }
-    }
-    return `${key}="${obj2[key]}"`;
-  }).join(" ");
-}
-function OBJECT_TO_CLASS(obj2) {
-  return Object.keys(obj2).filter((k) => obj2[k]).map((key) => {
-    return key;
-  }).join(" ");
-}
-function createElementJsx(Component2, props2, ...children2) {
-  children2 = children2.flat(Infinity).join("");
-  if (typeof Component2 !== "string") {
-    const ComponentName = Component2.name;
-    registElement({
-      [ComponentName]: Component2
-    });
-    return `<object refClass="${ComponentName}" ${variable$4(props2)}>${children2}</object>`;
-  } else {
-    return `<${Component2} ${OBJECT_TO_PROPERTY(props2)}>${children2}</${Component2}>`;
   }
 }
 class TabPanel extends EditorElement {
@@ -24602,12 +24713,12 @@ class Tabs extends EditorElement {
 }
 class Inspector extends EditorElement {
   afterRender() {
-    this.$el.toggle(this.$config.get("editor.design.mode") === "design");
+    this.$el.toggle(this.$config.is("editor.design.mode", DesignMode.DESIGN));
   }
   [BIND("$el")]() {
     return {
       style: {
-        display: this.$config.get("editor.design.mode") === "design" ? "block" : "none"
+        display: this.$config.is("editor.design.mode", DesignMode.DESIGN) ? "block" : "none"
       }
     };
   }
@@ -24623,27 +24734,39 @@ class Inspector extends EditorElement {
     }, /* @__PURE__ */ createElementJsx(TabPanel, {
       value: "style",
       title: this.$i18n("inspector.tab.title.design")
+    }, /* @__PURE__ */ createElementJsx("div", {
+      style: "display: flex; flex-direction: column;"
     }, this.$injectManager.generate("inspector.tab.style"), /* @__PURE__ */ createElementJsx("div", {
-      class: "empty"
-    })), /* @__PURE__ */ createElementJsx(TabPanel, {
+      class: "empty",
+      style: "order: 1000000;"
+    }))), /* @__PURE__ */ createElementJsx(TabPanel, {
       value: "transition",
       title: this.$i18n("inspector.tab.title.transition")
+    }, /* @__PURE__ */ createElementJsx("div", {
+      style: "display: flex; flex-direction: column;"
     }, this.$injectManager.generate("inspector.tab.transition"), /* @__PURE__ */ createElementJsx("div", {
-      class: "empty"
-    })), /* @__PURE__ */ createElementJsx(TabPanel, {
+      class: "empty",
+      style: "order: 1000000;"
+    }))), /* @__PURE__ */ createElementJsx(TabPanel, {
       value: "code",
       title: this.$i18n("inspector.tab.title.code")
+    }, /* @__PURE__ */ createElementJsx("div", {
+      style: "display: flex; flex-direction: column;"
     }, this.$injectManager.generate("inspector.tab.code"), /* @__PURE__ */ createElementJsx("div", {
-      class: "empty"
-    })), this.$injectManager.getTargetMenuItems("inspector.tab").map((it) => {
+      class: "empty",
+      style: "order: 1000000;"
+    }))), this.$injectManager.getTargetMenuItems("inspector.tab").map((it) => {
       const { value, title: title2, loadElements } = it.class;
       return /* @__PURE__ */ createElementJsx(TabPanel, {
         value,
         title: title2,
         icon: it.icon
+      }, /* @__PURE__ */ createElementJsx("div", {
+        style: "display: flex: flex-direction: column;"
       }, loadElements.map((element) => craeteElement(element)), this.$injectManager.generate("inspector.tab." + it.value), /* @__PURE__ */ createElementJsx("div", {
-        class: "empty"
-      }));
+        class: "empty",
+        style: "order: 1000000;"
+      })));
     }))));
   }
 }
@@ -24659,11 +24782,12 @@ class LanguageSelector extends EditorElement {
     return `
             <div class='status-selector'>
                 <div class='item'>
-                    <object refClass="SelectEditor"  
-                        ref='$locale' 
-                        options=${variable$4(languages)}
-                        value="${this.$editor.locale}" 
-                        onchange="changeLocale"
+                    ${createComponent("SelectEditor", {
+      ref: "$locale",
+      options: languages,
+      value: this.$editor.locale,
+      onchange: "changeLocale"
+    })}
                     /> 
                 </div>
             </div>
@@ -24682,11 +24806,13 @@ class LayoutSelector extends EditorElement {
     return `
             <div class='status-selector'>
                 <div class='item'>
-                    <object refClass="SelectEditor"  
-                        ref='$locale' 
-                        options=${variable$4(layouts)}
-                        value="${this.$editor.layout}" 
-                        onchange="changeEditorLayoutValue"
+                    ${createComponent("SelectEditor", {
+      ref: "$locale",
+      options: layouts,
+      value: this.$editor.layout,
+      onchange: "changeEditorLayoutValue"
+    })}
+                        
                     /> 
                 </div>
             </div>
@@ -24724,9 +24850,8 @@ class StatusBar extends EditorElement {
                 <div class='message-view' ref='$msg'></div>
                 <div class='tool-view right' ref='$rightTool'>
                     ${this.$injectManager.generate("statusbar.right")}
-                    <object refClass="LayoutSelector" />
-                    <object refClass="LanguageSelector" />
-                    <object refClass="VersionView" />
+                    ${createComponent("LayoutSelector")}
+                    ${createComponent("VersionView")}
                 </div>
             </div>
         `;
@@ -25478,8 +25603,7 @@ class ToolBarRenderer extends EditorElement {
     }
   }
   renderButton(item2, index2) {
-    return `
-            <object refClass="ToolbarMenuItem" ${variable$4({
+    return createComponent("ToolbarMenuItem", {
       ref: "$button-" + index2,
       title: item2.title,
       icon: item2.icon,
@@ -25492,12 +25616,10 @@ class ToolBarRenderer extends EditorElement {
       selectedKey: item2.selectedKey,
       action: item2.action,
       events: item2.events
-    })} />
-        `;
+    });
   }
   renderDropdown(item2, index2) {
-    return `
-            <object refClass="DropdownMenu" ${variable$4({
+    return createComponent("DropdownMenu", {
       ref: "$dropdown-" + index2,
       items: item2.items,
       icon: item2.icon,
@@ -25507,11 +25629,9 @@ class ToolBarRenderer extends EditorElement {
       action: item2.action,
       style: item2.style,
       dy: 6
-    })} >     
-                ${item2.content}
-            </object>
-        
-        `;
+    }, [
+      item2.content
+    ]);
   }
 }
 class ToolBar extends EditorElement {
@@ -25573,28 +25693,28 @@ class ToolBar extends EditorElement {
   template() {
     return `
             <div class='elf--tool-bar'>
-                <object refClass="ToolBarRenderer" ${variable$4({
+                ${createComponent("ToolBarRenderer", {
       items: ToolbarMenu.left(this.$editor)
-    })} />            
+    })}
                 <div class='center'>
                 </div>
                 <div class='right'>
                     ${this.$injectManager.generate("toolbar.right")}
-                    <object refClass="ThemeChanger" />                            
+                    ${createComponent("ThemeChanger")}
                 </div>
             </div>
         `;
   }
   [LOAD("$logo")]() {
     return `
-            <div class="logo-item">                   
-                <object refClass="DropdownMenu" ${variable$4({
+            <div class="logo-item">           
+                ${createComponent("DropdownMenu", {
       ref: "$menu",
       items: this.state.items,
       dy: 6
-    })} >     
-                    <label class='logo'></label>
-                </object>
+    }, [
+      createElement("label", { class: "logo" })
+    ])}
             </div>                                
         `;
   }
@@ -25736,6 +25856,13 @@ class BaseProperty extends EditorElement {
         </div>
         `;
   }
+  [BIND("$el")]() {
+    return {
+      style: {
+        "--property-order": this.order
+      }
+    };
+  }
   setTitle(title2) {
     this.refs.$propertyTitle.html(title2);
   }
@@ -25845,6 +25972,9 @@ class BaseProperty extends EditorElement {
   get editableProperty() {
     return "";
   }
+  get order() {
+    return 1e3;
+  }
   checkShow() {
     if (!this.$selection.current) {
       this.hide();
@@ -25882,16 +26012,7 @@ class AlignmentProperty extends BaseProperty {
   getBody() {
     return `
       <div class="elf--alignment-item">
-        <object refClass="LeftAlign" />
-        <object refClass="CenterAlign" />
-        <object refClass="RightAlign" />
-
-        <object refClass="TopAlign" />
-        <object refClass="MiddleAlign" />
-        <object refClass="BottomAlign" />  
-
-        <object refClass="SameWidth" direction="bottom" />
-        <object refClass="SameHeight" />
+        ${createComponentList("LeftAlign", "CenterAlign", "RightAlign", "TopAlign", "MiddleAlign", "BottomAlign", ["SameWidth", { direction: "bottom" }], "SameHeight")}
       </div>
     `;
   }
@@ -26253,7 +26374,6 @@ class BasePopup extends EditorElement {
   [POINTERSTART("$title") + MOVE("movePopupTitle") + END("endPopupTitle")]() {
     this.x = Length.parse(this.$el.css("left"));
     this.y = Length.parse(this.$el.css("top"));
-    console.log(this.x, this.y);
   }
   movePopupTitle(dx, dy) {
     var left2 = Length.px(this.x.value + dx);
@@ -26338,7 +26458,12 @@ class AnimationPropertyPopup extends BasePopup {
     return `
     <div class='timing-function'>
       <label>${this.$i18n("animation.property.popup.timing.function")}</label>
-      <object refClass="CubicBezierEditor" ref='$cubicBezierEditor' key="timingFunction" value="${this.state.data.timingFunction || "linear"}" onChange='changeCubicBezier' />
+      ${createComponent("CubicBezierEditor", {
+      ref: "$cubicBezierEditor",
+      key: "timingFunction",
+      value: this.state.data.timingFunction || "linear",
+      onChange: "changeCubicBezier"
+    })}
     </div>
     `;
   }
@@ -26376,14 +26501,14 @@ class AnimationPropertyPopup extends BasePopup {
     }).join(",");
     return `
       <div class='direction'>
-        <object refClass="SelectEditor"  
-            label='${this.$i18n("animation.property.popup.direction")}'
-            ref='$direction' 
-            key='direction' 
-            value="${this.state.data.direction}"
-            options='${options2}'
-            onChange='changeSelect'
-        /> 
+        ${createComponent("SelectEditor", {
+      label: this.$i18n("animation.property.popup.direction"),
+      ref: "$direction",
+      key: "direction",
+      value: this.state.data.direction,
+      options: options2,
+      onChange: "changeSelect"
+    })}
       </div>
     `;
   }
@@ -26393,14 +26518,14 @@ class AnimationPropertyPopup extends BasePopup {
   templateForPlayState() {
     return `
     <div class='play-state'>
-      <object refClass="SelectEditor"  
-          label='${this.$i18n("animation.property.popup.play.state")}'
-          ref='$playState' 
-          key='playState' 
-          value="${this.state.data.playState}"
-          options='${["paused", "running"]}'
-          onChange='changeSelect'
-      /> 
+      ${createComponent("SelectEditor", {
+      label: this.$i18n("animation.property.popup.play.state"),
+      ref: "$playState",
+      key: "playState",
+      value: this.state.data.playState,
+      options: ["paused", "running"],
+      onChange: "changeSelect"
+    })}
     </div>
   `;
   }
@@ -26410,55 +26535,56 @@ class AnimationPropertyPopup extends BasePopup {
     }).join(",");
     return `
     <div class='fill-mode'>
-      <object refClass="SelectEditor"  
-          label='${this.$i18n("animation.property.popup.fill.mode")}'
-          ref='$fillMode' 
-          key='fillMode' 
-          value="${this.state.data.fillMode}"
-          options='${options2}'
-          onChange='changeSelect'
-      /> 
+      ${createComponent("SelectEditor", {
+      label: this.$i18n("animation.property.popup.fill.mode"),
+      ref: "$fillMode",
+      key: "fillMode",
+      value: this.state.data.fillMode,
+      options: options2,
+      onChange: "changeSelect"
+    })}
     </div>
   `;
   }
   templateForDelay() {
     return `
     <div class='delay'>
-      <object refClass="RangeEditor"  
-        ref='$delay' 
-        label='${this.$i18n("animation.property.popup.delay")}' 
-        calc='false' 
-        key='delay' 
-        value='${this.state.data.delay}' 
-        units='s,ms' 
-        onChange="changeRangeEditor" />
+      ${createComponent("RangeEditor", {
+      ref: "$delay",
+      label: this.$i18n("animation.property.popup.delay"),
+      key: "delay",
+      value: this.state.data.delay,
+      units: ["s", "ms"],
+      onChange: "changeRangeEditor"
+    })} 
     </div>
     `;
   }
   templateForDuration() {
     return `
     <div class='duration'>
-      <object refClass="RangeEditor"  
-        ref='$duration' 
-        label='${this.$i18n("animation.property.popup.duration")}'  
-        key='duration' 
-        value='${this.state.data.duration}' 
-        units='s,ms' 
-        onChange="changeRangeEditor" />
+      ${createComponent("RangeEditor", {
+      ref: "$duration",
+      label: this.$i18n("animation.property.popup.duration"),
+      key: "duration",
+      value: this.state.data.duration,
+      units: ["s", "ms"],
+      onChange: "changeRangeEditor"
+    })} 
     </div>
     `;
   }
   templateForIterationCount() {
     return `
       <div class='iteration-count'>
-        <object refClass="IterationCountEditor"
-          ref='$iterationCount' 
-          label='${this.$i18n("animation.property.popup.iteration")}' 
-          key='iterationCount' 
-          value='${this.state.iterationCount || "0"}' 
-          units='normal,infinite' 
-          onChange="changeRangeEditor" 
-        />
+        ${createComponent("IterationCountEditor", {
+      ref: "$iterationCount",
+      label: this.$i18n("animation.property.popup.iteration"),
+      key: "iterationCount",
+      value: this.state.iterationCount || 0,
+      units: ["normal", "infinite"],
+      onChange: "changeRangeEditor"
+    })}
       </div>
     `;
   }
@@ -26614,6 +26740,10 @@ const ResizingMode = {
   HUG_CONTENT: "hug-content",
   FILL_CONTAINER: "fill-container"
 };
+const TextClip = {
+  NONE: "none",
+  TEXT: "text"
+};
 class ObjectProperty {
   static create(json) {
     return class extends BaseProperty {
@@ -26626,29 +26756,46 @@ class ObjectProperty {
       get editableProperty() {
         return json.editableProperty;
       }
+      get order() {
+        return isUndefined(json.order) ? 1e3 : json.order;
+      }
       refresh() {
         const current = this.$selection.current;
         if (current) {
-          this.setTitle(current.getDefaultTitle() || current.itemType || current.name);
+          this.setTitle(json.title || current.getDefaultTitle() || current.itemType || current.name);
           this.load();
+          const inspector = isFunction(json.inspector) ? json.inspector(current) : this.$editor.components.createInspector(current, json.editableProperty);
+          this.children.$comp.setInspector(inspector);
         }
       }
       [SUBSCRIBE("refreshSelection") + IF("checkShow")]() {
-        this.refresh();
+        if (json.preventUpdate) {
+          if (this.$editor.isPointerUp) {
+            this.refresh();
+          }
+        } else {
+          this.refresh();
+        }
       }
       [LOAD("$body")]() {
         var current = this.$selection.current;
         if (!current)
           return "";
         const inspector = isFunction(json.inspector) ? json.inspector(current) : this.$editor.components.createInspector(current, json.editableProperty);
-        return `
-          <object refClass="ComponentEditor" ref="$comp" inspector=${variable$4(inspector)} onchange="changeComponentProperty" />
-        `;
+        return createComponent("ComponentEditor", {
+          ref: "$comp",
+          inspector,
+          onchange: "changeComponentProperty"
+        });
       }
       getBody() {
-        return `
-          <div ref='$body'></div>
-        `;
+        var current = this.$selection.current || {};
+        const inspector = isFunction(json.inspector) ? json.inspector(current) : this.$editor.components.createInspector(current, json.editableProperty);
+        return createComponent("ComponentEditor", {
+          ref: "$comp",
+          inspector,
+          onchange: "changeComponentProperty"
+        });
       }
       [SUBSCRIBE_SELF("changeComponentProperty")](key, value) {
         if (json.action) {
@@ -26671,13 +26818,14 @@ function appearance(editor) {
         return [
           {
             type: "column",
-            size: [3, 1],
+            size: [2, 1],
             columns: [
               {
                 key: "background-color",
                 editor: "color-view",
                 editorOptions: {
-                  compact: true
+                  compact: true,
+                  format: true
                 },
                 defaultValue: current["background-color"]
               },
@@ -26685,6 +26833,7 @@ function appearance(editor) {
                 key: "mix-blend-mode",
                 editor: "blend-select",
                 editorOptions: {
+                  label: "tonality",
                   compact: true
                 },
                 defaultValue: current["mix-blend-mode"]
@@ -26792,14 +26941,12 @@ class ArtBoardSizeProperty extends BaseProperty {
     var categories2 = artboardSize.map((it, index2) => {
       return { category: it.category, index: index2 };
     });
-    return `
-      <object refClass="SelectEditor"  
-        ref='$select' 
-        value="${categories2[0].category}" 
-        options=${variable$4(categories2.map((it) => it.category))} 
-        onchange='changeSizeIndex'
-      />
-    `;
+    return createComponent("SelectEditor", {
+      ref: "$select",
+      value: categories2[0].category,
+      options: categories2.map((it) => it.category),
+      onchange: "changeSizeIndex"
+    });
   }
   [SUBSCRIBE_SELF("changeSizeIndex")](key, value) {
     var selectedIndex = this.state.selectedIndex;
@@ -26871,6 +27018,7 @@ const filter_list$1 = [
   "sepia",
   "svg"
 ];
+var BackdropFilterProperty$1 = "";
 class BackdropFilterProperty extends BaseProperty {
   getTitle() {
     return this.$i18n("backdrop.filter.property.title");
@@ -26892,7 +27040,7 @@ class BackdropFilterProperty extends BaseProperty {
   }
   getTools() {
     return `
-      <select ref="$filterSelect"></select>
+      <select class="filter-select" ref="$filterSelect"></select>
       <button type="button" ref="$add" title="add Filter">${iconUse$1("add")}</button>
     `;
   }
@@ -26940,7 +27088,13 @@ class BackdropFilterProperty extends BaseProperty {
     var value = current["backdrop-filter"];
     return `
       <div>
-        <object refClass="FilterEditor" ref='$filterEditor' key="backdrop-filter" value='${value}' hide-label="true" onchange='changeFilterEditor' />
+        ${createComponent("FilterEditor", {
+      ref: "$filterEditor",
+      key: "backdrop-filter",
+      value,
+      hideLabel: true,
+      onchange: "changeFilterEditor"
+    })}
       </div>
     `;
   }
@@ -26974,15 +27128,14 @@ class BackgroundClipProperty extends BaseProperty {
   [LOAD("$backgroundClip")]() {
     var current = this.$selection.current || {};
     var clip = current["background-clip"] || "";
-    return `
-      <object refClass="SelectEditor"  
-          ref='$1' 
-          key='background-clip' 
-          icon="true" 
-          value="${clip}" 
-          options=${variable$4(["", "paddinb-box", "border-box", "content-box", "text"])} 
-          onchange="changeSelect" 
-      />`;
+    return createComponent("SelectEditor", {
+      ref: "$1",
+      key: "background-clip",
+      icon: true,
+      value: clip,
+      options: ["", "paddinb-box", "border-box", "content-box", "text"],
+      onchange: "changeSelect"
+    });
   }
   [SUBSCRIBE_SELF("changeSelect")](key, value) {
     this.command("setAttributeForMulti", "change background clip", this.$selection.packByValue({
@@ -27005,11 +27158,11 @@ const names$1 = {
   image: "Image",
   "static-gradient": "Static",
   "linear-gradient": "Linear",
-  "repeating-linear-gradient": `${obj.repeat} Linear`,
+  "repeating-linear-gradient": `Linear`,
   "radial-gradient": "Radial",
-  "repeating-radial-gradient": `${obj.repeat} Radial`,
+  "repeating-radial-gradient": `Radial`,
   "conic-gradient": "Conic",
-  "repeating-conic-gradient": `${obj.repeat} Conic`
+  "repeating-conic-gradient": `Conic`
 };
 const types = {
   image: "image",
@@ -27026,7 +27179,7 @@ const types = {
 class BackgroundImageEditor extends EditorElement {
   initState() {
     return {
-      hideLabel: this.props["hide-label"] === "true" ? true : false,
+      hideLabel: this.props.hideLabel || false,
       value: this.props.value,
       images: this.parseBackgroundImage(this.props.value)
     };
@@ -27043,30 +27196,10 @@ class BackgroundImageEditor extends EditorElement {
     });
   }
   template() {
-    var labelClass = this.state.hideLabel ? "hide" : "";
     return `
             <div class='elf--background-image-editor' >
-                <div class='label ${labelClass}'>
-                    <label>${this.props.title || ""}</label>
-                    <div class='tools'>
-                        <button type="button" ref='$add'>${obj.add} ${this.props.title ? "" : "Add"}</button>
-                    </div>
-                </div>
                 <div class='fill-list' ref='$fillList'></div>
             </div>
-        `;
-  }
-  templateForBlendMode(index2, blendMode) {
-    return `
-        <div>
-          <object refClass="BlendSelectEditor" 
-                ref='$blend_${index2}' 
-                key='blendMode' 
-                value="${blendMode}" 
-                params="${index2}" 
-                onchange="changeRangeEditor" 
-            />
-        </div>
         `;
   }
   [LOAD("$fillList") + DOMDIFF]() {
@@ -27081,32 +27214,39 @@ class BackgroundImageEditor extends EditorElement {
       }
       return `
             <div class='fill-item ${selectedClass}' data-index='${index2}' ref="fillIndex${index2}"  draggable='true' data-fill-type="${backgroundType}" >
-                <object refClass="BackgroundPositionEditor" 
-                    key="background-position"
-                    index="${index2}"
-                    ref="$bp${index2}"
-                    x="${it.x}"
-                    y="${it.y}"
-                    width="${it.width}"
-                    height="${it.height}"
-                    repeat="${it.repeat}"
-                    size="${it.size}"
-                    blendMode="${it.blendMode}"     
-                    onchange='changePattern' />
-                <object refClass="GradientSingleEditor" 
-                    index="${index2}"
-                    ref="$gse${index2}"
-                    image="${it.image}"
-                    color="${current.color}"
-                    key="background-image"
-                    onchange='changePattern'
-
-                />
+                ${createComponentList(["BackgroundPositionEditor", {
+        key: "background-position",
+        index: index2,
+        ref: `$bp${index2}`,
+        x: it.x,
+        y: it.y,
+        width: it.width,
+        height: it.height,
+        repeat: it.repeat,
+        size: it.size,
+        blendMode: it.blendMode,
+        onchange: "changePattern"
+      }], ["GradientSingleEditor", {
+        index: index2,
+        ref: `$gse${index2}`,
+        image: it.image,
+        color: current.color,
+        key: "background-image",
+        onchange: "changePattern"
+      }])}
                 <div class='fill-info'>
                   <div class='gradient-info'>
-                    <div class='fill-title' ref="fillTitle${index2}">${backgroundTypeName}</div>
+                    <div class='fill-title' ref="fillTitle${index2}" data-repeat="${image2.type.includes("repeating")}">${backgroundTypeName}</div>
                     <div class='blend'>
-                      ${this.templateForBlendMode(index2, it.blendMode)}
+                        ${createComponent("BlendSelectEditor", {
+        ref: `$blend_${index2}`,
+        key: "blendMode",
+        label: "tonality",
+        value: it.blendMode,
+        params: index2,
+        compact: true,
+        onchange: "changeRangeEditor"
+      })}
                     </div>
                     <div class='tools'>
                       <button type="button" class='remove' data-index='${index2}'>${obj.remove2}</button>
@@ -27121,15 +27261,25 @@ class BackgroundImageEditor extends EditorElement {
     var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.images));
     this.parent.trigger(this.props.onchange, this.props.key, value);
   }
-  [SUBSCRIBE("add")]() {
+  makeGradient(type) {
+    switch (type) {
+      case "linear-gradient":
+        return `linear-gradient(90deg, white 0%, black 100%)`;
+      case "repeating-linear-gradient":
+        return `repeating-linear-gradient(90deg, white 2px, black 4px)`;
+      case "radial-gradient":
+        return `radial-gradient(circle, white 0%, black 100%)`;
+      case "repeating-radial-gradient":
+        return `repeating-radial-gradient(circle, white 2px, black 4px)`;
+      case "conic-gradient":
+        return `conic-gradient(white 0%, black 100%)`;
+      case "repeating-conic-gradient":
+        return `repeating-conic-gradient(white 50%, black 100%)`;
+    }
+  }
+  [SUBSCRIBE("add")](gradientType) {
     this.state.images.push(new BackgroundImage({
-      image: new LinearGradient$1({
-        angle: 90,
-        colorsteps: [
-          new ColorStep({ percent: 0, color: "white", index: 0 }),
-          new ColorStep({ percent: 100, color: "black", index: 1 })
-        ]
-      })
+      image: BackgroundImage.parseImage(this.makeGradient(gradientType))
     }));
     this.refresh();
     this.modifyBackgroundImage();
@@ -27212,14 +27362,15 @@ class BackgroundImagePositionPopup extends BasePopup {
   }
   templateForSize() {
     return `
-      <div class=''>
-        <object refClass="SelectEditor"  
-          label="${this.$i18n("background.image.position.popup.size")}" 
-          ref='$size' 
-          key='size' 
-          value="${this.state.size}" 
-          options=${variable$4(["contain", "cover", "auto"])}
-          onchange="changeRangeEditor" />      
+      <div>
+        ${createComponent("SelectEditor", {
+      label: this.$i18n("background.image.position.popup.size"),
+      ref: "$size",
+      key: "size",
+      value: this.state.size,
+      options: ["contain", "cover", "auto"],
+      onchange: "changeRangeEditor"
+    })}
       </div>
     `;
   }
@@ -27228,59 +27379,74 @@ class BackgroundImagePositionPopup extends BasePopup {
   }
   templateForX() {
     return `
-      <div class=''>
-        <object refClass="InputRangeEditor"  
-            label="X"
-            compact="true"          
-            ref="$x" 
-            key="x"
-            value="${this.state.x}"
-            min="-1000" max="1000" step="1"
-            onchange="changeRangeEditor"
-        />
+      <div>
+        ${createComponent("InputRangeEditor", {
+      label: "X",
+      compact: true,
+      ref: "$x",
+      key: "x",
+      value: this.state.x,
+      min: -1e3,
+      max: 1e3,
+      step: 1,
+      onchange: "changeRangeEditor"
+    })}
       </div>
     `;
   }
   templateForY() {
     return `
-      <div class=''>
-        <object refClass="InputRangeEditor"  
-            label="Y" 
-            compact="true"          
-            ref="$y" 
-            key="y"
-            value="${this.state.y}"            
-            min="-1000" max="1000" step="1"
-            onchange="changeRangeEditor"
+      <div >
+        <object refClass="InputRangeEditor" ${variable$4({
+      label: "Y",
+      compact: true,
+      ref: "$y",
+      key: "y",
+      value: this.state.y,
+      min: -1e3,
+      max: 1e3,
+      step: 1,
+      onchange: "changeRangeEditor"
+    })}  
+          
         />
       </div>
     `;
   }
   templateForWidth() {
     return `
-    <div class=''>
-      <object refClass="InputRangeEditor"  
-          label="W"
-          compact="true"          
-          ref="$width" 
-          key="width"
-          value="${this.state.width}"          
-          min="0" max="500" step="1" 
-          onchange="changeRangeEditor"
+    <div >
+      <object refClass="InputRangeEditor" ${variable$4({
+      label: "W",
+      compact: true,
+      ref: "$width",
+      key: "width",
+      value: this.state.width,
+      min: 0,
+      max: 500,
+      step: 1,
+      onchange: "changeRangeEditor"
+    })} 
+        
       />
     </div>
     `;
   }
   templateForHeight() {
     return `
-    <div class=''>
-      <object refClass="InputRangeEditor"  
-          label="H"
-          compact="true"          
-          ref="$height" 
-          key="height"
-          value="${this.state.height}"          
-          min="0" max="500" step="1" onchange="changeRangeEditor"
+    <div >
+      <object refClass="InputRangeEditor" ${variable$4({
+      label: "H",
+      compact: true,
+      ref: "$height",
+      key: "height",
+      value: this.state.height,
+      min: 0,
+      max: 500,
+      step: 1,
+      onchange: "changeRangeEditor"
+    })} 
+
       />
     </div>
     `;
@@ -27336,6 +27502,7 @@ class BackgroundImagePositionPopup extends BasePopup {
     this.show(460);
   }
 }
+var BackgroundImageProperty$1 = "";
 class BackgroundImageProperty extends BaseProperty {
   getTitle() {
     return this.$i18n("background.image.property.title");
@@ -27361,21 +27528,30 @@ class BackgroundImageProperty extends BaseProperty {
     `;
   }
   getTools() {
-    return `<button type="button" ref='$add'>${iconUse$1("add")}</button>`;
+    return `
+      <div ref='$add'>
+        <button type="button" class='fill' data-value="static-gradient" data-tooltip="Static" ></button>
+        <button type="button" class='fill' data-value="linear-gradient" data-tooltip="Linear" ></button>
+        <button type="button" class='fill' data-value="repeating-linear-gradient" data-tooltip="R Linear" ></button>
+        <button type="button" class='fill' data-value="radial-gradient" data-tooltip="Radial" ></button>
+        <button type="button" class='fill' data-value="repeating-radial-gradient" data-tooltip="R Radial" ></button>
+        <button type="button" class='fill' data-value="conic-gradient" data-tooltip="Conic" ></button>
+        <button type="button" class='fill' data-value="repeating-conic-gradient" data-tooltip="R Conic" data-direction="bottom right" ></button>
+      </div>
+    `;
   }
-  [CLICK("$add")]() {
-    this.children.$backgroundImageEditor.trigger("add");
+  [CLICK("$add [data-value]")](e2) {
+    this.children.$backgroundImageEditor.trigger("add", e2.$dt.data("value"));
   }
   [LOAD("$property")]() {
     var current = this.$selection.current || {};
     var value = current["background-image"] || "";
-    return `<object refClass="BackgroundImageEditor" 
-              ref='$backgroundImageEditor' 
-              key='background-image'
-              value='${value}' 
-              hide-label="true"
-              onchange='changeBackgroundImage' 
-            />`;
+    return createComponent("BackgroundImageEditor", {
+      ref: "$backgroundImageEditor",
+      key: "background-image",
+      value,
+      onchange: "changeBackgroundImage"
+    });
   }
   get editableProperty() {
     return "background-image";
@@ -27831,7 +28007,13 @@ class BorderEditor extends EditorElement {
       label = this.$i18n("border.editor." + label);
       return `
       <div>
-        <object refClass='BorderValueEditor' ref='$${type}' label='${label}' key="${type}" value="${this.state.borders[type]}" onchange="changeKeyValue" />
+        <object refClass='BorderValueEditor' ${variable$4({
+        ref: `$${type}`,
+        label,
+        key: type,
+        value: this.state.borders[type],
+        onchange: "changeKeyValue"
+      })}  />
       </div>
       `;
     });
@@ -27863,7 +28045,12 @@ class BorderProperty extends BaseProperty {
     var current = this.$selection.current || {};
     var value = current["border"] || "";
     return `
-      <object refClass='BorderEditor' ref='$1' key='border' value='${value}' onchange='changeKeyValue' />
+      <object refClass='BorderEditor' ${variable$4({
+      ref: "$1",
+      key: "border",
+      value,
+      onchange: "changeKeyValue"
+    })}  />
     `;
   }
   get editableProperty() {
@@ -28063,7 +28250,11 @@ class BorderImageProperty extends BaseProperty {
           </button>
         </div>
         <div class="slice-value">
-          <object refClass="RangeEditor"  ref='$allSlice' key='border-image-slice' onchange='changeBorderImage' />
+          ${createComponent("RangeEditor", {
+      ref: "$allSlice",
+      key: "border-image-slice",
+      onchange: "changeBorderImage"
+    })}
         </div>
       </div>
       <div
@@ -28078,10 +28269,20 @@ class BorderImageProperty extends BaseProperty {
                 <label class='title'>${it.title}</label>
               </div>
               <div>
-                <object refClass="RangeEditor"  ref='$${it.key}Slice' label='Slice' key='border-image-slice-${it.key}' onchange='changeBorderImage' /> 
+                ${createComponent("RangeEditor", {
+        ref: `$${it.key}Slice`,
+        label: "Slice",
+        key: `border-image-slice-${it.key}`,
+        onchange: "changeBorderImage"
+      })}
               </div>  
               <div>
-                <object refClass="RangeEditor"  ref='$${it.key}Width' label='Width' key='border-image-width-${it.key}' onchange='changeBorderImage' /> 
+                ${createComponent("RangeEditor", {
+        ref: `$${it.key}Width`,
+        label: "Width",
+        key: `border-image-width-${it.key}`,
+        onchange: "changeBorderImage"
+      })}              
               </div>                
             `;
     }).join("")}
@@ -28284,7 +28485,7 @@ class BorderRadiusEditor extends EditorElement {
     return `
       <div class="border-radius-item">
         <div class="radius-value">
-          <object refClass="InputRangeEditor" ${variable$4({
+          ${createComponent("InputRangeEditor", {
       label: iconUse$1("outline_rect"),
       ref: "$all",
       compact: "true",
@@ -28292,7 +28493,7 @@ class BorderRadiusEditor extends EditorElement {
       value: borderRadius2,
       min: 0,
       onchange: "changeBorderRadius"
-    })}  />
+    })}
         </div>
         <div></div>
 
@@ -28495,20 +28696,13 @@ var BoxShadowEditor$1 = "";
 class BoxShadowEditor extends EditorElement {
   initState() {
     return {
-      hideLabel: this.props["hide-label"] === "true" ? true : false,
+      hideLabel: this.props.hideLabel === "true" ? true : false,
       boxShadows: BoxShadow.parseStyle(this.props.value || "")
     };
   }
   template() {
-    var labelClass = this.state.hideLabel ? "hide" : "";
     return `
       <div class="elf--box-shadow-editor" >
-        <div class='label ${labelClass}' >
-            <label>${this.props.title || ""}</label>
-            <div class='tools'>
-              <button type="button" ref="$add" title="add Box Shadow">${obj.add}</button> ${this.props.title ? "" : "Add"}
-            </div>
-        </div>
         <div class='box-shadow-list' ref='$shadowList'></div>
       </div>
     `;
@@ -28816,17 +29010,17 @@ class CircleEditor extends EditorElement {
   template() {
     return `
         <div class='clip-path-editor circle-editor'>
-            <object refClass="RangeEditor"  
-                ref='$range' 
-                label='Radius' 
-                key='radius' 
-                value='${this.state.radius}' 
-                min="0" 
-                max="100" 
-                step="0.1" 
-                units="%,closest-side,farthest-side" 
-                onchange='changeRangeEditor' 
-            />
+            ${createComponent("InputRangeEditor", {
+      ref: "$range",
+      label: "Radius",
+      key: "radius",
+      value: this.state.radius,
+      min: 0,
+      max: 100,
+      step: 0.1,
+      units: ["%", "closest-side", "farthest-side"],
+      onchange: "changeRangeEditor"
+    })}
             <div class='drag-area' ref='$area'>
                 <div class='drag-pointer' ref='$pointer' style='left: ${this.state.x};top: ${this.state.y};'></div>
                 <div class='clip-area circle' ref='$clipArea'></div>
@@ -29097,15 +29291,47 @@ class InsetEditor extends EditorElement {
     this.parent.trigger(this.props.onchange, this.props.key, this.toClipPathValueString(), this.props.params);
   }
 }
+var polygon = {
+  key: "polygon",
+  title: "Polygon",
+  execute: function() {
+    return [
+      { name: "Triangle", polygon: "50% 0%, 0% 100%, 100% 100%" },
+      { name: "Trapezoid", polygon: "20% 0%, 80% 0%, 100% 100%, 0% 100%" },
+      {
+        name: "Parallelogram",
+        polygon: "25% 0%, 100% 0%, 75% 100%, 0% 100%"
+      },
+      {
+        name: "Rhombus",
+        polygon: "50% 0%, 100% 50%, 50% 100%, 0% 50%"
+      },
+      {
+        name: "Pentagon",
+        polygon: "50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%"
+      },
+      {
+        name: "Hexagon",
+        polygon: "50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%"
+      },
+      {
+        name: "Heptagon",
+        polygon: "50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%"
+      },
+      {
+        name: "Octagon",
+        polygon: "30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%"
+      }
+    ];
+  }
+};
 class PolygonEditor extends EditorElement {
   parseValue(str = "") {
-    var maxWidth = 220;
-    var maxHeight = 220;
     return str.split(",").filter((it) => it.trim()).map((it) => {
       var [x2, y2] = it.trim().split(" ");
       return {
-        x: Length.parse(x2).toPx(maxWidth),
-        y: Length.parse(y2).toPx(maxHeight)
+        x: Length.parse(x2),
+        y: Length.parse(y2)
       };
     });
   }
@@ -29115,54 +29341,37 @@ class PolygonEditor extends EditorElement {
     };
   }
   template() {
+    const polygonList = polygon.execute();
     return `
         <div class='clip-path-editor polygon-editor'>
+            ${createComponent("SelectEditor", {
+      ref: "$polygonSelect",
+      options: ["", ...polygonList.map((it) => it.name)],
+      onchange: (key, value) => {
+        const polygon2 = polygonList.find((it) => it.name === value);
+        if (polygon2) {
+          this.updateData({ value: this.parseValue(polygon2.polygon) });
+          this.refresh();
+        }
+      }
+    })}
             <div class='drag-area' ref='$area'>
                 <div class='pointer-list' ref='$list'></div>
                 <div class='clip-area polygon' ref='$clipArea'></div>            
             </div>
-            <div class='pointer-input' ref='$inputList'></div>
         </div>
     `;
-  }
-  [LOAD("$inputList")]() {
-    return this.state.value.map((it, index2) => {
-      return `
-            <div class='pointer-item' data-index="${index2}">
-                <div class='input-item'>
-                    <label>X</label><input type='number' class='x' value="${it.x.value.toString()}" /><span>%</span>
-                </div>
-                <div class='input-item'>
-                    <label>Y</label><input type='number' class='y' value="${it.y.value.toString()}" /><span>%</span>
-                </div>
-                <div class='tools'>
-                    <button type="button" class='copy' data-index="${index2}">${obj.copy}</button>
-                    <button type="button" class='remove' data-index="${index2}">${obj.remove2}</button>
-                </div>
-            </div>
-            `;
-    });
   }
   [CLICK("$area") + PREVENT](e2) {
     if (Dom.create(e2.target).is(this.refs.$area)) {
       this.areaRect = this.refs.$area.rect();
       var { x: x2, y: y2 } = e2.xy;
       this.appendValue({
-        x: x2 - this.areaRect.left,
-        y: y2 - this.areaRect.top
+        x: Length.px(x2 - this.areaRect.left).toPercent(this.areaRect.width),
+        y: Length.px(y2 - this.areaRect.top).toPercent(this.areaRect.height)
       });
       this.refresh();
     }
-  }
-  [CLICK("$inputList .pointer-item .remove")](e2) {
-    var index2 = +e2.$dt.attr("data-index");
-    this.removeValue(index2);
-    this.refresh();
-  }
-  [CLICK("$inputList .pointer-item .copy")](e2) {
-    var index2 = +e2.$dt.attr("data-index");
-    this.copyValue(index2);
-    this.refresh();
   }
   [BIND("$clipArea")]() {
     return {
@@ -29185,15 +29394,17 @@ class PolygonEditor extends EditorElement {
     this.removeValue(index2);
     this.refresh();
   }
+  [CLICK("$area .drag-pointer") + SHIFT + PREVENT](e2) {
+    var index2 = +e2.$dt.attr("data-index");
+    this.copyValue(index2);
+    this.refresh();
+  }
   [POINTERSTART("$area .drag-pointer") + MOVE()](e2) {
     this.selectedIndex = +e2.$dt.attr("data-index");
     this.$target = e2.$dt;
     this.areaRect = this.refs.$area.rect();
     this.startXY = e2.xy;
     this.$value = this.state.value[this.selectedIndex];
-    var $inputList = this.refs.$inputList;
-    this.$x = $inputList.$(`.pointer-item[data-index="${this.selectedIndex}"] input.x`);
-    this.$y = $inputList.$(`.pointer-item[data-index="${this.selectedIndex}"] input.y`);
   }
   move(dx, dy) {
     var x2 = this.startXY.x + dx;
@@ -29208,8 +29419,8 @@ class PolygonEditor extends EditorElement {
     } else if (this.areaRect.bottom < y2) {
       y2 = this.areaRect.bottom;
     }
-    var left2 = x2 - this.areaRect.x;
-    var top2 = y2 - this.areaRect.y;
+    var left2 = Length.percent((x2 - this.areaRect.x) / this.areaRect.width * 100);
+    var top2 = Length.percent((y2 - this.areaRect.y) / this.areaRect.height * 100);
     this.$target.css({
       left: left2,
       top: top2
@@ -29218,17 +29429,11 @@ class PolygonEditor extends EditorElement {
       x: left2,
       y: top2
     });
-    var maxWidth = 220;
-    var maxHeight = 220;
-    this.$x.val(left2.toPercent(maxWidth).round(10).value);
-    this.$y.val(top2.toPercent(maxHeight).round(10).value);
     this.bindData("$clipArea");
   }
   toClipPathValueString() {
-    var maxWidth = 220;
-    var maxHeight = 220;
     return this.state.value.map((it) => {
-      return `${it.x.toPercent(maxWidth).round(10)} ${it.y.toPercent(maxHeight).round(10)}`;
+      return `${it.x.round(10)} ${it.y.round(10)}`;
     }).join(",");
   }
   updateData(data) {
@@ -29246,8 +29451,8 @@ class PolygonEditor extends EditorElement {
   copyValue(index2) {
     var { x: x2, y: y2 } = this.state.value[index2];
     this.state.value.splice(index2 + 1, 0, {
-      x: x2.value + 10,
-      y: y2.value + 10
+      x: x2.clone().add(0.1),
+      y: y2.clone().add(0.1)
     });
     this.parent.trigger(this.props.onchange, this.props.key, this.toClipPathValueString(), this.props.params);
   }
@@ -29291,30 +29496,30 @@ class EllipseEditor extends EditorElement {
     return `
         <div class='clip-path-editor circle-editor'>
             <div>
-                <object refClass="RangeEditor"  
-                    ref='$rangeX' 
-                    label='Radius X' 
-                    key='radiusX' 
-                    value='${this.state.radiusX}' 
-                    min="0" 
-                    max="100" 
-                    step="0.1" 
-                    units="%" 
-                    onchange='changeRangeEditor' 
-                />
+                ${createComponent("InputRangeEditor", {
+      ref: "$rangeX",
+      label: "Radius X",
+      key: "radiusX",
+      value: this.state.radiusX,
+      min: 0,
+      max: 100,
+      step: 0.1,
+      units: ["%"],
+      onchange: "changeRangeEditor"
+    })}
             </div>
             <div>
-                <object refClass="RangeEditor"  
-                    ref='$rangeY' 
-                    label='Radius Y' 
-                    key='radiusY' 
-                    value='${this.state.radiusY}' 
-                    min="0" 
-                    max="100" 
-                    step="0.1" 
-                    units="%" 
-                    onchange='changeRangeEditor' 
-                />
+            ${createComponent("InputRangeEditor", {
+      ref: "$rangeY",
+      label: "Radius Y",
+      key: "radiusY",
+      value: this.state.radiusY,
+      min: 0,
+      max: 100,
+      step: 0.1,
+      units: ["%"],
+      onchange: "changeRangeEditor"
+    })}            
             </div>            
             <div class='drag-area' ref='$area'>
                 <div class='drag-pointer' ref='$pointer' style='left: ${this.state.x};top: ${this.state.y};'></div>
@@ -29475,11 +29680,11 @@ class ClipPathProperty extends BaseProperty {
     return `
       <div ref="$tools" class="add-tools">
         <button type="button" data-value='circle' data-tooltip="Circle">${iconUse$1("outline_circle")}</button>
-        <button type="button" data-value='ellipse' data-tooltip="Circle">${iconUse$1("outline_circle")}</button>
-        <button type="button" data-value='inset' data-tooltip="Circle">${iconUse$1("outline_rect")}</button>
-        <button type="button" data-value='polygon' data-tooltip="Circle">${iconUse$1("polygon")}</button>
-        <button type="button" data-value='path' data-tooltip="Circle">${iconUse$1("pentool")}</button>
-        <button type="button" data-value='svg' data-tooltip="Circle">${iconUse$1("image")}</button>
+        <button type="button" data-value='ellipse' data-tooltip="Ellipse">${iconUse$1("outline_circle")}</button>
+        <button type="button" data-value='inset' data-tooltip="Inset">${iconUse$1("outline_rect")}</button>
+        <button type="button" data-value='polygon' data-tooltip="Polygon">${iconUse$1("polygon")}</button>
+        <button type="button" data-value='path' data-tooltip="Path">${iconUse$1("pentool")}</button>
+        <button type="button" data-value='svg' data-tooltip="SVG">${iconUse$1("image")}</button>
       </div>
     `;
   }
@@ -29502,6 +29707,7 @@ class ClipPathProperty extends BaseProperty {
     return `
       <div>
         <div class='clippath-item'>
+          <label>${iconUse$1("drag_indicator")}</label>
           <div class='title'>
             <div class='name'>${clippath}</div>
           </div>
@@ -30501,7 +30707,7 @@ class ComponentEditor extends EditorElement {
     if (childEditor.type === "column") {
       const size2 = (childEditor.size || [2]).join("-");
       return `
-        <div class='column column-${size2}' >
+        <div class='column column-${size2}' style="--column-gap: ${childEditor.gap}px" >
           ${childEditor.columns.map((it, itemIndex) => {
         if (it === "-") {
           return `<div class="column-item"></div>`;
@@ -30523,7 +30729,10 @@ class ComponentEditor extends EditorElement {
         <object 
           refClass="${childEditor.editor}" 
           ${variable$4(__spreadProps(__spreadValues({}, childEditor.editorOptions), {
-      onchange: "changeComponentValue",
+      onchange: (key, value) => {
+        const newValue = isFunction(childEditor.convert) ? childEditor.convert(key, value) : value;
+        this.trigger("changeComponentValue", key, newValue);
+      },
       ref: `${childEditor.key}${index2}`,
       key: childEditor.key,
       value: childEditor.defaultValue
@@ -30549,6 +30758,11 @@ class ComponentEditor extends EditorElement {
       }
     });
     return self2;
+  }
+  setInspector(inspector) {
+    this.setState({
+      inspector
+    });
   }
   setValue(obj2 = {}) {
     Object.keys(obj2).forEach((key) => {
@@ -31721,7 +31935,7 @@ class GroupModel extends MovableModel {
     return this.isLayout(Layout.DEFAULT);
   }
   hasLayout() {
-    return !this.hasConstraints();
+    return !this.hasConstraints() || Boolean(this.json.layout) === false;
   }
   isLayout(layout2) {
     return this.json.layout === layout2;
@@ -31914,7 +32128,7 @@ class DomModel extends GroupModel {
   }
   toCloneObject() {
     var json = this.json;
-    return __spreadProps(__spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("position", "rootVariable", "variable", "transform", "filter", "backdrop-filter", "background-color", "background-image", "text-clip", "border-radius", "border", "border-top", "border-left", "border-right", "border-bottom", "box-shadow", "text-shadow", "clip-path", "color", "font-size", "font-stretch", "line-height", "text-align", "text-transform", "text-decoration", "letter-spacing", "word-spacing", "text-indent", "perspective-origin", "transform-origin", "transform-style", "perspective", "mix-blend-mode", "overflow", "opacity", "flex-layout", "grid-layout", "animation", "transition", "margin-top", "margin-left", "margin-right", "margin-bottom", "padding-top", "padding-right", "padding-left", "padding-bottom", "constraints-horizontal", "constraints-vertical")), {
+    return __spreadProps(__spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("position", "rootVariable", "variable", "transform", "filter", "backdrop-filter", "background-color", "background-image", "text-clip", "border-radius", "border", "border-top", "border-left", "border-right", "border-bottom", "box-shadow", "text-shadow", "clip-path", "color", "font-size", "line-height", "text-align", "text-transform", "text-decoration", "letter-spacing", "word-spacing", "text-indent", "perspective-origin", "transform-origin", "transform-style", "perspective", "mix-blend-mode", "overflow", "opacity", "flex-layout", "grid-layout", "animation", "transition", "margin-top", "margin-left", "margin-right", "margin-bottom", "padding-top", "padding-right", "padding-left", "padding-bottom", "constraints-horizontal", "constraints-vertical")), {
       selectors: json.selectors.map((selector2) => selector2.clone()),
       svg: json.svg.map((svg) => svg.clone())
     });
@@ -32529,6 +32743,14 @@ class TextLayer extends LayerModel {
   }
   editable(editablePropertyName) {
     switch (editablePropertyName) {
+      case "svg-item":
+      case "box-shadow":
+      case "transform":
+      case "transform-origin":
+      case "perspective":
+      case "perspective-origin":
+      case "layout":
+        return false;
       case "font":
       case "font-spacing":
       case "text-style":
@@ -32537,19 +32759,12 @@ class TextLayer extends LayerModel {
       case "text-clip":
       case "background-image":
       case "box-model":
-        return true;
-      case "svg-item":
       case "border":
       case "border-radius":
       case "backdrop-filter":
       case "background-image":
       case "pattern":
-      case "box-shadow":
-      case "transform":
-      case "transform-origin":
-      case "perspective":
-      case "perspective-origin":
-        return false;
+        return true;
     }
     return super.editable(editablePropertyName);
   }
@@ -34436,8 +34651,8 @@ var ko_KR = {
   "filter.property.contrast": "\uB300\b\uC870(Contrast)",
   "filter.property.drop-shadow": "\uADF8\uB9BC\uC790(Drop Shadow)",
   "filter.property.drop-shadow.color": "\uC0C9",
-  "filter.property.drop-shadow.offsetX": "X \uAC04\uACA9",
-  "filter.property.drop-shadow.offsetY": "Y \uAC04\uACA9",
+  "filter.property.drop-shadow.offsetX": "X",
+  "filter.property.drop-shadow.offsetY": "Y",
   "filter.property.drop-shadow.blurRadius": "\uD750\uB9BC",
   "filter.property.opacity": "\uD22C\uBA85\uB3C4(Opacity)",
   "filter.property.saturate": "\uCC44\uB3C4(Saturate)",
@@ -35624,6 +35839,7 @@ const filter_list = [
   "sepia",
   "svg"
 ];
+var FilterProperty$1 = "";
 class FilterProperty extends BaseProperty {
   initialize() {
     super.initialize();
@@ -35655,7 +35871,7 @@ class FilterProperty extends BaseProperty {
   }
   getTools() {
     return `
-      <select ref="$filterSelect">      
+      <select class='filter-select' ref="$filterSelect">      
       </select>
       <button type="button" ref="$add" title="add Filter">${obj.add}</button>
     `;
@@ -35703,10 +35919,12 @@ class FilterProperty extends BaseProperty {
   [LOAD("$body")]() {
     var current = this.$selection.current || {};
     var value = current.filter;
-    return `
-      <div>
-        <object refClass="FilterEditor" ref='$filterEditor' key="filter" value='${value}' hide-label='true' onchange='changeFilterEditor' />
-      </div>`;
+    return createComponent("FilterEditor", {
+      ref: "$filterEditor",
+      key: "filter",
+      value,
+      onchange: "changeFilterEditor"
+    });
   }
   [SUBSCRIBE_SELF("changeFilterEditor")](key, filter2) {
     this.command("setAttributeForMulti", "change filter", this.$selection.packByValue({
@@ -35728,189 +35946,133 @@ function filter(editor) {
     FilterProperty
   });
 }
-class FontProperty extends BaseProperty {
-  getTitle() {
-    return this.$i18n("font.property.title");
-  }
-  getClassName() {
-    return "item";
-  }
-  afterRender() {
-    this.show();
-  }
-  get editableProperty() {
-    return "font";
-  }
-  [SUBSCRIBE("refreshSelection") + IF("checkShow")]() {
-    this.refresh();
-  }
-  refresh() {
-    var current = this.$selection.current;
-    if (current) {
-      this.children.$color.setValue(current["color"] || "rgba(0, 0, 0, 1)");
-      this.children.$size.setValue(current["font-size"]);
-      this.children.$stretch.setValue(current["font-stretch"] || "0%");
-      this.children.$style.setValue(current["font-style"]);
-      this.children.$family.setValue(current["font-family"]);
-    }
-  }
-  getBody() {
-    return `
-      <div class='property-item animation-property-item'>
-        <div class='group'>
-          <span class='add-timeline-property' data-property='color'></span>
-        </div>
-        <object refClass="ColorViewEditor" ref='$color' label='${this.$i18n("font.property.color")}' key='color' onchange="changeColor" />
-      </div>      
-      <div class='property-item animation-property-item'>
-        <div class='group'>
-          <span class='add-timeline-property' data-property='font-size'></span>
-        </div>
-        <object refClass="RangeEditor"  
-          ref='$size' 
-          label='${this.$i18n("font.property.size")}' 
-          key="font-size" 
-          
-          onchange="changeRangeEditor" />
-      </div>
-      <div class='property-item animation-property-item'>
-        <div class='group'>
-          <span class='add-timeline-property' data-property='font-stretch'></span>
-        </div>
-        <object refClass="RangeEditor"  
-          ref='$stretch' 
-          label='${this.$i18n("font.property.stretch")}' 
-          key="font-stretch" 
-          
-          units='%',
-          onchange="changeRangeEditor" />
-      </div>      
- 
-      <div class='property-item animation-property-item'>
-        <div class='group'>
-          <span class='add-timeline-property' data-property='font-weight'></span>
-        </div>
-        <object refClass="NumberRangeEditor"  
-          ref='$weightRange' 
-          label='${this.$i18n("font.property.weight")}' 
-          key='font-weight' 
-         
-          value="400" 
-          min="100"
-          max="900"
-          step="1"
-          calc="false"
-          unit="number" 
-          onchange="changeRangeEditor" 
-          />
-      </div>              
-      <div class='property-item'>
-        <object refClass="SelectIconEditor" 
-          ref='$style' 
-          label='${this.$i18n("font.property.style")}' 
-          key="font-style"
-          compact="true"
-          options=${variable$4(["normal", "italic"])}
-          icons='title,italic'
-          onchange="changeRangeEditor" />
-      </div>      
-
-      <div class='property-item'>
-        <object refClass="FontSelectEditor"  
-          ref='$family' 
-          icon="true"
-          label='${this.$i18n("font.property.family")}' 
-          key="font-family" 
-          onchange="changeRangeEditor" 
-        />
-      </div> 
-         
-    `;
-  }
-  [SUBSCRIBE_SELF("changeColor")](key, color2) {
-    this.trigger("changeRangeEditor", key, color2);
-  }
-  [SUBSCRIBE_SELF("changeRangeEditor")](key, value) {
-    this.command("setAttributeForMulti", "change font attribute", this.$selection.packByValue({
-      [key]: value
-    }));
-  }
-}
 function font(editor) {
   editor.registerMenuItem("inspector.tab.style", {
-    FontProperty
+    FontProperty: ObjectProperty.create({
+      title: editor.$i18n("font.property.title"),
+      editableProperty: "font"
+    })
   });
-}
-class FontSpacingProperty extends BaseProperty {
-  getTitle() {
-    return this.$i18n("font.spacing.property.title");
-  }
-  get editableProperty() {
-    return "font-spacing";
-  }
-  [SUBSCRIBE("refreshSelection") + IF("checkShow")]() {
-    this.refresh();
-  }
-  refresh() {
-    var current = this.$selection.current;
-    if (current) {
-      this.children.$lineHeight.setValue(current["line-height"] || Length.number(1));
-      this.children.$letter.setValue(current["letter-spacing"] || "0px");
-      this.children.$word.setValue(current["word-spacing"] || "0px");
-      this.children.$indent.setValue(current["text-indent"] || "0px");
-    }
-  }
-  getBody() {
-    return `
-
-    <div class='property-item animation-property-item'>
-      <div class='group'>
-        <span class='add-timeline-property' data-property='line-height'></span>
-      </div>
-      <object refClass="RangeEditor"  
-        ref='$lineHeight' 
-        label='${this.$i18n("font.spacing.property.lineHeight")}' 
-        key="line-height" 
-        min="0"
-        max="10"
-        step="0.01"
-        units=",px,%,em"
-        onchange="changeRangeEditor" />
-    </div>       
-      <div class='property-item animation-property-item'>
-        <div class='group'>
-          <span class='add-timeline-property' data-property='letter-spacing'></span>
-        </div>
-        <object refClass="RangeEditor"  ref='$letter' label='${this.$i18n("font.spacing.property.letterSpacing")}' key="letter-spacing" min="-100" max="100" onchange="changeRangeEditor" />
-      </div>
-
-      <div class='property-item animation-property-item'>
-        <div class='group'>
-          <span class='add-timeline-property' data-property='word-spacing'></span>
-        </div>
-        <object refClass="RangeEditor"  ref='$word' label='${this.$i18n("font.spacing.property.wordSpacing")}' key="word-spacing"  min="-100" max="100" onchange="changeRangeEditor" />
-      </div>
-
-      <div class='property-item animation-property-item'>
-        <div class='group'>
-          <span class='add-timeline-property' data-property='text-indent'></span>
-        </div>      
-        <object refClass="RangeEditor"  ref='$indent' label='${this.$i18n("font.spacing.property.indent")}' key="text-indent"  min="-100" max="100" onchange="changeRangeEditor" />
-      </div>      
-    `;
-  }
-  [SUBSCRIBE_SELF("changeRangeEditor")](key, value) {
-    if (value.unit === "") {
-      value = Length.number(value.value);
-    }
-    this.command("setAttributeForMulti", `change font spacing : ${key}`, this.$selection.packByValue({
-      [key]: value
-    }));
-  }
-}
-function fontSpacing(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
-    FontSpacingProperty
+  editor.registerInspector("font", (current) => {
+    return [
+      {
+        key: "font-family",
+        editor: "SelectEditor",
+        editorOptions: {
+          compact: true,
+          label: "font_download",
+          options: [
+            "",
+            "Arial",
+            "Arial Black",
+            "Times New Roman",
+            "Times",
+            "Courier New",
+            "Courier",
+            "Verdana",
+            "Georgia",
+            "Palatino",
+            "Garamond",
+            "Bookman",
+            "Tahoma",
+            "Trebuchet MS",
+            "Impact",
+            "Comic Sans MS",
+            "serif",
+            "sans-serif",
+            "monospace",
+            "cursive",
+            "fantasy",
+            "system-ui"
+          ]
+        },
+        defaultValue: current["font-family"] || ""
+      },
+      {
+        type: "column",
+        size: [2, 1, 1],
+        columns: [
+          {
+            key: "color",
+            editor: "ColorViewEditor",
+            editorOptions: {
+              compact: true
+            },
+            defaultValue: current["color"] || "#000"
+          },
+          {
+            key: "font-size",
+            editor: "NumberInputEditor",
+            editorOptions: {
+              label: "format_size",
+              compact: true,
+              min: 8,
+              max: 100,
+              step: 1
+            },
+            defaultValue: Length.parse(current["font-size"]).value,
+            convert: (key, value) => Length.px(value)
+          },
+          {
+            key: "font-weight",
+            editor: "NumberInputEditor",
+            editorOptions: {
+              label: "format_bold",
+              compact: true,
+              min: 100,
+              max: 900,
+              step: 100
+            },
+            defaultValue: current["font-weight"] || 400
+          }
+        ]
+      },
+      {
+        type: "column",
+        size: [1, 1, 1],
+        gap: 10,
+        columns: [
+          {
+            key: "text-indent",
+            editor: "NumberInputEditor",
+            editorOptions: {
+              label: "format_indent",
+              min: -100,
+              max: 100,
+              step: 1,
+              compact: true
+            },
+            defaultValue: Length.parse(current["text-indent"]).value,
+            convert: (key, value) => Length.px(value)
+          },
+          {
+            key: "line-height",
+            editor: "NumberInputEditor",
+            editorOptions: {
+              label: "format_line_spacing",
+              min: 0,
+              max: 10,
+              step: 0.01,
+              compact: true
+            },
+            defaultValue: current["line-height"] || 1.2
+          },
+          {
+            key: "letter-spacing",
+            editor: "NumberInputEditor",
+            editorOptions: {
+              label: "space",
+              min: -100,
+              max: 100,
+              step: 1,
+              compact: true
+            },
+            defaultValue: Length.parse(current["letter-spacing"]).value,
+            convert: (key, value) => Length.px(value)
+          }
+        ]
+      }
+    ];
   });
 }
 class SVGGradient extends Gradient {
@@ -38069,7 +38231,7 @@ class LayerTreeProperty extends BaseProperty {
   getIcon(item2) {
     if (item2.d) {
       const path = PathParser.fromSVGString(item2.absolutePath().d);
-      return iconUseForPath(path.scaleWith(24, 24).d, { width: 24, height: 24 });
+      return iconUseForPath(path.scaleWith(24, 24).d, { width: 24, height: 24, fill: "currentColor", stroke: "currentColor" });
     }
     if (item2.hasChildren()) {
       if (item2.isLayout("flex")) {
@@ -38626,9 +38788,9 @@ class FlexLayoutItemProperty extends BaseProperty {
     return "elf--flex-layout-item-property";
   }
   getLayoutOptions() {
-    return variable$4(["none", "auto", "value"].map((it) => {
+    return ["none", "auto", "value"].map((it) => {
       return { value: it, text: this.$i18n(`flex.layout.item.property.${it}`) };
-    }));
+    });
   }
   getBody() {
     return `
@@ -38640,26 +38802,57 @@ class FlexLayoutItemProperty extends BaseProperty {
     const valueType2 = "value";
     return `
       <div class='layout-select'>
-        <object refClass="SelectIconEditor" 
-        ref='$layout' 
-        key='layout' 
-        icon="true" 
-        value="${valueType2}"
-        options="${this.getLayoutOptions()}"  
-        onchange="changeLayoutType" />
+        ${createComponent("SelectIconEditor", {
+      ref: "$layout",
+      key: "layout",
+      icon: true,
+      value: valueType2,
+      options: this.getLayoutOptions(),
+      onchange: "changeLayoutType"
+    })}
       </div>
       <div class='layout-list' ref='$layoutList' data-selected-value='${valueType2}'>
         <div data-value='none'></div>
         <div data-value='auto'></div>
         <div data-value='value'>
           <div class='value-item'>
-            <object refClass="RangeEditor"  ref='$grow' label='${this.$i18n("flex.layout.item.property.grow")}' key="flex-grow" value="${current["flex-grow"]}" min='0' max='1' step='0.01' units=",auto" onchange='changeFlexItem' />
+            ${createComponent({
+      ref: "$grow",
+      label: this.$i18n("flex.layout.item.property.grow"),
+      key: "flex-grow",
+      value: current["flex-grow"],
+      min: 0,
+      max: 1,
+      step: 0.01,
+      units: ["", "auto"],
+      onchange: "changeFlexItem"
+    })}
           </div>
           <div class='value-item'>
-            <object refClass="RangeEditor"  ref='$shrink' label='${this.$i18n("flex.layout.item.property.shrink")}' key="flex-shrink" value="${current["flex-shrink"]}" min='0' max='1' step='0.01' units=",auto" onchange='changeFlexItem' />
+            ${createComponent({
+      ref: "$shrink",
+      label: this.$i18n("flex.layout.item.property.shrink"),
+      key: "flex-shrink",
+      value: current["flex-shrink"],
+      min: 0,
+      max: 1,
+      step: 0.01,
+      units: ["", "auto"],
+      onchange: "changeFlexItem"
+    })}
           </div>
           <div class='value-item'>
-            <object refClass="RangeEditor"  ref='$basis' label='${this.$i18n("flex.layout.item.property.basis")}' key="flex-basis" value="${current["flex-basis"]}" min='0' units="px,em,%,auto" onchange='changeFlexItem' />
+            ${createComponent("RangeEditor", {
+      ref: "$basis",
+      label: this.$i18n("flex.layout.item.property.basis"),
+      key: "flex-basis",
+      value: current["flex-basis"],
+      min: 0,
+      max: 1,
+      step: 0.01,
+      units: ["px", "em", "%", "auto"],
+      onchange: "changeFlexItem"
+    })}          
           </div>                    
         </div>
       </div>
@@ -38878,13 +39071,14 @@ class GridGapEditor extends EditorElement {
     return `
             <div class='item'>
                 <div class='value'>
-                    <object refClass="RangeEditor" 
-                        label='${this.state.label}' 
-                        ref='$value' 
-                        key="value" 
-                        value="${this.state.value}" 
-                        units='px,em,%'
-                        onchange="changeKeyValue" />
+                    ${createComponent("RangeEditor", {
+      label: this.state.label,
+      ref: "$value",
+      key: "value",
+      value: this.state.value,
+      units: ["px", "em", "%"],
+      onchange: "changeKeyValue"
+    })}
                 </div>
             </div>
         `;
@@ -39657,7 +39851,7 @@ var PatternEditor$1 = "";
 class PatternEditor extends EditorElement {
   initState() {
     return {
-      hideLabel: this.props["hide-label"] === "true" ? true : false,
+      hideLabel: this.props.hideLabel,
       value: this.props.value,
       patterns: this.parsePattern(this.props.value)
     };
@@ -39672,15 +39866,9 @@ class PatternEditor extends EditorElement {
     });
   }
   template() {
-    var labelClass = this.state.hideLabel ? "hide" : "";
+    this.state.hideLabel ? "hide" : "";
     return `
             <div class='elf--pattern-editor' >
-                <div class='label ${labelClass}'>
-                    <label>${this.props.title || ""}</label>
-                    <div class='tools'>
-                        <button type="button" ref='$add'>${obj.add} ${this.props.title ? "" : "Add"}</button>
-                    </div>
-                </div>
                 <div class='pattern-list' ref='$patternList'></div>
             </div>
         `;
@@ -40636,6 +40824,9 @@ class SelectEditor extends EditorElement {
     var hasLabel = !!label ? "has-label" : "";
     var hasTabIndex = !!tabIndex ? 'tabIndex="1"' : "";
     var compact = !!this.props.compact ? "compact" : "";
+    if (obj[label]) {
+      label = iconUse$1(label);
+    }
     return `
             <div class='elf--select-editor ${hasLabel} ${compact}'>
                 ${label ? `<label title="${title2}">${label}</label>` : ""}
@@ -41624,7 +41815,7 @@ class ColorViewEditor extends EditorElement {
   }
   [BIND("$colorCode")]() {
     return {
-      value: this.state.value
+      value: this.props.format ? this.hexColor : this.state.value
     };
   }
   [BIND("$opacityCode")]() {
@@ -42074,7 +42265,6 @@ class CSSPropertyEditor extends EditorElement {
       case "padding-left":
       case "padding-right":
       case "font-size":
-      case "font-stretch":
       case "width":
       case "height":
       case "perspective":
@@ -42143,7 +42333,6 @@ class CSSPropertyEditor extends EditorElement {
         <optgroup label='Font'>
           <option value='font-size'>font-size</option>
           <option value='font-weight'>font-weight</option>          
-          <option value='font-stretch'>font-stretch</option>
         </optgroup>
         <optgroup label='Animation'>
           <option value='animation-timing-function'>timing-function</option>
@@ -42552,21 +42741,13 @@ class FilterEditor extends EditorElement {
   }
   initState() {
     return {
-      hideLabel: this.props["hide-label"] === "true" ? true : false,
+      hideLabel: this.props.hideLabel === "true" ? true : false,
       filters: Filter.parseStyle(this.props.value)
     };
   }
   template() {
-    var labelClass = this.state.hideLabel ? "hide" : "";
     return `
       <div class='elf--filter-editor filter-list'>
-          <div class='label ${labelClass}' >
-              <label>${this.props.title || ""}</label>
-              <div class='tools'>
-                <select ref="$filterSelect"></select>
-                <button type="button" ref="$add" title="add Filter">${obj.add}</button>
-              </div>
-          </div>
           <div class='filter-list' ref='$filterList'></div>
       </div>`;
   }
@@ -42598,37 +42779,39 @@ class FilterEditor extends EditorElement {
   makeDropShadowFilterTemplate(spec, filter2, index2) {
     return `
       <div class="filter-item">
-        <div class="title drop-shadow" draggable="true" data-index="${index2}">
-          <label>${this.$i18n("filter.property.drop-shadow")}</label>
+        <div class="title drop-shadow">
+          <label draggable="true"  data-index="${index2}">${iconUse$1("drag_indicator")}</label>
+          <span class='sub-title'>${this.$i18n("filter.property.drop-shadow")}</span>
           <div class="filter-menu">
-            <button type="button" class="del" data-index="${index2}">
-              ${obj.remove2}
-            </button>
+            <button type="button" class="del" data-index="${index2}">${iconUse$1("remove2")}</button>
           </div>
         </div>
-
-        <div class="filter-ui drop-shadow-color">
-          <object refClass="ColorViewEditor" 
-            label="${this.$i18n(`filter.property.drop-shadow.color`)}" 
-            ref='$dropShadowColorView${index2}' 
-            params="${index2}" 
-            value="${filter2.color}" 
-            on-change-value="changeDropShadowColor" />
+        <div class="filter-ui-list">
+          ${createComponentList(["ColorViewEditor", {
+      ref: `$dropShadowColorView${index2}`,
+      params: index2,
+      compact: true,
+      value: filter2.color,
+      onchange: "changeDropShadowColor"
+    }], ...["offsetX", "offsetY", "blurRadius"].map((key) => {
+      return [
+        "InputRangeEditor",
+        {
+          ref: `$${key}${index2}`,
+          label: this.$i18n(`filter.property.drop-shadow.${key}`),
+          key: index2,
+          min: spec[key].min,
+          max: spec[key].max,
+          step: spec[key].step,
+          params: key,
+          value: filter2[key].value || spec[key].defaultValue,
+          units: spec[key].units,
+          onchange: "changeRangeEditor"
+        }
+      ];
+    }))}
         </div>
 
-        ${["offsetX", "offsetY", "blurRadius"].map((key) => {
-      return `        
-            <div class="filter-ui drop-shadow">
-                <object refClass="RangeEditor"  
-                  ref='$${key}${index2}' 
-                  label="${this.$i18n(`filter.property.drop-shadow.${key}`)}"
-                  key="${index2}" 
-                  min="${spec[key].min}"
-                  min="${spec[key].max}"
-                  params="${key}" 
-                  value="${filter2[key].value}" units="${spec[key].units.join(",")}" onchange="changeRangeEditor" />
-            </div>`;
-    }).join("")}
       </div>
     `;
   }
@@ -42654,33 +42837,31 @@ class FilterEditor extends EditorElement {
           return { value: it.id };
         });
       }
-      return `
-      <object refClass="SelectEditor"  
-        ref='$select${index2}' 
-        key="${index2}" 
-        label="SVG Filter"
-        value="${filter2.value}" 
-        options=${variable$4(["", ...options2])}
-        onchange="changeRangeEditor"  />`;
+      return createComponent("SelectEditor", {
+        ref: `$select${index2}`,
+        key: index2,
+        label: "SVG Filter",
+        value: filter2.value,
+        options: ["", ...options2],
+        onchange: "changeRangeEditor"
+      });
     }
-    return `
-      <object refClass="RangeEditor"  
-        ref='$range${index2}_${filter2.type}' 
-        key="${index2}" 
-        min='${spec.min}'
-        max='${spec.max}'
-        value="${filter2.value}" 
-        units="${spec.units.join(",")}"   
-        onchange="changeRangeEditor" />
-      `;
+    return createComponent("InputRangeEditor", {
+      ref: `$range${index2}_${filter2.type}`,
+      label: this.$i18n("filter.property." + filter2.type),
+      key: index2,
+      min: spec.min,
+      max: spec.max,
+      value: filter2.value,
+      units: spec.units,
+      onchange: "changeRangeEditor"
+    });
   }
   makeOneFilterTemplate(spec, filter2, index2) {
-    var isSVG = filter2.type === "svg";
-    var title2 = `${this.$i18n("filter.property." + filter2.type)}`;
     return `
       <div class="filter-item" data-index="${index2}">
         <div class="title" >
-          <label draggable="true" data-index="${index2}" title="${isSVG ? "" : title2}">${title2}</label>
+          <label draggable="true" data-index="${index2}">${iconUse$1("drag_indicator")}</label>
           ${filter2.type != "svg" ? `
           <div class="filter-ui">
             ${this.makeOneFilterEditor(index2, filter2, spec)}
@@ -42692,7 +42873,7 @@ class FilterEditor extends EditorElement {
         `}          
           <div class="filter-menu">
             <button type="button" class="del" data-index="${index2}">
-              ${obj.remove2}
+              ${iconUse$1("remove2")}
             </button>
           </div>
         </div>
@@ -42711,10 +42892,10 @@ class FilterEditor extends EditorElement {
       return this.makeFilterTemplate(filter2, index2.toString());
     });
   }
-  [DRAGSTART("$filterList .filter-item .title label")](e2) {
+  [DRAGSTART("$filterList .filter-item > .title > label")](e2) {
     this.startIndex = +e2.$dt.attr("data-index");
   }
-  [DRAGOVER("$filterList .filter-item .title label") + PREVENT](e2) {
+  [DRAGOVER("$filterList .filter-item > .title > label") + PREVENT](e2) {
   }
   sortItem(arr, startIndex, targetIndex) {
     arr.splice(targetIndex + (startIndex < targetIndex ? -1 : 0), 0, ...arr.splice(startIndex, 1));
@@ -42949,11 +43130,24 @@ class GradientEditor extends EditorElement {
                 <label for='gradientConnected${this.id}'>Connected <input type='checkbox'  id='gradientConnected${this.id}' ref='$cut' checked /></label>
             </div>            
             <div class='tools' data-editor='tools'>
-              <object refClass='InputRangeEditor' label="Offset" ref='$range' calc="false" key='length' onchange='changeColorStepOffset' />
+                ${createComponent("InputRangeEditor", {
+      label: "Offset",
+      ref: "$range",
+      key: "length",
+      onchange: "changeColorStepOffset"
+    })}
             </div>
             <div class='sub-editor' ref='$subEditor'> 
               <div data-editor='angle'>
-                <object refClass="InputRangeEditor" label='Angle' ref='$angle' calc="false" units="deg" min="-720" max="720" key='angle' onchange='changeKeyValue' />
+                ${createComponent("InputRangeEditor", {
+      label: "Angle",
+      ref: "$angle",
+      units: "deg",
+      min: -720,
+      max: 720,
+      key: "angle",
+      onchange: "changeKeyValue"
+    })}
               </div>
               <div data-editor='centerX'>
                 <object refClass="RangeEditor" label='Center X' ref='$radialPositionX' calc="false" value="50%"  key='radialPositionX' onchange='changeKeyValue' />
@@ -43321,24 +43515,24 @@ class InputRangeEditor extends EditorElement {
     this.notEventRedefine = true;
   }
   initState() {
-    var units = this.props.units || "px,em,%,auto";
-    var value = Length.parse(this.props.value || 0);
+    var units = this.props.units || ["px", "em", "%", "auto"];
+    var value = Length.parse(this.props.value || "0px");
     let label = this.props.label || "";
     if (obj[label]) {
       label = obj[label];
     }
     return {
-      removable: this.props.removable === "true",
+      removable: this.props.removable,
       label,
-      compact: this.props.compact === "true",
-      wide: this.props.wide === "true",
+      compact: this.props.compact,
+      wide: this.props.wide,
       min: +this.props.min || 0,
       max: +this.props.max || 100,
       step: +this.props.step || 1,
       key: this.props.key,
       params: this.props.params || "",
       layout: this.props.layout || "",
-      disabled: this.props.disabled === "true",
+      disabled: this.props.disabled,
       title: this.props.title || "",
       units,
       value
@@ -43355,7 +43549,7 @@ class InputRangeEditor extends EditorElement {
     }
     var layoutClass = layout2;
     var realValue = (+value).toString();
-    const units = this.state.units.split(",").filter(Boolean);
+    const units = this.state.units;
     return `
         <div 
             ref="$range",
@@ -43374,15 +43568,14 @@ class InputRangeEditor extends EditorElement {
                 <div class='area'>
                     <input type='number' class='property-number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step2}" tabIndex="1" />
                     
-                    ${units.length === 1 ? `<span class='unit'>${units[0]}</span>` : `
-                            <object refClass="SelectEditor"  
-                                ref='$unit' 
-                                key='unit' 
-                                compact="true"
-                                value="${this.state.selectedUnit || this.state.value.unit}" 
-                                options="${this.state.units}" 
-                                onchange='changeUnit' 
-                            />`}
+                    ${units.length === 1 ? `<span class='unit'>${units[0]}</span>` : createComponent("SelectEditor", {
+      ref: "$unit",
+      key: "unit",
+      compact: true,
+      value: this.state.selectedUnit || this.state.value.unit,
+      options: this.state.units,
+      onchange: "changeUnit"
+    })}
                     
                     
                 </div>
@@ -43454,7 +43647,7 @@ class InputRangeEditor extends EditorElement {
     this.refs.$range.addClass("drag");
     this.initNumberValue = +this.refs.$propertyNumber.value;
     this.initUnit = this.state.value.unit;
-    this.initUnits = this.state.units.split(",").filter(Boolean);
+    this.initUnits = this.state.units;
     this.refs.$propertyNumber.focus();
     this.refs.$propertyNumber.select();
   }
@@ -43477,7 +43670,7 @@ class RangeEditor extends EditorElement {
     this.notEventRedefine = true;
   }
   initState() {
-    var units = this.props.units || "px,em,%";
+    var units = this.props.units || ["px", "em", "%"];
     var value = Length.parse(this.props.value || 0);
     return {
       removable: this.props.removable === "true",
@@ -43505,7 +43698,10 @@ class RangeEditor extends EditorElement {
     }
     var layoutClass = layout2;
     var realValue = (+value).toString();
-    var units = this.state.units.split(",").map((it) => {
+    if (this.state.units === "%") {
+      throw new Error("%");
+    }
+    var units = this.state.units.map((it) => {
       let description = it;
       if (description === "number") {
         description = "";
@@ -43528,7 +43724,13 @@ class RangeEditor extends EditorElement {
                 <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step2}" /> 
                 <div class='area' ref='$rangeArea'>
                     <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step2}" tabIndex="1" />
-                    <object refClass="SelectEditor"  ref='$unit' key='unit' value="${this.state.value.unit}" options=${variable$4(units)} onchange='changeUnit' />
+                    ${createComponent("SelectEditor", {
+      ref: "$unit",
+      key: "unit",
+      value: this.state.value.unit,
+      options: units,
+      onchange: "changeUnit"
+    })}
                 </div>
             </div>
             <button type='button' class='remove thin' ref='$remove' title='Remove'>${obj.remove}</button>
@@ -43595,9 +43797,9 @@ class IterationCountEditor extends RangeEditor {
     if (value === "infinite") {
       value = new Length(0, "infinite");
     } else {
-      value = Length.number(value.split("normal")[0]);
+      value = Length.number(value);
     }
-    var units = this.props.units || "px,em,%";
+    var units = this.props.units || ["px", "em", "%"];
     return __spreadValues(__spreadValues({}, super.initState()), {
       key: this.props.key,
       params: this.props.params || "",
@@ -43634,28 +43836,28 @@ class MediaProgressEditor extends EditorElement {
                     <div class='drag-item end' ref='$end'></div>
                 </div>
                 <div class='item'>
-                    <object refClass="NumberRangeEditor"  
-                        ref='$s' 
-                        label='Start' 
-                        key='start' 
-                        min="0" 
-                        max="${duration}" 
-                        step="0.001" 
-                        value="${start2 * duration}" 
-                        onchange="changeValue" 
-                    />
+                    ${createComponent("NumberRangeEditor", {
+      ref: "$s",
+      label: "Start",
+      key: "start",
+      min: 0,
+      max: duration,
+      step: 1e-3,
+      value: start2 * duration,
+      onchange: "changeValue"
+    })}
                 </div>
                 <div class='item'>
-                    <object refClass="NumberRangeEditor"  
-                        ref='$e' 
-                        label='End' 
-                        key='end' 
-                        min="0" 
-                        max="${duration}" 
-                        step="0.001" 
-                        value="${end2 * duration}" 
-                        onchange="changeValue" 
-                    />
+                    ${createComponent("NumberRangeEditor", {
+      ref: "$e",
+      label: "End",
+      key: "end",
+      min: 0,
+      max: duration,
+      step: 1e-3,
+      value: end2 * duration,
+      onchange: "changeValue"
+    })}
                 </div>                
             </div>
         `;
@@ -44315,7 +44517,7 @@ class StrokeDashArrayEditor extends EditorElement {
       var num = index2 + 1;
       return `
         <div class='dasharray-item'>
-          <object refClass="NumberInputEditor" ${variable$4({
+          ${createComponent("NumberInputEditor", {
         ref: `$dash-${this.state.count}-${num}`,
         compact: true,
         key: index2,
@@ -44325,8 +44527,6 @@ class StrokeDashArrayEditor extends EditorElement {
         step: 1,
         onchange: "changeRangeEditor"
       })}  
-
-          />
           <button type="button" data-index="${index2}" class='delete'>${iconUse$1("close")}</button>
         </div>
       `;
@@ -44470,7 +44670,7 @@ class VarEditor extends EditorElement {
       return { key, value };
     });
     return {
-      hideLabel: this.props["hide-label"] == "true" ? true : false,
+      hideLabel: this.props.hideLabel == "true" ? true : false,
       params: this.props.params || "",
       values
     };
@@ -44705,6 +44905,13 @@ class HTMLRenderer {
     }
     return this.getDefaultRendererInstance().toStyle(item2, renderer || this);
   }
+  toStyleData(item2, renderer) {
+    const currentRenderer = this.getRendererInstance(item2);
+    if (isFunction(currentRenderer.toStyleData)) {
+      return currentRenderer.toStyleData(item2, renderer || this);
+    }
+    return this.getDefaultRendererInstance().toStyleData(item2, renderer || this);
+  }
   toExportStyle(item2, renderer) {
     const currentRenderer = this.getRendererInstance(item2);
     if (isFunction(currentRenderer.toExportStyle)) {
@@ -44736,7 +44943,7 @@ class HTMLRenderer {
     }) : [];
     const selectorCode = current ? current.selectors : [];
     return `
-<div class=''>
+<div >
 
 ${cssCode && `<div><pre title='CSS'>${cssCode}</pre></div>`}
 
@@ -46397,7 +46604,6 @@ class DomRender$1 extends ItemRender$1 {
       "perspective",
       "perspective-origin",
       "font-size",
-      "font-stretch",
       "line-height",
       "font-weight",
       "font-family",
@@ -46562,6 +46768,13 @@ ${cssString}
     ` + item2.layers.map((it) => {
       return renderer.toStyle(it, renderer);
     }).join("");
+  }
+  toStyleData(item2, renderer) {
+    const cssString = this.generateView(item2, `[data-renderer-id='${renderer.id}'] .element-item[data-id='${item2.id}']`);
+    return {
+      styleTag: `<style type='text/css' data-renderer-type="html" data-id='${item2.id}'>${cssString}</style>`,
+      cssString
+    };
   }
   toExportStyle(item2, renderer) {
     const cssString = this.generateView(item2, `.element-item[data-id='${item2.id}']`);
@@ -47383,6 +47596,9 @@ class TextRender$2 extends LayerRender$1 {
   toCSS(item2) {
     let css = super.toCSS(item2);
     css.margin = css.margin || "0px";
+    if (item2.overflow !== Overflow.SCROLL) {
+      css.height = "auto";
+    }
     return css;
   }
   update(item2, currentElement) {
@@ -47659,7 +47875,7 @@ class MovableRender extends GroupRender {
 }
 class DomRender extends MovableRender {
   async toCloneObject(item2, renderer) {
-    return __spreadProps(__spreadValues(__spreadValues({}, await super.toCloneObject(item2, renderer)), item2.attrs("position", "rootVariable", "variable", "filter", "backdrop-filter", "background-color", "background-image", "text-clip", "border-radius", "border", "box-shadow", "text-shadow", "clip-path", "color", "font-size", "font-stretch", "line-height", "text-align", "text-transform", "text-decoration", "letter-spacing", "word-spacing", "text-indent", "perspective-origin", "transform-style", "perspective", "mix-blend-mode", "overflow", "opacity", "animation", "transition")), {
+    return __spreadProps(__spreadValues(__spreadValues({}, await super.toCloneObject(item2, renderer)), item2.attrs("position", "rootVariable", "variable", "filter", "backdrop-filter", "background-color", "background-image", "text-clip", "border-radius", "border", "box-shadow", "text-shadow", "clip-path", "color", "font-size", "line-height", "text-align", "text-transform", "text-decoration", "letter-spacing", "word-spacing", "text-indent", "perspective-origin", "transform-style", "perspective", "mix-blend-mode", "overflow", "opacity", "animation", "transition")), {
       selectors: item2.selectors.map((selector2) => selector2.clone()),
       svg: item2.svg.map((svg) => svg.clone())
     });
@@ -47844,7 +48060,6 @@ class SVGRender extends DomRender$1 {
       overflow: "visible"
     }, this.toKeyListCSS(item2, [
       "font-size",
-      "font-stretch",
       "line-height",
       "font-weight",
       "font-family",
@@ -48496,7 +48711,10 @@ class SelectorPopup extends BasePopup {
     </div>`;
   }
   templateForProperty() {
-    return `<object refClass="CSSPropertyEditor" ref='$propertyEditor' onchange='changePropertyEditor' />`;
+    return createComponent("CSSPropertyEditor", {
+      ref: "$propertyEditor",
+      onchange: "changePropertyEditor"
+    });
   }
   templateForSelector() {
     return `
@@ -48556,7 +48774,12 @@ class SelectorProperty extends BaseProperty {
   getTools() {
     return `
       <div style='display:inline-block;'>
-        <object refClass="SelectEditor"  ref='$select' key='selector' icon="true" none-value="selector" options=${variable$4(selectorList)} />
+        ${createComponent("SelectEditor", {
+      ref: "$select",
+      key: "selector",
+      "none-value": "selector",
+      options: selectorList
+    })}
       </div>
       <button type="button" ref="$add" title="add Selector">${obj.add}</button>
     `;
@@ -49106,44 +49329,46 @@ class FuncFilterEditor extends EditorElement {
     var { type, label } = this.state;
     var hasLabel = !!label ? "has-label" : "";
     return `
-        <object refClass="SelectEditor"  
-            label="${label}" 
-            ref="$type"
-            key="type" 
-            value="${this.state.type}" 
-            options=${variable$4(["identity", "table", "discrete", "linear", "gamma"])} 
-            onchange="changeType" />
+            ${createComponent("SelectEditor", {
+      label,
+      ref: "$type",
+      key: "type",
+      value: this.state.type,
+      options: ["identity", "table", "discrete", "linear", "gamma"],
+      onchange: "changeType"
+    })}
         <div class='elf--func-filter-editor ${hasLabel}' ref='$container' data-selected-type='${type}'>
             ${label ? `<label></label>` : ""}
             <div data-type='identity'>
             </div>
             <div data-type='table'>
-                <object refClass="TextEditor" 
-                    label='tableValues' 
-                    ref='$values' 
-                    key='values' 
-                    value="${this.state.values.join(" ")}" 
-                    onchange=${this.subscribe((key, value) => {
-      this.updateData({
-        [key]: value.split(" ")
-      });
-    })} />
+                ${createComponent("TextEditor", {
+      label: "tableValues",
+      ref: "$values",
+      key: "values",
+      value: this.state.values.join(" "),
+      onchange: (key, value) => {
+        this.updateData({
+          [key]: value.split(" ")
+        });
+      }
+    })}
             </div>
             <div data-type='linear'>
                 ${["slop", "intercept"].map((it) => {
       return `
                         <div>
-                            <object refClass="NumberRangeEditor"  
-                                label='${it}' 
-                                ref='$${it}' 
-                                key='${it}' 
-                                value="${this.state[it]}" 
-                                onchange=${this.subscribe((key, value) => {
-        this.updateData({
-          [key]: value
-        });
+                            ${createComponent("NumberRangeEditor", {
+        label: it,
+        ref: `$${it}`,
+        key: it,
+        value: this.state[it],
+        onchange: (key, value) => {
+          this.updateData({
+            [key]: value
+          });
+        }
       })}
-                            />
                         </div>                    
                     `;
     }).join("")}
@@ -49152,17 +49377,17 @@ class FuncFilterEditor extends EditorElement {
                 ${["amplitude", "exponent", "offset"].map((it) => {
       return `
                         <div>
-                            <object refClass="NumberRangeEditor"  
-                                label='${it}' 
-                                ref='$${it}' 
-                                key='${it}' 
-                                value="${this.state[it]}" 
-                                onchange=${this.subscribe((key, value) => {
-        this.updateData({
-          [key]: value
-        });
+                            ${createComponent("NumberRangeEditor", {
+        label: it,
+        ref: `$${it}`,
+        key: it,
+        value: this.state[it],
+        onchange: (key, value) => {
+          this.updateData({
+            [key]: value
+          });
+        }
       })}
-                                />
                         </div>                    
                     `;
     }).join("")}            
@@ -49839,146 +50064,103 @@ class SVGFilterEditor extends EditorElement {
   makeFilterEditorTemplate(s, filter2, key) {
     var objectId = `${filter2.type}${key}${this.state.selectedIndex}${Date.now()}`;
     if (s.inputType === "color-matrix") {
-      return `
-        <div>
-          <object refClass="ColorMatrixEditor" 
-            ref='$colorMatrix${objectId}' 
-            label="${s.title}"
-            key="${key}"       
-            column='${s.column}' 
-            values='${filter2[key].join(" ")}' 
-            onchange="changeRangeEditor"
-          />
-        </div>
-        `;
+      return createComponent("ColorMatrixEditor", {
+        ref: `$colorMatrix${objectId}`,
+        label: s.title,
+        key,
+        column: s.column,
+        values: filter2[key].join(" "),
+        onchange: "changeRangeEditor"
+      });
     } else if (s.inputType === "input-array") {
-      return `
-        <div>
-          <object refClass="InputArrayEditor" 
-            ref='$inputArray${objectId}' 
-            label="${s.title}"
-            key="${key}"       
-            column-label="R,G,B,A,M",
-            row-label="R,G,B,A",
-            column='${s.column}' 
-            values='${filter2[key].join(" ")}' 
-            onchange="changeRangeEditor"
-          />
-        </div>
-        `;
+      return createComponent("InputArrayEditor", {
+        ref: `$inputArray${objectId}`,
+        label: s.title,
+        key,
+        "column-label": "R,G,B,A,M",
+        "row-label": "R,G,B,A",
+        column: s.column,
+        values: filter2[key].join(" "),
+        onchange: "changeRangeEditor"
+      });
     } else if (s.inputType === "blend") {
-      return `
-        <div>
-          <object refClass="BlendSelectEditor" 
-            ref='$blend${objectId}' 
-            label="${s.title}"
-            key="${key}"
-            value='${filter2[key].toString()}' 
-            onchange="changeRangeEditor"             
-          />
-        </div>
-        `;
+      return createComponent("BlendSelectEditor", {
+        ref: `$blend${objectId}`,
+        label: s.title,
+        key,
+        value: filter2[key].toString(),
+        onchange: "changeRangeEditor"
+      });
     } else if (s.inputType === "select") {
       var options2 = s.options;
       if (isFunction(s.options)) {
         options2 = s.options(this.state.filters);
       }
-      return `
-          <div>
-            <object refClass="SelectEditor"  
-              ref='$select${objectId}' 
-              label="${s.title}"
-              options='${options2}' 
-              key="${key}"
-              value='${filter2[key].toString()}' 
-              onchange="changeRangeEditor"             
-            />
-          </div>
-          `;
+      return createComponent("SelectEditor", {
+        ref: `$select${objectId}`,
+        label: s.title,
+        options: options2,
+        key,
+        value: filter2[key].toString(),
+        onchange: "changeRangeEditor"
+      });
     } else if (s.inputType === "text") {
-      return `
-        <div>
-          <object refClass="TextEditor" 
-            ref='$text${objectId}' 
-            label="${s.title}"
-            key="${key}"
-            value='${filter2[key].toString()}' 
-            onchange="changeTextEditor"
-          />
-        </div>
-        `;
+      return createComponent("TextEditor", {
+        ref: `$text${objectId}`,
+        label: s.title,
+        key,
+        value: filter2[key].toString(),
+        onchange: "changeTextEditor"
+      });
     } else if (s.inputType === "number-range") {
-      return ` 
-        <div>
-          <object refClass="NumberRangeEditor"  
-            ref='$numberrange${objectId}' 
-            label="${s.title}" 
-            layout='block'             
-            min="${s.min}"
-            max="${s.max}"
-            step="${s.step}"
-            key="${key}" 
-            value="${filter2[key].toString()}" 
-            onchange="changeRangeEditor" 
-          />
-        </div>
-      `;
+      return createComponent("NumberRangeEditor", {
+        ref: `$numberrange${objectId}`,
+        label: s.title,
+        layout: "block",
+        min: s.min,
+        max: s.max,
+        step: s.step,
+        key,
+        value: filter2[key].toString(),
+        onchange: "changeRangeEditor"
+      });
     } else if (s.inputType === "color") {
-      return `
-        <div>
-          <object refClass="ColorViewEditor" 
-            ref='$colorview${objectId}' 
-            label="${s.title}" 
-            key="${key}"
-            value="${filter2[key].toString()}" 
-            onchange=${this.subscribe((key2, color2, params) => {
-        this.trigger("changeRangeEditor", key2, color2, params);
-      })}
-          />
-        </div>
-      `;
+      return createComponent("ColorViewEditor", {
+        ref: `$colorview${objectId}`,
+        label: s.title,
+        key,
+        value: filter2[key].toString(),
+        onchange: "changeRangeEditor"
+      });
     } else if (s.inputType === "FuncFilter") {
-      return `
-        <div>
-          <object refClass="FuncFilterEditor" 
-            ref='$funcFilter${objectId}' 
-            label="${s.title}" 
-            key="${key}"
-            value="${filter2[key].toString()}" 
-            onchange="changeFuncFilterEditor" 
-          />
-        </div>
-      `;
+      return createComponent("FuncFilterEditor", {
+        ref: `$funcFilter${objectId}`,
+        label: s.title,
+        key,
+        value: filter2[key].toString(),
+        onchange: "changeFuncFilterEditor"
+      });
     } else if (s.inputType === "ImageSelectEditor") {
-      return `
-        <div>
-          <object refClass="ImageSelectEditor" 
-            ref='$imageSelect${objectId}' 
-            label="${s.title}" 
-            key="${key}"
-            value="${filter2[key].toString()}" 
-            onchange="changeRangeEditor" 
-          />
-        </div>
-      `;
+      return createComponent("ImageSelectEditor", {
+        ref: `$imageSelect${objectId}`,
+        label: s.title,
+        key,
+        value: filter2[key].toString(),
+        onchange: "changeRangeEditor"
+      });
     }
-    return `
-      <div>
-        <object refClass="RangeEditor"  
-          ref='$range${objectId}' 
-          layout='block' 
-          calc='false' 
-          label="${s.title}" 
-          min="${s.min}"
-          max="${s.max}"
-          step="${s.step}"
-          key="${key}" 
-          value="${filter2[key].toString()}" 
-          units="${s.units.join(",")}" 
-          onchange="changeRangeEditor" 
-        />
-      </div>
-    `;
+    return createComponent("RangeEditor", {
+      ref: `$range${objectId}`,
+      layout: "block",
+      label: s.title,
+      min: s.min,
+      max: s.max,
+      step: s.step,
+      key,
+      value: filter2[key].toString(),
+      units: s.units,
+      onchange: "changeRangeEditor"
+    });
   }
   makeOneFilterTemplate(spec, filter2) {
     return `
@@ -50368,19 +50550,17 @@ class SVGFilterPopup extends BasePopup {
     </div>`;
   }
   [LOAD("$editor")]() {
-    return `
-      <object refClass="SVGFilterEditor" 
-        ref='$filter' 
-        title='Filter Type' 
-        key="filter" 
-        value="${variable$4(this.state.filters)}"
-        onchange=${this.subscribe((key, filters) => {
-      this.updateData({
-        filters
-      });
-    })} 
-      />
-    `;
+    return createComponent("SVGFilterEditor", {
+      ref: "$filter",
+      title: "Filter Type",
+      key: "filter",
+      value: this.state.filters,
+      onchange: (key, filters) => {
+        this.updateData({
+          filters
+        });
+      }
+    });
   }
   [SUBSCRIBE("showSVGFilterPopup")](data) {
     data.filters = data.filters.map((it) => {
@@ -50539,7 +50719,8 @@ function svgItem(editor) {
   editor.registerMenuItem("inspector.tab.style", {
     SVGItemProperty: ObjectProperty.create({
       title: editor.$i18n("svg.item.property.title"),
-      editableProperty: "svg-item"
+      editableProperty: "svg-item",
+      preventUpdate: true
     })
   });
   editor.registerMenuItem("popup", {
@@ -50839,61 +51020,58 @@ class SVGTextProperty extends BaseProperty {
   }
   getBody() {
     return `
-      <div class='property-item animation-property-item'>
-        <div class='group'>
-          <span class='add-timeline-property' data-property='text'></span>
-        </div>
-        <object refClass="TextAreaEditor" 
-          ref='$text' 
-          label='${this.$i18n("svg.text.property.textarea")}' 
-          key="text"
-          onchange="changeTextValue" />
+      <div class='property-item '>
+        ${createComponent("TextAreaEditor", {
+      ref: "$text",
+      label: this.$i18n("svg.text.property.textarea"),
+      key: "text",
+      onchange: "changeTextValue"
+    })}
       </div>        
       <div class='property-item'>
-        <object refClass="SelectIconEditor" 
-          ref='$text-anchor' 
-          label='${this.$i18n("svg.text.property.anchor")}' 
-          key="text-anchor" 
-          options=${variable$4(["start", "middle", "end"])} 
-          onchange="changeTextValue" />
+        ${createComponent("SelectIconEditor", {
+      ref: "$text-anchor",
+      label: this.$i18n("svg.text.property.anchor"),
+      key: "text-anchor",
+      options: ["start", "middle", "end"],
+      onchange: "changeTextValue"
+    })}
+          
       </div>            
-      <div class='property-item animation-property-item'>
-        <div class='group'>
-          <span class='add-timeline-property' data-property='lengthAdjust'></span>
-        </div>
-        <object refClass="SelectEditor"  
-          ref='$lengthAdjust' 
-          label='${this.$i18n("svg.text.property.length.adjust")}' 
-          key='lengthAdjust' 
-          value='spacing' 
-          options=${variable$4(["spacing", "spacingAndGlyphs"])} 
-          onchange='changeTextValue' />        
+      <div class='property-item '>
+        ${createComponent("SelectEditor", {
+      ref: "$lengthAdjust",
+      label: this.$i18n("svg.text.property.length.adjust"),
+      key: "lengthAdjust",
+      value: "spacing",
+      options: ["spacing", "spacingAndGlyphs"],
+      onchange: "changeTextValue"
+    })}
+          
       </div>        
-      <div class='property-item animation-property-item'>
-        <div class='group'>
-          <span class='add-timeline-property' data-property='textLength'></span>
-        </div>
-        <object refClass="RangeEditor"  
-          ref='$textLength' 
-          label='${this.$i18n("svg.text.property.text.length")}' 
-          key='textLength'
-          min="0"
-          max='1000'
-          step="0.1"
-          onchange='changeTextValue' />                
+      <div class='property-item '>
+        ${createComponent("RangeEditor", {
+      ref: "$textLength",
+      label: this.$i18n("svg.text.property.text.length"),
+      key: "textLength",
+      min: 0,
+      max: 1e3,
+      step: 0.1,
+      onchange: "changeTextValue"
+    })}
+          
       </div>        
-      <div class='property-item animation-property-item'>
-        <div class='group'>
-          <span class='add-timeline-property' data-property='startOffset'></span>
-        </div>
-        <object refClass="RangeEditor"  
-          ref='$startOffset' 
-          label='${this.$i18n("svg.text.property.start.offset")}' 
-          key='startOffset' 
-          min="0"
-          max='1000'
-          step="0.1"          
-          onchange='changeTextValue' />        
+      <div class='property-item '>
+        ${createComponent("RangeEditor", {
+      ref: "$startOffset",
+      label: this.$i18n("svg.text.property.start.offset"),
+      key: "startOffset",
+      min: 0,
+      max: 1e3,
+      step: 0.1,
+      onchange: "changeTextValue"
+    })}
+          
       </div>                    
     `;
   }
@@ -50908,192 +51086,103 @@ function svgText(editor) {
     SVGTextProperty
   });
 }
-const textTransformOptions = [
-  { value: TextTransform.NONE, text: "None" },
-  { value: TextTransform.CAPITALIZE, text: "Ag" },
-  { value: TextTransform.UPPERCASE, text: "AG" },
-  { value: TextTransform.LOWERCASE, text: "ag" }
-];
-const textDecorationOptions = [
-  { value: TextDecoration.NONE, text: "None" },
-  { value: TextDecoration.UNDERLINE, text: "Underline" },
-  { value: TextDecoration.OVERLINE, text: "Overline" },
-  { value: TextDecoration.LINE_THROUGH, text: "Line-through" },
-  { value: TextDecoration.BLINK, text: "Blink" }
-];
-class TextProperty extends BaseProperty {
-  getTitle() {
-    return this.$i18n("text.property.title");
-  }
-  get editableProperty() {
-    return "text-style";
-  }
-  [SUBSCRIBE("refreshSelection") + IF("checkShow")]() {
-    this.refresh();
-  }
-  refresh() {
-    var current = this.$selection.current;
-    if (current) {
-      this.children.$align.setValue(current["text-align"]);
-      this.children.$transform.setValue(current["text-transform"]);
-      this.children.$decoration.setValue(current["text-decoration"]);
-    }
-  }
-  getBody() {
-    return `
-      <div class="property-item">
-        <object refClass="SelectIconEditor" 
-          ref='$align' 
-          label='${this.$i18n("text.property.align")}' 
-          key='text-align' 
-          value='left' 
-          options=${variable$4(["left", "center", "right", "justify"])} 
-          icons="align_left,align_center,align_right,align_justify" 
-          onchange='changeTextValue' />        
-      </div>        
-      <div class="property-item">
-        <object refClass="SelectIconEditor" 
-          ref='$transform' 
-          label='${this.$i18n("text.property.transform")}' 
-          key='text-transform' 
-          options=${variable$4(textTransformOptions)}
-          icons="horizontal_rule"
-          onchange='changeTextValue' />                
-      </div>        
-      <div class="property-item">
-        <object refClass="SelectIconEditor" 
-          ref='$decoration' 
-          label='${this.$i18n("text.property.decoration")}' 
-          key='text-decoration' 
-          options=${variable$4(textDecorationOptions)}
-          icons="horizontal_rule,underline,O,strikethrough"
-          onchange='changeTextValue' />        
-      </div>                    
-    `;
-  }
-  [SUBSCRIBE_SELF("changeTextValue")](key, value) {
-    this.command("setAttributeForMulti", `change text property : ${key}`, this.$selection.packByValue({ [key]: value }));
-  }
-}
 function text$1(editor) {
   editor.registerMenuItem("inspector.tab.style", {
-    TextProperty
+    TextProperty: ObjectProperty.create({
+      title: editor.$i18n("text.property.title"),
+      editableProperty: "text-style"
+    })
   });
-}
-class TextClipProperty extends BaseProperty {
-  getTitle() {
-    return this.$i18n("text.clip.property.title");
-  }
-  isFirstShow() {
-    return false;
-  }
-  getClassName() {
-    return "item";
-  }
-  getTools() {
-    return `<div ref='$textClip'></div>`;
-  }
-  [LOAD("$textClip")]() {
-    var current = this.$selection.current || {};
-    var clip = current["text-clip"] || "";
-    return `
-      <object refClass="SelectEditor"  ref='$1' key='text-clip' icon="true" value="${clip}" options=${variable$4(["", "text"])} onchange="changeSelect" />
-    `;
-  }
-  [SUBSCRIBE_SELF("changeSelect")](key, value) {
-    this.emit("setAttributeForMulti", this.$selection.packByValue({ [key]: value }));
-  }
-  get editableProperty() {
-    return "text-clip";
-  }
-  [SUBSCRIBE("refreshSelection") + IF("checkShow")]() {
-    this.refresh();
-  }
-}
-function textClip(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
-    TextClipProperty
-  });
-}
-class TextFillProperty extends BaseProperty {
-  getTitle() {
-    return this.$i18n("text.fill.property.title");
-  }
-  get editableProperty() {
-    return "text-fill";
-  }
-  [SUBSCRIBE("refreshSelection") + IF("checkShow")]() {
-    this.refresh();
-  }
-  refresh() {
-    var current = this.$selection.current;
-    if (current) {
-      this.children.$fillColor.setValue(current["text-fill-color"] || "rgba(0, 0, 0, 1)");
-      this.children.$strokeColor.setValue(current["text-stroke-color"] || "rgba(0, 0, 0, 1)");
-      this.children.$width.setValue(current["text-stroke-width"] || "0px");
-    }
-  }
-  getBody() {
-    return `
-      <div class='property-item animation-property-item'>
-        <div class='group'>
-          <span class='add-timeline-property' data-property='text-fill-color'></span>
-        </div>
-        <object refClass="ColorViewEditor" ref='$fillColor' label='${this.$i18n("text.fill.property.fill")}' key='text-fill-color' onchange="changeColor" />
-      </div>           
-      <div class='property-item animation-property-item'>
-        <div class='group'>
-          <span class='add-timeline-property' data-property='text-stroke-color'></span>
-        </div>
-        <object refClass="ColorViewEditor" ref='$strokeColor' label='${this.$i18n("text.fill.property.stroke")}' key='text-stroke-color' onchange="changeColor" />
-      </div>                 
-
-      <div class='property-item animation-property-item'>
-        <div class='group'>
-          <span class='add-timeline-property' data-property='text-stroke-width'></span>
-        </div>
-        <object refClass="RangeEditor"  
-          ref='$width' 
-          label='${this.$i18n("text.fill.property.strokeWidth")}' 
-          key="text-stroke-width" 
-          
-          max="50"
-          onchange="changeRangeEditor" />
-      </div>
-    
-    `;
-  }
-  [SUBSCRIBE_SELF("changeColor")](key, color2, params) {
-    this.trigger("changeRangeEditor", key, color2);
-  }
-  [SUBSCRIBE_SELF("changeRangeEditor")](key, value) {
-    this.command("setAttributeForMulti", "change text fill", this.$selection.packByValue({ [key]: value }));
-  }
-}
-function textFill(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
-    TextFillProperty
+  editor.registerInspector("text-style", (current) => {
+    return [
+      {
+        type: "column",
+        size: [2, 1, 1],
+        columns: [
+          {
+            key: "text-align",
+            editor: "SelectIconEditor",
+            editorOptions: {
+              compact: true,
+              options: ["left", "center", "right", "justify"],
+              icons: ["align_left", "align_center", "align_right", "align_justify"]
+            },
+            defaultValue: current["text-align"] || "left"
+          },
+          "-",
+          {
+            key: "text-transform",
+            editor: "SelectIconEditor",
+            editorOptions: {
+              options: [
+                { value: TextTransform.CAPITALIZE, text: "Ag" },
+                { value: TextTransform.UPPERCASE, text: "AG" },
+                { value: TextTransform.LOWERCASE, text: "ag" }
+              ],
+              compact: true,
+              icons: ["horizontal_rule"]
+            }
+          }
+        ]
+      },
+      {
+        type: "column",
+        size: [3, 2, 1],
+        gap: 20,
+        columns: [
+          {
+            key: "text-decoration",
+            editor: "SelectIconEditor",
+            editorOptions: {
+              options: [
+                { value: TextDecoration.NONE, text: "None" },
+                { value: TextDecoration.UNDERLINE, text: "Underline" },
+                { value: TextDecoration.LINE_THROUGH, text: "LineThrough" }
+              ],
+              icons: ["horizontal_rule", "underline", "strikethrough"],
+              onchange: "changeTextValue"
+            },
+            defaultValue: current["text-tranform"]
+          },
+          {
+            key: "font-style",
+            editor: "SelectIconEditor",
+            editorOptions: {
+              compact: true,
+              options: ["normal", "italic"],
+              icons: ["title", "italic"]
+            },
+            defaultValue: current["font-style"]
+          },
+          {
+            key: "text-clip",
+            editor: "ToggleButton",
+            editorOptions: {
+              checkedValue: TextClip.TEXT,
+              toggleLabels: ["vignette", "vignette"],
+              toggleTitles: ["", "Text Clip"],
+              toggleValues: [TextClip.NONE, TextClip.TEXT]
+            },
+            defaultValue: current["text-clip"] || TextClip.NONE
+          }
+        ]
+      }
+    ];
   });
 }
 var TextShadowEditor$1 = "";
 class TextShadowEditor extends EditorElement {
   initState() {
     return {
-      hideLabel: this.props["hide-label"] === "true" ? true : false,
+      hideLabel: this.props.hideLabel === "true" ? true : false,
       selectedIndex: -1,
       textShadows: this.props.value
     };
   }
   template() {
-    var labelClass = this.state.hideLabel ? "hide" : "";
+    this.state.hideLabel ? "hide" : "";
     return `
       <div class="elf--text-shadow-editor" >
-        <div class='label ${labelClass}' >
-            <label>${this.props.title || ""}</label>        
-            <div class='tools'>
-              <button type="button" ref="$add" title="add Text Shadow">${obj.add}</button>
-            </div>
-        </div>
         <div class='text-shadow-list' ref='$shadowList'></div>
       </div>
     `;
@@ -51203,18 +51292,16 @@ class TextShadowProperty extends BaseProperty {
   }
   [LOAD("$shadowList")]() {
     var current = this.$selection.current || {};
-    return `
-      <object refClass="TextShadowEditor" 
-        ref='$textshadow' 
-        value="${variable$4(TextShadow.parseStyle(current["text-shadow"]))}" 
-        hide-label="true" 
-        onChange=${this.subscribe((textshadow) => {
-      this.command("setAttributeForMulti", "change text shadow", this.$selection.packByValue({
-        "text-shadow": textshadow
-      }));
-    })}
-      />
-    `;
+    return createComponent("TextShadowEditor", {
+      ref: "$textshadow",
+      value: TextShadow.parseStyle(current["text-shadow"]),
+      hideLabel: true,
+      onChange: this.subscribe((textshadow) => {
+        this.command("setAttributeForMulti", "change text shadow", this.$selection.packByValue({
+          "text-shadow": textshadow
+        }));
+      })
+    });
   }
   get editableProperty() {
     return "text-shadow";
@@ -51254,21 +51341,44 @@ class TextShadowPropertyPopup extends BasePopup {
           ></div>
         </div>
         <div class='popup-item'>
-          <object refClass="RangeEditor"  ref='$offsetX' label='Offset X' key='offsetX' min="-100" max='100' value='${this.state.offsetX}' onchange='changeShadow' />
+          ${createComponent("RangeEditor", {
+      ref: "$offsetX",
+      label: "Offset X",
+      key: "offsetX",
+      min: -100,
+      max: 100,
+      value: this.state.offsetX,
+      onchange: "changeShadow"
+    })}
         </div>
         <div class='popup-item'>
-          <object refClass="RangeEditor"  ref='$offsetY' label="Offset Y" key='offsetY' min="-100" max='100' value='${this.state.offsetY}' onchange='changeShadow' />
+          ${createComponent("RangeEditor", {
+      ref: "$offsetY",
+      label: "Offset Y",
+      key: "offsetY",
+      min: -100,
+      max: 100,
+      value: this.state.offsetY,
+      onchange: "changeShadow"
+    })}        
         </div>
         <div class='popup-item'>
-          <object refClass="RangeEditor"  ref='$blurRadius' label="Blur Radius" key='blurRadius' value='${this.state.blurRadius}' onchange='changeShadow' />
+        ${createComponent("RangeEditor", {
+      ref: "$blurRadius",
+      label: "Blur Radius",
+      key: "blurRadius",
+      value: this.state.blurRadius,
+      onchange: "changeShadow"
+    })}                
         </div>
         <div class='popup-item'>
-          <object refClass="ColorViewEditor" 
-              ref='$foreColor' 
-              label="color" 
-              key='color' 
-              value="${this.state.color}"
-              onchange="changeShadow" />
+          ${createComponent("ColorViewEditor", {
+      ref: "$foreColor",
+      label: "color",
+      key: "color",
+      value: this.state.color,
+      onchange: "changeShadow"
+    })}                
         </div>        
       </div>
     `;
@@ -51604,7 +51714,6 @@ const property_list = [
   "filter",
   "font-size",
   "font-size-adjust",
-  "font-stretch",
   "font-weight",
   "height",
   "left",
@@ -51682,7 +51791,12 @@ class TransitionPropertyPopup extends BasePopup {
     return `
     <div class='timing-function'>
       <label>Timing function</label>
-      <object refClass="CubicBezierEditor" ref='$cubicBezierEditor' key="timingFunction" value="${this.state.data.timingFunction || "linear"}" onChange='changeCubicBezier' />
+      ${createComponent("CubicBezierEditor", {
+      ref: "$cubicBezierEditor",
+      key: "timingFunction",
+      value: this.state.data.timingFunction || "linear",
+      onChange: "changeCubicBezier"
+    })}
     </div>
     `;
   }
@@ -51694,29 +51808,43 @@ class TransitionPropertyPopup extends BasePopup {
   templateForProperty() {
     return `
       <div class='name'>
-        <object refClass="SelectEditor"  
-          ref='$property' 
-          icon="true" 
-          label="Property" 
-          key='name' 
-          value="${this.state.data.name}" 
-          options=${variable$4(property_list)} 
-          onChange='changeTransition' 
-        /> 
+        ${createComponent("SelectEditor", {
+      ref: "$property",
+      icon: true,
+      label: "Property",
+      key: "name",
+      value: this.state.data.name,
+      options: property_list,
+      onChange: "changeTransition"
+    })}
       </div>
     `;
   }
   templateForDelay() {
     return `
     <div class='delay'>
-      <object refClass="RangeEditor"  ref='$delay' label='Delay' calc='false' key='delay' value='${this.state.data.delay}' units='s,ms' onChange="changeRangeEditor" />
+      ${createComponent("RangeEditor", {
+      ref: "$delay",
+      label: "Delay",
+      key: "delay",
+      value: this.state.data.delay,
+      units: ["s", "ms"],
+      onChange: "changeRangeEditor"
+    })}
     </div>
     `;
   }
   templateForDuration() {
     return `
     <div class='duration'>
-      <object refClass="RangeEditor"  ref='$duration' label='Duration'  calc='false' key='duration' value='${this.state.data.duration}' units='s,ms' onChange="changeRangeEditor" />
+      ${createComponent("RangeEditor", {
+      ref: "$duration",
+      label: "Duration",
+      key: "duration",
+      value: this.state.data.duration,
+      units: ["s", "ms"],
+      onChange: "changeRangeEditor"
+    })}
     </div>
     `;
   }
@@ -51788,7 +51916,14 @@ class VideoProperty extends BaseProperty {
           <button type="button" data-value="play" >${obj.play} ${this.$i18n("video.property.play")}</button>
           <button type="button" data-value="pause">${obj.pause}  ${this.$i18n("video.property.pause")}</button>      
           <div>
-            <object refClass="NumberRangeEditor"  ref='$currentTime' min="0" max="${duration}" value="${currentTime}" step="0.001" onchange="changeCurrentTime" />
+            ${createComponent("NumberRangeEditor", {
+      ref: "$currentTime",
+      min: 0,
+      max: duration,
+      value: currentTime,
+      step: 1e-3,
+      onchange: "changeCurrentTime"
+    })}
           </div>
         </div>    
         <div class='property-item animation-property-item has-label'>        
@@ -51809,7 +51944,15 @@ class VideoProperty extends BaseProperty {
             ${this.$i18n("video.property.playbackRate")}
           </div>
           <div>
-            <object refClass="NumberRangeEditor"  ref='$playbackRate' min="0.1" max="10" clamp="true" value="${this.state.playbackRate}" step="0.001" onchange="changePlaybackRate" />
+            ${createComponent("NumberRangeEditor", {
+      ref: "$playbackRate",
+      min: 0.1,
+      max: 10,
+      clamp: true,
+      value: this.state.playbackRate,
+      step: 1e-3,
+      onchange: "changePlaybackRate"
+    })}
           </div>
         </div>        
         <div class='property-item animation-property-item full'>
@@ -51817,7 +51960,12 @@ class VideoProperty extends BaseProperty {
             <span class='add-timeline-property' data-property='playTime'></span>
             ${this.$i18n("video.property.playTime")}
           </div>
-          <object refClass="MediaProgressEditor" ref='$progress'  key='playTime' value="${current.playTime}" onchange="changeSelect" />
+          ${createComponent("MediaProgressEditor", {
+      ref: "$progress",
+      key: "playTime",
+      value: current.playTime,
+      onchange: "changeSelect"
+    })}
         </div>
       `;
   }
@@ -54593,6 +54741,9 @@ class HoverView extends EditorElement {
     if (!this.$viewport.checkInViewport(this.$viewport.getWorldPosition(e2))) {
       return false;
     }
+    const canvas = Dom.create(e2.target).closest("elf--page-container");
+    if (!canvas)
+      return false;
     return this.$modeView.isCurrentMode("CanvasView");
   }
   [CONFIG("bodyEvent") + IF("checkModeView")]() {
@@ -54608,10 +54759,10 @@ class HoverView extends EditorElement {
     let hoverItems = items;
     let id = (_a = hoverItems[0]) == null ? void 0 : _a.id;
     if (this.$selection.isEmpty) {
-      id = (_b = hoverItems[hoverItems.length - 1]) == null ? void 0 : _b.id;
+      id = (_b = hoverItems[0]) == null ? void 0 : _b.id;
     } else if (this.$selection.isOne) {
       const pathIds = this.$selection.current.pathIds;
-      hoverItems = hoverItems.filter((it) => pathIds.includes(it.id) === false);
+      hoverItems = hoverItems.filter((it) => pathIds.includes(it.id) === false || it.id === this.$selection.current.id);
       id = (_c = hoverItems[0]) == null ? void 0 : _c.id;
     }
     if (!id) {
@@ -55377,7 +55528,6 @@ class SelectionToolView extends SelectionToolEvent$1 {
     this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "width", "height", "resizingHorizontal", "resizingVertical"));
     this.nextTick(() => {
       this.emit("refreshSelection");
-      this.emit("refreshAllElementBoundSize");
     });
     this.state.dragging = true;
   }
@@ -56135,24 +56285,21 @@ var designEditorPlugins = [
   boxModel,
   pathTool,
   artboard,
-  appearance,
-  component,
-  backgroundImage,
-  border,
-  borderRadius,
   svgText,
   font,
   text$1,
   textShadow,
-  fontSpacing,
   content,
-  textFill,
-  textClip,
+  appearance,
+  component,
+  backgroundImage,
+  patternAsset,
+  border,
+  borderRadius,
   video,
   image,
   perspective,
   perspectiveOrigin,
-  patternAsset,
   svgFilterAsset,
   svgItem,
   layerTree,
@@ -56185,10 +56332,10 @@ class ObjectItems extends EditorElement {
     return `
         <div class="object-items">
           <div>
-            <object refClass="ProjectProperty" />
+            ${createComponent("ProjectProperty")}
           </div>
           <div>
-            <object refClass="LayerTreeProperty" />
+            ${createComponent("LayerTreeProperty")}
           </div>
         </div>
     `;
@@ -56250,9 +56397,13 @@ class LibraryItems extends EditorElement {
     return `
       <div class='elf--library-items'>
         <div>
-          <object label="Search" refClass="TextEditor" key="search" onchange=${this.subscribe((key, value) => {
-      this.broadcast("search", value);
-    }, 300)} />
+          ${createComponent("TextEditor", {
+      label: "Search",
+      key: "search",
+      onchange: this.subscribe((key, value) => {
+        this.broadcast("search", value);
+      }, 300)
+    })}
         </div>
         ${this.$injectManager.generate("library")}
       </div>
@@ -56326,23 +56477,23 @@ class LayerTab extends EditorElement {
           </div>
           <div class="tab-body" ref="$body">
             <div class="tab-content selected" data-value="2">
-              <object refClass="ObjectItems" />
+              ${createComponent("ObjectItems")}
             </div>
             <div class='tab-content' data-value='3'>
-              <object refClass="LibraryItems" />
+              ${createComponent("LibraryItems")}
             </div>            
             <div class='tab-content' data-value='5'>
-              <object refClass="AssetItems" />            
+              ${createComponent("AssetItems")}            
               <div class='assets'>
-                <object refClass="GradientAssetsProperty" />    
-                <object refClass="PatternAssetsProperty" />    
-                <object refClass="ImageAssetsProperty" />      
-                <object refClass="VideoAssetsProperty" />       
-                <object refClass="SVGFilterAssetsProperty" />                
+                ${createComponent("GradientAssetsProperty")}
+                ${createComponent("PatternAssetsProperty")}
+                ${createComponent("ImageAssetsProperty")}
+                ${createComponent("VideoAssetsProperty")}
+                ${""}
               </div>
             </div>
             <div class='tab-content' data-value='6'>
-              <object refClass="CustomAssets" />
+              ${createComponent("CustomAssets")}
             </div>
             ${this.$injectManager.getTargetMenuItems("leftbar.tab").map((it) => {
       const { value } = it.class;
@@ -58136,7 +58287,7 @@ class SingleObjectItems extends EditorElement {
     return `
         <div class="object-items single">
           <div>
-            <object refClass="LayerTreeProperty" />
+            ${createComponent("LayerTreeProperty")}
           </div>
         </div>
     `;
@@ -58196,10 +58347,10 @@ class ItemLayerTab extends EditorElement {
           </div>
           <div class="tab-body" ref="$body">
             <div class="tab-content selected" data-value="2">
-              <object refClass="SingleObjectItems" />
+              ${createComponent("SingleObjectItems")}
             </div>
             <div class='tab-content' data-value='6'>
-              <object refClass="CustomAssets" />
+              ${createComponent("CustomAssets")}
             </div>
             ${this.$injectManager.getTargetMenuItems("leftbar.tab").filter((it) => {
       return it.class.designMode && it.class.designMode.includes("item");
@@ -58241,13 +58392,11 @@ class SingleInspector extends EditorElement {
     return `
       <div class="feature-control inspector">
         <div>
-              <object refClass="AlignmentProperty" />
-              <object refClass="DepthProperty" />              
-              <object refClass="PathToolProperty" />              
-
-              <!-- Default Property --> 
-              <object refClass="PositionProperty" />
-              <object refClass="AppearanceProperty" />                                   
+              ${createComponent("AlignmentProperty")}
+              ${createComponent("DepthProperty")}
+              ${createComponent("PathToolProperty")}
+              ${createComponent("PositionProperty")}
+              ${createComponent("AppearanceProperty")}
 
               ${this.$injectManager.generate("inspector.tab.style")}                             
               <div class='empty'></div>
@@ -58318,34 +58467,34 @@ class DesignEditor extends BaseLayout {
       <div class="designeditor">
         <div class="layout-main">
           <div class='layout-top' ref='$top'>
-            <object refClass="ToolBar" />
+            ${createComponent("ToolBar")}
           </div>
           <div class="layout-middle" ref='$middle'>      
             <div class="layout-body" ref='$bodyPanel'>
-              <object refClass="BodyPanel" ref="$bodyPanelView" />
+              ${createComponent("BodyPanel", { ref: "$bodyPanelView" })}
             </div>                           
             <div class='layout-left' ref='$leftPanel'>
-              ${isItemMode ? "<object refClass='ItemLayerTab' />" : "<object refClass='LayerTab' />"}
+              ${isItemMode ? createComponent("ItemLayerTab") : createComponent("LayerTab")}
             </div>
             <div class="layout-right" ref='$rightPanel'>
-              ${isItemMode ? '<object refClass="SingleInspector" />' : '<object refClass="Inspector" />'}
+              ${isItemMode ? createComponent("SingleInspector") : createComponent("Inspector")}
             </div>
             <div class='layout-footer' ref='$footerPanel'>
               <div class='footer-splitter' ref='$footerSplitter' title="${this.$i18n("timeline.property.resize")}"></div>
-              <object refClass='TimelineProperty' />
+              ${""}
             </div>   
             <div class='left-arrow' ref='$leftArrow'>
-              <object refClass="SwitchLeftPanel" />
+              ${createComponent("SwitchLeftPanel")}
             </div>
             <div class='splitter' ref='$splitter'></div>            
             <div class='right-arrow' ref='$rightArrow'>
-              <object refClass="SwitchRightPanel" />
+              ${createComponent("SwitchRightPanel")}
             </div>            
           </div>
-          <object refClass="KeyboardManager" />                
+          ${createComponent("KeyboardManager")}
         </div>
-        <object refClass="PopupManager" />
-        <object refClass="IconManager" />        
+        ${createComponent("PopupManager")}
+        ${createComponent("IconManager")}
       </div>
     `;
   }

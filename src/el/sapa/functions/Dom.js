@@ -203,14 +203,21 @@ export default class Dom {
 
     if (!this.el) return [];
 
-    const $parentNode = this.parent(); 
 
-    if ($parentNode) {
-      return [...$parentNode.path(), this]
-    } else {
-      return [this]
-    }
+    let pathList = [this];
+    let $parentNode = this.parent(); 
 
+    if (!$parentNode.el) return pathList;
+
+    while ($parentNode) {
+      pathList.unshift($parentNode);
+
+      $parentNode = $parentNode.parent();
+
+      if (!$parentNode.el) break;
+    }  
+
+    return pathList
 
   }
 

@@ -389,7 +389,6 @@ export default class DomRender extends ItemRender {
       'perspective',
       'perspective-origin',
       'font-size',
-      'font-stretch',
       'line-height',
       'font-weight',
       'font-family',
@@ -688,6 +687,15 @@ ${cssString}
     ` + item.layers.map(it => {
       return renderer.toStyle(it, renderer);
     }).join('')
+  }
+
+  toStyleData(item, renderer) {
+    const cssString = this.generateView(item, `[data-renderer-id='${renderer.id}'] .element-item[data-id='${item.id}']`)
+
+    return {
+      styleTag: `<style type='text/css' data-renderer-type="html" data-id='${item.id}'>${cssString}</style>`,
+      cssString
+    }
   }
 
   /**

@@ -1,4 +1,5 @@
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { createComponent } from "el/sapa/functions/jsx";
 
 import './ObjectItems.scss';
 
@@ -7,10 +8,10 @@ export default class ObjectItems extends EditorElement {
     return /*html*/`
         <div class="object-items">
           <div>
-            <object refClass="ProjectProperty" />
+            ${createComponent("ProjectProperty")}
           </div>
           <div>
-            <object refClass="LayerTreeProperty" />
+            ${createComponent("LayerTreeProperty")}
           </div>
         </div>
     `;

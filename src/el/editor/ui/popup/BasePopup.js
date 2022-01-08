@@ -49,9 +49,6 @@ export default class BasePopup extends EditorElement {
   [POINTERSTART('$title') + MOVE('movePopupTitle') + END('endPopupTitle')] () {
     this.x = Length.parse(this.$el.css('left'))
     this.y = Length.parse(this.$el.css('top'))
-
-    console.log(this.x, this.y);
-
   }
 
   movePopupTitle (dx, dy) {

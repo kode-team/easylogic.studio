@@ -104,7 +104,6 @@ export class DomModel extends GroupModel {
         'clip-path',
         'color',
         'font-size',
-        'font-stretch',
         'line-height',
         'text-align',
         'text-transform',

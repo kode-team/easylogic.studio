@@ -18,6 +18,8 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './TransformEditor.scss';
 import { isNotUndefined } from "el/sapa/functions/func";
 import { TransformValue } from "el/editor/types/model";
+import { createComponent } from "el/sapa/functions/jsx";
+
 
 var transformList = [
   TransformValue.PERSPECTIVE,  
@@ -60,7 +62,7 @@ export default class TransformEditor extends EditorElement {
 
   initState() {
     return {
-      hideLabel: this.props['hide-label'] === 'true' ? true: false, 
+      hideLabel: this.props.hideLabel === 'true' ? true: false, 
       transforms: Transform.parseStyle(this.props.value)
     }
   }
@@ -153,18 +155,19 @@ export default class TransformEditor extends EditorElement {
   
             return /*html*/`
               <div>
-                <object refClass="InputRangeEditor"  
-                      ref='$range_${type}_${index}_${tindex}' 
-                      min="${min}" 
-                      max="${max}" 
-                      wide="true"
-                      step="${step}" 
-                      label="${label}"
-                      key="${index}" 
-                      params='${tindex}' 
-                      value="${it}" 
-                      units="${units}" 
-                      onchange="changeRangeEditor" />
+                ${createComponent("InputRangeEditor" , { 
+                      ref: `$range_${type}_${index}_${tindex}`,
+                      min,
+                      max,
+                      wide: true,
+                      step: step,
+                      label,
+                      key: index,
+                      params: tindex,
+                      value: it,
+                      units,
+                      onchange: "changeRangeEditor"
+                 })}
               </div>`
             }).join('')}      
           </div>        
@@ -227,17 +230,18 @@ export default class TransformEditor extends EditorElement {
 
             return /*html*/`
               <div>
-                <object refClass="${editorType}"  
-                      ref='$range_${type}_${index}_${tindex}' 
-                      min="${min}" 
-                      max="${max}" 
-                      step="${step}" 
-                      label="${label}"
-                      key="${index}" 
-                      params='${tindex}' 
-                      value="${it}" 
-                      units="${units}" 
-                      onchange="changeRangeEditor" />
+                ${createComponent(editorType, {
+                  ref: `$range_${type}_${index}_${tindex}`,
+                  min,
+                  max,
+                  step,
+                  label,
+                  key: index,
+                  params: tindex,
+                  value: it, 
+                  units,
+                  onchange: "changeRangeEditor"
+                })}
               </div>`
           }).join('')}   
           </div>       

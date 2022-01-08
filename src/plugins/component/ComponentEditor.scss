@@ -1,9 +1,10 @@
 .component-editor {
     padding-bottom: 5px;
+    --column-gap: 2px;
     .column {
         display: grid;
         grid-template-columns: 1fr;
-        grid-column-gap: 2px;
+        grid-column-gap: var(--column-gap);
         grid-row-gap: 2px;
 
         .column-item {
@@ -24,6 +25,25 @@
         }
     }
 
+    .column-1-1 {
+        grid-template-columns: 1fr 1fr;
+    }            
+
+    .column-1-1-1 {
+        grid-template-columns: 1fr 1fr 1fr;
+    }                
+
+    .column-1-2 {
+        grid-template-columns: 1fr 2fr;
+    }                
+
+    .column-1-2-3 {
+        grid-template-columns: 1fr 3fr;
+    }                
+    .column-1-1-1-1 {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }                    
+
     .column-2 {
         grid-template-columns: 1fr 1fr;
     }
@@ -32,17 +52,22 @@
         grid-template-columns: 2fr 1fr;
     }    
 
+    .column-2-1-1 {
+        grid-template-columns: 2fr 1fr 1fr;
+    }        
+
     .column-3-1 {
         grid-template-columns: 3fr 1fr;
     }        
 
-    .column-1-1 {
-        grid-template-columns: 1fr 1fr;
+    .column-3-1-1 {
+        grid-template-columns: 3fr 1fr 1fr;
     }            
 
-    .column-1-1-1 {
-        grid-template-columns: 1fr 1fr 1fr;
+    .column-3-2-1 {
+        grid-template-columns: 3fr 2fr 1fr;
     }                
+
     
     > label {
         display: flex;

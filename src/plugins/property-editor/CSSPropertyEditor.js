@@ -438,7 +438,6 @@ export default class CSSPropertyEditor extends EditorElement {
       case 'padding-right': 
 
       case 'font-size': 
-      case 'font-stretch': 
       case 'width': 
       case 'height':   
       case 'perspective':  
@@ -515,7 +514,6 @@ export default class CSSPropertyEditor extends EditorElement {
         <optgroup label='Font'>
           <option value='font-size'>font-size</option>
           <option value='font-weight'>font-weight</option>          
-          <option value='font-stretch'>font-stretch</option>
         </optgroup>
         <optgroup label='Animation'>
           <option value='animation-timing-function'>timing-function</option>

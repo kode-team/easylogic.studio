@@ -8,6 +8,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './InputRangeEditor.scss';
 import { END, MOVE } from "el/editor/types/event";
 import { round } from "el/utils/math";
+import { createComponent } from "el/sapa/functions/jsx";
 export default class InputRangeEditor extends EditorElement {
 
     initialize() {
@@ -17,8 +18,8 @@ export default class InputRangeEditor extends EditorElement {
     }    
 
     initState() {
-        var units =  this.props.units || 'px,em,%,auto';
-        var value = Length.parse(this.props.value || 0);
+        var units =  this.props.units || ['px','em','%','auto'];
+        var value = Length.parse(this.props.value || '0px');
         let label = this.props.label || ''; 
 
         if (icon[label]) {
@@ -26,17 +27,17 @@ export default class InputRangeEditor extends EditorElement {
         }
 
         return {
-            removable: this.props.removable === 'true',
+            removable: this.props.removable,
             label,
-            compact: this.props.compact === 'true',
-            wide: this.props.wide === 'true',
+            compact: this.props.compact,
+            wide: this.props.wide,
             min: +this.props.min || 0,
             max: +this.props.max || 100,
             step: +this.props.step || 1,
             key: this.props.key,
             params: this.props.params || '',
             layout: this.props.layout || '',
-            disabled: this.props.disabled === 'true',
+            disabled: this.props.disabled,
             title: this.props.title || "",
             units,
             value
@@ -60,7 +61,7 @@ export default class InputRangeEditor extends EditorElement {
         var layoutClass = layout;
 
         var realValue = (+value).toString();
-        const units = this.state.units.split(',').filter(Boolean);
+        const units = this.state.units;
 
         return /*html*/`
         <div 
@@ -82,16 +83,14 @@ export default class InputRangeEditor extends EditorElement {
                     
                     ${
                         units.length === 1 ? 
-                        `<span class='unit'>${units[0]}</span>` : 
-                        /*html*/`
-                            <object refClass="SelectEditor"  
-                                ref='$unit' 
-                                key='unit' 
-                                compact="true"
-                                value="${this.state.selectedUnit || this.state.value.unit}" 
-                                options="${this.state.units}" 
-                                onchange='changeUnit' 
-                            />`
+                        `<span class='unit'>${units[0]}</span>` : createComponent("SelectEditor" , {
+                            ref: '$unit',
+                            key: 'unit',
+                            compact: true,
+                            value: this.state.selectedUnit || this.state.value.unit,
+                            options: this.state.units,
+                            onchange: 'changeUnit' 
+                        })
                     }
                     
                     
@@ -187,7 +186,7 @@ export default class InputRangeEditor extends EditorElement {
 
         this.initNumberValue = +this.refs.$propertyNumber.value;
         this.initUnit = this.state.value.unit;
-        this.initUnits = this.state.units.split(',').filter(Boolean);
+        this.initUnits = this.state.units;
         this.refs.$propertyNumber.focus();
         this.refs.$propertyNumber.select();
     }

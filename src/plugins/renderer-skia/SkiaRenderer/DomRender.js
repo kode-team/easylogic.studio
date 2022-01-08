@@ -309,7 +309,6 @@ export default class DomRender extends ItemRender {
       'perspective', 
       'perspective-origin',
       'font-size', 
-      'font-stretch', 
       'line-height', 
       'font-weight', 
       'font-family', 

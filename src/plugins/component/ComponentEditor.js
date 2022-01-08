@@ -26,7 +26,7 @@ export default class ComponentEditor extends EditorElement {
       const size = (childEditor.size || [2]).join('-');
 
       return /*html*/`
-        <div class='column column-${size}' >
+        <div class='column column-${size}' style="--column-gap: ${childEditor.gap}px" >
           ${childEditor.columns.map((it, itemIndex) => {
             if (it === '-') {
               return /*html*/`<div class="column-item"></div>`;
@@ -51,7 +51,10 @@ export default class ComponentEditor extends EditorElement {
           refClass="${childEditor.editor}" 
           ${variable({
             ...childEditor.editorOptions,
-            onchange: 'changeComponentValue',
+            onchange: (key, value) => {
+              const newValue = isFunction(childEditor.convert) ? childEditor.convert(key, value) : value;
+              this.trigger('changeComponentValue', key, newValue);
+            },
             ref: `${childEditor.key}${index}`,
             key: childEditor.key,
             value: childEditor.defaultValue
@@ -85,6 +88,12 @@ export default class ComponentEditor extends EditorElement {
     })
 
     return self;
+  }
+
+  setInspector (inspector) {
+    this.setState({
+      inspector
+    })
   }
 
   setValue(obj = {}) {

@@ -1,8 +1,9 @@
-import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { LOAD, SUBSCRIBE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './FuncFilterEditor.scss';
-import { variable } from 'el/sapa/functions/registElement';
+import { createComponent } from "el/sapa/functions/jsx";
+
 
 export default class FuncFilterEditor extends EditorElement {
 
@@ -45,44 +46,46 @@ export default class FuncFilterEditor extends EditorElement {
         var hasLabel = !!label ? 'has-label' : ''
 
         return /*html*/`
-        <object refClass="SelectEditor"  
-            label="${label}" 
-            ref="$type"
-            key="type" 
-            value="${this.state.type}" 
-            options=${variable(["identity","table","discrete","linear","gamma"])} 
-            onchange="changeType" />
+            ${createComponent('SelectEditor', {
+                label: label,
+                ref: "$type",
+                key: "type",
+                value: this.state.type,
+                options: ["identity","table","discrete","linear","gamma"],
+                onchange: "changeType"                
+            })}
         <div class='elf--func-filter-editor ${hasLabel}' ref='$container' data-selected-type='${type}'>
             ${label ? `<label></label>` : '' }
             <div data-type='identity'>
             </div>
             <div data-type='table'>
-                <object refClass="TextEditor" 
-                    label='tableValues' 
-                    ref='$values' 
-                    key='values' 
-                    value="${this.state.values.join(' ')}" 
-                    onchange=${this.subscribe((key, value) => {
+                ${createComponent('TextEditor', {
+                    label: 'tableValues',
+                    ref: '$values',
+                    key: 'values',
+                    value: this.state.values.join(' '),
+                    onchange: (key, value) => {
                         this.updateData({
                             [key]: value.split(' ') 
                         })
-                    })} />
+                    }
+                })}
             </div>
             <div data-type='linear'>
                 ${['slop', 'intercept'].map(it => {
                     return /*html*/`
                         <div>
-                            <object refClass="NumberRangeEditor"  
-                                label='${it}' 
-                                ref='$${it}' 
-                                key='${it}' 
-                                value="${this.state[it]}" 
-                                onchange=${this.subscribe((key, value) => {
+                            ${createComponent("NumberRangeEditor", {
+                                label: it,
+                                ref: `$${it}`,
+                                key: it,
+                                value: this.state[it],
+                                onchange: (key, value) => {
                                     this.updateData({
                                         [key]: value
                                     })
-                                })}
-                            />
+                                }
+                            })}
                         </div>                    
                     `
                 }).join('')}
@@ -91,17 +94,17 @@ export default class FuncFilterEditor extends EditorElement {
                 ${['amplitude', 'exponent', 'offset'].map(it => {
                     return /*html*/`
                         <div>
-                            <object refClass="NumberRangeEditor"  
-                                label='${it}' 
-                                ref='$${it}' 
-                                key='${it}' 
-                                value="${this.state[it]}" 
-                                onchange=${this.subscribe((key, value) => {
+                            ${createComponent("NumberRangeEditor", {
+                                label: it,
+                                ref: `$${it}`,
+                                key: it,
+                                value: this.state[it],
+                                onchange: (key, value) => {
                                     this.updateData({
                                         [key]: value
                                     })
-                                })}
-                                />
+                                }
+                            })}
                         </div>                    
                     `
                 }).join('')}            

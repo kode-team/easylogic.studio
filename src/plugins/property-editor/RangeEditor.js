@@ -8,6 +8,7 @@ import { END, MOVE } from "el/editor/types/event";
 
 import './RangeEditor.scss';
 import { variable } from 'el/sapa/functions/registElement';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class RangeEditor extends EditorElement {
 
@@ -19,7 +20,7 @@ export default class RangeEditor extends EditorElement {
     }    
 
     initState() {
-        var units = this.props.units || 'px,em,%';
+        var units = this.props.units || ['px', 'em', '%'];
         var value = Length.parse(this.props.value || 0);
 
         return {
@@ -56,7 +57,11 @@ export default class RangeEditor extends EditorElement {
 
         var realValue = (+value).toString();
 
-        var units = this.state.units.split(',').map(it => {
+        if (this.state.units === '%') {
+            throw new Error('%');
+        }
+
+        var units = this.state.units.map(it => {
             let description = it; 
             if (description === 'number')  {
                 description = '';
@@ -80,7 +85,13 @@ export default class RangeEditor extends EditorElement {
                 <input type='range' ref='$property' value="${realValue}" min="${min}" max="${max}" step="${step}" /> 
                 <div class='area' ref='$rangeArea'>
                     <input type='number' ref='$propertyNumber' value="${realValue}" min="${min}" max="${max}" step="${step}" tabIndex="1" />
-                    <object refClass="SelectEditor"  ref='$unit' key='unit' value="${this.state.value.unit}" options=${variable(units)} onchange='changeUnit' />
+                    ${createComponent("SelectEditor", {
+                        ref: '$unit',
+                        key: 'unit',
+                        value: this.state.value.unit,
+                        options: units,
+                        onchange: 'changeUnit' 
+                    })}
                 </div>
             </div>
             <button type='button' class='remove thin' ref='$remove' title='Remove'>${icon.remove}</button>

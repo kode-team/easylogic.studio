@@ -21,6 +21,7 @@ import ItemLayerTab from "./area/ItemLayerTab";
 import SingleInspector from './area/SingleInspector';
 import SwitchLeftPanel from './area/status-bar/SwitchLeftPanel';
 import SwitchRightPanel from './area/status-bar/SwitchRightPanel';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class DesignEditor extends BaseLayout {
 
@@ -74,34 +75,34 @@ export default class DesignEditor extends BaseLayout {
       <div class="designeditor">
         <div class="layout-main">
           <div class='layout-top' ref='$top'>
-            <object refClass="ToolBar" />
+            ${createComponent('ToolBar')}
           </div>
           <div class="layout-middle" ref='$middle'>      
             <div class="layout-body" ref='$bodyPanel'>
-              <object refClass="BodyPanel" ref="$bodyPanelView" />
+              ${createComponent('BodyPanel', {ref: "$bodyPanelView"})}
             </div>                           
             <div class='layout-left' ref='$leftPanel'>
-              ${isItemMode ? "<object refClass='ItemLayerTab' />" : "<object refClass='LayerTab' />"}
+              ${isItemMode ? createComponent('ItemLayerTab') : createComponent('LayerTab') }
             </div>
             <div class="layout-right" ref='$rightPanel'>
-              ${isItemMode ? '<object refClass="SingleInspector" />' : '<object refClass="Inspector" />'}
+              ${isItemMode ? createComponent("SingleInspector") : createComponent("Inspector") }
             </div>
             <div class='layout-footer' ref='$footerPanel'>
               <div class='footer-splitter' ref='$footerSplitter' title="${this.$i18n('timeline.property.resize')}"></div>
-              <object refClass='TimelineProperty' />
+              ${/*createComponent('TimelineProperty')*/""}
             </div>   
             <div class='left-arrow' ref='$leftArrow'>
-              <object refClass="SwitchLeftPanel" />
+              ${createComponent("SwitchLeftPanel")}
             </div>
             <div class='splitter' ref='$splitter'></div>            
             <div class='right-arrow' ref='$rightArrow'>
-              <object refClass="SwitchRightPanel" />
+              ${createComponent("SwitchRightPanel")}
             </div>            
           </div>
-          <object refClass="KeyboardManager" />                
+          ${createComponent("KeyboardManager")}
         </div>
-        <object refClass="PopupManager" />
-        <object refClass="IconManager" />        
+        ${createComponent("PopupManager")}
+        ${createComponent("IconManager")}
       </div>
     `;
   }

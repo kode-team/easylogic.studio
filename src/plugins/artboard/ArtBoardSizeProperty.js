@@ -4,6 +4,7 @@ import BaseProperty from "el/editor/ui/property/BaseProperty";
 import artboardSize from "./preset/artboard.size";
 import './ArtBoardSizeProperty.scss';
 import { variable } from "el/sapa/functions/registElement";
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class ArtBoardSizeProperty extends BaseProperty {
 
@@ -35,14 +36,12 @@ export default class ArtBoardSizeProperty extends BaseProperty {
       return {category: it.category, index}
      })
 
-    return /*html*/`
-      <object refClass="SelectEditor"  
-        ref='$select' 
-        value="${categories[0].category}" 
-        options=${variable(categories.map(it => it.category))} 
-        onchange='changeSizeIndex'
-      />
-    `
+    return createComponent("SelectEditor", {
+        ref: '$select',
+        value: categories[0].category,
+        options: categories.map(it => it.category),
+        onchange: 'changeSizeIndex'
+      })
   }
 
   [SUBSCRIBE_SELF('changeSizeIndex')] (key, value) {

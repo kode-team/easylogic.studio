@@ -114,7 +114,7 @@ export default class LayerTreeProperty extends BaseProperty {
     if (item.d) {
       const path = PathParser.fromSVGString(item.absolutePath().d)
 
-      return iconUseForPath(path.scaleWith(24, 24).d, { width: 24, height: 24 });
+      return iconUseForPath(path.scaleWith(24, 24).d, { width: 24, height: 24, fill: 'currentColor', stroke: 'currentColor' });
     }
 
     if (item.hasChildren()) {

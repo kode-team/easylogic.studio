@@ -8,6 +8,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './PageTools.scss';
 import PathParser from 'el/editor/parser/PathParser';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class PageTools extends EditorElement {
 
@@ -16,20 +17,19 @@ export default class PageTools extends EditorElement {
       <div class='elf--page-tools'>
         <button type='button' ref='$minus'>${iconUse("remove2")}</button>
         <div class='select'>
-          <object 
-            refClass="NumberInputEditor" 
-            ref='$scaleInput' 
-            min='10' 
-            max='240' 
-            step="1" 
-            key="scale" 
-            value="${this.$viewport.scale * 100}" 
-            onchange=${this.subscribe((key, scale) => {
+          ${createComponent('NumberInputEditor', {
+            ref: '$scaleInput',
+            min: 10,
+            max: 240,
+            step: 1,
+            key: "scale", 
+            value: this.$viewport.scale * 100,
+            onchange: this.subscribe((key, scale) => {
               this.$viewport.setScale(scale / 100);
               this.emit('updateViewport');
               this.trigger('updateViewport');
-            }, 1000)}
-        />
+            }, 1000)            
+          })}
         </div>
         <label>%</label>
         <button type='button' ref='$plus'>${iconUse("add")}</button>        

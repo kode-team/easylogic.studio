@@ -3,10 +3,10 @@ import {
   LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF
 } from "el/sapa/Event";
 
-import icon, { iconUse } from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { createComponent } from 'el/sapa/functions/jsx';
 
-
+import './BackgroundImageProperty.scss';
 
 export default class BackgroundImageProperty extends BaseProperty {
 
@@ -43,24 +43,33 @@ export default class BackgroundImageProperty extends BaseProperty {
 
 
   getTools() {
-    return `<button type="button" ref='$add'>${iconUse("add")}</button>`
+    return /*html*/`
+      <div ref='$add'>
+        <button type="button" class='fill' data-value="static-gradient" data-tooltip="Static" ></button>
+        <button type="button" class='fill' data-value="linear-gradient" data-tooltip="Linear" ></button>
+        <button type="button" class='fill' data-value="repeating-linear-gradient" data-tooltip="R Linear" ></button>
+        <button type="button" class='fill' data-value="radial-gradient" data-tooltip="Radial" ></button>
+        <button type="button" class='fill' data-value="repeating-radial-gradient" data-tooltip="R Radial" ></button>
+        <button type="button" class='fill' data-value="conic-gradient" data-tooltip="Conic" ></button>
+        <button type="button" class='fill' data-value="repeating-conic-gradient" data-tooltip="R Conic" data-direction="bottom right" ></button>
+      </div>
+    `
   }
 
-  [CLICK('$add')] () {
-    this.children.$backgroundImageEditor.trigger('add');
+  [CLICK('$add [data-value]')] (e) {
+    this.children.$backgroundImageEditor.trigger('add', e.$dt.data('value'));
   }  
 
   [LOAD('$property')] () {
     var current = this.$selection.current || {}; 
     var value = current['background-image'] || ''
 
-    return /*html*/`<object refClass="BackgroundImageEditor" 
-              ref='$backgroundImageEditor' 
-              key='background-image'
-              value='${value}' 
-              hide-label="true"
-              onchange='changeBackgroundImage' 
-            />`
+    return createComponent('BackgroundImageEditor', {
+      ref: '$backgroundImageEditor',
+      key: 'background-image',
+      value,
+      onchange: 'changeBackgroundImage' 
+    });
   }
 
   get editableProperty() {

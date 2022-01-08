@@ -6,6 +6,8 @@ import {
 
 import icon, { iconUse } from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { createComponent } from "el/sapa/functions/jsx";
+
 
 var transformList = [
 
@@ -45,7 +47,7 @@ export default class TransformProperty extends BaseProperty {
 
   getBody() {
     return /*html*/`
-      <object refClass="RotateEditorView" />
+      ${createComponent("RotateEditorView")}
       <div class='full transform-property' ref='$body'></div>
     `;
   }
@@ -81,9 +83,12 @@ export default class TransformProperty extends BaseProperty {
     var current = this.$selection.current || {} 
     var value = current.transform;
 
-    return /*html*/`
-      <object refClass="TransformEditor" ref='$transformEditor' value='${value}' hide-label="true" onchange='changeTransformEditor' />
-    `
+    return createComponent("TransformEditor", { 
+      ref: '$transformEditor',
+      value, 
+      hideLabel: true, 
+      onchange: 'changeTransformEditor' 
+    });
   }
 
   [SUBSCRIBE_SELF('changeTransformEditor')] (transform) {

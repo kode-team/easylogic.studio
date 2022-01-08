@@ -10,21 +10,14 @@ export default class BoxShadowEditor extends EditorElement {
 
   initState() {
     return {
-      hideLabel: this.props['hide-label'] === 'true' ? true : false,
+      hideLabel: this.props.hideLabel === 'true' ? true : false,
       boxShadows: BoxShadow.parseStyle(this.props.value || '')
     }
   }
 
   template() {
-    var labelClass = this.state.hideLabel ? 'hide' : '';
     return /*html*/`
       <div class="elf--box-shadow-editor" >
-        <div class='label ${labelClass}' >
-            <label>${this.props.title||''}</label>
-            <div class='tools'>
-              <button type="button" ref="$add" title="add Box Shadow">${icon.add}</button> ${this.props.title ? '': 'Add'}
-            </div>
-        </div>
         <div class='box-shadow-list' ref='$shadowList'></div>
       </div>
     `;

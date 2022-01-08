@@ -21,7 +21,6 @@ export default class DomRender extends MovableRender {
         'clip-path',
         'color',
         'font-size',
-        'font-stretch',
         'line-height',
         'text-align',
         'text-transform',

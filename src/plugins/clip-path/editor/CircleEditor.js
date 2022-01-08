@@ -3,6 +3,7 @@ import { POINTERSTART, BIND, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { isUndefined } from "el/sapa/functions/func";
 import { END, MOVE } from "el/editor/types/event";
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class CircleEditor extends EditorElement {
 
@@ -36,17 +37,17 @@ export default class CircleEditor extends EditorElement {
     template() {
         return /*html*/`
         <div class='clip-path-editor circle-editor'>
-            <object refClass="RangeEditor"  
-                ref='$range' 
-                label='Radius' 
-                key='radius' 
-                value='${this.state.radius}' 
-                min="0" 
-                max="100" 
-                step="0.1" 
-                units="%,closest-side,farthest-side" 
-                onchange='changeRangeEditor' 
-            />
+            ${createComponent("InputRangeEditor", {
+                ref: '$range',
+                label: 'Radius',
+                key: 'radius',
+                value: this.state.radius,
+                min: 0,
+                max: 100,
+                step: 0.1,
+                units: ["%","closest-side","farthest-side"],
+                onchange: 'changeRangeEditor' 
+            })}
             <div class='drag-area' ref='$area'>
                 <div class='drag-pointer' ref='$pointer' style='left: ${this.state.x};top: ${this.state.y};'></div>
                 <div class='clip-area circle' ref='$clipArea'></div>

@@ -2,6 +2,7 @@ import "el/editor/ui/window-list";
 
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import NotificationView from "el/editor/ui/view/NotificationView";
+import { createComponent } from "el/sapa/functions/jsx";
 
 
 export default class PopupManager extends EditorElement {
@@ -15,14 +16,11 @@ export default class PopupManager extends EditorElement {
   template() {
     return /*html*/`
       <div class="popup-manger">
-        <object refClass='ExportWindow' />
-        <object refClass='EmbedEditorWindow' />
-        <object refClass='ProjectWindow' />
-        <object refClass='ShortcutWindow' />
-        <!-- LoginWindow / -->
-        <!-- SignWindow / -->
-        <!-- ImageFileView / -->
-        <object refClass='NotificationView' />
+        ${createComponent('ExportWindow')}
+        ${createComponent('EmbedEditorWindow')}
+        ${createComponent('ProjectWindow')}
+        ${createComponent('ShortcutWindow')}
+        ${createComponent('NotificationView')}
         ${this.$injectManager.generate('popup')}
       </div>
     `;

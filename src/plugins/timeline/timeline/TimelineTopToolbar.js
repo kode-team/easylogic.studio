@@ -1,4 +1,5 @@
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { createComponent } from "el/sapa/functions/jsx";
 import KeyframeTimeControl from "./KeyframeTimeControl";
 
 export default class TimelineTopToolbar extends EditorElement {
@@ -12,7 +13,7 @@ export default class TimelineTopToolbar extends EditorElement {
     template() {
         return /*html*/`
             <div class='timeline-top-toolbar'>
-                <object refClass="KeyframeTimeControl" />
+                ${createComponent("KeyframeTimeControl")}
             </div>
         `
     }

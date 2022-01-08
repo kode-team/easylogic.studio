@@ -4,6 +4,7 @@ import icon from "el/editor/icon/icon";
 import { TextShadow } from "el/editor/property-parser/TextShadow";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { variable } from 'el/sapa/functions/registElement';
+import { createComponent } from "el/sapa/functions/jsx";
 
 
 export default class TextShadowProperty extends BaseProperty {
@@ -22,7 +23,7 @@ export default class TextShadowProperty extends BaseProperty {
     return true
   }
 
-  getKeyframeProperty () {
+  getKeyframeProperty() {
     return 'text-shadow'
   }
 
@@ -30,24 +31,22 @@ export default class TextShadowProperty extends BaseProperty {
     return `<button type="button" ref='$add'>${icon.add}</button>`
   }
 
-  [CLICK('$add')] () {
+  [CLICK('$add')]() {
     this.children.$textshadow.trigger('add');
-  }  
-  
+  }
+
   [LOAD("$shadowList")]() {
     var current = this.$selection.current || {};
-    return /*html*/`
-      <object refClass="TextShadowEditor" 
-        ref='$textshadow' 
-        value="${variable(TextShadow.parseStyle(current['text-shadow']))}" 
-        hide-label="true" 
-        onChange=${this.subscribe((textshadow) => {
-          this.command('setAttributeForMulti', 'change text shadow', this.$selection.packByValue({ 
-            'text-shadow': textshadow
-          }))
-        })}
-      />
-    `
+    return createComponent("TextShadowEditor", {
+      ref: '$textshadow',
+      value: TextShadow.parseStyle(current['text-shadow']),
+      hideLabel: true,
+      onChange: this.subscribe((textshadow) => {
+        this.command('setAttributeForMulti', 'change text shadow', this.$selection.packByValue({
+          'text-shadow': textshadow
+        }))
+      })
+    })
   }
 
   get editableProperty() {
@@ -56,5 +55,5 @@ export default class TextShadowProperty extends BaseProperty {
 
   [SUBSCRIBE('refreshSelection') + IF('checkShow')]() {
     this.refresh();
-  }  
+  }
 }

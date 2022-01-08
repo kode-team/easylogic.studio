@@ -32,11 +32,25 @@ export default {
         messages.forEach(message => {
             commandMaker.emit('update', message.id, message.attrs, context);
 
-            // 부모가 project 아닐 때만 업데이트 메세지를 날린다. 
-            const parent = editor.get(message.parentId)
-            if (message.parentId && parent?.isNot("project") && parent.children.length >= 1) {
-                commandMaker.emit('update', message.parentId, { 'changedChildren': true }, context)
+
+            // 부모가 바뀌는 조건을 맞춰야 한다. 
+            const item = editor.get(message.id);
+
+            if (item.is('artboard')) {
+                return;
             }
+
+            const parent = item.parent;
+            if (item.isLayoutItem() || parent.is('boolean-path')) {
+                // 부모가 project 아닐 때만 업데이트 메세지를 날린다. 
+                const parent = editor.get(message.parentId)
+                if (message.parentId && parent?.isNot("project") && parent.children.length >= 1) {
+                    commandMaker.emit('update', message.parentId, { 'changedChildren': true }, context)
+                }
+
+            }
+
+
         })
 
         // run multi command 

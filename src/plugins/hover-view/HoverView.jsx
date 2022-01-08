@@ -1,6 +1,7 @@
 import { CONFIG, SUBSCRIBE, IF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import "./HoverView.scss";
+import Dom from 'el/sapa/functions/Dom';
 
 export default class HoverView extends EditorElement {
 
@@ -20,6 +21,10 @@ export default class HoverView extends EditorElement {
         if (!this.$viewport.checkInViewport(this.$viewport.getWorldPosition(e))) {
             return false; 
         }
+
+        const canvas = Dom.create(e.target).closest('elf--page-container');
+
+        if (!canvas) return false; 
 
         return this.$modeView.isCurrentMode('CanvasView');
     }
@@ -47,10 +52,10 @@ export default class HoverView extends EditorElement {
         let id = hoverItems[0]?.id;
 
         if (this.$selection.isEmpty) {
-            id = hoverItems[hoverItems.length - 1]?.id;
+            id = hoverItems[0]?.id;
         } else if (this.$selection.isOne) {
             const pathIds = this.$selection.current.pathIds;
-            hoverItems = hoverItems.filter(it => pathIds.includes(it.id) === false )
+            hoverItems = hoverItems.filter(it => pathIds.includes(it.id) === false || it.id === this.$selection.current.id);
 
             id = hoverItems[0]?.id;
         }

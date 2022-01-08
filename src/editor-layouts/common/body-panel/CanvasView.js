@@ -14,6 +14,7 @@ import DragAreaRectView from "./render-view/draw-panels/DragAreaRectView";
 
 
 import './CanvasView.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 
 
 export default class CanvasView extends EditorElement {
@@ -48,20 +49,26 @@ export default class CanvasView extends EditorElement {
           <div class='page-lock scrollbar' ref='$lock'>            
 
             <!-- 선택 영역 이벤트 설정  -->
-            <object refClass="DragAreaView" />
+            ${createComponent("DragAreaView", {
+              ref: "$dragAreaView"
+            })}
 
             <!-- HTML 렌더링 영역  --> 
-            <object refClass='HTMLRenderView' />
+            ${createComponent("HTMLRenderView", {
+              ref: "$htmlRenderView"
+            })}
 
             <!-- 드래그 영역 그려주는 뷰 --> 
-            <object refClass="DragAreaRectView" ref="$dragAreaRectView" />                                                                            
+            ${createComponent("DragAreaRectView", {
+              ref: "$dragAreaRectView"
+            })}
 
             <!-- 캔버스 영역에 그리기 도와주는 뷰 -->
             ${this.$injectManager.generate('canvas.view')}              
 
           </div>
         </div>
-        <object refClass='PageTools' />
+        ${createComponent('PageTools')}
       </div>
     `;
   }

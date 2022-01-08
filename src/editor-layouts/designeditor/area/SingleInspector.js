@@ -1,6 +1,7 @@
 
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { BIND } from "el/sapa/Event";
+import { createComponent } from 'el/sapa/functions/jsx';
 
 export default class SingleInspector extends EditorElement {
 
@@ -20,13 +21,11 @@ export default class SingleInspector extends EditorElement {
     return /*html*/`
       <div class="feature-control inspector">
         <div>
-              <object refClass="AlignmentProperty" />
-              <object refClass="DepthProperty" />              
-              <object refClass="PathToolProperty" />              
-
-              <!-- Default Property --> 
-              <object refClass="PositionProperty" />
-              <object refClass="AppearanceProperty" />                                   
+              ${createComponent('AlignmentProperty')}
+              ${createComponent('DepthProperty')}
+              ${createComponent('PathToolProperty')}
+              ${createComponent('PositionProperty')}
+              ${createComponent('AppearanceProperty')}
 
               ${this.$injectManager.generate('inspector.tab.style')}                             
               <div class='empty'></div>

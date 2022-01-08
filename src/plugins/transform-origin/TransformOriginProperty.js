@@ -1,6 +1,7 @@
 
 import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class TransformOriginProperty extends BaseProperty {
 
@@ -30,7 +31,11 @@ export default class TransformOriginProperty extends BaseProperty {
     var current = this.$selection.current || {};
     var value = current['transform-origin'] || ''
 
-    return /*html*/`<object refClass="TransformOriginEditor" ref='$1' value='${value}' onchange='changeTransformOrigin' />`
+    return createComponent("TransformOriginEditor", { 
+      ref:'$1',
+      value, 
+      onchange: 'changeTransformOrigin' 
+    });
   }
 
   get editableProperty() {

@@ -6,6 +6,7 @@ import './StrokeDashArrayEditor.scss';
 import { isArray } from "el/sapa/functions/func";
 import { variable } from "el/sapa/functions/registElement";
 import Dom from "el/sapa/functions/Dom";
+import { createComponent } from "el/sapa/functions/jsx";
 
 const dash_list = [
   [10, 5],
@@ -106,7 +107,7 @@ export default class StrokeDashArrayEditor extends EditorElement {
       var num = index + 1; 
       return /*html*/`
         <div class='dasharray-item'>
-          <object refClass="NumberInputEditor" ${variable({
+          ${createComponent("NumberInputEditor", {
             ref: `$dash-${this.state.count}-${num}`,
             compact: true,
             key: index,
@@ -116,8 +117,6 @@ export default class StrokeDashArrayEditor extends EditorElement {
             step: 1,
             onchange: "changeRangeEditor" 
           })}  
-
-          />
           <button type="button" data-index="${index}" class='delete'>${iconUse('close')}</button>
         </div>
       `

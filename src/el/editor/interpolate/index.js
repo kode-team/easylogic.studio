@@ -77,7 +77,6 @@ function makeInterpolate (layer, property, startValue, endValue, editorString, a
         return makeInterpolateLength(layer, property, startValue, endValue, 'height');
     case 'perspective':
     case 'font-size':
-    case 'font-stretch':
     case 'font-weight':
     case 'text-stroke-width':
     case 'RangeEditor':

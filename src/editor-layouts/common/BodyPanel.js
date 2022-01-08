@@ -7,6 +7,8 @@ import CanvasView from "./body-panel/CanvasView";
 
 import './BodyPanel.scss';
 import PageSubEditor from './body-panel/PageSubEditor';
+import { createComponent } from "el/sapa/functions/jsx";
+
 
 export default class BodyPanel extends EditorElement {
 
@@ -23,12 +25,12 @@ export default class BodyPanel extends EditorElement {
     return /*html*/`
       <div class="elf--body-panel">
         <div class="submenu-area">
-          <object refClass="PageSubEditor" />
+          ${createComponent('PageSubEditor')}
         </div>
         <div class='editing-area'>
-          <object refClass='HorizontalRuler' />
-          <object refClass='VerticalRuler' />
-          <object refClass='CanvasView' />        
+          ${createComponent('HorizontalRuler')}
+          ${createComponent('VerticalRuler')}
+          ${createComponent('CanvasView')}
         </div>
       </div>
     `;

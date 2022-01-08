@@ -24,6 +24,7 @@ import AddRect from "el/editor/ui/menu-items/AddRect";
 import AddSVGRect from "el/editor/ui/menu-items/AddSVGRect";
 import ToolbarMenu from "el/editor/menus/menu_list/ToolbarMenu";
 import ToolBarRenderer from "./ToolBarRenderer";
+import { createComponent, createElement } from "el/sapa/functions/jsx";
 
 
 
@@ -86,14 +87,14 @@ export default class ToolBar extends EditorElement {
     template() {
         return /*html*/`
             <div class='elf--tool-bar'>
-                <object refClass="ToolBarRenderer" ${variable({
+                ${createComponent("ToolBarRenderer", {
                     items: ToolbarMenu.left(this.$editor)
-                })} />            
+                })}
                 <div class='center'>
                 </div>
                 <div class='right'>
                     ${this.$injectManager.generate('toolbar.right')}
-                    <object refClass="ThemeChanger" />                            
+                    ${createComponent("ThemeChanger")}
                 </div>
             </div>
         `
@@ -101,14 +102,14 @@ export default class ToolBar extends EditorElement {
 
     [LOAD('$logo')]() {
         return /*html*/`
-            <div class="logo-item">                   
-                <object refClass="DropdownMenu" ${variable({
+            <div class="logo-item">           
+                ${createComponent("DropdownMenu", {
                     ref: "$menu",
                     items: this.state.items,
                     dy: 6
-                })} >     
-                    <label class='logo'></label>
-                </object>
+                }, [
+                    createElement('label', {class: 'logo'})
+                ])}
             </div>                                
         `
     }

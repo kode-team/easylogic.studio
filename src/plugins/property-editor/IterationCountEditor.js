@@ -9,9 +9,9 @@ export default class IterationCountEditor extends RangeEditor {
         if (value === 'infinite') {
             value = new Length(0, 'infinite')
         } else {
-            value = Length.number(value.split('normal')[0])
+            value = Length.number(value)
         }
-        var units = this.props.units || 'px,em,%';
+        var units = this.props.units || ['px', 'em', '%'];
         
         return {
             ...super.initState(), 
