@@ -1,6 +1,6 @@
 
 import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { variable } from 'el/sapa/functions/registElement';
 import './GridBoxEditor.scss';
@@ -104,8 +104,8 @@ export default class GridBoxEditor extends EditorElement {
                         onchange="changeKeyValue" />
                 </div>
                 <div class='tools'>
-                    <button type="button" class='copy'>${icon.copy}</button>                
-                    <button type="button" class='remove'>${icon.remove2}</button>
+                    <button type="button" class='copy'>${iconUse("copy")}</button>                
+                    <button type="button" class='remove'>${iconUse("remove2")}</button>
                 </div>
             </div>
         `

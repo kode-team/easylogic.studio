@@ -1,7 +1,6 @@
 import { Editor } from "el/editor/manager/Editor";
 import TextShadowEditor from "./TextShadowEditor";
 import TextShadowProperty from "./TextShadowProperty";
-import TextShadowPropertyPopup from "./TextShadowPropertyPopup";
 
 /**
  * 
@@ -15,9 +14,5 @@ export default function (editor) {
 
     editor.registerMenuItem('inspector.tab.style', {
         TextShadowProperty        
-    })
-
-    editor.registerMenuItem('popup', {
-        TextShadowPropertyPopup
     })
 }

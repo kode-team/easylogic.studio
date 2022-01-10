@@ -1,7 +1,7 @@
 
 import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
 import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE, SUBSCRIBE, DOMDIFF, SUBSCRIBE_SELF } from "el/sapa/Event";
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import { CSS_TO_STRING, STRING_TO_CSS } from "el/utils/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
@@ -65,7 +65,7 @@ export default class BackgroundImageEditor extends EditorElement {
             </div>
         `
     }
-    
+
 
     [LOAD('$fillList') + DOMDIFF] () {
 
@@ -86,6 +86,7 @@ export default class BackgroundImageEditor extends EditorElement {
       
             return /*html*/`
             <div class='fill-item ${selectedClass}' data-index='${index}' ref="fillIndex${index}"  draggable='true' data-fill-type="${backgroundType}" >
+                <label draggable="true" data-index="${index}">${iconUse('drag_indicator')}</label>
                 ${createComponentList(
                     ["BackgroundPositionEditor", {
                         key: "background-position",
@@ -167,7 +168,7 @@ export default class BackgroundImageEditor extends EditorElement {
     }
 
 
-    [DRAGSTART("$fillList .fill-item")](e) {
+    [DRAGSTART("$fillList .fill-item > label")](e) {
         this.startIndex = +e.$dt.attr("data-index");
     }
 

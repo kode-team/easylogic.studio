@@ -1,7 +1,7 @@
 
 import { LOAD, CLICK, BIND, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { Length } from "el/editor/unit/Length";
 
@@ -35,7 +35,7 @@ export default class ImageProperty extends BaseProperty {
       <div>
         <label> ${this.$i18n('image.property.origin')} </label> 
         <span ref='$sizeInfo'></span> 
-        <button type="button" ref='$resize'>${icon.size}</button>
+        <button type="button" ref='$resize'>${iconUse("size")}</button>
       </div>
       <div>
         <object refClass="SelectEditor"  ref='$select' label="${this.$i18n('image.property.size')}" key='size' value='' options='${image_size.join(',')}' onchange='changeImageSize' />

@@ -1,6 +1,7 @@
 import { Length } from "el/editor/unit/Length";
 import { PropertyItem } from "el/editor/items/PropertyItem";
 import { convertMatches, reverseMatches } from "el/utils/parser";
+import { isNumber } from "el/sapa/functions/func";
 
 export class TextShadow extends PropertyItem {
   static parse(obj) {
@@ -10,8 +11,10 @@ export class TextShadow extends PropertyItem {
   static parseStyle (str = '') {
     var results = convertMatches(str);
 
+    str = str.trim();
+
     var textShadows = results.str.split(",").filter(it => it.trim()).map(shadow => {
-      var values = shadow.split(" ");
+      var values = shadow.trim().split(" ");
 
       var colors = values
         .filter(it => it.includes("@"))
@@ -42,9 +45,9 @@ export class TextShadow extends PropertyItem {
   getDefaultObject() {
     return super.getDefaultObject({
       itemType: "text-shadow",
-      offsetX: 0,
-      offsetY: 0,
-      blurRadius: 0,
+      offsetX: '0px',
+      offsetY: '0px',
+      blurRadius: '0px',
       color: "rgba(0, 0, 0, 1)"
     });
   }
@@ -61,9 +64,14 @@ export class TextShadow extends PropertyItem {
 
     json = super.convert(json);
 
-    json.offsetX = Length.parse(json.offsetX);
-    json.offsetY = Length.parse(json.offsetY);
-    json.blurRadius = Length.parse(json.blurRadius);
+    if (isNumber(json.offsetX)) json.offsetX = Length.px(json.offsetX);
+    else if (json.offsetX) json.offsetX = Length.parse(json.offsetX);
+
+    if (isNumber(json.offsetY)) json.offsetY = Length.px(json.offsetY);
+    else if (json.offsetY) json.offsetY = Length.parse(json.offsetY);
+
+    if (isNumber(json.blurRadius)) json.blurRadius = Length.px(json.blurRadius);
+    else if (json.blurRadius) json.blurRadius = Length.parse(json.blurRadius);
 
     return json 
   }
@@ -76,8 +84,12 @@ export class TextShadow extends PropertyItem {
   }
 
   toString() {
-    var json = this.json;
+    var {offsetX, offsetY, blurRadius, color} = this.json;
 
-    return `${json.offsetX} ${json.offsetY} ${json.blurRadius} ${json.color}`;
+    if (isNumber(offsetX)) offsetX = Length.px(offsetX);
+    if (isNumber(offsetY)) offsetY = Length.px(offsetY);
+    if (isNumber(blurRadius)) blurRadius = Length.px(blurRadius);
+
+    return `${offsetX} ${offsetY} ${blurRadius} ${color}`;
   }
 }

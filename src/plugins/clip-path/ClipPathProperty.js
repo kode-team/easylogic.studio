@@ -33,7 +33,7 @@ export default class ClipPathProperty extends BaseProperty {
     return /*html*/`
       <div ref="$tools" class="add-tools">
         <button type="button" data-value='circle' data-tooltip="Circle">${iconUse('outline_circle')}</button>
-        <button type="button" data-value='ellipse' data-tooltip="Ellipse">${iconUse('outline_circle')}</button>
+        <button type="button" data-value='ellipse' data-tooltip="Ellipse">${iconUse('outline_circle', "scale(1 0.7) translate(0 5)")}</button>
         <button type="button" data-value='inset' data-tooltip="Inset">${iconUse('outline_rect')}</button>
         <button type="button" data-value='polygon' data-tooltip="Polygon">${iconUse('polygon')}</button>
         <button type="button" data-value='path' data-tooltip="Path">${iconUse('pentool')}</button>

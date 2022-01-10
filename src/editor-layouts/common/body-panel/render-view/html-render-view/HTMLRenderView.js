@@ -555,11 +555,14 @@ export default class HTMLRenderView extends EditorElement {
 
 
     refreshSelectionStyleView(obj) {
-        var items = obj ? [obj] : this.$selection.items;
 
-        items.forEach(current => {
-            this.updateElement(current);
-        })
+        if (obj) {
+            this.updateElement(obj);
+        } else {
+            this.$selection.items.forEach(current => {
+                this.updateElement(current);
+            })
+        }
     }
 
     updateElement(item) {
@@ -642,8 +645,7 @@ export default class HTMLRenderView extends EditorElement {
                 if (width > 0 && height > 0 ) {
                     parentObj.reset({ x, y, width, height })
 
-                    // this.updateElement(parentObj, $el);
-                    this.emit('refreshSelectionStyleView', parentObj);                    
+                    this.refreshSelectionStyleView(parentObj);                    
                 }
 
 
@@ -671,19 +673,12 @@ export default class HTMLRenderView extends EditorElement {
 
                     if (width > 0 && height > 0 ) {
                         it.reset({ x, y, width, height })
-
-                        this.updateElement(it, $el);
     
                         this.refreshSelectionStyleView(it);
-                        // if (this.$config.false('set.move.control.point')) {
-                            // this.emit('refreshSelectionTool', true);
-                        // }
                     }
-
-
                 }
 
-                this.refreshElementBoundSize(it);
+                this.trigger('refreshElementBoundSize', it);
             })
         }
     }

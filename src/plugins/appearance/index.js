@@ -12,11 +12,12 @@ export default function (editor) {
         AppearanceProperty: ObjectProperty.create({
             title: editor.$i18n('background.color.property.title'),
             editableProperty: "appearance",
+            preventUpdate: true,
             inspector : (current) => {
                 return [
                     {
                       type: 'column', 
-                      size: [2, 1],
+                      size: [1, 1],
                       columns: [
                         {
                           key: 'background-color',

@@ -13,6 +13,7 @@ export default function (editor) {
         FontProperty: ObjectProperty.create({
             title: editor.$i18n('font.property.title'),
             editableProperty: 'font',
+            preventUpdate: true,
         })
     })
 

@@ -87,10 +87,6 @@ export default class DesignEditor extends BaseLayout {
             <div class="layout-right" ref='$rightPanel'>
               ${isItemMode ? createComponent("SingleInspector") : createComponent("Inspector") }
             </div>
-            <div class='layout-footer' ref='$footerPanel'>
-              <div class='footer-splitter' ref='$footerSplitter' title="${this.$i18n('timeline.property.resize')}"></div>
-              ${/*createComponent('TimelineProperty')*/""}
-            </div>   
             <div class='left-arrow' ref='$leftArrow'>
               ${createComponent("SwitchLeftPanel")}
             </div>
@@ -204,16 +200,6 @@ export default class DesignEditor extends BaseLayout {
       }
     }
   }  
-  
-
-  [BIND('$footerPanel')] () {
-   
-    let height = this.state.bottomSize;
- 
-    return {
-      style: { height }
-    }
-  }    
 
   [POINTERSTART('$splitter') + MOVE('moveSplitter') + END('moveEndSplitter')] () {
 
@@ -236,26 +222,12 @@ export default class DesignEditor extends BaseLayout {
     this.refs.$splitter.removeClass('selected');
   }
 
-  [POINTERSTART('$footerSplitter') + MOVE('moveFooterSplitter')] () {
+  afterRender() {
+    super.afterRender();
 
-    this.minFooterSize = this.$theme('bottom_size');
-    this.maxFooterSize = this.$theme('bottom_max_size');
-    this.bottomSize = Length.parse(this.refs.$footerPanel.css('height')).value;
+    this.$config.init('editor.layout.elements', this.refs);    
+
   }
-
-  moveFooterSplitter (_, dy) {
-    const bottomSize = Math.max(Math.min(this.bottomSize - dy , this.maxFooterSize), this.minFooterSize)
-    this.setState({
-      bottomSize,
-      lastBottomSize: bottomSize      
-    })
-
-    // this.trigger('changeTimelineHeight');
-  }  
-
-  // [SUBSCRIBE('changeTimelineHeight') + THROTTLE(100)] () {
-  //   this.emit('refreshTimeline')
-  // }
 
   refresh () {
 
@@ -272,6 +244,7 @@ export default class DesignEditor extends BaseLayout {
     this.bindData('$footerPanel');        
     
     this.emit('resizeEditor');    
+
   }
 
   [CONFIG('show.left.panel')]() {
@@ -290,27 +263,6 @@ export default class DesignEditor extends BaseLayout {
 
   [CONFIG('editor.design.mode')] () {
     this.bindData('$el');
-  }
-
-
-  [SUBSCRIBE('toggleFooter')] (isShow) {
-    this.$el.toggleClass('show-footer', isShow);
-
-    if (this.$el.hasClass('show-footer')) {
-      if (this.state.bottomSize === 30) {
-        this.state.bottomSize = this.state.lastBottomSize || this.$theme('bottom_size');
-      }
-    } else {
-      this.state.bottomSize = 30
-    }
-
-    this.refresh();
-
-  }
-
-  [TRANSITIONEND('$el .layout-footer')] (e) {
-    this.emit('toggleFooterEnd');
-
   }
 
   /** 드랍존 설정을 위해서 남겨놔야함 */

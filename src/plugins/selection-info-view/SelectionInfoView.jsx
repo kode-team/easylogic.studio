@@ -148,7 +148,7 @@ export default class SelectionInfoView extends EditorElement {
 
 
     [LOAD('$el') + DOMDIFF] () {
-        return this.$selection.currentProject.artboards.map(it => {
+        return this.$selection.currentProject?.artboards.map(it => {
             return { title: it.name, id: it.id, pointers: this.$viewport.applyVerties(it.verties) }
         }).map(it => this.makeArtboardTitleArea(it))
 

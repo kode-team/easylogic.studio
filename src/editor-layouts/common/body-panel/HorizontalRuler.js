@@ -1,6 +1,7 @@
-import { BIND, CONFIG, DEBOUNCE, DOMDIFF, LOAD, SUBSCRIBE, THROTTLE } from "el/sapa/Event";
+import { BIND, CONFIG, DEBOUNCE, DOMDIFF, IF, LOAD, SUBSCRIBE, THROTTLE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './HorizontalRuler.scss';
+import Dom from "el/sapa/functions/Dom";
 
 let pathString = []
 
@@ -8,7 +9,11 @@ export default class HorizontalRuler extends EditorElement {
     template () {
         return /*html*/`
             <div class="elf--horizontal-ruler">
-                <div class='horizontal-ruler-container' ref='$layerRuler'></div>                            
+                <div class='horizontal-ruler-container' ref='$layerRuler'>
+                    <svg class="lines" width="100%" width="100%" overflow="hidden">
+                        <path ref="$rulerLines" d="" />
+                    </svg>
+                </div>                            
                 <div class='horizontal-ruler-container' ref='$ruler'></div>
                 <div class='horizontal-ruler-container'>
                     <svg width="100%" width="100%" overflow="hidden">
@@ -171,7 +176,7 @@ export default class HorizontalRuler extends EditorElement {
         ].join('');
     }    
 
-    [LOAD('$ruler') + DOMDIFF] () { 
+    [LOAD('$ruler')] () { 
 
         this.initializeRect();
 
@@ -184,14 +189,11 @@ export default class HorizontalRuler extends EditorElement {
         `
     }
 
-    [LOAD('$layerRuler') + DOMDIFF] () { 
-        this.initializeRect();
+    [BIND('$rulerLines')] () { 
+        return {
+            d: this.makeRulerForCurrent()
 
-        return /*html*/`
-            <svg width="100%" width="100%" overflow="hidden">
-                <path data-selected="true" d="${this.makeRulerForCurrent()}" fill="rgba(100, 255, 255, 0.5)" stroke="transparent" />
-            </svg>
-        `
+        }
     }  
 
     makeRulerCursor() {
@@ -240,9 +242,10 @@ export default class HorizontalRuler extends EditorElement {
 
     [SUBSCRIBE('resize.window', 'resizeCanvas')] () {
         this.refreshCanvasSize();
-    }    
+    }
 
-    [CONFIG('bodyEvent')] () {
+    [CONFIG('onMouseMovepageContainer')] () {
         this.bindData('$cursor');
+        this.bindData('$rulerLines');
     }
 }

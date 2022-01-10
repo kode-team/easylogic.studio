@@ -20,12 +20,14 @@ export default class NumberInputEditor extends EditorElement {
 
         const compact = isBoolean(this.props.compact) ? this.props.compact : this.props.compact === 'true';
         const wide = isBoolean(this.props.wide) ? this.props.wide : this.props.wide === 'true';        
+        const mini = isBoolean(this.props.mini) ? this.props.mini : this.props.mini === 'true';        
         const trigger = this.props.trigger || "input";
 
         return {
             label,
             compact,     
             wide,            
+            mini,
             trigger,
             min: +this.props.min || 0,
             max: +this.props.max || 100,
@@ -42,7 +44,7 @@ export default class NumberInputEditor extends EditorElement {
     }
 
     [LOAD('$body')] () {
-        var { min, max, step, label,  type, layout, compact, wide, disabled, removable } = this.state
+        var { min, max, step, label,  type, layout, mini, compact, wide, disabled, removable } = this.state
 
         var value = this.state.value
 
@@ -61,6 +63,7 @@ export default class NumberInputEditor extends EditorElement {
                 'has-label': !!label,
                 'compact': !!compact,
                 'wide': !!wide,
+                'mini': !!mini,
                 'is-removable': removable,
                 'disabled': disabled,
                 [layoutClass] : true 

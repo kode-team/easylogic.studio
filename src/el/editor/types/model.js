@@ -175,3 +175,8 @@ export const TextClip = {
     NONE: "none",
     TEXT: "text"
 }
+
+export const BoxShadowStyle = {
+    OUTSET: "outset",
+    INSET: "inset",
+}

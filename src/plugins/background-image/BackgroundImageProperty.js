@@ -44,7 +44,7 @@ export default class BackgroundImageProperty extends BaseProperty {
 
   getTools() {
     return /*html*/`
-      <div ref='$add'>
+      <div class="fill-sample-list" ref='$add'>
         <button type="button" class='fill' data-value="static-gradient" data-tooltip="Static" ></button>
         <button type="button" class='fill' data-value="linear-gradient" data-tooltip="Linear" ></button>
         <button type="button" class='fill' data-value="repeating-linear-gradient" data-tooltip="R Linear" ></button>

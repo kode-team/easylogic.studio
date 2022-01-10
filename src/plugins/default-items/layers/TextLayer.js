@@ -36,7 +36,6 @@ export class TextLayer extends LayerModel {
 
     switch (editablePropertyName) {
       case 'svg-item':
-      case 'box-shadow':
       case 'transform':
       case 'transform-origin':
       case 'perspective':

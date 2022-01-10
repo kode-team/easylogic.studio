@@ -78,6 +78,23 @@ export default class BasePopup extends EditorElement {
       .show("inline-block");
   }
 
+  makeRect (width, height, rect) {
+
+    const elements = this.$config.get('editor.layout.elements');
+    const bodyRect = elements.$bodyPanel.rect();
+
+    const left = bodyRect.left + bodyRect.width - (width - 10)
+    const top = rect.top + height > bodyRect.top + bodyRect.height ? bodyRect.top + bodyRect.height - height - 10 : rect.top;
+
+
+    return {
+      top: top,
+      left: left < rect.left  && rect.left <= left + width ? left - ((left + width)  - rect.left) - 10 : left,
+      width: width,
+      height: height,
+    }
+  }
+
   showByRect (rect) {
     this.$el
       .css({

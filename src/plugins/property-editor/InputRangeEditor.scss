@@ -23,6 +23,7 @@
     &.focused {
         border-color: var(--elf--selected-color);
         border-width: 1px;
+        box-shadow: 0px 0px 0px 1px var(--elf--selected-color);
         --elf--input-range-border-color: var(--elf--input-border-color);        
     }
 

@@ -1,161 +1,161 @@
-@import '../../scss/mixins.scss';
+@import "../../scss/mixins.scss";
 
 .elf--background-image-editor {
-  padding: 5px 10px;
+  padding: 5px 10px 5px 5px;
   padding-top: 0px;
   .label {
     height: 20px;
     margin-top: 2px;
 
     &.hide {
-      display: none; 
+      display: none;
     }
     label {
       font-size: 12px;
       padding-left: 5px;
       vertical-align: middle;
-   
     }
   }
 
   .tools {
-      vertical-align: middle;
-      text-align: right;
-      float:right;
+    vertical-align: middle;
+    text-align: right;
+    float: right;
   }
 
-    .fill-list {
+  .fill-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    font-size: 12px;
+
+    .fill-item {
+      display: grid;
+      grid-template-columns: 18px 24px 24px 1fr;
+      margin-bottom: 4px;
+
+      > label {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+      }
+
+      > div {
+        display: flex;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+      }
+
+      // &:hover {
+      //   background-color: var(--elf--input-inactive-color);
+      // }
+
+      .gradient-info {
+        width: 100%;
         display: grid;
-        grid-template-columns: 1fr;
-        font-size: 12px;
-      
-        .fill-item {
-          display: grid;
-          grid-template-columns: 24px 24px 1fr;
-          // column-gap: 1px;
-          margin-bottom: 4px;
-          padding-left: 2px;
+        grid-template-columns: 50px 1fr 32px;
 
-          >div {
-            display: flex;
-            height: 100%;
-            justify-content: center;
-            align-items: center;            
+        color: var(--elf--font-color);
+
+        svg {
+          path {
+            fill: currentColor;
           }
+        }
 
+        .tools {
+          text-align: right;
+          display: flex;
+          justify-content: center;
+          align-items: center;
           &:hover {
             background-color: var(--elf--input-inactive-color);
           }
-      
-          .gradient-info {
-            width: 100%;
-            display: grid;
-            grid-template-columns: 50px 1fr 32px;
+        }
+      }
 
-            color: var(--elf--font-color);
+      &[data-fill-type="gradient"] {
+        .colorcode,
+        .opacity {
+          display: none;
+        }
 
-            svg {
-              path {
-                fill: currentColor;
-              }
-            }
-      
-            .tools {
-              text-align: right;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              &:hover {
-                background-color: var(--elf--input-inactive-color);
-              }
-            }
-          }
-      
-          &[data-fill-type="gradient"] {
-            .colorcode,
-            .opacity {
-              display: none;
-            }
-      
-            .colorsteps {
-              display: block;
-            }
-          }
+        .colorsteps {
+          display: block;
+        }
+      }
 
-          .pattern {
-            background-color: var(--elf--border-color);
-            // border-radius: 3px;
-          }
-      
-          .preview {
-            cursor: pointer;
-            height: auto;
-            // width: 30px;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-      
-            .mini-view {
-              display: block;
-              width: 20px;
-              height: 20px;
+      .pattern {
+        background-color: var(--elf--border-color);
+        // border-radius: 3px;
+      }
 
-              
-              pointer-events: none;
-              // border-radius: 3px;
-              position: relative;
-              @include transparent-background();
-              .color-view {
-                position: absolute;
-                left: 0px;
-                top: 0px;
-                right: 0px;
-                bottom: 0px;
-                border-radius: 0px;
-              } 
-            }
-          }
-      
-          .fill-title {
-            pointer-events: none;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            text-align: left;
-            padding-left: 2px;
-            position: relative;
-      
-            svg {
-              width: 16px;
-              height: 16px;
-              vertical-align: middle;
-            }
+      .preview {
+        cursor: pointer;
+        height: auto;
+        // width: 30px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
 
-            &[data-repeat="true"] {
-              background-color: var(--elf--input-inactive-color);
-              color: var(--elf--font-color);
+        .mini-view {
+          display: block;
+          width: 20px;
+          height: 20px;
 
-              &:after {
-                content: "";
-                position: absolute;
-                right: 2px;
-                top: 50%;
-                bottom: 0px;
-                width: 4px;
-                height: 50%;
-                transform: translateY(-50%);
-                border-right: 4px double var(--elf--font-color);
-              }
-
-            }
-          }
-      
-          .colorcode {
-            input {
-              width: 100%;
-            }
+          pointer-events: none;
+          // border-radius: 3px;
+          position: relative;
+          @include transparent-background();
+          .color-view {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            right: 0px;
+            bottom: 0px;
+            border-radius: 0px;
           }
         }
       }
-      
+
+      .fill-title {
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        text-align: left;
+        padding-left: 2px;
+        position: relative;
+
+        svg {
+          width: 16px;
+          height: 16px;
+          vertical-align: middle;
+        }
+
+        &[data-repeat="true"] {
+          background-color: var(--elf--input-inactive-color);
+          color: var(--elf--font-color);
+
+          &:after {
+            content: "";
+            position: absolute;
+            right: 2px;
+            top: 50%;
+            bottom: 0px;
+            width: 4px;
+            height: 50%;
+            transform: translateY(-50%);
+            border-right: 4px double var(--elf--font-color);
+          }
+        }
+      }
+
+      .colorcode {
+        input {
+          width: 100%;
+        }
+      }
+    }
+  }
 }

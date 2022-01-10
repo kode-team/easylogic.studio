@@ -1,25 +1,21 @@
-import { CLICK, LOAD, SUBSCRIBE } from "el/sapa/Event";
-import icon from "el/editor/icon/icon";
+import { CLICK, DRAGOVER, DRAGSTART, DROP, LOAD, PREVENT, SUBSCRIBE } from "el/sapa/Event";
+import { iconUse } from "el/editor/icon/icon";
 import { TextShadow } from "el/editor/property-parser/TextShadow";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './TextShadowEditor.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class TextShadowEditor extends EditorElement {
 
   initState() {
 
     return {
-      hideLabel: this.props.hideLabel === 'true' ? true : false, 
-      selectedIndex: -1,
-      textShadows: this.props.value
+      textShadows: TextShadow.parseStyle(this.props.value),
     }
   }
 
   template() {
-
-    var labelClass = this.state.hideLabel ? 'hide' : ''; 
-
     return /*html*/`
       <div class="elf--text-shadow-editor" >
         <div class='text-shadow-list' ref='$shadowList'></div>
@@ -28,52 +24,68 @@ export default class TextShadowEditor extends EditorElement {
   }
 
   [LOAD("$shadowList")]() {
-  
+
     var arr = this.state.textShadows.map((shadow, index) => {
       return /*html*/`
         <div class="shadow-item real" data-index="${index}">
-          <div class="color">
-            <div class='color-view' style="background-color: ${shadow.color}">
-            </div>
-          </div>
-          <div class="offset-x">${shadow.offsetX}</div>
-          <div class="offset-y">${shadow.offsetY}</div>
-          <div class="blur-radius">${shadow.blurRadius}</div>
+          <label draggable="true" data-index="${index}">${iconUse('drag_indicator')}</label>
+          ${createComponent('ColorViewEditor', {
+        mini: true,
+        key: 'color',
+        value: shadow.color,
+        params: index,
+        onchange: 'changeKeyValue'
+      })}
+          ${createComponent('NumberInputEditor', {
+        mini: true,
+        key: 'offsetX',
+        label: 'X',
+        value: shadow.offsetX,
+        params: index,
+        onchange: 'changeKeyValue'
+      })}          
+          ${createComponent('NumberInputEditor', {
+        mini: true,
+        key: 'offsetY',
+        label: 'Y',
+        value: shadow.offsetY,
+        params: index,
+        onchange: 'changeKeyValue'
+      })}                    
+          ${createComponent('NumberInputEditor', {
+        mini: true,
+        label: 'B',
+        key: 'blurRadius',
+        value: shadow.blurRadius,
+        params: index,
+        onchange: 'changeKeyValue'
+      })}                    
           <div class="tools">
             <button type="button" class="remove" data-index="${index}">
-              ${icon.remove2}
+              ${iconUse('remove2')}
             </button>
           </div>
         </div>
       `;
     });
 
-    if (arr.length) {
-      arr.push(/*html*/`
-      <div class="shadow-item desc">
-            <div class="color"></div>
-            <div class="offset-x">X</div>
-            <div class="offset-y">Y</div>
-            <div class="blur-radius">Blur</div>
-            <div class="tools">
-            </div>
-          </div>
-      `);
-    }
-
-
     return arr.join('');
   }
 
-  modifyTextShadow () {
+  modifyTextShadow() {
     var value = this.state.textShadows.join(', ');
 
-    this.parent.trigger(this.props.onchange, value)
+    this.parent.trigger(this.props.onchange, this.props.key, value)
   }
 
 
-  [SUBSCRIBE('add')] () {
-    this.state.textShadows.push(new TextShadow())
+  [SUBSCRIBE('add')](shadow = '') {
+
+    if (shadow) {
+      this.state.textShadows = TextShadow.parseStyle(shadow);
+    } else {
+      this.state.textShadows.push(new TextShadow())
+    }
 
     this.refresh();
 
@@ -83,6 +95,39 @@ export default class TextShadowEditor extends EditorElement {
   [CLICK("$add")]() {
     this.trigger('add');
   }
+
+
+
+  [DRAGSTART("$shadowList .shadow-item > label")](e) {
+    this.startIndex = +e.$dt.attr("data-index");
+  }
+
+  [DRAGOVER("$shadowList .shadow-item") + PREVENT](e) { }
+
+
+  sortItem(arr, startIndex, targetIndex) {
+    arr.splice(
+      targetIndex + (startIndex < targetIndex ? -1 : 0),
+      0,
+      ...arr.splice(startIndex, 1)
+    );
+  }
+
+  sortTextShadow(startIndex, targetIndex) {
+    this.sortItem(this.state.textShadows, startIndex, targetIndex);
+  }
+
+  [DROP("$shadowList .shadow-item") + PREVENT](e) {
+    var targetIndex = +e.$dt.attr("data-index");
+
+    this.sortTextShadow(this.startIndex, targetIndex);
+
+    this.refresh();
+
+    this.modifyTextShadow()    
+
+  }
+
 
   [CLICK("$shadowList .remove")](e) {
     var index = +e.$dt.attr("data-index");
@@ -94,45 +139,17 @@ export default class TextShadowEditor extends EditorElement {
     this.modifyTextShadow()
   }
 
-  [CLICK("$shadowList .shadow-item.real > div:not(.tools)")](e) {
-    var index = +e.$dt.closest('shadow-item').attr("data-index");
+  [SUBSCRIBE("changeKeyValue")](key, value, index) {
 
     var shadow = this.state.textShadows[index]
 
-   this.viewShadowPopup(shadow, index)
-  }
+    shadow.reset({
+      [key]: value
+    })
 
-  viewShadowPopup(shadow, index) {
-    this.setState({
-      selectedIndex: index
-    }, false)
+    // this.refresh();
 
-    this.viewTextShadowPropertyPopup(shadow);
-  }
-
-  viewTextShadowPropertyPopup(shadow) {
-    this.emit("showTextShadowPropertyPopup", {
-      changeEvent: 'changeTextShadowEditorPopup',
-      color: shadow.color,
-      offsetX: shadow.offsetX,
-      offsetY: shadow.offsetY,
-      blurRadius: shadow.blurRadius
-    }, {
-      id: this.id
-    });
-    
-  }
-
-  [SUBSCRIBE("changeTextShadowEditorPopup")](data, params) {
-    if (params.id === this.id) {
-      var shadow = this.state.textShadows[this.state.selectedIndex]
-
-      shadow.reset(data)
-  
-      this.refresh();
-  
-      this.modifyTextShadow();
-    }
+    this.modifyTextShadow();
 
   }
 }

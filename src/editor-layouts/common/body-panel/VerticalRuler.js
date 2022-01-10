@@ -1,6 +1,7 @@
-import { LOAD, DOMDIFF, SUBSCRIBE, DEBOUNCE, THROTTLE, CONFIG, BIND } from "el/sapa/Event";
+import { LOAD, DOMDIFF, SUBSCRIBE, DEBOUNCE, THROTTLE, CONFIG, BIND, IF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './VerticalRuler.scss';
+import Dom from 'el/sapa/functions/Dom';
 
 let pathString = []
 
@@ -8,7 +9,11 @@ export default class VerticalRuler extends EditorElement {
     template () {
         return /*html*/`
             <div class="elf--vertical-ruler">
-                <div class='vertical-ruler-container' ref='$layerRuler'></div>                                        
+                <div class='vertical-ruler-container' ref='$layerRuler'>
+                    <svg class="lines" width="100%" height="100%" overflow="hidden">
+                        <path ref="$rulerLines" d=""/>
+                    </svg>
+                </div>                                        
                 <div class='vertical-ruler-container' ref='$body'></div>
                 <div class='vertical-ruler-container'>
                     <svg width="100%" height="100%" overflow="hidden">
@@ -167,7 +172,7 @@ export default class VerticalRuler extends EditorElement {
         ].join('');
     }
 
-    [LOAD('$body') + DOMDIFF] () { 
+    [LOAD('$body')] () { 
 
         if (!this.state.rect || this.state.rect.width == 0) {
             this.state.rect = this.$el.rect();
@@ -181,18 +186,12 @@ export default class VerticalRuler extends EditorElement {
         `
     }
 
-    [LOAD('$layerRuler') + DOMDIFF] () { 
+    [BIND('$rulerLines')] () { 
+        return {
+            d: this.makeRulerForCurrent()
 
-        if (!this.state.rect || this.state.rect.width == 0) {
-            this.state.rect = this.$el.rect();
         }
-
-        return /*html*/`
-            <svg width="100%" height="100%" overflow="hidden">
-                <path data-selected="true"  d="${this.makeRulerForCurrent()}" fill="rgba(100, 255, 255, 0.5)" stroke="transparent" />
-            </svg>
-        `
-    }    
+    }      
 
 
     makeRulerCursor() {
@@ -223,9 +222,6 @@ export default class VerticalRuler extends EditorElement {
 
     }    
 
-    [SUBSCRIBE('updateViewport')] () {
-        this.refresh();
-    }
 
     [SUBSCRIBE('refreshSelectionStyleView') + THROTTLE(10)] () {
         const current = this.$selection.current;        
@@ -236,16 +232,16 @@ export default class VerticalRuler extends EditorElement {
 
     }
 
-    [SUBSCRIBE('refreshSelection')] () {
-        this.load('$layerRuler');      
-    }    
+    [SUBSCRIBE('updateViewport', 'refreshSelection')] () {
+        this.refresh();      
+    }
 
     [SUBSCRIBE('resize.window', 'resizeCanvas')] () {
         this.refreshCanvasSize();
     }      
-    
 
-    [CONFIG('bodyEvent')] () {
+    [CONFIG('onMouseMovepageContainer')] () {
         this.bindData('$cursor');
+        this.bindData('$rulerLines');
     }    
 }

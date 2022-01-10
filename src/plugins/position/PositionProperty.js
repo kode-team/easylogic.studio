@@ -5,6 +5,7 @@ import { Length } from "el/editor/unit/Length";
 
 import "./PositionProperty.scss";
 import { variable } from 'el/sapa/functions/registElement';
+import { createComponent } from "el/sapa/functions/jsx";
 
 const DEFAULT_SIZE = 0;
 
@@ -71,74 +72,71 @@ export default class PositionProperty extends BaseProperty {
     return /*html*/`
       <div class="position-item" ref="$positionItem" style='padding: 5px 10px;'>
         <div class="grid-layout">
-            <object refClass='NumberInputEditor' ${variable({
-      ref: '$x',
-      compact: true,
-      label: "X",
-      key: 'x',
-      min: -100000,
-      max: 100000,
-      trigger: "enter",
-      onchange: 'changRangeEditor'
-    })} />
-            <object refClass='NumberInputEditor' ${variable({
-      ref: '$y',
-      compact: true,
-      trigger: "enter",
-      label: "Y",
-      key: 'y',
-      min: -10000,
-      max: 10000,
-      onchange: 'changRangeEditor'
-    })} />      
+          ${createComponent('NumberInputEditor', {
+            ref: '$x',
+            compact: true,
+            label: "X",
+            key: 'x',
+            min: -100000,
+            max: 100000,
+            trigger: "enter",
+            onchange: 'changRangeEditor'
+          })}
+          ${createComponent('NumberInputEditor', {
+            ref: '$y',
+            compact: true,
+            trigger: "enter",
+            label: "Y",
+            key: 'y',
+            min: -10000,
+            max: 10000,
+            onchange: 'changRangeEditor'
+          })}
         </div>
         <div class="grid-layout">          
-          <object refClass='NumberInputEditor' ${variable({
-      ref: '$width',
-      compact: true,
-      trigger: "enter",
-      label: 'W',
-      key: 'width',
-      min: 0,
-      max: 3000,
-      onchange: 'changRangeEditor'
-    })} />
-          <object refClass='NumberInputEditor' ${variable({
-      ref: '$height',
-      compact: true,
-      trigger: "enter",
-      label: 'H',
-      key: 'height',
-      min: 0,
-      max: 3000,
-      onchange: 'changRangeEditor'
-    })}  />
+          ${createComponent('NumberInputEditor', {
+              ref: '$width',
+              compact: true,
+              trigger: "enter",
+              label: 'W',
+              key: 'width',
+              min: 0,
+              max: 3000,
+              onchange: 'changRangeEditor'
+          })}
+          ${createComponent('NumberInputEditor', {
+            ref: '$height',
+            compact: true,
+            trigger: "enter",
+            label: 'H',
+            key: 'height',
+            min: 0,
+            max: 3000,
+            onchange: 'changRangeEditor'
+          })}
         </div> 
         <div class="grid-layout">
-          <div>
-            <object refClass='InputRangeEditor' 
-              ref='$rotate' 
-              key='rotateZ' 
-              compact="true" 
-              label='rotate_left'
-              min="-360"
-              max="360"
-              step="1"
-              units="deg"
-              onchange="changeRotate" />
-          </div>        
-
-          <div>
-            <object refClass="NumberInputEditor"
-              ref='$opacity' 
-              key='opacity' 
-              compact="true" 
-              label='opacity'
-              min="0"
-              max="1"
-              step="0.01"
-              onchange="changeSelect" />
-          </div>        
+          ${createComponent('InputRangeEditor', {
+            ref: '$rotate',
+            key: 'rotateZ', 
+            compact: true,
+            label: 'rotate_left',
+            min: -360,
+            max: 360,
+            step: 1, 
+            units: ['deg'],
+            onchange: "changeRotate"
+          })}
+          ${createComponent('NumberInputEditor', {
+            ref: '$opacity',
+            key: 'opacity',
+            compact: true,
+            label: 'opacity',
+            min: 0,
+            max: 1,
+            step: 0.01,
+            onchange: "changeSelect"
+          })}
         </div>                
       </div>
     `;

@@ -1,5 +1,5 @@
 import EventMachine from "./EventMachine";
-import { debounce, ifCheck, isArray, isFunction, isNotUndefined, throttle } from "./functions/func";
+import { debounce, ifCheck, isArray, isFunction, isNotUndefined, makeRequestAnimationFrame, throttle } from "./functions/func";
 import { uuidShort } from 'el/utils/math';
 
 /**
@@ -53,6 +53,7 @@ export default class BaseStore {
    * @returns {Function} off callback 
    */
   on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false, beforeMethods = []) {
+
     var callback = originalCallback;
 
     if (debounceDelay > 0) callback = debounce(originalCallback, debounceDelay);
@@ -61,6 +62,9 @@ export default class BaseStore {
     if (beforeMethods.length) {
       callback = ifCheck(callback, context, beforeMethods);
     }
+
+    // 모든 이벤트는 requestAnimationFrame 을 통과하도록 한다.
+    callback = makeRequestAnimationFrame(callback, context);
 
     this.getCallbacks(event).push({ event, callback, context, originalCallback, enableAllTrigger, enableSelfTrigger });
 

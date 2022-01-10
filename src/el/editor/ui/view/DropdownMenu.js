@@ -49,8 +49,8 @@ export class DropdownMenu extends EditorElement {
     if (Array.isArray(it.items)) {
       return /*html*/`
           <li>
-              <span>${iconUse("arrowRight")}</span>
               <label>${this.$i18n(it.title)}</label> 
+              <span>${iconUse("arrowRight")}</span>              
               <ul>
                   ${it.items.map(child => this.makeMenuItem(child)).join('')}
               </ul>

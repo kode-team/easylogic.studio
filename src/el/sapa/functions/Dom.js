@@ -284,7 +284,7 @@ export default class Dom {
 
       return this;  
     } catch (e) {
-      console.log(e);
+      console.log(e, html);
       return this;
     }
 
@@ -535,8 +535,6 @@ export default class Dom {
       return {
         x: box.x - parentBox.x,
         y: box.y - parentBox.y,
-        top: box.x - parentBox.x,
-        left: box.y - parentBox.y,
         width: box.width,
         height: box.height
       }
@@ -545,8 +543,6 @@ export default class Dom {
     return {
       x: this.el.offsetLeft,
       y: this.el.offsetTop,
-      top: this.el.offsetTop,
-      left: this.el.offsetLeft,
       width: this.el.offsetWidth,
       height: this.el.offsetHeight
     };

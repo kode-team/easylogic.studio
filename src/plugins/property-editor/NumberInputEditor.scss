@@ -4,11 +4,13 @@
     // grid-column-gap: 4px;
     height: var(--elf--input-height);
     box-sizing: border-box;
-    // border: 1px solid transparent;
+    border: 1px solid transparent;
     padding: 4px 4px;
     border-radius: 1px;
 
     &.focused {
+        border-color: var(--elf--selected-color);
+        border-width: 1px;        
         box-shadow: 0 0 0 1px var(--elf--selected-color);
     }
 
@@ -26,6 +28,10 @@
 
         &.compact {
             grid-template-columns: 30px 1fr;
+        }
+
+        &.mini {
+            grid-template-columns: 10px 1fr;
         }
 
 

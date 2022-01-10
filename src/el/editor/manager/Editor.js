@@ -219,8 +219,8 @@ export class Editor {
   }
 
   on(...args) {
-    const [name, callback, ...rest] = args;
-    return this.store.on(name, callback, this, ...rest);
+    const [name, callback, context, ...rest] = args;
+    return this.store.on(name, callback, context || this, ...rest);
   }
 
   off(...args) {

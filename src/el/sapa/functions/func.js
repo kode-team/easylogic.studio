@@ -74,6 +74,14 @@ export function ifCheck(callback, context, checkMethods) {
     }
 }
 
+export function makeRequestAnimationFrame (callback, context) {
+    return (...args) => {
+        requestAnimationFrame(() => {
+            callback.apply(context, args);
+        });
+    };
+}
+
 export function keyEach(obj, callback) {
     Object.keys(obj).forEach((key, index) => {
         callback(key, obj[key], index);

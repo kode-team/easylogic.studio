@@ -32,17 +32,18 @@ export class Pattern extends PropertyItem {
 
     if (!pattern) return patterns;
 
+    pattern = pattern.trim();
+
     if (PatternCache.has(pattern)) {
       return PatternCache.get(pattern);
     }
-
 
     var results = convertMatches(pattern);
 
     var matches = (results.str.match(PATTERN_REG) || []);
     matches.forEach((value, index) => {
       var [patternName, patternValue] = value.split("(");
-      patternValue = patternValue.split(")")[0];
+      patternValue = patternValue.split(")")[0].trim();
 
         var [size, position, foreColor, backColor, blendMode, lineSize] = patternValue.split(",").map(it => it.trim());
 
@@ -157,7 +158,7 @@ export class GridPattern extends BasePattern {
     foreColor = foreColor || 'black'
 
     return `
-      background-image: linear-gradient(${foreColor} ${lineHeight}, ${backColor} ${lineHeight}),linear-gradient(to right, ${foreColor} ${lineWidth}, ${backColor} ${lineWidth});
+      background-image: linear-gradient(to bottom,${foreColor} ${lineHeight}, ${backColor} ${lineHeight}),linear-gradient(to right, ${foreColor} ${lineWidth}, ${backColor} ${lineWidth});
       background-size: ${width/2}px ${height/2}px, ${width/2}px ${height/2}px;      
       background-blend-mode: ${blendMode}, ${blendMode};      
     `
@@ -274,7 +275,7 @@ export class HorizontalLinePattern extends BasePattern {
     foreColor = foreColor || 'black'
 
     return `
-      background-image: repeating-linear-gradient(0deg, ${foreColor} 0px, ${foreColor} ${lineWidth}, ${backColor} ${lineWidth}, ${backColor} 100%);    
+      background-image: repeating-linear-gradient( to bottom, ${foreColor} 0px, ${foreColor} ${lineWidth}, ${backColor} ${lineWidth}, ${backColor} 100%);    
       background-position: ${x} ${y};
       background-size: ${width} ${height};   
       background-blend-mode: ${blendMode};

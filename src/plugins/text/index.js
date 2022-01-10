@@ -14,6 +14,7 @@ export default function (editor) {
         TextProperty: ObjectProperty.create({
             title: editor.$i18n('text.property.title'),
             editableProperty: 'text-style',
+            preventUpdate: true,
         })
     })
 

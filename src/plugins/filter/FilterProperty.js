@@ -4,7 +4,7 @@ import {
 } from "el/sapa/Event";
 
 
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { filter_list } from "./util";
 import { createComponent } from "el/sapa/functions/jsx";
@@ -58,7 +58,7 @@ export default class FilterProperty extends BaseProperty {
     return /*html*/`
       <select class='filter-select' ref="$filterSelect">      
       </select>
-      <button type="button" ref="$add" title="add Filter">${icon.add}</button>
+      <button type="button" ref="$add" title="add Filter">${iconUse("add")}</button>
     `
   }
   

@@ -108,7 +108,6 @@ export default class ResizingProperty extends BaseProperty {
     const key = e.$dt.data("key");
 
     const current = this.$selection.current;
-    console.log(key);
 
     if (current[key] === ResizingMode.FIXED) {
       this.trigger('changeResizingMode', key, ResizingMode.HUG_CONTENT);

@@ -1,16 +1,17 @@
-import { CLICK, LOAD, SUBSCRIBE } from "el/sapa/Event";
-import icon from "el/editor/icon/icon";
+import { CLICK, DRAGOVER, DRAGSTART, DROP, LOAD, PREVENT, SUBSCRIBE } from "el/sapa/Event";
+import icon, { iconUse } from "el/editor/icon/icon";
 import { BoxShadow } from "el/editor/property-parser/BoxShadow";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { Length } from "el/editor/unit/Length";
 
 import './BoxShadowEditor.scss';
+import { createComponent } from "el/sapa/functions/jsx";
+import { BoxShadowStyle } from "el/editor/types/model";
 
 export default class BoxShadowEditor extends EditorElement {
 
   initState() {
     return {
-      hideLabel: this.props.hideLabel === 'true' ? true : false,
       boxShadows: BoxShadow.parseStyle(this.props.value || '')
     }
   }
@@ -27,57 +28,94 @@ export default class BoxShadowEditor extends EditorElement {
     var arr = this.state.boxShadows.map((shadow, index) => {
       return /*html*/`
         <div class="shadow-item real" data-index="${index}">
-          <div class="color">
-            <div class='color-view' style="background-color: ${shadow.color}">
-            </div>
-          </div>
-          <div class="inset" data-value="${shadow.inset}">${icon.check}</div>
-          <div class="offset-x">${shadow.offsetX}</div>
-          <div class="offset-y">${shadow.offsetY}</div>
-          <div class="blur-radius">${shadow.blurRadius}</div>
-          <div class="spread-radius">${shadow.spreadRadius}</div>
+            <label draggable="true" data-index="${index}">${iconUse('drag_indicator')}</label>
+            ${createComponent('ColorViewEditor', {
+              mini: true,
+              key: 'color',
+              value: shadow.color,
+              params: index,
+              onchange: 'changeKeyValue'
+            })}
+            ${createComponent('ToggleButton', {
+              mini: true,
+              key: 'inset',
+              value: shadow.inset,
+              params: index,
+              onchange: 'changeKeyValue',
+              checkedValue: BoxShadowStyle.INSET,
+              toggleLabels: ['border_style', 'border_style'],
+              toggleTitles: [BoxShadowStyle.INSET, BoxShadowStyle.INSET],
+              toggleValues: [BoxShadowStyle.OUTSET, BoxShadowStyle.INSET],              
+            })}            
+            ${createComponent('NumberInputEditor', {
+              mini: true,
+              key: 'offsetX',
+              label: 'X',
+              value: shadow.offsetX,
+              params: index,
+              onchange: 'changeKeyValue'
+            })}          
+            ${createComponent('NumberInputEditor', {
+              mini: true,
+              key: 'offsetY',
+              label: 'Y',
+              value: shadow.offsetY,
+              params: index,
+              onchange: 'changeKeyValue'
+            })}                    
+            ${createComponent('NumberInputEditor', {
+              mini: true,
+              label: 'B',
+              key: 'blurRadius',
+              value: shadow.blurRadius,
+              params: index,
+              onchange: 'changeKeyValue'
+            })} 
+            ${createComponent('NumberInputEditor', {
+              mini: true,
+              label: 'S',
+              key: 'spreadRadius',
+              value: shadow.spreadRadius,
+              params: index,
+              onchange: 'changeKeyValue'
+            })}             
           <div class="tools">
             <button type="button" class="remove" data-index="${index}">
-              ${icon.remove2}
+              ${iconUse('remove2')}
             </button>
           </div>
         </div>
       `;
     });
 
-    if (arr.length) {
-      arr.push(/*html*/`
-      <div class="shadow-item desc">
-        <div class="color"></div>      
-        <div class="inset" >Inset</div>
-
-        <div class="offset-x">X</div>
-        <div class="offset-y">Y</div>
-        <div class="blur-radius">${this.$i18n('boxshadow.editor.blur')}</div>
-        <div class="spread-radius">${this.$i18n('boxshadow.editor.spread')}</div>
-        <div class="tools">
-        </div>
-      </div>
-      `);
-    }
-
 
     return arr.join('');
   }
 
-  modifyBoxShadow () {
+  modifyBoxShadow() {
     var value = this.state.boxShadows.join(', ');
 
-    this.parent.trigger(this.props.onchange, value)
+    this.parent.trigger(this.props.onchange, this.props.key, value)
   }
 
-  [SUBSCRIBE('add')] () {
-    this.state.boxShadows.push(new BoxShadow({
-      offsetX: 2,
-      offsetY: 2,
-      blurRadius: 3,
-      spreadRadius: 1
-    }))
+  [SUBSCRIBE('add')](shadow = '') {
+
+    if (shadow) {
+      this.state.boxShadows = BoxShadow.parseStyle(shadow);
+    } else {
+      const shadowObj = new BoxShadow({
+        color: 'black',
+        inset: BoxShadowStyle.OUTSET,
+        offsetX: 2,
+        offsetY: 2,
+        blurRadius: 3,
+        spreadRadius: 1
+      })
+  
+      this.state.boxShadows.push(shadowObj)
+    }
+
+
 
     this.refresh();
 
@@ -88,6 +126,39 @@ export default class BoxShadowEditor extends EditorElement {
     this.trigger('add');
   }
 
+
+
+  [DRAGSTART("$shadowList .shadow-item > label")](e) {
+    this.startIndex = +e.$dt.attr("data-index");
+  }
+
+  [DRAGOVER("$shadowList .shadow-item") + PREVENT](e) { }
+
+
+  sortItem(arr, startIndex, targetIndex) {
+    arr.splice(
+      targetIndex + (startIndex < targetIndex ? -1 : 0),
+      0,
+      ...arr.splice(startIndex, 1)
+    );
+  }
+
+  sortBoxShadow(startIndex, targetIndex) {
+    this.sortItem(this.state.boxShadows, startIndex, targetIndex);
+  }
+
+  [DROP("$shadowList .shadow-item") + PREVENT](e) {
+    var targetIndex = +e.$dt.attr("data-index");
+
+    this.sortBoxShadow(this.startIndex, targetIndex);
+
+    this.refresh();
+
+    this.modifyBoxShadow()    
+
+  }
+
+
   [CLICK("$shadowList .remove")](e) {
     var index = +e.$dt.attr("data-index");
 
@@ -96,43 +167,18 @@ export default class BoxShadowEditor extends EditorElement {
     this.refresh();
 
     this.modifyBoxShadow()
-
-    this.emit('hideBoxShadowPropertyPopup')
   }
 
 
-  [CLICK("$shadowList .shadow-item.real > div:not(.tools)")](e) {
-    var index = +e.$dt.closest('shadow-item').attr("data-index");
+  [SUBSCRIBE("changeKeyValue")](key, value, index) {
 
     var shadow = this.state.boxShadows[index]
 
-    this.viewShadowPopup(shadow, index);
-  }
+    shadow.reset({
+      [key]: value
+    })
 
-  viewShadowPopup(shadow, index) {
-    this.selectedIndex = index;
-
-    this.viewBoxShadowPropertyPopup(shadow);
-  }
-
-  viewBoxShadowPropertyPopup(shadow) {
-    this.emit("showBoxShadowPropertyPopup", {
-      changeEvent: (data, params) => {
-        var shadow = this.state.boxShadows[this.selectedIndex]
-        if (shadow) {
-          shadow.reset(data)
-          this.refresh();
-    
-          this.modifyBoxShadow();      
-        }
-      },
-      color: shadow.color,
-      inset: shadow.inset,
-      offsetX: shadow.offsetX,
-      offsetY: shadow.offsetY,
-      blurRadius: shadow.blurRadius,
-      spreadRadius: shadow.spreadRadius
-    }, { id: this.id });
+    this.modifyBoxShadow();
 
   }
 }

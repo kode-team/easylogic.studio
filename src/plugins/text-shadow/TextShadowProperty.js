@@ -1,11 +1,11 @@
-import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/sapa/Event";
+import { LOAD, CLICK, SUBSCRIBE, IF, DEBOUNCE } from "el/sapa/Event";
 
 import icon from "el/editor/icon/icon";
-import { TextShadow } from "el/editor/property-parser/TextShadow";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
-import { variable } from 'el/sapa/functions/registElement';
 import { createComponent } from "el/sapa/functions/jsx";
+import textShadow from "el/editor/preset/text-shadow";
 
+import "./TextShadowProperty.scss";
 
 export default class TextShadowProperty extends BaseProperty {
 
@@ -14,38 +14,40 @@ export default class TextShadowProperty extends BaseProperty {
   }
 
   getBody() {
-    return `
+    return /*html*/`
       <div class="full text-shadow-item" ref="$shadowList"></div>
     `;
   }
 
-  hasKeyframe() {
-    return true
-  }
-
-  getKeyframeProperty() {
-    return 'text-shadow'
-  }
-
   getTools() {
-    return `<button type="button" ref='$add'>${icon.add}</button>`
+    return /*html*/`
+      <select class='text-shadow-samples' ref="$select">
+      ${textShadow.map((item, index) => {
+        return /*html*/`
+          <option value="${index}">${item.name}</option>
+        `
+      }).join('')}
+      </select>
+      <button type="button" ref='$add'>${icon.add}</button>
+    `
   }
 
   [CLICK('$add')]() {
-    this.children.$textshadow.trigger('add');
+    const index = +this.refs.$select.value;    
+    this.children.$textshadow.trigger('add', textShadow[index].shadow);
   }
 
   [LOAD("$shadowList")]() {
     var current = this.$selection.current || {};
     return createComponent("TextShadowEditor", {
       ref: '$textshadow',
-      value: TextShadow.parseStyle(current['text-shadow']),
-      hideLabel: true,
-      onChange: this.subscribe((textshadow) => {
+      key: 'text-shadow',
+      value: current['text-shadow'],
+      onchange: (key, value) => {
         this.command('setAttributeForMulti', 'change text shadow', this.$selection.packByValue({
-          'text-shadow': textshadow
+          [key]: value
         }))
-      })
+      }
     })
   }
 
@@ -53,7 +55,7 @@ export default class TextShadowProperty extends BaseProperty {
     return 'text-shadow';
   }
 
-  [SUBSCRIBE('refreshSelection') + IF('checkShow')]() {
+  [SUBSCRIBE('refreshSelection') + IF('checkShow') + DEBOUNCE(100)]() {
     this.refresh();
   }
 }

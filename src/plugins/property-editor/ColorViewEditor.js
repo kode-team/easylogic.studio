@@ -175,6 +175,7 @@ export default class ColorViewEditor extends EditorElement {
     }
 
     viewColorPicker() {
+
         this.emit("showColorPickerPopup", {
             target: this,
             changeEvent: (color) => {
@@ -184,7 +185,7 @@ export default class ColorViewEditor extends EditorElement {
                 this.updateEndData({ value: color, color: Color.parse(color) })
             },
             color: this.state.value
-        });
+        }, null, this.$el.rect());
     }
 
 

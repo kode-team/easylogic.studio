@@ -397,6 +397,13 @@ function ifCheck(callback, context, checkMethods) {
     }
   };
 }
+function makeRequestAnimationFrame(callback, context) {
+  return (...args2) => {
+    requestAnimationFrame(() => {
+      callback.apply(context, args2);
+    });
+  };
+}
 function keyEach(obj2, callback) {
   Object.keys(obj2).forEach((key, index2) => {
     callback(key, obj2[key], index2);
@@ -2989,7 +2996,7 @@ class Dom {
       }
       return this;
     } catch (e2) {
-      console.log(e2);
+      console.log(e2, html2);
       return this;
     }
   }
@@ -3172,8 +3179,6 @@ class Dom {
       return {
         x: box.x - parentBox.x,
         y: box.y - parentBox.y,
-        top: box.x - parentBox.x,
-        left: box.y - parentBox.y,
         width: box.width,
         height: box.height
       };
@@ -3181,8 +3186,6 @@ class Dom {
     return {
       x: this.el.offsetLeft,
       y: this.el.offsetTop,
-      top: this.el.offsetTop,
-      left: this.el.offsetLeft,
       width: this.el.offsetWidth,
       height: this.el.offsetHeight
     };
@@ -4410,6 +4413,7 @@ class BaseStore {
     if (beforeMethods.length) {
       callback = ifCheck(callback, context, beforeMethods);
     }
+    callback = makeRequestAnimationFrame(callback, context);
     this.getCallbacks(event).push({ event, callback, context, originalCallback, enableAllTrigger, enableSelfTrigger });
     this.debug("add message event", event, context.sourceName);
     return () => {
@@ -6266,26 +6270,157 @@ var parser = /* @__PURE__ */ Object.freeze({
   parse,
   parseGradient
 });
+const ConstraintsDirection = {
+  HORIZONTAL: "constraints-horizontal",
+  VERTICAL: "constraints-vertical"
+};
+const Constraints = {
+  NONE: "none",
+  MIN: "min",
+  MAX: "max",
+  STRETCH: "stretch",
+  SCALE: "scale",
+  CENTER: "center"
+};
+const BooleanOperation = {
+  DIFFERENCE: "difference",
+  INTERSECTION: "intersection",
+  UNION: "union",
+  REVERSE_DIFFERENCE: "reverse-difference",
+  XOR: "xor"
+};
+const StrokeLineCap = {
+  BUTT: "butt",
+  ROUND: "round",
+  SQUARE: "square"
+};
+const StrokeLineJoin = {
+  MITER: "miter",
+  ROUND: "round",
+  BEVEL: "bevel"
+};
+const BlendMode = {
+  NORMAL: "normal",
+  MULTIPLY: "multiply",
+  SCREEN: "screen",
+  OVERLAY: "overlay",
+  DARKEN: "darken",
+  LIGHTEN: "lighten",
+  COLOR_DODGE: "color-dodge",
+  COLOR_BURN: "color-burn",
+  HARD_LIGHT: "hard-light",
+  SOFT_LIGHT: "soft-light",
+  DIFFERENCE: "difference",
+  EXCLUSION: "exclusion",
+  HUE: "hue",
+  SATURATION: "saturation",
+  COLOR: "color",
+  LUMINOSITY: "luminosity"
+};
+const TextDecoration = {
+  NONE: "none",
+  UNDERLINE: "underline",
+  OVERLINE: "overline",
+  LINE_THROUGH: "line-through",
+  BLINK: "blink"
+};
+const TextTransform = {
+  NONE: "none",
+  CAPITALIZE: "capitalize",
+  UPPERCASE: "uppercase",
+  LOWERCASE: "lowercase"
+};
+const Overflow = {
+  VISIBLE: "visible",
+  HIDDEN: "hidden",
+  SCROLL: "scroll",
+  AUTO: "auto"
+};
+const BorderStyle = {
+  NONE: "none",
+  HIDDEN: "hidden",
+  DOTTED: "dotted",
+  DASHED: "dashed",
+  SOLID: "solid",
+  DOUBLE: "double",
+  GROOVE: "groove",
+  RIDGE: "ridge",
+  INSET: "inset",
+  OUTSET: "outset"
+};
+const Layout = {
+  DEFAULT: "default",
+  FLEX: "flex",
+  GRID: "grid"
+};
+const FlexDirection = {
+  ROW: "row",
+  ROW_REVERSE: "row-reverse",
+  COLUMN: "column",
+  COLUMN_REVERSE: "column-reverse"
+};
+const JustifyContent = {
+  FLEX_START: "flex-start",
+  FLEX_END: "flex-end",
+  CENTER: "center",
+  SPACE_BETWEEN: "space-between",
+  SPACE_AROUND: "space-around",
+  SPACE_EVENLY: "space-evenly"
+};
+const AlignItems = {
+  FLEX_START: "flex-start",
+  FLEX_END: "flex-end",
+  CENTER: "center",
+  BASELINE: "baseline",
+  STRETCH: "stretch"
+};
+const AlignContent = {
+  FLEX_START: "flex-start",
+  FLEX_END: "flex-end",
+  CENTER: "center",
+  SPACE_BETWEEN: "space-between",
+  SPACE_AROUND: "space-around",
+  SPACE_EVENLY: "space-evenly"
+};
+const FlexWrap = {
+  NOWRAP: "nowrap",
+  WRAP: "wrap",
+  WRAP_REVERSE: "wrap-reverse"
+};
+const ResizingMode = {
+  FIXED: "fixed",
+  HUG_CONTENT: "hug-content",
+  FILL_CONTAINER: "fill-container"
+};
+const TextClip = {
+  NONE: "none",
+  TEXT: "text"
+};
+const BoxShadowStyle = {
+  OUTSET: "outset",
+  INSET: "inset"
+};
 class BoxShadow extends PropertyItem {
   static parse(obj2) {
     return new BoxShadow(obj2);
   }
   static parseStyle(str) {
     var boxShadows = [];
+    str = str.trim();
     if (!str)
       return boxShadows;
     var results = convertMatches(str);
     boxShadows = results.str.split(",").filter((it) => it.trim()).map((shadow2) => {
-      var values = shadow2.split(" ");
-      var insets = values.filter((it) => it === "inset");
+      var values = shadow2.trim().split(" ");
+      var insets = values.filter((it) => it === BoxShadowStyle.INSET);
       var colors2 = values.filter((it) => it.includes("@")).map((it) => {
         return reverseMatches(it, results.matches);
       });
       var numbers = values.filter((it) => {
-        return it !== "inset" && !it.includes("@");
+        return it !== BoxShadowStyle.INSET && !it.includes("@");
       });
       return BoxShadow.parse({
-        inset: !!insets.length,
+        inset: !!insets.length ? BoxShadowStyle.INSET : BoxShadowStyle.OUTSET,
         color: colors2[0] || "rgba(0, 0, 0, 1)",
         offsetX: Length.parse(numbers[0] || "0px"),
         offsetY: Length.parse(numbers[1] || "0px"),
@@ -6315,10 +6450,22 @@ class BoxShadow extends PropertyItem {
   }
   convert(json) {
     json = super.convert(json);
-    json.offsetX = Length.parse(json.offsetX);
-    json.offsetY = Length.parse(json.offsetY);
-    json.blurRadius = Length.parse(json.blurRadius);
-    json.spreadRadius = Length.parse(json.spreadRadius);
+    if (isNumber(json.offsetX))
+      json.offsetX = Length.px(json.offsetX);
+    else if (json.offsetX)
+      json.offsetX = Length.parse(json.offsetX);
+    if (isNumber(json.offsetY))
+      json.offsetY = Length.px(json.offsetY);
+    else if (json.offsetY)
+      json.offsetY = Length.parse(json.offsetY);
+    if (isNumber(json.blurRadius))
+      json.blurRadius = Length.px(json.blurRadius);
+    else if (json.blurRadius)
+      json.blurRadius = Length.parse(json.blurRadius);
+    if (isNumber(json.spreadRadius))
+      json.spreadRadius = Length.px(json.spreadRadius);
+    else if (json.spreadRadius)
+      json.spreadRadius = Length.parse(json.spreadRadius);
     return json;
   }
   toCSS() {
@@ -6328,7 +6475,7 @@ class BoxShadow extends PropertyItem {
   }
   toString() {
     var json = this.json;
-    return `${json.inset ? "inset " : ""}${json.offsetX} ${json.offsetY} ${json.blurRadius} ${json.spreadRadius} ${json.color}`;
+    return `${json.inset === BoxShadowStyle.INSET ? "inset " : ""}${json.offsetX} ${json.offsetY} ${json.blurRadius} ${json.spreadRadius} ${json.color}`;
   }
 }
 function makeInterpolateBoolean(layer2, property, s, e2) {
@@ -6631,8 +6778,9 @@ class TextShadow extends PropertyItem {
   }
   static parseStyle(str = "") {
     var results = convertMatches(str);
+    str = str.trim();
     var textShadows = results.str.split(",").filter((it) => it.trim()).map((shadow2) => {
-      var values = shadow2.split(" ");
+      var values = shadow2.trim().split(" ");
       var colors2 = values.filter((it) => it.includes("@")).map((it) => {
         return reverseMatches(it, results.matches) || "black";
       });
@@ -6654,9 +6802,9 @@ class TextShadow extends PropertyItem {
   getDefaultObject() {
     return super.getDefaultObject({
       itemType: "text-shadow",
-      offsetX: 0,
-      offsetY: 0,
-      blurRadius: 0,
+      offsetX: "0px",
+      offsetY: "0px",
+      blurRadius: "0px",
       color: "rgba(0, 0, 0, 1)"
     });
   }
@@ -6665,9 +6813,18 @@ class TextShadow extends PropertyItem {
   }
   convert(json) {
     json = super.convert(json);
-    json.offsetX = Length.parse(json.offsetX);
-    json.offsetY = Length.parse(json.offsetY);
-    json.blurRadius = Length.parse(json.blurRadius);
+    if (isNumber(json.offsetX))
+      json.offsetX = Length.px(json.offsetX);
+    else if (json.offsetX)
+      json.offsetX = Length.parse(json.offsetX);
+    if (isNumber(json.offsetY))
+      json.offsetY = Length.px(json.offsetY);
+    else if (json.offsetY)
+      json.offsetY = Length.parse(json.offsetY);
+    if (isNumber(json.blurRadius))
+      json.blurRadius = Length.px(json.blurRadius);
+    else if (json.blurRadius)
+      json.blurRadius = Length.parse(json.blurRadius);
     return json;
   }
   toCSS() {
@@ -6676,8 +6833,14 @@ class TextShadow extends PropertyItem {
     };
   }
   toString() {
-    var json = this.json;
-    return `${json.offsetX} ${json.offsetY} ${json.blurRadius} ${json.color}`;
+    var { offsetX, offsetY, blurRadius, color: color2 } = this.json;
+    if (isNumber(offsetX))
+      offsetX = Length.px(offsetX);
+    if (isNumber(offsetY))
+      offsetY = Length.px(offsetY);
+    if (isNumber(blurRadius))
+      blurRadius = Length.px(blurRadius);
+    return `${offsetX} ${offsetY} ${blurRadius} ${color2}`;
   }
 }
 function makeInterpolateTextShadow(layer2, property, startValue, endValue) {
@@ -14376,6 +14539,7 @@ class Pattern extends PropertyItem {
     var patterns2 = [];
     if (!pattern)
       return patterns2;
+    pattern = pattern.trim();
     if (PatternCache.has(pattern)) {
       return PatternCache.get(pattern);
     }
@@ -14383,7 +14547,7 @@ class Pattern extends PropertyItem {
     var matches2 = results.str.match(PATTERN_REG) || [];
     matches2.forEach((value, index2) => {
       var [patternName, patternValue] = value.split("(");
-      patternValue = patternValue.split(")")[0];
+      patternValue = patternValue.split(")")[0].trim();
       var [size2, position2, foreColor, backColor, blendMode, lineSize] = patternValue.split(",").map((it) => it.trim());
       var [width2, height2] = size2.split(" ");
       var [x2, y2] = position2.split(" ");
@@ -14485,7 +14649,7 @@ class GridPattern extends BasePattern {
     backColor = backColor || "transparent";
     foreColor = foreColor || "black";
     return `
-      background-image: linear-gradient(${foreColor} ${lineHeight}, ${backColor} ${lineHeight}),linear-gradient(to right, ${foreColor} ${lineWidth}, ${backColor} ${lineWidth});
+      background-image: linear-gradient(to bottom,${foreColor} ${lineHeight}, ${backColor} ${lineHeight}),linear-gradient(to right, ${foreColor} ${lineWidth}, ${backColor} ${lineWidth});
       background-size: ${width2 / 2}px ${height2 / 2}px, ${width2 / 2}px ${height2 / 2}px;      
       background-blend-mode: ${blendMode}, ${blendMode};      
     `;
@@ -14572,7 +14736,7 @@ class HorizontalLinePattern extends BasePattern {
     backColor = backColor || "transparent";
     foreColor = foreColor || "black";
     return `
-      background-image: repeating-linear-gradient(0deg, ${foreColor} 0px, ${foreColor} ${lineWidth}, ${backColor} ${lineWidth}, ${backColor} 100%);    
+      background-image: repeating-linear-gradient( to bottom, ${foreColor} 0px, ${foreColor} ${lineWidth}, ${backColor} ${lineWidth}, ${backColor} 100%);    
       background-position: ${x2} ${y2};
       background-size: ${width2} ${height2};   
       background-blend-mode: ${blendMode};
@@ -16588,13 +16752,26 @@ var __glob_0_41$2 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": dropImageUrl
 });
+var editor_config_body_event = {
+  command: "config:bodyEvent",
+  description: "fire when bodyEvent was set",
+  execute: function(editor) {
+    const $target = Dom.create(editor.config.get("bodyEvent").target);
+    editor.config.init("onMouseMovepageContainer", $target);
+  }
+};
+var __glob_0_42$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": editor_config_body_event
+});
 var fileDropItems = {
   command: "fileDropItems",
   execute: function(editor, items = []) {
     editor.emit("updateResource", items);
   }
 };
-var __glob_0_42$2 = /* @__PURE__ */ Object.freeze({
+var __glob_0_43$2 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": fileDropItems
@@ -16612,7 +16789,7 @@ var firstTimelineItem = {
     });
   }
 };
-var __glob_0_43$2 = /* @__PURE__ */ Object.freeze({
+var __glob_0_44$2 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": firstTimelineItem
@@ -16646,7 +16823,7 @@ var group_item$1 = {
     }
   }
 };
-var __glob_0_44$2 = /* @__PURE__ */ Object.freeze({
+var __glob_0_45$2 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": group_item$1
@@ -16686,7 +16863,7 @@ var history_addLayer = {
     });
   }
 };
-var __glob_0_45$2 = /* @__PURE__ */ Object.freeze({
+var __glob_0_46$2 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_addLayer
@@ -16718,7 +16895,7 @@ var history_group_item = {
   undo: function(editor, { undoValues: [ids, projectId] }) {
   }
 };
-var __glob_0_46$2 = /* @__PURE__ */ Object.freeze({
+var __glob_0_47$2 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_group_item
@@ -16729,7 +16906,7 @@ var history_redo$1 = {
     editor.history.redo();
   }
 };
-var __glob_0_47$2 = /* @__PURE__ */ Object.freeze({
+var __glob_0_48$2 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_redo$1
@@ -16772,7 +16949,7 @@ var history_refreshSelection = {
     this.nextAction(editor);
   }
 };
-var __glob_0_48$2 = /* @__PURE__ */ Object.freeze({
+var __glob_0_49$2 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_refreshSelection
@@ -16810,7 +16987,7 @@ var history_refreshSelectionProject = {
     this.nextAction(editor);
   }
 };
-var __glob_0_49$2 = /* @__PURE__ */ Object.freeze({
+var __glob_0_50$2 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_refreshSelectionProject
@@ -16871,7 +17048,7 @@ var history_removeLayer = {
     });
   }
 };
-var __glob_0_50$2 = /* @__PURE__ */ Object.freeze({
+var __glob_0_51$2 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_removeLayer
@@ -16908,7 +17085,7 @@ var history_removeProject = {
     });
   }
 };
-var __glob_0_51$2 = /* @__PURE__ */ Object.freeze({
+var __glob_0_52$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_removeProject
@@ -16944,7 +17121,7 @@ var history_setAttributeForMulti = {
     });
   }
 };
-var __glob_0_52$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_53$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_setAttributeForMulti
@@ -16955,7 +17132,7 @@ var history_undo$1 = {
     editor.history.undo();
   }
 };
-var __glob_0_53$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_54$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_undo$1
@@ -16970,7 +17147,7 @@ var item_move_depth_down$1 = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_54$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_55$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": item_move_depth_down$1
@@ -16985,7 +17162,7 @@ var item_move_depth_first = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_55$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_56$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": item_move_depth_first
@@ -17000,7 +17177,7 @@ var item_move_depth_last = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_56$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_57$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": item_move_depth_last
@@ -17015,7 +17192,7 @@ var item_move_depth_up$1 = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_57$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_58$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": item_move_depth_up$1
@@ -17027,7 +17204,7 @@ var keymap_keydown = {
     editor.shortcuts.execute(e2, "keydown");
   }
 };
-var __glob_0_58$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_59$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": keymap_keydown
@@ -17039,7 +17216,7 @@ var keymap_keyup = {
     editor.shortcuts.execute(e2, "keyup");
   }
 };
-var __glob_0_59$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_60$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": keymap_keyup
@@ -17057,7 +17234,7 @@ var lastTimelineItem = {
     });
   }
 };
-var __glob_0_60$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_61$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": lastTimelineItem
@@ -17069,7 +17246,7 @@ var load_json = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_61$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_62$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": load_json
@@ -17088,7 +17265,7 @@ var moveLayer = {
     });
   }
 };
-var __glob_0_62$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_63$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": moveLayer
@@ -17111,7 +17288,7 @@ var moveLayerForItems = {
     });
   }
 };
-var __glob_0_63$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_64$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": moveLayerForItems
@@ -17133,7 +17310,7 @@ var moveSelectionToCenter = {
     editor.emit("moveToCenter", areaVerties, withScale);
   }
 };
-var __glob_0_64$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_65$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": moveSelectionToCenter
@@ -17147,7 +17324,7 @@ var moveToCenter = {
     }
   }
 };
-var __glob_0_65$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_66$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": moveToCenter
@@ -17187,7 +17364,7 @@ function newComponent(editor, itemType, obj2, isSelected = true, containerItem =
   editor.command("addLayer", `add layer - ${itemType}`, editor.createModel(newObjAttrs), isSelected, containerItem);
   editor.changeMode(EDIT_MODE_SELECTION);
 }
-var __glob_0_66$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_67$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": newComponent
@@ -17205,7 +17382,7 @@ var nextTimelineItem = {
     });
   }
 };
-var __glob_0_67$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_68$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": nextTimelineItem
@@ -17297,7 +17474,7 @@ var open_editor = {
     }
   }
 };
-var __glob_0_68$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_69$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": open_editor
@@ -17310,7 +17487,7 @@ var pauseTimelineItem = {
     }
   }
 };
-var __glob_0_69$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_70$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pauseTimelineItem
@@ -17365,7 +17542,7 @@ var playTimelineItem = {
     });
   }
 };
-var __glob_0_70$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_71$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": playTimelineItem
@@ -17376,7 +17553,7 @@ var pop_mode_view = {
     editor.modeViewManager.popMode(modeView);
   }
 };
-var __glob_0_71$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_72$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pop_mode_view
@@ -17394,7 +17571,7 @@ var prevTimelineItem = {
     });
   }
 };
-var __glob_0_72$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_73$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": prevTimelineItem
@@ -17405,7 +17582,7 @@ var push_mode_view = {
     editor.modeViewManager.pushMode(modeView);
   }
 };
-var __glob_0_73$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_74$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": push_mode_view
@@ -17445,7 +17622,7 @@ var recoverBooleanPath = {
     }
   }
 };
-var __glob_0_74$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_75$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": recoverBooleanPath
@@ -17456,7 +17633,7 @@ var recoverCursor = {
     editor.emit("changeIconView", "auto");
   }
 };
-var __glob_0_75$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_76$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": recoverCursor
@@ -17472,7 +17649,7 @@ function refreshArtboard(editor) {
     editor.emit("refreshSelectionTool", true);
   });
 }
-var __glob_0_76$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_77$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": refreshArtboard
@@ -17483,7 +17660,7 @@ var refreshCursor = {
     editor.emit("changeIconView", iconType, ...args2);
   }
 };
-var __glob_0_77$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_78$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": refreshCursor
@@ -17496,7 +17673,7 @@ function refreshElement(editor, current) {
     editor.emit("refreshElementBoundSize", current);
   }
 }
-var __glob_0_78$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_79$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": refreshElement
@@ -17504,7 +17681,7 @@ var __glob_0_78$1 = /* @__PURE__ */ Object.freeze({
 function refreshHistory(editor) {
   editor.emit("saveJSON");
 }
-var __glob_0_79$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_80$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": refreshHistory
@@ -17512,7 +17689,7 @@ var __glob_0_79$1 = /* @__PURE__ */ Object.freeze({
 function refreshProject(editor, current) {
   editor.emit("refreshStyleView", current, true);
 }
-var __glob_0_80$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_81$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": refreshProject
@@ -17526,7 +17703,7 @@ var refreshSelectedOffset = {
     }
   }
 };
-var __glob_0_81$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_82$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": refreshSelectedOffset
@@ -17543,7 +17720,7 @@ var removeAnimationItem = {
     }
   }
 };
-var __glob_0_82$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_83$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": removeAnimationItem
@@ -17563,7 +17740,7 @@ var removeLayer$1 = {
     });
   }
 };
-var __glob_0_83$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_84$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": removeLayer$1
@@ -17580,7 +17757,7 @@ var removeTimeline = {
     }
   }
 };
-var __glob_0_84$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_85$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": removeTimeline
@@ -17597,7 +17774,7 @@ var removeTimelineProperty = {
     }
   }
 };
-var __glob_0_85$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_86$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": removeTimelineProperty
@@ -17607,7 +17784,7 @@ function resetSelection(editor) {
     editor.emit("refreshSelectionTool");
   });
 }
-var __glob_0_86$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_87$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": resetSelection
@@ -17625,7 +17802,7 @@ function resizeArtBoard(editor, size2 = "") {
     _doForceRefreshSelection(editor);
   }
 }
-var __glob_0_87$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_88$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": resizeArtBoard
@@ -17643,7 +17820,7 @@ var rotateLayer = {
     });
   }
 };
-var __glob_0_88$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_89$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": rotateLayer
@@ -17664,7 +17841,7 @@ var same_height$1 = {
     }
   }
 };
-var __glob_0_89$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_90$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": same_height$1
@@ -17682,7 +17859,7 @@ var same_width$1 = {
     }
   }
 };
-var __glob_0_90$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_91$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": same_width$1
@@ -17693,7 +17870,7 @@ var saveJSON = {
     editor.saveItem("model", editor.modelManager.toJSON());
   }
 };
-var __glob_0_91$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_92$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": saveJSON
@@ -17715,7 +17892,7 @@ var savePNG = {
     }
   }
 };
-var __glob_0_92$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_93$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": savePNG
@@ -17726,7 +17903,7 @@ var segment_delete$1 = {
     editor.emit("deleteSegment");
   }
 };
-var __glob_0_93$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_94$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": segment_delete$1
@@ -17738,7 +17915,7 @@ var segment_move_down = {
     editor.emit("moveSegment", 0, dy);
   }
 };
-var __glob_0_94$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_95$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": segment_move_down
@@ -17750,7 +17927,7 @@ var segment_move_left = {
     editor.emit("moveSegment", -1 * dx, 0);
   }
 };
-var __glob_0_95$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_96$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": segment_move_left
@@ -17762,7 +17939,7 @@ var segment_move_right = {
     editor.emit("moveSegment", dx, 0);
   }
 };
-var __glob_0_96$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_97$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": segment_move_right
@@ -17774,7 +17951,7 @@ var segment_move_up = {
     editor.emit("moveSegment", 0, -1 * dy);
   }
 };
-var __glob_0_97$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_98$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": segment_move_up
@@ -17789,7 +17966,7 @@ var select_all$1 = {
     }
   }
 };
-var __glob_0_98$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_99$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": select_all$1
@@ -17805,7 +17982,7 @@ var selectTimelineItem = {
     }
   }
 };
-var __glob_0_99$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_100$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": selectTimelineItem
@@ -17843,7 +18020,7 @@ var setAttributeForMulti = {
     commandMaker.run();
   }
 };
-var __glob_0_100$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_101$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": setAttributeForMulti
@@ -17855,7 +18032,7 @@ var setEditorLayout = {
     editor.emit("changedEditorlayout");
   }
 };
-var __glob_0_101$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_102$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": setEditorLayout
@@ -17867,7 +18044,7 @@ var setLocale = {
     editor.emit("changed.locale");
   }
 };
-var __glob_0_102$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_103$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": setLocale
@@ -17883,7 +18060,7 @@ var setTimelineOffset = {
     }
   }
 };
-var __glob_0_103$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_104$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": setTimelineOffset
@@ -17894,7 +18071,7 @@ var showExportView = {
     editor.emit("showExportWindow");
   }
 };
-var __glob_0_104$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_105$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": showExportView
@@ -17920,7 +18097,7 @@ var sort_bottom = {
     }
   }
 };
-var __glob_0_105$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_106$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sort_bottom
@@ -17945,7 +18122,7 @@ var sort_center = {
     }
   }
 };
-var __glob_0_106$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_107$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sort_center
@@ -17971,7 +18148,7 @@ var sort_left = {
     }
   }
 };
-var __glob_0_107$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_108$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sort_left
@@ -17996,7 +18173,7 @@ var sort_middle = {
     }
   }
 };
-var __glob_0_108$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_109$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sort_middle
@@ -18022,7 +18199,7 @@ var sort_right = {
     }
   }
 };
-var __glob_0_109$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_110$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sort_right
@@ -18048,7 +18225,7 @@ var sort_top = {
     }
   }
 };
-var __glob_0_110$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_111$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sort_top
@@ -18078,7 +18255,7 @@ var switch_path = {
     }
   }
 };
-var __glob_0_111$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_112$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": switch_path
@@ -18089,7 +18266,7 @@ var toggle_tool_hand = {
     editor.config.toggle("set.tool.hand");
   }
 };
-var __glob_0_112$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_113$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": toggle_tool_hand
@@ -18112,7 +18289,7 @@ var ungroup_item$1 = {
     }
   }
 };
-var __glob_0_113$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_114$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": ungroup_item$1
@@ -18126,7 +18303,7 @@ var updateClipPath = {
     }));
   }
 };
-var __glob_0_114$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_115$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateClipPath
@@ -18149,7 +18326,7 @@ var updateImage = {
     reader.readAsDataURL(imageFileOrBlob);
   }
 };
-var __glob_0_115$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_116$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateImage
@@ -18177,7 +18354,7 @@ var updateImageAssetItem = {
     reader.readAsDataURL(item2);
   }
 };
-var __glob_0_116$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_117$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateImageAssetItem
@@ -18214,7 +18391,7 @@ var updatePathItem = {
     }
   }
 };
-var __glob_0_117$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_118$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updatePathItem
@@ -18244,7 +18421,7 @@ var updateResource = {
     });
   }
 };
-var __glob_0_118$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_119$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateResource
@@ -18257,7 +18434,7 @@ var updateScale = {
     editor.emit("updateViewport", scale2, oldScale);
   }
 };
-var __glob_0_119$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_120$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateScale
@@ -18327,7 +18504,7 @@ var updateUriList = {
     }
   }
 };
-var __glob_0_120$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_121$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateUriList
@@ -18350,7 +18527,7 @@ var updateVideo = {
     reader.readAsDataURL(item2);
   }
 };
-var __glob_0_121$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_122$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateVideo
@@ -18378,7 +18555,7 @@ var updateVideoAssetItem = {
     reader.readAsDataURL(item2);
   }
 };
-var __glob_0_122$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_123$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateVideoAssetItem
@@ -18389,7 +18566,7 @@ var zoom_default$1 = {
     editor.viewport.zoomDefault();
   }
 };
-var __glob_0_123$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_124$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": zoom_default$1
@@ -18400,7 +18577,7 @@ var zoom_in$1 = {
     editor.viewport.zoomIn(0.02);
   }
 };
-var __glob_0_124$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_125$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": zoom_in$1
@@ -18411,7 +18588,7 @@ var zoom_out$1 = {
     editor.viewport.zoomOut(0.02);
   }
 };
-var __glob_0_125$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_126$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": zoom_out$1
@@ -18429,12 +18606,12 @@ var update = {
     }
   }
 };
-var __glob_0_126$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_127$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": update
 });
-const modules$4 = { "./command_list/_currentProject.js": __glob_0_0$4, "./command_list/_doForceRefreshSelection.js": __glob_0_1$4, "./command_list/addArtBoard.js": __glob_0_2$4, "./command_list/addBackgroundColor.js": __glob_0_3$4, "./command_list/addBackgroundImageAsset.js": __glob_0_4$4, "./command_list/addBackgroundImageGradient.js": __glob_0_5$4, "./command_list/addBackgroundImagePattern.js": __glob_0_6$4, "./command_list/addCustomComponent.js": __glob_0_7$4, "./command_list/addImage.js": __glob_0_8$4, "./command_list/addImageAssetItem.js": __glob_0_9$4, "./command_list/addLayer.js": __glob_0_10$4, "./command_list/addLayerView.js": __glob_0_11$4, "./command_list/addProject.js": __glob_0_12$4, "./command_list/addSVGFilterAssetItem.js": __glob_0_13$4, "./command_list/addText.js": __glob_0_14$4, "./command_list/addTimelineCurrentProperty.js": __glob_0_15$4, "./command_list/addTimelineItem.js": __glob_0_16$4, "./command_list/addTimelineKeyframe.js": __glob_0_17$4, "./command_list/addTimelineProperty.js": __glob_0_18$4, "./command_list/addVideo.js": __glob_0_19$4, "./command_list/addVideoAssetItem.js": __glob_0_20$4, "./command_list/clipboard.copy.js": __glob_0_21$3, "./command_list/clipboard.paste.js": __glob_0_22$3, "./command_list/convert.flatten.path.js": __glob_0_23$3, "./command_list/convert.no.transform.path.js": __glob_0_24$2, "./command_list/convert.normalize.path.js": __glob_0_25$2, "./command_list/convert.path.operation.js": __glob_0_26$2, "./command_list/convert.polygonal.path.js": __glob_0_27$2, "./command_list/convert.simplify.path.js": __glob_0_28$2, "./command_list/convert.smooth.path.js": __glob_0_29$2, "./command_list/convert.stroke.to.path.js": __glob_0_30$2, "./command_list/convertPasteText.js": __glob_0_31$2, "./command_list/convertPath.js": __glob_0_32$2, "./command_list/copy.path.js": __glob_0_33$2, "./command_list/copyTimelineProperty.js": __glob_0_34$2, "./command_list/deleteTimelineKeyframe.js": __glob_0_35$2, "./command_list/doubleclick.item.js": __glob_0_36$2, "./command_list/downloadJSON.js": __glob_0_37$2, "./command_list/downloadPNG.js": __glob_0_38$2, "./command_list/downloadSVG.js": __glob_0_39$2, "./command_list/drop.asset.js": __glob_0_40$2, "./command_list/dropImageUrl.js": __glob_0_41$2, "./command_list/fileDropItems.js": __glob_0_42$2, "./command_list/firstTimelineItem.js": __glob_0_43$2, "./command_list/group.item.js": __glob_0_44$2, "./command_list/history.addLayer.js": __glob_0_45$2, "./command_list/history.group.item.js": __glob_0_46$2, "./command_list/history.redo.js": __glob_0_47$2, "./command_list/history.refreshSelection.js": __glob_0_48$2, "./command_list/history.refreshSelectionProject.js": __glob_0_49$2, "./command_list/history.removeLayer.js": __glob_0_50$2, "./command_list/history.removeProject.js": __glob_0_51$2, "./command_list/history.setAttributeForMulti.js": __glob_0_52$1, "./command_list/history.undo.js": __glob_0_53$1, "./command_list/item.move.depth.down.js": __glob_0_54$1, "./command_list/item.move.depth.first.js": __glob_0_55$1, "./command_list/item.move.depth.last.js": __glob_0_56$1, "./command_list/item.move.depth.up.js": __glob_0_57$1, "./command_list/keymap.keydown.js": __glob_0_58$1, "./command_list/keymap.keyup.js": __glob_0_59$1, "./command_list/lastTimelineItem.js": __glob_0_60$1, "./command_list/load.json.js": __glob_0_61$1, "./command_list/moveLayer.js": __glob_0_62$1, "./command_list/moveLayerForItems.js": __glob_0_63$1, "./command_list/moveSelectionToCenter.js": __glob_0_64$1, "./command_list/moveToCenter.js": __glob_0_65$1, "./command_list/newComponent.js": __glob_0_66$1, "./command_list/nextTimelineItem.js": __glob_0_67$1, "./command_list/open.editor.js": __glob_0_68$1, "./command_list/pauseTimelineItem.js": __glob_0_69$1, "./command_list/playTimelineItem.js": __glob_0_70$1, "./command_list/pop.mode.view.js": __glob_0_71$1, "./command_list/prevTimelineItem.js": __glob_0_72$1, "./command_list/push.mode.view.js": __glob_0_73$1, "./command_list/recoverBooleanPath.js": __glob_0_74$1, "./command_list/recoverCursor.js": __glob_0_75$1, "./command_list/refreshArtboard.js": __glob_0_76$1, "./command_list/refreshCursor.js": __glob_0_77$1, "./command_list/refreshElement.js": __glob_0_78$1, "./command_list/refreshHistory.js": __glob_0_79$1, "./command_list/refreshProject.js": __glob_0_80$1, "./command_list/refreshSelectedOffset.js": __glob_0_81$1, "./command_list/removeAnimationItem.js": __glob_0_82$1, "./command_list/removeLayer.js": __glob_0_83$1, "./command_list/removeTimeline.js": __glob_0_84$1, "./command_list/removeTimelineProperty.js": __glob_0_85$1, "./command_list/resetSelection.js": __glob_0_86$1, "./command_list/resizeArtBoard.js": __glob_0_87$1, "./command_list/rotateLayer.js": __glob_0_88$1, "./command_list/same.height.js": __glob_0_89$1, "./command_list/same.width.js": __glob_0_90$1, "./command_list/saveJSON.js": __glob_0_91$1, "./command_list/savePNG.js": __glob_0_92$1, "./command_list/segment.delete.js": __glob_0_93$1, "./command_list/segment.move.down.js": __glob_0_94$1, "./command_list/segment.move.left.js": __glob_0_95$1, "./command_list/segment.move.right.js": __glob_0_96$1, "./command_list/segment.move.up.js": __glob_0_97$1, "./command_list/select.all.js": __glob_0_98$1, "./command_list/selectTimelineItem.js": __glob_0_99$1, "./command_list/setAttributeForMulti.js": __glob_0_100$1, "./command_list/setEditorLayout.js": __glob_0_101$1, "./command_list/setLocale.js": __glob_0_102$1, "./command_list/setTimelineOffset.js": __glob_0_103$1, "./command_list/showExportView.js": __glob_0_104$1, "./command_list/sort.bottom.js": __glob_0_105$1, "./command_list/sort.center.js": __glob_0_106$1, "./command_list/sort.left.js": __glob_0_107$1, "./command_list/sort.middle.js": __glob_0_108$1, "./command_list/sort.right.js": __glob_0_109$1, "./command_list/sort.top.js": __glob_0_110$1, "./command_list/switch.path.js": __glob_0_111$1, "./command_list/toggle.tool.hand.js": __glob_0_112$1, "./command_list/ungroup.item.js": __glob_0_113$1, "./command_list/updateClipPath.js": __glob_0_114$1, "./command_list/updateImage.js": __glob_0_115$1, "./command_list/updateImageAssetItem.js": __glob_0_116$1, "./command_list/updatePathItem.js": __glob_0_117$1, "./command_list/updateResource.js": __glob_0_118$1, "./command_list/updateScale.js": __glob_0_119$1, "./command_list/updateUriList.js": __glob_0_120$1, "./command_list/updateVideo.js": __glob_0_121$1, "./command_list/updateVideoAssetItem.js": __glob_0_122$1, "./command_list/zoom.default.js": __glob_0_123$1, "./command_list/zoom.in.js": __glob_0_124$1, "./command_list/zoom.out.js": __glob_0_125$1, "./command_list/model/update.js": __glob_0_126$1 };
+const modules$4 = { "./command_list/_currentProject.js": __glob_0_0$4, "./command_list/_doForceRefreshSelection.js": __glob_0_1$4, "./command_list/addArtBoard.js": __glob_0_2$4, "./command_list/addBackgroundColor.js": __glob_0_3$4, "./command_list/addBackgroundImageAsset.js": __glob_0_4$4, "./command_list/addBackgroundImageGradient.js": __glob_0_5$4, "./command_list/addBackgroundImagePattern.js": __glob_0_6$4, "./command_list/addCustomComponent.js": __glob_0_7$4, "./command_list/addImage.js": __glob_0_8$4, "./command_list/addImageAssetItem.js": __glob_0_9$4, "./command_list/addLayer.js": __glob_0_10$4, "./command_list/addLayerView.js": __glob_0_11$4, "./command_list/addProject.js": __glob_0_12$4, "./command_list/addSVGFilterAssetItem.js": __glob_0_13$4, "./command_list/addText.js": __glob_0_14$4, "./command_list/addTimelineCurrentProperty.js": __glob_0_15$4, "./command_list/addTimelineItem.js": __glob_0_16$4, "./command_list/addTimelineKeyframe.js": __glob_0_17$4, "./command_list/addTimelineProperty.js": __glob_0_18$4, "./command_list/addVideo.js": __glob_0_19$4, "./command_list/addVideoAssetItem.js": __glob_0_20$4, "./command_list/clipboard.copy.js": __glob_0_21$3, "./command_list/clipboard.paste.js": __glob_0_22$3, "./command_list/convert.flatten.path.js": __glob_0_23$3, "./command_list/convert.no.transform.path.js": __glob_0_24$2, "./command_list/convert.normalize.path.js": __glob_0_25$2, "./command_list/convert.path.operation.js": __glob_0_26$2, "./command_list/convert.polygonal.path.js": __glob_0_27$2, "./command_list/convert.simplify.path.js": __glob_0_28$2, "./command_list/convert.smooth.path.js": __glob_0_29$2, "./command_list/convert.stroke.to.path.js": __glob_0_30$2, "./command_list/convertPasteText.js": __glob_0_31$2, "./command_list/convertPath.js": __glob_0_32$2, "./command_list/copy.path.js": __glob_0_33$2, "./command_list/copyTimelineProperty.js": __glob_0_34$2, "./command_list/deleteTimelineKeyframe.js": __glob_0_35$2, "./command_list/doubleclick.item.js": __glob_0_36$2, "./command_list/downloadJSON.js": __glob_0_37$2, "./command_list/downloadPNG.js": __glob_0_38$2, "./command_list/downloadSVG.js": __glob_0_39$2, "./command_list/drop.asset.js": __glob_0_40$2, "./command_list/dropImageUrl.js": __glob_0_41$2, "./command_list/editor.config.body.event.js": __glob_0_42$2, "./command_list/fileDropItems.js": __glob_0_43$2, "./command_list/firstTimelineItem.js": __glob_0_44$2, "./command_list/group.item.js": __glob_0_45$2, "./command_list/history.addLayer.js": __glob_0_46$2, "./command_list/history.group.item.js": __glob_0_47$2, "./command_list/history.redo.js": __glob_0_48$2, "./command_list/history.refreshSelection.js": __glob_0_49$2, "./command_list/history.refreshSelectionProject.js": __glob_0_50$2, "./command_list/history.removeLayer.js": __glob_0_51$2, "./command_list/history.removeProject.js": __glob_0_52$1, "./command_list/history.setAttributeForMulti.js": __glob_0_53$1, "./command_list/history.undo.js": __glob_0_54$1, "./command_list/item.move.depth.down.js": __glob_0_55$1, "./command_list/item.move.depth.first.js": __glob_0_56$1, "./command_list/item.move.depth.last.js": __glob_0_57$1, "./command_list/item.move.depth.up.js": __glob_0_58$1, "./command_list/keymap.keydown.js": __glob_0_59$1, "./command_list/keymap.keyup.js": __glob_0_60$1, "./command_list/lastTimelineItem.js": __glob_0_61$1, "./command_list/load.json.js": __glob_0_62$1, "./command_list/moveLayer.js": __glob_0_63$1, "./command_list/moveLayerForItems.js": __glob_0_64$1, "./command_list/moveSelectionToCenter.js": __glob_0_65$1, "./command_list/moveToCenter.js": __glob_0_66$1, "./command_list/newComponent.js": __glob_0_67$1, "./command_list/nextTimelineItem.js": __glob_0_68$1, "./command_list/open.editor.js": __glob_0_69$1, "./command_list/pauseTimelineItem.js": __glob_0_70$1, "./command_list/playTimelineItem.js": __glob_0_71$1, "./command_list/pop.mode.view.js": __glob_0_72$1, "./command_list/prevTimelineItem.js": __glob_0_73$1, "./command_list/push.mode.view.js": __glob_0_74$1, "./command_list/recoverBooleanPath.js": __glob_0_75$1, "./command_list/recoverCursor.js": __glob_0_76$1, "./command_list/refreshArtboard.js": __glob_0_77$1, "./command_list/refreshCursor.js": __glob_0_78$1, "./command_list/refreshElement.js": __glob_0_79$1, "./command_list/refreshHistory.js": __glob_0_80$1, "./command_list/refreshProject.js": __glob_0_81$1, "./command_list/refreshSelectedOffset.js": __glob_0_82$1, "./command_list/removeAnimationItem.js": __glob_0_83$1, "./command_list/removeLayer.js": __glob_0_84$1, "./command_list/removeTimeline.js": __glob_0_85$1, "./command_list/removeTimelineProperty.js": __glob_0_86$1, "./command_list/resetSelection.js": __glob_0_87$1, "./command_list/resizeArtBoard.js": __glob_0_88$1, "./command_list/rotateLayer.js": __glob_0_89$1, "./command_list/same.height.js": __glob_0_90$1, "./command_list/same.width.js": __glob_0_91$1, "./command_list/saveJSON.js": __glob_0_92$1, "./command_list/savePNG.js": __glob_0_93$1, "./command_list/segment.delete.js": __glob_0_94$1, "./command_list/segment.move.down.js": __glob_0_95$1, "./command_list/segment.move.left.js": __glob_0_96$1, "./command_list/segment.move.right.js": __glob_0_97$1, "./command_list/segment.move.up.js": __glob_0_98$1, "./command_list/select.all.js": __glob_0_99$1, "./command_list/selectTimelineItem.js": __glob_0_100$1, "./command_list/setAttributeForMulti.js": __glob_0_101$1, "./command_list/setEditorLayout.js": __glob_0_102$1, "./command_list/setLocale.js": __glob_0_103$1, "./command_list/setTimelineOffset.js": __glob_0_104$1, "./command_list/showExportView.js": __glob_0_105$1, "./command_list/sort.bottom.js": __glob_0_106$1, "./command_list/sort.center.js": __glob_0_107$1, "./command_list/sort.left.js": __glob_0_108$1, "./command_list/sort.middle.js": __glob_0_109$1, "./command_list/sort.right.js": __glob_0_110$1, "./command_list/sort.top.js": __glob_0_111$1, "./command_list/switch.path.js": __glob_0_112$1, "./command_list/toggle.tool.hand.js": __glob_0_113$1, "./command_list/ungroup.item.js": __glob_0_114$1, "./command_list/updateClipPath.js": __glob_0_115$1, "./command_list/updateImage.js": __glob_0_116$1, "./command_list/updateImageAssetItem.js": __glob_0_117$1, "./command_list/updatePathItem.js": __glob_0_118$1, "./command_list/updateResource.js": __glob_0_119$1, "./command_list/updateScale.js": __glob_0_120$1, "./command_list/updateUriList.js": __glob_0_121$1, "./command_list/updateVideo.js": __glob_0_122$1, "./command_list/updateVideoAssetItem.js": __glob_0_123$1, "./command_list/zoom.default.js": __glob_0_124$1, "./command_list/zoom.in.js": __glob_0_125$1, "./command_list/zoom.out.js": __glob_0_126$1, "./command_list/model/update.js": __glob_0_127$1 };
 const obj$1 = {};
 Object.entries(modules$4).forEach(([key, value]) => {
   key = key.replace("./command_list/", "").replace(".js", "");
@@ -18488,7 +18665,7 @@ class CommandManager {
       };
       callback.source = command.command;
       this.localCommands[command.command] = callback;
-      return this.$editor.on(command.command, callback, this, command.debounce || 0);
+      return this.$editor.on(command.command, callback, command, command.debounce || 0);
     }
   }
   getCallback(command) {
@@ -20209,32 +20386,38 @@ var __glob_0_35 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": border_inner
 });
-var bottom = _icon_template(`<path d="M4,20 L20,20Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />`);
+var border_style = _icon_template(`<path d="M15 21h2v-2h-2v2zm4 0h2v-2h-2v2zM7 21h2v-2H7v2zm4 0h2v-2h-2v2zm8-4h2v-2h-2v2zm0-4h2v-2h-2v2zM3 3v18h2V5h16V3H3zm16 6h2V7h-2v2z"/>`);
 var __glob_0_36 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": border_style
+});
+var bottom = _icon_template(`<path d="M4,20 L20,20Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />`);
+var __glob_0_37 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": bottom
 });
 var broken_image = _icon_template(`<path d="M21 5v6.59l-3-3.01-4 4.01-4-4-4 4-3-3.01V5c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2zm-3 6.42l3 3.01V19c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2v-6.58l3 2.99 4-4 4 4 4-3.99z"/>`);
-var __glob_0_37 = /* @__PURE__ */ Object.freeze({
+var __glob_0_38 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": broken_image
 });
 var brush = _icon_template(`<path d="M7 14c-1.66 0-3 1.34-3 3 0 1.31-1.16 2-2 2 .92 1.22 2.49 2 4 2 2.21 0 4-1.79 4-4 0-1.66-1.34-3-3-3zm13.71-9.37l-1.34-1.34c-.39-.39-1.02-.39-1.41 0L9 12.25 11.75 15l8.96-8.96c.39-.39.39-1.02 0-1.41z"/>`);
-var __glob_0_38 = /* @__PURE__ */ Object.freeze({
+var __glob_0_39 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": brush
 });
 var build = _icon_template(`<path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>`);
-var __glob_0_39 = /* @__PURE__ */ Object.freeze({
+var __glob_0_40 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": build
 });
 var camera_roll = _icon_template(`<path d="M14 5c0-1.1-.9-2-2-2h-1V2c0-.55-.45-1-1-1H6c-.55 0-1 .45-1 1v1H4c-1.1 0-2 .9-2 2v15c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2h8V5h-8zm-2 13h-2v-2h2v2zm0-9h-2V7h2v2zm4 9h-2v-2h2v2zm0-9h-2V7h2v2zm4 9h-2v-2h2v2zm0-9h-2V7h2v2z"/>`);
-var __glob_0_40 = /* @__PURE__ */ Object.freeze({
+var __glob_0_41 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": camera_roll
@@ -20287,7 +20470,7 @@ var cat = _icon_template(`
 	c10.0879-20.4091-1.0878-32.4358-4.9794-35.7968c9.66-2.4378,21.5306-2.5917,36.0081,1.4018
 	C400.7746,158.6876,395.8536,185.0439,369.7458,193.0825z"/>
 `);
-var __glob_0_41 = /* @__PURE__ */ Object.freeze({
+var __glob_0_42 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": cat
@@ -20295,25 +20478,25 @@ var __glob_0_41 = /* @__PURE__ */ Object.freeze({
 var center = _icon_template(`
     <path d="M12,4 L12,20Z M6,10 L18,10 L18,14 L6,14Z" stroke-width="1" />
 `);
-var __glob_0_42 = /* @__PURE__ */ Object.freeze({
+var __glob_0_43 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": center
 });
 var chart = _icon_template(`<path d="M9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4zm2.5 2.1h-15V5h15v14.1zm0-16.1h-15c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>`);
-var __glob_0_43 = /* @__PURE__ */ Object.freeze({
+var __glob_0_44 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": chart
 });
 var check$1 = _icon_template(`<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>`);
-var __glob_0_44 = /* @__PURE__ */ Object.freeze({
+var __glob_0_45 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": check$1
 });
 var chevron_left = _icon_template(`<path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>`);
-var __glob_0_45 = /* @__PURE__ */ Object.freeze({
+var __glob_0_46 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": chevron_left
@@ -20321,49 +20504,49 @@ var __glob_0_45 = /* @__PURE__ */ Object.freeze({
 var chevron_right = _icon_template(`
     <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/>
 `);
-var __glob_0_46 = /* @__PURE__ */ Object.freeze({
+var __glob_0_47 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": chevron_right
 });
 var circle = _icon_template(`<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>`);
-var __glob_0_47 = /* @__PURE__ */ Object.freeze({
+var __glob_0_48 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": circle
 });
 var close = _icon_template(`<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>`);
-var __glob_0_48 = /* @__PURE__ */ Object.freeze({
+var __glob_0_49 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": close
 });
 var code = _icon_template(`<path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>`);
-var __glob_0_49 = /* @__PURE__ */ Object.freeze({
+var __glob_0_50 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": code
 });
 var color$1 = _icon_template(`<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>`);
-var __glob_0_50 = /* @__PURE__ */ Object.freeze({
+var __glob_0_51 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": color$1
 });
 var color_lens = _icon_template(`<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>`);
-var __glob_0_51 = /* @__PURE__ */ Object.freeze({
+var __glob_0_52 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": color_lens
 });
 var control_point = _icon_template(`<path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>`);
-var __glob_0_52 = /* @__PURE__ */ Object.freeze({
+var __glob_0_53 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": control_point
 });
 var copy = _icon_template(`<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm-1 4l6 6v10c0 1.1-.9 2-2 2H7.99C6.89 23 6 22.1 6 21l.01-14c0-1.1.89-2 1.99-2h7zm-1 7h5.5L14 6.5V12z"/>`);
-var __glob_0_53 = /* @__PURE__ */ Object.freeze({
+var __glob_0_54 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": copy
@@ -20371,13 +20554,13 @@ var __glob_0_53 = /* @__PURE__ */ Object.freeze({
 var create_folder = _icon_template(`
     <path d="M22 6H12l-2-2H2v16h20V6zm-3 8h-3v3h-2v-3h-3v-2h3V9h2v3h3v2z"/>
 `);
-var __glob_0_54 = /* @__PURE__ */ Object.freeze({
+var __glob_0_55 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": create_folder
 });
 var cube = _icon_template(`<path d="M21 16.5a1 1 0 0 1-.527.881l-7.907 4.443a.996.996 0 0 1-1.132 0l-7.907-4.443A1 1 0 0 1 3 16.5v-9a1 1 0 0 1 .527-.881l7.907-4.443a.995.995 0 0 1 1.132 0l7.907 4.443A1 1 0 0 1 21 7.5v9zM12 4.15L6.042 7.5l5.96 3.35 5.958-3.35-5.958-3.35zM5 15.916l6 3.372V12.58L5 9.209v6.706zm14 0V9.209l-6 3.372v6.707l6-3.373z" />`);
-var __glob_0_55 = /* @__PURE__ */ Object.freeze({
+var __glob_0_56 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": cube
@@ -20387,163 +20570,163 @@ var cylinder = _icon_template(`
 <path d="M 12 0 C 7.636719 0 3 1.226562 3 3.5 L 3 20.5 C 3 22.773438 7.636719 24 12 24 C 16.363281 24 21 22.773438 21 20.5 L 21 3.5 C 21 1.226562 16.363281 0 12 0 Z M 20 19.121094 C 19.921875 19.140625 19.84375 19.171875 19.78125 19.230469 C 19.574219 19.414062 19.554688 19.726562 19.738281 19.933594 C 19.914062 20.128906 20 20.320312 20 20.5 C 20 21.542969 16.957031 23 12 23 C 7.042969 23 4 21.542969 4 20.5 C 4 20.320312 4.085938 20.128906 4.261719 19.933594 C 4.445312 19.726562 4.425781 19.410156 4.21875 19.226562 C 4.15625 19.171875 4.078125 19.140625 4 19.121094 L 4 5.160156 C 5.59375 6.363281 8.863281 7 12 7 C 15.136719 7 18.40625 6.363281 20 5.160156 Z M 12 6 C 7.042969 6 4 4.542969 4 3.5 C 4 2.457031 7.042969 1 12 1 C 16.957031 1 20 2.457031 20 3.5 C 20 4.542969 16.957031 6 12 6 Z M 12 6 "/>
 </g>
 `);
-var __glob_0_56 = /* @__PURE__ */ Object.freeze({
+var __glob_0_57 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": cylinder
 });
 var dahaze = _icon_template(`<path d="M2 15.5v2h20v-2H2zm0-5v2h20v-2H2zm0-5v2h20v-2H2z"/>`);
-var __glob_0_57 = /* @__PURE__ */ Object.freeze({
+var __glob_0_58 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": dahaze
 });
 var dark = _icon_template(`<path d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"/>`);
-var __glob_0_58 = /* @__PURE__ */ Object.freeze({
+var __glob_0_59 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": dark
 });
 var delete_forever = _icon_template(`<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/>`);
-var __glob_0_59 = /* @__PURE__ */ Object.freeze({
+var __glob_0_60 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": delete_forever
 });
 var device_hub = _icon_template(`<path d="M17 16l-4-4V8.82C14.16 8.4 15 7.3 15 6c0-1.66-1.34-3-3-3S9 4.34 9 6c0 1.3.84 2.4 2 2.82V12l-4 4H3v5h5v-3.05l4-4.2 4 4.2V21h5v-5h-4z"/>`);
-var __glob_0_60 = /* @__PURE__ */ Object.freeze({
+var __glob_0_61 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": device_hub
 });
 var diffuse = _icon_template(`<path d="M5 14.5h14v-6H5v6zM11 .55V3.5h2V.55h-2zm8.04 2.5l-1.79 1.79 1.41 1.41 1.8-1.79-1.42-1.41zM13 22.45V19.5h-2v2.95h2zm7.45-3.91l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zM3.55 4.46l1.79 1.79 1.41-1.41-1.79-1.79-1.41 1.41zm1.41 15.49l1.79-1.8-1.41-1.41-1.79 1.79 1.41 1.42z"/>`);
-var __glob_0_61 = /* @__PURE__ */ Object.freeze({
+var __glob_0_62 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": diffuse
 });
 var doc = _icon_template(`<path d="M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z"/>`);
-var __glob_0_62 = /* @__PURE__ */ Object.freeze({
+var __glob_0_63 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": doc
 });
 var drag_indicator = _icon_template(`<path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>`);
-var __glob_0_63 = /* @__PURE__ */ Object.freeze({
+var __glob_0_64 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": drag_indicator
 });
 var draw = _icon_template(`<path d="M18.85,10.39l1.06-1.06c0.78-0.78,0.78-2.05,0-2.83L18.5,5.09c-0.78-0.78-2.05-0.78-2.83,0l-1.06,1.06L18.85,10.39z M14.61,11.81L7.41,19H6v-1.41l7.19-7.19L14.61,11.81z M13.19,7.56L4,16.76V21h4.24l9.19-9.19L13.19,7.56L13.19,7.56z M19,17.5 c0,2.19-2.54,3.5-5,3.5c-0.55,0-1-0.45-1-1s0.45-1,1-1c1.54,0,3-0.73,3-1.5c0-0.47-0.48-0.87-1.23-1.2l1.48-1.48 C18.32,15.45,19,16.29,19,17.5z M4.58,13.35C3.61,12.79,3,12.06,3,11c0-1.8,1.89-2.63,3.56-3.36C7.59,7.18,9,6.56,9,6 c0-0.41-0.78-1-2-1C5.74,5,5.2,5.61,5.17,5.64C4.82,6.05,4.19,6.1,3.77,5.76C3.36,5.42,3.28,4.81,3.62,4.38C3.73,4.24,4.76,3,7,3 c2.24,0,4,1.32,4,3c0,1.87-1.93,2.72-3.64,3.47C6.42,9.88,5,10.5,5,11c0,0.31,0.43,0.6,1.07,0.86L4.58,13.35z" />`);
-var __glob_0_64 = /* @__PURE__ */ Object.freeze({
+var __glob_0_65 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": draw
 });
 var east = _icon_template(`<path d="M15,5l-1.41,1.41L18.17,11H2V13h16.17l-4.59,4.59L15,19l7-7L15,5z"/>`);
-var __glob_0_65 = /* @__PURE__ */ Object.freeze({
+var __glob_0_66 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": east
 });
 var edit = _icon_template(`<path d="M3 17.46v3.04c0 .28.22.5.5.5h3.04c.13 0 .26-.05.35-.15L17.81 9.94l-3.75-3.75L3.15 17.1c-.1.1-.15.22-.15.36zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>`);
-var __glob_0_66 = /* @__PURE__ */ Object.freeze({
+var __glob_0_67 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": edit
 });
 var end = _icon_template(`<path transform="translate(24,0) scale(-1, 1)" d="M14.59,7.41L18.17,11H6v2h12.17l-3.59,3.59L16,18l6-6l-6-6L14.59,7.41z M2,6v12h2V6H2z"/>`);
-var __glob_0_67 = /* @__PURE__ */ Object.freeze({
+var __glob_0_68 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": end
 });
 var exit_to_app = _icon_template(`<path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>`);
-var __glob_0_68 = /* @__PURE__ */ Object.freeze({
+var __glob_0_69 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": exit_to_app
 });
 var expand = _icon_template(`<path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>`);
-var __glob_0_69 = /* @__PURE__ */ Object.freeze({
+var __glob_0_70 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": expand
 });
 var expand_more = _icon_template(`<path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6-1.41-1.41z"/>`);
-var __glob_0_70 = /* @__PURE__ */ Object.freeze({
+var __glob_0_71 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": expand_more
 });
 var _export = _icon_template(`<path d="M9 3L5 6.99h3V14h2V6.99h3L9 3zm7 14.01V10h-2v7.01h-3L15 21l4-3.99h-3z"/>`);
-var __glob_0_71 = /* @__PURE__ */ Object.freeze({
+var __glob_0_72 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": _export
 });
 var face = _icon_template(`<path d="M9 11.75c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25zm6 0c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-.29.02-.58.05-.86 2.36-1.05 4.23-2.98 5.21-5.37C11.07 8.33 14.05 10 17.42 10c.78 0 1.53-.09 2.25-.26.21.71.33 1.47.33 2.26 0 4.41-3.59 8-8 8z"/>`);
-var __glob_0_72 = /* @__PURE__ */ Object.freeze({
+var __glob_0_73 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": face
 });
 var fast_forward = _icon_template(`<path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/>`);
-var __glob_0_73 = /* @__PURE__ */ Object.freeze({
+var __glob_0_74 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": fast_forward
 });
 var fast_rewind = _icon_template(`<path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/>`);
-var __glob_0_74 = /* @__PURE__ */ Object.freeze({
+var __glob_0_75 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": fast_rewind
 });
 var file_copy = _icon_template(`<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm-1 4l6 6v10c0 1.1-.9 2-2 2H7.99C6.89 23 6 22.1 6 21l.01-14c0-1.1.89-2 1.99-2h7zm-1 7h5.5L14 6.5V12z"/>`);
-var __glob_0_75 = /* @__PURE__ */ Object.freeze({
+var __glob_0_76 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": file_copy
 });
 var filter$1 = _icon_template(`<path d="M18.7 12.4c-.28-.16-.57-.29-.86-.4.29-.11.58-.24.86-.4 1.92-1.11 2.99-3.12 3-5.19-1.79-1.03-4.07-1.11-6 0-.28.16-.54.35-.78.54.05-.31.08-.63.08-.95 0-2.22-1.21-4.15-3-5.19C10.21 1.85 9 3.78 9 6c0 .32.03.64.08.95-.24-.2-.5-.39-.78-.55-1.92-1.11-4.2-1.03-6 0 0 2.07 1.07 4.08 3 5.19.28.16.57.29.86.4-.29.11-.58.24-.86.4-1.92 1.11-2.99 3.12-3 5.19 1.79 1.03 4.07 1.11 6 0 .28-.16.54-.35.78-.54-.05.32-.08.64-.08.96 0 2.22 1.21 4.15 3 5.19 1.79-1.04 3-2.97 3-5.19 0-.32-.03-.64-.08-.95.24.2.5.38.78.54 1.92 1.11 4.2 1.03 6 0-.01-2.07-1.08-4.08-3-5.19zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>`);
-var __glob_0_76 = /* @__PURE__ */ Object.freeze({
+var __glob_0_77 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": filter$1
 });
 var flag = _icon_template(`<path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/>`);
-var __glob_0_77 = /* @__PURE__ */ Object.freeze({
+var __glob_0_78 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flag
 });
 var flash_on = _icon_template(`<path d="M7 2v11h3v9l7-12h-4l4-8z"/>`);
-var __glob_0_78 = /* @__PURE__ */ Object.freeze({
+var __glob_0_79 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flash_on
 });
 var flatten = _icon_template(`<path d="M4,9v2h16V9H4z M16,4l-1.41-1.41L13,4.17V1h-2v3.19L9.39,2.61L8,4l4,4L16,4z M4,14h16v-2H4V14z M8,19l1.39,1.39L11,18.81 V22h2v-3.17l1.59,1.59L16,19l-4-4L8,19z"/>`);
-var __glob_0_79 = /* @__PURE__ */ Object.freeze({
+var __glob_0_80 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flatten
 });
 var flex = _icon_template(`<path d="M3,5v14h18V5H3z M8.33,17H5V7h3.33V17z M13.67,17h-3.33V7h3.33V17z M19,17h-3.33V7H19V17z"/>`);
-var __glob_0_80 = /* @__PURE__ */ Object.freeze({
+var __glob_0_81 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flex
 });
 var flip = _icon_template(`<path d="M15 21h2v-2h-2v2zm4-12h2V7h-2v2zM3 5v14c0 1.1.9 2 2 2h4v-2H5V5h4V3H5c-1.1 0-2 .9-2 2zm16-2v2h2c0-1.1-.9-2-2-2zm-8 20h2V1h-2v22zm8-6h2v-2h-2v2zM15 5h2V3h-2v2zm4 8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2z"/>`);
-var __glob_0_81 = /* @__PURE__ */ Object.freeze({
+var __glob_0_82 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flip
 });
 var flipY = _icon_template(`<path d="M15 21h2v-2h-2v2zm4-12h2V7h-2v2zM3 5v14c0 1.1.9 2 2 2h4v-2H5V5h4V3H5c-1.1 0-2 .9-2 2zm16-2v2h2c0-1.1-.9-2-2-2zm-8 20h2V1h-2v22zm8-6h2v-2h-2v2zM15 5h2V3h-2v2zm4 8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2z"/>`);
-var __glob_0_82 = /* @__PURE__ */ Object.freeze({
+var __glob_0_83 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flipY
@@ -20555,79 +20738,79 @@ var flip_camera = _icon_template(`
     <path d="M16,14v2h2.91c-1.38,2.39-3.96,4-6.91,4c-3.72,0-6.85-2.56-7.74-6H2.2c0.93,4.56,4.96,8,9.8,8c3.27,0,6.18-1.58,8-4.01V20
         h2v-6H16z"/>
 `);
-var __glob_0_83 = /* @__PURE__ */ Object.freeze({
+var __glob_0_84 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": flip_camera
 });
 var folder = _icon_template(`<path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>`);
-var __glob_0_84 = /* @__PURE__ */ Object.freeze({
+var __glob_0_85 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": folder
 });
 var font_download = _icon_template(`<path d="M9.93 13.5h4.14L12 7.98zM20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-4.05 16.5l-1.14-3H9.17l-1.12 3H5.96l5.11-13h1.86l5.11 13h-2.09z"/>`);
-var __glob_0_85 = /* @__PURE__ */ Object.freeze({
+var __glob_0_86 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": font_download
 });
 var format_bold = _icon_template(`<path d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4H7v14h7.04c2.09 0 3.71-1.7 3.71-3.79 0-1.52-.86-2.82-2.15-3.42zM10 6.5h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9H10v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z"/>`);
-var __glob_0_86 = /* @__PURE__ */ Object.freeze({
+var __glob_0_87 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": format_bold
 });
 var format_indent = _icon_template(`<path d="M3 21h18v-2H3v2zM3 8v8l4-4-4-4zm8 9h10v-2H11v2zM3 3v2h18V3H3zm8 6h10V7H11v2zm0 4h10v-2H11v2z"/>`);
-var __glob_0_87 = /* @__PURE__ */ Object.freeze({
+var __glob_0_88 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": format_indent
 });
 var format_line_spacing = _icon_template(`<path d="M6 7h2.5L5 3.5 1.5 7H4v10H1.5L5 20.5 8.5 17H6V7zm4-2v2h12V5H10zm0 14h12v-2H10v2zm0-6h12v-2H10v2z"/>`);
-var __glob_0_88 = /* @__PURE__ */ Object.freeze({
+var __glob_0_89 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": format_line_spacing
 });
 var format_shapes = _icon_template(`<path d="M23 7V1h-6v2H7V1H1v6h2v10H1v6h6v-2h10v2h6v-6h-2V7h2zM3 3h2v2H3V3zm2 18H3v-2h2v2zm12-2H7v-2H5V7h2V5h10v2h2v10h-2v2zm4 2h-2v-2h2v2zM19 5V3h2v2h-2zm-5.27 9h-3.49l-.73 2H7.89l3.4-9h1.4l3.41 9h-1.63l-.74-2zm-3.04-1.26h2.61L12 8.91l-1.31 3.83z"/>`);
-var __glob_0_89 = /* @__PURE__ */ Object.freeze({
+var __glob_0_90 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": format_shapes
 });
 var format_size = _icon_template(`<path d="M9 4v3h5v12h3V7h5V4H9zm-6 8h3v7h3v-7h3V9H3v3z"/>`);
-var __glob_0_90 = /* @__PURE__ */ Object.freeze({
+var __glob_0_91 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": format_size
 });
 var fullscreen = _icon_template(`<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>`);
-var __glob_0_91 = /* @__PURE__ */ Object.freeze({
+var __glob_0_92 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": fullscreen
 });
 var gps_fixed = _icon_template(`<path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm8.94 3c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>`);
-var __glob_0_92 = /* @__PURE__ */ Object.freeze({
+var __glob_0_93 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": gps_fixed
 });
 var gradient$1 = _icon_template('<path d="M11 9h2v2h-2zm-2 2h2v2H9zm4 0h2v2h-2zm2-2h2v2h-2zM7 9h2v2H7zm12-6H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 18H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm2-7h-2v2h2v2h-2v-2h-2v2h-2v-2h-2v2H9v-2H7v2H5v-2h2v-2H5V5h14v6z"/>');
-var __glob_0_93 = /* @__PURE__ */ Object.freeze({
+var __glob_0_94 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": gradient$1
 });
 var grid$1 = _icon_template(`<path d="M3,3v8h8V3H3z M9,9H5V5h4V9z M3,13v8h8v-8H3z M9,19H5v-4h4V19z M13,3v8h8V3H13z M19,9h-4V5h4V9z M13,13v8h8v-8H13z M19,19h-4v-4h4V19z"/>`);
-var __glob_0_94 = /* @__PURE__ */ Object.freeze({
+var __glob_0_95 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": grid$1
 });
 var grid3x3 = _icon_template(`<path d="M20,10V8h-4V4h-2v4h-4V4H8v4H4v2h4v4H4v2h4v4h2v-4h4v4h2v-4h4v-2h-4v-4H20z M14,14h-4v-4h4V14z"/>`);
-var __glob_0_95 = /* @__PURE__ */ Object.freeze({
+var __glob_0_96 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": grid3x3
@@ -20635,49 +20818,49 @@ var __glob_0_95 = /* @__PURE__ */ Object.freeze({
 var group = _icon_template(`
         <path d="M3 5h2V3c-1.1 0-2 .9-2 2zm0 8h2v-2H3v2zm4 8h2v-2H7v2zM3 9h2V7H3v2zm10-6h-2v2h2V3zm6 0v2h2c0-1.1-.9-2-2-2zM5 21v-2H3c0 1.1.9 2 2 2zm-2-4h2v-2H3v2zM9 3H7v2h2V3zm2 18h2v-2h-2v2zm8-8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2zm0-12h2V7h-2v2zm0 8h2v-2h-2v2zm-4 4h2v-2h-2v2zm0-16h2V3h-2v2zM7 17h10V7H7v10zm2-8h6v6H9V9z"/>
     `);
-var __glob_0_96 = /* @__PURE__ */ Object.freeze({
+var __glob_0_97 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": group
 });
 var height = _icon_template(`<polygon points="13,6.99 16,6.99 12,3 8,6.99 11,6.99 11,17.01 8,17.01 12,21 16,17.01 13,17.01"/>`);
-var __glob_0_97 = /* @__PURE__ */ Object.freeze({
+var __glob_0_98 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": height
 });
 var highlight_at = _icon_template(`<path d="M17,5h-2V3h2V5z M15,15v6l2.29-2.29L19.59,21L21,19.59l-2.29-2.29L21,15H15z M19,9h2V7h-2V9z M19,13h2v-2h-2V13z M11,21h2 v-2h-2V21z M7,5h2V3H7V5z M3,17h2v-2H3V17z M5,21v-2H3C3,20.1,3.9,21,5,21z M19,3v2h2C21,3.9,20.1,3,19,3z M11,5h2V3h-2V5z M3,9h2 V7H3V9z M7,21h2v-2H7V21z M3,13h2v-2H3V13z M3,5h2V3C3.9,3,3,3.9,3,5z"/>`);
-var __glob_0_98 = /* @__PURE__ */ Object.freeze({
+var __glob_0_99 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": highlight_at
 });
 var horizontal_distribute = _icon_template(`<path d="M4,22H2V2h2V22z M22,2h-2v20h2V2z M13.5,7h-3v10h3V7z"/>`);
-var __glob_0_99 = /* @__PURE__ */ Object.freeze({
+var __glob_0_100 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": horizontal_distribute
 });
 var horizontal_rule = _icon_template(`<rect fill-rule="evenodd" height="2" width="16" x="4" y="11"/>`);
-var __glob_0_100 = /* @__PURE__ */ Object.freeze({
+var __glob_0_101 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": horizontal_rule
 });
 var image$1 = _icon_template(`<path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>`);
-var __glob_0_101 = /* @__PURE__ */ Object.freeze({
+var __glob_0_102 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": image$1
 });
 var input = _icon_template(`<path d="M21 3.01H3c-1.1 0-2 .9-2 2V9h2V4.99h18v14.03H3V15H1v4.01c0 1.1.9 1.98 2 1.98h18c1.1 0 2-.88 2-1.98v-14c0-1.11-.9-2-2-2zM11 16l4-4-4-4v3H1v2h10v3z"/>`);
-var __glob_0_102 = /* @__PURE__ */ Object.freeze({
+var __glob_0_103 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": input
 });
 var italic = _icon_template(`<path d="M10 4v3h2.21l-3.42 8H6v3h8v-3h-2.21l3.42-8H18V4z"/>`);
-var __glob_0_103 = /* @__PURE__ */ Object.freeze({
+var __glob_0_104 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": italic
@@ -20690,7 +20873,7 @@ var join_full = _icon_template(`
     </g>
 </g>
 `);
-var __glob_0_104 = /* @__PURE__ */ Object.freeze({
+var __glob_0_105 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": join_full
@@ -20699,49 +20882,49 @@ var join_right = _icon_template(`
 <ellipse cx="12" cy="12" rx="3" ry="5.74"/>
 <path d="M16.5,12c0,0.97-0.23,4.16-3.03,6.5C14.25,18.81,15.1,19,16,19c3.86,0,7-3.14,7-7s-3.14-7-7-7c-0.9,0-1.75,0.19-2.53,0.5 C16.27,7.84,16.5,11.03,16.5,12z"/></g><g><path d="M8,19c0.9,0,1.75-0.19,2.53-0.5c-0.61-0.51-1.1-1.07-1.49-1.63C8.71,16.95,8.36,17,8,17c-2.76,0-5-2.24-5-5s2.24-5,5-5 c0.36,0,0.71,0.05,1.04,0.13c0.39-0.56,0.88-1.12,1.49-1.63C9.75,5.19,8.9,5,8,5c-3.86,0-7,3.14-7,7S4.14,19,8,19z"/>
 `);
-var __glob_0_105 = /* @__PURE__ */ Object.freeze({
+var __glob_0_106 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": join_right
 });
 var justify_content_space_around = _icon_template(`<path d="M15,7v10H9V7H15z M21,5h-3v14h3V5z M17,5H7v14h10V5z M6,5H3v14h3V5z"/>`);
-var __glob_0_106 = /* @__PURE__ */ Object.freeze({
+var __glob_0_107 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": justify_content_space_around
 });
 var keyboard = _icon_template(`<path d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z"/>`);
-var __glob_0_107 = /* @__PURE__ */ Object.freeze({
+var __glob_0_108 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": keyboard
 });
 var keyboard_arrow_down = _icon_template(`<path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>`);
-var __glob_0_108 = /* @__PURE__ */ Object.freeze({
+var __glob_0_109 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": keyboard_arrow_down
 });
 var keyboard_arrow_left = _icon_template(`<path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/>`);
-var __glob_0_109 = /* @__PURE__ */ Object.freeze({
+var __glob_0_110 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": keyboard_arrow_left
 });
 var keyboard_arrow_right = _icon_template(`<path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>`);
-var __glob_0_110 = /* @__PURE__ */ Object.freeze({
+var __glob_0_111 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": keyboard_arrow_right
 });
 var keyboard_arrow_up = _icon_template(`<path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6 1.41 1.41z"/>`);
-var __glob_0_111 = /* @__PURE__ */ Object.freeze({
+var __glob_0_112 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": keyboard_arrow_up
 });
 var landscape = _icon_template(`<path d="M14 6l-3.75 5 2.85 3.8-1.6 1.2C9.81 13.75 7 10 7 10l-6 8h22L14 6z"/>`);
-var __glob_0_112 = /* @__PURE__ */ Object.freeze({
+var __glob_0_113 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": landscape
@@ -20749,55 +20932,55 @@ var __glob_0_112 = /* @__PURE__ */ Object.freeze({
 var launch = _icon_template(`
         <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
     `);
-var __glob_0_113 = /* @__PURE__ */ Object.freeze({
+var __glob_0_114 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": launch
 });
 var layers = _icon_template(`<path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/>`);
-var __glob_0_114 = /* @__PURE__ */ Object.freeze({
+var __glob_0_115 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": layers
 });
 var layout_default = _icon_template(`<path d="M19 7h-8v6h8V7zm-2 4h-4V9h4v2zm4-8H3c-1.1 0-2 .9-2 2v14c0 1.1.9 1.98 2 1.98h18c1.1 0 2-.88 2-1.98V5c0-1.1-.9-2-2-2zm0 16.01H3V4.98h18v14.03z"/>`);
-var __glob_0_115 = /* @__PURE__ */ Object.freeze({
+var __glob_0_116 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": layout_default
 });
 var layout_flex = _icon_template(`<path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M8,18H4V6h4V18z M14,18h-4V6h4V18z M20,18h-4V6h4V18z"/>`);
-var __glob_0_116 = /* @__PURE__ */ Object.freeze({
+var __glob_0_117 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": layout_flex
 });
 var layout_grid = _icon_template(`<path d="M3,3v8h8V3H3z M9,9H5V5h4V9z M3,13v8h8v-8H3z M9,19H5v-4h4V19z M13,3v8h8V3H13z M19,9h-4V5h4V9z M13,13v8h8v-8H13z M19,19h-4v-4h4V19z"/>`);
-var __glob_0_117 = /* @__PURE__ */ Object.freeze({
+var __glob_0_118 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": layout_grid
 });
 var left = _icon_template(`<path d="M2,4 L2,20Z M6,10 L16,10 L16,14 L6,14Z" stroke-width="1" />`);
-var __glob_0_118 = /* @__PURE__ */ Object.freeze({
+var __glob_0_119 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": left
 });
 var left_hide = _icon_template(`<path d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"/>`);
-var __glob_0_119 = /* @__PURE__ */ Object.freeze({
+var __glob_0_120 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": left_hide
 });
 var lens = _icon_template(`<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>`);
-var __glob_0_120 = /* @__PURE__ */ Object.freeze({
+var __glob_0_121 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": lens
 });
 var light = _icon_template(`<path d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"/>`);
-var __glob_0_121 = /* @__PURE__ */ Object.freeze({
+var __glob_0_122 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": light
@@ -20806,7 +20989,7 @@ var line_cap_butt = _icon_template(`
         <rect class="base" width="13" height="12" x="3" y="2" fill="transparent" fill-rule="nonzero"></rect>
         <path fill="currentColor" fill-rule="nonzero" d="M3.5,6.06300874 C4.20280365,6.2438979 4.7561021,6.79719635 4.93699126,7.5 L16,7.5 L16,8.5 L4.93699126,8.5 C4.7561021,9.20280365 4.20280365,9.7561021 3.5,9.93699126 L3.5,13.5 L16,13.5 L16,14.5 L2.5,14.5 L2.5,9.93699126 C1.63738639,9.71496986 1,8.93191971 1,8 C1,7.06808029 1.63738639,6.28503014 2.5,6.06300874 L2.5,1.5 L16,1.5 L16,2.5 L3.5,2.5 L3.5,6.06300874 Z"></path>
     `, { width: 18, height: 16 });
-var __glob_0_122 = /* @__PURE__ */ Object.freeze({
+var __glob_0_123 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_cap_butt
@@ -20815,7 +20998,7 @@ var line_cap_round = _icon_template(`
         <path class="base" fill="transparent" fill-rule="nonzero" d="M8,2 L16,2 L16,14 L8,14 C4.6862915,14 2,11.3137085 2,8 L2,8 C2,4.6862915 4.6862915,2 8,2 Z"></path>
         <path fill="currentColor" fill-rule="nonzero" d="M9.93699126,8.5 C9.71496986,9.36261361 8.93191971,10 8,10 C6.8954305,10 6,9.1045695 6,8 C6,6.8954305 6.8954305,6 8,6 C8.93191971,6 9.71496986,6.63738639 9.93699126,7.5 L16,7.5 L16,8.5 L9.93699126,8.5 Z M16,13.5 L16,14.5 L8,14.5 C4.41014913,14.5 1.5,11.5898509 1.5,8 C1.5,4.41014913 4.41014913,1.5 8,1.5 L16,1.5 L16,2.5 L8,2.5 C4.96243388,2.5 2.5,4.96243388 2.5,8 C2.5,11.0375661 4.96243388,13.5 8,13.5 L16,13.5 Z"></path>
     `, { width: 18, height: 16 });
-var __glob_0_123 = /* @__PURE__ */ Object.freeze({
+var __glob_0_124 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_cap_round
@@ -20824,133 +21007,133 @@ var line_cap_square = _icon_template(`
         <rect class="base" width="14" height="12" x="2" y="2" fill="transparent" fill-rule="nonzero"></rect>
         <path fill="currentColor" fill-rule="nonzero" d="M9.93699126,8.5 C9.71496986,9.36261361 8.93191971,10 8,10 C6.8954305,10 6,9.1045695 6,8 C6,6.8954305 6.8954305,6 8,6 C8.93191971,6 9.71496986,6.63738639 9.93699126,7.5 L16,7.5 L16,8.5 L9.93699126,8.5 Z M2.5,13.5 L16,13.5 L16,14.5 L1.5,14.5 L1.5,1.5 L16,1.5 L16,2.5 L2.5,2.5 L2.5,13.5 Z"></path>
     `, { width: 18, height: 16 });
-var __glob_0_124 = /* @__PURE__ */ Object.freeze({
+var __glob_0_125 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_cap_square
 });
 var line_chart = _icon_template(`<path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/>`);
-var __glob_0_125 = /* @__PURE__ */ Object.freeze({
+var __glob_0_126 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_chart
 });
 var line_join_bevel = _icon_template(`<g fill="none" fill-rule="evenodd"><polygon class="base" fill="transparent" fill-rule="nonzero" points="2 14.5 2 7.538 7.382 1.5 16 1.5 16 14.5"></polygon><path fill="currentColor" fill-rule="nonzero" d="M2.96551724,7.95245414 L2.96551724,14.5 L2,14.5 L2,7.53775146 L7.38172454,1.5 L16,1.5 L16,2.46 L7.76471206,2.46 L2.96551724,7.95245414 Z M10.9369913,9 C10.7561021,9.70280365 10.2028036,10.2561021 9.5,10.4369913 L9.5,14.5 L8.5,14.5 L8.5,10.4369913 C7.63738639,10.2149699 7,9.43191971 7,8.5 C7,7.3954305 7.8954305,6.5 9,6.5 C9.93191971,6.5 10.7149699,7.13738639 10.9369913,8 L16,8 L16,9 L10.9369913,9 Z"></path></g>`, { width: 18, height: 16 });
-var __glob_0_126 = /* @__PURE__ */ Object.freeze({
+var __glob_0_127 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_join_bevel
 });
 var line_join_miter = _icon_template(`<g fill="none" fill-rule="evenodd"><rect class="base" width="14" height="13" x="2" y="1.5" fill="transparent" fill-rule="nonzero"></rect><path fill="currentColor" fill-rule="nonzero" d="M10.9369913,9 C10.7561021,9.70280365 10.2028036,10.2561021 9.5,10.4369913 L9.5,14.5 L8.5,14.5 L8.5,10.4369913 C7.63738639,10.2149699 7,9.43191971 7,8.5 C7,7.3954305 7.8954305,6.5 9,6.5 C9.93191971,6.5 10.7149699,7.13738639 10.9369913,8 L16,8 L16,9 L10.9369913,9 Z M3,2.5 L3,14.5 L2,14.5 L2,1.5 L16,1.5 L16,2.5 L3,2.5 Z"></path></g>`, { width: 18, height: 16 });
-var __glob_0_127 = /* @__PURE__ */ Object.freeze({
+var __glob_0_128 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_join_miter
 });
 var line_join_round = _icon_template(`<g fill="none" fill-rule="evenodd"><path class="base" fill="transparent" fill-rule="nonzero" d="M9,1.5 L16,1.5 L16,14.5 L2,14.5 L2,8.5 C2,4.63400675 5.13400675,1.5 9,1.5 Z"></path><path fill="currentColor" fill-rule="nonzero" d="M2.96551724,14.5 L2,14.5 L2,7.74 C2,4.29374316 4.80979916,1.5 8.27586207,1.5 L16,1.5 L16,2.46 L8.27586207,2.46 C5.3430396,2.46 2.96551724,4.82393652 2.96551724,7.74 L2.96551724,14.5 Z M10.9369913,9 C10.7561021,9.70280365 10.2028036,10.2561021 9.5,10.4369913 L9.5,14.5 L8.5,14.5 L8.5,10.4369913 C7.63738639,10.2149699 7,9.43191971 7,8.5 C7,7.3954305 7.8954305,6.5 9,6.5 C9.93191971,6.5 10.7149699,7.13738639 10.9369913,8 L16,8 L16,9 L10.9369913,9 Z"></path></g>`, { width: 18, height: 16 });
-var __glob_0_128 = /* @__PURE__ */ Object.freeze({
+var __glob_0_129 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_join_round
 });
 var line_style = _icon_template(`<path d="M3 16h5v-2H3v2zm6.5 0h5v-2h-5v2zm6.5 0h5v-2h-5v2zM3 20h2v-2H3v2zm4 0h2v-2H7v2zm4 0h2v-2h-2v2zm4 0h2v-2h-2v2zm4 0h2v-2h-2v2zM3 12h8v-2H3v2zm10 0h8v-2h-8v2zM3 4v4h18V4H3z"/>`);
-var __glob_0_129 = /* @__PURE__ */ Object.freeze({
+var __glob_0_130 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_style
 });
 var line_weight = _icon_template(`<path d="M3 17h18v-2H3v2zm0 3h18v-1H3v1zm0-7h18v-3H3v3zm0-9v4h18V4H3z"/>`);
-var __glob_0_130 = /* @__PURE__ */ Object.freeze({
+var __glob_0_131 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": line_weight
 });
 var list = _icon_template(`<path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"/>`);
-var __glob_0_131 = /* @__PURE__ */ Object.freeze({
+var __glob_0_132 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": list
 });
 var local_library = _icon_template(`<path d="M12 11.55C9.64 9.35 6.48 8 3 8v11c3.48 0 6.64 1.35 9 3.55 2.36-2.19 5.52-3.55 9-3.55V8c-3.48 0-6.64 1.35-9 3.55zM12 8c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3z"/>`);
-var __glob_0_132 = /* @__PURE__ */ Object.freeze({
+var __glob_0_133 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": local_library
 });
 var local_movie = _icon_template(`<path d="M18 3v2h-2V3H8v2H6V3H4v18h2v-2h2v2h8v-2h2v2h2V3h-2zM8 17H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6V7h2v2zm10 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/>`);
-var __glob_0_133 = /* @__PURE__ */ Object.freeze({
+var __glob_0_134 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": local_movie
 });
 var lock = _icon_template(`<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>`);
-var __glob_0_134 = /* @__PURE__ */ Object.freeze({
+var __glob_0_135 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": lock
 });
 var lock_open = _icon_template(`<path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm0 12H6V10h12v10z"/>`);
-var __glob_0_135 = /* @__PURE__ */ Object.freeze({
+var __glob_0_136 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": lock_open
 });
 var looks = _icon_template(`<path d="M12 10c-3.86 0-7 3.14-7 7h2c0-2.76 2.24-5 5-5s5 2.24 5 5h2c0-3.86-3.14-7-7-7zm0-4C5.93 6 1 10.93 1 17h2c0-4.96 4.04-9 9-9s9 4.04 9 9h2c0-6.07-4.93-11-11-11z"/>`);
-var __glob_0_136 = /* @__PURE__ */ Object.freeze({
+var __glob_0_137 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": looks
 });
 var margin = _icon_template(`<path d="M3,3v18h18V3H3z M19,19H5V5h14V19z M11,7h2v2h-2V7z M7,7h2v2H7V7z M15,7h2v2h-2V7z M7,11h2v2H7V11z M11,11h2v2h-2V11z M15,11h2v2h-2V11z"/>`);
-var __glob_0_137 = /* @__PURE__ */ Object.freeze({
+var __glob_0_138 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": margin
 });
 var merge = _icon_template(`<path d="M17 20.41L18.41 19 15 15.59 13.59 17 17 20.41zM7.5 8H11v5.59L5.59 19 7 20.41l6-6V8h3.5L12 3.5 7.5 8z"/>`);
-var __glob_0_138 = /* @__PURE__ */ Object.freeze({
+var __glob_0_139 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": merge
 });
 var middle = _icon_template(`<path d="M4,12 L20,12Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />`);
-var __glob_0_139 = /* @__PURE__ */ Object.freeze({
+var __glob_0_140 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": middle
 });
 var navigation = _icon_template(`<path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" transform="rotate(-30 12 12)" stroke-width="1" fill="transparent"/>`);
-var __glob_0_140 = /* @__PURE__ */ Object.freeze({
+var __glob_0_141 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": navigation
 });
 var near_me = _icon_template(`<path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/>`);
-var __glob_0_141 = /* @__PURE__ */ Object.freeze({
+var __glob_0_142 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": near_me
 });
 var north = _icon_template(`<path d="M5,9l1.41,1.41L11,5.83V22H13V5.83l4.59,4.59L19,9l-7-7L5,9z"/>`);
-var __glob_0_142 = /* @__PURE__ */ Object.freeze({
+var __glob_0_143 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": north
 });
 var note = _icon_template(`<path d="M17 10H7v2h10v-2zm2-7h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zm-5-5H7v2h7v-2z"/>`);
-var __glob_0_143 = /* @__PURE__ */ Object.freeze({
+var __glob_0_144 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": note
 });
 var nowrap = _icon_template(`<path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/>`);
-var __glob_0_144 = /* @__PURE__ */ Object.freeze({
+var __glob_0_145 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": nowrap
 });
 var opacity = _icon_template(`<path d="M17.66 8L12 2.35 6.34 8C4.78 9.56 4 11.64 4 13.64s.78 4.11 2.34 5.67 3.61 2.35 5.66 2.35 4.1-.79 5.66-2.35S20 15.64 20 13.64 19.22 9.56 17.66 8zM6 14c.01-2 .62-3.27 1.76-4.4L12 5.27l4.24 4.38C17.38 10.77 17.99 12 18 14H6z"/>`);
-var __glob_0_145 = /* @__PURE__ */ Object.freeze({
+var __glob_0_146 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": opacity
@@ -20960,7 +21143,7 @@ function open_in_full(transform2 = "") {
         <g transform='${transform2}'><path fill='#fff' d='M2.6 5.6L0 8.3 2.6 11l1.2-1.2-.5-.5h9.4l-.5.5 1.2 1.2L16 8.3l-2.6-2.7-1.2 1.2.5.5H3.3l.5-.5-1.2-1.2z'/><path fill='#231f20' d='M5.1 279h-4v1h5v-5h-1zm5 0v5h-5v1h5v5h1v-5h5v-1h-5v-5z'/><path fill='#fff' d='M.6 278.5h4v-4h2v6h-6zm4.5.5h-4v1h5v-5h-1zm4.5-.5h2v5h5v2h-5v5h-2v-5h-5v-2h5zm.5 5.5h-5v1h5v5h1v-5h5v-1h-5v-5h-1z'/><path fill='#000' d='M2.6 6.3l-2 2 2 2 .6-.5-1-1H14l-1 1 .5.5 2-2-2-2-.5.5 1 1H2.1l1-1-.5-.5z'/></g>
     `, { width: 24, height: 24, viewBoxWidth: 16, viewBoxHeight: 16 });
 }
-var __glob_0_146 = /* @__PURE__ */ Object.freeze({
+var __glob_0_147 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": open_in_full
@@ -20968,91 +21151,91 @@ var __glob_0_146 = /* @__PURE__ */ Object.freeze({
 var outline = _icon_template(`
     <path d="M19.77 4.93l1.4 1.4L8.43 19.07l-5.6-5.6 1.4-1.4 4.2 4.2L19.77 4.93m0-2.83L8.43 13.44l-4.2-4.2L0 13.47l8.43 8.43L24 6.33 19.77 2.1z"/>
 `);
-var __glob_0_147 = /* @__PURE__ */ Object.freeze({
+var __glob_0_148 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": outline
 });
 var outline_circle = _icon_template(`<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/>`);
-var __glob_0_148 = /* @__PURE__ */ Object.freeze({
+var __glob_0_149 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": outline_circle
 });
 var outline_image = _icon_template(`<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54-1.96-2.36L6.5 17h11l-3.54-4.71z"/>`);
-var __glob_0_149 = /* @__PURE__ */ Object.freeze({
+var __glob_0_150 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": outline_image
 });
 var outline_rect = _icon_template(`<path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>`);
-var __glob_0_150 = /* @__PURE__ */ Object.freeze({
+var __glob_0_151 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": outline_rect
 });
 var outline_shape = _icon_template(`<path d="M2 12C2 6.48 6.48 2 12 2s10 4.48 10 10-4.48 10-10 10S2 17.52 2 12zm10 6c3.31 0 6-2.69 6-6s-2.69-6-6-6-6 2.69-6 6 2.69 6 6 6z"/>`);
-var __glob_0_151 = /* @__PURE__ */ Object.freeze({
+var __glob_0_152 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": outline_shape
 });
 var padding = _icon_template(`<path d="M3 5h2V3c-1.1 0-2 .9-2 2zm0 8h2v-2H3v2zm4 8h2v-2H7v2zM3 9h2V7H3v2zm10-6h-2v2h2V3zm6 0v2h2c0-1.1-.9-2-2-2zM5 21v-2H3c0 1.1.9 2 2 2zm-2-4h2v-2H3v2zM9 3H7v2h2V3zm2 18h2v-2h-2v2zm8-8h2v-2h-2v2zm0 8c1.1 0 2-.9 2-2h-2v2zm0-12h2V7h-2v2zm0 8h2v-2h-2v2zm-4 4h2v-2h-2v2zm0-16h2V3h-2v2zM7 17h10V7H7v10zm2-8h6v6H9V9z"/>`);
-var __glob_0_152 = /* @__PURE__ */ Object.freeze({
+var __glob_0_153 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": padding
 });
 var paint = _icon_template(`<path d="M18 4V3c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h12c.55 0 1-.45 1-1V6h1v4H9v11c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-9h8V4h-3z"/>`);
-var __glob_0_153 = /* @__PURE__ */ Object.freeze({
+var __glob_0_154 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": paint
 });
 var palette = _icon_template(`<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>`);
-var __glob_0_154 = /* @__PURE__ */ Object.freeze({
+var __glob_0_155 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": palette
 });
 var pantool = _icon_template(`<path d="M18 24h-6.55c-1.08 0-2.14-.45-2.89-1.23l-7.3-7.61 2.07-1.83c.62-.55 1.53-.66 2.26-.27L8 14.34V4.79c0-1.38 1.12-2.5 2.5-2.5.17 0 .34.02.51.05.09-1.3 1.17-2.33 2.49-2.33.86 0 1.61.43 2.06 1.09.29-.12.61-.18.94-.18 1.38 0 2.5 1.12 2.5 2.5v.28c.16-.03.33-.05.5-.05 1.38 0 2.5 1.12 2.5 2.5V20c0 2.21-1.79 4-4 4zM4.14 15.28l5.86 6.1c.38.39.9.62 1.44.62H18c1.1 0 2-.9 2-2V6.15c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12h-2V3.42c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12h-2V2.51c0-.28-.22-.5-.5-.5s-.5.22-.5.5V12h-2V4.79c0-.28-.22-.5-.5-.5s-.5.23-.5.5v12.87l-5.35-2.83-.51.45z"/>`);
-var __glob_0_155 = /* @__PURE__ */ Object.freeze({
+var __glob_0_156 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pantool
 });
 var pattern_check = _icon_template(`<path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/>`);
-var __glob_0_156 = /* @__PURE__ */ Object.freeze({
+var __glob_0_157 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pattern_check
 });
 var pattern_cross_dot = _icon_template(`<path d="M6,13c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S6.55,13,6,13z M6,17c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1 S6.55,17,6,17z M6,9c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S6.55,9,6,9z M3,9.5c-0.28,0-0.5,0.22-0.5,0.5s0.22,0.5,0.5,0.5 s0.5-0.22,0.5-0.5S3.28,9.5,3,9.5z M6,5C5.45,5,5,5.45,5,6s0.45,1,1,1s1-0.45,1-1S6.55,5,6,5z M21,10.5c0.28,0,0.5-0.22,0.5-0.5 S21.28,9.5,21,9.5s-0.5,0.22-0.5,0.5S20.72,10.5,21,10.5z M14,7c0.55,0,1-0.45,1-1s-0.45-1-1-1s-1,0.45-1,1S13.45,7,14,7z M14,3.5 c0.28,0,0.5-0.22,0.5-0.5S14.28,2.5,14,2.5S13.5,2.72,13.5,3S13.72,3.5,14,3.5z M3,13.5c-0.28,0-0.5,0.22-0.5,0.5 s0.22,0.5,0.5,0.5s0.5-0.22,0.5-0.5S3.28,13.5,3,13.5z M10,20.5c-0.28,0-0.5,0.22-0.5,0.5s0.22,0.5,0.5,0.5s0.5-0.22,0.5-0.5 S10.28,20.5,10,20.5z M10,3.5c0.28,0,0.5-0.22,0.5-0.5S10.28,2.5,10,2.5S9.5,2.72,9.5,3S9.72,3.5,10,3.5z M10,7c0.55,0,1-0.45,1-1 s-0.45-1-1-1S9,5.45,9,6S9.45,7,10,7z M10,12.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5S10.83,12.5,10,12.5z M18,13c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S18.55,13,18,13z M18,17c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1 S18.55,17,18,17z M18,9c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S18.55,9,18,9z M18,5c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1 S18.55,5,18,5z M21,13.5c-0.28,0-0.5,0.22-0.5,0.5s0.22,0.5,0.5,0.5s0.5-0.22,0.5-0.5S21.28,13.5,21,13.5z M14,17 c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S14.55,17,14,17z M14,20.5c-0.28,0-0.5,0.22-0.5,0.5s0.22,0.5,0.5,0.5s0.5-0.22,0.5-0.5 S14.28,20.5,14,20.5z M10,8.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5S10.83,8.5,10,8.5z M10,17 c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S10.55,17,10,17z M14,12.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5 S14.83,12.5,14,12.5z M14,8.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5S14.83,8.5,14,8.5z"/>`);
-var __glob_0_157 = /* @__PURE__ */ Object.freeze({
+var __glob_0_158 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pattern_cross_dot
 });
 var pattern_dot = _icon_template(`<path d="M6,13c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S6.55,13,6,13z M6,17c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1 S6.55,17,6,17z M6,9c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S6.55,9,6,9z M3,9.5c-0.28,0-0.5,0.22-0.5,0.5s0.22,0.5,0.5,0.5 s0.5-0.22,0.5-0.5S3.28,9.5,3,9.5z M6,5C5.45,5,5,5.45,5,6s0.45,1,1,1s1-0.45,1-1S6.55,5,6,5z M21,10.5c0.28,0,0.5-0.22,0.5-0.5 S21.28,9.5,21,9.5s-0.5,0.22-0.5,0.5S20.72,10.5,21,10.5z M14,7c0.55,0,1-0.45,1-1s-0.45-1-1-1s-1,0.45-1,1S13.45,7,14,7z M14,3.5 c0.28,0,0.5-0.22,0.5-0.5S14.28,2.5,14,2.5S13.5,2.72,13.5,3S13.72,3.5,14,3.5z M3,13.5c-0.28,0-0.5,0.22-0.5,0.5 s0.22,0.5,0.5,0.5s0.5-0.22,0.5-0.5S3.28,13.5,3,13.5z M10,20.5c-0.28,0-0.5,0.22-0.5,0.5s0.22,0.5,0.5,0.5s0.5-0.22,0.5-0.5 S10.28,20.5,10,20.5z M10,3.5c0.28,0,0.5-0.22,0.5-0.5S10.28,2.5,10,2.5S9.5,2.72,9.5,3S9.72,3.5,10,3.5z M10,7c0.55,0,1-0.45,1-1 s-0.45-1-1-1S9,5.45,9,6S9.45,7,10,7z M10,12.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5S10.83,12.5,10,12.5z M18,13c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S18.55,13,18,13z M18,17c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1 S18.55,17,18,17z M18,9c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S18.55,9,18,9z M18,5c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1 S18.55,5,18,5z M21,13.5c-0.28,0-0.5,0.22-0.5,0.5s0.22,0.5,0.5,0.5s0.5-0.22,0.5-0.5S21.28,13.5,21,13.5z M14,17 c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S14.55,17,14,17z M14,20.5c-0.28,0-0.5,0.22-0.5,0.5s0.22,0.5,0.5,0.5s0.5-0.22,0.5-0.5 S14.28,20.5,14,20.5z M10,8.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5S10.83,8.5,10,8.5z M10,17 c-0.55,0-1,0.45-1,1s0.45,1,1,1s1-0.45,1-1S10.55,17,10,17z M14,12.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5 S14.83,12.5,14,12.5z M14,8.5c-0.83,0-1.5,0.67-1.5,1.5s0.67,1.5,1.5,1.5s1.5-0.67,1.5-1.5S14.83,8.5,14,8.5z"/>`);
-var __glob_0_158 = /* @__PURE__ */ Object.freeze({
+var __glob_0_159 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pattern_dot
 });
 var pattern_grid = _icon_template(`<path d="M22,7V5h-3V2h-2v3h-4V2h-2v3H7V2H5v3H2v2h3v4H2v2h3v4H2v2h3v3h2v-3h4v3h2v-3h4v3h2v-3h3v-2h-3v-4h3v-2h-3V7H22z M7,7h4v4 H7V7z M7,17v-4h4v4H7z M17,17h-4v-4h4V17z M17,11h-4V7h4V11z"/>`);
-var __glob_0_159 = /* @__PURE__ */ Object.freeze({
+var __glob_0_160 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pattern_grid
 });
 var pattern_horizontal_line = _icon_template(`<path d="M3 15h18v-2H3v2zm0 4h18v-2H3v2zm0-8h18V9H3v2zm0-6v2h18V5H3z"/>`);
-var __glob_0_160 = /* @__PURE__ */ Object.freeze({
+var __glob_0_161 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pattern_horizontal_line
 });
 var pause = _icon_template(`<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`);
-var __glob_0_161 = /* @__PURE__ */ Object.freeze({
+var __glob_0_162 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pause
@@ -21062,97 +21245,97 @@ var pentool = _icon_template(`
         <path stroke="currentColor" d="M 7.501491970838878 -0.0000015572448855733659Q 14.336036333057622 7.389304433496911 15.674208571053226 11.025537025755131Q 17.012380809048864 14.661769618013372 12.854180922821438 14.544928811787997L 12.854180922821438 16.99999278410904L 3.2146550430021494 16.99999278410904L 3.2146550430021494 14.544928811787997Q -0.8480130988910353 14.661769618013372 0.22369613306813782 11.025537025755131Q 1.295405365027311 7.389304433496911 7.501491970838878 -0.0000015572448855733659Z M 7.501491970838878 -0.0000015572448855733659M 7.043097362212707 10.615180199186797L 7.043097362212707 2.029497238417552Q 2.4235653311211847 7.389304433496911 1.2143202542326725 11.099378313047254Q 0.22369613306813782 14.380813978493594 4.269842778971384 13.709709450113499L 4.269842778971384 16.233605781316655L 11.751764459057853 16.233605781316655L 11.751764459057853 13.709709450113499Q 15.84146041516868 14.140123940309786 14.670231046646997 10.775846698306177Q 14.195747591990225 9.593976493057127 8.077664264490855 2.029497238417552L 8.077664264490855 10.615180199186797L 7.043097362212707 10.615180199186797Z"/>
     </g>
 `);
-var __glob_0_162 = /* @__PURE__ */ Object.freeze({
+var __glob_0_163 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pentool
 });
 var photo = _icon_template(`<path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>`);
-var __glob_0_163 = /* @__PURE__ */ Object.freeze({
+var __glob_0_164 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": photo
 });
 var play = _icon_template(`<path d="M8 5v14l11-7z"/>`);
-var __glob_0_164 = /* @__PURE__ */ Object.freeze({
+var __glob_0_165 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": play
 });
 var plugin = _icon_template(`<path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm15 0h-2v3h-3v2h3v3h2v-3h3v-2h-3z"/>`);
-var __glob_0_165 = /* @__PURE__ */ Object.freeze({
+var __glob_0_166 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": plugin
 });
 var polygon$1 = _icon_template(`<path d="M17.2,3H6.8l-5.2,9l5.2,9h10.4l5.2-9L17.2,3z M16.05,19H7.95l-4.04-7l4.04-7h8.09l4.04,7L16.05,19z"/>`);
-var __glob_0_166 = /* @__PURE__ */ Object.freeze({
+var __glob_0_167 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": polygon$1
 });
 var power_input = _icon_template(`<path d="M2 9v2h19V9H2zm0 6h5v-2H2v2zm7 0h5v-2H9v2zm7 0h5v-2h-5v2z"/>`);
-var __glob_0_167 = /* @__PURE__ */ Object.freeze({
+var __glob_0_168 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": power_input
 });
 var publish = _icon_template(`<path d="M5 4v2h14V4H5zm0 10h4v6h6v-6h4l-7-7-7 7z"/>`);
-var __glob_0_168 = /* @__PURE__ */ Object.freeze({
+var __glob_0_169 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": publish
 });
 var rect$1 = _icon_template(`<path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>`);
-var __glob_0_169 = /* @__PURE__ */ Object.freeze({
+var __glob_0_170 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": rect$1
 });
 var redo = _icon_template(`<path d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"/>`);
-var __glob_0_170 = /* @__PURE__ */ Object.freeze({
+var __glob_0_171 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": redo
 });
 var refresh = _icon_template(`<path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>`);
-var __glob_0_171 = /* @__PURE__ */ Object.freeze({
+var __glob_0_172 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": refresh
 });
 var remove = _icon_template(`<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>`);
-var __glob_0_172 = /* @__PURE__ */ Object.freeze({
+var __glob_0_173 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": remove
 });
 var remove2 = _icon_template(`<path d="M19 13H5v-2h14v2z"/>`);
-var __glob_0_173 = /* @__PURE__ */ Object.freeze({
+var __glob_0_174 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": remove2
 });
 var repeat = _icon_template(`<path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/>`);
-var __glob_0_174 = /* @__PURE__ */ Object.freeze({
+var __glob_0_175 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": repeat
 });
 var replay = _icon_template(`<defs><path id="a" d="M0 0h24v24H0V0z"/></defs><clipPath id="b"><use xlink:href="#a" overflow="visible"/></clipPath><path d="M12 5V1L7 6l5 5V7c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8zm-1.1 11H10v-3.3L9 13v-.7l1.8-.6h.1V16zm4.3-1.8c0 .3 0 .6-.1.8l-.3.6s-.3.3-.5.3-.4.1-.6.1-.4 0-.6-.1-.3-.2-.5-.3-.2-.3-.3-.6-.1-.5-.1-.8v-.7c0-.3 0-.6.1-.8l.3-.6s.3-.3.5-.3.4-.1.6-.1.4 0 .6.1c.2.1.3.2.5.3s.2.3.3.6.1.5.1.8v.7zm-.9-.8v-.5s-.1-.2-.1-.3-.1-.1-.2-.2-.2-.1-.3-.1-.2 0-.3.1l-.2.2s-.1.2-.1.3v2s.1.2.1.3.1.1.2.2.2.1.3.1.2 0 .3-.1l.2-.2s.1-.2.1-.3v-1.5z" clip-path="url(#b)"/>`);
-var __glob_0_175 = /* @__PURE__ */ Object.freeze({
+var __glob_0_176 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": replay
 });
 var right = _icon_template(`<path d="M20,4 L20,20Z M6,10 L16,10 L16,14 L6,14Z" stroke-width="1" />`);
-var __glob_0_176 = /* @__PURE__ */ Object.freeze({
+var __glob_0_177 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": right
 });
 var right_hide = _icon_template(`<path d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"/>`);
-var __glob_0_177 = /* @__PURE__ */ Object.freeze({
+var __glob_0_178 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": right_hide
@@ -21160,19 +21343,19 @@ var __glob_0_177 = /* @__PURE__ */ Object.freeze({
 var rotate = _icon_template(`
         <path d="M7.11 8.53L5.7 7.11C4.8 8.27 4.24 9.61 4.07 11h2.02c.14-.87.49-1.72 1.02-2.47zM6.09 13H4.07c.17 1.39.72 2.73 1.62 3.89l1.41-1.42c-.52-.75-.87-1.59-1.01-2.47zm1.01 5.32c1.16.9 2.51 1.44 3.9 1.61V17.9c-.87-.15-1.71-.49-2.46-1.03L7.1 18.32zM13 4.07V1L8.45 5.55 13 10V6.09c2.84.48 5 2.94 5 5.91s-2.16 5.43-5 5.91v2.02c3.95-.49 7-3.85 7-7.93s-3.05-7.44-7-7.93z" stroke='white' stroke-width="0.5" />
     `);
-var __glob_0_178 = /* @__PURE__ */ Object.freeze({
+var __glob_0_179 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": rotate
 });
 var rotate_left = _icon_template(`<path d="M7.11 8.53L5.7 7.11C4.8 8.27 4.24 9.61 4.07 11h2.02c.14-.87.49-1.72 1.02-2.47zM6.09 13H4.07c.17 1.39.72 2.73 1.62 3.89l1.41-1.42c-.52-.75-.87-1.59-1.01-2.47zm1.01 5.32c1.16.9 2.51 1.44 3.9 1.61V17.9c-.87-.15-1.71-.49-2.46-1.03L7.1 18.32zM13 4.07V1L8.45 5.55 13 10V6.09c2.84.48 5 2.94 5 5.91s-2.16 5.43-5 5.91v2.02c3.95-.49 7-3.85 7-7.93s-3.05-7.44-7-7.93z"/>`);
-var __glob_0_179 = /* @__PURE__ */ Object.freeze({
+var __glob_0_180 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": rotate_left
 });
 var round = _icon_template(`<path d="M19 19h2v2h-2v-2zm0-2h2v-2h-2v2zM3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm0-4h2V3H3v2zm4 0h2V3H7v2zm8 16h2v-2h-2v2zm-4 0h2v-2h-2v2zm4 0h2v-2h-2v2zm-8 0h2v-2H7v2zm-4 0h2v-2H3v2zM21 8c0-2.76-2.24-5-5-5h-5v2h5c1.65 0 3 1.35 3 3v5h2V8z"/>`);
-var __glob_0_180 = /* @__PURE__ */ Object.freeze({
+var __glob_0_181 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": round
@@ -21180,7 +21363,7 @@ var __glob_0_180 = /* @__PURE__ */ Object.freeze({
 var same_height = _icon_template(`
     <path d="M4,4 L20,4Z M4,20 L20,20Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />
 `);
-var __glob_0_181 = /* @__PURE__ */ Object.freeze({
+var __glob_0_182 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": same_height
@@ -21188,265 +21371,265 @@ var __glob_0_181 = /* @__PURE__ */ Object.freeze({
 var same_width = _icon_template(`
     <path d="M20,4 L20,20Z M2,4 L2,20Z M6,10 L16,10 L16,14 L6,14Z" stroke-width="1" />
 `);
-var __glob_0_182 = /* @__PURE__ */ Object.freeze({
+var __glob_0_183 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": same_width
 });
 var save = _icon_template(`<path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z"/><path fill="none" d="M0 0h24v24H0z"/>`);
-var __glob_0_183 = /* @__PURE__ */ Object.freeze({
+var __glob_0_184 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": save
 });
 var scatter = _icon_template(`<g fill="#010101"><circle cx="7" cy="14" r="3"/><circle cx="11" cy="6" r="3"/><circle cx="16.6" cy="17.6" r="3"/></g>`);
-var __glob_0_184 = /* @__PURE__ */ Object.freeze({
+var __glob_0_185 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": scatter
 });
 var screen = _icon_template(`<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>`);
-var __glob_0_185 = /* @__PURE__ */ Object.freeze({
+var __glob_0_186 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": screen
 });
 var setting = _icon_template(`<path d="M15.95 10.78c.03-.25.05-.51.05-.78s-.02-.53-.06-.78l1.69-1.32c.15-.12.19-.34.1-.51l-1.6-2.77c-.1-.18-.31-.24-.49-.18l-1.99.8c-.42-.32-.86-.58-1.35-.78L12 2.34c-.03-.2-.2-.34-.4-.34H8.4c-.2 0-.36.14-.39.34l-.3 2.12c-.49.2-.94.47-1.35.78l-1.99-.8c-.18-.07-.39 0-.49.18l-1.6 2.77c-.1.18-.06.39.1.51l1.69 1.32c-.04.25-.07.52-.07.78s.02.53.06.78L2.37 12.1c-.15.12-.19.34-.1.51l1.6 2.77c.1.18.31.24.49.18l1.99-.8c.42.32.86.58 1.35.78l.3 2.12c.04.2.2.34.4.34h3.2c.2 0 .37-.14.39-.34l.3-2.12c.49-.2.94-.47 1.35-.78l1.99.8c.18.07.39 0 .49-.18l1.6-2.77c.1-.18.06-.39-.1-.51l-1.67-1.32zM10 13c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/>`);
-var __glob_0_186 = /* @__PURE__ */ Object.freeze({
+var __glob_0_187 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": setting
 });
 var settings_input_component = _icon_template(`<path d="M5 2c0-.55-.45-1-1-1s-1 .45-1 1v4H1v6h6V6H5V2zm4 14c0 1.3.84 2.4 2 2.82V23h2v-4.18c1.16-.41 2-1.51 2-2.82v-2H9v2zm-8 0c0 1.3.84 2.4 2 2.82V23h2v-4.18C6.16 18.4 7 17.3 7 16v-2H1v2zM21 6V2c0-.55-.45-1-1-1s-1 .45-1 1v4h-2v6h6V6h-2zm-8-4c0-.55-.45-1-1-1s-1 .45-1 1v4H9v6h6V6h-2V2zm4 14c0 1.3.84 2.4 2 2.82V23h2v-4.18c1.16-.41 2-1.51 2-2.82v-2h-6v2z"/>`);
-var __glob_0_187 = /* @__PURE__ */ Object.freeze({
+var __glob_0_188 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": settings_input_component
 });
 var shadow$1 = _icon_template(`<path d="M15.96 10.29l-2.75 3.54-1.96-2.36L8.5 15h11l-3.54-4.71zM3 5H1v16c0 1.1.9 2 2 2h16v-2H3V5zm18-4H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 16H7V3h14v14z"/>`);
-var __glob_0_188 = /* @__PURE__ */ Object.freeze({
+var __glob_0_189 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": shadow$1
 });
 var shape = _icon_template(`<path d="M23 7V1h-6v2H7V1H1v6h2v10H1v6h6v-2h10v2h6v-6h-2V7h2zM3 3h2v2H3V3zm2 18H3v-2h2v2zm12-2H7v-2H5V7h2V5h10v2h2v10h-2v2zm4 2h-2v-2h2v2zM19 5V3h2v2h-2z"/>`);
-var __glob_0_189 = /* @__PURE__ */ Object.freeze({
+var __glob_0_190 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": shape
 });
 var shuffle = _icon_template(`<path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/>`);
-var __glob_0_190 = /* @__PURE__ */ Object.freeze({
+var __glob_0_191 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": shuffle
 });
 var size = _icon_template(`<path d="M21 15h2v2h-2v-2zm0-4h2v2h-2v-2zm2 8h-2v2c1 0 2-1 2-2zM13 3h2v2h-2V3zm8 4h2v2h-2V7zm0-4v2h2c0-1-1-2-2-2zM1 7h2v2H1V7zm16-4h2v2h-2V3zm0 16h2v2h-2v-2zM3 3C2 3 1 4 1 5h2V3zm6 0h2v2H9V3zM5 3h2v2H5V3zm-4 8v8c0 1.1.9 2 2 2h12V11H1zm2 8l2.5-3.21 1.79 2.15 2.5-3.22L13 19H3z"/>`);
-var __glob_0_191 = /* @__PURE__ */ Object.freeze({
+var __glob_0_192 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": size
 });
 var skip_next = _icon_template(`<path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>`);
-var __glob_0_192 = /* @__PURE__ */ Object.freeze({
+var __glob_0_193 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": skip_next
 });
 var skip_prev = _icon_template(`<path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>`);
-var __glob_0_193 = /* @__PURE__ */ Object.freeze({
+var __glob_0_194 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": skip_prev
 });
 var smooth = _icon_template(`<path d="M4.59 6.89c.7-.71 1.4-1.35 1.71-1.22.5.2 0 1.03-.3 1.52-.25.42-2.86 3.89-2.86 6.31 0 1.28.48 2.34 1.34 2.98.75.56 1.74.73 2.64.46 1.07-.31 1.95-1.4 3.06-2.77 1.21-1.49 2.83-3.44 4.08-3.44 1.63 0 1.65 1.01 1.76 1.79-3.78.64-5.38 3.67-5.38 5.37 0 1.7 1.44 3.09 3.21 3.09 1.63 0 4.29-1.33 4.69-6.1H21v-2.5h-2.47c-.15-1.65-1.09-4.2-4.03-4.2-2.25 0-4.18 1.91-4.94 2.84-.58.73-2.06 2.48-2.29 2.72-.25.3-.68.84-1.11.84-.45 0-.72-.83-.36-1.92.35-1.09 1.4-2.86 1.85-3.52.78-1.14 1.3-1.92 1.3-3.28C8.95 3.69 7.31 3 6.44 3 5.12 3 3.97 4 3.72 4.25c-.36.36-.66.66-.88.93l1.75 1.71zm9.29 11.66c-.31 0-.74-.26-.74-.72 0-.6.73-2.2 2.87-2.76-.3 2.69-1.43 3.48-2.13 3.48z"/>`);
-var __glob_0_194 = /* @__PURE__ */ Object.freeze({
+var __glob_0_195 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": smooth
 });
 var source = _icon_template(`<path d="M20,6h-8l-2-2H4C2.9,4,2.01,4.9,2.01,6L2,18c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V8C22,6.9,21.1,6,20,6z M20,18L4,18V6h5.17 l2,2H20V18z M18,12H6v-2h12V12z M14,16H6v-2h8V16z"/>`);
-var __glob_0_195 = /* @__PURE__ */ Object.freeze({
+var __glob_0_196 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": source
 });
 var south = _icon_template(`<path d="M19,15l-1.41-1.41L13,18.17V2H11v16.17l-4.59-4.59L5,15l7,7L19,15z"/>`);
-var __glob_0_196 = /* @__PURE__ */ Object.freeze({
+var __glob_0_197 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": south
 });
 var space = _icon_template(`<path d="M18 9v4H6V9H4v6h16V9h-2z"/>`);
-var __glob_0_197 = /* @__PURE__ */ Object.freeze({
+var __glob_0_198 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": space
 });
 var specular = _icon_template(`<path d="M3.55 18.54l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8zM11 22.45h2V19.5h-2v2.95zM4 10.5H1v2h3v-2zm11-4.19V1.5H9v4.81C7.21 7.35 6 9.28 6 11.5c0 3.31 2.69 6 6 6s6-2.69 6-6c0-2.22-1.21-4.15-3-5.19zm5 4.19v2h3v-2h-3zm-2.76 7.66l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4z"/>`);
-var __glob_0_198 = /* @__PURE__ */ Object.freeze({
+var __glob_0_199 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": specular
 });
 var speed = _icon_template(`<path d="M20.38 8.57l-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44zm-9.79 6.84a2 2 0 0 0 2.83 0l5.66-8.49-8.49 5.66a2 2 0 0 0 0 2.83z"/>`);
-var __glob_0_199 = /* @__PURE__ */ Object.freeze({
+var __glob_0_200 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": speed
 });
 var star = _icon_template(`<path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>`);
-var __glob_0_200 = /* @__PURE__ */ Object.freeze({
+var __glob_0_201 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": star
 });
 var start$1 = _icon_template(`<path d="M14.59,7.41L18.17,11H6v2h12.17l-3.59,3.59L16,18l6-6l-6-6L14.59,7.41z M2,6v12h2V6H2z"/>`);
-var __glob_0_201 = /* @__PURE__ */ Object.freeze({
+var __glob_0_202 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": start$1
 });
 var storage = _icon_template(`<path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>`);
-var __glob_0_202 = /* @__PURE__ */ Object.freeze({
+var __glob_0_203 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": storage
 });
 var straighten = _icon_template(`<path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h2v4h2V8h2v4h2V8h2v4h2V8h2v4h2V8h2v8z"/>`);
-var __glob_0_203 = /* @__PURE__ */ Object.freeze({
+var __glob_0_204 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": straighten
 });
 var strikethrough = _icon_template(`<defs><path id="a" d="M0 0h24v24H0V0z"/></defs><clipPath id="b"><use xlink:href="#a" overflow="visible"/></clipPath><path clip-path="url(#b)" d="M7.24 8.75c-.26-.48-.39-1.03-.39-1.67 0-.61.13-1.16.4-1.67.26-.5.63-.93 1.11-1.29.48-.35 1.05-.63 1.7-.83.66-.19 1.39-.29 2.18-.29.81 0 1.54.11 2.21.34.66.22 1.23.54 1.69.94.47.4.83.88 1.08 1.43.25.55.38 1.15.38 1.81h-3.01c0-.31-.05-.59-.15-.85-.09-.27-.24-.49-.44-.68-.2-.19-.45-.33-.75-.44-.3-.1-.66-.16-1.06-.16-.39 0-.74.04-1.03.13-.29.09-.53.21-.72.36-.19.16-.34.34-.44.55-.1.21-.15.43-.15.66 0 .48.25.88.74 1.21.38.25.77.48 1.41.7H7.39c-.05-.08-.11-.17-.15-.25zM21 12v-2H3v2h9.62c.18.07.4.14.55.2.37.17.66.34.87.51.21.17.35.36.43.57.07.2.11.43.11.69 0 .23-.05.45-.14.66-.09.2-.23.38-.42.53-.19.15-.42.26-.71.35-.29.08-.63.13-1.01.13-.43 0-.83-.04-1.18-.13s-.66-.23-.91-.42c-.25-.19-.45-.44-.59-.75-.14-.31-.25-.76-.25-1.21H6.4c0 .55.08 1.13.24 1.58.16.45.37.85.65 1.21.28.35.6.66.98.92.37.26.78.48 1.22.65.44.17.9.3 1.38.39.48.08.96.13 1.44.13.8 0 1.53-.09 2.18-.28s1.21-.45 1.67-.79c.46-.34.82-.77 1.07-1.27s.38-1.07.38-1.71c0-.6-.1-1.14-.31-1.61-.05-.11-.11-.23-.17-.33H21z"/>`);
-var __glob_0_204 = /* @__PURE__ */ Object.freeze({
+var __glob_0_205 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": strikethrough
 });
 var stroke_to_path = _icon_template(`<path d="M20 4h-4l-4-4-4 4H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H4V6h4.52l3.52-3.5L15.52 6H20v14zM6 18h12V8H6v10zm2-8h8v6H8v-6z"/>`);
-var __glob_0_205 = /* @__PURE__ */ Object.freeze({
+var __glob_0_206 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": stroke_to_path
 });
 var swap_horiz = _icon_template(`<path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"/>`);
-var __glob_0_206 = /* @__PURE__ */ Object.freeze({
+var __glob_0_207 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": swap_horiz
 });
 var switch_left = _icon_template(`<path d="M8.5,8.62v6.76L5.12,12L8.5,8.62 M10,5l-7,7l7,7V5L10,5z M14,5v14l7-7L14,5z"/>`);
-var __glob_0_207 = /* @__PURE__ */ Object.freeze({
+var __glob_0_208 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": switch_left
 });
 var switch_right = _icon_template(`<path d="M15.5,15.38V8.62L18.88,12L15.5,15.38 M14,19l7-7l-7-7V19L14,19z M10,19V5l-7,7L10,19z"/>`);
-var __glob_0_208 = /* @__PURE__ */ Object.freeze({
+var __glob_0_209 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": switch_right
 });
 var sync = _icon_template(`<path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>`);
-var __glob_0_209 = /* @__PURE__ */ Object.freeze({
+var __glob_0_210 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sync
 });
 var table_rows = _icon_template(`<path d="M19,3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M19,5v3H5V5H19z M19,10v4H5v-4H19z M5,19v-3h14v3H5z"/>`);
-var __glob_0_210 = /* @__PURE__ */ Object.freeze({
+var __glob_0_211 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": table_rows
 });
 var text_rotate = _icon_template(`<path d="M12.75 3h-1.5L6.5 14h2.1l.9-2.2h5l.9 2.2h2.1L12.75 3zm-2.62 7L12 4.98 13.87 10h-3.74zm10.37 8l-3-3v2H5v2h12.5v2l3-3z"/>`);
-var __glob_0_211 = /* @__PURE__ */ Object.freeze({
+var __glob_0_212 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": text_rotate
 });
 var texture$1 = _icon_template(`<path d="M19.51 3.08L3.08 19.51c.09.34.27.65.51.9.25.24.56.42.9.51L20.93 4.49c-.19-.69-.73-1.23-1.42-1.41zM11.88 3L3 11.88v2.83L14.71 3h-2.83zM5 3c-1.1 0-2 .9-2 2v2l4-4H5zm14 18c.55 0 1.05-.22 1.41-.59.37-.36.59-.86.59-1.41v-2l-4 4h2zm-9.71 0h2.83L21 12.12V9.29L9.29 21z"/>`);
-var __glob_0_212 = /* @__PURE__ */ Object.freeze({
+var __glob_0_213 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": texture$1
 });
 var timer = _icon_template(`<path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>`);
-var __glob_0_213 = /* @__PURE__ */ Object.freeze({
+var __glob_0_214 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": timer
 });
 var title = _icon_template(`<path d="M5 4v3h5.5v12h3V7H19V4z"/>`);
-var __glob_0_214 = /* @__PURE__ */ Object.freeze({
+var __glob_0_215 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": title
 });
 var to_back = _icon_template(`<path d="M 7 7L 22 7L 22 22L 7 22L 7 7Z" style="fill:white !important;"/><path d="M 0 0L 14 0L 14 14L 0 14L 0 0Z M 16 16L 30 16L 30 30L 16 30L 16 16Z"/>`, { width: 30, height: 30 });
-var __glob_0_215 = /* @__PURE__ */ Object.freeze({
+var __glob_0_216 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": to_back
 });
 var to_front = _icon_template(`<path d="M 0 0L 14 0L 14 14L 0 14L 0 0Z M 16 16L 30 16L 30 30L 16 30L 16 16Z"/><path d="M 7 7L 22 7L 22 22L 7 22L 7 7Z" style="fill:white !important;"/>`, { width: 30, height: 30 });
-var __glob_0_216 = /* @__PURE__ */ Object.freeze({
+var __glob_0_217 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": to_front
 });
 var tonality = _icon_template(`<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c1.03.13 2 .45 2.87.93H13v-.93zM13 7h5.24c.25.31.48.65.68 1H13V7zm0 3h6.74c.08.33.15.66.19 1H13v-1zm0 9.93V19h2.87c-.87.48-1.84.8-2.87.93zM18.24 17H13v-1h5.92c-.2.35-.43.69-.68 1zm1.5-3H13v-1h6.93c-.04.34-.11.67-.19 1z"/>`);
-var __glob_0_217 = /* @__PURE__ */ Object.freeze({
+var __glob_0_218 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": tonality
 });
 var top = _icon_template(`<path d="M4,4 L20,4Z M10,8 L10,16 L14,16 L14,8Z" stroke-width="1" />`);
-var __glob_0_218 = /* @__PURE__ */ Object.freeze({
+var __glob_0_219 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": top
 });
 var transform$1 = _icon_template(`<path d="M22 18v-2H8V4h2L7 1 4 4h2v2H2v2h4v8c0 1.1.9 2 2 2h8v2h-2l3 3 3-3h-2v-2h4zM10 8h6v6h2V8c0-1.1-.9-2-2-2h-6v2z"/>`);
-var __glob_0_219 = /* @__PURE__ */ Object.freeze({
+var __glob_0_220 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": transform$1
 });
 var underline = _icon_template(`<path d="M12 17c3.31 0 6-2.69 6-6V3h-2.5v8c0 1.93-1.57 3.5-3.5 3.5S8.5 12.93 8.5 11V3H6v8c0 3.31 2.69 6 6 6zm-7 2v2h14v-2H5z"/>`);
-var __glob_0_220 = /* @__PURE__ */ Object.freeze({
+var __glob_0_221 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": underline
 });
 var undo = _icon_template(`<path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/>`);
-var __glob_0_221 = /* @__PURE__ */ Object.freeze({
+var __glob_0_222 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": undo
 });
 var unfold = _icon_template(`<path d="M12 5.83L15.17 9l1.41-1.41L12 3 7.41 7.59 8.83 9 12 5.83zm0 12.34L8.83 15l-1.41 1.41L12 21l4.59-4.59L15.17 15 12 18.17z"/>`);
-var __glob_0_222 = /* @__PURE__ */ Object.freeze({
+var __glob_0_223 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": unfold
 });
 var vertical_align_baseline = _icon_template(`<path d="M16,18v2H8v-2H16z M11,7.99V16h2V7.99h3L12,4L8,7.99H11z"/>`);
-var __glob_0_223 = /* @__PURE__ */ Object.freeze({
+var __glob_0_224 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vertical_align_baseline
 });
 var vertical_align_bottom = _icon_template(`<path d="M16 13h-3V3h-2v10H8l4 4 4-4zM4 19v2h16v-2H4z"/>`);
-var __glob_0_224 = /* @__PURE__ */ Object.freeze({
+var __glob_0_225 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vertical_align_bottom
 });
 var vertical_align_center = _icon_template(`<path d="M8 19h3v4h2v-4h3l-4-4-4 4zm8-14h-3V1h-2v4H8l4 4 4-4zM4 11v2h16v-2H4z"/>`);
-var __glob_0_225 = /* @__PURE__ */ Object.freeze({
+var __glob_0_226 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vertical_align_center
@@ -21455,19 +21638,19 @@ var vertical_align_stretch = _icon_template(`
     <path d="M19,13H5c-1.1,0-2,0.9-2,2v4c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2v-4C21,13.9,20.1,13,19,13z M19,19H5v-4h14V19z"/>
     <path d="M19,3H5C3.9,3,3,3.9,3,5v4c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M19,9H5V5h14V9z"/>
 `);
-var __glob_0_226 = /* @__PURE__ */ Object.freeze({
+var __glob_0_227 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vertical_align_stretch
 });
 var vertical_align_top = _icon_template(`<path d="M8 11h3v10h2V11h3l-4-4-4 4zM4 3v2h16V3H4z"/>`);
-var __glob_0_227 = /* @__PURE__ */ Object.freeze({
+var __glob_0_228 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vertical_align_top
 });
 var vertical_distribute = _icon_template(`<path d="M22,2v2H2V2H22z M7,10.5v3h10v-3H7z M2,20v2h20v-2H2z"/>`);
-var __glob_0_228 = /* @__PURE__ */ Object.freeze({
+var __glob_0_229 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vertical_distribute
@@ -21475,49 +21658,49 @@ var __glob_0_228 = /* @__PURE__ */ Object.freeze({
 var video$1 = _icon_template(`
         <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
     `);
-var __glob_0_229 = /* @__PURE__ */ Object.freeze({
+var __glob_0_230 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": video$1
 });
 var view_comfy = _icon_template(`<path d="M3 9h4V5H3v4zm0 5h4v-4H3v4zm5 0h4v-4H8v4zm5 0h4v-4h-4v4zM8 9h4V5H8v4zm5-4v4h4V5h-4zm5 9h4v-4h-4v4zM3 19h4v-4H3v4zm5 0h4v-4H8v4zm5 0h4v-4h-4v4zm5 0h4v-4h-4v4zm0-14v4h4V5h-4z"/>`);
-var __glob_0_230 = /* @__PURE__ */ Object.freeze({
+var __glob_0_231 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": view_comfy
 });
 var view_list = _icon_template(`<path d="M4 14h4v-4H4v4zm0 5h4v-4H4v4zM4 9h4V5H4v4zm5 5h12v-4H9v4zm0 5h12v-4H9v4zM9 5v4h12V5H9z"/>`);
-var __glob_0_231 = /* @__PURE__ */ Object.freeze({
+var __glob_0_232 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": view_list
 });
 var view_week = _icon_template(`<path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M8,18H4V6h4V18z M14,18h-4V6h4V18z M20,18h-4V6h4V18z"/>`);
-var __glob_0_232 = /* @__PURE__ */ Object.freeze({
+var __glob_0_233 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": view_week
 });
 var view_week_reverse = _icon_template(`<path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M8,18H4V6h4V18z M14,18h-4V6h4V18z M20,18h-4V6h4V18z M0,12 L24,12"/>`);
-var __glob_0_233 = /* @__PURE__ */ Object.freeze({
+var __glob_0_234 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": view_week_reverse
 });
 var vignette = _icon_template(`<path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 15c-4.42 0-8-2.69-8-6s3.58-6 8-6 8 2.69 8 6-3.58 6-8 6z"/>`);
-var __glob_0_234 = /* @__PURE__ */ Object.freeze({
+var __glob_0_235 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vignette
 });
 var vintage = _icon_template(`<path d="M18.7 12.4c-.28-.16-.57-.29-.86-.4.29-.11.58-.24.86-.4 1.92-1.11 2.99-3.12 3-5.19-1.79-1.03-4.07-1.11-6 0-.28.16-.54.35-.78.54.05-.31.08-.63.08-.95 0-2.22-1.21-4.15-3-5.19C10.21 1.85 9 3.78 9 6c0 .32.03.64.08.95-.24-.2-.5-.39-.78-.55-1.92-1.11-4.2-1.03-6 0 0 2.07 1.07 4.08 3 5.19.28.16.57.29.86.4-.29.11-.58.24-.86.4-1.92 1.11-2.99 3.12-3 5.19 1.79 1.03 4.07 1.11 6 0 .28-.16.54-.35.78-.54-.05.32-.08.64-.08.96 0 2.22 1.21 4.15 3 5.19 1.79-1.04 3-2.97 3-5.19 0-.32-.03-.64-.08-.95.24.2.5.38.78.54 1.92 1.11 4.2 1.03 6 0-.01-2.07-1.08-4.08-3-5.19zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>`);
-var __glob_0_235 = /* @__PURE__ */ Object.freeze({
+var __glob_0_236 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": vintage
 });
 var visible = _icon_template(`<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>`);
-var __glob_0_236 = /* @__PURE__ */ Object.freeze({
+var __glob_0_237 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": visible
@@ -21525,7 +21708,7 @@ var __glob_0_236 = /* @__PURE__ */ Object.freeze({
 var volume_down = _icon_template(`
         <path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"/>
     `);
-var __glob_0_237 = /* @__PURE__ */ Object.freeze({
+var __glob_0_238 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": volume_down
@@ -21533,7 +21716,7 @@ var __glob_0_237 = /* @__PURE__ */ Object.freeze({
 var volume_off = _icon_template(`
     <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
 `);
-var __glob_0_238 = /* @__PURE__ */ Object.freeze({
+var __glob_0_239 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": volume_off
@@ -21541,54 +21724,54 @@ var __glob_0_238 = /* @__PURE__ */ Object.freeze({
 var volume_up = _icon_template(`
     <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
 `);
-var __glob_0_239 = /* @__PURE__ */ Object.freeze({
+var __glob_0_240 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": volume_up
 });
 var wave = _icon_template(`<path d="M17 16.99c-1.35 0-2.2.42-2.95.8-.65.33-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.95c1.35 0 2.2-.42 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.42 2.95-.8c.65-.33 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm0-4.45c-1.35 0-2.2.43-2.95.8-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.32-1.17.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm2.95-8.08c-.75-.38-1.58-.8-2.95-.8s-2.2.42-2.95.8c-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.37-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.93c1.35 0 2.2-.43 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V5.04c-.9 0-1.4-.25-2.05-.58zM17 8.09c-1.35 0-2.2.43-2.95.8-.65.35-1.15.6-2.05.6s-1.4-.25-2.05-.6c-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.35-1.15.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.32 1.18-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V9.49c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8z"/>`);
-var __glob_0_240 = /* @__PURE__ */ Object.freeze({
+var __glob_0_241 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": wave
 });
 var waves = _icon_template(`<path d="M17 16.99c-1.35 0-2.2.42-2.95.8-.65.33-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.95c1.35 0 2.2-.42 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.42 2.95-.8c.65-.33 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm0-4.45c-1.35 0-2.2.43-2.95.8-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.32-1.17.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm2.95-8.08c-.75-.38-1.58-.8-2.95-.8s-2.2.42-2.95.8c-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.37-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.93c1.35 0 2.2-.43 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V5.04c-.9 0-1.4-.25-2.05-.58zM17 8.09c-1.35 0-2.2.43-2.95.8-.65.35-1.15.6-2.05.6s-1.4-.25-2.05-.6c-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.35-1.15.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.32 1.18-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V9.49c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8z"/>`);
-var __glob_0_241 = /* @__PURE__ */ Object.freeze({
+var __glob_0_242 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": waves
 });
 var web = _icon_template(`<path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"/>`);
-var __glob_0_242 = /* @__PURE__ */ Object.freeze({
+var __glob_0_243 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": web
 });
 var west = _icon_template(`<path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z"/>`);
-var __glob_0_243 = /* @__PURE__ */ Object.freeze({
+var __glob_0_244 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": west
 });
 var width$1 = _icon_template(`<polygon transform="rotate(90 12 12)" points="13,6.99 16,6.99 12,3 8,6.99 11,6.99 11,17.01 8,17.01 12,21 16,17.01 13,17.01"/>`);
-var __glob_0_244 = /* @__PURE__ */ Object.freeze({
+var __glob_0_245 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": width$1
 });
 var wrap = _icon_template(`<path d="M11 9l1.42 1.42L8.83 14H18V4h2v12H8.83l3.59 3.58L11 21l-6-6 6-6z"/>`);
-var __glob_0_245 = /* @__PURE__ */ Object.freeze({
+var __glob_0_246 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": wrap
 });
 var wrap_text = _icon_template(`<path d="M4 19h6v-2H4v2zM20 5H4v2h16V5zm-3 6H4v2h13.25c1.1 0 2 .9 2 2s-.9 2-2 2H15v-2l-3 3 3 3v-2h2c2.21 0 4-1.79 4-4s-1.79-4-4-4z"/>`);
-var __glob_0_246 = /* @__PURE__ */ Object.freeze({
+var __glob_0_247 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": wrap_text
 });
-const modules$2 = { "./icon_list/_icon_template.js": __glob_0_0$2, "./icon_list/account_tree.js": __glob_0_1$2, "./icon_list/add.js": __glob_0_2$2, "./icon_list/add_box.js": __glob_0_3$2, "./icon_list/add_circle.js": __glob_0_4$2, "./icon_list/add_note.js": __glob_0_5$2, "./icon_list/align_center.js": __glob_0_6$2, "./icon_list/align_horizontal_center.js": __glob_0_7$2, "./icon_list/align_horizontal_left.js": __glob_0_8$2, "./icon_list/align_horizontal_right.js": __glob_0_9$2, "./icon_list/align_justify.js": __glob_0_10$2, "./icon_list/align_left.js": __glob_0_11$2, "./icon_list/align_right.js": __glob_0_12$2, "./icon_list/align_vertical_bottom.js": __glob_0_13$2, "./icon_list/align_vertical_center.js": __glob_0_14$2, "./icon_list/align_vertical_top.js": __glob_0_15$2, "./icon_list/alternate.js": __glob_0_16$2, "./icon_list/alternate_reverse.js": __glob_0_17$2, "./icon_list/apps.js": __glob_0_18$2, "./icon_list/archive.js": __glob_0_19$2, "./icon_list/arrowLeft.js": __glob_0_20$2, "./icon_list/arrowRight.js": __glob_0_21$1, "./icon_list/arrow_right.js": __glob_0_22$1, "./icon_list/artboard.js": __glob_0_23$1, "./icon_list/auto_awesome.js": __glob_0_24, "./icon_list/autorenew.js": __glob_0_25, "./icon_list/ballot.js": __glob_0_26, "./icon_list/bar_chart.js": __glob_0_27, "./icon_list/blur.js": __glob_0_28, "./icon_list/blur_linear.js": __glob_0_29, "./icon_list/boolean_difference.js": __glob_0_30, "./icon_list/boolean_intersection.js": __glob_0_31, "./icon_list/boolean_union.js": __glob_0_32, "./icon_list/boolean_xor.js": __glob_0_33, "./icon_list/border_all.js": __glob_0_34, "./icon_list/border_inner.js": __glob_0_35, "./icon_list/bottom.js": __glob_0_36, "./icon_list/broken_image.js": __glob_0_37, "./icon_list/brush.js": __glob_0_38, "./icon_list/build.js": __glob_0_39, "./icon_list/camera_roll.js": __glob_0_40, "./icon_list/cat.js": __glob_0_41, "./icon_list/center.js": __glob_0_42, "./icon_list/chart.js": __glob_0_43, "./icon_list/check.js": __glob_0_44, "./icon_list/chevron_left.js": __glob_0_45, "./icon_list/chevron_right.js": __glob_0_46, "./icon_list/circle.js": __glob_0_47, "./icon_list/close.js": __glob_0_48, "./icon_list/code.js": __glob_0_49, "./icon_list/color.js": __glob_0_50, "./icon_list/color_lens.js": __glob_0_51, "./icon_list/control_point.js": __glob_0_52, "./icon_list/copy.js": __glob_0_53, "./icon_list/create_folder.js": __glob_0_54, "./icon_list/cube.js": __glob_0_55, "./icon_list/cylinder.js": __glob_0_56, "./icon_list/dahaze.js": __glob_0_57, "./icon_list/dark.js": __glob_0_58, "./icon_list/delete_forever.js": __glob_0_59, "./icon_list/device_hub.js": __glob_0_60, "./icon_list/diffuse.js": __glob_0_61, "./icon_list/doc.js": __glob_0_62, "./icon_list/drag_indicator.js": __glob_0_63, "./icon_list/draw.js": __glob_0_64, "./icon_list/east.js": __glob_0_65, "./icon_list/edit.js": __glob_0_66, "./icon_list/end.js": __glob_0_67, "./icon_list/exit_to_app.js": __glob_0_68, "./icon_list/expand.js": __glob_0_69, "./icon_list/expand_more.js": __glob_0_70, "./icon_list/export.js": __glob_0_71, "./icon_list/face.js": __glob_0_72, "./icon_list/fast_forward.js": __glob_0_73, "./icon_list/fast_rewind.js": __glob_0_74, "./icon_list/file_copy.js": __glob_0_75, "./icon_list/filter.js": __glob_0_76, "./icon_list/flag.js": __glob_0_77, "./icon_list/flash_on.js": __glob_0_78, "./icon_list/flatten.js": __glob_0_79, "./icon_list/flex.js": __glob_0_80, "./icon_list/flip.js": __glob_0_81, "./icon_list/flipY.js": __glob_0_82, "./icon_list/flip_camera.js": __glob_0_83, "./icon_list/folder.js": __glob_0_84, "./icon_list/font_download.js": __glob_0_85, "./icon_list/format_bold.js": __glob_0_86, "./icon_list/format_indent.js": __glob_0_87, "./icon_list/format_line_spacing.js": __glob_0_88, "./icon_list/format_shapes.js": __glob_0_89, "./icon_list/format_size.js": __glob_0_90, "./icon_list/fullscreen.js": __glob_0_91, "./icon_list/gps_fixed.js": __glob_0_92, "./icon_list/gradient.js": __glob_0_93, "./icon_list/grid.js": __glob_0_94, "./icon_list/grid3x3.js": __glob_0_95, "./icon_list/group.js": __glob_0_96, "./icon_list/height.js": __glob_0_97, "./icon_list/highlight_at.js": __glob_0_98, "./icon_list/horizontal_distribute.js": __glob_0_99, "./icon_list/horizontal_rule.js": __glob_0_100, "./icon_list/image.js": __glob_0_101, "./icon_list/input.js": __glob_0_102, "./icon_list/italic.js": __glob_0_103, "./icon_list/join_full.js": __glob_0_104, "./icon_list/join_right.js": __glob_0_105, "./icon_list/justify_content_space_around.js": __glob_0_106, "./icon_list/keyboard.js": __glob_0_107, "./icon_list/keyboard_arrow_down.js": __glob_0_108, "./icon_list/keyboard_arrow_left.js": __glob_0_109, "./icon_list/keyboard_arrow_right.js": __glob_0_110, "./icon_list/keyboard_arrow_up.js": __glob_0_111, "./icon_list/landscape.js": __glob_0_112, "./icon_list/launch.js": __glob_0_113, "./icon_list/layers.js": __glob_0_114, "./icon_list/layout_default.js": __glob_0_115, "./icon_list/layout_flex.js": __glob_0_116, "./icon_list/layout_grid.js": __glob_0_117, "./icon_list/left.js": __glob_0_118, "./icon_list/left_hide.js": __glob_0_119, "./icon_list/lens.js": __glob_0_120, "./icon_list/light.js": __glob_0_121, "./icon_list/line_cap_butt.js": __glob_0_122, "./icon_list/line_cap_round.js": __glob_0_123, "./icon_list/line_cap_square.js": __glob_0_124, "./icon_list/line_chart.js": __glob_0_125, "./icon_list/line_join_bevel.js": __glob_0_126, "./icon_list/line_join_miter.js": __glob_0_127, "./icon_list/line_join_round.js": __glob_0_128, "./icon_list/line_style.js": __glob_0_129, "./icon_list/line_weight.js": __glob_0_130, "./icon_list/list.js": __glob_0_131, "./icon_list/local_library.js": __glob_0_132, "./icon_list/local_movie.js": __glob_0_133, "./icon_list/lock.js": __glob_0_134, "./icon_list/lock_open.js": __glob_0_135, "./icon_list/looks.js": __glob_0_136, "./icon_list/margin.js": __glob_0_137, "./icon_list/merge.js": __glob_0_138, "./icon_list/middle.js": __glob_0_139, "./icon_list/navigation.js": __glob_0_140, "./icon_list/near_me.js": __glob_0_141, "./icon_list/north.js": __glob_0_142, "./icon_list/note.js": __glob_0_143, "./icon_list/nowrap.js": __glob_0_144, "./icon_list/opacity.js": __glob_0_145, "./icon_list/open_in_full.js": __glob_0_146, "./icon_list/outline.js": __glob_0_147, "./icon_list/outline_circle.js": __glob_0_148, "./icon_list/outline_image.js": __glob_0_149, "./icon_list/outline_rect.js": __glob_0_150, "./icon_list/outline_shape.js": __glob_0_151, "./icon_list/padding.js": __glob_0_152, "./icon_list/paint.js": __glob_0_153, "./icon_list/palette.js": __glob_0_154, "./icon_list/pantool.js": __glob_0_155, "./icon_list/pattern_check.js": __glob_0_156, "./icon_list/pattern_cross_dot.js": __glob_0_157, "./icon_list/pattern_dot.js": __glob_0_158, "./icon_list/pattern_grid.js": __glob_0_159, "./icon_list/pattern_horizontal_line.js": __glob_0_160, "./icon_list/pause.js": __glob_0_161, "./icon_list/pentool.js": __glob_0_162, "./icon_list/photo.js": __glob_0_163, "./icon_list/play.js": __glob_0_164, "./icon_list/plugin.js": __glob_0_165, "./icon_list/polygon.js": __glob_0_166, "./icon_list/power_input.js": __glob_0_167, "./icon_list/publish.js": __glob_0_168, "./icon_list/rect.js": __glob_0_169, "./icon_list/redo.js": __glob_0_170, "./icon_list/refresh.js": __glob_0_171, "./icon_list/remove.js": __glob_0_172, "./icon_list/remove2.js": __glob_0_173, "./icon_list/repeat.js": __glob_0_174, "./icon_list/replay.js": __glob_0_175, "./icon_list/right.js": __glob_0_176, "./icon_list/right_hide.js": __glob_0_177, "./icon_list/rotate.js": __glob_0_178, "./icon_list/rotate_left.js": __glob_0_179, "./icon_list/round.js": __glob_0_180, "./icon_list/same_height.js": __glob_0_181, "./icon_list/same_width.js": __glob_0_182, "./icon_list/save.js": __glob_0_183, "./icon_list/scatter.js": __glob_0_184, "./icon_list/screen.js": __glob_0_185, "./icon_list/setting.js": __glob_0_186, "./icon_list/settings_input_component.js": __glob_0_187, "./icon_list/shadow.js": __glob_0_188, "./icon_list/shape.js": __glob_0_189, "./icon_list/shuffle.js": __glob_0_190, "./icon_list/size.js": __glob_0_191, "./icon_list/skip_next.js": __glob_0_192, "./icon_list/skip_prev.js": __glob_0_193, "./icon_list/smooth.js": __glob_0_194, "./icon_list/source.js": __glob_0_195, "./icon_list/south.js": __glob_0_196, "./icon_list/space.js": __glob_0_197, "./icon_list/specular.js": __glob_0_198, "./icon_list/speed.js": __glob_0_199, "./icon_list/star.js": __glob_0_200, "./icon_list/start.js": __glob_0_201, "./icon_list/storage.js": __glob_0_202, "./icon_list/straighten.js": __glob_0_203, "./icon_list/strikethrough.js": __glob_0_204, "./icon_list/stroke_to_path.js": __glob_0_205, "./icon_list/swap_horiz.js": __glob_0_206, "./icon_list/switch_left.js": __glob_0_207, "./icon_list/switch_right.js": __glob_0_208, "./icon_list/sync.js": __glob_0_209, "./icon_list/table_rows.js": __glob_0_210, "./icon_list/text_rotate.js": __glob_0_211, "./icon_list/texture.js": __glob_0_212, "./icon_list/timer.js": __glob_0_213, "./icon_list/title.js": __glob_0_214, "./icon_list/to_back.js": __glob_0_215, "./icon_list/to_front.js": __glob_0_216, "./icon_list/tonality.js": __glob_0_217, "./icon_list/top.js": __glob_0_218, "./icon_list/transform.js": __glob_0_219, "./icon_list/underline.js": __glob_0_220, "./icon_list/undo.js": __glob_0_221, "./icon_list/unfold.js": __glob_0_222, "./icon_list/vertical_align_baseline.js": __glob_0_223, "./icon_list/vertical_align_bottom.js": __glob_0_224, "./icon_list/vertical_align_center.js": __glob_0_225, "./icon_list/vertical_align_stretch.js": __glob_0_226, "./icon_list/vertical_align_top.js": __glob_0_227, "./icon_list/vertical_distribute.js": __glob_0_228, "./icon_list/video.js": __glob_0_229, "./icon_list/view_comfy.js": __glob_0_230, "./icon_list/view_list.js": __glob_0_231, "./icon_list/view_week.js": __glob_0_232, "./icon_list/view_week_reverse.js": __glob_0_233, "./icon_list/vignette.js": __glob_0_234, "./icon_list/vintage.js": __glob_0_235, "./icon_list/visible.js": __glob_0_236, "./icon_list/volume_down.js": __glob_0_237, "./icon_list/volume_off.js": __glob_0_238, "./icon_list/volume_up.js": __glob_0_239, "./icon_list/wave.js": __glob_0_240, "./icon_list/waves.js": __glob_0_241, "./icon_list/web.js": __glob_0_242, "./icon_list/west.js": __glob_0_243, "./icon_list/width.js": __glob_0_244, "./icon_list/wrap.js": __glob_0_245, "./icon_list/wrap_text.js": __glob_0_246 };
+const modules$2 = { "./icon_list/_icon_template.js": __glob_0_0$2, "./icon_list/account_tree.js": __glob_0_1$2, "./icon_list/add.js": __glob_0_2$2, "./icon_list/add_box.js": __glob_0_3$2, "./icon_list/add_circle.js": __glob_0_4$2, "./icon_list/add_note.js": __glob_0_5$2, "./icon_list/align_center.js": __glob_0_6$2, "./icon_list/align_horizontal_center.js": __glob_0_7$2, "./icon_list/align_horizontal_left.js": __glob_0_8$2, "./icon_list/align_horizontal_right.js": __glob_0_9$2, "./icon_list/align_justify.js": __glob_0_10$2, "./icon_list/align_left.js": __glob_0_11$2, "./icon_list/align_right.js": __glob_0_12$2, "./icon_list/align_vertical_bottom.js": __glob_0_13$2, "./icon_list/align_vertical_center.js": __glob_0_14$2, "./icon_list/align_vertical_top.js": __glob_0_15$2, "./icon_list/alternate.js": __glob_0_16$2, "./icon_list/alternate_reverse.js": __glob_0_17$2, "./icon_list/apps.js": __glob_0_18$2, "./icon_list/archive.js": __glob_0_19$2, "./icon_list/arrowLeft.js": __glob_0_20$2, "./icon_list/arrowRight.js": __glob_0_21$1, "./icon_list/arrow_right.js": __glob_0_22$1, "./icon_list/artboard.js": __glob_0_23$1, "./icon_list/auto_awesome.js": __glob_0_24, "./icon_list/autorenew.js": __glob_0_25, "./icon_list/ballot.js": __glob_0_26, "./icon_list/bar_chart.js": __glob_0_27, "./icon_list/blur.js": __glob_0_28, "./icon_list/blur_linear.js": __glob_0_29, "./icon_list/boolean_difference.js": __glob_0_30, "./icon_list/boolean_intersection.js": __glob_0_31, "./icon_list/boolean_union.js": __glob_0_32, "./icon_list/boolean_xor.js": __glob_0_33, "./icon_list/border_all.js": __glob_0_34, "./icon_list/border_inner.js": __glob_0_35, "./icon_list/border_style.js": __glob_0_36, "./icon_list/bottom.js": __glob_0_37, "./icon_list/broken_image.js": __glob_0_38, "./icon_list/brush.js": __glob_0_39, "./icon_list/build.js": __glob_0_40, "./icon_list/camera_roll.js": __glob_0_41, "./icon_list/cat.js": __glob_0_42, "./icon_list/center.js": __glob_0_43, "./icon_list/chart.js": __glob_0_44, "./icon_list/check.js": __glob_0_45, "./icon_list/chevron_left.js": __glob_0_46, "./icon_list/chevron_right.js": __glob_0_47, "./icon_list/circle.js": __glob_0_48, "./icon_list/close.js": __glob_0_49, "./icon_list/code.js": __glob_0_50, "./icon_list/color.js": __glob_0_51, "./icon_list/color_lens.js": __glob_0_52, "./icon_list/control_point.js": __glob_0_53, "./icon_list/copy.js": __glob_0_54, "./icon_list/create_folder.js": __glob_0_55, "./icon_list/cube.js": __glob_0_56, "./icon_list/cylinder.js": __glob_0_57, "./icon_list/dahaze.js": __glob_0_58, "./icon_list/dark.js": __glob_0_59, "./icon_list/delete_forever.js": __glob_0_60, "./icon_list/device_hub.js": __glob_0_61, "./icon_list/diffuse.js": __glob_0_62, "./icon_list/doc.js": __glob_0_63, "./icon_list/drag_indicator.js": __glob_0_64, "./icon_list/draw.js": __glob_0_65, "./icon_list/east.js": __glob_0_66, "./icon_list/edit.js": __glob_0_67, "./icon_list/end.js": __glob_0_68, "./icon_list/exit_to_app.js": __glob_0_69, "./icon_list/expand.js": __glob_0_70, "./icon_list/expand_more.js": __glob_0_71, "./icon_list/export.js": __glob_0_72, "./icon_list/face.js": __glob_0_73, "./icon_list/fast_forward.js": __glob_0_74, "./icon_list/fast_rewind.js": __glob_0_75, "./icon_list/file_copy.js": __glob_0_76, "./icon_list/filter.js": __glob_0_77, "./icon_list/flag.js": __glob_0_78, "./icon_list/flash_on.js": __glob_0_79, "./icon_list/flatten.js": __glob_0_80, "./icon_list/flex.js": __glob_0_81, "./icon_list/flip.js": __glob_0_82, "./icon_list/flipY.js": __glob_0_83, "./icon_list/flip_camera.js": __glob_0_84, "./icon_list/folder.js": __glob_0_85, "./icon_list/font_download.js": __glob_0_86, "./icon_list/format_bold.js": __glob_0_87, "./icon_list/format_indent.js": __glob_0_88, "./icon_list/format_line_spacing.js": __glob_0_89, "./icon_list/format_shapes.js": __glob_0_90, "./icon_list/format_size.js": __glob_0_91, "./icon_list/fullscreen.js": __glob_0_92, "./icon_list/gps_fixed.js": __glob_0_93, "./icon_list/gradient.js": __glob_0_94, "./icon_list/grid.js": __glob_0_95, "./icon_list/grid3x3.js": __glob_0_96, "./icon_list/group.js": __glob_0_97, "./icon_list/height.js": __glob_0_98, "./icon_list/highlight_at.js": __glob_0_99, "./icon_list/horizontal_distribute.js": __glob_0_100, "./icon_list/horizontal_rule.js": __glob_0_101, "./icon_list/image.js": __glob_0_102, "./icon_list/input.js": __glob_0_103, "./icon_list/italic.js": __glob_0_104, "./icon_list/join_full.js": __glob_0_105, "./icon_list/join_right.js": __glob_0_106, "./icon_list/justify_content_space_around.js": __glob_0_107, "./icon_list/keyboard.js": __glob_0_108, "./icon_list/keyboard_arrow_down.js": __glob_0_109, "./icon_list/keyboard_arrow_left.js": __glob_0_110, "./icon_list/keyboard_arrow_right.js": __glob_0_111, "./icon_list/keyboard_arrow_up.js": __glob_0_112, "./icon_list/landscape.js": __glob_0_113, "./icon_list/launch.js": __glob_0_114, "./icon_list/layers.js": __glob_0_115, "./icon_list/layout_default.js": __glob_0_116, "./icon_list/layout_flex.js": __glob_0_117, "./icon_list/layout_grid.js": __glob_0_118, "./icon_list/left.js": __glob_0_119, "./icon_list/left_hide.js": __glob_0_120, "./icon_list/lens.js": __glob_0_121, "./icon_list/light.js": __glob_0_122, "./icon_list/line_cap_butt.js": __glob_0_123, "./icon_list/line_cap_round.js": __glob_0_124, "./icon_list/line_cap_square.js": __glob_0_125, "./icon_list/line_chart.js": __glob_0_126, "./icon_list/line_join_bevel.js": __glob_0_127, "./icon_list/line_join_miter.js": __glob_0_128, "./icon_list/line_join_round.js": __glob_0_129, "./icon_list/line_style.js": __glob_0_130, "./icon_list/line_weight.js": __glob_0_131, "./icon_list/list.js": __glob_0_132, "./icon_list/local_library.js": __glob_0_133, "./icon_list/local_movie.js": __glob_0_134, "./icon_list/lock.js": __glob_0_135, "./icon_list/lock_open.js": __glob_0_136, "./icon_list/looks.js": __glob_0_137, "./icon_list/margin.js": __glob_0_138, "./icon_list/merge.js": __glob_0_139, "./icon_list/middle.js": __glob_0_140, "./icon_list/navigation.js": __glob_0_141, "./icon_list/near_me.js": __glob_0_142, "./icon_list/north.js": __glob_0_143, "./icon_list/note.js": __glob_0_144, "./icon_list/nowrap.js": __glob_0_145, "./icon_list/opacity.js": __glob_0_146, "./icon_list/open_in_full.js": __glob_0_147, "./icon_list/outline.js": __glob_0_148, "./icon_list/outline_circle.js": __glob_0_149, "./icon_list/outline_image.js": __glob_0_150, "./icon_list/outline_rect.js": __glob_0_151, "./icon_list/outline_shape.js": __glob_0_152, "./icon_list/padding.js": __glob_0_153, "./icon_list/paint.js": __glob_0_154, "./icon_list/palette.js": __glob_0_155, "./icon_list/pantool.js": __glob_0_156, "./icon_list/pattern_check.js": __glob_0_157, "./icon_list/pattern_cross_dot.js": __glob_0_158, "./icon_list/pattern_dot.js": __glob_0_159, "./icon_list/pattern_grid.js": __glob_0_160, "./icon_list/pattern_horizontal_line.js": __glob_0_161, "./icon_list/pause.js": __glob_0_162, "./icon_list/pentool.js": __glob_0_163, "./icon_list/photo.js": __glob_0_164, "./icon_list/play.js": __glob_0_165, "./icon_list/plugin.js": __glob_0_166, "./icon_list/polygon.js": __glob_0_167, "./icon_list/power_input.js": __glob_0_168, "./icon_list/publish.js": __glob_0_169, "./icon_list/rect.js": __glob_0_170, "./icon_list/redo.js": __glob_0_171, "./icon_list/refresh.js": __glob_0_172, "./icon_list/remove.js": __glob_0_173, "./icon_list/remove2.js": __glob_0_174, "./icon_list/repeat.js": __glob_0_175, "./icon_list/replay.js": __glob_0_176, "./icon_list/right.js": __glob_0_177, "./icon_list/right_hide.js": __glob_0_178, "./icon_list/rotate.js": __glob_0_179, "./icon_list/rotate_left.js": __glob_0_180, "./icon_list/round.js": __glob_0_181, "./icon_list/same_height.js": __glob_0_182, "./icon_list/same_width.js": __glob_0_183, "./icon_list/save.js": __glob_0_184, "./icon_list/scatter.js": __glob_0_185, "./icon_list/screen.js": __glob_0_186, "./icon_list/setting.js": __glob_0_187, "./icon_list/settings_input_component.js": __glob_0_188, "./icon_list/shadow.js": __glob_0_189, "./icon_list/shape.js": __glob_0_190, "./icon_list/shuffle.js": __glob_0_191, "./icon_list/size.js": __glob_0_192, "./icon_list/skip_next.js": __glob_0_193, "./icon_list/skip_prev.js": __glob_0_194, "./icon_list/smooth.js": __glob_0_195, "./icon_list/source.js": __glob_0_196, "./icon_list/south.js": __glob_0_197, "./icon_list/space.js": __glob_0_198, "./icon_list/specular.js": __glob_0_199, "./icon_list/speed.js": __glob_0_200, "./icon_list/star.js": __glob_0_201, "./icon_list/start.js": __glob_0_202, "./icon_list/storage.js": __glob_0_203, "./icon_list/straighten.js": __glob_0_204, "./icon_list/strikethrough.js": __glob_0_205, "./icon_list/stroke_to_path.js": __glob_0_206, "./icon_list/swap_horiz.js": __glob_0_207, "./icon_list/switch_left.js": __glob_0_208, "./icon_list/switch_right.js": __glob_0_209, "./icon_list/sync.js": __glob_0_210, "./icon_list/table_rows.js": __glob_0_211, "./icon_list/text_rotate.js": __glob_0_212, "./icon_list/texture.js": __glob_0_213, "./icon_list/timer.js": __glob_0_214, "./icon_list/title.js": __glob_0_215, "./icon_list/to_back.js": __glob_0_216, "./icon_list/to_front.js": __glob_0_217, "./icon_list/tonality.js": __glob_0_218, "./icon_list/top.js": __glob_0_219, "./icon_list/transform.js": __glob_0_220, "./icon_list/underline.js": __glob_0_221, "./icon_list/undo.js": __glob_0_222, "./icon_list/unfold.js": __glob_0_223, "./icon_list/vertical_align_baseline.js": __glob_0_224, "./icon_list/vertical_align_bottom.js": __glob_0_225, "./icon_list/vertical_align_center.js": __glob_0_226, "./icon_list/vertical_align_stretch.js": __glob_0_227, "./icon_list/vertical_align_top.js": __glob_0_228, "./icon_list/vertical_distribute.js": __glob_0_229, "./icon_list/video.js": __glob_0_230, "./icon_list/view_comfy.js": __glob_0_231, "./icon_list/view_list.js": __glob_0_232, "./icon_list/view_week.js": __glob_0_233, "./icon_list/view_week_reverse.js": __glob_0_234, "./icon_list/vignette.js": __glob_0_235, "./icon_list/vintage.js": __glob_0_236, "./icon_list/visible.js": __glob_0_237, "./icon_list/volume_down.js": __glob_0_238, "./icon_list/volume_off.js": __glob_0_239, "./icon_list/volume_up.js": __glob_0_240, "./icon_list/wave.js": __glob_0_241, "./icon_list/waves.js": __glob_0_242, "./icon_list/web.js": __glob_0_243, "./icon_list/west.js": __glob_0_244, "./icon_list/width.js": __glob_0_245, "./icon_list/wrap.js": __glob_0_246, "./icon_list/wrap_text.js": __glob_0_247 };
 const obj = {};
 Object.entries(modules$2).forEach(([key, value]) => {
   key = key.replace("./icon_list/", "").replace(".js", "");
@@ -22156,11 +22339,11 @@ class IconManager$1 {
     this.iconMap = {};
   }
   get(itemType, item2) {
-    const icon2 = this.iconMap[itemType];
-    if (isFunction(icon2)) {
-      return icon2(item2);
+    const icon = this.iconMap[itemType];
+    if (isFunction(icon)) {
+      return icon(item2);
     }
-    return iconUse$1(icon2 || item2.getIcon());
+    return iconUse$1(icon || item2.getIcon());
   }
   set(itemType, value) {
     this.iconMap[itemType] = value;
@@ -22298,8 +22481,8 @@ class Editor {
     this.store.emit(...args2);
   }
   on(...args2) {
-    const [name2, callback, ...rest] = args2;
-    return this.store.on(name2, callback, this, ...rest);
+    const [name2, callback, context, ...rest] = args2;
+    return this.store.on(name2, callback, context || this, ...rest);
   }
   off(...args2) {
     this.store.off(...args2);
@@ -22790,7 +22973,11 @@ class HorizontalRuler extends EditorElement {
   template() {
     return `
             <div class="elf--horizontal-ruler">
-                <div class='horizontal-ruler-container' ref='$layerRuler'></div>                            
+                <div class='horizontal-ruler-container' ref='$layerRuler'>
+                    <svg class="lines" width="100%" width="100%" overflow="hidden">
+                        <path ref="$rulerLines" d="" />
+                    </svg>
+                </div>                            
                 <div class='horizontal-ruler-container' ref='$ruler'></div>
                 <div class='horizontal-ruler-container'>
                     <svg width="100%" width="100%" overflow="hidden">
@@ -22907,7 +23094,7 @@ class HorizontalRuler extends EditorElement {
       0 < dist2 && dist2 < 15 ? this.makeLineText(1, minX, maxX, realWidth, width2, 20) : ""
     ].join("");
   }
-  [LOAD("$ruler") + DOMDIFF]() {
+  [LOAD("$ruler")]() {
     this.initializeRect();
     return `
             <svg width="100%" width="100%" overflow="hidden">
@@ -22916,13 +23103,10 @@ class HorizontalRuler extends EditorElement {
             </svg>
         `;
   }
-  [LOAD("$layerRuler") + DOMDIFF]() {
-    this.initializeRect();
-    return `
-            <svg width="100%" width="100%" overflow="hidden">
-                <path data-selected="true" d="${this.makeRulerForCurrent()}" fill="rgba(100, 255, 255, 0.5)" stroke="transparent" />
-            </svg>
-        `;
+  [BIND("$rulerLines")]() {
+    return {
+      d: this.makeRulerForCurrent()
+    };
   }
   makeRulerCursor() {
     const targetMousePoint = this.$viewport.getWorldPosition();
@@ -22957,8 +23141,9 @@ class HorizontalRuler extends EditorElement {
   [SUBSCRIBE("resize.window", "resizeCanvas")]() {
     this.refreshCanvasSize();
   }
-  [CONFIG("bodyEvent")]() {
+  [CONFIG("onMouseMovepageContainer")]() {
     this.bindData("$cursor");
+    this.bindData("$rulerLines");
   }
 }
 var VerticalRuler$1 = "";
@@ -22967,7 +23152,11 @@ class VerticalRuler extends EditorElement {
   template() {
     return `
             <div class="elf--vertical-ruler">
-                <div class='vertical-ruler-container' ref='$layerRuler'></div>                                        
+                <div class='vertical-ruler-container' ref='$layerRuler'>
+                    <svg class="lines" width="100%" height="100%" overflow="hidden">
+                        <path ref="$rulerLines" d=""/>
+                    </svg>
+                </div>                                        
                 <div class='vertical-ruler-container' ref='$body'></div>
                 <div class='vertical-ruler-container'>
                     <svg width="100%" height="100%" overflow="hidden">
@@ -23084,7 +23273,7 @@ class VerticalRuler extends EditorElement {
       0 < dist2 && dist2 < 15 ? this.makeLineText(1, minY, maxY, realHeight, height2, 20) : ""
     ].join("");
   }
-  [LOAD("$body") + DOMDIFF]() {
+  [LOAD("$body")]() {
     if (!this.state.rect || this.state.rect.width == 0) {
       this.state.rect = this.$el.rect();
     }
@@ -23095,15 +23284,10 @@ class VerticalRuler extends EditorElement {
             </svg>
         `;
   }
-  [LOAD("$layerRuler") + DOMDIFF]() {
-    if (!this.state.rect || this.state.rect.width == 0) {
-      this.state.rect = this.$el.rect();
-    }
-    return `
-            <svg width="100%" height="100%" overflow="hidden">
-                <path data-selected="true"  d="${this.makeRulerForCurrent()}" fill="rgba(100, 255, 255, 0.5)" stroke="transparent" />
-            </svg>
-        `;
+  [BIND("$rulerLines")]() {
+    return {
+      d: this.makeRulerForCurrent()
+    };
   }
   makeRulerCursor() {
     const targetMousePoint = this.$viewport.getWorldPosition();
@@ -23124,23 +23308,21 @@ class VerticalRuler extends EditorElement {
       this.load();
     }
   }
-  [SUBSCRIBE("updateViewport")]() {
-    this.refresh();
-  }
   [SUBSCRIBE("refreshSelectionStyleView") + THROTTLE(10)]() {
     const current = this.$selection.current;
     if (current && current.hasChangedField("x", "y", "width", "height", "transform", "rotateZ", "rotate")) {
       this.refresh();
     }
   }
-  [SUBSCRIBE("refreshSelection")]() {
-    this.load("$layerRuler");
+  [SUBSCRIBE("updateViewport", "refreshSelection")]() {
+    this.refresh();
   }
   [SUBSCRIBE("resize.window", "resizeCanvas")]() {
     this.refreshCanvasSize();
   }
-  [CONFIG("bodyEvent")]() {
+  [CONFIG("onMouseMovepageContainer")]() {
     this.bindData("$cursor");
+    this.bindData("$rulerLines");
   }
 }
 class Resource {
@@ -23617,10 +23799,13 @@ class HTMLRenderView extends EditorElement {
     }, 100);
   }
   refreshSelectionStyleView(obj2) {
-    var items = obj2 ? [obj2] : this.$selection.items;
-    items.forEach((current) => {
-      this.updateElement(current);
-    });
+    if (obj2) {
+      this.updateElement(obj2);
+    } else {
+      this.$selection.items.forEach((current) => {
+        this.updateElement(current);
+      });
+    }
   }
   updateElement(item2) {
     if (item2) {
@@ -23673,7 +23858,7 @@ class HTMLRenderView extends EditorElement {
         const { x: x2, y: y2, width: width2, height: height2 } = $el.offsetRect();
         if (width2 > 0 && height2 > 0) {
           parentObj.reset({ x: x2, y: y2, width: width2, height: height2 });
-          this.emit("refreshSelectionStyleView", parentObj);
+          this.refreshSelectionStyleView(parentObj);
         }
         return;
       }
@@ -23684,11 +23869,10 @@ class HTMLRenderView extends EditorElement {
           const { x: x2, y: y2, width: width2, height: height2 } = $el2.offsetRect();
           if (width2 > 0 && height2 > 0) {
             it.reset({ x: x2, y: y2, width: width2, height: height2 });
-            this.updateElement(it, $el2);
             this.refreshSelectionStyleView(it);
           }
         }
-        this.refreshElementBoundSize(it);
+        this.trigger("refreshElementBoundSize", it);
       });
     }
   }
@@ -24997,8 +25181,8 @@ class DropdownMenu extends EditorElement {
     if (Array.isArray(it.items)) {
       return `
           <li>
-              <span>${iconUse$1("arrowRight")}</span>
               <label>${this.$i18n(it.title)}</label> 
+              <span>${iconUse$1("arrowRight")}</span>              
               <ul>
                   ${it.items.map((child) => this.makeMenuItem(child)).join("")}
               </ul>
@@ -26393,6 +26577,18 @@ class BasePopup extends EditorElement {
       "z-index": this.$editor.zIndex
     }).show("inline-block");
   }
+  makeRect(width2, height2, rect2) {
+    const elements = this.$config.get("editor.layout.elements");
+    const bodyRect = elements.$bodyPanel.rect();
+    const left2 = bodyRect.left + bodyRect.width - (width2 - 10);
+    const top2 = rect2.top + height2 > bodyRect.top + bodyRect.height ? bodyRect.top + bodyRect.height - height2 - 10 : rect2.top;
+    return {
+      top: top2,
+      left: left2 < rect2.left && rect2.left <= left2 + width2 ? left2 - (left2 + width2 - rect2.left) - 10 : left2,
+      width: width2,
+      height: height2
+    };
+  }
   showByRect(rect2) {
     this.$el.css({
       top: Length.px(rect2.top),
@@ -26618,132 +26814,6 @@ function animation(editor) {
     AnimationPropertyPopup
   });
 }
-const ConstraintsDirection = {
-  HORIZONTAL: "constraints-horizontal",
-  VERTICAL: "constraints-vertical"
-};
-const Constraints = {
-  NONE: "none",
-  MIN: "min",
-  MAX: "max",
-  STRETCH: "stretch",
-  SCALE: "scale",
-  CENTER: "center"
-};
-const BooleanOperation = {
-  DIFFERENCE: "difference",
-  INTERSECTION: "intersection",
-  UNION: "union",
-  REVERSE_DIFFERENCE: "reverse-difference",
-  XOR: "xor"
-};
-const StrokeLineCap = {
-  BUTT: "butt",
-  ROUND: "round",
-  SQUARE: "square"
-};
-const StrokeLineJoin = {
-  MITER: "miter",
-  ROUND: "round",
-  BEVEL: "bevel"
-};
-const BlendMode = {
-  NORMAL: "normal",
-  MULTIPLY: "multiply",
-  SCREEN: "screen",
-  OVERLAY: "overlay",
-  DARKEN: "darken",
-  LIGHTEN: "lighten",
-  COLOR_DODGE: "color-dodge",
-  COLOR_BURN: "color-burn",
-  HARD_LIGHT: "hard-light",
-  SOFT_LIGHT: "soft-light",
-  DIFFERENCE: "difference",
-  EXCLUSION: "exclusion",
-  HUE: "hue",
-  SATURATION: "saturation",
-  COLOR: "color",
-  LUMINOSITY: "luminosity"
-};
-const TextDecoration = {
-  NONE: "none",
-  UNDERLINE: "underline",
-  OVERLINE: "overline",
-  LINE_THROUGH: "line-through",
-  BLINK: "blink"
-};
-const TextTransform = {
-  NONE: "none",
-  CAPITALIZE: "capitalize",
-  UPPERCASE: "uppercase",
-  LOWERCASE: "lowercase"
-};
-const Overflow = {
-  VISIBLE: "visible",
-  HIDDEN: "hidden",
-  SCROLL: "scroll",
-  AUTO: "auto"
-};
-const BorderStyle = {
-  NONE: "none",
-  HIDDEN: "hidden",
-  DOTTED: "dotted",
-  DASHED: "dashed",
-  SOLID: "solid",
-  DOUBLE: "double",
-  GROOVE: "groove",
-  RIDGE: "ridge",
-  INSET: "inset",
-  OUTSET: "outset"
-};
-const Layout = {
-  DEFAULT: "default",
-  FLEX: "flex",
-  GRID: "grid"
-};
-const FlexDirection = {
-  ROW: "row",
-  ROW_REVERSE: "row-reverse",
-  COLUMN: "column",
-  COLUMN_REVERSE: "column-reverse"
-};
-const JustifyContent = {
-  FLEX_START: "flex-start",
-  FLEX_END: "flex-end",
-  CENTER: "center",
-  SPACE_BETWEEN: "space-between",
-  SPACE_AROUND: "space-around",
-  SPACE_EVENLY: "space-evenly"
-};
-const AlignItems = {
-  FLEX_START: "flex-start",
-  FLEX_END: "flex-end",
-  CENTER: "center",
-  BASELINE: "baseline",
-  STRETCH: "stretch"
-};
-const AlignContent = {
-  FLEX_START: "flex-start",
-  FLEX_END: "flex-end",
-  CENTER: "center",
-  SPACE_BETWEEN: "space-between",
-  SPACE_AROUND: "space-around",
-  SPACE_EVENLY: "space-evenly"
-};
-const FlexWrap = {
-  NOWRAP: "nowrap",
-  WRAP: "wrap",
-  WRAP_REVERSE: "wrap-reverse"
-};
-const ResizingMode = {
-  FIXED: "fixed",
-  HUG_CONTENT: "hug-content",
-  FILL_CONTAINER: "fill-container"
-};
-const TextClip = {
-  NONE: "none",
-  TEXT: "text"
-};
 class ObjectProperty {
   static create(json) {
     return class extends BaseProperty {
@@ -26814,11 +26884,12 @@ function appearance(editor) {
     AppearanceProperty: ObjectProperty.create({
       title: editor.$i18n("background.color.property.title"),
       editableProperty: "appearance",
+      preventUpdate: true,
       inspector: (current) => {
         return [
           {
             type: "column",
-            size: [2, 1],
+            size: [1, 1],
             columns: [
               {
                 key: "background-color",
@@ -27214,6 +27285,7 @@ class BackgroundImageEditor extends EditorElement {
       }
       return `
             <div class='fill-item ${selectedClass}' data-index='${index2}' ref="fillIndex${index2}"  draggable='true' data-fill-type="${backgroundType}" >
+                <label draggable="true" data-index="${index2}">${iconUse$1("drag_indicator")}</label>
                 ${createComponentList(["BackgroundPositionEditor", {
         key: "background-position",
         index: index2,
@@ -27287,7 +27359,7 @@ class BackgroundImageEditor extends EditorElement {
   [CLICK("$add")]() {
     this.trigger("add");
   }
-  [DRAGSTART("$fillList .fill-item")](e2) {
+  [DRAGSTART("$fillList .fill-item > label")](e2) {
     this.startIndex = +e2.$dt.attr("data-index");
   }
   [DRAGOVER("$fillList .fill-item") + PREVENT](e2) {
@@ -27529,7 +27601,7 @@ class BackgroundImageProperty extends BaseProperty {
   }
   getTools() {
     return `
-      <div ref='$add'>
+      <div class="fill-sample-list" ref='$add'>
         <button type="button" class='fill' data-value="static-gradient" data-tooltip="Static" ></button>
         <button type="button" class='fill' data-value="linear-gradient" data-tooltip="Linear" ></button>
         <button type="button" class='fill' data-value="repeating-linear-gradient" data-tooltip="R Linear" ></button>
@@ -28696,7 +28768,6 @@ var BoxShadowEditor$1 = "";
 class BoxShadowEditor extends EditorElement {
   initState() {
     return {
-      hideLabel: this.props.hideLabel === "true" ? true : false,
       boxShadows: BoxShadow.parseStyle(this.props.value || "")
     };
   }
@@ -28711,92 +28782,160 @@ class BoxShadowEditor extends EditorElement {
     var arr = this.state.boxShadows.map((shadow2, index2) => {
       return `
         <div class="shadow-item real" data-index="${index2}">
-          <div class="color">
-            <div class='color-view' style="background-color: ${shadow2.color}">
-            </div>
-          </div>
-          <div class="inset" data-value="${shadow2.inset}">${obj.check}</div>
-          <div class="offset-x">${shadow2.offsetX}</div>
-          <div class="offset-y">${shadow2.offsetY}</div>
-          <div class="blur-radius">${shadow2.blurRadius}</div>
-          <div class="spread-radius">${shadow2.spreadRadius}</div>
+            <label draggable="true" data-index="${index2}">${iconUse$1("drag_indicator")}</label>
+            ${createComponent("ColorViewEditor", {
+        mini: true,
+        key: "color",
+        value: shadow2.color,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}
+            ${createComponent("ToggleButton", {
+        mini: true,
+        key: "inset",
+        value: shadow2.inset,
+        params: index2,
+        onchange: "changeKeyValue",
+        checkedValue: BoxShadowStyle.INSET,
+        toggleLabels: ["border_style", "border_style"],
+        toggleTitles: [BoxShadowStyle.INSET, BoxShadowStyle.INSET],
+        toggleValues: [BoxShadowStyle.OUTSET, BoxShadowStyle.INSET]
+      })}            
+            ${createComponent("NumberInputEditor", {
+        mini: true,
+        key: "offsetX",
+        label: "X",
+        value: shadow2.offsetX,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}          
+            ${createComponent("NumberInputEditor", {
+        mini: true,
+        key: "offsetY",
+        label: "Y",
+        value: shadow2.offsetY,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}                    
+            ${createComponent("NumberInputEditor", {
+        mini: true,
+        label: "B",
+        key: "blurRadius",
+        value: shadow2.blurRadius,
+        params: index2,
+        onchange: "changeKeyValue"
+      })} 
+            ${createComponent("NumberInputEditor", {
+        mini: true,
+        label: "S",
+        key: "spreadRadius",
+        value: shadow2.spreadRadius,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}             
           <div class="tools">
             <button type="button" class="remove" data-index="${index2}">
-              ${obj.remove2}
+              ${iconUse$1("remove2")}
             </button>
           </div>
         </div>
       `;
     });
-    if (arr.length) {
-      arr.push(`
-      <div class="shadow-item desc">
-        <div class="color"></div>      
-        <div class="inset" >Inset</div>
-
-        <div class="offset-x">X</div>
-        <div class="offset-y">Y</div>
-        <div class="blur-radius">${this.$i18n("boxshadow.editor.blur")}</div>
-        <div class="spread-radius">${this.$i18n("boxshadow.editor.spread")}</div>
-        <div class="tools">
-        </div>
-      </div>
-      `);
-    }
     return arr.join("");
   }
   modifyBoxShadow() {
     var value = this.state.boxShadows.join(", ");
-    this.parent.trigger(this.props.onchange, value);
+    this.parent.trigger(this.props.onchange, this.props.key, value);
   }
-  [SUBSCRIBE("add")]() {
-    this.state.boxShadows.push(new BoxShadow({
-      offsetX: 2,
-      offsetY: 2,
-      blurRadius: 3,
-      spreadRadius: 1
-    }));
+  [SUBSCRIBE("add")](shadow2 = "") {
+    if (shadow2) {
+      this.state.boxShadows = BoxShadow.parseStyle(shadow2);
+    } else {
+      const shadowObj = new BoxShadow({
+        color: "black",
+        inset: BoxShadowStyle.OUTSET,
+        offsetX: 2,
+        offsetY: 2,
+        blurRadius: 3,
+        spreadRadius: 1
+      });
+      this.state.boxShadows.push(shadowObj);
+    }
     this.refresh();
     this.modifyBoxShadow();
   }
   [CLICK("$add")]() {
     this.trigger("add");
   }
+  [DRAGSTART("$shadowList .shadow-item > label")](e2) {
+    this.startIndex = +e2.$dt.attr("data-index");
+  }
+  [DRAGOVER("$shadowList .shadow-item") + PREVENT](e2) {
+  }
+  sortItem(arr, startIndex, targetIndex) {
+    arr.splice(targetIndex + (startIndex < targetIndex ? -1 : 0), 0, ...arr.splice(startIndex, 1));
+  }
+  sortBoxShadow(startIndex, targetIndex) {
+    this.sortItem(this.state.boxShadows, startIndex, targetIndex);
+  }
+  [DROP("$shadowList .shadow-item") + PREVENT](e2) {
+    var targetIndex = +e2.$dt.attr("data-index");
+    this.sortBoxShadow(this.startIndex, targetIndex);
+    this.refresh();
+    this.modifyBoxShadow();
+  }
   [CLICK("$shadowList .remove")](e2) {
     var index2 = +e2.$dt.attr("data-index");
     this.state.boxShadows.splice(index2, 1);
     this.refresh();
     this.modifyBoxShadow();
-    this.emit("hideBoxShadowPropertyPopup");
   }
-  [CLICK("$shadowList .shadow-item.real > div:not(.tools)")](e2) {
-    var index2 = +e2.$dt.closest("shadow-item").attr("data-index");
+  [SUBSCRIBE("changeKeyValue")](key, value, index2) {
     var shadow2 = this.state.boxShadows[index2];
-    this.viewShadowPopup(shadow2, index2);
-  }
-  viewShadowPopup(shadow2, index2) {
-    this.selectedIndex = index2;
-    this.viewBoxShadowPropertyPopup(shadow2);
-  }
-  viewBoxShadowPropertyPopup(shadow2) {
-    this.emit("showBoxShadowPropertyPopup", {
-      changeEvent: (data, params) => {
-        var shadow3 = this.state.boxShadows[this.selectedIndex];
-        if (shadow3) {
-          shadow3.reset(data);
-          this.refresh();
-          this.modifyBoxShadow();
-        }
-      },
-      color: shadow2.color,
-      inset: shadow2.inset,
-      offsetX: shadow2.offsetX,
-      offsetY: shadow2.offsetY,
-      blurRadius: shadow2.blurRadius,
-      spreadRadius: shadow2.spreadRadius
-    }, { id: this.id });
+    shadow2.reset({
+      [key]: value
+    });
+    this.modifyBoxShadow();
   }
 }
+var boxShadow$1 = [
+  { name: "Box", shadow: `0px 3px 3px 0px rgba(0,0,0,0.2)` },
+  { name: "Shadow-4", shadow: `
+        0px 1px 1px 0px rgba(0,0,0,0.15), 
+        0px 2px 2px 0px rgba(0,0,0,0.15), 
+        0px 4px 4px 0px rgba(0,0,0,0.15), 
+        0px 8px 8px 0px rgba(0,0,0,0.15)
+    ` },
+  { name: "Shadow-5", shadow: `
+        0px  1px 1px 0px rgba(0,0,0,0.12), 
+        0px  2px 2px 0px rgba(0,0,0,0.12), 
+        0px  4px 4px 0px rgba(0,0,0,0.12), 
+        0px  8px 8px 0px rgba(0,0,0,0.12),
+        0px  16px 16px 0px rgba(0,0,0,0.12)
+    ` },
+  { name: "Shadow-6", shadow: `
+        0px 1px 1px 0px rgba(0,0,0,0.11), 
+        0px 2px 2px 0px rgba(0,0,0,0.11), 
+        0px 4px 4px 0px rgba(0,0,0,0.11), 
+        0px 8px 8px 0px rgba(0,0,0,0.11), 
+        0px 16px 16px 0px rgba(0,0,0,0.11), 
+        0px 32px 32px 0px rgba(0,0,0,0.11)
+    ` },
+  { name: "Sharp", shadow: `
+        0px 1px 1px 0px rgba(0,0,0,0.25), 
+        0px 2px 2px 0px rgba(0,0,0,0.20), 
+        0px 4px 4px 0px rgba(0,0,0,0.15), 
+        0px 8px 8px 0px rgba(0,0,0,0.10),
+        0px 16px 16px 0px rgba(0,0,0,0.05)
+    ` },
+  { name: "Diffuse", shadow: `
+        0px 1px 1px 0px rgba(0,0,0,0.08), 
+        0px 2px 2px 0px rgba(0,0,0,0.12), 
+        0px 4px 4px 0px rgba(0,0,0,0.16), 
+        0px 8px 8px 0px rgba(0,0,0,0.20)
+    ` }
+];
+var BoxShadowProperty$1 = "";
 class BoxShadowProperty extends BaseProperty {
   getTitle() {
     return this.$i18n("boxshadow.property.title");
@@ -28806,170 +28945,40 @@ class BoxShadowProperty extends BaseProperty {
       <div class="full box-shadow-item" ref="$shadowList"></div>
     `;
   }
-  hasKeyframe() {
-    return true;
+  getTools() {
+    return `
+      <select class='box-shadow-samples' ref="$select">
+      ${boxShadow$1.map((item2, index2) => {
+      return `
+          <option value="${index2}">${item2.name}</option>
+        `;
+    }).join("")}
+      </select>
+      <button type="button" ref='$add'>${obj.add}</button>
+    `;
+  }
+  [CLICK("$add")]() {
+    const index2 = +this.refs.$select.value;
+    this.children.$boxshadow.trigger("add", boxShadow$1[index2].shadow);
   }
   [LOAD("$shadowList")]() {
     var current = this.$selection.current || {};
-    return `
-      <object refClass="BoxShadowEditor" ref='$boxshadow' value="${current["box-shadow"] || ""}" hide-label="true" onChange="changeBoxShadow" />
-    `;
-  }
-  getTools() {
-    return `<button type="button" ref='$add'>${obj.add}</button>`;
-  }
-  [CLICK("$add")]() {
-    this.children.$boxshadow.trigger("add");
+    return createComponent("BoxShadowEditor", {
+      ref: "$boxshadow",
+      key: "box-shadow",
+      value: current["box-shadow"],
+      onchange: (key, value) => {
+        this.command("setAttributeForMulti", "change box shadow", this.$selection.packByValue({
+          [key]: value
+        }));
+      }
+    });
   }
   get editableProperty() {
     return "box-shadow";
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100) + IF("checkShow")]() {
     this.refresh();
-  }
-  [SUBSCRIBE_SELF("changeBoxShadow")](boxshadow) {
-    this.command("setAttributeForMulti", "change box shadow", this.$selection.packByValue({
-      "box-shadow": boxshadow
-    }));
-  }
-}
-var BoxShadowPropertyPopup$1 = "";
-class BoxShadowPropertyPopup extends BasePopup {
-  getTitle() {
-    return "Box Shadow Editor";
-  }
-  initState() {
-    return {
-      color: "rgba(0, 0, 0, 1)",
-      inset: false,
-      offsetX: 0,
-      offsetY: 0,
-      blurRadius: 0,
-      spreadRadius: 0
-    };
-  }
-  updateData(opt) {
-    this.setState(opt, false);
-    this.emit(this.changeEvent, opt, this.state.params);
-  }
-  getBody() {
-    return `<div class='elf--box-shadow-property-popup' ref='$popup'></div>`;
-  }
-  [LOAD("$popup")]() {
-    return `
-      <div class="box">
-        <div class="type">
-          <label>Type</label>
-          <div
-            class="select"
-            data-selected-value="${this.state.inset ? "inset" : "outset"}"
-            ref="$type"
-          >
-            <button type="button" data-value="outset">Outset</button>
-            <button type="button" data-value="inset">Inset</button>
-          </div>
-        </div>
-        <div class="drag-board" ref="$dragBoard">
-          <div
-            class="pointer"
-            ref="$pointer"
-            style="left: ${this.state.offsetX};top: ${this.state.offsetY}"
-          ></div>
-        </div>        
-        <div class="popup-item offset-x">
-          <object refClass="RangeEditor" ref='$offsetX' label='X' key='offsetX' value="${this.state.offsetX}" onchange='changeRangeEditor' />
-        </div>
-        <div class="popup-item offset-y">
-          <object refClass="RangeEditor" ref='$offsetY' label='Y' key='offsetY' value="${this.state.offsetY}" onchange='changeRangeEditor' />        
-        </div>
-        <div class="popup-item blur-radius">
-          <object refClass="RangeEditor" ref='$blurRadius' label='Blur' key='blurRadius' value="${this.state.blurRadius}" onchange='changeRangeEditor' />        
-        </div>
-        <div class="popup-item spread-radius">
-          <object refClass="RangeEditor" 
-              ref='$spreadRadius' 
-              label='Spread' 
-              key='spreadRadius' 
-              value="${this.state.spreadRadius}" 
-              onchange='changeRangeEditor' 
-            />        
-        </div>
-        <div class='popup-item'>
-          <object refClass="ColorViewEditor" 
-              ref='$foreColor' 
-              label="color" 
-              key='color' 
-              value="${this.state.color}"
-              onchange="changeRangeEditor" />
-        </div>        
-      </div>
-    `;
-  }
-  [CLICK("$popup .select button")](e2) {
-    var type = e2.$dt.attr("data-value");
-    this.getRef("$type").attr("data-selected-value", type);
-    this.updateData({
-      inset: type === "inset"
-    });
-  }
-  [POINTERSTART("$popup .drag-board") + MOVE("movePointer")](e2) {
-    this.offsetX = e2.offsetX;
-    this.offsetY = e2.offsetY;
-    var rect2 = this.getRef("$dragBoard").rect();
-    this.boardWidth = rect2.width;
-    this.boardHeight = rect2.height;
-  }
-  refreshPointer() {
-    this.getRef("$pointer").css({
-      left: this.state.offsetX,
-      top: this.state.offsetY
-    });
-  }
-  movePointer(dx, dy) {
-    var realX = this.offsetX + dx;
-    var realY = this.offsetY + dy;
-    var halfWidth = this.boardWidth / 2;
-    var halfHeight = this.boardHeight / 2;
-    var x2 = realX - halfWidth;
-    var y2 = realY - halfHeight;
-    if (x2 < -halfWidth) {
-      x2 = -halfWidth;
-    } else if (x2 > halfWidth) {
-      x2 = halfWidth;
-    }
-    if (y2 < -halfHeight) {
-      y2 = -halfHeight;
-    } else if (y2 > halfHeight) {
-      y2 = halfHeight;
-    }
-    x2 = Math.floor(x2);
-    y2 = Math.floor(y2);
-    this.getRef("$offsetX").val(x2);
-    this.getRef("$offsetY").val(y2);
-    this.updateData({
-      offsetX: x2,
-      offsetY: y2
-    });
-    this.refreshPointer();
-    this.children.$offsetX.setValue(this.state.offsetX);
-    this.children.$offsetY.setValue(this.state.offsetY);
-  }
-  [SUBSCRIBE_SELF("changeRangeEditor")](key, value) {
-    this.updateData({
-      [key]: value
-    });
-    if (key === "offsetX" || key === "offsetY") {
-      this.refreshPointer();
-    }
-  }
-  [SUBSCRIBE("showBoxShadowPropertyPopup")](data, params) {
-    this.changeEvent = data.changeEvent || "changeBoxShadowPropertyPopup";
-    this.setState(__spreadProps(__spreadValues({}, data), { params }));
-    this.refresh();
-    this.show(432);
-  }
-  [SUBSCRIBE("hideBoxShadowPropertyPopup")]() {
-    this.hide();
   }
 }
 function boxShadow(editor) {
@@ -28978,9 +28987,6 @@ function boxShadow(editor) {
   });
   editor.registerMenuItem("inspector.tab.style", {
     BoxShadowProperty
-  });
-  editor.registerMenuItem("popup", {
-    BoxShadowPropertyPopup
   });
 }
 class CircleEditor extends EditorElement {
@@ -29680,7 +29686,7 @@ class ClipPathProperty extends BaseProperty {
     return `
       <div ref="$tools" class="add-tools">
         <button type="button" data-value='circle' data-tooltip="Circle">${iconUse$1("outline_circle")}</button>
-        <button type="button" data-value='ellipse' data-tooltip="Ellipse">${iconUse$1("outline_circle")}</button>
+        <button type="button" data-value='ellipse' data-tooltip="Ellipse">${iconUse$1("outline_circle", "scale(1 0.7) translate(0 5)")}</button>
         <button type="button" data-value='inset' data-tooltip="Inset">${iconUse$1("outline_rect")}</button>
         <button type="button" data-value='polygon' data-tooltip="Polygon">${iconUse$1("polygon")}</button>
         <button type="button" data-value='path' data-tooltip="Path">${iconUse$1("pentool")}</button>
@@ -30531,7 +30537,7 @@ class ColorPickerPopup extends BasePopup {
     });
     this.children.$color.setValue(this.state.color);
   }
-  [SUBSCRIBE("showColorPickerPopup")](data, params) {
+  [SUBSCRIBE("showColorPickerPopup")](data, params, rect2) {
     data.changeEvent = data.changeEvent || "changeFillPopup";
     if (!(data.target instanceof UIElement)) {
       throw new Error("ColorPicker needs data.target");
@@ -30539,7 +30545,7 @@ class ColorPickerPopup extends BasePopup {
     this.params = params;
     this.setState(data, false);
     this.children.$color.setValue(this.state.color);
-    this.show(232);
+    this.showByRect(this.makeRect(245, 500, rect2));
   }
   [SUBSCRIBE("hideColorPickerPopup")]() {
     this.hide();
@@ -32744,7 +32750,6 @@ class TextLayer extends LayerModel {
   editable(editablePropertyName) {
     switch (editablePropertyName) {
       case "svg-item":
-      case "box-shadow":
       case "transform":
       case "transform-origin":
       case "perspective":
@@ -35806,11 +35811,11 @@ class ExportProperty extends BaseProperty {
     return `
         <div class='export-item svg'>
           <label>SVG</label>
-          <button ref='$svg'>${obj.archive} ${this.$i18n("export.property.download")}</button>
+          <button ref='$svg'>${iconUse$1("archive")} ${this.$i18n("export.property.download")}</button>
         </div>
         <div class='export-item png'>
           <label>PNG</label>
-          <button ref='$png'>${obj.archive} ${this.$i18n("export.property.download")}</button>
+          <button ref='$png'>${iconUse$1("archive")} ${this.$i18n("export.property.download")}</button>
         </div> 
       `;
   }
@@ -35873,7 +35878,7 @@ class FilterProperty extends BaseProperty {
     return `
       <select class='filter-select' ref="$filterSelect">      
       </select>
-      <button type="button" ref="$add" title="add Filter">${obj.add}</button>
+      <button type="button" ref="$add" title="add Filter">${iconUse$1("add")}</button>
     `;
   }
   [CLICK("$add")]() {
@@ -35950,7 +35955,8 @@ function font(editor) {
   editor.registerMenuItem("inspector.tab.style", {
     FontProperty: ObjectProperty.create({
       title: editor.$i18n("font.property.title"),
-      editableProperty: "font"
+      editableProperty: "font",
+      preventUpdate: true
     })
   });
   editor.registerInspector("font", (current) => {
@@ -36447,7 +36453,7 @@ const imageTypeList$1 = [
   "image-resource"
 ];
 const iconList$1 = {
-  "image-resource": obj.photo
+  "image-resource": iconUse$1("photo")
 };
 const presetPosition$1 = {
   top: { x1: "0%", y1: "100%", x2: "0%", y2: "0%" },
@@ -36534,14 +36540,14 @@ class FillEditor extends EditorElement {
                 <circle r='5' data-type='f' ref='$fPoint' />
               </svg>              
               <div class='preset-position'>
-                <div data-value='top' title='top'>${obj.chevron_right}</div>
-                <div data-value='right' title='right'>${obj.chevron_right}</div>
-                <div data-value='left' title='left'>${obj.chevron_right}</div>
-                <div data-value='bottom' title='bottom'>${obj.chevron_right}</div>
-                <div data-value='top left' title='top left'>${obj.chevron_right}</div>
-                <div data-value='top right' title='top right'>${obj.chevron_right}</div>
-                <div data-value='bottom left' title='bottom left'>${obj.chevron_right}</div>
-                <div data-value='bottom right' title='bottom right'>${obj.chevron_right}</div>                
+                <div data-value='top' title='top'>${iconUse$1("chevron_right")}</div>
+                <div data-value='right' title='right'>${iconUse$1("chevron_right")}</div>
+                <div data-value='left' title='left'>${iconUse$1("chevron_right")}</div>
+                <div data-value='bottom' title='bottom'>${iconUse$1("chevron_right")}</div>
+                <div data-value='top left' title='top left'>${iconUse$1("chevron_right")}</div>
+                <div data-value='top right' title='top right'>${iconUse$1("chevron_right")}</div>
+                <div data-value='bottom left' title='bottom left'>${iconUse$1("chevron_right")}</div>
+                <div data-value='bottom right' title='bottom right'>${iconUse$1("chevron_right")}</div>                
               </div>
               <div data-editor='image-loader'>
                 <input type='file' accept="image/*" ref='$file' />
@@ -37439,7 +37445,7 @@ class GradientAssetsProperty extends BaseProperty {
       `;
     });
     if (preset.edit) {
-      results.push(`<div class='add-gradient-item'><butto type="button">${icon.add}</button></div>`);
+      results.push(`<div class='add-gradient-item'><butto type="button">${iconUse$1("add")}</button></div>`);
     }
     return results;
   }
@@ -37534,7 +37540,7 @@ class ImageProperty extends BaseProperty {
       <div>
         <label> ${this.$i18n("image.property.origin")} </label> 
         <span ref='$sizeInfo'></span> 
-        <button type="button" ref='$resize'>${obj.size}</button>
+        <button type="button" ref='$resize'>${iconUse$1("size")}</button>
       </div>
       <div>
         <object refClass="SelectEditor"  ref='$select' label="${this.$i18n("image.property.size")}" key='size' value='' options='${image_size.join(",")}' onchange='changeImageSize' />
@@ -38984,8 +38990,8 @@ class GridBoxEditor extends EditorElement {
                         onchange="changeKeyValue" />
                 </div>
                 <div class='tools'>
-                    <button type="button" class='copy'>${obj.copy}</button>                
-                    <button type="button" class='remove'>${obj.remove2}</button>
+                    <button type="button" class='copy'>${iconUse$1("copy")}</button>                
+                    <button type="button" class='remove'>${iconUse$1("remove2")}</button>
                 </div>
             </div>
         `;
@@ -39642,7 +39648,6 @@ class ResizingProperty extends BaseProperty {
   [CLICK("$resizingModeInfo [data-key]")](e2) {
     const key = e2.$dt.data("key");
     const current = this.$selection.current;
-    console.log(key);
     if (current[key] === ResizingMode.FIXED) {
       this.trigger("changeResizingMode", key, ResizingMode.HUG_CONTENT);
     } else {
@@ -39751,9 +39756,9 @@ var verticalLine = {
   title: "Vertical Line",
   execute: function() {
     return [
-      { pattern: `vertical-line(10px 10px, 0, #B7C4CD, white, normal, 1px)` },
-      { pattern: `vertical-line(25px 25px, 0, #DDB104, #FEF0BC, normal, 2px)` },
-      { pattern: `vertical-line(50px 50px, 0, black, rgba(231,57,63,0.9), normal, 1px)` }
+      { pattern: `vertical-line(10px 10px, 0px, #B7C4CD, white, normal, 1px)` },
+      { pattern: `vertical-line(25px 25px, 0px, #DDB104, #FEF0BC, normal, 2px)` },
+      { pattern: `vertical-line(50px 50px, 0px, black, rgba(231,57,63,0.9), normal, 1px)` }
     ];
   }
 };
@@ -39881,23 +39886,24 @@ class PatternEditor extends EditorElement {
       }
       return `
             <div class='pattern-item ${selectedClass}' data-index='${index2}' ref="fillIndex${index2}"  draggable='true'>
-                <object refClass="PatternSizeEditor" 
-                    key="pattern-size"
-                    ref="$bp${index2}"
-                    type="${it.type}"
-                    x="${it.x}"
-                    y="${it.y}"
-                    width="${it.width}"
-                    height="${it.height}"
-                    index="${index2}"
-                    foreColor="${it.foreColor}"
-                    backColor="${it.backColor}"
-                    blendMode="${it.blendMode}"
-                    lineWidth="${it.lineWidth}"
-                    lineHeight="${it.lineHeight}"
-                    onchange='changePatternSizeInfo' />
+                ${createComponent("PatternSizeEditor", {
+        key: "pattern-size",
+        ref: `$bp${index2}`,
+        type: it.type,
+        x: it.x,
+        y: it.y,
+        width: it.width,
+        height: it.height,
+        index: index2,
+        foreColor: it.foreColor,
+        backColor: it.backColor,
+        blendMode: it.blendMode,
+        lineWidth: it.lineWidth,
+        lineHeight: it.lineHeight,
+        onchange: "changePatternSizeInfo"
+      })}
                 <div class='tools'>
-                    <button type="button" class='remove' title='Remove a pattern' data-index='${index2}'>${obj.remove}</button>
+                    <button type="button" class='remove' title='Remove a pattern' data-index='${index2}'>${iconUse$1("remove")}</button>
                 </div>
             </div>
             `;
@@ -39998,7 +40004,7 @@ class PatternInfoPopup extends BasePopup {
       blendMode,
       lineWidth,
       lineHeight
-    }, this.state.params);
+    });
   }
   [SUBSCRIBE_SELF("changeRangeEditor")](key, value) {
     this.updateData({ [key]: value });
@@ -40037,6 +40043,9 @@ class PatternInfoPopup extends BasePopup {
       step: 1,
       onchange: "changeRangeEditor"
     });
+  }
+  templateForLabel() {
+    return `<label>${this.state.type}</label>`;
   }
   templateForWidth() {
     return createComponent("InputRangeEditor", {
@@ -40107,7 +40116,6 @@ class PatternInfoPopup extends BasePopup {
       ref: "$foreColor",
       label: this.$i18n("pattern.info.popup.foreColor"),
       key: "foreColor",
-      compact: true,
       value: this.state.foreColor,
       onchange: "changeRangeEditor"
     });
@@ -40117,7 +40125,6 @@ class PatternInfoPopup extends BasePopup {
       ref: "$backColor",
       label: this.$i18n("pattern.info.popup.backColor"),
       key: "backColor",
-      compact: true,
       value: this.state.backColor,
       onchange: "changeRangeEditor"
     });
@@ -40144,19 +40151,22 @@ class PatternInfoPopup extends BasePopup {
     return `
       
       <div class='box'>
-          <div class='grid-2'>
+          <div>
+            ${this.templateForLabel()}
+          </div>
+          <div>
             ${this.templateForWidth()}
             ${this.templateForHeight()}        
           </div>
-          <div class='grid-2'>
+          <div>
             ${this.templateForLineWidth()}
             ${this.templateForLineHeight()}                  
           </div>
-          <div class='grid-2'>
+          <div>
             ${this.templateForX()}
             ${this.templateForY()}
           </div>
-          <div class="grid-2">
+          <div>
             ${this.templateForForeColor()}
             ${this.templateForBackColor()}
           </div>
@@ -40166,12 +40176,11 @@ class PatternInfoPopup extends BasePopup {
       </div>
     `;
   }
-  [SUBSCRIBE("showPatternInfoPopup")](data, params) {
+  [SUBSCRIBE("showPatternInfoPopup")](data, rect2) {
     this.state.changeEvent = data.changeEvent || "changePatternInfoPopup";
-    this.state.params = params;
     this.state.instance = data.instance;
     this.setState(data.data);
-    this.show(400);
+    this.showByRect(rect2);
   }
 }
 var PatternProperty$1 = "";
@@ -40234,11 +40243,11 @@ class PatternSizeEditor extends EditorElement {
       y: Length.parse(this.props.y),
       width: Length.parse(this.props.width),
       height: Length.parse(this.props.height),
-      lineWidth: Length.parse(this.props.linewidth),
-      lineHeight: Length.parse(this.props.lineheight),
-      backColor: this.props.backcolor,
-      foreColor: this.props.forecolor,
-      blendMode: this.props.blendmode,
+      lineWidth: Length.parse(this.props.lineWidth),
+      lineHeight: Length.parse(this.props.lineHeight),
+      backColor: this.props.backColor,
+      foreColor: this.props.foreColor,
+      blendMode: this.props.blendMode,
       type: this.props.type
     };
   }
@@ -40253,7 +40262,30 @@ class PatternSizeEditor extends EditorElement {
     this.setState(__spreadValues({}, obj2));
   }
   [BIND("$miniView")]() {
-    let obj2 = __spreadValues({}, this.state);
+    const {
+      type,
+      x: x2,
+      y: y2,
+      width: width2,
+      height: height2,
+      lineWidth,
+      lineHeight,
+      backColor,
+      foreColor,
+      blendMode
+    } = this.state;
+    let obj2 = {
+      type,
+      x: x2,
+      y: y2,
+      width: width2,
+      height: height2,
+      lineWidth,
+      lineHeight,
+      backColor,
+      foreColor,
+      blendMode
+    };
     if (this.state.width > 80) {
       obj2.width = 80;
       obj2.x = obj2.x.value / this.state.width / 80;
@@ -40282,12 +40314,22 @@ class PatternSizeEditor extends EditorElement {
     this.viewBackgroundPositionPopup();
   }
   viewBackgroundPositionPopup() {
-    this.emit("showPatternInfoPopup", {
-      changeEvent: (pattern) => {
-        this.updateData(__spreadValues({}, pattern));
-      },
-      data: this.state,
-      instance: this
+    this.emit("getLayoutElement", (layoutElement) => {
+      const bodyRect = layoutElement.$bodyPanel.rect();
+      const rect2 = this.$el.rect();
+      const newRect = {
+        left: bodyRect.left + bodyRect.width - 240,
+        top: rect2.top,
+        width: 240,
+        height: 300
+      };
+      this.emit("showPatternInfoPopup", {
+        changeEvent: (pattern) => {
+          this.updateData(__spreadValues({}, pattern));
+        },
+        data: this.state,
+        instance: this
+      }, newRect);
     });
   }
 }
@@ -40580,7 +40622,7 @@ class PositionProperty extends BaseProperty {
     return `
       <div class="position-item" ref="$positionItem" style='padding: 5px 10px;'>
         <div class="grid-layout">
-            <object refClass='NumberInputEditor' ${variable$4({
+          ${createComponent("NumberInputEditor", {
       ref: "$x",
       compact: true,
       label: "X",
@@ -40589,8 +40631,8 @@ class PositionProperty extends BaseProperty {
       max: 1e5,
       trigger: "enter",
       onchange: "changRangeEditor"
-    })} />
-            <object refClass='NumberInputEditor' ${variable$4({
+    })}
+          ${createComponent("NumberInputEditor", {
       ref: "$y",
       compact: true,
       trigger: "enter",
@@ -40599,10 +40641,10 @@ class PositionProperty extends BaseProperty {
       min: -1e4,
       max: 1e4,
       onchange: "changRangeEditor"
-    })} />      
+    })}
         </div>
         <div class="grid-layout">          
-          <object refClass='NumberInputEditor' ${variable$4({
+          ${createComponent("NumberInputEditor", {
       ref: "$width",
       compact: true,
       trigger: "enter",
@@ -40611,8 +40653,8 @@ class PositionProperty extends BaseProperty {
       min: 0,
       max: 3e3,
       onchange: "changRangeEditor"
-    })} />
-          <object refClass='NumberInputEditor' ${variable$4({
+    })}
+          ${createComponent("NumberInputEditor", {
       ref: "$height",
       compact: true,
       trigger: "enter",
@@ -40621,33 +40663,30 @@ class PositionProperty extends BaseProperty {
       min: 0,
       max: 3e3,
       onchange: "changRangeEditor"
-    })}  />
+    })}
         </div> 
         <div class="grid-layout">
-          <div>
-            <object refClass='InputRangeEditor' 
-              ref='$rotate' 
-              key='rotateZ' 
-              compact="true" 
-              label='rotate_left'
-              min="-360"
-              max="360"
-              step="1"
-              units="deg"
-              onchange="changeRotate" />
-          </div>        
-
-          <div>
-            <object refClass="NumberInputEditor"
-              ref='$opacity' 
-              key='opacity' 
-              compact="true" 
-              label='opacity'
-              min="0"
-              max="1"
-              step="0.01"
-              onchange="changeSelect" />
-          </div>        
+          ${createComponent("InputRangeEditor", {
+      ref: "$rotate",
+      key: "rotateZ",
+      compact: true,
+      label: "rotate_left",
+      min: -360,
+      max: 360,
+      step: 1,
+      units: ["deg"],
+      onchange: "changeRotate"
+    })}
+          ${createComponent("NumberInputEditor", {
+      ref: "$opacity",
+      key: "opacity",
+      compact: true,
+      label: "opacity",
+      min: 0,
+      max: 1,
+      step: 0.01,
+      onchange: "changeSelect"
+    })}
         </div>                
       </div>
     `;
@@ -41844,7 +41883,7 @@ class ColorViewEditor extends EditorElement {
         this.updateEndData({ value: color2, color: Color.parse(color2) });
       },
       color: this.state.value
-    });
+    }, null, this.$el.rect());
   }
   [CLICK("$remove")](e2) {
     this.updateData({ value: "" });
@@ -43931,11 +43970,13 @@ class NumberInputEditor extends EditorElement {
     }
     const compact = isBoolean(this.props.compact) ? this.props.compact : this.props.compact === "true";
     const wide = isBoolean(this.props.wide) ? this.props.wide : this.props.wide === "true";
+    const mini = isBoolean(this.props.mini) ? this.props.mini : this.props.mini === "true";
     const trigger = this.props.trigger || "input";
     return {
       label,
       compact,
       wide,
+      mini,
       trigger,
       min: +this.props.min || 0,
       max: +this.props.max || 100,
@@ -43950,7 +43991,7 @@ class NumberInputEditor extends EditorElement {
     return `<div class='small-editor' ref='$body'></div>`;
   }
   [LOAD("$body")]() {
-    var { min, max, step: step2, label, type, layout: layout2, compact, wide, disabled, removable } = this.state;
+    var { min, max, step: step2, label, type, layout: layout2, mini, compact, wide, disabled, removable } = this.state;
     var value = this.state.value;
     if (isNaN(value)) {
       value = 0;
@@ -43964,6 +44005,7 @@ class NumberInputEditor extends EditorElement {
       "has-label": !!label,
       "compact": !!compact,
       "wide": !!wide,
+      "mini": !!mini,
       "is-removable": removable,
       "disabled": disabled,
       [layoutClass]: true
@@ -46520,14 +46562,10 @@ class DomRender$1 extends ItemRender$1 {
         case ResizingMode.FIXED:
           obj2.width = Length.px(item2.screenWidth);
           break;
-        case ResizingMode.HUG_CONTENT:
-          break;
       }
       switch (item2.resizingVertical) {
         case ResizingMode.FIXED:
           obj2.height = Length.px(item2.screenHeight);
-          break;
-        case ResizingMode.HUG_CONTENT:
           break;
       }
     } else if (item2.isInDefault()) {
@@ -47582,8 +47620,12 @@ class TextRender$2 extends LayerRender$1 {
   toCSS(item2) {
     let css = super.toCSS(item2);
     css.margin = css.margin || "0px";
-    if (item2.overflow !== Overflow.SCROLL) {
-      css.height = "auto";
+    if (item2.parent.is("project")) {
+      css.height = Length.px(item2.screenHeight);
+    } else {
+      if (item2.overflow !== Overflow.SCROLL) {
+        css.height = "auto";
+      }
     }
     return css;
   }
@@ -48098,8 +48140,8 @@ class SVGRender extends DomRender$1 {
 <svg class='svg-element-item ${itemType}'
     xmlns="http://www.w3.org/2000/svg"
     data-id="${id}"
-    x="${x2.value}"
-    y="${y2.value}"
+    x="${x2}"
+    y="${y2}"
     width="${width2}"
     height="${height2}"
     viewBox="0 0 ${width2} ${height2}"
@@ -51076,7 +51118,8 @@ function text$1(editor) {
   editor.registerMenuItem("inspector.tab.style", {
     TextProperty: ObjectProperty.create({
       title: editor.$i18n("text.property.title"),
-      editableProperty: "text-style"
+      editableProperty: "text-style",
+      preventUpdate: true
     })
   });
   editor.registerInspector("text-style", (current) => {
@@ -51160,13 +51203,10 @@ var TextShadowEditor$1 = "";
 class TextShadowEditor extends EditorElement {
   initState() {
     return {
-      hideLabel: this.props.hideLabel === "true" ? true : false,
-      selectedIndex: -1,
-      textShadows: this.props.value
+      textShadows: TextShadow.parseStyle(this.props.value)
     };
   }
   template() {
-    this.state.hideLabel ? "hide" : "";
     return `
       <div class="elf--text-shadow-editor" >
         <div class='text-shadow-list' ref='$shadowList'></div>
@@ -51177,46 +51217,80 @@ class TextShadowEditor extends EditorElement {
     var arr = this.state.textShadows.map((shadow2, index2) => {
       return `
         <div class="shadow-item real" data-index="${index2}">
-          <div class="color">
-            <div class='color-view' style="background-color: ${shadow2.color}">
-            </div>
-          </div>
-          <div class="offset-x">${shadow2.offsetX}</div>
-          <div class="offset-y">${shadow2.offsetY}</div>
-          <div class="blur-radius">${shadow2.blurRadius}</div>
+          <label draggable="true" data-index="${index2}">${iconUse$1("drag_indicator")}</label>
+          ${createComponent("ColorViewEditor", {
+        mini: true,
+        key: "color",
+        value: shadow2.color,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}
+          ${createComponent("NumberInputEditor", {
+        mini: true,
+        key: "offsetX",
+        label: "X",
+        value: shadow2.offsetX,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}          
+          ${createComponent("NumberInputEditor", {
+        mini: true,
+        key: "offsetY",
+        label: "Y",
+        value: shadow2.offsetY,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}                    
+          ${createComponent("NumberInputEditor", {
+        mini: true,
+        label: "B",
+        key: "blurRadius",
+        value: shadow2.blurRadius,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}                    
           <div class="tools">
             <button type="button" class="remove" data-index="${index2}">
-              ${obj.remove2}
+              ${iconUse$1("remove2")}
             </button>
           </div>
         </div>
       `;
     });
-    if (arr.length) {
-      arr.push(`
-      <div class="shadow-item desc">
-            <div class="color"></div>
-            <div class="offset-x">X</div>
-            <div class="offset-y">Y</div>
-            <div class="blur-radius">Blur</div>
-            <div class="tools">
-            </div>
-          </div>
-      `);
-    }
     return arr.join("");
   }
   modifyTextShadow() {
     var value = this.state.textShadows.join(", ");
-    this.parent.trigger(this.props.onchange, value);
+    this.parent.trigger(this.props.onchange, this.props.key, value);
   }
-  [SUBSCRIBE("add")]() {
-    this.state.textShadows.push(new TextShadow());
+  [SUBSCRIBE("add")](shadow2 = "") {
+    if (shadow2) {
+      this.state.textShadows = TextShadow.parseStyle(shadow2);
+    } else {
+      this.state.textShadows.push(new TextShadow());
+    }
     this.refresh();
     this.modifyTextShadow();
   }
   [CLICK("$add")]() {
     this.trigger("add");
+  }
+  [DRAGSTART("$shadowList .shadow-item > label")](e2) {
+    this.startIndex = +e2.$dt.attr("data-index");
+  }
+  [DRAGOVER("$shadowList .shadow-item") + PREVENT](e2) {
+  }
+  sortItem(arr, startIndex, targetIndex) {
+    arr.splice(targetIndex + (startIndex < targetIndex ? -1 : 0), 0, ...arr.splice(startIndex, 1));
+  }
+  sortTextShadow(startIndex, targetIndex) {
+    this.sortItem(this.state.textShadows, startIndex, targetIndex);
+  }
+  [DROP("$shadowList .shadow-item") + PREVENT](e2) {
+    var targetIndex = +e2.$dt.attr("data-index");
+    this.sortTextShadow(this.startIndex, targetIndex);
+    this.refresh();
+    this.modifyTextShadow();
   }
   [CLICK("$shadowList .remove")](e2) {
     var index2 = +e2.$dt.attr("data-index");
@@ -51224,37 +51298,30 @@ class TextShadowEditor extends EditorElement {
     this.refresh();
     this.modifyTextShadow();
   }
-  [CLICK("$shadowList .shadow-item.real > div:not(.tools)")](e2) {
-    var index2 = +e2.$dt.closest("shadow-item").attr("data-index");
+  [SUBSCRIBE("changeKeyValue")](key, value, index2) {
     var shadow2 = this.state.textShadows[index2];
-    this.viewShadowPopup(shadow2, index2);
-  }
-  viewShadowPopup(shadow2, index2) {
-    this.setState({
-      selectedIndex: index2
-    }, false);
-    this.viewTextShadowPropertyPopup(shadow2);
-  }
-  viewTextShadowPropertyPopup(shadow2) {
-    this.emit("showTextShadowPropertyPopup", {
-      changeEvent: "changeTextShadowEditorPopup",
-      color: shadow2.color,
-      offsetX: shadow2.offsetX,
-      offsetY: shadow2.offsetY,
-      blurRadius: shadow2.blurRadius
-    }, {
-      id: this.id
+    shadow2.reset({
+      [key]: value
     });
-  }
-  [SUBSCRIBE("changeTextShadowEditorPopup")](data, params) {
-    if (params.id === this.id) {
-      var shadow2 = this.state.textShadows[this.state.selectedIndex];
-      shadow2.reset(data);
-      this.refresh();
-      this.modifyTextShadow();
-    }
+    this.modifyTextShadow();
   }
 }
+var textShadow$1 = [
+  { name: "Mystic", shadow: `20px 0px 10px rgb(0, 0, 0)` },
+  { name: "Monoton", shadow: `0px -78px rgb(255, 196, 0)` },
+  { name: "Radioactive", shadow: `-18px -18px 20px rgb(87, 255, 9);` },
+  { name: "Bungee", shadow: `-18px 18px 0 rgb(66, 45, 45)` },
+  { name: "Sprint", shadow: `-20px -108px 0px rgba(255, 255, 255, 0.445)` },
+  { name: "Prickly", shadow: `-18px -18px 2px #777` },
+  { name: "Codystar", shadow: `1px 1px 10px rgb(16, 72, 255), 1px 1px 10px rgb(0, 195, 255)` },
+  { name: "Elegant", shadow: `-18px 8px 18px #b4bbbb` },
+  { name: "Playful", shadow: `
+        -2px -2px 0px #888,
+        4px 4px 0px #888,
+        7px 7px 0px #888
+    ` }
+];
+var TextShadowProperty$1 = "";
 class TextShadowProperty extends BaseProperty {
   getTitle() {
     return this.$i18n("text.shadow.property.title");
@@ -51264,168 +51331,40 @@ class TextShadowProperty extends BaseProperty {
       <div class="full text-shadow-item" ref="$shadowList"></div>
     `;
   }
-  hasKeyframe() {
-    return true;
-  }
-  getKeyframeProperty() {
-    return "text-shadow";
-  }
   getTools() {
-    return `<button type="button" ref='$add'>${obj.add}</button>`;
+    return `
+      <select class='text-shadow-samples' ref="$select">
+      ${textShadow$1.map((item2, index2) => {
+      return `
+          <option value="${index2}">${item2.name}</option>
+        `;
+    }).join("")}
+      </select>
+      <button type="button" ref='$add'>${obj.add}</button>
+    `;
   }
   [CLICK("$add")]() {
-    this.children.$textshadow.trigger("add");
+    const index2 = +this.refs.$select.value;
+    this.children.$textshadow.trigger("add", textShadow$1[index2].shadow);
   }
   [LOAD("$shadowList")]() {
     var current = this.$selection.current || {};
     return createComponent("TextShadowEditor", {
       ref: "$textshadow",
-      value: TextShadow.parseStyle(current["text-shadow"]),
-      hideLabel: true,
-      onChange: this.subscribe((textshadow) => {
+      key: "text-shadow",
+      value: current["text-shadow"],
+      onchange: (key, value) => {
         this.command("setAttributeForMulti", "change text shadow", this.$selection.packByValue({
-          "text-shadow": textshadow
+          [key]: value
         }));
-      })
+      }
     });
   }
   get editableProperty() {
     return "text-shadow";
   }
-  [SUBSCRIBE("refreshSelection") + IF("checkShow")]() {
+  [SUBSCRIBE("refreshSelection") + IF("checkShow") + DEBOUNCE(100)]() {
     this.refresh();
-  }
-}
-var TextShadowPropertyPopup$1 = "";
-class TextShadowPropertyPopup extends BasePopup {
-  getTitle() {
-    return "Text Shadow Editor";
-  }
-  initState() {
-    return {
-      color: "rgba(0, 0, 0, 1)",
-      offsetX: 0,
-      offsetY: 0,
-      blurRadius: 0
-    };
-  }
-  updateData(opt) {
-    this.setState(opt, false);
-    this.emit(this.changeEvent, opt, this.params);
-  }
-  getBody() {
-    return `<div class='elf--text-shadow-property-popup' ref='$popup'></div>`;
-  }
-  [LOAD("$popup")]() {
-    return `
-      <div class='box'>
-        <div class="drag-board" ref="$dragBoard">
-          <div
-            class="pointer"
-            ref="$pointer"
-            style="left: ${this.state.offsetX};top: ${this.state.offsetY}"
-          ></div>
-        </div>
-        <div class='popup-item'>
-          ${createComponent("RangeEditor", {
-      ref: "$offsetX",
-      label: "Offset X",
-      key: "offsetX",
-      min: -100,
-      max: 100,
-      value: this.state.offsetX,
-      onchange: "changeShadow"
-    })}
-        </div>
-        <div class='popup-item'>
-          ${createComponent("RangeEditor", {
-      ref: "$offsetY",
-      label: "Offset Y",
-      key: "offsetY",
-      min: -100,
-      max: 100,
-      value: this.state.offsetY,
-      onchange: "changeShadow"
-    })}        
-        </div>
-        <div class='popup-item'>
-        ${createComponent("RangeEditor", {
-      ref: "$blurRadius",
-      label: "Blur Radius",
-      key: "blurRadius",
-      value: this.state.blurRadius,
-      onchange: "changeShadow"
-    })}                
-        </div>
-        <div class='popup-item'>
-          ${createComponent("ColorViewEditor", {
-      ref: "$foreColor",
-      label: "color",
-      key: "color",
-      value: this.state.color,
-      onchange: "changeShadow"
-    })}                
-        </div>        
-      </div>
-    `;
-  }
-  [SUBSCRIBE("changeShadow")](key, value) {
-    this.updateData({
-      [key]: value
-    });
-    if (key === "offsetX" || key === "offsetY") {
-      this.refreshPointer();
-    }
-  }
-  [POINTERSTART("$popup .drag-board") + MOVE("movePointer")](e2) {
-    this.offsetX = e2.offsetX;
-    this.offsetY = e2.offsetY;
-    var rect2 = this.getRef("$dragBoard").rect();
-    this.boardWidth = rect2.width;
-    this.boardHeight = rect2.height;
-  }
-  refreshPointer() {
-    this.getRef("$pointer").css({
-      left: this.state.offsetX,
-      top: this.state.offsetY
-    });
-  }
-  movePointer(dx, dy) {
-    var realX = this.offsetX + dx;
-    var realY = this.offsetY + dy;
-    var halfWidth = this.boardWidth / 2;
-    var halfHeight = this.boardHeight / 2;
-    var x2 = realX - halfWidth;
-    var y2 = realY - halfHeight;
-    if (x2 < -halfWidth) {
-      x2 = -halfWidth;
-    } else if (x2 > halfWidth) {
-      x2 = halfWidth;
-    }
-    if (y2 < -halfHeight) {
-      y2 = -halfHeight;
-    } else if (y2 > halfHeight) {
-      y2 = halfHeight;
-    }
-    x2 = Math.floor(x2);
-    y2 = Math.floor(y2);
-    this.updateData({
-      offsetX: x2,
-      offsetY: y2
-    });
-    this.children.$offsetX.setValue(this.state.offsetX);
-    this.children.$offsetY.setValue(this.state.offsetY);
-    this.refreshPointer();
-  }
-  [SUBSCRIBE("showTextShadowPropertyPopup")](data, params) {
-    this.changeEvent = data.changeEvent || "changeTextShadowPropertyPopup";
-    this.params = params;
-    this.setState(data, false);
-    this.refresh();
-    this.show(432);
-  }
-  [SUBSCRIBE("hideTextShadowPropertyPopup")]() {
-    this.hide();
   }
 }
 function textShadow(editor) {
@@ -51434,9 +51373,6 @@ function textShadow(editor) {
   });
   editor.registerMenuItem("inspector.tab.style", {
     TextShadowProperty
-  });
-  editor.registerMenuItem("popup", {
-    TextShadowPropertyPopup
   });
 }
 const TRANSITION_TIMING_REG = /((cubic-bezier|steps)\(([^\)]*)\))/gi;
@@ -55135,7 +55071,8 @@ class SelectionInfoView extends EditorElement {
     }
   }
   [LOAD("$el") + DOMDIFF]() {
-    return this.$selection.currentProject.artboards.map((it) => {
+    var _a;
+    return (_a = this.$selection.currentProject) == null ? void 0 : _a.artboards.map((it) => {
       return { title: it.name, id: it.id, pointers: this.$viewport.applyVerties(it.verties) };
     }).map((it) => this.makeArtboardTitleArea(it));
   }
@@ -55512,9 +55449,6 @@ class SelectionToolView extends SelectionToolEvent$1 {
     }
     this.$selection.recoverChildren();
     this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "width", "height", "resizingHorizontal", "resizingVertical"));
-    this.nextTick(() => {
-      this.emit("refreshSelection");
-    });
     this.state.dragging = true;
   }
   moveEndVertex() {
@@ -58465,10 +58399,6 @@ class DesignEditor extends BaseLayout {
             <div class="layout-right" ref='$rightPanel'>
               ${isItemMode ? createComponent("SingleInspector") : createComponent("Inspector")}
             </div>
-            <div class='layout-footer' ref='$footerPanel'>
-              <div class='footer-splitter' ref='$footerSplitter' title="${this.$i18n("timeline.property.resize")}"></div>
-              ${""}
-            </div>   
             <div class='left-arrow' ref='$leftArrow'>
               ${createComponent("SwitchLeftPanel")}
             </div>
@@ -58566,12 +58496,6 @@ class DesignEditor extends BaseLayout {
       }
     };
   }
-  [BIND("$footerPanel")]() {
-    let height2 = this.state.bottomSize;
-    return {
-      style: { height: height2 }
-    };
-  }
   [POINTERSTART("$splitter") + MOVE("moveSplitter") + END("moveEndSplitter")]() {
     this.minSize = this.$theme("left_size");
     this.maxSize = this.$theme("left_max_size");
@@ -58586,17 +58510,9 @@ class DesignEditor extends BaseLayout {
   moveEndSplitter() {
     this.refs.$splitter.removeClass("selected");
   }
-  [POINTERSTART("$footerSplitter") + MOVE("moveFooterSplitter")]() {
-    this.minFooterSize = this.$theme("bottom_size");
-    this.maxFooterSize = this.$theme("bottom_max_size");
-    this.bottomSize = Length.parse(this.refs.$footerPanel.css("height")).value;
-  }
-  moveFooterSplitter(_, dy) {
-    const bottomSize = Math.max(Math.min(this.bottomSize - dy, this.maxFooterSize), this.minFooterSize);
-    this.setState({
-      bottomSize,
-      lastBottomSize: bottomSize
-    });
+  afterRender() {
+    super.afterRender();
+    this.$config.init("editor.layout.elements", this.refs);
   }
   refresh() {
     this.bindData("$el");
@@ -58626,20 +58542,6 @@ class DesignEditor extends BaseLayout {
   }
   [CONFIG("editor.design.mode")]() {
     this.bindData("$el");
-  }
-  [SUBSCRIBE("toggleFooter")](isShow) {
-    this.$el.toggleClass("show-footer", isShow);
-    if (this.$el.hasClass("show-footer")) {
-      if (this.state.bottomSize === 30) {
-        this.state.bottomSize = this.state.lastBottomSize || this.$theme("bottom_size");
-      }
-    } else {
-      this.state.bottomSize = 30;
-    }
-    this.refresh();
-  }
-  [TRANSITIONEND("$el .layout-footer")](e2) {
-    this.emit("toggleFooterEnd");
   }
   [DRAGOVER("$middle") + PREVENT](e2) {
   }

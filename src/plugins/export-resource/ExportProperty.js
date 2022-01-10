@@ -1,7 +1,7 @@
 
 import { DEBOUNCE, CLICK, SUBSCRIBE } from "el/sapa/Event";
 
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import './ExportProperty.scss';
 
@@ -24,11 +24,11 @@ export default class ExportProperty extends BaseProperty {
     return /*html*/`
         <div class='export-item svg'>
           <label>SVG</label>
-          <button ref='$svg'>${icon.archive} ${this.$i18n('export.property.download')}</button>
+          <button ref='$svg'>${iconUse("archive")} ${this.$i18n('export.property.download')}</button>
         </div>
         <div class='export-item png'>
           <label>PNG</label>
-          <button ref='$png'>${icon.archive} ${this.$i18n('export.property.download')}</button>
+          <button ref='$png'>${iconUse("archive")} ${this.$i18n('export.property.download')}</button>
         </div> 
       `;
   }  

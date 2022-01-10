@@ -1,12 +1,13 @@
 
 import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE, SUBSCRIBE } from "el/sapa/Event";
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import { Pattern } from "el/editor/property-parser/Pattern";
 import patterns from "el/editor/preset/patterns";
 
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './PatternEditor.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class PatternEditor extends EditorElement {
 
@@ -51,23 +52,24 @@ export default class PatternEditor extends EditorElement {
 
             return /*html*/`
             <div class='pattern-item ${selectedClass}' data-index='${index}' ref="fillIndex${index}"  draggable='true'>
-                <object refClass="PatternSizeEditor" 
-                    key="pattern-size"
-                    ref="$bp${index}"
-                    type="${it.type}"
-                    x="${it.x}"
-                    y="${it.y}"
-                    width="${it.width}"
-                    height="${it.height}"
-                    index="${index}"
-                    foreColor="${it.foreColor}"
-                    backColor="${it.backColor}"
-                    blendMode="${it.blendMode}"
-                    lineWidth="${it.lineWidth}"
-                    lineHeight="${it.lineHeight}"
-                    onchange='changePatternSizeInfo' />
+                ${createComponent("PatternSizeEditor" , {
+                    key: "pattern-size",
+                    ref: `$bp${index}`,
+                    type: it.type,
+                    x: it.x,
+                    y: it.y,
+                    width: it.width,
+                    height: it.height,
+                    index,
+                    foreColor: it.foreColor,
+                    backColor: it.backColor,
+                    blendMode: it.blendMode,
+                    lineWidth: it.lineWidth,
+                    lineHeight: it.lineHeight,
+                    onchange: 'changePatternSizeInfo'
+                })}
                 <div class='tools'>
-                    <button type="button" class='remove' title='Remove a pattern' data-index='${index}'>${icon.remove}</button>
+                    <button type="button" class='remove' title='Remove a pattern' data-index='${index}'>${iconUse('remove')}</button>
                 </div>
             </div>
             `;
