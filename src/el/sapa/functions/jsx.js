@@ -88,6 +88,11 @@ export function createElementJsx (Component, props, ...children) {
     // 모든 children 을 하나로 모은다. 
     children = children.flat(Infinity);
 
+    // Fragment 는 자동으로 배열 형태로 리턴한다. 
+    if (Component === FragmentInstance) {
+        return children;
+    }
+
     if (typeof Component !== 'string') {
         const ComponentName = Component.name;
         registElement({
@@ -102,3 +107,5 @@ export function createElementJsx (Component, props, ...children) {
 
 
 }
+
+export const FragmentInstance = new Object()

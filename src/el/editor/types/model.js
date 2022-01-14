@@ -180,3 +180,12 @@ export const BoxShadowStyle = {
     OUTSET: "outset",
     INSET: "inset",
 }
+
+export const GradientType = {
+    LINEAR: "linear-gradient",
+    RADIAL: "radial-gradient",
+    CONIC: "conic-gradient",
+    REPEATING_LINEAR: "repeating-linear-gradient",
+    REPEATING_RADIAL: "repeating-radial-gradient",
+    REPEATING_CONIC: "repeating-conic-gradient",
+}

@@ -117,7 +117,7 @@ export default class BackgroundImageEditor extends EditorElement {
                         ${createComponent("BlendSelectEditor", {
                             ref: `$blend_${index}`,
                             key: 'blendMode',
-                            label: 'tonality',
+                            // label: 'tonality',
                             value: it.blendMode,
                             params: index,
                             compact: true,
@@ -125,7 +125,10 @@ export default class BackgroundImageEditor extends EditorElement {
                         })}
                     </div>
                     <div class='tools'>
-                      <button type="button" class='remove' data-index='${index}'>${icon.remove2}</button>
+                      <button type="button" class='copy' data-index='${index}'>${iconUse('copy')}</button>
+                    </div>                    
+                    <div class='tools'>
+                      <button type="button" class='remove' data-index='${index}'>${iconUse('remove2')}</button>
                     </div>
                   </div>
                 </div>
@@ -216,6 +219,18 @@ export default class BackgroundImageEditor extends EditorElement {
 
         this.modifyBackgroundImage()
     }
+
+    [CLICK("$fillList .tools .copy")](e) {
+        var index = +e.$dt.attr("data-index");
+
+        const current = this.state.images[index]
+        
+        this.state.images.splice(index, 0, current);
+
+        this.refresh();
+
+        this.modifyBackgroundImage()
+    }    
 
     selectItem(selectedIndex, isSelected = true) {
         if (isSelected) {

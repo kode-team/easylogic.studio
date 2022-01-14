@@ -134,14 +134,14 @@ export default class BackgroundImagePositionPopup extends BasePopup {
     return /*html*/`
     <div class='grid'>
       <label>${this.$i18n('background.image.position.popup.repeat')}</label>
-      <div class='repeat-list' ref="$repeat" data-value='${this.state.repeat}'>
-          <button type="button" value='no-repeat' title="${this.$i18n('background.image.position.popup.type.no-repeat')}"></button>
-          <button type="button" value='repeat' title="${this.$i18n('background.image.position.popup.type.repeat')}"></button>
-          <button type="button" value='repeat-x' title="${this.$i18n('background.image.position.popup.type.repeat-x')}"></button>
-          <button type="button" value='repeat-y' title="${this.$i18n('background.image.position.popup.type.repeat-y')}"></button>
-          <button type="button" value='space' title="${this.$i18n('background.image.position.popup.type.space')}"></button>
-          <button type="button" value='round' title="${this.$i18n('background.image.position.popup.type.round')}"></button>
-      </div>
+    </div>
+    <div class='repeat-list' ref="$repeat" data-value='${this.state.repeat}'>
+        <button type="button" value='no-repeat' title="${this.$i18n('background.image.position.popup.type.no-repeat')}"></button>
+        <button type="button" value='repeat' title="${this.$i18n('background.image.position.popup.type.repeat')}"></button>
+        <button type="button" value='repeat-x' title="${this.$i18n('background.image.position.popup.type.repeat-x')}"></button>
+        <button type="button" value='repeat-y' title="${this.$i18n('background.image.position.popup.type.repeat-y')}"></button>
+        <button type="button" value='space' title="${this.$i18n('background.image.position.popup.type.space')}"></button>
+        <button type="button" value='round' title="${this.$i18n('background.image.position.popup.type.round')}"></button>
     </div>
     `;
   }
@@ -164,14 +164,10 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
         <div class='background-property'>
           ${this.templateForSize()}      
-          <div class="grid-2">            
-            ${this.templateForX()}
-            ${this.templateForY()}
-          </div>
-          <div class="grid-2">            
-            ${this.templateForWidth()}
-            ${this.templateForHeight()}
-          </div>
+          ${this.templateForX()}
+          ${this.templateForY()}
+          ${this.templateForWidth()}
+          ${this.templateForHeight()}
           ${this.templateForRepeat()}
         </div>
       </div>
@@ -179,13 +175,13 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   }
 
 
-  [SUBSCRIBE("showBackgroundImagePositionPopup")](data, params) {
+  [SUBSCRIBE("showBackgroundImagePositionPopup")](data, params, rect) {
     this.state.changeEvent = data.changeEvent || 'changeFillPopup'
     this.state.params = params; 
 
     this.setState(data.data);
 
-    this.show(460);
+    this.showByRect(this.makeRect(180, 310, rect));
   }
 
 

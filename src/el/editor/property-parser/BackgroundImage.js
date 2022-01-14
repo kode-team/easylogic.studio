@@ -165,6 +165,70 @@ export class BackgroundImage extends PropertyItem {
     return super.checkField(key, value);
   }
 
+  /**
+   * 
+   * newX, newY 를 기준으로 image position, size 을 복구한다. 
+   * 
+   * x.isPercent() ? Length.percent(newX / (maxWidth - newWidth) * 100) : Length.px(newX),
+   * 
+   * @param {number} newX 
+   * @param {number} newY 
+   * @param {number} maxWidth 
+   * @param {number} maxHeight 
+   * @param {number} dx 변경된 넓이 크기 
+   * @param {number} dy 변경된 높이 크기 
+   * @returns 
+   */
+  recoverOffset (newX, newY, maxWidth, maxHeight, dx = 0, dy = 0) {
+    const { x, y, width, height } = this.json;
+
+    const newWidth = Math.floor(width.toPx(maxWidth).value + dx);
+    const newHeight = Math.floor(height.toPx(maxHeight).value + dy);    
+
+    if (newWidth < 0) {
+      newX += newWidth
+    }
+
+    if (newHeight < 0) {
+      newY += newHeight
+    }    
+
+    // x, y 가 percent 일 때는 크기의 역순으로 해서 위치를 계산해준다. 
+    return {
+      x: x.isPercent() ? Length.percent(Math.floor(newX / (maxWidth - newWidth) * 100)) : Length.px(newX),
+      y: y.isPercent() ? Length.percent(Math.floor(newY / (maxHeight - newHeight) * 100)) : Length.px(newY),
+      width: Length.px(Math.abs(newWidth)).to(width.unit, maxWidth),
+      height: Length.px(Math.abs(newHeight)).to(height.unit, maxHeight),
+    }
+  }
+
+  /**
+   * background image 의 위치와 크기를 구한다. 
+   * 
+   * @param {number} maxWidth 
+   * @param {number} maxHeight 
+   * @returns 
+   */
+  getOffset(containerWidth, containerHeight) {
+
+    const { x, y, width, height } = this.json;
+
+    const newWidth = width.toPx(containerWidth);
+    const newHeight = height.toPx(containerHeight);
+
+    const newX = x.toPx(containerWidth);
+    const newY = y.toPx(containerHeight);
+
+    // refer to https://developer.mozilla.org/en-US/docs/Web/CSS/background-position#regarding_percentages
+    // x, y 가 percent 일 경우, 계산하는 방식이 달라진다. 
+    return {
+      x: x.isPercent() ? (containerWidth - newWidth) * (x.value / 100) : newX,
+      y: y.isPercent() ? (containerHeight - newHeight) * (y.value / 100) : newY,
+      width: newWidth.value,
+      height: newHeight.value,
+    }
+  }
+
   toBackgroundImageCSS() {
     if (!this.json.image) return {};
     return {

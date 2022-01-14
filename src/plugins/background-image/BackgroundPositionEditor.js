@@ -66,7 +66,7 @@ export default class BackgroundPositionEditor extends EditorElement {
             data: this.state 
         }, {
             id: this.id
-        });
+        }, this.$el.rect());
     }
 
 

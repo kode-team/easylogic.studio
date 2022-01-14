@@ -7,7 +7,9 @@ import PathParser from "el/editor/parser/PathParser";
 import { Pattern } from 'el/editor/property-parser/Pattern';
 import { BackgroundImage } from 'el/editor/property-parser/BackgroundImage';
 import { STRING_TO_CSS } from "el/utils/func";
-import { Constraints, Layout } from "../types/model";
+import { Constraints, GradientType, Layout } from "../types/model";
+import { rectToVerties } from "el/utils/collision";
+import { vertiesMap } from "el/utils/math";
 
 
 const editableList = [
@@ -162,7 +164,7 @@ export class DomModel extends GroupModel {
 
   get changedBoxModel() {
     return this.hasChangedField(
-      'margin-top', 'margin-left', 'margin-bottom', 'margin-right', 
+      'margin-top', 'margin-left', 'margin-bottom', 'margin-right',
       'padding-top', 'padding-left', 'padding-right', 'padding-bottom'
     )
   }
@@ -250,7 +252,7 @@ export class DomModel extends GroupModel {
     return results;
   }
 
-  reset(obj, context = {origin: "*"}) {
+  reset(obj, context = { origin: "*" }) {
     const isChanged = super.reset(obj, context);
 
     // transform 에 변경이 생기면 미리 캐슁해둔다. 
@@ -262,12 +264,12 @@ export class DomModel extends GroupModel {
         const d = this.cacheClipPath.clone().scale(this.json.width / this.cacheClipPathWidth, this.json.height / this.cacheClipPathHeight).d;
         this.json['clip-path'] = `path(${d})`;
 
-        this.modelManager.setChanged('reset', this.id, { 'clip-path' : this.json['clip-path'] });
+        this.modelManager.setChanged('reset', this.id, { 'clip-path': this.json['clip-path'] });
       }
 
     } else if (this.hasChangedField('background-image', 'pattern')) {
       this.setBackgroundImageCache()
-    }    
+    }
 
     return isChanged;
   }
@@ -284,7 +286,7 @@ export class DomModel extends GroupModel {
         });
       })
 
-      for(var i = 0, len = patternList.length; i < len; i++)   {
+      for (var i = 0, len = patternList.length; i < len; i++) {
         list.push.apply(list, patternList[i]);
       }
     }
@@ -308,7 +310,7 @@ export class DomModel extends GroupModel {
   setClipPathCache() {
     var obj = ClipPath.parseStyle(this.json['clip-path'])
 
-    this.cacheClipPathObject = obj;    
+    this.cacheClipPathObject = obj;
     if (obj.type === 'path') {
       this.cacheClipPath = new PathParser(obj.value.trim())
       this.cacheClipPathWidth = this.json.width;
@@ -332,6 +334,72 @@ export class DomModel extends GroupModel {
       return this.cacheClipPath.clone().scale(this.json.width / this.cacheClipPathWidth, this.json.height / this.cacheClipPathHeight).d;
     }
 
+  }
+
+  getBackgroundImage(index) {
+    const value = this.json['background-image'];
+
+    const backgroundImages = BackgroundImage.parseStyle(STRING_TO_CSS(value));
+
+    return backgroundImages[index || 0]
+  }
+
+  /**
+   * 선택된 backround image 의 matrix 를 생성함. 
+   * 
+   * backRect : { x, y, width, height}
+   * backVerties : backRect 의 world 좌표
+   * 
+   * @param {number} index 
+   * @returns 
+   */
+  createBackgroundImageMatrix(index) {
+
+    const backgroundImage = this.getBackgroundImage(index);
+
+    const { image } = backgroundImage;
+
+    const maxWidth = this.screenWidth;
+    const maxHeight = this.screenHeight;
+
+    const backRect = backgroundImage.getOffset(maxWidth, maxHeight);
+
+    const backVerties = vertiesMap(rectToVerties(backRect.x, backRect.y, backRect.width, backRect.height), this.absoluteMatrix);
+    const result = {
+      backRect,
+      backVerties,
+      absoluteMatrix: this.absoluteMatrix,      
+      backgroundImage
+    }
+
+    switch (image.type) {
+      case GradientType.RADIAL:
+      case GradientType.REPEATING_RADIAL:
+      case GradientType.CONIC:
+      case GradientType.REPEATING_CONIC:
+        let [rx, ry] = image.radialPosition;
+
+        if (rx == 'center')  rx = Length.percent(50);
+        if (ry == 'center')  ry = Length.percent(50);
+      
+        const newRx = rx.toPx(backRect.width);
+        const newRy = ry.toPx(backRect.height);
+
+        const centerVerties = vertiesMap(
+          [
+            [newRx.value + backRect.x, newRy.value + backRect.y, 0],
+            [newRx.value + backRect.x, newRy.value + backRect.y - 1, 0],
+          ],
+          this.absoluteMatrix
+        );
+
+        result.radialCenterPosition = centerVerties[0];
+        result.radialCenterStick = centerVerties[1];
+
+        break;
+    }
+
+    return result;
   }
 
 }

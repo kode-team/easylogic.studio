@@ -62,6 +62,7 @@ import guideLineView from "./guide-line-view"
 import selectionInfoView from "./selection-info-view"
 import selectionToolView from "./selection-tool-view"
 import defaultIcons from "./default-icons"
+import GradientEditorView from "./gradient-editor-view"
 
 
 
@@ -167,5 +168,5 @@ export default [
     hoverView,
     pathDrawView,
     pathEditorView,    
-
+    GradientEditorView,
 ]

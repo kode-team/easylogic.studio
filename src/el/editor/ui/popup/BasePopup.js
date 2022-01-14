@@ -38,8 +38,12 @@ export default class BasePopup extends EditorElement {
     return '';
   }
 
+  onClose () { }
+
   [CLICK('$close')] () {
     this.$el.hide();
+
+    this.onClose();
   }
 
   setTitle (title) {

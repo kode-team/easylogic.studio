@@ -1,5 +1,5 @@
 
-import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { DOMDIFF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
 import BasePopup from "el/editor/ui/popup/BasePopup";
@@ -59,7 +59,7 @@ export default class GradientPickerPopup extends BasePopup {
     return this.state.image.colorsteps[this.state.selectColorStepIndex || 0].color; 
   }
 
-  [LOAD('$gradientEditor')] () {
+  [LOAD('$gradientEditor') + DOMDIFF] () {
     return /*html*/`<object refClass="GradientEditor" 
       ref="$g" 
       value="${this.state.image}" 
@@ -83,13 +83,21 @@ export default class GradientPickerPopup extends BasePopup {
     this.children.$g.trigger('setImageUrl', url);
   }
 
-  [SUBSCRIBE("showGradientPickerPopup")](data, params) {    
+  [SUBSCRIBE("showGradientPickerPopup")](data, params, rect) {    
     data.changeEvent = data.changeEvent || 'changeFillPopup'
     data.image = data.gradient
     data.params = params;
     this.setState(data);
 
-    this.show(432);
+    this.showByRect(this.makeRect(248, 660, rect));
+
+    this.emit('showGradientEditorView', {
+      index: data.index
+    })
+  }
+
+  onClose() {
+    this.emit('hideGradientEditorView')
   }
 
   [SUBSCRIBE("selectColorStep")](color) {
@@ -104,6 +112,12 @@ export default class GradientPickerPopup extends BasePopup {
     })
 
     this.updateData();
+  }
+
+  refresh() {
+    if (this.$el.isShow()) {
+      this.load();
+    }
   }
 
 

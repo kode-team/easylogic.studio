@@ -335,7 +335,16 @@ export class ViewportManager {
 
     applyVertexInverse (vertex) {
         return vec3.transformMat4([], vertex, this.matrixInverse);
-    }    
+    }   
+    
+    applyScaleVertex (vertex) {
+        return vec3.transformMat4([], vertex, this.scaleMatrix);
+    }
+
+    applyScaleVertexInverse (vertex) {
+        return vec3.transformMat4([], vertex, this.scaleMatrixInverse);
+    }
+
 
     applyVerties (verties) {
         return vertiesMap(verties, this.matrix);

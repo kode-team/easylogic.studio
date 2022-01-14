@@ -10,20 +10,20 @@ import './BackgroundImageProperty.scss';
 
 export default class BackgroundImageProperty extends BaseProperty {
 
-  
+
   getTitle() {
     return this.$i18n('background.image.property.title');
   }
 
-  hasKeyframe () {
-    return true; 
+  hasKeyframe() {
+    return true;
   }
 
-  afterRender () {
+  afterRender() {
     this.show();
   }
 
-  getKeyframeProperty () {
+  getKeyframeProperty() {
     return 'background-image';
   }
 
@@ -56,19 +56,19 @@ export default class BackgroundImageProperty extends BaseProperty {
     `
   }
 
-  [CLICK('$add [data-value]')] (e) {
+  [CLICK('$add [data-value]')](e) {
     this.children.$backgroundImageEditor.trigger('add', e.$dt.data('value'));
-  }  
+  }
 
-  [LOAD('$property')] () {
-    var current = this.$selection.current || {}; 
+  [LOAD('$property')]() {
+    var current = this.$selection.current || {};
     var value = current['background-image'] || ''
 
     return createComponent('BackgroundImageEditor', {
       ref: '$backgroundImageEditor',
       key: 'background-image',
       value,
-      onchange: 'changeBackgroundImage' 
+      onchange: 'changeBackgroundImage'
     });
   }
 
@@ -80,8 +80,17 @@ export default class BackgroundImageProperty extends BaseProperty {
     this.refresh();
   }
 
-  [SUBSCRIBE_SELF('changeBackgroundImage')] (key, value) {
-    this.command('setAttributeForMulti', 'change background image', this.$selection.packByValue({ 
+
+  [SUBSCRIBE("refreshSelectionStyleView")]() {
+    if (this.$selection.current) {
+      if (this.$selection.hasChangedField("background-image")) {
+        this.refresh();
+      }
+    }
+  }
+
+  [SUBSCRIBE_SELF('changeBackgroundImage')](key, value) {
+    this.command('setAttributeForMulti', 'change background image', this.$selection.packByValue({
       [key]: value
     }))
   }

@@ -3,28 +3,12 @@ import { LOAD, CLICK, POINTERSTART,  BIND, PREVENT, DOUBLECLICK, CHANGE, SUBSCRI
 import { Length } from "el/editor/unit/Length";
 import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
-import icon, { iconUse } from "el/editor/icon/icon";
-import { clone } from "el/sapa/functions/func";
+import { iconUse } from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
 
 import './GradientEditor.scss';
-import { variable } from 'el/sapa/functions/registElement';
 import { createComponent } from "el/sapa/functions/jsx";
-
-
-var radialTypeList = [
-  'circle',
-  'circle closest-side',
-  'circle closest-corner',
-  'circle farthest-side',
-  'circle farthest-corner',
-  'ellipse',
-  'ellipse closest-side',
-  'ellipse closest-corner',
-  'ellipse farthest-side',
-  'ellipse farthest-corner'
-]
 
 var imageTypeList = [
   'static-gradient',
@@ -39,24 +23,6 @@ var imageTypeList = [
 
 var iconList = {
   'image-resource': iconUse("photo")
-}
-
-var hasRadialPosition = {
-  'radial-gradient': true,
-  'repeating-radial-gradient': true,
-  'conic-gradient': true,
-  'repeating-conic-gradient': true
-}
-
-var presetPosition = {
-  top: [ '50%', '0%' ],
-  'top left': [ '0%', '0%' ],
-  'top right': [ '100%', '0%' ],
-  left: [ '0%', '50%' ],
-  right: [ '100%', '50%' ],
-  bottom: [ '50%', '100%' ],
-  'bottom left': [ '0%', '100%' ],
-  'bottom right': [ '100%', '100%' ]
 }
 
 export default class GradientEditor extends EditorElement  {
@@ -93,18 +59,6 @@ export default class GradientEditor extends EditorElement  {
     return /*html*/`
         <div class='elf--gradient-editor' data-selected-editor='${type}'>
             <div class='gradient-preview'>
-              <div class='gradient-view' ref='$gradientView' title='${this.$i18n('gradient.editor.drag.message')}'></div>
-              <div class='drag-pointer' ref='$dragPosition'></div>
-              <div class='preset-position'>
-                <div data-value='top' title='top'>${iconUse("chevron_right")}</div>
-                <div data-value='right' title='right'>${iconUse("chevron_right")}</div>
-                <div data-value='left' title='left'>${iconUse("chevron_right")}</div>
-                <div data-value='bottom' title='bottom'>${iconUse("chevron_right")}</div>
-                <div data-value='top left' title='top left'>${iconUse("chevron_right")}</div>
-                <div data-value='top right' title='top right'>${iconUse("chevron_right")}</div>
-                <div data-value='bottom left' title='bottom left'>${iconUse("chevron_right")}</div>
-                <div data-value='bottom right' title='bottom right'>${iconUse("chevron_right")}</div>                
-              </div>
               <div data-editor='image-loader'>
                 <input type='file' accept="image/*" ref='$file' />
               </div>              
@@ -122,40 +76,6 @@ export default class GradientEditor extends EditorElement  {
                     <div class='step-list' ref="$stepList" ></div>
                 </div>
             </div>
-            <div class='tools' data-editor='tools'>
-                <label for='gradientConnected${this.id}'>Connected <input type='checkbox'  id='gradientConnected${this.id}' ref='$cut' checked /></label>
-            </div>            
-            <div class='tools' data-editor='tools'>
-                ${createComponent('InputRangeEditor', {
-                  label: "Offset",
-                  ref: '$range',
-                  key: 'length',
-                  onchange: 'changeColorStepOffset' 
-                })}
-            </div>
-            <div class='sub-editor' ref='$subEditor'> 
-              <div data-editor='angle'>
-                ${createComponent("InputRangeEditor",  {
-                  label: 'Angle',
-                  ref: '$angle',
-                  units: "deg",
-                   min: -720,
-                   max: 720,
-                   key: 'angle',
-                   onchange: 'changeKeyValue' 
-                })}
-              </div>
-              <div data-editor='centerX'>
-                <object refClass="RangeEditor" label='Center X' ref='$radialPositionX' calc="false" value="50%"  key='radialPositionX' onchange='changeKeyValue' />
-              </div>                
-              <div data-editor='centerY'>                      
-                <object refClass="RangeEditor" label='Center Y' ref='$radialPositionY' calc="false" value="50%" key='radialPositionY' onchange='changeKeyValue' />
-              </div>                
-              <div data-editor='radialType'>              
-                <object refClass="SelectEditor" label='Radial Type' ref='$radialType' value="" options="${variable(radialTypeList)}" key='radialType' onchange='changeKeyValue' />
-              </div>
-
-            </div>            
         </div>
       `;
   }
@@ -172,60 +92,9 @@ export default class GradientEditor extends EditorElement  {
   }
 
 
-  [CLICK('$el .preset-position [data-value]')] (e) {
-    var type = e.$dt.attr('data-value')
-
-    if (presetPosition[type]) {
-      this.state.image.radialPosition = clone(presetPosition[type])
-      this.refresh();
-      this.updateData();
-    }
-
-  }
-
   [DOUBLECLICK('$gradientView') + PREVENT] (e) {
     this.state.image.radialPosition = ['50%', '50%']
     this.refresh();
-    this.updateData();
-  }
-
-  [POINTERSTART('$gradientView') + MOVE('moveDragPosition') + END('moveEndDragPosition')]  (e) {
-    var parent = this.refs.$dragPosition.parent();
-    this.containerRect = parent.rect();
-    this.startXY = e.xy; 
-    this.$config.set('set.move.control.point', true);
-  }
-
-  moveEndDragPosition(dx, dy) {
-    this.$config.set('set.move.control.point', false);
-  }
-
-  moveDragPosition (dx, dy) {
-    var x = this.startXY.x + dx; 
-    var y = this.startXY.y + dy; 
-
-    if (this.containerRect.x > x) {
-      x = this.containerRect.x; 
-    } else if (this.containerRect.x + this.containerRect.width < x) {
-      x = this.containerRect.x + this.containerRect.width; 
-    }
-
-    if (this.containerRect.y > y) {
-      y = this.containerRect.y; 
-    } else if (this.containerRect.y + this.containerRect.height < y) {
-      y = this.containerRect.y + this.containerRect.height; 
-    }    
-
-    var left = Length.percent((x - this.containerRect.x ) / this.containerRect.width  * 100) 
-    var top = Length.percent((y - this.containerRect.y ) / this.containerRect.height  * 100) 
-
-    this.state.image.radialPosition = [ left, top]
-
-    this.bindData('$dragPosition');
-    this.bindData('$gradientView')    
-    this.children.$radialPositionX.setValue(left)
-    this.children.$radialPositionY.setValue(top)
-
     this.updateData();
   }
 
@@ -239,48 +108,15 @@ export default class GradientEditor extends EditorElement  {
       type,
       url,
       colorsteps: this.state.image.colorsteps || [] ,   
-      angle: Length.parse(this.children.$angle.getValue()).value,
-      radialType: this.children.$radialType.getValue(),
-      radialPosition: [ 
-        this.children.$radialPositionX.getValue(), 
-        this.children.$radialPositionY.getValue() 
-      ] 
+      angle: this.state.image.angle,
+      radialType: this.state.image.radialType,
+      radialPosition: this.state.image.radialPosition
     })
     this.refresh();
     this.updateData();
-    this.sendMessage();
   }
 
-  sendMessage (type) {
-    var type = this.$el.attr('data-selected-editor');
-    if (type === 'linear-gradient' || type === 'repeating-linear-gradient') {
-      this.emit('addStatusBarMessage', '');
-    } else {
-      this.emit('addStatusBarMessage', 'Drag if you want to move center position');
-    }
-  }
-
-  [SUBSCRIBE_SELF('changeKeyValue')] (key, value) {
-
-    if (key === 'angle') {
-      value = value.value; 
-    } 
-
-    this.state.image[key] = value;
-
-    if (key === 'radialPositionX' || key === 'radialPositionY') {
-      this.state.image['radialPosition'] = [
-        this.state.image.radialPositionX || '50%', 
-        this.state.image.radialPositionY || '50%'
-      ] 
-    }
-
-    this.bindData('$gradientView')
-
-    this.updateData();
-  }
-
-  [SUBSCRIBE('changeColorStepOffset')] (key, value) {
+  [SUBSCRIBE_SELF('changeColorStepOffset')] (key, value) {
     if (this.currentStep) {
       this.currentStep.percent = value.value;
       this.state.image.sortColorStep();
@@ -330,39 +166,6 @@ export default class GradientEditor extends EditorElement  {
     }
   }
 
-  [BIND('$gradientView')] () {
-
-    var type = this.state.image.type;
-    var size = 'auto';
-
-    if (type === 'url' || type === 'image-resource') {
-      size = 'cover'
-    }
-
-    return {
-      style: {
-        'background-image': this.state.image.toString(),
-        'background-size': size,
-        'background-repeat': 'no-repeat'
-      }
-    }
-  }
-
-  [BIND('$dragPosition')] () {
-    var left = '50%'
-    var top = '50%'
-
-    if (hasRadialPosition[this.state.image.type]) {
-      var [left, top] = this.state.image.radialPosition;
-    }
-
-    return {
-      style: {
-        left, top 
-      }
-    }
-  }
-
   [LOAD('$stepList')] () {
     var colorsteps = this.state.image.colorsteps || [] 
     return colorsteps.map( (it, index) => {
@@ -375,16 +178,6 @@ export default class GradientEditor extends EditorElement  {
         <div class='arrow' style="background-color: ${it.color}"></div>
       </div>`
     })
-  }
-
-  [CLICK('$cut')] () {
-    if (this.currentStep) {
-
-      this.currentStep.cut = this.refs.$cut.checked()
-
-      this.refresh()
-      this.updateData();      
-    } 
   }
 
   removeStep(id) {
@@ -402,8 +195,6 @@ export default class GradientEditor extends EditorElement  {
 
     if (this.state.image.colorsteps) {
       this.currentStep = this.state.image.colorsteps.find( it => this.$selection.isSelectedColorStep(it.id))
-      this.refs.$cut.checked(this.currentStep.cut);
-      this.children.$range.setValue(Length.percent(this.currentStep.percent));
       this.parent.trigger('selectColorStep', this.currentStep.color)    
   
     }
@@ -412,13 +203,15 @@ export default class GradientEditor extends EditorElement  {
 
   }
 
-  [POINTERSTART('$stepList .step') + MOVE()] (e) {
+  [POINTERSTART('$stepList .step') + MOVE() + END()] (e) {
     var id = e.$dt.attr('data-id')
 
     if (e.altKey) {
       this.removeStep(id);
       return false; 
     } else {
+
+      this.isSelectedColorStep = this.$selection.isSelectedColorStep(id);
 
       this.selectStep(id);
 
@@ -448,11 +241,25 @@ export default class GradientEditor extends EditorElement  {
 
     this.currentStep.setValue(percent, rect.width)
 
-    this.children.$range.setValue(Length.percent(percent));    
+    // this.children.$range.setValue(Length.percent(percent));    
     this.state.image.sortColorStep();
     this.refresh()
 
     this.updateData();    
+  }
+
+  end (dx, dy) {
+    if (dx === 0 && dy === 0) {
+      if (this.isSelectedColorStep) {
+        if (this.currentStep) {
+
+          this.currentStep.cut = !this.currentStep.cut
+    
+          this.refresh()
+          this.updateData();      
+        } 
+      }
+    }
   }
 
 
