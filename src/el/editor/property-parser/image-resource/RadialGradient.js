@@ -41,7 +41,7 @@ export class RadialGradient extends Gradient {
     var colorString = this.getColorString();
     var json = this.json;
     var opt = '';
-    var radialType = json.radialType;
+    var radialType = json.radialType || 'circle';
     var radialPosition = json.radialPosition || ["center", "center"];
 
     radialPosition = DEFINED_POSITIONS[radialPosition]

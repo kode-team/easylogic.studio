@@ -30,7 +30,8 @@
 
     .fill-item {
       display: grid;
-      grid-template-columns: 18px 24px 24px 1fr;
+      grid-template-columns: 18px 30px 1fr;
+      column-gap: 2px;
       margin-bottom: 4px;
 
       > label {
@@ -53,7 +54,7 @@
       .gradient-info {
         width: 100%;
         display: grid;
-        grid-template-columns: 50px 1fr 24px 24px;
+        grid-template-columns: 1fr 24px 24px;
 
         color: var(--elf--font-color);
 

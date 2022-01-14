@@ -189,3 +189,8 @@ export const GradientType = {
     REPEATING_RADIAL: "repeating-radial-gradient",
     REPEATING_CONIC: "repeating-conic-gradient",
 }
+
+export const RadialGradientType = {
+    CIRCLE: "circle",
+    ELLIPSE: "ellipse",
+}

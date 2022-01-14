@@ -9,6 +9,7 @@ import { END, MOVE } from "el/editor/types/event";
 
 import './GradientEditor.scss';
 import { createComponent } from "el/sapa/functions/jsx";
+import { RadialGradientType } from "el/editor/types/model";
 
 var imageTypeList = [
   'static-gradient',
@@ -109,8 +110,8 @@ export default class GradientEditor extends EditorElement  {
       url,
       colorsteps: this.state.image.colorsteps || [] ,   
       angle: this.state.image.angle,
-      radialType: this.state.image.radialType,
-      radialPosition: this.state.image.radialPosition
+      radialType: this.state.image.radialType || RadialGradientType.CIRCLE,
+      radialPosition: this.state.image.radialPosition || ['50%', '50%']
     })
     this.refresh();
     this.updateData();

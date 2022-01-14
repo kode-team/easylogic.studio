@@ -193,10 +193,41 @@ export class BackgroundImage extends PropertyItem {
       newY += newHeight
     }    
 
+    let nextX = Length.px(newX);
+    let nextY = Length.px(newY);
+
+    const dist = 2;
+
+    if (x.isPercent()) {
+
+      if (newX < dist) {
+        nextX = Length.percent(0)
+      } else if (Math.abs((maxWidth - newWidth) - newX) < dist) {
+        nextX = Length.percent(100)        
+      } else if (Math.abs(((maxWidth - newWidth)/2) - newX) < dist) {        
+        nextX = Length.percent(50)        
+      } else {
+        nextX = Length.percent(newX / (maxWidth - newWidth) * 100);
+      }
+    }
+
+    if (y.isPercent()) {
+
+      if (newY < dist) {
+        nextY = Length.percent(0)
+      } else if (Math.abs((maxHeight - newHeight) - newY) < dist) {
+        nextY = Length.percent(100)        
+      } else if (Math.abs(((maxHeight - newHeight)/2) - newY) < dist) {        
+        nextY = Length.percent(50)        
+      } else {
+        nextY = Length.percent(newY / (maxHeight - newHeight) * 100);
+      }
+    }
+
     // x, y 가 percent 일 때는 크기의 역순으로 해서 위치를 계산해준다. 
     return {
-      x: x.isPercent() ? Length.percent(Math.floor(newX / (maxWidth - newWidth) * 100)) : Length.px(newX),
-      y: y.isPercent() ? Length.percent(Math.floor(newY / (maxHeight - newHeight) * 100)) : Length.px(newY),
+      x: nextX,
+      y: nextY,
       width: Length.px(Math.abs(newWidth)).to(width.unit, maxWidth),
       height: Length.px(Math.abs(newHeight)).to(height.unit, maxHeight),
     }

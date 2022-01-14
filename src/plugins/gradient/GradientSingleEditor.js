@@ -2,7 +2,7 @@ import { CLICK, BIND, SUBSCRIBE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './GradientSingleEditor.scss';
-import { GradientType } from "el/editor/types/model";
+import { GradientType, RadialGradientType } from "el/editor/types/model";
 import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
 
 export default class GradientSingleEditor extends EditorElement {
@@ -77,7 +77,7 @@ export default class GradientSingleEditor extends EditorElement {
             case GradientType.REPEATING_RADIAL:
                 image.reset({
                     radialPosition: currentImage.radialPosition,
-                    raidalType: currentImage.radialType,
+                    raidalType: currentImage.radialType || RadialGradientType.CIRCLE,
                 })
 
                 break;
@@ -86,7 +86,7 @@ export default class GradientSingleEditor extends EditorElement {
                 image.reset({
                     angle: currentImage.angle,
                     radialPosition: currentImage.radialPosition,
-                    raidalType: currentImage.radialType,
+                    raidalType: currentImage.radialType || RadialGradientType.CIRCLE,
                 })
                 break;
             case GradientType.LINEAR:

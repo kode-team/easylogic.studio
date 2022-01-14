@@ -6408,6 +6408,10 @@ const GradientType = {
   REPEATING_RADIAL: "repeating-radial-gradient",
   REPEATING_CONIC: "repeating-conic-gradient"
 };
+const RadialGradientType = {
+  CIRCLE: "circle",
+  ELLIPSE: "ellipse"
+};
 class BoxShadow extends PropertyItem {
   static parse(obj2) {
     return new BoxShadow(obj2);
@@ -7386,7 +7390,7 @@ class RadialGradient extends Gradient {
     var colorString = this.getColorString();
     var json = this.json;
     var opt = "";
-    var radialType = json.radialType;
+    var radialType = json.radialType || "circle";
     var radialPosition = json.radialPosition || ["center", "center"];
     radialPosition = DEFINED_POSITIONS$1[radialPosition] ? radialPosition : radialPosition.join(" ");
     opt = radialPosition ? `${radialType} at ${radialPosition}` : radialType;
@@ -7712,9 +7716,34 @@ class BackgroundImage extends PropertyItem {
     if (newHeight < 0) {
       newY += newHeight;
     }
+    let nextX = Length.px(newX);
+    let nextY = Length.px(newY);
+    const dist2 = 2;
+    if (x2.isPercent()) {
+      if (newX < dist2) {
+        nextX = Length.percent(0);
+      } else if (Math.abs(maxWidth - newWidth - newX) < dist2) {
+        nextX = Length.percent(100);
+      } else if (Math.abs((maxWidth - newWidth) / 2 - newX) < dist2) {
+        nextX = Length.percent(50);
+      } else {
+        nextX = Length.percent(newX / (maxWidth - newWidth) * 100);
+      }
+    }
+    if (y2.isPercent()) {
+      if (newY < dist2) {
+        nextY = Length.percent(0);
+      } else if (Math.abs(maxHeight - newHeight - newY) < dist2) {
+        nextY = Length.percent(100);
+      } else if (Math.abs((maxHeight - newHeight) / 2 - newY) < dist2) {
+        nextY = Length.percent(50);
+      } else {
+        nextY = Length.percent(newY / (maxHeight - newHeight) * 100);
+      }
+    }
     return {
-      x: x2.isPercent() ? Length.percent(Math.floor(newX / (maxWidth - newWidth) * 100)) : Length.px(newX),
-      y: y2.isPercent() ? Length.percent(Math.floor(newY / (maxHeight - newHeight) * 100)) : Length.px(newY),
+      x: nextX,
+      y: nextY,
       width: Length.px(Math.abs(newWidth)).to(width2.unit, maxWidth),
       height: Length.px(Math.abs(newHeight)).to(height2.unit, maxHeight)
     };
@@ -27329,7 +27358,7 @@ class BackgroundImageEditor extends EditorElement {
     return this.state.images.map((it, index2) => {
       var image2 = it.image;
       var backgroundType = types[image2.type];
-      var backgroundTypeName = names$1[image2.type];
+      names$1[image2.type];
       const selectedClass = it.selected ? "selected" : "";
       if (it.selected) {
         this.selectedIndex = index2;
@@ -27337,19 +27366,7 @@ class BackgroundImageEditor extends EditorElement {
       return `
             <div class='fill-item ${selectedClass}' data-index='${index2}' ref="fillIndex${index2}"  draggable='true' data-fill-type="${backgroundType}" >
                 <label draggable="true" data-index="${index2}">${iconUse$1("drag_indicator")}</label>
-                ${createComponentList(["BackgroundPositionEditor", {
-        key: "background-position",
-        index: index2,
-        ref: `$bp${index2}`,
-        x: it.x,
-        y: it.y,
-        width: it.width,
-        height: it.height,
-        repeat: it.repeat,
-        size: it.size,
-        blendMode: it.blendMode,
-        onchange: "changePattern"
-      }], ["GradientSingleEditor", {
+                ${createComponentList(["GradientSingleEditor", {
         index: index2,
         ref: `$gse${index2}`,
         image: it.image,
@@ -27359,7 +27376,6 @@ class BackgroundImageEditor extends EditorElement {
       }])}
                 <div class='fill-info'>
                   <div class='gradient-info'>
-                    <div class='fill-title' ref="fillTitle${index2}" data-repeat="${image2.type.includes("repeating")}">${backgroundTypeName}</div>
                     <div class='blend'>
                         ${createComponent("BlendSelectEditor", {
         ref: `$blend_${index2}`,
@@ -37099,7 +37115,7 @@ class GradientPickerPopup extends BasePopup {
     data.image = data.gradient;
     data.params = params;
     this.setState(data);
-    this.showByRect(this.makeRect(248, 660, rect2));
+    this.showByRect(this.makeRect(248, 550, rect2));
     this.emit("showGradientEditorView", {
       index: data.index
     });
@@ -37369,7 +37385,7 @@ class GradientSingleEditor extends EditorElement {
       case GradientType.REPEATING_RADIAL:
         image2.reset({
           radialPosition: currentImage.radialPosition,
-          raidalType: currentImage.radialType
+          raidalType: currentImage.radialType || RadialGradientType.CIRCLE
         });
         break;
       case GradientType.CONIC:
@@ -37377,7 +37393,7 @@ class GradientSingleEditor extends EditorElement {
         image2.reset({
           angle: currentImage.angle,
           radialPosition: currentImage.radialPosition,
-          raidalType: currentImage.radialType
+          raidalType: currentImage.radialType || RadialGradientType.CIRCLE
         });
         break;
       case GradientType.LINEAR:
@@ -43279,8 +43295,8 @@ class GradientEditor extends EditorElement {
       url,
       colorsteps: this.state.image.colorsteps || [],
       angle: this.state.image.angle,
-      radialType: this.state.image.radialType,
-      radialPosition: this.state.image.radialPosition
+      radialType: this.state.image.radialType || RadialGradientType.CIRCLE,
+      radialPosition: this.state.image.radialPosition || ["50%", "50%"]
     });
     this.refresh();
     this.updateData();

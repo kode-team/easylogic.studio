@@ -89,7 +89,7 @@ export default class GradientPickerPopup extends BasePopup {
     data.params = params;
     this.setState(data);
 
-    this.showByRect(this.makeRect(248, 660, rect));
+    this.showByRect(this.makeRect(248, 550, rect));
 
     this.emit('showGradientEditorView', {
       index: data.index

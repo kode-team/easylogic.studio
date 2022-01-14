@@ -88,19 +88,19 @@ export default class BackgroundImageEditor extends EditorElement {
             <div class='fill-item ${selectedClass}' data-index='${index}' ref="fillIndex${index}"  draggable='true' data-fill-type="${backgroundType}" >
                 <label draggable="true" data-index="${index}">${iconUse('drag_indicator')}</label>
                 ${createComponentList(
-                    ["BackgroundPositionEditor", {
-                        key: "background-position",
-                        index,
-                        ref: `$bp${index}`,
-                        x: it.x,
-                        y: it.y,
-                        width: it.width,
-                        height: it.height,
-                        repeat: it.repeat,
-                        size: it.size,
-                        blendMode: it.blendMode,
-                        onchange: 'changePattern'
-                    }],
+                    // ["BackgroundPositionEditor", {
+                    //     key: "background-position",
+                    //     index,
+                    //     ref: `$bp${index}`,
+                    //     x: it.x,
+                    //     y: it.y,
+                    //     width: it.width,
+                    //     height: it.height,
+                    //     repeat: it.repeat,
+                    //     size: it.size,
+                    //     blendMode: it.blendMode,
+                    //     onchange: 'changePattern'
+                    // }],
                     ["GradientSingleEditor" ,{
                         index,
                         ref: `$gse${index}`,
@@ -112,7 +112,6 @@ export default class BackgroundImageEditor extends EditorElement {
                 )}
                 <div class='fill-info'>
                   <div class='gradient-info'>
-                    <div class='fill-title' ref="fillTitle${index}" data-repeat="${image.type.includes('repeating')}">${backgroundTypeName}</div>
                     <div class='blend'>
                         ${createComponent("BlendSelectEditor", {
                             ref: `$blend_${index}`,
@@ -224,7 +223,7 @@ export default class BackgroundImageEditor extends EditorElement {
         var index = +e.$dt.attr("data-index");
 
         const current = this.state.images[index]
-        
+
         this.state.images.splice(index, 0, current);
 
         this.refresh();
