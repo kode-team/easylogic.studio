@@ -65,7 +65,7 @@ export default class BrushDrawView extends EditorElement {
         }
     }
 
-    [KEYUP('document') + IF('isShow') + ESCAPE + ENTER + PREVENT + STOP] () {
+    [KEYUP('document') + IF('isShow') + ESCAPE + ENTER] () {
         this.trigger('hideBrushDrawEditor');        
     }
 

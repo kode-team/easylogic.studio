@@ -1,5 +1,7 @@
 import {
+  CLICK,
   DOMDIFF,
+  IF,
   LEFT_BUTTON,
   LOAD,
   POINTERSTART,
@@ -19,6 +21,7 @@ import {
 import { Length } from "el/editor/unit/Length";
 import { GradientType } from "el/editor/types/model";
 import { vec3 } from "gl-matrix";
+import Dom from "el/sapa/functions/Dom";
 
 var radialTypeList = [
   "circle",
@@ -94,6 +97,7 @@ export default class GradientEditorView extends EditorElement {
   [POINTERSTART("$el .resizer") +
     LEFT_BUTTON +
     MOVE("calculateMovedResizer") +
+    END("calculateMovedEndResizer") +
     PREVENT](e) {
     this.state.$target = e.$dt;
 
@@ -137,17 +141,12 @@ export default class GradientEditorView extends EditorElement {
       height: backRect.height,
     });
 
-    var value = CSS_TO_STRING(
-      BackgroundImage.toPropertyCSS(this.state.backgroundImages)
-    );
 
-    this.command(
-      "setAttributeForMulti",
-      "change background image",
-      this.$selection.packByValue({
-        "background-image": value,
-      })
-    );
+    this.updateData();
+  }
+
+  calculateMovedEndResizer() {
+    this.updateData();
   }
 
   [POINTERSTART("$el .back-rect") +
@@ -195,17 +194,8 @@ export default class GradientEditorView extends EditorElement {
       y: backRect.y,
     });
 
-    var value = CSS_TO_STRING(
-      BackgroundImage.toPropertyCSS(this.state.backgroundImages)
-    );
-
-    this.command(
-      "setAttributeForMulti",
-      "change background image",
-      this.$selection.packByValue({
-        "background-image": value,
-      })
-    );
+    
+    this.updateData();
   }
 
   calculateMovedEndRect(dx, dy) {
@@ -215,19 +205,10 @@ export default class GradientEditorView extends EditorElement {
 
       this.state.backgroundImages[this.state.index].repeat =
         repeatTypeList[(index + 1) % repeatTypeList.length];
-
-      var value = CSS_TO_STRING(
-        BackgroundImage.toPropertyCSS(this.state.backgroundImages)
-      );
-
-      this.command(
-        "setAttributeForMulti",
-        "change background image",
-        this.$selection.packByValue({
-          "background-image": value,
-        })
-      );
     }
+
+
+    this.updateData();
   }
 
   /**
@@ -260,29 +241,33 @@ export default class GradientEditorView extends EditorElement {
 
     const distAngle = calculateAngleForVec3(point, center, dist);
 
-    let newAngle = Math.floor(this.state.gradient.image.angle + distAngle)
+    let newAngle = Math.floor(this.state.gradient.image.angle + distAngle);
 
-    if (this.$config.get('bodyEvent').shiftKey) {
-        newAngle -= newAngle % this.$config.get('fixed.angle');
+    if (this.$config.get("bodyEvent").shiftKey) {
+      newAngle -= newAngle % this.$config.get("fixed.angle");
     }
 
     this.state.backgroundImages[this.state.index].image.angle = newAngle;
 
-    var value = CSS_TO_STRING(
-      BackgroundImage.toPropertyCSS(this.state.backgroundImages)
-    );
 
-    this.command(
-      "setAttributeForMulti",
-      "change background image",
-      this.$selection.packByValue({
-        "background-image": value,
-      })
-    );
+    this.updateData();
   }
 
   calculatedMovedEndAngle() {
     this.state.$target.toggleClass("moved");
+
+    this.updateData();    
+  }
+
+  isMovableCenter(e) {
+    this.initializeData();    
+
+    return [
+        GradientType.RADIAL,
+        GradientType.REPEATING_RADIAL,
+        GradientType.CONIC,
+        GradientType.REPEATING_CONIC,
+    ].includes(this.state.gradient.type)
   }
 
   /**
@@ -296,6 +281,7 @@ export default class GradientEditorView extends EditorElement {
     LEFT_BUTTON +
     MOVE("calculateMovedElement") +
     END("calculateMovedEndElement") +
+    IF('isMovableCenter') +
     PREVENT](e) {
     this.state.$target = e.$dt;
     this.state.left = Length.parse(e.$dt.css("left")).value;
@@ -342,17 +328,8 @@ export default class GradientEditorView extends EditorElement {
       Length.percent((newY / backRect.height) * 100),
     ];
 
-    var value = CSS_TO_STRING(
-      BackgroundImage.toPropertyCSS(this.state.backgroundImages)
-    );
 
-    this.command(
-      "setAttributeForMulti",
-      "change background image",
-      this.$selection.packByValue({
-        "background-image": value,
-      })
-    );
+    this.updateData();    
   }
 
   calculateMovedEndElement(dx, dy) {
@@ -364,24 +341,28 @@ export default class GradientEditorView extends EditorElement {
             this.state.gradient.image.radialType
           );
 
-          this.state.gradient.image.radialType =
+          this.state.backgroundImages[this.state.index].image.radialType =
             radialTypeList[(index + 1) % radialTypeList.length];
-
-          var value = CSS_TO_STRING(
-            BackgroundImage.toPropertyCSS(this.state.backgroundImages)
-          );
-
-          this.command(
-            "setAttributeForMulti",
-            "change background image",
-            this.$selection.packByValue({
-              "background-image": value,
-            })
-          );
-
           break;
       }
-    }
+    } 
+
+
+    this.updateData();
+  }
+
+  updateData() {
+    var value = CSS_TO_STRING(
+      BackgroundImage.toPropertyCSS(this.state.backgroundImages)
+    );
+
+    this.command(
+      "setAttributeForMulti",
+      "change background image",
+      this.$selection.packByValue({
+        "background-image": value,
+      })
+    );
   }
 
   refresh() {
@@ -419,11 +400,15 @@ export default class GradientEditorView extends EditorElement {
 
     this.refresh();
     this.emit("recoverCursor");
+
+    this.emit('push.mode.view', 'GradientEditorView');
   }
 
   [SUBSCRIBE("hideGradientEditorView")]() {
     this.$el.hide();
     this.state.isShow = false;
+
+    this.emit('pop.mode.view', 'GradientEditorView');    
   }
 
   [SUBSCRIBE("refreshSelection")]() {
@@ -467,25 +452,29 @@ export default class GradientEditorView extends EditorElement {
     let centerPosition, centerStick;
 
     if (
+      image.type === GradientType.STATIC ||
       image.type === GradientType.LINEAR ||
       image.type === GradientType.REPEATING_LINEAR
     ) {
-        const boxPosition = this.$viewport.applyVerties(result.backVerties);
+      const boxPosition = this.$viewport.applyVerties(result.backVerties);
 
-        centerPosition = vec3.lerp([], boxPosition[0], boxPosition[2], 0.5);
+      centerPosition = vec3.lerp([], boxPosition[0], boxPosition[2], 0.5);
 
-        const stickPoint = vec3.lerp([], boxPosition[0], boxPosition[1], 0.5);
+      const stickPoint = vec3.lerp([], boxPosition[0], boxPosition[1], 0.5);
 
-        centerStick = vec3.lerp([],
-            centerPosition,
-            vec3.lerp([], centerPosition, stickPoint, 1/vec3.dist(centerPosition, stickPoint)), 
-            40
-        ) ;
-
-    } else {
-      centerPosition = this.$viewport.applyVertex(
-        result.radialCenterPosition
+      centerStick = vec3.lerp(
+        [],
+        centerPosition,
+        vec3.lerp(
+          [],
+          centerPosition,
+          stickPoint,
+          1 / vec3.dist(centerPosition, stickPoint)
+        ),
+        40
       );
+    } else {
+      centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
 
       centerStick = vec3.lerp(
         [],
@@ -493,11 +482,13 @@ export default class GradientEditorView extends EditorElement {
         this.$viewport.applyVertex(result.radialCenterStick),
         40
       );
-
     }
-    const newCenterStick = vertiesMap( [centerStick], calculateRotationOriginMat4(image.angle, centerPosition))[0];    
+    const newCenterStick = vertiesMap(
+      [centerStick],
+      calculateRotationOriginMat4(image.angle, centerPosition)
+    )[0];
 
-    const targetStick = vec3.lerp([], newCenterStick, centerPosition, 3/4);
+    const targetStick = vec3.lerp([], newCenterStick, centerPosition, 3 / 4);
 
     return (
       <>

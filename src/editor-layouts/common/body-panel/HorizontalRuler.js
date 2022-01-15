@@ -6,6 +6,13 @@ import Dom from "el/sapa/functions/Dom";
 let pathString = []
 
 export default class HorizontalRuler extends EditorElement {
+
+  initialize() {
+    super.initialize();
+    
+    this.notEventRedefine = true;
+  }
+
     template () {
         return /*html*/`
             <div class="elf--horizontal-ruler">

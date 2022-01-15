@@ -280,7 +280,16 @@ export default {
     'background.image.position.popup.type.space': 'space', 
     'background.image.position.popup.type.round': 'round',     
 
-    'gradient.picker.popup.title': 'Gradient & Image Picker',    
+    'gradient.picker.popup.title': 'Gradient & Image Picker',  
+    'gradient.picker.popup.static-gradient': 'Static',    
+    'gradient.picker.popup.linear-gradient': 'Linear',
+    'gradient.picker.popup.repeating-linear-gradient': 'Repeating Linear',
+    'gradient.picker.popup.radial-gradient': 'Radial',
+    'gradient.picker.popup.repeating-radial-gradient': 'Repeating Radial',
+    'gradient.picker.popup.conic-gradient': 'Linear',
+    'gradient.picker.popup.repeating-conic-gradient': 'Repeating Conic',        
+    
+
     'image.asset.property.title': 'Image',
     'video.asset.property.title': 'Video',    
     'color.asset.property.title': 'Color',

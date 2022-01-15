@@ -6,6 +6,12 @@ import './IconListViewEditor.scss';
 
 export default class IconListViewEditor extends EditorElement {
 
+    initialize() {
+        super.initialize();
+
+        this.notEventRedefine = true;
+    }
+    
     initState() {
         return {
             value: this.props.value

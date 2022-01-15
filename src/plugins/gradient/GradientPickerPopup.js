@@ -5,6 +5,9 @@ import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import './GradientPickerPopup.scss';
+import { createComponent } from "el/sapa/functions/jsx";
+import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
+import { isString } from "el/sapa/functions/func";
 
 export default class GradientPickerPopup extends BasePopup {
 
@@ -60,17 +63,19 @@ export default class GradientPickerPopup extends BasePopup {
   }
 
   [LOAD('$gradientEditor') + DOMDIFF] () {
-    return /*html*/`<object refClass="GradientEditor" 
-      ref="$g" 
-      value="${this.state.image}" 
-      selectedIndex="${this.state.selectColorStepIndex}" 
-      onchange='changeGradientEditor'
-    />`
+    return createComponent("GradientEditor", {
+      ref: "$g",
+      value: `${this.state.image}`,
+      selectedIndex: this.state.selectColorStepIndex,
+      onchange: 'changeGradientEditor'
+    })
   }
 
   [SUBSCRIBE_SELF('changeGradientEditor')] (data) {
 
-    this.state.image = data;
+    this.state.image = isString(data) ? BackgroundImage.parseImage(data) : data;
+
+    this.updateTitle();
 
     this.updateData();
   }
@@ -83,17 +88,29 @@ export default class GradientPickerPopup extends BasePopup {
     this.children.$g.trigger('setImageUrl', url);
   }
 
+  updateTitle () {
+    this.setTitle(this.$i18n(`gradient.picker.popup.${this.state.image.type}`))
+  }
+
   [SUBSCRIBE("showGradientPickerPopup")](data, params, rect) {    
     data.changeEvent = data.changeEvent || 'changeFillPopup'
     data.image = data.gradient
     data.params = params;
     this.setState(data);
 
-    this.showByRect(this.makeRect(248, 550, rect));
+    this.showByRect(this.makeRect(248, 600, rect));
+
+    this.updateTitle();
 
     this.emit('showGradientEditorView', {
       index: data.index
     })
+  }
+
+  [SUBSCRIBE("hideGradientPickerPopup")]() {
+    this.hide();
+
+    this.emit('hideGradientEditorView')
   }
 
   onClose() {
@@ -114,15 +131,18 @@ export default class GradientPickerPopup extends BasePopup {
     this.updateData();
   }
 
-  refresh() {
+  load(...args) {
     if (this.$el.isShow()) {
-      this.load();
+      super.load(...args);
     }
   }
 
+  getValue () {
+    return `${this.state.image}`
+  }
 
   updateData() {
-    this.state.instance.trigger(this.state.changeEvent, this.state.image, this.state.params);
+    this.state.instance.trigger(this.state.changeEvent, this.getValue(), this.state.params);
   }
 
 }

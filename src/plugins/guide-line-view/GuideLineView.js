@@ -135,6 +135,14 @@ const point = (target, dist = 3, direction = 'left') => {
  */
 export default class GuideLineView extends EditorElement {
 
+
+    initialize() {
+        super.initialize();
+
+        this.notEventRedefine = true;
+    }
+
+
     template() {
         return /*html*/`
             <svg class='elf--guide-line-view' ref="$guide" width="100%" height="100%" ></svg>

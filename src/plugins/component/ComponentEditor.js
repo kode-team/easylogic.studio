@@ -7,6 +7,13 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 export default class ComponentEditor extends EditorElement {
 
+
+  initialize() {
+    super.initialize();
+
+    this.notEventRedefine = true;
+  }
+
   initState() {
     return {
       inspector: this.props.inspector
@@ -28,20 +35,20 @@ export default class ComponentEditor extends EditorElement {
       return /*html*/`
         <div class='column column-${size}' style="--column-gap: ${childEditor.gap}px" >
           ${childEditor.columns.map((it, itemIndex) => {
-            if (it === '-') {
-              return /*html*/`<div class="column-item"></div>`;
-            } else if (it.type === 'label') { 
-              return /*html*/`<div class="column-item">
+        if (it === '-') {
+          return /*html*/`<div class="column-item"></div>`;
+        } else if (it.type === 'label') {
+          return /*html*/`<div class="column-item">
                 <label>${it.label}</label>
               </div>`;
-            }
+        }
 
-            return /*html*/`
+        return /*html*/`
               <div class='column-item'>
                 ${this.getPropertyEditor(`${index}${itemIndex}`, it)}
               </div>
             `
-          }).join('')}  
+      }).join('')}  
         </div>
       `
     }
@@ -50,15 +57,15 @@ export default class ComponentEditor extends EditorElement {
         <object 
           refClass="${childEditor.editor}" 
           ${variable({
-            ...childEditor.editorOptions,
-            onchange: (key, value) => {
-              const newValue = isFunction(childEditor.convert) ? childEditor.convert(key, value) : value;
-              this.trigger('changeComponentValue', key, newValue);
-            },
-            ref: `${childEditor.key}${index}`,
-            key: childEditor.key,
-            value: childEditor.defaultValue
-          })} 
+      ...childEditor.editorOptions,
+      onchange: (key, value) => {
+        const newValue = isFunction(childEditor.convert) ? childEditor.convert(key, value) : value;
+        this.trigger('changeComponentValue', key, newValue);
+      },
+      ref: `${childEditor.key}${index}`,
+      key: childEditor.key,
+      value: childEditor.defaultValue
+    })} 
         />
     `
 
@@ -90,7 +97,7 @@ export default class ComponentEditor extends EditorElement {
     return self;
   }
 
-  setInspector (inspector) {
+  setInspector(inspector) {
     this.setState({
       inspector
     })

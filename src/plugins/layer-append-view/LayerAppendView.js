@@ -473,10 +473,10 @@ export default class LayerAppendView extends EditorElement {
         return this.state.isShow
     }
 
-    [KEYDOWN('document') + IF('isShow') + ESCAPE + ENTER + PREVENT + STOP](e) {
+    [KEYDOWN('document') + IF('isShow') + ESCAPE + ENTER](e) {
         // NOOP
     }
-    [KEYUP('document') + IF('isShow') + ESCAPE + ENTER + PREVENT + STOP](e) {
+    [KEYUP('document') + IF('isShow') + ESCAPE + ENTER](e) {
 
         switch (this.state.type) {
             case "text":
@@ -523,17 +523,6 @@ export default class LayerAppendView extends EditorElement {
         this.state.target = null;
         this.bindData('$areaRect');
         this.trigger('hideLayerAppendView')
-    }
-
-    [KEYUP('$el') + IF('isShow')](e) {
-        switch (this.state.type) {
-            case "text":
-                const $t = Dom.create(e.target);
-                const { width, height } = $t.rect();
-
-
-                break;
-        }
     }
 
     [CHANGE('$file')](e) {

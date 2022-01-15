@@ -4,4 +4,5 @@ export default {
     command: 'addLayerView', 
     args: ['text'],
     description: 'Add text layer',
+    when: 'CanvasView'
 }

@@ -7,35 +7,41 @@ import './BaseProperty.scss';
 
 export default class BaseProperty extends EditorElement {
 
-  onToggleShow() {}
+
+  initialize() {
+    super.initialize();
+
+    this.notEventRedefine = true;
+  }
+
+  onToggleShow() { }
 
   template() {
     return /*html*/`
-        <div class='elf--property ${this.isHideHeader() ? 'no-title' : ''} ${this.getClassName()} ${this.isFirstShow() ?  'show' : '' }'>
+        <div class='elf--property ${this.isHideHeader() ? 'no-title' : ''} ${this.getClassName()} ${this.isFirstShow() ? 'show' : ''}'>
             ${this.isHideHeader() ? ''
-            : /*html*/`
+        : /*html*/`
             <div class='property-title ${this.getTitleClassName()}' ref="$title">
-                <label class="${this.hasKeyframe() ? 'has-keyframe': ''}"> 
-                  ${
-                    this.hasKeyframe() ? 
+                <label class="${this.hasKeyframe() ? 'has-keyframe' : ''}"> 
+                  ${this.hasKeyframe() ?
                     /*html*/`
                       <span class='add-timeline-property' data-property='${this.getKeyframeProperty()}'></span>
                     `
 
-                    : ''
-                  } 
+          : ''
+        } 
                   <span ref='$propertyTitle'>${this.getTitle()}</span>
                 </label>
                 <span class="tools">${this.getTools()}</span>
             </div>`
-            }
+      }
             <div class='property-body ${this.getBodyClassName()}'>${this.getBody()}</div>
-            ${ this.getFooter() ? `<div class='property-footer'>${this.getFooter()}</div>` : ''}
+            ${this.getFooter() ? `<div class='property-footer'>${this.getFooter()}</div>` : ''}
         </div>
         `;
   }
 
-  [BIND('$el')] () {
+  [BIND('$el')]() {
     return {
       style: {
         '--property-order': this.order,
@@ -43,19 +49,19 @@ export default class BaseProperty extends EditorElement {
     }
   }
 
-  setTitle (title) {
+  setTitle(title) {
     this.refs.$propertyTitle.html(title);
   }
 
-  hasKeyframe () {
+  hasKeyframe() {
     return false;
   }
-    
+
   isHideHeader() {
     return false;
   }
 
-  isFirstShow () {
+  isFirstShow() {
     return true
   }
 
@@ -86,7 +92,7 @@ export default class BaseProperty extends EditorElement {
   }
 
   getFooter() {
-    return ''; 
+    return '';
   }
 
   // [CLICK("$title label")](e) {
@@ -143,7 +149,7 @@ export default class BaseProperty extends EditorElement {
 
   }
 
-  refreshShowIsNot (type = '', isRefresh = true ) {
+  refreshShowIsNot(type = '', isRefresh = true) {
 
     var current = this.$selection.current;
     if (current) {
@@ -159,12 +165,12 @@ export default class BaseProperty extends EditorElement {
     }
   }
 
-  refreshShow (type, isRefresh = true) {
+  refreshShow(type, isRefresh = true) {
 
     var current = this.$selection.current;
     if (current) {
 
-      if  (isFunction(type) && type()) {
+      if (isFunction(type) && type()) {
         this.show();
         if (isRefresh) this.refresh();
       } else {
@@ -174,15 +180,15 @@ export default class BaseProperty extends EditorElement {
         } else {
           this.hide();
         }
-      } 
-    }  else {
+      }
+    } else {
       this.hide();
     }
   }
 
 
-  startInputEditing (input) {
-    if (!input) return; 
+  startInputEditing(input) {
+    if (!input) return;
     input.attr('contenteditable', true);
 
     input.css({
@@ -194,8 +200,8 @@ export default class BaseProperty extends EditorElement {
     input.focus();
   }
 
-  endInputEditing (input, callback) {
-    if (!input) return;     
+  endInputEditing(input, callback) {
+    if (!input) return;
     input.attr('contenteditable', false);
     input.css({
       'background-color': null,
@@ -205,7 +211,7 @@ export default class BaseProperty extends EditorElement {
 
     var index = input.attr('data-index');
 
-    callback && callback (index, input.text().trim())
+    callback && callback(index, input.text().trim())
 
     input.blur();
   }
@@ -217,7 +223,7 @@ export default class BaseProperty extends EditorElement {
   /**
    * inspector 에서 표시 순서를 정할 수 있다. 
    */
-  get order () {
+  get order() {
     return 1000;
   }
 
@@ -225,15 +231,15 @@ export default class BaseProperty extends EditorElement {
 
     if (!this.$selection.current) {
       this.hide();
-      return false; 
+      return false;
     }
 
     if (this.$selection.current.editable(this.editableProperty)) {
       this.show();
-      return true; 
+      return true;
     } else {
       this.hide();
-      return false; 
+      return false;
     }
   }
 }

@@ -280,7 +280,7 @@ export default {
     'background.image.position.popup.type.space': '공백유지', 
     'background.image.position.popup.type.round': '반올림', 
 
-    'gradient.picker.popup.title': '그라디언트와 이미지',
+    'gradient.picker.popup.title': '그라디언트와 이미지',     
 
     'image.asset.property.title': '이미지',
     'video.asset.property.title': '비디오',    

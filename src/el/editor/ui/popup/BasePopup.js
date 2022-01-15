@@ -1,5 +1,5 @@
 
-import { POINTERSTART, CLICK, SUBSCRIBE } from "el/sapa/Event";
+import { POINTERSTART, CLICK, SUBSCRIBE, KEYDOWN, PREVENT, KEYUP } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
 import icon, { iconUse } from "el/editor/icon/icon";
 import { EditorElement } from "../common/EditorElement";
@@ -9,6 +9,11 @@ import './BasePopup.scss';
 
 export default class BasePopup extends EditorElement {
 
+  initialize() {
+    super.initialize();
+
+    this.notEventRedefine = true;
+  }
   template() {
     return /*html*/`
         <div class='elf--popup ${this.getClassName()}'>

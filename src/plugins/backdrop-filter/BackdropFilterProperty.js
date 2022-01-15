@@ -11,6 +11,12 @@ import { createComponent } from "el/sapa/functions/jsx";
 import "./BackdropFilterProperty.scss";
 export default class BackdropFilterProperty extends BaseProperty {
 
+  initialize() {
+    super.initialize();
+    
+    this.notEventRedefine = true;
+  }
+
   getTitle() {
     return this.$i18n('backdrop.filter.property.title');
   }

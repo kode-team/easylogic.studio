@@ -38,6 +38,12 @@ const names = {
 
 export default class BackgroundImageEditor extends EditorElement {
 
+    initialize() {
+        super.initialize();
+
+        this.notEventRedefine = true;
+    }
+
     initState() {
         return {
             hideLabel: this.props.hideLabel || false,
@@ -71,12 +77,10 @@ export default class BackgroundImageEditor extends EditorElement {
 
         const current = this.$selection.current || {color: 'black'};
 
-
         return this.state.images.map((it, index) => {
             var image = it.image;
 
             var backgroundType = types[image.type];
-            var backgroundTypeName = names[image.type];
 
             const selectedClass = it.selected ? "selected" : "";
       
@@ -88,19 +92,19 @@ export default class BackgroundImageEditor extends EditorElement {
             <div class='fill-item ${selectedClass}' data-index='${index}' ref="fillIndex${index}"  draggable='true' data-fill-type="${backgroundType}" >
                 <label draggable="true" data-index="${index}">${iconUse('drag_indicator')}</label>
                 ${createComponentList(
-                    // ["BackgroundPositionEditor", {
-                    //     key: "background-position",
-                    //     index,
-                    //     ref: `$bp${index}`,
-                    //     x: it.x,
-                    //     y: it.y,
-                    //     width: it.width,
-                    //     height: it.height,
-                    //     repeat: it.repeat,
-                    //     size: it.size,
-                    //     blendMode: it.blendMode,
-                    //     onchange: 'changePattern'
-                    // }],
+                    ["BackgroundPositionEditor", {
+                        key: "background-position",
+                        index,
+                        ref: `$bp${index}`,
+                        x: it.x,
+                        y: it.y,
+                        width: it.width,
+                        height: it.height,
+                        repeat: it.repeat,
+                        size: it.size,
+                        blendMode: it.blendMode,
+                        onchange: 'changePattern'
+                    }],
                     ["GradientSingleEditor" ,{
                         index,
                         ref: `$gse${index}`,
@@ -124,10 +128,10 @@ export default class BackgroundImageEditor extends EditorElement {
                         })}
                     </div>
                     <div class='tools'>
-                      <button type="button" class='copy' data-index='${index}'>${iconUse('copy')}</button>
+                      <button type="button" class='copy' data-index='${index}' title="Copy Item">${iconUse('add')}</button>
                     </div>                    
                     <div class='tools'>
-                      <button type="button" class='remove' data-index='${index}'>${iconUse('remove2')}</button>
+                      <button type="button" class='remove' data-index='${index}' title="Remove Item">${iconUse('remove2')}</button>
                     </div>
                   </div>
                 </div>
@@ -144,6 +148,7 @@ export default class BackgroundImageEditor extends EditorElement {
 
     makeGradient (type) {
         switch(type) {
+        case 'static-gradient': return `static-gradient(black)`;            
         case 'linear-gradient': return `linear-gradient(90deg, white 0%, black 100%)`;
         case 'repeating-linear-gradient': return `repeating-linear-gradient(90deg, white 2px, black 4px)`;
         case 'radial-gradient': return `radial-gradient(circle, white 0%, black 100%)`;
@@ -198,8 +203,6 @@ export default class BackgroundImageEditor extends EditorElement {
         this.sortBackgroundImage(this.startIndex, targetIndex);
 
         this.refresh();
-
-        // this.viewFillPopup(this.getRef("preview", this.selectedIndex));
 
         this.modifyBackgroundImage()
 

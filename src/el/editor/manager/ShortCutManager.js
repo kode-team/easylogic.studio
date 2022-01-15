@@ -151,10 +151,12 @@ export class ShortCutManager {
 
             if (filteredCommands.length) {
                 e.preventDefault();
+                
+                filteredCommands.forEach(it => {
+                    this.$editor.emit(it.command, ...it.args);
+                })                
             }
-            filteredCommands.forEach(it => {
-                this.$editor.emit(it.command, ...it.args);
-            })
+
         }
     }
 }

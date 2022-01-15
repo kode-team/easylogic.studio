@@ -6,6 +6,13 @@ import Dom from 'el/sapa/functions/Dom';
 let pathString = []
 
 export default class VerticalRuler extends EditorElement {
+
+    initialize() {
+        super.initialize();
+        
+        this.notEventRedefine = true;
+      }
+    
     template () {
         return /*html*/`
             <div class="elf--vertical-ruler">

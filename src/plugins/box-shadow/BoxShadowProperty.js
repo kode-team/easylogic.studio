@@ -8,6 +8,12 @@ import './BoxShadowProperty.scss';
 
 export default class BoxShadowProperty extends BaseProperty {
 
+  initialize() {
+    super.initialize();
+    
+    this.notEventRedefine = true;
+  }
+
   getTitle () {
     return this.$i18n('boxshadow.property.title');
   }

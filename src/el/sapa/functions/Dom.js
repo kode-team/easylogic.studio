@@ -173,7 +173,12 @@ export default class Dom {
   }
 
   is(checkElement) {
-    return this.el === (checkElement.el || checkElement);
+
+    if (checkElement instanceof Dom) {
+      return this.el === checkElement.el;
+    }
+
+    return this.el === checkElement;
   }
 
   isTag(tag) {

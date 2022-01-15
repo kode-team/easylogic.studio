@@ -77,6 +77,12 @@ const ARROW_RIGHT = CHECKER("ArrowRight");
 const ENTER = CHECKER("Enter");
 const SPACE = CHECKER("Space");
 const ESCAPE = CHECKER("Escape");
+const BACKSPACE = CHECKER("Backspace");
+const DELETE = CHECKER("Delete");
+const EQUAL = CHECKER("Equal");
+const MINUS = CHECKER("Minus");
+const BRACKET_RIGHT = CHECKER("BracketRight");
+const BRACKET_LEFT = CHECKER("BracketLeft");
 const ALT = CHECKER("isAltKey");
 const SHIFT = CHECKER("isShiftKey");
 const META = CHECKER("isMetaKey");
@@ -261,6 +267,12 @@ var Event$1 = /* @__PURE__ */ Object.freeze({
   ENTER,
   SPACE,
   ESCAPE,
+  BACKSPACE,
+  DELETE,
+  EQUAL,
+  MINUS,
+  BRACKET_RIGHT,
+  BRACKET_LEFT,
   ALT,
   SHIFT,
   META,
@@ -2912,7 +2924,10 @@ class Dom {
     return this;
   }
   is(checkElement) {
-    return this.el === (checkElement.el || checkElement);
+    if (checkElement instanceof Dom) {
+      return this.el === checkElement.el;
+    }
+    return this.el === checkElement;
   }
   isTag(tag) {
     return this.el.tagName.toLowerCase() === tag.toLowerCase();
@@ -6401,6 +6416,7 @@ const BoxShadowStyle = {
   INSET: "inset"
 };
 const GradientType = {
+  STATIC: "static-gradient",
   LINEAR: "linear-gradient",
   RADIAL: "radial-gradient",
   CONIC: "conic-gradient",
@@ -7167,6 +7183,24 @@ class Gradient extends ImageResource {
       it.index = index2 * 100;
     });
   }
+  sortToRight() {
+    var children2 = this.colorsteps;
+    const length2 = children2.length;
+    const unit = 100 / length2;
+    children2.forEach((it, index2) => {
+      it.percent = unit * (index2 + 1);
+    });
+    this.sortColorStep();
+  }
+  sortToLeft() {
+    var children2 = this.colorsteps;
+    const length2 = children2.length;
+    const unit = 100 / length2;
+    children2.forEach((it, index2) => {
+      it.percent = unit * index2;
+    });
+    this.sortColorStep();
+  }
   addColorStepList(colorstepList = []) {
     colorstepList.forEach((c2) => {
       this.addColorStep(c2, false);
@@ -7224,6 +7258,17 @@ class StaticGradient extends Gradient {
     return __spreadProps(__spreadValues({}, super.toCloneObject()), {
       static: true
     });
+  }
+  static parse(str) {
+    var _a;
+    var results = convertMatches(str);
+    var colorsteps = [];
+    let newColor = (_a = results.str.split("(")[1].split(")")[0]) == null ? void 0 : _a.trim();
+    if (newColor.includes("@")) {
+      newColor = reverseMatches(newColor, results.matches);
+      colorsteps.push.apply(colorsteps, ColorStep.parse(newColor));
+    }
+    return new StaticGradient({ colorsteps });
   }
   static create(color2 = "transparent") {
     return new StaticGradient({
@@ -7593,7 +7638,7 @@ class RepeatingConicGradient extends ConicGradient {
   }
 }
 const RepeatList = ["repeat", "no-repeat", "repeat-x", "repeat-y", "round", "space"];
-const reg$1 = /((linear\-gradient|repeating\-linear\-gradient|radial\-gradient|repeating\-radial\-gradient|conic\-gradient|repeating\-conic\-gradient|url)\(([^\)]*)\))/gi;
+const reg$1 = /((static\-gradient|linear\-gradient|repeating\-linear\-gradient|radial\-gradient|repeating\-radial\-gradient|conic\-gradient|repeating\-conic\-gradient|url)\(([^\)]*)\))/gi;
 class BackgroundImage extends PropertyItem {
   addImageResource(imageResource) {
     this.clear("image-resource");
@@ -7832,6 +7877,13 @@ class BackgroundImage extends PropertyItem {
         image2 = RepeatingLinearGradient.parse(value);
       } else if (value.includes("linear-gradient")) {
         image2 = LinearGradient$1.parse(value);
+        if (image2.colorsteps.length === 2) {
+          if (image2.colorsteps[0].color === image2.colorsteps[1].color) {
+            image2 = StaticGradient.parse(`static-gradient(${image2.colorsteps[0].color})`);
+          }
+        }
+      } else if (value.includes("static-gradient")) {
+        image2 = StaticGradient.parse(value);
       } else if (value.includes("repeating-radial-gradient")) {
         image2 = RepeatingRadialGradient.parse(value);
       } else if (value.includes("radial-gradient")) {
@@ -7879,6 +7931,13 @@ class BackgroundImage extends PropertyItem {
           image2 = RepeatingLinearGradient.parse(value);
         } else if (value.includes("linear-gradient")) {
           image2 = LinearGradient$1.parse(value);
+          if (image2.colorsteps.length === 2) {
+            if (image2.colorsteps[0].color === image2.colorsteps[1].color) {
+              image2 = StaticGradient.parse(`static-gradient(${image2.colorsteps[0].color})`);
+            }
+          }
+        } else if (value.includes("static-gradient")) {
+          image2 = StaticGradient.parse(value);
         } else if (value.includes("repeating-radial-gradient")) {
           image2 = RepeatingRadialGradient.parse(value);
         } else if (value.includes("radial-gradient")) {
@@ -17734,7 +17793,7 @@ var __glob_0_78$1 = /* @__PURE__ */ Object.freeze({
 });
 function refreshElement(editor, current) {
   editor.emit("refreshSelectionStyleView", current);
-  if (current.isLayoutItem() || current.parent.is("boolean-path")) {
+  if (current && current.isNot("project") && (current.isLayoutItem() || current.parent.is("boolean-path"))) {
     editor.emit("refreshElementBoundSize", current.parent);
   } else {
     editor.emit("refreshElementBoundSize", current);
@@ -18781,7 +18840,8 @@ var add_brush = {
   key: "b",
   command: "addLayerView",
   args: ["brush"],
-  description: "Draw SVG Path"
+  description: "Draw SVG Path",
+  when: "CanvasView"
 };
 var __glob_0_1$3 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -18793,7 +18853,8 @@ var add_circle$1 = {
   key: "o",
   command: "addLayerView",
   args: ["circle"],
-  description: "Add circle layer"
+  description: "Add circle layer",
+  when: "CanvasView"
 };
 var __glob_0_2$3 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -18805,7 +18866,8 @@ var add_circle_l = {
   key: "l",
   command: "addLayerView",
   args: ["circle"],
-  description: "Add circle layer"
+  description: "Add circle layer",
+  when: "CanvasView"
 };
 var __glob_0_3$3 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -18817,7 +18879,8 @@ var add_path = {
   key: "p",
   command: "addLayerView",
   args: ["path"],
-  description: "Add SVG Path layer"
+  description: "Add SVG Path layer",
+  when: "CanvasView"
 };
 var __glob_0_4$3 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -18829,7 +18892,8 @@ var add_rect = {
   key: "r",
   command: "addLayerView",
   args: ["rect"],
-  description: "Add rect layer"
+  description: "Add rect layer",
+  when: "CanvasView"
 };
 var __glob_0_5$3 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -18841,7 +18905,8 @@ var add_rect_m = {
   key: "m",
   command: "addLayerView",
   args: ["rect"],
-  description: "Add rect layer"
+  description: "Add rect layer",
+  when: "CanvasView"
 };
 var __glob_0_6$3 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -18853,7 +18918,8 @@ var add_text = {
   key: "t",
   command: "addLayerView",
   args: ["text"],
-  description: "Add text layer"
+  description: "Add text layer",
+  when: "CanvasView"
 };
 var __glob_0_7$3 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -19364,7 +19430,8 @@ var show_pan = {
   category: "Tool",
   key: "space",
   command: "showPan",
-  description: "Show panning area"
+  description: "Show panning area",
+  when: "CanvasView"
 };
 var __glob_0_47$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -19650,10 +19717,10 @@ class ShortCutManager {
       const filteredCommands = commands.filter((it) => it.eventType === eventType).filter((it) => this.checkWhen(it));
       if (filteredCommands.length) {
         e2.preventDefault();
+        filteredCommands.forEach((it) => {
+          this.$editor.emit(it.command, ...it.args);
+        });
       }
-      filteredCommands.forEach((it) => {
-        this.$editor.emit(it.command, ...it.args);
-      });
     }
   }
 }
@@ -23047,6 +23114,10 @@ class BaseLayout extends EditorElement {
 var HorizontalRuler$1 = "";
 let pathString$1 = [];
 class HorizontalRuler extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   template() {
     return `
             <div class="elf--horizontal-ruler">
@@ -23226,6 +23297,10 @@ class HorizontalRuler extends EditorElement {
 var VerticalRuler$1 = "";
 let pathString = [];
 class VerticalRuler extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   template() {
     return `
             <div class="elf--vertical-ruler">
@@ -23438,6 +23513,10 @@ const filter_list$2 = [
 ];
 const TEMP_DIV = Dom.create("div");
 class StyleView extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     return {
       lastChangedList: {}
@@ -23956,6 +24035,10 @@ class HTMLRenderView extends EditorElement {
 }
 var PageTools$1 = "";
 class PageTools extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   template() {
     return `     
       <div class='elf--page-tools'>
@@ -24342,7 +24425,7 @@ class CanvasView extends EditorElement {
       this.trigger("resizeCanvas");
       this.emit("moveSelectionToCenter", false);
       this.refreshCursor();
-    }, 10);
+    }, 1e3);
   }
   template() {
     return `
@@ -26097,6 +26180,10 @@ class TopAlign extends MenuItem {
 }
 var BaseProperty$1 = "";
 class BaseProperty extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   onToggleShow() {
   }
   template() {
@@ -26599,6 +26686,10 @@ class AnimationProperty extends BaseProperty {
 }
 var BasePopup$1 = "";
 class BasePopup extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   template() {
     return `
         <div class='elf--popup ${this.getClassName()}'>
@@ -27171,6 +27262,10 @@ const filter_list$1 = [
 ];
 var BackdropFilterProperty$1 = "";
 class BackdropFilterProperty extends BaseProperty {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   getTitle() {
     return this.$i18n("backdrop.filter.property.title");
   }
@@ -27303,18 +27398,6 @@ function backgroundClip(editor) {
   });
 }
 var BackgroundImageEditor$1 = "";
-const names$1 = {
-  "image-resource": "Image",
-  "url": "Image",
-  image: "Image",
-  "static-gradient": "Static",
-  "linear-gradient": "Linear",
-  "repeating-linear-gradient": `Linear`,
-  "radial-gradient": "Radial",
-  "repeating-radial-gradient": `Radial`,
-  "conic-gradient": "Conic",
-  "repeating-conic-gradient": `Conic`
-};
 const types = {
   image: "image",
   "image-resource": "image",
@@ -27328,6 +27411,10 @@ const types = {
   "repeating-conic-gradient": "gradient"
 };
 class BackgroundImageEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     return {
       hideLabel: this.props.hideLabel || false,
@@ -27358,7 +27445,6 @@ class BackgroundImageEditor extends EditorElement {
     return this.state.images.map((it, index2) => {
       var image2 = it.image;
       var backgroundType = types[image2.type];
-      names$1[image2.type];
       const selectedClass = it.selected ? "selected" : "";
       if (it.selected) {
         this.selectedIndex = index2;
@@ -27366,7 +27452,19 @@ class BackgroundImageEditor extends EditorElement {
       return `
             <div class='fill-item ${selectedClass}' data-index='${index2}' ref="fillIndex${index2}"  draggable='true' data-fill-type="${backgroundType}" >
                 <label draggable="true" data-index="${index2}">${iconUse$1("drag_indicator")}</label>
-                ${createComponentList(["GradientSingleEditor", {
+                ${createComponentList(["BackgroundPositionEditor", {
+        key: "background-position",
+        index: index2,
+        ref: `$bp${index2}`,
+        x: it.x,
+        y: it.y,
+        width: it.width,
+        height: it.height,
+        repeat: it.repeat,
+        size: it.size,
+        blendMode: it.blendMode,
+        onchange: "changePattern"
+      }], ["GradientSingleEditor", {
         index: index2,
         ref: `$gse${index2}`,
         image: it.image,
@@ -27387,10 +27485,10 @@ class BackgroundImageEditor extends EditorElement {
       })}
                     </div>
                     <div class='tools'>
-                      <button type="button" class='copy' data-index='${index2}'>${iconUse$1("copy")}</button>
+                      <button type="button" class='copy' data-index='${index2}' title="Copy Item">${iconUse$1("add")}</button>
                     </div>                    
                     <div class='tools'>
-                      <button type="button" class='remove' data-index='${index2}'>${iconUse$1("remove2")}</button>
+                      <button type="button" class='remove' data-index='${index2}' title="Remove Item">${iconUse$1("remove2")}</button>
                     </div>
                   </div>
                 </div>
@@ -27404,6 +27502,8 @@ class BackgroundImageEditor extends EditorElement {
   }
   makeGradient(type) {
     switch (type) {
+      case "static-gradient":
+        return `static-gradient(black)`;
       case "linear-gradient":
         return `linear-gradient(90deg, white 0%, black 100%)`;
       case "repeating-linear-gradient":
@@ -27648,17 +27748,15 @@ class BackgroundImagePositionPopup extends BasePopup {
 }
 var BackgroundImageProperty$1 = "";
 class BackgroundImageProperty extends BaseProperty {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   getTitle() {
     return this.$i18n("background.image.property.title");
   }
-  hasKeyframe() {
-    return true;
-  }
   afterRender() {
     this.show();
-  }
-  getKeyframeProperty() {
-    return "background-image";
   }
   getClassName() {
     return "background-image";
@@ -27718,6 +27816,10 @@ class BackgroundImageProperty extends BaseProperty {
 }
 var BackgroundPositionEditor$1 = "";
 class BackgroundPositionEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     return {
       index: this.props.index,
@@ -27727,8 +27829,7 @@ class BackgroundPositionEditor extends EditorElement {
       height: this.props.height,
       repeat: this.props.repeat,
       size: this.props.size,
-      blendMode: this.props.blendMode,
-      color: "rgba(0, 0, 0, 1)"
+      blendMode: this.props.blendMode
     };
   }
   updateData(opt = {}) {
@@ -27746,7 +27847,7 @@ class BackgroundPositionEditor extends EditorElement {
       style: {
         "background-image": "linear-gradient(to top right, black, white)",
         "background-repeat": this.state.repeat,
-        "background-size": "7px 7px"
+        "background-size": "10px 10px"
       }
     };
   }
@@ -27755,7 +27856,7 @@ class BackgroundPositionEditor extends EditorElement {
             <div class='elf--background-position-editor'>
                 <div class='preview' ref='$preview'>
                     <div class='mini-view'>
-                        <div class='color-view' style="background-color: ${this.state.color}" ref='$miniView'></div>
+                        <div class='color-view' ref='$miniView'></div>
                     </div>
                 </div>
             </div>
@@ -28133,6 +28234,10 @@ const borderTypeTitle = {
   "border-left": "left"
 };
 class BorderEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     var borders = Border.parseStyle(this.props.value);
     var direction = Object.keys(borders)[0] || "border";
@@ -28186,6 +28291,10 @@ class BorderEditor extends EditorElement {
 }
 var BorderProperty$1 = "";
 class BorderProperty extends BaseProperty {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   getTitle() {
     return this.$i18n("border.property.title");
   }
@@ -28616,6 +28725,10 @@ const BorderGroup = {
   PARTITIAL: "partial"
 };
 class BorderRadiusEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     return __spreadValues({}, BorderRadius.parseStyle(this.props.value));
   }
@@ -28721,6 +28834,10 @@ class BorderRadiusEditor extends EditorElement {
   }
 }
 class BorderRadiusProperty extends BaseProperty {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   getTitle() {
     return this.$i18n("border.radius.property.title");
   }
@@ -28845,6 +28962,10 @@ function boxModel(editor) {
 }
 var BoxShadowEditor$1 = "";
 class BoxShadowEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     return {
       boxShadows: BoxShadow.parseStyle(this.props.value || "")
@@ -29016,6 +29137,10 @@ var boxShadow$1 = [
 ];
 var BoxShadowProperty$1 = "";
 class BoxShadowProperty extends BaseProperty {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   getTitle() {
     return this.$i18n("boxshadow.property.title");
   }
@@ -29746,6 +29871,10 @@ class ClipPathPopup extends BasePopup {
 }
 var ClipPathProperty$1 = "";
 class ClipPathProperty extends BaseProperty {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   getTitle() {
     return this.$i18n("clippath.property.title");
   }
@@ -29947,6 +30076,10 @@ function codeview(editor) {
   });
 }
 class Hue extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     return {
       hue: 0,
@@ -29999,6 +30132,10 @@ class Hue extends EditorElement {
   }
 }
 class Opacity extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     return {
       colorbar: Color.parse("rgba(0, 0, 0, 1)"),
@@ -30065,6 +30202,10 @@ class Opacity extends EditorElement {
   }
 }
 class ColorView extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     return {
       value: "rgba(0, 0, 0, 1)"
@@ -30282,6 +30423,10 @@ class ColorInformation extends EditorElement {
   }
 }
 class ColorPalette extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     return {
       hueColor: "rgba(0, 0, 0, 1)",
@@ -30778,6 +30923,10 @@ class ComponentPopup extends BasePopup {
 }
 var ComponentEditor$1 = "";
 class ComponentEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     return {
       inspector: this.props.inspector
@@ -34505,6 +34654,13 @@ var en_US = {
   "background.image.position.popup.type.space": "space",
   "background.image.position.popup.type.round": "round",
   "gradient.picker.popup.title": "Gradient & Image Picker",
+  "gradient.picker.popup.static-gradient": "Static",
+  "gradient.picker.popup.linear-gradient": "Linear",
+  "gradient.picker.popup.repeating-linear-gradient": "Repeating Linear",
+  "gradient.picker.popup.radial-gradient": "Radial",
+  "gradient.picker.popup.repeating-radial-gradient": "Repeating Radial",
+  "gradient.picker.popup.conic-gradient": "Linear",
+  "gradient.picker.popup.repeating-conic-gradient": "Repeating Conic",
   "image.asset.property.title": "Image",
   "video.asset.property.title": "Video",
   "color.asset.property.title": "Color",
@@ -37093,15 +37249,16 @@ class GradientPickerPopup extends BasePopup {
     return this.state.image.colorsteps[this.state.selectColorStepIndex || 0].color;
   }
   [LOAD("$gradientEditor") + DOMDIFF]() {
-    return `<object refClass="GradientEditor" 
-      ref="$g" 
-      value="${this.state.image}" 
-      selectedIndex="${this.state.selectColorStepIndex}" 
-      onchange='changeGradientEditor'
-    />`;
+    return createComponent("GradientEditor", {
+      ref: "$g",
+      value: `${this.state.image}`,
+      selectedIndex: this.state.selectColorStepIndex,
+      onchange: "changeGradientEditor"
+    });
   }
   [SUBSCRIBE_SELF("changeGradientEditor")](data) {
-    this.state.image = data;
+    this.state.image = isString(data) ? BackgroundImage.parseImage(data) : data;
+    this.updateTitle();
     this.updateData();
   }
   [SUBSCRIBE_SELF("changeColor")](color2) {
@@ -37110,15 +37267,23 @@ class GradientPickerPopup extends BasePopup {
   [SUBSCRIBE_SELF("changeImageUrl")](url) {
     this.children.$g.trigger("setImageUrl", url);
   }
+  updateTitle() {
+    this.setTitle(this.$i18n(`gradient.picker.popup.${this.state.image.type}`));
+  }
   [SUBSCRIBE("showGradientPickerPopup")](data, params, rect2) {
     data.changeEvent = data.changeEvent || "changeFillPopup";
     data.image = data.gradient;
     data.params = params;
     this.setState(data);
-    this.showByRect(this.makeRect(248, 550, rect2));
+    this.showByRect(this.makeRect(248, 600, rect2));
+    this.updateTitle();
     this.emit("showGradientEditorView", {
       index: data.index
     });
+  }
+  [SUBSCRIBE("hideGradientPickerPopup")]() {
+    this.hide();
+    this.emit("hideGradientEditorView");
   }
   onClose() {
     this.emit("hideGradientEditorView");
@@ -37130,13 +37295,16 @@ class GradientPickerPopup extends BasePopup {
     this.state.image.reset(__spreadValues({}, data));
     this.updateData();
   }
-  refresh() {
+  load(...args2) {
     if (this.$el.isShow()) {
-      this.load();
+      super.load(...args2);
     }
   }
+  getValue() {
+    return `${this.state.image}`;
+  }
   updateData() {
-    this.state.instance.trigger(this.state.changeEvent, this.state.image, this.state.params);
+    this.state.instance.trigger(this.state.changeEvent, this.getValue(), this.state.params);
   }
 }
 class FillPickerPopup extends BasePopup {
@@ -37329,6 +37497,10 @@ class FillSingleEditor extends EditorElement {
 }
 var GradientSingleEditor$1 = "";
 class GradientSingleEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     return {
       index: this.props.index,
@@ -37384,22 +37556,23 @@ class GradientSingleEditor extends EditorElement {
       case GradientType.RADIAL:
       case GradientType.REPEATING_RADIAL:
         image2.reset({
-          radialPosition: currentImage.radialPosition,
+          radialPosition: currentImage.radialPosition || ["50%", "50%"],
           raidalType: currentImage.radialType || RadialGradientType.CIRCLE
         });
         break;
       case GradientType.CONIC:
       case GradientType.REPEATING_CONIC:
         image2.reset({
-          angle: currentImage.angle,
-          radialPosition: currentImage.radialPosition,
+          angle: currentImage.angle || 0,
+          radialPosition: currentImage.radialPosition || ["50%", "50%"],
           raidalType: currentImage.radialType || RadialGradientType.CIRCLE
         });
         break;
       case GradientType.LINEAR:
       case GradientType.REPEATING_LINEAR:
+      case GradientType.STATIC:
         image2.reset({
-          angle: currentImage.angle
+          angle: currentImage.angle || 0
         });
         break;
     }
@@ -38669,6 +38842,10 @@ function layerTree(editor) {
 }
 var FlexLayoutEditor$1 = "";
 class FlexLayoutEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   getDirectionOptions() {
     return this.makeOptionsFunction("row,column");
   }
@@ -39067,6 +39244,10 @@ class FlexLayoutItemProperty extends BaseProperty {
 var GridBoxEditor$1 = "";
 const REG_CSS_UNIT = /(auto)|(repeat\([^\)]*\))|(([\d.]+)(px|pt|fr|r?em|deg|vh|vw|%))/gi;
 class GridBoxEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   getLayoutItemOptions() {
     return variable$4("none,auto,repeat,length".split(",").map((it) => {
       return { value: it, text: this.$i18n(`grid.box.editor.${it}`) };
@@ -39209,6 +39390,10 @@ class GridBoxEditor extends EditorElement {
   }
 }
 class GridGapEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     return {
       label: this.props.label,
@@ -39264,6 +39449,10 @@ class GridGapEditor extends EditorElement {
 }
 var GridLayoutEditor$1 = "";
 class GridLayoutEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     return __spreadValues({}, STRING_TO_CSS(this.props.value));
   }
@@ -39515,6 +39704,10 @@ class GridLayoutItemProperty extends BaseProperty {
 }
 var LayoutProperty$1 = "";
 class LayoutProperty extends BaseProperty {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   getTitle() {
     return this.$i18n("layout.property.title");
   }
@@ -39616,6 +39809,10 @@ class LayoutProperty extends BaseProperty {
 }
 var DefaultLayoutItemProperty$1 = "";
 class DefaultLayoutItemProperty extends BaseProperty {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   getTitle() {
     return this.$i18n("default.layout.item.property.title.constraints");
   }
@@ -40010,6 +40207,10 @@ class PatternAssetsProperty extends BaseProperty {
 }
 var PatternEditor$1 = "";
 class PatternEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     return {
       hideLabel: this.props.hideLabel,
@@ -40341,6 +40542,10 @@ class PatternInfoPopup extends BasePopup {
 }
 var PatternProperty$1 = "";
 class PatternProperty extends BaseProperty {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   getTitle() {
     return this.$i18n("pattern.property.title");
   }
@@ -41762,6 +41967,10 @@ const modules = { "./colors_list/material-amber.js": __glob_0_0, "./colors_list/
 var colors = Object.values(modules).map((it) => it.default);
 var ColorAssetsEditor$1 = "";
 class ColorAssetsEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     return {
       mode: "grid",
@@ -41890,6 +42099,10 @@ class ColorSingleEditor extends EditorElement {
 }
 var ColorViewEditor$1 = "";
 class ColorViewEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     const value = this.props.value || "rgba(0, 0, 0, 1)";
     const compact = isBoolean(this.props.compact) ? this.props.compact : this.props.compact === "true";
@@ -43227,11 +43440,15 @@ var iconList = {
   "image-resource": iconUse$1("photo")
 };
 class GradientEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     return {
       index: +(this.props.index || 0),
       value: this.props.value,
-      image: BackgroundImage.parseImage(this.props.value || "") || { type: "", colorsteps: [] }
+      image: BackgroundImage.parseImage(this.props.value || "") || { type: "static-gradient", colorsteps: [] }
     };
   }
   setValue(value) {
@@ -43242,24 +43459,15 @@ class GradientEditor extends EditorElement {
     this.parent.trigger("changeTabType", this.state.image.type);
   }
   template() {
-    var { image: image2 } = this.state;
-    image2 = image2 || {};
-    var type = image2.type || "static-gradient";
-    if (type === "url")
-      type = "image-resource";
     return `
-        <div class='elf--gradient-editor' data-selected-editor='${type}'>
+        <div class='elf--gradient-editor'>
             <div class='gradient-preview'>
               <div data-editor='image-loader'>
                 <input type='file' accept="image/*" ref='$file' />
               </div>              
             </div>
             <div class="picker-tab">
-              <div class="picker-tab-list" ref="$tab">
-                ${imageTypeList.map((it) => {
-      return `<span class='picker-tab-item ${it}' data-editor='${it}'><span class='icon'>${iconList[it] || ""}</span></span>`;
-    }).join("")}
-              </div>
+              <div class="picker-tab-list" ref="$tab"></div>
             </div>
             <div class='gradient-steps' data-editor='gradient'>
                 <div class="hue-container" ref="$back"></div>            
@@ -43287,13 +43495,17 @@ class GradientEditor extends EditorElement {
   }
   [CLICK("$tab .picker-tab-item")](e2) {
     var type = e2.$dt.attr("data-editor");
-    this.$el.attr("data-selected-editor", type);
+    e2.$dt.onlyOneClass("selected");
     this.parent.trigger("changeTabType", type);
+    const colorsteps = this.state.image.colorsteps || [];
+    if (colorsteps.length === 1) {
+      colorsteps.push(colorsteps[0]);
+    }
     var url = type === "image-resource" ? this.state.image.url : this.state.url;
     this.state.image = BackgroundImage.changeImageType({
       type,
       url,
-      colorsteps: this.state.image.colorsteps || [],
+      colorsteps,
       angle: this.state.image.angle,
       radialType: this.state.image.radialType || RadialGradientType.CIRCLE,
       radialPosition: this.state.image.radialPosition || ["50%", "50%"]
@@ -43336,20 +43548,30 @@ class GradientEditor extends EditorElement {
   }
   [BIND("$stepList")]() {
     return {
-      "data-selected-index": this.state.index.toString(),
       "style": {
         "background-image": this.getLinearGradient()
       }
     };
   }
-  [LOAD("$stepList")]() {
+  [LOAD("$tab")]() {
+    var { image: image2 } = this.state;
+    image2 = image2 || {};
+    var type = image2.type || "static-gradient";
+    if (type === "url")
+      type = "image-resource";
+    return imageTypeList.map((it) => {
+      const selected = type === it ? "selected" : "";
+      return `<span class='picker-tab-item ${it} ${selected}' data-editor='${it}'><span class='icon'>${iconList[it] || ""}</span></span>`;
+    });
+  }
+  [LOAD("$stepList") + DOMDIFF]() {
     var colorsteps = this.state.image.colorsteps || [];
     return colorsteps.map((it, index2) => {
       var selected = this.$selection.isSelectedColorStep(it.id) ? "selected" : "";
       return `
-      <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' style='left: ${it.toLength()};'>
+      <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' tabindex="-1" style='left: ${it.toLength()};'>
+        <div class='arrow' style="background-color: ${it.color}"></div>      
         <div class='color-view' style="background-color: ${it.color}"></div>
-        <div class='arrow' style="background-color: ${it.color}"></div>
       </div>`;
     });
   }
@@ -43367,12 +43589,83 @@ class GradientEditor extends EditorElement {
     }
     this.refresh();
   }
+  [KEYUP("$el .step")](e2) {
+    const id = e2.$dt.data("id");
+    switch (e2.code) {
+      case "Delete":
+      case "Backspace":
+        this.removeStep(id);
+        break;
+      case "BracketRight":
+        this.sortToRight(id);
+        break;
+      case "BracketLeft":
+        this.sortToLeft(id);
+        break;
+      case "Equal":
+        this.appendColorStep(id);
+        break;
+      case "Minus":
+        this.prependColorStep(id);
+        break;
+    }
+  }
+  sortToRight(id) {
+    this.state.image.sortToRight();
+    this.refresh();
+    this.updateData();
+    this.doFocus(id);
+  }
+  sortToLeft(id) {
+    this.state.image.sortToLeft();
+    this.refresh();
+    this.updateData();
+    this.doFocus(id);
+  }
+  appendColorStep(id) {
+    const currentIndex = this.state.image.colorsteps.findIndex((it) => it.id === id);
+    const nextIndex = currentIndex + 1;
+    const currentColorStep = this.state.image.colorsteps[currentIndex];
+    const nextColorStep = this.state.image.colorsteps[nextIndex];
+    if (!nextColorStep) {
+      if (currentColorStep.percent !== 100) {
+        this.state.image.insertColorStep(currentColorStep.percent + (100 - currentColorStep.percent) / 2);
+      }
+    } else {
+      this.state.image.insertColorStep(currentColorStep.percent + (nextColorStep.percent - currentColorStep.percent) / 2);
+    }
+    this.refresh();
+    this.updateData();
+    this.doFocus(id);
+  }
+  doFocus(id) {
+    this.nextTick(() => {
+      this.refs.$stepList.$(".step[data-id='" + id + "']").focus();
+    }, 100);
+  }
+  prependColorStep(id) {
+    const currentIndex = this.state.image.colorsteps.findIndex((it) => it.id === id);
+    const prevIndex = currentIndex - 1;
+    const currentColorStep = this.state.image.colorsteps[currentIndex];
+    const prevColorStep = this.state.image.colorsteps[prevIndex];
+    if (!prevColorStep) {
+      if (currentColorStep.percent !== 0) {
+        this.state.image.insertColorStep(currentColorStep.percent);
+      }
+    } else {
+      this.state.image.insertColorStep(prevColorStep.percent + (currentColorStep.percent - prevColorStep.percent) / 2);
+    }
+    this.refresh();
+    this.updateData();
+    this.doFocus(id);
+  }
   [POINTERSTART("$stepList .step") + MOVE() + END()](e2) {
     var id = e2.$dt.attr("data-id");
     if (e2.altKey) {
       this.removeStep(id);
       return false;
     } else {
+      e2.$dt.focus();
       this.isSelectedColorStep = this.$selection.isSelectedColorStep(id);
       this.selectStep(id);
       this.startXY = e2.xy;
@@ -43407,9 +43700,7 @@ class GradientEditor extends EditorElement {
         }
       }
     }
-  }
-  refresh() {
-    this.load();
+    this.doFocus(this.state.id);
   }
   getLinearGradient() {
     var { image: image2 } = this.state;
@@ -43443,6 +43734,10 @@ class GradientEditor extends EditorElement {
 }
 var IconListViewEditor$1 = "";
 class IconListViewEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     return {
       value: this.props.value
@@ -43954,6 +44249,10 @@ class MediaProgressEditor extends EditorElement {
 }
 var NumberInputEditor$1 = "";
 class NumberInputEditor extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   initState() {
     var value = +this.props.value;
     let label = this.props.label || "";
@@ -48785,6 +49084,10 @@ const selectorList = [
   ":focus"
 ].map((value) => ({ value }));
 class SelectorProperty extends BaseProperty {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   getTitle() {
     return this.$i18n("selector.property.title");
   }
@@ -53197,7 +53500,7 @@ class PathDrawView extends EditorElement {
       this.state.rect = this.$el.rect();
     }
   }
-  [KEYUP("document") + IF("isShow") + ESCAPE + ENTER + PREVENT + STOP]() {
+  [KEYUP("document") + IF("isShow") + ESCAPE + ENTER]() {
     this.trigger("hidePathDrawEditor");
   }
   [SUBSCRIBE("DrawEditorDone")]() {
@@ -53709,10 +54012,10 @@ class PathEditorView extends PathTransformEditor {
       this.trigger("hidePathEditor");
     }
   }
-  [KEYUP("document") + IF("isShow") + ENTER + PREVENT + STOP]() {
+  [KEYUP("document") + IF("isShow") + ENTER]() {
     this.trigger("PathEditorDone");
   }
-  [KEYUP("document") + IF("isShow") + ESCAPE + PREVENT + STOP]() {
+  [KEYUP("document") + IF("isShow") + ESCAPE]() {
     if (this.state.current) {
       this.refreshPathLayer();
     } else {
@@ -54561,9 +54864,9 @@ class LayerAppendView extends EditorElement {
   isShow() {
     return this.state.isShow;
   }
-  [KEYDOWN("document") + IF("isShow") + ESCAPE + ENTER + PREVENT + STOP](e2) {
+  [KEYDOWN("document") + IF("isShow") + ESCAPE + ENTER](e2) {
   }
-  [KEYUP("document") + IF("isShow") + ESCAPE + ENTER + PREVENT + STOP](e2) {
+  [KEYUP("document") + IF("isShow") + ESCAPE + ENTER](e2) {
     switch (this.state.type) {
       case "text":
         const $t = Dom.create(e2.target);
@@ -54597,14 +54900,6 @@ class LayerAppendView extends EditorElement {
     this.state.target = null;
     this.bindData("$areaRect");
     this.trigger("hideLayerAppendView");
-  }
-  [KEYUP("$el") + IF("isShow")](e2) {
-    switch (this.state.type) {
-      case "text":
-        const $t = Dom.create(e2.target);
-        $t.rect();
-        break;
-    }
   }
   [CHANGE("$file")](e2) {
     this.refs.$file.files.forEach((item2) => {
@@ -54848,6 +55143,10 @@ const point = (target, dist2 = 3, direction = "left") => {
     `;
 };
 class GuideLineView extends EditorElement {
+  initialize() {
+    super.initialize();
+    this.notEventRedefine = true;
+  }
   template() {
     return `
             <svg class='elf--guide-line-view' ref="$guide" width="100%" height="100%" ></svg>
@@ -56219,7 +56518,7 @@ class GradientEditorView$1 extends EditorElement {
     this.state.maxHeight = current.screenHeight;
     this.state.backgroundImageMatrix = current.createBackgroundImageMatrix(this.state.index);
   }
-  [POINTERSTART("$el .resizer") + LEFT_BUTTON + MOVE("calculateMovedResizer") + PREVENT](e2) {
+  [POINTERSTART("$el .resizer") + LEFT_BUTTON + MOVE("calculateMovedResizer") + END("calculateMovedEndResizer") + PREVENT](e2) {
     this.state.$target = e2.$dt;
     this.initializeData();
     this.initMousePoint = this.$viewport.getWorldPosition(e2);
@@ -56240,10 +56539,10 @@ class GradientEditorView$1 extends EditorElement {
       width: backRect.width,
       height: backRect.height
     });
-    var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.backgroundImages));
-    this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
-      "background-image": value
-    }));
+    this.updateData();
+  }
+  calculateMovedEndResizer() {
+    this.updateData();
   }
   [POINTERSTART("$el .back-rect") + LEFT_BUTTON + MOVE("calculateMovedRect") + END("calculateMovedEndRect") + PREVENT](e2) {
     this.state.$target = e2.$dt;
@@ -56264,20 +56563,14 @@ class GradientEditorView$1 extends EditorElement {
       x: backRect.x,
       y: backRect.y
     });
-    var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.backgroundImages));
-    this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
-      "background-image": value
-    }));
+    this.updateData();
   }
   calculateMovedEndRect(dx, dy) {
     if (dx == 0 && dy === 0) {
       const index2 = repeatTypeList.indexOf(this.state.gradient.repeat);
       this.state.backgroundImages[this.state.index].repeat = repeatTypeList[(index2 + 1) % repeatTypeList.length];
-      var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.backgroundImages));
-      this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
-        "background-image": value
-      }));
     }
+    this.updateData();
   }
   [POINTERSTART("$el .gradient-angle circle") + LEFT_BUTTON + MOVE("calculateMovedAngle") + END("calculatedMovedEndAngle") + PREVENT](e2) {
     this.state.$target = e2.$dt;
@@ -56298,15 +56591,22 @@ class GradientEditorView$1 extends EditorElement {
       newAngle -= newAngle % this.$config.get("fixed.angle");
     }
     this.state.backgroundImages[this.state.index].image.angle = newAngle;
-    var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.backgroundImages));
-    this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
-      "background-image": value
-    }));
+    this.updateData();
   }
   calculatedMovedEndAngle() {
     this.state.$target.toggleClass("moved");
+    this.updateData();
   }
-  [POINTERSTART("$el .gradient-position") + LEFT_BUTTON + MOVE("calculateMovedElement") + END("calculateMovedEndElement") + PREVENT](e2) {
+  isMovableCenter(e2) {
+    this.initializeData();
+    return [
+      GradientType.RADIAL,
+      GradientType.REPEATING_RADIAL,
+      GradientType.CONIC,
+      GradientType.REPEATING_CONIC
+    ].includes(this.state.gradient.type);
+  }
+  [POINTERSTART("$el .gradient-position") + LEFT_BUTTON + MOVE("calculateMovedElement") + END("calculateMovedEndElement") + IF("isMovableCenter") + PREVENT](e2) {
     this.state.$target = e2.$dt;
     this.state.left = Length.parse(e2.$dt.css("left")).value;
     this.state.top = Length.parse(e2.$dt.css("top")).value;
@@ -56333,10 +56633,7 @@ class GradientEditorView$1 extends EditorElement {
       Length.percent(newX / backRect.width * 100),
       Length.percent(newY / backRect.height * 100)
     ];
-    var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.backgroundImages));
-    this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
-      "background-image": value
-    }));
+    this.updateData();
   }
   calculateMovedEndElement(dx, dy) {
     if (dx == 0 && dy === 0) {
@@ -56344,14 +56641,17 @@ class GradientEditorView$1 extends EditorElement {
         case GradientType.RADIAL:
         case GradientType.REPEATING_RADIAL:
           const index2 = radialTypeList.indexOf(this.state.gradient.image.radialType);
-          this.state.gradient.image.radialType = radialTypeList[(index2 + 1) % radialTypeList.length];
-          var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.backgroundImages));
-          this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
-            "background-image": value
-          }));
+          this.state.backgroundImages[this.state.index].image.radialType = radialTypeList[(index2 + 1) % radialTypeList.length];
           break;
       }
     }
+    this.updateData();
+  }
+  updateData() {
+    var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.backgroundImages));
+    this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
+      "background-image": value
+    }));
   }
   refresh() {
     if (this.state.isShow) {
@@ -56374,10 +56674,12 @@ class GradientEditorView$1 extends EditorElement {
     this.state.isShow = true;
     this.refresh();
     this.emit("recoverCursor");
+    this.emit("push.mode.view", "GradientEditorView");
   }
   [SUBSCRIBE("hideGradientEditorView")]() {
     this.$el.hide();
     this.state.isShow = false;
+    this.emit("pop.mode.view", "GradientEditorView");
   }
   [SUBSCRIBE("refreshSelection")]() {
     this.refresh();
@@ -56407,7 +56709,7 @@ class GradientEditorView$1 extends EditorElement {
   makeCenterPoint(result) {
     const { image: image2 } = result.backgroundImage;
     let centerPosition, centerStick;
-    if (image2.type === GradientType.LINEAR || image2.type === GradientType.REPEATING_LINEAR) {
+    if (image2.type === GradientType.STATIC || image2.type === GradientType.LINEAR || image2.type === GradientType.REPEATING_LINEAR) {
       const boxPosition = this.$viewport.applyVerties(result.backVerties);
       centerPosition = lerp([], boxPosition[0], boxPosition[2], 0.5);
       const stickPoint = lerp([], boxPosition[0], boxPosition[1], 0.5);

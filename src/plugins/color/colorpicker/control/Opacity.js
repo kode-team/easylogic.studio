@@ -10,6 +10,14 @@ import { END, MOVE } from 'el/editor/types/event';
 
 export default class Opacity extends EditorElement {
 
+
+    initialize() {
+        super.initialize();
+
+        this.notEventRedefine = true;
+    }
+
+
     initState() {
         return {
             colorbar: Color.parse('rgba(0, 0, 0, 1)'),

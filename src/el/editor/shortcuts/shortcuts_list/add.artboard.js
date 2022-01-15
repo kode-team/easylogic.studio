@@ -4,5 +4,5 @@ export default {
     command: 'addLayerView', 
     args: ['artboard'],
     description: 'Add ArtBoard',
-    when: 'CanvasView'
+    when: 'CanvasView'    
 }

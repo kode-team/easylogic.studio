@@ -76,6 +76,13 @@ export const ARROW_RIGHT = CHECKER('ArrowRight');
 export const ENTER = CHECKER('Enter');
 export const SPACE = CHECKER('Space');
 export const ESCAPE = CHECKER('Escape');
+export const BACKSPACE = CHECKER('Backspace');
+export const DELETE = CHECKER('Delete');
+export const EQUAL = CHECKER('Equal');
+export const MINUS = CHECKER('Minus');
+export const BRACKET_RIGHT = CHECKER('BracketRight');
+export const BRACKET_LEFT = CHECKER('BracketLeft');
+
 
 export const ALT = CHECKER("isAltKey");
 export const SHIFT = CHECKER("isShiftKey");

@@ -8,6 +8,15 @@ import PathParser from "el/editor/parser/PathParser";
 import { vertiesToRectangle } from "el/utils/collision";
 
 export default class ClipPathProperty extends BaseProperty {
+
+
+  initialize() {
+    super.initialize();
+    
+    this.notEventRedefine = true;
+  }
+
+
   getTitle() {
     return this.$i18n('clippath.property.title');
   }

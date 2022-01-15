@@ -23,6 +23,14 @@ const borderTypeTitle = {
 
 export default class BorderEditor extends EditorElement {
 
+
+  initialize() {
+    super.initialize();
+    
+    this.notEventRedefine = true;
+  }
+
+
   initState() {
 
     var borders = Border.parseStyle(this.props.value)

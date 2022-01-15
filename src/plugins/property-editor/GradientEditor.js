@@ -1,5 +1,5 @@
 
-import { LOAD, CLICK, POINTERSTART,  BIND, PREVENT, DOUBLECLICK, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { LOAD, CLICK, POINTERSTART, BIND, PREVENT, DOUBLECLICK, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF, KEYUP, KEYDOWN, KEYPRESS, DOMDIFF, ENTER, DELETE, BACKSPACE, EQUAL, MINUS, BRACKET_RIGHT, BRACKET_LEFT } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
 import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
@@ -8,8 +8,8 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
 
 import './GradientEditor.scss';
-import { createComponent } from "el/sapa/functions/jsx";
 import { RadialGradientType } from "el/editor/types/model";
+import { KEY_CODE } from 'el/editor/types/key';
 
 var imageTypeList = [
   'static-gradient',
@@ -26,18 +26,25 @@ var iconList = {
   'image-resource': iconUse("photo")
 }
 
-export default class GradientEditor extends EditorElement  {
+export default class GradientEditor extends EditorElement {
+
+  initialize() {
+    super.initialize();
+
+    this.notEventRedefine = true;
+  }
+
 
   initState() {
 
     return {
-      index: +(this.props.index || 0 ),
-      value: this.props.value, 
-      image: BackgroundImage.parseImage(this.props.value || '') || { type: '', colorsteps: [] } 
+      index: +(this.props.index || 0),
+      value: this.props.value,
+      image: BackgroundImage.parseImage(this.props.value || '') || { type: 'static-gradient', colorsteps: [] }
     }
   }
 
-  setValue (value) {
+  setValue(value) {
     this.setState({
       image: BackgroundImage.parseImage(value)
     }, false)
@@ -47,29 +54,15 @@ export default class GradientEditor extends EditorElement  {
   }
 
   template() {
-
-    var { image } = this.state; 
-
-    image = image || {} 
-
-    var type = image.type || 'static-gradient'
-    
-    if (type === 'url') type = 'image-resource'
-
-
     return /*html*/`
-        <div class='elf--gradient-editor' data-selected-editor='${type}'>
+        <div class='elf--gradient-editor'>
             <div class='gradient-preview'>
               <div data-editor='image-loader'>
                 <input type='file' accept="image/*" ref='$file' />
               </div>              
             </div>
             <div class="picker-tab">
-              <div class="picker-tab-list" ref="$tab">
-                ${imageTypeList.map(it => {
-                  return `<span class='picker-tab-item ${it}' data-editor='${it}'><span class='icon'>${iconList[it] || ''}</span></span>`
-                }).join('')}
-              </div>
+              <div class="picker-tab-list" ref="$tab"></div>
             </div>
             <div class='gradient-steps' data-editor='gradient'>
                 <div class="hue-container" ref="$back"></div>            
@@ -81,7 +74,7 @@ export default class GradientEditor extends EditorElement  {
       `;
   }
 
-  [CHANGE('$file')] (e) {
+  [CHANGE('$file')](e) {
     var project = this.$selection.currentProject;
     if (project) {
       [...e.target.files].forEach(item => {
@@ -93,22 +86,30 @@ export default class GradientEditor extends EditorElement  {
   }
 
 
-  [DOUBLECLICK('$gradientView') + PREVENT] (e) {
+  [DOUBLECLICK('$gradientView') + PREVENT](e) {
     this.state.image.radialPosition = ['50%', '50%']
     this.refresh();
     this.updateData();
   }
 
-  [CLICK('$tab .picker-tab-item')] (e) {
+  [CLICK('$tab .picker-tab-item')](e) {
     var type = e.$dt.attr('data-editor')
-    this.$el.attr('data-selected-editor', type);
+    e.$dt.onlyOneClass('selected');
+
+    // this.$el.attr('data-selected-editor', type);
     this.parent.trigger('changeTabType', type);
+
+    const colorsteps = this.state.image.colorsteps || [];
+
+    if (colorsteps.length === 1) {
+      colorsteps.push(colorsteps[0])
+    }
 
     var url = type === 'image-resource' ? this.state.image.url : this.state.url;
     this.state.image = BackgroundImage.changeImageType({
       type,
       url,
-      colorsteps: this.state.image.colorsteps || [] ,   
+      colorsteps: colorsteps,
       angle: this.state.image.angle,
       radialType: this.state.image.radialType || RadialGradientType.CIRCLE,
       radialPosition: this.state.image.radialPosition || ['50%', '50%']
@@ -117,25 +118,24 @@ export default class GradientEditor extends EditorElement  {
     this.updateData();
   }
 
-  [SUBSCRIBE_SELF('changeColorStepOffset')] (key, value) {
+  [SUBSCRIBE_SELF('changeColorStepOffset')](key, value) {
     if (this.currentStep) {
       this.currentStep.percent = value.value;
       this.state.image.sortColorStep();
       this.refresh()
-      this.updateData();      
+      this.updateData();
     }
   }
 
-  [CLICK('$back')] (e) {
-    
+  [CLICK('$back')](e) {
     var rect = this.refs.$stepList.rect();
-    
+
     var minX = rect.x;
     var maxX = rect.right;
 
-    var x = e.xy.x 
+    var x = e.xy.x
 
-    if (x < minX)  x = minX
+    if (x < minX) x = minX
     else if (x > maxX) x = maxX
     var percent = (x - minX) / rect.width * 100;
 
@@ -146,7 +146,7 @@ export default class GradientEditor extends EditorElement  {
     this.updateData();
   }
 
-  [BIND('$el')] () {
+  [BIND('$el')]() {
     var type = this.state.image.type;
     if (type === 'url') {
       type = 'image-resource'
@@ -157,26 +157,41 @@ export default class GradientEditor extends EditorElement  {
     }
   }
 
-  [BIND('$stepList')] () {
+  [BIND('$stepList')]() {
     return {
-      'data-selected-index': this.state.index.toString(),
       'style': {
-        'background-image' : this.getLinearGradient()
+        'background-image': this.getLinearGradient()
       }
-      
+
     }
   }
 
-  [LOAD('$stepList')] () {
-    var colorsteps = this.state.image.colorsteps || [] 
-    return colorsteps.map( (it, index) => {
+  [LOAD('$tab')]() {
+
+    var { image } = this.state;
+
+    image = image || {}
+
+    var type = image.type || 'static-gradient'
+
+    if (type === 'url') type = 'image-resource'
+
+    return imageTypeList.map(it => {
+      const selected = type === it ? 'selected' : '';
+      return /*html*/`<span class='picker-tab-item ${it} ${selected}' data-editor='${it}'><span class='icon'>${iconList[it] || ''}</span></span>`
+    });
+  }
+
+  [LOAD('$stepList') + DOMDIFF]() {
+    var colorsteps = this.state.image.colorsteps || []
+    return colorsteps.map((it, index) => {
 
       var selected = this.$selection.isSelectedColorStep(it.id) ? 'selected' : '';
 
       return /*html*/`
-      <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' style='left: ${it.toLength()};'>
+      <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' tabindex="-1" style='left: ${it.toLength()};'>
+        <div class='arrow' style="background-color: ${it.color}"></div>      
         <div class='color-view' style="background-color: ${it.color}"></div>
-        <div class='arrow' style="background-color: ${it.color}"></div>
       </div>`
     })
   }
@@ -186,32 +201,126 @@ export default class GradientEditor extends EditorElement  {
     this.state.image.removeColorStep(id);
 
     this.refresh();
-    this.updateData();          
+    this.updateData();
   }
 
   selectStep(id) {
-    this.state.id = id; 
+    this.state.id = id;
 
     this.$selection.selectColorStep(id);
 
     if (this.state.image.colorsteps) {
-      this.currentStep = this.state.image.colorsteps.find( it => this.$selection.isSelectedColorStep(it.id))
-      this.parent.trigger('selectColorStep', this.currentStep.color)    
-  
+      this.currentStep = this.state.image.colorsteps.find(it => this.$selection.isSelectedColorStep(it.id))
+      this.parent.trigger('selectColorStep', this.currentStep.color)
+
     }
 
     this.refresh();
 
   }
 
-  [POINTERSTART('$stepList .step') + MOVE() + END()] (e) {
+
+  [KEYUP('$el .step')](e) {
+    const id = e.$dt.data('id');
+    switch (e.code) {
+      case 'Delete':
+      case 'Backspace':
+        this.removeStep(id);
+        break;
+      case 'BracketRight':
+        this.sortToRight(id);
+        break;
+      case 'BracketLeft':
+        this.sortToLeft(id);
+        break;
+      case 'Equal':
+        this.appendColorStep(id);
+        break;
+      case 'Minus':
+        this.prependColorStep(id);
+        break;
+    }
+  }
+
+
+  sortToRight(id) {
+    this.state.image.sortToRight();
+
+    this.refresh();
+    this.updateData();
+
+    this.doFocus(id)
+  }
+
+  sortToLeft(id) {
+    this.state.image.sortToLeft();
+
+    this.refresh();
+    this.updateData();
+
+    this.doFocus(id)
+  }
+
+
+  appendColorStep(id) {
+
+    const currentIndex = this.state.image.colorsteps.findIndex(it => it.id === id);
+    const nextIndex = currentIndex + 1;
+
+    const currentColorStep = this.state.image.colorsteps[currentIndex];
+    const nextColorStep = this.state.image.colorsteps[nextIndex];
+
+    if (!nextColorStep) {
+      if (currentColorStep.percent !== 100) {
+        this.state.image.insertColorStep(currentColorStep.percent + (100 - currentColorStep.percent) / 2);
+      }
+    } else {
+      this.state.image.insertColorStep(currentColorStep.percent + (nextColorStep.percent - currentColorStep.percent) / 2);
+    }
+
+    this.refresh();
+    this.updateData();
+
+    this.doFocus(id);
+  }
+
+  doFocus(id) {
+
+    this.nextTick(() => {
+      this.refs.$stepList.$(".step[data-id='" + id + "']").focus();
+    }, 100)
+  }
+
+  prependColorStep(id) {
+    const currentIndex = this.state.image.colorsteps.findIndex(it => it.id === id);
+    const prevIndex = currentIndex - 1;
+
+    const currentColorStep = this.state.image.colorsteps[currentIndex];
+    const prevColorStep = this.state.image.colorsteps[prevIndex];
+
+    if (!prevColorStep) {
+      if (currentColorStep.percent !== 0) {
+        this.state.image.insertColorStep(currentColorStep.percent);
+      }
+    } else {
+      this.state.image.insertColorStep(prevColorStep.percent + (currentColorStep.percent - prevColorStep.percent) / 2);
+    }
+
+    this.refresh();
+    this.updateData();
+
+    this.doFocus(id);
+
+  }
+
+  [POINTERSTART('$stepList .step') + MOVE() + END()](e) {
     var id = e.$dt.attr('data-id')
 
     if (e.altKey) {
       this.removeStep(id);
-      return false; 
+      return false;
     } else {
-
+      e.$dt.focus();
       this.isSelectedColorStep = this.$selection.isSelectedColorStep(id);
 
       this.selectStep(id);
@@ -223,20 +332,20 @@ export default class GradientEditor extends EditorElement  {
 
   }
 
-  getStepListRect () {
+  getStepListRect() {
     return this.cachedStepListRect;
   }
 
-  move (dx, dy) {
+  move(dx, dy) {
 
     var rect = this.getStepListRect()
-    
+
     var minX = rect.x;
     var maxX = rect.right;
 
-    var x = this.startXY.x + dx 
+    var x = this.startXY.x + dx
 
-    if (x < minX)  x = minX
+    if (x < minX) x = minX
     else if (x > maxX) x = maxX
     var percent = (x - minX) / rect.width * 100;
 
@@ -246,42 +355,40 @@ export default class GradientEditor extends EditorElement  {
     this.state.image.sortColorStep();
     this.refresh()
 
-    this.updateData();    
+    this.updateData();
   }
 
-  end (dx, dy) {
+  end(dx, dy) {
     if (dx === 0 && dy === 0) {
       if (this.isSelectedColorStep) {
         if (this.currentStep) {
 
           this.currentStep.cut = !this.currentStep.cut
-    
+
           this.refresh()
-          this.updateData();      
-        } 
+          this.updateData();
+        }
       }
     }
+
+
+    this.doFocus(this.state.id);
   }
 
+  getLinearGradient() {
 
-  refresh() {
-    this.load();
-  }
-
-  getLinearGradient () {
-
-    var { image } = this.state; 
+    var { image } = this.state;
 
     return `linear-gradient(to right, ${Gradient.toColorString(image.colorsteps)})`;
 
   }
 
-  [SUBSCRIBE('setColorStepColor')] (color) {
+  [SUBSCRIBE('setColorStepColor')](color) {
 
     if (this.state.image.type === 'static-gradient') {
-      this.state.image.colorsteps[0].color = color; 
+      this.state.image.colorsteps[0].color = color;
       this.refresh()
-      this.updateData();      
+      this.updateData();
     } else {
 
       if (this.currentStep) {
@@ -294,10 +401,10 @@ export default class GradientEditor extends EditorElement  {
   }
 
 
-  [SUBSCRIBE('setImageUrl')] (url) {
+  [SUBSCRIBE('setImageUrl')](url) {
 
     if (this.state.image) {
-      this.state.url = url; 
+      this.state.url = url;
       this.state.image.reset({ url });
       this.refresh();
       this.updateData();

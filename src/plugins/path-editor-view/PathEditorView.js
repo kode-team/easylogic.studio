@@ -303,11 +303,11 @@ export default class PathEditorView extends PathTransformEditor {
  
     }
 
-    [KEYUP('document') + IF('isShow') + ENTER + PREVENT + STOP]() {
+    [KEYUP('document') + IF('isShow') + ENTER]() {
         this.trigger("PathEditorDone")
     }
 
-    [KEYUP('document') + IF('isShow') + ESCAPE + PREVENT + STOP]() {
+    [KEYUP('document') + IF('isShow') + ESCAPE]() {
         if (this.state.current) {
             this.refreshPathLayer();
         } else {

@@ -15,7 +15,7 @@ import { combineKeyArray, isString, keyEach, keyMap } from "el/sapa/functions/fu
 import { CSS_TO_STRING } from "el/utils/func";
 
 const RepeatList = ["repeat", "no-repeat", "repeat-x", "repeat-y", 'round', 'space'];
-const reg = /((linear\-gradient|repeating\-linear\-gradient|radial\-gradient|repeating\-radial\-gradient|conic\-gradient|repeating\-conic\-gradient|url)\(([^\)]*)\))/gi;
+const reg = /((static\-gradient|linear\-gradient|repeating\-linear\-gradient|radial\-gradient|repeating\-radial\-gradient|conic\-gradient|repeating\-conic\-gradient|url)\(([^\)]*)\))/gi;
 
 export class BackgroundImage extends PropertyItem {
   addImageResource(imageResource) {
@@ -345,6 +345,7 @@ export class BackgroundImage extends PropertyItem {
   }
 
   static parseImage (str) {
+
     var results = convertMatches(str);
     let image = null;
 
@@ -359,6 +360,16 @@ export class BackgroundImage extends PropertyItem {
         image = RepeatingLinearGradient.parse(value);
       } else if (value.includes("linear-gradient")) {
         image = LinearGradient.parse(value);
+
+        // 동일한 색을 가진 linear 는 기본적으로 static 과 같다. 
+        if (image.colorsteps.length === 2) {
+          if (image.colorsteps[0].color === image.colorsteps[1].color) {
+            image = StaticGradient.parse(`static-gradient(${image.colorsteps[0].color})`);          
+          }
+        }
+
+      } else if (value.includes("static-gradient")) {
+        image = StaticGradient.parse(value);        
       } else if (value.includes("repeating-radial-gradient")) {
         image = RepeatingRadialGradient.parse(value);
       } else if (value.includes("radial-gradient")) {
@@ -411,6 +422,16 @@ export class BackgroundImage extends PropertyItem {
           image = RepeatingLinearGradient.parse(value);
         } else if (value.includes("linear-gradient")) {
           image = LinearGradient.parse(value);
+
+        // 동일한 색을 가진 linear 는 기본적으로 static 과 같다.           
+          if (image.colorsteps.length === 2) {
+            if (image.colorsteps[0].color === image.colorsteps[1].color) {
+              image = StaticGradient.parse(`static-gradient(${image.colorsteps[0].color})`);          
+            }
+          }
+
+        } else if (value.includes("static-gradient")) {
+          image = StaticGradient.parse(value);          
         } else if (value.includes("repeating-radial-gradient")) {
           image = RepeatingRadialGradient.parse(value);
         } else if (value.includes("radial-gradient")) {

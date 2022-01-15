@@ -11,20 +11,19 @@ import './BackgroundImageProperty.scss';
 export default class BackgroundImageProperty extends BaseProperty {
 
 
+  initialize() {
+    super.initialize();
+
+    this.notEventRedefine = true;
+  }
+
   getTitle() {
     return this.$i18n('background.image.property.title');
   }
 
-  hasKeyframe() {
-    return true;
-  }
 
   afterRender() {
     this.show();
-  }
-
-  getKeyframeProperty() {
-    return 'background-image';
   }
 
   getClassName() {

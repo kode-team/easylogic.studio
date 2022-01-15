@@ -7,6 +7,14 @@ import { variable } from "el/sapa/functions/registElement";
 
 export default class BorderProperty extends BaseProperty {
 
+
+  initialize() {
+    super.initialize();
+    
+    this.notEventRedefine = true;
+  }
+
+
   getTitle() {
     return this.$i18n('border.property.title');  
   }

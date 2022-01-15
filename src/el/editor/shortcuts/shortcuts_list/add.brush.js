@@ -4,4 +4,5 @@ export default {
     command: 'addLayerView', 
     args: ['brush'],
     description: 'Draw SVG Path',
+    when: 'CanvasView'    
 }

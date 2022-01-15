@@ -182,6 +182,7 @@ export const BoxShadowStyle = {
 }
 
 export const GradientType = {
+    STATIC: "static-gradient",
     LINEAR: "linear-gradient",
     RADIAL: "radial-gradient",
     CONIC: "conic-gradient",

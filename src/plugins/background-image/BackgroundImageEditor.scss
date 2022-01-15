@@ -30,7 +30,7 @@
 
     .fill-item {
       display: grid;
-      grid-template-columns: 18px 30px 1fr;
+      grid-template-columns: 18px 30px 30px 1fr;
       column-gap: 2px;
       margin-bottom: 4px;
 
@@ -102,8 +102,8 @@
 
         .mini-view {
           display: block;
-          width: 20px;
-          height: 20px;
+          width: 30px;
+          height: 30px;
           @include transparent-background(6px, rgb(199, 199, 199), 3px);  
           pointer-events: none;
           // border-radius: 3px;

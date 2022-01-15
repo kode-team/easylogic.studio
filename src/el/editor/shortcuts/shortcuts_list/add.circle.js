@@ -4,4 +4,5 @@ export default {
     command: 'addLayerView', 
     args: ['circle'],
     description: 'Add circle layer',
+    when: 'CanvasView'    
 }
