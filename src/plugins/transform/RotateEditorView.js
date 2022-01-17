@@ -34,12 +34,6 @@ const DEFINED_ANGLES = {
 
 export default class RotateEditorView extends EditorElement {
 
-    initialize() {
-        super.initialize();
-
-        this.notEventRedefine = true;
-    }
-
     template() {
         return /*html*/`
             <div class='elf--rotate-editor-view'>            

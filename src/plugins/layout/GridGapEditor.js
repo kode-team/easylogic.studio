@@ -6,14 +6,6 @@ import { createComponent } from "el/sapa/functions/jsx";
 
 export default class GridGapEditor extends EditorElement {
 
-
-    initialize() {
-        super.initialize();
-        
-        this.notEventRedefine = true;
-      }
-    
-
     initState() {
         return {
             label: this.props.label,

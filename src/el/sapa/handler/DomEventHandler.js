@@ -270,9 +270,7 @@ export default class DomEventHandler extends BaseHandler {
             capture: options  
           }
         }
-
-        // console.log(this.context, eventObject.eventName, eventObject.callback, options);
-      
+              
         Event.addDomEvent(
           eventObject.dom,
           eventObject.eventName,

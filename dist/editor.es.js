@@ -19,6 +19,243 @@ var __spreadValues = (a, b) => {
 var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
 var index = "";
 var layout$1 = "";
+const UUID_REG$1 = /[xy]/g;
+function uuid$1() {
+  var dt = new Date().getTime();
+  var uuid2 = "xxx12-xx-34xx".replace(UUID_REG$1, function(c2) {
+    var r = (dt + Math.random() * 16) % 16 | 0;
+    dt = Math.floor(dt / 16);
+    return (c2 == "x" ? r : r & 3 | 8).toString(16);
+  });
+  return uuid2;
+}
+function uuidShort$1() {
+  var dt = new Date().getTime();
+  var uuid2 = "idxxxxxxx".replace(UUID_REG$1, function(c2) {
+    var r = (dt + Math.random() * 16) % 16 | 0;
+    dt = Math.floor(dt / 16);
+    return (c2 == "x" ? r : r & 3 | 8).toString(16);
+  });
+  return uuid2;
+}
+function collectProps(root, filterFunction = () => true) {
+  let p = root;
+  let results = [];
+  do {
+    const isObject2 = p instanceof Object;
+    if (isObject2 === false) {
+      break;
+    }
+    const names2 = Object.getOwnPropertyNames(p).filter(filterFunction);
+    results.push.apply(results, names2);
+  } while (p = Object.getPrototypeOf(p));
+  return results;
+}
+function debounce(callback, delay = 0) {
+  if (delay === 0) {
+    return callback;
+  }
+  var t = void 0;
+  return function($1, $2, $3, $4, $5) {
+    if (t) {
+      clearTimeout(t);
+    }
+    t = setTimeout(function() {
+      callback($1, $2, $3, $4, $5);
+    }, delay || 300);
+  };
+}
+function throttle(callback, delay) {
+  var t = void 0;
+  return function($1, $2, $3, $4, $5) {
+    if (!t) {
+      t = setTimeout(function() {
+        callback($1, $2, $3, $4, $5);
+        t = null;
+      }, delay || 300);
+    }
+  };
+}
+function ifCheck(callback, context, checkMethods) {
+  return (...args2) => {
+    const ifResult = checkMethods.every((check2) => {
+      return context[check2.target].apply(context, args2);
+    });
+    if (ifResult) {
+      callback.apply(context, args2);
+    }
+  };
+}
+function makeRequestAnimationFrame(callback, context) {
+  return (...args2) => {
+    requestAnimationFrame(() => {
+      callback.apply(context, args2);
+    });
+  };
+}
+function keyEach(obj2, callback) {
+  Object.keys(obj2).forEach((key, index2) => {
+    callback(key, obj2[key], index2);
+  });
+}
+function keyMap(obj2, callback) {
+  return Object.keys(obj2).map((key, index2) => {
+    return callback(key, obj2[key], index2);
+  });
+}
+function keyMapJoin(obj2, callback, joinString = "") {
+  return keyMap(obj2, callback).join(joinString);
+}
+function isUndefined(value) {
+  return typeof value == "undefined" || value === null;
+}
+function isNotUndefined(value) {
+  return isUndefined(value) === false;
+}
+function isBoolean(value) {
+  return typeof value == "boolean";
+}
+function isString(value) {
+  return typeof value == "string";
+}
+function isArray(value) {
+  return Array.isArray(value);
+}
+function isObject(value) {
+  return typeof value == "object" && !Array.isArray(value) && !isNumber(value) && !isString(value) && value !== null;
+}
+function isFunction(value) {
+  return typeof value == "function";
+}
+function isNumber(value) {
+  return typeof value == "number";
+}
+function isZero(num) {
+  return num === 0;
+}
+function isNotZero(num) {
+  return !isZero(num);
+}
+function clone$1(obj2) {
+  if (isUndefined(obj2))
+    return void 0;
+  return JSON.parse(JSON.stringify(obj2));
+}
+function combineKeyArray(obj2) {
+  Object.keys(obj2).forEach((key) => {
+    if (Array.isArray(obj2[key])) {
+      obj2[key] = obj2[key].join(", ");
+    }
+  });
+  return obj2;
+}
+const short_tag_regexp = /\<(\w*)([^\>]*)\/\>/gim;
+const HTML_TAG = {
+  "image": true,
+  "input": true,
+  "br": true,
+  "path": true,
+  "line": true,
+  "circle": true,
+  "rect": true,
+  "path": true,
+  "polygon": true,
+  "polyline": true,
+  "use": true
+};
+const html = (strings, ...args2) => {
+  var results = strings.map((it, index2) => {
+    var results2 = args2[index2] || "";
+    if (!Array.isArray(results2)) {
+      results2 = [results2];
+    }
+    results2 = results2.join("");
+    return it + results2;
+  }).join("");
+  results = results.replace(short_tag_regexp, function(match, p1) {
+    if (HTML_TAG[p1.toLowerCase()]) {
+      return match;
+    } else {
+      return match.replace("/>", `></${p1}>`);
+    }
+  });
+  return results;
+};
+const splitMethodByKeyword = (arr, keyword) => {
+  const filterKeys = arr.filter((code2) => code2.indexOf(`${keyword}(`) > -1);
+  const filterMaps = filterKeys.map((code2) => {
+    const [target, param] = code2.split(`${keyword}(`)[1].split(")")[0].trim().split(" ");
+    return { target, param };
+  });
+  return [filterKeys, filterMaps];
+};
+const map = {};
+const aliasMap = {};
+const __tempVariables = new Map();
+const __tempVariablesGroup = new Map();
+window.__tempVariables = __tempVariables;
+const VARIABLE_SAPARATOR = "v:";
+function variable$4(value, groupId = "") {
+  const id = `${VARIABLE_SAPARATOR}${uuidShort$1()}`;
+  __tempVariables.set(id, value);
+  if (groupId) {
+    __tempVariablesGroup.has(groupId) || __tempVariablesGroup.set(groupId, new Set());
+    __tempVariablesGroup.get(groupId).add(id);
+  }
+  return id;
+}
+function initializeGroupVariables(groupId) {
+  if (__tempVariablesGroup.has(groupId)) {
+    __tempVariablesGroup.get(groupId).forEach((id) => {
+      __tempVariables.delete(id);
+    });
+    __tempVariablesGroup.delete(groupId);
+  }
+}
+function recoverVariable(id, removeVariable = true) {
+  if (isString(id) === false) {
+    return id;
+  }
+  let value = id;
+  if (__tempVariables.has(id)) {
+    value = __tempVariables.get(id);
+    if (removeVariable) {
+      __tempVariables.delete(id);
+    }
+  }
+  return value;
+}
+function getVariable(idOrValue) {
+  if (__tempVariables.has(idOrValue)) {
+    return __tempVariables.get(idOrValue);
+  }
+  return idOrValue;
+}
+function hasVariable(id) {
+  return __tempVariables.has(id);
+}
+function spreadVariable(obj2) {
+  return Object.entries(obj2).map(([key, value]) => {
+    return `${key}=${variable$4(value)}`;
+  }).join(" ");
+}
+function registElement(classes = {}) {
+  Object.keys(classes).forEach((key) => {
+    if (map[key]) {
+      return;
+    }
+    map[key] = classes[key];
+  });
+}
+function registAlias(a, b) {
+  aliasMap[a] = b;
+}
+function retriveAlias(key) {
+  return aliasMap[key];
+}
+function retriveElement(className) {
+  return map[retriveAlias(className) || className];
+}
 const MAGIC_METHOD = "@magic:";
 const makeEventChecker = (value, split = CHECK_SAPARATOR) => {
   return ` ${split} ${value}`;
@@ -108,6 +345,10 @@ const THROTTLE = (t = 100) => {
 };
 const ALL_TRIGGER = CHECKER("allTrigger()");
 const SELF_TRIGGER = CHECKER("selfTrigger()");
+const FRAME = CHECKER("frame()");
+const PARAMS = (obj2) => {
+  return CHECKER(`params(${variable$4(obj2)})`);
+};
 const CAPTURE = CHECKER("capture()");
 const PREVENT = AFTER(`preventDefault`);
 const STOP = AFTER(`stopPropagation`);
@@ -292,6 +533,8 @@ var Event$1 = /* @__PURE__ */ Object.freeze({
   THROTTLE,
   ALL_TRIGGER,
   SELF_TRIGGER,
+  FRAME,
+  PARAMS,
   CAPTURE,
   PREVENT,
   STOP,
@@ -361,157 +604,6 @@ var Event$1 = /* @__PURE__ */ Object.freeze({
   normalizeWheelEvent,
   "default": Event
 });
-function collectProps(root, filterFunction = () => true) {
-  let p = root;
-  let results = [];
-  do {
-    const isObject2 = p instanceof Object;
-    if (isObject2 === false) {
-      break;
-    }
-    const names2 = Object.getOwnPropertyNames(p).filter(filterFunction);
-    results.push.apply(results, names2);
-  } while (p = Object.getPrototypeOf(p));
-  return results;
-}
-function debounce(callback, delay = 0) {
-  if (delay === 0) {
-    return callback;
-  }
-  var t = void 0;
-  return function($1, $2, $3, $4, $5) {
-    if (t) {
-      clearTimeout(t);
-    }
-    t = setTimeout(function() {
-      callback($1, $2, $3, $4, $5);
-    }, delay || 300);
-  };
-}
-function throttle(callback, delay) {
-  var t = void 0;
-  return function($1, $2, $3, $4, $5) {
-    if (!t) {
-      t = setTimeout(function() {
-        callback($1, $2, $3, $4, $5);
-        t = null;
-      }, delay || 300);
-    }
-  };
-}
-function ifCheck(callback, context, checkMethods) {
-  return (...args2) => {
-    const ifResult = checkMethods.every((check2) => {
-      return context[check2.target].apply(context, args2);
-    });
-    if (ifResult) {
-      callback.apply(context, args2);
-    }
-  };
-}
-function makeRequestAnimationFrame(callback, context) {
-  return (...args2) => {
-    requestAnimationFrame(() => {
-      callback.apply(context, args2);
-    });
-  };
-}
-function keyEach(obj2, callback) {
-  Object.keys(obj2).forEach((key, index2) => {
-    callback(key, obj2[key], index2);
-  });
-}
-function keyMap(obj2, callback) {
-  return Object.keys(obj2).map((key, index2) => {
-    return callback(key, obj2[key], index2);
-  });
-}
-function keyMapJoin(obj2, callback, joinString = "") {
-  return keyMap(obj2, callback).join(joinString);
-}
-function isUndefined(value) {
-  return typeof value == "undefined" || value === null;
-}
-function isNotUndefined(value) {
-  return isUndefined(value) === false;
-}
-function isBoolean(value) {
-  return typeof value == "boolean";
-}
-function isString(value) {
-  return typeof value == "string";
-}
-function isArray(value) {
-  return Array.isArray(value);
-}
-function isObject(value) {
-  return typeof value == "object" && !Array.isArray(value) && !isNumber(value) && !isString(value) && value !== null;
-}
-function isFunction(value) {
-  return typeof value == "function";
-}
-function isNumber(value) {
-  return typeof value == "number";
-}
-function isZero(num) {
-  return num === 0;
-}
-function isNotZero(num) {
-  return !isZero(num);
-}
-function clone$1(obj2) {
-  if (isUndefined(obj2))
-    return void 0;
-  return JSON.parse(JSON.stringify(obj2));
-}
-function combineKeyArray(obj2) {
-  Object.keys(obj2).forEach((key) => {
-    if (Array.isArray(obj2[key])) {
-      obj2[key] = obj2[key].join(", ");
-    }
-  });
-  return obj2;
-}
-const short_tag_regexp = /\<(\w*)([^\>]*)\/\>/gim;
-const HTML_TAG = {
-  "image": true,
-  "input": true,
-  "br": true,
-  "path": true,
-  "line": true,
-  "circle": true,
-  "rect": true,
-  "path": true,
-  "polygon": true,
-  "polyline": true,
-  "use": true
-};
-const html = (strings, ...args2) => {
-  var results = strings.map((it, index2) => {
-    var results2 = args2[index2] || "";
-    if (!Array.isArray(results2)) {
-      results2 = [results2];
-    }
-    results2 = results2.join("");
-    return it + results2;
-  }).join("");
-  results = results.replace(short_tag_regexp, function(match, p1) {
-    if (HTML_TAG[p1.toLowerCase()]) {
-      return match;
-    } else {
-      return match.replace("/>", `></${p1}>`);
-    }
-  });
-  return results;
-};
-const splitMethodByKeyword = (arr, keyword) => {
-  const filterKeys = arr.filter((code2) => code2.indexOf(`${keyword}(`) > -1);
-  const filterMaps = filterKeys.map((code2) => {
-    const [target, param] = code2.split(`${keyword}(`)[1].split(")")[0].trim().split(" ");
-    return { target, param };
-  });
-  return [filterKeys, filterMaps];
-};
 var EPSILON = 1e-6;
 var ARRAY_TYPE = typeof Float32Array !== "undefined" ? Float32Array : Array;
 if (!Math.hypot)
@@ -1735,19 +1827,19 @@ function calculateAnglePointDistance(point2, center2, dist2) {
 function calculateAngle360(rx, ry) {
   return (calculateAngle(rx, ry) + 180) % 360;
 }
-const UUID_REG$1 = /[xy]/g;
-function uuid$1() {
+const UUID_REG = /[xy]/g;
+function uuid() {
   var dt = new Date().getTime();
-  var uuid2 = "xxx12-xx-34xx".replace(UUID_REG$1, function(c2) {
+  var uuid2 = "xxx12-xx-34xx".replace(UUID_REG, function(c2) {
     var r = (dt + Math.random() * 16) % 16 | 0;
     dt = Math.floor(dt / 16);
     return (c2 == "x" ? r : r & 3 | 8).toString(16);
   });
   return uuid2;
 }
-function uuidShort$1() {
+function uuidShort() {
   var dt = new Date().getTime();
-  var uuid2 = "idxxxxxxx".replace(UUID_REG$1, function(c2) {
+  var uuid2 = "idxxxxxxx".replace(UUID_REG, function(c2) {
     var r = (dt + Math.random() * 16) % 16 | 0;
     dt = Math.floor(dt / 16);
     return (c2 == "x" ? r : r & 3 | 8).toString(16);
@@ -1835,8 +1927,8 @@ var math = /* @__PURE__ */ Object.freeze({
   calculateMatrixInverse,
   calculateAnglePointDistance,
   calculateAngle360,
-  uuid: uuid$1,
-  uuidShort: uuidShort$1,
+  uuid,
+  uuidShort,
   cubicBezier,
   getGradientLine,
   getCenterInTriangle,
@@ -1861,7 +1953,7 @@ class Length {
   constructor(value = "", unit = "") {
     this.value = value;
     if (isNumber(this.value) && isNaN(this.value)) {
-      throw new Error("NaN is not able to set");
+      this.value = 0;
     }
     this.unit = unit;
   }
@@ -2461,7 +2553,7 @@ class Item {
   }
   reset(obj2) {
     if (!obj2.__changedId)
-      obj2.__changedId = uuid$1();
+      obj2.__changedId = uuid();
     if (this.lastChangedField.__changedId !== obj2.__changedId) {
       this.json = this.convert(Object.assign(this.json, obj2));
       this.lastChangedField = obj2;
@@ -2474,7 +2566,7 @@ class Item {
     return args2.some((it) => this.lastChangedFieldKeys.includes(it));
   }
   getDefaultObject(obj2 = {}) {
-    var id = uuidShort$1();
+    var id = uuidShort();
     return __spreadValues({
       id,
       _timestamp: Date.now(),
@@ -2702,7 +2794,7 @@ function updateElement(parentElement, oldEl, newEl, i, options2 = {}) {
     var newChildren = children(newEl);
     var max = Math.max(oldChildren.length, newChildren.length);
     for (var i = 0; i < max; i++) {
-      updateElement(oldEl, oldChildren[i], newChildren[i], i);
+      updateElement(oldEl, oldChildren[i], newChildren[i], i, options2);
     }
   }
 }
@@ -2720,6 +2812,7 @@ const children = (el) => {
 };
 function DomDiff(A, B, options2 = {}) {
   options2.checkPassed = isFunction(options2.checkPassed) ? options2.checkPassed : void 0;
+  options2.removedElements = [];
   A = A.el || A;
   B = B.el || B;
   var childrenA = children(A);
@@ -2728,92 +2821,6 @@ function DomDiff(A, B, options2 = {}) {
   for (var i = 0; i < len2; i++) {
     updateElement(A, childrenA[i], childrenB[i], i, options2);
   }
-}
-const UUID_REG = /[xy]/g;
-function uuid() {
-  var dt = new Date().getTime();
-  var uuid2 = "xxx12-xx-34xx".replace(UUID_REG, function(c2) {
-    var r = (dt + Math.random() * 16) % 16 | 0;
-    dt = Math.floor(dt / 16);
-    return (c2 == "x" ? r : r & 3 | 8).toString(16);
-  });
-  return uuid2;
-}
-function uuidShort() {
-  var dt = new Date().getTime();
-  var uuid2 = "idxxxxxxx".replace(UUID_REG, function(c2) {
-    var r = (dt + Math.random() * 16) % 16 | 0;
-    dt = Math.floor(dt / 16);
-    return (c2 == "x" ? r : r & 3 | 8).toString(16);
-  });
-  return uuid2;
-}
-const map = {};
-const aliasMap = {};
-const __tempVariables = new Map();
-const __tempVariablesGroup = new Map();
-window.__tempVariables = __tempVariables;
-const VARIABLE_SAPARATOR = "v:";
-function variable$4(value, groupId = "") {
-  const id = `${VARIABLE_SAPARATOR}${uuidShort()}`;
-  __tempVariables.set(id, value);
-  if (groupId) {
-    __tempVariablesGroup.has(groupId) || __tempVariablesGroup.set(groupId, new Set());
-    __tempVariablesGroup.get(groupId).add(id);
-  }
-  return id;
-}
-function initializeGroupVariables(groupId) {
-  if (__tempVariablesGroup.has(groupId)) {
-    __tempVariablesGroup.get(groupId).forEach((id) => {
-      __tempVariables.delete(id);
-    });
-    __tempVariablesGroup.delete(groupId);
-  }
-}
-function recoverVariable(id, removeVariable = true) {
-  if (isString(id) === false) {
-    return id;
-  }
-  let value = id;
-  if (__tempVariables.has(id)) {
-    value = __tempVariables.get(id);
-    if (removeVariable) {
-      __tempVariables.delete(id);
-    }
-  }
-  return value;
-}
-function getVariable(idOrValue) {
-  if (__tempVariables.has(idOrValue)) {
-    return __tempVariables.get(idOrValue);
-  }
-  return idOrValue;
-}
-function hasVariable(id) {
-  return __tempVariables.has(id);
-}
-function spreadVariable(obj2) {
-  return Object.entries(obj2).map(([key, value]) => {
-    return `${key}=${variable$4(value)}`;
-  }).join(" ");
-}
-function registElement(classes = {}) {
-  Object.keys(classes).forEach((key) => {
-    if (map[key]) {
-      return;
-    }
-    map[key] = classes[key];
-  });
-}
-function registAlias(a, b) {
-  aliasMap[a] = b;
-}
-function retriveAlias(key) {
-  return aliasMap[key];
-}
-function retriveElement(className) {
-  return map[retriveAlias(className) || className];
 }
 class Dom {
   constructor(tag, className, attr) {
@@ -4032,7 +4039,7 @@ class EventMachine {
     this.refs = {};
     this.children = {};
     this._bindings = [];
-    this.id = uuid();
+    this.id = uuid$1();
     this.handlers = this.initializeHandler();
     this._localTimestamp = 0;
     this.initializeProperty(opt, props2);
@@ -4048,7 +4055,7 @@ class EventMachine {
     this.opt = opt || {};
     this.parent = this.opt;
     this.props = props2;
-    this.source = uuid();
+    this.source = uuid$1();
     this.sourceName = this.constructor.name;
   }
   initComponents() {
@@ -4398,7 +4405,7 @@ class EventMachine {
 }
 class BaseStore {
   constructor(editor) {
-    this.id = uuidShort$1();
+    this.id = uuidShort();
     this.cachedCallback = {};
     this.callbacks = {};
     this.editor = editor;
@@ -4419,7 +4426,7 @@ class BaseStore {
   }
   debug(...args2) {
   }
-  on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false, beforeMethods = []) {
+  on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false, beforeMethods = [], frame = false) {
     var callback = originalCallback;
     if (debounceDelay > 0)
       callback = debounce(originalCallback, debounceDelay);
@@ -4428,7 +4435,9 @@ class BaseStore {
     if (beforeMethods.length) {
       callback = ifCheck(callback, context, beforeMethods);
     }
-    callback = makeRequestAnimationFrame(callback, context);
+    if (frame) {
+      callback = makeRequestAnimationFrame(callback, context);
+    }
     this.getCallbacks(event).push({ event, callback, context, originalCallback, enableAllTrigger, enableSelfTrigger });
     this.debug("add message event", event, context.sourceName);
     return () => {
@@ -4703,8 +4712,8 @@ class TransformOrigin {
   }
   static scale(transformOrigin, width2, height2) {
     let parsedTransformOrigin = TransformOrigin.parseStyle(transformOrigin);
-    if (isNaN(width2) || isNaN(height2)) {
-      throw new Error(width2);
+    if (width2 === 0 && height2 === 0) {
+      return [0, 0, 0];
     }
     const originX = parsedTransformOrigin[0].toPx(width2).value;
     const originY = parsedTransformOrigin[1].toPx(height2).value;
@@ -6428,6 +6437,15 @@ const RadialGradientType = {
   CIRCLE: "circle",
   ELLIPSE: "ellipse"
 };
+const ClipPathType = {
+  NONE: "none",
+  CIRCLE: "circle",
+  ELLIPSE: "ellipse",
+  POLYGON: "polygon",
+  INSET: "inset",
+  PATH: "path",
+  SVG: "svg"
+};
 class BoxShadow extends PropertyItem {
   static parse(obj2) {
     return new BoxShadow(obj2);
@@ -6941,7 +6959,7 @@ class ImageResource extends PropertyItem {
 class ColorStep extends Item {
   getDefaultObject() {
     return {
-      id: uuidShort$1(),
+      id: uuidShort(),
       cut: false,
       percent: 0,
       unit: "%",
@@ -8252,7 +8270,7 @@ function makeInterpolateBackgroundImage(layer2, property, startValue, endValue) 
     }));
   };
 }
-const FILTER_REG = /((blur|drop\-shadow|hue\-rotate|invert|brightness|contrast|opacity|saturate|sepia|url)\(([^\)]*)\))/gi;
+const FILTER_REG = /((blur|grayscale|drop\-shadow|hue\-rotate|invert|brightness|contrast|opacity|saturate|sepia|url)\(([^\)]*)\))/gi;
 class Filter extends PropertyItem {
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
@@ -8719,9 +8737,9 @@ class ClipPath extends PropertyItem {
     });
     return clippath;
   }
-  static parseStyleForCircle(str) {
+  static parseStyleForCircle(str = "50% at 50% 50%") {
     var radius = new Length("", "closest-side"), position2 = "";
-    str = str || "50%";
+    str = str || "50% at 50% 50%";
     if (str.includes("at")) {
       [radius, position2] = str.split("at").map((it) => it.trim());
     } else {
@@ -8731,6 +8749,7 @@ class ClipPath extends PropertyItem {
     if (isUndefined(y2)) {
       y2 = x2;
     }
+    radius = Length.parse(radius);
     x2 = Length.parse(x2);
     y2 = Length.parse(y2);
     return {
@@ -13050,7 +13069,7 @@ class BaseModel {
     return args2.some((it) => this.lastChangedField[it] !== void 0);
   }
   getDefaultObject(obj2 = {}) {
-    var id = uuid$1();
+    var id = uuid();
     return __spreadValues({
       id,
       children: [],
@@ -13653,7 +13672,7 @@ class TimelineModel extends AssetModel {
     this.compileAll();
   }
   addTimeline(fps = 60, endTimecode = "00:00:10:00") {
-    var id = uuidShort$1();
+    var id = uuidShort();
     var selectedTimeline = __spreadProps(__spreadValues({
       id,
       title: "sample"
@@ -13862,7 +13881,7 @@ class TimelineModel extends AssetModel {
       var times = p.keyframes.filter((it) => it.time === time);
       if (!times.length) {
         value = isUndefined(value) || value === "" ? this.getDefaultPropertyValue(property) : value;
-        var obj2 = { id: uuidShort$1(), layerId, property, time, value, timing: timing || "linear", editor };
+        var obj2 = { id: uuidShort(), layerId, property, time, value, timing: timing || "linear", editor };
         p.keyframes.push(obj2);
         p.keyframes.sort((a, b) => {
           return a.time > b.time ? 1 : -1;
@@ -15053,7 +15072,7 @@ var addSVGFilterAssetItem = {
   execute: function(editor, callback) {
     var project2 = editor.selection.currentProject;
     if (project2) {
-      var id = uuidShort$1();
+      var id = uuidShort();
       var index2 = project2.createSVGFilter({ id, filters: [] });
       callback && callback(index2, id);
     }
@@ -17588,12 +17607,7 @@ var open_editor = {
         } else if (obj2.type === "svg")
           ;
         else {
-          editor.emit("showClipPathPopup", {
-            "clip-path": current["clip-path"],
-            changeEvent: function(data) {
-              editor.command("setAttributeForMulti", "change clip-path", editor.selection.packByValue(data));
-            }
-          });
+          editor.emit("showClippathEditorView");
         }
       } else
         ;
@@ -18442,7 +18456,7 @@ var updateImage = {
       var datauri = e2.target.result;
       var local = URL.createObjectURL(imageFileOrBlob);
       editor.emit("addImageAssetItem", {
-        id: uuidShort$1(),
+        id: uuidShort(),
         type: imageFileOrBlob.type,
         name: imageFileOrBlob.name,
         original: datauri,
@@ -18467,7 +18481,7 @@ var updateImageAssetItem = {
       var project2 = editor.selection.currentProject;
       if (project2) {
         const image2 = project2.createImage({
-          id: uuidShort$1(),
+          id: uuidShort(),
           type: item2.type,
           name: item2.name,
           original: datauri,
@@ -18602,7 +18616,7 @@ var updateUriList = {
         case "image/jpg":
         case "image/jpeg":
           editor.emit("addImageAssetItem", {
-            id: uuidShort$1(),
+            id: uuidShort(),
             type: info.mimeType,
             name: "",
             original: datauri,
@@ -18619,7 +18633,7 @@ var updateUriList = {
         case "gif":
         case "svg":
           editor.emit("addImageAssetItem", {
-            id: uuidShort$1(),
+            id: uuidShort(),
             type: "image/" + ext,
             name: name2,
             original: item2.data,
@@ -18643,7 +18657,7 @@ var updateVideo = {
       var datauri = e2.target.result;
       var local = URL.createObjectURL(item2);
       editor.emit("addVideoAssetItem", {
-        id: uuidShort$1(),
+        id: uuidShort(),
         type: item2.type,
         name: item2.name,
         original: datauri,
@@ -18668,7 +18682,7 @@ var updateVideoAssetItem = {
       var project2 = editor.selection.currentProject;
       if (project2) {
         project2.createVideo({
-          id: uuidShort$1(),
+          id: uuidShort(),
           type: item2.type,
           name: item2.name,
           original: datauri,
@@ -20246,7 +20260,7 @@ class StorageManager {
     let isNew = false;
     const artboards = (this.editor.loadItem(this.customAssetKey) || []).map((it) => {
       if (!it.id) {
-        it.id = uuid$1();
+        it.id = uuid();
         isNew = true;
       }
       return it;
@@ -20277,7 +20291,7 @@ class StorageManager {
       await this.setCustomAssetList([
         ...assetList,
         {
-          id: uuid$1(),
+          id: uuid(),
           preview: datauri,
           component: json
         }
@@ -22102,7 +22116,7 @@ function createElement(Component2, props2, children2 = []) {
   children2 = children2.flat(Infinity);
   return `<${Component2} ${OBJECT_TO_PROPERTY(props2)}>${children2.join(" ")}</${Component2}>`;
 }
-function createElementJsx(Component2, props2, ...children2) {
+function createElementJsx(Component2, props2 = {}, ...children2) {
   children2 = children2.flat(Infinity);
   if (Component2 === FragmentInstance) {
     return children2;
@@ -22500,7 +22514,7 @@ const EDIT_MODE_SELECTION = "SELECTION";
 const EDIT_MODE_ADD = "ADD";
 class Editor {
   constructor() {
-    this.EDITOR_ID = uuid$1();
+    this.EDITOR_ID = uuid();
     this.projects = [];
     this.popupZIndex = 1e4;
     this.canvasWidth = 1e5;
@@ -22795,7 +22809,7 @@ class UIElement extends EventMachine {
   splitMethod(arr, keyword, defaultValue = 0) {
     var [methods, params] = splitMethodByKeyword(arr, keyword);
     return [
-      methods.length ? +params[0].target : defaultValue,
+      methods.length ? params[0].target : defaultValue,
       methods,
       params
     ];
@@ -22815,12 +22829,29 @@ class UIElement extends EventMachine {
       const [throttleSecond, throttleMethods] = this.splitMethod(methodLine, "throttle");
       const [allTrigger, allTriggerMethods] = this.splitMethod(methodLine, "allTrigger");
       const [selfTrigger, selfTriggerMethods] = this.splitMethod(methodLine, "selfTrigger");
+      const [frameTrigger, frameTriggerMethods] = this.splitMethod(methodLine, "frame");
+      const [paramsVariable, paramsVariableMethods, params] = this.splitMethod(methodLine, "params");
+      let debounce2 = +debounceSecond > 0 ? debounceSecond : 0;
+      let throttle2 = +throttleSecond > 0 ? throttleSecond : 0;
+      let isAllTrigger = Boolean(allTriggerMethods.length);
+      let isSelfTrigger = Boolean(selfTriggerMethods.length);
+      let isFrameTrigger = Boolean(frameTriggerMethods.length);
+      if (paramsVariableMethods.length) {
+        const settings = getVariable(paramsVariable);
+        if (isNotUndefined(settings.debounce))
+          debounce2 = settings.debounce;
+        if (isNotUndefined(settings.throttle))
+          throttle2 = settings.throttle;
+        if (isNotUndefined(settings.frame))
+          isFrameTrigger = settings.frame;
+      }
+      const originalCallback = this[key];
       events.split(CHECK_SAPARATOR).filter((it) => {
-        return checkMethodList.indexOf(it) === -1 && debounceMethods.indexOf(it) === -1 && allTriggerMethods.indexOf(it) === -1 && selfTriggerMethods.indexOf(it) === -1 && throttleMethods.indexOf(it) === -1;
+        return checkMethodList.indexOf(it) === -1 && debounceMethods.indexOf(it) === -1 && allTriggerMethods.indexOf(it) === -1 && selfTriggerMethods.indexOf(it) === -1 && throttleMethods.indexOf(it) === -1 && paramsVariableMethods.indexOf(it) === -1;
       }).map((it) => it.trim()).filter(Boolean).forEach((e2) => {
-        if (isFunction(this[key])) {
-          var callback = this.createLocalCallback(e2, this[key]);
-          this.$store.on(e2, callback, this, debounceSecond, throttleSecond, allTriggerMethods.length, selfTriggerMethods.length, checkMethodList);
+        if (isFunction(originalCallback)) {
+          var callback = this.createLocalCallback(e2, originalCallback);
+          this.$store.on(e2, callback, this, debounce2, throttle2, isAllTrigger, isSelfTrigger, checkMethodList, isFrameTrigger);
         }
       });
     });
@@ -22856,14 +22887,14 @@ class UIElement extends EventMachine {
       this.children[key].trigger(messageName, ...args2);
     });
   }
-  on(message, callback, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false) {
-    this.$store.on(message, callback, this.source, debounceDelay, throttleDelay, enableAllTrigger, enableSelfTrigger);
+  on(message, callback, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false, frame = false) {
+    this.$store.on(message, callback, this.source, debounceDelay, throttleDelay, enableAllTrigger, enableSelfTrigger, [], frame);
   }
   off(message, callback) {
     this.$store.off(message, callback, this.source);
   }
   subscribe(callback, debounceSecond = 0, throttleSecond = 0) {
-    const id = `subscribe.${uuidShort()}`;
+    const id = `subscribe.${uuidShort$1()}`;
     const newCallback = this.createLocalCallback(id, callback);
     this.$store.on(id, newCallback, this, debounceSecond, throttleSecond, false, true);
     return id;
@@ -22876,6 +22907,9 @@ class EditorElement extends UIElement {
   }
   initializeI18nMessage() {
     return {};
+  }
+  get notEventRedefine() {
+    return true;
   }
   get $editor() {
     if (!this.__cacheParentEditor) {
@@ -23114,10 +23148,6 @@ class BaseLayout extends EditorElement {
 var HorizontalRuler$1 = "";
 let pathString$1 = [];
 class HorizontalRuler extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   template() {
     return `
             <div class="elf--horizontal-ruler">
@@ -23128,9 +23158,7 @@ class HorizontalRuler extends EditorElement {
                 </div>                            
                 <div class='horizontal-ruler-container' ref='$ruler'></div>
                 <div class='horizontal-ruler-container'>
-                    <svg width="100%" width="100%" overflow="hidden">
-                        <path data-mouse="true" d="" stroke="transparent" ref="$cursor" />
-                    </svg>
+                    <div class="cursor" ref="$cursor"></div>
                 </div>
             </div>
         `;
@@ -23266,8 +23294,16 @@ class HorizontalRuler extends EditorElement {
     return `M ${x2 - 0.5} 0 L ${x2 - 0.5} 20`;
   }
   [BIND("$cursor")]() {
+    const targetMousePoint = this.$viewport.getWorldPosition();
+    const { minX, maxX, width: realWidth } = this.$viewport;
+    this.initializeRect();
+    const width2 = this.state.rect.width;
+    const distX = targetMousePoint[0] - minX;
+    const x2 = distX === 0 ? 0 : distX / realWidth * width2;
     return {
-      d: this.makeRulerCursor()
+      cssText: `
+                --elf--horizontal-cursor-position: ${x2}px;
+            `
     };
   }
   refresh() {
@@ -23297,10 +23333,6 @@ class HorizontalRuler extends EditorElement {
 var VerticalRuler$1 = "";
 let pathString = [];
 class VerticalRuler extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   template() {
     return `
             <div class="elf--vertical-ruler">
@@ -23311,9 +23343,7 @@ class VerticalRuler extends EditorElement {
                 </div>                                        
                 <div class='vertical-ruler-container' ref='$body'></div>
                 <div class='vertical-ruler-container'>
-                    <svg width="100%" height="100%" overflow="hidden">
-                        <path data-mouse="true" d="" stroke="transparent" ref="$cursor" />
-                    </svg>
+                    <div class="cursor" ref="$cursor"></div>
                 </div>                
             </div>
         `;
@@ -23441,18 +23471,17 @@ class VerticalRuler extends EditorElement {
       d: this.makeRulerForCurrent()
     };
   }
-  makeRulerCursor() {
+  [BIND("$cursor")]() {
     const targetMousePoint = this.$viewport.getWorldPosition();
     const { minY, maxY, height: realHeight } = this.$viewport;
     this.initializeRect();
     const height2 = this.state.rect.height;
     const distY = targetMousePoint[1] - minY;
     const y2 = distY === 0 ? 0 : distY / realHeight * height2;
-    return `M 0 ${y2 - 0.5} L 20 ${y2 - 0.5}`;
-  }
-  [BIND("$cursor")]() {
     return {
-      d: this.makeRulerCursor()
+      cssText: `
+                --elf--vertical-cursor-position: ${y2}px;
+            `
     };
   }
   refresh() {
@@ -23513,10 +23542,6 @@ const filter_list$2 = [
 ];
 const TEMP_DIV = Dom.create("div");
 class StyleView extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       lastChangedList: {}
@@ -23706,7 +23731,7 @@ class HTMLRenderView extends EditorElement {
   [SUBSCRIBE("refreshAllElementBoundSize")]() {
     this.refreshAllElementBoundSize();
   }
-  [SUBSCRIBE("refreshElementBoundSize")](parentObj) {
+  [SUBSCRIBE("refreshElementBoundSize") + DEBOUNCE(100) + FRAME](parentObj) {
     this.refreshElementBoundSize(parentObj);
   }
   [SUBSCRIBE("updateAllCanvas")](parentLayer) {
@@ -23907,9 +23932,7 @@ class HTMLRenderView extends EditorElement {
     }
     this.emit("setAttributeForMulti", this.$selection.packByValue({
       "x": (item2) => item2.x,
-      "y": (item2) => item2.y,
-      "right": void 0,
-      "bottom": void 0
+      "y": (item2) => item2.y
     }));
   }
   moveTo(dist2) {
@@ -24035,10 +24058,6 @@ class HTMLRenderView extends EditorElement {
 }
 var PageTools$1 = "";
 class PageTools extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   template() {
     return `     
       <div class='elf--page-tools'>
@@ -26180,10 +26199,6 @@ class TopAlign extends MenuItem {
 }
 var BaseProperty$1 = "";
 class BaseProperty extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   onToggleShow() {
   }
   template() {
@@ -26686,10 +26701,6 @@ class AnimationProperty extends BaseProperty {
 }
 var BasePopup$1 = "";
 class BasePopup extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   template() {
     return `
         <div class='elf--popup ${this.getClassName()}'>
@@ -27262,21 +27273,11 @@ const filter_list$1 = [
 ];
 var BackdropFilterProperty$1 = "";
 class BackdropFilterProperty extends BaseProperty {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   getTitle() {
     return this.$i18n("backdrop.filter.property.title");
   }
-  hasKeyframe() {
-    return true;
-  }
   getTitleClassName() {
     return "filter";
-  }
-  getKeyframeProperty() {
-    return "backdrop-filter";
   }
   getBodyClassName() {
     return "no-padding";
@@ -27411,10 +27412,6 @@ const types = {
   "repeating-conic-gradient": "gradient"
 };
 class BackgroundImageEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       hideLabel: this.props.hideLabel || false,
@@ -27748,10 +27745,6 @@ class BackgroundImagePositionPopup extends BasePopup {
 }
 var BackgroundImageProperty$1 = "";
 class BackgroundImageProperty extends BaseProperty {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   getTitle() {
     return this.$i18n("background.image.property.title");
   }
@@ -27816,10 +27809,6 @@ class BackgroundImageProperty extends BaseProperty {
 }
 var BackgroundPositionEditor$1 = "";
 class BackgroundPositionEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       index: this.props.index,
@@ -27912,10 +27901,6 @@ class BaseUI extends EditorElement {
   }
 }
 class Button extends BaseUI {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       label: this.props.label || "",
@@ -27948,10 +27933,6 @@ class Button extends BaseUI {
 var ToggleCheckBox$1 = "";
 const DEFAULT_LABELS$1 = ["True", "False"];
 class ToggleCheckBox extends BaseUI {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       label: this.props.label || "",
@@ -28021,10 +28002,6 @@ class ToggleCheckBox extends BaseUI {
 var ToggleButton$1 = "";
 const DEFAULT_LABELS = ["True", "False"];
 class ToggleButton extends BaseUI {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       checkedValue: this.props.checkedValue || this.props.value,
@@ -28234,10 +28211,6 @@ const borderTypeTitle = {
   "border-left": "left"
 };
 class BorderEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     var borders = Border.parseStyle(this.props.value);
     var direction = Object.keys(borders)[0] || "border";
@@ -28291,10 +28264,6 @@ class BorderEditor extends EditorElement {
 }
 var BorderProperty$1 = "";
 class BorderProperty extends BaseProperty {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   getTitle() {
     return this.$i18n("border.property.title");
   }
@@ -28725,10 +28694,6 @@ const BorderGroup = {
   PARTITIAL: "partial"
 };
 class BorderRadiusEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return __spreadValues({}, BorderRadius.parseStyle(this.props.value));
   }
@@ -28834,10 +28799,6 @@ class BorderRadiusEditor extends EditorElement {
   }
 }
 class BorderRadiusProperty extends BaseProperty {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   getTitle() {
     return this.$i18n("border.radius.property.title");
   }
@@ -28878,10 +28839,6 @@ fields.forEach((field) => {
   styleKeys.push.apply(styleKeys, ["-top", "-bottom", "-left", "-right"].map((it) => field + it));
 });
 class BoxModelProperty extends BaseProperty {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   getTitle() {
     return this.$i18n("box.model.property.title");
   }
@@ -28962,10 +28919,6 @@ function boxModel(editor) {
 }
 var BoxShadowEditor$1 = "";
 class BoxShadowEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       boxShadows: BoxShadow.parseStyle(this.props.value || "")
@@ -29137,10 +29090,6 @@ var boxShadow$1 = [
 ];
 var BoxShadowProperty$1 = "";
 class BoxShadowProperty extends BaseProperty {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   getTitle() {
     return this.$i18n("boxshadow.property.title");
   }
@@ -29193,314 +29142,7 @@ function boxShadow(editor) {
     BoxShadowProperty
   });
 }
-class CircleEditor extends EditorElement {
-  parseValue(str = "50%") {
-    var radius = new Length("", "closest-side"), position2 = "";
-    str = str || "50%";
-    if (str.includes("at")) {
-      [radius, position2] = str.split("at").map((it) => it.trim());
-    } else {
-      position2 = str.trim();
-    }
-    var [x2, y2] = position2.split(" ");
-    if (isUndefined(y2)) {
-      y2 = x2;
-    }
-    x2 = Length.parse(x2);
-    y2 = Length.parse(y2);
-    return {
-      radius,
-      x: x2,
-      y: y2
-    };
-  }
-  initState() {
-    return this.parseValue(this.props.value);
-  }
-  template() {
-    return `
-        <div class='clip-path-editor circle-editor'>
-            ${createComponent("InputRangeEditor", {
-      ref: "$range",
-      label: "Radius",
-      key: "radius",
-      value: this.state.radius,
-      min: 0,
-      max: 100,
-      step: 0.1,
-      units: ["%", "closest-side", "farthest-side"],
-      onchange: "changeRangeEditor"
-    })}
-            <div class='drag-area' ref='$area'>
-                <div class='drag-pointer' ref='$pointer' style='left: ${this.state.x};top: ${this.state.y};'></div>
-                <div class='clip-area circle' ref='$clipArea'></div>
-            </div>
-        </div>
-    `;
-  }
-  [BIND("$clipArea")]() {
-    return {
-      style: {
-        "clip-path": `${this.props.key}(${this.toClipPathValueString()})`
-      }
-    };
-  }
-  [POINTERSTART("$area") + MOVE() + END()](e2) {
-    this.areaRect = this.refs.$area.rect();
-    this.startXY = e2.xy;
-  }
-  move(dx, dy) {
-    var x2 = this.startXY.x + dx;
-    var y2 = this.startXY.y + dy;
-    if (this.areaRect.x > x2) {
-      x2 = this.areaRect.x;
-    } else if (this.areaRect.right < x2) {
-      x2 = this.areaRect.right;
-    }
-    if (this.areaRect.y > y2) {
-      y2 = this.areaRect.y;
-    } else if (this.areaRect.bottom < y2) {
-      y2 = this.areaRect.bottom;
-    }
-    var left2 = Length.percent((x2 - this.areaRect.x) / this.areaRect.width * 100).round(1);
-    var top2 = Length.percent((y2 - this.areaRect.y) / this.areaRect.height * 100).round(1);
-    this.refs.$pointer.css({
-      left: left2,
-      top: top2
-    });
-    this.updateData({
-      x: left2,
-      y: top2
-    });
-    this.bindData("$clipArea");
-  }
-  toClipPathValueString() {
-    var { x: x2, y: y2, radius } = this.state;
-    var results = `${x2} ${y2}`;
-    var radiusString = radius + "";
-    if (radiusString.includes("closest-side")) {
-      radiusString = "closest-side";
-    } else if (radiusString.includes("farthest-side")) {
-      radiusString = "farthest-side";
-    }
-    return radius ? `${radiusString} at ${results}` : `${results}`;
-  }
-  updateData(data) {
-    this.setState(data);
-    this.parent.trigger(this.props.onchange, this.props.key, this.toClipPathValueString(), this.props.params);
-  }
-  [SUBSCRIBE_SELF("changeRangeEditor")](key, value) {
-    if (key === "radius") {
-      var radius = value;
-      var tempValue = value.unit + "";
-      if (tempValue.includes("closest-side")) {
-        radius = new Length("", "closest-side");
-      } else if (tempValue.includes("farthest-side")) {
-        radius = new Length("", "farthest-side");
-      }
-      this.updateData({
-        radius
-      });
-    }
-  }
-}
-class InsetEditor extends EditorElement {
-  parseValue(str = "") {
-    var [inset, round2] = str.split("round");
-    var [_count, top2, right2, bottom2, left2] = DirectionLength.parse(inset);
-    if (round2) {
-      var [_roundCount, topRadius, rightRadius, bottomRadius, leftRadius] = DirectionLength.parse(round2);
-    }
-    return {
-      isAll: _count === 1,
-      top: top2,
-      right: right2,
-      bottom: bottom2,
-      left: left2,
-      round: round2,
-      isAllRadius: _roundCount === 1,
-      topRadius,
-      rightRadius,
-      bottomRadius,
-      leftRadius
-    };
-  }
-  initState() {
-    return this.parseValue(this.props.value);
-  }
-  template() {
-    var { top: top2, right: right2, bottom: bottom2, left: left2, round: round2 } = this.state;
-    var maxWidth = 220;
-    var maxHeight = 220;
-    var topX = Length.percent(Math.abs((left2.value - (100 - right2.value)) / 2)).toPx(maxWidth);
-    var topY = top2.toPx(maxHeight);
-    var bottomX = topX.clone();
-    var bottomY = Length.percent(100 - bottom2.value).toPx(maxHeight);
-    var rightX = Length.percent(100 - right2.value).toPx(maxWidth);
-    var rightY = Length.percent(Math.abs((top2.value - (100 - bottom2.value)) / 2)).toPx(maxHeight);
-    var leftX = left2.toPx(maxWidth);
-    var leftY = Length.percent(Math.abs((top2.value - (100 - bottom2.value)) / 2)).toPx(maxHeight);
-    var roundCheckStatus = round2 ? "checked" : "";
-    return `
-        <div class='clip-path-editor inset-editor'>
-            <div class='drag-area' ref='$area'>
-                <div class='drag-pointer' data-type='top' ref='$top' style='left: ${topX};top: ${topY};'></div>
-                <div class='drag-pointer' data-type='right' ref='$right' style='left: ${rightX};top: ${rightY};'></div>
-                <div class='drag-pointer' data-type='bottom' ref='$bottom' style='left: ${bottomX};top: ${bottomY};'></div>
-                <div class='drag-pointer' data-type='left' ref='$left' style='left: ${leftX};top: ${leftY};'></div>
-                <div class='clip-area inset' ref='$clipAreaView' style='pointer-events: none;'></div>
-                <div class='clip-area-handle' ref='$clipArea' style='left: ${leftX};top: ${topY};width: ${Length.px(rightX.value - left2.value)};height: ${Length.px(bottomY.value - topY.value)};'></div>
-            </div>
-            <div class='round-area'>
-                <label><input type="checkbox" ${roundCheckStatus} ref='$hasRound' /> Round </label>
-                <div ref='$round'></div>
-            </div>
-        </div>
-    `;
-  }
-  [BIND("$clipAreaView")]() {
-    return {
-      style: {
-        "clip-path": `${this.props.key}(${this.toClipPathValueString()})`
-      }
-    };
-  }
-  [CLICK("$hasRound")](e2) {
-    this.updateData({
-      round: this.refs.$hasRound.checked()
-    });
-    this.bindData("$clipAreaView");
-  }
-  [LOAD("$round")]() {
-    var { topRadius, rightRadius, bottomRadius, leftRadius } = this.state;
-    var value = [topRadius, rightRadius, bottomRadius, leftRadius].join(" ");
-    return `<object refClass="DirectionEditor" ref='$borderRadius' value='${value}' onchange='changeBorderRadius' />`;
-  }
-  [SUBSCRIBE_SELF("changeBorderRadius")]([_count, topRadius, rightRadius, bottomRadius, leftRadius]) {
-    this.updateData({
-      isAllRadius: _count === 1,
-      topRadius,
-      rightRadius,
-      bottomRadius,
-      leftRadius
-    });
-    this.bindData("$clipAreaView");
-  }
-  refreshPointer() {
-    var { top: top2, right: right2, bottom: bottom2, left: left2 } = this.state;
-    var maxWidth = 220;
-    var maxHeight = 220;
-    var halfWidth = Math.abs((left2.value + (100 - right2.value)) / 2);
-    var halfHeight = Math.abs((top2.value + (100 - bottom2.value)) / 2);
-    var topX = Length.percent(halfWidth).toPx(maxWidth);
-    var topY = top2.toPx(maxHeight);
-    var bottomX = Length.percent(halfWidth).toPx(maxWidth);
-    var bottomY = Length.percent(100 - bottom2.value).toPx(maxHeight);
-    var rightX = Length.percent(100 - right2.value).toPx(maxWidth);
-    var rightY = Length.percent(halfHeight).toPx(maxHeight);
-    var leftX = left2.toPx(maxWidth);
-    var leftY = Length.percent(halfHeight).toPx(maxHeight);
-    this.refs.$top.css({ left: topX, top: topY });
-    this.refs.$right.css({ left: rightX, top: rightY });
-    this.refs.$bottom.css({ left: bottomX, top: bottomY });
-    this.refs.$left.css({ left: leftX, top: leftY });
-    this.refs.$clipArea.css({
-      left: leftX,
-      top: topY,
-      width: rightX.value - leftX.value,
-      height: bottomY.value - topY.value
-    });
-    this.bindData("$clipAreaView");
-  }
-  [POINTERSTART("$area .clip-area-handle") + MOVE("moveClipArea")](e2) {
-    this.type = e2.$dt.attr("data-type");
-    this.$target = e2.$dt;
-    this.areaRect = this.refs.$area.rect();
-    this.startXY = e2.xy;
-    this.clipRect = {
-      left: Length.parse(this.$target.css("left")).value,
-      top: Length.parse(this.$target.css("top")).value,
-      width: Length.parse(this.$target.css("width")).value,
-      height: Length.parse(this.$target.css("height")).value
-    };
-  }
-  moveClipArea(dx, dy) {
-    var clipWidth = this.clipRect.width;
-    var clipHeight = this.clipRect.height;
-    var x2 = this.clipRect.left.value + dx;
-    var y2 = this.clipRect.top.value + dy;
-    if (0 > x2) {
-      x2 = 0;
-    } else if (this.areaRect.width < x2 + clipWidth) {
-      x2 = this.areaRect.width - clipWidth;
-    }
-    if (0 > y2) {
-      y2 = 0;
-    } else if (this.areaRect.height < y2 + clipHeight) {
-      y2 = this.areaRect.height - clipHeight;
-    }
-    var left2 = x2;
-    var top2 = y2;
-    this.updateData({
-      top: Length.px(top2).toPercent(this.areaRect.height).round(100),
-      bottom: Length.px(this.areaRect.height - (y2 + clipHeight)).toPercent(this.areaRect.height).round(100),
-      right: Length.px(this.areaRect.width - (x2 + clipWidth)).toPercent(this.areaRect.width).round(100),
-      left: Length.px(left2).toPercent(this.areaRect.width).round(100)
-    });
-    this.refreshPointer();
-  }
-  [POINTERSTART("$area .drag-pointer") + MOVE()](e2) {
-    this.type = e2.$dt.attr("data-type");
-    this.$target = e2.$dt;
-    this.areaRect = this.refs.$area.rect();
-    this.startXY = e2.xy;
-  }
-  move(dx, dy) {
-    var x2 = this.startXY.x + dx;
-    var y2 = this.startXY.y + dy;
-    if (this.areaRect.x > x2) {
-      x2 = this.areaRect.x;
-    } else if (this.areaRect.right < x2) {
-      x2 = this.areaRect.right;
-    }
-    if (this.areaRect.y > y2) {
-      y2 = this.areaRect.y;
-    } else if (this.areaRect.bottom < y2) {
-      y2 = this.areaRect.bottom;
-    }
-    var left2 = x2 - this.areaRect.x;
-    var top2 = y2 - this.areaRect.y;
-    if (this.type === "top") {
-      this.updateData({
-        top: Length.px(top2).toPercent(this.areaRect.height).round(100)
-      });
-    } else if (this.type === "bottom") {
-      this.updateData({
-        bottom: Length.px(this.areaRect.height - top2).toPercent(this.areaRect.height).round(100)
-      });
-    } else if (this.type === "right") {
-      this.updateData({
-        right: Length.px(this.areaRect.width - left2).toPercent(this.areaRect.width).round(100)
-      });
-    } else if (this.type === "left") {
-      this.updateData({
-        left: Length.px(left2).toPercent(this.areaRect.width).round(100)
-      });
-    }
-    this.refreshPointer();
-  }
-  toClipPathValueString() {
-    var { top: top2, right: right2, left: left2, bottom: bottom2, round: round2, topRadius, leftRadius, bottomRadius, rightRadius } = this.state;
-    var position2 = [top2, right2, bottom2, left2].join(" ");
-    var radius = [topRadius, rightRadius, bottomRadius, leftRadius].join(" ");
-    var results = `${position2} ${round2 && radius.trim() ? `round ${radius}` : ""}`;
-    return results;
-  }
-  updateData(data) {
-    this.setState(data, false);
-    this.parent.trigger(this.props.onchange, this.props.key, this.toClipPathValueString(), this.props.params);
-  }
-}
+var ClipPathProperty$1 = "";
 var polygon = {
   key: "polygon",
   title: "Polygon",
@@ -29535,354 +29177,15 @@ var polygon = {
     ];
   }
 };
-class PolygonEditor extends EditorElement {
-  parseValue(str = "") {
-    return str.split(",").filter((it) => it.trim()).map((it) => {
-      var [x2, y2] = it.trim().split(" ");
-      return {
-        x: Length.parse(x2),
-        y: Length.parse(y2)
-      };
-    });
-  }
-  initState() {
-    return {
-      value: this.parseValue(this.props.value)
-    };
-  }
-  template() {
-    const polygonList = polygon.execute();
-    return `
-        <div class='clip-path-editor polygon-editor'>
-            ${createComponent("SelectEditor", {
-      ref: "$polygonSelect",
-      options: ["", ...polygonList.map((it) => it.name)],
-      onchange: (key, value) => {
-        const polygon2 = polygonList.find((it) => it.name === value);
-        if (polygon2) {
-          this.updateData({ value: this.parseValue(polygon2.polygon) });
-          this.refresh();
-        }
-      }
-    })}
-            <div class='drag-area' ref='$area'>
-                <div class='pointer-list' ref='$list'></div>
-                <div class='clip-area polygon' ref='$clipArea'></div>            
-            </div>
-        </div>
-    `;
-  }
-  [CLICK("$area") + PREVENT](e2) {
-    if (Dom.create(e2.target).is(this.refs.$area)) {
-      this.areaRect = this.refs.$area.rect();
-      var { x: x2, y: y2 } = e2.xy;
-      this.appendValue({
-        x: Length.px(x2 - this.areaRect.left).toPercent(this.areaRect.width),
-        y: Length.px(y2 - this.areaRect.top).toPercent(this.areaRect.height)
-      });
-      this.refresh();
-    }
-  }
-  [BIND("$clipArea")]() {
-    return {
-      style: {
-        "clip-path": `polygon(${this.toClipPathValueString()})`
-      }
-    };
-  }
-  [LOAD("$list")]() {
-    return this.state.value.map((it, index2) => {
-      var className = [
-        index2 === 0 ? "first" : "",
-        index2 === this.state.value.length - 1 ? "last" : ""
-      ].filter((it2) => it2).join(" ");
-      return `<div class='drag-pointer ${className}' data-index="${index2.toString()}" style='left: ${it.x};top: ${it.y};'></div>`;
-    });
-  }
-  [CLICK("$area .drag-pointer") + ALT + PREVENT](e2) {
-    var index2 = +e2.$dt.attr("data-index");
-    this.removeValue(index2);
-    this.refresh();
-  }
-  [CLICK("$area .drag-pointer") + SHIFT + PREVENT](e2) {
-    var index2 = +e2.$dt.attr("data-index");
-    this.copyValue(index2);
-    this.refresh();
-  }
-  [POINTERSTART("$area .drag-pointer") + MOVE()](e2) {
-    this.selectedIndex = +e2.$dt.attr("data-index");
-    this.$target = e2.$dt;
-    this.areaRect = this.refs.$area.rect();
-    this.startXY = e2.xy;
-    this.$value = this.state.value[this.selectedIndex];
-  }
-  move(dx, dy) {
-    var x2 = this.startXY.x + dx;
-    var y2 = this.startXY.y + dy;
-    if (this.areaRect.x > x2) {
-      x2 = this.areaRect.x;
-    } else if (this.areaRect.right < x2) {
-      x2 = this.areaRect.right;
-    }
-    if (this.areaRect.y > y2) {
-      y2 = this.areaRect.y;
-    } else if (this.areaRect.bottom < y2) {
-      y2 = this.areaRect.bottom;
-    }
-    var left2 = Length.percent((x2 - this.areaRect.x) / this.areaRect.width * 100);
-    var top2 = Length.percent((y2 - this.areaRect.y) / this.areaRect.height * 100);
-    this.$target.css({
-      left: left2,
-      top: top2
-    });
-    this.updateValue(this.selectedIndex, {
-      x: left2,
-      y: top2
-    });
-    this.bindData("$clipArea");
-  }
-  toClipPathValueString() {
-    return this.state.value.map((it) => {
-      return `${it.x.round(10)} ${it.y.round(10)}`;
-    }).join(",");
-  }
-  updateData(data) {
-    this.setState(data, false);
-    this.parent.trigger(this.props.onchange, this.props.key, this.toClipPathValueString(), this.props.params);
-  }
-  appendValue(data) {
-    this.state.value.push(data);
-    this.parent.trigger(this.props.onchange, this.props.key, this.toClipPathValueString(), this.props.params);
-  }
-  removeValue(index2) {
-    this.state.value.splice(index2, 1);
-    this.parent.trigger(this.props.onchange, this.props.key, this.toClipPathValueString(), this.props.params);
-  }
-  copyValue(index2) {
-    var { x: x2, y: y2 } = this.state.value[index2];
-    this.state.value.splice(index2 + 1, 0, {
-      x: x2.clone().add(0.1),
-      y: y2.clone().add(0.1)
-    });
-    this.parent.trigger(this.props.onchange, this.props.key, this.toClipPathValueString(), this.props.params);
-  }
-  updateValue(index2, data) {
-    this.state.value[index2] = __spreadValues(__spreadValues({}, this.state.value[index2]), data);
-    this.parent.trigger(this.props.onchange, this.props.key, this.toClipPathValueString(), this.props.params);
-  }
-}
-class EllipseEditor extends EditorElement {
-  parseValue(str = "50% 50%") {
-    var radius = `50% 50%`, position2 = "";
-    str = str || "50%";
-    if (str.includes("at")) {
-      [radius, position2] = str.split("at").map((it) => it.trim());
-    } else {
-      position2 = str.trim();
-    }
-    var [x2, y2] = position2.split(" ");
-    if (isUndefined(y2)) {
-      y2 = x2;
-    }
-    x2 = Length.parse(x2);
-    y2 = Length.parse(y2);
-    var [radiusX, radiusY] = radius.split(" ");
-    if (isUndefined(radiusY)) {
-      radiusY = radiusX;
-    }
-    radiusX = Length.parse(radiusX);
-    radiusY = Length.parse(radiusY);
-    return {
-      radiusX,
-      radiusY,
-      x: x2,
-      y: y2
-    };
-  }
-  initState() {
-    return this.parseValue(this.props.value);
-  }
-  template() {
-    return `
-        <div class='clip-path-editor circle-editor'>
-            <div>
-                ${createComponent("InputRangeEditor", {
-      ref: "$rangeX",
-      label: "Radius X",
-      key: "radiusX",
-      value: this.state.radiusX,
-      min: 0,
-      max: 100,
-      step: 0.1,
-      units: ["%"],
-      onchange: "changeRangeEditor"
-    })}
-            </div>
-            <div>
-            ${createComponent("InputRangeEditor", {
-      ref: "$rangeY",
-      label: "Radius Y",
-      key: "radiusY",
-      value: this.state.radiusY,
-      min: 0,
-      max: 100,
-      step: 0.1,
-      units: ["%"],
-      onchange: "changeRangeEditor"
-    })}            
-            </div>            
-            <div class='drag-area' ref='$area'>
-                <div class='drag-pointer' ref='$pointer' style='left: ${this.state.x};top: ${this.state.y};'></div>
-                <div class='clip-area circle' ref='$clipArea'></div>
-            </div>
-        </div>
-    `;
-  }
-  [BIND("$clipArea")]() {
-    return {
-      style: {
-        "clip-path": `${this.props.key}(${this.toClipPathValueString()})`
-      }
-    };
-  }
-  [POINTERSTART("$area") + MOVE() + END()](e2) {
-    this.areaRect = this.refs.$area.rect();
-    this.startXY = e2.xy;
-  }
-  move(dx, dy) {
-    var x2 = this.startXY.x + dx;
-    var y2 = this.startXY.y + dy;
-    if (this.areaRect.x > x2) {
-      x2 = this.areaRect.x;
-    } else if (this.areaRect.right < x2) {
-      x2 = this.areaRect.right;
-    }
-    if (this.areaRect.y > y2) {
-      y2 = this.areaRect.y;
-    } else if (this.areaRect.bottom < y2) {
-      y2 = this.areaRect.bottom;
-    }
-    var left2 = Length.percent((x2 - this.areaRect.x) / this.areaRect.width * 100).round(1);
-    var top2 = Length.percent((y2 - this.areaRect.y) / this.areaRect.height * 100).round(1);
-    this.refs.$pointer.css({
-      left: left2,
-      top: top2
-    });
-    this.updateData({
-      x: left2,
-      y: top2
-    });
-    this.bindData("$clipArea");
-  }
-  toClipPathValueString() {
-    var { x: x2, y: y2, radiusX, radiusY } = this.state;
-    var results = `${x2} ${y2}`;
-    var radiusString = `${radiusX} ${radiusY}`;
-    return `${radiusString} at ${results}`;
-  }
-  updateData(data) {
-    this.setState(data);
-    this.parent.trigger(this.props.onchange, this.props.key, this.toClipPathValueString(), this.props.params);
-  }
-  [SUBSCRIBE_SELF("changeRangeEditor")](key, value) {
-    this.updateData({
-      [key]: value.clone()
-    });
-  }
-}
-var ClipPathPopup$1 = "";
-class ClipPathPopup extends BasePopup {
-  components() {
-    return {
-      CircleEditor,
-      InsetEditor,
-      PolygonEditor,
-      EllipseEditor
-    };
-  }
-  getTitle() {
-    return "ClipPath";
-  }
-  initState() {
-    return {
-      type: "none",
-      value: ""
-    };
-  }
-  toClipPathCSS() {
-    return ClipPath.toCSS(this.state);
-  }
-  updateData(opt) {
-    this.setState(opt, false);
-    this.emit(this.state.changeEvent || "changeClipPathPopup", this.toClipPathCSS());
-  }
-  getBody() {
-    return `
-    <div class='elf--clippath-popup' ref='$popup'>
-      <div class="box">
-        <div class='clip-path-editor clip-path-type' ref='$clippathType'></div>
-        <div class='clip-path-editor' ref='$clippath'></div>
-      </div>
-    </div>`;
-  }
-  [LOAD("$clippathType")]() {
-    return `
-      <div>${this.state.type} Editor</div>
-    `;
-  }
-  [LOAD("$clippath")]() {
-    switch (this.state.type) {
-      case "circle":
-        return `<object refClass="CircleEditor" ref='$circle' key='circle' value='${this.state.value}' onchange='changeClipPath' />`;
-      case "ellipse":
-        return `<object refClass="EllipseEditor" ref='$ellipse' key='ellipse' value='${this.state.value}' onchange='changeClipPath' />`;
-      case "inset":
-        return `<object refClass="InsetEditor" ref='$inset' key='inset' value='${this.state.value}' onchange='changeClipPath' />`;
-      case "polygon":
-        return `<object refClass="PolygonEditor" ref='$polygon' key='polygon' value='${this.state.value}' onchange='changeClipPath' />`;
-      case "path":
-        return `<object refClass="PathEditor" ref='$path' key='path' value='${this.state.value}' onchange='changeClipPath' />`;
-      case "svg":
-        var current = this.$selection.currentProject || { svg: [] };
-        var options2 = current.svg.filter((it) => it.type === "clip-path").map((it) => it.name).join(",");
-        if (options2.length) {
-          options2 = "," + options2;
-        }
-        return `<object refClass="SelectEditor"  ref='$svg' key='svg' value='${this.state.value}' options='${options2}' onchange='changeClipPath' />`;
-      default:
-        return `<div class='type none'></div>`;
-    }
-  }
-  [SUBSCRIBE_SELF("changeClipPath")](type, value) {
-    this.updateData({
-      type,
-      value
-    });
-  }
-  [SUBSCRIBE("showClipPathPopup")](data) {
-    this.state.changeEvent = data.changeEvent;
-    this.setState(ClipPath.parseStyle(data["clip-path"]));
-    this.refresh();
-    this.show(220);
-  }
-  [SUBSCRIBE("hideClipPathPopup")]() {
-    this.hide();
-  }
-}
-var ClipPathProperty$1 = "";
+const ClipPathSample = {
+  [ClipPathType.CIRCLE]: "circle(50% at 50% 50%)",
+  [ClipPathType.ELLIPSE]: "ellipse(50% 50% at 50% 50%)",
+  [ClipPathType.INSET]: "inset(0% 0% 0% 0%)",
+  [ClipPathType.POLYGON]: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"
+};
 class ClipPathProperty extends BaseProperty {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   getTitle() {
     return this.$i18n("clippath.property.title");
-  }
-  hasKeyframe() {
-    return true;
-  }
-  getKeyframeProperty() {
-    return "clip-path";
   }
   getClassName() {
     return "clip-path-property";
@@ -29904,6 +29207,7 @@ class ClipPathProperty extends BaseProperty {
   }
   makeClipPathTemplate(clippath, func2) {
     const isPath = clippath === "path";
+    const isPolygon = clippath = "polygon";
     let newPathString = "";
     if (isPath) {
       const pathString2 = func2.split("(")[1].split(")")[0];
@@ -29918,12 +29222,29 @@ class ClipPathProperty extends BaseProperty {
       const newRectangle = vertiesToRectangle(newBBox);
       newPathString = pathObject.translate(260 / 2 - newRectangle.width / 2, 0).d;
     }
+    let polygonSelect = "";
+    if (isPolygon) {
+      const polygonList = polygon.execute();
+      polygonSelect = createComponent("SelectEditor", {
+        ref: "$polygonSelect",
+        options: ["", ...polygonList.map((it) => it.name)],
+        onchange: (key, value) => {
+          const polygon2 = polygonList.find((it) => it.name === value);
+          if (polygon2) {
+            this.updatePathInfo({
+              "clip-path": `polygon(${polygon2.polygon})`
+            });
+          }
+        }
+      });
+    }
     return `
       <div>
         <div class='clippath-item'>
           <label>${iconUse$1("drag_indicator")}</label>
           <div class='title'>
             <div class='name'>${clippath}</div>
+            ${isPolygon ? polygonSelect : ""}
           </div>
           <div class='tools'>
             <button type="button" class="del">${obj.remove2}</button>
@@ -29933,12 +29254,6 @@ class ClipPathProperty extends BaseProperty {
       </div>
 
     `;
-  }
-  [CLICK("$clippathList .clippath-item .title")](e2) {
-    var current = this.$selection.current;
-    if (!current)
-      return;
-    this.viewClipPathPicker();
   }
   [CLICK("$clippathList .del") + PREVENT](e2) {
     var current = this.$selection.current;
@@ -29976,43 +29291,11 @@ class ClipPathProperty extends BaseProperty {
     }
     if (current) {
       current.reset({
-        "clip-path": e2.$dt.data("value")
+        "clip-path": ClipPathSample[e2.$dt.data("value")]
       });
       this.command("setAttributeForMulti", "change clip-path", this.$selection.pack("clip-path"));
     }
     this.refresh();
-  }
-  viewClipPathPicker() {
-    var current = this.$selection.current;
-    if (!current)
-      return;
-    var obj2 = ClipPath.parseStyle(current["clip-path"]);
-    switch (obj2.type) {
-      case "path":
-        var d = current.absolutePath(current.clipPathString).d;
-        var mode = d ? "modify" : "path";
-        this.emit("showPathEditor", mode, {
-          changeEvent: (data) => {
-            data.d = current.invertPath(data.d).d;
-            this.updatePathInfo({
-              "clip-path": `path(${data.d})`
-            });
-          },
-          current,
-          d
-        });
-        break;
-      case "svg":
-        break;
-      default:
-        this.emit("showClipPathPopup", {
-          "clip-path": current["clip-path"],
-          changeEvent: (data) => {
-            this.updatePathInfo(data);
-          }
-        });
-        break;
-    }
   }
   updatePathInfo(data) {
     if (!data)
@@ -30029,16 +29312,9 @@ function clipPath(editor) {
   editor.registerMenuItem("inspector.tab.style", {
     ClipPathProperty
   });
-  editor.registerMenuItem("popup", {
-    ClipPathPopup
-  });
 }
 var CodeViewProperty$1 = "";
 class CodeViewProperty extends BaseProperty {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   getTitle() {
     return this.$i18n("code.view.property.title");
   }
@@ -30076,10 +29352,6 @@ function codeview(editor) {
   });
 }
 class Hue extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       hue: 0,
@@ -30132,10 +29404,6 @@ class Hue extends EditorElement {
   }
 }
 class Opacity extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       colorbar: Color.parse("rgba(0, 0, 0, 1)"),
@@ -30202,10 +29470,6 @@ class Opacity extends EditorElement {
   }
 }
 class ColorView extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       value: "rgba(0, 0, 0, 1)"
@@ -30423,10 +29687,6 @@ class ColorInformation extends EditorElement {
   }
 }
 class ColorPalette extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       hueColor: "rgba(0, 0, 0, 1)",
@@ -30923,10 +30183,6 @@ class ComponentPopup extends BasePopup {
 }
 var ComponentEditor$1 = "";
 class ComponentEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       inspector: this.props.inspector
@@ -31442,14 +30698,18 @@ class BaseAssetModel extends BaseModel {
   }
   createSVGFilter(data = {}) {
     return this.addSVGFilter(__spreadValues({
-      id: uuidShort$1()
+      id: uuidShort()
     }, data));
   }
 }
 class MovableModel extends BaseAssetModel {
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
-      angle: 0
+      angle: 0,
+      x: 0,
+      y: 0,
+      width: 300,
+      height: 300
     }, obj2));
   }
   get isAbsolute() {
@@ -31767,6 +31027,9 @@ class MovableModel extends BaseAssetModel {
       }
     }
     multiply$1(transform2, transform2, this.getRelativeMatrix());
+    if (transform2.filter((it) => !isNaN(it)).length === 0) {
+      return create$5();
+    }
     return transform2;
   }
   getRelativeMatrix() {
@@ -32341,16 +31604,11 @@ class DomModel extends GroupModel {
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       "position": "absolute",
-      "x": 0,
-      "y": 0,
       "rootVariable": "",
       "variable": "",
-      "width": 300,
-      "height": 300,
       "color": "black",
       "overflow": "visible",
       "opacity": 1,
-      "transform-style": "preserve-3d",
       "layout": Layout.DEFAULT,
       "flex-layout": "display:flex;",
       "grid-layout": "display:grid;",
@@ -35993,84 +35251,6 @@ function defaultPatterns(editor) {
     TextureView
   });
 }
-class OrderDown extends MenuItem {
-  getIconString() {
-    return "to_back";
-  }
-  getTitle() {
-    return "To Back";
-  }
-  clickButton(e2) {
-    this.emit("item.move.depth.down");
-  }
-}
-class OrderFirst extends MenuItem {
-  getIconString() {
-    return "to_front";
-  }
-  getTitle() {
-    return "To First";
-  }
-  clickButton(e2) {
-    this.emit("item.move.depth.first");
-  }
-}
-class OrderLast extends MenuItem {
-  getIconString() {
-    return "to_back";
-  }
-  getTitle() {
-    return "To Last";
-  }
-  clickButton(e2) {
-    this.emit("item.move.depth.last");
-  }
-}
-class OrderTop extends MenuItem {
-  getIconString() {
-    return "to_front";
-  }
-  getTitle() {
-    return "To Front";
-  }
-  clickButton(e2) {
-    this.emit("item.move.depth.up");
-  }
-}
-var DepthProperty$1 = "";
-class DepthProperty extends BaseProperty {
-  components() {
-    return {
-      OrderTop,
-      OrderDown,
-      OrderFirst,
-      OrderLast,
-      OrderTop,
-      OrderDown
-    };
-  }
-  getTitle() {
-    return this.$i18n("alignment.property.title");
-  }
-  isHideHeader() {
-    return true;
-  }
-  getBody() {
-    return `
-      <div class="elf--depth-item">
-        <object refClass="OrderTop" />
-        <object refClass="OrderDown" />
-        <object refClass="OrderFirst" />
-        <object refClass="OrderLast" />        
-      </div>
-    `;
-  }
-}
-function depth(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
-    DepthProperty
-  });
-}
 var ExportProperty$1 = "";
 class ExportProperty extends BaseProperty {
   getTitle() {
@@ -36121,10 +35301,6 @@ const filter_list = [
 ];
 var FilterProperty$1 = "";
 class FilterProperty extends BaseProperty {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   getTitle() {
     return this.$i18n("filter.property.title");
   }
@@ -36214,10 +35390,10 @@ class FilterProperty extends BaseProperty {
   get editableProperty() {
     return "filter";
   }
-  [SUBSCRIBE("refreshSelection") + IF("checkShow") + DEBOUNCE(1e3)]() {
+  [SUBSCRIBE("refreshSelection") + IF("checkShow") + DEBOUNCE(100)]() {
     this.refresh();
   }
-  [SUBSCRIBE("refreshSVGArea") + DEBOUNCE(1e3)]() {
+  [SUBSCRIBE("refreshSVGArea") + DEBOUNCE(100)]() {
     this.load("$filterSelect");
   }
 }
@@ -37399,10 +36575,6 @@ class FillPickerPopup extends BasePopup {
 }
 var FillSingleEditor$1 = "";
 class FillSingleEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       index: this.props.index,
@@ -37497,10 +36669,6 @@ class FillSingleEditor extends EditorElement {
 }
 var GradientSingleEditor$1 = "";
 class GradientSingleEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       index: this.props.index,
@@ -37557,15 +36725,14 @@ class GradientSingleEditor extends EditorElement {
       case GradientType.REPEATING_RADIAL:
         image2.reset({
           radialPosition: currentImage.radialPosition || ["50%", "50%"],
-          raidalType: currentImage.radialType || RadialGradientType.CIRCLE
+          radialType: currentImage.radialType || RadialGradientType.CIRCLE
         });
         break;
       case GradientType.CONIC:
       case GradientType.REPEATING_CONIC:
         image2.reset({
           angle: currentImage.angle || 0,
-          radialPosition: currentImage.radialPosition || ["50%", "50%"],
-          raidalType: currentImage.radialType || RadialGradientType.CIRCLE
+          radialPosition: currentImage.radialPosition || ["50%", "50%"]
         });
         break;
       case GradientType.LINEAR:
@@ -38495,10 +37662,6 @@ function keyframe(editor) {
 var LayerTreeProperty$1 = "";
 const DRAG_START_CLASS = "drag-start";
 class LayerTreeProperty extends BaseProperty {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   getTitle() {
     return this.$i18n("layer.tree.property.title");
   }
@@ -38578,7 +37741,7 @@ class LayerTreeProperty extends BaseProperty {
     }
     return this.$icon.get(item2.itemType, item2);
   }
-  makeLayerList(parentObject, depth2 = 0) {
+  makeLayerList(parentObject, depth = 0) {
     if (!parentObject.layers)
       return "";
     const layers2 = parentObject.layers;
@@ -38597,12 +37760,12 @@ class LayerTreeProperty extends BaseProperty {
         title2 = this.$i18n("layer.tree.property.layout.title." + layer2.layout);
       }
       const isHide = layer2.isTreeItemHide();
-      const depthPadding = depth2 * 20;
+      const depthPadding = depth * 20;
       const hasChildren = layer2.hasChildren();
       const lock2 = this.$lockManager.get(layer2.id);
       const visible2 = this.$visibleManager.get(layer2.id);
       data[data.length] = `        
-        <div class='layer-item ${selectedClass} ${selectedPathClass} ${hovered}' data-is-group="${hasChildren}" data-depth="${depth2}" data-layout='${layer2.layout}' data-layer-id='${layer2.id}' data-is-hide="${isHide}"  draggable="true">
+        <div class='layer-item ${selectedClass} ${selectedPathClass} ${hovered}' data-is-group="${hasChildren}" data-depth="${depth}" data-layout='${layer2.layout}' data-layer-id='${layer2.id}' data-is-hide="${isHide}"  draggable="true">
           <div class='detail'>
             <label data-layout-title='${title2}' style='padding-left: ${Length.px(depthPadding)}' > 
               <div class='folder ${layer2.collapsed ? "collapsed" : ""}'>${hasChildren ? iconUse$1("arrow_right") : ""}</div>
@@ -38617,7 +37780,7 @@ class LayerTreeProperty extends BaseProperty {
           </div>
         </div>
 
-        ${this.makeLayerList(layer2, depth2 + 1)}
+        ${this.makeLayerList(layer2, depth + 1)}
       `;
     }
     return data.join(" ");
@@ -38842,10 +38005,6 @@ function layerTree(editor) {
 }
 var FlexLayoutEditor$1 = "";
 class FlexLayoutEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   getDirectionOptions() {
     return this.makeOptionsFunction("row,column");
   }
@@ -39244,10 +38403,6 @@ class FlexLayoutItemProperty extends BaseProperty {
 var GridBoxEditor$1 = "";
 const REG_CSS_UNIT = /(auto)|(repeat\([^\)]*\))|(([\d.]+)(px|pt|fr|r?em|deg|vh|vw|%))/gi;
 class GridBoxEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   getLayoutItemOptions() {
     return variable$4("none,auto,repeat,length".split(",").map((it) => {
       return { value: it, text: this.$i18n(`grid.box.editor.${it}`) };
@@ -39390,10 +38545,6 @@ class GridBoxEditor extends EditorElement {
   }
 }
 class GridGapEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       label: this.props.label,
@@ -39449,10 +38600,6 @@ class GridGapEditor extends EditorElement {
 }
 var GridLayoutEditor$1 = "";
 class GridLayoutEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return __spreadValues({}, STRING_TO_CSS(this.props.value));
   }
@@ -39704,10 +38851,6 @@ class GridLayoutItemProperty extends BaseProperty {
 }
 var LayoutProperty$1 = "";
 class LayoutProperty extends BaseProperty {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   getTitle() {
     return this.$i18n("layout.property.title");
   }
@@ -39809,10 +38952,6 @@ class LayoutProperty extends BaseProperty {
 }
 var DefaultLayoutItemProperty$1 = "";
 class DefaultLayoutItemProperty extends BaseProperty {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   getTitle() {
     return this.$i18n("default.layout.item.property.title.constraints");
   }
@@ -40207,10 +39346,6 @@ class PatternAssetsProperty extends BaseProperty {
 }
 var PatternEditor$1 = "";
 class PatternEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       hideLabel: this.props.hideLabel,
@@ -40542,10 +39677,6 @@ class PatternInfoPopup extends BasePopup {
 }
 var PatternProperty$1 = "";
 class PatternProperty extends BaseProperty {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   getTitle() {
     return this.$i18n("pattern.property.title");
   }
@@ -41178,10 +40309,6 @@ function project(editor) {
 }
 var SelectEditor$1 = "";
 class SelectEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     var splitChar = this.props.split || ",";
     var options2 = Array.isArray(this.props.options) ? this.props.options.map((it) => {
@@ -41299,53 +40426,6 @@ class BlendSelectEditor extends SelectEditor {
   initState() {
     return __spreadProps(__spreadValues({}, super.initState()), {
       options: this.getBlendList()
-    });
-  }
-}
-var ClipPathEditor$1 = "";
-class ClipPathEditor extends EditorElement {
-  initState() {
-    return {
-      clippath: this.props.value
-    };
-  }
-  updateData(opt = {}) {
-    this.setState(opt);
-    this.modifyClipPath();
-  }
-  getValue() {
-    return this.state.clippath;
-  }
-  setValue(clippath) {
-    this.setState({ clippath });
-  }
-  modifyClipPath() {
-    this.parent.trigger(this.props.onchange, this.state.clippath, this.props.params);
-  }
-  template() {
-    return `
-            <div class='elf--clip-path-editor'></div>
-        `;
-  }
-  [LOAD()]() {
-    var clippath = this.state.clippath;
-    return `
-        <div class='clippath-item'>
-            <div class='name'>${clippath}</div>
-        </div>
-        `;
-  }
-  [CLICK()](e2) {
-    this.viewClipPathPicker();
-  }
-  viewClipPathPicker() {
-    this.emit("showClipPathPopup", {
-      changeEvent: (data) => {
-        this.updateData({
-          clippath: data["clip-path"]
-        });
-      },
-      "clip-path": this.state.clippath
     });
   }
 }
@@ -41967,10 +41047,6 @@ const modules = { "./colors_list/material-amber.js": __glob_0_0, "./colors_list/
 var colors = Object.values(modules).map((it) => it.default);
 var ColorAssetsEditor$1 = "";
 class ColorAssetsEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       mode: "grid",
@@ -42099,10 +41175,6 @@ class ColorSingleEditor extends EditorElement {
 }
 var ColorViewEditor$1 = "";
 class ColorViewEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     const value = this.props.value || "rgba(0, 0, 0, 1)";
     const compact = isBoolean(this.props.compact) ? this.props.compact : this.props.compact === "true";
@@ -43129,10 +42201,6 @@ var specList = {
   svg: URLSvgFilter.spec
 };
 class FilterEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       hideLabel: this.props.hideLabel === "true" ? true : false,
@@ -43440,10 +42508,6 @@ var iconList = {
   "image-resource": iconUse$1("photo")
 };
 class GradientEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       index: +(this.props.index || 0),
@@ -43734,10 +42798,6 @@ class GradientEditor extends EditorElement {
 }
 var IconListViewEditor$1 = "";
 class IconListViewEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     return {
       value: this.props.value
@@ -43822,10 +42882,6 @@ class InputArrayEditor extends EditorElement {
 }
 var InputRangeEditor$1 = "";
 class InputRangeEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     var units = this.props.units || ["px", "em", "%", "auto"];
     var value = Length.parse(this.props.value || "0px");
@@ -43977,10 +43033,6 @@ class InputRangeEditor extends EditorElement {
 }
 var RangeEditor$1 = "";
 class RangeEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     var units = this.props.units || ["px", "em", "%"];
     var value = Length.parse(this.props.value || 0);
@@ -44249,10 +43301,6 @@ class MediaProgressEditor extends EditorElement {
 }
 var NumberInputEditor$1 = "";
 class NumberInputEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     var value = +this.props.value;
     let label = this.props.label || "";
@@ -44369,10 +43417,6 @@ class NumberInputEditor extends EditorElement {
 }
 var NumberRangeEditor$1 = "";
 class NumberRangeEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     var value = Length.parse(this.props.value || Length.number(0));
     value = value.toUnit("number");
@@ -44655,10 +43699,6 @@ class PolygonDataEditor extends EditorElement {
 }
 var SelectIconEditor$1 = "";
 class SelectIconEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     var splitChar = this.props.split || ",";
     var options2 = Array.isArray(this.props.options) ? this.props.options.map((it) => {
@@ -44770,10 +43810,6 @@ const dash_list = [
   [5, 5, 1, 5]
 ];
 class StrokeDashArrayEditor extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   initState() {
     var value = isArray(this.props.value) ? this.props.value : this.generateValue(this.props.value || "");
     return {
@@ -45063,7 +44099,6 @@ function propertyEditor(editor) {
     TextEditor,
     ColorSingleEditor,
     CubicBezierEditor,
-    ClipPathEditor,
     ColorViewEditor,
     VarEditor,
     PathDataEditor,
@@ -45313,7 +44348,7 @@ class BaseSVGFilter extends PropertyItem {
     return false;
   }
   getDefaultObject(obj2 = {}) {
-    var id = uuidShort$1();
+    var id = uuidShort();
     return super.getDefaultObject(__spreadValues({
       itemType: "svgfilter",
       id,
@@ -46915,7 +45950,6 @@ class DomRender$1 extends ItemRender$1 {
       "opacity",
       "mix-blend-mode",
       "transform-origin",
-      "transform-style",
       "perspective",
       "perspective-origin",
       "font-size",
@@ -47104,14 +46138,13 @@ ${cssString}
   render(item2, renderer) {
     var { elementType, id, name: name2, itemType, isBooleanItem } = item2;
     const tagName = elementType || "div";
-    return `<${tagName} class="element-item ${itemType}" data-is-boolean-item="${isBooleanItem}" data-id="${id}" data-title="${name2}">
-  ${this.toDefString(item2)}
-  ${item2.layers.map((it) => {
+    return `<${tagName} class="element-item ${itemType}" data-is-boolean-item="${isBooleanItem}" data-id="${id}" data-title="${name2}">${this.toDefString(item2)}${item2.layers.map((it) => {
       return renderer.render(it, renderer);
-    }).join("")}
-</${tagName}>`;
+    }).join("")}</${tagName}>`;
   }
   toSVGFilter(item2) {
+    if (item2.svgfilters.length === 0)
+      return "";
     var filterString = item2.computedValue("svgfilters");
     if (item2.hasChangedField("svgfilters") || !filterString) {
       filterString = item2.computed("svgfilters", (svgfilters) => {
@@ -48168,7 +47201,7 @@ class ItemRender {
       json.parentId = item2.parentId;
     }
     json.referenceId = item2.id;
-    json.newTargetId = uuid$1();
+    json.newTargetId = uuid();
     let layers2 = [];
     for (var i = 0, len2 = item2.layers.length; i < len2; i++) {
       layers2.push(await renderer.render(item2.layers[i], renderer));
@@ -49084,10 +48117,6 @@ const selectorList = [
   ":focus"
 ].map((value) => ({ value }));
 class SelectorProperty extends BaseProperty {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   getTitle() {
     return this.$i18n("selector.property.title");
   }
@@ -49304,7 +48333,7 @@ class SVGFilterAssetsProperty extends BaseProperty {
   [CLICK("$svgfilterList .add-svgfilter-item")]() {
     this.executeSVGFilter((project2) => {
       project2.createSVGFilter({
-        id: uuidShort$1(),
+        id: uuidShort(),
         filters: []
       });
     });
@@ -51768,10 +50797,6 @@ class Transition extends PropertyItem {
 }
 var TransitionProperty$1 = "";
 class TransitionProperty extends BaseProperty {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   getTitle() {
     return this.$i18n("transition.property.title");
   }
@@ -55143,10 +54168,6 @@ const point = (target, dist2 = 3, direction = "left") => {
     `;
 };
 class GuideLineView extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   template() {
     return `
             <svg class='elf--guide-line-view' ref="$guide" width="100%" height="100%" ></svg>
@@ -55282,10 +54303,6 @@ function guideLineView(editor) {
 }
 var SelectionInfoView$1 = "";
 class SelectionInfoView extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   template() {
     return /* @__PURE__ */ createElementJsx("div", {
       class: "elf--selection-info-view"
@@ -55410,7 +54427,7 @@ const SelectionToolEvent$1 = class extends EditorElement {
     this.initSelectionTool(isShow);
   }
   [SUBSCRIBE("updateViewport")]() {
-    if (this.$selection.isOne && this.$modeView.isCurrentMode("CanvasView")) {
+    if (this.$selection.isOne) {
       this.initSelectionTool();
     }
   }
@@ -56498,10 +55515,6 @@ var repeatTypeList = [
   "round"
 ];
 class GradientEditorView$1 extends EditorElement {
-  initialize() {
-    super.initialize();
-    this.notEventRedefine = true;
-  }
   template() {
     return /* @__PURE__ */ createElementJsx("div", {
       class: "elf--gradient-editor-view"
@@ -56755,6 +55768,658 @@ function GradientEditorView(editor) {
     GradientEditorView: GradientEditorView$1
   });
 }
+var ClippathEditorView$2 = "";
+class ClippathPolygonEditorView extends EditorElement {
+  initializePolygon() {
+    const current = this.$selection.current;
+    this.state.current;
+    this.state.width = current.screenWidth;
+    this.state.height = current.screenHeight;
+    this.state.clippath = ClipPath.parseStyle(current["clip-path"]);
+    this.state.clippath.value = ClipPath.parseStyleForPolygon(this.state.clippath.value);
+    this.screenPoints = this.$viewport.applyVerties(vertiesMap(this.state.clippath.value.map((point2) => {
+      const { x: x2, y: y2 } = point2;
+      const newX = x2.toPx(this.state.width);
+      const newY = y2.toPx(this.state.height);
+      return fromValues(newX, newY, 0);
+    }), current.absoluteMatrix));
+    this.clonedScreenPoints = clone$1(this.screenPoints);
+  }
+  [POINTERSTART("$el .polygon .polygon-pointer") + LEFT_BUTTON + MOVE("movePolygonPointer") + END("moveEndPolygonPointer")](e2) {
+    this.initializePolygon();
+    this.polygonTargetIndex = +e2.$dt.data("index");
+  }
+  movePolygonPointer(dx, dy) {
+    this.clonedScreenPoints[this.polygonTargetIndex] = add$1([], this.screenPoints[this.polygonTargetIndex], [dx, dy, 0]);
+    this.updatePolygon(this.clonedScreenPoints);
+  }
+  moveEndPolygonPointer() {
+    const value = ClipPath.toCSS(this.state.clippath);
+    this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
+  }
+  [POINTERSTART("$el .polygon .polygon-line") + LEFT_BUTTON](e2) {
+    this.initializePolygon();
+    const index2 = +e2.$dt.data("index");
+    this.polygonTargetIndex = index2;
+    console.log(index2);
+    const current = this.screenPoints[this.polygonTargetIndex];
+    const next = this.screenPoints[(this.polygonTargetIndex + 1) % this.screenPoints.length];
+    const newPoint = lerp([], current, next, 0.5);
+    this.screenPoints.splice(this.polygonTargetIndex + 1, 0, newPoint);
+    this.updatePolygon(this.screenPoints);
+  }
+  updatePolygon(screenPoints) {
+    const newWorldPoints = this.$viewport.applyVertiesInverse(screenPoints);
+    const inverseMatrix = this.$selection.current.absoluteMatrixInverse;
+    const newLocalPoints = vertiesMap(newWorldPoints, inverseMatrix);
+    this.state.clippath.value = newLocalPoints.map((p) => {
+      return [
+        Length.percent(p[0] / this.state.width * 100),
+        Length.percent(p[1] / this.state.height * 100)
+      ].join(" ");
+    }).join(",");
+    const value = ClipPath.toCSS(this.state.clippath);
+    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+  }
+  [POINTERSTART("$el .polygon .polygon-center") + LEFT_BUTTON + MOVE("movePolygonCenter") + END("moveEndPolygonCenter")](e2) {
+    this.initializePolygon();
+  }
+  movePolygonCenter(dx, dy) {
+    const newScreenPoints = this.screenPoints.map((p) => {
+      return add$1([], p, [dx, dy, 0]);
+    });
+    this.updatePolygon(newScreenPoints);
+  }
+  moveEndPolygonCenter(dx, dy) {
+    if (dx == 0 && dy == 0) {
+      switch (this.state.clippath.type) {
+        case ClipPathType.POLYGON:
+          const value2 = ClipPath.toCSS({
+            type: ClipPathType.CIRCLE,
+            value: `50% at 50% 50%`
+          });
+          this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value2));
+          break;
+      }
+      return;
+    }
+    const value = ClipPath.toCSS(this.state.clippath);
+    this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
+  }
+  templatePolygon(clippath) {
+    const current = this.$selection.current;
+    const points2 = ClipPath.parseStyleForPolygon(clippath.value).map((point2) => [
+      point2.x.toPx(current.screenWidth).value,
+      point2.y.toPx(current.screenHeight).value,
+      0
+    ]);
+    const centerPoint = toRectVerties(points2)[4];
+    const screenPoints = this.$viewport.applyVerties(vertiesMap(points2, current.absoluteMatrix));
+    const screenCenter = this.$viewport.applyVerties(vertiesMap([centerPoint], current.absoluteMatrix))[0];
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "polygon"
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "polygon-back"
+    }, /* @__PURE__ */ createElementJsx("svg", {
+      style: "position:absolute;width:100%;height:100%;"
+    }, /* @__PURE__ */ createElementJsx("polygon", {
+      points: `${screenPoints.map((it) => [it[0], it[1]].join(",")).join(" ")}`
+    }), screenPoints.map((it, index2) => {
+      const nextIndex = (index2 + 1) % screenPoints.length;
+      const nextPoint = screenPoints[nextIndex];
+      return /* @__PURE__ */ createElementJsx("line", {
+        x1: it[0],
+        y1: it[1],
+        x2: nextPoint[0],
+        y2: nextPoint[1],
+        class: "polygon-line",
+        "data-index": index2
+      });
+    }), screenPoints.map((it, index2) => {
+      return /* @__PURE__ */ createElementJsx("circle", {
+        cx: it[0],
+        cy: it[1],
+        r: 3,
+        class: "polygon-pointer",
+        "data-index": index2
+      });
+    }))), /* @__PURE__ */ createElementJsx("div", {
+      class: "polygon-center",
+      style: { left: Length.px(screenCenter[0]), top: Length.px(screenCenter[1]) }
+    }));
+  }
+}
+class ClippathInsetEditorView extends ClippathPolygonEditorView {
+  initializeInset() {
+    const current = this.$selection.current;
+    this.state.current;
+    this.state.width = current.screenWidth;
+    this.state.height = current.screenHeight;
+    this.state.clippath = ClipPath.parseStyle(current["clip-path"]);
+    this.state.clippath.value = ClipPath.parseStyleForInset(this.state.clippath.value);
+    this.state.inset = this.state.clippath.value;
+    const inset = this.state.inset;
+    const top2 = inset.top.toPx(current.screenHeight);
+    const left2 = inset.left.toPx(current.screenWidth);
+    const right2 = Length.px(current.screenWidth - inset.right.toPx(current.screenWidth));
+    const bottom2 = Length.px(current.screenHeight - inset.bottom.toPx(current.screenHeight));
+    const verties = this.$viewport.applyVerties(vertiesMap([
+      [left2, top2, 0],
+      [right2, top2, 0],
+      [right2, bottom2, 0],
+      [left2, bottom2, 0]
+    ], current.absoluteMatrix));
+    const leftPoint = lerp([], verties[0], verties[3], 0.5);
+    const topPoint = lerp([], verties[0], verties[1], 0.5);
+    const rightPoint = lerp([], verties[1], verties[2], 0.5);
+    const bottomPoint = lerp([], verties[2], verties[3], 0.5);
+    const centerPoint = lerp([], verties[0], verties[2], 0.5);
+    this.screenPoints = [
+      leftPoint,
+      topPoint,
+      rightPoint,
+      bottomPoint,
+      centerPoint
+    ];
+  }
+  [POINTERSTART("$el .inset .inset-direction") + LEFT_BUTTON + MOVE("moveInsetRadius") + END("moveEndInsetRadius")](e2) {
+    this.initializeInset();
+    this.insetTarget = e2.$dt.data("direction");
+  }
+  moveInsetRadius(dx, dy) {
+    const { left: left2, top: top2, right: right2, bottom: bottom2 } = this.state.inset;
+    let [leftPoint, topPoint, rightPoint, bottomPoint] = this.screenPoints;
+    if (this.insetTarget == "left")
+      leftPoint = add$1([], leftPoint, [dx, dy, 0]);
+    else if (this.insetTarget == "top")
+      topPoint = add$1([], topPoint, [dx, dy, 0]);
+    else if (this.insetTarget == "right")
+      rightPoint = add$1([], rightPoint, [dx, dy, 0]);
+    else if (this.insetTarget == "bottom")
+      bottomPoint = add$1([], bottomPoint, [dx, dy, 0]);
+    const newLeftPoint = this.$viewport.applyVertexInverse(leftPoint);
+    const newTopPoint = this.$viewport.applyVertexInverse(topPoint);
+    const newRightPoint = this.$viewport.applyVertexInverse(rightPoint);
+    const newBottomPoint = this.$viewport.applyVertexInverse(bottomPoint);
+    const inverseMatrix = this.$selection.current.absoluteMatrixInverse;
+    const [
+      relativeLeftPosition,
+      relativeTopPosition,
+      relativeRightPosition,
+      relativeBottomPosition
+    ] = vertiesMap([
+      newLeftPoint,
+      newTopPoint,
+      newRightPoint,
+      newBottomPoint
+    ], inverseMatrix);
+    this.state.clippath.value = [
+      top2.isPercent() ? Length.percent(relativeTopPosition[1] / this.state.height * 100) : Length.px(relativeTopPosition[1]),
+      right2.isPercent() ? Length.percent((this.state.width - relativeRightPosition[0]) / this.state.width * 100) : Length.px(this.state.width - relativeRightPosition[0]),
+      bottom2.isPercent() ? Length.percent((this.state.height - relativeBottomPosition[1]) / this.state.height * 100) : Length.px(this.state.height - relativeBottomPosition[1]),
+      left2.isPercent() ? Length.percent(relativeLeftPosition[0] / this.state.width * 100) : Length.px(relativeLeftPosition[0])
+    ].join(" ");
+    const value = ClipPath.toCSS(this.state.clippath);
+    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+  }
+  moveEndInsetRadius() {
+    const value = ClipPath.toCSS(this.state.clippath);
+    this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
+  }
+  [POINTERSTART("$el .inset .inset-center") + LEFT_BUTTON + MOVE("moveInsetCenter") + END("moveEndInsetCenter")](e2) {
+    this.initializeInset();
+  }
+  moveInsetCenter(dx, dy) {
+    const { left: left2, top: top2, right: right2, bottom: bottom2 } = this.state.inset;
+    let [leftPoint, topPoint, rightPoint, bottomPoint] = this.screenPoints;
+    leftPoint = add$1([], leftPoint, [dx, dy, 0]);
+    topPoint = add$1([], topPoint, [dx, dy, 0]);
+    rightPoint = add$1([], rightPoint, [dx, dy, 0]);
+    bottomPoint = add$1([], bottomPoint, [dx, dy, 0]);
+    const newLeftPoint = this.$viewport.applyVertexInverse(leftPoint);
+    const newTopPoint = this.$viewport.applyVertexInverse(topPoint);
+    const newRightPoint = this.$viewport.applyVertexInverse(rightPoint);
+    const newBottomPoint = this.$viewport.applyVertexInverse(bottomPoint);
+    const inverseMatrix = this.$selection.current.absoluteMatrixInverse;
+    const [
+      relativeLeftPosition,
+      relativeTopPosition,
+      relativeRightPosition,
+      relativeBottomPosition
+    ] = vertiesMap([
+      newLeftPoint,
+      newTopPoint,
+      newRightPoint,
+      newBottomPoint
+    ], inverseMatrix);
+    this.state.clippath.value = [
+      top2.isPercent() ? Length.percent(relativeTopPosition[1] / this.state.height * 100) : Length.px(relativeTopPosition[1]),
+      right2.isPercent() ? Length.percent((this.state.width - relativeRightPosition[0]) / this.state.width * 100) : Length.px(this.state.width - relativeRightPosition[0]),
+      bottom2.isPercent() ? Length.percent((this.state.height - relativeBottomPosition[1]) / this.state.height * 100) : Length.px(this.state.height - relativeBottomPosition[1]),
+      left2.isPercent() ? Length.percent(relativeLeftPosition[0] / this.state.width * 100) : Length.px(relativeLeftPosition[0])
+    ].join(" ");
+    const value = ClipPath.toCSS(this.state.clippath);
+    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+  }
+  moveEndInsetCenter(dx, dy) {
+    if (dx == 0 && dy == 0) {
+      switch (this.state.clippath.type) {
+        case ClipPathType.INSET:
+          const value2 = ClipPath.toCSS({
+            type: ClipPathType.POLYGON,
+            value: `0% 0%, 100% 0%, 100% 100%, 0% 100%`
+          });
+          this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value2));
+          break;
+      }
+      return;
+    }
+    const value = ClipPath.toCSS(this.state.clippath);
+    this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
+  }
+  templateInset(clippath) {
+    const current = this.$selection.current;
+    clippath.value = ClipPath.parseStyleForInset(clippath.value);
+    const top2 = clippath.value.top.toPx(current.screenHeight);
+    const left2 = clippath.value.left.toPx(current.screenWidth);
+    const right2 = Length.px(current.screenWidth - clippath.value.right.toPx(current.screenWidth));
+    const bottom2 = Length.px(current.screenHeight - clippath.value.bottom.toPx(current.screenHeight));
+    const verties = this.$viewport.applyVerties(vertiesMap([
+      [left2, top2, 0],
+      [right2, top2, 0],
+      [right2, bottom2, 0],
+      [left2, bottom2, 0]
+    ], current.absoluteMatrix));
+    const leftPoint = lerp([], verties[0], verties[3], 0.5);
+    const topPoint = lerp([], verties[0], verties[1], 0.5);
+    const rightPoint = lerp([], verties[1], verties[2], 0.5);
+    const bottomPoint = lerp([], verties[2], verties[3], 0.5);
+    const centerPoint = lerp([], verties[0], verties[2], 0.5);
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "inset"
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "inset-back"
+    }, /* @__PURE__ */ createElementJsx("svg", {
+      style: "position:absolute;width:100%;height:100%;"
+    }, /* @__PURE__ */ createElementJsx("path", {
+      d: `
+            M ${verties[0][0]} ${verties[0][1]}
+            L ${verties[1][0]} ${verties[1][1]}
+            L ${verties[2][0]} ${verties[2][1]}
+            L ${verties[3][0]} ${verties[3][1]}
+            Z
+          `
+    }))), /* @__PURE__ */ createElementJsx("div", {
+      class: "inset-direction",
+      "data-direction": "left",
+      style: { left: Length.px(leftPoint[0]), top: Length.px(leftPoint[1]) }
+    }), /* @__PURE__ */ createElementJsx("div", {
+      class: "inset-direction",
+      "data-direction": "top",
+      style: { left: Length.px(topPoint[0]), top: Length.px(topPoint[1]) }
+    }), /* @__PURE__ */ createElementJsx("div", {
+      class: "inset-direction",
+      "data-direction": "right",
+      style: { left: Length.px(rightPoint[0]), top: Length.px(rightPoint[1]) }
+    }), /* @__PURE__ */ createElementJsx("div", {
+      class: "inset-direction",
+      "data-direction": "bottom",
+      style: { left: Length.px(bottomPoint[0]), top: Length.px(bottomPoint[1]) }
+    }), /* @__PURE__ */ createElementJsx("div", {
+      class: "inset-center",
+      style: { left: Length.px(centerPoint[0]), top: Length.px(centerPoint[1]) }
+    }));
+  }
+}
+class ClippathCircleEditorView extends ClippathInsetEditorView {
+  [POINTERSTART("$el .circle .circle-radius") + LEFT_BUTTON + MOVE("moveCircleRadius") + END("moveEndCircleRadius")](e2) {
+    const current = this.$selection.current;
+    this.state.current;
+    this.state.width = current.screenWidth;
+    this.state.height = current.screenHeight;
+    this.state.clippath = ClipPath.parseStyle(current["clip-path"]);
+    this.state.circle = ClipPath.parseStyleForCircle(this.state.clippath.value);
+  }
+  moveCircleRadius(dx, dy) {
+    const current = this.$selection.current;
+    const { radius, x: x2, y: y2 } = this.state.circle;
+    const oldX = x2.toPx(current.screenWidth);
+    const oldY = y2.toPx(current.screenHeight);
+    const r = Math.sqrt(Math.pow(current.screenWidth, 2) + Math.pow(current.screenHeight, 2)) / Math.sqrt(2);
+    const oldRadius = radius.toPx(current.screenWidth);
+    const verties = this.$viewport.applyVerties(vertiesMap([
+      [oldX.value + oldRadius.value, oldY, 0]
+    ], current.absoluteMatrix));
+    const newRadius = verties[0];
+    const newX = newRadius[0] + dx;
+    const newY = newRadius[1] + dy;
+    const localPosition = this.$viewport.applyVertexInverse([newX, newY, 0]);
+    const relativePosition = vertiesMap([localPosition], this.$selection.current.absoluteMatrixInverse)[0];
+    const distX = Math.abs(relativePosition[0] - oldX);
+    const result = [
+      radius.isPercent() ? Length.percent(distX / r * 100) : Length.px(distX),
+      x2,
+      y2
+    ];
+    this.state.clippath.value = `${result[0]} at ${result[1]} ${result[2]}`;
+    const value = ClipPath.toCSS(this.state.clippath);
+    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+  }
+  moveEndCircleRadius() {
+    const value = ClipPath.toCSS(this.state.clippath);
+    this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
+  }
+  [POINTERSTART("$el .circle .circle-center") + LEFT_BUTTON + MOVE("moveCircleCenter") + END("moveEndCircleCenter")](e2) {
+    const current = this.$selection.current;
+    this.state.current;
+    this.state.width = current.screenWidth;
+    this.state.height = current.screenHeight;
+    this.state.clippath = ClipPath.parseStyle(current["clip-path"]);
+    this.state.circle = ClipPath.parseStyleForCircle(this.state.clippath.value);
+  }
+  moveCircleCenter(dx, dy) {
+    const current = this.$selection.current;
+    const { radius, x: x2, y: y2 } = this.state.circle;
+    const oldX = x2.toPx(current.screenWidth);
+    const oldY = y2.toPx(current.screenHeight);
+    const verties = this.$viewport.applyVerties(vertiesMap([
+      [oldX, oldY, 0]
+    ], current.absoluteMatrix));
+    const center2 = verties[0];
+    const newX = center2[0] + dx;
+    const newY = center2[1] + dy;
+    const localPosition = this.$viewport.applyVertexInverse([newX, newY, 0]);
+    const relativePosition = vertiesMap([localPosition], this.$selection.current.absoluteMatrixInverse)[0];
+    const result = [
+      radius,
+      x2.isPercent() ? Length.percent(relativePosition[0] / this.state.width * 100) : Length.px(relativePosition[0]),
+      y2.isPercent() ? Length.percent(relativePosition[1] / this.state.height * 100) : Length.px(relativePosition[1])
+    ];
+    this.state.clippath.value = `${radius} at ${result[1]} ${result[2]}`;
+    const value = ClipPath.toCSS(this.state.clippath);
+    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+  }
+  moveEndCircleCenter(dx, dy) {
+    if (dx == 0 && dy == 0) {
+      switch (this.state.clippath.type) {
+        case ClipPathType.CIRCLE:
+          const value2 = ClipPath.toCSS({
+            type: ClipPathType.ELLIPSE,
+            value: `${this.state.circle.radius} ${this.state.circle.radius} at ${this.state.circle.x} ${this.state.circle.y}`
+          });
+          this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value2));
+          break;
+      }
+      return;
+    }
+    const value = ClipPath.toCSS(this.state.clippath);
+    this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
+  }
+  templateCircle(clippath) {
+    const current = this.$selection.current;
+    const r = Math.sqrt(Math.pow(current.screenWidth, 2) + Math.pow(current.screenHeight, 2)) / Math.sqrt(2);
+    const radius = clippath.value.radius.toPx(r);
+    const x2 = clippath.value.x.toPx(current.screenWidth);
+    const y2 = clippath.value.y.toPx(current.screenHeight);
+    const verties = this.$viewport.applyVerties(vertiesMap([
+      [x2, y2, 0],
+      [x2.value + radius.value, y2, 0]
+    ], current.absoluteMatrix));
+    const center2 = verties[0];
+    const radiusPos = verties[1];
+    const dist$1 = dist(center2, radiusPos);
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "circle"
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "circle-back",
+      style: {
+        left: Length.px(center2[0]),
+        top: Length.px(center2[1]),
+        width: Length.px(dist$1 * 2),
+        height: Length.px(dist$1 * 2)
+      }
+    }), /* @__PURE__ */ createElementJsx("div", {
+      class: "circle-center",
+      style: {
+        left: center2[0] + "px",
+        top: center2[1] + "px"
+      }
+    }), /* @__PURE__ */ createElementJsx("div", {
+      class: "circle-radius",
+      style: {
+        left: radiusPos[0] + "px",
+        top: radiusPos[1] + "px"
+      }
+    }));
+  }
+}
+class ClippathEllipseEditorView extends ClippathCircleEditorView {
+  [POINTERSTART("$el .ellipse .ellipse-radius-x") + LEFT_BUTTON + MOVE("moveEllipseRadiusX") + END("moveEndEllipseRadiusX")](e2) {
+    const current = this.$selection.current;
+    this.state.current;
+    this.state.width = current.screenWidth;
+    this.state.height = current.screenHeight;
+    this.state.clippath = ClipPath.parseStyle(current["clip-path"]);
+    this.state.ellipse = ClipPath.parseStyleForEllipse(this.state.clippath.value);
+  }
+  moveEllipseRadiusX(dx, dy) {
+    const current = this.$selection.current;
+    const { radiusX, radiusY, x: x2, y: y2 } = this.state.ellipse;
+    const oldX = x2.toPx(current.screenWidth);
+    const oldY = y2.toPx(current.screenHeight);
+    const oldRadiusX = radiusX.toPx(current.screenWidth);
+    const verties = this.$viewport.applyVerties(vertiesMap([
+      [oldX.value + oldRadiusX.value, oldY, 0]
+    ], current.absoluteMatrix));
+    const newRadius = verties[0];
+    const newX = newRadius[0] + dx;
+    const newY = newRadius[1] + dy;
+    const localPosition = this.$viewport.applyVertexInverse([newX, newY, 0]);
+    const relativePosition = vertiesMap([localPosition], this.$selection.current.absoluteMatrixInverse)[0];
+    const distX = Math.abs(relativePosition[0] - oldX);
+    const result = [
+      radiusX.isPercent() ? Length.percent(distX / this.state.width * 100) : Length.px(distX),
+      x2,
+      y2
+    ];
+    this.state.clippath.value = `${result[0]} ${radiusY} at ${result[1]} ${result[2]}`;
+    const value = ClipPath.toCSS(this.state.clippath);
+    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+  }
+  [POINTERSTART("$el .ellipse .ellipse-radius-y") + LEFT_BUTTON + MOVE("moveEllipseRadiusY") + END("moveEndEllipseRadiusX")](e2) {
+    const current = this.$selection.current;
+    this.state.current;
+    this.state.width = current.screenWidth;
+    this.state.height = current.screenHeight;
+    this.state.clippath = ClipPath.parseStyle(current["clip-path"]);
+    this.state.ellipse = ClipPath.parseStyleForEllipse(this.state.clippath.value);
+  }
+  moveEllipseRadiusY(dx, dy) {
+    const current = this.$selection.current;
+    const { radiusX, radiusY, x: x2, y: y2 } = this.state.ellipse;
+    const oldX = x2.toPx(current.screenWidth);
+    const oldY = y2.toPx(current.screenHeight);
+    const oldRadiusY = radiusY.toPx(current.screenHeight);
+    const verties = this.$viewport.applyVerties(vertiesMap([
+      [oldX.value, oldY.value + oldRadiusY.value, 0]
+    ], current.absoluteMatrix));
+    const newRadius = verties[0];
+    const newX = newRadius[0] + dx;
+    const newY = newRadius[1] + dy;
+    const localPosition = this.$viewport.applyVertexInverse([newX, newY, 0]);
+    const relativePosition = vertiesMap([localPosition], this.$selection.current.absoluteMatrixInverse)[0];
+    const distY = Math.abs(relativePosition[1] - oldY);
+    const result = [
+      radiusY.isPercent() ? Length.percent(distY / this.state.height * 100) : Length.px(distY),
+      x2,
+      y2
+    ];
+    this.state.clippath.value = `${radiusX} ${result[0]} at ${x2} ${y2}`;
+    const value = ClipPath.toCSS(this.state.clippath);
+    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+  }
+  moveEndEllipseRadiusX() {
+    const value = ClipPath.toCSS(this.state.clippath);
+    this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
+  }
+  [POINTERSTART("$el .ellipse .ellipse-center") + LEFT_BUTTON + MOVE("moveEllipseCenter") + END("moveEndEllipseCenter")](e2) {
+    const current = this.$selection.current;
+    this.state.current;
+    this.state.width = current.screenWidth;
+    this.state.height = current.screenHeight;
+    this.state.clippath = ClipPath.parseStyle(current["clip-path"]);
+    this.state.ellipse = ClipPath.parseStyleForEllipse(this.state.clippath.value);
+    this.state.left = Length.parse(e2.$dt.css("left")).value;
+    this.state.top = Length.parse(e2.$dt.css("top")).value;
+  }
+  moveEllipseCenter(dx, dy) {
+    const { radiusX, radiusY, x: x2, y: y2 } = this.state.ellipse;
+    const newLeft = this.state.left + dx;
+    const newTop = this.state.top + dy;
+    const worldPosition = this.$viewport.applyVertexInverse([
+      newLeft,
+      newTop,
+      0
+    ]);
+    const relativePosition = vertiesMap([worldPosition], this.$selection.current.absoluteMatrixInverse)[0];
+    const result = [
+      radiusX,
+      radiusY,
+      x2.isPercent() ? Length.percent(relativePosition[0] / this.state.width * 100) : Length.px(relativePosition[0]),
+      y2.isPercent() ? Length.percent(relativePosition[1] / this.state.height * 100) : Length.px(relativePosition[1])
+    ];
+    this.state.clippath.value = `${radiusX} ${radiusY} at ${result[2]} ${result[3]}`;
+    const value = ClipPath.toCSS(this.state.clippath);
+    this.emit("setAttributeForMulti", this.$selection.packByValue(value));
+  }
+  moveEndEllipseCenter(dx, dy) {
+    if (dx == 0 && dy == 0) {
+      switch (this.state.clippath.type) {
+        case ClipPathType.ELLIPSE:
+          const value2 = ClipPath.toCSS({
+            type: ClipPathType.INSET,
+            value: ""
+          });
+          this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value2));
+          break;
+      }
+      return;
+    }
+    const value = ClipPath.toCSS(this.state.clippath);
+    this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
+  }
+  templateEllipse(clippath) {
+    const current = this.$selection.current;
+    const radiusX = clippath.value.radiusX.toPx(current.screenWidth);
+    const radiusY = clippath.value.radiusY.toPx(current.screenHeight);
+    const x2 = clippath.value.x.toPx(current.screenWidth);
+    const y2 = clippath.value.y.toPx(current.screenHeight);
+    const verties = this.$viewport.applyVerties(vertiesMap([
+      [x2, y2, 0],
+      [x2.value + radiusX.value, y2, 0],
+      [x2.value, y2.value + radiusY.value, 0]
+    ], current.absoluteMatrix));
+    const center2 = verties[0];
+    const radiusXPos = verties[1];
+    const radiusYPos = verties[2];
+    const distX = dist(center2, radiusXPos);
+    const distY = dist(center2, radiusYPos);
+    const direction = subtract([], radiusXPos, center2);
+    const angle2 = calculateAngle(direction[0], direction[1]);
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "ellipse"
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "ellipse-back"
+    }, /* @__PURE__ */ createElementJsx("svg", {
+      style: "position:absolute;width:100%;height:100%;"
+    }, /* @__PURE__ */ createElementJsx("ellipse", {
+      cx: center2[0],
+      cy: center2[1],
+      rx: distX,
+      ry: distY,
+      transform: `rotate(${angle2} ${center2[0]} ${center2[1]})`
+    }))), /* @__PURE__ */ createElementJsx("div", {
+      class: "ellipse-center",
+      style: {
+        left: center2[0] + "px",
+        top: center2[1] + "px"
+      }
+    }), /* @__PURE__ */ createElementJsx("div", {
+      class: "ellipse-radius ellipse-radius-x",
+      style: {
+        left: radiusXPos[0] + "px",
+        top: radiusXPos[1] + "px"
+      }
+    }), /* @__PURE__ */ createElementJsx("div", {
+      class: "ellipse-radius ellipse-radius-y",
+      style: {
+        left: radiusYPos[0] + "px",
+        top: radiusYPos[1] + "px"
+      }
+    }));
+  }
+}
+class ClippathEditorView$1 extends ClippathEllipseEditorView {
+  template() {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--clippath-editor-view "
+    });
+  }
+  [LOAD("$el") + DOMDIFF]() {
+    const current = this.$selection.current;
+    if (!current) {
+      return "";
+    }
+    const clippath = ClipPath.parseStyle(current["clip-path"]);
+    switch (clippath.type) {
+      case ClipPathType.CIRCLE:
+        clippath.value = ClipPath.parseStyleForCircle(clippath.value);
+        return this.templateCircle(clippath);
+      case ClipPathType.ELLIPSE:
+        clippath.value = ClipPath.parseStyleForEllipse(clippath.value);
+        return this.templateEllipse(clippath);
+      case ClipPathType.POLYGON:
+        return this.templatePolygon(clippath);
+      case ClipPathType.INSET:
+        return this.templateInset(clippath);
+    }
+    return /* @__PURE__ */ createElementJsx("div", null);
+  }
+  [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
+    this.refresh();
+  }
+  [SUBSCRIBE("updateViewport")]() {
+    this.refresh();
+  }
+  checkClipPath() {
+    if (this.$el.isShow() === false)
+      return false;
+    const current = this.$selection.current;
+    if (!current)
+      return false;
+    return this.$selection.current.hasChangedField("clip-path", "angle", "x", "y", "width", "height");
+  }
+  [SUBSCRIBE("refreshSelectionStyleView") + IF("checkClipPath")]() {
+    this.refresh();
+  }
+  [CLICK("$el")](e2) {
+    if (Dom.create(e2.target).isTag("svg") || Dom.create(e2.target).hasClass("elf--clippath-editor-view")) {
+      this.trigger("hideClippathEditorView");
+    }
+  }
+  [SUBSCRIBE("hideClippathEditorView")]() {
+    this.$el.hide();
+  }
+  [SUBSCRIBE("showClippathEditorView")]() {
+    this.$el.show();
+    this.refresh();
+  }
+}
+function ClippathEditorView(editor) {
+  editor.registerMenuItem("canvas.view", {
+    ClippathEditorView: ClippathEditorView$1
+  });
+}
 var designEditorPlugins = [
   defaultConfigs,
   defaultIcons,
@@ -56768,7 +56433,6 @@ var designEditorPlugins = [
   propertyEditor,
   color,
   gradient,
-  depth,
   alignment,
   position,
   layout,
@@ -56815,7 +56479,8 @@ var designEditorPlugins = [
   hoverView,
   pathDrawView,
   pathEditorView,
-  GradientEditorView
+  GradientEditorView,
+  ClippathEditorView
 ];
 var ObjectItems$1 = "";
 class ObjectItems extends EditorElement {
@@ -58970,13 +58635,7 @@ class DesignEditor extends BaseLayout {
             <div class="layout-right" ref='$rightPanel'>
               ${isItemMode ? createComponent("SingleInspector") : createComponent("Inspector")}
             </div>
-            <div class='left-arrow' ref='$leftArrow'>
-              ${createComponent("SwitchLeftPanel")}
-            </div>
             <div class='splitter' ref='$splitter'></div>            
-            <div class='right-arrow' ref='$rightArrow'>
-              ${createComponent("SwitchRightPanel")}
-            </div>            
           </div>
           ${createComponent("KeyboardManager")}
         </div>
@@ -59061,8 +58720,8 @@ class DesignEditor extends BaseLayout {
     }
     return {
       style: {
-        left: left2 + 14,
-        right: right2 + 14,
+        left: left2,
+        right: right2,
         bottom: bottom2
       }
     };
@@ -59088,8 +58747,6 @@ class DesignEditor extends BaseLayout {
   refresh() {
     this.bindData("$el");
     this.bindData("$splitter");
-    this.bindData("$leftArrow");
-    this.bindData("$rightArrow");
     this.bindData("$headerPanel");
     this.bindData("$leftPanel");
     this.bindData("$rightPanel");

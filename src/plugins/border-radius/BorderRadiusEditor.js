@@ -23,12 +23,6 @@ const BorderGroup = {
 
 export default class BorderRadiusEditor extends EditorElement {
 
-  initialize() {
-    super.initialize();
-    
-    this.notEventRedefine = true;
-  }
-
   initState() {
     return {
       ...BorderRadius.parseStyle(this.props.value),

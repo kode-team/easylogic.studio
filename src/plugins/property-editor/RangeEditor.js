@@ -12,13 +12,6 @@ import { createComponent } from "el/sapa/functions/jsx";
 
 export default class RangeEditor extends EditorElement {
 
-
-    initialize() {
-        super.initialize();
-    
-        this.notEventRedefine = true;
-    }    
-
     initState() {
         var units = this.props.units || ['px', 'em', '%'];
         var value = Length.parse(this.props.value || 0);

@@ -63,9 +63,7 @@ import selectionInfoView from "./selection-info-view"
 import selectionToolView from "./selection-tool-view"
 import defaultIcons from "./default-icons"
 import GradientEditorView from "./gradient-editor-view"
-
-
-
+import ClippathEditorView from "./clippath-editor-view"
 
 export default [
 
@@ -87,7 +85,7 @@ export default [
     gradient,
 
     // inspector.tab.style    
-    depth,
+    // depth,
     alignment,
     position,        
     layout,   
@@ -169,4 +167,5 @@ export default [
     pathDrawView,
     pathEditorView,    
     GradientEditorView,
+    ClippathEditorView
 ]

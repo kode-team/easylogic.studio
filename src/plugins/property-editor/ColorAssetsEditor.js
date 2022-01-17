@@ -6,13 +6,7 @@ import './ColorAssetsEditor.scss';
 import { variable } from 'el/sapa/functions/registElement';
 
 export default class ColorAssetsEditor extends EditorElement {
-
-  initialize() {
-    super.initialize();
-
-    this.notEventRedefine = true;
-  }
-
+  
   initState() {
     return {
       mode: 'grid',

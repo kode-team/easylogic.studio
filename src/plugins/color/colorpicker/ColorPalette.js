@@ -6,14 +6,6 @@ import { END, MOVE } from "el/editor/types/event";
 
 export default class ColorPalette extends EditorElement {
 
-
-  initialize() {
-    super.initialize();
-
-    this.notEventRedefine = true;
-  }
-
-
   initState() {
     return {
       hueColor:'rgba(0, 0, 0, 1)',

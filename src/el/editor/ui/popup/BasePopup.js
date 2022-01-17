@@ -9,11 +9,6 @@ import './BasePopup.scss';
 
 export default class BasePopup extends EditorElement {
 
-  initialize() {
-    super.initialize();
-
-    this.notEventRedefine = true;
-  }
   template() {
     return /*html*/`
         <div class='elf--popup ${this.getClassName()}'>

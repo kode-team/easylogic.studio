@@ -12,12 +12,6 @@ const TEMP_DIV = Dom.create('div')
 
 export default class StyleView extends EditorElement {
 
-  initialize() {
-    super.initialize();
-
-    this.notEventRedefine = true;
-  }
-
   initState() {
     return {
       lastChangedList: {}

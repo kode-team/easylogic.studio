@@ -38,12 +38,6 @@ const selectorList = [
  */
 export default class SelectorProperty extends BaseProperty {
 
-  initialize() {
-    super.initialize();
-    
-    this.notEventRedefine = true;
-  }
-
   getTitle() {
     return this.$i18n('selector.property.title');
   }

@@ -7,13 +7,6 @@ import './BaseProperty.scss';
 
 export default class BaseProperty extends EditorElement {
 
-
-  initialize() {
-    super.initialize();
-
-    this.notEventRedefine = true;
-  }
-
   onToggleShow() { }
 
   template() {

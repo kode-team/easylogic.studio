@@ -47,8 +47,8 @@ test("create project", () => {
     });
 
     expect(model.itemType).toEqual('project');
-    expect(model.screenWidth).toEqual(0);
-    expect(model.screenHeight).toEqual(0);
+    expect(model.screenWidth).toEqual(300);
+    expect(model.screenHeight).toEqual(300);
 })
 
 test("create artboard", () => {
@@ -58,15 +58,17 @@ test("create artboard", () => {
     }, modelManager);
 
     const model = new MovableModel({
-        itemType: 'artboard'
+        itemType: 'artboard',
+        width: 200,
+        height: 100,
     }, modelManager);
 
     project.appendChild(model);
 
 
     expect(model.itemType).toEqual('artboard');
-    expect(model.screenWidth).toEqual(0);
-    expect(model.screenHeight).toEqual(0);
+    expect(model.screenWidth).toEqual(200);
+    expect(model.screenHeight).toEqual(100);
     expect(model.parentId).toEqual(project.id);
 })
 
@@ -81,7 +83,6 @@ test("create movable in artboard", () => {
     }, modelManager);
 
     registerModel(project);    
-    // console.log(project);
 
     const artboard = new MovableModel({
         itemType: 'artboard',

@@ -11,12 +11,6 @@ import { iconUse } from "el/editor/icon/icon";
 
 export default class DefaultLayoutItemProperty extends BaseProperty {
 
-  initialize() {
-    super.initialize();
-
-    this.notEventRedefine = true;
-  }
-
   getTitle() {
     return this.$i18n('default.layout.item.property.title.constraints');
   }

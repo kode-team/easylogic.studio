@@ -5,13 +5,6 @@ import './Button.scss';
 
 export default class Button extends BaseUI {
 
-
-    initialize() {
-        super.initialize();
-    
-        this.notEventRedefine = true;
-    }    
-
     initState() {
         return {
             label: this.props.label || '',

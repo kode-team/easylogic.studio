@@ -1,3 +1,5 @@
+import { variable } from "./functions/registElement";
+
 export const MAGIC_METHOD = "@magic:";
 export const makeEventChecker = (value, split = CHECK_SAPARATOR) => {
   return ` ${split} ${value}`;
@@ -115,6 +117,11 @@ export const THROTTLE = (t = 100) => {
 };
 export const ALL_TRIGGER = CHECKER("allTrigger()");
 export const SELF_TRIGGER = CHECKER("selfTrigger()");
+export const FRAME = CHECKER("frame()");
+
+export const PARAMS = (obj) => {
+  return CHECKER(`params(${variable(obj)})`);
+}
 
 export const CAPTURE = CHECKER("capture()");
 

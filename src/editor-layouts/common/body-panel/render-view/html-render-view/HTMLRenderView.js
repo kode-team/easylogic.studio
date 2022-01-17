@@ -1,6 +1,6 @@
 import { vec3 } from "gl-matrix";
 
-import { BIND, POINTERSTART, IF, KEYUP, DOUBLECLICK, FOCUSOUT, SUBSCRIBE, CONFIG, DEBOUNCE } from "el/sapa/Event";
+import { BIND, POINTERSTART, IF, KEYUP, DOUBLECLICK, FOCUSOUT, SUBSCRIBE, CONFIG, DEBOUNCE, FRAME } from "el/sapa/Event";
 import Dom from "el/sapa/functions/Dom";
 import { isFunction } from "el/sapa/functions/func";
 import { KEY_CODE } from "el/editor/types/key";
@@ -117,7 +117,7 @@ export default class HTMLRenderView extends EditorElement {
         this.refreshAllElementBoundSize();
     }
 
-    [SUBSCRIBE('refreshElementBoundSize')] (parentObj) {
+    [SUBSCRIBE('refreshElementBoundSize') + DEBOUNCE(100) + FRAME] (parentObj) {
         this.refreshElementBoundSize(parentObj);
     }    
 
@@ -442,6 +442,8 @@ export default class HTMLRenderView extends EditorElement {
         this.moveTo(newDist);
 
         // 최종 위치에서 ArtBoard 변경하기 
+        // 마우스 위치에 따라 root 를 어디로 할지 정의 해야함 
+        // 레이아웃도 있기 때문에 구조를 다시 맞춰야 함 . 
         if (this.$selection.changeArtBoard()) {
             this.initMousePoint = targetMousePoint;
             this.$selection.reselect();
@@ -458,8 +460,6 @@ export default class HTMLRenderView extends EditorElement {
         this.emit('setAttributeForMulti', this.$selection.packByValue({
             'x': (item) => item.x , 
             'y': (item) => item.y ,
-            'right': undefined,
-            'bottom': undefined,
         }));
         // this.emit('refreshSelectionTool', true);
 
@@ -630,7 +630,6 @@ export default class HTMLRenderView extends EditorElement {
 
     refreshElementBoundSize(parentObj) {
         if (parentObj) {
-
             if (parentObj.hasChildren() === false) {
                 // 크기 변경이 없으면 bound size 를 수정하지 않는다. 
                 // 다른 레이아웃으로 들어가게 되면 크기의 변경이 있을 수도 있다. 

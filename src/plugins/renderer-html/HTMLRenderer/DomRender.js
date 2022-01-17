@@ -385,7 +385,7 @@ export default class DomRender extends ItemRender {
       'opacity',
       'mix-blend-mode',
       'transform-origin',
-      'transform-style',
+      // 'transform-style',
       'perspective',
       'perspective-origin',
       'font-size',
@@ -726,15 +726,15 @@ ${cssString}
 
     const tagName = elementType || 'div'
 
-    return /*html*/`<${tagName} class="element-item ${itemType}" data-is-boolean-item="${isBooleanItem}" data-id="${id}" data-title="${name}">
-  ${this.toDefString(item)}
-  ${item.layers.map(it => {
+    return /*html*/`<${tagName} class="element-item ${itemType}" data-is-boolean-item="${isBooleanItem}" data-id="${id}" data-title="${name}">${this.toDefString(item)}${item.layers.map(it => {
       return renderer.render(it, renderer)
-    }).join('')}
-</${tagName}>`
+    }).join('')}</${tagName}>`
   }
 
   toSVGFilter(item) {
+
+    if (item.svgfilters.length === 0) return "";
+
     var filterString = item.computedValue('svgfilters');
 
     // 변경점이 svgfilters 일 때만 computed 로 다시 캐슁하기 

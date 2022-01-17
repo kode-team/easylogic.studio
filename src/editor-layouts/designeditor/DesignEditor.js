@@ -87,13 +87,7 @@ export default class DesignEditor extends BaseLayout {
             <div class="layout-right" ref='$rightPanel'>
               ${isItemMode ? createComponent("SingleInspector") : createComponent("Inspector") }
             </div>
-            <div class='left-arrow' ref='$leftArrow'>
-              ${createComponent("SwitchLeftPanel")}
-            </div>
             <div class='splitter' ref='$splitter'></div>            
-            <div class='right-arrow' ref='$rightArrow'>
-              ${createComponent("SwitchRightPanel")}
-            </div>            
           </div>
           ${createComponent("KeyboardManager")}
         </div>
@@ -194,8 +188,8 @@ export default class DesignEditor extends BaseLayout {
 
     return {
       style: { 
-        left: left+14, 
-        right: right+14, 
+        left: left, 
+        right: right, 
         bottom: bottom
       }
     }
@@ -233,8 +227,6 @@ export default class DesignEditor extends BaseLayout {
 
     this.bindData('$el');
     this.bindData('$splitter');
-    this.bindData('$leftArrow');
-    this.bindData('$rightArrow');
     this.bindData('$headerPanel');    
     this.bindData('$leftPanel');
     this.bindData('$rightPanel');

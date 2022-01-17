@@ -113,12 +113,7 @@ export default {
                 } else if (obj.type === 'svg') {
                     // NOOP
                 } else {
-                    editor.emit("showClipPathPopup", {
-                        'clip-path': current['clip-path'],
-                        changeEvent: function (data) {
-                            editor.command('setAttributeForMulti', 'change clip-path', editor.selection.packByValue(data));
-                        }
-                    });
+                    editor.emit("showClippathEditorView");
                 }
 
             } else {

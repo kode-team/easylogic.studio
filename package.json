@@ -15,6 +15,7 @@
     }
   },
   "dependencies": {
+    "@entityjs/entityjs": "0.0.5",
     "array-organizer": "^1.5.7",
     "fit-curve": "^0.2.0",
     "gl-matrix": "^3.3.0",
@@ -27,15 +28,10 @@
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.32",
-    "@swc/core": "^1.2.120",
-    "@swc/jest": "^0.2.15",
     "adorable-css": "^0.5.2",
     "autoprefixer": "^9.8.6",
     "cssnano": "^5.0.13",
     "happy-dom": "^2.25.1",
-    "jest": "^27.4.5",
-    "jest-cli": "^27.4.5",
-    "jest-report": "^0.1.11",
     "postcss": "^8.4.4",
     "release-it": "^14.6.2",
     "rollup-plugin-copy": "^3.4.0",
@@ -73,30 +69,5 @@
   "bugs": {
     "url": "https://github.com/easylogic/editor/issues"
   },
-  "homepage": "https://editor.easylogic.studio/",
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "jsx",
-      "ts",
-      "tsx",
-      "svelte",
-      "json"
-    ],
-    "transform": {
-      "^.+\\.(t|j)sx?$": [
-        "@swc/jest"
-      ]
-    },
-    "testEnvironment": "jsdom",
-    "testMatch": [
-      "<rootDir>/**/*.test.js"
-    ],
-    "moduleNameMapper": {
-      "^el(.*)$": "<rootDir>/src/el$1",
-      "^export-library(.*)$": "<rootDir>/src/export-library$1",
-      "^plugins(.*)$": "<rootDir>/src/plugins$1"
-    }
-  }
+  "homepage": "https://editor.easylogic.studio/"
 }

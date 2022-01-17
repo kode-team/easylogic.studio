@@ -7,14 +7,6 @@ import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
 
 export default class GradientSingleEditor extends EditorElement {
 
-
-    initialize() {
-        super.initialize();
-
-        this.notEventRedefine = true;
-    }
-
-
     initState() {
         return {
             index: this.props.index,
@@ -77,6 +69,7 @@ export default class GradientSingleEditor extends EditorElement {
 
     [SUBSCRIBE('changeGradientSingle')](image, params) {
         image = BackgroundImage.parseImage(image)
+    
         const currentImage = this.$selection.current.getBackgroundImage(this.state.index)?.image;
 
         switch (currentImage.type) {
@@ -84,7 +77,7 @@ export default class GradientSingleEditor extends EditorElement {
             case GradientType.REPEATING_RADIAL:
                 image.reset({
                     radialPosition: currentImage.radialPosition || ['50%', '50%'],
-                    raidalType: currentImage.radialType || RadialGradientType.CIRCLE,
+                    radialType: currentImage.radialType || RadialGradientType.CIRCLE,
                 })
 
                 break;
@@ -93,7 +86,6 @@ export default class GradientSingleEditor extends EditorElement {
                 image.reset({
                     angle: currentImage.angle || 0,
                     radialPosition: currentImage.radialPosition || ['50%', '50%'],
-                    raidalType: currentImage.radialType || RadialGradientType.CIRCLE,
                 })
                 break;
             case GradientType.LINEAR:

@@ -11,14 +11,6 @@ import "./PatternProperty.scss";
 
 export default class PatternProperty extends BaseProperty {
 
-
-  initialize() {
-    super.initialize();
-    
-    this.notEventRedefine = true;
-  }
-
-
   getTitle () {
     return this.$i18n('pattern.property.title');
   }

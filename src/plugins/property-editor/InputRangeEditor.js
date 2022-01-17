@@ -11,12 +11,6 @@ import { round } from "el/utils/math";
 import { createComponent } from "el/sapa/functions/jsx";
 export default class InputRangeEditor extends EditorElement {
 
-    initialize() {
-        super.initialize();
-    
-        this.notEventRedefine = true;
-    }    
-
     initState() {
         var units =  this.props.units || ['px','em','%','auto'];
         var value = Length.parse(this.props.value || '0px');

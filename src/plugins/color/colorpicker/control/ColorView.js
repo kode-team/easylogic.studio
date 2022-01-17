@@ -3,14 +3,6 @@ import { EditorElement } from 'el/editor/ui/common/EditorElement';
 
 export default class ColorView extends EditorElement {
 
-
-    initialize() {
-        super.initialize();
-
-        this.notEventRedefine = true;
-    }
-
-
     initState() {
         return {
             value: 'rgba(0, 0, 0, 1)'

@@ -3,14 +3,6 @@ import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 export default class BorderRadiusProperty extends BaseProperty {
 
-
-  initialize() {
-    super.initialize();
-    
-    this.notEventRedefine = true;
-  }
-
-
   getTitle() {
     return this.$i18n('border.radius.property.title');  
   }

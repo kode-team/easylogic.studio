@@ -9,12 +9,6 @@ import { FlexWrap } from "el/editor/types/model";
 
 export default class FlexLayoutEditor extends EditorElement {
 
-    initialize() {
-        super.initialize();
-
-        this.notEventRedefine = true;
-    }
-
     getDirectionOptions () {
         return this.makeOptionsFunction('row,column')
     } 

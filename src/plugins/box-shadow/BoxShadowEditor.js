@@ -10,12 +10,6 @@ import { BoxShadowStyle } from "el/editor/types/model";
 
 export default class BoxShadowEditor extends EditorElement {
 
-  initialize() {
-    super.initialize();
-    
-    this.notEventRedefine = true;
-  }
-
   initState() {
     return {
       boxShadows: BoxShadow.parseStyle(this.props.value || '')

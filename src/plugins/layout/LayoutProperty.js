@@ -4,16 +4,9 @@ import { variable } from 'el/sapa/functions/registElement';
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './LayoutProperty.scss';
-import { CSS_TO_STRING } from "el/utils/func";
 
 
 export default class LayoutProperty extends BaseProperty {
-  
-  initialize() {
-    super.initialize();
-
-    this.notEventRedefine = true;
-  }
 
   getTitle() {
     return this.$i18n('layout.property.title');

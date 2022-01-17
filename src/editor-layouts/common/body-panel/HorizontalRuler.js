@@ -1,19 +1,12 @@
-import { BIND, CONFIG, DEBOUNCE, DOMDIFF, IF, LOAD, SUBSCRIBE, THROTTLE } from "el/sapa/Event";
+import { BIND, CONFIG, LOAD, SUBSCRIBE, THROTTLE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './HorizontalRuler.scss';
-import Dom from "el/sapa/functions/Dom";
 
 let pathString = []
 
 export default class HorizontalRuler extends EditorElement {
 
-  initialize() {
-    super.initialize();
-    
-    this.notEventRedefine = true;
-  }
-
-    template () {
+    template() {
         return /*html*/`
             <div class="elf--horizontal-ruler">
                 <div class='horizontal-ruler-container' ref='$layerRuler'>
@@ -23,9 +16,7 @@ export default class HorizontalRuler extends EditorElement {
                 </div>                            
                 <div class='horizontal-ruler-container' ref='$ruler'></div>
                 <div class='horizontal-ruler-container'>
-                    <svg width="100%" width="100%" overflow="hidden">
-                        <path data-mouse="true" d="" stroke="transparent" ref="$cursor" />
-                    </svg>
+                    <div class="cursor" ref="$cursor"></div>
                 </div>
             </div>
         `
@@ -35,61 +26,61 @@ export default class HorizontalRuler extends EditorElement {
         this.refreshCanvasSize();
     }
 
-    refreshCanvasSize () {
+    refreshCanvasSize() {
         this.state.rect = this.$el.rect();
-    }    
+    }
 
-    initializeRect () {
+    initializeRect() {
         if (!this.state.rect || this.state.rect.width == 0) {
             this.state.rect = this.$el.rect();
         }
     }
 
-    makeLine (pathString,  baseNumber, minX, maxX, realWidth, width, epsilon = 3, lineWidth = 30, expect = 10) {
-        let startX = minX - (minX % baseNumber); 
-        let endX = maxX + (maxX % baseNumber); 
+    makeLine(pathString, baseNumber, minX, maxX, realWidth, width, epsilon = 3, lineWidth = 30, expect = 10) {
+        let startX = minX - (minX % baseNumber);
+        let endX = maxX + (maxX % baseNumber);
 
         // if (width / realWidth < 1) return;
 
-        const firstX = ((startX - minX)/realWidth) * width; 
-        const secondX = ((startX + baseNumber - minX)/realWidth) * width; 
+        const firstX = ((startX - minX) / realWidth) * width;
+        const secondX = ((startX + baseNumber - minX) / realWidth) * width;
 
         if (Math.abs(secondX - firstX) < epsilon) return;
 
-        for(var i = startX; i < endX; i += baseNumber) {
+        for (var i = startX; i < endX; i += baseNumber) {
 
             if (i != 0 && i % expect === 0) continue;
 
-            const x = Math.floor(((i - minX)/realWidth) * width);
+            const x = Math.floor(((i - minX) / realWidth) * width);
 
             pathString[pathString.length] = `M ${x} ${30 - lineWidth} L ${x} 30 `;
         }
 
-    }     
-    
-    makeLineText (baseNumber, minX, maxX, realWidth, width, epsilon = 3) {
+    }
+
+    makeLineText(baseNumber, minX, maxX, realWidth, width, epsilon = 3) {
         const text = [];
-        let startX = minX - (minX % baseNumber); 
-        let endX = maxX + (maxX % baseNumber); 
+        let startX = minX - (minX % baseNumber);
+        let endX = maxX + (maxX % baseNumber);
 
         // if (width / realWidth < 1) return;
 
-        const firstX = ((startX - minX)/realWidth) * width; 
-        const secondX = ((startX + baseNumber - minX)/realWidth) * width; 
+        const firstX = ((startX - minX) / realWidth) * width;
+        const secondX = ((startX + baseNumber - minX) / realWidth) * width;
 
         if (Math.abs(secondX - firstX) < epsilon) return;
 
-        for(var i = startX; i < endX; i += baseNumber) {
+        for (var i = startX; i < endX; i += baseNumber) {
 
-            const x = Math.floor(((i - minX)/realWidth) * width);
+            const x = Math.floor(((i - minX) / realWidth) * width);
 
             text[text.length] = `<text x="${x}" y="${0}" dx="0" dy="8" text-anchor="middle" alignment-baseline="bottom" >${i}</text>`
         }
 
         return text.join('');
-    }         
+    }
 
-    makeRulerForCurrentArtboard () {
+    makeRulerForCurrentArtboard() {
         const current = this.$selection.current;
 
         if (!current) return '';
@@ -100,11 +91,11 @@ export default class HorizontalRuler extends EditorElement {
 
         const verties = currentArtboard.verties;
 
-        const {minX, maxX, width: realWidth} = this.$viewport;
+        const { minX, maxX, width: realWidth } = this.$viewport;
         const width = this.state.rect.width;
 
-        const firstX = ((verties[0][0] - minX)/realWidth) * width; 
-        const secondX = ((verties[2][0] - minX)/realWidth) * width; 
+        const firstX = ((verties[0][0] - minX) / realWidth) * width;
+        const secondX = ((verties[2][0] - minX) / realWidth) * width;
 
         return `
             M ${firstX} 20 
@@ -115,7 +106,7 @@ export default class HorizontalRuler extends EditorElement {
         `
     }
 
-    makeRulerForCurrent () {
+    makeRulerForCurrent() {
         const current = this.$selection.current;
 
         if (!current) return '';
@@ -128,11 +119,11 @@ export default class HorizontalRuler extends EditorElement {
         const currentMaxX = Math.max.apply(Math, xList);
 
         // viewport 
-        const {minX, width: realWidth} = this.$viewport;
+        const { minX, width: realWidth } = this.$viewport;
         const width = this.state.rect.width;
 
-        const firstX = ((currentMinX - minX)/realWidth) * width; 
-        const secondX = ((currentMaxX - minX)/realWidth) * width; 
+        const firstX = ((currentMinX - minX) / realWidth) * width;
+        const secondX = ((currentMaxX - minX) / realWidth) * width;
 
         return `
             M ${firstX} 0 
@@ -143,27 +134,27 @@ export default class HorizontalRuler extends EditorElement {
         `
     }
 
-    makeRuler () {
+    makeRuler() {
 
-        const {minX,maxX, width: realWidth} = this.$viewport;
+        const { minX, maxX, width: realWidth } = this.$viewport;
         const width = this.state.rect.width;
 
         pathString = []
-    
-        this.makeLine(pathString, 200, minX, maxX, realWidth, width, 10, 20, 10000);        
-        this.makeLine(pathString, 100, minX, maxX, realWidth,width, 10, 20, 200);
-        this.makeLine(pathString, 50, minX, maxX, realWidth,width, 10, 20, 100);
-        this.makeLine(pathString, 10, minX, maxX, realWidth,width, 10, 18, 50);
-        this.makeLine(pathString, 5, minX, maxX, realWidth,width, 10, 15, 10);
-        this.makeLine(pathString, 1, minX, maxX, realWidth,width, 10, 13, 5);        
+
+        this.makeLine(pathString, 200, minX, maxX, realWidth, width, 10, 20, 10000);
+        this.makeLine(pathString, 100, minX, maxX, realWidth, width, 10, 20, 200);
+        this.makeLine(pathString, 50, minX, maxX, realWidth, width, 10, 20, 100);
+        this.makeLine(pathString, 10, minX, maxX, realWidth, width, 10, 18, 50);
+        this.makeLine(pathString, 5, minX, maxX, realWidth, width, 10, 15, 10);
+        this.makeLine(pathString, 1, minX, maxX, realWidth, width, 10, 13, 5);
 
         return pathString.join('');
-    }    
+    }
 
 
-    makeRulerText () {
+    makeRulerText() {
 
-        const {minX,maxX, width: realWidth} = this.$viewport;
+        const { minX, maxX, width: realWidth } = this.$viewport;
         const width = this.state.rect.width;
 
         const dist = Math.abs(maxX - minX);
@@ -172,18 +163,18 @@ export default class HorizontalRuler extends EditorElement {
 
         return [
             dist > 3000 ? this.makeLineText(500, minX, maxX, realWidth, width, 20) : '',
-            (1000 < dist && dist < 3000) ? this.makeLineText(100, minX, maxX, realWidth,width, 20) : '',
-            (800 < dist && dist < 1000) ? this.makeLineText(100, minX, maxX, realWidth,width, 20) : '',
-            (500 < dist && dist < 800) ? this.makeLineText(100, minX, maxX, realWidth,width, 20) : '',
-            (500 < dist && dist < 800) ? this.makeLineText(50, minX, maxX, realWidth,width, 20) : '',
-            (200 < dist && dist < 500) ? this.makeLineText(50, minX, maxX, realWidth,width, 20) : '',
-            (50 < dist && dist < 200) ? this.makeLineText(10, minX, maxX, realWidth,width, 20) : '',            
-            (15 < dist && dist < 50) ? this.makeLineText(5, minX, maxX, realWidth,width, 20) : '',                        
-            (0 < dist && dist < 15) ? this.makeLineText(1, minX, maxX, realWidth,width, 20) : '',                                    
+            (1000 < dist && dist < 3000) ? this.makeLineText(100, minX, maxX, realWidth, width, 20) : '',
+            (800 < dist && dist < 1000) ? this.makeLineText(100, minX, maxX, realWidth, width, 20) : '',
+            (500 < dist && dist < 800) ? this.makeLineText(100, minX, maxX, realWidth, width, 20) : '',
+            (500 < dist && dist < 800) ? this.makeLineText(50, minX, maxX, realWidth, width, 20) : '',
+            (200 < dist && dist < 500) ? this.makeLineText(50, minX, maxX, realWidth, width, 20) : '',
+            (50 < dist && dist < 200) ? this.makeLineText(10, minX, maxX, realWidth, width, 20) : '',
+            (15 < dist && dist < 50) ? this.makeLineText(5, minX, maxX, realWidth, width, 20) : '',
+            (0 < dist && dist < 15) ? this.makeLineText(1, minX, maxX, realWidth, width, 20) : '',
         ].join('');
-    }    
+    }
 
-    [LOAD('$ruler')] () { 
+    [LOAD('$ruler')]() {
 
         this.initializeRect();
 
@@ -196,16 +187,16 @@ export default class HorizontalRuler extends EditorElement {
         `
     }
 
-    [BIND('$rulerLines')] () { 
+    [BIND('$rulerLines')]() {
         return {
             d: this.makeRulerForCurrent()
 
         }
-    }  
+    }
 
     makeRulerCursor() {
         const targetMousePoint = this.$viewport.getWorldPosition();
-        const {minX,maxX, width: realWidth} = this.$viewport;
+        const { minX, maxX, width: realWidth } = this.$viewport;
 
         this.initializeRect();
 
@@ -213,17 +204,30 @@ export default class HorizontalRuler extends EditorElement {
 
         const distX = (targetMousePoint[0] - minX)
 
-        const x = distX === 0 ? 0 : (distX/realWidth) * width;
+        const x = distX === 0 ? 0 : (distX / realWidth) * width;
 
         return `M ${x - 0.5} 0 L ${x - 0.5} 20`;
     }
 
-    [BIND('$cursor')] () {
+    [BIND('$cursor')]() {
+        const targetMousePoint = this.$viewport.getWorldPosition();
+        const { minX, maxX, width: realWidth } = this.$viewport;
+
+        this.initializeRect();
+
+        const width = this.state.rect.width;
+
+        const distX = (targetMousePoint[0] - minX)
+
+        const x = distX === 0 ? 0 : (distX / realWidth) * width;
+
         return {
-            d: this.makeRulerCursor(),
+            cssText: `
+                --elf--horizontal-cursor-position: ${x}px;
+            `
         }
     }
-    
+
     refresh() {
 
         if (this.$config.get('show.ruler')) {
@@ -232,11 +236,11 @@ export default class HorizontalRuler extends EditorElement {
 
     }
 
-    [SUBSCRIBE('updateViewport', 'refreshSelection')] () {
-        this.refresh();      
+    [SUBSCRIBE('updateViewport', 'refreshSelection')]() {
+        this.refresh();
     }
 
-    [SUBSCRIBE('refreshSelectionStyleView') + THROTTLE(10)] () {
+    [SUBSCRIBE('refreshSelectionStyleView') + THROTTLE(10)]() {
         if (this.$selection.current) {
             const current = this.$selection.current;
 
@@ -247,11 +251,11 @@ export default class HorizontalRuler extends EditorElement {
         }
     }
 
-    [SUBSCRIBE('resize.window', 'resizeCanvas')] () {
+    [SUBSCRIBE('resize.window', 'resizeCanvas')]() {
         this.refreshCanvasSize();
     }
 
-    [CONFIG('onMouseMovepageContainer')] () {
+    [CONFIG('onMouseMovepageContainer')]() {
         this.bindData('$cursor');
         this.bindData('$rulerLines');
     }

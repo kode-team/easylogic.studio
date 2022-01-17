@@ -12,12 +12,6 @@ const REG_CSS_UNIT = /(auto)|(repeat\([^\)]*\))|(([\d.]+)(px|pt|fr|r?em|deg|vh|v
 
 export default class GridBoxEditor extends EditorElement {
 
-    initialize() {
-        super.initialize();
-        
-        this.notEventRedefine = true;
-      }
-    
 
     getLayoutItemOptions () {
         return variable('none,auto,repeat,length'.split(',').map(it => {

@@ -1,0 +1,188 @@
+
+.elf--clippath-editor-view {
+  display: none;
+  position:absolute;
+  left:0px;
+  top:0px;
+  right:0px;
+  bottom:0px;
+  // pointer-events: none;
+
+  .polygon {
+    .polygon-back {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      right: 0px;
+      bottom: 0px;
+      cursor: grab;
+
+      svg {
+        polygon {
+          // pointer-events: all;
+          fill: transparent;
+          stroke-width: 2;
+          stroke: white;
+          filter: drop-shadow(0 0 3px rgba(255, 0, 255, 0.7));
+        }
+      }
+    }
+    .polygon-pointer {
+      position: absolute;
+      fill: white;
+      pointer-events: all;
+      cursor: grab;
+      r: 5;
+      filter: drop-shadow(0 0 3px rgba(255, 0, 255, 0.7));      
+    }
+
+    .polygon-line {
+      pointer-events: all;      
+      cursor: copy;
+      &:hover {
+        stroke-width: 2;
+        stroke: red;
+      }
+    }
+
+    .polygon-center {
+      position: absolute;
+      transform: translateX(-50%) translateY(-50%);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid  white;
+      pointer-events: all;
+      cursor: grab;
+      filter: drop-shadow(0 0 3px rgba(255, 0, 255, 0.7));      
+    }
+  }
+
+  .inset {
+    .inset-back {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      right: 0px;
+      bottom: 0px;
+      cursor: grab;
+
+      svg {
+        path {
+          // pointer-events: all;
+          fill: transparent;
+          stroke-width: 2;
+          stroke: white;
+          filter: drop-shadow(0 0 3px rgba(255, 0, 255, 0.7));
+        }
+      }
+    }
+    .inset-direction {
+      position: absolute;
+      transform: translateX(-50%) translateY(-50%);
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background-color: white;
+      pointer-events: all;
+      cursor: grab;
+      filter: drop-shadow(0 0 3px rgba(255, 0, 255, 0.7));      
+    }
+
+    .inset-center {
+      position: absolute;
+      transform: translateX(-50%) translateY(-50%);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid  white;
+      pointer-events: all;
+      cursor: grab;
+      filter: drop-shadow(0 0 3px rgba(255, 0, 255, 0.7));      
+    }
+  }
+
+  .circle {
+    .circle-back {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      transform: translateX(-50%) translateY(-50%);      
+      pointer-events: none;
+      border-radius: 50%;
+      border: 2px solid white;
+      filter: drop-shadow(0 0 3px rgba(255, 0, 255, 0.7));
+      cursor: grab;
+    }
+    .circle-center {
+      position: absolute;
+      transform: translateX(-50%) translateY(-50%);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid white;
+      pointer-events: all;
+      filter: drop-shadow(0 0 3px rgba(255, 0, 255, 0.7));
+      cursor: grab;
+    }
+
+    .circle-radius {
+      position: absolute;
+      transform: translateX(-50%) translateY(-50%);
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background-color: white;
+      filter: drop-shadow(0 0 3px rgba(255, 0, 255, 0.7));      
+      pointer-events: all;
+      cursor: grab;
+    }
+  }
+
+
+  .ellipse {
+    .ellipse-back {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      right: 0px;
+      bottom: 0px; 
+      pointer-events: none;
+      cursor: grab;
+
+      svg {
+        ellipse {
+          pointer-events: all;
+          fill: transparent;
+          stroke-width: 2;
+          stroke: white;
+          filter: drop-shadow(0 0 3px rgba(255, 0, 255, 0.7));
+        }
+      }
+    }
+    .ellipse-center {
+      position: absolute;
+      transform: translateX(-50%) translateY(-50%);
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid white;
+      pointer-events: all;
+      filter: drop-shadow(0 0 3px rgba(255, 0, 255, 0.7));
+      cursor: grab;
+    }
+
+    .ellipse-radius {
+      position: absolute;
+      transform: translateX(-50%) translateY(-50%);
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background-color: white;
+      filter: drop-shadow(0 0 3px rgba(255, 0, 255, 0.7));      
+      pointer-events: all;
+      cursor: grab;
+    }
+  }
+}
+

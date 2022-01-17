@@ -7,14 +7,6 @@ import './GridLayoutEditor.scss';
 
 export default class GridLayoutEditor extends EditorElement {
 
-
-  initialize() {
-    super.initialize();
-    
-    this.notEventRedefine = true;
-  }
-
-
     initState() {
         return {
             ...STRING_TO_CSS(this.props.value),

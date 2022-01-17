@@ -14,13 +14,6 @@ fields.forEach(field => {
 
 export default class BoxModelProperty extends BaseProperty {
 
-  initialize() {
-    super.initialize();
-
-    // 이벤트 재정의 막기 
-    this.notEventRedefine = true;
-  }
-
   getTitle() {
     return this.$i18n('box.model.property.title');
   }

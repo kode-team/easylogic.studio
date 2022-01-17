@@ -55,17 +55,13 @@ export class DomModel extends GroupModel {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       'position': 'absolute',
-      'x': 0,
-      'y': 0,
       'rootVariable': '',
       'variable': '',
-      'width': 300,
-      'height': 300,
       'color': "black",
       // 'font-size': 13,
       'overflow': 'visible',
       'opacity': 1,
-      'transform-style': 'preserve-3d',
+      // 'transform-style': 'preserve-3d',
       'layout': Layout.DEFAULT,
       'flex-layout': 'display:flex;',
       'grid-layout': 'display:grid;',

@@ -98,9 +98,10 @@ export class ClipPath extends PropertyItem {
         return clippath;
     }
 
-    static parseStyleForCircle (str) {
+    static parseStyleForCircle (str = '50% at 50% 50%') {
         var radius = new Length('', 'closest-side'), position = ''; 
-        str = str || '50%'
+        str = str || '50% at 50% 50%'
+
         if (str.includes('at')) {
             [ radius, position ] = str.split('at').map(it => it.trim());
         }  else {
@@ -113,6 +114,7 @@ export class ClipPath extends PropertyItem {
             y = x; 
         }
 
+        radius = Length.parse(radius);
         x = Length.parse(x)
         y = Length.parse(y)
 

@@ -9,12 +9,6 @@ import { CSS_TO_STRING } from "el/utils/func";
 
 export default class SelectIconEditor extends EditorElement {
 
-    initialize() {
-        super.initialize();
-    
-        this.notEventRedefine = true;
-    }
-
     initState() {
         var splitChar = this.props.split || ',';
         var options = Array.isArray(this.props.options) 

@@ -3,14 +3,6 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './BackgroundPositionEditor.scss'
 export default class BackgroundPositionEditor extends EditorElement {
 
-
-    initialize() {
-        super.initialize();
-
-        this.notEventRedefine = true;
-    }
-
-
     initState() { 
         return {
             index: this.props.index,

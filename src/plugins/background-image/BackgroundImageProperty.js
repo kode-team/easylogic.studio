@@ -10,13 +10,6 @@ import './BackgroundImageProperty.scss';
 
 export default class BackgroundImageProperty extends BaseProperty {
 
-
-  initialize() {
-    super.initialize();
-
-    this.notEventRedefine = true;
-  }
-
   getTitle() {
     return this.$i18n('background.image.property.title');
   }

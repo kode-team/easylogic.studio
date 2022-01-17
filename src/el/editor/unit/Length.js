@@ -28,7 +28,7 @@ export class Length {
     this.value = value;
 
     if (isNumber(this.value) && isNaN(this.value)) {
-      throw new Error('NaN is not able to set')
+      this.value = 0;
     }
 
     this.unit = unit;

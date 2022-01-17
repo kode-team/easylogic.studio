@@ -11,13 +11,7 @@ import PathParser from 'el/editor/parser/PathParser';
 import { createComponent } from "el/sapa/functions/jsx";
 
 export default class PageTools extends EditorElement {
-
-  initialize() {
-    super.initialize();
-    
-    this.notEventRedefine = true;
-  }
-
+  
   template() {
     return /*html*/`     
       <div class='elf--page-tools'>

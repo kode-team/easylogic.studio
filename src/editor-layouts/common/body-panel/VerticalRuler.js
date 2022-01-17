@@ -6,12 +6,6 @@ import Dom from 'el/sapa/functions/Dom';
 let pathString = []
 
 export default class VerticalRuler extends EditorElement {
-
-    initialize() {
-        super.initialize();
-        
-        this.notEventRedefine = true;
-      }
     
     template () {
         return /*html*/`
@@ -23,9 +17,7 @@ export default class VerticalRuler extends EditorElement {
                 </div>                                        
                 <div class='vertical-ruler-container' ref='$body'></div>
                 <div class='vertical-ruler-container'>
-                    <svg width="100%" height="100%" overflow="hidden">
-                        <path data-mouse="true" d="" stroke="transparent" ref="$cursor" />
-                    </svg>
+                    <div class="cursor" ref="$cursor"></div>
                 </div>                
             </div>
         `
@@ -200,8 +192,7 @@ export default class VerticalRuler extends EditorElement {
         }
     }      
 
-
-    makeRulerCursor() {
+    [BIND('$cursor')] () {
         const targetMousePoint = this.$viewport.getWorldPosition();
         const {minY,maxY, height: realHeight} = this.$viewport;
 
@@ -213,12 +204,10 @@ export default class VerticalRuler extends EditorElement {
 
         const y = distY === 0 ? 0 : (distY/realHeight) * height;
 
-        return `M 0 ${y - 0.5} L 20 ${y - 0.5}`;
-    }
-
-    [BIND('$cursor')] () {
         return {
-            d: this.makeRulerCursor(),
+            cssText: `
+                --elf--vertical-cursor-position: ${y}px;
+            `
         }
     }    
 

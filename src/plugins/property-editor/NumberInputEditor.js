@@ -10,12 +10,6 @@ import { isBoolean } from "el/sapa/functions/func";
 
 export default class NumberInputEditor extends EditorElement {
 
-    initialize() {
-        super.initialize();
-        
-        this.notEventRedefine = true;
-      }
-    
     initState() {
         var value = +this.props.value;
         let label = this.props.label || ''; 

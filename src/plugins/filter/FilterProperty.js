@@ -4,7 +4,7 @@ import {
 } from "el/sapa/Event";
 
 
-import icon, { iconUse } from "el/editor/icon/icon";
+import { iconUse } from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { filter_list } from "./util";
 import { createComponent } from "el/sapa/functions/jsx";
@@ -12,13 +12,6 @@ import { createComponent } from "el/sapa/functions/jsx";
 import './FilterProperty.scss';
 
 export default class FilterProperty extends BaseProperty {
-
-
-  initialize() {
-    super.initialize();
-
-    this.notEventRedefine = true;
-  }  
 
   getTitle () {
     return this.$i18n('filter.property.title');
@@ -140,11 +133,11 @@ export default class FilterProperty extends BaseProperty {
     return "filter";
   }
 
-  [SUBSCRIBE('refreshSelection') + IF('checkShow') + DEBOUNCE(1000)] () {
+  [SUBSCRIBE('refreshSelection') + IF('checkShow') + DEBOUNCE(100)] () {
     this.refresh();
   }
 
-  [SUBSCRIBE('refreshSVGArea') + DEBOUNCE(1000)] () {
+  [SUBSCRIBE('refreshSVGArea') + DEBOUNCE(100)] () {
     this.load('$filterSelect');
   }
 }

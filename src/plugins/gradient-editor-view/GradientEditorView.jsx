@@ -59,20 +59,9 @@ var circleGradientList = [
  *
  * current.createBackgroundImageMatrix(index) 를 통해서 matrix 를 생성한 값을 캐쉬로 잡고 처리한다.
  *
- * angle 을 어떻게 표현할지. 도구상에 어떻게 구성할지 고민해본다.
- *
- * matrix 로 표현된 영역전체의 drag 를 어떻게 할지 고민해본다.  (HtmlRenderView 와 유사한 로직으로 클릭후 이동에 대한 처리가 필요하다.)
- *
- * matrix 로 표현된 영역전체의 resize 를 어떻게 할지 고민해본다.  (selection tool 과 비슷한 것을 만들어야할수도 있다.)
- *
  */
 
 export default class GradientEditorView extends EditorElement {
-  initialize() {
-    super.initialize();
-
-    this.notEventRedefine = true;
-  }
 
   template() {
     return <div class="elf--gradient-editor-view"></div>;

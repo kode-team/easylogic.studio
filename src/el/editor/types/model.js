@@ -195,3 +195,13 @@ export const RadialGradientType = {
     CIRCLE: "circle",
     ELLIPSE: "ellipse",
 }
+
+export const ClipPathType = {
+    NONE: "none",
+    CIRCLE: 'circle',
+    ELLIPSE: 'ellipse',
+    POLYGON: 'polygon',
+    INSET: 'inset',
+    PATH: 'path',
+    SVG: 'svg'
+}

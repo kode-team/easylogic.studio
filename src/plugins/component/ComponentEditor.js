@@ -7,13 +7,6 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 export default class ComponentEditor extends EditorElement {
 
-
-  initialize() {
-    super.initialize();
-
-    this.notEventRedefine = true;
-  }
-
   initState() {
     return {
       inspector: this.props.inspector

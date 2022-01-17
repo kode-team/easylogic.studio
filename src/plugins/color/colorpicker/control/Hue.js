@@ -5,14 +5,6 @@ import { END, MOVE } from 'el/editor/types/event';
 
 export default class Hue extends EditorElement {
 
-
-    initialize() {
-        super.initialize();
-
-        this.notEventRedefine = true;
-    }
-
-
     initState() {
         return {
             hue: 0,

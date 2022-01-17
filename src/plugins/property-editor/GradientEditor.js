@@ -28,13 +28,6 @@ var iconList = {
 
 export default class GradientEditor extends EditorElement {
 
-  initialize() {
-    super.initialize();
-
-    this.notEventRedefine = true;
-  }
-
-
   initState() {
 
     return {

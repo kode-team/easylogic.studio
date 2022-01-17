@@ -83,7 +83,7 @@ export function createElement(Component, props, children = []) {
     return /*html*/`<${Component} ${OBJECT_TO_PROPERTY(props)}>${children.join(' ')}</${Component}>`;
 }
 
-export function createElementJsx (Component, props, ...children) {
+export function createElementJsx (Component, props = {}, ...children) {
 
     // 모든 children 을 하나로 모은다. 
     children = children.flat(Infinity);
@@ -98,7 +98,6 @@ export function createElementJsx (Component, props, ...children) {
         registElement({
             [ComponentName]: Component
         })
-
         return createComponent(ComponentName, props, children);
     } else {
         return createElement(Component, props, children)

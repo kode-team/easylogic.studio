@@ -48,6 +48,17 @@ export class EditorElement extends UIElement {
     }
 
     /**
+     * DomEventHandler 에서 이벤트 재정의를 할지 설정합니다. 
+     * 
+     * true 를 리턴하면 DOM 이벤트는 한번만 정의 됩니다. 
+     * 
+     * @returns {boolean} 
+     */
+    get notEventRedefine () {
+        return true; 
+    }
+
+    /**
      * Editor 루트를 재정의 해서 사용
      * 
      * @override

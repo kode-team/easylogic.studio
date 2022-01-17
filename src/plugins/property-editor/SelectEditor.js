@@ -6,12 +6,6 @@ import icon, { iconUse } from "el/editor/icon/icon";
 import { BlendMode } from "el/editor/types/model";
 export default class SelectEditor extends EditorElement {
 
-    initialize() {
-        super.initialize();
-    
-        this.notEventRedefine = true;
-    }
-
     initState() {
         var splitChar = this.props.split || ',';
 

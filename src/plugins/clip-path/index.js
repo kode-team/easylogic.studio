@@ -1,5 +1,4 @@
 import { Editor } from "el/editor/manager/Editor";
-import ClipPathPopup from "./ClipPathPopup";
 import ClipPathProperty from "./ClipPathProperty";
 
 
@@ -10,9 +9,5 @@ import ClipPathProperty from "./ClipPathProperty";
 export default function (editor) {
     editor.registerMenuItem('inspector.tab.style', {
         ClipPathProperty
-    })
-
-    editor.registerMenuItem('popup', {
-        ClipPathPopup
     })
 }

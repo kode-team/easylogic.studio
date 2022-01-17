@@ -9,13 +9,6 @@ const DEFAULT_LABELS = ['True', 'False']
 
 export default class ToggleButton extends BaseUI {
 
-
-    initialize() {
-        super.initialize();
-    
-        this.notEventRedefine = true;
-    }    
-
     initState() {
         return {
             checkedValue: this.props.checkedValue || this.props.value,

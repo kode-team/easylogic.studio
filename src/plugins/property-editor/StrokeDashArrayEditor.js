@@ -21,14 +21,6 @@ const dash_list = [
 
 export default class StrokeDashArrayEditor extends EditorElement {
 
-
-  initialize() {
-    super.initialize();
-
-    this.notEventRedefine = true;
-  }  
-
-
   initState() {
 
     var value = isArray(this.props.value) ? this.props.value : this.generateValue(this.props.value || '')

@@ -10,12 +10,6 @@ import './PatternEditor.scss';
 import { createComponent } from "el/sapa/functions/jsx";
 
 export default class PatternEditor extends EditorElement {
-
-    initialize() {
-        super.initialize();
-        
-        this.notEventRedefine = true;
-      }
     
     initState() {
         return {

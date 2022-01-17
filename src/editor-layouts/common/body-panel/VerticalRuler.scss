@@ -14,6 +14,7 @@
     top:0px;
     height: 100%;
     width: 100%;
+    overflow: hidden;    
 
 
     svg.lines {
@@ -22,6 +23,14 @@
         stroke: transparent;
       }        
     }    
+
+    .cursor {
+      --elf--vertical-cursor-position: 0px;
+      height: 2px;
+      width: 100%;
+      background-color: var(--elf--selected-color-2);
+      transform: translateY(var(--elf--vertical-cursor-position)) translateZ(0);
+    }
   }
 
   svg {

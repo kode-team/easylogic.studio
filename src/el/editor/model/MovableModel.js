@@ -14,6 +14,10 @@ export class MovableModel extends BaseAssetModel {
     getDefaultObject(obj = {}) {
         return super.getDefaultObject({
             angle: 0,
+            x: 0,
+            y: 0,      
+            width: 300,
+            height: 300,            
             ...obj
           });
     }
@@ -551,6 +555,9 @@ export class MovableModel extends BaseAssetModel {
         }
 
         mat4.multiply(transform, transform, this.getRelativeMatrix());
+        if (transform.filter(it => !isNaN(it)).length === 0) {
+            return mat4.create();
+        }
 
         return transform;
     }

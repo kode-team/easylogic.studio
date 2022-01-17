@@ -7,14 +7,6 @@ import { clone, isBoolean } from "el/sapa/functions/func";
 
 export default class ColorViewEditor extends EditorElement {
 
-
-  initialize() {
-    super.initialize();
-    
-    this.notEventRedefine = true;
-  }
-
-
     initState() {
         const value = this.props.value || 'rgba(0, 0, 0, 1)';
         const compact = isBoolean(this.props.compact) ? this.props.compact : this.props.compact === 'true';

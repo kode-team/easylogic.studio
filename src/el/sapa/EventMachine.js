@@ -3,7 +3,6 @@ import {
   CHECK_LOAD_PATTERN,
   LOAD_SAPARATOR,
   DOMDIFF,
-  getRef,
   MAGIC_METHOD,
 } from "./Event";
 import Dom from "./functions/Dom";
@@ -13,7 +12,6 @@ import {
   html,
   keyEach,
   collectProps,
-  isString
 } from "./functions/func";
 
 import DomEventHandler from "./handler/DomEventHandler";

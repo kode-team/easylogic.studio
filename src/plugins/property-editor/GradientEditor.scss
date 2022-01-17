@@ -75,90 +75,6 @@
       pointer-events: none;
     }
 
-    .preset-position {
-      position: absolute;
-      left: 0px;
-      top: 0px;
-      right: 0px;
-      bottom: 0px;
-      pointer-events: none;
-      // overflow: auto;
-
-      > div {
-        pointer-events: all;
-        height: 10px;
-        width: 10px;
-        position: absolute;
-        display: block;
-        color: var(--elf--font-color);
-        cursor: pointer;
-
-        svg {
-          width: 100%;
-          height: 100%;
-
-          path {
-            fill: currentColor;
-          }
-        }
-      }
-
-      [data-value="top"] {
-        position: absolute;
-        top: 0px;
-        left: 50%;
-        transform: translate(-50%, -100%) rotate(-90deg);
-      }
-
-      [data-value="top left"] {
-        position: absolute;
-        top: 0px;
-        left: 0%;
-        transform: translate(-100%, -100%) rotate(-135deg);
-      }
-
-      [data-value="top right"] {
-        position: absolute;
-        top: 0px;
-        left: 100%;
-        transform: translate(0%, -100%) rotate(-45deg);
-      }
-
-      [data-value="right"] {
-        position: absolute;
-        top: 50%;
-        left: 100%;
-        transform: translate(0%, -50%);
-      }
-
-      [data-value="left"] {
-        position: absolute;
-        top: 50%;
-        left: 0%;
-        transform: translate(-100%, -50%) rotate(-180deg);
-      }
-
-      [data-value="bottom"] {
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        transform: translate(-50%, 0%) rotate(90deg);
-      }
-
-      [data-value="bottom left"] {
-        position: absolute;
-        top: 100%;
-        left: 0%;
-        transform: translate(-100%, 0%) rotate(135deg);
-      }
-
-      [data-value="bottom right"] {
-        position: absolute;
-        top: 100%;
-        left: 100%;
-        transform: translate(0%, 0%) rotate(45deg);
-      }
-    }
   }
 
   .picker-tab {
@@ -289,8 +205,8 @@
     right: 0px;
     top: 4px;
     height: 14px;
-    border-radius: 10px;
-    border: 1px solid var(--elf--border-color);
+    // border-radius: 10px;
+    box-shadow: 0 0 0 1px var(--elf--border-color);
 
     @include transparent-background();
     pointer-events: all;
@@ -304,7 +220,7 @@
       height: 100%;
       top: 0px;
       left: 0px;
-      border-radius: 10px;
+    //   border-radius: 10px;
       pointer-events: none;
 
       .step {

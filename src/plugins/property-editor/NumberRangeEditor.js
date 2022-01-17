@@ -9,13 +9,6 @@ import { OBJECT_TO_CLASS } from "el/utils/func";
 
 export default class NumberRangeEditor extends EditorElement {
 
-
-    initialize() {
-        super.initialize();
-    
-        this.notEventRedefine = true;
-    }    
-
     initState() {
         var value = Length.parse(this.props.value || Length.number(0));
         value = value.toUnit('number');

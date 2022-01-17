@@ -48,12 +48,6 @@ var specList = {
 
 export default class FilterEditor extends EditorElement {
 
-  initialize() {
-    super.initialize();
-
-    this.notEventRedefine = true;
-  }
-
   initState() {
     return {
       hideLabel: this.props.hideLabel === 'true' ? true : false,

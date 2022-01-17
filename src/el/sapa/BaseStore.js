@@ -52,7 +52,7 @@ export default class BaseStore {
    * @param {string[]} [beforeMethods=[]]
    * @returns {Function} off callback 
    */
-  on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false, beforeMethods = []) {
+  on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false, beforeMethods = [], frame = false) {
 
     var callback = originalCallback;
 
@@ -63,8 +63,10 @@ export default class BaseStore {
       callback = ifCheck(callback, context, beforeMethods);
     }
 
-    // 모든 이벤트는 requestAnimationFrame 을 통과하도록 한다.
-    callback = makeRequestAnimationFrame(callback, context);
+    if (frame) {
+      // 모든 이벤트는 requestAnimationFrame 을 통과하도록 한다.
+      callback = makeRequestAnimationFrame(callback, context);
+    }
 
     this.getCallbacks(event).push({ event, callback, context, originalCallback, enableAllTrigger, enableSelfTrigger });
 
