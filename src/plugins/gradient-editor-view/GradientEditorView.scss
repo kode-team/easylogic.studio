@@ -97,7 +97,6 @@
 
     circle {
       pointer-events: all;      
-      fill: white;
       // stroke: black;
       stroke-width: 2;
 
@@ -107,6 +106,16 @@
 
       &.moved {
         cursor: grabbing;
+      }
+
+      &.colorstep {
+        stroke-width: 0.5;
+        stroke: white;
+        r: 6;
+      }
+
+      &:not(.colorstep) {
+        fill: white;
       }
     }
     

@@ -431,7 +431,7 @@ export default class GradientEditorView extends EditorElement {
   makeCenterPoint(result) {
     const { image } = result.backgroundImage;
 
-    let boxPosition, centerPosition, centerStick, startPoint, endPoint;
+    let boxPosition, centerPosition, centerStick, startPoint, endPoint, colorsteps;
 
     if (
       image.type === GradientType.STATIC ||
@@ -442,6 +442,10 @@ export default class GradientEditorView extends EditorElement {
       startPoint = this.$viewport.applyVertex(result.startPoint);
       endPoint = this.$viewport.applyVertex(result.endPoint);
       centerPosition = this.$viewport.applyVertex(result.centerPosition);
+      colorsteps = result.colorsteps.map(it => {
+          it.screenXY = this.$viewport.applyVertex(it.pos)
+          return it;
+      })
 
       const stickPoint = vec3.lerp([], boxPosition[0], boxPosition[1], 0.5);
 
@@ -513,7 +517,7 @@ export default class GradientEditorView extends EditorElement {
                         L ${endPoint[0]} ${endPoint[1]}
                     `}
                 />
-                <circle
+                {/* <circle
                   cx={startPoint[0]}
                   cy={startPoint[1]}
                   r="5"
@@ -524,7 +528,10 @@ export default class GradientEditorView extends EditorElement {
                   cy={endPoint[1]}
                   r="5"
                   data-point-type="end"
-                ></circle>
+                ></circle> */}
+                {colorsteps.map(it => {
+                    return <circle class="colorstep" cx={it.screenXY[0]} cy={it.screenXY[1]} fill={it.color}></circle>
+                })}
               </>
             ) : null}
 

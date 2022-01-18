@@ -418,6 +418,15 @@ export class DomModel extends GroupModel {
 
         result.endPoint = newEndPoint;
         result.startPoint = newStartPoint
+
+        result.colorsteps = image.colorsteps.map(it => {
+          const offset = it.toLength().toPx(result.gradientLineLength).value;
+          return {
+            color: it.color,
+            pos: vec3.lerp([], result.startPoint, result.endPoint, offset / result.gradientLineLength)
+          }
+        });
+
         break;
     }
 

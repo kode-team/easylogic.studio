@@ -31800,6 +31800,13 @@ class DomModel extends GroupModel {
         const [newStartPoint, newEndPoint] = vertiesMap([startPoint, endPoint], calculateRotationOriginMat4(image2.angle, result.centerPosition));
         result.endPoint = newEndPoint;
         result.startPoint = newStartPoint;
+        result.colorsteps = image2.colorsteps.map((it) => {
+          const offset = it.toLength().toPx(result.gradientLineLength).value;
+          return {
+            color: it.color,
+            pos: lerp([], result.startPoint, result.endPoint, offset / result.gradientLineLength)
+          };
+        });
         break;
     }
     return result;
@@ -55734,12 +55741,16 @@ class GradientEditorView$1 extends EditorElement {
   }
   makeCenterPoint(result) {
     const { image: image2 } = result.backgroundImage;
-    let boxPosition, centerPosition, centerStick, startPoint, endPoint;
+    let boxPosition, centerPosition, centerStick, startPoint, endPoint, colorsteps;
     if (image2.type === GradientType.STATIC || image2.type === GradientType.LINEAR || image2.type === GradientType.REPEATING_LINEAR) {
       boxPosition = this.$viewport.applyVerties(result.backVerties);
       startPoint = this.$viewport.applyVertex(result.startPoint);
       endPoint = this.$viewport.applyVertex(result.endPoint);
       centerPosition = this.$viewport.applyVertex(result.centerPosition);
+      colorsteps = result.colorsteps.map((it) => {
+        it.screenXY = this.$viewport.applyVertex(it.pos);
+        return it;
+      });
       const stickPoint = lerp([], boxPosition[0], boxPosition[1], 0.5);
       centerStick = lerp([], centerPosition, lerp([], centerPosition, stickPoint, 1 / dist(centerPosition, stickPoint)), 40);
     } else {
@@ -55773,16 +55784,13 @@ class GradientEditorView$1 extends EditorElement {
                         M ${startPoint[0]} ${startPoint[1]}
                         L ${endPoint[0]} ${endPoint[1]}
                     `
-    }), /* @__PURE__ */ createElementJsx("circle", {
-      cx: startPoint[0],
-      cy: startPoint[1],
-      r: "5",
-      "data-point-type": "start"
-    }), /* @__PURE__ */ createElementJsx("circle", {
-      cx: endPoint[0],
-      cy: endPoint[1],
-      r: "5",
-      "data-point-type": "end"
+    }), colorsteps.map((it) => {
+      return /* @__PURE__ */ createElementJsx("circle", {
+        class: "colorstep",
+        cx: it.screenXY[0],
+        cy: it.screenXY[1],
+        fill: it.color
+      });
     })) : null) : null);
   }
   [LOAD("$el") + DOMDIFF]() {
