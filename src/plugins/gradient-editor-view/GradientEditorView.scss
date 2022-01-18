@@ -36,7 +36,7 @@
     border-radius: 50%;
     border: 2px solid white;
     pointer-events: all;
-    filter: drop-shadow(0 0 3px rgba(255, 0, 255, 0.7));
+    filter: drop-shadow(0 0 3px rgba(0, 0, 255, 0.7));
     cursor: grab;
   }
 
@@ -45,7 +45,7 @@
     pointer-events: none;
     cursor: move;
     // border:2px solid black;
-    // filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.7));
+    filter: drop-shadow(0 0 3px rgba(0, 0, 255, 0.7));
     box-sizing: border-box;
 
     svg {
@@ -71,7 +71,7 @@
     transform: translate(-50%, -50%);
     // border: 2px solid black;
     border-radius: 100%;
-    box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.7);
+    filter: drop-shadow(0 0 3px rgba(0, 0, 255, 0.7));
 
     &[data-direction="bottom-right"] {
       left: 100%;
@@ -87,6 +87,7 @@
     bottom: 0px;
     pointer-events: none;
     overflow: visible;
+    filter: drop-shadow(0 0 3px rgba(0, 0, 255, 0.7));    
 
     
     path {

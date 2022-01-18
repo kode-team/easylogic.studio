@@ -200,7 +200,7 @@ export class BackgroundImage extends PropertyItem {
 
     if (x.isPercent()) {
 
-      if (newX < dist) {
+      if (Math.abs(newX) < dist) {
         nextX = Length.percent(0)
       } else if (Math.abs((maxWidth - newWidth) - newX) < dist) {
         nextX = Length.percent(100)        
@@ -213,7 +213,7 @@ export class BackgroundImage extends PropertyItem {
 
     if (y.isPercent()) {
 
-      if (newY < dist) {
+      if (Math.abs(newY) < dist) {
         nextY = Length.percent(0)
       } else if (Math.abs((maxHeight - newHeight) - newY) < dist) {
         nextY = Length.percent(100)        

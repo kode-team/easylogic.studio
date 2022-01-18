@@ -7783,7 +7783,7 @@ class BackgroundImage extends PropertyItem {
     let nextY = Length.px(newY);
     const dist2 = 2;
     if (x2.isPercent()) {
-      if (newX < dist2) {
+      if (Math.abs(newX) < dist2) {
         nextX = Length.percent(0);
       } else if (Math.abs(maxWidth - newWidth - newX) < dist2) {
         nextX = Length.percent(100);
@@ -7794,7 +7794,7 @@ class BackgroundImage extends PropertyItem {
       }
     }
     if (y2.isPercent()) {
-      if (newY < dist2) {
+      if (Math.abs(newY) < dist2) {
         nextY = Length.percent(0);
       } else if (Math.abs(maxHeight - newHeight - newY) < dist2) {
         nextY = Length.percent(100);
@@ -31756,6 +31756,9 @@ class DomModel extends GroupModel {
     const backgroundImages = BackgroundImage.parseStyle(STRING_TO_CSS(value));
     return backgroundImages[index2 || 0];
   }
+  getGradientLineLength(width2, height2, angle2) {
+    return Math.abs(width2 * Math.sin(degreeToRadian$1(angle2))) + Math.abs(height2 * Math.cos(degreeToRadian$1(angle2)));
+  }
   createBackgroundImageMatrix(index2) {
     const backgroundImage2 = this.getBackgroundImage(index2);
     const { image: image2 } = backgroundImage2;
@@ -31787,6 +31790,16 @@ class DomModel extends GroupModel {
         ], this.absoluteMatrix);
         result.radialCenterPosition = centerVerties[0];
         result.radialCenterStick = centerVerties[1];
+        break;
+      case GradientType.LINEAR:
+      case GradientType.REPEATING_LINEAR:
+        result.gradientLineLength = this.getGradientLineLength(backRect.width, backRect.height, image2.angle);
+        result.centerPosition = lerp([], backVerties[0], backVerties[2], 0.5);
+        const startPoint = add$1([], result.centerPosition, [0, result.gradientLineLength / 2, 0]);
+        const endPoint = subtract([], result.centerPosition, [0, result.gradientLineLength / 2, 0]);
+        const [newStartPoint, newEndPoint] = vertiesMap([startPoint, endPoint], calculateRotationOriginMat4(image2.angle, result.centerPosition));
+        result.endPoint = newEndPoint;
+        result.startPoint = newStartPoint;
         break;
     }
     return result;
@@ -40086,7 +40099,7 @@ class PositionProperty extends BaseProperty {
     var current = this.$selection.current;
     if (!current)
       return false;
-    return current.hasChangedField("x", "y", "right", "bottom", "width", "height", "transform", "rotateZ", "rotate", "opacity", "constraints-horizontal", "constriants-vertical");
+    return current.hasChangedField("x", "y", "right", "bottom", "width", "height", "angle", "transform", "rotateZ", "rotate", "opacity", "constraints-horizontal", "constriants-vertical");
   }
   [SUBSCRIBE("refreshSelectionStyleView") + IF("checkChangedValue") + THROTTLE(10)]() {
     var current = this.$selection.current;
@@ -55721,17 +55734,19 @@ class GradientEditorView$1 extends EditorElement {
   }
   makeCenterPoint(result) {
     const { image: image2 } = result.backgroundImage;
-    let centerPosition, centerStick;
+    let boxPosition, centerPosition, centerStick, startPoint, endPoint;
     if (image2.type === GradientType.STATIC || image2.type === GradientType.LINEAR || image2.type === GradientType.REPEATING_LINEAR) {
-      const boxPosition = this.$viewport.applyVerties(result.backVerties);
-      centerPosition = lerp([], boxPosition[0], boxPosition[2], 0.5);
+      boxPosition = this.$viewport.applyVerties(result.backVerties);
+      startPoint = this.$viewport.applyVertex(result.startPoint);
+      endPoint = this.$viewport.applyVertex(result.endPoint);
+      centerPosition = this.$viewport.applyVertex(result.centerPosition);
       const stickPoint = lerp([], boxPosition[0], boxPosition[1], 0.5);
       centerStick = lerp([], centerPosition, lerp([], centerPosition, stickPoint, 1 / dist(centerPosition, stickPoint)), 40);
     } else {
       centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
       centerStick = lerp([], centerPosition, this.$viewport.applyVertex(result.radialCenterStick), 40);
     }
-    const newCenterStick = vertiesMap([centerStick], calculateRotationOriginMat4(image2.angle, centerPosition))[0];
+    const [newCenterStick] = vertiesMap([centerStick], calculateRotationOriginMat4(image2.angle, centerPosition));
     const targetStick = lerp([], newCenterStick, centerPosition, 3 / 4);
     return /* @__PURE__ */ createElementJsx(Fragment, null, /* @__PURE__ */ createElementJsx("div", {
       class: "gradient-position center",
@@ -55753,7 +55768,22 @@ class GradientEditorView$1 extends EditorElement {
       r: "7",
       "data-center-x": centerPosition[0],
       "data-center-y": centerPosition[1]
-    })) : null);
+    }), image2.type === GradientType.LINEAR || image2.type === GradientType.REPEATING_LINEAR ? /* @__PURE__ */ createElementJsx(Fragment, null, /* @__PURE__ */ createElementJsx("path", {
+      d: `
+                        M ${startPoint[0]} ${startPoint[1]}
+                        L ${endPoint[0]} ${endPoint[1]}
+                    `
+    }), /* @__PURE__ */ createElementJsx("circle", {
+      cx: startPoint[0],
+      cy: startPoint[1],
+      r: "5",
+      "data-point-type": "start"
+    }), /* @__PURE__ */ createElementJsx("circle", {
+      cx: endPoint[0],
+      cy: endPoint[1],
+      r: "5",
+      "data-point-type": "end"
+    })) : null) : null);
   }
   [LOAD("$el") + DOMDIFF]() {
     const current = this.$selection.current;

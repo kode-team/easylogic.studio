@@ -62,7 +62,6 @@ var circleGradientList = [
  */
 
 export default class GradientEditorView extends EditorElement {
-
   template() {
     return <div class="elf--gradient-editor-view"></div>;
   }
@@ -130,7 +129,6 @@ export default class GradientEditorView extends EditorElement {
       height: backRect.height,
     });
 
-
     this.updateData();
   }
 
@@ -183,7 +181,6 @@ export default class GradientEditorView extends EditorElement {
       y: backRect.y,
     });
 
-    
     this.updateData();
   }
 
@@ -195,7 +192,6 @@ export default class GradientEditorView extends EditorElement {
       this.state.backgroundImages[this.state.index].repeat =
         repeatTypeList[(index + 1) % repeatTypeList.length];
     }
-
 
     this.updateData();
   }
@@ -238,25 +234,24 @@ export default class GradientEditorView extends EditorElement {
 
     this.state.backgroundImages[this.state.index].image.angle = newAngle;
 
-
     this.updateData();
   }
 
   calculatedMovedEndAngle() {
     this.state.$target.toggleClass("moved");
 
-    this.updateData();    
+    this.updateData();
   }
 
   isMovableCenter(e) {
-    this.initializeData();    
+    this.initializeData();
 
     return [
-        GradientType.RADIAL,
-        GradientType.REPEATING_RADIAL,
-        GradientType.CONIC,
-        GradientType.REPEATING_CONIC,
-    ].includes(this.state.gradient.type)
+      GradientType.RADIAL,
+      GradientType.REPEATING_RADIAL,
+      GradientType.CONIC,
+      GradientType.REPEATING_CONIC,
+    ].includes(this.state.gradient.type);
   }
 
   /**
@@ -270,7 +265,7 @@ export default class GradientEditorView extends EditorElement {
     LEFT_BUTTON +
     MOVE("calculateMovedElement") +
     END("calculateMovedEndElement") +
-    IF('isMovableCenter') +
+    IF("isMovableCenter") +
     PREVENT](e) {
     this.state.$target = e.$dt;
     this.state.left = Length.parse(e.$dt.css("left")).value;
@@ -317,8 +312,7 @@ export default class GradientEditorView extends EditorElement {
       Length.percent((newY / backRect.height) * 100),
     ];
 
-
-    this.updateData();    
+    this.updateData();
   }
 
   calculateMovedEndElement(dx, dy) {
@@ -334,8 +328,7 @@ export default class GradientEditorView extends EditorElement {
             radialTypeList[(index + 1) % radialTypeList.length];
           break;
       }
-    } 
-
+    }
 
     this.updateData();
   }
@@ -390,14 +383,14 @@ export default class GradientEditorView extends EditorElement {
     this.refresh();
     this.emit("recoverCursor");
 
-    this.emit('push.mode.view', 'GradientEditorView');
+    this.emit("push.mode.view", "GradientEditorView");
   }
 
   [SUBSCRIBE("hideGradientEditorView")]() {
     this.$el.hide();
     this.state.isShow = false;
 
-    this.emit('pop.mode.view', 'GradientEditorView');    
+    this.emit("pop.mode.view", "GradientEditorView");
   }
 
   [SUBSCRIBE("refreshSelection")]() {
@@ -438,16 +431,17 @@ export default class GradientEditorView extends EditorElement {
   makeCenterPoint(result) {
     const { image } = result.backgroundImage;
 
-    let centerPosition, centerStick;
+    let boxPosition, centerPosition, centerStick, startPoint, endPoint;
 
     if (
       image.type === GradientType.STATIC ||
       image.type === GradientType.LINEAR ||
       image.type === GradientType.REPEATING_LINEAR
     ) {
-      const boxPosition = this.$viewport.applyVerties(result.backVerties);
-
-      centerPosition = vec3.lerp([], boxPosition[0], boxPosition[2], 0.5);
+      boxPosition = this.$viewport.applyVerties(result.backVerties);
+      startPoint = this.$viewport.applyVertex(result.startPoint);
+      endPoint = this.$viewport.applyVertex(result.endPoint);
+      centerPosition = this.$viewport.applyVertex(result.centerPosition);
 
       const stickPoint = vec3.lerp([], boxPosition[0], boxPosition[1], 0.5);
 
@@ -462,6 +456,7 @@ export default class GradientEditorView extends EditorElement {
         ),
         40
       );
+
     } else {
       centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
 
@@ -472,10 +467,10 @@ export default class GradientEditorView extends EditorElement {
         40
       );
     }
-    const newCenterStick = vertiesMap(
+    const [newCenterStick] = vertiesMap(
       [centerStick],
       calculateRotationOriginMat4(image.angle, centerPosition)
-    )[0];
+    );
 
     const targetStick = vec3.lerp([], newCenterStick, centerPosition, 3 / 4);
 
@@ -508,6 +503,34 @@ export default class GradientEditorView extends EditorElement {
               data-center-x={centerPosition[0]}
               data-center-y={centerPosition[1]}
             />
+
+            {image.type === GradientType.LINEAR ||
+            image.type === GradientType.REPEATING_LINEAR ? (
+              <>
+                <path
+                  d={`
+                        M ${startPoint[0]} ${startPoint[1]}
+                        L ${endPoint[0]} ${endPoint[1]}
+                    `}
+                />
+                <circle
+                  cx={startPoint[0]}
+                  cy={startPoint[1]}
+                  r="5"
+                  data-point-type="start"
+                ></circle>
+                <circle
+                  cx={endPoint[0]}
+                  cy={endPoint[1]}
+                  r="5"
+                  data-point-type="end"
+                ></circle>
+              </>
+            ) : null}
+
+            {/* <text x={centerPosition[0]} y={centerPosition[1]} dy="30">
+              {image.angle}
+            </text> */}
           </svg>
         ) : null}
       </>

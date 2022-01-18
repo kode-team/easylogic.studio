@@ -33,6 +33,7 @@ export default class PositionProperty extends BaseProperty {
       'bottom',
       'width',
       'height',
+      'angle',
       'transform',
       'rotateZ',
       'rotate',

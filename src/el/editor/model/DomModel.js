@@ -9,7 +9,8 @@ import { BackgroundImage } from 'el/editor/property-parser/BackgroundImage';
 import { STRING_TO_CSS } from "el/utils/func";
 import { Constraints, GradientType, Layout } from "../types/model";
 import { rectToVerties } from "el/utils/collision";
-import { vertiesMap } from "el/utils/math";
+import { calculateRotationOriginMat4, degreeToRadian, vertiesMap } from "el/utils/math";
+import { vec3 } from "gl-matrix";
 
 
 const editableList = [
@@ -340,6 +341,14 @@ export class DomModel extends GroupModel {
     return backgroundImages[index || 0]
   }
 
+
+  getGradientLineLength(width, height, angle) {
+    return (
+      Math.abs(width * Math.sin(degreeToRadian(angle))) +
+      Math.abs(height * Math.cos(degreeToRadian(angle)))
+    );
+  }
+
   /**
    * 선택된 backround image 의 matrix 를 생성함. 
    * 
@@ -392,6 +401,23 @@ export class DomModel extends GroupModel {
         result.radialCenterPosition = centerVerties[0];
         result.radialCenterStick = centerVerties[1];
 
+        break;
+      case GradientType.LINEAR:
+      case GradientType.REPEATING_LINEAR:
+        // gradient length 구하기
+        result.gradientLineLength = this.getGradientLineLength( backRect.width, backRect.height, image.angle);
+        result.centerPosition = vec3.lerp([], backVerties[0], backVerties[2], 0.5);
+
+        const startPoint = vec3.add([], result.centerPosition, [0, result.gradientLineLength/2, 0]);        
+        const endPoint = vec3.subtract([], result.centerPosition, [0, result.gradientLineLength/2, 0]);
+
+        const [newStartPoint, newEndPoint] = vertiesMap(
+          [startPoint, endPoint],
+          calculateRotationOriginMat4(image.angle, result.centerPosition)
+        );
+
+        result.endPoint = newEndPoint;
+        result.startPoint = newStartPoint
         break;
     }
 
