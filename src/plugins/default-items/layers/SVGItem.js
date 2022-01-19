@@ -36,18 +36,28 @@ export class SVGItem extends LayerModel {
       overflow: 'visible',         
       stroke: 'black',
       'stroke-width': 1,
-      'svgfilter': '',
       fill: 'transparent',
-      'fill-rule': '',
-      'fill-opacity': '',
-      'stroke-linecap': '',
-      'stroke-linejoin': '',      
-      'stroke-dashoffset': 0, 
-      'stroke-dasharray': ' ',
+      'fill-rule': 'nonzero',
       'text-anchor': 'start',
+      'stroke-dasharray': [],
+      'stroke-dashoffset': 0,
       ...obj
     });
   }
+
+  /**
+   * svg item 의 경우 부모가 boolean 연산을 수행할 때 
+   * drag 로 하위 패스를 선택하지 못하도록 막는다. 
+   */
+  get isDragSelectable() {
+    return this.isBooleanItem === false;
+  }
+
+  get isBooleanItem() {
+    return Boolean(this.parent.is('boolean-path'));
+  }
+
+
 
   editable(editablePropertyName) {
 
@@ -99,13 +109,14 @@ export class SVGItem extends LayerModel {
    * 
    * @param {number} x 
    * @param {number} y 
-   * @returns 
+   * @returns {boolean}
    */
    hasPoint (x, y) {
+    const obj = this.attrs('fill', 'stroke', 'fill-opacity', 'stroke-width');
 
-    const fill = this.json.fill;
-    const fillOpacity = this.json['fill-opacity'];
-    const strokeWidth = this.json['stroke-width'];
+    const fill = obj.fill;
+    const fillOpacity = obj['fill-opacity'];
+    const strokeWidth = obj['stroke-width'];
 
     const isTransparent = fill === 'transparent' || fillOpacity === 0 || Color.parse(fill).a === 0;
     const isZeroStroke = strokeWidth === 0;
@@ -129,7 +140,7 @@ export class SVGItem extends LayerModel {
    * 
    * @param {*} x 
    * @param {*} y 
-   * @returns 
+   * @returns {boolean}
    */
   isPointInFill(x, y) {
     const svgEl = this.getCache("svgElement")
@@ -147,6 +158,13 @@ export class SVGItem extends LayerModel {
     return false;
   }
 
+
+  /**
+   * 
+   * @param {number} x 
+   * @param {number} y 
+   * @returns {boolean}
+   */
   isPointInStroke(x, y) {
     const svgEl = this.getCache("svgElement")
     const pathEl = this.getCache("pathElement")
@@ -163,17 +181,22 @@ export class SVGItem extends LayerModel {
     return false;
   }
 
+  /**
+   * 
+   * @param {number} distX 
+   * @param {number} distY 
+   * @returns {Object}
+   */
   convertStrokeToPath(distX = 10, distY = 10) {
 
-    const attrs = this.attrs('width', 'parentId', 'height', 'x', 'y', 'transform');        
-    const localFill = this.json.stroke
+    const attrs = this.attrs('name', 'width', 'parentId', 'height', 'x', 'y', 'transform', 'stroke');        
+
+    attrs.fill = attrs.stroke;
+    delete attrs.stroke;
 
     return {
       itemType: 'svg-path',
-      name: this.json.name,
-      fill: localFill,
       'fill-rule': 'evenodd',
-      // 'stroke': 'transparent',
       ...attrs,
       x: Length.parse(attrs.x).add(distX),
       y: Length.parse(attrs.y).add(distY)      
@@ -181,6 +204,10 @@ export class SVGItem extends LayerModel {
   }  
 
 
+  /**
+   * 
+   * @returns {Object}
+   */
   toSVGPath() {
     const attrs = this.toCloneObject();
 

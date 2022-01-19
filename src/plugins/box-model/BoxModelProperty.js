@@ -1,4 +1,4 @@
-import { DEBOUNCE, IF, INPUT, LOAD, SUBSCRIBE } from "el/sapa/Event";
+import { DEBOUNCE, DOMDIFF, IF, INPUT, LOAD, SUBSCRIBE } from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { Length } from "el/editor/unit/Length";
 
@@ -13,16 +13,26 @@ fields.forEach(field => {
 
 
 export default class BoxModelProperty extends BaseProperty {
+
   getTitle() {
     return this.$i18n('box.model.property.title');
   }
 
   get editableProperty() {
-    return 'box-model';
+    return 'box-model-block';
   }
 
   [SUBSCRIBE('refreshSelection') + DEBOUNCE(100) + IF('checkShow')]() {
     this.refresh();
+  }
+
+  [SUBSCRIBE('refreshSelectionStyleView')]() {
+    const current = this.$selection.current;
+
+
+    if (current?.hasChangedField('padding-left', 'padding-right', 'padding-top', 'padding-bottom')) {
+      this.refresh();
+    }
   }
 
   getBody() {
@@ -31,12 +41,12 @@ export default class BoxModelProperty extends BaseProperty {
 
   templateInput(key, current) {
 
-    var value = Length.parse(current[key] || Length.z())
+    var value = Length.parse(current[key] || 0)
 
     return /*html*/`<input type="number" ref="$${key}" value="${value.value}" tabIndex="1" />`;
   }
 
-  [LOAD("$boxModelItem")]() {
+  [LOAD("$boxModelItem") + DOMDIFF]() {
     var current = this.$selection.current;
 
     if (!current) return '';
@@ -86,7 +96,7 @@ export default class BoxModelProperty extends BaseProperty {
     var data = {};
 
     styleKeys.forEach(key => {
-      data[key] = Length.px(this.refs["$" + key].value);
+      data[key] = this.refs["$" + key].value;
     });
 
     this.command("setAttributeForMulti", 'change padding or margin', this.$selection.packByValue(data))    

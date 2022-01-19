@@ -1,7 +1,5 @@
 import { makeInterpolateLength } from "./makeInterpolateLength";
-import { STRING_TO_CSS, CSS_TO_STRING } from "el/sapa/functions/func";
 import BorderRadius from "../../property-parser/BorderRadius";
-import { Length } from "el/editor/unit/Length";
 
 const getBorderRadiusList = (radiusValue) => {
     var startObject = [] 

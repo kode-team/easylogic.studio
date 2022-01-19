@@ -1,23 +1,32 @@
 import { CLICK, INPUT, CHANGE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import BorderRadius from "el/editor/property-parser/BorderRadius";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './BorderRadiusEditor.scss';
+import { variable } from 'el/sapa/functions/registElement';
+import { createComponent } from "el/sapa/functions/jsx";
 
 const typeList = [
-  { key: "border-top-left-radius", title: "topLeft" },
-  { key: "border-top-right-radius", title: "topRight" },
-  { key: "border-bottom-right-radius", title: "bottomRight" },
-  { key: "border-bottom-left-radius", title: "bottomLeft" }  
+  { key: "border-top-left-radius", title: "topLeft", label: 'TL' },
+  { key: "border-top-right-radius", title: "topRight", label: 'TR' },
+  { key: "border-bottom-left-radius", title: "bottomLeft", label: 'BL' },  
+  { key: "border-bottom-right-radius", title: "bottomRight", label: 'BR' },
 ];
 
 const keyList = typeList.map(it => it.key);
 
+const BorderGroup = {
+  ALL: 'all',
+  PARTITIAL : 'partial',
+}
+
 export default class BorderRadiusEditor extends EditorElement {
 
   initState() {
-    return BorderRadius.parseStyle(this.props.value)
+    return {
+      ...BorderRadius.parseStyle(this.props.value),
+    }
   }
 
   template() {
@@ -37,36 +46,55 @@ export default class BorderRadiusEditor extends EditorElement {
 
   [LOAD('$body')] () {
 
-    var selectedValue = this.state.isAll ? 'all' : 'partitial'
+    var selectedValue = BorderGroup.ALL
     var borderRadius = this.state['border-radius'];
 
     return /*html*/`
-      <div class="property-item border-radius-item">
-        <div class="radius-selector" data-selected-value="${selectedValue}" ref="$selector">
-          <button type="button" data-value="all">${icon.border_all}</button>
-          <button type="button" data-value="partitial">
-            ${icon.border_inner}
-          </button>
-        </div>
+      <div class="border-radius-item">
         <div class="radius-value">
-          <object refClass="RangeEditor"  ref='$all' key='border-radius' value="${borderRadius}" onchange='changeBorderRadius' />
+          ${createComponent("InputRangeEditor", {
+            label: iconUse('outline_rect'),
+            ref: '$all',
+            compact: "true",
+            key: 'border-radius',
+            value: borderRadius,
+            min: 0,
+            onchange: 'changeBorderRadius'
+          })}
         </div>
+        <div></div>
+
+        <object refClass="ToggleButton" ${variable({
+            compact: true,
+            ref: '$toggle',
+            key: 'border-all',
+            checkedValue: BorderGroup.PARTITIAL,
+            value: BorderGroup.ALL,
+            toggleLabels: ['border_inner', 'border_inner'],
+            toggleValues: [BorderGroup.ALL, BorderGroup.PARTITIAL],
+            onchange: 'changeKeyValue'
+        })}
+        />
       </div>
       <div
-        class="property-item full border-radius-item"
+        class="full border-radius-item"
         ref="$partitialSetting"
         style="display: none;"
       >
         <div class="radius-setting-box" ref="$radiusSettingBox">
-          ${typeList.map(it => {
-            var value = this.state[it.key]
-            var label = this.$i18n('border.radius.editor.' + it.title);
-            return /*html*/`
-              <div>
-                  <object refClass="RangeEditor"  ref='$${it.key}' label='${label}' key='${it.key}' value='${value}' onchange='changeBorderRadius' />
-              </div>  
-            `;
-          }).join('')}
+          <div>
+            ${typeList.map(it => {
+              var value = this.state[it.key]
+              var title = this.$i18n('border.radius.editor.' + it.title);
+              var label = it.label;
+
+              return /*html*/`
+                <div>
+                    <object refClass="InputRangeEditor"  compact="true" ref='$${it.key}' label='${label}' title="${title}" key='${it.key}' value='${value}' min="0" step="1" onchange='changeBorderRadius' />
+                </div>  
+              `;
+            }).join('')}
+          </div>
         </div>
       </div>
     `;
@@ -81,14 +109,11 @@ export default class BorderRadiusEditor extends EditorElement {
   }
 
   setBorderRadius() {
-    var type = this.refs.$selector.attr("data-selected-value");
+    var type = this.selectedValue;
 
-    if (type === "all") {
-      this.state.isAll = true; 
+    if (type === BorderGroup.ALL) {
       this.state['border-radius'] = this.children[`$all`].getValue();
     } else {
-
-      this.state.isAll = false; 
       keyList.forEach(key => {
         this.state[key] = this.children[`$${key}`].getValue();
       });
@@ -100,7 +125,7 @@ export default class BorderRadiusEditor extends EditorElement {
   modifyBorderRadius () {
     var value = '';
 
-    if (this.state.isAll) {
+    if (this.selectedValue === BorderGroup.ALL) {
       value = this.state['border-radius'] + ''
     } else {
       value = keyList.map(key => `${this.state[key]}`).join(' ')
@@ -109,14 +134,15 @@ export default class BorderRadiusEditor extends EditorElement {
     this.parent.trigger(this.props.onchange, value);
   }
 
-  [CLICK("$selector button")](e) {
-    var type = e.$dt.attr("data-value");
-    this.refs.$selector.attr("data-selected-value", type);
+  [SUBSCRIBE_SELF("changeKeyValue")](key, value) {
+    const type = value;
 
-    if (type === "all") {
-      this.refs.$partitialSetting.hide();
+    if (type === BorderGroup.PARTITIAL) {
+      this.selectedValue = BorderGroup.PARTITIAL;
+      this.refs.$partitialSetting.show();
     } else {
-      this.refs.$partitialSetting.show("grid");
+      this.selectedValue = BorderGroup.ALL;
+      this.refs.$partitialSetting.hide();
     }
 
     this.setBorderRadius();

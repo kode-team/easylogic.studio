@@ -7,6 +7,7 @@ import SameHeight from "el/editor/ui/menu-items/SameHeight";
 import SameWidth from "el/editor/ui/menu-items/SameWidth";
 import TopAlign from "el/editor/ui/menu-items/TopAlign";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { createComponentList } from "el/sapa/functions/jsx";
 
 import './AlignmentProperty.scss';
 
@@ -36,16 +37,18 @@ export default class AlignmentProperty extends BaseProperty {
   getBody() {
     return /*html*/`
       <div class="elf--alignment-item">
-        <object refClass="LeftAlign" />
-        <object refClass="CenterAlign" />
-        <object refClass="RightAlign" />
-
-        <object refClass="TopAlign" />
-        <object refClass="MiddleAlign" />
-        <object refClass="BottomAlign" />  
-
-        <object refClass="SameWidth" direction="bottom" />
-        <object refClass="SameHeight" />
+        ${createComponentList(
+          "LeftAlign",
+          "CenterAlign",
+          "RightAlign",
+  
+          "TopAlign",
+          "MiddleAlign",
+          "BottomAlign",
+  
+          ["SameWidth", {direction: "bottom"}],
+          "SameHeight"
+        )}
       </div>
     `;
   }

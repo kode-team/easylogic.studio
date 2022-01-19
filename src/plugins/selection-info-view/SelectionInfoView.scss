@@ -1,0 +1,18 @@
+
+.elf--selection-info-view {
+  pointer-events:none;
+  position:absolute;
+  left:0px;
+  top:0px;
+  right:0px;
+  bottom:0px;
+
+  .artboard-title {
+    position: absolute;
+    display: inline-block;
+    
+    pointer-events: all;
+    transform: translateY(-100%);
+  }
+}
+

@@ -10,8 +10,6 @@ import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { CLICK, SUBSCRIBE } from "el/sapa/Event";
 
 import './PathToolProperty.scss';
-import PathParser from '../../el/editor/parser/PathParser';
-import { Length } from 'el/editor/unit/Length';
 import { iconUse } from 'el/editor/icon/icon';
 
 export default class PathToolProperty extends BaseProperty {
@@ -41,55 +39,68 @@ export default class PathToolProperty extends BaseProperty {
     return /*html*/`
       <div class="elf--boolean-item" ref="$buttons">
         <div>
-          <button type="button" data-value="union">${iconUse("boolean_union", "", {width: 30, height: 30})} Union</button>        
-          <button type="button" data-value="intersection">${iconUse("boolean_intersection", "", {width: 30, height: 30})} Intersection</button>        
+          <button type="button" data-command="convert.path.operation" data-args="union">${iconUse("boolean_union", "", {width: 30, height: 30})} Union</button>        
+          <button type="button" data-command="convert.path.operation" data-args="intersection">${iconUse("boolean_intersection", "", {width: 30, height: 30})} Intersection</button>        
         </div>
         <div>
-          <button type="button" data-value="difference">${iconUse("boolean_difference", "", {width: 30, height: 30})} Difference</button>        
-          <button type="button" data-value="xor">${iconUse("boolean_xor", "", {width: 30, height: 30})} Exclude</button>        
+          <button type="button" data-command="convert.path.operation" data-args="difference">${iconUse("boolean_difference", "", {width: 30, height: 30})} Subtract</button>        
+          <button type="button" data-command="convert.path.operation" data-args="xor">${iconUse("boolean_xor", "", {width: 30, height: 30})} Exclude</button>        
         </div>
+        <div class="divider"></div>
+        <!--div>
+          <button type="button" data-command="convert.no.transform.path">${iconUse('grid3x3', "", {width: 24, height: 24})} No Transform</button>        
+        </div-->
         <div>
-          <button type="button" data-value="simplify">${iconUse('grid3x3', "", {width: 24, height: 24})} Self Intersection</button>        
-          <button type="button" data-value="flatten">${iconUse('flatten', "", {width: 24, height: 24})} Flatten</button>                  
-        </div>
-        <div>
-          <button type="button" data-value="smooth">${iconUse('smooth', "", {width: 24, height: 24})} Smooth Path</button>                
-          <button type="button" data-value="stroke">${iconUse('stroke_to_path', "", {width: 24, height: 24})} Stroke to path</button> 
+          <button type="button" data-command="convert.simplify.path">${iconUse('grid3x3', "", {width: 24, height: 24})} Self Intersection</button>        
+          <button type="button" data-command="convert.flatten.path">${iconUse('flatten', "", {width: 24, height: 24})} Flatten</button>                  
         </div>        
         <div>
-          <button type="button" data-value="polygonal">${iconUse('highlight_at', "", {width: 24, height: 24})} Polygonal</button>                
-          <button type="button" data-value="normalize">${iconUse('stroke_to_path', "", {width: 24, height: 24})} Curve</button> 
-        </div>                
+          <!--<button type="button" data-command="convert.smooth.path">${iconUse('smooth', "", {width: 24, height: 24})} Smooth Path</button>-->                
+          <button type="button" data-command="switch.path">${iconUse("sync", "", {width: 30, height: 30})} Switch path</button>                  
+          <button type="button" data-command="convert.stroke.to.path">${iconUse('outline_shape', "", {width: 24, height: 24})} Outline Path</button> 
+        </div>        
+        <!--div>
+          <button type="button" data-command="convert.polygonal.path">${iconUse('highlight_at', "", {width: 24, height: 24})} Polygonal</button>                
+          <button type="button" data-command="convert.normalize.path">${iconUse('stroke_to_path', "", {width: 24, height: 24})} Normalize</button> 
+        </div-->                
       </div>
     `;
   }
 
   [CLICK('$buttons button')] (e) {
-    const current = this.$selection.current;
-    const command = e.$dt.data('value');
+    const command = e.$dt.data('command');
+    const args = e.$dt.data('args');
 
-    if (command === 'stroke') {
-      this.emit('convert.stroke.to.path');
-    } else if (command === 'simplify') {
-      this.emit('convert.simplify.path');
-    } else if (command === 'normalize') {
-      this.emit('convert.normalize.path');
-    } else if (command === 'smooth') {
-      this.emit('convert.smooth.path');
-    } else if (command === 'polygonal') {
-      this.emit('convert.polygonal.path');
-    } else if (command === 'flatten') {
-      this.emit('convert.flatten.path');
+    if (command === "convert.smooth.path") {
+      this.emit(command);
     } else {
-      this.emit('convert.path.operation', command);  
+      this.emit(command, args);
     }
+
+
+    // if (command === 'stroke') {
+    //   this.emit('convert.stroke.to.path');
+    // } else if (command === 'switch-path') {
+    //     this.emit('switch.path');
+    // } else if (command === 'simplify') {
+    //   this.emit('convert.simplify.path');
+    // } else if (command === 'normalize') {
+    //   this.emit('convert.normalize.path');
+    // } else if (command === 'smooth') {
+    //   this.emit('convert.smooth.path');
+    // } else if (command === 'polygonal') {
+    //   this.emit('convert.polygonal.path');
+    // } else if (command === 'flatten') {
+    //   this.emit('convert.flatten.path');
+    // } else {
+    //   this.emit('convert.path.operation', command);  
+    // }
 
   }
 
   [SUBSCRIBE('refreshSelection')] () {
     this.refreshShow(() => {
-
-      if (this.$selection.length === 1 && this.$selection.current['boolean-path']) return true;
+      if (this.$selection.length === 1 && this.$selection.is('boolean-path')) return true;
 
       return this.$selection.is('svg-path', 'polygon', 'star');
     })

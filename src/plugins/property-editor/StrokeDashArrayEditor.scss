@@ -1,11 +1,64 @@
 .elf--stroke-dasharray-editor {
     padding: 4px 0px;
+    position: relative;
     .dasharray-item {
-        margin-bottom: 3px;   
-        display:grid;
-        grid-template-columns: 1fr 20px;
-        grid-column-gap: 2px;
+        margin-right: 4px;   
+        display:flex;
+        column-gap: 2px;
+        border-bottom: 1px solid var(--elf--border-color);
+        position: relative;
 
+        > * {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100%;
+
+            input {
+                width :20px !important;
+            }
+        }
+
+        > button {
+            svg {
+                width: 10px;
+                height: 10px;
+            }
+        }
+    }
+
+    .dash-list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        // grid-template-columns: repeat(4, 1fr);
+    }
+
+    .dash-sample-list {
+        position: absolute;
+        height: 100px;
+        width: 100px;
+        top: 30px;
+        overflow: auto;
+        border: 1px solid var(--elf--border-color);
+        background-color: var(--elf--input-inactive-color);
+        z-index: 10;
+        display: none;
+
+        .dash-sample {
+            height: 20px;
+            cursor: pointer;
+            &:hover {
+                background-color: var(--elf--input-background-color);
+            }
+
+            svg {
+                line {
+                    stroke: var(--elf--selected-font-color);
+                }
+                
+            }
+        }
     }
 
     > .tools {
@@ -14,16 +67,29 @@
             display: grid;
             grid-template-columns: 70px 1fr;
 
-            .label {
+            .buttons {
                 text-align: left;
+                padding-left: 4px;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
             }
         }
 
         label {
-            // color: var(--elf--selected-font-color);
             vertical-align: middle;
             cursor: pointer;
             text-align: left;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+
+            &:hover {
+                font-weight: bold;
+            }
         }
     }
 

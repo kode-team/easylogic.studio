@@ -1,11 +1,61 @@
 import { MovableModel } from "./MovableModel";
+import { rectToVerties } from 'el/utils/collision';
+import { AlignContent, AlignItems, Constraints, ConstraintsDirection, FlexDirection, FlexWrap, JustifyContent, Layout, ResizingMode } from 'el/editor/types/model';
+import DefaultLayoutEngine from "../layout-engine/DefaultLayoutEngine";
+import { isUndefined } from "el/sapa/functions/func";
 
-const layout_list  = ['flex', 'grid']
 
-export class GroupModel extends MovableModel {   
+const LayoutEngine = {
+    [Layout.DEFAULT]: DefaultLayoutEngine
+}
 
-    isLayoutItem () {
-        return this.parent.hasLayout();
+export class GroupModel extends MovableModel {
+
+    getDefaultObject(obj = {}) {
+        return super.getDefaultObject({
+            'layout': Layout.DEFAULT,
+            'constraints-horizontal': Constraints.NONE,
+            'constraints-vertical': Constraints.NONE,
+            // flex
+            'flex-direction': FlexDirection.ROW,
+            'flex-wrap': FlexWrap.NOWRAP,
+            'justify-content': JustifyContent.FLEX_START,
+            'align-items': AlignItems.FLEX_START,
+            'align-content': AlignContent.FLEX_START,
+            'order': 0,
+            'flex-grow': 0,
+            'flex-shrink': 0,
+            'flex-basis': 'auto',       // 항목의 크기를 기본 크기(원래 가지고 있는 크기)로 정함             
+            'gap': 0,
+            resizingHorizontal: ResizingMode.FIXED,
+            resizingVertical: ResizingMode.FIXED,
+            // grid
+            'grid-template-rows': 'auto',
+            'grid-template-columns': 'auto',
+            'grid-template-areas': '',
+            'grid-auto-rows': 'auto',
+            'grid-auto-columns': 'auto',
+            'grid-auto-flow': 'row',
+            ...obj,
+        })
+    }
+
+
+    get layout() {
+        return this.json.layout;
+    }
+
+    isLayoutItem() {
+        return !!this.parent?.hasLayout();
+    }
+
+    /**
+     * default layout 이고 constrains 값을 가지고 있으면 
+     * 
+     * @returns {boolean}
+     */
+    hasConstraints() {
+        return this.isLayout(Layout.DEFAULT);
     }
 
     /**
@@ -14,9 +64,8 @@ export class GroupModel extends MovableModel {
      * 
      * @returns {boolean}
      */
-    hasLayout () {
-        const layout = this.json.layout || "default";
-        return layout !== "default";
+    hasLayout() {
+        return !this.hasConstraints() || Boolean(this.json.layout) === false;
     }
 
     /**
@@ -26,28 +75,97 @@ export class GroupModel extends MovableModel {
      * @returns {boolean}
      */
     isLayout(layout) {
-        const localLayout = this.json.layout || "default";        
-        return localLayout === layout;
+        return this.json.layout === layout;
     }
 
-    isInDefault () {
-        if  (!this.isLayoutItem()) return false; 
+    isInDefault() {
+        const parentLayout = this.parent?.layout || 'default';
 
-        const parentLayout = this.parent.layout || 'default';
-                
-        return 'default' === parentLayout; 
+        return Layout.DEFAULT === parentLayout;
     }
 
-    isInGrid () {
-        if  (!this.isLayoutItem()) return false; 
-                
-        return 'grid' === this.parent.layout; 
+    isInGrid() {
+        return this.isInLayout(Layout.GRID);
     }
 
-    isInFlex () {
-        if  (!this.isLayoutItem()) return false; 
-
-        return 'flex' === this.parent.layout 
+    isInFlex() {
+        return this.isInLayout(Layout.FLEX);
     }
 
+    isInLayout(layout) {
+        if (!this.isLayoutItem()) return false;
+
+        return this.parent.layout === layout;
+    }
+
+    /**
+     * padding 을 제외한 내부 content 영역을 verties 로 리턴한다. 
+     * 
+     */
+    get contentBox() {
+
+        const x = this['padding-left'] || 0;
+        const y = this['padding-top'] || 0;
+
+        const width = this.screenWidth - (this['padding-left'] || 0) - (this['padding-right'] || 0);
+        const height = this.screenHeight - (this['padding-top'] || 0) - (this['padding-bottom'] || 0);
+
+        return rectToVerties(x, y, width, height)
+    }
+
+    reset(obj) {
+        const isChanged = super.reset(obj);
+
+        if (this.hasChangedField(ConstraintsDirection.VERTICAL, ConstraintsDirection.HORIZONTAL)) {
+            console.log('a');
+        }
+
+        return isChanged;
+    }
+
+    changeConstraints(direction, value) {
+
+        const h = this.json[direction];
+        let newConstraints = value;
+
+        if (h === Constraints.MAX) {
+
+            if (value === Constraints.MAX) {
+                newConstraints = Constraints.SCALE;
+            } if (e.shiftKey && value === Constraints.MIN) {
+                newConstraints = Constraints.STRETCH
+            }
+        } else if (h === Constraints.MIN) {
+            if (value === Constraints.MIN) {
+                newConstraints = Constraints.SCALE;
+            } else if (e.shiftKey && value === Constraints.MAX) {
+                newConstraints = Constraints.STRETCH;
+            }
+        } else if (h === Constraints.STRETCH) {
+            if (value === Constraints.MIN) {
+                newConstraints = Constraints.MAX;
+            } else if (value === Constraints.MAX) {
+                newConstraints = Constraints.MIN;
+            }
+        }
+
+        this.reset({
+            [direction]: newConstraints
+        })
+
+    }
+
+
+    startToCacheChildren() {
+
+
+        LayoutEngine[this.layout]?.startCache(this);
+    }
+
+    /**
+     * 상위 레이어에 맞게 자식 레이어의 공간(x,y,width,height)를 변경한다.
+     */
+    recoverChildren() {
+        LayoutEngine[this.layout]?.recover(this);
+    }
 }

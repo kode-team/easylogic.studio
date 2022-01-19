@@ -15,7 +15,7 @@ import { combineKeyArray, isString, keyEach, keyMap } from "el/sapa/functions/fu
 import { CSS_TO_STRING } from "el/utils/func";
 
 const RepeatList = ["repeat", "no-repeat", "repeat-x", "repeat-y", 'round', 'space'];
-const reg = /((linear\-gradient|repeating\-linear\-gradient|radial\-gradient|repeating\-radial\-gradient|conic\-gradient|repeating\-conic\-gradient|url)\(([^\)]*)\))/gi;
+const reg = /((static\-gradient|linear\-gradient|repeating\-linear\-gradient|radial\-gradient|repeating\-radial\-gradient|conic\-gradient|repeating\-conic\-gradient|url)\(([^\)]*)\))/gi;
 
 export class BackgroundImage extends PropertyItem {
   addImageResource(imageResource) {
@@ -165,6 +165,101 @@ export class BackgroundImage extends PropertyItem {
     return super.checkField(key, value);
   }
 
+  /**
+   * 
+   * newX, newY 를 기준으로 image position, size 을 복구한다. 
+   * 
+   * x.isPercent() ? Length.percent(newX / (maxWidth - newWidth) * 100) : Length.px(newX),
+   * 
+   * @param {number} newX 
+   * @param {number} newY 
+   * @param {number} maxWidth 
+   * @param {number} maxHeight 
+   * @param {number} dx 변경된 넓이 크기 
+   * @param {number} dy 변경된 높이 크기 
+   * @returns 
+   */
+  recoverOffset (newX, newY, maxWidth, maxHeight, dx = 0, dy = 0) {
+    const { x, y, width, height } = this.json;
+
+    const newWidth = Math.floor(width.toPx(maxWidth).value + dx);
+    const newHeight = Math.floor(height.toPx(maxHeight).value + dy);    
+
+    if (newWidth < 0) {
+      newX += newWidth
+    }
+
+    if (newHeight < 0) {
+      newY += newHeight
+    }    
+
+    let nextX = Length.px(newX);
+    let nextY = Length.px(newY);
+
+    const dist = 2;
+
+    if (x.isPercent()) {
+
+      if (Math.abs(newX) < dist) {
+        nextX = Length.percent(0)
+      } else if (Math.abs((maxWidth - newWidth) - newX) < dist) {
+        nextX = Length.percent(100)        
+      } else if (Math.abs(((maxWidth - newWidth)/2) - newX) < dist) {        
+        nextX = Length.percent(50)        
+      } else {
+        nextX = Length.percent(newX / (maxWidth - newWidth) * 100);
+      }
+    }
+
+    if (y.isPercent()) {
+
+      if (Math.abs(newY) < dist) {
+        nextY = Length.percent(0)
+      } else if (Math.abs((maxHeight - newHeight) - newY) < dist) {
+        nextY = Length.percent(100)        
+      } else if (Math.abs(((maxHeight - newHeight)/2) - newY) < dist) {        
+        nextY = Length.percent(50)        
+      } else {
+        nextY = Length.percent(newY / (maxHeight - newHeight) * 100);
+      }
+    }
+
+    // x, y 가 percent 일 때는 크기의 역순으로 해서 위치를 계산해준다. 
+    return {
+      x: nextX,
+      y: nextY,
+      width: Length.px(Math.abs(newWidth)).to(width.unit, maxWidth),
+      height: Length.px(Math.abs(newHeight)).to(height.unit, maxHeight),
+    }
+  }
+
+  /**
+   * background image 의 위치와 크기를 구한다. 
+   * 
+   * @param {number} maxWidth 
+   * @param {number} maxHeight 
+   * @returns 
+   */
+  getOffset(containerWidth, containerHeight) {
+
+    const { x, y, width, height } = this.json;
+
+    const newWidth = width.toPx(containerWidth);
+    const newHeight = height.toPx(containerHeight);
+
+    const newX = x.toPx(containerWidth);
+    const newY = y.toPx(containerHeight);
+
+    // refer to https://developer.mozilla.org/en-US/docs/Web/CSS/background-position#regarding_percentages
+    // x, y 가 percent 일 경우, 계산하는 방식이 달라진다. 
+    return {
+      x: x.isPercent() ? (containerWidth - newWidth) * (x.value / 100) : newX,
+      y: y.isPercent() ? (containerHeight - newHeight) * (y.value / 100) : newY,
+      width: newWidth.value,
+      height: newHeight.value,
+    }
+  }
+
   toBackgroundImageCSS() {
     if (!this.json.image) return {};
     return {
@@ -250,6 +345,7 @@ export class BackgroundImage extends PropertyItem {
   }
 
   static parseImage (str) {
+
     var results = convertMatches(str);
     let image = null;
 
@@ -264,6 +360,16 @@ export class BackgroundImage extends PropertyItem {
         image = RepeatingLinearGradient.parse(value);
       } else if (value.includes("linear-gradient")) {
         image = LinearGradient.parse(value);
+
+        // 동일한 색을 가진 linear 는 기본적으로 static 과 같다. 
+        if (image.colorsteps.length === 2) {
+          if (image.colorsteps[0].color === image.colorsteps[1].color) {
+            image = StaticGradient.parse(`static-gradient(${image.colorsteps[0].color})`);          
+          }
+        }
+
+      } else if (value.includes("static-gradient")) {
+        image = StaticGradient.parse(value);        
       } else if (value.includes("repeating-radial-gradient")) {
         image = RepeatingRadialGradient.parse(value);
       } else if (value.includes("radial-gradient")) {
@@ -316,6 +422,16 @@ export class BackgroundImage extends PropertyItem {
           image = RepeatingLinearGradient.parse(value);
         } else if (value.includes("linear-gradient")) {
           image = LinearGradient.parse(value);
+
+        // 동일한 색을 가진 linear 는 기본적으로 static 과 같다.           
+          if (image.colorsteps.length === 2) {
+            if (image.colorsteps[0].color === image.colorsteps[1].color) {
+              image = StaticGradient.parse(`static-gradient(${image.colorsteps[0].color})`);          
+            }
+          }
+
+        } else if (value.includes("static-gradient")) {
+          image = StaticGradient.parse(value);          
         } else if (value.includes("repeating-radial-gradient")) {
           image = RepeatingRadialGradient.parse(value);
         } else if (value.includes("radial-gradient")) {

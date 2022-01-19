@@ -1,5 +1,6 @@
 import { STRING_TO_CSS } from "el/utils/func";
 import Color from "el/utils/Color";
+import { Length } from 'el/editor/unit/Length';
 
 var BorderStyles = {
     "none": true,
@@ -30,7 +31,8 @@ export class Border {
             } else if (Color.isColor(value)) {
                 color = value; 
             } else {
-                width = value; 
+                // 현재는 px 만 지원 
+                width = Length.parse(value).value; 
             }
         });
 
@@ -40,7 +42,7 @@ export class Border {
     }
 
     static joinValue (obj) {
-        return `${obj.width} ${obj.style || 'solid'} ${obj.color}`
+        return `${obj.width}px ${obj.style || 'solid'} ${obj.color}`
     }
 
     static join (obj) {

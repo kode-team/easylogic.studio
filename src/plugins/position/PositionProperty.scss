@@ -1,0 +1,6 @@
+.grid-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr 20px; 
+    column-gap: 10px; 
+    margin-bottom: 4px;
+}

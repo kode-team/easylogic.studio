@@ -4,18 +4,14 @@ import {
 } from "el/sapa/Event";
 
 
-import icon from "el/editor/icon/icon";
+import { iconUse } from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { filter_list } from "./util";
+import { createComponent } from "el/sapa/functions/jsx";
+
+import './FilterProperty.scss';
 
 export default class FilterProperty extends BaseProperty {
-
-
-  initialize() {
-    super.initialize();
-
-    this.notEventRedefine = true;
-  }  
 
   getTitle () {
     return this.$i18n('filter.property.title');
@@ -53,9 +49,9 @@ export default class FilterProperty extends BaseProperty {
 
   getTools() {
     return /*html*/`
-      <select ref="$filterSelect">      
+      <select class='filter-select' ref="$filterSelect">      
       </select>
-      <button type="button" ref="$add" title="add Filter">${icon.add}</button>
+      <button type="button" ref="$add" title="add Filter">${iconUse("add")}</button>
     `
   }
   
@@ -118,10 +114,12 @@ export default class FilterProperty extends BaseProperty {
     var current = this.$selection.current || {} 
     var value = current.filter;
 
-    return /*html*/`
-      <div>
-        <object refClass="FilterEditor" ref='$filterEditor' key="filter" value='${value}' hide-label='true' onchange='changeFilterEditor' />
-      </div>`
+    return createComponent("FilterEditor", {
+      ref: '$filterEditor',
+      key: "filter",
+      value,
+      onchange: 'changeFilterEditor' 
+    })
   }
 
   [SUBSCRIBE_SELF('changeFilterEditor')] (key, filter) {
@@ -135,11 +133,11 @@ export default class FilterProperty extends BaseProperty {
     return "filter";
   }
 
-  [SUBSCRIBE('refreshSelection') + IF('checkShow') + DEBOUNCE(1000)] () {
+  [SUBSCRIBE('refreshSelection') + IF('checkShow') + DEBOUNCE(100)] () {
     this.refresh();
   }
 
-  [SUBSCRIBE('refreshSVGArea') + DEBOUNCE(1000)] () {
+  [SUBSCRIBE('refreshSVGArea') + DEBOUNCE(100)] () {
     this.load('$filterSelect');
   }
 }

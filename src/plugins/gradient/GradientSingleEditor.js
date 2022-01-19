@@ -2,10 +2,12 @@ import { CLICK, BIND, SUBSCRIBE } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './GradientSingleEditor.scss';
+import { GradientType, RadialGradientType } from "el/editor/types/model";
+import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
 
 export default class GradientSingleEditor extends EditorElement {
 
-    initState() { 
+    initState() {
         return {
             index: this.props.index,
             image: this.props.image,
@@ -22,18 +24,17 @@ export default class GradientSingleEditor extends EditorElement {
         this.parent.trigger(this.props.onchange, this.props.key, value, this.state.index);
     }
 
-    setValue (obj) {
+    setValue(obj) {
         this.setState({
-            ...obj 
+            ...obj
         })
     }
 
-    [BIND('$miniView')] () {
+    [BIND('$miniView')]() {
         return {
             style: {
-                'background-image': this.state.image, 
+                'background-image': this.state.image,
                 'background-size': 'cover',
-                'color': this.props.color,
             }
         }
     }
@@ -44,7 +45,7 @@ export default class GradientSingleEditor extends EditorElement {
             <div class='elf--gradient-single-editor'>
                 <div class='preview' ref='$preview'>
                     <div class='mini-view'>
-                        <div class='color-view' style="background-color: ${this.state.color}" ref='$miniView'></div>
+                        <div class='color-view' ref='$miniView'></div>
                     </div>
                 </div>
             </div>
@@ -61,13 +62,44 @@ export default class GradientSingleEditor extends EditorElement {
         this.emit("showGradientPickerPopup", {
             instance: this,
             changeEvent: 'changeGradientSingle',
-            gradient: this.state.image 
-        });
+            index: this.state.index,
+            gradient: this.state.image
+        }, null, this.$el.rect());
     }
 
-    [SUBSCRIBE('changeGradientSingle')] (image, params) {
+    [SUBSCRIBE('changeGradientSingle')](image, params) {
+        image = BackgroundImage.parseImage(image)
+    
+        const currentImage = this.$selection.current.getBackgroundImage(this.state.index)?.image;
+
+        switch (currentImage.type) {
+            case GradientType.RADIAL:
+            case GradientType.REPEATING_RADIAL:
+                image.reset({
+                    radialPosition: currentImage.radialPosition || ['50%', '50%'],
+                    radialType: currentImage.radialType || RadialGradientType.CIRCLE,
+                })
+
+                break;
+            case GradientType.CONIC:
+            case GradientType.REPEATING_CONIC:
+                image.reset({
+                    angle: currentImage.angle || 0,
+                    radialPosition: currentImage.radialPosition || ['50%', '50%'],
+                })
+                break;
+            case GradientType.LINEAR:
+            case GradientType.REPEATING_LINEAR:
+            case GradientType.STATIC:                
+                image.reset({
+                    angle: currentImage.angle || 0,
+                })
+                break;
+        }
+
+
         this.updateData({ image })
 
         this.refresh();
-      }
+    }
 }

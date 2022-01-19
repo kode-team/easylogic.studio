@@ -30,6 +30,9 @@ import { PathKitManager } from "./PathKitManager";
 import { SegmentSelectionManager } from "./SegmentSelectionManager";
 import { LockManager } from "./LockManager";
 import { VisibleManager } from "./VisibleManager";
+import { CommandMaker } from "./CommandMaker";
+import { ClipboardManager } from './ClipboardManager';
+import { IconManager } from './IconManager';
 
 
 export const EDIT_MODE_SELECTION = 'SELECTION';
@@ -92,6 +95,8 @@ export class Editor {
     this.pathKitManager = new PathKitManager(this);
     this.lockManager = new LockManager(this);
     this.visibleManager = new VisibleManager(this);
+    this.clipboard = new ClipboardManager(this);
+    this.iconManager = new IconManager(this);
 
     this.initPlugins();
     this.initStorage();
@@ -109,6 +114,10 @@ export class Editor {
   getI18nMessage(key, params = {}, locale) {
     return this.i18n.get(key, params, locale || this.locale)
   }
+
+  $i18n(key, params = {}, locale) {
+    return this.getI18nMessage(key, params, locale);
+  }  
 
   hasI18nkey(key, locale) {
     return this.i18n.hasKey(key, locale || this.locale)
@@ -210,8 +219,8 @@ export class Editor {
   }
 
   on(...args) {
-    const [name, callback, ...rest] = args;
-    return this.store.on(name, callback, this, ...rest);
+    const [name, callback, context, ...rest] = args;
+    return this.store.on(name, callback, context || this, ...rest);
   }
 
   off(...args) {
@@ -281,7 +290,7 @@ export class Editor {
    * itemObject (객체)를 가지고 itemType 에 따른  실제 Component 객체를 생성해준다. 
    * 
    * @param {object} itemObject 
-   * @param {Boolean} isRecoverPosition 
+   * @param {Boolean} [isRecoverPosition=true]
    */
   createModel(itemObject, isRegister = true) {
     return this.modelManager.createModel(itemObject, isRegister);
@@ -310,6 +319,10 @@ export class Editor {
     return JSON.parse(window.localStorage.getItem(`${this.storeKey}.${key}`) || JSON.stringify(""))
   }
 
+  createCommandMaker() {
+    return new CommandMaker(this);
+  }
+
   /**
    * register UIElement 
    * 
@@ -330,7 +343,7 @@ export class Editor {
     })
   }
 
-  registerMenuItem(target, obj) {
+  registerMenuItem(target, obj = {}) {
     this.injectManager.registerMenuItem(target, obj);
     this.registerElement(obj);
   }
@@ -422,4 +435,17 @@ export class Editor {
       this.registerI18nMessage(locale, messages);
     });
   }  
+
+  registerIcon (itemType, iconOrFunction) {
+    this.iconManager.registerIcon(itemType, iconOrFunction);
+  }
+
+  /**
+   * 
+   * @param {string} id 
+   * @returns {BaseModel}
+   */
+  get (id) {
+    return this.modelManager.get(id);
+  }
 }

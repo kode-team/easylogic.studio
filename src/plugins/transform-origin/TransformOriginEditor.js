@@ -3,6 +3,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { Length } from "el/editor/unit/Length";
 
 import './TransformOriginEditor.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 
 const typeList = [
   { key: "transform-origin-x", title: "X" },
@@ -108,7 +109,14 @@ export default class TransformOriginEditor extends EditorElement {
           ${typeList.map(it => {
       return /*html*/`
               <div>
-                  <object refClass="RangeEditor"  ref='$${it.key}' compact="true" label='${it.title}' key='${it.key}' value="${this.state[it.key]}" onchange='changeTransformOrigin' />
+                  ${createComponent("RangeEditor", { 
+                    ref: `$${it.key}`,
+                    compact: true,
+                    label: it.title,
+                    key: it.key,
+                    value: this.state[it.key],
+                    onchange: 'changeTransformOrigin'
+                  })}
               </div>  
             `;
     }).join('')}

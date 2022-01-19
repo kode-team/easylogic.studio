@@ -1,0 +1,14 @@
+.pattern-info-popup {
+    width: 240px;
+    .box {
+        > div {
+            display: grid;
+            grid-template-columns: 1fr;
+            column-gap: 10px;
+
+            &.grid-2 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    }
+}

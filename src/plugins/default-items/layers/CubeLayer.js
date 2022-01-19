@@ -217,8 +217,8 @@ export class CubeLayer extends Component {
     var rate = json.rate.value; 
     var width = json.width; 
     var height = json.height; 
-    var halfWidth = width.value/2
-    var halfHeight = height.value/2
+    var halfWidth = width/2
+    var halfHeight = height/2
     var backfaceVisibility = json['backface-visibility']
     var css = {
       ...this.toKeyListCSS(
@@ -353,8 +353,8 @@ export class CubeLayer extends Component {
 
       return this.wrapperRootSVG(x, y, width, height, /*html*/`
         <foreignObject ${OBJECT_TO_PROPERTY({ 
-          width: width.value,
-          height: height.value,
+          width: width,
+          height: height,
           overflow: 'visible'
         })}>
           <div xmlns="http://www.w3.org/1999/xhtml">
@@ -373,8 +373,8 @@ export class CubeLayer extends Component {
       return /*html*/`
         ${this.toDefString}
         <foreignObject ${OBJECT_TO_PROPERTY({ 
-          width: width.value,
-          height: height.value,
+          width: width,
+          height: height,
           overflow: 'visible'
         })}>
           <div xmlns="http://www.w3.org/1999/xhtml">

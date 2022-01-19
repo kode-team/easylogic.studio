@@ -30,18 +30,6 @@
             }
         }
 
-        &[data-layout="grid"] {
-            .icon {
-                color: red;
-            }
-        }
-
-        &[data-layout="flex"] {
-            .icon {
-                color: green;
-            }
-        }
-
         .detail {
             display: grid;
             grid-template-columns: 1fr 60px;
@@ -54,7 +42,6 @@
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
-                font-size: 12px;
                 vertical-align: middle;
                 display: grid;
                 grid-template-columns: 20px 20px 1fr;
@@ -91,12 +78,12 @@
         }
 
         &.selected{
-            background-color: var(--elf--selected-color);
+            background-color: var(--elf--selected-color-2);
             color: var(--elf--selected-font-color);
         }
 
         &.selected-path {
-            background-color: var(--elf--selected-color-2);
+            background-color: var(--elf--selected-color-3);
         }
 
         &:not(.selected).hovered,

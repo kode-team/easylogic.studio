@@ -8,19 +8,22 @@ export default class SVGItemRender extends LayerRender {
 
     update (item, currentElement) {
 
+        this.updateElementCache(item, currentElement);
+  
+        super.update(item, currentElement);
+    }
+
+
+    updateElementCache (item, currentElement) {
         // element 를 캐쉬 해두기 
         if (item.getCache("element") !== currentElement) {
             item.addCache("element", currentElement);
-            
+
             const $path = currentElement.$('path');            
             item.addCache("svgElement", $path.parent().el)
             item.addCache("pathElement", $path.el);
         }    
-  
-
-        super.update(item, currentElement);
     }
-
 
     /**
      * Def 업데이트 하기 
@@ -61,25 +64,43 @@ export default class SVGItemRender extends LayerRender {
     cachedStroke(item) {
 
         return item.computed('stroke', (value) => {
-            return SVGFill.parseImage(value || 'black')
+
+            if (item.isBooleanItem) {
+                return SVGFill.parseImage('transparent')
+            } else {
+                return SVGFill.parseImage(value || 'black')
+            }
+
         });
     }
 
     cachedFill(item) {
 
         return item.computed('fill', (value) => {
-            return SVGFill.parseImage(value || 'black')
+
+            if (item.isBooleanItem) {
+                return SVGFill.parseImage('transparent')
+            } else {
+                return SVGFill.parseImage(value || 'black')
+            }
+
         });
     }     
 
     toFillSVG (item) {
         const fillValue = this.cachedFill(item);
-        return fillValue?.toSVGString?.(this.fillId(item));
+        return fillValue?.toSVGString?.(this.fillId(item), {
+            width: item.width,
+            height: item.height
+        });
     }
 
     toStrokeSVG (item) { 
         const strokeValue = this.cachedStroke(item);
-        return strokeValue?.toSVGString?.(this.strokeId(item));
+        return strokeValue?.toSVGString?.(this.strokeId(item), {
+            width: item.width,
+            height: item.height
+        });
     }  
 
     toFillValue (item) {
@@ -122,13 +143,17 @@ export default class SVGItemRender extends LayerRender {
      * @param {Item} item 
      */
     toDefaultCSS(item) {
-        return {
-            ...super.toDefaultCSS(item),
-            ...this.toKeyListCSS(item, [
-                'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dasharray', 'stroke-dashoffset',
+        return Object.assign(
+            {}, 
+            super.toDefaultCSS(item),
+            this.toKeyListCSS(item, [
+                'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-dashoffset',
                 'fill-opacity', 'fill-rule', 'text-anchor'
-            ])
-        }
+            ]),
+            {
+                'stroke-dasharray': item['stroke-dasharray']?.join(' '),
+            }
+        );
     }
 
     /**

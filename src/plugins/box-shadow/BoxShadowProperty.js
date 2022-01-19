@@ -1,7 +1,10 @@
 import { CLICK, DEBOUNCE, IF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { createComponent } from "el/sapa/functions/jsx";
+import boxShadow from "el/editor/preset/box-shadow";
 
+import './BoxShadowProperty.scss';
 
 export default class BoxShadowProperty extends BaseProperty {
 
@@ -15,25 +18,40 @@ export default class BoxShadowProperty extends BaseProperty {
     `;
   }
 
-  hasKeyframe() {
-    return true; 
-  }
-
-  [LOAD("$shadowList")]() {
-    var current = this.$selection.current || {};
-    return /*html*/`
-      <object refClass="BoxShadowEditor" ref='$boxshadow' value="${current['box-shadow'] || ''}" hide-label="true" onChange="changeBoxShadow" />
-    `
-  }
 
 
   getTools() {
-    return /*html*/`<button type="button" ref='$add'>${icon.add}</button>`
+    return /*html*/`
+      <select class='box-shadow-samples' ref="$select">
+      ${boxShadow.map((item, index) => {
+        return /*html*/`
+          <option value="${index}">${item.name}</option>
+        `
+      }).join('')}
+      </select>
+      <button type="button" ref='$add'>${icon.add}</button>
+    `
   }
 
   [CLICK('$add')] () {
-    this.children.$boxshadow.trigger('add');
+    const index = +this.refs.$select.value;
+    this.children.$boxshadow.trigger('add', boxShadow[index].shadow);
   }
+
+
+  [LOAD("$shadowList")]() {
+    var current = this.$selection.current || {};
+    return createComponent("BoxShadowEditor", {
+      ref: '$boxshadow',
+      key: 'box-shadow',
+      value: current['box-shadow'],
+      onchange: (key, value) => {
+        this.command('setAttributeForMulti', 'change box shadow', this.$selection.packByValue({
+          [key]: value
+        }))
+      }
+    });
+  }  
 
   get editableProperty() {
     return 'box-shadow';
@@ -41,14 +59,6 @@ export default class BoxShadowProperty extends BaseProperty {
 
   [SUBSCRIBE('refreshSelection') + DEBOUNCE(100) + IF('checkShow')]() {
     this.refresh();
-
-  }
-
-  [SUBSCRIBE_SELF("changeBoxShadow")](boxshadow) {
-
-    this.command('setAttributeForMulti', 'change box shadow', this.$selection.packByValue({ 
-      'box-shadow': boxshadow
-    }))
 
   }
 }

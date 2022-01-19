@@ -4,6 +4,8 @@ import { second, timecode } from "el/utils/time";
 import { isUndefined } from "el/sapa/functions/func";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { createComponent } from "el/sapa/functions/jsx";
+
 
 export default class TimelineValueEditor extends EditorElement {
 
@@ -159,15 +161,22 @@ checkKey (e) {
   }
 
   templateForProperty() {
-    return /*html*/`
-      <object refClass="CSSPropertyEditor" ref='$propertyEditor' hide-title='true' onchange='changePropertyEditor' />
-    `
+    return createComponent('CSSPropertyEditor', {
+      ref: '$propertyEditor',
+      hideTitle: true, 
+      onchange: 'changePropertyEditor'
+    })
   }    
 
   templateForTimingFunction () {
     return /*html*/`
     <div class='timing-function'>
-      <object refClass="CubicBezierEditor" ref='$cubicBezierEditor' key="timing" value="${this.state.timingFunction || 'linear'}" onChange='changeCubicBezier' />
+      ${createComponent("CubicBezierEditor" , {
+        ref: '$cubicBezierEditor',
+        key: "timing",
+        value: this.state.timingFunction || 'linear',
+        onChange: 'changeCubicBezier'
+      })}
     </div>
     `
   }

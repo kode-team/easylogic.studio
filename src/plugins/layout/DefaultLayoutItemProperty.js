@@ -1,132 +1,139 @@
 
-import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { CLICK, DEBOUNCE, DOMDIFF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 
-import { CSS_TO_STRING } from "el/utils/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './DefaultLayoutItemProperty.scss';
 import { variable } from 'el/sapa/functions/registElement';
+import { Constraints, ConstraintsDirection, Layout } from "el/editor/types/model";
+import { iconUse } from "el/editor/icon/icon";
+
 
 export default class DefaultLayoutItemProperty extends BaseProperty {
 
   getTitle() {
-    return this.$i18n('flex.layout.item.property.title');
+    return this.$i18n('default.layout.item.property.title.constraints');
   }
 
   getClassName() {
-    return 'elf--flex-layout-item-property';
-  }
-
-  getLayoutOptions () {
-    return variable(['none', 'auto', 'value'].map(it => {
-        return {value: it, text: this.$i18n(`flex.layout.item.property.${it}`) }
-    }));
+    return 'elf--default-layout-item-property';
   }
 
   getBody() {
     return /*html*/`
-        <div class='property-item' ref='$body'></div>
+        <div class='property-item' ref='$body'>
+          <div class="constraints">
+            <div ref="$constraintsInfo"></div>
+            <div ref="$constraintsInfoInput"></div>
+          </div>
+        </div>
       `;
   }  
 
-  [LOAD('$body')] () {
-    var current = this.$selection.current || { 'flex-layout-item' : 'none' }
+  [LOAD('$constraintsInfo') + DOMDIFF] () {
+    var current = this.$selection.current
 
-    var valueType = current['flex-layout-item'] || 'none';
+    const hasLayout = current?.hasLayout();
 
-    var arr = [] 
-    if (['none', 'auto'].includes(valueType) === false) {
-      arr  = valueType.split(' ');
-    }
-
-    if (arr.length > 0) {
-      valueType = 'value'
-    }
+    const h = current?.['constraints-horizontal'] || Constraints.MIN;
+    const v = current?.['constraints-vertical'] || Constraints.MIN;
 
     return /*html*/`
-      <div class='layout-select'>
-        <object refClass="SelectIconEditor" 
-        ref='$layout' 
-        key='layout' 
-        icon="true" 
-        value="${valueType}"
-        options="${this.getLayoutOptions()}"  
-        onchange="changeLayoutType" />
-      </div>
-      <div class='layout-list' ref='$layoutList' data-selected-value='${current.layout}'>
-        <div data-value='none'></div>
-        <div data-value='auto'></div>
-        <div data-value='value'>
-          <div class='value-item'>
-            <object refClass="RangeEditor"  ref='$grow' label='${this.$i18n('flex.layout.item.property.grow')}' key="flex-grow" value="${arr[0]}" min='0' max='1' step='0.01' units=",auto" onchange='changeDefaultItem' />
-          </div>
-          <div class='value-item'>
-            <object refClass="RangeEditor"  ref='$shrink' label='${this.$i18n('flex.layout.item.property.shrink')}' key="flex-shrink" value="${arr[1]}" min='0' max='1' step='0.01' units=",auto" onchange='changeDefaultItem' />
-          </div>
-          <div class='value-item'>
-            <object refClass="RangeEditor"  ref='$basis' label='${this.$i18n('flex.layout.item.property.basis')}' key="flex-basis" value="${arr[2]}" min='0' units="px,em,%,auto" onchange='changeDefaultItem' />
-          </div>                    
-        </div>
+      <div class="constraints-box">
+
+        <!-- Horizontal -->
+        <div class='item' data-value='min' data-selected="${h === Constraints.MIN || h === Constraints.STRETCH}" data-key='${ConstraintsDirection.HORIZONTAL}'></div>
+        <div class='item' data-value='max' data-selected="${h === Constraints.MAX || h === Constraints.STRETCH}" data-key='${ConstraintsDirection.HORIZONTAL}'></div>
+        <div class='item' data-value='center' data-selected="${h === Constraints.CENTER}" data-key='${ConstraintsDirection.HORIZONTAL}'></div>
+
+        <!-- Vertical -->
+        <div class='item' data-value='min' data-selected="${v === Constraints.MIN || v === Constraints.STRETCH}" data-key='${ConstraintsDirection.VERTICAL}'></div>
+        <div class='item' data-value='max' data-selected="${v === Constraints.MAX || v === Constraints.STRETCH}" data-key='${ConstraintsDirection.VERTICAL}'></div>
+        <div class='item' data-value='center' data-selected="${v === Constraints.CENTER}" data-key='${ConstraintsDirection.VERTICAL}'></div>            
+        <div class="rect"></div>
       </div>
     `
   }
 
-  getDefaultItemValue  (value) {
-    return value.unit === 'auto' ? 'auto' : value + "";
+  [LOAD('$constraintsInfoInput')] () {
+    var current = this.$selection.current
+
+    const hasLayout = current?.hasLayout();
+    const h = current?.['constraints-horizontal'] || Constraints.MIN;
+    const v = current?.['constraints-vertical'] || Constraints.MIN;    
+    return /*html*/`
+      <div>
+        <object refClass="SelectEditor" ${variable({
+          ref: '$constraintsHorizontal',
+          key: 'constraints-horizontal',
+          value: current?.['constraints-horizontal'] || 'min',
+          label: iconUse('width'),          
+          compact: true,
+          options: [
+            {value: 'min', 'text': 'Left'},
+            {value: 'max', 'text': 'Right'},
+            {value: 'stretch', 'text': 'Left and Right', disabled: hasLayout},
+            {value: 'center', 'text': 'Center'},
+            {value: 'scale', 'text': 'Scale', disabled: hasLayout},            
+          ],
+          onchange: 'changeConstraints'
+        })} />
+      </div>
+
+      <div>
+        <object refClass="SelectEditor" ${variable({
+          ref: '$constraintsVertical',
+          key: 'constraints-vertical',
+          value: current?.['constraints-vertical'] || 'min',
+          label: iconUse('height'),
+          compact: true,
+          options: [
+            {value: 'min', 'text': 'Top'},
+            {value: 'max', 'text': 'Bottom'},
+            {value: 'stretch', 'text': 'Top and Bottom', disabled: hasLayout},
+            {value: 'center', 'text': 'Center'},
+            {value: 'scale', 'text': 'Scale', disabled: hasLayout},            
+          ],
+          onchange: 'changeConstraints'
+        })} />          
+      </div>
+    `
   }
 
-  getDefaultValue () {
+  [CLICK('$constraintsInfo .item')] (e) {
+    const [value, key] = e.$dt.attrs('data-value', 'data-key');
 
-    var grow = this.children.$grow.getValue();
-    var shrink = this.children.$shrink.getValue();
-    var basis = this.children.$basis.getValue();
+    const current = this.$selection.current;
 
-    grow = this.getDefaultItemValue(grow);
-    shrink = this.getDefaultItemValue(shrink);
-    basis = this.getDefaultItemValue(basis);
+    if (!current) return;
 
-    return CSS_TO_STRING({
-      flex: `${grow} ${shrink} ${basis}`
-    })
+    current.changeConstraints(key, value);
+    this.trigger('changeConstraints', key, current[key]);
   }
 
-  [SUBSCRIBE_SELF('changeDefaultItem')] (key, value) {
+  [SUBSCRIBE_SELF('changeConstraints')] (key, value) {
 
-    this.command('setAttributeForMulti', 'change flex layout', this.$selection.packByValue({ 
-      'flex-layout-item': this.getDefaultValue()
+    this.command('setAttributeForMulti', 'apply constraints', this.$selection.packByValue({
+      [key]: value
     }))
 
     this.nextTick(() => {
-      this.emit('refreshAllElementBoundSize')    
-    })
-  }
-
-  [SUBSCRIBE_SELF('changeLayoutType')] (key, value) {
-
-    var valueType = this.children.$layout.getValue()
-    var value = valueType;
-
-    if (valueType === 'value') {
-      value = this.getDefaultValue()
-    }
-
-    this.command('setAttributeForMulti', 'change flex layout', this.$selection.packByValue({ 
-      'flex-layout-item': value
-    }))
-
-    // 타입 변화에 따른 하위 아이템들의 설정을 바꿔야 한다. 
-    this.refs.$layoutList.attr('data-selected-value', valueType);
-
-    this.nextTick(() => {
-      this.emit('refreshAllElementBoundSize')    
-    })
+      this.refresh();
+    }, 100)
 
   }
 
   [SUBSCRIBE('refreshSelection') + DEBOUNCE(100)]() {
     this.refreshShow(() => {
       var current = this.$selection.current; 
-      return  current && current.isInDefault()
+
+      // // const isFlexLayout = current.isLayout(Layout.FLEX);
+      // const isGridLayout = current.isLayout(Layout.GRID);
+
+      // const hasLayout = isFlexLayout || isGridLayout;
+
+
+      return  current && (current.isInDefault()) && current.parent.isNot('project')
     });
   }
 }

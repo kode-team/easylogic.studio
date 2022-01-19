@@ -1,12 +1,12 @@
 .elf--grid-layout-editor {
-    .grid-layout-item {  
-        > .label {
-            padding: 4px 4px;
-            margin-bottom: 5px;
-        }
-
-
-        margin-top: 5px;
-        margin-bottom: 5px;
+  padding: 0px 10px 10px 10px;
+  .grid-layout-item {
+    > .label {
+      padding: 4px 4px;
+      margin-bottom: 5px;
     }
+
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
 }

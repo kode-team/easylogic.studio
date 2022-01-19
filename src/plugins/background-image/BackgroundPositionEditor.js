@@ -13,7 +13,6 @@ export default class BackgroundPositionEditor extends EditorElement {
             repeat: this.props.repeat,
             size: this.props.size,
             blendMode: this.props.blendMode,
-            color: 'rgba(0, 0, 0, 1)'
         }
     }
 
@@ -37,7 +36,7 @@ export default class BackgroundPositionEditor extends EditorElement {
             style: {
                 'background-image': 'linear-gradient(to top right, black, white)',
                 'background-repeat': this.state.repeat,
-                'background-size': '7px 7px'
+                'background-size': '10px 10px'
             }
         }
     }
@@ -48,7 +47,7 @@ export default class BackgroundPositionEditor extends EditorElement {
             <div class='elf--background-position-editor'>
                 <div class='preview' ref='$preview'>
                     <div class='mini-view'>
-                        <div class='color-view' style="background-color: ${this.state.color}" ref='$miniView'></div>
+                        <div class='color-view' ref='$miniView'></div>
                     </div>
                 </div>
             </div>
@@ -66,13 +65,12 @@ export default class BackgroundPositionEditor extends EditorElement {
             data: this.state 
         }, {
             id: this.id
-        });
+        }, this.$el.rect());
     }
 
 
     [SUBSCRIBE("changeBackgroundPositionPattern")](pattern, params) {
         if (params.id === this.id) {
-            // this.refs.$miniView.cssText(`background-color: ${color}`);
             this.updateData({ ...pattern })
         }
     }    

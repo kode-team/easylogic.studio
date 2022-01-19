@@ -1,6 +1,7 @@
 import MenuItem from "./MenuItem";
 
-import { SUBSCRIBE } from "el/sapa/Event";
+import { CONFIG, SUBSCRIBE } from "el/sapa/Event";
+import { EditingMode } from "el/editor/types/editor";
  
 export default class SelectTool extends MenuItem {
 
@@ -20,15 +21,20 @@ export default class SelectTool extends MenuItem {
     this.emit('addLayerView', 'select');
   }
 
-  [SUBSCRIBE('addLayerView')] (type) {
-    this.setSelected(type === 'select');
+  doSelect () {
+    this.setSelected(this.$config.is("editing.mode", EditingMode.SELECT));
   }
 
   [SUBSCRIBE('refreshSelection')] () {
-    this.setSelected(this.$selection.isEmpty);
+    this.doSelect();
   }  
 
   isHideTitle() {
     return true;
   }
+
+  [CONFIG("editing.mode")] () {
+    this.doSelect();
+  }
+
 }

@@ -7,6 +7,7 @@ import CustomAssets from "./object-list/CustomAssets";
 import LibraryItems from "./object-list/LibraryItems";
 import AssetItems from "./object-list/AssetItems";
 import SingleObjectItems from './object-list/SingleObjectItems';
+import { createComponent } from 'el/sapa/functions/jsx';
 
 
 
@@ -71,10 +72,10 @@ export default class ItemLayerTab extends EditorElement {
           </div>
           <div class="tab-body" ref="$body">
             <div class="tab-content selected" data-value="2">
-              <object refClass="SingleObjectItems" />
+              ${createComponent("SingleObjectItems")}
             </div>
             <div class='tab-content' data-value='6'>
-              <object refClass="CustomAssets" />
+              ${createComponent("CustomAssets")}
             </div>
             ${this.$injectManager.getTargetMenuItems('leftbar.tab').filter(it => {
               return it.class.designMode && it.class.designMode.includes('item');

@@ -1,9 +1,10 @@
 import BaseProperty from "./BaseProperty";
 
 import { DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
-import { registElement } from "el/sapa/functions/registElement";
+import { registElement, variable } from "el/sapa/functions/registElement";
 
 import './PathDataProperty.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 export default class PathDataProperty extends BaseProperty {
 
   getTitle() {
@@ -14,13 +15,13 @@ export default class PathDataProperty extends BaseProperty {
     return "item elf--path-data-property"
   }
 
-  isSVGItem  (current) {
+  isSVGItem(current) {
     return current.is('svg-path', 'svg-brush', 'svg-textpath')
   }
 
   [SUBSCRIBE('refreshStyleView', 'refreshRect') + DEBOUNCE(100)]() {
     this.refresh();
-  }  
+  }
 
   [SUBSCRIBE('refreshSelection')]() {
 
@@ -38,17 +39,22 @@ export default class PathDataProperty extends BaseProperty {
 
     return /*html*/`
       <div>
-        <object refClass="PathDataEditor" ref='$pathData' key='d' value='${current.d}' onchange='changeValue' />
+      ${createComponent("PathDataEditor", {
+        ref: '$pathData',
+        key: 'd',
+        value: current.d,
+        onchange: 'changeValue'
+      })}
       </div>
     `;
   }
 
 
-  [SUBSCRIBE_SELF('changeValue')] (key, value, params) {
+  [SUBSCRIBE_SELF('changeValue')](key, value, params) {
     this.emit("updatePathItem", this.$selection.current, {
-      [key]: value 
+      [key]: value
     })
-    
+
   }
 }
 

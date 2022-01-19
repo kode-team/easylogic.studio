@@ -1,19 +1,23 @@
+import { clone } from "el/sapa/functions/func";
+
 /**
  * @method format
  *
  * convert color to format string
  *
- *     // hex
- *     color.format({ r : 255, g : 255, b : 255 }, 'hex')  // #FFFFFF
+ * ```js
+ *     ## hex
+ *     color.format({ r : 255, g : 255, b : 255 }, 'hex')
  *
- *     // rgb
- *     color.format({ r : 255, g : 255, b : 255 }, 'rgb') // rgba(255, 255, 255, 0.5);
+ *     ## rgb
+ *     color.format({ r : 255, g : 255, b : 255 }, 'rgb')
  *
- *     // rgba
- *     color.format({ r : 255, g : 255, b : 255, a : 0.5 }, 'rgb') // rgba(255, 255, 255, 0.5);
- *
+ *     ## rgba
+ *     color.format({ r : 255, g : 255, b : 255, a : 0.5 }, 'rgb')
+ * ```
+ * 
  * @param {Object} obj  obj has r, g, b and a attributes
- * @param {"hex"/"rgb"} type  format string type
+ * @param {hex|rgb|hsl} type  format string type
  * @returns {*}
  */
 export function format(obj, type, defaultColor = 'rgba(0, 0, 0, 0)') {
@@ -31,6 +35,12 @@ export function format(obj, type, defaultColor = 'rgba(0, 0, 0, 0)') {
     }
 
     return obj;
+}
+
+export function formatWithoutAlpha(obj, type, defaultColor = 'rgba(0, 0, 0, 0)') {
+    const newColorObj = clone(obj);
+    newColorObj.a = 1; 
+    return format(newColorObj, type, defaultColor);
 }
 
 export function hex(obj) {

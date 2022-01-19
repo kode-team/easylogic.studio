@@ -27,6 +27,12 @@ export default class JSONRenderer {
         }
     }
 
+    async renderAll (items, renderer) {
+        return await Promise.all(items.map(async (it) => {
+            return await this.render(it, renderer)
+        }))
+    }
+
     async getResourceDataURI (item, renderer) {
         
     }

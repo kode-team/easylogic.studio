@@ -1,25 +1,198 @@
-.elf--flex-layout-item-property {
+.elf--default-layout-item-property {
 
-    .layout-list {
-        
-        > [data-value] {
-            display: none;
+    .constraints {
+        display: grid;
+        grid-template-columns: 100px 1fr;
+        column-gap: 10px;
 
-            &.selected {
-                display: block;
-            }
-        }
-
-        @each $selectType in none, auto, value {
-            &[data-selected-value="#{$selectType}"] [data-value="#{$selectType}"] {
-                display: block;
-            }
-        }    
-
-        .value-item {
-            margin-top: 5px;
-        }
+        padding-bottom: 10px;
     }
 
+    .constraints-box {
+        position: relative;
+        width: 70px;
+        height: 70px;
+        // background-color: white;
+        border: 1px solid var(--elf--input-border-color);
+        margin-left: 10px;
+
+        > .item {
+            position: absolute;
+            // border: 1px solid black;
+            box-sizing: border-box;
+            // pointer-events: none;
+
+            &:hover {
+                background-color: var(--elf--selected-hover-color);
+            }
+
+            &[data-selected="true"] {
+                z-index: 1;
+                &:before {
+                    background-color: var(--elf--selected-color-2) !important;
+                    // opacity: 0.5;
+                }
+
+                border-left-color: var(--elf--selected-color) !important;
+                border-right-color: var(--elf--selected-color) !important;
+                border-top-color: var(--elf--selected-color) !important;
+                border-bottom-color: var(--elf--selected-color) !important;
+            }
+
+            &[disabled] {
+                display: none;
+            }
+    
+        }
+
+        > .rect {
+            position: absolute;
+            width: calc(50% - 2px);
+            height: calc(50% - 2px);
+            left: calc(25% + 1px);
+            top: calc(25% + 1px);
+            box-sizing: border-box;
+            border: 1px solid var(--elf--font-color);
+            pointer-events: none;
+        }        
+
+        [data-key='constraints-horizontal'] {
+            &:before {
+                content: '';
+                position: absolute;
+                left: 3px;
+                right: 5px;
+                top: 50%;
+                transform: translateY(-50%);
+                height: 2px;
+                background-color: var(--elf--input-border-color);
+                pointer-events: none;
+            }          
+            
+            &[data-value="scale"] {
+                &:before {
+                    top: 50%;
+                    // transform: translateX(-50%);
+                    left: 0px;
+                    right: 0px;
+                    height: 3px;
+                    width: auto;
+                    background-color: var(--elf--font-color);
+                    pointer-events: none;
+                }
+
+                bottom: -12px;
+                left: 0px;
+                height: 8px;
+                right: -1px;
+                box-sizing: border-box;
+                border-left: 2px solid var(--elf--font-color);
+                border-right: 2px solid var(--elf--font-color);
+            }            
+
+            &[data-value="min"] {
+                left: 0px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 20px;
+                height: 12px;
+            }
+
+            &[data-value="max"] {
+                right: 0px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 20px;
+                height: 12px;
+
+
+                &:before {
+                    left: 5px;
+                    right: 3px;
+                }                
+            }            
+
+            &[data-value="center"] {
+                left: 50%;
+                top: 50%;
+                transform: translateY(-50%);
+                left: calc(25% + 8px);
+                right: calc(25% + 8px);
+                height: 12px;
+
+                &:before {
+                    left: 0px;
+                    right: 0px;
+                }
+            }                        
+        }
+
+
+        [data-key='constraints-vertical'] {
+
+            &:before {
+                content: '';
+                position: absolute;
+                top: 4px;
+                bottom: 4px;
+                left: 50%;
+                transform: translateX(-50%);
+                // width: 20px;
+                width: 2px;
+                background-color: var(--elf--input-border-color);
+                pointer-events: none;
+            }                            
+
+            &[data-value="scale"] {
+                &:before {
+                    left: 50%;
+                    transform: translateX(-50%);
+                    top: 0px;
+                    bottom: 0px;
+                    width: 3px;
+                    height: auto;
+                    background-color: var(--elf--font-color);
+                    pointer-events: none;
+                }
+
+                right: -12px;
+                top: 0px;
+                width: 8px;
+                bottom: -1px;
+                box-sizing: border-box;
+                border-top: 1px solid var(--elf--font-color);
+                border-bottom: 1px solid var(--elf--font-color);
+            }
+
+            &[data-value="min"] {
+                top: 0px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 12px;
+                height: 20px;
+            }
+
+            &[data-value="max"] {
+                bottom: 0px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 12px;
+                height: 20px;
+            }            
+
+            &[data-value="center"] {
+                top: calc(25% + 8px);
+                bottom: calc(25% + 8px);
+                left: 50%;
+                transform: translateX(-50%);
+                width: 12px;
+
+                &:before {
+                    top: 0px;
+                    bottom: 0px;
+                }                
+            }                        
+        }
+    }
     
 }

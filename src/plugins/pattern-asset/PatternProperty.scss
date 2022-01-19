@@ -1,0 +1,20 @@
+.el--pattern-property {
+
+    .pattern-property {
+
+        display: flex;
+    }
+
+    .add-tools {
+        opacity: 0.3;
+        transition: opacity 0.2s;
+        &:hover {
+            opacity: 1;
+        }
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+}

@@ -1,22 +1,23 @@
+import { BlendMode } from "el/editor/types/model";
 import SelectEditor from "./SelectEditor";
 
 export const blend_list = [
-    "normal",
-    "multiply",
-    "screen",
-    "overlay",
-    "darken",
-    "lighten",
-    "color-dodge",
-    "color-burn",
-    "hard-light",
-    "soft-light",
-    "difference",
-    "exclusion",
-    "hue",
-    "saturation",
-    "color",
-    "luminosity"
+    BlendMode.NORMAL,
+    BlendMode.MULTIPLY,
+    BlendMode.SCREEN,
+    BlendMode.OVERLAY,
+    BlendMode.DARKEN,
+    BlendMode.LIGHTEN,
+    BlendMode.COLOR_DODGE,
+    BlendMode.COLOR_BURN,
+    BlendMode.HARD_LIGHT,
+    BlendMode.SOFT_LIGHT,
+    BlendMode.DIFFERENCE,
+    BlendMode.EXCLUSION,
+    BlendMode.HUE,
+    BlendMode.SATURATION,
+    BlendMode.COLOR,
+    BlendMode.LUMINOSITY
   ];
 
 export default class BlendSelectEditor extends SelectEditor {

@@ -28,7 +28,7 @@ export default class TimelineKeyframeList extends EditorElement {
         
         var rate =  (offsetTime - startTime) / (endTime - startTime);
 
-        return Length.px(this.rect.totalWidth * rate + PADDING/2);
+        return this.rect.totalWidth * rate + PADDING/2;
     }
 
 
@@ -91,8 +91,8 @@ export default class TimelineKeyframeList extends EditorElement {
 
                 if (!next) return '';
 
-                var start = Length.px(it.left.value); 
-                var width = Length.px(next.left.value - it.left.value);
+                var start = it.left.value; 
+                var width = next.left.value - it.left.value;
 
                 var selected = this.$timeline.checked(it.id) && this.$timeline.checked(next.id)
 
@@ -103,7 +103,7 @@ export default class TimelineKeyframeList extends EditorElement {
                         style='left: ${start}; width: ${width}'} ></div>
 
                     ${it.subOffset.map((subOffset, subOffsetIndex) => {
-                        var subOffsetLeft = Length.px(it.left.value +  (subOffset.length / subOffset.totalLength) * width.value)
+                        var subOffsetLeft = it.left.value +  (subOffset.length / subOffset.totalLength) * width
                         return /*html*/`
                         <div 
                             class='${OBJECT_TO_CLASS({
@@ -230,10 +230,10 @@ export default class TimelineKeyframeList extends EditorElement {
 
     moveDragArea (dx, dy) {
         if (this.isNotMoved(dx, dy)) return; 
-        var left = dx < 0 ? Length.px(this.dragXY.x + dx) : Length.px(this.dragXY.x);
-        var top = dy < 0 ? Length.px(this.dragXY.y + dy) : Length.px(this.dragXY.y);
-        var width = Length.px(Math.abs(dx)) 
-        var height = Length.px(Math.abs(dy))
+        var left = dx < 0 ? this.dragXY.x + dx) : Length.px(this.dragXY.x;
+        var top = dy < 0 ? this.dragXY.y + dy) : Length.px(this.dragXY.y;
+        var width = Math.abs(dx) 
+        var height = Math.abs(dy)
 
         this.refs.$dragArea.css({ left, top,  width, height})
 
@@ -282,7 +282,7 @@ export default class TimelineKeyframeList extends EditorElement {
         var width = this.$el.width();
 
         var startTime = this.getTimeRateByPosition((this.left.value) / width );
-        var endTime = this.getTimeRateByPosition((this.left.value + this.width.value) / width);
+        var endTime = this.getTimeRateByPosition((this.left.value + this.width) / width);
 
         this.$timeline.selectBySearch(this.getLayerList(), startTime, endTime);
         this.refresh();

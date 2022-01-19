@@ -21,16 +21,15 @@ This project is [sapa](https://github.com/easylogic/sapa) based.
 
 ### Support Element 
 
+* Artboard 
 * Rect 
 * Circle 
 * Text 
 * Image 
-* Cube 
-* Cylinder 
-* SVG Path 
-* SVG Rect with path 
-* SVG Circle with path 
-* SVG Text 
+* SVG Path (with Rect, Circle) 
+* SVG Spline
+* SVG Polygon
+* SVG Star 
 * SVG TextPath
 
 
@@ -38,26 +37,24 @@ This project is [sapa](https://github.com/easylogic/sapa) based.
 
 * Alignment 
 * Position 
-* Size 
-* BoxModel 
-* Transform 
-  * Support transform ui  (rotate X,Y,Z )
+* Size (pixel based)
+* Layout (flex, grid, abolute) 
+* Constraints (auto resizing)
 * Many styling tools 
-  * background
+  * background (support resizing tool)
   * font & text style 
-  * gradient (multiple background images)
+  * gradient (multiple background images )
   * border & radius 
-  * filter
-  * clip-path
-  * box-shadows 
-  * text-shadows 
+  * filter 
+  * clip-path (support svg path )
+  * box-shadows  (multiple)
+  * text-shadows (multiple)
 
 
 ### Animation 
 * Transition 
 * Animation & Keyframes 
 * Support cubic-bezier editor 
-* Support timeline editor 
 
 ### Code & Share 
 * Support code viewer  
@@ -65,12 +62,6 @@ This project is [sapa](https://github.com/easylogic/sapa) based.
 
 ### Drawing 
 * Support mini path editor 
-
-### Assets 
-* Color - refer to https://github.com/easylogic/editor-plugin-color
-* Gradient
-* SVG Filter 
-* Image 
 
 
 ### Theming  
@@ -86,20 +77,6 @@ cd editor
 npm install 
 npm run dev 
 ``` 
-
-# Development - Electron 
-
-```
-git clone https://github.com/easylogic/editor.git
-cd editor
-npm install 
-npm install electron 
-open terminal (open local web server)
--> npm run dev:electron 
-open terminal (run electron)
--> npm run electron 
-
-```
 
 # build 
 
@@ -127,36 +104,36 @@ var app = new EasyLogic.createDesignEditor({
     projects: [{
       itemType: 'project', 
       layers: [
-        {itemType: 'rect', x: '0px', y: '0px', width: '100px', height: '100px', 'background-color': 'red'},
-        {itemType: 'rect', x: '20px', y: '20px', width: '100px', height: '100px', 'background-color': 'green'},
-        {itemType: 'rect', x: '40px', y: '40px', width: '100px', height: '100px', 'background-color': 'blue'}
+        {itemType: 'rect', x: 0, y: 0, width: 100, height: 100, 'background-color': 'red'},
+        {itemType: 'rect', x: 20, y: 20, width: 100, height: 100, 'background-color': 'green'},
+        {itemType: 'rect', x: 40, y: 40, width: 100, height: 100, 'background-color': 'blue'}
       ]
     }],
   },
   plugins: [
+    // define plugin 
     function (editor) {
       console.log(editor);
     }
   ]
 });
 
-// project 리스트 조회 
-app.getValue():  project[]
-
-// project 리스트 설정 
-app.setValue(project[]);
-
 ```
 
 # Configs 
 
+You can set some useful configs.
+
 ```js
+var app = new EasyLogic.createDesignEditor({
+  container: document.getElementById('app'),
   config: {
     "style.canvas.backgroud.color": "#FDC111"
     "show.ruler": false,
     "show.left.panel": false,
     "show.right.panel": false
   },
+})
 ```
 
 # Plugins 

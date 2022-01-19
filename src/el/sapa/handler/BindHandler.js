@@ -1,7 +1,25 @@
 import BaseHandler from "./BaseHandler";
-import { isObject } from "../functions/func";
+import { isNumber, isObject } from "../functions/func";
 import { CHECK_BIND_PATTERN, BIND_CHECK_FUNCTION, CHECK_SAPARATOR, BIND_CHECK_DEFAULT_FUNCTION, BIND_SAPARATOR } from "../Event";
 import Dom from "el/sapa/functions/Dom";
+
+const convertToPx = (key, value) => {
+
+    if (isNumber(value)) {
+      switch (key) {
+        case 'width':
+        case 'height':
+        case 'top':
+        case 'left':
+        case 'right':
+        case 'bottom':
+          return value + 'px';
+      }
+
+    }
+
+    return value;
+}
 
 /**
  * 
@@ -22,7 +40,13 @@ const applyElementAttribute = ($element, key, value) => {
      * style: { key: value }
      */
     if (typeof(value) !== 'string') {
-      $element.css(value);
+
+      const css = {}
+      Object.entries(value).forEach(([key, value]) => {
+        css[key] = convertToPx(key, value);
+      })
+
+      $element.css(css);
     }
 
     return;

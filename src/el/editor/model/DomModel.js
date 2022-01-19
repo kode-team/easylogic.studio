@@ -7,6 +7,10 @@ import PathParser from "el/editor/parser/PathParser";
 import { Pattern } from 'el/editor/property-parser/Pattern';
 import { BackgroundImage } from 'el/editor/property-parser/BackgroundImage';
 import { STRING_TO_CSS } from "el/utils/func";
+import { Constraints, GradientType, Layout } from "../types/model";
+import { rectToVerties } from "el/utils/collision";
+import { calculateRotationOriginMat4, degreeToRadian, vertiesMap } from "el/utils/math";
+import { vec3 } from "gl-matrix";
 
 
 const editableList = [
@@ -52,25 +56,20 @@ export class DomModel extends GroupModel {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
       'position': 'absolute',
-      'x': Length.z(),
-      'y': Length.z(),
       'rootVariable': '',
       'variable': '',
-      'width': Length.px(300),
-      'height': Length.px(300),
       'color': "black",
-      // 'font-size': Length.px(13),
+      // 'font-size': 13,
       'overflow': 'visible',
       'opacity': 1,
-      'z-index': Length.auto,
-      'transform-style': 'preserve-3d',
-      'layout': 'default',
+      // 'transform-style': 'preserve-3d',
+      'layout': Layout.DEFAULT,
       'flex-layout': 'display:flex;',
       'grid-layout': 'display:grid;',
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
       // keyframes: [],
-      "boolean-operation": 'none',
-      "boolean-path": "",
+      "constraints-vertical": Constraints.MIN,
+      "constraints-horizontal": Constraints.MIN,
       selectors: [],
       svg: [],
       ...obj
@@ -95,12 +94,15 @@ export class DomModel extends GroupModel {
         'text-clip',
         'border-radius',
         'border',
+        'border-top',
+        'border-left',
+        'border-right',
+        'border-bottom',
         'box-shadow',
         'text-shadow',
         'clip-path',
         'color',
         'font-size',
-        'font-stretch',
         'line-height',
         'text-align',
         'text-transform',
@@ -127,7 +129,8 @@ export class DomModel extends GroupModel {
         'padding-right',
         'padding-left',
         'padding-bottom',
-        'boolean-operation'
+        'constraints-horizontal',
+        'constraints-vertical',
       ),
 
       // 'keyframe': 'sample 0% --aaa 100px | sample 100% width 200px | sample2 0.5% background-image background-image:linear-gradient(to right, black, yellow 100%)',
@@ -158,9 +161,29 @@ export class DomModel extends GroupModel {
 
   get changedBoxModel() {
     return this.hasChangedField(
-      'margin-top', 'margin-left', 'margin-bottom', 'margin-right', 
+      'margin-top', 'margin-left', 'margin-bottom', 'margin-right',
       'padding-top', 'padding-left', 'padding-right', 'padding-bottom'
     )
+  }
+
+  get changedFlexLayout() {
+    return this.hasChangedField(
+      'flex-direction', 'flex-wrap', 'justify-content', 'align-items', 'align-content',
+      'order', 'flex-basis', 'flex-grow', 'flex-shrink', 'flex-flow'
+    )
+  }
+
+  get changedGridLayout() {
+    return this.hasChangedField(
+      'grid-template-rows', 'grid-template-columns', 'grid-template-areas',
+      'grid-auto-rows', 'grid-auto-columns', 'grid-auto-flow',
+      'grid-row-gap', 'grid-column-gap', 'grid-row-start', 'grid-row-end',
+      'grid-column-start', 'grid-column-end', 'grid-area'
+    )
+  }
+
+  get changedLayout() {
+    return this.hasChangedField('layout') || this.changedBoxModel || this.changedFlexLayout || this.changedGridLayout
   }
 
 
@@ -226,8 +249,8 @@ export class DomModel extends GroupModel {
     return results;
   }
 
-  reset(obj) {
-    const isChanged = super.reset(obj);
+  reset(obj, context = { origin: "*" }) {
+    const isChanged = super.reset(obj, context);
 
     // transform 에 변경이 생기면 미리 캐슁해둔다. 
     if (this.hasChangedField('clip-path')) {
@@ -235,37 +258,15 @@ export class DomModel extends GroupModel {
     } else if (this.hasChangedField('width', 'height')) {
 
       if (this.cacheClipPath) {
-        const d = this.cacheClipPath.clone().scale(this.json.width.value / this.cacheClipPathWidth, this.json.height.value / this.cacheClipPathHeight).d;
+        const d = this.cacheClipPath.clone().scale(this.json.width / this.cacheClipPathWidth, this.json.height / this.cacheClipPathHeight).d;
         this.json['clip-path'] = `path(${d})`;
 
-        this.modelManager.setChanged('reset', this.id, { 'clip-path' : this.json['clip-path'] });
+        this.modelManager.setChanged('reset', this.id, { 'clip-path': this.json['clip-path'] });
       }
 
     } else if (this.hasChangedField('background-image', 'pattern')) {
       this.setBackgroundImageCache()
-    } else if (this.hasChangedField('changedChildren', 'boolean-operation') || !this.json['boolean-path']) {
-
-      // 자식이 변경이 되었을 때 
-      if (this.json['boolean-operation'] !== 'none') {
-        if (this.json.children?.length === 2) {
-
-          if (this.modelManager.editor.pathKitManager.has()) {
-            const paths = this.layers.filter(it => it.d)
-    
-            if (paths.length === 2) {
-              // path 를 다시 생성하는데 
-              const newPath = this['boolean-operation'] != 'none' ?  this.booleanOperation() : "";
-      
-              this.json['boolean-path'] = newPath;
-            }
-          }
-    
-        }
-
-      }
-
-  
-    }    
+    }
 
     return isChanged;
   }
@@ -282,7 +283,7 @@ export class DomModel extends GroupModel {
         });
       })
 
-      for(var i = 0, len = patternList.length; i < len; i++)   {
+      for (var i = 0, len = patternList.length; i < len; i++) {
         list.push.apply(list, patternList[i]);
       }
     }
@@ -300,16 +301,17 @@ export class DomModel extends GroupModel {
     } else {
       this.cacheBackgroundImage = {}
     }
+
   }
 
   setClipPathCache() {
     var obj = ClipPath.parseStyle(this.json['clip-path'])
 
-    this.cacheClipPathObject = obj;    
+    this.cacheClipPathObject = obj;
     if (obj.type === 'path') {
       this.cacheClipPath = new PathParser(obj.value.trim())
-      this.cacheClipPathWidth = this.json.width.value;
-      this.cacheClipPathHeight = this.json.height.value;
+      this.cacheClipPathWidth = this.json.width;
+      this.cacheClipPathHeight = this.json.height;
     }
   }
 
@@ -326,77 +328,109 @@ export class DomModel extends GroupModel {
     }
 
     if (this.cacheClipPath) {
-      return this.cacheClipPath.clone().scale(this.json.width.value / this.cacheClipPathWidth, this.json.height.value / this.cacheClipPathHeight).d;
+      return this.cacheClipPath.clone().scale(this.json.width / this.cacheClipPathWidth, this.json.height / this.cacheClipPathHeight).d;
     }
 
   }
 
-  booleanOperation() {
-    const op = this.json['boolean-operation']
-    switch(op) {
-    case "intersection": return this.intersection();
-    case "union": return this.union();
-    case "difference": return this.difference();
-    case "reverse-difference": return this.reverseDifference();
-    case "xor": return this.xor();
+  getBackgroundImage(index) {
+    const value = this.json['background-image'];
+
+    const backgroundImages = BackgroundImage.parseStyle(STRING_TO_CSS(value));
+
+    return backgroundImages[index || 0]
+  }
+
+
+  getGradientLineLength(width, height, angle) {
+    return (
+      Math.abs(width * Math.sin(degreeToRadian(angle))) +
+      Math.abs(height * Math.cos(degreeToRadian(angle)))
+    );
+  }
+
+  /**
+   * 선택된 backround image 의 matrix 를 생성함. 
+   * 
+   * backRect : { x, y, width, height}
+   * backVerties : backRect 의 world 좌표
+   * 
+   * @param {number} index 
+   * @returns 
+   */
+  createBackgroundImageMatrix(index) {
+
+    const backgroundImage = this.getBackgroundImage(index);
+
+    const { image } = backgroundImage;
+
+    const maxWidth = this.screenWidth;
+    const maxHeight = this.screenHeight;
+
+    const backRect = backgroundImage.getOffset(maxWidth, maxHeight);
+
+    const backVerties = vertiesMap(rectToVerties(backRect.x, backRect.y, backRect.width, backRect.height), this.absoluteMatrix);
+    const result = {
+      backRect,
+      backVerties,
+      absoluteMatrix: this.absoluteMatrix,      
+      backgroundImage
     }
 
-    return "";
-  }
+    switch (image.type) {
+      case GradientType.RADIAL:
+      case GradientType.REPEATING_RADIAL:
+      case GradientType.CONIC:
+      case GradientType.REPEATING_CONIC:
+        let [rx, ry] = image.radialPosition;
 
-  intersection() {
-    const layers = this.layers; 
+        if (rx == 'center')  rx = Length.percent(50);
+        if (ry == 'center')  ry = Length.percent(50);
+      
+        const newRx = rx.toPx(backRect.width);
+        const newRy = ry.toPx(backRect.height);
 
-    const newPath = this.modelManager.editor.pathKitManager.intersection(
-      layers[0].accumulatedPath().d,
-      layers[1].accumulatedPath().d
-    ) 
+        const centerVerties = vertiesMap(
+          [
+            [newRx.value + backRect.x, newRy.value + backRect.y, 0],
+            [newRx.value + backRect.x, newRy.value + backRect.y - 1, 0],
+          ],
+          this.absoluteMatrix
+        );
 
-    return this.invertPath(newPath).d;
-  }
+        result.radialCenterPosition = centerVerties[0];
+        result.radialCenterStick = centerVerties[1];
 
-  union() {
-    const layers = this.layers; 
+        break;
+      case GradientType.LINEAR:
+      case GradientType.REPEATING_LINEAR:
+        // gradient length 구하기
+        result.gradientLineLength = this.getGradientLineLength( backRect.width, backRect.height, image.angle);
+        result.centerPosition = vec3.lerp([], backVerties[0], backVerties[2], 0.5);
 
-    const newPath = this.modelManager.editor.pathKitManager.union(
-      layers[0].accumulatedPath().d,
-      layers[1].accumulatedPath().d
-    ) 
+        const startPoint = vec3.add([], result.centerPosition, [0, result.gradientLineLength/2, 0]);        
+        const endPoint = vec3.subtract([], result.centerPosition, [0, result.gradientLineLength/2, 0]);
 
-    return this.invertPath(newPath).d;
-  }
+        const [newStartPoint, newEndPoint] = vertiesMap(
+          [startPoint, endPoint],
+          calculateRotationOriginMat4(image.angle, result.centerPosition)
+        );
 
-  difference() {
-    const layers = this.layers; 
+        result.endPoint = newEndPoint;
+        result.startPoint = newStartPoint
 
-    const newPath = this.modelManager.editor.pathKitManager.difference(
-      layers[0].accumulatedPath().d,
-      layers[1].accumulatedPath().d
-    ) 
+        result.colorsteps = image.colorsteps.map(it => {
+          const offset = it.toLength().toPx(result.gradientLineLength).value;
+          return {
+            color: it.color,
+            pos: vec3.lerp([], result.startPoint, result.endPoint, offset / result.gradientLineLength)
+          }
+        });
 
-    return this.invertPath(newPath).d;
-  }
+        break;
+    }
 
-  reverseDifference() {
-    const layers = this.layers; 
-
-    const newPath = this.modelManager.editor.pathKitManager.reverseDifference(
-      layers[0].accumulatedPath().d,
-      layers[1].accumulatedPath().d
-    ) 
-
-    return this.invertPath(newPath).d;
-  }  
-
-  xor() {
-    const layers = this.layers; 
-
-    const newPath = this.modelManager.editor.pathKitManager.xor(
-      layers[0].accumulatedPath().d,
-      layers[1].accumulatedPath().d
-    ) 
-
-    return this.invertPath(newPath).d;
+    return result;
   }
 
 }

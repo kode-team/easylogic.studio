@@ -3,6 +3,7 @@ import { Border } from "el/editor/property-parser/Border";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './BorderEditor.scss';
+import { variable } from "el/sapa/functions/registElement";
 
 const borderTypeList = [
   "border", 
@@ -47,11 +48,6 @@ export default class BorderEditor extends EditorElement {
     this.refresh();
   }
 
-  refresh () {
-    this.load();
-
-  }
-
 
   [LOAD('$editorArea')] () {
     return borderTypeList.map(type => {
@@ -60,7 +56,13 @@ export default class BorderEditor extends EditorElement {
       label = this.$i18n('border.editor.' + label);
       return /*html*/`
       <div>
-        <object refClass='BorderValueEditor' ref='$${type}' label='${label}' key="${type}" value="${this.state.borders[type]}" onchange="changeKeyValue" />
+        <object refClass='BorderValueEditor' ${variable({
+          ref: `$${type}`,
+          label,
+          key: type,
+          value: this.state.borders[type],
+          onchange: "changeKeyValue"
+        })}  />
       </div>
       `
     })
@@ -69,12 +71,6 @@ export default class BorderEditor extends EditorElement {
   template() {
     return /*html*/`
       <div class="elf--border-editor">
-        <div class='header'>
-          <div></div>
-          <label>${this.$i18n('border.editor.width')}</label>
-          <label>${this.$i18n('border.editor.style')}</label>
-          <label>${this.$i18n('border.editor.color')}</label>
-        </div>
         <div class='editor-area' ref='$editorArea'>
 
         </div>

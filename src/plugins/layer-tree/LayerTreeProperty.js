@@ -4,23 +4,18 @@ import {
   DRAGOVER, DROP, BIND, DRAGEND,
   SUBSCRIBE, SUBSCRIBE_SELF, THROTTLE, CONFIG
 } from "el/sapa/Event";
-import { iconUse } from "el/editor/icon/icon";
+import { iconUse, iconUseForPath } from "el/editor/icon/icon";
 import { Length } from "el/editor/unit/Length";
 import { KEY_CODE } from "el/editor/types/key";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './LayerTreeProperty.scss';
 import Dom from 'el/sapa/functions/Dom';
+import PathParser from 'el/editor/parser/PathParser';
 
 const DRAG_START_CLASS = 'drag-start'
 
 export default class LayerTreeProperty extends BaseProperty {
-
-  initialize() {
-    super.initialize();
-
-    this.notEventRedefine = true;
-  }
 
   getTitle() {
     return this.$i18n('layer.tree.property.title')
@@ -60,7 +55,7 @@ export default class LayerTreeProperty extends BaseProperty {
       var top = this.state.lastDragOverPosition + offset - this.state.rootRect.top
 
       bound = {
-        top: Length.px(top),
+        top: top,
         height: '1px',
         width: '100%',
         left: '0px'
@@ -73,7 +68,7 @@ export default class LayerTreeProperty extends BaseProperty {
       var top = this.state.lastDragOverPosition + offset - this.state.rootRect.top
 
       bound = {
-        top: Length.px(top),
+        top: top,
         height: '1px',
         width: '100%',
         left: '0px'
@@ -89,8 +84,8 @@ export default class LayerTreeProperty extends BaseProperty {
         var top = this.state.lastDragOverPosition + offset - this.state.rootRect.top
 
         bound = {
-          top: Length.px(top),
-          height: Length.px(this.state.itemRect.height),
+          top: top,
+          height: this.state.itemRect.height,
           width: '100%',
           left: '0px'
         }
@@ -110,44 +105,23 @@ export default class LayerTreeProperty extends BaseProperty {
   getIcon(item) {
     // return '';
 
-    if (item.hasChildren() && item.is('artboard') === false) {
+    if (item.d) {
+      const path = PathParser.fromSVGString(item.absolutePath().d)
 
-      if (item['boolean-operation'] !== 'none' && item['boolean-path']) {
-        return iconUse('dark')
-      }
+      return iconUseForPath(path.scaleWith(24, 24).d, { width: 24, height: 24, fill: 'currentColor', stroke: 'currentColor' });
+    }
 
+    if (item.hasChildren()) {
       if (item.isLayout('flex')) {
-        return iconUse("flex");
+        return iconUse("layout_flex");
       } else if (item.isLayout('grid')) {
-        return iconUse("grid");
-      }
+        return iconUse("layout_grid");
+      } 
 
-      return iconUse("margin");
+      return iconUse("layout_default");
     }
 
-    switch (item.itemType) {
-      case 'artboard':
-        return iconUse('artboard');
-      case 'circle':
-        return iconUse('lens');
-      case 'image':
-        return iconUse('image');
-      case 'text':
-      case 'svg-text':
-        return iconUse('title');
-      case 'svg-textpath':
-        return iconUse('text_rotate');
-      case 'svg-path':
-        return iconUse('pentool');
-      case 'polygon':
-        return iconUse('polygon');        
-      case 'star':
-        return iconUse('star');        
-      case 'spline':
-        return iconUse('smooth');        
-      default:
-        return iconUse('rect');
-    }
+    return this.$icon.get(item.itemType, item);
   }
 
   makeLayerList(parentObject, depth = 0) {
@@ -162,7 +136,7 @@ export default class LayerTreeProperty extends BaseProperty {
       var selectedPathClass = this.$selection.hasPathOf(layer) ? 'selected-path' : '';
       var selectedClass = this.$selection.check(layer) ? 'selected' : '';
       var hovered = this.$selection.checkHover(layer) ? 'hovered' : '';
-      var name = layer.name;
+      var name = layer.is('boolean-path') ? layer['boolean-operation'] : layer.name;
 
       if (layer.is('text')) {
         name = layer.text || layer.name
@@ -174,7 +148,7 @@ export default class LayerTreeProperty extends BaseProperty {
       }
 
       const isHide = layer.isTreeItemHide()
-      const depthPadding = Length.px(depth * 20);
+      const depthPadding = depth * 20;
       const hasChildren = layer.hasChildren()
       const lock = this.$lockManager.get(layer.id);
       const visible = this.$visibleManager.get(layer.id);
@@ -182,7 +156,7 @@ export default class LayerTreeProperty extends BaseProperty {
       data[data.length] = /*html*/`        
         <div class='layer-item ${selectedClass} ${selectedPathClass} ${hovered}' data-is-group="${hasChildren}" data-depth="${depth}" data-layout='${layer.layout}' data-layer-id='${layer.id}' data-is-hide="${isHide}"  draggable="true">
           <div class='detail'>
-            <label data-layout-title='${title}' style='padding-left: ${depthPadding}' > 
+            <label data-layout-title='${title}' style='padding-left: ${Length.px(depthPadding)}' > 
               <div class='folder ${layer.collapsed ? 'collapsed' : ''}'>${hasChildren ? iconUse('arrow_right') : ''}</div>
               <span class='icon' data-item-type="${layer.itemType}">${this.getIcon(layer)}</span> 
               <span class='name'>${name}</span>
@@ -288,6 +262,11 @@ export default class LayerTreeProperty extends BaseProperty {
     })
 
     this.emit('refreshAll')
+
+    this.nextTick(() => {
+      this.emit('recoverBooleanPath');
+    }, 10)
+
   }
 
   [DOUBLECLICK('$layerList .layer-item')](e) {
@@ -343,8 +322,8 @@ export default class LayerTreeProperty extends BaseProperty {
 
     this.emit('newComponent', 'rect', {
       'background-color': '#ececec',
-      width: Length.px(200),
-      height: Length.px(100)
+      width: 200,
+      height: 100
     });
   }
 

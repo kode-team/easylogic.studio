@@ -9,18 +9,19 @@ import KeyboardManager from "../common/KeyboardManager";
 
 import Inspector from "./area/Inspector";
 import StatusBar from './area/StatusBar';
-import ToolBar from "./area/ToolBar";
+import ToolBar from "./area/tool-bar/ToolBar";
 
 import designEditorPlugins from "plugins/design-editor-plugins";
 import LayerTab from "./area/LayerTab";
 import { END, MOVE } from "el/editor/types/event";
 import { isFunction } from 'el/sapa/functions/func';
 import IconManager from '../common/IconManager';
-import PathKitInit from "pathkit-wasm/bin/pathkit.js";
+import PathKitInit from "pathkit-wasm/bin/pathkit";
 import ItemLayerTab from "./area/ItemLayerTab";
 import SingleInspector from './area/SingleInspector';
-
-// import './web-component/MyElement';
+import SwitchLeftPanel from './area/status-bar/SwitchLeftPanel';
+import SwitchRightPanel from './area/status-bar/SwitchRightPanel';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class DesignEditor extends BaseLayout {
 
@@ -29,6 +30,7 @@ export default class DesignEditor extends BaseLayout {
 
     (async () => {
       this.$pathkit.registerPathKit(await PathKitInit());
+  
     })()
   }
 
@@ -43,10 +45,17 @@ export default class DesignEditor extends BaseLayout {
       BodyPanel,
       PopupManager,
       KeyboardManager,
-      IconManager
+      IconManager,
+      SwitchLeftPanel,
+      SwitchRightPanel,
     }
   }
 
+  /**
+   * 
+   * @protected
+   * @returns {function[]}
+   */
   getPlugins() {
     return designEditorPlugins
   }
@@ -61,36 +70,29 @@ export default class DesignEditor extends BaseLayout {
   }
 
   template() {
+    const isItemMode = this.$config.is('editor.design.mode', 'item')
     return /*html*/`
       <div class="designeditor">
         <div class="layout-main">
           <div class='layout-top' ref='$top'>
-            <object refClass="ToolBar" />
+            ${createComponent('ToolBar')}
           </div>
           <div class="layout-middle" ref='$middle'>      
             <div class="layout-body" ref='$bodyPanel'>
-              <object refClass="BodyPanel" ref="$bodyPanelView" />
+              ${createComponent('BodyPanel', {ref: "$bodyPanelView"})}
             </div>                           
             <div class='layout-left' ref='$leftPanel'>
-              <object refClass='LayerTab' />
-              <object refClass='ItemLayerTab' />
+              ${isItemMode ? createComponent('ItemLayerTab') : createComponent('LayerTab') }
             </div>
             <div class="layout-right" ref='$rightPanel'>
-              <object refClass='Inspector' />
-              <object refClass="SingleInspector" />
+              ${isItemMode ? createComponent("SingleInspector") : createComponent("Inspector") }
             </div>
-
-            <div class='layout-footer' ref='$footerPanel'>
-              <div class='footer-splitter' ref='$footerSplitter' title="${this.$i18n('timeline.property.resize')}"></div>
-              <object refClass='TimelineProperty' />
-            </div>   
-            <div class='splitter' ref='$splitter'></div>
+            <div class='splitter' ref='$splitter'></div>            
           </div>
-          <object refClass='StatusBar' />
-          <object refClass="KeyboardManager" />                
+          ${createComponent("KeyboardManager")}
         </div>
-        <object refClass="PopupManager" />
-        <object refClass="IconManager" />        
+        ${createComponent("PopupManager")}
+        ${createComponent("IconManager")}
       </div>
     `;
   }
@@ -102,20 +104,35 @@ export default class DesignEditor extends BaseLayout {
   }
 
   [BIND('$splitter')] () {
-    let left = `${this.state.leftSize}px`    
+    let left = this.state.leftSize
     if (this.$config.false('show.left.panel')) {
-      left = `0px`
+      left = 0
     }
 
     return {
-      style: { left }
+      style: { 
+        left: left 
+      }
     }
   }
 
+  [BIND('$leftArrow')] () {
+    let left = this.state.leftSize
+    if (this.$config.false('show.left.panel')) {
+      left = 0
+    }
+
+    return {
+      style: { 
+        left: left
+      }
+    }
+  }  
+
   [BIND('$leftPanel')] () {
     let left = `0px`    
-    let width = Length.px(this.state.leftSize);
-    let bottom = Length.px(this.state.bottomSize);
+    let width = this.state.leftSize;
+    let bottom = this.state.bottomSize;
     if (this.$config.false('show.left.panel')) {
       left = `-${this.state.leftSize}px`    
     }
@@ -126,45 +143,57 @@ export default class DesignEditor extends BaseLayout {
   }  
 
   [BIND('$rightPanel')] () {
-    let right = `0px`    
-    let bottom = Length.px(this.state.bottomSize);    
+    let right = 0    
+    let bottom = this.state.bottomSize;    
     if (this.$config.false('show.right.panel')) {
-      right = `-${this.state.rightSize}px`    
+      right = -this.state.rightSize
     }
 
     return {
-      style: { right, bottom }
+      style: { 
+        right: right, 
+        bottom 
+      }
+    }
+  }    
+
+  [BIND('$rightArrow')] () {
+    let right = 6    
+    let bottom = this.state.bottomSize;    
+    if (this.$config.true('show.right.panel')) {
+      right = this.state.rightSize + 6
+    }
+
+    return {
+      style: { 
+        right: right, 
+        bottom 
+      }
     }
   }    
 
   [BIND('$bodyPanel')] () {
    
-    let left = `${this.state.leftSize}px`
-    let right = `${this.state.rightSize}px`
-    let bottom = `${this.state.bottomSize}px`
+    let left = this.state.leftSize
+    let right = this.state.rightSize
+    let bottom = this.state.bottomSize
 
     if (this.$config.false('show.left.panel')) {
-      left = `0px`
+      left = 0
     }
 
     if (this.$config.false('show.right.panel')) {
-      right = `0px`
+      right = 0
     }
 
     return {
-      style: { left, right, bottom }
+      style: { 
+        left: left, 
+        right: right, 
+        bottom: bottom
+      }
     }
   }  
-  
-
-  [BIND('$footerPanel')] () {
-   
-    let height = Length.px(this.state.bottomSize);
- 
-    return {
-      style: { height }
-    }
-  }    
 
   [POINTERSTART('$splitter') + MOVE('moveSplitter') + END('moveEndSplitter')] () {
 
@@ -187,26 +216,12 @@ export default class DesignEditor extends BaseLayout {
     this.refs.$splitter.removeClass('selected');
   }
 
-  [POINTERSTART('$footerSplitter') + MOVE('moveFooterSplitter')] () {
+  afterRender() {
+    super.afterRender();
 
-    this.minFooterSize = this.$theme('bottom_size');
-    this.maxFooterSize = this.$theme('bottom_max_size');
-    this.bottomSize = Length.parse(this.refs.$footerPanel.css('height')).value;
+    this.$config.init('editor.layout.elements', this.refs);    
+
   }
-
-  moveFooterSplitter (_, dy) {
-    const bottomSize = Math.max(Math.min(this.bottomSize - dy , this.maxFooterSize), this.minFooterSize)
-    this.setState({
-      bottomSize,
-      lastBottomSize: bottomSize      
-    })
-
-    // this.trigger('changeTimelineHeight');
-  }  
-
-  // [SUBSCRIBE('changeTimelineHeight') + THROTTLE(100)] () {
-  //   this.emit('refreshTimeline')
-  // }
 
   refresh () {
 
@@ -221,6 +236,7 @@ export default class DesignEditor extends BaseLayout {
     this.bindData('$footerPanel');        
     
     this.emit('resizeEditor');    
+
   }
 
   [CONFIG('show.left.panel')]() {
@@ -239,27 +255,6 @@ export default class DesignEditor extends BaseLayout {
 
   [CONFIG('editor.design.mode')] () {
     this.bindData('$el');
-  }
-
-
-  [SUBSCRIBE('toggleFooter')] (isShow) {
-    this.$el.toggleClass('show-footer', isShow);
-
-    if (this.$el.hasClass('show-footer')) {
-      if (this.state.bottomSize === 30) {
-        this.state.bottomSize = this.state.lastBottomSize || this.$theme('bottom_size');
-      }
-    } else {
-      this.state.bottomSize = 30
-    }
-
-    this.refresh();
-
-  }
-
-  [TRANSITIONEND('$el .layout-footer')] (e) {
-    this.emit('toggleFooterEnd');
-
   }
 
   /** 드랍존 설정을 위해서 남겨놔야함 */

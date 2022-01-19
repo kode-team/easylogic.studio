@@ -10,7 +10,7 @@ export class Segment {
      * 
      * @param {number} x 
      * @param {number} y 
-     * @returns 
+     * @returns {Object}
      */
     static M(x, y) {
         return {
@@ -23,7 +23,7 @@ export class Segment {
      * 
      * @param {number} x 
      * @param {number} y 
-     * @returns 
+     * @returns {Object}
      */
     static L(x, y) {
         return {
@@ -38,7 +38,7 @@ export class Segment {
      * @param {number} y1 
      * @param {number} x 
      * @param {number} y 
-     * @returns 
+     * @returns {Object}
      */
     static Q(x1, y1, x, y) {
         return {
@@ -55,7 +55,7 @@ export class Segment {
      * @param {number} y2 
      * @param {number} x 
      * @param {number} y 
-     * @returns 
+     * @returns {Object}
      */
     static C(x1, y1, x2, y2, x, y) {
         return {
@@ -73,7 +73,7 @@ export class Segment {
      * @param {number} sf 
      * @param {number} x 
      * @param {number} y 
-     * @returns 
+     * @returns {Object}
      */
     static A(rx, ry, xrot, laf, sf, x, y) {
         return {
@@ -84,7 +84,7 @@ export class Segment {
     /**
      * Close Path
      * 
-     * @returns 
+     * @returns {Object}
      */
     static Z() {
         return {

@@ -73,7 +73,7 @@ export class CommandManager {
             // local command 에 등록 
             this.localCommands[command.command] = callback;            
 
-            return this.$editor.on(command.command, callback, this, command.debounce || 0);
+            return this.$editor.on(command.command, callback, command, command.debounce || 0);
         }
 
     }

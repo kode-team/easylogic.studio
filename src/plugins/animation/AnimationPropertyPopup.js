@@ -4,6 +4,7 @@ import { LOAD, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import './AnimationPropertyPopup.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class AnimationPropertyPopup extends BasePopup {
 
@@ -13,14 +14,14 @@ export default class AnimationPropertyPopup extends BasePopup {
 
   initState() {
     return {
-      changeEvent: '', 
-      instance: {}, 
-      data: {} 
+      changeEvent: '',
+      instance: {},
+      data: {}
     };
   }
 
   updateData(opt) {
-    this.state.data = {...this.state.data, ...opt} 
+    this.state.data = { ...this.state.data, ...opt }
     if (this.state.instance) {
       this.state.instance.trigger(this.state.changeEvent, this.state.data);
     }
@@ -30,7 +31,7 @@ export default class AnimationPropertyPopup extends BasePopup {
     return /*html*/`<div class='elf--animation-property-popup' ref='$popup'></div>`;
   }
 
-  [LOAD('$popup')] () {
+  [LOAD('$popup')]() {
     return /*html*/`
       <div class="box">
         ${this.templateForKeyframe()}
@@ -45,17 +46,22 @@ export default class AnimationPropertyPopup extends BasePopup {
     `;
   }
 
-  templateForTimingFunction () {
+  templateForTimingFunction() {
     return /*html*/`
     <div class='timing-function'>
       <label>${this.$i18n('animation.property.popup.timing.function')}</label>
-      <object refClass="CubicBezierEditor" ref='$cubicBezierEditor' key="timingFunction" value="${this.state.data.timingFunction || 'linear'}" onChange='changeCubicBezier' />
+      ${createComponent("CubicBezierEditor", {
+      ref: '$cubicBezierEditor',
+      key: "timingFunction",
+      value: this.state.data.timingFunction || 'linear',
+      onChange: 'changeCubicBezier'
+    })}
     </div>
     `
   }
 
   templateForKeyframe() {
-   
+
     return /*html*/`
       <div class='name'>
         <label>${this.$i18n('animation.property.popup.keyframe')}</label>
@@ -66,16 +72,16 @@ export default class AnimationPropertyPopup extends BasePopup {
     `
   }
 
-  [LOAD('$name')] () {
+  [LOAD('$name')]() {
     var current = this.$selection.currentProject;
     var names = []
     if (current && current.keyframes) {
       names = current.keyframes.map(it => {
-        return {key: it.name, value: it.name}
+        return { key: it.name, value: it.name }
       });
     }
 
-    names.unshift({key: 'Select a keyframe', value : ''});
+    names.unshift({ key: 'Select a keyframe', value: '' });
 
     return names.map(it => {
       var selected = it.value === this.name ? 'selected' : '';
@@ -84,8 +90,8 @@ export default class AnimationPropertyPopup extends BasePopup {
     })
   }
 
-  [CHANGE('$name')] () {
-    this.updateData({name: this.refs.$name.value })
+  [CHANGE('$name')]() {
+    this.updateData({ name: this.refs.$name.value })
   }
 
   templateForDirection() {
@@ -96,102 +102,103 @@ export default class AnimationPropertyPopup extends BasePopup {
 
     return /*html*/`
       <div class='direction'>
-        <object refClass="SelectEditor"  
-            label='${this.$i18n('animation.property.popup.direction')}'
-            ref='$direction' 
-            key='direction' 
-            value="${this.state.data.direction}"
-            options='${options}'
-            onChange='changeSelect'
-        /> 
+        ${createComponent("SelectEditor", {
+      label: this.$i18n('animation.property.popup.direction'),
+      ref: '$direction',
+      key: 'direction',
+      value: this.state.data.direction,
+      options,
+      onChange: 'changeSelect'
+    })}
       </div>
     `
   }
 
-  [SUBSCRIBE_SELF('changeSelect')] (key, value) {
+  [SUBSCRIBE_SELF('changeSelect')](key, value) {
     this.updateData({ [key]: value })
   }
 
   templateForPlayState() {
     return /*html*/`
     <div class='play-state'>
-      <object refClass="SelectEditor"  
-          label='${this.$i18n('animation.property.popup.play.state')}'
-          ref='$playState' 
-          key='playState' 
-          value="${this.state.data.playState}"
-          options='${['paused', 'running']}'
-          onChange='changeSelect'
-      /> 
+      ${createComponent("SelectEditor", {
+      label: this.$i18n('animation.property.popup.play.state'),
+      ref: '$playState',
+      key: 'playState',
+      value: this.state.data.playState,
+      options: ['paused', 'running'],
+      onChange: 'changeSelect'
+    })}
     </div>
   `
-  }  
+  }
 
   templateForFillMode() {
 
-    var options = 'none,forwards,backwards,both'.split(',').map(it=>{
+    var options = 'none,forwards,backwards,both'.split(',').map(it => {
       return `${it}:${this.$i18n(it)}`
     }).join(',');
 
     return /*html*/`
     <div class='fill-mode'>
-      <object refClass="SelectEditor"  
-          label='${this.$i18n('animation.property.popup.fill.mode')}'
-          ref='$fillMode' 
-          key='fillMode' 
-          value="${this.state.data.fillMode}"
-          options='${options}'
-          onChange='changeSelect'
-      /> 
+      ${createComponent("SelectEditor", {
+      label: this.$i18n('animation.property.popup.fill.mode'),
+      ref: '$fillMode',
+      key: 'fillMode',
+      value: this.state.data.fillMode,
+      options,
+      onChange: 'changeSelect'
+    })}
     </div>
   `
   }
 
-  templateForDelay () {
+  templateForDelay() {
     return /*html*/`
     <div class='delay'>
-      <object refClass="RangeEditor"  
-        ref='$delay' 
-        label='${this.$i18n('animation.property.popup.delay')}' 
-        calc='false' 
-        key='delay' 
-        value='${this.state.data.delay}' 
-        units='s,ms' 
-        onChange="changeRangeEditor" />
+      ${createComponent("RangeEditor", {
+      ref: '$delay',
+      label: this.$i18n('animation.property.popup.delay'),
+      key: 'delay',
+      value: this.state.data.delay,
+      units: ['s', 'ms'],
+      onChange: "changeRangeEditor"
+    })} 
     </div>
     `
   }
 
-  templateForDuration () {
+  templateForDuration() {
     return /*html*/`
     <div class='duration'>
-      <object refClass="RangeEditor"  
-        ref='$duration' 
-        label='${this.$i18n('animation.property.popup.duration')}'  
-        key='duration' 
-        value='${this.state.data.duration}' 
-        units='s,ms' 
-        onChange="changeRangeEditor" />
+      ${createComponent("RangeEditor", {
+      ref: '$duration',
+      label: this.$i18n('animation.property.popup.duration'),
+      key: 'duration',
+      value: this.state.data.duration,
+      units: ['s', 'ms'],
+      onChange: "changeRangeEditor"
+    })} 
     </div>
     `
   }
 
-  templateForIterationCount () {
+  templateForIterationCount() {
     return /*html*/`
       <div class='iteration-count'>
-        <object refClass="IterationCountEditor"
-          ref='$iterationCount' 
-          label='${this.$i18n('animation.property.popup.iteration')}' 
-          key='iterationCount' 
-          value='${this.state.iterationCount || '0'}' 
-          units='normal,infinite' 
-          onChange="changeRangeEditor" 
-        />
+        ${createComponent("IterationCountEditor", {
+      ref: '$iterationCount',
+      label: this.$i18n('animation.property.popup.iteration'),
+      key: 'iterationCount',
+      value: this.state.iterationCount || 0,
+      units: ['normal', 'infinite'],
+      onChange: "changeRangeEditor"
+    })}
       </div>
     `
   }
 
-  [SUBSCRIBE_SELF('changeRangeEditor')] (key, value) {
+  [SUBSCRIBE_SELF('changeRangeEditor')](key, value) {
 
     if (key === 'iterationCount') {
       if (value.unit === 'normal') {
@@ -203,7 +210,7 @@ export default class AnimationPropertyPopup extends BasePopup {
     this.updateData({ [key]: value })
   }
 
-  [SUBSCRIBE_SELF('changeCubicBezier')] (key, value) {
+  [SUBSCRIBE_SELF('changeCubicBezier')](key, value) {
     this.updateData({ [key]: value })
   }
 
@@ -212,7 +219,7 @@ export default class AnimationPropertyPopup extends BasePopup {
 
     this.show(250)
 
-    this.children.$cubicBezierEditor.trigger('showCubicBezierEditor', data.data.timingFunction)        
+    this.children.$cubicBezierEditor.trigger('showCubicBezierEditor', data.data.timingFunction)
   }
 
   [SUBSCRIBE("hideAnimationPropertyPopup")]() {

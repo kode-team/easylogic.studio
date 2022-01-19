@@ -1,7 +1,6 @@
 import { Length } from "el/editor/unit/Length";
 import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
-import { OBJECT_TO_CLASS } from "el/utils/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './CSSPropertyEditor.scss';
@@ -29,11 +28,13 @@ export default class CSSPropertyEditor extends EditorElement {
 
 
   template() {
+
+
+    const hideTitleClass = this.state.hideTitle ? 'hide-title' : '';
+    const hideRefreshClass = this.state.hideRefresh ? 'hide-refresh' : '';
+
     return /*html*/`
-      <div class='elf--css-property-editor ${OBJECT_TO_CLASS({ 
-        'hide-title': this.state.hideTitle, 
-        'hide-refresh': this.state.hideRefresh 
-      })}'>
+      <div class='elf--css-property-editor ${hideTitleClass} ${hideRefreshClass}'>
         <div class='title'>
           <label>${this.$i18n('css.property.editor.properties')}</label>
           <div class='tools'>
@@ -76,7 +77,7 @@ export default class CSSPropertyEditor extends EditorElement {
         case 'opacity':
           return 1; 
         default: 
-          return Length.z();
+          return 0;
       }
   }
 
@@ -437,7 +438,6 @@ export default class CSSPropertyEditor extends EditorElement {
       case 'padding-right': 
 
       case 'font-size': 
-      case 'font-stretch': 
       case 'width': 
       case 'height':   
       case 'perspective':  
@@ -514,7 +514,6 @@ export default class CSSPropertyEditor extends EditorElement {
         <optgroup label='Font'>
           <option value='font-size'>font-size</option>
           <option value='font-weight'>font-weight</option>          
-          <option value='font-stretch'>font-stretch</option>
         </optgroup>
         <optgroup label='Animation'>
           <option value='animation-timing-function'>timing-function</option>

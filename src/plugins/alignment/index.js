@@ -7,7 +7,7 @@ import AlignmentProperty from "./AlignmentProperty";
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerElement({
-        AlignmentProperty
+    editor.registerMenuItem('inspector.tab.style', {
+        AlignmentProperty  
     })
 }

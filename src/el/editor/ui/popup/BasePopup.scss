@@ -1,7 +1,7 @@
 .elf--popup {
     position: absolute;
     display: none;
-    
+
     z-index: 1000;
     background-color: var(--elf--popup-background-color);
     border-radius: 2px;
@@ -19,8 +19,8 @@
     }
 
     .popup-title {
-      font-size: 12px;
-      font-weight: bold;
+      font-size: 11px;
+      // font-weight: bold;
 
       padding: 10px ;
       display: flex;
@@ -46,10 +46,6 @@
       .popup-item {
         margin-bottom: 5px;
         padding: 2px 0px;        
-
-        .has-label {
-          grid-template-columns: 100px 1fr !important;
-        }
       }
     }
   

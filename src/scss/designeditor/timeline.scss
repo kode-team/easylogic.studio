@@ -20,7 +20,6 @@
     top: 0px;
     bottom: 0px;
     background-color: var(--elf--background-color);
-    font-size: 12px;
     
     border-left: 1px solid var(--elf--border-color);
     border-top: 1px solid var(--elf--border-color);
@@ -140,7 +139,6 @@
     top: 0px;
     bottom: 0px;
     background-color: var(--elf--background-color);
-    font-size: 12px;
     
     border-right: 1px solid var(--elf--border-color);
     border-top: 1px solid var(--elf--border-color);
@@ -171,8 +169,6 @@
     right: $right-size;
     top: 0px;
     bottom: 0px;
-    // background-color: var(--elf--background-color);    
-    font-size: 12px;
 
     .timeline-header {
         position: absolute;

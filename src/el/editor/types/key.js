@@ -1,3 +1,4 @@
+import { os } from "el/utils/detect"
 
 
 export const KEY_CODE = {
@@ -100,4 +101,44 @@ export const KEY_CODE = {
     "quote":        0xDE, // 222	Quote (''') key.
     "'":            0xDE, // 222	Quote (''') key.
     "altgr":        0xE1, // 225	AltGr key (Level 3 Shift key or Level 5 Shift key) on Linux.
+}
+
+const keyAlias = {
+    'ARROWRIGHT': '→',
+    'ARROWLEFT': '←',
+    'ARROWUP': '↑',
+    'ARROWDOWN': '→',
+    'BACKSPACE': '⌫',
+    'CMD': '⌘',
+    'SHIFT': '⇧',
+    'CTRL': '⌃',
+    'ALT': '⌥',
+    'ENTER': '↵',
+    'ESC': '⎋',
+    'TAB': '⇥',
+    'SPACE': '␣',
+    'CAPSLOCK': '⇪',
+    'DELETE': '⌦',
+    'INSERT': '⌤',
+    'HOME': '⇱',
+    'END': '⇲',
+    'PAGEUP': '⇞',
+    'PAGEDOWN': '⇟',
+    'PRINTSCREEN': '⎙',
+    'SCROLLLOCK': '⇞',
+    'PAUSE': '⏏',
+    'NUMLOCK': '⇪',
+    'META': '⌘',
+    'WINDOWS': '⌘',
+    'CONTEXTMENU': '⌥',
+    'COMMAND': '⌘',
+}
+
+const OSName = os()
+
+export const KeyStringMaker = (item, os = OSName) => {
+    return (item[os] || item.key).split('+').map(it => it.trim()).map(it => {
+        const keyString = it.toUpperCase();
+        return keyAlias[keyString] || keyString;
+    }).join(' ')
 }

@@ -1,19 +1,21 @@
 
 // common 
-$border-color: #595959;
-$selected-border-color: #3a89f0;
-$selected-color: #03a9f4;
-$selected-color-2: #202223;
+$border-color: $oc-gray-9;
+$selected-border-color: $oc-blue-7;
+$selected-color: $oc-blue-6;
+$selected-color-2: $oc-blue-9;
+$selected-hover-color: $oc-blue-3;
 
 $selection-tool-border-color: #3a89f0;
 
-$background-color: #262626;
-$header-background-color: #363636;
+$background-color: $oc-gray-8;
+$header-background-color: $oc-gray-9;
 $selected-background-color: #535353; 
-$font-color: #ffffff;
-$disabled-font-color: #8a8a8a;
-$selected-font-color: rgb(255, 255, 255);
-$menu-item-title-font-color: #949494;
+$font-color: $oc-gray-0;
+$disabled-font-color: $oc-gray-2;
+$selected-font-color: $oc-gray-0;
+$menu-item-title-font-color: $oc-gray-2;
+$layout-border-color: $oc-gray-9;
 
 
 // base 
@@ -21,28 +23,30 @@ $range-thumb-color:  $selected-color;
 $range-track-color:  rgb(97, 97, 97);
 $range-thumb-border-color: rgba(0, 0, 0, 0.8);
 
-$input-background-color: #383838;
-$input-border-color:#383838;
-$input-font-color: #ececec;
+$input-background-color: $oc-gray-8;
+$input-inactive-color: $oc-gray-7;
+$input-border-color:$oc-gray-5;
+$input-font-color: $font-color;
 $input-sub-font-color: #7a7a7a;
 $input-height: 30px;
-$input-font-size: 13px;
+$input-font-size: 11px;
 
 $divider-color:  rgb(97, 97, 97); 
 
 // tab 
 $tab-background-color: $background-color; 
-$tab-header-background-color: #232937; 
+$tab-header-background-color: $oc-gray-9; 
 $tab-header-font-color: $font-color; 
-$tab-font-color: $font-color;
+$tab-font-color: #949494;
 $tab-selected-color: white; 
 $tab-selected-font-color: black;
 $tab-selected-border-color: black;
 $tab-border-color: $border-color;
 
+
 // property 
-$property-border-color: $border-color;
-$property-background-color: #3c3c3c;
+$property-border-color: #0b0b0b;
+$property-background-color: #22282c;
 $property-title-background-color: #161616;
 
 // list 
@@ -52,7 +56,8 @@ $list-item-selected-color: #03a9f4;
 
 
 // popup 
-$popup-background-color: #1f1f1f; 
+$popup-background-color: $oc-gray-8; 
+$popup-font-color: $oc-gray-4;
 
 // window 
 $window-background-color: rgba(61, 61, 61, 0.5);
@@ -87,5 +92,5 @@ $drag-area-rect-background-color: rgba(107, 188, 255, 0.214);
 $rotate-x-border-color: rgb(104, 104, 247);
 $rotate-y-border-color: rgb(112, 197, 112);
 
-$tooltip-background-color: rgba($selected-color, 0.9);
+$tooltip-background-color: $oc-gray-9;
 $tooltip-font-color: $selected-font-color;

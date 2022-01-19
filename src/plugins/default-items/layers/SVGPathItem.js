@@ -24,15 +24,15 @@ export class SVGPathItem extends SVGItem {
     return false; 
   }
 
-  reset(json) {
-    const isChanged = super.reset(json);
+  reset(json, context = {origin: '*'}) {
+    const isChanged = super.reset(json, context);
 
     if (this.hasChangedField('d')) {
       // d 속성이 변경 될 때 성능을 위해서 PathParser 로 미리 객체를 생성해준다. 
       // 이때 width, height 를 같이 해둬야 한다. 
       this.cachePath = new PathParser(this.json.d);
-      this.cacheWidth = this.json.width.value;
-      this.cacheHeight = this.json.height.value;
+      this.cacheWidth = this.json.width;
+      this.cacheHeight = this.json.height;
 
       // this.modelManager.setChanged('resetCache', this.id, { path: this.cachePath, width: this.cacheWidth, height: this.cacheHeight });
     }
@@ -45,10 +45,10 @@ export class SVGPathItem extends SVGItem {
 
     if (this.hasChangedField('d')) {
       this.cachePath = new PathParser(this.json.d);
-      this.cacheWidth = this.json.width.value;
-      this.cacheHeight = this.json.height.value;
+      this.cacheWidth = this.json.width;
+      this.cacheHeight = this.json.height;
     } else if (this.hasChangedField('width', 'height')) {
-      this.json.d = this.cachePath.clone().scale(this.json.width.value/this.cacheWidth, this.json.height.value/this.cacheHeight).d;
+      this.json.d = this.cachePath.clone().scale(this.json.width/this.cacheWidth, this.json.height/this.cacheHeight).d;
       this.modelManager.setChanged('reset', this.id, { d : this.json.d });
     }
 
@@ -59,8 +59,8 @@ export class SVGPathItem extends SVGItem {
     super.setCache();
 
     this.cachePath = new PathParser(this.json.d);
-    this.cacheWidth = this.json.width.value;
-    this.cacheHeight = this.json.height.value;    
+    this.cacheWidth = this.json.width;
+    this.cacheHeight = this.json.height;    
   }
 
   get d() {
@@ -71,11 +71,11 @@ export class SVGPathItem extends SVGItem {
 
     if (!this.cachePath) {
       this.cachePath = new PathParser(this.json.d);
-      this.cacheWidth = this.json.width.value;
-      this.cacheHeight = this.json.height.value;          
+      this.cacheWidth = this.json.width;
+      this.cacheHeight = this.json.height;          
     }
 
-    return this.cachePath.clone().scale(this.json.width.value/this.cacheWidth, this.json.height.value/this.cacheHeight).d;
+    return this.cachePath.clone().scale(this.json.width/this.cacheWidth, this.json.height/this.cacheHeight).d;
   }
  
 

@@ -25,17 +25,19 @@
                 right: 0px;
                 padding: 2px 4px;
                 margin-bottom: 10px;
+                font-weight: bold;
+                border: 1px solid var(--elf--border-color);
             }
 
             white-space: pre-wrap;
             word-break: break-all;
             padding:20px 0px;
-            padding-top: 30px;
+            padding-top: 40px;
+            padding-left: 20px;
             user-select: text;
             // border: 1px solid var(--elf--border-color);
             position: relative;
             margin-top:0px;
-            font-size: 11px;
             line-height: 1.7;
 
             .block {

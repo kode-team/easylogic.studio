@@ -32,10 +32,15 @@ export class SVGPolygonItem extends SVGItem {
     return false; 
   }
 
+  get editablePath() {
+    // editing 막기 
+    return false; 
+  }
+
   get d() {
     const {width, height, count} = this.json;
 
-    return PathParser.makePolygon(width.value, height.value, count).d;
+    return PathParser.makePolygon(width, height, count).d;
   }
  
 
@@ -52,7 +57,7 @@ export class SVGPolygonItem extends SVGItem {
 
   isPointInPath (point) {
 
-    const localPoint = vec3.transformMat4([], point, this.accumulatedMatrixInverse);
+    const localPoint = vec3.transformMat4([], point, this.absoluteMatrixInverse);
 
     return this.cachePath.isPointInPath({ x: localPoint[0], y: localPoint[1] }, this.json['stroke-width'] || 0);
   }  

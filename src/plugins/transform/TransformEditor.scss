@@ -9,7 +9,6 @@
     }
 
     label {
-      font-size: 12px;
       padding-left: 5px;
       vertical-align: middle;
 
@@ -35,7 +34,7 @@
     .transform-item {
       display: block;
       margin-top: 10px;
-      border: 1px solid var(--elf--border-color);
+      // border: 1px solid var(--elf--border-color);
       box-sizing: border-box;
       padding: 0px 2px;
       border-radius: 4px;
@@ -48,7 +47,6 @@
         margin: 3px 0px;        
   
         label {
-          font-size: 12px;
           padding: 2px 5px;
           cursor: move;          
           color: var(--elf--font-color);

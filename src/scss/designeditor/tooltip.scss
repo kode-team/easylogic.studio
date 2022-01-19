@@ -15,25 +15,26 @@
   &:after {
     pointer-events: none;
     content: attr(data-tooltip);
-    display: block;
+    display: inline-block;
     text-align: center;
     color: var(--elf--tooltip-font-color);
-    font-size: 12px;
     font-weight: 400;
     background-color: var(--elf--tooltip-background-color);
+    border: 1px solid var(--elf--border-color);
     box-sizing: border-box;
     padding: 4px 5px;
     border-radius: 2px;
     opacity: 0;
+    font-size: 11px;
     transition: all 0.1s linear;
     position: absolute;
+    line-height: 1.6;    
     right: auto;
     left: 50%;
     top: 110%;
     transform: translateX(-50%);
-    z-index: 1000000;
+    z-index: 10000000;
     white-space: nowrap;
-    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.1);
   }
 
   &[data-direction="right"] {
@@ -59,7 +60,7 @@
       position: absolute;
       right: auto;
       left: 50%;
-      top: 100%;
+      top: var(--elf--toggle-checkbox-tooltip-bottom-top, 100%);
       transform: translateX(-50%);
     }
   }
@@ -69,7 +70,7 @@
       position: absolute;
       right: auto;
       left: 50%;
-      top: 0%;
+      top: var(----elf--toggle-checkbox-tooltip-top, 0%);
       transform: translateX(-50%) translateY(-150%);
     }
   }

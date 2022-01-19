@@ -3,22 +3,15 @@
 
     .border-radius-item {
       display: grid; 
-      grid-template-columns: 80px 1fr;
-
-      &.full {
-        grid-template-columns: 1fr;
-      }
+      grid-template-columns: 1fr 1fr 30px;
     }
 
     .radius-selector {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-  
       @each $borderRadiusType in all, partitial {
         &[data-selected-value="#{$borderRadiusType}"] {
           button[data-value="#{$borderRadiusType}"] {
-            background-color: var(--elf--selected-color);
-            color: var(--elf--selected-font-color);
+            background-color: var(--elf--selected-color-2);
+            color: var(--elf--font-color);
           }
         }
       }
@@ -33,9 +26,15 @@
 
     
     .radius-setting-box {
+      display: grid;
+      grid-template-columns: 1fr 30px;
+
       > div {
-        margin-bottom: 5px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
       }
+
+      margin-bottom: 5px;      
     }
   }
   

@@ -1,3 +1,5 @@
+import { createComponent } from "el/sapa/functions/jsx";
+
 export class InjectManager {
   constructor(editor) {
     this.editor = editor;
@@ -11,7 +13,7 @@ export class InjectManager {
    * @param {string} target 
    * @param {object} obj 
    */
-  registerMenuItem(target, obj) {
+  registerMenuItem(target, obj = {}) {
 
     if (!this.menuItems[target]) {
       this.menuItems[target] = []
@@ -33,14 +35,17 @@ export class InjectManager {
    * target 별 Object 를 나열해준다. 
    * 
    * @param {string} target 
-   * @returns 
+   * @returns {string}
    */
   generate(target, hasRef = false) {
     return this.getTargetMenuItems(target).map(it => {
+      const props = {}
 
-      const refString = hasRef ? `ref="$${it.refClass}"` : "";
+      if (hasRef) {
+        props.ref = `$${it.refClass}`
+      }
 
-      return /*html*/`<object refClass="${it.refClass}" ${refString} />`
+      return createComponent(it.refClass, props);
     }).join('\n')
   }
 };

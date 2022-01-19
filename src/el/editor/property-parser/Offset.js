@@ -37,7 +37,7 @@ export class Offset extends PropertyItem {
   createProperty(data = {}) {
     return this.addProperty({
       checked: true,
-      value: Length.z(),
+      value: 0,
       ...data
     });
   } 

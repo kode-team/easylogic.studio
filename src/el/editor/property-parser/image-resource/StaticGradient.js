@@ -1,5 +1,6 @@
 import { Gradient } from "./Gradient";
 import { ColorStep } from "./ColorStep";
+import { convertMatches, reverseMatches } from "el/utils/parser";
 
 export class StaticGradient extends Gradient {
     getDefaultObject() {
@@ -18,6 +19,25 @@ export class StaticGradient extends Gradient {
             ...super.toCloneObject(),
             static: true 
         }
+    }
+
+    static parse (str) {
+        var results = convertMatches(str);
+        var colorsteps = [];
+
+        let newColor = results.str
+          .split("(")[1]
+          .split(")")[0]?.trim()
+
+        if (newColor.includes("@")) {
+
+            newColor = reverseMatches(newColor, results.matches);
+
+            colorsteps.push.apply(colorsteps, ColorStep.parse(newColor));
+        }
+
+
+        return new StaticGradient({ colorsteps });
     }
 
     static create (color = 'transparent') {

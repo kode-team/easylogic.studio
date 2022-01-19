@@ -21,17 +21,21 @@
 
     .area {
         display: block; 
-        font-size: 13px;
         height: 100%;
 
         button {
             display: inline-block;
             border: 0px;
-            background-color: var(--elf--selected-color);
-            color: var(--elf--selected-font-color);
+            background-color: var(--elf--input-inactive-color);
+            color: var(--elf--input-font-color);
             height: 100%;
             width : 100%;
             border-radius: 4px;
+
+            &:hover {
+                background-color: var(--elf--selected-color-2);
+                color: var(--elf--selected-font-color);
+            }
         }
     }
 }

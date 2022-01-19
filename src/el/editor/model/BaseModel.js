@@ -38,7 +38,7 @@ export class BaseModel {
           return this.getCache(key);
         } else {
           // getter or json property
-          return originMethod || target.json[key];
+          return isNotUndefined(originMethod) ? originMethod : target.json[key];
         }
       },
       set: (target, key, value) => {
@@ -87,7 +87,7 @@ export class BaseModel {
   }
 
   changed() {
-    this.timestamp += performance.now();
+    this.timestamp += Date.now();
   }
 
   /***********************************
@@ -167,13 +167,13 @@ export class BaseModel {
    * @returns {Item}
    */
   get parent() {
-    if (!this.json.parentId) return undefined;
+    if (!this.parentId) return undefined;
 
-    return this.modelManager.get(this.json.parentId);
+    return this.modelManager.get(this.parentId);
   }
 
   setParentId(parentId) {
-    this.json.parentId = parentId;
+    this.reset({ parentId });
 
     this.modelManager.setChanged('setParentId', this.id, { parentId });        
   }
@@ -223,13 +223,17 @@ export class BaseModel {
     return this.modelManager.getPath(this.id, this.ref);
   }
 
-  get lock() {
-    return this.modelManager.editor.lockManager.get(this.id);
+  get pathIds() {
+    return this.path.map(it => it.id);
   }
 
-  get visible() {
-    return this.modelManager.editor.visibleManager.get(this.id);
-  }
+  // get lock() {
+  //   return this.modelManager.editor.lockManager.get(this.id);
+  // }
+
+  // get visible() {
+  //   return this.modelManager.editor.visibleManager.get(this.id);
+  // }
 
   get childrenLength() {
     return this.json.children.length;
@@ -271,7 +275,7 @@ export class BaseModel {
    * 
    * @param {string} key attirbute field name
    * @param {Function} newValueCallback cache 에 적용할 값을 구하는 함수
-   * @returns 
+   * @returns {any}
    */
   computed(key, newValueCallback, isForce = false) {
     const cachedKey = `__cachedKey_${key}`
@@ -311,8 +315,6 @@ export class BaseModel {
    * action
    *
    **********************************/
-
-
   generateListNumber() {
     this.layers.forEach((it, index) => {
       it.no = index;
@@ -336,7 +338,7 @@ export class BaseModel {
 
   toCloneObject(isDeep = true) {
     var json = this.attrs(
-      'itemType', 'name', 'elementType', 'type', 'selected', 'parentId'
+      'itemType', 'name', 'elementType', 'type', 'selected', 'parentId', 'children'
     )
 
     if (isDeep) {
@@ -359,7 +361,7 @@ export class BaseModel {
    * check object values 
    * 
    * @param {KeyValue} obj 
-   * @returns 
+   * @returns {boolean}
    */
   isChangedValue(obj) {
     return true;
@@ -369,15 +371,20 @@ export class BaseModel {
    * set json content
    *
    * @param {object} obj
+   * @param {{origin: string}} context
    */
-  reset(obj) {
+  reset(obj, context = {origin: '*'}) {
     const isChanged = this.isChangedValue(obj);
 
     if (isChanged) {
       this.json = this.convert(Object.assign(this.json, obj));
       this.lastChangedField = obj;
       this.lastChangedFieldKeys = Object.keys(obj);
-      this.modelManager.setChanged('reset', this.id, obj);
+
+      if (context.origin === '*') {
+        this.modelManager.setChanged('reset', this.id, obj);
+      }
+      
       this.changed();
     }
 
@@ -406,6 +413,7 @@ export class BaseModel {
       // selected: false,  // 선택 여부 체크 
       children: [],   // 하위 객체를 저장한다. 
       offsetInParent: 1,  // 부모에서 자신의 위치를 숫자로 나타낸다. 
+      parentId: '',  // 부모 객체의 id
       ...obj
     };
   }
@@ -419,9 +427,9 @@ export class BaseModel {
     const result = {}
 
     args.forEach(field => {
-      if (isNotUndefined(this.json[field])) {
-        result[field] = clone(this.json[field])
-      }
+      if (isNotUndefined(this.ref[field])) {
+        result[field] = clone(this.ref[field])
+      } 
     })
 
     return result;
@@ -562,7 +570,7 @@ export class BaseModel {
   }
 
   expectJSON(key) {
-    if (key === 'parent') return false;
+    // if (key === 'parent') return false;
     if (isUndefined(this.json[key])) return false;
 
     return true;
@@ -605,9 +613,20 @@ export class BaseModel {
     return this.json.children.indexOf(item.id);
   }
 
+  /**
+   * find a model by id 
+   * 
+   * @param {string} id 
+   * @returns {BaseModel}
+   */
+  find(id) {
+    return this.modelManager.get(id);
+  }
+
   copyItem(childItemId, dist = 10) {
     const childItem = this.modelManager.get(childItemId);
     var child = childItem.clone()
+
     child.renameWithCount()
     child.move([dist, dist, 0])
 

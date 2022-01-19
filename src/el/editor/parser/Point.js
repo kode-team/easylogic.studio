@@ -131,7 +131,7 @@ export default class Point {
      * 
      * @param {array} points 
      * @param {{x: number, y: number}} p0 
-     * @returns 
+     * @returns {number}
      */
     static getIndex (points, p0) {
         var firstIndex = -1; 
@@ -194,7 +194,7 @@ export default class Point {
      * 
      * @param {*} points 
      * @param {*} index 
-     * @returns 
+     * @returns {number}
      */
     static getGroupIndex (points, index) {
         var groupIndex = -1; 

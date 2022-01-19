@@ -17,29 +17,31 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './TransformEditor.scss';
 import { isNotUndefined } from "el/sapa/functions/func";
+import { TransformValue } from "el/editor/types/model";
+import { createComponent } from "el/sapa/functions/jsx";
+
 
 var transformList = [
-  'perspective',  
-  'rotate',
-  'rotateX',
-  'rotateY',
-  'rotateZ',
-  'rotate3d',    
-  'skew',
-  'skewX',    
-  'skewY',   
-  'translate',
-  'translateX',  
-  'translateY',
-  'translateZ',
-  'translate3d',
-  'scale',
-  'scaleX',
-  'scaleY',
-  'scaleZ',
-  'scale3d',
-  'matrix',
-  'matrix3d',  
+  TransformValue.PERSPECTIVE,  
+  TransformValue.ROTATE,
+  TransformValue.ROTATE_X,
+  TransformValue.ROTATE_Y,
+  TransformValue.ROTATE_Z,  
+  TransformValue.SKEW,
+  TransformValue.SKEW_X,
+  TransformValue.SKEW_Y,  
+  TransformValue.TRANSLATE,
+  TransformValue.TRANSLATE_X,
+  TransformValue.TRANSLATE_Y,
+  TransformValue.TRANSLATE_Z,  
+  TransformValue.TRANSLATE_3D,  
+  TransformValue.SCALE,
+  TransformValue.SCALE_X,
+  TransformValue.SCALE_Y,
+  TransformValue.SCALE_Z,  
+  TransformValue.SCALE_3D,  
+  TransformValue.MATRIX,
+  TransformValue.MATRIX_3D,
 ];
 
 const labels = {
@@ -60,7 +62,7 @@ export default class TransformEditor extends EditorElement {
 
   initState() {
     return {
-      hideLabel: this.props['hide-label'] === 'true' ? true: false, 
+      hideLabel: this.props.hideLabel === 'true' ? true: false, 
       transforms: Transform.parseStyle(this.props.value)
     }
   }
@@ -95,7 +97,7 @@ export default class TransformEditor extends EditorElement {
       case 'skew':
         return labels[type][index];
       }
-    return ''
+    return type;
   }
 
   isMultiValue (type) {
@@ -145,35 +147,37 @@ export default class TransformEditor extends EditorElement {
     return /*html*/`
       <div class="transform-item" data-index="${index}">
         <div class="title" data-index="${index}">
-          <label draggable="true" >${this.$i18n('css.item.' + type)}</label>
+          <div class="transform-ui ${type}">
+          ${transform.value.map( (it, tindex) => {
+  
+            var label = this.getLabel(type, tindex);
+            var {min, max, step, units} = this.getRange(type);
+  
+            return /*html*/`
+              <div>
+                ${createComponent("InputRangeEditor" , { 
+                      ref: `$range_${type}_${index}_${tindex}`,
+                      min,
+                      max,
+                      wide: true,
+                      step: step,
+                      label,
+                      key: index,
+                      params: tindex,
+                      value: it,
+                      units,
+                      onchange: "changeRangeEditor"
+                 })}
+              </div>`
+            }).join('')}      
+          </div>        
           <div class="transform-menu">
             <button type="button" class="del" data-index="${index}">
               ${iconUse("remove2")}
             </button>
           </div>
         </div>
-        <div class="transform-ui ${type}">
-        ${transform.value.map( (it, tindex) => {
-
-          var label = this.getLabel(type, tindex);
-          var {min, max, step, units} = this.getRange(type);
-
-          return /*html*/`
-            <div>
-              <object refClass="RangeEditor"  
-                    ref='$range_${type}_${index}_${tindex}' 
-                    min="${min}" 
-                    max="${max}" 
-                    step="${step}" 
-                    label="${label}"
-                    key="${index}" 
-                    params='${tindex}' 
-                    value="${it}" 
-                    units="${units}" 
-                    onchange="changeRangeEditor" />
-            </div>`
-          }).join('')}      
-      </div>        
+        
 
       </div>
     `;
@@ -226,17 +230,18 @@ export default class TransformEditor extends EditorElement {
 
             return /*html*/`
               <div>
-                <object refClass="${editorType}"  
-                      ref='$range_${type}_${index}_${tindex}' 
-                      min="${min}" 
-                      max="${max}" 
-                      step="${step}" 
-                      label="${label}"
-                      key="${index}" 
-                      params='${tindex}' 
-                      value="${it}" 
-                      units="${units}" 
-                      onchange="changeRangeEditor" />
+                ${createComponent(editorType, {
+                  ref: `$range_${type}_${index}_${tindex}`,
+                  min,
+                  max,
+                  step,
+                  label,
+                  key: index,
+                  params: tindex,
+                  value: it, 
+                  units,
+                  onchange: "changeRangeEditor"
+                })}
               </div>`
           }).join('')}   
           </div>       
@@ -318,7 +323,7 @@ export default class TransformEditor extends EditorElement {
       case 'translateX': 
       case 'translateY': 
       case 'translateZ': 
-        return [Length.z()]            
+        return [0]            
       case 'rotateX': 
       case 'rotateY': 
       case 'rotateZ': 
@@ -328,9 +333,9 @@ export default class TransformEditor extends EditorElement {
       case 'perspective':
         return [Length.deg(0)]            
       case 'translate': 
-        return [Length.z(),Length.z()]
+        return [0,0]
       case 'translate3d': 
-        return [Length.z(),Length.z(), Length.z()]        
+        return [0,0, 0]        
       case 'scale': 
         return [Length.number(1),Length.number(1)]
       case 'skew': 

@@ -1,6 +1,5 @@
 import { Editor } from "el/editor/manager/Editor";
 import BlendSelectEditor from "./BlendSelectEditor";
-import ClipPathEditor from "./ClipPathEditor";
 import ColorAssetsEditor from "./ColorAssetsEditor";
 import ColorSingleEditor from "./ColorSingleEditor";
 import ColorViewEditor from "./ColorViewEditor";
@@ -38,7 +37,6 @@ export default function (editor) {
         TextEditor,
         ColorSingleEditor,
         CubicBezierEditor,
-        ClipPathEditor,
         ColorViewEditor,
         VarEditor,
         PathDataEditor,

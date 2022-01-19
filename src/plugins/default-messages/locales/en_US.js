@@ -9,9 +9,9 @@ export default {
     'app.lang.fr_FR': 'Français',
     'app.label.lang': 'Language',
 
-    'app.layout.all': 'All',
-    'app.layout.css': 'CSS',
-    'app.layout.svg': 'SVG',
+    'app.layout.all': 'Layout',
+    'app.layout.css': 'CSS Mode',
+    'app.layout.svg': 'SVG Mode',
     'app.label.layout': 'Menu Layout',
 
 
@@ -42,6 +42,7 @@ export default {
     'menu.item.github.title': 'Github',
     'menu.item.learn.title': 'Learn',       
     'menu.item.projects.title': 'Projects',
+    'menu.item.language.title': 'Language',
 
     'project.property.title' : 'Project',
     'project.information.property.title': 'Project information',   
@@ -201,6 +202,7 @@ export default {
     'svg.item.property.lineCap': 'Line Cap',
     'svg.item.property.lineJoin': 'Line Join',
     'svg.item.property.filter': 'Filter',
+    'svg.item.property.blend': 'Blend Mode',
 
 
     'border.editor.all': 'All',     
@@ -278,7 +280,16 @@ export default {
     'background.image.position.popup.type.space': 'space', 
     'background.image.position.popup.type.round': 'round',     
 
-    'gradient.picker.popup.title': 'Gradient & Image Picker',    
+    'gradient.picker.popup.title': 'Gradient & Image Picker',  
+    'gradient.picker.popup.static-gradient': 'Static',    
+    'gradient.picker.popup.linear-gradient': 'Linear',
+    'gradient.picker.popup.repeating-linear-gradient': 'Repeating Linear',
+    'gradient.picker.popup.radial-gradient': 'Radial',
+    'gradient.picker.popup.repeating-radial-gradient': 'Repeating Radial',
+    'gradient.picker.popup.conic-gradient': 'Linear',
+    'gradient.picker.popup.repeating-conic-gradient': 'Repeating Conic',        
+    
+
     'image.asset.property.title': 'Image',
     'video.asset.property.title': 'Video',    
     'color.asset.property.title': 'Color',
@@ -287,7 +298,7 @@ export default {
     'svgfilter.asset.property.title': 'SVG Filter',
 
 
-    'inspector.tab.title.style': 'Style',
+    'inspector.tab.title.design': 'Design',
     'inspector.tab.title.component': 'Component',
     'inspector.tab.title.transition': 'Animation',
     'inspector.tab.title.asset': 'Assets',
@@ -390,6 +401,9 @@ export default {
     'layout.property.flex': 'Flex Box',
     'layout.property.grid': 'Grid',
     'layout.property.default': 'Default',
+    'layout.property.resizing.title': 'Resizing',
+
+    'default.layout.item.property.title.constraints': 'Constraints',    
 
     'flex.layout.editor.row': 'Row',
     'flex.layout.editor.column': 'column',
@@ -410,7 +424,7 @@ export default {
     'flex.layout.editor.align-items': 'Align Items',
     'flex.layout.editor.align-content': 'Align Content',    
 
-    'flex.layout.item.property.title': 'Layout Item Detail',
+    'flex.layout.item.property.title': 'Flex Item Detail',
     'flex.layout.item.property.grow': 'Flex Grow',
     'flex.layout.item.property.shrink': 'Flex Shrink',
     'flex.layout.item.property.basis': 'Flex Basis',

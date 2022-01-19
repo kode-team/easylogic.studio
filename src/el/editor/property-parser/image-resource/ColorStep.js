@@ -103,8 +103,14 @@ export class ColorStep extends Item {
    * @return {Length}
    */
   toLength(maxValue) {
-    // TODO: apply maxValue
-    return Length.parse(this.json);
+    
+    if (this.isPx) {
+      return Length.px(this.json.px);
+    } else if (this.isPercent) {
+      return Length.percent(this.json.percent);
+    } else if (this.isEm) {
+      return Length.em(this.json.em);
+    }
   }
 
   getPrevLength() {
@@ -206,7 +212,7 @@ export class ColorStep extends Item {
     return colorsteps;
   }
 
-  static createRepeatColorStep (maxCount = 2, unitValue = Length.px(1)) { 
+  static createRepeatColorStep (maxCount = 2, unitValue = 1) { 
 
     var colorStepCount = randomNumber(2, maxCount);
 

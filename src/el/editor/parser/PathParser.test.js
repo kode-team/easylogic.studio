@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import PathParser from './PathParser';
 
 test("create PathParser", () => {
@@ -29,13 +30,13 @@ test("path rotate", () => {
 
 test("path bbox for point", () => {
     const path = new PathParser("M0,0 L4,0 L4,4 L0,4");
-    expect(path.getBBox()).toStrictEqual([[0, 0, 0], [4, 0, 0], [4, 4, 0], [0, 4, 0]]);
+    expect(path.getBBox()).toEqual([[0, 0, 0], [4, 0, 0], [4, 4, 0], [0, 4, 0]]);
 })
 
 test("path bbox for curve", () => {
     const path = new PathParser("M0,0 C 10 10, 20 20, 30 30");
 
-    expect(path.getBBox()).toStrictEqual([[0, 0, 0], [30, 0, 0], [30, 30, 0], [0, 30, 0]]);
+    expect(path.getBBox()).toEqual([[0, 0, 0], [30, 0, 0], [30, 30, 0], [0, 30, 0]]);
 })
 
 test("path bbox for multi segment", () => {
@@ -53,7 +54,7 @@ test("path reset", () => {
 
 test("path segment list", () => {
     const path = new PathParser("M0,0 L4,0 L4,4 L0,4");
-    expect(path.segments).toStrictEqual([
+    expect(path.segments).toEqual([
         { "command": "M", "values": [0, 0] },
         { "command": "L", "values": [4, 0] },
         { "command": "L", "values": [4, 4] },
@@ -63,12 +64,12 @@ test("path segment list", () => {
 
 test("path - closed point in line", () => {
     const path = new PathParser("M0,0 L4,0 L4,4 L0,4");
-    expect(path.getClosedPoint({ x: 10, y: 10 }, 20)).toStrictEqual({ "x": 4, "y": 4 });
+    expect(path.getClosedPoint({ x: 10, y: 10 }, 20)).toEqual({ "x": 4, "y": 4 });
 })
 
 test("path - closed point in curve", () => {
     const path = new PathParser("M0,0 C20,30 50,40 100,100");
-    expect(path.getClosedPoint({ x: 10, y: 10 }, 20)).toStrictEqual({
+    expect(path.getClosedPoint({ x: 10, y: 10 }, 20)).toEqual({
         "x": 8.843183593749998,
         "y": 11.422597656249998
     });
@@ -76,13 +77,13 @@ test("path - closed point in curve", () => {
 
 test("path - center pointer list", () => {
     const path = new PathParser("M0,0 C20,30 50,40 100,100");
-    expect(path.getCenterPointers()).toStrictEqual([
+    expect(path.getCenterPointers()).toEqual([
         { index: 0, pointer: [0, 0, 0]},
         { index: 1, pointer: [100, 100, 0]}
     ]);
 
     path.reset("M0,0 C20,30 50,40 100,100 Q 20 30 70 70");
-    expect(path.getCenterPointers()).toStrictEqual([
+    expect(path.getCenterPointers()).toEqual([
         { index: 0, pointer: [0, 0, 0]},
         { index: 1, pointer: [100, 100, 0]},
         { index: 2, pointer: [70, 70, 0]},
@@ -91,12 +92,12 @@ test("path - center pointer list", () => {
 
 test("path - same pointer list", () => {
     const path = new PathParser("M0,0 C20,30 50,40 100,100 Q 20 30 70 70 L 100 100");    
-    expect(path.getSamePointers([100, 100, 0])).toStrictEqual([
+    expect(path.getSamePointers([100, 100, 0])).toEqual([
         { index: 1, pointer: [100, 100, 0]},
         { index: 3, pointer: [100, 100, 0]}
     ]);
 
-    expect(path.getSamePointers([100, 100, 0], 70)).toStrictEqual([
+    expect(path.getSamePointers([100, 100, 0], 70)).toEqual([
         { index: 1, pointer: [100, 100, 0]},
         { index: 2, pointer: [70, 70, 0]},
         { index: 3, pointer: [100, 100, 0]}
@@ -109,7 +110,7 @@ test("path group - two path group check", () => {
         M10,10 C20,30 50,40 100,100 Q 20 30 70 70 L 100 100
     `);
 
-    expect(path.getGroup()).toStrictEqual([
+    expect(path.getGroup()).toEqual([
         {
             index: 0,
             groupIndex: 0,
@@ -182,21 +183,21 @@ test("path - normalize , convert quard curve to cubic bezier curve", () => {
     const path = new PathParser(`M0,0 Q200 200 300 100`);
     const path2 = path.normalize();
 
-    expect(path2.d).toBe("M 0 0C 133.33333333333331 133.33333333333331 233.33333333333334 166.66666666666666 300 100");
+    expect(path2.d).toBe("M 0 0C 133.3333282470703 133.3333282470703 233.3333282470703 166.6666717529297 300 100");
 })
 
 test("path - normalize with Z, convert quard curve to cubic bezier curve", () => {
     const path = new PathParser(`M0,0 Q200 200 300 100 Z`);
     const path2 = path.normalize();
 
-    expect(path2.d).toBe("M 0 0C 133.33333333333331 133.33333333333331 233.33333333333334 166.66666666666666 300 100Z");
+    expect(path2.d).toBe("M 0 0C 133.3333282470703 133.3333282470703 233.3333282470703 166.6666717529297 300 100Z");
 })
 
 test("path - normalize with Z, convert quard curve to cubic bezier curve", () => {
     const path = new PathParser(`M0,0 L 100 100C 20 30 50 40 100 100 Q200 200 300 100 Z`);
     const path2 = path.normalize();
 
-    expect(path2.d).toBe("M 0 0C 33 33 66 66 100 100C 20 30 50 40 100 100C 166.66666666666666 166.66666666666666 233.33333333333334 166.66666666666666 300 100Z");
+    expect(path2.d).toBe("M 0 0C 33 33 66 66 100 100C 20 30 50 40 100 100C 166.6666717529297 166.6666717529297 233.3333282470703 166.6666717529297 300 100Z");
 })
 
 test("path - divide line segment by count", () => {
@@ -204,7 +205,7 @@ test("path - divide line segment by count", () => {
 
     const path2 = path.divideSegmentByCount(5);
 
-    expect(path2.d).toBe("M 0 0L 10 10L 20 20L 30 30L 40 40L 50 50")
+    expect(path2.d).toBe("M 0 0L 10 10L 18 18L 24.4 24.4L 29.52 29.52L 33.616 33.616")
 
 
 })
@@ -322,7 +323,7 @@ test("path - custom transform", () => {
     const newPath = path.divideSegmentByCount(4);
     newPath.transform(([x, y, z]) => [x, y + 4 * Math.sin(x / 16), z]);
 
-    expect(newPath.d).toBe("M 0 0L 2.5 0.6224599710942241L 5 1.2297540583215234L 7.5 1.8070858859667351L 10 2.340389091761849L 10 4.840389091761849L 10 7.340389091761849L 10 9.84038909176185L 10 12.34038909176185L 7.5 11.807085885966735L 5 11.229754058321523L 2.5 10.622459971094225L 0 10")
+    expect(newPath.d).toBe("M 0 0L 2.5 0.6224599710942241L 4.375 1.0801712668743402L 5.78125 1.4140676407503237L 6.8359375 1.6574640734447574L 10 4.840389091761849L 10 6.715389091761849L 10 8.12163909176185L 10 9.17632659176185L 7.5 11.807085885966735L 5.625 11.377460632582794L 4.21875 11.042509096222679L 3.1640625 10.78587004037591")
 })
 
 test("path - total length", () => {

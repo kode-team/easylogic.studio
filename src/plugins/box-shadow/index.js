@@ -1,7 +1,6 @@
 import { Editor } from "el/editor/manager/Editor";
 import BoxShadowEditor from "./BoxShadowEditor";
 import BoxShadowProperty from "./BoxShadowProperty";
-import BoxShadowPropertyPopup from "./BoxShadowPropertyPopup";
 
 
 /**
@@ -15,9 +14,5 @@ export default function (editor) {
 
     editor.registerMenuItem('inspector.tab.style', {
         BoxShadowProperty
-    })
-
-    editor.registerMenuItem('popup', {
-        BoxShadowPropertyPopup
     })
 }

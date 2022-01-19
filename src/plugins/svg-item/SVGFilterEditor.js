@@ -1,4 +1,4 @@
-import icon, { iconUse } from "el/editor/icon/icon";
+import { iconUse } from "el/editor/icon/icon";
 import {
   LOAD,
   CLICK,
@@ -7,7 +7,6 @@ import {
   PREVENT,
   DROP,
   DRAGSTART,
-  SUBSCRIBE,
   SUBSCRIBE_SELF
 } from "el/sapa/Event";
 
@@ -18,9 +17,11 @@ import PathStringManager from "el/editor/parser/PathStringManager";
 import svgFilterPreset from "./editor/svg-filter-preset";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './SVGFilterEditor.scss';
-import { mapjoin, OBJECT_TO_CLASS, repeat } from "el/utils/func";
+import { mapjoin, repeat } from "el/utils/func";
 import { clone, isFunction, keyMapJoin } from "el/sapa/functions/func";
 import { END, MOVE } from "el/editor/types/event";
+import { createComponent } from "el/sapa/functions/jsx";
+
 
 const filterTypes = [
   {label: 'GRAPHIC REFERENCES', items : [
@@ -345,48 +346,35 @@ export default class SVGFilterEditor extends EditorElement {
 
 
     if (s.inputType === 'color-matrix') {
-      return /*html*/`
-        <div>
-          <object refClass="ColorMatrixEditor" 
-            ref='$colorMatrix${objectId}' 
-            label="${s.title}"
-            key="${key}"       
-            column='${s.column}' 
-            values='${filter[key].join(' ')}' 
-            onchange="changeRangeEditor"
-          />
-        </div>
-        `
+      return createComponent("ColorMatrixEditor", {
+        ref: `$colorMatrix${objectId}`,
+        label: s.title,
+        key,
+        column: s.column,
+        values: filter[key].join(' '),
+        onchange: "changeRangeEditor"
+      })
+
     } else if (s.inputType === 'input-array') {
-      return /*html*/`
-        <div>
-          <object refClass="InputArrayEditor" 
-            ref='$inputArray${objectId}' 
-            label="${s.title}"
-            key="${key}"       
-            column-label="R,G,B,A,M",
-            row-label="R,G,B,A",
-            column='${s.column}' 
-            values='${filter[key].join(' ')}' 
-            onchange="changeRangeEditor"
-          />
-        </div>
-        `
+      return createComponent("InputArrayEditor" , {
+            ref: `$inputArray${objectId}`,
+            label: s.title,
+            key,
+            "column-label": "R,G,B,A,M",
+            "row-label": "R,G,B,A",
+            column: s.column,
+            values: filter[key].join(' '),
+            onchange: "changeRangeEditor"
+      })
 
     } else if (s.inputType === 'blend') {
-
-      return /*html*/`
-        <div>
-          <object refClass="BlendSelectEditor" 
-            ref='$blend${objectId}' 
-            label="${s.title}"
-            key="${key}"
-            value='${filter[key].toString()}' 
-            onchange="changeRangeEditor"             
-          />
-        </div>
-        `
-
+      return createComponent("BlendSelectEditor", {
+        ref: `$blend${objectId}`,
+        label: s.title,
+        key,
+        value: filter[key].toString(),
+        onchange: "changeRangeEditor"
+      });
     } else if (s.inputType === 'select') {
 
         var options = s.options
@@ -395,103 +383,72 @@ export default class SVGFilterEditor extends EditorElement {
           options = s.options(this.state.filters)
         }
   
-        return /*html*/`
-          <div>
-            <object refClass="SelectEditor"  
-              ref='$select${objectId}' 
-              label="${s.title}"
-              options='${options}' 
-              key="${key}"
-              value='${filter[key].toString()}' 
-              onchange="changeRangeEditor"             
-            />
-          </div>
-          `        
+        return createComponent("SelectEditor", {
+          ref: `$select${objectId}`,
+          label: s.title,
+          options,
+          key,
+          value: filter[key].toString(),
+          onchange: "changeRangeEditor"             
+        })
     } else if (s.inputType === 'text') {
-      return /*html*/`
-        <div>
-          <object refClass="TextEditor" 
-            ref='$text${objectId}' 
-            label="${s.title}"
-            key="${key}"
-            value='${filter[key].toString()}' 
-            onchange="changeTextEditor"
-          />
-        </div>
-        `
+      return createComponent("TextEditor", { 
+        ref: `$text${objectId}`,
+        label: s.title,
+        key,
+        value: filter[key].toString(),
+        onchange: "changeTextEditor"
+      })
     } else if (s.inputType === 'number-range') {  
-      return /*html*/` 
-        <div>
-          <object refClass="NumberRangeEditor"  
-            ref='$numberrange${objectId}' 
-            label="${s.title}" 
-            layout='block'             
-            min="${s.min}"
-            max="${s.max}"
-            step="${s.step}"
-            key="${key}" 
-            value="${filter[key].toString()}" 
-            onchange="changeRangeEditor" 
-          />
-        </div>
-      `
+      return createComponent("NumberRangeEditor", {  
+            ref: `$numberrange${objectId}`,
+            label: s.title,
+            layout: 'block',
+            min: s.min,
+            max: s.max,
+            step: s.step,
+            key,
+            value: filter[key].toString(),
+            onchange: "changeRangeEditor" 
+      })
     } else if (s.inputType === 'color') {
-      return /*html*/`
-        <div>
-          <object refClass="ColorViewEditor" 
-            ref='$colorview${objectId}' 
-            label="${s.title}" 
-            key="${key}"
-            value="${filter[key].toString()}" 
-            onchange=${this.subscribe((key, color, params) => {
-              this.trigger('changeRangeEditor', key, color, params)
-            })}
-          />
-        </div>
-      `
+      return createComponent("ColorViewEditor", {
+        ref: `$colorview${objectId}`,
+        label: s.title,
+        key,
+        value: filter[key].toString(),
+        onchange: "changeRangeEditor"
+      })
     } else if (s.inputType === 'FuncFilter') {
-      return /*html*/`
-        <div>
-          <object refClass="FuncFilterEditor" 
-            ref='$funcFilter${objectId}' 
-            label="${s.title}" 
-            key="${key}"
-            value="${filter[key].toString()}" 
-            onchange="changeFuncFilterEditor" 
-          />
-        </div>
-      `  
+      return createComponent("FuncFilterEditor", {
+        ref: `$funcFilter${objectId}`,
+        label: s.title,
+        key,
+        value: filter[key].toString(),
+        onchange: "changeFuncFilterEditor" 
+      });
     } else if (s.inputType === 'ImageSelectEditor') {
-      return /*html*/`
-        <div>
-          <object refClass="ImageSelectEditor" 
-            ref='$imageSelect${objectId}' 
-            label="${s.title}" 
-            key="${key}"
-            value="${filter[key].toString()}" 
-            onchange="changeRangeEditor" 
-          />
-        </div>
-      `            
+      return createComponent("ImageSelectEditor", {
+        ref: `$imageSelect${objectId}`,
+        label: s.title,
+        key,
+        value: filter[key].toString(),
+        onchange: "changeRangeEditor" 
+      });
     }
 
-    return /*html*/`
-      <div>
-        <object refClass="RangeEditor"  
-          ref='$range${objectId}' 
-          layout='block' 
-          calc='false' 
-          label="${s.title}" 
-          min="${s.min}"
-          max="${s.max}"
-          step="${s.step}"
-          key="${key}" 
-          value="${filter[key].toString()}" 
-          units="${s.units.join(',')}" 
-          onchange="changeRangeEditor" 
-        />
-      </div>
-    `
+    return createComponent("RangeEditor" , {
+          ref: `$range${objectId}`,
+          layout: 'block',
+          label: s.title,
+          min: s.min,
+          max: s.max,
+          step: s.step,
+          key,
+          value: filter[key].toString(),
+          units: s.units,
+          onchange: "changeRangeEditor" 
+    })
   }
 
   makeOneFilterTemplate(spec, filter) {
@@ -857,8 +814,8 @@ export default class SVGFilterEditor extends EditorElement {
         })
   
         this.$target.css({
-          left: Length.px(filter.bound.x),
-          top: Length.px(filter.bound.y),
+          left: filter.bound.x,
+          top: filter.bound.y,
         })
         
         this.load('$connectedLinePanel');
@@ -872,10 +829,10 @@ export default class SVGFilterEditor extends EditorElement {
 
     return this.state.filters.map((it, index) => {
 
+      const selectedClass = index ===  this.state.selectedIndex ? 'selected' : '';
+
       return /*html*/`
-        <div class='filter-node ${OBJECT_TO_CLASS({
-          'selected': index ===  this.state.selectedIndex
-        })}' data-type="${it.type}" data-index="${index}" data-filter-id="${it.id}" style='left: ${it.bound.x}px;top: ${it.bound.y}px;'>
+        <div class='filter-node ${selectedClass}' data-type="${it.type}" data-index="${index}" data-filter-id="${it.id}" style='left: ${it.bound.x}px;top: ${it.bound.y}px;'>
           <div class='label'>${this.$i18n(it.type)}</div>
           <div class='remove'>${iconUse("close")}</div>
           <div class='preview' data-source-type="${getSourceTypeString(it.type)}" data-filter-type='${it.type}'>${getIcon(it.type)}</div>

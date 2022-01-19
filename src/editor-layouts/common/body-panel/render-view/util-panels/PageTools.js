@@ -8,28 +8,28 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './PageTools.scss';
 import PathParser from 'el/editor/parser/PathParser';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class PageTools extends EditorElement {
-
+  
   template() {
     return /*html*/`     
       <div class='elf--page-tools'>
         <button type='button' ref='$minus'>${iconUse("remove2")}</button>
         <div class='select'>
-          <object 
-            refClass="NumberInputEditor" 
-            ref='$scale' 
-            min='10' 
-            max='240' 
-            step="1" 
-            key="scale" 
-            value="${this.$viewport.scale * 100}" 
-            onchange=${this.subscribe((key, scale) => {
-      this.$viewport.setScale(scale / 100);
-      this.emit('updateViewport');
-      this.trigger('updateViewport');
-    }, 1000)}
-        />
+          ${createComponent('NumberInputEditor', {
+            ref: '$scaleInput',
+            min: 10,
+            max: 240,
+            step: 1,
+            key: "scale", 
+            value: this.$viewport.scale * 100,
+            onchange: this.subscribe((key, scale) => {
+              this.$viewport.setScale(scale / 100);
+              this.emit('updateViewport');
+              this.trigger('updateViewport');
+            }, 1000)            
+          })}
         </div>
         <label>%</label>
         <button type='button' ref='$plus'>${iconUse("add")}</button>        
@@ -52,8 +52,8 @@ export default class PageTools extends EditorElement {
   [SUBSCRIBE('updateViewport')]() {
     const scale = Math.floor(this.$viewport.scale * 100)
 
-    if (this.children.$scale) {
-      this.children.$scale.setValue(scale);
+    if (this.children.$scaleInput) {
+      this.children.$scaleInput.setValue(scale);
     }
 
   }
@@ -98,7 +98,7 @@ export default class PageTools extends EditorElement {
       this.emit('open.editor', current);
     } else {
 
-      const pathList = PathParser.fromSVGString(current.accumulatedPath().d).toPathList()
+      const pathList = PathParser.fromSVGString(current.absolutePath().d).toPathList()
 
       this.emit('showPathEditor', 'modify', {
         box: 'canvas',
@@ -142,15 +142,19 @@ export default class PageTools extends EditorElement {
 
       selectedItem.allLayers.forEach(item => {
 
-        const list = PathParser.fromSVGString(item.accumulatedPath().d).toPathList()
+        if (item.isNot('boolean-path')) {
+          const list = PathParser.fromSVGString(item.absolutePath().d).toPathList()
 
-        list.forEach((path, index) => {
-          buttons.push({
-            item,
-            index,
-            path
+          list.forEach((path, index) => {
+            buttons.push({
+              item,
+              index,
+              path
+            })
           })
-        })
+  
+        }
+
 
       });
     })

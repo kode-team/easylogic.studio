@@ -1,18 +1,19 @@
 
 import { LOAD, CLICK, DRAGSTART, DRAGOVER, DROP, PREVENT, DEBOUNCE, SUBSCRIBE } from "el/sapa/Event";
-import icon from "el/editor/icon/icon";
+import icon, { iconUse } from "el/editor/icon/icon";
 import { Pattern } from "el/editor/property-parser/Pattern";
 import patterns from "el/editor/preset/patterns";
 
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './PatternEditor.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class PatternEditor extends EditorElement {
-
+    
     initState() {
         return {
-            hideLabel: this.props['hide-label'] === 'true' ? true: false,
+            hideLabel: this.props.hideLabel,
             value: this.props.value, 
             patterns : this.parsePattern(this.props.value)
         }
@@ -33,12 +34,6 @@ export default class PatternEditor extends EditorElement {
         var labelClass = this.state.hideLabel ? 'hide' : '';
         return /*html*/`
             <div class='elf--pattern-editor' >
-                <div class='label ${labelClass}'>
-                    <label>${this.props.title||''}</label>
-                    <div class='tools'>
-                        <button type="button" ref='$add'>${icon.add} ${this.props.title ? '' : 'Add'}</button>
-                    </div>
-                </div>
                 <div class='pattern-list' ref='$patternList'></div>
             </div>
         `
@@ -57,23 +52,24 @@ export default class PatternEditor extends EditorElement {
 
             return /*html*/`
             <div class='pattern-item ${selectedClass}' data-index='${index}' ref="fillIndex${index}"  draggable='true'>
-                <object refClass="PatternSizeEditor" 
-                    key="pattern-size"
-                    ref="$bp${index}"
-                    type="${it.type}"
-                    x="${it.x}"
-                    y="${it.y}"
-                    width="${it.width}"
-                    height="${it.height}"
-                    index="${index}"
-                    foreColor="${it.foreColor}"
-                    backColor="${it.backColor}"
-                    blendMode="${it.blendMode}"
-                    lineWidth="${it.lineWidth}"
-                    lineHeight="${it.lineHeight}"
-                    onchange='changePatternSizeInfo' />
+                ${createComponent("PatternSizeEditor" , {
+                    key: "pattern-size",
+                    ref: `$bp${index}`,
+                    type: it.type,
+                    x: it.x,
+                    y: it.y,
+                    width: it.width,
+                    height: it.height,
+                    index,
+                    foreColor: it.foreColor,
+                    backColor: it.backColor,
+                    blendMode: it.blendMode,
+                    lineWidth: it.lineWidth,
+                    lineHeight: it.lineHeight,
+                    onchange: 'changePatternSizeInfo'
+                })}
                 <div class='tools'>
-                    <button type="button" class='remove' title='Remove a pattern' data-index='${index}'>${icon.remove}</button>
+                    <button type="button" class='remove' title='Remove a pattern' data-index='${index}'>${iconUse('remove')}</button>
                 </div>
             </div>
             `;
@@ -92,7 +88,9 @@ export default class PatternEditor extends EditorElement {
 
         if (pattern) {
 
-            this.state.patterns.push.apply(this.state.patterns, Pattern.parseStyle(pattern.execute()[0].pattern));
+            const data = Pattern.parseStyle(pattern.execute()[0].pattern)
+
+            this.state.patterns.push.apply(this.state.patterns, data);
 
             this.refresh();
     

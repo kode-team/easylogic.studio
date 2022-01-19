@@ -2,6 +2,8 @@
 import { Length } from "el/editor/unit/Length";
 import { PropertyItem } from "el/editor/items/PropertyItem";
 import { convertMatches, reverseMatches } from "el/utils/parser";
+import { BoxShadowStyle } from 'el/editor/types/model';
+import { isNumber } from "el/sapa/functions/func";
 
 export class BoxShadow extends PropertyItem {
   static parse(obj) {
@@ -11,15 +13,16 @@ export class BoxShadow extends PropertyItem {
   static parseStyle (str) {
 
       var boxShadows = [];
+      str = str.trim()
 
       if (!str) return boxShadows;
 
       var results = convertMatches(str);
 
       boxShadows = results.str.split(",").filter(it => it.trim()).map(shadow => {
-        var values = shadow.split(" ");
+        var values = shadow.trim().split(" ");
 
-        var insets = values.filter(it => it === "inset");
+        var insets = values.filter(it => it === BoxShadowStyle.INSET);
         var colors = values
           .filter(it => it.includes("@"))
           .map(it => {
@@ -27,11 +30,11 @@ export class BoxShadow extends PropertyItem {
           });
 
         var numbers = values.filter(it => {
-          return it !== "inset" && !it.includes("@");
+          return it !== BoxShadowStyle.INSET && !it.includes("@");
         });
 
         return BoxShadow.parse({
-          inset: !!insets.length,
+          inset: !!insets.length ? BoxShadowStyle.INSET : BoxShadowStyle.OUTSET,
           color: colors[0] || "rgba(0, 0, 0, 1)",
           offsetX: Length.parse(numbers[0] || "0px"),
           offsetY: Length.parse(numbers[1] || "0px"),
@@ -51,10 +54,10 @@ export class BoxShadow extends PropertyItem {
     return super.getDefaultObject({
       itemType: "box-shadow",
       inset: false,
-      offsetX: Length.z(),
-      offsetY: Length.z(),
-      blurRadius: Length.z(),
-      spreadRadius: Length.z(),
+      offsetX: 0,
+      offsetY: 0,
+      blurRadius: 0,
+      spreadRadius: 0,
       color: "rgba(0, 0, 0, 1)"
     });
   }
@@ -79,10 +82,17 @@ export class BoxShadow extends PropertyItem {
 
     json = super.convert(json);
 
-    json.offsetX = Length.parse(json.offsetX);
-    json.offsetY = Length.parse(json.offsetY);
-    json.blurRadius = Length.parse(json.blurRadius);
-    json.spreadRadius = Length.parse(json.spreadRadius);
+    if (isNumber(json.offsetX)) json.offsetX = Length.px(json.offsetX);
+    else if (json.offsetX) json.offsetX = Length.parse(json.offsetX);
+
+    if (isNumber(json.offsetY)) json.offsetY = Length.px(json.offsetY);
+    else if (json.offsetY) json.offsetY = Length.parse(json.offsetY);
+
+    if (isNumber(json.blurRadius)) json.blurRadius = Length.px(json.blurRadius);
+    else if (json.blurRadius) json.blurRadius = Length.parse(json.blurRadius);
+
+    if (isNumber(json.spreadRadius)) json.spreadRadius = Length.px(json.spreadRadius);
+    else if (json.spreadRadius) json.spreadRadius = Length.parse(json.spreadRadius);
 
     return json 
   }
@@ -96,7 +106,7 @@ export class BoxShadow extends PropertyItem {
   toString() {
     var json = this.json;
 
-    return `${json.inset ? "inset " : ''}${json.offsetX} ${
+    return `${json.inset === BoxShadowStyle.INSET ? "inset " : ''}${json.offsetX} ${
       json.offsetY
     } ${json.blurRadius} ${json.spreadRadius} ${json.color}`;
   }

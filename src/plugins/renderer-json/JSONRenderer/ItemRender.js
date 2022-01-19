@@ -14,8 +14,13 @@ export default class ItemRender {
       'type', 
       'visible', 
       'lock', 
-      'selected'
+      'selected',
     )
+
+    // parent가 project 가 아니면 parentId 를 넣어준다. 
+    if (item.parent && item.parent.isNot('project')) {
+      json.parentId = item.parentId;
+    }
 
     json.referenceId = item.id; 
     json.newTargetId = uuid();

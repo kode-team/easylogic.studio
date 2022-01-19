@@ -9,9 +9,9 @@ export default {
     'app.lang.fr_FR': 'Français',    
     'app.label.lang': '언어',
 
-    'app.layout.all': '전체',
-    'app.layout.css': 'CSS',
-    'app.layout.svg': 'SVG',
+    'app.layout.all': '레이아웃',
+    'app.layout.css': 'CSS 모드',
+    'app.layout.svg': 'SVG 모드',
     'app.label.layout': '메뉴구성',    
 
     'app.theme.dark': '어두운',
@@ -107,8 +107,8 @@ export default {
     'filter.property.contrast': '대조(Contrast)',
     'filter.property.drop-shadow': '그림자(Drop Shadow)',
     'filter.property.drop-shadow.color': '색',
-    'filter.property.drop-shadow.offsetX': 'X 간격',
-    'filter.property.drop-shadow.offsetY': 'Y 간격',
+    'filter.property.drop-shadow.offsetX': 'X',
+    'filter.property.drop-shadow.offsetY': 'Y',
     'filter.property.drop-shadow.blurRadius': '흐림',    
     'filter.property.opacity': '투명도(Opacity)',
     'filter.property.saturate': '채도(Saturate)',
@@ -199,7 +199,7 @@ export default {
     'svg.item.property.lineCap': '선 모양',
     'svg.item.property.lineJoin': '겹친 선',
     'svg.item.property.filter': '필터',
-
+    'svg.item.property.blend': '블렌드',
 
 
     'border.editor.all': '전체',      
@@ -210,7 +210,6 @@ export default {
     'border.editor.left': '왼쪽',        
     'border.editor.right': '오른쪽',        
     'border.editor.bottom': '아래',      
-
 
     'border.radius.editor.topLeft': '왼쪽 위',
     'border.radius.editor.topRight': '오른쪽 위',
@@ -281,7 +280,7 @@ export default {
     'background.image.position.popup.type.space': '공백유지', 
     'background.image.position.popup.type.round': '반올림', 
 
-    'gradient.picker.popup.title': '그라디언트와 이미지',
+    'gradient.picker.popup.title': '그라디언트와 이미지',     
 
     'image.asset.property.title': '이미지',
     'video.asset.property.title': '비디오',    
@@ -290,7 +289,7 @@ export default {
     'pattern.asset.property.title': '패턴', 
     'svgfilter.asset.property.title': 'SVG 필터',     
     
-    'inspector.tab.title.style': '스타일',
+    'inspector.tab.title.design': '디자인',
     'inspector.tab.title.component': '컴포넌트 속성',
     'inspector.tab.title.transition': '애니메이션',
     'inspector.tab.title.asset': '에셋 관리자',
@@ -392,7 +391,10 @@ export default {
     'layout.property.title': '레이아웃',
     'layout.property.flex': '플렉스 박스',
     'layout.property.grid': '그리드',
-    'layout.property.default': '기본 좌표',    
+    'layout.property.default': '기본 좌표',   
+    'layout.property.resizing.title': '사이즈 조절',    
+    
+    'default.layout.item.property.title.constraints': 'Constraints',        
 
     'flex.layout.editor.row': '행',
     'flex.layout.editor.column': '열',

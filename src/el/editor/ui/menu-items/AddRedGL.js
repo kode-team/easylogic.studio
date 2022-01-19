@@ -16,8 +16,8 @@ export default class AddRedGL extends MenuItem {
 
     if (artboard) {
       var layer = artboard.add(new RedGLLayer({
-        width: Length.px(100),
-        height: Length.px(100)
+        width: 100,
+        height: 100
       }))
 
       this.$selection.select(layer);

@@ -12,6 +12,7 @@ import { CommandManager } from "el/editor/manager/CommandManager";
 import { SnapManager } from "el/editor/manager/SnapManager";
 import { PathKitManager } from "el/editor/manager/PathKitManager";
 import { VisibleManager } from "el/editor/manager/VisibleManager";
+import { IconManager } from "el/editor/manager/IconManager";
 
 export class EditorElement extends UIElement {
 
@@ -44,6 +45,17 @@ export class EditorElement extends UIElement {
      */ 
     initializeI18nMessage() {
         return {}
+    }
+
+    /**
+     * DomEventHandler 에서 이벤트 재정의를 할지 설정합니다. 
+     * 
+     * true 를 리턴하면 DOM 이벤트는 한번만 정의 됩니다. 
+     * 
+     * @returns {boolean} 
+     */
+    get notEventRedefine () {
+        return true; 
     }
 
     /**
@@ -111,14 +123,14 @@ export class EditorElement extends UIElement {
     }
 
     /**
-     * @type {ViewportManager} $viewport
+     * @type {ViewportManager}
      */
     get $viewport() {
         return this.$editor.viewport;
     }
 
     /**
-     * @type {SnapManager} $snapManager
+     * @type {SnapManager}
      */
     get $snapManager() {
         return this.$editor.snapManager;
@@ -133,21 +145,21 @@ export class EditorElement extends UIElement {
     }
 
     /**
-     * @type {ShortCutManager} $shortcuts
+     * @type {ShortCutManager}
      */
     get $shortcuts() {
         return this.$editor.shortcuts;
     }
 
     /**
-     * @type {KeyBoardManager} $keyboardManager
+     * @type {KeyBoardManager}
      */
     get $keyboardManager() {
         return this.$editor.keyboardManager;
     }
 
     /**
-     * @type {StorageManager} $storageManager
+     * @type {StorageManager}
      */
     get $storageManager() {
         return this.$editor.storageManager;
@@ -206,6 +218,14 @@ export class EditorElement extends UIElement {
      */
     get $pathkit() {
         return this.$editor.pathKitManager;
+    }
+
+    /**
+     * 
+     * @type {IconManager}
+     */
+    get $icon () {
+        return this.$editor.iconManager;
     }
 
     /**

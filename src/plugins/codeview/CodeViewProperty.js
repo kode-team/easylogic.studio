@@ -6,13 +6,6 @@ import './CodeViewProperty.scss';
 
 export default class CodeViewProperty extends BaseProperty {
 
-
-  initialize() {
-    super.initialize();
-
-    this.notEventRedefine = true;
-  }
-
   getTitle() {
     return this.$i18n('code.view.property.title');
   }

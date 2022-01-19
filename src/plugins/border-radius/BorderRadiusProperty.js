@@ -7,15 +7,6 @@ export default class BorderRadiusProperty extends BaseProperty {
     return this.$i18n('border.radius.property.title');  
   }
 
-
-  hasKeyframe () {
-    return true; 
-  }
-
-  getKeyframeProperty () {
-    return 'border-radius'
-  }
-
   getBody() {
     return /*html*/`<div class="property-item full border-radius-item" ref='$body'></div>`;
   }

@@ -1,7 +1,6 @@
 import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties, targetItemsToRectVerties, toRectVerties} from "el/utils/collision";
 import { Item } from "el/editor/items/Item";
 import { Project } from "plugins/default-items/layers/Project";
-import { Length } from "el/editor/unit/Length";
 import { vec3 } from "gl-matrix";
 import { clone, isFunction, isString, isUndefined, isObject } from "el/sapa/functions/func";
 import { area } from "el/utils/math";
@@ -18,10 +17,6 @@ export class SelectionManager {
      * @property {Project} project Project Item 
      */
     this.project = null;
-    /**
-     * @property {Item[]} items Item List
-     */
-    // this.items = [];
     this.itemKeys = {} 
     this.hoverId = ''; 
     this.hoverItems = []    
@@ -50,6 +45,10 @@ export class SelectionManager {
 
   get modelManager() {
     return this.$editor.modelManager;
+  }
+
+  get lockManager () {
+    return this.$editor.lockManager;
   }
 
   get items () {
@@ -145,7 +144,9 @@ export class SelectionManager {
     }).filter(item => {
       // 사각형 영역에 포함되는지 체크 
       return item.isPointInRect(this.pos[0], this.pos[1])
-    }).map(item => this.modelManager.findGroupItem(item.id));
+    })
+    
+    // .map(item => this.modelManager.findGroupItem(item.id));
 
   }
 
@@ -262,7 +263,9 @@ export class SelectionManager {
   // group 을 선택할 때 사용한다. 
   selectByGroup(...ids) {
 
-    var list = this.modelManager.searchItemsById(this.filterIds(ids || [])).filter(it => !it.lock)
+    var list = this.modelManager.searchItemsById(this.filterIds(ids || [])).filter(it => {
+      return !this.lockManager.get(it.id)
+    })
 
     // 상위 group 이 있다면 group 을 기준으로 selection 을 맞춘다. 
     const newSelectedItems = this.modelManager.convertGroupItems(list);
@@ -480,7 +483,6 @@ export class SelectionManager {
         this.cachedItemMatrices.push(it.matrix);
       } 
       // artboard 가 아닌데 자식을 가지고 있을 때는 자식을 포함 
-      // TODO: layout 을 가지고 있는 경우 어떻게 해야할지 정해야함 
       else if (it.hasChildren()) {
         const list = this.modelManager.getAllLayers(it.id).map(it => it.matrix);
 
@@ -506,19 +508,22 @@ export class SelectionManager {
     this.cachedCurrentChildrenItemMatrices = this.modelManager.getAllLayers(this.current.id).map(it => it.matrix);
   }
 
+  startToCacheChildren() {
+    this.items.forEach(item => {
+      item.startToCacheChildren()
+    })
+  }
+
+  recoverChildren() {
+    this.items.forEach(item => {
+      item.recoverChildren()
+    })
+  }
+
   get verties () {
 
     if (this.isOne) {    // 하나 일 때랑 
       return this.current.verties;
-    } else {
-      return this.rectVerties;
-    }
-  }
-
-  get selectionVerties () {
-
-    if (this.isOne) {    // 하나 일 때랑 
-      return this.current.selectionVerties();
     } else {
       return this.rectVerties;
     }
@@ -556,10 +561,10 @@ export class SelectionManager {
   get itemRect () {
     const verties = this.verties;
     return {
-      x: Length.px(verties[0][0]),
-      y: Length.px(verties[0][1]),
-      width: Length.px(vec3.distance(verties[0], verties[1])),
-      height: Length.px(vec3.distance(verties[0], verties[3])),      
+      x: verties[0][0],
+      y: verties[0][1],
+      width: vec3.distance(verties[0], verties[1]),
+      height: vec3.distance(verties[0], verties[3]),      
     }
   } 
 
@@ -598,7 +603,35 @@ export class SelectionManager {
   }
 
   /**
-   * 특정 영역의 값에 대한 패키징 한다. 
+   * id 리스트로 특정 값의 객체를 만들어준다. 
+   * 
+   * @param {string[]} ids 
+   * @param  {...string} keys 
+   * @returns 
+   */
+  packByIds (ids, ...keys) {
+    let data = {};
+    let localItems = []
+    if (ids === null) {
+      localItems = this.items;
+    } else if (isString(ids) || Array.isArray(ids)){
+      localItems = this.itemsByIds(ids);
+    }
+
+    const valueObject = {}
+    keys.forEach(it => {
+      valueObject[it] = true
+    })
+
+    localItems.forEach(item => {
+      data[item.id] = item.attrs(...keys);
+    })
+
+    return data;
+  }
+
+  /**
+   * 특정 값에 대한 패키징 한다. 
    * 
    * @param {object} valueObject
    * @returns {Object} 
@@ -645,7 +678,6 @@ export class SelectionManager {
   }
 
   reset (obj) {
-
     Object.entries(obj).forEach(([id, attrs]) => {
       this.get(id)?.reset(attrs);
     })
@@ -664,11 +696,19 @@ export class SelectionManager {
     this.empty();
   }
 
+  /**
+   * @deprecated
+   */  
   copy () {
+    console.warn('copy is deprecated');
     this.copyItems = this.items.map(item => item)
   }  
 
+  /**
+   * @deprecated
+   */
   paste() {
+    console.warn('paste is deprecated. use copy and paste')
     this.select(...this.copyItems.map(item => item.copy(10)));
     this.copy()
   }
@@ -705,7 +745,7 @@ export class SelectionManager {
    * 선택된 영역의 자식인지 체크 한다. 
    * 
    * @param {string} childId 
-   * @returns 
+   * @returns {boolean}
    */
   checkChildren (childId) {
     return this.cachedChildren.includes(childId);
@@ -773,7 +813,7 @@ export class SelectionManager {
   }
 
   is (...args) {
-    return this.current?.is(...args);
+    return args.includes(this.current?.itemType);
   }
 
   isAll (...args) {

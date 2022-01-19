@@ -2,24 +2,11 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@assets/*": [
-        "./src/assets/*"
-      ],
-      "el/*": [
-        "./src/el/*"
-      ],
-      "style/*": [
-        "./src/scss/*"
-      ],
-      "export-library/*": [
-        "./src/export-library/*"
-      ],
-      "plugins/*": [
-        "./src/plugins/*"
-      ],
-      "designeditor/*": [
-        "src/editor-layouts/designeditor/*"
-      ]
+      "el/*": ["./src/el/*"],
+      "style/*": ["./src/scss/*"],
+      "export-library/*": ["./src/export-library/*"],
+      "plugins/*": ["./src/plugins/*"],
+      "designeditor/*": ["src/editor-layouts/designeditor/*"]
     }
   }
 }

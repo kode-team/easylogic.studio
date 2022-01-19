@@ -3,7 +3,6 @@ import {
   CHECK_LOAD_PATTERN,
   LOAD_SAPARATOR,
   DOMDIFF,
-  getRef,
   MAGIC_METHOD,
 } from "./Event";
 import Dom from "./functions/Dom";
@@ -13,20 +12,22 @@ import {
   html,
   keyEach,
   collectProps,
-  isString
 } from "./functions/func";
 
 import DomEventHandler from "./handler/DomEventHandler";
 import BindHandler from "./handler/BindHandler";
-import { hasVariable, recoverVariable, retriveElement, spreadVariable, variable } from "./functions/registElement";
+import { getVariable, hasVariable, recoverVariable, retriveElement, spreadVariable, variable } from "./functions/registElement";
 import { uuid } from "./functions/uuid";
 import { isObject } from 'el/sapa/functions/func';
+import CallbackHandler from "./handler/CallbackHandler";
 
 const REFERENCE_PROPERTY = "ref";
 const TEMP_DIV = Dom.create("div");
 const QUERY_PROPERTY = `[${REFERENCE_PROPERTY}]`;
 const REF_CLASS = 'refclass';
 const REF_CLASS_PROPERTY = `[${REF_CLASS}]`
+
+
 
 
 export default class EventMachine {
@@ -39,12 +40,23 @@ export default class EventMachine {
     this._bindings = [];
     this.id = uuid();    
     this.handlers = this.initializeHandler()
+    this._localTimestamp = 0;
 
     this.initializeProperty(opt, props);
 
     this.initComponents();
   }
 
+  get _timestamp() {
+    return this._localTimestamp++;
+  }
+
+  /**
+   * for svelte variable 
+   */
+  get target() {
+    return this.$el.el;
+  }
 
   /**
    * UIElement instance 에 필요한 기본 속성 설정 
@@ -65,7 +77,8 @@ export default class EventMachine {
   initializeHandler () {
     return [
       new BindHandler(this),
-      new DomEventHandler(this)
+      new DomEventHandler(this),
+      new CallbackHandler(this)
     ]
   }
 
@@ -200,7 +213,6 @@ export default class EventMachine {
    * @param {Boolean} [isLoad=false] 
    */
   parseTemplate(html, isLoad) {
-
     /////////////////////////////////////////////////////////////////
     //FIXME: html string, element 형태 모두 array 로 받을 수 있도록 해보자. 
     if (Array.isArray(html)) {
@@ -243,7 +255,19 @@ export default class EventMachine {
     return TEMP_DIV.createChildrenFragment();
   }
 
-  parseProperty ($dom) {
+  /**
+   * $dom 에 있는 props, children 정보만 가지고 온다. 
+   * 
+   * 이것을 가지고 오는 이유는  중첩된 컴포넌트 내에서 하위 컴포넌트를 찾기 위해서이다.
+   * 
+   * ps.
+   * 
+   * 조회만 하기 때문에 getVariable()로 값만 조회한다. 
+   * 
+   * @param {Dom} $dom 
+   * @returns 
+   */
+  parsePropertyInfo ($dom) {
     let props = {};
 
     // parse properties 
@@ -251,22 +275,22 @@ export default class EventMachine {
 
       // 속성값이 없고, 속성 이름이 참조 변수 일 때는  그대로 보여준다. 
       if (hasVariable(t.nodeName)) {
-        const recoveredValue = recoverVariable(t.nodeName);
-
+        const recoveredValue = getVariable(t.nodeName);
         if (isObject(recoveredValue)) {
-          props = Object.assign(props, recoveredValue)
+          props = Object.assign(props, recoveredValue)     
         } else {
-          props[t.nodeName] = recoverVariable(t.nodeValue);                    
+          props[t.nodeName] = getVariable(t.nodeValue);                    
         }
 
       } else {
-        props[t.nodeName] = recoverVariable(t.nodeValue);          
+        props[t.nodeName] = getVariable(t.nodeValue);          
       }
     }
 
     // 하위 html 문자열을 props.content 로 저장한다. 
-    props.content = $dom.html()
-    if (props.content) {
+    const content = $dom.html()
+    if (content) {
+      props.content = content;
       props.contentChildren = this.parseContent(props.content)
     }
 
@@ -288,29 +312,54 @@ export default class EventMachine {
     return EventMachineComponent;
   }
 
-  renderComponent({ $dom, refName, EventMachineComponent, props }) {
+
+  createInstanceForComponent (EventMachineComponent, targetElement, props) {
+    // external component 
+    if (EventMachineComponent.__proto__.name === 'ProxyComponent') {
+      return new EventMachineComponent({target: targetElement, props});
+    }
+
+    // return sapa component 
+    return new EventMachineComponent(this, props);
+  }  
+
+  renderComponent({ $dom, refName, component, props }) {
     var instance = null; 
 
     // 동일한 refName 의 EventMachine 이 존재하면  해당 컴포넌트는 다시 그려진다. 
     // 루트 element 는 변경되지 않는다. 
     if (this.children[refName]) {
+
+      // FIXME: svelte 컴포넌트를 어떻게 재로드 할지 고민해야함 
       instance = this.children[refName] 
+      instance.__timestamp = this._localTimestamp;
       instance._reload(props);
     } else {
-      // 기존의 refName 이 존재하지 않으면 Component 를 생성해서 element 를 교체한다. 
-      instance = new EventMachineComponent(this, props);
+      instance = this.createInstanceForComponent(component, $dom.$parent.el, props);
+      instance.__timestamp = this._localTimestamp;
 
       this.children[refName || instance.id] = instance;
 
-      instance.render();
+      if (isFunction(instance.render)) {
+        instance.render();
+
+      } else {
+        // NOOP
+        // console.log(instance);
+      }
+
     }
     
 
     if (instance.renderTarget) {
       instance.$el?.appendTo(instance.renderTarget);
       $dom.remove();
-    } else {
+    } else if (instance.$el) {
       $dom.replace(instance.$el);     
+    } else {
+      // EventMachine 의 renderTarget 또는 $el 이 없으면
+      // renderTarget 과 유사하지만 appendTo 를 하지 않는다.
+      $dom.remove();
     }
   }
 
@@ -331,7 +380,7 @@ export default class EventMachine {
    * component 정보 얻어오기 
    * 
    * @param {Dom} $dom 
-   * @returns 
+   * @returns {Object}
    */
   _getComponentInfo ($dom) {
 
@@ -339,17 +388,18 @@ export default class EventMachine {
     const EventMachineComponent = this.getEventMachineComponent(refClass)
 
     if (EventMachineComponent) {
-      let props = this.parseProperty($dom);
+      let props = this.parsePropertyInfo($dom);
 
-      // create component 
+      // get component class name
       let refName = $dom.attr(REFERENCE_PROPERTY);
 
       return { 
         $dom,
         refClass,
         props,
-        refName,
-        EventMachineComponent
+        // variable 로 props 를 지정했을 수도 있기 때문에 props.ref 도 같이 사용한다. 
+        refName: refName || props.ref, 
+        component: EventMachineComponent
       }
     } else {
       return {
@@ -364,10 +414,20 @@ export default class EventMachine {
    * 
    * @return {object[]}
    */ 
-  parseComponentList($el) {
+   getComponentInfoList($el) {
+
+    if (!$el) return [];
 
     const children = []
-    let targets = $el.$$(REF_CLASS_PROPERTY);
+
+    // 하위에 refclass 를 가진 element 중에 마지막 지점인 컴포넌트만 조회한다. 
+    // 부모에 refclass 를 가지고 있는 경우는 그 다음 컴포넌트로 넘겨서 생성한다. 
+    // 이렇게 하지 않으면 최상위 부모에서 모든 하위 refclass 를 컴포넌트로 생성해버리는 문제가 생긴다. 
+    let targets = $el.$$(REF_CLASS_PROPERTY).filter(it => {
+      return it.path().filter(a =>{
+        return a.attr(REF_CLASS)
+      }).length === 1
+    })
 
     targets.forEach($dom => {
       children.push(this._getComponentInfo($dom));
@@ -379,7 +439,7 @@ export default class EventMachine {
   parseComponent() {
     const $el = this.$el;
 
-    const componentList = this.parseComponentList($el);
+    const componentList = this.getComponentInfoList($el);
 
     componentList.forEach(comp => {
       if (comp.notUsed) {
@@ -389,9 +449,9 @@ export default class EventMachine {
       }  
     })
 
-    keyEach(this.children, (key, obj) => {
-      if (obj && obj.clean()) {
-        delete this.children[key]
+    keyEach(this.children, (key, child) => {
+      if (child.__timestamp !== this._localTimestamp) {
+        child.clean();
       }
     })
   }
@@ -400,7 +460,9 @@ export default class EventMachine {
     if (this.$el && !this.$el.hasParent()) {
 
       keyEach(this.children, (key, child) => {
-        child.clean();
+        if (isFunction(child?.clean)) {
+          child.clean();
+        }
       })
 
       this.destroy();  
@@ -418,6 +480,9 @@ export default class EventMachine {
   }
 
   _afterLoad () {
+
+    // timestamp 기록 
+    this._timestamp;
 
     this.runHandlers('initialize');
 
@@ -449,8 +514,8 @@ export default class EventMachine {
       checker = checker.map(it => it.trim())
       
       const isDomDiff = Boolean(checker.filter(it => DOMDIFF.includes(it)).length);
-
-      if (this.refs[elName]) {        
+      const refTarget = this.refs[elName];
+      if (refTarget) {        
         var newTemplate = await this[callbackName].apply(this, args);
 
         if (Array.isArray(newTemplate)) {
@@ -460,9 +525,11 @@ export default class EventMachine {
         // create fragment 
         const fragment = this.parseTemplate(html`${newTemplate}`, true);
         if (isDomDiff) {
-          this.refs[elName].htmlDiff(fragment);
+          refTarget.htmlDiff(fragment);
         } else {
-          this.refs[elName].html(fragment);
+          if (refTarget) { 
+            refTarget.html(fragment);
+          }
         }
 
       }

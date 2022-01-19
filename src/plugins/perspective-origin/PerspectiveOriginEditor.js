@@ -31,9 +31,9 @@ export default class PerspectiveOriginEditor extends EditorElement {
 
     var obj = {
       isAll: true,
-      'perspective-origin': Length.z(),
-      'perspective-origin-x': Length.z(),
-      'perspective-origin-y': Length.z()      
+      'perspective-origin': 0,
+      'perspective-origin-x': 0,
+      'perspective-origin-y': 0      
     }
 
     if (this.props.value) {

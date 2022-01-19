@@ -30,7 +30,7 @@ export default class CustomAssets extends EditorElement {
           <div class='tools'>
             <div class='title'>${it.component.name}</div>
             <div class='buttons'>
-              <button type="button" class='remove-asset-preview' data-tooltip="remove asset" data-preview-id="${it.id}">${iconUse('remove')}</button>
+              <button type="button" class='remove-asset-preview' title="remove asset" data-preview-id="${it.id}">${iconUse('remove')}</button>
             </div>
           </div>
         </div>

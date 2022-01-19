@@ -4,6 +4,8 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { Length } from "el/editor/unit/Length";
 import { END, MOVE } from "el/editor/types/event";
 import './MediaProgressEditor.scss';
+import { createComponent } from "el/sapa/functions/jsx";
+
 
 export default class MediaProgressEditor extends EditorElement {
 
@@ -41,28 +43,28 @@ export default class MediaProgressEditor extends EditorElement {
                     <div class='drag-item end' ref='$end'></div>
                 </div>
                 <div class='item'>
-                    <object refClass="NumberRangeEditor"  
-                        ref='$s' 
-                        label='Start' 
-                        key='start' 
-                        min="0" 
-                        max="${duration}" 
-                        step="0.001" 
-                        value="${start * duration}" 
-                        onchange="changeValue" 
-                    />
+                    ${createComponent("NumberRangeEditor", {
+                        ref: '$s',
+                        label: 'Start',
+                        key: 'start',
+                        min: 0,
+                        max: duration,
+                        step: 0.001,
+                        value: start * duration,
+                        onchange: "changeValue" 
+                    })}
                 </div>
                 <div class='item'>
-                    <object refClass="NumberRangeEditor"  
-                        ref='$e' 
-                        label='End' 
-                        key='end' 
-                        min="0" 
-                        max="${duration}" 
-                        step="0.001" 
-                        value="${end * duration}" 
-                        onchange="changeValue" 
-                    />
+                    ${createComponent("NumberRangeEditor" , {
+                        ref: '$e',
+                        label: 'End',
+                        key: 'end',
+                        min: 0,
+                        max: duration,
+                        step: 0.001,
+                        value: end * duration,
+                        onchange: "changeValue"
+                    })}
                 </div>                
             </div>
         `
@@ -103,7 +105,7 @@ export default class MediaProgressEditor extends EditorElement {
         this.rect = this.refs.$progress.rect();
         this.pos = Length.parse(this.refs.$end.css('left')).toPx(this.rect.width);
         this.min = Length.parse(this.refs.$start.css('left')).toPx(this.rect.width);
-        this.max = Length.px(this.rect.width);
+        this.max = this.rect.width;
     }
 
     moveStartForEnd (dx, dy) {

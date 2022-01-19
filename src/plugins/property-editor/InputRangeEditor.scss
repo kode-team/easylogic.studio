@@ -1,51 +1,81 @@
-$border-radius: 3px;
 .elf--input-range-editor {
     display: grid;
     grid-template-columns: 1fr;
     height: var(--elf--input-height);
-    border-radius: $border-radius;
+    border-radius: 2px;
+    border: 1px solid transparent;
 
-    &.focused {
+    &.disabled {
+        label {
+            color: var(--elf--selected-color);
+        }
 
-        .area {
-            
-            input[type="number"] {
-                border-color: var(--elf--selected-color) !important;
-            }
+        > * {
+            pointer-events: none;
+        }
 
-            .elf--select-editor {
-
-                select {
-                    border-color: var(--elf--selected-color) !important;
-                }
-            }
+        input {
+            color: var(--elf--input-sub-font-color);
         }
     }
 
+
+    &.focused {
+        border-color: var(--elf--selected-color);
+        border-width: 1px;
+        box-shadow: 0px 0px 0px 1px var(--elf--selected-color);
+        --elf--input-range-border-color: var(--elf--input-border-color);        
+    }
+
+    &.drag {
+        border-color: var(--elf--selected-color);
+        border-width: 1px;
+        --elf--input-range-border-color: var(--elf--input-border-color);        
+    }
+
+    &:hover:not(.focused):not(.drag) {
+        border-color: var(--elf--input-border-color);
+        --elf--input-range-border-color: var(--elf--input-border-color);
+    }
+
     &.has-label {
-        grid-template-columns: 60px 1fr;
+        grid-template-columns: 70px 1fr;
 
         &.compact {
             grid-template-columns: 30px 1fr;
         }
 
+        &.wide {
+            grid-template-columns: 1fr 1fr;
+
+            .range--editor-type {
+                .area {
+                    grid-template-columns: 1fr 40px;
+                }
+            }
+        }        
+
         &.is-removable {
-            grid-template-columns: 60px 1fr 12px;
+            grid-template-columns: 70px 1fr 12px;
         }
 
         label {
             text-align: left;
             vertical-align: middle;
-            padding: 4px 0px 2px 0px;
-            font-size: 13px;
+            padding:0px;
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;
-            line-height: 1.6;
+            line-height: 2;
+            cursor: ew-resize;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding-left: 4px;
 
             svg {
-                width: 20px;
-                height: 20px;
+                width: 24px;
+                height: 24px;
                 vertical-align: middle;
             }
         }
@@ -77,9 +107,8 @@ $border-radius: 3px;
         height: 100%;
 
         .area {
-            font-size: 13px;
             display: grid;
-            grid-template-columns: 1fr 30px;
+            grid-template-columns: 1fr 40px;
             height: 100%;
             border-radius: 3px;
             
@@ -91,43 +120,38 @@ $border-radius: 3px;
 
             input,select {
                 width: 100%;
+                font-size: 11px;
             }
 
             input[type=number] {        
-                height: 100%;                 
-                padding: 2px 2px;      
-                border-right: 0px;
-                border-top-left-radius: $border-radius;
-                border-bottom-left-radius: $border-radius;
-                border-top-right-radius: 0px;
-                border-bottom-right-radius: 0px;                
-
-                border-bottom: 1px solid var(--elf--input-border-color);
-                border-top: 1px solid var(--elf--input-border-color);
-                border-left: 1px solid var(--elf--input-border-color);                                     
+                width: 100%;
+                padding-left: 2px;
+                background-color: transparent;
+                border:0px;
+                appearance: none;         
+                vertical-align: middle;        
             }
 
             .elf--select-editor {
+                height: calc(var(--elf--input-height) - 2px);
+                border-left: 1px solid var(--elf--input-range-border-color);
+                &:hover {
+                    border: 0px !important;
+                    box-shadow: none !important;
+                }
 
                 select {
-                    border-top-left-radius: 0px;
-                    border-bottom-left-radius: 0px;                                    
-                    border-top-right-radius: $border-radius;
-                    border-bottom-right-radius: $border-radius;
-                    border-top-left-radius: 0px;
-                    border-bottom-left-radius: 0px;                    
-                    background-color: var(--elf--input-background-color);
-                    appearance: none;
-                    text-align: center;
-                    height: 100%;
-                    
-                    padding: 0px 4px;             
-                    border-left:0px;
+                    background-color: transparent;
+                    height: 24px;
                     color: var(--elf--input-sub-font-color);
-                    border-bottom: 1px solid var(--elf--input-border-color);
-                    border-top: 1px solid var(--elf--input-border-color);
-                    border-right: 1px solid var(--elf--input-border-color);                     
+                    border: 0px;
                 }
+            }
+
+            .unit {
+                vertical-align: middle;
+                display: inline-block;
+                line-height: 2;
             }
         }
 

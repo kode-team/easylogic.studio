@@ -6,19 +6,12 @@ import './FillSingleEditor.scss';
 
 export default class FillSingleEditor extends EditorElement {
 
-
-    initialize() {
-        super.initialize();
-    
-        this.notEventRedefine = true;
-    }    
-
     initState() { 
         return {
             index: this.props.index,
             label: this.props.label,      
             simple: this.props.simple === 'true' ? true : false,       
-            image: SVGFill.parseImage(this.props.image || 'transparent')
+            image: SVGFill.parseImage(this.props.value || this.props.image || 'transparent')
         }
     }
 

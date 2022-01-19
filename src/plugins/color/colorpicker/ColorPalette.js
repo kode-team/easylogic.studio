@@ -49,8 +49,8 @@ export default class ColorPalette extends EditorElement {
 
     return {
       style : {
-        left: Length.px(x),
-        top: Length.px(y),
+        left: x,
+        top: y,
       }
     }
   }

@@ -15,13 +15,14 @@ export default class MenuItem extends EditorElement {
             type="button" 
             class='elf--menu-item ${this.getClassName()}' 
             data-no-title="${this.isHideTitle()}" 
-            ${this.isHideTitle() ? `data-tooltip="${this.getTitle()}"` : ''} 
+            ${this.isHideTitle() && this.isHideTooltip() === false ? `data-tooltip="${this.getTitle()}"` : ''} 
             checked="${this.getChecked() ? 'checked' : ''}"
             ${this.isDisabled() ? 'disabled' : ''}
             data-direction="${this.getDirection()}"
         >
-            <div class="icon ${this.getIcon()}">${icon[this.getIconString()] || this.getIconString() || ''}</div>
-            <div class="title">${this.getTitle()}</div>
+            <div class="icon ${this.getIcon()}" ref="$icon">${icon[this.getIconString()] || this.getIconString() || ''}</div>
+            ${this.isHideTitle() ? '' : /*html*/`<div class="title">${this.getTitle()}</div>`}
+            
         </button>
         `
     }
@@ -52,12 +53,20 @@ export default class MenuItem extends EditorElement {
         return DEFAULT_ICON;
     }
 
+    setIcon(iconString) {
+        this.refs.$icon.html(icon[iconString] || iconString || "");
+    }
+
     getIconString() {
         return DEFAULT_ICON;
     }
 
     isHideTitle() {
         return false;
+    }
+
+    isHideTooltip() {
+        return true;
     }
 
     [CLICK()](e) {

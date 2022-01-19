@@ -14,6 +14,23 @@
     top:0px;
     height: 100%;
     width: 100%;
+    overflow: hidden;    
+
+
+    svg.lines {
+      path {
+        fill: var(--elf--selected-hover-color);
+        stroke: transparent;
+      }        
+    }    
+
+    .cursor {
+      --elf--vertical-cursor-position: 0px;
+      height: 2px;
+      width: 100%;
+      background-color: var(--elf--selected-color-2);
+      transform: translateY(var(--elf--vertical-cursor-position)) translateZ(0);
+    }
   }
 
   svg {
@@ -25,6 +42,16 @@
 
     path {
       stroke: var(--elf--font-color);
+
+
+      &[data-selected="true"] {
+        stroke: transparent;
+      }      
+
+      &[data-mouse="true"] {
+        stroke: var(--elf--selected-color);
+        stroke-width: 2;
+      }      
     } 
   }
 }

@@ -2,6 +2,7 @@
 import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { Length } from "el/editor/unit/Length";
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class GridGapEditor extends EditorElement {
 
@@ -34,13 +35,14 @@ export default class GridGapEditor extends EditorElement {
         return /*html*/`
             <div class='item'>
                 <div class='value'>
-                    <object refClass="RangeEditor" 
-                        label='${this.state.label}' 
-                        ref='$value' 
-                        key="value" 
-                        value="${this.state.value}" 
-                        units='px,em,%'
-                        onchange="changeKeyValue" />
+                    ${createComponent("RangeEditor", {
+                        label: this.state.label,
+                        ref: '$value',
+                        key: "value",
+                        value: this.state.value,
+                        units: ['px','em','%'],
+                        onchange: "changeKeyValue"
+                    })}
                 </div>
             </div>
         `

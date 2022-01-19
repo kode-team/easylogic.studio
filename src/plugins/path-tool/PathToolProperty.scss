@@ -2,7 +2,8 @@
 
     // height: 24px;
     padding: 0px 5px;
-    padding-top: 8px;    
+    padding-top: 8px;   
+    padding-bottom: 10px; 
 
     > div {
       display: grid;
@@ -11,6 +12,14 @@
       padding: 4px 0px;
       height: 30px;
       text-align: left;
+
+      &.divider {
+        height: 1px;
+        padding: 0px;
+        font-size: 0px;
+        background-color: var(--elf--property-border-color);
+        margin: 10px 0px;
+      }
     }
 
     button {
@@ -21,6 +30,9 @@
         border:0px;
         box-shadow: none;
         text-align: left;
+        height: 24px;
+        font-size: 11px;
+        vertical-align: middle;
 
         &[data-no-title="true"] {
             .title {
@@ -31,12 +43,12 @@
         svg {
           width: 20px;
           height: 20px;
+          vertical-align: middle;
         }
   
       }
   
       .title {
-        font-size: 9px;
         color: #999;
         // display: none;
       }

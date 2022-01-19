@@ -6,32 +6,22 @@ import {
 import icon, { iconUse } from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { filter_list } from "./util";
+import { createComponent } from "el/sapa/functions/jsx";
+
+import "./BackdropFilterProperty.scss";
 export default class BackdropFilterProperty extends BaseProperty {
 
   getTitle() {
     return this.$i18n('backdrop.filter.property.title');
   }
 
-
-  hasKeyframe () {
-    return true; 
-  }
-
-
   getTitleClassName() {
     return 'filter'
-  }
-
-
-  getKeyframeProperty () {
-    return 'backdrop-filter';
   }
 
   getBodyClassName() {
     return 'no-padding';
   }
-
-
 
   getBody() {
     return /*html*/`<div class='full filter-property' ref='$body'></div>`;
@@ -39,7 +29,7 @@ export default class BackdropFilterProperty extends BaseProperty {
 
   getTools() {
     return /*html*/`
-      <select ref="$filterSelect"></select>
+      <select class="filter-select" ref="$filterSelect"></select>
       <button type="button" ref="$add" title="add Filter">${iconUse("add")}</button>
     `
   }
@@ -105,7 +95,13 @@ export default class BackdropFilterProperty extends BaseProperty {
 
     return /*html*/`
       <div>
-        <object refClass="FilterEditor" ref='$filterEditor' key="backdrop-filter" value='${value}' hide-label="true" onchange='changeFilterEditor' />
+        ${createComponent("FilterEditor", {
+          ref: '$filterEditor',
+          key: "backdrop-filter",
+          value,
+          hideLabel: true,
+          onchange: 'changeFilterEditor'
+        })}
       </div>
     `
   }

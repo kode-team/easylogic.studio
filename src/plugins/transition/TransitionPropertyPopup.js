@@ -3,6 +3,8 @@ import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import './TransitionPropertyPopup.scss';
 import { variable } from 'el/sapa/functions/registElement';
+import { createComponent } from "el/sapa/functions/jsx";
+
 
 const property_list = [
   'none',
@@ -38,7 +40,6 @@ const property_list = [
 
   'font-size',
   'font-size-adjust',
-  'font-stretch',
   'font-weight',
   'height',
   'left',
@@ -126,7 +127,12 @@ export default class TransitionPropertyPopup extends BasePopup {
     return /*html*/`
     <div class='timing-function'>
       <label>Timing function</label>
-      <object refClass="CubicBezierEditor" ref='$cubicBezierEditor' key="timingFunction" value="${this.state.data.timingFunction || 'linear'}" onChange='changeCubicBezier' />
+      ${createComponent("CubicBezierEditor", {
+        ref: '$cubicBezierEditor',
+        key: "timingFunction",
+        value: this.state.data.timingFunction || 'linear',
+        onChange: 'changeCubicBezier'
+      })}
     </div>
     `
   }
@@ -141,15 +147,15 @@ export default class TransitionPropertyPopup extends BasePopup {
    
     return /*html*/`
       <div class='name'>
-        <object refClass="SelectEditor"  
-          ref='$property' 
-          icon="true" 
-          label="Property" 
-          key='name' 
-          value="${this.state.data.name}" 
-          options=${variable(property_list)} 
-          onChange='changeTransition' 
-        /> 
+        ${createComponent("SelectEditor", {
+          ref: '$property',
+          icon: true,
+          label: "Property",
+          key: 'name',
+          value: this.state.data.name,
+          options: property_list,
+          onChange: 'changeTransition'           
+        })}
       </div>
     `
   }
@@ -158,7 +164,14 @@ export default class TransitionPropertyPopup extends BasePopup {
   templateForDelay () {
     return /*html*/`
     <div class='delay'>
-      <object refClass="RangeEditor"  ref='$delay' label='Delay' calc='false' key='delay' value='${this.state.data.delay}' units='s,ms' onChange="changeRangeEditor" />
+      ${createComponent("RangeEditor", {
+        ref: '$delay',
+        label: 'Delay',
+        key: 'delay',
+        value: this.state.data.delay,
+        units: ['s', 'ms'],
+        onChange: "changeRangeEditor"
+      })}
     </div>
     `
   }
@@ -166,7 +179,14 @@ export default class TransitionPropertyPopup extends BasePopup {
   templateForDuration () {
     return /*html*/`
     <div class='duration'>
-      <object refClass="RangeEditor"  ref='$duration' label='Duration'  calc='false' key='duration' value='${this.state.data.duration}' units='s,ms' onChange="changeRangeEditor" />
+      ${createComponent("RangeEditor", {
+        ref: '$duration',
+        label: 'Duration',
+        key: 'duration',
+        value: this.state.data.duration,
+        units: ['s', 'ms'],
+        onChange: "changeRangeEditor"
+      })}
     </div>
     `
   }

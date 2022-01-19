@@ -1,8 +1,9 @@
 
 .logo-item {
-    display: inline-block;
-    padding: 10px 0px;
-    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     label.logo {
         display: inline-block;
         width: 30px;
@@ -10,15 +11,5 @@
         background-image: url(./images/icon128.png);
         background-size: contain;
         border-radius: 2px;
-
-        &:after {
-            content: attr(title);
-            display: block;
-            white-space: nowrap;
-            padding: 8px 10px;
-            margin-left: 20px;
-            color: var(--elf--font-color);
-            font-size: 14px;
-        }
     }
 }

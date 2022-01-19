@@ -1,5 +1,5 @@
 
-import { POINTERSTART, CLICK, SUBSCRIBE } from "el/sapa/Event";
+import { POINTERSTART, CLICK, SUBSCRIBE, KEYDOWN, PREVENT, KEYUP } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
 import icon, { iconUse } from "el/editor/icon/icon";
 import { EditorElement } from "../common/EditorElement";
@@ -38,8 +38,12 @@ export default class BasePopup extends EditorElement {
     return '';
   }
 
+  onClose () { }
+
   [CLICK('$close')] () {
     this.$el.hide();
+
+    this.onClose();
   }
 
   setTitle (title) {
@@ -49,7 +53,6 @@ export default class BasePopup extends EditorElement {
   [POINTERSTART('$title') + MOVE('movePopupTitle') + END('endPopupTitle')] () {
     this.x = Length.parse(this.$el.css('left'))
     this.y = Length.parse(this.$el.css('top'))
-
   }
 
   movePopupTitle (dx, dy) {
@@ -67,16 +70,33 @@ export default class BasePopup extends EditorElement {
     var top = this.$el.css('top')
     var left = this.$el.css('left')
 
-    var realTop = top !== 'auto' ? Length.parse(top) : Length.px(110)
-    var realLeft = left !== 'auto' ? Length.parse(left) : Length.px(document.body.clientWidth - rightPosition - popupPadding - width)
+    var realTop = top !== 'auto' ? Length.parse(top) : 110
+    var realLeft = left !== 'auto' ? Length.parse(left) : document.body.clientWidth - rightPosition - popupPadding - width
 
     this.$el
       .css({
-        top: realTop,
-        left: realLeft,
+        top: Length.px(realTop),
+        left: Length.px(realLeft),
         'z-index': this.$editor.zIndex
       })
       .show("inline-block");
+  }
+
+  makeRect (width, height, rect) {
+
+    const elements = this.$config.get('editor.layout.elements');
+    const bodyRect = elements.$bodyPanel.rect();
+
+    const left = bodyRect.left + bodyRect.width - (width - 10)
+    const top = rect.top + height > bodyRect.top + bodyRect.height ? bodyRect.top + bodyRect.height - height - 10 : rect.top;
+
+
+    return {
+      top: top,
+      left: left < rect.left  && rect.left <= left + width ? left - ((left + width)  - rect.left) - 10 : left,
+      width: width,
+      height: height,
+    }
   }
 
   showByRect (rect) {
@@ -106,8 +126,8 @@ export default class BasePopup extends EditorElement {
 
   moveResizer (dx, dy) {
     this.$el.css({
-      width: Length.px(Math.min(this.width.value + dx, 1000)),
-      height: Length.px(Math.min(this.height.value + dy, 700)),
+      width: Math.min(this.width + dx, 1000),
+      height: Math.min(this.height + dy, 700),
     })
   }
 

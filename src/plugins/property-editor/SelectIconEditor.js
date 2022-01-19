@@ -1,7 +1,7 @@
 
 import { LOAD, CLICK, DOMDIFF } from "el/sapa/Event";
-import icon from "el/editor/icon/icon";
-import { isString } from "el/sapa/functions/func";
+import icon, { iconBlank, iconMake } from "el/editor/icon/icon";
+import { isNotUndefined, isString } from "el/sapa/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './SelectIconEditor.scss';
@@ -9,18 +9,12 @@ import { CSS_TO_STRING } from "el/utils/func";
 
 export default class SelectIconEditor extends EditorElement {
 
-    initialize() {
-        super.initialize();
-    
-        this.notEventRedefine = true;
-    }
-
     initState() {
         var splitChar = this.props.split || ',';
         var options = Array.isArray(this.props.options) 
                         ? this.props.options.map(it => {
                             if (isString(it)) {
-                                return { value: it }
+                                return { value: it, text: it }
                             }
                             return it;  
                         })
@@ -29,8 +23,8 @@ export default class SelectIconEditor extends EditorElement {
                             return { value, text }
                         });
 
-        var icons = (this.props.icons || '').split(splitChar).map(it => it.trim());
-        var colors = (this.props.colors || '').split(splitChar).map(it => it.trim());
+        var icons = this.props.icons || [];
+        var colors = this.props.colors || [];
 
         var value = this.props.value || '';
 
@@ -86,8 +80,15 @@ export default class SelectIconEditor extends EditorElement {
             var isSelected = value === this.state.value; 
             var selected = isSelected ? 'selected' : '' 
             if (it.value === '') {
-                var label = icon.close
+                var label = ""
                 title = 'close'
+
+                if (isNotUndefined(this.state.icons[index])) {
+                    iconClass = 'icon'
+                    label = iconBlank()
+                    value = '__blank__'
+                }
+
             } else {
                 var iconKey = this.state.icons[index];
 
@@ -105,13 +106,20 @@ export default class SelectIconEditor extends EditorElement {
                 css['background-color'] = color; 
             }
             
-            return /*html*/`<div class='select-icon-item ${selected} ${iconClass}' style='${CSS_TO_STRING(css)}' data-value="${value}" title='${title}'>${label}</div>`
+            return /*html*/`
+                <div class='select-icon-item ${selected} ${iconClass}' 
+                    style='${CSS_TO_STRING(css)}' 
+                    data-value="${value}" 
+                    data-tooltip='${title}'
+                >${label}</div>`
         })
     }
 
     [CLICK('$options .select-icon-item')] (e) {
 
         var value = e.$dt.attr('data-value')
+
+        if (!value || value === '__blank__') return;
 
         this.updateData({
             value

@@ -132,7 +132,7 @@ export class CylinderLayer extends Component {
       var {width} = this.json;
 
       var count = this.json.count.value; 
-      var w = width.value;
+      var w = width;
       var r = w/2
       var angle = 360 / count; 
 
@@ -289,7 +289,7 @@ export class CylinderLayer extends Component {
     return [
       { selector: '.face', cssText: `
           position: absolute;
-          left: ${width.value/2 - faceWidth/2}px;
+          left: ${width/2 - faceWidth/2}px;
           top: 0px;
           bottom: 0px;
           right: 0px;
@@ -308,7 +308,7 @@ export class CylinderLayer extends Component {
   get cylinderInfo () {
     var {width} = this.json;
 
-    var w = width.value;
+    var w = width;
     var h = w; 
     var r = w/2
     var yr = h/2;
@@ -397,8 +397,8 @@ export class CylinderLayer extends Component {
     <g transform="translate(${x}, ${y})">
     ${this.toDefString}
       <foreignObject ${OBJECT_TO_PROPERTY({ 
-        width: width.value,
-        height: height.value,
+        width: width,
+        height: height,
         overflow: 'visible'
       })}>
         <div xmlns="http://www.w3.org/1999/xhtml">

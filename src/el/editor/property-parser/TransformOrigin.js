@@ -39,6 +39,13 @@ export class TransformOrigin {
 
   static scale (transformOrigin, width, height)  {
     let parsedTransformOrigin = TransformOrigin.parseStyle(transformOrigin)
+    // if (isNaN(width) || isNaN(height)) {
+    //   throw new Error(width);
+    // }
+
+    if (width === 0 && height === 0) {
+      return [0, 0, 0]
+    }
 
     const originX = parsedTransformOrigin[0].toPx(width).value
     const originY = parsedTransformOrigin[1].toPx(height).value

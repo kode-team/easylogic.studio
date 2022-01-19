@@ -3,18 +3,26 @@
   
     .clippath-item {
       display: grid; 
-      grid-template-columns: 1fr 20px; 
+      grid-template-columns: 20px 1fr 30px; 
       grid-column-gap: 4px;
       margin-bottom: 5px;
-      padding: 5px 6px;  
+      // padding: 5px 6px;  
       cursor: pointer;
+      height: 30px;
 
-      &.selected,
-      &:hover {
-        background-color: var(--elf--selected-color);
+      > label {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        // padding: 5px 0px;
+        cursor: move;
       }
 
       .title {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        column-gap: 10px;
         .name {
             padding: 2px 0px;
         }
@@ -23,6 +31,14 @@
       .tools {
         vertical-align: middle;
         text-align: right;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          background-color: var(--elf--input-inactive-color);
+        }
       } 
 
       .offset-list {

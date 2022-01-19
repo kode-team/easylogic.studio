@@ -5,6 +5,7 @@ import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import "./GradientAssetsProperty.scss";
 import { variable } from 'el/sapa/functions/registElement';
+import { iconUse } from "el/editor/icon/icon";
 
 const options = gradients.map(it => {
   return { value: it.key, text: it.title } 
@@ -30,7 +31,7 @@ export default class GradientAssetsProperty extends BaseProperty {
 
   [LOAD('$tools')]() {
     return /*html*/`
-      <object refClass="SelectEditor"  key="preset" value="${this.state.preset}" options=${variable(options)} onchange="changePreset"  />
+      <object refClass="SelectEditor" ref='$preset'  key="preset" value="${this.state.preset}" options=${variable(options)} onchange="changePreset"  />
     `
   }  
 
@@ -83,7 +84,7 @@ export default class GradientAssetsProperty extends BaseProperty {
     })
 
     if (preset.edit) {
-      results.push(/*html*/`<div class='add-gradient-item'><butto type="button">${icon.add}</button></div>`)
+      results.push(/*html*/`<div class='add-gradient-item'><butto type="button">${iconUse("add")}</button></div>`)
     }
 
     return results

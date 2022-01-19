@@ -114,15 +114,11 @@ export class ViewportManager {
      * @param {number} rect.height
      */
     refreshCanvasSize (rect) {
+
         
         if (this.canvasSize) {
     
-            this.canvasSize = {
-                x: rect.x ,
-                y: rect.y ,
-                width: rect.width,
-                height: rect.height 
-            }
+            this.canvasSize = rect
 
             this.cachedViewport = rectToVerties(0, 0, this.canvasSize.width, this.canvasSize.height)
             const newVerties = vec3.transformMat4(
@@ -154,12 +150,7 @@ export class ViewportManager {
             this.setTransformOrigin(newTransformOrigin)            
     
         } else {
-            this.canvasSize = {
-                x: rect.x,
-                y: rect.y,
-                width: rect.width,
-                height: rect.height
-            }
+            this.canvasSize = rect;
         
             this.cachedViewport = rectToVerties(0, 0, this.canvasSize.width, this.canvasSize.height)
     
@@ -187,6 +178,11 @@ export class ViewportManager {
 
     getWorldPosition(e) {
         e = e || this.editor.config.get('bodyEvent')
+
+        if (!e) {
+            return this.createWorldPosition(0, 0);
+        }
+
         return this.createWorldPosition(e.clientX, e.clientY);
     }
 
@@ -316,6 +312,12 @@ export class ViewportManager {
     get maxX () { return this.verties[2][0]; }
     get minY () { return this.verties[0][1]; }
     get maxY () { return this.verties[2][1]; }    
+
+    /**
+     * center position in viewport as world
+     * 
+     * @returns {vec3}
+     */
     get center () { return this.verties[4]; }
 
     get height () { return this.maxY - this.minY; }
@@ -333,7 +335,16 @@ export class ViewportManager {
 
     applyVertexInverse (vertex) {
         return vec3.transformMat4([], vertex, this.matrixInverse);
-    }    
+    }   
+    
+    applyScaleVertex (vertex) {
+        return vec3.transformMat4([], vertex, this.scaleMatrix);
+    }
+
+    applyScaleVertexInverse (vertex) {
+        return vec3.transformMat4([], vertex, this.scaleMatrixInverse);
+    }
+
 
     applyVerties (verties) {
         return vertiesMap(verties, this.matrix);
@@ -364,6 +375,17 @@ export class ViewportManager {
         return this.applyVertiesInverse(rectToVertiesForArea(x, y, width, height));
     }
 
+    zoomIn (zoomFactor = 0.01) {
+        this.setScale(this.scale + zoomFactor);
+        this.editor.emit('updateViewport');
+    }
 
+    zoomOut (zoomFactor = 0.01) {
+        this.zoomIn(-zoomFactor);
+    }    
 
+    zoomDefault () {
+        this.setScale(1);
+        this.editor.emit('updateViewport');
+    }        
 }

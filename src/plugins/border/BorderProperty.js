@@ -3,20 +3,12 @@ import { LOAD, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './BorderProperty.scss';
+import { variable } from "el/sapa/functions/registElement";
 
 export default class BorderProperty extends BaseProperty {
 
   getTitle() {
     return this.$i18n('border.property.title');  
-  }
-
-
-  hasKeyframe () {
-    return true; 
-  }
-
-  getKeyframeProperty () {
-    return 'border'
   }
 
   getBody() {
@@ -28,7 +20,12 @@ export default class BorderProperty extends BaseProperty {
     var value = current['border'] || ''
 
     return /*html*/`
-      <object refClass='BorderEditor' ref='$1' key='border' value='${value}' onchange='changeKeyValue' />
+      <object refClass='BorderEditor' ${variable({
+        ref: '$1',
+        key: 'border',
+        value,
+        onchange: 'changeKeyValue'
+      })}  />
     `
   }
 
@@ -37,6 +34,7 @@ export default class BorderProperty extends BaseProperty {
   }
 
   [SUBSCRIBE('refreshSelection') + DEBOUNCE(100) + IF('checkShow')]() {
+
     this.refresh();
   }  
 

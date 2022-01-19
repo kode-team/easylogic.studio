@@ -119,7 +119,7 @@ export function rectRect (rx1, ry1, rw1, rh1, rx2, ry2, rw2, rh2) {
  * @param {*} ry2 
  * @param {*} rw2 
  * @param {*} rh2 
- * @returns 
+ * @returns {vec3[]}
  */
 export function intersectRectRect(rx1, ry1, rw1, rh1, rx2, ry2, rw2, rh2) {
     const b1 = rectToVerties(rx1, ry1, rw1, rh1);
@@ -341,7 +341,7 @@ export function lineRect(x1, y1, x2, y2, rectX, rectY, width, height) {
  * @param {number} rectY 
  * @param {number} width 
  * @param {number} height 
- * @returns {[x, y][]}
+ * @returns {vec3[]}
  */
 export function getClosestPointBylineRect(x1, y1, x2, y2, rectX, rectY, width, height) {
     const left = getClosestPointBylineLine(x1, y1, x2, y2, rectX, rectY, rectX, rectY + height);
@@ -468,8 +468,8 @@ export function getClosestPointByPolyLine(verties = [], x1, y1, x2, y2) {
  * polygon 끼리 충돌 비교 
  * 
  * 
- * @param {[x,y][]} verties 
- * @param {[x,y][]} targetVerties 
+ * @param {vec3[]} verties 
+ * @param {vec3[]} targetVerties 
  */
 export function polyPoly (verties = [], targetVerties = []) {
     const len = verties.length
@@ -500,6 +500,15 @@ export function polyInPoly(sourceVerties = [], targetVerties = []) {
     })
 }
 
+/**
+ * 
+ * @param {number} x 
+ * @param {number} y 
+ * @param {number} width 
+ * @param {number} height 
+ * @param {string} origin 
+ * @returns {vec3[]}
+ */
 export function rectToVerties (x, y, width, height, origin = '50% 50% 0px') {
 
     const center = TransformOrigin.scale( origin,  width,  height );
@@ -588,25 +597,22 @@ export function targetItemsToRectVerties (items = []) {
  * 
  * @param {vec3[]} verties 
  * @param {boolean} [hasLength=true] 
- * @returns 
+ * @returns {Object} rectangle
+ * @returns {Length} rectangle.x 
+ * @returns {Length} rectangle.y
+ * @returns {Length} rectangle.width
+ * @returns {Length} rectangle.height
+ * @returns {Length} rectangle.left
+ * @returns {Length} rectangle.top
  */
-export function vertiesToRectangle (verties, hasLength = true) {
+export function vertiesToRectangle (verties) {
 
-    if (hasLength) {
-        const x = Length.px(verties[0][0]).floor();
-        const y = Length.px(verties[0][1]).floor();
-        const width = Length.px(vec3.dist(verties[0], verties[1])).floor();
-        const height = Length.px(vec3.dist(verties[0], verties[3])).floor();
-    
-        return {x, left: x, y, top: y, width, height}
-    } else {
-        const x = verties[0][0];
-        const y = verties[0][1];
-        const width = vec3.dist(verties[0], verties[1]);
-        const height = vec3.dist(verties[0], verties[3]);
-    
-        return {x, left: x, y, top: y, width, height}        
-    }
+    const x = verties[0][0];
+    const y = verties[0][1];
+    const width = vec3.dist(verties[0], verties[1]);
+    const height = vec3.dist(verties[0], verties[3]);
+
+    return {x, left: x, y, top: y, width, height}        
 }
 
 export function toRectVertiesWithoutTransformOrigin (verties) {
@@ -624,7 +630,6 @@ export function toRectVerties(verties) {
     const xList = [];
     const yList = [];
 
-    
     verties.forEach(vector => {
         xList.push(vector[0]);
         yList.push(vector[1])

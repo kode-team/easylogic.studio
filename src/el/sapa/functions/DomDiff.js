@@ -74,6 +74,12 @@ function changed(node1, node2) {
 }
 
 function hasPassed(node1) {
+
+    // <!-- comment -->  형태의 주석일 때는 그냥 패스 
+    if (node1?.nodeType === 8) {
+        return true;
+    }
+
     return (
         (node1.nodeType !== Node.TEXT_NODE && node1.getAttribute('data-domdiff-pass') === 'true') 
     ) 
@@ -102,17 +108,13 @@ function getProps (attributes) {
 }
 
 function updateElement (parentElement, oldEl, newEl, i, options = {}) {
-
     if (!oldEl) {
-        // console.log('replace');        
         parentElement.appendChild(newEl.cloneNode(true));
     } else if (!newEl) {
-        // console.log('replace');        
         parentElement.removeChild(oldEl);
     } else if (hasPassed(oldEl) || hasPassed(newEl)) {
         // NOOP
         // data-domdiff-pass="true" 일 때는 아무것도 비교하지 않고 끝낸다. 
-        // console.log(oldEl, newEl, 'passed');
     } else if (changed(newEl, oldEl) || hasRefClass(newEl)) {
         // node 가 같지 않으면 바꾸고, refClass 속성이 있으면 바꾸고
         parentElement.replaceChild(newEl.cloneNode(true), oldEl);
@@ -128,7 +130,6 @@ function updateElement (parentElement, oldEl, newEl, i, options = {}) {
             // 정상적인 노드에서 checkPassed 가 true 이면 아무것도 하지 않는다. 
             // 다만 자식의 속성은 변경해야한다. 
         } else {
-            // console.log(newEl);
             updateProps(oldEl, getProps(newEl.attributes), getProps(oldEl.attributes)); // added        
         }
 
@@ -137,7 +138,7 @@ function updateElement (parentElement, oldEl, newEl, i, options = {}) {
         var max = Math.max(oldChildren.length, newChildren.length);
 
         for (var i = 0; i < max; i++) {
-            updateElement(oldEl, oldChildren[i], newChildren[i], i);
+            updateElement(oldEl, oldChildren[i], newChildren[i], i, options);
         }
     }
 
@@ -172,6 +173,7 @@ export function DomDiff (A, B, options = {}) {
 
     // initialize options parameter
     options.checkPassed = isFunction(options.checkPassed) ? options.checkPassed : undefined;
+    options.removedElements = [];
 
     A = A.el || A; 
     B = B.el || B; 

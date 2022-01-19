@@ -5,6 +5,9 @@ import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './VideoProperty.scss';
+import { variable } from "el/sapa/functions/registElement";
+import { createComponent } from "el/sapa/functions/jsx";
+
 
 const video_dom_property = [
   // 'audioTracks',
@@ -89,7 +92,14 @@ export default class VideoProperty extends BaseProperty {
           <button type="button" data-value="play" >${icon.play} ${this.$i18n('video.property.play')}</button>
           <button type="button" data-value="pause">${icon.pause}  ${this.$i18n('video.property.pause')}</button>      
           <div>
-            <object refClass="NumberRangeEditor"  ref='$currentTime' min="0" max="${duration}" value="${currentTime}" step="0.001" onchange="changeCurrentTime" />
+            ${createComponent("NumberRangeEditor", {
+              ref: '$currentTime',
+              min: 0,
+              max: duration,
+              value: currentTime,
+              step: 0.001,
+              onchange: "changeCurrentTime"
+            })}
           </div>
         </div>    
         <div class='property-item animation-property-item has-label'>        
@@ -110,7 +120,15 @@ export default class VideoProperty extends BaseProperty {
             ${this.$i18n('video.property.playbackRate')}
           </div>
           <div>
-            <object refClass="NumberRangeEditor"  ref='$playbackRate' min="0.1" max="10" clamp="true" value="${this.state.playbackRate}" step="0.001" onchange="changePlaybackRate" />
+            ${createComponent("NumberRangeEditor", {
+              ref: '$playbackRate',
+              min: 0.1,
+              max: 10,
+              clamp: true,
+              value: this.state.playbackRate,
+              step: 0.001, 
+              onchange: "changePlaybackRate"
+            })}
           </div>
         </div>        
         <div class='property-item animation-property-item full'>
@@ -118,7 +136,12 @@ export default class VideoProperty extends BaseProperty {
             <span class='add-timeline-property' data-property='playTime'></span>
             ${this.$i18n('video.property.playTime')}
           </div>
-          <object refClass="MediaProgressEditor" ref='$progress'  key='playTime' value="${current.playTime}" onchange="changeSelect" />
+          ${createComponent("MediaProgressEditor", {
+            ref: '$progress',
+            key: 'playTime',
+            value: current.playTime,
+            onchange: "changeSelect"
+          })}
         </div>
       `;
   }

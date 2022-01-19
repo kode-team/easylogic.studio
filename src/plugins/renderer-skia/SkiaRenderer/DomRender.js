@@ -1,5 +1,5 @@
 import Dom from "el/sapa/functions/Dom";
-import { CSS_TO_STRING, isNotUndefined, keyEach, OBJECT_TO_CLASS, OBJECT_TO_PROPERTY, STRING_TO_CSS } from "el/sapa/functions/func";
+import { CSS_TO_STRING, isNotUndefined, STRING_TO_CSS } from "el/sapa/functions/func";
 import { Item } from "el/editor/items/Item";
 import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
 import { ClipPath } from "el/editor/property-parser/ClipPath";
@@ -45,7 +45,7 @@ export default class DomRender extends ItemRender {
     paint.setStrokeWidth(borderWidth);
     paint.setAntiAlias(true);
 
-    const strokeRect = CanvasKit.XYWHRect(halfBorderWidth,halfBorderWidth,item.screenWidth.value-borderWidth,item.screenHeight.value-borderWidth)
+    const strokeRect = CanvasKit.XYWHRect(halfBorderWidth,halfBorderWidth,item.screenWidth-borderWidth,item.screenHeight-borderWidth)
 
     // console.log(stroke);
     canvas.drawRect(strokeRect, paint);    
@@ -81,7 +81,7 @@ export default class DomRender extends ItemRender {
     this.setTransform(canvas, item);
 
 
-    const backgroundRect = CanvasKit.XYWHRect(0,0,item.screenWidth.value,item.screenHeight.value)
+    const backgroundRect = CanvasKit.XYWHRect(0,0,item.screenWidth,item.screenHeight)
 
     canvas.drawRect(backgroundRect, this.toFillPaint(item, renderer));    
 
@@ -309,7 +309,6 @@ export default class DomRender extends ItemRender {
       'perspective', 
       'perspective-origin',
       'font-size', 
-      'font-stretch', 
       'line-height', 
       'font-weight', 
       'font-family', 

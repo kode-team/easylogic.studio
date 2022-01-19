@@ -42,9 +42,9 @@ export class SVGStarItem extends SVGItem {
 
     let newPath = "";
     if (isCurve) {
-      newPath = PathParser.makeCurvedStar(width.value, height.value, count, radius, tension).d;
+      newPath = PathParser.makeCurvedStar(width, height, count, radius, tension).d;
     } else {
-      newPath = PathParser.makeStar(width.value, height.value, count, radius).d;
+      newPath = PathParser.makeStar(width, height, count, radius).d;
     }
 
     return newPath;

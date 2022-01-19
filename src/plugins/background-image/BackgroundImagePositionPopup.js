@@ -2,10 +2,10 @@
 import { CLICK, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
-import { Length } from "el/editor/unit/Length";
-
 import './BackgroundImagePositionPopup.scss';
 import { variable } from 'el/sapa/functions/registElement';
+import { createComponent } from "el/sapa/functions/jsx";
+
 
 export default class BackgroundImagePositionPopup extends BasePopup {
 
@@ -18,10 +18,10 @@ export default class BackgroundImagePositionPopup extends BasePopup {
     return {
       size: this.props.size || 'auto',
       repeat: this.props.repeat || 'repeat',
-      x: this.props.x || Length.z(),
-      y: this.props.y || Length.z(),
-      width: this.props.width || Length.z(),
-      height: this.props.height || Length.z(),
+      x: this.props.x || 0,
+      y: this.props.y || 0,
+      width: this.props.width || 0,
+      height: this.props.height || 0,
       blendMode: this.props.blendMode,
     }
   }
@@ -35,14 +35,15 @@ export default class BackgroundImagePositionPopup extends BasePopup {
  
   templateForSize() {
     return /*html*/`
-      <div class='popup-item'>
-        <object refClass="SelectEditor"  
-          label="${this.$i18n('background.image.position.popup.size')}" 
-          ref='$size' 
-          key='size' 
-          value="${this.state.size}" 
-          options=${variable(["contain","cover","auto" ])}
-          onchange="changeRangeEditor" />      
+      <div>
+        ${createComponent("SelectEditor", {
+          label: this.$i18n('background.image.position.popup.size'),
+          ref: '$size',
+          key: 'size',
+          value: this.state.size,
+          options: ["contain","cover","auto" ],
+          onchange: "changeRangeEditor"
+        })}
       </div>
     `;
   }
@@ -53,31 +54,37 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
   templateForX() {
     return /*html*/`
-      <div class='popup-item'>
-        <object refClass="RangeEditor"  
-            label="X"
-            calc="false"            
-            ref="$x" 
-            key="x"
-            value="${this.state.x}"
-            min="-1000" max="1000" step="1"
-            onchange="changeRangeEditor"
-        />
+      <div>
+        ${createComponent("InputRangeEditor", {
+          label: "X",
+          compact: true,
+          ref: "$x",
+          key: "x",
+          value: this.state.x,
+          min: -1000,
+          max: 1000,
+          step: 1,
+          onchange: "changeRangeEditor"
+        })}
       </div>
     `;
   }
 
   templateForY() {
     return /*html*/`
-      <div class='popup-item'>
-        <object refClass="RangeEditor"  
-            label="Y" 
-            calc="false"       
-            ref="$y" 
-            key="y"
-            value="${this.state.y}"            
-            min="-1000" max="1000" step="1"
-            onchange="changeRangeEditor"
+      <div >
+        <object refClass="InputRangeEditor" ${variable({
+          label: "Y",
+          compact: true,
+          ref: "$y",
+          key: "y",
+          value: this.state.y,
+          min: -1000,
+          max: 1000,
+          step: 1,
+          onchange: "changeRangeEditor"
+        })}  
+          
         />
       </div>
     `;
@@ -85,15 +92,19 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
   templateForWidth() {
     return /*html*/`
-    <div class='popup-item'>
-      <object refClass="RangeEditor"  
-          label="${this.$i18n('background.image.position.popup.width')}"   
-          calc="false"             
-          ref="$width" 
-          key="width"
-          value="${this.state.width}"          
-          min="0" max="500" step="1" 
-          onchange="changeRangeEditor"
+    <div >
+      <object refClass="InputRangeEditor" ${variable({
+        label: "W",
+        compact: true,
+        ref: "$width",
+        key: "width",
+        value: this.state.width,
+        min:0,
+        max: 500,
+        step: 1,
+        onchange: "changeRangeEditor"
+      })} 
+        
       />
     </div>
     `;
@@ -101,14 +112,19 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
   templateForHeight() {
     return /*html*/`
-    <div class='popup-item'>
-      <object refClass="RangeEditor"  
-          label="${this.$i18n('background.image.position.popup.height')}"
-          calc="false"          
-          ref="$height" 
-          key="height"
-          value="${this.state.height}"          
-          min="0" max="500" step="1" onchange="changeRangeEditor"
+    <div >
+      <object refClass="InputRangeEditor" ${variable({
+        label: "H",
+        compact: true,
+        ref: "$height",
+        key: "height",
+        value: this.state.height,
+        min:0, 
+        max:500,
+        step: 1,
+        onchange: "changeRangeEditor"
+      })} 
+
       />
     </div>
     `;
@@ -116,16 +132,16 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
   templateForRepeat() {
     return /*html*/`
-    <div class='popup-item grid-2'>
+    <div class='grid'>
       <label>${this.$i18n('background.image.position.popup.repeat')}</label>
-      <div class='repeat-list' ref="$repeat" data-value='${this.state.repeat}'>
-          <button type="button" value='no-repeat' title="${this.$i18n('background.image.position.popup.type.no-repeat')}"></button>
-          <button type="button" value='repeat' title="${this.$i18n('background.image.position.popup.type.repeat')}"></button>
-          <button type="button" value='repeat-x' title="${this.$i18n('background.image.position.popup.type.repeat-x')}"></button>
-          <button type="button" value='repeat-y' title="${this.$i18n('background.image.position.popup.type.repeat-y')}"></button>
-          <button type="button" value='space' title="${this.$i18n('background.image.position.popup.type.space')}"></button>
-          <button type="button" value='round' title="${this.$i18n('background.image.position.popup.type.round')}"></button>
-      </div>
+    </div>
+    <div class='repeat-list' ref="$repeat" data-value='${this.state.repeat}'>
+        <button type="button" value='no-repeat' title="${this.$i18n('background.image.position.popup.type.no-repeat')}"></button>
+        <button type="button" value='repeat' title="${this.$i18n('background.image.position.popup.type.repeat')}"></button>
+        <button type="button" value='repeat-x' title="${this.$i18n('background.image.position.popup.type.repeat-x')}"></button>
+        <button type="button" value='repeat-y' title="${this.$i18n('background.image.position.popup.type.repeat-y')}"></button>
+        <button type="button" value='space' title="${this.$i18n('background.image.position.popup.type.space')}"></button>
+        <button type="button" value='round' title="${this.$i18n('background.image.position.popup.type.round')}"></button>
     </div>
     `;
   }
@@ -147,7 +163,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
       <div class='box'>
 
         <div class='background-property'>
-          ${this.templateForSize()}        
+          ${this.templateForSize()}      
           ${this.templateForX()}
           ${this.templateForY()}
           ${this.templateForWidth()}
@@ -159,13 +175,13 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   }
 
 
-  [SUBSCRIBE("showBackgroundImagePositionPopup")](data, params) {
+  [SUBSCRIBE("showBackgroundImagePositionPopup")](data, params, rect) {
     this.state.changeEvent = data.changeEvent || 'changeFillPopup'
     this.state.params = params; 
 
     this.setState(data.data);
 
-    this.show(460);
+    this.showByRect(this.makeRect(180, 310, rect));
   }
 
 

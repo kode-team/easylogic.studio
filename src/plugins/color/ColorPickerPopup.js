@@ -74,7 +74,7 @@ export default class ColorPickerPopup extends BasePopup {
     this.children.$color.setValue(this.state.color);
   }
 
-  [SUBSCRIBE("showColorPickerPopup")](data, params) {
+  [SUBSCRIBE("showColorPickerPopup")](data, params, rect) {
     data.changeEvent = data.changeEvent || 'changeFillPopup'
 
     if (!(data.target instanceof UIElement)) {
@@ -85,7 +85,7 @@ export default class ColorPickerPopup extends BasePopup {
     this.setState(data, false);
     this.children.$color.setValue(this.state.color);
 
-    this.show(232);
+    this.showByRect(this.makeRect(245, 500, rect));
   }
 
   [SUBSCRIBE("hideColorPickerPopup")]() {

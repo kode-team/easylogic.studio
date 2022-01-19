@@ -1,15 +1,24 @@
-import { LOAD, DOMDIFF, SUBSCRIBE, DEBOUNCE, THROTTLE } from "el/sapa/Event";
+import { LOAD, DOMDIFF, SUBSCRIBE, DEBOUNCE, THROTTLE, CONFIG, BIND, IF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './VerticalRuler.scss';
+import Dom from 'el/sapa/functions/Dom';
 
 let pathString = []
 
 export default class VerticalRuler extends EditorElement {
+    
     template () {
         return /*html*/`
             <div class="elf--vertical-ruler">
-                <div class='vertical-ruler-container' ref='$layerRuler'></div>                                        
+                <div class='vertical-ruler-container' ref='$layerRuler'>
+                    <svg class="lines" width="100%" height="100%" overflow="hidden">
+                        <path ref="$rulerLines" d=""/>
+                    </svg>
+                </div>                                        
                 <div class='vertical-ruler-container' ref='$body'></div>
+                <div class='vertical-ruler-container'>
+                    <div class="cursor" ref="$cursor"></div>
+                </div>                
             </div>
         `
     }
@@ -20,6 +29,12 @@ export default class VerticalRuler extends EditorElement {
 
     refreshCanvasSize () {
         this.state.rect = this.$el.rect();
+    }   
+    
+    initializeRect () {
+        if (!this.state.rect || this.state.rect.width == 0) {
+            this.state.rect = this.$el.rect();
+        }
     }    
 
     makeLine (pathString,  baseNumber, minY, maxY, realHeight, height, epsilon = 3, lineWidth = 30, expect = 10) {
@@ -111,10 +126,10 @@ export default class VerticalRuler extends EditorElement {
         const secondY = ((currentMaxY - minY)/realHeight) * height; 
 
         return `
-            M 15 ${firstY}
+            M 0 ${firstY}
             L 20 ${firstY}
             L 20 ${secondY}
-            L 15 ${secondY}
+            L 0 ${secondY}
             Z
         `
     }
@@ -156,7 +171,7 @@ export default class VerticalRuler extends EditorElement {
         ].join('');
     }
 
-    [LOAD('$body') + DOMDIFF] () { 
+    [LOAD('$body')] () { 
 
         if (!this.state.rect || this.state.rect.width == 0) {
             this.state.rect = this.$el.rect();
@@ -170,17 +185,30 @@ export default class VerticalRuler extends EditorElement {
         `
     }
 
-    [LOAD('$layerRuler') + DOMDIFF] () { 
+    [BIND('$rulerLines')] () { 
+        return {
+            d: this.makeRulerForCurrent()
 
-        if (!this.state.rect || this.state.rect.width == 0) {
-            this.state.rect = this.$el.rect();
         }
+    }      
 
-        return /*html*/`
-            <svg width="100%" height="100%" overflow="hidden">
-                <path d="${this.makeRulerForCurrent()}" fill="rgba(100, 255, 255, 0.5)" />
-            </svg>
-        `
+    [BIND('$cursor')] () {
+        const targetMousePoint = this.$viewport.getWorldPosition();
+        const {minY,maxY, height: realHeight} = this.$viewport;
+
+        this.initializeRect();
+
+        const height = this.state.rect.height;
+
+        const distY = (targetMousePoint[1] - minY)
+
+        const y = distY === 0 ? 0 : (distY/realHeight) * height;
+
+        return {
+            cssText: `
+                --elf--vertical-cursor-position: ${y}px;
+            `
+        }
     }    
 
     refresh() {
@@ -190,9 +218,6 @@ export default class VerticalRuler extends EditorElement {
 
     }    
 
-    [SUBSCRIBE('updateViewport')] () {
-        this.refresh();
-    }
 
     [SUBSCRIBE('refreshSelectionStyleView') + THROTTLE(10)] () {
         const current = this.$selection.current;        
@@ -203,11 +228,16 @@ export default class VerticalRuler extends EditorElement {
 
     }
 
-    [SUBSCRIBE('refreshSelection')] () {
-        this.load('$layerRuler');      
-    }    
+    [SUBSCRIBE('updateViewport', 'refreshSelection')] () {
+        this.refresh();      
+    }
 
     [SUBSCRIBE('resize.window', 'resizeCanvas')] () {
         this.refreshCanvasSize();
-    }        
+    }      
+
+    [CONFIG('onMouseMovepageContainer')] () {
+        this.bindData('$cursor');
+        this.bindData('$rulerLines');
+    }    
 }

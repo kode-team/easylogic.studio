@@ -37,7 +37,6 @@ $grid-tool-size: 18px;
             left: 50%;
             top: 50%;
             transform: translateX(-50%) translateY(-50%);
-            font-size: 11px;
 
             &+ .delete {
                 position: absolute;
@@ -61,7 +60,6 @@ $grid-tool-size: 18px;
             top: 50%;
             transform:  translateY(-50%) translateX(-50%) rotate(270deg) ;
             transform-origin: center center;
-            font-size: 11px;
 
             &:focus {
                 transform:  translateY(-50%) translateX(-50%);
@@ -232,14 +230,12 @@ $grid-tool-size: 18px;
             &:before {
                 content: attr(data-area);
                 text-align: center;
-                font-size: 10px;
                 color: var(--elf--border-color);
             }
 
             &::after {
                 content: attr(data-row) ' / ' attr(data-column);
                 text-align: center;
-                font-size: 10px;
                 color: var(--elf--border-color);
             }
 

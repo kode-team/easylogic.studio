@@ -11,7 +11,6 @@
 
             label {
                 padding: 2px 0px;       
-                font-size: 12px;   
                 cursor: pointer;      
             }
 
@@ -23,7 +22,7 @@
         }        
 
         &.selected {      
-            background-color: var(--elf--selected-color);
+            background-color: var(--elf--selected-color-2);
             color: var(--elf--selected-font-color);            
         }
     }

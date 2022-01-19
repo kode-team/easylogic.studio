@@ -1,513 +1,290 @@
-@import '../../scss/mixins.scss';
+@import "../../scss/mixins.scss";
 
 .elf--gradient-editor {
+  position: relative;
+  box-sizing: border-box;
+  padding: 0px 4px;
+
+  .gradient-preview {
+    display: none;
+  }
+
+  .tools {
+    padding: 4px 0px;
+  }
+
+  [data-editor] {
+    display: none;
+  }
+
+  &:not([data-selected-editor*="static-gradient"]),
+  &:not([data-selected-editor*="image-resource"]) {
+    [data-editor="gradient"] {
+      display: block;
+    }
+    [data-editor="tools"] {
+      display: grid;
+    }
+  }
+
+  [data-editor="image-loader"] {
+    display: none;
+    pointer-events: all;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+
+    input[type="file"] {
+      width: 100%;
+      height: 100%;
+      display: block;
+      opacity: 0;
+      pointer-events: all;
+    }
+  }
+
+  .gradient-preview {
+    width: 100%;
+    height: 80px;
     position: relative;
-    box-sizing: border-box;
-    padding: 0px 4px;
+    margin-bottom: 15px;
+    border-radius: 3px;
+    // overflow: hidden;
+    @include transparent-background();
+    // box-shadow: 0 0 10px 1px var(--elf--border-color);
+    // display: none;
 
-    .tools {
-        padding: 4px 0px;
-        display: grid;
-        grid-template-columns: 70px 1fr; 
-
-        grid-column-gap: 4px;
+    .gradient-view {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      right: 0px;
+      bottom: 0px;
     }
 
-    [data-editor] {
-        display: none;
-        margin-top: 3px;
-
-        > label {
-            font-size: 11px;
-        }
-
+    .drag-pointer {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 10px;
+      height: 10px;
+      border-radius: 100%;
+      display: inline-block;
+      background-color: rgba(230, 230, 230, 0.2);
+      pointer-events: none;
     }
 
-    &:not([data-selected-editor*='static-gradient']),
-    &:not([data-selected-editor*='image-resource'])
-     {
-        [data-editor='gradient'] {
-            display: block; 
-        }
-        [data-editor='tools'] {
-            display: grid;
-        }
-    }
+  }
 
-    [data-editor='image-loader'] {
-        display: none; 
-        pointer-events: all;     
-        position: absolute;
-        left:0px;
-        right:0px;
-        top:0px;
-        bottom:0px;   
+  .picker-tab {
+    .picker-tab-list {
+      text-align: center;
+      padding: 2px 0px;
 
-        input[type=file] {
+      .picker-tab-item {
+        display: inline-block;
+        vertical-align: middle;
+        height: 22px;
+        width: 22px;
+
+        // border: 1px solid var(--elf--border-color);
+        cursor: pointer;
+        position: relative;
+        border-radius: 20%;
+        margin: 0px 2px;
+        transition: all 1s linear;
+
+        .icon {
+          pointer-events: none;
+          border-radius: 100%;
+          display: inline-block;
+          width: 80%;
+          height: 80%;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translateX(-50%) translateY(-50%);
+          color: var(--elf--font-color);
+          svg {
             width: 100%;
             height: 100%;
-            display: block;
-            opacity: 0;
-            pointer-events: all;
+          }
         }
+
+        &.static-gradient .icon {
+          background-image: linear-gradient(to right, red, red);
+        }
+
+        &.linear-gradient .icon {
+          background-image: linear-gradient(to right, black, gray);
+        }
+
+        &.radial-gradient .icon {
+          background-image: radial-gradient(closest-side, black, #ebf8e1, gray);
+        }
+
+        &.conic-gradient .icon {
+          background-image: conic-gradient(black, #ebf8e1);
+        }
+
+        &.repeating-linear-gradient .icon {
+          background-image: repeating-linear-gradient(
+            45deg,
+            #3f87a6,
+            #ebf8e1 15%,
+            #f69d3c 20%
+          );
+        }
+
+        &.repeating-radial-gradient .icon {
+          background-image: repeating-radial-gradient(
+            circle,
+            #3f87a6,
+            #ebf8e1 15%,
+            #f69d3c 20%
+          );
+        }
+
+        &.repeating-conic-gradient .icon {
+          background-image: repeating-conic-gradient(
+            #3f87a6,
+            #ebf8e1 5%,
+            #f69d3c 10%
+          );
+        }
+
+        &.selected {
+          background-color: var(--elf--selected-color-2);
+          color: var(--elf--selected-font-color);
+
+          transform: scale(1.2);
+        }
+      }
+    }
+  }
+
+  &[data-selected-editor="image-resource"] {
+    .drag-pointer {
+      display: none;
     }
 
+    .preset-position {
+      display: none;
+    }
+  }
 
-    .gradient-preview {
-        width: 100%;
-        height: 80px;
-        position: relative;
-        margin-bottom: 15px;
-        border-radius: 3px;
-        // overflow: hidden;
+  &[data-selected-editor="image-resource"] {
+    [data-editor="gradient"],
+    [data-editor="tools"],
+    .drag-pointer,
+    .preset-position,
+    .sub-editor {
+      display: none;
+    }
+
+    [data-editor="image-loader"] {
+      display: block;
+    }
+  }
+
+  .sub-editor {
+    padding: 0px 0px;
+  }
+
+  .gradient-steps {
+    position: relative;
+    height: 50px;
+    margin-top: 14px;
+  }
+
+  .hue-container,
+  .hue {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 4px;
+    height: 14px;
+    // border-radius: 10px;
+    box-shadow: 0 0 0 1px var(--elf--border-color);
+
+    @include transparent-background();
+    pointer-events: all;
+  }
+
+  .hue {
+    pointer-events: none;
+    .step-list {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0px;
+      left: 0px;
+    //   border-radius: 10px;
+      pointer-events: none;
+
+      .step {
+        pointer-events: all;
+        width: 12px;
+        height: 12px;
+        border: 1px solid white;
+
+        display: inline-block;
+        position: absolute;
+        top: 50%;
+        border-radius: 100%;
+        box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.5);
+
+        &.selected {
+          border: 0px;
+          box-shadow: 0 0 0px 1px rgba(222, 222, 222, 0.5);
+          transform: translateX(-50%) translateY(calc(100% + 8px));
+
+          .arrow {
+            display: block;
+          }
+
+          .color-view {
+            transform: scale(1.5);
+            border: 1px solid white;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+          }
+        }
+
+        &[data-cut="true"] {
+          border-radius: 0%;
+
+          .color-view {
+            border-radius: 0%;
+          }
+        }
+
+        transform: translateX(-50%) translateY(-50%);
         @include transparent-background();
-        box-shadow: 0 0 10px 1px var(--elf--border-color);
-        // display: none;
-    
-        .gradient-view {
+
+        .color-view {
           position: absolute;
           left: 0px;
           top: 0px;
-          right: 0px;
           bottom: 0px;
-        }
-    
-        .drag-pointer {
-          position: absolute;
-          transform: translate(-50%, -50%);
-          width: 10px;
-          height: 10px;
+          right: 0px;
           border-radius: 100%;
-          display: inline-block;
-          background-color: rgba(230, 230, 230, 0.2);
+        //   pointer-events: none;
+          box-sizing: border-box;
+        }
+
+        .arrow {
+          position: absolute;
+          left: 50%;
+          display: none;
+          top: 0%;
+          width: 5px;
+          height: 10px;
+          transform: translateX(calc(-50% - 0.5px)) translateY(-140%);
           pointer-events: none;
-        }
-
-        .preset-position {
-            position: absolute;
-            left: 0px;
-            top: 0px;
-            right: 0px;
-            bottom: 0px;
-            pointer-events: none; 
-            // overflow: auto;
-
-            > div {
-                pointer-events: all; 
-                height: 10px;
-                width: 10px;
-                position: absolute;
-                display: block;
-                color: var(--elf--font-color);
-                cursor: pointer;
-
-                svg {
-                    width: 100%;
-                    height: 100%;
-
-                    path {
-                        fill: currentColor;
-                    }
-                }
-            }
-
-            [data-value='top'] {
-                position: absolute;
-                top: 0px;
-                left: 50%;
-                transform: translate(-50%,-100%) rotate(-90deg);
-            }
-
-            [data-value='top left'] {
-                position: absolute;
-                top: 0px;
-                left: 0%;
-                transform: translate(-100%,-100%) rotate(-135deg);
-            }            
-
-            [data-value='top right'] {
-                position: absolute;
-                top: 0px;
-                left: 100%;
-                transform: translate(0%,-100%) rotate(-45deg);
-            }                        
-
-            [data-value='right'] {
-                position: absolute;
-                top: 50%;
-                left: 100%;
-                transform: translate(0%, -50%);
-            }
-            
-            [data-value='left'] {
-                position: absolute;
-                top: 50%;
-                left: 0%;
-                transform: translate(-100%, -50%) rotate(-180deg);
-            }
-            
-            [data-value='bottom'] {
-                position: absolute;
-                top: 100%;
-                left: 50%;
-                transform: translate(-50%, 0%) rotate(90deg);
-            }            
-
-            [data-value='bottom left'] {
-                position: absolute;
-                top: 100%;
-                left: 0%;
-                transform: translate(-100%, 0%) rotate(135deg);
-            }                        
-
-            [data-value='bottom right'] {
-                position: absolute;
-                top: 100%;
-                left: 100%;
-                transform: translate(0%, 0%) rotate(45deg);
-            }                                    
-        }
-      
-      }
-
-    
-    @each $imageType in static-gradient, linear-gradient, repeating-linear-gradient, radial-gradient, repeating-radial-gradient, conic-gradient, repeating-conic-gradient, image-resource  {
-        &[data-selected-editor="#{$imageType}"] {
-          .#{$imageType} {
-            background-color: var(--elf--selected-color);
-            color: var(--elf--selected-font-color);
-          }
+          clip-path: polygon(40% 0%, 60% 0%, 60% 100%, 40% 100%);
         }
       }
-
-    
-    .picker-tab {
-        .picker-tab-list {
-            text-align: center;
-            padding: 2px 0px;
-
-            .picker-tab-item {
-                display: inline-block;
-                vertical-align: middle;
-                height: 20px;
-                width: 20px;
-                
-                // border: 1px solid var(--elf--border-color);
-                cursor: pointer;
-                position: relative;
-                border-radius: 20%;
-                margin:0px 2px;
-
-                .icon {
-                    pointer-events: none;
-                    border-radius: 100%;
-                    display: inline-block;
-                    width: 90%;
-                    height: 90%;
-                    position: absolute;
-                    left: 50%;
-                    top: 50%;
-                    transform: translateX(-50%) translateY(-50%);
-                    color: var(--elf--font-color);
-                    svg {
-                        width: 100%;
-                        height: 100%;
-                    }
-                }
-
-                &.static-gradient .icon {
-                    background-image: linear-gradient(to right, red, red);
-                }
-
-                &.linear-gradient .icon {
-                    background-image: linear-gradient(to right, black, gray);
-                }
-
-                &.radial-gradient .icon {
-                    background-image: radial-gradient(closest-side, black, #ebf8e1, gray);
-                }
-
-                &.conic-gradient .icon {
-                    background-image: conic-gradient(black, #ebf8e1);
-                }
-
-                &.repeating-linear-gradient .icon {
-                    background-image: repeating-linear-gradient(
-                        45deg,
-                        #3f87a6,
-                        #ebf8e1 15%,
-                        #f69d3c 20%
-                    );
-                }
-
-                &.repeating-radial-gradient .icon {
-                    background-image: repeating-radial-gradient(
-                        circle,
-                        #3f87a6,
-                        #ebf8e1 15%,
-                        #f69d3c 20%
-                    );
-                }
-
-                &.repeating-conic-gradient .icon {
-                    background-image: repeating-conic-gradient(
-                        #3f87a6,
-                        #ebf8e1 5%,
-                        #f69d3c 10%
-                    );
-                }
-            }
-        }
-
-        .picker-gradient-selector {
-             padding: 2px 10px;
-            .gradient-steps {
-                position: relative;
-                display: block;
-                height: 30px;
-
-                .hue-container {
-                    width: 100%;
-                    height: 14px;
-                    position: absolute;
-                    z-index: 0;
-                    @include transparent-background();
-                    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
-                }
-
-                .hue {
-                    position: relative;
-                    padding: 0px;
-                    margin: 0px;
-                    cursor: pointer;
-
-                    > .step-list {
-                        position: relative;
-                        width: 100%;
-                        cursor: copy;
-                        height: 14px;
-                        z-index: 1;
-
-                        &.mode-drag {
-                        cursor: pointer;
-                        }
-                    }
-
-                .drag-bar {
-                    border: 0px;
-                    background-color: transparent;
-                    border: 2px solid white;
-                    box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.6);
-                    width: 10px;
-                    height: 10px;
-                    transform: none;
-                    border-radius: 50%;
-                    display: inline-block;
-                    left: 0px;
-                    top: 17px;
-                    transform: translateX(-50%);
-                    position: absolute;
-                    background-color: rgba(white, 0.8);
-                    cursor: pointer;
-                    transition: top 0.3s ease-out;
-
-                    .guide-line {
-                        pointer-events: none;
-                        position: absolute;
-                        width: 1px;
-                        height: 0px;
-                        bottom: 8px;
-                        left: 3px;
-                        transform: translateX(-1px);
-                        transition: all 0.3s ease-out;
-                    }
-
-                    &.selected {
-                        z-index: 1;
-                        top: 30px;
-                        .guide-line {
-                            height: 17px;
-                        }
-
-                        .guide-change {
-                            opacity: 1;
-                        }
-                    }
-                }
-                }
-            }
-        }
-    } 
-
-    &[data-selected-editor='linear-gradient'], 
-    &[data-selected-editor='repeating-linear-gradient'],
-    &[data-selected-editor='image-resource']
-    {
-        .drag-pointer {
-            display: none; 
-        }
-
-        .preset-position {
-            display: none; 
-        }
     }
-    
-    
-
-    &[data-selected-editor='linear-gradient'], 
-    &[data-selected-editor='repeating-linear-gradient'], 
-    &[data-selected-editor='conic-gradient'], 
-    &[data-selected-editor='repeating-conic-gradient']
-    {
-        [data-editor='angle']
-        {
-            display: block;
-        }
-
-    }        
-
-    &[data-selected-editor='radial-gradient'], 
-    &[data-selected-editor='repeating-radial-gradient'], 
-    &[data-selected-editor='conic-gradient'], 
-    &[data-selected-editor='repeating-conic-gradient']
-    {
-        [data-editor='centerX'],
-        [data-editor='centerY']
-        {
-            display: block;
-        }
-
-    }             
-    
-    
-    &[data-selected-editor='radial-gradient'], 
-    &[data-selected-editor='repeating-radial-gradient']
-    {
-        [data-editor='radialType']
-        {
-            display: block;
-        }
-    }          
-
-    &[data-selected-editor='image-resource'] {
-        
-        [data-editor='gradient'],
-        [data-editor='tools'],
-        .drag-pointer,
-        .preset-position,
-        .sub-editor
-        {
-            display: none;
-        } 
-
-        [data-editor='image-loader'] {
-            display: block; 
-        }
-    }
-
-    .sub-editor {
-        padding: 0px 0px;
-    }
-
-    .gradient-steps {
-        position: relative;
-        height: 30px;
-    }
-
-    .hue-container,
-    .hue {
-        position: absolute;
-        left: 0px;
-        right:0px;
-        top: 4px;
-        height: 14px;
-        border-radius: 10px;
-        border:1px solid var(--elf--border-color);
-        
-        @include transparent-background();
-        pointer-events: all;
-    }
-
-    .hue {
-        pointer-events: none;
-        .step-list {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0px;
-            left:0px;
-            border-radius: 10px;
-            pointer-events: none;   
-            
-            @for $selectValue from 0 to 20 {
-                &[data-selected-index="#{$selectValue}"] {
-                    [data-index="#{$selectValue}"] {
-                        border:0px;
-                        transform: translateX(-50%) translateY(calc(100%));
-
-                        .arrow {
-                            display: block; 
-                        }
-                    }
-                }
-            }
-
-
-            .step {
-                pointer-events: all;
-                width: 10px;
-                height: 10px; 
-                border: 1px solid white;
-                
-                display: inline-block;
-                position: absolute;
-                top: 50%;
-                border-radius: 100%;
-                box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.5);    
-                
-                &.selected {
-                    border:0px;
-                    box-shadow: 0 0 0px 1px rgba(222, 222, 222, 0.5);
-                    transform: translateX(-50%) translateY(calc(100%));
-
-                    .arrow {
-                        display: block; 
-                    }
-                }
-
-                &[data-cut='true'] {
-                    border-radius: 0%;
-
-                    .color-view {
-                        border-radius: 0%;
-                    }
-                }
-
-                transform: translateX(-50%) translateY(-50%);
-                @include transparent-background();
-
-                .color-view {
-                    position: absolute;
-                    left: 0px;
-                    top:0px;
-                    bottom:0px;
-                    right:0px;
-                    border-radius: 100%;
-                    pointer-events: none;                    
-                }
-
-                .arrow {
-                    position: absolute;
-                    left: 50%;
-                    display: none;
-                    top:0%;
-                    width:5px;
-                    height:5px;
-                    transform: translateX(-50%) translateY(-120%);
-                    pointer-events: none;        
-                    clip-path: polygon(40% 0%, 60% 0%, 60% 100%, 40% 100%);                    
-                }
-            }      
-        }
-    }
+  }
 }

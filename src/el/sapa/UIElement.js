@@ -1,8 +1,11 @@
 import BaseStore from "./BaseStore";
 import { CHECK_SAPARATOR, CHECK_SUBSCRIBE_PATTERN, SAPARATOR, SUBSCRIBE_SAPARATOR } from "./Event";
 import EventMachine from "./EventMachine";
-import { isFunction, splitMethodByKeyword } from "./functions/func";
+import { isFunction, isNotUndefined, splitMethodByKeyword } from "./functions/func";
 import { uuidShort } from "./functions/uuid";
+import { getVariable } from './functions/registElement';
+
+const reg = /@magic:subscribe ([^|]+)(\|[\W]+[a-zA-Z]+\((.*)\))+/g
 
 /**
  * UI 를 만드는 기본 단위 
@@ -21,7 +24,7 @@ class UIElement extends EventMachine {
     if (props.store) {
       this.__storeInstance = props.store;
     } else {
-      this.__storeInstance = new BaseStore()      
+      this.__storeInstance = new BaseStore()
     }
 
     this.created();
@@ -33,7 +36,7 @@ class UIElement extends EventMachine {
   }
 
 
-  setStore (storeInstance) {
+  setStore(storeInstance) {
     this.__storeInstance = storeInstance;
   }
 
@@ -44,25 +47,25 @@ class UIElement extends EventMachine {
    */
   get $store() {
     return this.__storeInstance || this.parent.$store;
-  }    
+  }
 
   /**
    * UIElement 가 생성될 때 호출되는 메소드 
    * @protected
    */
-  created() {}
+  created() { }
 
   getRealEventName(e, s = MULTI_PREFIX) {
     var startIndex = e.indexOf(s);
     return e.substr(startIndex < 0 ? 0 : startIndex + s.length);
   }
 
-  splitMethod (arr, keyword, defaultValue = 0) {
+  splitMethod(arr, keyword, defaultValue = 0) {
     var [methods, params] = splitMethodByKeyword(arr, keyword);
 
     return [
-      methods.length ? +params[0].target : defaultValue,
-      methods, 
+      methods.length ? params[0].target : defaultValue,
+      methods,
       params
     ]
   }
@@ -88,35 +91,54 @@ class UIElement extends EventMachine {
       const events = this.getRealEventName(key, SUBSCRIBE_SAPARATOR);
       // context 에 속한 변수나 메소드 리스트 체크
       const [method, ...methodLine] = events.split(CHECK_SAPARATOR);
-      const checkMethodList = methodLine.map(it => it.trim()).filter(code => this[code]).map(target => ({target}));
+      const checkMethodList = methodLine.map(it => it.trim()).filter(code => this[code]).map(target => ({ target }));
 
       // support deboounce for store event    
       const [debounceSecond, debounceMethods] = this.splitMethod(methodLine, 'debounce');
-      const [throttleSecond, throttleMethods] = this.splitMethod(methodLine, 'throttle');      
-      const [allTrigger, allTriggerMethods] = this.splitMethod(methodLine, 'allTrigger');   
-      const [selfTrigger, selfTriggerMethods] = this.splitMethod(methodLine, 'selfTrigger');            
+      const [throttleSecond, throttleMethods] = this.splitMethod(methodLine, 'throttle');
+      const [allTrigger, allTriggerMethods] = this.splitMethod(methodLine, 'allTrigger');
+      const [selfTrigger, selfTriggerMethods] = this.splitMethod(methodLine, 'selfTrigger');
+      const [frameTrigger, frameTriggerMethods] = this.splitMethod(methodLine, 'frame');
+      const [paramsVariable, paramsVariableMethods, params] = this.splitMethod(methodLine, 'params');
+
+      let debounce = +debounceSecond > 0 ? debounceSecond : 0;
+      let throttle = +throttleSecond > 0 ? throttleSecond : 0;
+      let isAllTrigger = Boolean(allTriggerMethods.length);
+      let isSelfTrigger = Boolean(selfTriggerMethods.length);
+      let isFrameTrigger = Boolean(frameTriggerMethods.length);
+
+      if (paramsVariableMethods.length) {
+        const settings = getVariable(paramsVariable);
+
+        if (isNotUndefined(settings.debounce)) debounce = settings.debounce;
+        if (isNotUndefined(settings.throttle)) throttle = settings.throttle;
+        if (isNotUndefined(settings.frame)) isFrameTrigger = settings.frame;
+      }
+
+      const originalCallback = this[key]
 
       events
         .split(CHECK_SAPARATOR)
         .filter(it => {
           return (
-              checkMethodList.indexOf(it) === -1 &&             
-              debounceMethods.indexOf(it) === -1 && 
-              allTriggerMethods.indexOf(it) === -1 &&               
-              selfTriggerMethods.indexOf(it) === -1 &&                             
-              throttleMethods.indexOf(it) === -1
+            checkMethodList.indexOf(it) === -1 &&
+            debounceMethods.indexOf(it) === -1 &&
+            allTriggerMethods.indexOf(it) === -1 &&
+            selfTriggerMethods.indexOf(it) === -1 &&
+            throttleMethods.indexOf(it) === -1 &&
+            paramsVariableMethods.indexOf(it) === -1
           )
         })
         .map(it => it.trim())
         .filter(Boolean)
         .forEach(e => {
 
-          if (isFunction(this[key])) {
-            var callback = this.createLocalCallback(e, this[key] )
-            this.$store.on(e, callback, this, debounceSecond, throttleSecond, allTriggerMethods.length, selfTriggerMethods.length, checkMethodList);
+          if (isFunction(originalCallback)) {
+            var callback = this.createLocalCallback(e, originalCallback)
+            this.$store.on(e, callback, this, debounce, throttle, isAllTrigger, isSelfTrigger, checkMethodList, isFrameTrigger);
           }
 
-      });
+        });
     });
   }
 
@@ -127,7 +149,7 @@ class UIElement extends EventMachine {
     this.$store.offAll(this);
   }
 
-  destroy () {
+  destroy() {
     super.destroy()
 
     this.destoryStoreSUBSCRIBE();
@@ -155,7 +177,7 @@ class UIElement extends EventMachine {
    */
   emit(messageName, ...args) {
     this.$store.source = this.source;
-    this.$store.sourceContext = this; 
+    this.$store.sourceContext = this;
     this.$store.emit(messageName, ...args);
   }
 
@@ -165,7 +187,7 @@ class UIElement extends EventMachine {
    * @param {Function} callback 
    * @param {number} [delay=0]  callback 이 실행될 딜레이 시간 설정 
    */
-  nextTick (callback, delay = 0) {
+  nextTick(callback, delay = 0) {
 
     setTimeout(() => {
       this.$store.nextTick(callback);
@@ -191,7 +213,7 @@ class UIElement extends EventMachine {
    * 
    * @param {string} messageName
    * @param {any[]} args
-   */ 
+   */
   broadcast(messageName, ...args) {
     Object.keys(this.children).forEach(key => {
       this.children[key].trigger(messageName, ...args);
@@ -204,12 +226,12 @@ class UIElement extends EventMachine {
    * 
    * @param {string} message 이벤트 메세지 이름 
    * @param {Function} callback 메세지 지정시 실행될 함수
-   */ 
-  on (message, callback, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false) {
-    this.$store.on(message, callback, this.source, debounceDelay, throttleDelay, enableAllTrigger, enableSelfTrigger);
+   */
+  on(message, callback, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false, frame = false) {
+    this.$store.on(message, callback, this.source, debounceDelay, throttleDelay, enableAllTrigger, enableSelfTrigger, [], frame);
   }
 
-  off (message, callback) {
+  off(message, callback) {
     this.$store.off(message, callback, this.source);
   }
 
@@ -239,15 +261,15 @@ class UIElement extends EventMachine {
    * @param {number} [debounceSecond=0] debounce 시간(ms)
    * @param {number} [throttleSecond=0] throttle 시간(ms)
    * @returns {string} function id 
-   */ 
+   */
   subscribe(callback, debounceSecond = 0, throttleSecond = 0) {
     const id = `subscribe.${uuidShort()}`;
 
     const newCallback = this.createLocalCallback(id, callback);
 
-    this.$store.on(id, newCallback, this, debounceSecond, throttleSecond, false, /*self trigger*/true);    
+    this.$store.on(id, newCallback, this, debounceSecond, throttleSecond, false, /*self trigger*/true);
 
-    return id; 
+    return id;
   }
 }
 

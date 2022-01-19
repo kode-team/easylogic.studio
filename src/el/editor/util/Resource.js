@@ -78,7 +78,6 @@ const CSS_PROPERTY_LIST = {
     'clip-path': true,
     'color': true,
     'font-size': true,
-    'font-stretch': true,
     'line-height': true,
     'text-align': true,
     'text-transform': true,

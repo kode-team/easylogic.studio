@@ -1,32 +1,40 @@
 .elf--background-image-position-picker {
   
-  width: 260px !important;
+  width: 180 !important;
   
+  .background-property > div {
+    margin-bottom: 10px;
+  }
 
   .popup-item {
     margin-bottom: 5px;
   }
 
-  .grid-2 {
+  .grid {
     display: grid;
     grid-template-columns: 60px 1fr;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 10px;
 
     label {
-      font-size: 11px;
       padding-right: 2px;
       text-align: left;
     }
   }
 
-  label {
-    font-size: 11px;
-  }
-
   .repeat-list {
+    display: flex;
+    gap: 5px;
     button {
+      flex: 1 1 auto;
       width: 24px;
       height: 24px;
-      // background-color: #434b50;
+      background-color: #434b50;
+
 
       &[value="no-repeat"] {
         background-image: linear-gradient(

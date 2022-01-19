@@ -4,10 +4,10 @@
  * 상위 클래스의 모든 property 를 수집해서 리턴한다.
  * 
  * @param {Object} root  상속관계에 있는 인스턴스 
- * @param {Object} expectMethod 제외될 필드 리스트 { [field]: true }
+ * @param {function} {filterFunction}  예외 필터
  * @returns {string[]} 나의 상위 모든 메소드를 수집해서 리턴한다. 
  */
-export function collectProps(root, expectMethod = {}) {
+export function collectProps(root, filterFunction = () => true) {
 
     let p = root;
     let results = [];
@@ -17,10 +17,8 @@ export function collectProps(root, expectMethod = {}) {
         if (isObject === false) {
             break;
         }
-
-        const names = Object.getOwnPropertyNames(p).filter(name => {
-            return root && isFunction(root[name]) && !expectMethod[name];
-        });
+        
+        const names = Object.getOwnPropertyNames(p).filter(filterFunction);
 
         results.push.apply(results, names);
     } while (p = Object.getPrototypeOf(p));
@@ -74,6 +72,14 @@ export function ifCheck(callback, context, checkMethods) {
             callback.apply(context, args);
         }
     }
+}
+
+export function makeRequestAnimationFrame (callback, context) {
+    return (...args) => {
+        requestAnimationFrame(() => {
+            callback.apply(context, args);
+        });
+    };
 }
 
 export function keyEach(obj, callback) {

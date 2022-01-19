@@ -14,7 +14,7 @@ export default class VarEditor extends EditorElement {
         });
 
         return {
-            hideLabel: this.props['hide-label'] == 'true' ? true : false, 
+            hideLabel: this.props.hideLabel == 'true' ? true : false, 
             params: this.props.params || '',
             values
         }

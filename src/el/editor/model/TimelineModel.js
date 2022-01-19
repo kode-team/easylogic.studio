@@ -20,12 +20,12 @@ export class TimelineModel extends AssetModel {
           fps: 60,
           animations: [
           {id: 'xxxxx', properties: [
-            {property: 'width', keyframes: [ {time: 10, value: Length.px(10), timing: 'linear'} ] },
-            {property: 'height', keyframes: [ {time: 10, value: Length.px(10), timing: 'linear'} ] },
-            {property: 'translateX', keyframes: [ {time: 10, value: Length.px(10), timing: 'linear'} ] },
-            {property: 'rotateZ', keyframes: [ {time: 10, value: Length.px(10), timing: 'linear'} ] },
-            {property: 'perspective', keyframes: [ {time: 10, value: Length.px(10), timing: 'linear'} ] },
-            {property: 'width', keyframes: [ {time: 10, value: Length.px(10), timing: 'linear'} ] },
+            {property: 'width', keyframes: [ {time: 10, value: 10, timing: 'linear'} ] },
+            {property: 'height', keyframes: [ {time: 10, value: 10, timing: 'linear'} ] },
+            {property: 'translateX', keyframes: [ {time: 10, value: 10, timing: 'linear'} ] },
+            {property: 'rotateZ', keyframes: [ {time: 10, value: 10, timing: 'linear'} ] },
+            {property: 'perspective', keyframes: [ {time: 10, value: 10, timing: 'linear'} ] },
+            {property: 'width', keyframes: [ {time: 10, value: 10, timing: 'linear'} ] },
           ]}
         ]} */
       ],

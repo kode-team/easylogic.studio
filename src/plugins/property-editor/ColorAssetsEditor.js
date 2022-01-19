@@ -6,7 +6,7 @@ import './ColorAssetsEditor.scss';
 import { variable } from 'el/sapa/functions/registElement';
 
 export default class ColorAssetsEditor extends EditorElement {
-
+  
   initState() {
     return {
       mode: 'grid',
@@ -41,12 +41,15 @@ export default class ColorAssetsEditor extends EditorElement {
     return /*html*/`
       <div class='elf--color-assets-editor'>
         <div class='color-assets-head'>
-          <label>${this.$i18n('color.asset.property.title')}</label>
           <div class='tools'>${this.getTools()}</div>
         </div>
         <div class='color-list' ref='$colorList' data-view-mode='${this.state.mode}'></div>
       </div>
     `;
+  }
+
+  [CLICK('$title')] () {
+    this.$el.toggleClass('is-open')
   }
 
   [LOAD("$colorList")]() {

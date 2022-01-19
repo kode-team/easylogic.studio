@@ -49,9 +49,11 @@ export default class ImageSelectPopup extends BasePopup {
   [LOAD('$imageBox') + DOMDIFF] () {
     var project = this.$selection.currentProject || { images: [] }
 
-    return project.images.map( (image, index) => {
-      return /*html*/`<div class='image-item' ><img src='${image.local}' data-id="${image.id}" /></div>`
-    })
+    return "";
+
+    // return project.images.map( (image, index) => {
+    //   return /*html*/`<div class='image-item' ><img src='${image.local}' data-id="${image.id}" /></div>`
+    // })
   }
 
   [CLICK('$imageBox .image-item')] (e) {
@@ -59,10 +61,10 @@ export default class ImageSelectPopup extends BasePopup {
 
     this.updateData({
       value: $img.attr('data-id'),
-      naturalWidth: Length.px($img.naturalWidth),
-      naturalHeight: Length.px($img.naturalHeight), 
-      width: Length.px($img.naturalWidth),
-      height: Length.px($img.naturalHeight)
+      naturalWidth: $img.naturalWidth,
+      naturalHeight: $img.naturalHeight, 
+      width: $img.naturalWidth,
+      height: $img.naturalHeight
     });
 
     this.trigger('hideImageSelectPopup')

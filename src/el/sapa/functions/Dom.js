@@ -115,11 +115,11 @@ export default class Dom {
    * set -> Dom.create(targetElement).attr('key', value);
    * 
    * @param {string} key 
-   * @param {[string]} value 
+   * @param {string[]} value 
    */
   attr(key, value) {
     if (arguments.length == 1) {
-      return this.el.getAttribute(key);
+      return this.el.getAttribute && this.el.getAttribute(key);
     }
 
     // 동일한 속성 값이 있다면 변경하지 않는다. 
@@ -173,7 +173,12 @@ export default class Dom {
   }
 
   is(checkElement) {
-    return this.el === (checkElement.el || checkElement);
+
+    if (checkElement instanceof Dom) {
+      return this.el === checkElement.el;
+    }
+
+    return this.el === checkElement;
   }
 
   isTag(tag) {
@@ -203,15 +208,26 @@ export default class Dom {
 
     if (!this.el) return [];
 
-    const $parentNode = this.parent(); 
 
-    if ($parentNode) {
-      return [...$parentNode.path(), this]
-    } else {
-      return [this]
-    }
+    let pathList = [this];
+    let $parentNode = this.parent(); 
 
+    if (!$parentNode.el) return pathList;
 
+    while ($parentNode) {
+      pathList.unshift($parentNode);
+
+      $parentNode = $parentNode.parent();
+
+      if (!$parentNode.el) break;
+    }  
+
+    return pathList
+
+  }
+
+  get $parent() {
+    return this.parent();
   }
 
   parent() {
@@ -259,17 +275,24 @@ export default class Dom {
   }
 
   html(html) {
-    if (typeof html === 'undefined') {
-      return this.el.innerHTML;
+
+    try {
+      if (typeof html === 'undefined') {
+        return this.el.innerHTML;
+      }
+  
+      if (typeof html === 'string') {
+        Object.assign(this.el, { innerHTML: html });
+      } else {
+        this.empty().append(html);
+      }
+
+      return this;  
+    } catch (e) {
+      console.log(e, html);
+      return this;
     }
 
-    if (typeof html === 'string') {
-      Object.assign(this.el, { innerHTML: html });
-    } else {
-      this.empty().append(html);
-    }
-
-    return this;
   }
 
   htmlDiff(fragment) {
@@ -517,8 +540,6 @@ export default class Dom {
       return {
         x: box.x - parentBox.x,
         y: box.y - parentBox.y,
-        top: box.x - parentBox.x,
-        left: box.y - parentBox.y,
         width: box.width,
         height: box.height
       }
@@ -527,8 +548,6 @@ export default class Dom {
     return {
       x: this.el.offsetLeft,
       y: this.el.offsetTop,
-      top: this.el.offsetTop,
-      left: this.el.offsetLeft,
       width: this.el.offsetWidth,
       height: this.el.offsetHeight
     };

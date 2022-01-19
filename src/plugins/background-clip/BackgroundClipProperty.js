@@ -1,6 +1,7 @@
 import { LOAD, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { variable } from "el/sapa/functions/registElement";
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class BackgroundClipProperty extends BaseProperty {
   
@@ -20,15 +21,14 @@ export default class BackgroundClipProperty extends BaseProperty {
     var current = this.$selection.current || {};
 
     var clip = current['background-clip'] || ''
-    return /*html*/`
-      <object refClass="SelectEditor"  
-          ref='$1' 
-          key='background-clip' 
-          icon="true" 
-          value="${clip}" 
-          options=${variable(["","paddinb-box","border-box","content-box","text"])} 
-          onchange="changeSelect" 
-      />`;
+    return createComponent("SelectEditor", {
+        ref: '$1',
+        key: 'background-clip',
+        icon: true,
+        value: clip,
+        options: ["","paddinb-box","border-box","content-box","text"],
+        onchange: "changeSelect" 
+      });
   }
 
   [SUBSCRIBE_SELF('changeSelect')] (key, value) {

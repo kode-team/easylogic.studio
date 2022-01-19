@@ -3,6 +3,7 @@ import { CLICK, CHANGE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { Position } from "el/editor/unit/Length";
 import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { createComponent, createElementJsx } from "el/sapa/functions/jsx";
 
 const typeList = [
   { key: "top", title: "Top" },
@@ -143,7 +144,11 @@ export default class BorderImageProperty extends BaseProperty {
           </button>
         </div>
         <div class="slice-value">
-          <object refClass="RangeEditor"  ref='$allSlice' key='border-image-slice' onchange='changeBorderImage' />
+          ${createComponent('RangeEditor', {
+            ref: '$allSlice',
+            key: 'border-image-slice', 
+            onchange: 'changeBorderImage'
+          })}
         </div>
       </div>
       <div
@@ -153,15 +158,25 @@ export default class BorderImageProperty extends BaseProperty {
       >
         <div class="slice-setting-box" ref="$sliceSettingBox">
           ${typeList.map(it => {
-            return `
+            return /*html*/`
               <div>
                 <label class='title'>${it.title}</label>
               </div>
               <div>
-                <object refClass="RangeEditor"  ref='$${it.key}Slice' label='Slice' key='border-image-slice-${it.key}' onchange='changeBorderImage' /> 
+                ${createComponent('RangeEditor', {
+                  ref: `$${it.key}Slice`,
+                  label: 'Slice',
+                  key: `border-image-slice-${it.key}`,
+                  onchange: 'changeBorderImage'
+                })}
               </div>  
               <div>
-                <object refClass="RangeEditor"  ref='$${it.key}Width' label='Width' key='border-image-width-${it.key}' onchange='changeBorderImage' /> 
+                ${createComponent('RangeEditor', {
+                  ref: `$${it.key}Width`,
+                  label: 'Width',
+                  key: `border-image-width-${it.key}`,
+                  onchange: 'changeBorderImage'
+                })}              
               </div>                
             `;
           }).join('')}

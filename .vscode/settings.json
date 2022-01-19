@@ -1,0 +1,3 @@
+{
+    "autoimport.filesToScan": "**/*.{js,jsx,ts,tsx,svelte}"
+}

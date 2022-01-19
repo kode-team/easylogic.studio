@@ -1,72 +1,57 @@
 {
   "name": "@easylogic/editor",
-  "version": "0.11.29",
+  "version": "0.12.0",
   "description": "Fantastic Web Design Tool ",
-  "main": "./dist/editor.js",
   "types": "./dist/index.d.ts",
-  "directories": {
-    "test": "test"
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/editor.umd.js",
+  "module": "./dist/editor.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/editor.es.js",
+      "require": "./dist/editor.umd.js"
+    }
   },
   "dependencies": {
-    "@babel/runtime": "^7.13.10",
-    "@emotion/css": "^11.5.0",
+    "@entityjs/entityjs": "0.0.5",
     "array-organizer": "^1.5.7",
     "fit-curve": "^0.2.0",
     "gl-matrix": "^3.3.0",
     "js-video-url-parser": "^0.4.3",
     "nurbs": "^1.1.1",
+    "open-color": "^1.9.1",
     "pathkit-wasm": "^0.7.0",
     "svg-arc-to-cubic-bezier": "^3.2.0",
-    "yorkie-js-sdk": "^0.1.8"
+    "yorkie-js-sdk": "^0.1.11"
   },
   "devDependencies": {
-    "@babel/core": "^7.13.15",
-    "@babel/plugin-proposal-optional-chaining": "^7.13.12",
-    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@babel/plugin-transform-runtime": "^7.13.15",
-    "@babel/preset-env": "^7.13.15",
+    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.32",
+    "adorable-css": "^0.5.2",
     "autoprefixer": "^9.8.6",
-    "babel-loader": "^8.2.2",
-    "copy-webpack-plugin": "^5.1.2",
-    "css-loader": "^2.1.1",
-    "cssnano": "^4.1.11",
-    "file-loader": "^3.0.1",
-    "html-loader": "^0.5.5",
-    "html-webpack-plugin": "^3.2.0",
-    "jest": "^24.8.0",
-    "jest-cli": "^24.8.0",
-    "jest-report": "^0.1.11",
-    "mini-css-extract-plugin": "^0.6.0",
-    "postcss-loader": "^3.0.0",
+    "cssnano": "^5.0.13",
+    "happy-dom": "^2.25.1",
+    "postcss": "^8.4.4",
     "release-it": "^14.6.2",
-    "sass": "^1.32.8",
-    "sass-loader": "^7.1.0",
-    "string-replace-loader": "^2.3.0",
-    "terser-webpack-plugin": "^2.3.8",
-    "webpack": "^4.46.0",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.2",
-    "webpack-pwa-manifest": "^4.3.0",
-    "workbox-webpack-plugin": "^5.1.4"
+    "rollup-plugin-copy": "^3.4.0",
+    "sass": "^1.44.0",
+    "svelte": "^3.44.3",
+    "vite": "^2.6.14",
+    "vite-plugin-copy": "^0.1.6",
+    "vite-plugin-replace": "^0.1.1",
+    "vitest": "0.0.107"
   },
   "scripts": {
+    "vite:dev": "vite --config=vite.config.js",
+    "vite:dist": "vite build --config=vite.dist.config.js",
+    "vite:prod": "vite build --config=vite.prod.config.js && npm run copy:resource",
     "release": "release-it *",
     "copy:resource": "cp CNAME docs/",
-    "watch": "webpack --mode=production --watch --progress --config=webpack.dist.config.js",
-    "build:web": "rm -rf docs/ && webpack --mode=production --progress && npm run copy:resource",
-    "build:dist": "rm -rf dist/ &&webpack --mode=production --progress --config=webpack.dist.config.js",
-    "build:vscode": "rm -rf vscode/ &&webpack --mode=production --progress --config=webpack.vscode.config.js",
-    "build:ext:chrome": "INLINE_RUNTIME_CHUNK=false webpack --mode=production --config=webpack.chrome-extension.config.js",
-    "build:ext:whale": "webpack --mode=production --config=webpack.whale-extension.config.js",
-    "build": "npm run build:web; npm run build:dist",
-    "build:all": "npm run build:web && npm run build:dist && npm run build:vscode",
-    "zip:ext:chrome": "zip -r chrome-extension/chrome-extension.zip chrome-extension",
-    "zip:ext:whale": "zip -r whale-extension/whale-extension.zip whale-extension",
-    "zip": "npm run zip:ext:chrome && npm run zip:ext:whale",
-    "dev": "webpack-dev-server --port 8081 --config=webpack.dev.config.js --progress --open",
-    "dev:electron": "webpack-dev-server --port 8081 --config=webpack.dev.electron.config.js --progress --open",
-    "electron": "electron main.js",
-    "test": "NODE_ENV=test jest --watch"
+    "build": "npm run vite:prod && npm run vite:dist",
+    "dev": "npm run vite:dev",
+    "test": "vitest",
+    "coverage": "vitest --coverage"
   },
   "repository": {
     "type": "git",
@@ -84,14 +69,5 @@
   "bugs": {
     "url": "https://github.com/easylogic/editor/issues"
   },
-  "homepage": "https://editor.easylogic.studio/",
-  "jest": {
-    "moduleNameMapper": {
-      "^@assets(.*)$": "<rootDir>/src/assets$1",
-      "^el(.*)$": "<rootDir>/src/el$1",
-      "^export-library(.*)$": "<rootDir>/src/export-library$1",
-      "^plugins(.*)$": "<rootDir>/src/plugins$1",
-      "^designeditor(.*)$": "<rootDir>/editor-layouts/designeditor$1"
-    }
-  }
+  "homepage": "https://editor.easylogic.studio/"
 }

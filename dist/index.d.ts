@@ -581,8 +581,8 @@ declare module "@easylogic/editor" {
         localMatrixInverse: mat4;
         itemMatrix: mat4;     // 자기 자신의 matrix without translate offset(x,y)
         itemMatrixInverse: mat4;
-        accumulatedMatrix: mat4;  // parentMatrix * offset translate * localMatrix , 축적된 matrix 
-        accumulatedMatrixInverse: mat4;
+        absoluteMatrix: mat4;  // parentMatrix * offset translate * localMatrix , 축적된 matrix 
+        absoluteMatrixInverse: mat4;
     }
 
     interface PathParser { }
@@ -679,8 +679,8 @@ declare module "@easylogic/editor" {
         getDirectionBottomRightMatrix(width: Length, height: Length): mat4;
         getDirectionBottomMatrix(width: Length, height: Length): mat4;
 
-        getAccumulatedMatrix(): mat4;
-        getAccumulatedMatrixInverse(): mat4;
+        getAbsoluteMatrix(): mat4;
+        getAbsoluteMatrixInverse(): mat4;
 
         verties(width: Length, height: Length): vec3[];
         selectionVerties(): vec3[];
@@ -700,7 +700,7 @@ declare module "@easylogic/editor" {
          * 
          * @returns {PathParser} 
          */
-        accumulatedPath(pathString: string = ''): PathParser;
+        absolutePath(pathString: string = ''): PathParser;
 
         // 전체 캔버스에 그려진 path 의 개별 verties 를 
         // svg container 의 matrix 의 inverse matrix 를 곱해서 재계산 한다.     
@@ -737,8 +737,8 @@ declare module "@easylogic/editor" {
         /**
          * 새로운 부모를 기준으로 childItem 의 transform 을 맞춘다. 
          * 
-         * 1. childItem 의 accumulatedMatrix 를 구한다. 
-         * 2. 새로운 부모를 기준으로 좌표를 다시 맞춘다.   parentItem.accumulatedMatrixInverse 
+         * 1. childItem 의 absoluteMatrix 를 구한다. 
+         * 2. 새로운 부모를 기준으로 좌표를 다시 맞춘다.   parentItem.absoluteMatrixInverse 
          * 
          * childItem 의 좌표를 새로운 parent 로 맞출 때는  
          * itemMatrix (rotateZ) 를 먼저 구하고 offset 을 다시 구하는 순서로 간다. 
@@ -1120,6 +1120,15 @@ declare module "@easylogic/editor" {
 
     }
 
+    export interface ObjectPropertyProps {
+        title: string;
+        editableProperty?: string;
+        action?: string|Function;
+        inspector?: Function;
+    }
+    export class ObjectProperty {
+        static create(json: ObjectPropertyProps): BaseProperty;
+    }
 
     export class MenuItem extends EditorElement {
 

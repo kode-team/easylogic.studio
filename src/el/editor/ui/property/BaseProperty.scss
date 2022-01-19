@@ -1,48 +1,15 @@
 .elf--property {
-    // padding: 5px 10px;
+    --property-order: 1000;
     border-bottom: 1px solid var(--elf--property-border-color);  
-    // background-color: var(--elf--property-background-color);
-    // margin: 0px 5px;
-    // border-radius: 4px;
-    // color: var(--elf--font-color); 
     display: none; 
     box-shadow: 0 0 2px 0 rgba(255, 255, 255, 0.001);
-    margin: 4px auto;
-  
+    margin-bottom: 4px;
+    order: var(--property-order);  
   
     &:first-child { 
       border-top: 0px;
     }
-  
-    .group {
-      position: relative;
-  
-      .add-timeline-property {
-        left: 0px;
-      }
-    }
-  
-    .add-timeline-property {
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      display: none;
-      vertical-align: middle;
-  
-  
-      width: 7px;
-      height: 7px;
-      box-shadow: 0 0 0 1px var(--elf--border-color);
-      background-color: var(--elf--timeline-property-add-background-color);
-      cursor: pointer;
-      transform: translateY(-50%) rotate(45deg);
-  
-      &:hover {
-        box-shadow: 0 0 0 1px var(--elf--selected-color);
-        background-color: var(--elf--selected-color);
-      }
-    }
-  
+    
     &.full { 
       height: 100%;
       display: flex;
@@ -54,9 +21,6 @@
   
       .property-title {
         flex: none; 
-        height: 30px;
-  
-  
       }
   
       .property-body {
@@ -86,18 +50,15 @@
     }
   
     > .property-title {
-      padding: 5px 10px;
-      line-height: 2;
+      padding: 0px 10px;
       cursor: pointer;
       position: relative;
-      font-size: 11px;
-      font-weight: 400;
-      display: grid;
-      grid-template-columns: 1fr 100px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       cursor: pointer;
-      // border-bottom: 1px solid var(--elf--property-border-color);  
       color: var(--elf--font-color);
-      // background-color: var(--elf--property-title-background-color);
+      height: 30px;
   
       &.filter {
         grid-template-columns: 1fr 110px;
@@ -112,13 +73,14 @@
         padding-left: 2px;
         vertical-align: middle;
         cursor: pointer;
-        line-height: 2.4;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         text-transform: uppercase;
-        font-weight: bold;
+        font-weight: 600;
         letter-spacing: 1px;
+        font-size: 10px;
+        line-height: 2;
   
         .icon {
           display: inline-block;
@@ -134,25 +96,19 @@
       > .tools {
         text-align: right;
         vertical-align: middle;
-        line-height: 2.3;
-        float: right;
+        white-space: nowrap;
+        flex: none;
   
         > * {
           flex: none;
         }
-  
-        select {
-          min-width: 80px;
-          max-width: 80px;
-          background-color: var(--elf--input-background-color);
-        }
-        
+          
       }
     }
   
     > .property-body {
       display: none;
-      padding: 10px;
+      padding: 0px 10px;
       padding-top: 0px;
       position: relative;
       // background-color: var(--elf--property-background-color);
@@ -162,7 +118,6 @@
       }
   
       .property-item {
-        font-size: 11px;
         padding:4px 0px;
   
         &:first-child {
@@ -213,8 +168,6 @@
       > div {
         margin-bottom: 5px;
       }
-  
-      font-size: 12px;
   
       label {
         width: 60px;

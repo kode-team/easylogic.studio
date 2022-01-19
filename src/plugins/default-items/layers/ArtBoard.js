@@ -7,8 +7,8 @@ export class ArtBoard extends LayerModel {
     return super.getDefaultObject({
       itemType: "artboard",
       name: "New ArtBoard",
-      width: Length.px(1000),
-      height: Length.px(1000),
+      width: 1000,
+      height: 1000,
       'background-color': 'white',
       'transform-style': 'flat',
       ...obj

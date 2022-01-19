@@ -176,6 +176,16 @@ export default class HTMLRenderer {
         return this.getDefaultRendererInstance().toStyle(item, renderer || this);        
     }
 
+    toStyleData (item, renderer) {
+        const currentRenderer = this.getRendererInstance(item);
+
+        if (isFunction(currentRenderer.toStyleData)) {
+            return currentRenderer.toStyleData(item, renderer || this);
+        }
+
+        return this.getDefaultRendererInstance().toStyleData(item, renderer || this);        
+    }    
+
     /**
      * 
      * 렌더링 될 style 태그를 리턴한다. 
@@ -235,7 +245,7 @@ export default class HTMLRenderer {
     
     
         return /*html*/`
-<div class=''>
+<div >
 
 ${cssCode && /*html*/`<div><pre title='CSS'>${cssCode}</pre></div>`}
 

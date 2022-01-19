@@ -51,6 +51,8 @@ These are only needed for PathKit.FromCmds().
 */
 
 import { Length } from 'el/editor/unit/Length';
+import PathParser from 'el/editor/parser/PathParser';
+import { isArray } from 'el/sapa/functions/func';
 
 export class PathKitManager {
   constructor(editor) {
@@ -80,7 +82,7 @@ export class PathKitManager {
   intersection(first, second) {
     const PathKit = this.pathkit;
     if (!PathKit) return;    
-    return this.booleanOperation(first, second, PathKit.PathOp.INTERSECT);
+    return this.reversePathString(this.booleanOperation(first, second, PathKit.PathOp.INTERSECT));
   }
 
   union(first, second) {
@@ -92,19 +94,26 @@ export class PathKitManager {
   difference(first, second) {
     const PathKit = this.pathkit;
     if (!PathKit) return;    
-    return this.booleanOperation(first, second, PathKit.PathOp.DIFFERENCE);
+    return this.reversePathString(this.booleanOperation(first, second, PathKit.PathOp.DIFFERENCE));
   }
 
   reverseDifference(first, second) {
     const PathKit = this.pathkit;
     if (!PathKit) return;    
-    return this.booleanOperation(first, second, PathKit.PathOp.REVERSE_DIFFERENCE);
+    return this.reversePathString(this.booleanOperation(first, second, PathKit.PathOp.REVERSE_DIFFERENCE));
   }
 
   xor(first, second) {
     const PathKit = this.pathkit;
     if (!PathKit) return;
-    return this.booleanOperation(first, second, PathKit.PathOp.XOR);
+    return this.reversePathString(this.booleanOperation(first, second, PathKit.PathOp.XOR));
+  }
+
+  reversePathString(pathString) {
+    // xor 의 경우 변환하면 path 가 2개 이상 나올 수 있는데 
+    // 이때 내부의 영역도 하나의 패스로 나오기 때문에  
+    // svg 에서 제대로 표시를 해줄려면 특정 구간은 역순으로 나열 해줘야 한다. 
+    return PathParser.fromSVGString(pathString).reversePathStringByFunc((_, index) => index % 2 === 0);
   }
 
   isValidPath(path) {
@@ -119,7 +128,7 @@ export class PathKitManager {
    * 2d Path 내부의 segment 를 합쳐준다. 
    * 
    * @param {string} path 
-   * @returns 
+   * @returns {string}
    */
   simplify(path) {
     const PathKit = this.pathkit;    
@@ -151,8 +160,8 @@ export class PathKitManager {
     const pathObject = PathKit.FromSVGString(path);
 
 
-    if (opt['stroke-dasharray'].trim()) {
-      const arr = opt['stroke-dasharray'].trim().split(" ").map(it => +it)
+    if (isArray(opt['stroke-dasharray'])) {
+      const arr = opt['stroke-dasharray'];
 
       if (arr.length >= 2) {
         pathObject.dash(arr[0], arr[1], +(opt['stroke-dashoffset'] || 0))

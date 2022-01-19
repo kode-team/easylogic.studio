@@ -1,0 +1,81 @@
+.component-editor {
+    padding-bottom: 5px;
+    --column-gap: 2px;
+    .column {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-column-gap: var(--column-gap);
+        grid-row-gap: 2px;
+
+        .column-item {
+            display: flex;
+            align-items: stretch;
+            justify-content: stretch;
+
+            > * {
+                width: 100%;
+            }
+            > label {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+            }
+
+            
+        }
+    }
+
+    .column-1-1 {
+        grid-template-columns: 1fr 1fr;
+    }            
+
+    .column-1-1-1 {
+        grid-template-columns: 1fr 1fr 1fr;
+    }                
+
+    .column-1-2 {
+        grid-template-columns: 1fr 2fr;
+    }                
+
+    .column-1-2-3 {
+        grid-template-columns: 1fr 3fr;
+    }                
+    .column-1-1-1-1 {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }                    
+
+    .column-2 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .column-2-1 {
+        grid-template-columns: 2fr 1fr;
+    }    
+
+    .column-2-1-1 {
+        grid-template-columns: 2fr 1fr 1fr;
+    }        
+
+    .column-3-1 {
+        grid-template-columns: 3fr 1fr;
+    }        
+
+    .column-3-1-1 {
+        grid-template-columns: 3fr 1fr 1fr;
+    }            
+
+    .column-3-2-1 {
+        grid-template-columns: 3fr 2fr 1fr;
+    }                
+
+    
+    > label {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .component-item {
+        margin-bottom: 5px;
+    }
+}

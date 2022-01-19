@@ -1,0 +1,69 @@
+.elf--tool-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 100%;
+    background-color: var(--elf--header-background-color);
+    color: var(--elf--selected-font-color);
+
+    > * {
+        display: flex;
+        > * {
+            // display: inline-block;
+            min-height: 48px !important;
+            min-width: 48px !important;
+            vertical-align: middle;
+            padding: 0px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        > .dropdown-menu > button {
+            height: 48px !important;
+            width: 48px !important;
+        }
+
+
+        > button, > .dropdown-menu > button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+
+            stroke: var(--elf--selected-font-color);
+            fill: transparent !important;
+            stroke-width: 1 !important;
+
+
+            .icon {
+                svg {
+                    width: 20px;
+                    height: 20px;
+
+                    stroke: var(--elf--selected-font-color);
+                    fill: transparent !important;
+                    stroke-width: 1 !important;
+                }
+            }
+
+            &.elf--menu-item  {
+                &.selected {
+                    background-color: var(--elf--selected-color-2);
+                }
+
+                &:hover:not(.selected):not([checked]) {
+                    background-color: black;
+
+                }
+            }
+        }
+
+        > .elf--logo-area {
+            &:hover {
+                background-color: black;
+            }
+        }
+    }
+
+}

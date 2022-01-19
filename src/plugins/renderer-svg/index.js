@@ -15,6 +15,7 @@ import SVGTextRender from "./SVGRenderer/SVGTextRender";
 import TemplateRender from "./SVGRenderer/TemplateRender";
 import TextRender from "./SVGRenderer/TextRender";
 import VideoRender from "./SVGRenderer/VideoRender";
+import BooleanPathRender from './SVGRenderer/BooleanPathRender';
 
 /**
  * 
@@ -35,6 +36,7 @@ export default function (editor) {
     editor.registerRenderer('svg', 'iframe', new IFrameRender());
     editor.registerRenderer('svg', 'video', new VideoRender());
     editor.registerRenderer('svg', 'text', new TextRender());
+    editor.registerRenderer('svg', 'boolean-path', new BooleanPathRender());
     editor.registerRenderer('svg', 'svg-path', new SVGPathRender());
     editor.registerRenderer('svg', 'polygon', new SVGPolygonRender());
     editor.registerRenderer('svg', 'star', new SVGStarRender());

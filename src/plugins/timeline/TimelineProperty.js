@@ -10,6 +10,8 @@ import TimelineTopToolbar from "./timeline/TimelineTopToolbar";
 import TimelineKeyframeList from "./timeline/TimelineKeyframeList";
 import TimelineObjectList from "./timeline/TimelineObjectList";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { createComponent } from "el/sapa/functions/jsx";
+
 
 
 
@@ -37,10 +39,7 @@ export default class TimelineProperty extends BaseProperty {
   } 
 
   getTools() {
-    return /*html*/`
-      <object refClass="TimelinePlayControl" />
-      
-    `; 
+    return createComponent("TimelinePlayControl");
   }
 
   getClassName() {
@@ -50,29 +49,32 @@ export default class TimelineProperty extends BaseProperty {
   getBody() {
     return /*html*/`
       <div class='timeline-animation-area'>
-        <object refClass="TimelineAnimationProperty" />
+        ${createComponent("TimelineAnimationProperty")}
       </div>
       <div class='timeline-area'>
         <div class='timeline-header'>
           <div class='timeline-object-toolbar'>
-            <object refClass="TimelineTopToolbar" />
+            ${createComponent("TimelineTopToolbar")}
           </div>
           <div class='timeline-keyframe-toolbar' ref='$keyframeToolBar'>
-            <object refClass="KeyframeTimeView" ref='$keyframeTimeView' /> 
+            ${createComponent("KeyframeTimeView", {ref: '$keyframeTimeView'})}
           </div>
         </div>
         <div class='timeline-body'>
           <div class='timeline-object-area' ref='$area'>
-            <object refClass="TimelineObjectList" />
+            ${createComponent("TimelineObjectList")}
           </div>
           <div class='timeline-keyframe-area' ref='$keyframeArea'>
-            <object refClass="TimelineKeyframeList" ref='$keyframeList' />          
+            ${createComponent("TimelineKeyframeList", {ref: '$keyframeList'})}
           </div>
-          <object refClass="KeyframeTimeGridView" ref='$keyframeTimeGridView' />            
+            ${createComponent("KeyframeTimeGridView", {ref: '$keyframeTimeGridView'})}
         </div>
       </div>
       <div class='timeline-value-area'>
-        <object refClass="TimelineValueEditor" ref='$valueEditor' onchange='changeKeyframeValue' />
+      ${createComponent("TimelineValueEditor", {
+        ref: '$valueEditor',
+        onchange: 'changeKeyframeValue'
+      })}
       </div>
     `;
   }

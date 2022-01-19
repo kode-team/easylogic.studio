@@ -28,7 +28,7 @@ export class Length {
     this.value = value;
 
     if (isNumber(this.value) && isNaN(this.value)) {
-      throw new Error('NaN is not able to set')
+      this.value = 0;
     }
 
     this.unit = unit;
@@ -109,13 +109,13 @@ export class Length {
   }
 
   static z () {
-    return Length.px(0);
+    return 0;
   }
 
   /**
    * return calc()  css fuction string
    *
-   * Length.calc(`${Length.percent(100)} - ${Length.px(10)}`)
+   * Length.calc(`${Length.percent(100)} - ${10)}`
    *
    * @param {*} str
    */
@@ -159,7 +159,7 @@ export class Length {
           value = obj.value;
         }
 
-        return Length.px(value);
+        return value;
       } else if (obj.unit == "em") {
         var value = 0;
 
@@ -320,6 +320,14 @@ export class Length {
     return this.unit === "%" ? "percent" : this.unit;
   }
 
+  get isAuto () {
+    return this.value === 'auto' || this.unit === 'auto'
+  }
+
+  get isNotAuto () {
+    return !this.isAuto
+  }
+
   toJSON() {
     return this.toString(); // { value: this.value, unit: this.unit };
   }
@@ -377,6 +385,11 @@ export class Length {
 
   toPx(maxValue, fontSize = 16) {
     if (this.isPercent()) {
+
+      if (isUndefined(maxValue)) {
+        return this;
+      }
+
       return Length.px((this.value / 100) * maxValue);
     } else if (this.isPx()) {
       return this.clone();
@@ -384,6 +397,8 @@ export class Length {
       return Length.px(((this.value / 100) * maxValue) / 16);
     } else if (this.isString()) {
       return this.stringToPx(maxValue);
+    } else if (this.isNumber()) {
+      return Length.px(this.value).toPx(maxValue);
     }
   }
 
@@ -489,6 +504,19 @@ export class Length {
   isZero() {
     return this.value === 0;
   }
+
+  /**
+   * px 값으로 먼저 바꾸고 원래 있던 단위 값으로 maxValue 기준으로 다시 변경한다. 
+   * 
+   * @param {number} px 
+   * @param {number} maxValue 
+   * @returns {Length}
+   */
+  changeUnitValue (px, maxValue) {
+    const unit = this.unit;
+    return Length.px(px).to(unit, maxValue);
+  }
+
 }
 
 Length.auto = Length.string("auto");

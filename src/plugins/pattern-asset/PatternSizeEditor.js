@@ -9,17 +9,18 @@ import './PatternSizeEditor.scss';
 export default class PatternSizeEditor extends EditorElement {
 
     initState() { 
+
         return {
             index: this.props.index,
             x: Length.parse(this.props.x),
             y: Length.parse(this.props.y),
             width: Length.parse(this.props.width),
             height: Length.parse(this.props.height),
-            lineWidth: Length.parse(this.props.linewidth),
-            lineHeight: Length.parse(this.props.lineheight),            
-            backColor: this.props.backcolor,
-            foreColor: this.props.forecolor,
-            blendMode: this.props.blendmode,
+            lineWidth: Length.parse(this.props.lineWidth),
+            lineHeight: Length.parse(this.props.lineHeight),            
+            backColor: this.props.backColor,
+            foreColor: this.props.foreColor,
+            blendMode: this.props.blendMode,
             type: this.props.type,
         }
     }
@@ -41,20 +42,32 @@ export default class PatternSizeEditor extends EditorElement {
 
     [BIND('$miniView')] () {
 
+        const {
+            type, x, y, width, height, lineWidth, lineHeight, backColor, foreColor, blendMode
+        } = this.state;
+
         let obj = {
-            ...this.state,
+            type,
+            x, 
+            y,
+            width,
+            height,
+            lineWidth,
+            lineHeight,
+            backColor,
+            foreColor,
+            blendMode
         }        
 
-        if (this.state.width.value > 80) {
-            obj.width = Length.px(80);
-            obj.x = Length.px(obj.x.value / this.state.width.value/80)
+        if (this.state.width > 80) {
+            obj.width = 80;
+            obj.x = obj.x.value / this.state.width/80
         }
 
-        if (this.state.height.value > 80) {
-            obj.height = Length.px(80);
-            obj.y = Length.px(this.state.y.value / this.state.height.value/80)
+        if (this.state.height > 80) {
+            obj.height = 80;
+            obj.y = this.state.y.value / this.state.height/80
         }        
-
 
         const pattern = Pattern.parse(obj);
 
@@ -82,12 +95,26 @@ export default class PatternSizeEditor extends EditorElement {
     }
 
     viewBackgroundPositionPopup() {
-        this.emit("showPatternInfoPopup", {
-            changeEvent: (pattern) => {
-                this.updateData({ ...pattern })                
-            },
-            data: this.state,
-            instance: this
+
+        this.emit('getLayoutElement', (layoutElement) => {
+            const bodyRect = layoutElement.$bodyPanel.rect();
+            const rect = this.$el.rect();
+
+            const newRect = {
+                left: bodyRect.left + bodyRect.width - 240,
+                top: rect.top,
+                width: 240,
+                height: 300,
+            }         
+
+            this.emit("showPatternInfoPopup", {
+                changeEvent: (pattern) => {
+                    this.updateData({ ...pattern })                
+                },
+                data: this.state,
+                instance: this
+            }, newRect);
+
         });
     }
 }

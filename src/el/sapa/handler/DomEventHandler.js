@@ -37,6 +37,9 @@ export default class DomEventHandler extends BaseHandler {
         if (!this._domEvents) {
           this._domEvents = this.context.filterProps(CHECK_DOM_EVENT_PATTERN)
         }
+
+        // console.log(this.context, this._domEvents);
+
         this._domEvents.forEach(key => this.parseDomEvent(key));
     }
 
@@ -267,9 +270,7 @@ export default class DomEventHandler extends BaseHandler {
             capture: options  
           }
         }
-
-        // console.log(this.context, eventObject.eventName, eventObject.callback, options);
-      
+              
         Event.addDomEvent(
           eventObject.dom,
           eventObject.eventName,

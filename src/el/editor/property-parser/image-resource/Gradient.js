@@ -152,6 +152,34 @@ export class Gradient extends ImageResource {
     });
   }
 
+  sortToRight() {
+    var children = this.colorsteps;
+    const length = children.length; 
+
+    const unit = 100 / length;
+
+    children.forEach((it, index) => {
+      it.percent = unit * (index + 1);
+    })
+
+    this.sortColorStep();
+
+  }
+
+  sortToLeft() {
+    var children = this.colorsteps;
+    const length = children.length; 
+
+    const unit = 100 / length;
+
+    children.forEach((it, index) => {
+      it.percent = unit * index;
+    })
+
+    this.sortColorStep();
+
+  }  
+
   /**
    * add ColorStep List
    * @param {Array<ColorStep>} colorstepList

@@ -30,7 +30,7 @@ export default class PatternAssetsProperty extends BaseProperty {
     }));
 
     return /*html*/`
-      <object refClass="SelectEditor"  key="preset" value="${this.state.preset}" options="${options}" onchange="changePreset"  />
+      <object refClass="SelectEditor" ref="$assets"  key="preset" value="${this.state.preset}" options="${options}" onchange="changePreset"  />
     `
   }  
 

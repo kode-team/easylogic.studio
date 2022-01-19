@@ -748,14 +748,40 @@ export default class PathGenerator {
     }
 
     moveSelectedSegment(dx, dy) {
+        if (this.selectedPointList.length > 0) {
+            // 선택된 포인터를 옮길 때 
+            // curve 에 연결된 endPoint와 reversePoint 를 같이 책임 질 것인가? 
+            this.selectedPointList.forEach(it => {
+                var target = this.points[it.index][it.key]
+                target.x = it.x + dx;
+                target.y = it.y + dy;
+            })
+        } else if (this.selectedGroup) {
+            this.moveSelectedGroup(dx, dy);
 
-        // 선택된 포인터를 옮길 때 
-        // curve 에 연결된 endPoint와 reversePoint 를 같이 책임 질 것인가? 
-        this.selectedPointList.forEach(it => {
-            var target = this.points[it.index][it.key]
-            target.x = it.x + dx;
-            target.y = it.y + dy;
+        }
+
+    }
+
+    moveSelectedGroup(dx, dy) {
+
+        this.selectedGroup.points.forEach(it => {
+            const target = this.points[it.index];
+
+            target.startPoint.x = it.startPoint.x + dx;
+            target.startPoint.y = it.startPoint.y + dy;
+
+            target.endPoint.x = it.endPoint.x + dx;
+            target.endPoint.y = it.endPoint.y + dy;
+
+            target.reversePoint.x = it.reversePoint.x + dx;
+            target.reversePoint.y = it.reversePoint.y + dy;
+
         })
+    }    
+
+    get selectedGroup() {
+        return this.splitedGroupList[this.state.selectedGroupIndex];
     }
 
     get splitedGroupList() {
@@ -785,7 +811,8 @@ export default class PathGenerator {
         const groupList = this.groupList;
 
 
-        if (this.selectedPointList.length === 0) {
+        if (this.selectedPointList.length === 0 && this.state.selectedGroupIndex < 0) {
+            // 선택한 그룹 index 가 없으면 group index 를 모두 가져온다.
             return groupList.map(group => group.groupIndex);
         }
 
@@ -801,7 +828,7 @@ export default class PathGenerator {
 
         })
 
-        return [...groupIndexList];
+        return [...new Set([...groupIndexList, this.state.selectedGroupIndex])];
     }
 
     removeSelectedSegment() {
@@ -843,10 +870,10 @@ export default class PathGenerator {
         var state = this.state;
         var { isCurveSegment, segmentKey, connectedPoint } = state
 
-        if (this.selectedPointList.length > 1) {
             // 여러개가 동시에 선택된 상태에서는 
+        if (this.selectedPointList.length > 1) {
             this.moveSelectedSegment(dx, dy);
-        }  else {
+        } else if (this.selectedPointList.length === 1) {   // segment 1개를 선택했을 때 
             var { dx, dy, snapPointList } = this.calculateSnap(segmentKey, dx, dy, 3);
 
             this.snapPointList = snapPointList || []
@@ -886,7 +913,11 @@ export default class PathGenerator {
             }
 
             connectedPoint && this.copySegment(state.segment, state.connectedPoint)
-
+        } 
+        // group 이 선택되었다면 
+        else if (this.state.selectedGroupIndex > -1) {
+            // group 이 선택된 상태에서 
+            this.moveSelectedGroup(dx, dy);
         }
     }
 
@@ -1101,16 +1132,9 @@ export default class PathGenerator {
     makeStartPointGuide(prevPoint, current, nextPoint, index) {
         current.startPoint.isFirst = true;
 
-        // this.pathStringManager.M(current.startPoint)        
-
         if (current.curve === false) {
             this.segmentManager
                 .addPoint({}, current.startPoint, index, 'startPoint', this.isSelectedSegment('startPoint', index))
-
-            // if (!current.startPoint.isLast) {
-            //     this.segmentManager.addText(current.startPoint, index+1);
-            // }
-
 
         } else {
             this.segmentManager
@@ -1234,29 +1258,6 @@ export default class PathGenerator {
         }
     }
 
-    // makeMiddlePointGuideRealPath (prevPoint, current, nextPoint, index) {
-    //     return;
-    //     var mng = this.pathStringManager;
-    //     if (current.curve === false) { 
-    //         // 꼭지점
-    //         if (prevPoint.curve === false) {
-    //             mng.L(current.startPoint)
-    //         } else {
-    //             mng.Q(prevPoint.endPoint, current.startPoint)        
-    //         }
-    //     } else {    // 현재가 curve 일 때 
-    //         if (prevPoint.curve === false) { 
-    //             if (Point.isEqual(current.reversePoint, current.startPoint)) {
-    //                 mng.L( current.startPoint);
-    //             } else {
-    //                 mng.Q( current.reversePoint, current.startPoint);
-    //             }
-    //         } else {
-    //             mng.C(prevPoint.endPoint, current.reversePoint, current.startPoint)
-    //         }
-    //     }
-    // }
-
     checkInViewport(point) {
         const vertext = this.pathEditor.$viewport.applyVertexInverse([point.x, point.y, 0]);
         return this.pathEditor.$viewport.checkInViewport(vertext);
@@ -1373,10 +1374,6 @@ export default class PathGenerator {
 
             current.selected = this.selectedIndex === index;
 
-            // 각도를 표시 해준다. 
-            // 쓸 곳이 없다. 
-            // this.makeDistancePointGuide(prevPoint, current, nextPoint, index);
-
             if (current.command === 'M') {
                 this.makeStartPointGuide(prevPoint, current, nextPoint, index);
             } else {
@@ -1391,7 +1388,6 @@ export default class PathGenerator {
                     this.isSelectedSegment('startPoint', current?.index) ||
                     this.isSelectedSegment('reversePoint', current?.index))
 
-                // this.makeMiddlePointGuideRealPath(prevPoint, current, nextPoint, index);
                 this.makeMiddlePointGuideSplitLine(prevPoint, current, nextPoint, index, isSiblingSelected);
                 this.makeMiddlePointGuideSegment(prevPoint, current, nextPoint, index, isSiblingSelected);
             }
@@ -1520,7 +1516,7 @@ export default class PathGenerator {
     /**
      * isGroupSegment 이 true 일 경우
      * 해당 선택한 영역을 stripe 형태로 보여줌 
-     * @returns 
+     * @returns {string}
      */
     makePathArea() {
         const pathList = this.splitedGroupList.map(({ startPointIndex, points }, groupIndex) => {

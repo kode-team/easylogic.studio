@@ -8,6 +8,10 @@ export default class Undo extends MenuItem {
     return "Undo";
   }
 
+  isHideTitle() {
+    return true;
+  }
+
   clickButton(e) {
     this.emit('history.undo');
   }
