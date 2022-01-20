@@ -7,6 +7,12 @@
   right:0px;
   bottom:0px;
 
+  &.dragging {
+    .area-line {
+      pointer-events: none;
+    }
+  }
+
   .gradient-rect {
     position: absolute;
     left: 0px;
@@ -93,6 +99,23 @@
     path {
       fill: transparent;
       stroke: white;
+      pointer-events: stroke;
+
+      &.area-line {
+        stroke-width: 18;
+        stroke: transparent;
+      }
+    }
+
+    rect {
+      pointer-events: all;      
+
+      &.colorstep {
+        // fill: black;
+        stroke: white;
+        stroke-width: 0.5;
+        outline: none;
+      }
     }
 
     circle {
@@ -111,11 +134,17 @@
       &.colorstep {
         stroke-width: 0.5;
         stroke: white;
-        r: 6;
+        r: 7;
       }
 
-      &:not(.colorstep) {
+      &:not(.colorstep):not(.hover-colorstep){
         fill: white;
+      }
+
+      &.hover-colorstep {
+        pointer-events: none;
+        r: 8;
+        filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.7));
       }
     }
     

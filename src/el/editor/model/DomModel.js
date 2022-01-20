@@ -11,6 +11,7 @@ import { Constraints, GradientType, Layout } from "../types/model";
 import { rectToVerties } from "el/utils/collision";
 import { calculateRotationOriginMat4, degreeToRadian, vertiesMap } from "el/utils/math";
 import { vec3 } from "gl-matrix";
+import { Border } from 'el/editor/property-parser/Border';
 
 
 const editableList = [
@@ -334,11 +335,51 @@ export class DomModel extends GroupModel {
   }
 
   getBackgroundImage(index) {
-    const value = this.json['background-image'];
-
-    const backgroundImages = BackgroundImage.parseStyle(STRING_TO_CSS(value));
+    const backgroundImages = this.computedValue('background-image');
 
     return backgroundImages[index || 0]
+  }
+
+  get borderWidth () {
+    const border = Border.parseStyle(this.json.border);
+    const borderObject = Border.parseValue(border.border);
+
+    if (borderObject?.width) {
+      return {
+        borderLeftWidth: borderObject?.width,
+        borderRightWidth: borderObject?.width,
+        borderTopWidth: borderObject?.width,
+        borderBottomWidth: borderObject?.width,
+      }
+    }
+
+    return {
+      borderLeftWidth: 0,
+      borderRightWidth: 0,
+      borderTopWidth: 0,
+      borderBottomWidth: 0
+    }
+  }
+
+  get contentBox () {
+    const x = 0;
+    const y = 0;
+    const width = this.screenWidth;
+    const height = this.screenHeight;
+
+    if (true /*this.json['box-sizing'] === 'border-box'*/) {    // 현재는 border-box 로 고정이기 때문에 항상 border Width 를 같이 계산해준다. 
+      const borderWidth = this.borderWidth;
+      return {
+        x: x + borderWidth.borderLeftWidth,
+        y: y + borderWidth.borderTopWidth,
+        width: width - borderWidth.borderLeftWidth - borderWidth.borderRightWidth,
+        height: height - borderWidth.borderTopWidth - borderWidth.borderBottomWidth
+      }
+    }
+
+    return {
+      x, y, width, height
+    }
   }
 
 
@@ -360,14 +401,12 @@ export class DomModel extends GroupModel {
    */
   createBackgroundImageMatrix(index) {
 
+    const contentBox = this.contentBox;
     const backgroundImage = this.getBackgroundImage(index);
 
     const { image } = backgroundImage;
 
-    const maxWidth = this.screenWidth;
-    const maxHeight = this.screenHeight;
-
-    const backRect = backgroundImage.getOffset(maxWidth, maxHeight);
+    const backRect = backgroundImage.getOffset(contentBox);
 
     const backVerties = vertiesMap(rectToVerties(backRect.x, backRect.y, backRect.width, backRect.height), this.absoluteMatrix);
     const result = {
@@ -411,17 +450,31 @@ export class DomModel extends GroupModel {
         const startPoint = vec3.add([], result.centerPosition, [0, result.gradientLineLength/2, 0]);        
         const endPoint = vec3.subtract([], result.centerPosition, [0, result.gradientLineLength/2, 0]);
 
-        const [newStartPoint, newEndPoint] = vertiesMap(
-          [startPoint, endPoint],
+        const areaStartPoint = vec3.add([], startPoint, [0, 0, 0]);
+        const areaEndPoint = vec3.add([], endPoint, [0, 0, 0]);
+
+        const [
+          newStartPoint, 
+          newEndPoint,
+          newAreaStartPoint,
+          newAreaEndPoint
+        ] = vertiesMap(
+          [startPoint, endPoint,
+            areaStartPoint, areaEndPoint
+          ],
           calculateRotationOriginMat4(image.angle, result.centerPosition)
         );
 
         result.endPoint = newEndPoint;
         result.startPoint = newStartPoint
+        result.areaStartPoint = newAreaStartPoint;
+        result.areaEndPoint = newAreaEndPoint;
 
         result.colorsteps = image.colorsteps.map(it => {
           const offset = it.toLength().toPx(result.gradientLineLength).value;
           return {
+            id: it.id,
+            cut: it.cut,
             color: it.color,
             pos: vec3.lerp([], result.startPoint, result.endPoint, offset / result.gradientLineLength)
           }

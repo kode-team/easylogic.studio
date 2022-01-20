@@ -81,6 +81,47 @@ export class Gradient extends ImageResource {
     return colorstep;
   }
 
+  pickColorStep(percent) {
+    var colorsteps = this.colorsteps;
+    if (!colorsteps.length) {
+      return { percent: 0, color: "rgba(0,0,0,0)" };
+    }
+
+    if (percent < colorsteps[0].percent) {
+      return {
+        percent,
+        color: colorsteps[0].color
+      }
+    }
+
+    var lastIndex = colorsteps.length - 1;
+    if (colorsteps[lastIndex].percent < percent) {
+      return {
+        percent,
+        color: colorsteps[lastIndex].color
+      }
+    }
+
+    for (var i = 0, len = colorsteps.length - 1; i < len; i++) {
+      var step = colorsteps[i];
+      var nextStep = colorsteps[i + 1];
+
+      if (step.percent <= percent && percent <= nextStep.percent) {
+        var color = Color.mix(
+          step.color,
+          nextStep.color,
+          (percent - step.percent) / (nextStep.percent - step.percent),
+          "rgb"
+        );
+
+        return {
+          percent,
+          color
+        }
+      }
+    }
+  }  
+
   insertColorStep(
     percent,
     startColor = "rgba(216,216,216,0)",
@@ -101,7 +142,7 @@ export class Gradient extends ImageResource {
       this.addColorStep(
         new ColorStep({ index: 0, color: colorsteps[0].color, percent })
       );
-      return;
+      return 0;
     }
 
     var lastIndex = colorsteps.length - 1;
@@ -111,7 +152,7 @@ export class Gradient extends ImageResource {
 
       this.addColorStep(new ColorStep({ index, color, percent }));
 
-      return;
+      return index;
     }
 
     for (var i = 0, len = colorsteps.length - 1; i < len; i++) {
@@ -130,7 +171,7 @@ export class Gradient extends ImageResource {
           new ColorStep({ index: step.index + 1, color, percent })
         );
 
-        return;
+        return i + 1;
       }
     }
   }
@@ -207,6 +248,10 @@ export class Gradient extends ImageResource {
     } else {
       this.json.colorsteps = [];
     }
+  }
+
+  removeColorStepByIndex(index) {
+    this.json.colorsteps.splice(index, 1)
   }
 
   removeColorStep(id) {

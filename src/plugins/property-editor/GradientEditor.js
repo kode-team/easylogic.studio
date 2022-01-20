@@ -1,6 +1,5 @@
 
-import { LOAD, CLICK, POINTERSTART, BIND, PREVENT, DOUBLECLICK, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF, KEYUP, KEYDOWN, KEYPRESS, DOMDIFF, ENTER, DELETE, BACKSPACE, EQUAL, MINUS, BRACKET_RIGHT, BRACKET_LEFT } from "el/sapa/Event";
-import { Length } from "el/editor/unit/Length";
+import { LOAD, CLICK, POINTERSTART, BIND, PREVENT, DOUBLECLICK, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF, KEYUP, DOMDIFF} from "el/sapa/Event";
 import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
 import { iconUse } from "el/editor/icon/icon";
@@ -9,7 +8,6 @@ import { END, MOVE } from "el/editor/types/event";
 
 import './GradientEditor.scss';
 import { RadialGradientType } from "el/editor/types/model";
-import { KEY_CODE } from 'el/editor/types/key';
 
 var imageTypeList = [
   'static-gradient',
@@ -29,11 +27,20 @@ var iconList = {
 export default class GradientEditor extends EditorElement {
 
   initState() {
+    const image = BackgroundImage.parseImage(this.props.value || '') || { type: 'static-gradient', colorsteps: [] }
+
+    const id = image.colorsteps[this.props.index]?.id;
+    this.$selection.selectColorStep(id);
+
+    if (id) {
+      this.currentStep = image.colorsteps.find(it => this.$selection.isSelectedColorStep(it.id))
+    }
 
     return {
+      id,
       index: +(this.props.index || 0),
       value: this.props.value,
-      image: BackgroundImage.parseImage(this.props.value || '') || { type: 'static-gradient', colorsteps: [] }
+      image,
     }
   }
 
@@ -376,7 +383,7 @@ export default class GradientEditor extends EditorElement {
 
   }
 
-  [SUBSCRIBE('setColorStepColor')](color) {
+  [SUBSCRIBE_SELF('setColorStepColor')](color) {
 
     if (this.state.image.type === 'static-gradient') {
       this.state.image.colorsteps[0].color = color;

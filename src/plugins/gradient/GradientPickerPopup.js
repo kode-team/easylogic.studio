@@ -66,9 +66,20 @@ export default class GradientPickerPopup extends BasePopup {
     return createComponent("GradientEditor", {
       ref: "$g",
       value: `${this.state.image}`,
-      selectedIndex: this.state.selectColorStepIndex,
+      index: this.state.selectColorStepIndex,
       onchange: 'changeGradientEditor'
     })
+  }
+
+  [SUBSCRIBE('updateGradientEditor')] (data, targetColorStep) {
+
+    this.state.image = isString(data) ? BackgroundImage.parseImage(data) : data;
+
+    this.state.selectColorStepIndex = this.state.image.colorsteps.findIndex(it => it.color === targetColorStep.color && it.percent === targetColorStep.percent);
+
+    this.children.$color.setValue(targetColorStep.color);
+
+    this.refresh();
   }
 
   [SUBSCRIBE_SELF('changeGradientEditor')] (data) {

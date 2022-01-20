@@ -7153,6 +7153,36 @@ class Gradient extends ImageResource {
       this.sortColorStep();
     return colorstep;
   }
+  pickColorStep(percent) {
+    var colorsteps = this.colorsteps;
+    if (!colorsteps.length) {
+      return { percent: 0, color: "rgba(0,0,0,0)" };
+    }
+    if (percent < colorsteps[0].percent) {
+      return {
+        percent,
+        color: colorsteps[0].color
+      };
+    }
+    var lastIndex = colorsteps.length - 1;
+    if (colorsteps[lastIndex].percent < percent) {
+      return {
+        percent,
+        color: colorsteps[lastIndex].color
+      };
+    }
+    for (var i = 0, len2 = colorsteps.length - 1; i < len2; i++) {
+      var step2 = colorsteps[i];
+      var nextStep = colorsteps[i + 1];
+      if (step2.percent <= percent && percent <= nextStep.percent) {
+        var color2 = Color.mix(step2.color, nextStep.color, (percent - step2.percent) / (nextStep.percent - step2.percent), "rgb");
+        return {
+          percent,
+          color: color2
+        };
+      }
+    }
+  }
   insertColorStep(percent, startColor = "rgba(216,216,216,0)", endColor = "rgba(216,216,216,1)") {
     var colorsteps = this.colorsteps;
     if (!colorsteps.length) {
@@ -7165,14 +7195,14 @@ class Gradient extends ImageResource {
     if (percent < colorsteps[0].percent) {
       colorsteps[0].index = 1;
       this.addColorStep(new ColorStep({ index: 0, color: colorsteps[0].color, percent }));
-      return;
+      return 0;
     }
     var lastIndex = colorsteps.length - 1;
     if (colorsteps[lastIndex].percent < percent) {
       var color2 = colorsteps[lastIndex].color;
       var index2 = colorsteps[lastIndex].index + 1;
       this.addColorStep(new ColorStep({ index: index2, color: color2, percent }));
-      return;
+      return index2;
     }
     for (var i = 0, len2 = colorsteps.length - 1; i < len2; i++) {
       var step2 = colorsteps[i];
@@ -7180,7 +7210,7 @@ class Gradient extends ImageResource {
       if (step2.percent <= percent && percent <= nextStep.percent) {
         var color2 = Color.mix(step2.color, nextStep.color, (percent - step2.percent) / (nextStep.percent - step2.percent), "rgb");
         this.addColorStep(new ColorStep({ index: step2.index + 1, color: color2, percent }));
-        return;
+        return i + 1;
       }
     }
   }
@@ -7234,6 +7264,9 @@ class Gradient extends ImageResource {
     } else {
       this.json.colorsteps = [];
     }
+  }
+  removeColorStepByIndex(index2) {
+    this.json.colorsteps.splice(index2, 1);
   }
   removeColorStep(id) {
     this.json.colorsteps = this.json.colorsteps.filter((it) => it.id != id);
@@ -7769,10 +7802,12 @@ class BackgroundImage extends PropertyItem {
     }
     return super.checkField(key, value);
   }
-  recoverOffset(newX, newY, maxWidth, maxHeight, dx = 0, dy = 0) {
+  recoverOffset(newX, newY, contentBox, dx = 0, dy = 0) {
     const { x: x2, y: y2, width: width2, height: height2 } = this.json;
-    const newWidth = Math.floor(width2.toPx(maxWidth).value + dx);
-    const newHeight = Math.floor(height2.toPx(maxHeight).value + dy);
+    const newWidth = Math.floor(width2.toPx(contentBox.width).value + dx);
+    const newHeight = Math.floor(height2.toPx(contentBox.height).value + dy);
+    newX -= contentBox.x;
+    newY -= contentBox.y;
     if (newWidth < 0) {
       newX += newWidth;
     }
@@ -7785,41 +7820,41 @@ class BackgroundImage extends PropertyItem {
     if (x2.isPercent()) {
       if (Math.abs(newX) < dist2) {
         nextX = Length.percent(0);
-      } else if (Math.abs(maxWidth - newWidth - newX) < dist2) {
+      } else if (Math.abs(contentBox.width - newWidth - newX) < dist2) {
         nextX = Length.percent(100);
-      } else if (Math.abs((maxWidth - newWidth) / 2 - newX) < dist2) {
+      } else if (Math.abs((contentBox.width - newWidth) / 2 - newX) < dist2) {
         nextX = Length.percent(50);
       } else {
-        nextX = Length.percent(newX / (maxWidth - newWidth) * 100);
+        nextX = Length.percent(newX / (contentBox.width - newWidth) * 100);
       }
     }
     if (y2.isPercent()) {
       if (Math.abs(newY) < dist2) {
         nextY = Length.percent(0);
-      } else if (Math.abs(maxHeight - newHeight - newY) < dist2) {
+      } else if (Math.abs(contentBox.height - newHeight - newY) < dist2) {
         nextY = Length.percent(100);
-      } else if (Math.abs((maxHeight - newHeight) / 2 - newY) < dist2) {
+      } else if (Math.abs((contentBox.height - newHeight) / 2 - newY) < dist2) {
         nextY = Length.percent(50);
       } else {
-        nextY = Length.percent(newY / (maxHeight - newHeight) * 100);
+        nextY = Length.percent(newY / (contentBox.height - newHeight) * 100);
       }
     }
     return {
       x: nextX,
       y: nextY,
-      width: Length.px(Math.abs(newWidth)).to(width2.unit, maxWidth),
-      height: Length.px(Math.abs(newHeight)).to(height2.unit, maxHeight)
+      width: Length.px(Math.abs(newWidth)).to(width2.unit, contentBox.width),
+      height: Length.px(Math.abs(newHeight)).to(height2.unit, contentBox.height)
     };
   }
-  getOffset(containerWidth, containerHeight) {
+  getOffset(contentBox) {
     const { x: x2, y: y2, width: width2, height: height2 } = this.json;
-    const newWidth = width2.toPx(containerWidth);
-    const newHeight = height2.toPx(containerHeight);
-    const newX = x2.toPx(containerWidth);
-    const newY = y2.toPx(containerHeight);
+    const newWidth = width2.toPx(contentBox.width);
+    const newHeight = height2.toPx(contentBox.height);
+    const newX = x2.toPx(contentBox.width);
+    const newY = y2.toPx(contentBox.height);
     return {
-      x: x2.isPercent() ? (containerWidth - newWidth) * (x2.value / 100) : newX,
-      y: y2.isPercent() ? (containerHeight - newHeight) * (y2.value / 100) : newY,
+      x: contentBox.x + (x2.isPercent() ? (contentBox.width - newWidth) * (x2.value / 100) : newX),
+      y: contentBox.y + (y2.isPercent() ? (contentBox.height - newHeight) * (y2.value / 100) : newY),
       width: newWidth.value,
       height: newHeight.value
     };
@@ -31752,19 +31787,50 @@ class DomModel extends GroupModel {
     }
   }
   getBackgroundImage(index2) {
-    const value = this.json["background-image"];
-    const backgroundImages = BackgroundImage.parseStyle(STRING_TO_CSS(value));
+    const backgroundImages = this.computedValue("background-image");
     return backgroundImages[index2 || 0];
+  }
+  get borderWidth() {
+    const border2 = Border.parseStyle(this.json.border);
+    const borderObject = Border.parseValue(border2.border);
+    if (borderObject == null ? void 0 : borderObject.width) {
+      return {
+        borderLeftWidth: borderObject == null ? void 0 : borderObject.width,
+        borderRightWidth: borderObject == null ? void 0 : borderObject.width,
+        borderTopWidth: borderObject == null ? void 0 : borderObject.width,
+        borderBottomWidth: borderObject == null ? void 0 : borderObject.width
+      };
+    }
+    return {
+      borderLeftWidth: 0,
+      borderRightWidth: 0,
+      borderTopWidth: 0,
+      borderBottomWidth: 0
+    };
+  }
+  get contentBox() {
+    const x2 = 0;
+    const y2 = 0;
+    const width2 = this.screenWidth;
+    const height2 = this.screenHeight;
+    {
+      const borderWidth = this.borderWidth;
+      return {
+        x: x2 + borderWidth.borderLeftWidth,
+        y: y2 + borderWidth.borderTopWidth,
+        width: width2 - borderWidth.borderLeftWidth - borderWidth.borderRightWidth,
+        height: height2 - borderWidth.borderTopWidth - borderWidth.borderBottomWidth
+      };
+    }
   }
   getGradientLineLength(width2, height2, angle2) {
     return Math.abs(width2 * Math.sin(degreeToRadian$1(angle2))) + Math.abs(height2 * Math.cos(degreeToRadian$1(angle2)));
   }
   createBackgroundImageMatrix(index2) {
+    const contentBox = this.contentBox;
     const backgroundImage2 = this.getBackgroundImage(index2);
     const { image: image2 } = backgroundImage2;
-    const maxWidth = this.screenWidth;
-    const maxHeight = this.screenHeight;
-    const backRect = backgroundImage2.getOffset(maxWidth, maxHeight);
+    const backRect = backgroundImage2.getOffset(contentBox);
     const backVerties = vertiesMap(rectToVerties(backRect.x, backRect.y, backRect.width, backRect.height), this.absoluteMatrix);
     const result = {
       backRect,
@@ -31797,12 +31863,28 @@ class DomModel extends GroupModel {
         result.centerPosition = lerp([], backVerties[0], backVerties[2], 0.5);
         const startPoint = add$1([], result.centerPosition, [0, result.gradientLineLength / 2, 0]);
         const endPoint = subtract([], result.centerPosition, [0, result.gradientLineLength / 2, 0]);
-        const [newStartPoint, newEndPoint] = vertiesMap([startPoint, endPoint], calculateRotationOriginMat4(image2.angle, result.centerPosition));
+        const areaStartPoint = add$1([], startPoint, [0, 0, 0]);
+        const areaEndPoint = add$1([], endPoint, [0, 0, 0]);
+        const [
+          newStartPoint,
+          newEndPoint,
+          newAreaStartPoint,
+          newAreaEndPoint
+        ] = vertiesMap([
+          startPoint,
+          endPoint,
+          areaStartPoint,
+          areaEndPoint
+        ], calculateRotationOriginMat4(image2.angle, result.centerPosition));
         result.endPoint = newEndPoint;
         result.startPoint = newStartPoint;
+        result.areaStartPoint = newAreaStartPoint;
+        result.areaEndPoint = newAreaEndPoint;
         result.colorsteps = image2.colorsteps.map((it) => {
           const offset = it.toLength().toPx(result.gradientLineLength).value;
           return {
+            id: it.id,
+            cut: it.cut,
             color: it.color,
             pos: lerp([], result.startPoint, result.endPoint, offset / result.gradientLineLength)
           };
@@ -36448,9 +36530,15 @@ class GradientPickerPopup extends BasePopup {
     return createComponent("GradientEditor", {
       ref: "$g",
       value: `${this.state.image}`,
-      selectedIndex: this.state.selectColorStepIndex,
+      index: this.state.selectColorStepIndex,
       onchange: "changeGradientEditor"
     });
+  }
+  [SUBSCRIBE("updateGradientEditor")](data, targetColorStep) {
+    this.state.image = isString(data) ? BackgroundImage.parseImage(data) : data;
+    this.state.selectColorStepIndex = this.state.image.colorsteps.findIndex((it) => it.color === targetColorStep.color && it.percent === targetColorStep.percent);
+    this.children.$color.setValue(targetColorStep.color);
+    this.refresh();
   }
   [SUBSCRIBE_SELF("changeGradientEditor")](data) {
     this.state.image = isString(data) ? BackgroundImage.parseImage(data) : data;
@@ -42529,10 +42617,18 @@ var iconList = {
 };
 class GradientEditor extends EditorElement {
   initState() {
+    var _a;
+    const image2 = BackgroundImage.parseImage(this.props.value || "") || { type: "static-gradient", colorsteps: [] };
+    const id = (_a = image2.colorsteps[this.props.index]) == null ? void 0 : _a.id;
+    this.$selection.selectColorStep(id);
+    if (id) {
+      this.currentStep = image2.colorsteps.find((it) => this.$selection.isSelectedColorStep(it.id));
+    }
     return {
+      id,
       index: +(this.props.index || 0),
       value: this.props.value,
-      image: BackgroundImage.parseImage(this.props.value || "") || { type: "static-gradient", colorsteps: [] }
+      image: image2
     };
   }
   setValue(value) {
@@ -42790,7 +42886,7 @@ class GradientEditor extends EditorElement {
     var { image: image2 } = this.state;
     return `linear-gradient(to right, ${Gradient.toColorString(image2.colorsteps)})`;
   }
-  [SUBSCRIBE("setColorStepColor")](color2) {
+  [SUBSCRIBE_SELF("setColorStepColor")](color2) {
     if (this.state.image.type === "static-gradient") {
       this.state.image.colorsteps[0].color = color2;
       this.refresh();
@@ -55547,8 +55643,7 @@ class GradientEditorView$1 extends EditorElement {
     this.state.backImages = BackgroundImage.parseStyle(cssValue);
     const current = this.$selection.current;
     this.state.gradient = this.state.backImages[this.state.index];
-    this.state.maxWidth = current.screenWidth;
-    this.state.maxHeight = current.screenHeight;
+    this.state.contentBox = current.contentBox;
     this.state.backgroundImageMatrix = current.createBackgroundImageMatrix(this.state.index);
   }
   [POINTERSTART("$el .resizer") + LEFT_BUTTON + MOVE("calculateMovedResizer") + END("calculateMovedEndResizer") + PREVENT](e2) {
@@ -55565,7 +55660,7 @@ class GradientEditorView$1 extends EditorElement {
     const realDist = subtract([], nextResult, currentResult);
     const { backRect: rect2 } = this.state.backgroundImageMatrix;
     const backgroundImage2 = this.state.gradient;
-    const backRect = backgroundImage2.recoverOffset(rect2.x, rect2.y, this.state.maxWidth, this.state.maxHeight, realDist[0], realDist[1]);
+    const backRect = backgroundImage2.recoverOffset(rect2.x, rect2.y, this.state.contentBox, realDist[0], realDist[1]);
     this.state.backgroundImages[this.state.index].reset({
       x: backRect.x,
       y: backRect.y,
@@ -55591,7 +55686,7 @@ class GradientEditorView$1 extends EditorElement {
     const realDist = subtract([], nextResult, currentResult);
     const { backRect: rect2 } = this.state.backgroundImageMatrix;
     const backgroundImage2 = this.state.gradient;
-    const backRect = backgroundImage2.recoverOffset(rect2.x + realDist[0], rect2.y + realDist[1], this.state.maxWidth, this.state.maxHeight);
+    const backRect = backgroundImage2.recoverOffset(rect2.x + realDist[0], rect2.y + realDist[1], this.state.contentBox);
     this.state.backgroundImages[this.state.index].reset({
       x: backRect.x,
       y: backRect.y
@@ -55605,7 +55700,7 @@ class GradientEditorView$1 extends EditorElement {
     }
     this.updateData();
   }
-  [POINTERSTART("$el .gradient-angle circle") + LEFT_BUTTON + MOVE("calculateMovedAngle") + END("calculatedMovedEndAngle") + PREVENT](e2) {
+  [POINTERSTART("$el .gradient-angle .rotate") + LEFT_BUTTON + MOVE("calculateMovedAngle") + END("calculatedMovedEndAngle") + PREVENT](e2) {
     this.state.$target = e2.$dt;
     this.initializeData();
     this.state.centerX = +this.state.$target.data("center-x");
@@ -55659,7 +55754,7 @@ class GradientEditorView$1 extends EditorElement {
     ]);
     const localPosition = vertiesMap([worldPosition], this.$selection.current.absoluteMatrixInverse)[0];
     const backgroundImage2 = this.state.gradient;
-    const backRect = backgroundImage2.getOffset(this.state.maxWidth, this.state.maxHeight);
+    const backRect = backgroundImage2.getOffset(this.state.contentBox);
     const newX = localPosition[0] - backRect.x;
     const newY = localPosition[1] - backRect.y;
     this.state.backgroundImages[this.state.index].image.radialPosition = [
@@ -55686,6 +55781,184 @@ class GradientEditorView$1 extends EditorElement {
       "background-image": value
     }));
   }
+  [KEYUP("$el .colorstep")](e2) {
+    const index2 = +e2.$dt.data("index");
+    switch (e2.code) {
+      case "Delete":
+      case "Backspace":
+        this.removeStep(index2);
+        break;
+      case "BracketRight":
+        this.sortToRight(index2);
+        break;
+      case "BracketLeft":
+        this.sortToLeft(index2);
+        break;
+      case "Equal":
+        this.appendColorStep(index2);
+        break;
+      case "Minus":
+        this.prependColorStep(index2);
+        break;
+    }
+  }
+  removeStep(currentIndex) {
+    const image2 = this.state.lastBackgroundMatrix.backgroundImage.image;
+    image2.removeColorStepByIndex(currentIndex);
+    this.updateColorStepStatus(image2, -1);
+  }
+  sortToRight() {
+    const image2 = this.state.lastBackgroundMatrix.backgroundImage.image;
+    image2.sortRight();
+    this.updateColorStepStatus(image2, -1);
+  }
+  sortToLeft() {
+    const image2 = this.state.lastBackgroundMatrix.backgroundImage.image;
+    image2.sortLeft();
+    this.updateColorStepStatus(image2, -1);
+  }
+  appendColorStep(currentIndex) {
+    const nextIndex = currentIndex + 1;
+    const image2 = this.state.lastBackgroundMatrix.backgroundImage.image;
+    const currentColorStep = image2.colorsteps[currentIndex];
+    const nextColorStep = image2.colorsteps[nextIndex];
+    let newIndex = -1;
+    if (!nextColorStep) {
+      if (currentColorStep.percent !== 100) {
+        newIndex = image2.insertColorStep(currentColorStep.percent + (100 - currentColorStep.percent) / 2);
+      }
+    } else {
+      newIndex = image2.insertColorStep(currentColorStep.percent + (nextColorStep.percent - currentColorStep.percent) / 2);
+    }
+    this.updateColorStepStatus(image2, newIndex);
+  }
+  prependColorStep(currentIndex) {
+    const prevIndex = currentIndex - 1;
+    const image2 = this.state.lastBackgroundMatrix.backgroundImage.image;
+    const currentColorStep = image2.colorsteps[currentIndex];
+    const prevColorStep = image2.colorsteps[prevIndex];
+    let newIndex = -1;
+    if (!prevColorStep) {
+      if (currentColorStep.percent !== 0) {
+        newIndex = image2.insertColorStep(currentColorStep.percent);
+      }
+    } else {
+      newIndex = image2.insertColorStep(prevColorStep.percent + (currentColorStep.percent - prevColorStep.percent) / 2);
+    }
+    this.updateColorStepStatus(image2, newIndex);
+  }
+  [POINTERSTART("$el .colorstep") + MOVE("moveColorStep") + END("moveEndColorStep")](e2) {
+    this.$el.toggleClass("dragging", true);
+    this.state.hoverColorStep = null;
+    this.initializeData();
+    this.$targetIndex = +e2.$dt.data("index");
+    if (e2.altKey) {
+      this.removeStep(this.$targetIndex);
+      this.state.altKey = true;
+      return;
+    }
+    const result = this.state.backgroundImageMatrix;
+    this.centerPosition = this.$viewport.applyVertex(result.centerPosition);
+    this.startPoint = this.$viewport.applyVertex(result.startPoint);
+    this.endPoint = this.$viewport.applyVertex(result.endPoint);
+    this.screenXY = this.$viewport.applyVertex(result.colorsteps[this.$targetIndex].pos);
+    this.rotateInverse = calculateRotationOriginMat4(-this.state.gradient.image.angle, this.centerPosition);
+  }
+  moveColorStep(dx, dy) {
+    if (this.state.altKey)
+      return;
+    const nextPoint = add$1([], this.screenXY, [dx, dy, 0]);
+    const [baseStartPoint, baseEndPoint, baseNextPoint] = vertiesMap([this.startPoint, this.endPoint, nextPoint], this.rotateInverse);
+    let newDist = 0;
+    const [s, e2, n] = [baseStartPoint[1], baseEndPoint[1], baseNextPoint[1]];
+    const baseDefaultDist = Math.abs(s - e2);
+    if (s < n) {
+      newDist = -1 * Math.abs(n - s) / baseDefaultDist * 100;
+    } else if (e2 > n) {
+      newDist = Math.abs(n - s) / baseDefaultDist * 100;
+    } else {
+      const distStart = Math.abs(s - n);
+      const distEnd = Math.abs(e2 - n);
+      newDist = distStart / (distEnd + distStart) * 100;
+    }
+    const baseDist = dist(this.startPoint, this.endPoint);
+    const image2 = this.state.gradient.image;
+    image2.colorsteps[this.$targetIndex].setValue(newDist, baseDist);
+    const targetColorStep = {
+      color: image2.colorsteps[this.$targetIndex].color,
+      percent: image2.colorsteps[this.$targetIndex].percent
+    };
+    const nextImage = this.state.backgroundImages[this.state.index].image;
+    nextImage.colorsteps = image2.colorsteps.map((it) => {
+      return it;
+    });
+    nextImage.sortColorStep();
+    this.emit("updateGradientEditor", nextImage, targetColorStep);
+    var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.backgroundImages));
+    this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
+      "background-image": value
+    }));
+  }
+  moveEndColorStep(dx, dy) {
+    if (this.state.altKey) {
+      this.state.altKey = false;
+      return;
+    }
+    if (dx === 0 && dy === 0) {
+      const image2 = this.state.backgroundImages[this.state.index].image;
+      image2.colorsteps[this.$targetIndex].toggle();
+      const targetColorStep = {
+        color: image2.colorsteps[this.$targetIndex].color,
+        percent: image2.colorsteps[this.$targetIndex].percent
+      };
+      this.emit("updateGradientEditor", image2, targetColorStep);
+      var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.backgroundImages));
+      this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
+        "background-image": value
+      }));
+    }
+    this.$el.toggleClass("dragging", false);
+  }
+  updateColorStepStatus(image2, index2) {
+    this.initializeData();
+    const { color: color2, percent } = image2.colorsteps[index2] || {};
+    this.emit("updateGradientEditor", image2, { color: color2, percent });
+    this.state.backgroundImages[this.state.index].image = image2;
+    var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.backgroundImages));
+    this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
+      "background-image": value
+    }));
+    this.state.hoverColorStep = null;
+  }
+  [POINTERSTART("$el .area-line")]() {
+    const image2 = this.state.lastBackgroundMatrix.backgroundImage.image;
+    const index2 = image2.insertColorStep(this.state.hoverColorStep.percent);
+    this.updateColorStepStatus(image2, index2);
+  }
+  [POINTEROUT("$el .area-line")](evt) {
+    if (this.state.hoverColorStep) {
+      this.state.hoverColorStep = null;
+      this.refresh();
+    }
+  }
+  [POINTERMOVE("$el .area-line")](evt) {
+    const nextPoint = this.$viewport.applyVertex(this.$viewport.getWorldPosition(evt));
+    const [baseStartPoint, baseEndPoint, baseNextPoint] = vertiesMap([this.state.startPoint, this.state.endPoint, nextPoint], this.state.rotateInverse);
+    let newDist = 0;
+    const [s, e2, n] = [baseStartPoint[1], baseEndPoint[1], baseNextPoint[1]];
+    const baseDefaultDist = Math.abs(s - e2);
+    if (s < n) {
+      newDist = -1 * Math.abs(n - s) / baseDefaultDist * 100;
+    } else if (e2 > n) {
+      newDist = Math.abs(n - s) / baseDefaultDist * 100;
+    } else {
+      const distStart = Math.abs(s - n);
+      const distEnd = Math.abs(e2 - n);
+      newDist = distStart / (distEnd + distStart) * 100;
+    }
+    this.state.hoverColorStep = this.state.lastBackgroundMatrix.backgroundImage.image.pickColorStep(newDist);
+    this.refresh();
+  }
   refresh() {
     if (this.state.isShow) {
       this.load();
@@ -55696,7 +55969,7 @@ class GradientEditorView$1 extends EditorElement {
   }
   [SUBSCRIBE("refreshSelectionStyleView")]() {
     if (this.$selection.current) {
-      if (this.$selection.hasChangedField("x", "y", "width", "height", "rotate", "background-image")) {
+      if (this.$selection.hasChangedField("x", "y", "width", "height", "angle", "background-image", "border", "padding")) {
         this.refresh();
       }
     }
@@ -55741,32 +56014,38 @@ class GradientEditorView$1 extends EditorElement {
   }
   makeCenterPoint(result) {
     const { image: image2 } = result.backgroundImage;
-    let boxPosition, centerPosition, centerStick, startPoint, endPoint, colorsteps;
+    let boxPosition, centerPosition, centerStick, startPoint, endPoint, areaStartPoint, areaEndPoint, colorsteps;
     if (image2.type === GradientType.STATIC || image2.type === GradientType.LINEAR || image2.type === GradientType.REPEATING_LINEAR) {
       boxPosition = this.$viewport.applyVerties(result.backVerties);
       startPoint = this.$viewport.applyVertex(result.startPoint);
       endPoint = this.$viewport.applyVertex(result.endPoint);
+      areaStartPoint = this.$viewport.applyVertex(result.areaStartPoint);
+      areaEndPoint = this.$viewport.applyVertex(result.areaEndPoint);
       centerPosition = this.$viewport.applyVertex(result.centerPosition);
       colorsteps = result.colorsteps.map((it) => {
         it.screenXY = this.$viewport.applyVertex(it.pos);
         return it;
       });
-      const stickPoint = lerp([], boxPosition[0], boxPosition[1], 0.5);
-      centerStick = lerp([], centerPosition, lerp([], centerPosition, stickPoint, 1 / dist(centerPosition, stickPoint)), 40);
+      const stickPoint = lerp([], boxPosition[1], boxPosition[2], 0.5);
+      centerStick = lerp([], centerPosition, lerp([], centerPosition, stickPoint, 1 / dist(centerPosition, stickPoint)), 50);
     } else {
       centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
       centerStick = lerp([], centerPosition, this.$viewport.applyVertex(result.radialCenterStick), 40);
     }
     const [newCenterStick] = vertiesMap([centerStick], calculateRotationOriginMat4(image2.angle, centerPosition));
-    const targetStick = lerp([], newCenterStick, centerPosition, 3 / 4);
-    return /* @__PURE__ */ createElementJsx(Fragment, null, /* @__PURE__ */ createElementJsx("div", {
+    const targetStick = lerp([], newCenterStick, centerPosition, 1);
+    let newHoverColorStepPoint = null;
+    if (this.state.hoverColorStep) {
+      newHoverColorStepPoint = lerp([], startPoint, endPoint, this.state.hoverColorStep.percent / 100);
+    }
+    return /* @__PURE__ */ createElementJsx(Fragment, null, image2.type === GradientType.STATIC || image2.type === GradientType.CONIC || image2.type === GradientType.REPEATING_CONIC || image2.type === GradientType.RADIAL || image2.type === GradientType.REPEATING_RADIAL ? /* @__PURE__ */ createElementJsx("div", {
       class: "gradient-position center",
       "data-radial-type": image2.radialType,
       style: {
         left: Length.px(centerPosition[0]),
         top: Length.px(centerPosition[1])
       }
-    }), image2.type === GradientType.CONIC || image2.type === GradientType.REPEATING_CONIC || image2.type === GradientType.LINEAR || image2.type === GradientType.REPEATING_LINEAR ? /* @__PURE__ */ createElementJsx("svg", {
+    }) : null, image2.type === GradientType.CONIC || image2.type === GradientType.REPEATING_CONIC || image2.type === GradientType.LINEAR || image2.type === GradientType.REPEATING_LINEAR ? /* @__PURE__ */ createElementJsx("svg", {
       class: "gradient-angle"
     }, /* @__PURE__ */ createElementJsx("path", {
       d: `
@@ -55774,6 +56053,7 @@ class GradientEditorView$1 extends EditorElement {
                         L ${newCenterStick[0]} ${newCenterStick[1]}
                     `
     }), /* @__PURE__ */ createElementJsx("circle", {
+      class: "rotate",
       cx: newCenterStick[0],
       cy: newCenterStick[1],
       r: "7",
@@ -55781,16 +56061,52 @@ class GradientEditorView$1 extends EditorElement {
       "data-center-y": centerPosition[1]
     }), image2.type === GradientType.LINEAR || image2.type === GradientType.REPEATING_LINEAR ? /* @__PURE__ */ createElementJsx(Fragment, null, /* @__PURE__ */ createElementJsx("path", {
       d: `
+                        M ${areaStartPoint[0]} ${areaStartPoint[1]}
+                        L ${areaEndPoint[0]} ${areaEndPoint[1]}
+                    `,
+      class: "area-line"
+    }), /* @__PURE__ */ createElementJsx("path", {
+      d: `
                         M ${startPoint[0]} ${startPoint[1]}
                         L ${endPoint[0]} ${endPoint[1]}
-                    `
-    }), colorsteps.map((it) => {
-      return /* @__PURE__ */ createElementJsx("circle", {
-        class: "colorstep",
-        cx: it.screenXY[0],
-        cy: it.screenXY[1],
-        fill: it.color
-      });
+                    `,
+      class: "start-end-line"
+    }), colorsteps.map((it, index2) => {
+      if (it.cut) {
+        return /* @__PURE__ */ createElementJsx("rect", {
+          id: it.id,
+          "data-index": index2,
+          class: "colorstep",
+          transform: `rotate(${image2.angle} ${it.screenXY[0]} ${it.screenXY[1]})`,
+          x: it.screenXY[0] - 7,
+          y: it.screenXY[1] - 7,
+          width: 14,
+          height: 14,
+          fill: it.color,
+          tabIndex: -1
+        });
+      } else {
+        return /* @__PURE__ */ createElementJsx("rect", {
+          id: it.id,
+          "data-index": index2,
+          class: "colorstep",
+          transform: `rotate(${image2.angle} ${it.screenXY[0]} ${it.screenXY[1]})`,
+          x: it.screenXY[0] - 7,
+          y: it.screenXY[1] - 7,
+          rx: 7,
+          ry: 7,
+          width: 14,
+          height: 14,
+          fill: it.color,
+          tabIndex: -1
+        });
+      }
+    }), newHoverColorStepPoint && /* @__PURE__ */ createElementJsx("circle", {
+      class: "hover-colorstep",
+      r: "5",
+      cx: newHoverColorStepPoint[0],
+      cy: newHoverColorStepPoint[1],
+      fill: this.state.hoverColorStep.color
     })) : null) : null);
   }
   [LOAD("$el") + DOMDIFF]() {
@@ -55798,6 +56114,11 @@ class GradientEditorView$1 extends EditorElement {
     if (!current)
       return "";
     const result = current.createBackgroundImageMatrix(this.state.index);
+    this.state.lastBackgroundMatrix = result;
+    this.state.centerPosition = this.$viewport.applyVertex(result.centerPosition);
+    this.state.startPoint = this.$viewport.applyVertex(result.startPoint);
+    this.state.endPoint = this.$viewport.applyVertex(result.endPoint);
+    this.state.rotateInverse = calculateRotationOriginMat4(-1 * result.backgroundImage.image.angle, this.state.centerPosition);
     return /* @__PURE__ */ createElementJsx("div", null, this.makeGradientRect(result), this.makeCenterPoint(result));
   }
 }

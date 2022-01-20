@@ -173,17 +173,20 @@ export class BackgroundImage extends PropertyItem {
    * 
    * @param {number} newX 
    * @param {number} newY 
-   * @param {number} maxWidth 
-   * @param {number} maxHeight 
+   * @param {number} contentBox 
    * @param {number} dx 변경된 넓이 크기 
    * @param {number} dy 변경된 높이 크기 
    * @returns 
    */
-  recoverOffset (newX, newY, maxWidth, maxHeight, dx = 0, dy = 0) {
+  recoverOffset (newX, newY, contentBox, dx = 0, dy = 0) {
     const { x, y, width, height } = this.json;
 
-    const newWidth = Math.floor(width.toPx(maxWidth).value + dx);
-    const newHeight = Math.floor(height.toPx(maxHeight).value + dy);    
+    const newWidth = Math.floor(width.toPx(contentBox.width).value + dx);
+    const newHeight = Math.floor(height.toPx(contentBox.height).value + dy);    
+
+    // 시작점을 contentBox 로 맞춘다. 
+    newX -= contentBox.x;
+    newY -= contentBox.y;
 
     if (newWidth < 0) {
       newX += newWidth
@@ -202,12 +205,12 @@ export class BackgroundImage extends PropertyItem {
 
       if (Math.abs(newX) < dist) {
         nextX = Length.percent(0)
-      } else if (Math.abs((maxWidth - newWidth) - newX) < dist) {
+      } else if (Math.abs((contentBox.width - newWidth) - newX) < dist) {
         nextX = Length.percent(100)        
-      } else if (Math.abs(((maxWidth - newWidth)/2) - newX) < dist) {        
+      } else if (Math.abs(((contentBox.width - newWidth)/2) - newX) < dist) {        
         nextX = Length.percent(50)        
       } else {
-        nextX = Length.percent(newX / (maxWidth - newWidth) * 100);
+        nextX = Length.percent(newX / (contentBox.width - newWidth) * 100);
       }
     }
 
@@ -215,12 +218,12 @@ export class BackgroundImage extends PropertyItem {
 
       if (Math.abs(newY) < dist) {
         nextY = Length.percent(0)
-      } else if (Math.abs((maxHeight - newHeight) - newY) < dist) {
+      } else if (Math.abs((contentBox.height - newHeight) - newY) < dist) {
         nextY = Length.percent(100)        
-      } else if (Math.abs(((maxHeight - newHeight)/2) - newY) < dist) {        
+      } else if (Math.abs(((contentBox.height - newHeight)/2) - newY) < dist) {        
         nextY = Length.percent(50)        
       } else {
-        nextY = Length.percent(newY / (maxHeight - newHeight) * 100);
+        nextY = Length.percent(newY / (contentBox.height - newHeight) * 100);
       }
     }
 
@@ -228,33 +231,32 @@ export class BackgroundImage extends PropertyItem {
     return {
       x: nextX,
       y: nextY,
-      width: Length.px(Math.abs(newWidth)).to(width.unit, maxWidth),
-      height: Length.px(Math.abs(newHeight)).to(height.unit, maxHeight),
+      width: Length.px(Math.abs(newWidth)).to(width.unit, contentBox.width),
+      height: Length.px(Math.abs(newHeight)).to(height.unit, contentBox.height),
     }
   }
 
   /**
    * background image 의 위치와 크기를 구한다. 
    * 
-   * @param {number} maxWidth 
-   * @param {number} maxHeight 
+   * @param {object} contentBox 
    * @returns 
    */
-  getOffset(containerWidth, containerHeight) {
+  getOffset(contentBox) {
 
     const { x, y, width, height } = this.json;
 
-    const newWidth = width.toPx(containerWidth);
-    const newHeight = height.toPx(containerHeight);
+    const newWidth = width.toPx(contentBox.width);
+    const newHeight = height.toPx(contentBox.height);
 
-    const newX = x.toPx(containerWidth);
-    const newY = y.toPx(containerHeight);
+    const newX = x.toPx(contentBox.width);
+    const newY = y.toPx(contentBox.height);
 
     // refer to https://developer.mozilla.org/en-US/docs/Web/CSS/background-position#regarding_percentages
     // x, y 가 percent 일 경우, 계산하는 방식이 달라진다. 
     return {
-      x: x.isPercent() ? (containerWidth - newWidth) * (x.value / 100) : newX,
-      y: y.isPercent() ? (containerHeight - newHeight) * (y.value / 100) : newY,
+      x: contentBox.x + (x.isPercent() ? (contentBox.width - newWidth) * (x.value / 100) : newX),
+      y: contentBox.y + (y.isPercent() ? (contentBox.height - newHeight) * (y.value / 100) : newY),
       width: newWidth.value,
       height: newHeight.value,
     }
