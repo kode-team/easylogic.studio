@@ -10,7 +10,10 @@ const pkgJSON = require('./package.json');
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
-    // open: true,
+    open: true,
+    watch: {
+      usePolling: true
+    },    
     hmr: {
       protocol: 'ws',
       host: 'localhost'

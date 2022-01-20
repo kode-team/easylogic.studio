@@ -194,8 +194,8 @@
 
   .gradient-steps {
     position: relative;
-    height: 50px;
-    margin-top: 14px;
+    height: 24px;
+    margin-top: 30px;
   }
 
   .hue-container,
@@ -225,28 +225,27 @@
 
       .step {
         pointer-events: all;
-        width: 12px;
-        height: 12px;
-        border: 1px solid white;
+        width: 20px;
+        height: 20px;
+        border: 1px solid #ececec;
 
         display: inline-block;
         position: absolute;
-        top: 50%;
+        top: -100%;
         border-radius: 100%;
+        // overflow: hidden;
         box-shadow: 0 0 2px 0px rgba(0, 0, 0, 0.5);
 
         &.selected {
-          border: 0px;
           box-shadow: 0 0 0px 1px rgba(222, 222, 222, 0.5);
-          transform: translateX(-50%) translateY(calc(100% + 8px));
-
+          // transform: translateX(-50%) translateY(calc(100% + 8px));
           .arrow {
             display: block;
           }
 
           .color-view {
-            transform: scale(1.25);
-            border: 1px solid white;
+            // transform: scale(1.25);
+            // border: 1px solid white;
             box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
           }
         }
@@ -268,6 +267,7 @@
           top: 0px;
           bottom: 0px;
           right: 0px;
+          border: 2px solid white;
           border-radius: 100%;
         //   pointer-events: none;
           box-sizing: border-box;
@@ -276,13 +276,14 @@
         .arrow {
           position: absolute;
           left: 50%;
-          display: none;
-          top: 0%;
-          width: 5px;
-          height: 10px;
-          transform: translateX(calc(-50% - 0.5px)) translateY(-140%);
+          // display: none;
+          top: calc(100%);
+          width: 6px;
+          height: 4px;
+          background-color: #ececec !important;
+          transform: translateX(calc(-50% - 0.5px)) translateY(0%);
           pointer-events: none;
-          clip-path: polygon(40% 0%, 60% 0%, 60% 100%, 40% 100%);
+          clip-path: polygon(0% 0%, 100% 0%, 50% 100%, 0% 0%);
         }
       }
     }
