@@ -719,12 +719,14 @@ export default class GradientEditorView extends EditorElement {
       areaEndPoint,
       colorsteps;
 
+      boxPosition = this.$viewport.applyVerties(result.backVerties);
+
     if (
       image.type === GradientType.STATIC ||
       image.type === GradientType.LINEAR ||
       image.type === GradientType.REPEATING_LINEAR
     ) {
-      boxPosition = this.$viewport.applyVerties(result.backVerties);
+
       startPoint = this.$viewport.applyVertex(result.startPoint);
       endPoint = this.$viewport.applyVertex(result.endPoint);
       areaStartPoint = this.$viewport.applyVertex(result.areaStartPoint);
@@ -747,20 +749,29 @@ export default class GradientEditorView extends EditorElement {
           1 / vec3.dist(centerPosition, stickPoint)
         ),
         50
-      );
+      );          
+
     } else {
+      // radial, conic 
       centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
+      const stickPoint = this.$viewport.applyVertex(result.radialCenterStick);
 
       centerStick = vec3.lerp(
         [],
         centerPosition,
-        this.$viewport.applyVertex(result.radialCenterStick),
-        40
+        vec3.lerp(
+          [],
+          centerPosition,
+          stickPoint,
+          1 / vec3.dist(centerPosition, stickPoint)
+        ),
+        50
       );
     }
+
     const [newCenterStick] = vertiesMap(
       [centerStick],
-      calculateRotationOriginMat4(image.angle, centerPosition)
+      calculateRotationOriginMat4(image.angle || 0, centerPosition)
     );
 
     const targetStick = vec3.lerp([], newCenterStick, centerPosition, 1);
@@ -907,16 +918,25 @@ export default class GradientEditorView extends EditorElement {
 
     // cache
     this.state.lastBackgroundMatrix = result;
-    this.state.centerPosition = this.$viewport.applyVertex(
-      result.centerPosition
-    );
-    this.state.startPoint = this.$viewport.applyVertex(result.startPoint);
-    this.state.endPoint = this.$viewport.applyVertex(result.endPoint);
 
-    this.state.rotateInverse = calculateRotationOriginMat4(
-      -1 * result.backgroundImage.image.angle,
-      this.state.centerPosition
-    );
+    const image = result.backgroundImage.image;
+    switch (image.type) {
+      case GradientType.STATIC:
+      case GradientType.LINEAR:
+      case GradientType.REPEATING_LINEAR:
+
+        this.state.centerPosition = this.$viewport.applyVertex(
+          result.centerPosition
+        );
+        this.state.startPoint = this.$viewport.applyVertex(result.startPoint);
+        this.state.endPoint = this.$viewport.applyVertex(result.endPoint);
+
+        this.state.rotateInverse = calculateRotationOriginMat4(
+          -1 * result.backgroundImage.image.angle,
+          this.state.centerPosition
+        );
+        break;
+    }
 
     return (
       <div>

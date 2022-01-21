@@ -110,7 +110,7 @@ export default class GradientEditor extends EditorElement {
       type,
       url,
       colorsteps: colorsteps,
-      angle: this.state.image.angle,
+      angle: this.state.image.angle || 0,
       radialType: this.state.image.radialType || RadialGradientType.CIRCLE,
       radialPosition: this.state.image.radialPosition || ['50%', '50%']
     })

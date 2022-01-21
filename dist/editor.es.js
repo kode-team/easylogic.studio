@@ -12905,32 +12905,33 @@ class ModelManager {
 class BaseModel {
   constructor(json = {}, modelManager) {
     this.modelManager = modelManager;
-    this.ref = new Proxy(this, {
-      get: (target, key) => {
-        if (this.getCache(key)) {
-          return this.getCache(key);
+    const self2 = this;
+    this.ref = new Proxy(self2, {
+      get(target, key) {
+        if (self2.hasCache(key)) {
+          return self2.getCache(key);
         }
-        var originMethod = target[key];
-        if (isFunction(originMethod)) {
-          if (!this.getCache(key)) {
-            this.addCache(key, (...args2) => {
-              return originMethod.apply(target, args2);
+        const prop = self2[key];
+        if (isFunction(prop)) {
+          if (!self2.getCache(key)) {
+            self2.addCache(key, (...args2) => {
+              return prop.apply(self2, args2);
             });
           }
-          return this.getCache(key);
+          return self2.getCache(key);
         } else {
-          return isNotUndefined(originMethod) ? originMethod : target.json[key];
+          return isNotUndefined(prop) ? prop : self2.json[key];
         }
       },
-      set: (target, key, value) => {
-        const isDiff = target.json[key] != value;
+      set(target, key, value) {
+        const isDiff = self2.json[key] != value;
         if (isDiff) {
-          this.reset({ [key]: value });
+          self2.reset({ [key]: value });
         }
         return true;
       },
-      deleteProperty: (target, key) => {
-        this.reset({ [key]: void 0 });
+      deleteProperty(target, key) {
+        self2.reset({ [key]: void 0 });
       }
     });
     this.json = this.convert(Object.assign(this.getDefaultObject(), json));
@@ -13037,6 +13038,9 @@ class BaseModel {
   }
   getCache(key) {
     return this.cachedValue[key];
+  }
+  hasCache(key) {
+    return !!this.getCache(key);
   }
   computed(key, newValueCallback, isForce = false) {
     const cachedKey = `__cachedKey_${key}`;
@@ -42686,7 +42690,7 @@ class GradientEditor extends EditorElement {
       type,
       url,
       colorsteps,
-      angle: this.state.image.angle,
+      angle: this.state.image.angle || 0,
       radialType: this.state.image.radialType || RadialGradientType.CIRCLE,
       radialPosition: this.state.image.radialPosition || ["50%", "50%"]
     });
@@ -45991,8 +45995,8 @@ class DomRender$1 extends ItemRender$1 {
   }
   toKeyListCSS(item2, args2 = []) {
     let obj2 = {};
-    args2.filter((it) => isNotUndefined(item2.json[it])).forEach((it) => {
-      obj2[it] = item2.json[it];
+    args2.filter((it) => isNotUndefined(item2[it])).forEach((it) => {
+      obj2[it] = item2[it];
     });
     return obj2;
   }
@@ -56015,8 +56019,8 @@ class GradientEditorView$1 extends EditorElement {
   makeCenterPoint(result) {
     const { image: image2 } = result.backgroundImage;
     let boxPosition, centerPosition, centerStick, startPoint, endPoint, areaStartPoint, areaEndPoint, colorsteps;
+    boxPosition = this.$viewport.applyVerties(result.backVerties);
     if (image2.type === GradientType.STATIC || image2.type === GradientType.LINEAR || image2.type === GradientType.REPEATING_LINEAR) {
-      boxPosition = this.$viewport.applyVerties(result.backVerties);
       startPoint = this.$viewport.applyVertex(result.startPoint);
       endPoint = this.$viewport.applyVertex(result.endPoint);
       areaStartPoint = this.$viewport.applyVertex(result.areaStartPoint);
@@ -56030,9 +56034,10 @@ class GradientEditorView$1 extends EditorElement {
       centerStick = lerp([], centerPosition, lerp([], centerPosition, stickPoint, 1 / dist(centerPosition, stickPoint)), 50);
     } else {
       centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
-      centerStick = lerp([], centerPosition, this.$viewport.applyVertex(result.radialCenterStick), 40);
+      const stickPoint = this.$viewport.applyVertex(result.radialCenterStick);
+      centerStick = lerp([], centerPosition, lerp([], centerPosition, stickPoint, 1 / dist(centerPosition, stickPoint)), 50);
     }
-    const [newCenterStick] = vertiesMap([centerStick], calculateRotationOriginMat4(image2.angle, centerPosition));
+    const [newCenterStick] = vertiesMap([centerStick], calculateRotationOriginMat4(image2.angle || 0, centerPosition));
     const targetStick = lerp([], newCenterStick, centerPosition, 1);
     let newHoverColorStepPoint = null;
     if (this.state.hoverColorStep) {
@@ -56115,10 +56120,17 @@ class GradientEditorView$1 extends EditorElement {
       return "";
     const result = current.createBackgroundImageMatrix(this.state.index);
     this.state.lastBackgroundMatrix = result;
-    this.state.centerPosition = this.$viewport.applyVertex(result.centerPosition);
-    this.state.startPoint = this.$viewport.applyVertex(result.startPoint);
-    this.state.endPoint = this.$viewport.applyVertex(result.endPoint);
-    this.state.rotateInverse = calculateRotationOriginMat4(-1 * result.backgroundImage.image.angle, this.state.centerPosition);
+    const image2 = result.backgroundImage.image;
+    switch (image2.type) {
+      case GradientType.STATIC:
+      case GradientType.LINEAR:
+      case GradientType.REPEATING_LINEAR:
+        this.state.centerPosition = this.$viewport.applyVertex(result.centerPosition);
+        this.state.startPoint = this.$viewport.applyVertex(result.startPoint);
+        this.state.endPoint = this.$viewport.applyVertex(result.endPoint);
+        this.state.rotateInverse = calculateRotationOriginMat4(-1 * result.backgroundImage.image.angle, this.state.centerPosition);
+        break;
+    }
     return /* @__PURE__ */ createElementJsx("div", null, this.makeGradientRect(result), this.makeCenterPoint(result));
   }
 }

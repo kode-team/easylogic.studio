@@ -273,8 +273,8 @@ export default class DomRender extends ItemRender {
   toKeyListCSS(item, args = []) {
     let obj = {};
 
-    args.filter(it => isNotUndefined(item.json[it])).forEach(it => {
-      obj[it] = item.json[it]
+    args.filter(it => isNotUndefined(item[it])).forEach(it => {
+      obj[it] = item[it]
     })
 
     return obj;
@@ -512,6 +512,9 @@ export default class DomRender extends ItemRender {
    * @param {Item} item 
    */
   toDefInnerString(item) {
+
+    // TODO: item 의 값이 변화가 없으면 미리 생성된 값을 반환해야한다. 캐슁 전략이 필요함 
+
     return /*html*/`
       ${this.toClipPath(item)}
       ${this.toSVGFilter(item)}

@@ -20,38 +20,41 @@ export class BaseModel {
   constructor(json = {}, modelManager) {    
     this.modelManager = modelManager;
 
-    this.ref = new Proxy(this, {
-      get: (target, key) => {
-        if (this.getCache(key)) {
-          return this.getCache(key);
+    const self = this; 
+    this.ref = new Proxy(self, {
+      get (target, key) {
+
+        // target[key] 가 함수인 경우 미리 캐쉬 해둔다. 
+        if (self.hasCache(key)) {
+          return self.getCache(key);
         }
 
-        var originMethod = target[key];
-        if (isFunction(originMethod)) {
+        const prop = self[key];
 
-          if (!this.getCache(key)) {
-            this.addCache(key, (...args) => {
-              return originMethod.apply(target, args);
+        if (isFunction(prop)) {
+          if (!self.getCache(key)) {
+            self.addCache(key, (...args) => {
+              return prop.apply(self, args);
             });
           }
 
-          return this.getCache(key);
+          return self.getCache(key);
         } else {
           // getter or json property
-          return isNotUndefined(originMethod) ? originMethod : target.json[key];
+          return isNotUndefined(prop) ? prop : self.json[key];
         }
       },
-      set: (target, key, value) => {
-        const isDiff = target.json[key] != value;
+      set(target, key, value) {
+        const isDiff = self.json[key] != value;
 
         if (isDiff) {
-          this.reset({ [key]: value });
+          self.reset({ [key]: value });
         }
 
         return true;
       },
-      deleteProperty: (target, key) => {
-        this.reset({ [key]: undefined });
+      deleteProperty (target, key) {
+        self.reset({ [key]: undefined });
       }
     });
 
@@ -268,6 +271,10 @@ export class BaseModel {
     return this.cachedValue[key];
   }
 
+  hasCache (key) {
+    return !!this.getCache(key);
+  }
+
   /**
    * BaseModel 에서 attribute key 를 기반으로 캐쉬를 적용한다. 
    * 렌더링 시에 캐쉬를 적용하지 않으면 렌더링이 느려지기 때문에
@@ -382,6 +389,7 @@ export class BaseModel {
       this.lastChangedFieldKeys = Object.keys(obj);
 
       if (context.origin === '*') {
+        // console.log(this.modelManager);
         this.modelManager.setChanged('reset', this.id, obj);
       }
       

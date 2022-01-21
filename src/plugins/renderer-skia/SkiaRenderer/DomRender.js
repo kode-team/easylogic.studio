@@ -262,8 +262,8 @@ export default class DomRender extends ItemRender {
   toKeyListCSS (item, args = []) {
     let obj = {};
 
-    args.filter(it => isNotUndefined(item.json[it])).forEach( it => {
-        obj[it] = item.json[it]
+    args.filter(isNotUndefined).forEach( it => {
+        obj[it] = item[it]
     })
  
     return obj;
