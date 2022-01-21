@@ -190,8 +190,8 @@ export default class GradientEditor extends EditorElement {
 
       return /*html*/`
       <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' tabindex="-1" style='left: ${it.toLength()};'>
-        <div class='arrow' style="background-color: ${it.color}"></div>      
-        <div class='color-view' style="background-color: ${it.color}"></div>
+        <div class='color-view' style="background-color: ${it.color}"></div>      
+        <div class='arrow'></div>      
       </div>`
     })
   }

@@ -12913,7 +12913,7 @@ class BaseModel {
         }
         const prop = self2[key];
         if (isFunction(prop)) {
-          if (!self2.getCache(key)) {
+          if (!self2.hasCache(key)) {
             self2.addCache(key, (...args2) => {
               return prop.apply(self2, args2);
             });
@@ -13030,6 +13030,9 @@ class BaseModel {
   isNot(checkItemType) {
     return this.is(checkItemType) === false;
   }
+  get(key) {
+    return this.json[key];
+  }
   isSVG() {
     return false;
   }
@@ -13040,7 +13043,7 @@ class BaseModel {
     return this.cachedValue[key];
   }
   hasCache(key) {
-    return !!this.getCache(key);
+    return Boolean(this.cachedValue[key]);
   }
   computed(key, newValueCallback, isForce = false) {
     const cachedKey = `__cachedKey_${key}`;
@@ -13119,8 +13122,8 @@ class BaseModel {
   attrs(...args2) {
     const result = {};
     args2.forEach((field) => {
-      if (isNotUndefined(this.ref[field])) {
-        result[field] = clone$1(this.ref[field]);
+      if (isNotUndefined(this.get(field))) {
+        result[field] = clone$1(this.get(field));
       }
     });
     return result;
@@ -31943,9 +31946,6 @@ class ArtBoard extends LayerModel {
     switch (editablePropertyName) {
       case "border":
       case "border-radius":
-      case "backdrop-filter":
-      case "box-shadow":
-      case "clip-path":
         return false;
       case "artboard-size":
       case "layout":
@@ -42754,8 +42754,8 @@ class GradientEditor extends EditorElement {
       var selected = this.$selection.isSelectedColorStep(it.id) ? "selected" : "";
       return `
       <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' tabindex="-1" style='left: ${it.toLength()};'>
-        <div class='arrow' style="background-color: ${it.color}"></div>      
-        <div class='color-view' style="background-color: ${it.color}"></div>
+        <div class='color-view' style="background-color: ${it.color}"></div>      
+        <div class='arrow'></div>      
       </div>`;
     });
   }

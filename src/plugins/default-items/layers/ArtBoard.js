@@ -35,9 +35,6 @@ export class ArtBoard extends LayerModel {
     switch (editablePropertyName) {
     case 'border':
     case 'border-radius':
-    case 'backdrop-filter':
-    case 'box-shadow':
-    case 'clip-path':
       return false;
     case 'artboard-size':
     case 'layout':

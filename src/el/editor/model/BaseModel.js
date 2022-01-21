@@ -32,7 +32,7 @@ export class BaseModel {
         const prop = self[key];
 
         if (isFunction(prop)) {
-          if (!self.getCache(key)) {
+          if (!self.hasCache(key)) {
             self.addCache(key, (...args) => {
               return prop.apply(self, args);
             });
@@ -259,6 +259,16 @@ export class BaseModel {
     return this.is(checkItemType) === false;
   }
 
+  /**
+   * key  에 맞는 속성값을 리턴합니다. 
+   * 
+   * @param {string} key 
+   * @returns 
+   */
+  get (key) {
+    return this.json[key]
+  }
+
   isSVG() {
     return false;
   }
@@ -272,7 +282,7 @@ export class BaseModel {
   }
 
   hasCache (key) {
-    return !!this.getCache(key);
+    return Boolean(this.cachedValue[key]);
   }
 
   /**
@@ -389,7 +399,6 @@ export class BaseModel {
       this.lastChangedFieldKeys = Object.keys(obj);
 
       if (context.origin === '*') {
-        // console.log(this.modelManager);
         this.modelManager.setChanged('reset', this.id, obj);
       }
       
@@ -429,14 +438,14 @@ export class BaseModel {
   /**
    * 지정된 필드의 값을 object 형태로 리턴한다. 
    * 
-   * @param  {...string} args 필드 리스트 
+   * @param  {string[]} args 필드 리스트 
    */
    attrs (...args) {
     const result = {}
 
     args.forEach(field => {
-      if (isNotUndefined(this.ref[field])) {
-        result[field] = clone(this.ref[field])
+      if (isNotUndefined(this.get(field))) {
+        result[field] = clone(this.get(field))
       } 
     })
 
@@ -484,10 +493,18 @@ export class BaseModel {
     return layer;
   }
 
+  /**
+   * 
+   * @override
+   */
   resetMatrix(item) {
 
   }
 
+  /**
+   * 
+   * @override
+   */
   refreshMatrixCache() {
 
   }
@@ -509,7 +526,6 @@ export class BaseModel {
 
     layer.setParentId(this.id);
     this.json.children.splice(index, 0, layer.id);
-    // this.project.addIndexItem(layer);
     this.modelManager.setChanged('insertChild', this.id, {childId: layer.id, index: 0})
     return layer;
   }
