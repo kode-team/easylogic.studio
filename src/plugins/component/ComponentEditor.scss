@@ -1,6 +1,7 @@
 .component-editor {
     padding-bottom: 5px;
     --column-gap: 2px;
+    --row-gap: 2px;
     .column {
         display: grid;
         grid-template-columns: 1fr;

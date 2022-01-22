@@ -9,4 +9,5 @@ export default [
     '-',
     { icon: iconUse('video'), title: 'Video', command: 'addLayerView', args: ['video'], shortcut: KeyStringMaker({ key: "V" }) },        
     { icon: iconUse('iframe'), title: 'IFrame', command: 'addLayerView', args: ['iframe'], shortcut: KeyStringMaker({ key: "F" }) },        
+    { icon: iconUse('rect'), title: 'SampleLayer', command: 'addLayerView', args: ['sample'], shortcut: KeyStringMaker({ key: "F" }) },        
 ]
