@@ -12,8 +12,8 @@ const alias = require('./alias');
 export default defineConfig({
   esbuild: {
     jsxFactory: 'createElementJsx',
-    jsxFragment: 'Fragment',
-    jsxInject: `import { createElementJsx } from "el/sapa/functions/jsx"`
+    jsxFragment: 'FragmentInstance',
+    jsxInject: `import { createElementJsx, FragmentInstance } from "el/sapa/functions/jsx"`    
   },
   resolve: {
     alias,

@@ -55996,7 +55996,7 @@ class GradientEditorView$1 extends EditorElement {
   }
   makeGradientRect(result) {
     const boxPosition = this.$viewport.applyVerties(result.backVerties);
-    return /* @__PURE__ */ createElementJsx(Fragment, null, /* @__PURE__ */ createElementJsx("div", {
+    return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("div", {
       class: "gradient-rect"
     }, /* @__PURE__ */ createElementJsx("svg", null, /* @__PURE__ */ createElementJsx("path", {
       class: "back-rect",
@@ -56043,7 +56043,7 @@ class GradientEditorView$1 extends EditorElement {
     if (this.state.hoverColorStep) {
       newHoverColorStepPoint = lerp([], startPoint, endPoint, this.state.hoverColorStep.percent / 100);
     }
-    return /* @__PURE__ */ createElementJsx(Fragment, null, image2.type === GradientType.STATIC || image2.type === GradientType.CONIC || image2.type === GradientType.REPEATING_CONIC || image2.type === GradientType.RADIAL || image2.type === GradientType.REPEATING_RADIAL ? /* @__PURE__ */ createElementJsx("div", {
+    return /* @__PURE__ */ createElementJsx(FragmentInstance, null, image2.type === GradientType.STATIC || image2.type === GradientType.CONIC || image2.type === GradientType.REPEATING_CONIC || image2.type === GradientType.RADIAL || image2.type === GradientType.REPEATING_RADIAL ? /* @__PURE__ */ createElementJsx("div", {
       class: "gradient-position center",
       "data-radial-type": image2.radialType,
       style: {
@@ -56064,7 +56064,7 @@ class GradientEditorView$1 extends EditorElement {
       r: "7",
       "data-center-x": centerPosition[0],
       "data-center-y": centerPosition[1]
-    }), image2.type === GradientType.LINEAR || image2.type === GradientType.REPEATING_LINEAR ? /* @__PURE__ */ createElementJsx(Fragment, null, /* @__PURE__ */ createElementJsx("path", {
+    }), image2.type === GradientType.LINEAR || image2.type === GradientType.REPEATING_LINEAR ? /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("path", {
       d: `
                         M ${areaStartPoint[0]} ${areaStartPoint[1]}
                         L ${areaEndPoint[0]} ${areaEndPoint[1]}
