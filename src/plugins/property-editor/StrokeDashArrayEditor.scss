@@ -41,7 +41,7 @@
         top: 30px;
         overflow: auto;
         border: 1px solid var(--elf--border-color);
-        background-color: var(--elf--input-inactive-color);
+        background-color: var(--elf--input-background-color);
         z-index: 10;
         display: none;
 
@@ -49,12 +49,12 @@
             height: 20px;
             cursor: pointer;
             &:hover {
-                background-color: var(--elf--input-background-color);
+                background-color: var(--elf--input-inactive-color);
             }
 
             svg {
                 line {
-                    stroke: var(--elf--selected-font-color);
+                    stroke: var(--elf--font-color);
                 }
                 
             }

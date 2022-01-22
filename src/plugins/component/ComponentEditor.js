@@ -26,7 +26,7 @@ export default class ComponentEditor extends EditorElement {
       const size = (childEditor.size || [2]).join('-');
 
       return /*html*/`
-        <div class='column column-${size}' style="--column-gap: ${childEditor.gap}px" >
+        <div class='column column-${size}' style="--column-gap: ${childEditor.gap}px; --row-gap: ${childEditor.rowGap || 0}px" >
           ${childEditor.columns.map((it, itemIndex) => {
         if (it === '-') {
           return /*html*/`<div class="column-item"></div>`;

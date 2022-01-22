@@ -25,8 +25,6 @@ export default class SampleRender extends LayerRender {
             <div class="sample-item" style="background-color: yellow">${i}</div>
           `).join('\n')
 
-          console.log(template);
-
           $sampleItems.html(template);
         }
     

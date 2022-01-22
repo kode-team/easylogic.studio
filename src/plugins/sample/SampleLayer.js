@@ -1,11 +1,6 @@
-import icon from "el/editor/icon/icon";
 import { LayerModel } from "el/editor/model/LayerModel";
 
 export class SampleLayer extends LayerModel {
-
-  getIcon () {
-    return icon.web;
-  }  
 
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({

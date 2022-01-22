@@ -14,13 +14,13 @@ import SampleRender from "./SampleRender";
 
     editor.registerRenderer('html', 'sample', new SampleRender());
 
-    editor.registerMenuItem('inspector.tab.style', {
-        SampleProperty: ObjectProperty.create({
-          title: 'Sample 속성 편집기',
-          editableProperty: 'sample',
-          preventUpdate: true     // 마우스를 드래그 하는 동안은 업데이트 하지 않음. 
-        })
-    })    
+    // editor.registerMenuItem('inspector.tab.style', {
+    //     SampleProperty: ObjectProperty.create({
+    //       title: 'Sample 속성 편집기',
+    //       editableProperty: 'sample',
+    //       preventUpdate: true     // 마우스를 드래그 하는 동안은 업데이트 하지 않음. 
+    //     })
+    // })    
 
     editor.registerInspector('sample', current => {
         return [
