@@ -113,6 +113,7 @@ export default [
             '-',
             { icon: iconUse('video'), title: 'Video', key: 'video', command: 'addLayerView', args: ['video'], shortcut: KeyStringMaker({ key: "V" }) },
             { icon: iconUse('iframe'), title: 'IFrame', key: 'iframe', command: 'addLayerView', args: ['iframe'], shortcut: KeyStringMaker({ key: "F" }) },
+            { icon: iconUse('rect'), title: 'SampleLayer', key: 'sample', command: 'addLayerView', args: ['sample'] },
         ],
         events: ['config:editing.mode', 'config:editing.mode.itemType'],
         selected: (state, editor) => {
