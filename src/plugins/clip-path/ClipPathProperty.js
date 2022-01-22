@@ -15,6 +15,7 @@ const ClipPathSample = {
   [ClipPathType.ELLIPSE]: 'ellipse(50% 50% at 50% 50%)',
   [ClipPathType.INSET]: 'inset(0% 0% 0% 0%)',
   [ClipPathType.POLYGON]: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+  [ClipPathType.PATH]: 'path()',
 }
 
 
@@ -49,7 +50,7 @@ export default class ClipPathProperty extends BaseProperty {
   makeClipPathTemplate(clippath, func) {
 
     const isPath = clippath === 'path';
-    const isPolygon = clippath = 'polygon';
+    const isPolygon = clippath === 'polygon';
 
     let newPathString = '';
     if (isPath) {
@@ -111,14 +112,14 @@ export default class ClipPathProperty extends BaseProperty {
     `
   }
 
-  // [CLICK('$clippathList .clippath-item .title .name')](e) {
-  //   var current = this.$selection.current;
-  //   if (!current) return;
+  [CLICK('$clippathList .clippath-item .title .name')](e) {
+    var current = this.$selection.current;
+    if (!current) return;
 
 
-  //   this.viewClipPathPicker();
+    this.viewClipPathPicker();
 
-  // }
+  }
 
   [CLICK('$clippathList .del') + PREVENT](e) {
     var current = this.$selection.current;
@@ -173,42 +174,34 @@ export default class ClipPathProperty extends BaseProperty {
     this.refresh();
   }
 
-  // viewClipPathPicker() {
-  //   var current = this.$selection.current;
-  //   if (!current) return;
+  viewClipPathPicker() {
+    var current = this.$selection.current;
+    if (!current) return;
 
-  //   var obj = ClipPath.parseStyle(current['clip-path'])
+    var obj = ClipPath.parseStyle(current['clip-path'])
 
-  //   switch (obj.type) {
-  //     case 'path':
-  //       var d = current.absolutePath(current.clipPathString).d
-  //       var mode = d ? 'modify' : 'path'
+    switch (obj.type) {
+      case 'path':
+        var d = current.absolutePath(current.clipPathString).d
+        var mode = d ? 'modify' : 'path'
 
-  //       this.emit('showPathEditor', mode, {
-  //         changeEvent: (data) => {
-  //           data.d = current.invertPath(data.d).d;
+        this.emit('showPathEditor', mode, {
+          changeEvent: (data) => {
+            data.d = current.invertPath(data.d).d;
 
-  //           this.updatePathInfo({
-  //             'clip-path': `path(${data.d})`
-  //           });
-  //         },
-  //         current,
-  //         d,
-  //       })
-  //       break;
-  //     case 'svg':
-  //       // TODO: clip art 선택하기 
-  //       break;
-  //     default:
-  //       this.emit("showClipPathPopup", {
-  //         'clip-path': current['clip-path'],
-  //         changeEvent: (data) => {
-  //           this.updatePathInfo(data);
-  //         }
-  //       }, this.refs.$clippathList.rect());
-  //       break;
-  //   }
-  // }
+            this.updatePathInfo({
+              'clip-path': `path(${data.d})`
+            });
+          },
+          current,
+          d,
+        })
+        break;
+      case 'svg':
+        // TODO: clip art 선택하기 
+        break;
+    }
+  }
 
 
   updatePathInfo(data) {
