@@ -71,6 +71,9 @@ Sapa 에 대한 간략한 소개는 [여기](https://sapa.easylogic.studio/) 를
 * [설정](./Config.md)
 * [UI 만들기](./UI.md)
 
+## 유틸리티 영역 
+
+* [좌표 시스템](./Geometry.md)
 
 # 플러그인 만들기 
 
@@ -80,3 +83,29 @@ src/plugins/ 를 참고하세요.
 
 플러그인을 만들기 위해서는 [여기](./Plugin.md)을 참고하세요.
 
+
+# 유용한 API 모음 
+
+### 렌더링 레이어 속성 변경하기 
+
+```js
+
+editor.command('setAttributeForMulti', 'change property', editor.selection.packByValue({
+    'background-color': 'red'
+}))
+
+this.command('setAttributeForMulti', 'change property', this.$selection.packByValue({
+    'background-color': 'red'
+}))
+
+```
+
+### 현재 선택된 레이어 얻어오기 
+
+```js
+const layer = editor.selection.current;
+
+// or 
+const layer = this.$selection.current;
+
+```
