@@ -29223,7 +29223,8 @@ const ClipPathSample = {
   [ClipPathType.CIRCLE]: "circle(50% at 50% 50%)",
   [ClipPathType.ELLIPSE]: "ellipse(50% 50% at 50% 50%)",
   [ClipPathType.INSET]: "inset(0% 0% 0% 0%)",
-  [ClipPathType.POLYGON]: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)"
+  [ClipPathType.POLYGON]: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+  [ClipPathType.PATH]: "path()"
 };
 class ClipPathProperty extends BaseProperty {
   getTitle() {
@@ -29249,7 +29250,7 @@ class ClipPathProperty extends BaseProperty {
   }
   makeClipPathTemplate(clippath, func2) {
     const isPath = clippath === "path";
-    const isPolygon = clippath = "polygon";
+    const isPolygon = clippath === "polygon";
     let newPathString = "";
     if (isPath) {
       const pathString2 = func2.split("(")[1].split(")")[0];
@@ -29297,6 +29298,12 @@ class ClipPathProperty extends BaseProperty {
 
     `;
   }
+  [CLICK("$clippathList .clippath-item .title .name")](e2) {
+    var current = this.$selection.current;
+    if (!current)
+      return;
+    this.viewClipPathPicker();
+  }
   [CLICK("$clippathList .del") + PREVENT](e2) {
     var current = this.$selection.current;
     if (!current)
@@ -29338,6 +29345,28 @@ class ClipPathProperty extends BaseProperty {
       this.command("setAttributeForMulti", "change clip-path", this.$selection.pack("clip-path"));
     }
     this.refresh();
+  }
+  viewClipPathPicker() {
+    var current = this.$selection.current;
+    if (!current)
+      return;
+    var obj2 = ClipPath.parseStyle(current["clip-path"]);
+    switch (obj2.type) {
+      case "path":
+        var d = current.absolutePath(current.clipPathString).d;
+        var mode = d ? "modify" : "path";
+        this.emit("showPathEditor", mode, {
+          changeEvent: (data) => {
+            data.d = current.invertPath(data.d).d;
+            this.updatePathInfo({
+              "clip-path": `path(${data.d})`
+            });
+          },
+          current,
+          d
+        });
+        break;
+    }
   }
   updatePathInfo(data) {
     if (!data)
