@@ -82,9 +82,12 @@ export default class BackgroundImageProperty extends BaseProperty {
   }
 
   [SUBSCRIBE_SELF('changeBackgroundImage')](key, value) {
-    this.command('setAttributeForMulti', 'change background image', this.$selection.packByValue({
-      [key]: value
-    }))
+    this.nextTick(() => {
+      this.command('setAttributeForMulti', 'change background image', this.$selection.packByValue({
+        [key]: value
+      }))
+    }, 10)
+
   }
 
 }

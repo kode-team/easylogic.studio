@@ -12,6 +12,7 @@ export class RepeatingRadialGradient extends RadialGradient {
 
     return new RepeatingRadialGradient({
       radialType: radial.radialType,
+      radialSize: radial.radialSize,
       radialPosition: radial.radialPosition,
       colorsteps: radial.colorsteps
     });

@@ -8,11 +8,50 @@ import './GradientPickerPopup.scss';
 import { createComponent } from "el/sapa/functions/jsx";
 import { BackgroundImage } from "el/editor/property-parser/BackgroundImage";
 import { isString } from "el/sapa/functions/func";
+import { GradientType } from "el/editor/types/model";
 
 export default class GradientPickerPopup extends BasePopup {
 
   getTitle() {
-    return this.$i18n('gradient.picker.popup.title')
+    return createComponent("SelectEditor", {
+      ref: "$select",
+      value: this.state.image?.type || GradientType.STATIC,
+      onchange: "changeTabType",
+      options: [
+        {
+          value: GradientType.STATIC,
+          text: "Static"
+        },
+        {
+          value: GradientType.LINEAR,
+          text: "Linear Gradient"
+        },
+        {
+          value: GradientType.RADIAL,
+          text: "Radial Gradient"
+        },
+        {
+          value: GradientType.CONIC,
+          text: "Conic Gradient"
+        },
+        {
+          value: GradientType.REPEATING_LINEAR,
+          text: "Repeating Linear Gradient"
+        },
+        {
+          value: GradientType.REPEATING_RADIAL,
+          text: "Repeating Radial Gradient"
+        },
+        {
+          value: GradientType.REPEATING_CONIC,
+          text: "Repeating Conic Gradient"
+        },
+        {
+          value: GradientType.IMAGE,
+          text: "Image"
+        }
+      ]
+    });
   }
 
   initialize() {
@@ -42,10 +81,6 @@ export default class GradientPickerPopup extends BasePopup {
       </div>
      
     `;
-  }
-
-  [SUBSCRIBE('changeTabType')] (type) {
-    this.refs.$body.attr('data-selected-editor', type);
   }
 
   getColorString() {
@@ -91,6 +126,10 @@ export default class GradientPickerPopup extends BasePopup {
     this.updateData();
   }
 
+  [SUBSCRIBE_SELF('changeTabType')] (key, type) {
+    this.children.$g.trigger('changeTabType', type);
+  }
+
   [SUBSCRIBE_SELF('changeColor')] (color) {
     this.children.$g.trigger('setColorStepColor', color);
   }
@@ -100,7 +139,10 @@ export default class GradientPickerPopup extends BasePopup {
   }
 
   updateTitle () {
-    this.setTitle(this.$i18n(`gradient.picker.popup.${this.state.image.type}`))
+
+    this.children.$select.setValue(this.state.image.type);
+
+    // this.setTitle(this.$i18n(`gradient.picker.popup.${this.state.image.type}`))
   }
 
   [SUBSCRIBE("showGradientPickerPopup")](data, params, rect) {    
@@ -109,7 +151,7 @@ export default class GradientPickerPopup extends BasePopup {
     data.params = params;
     this.setState(data);
 
-    this.showByRect(this.makeRect(248, 600, rect));
+    this.showByRect(this.makeRect(248, 560, rect));
 
     this.updateTitle();
 

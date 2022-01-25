@@ -7,7 +7,7 @@ import PathParser from "el/editor/parser/PathParser";
 import { Pattern } from 'el/editor/property-parser/Pattern';
 import { BackgroundImage } from 'el/editor/property-parser/BackgroundImage';
 import { STRING_TO_CSS } from "el/utils/func";
-import { Constraints, GradientType, Layout } from "../types/model";
+import { Constraints, GradientType, Layout, RadialGradientType } from "el/editor/types/model";
 import { rectToVerties } from "el/utils/collision";
 import { calculateRotationOriginMat4, degreeToRadian, vertiesMap } from "el/utils/math";
 import { vec3 } from "gl-matrix";
@@ -340,7 +340,7 @@ export class DomModel extends GroupModel {
     return backgroundImages[index || 0]
   }
 
-  get borderWidth () {
+  get borderWidth() {
     const border = Border.parseStyle(this.json.border);
     const borderObject = Border.parseValue(border.border);
 
@@ -361,7 +361,7 @@ export class DomModel extends GroupModel {
     }
   }
 
-  get contentBox () {
+  get contentBox() {
     const x = 0;
     const y = 0;
     const width = this.screenWidth;
@@ -412,7 +412,7 @@ export class DomModel extends GroupModel {
     const result = {
       backRect,
       backVerties,
-      absoluteMatrix: this.absoluteMatrix,      
+      absoluteMatrix: this.absoluteMatrix,
       backgroundImage
     }
 
@@ -423,9 +423,9 @@ export class DomModel extends GroupModel {
       case GradientType.REPEATING_CONIC:
         let [rx, ry] = image.radialPosition;
 
-        if (rx == 'center')  rx = Length.percent(50);
-        if (ry == 'center')  ry = Length.percent(50);
-      
+        if (rx == 'center') rx = Length.percent(50);
+        if (ry == 'center') ry = Length.percent(50);
+
         const newRx = rx.toPx(backRect.width);
         const newRy = ry.toPx(backRect.height);
 
@@ -439,22 +439,106 @@ export class DomModel extends GroupModel {
 
         result.radialCenterPosition = centerVerties[0];
         result.radialCenterStick = centerVerties[1];
+        result.radialCenterPoint = [newRx.value, newRy.value, 0]
+
+
+
+        if (image.type === GradientType.RADIAL || image.type === GradientType.REPEATING_RADIAL) {
+          const { startPoint, endPoint, shapePoint } = image.getStartEndPoint(result);
+
+          const [
+            newStartPoint, 
+            newEndPoint, 
+            newShapePoint,
+            newEndPoint1,
+            newEndPoint2,
+            newShapePoint1,
+            newShapePoint2
+          ] = vertiesMap([
+            startPoint, 
+            endPoint, 
+            shapePoint,
+            [endPoint[0], endPoint[1] + 1, endPoint[2]],
+            [endPoint[0], endPoint[1] - 1, endPoint[2]],
+            [shapePoint[0] - 1, shapePoint[1], shapePoint[2]],
+            [shapePoint[0] + 1, shapePoint[1], shapePoint[2]]                        
+          ], this.absoluteMatrix);
+
+          result.radialCenterPosition = newStartPoint;
+          result.radialStartPoint = newStartPoint;
+          result.radialEndPoint = newEndPoint;
+          result.radialShapePoint = newShapePoint;
+          result.radialEndPoint1 = newEndPoint1;
+          result.radialEndPoint2 = newEndPoint2;
+          result.radialShapePoint1 = newShapePoint1;
+          result.radialShapePoint2 = newShapePoint2;
+
+          const dist = vec3.dist(newStartPoint, newEndPoint);
+
+          result.colorsteps = image.colorsteps.map(it => {
+            const offset = it.toLength().toPx(dist).value;
+            return {
+              id: it.id,
+              cut: it.cut,
+              color: it.color,
+              pos: vec3.lerp([], result.radialStartPoint, result.radialEndPoint, offset / dist)
+            }
+          });
+
+
+        } else if (image.type === GradientType.CONIC || image.type === GradientType.REPEATING_CONIC) {
+          const { startPoint, endPoint, shapePoint } = image.getStartEndPoint(result);
+
+          const [
+            newStartPoint, 
+            newEndPoint, 
+            newShapePoint,
+          ] = vertiesMap([
+            startPoint, 
+            endPoint, 
+            shapePoint,
+          ], this.absoluteMatrix);
+
+          result.radialCenterPosition = newStartPoint;
+          result.radialStartPoint = newStartPoint;
+          result.radialEndPoint = newEndPoint;
+          result.radialShapePoint = newShapePoint;
+
+          const targetPoint = newShapePoint;
+
+          result.colorsteps = image.colorsteps.map(it => {
+            const angle = it.percent * 3.6 + image.angle;
+
+            const [newPos] = vertiesMap([
+              targetPoint
+             ], calculateRotationOriginMat4(angle, result.radialCenterPosition)) 
+
+            return {
+              id: it.id,
+              cut: it.cut,
+              color: it.color,
+              pos: newPos
+            }
+          });
+
+
+        }
 
         break;
       case GradientType.LINEAR:
       case GradientType.REPEATING_LINEAR:
         // gradient length 구하기
-        result.gradientLineLength = this.getGradientLineLength( backRect.width, backRect.height, image.angle);
+        result.gradientLineLength = this.getGradientLineLength(backRect.width, backRect.height, image.angle);
         result.centerPosition = vec3.lerp([], backVerties[0], backVerties[2], 0.5);
 
-        const startPoint = vec3.add([], result.centerPosition, [0, result.gradientLineLength/2, 0]);        
-        const endPoint = vec3.subtract([], result.centerPosition, [0, result.gradientLineLength/2, 0]);
+        const startPoint = vec3.add([], result.centerPosition, [0, result.gradientLineLength / 2, 0]);
+        const endPoint = vec3.subtract([], result.centerPosition, [0, result.gradientLineLength / 2, 0]);
 
         const areaStartPoint = vec3.add([], startPoint, [0, 0, 0]);
         const areaEndPoint = vec3.add([], endPoint, [0, 0, 0]);
 
         const [
-          newStartPoint, 
+          newStartPoint,
           newEndPoint,
           newAreaStartPoint,
           newAreaEndPoint

@@ -13,15 +13,6 @@ import { ClipPath } from "el/editor/property-parser/ClipPath";
 import ClippathEllipseEditorView from "./ClippathEllipseEditorView";
 import Dom from "el/sapa/functions/Dom";
 
-/**
- * Gradient Editor View
- *
- * 모든 좌표 계산은 matrix 를 기준으로 한다.
- *
- * current.createBackgroundImageMatrix(index) 를 통해서 matrix 를 생성한 값을 캐쉬로 잡고 처리한다.
- *
- */
-
 export default class ClippathEditorView extends ClippathEllipseEditorView {
 
   template() {

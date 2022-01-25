@@ -1,9 +1,10 @@
-import { LOAD, CHANGE, BIND } from "el/sapa/Event";
+import { LOAD, CHANGE, BIND, DOMDIFF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './SelectEditor.scss';
 import icon, { iconUse } from "el/editor/icon/icon";
 import { BlendMode } from "el/editor/types/model";
+
 export default class SelectEditor extends EditorElement {
 
     initState() {
@@ -81,7 +82,7 @@ export default class SelectEditor extends EditorElement {
         }
     }
 
-    [LOAD('$options')]() {
+    [LOAD('$options') + DOMDIFF]() {
 
         var arr = this.state.options.map(it => {
 
