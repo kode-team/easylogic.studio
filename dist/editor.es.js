@@ -107,10 +107,10 @@ function keyMapJoin(obj2, callback, joinString = "") {
   return keyMap(obj2, callback).join(joinString);
 }
 function isUndefined(value) {
-  return typeof value == "undefined" || value === null;
+  return typeof value == "undefined";
 }
 function isNotUndefined(value) {
-  return isUndefined(value) === false;
+  return !isUndefined(value);
 }
 function isBoolean(value) {
   return typeof value == "boolean";
@@ -1805,6 +1805,13 @@ function calculateRotationOriginMat4(angle2, origin2) {
   translate(view, view, negate([], origin2));
   return view;
 }
+function calculateScaleOriginMat4(scale2, origin2) {
+  const view = create$5();
+  translate(view, view, origin2);
+  scale$1(view, view, [scale2, scale2, scale2]);
+  translate(view, view, negate([], origin2));
+  return view;
+}
 function calculateMatrix(...args2) {
   const view = create$5();
   args2.forEach((v) => {
@@ -1923,6 +1930,7 @@ var math = /* @__PURE__ */ Object.freeze({
   calculateAngle,
   calculateAngleForVec3,
   calculateRotationOriginMat4,
+  calculateScaleOriginMat4,
   calculateMatrix,
   calculateMatrixInverse,
   calculateAnglePointDistance,
@@ -5181,24 +5189,24 @@ const getPolygonalDist = (points2 = []) => {
 const getCurveDist = (sx, sy, cx1, cy1, cx2, cy2, ex, ey, count = 1e3) => {
   var curve = createBezier({ x: sx, y: sy }, { x: cx1, y: cy1 }, { x: cx2, y: cy2 }, { x: ex, y: ey });
   var total = 0;
-  var startPoint = curve(0);
+  var startPoint2 = curve(0);
   for (var i = 0; i <= count; i++) {
     var t = i / count;
     var xy2 = curve(t);
-    total += getDist(startPoint.x, startPoint.y, xy2.x, xy2.y);
-    startPoint = xy2;
+    total += getDist(startPoint2.x, startPoint2.y, xy2.x, xy2.y);
+    startPoint2 = xy2;
   }
   return total;
 };
 const getQuardDist = (sx, sy, cx1, cy1, ex, ey, count = 1e3) => {
   var curve = createBezierQuard({ x: sx, y: sy }, { x: cx1, y: cy1 }, { x: ex, y: ey });
   var total = 0;
-  var startPoint = curve(0);
+  var startPoint2 = curve(0);
   for (var i = 0; i <= count; i++) {
     var t = i / count;
     var xy2 = curve(t);
-    total += getDist(startPoint.x, startPoint.y, xy2.x, xy2.y);
-    startPoint = xy2;
+    total += getDist(startPoint2.x, startPoint2.y, xy2.x, xy2.y);
+    startPoint2 = xy2;
   }
   return total;
 };
@@ -6431,7 +6439,14 @@ const GradientType = {
   CONIC: "conic-gradient",
   REPEATING_LINEAR: "repeating-linear-gradient",
   REPEATING_RADIAL: "repeating-radial-gradient",
-  REPEATING_CONIC: "repeating-conic-gradient"
+  REPEATING_CONIC: "repeating-conic-gradient",
+  IMAGE: "image-resource"
+};
+const RadialGradientSizeType = {
+  CLOSEST_SIDE: "closest-side",
+  CLOSEST_CORNER: "closest-corner",
+  FARTHEST_SIDE: "farthest-side",
+  FARTHEST_CORNER: "farthest-corner"
 };
 const RadialGradientType = {
   CIRCLE: "circle",
@@ -7471,14 +7486,190 @@ class RadialGradient extends Gradient {
     return super.getDefaultObject(__spreadValues({
       type: "radial-gradient",
       radialType: "ellipse",
+      radialSize: RadialGradientSizeType.FARTHEST_CORNER,
       radialPosition: [Position.CENTER, Position.CENTER]
     }, obj2));
   }
   toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("radialType", "radialPosition"));
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("radialType", "radialSize", "radialPosition"));
   }
   isRadial() {
     return true;
+  }
+  getConerDist(result) {
+    let topLeftPoint = result.backVerties[0];
+    let topRightPoint = result.backVerties[1];
+    let bottomLeftPoint = result.backVerties[3];
+    let bottomRightPoint = result.backVerties[2];
+    const topLeftDist = dist(result.radialCenterPosition, topLeftPoint);
+    const topRightDist = dist(result.radialCenterPosition, topRightPoint);
+    const bottomLeftDist = dist(result.radialCenterPosition, bottomLeftPoint);
+    const bottomRightDist = dist(result.radialCenterPosition, bottomRightPoint);
+    const cornerList = [
+      ["top-left", topLeftPoint, topLeftDist],
+      ["top-right", topRightPoint, topRightDist],
+      ["bottom-left", bottomLeftPoint, bottomLeftDist],
+      ["bottom-right", bottomRightPoint, bottomRightDist]
+    ];
+    cornerList.sort((a, b) => {
+      return a[2] - b[2];
+    });
+    return {
+      cornerList,
+      topLeftDist,
+      topRightDist,
+      bottomLeftDist,
+      bottomRightDist
+    };
+  }
+  EllipseRadiusToSide(result, isClosest = true) {
+    var dx1 = Math.abs(result.radialCenterPoint[0]);
+    var dy1 = Math.abs(result.radialCenterPoint[1]);
+    var dx2 = Math.abs(result.radialCenterPoint[0] - result.backRect.width);
+    var dy2 = Math.abs(result.radialCenterPoint[1] - result.backRect.height);
+    if (isClosest) {
+      var dx = dx1 < dx2 ? dx1 : dx2;
+      var dy = dy1 < dy2 ? dy1 : dy2;
+    } else {
+      var dx = dx1 > dx2 ? dx1 : dx2;
+      var dy = dy1 > dy2 ? dy1 : dy2;
+    }
+    return { width: dx, height: dy };
+  }
+  EllipseRadius(newSize, result, isClosest = true) {
+    const { cornerList, topLeftDist, topRightDist, bottomRightDist, bottomLeftDist } = this.getConerDist(result);
+    const targetList = [topLeftDist, topRightDist, bottomLeftDist, bottomRightDist];
+    var raySize = isClosest ? Math.min(...targetList) : Math.max(...targetList);
+    var point2 = cornerList.find((it) => it[2] === raySize)[1];
+    var aspect_ratio = newSize.width / newSize.height;
+    if (aspect_ratio === 0) {
+      endPoint = clone(startPoint);
+      shapePoint = clone(startPoint);
+      return;
+    }
+    var distPoint = subtract([], point2, result.radialCenterPosition);
+    var a = Math.sqrt(Math.pow(distPoint[0], 2) + Math.pow(distPoint[1], 2) * Math.pow(aspect_ratio, 2));
+    var b = a / aspect_ratio;
+    return { width: a, height: b };
+  }
+  getStartEndPoint(result) {
+    let startPoint2, endPoint2, shapePoint2;
+    const radialType = this.json.radialType;
+    const radialSize = this.json.radialSize;
+    let [rx, ry] = this.json.radialPosition;
+    const backRect = result.backRect;
+    const backVerties = rectToVerties(backRect.x, backRect.y, backRect.width, backRect.height);
+    if (rx == "center")
+      rx = Length.percent(50);
+    if (ry == "center")
+      ry = Length.percent(50);
+    const newRx = rx.toPx(backRect.width);
+    const newRy = ry.toPx(backRect.height);
+    const centerPoisiton = [backRect.x + newRx.value, backRect.y + newRy.value, 0];
+    let leftPoint = [backVerties[0][0], newRy.value, 0];
+    let rightPoint = [backVerties[1][0], newRy.value, 0];
+    let topPoint = [newRx.value, backVerties[0][1], 0];
+    let bottomPoint = [newRx.value, backVerties[3][1], 0];
+    const leftDist = dist(centerPoisiton, leftPoint);
+    const rightDist = dist(centerPoisiton, rightPoint);
+    const topDist = dist(centerPoisiton, topPoint);
+    const bottomDist = dist(centerPoisiton, bottomPoint);
+    const list2 = [
+      ["top", topPoint, topDist],
+      ["left", leftPoint, leftDist],
+      ["right", rightPoint, rightDist],
+      ["bottom", bottomPoint, bottomDist]
+    ];
+    list2.sort((a, b) => {
+      return a[2] - b[2];
+    });
+    let topLeftPoint = backVerties[0];
+    let topRightPoint = backVerties[1];
+    let bottomLeftPoint = backVerties[3];
+    let bottomRightPoint = backVerties[2];
+    const topLeftDist = dist(centerPoisiton, topLeftPoint);
+    const topRightDist = dist(centerPoisiton, topRightPoint);
+    const bottomLeftDist = dist(centerPoisiton, bottomLeftPoint);
+    const bottomRightDist = dist(centerPoisiton, bottomRightPoint);
+    const cornerList = [
+      ["top-left", topLeftPoint, topLeftDist],
+      ["top-right", topRightPoint, topRightDist],
+      ["bottom-left", bottomLeftPoint, bottomLeftDist],
+      ["bottom-right", bottomRightPoint, bottomRightDist]
+    ];
+    cornerList.sort((a, b) => {
+      return a[2] - b[2];
+    });
+    startPoint2 = clone(centerPoisiton);
+    switch (radialType) {
+      case RadialGradientType.CIRCLE:
+        switch (radialSize) {
+          case RadialGradientSizeType.CLOSEST_SIDE:
+            var [side, point2, dist$1] = list2[0];
+            endPoint2 = fromValues(startPoint2[0] + dist$1, startPoint2[1], startPoint2[2]);
+            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + dist$1, startPoint2[2]);
+            break;
+          case RadialGradientSizeType.CLOSEST_CORNER:
+            var [side, point2, dist$1] = cornerList[0];
+            endPoint2 = fromValues(startPoint2[0] + dist$1, startPoint2[1], startPoint2[2]);
+            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + dist$1, startPoint2[2]);
+            break;
+          case RadialGradientSizeType.FARTHEST_SIDE:
+            var [side, point2, dist$1] = list2[list2.length - 1];
+            endPoint2 = fromValues(startPoint2[0] + dist$1, startPoint2[1], startPoint2[2]);
+            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + dist$1, startPoint2[2]);
+            break;
+          case RadialGradientType.CIRCLE:
+          case RadialGradientSizeType.FARTHEST_CORNER:
+            var [side, point2, dist$1] = cornerList[cornerList.length - 1];
+            endPoint2 = fromValues(startPoint2[0] + dist$1, startPoint2[1], startPoint2[2]);
+            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + dist$1, startPoint2[2]);
+            break;
+          default:
+            var dist$1 = radialSize[0].toPx(dist(result.backVerties[1], result.backVerties[0]));
+            endPoint2 = fromValues(startPoint2[0] + dist$1, startPoint2[1], startPoint2[2]);
+            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + dist$1, startPoint2[2]);
+            break;
+        }
+        break;
+      case RadialGradientType.ELLIPSE:
+        switch (radialSize) {
+          case RadialGradientSizeType.CLOSEST_SIDE:
+            var newSize = this.EllipseRadiusToSide(result, true);
+            endPoint2 = fromValues(startPoint2[0] + newSize.width, startPoint2[1], startPoint2[2]);
+            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + newSize.height, startPoint2[2]);
+            break;
+          case RadialGradientSizeType.CLOSEST_CORNER:
+            var newSize = this.EllipseRadiusToSide(result, true);
+            var radius = this.EllipseRadius(newSize, result, true);
+            endPoint2 = fromValues(startPoint2[0] + radius.width, startPoint2[1], startPoint2[2]);
+            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + radius.height, startPoint2[2]);
+            break;
+          case RadialGradientSizeType.FARTHEST_SIDE:
+            var newSize = this.EllipseRadiusToSide(result, false);
+            endPoint2 = fromValues(startPoint2[0] + newSize.width, startPoint2[1], startPoint2[2]);
+            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + newSize.height, startPoint2[2]);
+            break;
+          case RadialGradientSizeType.FARTHEST_CORNER:
+            var newSize = this.EllipseRadiusToSide(result, false);
+            var radius = this.EllipseRadius(newSize, result, false);
+            endPoint2 = fromValues(startPoint2[0] + radius.width, startPoint2[1], startPoint2[2]);
+            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + radius.height, startPoint2[2]);
+            break;
+          default:
+            var raySize = radialSize[0].toPx(dist(result.backVerties[1], result.backVerties[0]));
+            var shapeSize = radialSize[1].toPx(dist(result.backVerties[3], result.backVerties[0]));
+            endPoint2 = fromValues(startPoint2[0] + raySize, startPoint2[1], startPoint2[2]);
+            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + shapeSize, startPoint2[2]);
+            break;
+        }
+        break;
+    }
+    return {
+      startPoint: startPoint2,
+      endPoint: endPoint2,
+      shapePoint: shapePoint2
+    };
   }
   toString() {
     if (this.colorsteps.length === 0)
@@ -7486,10 +7677,12 @@ class RadialGradient extends Gradient {
     var colorString = this.getColorString();
     var json = this.json;
     var opt = "";
-    var radialType = json.radialType || "circle";
+    var radialType = json.radialType || RadialGradientType.ELLIPSE;
+    var radialSize = json.radialSize || RadialGradientSizeType.FARTHEST_CORNER;
     var radialPosition = json.radialPosition || ["center", "center"];
     radialPosition = DEFINED_POSITIONS$1[radialPosition] ? radialPosition : radialPosition.join(" ");
-    opt = radialPosition ? `${radialType} at ${radialPosition}` : radialType;
+    radialSize = isArray(radialSize) ? radialSize.join(" ") : radialSize;
+    opt = radialPosition ? `${radialType} ${radialSize} at ${radialPosition}` : `${radialType} ${radialSize}`;
     return `${json.type || "radial-gradient"}(${opt}, ${colorString})`;
   }
   static parse(str) {
@@ -7497,6 +7690,7 @@ class RadialGradient extends Gradient {
     var radialType = "ellipse";
     var radialPosition = [Position.CENTER, Position.CENTER];
     var colorsteps = [];
+    var radialSize = "";
     results.str.split("(")[1].split(")")[0].split(",").map((it) => it.trim()).forEach((newValue, index2) => {
       if (newValue.includes("@")) {
         newValue = reverseMatches(newValue, results.matches);
@@ -7506,6 +7700,19 @@ class RadialGradient extends Gradient {
           [radialType, radialPosition] = newValue.split("at").map((it) => it.trim());
         } else {
           radialType = newValue;
+        }
+        const tempArr = radialType.split(" ").map((it) => it.trim());
+        radialType = tempArr[0];
+        radialSize = tempArr[1] || RadialGradientSizeType.FARTHEST_CORNER;
+        switch (radialSize) {
+          case RadialGradientSizeType.CLOSEST_SIDE:
+          case RadialGradientSizeType.CLOSEST_CORNER:
+          case RadialGradientSizeType.FARTHEST_SIDE:
+          case RadialGradientSizeType.FARTHEST_CORNER:
+            break;
+          default:
+            radialSize = radialSize.split(" ").map((it) => Length.parse(it.trim()));
+            break;
         }
         if (typeof radialPosition === "string") {
           var arr = radialPosition.split(" ");
@@ -7525,7 +7732,7 @@ class RadialGradient extends Gradient {
         }
       }
     });
-    return new RadialGradient({ radialType, radialPosition, colorsteps });
+    return new RadialGradient({ radialType, radialSize, radialPosition, colorsteps });
   }
 }
 class RepeatingRadialGradient extends RadialGradient {
@@ -7538,6 +7745,7 @@ class RepeatingRadialGradient extends RadialGradient {
     var radial2 = RadialGradient.parse(str);
     return new RepeatingRadialGradient({
       radialType: radial2.radialType,
+      radialSize: radial2.radialSize,
       radialPosition: radial2.radialPosition,
       colorsteps: radial2.colorsteps
     });
@@ -7579,6 +7787,36 @@ class ConicGradient extends Gradient {
   }
   hasAngle() {
     return true;
+  }
+  getStartEndPoint(result) {
+    let startPoint2, endPoint2, shapePoint2;
+    let [rx, ry] = this.json.radialPosition;
+    const backRect = result.backRect;
+    const backVerties = rectToVerties(backRect.x, backRect.y, backRect.width, backRect.height);
+    if (rx == "center")
+      rx = Length.percent(50);
+    if (ry == "center")
+      ry = Length.percent(50);
+    const newRx = rx.toPx(backRect.width);
+    const newRy = ry.toPx(backRect.height);
+    const centerPoisiton = [backRect.x + newRx.value, backRect.y + newRy.value, 0];
+    let topLeftPoint = backVerties[0];
+    let topRightPoint = backVerties[1];
+    let bottomLeftPoint = backVerties[3];
+    let bottomRightPoint = backVerties[2];
+    const topLeftDist = dist(centerPoisiton, topLeftPoint);
+    const topRightDist = dist(centerPoisiton, topRightPoint);
+    const bottomLeftDist = dist(centerPoisiton, bottomLeftPoint);
+    const bottomRightDist = dist(centerPoisiton, bottomRightPoint);
+    startPoint2 = clone(centerPoisiton);
+    const dist$1 = Math.max(topLeftDist, topRightDist, bottomLeftDist, bottomRightDist);
+    endPoint2 = fromValues(startPoint2[0] + dist$1, startPoint2[1], startPoint2[2]);
+    shapePoint2 = fromValues(startPoint2[0], startPoint2[1] - dist$1, startPoint2[2]);
+    return {
+      startPoint: startPoint2,
+      endPoint: endPoint2,
+      shapePoint: shapePoint2
+    };
   }
   getColorString() {
     if (this.colorsteps.length === 0)
@@ -9448,10 +9686,10 @@ class Point {
     let maxdist2 = 0;
     let breakIndex = start2;
     const tol2 = tolerance * tolerance;
-    const startPoint = points2[start2];
+    const startPoint2 = points2[start2];
     const lastPoint = points2[last2];
     for (var i = start2 + 1; i < last2; i++) {
-      const dist2 = Point.segmentDistance2(points2[i].x, points2[i].y, startPoint, lastPoint);
+      const dist2 = Point.segmentDistance2(points2[i].x, points2[i].y, startPoint2, lastPoint);
       if (dist2 <= maxdist2)
         continue;
       breakIndex = i;
@@ -10338,14 +10576,14 @@ class PathParser {
         var [cx1, cy1, x2, y2] = values;
         var prevPoint = Point.getPrevPoint(points2, points2.length);
         if (prevPoint.curve) {
-          var startPoint = { x: x2, y: y2 };
-          var endPoint = { x: x2, y: y2 };
+          var startPoint2 = { x: x2, y: y2 };
+          var endPoint2 = { x: x2, y: y2 };
           var reversePoint2 = { x: x2, y: y2 };
           points2.push({
             command: "L",
             originalCommand: command,
-            startPoint,
-            endPoint,
+            startPoint: startPoint2,
+            endPoint: endPoint2,
             reversePoint: reversePoint2,
             curve: false
           });
@@ -10354,27 +10592,27 @@ class PathParser {
           if (nextSegment && nextSegment.command === "L") {
             prevPoint.curve = true;
             prevPoint.endPoint = { x: cx1, y: cy1 };
-            var startPoint = { x: x2, y: y2 };
+            var startPoint2 = { x: x2, y: y2 };
             var reversePoint2 = { x: x2, y: y2 };
-            var endPoint = { x: x2, y: y2 };
+            var endPoint2 = { x: x2, y: y2 };
             points2.push({
               command: "L",
               originalCommand: command,
               curve: false,
-              startPoint,
-              endPoint,
+              startPoint: startPoint2,
+              endPoint: endPoint2,
               reversePoint: reversePoint2
             });
           } else {
-            var startPoint = { x: x2, y: y2 };
+            var startPoint2 = { x: x2, y: y2 };
             var reversePoint2 = { x: cx1, y: cy1 };
-            var endPoint = { x: x2, y: y2 };
+            var endPoint2 = { x: x2, y: y2 };
             points2.push({
               command,
               originalCommand: command,
               curve: true,
-              startPoint,
-              endPoint,
+              startPoint: startPoint2,
+              endPoint: endPoint2,
               reversePoint: reversePoint2
             });
           }
@@ -10386,14 +10624,14 @@ class PathParser {
           var [cx1, cy1, sx, sy] = prevSegment.values;
           var prevPoint = Point.getPrevPoint(points2, points2.length);
           prevPoint.endPoint = Point.getReversePoint({ x: sx, y: sy }, { x: cx1, y: cy1 });
-          var startPoint = { x: x2, y: y2 };
-          var endPoint = { x: x2, y: y2 };
+          var startPoint2 = { x: x2, y: y2 };
+          var endPoint2 = { x: x2, y: y2 };
           var reversePoint2 = { x: x2, y: y2 };
           points2.push({
             command: "L",
             originalCommand: command,
-            startPoint,
-            endPoint,
+            startPoint: startPoint2,
+            endPoint: endPoint2,
             reversePoint: reversePoint2,
             curve: false
           });
@@ -10401,15 +10639,15 @@ class PathParser {
       } else if (command === "C") {
         var prevPoint = Point.getPrevPoint(points2, points2.length);
         var [cx1, cy1, cx2, cy2, x2, y2] = values;
-        var startPoint = { x: x2, y: y2 };
+        var startPoint2 = { x: x2, y: y2 };
         var reversePoint2 = { x: cx2, y: cy2 };
-        var endPoint = { x: x2, y: y2 };
+        var endPoint2 = { x: x2, y: y2 };
         points2.push({
           command,
           originalCommand: command,
           curve: true,
-          startPoint,
-          endPoint,
+          startPoint: startPoint2,
+          endPoint: endPoint2,
           reversePoint: reversePoint2
         });
         if (prevPoint) {
@@ -10423,14 +10661,14 @@ class PathParser {
           var [cx2, cy2, sx, sy] = prevSegment.values;
           var prevPoint = Point.getPrevPoint(points2, points2.length);
           prevPoint.endPoint = Point.getReversePoint(prevPoint.startPoint, prevPoint.reversePoint);
-          var startPoint = { x: x2, y: y2 };
-          var endPoint = { x: x2, y: y2 };
+          var startPoint2 = { x: x2, y: y2 };
+          var endPoint2 = { x: x2, y: y2 };
           var reversePoint2 = { x: cx2, y: cy2 };
           points2.push({
             command: "Q",
             originalCommand: command,
-            startPoint,
-            endPoint,
+            startPoint: startPoint2,
+            endPoint: endPoint2,
             reversePoint: reversePoint2,
             curve: false
           });
@@ -11908,22 +12146,22 @@ function makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey) {
 }
 function makeInterpolateOffset(segments2) {
   var interpolateList = [];
-  var startPoint = [];
+  var startPoint2 = [];
   segments2.forEach((segment, index2) => {
     switch (segment.command) {
       case "M":
         var [ex, ey] = segment.values;
-        startPoint = [ex, ey];
+        startPoint2 = [ex, ey];
         break;
       case "m":
-        var [sx, sy] = startPoint;
+        var [sx, sy] = startPoint2;
         var [ex, ey] = segment.values;
         ex += sx;
         ey += sy;
-        startPoint = [ex, ey];
+        startPoint2 = [ex, ey];
         break;
       case "L":
-        var [sx, sy] = startPoint;
+        var [sx, sy] = startPoint2;
         var [ex, ey] = segment.values;
         interpolateList.push({
           command: segment.command,
@@ -11931,10 +12169,10 @@ function makeInterpolateOffset(segments2) {
           length: getDist(sx, sy, ex, ey),
           interpolate: makeInterpolateLine(sx, sy, ex, ey)
         });
-        startPoint = [ex, ey];
+        startPoint2 = [ex, ey];
         break;
       case "l":
-        var [sx, sy] = startPoint;
+        var [sx, sy] = startPoint2;
         var [ex, ey] = segment.values;
         ex += sx;
         ey += sy;
@@ -11944,10 +12182,10 @@ function makeInterpolateOffset(segments2) {
           length: getDist(sx, sy, ex, ey),
           interpolate: makeInterpolateLine(sx, sy, ex, ey)
         });
-        startPoint = [ex, ey];
+        startPoint2 = [ex, ey];
         break;
       case "C":
-        var [sx, sy] = startPoint;
+        var [sx, sy] = startPoint2;
         var [cx1, cy1, cx2, cy2, ex, ey] = segment.values;
         interpolateList.push({
           command: segment.command,
@@ -11955,10 +12193,10 @@ function makeInterpolateOffset(segments2) {
           length: getCurveDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
           interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
         });
-        startPoint = [ex, ey];
+        startPoint2 = [ex, ey];
         break;
       case "c":
-        var [sx, sy] = startPoint;
+        var [sx, sy] = startPoint2;
         var [cx1, cy1, cx2, cy2, ex, ey] = segment.values;
         cx1 += sx;
         cx2 += sx;
@@ -11972,10 +12210,10 @@ function makeInterpolateOffset(segments2) {
           length: getCurveDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
           interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
         });
-        startPoint = [ex, ey];
+        startPoint2 = [ex, ey];
         break;
       case "Q":
-        var [sx, sy] = startPoint;
+        var [sx, sy] = startPoint2;
         var [cx1, cy1, ex, ey] = segment.values;
         interpolateList.push({
           command: segment.command,
@@ -11983,10 +12221,10 @@ function makeInterpolateOffset(segments2) {
           length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
           interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
         });
-        startPoint = [ex, ey];
+        startPoint2 = [ex, ey];
         break;
       case "q":
-        var [sx, sy] = startPoint;
+        var [sx, sy] = startPoint2;
         var [cx1, cy1, ex, ey] = segment.values;
         cx1 += sx;
         ex += sx;
@@ -11998,10 +12236,10 @@ function makeInterpolateOffset(segments2) {
           length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
           interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
         });
-        startPoint = [ex, ey];
+        startPoint2 = [ex, ey];
         break;
       case "S":
-        var [sx, sy] = startPoint;
+        var [sx, sy] = startPoint2;
         var [cx2, cy2, ex, ey] = segment.values;
         var prevSegment = interpolateList[interpolateList.length - 1];
         if (["C", "c", "S", "s"].includes(prevSegment.command)) {
@@ -12013,11 +12251,11 @@ function makeInterpolateOffset(segments2) {
             length: getCubicDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
             interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
           });
-          startPoint = [ex, ey];
+          startPoint2 = [ex, ey];
           break;
         }
       case "s":
-        var [sx, sy] = startPoint;
+        var [sx, sy] = startPoint2;
         var [cx2, cy2, ex, ey] = segment.values;
         cx2 += sx;
         ex += sx;
@@ -12033,11 +12271,11 @@ function makeInterpolateOffset(segments2) {
             length: getCubicDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
             interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
           });
-          startPoint = [ex, ey];
+          startPoint2 = [ex, ey];
           break;
         }
       case "T":
-        var [sx, sy] = startPoint;
+        var [sx, sy] = startPoint2;
         var [ex, ey] = segment.values;
         var prevSegment = interpolateList[interpolateList.length - 1];
         if (["Q", "q", "T", "t"].includes(prevSegment.command)) {
@@ -12049,11 +12287,11 @@ function makeInterpolateOffset(segments2) {
             length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
             interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
           });
-          startPoint = [ex, ey];
+          startPoint2 = [ex, ey];
         }
         break;
       case "t":
-        var [sx, sy] = startPoint;
+        var [sx, sy] = startPoint2;
         var [ex, ey] = segment.values;
         ex += sx;
         ey += sy;
@@ -12067,7 +12305,7 @@ function makeInterpolateOffset(segments2) {
             length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
             interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
           });
-          startPoint = [ex, ey];
+          startPoint2 = [ex, ey];
         }
         break;
     }
@@ -13052,11 +13290,11 @@ class BaseModel {
     if (isForce)
       ;
     else {
-      if (this.getCache(key) === value && this.getCache(parsedKey)) {
+      if (this.getCache(cachedKey) === value && this.getCache(parsedKey)) {
         return this.getCache(parsedKey);
       }
     }
-    this.addCache(key, value);
+    this.addCache(cachedKey, value);
     this.addCache(parsedKey, newValueCallback(value, this.ref));
     return this.getCache(parsedKey);
   }
@@ -13111,7 +13349,7 @@ class BaseModel {
     return args2.some((it) => this.lastChangedField[it] !== void 0);
   }
   getDefaultObject(obj2 = {}) {
-    var id = uuid();
+    var id = obj2.id || uuid();
     return __spreadValues({
       id,
       children: [],
@@ -18188,7 +18426,7 @@ var setAttributeForMulti = {
     messages.forEach((message) => {
       commandMaker.emit("update", message.id, message.attrs, context);
       const item2 = editor.get(message.id);
-      if (item2.is("artboard")) {
+      if (item2.parent && item2.parent.is("project")) {
         return;
       }
       const parent = item2.parent;
@@ -22543,7 +22781,7 @@ class IconManager$1 {
     if (isFunction(icon)) {
       return icon(item2);
     }
-    return iconUse$1(icon || item2.getIcon());
+    return iconUse$1(icon || item2.getIcon() || "rect");
   }
   set(itemType, value) {
     this.iconMap[itemType] = value;
@@ -25702,7 +25940,8 @@ registElement({ AddArtboard });
   { icon: iconUse$1("image"), title: "Image", command: "addLayerView", args: ["image"], shortcut: KeyStringMaker({ key: "I" }) },
   "-",
   { icon: iconUse$1("video"), title: "Video", command: "addLayerView", args: ["video"], shortcut: KeyStringMaker({ key: "V" }) },
-  { icon: iconUse$1("iframe"), title: "IFrame", command: "addLayerView", args: ["iframe"], shortcut: KeyStringMaker({ key: "F" }) }
+  { icon: iconUse$1("iframe"), title: "IFrame", command: "addLayerView", args: ["iframe"], shortcut: KeyStringMaker({ key: "F" }) },
+  { icon: iconUse$1("rect"), title: "SampleLayer", command: "addLayerView", args: ["sample"], shortcut: KeyStringMaker({ key: "F" }) }
 ];
 [
   { icon: iconUse$1("outline_rect"), title: "Rectangle", command: "addLayerView", args: ["svg-rect"], shortcut: KeyStringMaker({ key: "Shift+R" }) },
@@ -25846,7 +26085,8 @@ var DefaultMenu = [
       { icon: iconUse$1("image"), title: "Image", key: "image", command: "addLayerView", args: ["image"], shortcut: KeyStringMaker({ key: "I" }) },
       "-",
       { icon: iconUse$1("video"), title: "Video", key: "video", command: "addLayerView", args: ["video"], shortcut: KeyStringMaker({ key: "V" }) },
-      { icon: iconUse$1("iframe"), title: "IFrame", key: "iframe", command: "addLayerView", args: ["iframe"], shortcut: KeyStringMaker({ key: "F" }) }
+      { icon: iconUse$1("iframe"), title: "IFrame", key: "iframe", command: "addLayerView", args: ["iframe"], shortcut: KeyStringMaker({ key: "F" }) },
+      { icon: iconUse$1("rect"), title: "SampleLayer", key: "sample", command: "addLayerView", args: ["sample"] }
     ],
     events: ["config:editing.mode", "config:editing.mode.itemType"],
     selected: (state, editor) => {
@@ -27844,9 +28084,11 @@ class BackgroundImageProperty extends BaseProperty {
     }
   }
   [SUBSCRIBE_SELF("changeBackgroundImage")](key, value) {
-    this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
-      [key]: value
-    }));
+    this.nextTick(() => {
+      this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
+        [key]: value
+      }));
+    }, 10);
   }
 }
 var BackgroundPositionEditor$1 = "";
@@ -30189,6 +30431,9 @@ class ComponentProperty extends BaseProperty {
       return "";
     const inspector = this.$editor.components.createInspector(current);
     inspector.forEach((it) => {
+      if (isString(it)) {
+        return;
+      }
       let defaultValue = current[it.key] || it.defaultValue;
       if (isFunction(it.convertDefaultValue)) {
         defaultValue = it.convertDefaultValue(current, it.key);
@@ -30268,7 +30513,7 @@ class ComponentEditor extends EditorElement {
     if (childEditor.type === "column") {
       const size2 = (childEditor.size || [2]).join("-");
       return `
-        <div class='column column-${size2}' style="--column-gap: ${childEditor.gap}px" >
+        <div class='column column-${size2}' style="--column-gap: ${childEditor.gap}px; --row-gap: ${childEditor.rowGap || 0}px" >
           ${childEditor.columns.map((it, itemIndex) => {
         if (it === "-") {
           return `<div class="column-item"></div>`;
@@ -31892,23 +32137,90 @@ class DomModel extends GroupModel {
         ], this.absoluteMatrix);
         result.radialCenterPosition = centerVerties[0];
         result.radialCenterStick = centerVerties[1];
+        result.radialCenterPoint = [newRx.value, newRy.value, 0];
+        if (image2.type === GradientType.RADIAL || image2.type === GradientType.REPEATING_RADIAL) {
+          const { startPoint: startPoint3, endPoint: endPoint3, shapePoint: shapePoint2 } = image2.getStartEndPoint(result);
+          const [
+            newStartPoint2,
+            newEndPoint2,
+            newShapePoint,
+            newEndPoint1,
+            newEndPoint22,
+            newShapePoint1,
+            newShapePoint2
+          ] = vertiesMap([
+            startPoint3,
+            endPoint3,
+            shapePoint2,
+            [endPoint3[0], endPoint3[1] + 1, endPoint3[2]],
+            [endPoint3[0], endPoint3[1] - 1, endPoint3[2]],
+            [shapePoint2[0] - 1, shapePoint2[1], shapePoint2[2]],
+            [shapePoint2[0] + 1, shapePoint2[1], shapePoint2[2]]
+          ], this.absoluteMatrix);
+          result.radialCenterPosition = newStartPoint2;
+          result.radialStartPoint = newStartPoint2;
+          result.radialEndPoint = newEndPoint2;
+          result.radialShapePoint = newShapePoint;
+          result.radialEndPoint1 = newEndPoint1;
+          result.radialEndPoint2 = newEndPoint22;
+          result.radialShapePoint1 = newShapePoint1;
+          result.radialShapePoint2 = newShapePoint2;
+          const dist$1 = dist(newStartPoint2, newEndPoint2);
+          result.colorsteps = image2.colorsteps.map((it) => {
+            const offset = it.toLength().toPx(dist$1).value;
+            return {
+              id: it.id,
+              cut: it.cut,
+              color: it.color,
+              pos: lerp([], result.radialStartPoint, result.radialEndPoint, offset / dist$1)
+            };
+          });
+        } else if (image2.type === GradientType.CONIC || image2.type === GradientType.REPEATING_CONIC) {
+          const { startPoint: startPoint3, endPoint: endPoint3, shapePoint: shapePoint2 } = image2.getStartEndPoint(result);
+          const [
+            newStartPoint2,
+            newEndPoint2,
+            newShapePoint
+          ] = vertiesMap([
+            startPoint3,
+            endPoint3,
+            shapePoint2
+          ], this.absoluteMatrix);
+          result.radialCenterPosition = newStartPoint2;
+          result.radialStartPoint = newStartPoint2;
+          result.radialEndPoint = newEndPoint2;
+          result.radialShapePoint = newShapePoint;
+          const targetPoint = newShapePoint;
+          result.colorsteps = image2.colorsteps.map((it) => {
+            const angle2 = it.percent * 3.6 + image2.angle;
+            const [newPos] = vertiesMap([
+              targetPoint
+            ], calculateRotationOriginMat4(angle2, result.radialCenterPosition));
+            return {
+              id: it.id,
+              cut: it.cut,
+              color: it.color,
+              pos: newPos
+            };
+          });
+        }
         break;
       case GradientType.LINEAR:
       case GradientType.REPEATING_LINEAR:
         result.gradientLineLength = this.getGradientLineLength(backRect.width, backRect.height, image2.angle);
         result.centerPosition = lerp([], backVerties[0], backVerties[2], 0.5);
-        const startPoint = add$1([], result.centerPosition, [0, result.gradientLineLength / 2, 0]);
-        const endPoint = subtract([], result.centerPosition, [0, result.gradientLineLength / 2, 0]);
-        const areaStartPoint = add$1([], startPoint, [0, 0, 0]);
-        const areaEndPoint = add$1([], endPoint, [0, 0, 0]);
+        const startPoint2 = add$1([], result.centerPosition, [0, result.gradientLineLength / 2, 0]);
+        const endPoint2 = subtract([], result.centerPosition, [0, result.gradientLineLength / 2, 0]);
+        const areaStartPoint = add$1([], startPoint2, [0, 0, 0]);
+        const areaEndPoint = add$1([], endPoint2, [0, 0, 0]);
         const [
           newStartPoint,
           newEndPoint,
           newAreaStartPoint,
           newAreaEndPoint
         ] = vertiesMap([
-          startPoint,
-          endPoint,
+          startPoint2,
+          endPoint2,
           areaStartPoint,
           areaEndPoint
         ], calculateRotationOriginMat4(image2.angle, result.centerPosition));
@@ -31931,9 +32243,6 @@ class DomModel extends GroupModel {
   }
 }
 class LayerModel extends DomModel {
-  static getIcon() {
-    return obj.rect;
-  }
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
       itemType: "layer",
@@ -31943,9 +32252,6 @@ class LayerModel extends DomModel {
   }
   getDefaultTitle() {
     return "Layer";
-  }
-  getIcon() {
-    return obj.rect;
   }
   toCloneObject() {
     return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("tagName"));
@@ -36032,13 +36338,13 @@ class SVGFill extends PropertyItem {
   }
 }
 var FillEditor$1 = "";
-const imageTypeList$1 = [
+const imageTypeList = [
   "static-gradient",
   "linear-gradient",
   "radial-gradient",
   "image-resource"
 ];
-const iconList$1 = {
+const iconList = {
   "image-resource": iconUse$1("photo")
 };
 const presetPosition = {
@@ -36141,8 +36447,8 @@ class FillEditor extends EditorElement {
             </div>
             <div class="picker-tab">
               <div class="picker-tab-list" ref="$tab">
-                ${imageTypeList$1.map((it) => {
-      return `<span class='picker-tab-item ${it}' data-editor='${it}'><span class='icon'>${iconList$1[it] || ""}</span></span>`;
+                ${imageTypeList.map((it) => {
+      return `<span class='picker-tab-item ${it}' data-editor='${it}'><span class='icon'>${iconList[it] || ""}</span></span>`;
     }).join("")}
               </div>
             </div>
@@ -36519,7 +36825,46 @@ class FillEditor extends EditorElement {
 var GradientPickerPopup$1 = "";
 class GradientPickerPopup extends BasePopup {
   getTitle() {
-    return this.$i18n("gradient.picker.popup.title");
+    var _a;
+    return createComponent("SelectEditor", {
+      ref: "$select",
+      value: ((_a = this.state.image) == null ? void 0 : _a.type) || GradientType.STATIC,
+      onchange: "changeTabType",
+      options: [
+        {
+          value: GradientType.STATIC,
+          text: "Static"
+        },
+        {
+          value: GradientType.LINEAR,
+          text: "Linear Gradient"
+        },
+        {
+          value: GradientType.RADIAL,
+          text: "Radial Gradient"
+        },
+        {
+          value: GradientType.CONIC,
+          text: "Conic Gradient"
+        },
+        {
+          value: GradientType.REPEATING_LINEAR,
+          text: "Repeating Linear Gradient"
+        },
+        {
+          value: GradientType.REPEATING_RADIAL,
+          text: "Repeating Radial Gradient"
+        },
+        {
+          value: GradientType.REPEATING_CONIC,
+          text: "Repeating Conic Gradient"
+        },
+        {
+          value: GradientType.IMAGE,
+          text: "Image"
+        }
+      ]
+    });
   }
   initialize() {
     super.initialize();
@@ -36545,9 +36890,6 @@ class GradientPickerPopup extends BasePopup {
       </div>
      
     `;
-  }
-  [SUBSCRIBE("changeTabType")](type) {
-    this.refs.$body.attr("data-selected-editor", type);
   }
   getColorString() {
     var value = "";
@@ -36578,6 +36920,9 @@ class GradientPickerPopup extends BasePopup {
     this.updateTitle();
     this.updateData();
   }
+  [SUBSCRIBE_SELF("changeTabType")](key, type) {
+    this.children.$g.trigger("changeTabType", type);
+  }
   [SUBSCRIBE_SELF("changeColor")](color2) {
     this.children.$g.trigger("setColorStepColor", color2);
   }
@@ -36585,14 +36930,14 @@ class GradientPickerPopup extends BasePopup {
     this.children.$g.trigger("setImageUrl", url);
   }
   updateTitle() {
-    this.setTitle(this.$i18n(`gradient.picker.popup.${this.state.image.type}`));
+    this.children.$select.setValue(this.state.image.type);
   }
   [SUBSCRIBE("showGradientPickerPopup")](data, params, rect2) {
     data.changeEvent = data.changeEvent || "changeFillPopup";
     data.image = data.gradient;
     data.params = params;
     this.setState(data);
-    this.showByRect(this.makeRect(248, 600, rect2));
+    this.showByRect(this.makeRect(248, 560, rect2));
     this.updateTitle();
     this.emit("showGradientEditorView", {
       index: data.index
@@ -40513,7 +40858,7 @@ class SelectEditor extends EditorElement {
       text: (_a = this.state.options.find((it) => it.value === this.state.value)) == null ? void 0 : _a.text
     };
   }
-  [LOAD("$options")]() {
+  [LOAD("$options") + DOMDIFF]() {
     var arr = this.state.options.map((it) => {
       var value = it.value;
       var label = it.text || it.value;
@@ -42635,23 +42980,10 @@ class FontSelectEditor extends SelectEditor {
   }
 }
 var GradientEditor$1 = "";
-var imageTypeList = [
-  "static-gradient",
-  "linear-gradient",
-  "repeating-linear-gradient",
-  "radial-gradient",
-  "repeating-radial-gradient",
-  "conic-gradient",
-  "repeating-conic-gradient",
-  "image-resource"
-];
-var iconList = {
-  "image-resource": iconUse$1("photo")
-};
 class GradientEditor extends EditorElement {
   initState() {
     var _a;
-    const image2 = BackgroundImage.parseImage(this.props.value || "") || { type: "static-gradient", colorsteps: [] };
+    const image2 = BackgroundImage.parseImage(this.props.value || "") || { type: GradientType.STATIC, colorsteps: [] };
     const id = (_a = image2.colorsteps[this.props.index]) == null ? void 0 : _a.id;
     this.$selection.selectColorStep(id);
     if (id) {
@@ -42669,7 +43001,6 @@ class GradientEditor extends EditorElement {
       image: BackgroundImage.parseImage(value)
     }, false);
     this.refresh();
-    this.parent.trigger("changeTabType", this.state.image.type);
   }
   template() {
     return `
@@ -42678,9 +43009,6 @@ class GradientEditor extends EditorElement {
               <div data-editor='image-loader'>
                 <input type='file' accept="image/*" ref='$file' />
               </div>              
-            </div>
-            <div class="picker-tab">
-              <div class="picker-tab-list" ref="$tab"></div>
             </div>
             <div class='gradient-steps' data-editor='gradient'>
                 <div class="hue-container" ref="$back"></div>            
@@ -42706,13 +43034,19 @@ class GradientEditor extends EditorElement {
     this.refresh();
     this.updateData();
   }
-  [CLICK("$tab .picker-tab-item")](e2) {
-    var type = e2.$dt.attr("data-editor");
-    e2.$dt.onlyOneClass("selected");
-    this.parent.trigger("changeTabType", type);
-    const colorsteps = this.state.image.colorsteps || [];
+  [SUBSCRIBE_SELF("changeTabType")](type) {
+    var _a, _b;
+    const oldType = (_a = this.state.image) == null ? void 0 : _a.type;
+    const colorsteps = ((_b = this.state.image) == null ? void 0 : _b.colorsteps) || [];
     if (colorsteps.length === 1) {
       colorsteps.push(colorsteps[0]);
+    }
+    if (oldType === GradientType.STATIC) {
+      if (colorsteps.length === 0) {
+        colorsteps.push(colorsteps[0], colorsteps[0]);
+      } else if (colorsteps.length === 1) {
+        colorsteps.push(colorsteps[0]);
+      }
     }
     var url = type === "image-resource" ? this.state.image.url : this.state.url;
     this.state.image = BackgroundImage.changeImageType({
@@ -42754,7 +43088,6 @@ class GradientEditor extends EditorElement {
     if (type === "url") {
       type = "image-resource";
     }
-    this.parent.trigger("changeTabType", type);
     return {
       "data-selected-editor": type
     };
@@ -42766,19 +43099,9 @@ class GradientEditor extends EditorElement {
       }
     };
   }
-  [LOAD("$tab")]() {
-    var { image: image2 } = this.state;
-    image2 = image2 || {};
-    var type = image2.type || "static-gradient";
-    if (type === "url")
-      type = "image-resource";
-    return imageTypeList.map((it) => {
-      const selected = type === it ? "selected" : "";
-      return `<span class='picker-tab-item ${it} ${selected}' data-editor='${it}'><span class='icon'>${iconList[it] || ""}</span></span>`;
-    });
-  }
   [LOAD("$stepList") + DOMDIFF]() {
-    var colorsteps = this.state.image.colorsteps || [];
+    var _a;
+    var colorsteps = ((_a = this.state.image) == null ? void 0 : _a.colorsteps) || [];
     return colorsteps.map((it, index2) => {
       var selected = this.$selection.isSelectedColorStep(it.id) ? "selected" : "";
       return `
@@ -48755,9 +49078,9 @@ class ColorMatrixEditor extends EditorElement {
   }
   [CLICK("$sample .sample-item")](e2) {
     var index2 = +e2.$dt.attr("data-index");
-    var sample = sampleList[index2];
+    var sample2 = sampleList[index2];
     this.updateData({
-      values: normalize(sample.values)
+      values: normalize(sample2.values)
     });
     this.load("$body");
   }
@@ -51962,14 +52285,14 @@ class PathGenerator {
     var state = this.state;
     var x2 = state.dragXY.x + dx;
     var y2 = state.dragXY.y + dy;
-    var endPoint = { x: x2, y: y2 };
+    var endPoint2 = { x: x2, y: y2 };
     var reversePoint2 = { x: x2, y: y2 };
     if (state.dragPoints) {
-      state.reversePoint = Point.getReversePoint(state.startPoint, endPoint);
+      state.reversePoint = Point.getReversePoint(state.startPoint, endPoint2);
     }
     var point2 = {
       startPoint: state.startPoint,
-      endPoint,
+      endPoint: endPoint2,
       curve: !!state.dragPoints,
       reversePoint: reversePoint2,
       connected: true,
@@ -51977,12 +52300,12 @@ class PathGenerator {
     };
     this.points.push(point2);
   }
-  setLastPoint(startPoint) {
-    var endPoint = clone$1(startPoint);
-    var reversePoint2 = clone$1(startPoint);
+  setLastPoint(startPoint2) {
+    var endPoint2 = clone$1(startPoint2);
+    var reversePoint2 = clone$1(startPoint2);
     var point2 = {
-      startPoint,
-      endPoint,
+      startPoint: startPoint2,
+      endPoint: endPoint2,
       curve: false,
       reversePoint: reversePoint2,
       connected: false,
@@ -52282,15 +52605,15 @@ class PathGenerator {
     var points2 = this.points;
     var x2 = state.dragXY.x + dx;
     var y2 = state.dragXY.y + dy;
-    var endPoint = { x: x2, y: y2 };
+    var endPoint2 = { x: x2, y: y2 };
     var reversePoint2 = { x: x2, y: y2 };
     if (state.dragPoints) {
-      reversePoint2 = Point.getReversePoint(state.startPoint, endPoint);
+      reversePoint2 = Point.getReversePoint(state.startPoint, endPoint2);
     }
     points2.push({
       command: state.clickCount === 0 ? "M" : "",
       startPoint: state.startPoint,
-      endPoint,
+      endPoint: endPoint2,
       curve: !!state.dragPoints,
       reversePoint: reversePoint2
     });
@@ -52538,7 +52861,7 @@ class PathGenerator {
   }
   makeMovePositionGuide() {
     var state = this.state;
-    var { startPoint, moveXY, dragPoints, altKey, snapPointList, isGroupSegment } = state;
+    var { startPoint: startPoint2, moveXY, dragPoints, altKey, snapPointList, isGroupSegment } = state;
     var points2 = this.points;
     if (moveXY) {
       snapPointList = snapPointList || [];
@@ -52553,17 +52876,17 @@ class PathGenerator {
       var prev = points2[points2.length - 1];
       if (dragPoints && !isGroupSegment) {
         if (!prev) {
-          var { x: x2, y: y2 } = Point.getReversePoint(startPoint, moveXY);
-          this.guideLineManager.M(moveXY).L(startPoint).L({ x: x2, y: y2 });
-          this.segmentManager.addCurvePoint(startPoint).addCurvePoint(moveXY).addCurvePoint({ x: x2, y: y2 });
+          var { x: x2, y: y2 } = Point.getReversePoint(startPoint2, moveXY);
+          this.guideLineManager.M(moveXY).L(startPoint2).L({ x: x2, y: y2 });
+          this.segmentManager.addCurvePoint(startPoint2).addCurvePoint(moveXY).addCurvePoint({ x: x2, y: y2 });
         } else if (prev.curve) {
-          var { x: x2, y: y2 } = Point.getReversePoint(startPoint, moveXY);
-          this.guideLineManager.M(prev.startPoint).C(prev.endPoint, { x: x2, y: y2 }, startPoint);
-          this.segmentManager.addGuideLine(prev.startPoint, prev.endPoint).addGuideLine(startPoint, { x: x2, y: y2 }).addGuideLine(startPoint, moveXY).addCurvePoint(prev.endPoint).addCurvePoint({ x: x2, y: y2 }).addCurvePoint(moveXY).addPoint(false, startPoint);
+          var { x: x2, y: y2 } = Point.getReversePoint(startPoint2, moveXY);
+          this.guideLineManager.M(prev.startPoint).C(prev.endPoint, { x: x2, y: y2 }, startPoint2);
+          this.segmentManager.addGuideLine(prev.startPoint, prev.endPoint).addGuideLine(startPoint2, { x: x2, y: y2 }).addGuideLine(startPoint2, moveXY).addCurvePoint(prev.endPoint).addCurvePoint({ x: x2, y: y2 }).addCurvePoint(moveXY).addPoint(false, startPoint2);
         } else if (prev.curve === false) {
-          var { x: x2, y: y2 } = Point.getReversePoint(startPoint, moveXY);
-          this.guideLineManager.M(prev.startPoint).Q({ x: x2, y: y2 }, startPoint);
-          this.segmentManager.addGuideLine(moveXY, { x: x2, y: y2 }).addPoint(false, startPoint).addCurvePoint({ x: x2, y: y2 }).addCurvePoint(moveXY);
+          var { x: x2, y: y2 } = Point.getReversePoint(startPoint2, moveXY);
+          this.guideLineManager.M(prev.startPoint).Q({ x: x2, y: y2 }, startPoint2);
+          this.segmentManager.addGuideLine(moveXY, { x: x2, y: y2 }).addPoint(false, startPoint2).addCurvePoint({ x: x2, y: y2 }).addCurvePoint(moveXY);
         }
       } else {
         if (!prev)
@@ -55645,15 +55968,15 @@ function defaultIcons(editor) {
 var GradientEditorView$2 = "";
 var radialTypeList = [
   "circle",
+  "circle farthest-corner",
   "circle closest-side",
   "circle closest-corner",
   "circle farthest-side",
-  "circle farthest-corner",
   "ellipse",
+  "ellipse farthest-corner",
   "ellipse closest-side",
   "ellipse closest-corner",
-  "ellipse farthest-side",
-  "ellipse farthest-corner"
+  "ellipse farthest-side"
 ];
 var repeatTypeList = [
   "no-repeat",
@@ -55663,12 +55986,7 @@ var repeatTypeList = [
   "space",
   "round"
 ];
-class GradientEditorView$1 extends EditorElement {
-  template() {
-    return /* @__PURE__ */ createElementJsx("div", {
-      class: "elf--gradient-editor-view"
-    });
-  }
+class GradientBaseEditor extends EditorElement {
   initializeData() {
     const value = this.$selection.current["background-image"];
     const cssValue = STRING_TO_CSS(value);
@@ -55679,6 +55997,14 @@ class GradientEditorView$1 extends EditorElement {
     this.state.contentBox = current.contentBox;
     this.state.backgroundImageMatrix = current.createBackgroundImageMatrix(this.state.index);
   }
+  updateData() {
+    var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.backgroundImages));
+    this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
+      "background-image": value
+    }));
+  }
+}
+class GradientResizer extends GradientBaseEditor {
   [POINTERSTART("$el .resizer") + LEFT_BUTTON + MOVE("calculateMovedResizer") + END("calculateMovedEndResizer") + PREVENT](e2) {
     this.state.$target = e2.$dt;
     this.initializeData();
@@ -55733,6 +56059,8 @@ class GradientEditorView$1 extends EditorElement {
     }
     this.updateData();
   }
+}
+class GradientRotateEditor extends GradientResizer {
   [POINTERSTART("$el .gradient-angle .rotate") + LEFT_BUTTON + MOVE("calculateMovedAngle") + END("calculatedMovedEndAngle") + PREVENT](e2) {
     this.state.$target = e2.$dt;
     this.initializeData();
@@ -55758,62 +56086,8 @@ class GradientEditorView$1 extends EditorElement {
     this.state.$target.toggleClass("moved");
     this.updateData();
   }
-  isMovableCenter(e2) {
-    this.initializeData();
-    return [
-      GradientType.RADIAL,
-      GradientType.REPEATING_RADIAL,
-      GradientType.CONIC,
-      GradientType.REPEATING_CONIC
-    ].includes(this.state.gradient.type);
-  }
-  [POINTERSTART("$el .gradient-position") + LEFT_BUTTON + MOVE("calculateMovedElement") + END("calculateMovedEndElement") + IF("isMovableCenter") + PREVENT](e2) {
-    this.state.$target = e2.$dt;
-    this.state.left = Length.parse(e2.$dt.css("left")).value;
-    this.state.top = Length.parse(e2.$dt.css("top")).value;
-    this.initializeData();
-  }
-  calculateMovedElement(dx, dy) {
-    const newLeft = this.state.left + dx;
-    const newTop = this.state.top + dy;
-    this.state.$target.css({
-      left: Length.px(newLeft),
-      top: Length.px(newTop)
-    });
-    const worldPosition = this.$viewport.applyVertexInverse([
-      newLeft,
-      newTop,
-      0
-    ]);
-    const localPosition = vertiesMap([worldPosition], this.$selection.current.absoluteMatrixInverse)[0];
-    const backgroundImage2 = this.state.gradient;
-    const backRect = backgroundImage2.getOffset(this.state.contentBox);
-    const newX = localPosition[0] - backRect.x;
-    const newY = localPosition[1] - backRect.y;
-    this.state.backgroundImages[this.state.index].image.radialPosition = [
-      Length.percent(newX / backRect.width * 100),
-      Length.percent(newY / backRect.height * 100)
-    ];
-    this.updateData();
-  }
-  calculateMovedEndElement(dx, dy) {
-    if (dx == 0 && dy === 0) {
-      switch (this.state.gradient.type) {
-        case GradientType.RADIAL:
-        case GradientType.REPEATING_RADIAL:
-          const index2 = radialTypeList.indexOf(this.state.gradient.image.radialType);
-          this.state.backgroundImages[this.state.index].image.radialType = radialTypeList[(index2 + 1) % radialTypeList.length];
-          break;
-      }
-    }
-    this.updateData();
-  }
-  updateData() {
-    var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.backgroundImages));
-    this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
-      "background-image": value
-    }));
-  }
+}
+class GradientColorstepEditor extends GradientRotateEditor {
   [KEYUP("$el .colorstep")](e2) {
     const index2 = +e2.$dt.data("index");
     switch (e2.code) {
@@ -55891,28 +56165,61 @@ class GradientEditorView$1 extends EditorElement {
       return;
     }
     const result = this.state.backgroundImageMatrix;
-    this.centerPosition = this.$viewport.applyVertex(result.centerPosition);
-    this.startPoint = this.$viewport.applyVertex(result.startPoint);
-    this.endPoint = this.$viewport.applyVertex(result.endPoint);
-    this.screenXY = this.$viewport.applyVertex(result.colorsteps[this.$targetIndex].pos);
-    this.rotateInverse = calculateRotationOriginMat4(-this.state.gradient.image.angle, this.centerPosition);
+    switch (result.backgroundImage.image.type) {
+      case GradientType.LINEAR:
+      case GradientType.REPEATING_LINEAR:
+        this.centerPosition = this.$viewport.applyVertex(result.centerPosition);
+        this.startPoint = this.$viewport.applyVertex(result.startPoint);
+        this.endPoint = this.$viewport.applyVertex(result.endPoint);
+        this.screenXY = this.$viewport.applyVertex(result.colorsteps[this.$targetIndex].pos);
+        this.rotateInverse = calculateRotationOriginMat4(-this.state.gradient.image.angle, this.centerPosition);
+        break;
+      case GradientType.RADIAL:
+      case GradientType.REPEATING_RADIAL:
+        this.centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
+        this.startPoint = this.$viewport.applyVertex(result.radialStartPoint);
+        this.endPoint = this.$viewport.applyVertex(result.radialEndPoint);
+        this.screenXY = this.$viewport.applyVertex(result.colorsteps[this.$targetIndex].pos);
+        const dist2 = subtract([], this.endPoint, this.startPoint);
+        const angle2 = calculateAngle360(dist2[0], dist2[1]) - 180;
+        this.rotateInverse = calculateRotationOriginMat4(-angle2, this.centerPosition);
+        break;
+    }
   }
   moveColorStep(dx, dy) {
     if (this.state.altKey)
       return;
     const nextPoint = add$1([], this.screenXY, [dx, dy, 0]);
     const [baseStartPoint, baseEndPoint, baseNextPoint] = vertiesMap([this.startPoint, this.endPoint, nextPoint], this.rotateInverse);
+    const result = this.state.backgroundImageMatrix;
     let newDist = 0;
-    const [s, e2, n] = [baseStartPoint[1], baseEndPoint[1], baseNextPoint[1]];
-    const baseDefaultDist = Math.abs(s - e2);
-    if (s < n) {
-      newDist = -1 * Math.abs(n - s) / baseDefaultDist * 100;
-    } else if (e2 > n) {
-      newDist = Math.abs(n - s) / baseDefaultDist * 100;
-    } else {
-      const distStart = Math.abs(s - n);
-      const distEnd = Math.abs(e2 - n);
-      newDist = distStart / (distEnd + distStart) * 100;
+    switch (result.backgroundImage.image.type) {
+      case GradientType.LINEAR:
+      case GradientType.REPEATING_LINEAR:
+        var [s, e2, n] = [baseStartPoint[1], baseEndPoint[1], baseNextPoint[1]];
+        var baseDefaultDist = Math.abs(s - e2);
+        if (s < n) {
+          newDist = -1 * Math.abs(n - s) / baseDefaultDist * 100;
+        } else if (e2 > n) {
+          newDist = Math.abs(n - s) / baseDefaultDist * 100;
+        } else {
+          var distStart = Math.abs(s - n);
+          var distEnd = Math.abs(e2 - n);
+          newDist = distStart / (distEnd + distStart) * 100;
+        }
+        break;
+      case GradientType.RADIAL:
+      case GradientType.REPEATING_RADIAL:
+        var [s, e2, n] = [baseStartPoint[0], baseEndPoint[0], baseNextPoint[0]];
+        var baseDefaultDist = Math.abs(s - e2);
+        if (n < s) {
+          newDist = -1 * Math.abs(n - s) / baseDefaultDist * 100;
+        } else if (n > e2) {
+          newDist = Math.abs(n - s) / baseDefaultDist * 100;
+        } else {
+          newDist = (n - s) / baseDefaultDist * 100;
+        }
+        break;
     }
     const baseDist = dist(this.startPoint, this.endPoint);
     const image2 = this.state.gradient.image;
@@ -55992,6 +56299,67 @@ class GradientEditorView$1 extends EditorElement {
     this.state.hoverColorStep = this.state.lastBackgroundMatrix.backgroundImage.image.pickColorStep(newDist);
     this.refresh();
   }
+}
+class GradientEditorView$1 extends GradientColorstepEditor {
+  template() {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--gradient-editor-view"
+    });
+  }
+  isMovableCenter(e2) {
+    this.initializeData();
+    return [
+      GradientType.RADIAL,
+      GradientType.REPEATING_RADIAL,
+      GradientType.CONIC,
+      GradientType.REPEATING_CONIC
+    ].includes(this.state.gradient.type);
+  }
+  [POINTERSTART("$el .gradient-position") + LEFT_BUTTON + MOVE("calculateMovedElement") + END("calculateMovedEndElement") + IF("isMovableCenter") + PREVENT](e2) {
+    this.state.$target = e2.$dt;
+    this.state.left = Length.parse(e2.$dt.css("left")).value;
+    this.state.top = Length.parse(e2.$dt.css("top")).value;
+    this.initializeData();
+  }
+  calculateMovedElement(dx, dy) {
+    const newLeft = this.state.left + dx;
+    const newTop = this.state.top + dy;
+    this.state.$target.css({
+      left: Length.px(newLeft),
+      top: Length.px(newTop)
+    });
+    const worldPosition = this.$viewport.applyVertexInverse([
+      newLeft,
+      newTop,
+      0
+    ]);
+    const localPosition = vertiesMap([worldPosition], this.$selection.current.absoluteMatrixInverse)[0];
+    const backgroundImage2 = this.state.gradient;
+    const backRect = backgroundImage2.getOffset(this.state.contentBox);
+    const newX = localPosition[0] - backRect.x;
+    const newY = localPosition[1] - backRect.y;
+    this.state.backgroundImages[this.state.index].image.radialPosition = [
+      Length.percent(newX / backRect.width * 100),
+      Length.percent(newY / backRect.height * 100)
+    ];
+    this.updateData();
+  }
+  calculateMovedEndElement(dx, dy) {
+    if (dx == 0 && dy === 0) {
+      switch (this.state.gradient.type) {
+        case GradientType.RADIAL:
+        case GradientType.REPEATING_RADIAL:
+          const findKey = `${this.state.gradient.image.radialType} ${this.state.gradient.image.radialSize}`.trim();
+          const index2 = radialTypeList.indexOf(findKey);
+          const [radialType, radialSize] = radialTypeList[(index2 + 1) % radialTypeList.length].split(" ");
+          const image2 = this.state.backgroundImages[this.state.index].image;
+          image2.radialType = radialType;
+          image2.radialSize = radialSize;
+          break;
+      }
+    }
+    this.updateData();
+  }
   refresh() {
     if (this.state.isShow) {
       this.load();
@@ -56047,11 +56415,238 @@ class GradientEditorView$1 extends EditorElement {
   }
   makeCenterPoint(result) {
     const { image: image2 } = result.backgroundImage;
-    let boxPosition, centerPosition, centerStick, startPoint, endPoint, areaStartPoint, areaEndPoint, colorsteps;
+    switch (image2.type) {
+      case GradientType.LINEAR:
+      case GradientType.REPEATING_LINEAR:
+        return this.makeLinearCenterPoint(result);
+      case GradientType.RADIAL:
+      case GradientType.REPEATING_RADIAL:
+        return this.makeRadialCenterPoint(result);
+      case GradientType.CONIC:
+      case GradientType.REPEATING_CONIC:
+        return this.makeConicCenterPoint(result);
+    }
+    return "";
+  }
+  makeConicCenterPoint(result) {
+    const { image: image2 } = result.backgroundImage;
+    let centerPosition, centerStick, startPoint2, endPoint2;
+    let radialStartPoint, radialEndPoint, colorsteps;
+    this.$viewport.applyVerties(result.backVerties);
+    centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
+    radialStartPoint = this.$viewport.applyVertex(result.radialStartPoint);
+    radialEndPoint = this.$viewport.applyVertex(result.radialEndPoint);
+    this.$viewport.applyVertex(result.radialShapePoint);
+    let lastDist = dist(radialStartPoint, radialEndPoint) / 2;
+    if (lastDist < 50) {
+      lastDist = 50;
+    }
+    colorsteps = result.colorsteps.map((it) => {
+      it.screenXY = this.$viewport.applyVertex(it.pos);
+      const pointDist = dist(it.screenXY, radialStartPoint);
+      if (pointDist < lastDist) {
+        it.screenXY = lerp([], radialStartPoint, lerp([], radialStartPoint, it.screenXY, 1 / pointDist), lastDist);
+      } else if (pointDist > lastDist) {
+        it.screenXY = lerp([], radialStartPoint, it.screenXY, lastDist / pointDist);
+      }
+      const dist$1 = subtract([], it.screenXY, radialStartPoint);
+      it.angle = calculateAngle360(dist$1[0], dist$1[1]);
+      return it;
+    });
+    centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
+    const stickPoint = this.$viewport.applyVertex(result.radialCenterStick);
+    centerStick = lerp([], centerPosition, lerp([], centerPosition, stickPoint, 1 / dist(centerPosition, stickPoint)), lastDist + 20);
+    const [newCenterStick] = vertiesMap([centerStick], calculateRotationOriginMat4(image2.angle || 0, centerPosition));
+    const targetStick = lerp([], newCenterStick, centerPosition, 1);
+    if (this.state.hoverColorStep) {
+      lerp([], startPoint2, endPoint2, this.state.hoverColorStep.percent / 100);
+    }
+    return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("div", {
+      class: "gradient-position center",
+      "data-radial-type": image2.radialType,
+      style: {
+        left: Length.px(centerPosition[0]),
+        top: Length.px(centerPosition[1])
+      }
+    }), /* @__PURE__ */ createElementJsx("svg", {
+      class: "gradient-angle"
+    }, /* @__PURE__ */ createElementJsx("circle", {
+      class: "size",
+      cx: radialStartPoint[0],
+      cy: radialStartPoint[1],
+      r: lastDist
+    }), /* @__PURE__ */ createElementJsx("path", {
+      class: "stick",
+      d: `
+                M ${targetStick[0]} ${targetStick[1]}
+                L ${newCenterStick[0]} ${newCenterStick[1]}
+            `
+    }), /* @__PURE__ */ createElementJsx("circle", {
+      class: "rotate",
+      cx: newCenterStick[0],
+      cy: newCenterStick[1],
+      r: "7",
+      "data-center-x": centerPosition[0],
+      "data-center-y": centerPosition[1]
+    }), colorsteps.map((it) => {
+      return /* @__PURE__ */ createElementJsx("path", {
+        d: `
+                  M ${radialStartPoint[0]} ${radialStartPoint[1]}
+                  L ${it.screenXY[0]} ${it.screenXY[1]}
+              `,
+        stroke: it.color,
+        fill: "transparent",
+        "stroke-width": "1"
+      });
+    }), colorsteps.map((it, index2) => {
+      if (it.cut) {
+        return /* @__PURE__ */ createElementJsx("rect", {
+          id: it.id,
+          "data-index": index2,
+          class: "colorstep",
+          x: it.screenXY[0] - 7,
+          y: it.screenXY[1] - 7,
+          transform: `rotate(${it.angle} ${it.screenXY[0]} ${it.screenXY[1]})`,
+          width: 14,
+          height: 14,
+          fill: it.color,
+          tabIndex: -1
+        });
+      } else {
+        return /* @__PURE__ */ createElementJsx("rect", {
+          id: it.id,
+          "data-index": index2,
+          class: "colorstep",
+          x: it.screenXY[0] - 7,
+          y: it.screenXY[1] - 7,
+          transform: `rotate(${it.angle} ${it.screenXY[0]} ${it.screenXY[1]})`,
+          rx: 7,
+          ry: 7,
+          width: 14,
+          height: 14,
+          fill: it.color,
+          tabIndex: -1
+        });
+      }
+    })));
+  }
+  makeRadialCenterPoint(result) {
+    const { image: image2 } = result.backgroundImage;
+    let centerPosition, colorsteps, radialStartPoint, radialEndPoint, radialShapePoint, radialEndPoint1, radialShapePoint1, radialEndPoint2, radialShapePoint2;
+    this.$viewport.applyVerties(result.backVerties);
+    centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
+    radialStartPoint = this.$viewport.applyVertex(result.radialStartPoint);
+    radialEndPoint = this.$viewport.applyVertex(result.radialEndPoint);
+    radialShapePoint = this.$viewport.applyVertex(result.radialShapePoint);
+    radialEndPoint1 = this.$viewport.applyVertex(result.radialEndPoint1);
+    radialEndPoint2 = this.$viewport.applyVertex(result.radialEndPoint2);
+    radialShapePoint1 = this.$viewport.applyVertex(result.radialShapePoint1);
+    radialShapePoint2 = this.$viewport.applyVertex(result.radialShapePoint2);
+    [radialEndPoint1, radialEndPoint2] = vertiesMap([radialEndPoint1, radialEndPoint2], calculateScaleOriginMat4(30, radialEndPoint));
+    [radialShapePoint1, radialShapePoint2] = vertiesMap([radialShapePoint1, radialShapePoint2], calculateScaleOriginMat4(30, radialShapePoint));
+    colorsteps = result.colorsteps.map((it) => {
+      it.screenXY = this.$viewport.applyVertex(it.pos);
+      return it;
+    });
+    if (image2.radialType === RadialGradientType.ELLIPSE) {
+      radialShapePoint = this.$viewport.applyVertex(result.radialShapePoint);
+    }
+    const dist$1 = subtract([], radialEndPoint, radialStartPoint);
+    const angle2 = calculateAngle360(dist$1[0], dist$1[1]);
+    let newHoverColorStepPoint = null;
+    if (this.state.hoverColorStep) {
+      newHoverColorStepPoint = lerp([], startPoint, endPoint, this.state.hoverColorStep.percent / 100);
+    }
+    return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("div", {
+      class: "gradient-position center",
+      "data-radial-type": image2.radialType,
+      style: {
+        left: Length.px(centerPosition[0]),
+        top: Length.px(centerPosition[1])
+      }
+    }), /* @__PURE__ */ createElementJsx("svg", {
+      class: "gradient-radial-line"
+    }, /* @__PURE__ */ createElementJsx("path", {
+      d: `
+              M ${radialStartPoint[0]} ${radialStartPoint[1]}
+              L ${radialEndPoint[0]} ${radialEndPoint[1]}
+          `,
+      class: "area-line"
+    }), /* @__PURE__ */ createElementJsx("path", {
+      d: `
+              M ${radialStartPoint[0]} ${radialStartPoint[1]}
+              L ${radialEndPoint[0]} ${radialEndPoint[1]}
+          `,
+      class: "start-end-line"
+    }), /* @__PURE__ */ createElementJsx("path", {
+      d: `
+              M ${radialEndPoint1[0]} ${radialEndPoint1[1]}
+              L ${radialEndPoint2[0]} ${radialEndPoint2[1]}
+          `,
+      class: "start-end-line"
+    }), /* @__PURE__ */ createElementJsx("path", {
+      d: `
+              M ${radialShapePoint1[0]} ${radialShapePoint1[1]}
+              L ${radialShapePoint2[0]} ${radialShapePoint2[1]}
+          `,
+      class: "start-end-line"
+    }), image2.radialType === RadialGradientType.CIRCLE ? /* @__PURE__ */ createElementJsx("circle", {
+      class: "size",
+      cx: radialStartPoint[0],
+      cy: radialStartPoint[1],
+      r: dist(radialStartPoint, radialEndPoint)
+    }) : null, image2.radialType === RadialGradientType.ELLIPSE ? /* @__PURE__ */ createElementJsx("ellipse", {
+      class: "size",
+      cx: radialStartPoint[0],
+      cy: radialStartPoint[1],
+      transform: `rotate(${angle2} ${radialStartPoint[0]} ${radialStartPoint[1]})`,
+      rx: dist(radialStartPoint, radialEndPoint),
+      ry: dist(radialStartPoint, radialShapePoint)
+    }) : null, colorsteps.map((it, index2) => {
+      if (it.cut) {
+        return /* @__PURE__ */ createElementJsx("rect", {
+          id: it.id,
+          "data-index": index2,
+          class: "colorstep",
+          x: it.screenXY[0] - 7,
+          y: it.screenXY[1] - 7,
+          transform: `rotate(${angle2} ${it.screenXY[0]} ${it.screenXY[1]})`,
+          width: 14,
+          height: 14,
+          fill: it.color,
+          tabIndex: -1
+        });
+      } else {
+        return /* @__PURE__ */ createElementJsx("rect", {
+          id: it.id,
+          "data-index": index2,
+          class: "colorstep",
+          x: it.screenXY[0] - 7,
+          y: it.screenXY[1] - 7,
+          transform: `rotate(${angle2} ${it.screenXY[0]} ${it.screenXY[1]})`,
+          rx: 7,
+          ry: 7,
+          width: 14,
+          height: 14,
+          fill: it.color,
+          tabIndex: -1
+        });
+      }
+    }), newHoverColorStepPoint && /* @__PURE__ */ createElementJsx("circle", {
+      class: "hover-colorstep",
+      r: "5",
+      cx: newHoverColorStepPoint[0],
+      cy: newHoverColorStepPoint[1],
+      fill: this.state.hoverColorStep.color
+    })));
+  }
+  makeLinearCenterPoint(result) {
+    const { image: image2 } = result.backgroundImage;
+    let boxPosition, centerPosition, centerStick, startPoint2, endPoint2, areaStartPoint, areaEndPoint, colorsteps;
     boxPosition = this.$viewport.applyVerties(result.backVerties);
-    if (image2.type === GradientType.STATIC || image2.type === GradientType.LINEAR || image2.type === GradientType.REPEATING_LINEAR) {
-      startPoint = this.$viewport.applyVertex(result.startPoint);
-      endPoint = this.$viewport.applyVertex(result.endPoint);
+    if (image2.type === GradientType.LINEAR || image2.type === GradientType.REPEATING_LINEAR) {
+      startPoint2 = this.$viewport.applyVertex(result.startPoint);
+      endPoint2 = this.$viewport.applyVertex(result.endPoint);
       areaStartPoint = this.$viewport.applyVertex(result.areaStartPoint);
       areaEndPoint = this.$viewport.applyVertex(result.areaEndPoint);
       centerPosition = this.$viewport.applyVertex(result.centerPosition);
@@ -56061,31 +56656,20 @@ class GradientEditorView$1 extends EditorElement {
       });
       const stickPoint = lerp([], boxPosition[1], boxPosition[2], 0.5);
       centerStick = lerp([], centerPosition, lerp([], centerPosition, stickPoint, 1 / dist(centerPosition, stickPoint)), 50);
-    } else {
-      centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
-      const stickPoint = this.$viewport.applyVertex(result.radialCenterStick);
-      centerStick = lerp([], centerPosition, lerp([], centerPosition, stickPoint, 1 / dist(centerPosition, stickPoint)), 50);
     }
     const [newCenterStick] = vertiesMap([centerStick], calculateRotationOriginMat4(image2.angle || 0, centerPosition));
     const targetStick = lerp([], newCenterStick, centerPosition, 1);
     let newHoverColorStepPoint = null;
     if (this.state.hoverColorStep) {
-      newHoverColorStepPoint = lerp([], startPoint, endPoint, this.state.hoverColorStep.percent / 100);
+      newHoverColorStepPoint = lerp([], startPoint2, endPoint2, this.state.hoverColorStep.percent / 100);
     }
-    return /* @__PURE__ */ createElementJsx(FragmentInstance, null, image2.type === GradientType.STATIC || image2.type === GradientType.CONIC || image2.type === GradientType.REPEATING_CONIC || image2.type === GradientType.RADIAL || image2.type === GradientType.REPEATING_RADIAL ? /* @__PURE__ */ createElementJsx("div", {
-      class: "gradient-position center",
-      "data-radial-type": image2.radialType,
-      style: {
-        left: Length.px(centerPosition[0]),
-        top: Length.px(centerPosition[1])
-      }
-    }) : null, image2.type === GradientType.CONIC || image2.type === GradientType.REPEATING_CONIC || image2.type === GradientType.LINEAR || image2.type === GradientType.REPEATING_LINEAR ? /* @__PURE__ */ createElementJsx("svg", {
+    return /* @__PURE__ */ createElementJsx("svg", {
       class: "gradient-angle"
     }, /* @__PURE__ */ createElementJsx("path", {
       d: `
-                        M ${targetStick[0]} ${targetStick[1]}
-                        L ${newCenterStick[0]} ${newCenterStick[1]}
-                    `
+              M ${targetStick[0]} ${targetStick[1]}
+              L ${newCenterStick[0]} ${newCenterStick[1]}
+          `
     }), /* @__PURE__ */ createElementJsx("circle", {
       class: "rotate",
       cx: newCenterStick[0],
@@ -56093,7 +56677,7 @@ class GradientEditorView$1 extends EditorElement {
       r: "7",
       "data-center-x": centerPosition[0],
       "data-center-y": centerPosition[1]
-    }), image2.type === GradientType.LINEAR || image2.type === GradientType.REPEATING_LINEAR ? /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("path", {
+    }), /* @__PURE__ */ createElementJsx("path", {
       d: `
                         M ${areaStartPoint[0]} ${areaStartPoint[1]}
                         L ${areaEndPoint[0]} ${areaEndPoint[1]}
@@ -56101,8 +56685,8 @@ class GradientEditorView$1 extends EditorElement {
       class: "area-line"
     }), /* @__PURE__ */ createElementJsx("path", {
       d: `
-                        M ${startPoint[0]} ${startPoint[1]}
-                        L ${endPoint[0]} ${endPoint[1]}
+                        M ${startPoint2[0]} ${startPoint2[1]}
+                        L ${endPoint2[0]} ${endPoint2[1]}
                     `,
       class: "start-end-line"
     }), colorsteps.map((it, index2) => {
@@ -56141,7 +56725,7 @@ class GradientEditorView$1 extends EditorElement {
       cx: newHoverColorStepPoint[0],
       cy: newHoverColorStepPoint[1],
       fill: this.state.hoverColorStep.color
-    })) : null) : null);
+    }));
   }
   [LOAD("$el") + DOMDIFF]() {
     const current = this.$selection.current;
@@ -56151,7 +56735,6 @@ class GradientEditorView$1 extends EditorElement {
     this.state.lastBackgroundMatrix = result;
     const image2 = result.backgroundImage.image;
     switch (image2.type) {
-      case GradientType.STATIC:
       case GradientType.LINEAR:
       case GradientType.REPEATING_LINEAR:
         this.state.centerPosition = this.$viewport.applyVertex(result.centerPosition);
@@ -56160,7 +56743,7 @@ class GradientEditorView$1 extends EditorElement {
         this.state.rotateInverse = calculateRotationOriginMat4(-1 * result.backgroundImage.image.angle, this.state.centerPosition);
         break;
     }
-    return /* @__PURE__ */ createElementJsx("div", null, this.makeGradientRect(result), this.makeCenterPoint(result));
+    return /* @__PURE__ */ createElementJsx("div", null, this.makeGradientRect(result), image2.type === GradientType.STATIC || image2.type === GradientType.IMAGE ? null : this.makeCenterPoint(result));
   }
 }
 function GradientEditorView(editor) {
@@ -56820,6 +57403,132 @@ function ClippathEditorView(editor) {
     ClippathEditorView: ClippathEditorView$1
   });
 }
+class SampleLayer extends LayerModel {
+  getDefaultObject(obj2 = {}) {
+    return super.getDefaultObject(__spreadValues({
+      itemType: "sample",
+      name: "New Sample Layer",
+      sampleText: "Sample Text 1",
+      sampleNumber: 1
+    }, obj2));
+  }
+  toCloneObject() {
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("sampleText", "sampleNumber"));
+  }
+  editable(editablePropertyName) {
+    switch (editablePropertyName) {
+      case "sample":
+        return true;
+    }
+    return super.editable(editablePropertyName);
+  }
+  getDefaultTitle() {
+    return "Sample Layer";
+  }
+}
+class SampleRender extends LayerRender$1 {
+  update(item2, currentElement) {
+    const $sampleText = currentElement.$(".sample-text");
+    if ($sampleText) {
+      $sampleText.text(item2.sampleText);
+    }
+    const $sampleNumber = currentElement.$(".sample-number");
+    if ($sampleNumber) {
+      $sampleNumber.text(item2.sampleNumber);
+    }
+    const $sampleItems = currentElement.$(".sample-items");
+    if ($sampleItems) {
+      const template = [...Array(item2.sampleNumber)].map((_, i) => `
+            <div class="sample-item" style="background-color: yellow">${i}</div>
+          `).join("\n");
+      $sampleItems.html(template);
+    }
+    super.update(item2, currentElement);
+  }
+  render(item2) {
+    var { id, sampleText, sampleNumber } = item2;
+    return `
+      <div class='element-item sample' data-id="${id}">
+        ${this.toDefString(item2)}
+        <div>
+          <div class="sample-text">${sampleText}</div>
+          <div class="sample-number">${sampleNumber}</div>
+          <div class="sample-items" style="display: grid; grid-template-columns: 1fr 1fr 1fr; column-gap: 10px;"></div>
+        </div>
+      </div>`;
+  }
+}
+function sample(editor) {
+  editor.registerComponent("sample", SampleLayer);
+  editor.registerRenderer("html", "sample", new SampleRender());
+  editor.registerInspector("sample", (current) => {
+    return [
+      "Sample Text \uD3B8\uC9D1",
+      {
+        key: "sampleText",
+        editor: "TextEditor",
+        defaultValue: current.sampleText
+      },
+      "Sample Number \uD3B8\uC9D1",
+      {
+        key: "sampleNumber",
+        editor: "NumberInputEditor",
+        editorOptions: {
+          min: 0,
+          max: 10,
+          step: 1,
+          label: "SN"
+        },
+        defaultValue: current.sampleNumber
+      },
+      "\uC2A4\uD0C0\uC77C \uCE74\uD53C",
+      {
+        type: "column",
+        size: [1, 1],
+        gap: 10,
+        columns: [
+          {
+            key: "copyCssJSON",
+            editor: "Button",
+            editorOptions: {
+              text: "Copy CSS JSON",
+              onClick: () => {
+                console.log(JSON.stringify(editor.html.toCSS(current), null, 4));
+              }
+            }
+          },
+          {
+            key: "copyCssString",
+            editor: "Button",
+            editorOptions: {
+              text: "Copy CSS String",
+              onClick: () => {
+                console.log(CSS_TO_STRING$1(editor.html.toCSS(current)));
+              }
+            }
+          },
+          {
+            key: "changeColor",
+            editor: "Button",
+            editorOptions: {
+              text: "Change Text Random Color",
+              onClick: () => {
+                const textColor = Color.random();
+                const backgroundColor = Color.random();
+                editor.emit("setAttributeForMulti", {
+                  [current.id]: {
+                    color: textColor,
+                    "background-color": backgroundColor
+                  }
+                });
+              }
+            }
+          }
+        ]
+      }
+    ];
+  });
+}
 var designEditorPlugins = [
   defaultConfigs,
   defaultIcons,
@@ -56880,7 +57589,8 @@ var designEditorPlugins = [
   pathDrawView,
   pathEditorView,
   GradientEditorView,
-  ClippathEditorView
+  ClippathEditorView,
+  sample
 ];
 var ObjectItems$1 = "";
 class ObjectItems extends EditorElement {

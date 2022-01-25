@@ -17,6 +17,10 @@
     display: none;
   }
 
+  &[data-selected-editor="static-gradient"] {
+    display: none;
+  }
+
   &:not([data-selected-editor*="static-gradient"]),
   &:not([data-selected-editor*="image-resource"]) {
     [data-editor="gradient"] {

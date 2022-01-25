@@ -114,11 +114,11 @@ export function defaultValue(value, defaultValue) {
 }
 
 export function isUndefined(value) {
-    return typeof value == 'undefined' || value === null;
+    return typeof value == 'undefined';
 }
 
 export function isNotUndefined(value) {
-    return isUndefined(value) === false;
+    return !isUndefined(value);
 }
 
 export function isBoolean(value) {
@@ -130,7 +130,7 @@ export function isString(value) {
 }
 
 export function isNotString(value) {
-    return isString(value) === false;
+    return !isString(value);
 }
 
 export function isArray(value) {

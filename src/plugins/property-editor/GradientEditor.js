@@ -7,27 +7,12 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
 
 import './GradientEditor.scss';
-import { RadialGradientType } from "el/editor/types/model";
-
-var imageTypeList = [
-  'static-gradient',
-  'linear-gradient',
-  'repeating-linear-gradient',
-  'radial-gradient',
-  'repeating-radial-gradient',
-  'conic-gradient',
-  'repeating-conic-gradient',
-  'image-resource'
-]
-
-var iconList = {
-  'image-resource': iconUse("photo")
-}
+import { GradientType, RadialGradientType } from "el/editor/types/model";
 
 export default class GradientEditor extends EditorElement {
 
   initState() {
-    const image = BackgroundImage.parseImage(this.props.value || '') || { type: 'static-gradient', colorsteps: [] }
+    const image = BackgroundImage.parseImage(this.props.value || '') || { type: GradientType.STATIC, colorsteps: [] }
 
     const id = image.colorsteps[this.props.index]?.id;
     this.$selection.selectColorStep(id);
@@ -50,7 +35,6 @@ export default class GradientEditor extends EditorElement {
     }, false)
 
     this.refresh();
-    this.parent.trigger('changeTabType', this.state.image.type);
   }
 
   template() {
@@ -60,9 +44,6 @@ export default class GradientEditor extends EditorElement {
               <div data-editor='image-loader'>
                 <input type='file' accept="image/*" ref='$file' />
               </div>              
-            </div>
-            <div class="picker-tab">
-              <div class="picker-tab-list" ref="$tab"></div>
             </div>
             <div class='gradient-steps' data-editor='gradient'>
                 <div class="hue-container" ref="$back"></div>            
@@ -92,17 +73,20 @@ export default class GradientEditor extends EditorElement {
     this.updateData();
   }
 
-  [CLICK('$tab .picker-tab-item')](e) {
-    var type = e.$dt.attr('data-editor')
-    e.$dt.onlyOneClass('selected');
-
-    // this.$el.attr('data-selected-editor', type);
-    this.parent.trigger('changeTabType', type);
-
-    const colorsteps = this.state.image.colorsteps || [];
+  [SUBSCRIBE_SELF('changeTabType')](type) {
+    const oldType = this.state.image?.type;
+    const colorsteps = this.state.image?.colorsteps || [];
 
     if (colorsteps.length === 1) {
       colorsteps.push(colorsteps[0])
+    }
+
+    if (oldType === GradientType.STATIC) { 
+      if (colorsteps.length === 0) {
+        colorsteps.push(colorsteps[0], colorsteps[0])
+      } else if (colorsteps.length === 1) {
+        colorsteps.push(colorsteps[0])
+      }
     }
 
     var url = type === 'image-resource' ? this.state.image.url : this.state.url;
@@ -151,7 +135,7 @@ export default class GradientEditor extends EditorElement {
     if (type === 'url') {
       type = 'image-resource'
     }
-    this.parent.trigger('changeTabType', type);
+    // this.parent.trigger('changeTabType', type);
     return {
       "data-selected-editor": type
     }
@@ -166,24 +150,8 @@ export default class GradientEditor extends EditorElement {
     }
   }
 
-  [LOAD('$tab')]() {
-
-    var { image } = this.state;
-
-    image = image || {}
-
-    var type = image.type || 'static-gradient'
-
-    if (type === 'url') type = 'image-resource'
-
-    return imageTypeList.map(it => {
-      const selected = type === it ? 'selected' : '';
-      return /*html*/`<span class='picker-tab-item ${it} ${selected}' data-editor='${it}'><span class='icon'>${iconList[it] || ''}</span></span>`
-    });
-  }
-
   [LOAD('$stepList') + DOMDIFF]() {
-    var colorsteps = this.state.image.colorsteps || []
+    var colorsteps = this.state.image?.colorsteps || []
     return colorsteps.map((it, index) => {
 
       var selected = this.$selection.isSelectedColorStep(it.id) ? 'selected' : '';

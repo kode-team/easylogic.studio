@@ -14,15 +14,6 @@ import { ClipPath } from "el/editor/property-parser/ClipPath";
 import { vec3 } from "gl-matrix";
 import ClippathInsetEditorView from "./ClippathInsetEditorView";
 
-/**
- * Gradient Editor View
- *
- * 모든 좌표 계산은 matrix 를 기준으로 한다.
- *
- * current.createBackgroundImageMatrix(index) 를 통해서 matrix 를 생성한 값을 캐쉬로 잡고 처리한다.
- *
- */
-
 export default class ClippathCircleEditorView extends ClippathInsetEditorView {
 
   [POINTERSTART("$el .circle .circle-radius") + LEFT_BUTTON + MOVE('moveCircleRadius') + END('moveEndCircleRadius')](e) {

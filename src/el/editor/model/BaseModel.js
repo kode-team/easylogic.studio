@@ -23,7 +23,6 @@ export class BaseModel {
     const self = this; 
     this.ref = new Proxy(self, {
       get (target, key) {
-
         // target[key] 가 함수인 경우 미리 캐쉬 해둔다. 
         if (self.hasCache(key)) {
           return self.getCache(key);
@@ -304,13 +303,13 @@ export class BaseModel {
       // NOOP 
       // isForce 가 true 일 때는 캐쉬를 적용하지 않는다.
     } else {
-      if (this.getCache(key) === value && this.getCache(parsedKey)) {
+      if (this.getCache(cachedKey) === value && this.getCache(parsedKey)) {
         return this.getCache(parsedKey);
       }
     }
 
     // isForce 가 true 이면 다시 캐쉬를 만든다. 
-    this.addCache(key, value);
+    this.addCache(cachedKey, value);
     this.addCache(parsedKey, newValueCallback(value, this.ref));
 
     return this.getCache(parsedKey);
@@ -395,6 +394,7 @@ export class BaseModel {
 
     if (isChanged) {
       this.json = this.convert(Object.assign(this.json, obj));
+
       this.lastChangedField = obj;
       this.lastChangedFieldKeys = Object.keys(obj);
 
@@ -423,7 +423,7 @@ export class BaseModel {
    * @param {object} obj
    */
   getDefaultObject(obj = {}) {
-    var id = uuid()
+    var id = obj.id || uuid()
     return {
       id,
       // visible: true,  // 보이기 여부 설정 

@@ -305,6 +305,15 @@ export function calculateRotationOriginMat4(angle, origin) {
     return view;
 }
 
+export function calculateScaleOriginMat4(scale, origin) {
+    const view = mat4.create();
+    mat4.translate(view, view, origin);    // move origin 
+    mat4.scale(view, view, [scale, scale, scale]);    // rotate
+    mat4.translate(view, view, vec3.negate([], origin));    // move origin * -1  
+
+    return view;
+}
+
 export function calculateMatrix(...args) {
     const view = mat4.create();
     args.forEach(v => {

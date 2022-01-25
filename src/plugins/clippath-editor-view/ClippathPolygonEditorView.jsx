@@ -17,15 +17,6 @@ import PathParser from "el/editor/parser/PathParser";
 import { toRectVerties, vertiesToRectangle } from "el/utils/collision";
 import { clone } from "el/sapa/functions/func";
 
-/**
- * Gradient Editor View
- *
- * 모든 좌표 계산은 matrix 를 기준으로 한다.
- *
- * current.createBackgroundImageMatrix(index) 를 통해서 matrix 를 생성한 값을 캐쉬로 잡고 처리한다.
- *
- */
-
 export default class ClippathPolygonEditorView extends EditorElement {
 
   initializePolygon() {

@@ -189,7 +189,16 @@ export const GradientType = {
     REPEATING_LINEAR: "repeating-linear-gradient",
     REPEATING_RADIAL: "repeating-radial-gradient",
     REPEATING_CONIC: "repeating-conic-gradient",
+    IMAGE: "image-resource"
 }
+
+export const RadialGradientSizeType = {
+    CLOSEST_SIDE: "closest-side",
+    CLOSEST_CORNER: "closest-corner",
+    FARTHEST_SIDE: "farthest-side",
+    FARTHEST_CORNER: "farthest-corner",
+}
+
 
 export const RadialGradientType = {
     CIRCLE: "circle",

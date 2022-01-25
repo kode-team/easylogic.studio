@@ -64,6 +64,7 @@ import selectionToolView from "./selection-tool-view"
 import defaultIcons from "./default-icons"
 import GradientEditorView from "./gradient-editor-view"
 import ClippathEditorView from "./clippath-editor-view"
+import sample from "./sample"
 
 export default [
 
@@ -167,5 +168,9 @@ export default [
     pathDrawView,
     pathEditorView,    
     GradientEditorView,
-    ClippathEditorView
+    ClippathEditorView,
+
+
+    // sample
+    sample
 ]

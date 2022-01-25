@@ -61,6 +61,11 @@ export default class ComponentProperty extends BaseProperty {
 
 
     inspector.forEach(it => {
+
+      if (isString(it)) {
+        return;
+      }
+
       let defaultValue = current[it.key] || it.defaultValue
       
       if (isFunction(it.convertDefaultValue)) {

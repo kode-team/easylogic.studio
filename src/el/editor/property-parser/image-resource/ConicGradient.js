@@ -3,6 +3,8 @@ import { ColorStep } from "./ColorStep";
 import { Length, Position } from "el/editor/unit/Length";
 import { convertMatches, reverseMatches } from "el/utils/parser";
 import { clone, isNotUndefined, isString, isUndefined } from "el/sapa/functions/func";
+import { vec3 } from "gl-matrix";
+import { rectToVerties } from "el/utils/collision";
 
 
 const DEFINED_POSITIONS = {
@@ -48,6 +50,46 @@ export class ConicGradient extends Gradient {
   hasAngle() {
     return true;
   }
+
+  getStartEndPoint(result) {
+
+    let startPoint, endPoint, shapePoint
+
+    let [rx, ry] = this.json.radialPosition;
+
+    const backRect = result.backRect;
+    const backVerties = rectToVerties(backRect.x, backRect.y, backRect.width, backRect.height);
+
+    if (rx == 'center') rx = Length.percent(50);
+    if (ry == 'center') ry = Length.percent(50);
+
+    const newRx = rx.toPx(backRect.width);
+    const newRy = ry.toPx(backRect.height);
+
+    const centerPoisiton = [backRect.x + newRx.value, backRect.y + newRy.value, 0];
+
+    // coner 관련 
+    let topLeftPoint = backVerties[0]
+    let topRightPoint = backVerties[1]
+    let bottomLeftPoint = backVerties[3]
+    let bottomRightPoint = backVerties[2]
+
+    const topLeftDist = vec3.dist(centerPoisiton, topLeftPoint);
+    const topRightDist = vec3.dist(centerPoisiton, topRightPoint);
+    const bottomLeftDist = vec3.dist(centerPoisiton, bottomLeftPoint);
+    const bottomRightDist = vec3.dist(centerPoisiton, bottomRightPoint);
+
+    startPoint = vec3.clone(centerPoisiton);
+
+    const dist = Math.max(topLeftDist, topRightDist, bottomLeftDist, bottomRightDist);
+    endPoint = vec3.fromValues(startPoint[0] + dist, startPoint[1], startPoint[2])
+    shapePoint = vec3.fromValues(startPoint[0], startPoint[1] - dist, startPoint[2])
+
+    return {
+      startPoint, endPoint, shapePoint
+    }
+  }
+
 
   getColorString() {
     if(this.colorsteps.length === 0) return '';    

@@ -14,7 +14,7 @@ export class IconManager {
             return icon(item);
         }
 
-        return iconUse(icon || item.getIcon());
+        return iconUse(icon || item.getIcon() || 'rect');
     }
 
     set (itemType, value) {

@@ -1,11 +1,10 @@
-
 .elf--gradient-editor-view {
   display: none;
-  position:absolute;
-  left:0px;
-  top:0px;
-  right:0px;
-  bottom:0px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
 
   &.dragging {
     .area-line {
@@ -25,9 +24,8 @@
       width: 100%;
       height: 100%;
 
-
       path {
-        pointer-events: all;        
+        pointer-events: all;
         fill: transparent;
         stroke: black;
       }
@@ -59,21 +57,20 @@
       height: 100%;
 
       path {
-        pointer-events: all;        
+        pointer-events: all;
         fill: transparent;
         stroke: white;
         stroke-width: 2;
       }
     }
-
   }
 
   .resizer {
     position: absolute;
     width: 14px;
     height: 14px;
-    box-sizing: border-box;      
-    background-color:rgba(255, 255, 255, 1);
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 1);
     transform: translate(-50%, -50%);
     // border: 2px solid black;
     border-radius: 100%;
@@ -93,13 +90,16 @@
     bottom: 0px;
     pointer-events: none;
     overflow: visible;
-    filter: drop-shadow(0 0 3px rgba(0, 0, 255, 0.7));    
+    filter: drop-shadow(0 0 2px rgb(43, 43, 43));      
 
-    
     path {
       fill: transparent;
-      stroke: white;
+      // stroke: white;
       pointer-events: stroke;
+
+      &.stick {
+        stroke: white;
+      }
 
       &.area-line {
         stroke-width: 18;
@@ -108,18 +108,18 @@
     }
 
     rect {
-      pointer-events: all;      
+      pointer-events: all;
 
       &.colorstep {
         // fill: black;
         stroke: white;
-        stroke-width: 0.5;
+        stroke-width: 1;
         outline: none;
       }
     }
 
     circle {
-      pointer-events: all;      
+      pointer-events: all;
       // stroke: black;
       stroke-width: 2;
 
@@ -132,22 +132,68 @@
       }
 
       &.colorstep {
-        stroke-width: 0.5;
+        stroke-width: 1;
         stroke: white;
         r: 7;
       }
 
-      &:not(.colorstep):not(.hover-colorstep){
+      &:not(.colorstep):not(.hover-colorstep) {
         fill: white;
       }
+
+
+      &.size {
+        fill: transparent !important;
+        stroke: white;
+        stroke-width: 1;
+        pointer-events: none;
+      }
+
 
       &.hover-colorstep {
         pointer-events: none;
         r: 8;
-        filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.7));
       }
     }
-    
+  }
+
+  .gradient-radial-line {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    pointer-events: none;
+    overflow: visible;
+
+    path {
+      pointer-events: all;
+      fill: transparent;
+      stroke: white;
+      filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.7));
+    }
+
+    circle,
+    ellipse {
+      &.size {
+        fill: transparent;
+        stroke: white;
+        filter: drop-shadow(0 0 3px rgba(0, 255, 0, 0.7));
+      }
+    }
+
+
+    rect {
+      pointer-events: all;
+
+      &.colorstep {
+        // fill: black;
+        stroke: white;
+        stroke-width: 1;
+        outline: none;
+        filter: drop-shadow(0 0 3px rgba(0, 255, 0, 0.7));        
+      }
+    }
+
   }
 }
-

@@ -36,7 +36,7 @@ export default {
             // 부모가 바뀌는 조건을 맞춰야 한다. 
             const item = editor.get(message.id);
 
-            if (item.is('artboard')) {
+            if (item.parent && item.parent.is('project')) {
                 return;
             }
 

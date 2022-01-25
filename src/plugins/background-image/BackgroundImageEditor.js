@@ -39,6 +39,7 @@ const names = {
 export default class BackgroundImageEditor extends EditorElement {
 
     initState() {
+
         return {
             hideLabel: this.props.hideLabel || false,
             value: this.props.value, 
