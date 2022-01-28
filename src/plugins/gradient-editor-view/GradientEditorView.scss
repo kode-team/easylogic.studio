@@ -8,7 +8,7 @@
 
   &.dragging {
     .area-line {
-      pointer-events: none;
+      pointer-events: none !important;
     }
   }
 
@@ -27,7 +27,7 @@
       path {
         pointer-events: all;
         fill: transparent;
-        stroke: black;
+        stroke: white;
       }
     }
   }
@@ -40,7 +40,7 @@
     border-radius: 50%;
     border: 2px solid white;
     pointer-events: all;
-    filter: drop-shadow(0 0 3px rgba(0, 0, 255, 0.7));
+    filter: drop-shadow(0 0 2px rgb(43, 43, 43));      
     cursor: grab;
   }
 
@@ -49,7 +49,7 @@
     pointer-events: none;
     cursor: move;
     // border:2px solid black;
-    filter: drop-shadow(0 0 3px rgba(0, 0, 255, 0.7));
+    filter: drop-shadow(0 0 2px rgb(43, 43, 43));      
     box-sizing: border-box;
 
     svg {
@@ -74,7 +74,7 @@
     transform: translate(-50%, -50%);
     // border: 2px solid black;
     border-radius: 100%;
-    filter: drop-shadow(0 0 3px rgba(0, 0, 255, 0.7));
+    filter: drop-shadow(0 0 2px rgb(43, 43, 43));      
 
     &[data-direction="bottom-right"] {
       left: 100%;
@@ -99,11 +99,21 @@
 
       &.stick {
         stroke: white;
+        pointer-events: none;
+      }
+
+      &.color-stick {
+        pointer-events: none;
       }
 
       &.area-line {
         stroke-width: 18;
         stroke: transparent;
+      }
+
+      &.start-end-line {
+        stroke: white;
+        pointer-events: none;
       }
     }
 
@@ -149,6 +159,13 @@
         pointer-events: none;
       }
 
+      &.area-line {
+        stroke-width: 18;
+        stroke: transparent;
+        pointer-events: stroke;
+        fill: transparent !important;
+      }      
+
 
       &.hover-colorstep {
         pointer-events: none;
@@ -165,12 +182,17 @@
     bottom: 0px;
     pointer-events: none;
     overflow: visible;
+    filter: drop-shadow(0 0 2px rgb(43, 43, 43));          
 
     path {
       pointer-events: all;
       fill: transparent;
       stroke: white;
-      filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.7));
+
+      &.area-line {
+        stroke-width: 18;
+        stroke: transparent;
+      }      
     }
 
     circle,
@@ -178,7 +200,6 @@
       &.size {
         fill: transparent;
         stroke: white;
-        filter: drop-shadow(0 0 3px rgba(0, 255, 0, 0.7));
       }
     }
 
@@ -191,7 +212,6 @@
         stroke: white;
         stroke-width: 1;
         outline: none;
-        filter: drop-shadow(0 0 3px rgba(0, 255, 0, 0.7));        
       }
     }
 

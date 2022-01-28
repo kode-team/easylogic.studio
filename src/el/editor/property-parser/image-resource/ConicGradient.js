@@ -51,6 +51,12 @@ export class ConicGradient extends Gradient {
     return true;
   }
 
+  
+  pickColorStep(percent) {
+    // conic 의 경우 percent 가 마이너스로 올수 없으니 절대값으로 변환한다.
+    return super.pickColorStep((percent + 100) % 100)
+  }  
+
   getStartEndPoint(result) {
 
     let startPoint, endPoint, shapePoint
@@ -215,7 +221,14 @@ export class ConicGradient extends Gradient {
                 ? Length.parse(angle)
                 : Length.deg(+DEFINED_ANGLES[angle]);
             }
+
+            if (angle === "") {
+              angle = Length.deg(0);
+            }
           }
+
+
+
         }
       });
 

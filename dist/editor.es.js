@@ -6461,6 +6461,10 @@ const ClipPathType = {
   PATH: "path",
   SVG: "svg"
 };
+const VisibilityType = {
+  VISIBLE: "visible",
+  HIDDEN: "hidden"
+};
 class BoxShadow extends PropertyItem {
   static parse(obj2) {
     return new BoxShadow(obj2);
@@ -6971,100 +6975,104 @@ class ImageResource extends PropertyItem {
     return "none";
   }
 }
-class ColorStep extends Item {
-  getDefaultObject() {
-    return {
-      id: uuidShort(),
-      cut: false,
-      percent: 0,
-      unit: "%",
-      px: 0,
-      em: 0,
-      color: "rgba(0, 0, 0, 0)",
-      prevColorStep: null
-    };
+class ColorStep {
+  constructor(obj2 = {}) {
+    this.id = obj2.id || uuidShort();
+    this.color = obj2.color || "transparent";
+    this.cut = obj2.cut || false;
+    this.percent = obj2.percent || 0;
+    this.unit = obj2.unit || "%";
+    this.px = obj2.px || 0;
+    this.em = obj2.em || 0;
+    this.prevColorStep = obj2.prevColorStep || null;
   }
   toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("cut", "percent", "unit", "px", "em", "color"));
+    return {
+      id: this.id,
+      color: this.color,
+      cut: this.cut,
+      percent: this.percent,
+      unit: this.unit,
+      px: this.px,
+      em: this.em,
+      prevColorStep: this.prevColorStep
+    };
   }
   on() {
-    this.json.cut = true;
+    this.cut = true;
   }
   off() {
-    this.json.cut = false;
+    this.cut = false;
   }
   toggle() {
-    this.json.cut = !this.json.cut;
+    this.cut = !this.cut;
   }
   getUnit() {
-    return this.json.unit == "%" ? "percent" : this.json.unit;
+    return this.unit == "%" ? "percent" : this.unit;
   }
   add(num) {
     var unit = this.getUnit();
-    this.json[unit] += +num;
+    this[unit] += +num;
     return this;
   }
   sub(num) {
     var unit = this.getUnit();
-    this.json[unit] -= +num;
+    this[unit] -= +num;
     return this;
   }
   mul(num) {
     var unit = this.getUnit();
-    this.json[unit] *= +num;
+    this[unit] *= +num;
     return this;
   }
   div(num) {
     var unit = this.getUnit();
-    this.json[unit] /= +num;
+    this[unit] /= +num;
     return this;
   }
   mod(num) {
     var unit = this.getUnit();
-    this.json[unit] %= +num;
+    this[unit] %= +num;
     return this;
   }
   get isPx() {
-    return this.json.unit == "px";
+    return this.unit == "px";
   }
   get isPercent() {
-    return this.json.unit == "%" || this.json.unit === "percent";
+    return this.unit == "%" || this.unit === "percent";
   }
   get isEm() {
-    return this.json.unit == "em";
+    return this.unit == "em";
   }
   toLength(maxValue) {
     if (this.isPx) {
-      return Length.px(this.json.px);
+      return Length.px(this.px);
     } else if (this.isPercent) {
-      return Length.percent(this.json.percent);
+      return Length.percent(this.percent);
     } else if (this.isEm) {
-      return Length.em(this.json.em);
+      return Length.em(this.em);
     }
   }
   getPrevLength() {
-    if (!this.json.prevColorStep)
+    if (!this.prevColorStep)
       return "";
-    return this.json.prevColorStep.toLength();
+    return this.prevColorStep.toLength();
   }
   toString() {
-    var prev = this.json.cut ? this.getPrevLength() : "";
-    var color2 = this.json.color || "transparent";
+    var prev = this.cut ? this.getPrevLength() : "";
+    var color2 = this.color || "transparent";
     return `${color2} ${prev} ${this.toLength()}`;
-  }
-  reset(json) {
-    super.reset(json);
-    if (this.parent) {
-      this.parent.sortColorStep();
-    }
   }
   setValue(percent, maxValue) {
     if (this.isPx) {
-      this.reset({ px: maxValue * percent / 100 });
+      this.px = maxValue * percent / 100;
     } else if (this.isPercent) {
-      this.reset({ percent });
+      this.percent = percent;
     } else if (this.isEm) {
-      this.reset({ em: maxValue * percent / 100 / 16 });
+      this.em = maxValue * percent / 100 / 16;
+    }
+    if (this.parent) {
+      this.parent.sortColorStep();
     }
   }
   static parse(colorStepString) {
@@ -7788,6 +7796,9 @@ class ConicGradient extends Gradient {
   hasAngle() {
     return true;
   }
+  pickColorStep(percent) {
+    return super.pickColorStep((percent + 100) % 100);
+  }
   getStartEndPoint(result) {
     let startPoint2, endPoint2, shapePoint2;
     let [rx, ry] = this.json.radialPosition;
@@ -7902,6 +7913,9 @@ class ConicGradient extends Gradient {
           if (angle2.includes("from")) {
             angle2 = angle2.split("from")[1];
             angle2 = isUndefined(DEFINED_ANGLES[angle2]) ? Length.parse(angle2) : Length.deg(+DEFINED_ANGLES[angle2]);
+          }
+          if (angle2 === "") {
+            angle2 = Length.deg(0);
           }
         }
       }
@@ -8040,10 +8054,10 @@ class BackgroundImage extends PropertyItem {
     }
     return super.checkField(key, value);
   }
-  recoverOffset(newX, newY, contentBox, dx = 0, dy = 0) {
+  recoverOffset(newX, newY, contentBox, dx = 0, dy = 0, options2 = {}) {
     const { x: x2, y: y2, width: width2, height: height2 } = this.json;
     const newWidth = Math.floor(width2.toPx(contentBox.width).value + dx);
-    const newHeight = Math.floor(height2.toPx(contentBox.height).value + dy);
+    const newHeight = options2.shiftKey ? newWidth : Math.floor(height2.toPx(contentBox.height).value + dy);
     newX -= contentBox.x;
     newY -= contentBox.y;
     if (newWidth < 0) {
@@ -8138,8 +8152,14 @@ class BackgroundImage extends PropertyItem {
       "background-blend-mode": json.blendMode
     };
   }
+  toBackgroundVisibilityCSS() {
+    var json = this.json;
+    return {
+      "background-visibility": json.visibility === VisibilityType.HIDDEN ? VisibilityType.HIDDEN : VisibilityType.VISIBLE
+    };
+  }
   toCSS() {
-    var results = __spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues({}, this.toBackgroundImageCSS()), this.toBackgroundPositionCSS()), this.toBackgroundSizeCSS()), this.toBackgroundRepeatCSS()), this.toBackgroundBlendCSS());
+    const results = __spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues({}, this.toBackgroundImageCSS()), this.toBackgroundPositionCSS()), this.toBackgroundSizeCSS()), this.toBackgroundRepeatCSS()), this.toBackgroundBlendCSS()), this.toBackgroundVisibilityCSS());
     return results;
   }
   toString() {
@@ -8280,6 +8300,13 @@ class BackgroundImage extends PropertyItem {
           let [x2, y2] = it.split(" ");
           backgroundImages[index2].x = Length.parse(x2);
           backgroundImages[index2].y = Length.parse(y2);
+        }
+      });
+    }
+    if (style["background-visibility"]) {
+      style["background-visibility"].split(",").map((it) => it.trim()).forEach((it, index2) => {
+        if (backgroundImages[index2]) {
+          backgroundImages[index2].visibility = it === VisibilityType.HIDDEN ? VisibilityType.HIDDEN : VisibilityType.VISIBLE;
         }
       });
     }
@@ -15657,7 +15684,7 @@ var convert_no_transform_path = {
     }
   }
 };
-var __glob_0_24$2 = /* @__PURE__ */ Object.freeze({
+var __glob_0_24$3 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": convert_no_transform_path
@@ -19031,7 +19058,7 @@ var __glob_0_127$1 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": update
 });
-const modules$4 = { "./command_list/_currentProject.js": __glob_0_0$4, "./command_list/_doForceRefreshSelection.js": __glob_0_1$4, "./command_list/addArtBoard.js": __glob_0_2$4, "./command_list/addBackgroundColor.js": __glob_0_3$4, "./command_list/addBackgroundImageAsset.js": __glob_0_4$4, "./command_list/addBackgroundImageGradient.js": __glob_0_5$4, "./command_list/addBackgroundImagePattern.js": __glob_0_6$4, "./command_list/addCustomComponent.js": __glob_0_7$4, "./command_list/addImage.js": __glob_0_8$4, "./command_list/addImageAssetItem.js": __glob_0_9$4, "./command_list/addLayer.js": __glob_0_10$4, "./command_list/addLayerView.js": __glob_0_11$4, "./command_list/addProject.js": __glob_0_12$4, "./command_list/addSVGFilterAssetItem.js": __glob_0_13$4, "./command_list/addText.js": __glob_0_14$4, "./command_list/addTimelineCurrentProperty.js": __glob_0_15$4, "./command_list/addTimelineItem.js": __glob_0_16$4, "./command_list/addTimelineKeyframe.js": __glob_0_17$4, "./command_list/addTimelineProperty.js": __glob_0_18$4, "./command_list/addVideo.js": __glob_0_19$4, "./command_list/addVideoAssetItem.js": __glob_0_20$4, "./command_list/clipboard.copy.js": __glob_0_21$3, "./command_list/clipboard.paste.js": __glob_0_22$3, "./command_list/convert.flatten.path.js": __glob_0_23$3, "./command_list/convert.no.transform.path.js": __glob_0_24$2, "./command_list/convert.normalize.path.js": __glob_0_25$2, "./command_list/convert.path.operation.js": __glob_0_26$2, "./command_list/convert.polygonal.path.js": __glob_0_27$2, "./command_list/convert.simplify.path.js": __glob_0_28$2, "./command_list/convert.smooth.path.js": __glob_0_29$2, "./command_list/convert.stroke.to.path.js": __glob_0_30$2, "./command_list/convertPasteText.js": __glob_0_31$2, "./command_list/convertPath.js": __glob_0_32$2, "./command_list/copy.path.js": __glob_0_33$2, "./command_list/copyTimelineProperty.js": __glob_0_34$2, "./command_list/deleteTimelineKeyframe.js": __glob_0_35$2, "./command_list/doubleclick.item.js": __glob_0_36$2, "./command_list/downloadJSON.js": __glob_0_37$2, "./command_list/downloadPNG.js": __glob_0_38$2, "./command_list/downloadSVG.js": __glob_0_39$2, "./command_list/drop.asset.js": __glob_0_40$2, "./command_list/dropImageUrl.js": __glob_0_41$2, "./command_list/editor.config.body.event.js": __glob_0_42$2, "./command_list/fileDropItems.js": __glob_0_43$2, "./command_list/firstTimelineItem.js": __glob_0_44$2, "./command_list/group.item.js": __glob_0_45$2, "./command_list/history.addLayer.js": __glob_0_46$2, "./command_list/history.group.item.js": __glob_0_47$2, "./command_list/history.redo.js": __glob_0_48$2, "./command_list/history.refreshSelection.js": __glob_0_49$2, "./command_list/history.refreshSelectionProject.js": __glob_0_50$2, "./command_list/history.removeLayer.js": __glob_0_51$2, "./command_list/history.removeProject.js": __glob_0_52$1, "./command_list/history.setAttributeForMulti.js": __glob_0_53$1, "./command_list/history.undo.js": __glob_0_54$1, "./command_list/item.move.depth.down.js": __glob_0_55$1, "./command_list/item.move.depth.first.js": __glob_0_56$1, "./command_list/item.move.depth.last.js": __glob_0_57$1, "./command_list/item.move.depth.up.js": __glob_0_58$1, "./command_list/keymap.keydown.js": __glob_0_59$1, "./command_list/keymap.keyup.js": __glob_0_60$1, "./command_list/lastTimelineItem.js": __glob_0_61$1, "./command_list/load.json.js": __glob_0_62$1, "./command_list/moveLayer.js": __glob_0_63$1, "./command_list/moveLayerForItems.js": __glob_0_64$1, "./command_list/moveSelectionToCenter.js": __glob_0_65$1, "./command_list/moveToCenter.js": __glob_0_66$1, "./command_list/newComponent.js": __glob_0_67$1, "./command_list/nextTimelineItem.js": __glob_0_68$1, "./command_list/open.editor.js": __glob_0_69$1, "./command_list/pauseTimelineItem.js": __glob_0_70$1, "./command_list/playTimelineItem.js": __glob_0_71$1, "./command_list/pop.mode.view.js": __glob_0_72$1, "./command_list/prevTimelineItem.js": __glob_0_73$1, "./command_list/push.mode.view.js": __glob_0_74$1, "./command_list/recoverBooleanPath.js": __glob_0_75$1, "./command_list/recoverCursor.js": __glob_0_76$1, "./command_list/refreshArtboard.js": __glob_0_77$1, "./command_list/refreshCursor.js": __glob_0_78$1, "./command_list/refreshElement.js": __glob_0_79$1, "./command_list/refreshHistory.js": __glob_0_80$1, "./command_list/refreshProject.js": __glob_0_81$1, "./command_list/refreshSelectedOffset.js": __glob_0_82$1, "./command_list/removeAnimationItem.js": __glob_0_83$1, "./command_list/removeLayer.js": __glob_0_84$1, "./command_list/removeTimeline.js": __glob_0_85$1, "./command_list/removeTimelineProperty.js": __glob_0_86$1, "./command_list/resetSelection.js": __glob_0_87$1, "./command_list/resizeArtBoard.js": __glob_0_88$1, "./command_list/rotateLayer.js": __glob_0_89$1, "./command_list/same.height.js": __glob_0_90$1, "./command_list/same.width.js": __glob_0_91$1, "./command_list/saveJSON.js": __glob_0_92$1, "./command_list/savePNG.js": __glob_0_93$1, "./command_list/segment.delete.js": __glob_0_94$1, "./command_list/segment.move.down.js": __glob_0_95$1, "./command_list/segment.move.left.js": __glob_0_96$1, "./command_list/segment.move.right.js": __glob_0_97$1, "./command_list/segment.move.up.js": __glob_0_98$1, "./command_list/select.all.js": __glob_0_99$1, "./command_list/selectTimelineItem.js": __glob_0_100$1, "./command_list/setAttributeForMulti.js": __glob_0_101$1, "./command_list/setEditorLayout.js": __glob_0_102$1, "./command_list/setLocale.js": __glob_0_103$1, "./command_list/setTimelineOffset.js": __glob_0_104$1, "./command_list/showExportView.js": __glob_0_105$1, "./command_list/sort.bottom.js": __glob_0_106$1, "./command_list/sort.center.js": __glob_0_107$1, "./command_list/sort.left.js": __glob_0_108$1, "./command_list/sort.middle.js": __glob_0_109$1, "./command_list/sort.right.js": __glob_0_110$1, "./command_list/sort.top.js": __glob_0_111$1, "./command_list/switch.path.js": __glob_0_112$1, "./command_list/toggle.tool.hand.js": __glob_0_113$1, "./command_list/ungroup.item.js": __glob_0_114$1, "./command_list/updateClipPath.js": __glob_0_115$1, "./command_list/updateImage.js": __glob_0_116$1, "./command_list/updateImageAssetItem.js": __glob_0_117$1, "./command_list/updatePathItem.js": __glob_0_118$1, "./command_list/updateResource.js": __glob_0_119$1, "./command_list/updateScale.js": __glob_0_120$1, "./command_list/updateUriList.js": __glob_0_121$1, "./command_list/updateVideo.js": __glob_0_122$1, "./command_list/updateVideoAssetItem.js": __glob_0_123$1, "./command_list/zoom.default.js": __glob_0_124$1, "./command_list/zoom.in.js": __glob_0_125$1, "./command_list/zoom.out.js": __glob_0_126$1, "./command_list/model/update.js": __glob_0_127$1 };
+const modules$4 = { "./command_list/_currentProject.js": __glob_0_0$4, "./command_list/_doForceRefreshSelection.js": __glob_0_1$4, "./command_list/addArtBoard.js": __glob_0_2$4, "./command_list/addBackgroundColor.js": __glob_0_3$4, "./command_list/addBackgroundImageAsset.js": __glob_0_4$4, "./command_list/addBackgroundImageGradient.js": __glob_0_5$4, "./command_list/addBackgroundImagePattern.js": __glob_0_6$4, "./command_list/addCustomComponent.js": __glob_0_7$4, "./command_list/addImage.js": __glob_0_8$4, "./command_list/addImageAssetItem.js": __glob_0_9$4, "./command_list/addLayer.js": __glob_0_10$4, "./command_list/addLayerView.js": __glob_0_11$4, "./command_list/addProject.js": __glob_0_12$4, "./command_list/addSVGFilterAssetItem.js": __glob_0_13$4, "./command_list/addText.js": __glob_0_14$4, "./command_list/addTimelineCurrentProperty.js": __glob_0_15$4, "./command_list/addTimelineItem.js": __glob_0_16$4, "./command_list/addTimelineKeyframe.js": __glob_0_17$4, "./command_list/addTimelineProperty.js": __glob_0_18$4, "./command_list/addVideo.js": __glob_0_19$4, "./command_list/addVideoAssetItem.js": __glob_0_20$4, "./command_list/clipboard.copy.js": __glob_0_21$3, "./command_list/clipboard.paste.js": __glob_0_22$3, "./command_list/convert.flatten.path.js": __glob_0_23$3, "./command_list/convert.no.transform.path.js": __glob_0_24$3, "./command_list/convert.normalize.path.js": __glob_0_25$2, "./command_list/convert.path.operation.js": __glob_0_26$2, "./command_list/convert.polygonal.path.js": __glob_0_27$2, "./command_list/convert.simplify.path.js": __glob_0_28$2, "./command_list/convert.smooth.path.js": __glob_0_29$2, "./command_list/convert.stroke.to.path.js": __glob_0_30$2, "./command_list/convertPasteText.js": __glob_0_31$2, "./command_list/convertPath.js": __glob_0_32$2, "./command_list/copy.path.js": __glob_0_33$2, "./command_list/copyTimelineProperty.js": __glob_0_34$2, "./command_list/deleteTimelineKeyframe.js": __glob_0_35$2, "./command_list/doubleclick.item.js": __glob_0_36$2, "./command_list/downloadJSON.js": __glob_0_37$2, "./command_list/downloadPNG.js": __glob_0_38$2, "./command_list/downloadSVG.js": __glob_0_39$2, "./command_list/drop.asset.js": __glob_0_40$2, "./command_list/dropImageUrl.js": __glob_0_41$2, "./command_list/editor.config.body.event.js": __glob_0_42$2, "./command_list/fileDropItems.js": __glob_0_43$2, "./command_list/firstTimelineItem.js": __glob_0_44$2, "./command_list/group.item.js": __glob_0_45$2, "./command_list/history.addLayer.js": __glob_0_46$2, "./command_list/history.group.item.js": __glob_0_47$2, "./command_list/history.redo.js": __glob_0_48$2, "./command_list/history.refreshSelection.js": __glob_0_49$2, "./command_list/history.refreshSelectionProject.js": __glob_0_50$2, "./command_list/history.removeLayer.js": __glob_0_51$2, "./command_list/history.removeProject.js": __glob_0_52$1, "./command_list/history.setAttributeForMulti.js": __glob_0_53$1, "./command_list/history.undo.js": __glob_0_54$1, "./command_list/item.move.depth.down.js": __glob_0_55$1, "./command_list/item.move.depth.first.js": __glob_0_56$1, "./command_list/item.move.depth.last.js": __glob_0_57$1, "./command_list/item.move.depth.up.js": __glob_0_58$1, "./command_list/keymap.keydown.js": __glob_0_59$1, "./command_list/keymap.keyup.js": __glob_0_60$1, "./command_list/lastTimelineItem.js": __glob_0_61$1, "./command_list/load.json.js": __glob_0_62$1, "./command_list/moveLayer.js": __glob_0_63$1, "./command_list/moveLayerForItems.js": __glob_0_64$1, "./command_list/moveSelectionToCenter.js": __glob_0_65$1, "./command_list/moveToCenter.js": __glob_0_66$1, "./command_list/newComponent.js": __glob_0_67$1, "./command_list/nextTimelineItem.js": __glob_0_68$1, "./command_list/open.editor.js": __glob_0_69$1, "./command_list/pauseTimelineItem.js": __glob_0_70$1, "./command_list/playTimelineItem.js": __glob_0_71$1, "./command_list/pop.mode.view.js": __glob_0_72$1, "./command_list/prevTimelineItem.js": __glob_0_73$1, "./command_list/push.mode.view.js": __glob_0_74$1, "./command_list/recoverBooleanPath.js": __glob_0_75$1, "./command_list/recoverCursor.js": __glob_0_76$1, "./command_list/refreshArtboard.js": __glob_0_77$1, "./command_list/refreshCursor.js": __glob_0_78$1, "./command_list/refreshElement.js": __glob_0_79$1, "./command_list/refreshHistory.js": __glob_0_80$1, "./command_list/refreshProject.js": __glob_0_81$1, "./command_list/refreshSelectedOffset.js": __glob_0_82$1, "./command_list/removeAnimationItem.js": __glob_0_83$1, "./command_list/removeLayer.js": __glob_0_84$1, "./command_list/removeTimeline.js": __glob_0_85$1, "./command_list/removeTimelineProperty.js": __glob_0_86$1, "./command_list/resetSelection.js": __glob_0_87$1, "./command_list/resizeArtBoard.js": __glob_0_88$1, "./command_list/rotateLayer.js": __glob_0_89$1, "./command_list/same.height.js": __glob_0_90$1, "./command_list/same.width.js": __glob_0_91$1, "./command_list/saveJSON.js": __glob_0_92$1, "./command_list/savePNG.js": __glob_0_93$1, "./command_list/segment.delete.js": __glob_0_94$1, "./command_list/segment.move.down.js": __glob_0_95$1, "./command_list/segment.move.left.js": __glob_0_96$1, "./command_list/segment.move.right.js": __glob_0_97$1, "./command_list/segment.move.up.js": __glob_0_98$1, "./command_list/select.all.js": __glob_0_99$1, "./command_list/selectTimelineItem.js": __glob_0_100$1, "./command_list/setAttributeForMulti.js": __glob_0_101$1, "./command_list/setEditorLayout.js": __glob_0_102$1, "./command_list/setLocale.js": __glob_0_103$1, "./command_list/setTimelineOffset.js": __glob_0_104$1, "./command_list/showExportView.js": __glob_0_105$1, "./command_list/sort.bottom.js": __glob_0_106$1, "./command_list/sort.center.js": __glob_0_107$1, "./command_list/sort.left.js": __glob_0_108$1, "./command_list/sort.middle.js": __glob_0_109$1, "./command_list/sort.right.js": __glob_0_110$1, "./command_list/sort.top.js": __glob_0_111$1, "./command_list/switch.path.js": __glob_0_112$1, "./command_list/toggle.tool.hand.js": __glob_0_113$1, "./command_list/ungroup.item.js": __glob_0_114$1, "./command_list/updateClipPath.js": __glob_0_115$1, "./command_list/updateImage.js": __glob_0_116$1, "./command_list/updateImageAssetItem.js": __glob_0_117$1, "./command_list/updatePathItem.js": __glob_0_118$1, "./command_list/updateResource.js": __glob_0_119$1, "./command_list/updateScale.js": __glob_0_120$1, "./command_list/updateUriList.js": __glob_0_121$1, "./command_list/updateVideo.js": __glob_0_122$1, "./command_list/updateVideoAssetItem.js": __glob_0_123$1, "./command_list/zoom.default.js": __glob_0_124$1, "./command_list/zoom.in.js": __glob_0_125$1, "./command_list/zoom.out.js": __glob_0_126$1, "./command_list/model/update.js": __glob_0_127$1 };
 const obj$1 = {};
 Object.entries(modules$4).forEach(([key, value]) => {
   key = key.replace("./command_list/", "").replace(".js", "");
@@ -19433,7 +19460,7 @@ var item_move_shift_left = {
   args: [-10, 0],
   when: "CanvasView"
 };
-var __glob_0_24$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_24$2 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": item_move_shift_left
@@ -19781,7 +19808,7 @@ var __glob_0_51$1 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": zoom_out
 });
-const modules$3 = { "./shortcuts_list/add.artboard.js": __glob_0_0$3, "./shortcuts_list/add.brush.js": __glob_0_1$3, "./shortcuts_list/add.circle.js": __glob_0_2$3, "./shortcuts_list/add.circle.l.js": __glob_0_3$3, "./shortcuts_list/add.path.js": __glob_0_4$3, "./shortcuts_list/add.rect.js": __glob_0_5$3, "./shortcuts_list/add.rect.m.js": __glob_0_6$3, "./shortcuts_list/add.text.js": __glob_0_7$3, "./shortcuts_list/clipboard.copy.js": __glob_0_8$3, "./shortcuts_list/clipboard.paste.js": __glob_0_9$3, "./shortcuts_list/group.item.js": __glob_0_10$3, "./shortcuts_list/history.redo.js": __glob_0_11$3, "./shortcuts_list/history.undo.js": __glob_0_12$3, "./shortcuts_list/item.move.alt.down.js": __glob_0_13$3, "./shortcuts_list/item.move.alt.left.js": __glob_0_14$3, "./shortcuts_list/item.move.alt.right.js": __glob_0_15$3, "./shortcuts_list/item.move.alt.up.js": __glob_0_16$3, "./shortcuts_list/item.move.depth.down.js": __glob_0_17$3, "./shortcuts_list/item.move.depth.up.js": __glob_0_18$3, "./shortcuts_list/item.move.key.down.js": __glob_0_19$3, "./shortcuts_list/item.move.key.left.js": __glob_0_20$3, "./shortcuts_list/item.move.key.right.js": __glob_0_21$2, "./shortcuts_list/item.move.key.up.js": __glob_0_22$2, "./shortcuts_list/item.move.shift.down.js": __glob_0_23$2, "./shortcuts_list/item.move.shift.left.js": __glob_0_24$1, "./shortcuts_list/item.move.shift.right.js": __glob_0_25$1, "./shortcuts_list/item.move.shift.up.js": __glob_0_26$1, "./shortcuts_list/item.rotate.meta.left.js": __glob_0_27$1, "./shortcuts_list/item.rotate.meta.right.js": __glob_0_28$1, "./shortcuts_list/removeLayer.js": __glob_0_29$1, "./shortcuts_list/removeLayerByDeleteKey.js": __glob_0_30$1, "./shortcuts_list/segment.delete.js": __glob_0_31$1, "./shortcuts_list/segment.move.alt.down.js": __glob_0_32$1, "./shortcuts_list/segment.move.alt.left.js": __glob_0_33$1, "./shortcuts_list/segment.move.alt.right.js": __glob_0_34$1, "./shortcuts_list/segment.move.alt.up.js": __glob_0_35$1, "./shortcuts_list/segment.move.key.down.js": __glob_0_36$1, "./shortcuts_list/segment.move.key.left.js": __glob_0_37$1, "./shortcuts_list/segment.move.key.right.js": __glob_0_38$1, "./shortcuts_list/segment.move.key.up.js": __glob_0_39$1, "./shortcuts_list/segment.move.shift.down.js": __glob_0_40$1, "./shortcuts_list/segment.move.shift.left.js": __glob_0_41$1, "./shortcuts_list/segment.move.shift.right.js": __glob_0_42$1, "./shortcuts_list/segment.move.shift.up.js": __glob_0_43$1, "./shortcuts_list/select.all.js": __glob_0_44$1, "./shortcuts_list/select.view.js": __glob_0_45$1, "./shortcuts_list/set.tool.hand.js": __glob_0_46$1, "./shortcuts_list/show.pan.js": __glob_0_47$1, "./shortcuts_list/ungroup.item.js": __glob_0_48$1, "./shortcuts_list/zoom.default.js": __glob_0_49$1, "./shortcuts_list/zoom.in.js": __glob_0_50$1, "./shortcuts_list/zoom.out.js": __glob_0_51$1 };
+const modules$3 = { "./shortcuts_list/add.artboard.js": __glob_0_0$3, "./shortcuts_list/add.brush.js": __glob_0_1$3, "./shortcuts_list/add.circle.js": __glob_0_2$3, "./shortcuts_list/add.circle.l.js": __glob_0_3$3, "./shortcuts_list/add.path.js": __glob_0_4$3, "./shortcuts_list/add.rect.js": __glob_0_5$3, "./shortcuts_list/add.rect.m.js": __glob_0_6$3, "./shortcuts_list/add.text.js": __glob_0_7$3, "./shortcuts_list/clipboard.copy.js": __glob_0_8$3, "./shortcuts_list/clipboard.paste.js": __glob_0_9$3, "./shortcuts_list/group.item.js": __glob_0_10$3, "./shortcuts_list/history.redo.js": __glob_0_11$3, "./shortcuts_list/history.undo.js": __glob_0_12$3, "./shortcuts_list/item.move.alt.down.js": __glob_0_13$3, "./shortcuts_list/item.move.alt.left.js": __glob_0_14$3, "./shortcuts_list/item.move.alt.right.js": __glob_0_15$3, "./shortcuts_list/item.move.alt.up.js": __glob_0_16$3, "./shortcuts_list/item.move.depth.down.js": __glob_0_17$3, "./shortcuts_list/item.move.depth.up.js": __glob_0_18$3, "./shortcuts_list/item.move.key.down.js": __glob_0_19$3, "./shortcuts_list/item.move.key.left.js": __glob_0_20$3, "./shortcuts_list/item.move.key.right.js": __glob_0_21$2, "./shortcuts_list/item.move.key.up.js": __glob_0_22$2, "./shortcuts_list/item.move.shift.down.js": __glob_0_23$2, "./shortcuts_list/item.move.shift.left.js": __glob_0_24$2, "./shortcuts_list/item.move.shift.right.js": __glob_0_25$1, "./shortcuts_list/item.move.shift.up.js": __glob_0_26$1, "./shortcuts_list/item.rotate.meta.left.js": __glob_0_27$1, "./shortcuts_list/item.rotate.meta.right.js": __glob_0_28$1, "./shortcuts_list/removeLayer.js": __glob_0_29$1, "./shortcuts_list/removeLayerByDeleteKey.js": __glob_0_30$1, "./shortcuts_list/segment.delete.js": __glob_0_31$1, "./shortcuts_list/segment.move.alt.down.js": __glob_0_32$1, "./shortcuts_list/segment.move.alt.left.js": __glob_0_33$1, "./shortcuts_list/segment.move.alt.right.js": __glob_0_34$1, "./shortcuts_list/segment.move.alt.up.js": __glob_0_35$1, "./shortcuts_list/segment.move.key.down.js": __glob_0_36$1, "./shortcuts_list/segment.move.key.left.js": __glob_0_37$1, "./shortcuts_list/segment.move.key.right.js": __glob_0_38$1, "./shortcuts_list/segment.move.key.up.js": __glob_0_39$1, "./shortcuts_list/segment.move.shift.down.js": __glob_0_40$1, "./shortcuts_list/segment.move.shift.left.js": __glob_0_41$1, "./shortcuts_list/segment.move.shift.right.js": __glob_0_42$1, "./shortcuts_list/segment.move.shift.up.js": __glob_0_43$1, "./shortcuts_list/select.all.js": __glob_0_44$1, "./shortcuts_list/select.view.js": __glob_0_45$1, "./shortcuts_list/set.tool.hand.js": __glob_0_46$1, "./shortcuts_list/show.pan.js": __glob_0_47$1, "./shortcuts_list/ungroup.item.js": __glob_0_48$1, "./shortcuts_list/zoom.default.js": __glob_0_49$1, "./shortcuts_list/zoom.in.js": __glob_0_50$1, "./shortcuts_list/zoom.out.js": __glob_0_51$1 };
 var shortcuts = Object.values(modules$3).map((it) => it.default);
 const KEY_CODE = {
   "backspace": 8,
@@ -20741,7 +20768,7 @@ var __glob_0_23$1 = /* @__PURE__ */ Object.freeze({
   "default": artboard$1
 });
 var auto_awesome = _icon_template(`<path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/>`);
-var __glob_0_24 = /* @__PURE__ */ Object.freeze({
+var __glob_0_24$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": auto_awesome
@@ -22139,10 +22166,16 @@ var __glob_0_237 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": visible
 });
+var visible_off = _icon_template(`<path d="M12 6c3.79 0 7.17 2.13 8.82 5.5-.59 1.22-1.42 2.27-2.41 3.12l1.41 1.41c1.39-1.23 2.49-2.77 3.18-4.53C21.27 7.11 17 4 12 4c-1.27 0-2.49.2-3.64.57l1.65 1.65C10.66 6.09 11.32 6 12 6zm-1.07 1.14L13 9.21c.57.25 1.03.71 1.28 1.28l2.07 2.07c.08-.34.14-.7.14-1.07C16.5 9.01 14.48 7 12 7c-.37 0-.72.05-1.07.14zM2.01 3.87l2.68 2.68C3.06 7.83 1.77 9.53 1 11.5 2.73 15.89 7 19 12 19c1.52 0 2.98-.29 4.32-.82l3.42 3.42 1.41-1.41L3.42 2.45 2.01 3.87zm7.5 7.5l2.61 2.61c-.04.01-.08.02-.12.02-1.38 0-2.5-1.12-2.5-2.5 0-.05.01-.08.01-.13zm-3.4-3.4l1.75 1.75c-.23.55-.36 1.15-.36 1.78 0 2.48 2.02 4.5 4.5 4.5.63 0 1.23-.13 1.77-.36l.98.98c-.88.24-1.8.38-2.75.38-3.79 0-7.17-2.13-8.82-5.5.7-1.43 1.72-2.61 2.93-3.53z"/>`);
+var __glob_0_238 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": visible_off
+});
 var volume_down = _icon_template(`
         <path d="M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"/>
     `);
-var __glob_0_238 = /* @__PURE__ */ Object.freeze({
+var __glob_0_239 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": volume_down
@@ -22150,7 +22183,7 @@ var __glob_0_238 = /* @__PURE__ */ Object.freeze({
 var volume_off = _icon_template(`
     <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
 `);
-var __glob_0_239 = /* @__PURE__ */ Object.freeze({
+var __glob_0_240 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": volume_off
@@ -22158,54 +22191,54 @@ var __glob_0_239 = /* @__PURE__ */ Object.freeze({
 var volume_up = _icon_template(`
     <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
 `);
-var __glob_0_240 = /* @__PURE__ */ Object.freeze({
+var __glob_0_241 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": volume_up
 });
 var wave = _icon_template(`<path d="M17 16.99c-1.35 0-2.2.42-2.95.8-.65.33-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.95c1.35 0 2.2-.42 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.42 2.95-.8c.65-.33 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm0-4.45c-1.35 0-2.2.43-2.95.8-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.32-1.17.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm2.95-8.08c-.75-.38-1.58-.8-2.95-.8s-2.2.42-2.95.8c-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.37-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.93c1.35 0 2.2-.43 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V5.04c-.9 0-1.4-.25-2.05-.58zM17 8.09c-1.35 0-2.2.43-2.95.8-.65.35-1.15.6-2.05.6s-1.4-.25-2.05-.6c-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.35-1.15.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.32 1.18-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V9.49c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8z"/>`);
-var __glob_0_241 = /* @__PURE__ */ Object.freeze({
+var __glob_0_242 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": wave
 });
 var waves = _icon_template(`<path d="M17 16.99c-1.35 0-2.2.42-2.95.8-.65.33-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.95c1.35 0 2.2-.42 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.42 2.95-.8c.65-.33 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm0-4.45c-1.35 0-2.2.43-2.95.8-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.32-1.17.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.35 1.15-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.58.8 2.95.8v-1.95c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8zm2.95-8.08c-.75-.38-1.58-.8-2.95-.8s-2.2.42-2.95.8c-.65.32-1.18.6-2.05.6-.9 0-1.4-.25-2.05-.6-.75-.37-1.57-.8-2.95-.8s-2.2.42-2.95.8c-.65.33-1.17.6-2.05.6v1.93c1.35 0 2.2-.43 2.95-.8.65-.33 1.17-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V5.04c-.9 0-1.4-.25-2.05-.58zM17 8.09c-1.35 0-2.2.43-2.95.8-.65.35-1.15.6-2.05.6s-1.4-.25-2.05-.6c-.75-.38-1.57-.8-2.95-.8s-2.2.43-2.95.8c-.65.35-1.15.6-2.05.6v1.95c1.35 0 2.2-.43 2.95-.8.65-.32 1.18-.6 2.05-.6s1.4.25 2.05.6c.75.38 1.57.8 2.95.8s2.2-.43 2.95-.8c.65-.32 1.18-.6 2.05-.6.9 0 1.4.25 2.05.6.75.38 1.58.8 2.95.8V9.49c-.9 0-1.4-.25-2.05-.6-.75-.38-1.6-.8-2.95-.8z"/>`);
-var __glob_0_242 = /* @__PURE__ */ Object.freeze({
+var __glob_0_243 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": waves
 });
 var web = _icon_template(`<path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"/>`);
-var __glob_0_243 = /* @__PURE__ */ Object.freeze({
+var __glob_0_244 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": web
 });
 var west = _icon_template(`<path d="M9,19l1.41-1.41L5.83,13H22V11H5.83l4.59-4.59L9,5l-7,7L9,19z"/>`);
-var __glob_0_244 = /* @__PURE__ */ Object.freeze({
+var __glob_0_245 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": west
 });
 var width$1 = _icon_template(`<polygon transform="rotate(90 12 12)" points="13,6.99 16,6.99 12,3 8,6.99 11,6.99 11,17.01 8,17.01 12,21 16,17.01 13,17.01"/>`);
-var __glob_0_245 = /* @__PURE__ */ Object.freeze({
+var __glob_0_246 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": width$1
 });
 var wrap = _icon_template(`<path d="M11 9l1.42 1.42L8.83 14H18V4h2v12H8.83l3.59 3.58L11 21l-6-6 6-6z"/>`);
-var __glob_0_246 = /* @__PURE__ */ Object.freeze({
+var __glob_0_247 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": wrap
 });
 var wrap_text = _icon_template(`<path d="M4 19h6v-2H4v2zM20 5H4v2h16V5zm-3 6H4v2h13.25c1.1 0 2 .9 2 2s-.9 2-2 2H15v-2l-3 3 3 3v-2h2c2.21 0 4-1.79 4-4s-1.79-4-4-4z"/>`);
-var __glob_0_247 = /* @__PURE__ */ Object.freeze({
+var __glob_0_248 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": wrap_text
 });
-const modules$2 = { "./icon_list/_icon_template.js": __glob_0_0$2, "./icon_list/account_tree.js": __glob_0_1$2, "./icon_list/add.js": __glob_0_2$2, "./icon_list/add_box.js": __glob_0_3$2, "./icon_list/add_circle.js": __glob_0_4$2, "./icon_list/add_note.js": __glob_0_5$2, "./icon_list/align_center.js": __glob_0_6$2, "./icon_list/align_horizontal_center.js": __glob_0_7$2, "./icon_list/align_horizontal_left.js": __glob_0_8$2, "./icon_list/align_horizontal_right.js": __glob_0_9$2, "./icon_list/align_justify.js": __glob_0_10$2, "./icon_list/align_left.js": __glob_0_11$2, "./icon_list/align_right.js": __glob_0_12$2, "./icon_list/align_vertical_bottom.js": __glob_0_13$2, "./icon_list/align_vertical_center.js": __glob_0_14$2, "./icon_list/align_vertical_top.js": __glob_0_15$2, "./icon_list/alternate.js": __glob_0_16$2, "./icon_list/alternate_reverse.js": __glob_0_17$2, "./icon_list/apps.js": __glob_0_18$2, "./icon_list/archive.js": __glob_0_19$2, "./icon_list/arrowLeft.js": __glob_0_20$2, "./icon_list/arrowRight.js": __glob_0_21$1, "./icon_list/arrow_right.js": __glob_0_22$1, "./icon_list/artboard.js": __glob_0_23$1, "./icon_list/auto_awesome.js": __glob_0_24, "./icon_list/autorenew.js": __glob_0_25, "./icon_list/ballot.js": __glob_0_26, "./icon_list/bar_chart.js": __glob_0_27, "./icon_list/blur.js": __glob_0_28, "./icon_list/blur_linear.js": __glob_0_29, "./icon_list/boolean_difference.js": __glob_0_30, "./icon_list/boolean_intersection.js": __glob_0_31, "./icon_list/boolean_union.js": __glob_0_32, "./icon_list/boolean_xor.js": __glob_0_33, "./icon_list/border_all.js": __glob_0_34, "./icon_list/border_inner.js": __glob_0_35, "./icon_list/border_style.js": __glob_0_36, "./icon_list/bottom.js": __glob_0_37, "./icon_list/broken_image.js": __glob_0_38, "./icon_list/brush.js": __glob_0_39, "./icon_list/build.js": __glob_0_40, "./icon_list/camera_roll.js": __glob_0_41, "./icon_list/cat.js": __glob_0_42, "./icon_list/center.js": __glob_0_43, "./icon_list/chart.js": __glob_0_44, "./icon_list/check.js": __glob_0_45, "./icon_list/chevron_left.js": __glob_0_46, "./icon_list/chevron_right.js": __glob_0_47, "./icon_list/circle.js": __glob_0_48, "./icon_list/close.js": __glob_0_49, "./icon_list/code.js": __glob_0_50, "./icon_list/color.js": __glob_0_51, "./icon_list/color_lens.js": __glob_0_52, "./icon_list/control_point.js": __glob_0_53, "./icon_list/copy.js": __glob_0_54, "./icon_list/create_folder.js": __glob_0_55, "./icon_list/cube.js": __glob_0_56, "./icon_list/cylinder.js": __glob_0_57, "./icon_list/dahaze.js": __glob_0_58, "./icon_list/dark.js": __glob_0_59, "./icon_list/delete_forever.js": __glob_0_60, "./icon_list/device_hub.js": __glob_0_61, "./icon_list/diffuse.js": __glob_0_62, "./icon_list/doc.js": __glob_0_63, "./icon_list/drag_indicator.js": __glob_0_64, "./icon_list/draw.js": __glob_0_65, "./icon_list/east.js": __glob_0_66, "./icon_list/edit.js": __glob_0_67, "./icon_list/end.js": __glob_0_68, "./icon_list/exit_to_app.js": __glob_0_69, "./icon_list/expand.js": __glob_0_70, "./icon_list/expand_more.js": __glob_0_71, "./icon_list/export.js": __glob_0_72, "./icon_list/face.js": __glob_0_73, "./icon_list/fast_forward.js": __glob_0_74, "./icon_list/fast_rewind.js": __glob_0_75, "./icon_list/file_copy.js": __glob_0_76, "./icon_list/filter.js": __glob_0_77, "./icon_list/flag.js": __glob_0_78, "./icon_list/flash_on.js": __glob_0_79, "./icon_list/flatten.js": __glob_0_80, "./icon_list/flex.js": __glob_0_81, "./icon_list/flip.js": __glob_0_82, "./icon_list/flipY.js": __glob_0_83, "./icon_list/flip_camera.js": __glob_0_84, "./icon_list/folder.js": __glob_0_85, "./icon_list/font_download.js": __glob_0_86, "./icon_list/format_bold.js": __glob_0_87, "./icon_list/format_indent.js": __glob_0_88, "./icon_list/format_line_spacing.js": __glob_0_89, "./icon_list/format_shapes.js": __glob_0_90, "./icon_list/format_size.js": __glob_0_91, "./icon_list/fullscreen.js": __glob_0_92, "./icon_list/gps_fixed.js": __glob_0_93, "./icon_list/gradient.js": __glob_0_94, "./icon_list/grid.js": __glob_0_95, "./icon_list/grid3x3.js": __glob_0_96, "./icon_list/group.js": __glob_0_97, "./icon_list/height.js": __glob_0_98, "./icon_list/highlight_at.js": __glob_0_99, "./icon_list/horizontal_distribute.js": __glob_0_100, "./icon_list/horizontal_rule.js": __glob_0_101, "./icon_list/image.js": __glob_0_102, "./icon_list/input.js": __glob_0_103, "./icon_list/italic.js": __glob_0_104, "./icon_list/join_full.js": __glob_0_105, "./icon_list/join_right.js": __glob_0_106, "./icon_list/justify_content_space_around.js": __glob_0_107, "./icon_list/keyboard.js": __glob_0_108, "./icon_list/keyboard_arrow_down.js": __glob_0_109, "./icon_list/keyboard_arrow_left.js": __glob_0_110, "./icon_list/keyboard_arrow_right.js": __glob_0_111, "./icon_list/keyboard_arrow_up.js": __glob_0_112, "./icon_list/landscape.js": __glob_0_113, "./icon_list/launch.js": __glob_0_114, "./icon_list/layers.js": __glob_0_115, "./icon_list/layout_default.js": __glob_0_116, "./icon_list/layout_flex.js": __glob_0_117, "./icon_list/layout_grid.js": __glob_0_118, "./icon_list/left.js": __glob_0_119, "./icon_list/left_hide.js": __glob_0_120, "./icon_list/lens.js": __glob_0_121, "./icon_list/light.js": __glob_0_122, "./icon_list/line_cap_butt.js": __glob_0_123, "./icon_list/line_cap_round.js": __glob_0_124, "./icon_list/line_cap_square.js": __glob_0_125, "./icon_list/line_chart.js": __glob_0_126, "./icon_list/line_join_bevel.js": __glob_0_127, "./icon_list/line_join_miter.js": __glob_0_128, "./icon_list/line_join_round.js": __glob_0_129, "./icon_list/line_style.js": __glob_0_130, "./icon_list/line_weight.js": __glob_0_131, "./icon_list/list.js": __glob_0_132, "./icon_list/local_library.js": __glob_0_133, "./icon_list/local_movie.js": __glob_0_134, "./icon_list/lock.js": __glob_0_135, "./icon_list/lock_open.js": __glob_0_136, "./icon_list/looks.js": __glob_0_137, "./icon_list/margin.js": __glob_0_138, "./icon_list/merge.js": __glob_0_139, "./icon_list/middle.js": __glob_0_140, "./icon_list/navigation.js": __glob_0_141, "./icon_list/near_me.js": __glob_0_142, "./icon_list/north.js": __glob_0_143, "./icon_list/note.js": __glob_0_144, "./icon_list/nowrap.js": __glob_0_145, "./icon_list/opacity.js": __glob_0_146, "./icon_list/open_in_full.js": __glob_0_147, "./icon_list/outline.js": __glob_0_148, "./icon_list/outline_circle.js": __glob_0_149, "./icon_list/outline_image.js": __glob_0_150, "./icon_list/outline_rect.js": __glob_0_151, "./icon_list/outline_shape.js": __glob_0_152, "./icon_list/padding.js": __glob_0_153, "./icon_list/paint.js": __glob_0_154, "./icon_list/palette.js": __glob_0_155, "./icon_list/pantool.js": __glob_0_156, "./icon_list/pattern_check.js": __glob_0_157, "./icon_list/pattern_cross_dot.js": __glob_0_158, "./icon_list/pattern_dot.js": __glob_0_159, "./icon_list/pattern_grid.js": __glob_0_160, "./icon_list/pattern_horizontal_line.js": __glob_0_161, "./icon_list/pause.js": __glob_0_162, "./icon_list/pentool.js": __glob_0_163, "./icon_list/photo.js": __glob_0_164, "./icon_list/play.js": __glob_0_165, "./icon_list/plugin.js": __glob_0_166, "./icon_list/polygon.js": __glob_0_167, "./icon_list/power_input.js": __glob_0_168, "./icon_list/publish.js": __glob_0_169, "./icon_list/rect.js": __glob_0_170, "./icon_list/redo.js": __glob_0_171, "./icon_list/refresh.js": __glob_0_172, "./icon_list/remove.js": __glob_0_173, "./icon_list/remove2.js": __glob_0_174, "./icon_list/repeat.js": __glob_0_175, "./icon_list/replay.js": __glob_0_176, "./icon_list/right.js": __glob_0_177, "./icon_list/right_hide.js": __glob_0_178, "./icon_list/rotate.js": __glob_0_179, "./icon_list/rotate_left.js": __glob_0_180, "./icon_list/round.js": __glob_0_181, "./icon_list/same_height.js": __glob_0_182, "./icon_list/same_width.js": __glob_0_183, "./icon_list/save.js": __glob_0_184, "./icon_list/scatter.js": __glob_0_185, "./icon_list/screen.js": __glob_0_186, "./icon_list/setting.js": __glob_0_187, "./icon_list/settings_input_component.js": __glob_0_188, "./icon_list/shadow.js": __glob_0_189, "./icon_list/shape.js": __glob_0_190, "./icon_list/shuffle.js": __glob_0_191, "./icon_list/size.js": __glob_0_192, "./icon_list/skip_next.js": __glob_0_193, "./icon_list/skip_prev.js": __glob_0_194, "./icon_list/smooth.js": __glob_0_195, "./icon_list/source.js": __glob_0_196, "./icon_list/south.js": __glob_0_197, "./icon_list/space.js": __glob_0_198, "./icon_list/specular.js": __glob_0_199, "./icon_list/speed.js": __glob_0_200, "./icon_list/star.js": __glob_0_201, "./icon_list/start.js": __glob_0_202, "./icon_list/storage.js": __glob_0_203, "./icon_list/straighten.js": __glob_0_204, "./icon_list/strikethrough.js": __glob_0_205, "./icon_list/stroke_to_path.js": __glob_0_206, "./icon_list/swap_horiz.js": __glob_0_207, "./icon_list/switch_left.js": __glob_0_208, "./icon_list/switch_right.js": __glob_0_209, "./icon_list/sync.js": __glob_0_210, "./icon_list/table_rows.js": __glob_0_211, "./icon_list/text_rotate.js": __glob_0_212, "./icon_list/texture.js": __glob_0_213, "./icon_list/timer.js": __glob_0_214, "./icon_list/title.js": __glob_0_215, "./icon_list/to_back.js": __glob_0_216, "./icon_list/to_front.js": __glob_0_217, "./icon_list/tonality.js": __glob_0_218, "./icon_list/top.js": __glob_0_219, "./icon_list/transform.js": __glob_0_220, "./icon_list/underline.js": __glob_0_221, "./icon_list/undo.js": __glob_0_222, "./icon_list/unfold.js": __glob_0_223, "./icon_list/vertical_align_baseline.js": __glob_0_224, "./icon_list/vertical_align_bottom.js": __glob_0_225, "./icon_list/vertical_align_center.js": __glob_0_226, "./icon_list/vertical_align_stretch.js": __glob_0_227, "./icon_list/vertical_align_top.js": __glob_0_228, "./icon_list/vertical_distribute.js": __glob_0_229, "./icon_list/video.js": __glob_0_230, "./icon_list/view_comfy.js": __glob_0_231, "./icon_list/view_list.js": __glob_0_232, "./icon_list/view_week.js": __glob_0_233, "./icon_list/view_week_reverse.js": __glob_0_234, "./icon_list/vignette.js": __glob_0_235, "./icon_list/vintage.js": __glob_0_236, "./icon_list/visible.js": __glob_0_237, "./icon_list/volume_down.js": __glob_0_238, "./icon_list/volume_off.js": __glob_0_239, "./icon_list/volume_up.js": __glob_0_240, "./icon_list/wave.js": __glob_0_241, "./icon_list/waves.js": __glob_0_242, "./icon_list/web.js": __glob_0_243, "./icon_list/west.js": __glob_0_244, "./icon_list/width.js": __glob_0_245, "./icon_list/wrap.js": __glob_0_246, "./icon_list/wrap_text.js": __glob_0_247 };
+const modules$2 = { "./icon_list/_icon_template.js": __glob_0_0$2, "./icon_list/account_tree.js": __glob_0_1$2, "./icon_list/add.js": __glob_0_2$2, "./icon_list/add_box.js": __glob_0_3$2, "./icon_list/add_circle.js": __glob_0_4$2, "./icon_list/add_note.js": __glob_0_5$2, "./icon_list/align_center.js": __glob_0_6$2, "./icon_list/align_horizontal_center.js": __glob_0_7$2, "./icon_list/align_horizontal_left.js": __glob_0_8$2, "./icon_list/align_horizontal_right.js": __glob_0_9$2, "./icon_list/align_justify.js": __glob_0_10$2, "./icon_list/align_left.js": __glob_0_11$2, "./icon_list/align_right.js": __glob_0_12$2, "./icon_list/align_vertical_bottom.js": __glob_0_13$2, "./icon_list/align_vertical_center.js": __glob_0_14$2, "./icon_list/align_vertical_top.js": __glob_0_15$2, "./icon_list/alternate.js": __glob_0_16$2, "./icon_list/alternate_reverse.js": __glob_0_17$2, "./icon_list/apps.js": __glob_0_18$2, "./icon_list/archive.js": __glob_0_19$2, "./icon_list/arrowLeft.js": __glob_0_20$2, "./icon_list/arrowRight.js": __glob_0_21$1, "./icon_list/arrow_right.js": __glob_0_22$1, "./icon_list/artboard.js": __glob_0_23$1, "./icon_list/auto_awesome.js": __glob_0_24$1, "./icon_list/autorenew.js": __glob_0_25, "./icon_list/ballot.js": __glob_0_26, "./icon_list/bar_chart.js": __glob_0_27, "./icon_list/blur.js": __glob_0_28, "./icon_list/blur_linear.js": __glob_0_29, "./icon_list/boolean_difference.js": __glob_0_30, "./icon_list/boolean_intersection.js": __glob_0_31, "./icon_list/boolean_union.js": __glob_0_32, "./icon_list/boolean_xor.js": __glob_0_33, "./icon_list/border_all.js": __glob_0_34, "./icon_list/border_inner.js": __glob_0_35, "./icon_list/border_style.js": __glob_0_36, "./icon_list/bottom.js": __glob_0_37, "./icon_list/broken_image.js": __glob_0_38, "./icon_list/brush.js": __glob_0_39, "./icon_list/build.js": __glob_0_40, "./icon_list/camera_roll.js": __glob_0_41, "./icon_list/cat.js": __glob_0_42, "./icon_list/center.js": __glob_0_43, "./icon_list/chart.js": __glob_0_44, "./icon_list/check.js": __glob_0_45, "./icon_list/chevron_left.js": __glob_0_46, "./icon_list/chevron_right.js": __glob_0_47, "./icon_list/circle.js": __glob_0_48, "./icon_list/close.js": __glob_0_49, "./icon_list/code.js": __glob_0_50, "./icon_list/color.js": __glob_0_51, "./icon_list/color_lens.js": __glob_0_52, "./icon_list/control_point.js": __glob_0_53, "./icon_list/copy.js": __glob_0_54, "./icon_list/create_folder.js": __glob_0_55, "./icon_list/cube.js": __glob_0_56, "./icon_list/cylinder.js": __glob_0_57, "./icon_list/dahaze.js": __glob_0_58, "./icon_list/dark.js": __glob_0_59, "./icon_list/delete_forever.js": __glob_0_60, "./icon_list/device_hub.js": __glob_0_61, "./icon_list/diffuse.js": __glob_0_62, "./icon_list/doc.js": __glob_0_63, "./icon_list/drag_indicator.js": __glob_0_64, "./icon_list/draw.js": __glob_0_65, "./icon_list/east.js": __glob_0_66, "./icon_list/edit.js": __glob_0_67, "./icon_list/end.js": __glob_0_68, "./icon_list/exit_to_app.js": __glob_0_69, "./icon_list/expand.js": __glob_0_70, "./icon_list/expand_more.js": __glob_0_71, "./icon_list/export.js": __glob_0_72, "./icon_list/face.js": __glob_0_73, "./icon_list/fast_forward.js": __glob_0_74, "./icon_list/fast_rewind.js": __glob_0_75, "./icon_list/file_copy.js": __glob_0_76, "./icon_list/filter.js": __glob_0_77, "./icon_list/flag.js": __glob_0_78, "./icon_list/flash_on.js": __glob_0_79, "./icon_list/flatten.js": __glob_0_80, "./icon_list/flex.js": __glob_0_81, "./icon_list/flip.js": __glob_0_82, "./icon_list/flipY.js": __glob_0_83, "./icon_list/flip_camera.js": __glob_0_84, "./icon_list/folder.js": __glob_0_85, "./icon_list/font_download.js": __glob_0_86, "./icon_list/format_bold.js": __glob_0_87, "./icon_list/format_indent.js": __glob_0_88, "./icon_list/format_line_spacing.js": __glob_0_89, "./icon_list/format_shapes.js": __glob_0_90, "./icon_list/format_size.js": __glob_0_91, "./icon_list/fullscreen.js": __glob_0_92, "./icon_list/gps_fixed.js": __glob_0_93, "./icon_list/gradient.js": __glob_0_94, "./icon_list/grid.js": __glob_0_95, "./icon_list/grid3x3.js": __glob_0_96, "./icon_list/group.js": __glob_0_97, "./icon_list/height.js": __glob_0_98, "./icon_list/highlight_at.js": __glob_0_99, "./icon_list/horizontal_distribute.js": __glob_0_100, "./icon_list/horizontal_rule.js": __glob_0_101, "./icon_list/image.js": __glob_0_102, "./icon_list/input.js": __glob_0_103, "./icon_list/italic.js": __glob_0_104, "./icon_list/join_full.js": __glob_0_105, "./icon_list/join_right.js": __glob_0_106, "./icon_list/justify_content_space_around.js": __glob_0_107, "./icon_list/keyboard.js": __glob_0_108, "./icon_list/keyboard_arrow_down.js": __glob_0_109, "./icon_list/keyboard_arrow_left.js": __glob_0_110, "./icon_list/keyboard_arrow_right.js": __glob_0_111, "./icon_list/keyboard_arrow_up.js": __glob_0_112, "./icon_list/landscape.js": __glob_0_113, "./icon_list/launch.js": __glob_0_114, "./icon_list/layers.js": __glob_0_115, "./icon_list/layout_default.js": __glob_0_116, "./icon_list/layout_flex.js": __glob_0_117, "./icon_list/layout_grid.js": __glob_0_118, "./icon_list/left.js": __glob_0_119, "./icon_list/left_hide.js": __glob_0_120, "./icon_list/lens.js": __glob_0_121, "./icon_list/light.js": __glob_0_122, "./icon_list/line_cap_butt.js": __glob_0_123, "./icon_list/line_cap_round.js": __glob_0_124, "./icon_list/line_cap_square.js": __glob_0_125, "./icon_list/line_chart.js": __glob_0_126, "./icon_list/line_join_bevel.js": __glob_0_127, "./icon_list/line_join_miter.js": __glob_0_128, "./icon_list/line_join_round.js": __glob_0_129, "./icon_list/line_style.js": __glob_0_130, "./icon_list/line_weight.js": __glob_0_131, "./icon_list/list.js": __glob_0_132, "./icon_list/local_library.js": __glob_0_133, "./icon_list/local_movie.js": __glob_0_134, "./icon_list/lock.js": __glob_0_135, "./icon_list/lock_open.js": __glob_0_136, "./icon_list/looks.js": __glob_0_137, "./icon_list/margin.js": __glob_0_138, "./icon_list/merge.js": __glob_0_139, "./icon_list/middle.js": __glob_0_140, "./icon_list/navigation.js": __glob_0_141, "./icon_list/near_me.js": __glob_0_142, "./icon_list/north.js": __glob_0_143, "./icon_list/note.js": __glob_0_144, "./icon_list/nowrap.js": __glob_0_145, "./icon_list/opacity.js": __glob_0_146, "./icon_list/open_in_full.js": __glob_0_147, "./icon_list/outline.js": __glob_0_148, "./icon_list/outline_circle.js": __glob_0_149, "./icon_list/outline_image.js": __glob_0_150, "./icon_list/outline_rect.js": __glob_0_151, "./icon_list/outline_shape.js": __glob_0_152, "./icon_list/padding.js": __glob_0_153, "./icon_list/paint.js": __glob_0_154, "./icon_list/palette.js": __glob_0_155, "./icon_list/pantool.js": __glob_0_156, "./icon_list/pattern_check.js": __glob_0_157, "./icon_list/pattern_cross_dot.js": __glob_0_158, "./icon_list/pattern_dot.js": __glob_0_159, "./icon_list/pattern_grid.js": __glob_0_160, "./icon_list/pattern_horizontal_line.js": __glob_0_161, "./icon_list/pause.js": __glob_0_162, "./icon_list/pentool.js": __glob_0_163, "./icon_list/photo.js": __glob_0_164, "./icon_list/play.js": __glob_0_165, "./icon_list/plugin.js": __glob_0_166, "./icon_list/polygon.js": __glob_0_167, "./icon_list/power_input.js": __glob_0_168, "./icon_list/publish.js": __glob_0_169, "./icon_list/rect.js": __glob_0_170, "./icon_list/redo.js": __glob_0_171, "./icon_list/refresh.js": __glob_0_172, "./icon_list/remove.js": __glob_0_173, "./icon_list/remove2.js": __glob_0_174, "./icon_list/repeat.js": __glob_0_175, "./icon_list/replay.js": __glob_0_176, "./icon_list/right.js": __glob_0_177, "./icon_list/right_hide.js": __glob_0_178, "./icon_list/rotate.js": __glob_0_179, "./icon_list/rotate_left.js": __glob_0_180, "./icon_list/round.js": __glob_0_181, "./icon_list/same_height.js": __glob_0_182, "./icon_list/same_width.js": __glob_0_183, "./icon_list/save.js": __glob_0_184, "./icon_list/scatter.js": __glob_0_185, "./icon_list/screen.js": __glob_0_186, "./icon_list/setting.js": __glob_0_187, "./icon_list/settings_input_component.js": __glob_0_188, "./icon_list/shadow.js": __glob_0_189, "./icon_list/shape.js": __glob_0_190, "./icon_list/shuffle.js": __glob_0_191, "./icon_list/size.js": __glob_0_192, "./icon_list/skip_next.js": __glob_0_193, "./icon_list/skip_prev.js": __glob_0_194, "./icon_list/smooth.js": __glob_0_195, "./icon_list/source.js": __glob_0_196, "./icon_list/south.js": __glob_0_197, "./icon_list/space.js": __glob_0_198, "./icon_list/specular.js": __glob_0_199, "./icon_list/speed.js": __glob_0_200, "./icon_list/star.js": __glob_0_201, "./icon_list/start.js": __glob_0_202, "./icon_list/storage.js": __glob_0_203, "./icon_list/straighten.js": __glob_0_204, "./icon_list/strikethrough.js": __glob_0_205, "./icon_list/stroke_to_path.js": __glob_0_206, "./icon_list/swap_horiz.js": __glob_0_207, "./icon_list/switch_left.js": __glob_0_208, "./icon_list/switch_right.js": __glob_0_209, "./icon_list/sync.js": __glob_0_210, "./icon_list/table_rows.js": __glob_0_211, "./icon_list/text_rotate.js": __glob_0_212, "./icon_list/texture.js": __glob_0_213, "./icon_list/timer.js": __glob_0_214, "./icon_list/title.js": __glob_0_215, "./icon_list/to_back.js": __glob_0_216, "./icon_list/to_front.js": __glob_0_217, "./icon_list/tonality.js": __glob_0_218, "./icon_list/top.js": __glob_0_219, "./icon_list/transform.js": __glob_0_220, "./icon_list/underline.js": __glob_0_221, "./icon_list/undo.js": __glob_0_222, "./icon_list/unfold.js": __glob_0_223, "./icon_list/vertical_align_baseline.js": __glob_0_224, "./icon_list/vertical_align_bottom.js": __glob_0_225, "./icon_list/vertical_align_center.js": __glob_0_226, "./icon_list/vertical_align_stretch.js": __glob_0_227, "./icon_list/vertical_align_top.js": __glob_0_228, "./icon_list/vertical_distribute.js": __glob_0_229, "./icon_list/video.js": __glob_0_230, "./icon_list/view_comfy.js": __glob_0_231, "./icon_list/view_list.js": __glob_0_232, "./icon_list/view_week.js": __glob_0_233, "./icon_list/view_week_reverse.js": __glob_0_234, "./icon_list/vignette.js": __glob_0_235, "./icon_list/vintage.js": __glob_0_236, "./icon_list/visible.js": __glob_0_237, "./icon_list/visible_off.js": __glob_0_238, "./icon_list/volume_down.js": __glob_0_239, "./icon_list/volume_off.js": __glob_0_240, "./icon_list/volume_up.js": __glob_0_241, "./icon_list/wave.js": __glob_0_242, "./icon_list/waves.js": __glob_0_243, "./icon_list/web.js": __glob_0_244, "./icon_list/west.js": __glob_0_245, "./icon_list/width.js": __glob_0_246, "./icon_list/wrap.js": __glob_0_247, "./icon_list/wrap_text.js": __glob_0_248 };
 const obj = {};
 Object.entries(modules$2).forEach(([key, value]) => {
   key = key.replace("./icon_list/", "").replace(".js", "");
@@ -27764,6 +27797,9 @@ class BackgroundImageEditor extends EditorElement {
       })}
                     </div>
                     <div class='tools'>
+                      <button type="button" class='visibility' data-index='${index2}' title="Visibility">${iconUse$1(it.visibility === VisibilityType.HIDDEN ? "visible_off" : "visible")}</button>
+                    </div>                                       
+                    <div class='tools'>
                       <button type="button" class='copy' data-index='${index2}' title="Copy Item">${iconUse$1("add")}</button>
                     </div>                    
                     <div class='tools'>
@@ -27786,11 +27822,11 @@ class BackgroundImageEditor extends EditorElement {
       case "linear-gradient":
         return `linear-gradient(90deg, white 0%, black 100%)`;
       case "repeating-linear-gradient":
-        return `repeating-linear-gradient(90deg, white 2px, black 4px)`;
+        return `repeating-linear-gradient(90deg, white 2%, black 4%)`;
       case "radial-gradient":
         return `radial-gradient(circle, white 0%, black 100%)`;
       case "repeating-radial-gradient":
-        return `repeating-radial-gradient(circle, white 2px, black 4px)`;
+        return `repeating-radial-gradient(circle, white 2%, black 4%)`;
       case "conic-gradient":
         return `conic-gradient(white 0%, black 100%)`;
       case "repeating-conic-gradient":
@@ -27831,6 +27867,12 @@ class BackgroundImageEditor extends EditorElement {
   [CLICK("$fillList .tools .remove")](e2) {
     var removeIndex = +e2.$dt.attr("data-index");
     this.state.images.splice(removeIndex, 1);
+    this.refresh();
+    this.modifyBackgroundImage();
+  }
+  [CLICK("$fillList .tools .visibility")](e2) {
+    var index2 = +e2.$dt.attr("data-index");
+    this.state.images[index2].visibility = this.state.images[index2].visibility === VisibilityType.HIDDEN ? VisibilityType.VISIBLE : VisibilityType.HIDDEN;
     this.refresh();
     this.modifyBackgroundImage();
   }
@@ -30779,6 +30821,18 @@ var __glob_0_10$1 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": fixed_angle
 });
+var fixed_gradient_angle = {
+  key: "fixed.gradient.angle",
+  defaultValue: 5,
+  title: "fixed gradient angle count",
+  description: "Set fixed gradient angle",
+  type: "number"
+};
+var __glob_0_11$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": fixed_gradient_angle
+});
 var history_delay_ms = {
   key: "history.delay.ms",
   defaultValue: 500,
@@ -30786,7 +30840,7 @@ var history_delay_ms = {
   description: "Set history delay time",
   type: "number"
 };
-var __glob_0_11$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_12$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_delay_ms
@@ -30798,7 +30852,7 @@ var language_locale = {
   description: "set locale for editor",
   type: "string"
 };
-var __glob_0_12$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_13$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": language_locale
@@ -30811,7 +30865,7 @@ var set_drag_path_area = {
   type: "boolean",
   storage: "none"
 };
-var __glob_0_13$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_14$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": set_drag_path_area
@@ -30824,7 +30878,7 @@ var set_move_control_point = {
   type: "boolean",
   storage: "none"
 };
-var __glob_0_14$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_15$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": set_move_control_point
@@ -30837,7 +30891,7 @@ var set_tool_hand = {
   type: "boolean",
   storage: "none"
 };
-var __glob_0_15$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_16$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": set_tool_hand
@@ -30849,7 +30903,7 @@ var show_left_panel = {
   description: "Set left panel visibility to on",
   type: "boolean"
 };
-var __glob_0_16$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_17$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": show_left_panel
@@ -30861,7 +30915,7 @@ var show_outline = {
   description: "Set outline visibility to on",
   type: "boolean"
 };
-var __glob_0_17$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_18$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": show_outline
@@ -30873,7 +30927,7 @@ var show_right_panel = {
   description: "Set right panel visibility to on",
   type: "boolean"
 };
-var __glob_0_18$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_19$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": show_right_panel
@@ -30885,7 +30939,7 @@ var show_ruler = {
   description: "Set ruler visibility to on",
   type: "boolean"
 };
-var __glob_0_19$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_20$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": show_ruler
@@ -30897,7 +30951,7 @@ var snap_distance = {
   description: "Set snap distance",
   type: "number"
 };
-var __glob_0_20$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_21 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": snap_distance
@@ -30909,7 +30963,7 @@ var snap_grid = {
   description: "Set snap grid size",
   type: "number"
 };
-var __glob_0_21 = /* @__PURE__ */ Object.freeze({
+var __glob_0_22 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": snap_grid
@@ -30921,7 +30975,7 @@ var store_key = {
   description: "Set localStorage key",
   type: "number"
 };
-var __glob_0_22 = /* @__PURE__ */ Object.freeze({
+var __glob_0_23 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": store_key
@@ -30933,12 +30987,12 @@ var style_canvas_background_color = {
   description: "Set canvas background color",
   type: "color"
 };
-var __glob_0_23 = /* @__PURE__ */ Object.freeze({
+var __glob_0_24 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": style_canvas_background_color
 });
-const modules$1 = { "./config_list/area.width.js": __glob_0_0$1, "./config_list/body.move.ms.js": __glob_0_1$1, "./config_list/canvas.height.js": __glob_0_2$1, "./config_list/canvas.width.js": __glob_0_3$1, "./config_list/debug.mode.js": __glob_0_4$1, "./config_list/editing.mode.itemType.js": __glob_0_5$1, "./config_list/editing.mode.js": __glob_0_6$1, "./config_list/editor.design.mode.js": __glob_0_7$1, "./config_list/editor.layout.mode.js": __glob_0_8$1, "./config_list/editor.theme.js": __glob_0_9$1, "./config_list/fixed.angle.js": __glob_0_10$1, "./config_list/history.delay.ms.js": __glob_0_11$1, "./config_list/language.locale.js": __glob_0_12$1, "./config_list/set.drag.path.area.js": __glob_0_13$1, "./config_list/set.move.control.point.js": __glob_0_14$1, "./config_list/set.tool.hand.js": __glob_0_15$1, "./config_list/show.left.panel.js": __glob_0_16$1, "./config_list/show.outline.js": __glob_0_17$1, "./config_list/show.right.panel.js": __glob_0_18$1, "./config_list/show.ruler.js": __glob_0_19$1, "./config_list/snap.distance.js": __glob_0_20$1, "./config_list/snap.grid.js": __glob_0_21, "./config_list/store.key.js": __glob_0_22, "./config_list/style.canvas.background.color.js": __glob_0_23 };
+const modules$1 = { "./config_list/area.width.js": __glob_0_0$1, "./config_list/body.move.ms.js": __glob_0_1$1, "./config_list/canvas.height.js": __glob_0_2$1, "./config_list/canvas.width.js": __glob_0_3$1, "./config_list/debug.mode.js": __glob_0_4$1, "./config_list/editing.mode.itemType.js": __glob_0_5$1, "./config_list/editing.mode.js": __glob_0_6$1, "./config_list/editor.design.mode.js": __glob_0_7$1, "./config_list/editor.layout.mode.js": __glob_0_8$1, "./config_list/editor.theme.js": __glob_0_9$1, "./config_list/fixed.angle.js": __glob_0_10$1, "./config_list/fixed.gradient.angle.js": __glob_0_11$1, "./config_list/history.delay.ms.js": __glob_0_12$1, "./config_list/language.locale.js": __glob_0_13$1, "./config_list/set.drag.path.area.js": __glob_0_14$1, "./config_list/set.move.control.point.js": __glob_0_15$1, "./config_list/set.tool.hand.js": __glob_0_16$1, "./config_list/show.left.panel.js": __glob_0_17$1, "./config_list/show.outline.js": __glob_0_18$1, "./config_list/show.right.panel.js": __glob_0_19$1, "./config_list/show.ruler.js": __glob_0_20$1, "./config_list/snap.distance.js": __glob_0_21, "./config_list/snap.grid.js": __glob_0_22, "./config_list/store.key.js": __glob_0_23, "./config_list/style.canvas.background.color.js": __glob_0_24 };
 var configs = Object.values(modules$1).map((it) => it.default);
 function defaultConfigs(editor) {
   configs.forEach((config) => {
@@ -32038,7 +32092,7 @@ class DomModel extends GroupModel {
       const backgroundList = this.computed("background-image", (backgroundImage2) => {
         return BackgroundImage.parseStyle(STRING_TO_CSS(backgroundImage2));
       });
-      list2.push.apply(list2, backgroundList);
+      list2.push.apply(list2, backgroundList.filter((it) => it.visibility !== VisibilityType.HIDDEN));
     }
     if (list2.length) {
       this.cacheBackgroundImage = BackgroundImage.joinCSS(list2);
@@ -32190,9 +32244,14 @@ class DomModel extends GroupModel {
           result.radialStartPoint = newStartPoint2;
           result.radialEndPoint = newEndPoint2;
           result.radialShapePoint = newShapePoint;
-          const targetPoint = newShapePoint;
+          [result.radialStartPoint, result.radialEndPoint, result.radialShapePoint] = vertiesMap([
+            result.radialStartPoint,
+            result.radialEndPoint,
+            result.radialShapePoint
+          ], calculateRotationOriginMat4(image2.angle, result.radialCenterPosition));
+          const targetPoint = result.radialShapePoint;
           result.colorsteps = image2.colorsteps.map((it) => {
-            const angle2 = it.percent * 3.6 + image2.angle;
+            const angle2 = it.percent * 3.6;
             const [newPos] = vertiesMap([
               targetPoint
             ], calculateRotationOriginMat4(angle2, result.radialCenterPosition));
@@ -32211,19 +32270,14 @@ class DomModel extends GroupModel {
         result.centerPosition = lerp([], backVerties[0], backVerties[2], 0.5);
         const startPoint2 = add$1([], result.centerPosition, [0, result.gradientLineLength / 2, 0]);
         const endPoint2 = subtract([], result.centerPosition, [0, result.gradientLineLength / 2, 0]);
-        const areaStartPoint = add$1([], startPoint2, [0, 0, 0]);
-        const areaEndPoint = add$1([], endPoint2, [0, 0, 0]);
+        const areaStartPoint = clone(startPoint2);
+        const areaEndPoint = clone(endPoint2);
         const [
           newStartPoint,
           newEndPoint,
           newAreaStartPoint,
           newAreaEndPoint
-        ] = vertiesMap([
-          startPoint2,
-          endPoint2,
-          areaStartPoint,
-          areaEndPoint
-        ], calculateRotationOriginMat4(image2.angle, result.centerPosition));
+        ] = vertiesMap([startPoint2, endPoint2, areaStartPoint, areaEndPoint], calculateRotationOriginMat4(image2.angle, result.centerPosition));
         result.endPoint = newEndPoint;
         result.startPoint = newStartPoint;
         result.areaStartPoint = newAreaStartPoint;
@@ -36936,8 +36990,8 @@ class GradientPickerPopup extends BasePopup {
     data.changeEvent = data.changeEvent || "changeFillPopup";
     data.image = data.gradient;
     data.params = params;
-    this.setState(data);
     this.showByRect(this.makeRect(248, 560, rect2));
+    this.setState(data);
     this.updateTitle();
     this.emit("showGradientEditorView", {
       index: data.index
@@ -46202,6 +46256,7 @@ class DomRender$1 extends ItemRender$1 {
     if (!item2.cacheBackgroundImage) {
       item2.setBackgroundImageCache();
     }
+    delete item2.cacheBackgroundImage["background-visibility"];
     return item2.cacheBackgroundImage;
   }
   toLayoutCSS(item2) {
@@ -56007,8 +56062,10 @@ class GradientBaseEditor extends EditorElement {
 class GradientResizer extends GradientBaseEditor {
   [POINTERSTART("$el .resizer") + LEFT_BUTTON + MOVE("calculateMovedResizer") + END("calculateMovedEndResizer") + PREVENT](e2) {
     this.state.$target = e2.$dt;
+    this.$el.toggleClass("dragging", true);
     this.initializeData();
     this.initMousePoint = this.$viewport.getWorldPosition(e2);
+    this.isShiftKey = e2.shiftKey;
   }
   calculateMovedResizer(dx, dy) {
     const targetMousePoint = this.$viewport.getWorldPosition();
@@ -56019,7 +56076,9 @@ class GradientResizer extends GradientBaseEditor {
     const realDist = subtract([], nextResult, currentResult);
     const { backRect: rect2 } = this.state.backgroundImageMatrix;
     const backgroundImage2 = this.state.gradient;
-    const backRect = backgroundImage2.recoverOffset(rect2.x, rect2.y, this.state.contentBox, realDist[0], realDist[1]);
+    const backRect = backgroundImage2.recoverOffset(rect2.x, rect2.y, this.state.contentBox, realDist[0], realDist[1], {
+      shiftKey: this.$config.get("bodyEvent").shiftKey
+    });
     this.state.backgroundImages[this.state.index].reset({
       x: backRect.x,
       y: backRect.y,
@@ -56030,6 +56089,7 @@ class GradientResizer extends GradientBaseEditor {
   }
   calculateMovedEndResizer() {
     this.updateData();
+    this.$el.toggleClass("dragging", false);
   }
   [POINTERSTART("$el .back-rect") + LEFT_BUTTON + MOVE("calculateMovedRect") + END("calculateMovedEndRect") + PREVENT](e2) {
     this.state.$target = e2.$dt;
@@ -56064,6 +56124,7 @@ class GradientRotateEditor extends GradientResizer {
   [POINTERSTART("$el .gradient-angle .rotate") + LEFT_BUTTON + MOVE("calculateMovedAngle") + END("calculatedMovedEndAngle") + PREVENT](e2) {
     this.state.$target = e2.$dt;
     this.initializeData();
+    this.$el.toggleClass("dragging", true);
     this.state.centerX = +this.state.$target.data("center-x");
     this.state.centerY = +this.state.$target.data("center-y");
     this.state.startX = +this.state.$target.attr("cx");
@@ -56077,13 +56138,14 @@ class GradientRotateEditor extends GradientResizer {
     const distAngle = calculateAngleForVec3(point2, center2, dist2);
     let newAngle = Math.floor(this.state.gradient.image.angle + distAngle);
     if (this.$config.get("bodyEvent").shiftKey) {
-      newAngle -= newAngle % this.$config.get("fixed.angle");
+      newAngle -= newAngle % this.$config.get("fixed.gradient.angle");
     }
     this.state.backgroundImages[this.state.index].image.angle = newAngle;
     this.updateData();
   }
   calculatedMovedEndAngle() {
     this.state.$target.toggleClass("moved");
+    this.$el.toggleClass("dragging", false);
     this.updateData();
   }
 }
@@ -56158,7 +56220,8 @@ class GradientColorstepEditor extends GradientRotateEditor {
     this.$el.toggleClass("dragging", true);
     this.state.hoverColorStep = null;
     this.initializeData();
-    this.$targetIndex = +e2.$dt.data("index");
+    const $colorstep = e2.$dt;
+    this.$targetIndex = +$colorstep.data("index");
     if (e2.altKey) {
       this.removeStep(this.$targetIndex);
       this.state.altKey = true;
@@ -56184,6 +56247,18 @@ class GradientColorstepEditor extends GradientRotateEditor {
         const angle2 = calculateAngle360(dist2[0], dist2[1]) - 180;
         this.rotateInverse = calculateRotationOriginMat4(-angle2, this.centerPosition);
         break;
+      case GradientType.CONIC:
+      case GradientType.REPEATING_CONIC:
+        this.centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
+        this.startPoint = this.$viewport.applyVertex(result.radialShapePoint);
+        this.newStartPoint = subtract([], this.startPoint, this.centerPosition);
+        this.newStartAngle = calculateAngle360(this.newStartPoint[0], this.newStartPoint[1]);
+        const x2 = +$colorstep.data("x");
+        const y2 = +$colorstep.data("y");
+        this.screenXY = [x2, y2, 0];
+        this.endPoint = this.$viewport.applyVertex(result.radialEndPoint);
+        this.rotateInverse = create$5();
+        break;
     }
   }
   moveColorStep(dx, dy) {
@@ -56193,6 +56268,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
     const [baseStartPoint, baseEndPoint, baseNextPoint] = vertiesMap([this.startPoint, this.endPoint, nextPoint], this.rotateInverse);
     const result = this.state.backgroundImageMatrix;
     let newDist = 0;
+    let baseDist = 0;
     switch (result.backgroundImage.image.type) {
       case GradientType.LINEAR:
       case GradientType.REPEATING_LINEAR:
@@ -56207,6 +56283,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
           var distEnd = Math.abs(e2 - n);
           newDist = distStart / (distEnd + distStart) * 100;
         }
+        baseDist = dist(this.startPoint, this.endPoint);
         break;
       case GradientType.RADIAL:
       case GradientType.REPEATING_RADIAL:
@@ -56219,9 +56296,21 @@ class GradientColorstepEditor extends GradientRotateEditor {
         } else {
           newDist = (n - s) / baseDefaultDist * 100;
         }
+        baseDist = dist(this.startPoint, this.endPoint);
+        break;
+      case GradientType.CONIC:
+      case GradientType.REPEATING_CONIC:
+        const newNextPoint = subtract([], nextPoint, this.centerPosition);
+        let nextAngle = calculateAngle360(newNextPoint[0], newNextPoint[1]);
+        if (this.$config.get("bodyEvent").shiftKey) {
+          nextAngle -= nextAngle % this.$config.get("fixed.gradient.angle");
+        }
+        let newAngle = nextAngle - this.newStartAngle;
+        newDist = newAngle / 360 * 100;
+        newDist = (newDist + 100) % 100;
+        baseDist = 100;
         break;
     }
-    const baseDist = dist(this.startPoint, this.endPoint);
     const image2 = this.state.gradient.image;
     image2.colorsteps[this.$targetIndex].setValue(newDist, baseDist);
     const targetColorStep = {
@@ -56283,20 +56372,53 @@ class GradientColorstepEditor extends GradientRotateEditor {
   }
   [POINTERMOVE("$el .area-line")](evt) {
     const nextPoint = this.$viewport.applyVertex(this.$viewport.getWorldPosition(evt));
-    const [baseStartPoint, baseEndPoint, baseNextPoint] = vertiesMap([this.state.startPoint, this.state.endPoint, nextPoint], this.state.rotateInverse);
-    let newDist = 0;
-    const [s, e2, n] = [baseStartPoint[1], baseEndPoint[1], baseNextPoint[1]];
-    const baseDefaultDist = Math.abs(s - e2);
-    if (s < n) {
-      newDist = -1 * Math.abs(n - s) / baseDefaultDist * 100;
-    } else if (e2 > n) {
-      newDist = Math.abs(n - s) / baseDefaultDist * 100;
-    } else {
-      const distStart = Math.abs(s - n);
-      const distEnd = Math.abs(e2 - n);
-      newDist = distStart / (distEnd + distStart) * 100;
+    const image2 = this.state.lastBackgroundMatrix.backgroundImage.image;
+    let baseStartPoint, baseEndPoint, baseNextPoint;
+    switch (image2.type) {
+      case GradientType.LINEAR:
+      case GradientType.REPEATING_LINEAR:
+        [baseStartPoint, baseEndPoint, baseNextPoint] = vertiesMap([this.state.startPoint, this.state.endPoint, nextPoint], this.state.rotateInverse);
+        var newDist = 0;
+        var [s, e2, n] = [baseStartPoint[1], baseEndPoint[1], baseNextPoint[1]];
+        var baseDefaultDist = Math.abs(s - e2);
+        if (s < n) {
+          newDist = -1 * Math.abs(n - s) / baseDefaultDist * 100;
+        } else if (e2 > n) {
+          newDist = Math.abs(n - s) / baseDefaultDist * 100;
+        } else {
+          const distStart = Math.abs(s - n);
+          const distEnd = Math.abs(e2 - n);
+          newDist = distStart / (distEnd + distStart) * 100;
+        }
+        this.state.hoverColorStep = this.state.lastBackgroundMatrix.backgroundImage.image.pickColorStep(newDist);
+        break;
+      case GradientType.RADIAL:
+      case GradientType.REPEATING_RADIAL:
+        [baseStartPoint, baseEndPoint, baseNextPoint] = [
+          this.state.startPoint,
+          this.state.endPoint,
+          nextPoint
+        ];
+        var newDist = 0;
+        var [s, e2, n] = [baseStartPoint[0], baseEndPoint[0], baseNextPoint[0]];
+        var baseDefaultDist = Math.abs(s - e2);
+        if (n < s) {
+          newDist = -1 * Math.abs(n - s) / baseDefaultDist * 100;
+        } else {
+          newDist = Math.abs(n - s) / baseDefaultDist * 100;
+        }
+        this.state.hoverColorStep = this.state.lastBackgroundMatrix.backgroundImage.image.pickColorStep(newDist);
+        break;
+      case GradientType.CONIC:
+      case GradientType.REPEATING_CONIC:
+        const newStartPoint = subtract([], this.state.startPoint, this.state.centerPosition);
+        const newNextPoint = subtract([], nextPoint, this.state.centerPosition);
+        const startAngle = calculateAngle360(newStartPoint[0], newStartPoint[1]);
+        const nextAngle = calculateAngle360(newNextPoint[0], newNextPoint[1]);
+        var newDist = (nextAngle - startAngle) / 360 * 100;
+        this.state.hoverColorStep = this.state.lastBackgroundMatrix.backgroundImage.image.pickColorStep(newDist);
+        break;
     }
-    this.state.hoverColorStep = this.state.lastBackgroundMatrix.backgroundImage.image.pickColorStep(newDist);
     this.refresh();
   }
 }
@@ -56319,6 +56441,7 @@ class GradientEditorView$1 extends GradientColorstepEditor {
     this.state.$target = e2.$dt;
     this.state.left = Length.parse(e2.$dt.css("left")).value;
     this.state.top = Length.parse(e2.$dt.css("top")).value;
+    this.$el.toggleClass("dragging", true);
     this.initializeData();
   }
   calculateMovedElement(dx, dy) {
@@ -56359,6 +56482,7 @@ class GradientEditorView$1 extends GradientColorstepEditor {
       }
     }
     this.updateData();
+    this.$el.toggleClass("dragging", false);
   }
   refresh() {
     if (this.state.isShow) {
@@ -56430,13 +56554,13 @@ class GradientEditorView$1 extends GradientColorstepEditor {
   }
   makeConicCenterPoint(result) {
     const { image: image2 } = result.backgroundImage;
-    let centerPosition, centerStick, startPoint2, endPoint2;
-    let radialStartPoint, radialEndPoint, colorsteps;
+    let centerPosition, centerStick;
+    let radialStartPoint, radialEndPoint, radialShapePoint, colorsteps;
     this.$viewport.applyVerties(result.backVerties);
     centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
     radialStartPoint = this.$viewport.applyVertex(result.radialStartPoint);
     radialEndPoint = this.$viewport.applyVertex(result.radialEndPoint);
-    this.$viewport.applyVertex(result.radialShapePoint);
+    radialShapePoint = this.$viewport.applyVertex(result.radialShapePoint);
     let lastDist = dist(radialStartPoint, radialEndPoint) / 2;
     if (lastDist < 50) {
       lastDist = 50;
@@ -56454,12 +56578,16 @@ class GradientEditorView$1 extends GradientColorstepEditor {
       return it;
     });
     centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
-    const stickPoint = this.$viewport.applyVertex(result.radialCenterStick);
+    const stickPoint = this.$viewport.applyVertex(result.radialShapePoint);
     centerStick = lerp([], centerPosition, lerp([], centerPosition, stickPoint, 1 / dist(centerPosition, stickPoint)), lastDist + 20);
-    const [newCenterStick] = vertiesMap([centerStick], calculateRotationOriginMat4(image2.angle || 0, centerPosition));
-    const targetStick = lerp([], newCenterStick, centerPosition, 1);
+    const targetStick = lerp([], centerStick, centerPosition, 1);
+    let newHoverColorStepPoint = null;
     if (this.state.hoverColorStep) {
-      lerp([], startPoint2, endPoint2, this.state.hoverColorStep.percent / 100);
+      const hoverAngle = this.state.hoverColorStep.percent * 3.6;
+      const originDist = dist(centerPosition, radialShapePoint);
+      [newHoverColorStepPoint] = vertiesMap([
+        lerp([], centerPosition, radialShapePoint, (lastDist + 15) / originDist)
+      ], calculateRotationOriginMat4(hoverAngle, centerPosition));
     }
     return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("div", {
       class: "gradient-position center",
@@ -56475,29 +56603,24 @@ class GradientEditorView$1 extends GradientColorstepEditor {
       cx: radialStartPoint[0],
       cy: radialStartPoint[1],
       r: lastDist
+    }), /* @__PURE__ */ createElementJsx("circle", {
+      class: "area-line",
+      cx: radialStartPoint[0],
+      cy: radialStartPoint[1],
+      r: lastDist
     }), /* @__PURE__ */ createElementJsx("path", {
       class: "stick",
       d: `
                 M ${targetStick[0]} ${targetStick[1]}
-                L ${newCenterStick[0]} ${newCenterStick[1]}
+                L ${centerStick[0]} ${centerStick[1]}
             `
     }), /* @__PURE__ */ createElementJsx("circle", {
       class: "rotate",
-      cx: newCenterStick[0],
-      cy: newCenterStick[1],
+      cx: centerStick[0],
+      cy: centerStick[1],
       r: "7",
       "data-center-x": centerPosition[0],
       "data-center-y": centerPosition[1]
-    }), colorsteps.map((it) => {
-      return /* @__PURE__ */ createElementJsx("path", {
-        d: `
-                  M ${radialStartPoint[0]} ${radialStartPoint[1]}
-                  L ${it.screenXY[0]} ${it.screenXY[1]}
-              `,
-        stroke: it.color,
-        fill: "transparent",
-        "stroke-width": "1"
-      });
     }), colorsteps.map((it, index2) => {
       if (it.cut) {
         return /* @__PURE__ */ createElementJsx("rect", {
@@ -56510,7 +56633,9 @@ class GradientEditorView$1 extends GradientColorstepEditor {
           width: 14,
           height: 14,
           fill: it.color,
-          tabIndex: -1
+          tabIndex: -1,
+          "data-x": it.screenXY[0],
+          "data-y": it.screenXY[1]
         });
       } else {
         return /* @__PURE__ */ createElementJsx("rect", {
@@ -56525,9 +56650,17 @@ class GradientEditorView$1 extends GradientColorstepEditor {
           width: 14,
           height: 14,
           fill: it.color,
-          tabIndex: -1
+          tabIndex: -1,
+          "data-x": it.screenXY[0],
+          "data-y": it.screenXY[1]
         });
       }
+    }), newHoverColorStepPoint && /* @__PURE__ */ createElementJsx("circle", {
+      class: "hover-colorstep",
+      r: "5",
+      cx: newHoverColorStepPoint[0],
+      cy: newHoverColorStepPoint[1],
+      fill: this.state.hoverColorStep.color
     })));
   }
   makeRadialCenterPoint(result) {
@@ -56555,7 +56688,7 @@ class GradientEditorView$1 extends GradientColorstepEditor {
     const angle2 = calculateAngle360(dist$1[0], dist$1[1]);
     let newHoverColorStepPoint = null;
     if (this.state.hoverColorStep) {
-      newHoverColorStepPoint = lerp([], startPoint, endPoint, this.state.hoverColorStep.percent / 100);
+      newHoverColorStepPoint = lerp([], radialStartPoint, radialEndPoint, this.state.hoverColorStep.percent / 100);
     }
     return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("div", {
       class: "gradient-position center",
@@ -56634,7 +56767,7 @@ class GradientEditorView$1 extends GradientColorstepEditor {
       }
     }), newHoverColorStepPoint && /* @__PURE__ */ createElementJsx("circle", {
       class: "hover-colorstep",
-      r: "5",
+      r: "7",
       cx: newHoverColorStepPoint[0],
       cy: newHoverColorStepPoint[1],
       fill: this.state.hoverColorStep.color
@@ -56642,23 +56775,21 @@ class GradientEditorView$1 extends GradientColorstepEditor {
   }
   makeLinearCenterPoint(result) {
     const { image: image2 } = result.backgroundImage;
-    let boxPosition, centerPosition, centerStick, startPoint2, endPoint2, areaStartPoint, areaEndPoint, colorsteps;
-    boxPosition = this.$viewport.applyVerties(result.backVerties);
-    if (image2.type === GradientType.LINEAR || image2.type === GradientType.REPEATING_LINEAR) {
-      startPoint2 = this.$viewport.applyVertex(result.startPoint);
-      endPoint2 = this.$viewport.applyVertex(result.endPoint);
-      areaStartPoint = this.$viewport.applyVertex(result.areaStartPoint);
-      areaEndPoint = this.$viewport.applyVertex(result.areaEndPoint);
-      centerPosition = this.$viewport.applyVertex(result.centerPosition);
-      colorsteps = result.colorsteps.map((it) => {
-        it.screenXY = this.$viewport.applyVertex(it.pos);
-        return it;
-      });
-      const stickPoint = lerp([], boxPosition[1], boxPosition[2], 0.5);
-      centerStick = lerp([], centerPosition, lerp([], centerPosition, stickPoint, 1 / dist(centerPosition, stickPoint)), 50);
-    }
-    const [newCenterStick] = vertiesMap([centerStick], calculateRotationOriginMat4(image2.angle || 0, centerPosition));
-    const targetStick = lerp([], newCenterStick, centerPosition, 1);
+    let centerPosition, centerStick, startPoint2, endPoint2, areaStartPoint, areaEndPoint, colorsteps;
+    this.$viewport.applyVerties(result.backVerties);
+    startPoint2 = this.$viewport.applyVertex(result.startPoint);
+    endPoint2 = this.$viewport.applyVertex(result.endPoint);
+    areaStartPoint = this.$viewport.applyVertex(result.areaStartPoint);
+    areaEndPoint = this.$viewport.applyVertex(result.areaEndPoint);
+    centerPosition = this.$viewport.applyVertex(result.centerPosition);
+    colorsteps = result.colorsteps.map((it) => {
+      it.screenXY = this.$viewport.applyVertex(it.pos);
+      return it;
+    });
+    const lastDist = dist(centerPosition, endPoint2);
+    const [stickPoint] = vertiesMap([endPoint2], calculateRotationOriginMat4(90, lerp([], startPoint2, endPoint2, 0.5)));
+    centerStick = lerp([], centerPosition, lerp([], centerPosition, stickPoint, 1 / dist(centerPosition, stickPoint)), lastDist + 20);
+    const targetStick = lerp([], centerStick, centerPosition, 20 / (lastDist + 20));
     let newHoverColorStepPoint = null;
     if (this.state.hoverColorStep) {
       newHoverColorStepPoint = lerp([], startPoint2, endPoint2, this.state.hoverColorStep.percent / 100);
@@ -56666,14 +56797,20 @@ class GradientEditorView$1 extends GradientColorstepEditor {
     return /* @__PURE__ */ createElementJsx("svg", {
       class: "gradient-angle"
     }, /* @__PURE__ */ createElementJsx("path", {
+      class: "stick",
       d: `
               M ${targetStick[0]} ${targetStick[1]}
-              L ${newCenterStick[0]} ${newCenterStick[1]}
+              L ${centerStick[0]} ${centerStick[1]}
           `
     }), /* @__PURE__ */ createElementJsx("circle", {
+      class: "size",
+      cx: centerPosition[0],
+      cy: centerPosition[1],
+      r: dist(centerPosition, startPoint2)
+    }), /* @__PURE__ */ createElementJsx("circle", {
       class: "rotate",
-      cx: newCenterStick[0],
-      cy: newCenterStick[1],
+      cx: centerStick[0],
+      cy: centerStick[1],
       r: "7",
       "data-center-x": centerPosition[0],
       "data-center-y": centerPosition[1]
@@ -56741,6 +56878,17 @@ class GradientEditorView$1 extends GradientColorstepEditor {
         this.state.startPoint = this.$viewport.applyVertex(result.startPoint);
         this.state.endPoint = this.$viewport.applyVertex(result.endPoint);
         this.state.rotateInverse = calculateRotationOriginMat4(-1 * result.backgroundImage.image.angle, this.state.centerPosition);
+        break;
+      case GradientType.RADIAL:
+      case GradientType.REPEATING_RADIAL:
+        this.state.centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
+        this.state.startPoint = this.$viewport.applyVertex(result.radialStartPoint);
+        this.state.endPoint = this.$viewport.applyVertex(result.radialEndPoint);
+        break;
+      case GradientType.CONIC:
+      case GradientType.REPEATING_CONIC:
+        this.state.centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
+        this.state.startPoint = this.$viewport.applyVertex(result.radialShapePoint);
         break;
     }
     return /* @__PURE__ */ createElementJsx("div", null, this.makeGradientRect(result), image2.type === GradientType.STATIC || image2.type === GradientType.IMAGE ? null : this.makeCenterPoint(result));
