@@ -38,6 +38,9 @@ export default class DomRender extends ItemRender {
       item.setBackgroundImageCache();
     }
 
+    // visibility 속성은 출력하지 않는다.
+    delete item.cacheBackgroundImage['background-visibility'];
+
     return item.cacheBackgroundImage;
   }
 

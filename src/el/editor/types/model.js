@@ -214,3 +214,8 @@ export const ClipPathType = {
     PATH: 'path',
     SVG: 'svg'
 }
+
+export const VisibilityType = {
+    VISIBLE: "visible",
+    HIDDEN: "hidden",
+}

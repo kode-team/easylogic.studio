@@ -1,5 +1,3 @@
-
-import { Item } from "el/editor/items/Item";
 import { Length } from "el/editor/unit/Length";
 
 import { convertMatches } from "el/utils/parser";
@@ -8,94 +6,90 @@ import { randomNumber } from "el/utils/create";
 import Color from "el/utils/Color";
 import { uuidShort } from 'el/utils/math';
 
-export class ColorStep extends Item {
-  getDefaultObject() {
-    return {
-      id: uuidShort(),
-      cut: false,
-      percent: 0,
-      unit: "%",
-      px: 0,
-      em: 0,
-      color: "rgba(0, 0, 0, 0)",
-      prevColorStep: null
-    };
+export class ColorStep {
+  constructor (obj = {}) {
+    this.id = obj.id || uuidShort();
+    this.color = obj.color || 'transparent';
+    this.cut = obj.cut || false;
+    this.percent = obj.percent || 0;
+    this.unit = obj.unit || '%';
+    this.px = obj.px || 0;
+    this.em = obj.em || 0;
+    this.prevColorStep = obj.prevColorStep || null;
   }
 
   toCloneObject() {
     return {
-      ...super.toCloneObject(),
-      ...this.attrs(
-        'cut',
-        'percent',
-        'unit',
-        'px',
-        'em',
-        'color',
-      )
-
+      id: this.id,
+      color: this.color,
+      cut: this.cut,
+      percent: this.percent,
+      unit: this.unit,
+      px: this.px,
+      em: this.em,
+      prevColorStep: this.prevColorStep
     }
   }
 
   on() {
-    this.json.cut = true;
+    this.cut = true;
   }
 
   off() {
-    this.json.cut = false;
+    this.cut = false;
   }
 
   toggle() {
-    this.json.cut = !this.json.cut;
+    this.cut = !this.cut;
   }
 
   getUnit() {
-    return this.json.unit == "%" ? "percent" : this.json.unit;
+    return this.unit == "%" ? "percent" : this.unit;
   }
 
   add(num) {
     var unit = this.getUnit();
-    this.json[unit] += +num;
+    this[unit] += +num;
 
     return this;
   }
 
   sub(num) {
     var unit = this.getUnit();
-    this.json[unit] -= +num;
+    this[unit] -= +num;
 
     return this;
   }
 
   mul(num) {
     var unit = this.getUnit();
-    this.json[unit] *= +num;
+    this[unit] *= +num;
 
     return this;
   }
 
   div(num) {
     var unit = this.getUnit();
-    this.json[unit] /= +num;
+    this[unit] /= +num;
 
     return this;
   }
 
   mod(num) {
     var unit = this.getUnit();
-    this.json[unit] %= +num;
+    this[unit] %= +num;
 
     return this;
   }
 
   get isPx() {
-    return this.json.unit == "px";
+    return this.unit == "px";
   }
   get isPercent() {
-    return this.json.unit == "%" || this.json.unit === "percent";
+    return this.unit == "%" || this.unit === "percent";
   }
   get isEm() {
-    return this.json.unit == "em";
+    return this.unit == "em";
   }
 
   /**
@@ -105,18 +99,18 @@ export class ColorStep extends Item {
   toLength(maxValue) {
     
     if (this.isPx) {
-      return Length.px(this.json.px);
+      return Length.px(this.px);
     } else if (this.isPercent) {
-      return Length.percent(this.json.percent);
+      return Length.percent(this.percent);
     } else if (this.isEm) {
-      return Length.em(this.json.em);
+      return Length.em(this.em);
     }
   }
 
   getPrevLength() {
-    if (!this.json.prevColorStep) return '';
+    if (!this.prevColorStep) return '';
 
-    return this.json.prevColorStep.toLength();
+    return this.prevColorStep.toLength();
   }
 
   /**
@@ -125,25 +119,22 @@ export class ColorStep extends Item {
    * return {string}
    */
   toString() {
-    var prev = this.json.cut ? this.getPrevLength() : ''
-    var color = this.json.color || 'transparent'
+    var prev = this.cut ? this.getPrevLength() : ''
+    var color = this.color || 'transparent'
     return `${color} ${prev} ${this.toLength()}`;
-  }
-
-  reset(json) {
-    super.reset(json);
-    if (this.parent) {
-      this.parent.sortColorStep();
-    }
   }
 
   setValue(percent, maxValue) {
     if (this.isPx) {
-      this.reset({ px: maxValue * percent / 100 })      
+      this.px = maxValue * percent / 100;
     } else if (this.isPercent) {
-      this.reset({ percent })
+      this.percent = percent;
     } else if (this.isEm) {
-      this.reset({ em: (maxValue * percent / 100) / 16 })      
+      this.em = (maxValue * percent / 100) / 16
+    }
+
+    if (this.parent) {
+      this.parent.sortColorStep();
     }
   }
 

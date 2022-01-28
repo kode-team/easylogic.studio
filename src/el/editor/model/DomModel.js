@@ -7,7 +7,7 @@ import PathParser from "el/editor/parser/PathParser";
 import { Pattern } from 'el/editor/property-parser/Pattern';
 import { BackgroundImage } from 'el/editor/property-parser/BackgroundImage';
 import { STRING_TO_CSS } from "el/utils/func";
-import { Constraints, GradientType, Layout, RadialGradientType } from "el/editor/types/model";
+import { Constraints, GradientType, Layout, RadialGradientType, VisibilityType } from "el/editor/types/model";
 import { rectToVerties } from "el/utils/collision";
 import { calculateRotationOriginMat4, degreeToRadian, vertiesMap } from "el/utils/math";
 import { vec3 } from "gl-matrix";
@@ -294,7 +294,8 @@ export class DomModel extends GroupModel {
         return BackgroundImage.parseStyle(STRING_TO_CSS(backgroundImage))
       })
 
-      list.push.apply(list, backgroundList);
+      // visibility 가 hidden 이 아니면 모두 보여준다. 
+      list.push.apply(list, backgroundList.filter(it => it.visibility !== VisibilityType.HIDDEN));
     }
 
     if (list.length) {
@@ -447,21 +448,21 @@ export class DomModel extends GroupModel {
           const { startPoint, endPoint, shapePoint } = image.getStartEndPoint(result);
 
           const [
-            newStartPoint, 
-            newEndPoint, 
+            newStartPoint,
+            newEndPoint,
             newShapePoint,
             newEndPoint1,
             newEndPoint2,
             newShapePoint1,
             newShapePoint2
           ] = vertiesMap([
-            startPoint, 
-            endPoint, 
+            startPoint,
+            endPoint,
             shapePoint,
             [endPoint[0], endPoint[1] + 1, endPoint[2]],
             [endPoint[0], endPoint[1] - 1, endPoint[2]],
             [shapePoint[0] - 1, shapePoint[1], shapePoint[2]],
-            [shapePoint[0] + 1, shapePoint[1], shapePoint[2]]                        
+            [shapePoint[0] + 1, shapePoint[1], shapePoint[2]]
           ], this.absoluteMatrix);
 
           result.radialCenterPosition = newStartPoint;
@@ -490,12 +491,12 @@ export class DomModel extends GroupModel {
           const { startPoint, endPoint, shapePoint } = image.getStartEndPoint(result);
 
           const [
-            newStartPoint, 
-            newEndPoint, 
+            newStartPoint,
+            newEndPoint,
             newShapePoint,
           ] = vertiesMap([
-            startPoint, 
-            endPoint, 
+            startPoint,
+            endPoint,
             shapePoint,
           ], this.absoluteMatrix);
 
@@ -504,14 +505,21 @@ export class DomModel extends GroupModel {
           result.radialEndPoint = newEndPoint;
           result.radialShapePoint = newShapePoint;
 
-          const targetPoint = newShapePoint;
+
+          [result.radialStartPoint, result.radialEndPoint, result.radialShapePoint] = vertiesMap([
+            result.radialStartPoint,
+            result.radialEndPoint,
+            result.radialShapePoint
+          ], calculateRotationOriginMat4(image.angle, result.radialCenterPosition));
+
+          const targetPoint = result.radialShapePoint;
 
           result.colorsteps = image.colorsteps.map(it => {
-            const angle = it.percent * 3.6 + image.angle;
+            const angle = it.percent * 3.6;
 
             const [newPos] = vertiesMap([
               targetPoint
-             ], calculateRotationOriginMat4(angle, result.radialCenterPosition)) 
+            ], calculateRotationOriginMat4(angle, result.radialCenterPosition))
 
             return {
               id: it.id,
@@ -534,8 +542,8 @@ export class DomModel extends GroupModel {
         const startPoint = vec3.add([], result.centerPosition, [0, result.gradientLineLength / 2, 0]);
         const endPoint = vec3.subtract([], result.centerPosition, [0, result.gradientLineLength / 2, 0]);
 
-        const areaStartPoint = vec3.add([], startPoint, [0, 0, 0]);
-        const areaEndPoint = vec3.add([], endPoint, [0, 0, 0]);
+        const areaStartPoint = vec3.clone(startPoint);
+        const areaEndPoint = vec3.clone(endPoint);
 
         const [
           newStartPoint,
@@ -543,9 +551,7 @@ export class DomModel extends GroupModel {
           newAreaStartPoint,
           newAreaEndPoint
         ] = vertiesMap(
-          [startPoint, endPoint,
-            areaStartPoint, areaEndPoint
-          ],
+          [startPoint, endPoint, areaStartPoint, areaEndPoint],
           calculateRotationOriginMat4(image.angle, result.centerPosition)
         );
 

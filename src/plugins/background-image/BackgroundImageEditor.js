@@ -7,6 +7,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './BackgroundImageEditor.scss';
 import { createComponent, createComponentList } from "el/sapa/functions/jsx";
+import { VisibilityType } from "el/editor/types/model";
 
 
 const names = {
@@ -123,6 +124,9 @@ export default class BackgroundImageEditor extends EditorElement {
                         })}
                     </div>
                     <div class='tools'>
+                      <button type="button" class='visibility' data-index='${index}' title="Visibility">${iconUse(it.visibility === VisibilityType.HIDDEN ? 'visible_off' : 'visible')}</button>
+                    </div>                                       
+                    <div class='tools'>
                       <button type="button" class='copy' data-index='${index}' title="Copy Item">${iconUse('add')}</button>
                     </div>                    
                     <div class='tools'>
@@ -145,9 +149,9 @@ export default class BackgroundImageEditor extends EditorElement {
         switch(type) {
         case 'static-gradient': return `static-gradient(black)`;            
         case 'linear-gradient': return `linear-gradient(90deg, white 0%, black 100%)`;
-        case 'repeating-linear-gradient': return `repeating-linear-gradient(90deg, white 2px, black 4px)`;
+        case 'repeating-linear-gradient': return `repeating-linear-gradient(90deg, white 2%, black 4%)`;
         case 'radial-gradient': return `radial-gradient(circle, white 0%, black 100%)`;
-        case 'repeating-radial-gradient': return `repeating-radial-gradient(circle, white 2px, black 4px)`;
+        case 'repeating-radial-gradient': return `repeating-radial-gradient(circle, white 2%, black 4%)`;
         case 'conic-gradient': return `conic-gradient(white 0%, black 100%)`;
         case 'repeating-conic-gradient': return `repeating-conic-gradient(white 50%, black 100%)`;
         }
@@ -216,6 +220,17 @@ export default class BackgroundImageEditor extends EditorElement {
 
         this.modifyBackgroundImage()
     }
+
+    [CLICK("$fillList .tools .visibility")](e) {
+        var index = +e.$dt.attr("data-index");
+
+        // visibility 
+        this.state.images[index].visibility = this.state.images[index].visibility === VisibilityType.HIDDEN ? VisibilityType.VISIBLE : VisibilityType.HIDDEN;
+
+        this.refresh();
+
+        this.modifyBackgroundImage()
+    }    
 
     [CLICK("$fillList .tools .copy")](e) {
         var index = +e.$dt.attr("data-index");

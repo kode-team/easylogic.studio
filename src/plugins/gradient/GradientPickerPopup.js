@@ -149,9 +149,10 @@ export default class GradientPickerPopup extends BasePopup {
     data.changeEvent = data.changeEvent || 'changeFillPopup'
     data.image = data.gradient
     data.params = params;
-    this.setState(data);
 
     this.showByRect(this.makeRect(248, 560, rect));
+
+    this.setState(data);    
 
     this.updateTitle();
 

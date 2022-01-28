@@ -13,6 +13,7 @@ import { Gradient } from "./image-resource/Gradient";
 import { convertMatches, reverseMatches } from "el/utils/parser";
 import { combineKeyArray, isString, keyEach, keyMap } from "el/sapa/functions/func";
 import { CSS_TO_STRING } from "el/utils/func";
+import { VisibilityType } from 'el/editor/types/model';
 
 const RepeatList = ["repeat", "no-repeat", "repeat-x", "repeat-y", 'round', 'space'];
 const reg = /((static\-gradient|linear\-gradient|repeating\-linear\-gradient|radial\-gradient|repeating\-radial\-gradient|conic\-gradient|repeating\-conic\-gradient|url)\(([^\)]*)\))/gi;
@@ -176,13 +177,15 @@ export class BackgroundImage extends PropertyItem {
    * @param {number} contentBox 
    * @param {number} dx 변경된 넓이 크기 
    * @param {number} dy 변경된 높이 크기 
+   * @param {object} options
+   * @param {boolean} [options.shiftKey=false]    shiftKey 가 true 이면 width와 height 를 동일하게 width 로 맞춘다. 
    * @returns 
    */
-  recoverOffset (newX, newY, contentBox, dx = 0, dy = 0) {
+  recoverOffset (newX, newY, contentBox, dx = 0, dy = 0, options = { }) {
     const { x, y, width, height } = this.json;
 
     const newWidth = Math.floor(width.toPx(contentBox.width).value + dx);
-    const newHeight = Math.floor(height.toPx(contentBox.height).value + dy);    
+    const newHeight = options.shiftKey ? newWidth : Math.floor(height.toPx(contentBox.height).value + dy);    
 
     // 시작점을 contentBox 로 맞춘다. 
     newX -= contentBox.x;
@@ -312,13 +315,22 @@ export class BackgroundImage extends PropertyItem {
     };
   }
 
+  toBackgroundVisibilityCSS() {
+    var json = this.json;
+    return {
+      "background-visibility": json.visibility === VisibilityType.HIDDEN ? VisibilityType.HIDDEN : VisibilityType.VISIBLE
+    };
+  }
+
   toCSS() {
-    var results = {
+
+    const results = {
       ...this.toBackgroundImageCSS(),
       ...this.toBackgroundPositionCSS(),
       ...this.toBackgroundSizeCSS(),
       ...this.toBackgroundRepeatCSS(),
-      ...this.toBackgroundBlendCSS()
+      ...this.toBackgroundBlendCSS(),
+      ...this.toBackgroundVisibilityCSS()
     };
 
     return results;
@@ -490,6 +502,14 @@ export class BackgroundImage extends PropertyItem {
           let [x, y] = it.split(' ');
           backgroundImages[index].x = Length.parse(x);
           backgroundImages[index].y = Length.parse(y);
+        }
+      });
+    }
+
+    if (style["background-visibility"]) {
+      style["background-visibility"].split(",").map(it => it.trim()).forEach((it, index) => {
+        if (backgroundImages[index]) {
+          backgroundImages[index].visibility = it === VisibilityType.HIDDEN ? VisibilityType.HIDDEN : VisibilityType.VISIBLE;
         }
       });
     }
