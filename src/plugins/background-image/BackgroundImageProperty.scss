@@ -1,44 +1,14 @@
 .fill-sample-list {
-    opacity: 0.3;
-    transition: opacity 0.3s ease-in-out;
 
-    &:hover {
-        opacity: 1;
-    }
 }
 
 .fill {
     display: inline-block;
     vertical-align: middle;
-    width: 20px !important;
-    height: 20px !important;
+    width: 30px !important;
+    height: 30px !important;
 
-    &[data-value="static-gradient"] {
-        background-image: linear-gradient(to right, black 0px, black 100%);
+    &:hover {
+        background-color: var(--elf--input-inactive-color);
     }
-
-    &[data-value="linear-gradient"] {
-        background-image: linear-gradient(to right, white 0px, black 100%);
-    }
-
-    &[data-value="repeating-linear-gradient"] {
-        background-image: repeating-linear-gradient(to right, white 0px, black 5px);
-    }    
-
-    &[data-value="radial-gradient"] {
-        background-image: radial-gradient(closest-side, white 0px, black 100%);
-    }
-
-    &[data-value="repeating-radial-gradient"] {
-        background: repeating-radial-gradient(circle at 100%, white 2px, black 5px);
-    }    
-    
-    &[data-value="conic-gradient"] {
-        background-image: conic-gradient(white, black, white);
-    }
-
-    &[data-value="repeating-conic-gradient"] {
-        background-image: repeating-conic-gradient(white, black , white 10%);
-
-    }        
 }

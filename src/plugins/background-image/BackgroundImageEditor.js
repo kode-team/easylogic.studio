@@ -159,7 +159,7 @@ export default class BackgroundImageEditor extends EditorElement {
 
     [SUBSCRIBE('add')] (gradientType) {
 
-        this.state.images.push(new BackgroundImage({
+        this.state.images.unshift(new BackgroundImage({
             image: BackgroundImage.parseImage(this.makeGradient(gradientType))
         }));
 

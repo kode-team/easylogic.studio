@@ -31,11 +31,24 @@ export default class GradientSingleEditor extends EditorElement {
     }
 
     [BIND('$miniView')]() {
-        return {
-            style: {
-                'background-image': this.state.image,
-                'background-size': 'cover',
+        const project = this.$selection.currentProject;
+
+        if (this.state.image.type === GradientType.URL) {
+            const imageUrl = project.getImageValueById(this.state.image.url) || this.state.image.url;
+
+            return {
+                style: {
+                    'background-image': this.state.image.toString(imageUrl),
+                    'background-size': 'cover',
+                }
             }
+        } else {
+            return {
+                style: {
+                    'background-image': this.state.image,
+                    'background-size': 'cover',
+                }
+            }            
         }
     }
 
@@ -68,6 +81,7 @@ export default class GradientSingleEditor extends EditorElement {
     }
 
     [SUBSCRIBE('changeGradientSingle')](image, params) {
+
         image = BackgroundImage.parseImage(image)
     
         const currentImage = this.$selection.current.getBackgroundImage(this.state.index)?.image;
@@ -97,6 +111,7 @@ export default class GradientSingleEditor extends EditorElement {
                 break;
         }
 
+        console.log(image);
 
         this.updateData({ image })
 

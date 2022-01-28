@@ -158,7 +158,9 @@ export default class GradientEditor extends EditorElement {
 
       return /*html*/`
       <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' tabindex="-1" style='left: ${it.toLength()};'>
-        <div class='color-view' style="background-color: ${it.color}"></div>      
+        <div class='color-view' style="background-color: ${it.color}">
+          <span>${Math.floor(it.percent * 10)/10}</span>
+        </div>      
         <div class='arrow'></div>      
       </div>`
     })
@@ -316,6 +318,10 @@ export default class GradientEditor extends EditorElement {
     if (x < minX) x = minX
     else if (x > maxX) x = maxX
     var percent = (x - minX) / rect.width * 100;
+
+    if (this.$config.get('bodyEvent').shiftKey) {
+      percent = Math.floor(percent);
+    }
 
     this.currentStep.setValue(percent, rect.width)
 
