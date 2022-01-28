@@ -158,6 +158,7 @@ export class AssetModel extends BaseModel {
 
   getImageValueById (id) {
     const image = this.json.imageKeys[id]
+
     if (!image) return undefined;
 
     return image.local;

@@ -7,6 +7,7 @@ import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { createComponent } from 'el/sapa/functions/jsx';
 
 import './BackgroundImageProperty.scss';
+import { iconUse } from "el/editor/icon/icon";
 
 export default class BackgroundImageProperty extends BaseProperty {
 
@@ -28,24 +29,21 @@ export default class BackgroundImageProperty extends BaseProperty {
   }
 
   getBody() {
-    return /*html*/`
-      <div class='full' ref='$property'></div>               
-    `;
+    return <div class='full' ref='$property'></div>
   }
 
 
   getTools() {
-    return /*html*/`
-      <div class="fill-sample-list" ref='$add'>
-        <button type="button" class='fill' data-value="static-gradient" data-tooltip="Static" ></button>
-        <button type="button" class='fill' data-value="linear-gradient" data-tooltip="Linear" ></button>
-        <button type="button" class='fill' data-value="repeating-linear-gradient" data-tooltip="R Linear" ></button>
-        <button type="button" class='fill' data-value="radial-gradient" data-tooltip="Radial" ></button>
-        <button type="button" class='fill' data-value="repeating-radial-gradient" data-tooltip="R Radial" ></button>
-        <button type="button" class='fill' data-value="conic-gradient" data-tooltip="Conic" ></button>
-        <button type="button" class='fill' data-value="repeating-conic-gradient" data-tooltip="R Conic" data-direction="bottom right" ></button>
-      </div>
-    `
+    return <div class="fill-sample-list" ref='$add'>
+      <button type="button" class='fill' data-value="static-gradient">{iconUse('add')}</button>
+      {/* <button type="button" class='fill' data-value="linear-gradient" data-tooltip="Linear" ></button>
+      <button type="button" class='fill' data-value="repeating-linear-gradient" data-tooltip="R Linear" ></button>
+      <button type="button" class='fill' data-value="radial-gradient" data-tooltip="Radial" ></button>
+      <button type="button" class='fill' data-value="repeating-radial-gradient" data-tooltip="R Radial" ></button>
+      <button type="button" class='fill' data-value="conic-gradient" data-tooltip="Conic" ></button>
+      <button type="button" class='fill' data-value="repeating-conic-gradient" data-tooltip="R Conic" data-direction="bottom right" ></button>
+      <button type="button" class='fill' data-value="repeating-conic-gradient" data-tooltip="R Conic" data-direction="bottom right" ></button>         */}
+    </div>
   }
 
   [CLICK('$add [data-value]')](e) {

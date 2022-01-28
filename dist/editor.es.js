@@ -6440,7 +6440,8 @@ const GradientType = {
   REPEATING_LINEAR: "repeating-linear-gradient",
   REPEATING_RADIAL: "repeating-radial-gradient",
   REPEATING_CONIC: "repeating-conic-gradient",
-  IMAGE: "image-resource"
+  IMAGE: "image",
+  URL: "url"
 };
 const RadialGradientSizeType = {
   CLOSEST_SIDE: "closest-side",
@@ -7364,7 +7365,7 @@ const IMAGE_LIST$1 = ["jpg", "jpeg", "png", "gif", "svg"];
 class URLImageResource extends ImageResource {
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
-      type: "url",
+      type: GradientType.URL,
       url: "",
       datauri: ""
     }, obj2));
@@ -7379,9 +7380,8 @@ class URLImageResource extends ImageResource {
   isUrl() {
     return true;
   }
-  toString() {
-    var json = this.json;
-    return `url(${json.url})`;
+  toString(url) {
+    return `url(${url || this.json.url})`;
   }
   static isImageFile(fileExt) {
     return IMAGE_LIST$1.includes(fileExt);
@@ -27834,7 +27834,7 @@ class BackgroundImageEditor extends EditorElement {
     }
   }
   [SUBSCRIBE("add")](gradientType) {
-    this.state.images.push(new BackgroundImage({
+    this.state.images.unshift(new BackgroundImage({
       image: BackgroundImage.parseImage(this.makeGradient(gradientType))
     }));
     this.refresh();
@@ -28082,22 +28082,20 @@ class BackgroundImageProperty extends BaseProperty {
     return "no-padding";
   }
   getBody() {
-    return `
-      <div class='full' ref='$property'></div>               
-    `;
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "full",
+      ref: "$property"
+    });
   }
   getTools() {
-    return `
-      <div class="fill-sample-list" ref='$add'>
-        <button type="button" class='fill' data-value="static-gradient" data-tooltip="Static" ></button>
-        <button type="button" class='fill' data-value="linear-gradient" data-tooltip="Linear" ></button>
-        <button type="button" class='fill' data-value="repeating-linear-gradient" data-tooltip="R Linear" ></button>
-        <button type="button" class='fill' data-value="radial-gradient" data-tooltip="Radial" ></button>
-        <button type="button" class='fill' data-value="repeating-radial-gradient" data-tooltip="R Radial" ></button>
-        <button type="button" class='fill' data-value="conic-gradient" data-tooltip="Conic" ></button>
-        <button type="button" class='fill' data-value="repeating-conic-gradient" data-tooltip="R Conic" data-direction="bottom right" ></button>
-      </div>
-    `;
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "fill-sample-list",
+      ref: "$add"
+    }, /* @__PURE__ */ createElementJsx("button", {
+      type: "button",
+      class: "fill",
+      "data-value": "static-gradient"
+    }, iconUse$1("add")));
   }
   [CLICK("$add [data-value]")](e2) {
     this.children.$backgroundImageEditor.trigger("add", e2.$dt.data("value"));
@@ -31823,13 +31821,6 @@ class GroupModel extends MovableModel {
       return false;
     return this.parent.layout === layout2;
   }
-  get contentBox() {
-    const x2 = this["padding-left"] || 0;
-    const y2 = this["padding-top"] || 0;
-    const width2 = this.screenWidth - (this["padding-left"] || 0) - (this["padding-right"] || 0);
-    const height2 = this.screenHeight - (this["padding-top"] || 0) - (this["padding-bottom"] || 0);
-    return rectToVerties(x2, y2, width2, height2);
-  }
   reset(obj2) {
     const isChanged = super.reset(obj2);
     if (this.hasChangedField(ConstraintsDirection.VERTICAL, ConstraintsDirection.HORIZONTAL)) {
@@ -32095,9 +32086,18 @@ class DomModel extends GroupModel {
       list2.push.apply(list2, backgroundList.filter((it) => it.visibility !== VisibilityType.HIDDEN));
     }
     if (list2.length) {
+      const project2 = this.top;
       this.cacheBackgroundImage = BackgroundImage.joinCSS(list2);
+      const cacheList = list2.filter((it) => it.type === GradientType.URL).map((it) => it.image.url);
+      let cacheImage = this.cacheBackgroundImage["background-image"];
+      cacheList.forEach((url) => {
+        const imageUrl = project2.getImageValueById(url) || url;
+        cacheImage = cacheImage.replace(url, imageUrl);
+      });
+      this.cacheBackgroundImage["background-image"] = cacheImage;
     } else {
       this.cacheBackgroundImage = {};
+      this.cacheBackgroundImageOriginal = [];
     }
   }
   setClipPathCache() {
@@ -34590,7 +34590,8 @@ var en_US = {
   "pattern.info.popup.foreColor": "Fore",
   "pattern.info.popup.backColor": "Back",
   "stroke.dasharray.editor.add": "Add Dash",
-  "viewport.panning.enable": "You can move the area by holding down space key and dragging the screen."
+  "viewport.panning.enable": "You can move the area by holding down space key and dragging the screen.",
+  "image.select.editor.button": "Select Image"
 };
 var ko_KR = {
   "app.title": "EASYLOGIC",
@@ -36914,7 +36915,7 @@ class GradientPickerPopup extends BasePopup {
           text: "Repeating Conic Gradient"
         },
         {
-          value: GradientType.IMAGE,
+          value: GradientType.URL,
           text: "Image"
         }
       ]
@@ -36928,17 +36929,30 @@ class GradientPickerPopup extends BasePopup {
     return "fill-picker-popup";
   }
   getBody() {
+    var _a, _b;
     return `
-      <div class="elf--gradient-picker-popup" ref='$body' data-selected-editor=''>
+      <div class="elf--gradient-picker-popup" ref='$body' data-selected-editor='${(_a = this.state.image) == null ? void 0 : _a.type}'>
         <div class='box'>
           <div ref='$gradientEditor'></div>
         </div>
         <div class='box'>
           <div class='colorpicker'>
-            <object refClass="EmbedColorPicker" ref='$color' onchange='changeColor' />                    
+            ${createComponent("EmbedColorPicker", {
+      ref: "$color",
+      onchange: "changeColor"
+    })}
           </div>
           <div class='assetpicker'>
-            <object refClass="ImageAssetPicker" ref='$asset' onchange='changeImageUrl' />
+            ${createComponent("ImageSelectEditor", {
+      ref: "$image",
+      key: "image",
+      value: (_b = this.state.image) == null ? void 0 : _b.url,
+      onchange: "changeImageUrl"
+    })}
+            ${createComponent("ImageAssetPicker", {
+      ref: "$asset",
+      onchange: "changeImageUrl"
+    })}
           </div>
         </div>
       </div>
@@ -36955,7 +36969,17 @@ class GradientPickerPopup extends BasePopup {
   getCurrentColor() {
     return this.state.image.colorsteps[this.state.selectColorStepIndex || 0].color;
   }
+  [BIND("$body")]() {
+    var _a;
+    return {
+      "data-selected-editor": (_a = this.state.image) == null ? void 0 : _a.type
+    };
+  }
   [LOAD("$gradientEditor") + DOMDIFF]() {
+    var _a;
+    if (((_a = this.state.image) == null ? void 0 : _a.type) === GradientType.URL) {
+      return "";
+    }
     return createComponent("GradientEditor", {
       ref: "$g",
       value: `${this.state.image}`,
@@ -36976,12 +37000,18 @@ class GradientPickerPopup extends BasePopup {
   }
   [SUBSCRIBE_SELF("changeTabType")](key, type) {
     this.children.$g.trigger("changeTabType", type);
+    this.refs.$body.attr("data-selected-editor", type);
   }
   [SUBSCRIBE_SELF("changeColor")](color2) {
     this.children.$g.trigger("setColorStepColor", color2);
   }
-  [SUBSCRIBE_SELF("changeImageUrl")](url) {
-    this.children.$g.trigger("setImageUrl", url);
+  [SUBSCRIBE_SELF("changeImageUrl")](key, url) {
+    if (this.state.image) {
+      this.state.image.reset({
+        url
+      });
+      this.trigger("changeGradientEditor", this.state.image);
+    }
   }
   updateTitle() {
     this.children.$select.setValue(this.state.image.type);
@@ -37020,6 +37050,7 @@ class GradientPickerPopup extends BasePopup {
     return `${this.state.image}`;
   }
   updateData() {
+    console.log(this.state.image, this.getValue());
     this.state.instance.trigger(this.state.changeEvent, this.getValue(), this.state.params);
   }
 }
@@ -37227,12 +37258,23 @@ class GradientSingleEditor extends EditorElement {
     this.setState(__spreadValues({}, obj2));
   }
   [BIND("$miniView")]() {
-    return {
-      style: {
-        "background-image": this.state.image,
-        "background-size": "cover"
-      }
-    };
+    const project2 = this.$selection.currentProject;
+    if (this.state.image.type === GradientType.URL) {
+      const imageUrl = project2.getImageValueById(this.state.image.url) || this.state.image.url;
+      return {
+        style: {
+          "background-image": this.state.image.toString(imageUrl),
+          "background-size": "cover"
+        }
+      };
+    } else {
+      return {
+        style: {
+          "background-image": this.state.image,
+          "background-size": "cover"
+        }
+      };
+    }
   }
   template() {
     return `
@@ -37283,6 +37325,7 @@ class GradientSingleEditor extends EditorElement {
         });
         break;
     }
+    console.log(image2);
     this.updateData({ image: image2 });
     this.refresh();
   }
@@ -37634,13 +37677,15 @@ var ImageSelectEditor$1 = "";
 class ImageSelectEditor extends EditorElement {
   initState() {
     return {
+      key: this.props.key,
       value: this.props.value
     };
   }
   template() {
-    return `
-            <div class='elf--image-select-editor' ref='$body'></div>
-        `;
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--image-select-editor",
+      ref: "$body"
+    });
   }
   getValue() {
     return this.state.value;
@@ -37652,15 +37697,21 @@ class ImageSelectEditor extends EditorElement {
     const project2 = this.$selection.currentProject;
     if (!project2)
       return;
-    return `
-            <div class='preview-container'>
-                <img src="${project2.getImageValueById(this.state.value) || this.state.value}" />
-                <input type='file' ref='$file' accept="image/*" />
-            </div>
-            <div class='select-container'>
-                <button type="button" ref='$select'>Select a image</button>
-            <div>
-        `;
+    const imageUrl = project2.getImageValueById(this.state.value) || this.state.value;
+    return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("div", {
+      class: "preview-container"
+    }, imageUrl ? /* @__PURE__ */ createElementJsx("img", {
+      src: imageUrl
+    }) : null, /* @__PURE__ */ createElementJsx("input", {
+      type: "file",
+      ref: "$file",
+      accept: "image/*"
+    })), /* @__PURE__ */ createElementJsx("div", {
+      class: "select-container"
+    }, /* @__PURE__ */ createElementJsx("button", {
+      type: "button",
+      ref: "$select"
+    }, this.$i18n("image.select.editor.button"))));
   }
   [CHANGE("$file")](e2) {
     var files = [...e2.target.files];
@@ -43160,7 +43211,9 @@ class GradientEditor extends EditorElement {
       var selected = this.$selection.isSelectedColorStep(it.id) ? "selected" : "";
       return `
       <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' tabindex="-1" style='left: ${it.toLength()};'>
-        <div class='color-view' style="background-color: ${it.color}"></div>      
+        <div class='color-view' style="background-color: ${it.color}">
+          <span>${Math.floor(it.percent * 10) / 10}</span>
+        </div>      
         <div class='arrow'></div>      
       </div>`;
     });
@@ -43275,6 +43328,9 @@ class GradientEditor extends EditorElement {
     else if (x2 > maxX)
       x2 = maxX;
     var percent = (x2 - minX) / rect2.width * 100;
+    if (this.$config.get("bodyEvent").shiftKey) {
+      percent = Math.floor(percent);
+    }
     this.currentStep.setValue(percent, rect2.width);
     this.state.image.sortColorStep();
     this.refresh();
@@ -46256,8 +46312,13 @@ class DomRender$1 extends ItemRender$1 {
     if (!item2.cacheBackgroundImage) {
       item2.setBackgroundImageCache();
     }
-    delete item2.cacheBackgroundImage["background-visibility"];
-    return item2.cacheBackgroundImage;
+    return {
+      "background-image": item2.cacheBackgroundImage["background-image"],
+      "background-position": item2.cacheBackgroundImage["background-position"],
+      "background-repeat": item2.cacheBackgroundImage["background-repeat"],
+      "background-size": item2.cacheBackgroundImage["background-size"],
+      "background-blend-mode": item2.cacheBackgroundImage["background-blend-mode"]
+    };
   }
   toLayoutCSS(item2) {
     item2.layout;
@@ -56178,12 +56239,12 @@ class GradientColorstepEditor extends GradientRotateEditor {
   }
   sortToRight() {
     const image2 = this.state.lastBackgroundMatrix.backgroundImage.image;
-    image2.sortRight();
+    image2.sortToRight();
     this.updateColorStepStatus(image2, -1);
   }
   sortToLeft() {
     const image2 = this.state.lastBackgroundMatrix.backgroundImage.image;
-    image2.sortLeft();
+    image2.sortToLeft();
     this.updateColorStepStatus(image2, -1);
   }
   appendColorStep(currentIndex) {
@@ -57677,6 +57738,149 @@ function sample(editor) {
     ];
   });
 }
+class ImageAssetPicker extends EditorElement {
+  initState() {
+    return {
+      mode: "grid"
+    };
+  }
+  template() {
+    return `
+      <div class='image-asset-picker'>
+        <div class='image-list' ref='$imageList' data-view-mode='${this.state.mode}'></div>
+      </div>
+    `;
+  }
+  [LOAD("$imageList") + DOMDIFF]() {
+    var current = this.$selection.currentProject || { images: [] };
+    var images = current.images;
+    var results = images.map((image2) => {
+      return `
+        <div class='image-item'>
+          <div class='preview'>
+            <img src="${image2.local}" />
+          </div>
+        </div>
+      `;
+    });
+    return results;
+  }
+  [CLICK("$imageList .image-item")](e2) {
+    var $img = e2.$dt.$("img");
+    this.updateData($img.attr("src"));
+  }
+  updateData(localUrl) {
+    this.parent.trigger(this.props.onchange, localUrl);
+  }
+  [SUBSCRIBE("addImageAsset")]() {
+    this.refresh();
+  }
+}
+function revokeObjectUrl(url) {
+  URL.revokeObjectURL(url);
+}
+var ImageAssetsProperty$1 = "";
+class ImageAssetsProperty extends BaseProperty {
+  getTitle() {
+    return this.$i18n("image.asset.property.title");
+  }
+  initState() {
+    return {
+      mode: "grid"
+    };
+  }
+  getClassNamef() {
+    return "elf--image-assets-property";
+  }
+  afterRender() {
+    this.show();
+  }
+  getBody() {
+    return `
+      <div class='property-item image-assets'>
+        <div class='image-list' ref='$imageList' data-view-mode='${this.state.mode}'></div>
+      </div>
+    `;
+  }
+  [LOAD("$imageList") + DOMDIFF]() {
+    var current = this.$selection.currentProject || { images: [] };
+    var images = current.images;
+    var results = images.map((image2, index2) => {
+      return `
+        <div class='image-item' data-index="${index2}">
+          <div class='preview' draggable="true">
+            <img src="${image2.local}" />
+          </div>
+          <div class='tools'>
+            <button type="button" class='copy'>${obj.copy}</button>          
+            <button type="button" class='remove'>${obj.remove}</button>
+          </div>
+        </div>
+      `;
+    });
+    return `
+      <div class='loaded-list'>
+        ${results.join("")}
+        <div class='add-image-item'>
+          <input type='file' accept='image/*' ref='$file' />
+          <button type="button">${obj.add}</button>
+        </div>        
+      </div>
+
+    `;
+  }
+  executeImage(callback, isRefresh = true, isEmit = true) {
+    var project2 = this.$selection.currentProject;
+    if (project2) {
+      callback && callback(project2);
+      if (isRefresh)
+        this.refresh();
+      if (isEmit)
+        this.emit("refreshImageAssets");
+    } else {
+      alert("Please select a project.");
+    }
+  }
+  [DRAGSTART("$imageList .preview img")](e2) {
+    var index2 = +e2.$dt.closest("image-item").attr("data-index");
+    var project2 = this.$selection.currentProject;
+    if (project2) {
+      var imageInfo = project2.images[index2];
+      e2.dataTransfer.setData("image/info", imageInfo.local);
+    }
+  }
+  [CHANGE("$imageList .add-image-item input[type=file]")](e2) {
+    this.executeImage((project2) => {
+      [...e2.target.files].forEach((item2) => {
+        this.emit("updateImageAssetItem", item2);
+      });
+    });
+  }
+  [CLICK("$imageList .remove")](e2) {
+    var $item = e2.$dt.closest("image-item");
+    var index2 = +$item.attr("data-index");
+    this.executeImage((project2) => {
+      project2.removeImage(index2);
+      revokeObjectUrl($item.$(".preview img").attr("src"));
+    });
+  }
+  [CLICK("$imageList .copy")](e2) {
+    var $item = e2.$dt.closest("image-item");
+    var index2 = +$item.attr("data-index");
+    this.executeImage((project2) => {
+      project2.copyImage(index2);
+    });
+  }
+  [SUBSCRIBE("addImageAsset")]() {
+    this.refresh();
+  }
+}
+function imageAsset(editor) {
+  editor.registerElement({
+    ImageAssetPicker,
+    ImageAssetsProperty
+  });
+}
 var designEditorPlugins = [
   defaultConfigs,
   defaultIcons,
@@ -57738,6 +57942,7 @@ var designEditorPlugins = [
   pathEditorView,
   GradientEditorView,
   ClippathEditorView,
+  imageAsset,
   sample
 ];
 var ObjectItems$1 = "";

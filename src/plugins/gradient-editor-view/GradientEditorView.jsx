@@ -282,14 +282,14 @@ class GradientColorstepEditor extends GradientRotateEditor {
 
   sortToRight() {
     const image = this.state.lastBackgroundMatrix.backgroundImage.image;
-    image.sortRight();
+    image.sortToRight();
 
     this.updateColorStepStatus(image, -1);
   }
 
   sortToLeft() {
     const image = this.state.lastBackgroundMatrix.backgroundImage.image;
-    image.sortLeft();
+    image.sortToLeft();
 
     this.updateColorStepStatus(image, -1);
   }

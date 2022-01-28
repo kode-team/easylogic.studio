@@ -189,7 +189,8 @@ export const GradientType = {
     REPEATING_LINEAR: "repeating-linear-gradient",
     REPEATING_RADIAL: "repeating-radial-gradient",
     REPEATING_CONIC: "repeating-conic-gradient",
-    IMAGE: "image-resource"
+    IMAGE: "image",
+    URL: 'url'
 }
 
 export const RadialGradientSizeType = {

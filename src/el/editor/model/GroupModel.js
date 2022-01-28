@@ -98,21 +98,6 @@ export class GroupModel extends MovableModel {
         return this.parent.layout === layout;
     }
 
-    /**
-     * padding 을 제외한 내부 content 영역을 verties 로 리턴한다. 
-     * 
-     */
-    get contentBox() {
-
-        const x = this['padding-left'] || 0;
-        const y = this['padding-top'] || 0;
-
-        const width = this.screenWidth - (this['padding-left'] || 0) - (this['padding-right'] || 0);
-        const height = this.screenHeight - (this['padding-top'] || 0) - (this['padding-bottom'] || 0);
-
-        return rectToVerties(x, y, width, height)
-    }
-
     reset(obj) {
         const isChanged = super.reset(obj);
 

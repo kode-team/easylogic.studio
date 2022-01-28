@@ -39,9 +39,13 @@ export default class DomRender extends ItemRender {
     }
 
     // visibility 속성은 출력하지 않는다.
-    delete item.cacheBackgroundImage['background-visibility'];
-
-    return item.cacheBackgroundImage;
+    return {
+      "background-image": item.cacheBackgroundImage['background-image'],
+      "background-position": item.cacheBackgroundImage['background-position'],
+      "background-repeat": item.cacheBackgroundImage['background-repeat'],
+      "background-size": item.cacheBackgroundImage['background-size'],
+      "background-blend-mode": item.cacheBackgroundImage['background-blend-mode'],      
+    };
   }
 
   /**

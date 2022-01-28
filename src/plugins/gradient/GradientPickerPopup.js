@@ -1,5 +1,5 @@
 
-import { DOMDIFF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { BIND, DOMDIFF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
 import BasePopup from "el/editor/ui/popup/BasePopup";
@@ -47,7 +47,7 @@ export default class GradientPickerPopup extends BasePopup {
           text: "Repeating Conic Gradient"
         },
         {
-          value: GradientType.IMAGE,
+          value: GradientType.URL,
           text: "Image"
         }
       ]
@@ -66,16 +66,28 @@ export default class GradientPickerPopup extends BasePopup {
 
   getBody() {
     return /*html*/`
-      <div class="elf--gradient-picker-popup" ref='$body' data-selected-editor=''>
+      <div class="elf--gradient-picker-popup" ref='$body' data-selected-editor='${this.state.image?.type}'>
         <div class='box'>
           <div ref='$gradientEditor'></div>
         </div>
         <div class='box'>
           <div class='colorpicker'>
-            <object refClass="EmbedColorPicker" ref='$color' onchange='changeColor' />                    
+            ${createComponent('EmbedColorPicker', {
+              ref: "$color",
+              onchange: "changeColor",
+            })}
           </div>
           <div class='assetpicker'>
-            <object refClass="ImageAssetPicker" ref='$asset' onchange='changeImageUrl' />
+            ${createComponent('ImageSelectEditor', {
+              ref: "$image",
+              key: 'image',
+              value: this.state.image?.url,
+              onchange: "changeImageUrl",
+            })}
+            ${createComponent('ImageAssetPicker', {
+              ref: "$asset",
+              onchange: "changeImageUrl",
+            })}
           </div>
         </div>
       </div>
@@ -97,7 +109,17 @@ export default class GradientPickerPopup extends BasePopup {
     return this.state.image.colorsteps[this.state.selectColorStepIndex || 0].color; 
   }
 
+  [BIND('$body')] () {
+    return {
+      'data-selected-editor': this.state.image?.type
+    }
+  }
+
   [LOAD('$gradientEditor') + DOMDIFF] () {
+    if (this.state.image?.type === GradientType.URL) {
+      return "";
+    }
+
     return createComponent("GradientEditor", {
       ref: "$g",
       value: `${this.state.image}`,
@@ -118,7 +140,6 @@ export default class GradientPickerPopup extends BasePopup {
   }
 
   [SUBSCRIBE_SELF('changeGradientEditor')] (data) {
-
     this.state.image = isString(data) ? BackgroundImage.parseImage(data) : data;
 
     this.updateTitle();
@@ -128,14 +149,22 @@ export default class GradientPickerPopup extends BasePopup {
 
   [SUBSCRIBE_SELF('changeTabType')] (key, type) {
     this.children.$g.trigger('changeTabType', type);
+    this.refs.$body.attr('data-selected-editor', type);
   }
 
   [SUBSCRIBE_SELF('changeColor')] (color) {
     this.children.$g.trigger('setColorStepColor', color);
   }
 
-  [SUBSCRIBE_SELF('changeImageUrl')] (url) {
-    this.children.$g.trigger('setImageUrl', url);
+  [SUBSCRIBE_SELF('changeImageUrl')] (key, url) {
+
+    if (this.state.image) {
+      this.state.image.reset({
+        url
+      })
+
+      this.trigger('changeGradientEditor', this.state.image);
+    }
   }
 
   updateTitle () {
@@ -196,6 +225,7 @@ export default class GradientPickerPopup extends BasePopup {
   }
 
   updateData() {
+    console.log(this.state.image, this.getValue());
     this.state.instance.trigger(this.state.changeEvent, this.getValue(), this.state.params);
   }
 

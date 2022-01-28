@@ -1,3 +1,4 @@
+import { GradientType } from "el/editor/types/model";
 import { ImageResource } from "./ImageResource";
 
 const IMAGE_LIST = ["jpg", "jpeg", "png", "gif", "svg"];
@@ -26,7 +27,7 @@ function dataURItoBlob(dataURI) {
 export class URLImageResource extends ImageResource {
   getDefaultObject(obj = {}) {
     return super.getDefaultObject({
-      type: "url",
+      type: GradientType.URL,
       url: "",
       datauri: "",
       ...obj
@@ -52,10 +53,8 @@ export class URLImageResource extends ImageResource {
     return true;
   }
 
-  toString() {
-    var json = this.json;
-
-    return `url(${json.url})`;
+  toString(url) {
+    return `url(${url || this.json.url})`;
   }
 
   static isImageFile(fileExt) {

@@ -65,6 +65,7 @@ import defaultIcons from "./default-icons"
 import GradientEditorView from "./gradient-editor-view"
 import ClippathEditorView from "./clippath-editor-view"
 import sample from "./sample"
+import imageAsset from "./image-asset"
 
 export default [
 
@@ -170,6 +171,8 @@ export default [
     GradientEditorView,
     ClippathEditorView,
 
+    // image asset 
+    imageAsset,
 
     // sample
     sample

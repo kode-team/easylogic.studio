@@ -299,9 +299,24 @@ export class DomModel extends GroupModel {
     }
 
     if (list.length) {
+      const project = this.top;
       this.cacheBackgroundImage = BackgroundImage.joinCSS(list);
+      const cacheList = list.filter(it => it.type === GradientType.URL).map(it => it.image.url);
+      let cacheImage = this.cacheBackgroundImage['background-image'];
+
+      // project 에 있는 image 와 합쳐준다. 
+      cacheList.forEach(url => {
+  
+        const imageUrl = project.getImageValueById(url) || url;
+        
+        cacheImage =  cacheImage.replace(url, imageUrl);
+      })
+  
+      this.cacheBackgroundImage['background-image'] = cacheImage;
+
     } else {
       this.cacheBackgroundImage = {}
+      this.cacheBackgroundImageOriginal = []
     }
 
   }
@@ -362,6 +377,10 @@ export class DomModel extends GroupModel {
     }
   }
 
+  /**
+   * border-width 를 제외한 공간을 rect 로 리턴한다. 
+   * 
+   */
   get contentBox() {
     const x = 0;
     const y = 0;

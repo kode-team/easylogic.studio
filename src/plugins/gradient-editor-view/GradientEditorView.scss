@@ -72,13 +72,14 @@
     box-sizing: border-box;
     background-color: rgba(255, 255, 255, 1);
     transform: translate(-50%, -50%);
-    // border: 2px solid black;
+    border: 1px solid var(--elf--selected-color);
     border-radius: 100%;
     filter: drop-shadow(0 0 2px rgb(43, 43, 43));      
 
     &[data-direction="bottom-right"] {
       left: 100%;
       top: 100%;
+      cursor: nwse-resize;
     }
   }
 
