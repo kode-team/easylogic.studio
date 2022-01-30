@@ -110,9 +110,10 @@ export default class FillSingleEditor extends EditorElement {
 
         this.emit("showFillPickerPopup", {
             instance: this,
+            key: this.props.key,
             changeEvent: 'changeFillSingle',
             image: this.state.image 
-        });
+        }, null, this.$el.rect());
     }
 
     [SUBSCRIBE('changeFillSingle')] (image, params) {

@@ -156,10 +156,10 @@ export class AssetModel extends BaseModel {
     this.refreshImageKeys();
   }  
 
-  getImageValueById (id) {
+  getImageValueById (id, defaultValue = '') {
     const image = this.json.imageKeys[id]
 
-    if (!image) return undefined;
+    if (!image) return id || defaultValue;
 
     return image.local;
   }

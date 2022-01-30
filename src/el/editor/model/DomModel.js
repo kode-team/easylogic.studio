@@ -307,9 +307,9 @@ export class DomModel extends GroupModel {
       // project 에 있는 image 와 합쳐준다. 
       cacheList.forEach(url => {
   
-        const imageUrl = project.getImageValueById(url) || url;
-        
-        cacheImage =  cacheImage.replace(url, imageUrl);
+        const imageUrl = project.getImageValueById(url);
+
+        cacheImage =  cacheImage.replace(url, `"${imageUrl}"`);
       })
   
       this.cacheBackgroundImage['background-image'] = cacheImage;

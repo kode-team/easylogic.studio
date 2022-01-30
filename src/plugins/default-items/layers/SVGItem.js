@@ -1,6 +1,11 @@
 import { LayerModel } from "el/editor/model/LayerModel";
+import { SVGFill } from "el/editor/property-parser/SVGFill";
+import { GradientType } from "el/editor/types/model";
 import { Length } from 'el/editor/unit/Length';
+import { rectToVerties } from "el/utils/collision";
 import Color from "el/utils/Color";
+import { vertiesMap } from "el/utils/math";
+import { vec3 } from "gl-matrix";
 
 
 const expectedProperties = [
@@ -33,7 +38,7 @@ export class SVGItem extends LayerModel {
       itemType: 'svg',
       name: "New SVG",
       elementType: 'svg',
-      overflow: 'visible',         
+      overflow: 'visible',
       stroke: 'black',
       'stroke-width': 1,
       fill: 'transparent',
@@ -65,9 +70,9 @@ export class SVGItem extends LayerModel {
       return false;
     }
 
-    switch(editablePropertyName) {
-    case 'svg-item':
-      return true; 
+    switch (editablePropertyName) {
+      case 'svg-item':
+        return true;
     }
 
     return super.editable(editablePropertyName);
@@ -99,7 +104,7 @@ export class SVGItem extends LayerModel {
   }
 
   isSVG() {
-    return true; 
+    return true;
   }
 
 
@@ -111,7 +116,7 @@ export class SVGItem extends LayerModel {
    * @param {number} y 
    * @returns {boolean}
    */
-   hasPoint (x, y) {
+  hasPoint(x, y) {
     const obj = this.attrs('fill', 'stroke', 'fill-opacity', 'stroke-width');
 
     const fill = obj.fill;
@@ -132,7 +137,7 @@ export class SVGItem extends LayerModel {
 
     // svg item 쪽에서는 결과가 없으면 그냥 false 를 리턴해서 체크가 안되도록 해야한다. 
     return false;
-  }  
+  }
 
 
   /**
@@ -150,7 +155,7 @@ export class SVGItem extends LayerModel {
       const [localX, localY] = this.invertPoint([x, y, 0])
 
       const point = svgEl.createSVGPoint();
-      Object.assign(point, {x: localX, y: localY});
+      Object.assign(point, { x: localX, y: localY });
 
       return pathEl.isPointInFill(point);
     }
@@ -173,7 +178,7 @@ export class SVGItem extends LayerModel {
       const [localX, localY] = this.invertPoint([x, y, 0])
 
       const point = svgEl.createSVGPoint();
-      Object.assign(point, {x: localX, y: localY});
+      Object.assign(point, { x: localX, y: localY });
 
       return pathEl.isPointInStroke(point);
     }
@@ -189,7 +194,7 @@ export class SVGItem extends LayerModel {
    */
   convertStrokeToPath(distX = 10, distY = 10) {
 
-    const attrs = this.attrs('name', 'width', 'parentId', 'height', 'x', 'y', 'transform', 'stroke');        
+    const attrs = this.attrs('name', 'width', 'parentId', 'height', 'x', 'y', 'transform', 'stroke');
 
     attrs.fill = attrs.stroke;
     delete attrs.stroke;
@@ -199,9 +204,9 @@ export class SVGItem extends LayerModel {
       'fill-rule': 'evenodd',
       ...attrs,
       x: Length.parse(attrs.x).add(distX),
-      y: Length.parse(attrs.y).add(distY)      
+      y: Length.parse(attrs.y).add(distY)
     }
-  }  
+  }
 
 
   /**
@@ -218,5 +223,71 @@ export class SVGItem extends LayerModel {
       ...attrs,
       d: this.d,
     };
-  }  
+  }
+
+  /**
+   * svg fragment 의 matrix 를 구한다. 
+   * 
+   * @param {string} field   key field name 
+   */
+  createFragmentMatrix(field) {
+    const value = this.json[field];
+
+    const image = SVGFill.parseImage(value);
+
+    const backRect = {
+      x: 0,
+      y: 0,
+      width: this.screenWidth,
+      height: this.screenHeight,
+    }
+    const backVerties = vertiesMap(rectToVerties(backRect.x, backRect.y, backRect.width, backRect.height), this.absoluteMatrix);
+    const result = {
+      backRect,
+      backVerties,
+      absoluteMatrix: this.absoluteMatrix,
+      image
+    }
+
+    switch (image.type) {
+      case GradientType.RADIAL:
+
+        break;
+      case GradientType.LINEAR:
+
+        const newX1 = image.x1.toPx(backRect.width);
+        const newY1 = image.y1.toPx(backRect.height);
+        const newX2 = image.x2.toPx(backRect.width);
+        const newY2 = image.y2.toPx(backRect.height);
+
+        const [
+          newStartPoint,
+          newEndPoint,
+        ] = vertiesMap([
+          [newX1.value, newY1.value, 0],
+          [newX2.value, newY2.value, 0]
+        ],
+          this.absoluteMatrix
+        );
+
+        result.endPoint = newEndPoint;
+        result.startPoint = newStartPoint
+        result.areaStartPoint = vec3.clone(newStartPoint);
+        result.areaEndPoint = vec3.clone(newEndPoint);
+
+        result.colorsteps = image.colorsteps.map(it => {
+          const offset = it.toLength();
+          return {
+            id: it.id,
+            cut: it.cut,
+            color: it.color,
+            pos: vec3.lerp([], result.startPoint, result.endPoint, offset.value/100)
+          }
+        });
+
+        break;
+    }
+
+    return result;
+  }
 }

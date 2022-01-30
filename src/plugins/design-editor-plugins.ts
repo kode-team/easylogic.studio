@@ -62,10 +62,11 @@ import guideLineView from "./guide-line-view"
 import selectionInfoView from "./selection-info-view"
 import selectionToolView from "./selection-tool-view"
 import defaultIcons from "./default-icons"
-import GradientEditorView from "./gradient-editor-view"
+import gradientEditorView from "./gradient-editor-view"
 import ClippathEditorView from "./clippath-editor-view"
 import sample from "./sample"
 import imageAsset from "./image-asset"
+import fillEditorView from "./fill-editor-view"
 
 export default [
 
@@ -168,7 +169,8 @@ export default [
     hoverView,
     pathDrawView,
     pathEditorView,    
-    GradientEditorView,
+    gradientEditorView,
+    fillEditorView,
     ClippathEditorView,
 
     // image asset 

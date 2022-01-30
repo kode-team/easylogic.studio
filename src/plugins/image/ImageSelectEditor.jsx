@@ -29,7 +29,7 @@ export default class ImageSelectEditor extends EditorElement {
     if (!project) return;
 
     const imageUrl =
-      project.getImageValueById(this.state.value) || this.state.value;
+      project.getImageValueById(this.state.value);
 
     return (
       <>

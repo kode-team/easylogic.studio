@@ -1,0 +1,91 @@
+.elf--fill-editor-view {
+  display: none;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+
+  background-color: rgba(0, 255, 255, 0.1);
+
+  .linear-gradient {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    pointer-events: none;
+    overflow: visible;
+    filter: drop-shadow(0 0 2px rgb(43, 43, 43));
+
+    path {
+      fill: transparent;
+      // stroke: white;
+      pointer-events: stroke;
+
+      &.area-line {
+        stroke-width: 18;
+        stroke: transparent;
+        pointer-events: stroke;
+        fill: transparent !important;
+      }      
+
+      &.start-end-line {
+        stroke: white;
+        pointer-events: none;
+      }
+    }
+
+    rect {
+      pointer-events: all;
+
+      &.colorstep {
+        // fill: black;
+        stroke: white;
+        stroke-width: 1;
+        outline: none;
+      }
+    }
+
+    circle {
+      pointer-events: all;
+      // stroke: black;
+      stroke-width: 2;
+
+      &:hover {
+        cursor: grab;
+      }
+
+      &.moved {
+        cursor: grabbing;
+      }
+
+      &.colorstep {
+        stroke-width: 1;
+        stroke: white;
+        r: 7;
+      }
+
+      &:not(.colorstep):not(.hover-colorstep) {
+        fill: white;
+      }
+
+      &.size {
+        fill: transparent !important;
+        stroke: white;
+        stroke-width: 1;
+        pointer-events: none;
+      }
+
+      &.point {
+        fill: white;
+        r: 4;
+      }
+
+      &.hover-colorstep {
+        pointer-events: none;
+        r: 8;
+      }
+    }
+  }
+}

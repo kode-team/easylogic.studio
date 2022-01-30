@@ -1,4 +1,4 @@
-import { LOAD, CLICK, POINTERSTART, BIND, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { LOAD, CLICK, POINTERSTART, BIND, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF, KEYUP } from "el/sapa/Event";
 import { Length } from "el/editor/unit/Length";
 
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
@@ -10,6 +10,7 @@ import { isUndefined } from "el/sapa/functions/func";
 import { END, MOVE } from "el/editor/types/event";
 
 import './FillEditor.scss';
+import { GradientType } from "el/editor/types/model";
 
 
 const imageTypeList = [
@@ -44,22 +45,25 @@ const props = [
   'imageX', 'imageY', 'imageWidth', 'imageHeight'
 ]
 
-const rangeEditorList = [
-  'x1', 'y1', 'x2', 'y2', 
-  'cx', 'cy', 'r', 
-  'fx', 'fy', 'fr', 
-  'patternWidth', 'patternHeight',
-  'imageX', 'imageY', 'imageWidth', 'imageHeight'
-]
-
 export default class FillEditor extends EditorElement  {
 
   initState() {
+
+    const image = SVGFill.parseImage(this.props.value || 'transparent') || SVGStaticGradient.create()
+
+    const id = image.colorsteps[this.props.index]?.id;
+    this.$selection.selectColorStep(id);
+
+    if (id) {
+      this.currentStep = image.colorsteps.find(it => this.$selection.isSelectedColorStep(it.id))
+    }
+
+
     return {
       cachedRect: null,
       index: +(this.props.index || 0 ),
       value: this.props.value, 
-      image: SVGFill.parseImage(this.props.value || 'transparent') || SVGStaticGradient.create()
+      image,
     }
   }
 
@@ -70,63 +74,17 @@ export default class FillEditor extends EditorElement  {
     }, false)
 
     this.refresh();
-    this.parent.trigger('changeTabType', this.state.image.type);
   }
 
   template() {
-
-    var { image } = this.state; 
-
-    image = image || {} 
-
-    var type = image.type || 'static-gradient'
-    
-    if (type === 'url') type = 'image-resource'
-
-
     return /*html*/`
-        <div class='elf--fill-editor' data-selected-editor='${type}'>
-            <div class='gradient-preview'>
-              <div class='gradient-view' ref='$gradientView'>
-                <div class='drag-pointer' ref='$dragPosition'></div>
-              </div>
-              <svg class='pointer-draw' ref='$pointerDrawArea'>
-                <line data-type='line' ref='$line' />
-                <circle r='5' data-type='start' ref='$startPoint' />
-                <circle r='5' data-type='end' ref='$endPoint' />
-                <circle r='5' data-type='center' ref='$centerPoint' />
-                <circle r='5' data-type='f' ref='$fPoint' />
-              </svg>              
-              <div class='preset-position'>
-                <div data-value='top' title='top'>${iconUse('chevron_right')}</div>
-                <div data-value='right' title='right'>${iconUse('chevron_right')}</div>
-                <div data-value='left' title='left'>${iconUse('chevron_right')}</div>
-                <div data-value='bottom' title='bottom'>${iconUse('chevron_right')}</div>
-                <div data-value='top left' title='top left'>${iconUse('chevron_right')}</div>
-                <div data-value='top right' title='top right'>${iconUse('chevron_right')}</div>
-                <div data-value='bottom left' title='bottom left'>${iconUse('chevron_right')}</div>
-                <div data-value='bottom right' title='bottom right'>${iconUse('chevron_right')}</div>                
-              </div>
-              <div data-editor='image-loader'>
-                <input type='file' accept="image/*" ref='$file' />
-              </div>              
-            </div>
-            <div class="picker-tab">
-              <div class="picker-tab-list" ref="$tab">
-                ${imageTypeList.map(it => {
-                  return `<span class='picker-tab-item ${it}' data-editor='${it}'><span class='icon'>${iconList[it] || ''}</span></span>`
-                }).join('')}
-              </div>
-            </div>
+        <div class='elf--fill-editor'>
             <div class='gradient-steps' data-editor='gradient'>
                 <div class="hue-container" ref="$back"></div>            
                 <div class="hue" ref="$steps">
                     <div class='step-list' ref="$stepList" ></div>
                 </div>
-            </div>
-            <div class='tools' data-editor='tools'>
-              <object refClass="RangeEditor"  label='${this.$i18n('fill.editor.offset')}' ref='$range' key='length' onchange='changeColorStepOffset' />
-            </div>
+            </div>               
             <div class='sub-editor' ref='$subEditor'> 
                 <div data-editor='spreadMethod'>
                   <object refClass="SelectIconEditor" label='${this.$i18n('fill.editor.spread')}' ref='$spreadMethod' value="pad" options='pad,reflect,repeat' key='spreadMethod' onchange='changeKeyValue' />
@@ -134,14 +92,6 @@ export default class FillEditor extends EditorElement  {
                 <div data-editor='patternUnits'>
                   <object refClass="SelectEditor"  label='Pattern' ref='$patternUnits' options='userSpaceOnUse' key='patternUnits' onchange='changeKeyValue' />
                 </div>                  
-                ${rangeEditorList.map(field => {
-                  const label = this.$i18n('fill.editor.' + field)
-                  return /*html*/`
-                    <div data-editor='${field}'>
-                      <object refClass="RangeEditor"  label='${label}' ref='$${field}' value="${this.getImageFieldValue(image, field)}" key='${field}' onchange='changeKeyValue' />
-                    </div>
-                  `
-                }).join('')}
                                                                                                                                 
             </div>            
         </div>
@@ -190,25 +140,7 @@ export default class FillEditor extends EditorElement  {
     }
   }
 
-
-  [CLICK('$el .preset-position [data-value]')] (e) {
-    var type = e.$dt.attr('data-value')
-
-    if (presetPosition[type]) {
-      this.state.image.reset(presetPosition[type])
-      this.refresh();
-      this.refreshFieldValue();
-      this.updateData();
-    }
-
-  }
-
   refreshFieldValue() {
-    this.children.$x1.setValue(this.state.image.x1)
-    this.children.$y1.setValue(this.state.image.y1)
-    this.children.$x2.setValue(this.state.image.x2)
-    this.children.$y2.setValue(this.state.image.y2)
-
     this.children.$cx.setValue(this.state.image.cx)
     this.children.$cy.setValue(this.state.image.cy)
     this.children.$r.setValue(this.state.image.r)
@@ -235,62 +167,7 @@ export default class FillEditor extends EditorElement  {
   getFieldValue(field) {
     return Length.parse(this.getImageFieldValue(this.state.image, field));
   }
-
-  [BIND('$line')] () {
-    var {width, height} = this.getDrawAreaRect()
-
-    var x1 = this.getFieldValue('x1').toPx(width)
-    var y1 = this.getFieldValue('y1').toPx(height)
-    var x2 = this.getFieldValue('x2').toPx(width)
-    var y2 = this.getFieldValue('y2').toPx(height)    
-
-    return { x1, y1, x2, y2 }
-  }
-
-
-  [BIND('$startPoint')] () {
-    var {width, height} = this.getDrawAreaRect()
-
-    var cx = this.getFieldValue('x1').toPx(width)
-    var cy = this.getFieldValue('y1').toPx(height)
-
-    return { cx, cy }
-  }  
-
-  [BIND('$endPoint')] () {
-    var {width, height} = this.getDrawAreaRect()
-
-    var cx = this.getFieldValue('x2').toPx(width)
-    var cy = this.getFieldValue('y2').toPx(height)
-
-    return { cx, cy }
-  }  
-
-  [BIND('$centerPoint')] () {
-    var {width, height} = this.getDrawAreaRect()
-
-    var cx = this.getFieldValue('cx').toPx(width)
-    var cy = this.getFieldValue('cy').toPx(height)
-
-    return { cx, cy }
-  }  
-
-  [BIND('$fPoint')] () {
-    var {width, height} = this.getDrawAreaRect()
-
-    var cx = this.getFieldValue('fx').toPx(width)
-    var cy = this.getFieldValue('fy').toPx(height)
-
-
-    return { cx, cy }
-  }    
-
-  [POINTERSTART('$pointerDrawArea circle[data-type]') + MOVE('moveDragPointer')]  (e) {
-    this.containerRect = this.refs.$pointerDrawArea.rect();
-    this.startXY = e.xy; 
-    this.type = e.$dt.attr('data-type');
-    this.state.cachedRect = null; 
-  }
+  
 
   getRectRate (rect, x, y) {
 
@@ -316,76 +193,36 @@ export default class FillEditor extends EditorElement  {
     return {left, top}
   }
 
-  moveDragPointer (dx, dy) {
-    var x = this.startXY.x + dx; 
-    var y = this.startXY.y + dy; 
 
-    var {left, top } = this.getRectRate(this.containerRect, x, y);
+  [SUBSCRIBE_SELF('changeTabType')](type) {
+    const oldType = this.state.image?.type;
+    const colorsteps = this.state.image?.colorsteps || [];
 
-    if (this.type == 'start') {
-      this.state.image.reset({ x1: left, y1: top })
-      this.children.$x1.setValue(left)
-      this.children.$y1.setValue(top)            
-
-      this.bindData('$startPoint')
-      this.bindData('$line')
-
-    } else if (this.type == 'end') {
-      this.state.image.reset({ x2: left, y2: top })
-      this.children.$x2.setValue(left)
-      this.children.$y2.setValue(top)      
-      this.bindData('$endPoint')
-      this.bindData('$line')      
-    } else if (this.type == 'center') {
-      this.state.image.reset({ cx: left, cy: top })
-      this.children.$cx.setValue(left)
-      this.children.$cy.setValue(top)      
-      this.bindData('$centerPoint')
-    } else if (this.type == 'f') {
-      this.state.image.reset({ fx: left, fy: top })            
-      this.children.$fx.setValue(left)
-      this.children.$fy.setValue(top)      
-      this.bindData('$fPoint')      
+    if (colorsteps.length === 1) {
+      colorsteps.push(colorsteps[0])
     }
 
-    this.bindData('$gradientView')    
-
-
-    this.updateData();
-  }
-
-  [CLICK('$tab .picker-tab-item')] (e) {
-    var type = e.$dt.attr('data-editor')
-    this.$el.attr('data-selected-editor', type);
-    this.parent.trigger('changeTabType', type);
+    if (oldType === GradientType.STATIC) { 
+      if (colorsteps.length === 0) {
+        colorsteps.push(colorsteps[0], colorsteps[0])
+      } else if (colorsteps.length === 1) {
+        colorsteps.push(colorsteps[0])
+      }
+    }
 
     var url = type === 'image-resource' ? this.state.image.url : this.state.url;
-    var opt = {}
-    
-    props.forEach(it => {
-      opt[it] = this.children[`$${it}`].getValue()
-    })
 
     this.state.image = SVGFill.changeImageType({
       type,
       url,
       colorsteps: this.state.image.colorsteps || [] ,   
-      ...opt
+      x1: this.state.image.x1 || Length.percent(0),
+      y1: this.state.image.y1 || Length.percent(0),
+      x2: this.state.image.x2 || Length.percent(100),
+      y2: this.state.image.y2 || Length.percent(0),
     })
     this.refresh();
     this.updateData();
-    this.sendMessage();
-  }
-
-  sendMessage (type) {
-    var type = this.$el.attr('data-selected-editor');
-    if (type === 'linear-gradient') {
-      this.emit('addStatusBarMessage', '');
-    } else if (type === 'url' || type === 'image-resource') {
-      this.emit('addStatusBarMessage', this.$i18n('fill.editor.message.click.image'));
-    } else {
-      this.emit('addStatusBarMessage', this.$i18n('fill.editor.message.drag.position'));
-    }
   }
 
   [SUBSCRIBE_SELF('changeKeyValue')] (key, value) {
@@ -393,13 +230,6 @@ export default class FillEditor extends EditorElement  {
     this.state.image.reset({
       [key]: value
     })
-
-    this.bindData('$gradientView')
-    this.bindData('$line')
-    this.bindData('$startPoint')
-    this.bindData('$endPoint')
-    this.bindData('$centerPoint')
-    this.bindData('$fPoint')
 
     this.updateData();
   }
@@ -438,7 +268,7 @@ export default class FillEditor extends EditorElement  {
     if (type === 'url') {
       type = 'image-resource'
     }
-    this.parent.trigger('changeTabType', type);
+
     return {
       "data-selected-editor": type
     }
@@ -446,32 +276,9 @@ export default class FillEditor extends EditorElement  {
 
   [BIND('$stepList')] () {
     return {
-      'data-selected-index': this.state.index.toString(),
       'style': {
         'background-image' : this.getLinearGradient()
       }
-    }
-  }
-
-  get fillId () {
-    return this.id + 'fill';
-  }
-
-  [BIND('$gradientView')] () {
-
-    if (this.refs.$gradientView.html() !== '') {
-      return false;
-    }
-
-    return {
-      innerHTML : /*html*/`
-        <svg x="0" y="0" width="100%" height="100%">
-          <defs>
-            ${this.state.image.toSVGString(this.fillId)}
-          </defs>
-          <rect x="0" y="0" width="100%" height="100%" fill="${this.state.image.toFillValue(this.fillId)}" />
-        </svg>
-      `
     }
   }
 
@@ -481,9 +288,11 @@ export default class FillEditor extends EditorElement  {
 
       var selected = this.$selection.isSelectedColorStep(it.id) ? 'selected' : '';
       return /*html*/`
-      <div class='step ${selected}' data-id='${it.id}' style='left: ${it.percent}%;'>
-        <div class='color-view' style="background-color: ${it.color}"></div>
-        <div class='arrow' style="background-color: ${it.color}"></div>
+      <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' tabindex="-1" style='left: ${it.toLength()};'>
+        <div class='color-view' style="background-color: ${it.color}">
+          <span>${Math.floor(it.percent * 10)/10}</span>
+        </div>
+        <div class='arrow'></div>
       </div>`
     })
   }
@@ -504,22 +313,117 @@ export default class FillEditor extends EditorElement  {
 
     if (this.state.image.colorsteps) {
       this.currentStep = this.state.image.colorsteps.find( it => this.$selection.isSelectedColorStep(it.id))
-      this.children.$range.setValue(Length.percent(this.currentStep.percent));
       this.parent.trigger('selectColorStep', this.currentStep.color)    
-  
     }
 
     this.refresh();
 
   }
 
-  [POINTERSTART('$stepList .step') + MOVE()] (e) {
+
+
+  [KEYUP('$el .step')](e) {
+    const id = e.$dt.data('id');
+    switch (e.code) {
+      case 'Delete':
+      case 'Backspace':
+        this.removeStep(id);
+        break;
+      case 'BracketRight':
+        this.sortToRight(id);
+        break;
+      case 'BracketLeft':
+        this.sortToLeft(id);
+        break;
+      case 'Equal':
+        this.appendColorStep(id);
+        break;
+      case 'Minus':
+        this.prependColorStep(id);
+        break;
+    }
+  }
+
+
+  sortToRight(id) {
+    this.state.image.sortToRight();
+
+    this.refresh();
+    this.updateData();
+
+    this.doFocus(id)
+  }
+
+  sortToLeft(id) {
+    this.state.image.sortToLeft();
+
+    this.refresh();
+    this.updateData();
+
+    this.doFocus(id)
+  }
+
+
+  appendColorStep(id) {
+
+    const currentIndex = this.state.image.colorsteps.findIndex(it => it.id === id);
+    const nextIndex = currentIndex + 1;
+
+    const currentColorStep = this.state.image.colorsteps[currentIndex];
+    const nextColorStep = this.state.image.colorsteps[nextIndex];
+
+    if (!nextColorStep) {
+      if (currentColorStep.percent !== 100) {
+        this.state.image.insertColorStep(currentColorStep.percent + (100 - currentColorStep.percent) / 2);
+      }
+    } else {
+      this.state.image.insertColorStep(currentColorStep.percent + (nextColorStep.percent - currentColorStep.percent) / 2);
+    }
+
+    this.refresh();
+    this.updateData();
+
+    this.doFocus(id);
+  }
+
+  doFocus(id) {
+
+    this.nextTick(() => {
+      this.refs.$stepList.$(".step[data-id='" + id + "']").focus();
+    }, 100)
+  }
+
+  prependColorStep(id) {
+    const currentIndex = this.state.image.colorsteps.findIndex(it => it.id === id);
+    const prevIndex = currentIndex - 1;
+
+    const currentColorStep = this.state.image.colorsteps[currentIndex];
+    const prevColorStep = this.state.image.colorsteps[prevIndex];
+
+    if (!prevColorStep) {
+      if (currentColorStep.percent !== 0) {
+        this.state.image.insertColorStep(currentColorStep.percent);
+      }
+    } else {
+      this.state.image.insertColorStep(prevColorStep.percent + (currentColorStep.percent - prevColorStep.percent) / 2);
+    }
+
+    this.refresh();
+    this.updateData();
+
+    this.doFocus(id);
+
+  }  
+
+  [POINTERSTART('$stepList .step') + MOVE() + END()] (e) {
     var id = e.$dt.attr('data-id')
 
     if (e.altKey) {
       this.removeStep(id);
       return false; 
     } else {
+      e.$dt.focus();
+      this.isSelectedColorStep = this.$selection.isSelectedColorStep(id);
 
       this.selectStep(id);
 
@@ -548,13 +452,33 @@ export default class FillEditor extends EditorElement  {
     var percent = (x - minX) / rect.width * 100;
 
 
+    if (this.$config.get('bodyEvent').shiftKey) {
+      percent = Math.floor(percent);
+    }    
+
     this.currentStep.percent = percent;
 
-    this.children.$range.setValue(Length.percent(percent));    
     this.state.image.sortColorStep();
     this.refresh()
 
     this.updateData();    
+  }
+
+  end(dx, dy) {
+    if (dx === 0 && dy === 0) {
+      if (this.isSelectedColorStep) {
+        if (this.currentStep) {
+
+          this.currentStep.cut = !this.currentStep.cut
+
+          this.refresh()
+          this.updateData();
+        }
+      }
+    }
+
+
+    this.doFocus(this.state.id);
   }
 
   getLinearGradient () {
@@ -565,8 +489,7 @@ export default class FillEditor extends EditorElement  {
 
   }
 
-  [SUBSCRIBE('setColorStepColor')] (color) {
-
+  [SUBSCRIBE_SELF('setColorStepColor')] (color) {
     if (this.state.image.type === 'static-gradient') {
       this.state.image.setColor(color)
       this.refresh()

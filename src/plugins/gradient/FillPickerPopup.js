@@ -1,5 +1,5 @@
 
-import { LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { BIND, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
 import { SVGStaticGradient } from "el/editor/property-parser/image-resource/SVGStaticGradient";
@@ -7,13 +7,38 @@ import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import './GradientPickerPopup';
 
-import { html } from "el/sapa/functions/func";
+import { html, isString } from "el/sapa/functions/func";
 import { variable } from 'el/sapa/functions/registElement';
+import { GradientType } from "el/editor/types/model";
+import { createComponent } from "el/sapa/functions/jsx";
+import { SVGFill } from "el/editor/property-parser/SVGFill";
 
 export default class FillPickerPopup extends BasePopup {
 
   getTitle() {
-    return this.$i18n('fill.picker.popup.title')
+    return createComponent("SelectEditor", {
+      ref: "$select",
+      value: this.state.image?.type || GradientType.STATIC,
+      onchange: "changeTabType",
+      options: [
+        {
+          value: GradientType.STATIC,
+          text: "Static"
+        },
+        {
+          value: GradientType.LINEAR,
+          text: "Linear Gradient"
+        },
+        {
+          value: GradientType.RADIAL,
+          text: "Radial Gradient"
+        },
+        {
+          value: GradientType.URL,
+          text: "Image"
+        }
+      ]
+    });
   }
 
   initState() {
@@ -35,21 +60,28 @@ export default class FillPickerPopup extends BasePopup {
 
   getBody() {
     return html`
-      <div class="elf--gradient-picker-popup" ref='$body' data-selected-editor=''>
+      <div class="elf--gradient-picker-popup" ref='$body' data-selected-editor='${this.state.image?.type}'>
         <div class='box'>
           <div ref='$gradientEditor'></div>
         </div>
         <div class='box'>
           <div class='colorpicker'>
-            <object refClass="EmbedColorPicker" ${variable({
-              ref: '$color',
-              onchange: (color) => {
-                this.trigger('changeColor', color);
-              }
-            })}/>                    
+            ${createComponent('EmbedColorPicker', {
+              ref: "$color",
+              onchange: "changeColor",
+            })}    
           </div>
           <div class='assetpicker'>
-            <object refClass="ImageAssetPicker" ref='$asset' onchange='changeImageUrl' />
+            ${createComponent('ImageSelectEditor', {
+              ref: "$image",
+              key: 'image',
+              value: this.state.image?.url,
+              onchange: "changeImageUrl",
+            })}
+            ${createComponent('ImageAssetPicker', {
+              ref: "$asset",
+              onchange: "changeImageUrl",
+            })}
           </div>
         </div>
       </div>
@@ -57,9 +89,13 @@ export default class FillPickerPopup extends BasePopup {
     `;
   }
 
-  [SUBSCRIBE('changeTabType')] (type) {
-    this.refs.$body.attr('data-selected-editor', type);
+  [BIND('$body')]() {
+    return {
+      'data-selected-editor': this.state.image?.type
+    }
   }
+
+
 
   getColorString() {
     var value = '' ;
@@ -76,19 +112,43 @@ export default class FillPickerPopup extends BasePopup {
   }
 
   [LOAD('$gradientEditor')] () {
-    return /*html*/`<object refClass="FillEditor" 
-      ref="$g" 
-      value="${this.state.image}" 
-      selectedIndex="${this.state.selectColorStepIndex}" 
-      onchange='changeFillEditor'
-    />`
+    if (this.state.image?.type === GradientType.URL) {
+      return "";
+    }
+
+    return createComponent("FillEditor", {
+      ref: "$g",
+      value: `${this.state.image}`,
+      index: this.state.selectColorStepIndex,
+      onchange: 'changeFillEditor'
+    })    
   }
+
+
+  [SUBSCRIBE('updateFillEditor')] (data, targetColorStep) {
+
+    this.state.image = isString(data) ? SVGFill.parseImage(data) : data;
+
+    this.state.selectColorStepIndex = this.state.image.colorsteps.findIndex(it => it.color === targetColorStep.color && it.percent === targetColorStep.percent);
+
+    this.children.$color.setValue(targetColorStep.color);
+
+    this.refresh();
+  }  
 
   [SUBSCRIBE_SELF('changeFillEditor')] (data) {
 
-    this.state.image = data;
+    this.state.image = isString(data) ? SVGFill.parseImage(data) : data;
+
+    this.updateTitle();
 
     this.updateData();
+  }
+
+
+  [SUBSCRIBE_SELF('changeTabType')] (key, type) {
+    this.children.$g.trigger('changeTabType', type);
+    this.refs.$body.attr('data-selected-editor', type);
   }
 
   [SUBSCRIBE_SELF('changeColor')] (color) {
@@ -96,23 +156,48 @@ export default class FillPickerPopup extends BasePopup {
   }
 
   [SUBSCRIBE_SELF('changeImageUrl')] (url) {
-    this.children.$g.trigger('setImageUrl', url);
+
+    if (this.state.image) {
+      this.state.image.reset({
+        url
+      })
+
+      this.trigger('changeFillEditor', this.state.image);
+    }
   }
 
-  [SUBSCRIBE("showFillPickerPopup")](data, params) {
-    this.show(240);
+  updateTitle () {
+    this.children.$select.setValue(this.state.image.type);
+  }
 
+  [SUBSCRIBE("showFillPickerPopup")](data, params, rect) {
     data.changeEvent = data.changeEvent || 'changeFillPopup'
-    // data.image = data.gradient
     data.params = params;
 
+    this.showByRect(this.makeRect(248, 560, rect)); 
+
     this.setState(data);    
+
+    this.updateTitle();
 
     if (data.image.isGradient()) {
       this.trigger('selectColorStep', data.image.colorsteps[0].color);
     }
 
+    this.emit('showFillEditorView', {
+      key: data.key,
+    })
   }
+
+  [SUBSCRIBE("hideFillPickerPopup")]() {
+    this.hide();
+
+    this.emit('hideFillEditorView')
+  }
+
+  onClose() {
+    this.emit('hideFillEditorView')
+  }  
 
   [SUBSCRIBE("selectColorStep")](color) {
     this.children.$color.setValue(color);
@@ -128,9 +213,18 @@ export default class FillPickerPopup extends BasePopup {
     this.updateData();
   }
 
+  load(...args) {
+    if (this.$el.isShow()) {
+      super.load(...args);
+    }
+  }  
+
+  getValue() {
+    return `${this.state.image}`;
+  }
 
   updateData() {
-    this.state.instance.trigger(this.state.changeEvent, this.state.image, this.state.params);
+    this.state.instance.trigger(this.state.changeEvent, this.getValue(), this.state.params);
   }
 
 }

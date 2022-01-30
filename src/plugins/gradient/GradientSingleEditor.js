@@ -32,24 +32,21 @@ export default class GradientSingleEditor extends EditorElement {
 
     [BIND('$miniView')]() {
         const project = this.$selection.currentProject;
-
+        let image;
+        
         if (this.state.image.type === GradientType.URL) {
-            const imageUrl = project.getImageValueById(this.state.image.url) || this.state.image.url;
+            const imageUrl = project.getImageValueById(this.state.image.url);
 
-            return {
-                style: {
-                    'background-image': this.state.image.toString(imageUrl),
-                    'background-size': 'cover',
-                }
-            }
+            image = this.state.image.toString(imageUrl);
         } else {
-            return {
-                style: {
-                    'background-image': this.state.image,
-                    'background-size': 'cover',
-                }
-            }            
+            image = this.state.image;
         }
+
+        return {
+            style: {
+                'background-image': image,
+            }
+        }            
     }
 
     template() {
@@ -82,8 +79,10 @@ export default class GradientSingleEditor extends EditorElement {
 
     [SUBSCRIBE('changeGradientSingle')](image, params) {
 
+        // 새 background-image 를 생성하고 
         image = BackgroundImage.parseImage(image)
     
+        // 기존 background-image 에서 필요한 정보만 다시 가지고 온다. 
         const currentImage = this.$selection.current.getBackgroundImage(this.state.index)?.image;
 
         switch (currentImage.type) {
@@ -110,8 +109,6 @@ export default class GradientSingleEditor extends EditorElement {
                 })
                 break;
         }
-
-        console.log(image);
 
         this.updateData({ image })
 
