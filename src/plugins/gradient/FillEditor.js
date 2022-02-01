@@ -11,6 +11,7 @@ import { END, MOVE } from "el/editor/types/event";
 
 import './FillEditor.scss';
 import { GradientType } from "el/editor/types/model";
+import { createComponent } from "el/sapa/functions/jsx";
 
 
 const imageTypeList = [
@@ -86,9 +87,6 @@ export default class FillEditor extends EditorElement  {
                 </div>
             </div>               
             <div class='sub-editor' ref='$subEditor'> 
-                <div data-editor='spreadMethod'>
-                  <object refClass="SelectIconEditor" label='${this.$i18n('fill.editor.spread')}' ref='$spreadMethod' value="pad" options='pad,reflect,repeat' key='spreadMethod' onchange='changeKeyValue' />
-                </div>  
                 <div data-editor='patternUnits'>
                   <object refClass="SelectEditor"  label='Pattern' ref='$patternUnits' options='userSpaceOnUse' key='patternUnits' onchange='changeKeyValue' />
                 </div>                  
@@ -149,7 +147,6 @@ export default class FillEditor extends EditorElement  {
     this.children.$fy.setValue(this.state.image.fy)
     this.children.$fr.setValue(this.state.image.fr)  
     
-    this.children.$spreadMethod.setValue(this.state.image.spreadMethod);
     this.children.$patternUnits.setValue(this.state.image.patternUnits);
     this.children.$patternWidth.setValue(this.state.image.patternWidth);
     this.children.$patternHeight.setValue(this.state.image.patternHeight);
@@ -157,11 +154,6 @@ export default class FillEditor extends EditorElement  {
     this.children.$imageY.setValue(this.state.image.imageY);
     this.children.$imageWidth.setValue(this.state.image.imageWidth);        
     this.children.$imagenHeight.setValue(this.state.image.imageHeight);
-  }
-
-  getDrawAreaRect () {
-    // todo: rendering 되기 전에 크기를 알 수 있는 방법은 ?
-    return {width: 224, height: 150};
   }
 
   getFieldValue(field) {
@@ -187,8 +179,8 @@ export default class FillEditor extends EditorElement  {
 
 
 
-    var left = Length.percent((x - rx ) / width  * 100) 
-    var top = Length.percent((y - ry ) / height  * 100) 
+    var left = Length.makePercent(x - rx , width) 
+    var top = Length.makePercent(y - ry, height) 
 
     return {left, top}
   }
@@ -216,10 +208,7 @@ export default class FillEditor extends EditorElement  {
       type,
       url,
       colorsteps: this.state.image.colorsteps || [] ,   
-      x1: this.state.image.x1 || Length.percent(0),
-      y1: this.state.image.y1 || Length.percent(0),
-      x2: this.state.image.x2 || Length.percent(100),
-      y2: this.state.image.y2 || Length.percent(0),
+      spreadMethod: this.state.image.spreadMethod
     })
     this.refresh();
     this.updateData();

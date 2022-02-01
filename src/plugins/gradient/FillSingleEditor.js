@@ -3,6 +3,7 @@ import { SVGFill } from "el/editor/property-parser/SVGFill";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './FillSingleEditor.scss';
+import { GradientType } from "el/editor/types/model";
 
 export default class FillSingleEditor extends EditorElement {
 
@@ -45,7 +46,11 @@ export default class FillSingleEditor extends EditorElement {
         if (!image) return {innerHTML: ''}; 
 
         return {
-            innerHTML: image.toSVGString(this.fillId)
+            innerHTML: image.toSVGString(this.fillId, {
+                width: 20,
+                height: 20,
+                sizeType: "percent"
+            })
         }
     }
 
@@ -67,7 +72,7 @@ export default class FillSingleEditor extends EditorElement {
 
         var colors = image.type != 'url' ?  `${image.colorsteps[0].color}` : 'transparent'
 
-        if (image.type.includes('linear') || image.type.includes('radial') ) {
+        if ([GradientType.LINEAR, GradientType.RADIAL].includes(image.type)) {
             colors = image.colorsteps.map(it => {
                 return /*html*/`<span class='color' style='background-color: ${it.color}' title='${it.color}'></span>`
             }).join('')

@@ -62,7 +62,7 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
     const distX = Math.abs((relativePosition[0] - oldX))
 
     const result = [
-      radiusX.isPercent() ? Length.percent(distX/this.state.width * 100) : Length.px(distX),
+      radiusX.isPercent() ? Length.makePercent(distX, this.state.width) : Length.px(distX),
       x,
       y
     ]
@@ -111,7 +111,7 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
     const distY = Math.abs((relativePosition[1] - oldY))
 
     const result = [
-      radiusY.isPercent() ? Length.percent(distY/this.state.height * 100) : Length.px(distY),
+      radiusY.isPercent() ? Length.makePercent(distY, this.state.height) : Length.px(distY),
       x,
       y
     ]
@@ -165,8 +165,8 @@ export default class ClippathEllipseEditorView extends ClippathCircleEditorView 
     const result = [
       radiusX, 
       radiusY,
-      x.isPercent() ? Length.percent(relativePosition[0]/this.state.width * 100) : Length.px(relativePosition[0]),
-      y.isPercent() ? Length.percent(relativePosition[1]/this.state.height * 100) : Length.px(relativePosition[1])
+      x.isPercent() ? Length.makePercent(relativePosition[0], this.state.width) : Length.px(relativePosition[0]),
+      y.isPercent() ? Length.makePercent(relativePosition[1], this.state.height) : Length.px(relativePosition[1])
     ]
 
     this.state.clippath.value = `${radiusX} ${radiusY} at ${result[2]} ${result[3]}`;

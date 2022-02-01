@@ -50,11 +50,11 @@ export function matches (str) {
     return result;
 }
 
-export function convertMatches (str) {
+export function convertMatches (str, prefix = '@') {
     const m = matches(str); 
 
     m.forEach(it => {
-        str = str.replace(it.color, getColorIndexString(it))
+        str = str.replace(it.color, getColorIndexString(it, prefix))
     })
 
     return { str, matches: m }

@@ -83,6 +83,9 @@ export class Length {
   static percent(value) {
     return new Length(+value, "%");
   }
+  static makePercent (value, maxValue) {
+    return Length.percent(value / maxValue * 100);
+  }
   static deg(value) {
     return new Length(+value, "deg");
   }

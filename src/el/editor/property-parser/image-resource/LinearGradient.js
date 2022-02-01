@@ -91,6 +91,7 @@ export class LinearGradient extends Gradient {
 
   static parse(str) {
     var results = convertMatches(str);
+    
     var angle = 0;
     var colorsteps = [];
     results.str

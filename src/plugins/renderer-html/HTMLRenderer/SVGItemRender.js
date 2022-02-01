@@ -89,18 +89,13 @@ export default class SVGItemRender extends LayerRender {
 
     toFillSVG (item) {
         const fillValue = this.cachedFill(item);
-        return fillValue?.toSVGString?.(this.fillId(item), {
-            width: item.width,
-            height: item.height
-        });
+        return fillValue?.toSVGString?.(this.fillId(item), item.contentBox);
     }
 
     toStrokeSVG (item) { 
         const strokeValue = this.cachedStroke(item);
-        return strokeValue?.toSVGString?.(this.strokeId(item), {
-            width: item.width,
-            height: item.height
-        });
+
+        return strokeValue?.toSVGString?.(this.strokeId(item), item.contentBox);
     }  
 
     toFillValue (item) {

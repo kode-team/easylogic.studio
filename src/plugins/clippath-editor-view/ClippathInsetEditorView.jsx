@@ -94,10 +94,10 @@ export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
      ], inverseMatrix);
 
     this.state.clippath.value = [
-      top.isPercent() ? Length.percent((relativeTopPosition[1]/this.state.height * 100)) : Length.px(relativeTopPosition[1]),
-      right.isPercent() ? Length.percent(((this.state.width - relativeRightPosition[0])/this.state.width * 100)) : Length.px(this.state.width - relativeRightPosition[0]),
-      bottom.isPercent() ? Length.percent(((this.state.height - relativeBottomPosition[1])/this.state.height * 100)) : Length.px(this.state.height - relativeBottomPosition[1]),
-      left.isPercent() ? Length.percent((relativeLeftPosition[0]/this.state.width * 100)) : Length.px(relativeLeftPosition[0]),      
+      top.isPercent() ? Length.makePercent(relativeTopPosition[1], this.state.height) : Length.px(relativeTopPosition[1]),
+      right.isPercent() ? Length.makePercent(this.state.width - relativeRightPosition[0], this.state.width) : Length.px(this.state.width - relativeRightPosition[0]),
+      bottom.isPercent() ? Length.makePercent(this.state.height - relativeBottomPosition[1], this.state.height) : Length.px(this.state.height - relativeBottomPosition[1]),
+      left.isPercent() ? Length.makePercent(relativeLeftPosition[0], this.state.width) : Length.px(relativeLeftPosition[0]),      
     ].join(' ');
 
     const value = ClipPath.toCSS(this.state.clippath)
@@ -148,10 +148,10 @@ export default class ClippathInsetEditorView extends ClippathPolygonEditorView {
      ], inverseMatrix);
 
     this.state.clippath.value = [
-      top.isPercent() ? Length.percent((relativeTopPosition[1]/this.state.height * 100)) : Length.px(relativeTopPosition[1]),
-      right.isPercent() ? Length.percent(((this.state.width - relativeRightPosition[0])/this.state.width * 100)) : Length.px(this.state.width - relativeRightPosition[0]),
-      bottom.isPercent() ? Length.percent(((this.state.height - relativeBottomPosition[1])/this.state.height * 100)) : Length.px(this.state.height - relativeBottomPosition[1]),
-      left.isPercent() ? Length.percent((relativeLeftPosition[0]/this.state.width * 100)) : Length.px(relativeLeftPosition[0]),      
+      top.isPercent() ? Length.makePercent(relativeTopPosition[1], this.state.height) : Length.px(relativeTopPosition[1]),
+      right.isPercent() ? Length.makePercent(this.state.width - relativeRightPosition[0], this.state.width) : Length.px(this.state.width - relativeRightPosition[0]),
+      bottom.isPercent() ? Length.makePercent(this.state.height - relativeBottomPosition[1], this.state.height) : Length.px(this.state.height - relativeBottomPosition[1]),
+      left.isPercent() ? Length.makePercent(relativeLeftPosition[0], this.state.width) : Length.px(relativeLeftPosition[0]),      
     ].join(' ');
 
     const value = ClipPath.toCSS(this.state.clippath)

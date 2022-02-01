@@ -8,7 +8,7 @@
 
   background-color: rgba(0, 255, 255, 0.1);
 
-  .linear-gradient {
+  .gradient-editor-area {
     position: absolute;
     left: 0px;
     top: 0px;
@@ -34,6 +34,11 @@
         stroke: white;
         pointer-events: none;
       }
+
+      &.normal-line {
+        stroke: var(--elf--selected-color-2);
+        pointer-events: none;
+      }      
     }
 
     rect {
@@ -79,12 +84,18 @@
 
       &.point {
         fill: white;
-        r: 4;
+        r: 5;
+
+        &[data-type='start'] {
+          fill: var(--elf--selected-color) !important;
+        }
       }
 
       &.hover-colorstep {
         pointer-events: none;
         r: 8;
+        stroke: white;
+        stroke-width: 1;
       }
     }
   }

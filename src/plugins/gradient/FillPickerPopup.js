@@ -8,7 +8,6 @@ import BasePopup from "el/editor/ui/popup/BasePopup";
 import './GradientPickerPopup';
 
 import { html, isString } from "el/sapa/functions/func";
-import { variable } from 'el/sapa/functions/registElement';
 import { GradientType } from "el/editor/types/model";
 import { createComponent } from "el/sapa/functions/jsx";
 import { SVGFill } from "el/editor/property-parser/SVGFill";
@@ -125,13 +124,15 @@ export default class FillPickerPopup extends BasePopup {
   }
 
 
-  [SUBSCRIBE('updateFillEditor')] (data, targetColorStep) {
+  [SUBSCRIBE('updateFillEditor')] (data, targetColorStep = undefined) {
 
     this.state.image = isString(data) ? SVGFill.parseImage(data) : data;
 
-    this.state.selectColorStepIndex = this.state.image.colorsteps.findIndex(it => it.color === targetColorStep.color && it.percent === targetColorStep.percent);
+    if (targetColorStep) {
+      this.state.selectColorStepIndex = this.state.image.colorsteps.findIndex(it => it.color === targetColorStep.color && it.percent === targetColorStep.percent);
 
-    this.children.$color.setValue(targetColorStep.color);
+      this.children.$color.setValue(targetColorStep.color);
+    }
 
     this.refresh();
   }  

@@ -213,7 +213,7 @@ export class BackgroundImage extends PropertyItem {
       } else if (Math.abs(((contentBox.width - newWidth)/2) - newX) < dist) {        
         nextX = Length.percent(50)        
       } else {
-        nextX = Length.percent(newX / (contentBox.width - newWidth) * 100);
+        nextX = Length.makePercent(newX,  (contentBox.width - newWidth) );
       }
     }
 
@@ -226,7 +226,7 @@ export class BackgroundImage extends PropertyItem {
       } else if (Math.abs(((contentBox.height - newHeight)/2) - newY) < dist) {        
         nextY = Length.percent(50)        
       } else {
-        nextY = Length.percent(newY / (contentBox.height - newHeight) * 100);
+        nextY = Length.makePercent(newY, (contentBox.height - newHeight));
       }
     }
 

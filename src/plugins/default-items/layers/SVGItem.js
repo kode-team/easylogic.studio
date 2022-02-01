@@ -4,7 +4,7 @@ import { GradientType } from "el/editor/types/model";
 import { Length } from 'el/editor/unit/Length';
 import { rectToVerties } from "el/utils/collision";
 import Color from "el/utils/Color";
-import { vertiesMap } from "el/utils/math";
+import { calculateRotationOriginMat4, vertiesMap } from "el/utils/math";
 import { vec3 } from "gl-matrix";
 
 
@@ -248,19 +248,59 @@ export class SVGItem extends LayerModel {
       absoluteMatrix: this.absoluteMatrix,
       image
     }
+    const ratio = this.screenWidth / this.screenHeight;    
+
+    let newX1, newY1, newX2, newY2, newX3, newY3;
 
     switch (image.type) {
       case GradientType.RADIAL:
 
+        newX1 = image.x1.toPx(backRect.width);
+        newY1 = image.y1.toPx(backRect.height);
+        newX2 = image.x2.toPx(backRect.width);
+        newY2 = image.y2.toPx(backRect.height);
+        newX3 = image.x3.toPx(backRect.width);
+        newY3 = image.y3.toPx(backRect.height);        
+
+        const tempStartPoint = [newX1.value, newY1.value, 0];
+        const tempEndPoint = [newX2.value, newY2.value, 0];
+        const tempShapePoint = [newX3.value, newY3.value, 0];
+
+        var [
+          newStartPoint,
+          newEndPoint,
+          newShapePoint,
+        ] = vertiesMap([
+          tempStartPoint,
+          tempEndPoint,
+          tempShapePoint
+        ],
+          this.absoluteMatrix
+        );
+
+        result.endPoint = newEndPoint;
+        result.startPoint = newStartPoint
+        result.shapePoint = newShapePoint;
+
+        result.colorsteps = image.colorsteps.map(it => {
+          const offset = it.toLength();
+          return {
+            id: it.id,
+            cut: it.cut,
+            color: it.color,
+            pos: vec3.lerp([], result.startPoint, result.endPoint, offset.value/100)
+          }
+        });
+
         break;
       case GradientType.LINEAR:
 
-        const newX1 = image.x1.toPx(backRect.width);
-        const newY1 = image.y1.toPx(backRect.height);
-        const newX2 = image.x2.toPx(backRect.width);
-        const newY2 = image.y2.toPx(backRect.height);
+        newX1 = image.x1.toPx(backRect.width);
+        newY1 = image.y1.toPx(backRect.height);
+        newX2 = image.x2.toPx(backRect.width);
+        newY2 = image.y2.toPx(backRect.height);
 
-        const [
+        var [
           newStartPoint,
           newEndPoint,
         ] = vertiesMap([

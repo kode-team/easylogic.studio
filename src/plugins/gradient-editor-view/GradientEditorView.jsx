@@ -765,8 +765,8 @@ export default class GradientEditorView extends GradientColorstepEditor {
     const newY = localPosition[1] - backRect.y;
 
     this.state.backgroundImages[this.state.index].image.radialPosition = [
-      Length.percent((newX / backRect.width) * 100),
-      Length.percent((newY / backRect.height) * 100),
+      Length.makePercent(newX,  backRect.width),
+      Length.makePercent(newY, backRect.height),
     ];
 
     this.updateData();

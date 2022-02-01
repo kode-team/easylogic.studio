@@ -1,11 +1,33 @@
-import { DOMDIFF, KEYUP, LOAD, POINTERMOVE, POINTEROUT, POINTERSTART, SUBSCRIBE } from "el/sapa/Event";
+import {
+  DOMDIFF,
+  KEYUP,
+  LOAD,
+  POINTERMOVE,
+  POINTEROUT,
+  POINTERSTART,
+  SUBSCRIBE,
+} from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import "./FillEditorView.scss";
-import { GradientType } from "el/editor/types/model";
+import {
+  GradientType,
+  RadialGradientType,
+  SpreadMethodType,
+} from "el/editor/types/model";
 import { mat4, vec3 } from "gl-matrix";
-import { calculateAngle360, calculateRotationOriginMat4, vertiesMap } from "el/utils/math";
+import {
+  calculateAngle360,
+  calculateRotationOriginMat4,
+  vertiesMap,
+} from "el/utils/math";
 import { END, MOVE } from "el/editor/types/event";
 import { Length } from "el/editor/unit/Length";
+
+const spreadMethodList = [
+  SpreadMethodType.PAD,
+  SpreadMethodType.REFLECT,
+  SpreadMethodType.REPEAT,
+];
 
 /**
  * Fill Editor View
@@ -24,7 +46,7 @@ class FillBaseEditor extends EditorElement {
   }
 }
 
- class FillColorstepEditor extends FillBaseEditor {
+class FillColorstepEditor extends FillBaseEditor {
   [KEYUP("$el .colorstep")](e) {
     const index = +e.$dt.data("index");
     switch (e.code) {
@@ -48,21 +70,21 @@ class FillBaseEditor extends EditorElement {
   }
 
   removeStep(currentIndex) {
-    const image = this.state.image;
+    const image = this.state.imageResult.image;
     image.removeColorStepByIndex(currentIndex);
 
     this.updateColorStepStatus(image, -1);
   }
 
   sortToRight() {
-    const image = this.state.image;
+    const image = this.state.imageResult.image;
     image.sortToRight();
 
     this.updateColorStepStatus(image, -1);
   }
 
   sortToLeft() {
-    const image = this.state.image;
+    const image = this.state.imageResult.image;
     image.sortToLeft();
 
     this.updateColorStepStatus(image, -1);
@@ -70,7 +92,7 @@ class FillBaseEditor extends EditorElement {
 
   appendColorStep(currentIndex) {
     const nextIndex = currentIndex + 1;
-    const image = this.state.image;
+    const image = this.state.imageResult.image;
 
     const currentColorStep = image.colorsteps[currentIndex];
     const nextColorStep = image.colorsteps[nextIndex];
@@ -94,7 +116,7 @@ class FillBaseEditor extends EditorElement {
 
   prependColorStep(currentIndex) {
     const prevIndex = currentIndex - 1;
-    const image = this.state.image;
+    const image = this.state.imageResult.image;
     const currentColorStep = image.colorsteps[currentIndex];
     const prevColorStep = image.colorsteps[prevIndex];
     let newIndex = -1;
@@ -112,64 +134,344 @@ class FillBaseEditor extends EditorElement {
     this.updateColorStepStatus(image, newIndex);
   }
 
-  [POINTERSTART("$el .point") + MOVE('movePoint') + END('moveEndPoint')](e) {
+  [POINTERSTART("$el .point") + MOVE("movePoint") + END("moveEndPoint")](e) {
     this.$el.toggleClass("dragging", true);
     this.initializeData();
 
     const result = this.state.imageResult;
 
-    this.pointTarget = e.$dt.data('type');
+    this.pointTarget = e.$dt.data("type");
     this.startPoint = this.$viewport.applyVertex(result.startPoint);
     this.endPoint = this.$viewport.applyVertex(result.endPoint);
+    // this.areaStartPoint = this.$viewport.applyVertex(result.areaStartPoint);
+
+    this.dist = vec3.dist(this.startPoint, this.endPoint);
+
+    if (result.shapePoint) {
+      this.shapePoint = this.$viewport.applyVertex(result.shapePoint);
+      this.shapeDist = vec3.dist(this.startPoint, this.shapePoint);
+    }
+  }
+
+  calculateNextPoint(nextPoint) {
+    // shiftKey 를 누르고 있는 상태면 등간격으로 이동한다.
+    if (this.$config.get("bodyEvent").shiftKey) {
+      let tempStartPoint, tempEndPoint;
+      if (this.pointTarget === "start") {
+        tempStartPoint = this.endPoint;
+        tempEndPoint = nextPoint;
+      } else {
+        tempStartPoint = this.startPoint;
+        tempEndPoint = nextPoint;
+      }
+
+      // angle 을 구하고
+      const newDist = vec3.subtract([], tempEndPoint, tempStartPoint);
+      let newAngle = calculateAngle360(newDist[0], newDist[1]) - 90;
+
+      newAngle -= newAngle % this.$config.get("fixed.gradient.angle");
+
+      nextPoint = vertiesMap(
+        [vec3.add([], tempStartPoint, [0, -this.dist, 0])],
+        calculateRotationOriginMat4(newAngle, tempStartPoint)
+      )[0];
+    }
+
+    return nextPoint;
+  }
+
+  moveShapePoint(dx, dy) {
+    const targetPoint = this.shapePoint;
+    const nextPoint = this.calculateNextPoint(
+      vec3.add([], targetPoint, [dx, dy, 0])
+    );
+    const width = this.state.currentMatrix.width;
+    const height = this.state.currentMatrix.height;
+
+    const image = this.state.imageResult.image;
+
+    let newX, newY;
+    switch(image.type) {
+    case GradientType.RADIAL:
+
+
+      const dist = vec3.dist(this.startPoint, nextPoint);
+
+      const lastPoint = vec3.lerp([], this.startPoint, this.shapePoint, dist / this.shapeDist);
+
+
+      const [worldPosition] = vertiesMap(
+        [this.$viewport.applyVertexInverse(lastPoint)],
+        this.state.currentMatrix.absoluteMatrixInverse
+      );
+
+      newX = Length.makePercent(worldPosition[0], width)
+      newY = Length.makePercent(worldPosition[1], height)    
+
+      image.reset({
+        x3: newX,
+        y3: newY,
+      });
+
+      break;
+    }
+
+
+    this.command(
+      "setAttributeForMulti",
+      `change ${this.state.key} fragment`,
+      this.$selection.packByValue({
+        [this.state.key]: `${this.state.imageResult.image}`,
+      })
+    );
 
   }
 
-  movePoint (dx, dy) {
-    const targetPoint = this.pointTarget === 'start' ? this.startPoint : this.endPoint;
-    const nextPoint = vec3.add([], targetPoint, [dx, dy, 0]);
+  movePoint(dx, dy) {
 
-    const [worldPosition] = vertiesMap([
-      this.$viewport.applyVertexInverse(nextPoint)
-    ],  
+    if (this.pointTarget === 'shape') {
+      return this.moveShapePoint(dx, dy);
+    }
+
+    const targetPoint =
+      this.pointTarget === "start" ? this.startPoint : this.endPoint;
+    let nextPoint = this.calculateNextPoint(
+      vec3.add([], targetPoint, [dx, dy, 0])
+    );
+
+    var [worldPosition] = vertiesMap(
+      [this.$viewport.applyVertexInverse(nextPoint)],
       this.state.currentMatrix.absoluteMatrixInverse
     );
 
     const width = this.state.currentMatrix.width;
     const height = this.state.currentMatrix.height;
 
+    const image = this.state.imageResult.image;
 
-    let newX, newY;
-    if (this.pointTarget === 'start') {
-      newX = this.state.imageResult.image.x1.isPercent() ? Length.percent(worldPosition[0] / width * 100) : Length.px(worldPosition[0]);
-      newY = this.state.imageResult.image.y1.isPercent() ? Length.percent(worldPosition[1] / height * 100) : Length.px(worldPosition[1]);
-   
-      this.state.imageResult.image.reset({
-        x1: newX,
-        y1: newY
-      })
+    switch (image.type) {
+      case GradientType.RADIAL:
+        var newX, newY, newX2, newY2, newX3, newY3;
+        if (this.pointTarget === "start") {
+          newX = image.x1.isPercent()
+            ? Length.makePercent(worldPosition[0],  width)
+            : Length.px(worldPosition[0]);
+          newY = image.y1.isPercent()
+            ? Length.makePercent(worldPosition[1] , height)
+            : Length.px(worldPosition[1]);
 
-    } else if (this.pointTarget === 'end') {
-      newX = this.state.imageResult.image.x2.isPercent() ? Length.percent(worldPosition[0] / width * 100) : Length.px(worldPosition[0]);
-      newY = this.state.imageResult.image.y2.isPercent() ? Length.percent(worldPosition[1] / height * 100) : Length.px(worldPosition[1]);
-  
-      this.state.imageResult.image.reset({
-        x2: newX,
-        y2: newY
-      })
+          // end point 도 같이 옮기기
+          const nextEndPoint = this.calculateNextPoint(
+            vec3.add([], this.endPoint, [dx, dy, 0])
+          );
+          const [newEndPosition] = vertiesMap(
+            [this.$viewport.applyVertexInverse(nextEndPoint)],
+            this.state.currentMatrix.absoluteMatrixInverse
+          );
+
+          newX2 = image.x2.isPercent()
+            ? Length.makePercent(newEndPosition[0], width)
+            : Length.px(newEndPosition[0]);
+          newY2 = image.y2.isPercent()
+            ? Length.makePercent(newEndPosition[1], height)
+            : Length.px(newEndPosition[1]);
+
+          // shape point 도 같이 옮기기
+          const nextShapePoint = this.calculateNextPoint(
+            vec3.add([], this.shapePoint, [dx, dy, 0])
+          );
+          const [newShapePosition] = vertiesMap(
+            [this.$viewport.applyVertexInverse(nextShapePoint)],
+            this.state.currentMatrix.absoluteMatrixInverse
+          );
+
+          newX3 = image.x3.isPercent()
+            ? Length.makePercent(newShapePosition[0], width)
+            : Length.px(newShapePosition[0]);
+          newY3 = image.y3.isPercent()
+            ? Length.makePercent(newShapePosition[1], height)
+            : Length.px(newShapePosition[1]);
+
+          image.reset({
+            x1: newX,
+            y1: newY,
+            x2: newX2,
+            y2: newY2,
+            x3: newX3,
+            y3: newY3,
+          });
+        } else if (this.pointTarget === "end") {
+
+          if (this.$config.get('bodyEvent').altKey) {
+            // 각을 유지한채로 크기만 변경한다. 
+
+            
+            const dist = vec3.dist(this.startPoint, nextPoint);
+            nextPoint = vec3.lerp([], this.startPoint, this.endPoint, dist / this.dist);
+
+            var [worldPosition] = vertiesMap(
+              [this.$viewport.applyVertexInverse(nextPoint)],
+              this.state.currentMatrix.absoluteMatrixInverse
+            );
+          }
+
+          newX = Length.makePercent(worldPosition[0],  width)
+          newY = Length.makePercent(worldPosition[1] , height)
+
+          image.reset({
+            x2: newX,
+            y2: newY,
+          });
+
+          const lastDist = vec3.dist(this.startPoint, nextPoint);
+
+          const unitVector = vec3.lerp(
+            [],
+            this.startPoint,
+            nextPoint,
+            1 / lastDist
+          );
+
+          const nextShapePoint = vec3.lerp(
+            [],
+            this.startPoint,
+            vertiesMap(
+              [unitVector],
+              calculateRotationOriginMat4(90, this.startPoint)
+            )[0],
+            image.radialType === RadialGradientType.CIRCLE
+              ? lastDist
+              : this.shapeDist
+          );
+
+          const [newShapePosition] = vertiesMap(
+            [this.$viewport.applyVertexInverse(nextShapePoint)],
+            this.state.currentMatrix.absoluteMatrixInverse
+          );
+
+          newX3 = Length.makePercent(newShapePosition[0], width)
+          newY3 = Length.makePercent(newShapePosition[1], height)
+
+          image.reset({
+            x3: newX3,
+            y3: newY3,
+          });
+        }
+        break;
+
+      case GradientType.LINEAR:
+        var newX, newY;
+        if (this.pointTarget === "start") {
+          newX = image.x1.isPercent()
+            ? Length.makePercent(worldPosition[0], width)
+            : Length.px(worldPosition[0]);
+          newY = image.y1.isPercent()
+            ? Length.makePercent(worldPosition[1], height)
+            : Length.px(worldPosition[1]);
+
+          image.reset({
+            x1: newX,
+            y1: newY,
+          });
+        } else if (this.pointTarget === "end") {
+          newX = image.x2.isPercent()
+            ? Length.makePercent(worldPosition[0] ,width)
+            : Length.px(worldPosition[0]);
+          newY = image.y2.isPercent()
+            ? Length.makePercent(worldPosition[1] , height)
+            : Length.px(worldPosition[1]);
+
+          image.reset({
+            x2: newX,
+            y2: newY,
+          });
+        }
+        break;
     }
 
     this.command(
       "setAttributeForMulti",
       `change ${this.state.key} fragment`,
       this.$selection.packByValue({
-        [this.state.key] : `${this.state.imageResult.image}`,
+        [this.state.key]: `${this.state.imageResult.image}`,
       })
-    );    
-
+    );
   }
 
+  moveEndPoint(dx, dy) {
+    const image = this.state.imageResult.image;
 
+    if (dx === 0 && dy === 0) {
+      switch (image.type) {
+        case GradientType.RADIAL:
+          if (this.pointTarget === "start") {
+            switch (image.radialType) {
+              case RadialGradientType.CIRCLE:
+                image.reset({
+                  radialType: RadialGradientType.ELLIPSE,
+                });
+                break;
+              case RadialGradientType.ELLIPSE:
+                const lastDist = vec3.dist(this.startPoint, this.endPoint);
 
+                const unitVector = vec3.lerp(
+                  [],
+                  this.startPoint,
+                  nextPoint,
+                  1 / lastDist
+                );
+
+                const nextShapePoint = vec3.lerp(
+                  [],
+                  this.startPoint,
+                  vertiesMap(
+                    [unitVector],
+                    calculateRotationOriginMat4(90, this.startPoint)
+                  )[0],
+                  lastDist
+                );
+
+                const [newShapePosition] = vertiesMap(
+                  [this.$viewport.applyVertexInverse(nextShapePoint)],
+                  this.state.currentMatrix.absoluteMatrixInverse
+                );
+
+                const x3 = Length.makePercent(newShapePosition[0], width);
+                const y3 = Length.makePercent(newShapePosition[1], height);
+
+                image.reset({
+                  radialType: RadialGradientType.CIRCLE,
+                  x3,
+                  y3,
+                });
+                break;
+            }
+
+            break;
+          }
+
+        default:
+          const index = spreadMethodList.findIndex(
+            (it) => image.spreadMethod === it
+          );
+          const nextIndex = (index + 1) % spreadMethodList.length;
+
+          image.reset({
+            spreadMethod: spreadMethodList[nextIndex],
+          });
+          break;
+      }
+    }
+
+    this.emit("updateFillEditor", image);
+    this.command(
+      "setAttributeForMulti",
+      `change ${this.state.key} fragment`,
+      this.$selection.packByValue({
+        [this.state.key]: `${image}`,
+      })
+    );
+  }
 
   [POINTERSTART("$el .colorstep") +
     MOVE("moveColorStep") +
@@ -194,11 +496,11 @@ class FillBaseEditor extends EditorElement {
         this.startPoint = this.$viewport.applyVertex(result.startPoint);
         this.endPoint = this.$viewport.applyVertex(result.endPoint);
 
-        // conic 의 경우 중간 지점에 따라 UI 크기가 달라지기 때문에 
-        // 마지막 UI 에서 x, y 를 가지고 오도록 한다. 
-        const x = +$colorstep.data('x');
-        const y = +$colorstep.data('y');
-        this.screenXY = [x, y, 0];        
+        // conic 의 경우 중간 지점에 따라 UI 크기가 달라지기 때문에
+        // 마지막 UI 에서 x, y 를 가지고 오도록 한다.
+        const x = +$colorstep.data("x");
+        const y = +$colorstep.data("y");
+        this.screenXY = [x, y, 0];
 
         const dist = vec3.subtract([], this.endPoint, this.startPoint);
         // 눞혀진 각은 180 도 이다. 그렇다는 이야기는 회전을 하지 않았다는 의미가 되고 -180 을 해서 다시 0도로 맞춰준다.
@@ -263,7 +565,7 @@ class FillBaseEditor extends EditorElement {
       "setAttributeForMulti",
       `change ${this.state.key} fragment`,
       this.$selection.packByValue({
-        [this.state.key] : `${nextImage}`,
+        [this.state.key]: `${nextImage}`,
       })
     );
   }
@@ -307,7 +609,7 @@ class FillBaseEditor extends EditorElement {
       "setAttributeForMulti",
       "change background image",
       this.$selection.packByValue({
-        [this.state.key]: `${image}`
+        [this.state.key]: `${image}`,
       })
     );
     this.state.hoverColorStep = null;
@@ -341,7 +643,6 @@ class FillBaseEditor extends EditorElement {
     switch (image.type) {
       case GradientType.LINEAR:
       case GradientType.REPEATING_LINEAR:
-
         [baseStartPoint, baseEndPoint, baseNextPoint] = vertiesMap(
           [this.state.startPoint, this.state.endPoint, nextPoint],
           this.state.rotateInverse
@@ -358,10 +659,7 @@ class FillBaseEditor extends EditorElement {
         } else {
           newDist = ((n - s) / baseDefaultDist) * 100;
         }
-        this.state.hoverColorStep =
-          image.pickColorStep(
-            newDist
-          );
+        this.state.hoverColorStep = image.pickColorStep(newDist);
         break;
     }
 
@@ -386,7 +684,6 @@ export default class FillEditorView extends FillColorstepEditor {
     this.trigger(this.state.onchange, this.state.key, this.state.value);
   }
 
-
   refresh() {
     if (this.state.isShow) {
       this.load();
@@ -395,7 +692,7 @@ export default class FillEditorView extends FillColorstepEditor {
 
   [SUBSCRIBE("updateViewport")]() {
     this.refresh();
-  }  
+  }
 
   [SUBSCRIBE("refreshSelectionStyleView")]() {
     if (this.$selection.current) {
@@ -406,14 +703,14 @@ export default class FillEditorView extends FillColorstepEditor {
           "width",
           "height",
           "angle",
-          'fill',
-          'stroke'
+          "fill",
+          "stroke"
         )
       ) {
         this.refresh();
       }
     }
-  }  
+  }
 
   [SUBSCRIBE("showFillEditorView")](params = {}) {
     this.setState({
@@ -434,40 +731,32 @@ export default class FillEditorView extends FillColorstepEditor {
     this.$el.hide();
   }
 
-  makeLinearCenterPoint(result) {
-    let startPoint, endPoint, areaStartPoint, areaEndPoint, colorsteps;
+  makeRadialCenterPoint(result) {
+    let startPoint, endPoint, shapePoint, colorsteps;
 
     startPoint = this.$viewport.applyVertex(result.startPoint);
     endPoint = this.$viewport.applyVertex(result.endPoint);
-    areaStartPoint = this.$viewport.applyVertex(result.areaStartPoint);
-    areaEndPoint = this.$viewport.applyVertex(result.areaEndPoint);
+    shapePoint = this.$viewport.applyVertex(result.shapePoint);
 
     // angle 새로 구하기
     const dist = vec3.subtract([], endPoint, startPoint);
     const angle = calculateAngle360(dist[0], dist[1]) - 180;
 
-    const rotateInverse = calculateRotationOriginMat4(
-      -angle,
-      startPoint
-    );    
-
+    const rotateInverse = calculateRotationOriginMat4(-angle, startPoint);
     const rotateInverseInverse = mat4.invert([], rotateInverse);
 
     colorsteps = result.colorsteps.map((it) => {
       it.screenXY = this.$viewport.applyVertex(it.pos);
 
-      const [newScreenXY] = vertiesMap([it.screenXY], rotateInverse );
+      const [newScreenXY] = vertiesMap([it.screenXY], rotateInverse);
 
-      it.stickScreenXY = vertiesMap([
-        [newScreenXY[0] - 7, newScreenXY[1] - 21, 0]
-      ], rotateInverseInverse)[0];
-
-
+      it.stickScreenXY = vertiesMap(
+        [[newScreenXY[0] - 7, newScreenXY[1] - 21, 0]],
+        rotateInverseInverse
+      )[0];
 
       return it;
     });
-
-
 
     let newHoverColorStepPoint = null;
     if (this.state.hoverColorStep) {
@@ -480,11 +769,11 @@ export default class FillEditorView extends FillColorstepEditor {
     }
 
     return (
-      <svg class="linear-gradient">
+      <svg class="gradient-editor-area">
         <path
           d={`
-              M ${areaStartPoint[0]} ${areaStartPoint[1]}
-              L ${areaEndPoint[0]} ${areaEndPoint[1]}
+              M ${startPoint[0]} ${startPoint[1]}
+              L ${endPoint[0]} ${endPoint[1]}
           `}
           class="area-line"
         />
@@ -494,7 +783,14 @@ export default class FillEditorView extends FillColorstepEditor {
               L ${endPoint[0]} ${endPoint[1]}
           `}
           class="start-end-line"
-        />        
+        />
+        <path
+          d={`
+              M ${startPoint[0]} ${startPoint[1]}
+              L ${shapePoint[0]} ${shapePoint[1]}
+          `}
+          class="normal-line"
+        />
         {colorsteps.map((it, index) => {
           if (it.cut) {
             return (
@@ -510,7 +806,7 @@ export default class FillEditorView extends FillColorstepEditor {
                 fill={it.color}
                 tabIndex={-1}
                 data-x={it.screenXY[0]}
-                data-y={it.screenXY[1]}                
+                data-y={it.screenXY[1]}
               ></rect>
             );
           } else {
@@ -529,14 +825,150 @@ export default class FillEditorView extends FillColorstepEditor {
                 fill={it.color}
                 tabIndex={-1}
                 data-x={it.screenXY[0]}
-                data-y={it.screenXY[1]}                
+                data-y={it.screenXY[1]}
+              ></rect>
+            );
+          }
+        })}
+        <circle
+          class="point"
+          data-type="shape"
+          cx={shapePoint[0]}
+          cy={shapePoint[1]}
+        ></circle>
+
+        <circle
+          class="point"
+          data-type="start"
+          cx={startPoint[0]}
+          cy={startPoint[1]}
+        ></circle>
+        <circle
+          class="point"
+          data-type="end"
+          cx={endPoint[0]}
+          cy={endPoint[1]}
+        ></circle>
+        {newHoverColorStepPoint && (
+          <circle
+            class="hover-colorstep"
+            r="5"
+            cx={newHoverColorStepPoint[0]}
+            cy={newHoverColorStepPoint[1]}
+            fill={this.state.hoverColorStep.color}
+          ></circle>
+        )}
+      </svg>
+    );
+  }
+
+  makeLinearCenterPoint(result) {
+    let startPoint, endPoint, areaStartPoint, areaEndPoint, colorsteps;
+
+    startPoint = this.$viewport.applyVertex(result.startPoint);
+    endPoint = this.$viewport.applyVertex(result.endPoint);
+    areaStartPoint = this.$viewport.applyVertex(result.areaStartPoint);
+    areaEndPoint = this.$viewport.applyVertex(result.areaEndPoint);
+
+    // angle 새로 구하기
+    const dist = vec3.subtract([], endPoint, startPoint);
+    const angle = calculateAngle360(dist[0], dist[1]) - 180;
+
+    const rotateInverse = calculateRotationOriginMat4(-angle, startPoint);
+
+    const rotateInverseInverse = mat4.invert([], rotateInverse);
+
+    colorsteps = result.colorsteps.map((it) => {
+      it.screenXY = this.$viewport.applyVertex(it.pos);
+
+      const [newScreenXY] = vertiesMap([it.screenXY], rotateInverse);
+
+      it.stickScreenXY = vertiesMap(
+        [[newScreenXY[0] - 7, newScreenXY[1] - 21, 0]],
+        rotateInverseInverse
+      )[0];
+
+      return it;
+    });
+
+    let newHoverColorStepPoint = null;
+    if (this.state.hoverColorStep) {
+      newHoverColorStepPoint = vec3.lerp(
+        [],
+        startPoint,
+        endPoint,
+        this.state.hoverColorStep.percent / 100
+      );
+    }
+
+    return (
+      <svg class="gradient-editor-area">
+        <path
+          d={`
+              M ${areaStartPoint[0]} ${areaStartPoint[1]}
+              L ${areaEndPoint[0]} ${areaEndPoint[1]}
+          `}
+          class="area-line"
+        />
+        <path
+          d={`
+              M ${startPoint[0]} ${startPoint[1]}
+              L ${endPoint[0]} ${endPoint[1]}
+          `}
+          class="start-end-line"
+        />
+        {colorsteps.map((it, index) => {
+          if (it.cut) {
+            return (
+              <rect
+                id={it.id}
+                data-index={index}
+                class="colorstep"
+                x={it.stickScreenXY[0]}
+                y={it.stickScreenXY[1]}
+                transform={`rotate(${angle} ${it.stickScreenXY[0]} ${it.stickScreenXY[1]})`}
+                width={14}
+                height={14}
+                fill={it.color}
+                tabIndex={-1}
+                data-x={it.screenXY[0]}
+                data-y={it.screenXY[1]}
+              ></rect>
+            );
+          } else {
+            return (
+              <rect
+                id={it.id}
+                data-index={index}
+                class="colorstep"
+                x={it.stickScreenXY[0]}
+                y={it.stickScreenXY[1]}
+                transform={`rotate(${angle} ${it.stickScreenXY[0]} ${it.stickScreenXY[1]})`}
+                rx={7}
+                ry={7}
+                width={14}
+                height={14}
+                fill={it.color}
+                tabIndex={-1}
+                data-x={it.screenXY[0]}
+                data-y={it.screenXY[1]}
               ></rect>
             );
           }
         })}
 
-        <circle class="point" data-type="start" cx={startPoint[0]} cy={startPoint[1]}></circle>
-        <circle class="point" data-type="end" cx={endPoint[0]} cy={endPoint[1]}></circle>        
+        <circle
+          class="point"
+          data-type="start"
+          cx={startPoint[0]}
+          cy={startPoint[1]}
+        ></circle>
+        <circle
+          class="point"
+          data-type="end"
+          cx={endPoint[0]}
+          cy={endPoint[1]}
+        ></circle>
         {newHoverColorStepPoint && (
           <circle
             class="hover-colorstep"
@@ -575,22 +1007,36 @@ export default class FillEditorView extends FillColorstepEditor {
     this.state.result = result;
     this.state.originalResult = current.createFragmentMatrix(this.state.key);
 
-
     const image = result.image;
 
-    switch(image.type) {
-    case GradientType.LINEAR:
-      this.state.startPoint = this.$viewport.applyVertex(result.startPoint);
-      this.state.endPoint = this.$viewport.applyVertex(result.endPoint);
+    let angle, dist;
 
-      const dist = vec3.subtract([], this.state.endPoint, this.state.startPoint);
-      const angle = calculateAngle360(dist[0], dist[1]) - 180;
+    switch (image.type) {
+      case GradientType.LINEAR:
+        this.state.startPoint = this.$viewport.applyVertex(result.startPoint);
+        this.state.endPoint = this.$viewport.applyVertex(result.endPoint);
 
-      this.state.rotateInverse = calculateRotationOriginMat4(
-        -angle,
-        this.state.startPoint
-      );
-      break;
+        dist = vec3.subtract([], this.state.endPoint, this.state.startPoint);
+        angle = calculateAngle360(dist[0], dist[1]) - 180;
+
+        this.state.rotateInverse = calculateRotationOriginMat4(
+          -angle,
+          this.state.startPoint
+        );
+        break;
+      case GradientType.RADIAL:
+        this.state.startPoint = this.$viewport.applyVertex(result.startPoint);
+        this.state.endPoint = this.$viewport.applyVertex(result.endPoint);
+        this.state.shapePoint = this.$viewport.applyVertex(result.shapePoint);
+
+        dist = vec3.subtract([], this.state.endPoint, this.state.startPoint);
+        angle = calculateAngle360(dist[0], dist[1]) - 180;
+
+        this.state.rotateInverse = calculateRotationOriginMat4(
+          -angle,
+          this.state.startPoint
+        );
+        break;
     }
 
     return <div>{this.makeCenterPoint(result)}</div>;

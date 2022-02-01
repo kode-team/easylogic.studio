@@ -53,7 +53,7 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
     const distX = Math.abs(relativePosition[0] - oldX)
 
     const result = [
-      radius.isPercent() ? Length.percent((distX)/r * 100) : Length.px(distX),
+      radius.isPercent() ? Length.makePercent(distX, r) : Length.px(distX),
       x,
       y
     ]
@@ -105,8 +105,8 @@ export default class ClippathCircleEditorView extends ClippathInsetEditorView {
       
     const result = [
       radius, 
-      x.isPercent() ? Length.percent(relativePosition[0]/this.state.width * 100) : Length.px(relativePosition[0]),
-      y.isPercent() ? Length.percent(relativePosition[1]/this.state.height * 100) : Length.px(relativePosition[1])
+      x.isPercent() ? Length.makePercent(relativePosition[0], this.state.width) : Length.px(relativePosition[0]),
+      y.isPercent() ? Length.makePercent(relativePosition[1], this.state.height) : Length.px(relativePosition[1])
     ]
 
     this.state.clippath.value = `${radius} at ${result[1]} ${result[2]}`;

@@ -101,8 +101,8 @@ export default class ClippathPolygonEditorView extends EditorElement {
 
     this.state.clippath.value = newLocalPoints.map(p => {
       return [
-        Length.percent(p[0]/this.state.width * 100), 
-        Length.percent(p[1]/this.state.height * 100)
+        Length.makePercent(p[0], this.state.width), 
+        Length.makePercent(p[1], this.state.height)
       ].join(' ');
     }).join(',');
 
