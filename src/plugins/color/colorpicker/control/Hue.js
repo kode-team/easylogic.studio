@@ -29,7 +29,7 @@ export default class Hue extends EditorElement {
 
         return {
             style: {
-                left: Length.percent(hue/360*100),
+                left: Length.makePercent(hue, 360),
             },
             class: {
                 first: hue <= this.state.minValue,

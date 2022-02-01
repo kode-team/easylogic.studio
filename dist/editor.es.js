@@ -629,6 +629,61 @@ function create$6() {
   out[8] = 1;
   return out;
 }
+function multiply$2(out, a, b) {
+  var a00 = a[0], a01 = a[1], a02 = a[2];
+  var a10 = a[3], a11 = a[4], a12 = a[5];
+  var a20 = a[6], a21 = a[7], a22 = a[8];
+  var b00 = b[0], b01 = b[1], b02 = b[2];
+  var b10 = b[3], b11 = b[4], b12 = b[5];
+  var b20 = b[6], b21 = b[7], b22 = b[8];
+  out[0] = b00 * a00 + b01 * a10 + b02 * a20;
+  out[1] = b00 * a01 + b01 * a11 + b02 * a21;
+  out[2] = b00 * a02 + b01 * a12 + b02 * a22;
+  out[3] = b10 * a00 + b11 * a10 + b12 * a20;
+  out[4] = b10 * a01 + b11 * a11 + b12 * a21;
+  out[5] = b10 * a02 + b11 * a12 + b12 * a22;
+  out[6] = b20 * a00 + b21 * a10 + b22 * a20;
+  out[7] = b20 * a01 + b21 * a11 + b22 * a21;
+  out[8] = b20 * a02 + b21 * a12 + b22 * a22;
+  return out;
+}
+function fromTranslation$1(out, v) {
+  out[0] = 1;
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = 1;
+  out[5] = 0;
+  out[6] = v[0];
+  out[7] = v[1];
+  out[8] = 1;
+  return out;
+}
+function fromRotation$1(out, rad) {
+  var s = Math.sin(rad), c2 = Math.cos(rad);
+  out[0] = c2;
+  out[1] = s;
+  out[2] = 0;
+  out[3] = -s;
+  out[4] = c2;
+  out[5] = 0;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = 1;
+  return out;
+}
+function fromScaling$1(out, v) {
+  out[0] = v[0];
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = v[1];
+  out[5] = 0;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = 1;
+  return out;
+}
 function create$5() {
   var out = new ARRAY_TYPE(16);
   if (ARRAY_TYPE != Float32Array) {
@@ -2004,6 +2059,9 @@ class Length {
   static percent(value) {
     return new Length(+value, "%");
   }
+  static makePercent(value, maxValue) {
+    return Length.percent(value / maxValue * 100);
+  }
   static deg(value) {
     return new Length(+value, "deg");
   }
@@ -2757,8 +2815,8 @@ const updateProps = (node, newProps = {}, oldProps = {}) => {
   const keyList2 = [];
   keyList2.push.apply(keyList2, Object.keys(newProps));
   keyList2.push.apply(keyList2, Object.keys(oldProps));
-  const props2 = new Set(keyList2);
-  props2.forEach((key) => {
+  const props = new Set(keyList2);
+  props.forEach((key) => {
     updateProp(node, key, newProps[key], oldProps[key]);
   });
 };
@@ -4041,7 +4099,7 @@ const QUERY_PROPERTY = `[${REFERENCE_PROPERTY}]`;
 const REF_CLASS = "refclass";
 const REF_CLASS_PROPERTY = `[${REF_CLASS}]`;
 class EventMachine {
-  constructor(opt, props2) {
+  constructor(opt, props) {
     this.state = {};
     this.prevState = {};
     this.refs = {};
@@ -4050,7 +4108,7 @@ class EventMachine {
     this.id = uuid$1();
     this.handlers = this.initializeHandler();
     this._localTimestamp = 0;
-    this.initializeProperty(opt, props2);
+    this.initializeProperty(opt, props);
     this.initComponents();
   }
   get _timestamp() {
@@ -4059,10 +4117,10 @@ class EventMachine {
   get target() {
     return this.$el.el;
   }
-  initializeProperty(opt, props2 = {}) {
+  initializeProperty(opt, props = {}) {
     this.opt = opt || {};
     this.parent = this.opt;
-    this.props = props2;
+    this.props = props;
     this.source = uuid$1();
     this.sourceName = this.constructor.name;
   }
@@ -4094,11 +4152,11 @@ class EventMachine {
   apply(obj2) {
     return spreadVariable(obj2);
   }
-  _reload(props2, $container = null) {
+  _reload(props, $container = null) {
     if ($container) {
       this.render($container);
     }
-    this.props = props2;
+    this.props = props;
     this.state = {};
     this.setState(this.initState(), false);
     this.refresh(true);
@@ -4157,25 +4215,25 @@ class EventMachine {
     return TEMP_DIV$1.createChildrenFragment();
   }
   parsePropertyInfo($dom) {
-    let props2 = {};
+    let props = {};
     for (var t of $dom.el.attributes) {
       if (hasVariable(t.nodeName)) {
         const recoveredValue = getVariable(t.nodeName);
         if (isObject(recoveredValue)) {
-          props2 = Object.assign(props2, recoveredValue);
+          props = Object.assign(props, recoveredValue);
         } else {
-          props2[t.nodeName] = getVariable(t.nodeValue);
+          props[t.nodeName] = getVariable(t.nodeValue);
         }
       } else {
-        props2[t.nodeName] = getVariable(t.nodeValue);
+        props[t.nodeName] = getVariable(t.nodeValue);
       }
     }
     const content2 = $dom.html();
     if (content2) {
-      props2.content = content2;
-      props2.contentChildren = this.parseContent(props2.content);
+      props.content = content2;
+      props.contentChildren = this.parseContent(props.content);
     }
-    return props2;
+    return props;
   }
   parseSourceName(obj2) {
     if (obj2.parent) {
@@ -4187,21 +4245,21 @@ class EventMachine {
     var EventMachineComponent = retriveElement(refClassName) || this.childComponents[refClassName];
     return EventMachineComponent;
   }
-  createInstanceForComponent(EventMachineComponent, targetElement, props2) {
+  createInstanceForComponent(EventMachineComponent, targetElement, props) {
     if (EventMachineComponent.__proto__.name === "ProxyComponent") {
-      return new EventMachineComponent({ target: targetElement, props: props2 });
+      return new EventMachineComponent({ target: targetElement, props });
     }
-    return new EventMachineComponent(this, props2);
+    return new EventMachineComponent(this, props);
   }
-  renderComponent({ $dom, refName, component: component2, props: props2 }) {
+  renderComponent({ $dom, refName, component: component2, props }) {
     var _a;
     var instance = null;
     if (this.children[refName]) {
       instance = this.children[refName];
       instance.__timestamp = this._localTimestamp;
-      instance._reload(props2);
+      instance._reload(props);
     } else {
-      instance = this.createInstanceForComponent(component2, $dom.$parent.el, props2);
+      instance = this.createInstanceForComponent(component2, $dom.$parent.el, props);
       instance.__timestamp = this._localTimestamp;
       this.children[refName || instance.id] = instance;
       if (isFunction(instance.render)) {
@@ -4226,13 +4284,13 @@ class EventMachine {
     const refClass = $dom.attr(REF_CLASS);
     const EventMachineComponent = this.getEventMachineComponent(refClass);
     if (EventMachineComponent) {
-      let props2 = this.parsePropertyInfo($dom);
+      let props = this.parsePropertyInfo($dom);
       let refName = $dom.attr(REFERENCE_PROPERTY);
       return {
         $dom,
         refClass,
-        props: props2,
-        refName: refName || props2.ref,
+        props,
+        refName: refName || props.ref,
         component: EventMachineComponent
       };
     } else {
@@ -5368,8 +5426,8 @@ const polygonalForCurve = (c1, c2, c3, c4, count = 1e3) => {
     points2 = [];
     let currentLength = 0;
     for (let i = 0; i <= samplingCount; i++) {
-      const nextPoint = getBezierPointOne(bezierPoints, currentLength / totalLength);
-      points2.push(nextPoint);
+      const nextPoint2 = getBezierPointOne(bezierPoints, currentLength / totalLength);
+      points2.push(nextPoint2);
       currentLength += samplingStep;
     }
     lastLength = getPolygonalDist(points2);
@@ -6120,10 +6178,10 @@ function matches(str) {
   });
   return result;
 }
-function convertMatches(str) {
+function convertMatches(str, prefix = "@") {
   const m = matches(str);
   m.forEach((it) => {
-    str = str.replace(it.color, getColorIndexString(it));
+    str = str.replace(it.color, getColorIndexString(it, prefix));
   });
   return { str, matches: m };
 }
@@ -6465,6 +6523,20 @@ const ClipPathType = {
 const VisibilityType = {
   VISIBLE: "visible",
   HIDDEN: "hidden"
+};
+const TimingFunction = {
+  LINEAR: "linear",
+  EASE: "ease",
+  EASE_IN: "ease-in",
+  EASE_OUT: "ease-out",
+  EASE_IN_OUT: "ease-in-out",
+  STEPS: "steps",
+  CUBIC_BEZIER: "cubic-bezier"
+};
+const SpreadMethodType = {
+  PAD: "pad",
+  REFLECT: "reflect",
+  REPEAT: "repeat"
 };
 class BoxShadow extends PropertyItem {
   static parse(obj2) {
@@ -6986,6 +7058,7 @@ class ColorStep {
     this.px = obj2.px || 0;
     this.em = obj2.em || 0;
     this.prevColorStep = obj2.prevColorStep || null;
+    this.func = obj2.func || TimingFunction;
   }
   toCloneObject() {
     return {
@@ -8077,7 +8150,7 @@ class BackgroundImage extends PropertyItem {
       } else if (Math.abs((contentBox.width - newWidth) / 2 - newX) < dist2) {
         nextX = Length.percent(50);
       } else {
-        nextX = Length.percent(newX / (contentBox.width - newWidth) * 100);
+        nextX = Length.makePercent(newX, contentBox.width - newWidth);
       }
     }
     if (y2.isPercent()) {
@@ -8088,7 +8161,7 @@ class BackgroundImage extends PropertyItem {
       } else if (Math.abs((contentBox.height - newHeight) / 2 - newY) < dist2) {
         nextY = Length.percent(50);
       } else {
-        nextY = Length.percent(newY / (contentBox.height - newHeight) * 100);
+        nextY = Length.makePercent(newY, contentBox.height - newHeight);
       }
     }
     return {
@@ -9889,14 +9962,14 @@ class Point {
   }
   static getNextPoint(points2, index2) {
     var currentPoint = points2[index2];
-    var nextPoint = points2[index2 + 1];
-    if (nextPoint) {
-      nextPoint.index = index2 + 1;
+    var nextPoint2 = points2[index2 + 1];
+    if (nextPoint2) {
+      nextPoint2.index = index2 + 1;
     }
     if (currentPoint.connected || currentPoint.close) {
-      nextPoint = Point.getFirstPoint(points2, index2);
+      nextPoint2 = Point.getFirstPoint(points2, index2);
     }
-    return nextPoint;
+    return nextPoint2;
   }
   static removePoint(points2, pIndex, segment) {
     if (segment === "startPoint") {
@@ -11548,7 +11621,7 @@ class PathParser {
       const newPoints = [];
       points2.forEach((point2, index2) => {
         const prevPoint = points2[index2 - 1];
-        const nextPoint = points2[index2 + 1];
+        const nextPoint2 = points2[index2 + 1];
         if (index2 === 0) {
           newPoints.push({ point: point2 });
         } else if (index2 === points2.length - 1) {
@@ -11567,7 +11640,7 @@ class PathParser {
         } else {
           const p0 = prevPoint;
           const p1 = point2;
-          const p2 = nextPoint;
+          const p2 = nextPoint2;
           const V1 = div$1([], subtract([], p2, p0), [2, 2, 1]);
           const V3 = multiply([], V1, [1 - tension, 1 - tension, 1]);
           const V2 = negate([], V3);
@@ -13603,10 +13676,10 @@ class AssetModel extends BaseModel {
     this.json.images[index2] = __spreadValues(__spreadValues({}, this.json.images[index2]), value);
     this.refreshImageKeys();
   }
-  getImageValueById(id) {
+  getImageValueById(id, defaultValue = "") {
     const image2 = this.json.imageKeys[id];
     if (!image2)
-      return void 0;
+      return id || defaultValue;
     return image2.local;
   }
   getImageDataURIById(id) {
@@ -21284,11 +21357,11 @@ var __glob_0_97 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": group
 });
-var height = _icon_template(`<polygon points="13,6.99 16,6.99 12,3 8,6.99 11,6.99 11,17.01 8,17.01 12,21 16,17.01 13,17.01"/>`);
+var height$1 = _icon_template(`<polygon points="13,6.99 16,6.99 12,3 8,6.99 11,6.99 11,17.01 8,17.01 12,21 16,17.01 13,17.01"/>`);
 var __glob_0_98 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
-  "default": height
+  "default": height$1
 });
 var highlight_at = _icon_template(`<path d="M17,5h-2V3h2V5z M15,15v6l2.29-2.29L19.59,21L21,19.59l-2.29-2.29L21,15H15z M19,9h2V7h-2V9z M19,13h2v-2h-2V13z M11,21h2 v-2h-2V21z M7,5h2V3H7V5z M3,17h2v-2H3V17z M5,21v-2H3C3,20.1,3.9,21,5,21z M19,3v2h2C21,3.9,20.1,3,19,3z M11,5h2V3h-2V5z M3,9h2 V7H3V9z M7,21h2v-2H7V21z M3,13h2v-2H3V13z M3,5h2V3C3.9,3,3,3.9,3,5z"/>`);
 var __glob_0_99 = /* @__PURE__ */ Object.freeze({
@@ -22220,11 +22293,11 @@ var __glob_0_245 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": west
 });
-var width$1 = _icon_template(`<polygon transform="rotate(90 12 12)" points="13,6.99 16,6.99 12,3 8,6.99 11,6.99 11,17.01 8,17.01 12,21 16,17.01 13,17.01"/>`);
+var width$2 = _icon_template(`<polygon transform="rotate(90 12 12)" points="13,6.99 16,6.99 12,3 8,6.99 11,6.99 11,17.01 8,17.01 12,21 16,17.01 13,17.01"/>`);
 var __glob_0_246 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
-  "default": width$1
+  "default": width$2
 });
 var wrap = _icon_template(`<path d="M11 9l1.42 1.42L8.83 14H18V4h2v12H8.83l3.59 3.58L11 21l-6-6 6-6z"/>`);
 var __glob_0_247 = /* @__PURE__ */ Object.freeze({
@@ -22404,32 +22477,32 @@ function OBJECT_TO_CLASS(obj2) {
     return key;
   }).join(" ");
 }
-function createComponent(ComponentName, props2 = {}, children2 = []) {
+function createComponent(ComponentName, props = {}, children2 = []) {
   children2 = children2.flat(Infinity).join("");
-  const targetVariable = Object.keys(props2).length ? variable$4(props2) : "";
+  const targetVariable = Object.keys(props).length ? variable$4(props) : "";
   return `<object refClass="${ComponentName}" ${targetVariable}>${children2}</object>`;
 }
 function createComponentList(...args2) {
   return args2.map((it) => {
     let ComponentName;
-    let props2 = {};
+    let props = {};
     let children2 = [];
     if (isString(it)) {
       ComponentName = it;
     } else if (isArray(it)) {
-      [ComponentName, props2 = {}, children2 = []] = it;
+      [ComponentName, props = {}, children2 = []] = it;
     }
     if (children2.length) {
-      return createComponent(ComponentName, props2, createComponentList(children2));
+      return createComponent(ComponentName, props, createComponentList(children2));
     }
-    return createComponent(ComponentName, props2);
+    return createComponent(ComponentName, props);
   }).join("\n");
 }
-function createElement(Component2, props2, children2 = []) {
+function createElement(Component2, props, children2 = []) {
   children2 = children2.flat(Infinity);
-  return `<${Component2} ${OBJECT_TO_PROPERTY(props2)}>${children2.join(" ")}</${Component2}>`;
+  return `<${Component2} ${OBJECT_TO_PROPERTY(props)}>${children2.join(" ")}</${Component2}>`;
 }
-function createElementJsx(Component2, props2 = {}, ...children2) {
+function createElementJsx(Component2, props = {}, ...children2) {
   children2 = children2.flat(Infinity);
   if (Component2 === FragmentInstance) {
     return children2;
@@ -22439,9 +22512,9 @@ function createElementJsx(Component2, props2 = {}, ...children2) {
     registElement({
       [ComponentName]: Component2
     });
-    return createComponent(ComponentName, props2, children2);
+    return createComponent(ComponentName, props, children2);
   } else {
-    return createElement(Component2, props2, children2);
+    return createElement(Component2, props, children2);
   }
 }
 const FragmentInstance = new Object();
@@ -22466,11 +22539,11 @@ class InjectManager {
   }
   generate(target, hasRef = false) {
     return this.getTargetMenuItems(target).map((it) => {
-      const props2 = {};
+      const props = {};
       if (hasRef) {
-        props2.ref = `$${it.refClass}`;
+        props.ref = `$${it.refClass}`;
       }
-      return createComponent(it.refClass, props2);
+      return createComponent(it.refClass, props);
     }).join("\n");
   }
 }
@@ -23096,10 +23169,10 @@ const END = (method = "end") => {
   return AFTER(`bodyMouseUp ${method}`);
 };
 class UIElement extends EventMachine {
-  constructor(opt, props2 = {}) {
-    super(opt, props2);
-    if (props2.store) {
-      this.__storeInstance = props2.store;
+  constructor(opt, props = {}) {
+    super(opt, props);
+    if (props.store) {
+      this.__storeInstance = props.store;
     } else {
       this.__storeInstance = new BaseStore();
     }
@@ -29725,7 +29798,7 @@ class Hue extends EditorElement {
     const hue = this.state.hue;
     return {
       style: {
-        left: Length.percent(hue / 360 * 100)
+        left: Length.makePercent(hue, 360)
       },
       class: {
         first: hue <= this.state.minValue,
@@ -30821,7 +30894,7 @@ var __glob_0_10$1 = /* @__PURE__ */ Object.freeze({
 });
 var fixed_gradient_angle = {
   key: "fixed.gradient.angle",
-  defaultValue: 5,
+  defaultValue: 1,
   title: "fixed gradient angle count",
   description: "Set fixed gradient angle",
   type: "number"
@@ -32091,8 +32164,8 @@ class DomModel extends GroupModel {
       const cacheList = list2.filter((it) => it.type === GradientType.URL).map((it) => it.image.url);
       let cacheImage = this.cacheBackgroundImage["background-image"];
       cacheList.forEach((url) => {
-        const imageUrl = project2.getImageValueById(url) || url;
-        cacheImage = cacheImage.replace(url, imageUrl);
+        const imageUrl = project2.getImageValueById(url);
+        cacheImage = cacheImage.replace(url, `"${imageUrl}"`);
       });
       this.cacheBackgroundImage["background-image"] = cacheImage;
     } else {
@@ -32403,6 +32476,428 @@ class RectLayer extends LayerModel {
     return "Rect";
   }
 }
+class SVGGradient extends Gradient {
+  toString() {
+    return "";
+  }
+  toSVGString(id) {
+    return "";
+  }
+  toFillValue(id) {
+    return "";
+  }
+}
+class SVGLinearGradient extends SVGGradient {
+  getDefaultObject(obj2) {
+    return super.getDefaultObject(__spreadValues({
+      type: "linear-gradient",
+      x1: "0%",
+      y1: "0%",
+      x2: "100%",
+      y2: "0%",
+      spreadMethod: "pad"
+    }, obj2));
+  }
+  toCloneObject() {
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("x1", "y1", "x2", "y2", "spreadMethod"));
+  }
+  toString() {
+    if (this.colorsteps.length === 0)
+      return "";
+    var colorString = this.getColorString();
+    var { x1, y1, x2, y2, spreadMethod } = this.json;
+    var opt = [x1, y1, x2, y2, spreadMethod].join(" ");
+    var result = `${this.json.type}(${opt}, ${colorString})`;
+    return result;
+  }
+  toSVGString(id) {
+    var { x1, y1, x2, y2, spreadMethod } = this.json;
+    return `
+        <linearGradient 
+            id="${id}"
+            x1="${x1}"
+            x2="${x2}"
+            y1="${y1}"
+            y2="${y2}"
+            spreadMethod="${spreadMethod}"
+          >
+          ${this.colorsteps.map((it, index2) => {
+      if (it.cut) {
+        const prev = this.colorsteps[index2 - 1];
+        if (prev) {
+          return `
+                  <stop offset="${prev.percent}%"  stop-color="${it.color}" ></stop>
+                  <stop offset="${it.percent}%"  stop-color="${it.color}" ></stop>
+                `;
+        }
+      }
+      return `<stop offset="${it.percent}%"  stop-color="${it.color}" ></stop>`;
+    }).join("\n")}
+        </linearGradient>
+      `;
+  }
+  toFillValue(id) {
+    return `url(#${id})`;
+  }
+  static toLinearGradient(colorsteps) {
+    if (colorsteps.length === 0) {
+      return "none";
+    }
+    var gradient2 = new LinearGradient({
+      angle: "to right",
+      colorsteps
+    });
+    return gradient2 + "";
+  }
+  static parse(str) {
+    var results = convertMatches(str);
+    var opt = {};
+    var colorsteps = [];
+    results.str.split("(")[1].split(")")[0].split(",").map((it) => it.trim()).forEach((newValue, index2) => {
+      if (newValue.includes("@")) {
+        newValue = reverseMatches(newValue, results.matches);
+        colorsteps.push.apply(colorsteps, ColorStep.parse(newValue));
+      } else {
+        var [x1, y1, x2, y2, spreadMethod] = newValue.split(" ");
+        opt.x1 = Length.parse(x1);
+        opt.y1 = Length.parse(y1);
+        opt.x2 = Length.parse(x2);
+        opt.y2 = Length.parse(y2);
+        opt.spreadMethod = spreadMethod || "pad";
+      }
+    });
+    return new SVGLinearGradient(__spreadProps(__spreadValues({}, opt), { colorsteps }));
+  }
+}
+class SVGRadialGradient extends SVGGradient {
+  convert(json) {
+    json.spreadMethod = [SpreadMethodType.PAD, SpreadMethodType.REFLECT, SpreadMethodType.REPEAT].includes(json.spreadMethod) ? json.spreadMethod : SpreadMethodType.PAD;
+    return json;
+  }
+  getDefaultObject(obj2 = {}) {
+    return super.getDefaultObject(__spreadValues({
+      type: GradientType.RADIAL,
+      radialType: RadialGradientType.CIRCLE,
+      x1: Length.parse("50%"),
+      y1: Length.parse("50%"),
+      x2: Length.parse("100%"),
+      y2: Length.parse("50%"),
+      x3: Length.parse("50%"),
+      y3: Length.parse("100%"),
+      spreadMethod: SpreadMethodType.PAD
+    }, obj2));
+  }
+  toCloneObject() {
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("radialType", "x1", "y1", "x2", "y2", "x3", "y3", "spreadMethod"));
+  }
+  toString() {
+    if (this.colorsteps.length === 0)
+      return "";
+    var colorString = this.getColorString();
+    var { radialType, x1, y1, x2, y2, x3, y3, spreadMethod } = this.json;
+    var opt = [radialType, x1, y1, x2, y2, x3, y3, spreadMethod].join(" ").trim();
+    var result = `${this.json.type}(${opt}, ${colorString})`;
+    return result;
+  }
+  getGradientAngle(contentBox = {}) {
+    var { x1, y1, x2, y2 } = this.json;
+    const newX1 = x1.toPx(contentBox.width);
+    const newY1 = y1.toPx(contentBox.height);
+    const newX2 = x2.toPx(contentBox.width);
+    const newY2 = y2.toPx(contentBox.height);
+    const angle2 = calculateAngle360(newX2.value - newX1.value, newY2.value - newY1.value) + 180;
+    return angle2 % 360;
+  }
+  toSVGString(id, contentBox = {}) {
+    var { x1: cx, y1: cy, x2, y2, x3, y3, spreadMethod, radialType } = this.json;
+    const newX1 = cx.toPx(contentBox.width);
+    const newY1 = cy.toPx(contentBox.height);
+    const newX2 = x2.toPx(contentBox.width);
+    const newY2 = y2.toPx(contentBox.height);
+    contentBox.height / contentBox.width;
+    var dist$1 = dist([newX1.value, newY1.value, 0], [newX2.value, newY2.value, 0]);
+    var angle2 = this.getGradientAngle(contentBox);
+    const view = create$6();
+    multiply$2(view, view, fromTranslation$1([], [newX1.value, newY1.value]));
+    multiply$2(view, view, fromRotation$1([], degreeToRadian$1(angle2)));
+    if (radialType === RadialGradientType.ELLIPSE) {
+      const newX3 = x3.toPx(contentBox.width);
+      const newY3 = y3.toPx(contentBox.height);
+      var dist2 = dist([newX1.value, newY1.value, 0], [newX3.value, newY3.value, 0]);
+      multiply$2(view, view, fromScaling$1([], [1, dist2 / dist$1]));
+    }
+    const gradientTransform = `matrix(${view[0]}, ${view[1]}, ${view[3]}, ${view[4]}, ${view[6]}, ${view[7]})`;
+    return `
+<radialGradient ${OBJECT_TO_PROPERTY$1({ id, cx: 0, cy: 0, r: dist$1, spreadMethod, gradientUnits: "userSpaceOnUse", gradientTransform })} >
+  ${this.colorsteps.map((it, index2) => {
+      if (it.cut) {
+        const prev = this.colorsteps[index2 - 1];
+        if (prev) {
+          return `
+          <stop offset="${prev.percent}%"  stop-color="${it.color}" ></stop>
+          <stop offset="${it.percent}%"  stop-color="${it.color}" ></stop>
+        `;
+        }
+      }
+      return `<stop offset="${it.percent}%"  stop-color="${it.color}" />`;
+    }).join("\n")}
+</radialGradient>
+`;
+  }
+  toFillValue(id) {
+    return `url(#${id})`;
+  }
+  static parse(str) {
+    var results = convertMatches(str);
+    var opt = {};
+    var colorsteps = [];
+    const temp = results.str.split("radial-gradient(")[1];
+    var arr = temp.split(")");
+    arr.pop();
+    arr.join(")").split(",").map((it) => it.trim()).forEach((newValue, index2) => {
+      if (newValue.includes("@")) {
+        newValue = reverseMatches(newValue, results.matches);
+        colorsteps.push.apply(colorsteps, ColorStep.parse(newValue));
+      } else {
+        var tempArray = newValue.split(" ");
+        var index2 = tempArray.findIndex((it) => [RadialGradientType.CIRCLE, RadialGradientType.ELLIPSE].includes(it));
+        opt.radialType = index2 > -1 ? tempArray[index2] : RadialGradientType.CIRCLE;
+        tempArray[index2] = void 0;
+        index2 = tempArray.findIndex((it) => [SpreadMethodType.PAD, SpreadMethodType.REFLECT, SpreadMethodType.REFLECT].includes(it));
+        opt.spreadMethod = index2 > -1 ? tempArray[index2] : SpreadMethodType.PAD;
+        tempArray[index2] = void 0;
+        var [x1, y1, x2, y2, x3, y3] = tempArray.filter(Boolean).filter((it) => ["true", "false"].includes(it) === false);
+        opt.x1 = Length.parse(x1 || "50%");
+        opt.y1 = Length.parse(y1 || "50%");
+        opt.x2 = Length.parse(x2 || "100%");
+        opt.y2 = Length.parse(y2 || "50%");
+        opt.x3 = Length.parse(x3 || "50%");
+        opt.y3 = Length.parse(y3 || "100%");
+      }
+    });
+    return new SVGRadialGradient(__spreadProps(__spreadValues({}, opt), { colorsteps }));
+  }
+}
+class SVGStaticGradient extends SVGGradient {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "static-gradient",
+      static: true,
+      colorsteps: [
+        new ColorStep({ color: "red", percent: 0, index: 0 }),
+        new ColorStep({ color: "red", percent: 100, index: 1 })
+      ]
+    });
+  }
+  toCloneObject() {
+    return __spreadProps(__spreadValues({}, super.toCloneObject()), {
+      static: true
+    });
+  }
+  static create(color2 = "transparent") {
+    return new SVGStaticGradient({
+      colorsteps: [
+        new ColorStep({ color: color2, percent: 0, index: 0 }),
+        new ColorStep({ color: color2, percent: 100, index: 0 })
+      ]
+    });
+  }
+  setColor(color2) {
+    this.colorsteps.forEach((it) => {
+      it.color = color2;
+    });
+  }
+  toString() {
+    var color2 = this.json.colorsteps[0].color;
+    return color2;
+  }
+  toSVGString() {
+    return "";
+  }
+  toFillValue() {
+    return this.toString();
+  }
+  isStatic() {
+    return true;
+  }
+}
+const IMAGE_LIST = ["jpg", "jpeg", "png", "gif", "svg"];
+class SVGImageResource extends ImageResource {
+  getDefaultObject(obj2 = {}) {
+    return super.getDefaultObject(__spreadValues({
+      type: "url",
+      url: "",
+      datauri: "",
+      patternUnits: "userSpaceOnUse",
+      patternWidth: "100%",
+      patternHeight: "100%",
+      imageX: "0%",
+      imageY: "0%",
+      imageWidth: "100%",
+      imageHeight: "100%"
+    }, obj2));
+  }
+  toCloneObject() {
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("url", "datauri", "patternUnits", "patternWidth", "patternHeight", "imageX", "imageY", "imageWidth", "imageHeight"));
+  }
+  static parse(str) {
+    var content2 = str.split("(")[1].split(")")[0];
+    var [url, props] = content2.trim().split("#");
+    if (!props) {
+      return new SVGImageResource({ url });
+    }
+    var [patternUnits, patternWidth, patternHeight, imageX, imageY, imageWidth, imageHeight] = props.split(",");
+    return new SVGImageResource({ patternUnits, patternWidth, patternHeight, imageX, imageY, imageWidth, imageHeight, url });
+  }
+  isUrl() {
+    return true;
+  }
+  static isImageFile(fileExt) {
+    return IMAGE_LIST.includes(fileExt);
+  }
+  toString() {
+    var json = this.json;
+    var {
+      patternUnits,
+      patternWidth,
+      patternHeight,
+      imageX,
+      imageY,
+      imageWidth,
+      imageHeight,
+      url
+    } = json;
+    var string = [
+      patternUnits,
+      patternWidth,
+      patternHeight,
+      imageX,
+      imageY,
+      imageWidth,
+      imageHeight
+    ].join(",").trim();
+    return `url(${url}#${string})`;
+  }
+  toSVGString(id, item2 = {}) {
+    var {
+      patternUnits,
+      patternWidth,
+      patternHeight,
+      imageX,
+      imageY,
+      imageWidth,
+      imageHeight
+    } = this.json;
+    const localPatternWidth = Length.parse(patternWidth);
+    const localPatternHeight = Length.parse(patternHeight);
+    const localImageX = Length.parse(imageX);
+    const localImageY = Length.parse(imageY);
+    const localImageWidth = Length.parse(imageWidth);
+    const localImageHeight = Length.parse(imageHeight);
+    const width2 = item2.width ? localPatternWidth.toPx(item2.width).value : localPatternWidth;
+    const height2 = item2.height ? localPatternHeight.toPx(item2.height).value : localPatternHeight;
+    return `
+  <pattern ${OBJECT_TO_PROPERTY$1({ id, patternUnits, width: width2, height: height2 })} >
+    <image xlink:href="${this.json.datauri || this.json.url}" ${OBJECT_TO_PROPERTY$1({
+      x: localImageX.toPx(item2.width).value,
+      y: localImageY.toPx(item2.height).value,
+      width: localImageWidth.toPx(item2.width).value,
+      height: localImageHeight.toPx(item2.height).value,
+      preserveAspectRatio: "none"
+    })} />
+  </pattern>
+      `;
+  }
+  toFillValue(id) {
+    return `url(#${id})`;
+  }
+}
+const reg = /((linear\-gradient|radial\-gradient|url)\(([^\)]*)\))/gi;
+class SVGFill extends PropertyItem {
+  addImageResource(imageResource) {
+    this.clear("image-resource");
+    return this.addItem("image-resource", imageResource);
+  }
+  addGradient(gradient2) {
+    return this.addImageResource(gradient2);
+  }
+  setImageUrl(data) {
+    if (!data.images)
+      return;
+    if (!data.images.length)
+      return;
+    this.reset({
+      type: "image",
+      image: SVGFill.createImage(data.images[0])
+    });
+  }
+  static createImage(url) {
+    return new SVGLImageResource({ url });
+  }
+  setGradient(data) {
+    this.reset({
+      type: data.type,
+      image: SVGFill.createGradient(data, this.json.image)
+    });
+  }
+  static createGradient(data, gradient2) {
+    const colorsteps = data.colorsteps || gradient2.colorsteps;
+    let json = gradient2.toJSON();
+    delete json.itemType;
+    delete json.type;
+    switch (data.type) {
+      case GradientType.LINEAR:
+        return new SVGLinearGradient(__spreadProps(__spreadValues({}, json), { colorsteps }));
+      case GradientType.RADIAL:
+        return new SVGRadialGradient(__spreadProps(__spreadValues({}, json), { colorsteps }));
+      default:
+        return new SVGStaticGradient(__spreadProps(__spreadValues({}, json), { colorsteps }));
+    }
+  }
+  get image() {
+    return this.json.image;
+  }
+  set image(image2) {
+    this.json.image = image2;
+  }
+  static parse(obj2) {
+    return new SVGFill(obj2);
+  }
+  static parseImage(str = "") {
+    var results = convertMatches(str);
+    let image2 = null;
+    var matchResult = results.str.match(reg);
+    if (!matchResult) {
+      return SVGStaticGradient.create(str || "transparent");
+    }
+    matchResult.forEach((value, index2) => {
+      value = reverseMatches(value, results.matches);
+      if (value.includes(GradientType.LINEAR)) {
+        image2 = SVGLinearGradient.parse(value);
+      } else if (value.includes(GradientType.RADIAL)) {
+        image2 = SVGRadialGradient.parse(value);
+      } else if (value.includes(GradientType.URL)) {
+        image2 = SVGImageResource.parse(value);
+      } else {
+        image2 = SVGStaticGradient.parse(value);
+      }
+    });
+    return image2;
+  }
+  static changeImageType(options2) {
+    switch (options2.type) {
+      case GradientType.LINEAR:
+        return new SVGLinearGradient(options2);
+      case GradientType.RADIAL:
+        return new SVGRadialGradient(options2);
+      case "image-resource":
+      case GradientType.URL:
+        return new SVGImageResource(options2);
+      default:
+        return new SVGStaticGradient(options2);
+    }
+  }
+}
 const expectedProperties = [
   "appearance",
   "border",
@@ -32522,6 +33017,86 @@ class SVGItem extends LayerModel {
     return __spreadProps(__spreadValues({}, attrs), {
       d: this.d
     });
+  }
+  createFragmentMatrix(field) {
+    const value = this.json[field];
+    const image2 = SVGFill.parseImage(value);
+    const backRect = {
+      x: 0,
+      y: 0,
+      width: this.screenWidth,
+      height: this.screenHeight
+    };
+    const backVerties = vertiesMap(rectToVerties(backRect.x, backRect.y, backRect.width, backRect.height), this.absoluteMatrix);
+    const result = {
+      backRect,
+      backVerties,
+      absoluteMatrix: this.absoluteMatrix,
+      image: image2
+    };
+    this.screenWidth / this.screenHeight;
+    let newX1, newY1, newX2, newY2, newX3, newY3;
+    switch (image2.type) {
+      case GradientType.RADIAL:
+        newX1 = image2.x1.toPx(backRect.width);
+        newY1 = image2.y1.toPx(backRect.height);
+        newX2 = image2.x2.toPx(backRect.width);
+        newY2 = image2.y2.toPx(backRect.height);
+        newX3 = image2.x3.toPx(backRect.width);
+        newY3 = image2.y3.toPx(backRect.height);
+        const tempStartPoint = [newX1.value, newY1.value, 0];
+        const tempEndPoint = [newX2.value, newY2.value, 0];
+        const tempShapePoint = [newX3.value, newY3.value, 0];
+        var [
+          newStartPoint,
+          newEndPoint,
+          newShapePoint
+        ] = vertiesMap([
+          tempStartPoint,
+          tempEndPoint,
+          tempShapePoint
+        ], this.absoluteMatrix);
+        result.endPoint = newEndPoint;
+        result.startPoint = newStartPoint;
+        result.shapePoint = newShapePoint;
+        result.colorsteps = image2.colorsteps.map((it) => {
+          const offset = it.toLength();
+          return {
+            id: it.id,
+            cut: it.cut,
+            color: it.color,
+            pos: lerp([], result.startPoint, result.endPoint, offset.value / 100)
+          };
+        });
+        break;
+      case GradientType.LINEAR:
+        newX1 = image2.x1.toPx(backRect.width);
+        newY1 = image2.y1.toPx(backRect.height);
+        newX2 = image2.x2.toPx(backRect.width);
+        newY2 = image2.y2.toPx(backRect.height);
+        var [
+          newStartPoint,
+          newEndPoint
+        ] = vertiesMap([
+          [newX1.value, newY1.value, 0],
+          [newX2.value, newY2.value, 0]
+        ], this.absoluteMatrix);
+        result.endPoint = newEndPoint;
+        result.startPoint = newStartPoint;
+        result.areaStartPoint = clone(newStartPoint);
+        result.areaEndPoint = clone(newEndPoint);
+        result.colorsteps = image2.colorsteps.map((it) => {
+          const offset = it.toLength();
+          return {
+            id: it.id,
+            cut: it.cut,
+            color: it.color,
+            pos: lerp([], result.startPoint, result.endPoint, offset.value / 100)
+          };
+        });
+        break;
+    }
+    return result;
   }
 }
 class SVGPathItem extends SVGItem {
@@ -36028,435 +36603,24 @@ function font(editor) {
     ];
   });
 }
-class SVGGradient extends Gradient {
-  toString() {
-    return "";
-  }
-  toSVGString(id) {
-    return "";
-  }
-  toFillValue(id) {
-    return "";
-  }
-}
-class SVGLinearGradient extends SVGGradient {
-  getDefaultObject(obj2) {
-    return super.getDefaultObject(__spreadValues({
-      type: "linear-gradient",
-      x1: "0%",
-      y1: "0%",
-      x2: "100%",
-      y2: "0%",
-      spreadMethod: "pad"
-    }, obj2));
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("x1", "y1", "x2", "y2", "spreadMethod"));
-  }
-  toString() {
-    if (this.colorsteps.length === 0)
-      return "";
-    var colorString = this.getColorString();
-    var { x1, y1, x2, y2, spreadMethod } = this.json;
-    var opt = [x1, y1, x2, y2, spreadMethod].join(" ");
-    var result = `${this.json.type}(${opt}, ${colorString})`;
-    return result;
-  }
-  toSVGString(id) {
-    var { x1, y1, x2, y2, spreadMethod } = this.json;
-    return `
-        <linearGradient 
-            id="${id}"
-            x1="${x1}"
-            x2="${x2}"
-            y1="${y1}"
-            y2="${y2}"
-            spreadMethod="${spreadMethod}"
-          >
-          ${this.colorsteps.map((it) => {
-      return `<stop offset="${it.percent}%"  stop-color="${it.color}" ></stop>`;
-    }).join("\n")}
-        </linearGradient>
-      `;
-  }
-  toFillValue(id) {
-    return `url(#${id})`;
-  }
-  static toLinearGradient(colorsteps) {
-    if (colorsteps.length === 0) {
-      return "none";
-    }
-    var gradient2 = new LinearGradient({
-      angle: "to right",
-      colorsteps
-    });
-    return gradient2 + "";
-  }
-  static parse(str) {
-    var results = convertMatches(str);
-    var opt = {};
-    var colorsteps = [];
-    results.str.split("(")[1].split(")")[0].split(",").map((it) => it.trim()).forEach((newValue, index2) => {
-      if (newValue.includes("@")) {
-        newValue = reverseMatches(newValue, results.matches);
-        colorsteps.push.apply(colorsteps, ColorStep.parse(newValue));
-      } else {
-        var [x1, y1, x2, y2, spreadMethod] = newValue.split(" ");
-        opt.x1 = Length.parse(x1);
-        opt.y1 = Length.parse(y1);
-        opt.x2 = Length.parse(x2);
-        opt.y2 = Length.parse(y2);
-        opt.spreadMethod = spreadMethod || "pad";
-      }
-    });
-    return new SVGLinearGradient(__spreadProps(__spreadValues({}, opt), { colorsteps }));
-  }
-}
-class SVGRadialGradient extends SVGGradient {
-  getDefaultObject(obj2 = {}) {
-    return super.getDefaultObject(__spreadValues({
-      type: "radial-gradient",
-      cx: "50%",
-      cy: "50%",
-      r: "50%",
-      fx: "50%",
-      fy: "50%",
-      fr: "0%",
-      spreadMethod: "pad"
-    }, obj2));
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("cx", "cy", "r", "fx", "fy", "fr", "spreadMethod"));
-  }
-  toString() {
-    if (this.colorsteps.length === 0)
-      return "";
-    var colorString = this.getColorString();
-    var { cx, cy, r, fx, fy, fr, spreadMethod } = this.json;
-    var opt = [cx, cy, r, fx, fy, fr, spreadMethod].join(" ");
-    var result = `${this.json.type}(${opt}, ${colorString})`;
-    return result;
-  }
-  toSVGString(id) {
-    var { cx, cy, r, fx, fy, fr, spreadMethod } = this.json;
-    return `
-<radialGradient ${OBJECT_TO_PROPERTY$1({ id, cx, cy, r, fx, fy, fr, spreadMethod })} >
-  ${this.colorsteps.map((it) => {
-      return `<stop offset="${it.percent}%"  stop-color="${it.color}" />`;
-    }).join("\n")}
-</radialGradient>
-`;
-  }
-  toFillValue(id) {
-    return `url(#${id})`;
-  }
-  static parse(str) {
-    var results = convertMatches(str);
-    var opt = {};
-    var colorsteps = [];
-    results.str.split("(")[1].split(")")[0].split(",").map((it) => it.trim()).forEach((newValue, index2) => {
-      if (newValue.includes("@")) {
-        newValue = reverseMatches(newValue, results.matches);
-        colorsteps.push.apply(colorsteps, ColorStep.parse(newValue));
-      } else {
-        var [cx, cy, r, fx, fy, fr, spreadMethod] = newValue.split(" ");
-        opt.cx = cx;
-        opt.cy = cy;
-        opt.r = r;
-        opt.fx = fx;
-        opt.fy = fy;
-        opt.fr = fr;
-        opt.spreadMethod = spreadMethod || "pad";
-      }
-    });
-    return new SVGRadialGradient(__spreadProps(__spreadValues({}, opt), { colorsteps }));
-  }
-}
-class SVGStaticGradient extends SVGGradient {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "static-gradient",
-      static: true,
-      colorsteps: [
-        new ColorStep({ color: "red", percent: 0, index: 0 }),
-        new ColorStep({ color: "red", percent: 100, index: 1 })
-      ]
-    });
-  }
-  toCloneObject() {
-    return __spreadProps(__spreadValues({}, super.toCloneObject()), {
-      static: true
-    });
-  }
-  static create(color2 = "transparent") {
-    return new SVGStaticGradient({
-      colorsteps: [
-        new ColorStep({ color: color2, percent: 0, index: 0 }),
-        new ColorStep({ color: color2, percent: 100, index: 0 })
-      ]
-    });
-  }
-  setColor(color2) {
-    this.colorsteps.forEach((it) => {
-      it.color = color2;
-    });
-  }
-  toString() {
-    var color2 = this.json.colorsteps[0].color;
-    return color2;
-  }
-  toSVGString() {
-    return "";
-  }
-  toFillValue() {
-    return this.toString();
-  }
-  isStatic() {
-    return true;
-  }
-}
-const IMAGE_LIST = ["jpg", "jpeg", "png", "gif", "svg"];
-class SVGImageResource extends ImageResource {
-  getDefaultObject(obj2 = {}) {
-    return super.getDefaultObject(__spreadValues({
-      type: "url",
-      url: "",
-      datauri: "",
-      patternUnits: "userSpaceOnUse",
-      patternWidth: "100%",
-      patternHeight: "100%",
-      imageX: "0%",
-      imageY: "0%",
-      imageWidth: "100%",
-      imageHeight: "100%"
-    }, obj2));
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("url", "datauri", "patternUnits", "patternWidth", "patternHeight", "imageX", "imageY", "imageWidth", "imageHeight"));
-  }
-  static parse(str) {
-    var content2 = str.split("(")[1].split(")")[0];
-    var [url, props2] = content2.trim().split("#");
-    if (!props2) {
-      return new SVGImageResource({ url });
-    }
-    var [patternUnits, patternWidth, patternHeight, imageX, imageY, imageWidth, imageHeight] = props2.split(",");
-    return new SVGImageResource({ patternUnits, patternWidth, patternHeight, imageX, imageY, imageWidth, imageHeight, url });
-  }
-  isUrl() {
-    return true;
-  }
-  static isImageFile(fileExt) {
-    return IMAGE_LIST.includes(fileExt);
-  }
-  toString() {
-    var json = this.json;
-    var {
-      patternUnits,
-      patternWidth,
-      patternHeight,
-      imageX,
-      imageY,
-      imageWidth,
-      imageHeight,
-      url
-    } = json;
-    var string = [
-      patternUnits,
-      patternWidth,
-      patternHeight,
-      imageX,
-      imageY,
-      imageWidth,
-      imageHeight
-    ].join(",").trim();
-    return `url(${url}#${string})`;
-  }
-  toSVGString(id, item2 = {}) {
-    var {
-      patternUnits,
-      patternWidth,
-      patternHeight,
-      imageX,
-      imageY,
-      imageWidth,
-      imageHeight
-    } = this.json;
-    const localPatternWidth = Length.parse(patternWidth);
-    const localPatternHeight = Length.parse(patternHeight);
-    const localImageX = Length.parse(imageX);
-    const localImageY = Length.parse(imageY);
-    const localImageWidth = Length.parse(imageWidth);
-    const localImageHeight = Length.parse(imageHeight);
-    const width2 = item2.width ? localPatternWidth.toPx(item2.width).value : localPatternWidth;
-    const height2 = item2.height ? localPatternHeight.toPx(item2.height).value : localPatternHeight;
-    return `
-  <pattern ${OBJECT_TO_PROPERTY$1({ id, patternUnits, width: width2, height: height2 })} >
-    <image xlink:href="${this.json.datauri || this.json.url}" ${OBJECT_TO_PROPERTY$1({
-      x: localImageX.toPx(item2.width).value,
-      y: localImageY.toPx(item2.height).value,
-      width: localImageWidth.toPx(item2.width).value,
-      height: localImageHeight.toPx(item2.height).value,
-      preserveAspectRatio: "none"
-    })} />
-  </pattern>
-      `;
-  }
-  toFillValue(id) {
-    return `url(#${id})`;
-  }
-}
-const reg = /((linear\-gradient|radial\-gradient|url)\(([^\)]*)\))/gi;
-class SVGFill extends PropertyItem {
-  addImageResource(imageResource) {
-    this.clear("image-resource");
-    return this.addItem("image-resource", imageResource);
-  }
-  addGradient(gradient2) {
-    return this.addImageResource(gradient2);
-  }
-  setImageUrl(data) {
-    if (!data.images)
-      return;
-    if (!data.images.length)
-      return;
-    this.reset({
-      type: "image",
-      image: SVGFill.createImage(data.images[0])
-    });
-  }
-  static createImage(url) {
-    return new SVGLImageResource({ url });
-  }
-  setGradient(data) {
-    this.reset({
-      type: data.type,
-      image: SVGFill.createGradient(data, this.json.image)
-    });
-  }
-  static createGradient(data, gradient2) {
-    const colorsteps = data.colorsteps || gradient2.colorsteps;
-    let json = gradient2.toJSON();
-    delete json.itemType;
-    delete json.type;
-    switch (data.type) {
-      case "linear-gradient":
-        return new SVGLinearGradient(__spreadProps(__spreadValues({}, json), { colorsteps }));
-      case "radial-gradient":
-        return new SVGRadialGradient(__spreadProps(__spreadValues({}, json), { colorsteps }));
-      default:
-        return new SVGStaticGradient(__spreadProps(__spreadValues({}, json), { colorsteps }));
-    }
-  }
-  get image() {
-    return this.json.image;
-  }
-  set image(image2) {
-    this.json.image = image2;
-  }
-  static parse(obj2) {
-    return new SVGFill(obj2);
-  }
-  static parseImage(str) {
-    var results = convertMatches(str);
-    let image2 = null;
-    var matchResult = results.str.match(reg);
-    if (!matchResult) {
-      return SVGStaticGradient.create(str || "transparent");
-    }
-    matchResult.forEach((value, index2) => {
-      value = reverseMatches(value, results.matches);
-      if (value.includes("linear")) {
-        image2 = SVGLinearGradient.parse(value);
-      } else if (value.includes("radial")) {
-        image2 = SVGRadialGradient.parse(value);
-      } else if (value.includes("url")) {
-        image2 = SVGImageResource.parse(value);
-      } else {
-        image2 = SVGStaticGradient.parse(value);
-      }
-    });
-    return image2;
-  }
-  static changeImageType(options2) {
-    switch (options2.type) {
-      case "linear-gradient":
-        return new SVGLinearGradient(options2);
-      case "radial-gradient":
-        return new SVGRadialGradient(options2);
-      case "image-resource":
-      case "url":
-        return new SVGImageResource(options2);
-      default:
-        return new SVGStaticGradient(options2);
-    }
-  }
-}
 var FillEditor$1 = "";
-const imageTypeList = [
-  "static-gradient",
-  "linear-gradient",
-  "radial-gradient",
-  "image-resource"
-];
-const iconList = {
+({
   "image-resource": iconUse$1("photo")
-};
-const presetPosition = {
-  top: { x1: "0%", y1: "100%", x2: "0%", y2: "0%" },
-  "top left": { x1: "100%", y1: "100%", x2: "0%", y2: "0%" },
-  "top right": { x1: "0%", y1: "100%", x2: "100%", y2: "0%" },
-  left: { x1: "100%", y1: "0%", x2: "0%", y2: "0%" },
-  right: { x1: "0%", y1: "0%", x2: "100%", y2: "0%" },
-  bottom: { x1: "0%", y1: "0%", x2: "0%", y2: "100%" },
-  "bottom left": { x1: "100%", y1: "0%", x2: "0%", y2: "100%" },
-  "bottom right": { x1: "0%", y1: "0%", x2: "100%", y2: "100%" }
-};
-const props = [
-  "x1",
-  "y1",
-  "x2",
-  "y2",
-  "cx",
-  "cy",
-  "r",
-  "fx",
-  "fy",
-  "fr",
-  "spreadMethod",
-  "patternUnits",
-  "patternWidth",
-  "patternHeight",
-  "imageX",
-  "imageY",
-  "imageWidth",
-  "imageHeight"
-];
-const rangeEditorList = [
-  "x1",
-  "y1",
-  "x2",
-  "y2",
-  "cx",
-  "cy",
-  "r",
-  "fx",
-  "fy",
-  "fr",
-  "patternWidth",
-  "patternHeight",
-  "imageX",
-  "imageY",
-  "imageWidth",
-  "imageHeight"
-];
+});
 class FillEditor extends EditorElement {
   initState() {
+    var _a;
+    const image2 = SVGFill.parseImage(this.props.value || "transparent") || SVGStaticGradient.create();
+    const id = (_a = image2.colorsteps[this.props.index]) == null ? void 0 : _a.id;
+    this.$selection.selectColorStep(id);
+    if (id) {
+      this.currentStep = image2.colorsteps.find((it) => this.$selection.isSelectedColorStep(it.id));
+    }
     return {
       cachedRect: null,
       index: +(this.props.index || 0),
       value: this.props.value,
-      image: SVGFill.parseImage(this.props.value || "transparent") || SVGStaticGradient.create()
+      image: image2
     };
   }
   setValue(value) {
@@ -36465,72 +36629,20 @@ class FillEditor extends EditorElement {
       image: SVGFill.parseImage(value)
     }, false);
     this.refresh();
-    this.parent.trigger("changeTabType", this.state.image.type);
   }
   template() {
-    var { image: image2 } = this.state;
-    image2 = image2 || {};
-    var type = image2.type || "static-gradient";
-    if (type === "url")
-      type = "image-resource";
     return `
-        <div class='elf--fill-editor' data-selected-editor='${type}'>
-            <div class='gradient-preview'>
-              <div class='gradient-view' ref='$gradientView'>
-                <div class='drag-pointer' ref='$dragPosition'></div>
-              </div>
-              <svg class='pointer-draw' ref='$pointerDrawArea'>
-                <line data-type='line' ref='$line' />
-                <circle r='5' data-type='start' ref='$startPoint' />
-                <circle r='5' data-type='end' ref='$endPoint' />
-                <circle r='5' data-type='center' ref='$centerPoint' />
-                <circle r='5' data-type='f' ref='$fPoint' />
-              </svg>              
-              <div class='preset-position'>
-                <div data-value='top' title='top'>${iconUse$1("chevron_right")}</div>
-                <div data-value='right' title='right'>${iconUse$1("chevron_right")}</div>
-                <div data-value='left' title='left'>${iconUse$1("chevron_right")}</div>
-                <div data-value='bottom' title='bottom'>${iconUse$1("chevron_right")}</div>
-                <div data-value='top left' title='top left'>${iconUse$1("chevron_right")}</div>
-                <div data-value='top right' title='top right'>${iconUse$1("chevron_right")}</div>
-                <div data-value='bottom left' title='bottom left'>${iconUse$1("chevron_right")}</div>
-                <div data-value='bottom right' title='bottom right'>${iconUse$1("chevron_right")}</div>                
-              </div>
-              <div data-editor='image-loader'>
-                <input type='file' accept="image/*" ref='$file' />
-              </div>              
-            </div>
-            <div class="picker-tab">
-              <div class="picker-tab-list" ref="$tab">
-                ${imageTypeList.map((it) => {
-      return `<span class='picker-tab-item ${it}' data-editor='${it}'><span class='icon'>${iconList[it] || ""}</span></span>`;
-    }).join("")}
-              </div>
-            </div>
+        <div class='elf--fill-editor'>
             <div class='gradient-steps' data-editor='gradient'>
                 <div class="hue-container" ref="$back"></div>            
                 <div class="hue" ref="$steps">
                     <div class='step-list' ref="$stepList" ></div>
                 </div>
-            </div>
-            <div class='tools' data-editor='tools'>
-              <object refClass="RangeEditor"  label='${this.$i18n("fill.editor.offset")}' ref='$range' key='length' onchange='changeColorStepOffset' />
-            </div>
+            </div>               
             <div class='sub-editor' ref='$subEditor'> 
-                <div data-editor='spreadMethod'>
-                  <object refClass="SelectIconEditor" label='${this.$i18n("fill.editor.spread")}' ref='$spreadMethod' value="pad" options='pad,reflect,repeat' key='spreadMethod' onchange='changeKeyValue' />
-                </div>  
                 <div data-editor='patternUnits'>
                   <object refClass="SelectEditor"  label='Pattern' ref='$patternUnits' options='userSpaceOnUse' key='patternUnits' onchange='changeKeyValue' />
                 </div>                  
-                ${rangeEditorList.map((field) => {
-      const label = this.$i18n("fill.editor." + field);
-      return `
-                    <div data-editor='${field}'>
-                      <object refClass="RangeEditor"  label='${label}' ref='$${field}' value="${this.getImageFieldValue(image2, field)}" key='${field}' onchange='changeKeyValue' />
-                    </div>
-                  `;
-    }).join("")}
                                                                                                                                 
             </div>            
         </div>
@@ -36573,27 +36685,13 @@ class FillEditor extends EditorElement {
       });
     }
   }
-  [CLICK("$el .preset-position [data-value]")](e2) {
-    var type = e2.$dt.attr("data-value");
-    if (presetPosition[type]) {
-      this.state.image.reset(presetPosition[type]);
-      this.refresh();
-      this.refreshFieldValue();
-      this.updateData();
-    }
-  }
   refreshFieldValue() {
-    this.children.$x1.setValue(this.state.image.x1);
-    this.children.$y1.setValue(this.state.image.y1);
-    this.children.$x2.setValue(this.state.image.x2);
-    this.children.$y2.setValue(this.state.image.y2);
     this.children.$cx.setValue(this.state.image.cx);
     this.children.$cy.setValue(this.state.image.cy);
     this.children.$r.setValue(this.state.image.r);
     this.children.$fx.setValue(this.state.image.fx);
     this.children.$fy.setValue(this.state.image.fy);
     this.children.$fr.setValue(this.state.image.fr);
-    this.children.$spreadMethod.setValue(this.state.image.spreadMethod);
     this.children.$patternUnits.setValue(this.state.image.patternUnits);
     this.children.$patternWidth.setValue(this.state.image.patternWidth);
     this.children.$patternHeight.setValue(this.state.image.patternHeight);
@@ -36602,49 +36700,8 @@ class FillEditor extends EditorElement {
     this.children.$imageWidth.setValue(this.state.image.imageWidth);
     this.children.$imagenHeight.setValue(this.state.image.imageHeight);
   }
-  getDrawAreaRect() {
-    return { width: 224, height: 150 };
-  }
   getFieldValue(field) {
     return Length.parse(this.getImageFieldValue(this.state.image, field));
-  }
-  [BIND("$line")]() {
-    var { width: width2, height: height2 } = this.getDrawAreaRect();
-    var x1 = this.getFieldValue("x1").toPx(width2);
-    var y1 = this.getFieldValue("y1").toPx(height2);
-    var x2 = this.getFieldValue("x2").toPx(width2);
-    var y2 = this.getFieldValue("y2").toPx(height2);
-    return { x1, y1, x2, y2 };
-  }
-  [BIND("$startPoint")]() {
-    var { width: width2, height: height2 } = this.getDrawAreaRect();
-    var cx = this.getFieldValue("x1").toPx(width2);
-    var cy = this.getFieldValue("y1").toPx(height2);
-    return { cx, cy };
-  }
-  [BIND("$endPoint")]() {
-    var { width: width2, height: height2 } = this.getDrawAreaRect();
-    var cx = this.getFieldValue("x2").toPx(width2);
-    var cy = this.getFieldValue("y2").toPx(height2);
-    return { cx, cy };
-  }
-  [BIND("$centerPoint")]() {
-    var { width: width2, height: height2 } = this.getDrawAreaRect();
-    var cx = this.getFieldValue("cx").toPx(width2);
-    var cy = this.getFieldValue("cy").toPx(height2);
-    return { cx, cy };
-  }
-  [BIND("$fPoint")]() {
-    var { width: width2, height: height2 } = this.getDrawAreaRect();
-    var cx = this.getFieldValue("fx").toPx(width2);
-    var cy = this.getFieldValue("fy").toPx(height2);
-    return { cx, cy };
-  }
-  [POINTERSTART("$pointerDrawArea circle[data-type]") + MOVE("moveDragPointer")](e2) {
-    this.containerRect = this.refs.$pointerDrawArea.rect();
-    this.startXY = e2.xy;
-    this.type = e2.$dt.attr("data-type");
-    this.state.cachedRect = null;
   }
   getRectRate(rect2, x2, y2) {
     var { width: width2, height: height2, x: rx, y: ry } = rect2;
@@ -36658,78 +36715,38 @@ class FillEditor extends EditorElement {
     } else if (ry + height2 < y2) {
       y2 = ry + height2;
     }
-    var left2 = Length.percent((x2 - rx) / width2 * 100);
-    var top2 = Length.percent((y2 - ry) / height2 * 100);
+    var left2 = Length.makePercent(x2 - rx, width2);
+    var top2 = Length.makePercent(y2 - ry, height2);
     return { left: left2, top: top2 };
   }
-  moveDragPointer(dx, dy) {
-    var x2 = this.startXY.x + dx;
-    var y2 = this.startXY.y + dy;
-    var { left: left2, top: top2 } = this.getRectRate(this.containerRect, x2, y2);
-    if (this.type == "start") {
-      this.state.image.reset({ x1: left2, y1: top2 });
-      this.children.$x1.setValue(left2);
-      this.children.$y1.setValue(top2);
-      this.bindData("$startPoint");
-      this.bindData("$line");
-    } else if (this.type == "end") {
-      this.state.image.reset({ x2: left2, y2: top2 });
-      this.children.$x2.setValue(left2);
-      this.children.$y2.setValue(top2);
-      this.bindData("$endPoint");
-      this.bindData("$line");
-    } else if (this.type == "center") {
-      this.state.image.reset({ cx: left2, cy: top2 });
-      this.children.$cx.setValue(left2);
-      this.children.$cy.setValue(top2);
-      this.bindData("$centerPoint");
-    } else if (this.type == "f") {
-      this.state.image.reset({ fx: left2, fy: top2 });
-      this.children.$fx.setValue(left2);
-      this.children.$fy.setValue(top2);
-      this.bindData("$fPoint");
+  [SUBSCRIBE_SELF("changeTabType")](type) {
+    var _a, _b;
+    const oldType = (_a = this.state.image) == null ? void 0 : _a.type;
+    const colorsteps = ((_b = this.state.image) == null ? void 0 : _b.colorsteps) || [];
+    if (colorsteps.length === 1) {
+      colorsteps.push(colorsteps[0]);
     }
-    this.bindData("$gradientView");
-    this.updateData();
-  }
-  [CLICK("$tab .picker-tab-item")](e2) {
-    var type = e2.$dt.attr("data-editor");
-    this.$el.attr("data-selected-editor", type);
-    this.parent.trigger("changeTabType", type);
+    if (oldType === GradientType.STATIC) {
+      if (colorsteps.length === 0) {
+        colorsteps.push(colorsteps[0], colorsteps[0]);
+      } else if (colorsteps.length === 1) {
+        colorsteps.push(colorsteps[0]);
+      }
+    }
     var url = type === "image-resource" ? this.state.image.url : this.state.url;
-    var opt = {};
-    props.forEach((it) => {
-      opt[it] = this.children[`$${it}`].getValue();
-    });
-    this.state.image = SVGFill.changeImageType(__spreadValues({
+    this.state.image = SVGFill.changeImageType({
       type,
       url,
-      colorsteps: this.state.image.colorsteps || []
-    }, opt));
+      colorsteps: this.state.image.colorsteps || [],
+      spreadMethod: this.state.image.spreadMethod
+    });
     this.refresh();
     this.updateData();
-    this.sendMessage();
-  }
-  sendMessage(type) {
-    var type = this.$el.attr("data-selected-editor");
-    if (type === "linear-gradient") {
-      this.emit("addStatusBarMessage", "");
-    } else if (type === "url" || type === "image-resource") {
-      this.emit("addStatusBarMessage", this.$i18n("fill.editor.message.click.image"));
-    } else {
-      this.emit("addStatusBarMessage", this.$i18n("fill.editor.message.drag.position"));
-    }
   }
   [SUBSCRIBE_SELF("changeKeyValue")](key, value) {
     this.state.image.reset({
       [key]: value
     });
-    this.bindData("$gradientView");
-    this.bindData("$line");
-    this.bindData("$startPoint");
-    this.bindData("$endPoint");
-    this.bindData("$centerPoint");
-    this.bindData("$fPoint");
     this.updateData();
   }
   [SUBSCRIBE("changeColorStepOffset")](key, value) {
@@ -36760,35 +36777,15 @@ class FillEditor extends EditorElement {
     if (type === "url") {
       type = "image-resource";
     }
-    this.parent.trigger("changeTabType", type);
     return {
       "data-selected-editor": type
     };
   }
   [BIND("$stepList")]() {
     return {
-      "data-selected-index": this.state.index.toString(),
       "style": {
         "background-image": this.getLinearGradient()
       }
-    };
-  }
-  get fillId() {
-    return this.id + "fill";
-  }
-  [BIND("$gradientView")]() {
-    if (this.refs.$gradientView.html() !== "") {
-      return false;
-    }
-    return {
-      innerHTML: `
-        <svg x="0" y="0" width="100%" height="100%">
-          <defs>
-            ${this.state.image.toSVGString(this.fillId)}
-          </defs>
-          <rect x="0" y="0" width="100%" height="100%" fill="${this.state.image.toFillValue(this.fillId)}" />
-        </svg>
-      `
     };
   }
   [LOAD("$stepList")]() {
@@ -36796,9 +36793,11 @@ class FillEditor extends EditorElement {
     return colorsteps.map((it, index2) => {
       var selected = this.$selection.isSelectedColorStep(it.id) ? "selected" : "";
       return `
-      <div class='step ${selected}' data-id='${it.id}' style='left: ${it.percent}%;'>
-        <div class='color-view' style="background-color: ${it.color}"></div>
-        <div class='arrow' style="background-color: ${it.color}"></div>
+      <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' tabindex="-1" style='left: ${it.toLength()};'>
+        <div class='color-view' style="background-color: ${it.color}">
+          <span>${Math.floor(it.percent * 10) / 10}</span>
+        </div>
+        <div class='arrow'></div>
       </div>`;
     });
   }
@@ -36812,17 +36811,88 @@ class FillEditor extends EditorElement {
     this.$selection.selectColorStep(id);
     if (this.state.image.colorsteps) {
       this.currentStep = this.state.image.colorsteps.find((it) => this.$selection.isSelectedColorStep(it.id));
-      this.children.$range.setValue(Length.percent(this.currentStep.percent));
       this.parent.trigger("selectColorStep", this.currentStep.color);
     }
     this.refresh();
   }
-  [POINTERSTART("$stepList .step") + MOVE()](e2) {
+  [KEYUP("$el .step")](e2) {
+    const id = e2.$dt.data("id");
+    switch (e2.code) {
+      case "Delete":
+      case "Backspace":
+        this.removeStep(id);
+        break;
+      case "BracketRight":
+        this.sortToRight(id);
+        break;
+      case "BracketLeft":
+        this.sortToLeft(id);
+        break;
+      case "Equal":
+        this.appendColorStep(id);
+        break;
+      case "Minus":
+        this.prependColorStep(id);
+        break;
+    }
+  }
+  sortToRight(id) {
+    this.state.image.sortToRight();
+    this.refresh();
+    this.updateData();
+    this.doFocus(id);
+  }
+  sortToLeft(id) {
+    this.state.image.sortToLeft();
+    this.refresh();
+    this.updateData();
+    this.doFocus(id);
+  }
+  appendColorStep(id) {
+    const currentIndex = this.state.image.colorsteps.findIndex((it) => it.id === id);
+    const nextIndex = currentIndex + 1;
+    const currentColorStep = this.state.image.colorsteps[currentIndex];
+    const nextColorStep = this.state.image.colorsteps[nextIndex];
+    if (!nextColorStep) {
+      if (currentColorStep.percent !== 100) {
+        this.state.image.insertColorStep(currentColorStep.percent + (100 - currentColorStep.percent) / 2);
+      }
+    } else {
+      this.state.image.insertColorStep(currentColorStep.percent + (nextColorStep.percent - currentColorStep.percent) / 2);
+    }
+    this.refresh();
+    this.updateData();
+    this.doFocus(id);
+  }
+  doFocus(id) {
+    this.nextTick(() => {
+      this.refs.$stepList.$(".step[data-id='" + id + "']").focus();
+    }, 100);
+  }
+  prependColorStep(id) {
+    const currentIndex = this.state.image.colorsteps.findIndex((it) => it.id === id);
+    const prevIndex = currentIndex - 1;
+    const currentColorStep = this.state.image.colorsteps[currentIndex];
+    const prevColorStep = this.state.image.colorsteps[prevIndex];
+    if (!prevColorStep) {
+      if (currentColorStep.percent !== 0) {
+        this.state.image.insertColorStep(currentColorStep.percent);
+      }
+    } else {
+      this.state.image.insertColorStep(prevColorStep.percent + (currentColorStep.percent - prevColorStep.percent) / 2);
+    }
+    this.refresh();
+    this.updateData();
+    this.doFocus(id);
+  }
+  [POINTERSTART("$stepList .step") + MOVE() + END()](e2) {
     var id = e2.$dt.attr("data-id");
     if (e2.altKey) {
       this.removeStep(id);
       return false;
     } else {
+      e2.$dt.focus();
+      this.isSelectedColorStep = this.$selection.isSelectedColorStep(id);
       this.selectStep(id);
       this.startXY = e2.xy;
       this.cachedStepListRect = this.refs.$stepList.rect();
@@ -36841,17 +36911,31 @@ class FillEditor extends EditorElement {
     else if (x2 > maxX)
       x2 = maxX;
     var percent = (x2 - minX) / rect2.width * 100;
+    if (this.$config.get("bodyEvent").shiftKey) {
+      percent = Math.floor(percent);
+    }
     this.currentStep.percent = percent;
-    this.children.$range.setValue(Length.percent(percent));
     this.state.image.sortColorStep();
     this.refresh();
     this.updateData();
+  }
+  end(dx, dy) {
+    if (dx === 0 && dy === 0) {
+      if (this.isSelectedColorStep) {
+        if (this.currentStep) {
+          this.currentStep.cut = !this.currentStep.cut;
+          this.refresh();
+          this.updateData();
+        }
+      }
+    }
+    this.doFocus(this.state.id);
   }
   getLinearGradient() {
     var { image: image2 } = this.state;
     return `linear-gradient(to right, ${Gradient.toColorString(image2.colorsteps)})`;
   }
-  [SUBSCRIBE("setColorStepColor")](color2) {
+  [SUBSCRIBE_SELF("setColorStepColor")](color2) {
     if (this.state.image.type === "static-gradient") {
       this.state.image.setColor(color2);
       this.refresh();
@@ -37027,12 +37111,173 @@ class GradientPickerPopup extends BasePopup {
       index: data.index
     });
   }
-  [SUBSCRIBE("hideGradientPickerPopup")]() {
+  [SUBSCRIBE("selectColorStep")](color2) {
+    this.children.$color.setValue(color2);
+  }
+  [SUBSCRIBE("changeColorStep")](data = {}) {
+    this.state.image.reset(__spreadValues({}, data));
+    this.updateData();
+  }
+  load(...args2) {
+    if (this.$el.isShow()) {
+      super.load(...args2);
+    }
+  }
+  getValue() {
+    return `${this.state.image}`;
+  }
+  updateData() {
+    this.state.instance.trigger(this.state.changeEvent, this.getValue(), this.state.params);
+  }
+}
+class FillPickerPopup extends BasePopup {
+  getTitle() {
+    var _a;
+    return createComponent("SelectEditor", {
+      ref: "$select",
+      value: ((_a = this.state.image) == null ? void 0 : _a.type) || GradientType.STATIC,
+      onchange: "changeTabType",
+      options: [
+        {
+          value: GradientType.STATIC,
+          text: "Static"
+        },
+        {
+          value: GradientType.LINEAR,
+          text: "Linear Gradient"
+        },
+        {
+          value: GradientType.RADIAL,
+          text: "Radial Gradient"
+        },
+        {
+          value: GradientType.URL,
+          text: "Image"
+        }
+      ]
+    });
+  }
+  initState() {
+    return {
+      image: SVGStaticGradient.create()
+    };
+  }
+  initialize() {
+    super.initialize();
+    this.selectedTab = "static-gradient";
+  }
+  getClassName() {
+    return "fill-picker-popup";
+  }
+  getBody() {
+    var _a, _b;
+    return html`
+      <div class="elf--gradient-picker-popup" ref='$body' data-selected-editor='${(_a = this.state.image) == null ? void 0 : _a.type}'>
+        <div class='box'>
+          <div ref='$gradientEditor'></div>
+        </div>
+        <div class='box'>
+          <div class='colorpicker'>
+            ${createComponent("EmbedColorPicker", {
+      ref: "$color",
+      onchange: "changeColor"
+    })}    
+          </div>
+          <div class='assetpicker'>
+            ${createComponent("ImageSelectEditor", {
+      ref: "$image",
+      key: "image",
+      value: (_b = this.state.image) == null ? void 0 : _b.url,
+      onchange: "changeImageUrl"
+    })}
+            ${createComponent("ImageAssetPicker", {
+      ref: "$asset",
+      onchange: "changeImageUrl"
+    })}
+          </div>
+        </div>
+      </div>
+     
+    `;
+  }
+  [BIND("$body")]() {
+    var _a;
+    return {
+      "data-selected-editor": (_a = this.state.image) == null ? void 0 : _a.type
+    };
+  }
+  getColorString() {
+    var value = "";
+    if (this.state.image instanceof Gradient) {
+      value = this.state.image.getColorString();
+    }
+    return value;
+  }
+  getCurrentColor() {
+    return this.state.image.colorsteps[this.state.selectColorStepIndex || 0].color;
+  }
+  [LOAD("$gradientEditor")]() {
+    var _a;
+    if (((_a = this.state.image) == null ? void 0 : _a.type) === GradientType.URL) {
+      return "";
+    }
+    return createComponent("FillEditor", {
+      ref: "$g",
+      value: `${this.state.image}`,
+      index: this.state.selectColorStepIndex,
+      onchange: "changeFillEditor"
+    });
+  }
+  [SUBSCRIBE("updateFillEditor")](data, targetColorStep = void 0) {
+    this.state.image = isString(data) ? SVGFill.parseImage(data) : data;
+    if (targetColorStep) {
+      this.state.selectColorStepIndex = this.state.image.colorsteps.findIndex((it) => it.color === targetColorStep.color && it.percent === targetColorStep.percent);
+      this.children.$color.setValue(targetColorStep.color);
+    }
+    this.refresh();
+  }
+  [SUBSCRIBE_SELF("changeFillEditor")](data) {
+    this.state.image = isString(data) ? SVGFill.parseImage(data) : data;
+    this.updateTitle();
+    this.updateData();
+  }
+  [SUBSCRIBE_SELF("changeTabType")](key, type) {
+    this.children.$g.trigger("changeTabType", type);
+    this.refs.$body.attr("data-selected-editor", type);
+  }
+  [SUBSCRIBE_SELF("changeColor")](color2) {
+    this.children.$g.trigger("setColorStepColor", color2);
+  }
+  [SUBSCRIBE_SELF("changeImageUrl")](url) {
+    if (this.state.image) {
+      this.state.image.reset({
+        url
+      });
+      this.trigger("changeFillEditor", this.state.image);
+    }
+  }
+  updateTitle() {
+    this.children.$select.setValue(this.state.image.type);
+  }
+  [SUBSCRIBE("showFillPickerPopup")](data, params, rect2) {
+    data.changeEvent = data.changeEvent || "changeFillPopup";
+    data.params = params;
+    this.showByRect(this.makeRect(248, 560, rect2));
+    this.setState(data);
+    this.updateTitle();
+    if (data.image.isGradient()) {
+      this.trigger("selectColorStep", data.image.colorsteps[0].color);
+    }
+    this.emit("showFillEditorView", {
+      key: data.key
+    });
+  }
+  [SUBSCRIBE("hideFillPickerPopup")]() {
     this.hide();
-    this.emit("hideGradientEditorView");
+    this.emit("hideFillEditorView");
   }
   onClose() {
-    this.emit("hideGradientEditorView");
+    this.emit("hideFillEditorView");
   }
   [SUBSCRIBE("selectColorStep")](color2) {
     this.children.$color.setValue(color2);
@@ -37050,98 +37295,7 @@ class GradientPickerPopup extends BasePopup {
     return `${this.state.image}`;
   }
   updateData() {
-    console.log(this.state.image, this.getValue());
     this.state.instance.trigger(this.state.changeEvent, this.getValue(), this.state.params);
-  }
-}
-class FillPickerPopup extends BasePopup {
-  getTitle() {
-    return this.$i18n("fill.picker.popup.title");
-  }
-  initState() {
-    return {
-      image: SVGStaticGradient.create()
-    };
-  }
-  initialize() {
-    super.initialize();
-    this.selectedTab = "static-gradient";
-  }
-  getClassName() {
-    return "fill-picker-popup";
-  }
-  getBody() {
-    return html`
-      <div class="elf--gradient-picker-popup" ref='$body' data-selected-editor=''>
-        <div class='box'>
-          <div ref='$gradientEditor'></div>
-        </div>
-        <div class='box'>
-          <div class='colorpicker'>
-            <object refClass="EmbedColorPicker" ${variable$4({
-      ref: "$color",
-      onchange: (color2) => {
-        this.trigger("changeColor", color2);
-      }
-    })}/>                    
-          </div>
-          <div class='assetpicker'>
-            <object refClass="ImageAssetPicker" ref='$asset' onchange='changeImageUrl' />
-          </div>
-        </div>
-      </div>
-     
-    `;
-  }
-  [SUBSCRIBE("changeTabType")](type) {
-    this.refs.$body.attr("data-selected-editor", type);
-  }
-  getColorString() {
-    var value = "";
-    if (this.state.image instanceof Gradient) {
-      value = this.state.image.getColorString();
-    }
-    return value;
-  }
-  getCurrentColor() {
-    return this.state.image.colorsteps[this.state.selectColorStepIndex || 0].color;
-  }
-  [LOAD("$gradientEditor")]() {
-    return `<object refClass="FillEditor" 
-      ref="$g" 
-      value="${this.state.image}" 
-      selectedIndex="${this.state.selectColorStepIndex}" 
-      onchange='changeFillEditor'
-    />`;
-  }
-  [SUBSCRIBE_SELF("changeFillEditor")](data) {
-    this.state.image = data;
-    this.updateData();
-  }
-  [SUBSCRIBE_SELF("changeColor")](color2) {
-    this.children.$g.trigger("setColorStepColor", color2);
-  }
-  [SUBSCRIBE_SELF("changeImageUrl")](url) {
-    this.children.$g.trigger("setImageUrl", url);
-  }
-  [SUBSCRIBE("showFillPickerPopup")](data, params) {
-    this.show(240);
-    data.changeEvent = data.changeEvent || "changeFillPopup";
-    data.params = params;
-    this.setState(data);
-    if (data.image.isGradient()) {
-      this.trigger("selectColorStep", data.image.colorsteps[0].color);
-    }
-  }
-  [SUBSCRIBE("selectColorStep")](color2) {
-    this.children.$color.setValue(color2);
-  }
-  [SUBSCRIBE("changeColorStep")](data = {}) {
-    this.state.image.reset(__spreadValues({}, data));
-    this.updateData();
-  }
-  updateData() {
-    this.state.instance.trigger(this.state.changeEvent, this.state.image, this.state.params);
   }
 }
 var FillSingleEditor$1 = "";
@@ -37177,7 +37331,11 @@ class FillSingleEditor extends EditorElement {
     if (!image2)
       return { innerHTML: "" };
     return {
-      innerHTML: image2.toSVGString(this.fillId)
+      innerHTML: image2.toSVGString(this.fillId, {
+        width: 20,
+        height: 20,
+        sizeType: "percent"
+      })
     };
   }
   [BIND("$fillColor")]() {
@@ -37193,7 +37351,7 @@ class FillSingleEditor extends EditorElement {
     if (!image2)
       return { fill: "transparent" };
     var colors2 = image2.type != "url" ? `${image2.colorsteps[0].color}` : "transparent";
-    if (image2.type.includes("linear") || image2.type.includes("radial")) {
+    if ([GradientType.LINEAR, GradientType.RADIAL].includes(image2.type)) {
       colors2 = image2.colorsteps.map((it) => {
         return `<span class='color' style='background-color: ${it.color}' title='${it.color}'></span>`;
       }).join("");
@@ -37229,9 +37387,10 @@ class FillSingleEditor extends EditorElement {
   viewGradientPopup() {
     this.emit("showFillPickerPopup", {
       instance: this,
+      key: this.props.key,
       changeEvent: "changeFillSingle",
       image: this.state.image
-    });
+    }, null, this.$el.rect());
   }
   [SUBSCRIBE("changeFillSingle")](image2, params) {
     this.updateData({ image: SVGFill.parseImage(image2) });
@@ -37259,22 +37418,18 @@ class GradientSingleEditor extends EditorElement {
   }
   [BIND("$miniView")]() {
     const project2 = this.$selection.currentProject;
+    let image2;
     if (this.state.image.type === GradientType.URL) {
-      const imageUrl = project2.getImageValueById(this.state.image.url) || this.state.image.url;
-      return {
-        style: {
-          "background-image": this.state.image.toString(imageUrl),
-          "background-size": "cover"
-        }
-      };
+      const imageUrl = project2.getImageValueById(this.state.image.url);
+      image2 = this.state.image.toString(imageUrl);
     } else {
-      return {
-        style: {
-          "background-image": this.state.image,
-          "background-size": "cover"
-        }
-      };
+      image2 = this.state.image;
     }
+    return {
+      style: {
+        "background-image": image2
+      }
+    };
   }
   template() {
     return `
@@ -37325,7 +37480,6 @@ class GradientSingleEditor extends EditorElement {
         });
         break;
     }
-    console.log(image2);
     this.updateData({ image: image2 });
     this.refresh();
   }
@@ -37697,7 +37851,7 @@ class ImageSelectEditor extends EditorElement {
     const project2 = this.$selection.currentProject;
     if (!project2)
       return;
-    const imageUrl = project2.getImageValueById(this.state.value) || this.state.value;
+    const imageUrl = project2.getImageValueById(this.state.value);
     return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("div", {
       class: "preview-container"
     }, imageUrl ? /* @__PURE__ */ createElementJsx("img", {
@@ -43110,11 +43264,6 @@ class GradientEditor extends EditorElement {
   template() {
     return `
         <div class='elf--gradient-editor'>
-            <div class='gradient-preview'>
-              <div data-editor='image-loader'>
-                <input type='file' accept="image/*" ref='$file' />
-              </div>              
-            </div>
             <div class='gradient-steps' data-editor='gradient'>
                 <div class="hue-container" ref="$back"></div>            
                 <div class="hue" ref="$steps">
@@ -43133,11 +43282,6 @@ class GradientEditor extends EditorElement {
         });
       });
     }
-  }
-  [DOUBLECLICK("$gradientView") + PREVENT](e2) {
-    this.state.image.radialPosition = ["50%", "50%"];
-    this.refresh();
-    this.updateData();
   }
   [SUBSCRIBE_SELF("changeTabType")](type) {
     var _a, _b;
@@ -44297,7 +44441,7 @@ class SelectIconEditor extends EditorElement {
     var value = this.props.value || "";
     return {
       label: this.props.label || "",
-      compact: this.props.compact === "true",
+      compact: isBoolean(this.props.compact) ? this.props.compact : this.props.compact === "true",
       options: options2,
       icons,
       colors: colors2,
@@ -47087,18 +47231,12 @@ class SVGItemRender$2 extends LayerRender$1 {
   toFillSVG(item2) {
     var _a;
     const fillValue = this.cachedFill(item2);
-    return (_a = fillValue == null ? void 0 : fillValue.toSVGString) == null ? void 0 : _a.call(fillValue, this.fillId(item2), {
-      width: item2.width,
-      height: item2.height
-    });
+    return (_a = fillValue == null ? void 0 : fillValue.toSVGString) == null ? void 0 : _a.call(fillValue, this.fillId(item2), item2.contentBox);
   }
   toStrokeSVG(item2) {
     var _a;
     const strokeValue = this.cachedStroke(item2);
-    return (_a = strokeValue == null ? void 0 : strokeValue.toSVGString) == null ? void 0 : _a.call(strokeValue, this.strokeId(item2), {
-      width: item2.width,
-      height: item2.height
-    });
+    return (_a = strokeValue == null ? void 0 : strokeValue.toSVGString) == null ? void 0 : _a.call(strokeValue, this.strokeId(item2), item2.contentBox);
   }
   toFillValue(item2) {
     var _a;
@@ -49846,10 +49984,10 @@ function getSourceTypeString(type) {
   }
   return "";
 }
-const width = 40;
+const width$1 = 40;
 const half_height = 20;
 const connectedXAxis = {
-  "1": [width + 5]
+  "1": [width$1 + 5]
 };
 const connectedYAxis = {
   "1": [half_height]
@@ -52493,11 +52631,11 @@ class PathGenerator {
       }
     }
   }
-  calculateToCurve(point2, nextPoint, prevPoint) {
-    var centerX = (nextPoint.startPoint.x + prevPoint.startPoint.x) / 2;
-    var centerY = (nextPoint.startPoint.y + prevPoint.startPoint.y) / 2;
-    var dx = (nextPoint.startPoint.x - centerX) / 2;
-    var dy = (nextPoint.startPoint.y - centerY) / 2;
+  calculateToCurve(point2, nextPoint2, prevPoint) {
+    var centerX = (nextPoint2.startPoint.x + prevPoint.startPoint.x) / 2;
+    var centerY = (nextPoint2.startPoint.y + prevPoint.startPoint.y) / 2;
+    var dx = (nextPoint2.startPoint.x - centerX) / 2;
+    var dy = (nextPoint2.startPoint.y - centerY) / 2;
     point2.endPoint = {
       x: point2.startPoint.x + dx,
       y: point2.startPoint.y + dy
@@ -52522,9 +52660,9 @@ class PathGenerator {
           lastPoint.endPoint = clone$1(lastPoint.startPoint);
         }
       } else {
-        var nextPoint = this.getNextPoint(index2);
-        if (nextPoint && nextPoint.command === "M") {
-          var firstPoint = nextPoint;
+        var nextPoint2 = this.getNextPoint(index2);
+        if (nextPoint2 && nextPoint2.command === "M") {
+          var firstPoint = nextPoint2;
           firstPoint.curve = false;
           firstPoint.reversePoint = clone$1(firstPoint.startPoint);
           firstPoint.endPoint = clone$1(firstPoint.startPoint);
@@ -52533,24 +52671,24 @@ class PathGenerator {
     } else {
       point2.curve = true;
       var prevPoint = this.getPrevPoint(index2);
-      var nextPoint = this.getNextPoint(index2);
-      if (nextPoint && nextPoint.index < index2 && nextPoint.command === "M") {
-        var firstPoint = nextPoint;
-        nextPoint = this.getNextPoint(firstPoint.index);
-        this.calculateToCurve(point2, nextPoint, prevPoint);
+      var nextPoint2 = this.getNextPoint(index2);
+      if (nextPoint2 && nextPoint2.index < index2 && nextPoint2.command === "M") {
+        var firstPoint = nextPoint2;
+        nextPoint2 = this.getNextPoint(firstPoint.index);
+        this.calculateToCurve(point2, nextPoint2, prevPoint);
         firstPoint.curve = true;
         firstPoint.endPoint = clone$1(point2.endPoint);
         firstPoint.reversePoint = clone$1(point2.reversePoint);
-      } else if (nextPoint && nextPoint.index > index2 && nextPoint.command !== "M") {
-        this.calculateToCurve(point2, nextPoint, prevPoint);
-      } else if (!nextPoint && prevPoint) {
+      } else if (nextPoint2 && nextPoint2.index > index2 && nextPoint2.command !== "M") {
+        this.calculateToCurve(point2, nextPoint2, prevPoint);
+      } else if (!nextPoint2 && prevPoint) {
         var centerX = (point2.startPoint.x - prevPoint.startPoint.x) / 3;
         var centerY = (point2.startPoint.y - prevPoint.startPoint.y) / 3;
         point2.endPoint = { x: point2.startPoint.x + centerX, y: point2.startPoint.y + centerY };
         point2.reversePoint = Point.getReversePoint(point2.startPoint, point2.endPoint);
-      } else if (!prevPoint && nextPoint) {
-        var centerX = (point2.startPoint.x - nextPoint.startPoint.x) / 3;
-        var centerY = (point2.startPoint.y - nextPoint.startPoint.y) / 3;
+      } else if (!prevPoint && nextPoint2) {
+        var centerX = (point2.startPoint.x - nextPoint2.startPoint.x) / 3;
+        var centerY = (point2.startPoint.y - nextPoint2.startPoint.y) / 3;
         point2.endPoint = { x: point2.startPoint.x + centerX, y: point2.startPoint.y + centerY };
         point2.reverse = Point.getReversePoint(point2.startPoint, point2.endPoint);
       }
@@ -52820,17 +52958,17 @@ class PathGenerator {
       this.segmentManager.addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
     }
   }
-  makeDistancePointGuide(prevPoint, current, nextPoint, index2) {
+  makeDistancePointGuide(prevPoint, current, nextPoint2, index2) {
     if (current.selected) {
       if (prevPoint) {
         this.makeTriangleDistancePointGuide(prevPoint, current);
       }
-      if (nextPoint) {
-        this.makeTriangleDistancePointGuide(current, nextPoint);
+      if (nextPoint2) {
+        this.makeTriangleDistancePointGuide(current, nextPoint2);
       }
     }
   }
-  makeStartPointGuide(prevPoint, current, nextPoint, index2) {
+  makeStartPointGuide(prevPoint, current, nextPoint2, index2) {
     current.startPoint.isFirst = true;
     if (current.curve === false) {
       this.segmentManager.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
@@ -52841,7 +52979,7 @@ class PathGenerator {
       }
     }
   }
-  makeMiddlePointGuideSegment(prevPoint, current, nextPoint, index2, isSiblingSelected) {
+  makeMiddlePointGuideSegment(prevPoint, current, nextPoint2, index2, isSiblingSelected) {
     var mng = this.segmentManager;
     if (current.curve === false) {
       if (prevPoint.curve === false) {
@@ -52907,7 +53045,7 @@ class PathGenerator {
     const vertext = this.pathEditor.$viewport.applyVertexInverse([point2.x, point2.y, 0]);
     return this.pathEditor.$viewport.checkInViewport(vertext);
   }
-  makeMiddlePointGuideSplitLine(prevPoint, current, nextPoint, index2, isSiblingSelected) {
+  makeMiddlePointGuideSplitLine(prevPoint, current, nextPoint2, index2, isSiblingSelected) {
     const selected = isSiblingSelected ? "selected" : "";
     if (current.curve === false) {
       if (prevPoint.curve === false) {
@@ -52948,7 +53086,7 @@ class PathGenerator {
       var current = points2[currentIndex];
       if (!current)
         continue;
-      var nextPoint = Point.getNextPoint(points2, index2);
+      var nextPoint2 = Point.getNextPoint(points2, index2);
       var prevPoint = Point.getPrevPoint(points2, index2);
       if (prevPoint && prevPoint.command === "M") {
         if (current.startPoint) {
@@ -52956,19 +53094,19 @@ class PathGenerator {
         }
       }
       if (current.startPoint) {
-        if (nextPoint) {
-          current.startPoint.isLast = nextPoint.command === "M";
+        if (nextPoint2) {
+          current.startPoint.isLast = nextPoint2.command === "M";
         } else {
           current.startPoint.isLast = index2 === len2 - 1;
         }
       }
       current.selected = this.selectedIndex === index2;
       if (current.command === "M") {
-        this.makeStartPointGuide(prevPoint, current, nextPoint, index2);
+        this.makeStartPointGuide(prevPoint, current, nextPoint2, index2);
       } else {
-        var isSiblingSelected = Boolean(this.isSelectedSegment("endPoint", prevPoint == null ? void 0 : prevPoint.index) || this.isSelectedSegment("startPoint", prevPoint == null ? void 0 : prevPoint.index) || this.isSelectedSegment("reversePoint", prevPoint == null ? void 0 : prevPoint.index) || this.isSelectedSegment("endPoint", nextPoint == null ? void 0 : nextPoint.index) || this.isSelectedSegment("startPoint", nextPoint == null ? void 0 : nextPoint.index) || this.isSelectedSegment("reversePoint", nextPoint == null ? void 0 : nextPoint.index) || this.isSelectedSegment("endPoint", current == null ? void 0 : current.index) || this.isSelectedSegment("startPoint", current == null ? void 0 : current.index) || this.isSelectedSegment("reversePoint", current == null ? void 0 : current.index));
-        this.makeMiddlePointGuideSplitLine(prevPoint, current, nextPoint, index2, isSiblingSelected);
-        this.makeMiddlePointGuideSegment(prevPoint, current, nextPoint, index2, isSiblingSelected);
+        var isSiblingSelected = Boolean(this.isSelectedSegment("endPoint", prevPoint == null ? void 0 : prevPoint.index) || this.isSelectedSegment("startPoint", prevPoint == null ? void 0 : prevPoint.index) || this.isSelectedSegment("reversePoint", prevPoint == null ? void 0 : prevPoint.index) || this.isSelectedSegment("endPoint", nextPoint2 == null ? void 0 : nextPoint2.index) || this.isSelectedSegment("startPoint", nextPoint2 == null ? void 0 : nextPoint2.index) || this.isSelectedSegment("reversePoint", nextPoint2 == null ? void 0 : nextPoint2.index) || this.isSelectedSegment("endPoint", current == null ? void 0 : current.index) || this.isSelectedSegment("startPoint", current == null ? void 0 : current.index) || this.isSelectedSegment("reversePoint", current == null ? void 0 : current.index));
+        this.makeMiddlePointGuideSplitLine(prevPoint, current, nextPoint2, index2, isSiblingSelected);
+        this.makeMiddlePointGuideSegment(prevPoint, current, nextPoint2, index2, isSiblingSelected);
       }
       if (current.close) {
         this.pathStringManager.Z();
@@ -56081,7 +56219,7 @@ function defaultIcons(editor) {
   editor.registerIcon("spline", "smooth");
   editor.registerIcon("rect", "rect");
 }
-var GradientEditorView$2 = "";
+var GradientEditorView$1 = "";
 var radialTypeList = [
   "circle",
   "circle farthest-corner",
@@ -56325,8 +56463,8 @@ class GradientColorstepEditor extends GradientRotateEditor {
   moveColorStep(dx, dy) {
     if (this.state.altKey)
       return;
-    const nextPoint = add$1([], this.screenXY, [dx, dy, 0]);
-    const [baseStartPoint, baseEndPoint, baseNextPoint] = vertiesMap([this.startPoint, this.endPoint, nextPoint], this.rotateInverse);
+    const nextPoint2 = add$1([], this.screenXY, [dx, dy, 0]);
+    const [baseStartPoint, baseEndPoint, baseNextPoint] = vertiesMap([this.startPoint, this.endPoint, nextPoint2], this.rotateInverse);
     const result = this.state.backgroundImageMatrix;
     let newDist = 0;
     let baseDist = 0;
@@ -56361,7 +56499,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
         break;
       case GradientType.CONIC:
       case GradientType.REPEATING_CONIC:
-        const newNextPoint = subtract([], nextPoint, this.centerPosition);
+        const newNextPoint = subtract([], nextPoint2, this.centerPosition);
         let nextAngle = calculateAngle360(newNextPoint[0], newNextPoint[1]);
         if (this.$config.get("bodyEvent").shiftKey) {
           nextAngle -= nextAngle % this.$config.get("fixed.gradient.angle");
@@ -56432,13 +56570,13 @@ class GradientColorstepEditor extends GradientRotateEditor {
     }
   }
   [POINTERMOVE("$el .area-line")](evt) {
-    const nextPoint = this.$viewport.applyVertex(this.$viewport.getWorldPosition(evt));
+    const nextPoint2 = this.$viewport.applyVertex(this.$viewport.getWorldPosition(evt));
     const image2 = this.state.lastBackgroundMatrix.backgroundImage.image;
     let baseStartPoint, baseEndPoint, baseNextPoint;
     switch (image2.type) {
       case GradientType.LINEAR:
       case GradientType.REPEATING_LINEAR:
-        [baseStartPoint, baseEndPoint, baseNextPoint] = vertiesMap([this.state.startPoint, this.state.endPoint, nextPoint], this.state.rotateInverse);
+        [baseStartPoint, baseEndPoint, baseNextPoint] = vertiesMap([this.state.startPoint, this.state.endPoint, nextPoint2], this.state.rotateInverse);
         var newDist = 0;
         var [s, e2, n] = [baseStartPoint[1], baseEndPoint[1], baseNextPoint[1]];
         var baseDefaultDist = Math.abs(s - e2);
@@ -56458,7 +56596,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
         [baseStartPoint, baseEndPoint, baseNextPoint] = [
           this.state.startPoint,
           this.state.endPoint,
-          nextPoint
+          nextPoint2
         ];
         var newDist = 0;
         var [s, e2, n] = [baseStartPoint[0], baseEndPoint[0], baseNextPoint[0]];
@@ -56473,7 +56611,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
       case GradientType.CONIC:
       case GradientType.REPEATING_CONIC:
         const newStartPoint = subtract([], this.state.startPoint, this.state.centerPosition);
-        const newNextPoint = subtract([], nextPoint, this.state.centerPosition);
+        const newNextPoint = subtract([], nextPoint2, this.state.centerPosition);
         const startAngle = calculateAngle360(newStartPoint[0], newStartPoint[1]);
         const nextAngle = calculateAngle360(newNextPoint[0], newNextPoint[1]);
         var newDist = (nextAngle - startAngle) / 360 * 100;
@@ -56483,7 +56621,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
     this.refresh();
   }
 }
-class GradientEditorView$1 extends GradientColorstepEditor {
+class GradientEditorView extends GradientColorstepEditor {
   template() {
     return /* @__PURE__ */ createElementJsx("div", {
       class: "elf--gradient-editor-view"
@@ -56523,8 +56661,8 @@ class GradientEditorView$1 extends GradientColorstepEditor {
     const newX = localPosition[0] - backRect.x;
     const newY = localPosition[1] - backRect.y;
     this.state.backgroundImages[this.state.index].image.radialPosition = [
-      Length.percent(newX / backRect.width * 100),
-      Length.percent(newY / backRect.height * 100)
+      Length.makePercent(newX, backRect.width),
+      Length.makePercent(newY, backRect.height)
     ];
     this.updateData();
   }
@@ -56955,9 +57093,9 @@ class GradientEditorView$1 extends GradientColorstepEditor {
     return /* @__PURE__ */ createElementJsx("div", null, this.makeGradientRect(result), image2.type === GradientType.STATIC || image2.type === GradientType.IMAGE ? null : this.makeCenterPoint(result));
   }
 }
-function GradientEditorView(editor) {
+function gradientEditorView(editor) {
   editor.registerMenuItem("canvas.view", {
-    GradientEditorView: GradientEditorView$1
+    GradientEditorView
   });
 }
 var ClippathEditorView$2 = "";
@@ -57006,8 +57144,8 @@ class ClippathPolygonEditorView extends EditorElement {
     const newLocalPoints = vertiesMap(newWorldPoints, inverseMatrix);
     this.state.clippath.value = newLocalPoints.map((p) => {
       return [
-        Length.percent(p[0] / this.state.width * 100),
-        Length.percent(p[1] / this.state.height * 100)
+        Length.makePercent(p[0], this.state.width),
+        Length.makePercent(p[1], this.state.height)
       ].join(" ");
     }).join(",");
     const value = ClipPath.toCSS(this.state.clippath);
@@ -57058,12 +57196,12 @@ class ClippathPolygonEditorView extends EditorElement {
       points: `${screenPoints.map((it) => [it[0], it[1]].join(",")).join(" ")}`
     }), screenPoints.map((it, index2) => {
       const nextIndex = (index2 + 1) % screenPoints.length;
-      const nextPoint = screenPoints[nextIndex];
+      const nextPoint2 = screenPoints[nextIndex];
       return /* @__PURE__ */ createElementJsx("line", {
         x1: it[0],
         y1: it[1],
-        x2: nextPoint[0],
-        y2: nextPoint[1],
+        x2: nextPoint2[0],
+        y2: nextPoint2[1],
         class: "polygon-line",
         "data-index": index2
       });
@@ -57146,10 +57284,10 @@ class ClippathInsetEditorView extends ClippathPolygonEditorView {
       newBottomPoint
     ], inverseMatrix);
     this.state.clippath.value = [
-      top2.isPercent() ? Length.percent(relativeTopPosition[1] / this.state.height * 100) : Length.px(relativeTopPosition[1]),
-      right2.isPercent() ? Length.percent((this.state.width - relativeRightPosition[0]) / this.state.width * 100) : Length.px(this.state.width - relativeRightPosition[0]),
-      bottom2.isPercent() ? Length.percent((this.state.height - relativeBottomPosition[1]) / this.state.height * 100) : Length.px(this.state.height - relativeBottomPosition[1]),
-      left2.isPercent() ? Length.percent(relativeLeftPosition[0] / this.state.width * 100) : Length.px(relativeLeftPosition[0])
+      top2.isPercent() ? Length.makePercent(relativeTopPosition[1], this.state.height) : Length.px(relativeTopPosition[1]),
+      right2.isPercent() ? Length.makePercent(this.state.width - relativeRightPosition[0], this.state.width) : Length.px(this.state.width - relativeRightPosition[0]),
+      bottom2.isPercent() ? Length.makePercent(this.state.height - relativeBottomPosition[1], this.state.height) : Length.px(this.state.height - relativeBottomPosition[1]),
+      left2.isPercent() ? Length.makePercent(relativeLeftPosition[0], this.state.width) : Length.px(relativeLeftPosition[0])
     ].join(" ");
     const value = ClipPath.toCSS(this.state.clippath);
     this.emit("setAttributeForMulti", this.$selection.packByValue(value));
@@ -57185,10 +57323,10 @@ class ClippathInsetEditorView extends ClippathPolygonEditorView {
       newBottomPoint
     ], inverseMatrix);
     this.state.clippath.value = [
-      top2.isPercent() ? Length.percent(relativeTopPosition[1] / this.state.height * 100) : Length.px(relativeTopPosition[1]),
-      right2.isPercent() ? Length.percent((this.state.width - relativeRightPosition[0]) / this.state.width * 100) : Length.px(this.state.width - relativeRightPosition[0]),
-      bottom2.isPercent() ? Length.percent((this.state.height - relativeBottomPosition[1]) / this.state.height * 100) : Length.px(this.state.height - relativeBottomPosition[1]),
-      left2.isPercent() ? Length.percent(relativeLeftPosition[0] / this.state.width * 100) : Length.px(relativeLeftPosition[0])
+      top2.isPercent() ? Length.makePercent(relativeTopPosition[1], this.state.height) : Length.px(relativeTopPosition[1]),
+      right2.isPercent() ? Length.makePercent(this.state.width - relativeRightPosition[0], this.state.width) : Length.px(this.state.width - relativeRightPosition[0]),
+      bottom2.isPercent() ? Length.makePercent(this.state.height - relativeBottomPosition[1], this.state.height) : Length.px(this.state.height - relativeBottomPosition[1]),
+      left2.isPercent() ? Length.makePercent(relativeLeftPosition[0], this.state.width) : Length.px(relativeLeftPosition[0])
     ].join(" ");
     const value = ClipPath.toCSS(this.state.clippath);
     this.emit("setAttributeForMulti", this.$selection.packByValue(value));
@@ -57289,7 +57427,7 @@ class ClippathCircleEditorView extends ClippathInsetEditorView {
     const relativePosition = vertiesMap([localPosition], this.$selection.current.absoluteMatrixInverse)[0];
     const distX = Math.abs(relativePosition[0] - oldX);
     const result = [
-      radius.isPercent() ? Length.percent(distX / r * 100) : Length.px(distX),
+      radius.isPercent() ? Length.makePercent(distX, r) : Length.px(distX),
       x2,
       y2
     ];
@@ -57324,8 +57462,8 @@ class ClippathCircleEditorView extends ClippathInsetEditorView {
     const relativePosition = vertiesMap([localPosition], this.$selection.current.absoluteMatrixInverse)[0];
     const result = [
       radius,
-      x2.isPercent() ? Length.percent(relativePosition[0] / this.state.width * 100) : Length.px(relativePosition[0]),
-      y2.isPercent() ? Length.percent(relativePosition[1] / this.state.height * 100) : Length.px(relativePosition[1])
+      x2.isPercent() ? Length.makePercent(relativePosition[0], this.state.width) : Length.px(relativePosition[0]),
+      y2.isPercent() ? Length.makePercent(relativePosition[1], this.state.height) : Length.px(relativePosition[1])
     ];
     this.state.clippath.value = `${radius} at ${result[1]} ${result[2]}`;
     const value = ClipPath.toCSS(this.state.clippath);
@@ -57410,7 +57548,7 @@ class ClippathEllipseEditorView extends ClippathCircleEditorView {
     const relativePosition = vertiesMap([localPosition], this.$selection.current.absoluteMatrixInverse)[0];
     const distX = Math.abs(relativePosition[0] - oldX);
     const result = [
-      radiusX.isPercent() ? Length.percent(distX / this.state.width * 100) : Length.px(distX),
+      radiusX.isPercent() ? Length.makePercent(distX, this.state.width) : Length.px(distX),
       x2,
       y2
     ];
@@ -57442,7 +57580,7 @@ class ClippathEllipseEditorView extends ClippathCircleEditorView {
     const relativePosition = vertiesMap([localPosition], this.$selection.current.absoluteMatrixInverse)[0];
     const distY = Math.abs(relativePosition[1] - oldY);
     const result = [
-      radiusY.isPercent() ? Length.percent(distY / this.state.height * 100) : Length.px(distY),
+      radiusY.isPercent() ? Length.makePercent(distY, this.state.height) : Length.px(distY),
       x2,
       y2
     ];
@@ -57477,8 +57615,8 @@ class ClippathEllipseEditorView extends ClippathCircleEditorView {
     const result = [
       radiusX,
       radiusY,
-      x2.isPercent() ? Length.percent(relativePosition[0] / this.state.width * 100) : Length.px(relativePosition[0]),
-      y2.isPercent() ? Length.percent(relativePosition[1] / this.state.height * 100) : Length.px(relativePosition[1])
+      x2.isPercent() ? Length.makePercent(relativePosition[0], this.state.width) : Length.px(relativePosition[0]),
+      y2.isPercent() ? Length.makePercent(relativePosition[1], this.state.height) : Length.px(relativePosition[1])
     ];
     this.state.clippath.value = `${radiusX} ${radiusY} at ${result[2]} ${result[3]}`;
     const value = ClipPath.toCSS(this.state.clippath);
@@ -57881,6 +58019,663 @@ function imageAsset(editor) {
     ImageAssetsProperty
   });
 }
+var FillEditorView$1 = "";
+const spreadMethodList = [
+  SpreadMethodType.PAD,
+  SpreadMethodType.REFLECT,
+  SpreadMethodType.REPEAT
+];
+class FillBaseEditor extends EditorElement {
+  initializeData() {
+    const current = this.$selection.current;
+    this.state.currentMatrix = current.matrix;
+    this.state.imageResult = current.createFragmentMatrix(this.state.key);
+    this.state.originalResult = current.createFragmentMatrix(this.state.key);
+  }
+}
+class FillColorstepEditor extends FillBaseEditor {
+  [KEYUP("$el .colorstep")](e2) {
+    const index2 = +e2.$dt.data("index");
+    switch (e2.code) {
+      case "Delete":
+      case "Backspace":
+        this.removeStep(index2);
+        break;
+      case "BracketRight":
+        this.sortToRight(index2);
+        break;
+      case "BracketLeft":
+        this.sortToLeft(index2);
+        break;
+      case "Equal":
+        this.appendColorStep(index2);
+        break;
+      case "Minus":
+        this.prependColorStep(index2);
+        break;
+    }
+  }
+  removeStep(currentIndex) {
+    const image2 = this.state.imageResult.image;
+    image2.removeColorStepByIndex(currentIndex);
+    this.updateColorStepStatus(image2, -1);
+  }
+  sortToRight() {
+    const image2 = this.state.imageResult.image;
+    image2.sortToRight();
+    this.updateColorStepStatus(image2, -1);
+  }
+  sortToLeft() {
+    const image2 = this.state.imageResult.image;
+    image2.sortToLeft();
+    this.updateColorStepStatus(image2, -1);
+  }
+  appendColorStep(currentIndex) {
+    const nextIndex = currentIndex + 1;
+    const image2 = this.state.imageResult.image;
+    const currentColorStep = image2.colorsteps[currentIndex];
+    const nextColorStep = image2.colorsteps[nextIndex];
+    let newIndex = -1;
+    if (!nextColorStep) {
+      if (currentColorStep.percent !== 100) {
+        newIndex = image2.insertColorStep(currentColorStep.percent + (100 - currentColorStep.percent) / 2);
+      }
+    } else {
+      newIndex = image2.insertColorStep(currentColorStep.percent + (nextColorStep.percent - currentColorStep.percent) / 2);
+    }
+    this.updateColorStepStatus(image2, newIndex);
+  }
+  prependColorStep(currentIndex) {
+    const prevIndex = currentIndex - 1;
+    const image2 = this.state.imageResult.image;
+    const currentColorStep = image2.colorsteps[currentIndex];
+    const prevColorStep = image2.colorsteps[prevIndex];
+    let newIndex = -1;
+    if (!prevColorStep) {
+      if (currentColorStep.percent !== 0) {
+        newIndex = image2.insertColorStep(currentColorStep.percent);
+      }
+    } else {
+      newIndex = image2.insertColorStep(prevColorStep.percent + (currentColorStep.percent - prevColorStep.percent) / 2);
+    }
+    this.updateColorStepStatus(image2, newIndex);
+  }
+  [POINTERSTART("$el .point") + MOVE("movePoint") + END("moveEndPoint")](e2) {
+    this.$el.toggleClass("dragging", true);
+    this.initializeData();
+    const result = this.state.imageResult;
+    this.pointTarget = e2.$dt.data("type");
+    this.startPoint = this.$viewport.applyVertex(result.startPoint);
+    this.endPoint = this.$viewport.applyVertex(result.endPoint);
+    this.dist = dist(this.startPoint, this.endPoint);
+    if (result.shapePoint) {
+      this.shapePoint = this.$viewport.applyVertex(result.shapePoint);
+      this.shapeDist = dist(this.startPoint, this.shapePoint);
+    }
+  }
+  calculateNextPoint(nextPoint2) {
+    if (this.$config.get("bodyEvent").shiftKey) {
+      let tempStartPoint, tempEndPoint;
+      if (this.pointTarget === "start") {
+        tempStartPoint = this.endPoint;
+        tempEndPoint = nextPoint2;
+      } else {
+        tempStartPoint = this.startPoint;
+        tempEndPoint = nextPoint2;
+      }
+      const newDist = subtract([], tempEndPoint, tempStartPoint);
+      let newAngle = calculateAngle360(newDist[0], newDist[1]) - 90;
+      newAngle -= newAngle % this.$config.get("fixed.gradient.angle");
+      nextPoint2 = vertiesMap([add$1([], tempStartPoint, [0, -this.dist, 0])], calculateRotationOriginMat4(newAngle, tempStartPoint))[0];
+    }
+    return nextPoint2;
+  }
+  moveShapePoint(dx, dy) {
+    const targetPoint = this.shapePoint;
+    const nextPoint2 = this.calculateNextPoint(add$1([], targetPoint, [dx, dy, 0]));
+    const width2 = this.state.currentMatrix.width;
+    const height2 = this.state.currentMatrix.height;
+    const image2 = this.state.imageResult.image;
+    let newX, newY;
+    switch (image2.type) {
+      case GradientType.RADIAL:
+        const dist$1 = dist(this.startPoint, nextPoint2);
+        const lastPoint = lerp([], this.startPoint, this.shapePoint, dist$1 / this.shapeDist);
+        const [worldPosition] = vertiesMap([this.$viewport.applyVertexInverse(lastPoint)], this.state.currentMatrix.absoluteMatrixInverse);
+        newX = Length.makePercent(worldPosition[0], width2);
+        newY = Length.makePercent(worldPosition[1], height2);
+        image2.reset({
+          x3: newX,
+          y3: newY
+        });
+        break;
+    }
+    this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$selection.packByValue({
+      [this.state.key]: `${this.state.imageResult.image}`
+    }));
+  }
+  movePoint(dx, dy) {
+    if (this.pointTarget === "shape") {
+      return this.moveShapePoint(dx, dy);
+    }
+    const targetPoint = this.pointTarget === "start" ? this.startPoint : this.endPoint;
+    let nextPoint2 = this.calculateNextPoint(add$1([], targetPoint, [dx, dy, 0]));
+    var [worldPosition] = vertiesMap([this.$viewport.applyVertexInverse(nextPoint2)], this.state.currentMatrix.absoluteMatrixInverse);
+    const width2 = this.state.currentMatrix.width;
+    const height2 = this.state.currentMatrix.height;
+    const image2 = this.state.imageResult.image;
+    switch (image2.type) {
+      case GradientType.RADIAL:
+        var newX, newY, newX2, newY2, newX3, newY3;
+        if (this.pointTarget === "start") {
+          newX = image2.x1.isPercent() ? Length.makePercent(worldPosition[0], width2) : Length.px(worldPosition[0]);
+          newY = image2.y1.isPercent() ? Length.makePercent(worldPosition[1], height2) : Length.px(worldPosition[1]);
+          const nextEndPoint = this.calculateNextPoint(add$1([], this.endPoint, [dx, dy, 0]));
+          const [newEndPosition] = vertiesMap([this.$viewport.applyVertexInverse(nextEndPoint)], this.state.currentMatrix.absoluteMatrixInverse);
+          newX2 = image2.x2.isPercent() ? Length.makePercent(newEndPosition[0], width2) : Length.px(newEndPosition[0]);
+          newY2 = image2.y2.isPercent() ? Length.makePercent(newEndPosition[1], height2) : Length.px(newEndPosition[1]);
+          const nextShapePoint = this.calculateNextPoint(add$1([], this.shapePoint, [dx, dy, 0]));
+          const [newShapePosition] = vertiesMap([this.$viewport.applyVertexInverse(nextShapePoint)], this.state.currentMatrix.absoluteMatrixInverse);
+          newX3 = image2.x3.isPercent() ? Length.makePercent(newShapePosition[0], width2) : Length.px(newShapePosition[0]);
+          newY3 = image2.y3.isPercent() ? Length.makePercent(newShapePosition[1], height2) : Length.px(newShapePosition[1]);
+          image2.reset({
+            x1: newX,
+            y1: newY,
+            x2: newX2,
+            y2: newY2,
+            x3: newX3,
+            y3: newY3
+          });
+        } else if (this.pointTarget === "end") {
+          if (this.$config.get("bodyEvent").altKey) {
+            const dist$1 = dist(this.startPoint, nextPoint2);
+            nextPoint2 = lerp([], this.startPoint, this.endPoint, dist$1 / this.dist);
+            var [worldPosition] = vertiesMap([this.$viewport.applyVertexInverse(nextPoint2)], this.state.currentMatrix.absoluteMatrixInverse);
+          }
+          newX = Length.makePercent(worldPosition[0], width2);
+          newY = Length.makePercent(worldPosition[1], height2);
+          image2.reset({
+            x2: newX,
+            y2: newY
+          });
+          const lastDist = dist(this.startPoint, nextPoint2);
+          const unitVector = lerp([], this.startPoint, nextPoint2, 1 / lastDist);
+          const nextShapePoint = lerp([], this.startPoint, vertiesMap([unitVector], calculateRotationOriginMat4(90, this.startPoint))[0], image2.radialType === RadialGradientType.CIRCLE ? lastDist : this.shapeDist);
+          const [newShapePosition] = vertiesMap([this.$viewport.applyVertexInverse(nextShapePoint)], this.state.currentMatrix.absoluteMatrixInverse);
+          newX3 = Length.makePercent(newShapePosition[0], width2);
+          newY3 = Length.makePercent(newShapePosition[1], height2);
+          image2.reset({
+            x3: newX3,
+            y3: newY3
+          });
+        }
+        break;
+      case GradientType.LINEAR:
+        var newX, newY;
+        if (this.pointTarget === "start") {
+          newX = image2.x1.isPercent() ? Length.makePercent(worldPosition[0], width2) : Length.px(worldPosition[0]);
+          newY = image2.y1.isPercent() ? Length.makePercent(worldPosition[1], height2) : Length.px(worldPosition[1]);
+          image2.reset({
+            x1: newX,
+            y1: newY
+          });
+        } else if (this.pointTarget === "end") {
+          newX = image2.x2.isPercent() ? Length.makePercent(worldPosition[0], width2) : Length.px(worldPosition[0]);
+          newY = image2.y2.isPercent() ? Length.makePercent(worldPosition[1], height2) : Length.px(worldPosition[1]);
+          image2.reset({
+            x2: newX,
+            y2: newY
+          });
+        }
+        break;
+    }
+    this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$selection.packByValue({
+      [this.state.key]: `${this.state.imageResult.image}`
+    }));
+  }
+  moveEndPoint(dx, dy) {
+    const image2 = this.state.imageResult.image;
+    if (dx === 0 && dy === 0) {
+      switch (image2.type) {
+        case GradientType.RADIAL:
+          if (this.pointTarget === "start") {
+            switch (image2.radialType) {
+              case RadialGradientType.CIRCLE:
+                image2.reset({
+                  radialType: RadialGradientType.ELLIPSE
+                });
+                break;
+              case RadialGradientType.ELLIPSE:
+                const lastDist = dist(this.startPoint, this.endPoint);
+                const unitVector = lerp([], this.startPoint, nextPoint, 1 / lastDist);
+                const nextShapePoint = lerp([], this.startPoint, vertiesMap([unitVector], calculateRotationOriginMat4(90, this.startPoint))[0], lastDist);
+                const [newShapePosition] = vertiesMap([this.$viewport.applyVertexInverse(nextShapePoint)], this.state.currentMatrix.absoluteMatrixInverse);
+                const x3 = Length.makePercent(newShapePosition[0], width);
+                const y3 = Length.makePercent(newShapePosition[1], height);
+                image2.reset({
+                  radialType: RadialGradientType.CIRCLE,
+                  x3,
+                  y3
+                });
+                break;
+            }
+            break;
+          }
+        default:
+          const index2 = spreadMethodList.findIndex((it) => image2.spreadMethod === it);
+          const nextIndex = (index2 + 1) % spreadMethodList.length;
+          image2.reset({
+            spreadMethod: spreadMethodList[nextIndex]
+          });
+          break;
+      }
+    }
+    this.emit("updateFillEditor", image2);
+    this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$selection.packByValue({
+      [this.state.key]: `${image2}`
+    }));
+  }
+  [POINTERSTART("$el .colorstep") + MOVE("moveColorStep") + END("moveEndColorStep")](e2) {
+    this.$el.toggleClass("dragging", true);
+    this.state.hoverColorStep = null;
+    this.initializeData();
+    const $colorstep = e2.$dt;
+    this.$targetIndex = +$colorstep.data("index");
+    if (e2.altKey) {
+      this.removeStep(this.$targetIndex);
+      this.state.altKey = true;
+      return;
+    }
+    const result = this.state.imageResult;
+    switch (result.image.type) {
+      case GradientType.LINEAR:
+        this.startPoint = this.$viewport.applyVertex(result.startPoint);
+        this.endPoint = this.$viewport.applyVertex(result.endPoint);
+        const x2 = +$colorstep.data("x");
+        const y2 = +$colorstep.data("y");
+        this.screenXY = [x2, y2, 0];
+        const dist2 = subtract([], this.endPoint, this.startPoint);
+        const angle2 = calculateAngle360(dist2[0], dist2[1]) - 180;
+        this.rotateInverse = calculateRotationOriginMat4(-angle2, this.startPoint);
+        break;
+    }
+  }
+  moveColorStep(dx, dy) {
+    if (this.state.altKey)
+      return;
+    const nextPoint2 = add$1([], this.screenXY, [dx, dy, 0]);
+    const [baseStartPoint, baseEndPoint, baseNextPoint] = vertiesMap([this.startPoint, this.endPoint, nextPoint2], this.rotateInverse);
+    const result = this.state.imageResult;
+    let newDist = 0;
+    let baseDist = 0;
+    switch (result.image.type) {
+      case GradientType.LINEAR:
+        var [s, e2, n] = [baseStartPoint[0], baseEndPoint[0], baseNextPoint[0]];
+        var baseDefaultDist = Math.abs(s - e2);
+        if (n < s) {
+          newDist = -1 * Math.abs(n - s) / baseDefaultDist * 100;
+        } else if (n > e2) {
+          newDist = Math.abs(n - s) / baseDefaultDist * 100;
+        } else {
+          newDist = (n - s) / baseDefaultDist * 100;
+        }
+        baseDist = baseDefaultDist;
+        break;
+    }
+    const image2 = this.state.imageResult.image;
+    image2.colorsteps[this.$targetIndex].setValue(newDist, baseDist);
+    const targetColorStep = {
+      color: image2.colorsteps[this.$targetIndex].color,
+      percent: image2.colorsteps[this.$targetIndex].percent
+    };
+    const nextImage = this.state.originalResult.image;
+    nextImage.colorsteps = image2.colorsteps.map((it) => {
+      return it;
+    });
+    nextImage.sortColorStep();
+    this.emit("updateFillEditor", nextImage, targetColorStep);
+    this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$selection.packByValue({
+      [this.state.key]: `${nextImage}`
+    }));
+  }
+  moveEndColorStep(dx, dy) {
+    if (this.state.altKey) {
+      this.state.altKey = false;
+      return;
+    }
+    if (dx === 0 && dy === 0) {
+      const image2 = this.state.imageResult.image;
+      image2.colorsteps[this.$targetIndex].toggle();
+      const targetColorStep = {
+        color: image2.colorsteps[this.$targetIndex].color,
+        percent: image2.colorsteps[this.$targetIndex].percent
+      };
+      this.emit("updateFillEditor", image2, targetColorStep);
+      this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
+        [this.state.key]: `${image2}`
+      }));
+    }
+    this.$el.toggleClass("dragging", false);
+  }
+  updateColorStepStatus(image2, index2) {
+    this.initializeData();
+    const { color: color2, percent } = image2.colorsteps[index2] || {};
+    this.emit("updateFillEditor", image2, { color: color2, percent });
+    this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
+      [this.state.key]: `${image2}`
+    }));
+    this.state.hoverColorStep = null;
+  }
+  [POINTERSTART("$el .area-line")]() {
+    const image2 = this.state.originalResult.image;
+    const index2 = image2.insertColorStep(this.state.hoverColorStep.percent);
+    this.updateColorStepStatus(image2, index2);
+  }
+  [POINTEROUT("$el .area-line")](evt) {
+    if (this.state.hoverColorStep) {
+      this.state.hoverColorStep = null;
+      this.refresh();
+    }
+  }
+  [POINTERMOVE("$el .area-line")](evt) {
+    const nextPoint2 = this.$viewport.applyVertex(this.$viewport.getWorldPosition(evt));
+    const image2 = this.state.originalResult.image;
+    let baseStartPoint, baseEndPoint, baseNextPoint;
+    switch (image2.type) {
+      case GradientType.LINEAR:
+      case GradientType.REPEATING_LINEAR:
+        [baseStartPoint, baseEndPoint, baseNextPoint] = vertiesMap([this.state.startPoint, this.state.endPoint, nextPoint2], this.state.rotateInverse);
+        var [s, e2, n] = [baseStartPoint[0], baseEndPoint[0], baseNextPoint[0]];
+        var baseDefaultDist = Math.abs(s - e2);
+        var newDist;
+        if (n < s) {
+          newDist = -1 * Math.abs(n - s) / baseDefaultDist * 100;
+        } else if (n > e2) {
+          newDist = Math.abs(n - s) / baseDefaultDist * 100;
+        } else {
+          newDist = (n - s) / baseDefaultDist * 100;
+        }
+        this.state.hoverColorStep = image2.pickColorStep(newDist);
+        break;
+    }
+    this.refresh();
+  }
+}
+class FillEditorView extends FillColorstepEditor {
+  initState() {
+    return {
+      key: "",
+      value: "",
+      isShow: false
+    };
+  }
+  template() {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--fill-editor-view"
+    });
+  }
+  updateData() {
+    this.trigger(this.state.onchange, this.state.key, this.state.value);
+  }
+  refresh() {
+    if (this.state.isShow) {
+      this.load();
+    }
+  }
+  [SUBSCRIBE("updateViewport")]() {
+    this.refresh();
+  }
+  [SUBSCRIBE("refreshSelectionStyleView")]() {
+    if (this.$selection.current) {
+      if (this.$selection.hasChangedField("x", "y", "width", "height", "angle", "fill", "stroke")) {
+        this.refresh();
+      }
+    }
+  }
+  [SUBSCRIBE("showFillEditorView")](params = {}) {
+    this.setState({
+      key: params.key,
+      isShow: true,
+      onchange: params.onchange
+    });
+    this.$el.show();
+  }
+  [SUBSCRIBE("hideFillEditorView")]() {
+    this.setState({
+      key: "",
+      isShow: false,
+      onchange: null
+    });
+    this.$el.hide();
+  }
+  makeRadialCenterPoint(result) {
+    let startPoint2, endPoint2, shapePoint2, colorsteps;
+    startPoint2 = this.$viewport.applyVertex(result.startPoint);
+    endPoint2 = this.$viewport.applyVertex(result.endPoint);
+    shapePoint2 = this.$viewport.applyVertex(result.shapePoint);
+    const dist2 = subtract([], endPoint2, startPoint2);
+    const angle2 = calculateAngle360(dist2[0], dist2[1]) - 180;
+    const rotateInverse = calculateRotationOriginMat4(-angle2, startPoint2);
+    const rotateInverseInverse = invert([], rotateInverse);
+    colorsteps = result.colorsteps.map((it) => {
+      it.screenXY = this.$viewport.applyVertex(it.pos);
+      const [newScreenXY] = vertiesMap([it.screenXY], rotateInverse);
+      it.stickScreenXY = vertiesMap([[newScreenXY[0] - 7, newScreenXY[1] - 21, 0]], rotateInverseInverse)[0];
+      return it;
+    });
+    let newHoverColorStepPoint = null;
+    if (this.state.hoverColorStep) {
+      newHoverColorStepPoint = lerp([], startPoint2, endPoint2, this.state.hoverColorStep.percent / 100);
+    }
+    return /* @__PURE__ */ createElementJsx("svg", {
+      class: "gradient-editor-area"
+    }, /* @__PURE__ */ createElementJsx("path", {
+      d: `
+              M ${startPoint2[0]} ${startPoint2[1]}
+              L ${endPoint2[0]} ${endPoint2[1]}
+          `,
+      class: "area-line"
+    }), /* @__PURE__ */ createElementJsx("path", {
+      d: `
+              M ${startPoint2[0]} ${startPoint2[1]}
+              L ${endPoint2[0]} ${endPoint2[1]}
+          `,
+      class: "start-end-line"
+    }), /* @__PURE__ */ createElementJsx("path", {
+      d: `
+              M ${startPoint2[0]} ${startPoint2[1]}
+              L ${shapePoint2[0]} ${shapePoint2[1]}
+          `,
+      class: "normal-line"
+    }), colorsteps.map((it, index2) => {
+      if (it.cut) {
+        return /* @__PURE__ */ createElementJsx("rect", {
+          id: it.id,
+          "data-index": index2,
+          class: "colorstep",
+          x: it.stickScreenXY[0],
+          y: it.stickScreenXY[1],
+          transform: `rotate(${angle2} ${it.stickScreenXY[0]} ${it.stickScreenXY[1]})`,
+          width: 14,
+          height: 14,
+          fill: it.color,
+          tabIndex: -1,
+          "data-x": it.screenXY[0],
+          "data-y": it.screenXY[1]
+        });
+      } else {
+        return /* @__PURE__ */ createElementJsx("rect", {
+          id: it.id,
+          "data-index": index2,
+          class: "colorstep",
+          x: it.stickScreenXY[0],
+          y: it.stickScreenXY[1],
+          transform: `rotate(${angle2} ${it.stickScreenXY[0]} ${it.stickScreenXY[1]})`,
+          rx: 7,
+          ry: 7,
+          width: 14,
+          height: 14,
+          fill: it.color,
+          tabIndex: -1,
+          "data-x": it.screenXY[0],
+          "data-y": it.screenXY[1]
+        });
+      }
+    }), /* @__PURE__ */ createElementJsx("circle", {
+      class: "point",
+      "data-type": "shape",
+      cx: shapePoint2[0],
+      cy: shapePoint2[1]
+    }), /* @__PURE__ */ createElementJsx("circle", {
+      class: "point",
+      "data-type": "start",
+      cx: startPoint2[0],
+      cy: startPoint2[1]
+    }), /* @__PURE__ */ createElementJsx("circle", {
+      class: "point",
+      "data-type": "end",
+      cx: endPoint2[0],
+      cy: endPoint2[1]
+    }), newHoverColorStepPoint && /* @__PURE__ */ createElementJsx("circle", {
+      class: "hover-colorstep",
+      r: "5",
+      cx: newHoverColorStepPoint[0],
+      cy: newHoverColorStepPoint[1],
+      fill: this.state.hoverColorStep.color
+    }));
+  }
+  makeLinearCenterPoint(result) {
+    let startPoint2, endPoint2, areaStartPoint, areaEndPoint, colorsteps;
+    startPoint2 = this.$viewport.applyVertex(result.startPoint);
+    endPoint2 = this.$viewport.applyVertex(result.endPoint);
+    areaStartPoint = this.$viewport.applyVertex(result.areaStartPoint);
+    areaEndPoint = this.$viewport.applyVertex(result.areaEndPoint);
+    const dist2 = subtract([], endPoint2, startPoint2);
+    const angle2 = calculateAngle360(dist2[0], dist2[1]) - 180;
+    const rotateInverse = calculateRotationOriginMat4(-angle2, startPoint2);
+    const rotateInverseInverse = invert([], rotateInverse);
+    colorsteps = result.colorsteps.map((it) => {
+      it.screenXY = this.$viewport.applyVertex(it.pos);
+      const [newScreenXY] = vertiesMap([it.screenXY], rotateInverse);
+      it.stickScreenXY = vertiesMap([[newScreenXY[0] - 7, newScreenXY[1] - 21, 0]], rotateInverseInverse)[0];
+      return it;
+    });
+    let newHoverColorStepPoint = null;
+    if (this.state.hoverColorStep) {
+      newHoverColorStepPoint = lerp([], startPoint2, endPoint2, this.state.hoverColorStep.percent / 100);
+    }
+    return /* @__PURE__ */ createElementJsx("svg", {
+      class: "gradient-editor-area"
+    }, /* @__PURE__ */ createElementJsx("path", {
+      d: `
+              M ${areaStartPoint[0]} ${areaStartPoint[1]}
+              L ${areaEndPoint[0]} ${areaEndPoint[1]}
+          `,
+      class: "area-line"
+    }), /* @__PURE__ */ createElementJsx("path", {
+      d: `
+              M ${startPoint2[0]} ${startPoint2[1]}
+              L ${endPoint2[0]} ${endPoint2[1]}
+          `,
+      class: "start-end-line"
+    }), colorsteps.map((it, index2) => {
+      if (it.cut) {
+        return /* @__PURE__ */ createElementJsx("rect", {
+          id: it.id,
+          "data-index": index2,
+          class: "colorstep",
+          x: it.stickScreenXY[0],
+          y: it.stickScreenXY[1],
+          transform: `rotate(${angle2} ${it.stickScreenXY[0]} ${it.stickScreenXY[1]})`,
+          width: 14,
+          height: 14,
+          fill: it.color,
+          tabIndex: -1,
+          "data-x": it.screenXY[0],
+          "data-y": it.screenXY[1]
+        });
+      } else {
+        return /* @__PURE__ */ createElementJsx("rect", {
+          id: it.id,
+          "data-index": index2,
+          class: "colorstep",
+          x: it.stickScreenXY[0],
+          y: it.stickScreenXY[1],
+          transform: `rotate(${angle2} ${it.stickScreenXY[0]} ${it.stickScreenXY[1]})`,
+          rx: 7,
+          ry: 7,
+          width: 14,
+          height: 14,
+          fill: it.color,
+          tabIndex: -1,
+          "data-x": it.screenXY[0],
+          "data-y": it.screenXY[1]
+        });
+      }
+    }), /* @__PURE__ */ createElementJsx("circle", {
+      class: "point",
+      "data-type": "start",
+      cx: startPoint2[0],
+      cy: startPoint2[1]
+    }), /* @__PURE__ */ createElementJsx("circle", {
+      class: "point",
+      "data-type": "end",
+      cx: endPoint2[0],
+      cy: endPoint2[1]
+    }), newHoverColorStepPoint && /* @__PURE__ */ createElementJsx("circle", {
+      class: "hover-colorstep",
+      r: "5",
+      cx: newHoverColorStepPoint[0],
+      cy: newHoverColorStepPoint[1],
+      fill: this.state.hoverColorStep.color
+    }));
+  }
+  makeCenterPoint(result) {
+    const { image: image2 } = result;
+    switch (image2.type) {
+      case GradientType.LINEAR:
+        return this.makeLinearCenterPoint(result);
+      case GradientType.RADIAL:
+        return this.makeRadialCenterPoint(result);
+    }
+    return "";
+  }
+  [LOAD("$el") + DOMDIFF]() {
+    if (!this.state.isShow)
+      return "";
+    const current = this.$selection.current;
+    if (!current)
+      return "";
+    const result = current.createFragmentMatrix(this.state.key);
+    this.state.result = result;
+    this.state.originalResult = current.createFragmentMatrix(this.state.key);
+    const image2 = result.image;
+    let angle2, dist2;
+    switch (image2.type) {
+      case GradientType.LINEAR:
+        this.state.startPoint = this.$viewport.applyVertex(result.startPoint);
+        this.state.endPoint = this.$viewport.applyVertex(result.endPoint);
+        dist2 = subtract([], this.state.endPoint, this.state.startPoint);
+        angle2 = calculateAngle360(dist2[0], dist2[1]) - 180;
+        this.state.rotateInverse = calculateRotationOriginMat4(-angle2, this.state.startPoint);
+        break;
+      case GradientType.RADIAL:
+        this.state.startPoint = this.$viewport.applyVertex(result.startPoint);
+        this.state.endPoint = this.$viewport.applyVertex(result.endPoint);
+        this.state.shapePoint = this.$viewport.applyVertex(result.shapePoint);
+        dist2 = subtract([], this.state.endPoint, this.state.startPoint);
+        angle2 = calculateAngle360(dist2[0], dist2[1]) - 180;
+        this.state.rotateInverse = calculateRotationOriginMat4(-angle2, this.state.startPoint);
+        break;
+    }
+    return /* @__PURE__ */ createElementJsx("div", null, this.makeCenterPoint(result));
+  }
+}
+function fillEditorView(editor) {
+  editor.registerMenuItem("canvas.view", {
+    FillEditorView
+  });
+}
 var designEditorPlugins = [
   defaultConfigs,
   defaultIcons,
@@ -57940,7 +58735,8 @@ var designEditorPlugins = [
   hoverView,
   pathDrawView,
   pathEditorView,
-  GradientEditorView,
+  gradientEditorView,
+  fillEditorView,
   ClippathEditorView,
   imageAsset,
   sample

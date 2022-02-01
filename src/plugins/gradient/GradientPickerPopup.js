@@ -190,16 +190,6 @@ export default class GradientPickerPopup extends BasePopup {
     })
   }
 
-  [SUBSCRIBE("hideGradientPickerPopup")]() {
-    this.hide();
-
-    this.emit('hideGradientEditorView')
-  }
-
-  onClose() {
-    this.emit('hideGradientEditorView')
-  }
-
   [SUBSCRIBE("selectColorStep")](color) {
     this.children.$color.setValue(color);
   }
@@ -225,7 +215,6 @@ export default class GradientPickerPopup extends BasePopup {
   }
 
   updateData() {
-    console.log(this.state.image, this.getValue());
     this.state.instance.trigger(this.state.changeEvent, this.getValue(), this.state.params);
   }
 

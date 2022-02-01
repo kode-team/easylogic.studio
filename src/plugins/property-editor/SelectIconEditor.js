@@ -1,7 +1,7 @@
 
 import { LOAD, CLICK, DOMDIFF } from "el/sapa/Event";
 import icon, { iconBlank, iconMake } from "el/editor/icon/icon";
-import { isNotUndefined, isString } from "el/sapa/functions/func";
+import { isBoolean, isNotUndefined, isString } from "el/sapa/functions/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './SelectIconEditor.scss';
@@ -30,7 +30,7 @@ export default class SelectIconEditor extends EditorElement {
 
         return {
             label: this.props.label || '',
-            compact: this.props.compact === 'true',
+            compact: isBoolean(this.props.compact) ? this.props.compact : this.props.compact === 'true',
             options, 
             icons, 
             colors,

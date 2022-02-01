@@ -4,6 +4,8 @@ import { SVGLinearGradient } from "./image-resource/SVGLinearGradient";
 import { SVGRadialGradient } from "./image-resource/SVGRadialGradient";
 import { SVGStaticGradient } from "./image-resource/SVGStaticGradient";
 import { SVGImageResource } from "./image-resource/SVGImageResource";
+import { GradientType } from 'el/editor/types/model';
+import { isString } from "el/sapa/functions/func";
 
 
 const reg = /((linear\-gradient|radial\-gradient|url)\(([^\)]*)\))/gi;
@@ -46,9 +48,9 @@ export class SVGFill extends PropertyItem {
     delete json.type;
 
     switch (data.type) {
-      case "linear-gradient":
+      case GradientType.LINEAR:
         return new SVGLinearGradient({ ...json, colorsteps });
-      case "radial-gradient":
+      case GradientType.RADIAL:
         return new SVGRadialGradient({ ...json, colorsteps });
       default:
         return new SVGStaticGradient({ ...json, colorsteps });
@@ -67,7 +69,7 @@ export class SVGFill extends PropertyItem {
     return new SVGFill(obj);
   }
 
-  static parseImage (str) {
+  static parseImage (str = '') {
     var results = convertMatches(str);
     let image = null;
 
@@ -80,11 +82,11 @@ export class SVGFill extends PropertyItem {
     matchResult.forEach((value, index) => {
 
       value = reverseMatches(value, results.matches);
-      if (value.includes("linear")) {
+      if (value.includes(GradientType.LINEAR)) {
         image = SVGLinearGradient.parse(value);
-      } else if (value.includes("radial")) {
+      } else if (value.includes(GradientType.RADIAL)) {
         image = SVGRadialGradient.parse(value);
-      } else if (value.includes("url")) {
+      } else if (value.includes(GradientType.URL)) {
         image = SVGImageResource.parse(value);
       } else {
         image = SVGStaticGradient.parse(value);
@@ -97,12 +99,12 @@ export class SVGFill extends PropertyItem {
   static changeImageType (options) {
 
     switch  (options.type) {
-    case 'linear-gradient': 
+    case GradientType.LINEAR: 
       return new SVGLinearGradient(options);     
-    case 'radial-gradient': 
+    case GradientType.RADIAL: 
       return new SVGRadialGradient(options);
     case 'image-resource':
-    case 'url':
+    case GradientType.URL:
       return new SVGImageResource(options);
     default: 
       return new SVGStaticGradient(options);

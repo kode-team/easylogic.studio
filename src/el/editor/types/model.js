@@ -220,3 +220,19 @@ export const VisibilityType = {
     VISIBLE: "visible",
     HIDDEN: "hidden",
 }
+
+export const TimingFunction = {
+    LINEAR: "linear",
+    EASE: "ease",
+    EASE_IN: "ease-in",
+    EASE_OUT: "ease-out",
+    EASE_IN_OUT: "ease-in-out",
+    STEPS: "steps",
+    CUBIC_BEZIER: "cubic-bezier",
+}
+
+export const SpreadMethodType = {
+    PAD: "pad",
+    REFLECT: "reflect",
+    REPEAT: "repeat",
+}

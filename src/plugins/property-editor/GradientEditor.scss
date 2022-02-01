@@ -5,10 +5,6 @@
   box-sizing: border-box;
   padding: 0px 4px;
 
-  .gradient-preview {
-    display: none;
-  }
-
   .tools {
     padding: 4px 0px;
   }
@@ -31,146 +27,6 @@
     }
   }
 
-  [data-editor="image-loader"] {
-    display: none;
-    pointer-events: all;
-    position: absolute;
-    left: 0px;
-    right: 0px;
-    top: 0px;
-    bottom: 0px;
-
-    input[type="file"] {
-      width: 100%;
-      height: 100%;
-      display: block;
-      opacity: 0;
-      pointer-events: all;
-    }
-  }
-
-  .gradient-preview {
-    width: 100%;
-    height: 80px;
-    position: relative;
-    margin-bottom: 15px;
-    border-radius: 3px;
-    // overflow: hidden;
-    @include transparent-background();
-    // box-shadow: 0 0 10px 1px var(--elf--border-color);
-    // display: none;
-
-    .gradient-view {
-      position: absolute;
-      left: 0px;
-      top: 0px;
-      right: 0px;
-      bottom: 0px;
-    }
-
-    .drag-pointer {
-      position: absolute;
-      transform: translate(-50%, -50%);
-      width: 10px;
-      height: 10px;
-      border-radius: 100%;
-      display: inline-block;
-      background-color: rgba(230, 230, 230, 0.2);
-      pointer-events: none;
-    }
-
-  }
-
-  .picker-tab {
-    .picker-tab-list {
-      text-align: center;
-      padding: 2px 0px;
-
-      .picker-tab-item {
-        display: inline-block;
-        vertical-align: middle;
-        height: 24px;
-        width: 24px;
-
-        // border: 1px solid var(--elf--border-color);
-        cursor: pointer;
-        position: relative;
-        // border-radius: 4px;
-        margin: 0px 1px;
-        transition: all 1s linear;
-
-        .icon {
-          pointer-events: none;
-          // border-radius: 100%;
-          display: inline-block;
-          width: 80%;
-          height: 80%;
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translateX(-50%) translateY(-50%);
-          color: var(--elf--font-color);
-          border: 1px solid black;
-          svg {
-            width: 100%;
-            height: 100%;
-          }
-        }
-
-        &.static-gradient .icon {
-          background-image: linear-gradient(to right, red, red);
-        }
-
-        &.linear-gradient .icon {
-          background-image: linear-gradient(to right, black, gray);
-        }
-
-        &.radial-gradient .icon {
-          background-image: radial-gradient(closest-side, black, #ebf8e1, gray);
-        }
-
-        &.conic-gradient .icon {
-          background-image: conic-gradient(black, #ebf8e1);
-        }
-
-        &.repeating-linear-gradient .icon {
-          background-image: repeating-linear-gradient(
-            45deg,
-            #3f87a6,
-            #ebf8e1 15%,
-            #f69d3c 20%
-          );
-        }
-
-        &.repeating-radial-gradient .icon {
-          background-image: repeating-radial-gradient(
-            circle,
-            #3f87a6,
-            #ebf8e1 15%,
-            #f69d3c 20%
-          );
-        }
-
-        &.repeating-conic-gradient .icon {
-          background-image: repeating-conic-gradient(
-            #3f87a6,
-            #ebf8e1 5%,
-            #f69d3c 10%
-          );
-        }
-
-        &.selected {
-          background-color: var(--elf--selected-color);
-          color: var(--elf--selected-font-color);
-
-          // transform: scale(1.2);
-          z-index: 1;
-
-        }
-      }
-    }
-  }
-
   &[data-selected-editor="image-resource"] {
     .drag-pointer {
       display: none;
@@ -190,9 +46,6 @@
       display: none;
     }
 
-    [data-editor="image-loader"] {
-      display: block;
-    }
   }
 
   .sub-editor {

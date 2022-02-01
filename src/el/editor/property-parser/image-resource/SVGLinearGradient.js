@@ -24,9 +24,6 @@ export class SVGLinearGradient extends SVGGradient {
   }
 
   toString() {
-
-    // linear-gradient(x1 y1 x2 y2 spreadMethod, ....colors)
-
     if(this.colorsteps.length === 0) return '';    
 
     var colorString = this.getColorString();
@@ -51,7 +48,19 @@ export class SVGLinearGradient extends SVGGradient {
             y2="${y2}"
             spreadMethod="${spreadMethod}"
           >
-          ${this.colorsteps.map(it => {
+          ${this.colorsteps.map((it, index) => {
+
+            if (it.cut) {
+              const prev = this.colorsteps[index - 1];
+
+              if (prev) {
+                return /*html*/`
+                  <stop offset="${prev.percent}%"  stop-color="${it.color}" ></stop>
+                  <stop offset="${it.percent}%"  stop-color="${it.color}" ></stop>
+                `
+              }
+            }
+
             return /*html*/`<stop offset="${it.percent}%"  stop-color="${it.color}" ></stop>`
           }).join('\n')}
         </linearGradient>

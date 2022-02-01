@@ -5,6 +5,7 @@ import { repeat } from "el/utils/func";
 import { randomNumber } from "el/utils/create";
 import Color from "el/utils/Color";
 import { uuidShort } from 'el/utils/math';
+import { TimingFunction } from '../../types/model';
 
 export class ColorStep {
   constructor (obj = {}) {
@@ -16,6 +17,7 @@ export class ColorStep {
     this.px = obj.px || 0;
     this.em = obj.em || 0;
     this.prevColorStep = obj.prevColorStep || null;
+    this.func = obj.func || TimingFunction;
   }
 
   toCloneObject() {

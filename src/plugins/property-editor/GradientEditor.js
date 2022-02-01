@@ -40,11 +40,6 @@ export default class GradientEditor extends EditorElement {
   template() {
     return /*html*/`
         <div class='elf--gradient-editor'>
-            <div class='gradient-preview'>
-              <div data-editor='image-loader'>
-                <input type='file' accept="image/*" ref='$file' />
-              </div>              
-            </div>
             <div class='gradient-steps' data-editor='gradient'>
                 <div class="hue-container" ref="$back"></div>            
                 <div class="hue" ref="$steps">
@@ -64,13 +59,6 @@ export default class GradientEditor extends EditorElement {
         });
       })
     }
-  }
-
-
-  [DOUBLECLICK('$gradientView') + PREVENT](e) {
-    this.state.image.radialPosition = ['50%', '50%']
-    this.refresh();
-    this.updateData();
   }
 
   [SUBSCRIBE_SELF('changeTabType')](type) {
@@ -325,7 +313,6 @@ export default class GradientEditor extends EditorElement {
 
     this.currentStep.setValue(percent, rect.width)
 
-    // this.children.$range.setValue(Length.percent(percent));    
     this.state.image.sortColorStep();
     this.refresh()
 
