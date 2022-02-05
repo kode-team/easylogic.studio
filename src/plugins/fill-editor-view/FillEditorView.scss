@@ -8,6 +8,12 @@
 
   background-color: rgba(0, 255, 255, 0.1);
 
+  &.dragging {
+    .area-line {
+      pointer-events: none !important;
+    }
+  }
+
   .gradient-editor-area {
     position: absolute;
     left: 0px;
@@ -39,6 +45,29 @@
         stroke: var(--elf--selected-color-2);
         pointer-events: none;
       }      
+
+      &.timing {
+        // fill: black;
+        stroke: white;
+        stroke-width: 1;
+        outline: none;
+        pointer-events: none;
+        filter: drop-shadow(0 0 1px rgb(0, 0, 0));
+      }
+
+      &.step-point {
+        // fill: black;
+        stroke: white;
+        stroke-width: 1;
+        outline: none;
+      }
+
+      &.timing-path {
+        stroke: rgba(255, 255, 255, 0.5);
+        stroke-width: 2;
+        outline: none;
+        pointer-events: none;
+      }
     }
 
     rect {
@@ -50,6 +79,7 @@
         stroke-width: 1;
         outline: none;
       }
+      
     }
 
     circle {

@@ -235,6 +235,8 @@ export class SVGItem extends LayerModel {
 
     const image = SVGFill.parseImage(value);
 
+    // console.log(image, value);
+
     const backRect = {
       x: 0,
       y: 0,
@@ -284,10 +286,12 @@ export class SVGItem extends LayerModel {
 
         result.colorsteps = image.colorsteps.map(it => {
           const offset = it.toLength();
+
           return {
             id: it.id,
             cut: it.cut,
             color: it.color,
+            timing: it.timing,
             pos: vec3.lerp([], result.startPoint, result.endPoint, offset.value/100)
           }
         });
@@ -321,6 +325,7 @@ export class SVGItem extends LayerModel {
             id: it.id,
             cut: it.cut,
             color: it.color,
+            timing: it.timing,            
             pos: vec3.lerp([], result.startPoint, result.endPoint, offset.value/100)
           }
         });

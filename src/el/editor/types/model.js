@@ -236,3 +236,16 @@ export const SpreadMethodType = {
     REFLECT: "reflect",
     REPEAT: "repeat",
 }
+
+export const FuncType = {
+    COLOR: 'color',
+    LENGTH: 'length',
+    GRADIENT: 'gradient',
+    TIMING: 'timing',
+    KEYWORD: 'keyword',
+    STRING: 'string',
+    NUMBER: 'number',
+    BOOLEAN: 'boolean',
+    FUNCTION: 'function',
+    UNKNOWN: 'unknown'
+}

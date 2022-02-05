@@ -200,14 +200,17 @@ export default class FillEditor extends EditorElement  {
       } else if (colorsteps.length === 1) {
         colorsteps.push(colorsteps[0])
       }
+
     }
+
+
 
     var url = type === 'image-resource' ? this.state.image.url : this.state.url;
 
     this.state.image = SVGFill.changeImageType({
       type,
       url,
-      colorsteps: this.state.image.colorsteps || [] ,   
+      colorsteps,
       spreadMethod: this.state.image.spreadMethod
     })
     this.refresh();
@@ -274,7 +277,6 @@ export default class FillEditor extends EditorElement  {
   [LOAD('$stepList')] () {
     var colorsteps = this.state.image.colorsteps || [] 
     return colorsteps.map( (it, index) => {
-
       var selected = this.$selection.isSelectedColorStep(it.id) ? 'selected' : '';
       return /*html*/`
       <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' tabindex="-1" style='left: ${it.toLength()};'>
@@ -474,7 +476,7 @@ export default class FillEditor extends EditorElement  {
 
     var { image } = this.state; 
 
-    return `linear-gradient(to right, ${Gradient.toColorString(image.colorsteps)})`;
+    return `linear-gradient(to right, ${Gradient.toCSSColorString(image.colorsteps)})`;
 
   }
 

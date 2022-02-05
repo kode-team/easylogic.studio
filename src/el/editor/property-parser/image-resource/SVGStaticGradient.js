@@ -2,10 +2,10 @@ import { ColorStep } from "./ColorStep";
 import { SVGGradient } from "./SVGGradient";
 
 export class SVGStaticGradient extends SVGGradient {
+
     getDefaultObject() {
         return super.getDefaultObject({  
             type: 'static-gradient', 
-            static: true, 
             colorsteps: [
                 new ColorStep({color: 'red', percent: 0, index: 0 }),
                 new ColorStep({color: 'red', percent: 100, index: 1 }),
