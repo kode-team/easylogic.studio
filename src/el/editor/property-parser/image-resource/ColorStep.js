@@ -6,9 +6,11 @@ import { randomNumber } from "el/utils/create";
 import Color from "el/utils/Color";
 import { uuidShort } from 'el/utils/math';
 import { TimingFunction } from '../../types/model';
+import { parseValue } from "el/utils/css-function-parser";
 
 export class ColorStep {
   constructor (obj = {}) {
+    // console.log('colorstep', obj);
     this.id = obj.id || uuidShort();
     this.color = obj.color || 'transparent';
     this.cut = obj.cut || false;
@@ -17,7 +19,8 @@ export class ColorStep {
     this.px = obj.px || 0;
     this.em = obj.em || 0;
     this.prevColorStep = obj.prevColorStep || null;
-    this.func = obj.func || TimingFunction;
+    this.timing = obj.timing || parseValue('linear')[0].parsed;
+    this.timingCount = obj.timingCount || 1;
   }
 
   toCloneObject() {
@@ -29,7 +32,9 @@ export class ColorStep {
       unit: this.unit,
       px: this.px,
       em: this.em,
-      prevColorStep: this.prevColorStep
+      prevColorStep: this.prevColorStep,
+      timing: this.timing,
+      timingCount: this.timingCount
     }
   }
 
@@ -43,6 +48,23 @@ export class ColorStep {
 
   toggle() {
     this.cut = !this.cut;
+  }
+
+  toggleTiming () {
+
+    switch(this.timing.name) {
+    case TimingFunction.LINEAR:
+      this.timing = parseValue('steps(1, start)')[0].parsed;
+      break;
+    case TimingFunction.STEPS:
+      this.timing = parseValue('ease')[0].parsed;
+      this.timingCount = 15;
+      break;
+    default: 
+      this.timing = parseValue('linear')[0].parsed
+      this.timingCount = 1; 
+      break;
+    }
   }
 
   getUnit() {

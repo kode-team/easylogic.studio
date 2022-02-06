@@ -13,6 +13,7 @@ import {
   GradientType,
   RadialGradientType,
   SpreadMethodType,
+  TimingFunction,
 } from "el/editor/types/model";
 import { mat4, vec3 } from "gl-matrix";
 import {
@@ -22,12 +23,15 @@ import {
 } from "el/utils/math";
 import { END, MOVE } from "el/editor/types/event";
 import { Length } from "el/editor/unit/Length";
+import { repeat } from "el/utils/func";
 
 const spreadMethodList = [
   SpreadMethodType.PAD,
   SpreadMethodType.REFLECT,
   SpreadMethodType.REPEAT,
 ];
+
+const TOOL_SIZE = 20;
 
 /**
  * Fill Editor View
@@ -46,9 +50,69 @@ class FillBaseEditor extends EditorElement {
   }
 }
 
-class FillColorstepEditor extends FillBaseEditor {
+class FillTimingStepEditor extends FillBaseEditor {
+  [POINTERSTART("$el .step-point") +
+    MOVE("moveStepPoint") +
+    END("moveEndStepPoint")](e) {
+    this.$el.toggleClass("dragging", true);
+    this.initializeData();
+    const colorStepIndex = +e.$dt.data("colorstep-index");
+
+    this.localColorStep =
+      this.state.imageResult.image.colorsteps[colorStepIndex];
+    this.localColorStepTimingCount = this.localColorStep.timing.count;
+  }
+
+  moveStepPoint(dx, dy) {
+    const dist =
+      (dx < 0 ? -1 : 1) * Math.ceil(vec3.dist([0, 0, 0], [dx, dy, 0]) / 10);
+
+    this.localColorStep.timing.count = Math.max(
+      this.localColorStepTimingCount + dist,
+      1
+    );
+
+    this.command(
+      "setAttributeForMulti",
+      `change ${this.state.key} fragment`,
+      this.$selection.packByValue({
+        [this.state.key]: `${this.state.imageResult.image}`,
+      })
+    );
+  }
+
+  moveEndStepPoint(dx, dy) {
+
+    if (dx === 0 && dy === 0) {
+      const {timing, timingCount}  = this.localColorStep
+
+      switch(timing.name) {
+        case TimingFunction.STEPS:
+        case TimingFunction.LINEAR:
+          break;
+        default: 
+          // Cubic Bezier UI 표시를 해봅시다. 
+          // animation 쪽에 있는것을 가지고 와야 할 것 같네요. 
+        return;        
+      }
+
+    }
+
+    this.command(
+      "setAttributeForMulti",
+      `change ${this.state.key} fragment`,
+      this.$selection.packByValue({
+        [this.state.key]: `${this.state.imageResult.image}`,
+      })
+    );
+    this.$el.toggleClass("dragging", false);
+  }
+}
+
+class FillColorstepEditor extends FillTimingStepEditor {
   [KEYUP("$el .colorstep")](e) {
     const index = +e.$dt.data("index");
+    console.log(index);
     switch (e.code) {
       case "Delete":
       case "Backspace":
@@ -70,6 +134,9 @@ class FillColorstepEditor extends FillBaseEditor {
   }
 
   removeStep(currentIndex) {
+
+
+    console.log(currentIndex);
     const image = this.state.imageResult.image;
     image.removeColorStepByIndex(currentIndex);
 
@@ -169,6 +236,8 @@ class FillColorstepEditor extends FillBaseEditor {
       const newDist = vec3.subtract([], tempEndPoint, tempStartPoint);
       let newAngle = calculateAngle360(newDist[0], newDist[1]) - 90;
 
+      // 360 기준으로 숫자를 맞추지 않으면 +,- 값에 의해서 나머지가 엄청 차이나는 결과를 가지게 된다. 
+      newAngle = (newAngle + 360) % 360;
       newAngle -= newAngle % this.$config.get("fixed.gradient.angle");
 
       nextPoint = vertiesMap(
@@ -191,31 +260,32 @@ class FillColorstepEditor extends FillBaseEditor {
     const image = this.state.imageResult.image;
 
     let newX, newY;
-    switch(image.type) {
-    case GradientType.RADIAL:
+    switch (image.type) {
+      case GradientType.RADIAL:
+        const dist = vec3.dist(this.startPoint, nextPoint);
 
+        const lastPoint = vec3.lerp(
+          [],
+          this.startPoint,
+          this.shapePoint,
+          dist / this.shapeDist
+        );
 
-      const dist = vec3.dist(this.startPoint, nextPoint);
+        const [worldPosition] = vertiesMap(
+          [this.$viewport.applyVertexInverse(lastPoint)],
+          this.state.currentMatrix.absoluteMatrixInverse
+        );
 
-      const lastPoint = vec3.lerp([], this.startPoint, this.shapePoint, dist / this.shapeDist);
+        newX = Length.makePercent(worldPosition[0], width);
+        newY = Length.makePercent(worldPosition[1], height);
 
+        image.reset({
+          x3: newX,
+          y3: newY,
+        });
 
-      const [worldPosition] = vertiesMap(
-        [this.$viewport.applyVertexInverse(lastPoint)],
-        this.state.currentMatrix.absoluteMatrixInverse
-      );
-
-      newX = Length.makePercent(worldPosition[0], width)
-      newY = Length.makePercent(worldPosition[1], height)    
-
-      image.reset({
-        x3: newX,
-        y3: newY,
-      });
-
-      break;
+        break;
     }
-
 
     this.command(
       "setAttributeForMulti",
@@ -224,12 +294,10 @@ class FillColorstepEditor extends FillBaseEditor {
         [this.state.key]: `${this.state.imageResult.image}`,
       })
     );
-
   }
 
   movePoint(dx, dy) {
-
-    if (this.pointTarget === 'shape') {
+    if (this.pointTarget === "shape") {
       return this.moveShapePoint(dx, dy);
     }
 
@@ -254,10 +322,10 @@ class FillColorstepEditor extends FillBaseEditor {
         var newX, newY, newX2, newY2, newX3, newY3;
         if (this.pointTarget === "start") {
           newX = image.x1.isPercent()
-            ? Length.makePercent(worldPosition[0],  width)
+            ? Length.makePercent(worldPosition[0], width)
             : Length.px(worldPosition[0]);
           newY = image.y1.isPercent()
-            ? Length.makePercent(worldPosition[1] , height)
+            ? Length.makePercent(worldPosition[1], height)
             : Length.px(worldPosition[1]);
 
           // end point 도 같이 옮기기
@@ -301,13 +369,16 @@ class FillColorstepEditor extends FillBaseEditor {
             y3: newY3,
           });
         } else if (this.pointTarget === "end") {
+          if (this.$config.get("bodyEvent").altKey) {
+            // 각을 유지한채로 크기만 변경한다.
 
-          if (this.$config.get('bodyEvent').altKey) {
-            // 각을 유지한채로 크기만 변경한다. 
-
-            
             const dist = vec3.dist(this.startPoint, nextPoint);
-            nextPoint = vec3.lerp([], this.startPoint, this.endPoint, dist / this.dist);
+            nextPoint = vec3.lerp(
+              [],
+              this.startPoint,
+              this.endPoint,
+              dist / this.dist
+            );
 
             var [worldPosition] = vertiesMap(
               [this.$viewport.applyVertexInverse(nextPoint)],
@@ -315,8 +386,8 @@ class FillColorstepEditor extends FillBaseEditor {
             );
           }
 
-          newX = Length.makePercent(worldPosition[0],  width)
-          newY = Length.makePercent(worldPosition[1] , height)
+          newX = Length.makePercent(worldPosition[0], width);
+          newY = Length.makePercent(worldPosition[1], height);
 
           image.reset({
             x2: newX,
@@ -349,8 +420,8 @@ class FillColorstepEditor extends FillBaseEditor {
             this.state.currentMatrix.absoluteMatrixInverse
           );
 
-          newX3 = Length.makePercent(newShapePosition[0], width)
-          newY3 = Length.makePercent(newShapePosition[1], height)
+          newX3 = Length.makePercent(newShapePosition[0], width);
+          newY3 = Length.makePercent(newShapePosition[1], height);
 
           image.reset({
             x3: newX3,
@@ -375,10 +446,10 @@ class FillColorstepEditor extends FillBaseEditor {
           });
         } else if (this.pointTarget === "end") {
           newX = image.x2.isPercent()
-            ? Length.makePercent(worldPosition[0] ,width)
+            ? Length.makePercent(worldPosition[0], width)
             : Length.px(worldPosition[0]);
           newY = image.y2.isPercent()
-            ? Length.makePercent(worldPosition[1] , height)
+            ? Length.makePercent(worldPosition[1], height)
             : Length.px(worldPosition[1]);
 
           image.reset({
@@ -400,7 +471,8 @@ class FillColorstepEditor extends FillBaseEditor {
 
   moveEndPoint(dx, dy) {
     const image = this.state.imageResult.image;
-
+    const width = this.state.currentMatrix.width;
+    const height = this.state.currentMatrix.height;
     if (dx === 0 && dy === 0) {
       switch (image.type) {
         case GradientType.RADIAL:
@@ -417,7 +489,7 @@ class FillColorstepEditor extends FillBaseEditor {
                 const unitVector = vec3.lerp(
                   [],
                   this.startPoint,
-                  nextPoint,
+                  this.endPoint,
                   1 / lastDist
                 );
 
@@ -492,6 +564,7 @@ class FillColorstepEditor extends FillBaseEditor {
     const result = this.state.imageResult;
 
     switch (result.image.type) {
+      case GradientType.RADIAL:
       case GradientType.LINEAR:
         this.startPoint = this.$viewport.applyVertex(result.startPoint);
         this.endPoint = this.$viewport.applyVertex(result.endPoint);
@@ -530,6 +603,7 @@ class FillColorstepEditor extends FillBaseEditor {
     let baseDist = 0;
 
     switch (result.image.type) {
+      case GradientType.RADIAL:
       case GradientType.LINEAR:
         var [s, e, n] = [baseStartPoint[0], baseEndPoint[0], baseNextPoint[0]];
         var baseDefaultDist = Math.abs(s - e);
@@ -541,6 +615,8 @@ class FillColorstepEditor extends FillBaseEditor {
         } else {
           newDist = ((n - s) / baseDefaultDist) * 100;
         }
+
+        newDist = Math.max(0, Math.min(100, newDist));
         baseDist = baseDefaultDist;
         break;
     }
@@ -578,7 +654,7 @@ class FillColorstepEditor extends FillBaseEditor {
 
     if (dx === 0 && dy === 0) {
       const image = this.state.imageResult.image;
-      image.colorsteps[this.$targetIndex].toggle();
+      image.colorsteps[this.$targetIndex].toggleTiming();
 
       const targetColorStep = {
         color: image.colorsteps[this.$targetIndex].color,
@@ -642,7 +718,7 @@ class FillColorstepEditor extends FillBaseEditor {
 
     switch (image.type) {
       case GradientType.LINEAR:
-      case GradientType.REPEATING_LINEAR:
+      case GradientType.RADIAL:
         [baseStartPoint, baseEndPoint, baseNextPoint] = vertiesMap(
           [this.state.startPoint, this.state.endPoint, nextPoint],
           this.state.rotateInverse
@@ -720,6 +796,8 @@ export default class FillEditorView extends FillColorstepEditor {
     });
 
     this.$el.show();
+
+    this.emit("push.mode.view", "FillEditorView");    
   }
 
   [SUBSCRIBE("hideFillEditorView")]() {
@@ -729,6 +807,220 @@ export default class FillEditorView extends FillColorstepEditor {
       onchange: null,
     });
     this.$el.hide();
+
+    this.emit("pop.mode.view", "FillEditorView");    
+  }
+
+  makeTimingLine(timing, width = 10, startX = 0, startY = 0) {
+    switch (timing.name) {
+      case TimingFunction.LINEAR:
+        return ``;
+      case TimingFunction.STEPS:
+        const half = width / 2;
+        return (
+          <path
+            class="timing"
+            d={`
+          M${startX + 0} ${startY + width} 
+          L${startX + (width * 1) / 3} ${startY + width} 
+          L${startX + (width * 1) / 3} ${startY + (width * 2) / 3} 
+          L${startX + (width * 2) / 3} ${startY + (width * 2) / 3} 
+          L${startX + (width * 2) / 3} ${startY + (width * 1) / 3} 
+          L${startX + width} ${startY + (width * 1) / 3} 
+          L${startX + width} ${startY + 0}           
+        `}
+          />
+        );
+      default:
+        return (
+          <path
+            class="timing"
+            d={`
+          M${startX + 0} ${startY + width} 
+          C 
+            ${startX + timing.x1 * width} ${startY + width - timing.y1 * width} 
+            ${startX + timing.x2 * width} ${
+              startY + width - timing.y2 * width
+            }  
+            ${startX + width} ${startY + 0}
+        `}
+          />
+        );
+    }
+  }
+
+  makeTimingCircle(colorstepIndex, current, prev, size) {
+    const prevStickScreenXY = prev.stickScreenXYInEnd;
+    const stickScreenXY = current.stickScreenXYInStart;
+    const { timing, timingCount } = current;
+    let pos;
+    switch (timing.name) {
+      case TimingFunction.LINEAR:
+        return ``;
+      case TimingFunction.STEPS:
+        pos = vec3.lerp([], prevStickScreenXY, stickScreenXY, 0.5);
+        return (
+          <>
+            <circle
+              class="step-point"
+              data-colorstep-index={colorstepIndex}
+              cx={pos[0]}
+              cy={pos[1]}
+              r={7}
+            />
+            <text x={pos[0]} y={pos[1]} dy={4} text-anchor="middle">
+              {timing.count}
+            </text>
+          </>
+        );
+      default:
+        pos = vec3.lerp([], prevStickScreenXY, stickScreenXY, 0.5);
+        return (
+          <>
+            <circle
+              class="step-point"
+              data-colorstep-index={colorstepIndex}
+              cx={pos[0]}
+              cy={pos[1]}
+              r={7}
+            />
+            <text x={pos[0]} y={pos[1]} dy={4} text-anchor="middle">
+              {timingCount}
+            </text>
+          </>
+        );
+    }
+  }
+
+  makeTimingArea(colorstepIndex, current, prev, size) {
+    const prevStickScreenXY = prev.stickScreenXYInEnd;
+    const stickScreenXY = current.stickScreenXYInStart;
+
+    return (
+      <g class="timing-area">
+        {current.timing.name === TimingFunction.LINEAR ? (
+          ``
+        ) : (
+          <path
+            class="timing-path"
+            d={`
+              M ${prevStickScreenXY[0]} ${prevStickScreenXY[1]}
+              L ${stickScreenXY[0]} ${stickScreenXY[1]}
+            `}
+          />
+        )}
+
+        {this.makeTimingCircle(colorstepIndex, current, prev, size)}
+      </g>
+    );
+  }
+
+  makeGradientPoint(colorsteps, startPoint, endPoint, shapePoint, newHoverColorStepPoint) {
+    const size = TOOL_SIZE;
+    const dist = vec3.subtract([], endPoint, startPoint);
+    const angle = calculateAngle360(dist[0], dist[1]) - 180;    
+    return (
+      <>
+        {colorsteps.map((it, index) => {
+          if (index === 0) return "";
+
+          return this.makeTimingArea(index, it, colorsteps[index - 1], TOOL_SIZE);
+        })}
+        {colorsteps.map((it, index) => {
+          return (
+            <g
+              transform={`rotate(${angle} ${it.stickScreenXY[0]} ${it.stickScreenXY[1]})`}
+            >
+              <rect
+                id={it.id}
+                data-index={index}
+                class="colorstep"
+                x={it.stickScreenXY[0]}
+                y={it.stickScreenXY[1]}
+                width={size}
+                height={size}
+                fill={it.color}
+                tabIndex={-1}
+                data-x={it.screenXY[0]}
+                data-y={it.screenXY[1]}
+              ></rect>
+              {this.makeTimingLine(
+                it.timing,
+                size,
+                it.stickScreenXY[0],
+                it.stickScreenXY[1]
+              )}
+            </g>
+          );
+        })}
+
+        <circle
+          class="point"
+          data-type="start"
+          cx={startPoint[0]}
+          cy={startPoint[1]}
+        ></circle>
+        <circle
+          class="point"
+          data-type="end"
+          cx={endPoint[0]}
+          cy={endPoint[1]}
+        ></circle>
+        <circle
+          class="point"
+          data-type="shape"
+          cx={shapePoint[0]}
+          cy={shapePoint[1]}
+        ></circle>        
+        {newHoverColorStepPoint && (
+          <circle
+            class="hover-colorstep"
+            r="5"
+            cx={newHoverColorStepPoint[0]}
+            cy={newHoverColorStepPoint[1]}
+            fill={this.state.hoverColorStep.color}
+          ></circle>
+        )}
+      </>
+    );
+  }
+
+  makeStickPoint(colorsteps, startPoint, endPoint) {
+    const size = TOOL_SIZE;
+    // angle 새로 구하기
+    const dist = vec3.subtract([], endPoint, startPoint);
+    const angle = calculateAngle360(dist[0], dist[1]) - 180;
+
+    const rotateInverse = calculateRotationOriginMat4(-angle, startPoint);
+    const rotateInverseInverse = mat4.invert([], rotateInverse);
+
+    return colorsteps.map((it) => {
+      it.screenXY = this.$viewport.applyVertex(it.pos);
+
+      // 수평으로 만들고
+      const [newScreenXY] = vertiesMap([it.screenXY], rotateInverse);
+
+      // 거기서 위치를 조정하고
+      [it.stickScreenXY, it.stickScreenXYInStart, it.stickScreenXYInEnd] =
+        vertiesMap(
+          [
+            [newScreenXY[0] - size / 2, newScreenXY[1] - size * 1.5, 0],
+            [
+              newScreenXY[0] - size / 2,
+              newScreenXY[1] - size * 1.5 + size / 2,
+              0,
+            ],
+            [
+              newScreenXY[0] + size / 2,
+              newScreenXY[1] - size * 1.5 + size / 2,
+              0,
+            ],
+          ],
+
+          rotateInverseInverse
+        );
+      return it;
+    });
   }
 
   makeRadialCenterPoint(result) {
@@ -738,25 +1030,7 @@ export default class FillEditorView extends FillColorstepEditor {
     endPoint = this.$viewport.applyVertex(result.endPoint);
     shapePoint = this.$viewport.applyVertex(result.shapePoint);
 
-    // angle 새로 구하기
-    const dist = vec3.subtract([], endPoint, startPoint);
-    const angle = calculateAngle360(dist[0], dist[1]) - 180;
-
-    const rotateInverse = calculateRotationOriginMat4(-angle, startPoint);
-    const rotateInverseInverse = mat4.invert([], rotateInverse);
-
-    colorsteps = result.colorsteps.map((it) => {
-      it.screenXY = this.$viewport.applyVertex(it.pos);
-
-      const [newScreenXY] = vertiesMap([it.screenXY], rotateInverse);
-
-      it.stickScreenXY = vertiesMap(
-        [[newScreenXY[0] - 7, newScreenXY[1] - 21, 0]],
-        rotateInverseInverse
-      )[0];
-
-      return it;
-    });
+    colorsteps = this.makeStickPoint(result.colorsteps, startPoint, endPoint);
 
     let newHoverColorStepPoint = null;
     if (this.state.hoverColorStep) {
@@ -791,105 +1065,24 @@ export default class FillEditorView extends FillColorstepEditor {
           `}
           class="normal-line"
         />
-        {colorsteps.map((it, index) => {
-          if (it.cut) {
-            return (
-              <rect
-                id={it.id}
-                data-index={index}
-                class="colorstep"
-                x={it.stickScreenXY[0]}
-                y={it.stickScreenXY[1]}
-                transform={`rotate(${angle} ${it.stickScreenXY[0]} ${it.stickScreenXY[1]})`}
-                width={14}
-                height={14}
-                fill={it.color}
-                tabIndex={-1}
-                data-x={it.screenXY[0]}
-                data-y={it.screenXY[1]}
-              ></rect>
-            );
-          } else {
-            return (
-              <rect
-                id={it.id}
-                data-index={index}
-                class="colorstep"
-                x={it.stickScreenXY[0]}
-                y={it.stickScreenXY[1]}
-                transform={`rotate(${angle} ${it.stickScreenXY[0]} ${it.stickScreenXY[1]})`}
-                rx={7}
-                ry={7}
-                width={14}
-                height={14}
-                fill={it.color}
-                tabIndex={-1}
-                data-x={it.screenXY[0]}
-                data-y={it.screenXY[1]}
-              ></rect>
-            );
-          }
-        })}
-        <circle
-          class="point"
-          data-type="shape"
-          cx={shapePoint[0]}
-          cy={shapePoint[1]}
-        ></circle>
-
-        <circle
-          class="point"
-          data-type="start"
-          cx={startPoint[0]}
-          cy={startPoint[1]}
-        ></circle>
-        <circle
-          class="point"
-          data-type="end"
-          cx={endPoint[0]}
-          cy={endPoint[1]}
-        ></circle>
-        {newHoverColorStepPoint && (
-          <circle
-            class="hover-colorstep"
-            r="5"
-            cx={newHoverColorStepPoint[0]}
-            cy={newHoverColorStepPoint[1]}
-            fill={this.state.hoverColorStep.color}
-          ></circle>
+        {this.makeGradientPoint(
+          colorsteps,
+          startPoint,
+          endPoint,
+          shapePoint,
+          newHoverColorStepPoint
         )}
       </svg>
     );
   }
 
   makeLinearCenterPoint(result) {
-    let startPoint, endPoint, areaStartPoint, areaEndPoint, colorsteps;
+    let startPoint, endPoint, colorsteps;
 
     startPoint = this.$viewport.applyVertex(result.startPoint);
     endPoint = this.$viewport.applyVertex(result.endPoint);
-    areaStartPoint = this.$viewport.applyVertex(result.areaStartPoint);
-    areaEndPoint = this.$viewport.applyVertex(result.areaEndPoint);
 
-    // angle 새로 구하기
-    const dist = vec3.subtract([], endPoint, startPoint);
-    const angle = calculateAngle360(dist[0], dist[1]) - 180;
-
-    const rotateInverse = calculateRotationOriginMat4(-angle, startPoint);
-
-    const rotateInverseInverse = mat4.invert([], rotateInverse);
-
-    colorsteps = result.colorsteps.map((it) => {
-      it.screenXY = this.$viewport.applyVertex(it.pos);
-
-      const [newScreenXY] = vertiesMap([it.screenXY], rotateInverse);
-
-      it.stickScreenXY = vertiesMap(
-        [[newScreenXY[0] - 7, newScreenXY[1] - 21, 0]],
-        rotateInverseInverse
-      )[0];
-
-      return it;
-    });
+    colorsteps = this.makeStickPoint(result.colorsteps, startPoint, endPoint);
 
     let newHoverColorStepPoint = null;
     if (this.state.hoverColorStep) {
@@ -905,8 +1098,8 @@ export default class FillEditorView extends FillColorstepEditor {
       <svg class="gradient-editor-area">
         <path
           d={`
-              M ${areaStartPoint[0]} ${areaStartPoint[1]}
-              L ${areaEndPoint[0]} ${areaEndPoint[1]}
+            M ${startPoint[0]} ${startPoint[1]}
+            L ${endPoint[0]} ${endPoint[1]}
           `}
           class="area-line"
         />
@@ -917,66 +1110,12 @@ export default class FillEditorView extends FillColorstepEditor {
           `}
           class="start-end-line"
         />
-        {colorsteps.map((it, index) => {
-          if (it.cut) {
-            return (
-              <rect
-                id={it.id}
-                data-index={index}
-                class="colorstep"
-                x={it.stickScreenXY[0]}
-                y={it.stickScreenXY[1]}
-                transform={`rotate(${angle} ${it.stickScreenXY[0]} ${it.stickScreenXY[1]})`}
-                width={14}
-                height={14}
-                fill={it.color}
-                tabIndex={-1}
-                data-x={it.screenXY[0]}
-                data-y={it.screenXY[1]}
-              ></rect>
-            );
-          } else {
-            return (
-              <rect
-                id={it.id}
-                data-index={index}
-                class="colorstep"
-                x={it.stickScreenXY[0]}
-                y={it.stickScreenXY[1]}
-                transform={`rotate(${angle} ${it.stickScreenXY[0]} ${it.stickScreenXY[1]})`}
-                rx={7}
-                ry={7}
-                width={14}
-                height={14}
-                fill={it.color}
-                tabIndex={-1}
-                data-x={it.screenXY[0]}
-                data-y={it.screenXY[1]}
-              ></rect>
-            );
-          }
-        })}
-
-        <circle
-          class="point"
-          data-type="start"
-          cx={startPoint[0]}
-          cy={startPoint[1]}
-        ></circle>
-        <circle
-          class="point"
-          data-type="end"
-          cx={endPoint[0]}
-          cy={endPoint[1]}
-        ></circle>
-        {newHoverColorStepPoint && (
-          <circle
-            class="hover-colorstep"
-            r="5"
-            cx={newHoverColorStepPoint[0]}
-            cy={newHoverColorStepPoint[1]}
-            fill={this.state.hoverColorStep.color}
-          ></circle>
+        {this.makeGradientPoint(
+          colorsteps,
+          startPoint,
+          endPoint,
+          null,
+          newHoverColorStepPoint
         )}
       </svg>
     );

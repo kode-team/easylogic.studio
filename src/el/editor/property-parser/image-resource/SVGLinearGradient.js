@@ -1,17 +1,26 @@
-import { convertMatches, reverseMatches } from "el/utils/parser";
-import { ColorStep } from "./ColorStep";
 import { SVGGradient } from "./SVGGradient";
 import { Length } from "el/editor/unit/Length";
+import { FuncType, GradientType, SpreadMethodType } from "el/editor/types/model";
+import { parseOneValue } from "el/utils/css-function-parser";
 
+const SpreadMethodList = [SpreadMethodType.PAD, SpreadMethodType.REFLECT, SpreadMethodType.REPEAT];
 export class SVGLinearGradient extends SVGGradient {
+
+  convert(json) {
+
+    json.spreadMethod = SpreadMethodList.includes(json.spreadMethod) ? json.spreadMethod : SpreadMethodType.PAD;
+
+    return json;
+  }
+
   getDefaultObject(obj) {
     return super.getDefaultObject({
-      type: "linear-gradient",
-      x1: '0%',
-      y1: '0%',
-      x2: '100%',      
-      y2: '0%',
-      spreadMethod: 'pad',
+      type: GradientType.LINEAR,
+      x1: Length.parse("50%"),
+      y1: Length.parse("50%"),
+      x2: Length.parse("100%"),
+      y2: Length.parse("50%"),
+      spreadMethod: SpreadMethodType.PAD,
       ...obj
     });
   }
@@ -24,11 +33,11 @@ export class SVGLinearGradient extends SVGGradient {
   }
 
   toString() {
-    if(this.colorsteps.length === 0) return '';    
+    if (this.colorsteps.length === 0) return '';
 
     var colorString = this.getColorString();
 
-    var {x1, y1, x2, y2, spreadMethod} = this.json;
+    var { x1, y1, x2, y2, spreadMethod } = this.json;
     var opt = [x1, y1, x2, y2, spreadMethod].join(' ');
 
     var result = `${this.json.type}(${opt}, ${colorString})`;
@@ -37,79 +46,79 @@ export class SVGLinearGradient extends SVGGradient {
   }
 
   toSVGString(id) {
-      var {x1, y1, x2, y2, spreadMethod} = this.json;    
+    var { x1, y1, x2, y2, spreadMethod } = this.json;
 
-      return /*html*/`
-        <linearGradient 
-            id="${id}"
-            x1="${x1}"
-            x2="${x2}"
-            y1="${y1}"
-            y2="${y2}"
-            spreadMethod="${spreadMethod}"
-          >
-          ${this.colorsteps.map((it, index) => {
-
-            if (it.cut) {
-              const prev = this.colorsteps[index - 1];
-
-              if (prev) {
-                return /*html*/`
-                  <stop offset="${prev.percent}%"  stop-color="${it.color}" ></stop>
-                  <stop offset="${it.percent}%"  stop-color="${it.color}" ></stop>
-                `
-              }
-            }
-
-            return /*html*/`<stop offset="${it.percent}%"  stop-color="${it.color}" ></stop>`
-          }).join('\n')}
-        </linearGradient>
-      `
+    return /*html*/`
+      <linearGradient 
+        id="${id}"
+        x1="${x1}"
+        x2="${x2}"
+        y1="${y1}"
+        y2="${y2}"
+        spreadMethod="${spreadMethod}"
+      >
+        ${SVGLinearGradient.makeColorStepList(this.colorsteps).map(it => /*html*/`
+        <stop offset="${it.percent}%" stop-color="${it.color}"/>
+      `).join('')}
+      </linearGradient>
+    `
   }
 
-  toFillValue (id) {
-      return `url(#${id})`;
-  }  
-
-  static toLinearGradient(colorsteps) {
-    if (colorsteps.length === 0) {
-      return "none";
-    }
-
-    var gradient = new LinearGradient({
-      angle: "to right",
-      colorsteps
-    });
-
-    return gradient + "";
+  toFillValue(id) {
+    return `url(#${id})`;
   }
+
+  // static toLinearGradient(colorsteps) {
+  //   if (colorsteps.length === 0) {
+  //     return "none";
+  //   }
+
+  //   var gradient = new LinearGradient({
+  //     angle: "to right",
+  //     colorsteps
+  //   });
+
+  //   return gradient + "";
+  // }
 
   static parse(str) {
-    var results = convertMatches(str);
-    var opt = {};
-    var colorsteps = [];
-    results.str
-      .split("(")[1]
-      .split(")")[0]
-      .split(",")
-      .map(it => it.trim())
-      .forEach((newValue, index) => {
-        if (newValue.includes("@")) {
 
-          newValue = reverseMatches(newValue, results.matches);
+    const result = parseOneValue(str);
 
-          colorsteps.push.apply(colorsteps, ColorStep.parse(newValue));
-        } else {
+    var opt = {}
 
-          var [x1, y1, x2, y2, spreadMethod] = newValue.split(' ')
+    const [options, ...colors] = result.parsedParameters;
+    const list = []
 
-          opt.x1 = Length.parse(x1);
-          opt.y1 = Length.parse(y1);
-          opt.x2 = Length.parse(x2);
-          opt.y2 = Length.parse(y2);
-          opt.spreadMethod = spreadMethod || 'pad'
+    // option parser 
+    options.forEach(it => {
+
+      if (it.func === FuncType.KEYWORD) {
+        if (SpreadMethodList.includes(it.matchedString)) {
+          opt.spreadMethod = it.matchedString;
         }
-      });
+      } else {
+        list.push(it);
+      }
+    });
+
+    var [
+      x1 = Length.percent(50), 
+      y1 = Length.percent(50), 
+      x2 = Length.percent(100), 
+      y2 = Length.percent(50), 
+    ] = list.map(it => it.parsed);
+
+    opt = {
+      ...opt,
+      x1,
+      y1,
+      x2,
+      y2,
+    }
+
+    // colorstep parser 
+    const colorsteps = SVGLinearGradient.parseColorSteps(colors)
 
     return new SVGLinearGradient({ ...opt, colorsteps });
   }

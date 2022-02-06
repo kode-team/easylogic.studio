@@ -1,14 +1,10 @@
 import { PropertyItem } from "el/editor/items/PropertyItem"
-import { convertMatches, reverseMatches } from "el/utils/parser";
 import { SVGLinearGradient } from "./image-resource/SVGLinearGradient";
 import { SVGRadialGradient } from "./image-resource/SVGRadialGradient";
 import { SVGStaticGradient } from "./image-resource/SVGStaticGradient";
 import { SVGImageResource } from "./image-resource/SVGImageResource";
 import { GradientType } from 'el/editor/types/model';
-import { isString } from "el/sapa/functions/func";
-
-
-const reg = /((linear\-gradient|radial\-gradient|url)\(([^\)]*)\))/gi;
+import { parseValue } from "el/utils/css-function-parser";
 
 export class SVGFill extends PropertyItem {
   addImageResource(imageResource) {
@@ -70,28 +66,29 @@ export class SVGFill extends PropertyItem {
   }
 
   static parseImage (str = '') {
-    var results = convertMatches(str);
+
+    const result = parseValue(str)[0];
+
     let image = null;
 
-    var matchResult = results.str.match(reg)
-
-    if (!matchResult) {
+    if (!result) {
       return SVGStaticGradient.create(str || 'transparent'); 
     }
 
-    matchResult.forEach((value, index) => {
-
-      value = reverseMatches(value, results.matches);
-      if (value.includes(GradientType.LINEAR)) {
-        image = SVGLinearGradient.parse(value);
-      } else if (value.includes(GradientType.RADIAL)) {
-        image = SVGRadialGradient.parse(value);
-      } else if (value.includes(GradientType.URL)) {
-        image = SVGImageResource.parse(value);
-      } else {
-        image = SVGStaticGradient.parse(value);
-      }
-    });
+    switch(result.func) {
+    case GradientType.LINEAR:
+      image = SVGLinearGradient.parse(result.matchedString);
+      break;
+    case GradientType.RADIAL:
+      image = SVGRadialGradient.parse(result.matchedString);
+      break;
+    case GradientType.URL:
+      image = SVGImageResource.parse(result.matchedString);
+      break;
+    default:
+      image = SVGStaticGradient.create(result.matchedString);
+      break;
+    }
 
     return image
   }

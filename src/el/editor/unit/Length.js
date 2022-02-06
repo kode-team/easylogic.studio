@@ -520,6 +520,10 @@ export class Length {
     return Length.px(px).to(unit, maxValue);
   }
 
+  toObject() {
+    return {value: this.value, unit: this.unit};
+  }
+
 }
 
 Length.auto = Length.string("auto");

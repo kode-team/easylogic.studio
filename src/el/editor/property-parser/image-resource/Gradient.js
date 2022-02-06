@@ -4,6 +4,10 @@ import { ColorStep } from "./ColorStep";
 
 import Color from "el/utils/Color";
 import { isUndefined } from "el/sapa/functions/func";
+import { parseOneValue } from "el/utils/css-function-parser";
+import { FuncType, TimingFunction } from "el/editor/types/model";
+import { createTimingFunction } from "el/editor/interpolate";
+import { step } from "el/editor/interpolate/timing-functions/steps";
 
 const DEFINED_ANGLES = {
   "to top": 0,
@@ -103,16 +107,22 @@ export class Gradient extends ImageResource {
     }
 
     for (var i = 0, len = colorsteps.length - 1; i < len; i++) {
-      var step = colorsteps[i];
+      var currentStep = colorsteps[i];
       var nextStep = colorsteps[i + 1];
 
-      if (step.percent <= percent && percent <= nextStep.percent) {
-        var color = Color.mix(
-          step.color,
-          nextStep.color,
-          (percent - step.percent) / (nextStep.percent - step.percent),
-          "rgb"
-        );
+      if (currentStep.percent <= percent && percent <= nextStep.percent) {
+        const timing = nextStep.timing;
+        switch(timing.name) {
+          case TimingFunction.STEPS:
+            var func = step(timing.count, timing.direction);
+            break;
+          default:
+            var func = createTimingFunction(timing.matchedString)
+            break;
+        }
+
+        var stopPercent = (percent - currentStep.percent) / (nextStep.percent - currentStep.percent);
+        const color = Color.mix(currentStep.color, nextStep.color, func(stopPercent));
 
         return {
           percent,
@@ -267,33 +277,146 @@ export class Gradient extends ImageResource {
     return this.json.colorsteps;
   }
 
-  /**
-   * get color string
-   *
-   * @return {string}
-   */
-  getColorString() {
-    var colorsteps = this.colorsteps;
-
-    return Gradient.toColorString(colorsteps);
+  makeTimingString(timing, timingCount = 1) {
+    switch (timing.name) {
+      case TimingFunction.LINEAR:
+        return ``;
+      case TimingFunction.EASE:
+      case TimingFunction.EASE_IN:
+      case TimingFunction.EASE_OUT:
+      case TimingFunction.EASE_IN_OUT:
+        return `${timing.name} ${timingCount}`;
+      case TimingFunction.STEPS:
+        return `steps(${timing.count}, ${timing.direction})`;
+      default:
+        return `cubic-bezier(${timing.x1}, ${timing.y1}, ${timing.x2}, ${timing.y2}) ${timingCount}`;
+    }
   }
 
-  static toColorString (colorsteps = [] ) {
-    if (!colorsteps.length) return '';
+  /**
+   * 
+   * @override
+   * @returns {string}
+   * 
+   */
+  getColorString() {
+    return this.colorsteps.map((it, index) => {
+      const { color, percent, timing, timingCount } = it;
+      return `${color} ${percent}% ${this.makeTimingString(timing, timingCount)}`;
+    }).join(',');
+  }
 
-    var newColors = colorsteps.map((c, index) => {
-      c.prevColorStep = c.cut && index > 0 ? colorsteps[index - 1] : null;
-      return c;
+  static makeColorStepList(colorsteps) {
+    const results = [];
+
+    colorsteps.forEach((it, index) => {
+
+      const { color, percent, timing, timingCount } = it;
+
+      var prevColorStep = colorsteps[index - 1];
+
+      if (index === 0) {
+        
+        results.push({ color, percent });
+        return results;
+      }
+
+      switch (timing.name) {
+        case TimingFunction.STEPS:
+          var func = step(timing.count, timing.direction);
+          var localColorSteps = [];
+          for(var i = 1; i <= timing.count; i++) {
+
+            var stopPercent = prevColorStep.percent + (percent - prevColorStep.percent) * (i/timing.count);
+            var stopColor = Color.mix(prevColorStep.color, color, func(i / timing.count));     
+
+            localColorSteps.push({ percent: stopPercent, color: stopColor });
+          }
+
+          localColorSteps.forEach((obj, index) => {
+            if (index === 0) {
+              results.push({percent: prevColorStep.percent, color: obj.color});
+              results.push(obj);
+            } else {
+              const prev = localColorSteps[index-1]
+              results.push({percent: prev.percent, color: obj.color});
+              results.push(obj);
+            }
+          })
+          break;
+        default:
+          var func = createTimingFunction(timing.matchedString)
+          var localColorSteps = [];
+          for(var i = 1; i <= timingCount; i++) {
+            const stopPercent = prevColorStep.percent + (percent - prevColorStep.percent) * (i/timingCount);
+            const stopColor = Color.mix(prevColorStep.color, color, func(i/timingCount));
+            localColorSteps.push({ percent: stopPercent, color: stopColor });
+          }
+
+          results.push(...localColorSteps);
+          break;
+      }
+    
+      // if (it.cut) {
+      //   const prev = this.colorsteps[index - 1];
+
+      //   if (prev) {
+      //     const { percent: prevPercent, color: prevColor } = prev;
+      //     const { percent: nextPercent, color: nextColor } = it;
+          
+      //     results.push({ percent: prevPercent, color: prevColor });
+      //     results.push({ percent: nextPercent, color: nextColor });
+      //   }
+      // }
     });
 
-    if (newColors.length === 1) {
-      newColors.push(new ColorStep({
-        color: newColors[0].color || 'transparent',
-        percent: 100 
-      }))
-    }
+    return results;
+  }
 
-    return newColors.map(f => `${f}`).join(",");
+  static toCSSColorString (colorsteps = [] ) {
+    return Gradient.makeColorStepList(colorsteps).map(it => `${it.color} ${it.percent}%`).join(',')
+  }
+
+
+  static parseColorSteps (colors) {
+    return colors.map(it => {
+
+      if (it.length === 2) {
+        return new ColorStep({
+          color: it[0].matchedString,
+          percent: it[1].parsed.value, 
+          unit: it[1].parsed.unit,
+          timing: parseOneValue('linear').parsed,
+          timingCount: 1
+        })        
+      } else if (it.length === 3) {
+        if (it[2].parsed.funcType === FuncType.TIMING) {
+          return new ColorStep({
+            color: it[0].matchedString,
+            percent: it[1].parsed.value,
+            unit: it[1].parsed.unit,
+            timing: it[2].parsed,
+            timingCount: it[3]?.parsed.value
+          })          
+        } 
+
+        return new ColorStep({
+          color: it[0].matchedString,
+          percent: it[2].parsed.value,
+          unit: it[2].parsed.unit,
+          timing: parseOneValue(`steps(1, start)`).parsed,
+        })
+      } else if (it.length === 4) {
+        return new ColorStep({
+          color: it[0].matchedString,
+          percent: it[1].parsed.value,
+          unit: it[1].parsed.unit,
+          timing: it[2].parsed,
+          timingCount: it[3].parsed.value,
+        })          
+      }
+
+    });
   }
 
 }

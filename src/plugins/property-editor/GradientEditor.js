@@ -340,7 +340,7 @@ export default class GradientEditor extends EditorElement {
 
     var { image } = this.state;
 
-    return `linear-gradient(to right, ${Gradient.toColorString(image.colorsteps)})`;
+    return `linear-gradient(to right, ${Gradient.toCSSColorString(image.colorsteps)})`;
 
   }
 

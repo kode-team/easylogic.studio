@@ -1,14 +1,31 @@
+import { round } from "el/utils/math";
 
+/**
+ * step timing function
+ * 
+ * @param {number} step 
+ * @param {string} direction 
+ * @param {number} roundNumber 
+ * @returns 
+ */
 const stepTimingFunction = (step = 1, direction = 'end') => {
-    step = +step; 
-    return function (rate) {
-        var stepDist = 1 / step; 
+    var stepDist = 1 / step;
 
+    return function (rate) {
+
+        let pos = 0;
+
+        const offset = round((rate) / (stepDist), 10000000);
         if (direction == 'start') {
-            return stepDist * Math.ceil(rate / stepDist);
+            pos = Math.ceil(offset);
+
         } else if (direction == 'end') {
-            return stepDist * Math.floor(rate / stepDist);
+            if (rate === 0) return 0;
+
+            pos = Math.ceil(offset) - 1;
         }
+
+        return Math.min(Math.max(stepDist * pos, 0), 1);
     }
 }
 
