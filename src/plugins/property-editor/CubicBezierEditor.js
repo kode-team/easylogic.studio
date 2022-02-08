@@ -8,6 +8,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
 import './CubicBezierEditor.scss';
 import { curveToPath, curveToPointLine } from "el/utils/func";
+import { isUndefined } from "el/sapa/functions/func";
 
 export default class CubicBezierEditor extends EditorElement {
 
@@ -15,12 +16,20 @@ export default class CubicBezierEditor extends EditorElement {
         return {
             key: this.props.key,
             currentBezier: getPredefinedCubicBezier( this.props.value || 'linear'),
+            isAnimating: isUndefined(this.props.isAnimating) ? true : Boolean(this.props.isAnimating) ,
             currentBezierIndex: 0,
             selectedColor: '#609de2',
             animatedColor: '#609de266',
             curveColor: '#609de2',
             baseLineColor: 'rgba(117, 117, 117, 0.46)'
         }
+    }
+
+    afterRender() {
+        setTimeout(() => {
+            this.refresh();
+        }, 10)
+
     }
 
     template () {
@@ -41,7 +50,7 @@ export default class CubicBezierEditor extends EditorElement {
                     <div class='predefined-text' ref='$text'></div>
                     <div class='right' ref='$right'>${icon.chevron_right}</div>
                 </div>
-                <div class='animation'>
+                <div class='animation' ref='$animationArea'>
                     <canvas 
                         class='animation-canvas' 
                         ref='$animationCanvas' 
@@ -72,7 +81,7 @@ export default class CubicBezierEditor extends EditorElement {
                 </div>
                 <div class='bezier'>
                     <svg class='bezier-canvas' width="150" height="150" viewBox="0 0 150 150" overflow="visible">
-                        <path d="${linearCurve}" stroke="white" stroke-width="1" fill='none' ref='$bezierCanvas' />
+                        <path d="${linearCurve}" stroke="black" stroke-width="1" fill='none' ref='$bezierCanvas' />
                         <path d="${linearCurvePoint}" stroke="gray" stroke-width="1" fill='none' ref='$bezierCanvasPoint' />
                     </svg>                
                     <div class='control' ref='$control'>
@@ -82,6 +91,14 @@ export default class CubicBezierEditor extends EditorElement {
                 </div>
             </div>
         `
+    }
+
+    [BIND('$animationArea')] () {
+        return {
+            style: {
+                display: this.state.isAnimating ? 'block' : 'none'
+            }
+        }
     }
 
     [BIND('$bezierCanvas')] () {
@@ -177,21 +194,21 @@ export default class CubicBezierEditor extends EditorElement {
         var top = (1 - currentBezier[1]) * height;
 
         this.refs.$pointer1.css({
-            left: Length.px(left).round(),
-            top : Length.px(top).round()
+            left: Length.px(left),
+            top : Length.px(top)
         });
 
         left = currentBezier[2] * width ;
         top = (1 - currentBezier[3]) * height;
 
         this.refs.$pointer2.css({
-            left: Length.px(left).round(),
-            top : Length.px(top).round()
+            left: Length.px(left),
+            top : Length.px(top)
         })
     }
 
     drawPoint () {
-
+        if (this.state.isAnimating === false) return;
         if (this.timer) clearTimeout(this.timer);
         if (this.animationTimer) clearTimeout(this.animationTimer);
 

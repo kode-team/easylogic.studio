@@ -92,7 +92,7 @@
         display: inline-block;
         position: absolute;
         top: calc(-100% - 2px);
-        border-radius: 100%;
+        // border-radius: 100%;
 
         &.selected {
           border-color: var(--elf--selected-color-2);
@@ -112,7 +112,7 @@
         }
 
         &[data-cut="true"] {
-          border-radius: 0%;
+          // border-radius: 0%;
 
           .arrow {
             top: calc(100% - 0.3px);
@@ -133,12 +133,13 @@
           bottom: 0px;
           right: 0px;
           border: 2px solid white;
-          border-radius: 100%;
+          // border-radius: 100%;
         //   pointer-events: none;
           box-sizing: border-box;
           display: flex;
           justify-content: center;
           align-items: center;
+          cursor:pointer;          
           span {
             position: absolute;
             top: calc(-100% - 1px);
@@ -156,7 +157,7 @@
           position: absolute;
           left: 50%;
           // display: none;
-          top: calc(100% - 1.3px);
+          top: calc(100% - 0.3px);
           width: 16px;
           height: 6px;
           background-color: var(--elf--border-color);

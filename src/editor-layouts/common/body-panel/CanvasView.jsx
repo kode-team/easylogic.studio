@@ -40,37 +40,31 @@ export default class CanvasView extends EditorElement {
       this.trigger('resizeCanvas');
       this.emit('moveSelectionToCenter', false);
       this.refreshCursor();
-    }, 1000)
+    }, 100)
   }
   template() {
-    return/*html*/`
-      <div class='elf--page-container' tabIndex="-1" ref='$container'>
+    return <div class='elf--page-container' tabIndex="-1" ref='$container'>
         <div class='page-view' ref="$pageView">
           <div class='page-lock scrollbar' ref='$lock'>            
 
-            <!-- 선택 영역 이벤트 설정  -->
-            ${createComponent("DragAreaView", {
+            {createComponent("DragAreaView", {
               ref: "$dragAreaView"
             })}
 
-            <!-- HTML 렌더링 영역  --> 
-            ${createComponent("HTMLRenderView", {
+            {createComponent("HTMLRenderView", {
               ref: "$htmlRenderView"
             })}
 
-            <!-- 드래그 영역 그려주는 뷰 --> 
-            ${createComponent("DragAreaRectView", {
+            {createComponent("DragAreaRectView", {
               ref: "$dragAreaRectView"
             })}
-
-            <!-- 캔버스 영역에 그리기 도와주는 뷰 -->
-            ${this.$injectManager.generate('canvas.view')}              
+            
+            {this.$injectManager.generate('canvas.view')}              
 
           </div>
         </div>
         ${createComponent('PageTools')}
       </div>
-    `;
   }
 
   [BIND('$pageView')]() {

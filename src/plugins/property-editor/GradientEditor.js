@@ -12,7 +12,7 @@ import { GradientType, RadialGradientType } from "el/editor/types/model";
 export default class GradientEditor extends EditorElement {
 
   initState() {
-    const image = BackgroundImage.parseImage(this.props.value || '') || { type: GradientType.STATIC, colorsteps: [] }
+    const image = BackgroundImage.parseImage(this.props.value || 'static-gradient(#ececec)');
 
     const id = image.colorsteps[this.props.index]?.id;
     this.$selection.selectColorStep(id);
@@ -72,8 +72,6 @@ export default class GradientEditor extends EditorElement {
     if (oldType === GradientType.STATIC) { 
       if (colorsteps.length === 0) {
         colorsteps.push(colorsteps[0], colorsteps[0])
-      } else if (colorsteps.length === 1) {
-        colorsteps.push(colorsteps[0])
       }
     }
 
@@ -81,7 +79,7 @@ export default class GradientEditor extends EditorElement {
     this.state.image = BackgroundImage.changeImageType({
       type,
       url,
-      colorsteps: colorsteps,
+      colorsteps,
       angle: this.state.image.angle || 0,
       radialType: this.state.image.radialType || RadialGradientType.CIRCLE,
       radialPosition: this.state.image.radialPosition || ['50%', '50%']

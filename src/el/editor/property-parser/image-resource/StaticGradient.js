@@ -1,58 +1,58 @@
 import { Gradient } from "./Gradient";
 import { ColorStep } from "./ColorStep";
 import { convertMatches, reverseMatches } from "el/utils/parser";
+import { parseOneValue } from "el/utils/css-function-parser";
 
 export class StaticGradient extends Gradient {
     getDefaultObject() {
-        return super.getDefaultObject({  
-            type: 'static-gradient', 
-            static: true, 
+        return super.getDefaultObject({
+            type: 'static-gradient',
+            static: true,
             colorsteps: [
-                new ColorStep({color: 'red', percent: 0, index: 0}),
-                new ColorStep({color: 'red', percent: 100, index: 0})
+                new ColorStep({ color: 'red', percent: 0, index: 0 }),
+                new ColorStep({ color: 'red', percent: 100, index: 0 })
             ]
-        }) 
+        })
     }
 
     toCloneObject() {
         return {
             ...super.toCloneObject(),
-            static: true 
+            static: true
         }
     }
 
-    static parse (str) {
-        var results = convertMatches(str);
-        var colorsteps = [];
+    static parse(str) {
 
-        let newColor = results.str
-          .split("(")[1]
-          .split(")")[0]?.trim()
+        const result = parseOneValue(str);
 
-        if (newColor.includes("@")) {
-
-            newColor = reverseMatches(newColor, results.matches);
-
-            colorsteps.push.apply(colorsteps, ColorStep.parse(newColor));
-        }
-
+        var colorsteps = Gradient.parseColorSteps(result.parameters);
 
         return new StaticGradient({ colorsteps });
     }
 
-    static create (color = 'transparent') {
+    static create(color = 'transparent') {
         return new StaticGradient({
             colorsteps: [
-                new ColorStep({color, percent: 0, index: 0}),
-                new ColorStep({color, percent: 100, index: 1})
+                new ColorStep({ color, percent: 0, index: 0 }),
+                new ColorStep({ color, percent: 100, index: 1 })
             ]
         })
     }
 
-    toString () {
+    toString() {
         var color = this.json.colorsteps[0].color;
-        return `linear-gradient(to right, ${color} 0%, ${color} 100%)`
+        return `static-gradient(${color})`
     }
 
-    isStatic () { return true; }
+    toCSSString() {
+
+        if (this.colorsteps.length === 0) return '';
+
+        const color = this.colorsteps[0].color || "black";
+
+        return `linear-gradient(${color} 0%, ${color} 100%)`;
+    }
+
+    isStatic() { return true; }
 }

@@ -292,6 +292,7 @@ export class SVGItem extends LayerModel {
             cut: it.cut,
             color: it.color,
             timing: it.timing,
+            timingCount: it.timingCount,
             pos: vec3.lerp([], result.startPoint, result.endPoint, offset.value/100)
           }
         });
@@ -326,6 +327,7 @@ export class SVGItem extends LayerModel {
             cut: it.cut,
             color: it.color,
             timing: it.timing,            
+            timingCount: it.timingCount,
             pos: vec3.lerp([], result.startPoint, result.endPoint, offset.value/100)
           }
         });

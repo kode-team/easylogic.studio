@@ -5250,24 +5250,24 @@ const getPolygonalDist = (points2 = []) => {
 const getCurveDist = (sx, sy, cx1, cy1, cx2, cy2, ex, ey, count = 1e3) => {
   var curve = createBezier({ x: sx, y: sy }, { x: cx1, y: cy1 }, { x: cx2, y: cy2 }, { x: ex, y: ey });
   var total = 0;
-  var startPoint2 = curve(0);
+  var startPoint = curve(0);
   for (var i = 0; i <= count; i++) {
     var t = i / count;
     var xy2 = curve(t);
-    total += getDist(startPoint2.x, startPoint2.y, xy2.x, xy2.y);
-    startPoint2 = xy2;
+    total += getDist(startPoint.x, startPoint.y, xy2.x, xy2.y);
+    startPoint = xy2;
   }
   return total;
 };
 const getQuardDist = (sx, sy, cx1, cy1, ex, ey, count = 1e3) => {
   var curve = createBezierQuard({ x: sx, y: sy }, { x: cx1, y: cy1 }, { x: ex, y: ey });
   var total = 0;
-  var startPoint2 = curve(0);
+  var startPoint = curve(0);
   for (var i = 0; i <= count; i++) {
     var t = i / count;
     var xy2 = curve(t);
-    total += getDist(startPoint2.x, startPoint2.y, xy2.x, xy2.y);
-    startPoint2 = xy2;
+    total += getDist(startPoint.x, startPoint.y, xy2.x, xy2.y);
+    startPoint = xy2;
   }
   return total;
 };
@@ -6542,6 +6542,7 @@ const SpreadMethodType = {
   REPEAT: "repeat"
 };
 const FuncType = {
+  COMMA: "comma",
   COLOR: "color",
   LENGTH: "length",
   GRADIENT: "gradient",
@@ -6887,6 +6888,8 @@ const stepTimingFunction = (step2 = 1, direction = "end") => {
     } else if (direction == "end") {
       if (rate === 0)
         return 0;
+      else if (rate === 1)
+        return 1;
       pos = Math.ceil(offset) - 1;
     }
     return Math.min(Math.max(stepDist * pos, 0), 1);
@@ -7067,7 +7070,7 @@ class ImageResource extends PropertyItem {
     return "none";
   }
 }
-const CSS_FUNC_REGEXP = /(([\-]?[\d.]+)(px|pt|fr|r?em|deg|vh|vw|m?s|%|g?rad|turn)?)|#(?:[\da-f]{8})|(#(?:[\da-f]{3}){1,2}|([a-z_\-]+)\([^\(\)]+\)|([a-z_\-]+))/gi;
+const CSS_FUNC_REGEXP = /(([\-]?[\d.]+)(px|pt|fr|r?em|deg|vh|vw|m?s|%|g?rad|turn)?)|#(?:[\da-f]{8})|(#(?:[\da-f]{3}){1,2}|([a-z_\-]+)\([^\(\)]+\)|([a-z_\-]+))|(\,)/gi;
 const CSS_LENGTH_REGEXP = /^[\-]?([\d.]+)(px|pt|fr|r?em|deg|vh|vw|m?s|%|g?rad|turn)?$/gi;
 const CSS_KEYWORD_REGEXP = /^[a-z_\-]+$/gi;
 const GRADIENT_LIST = [
@@ -7087,10 +7090,12 @@ const TIMIING_LIST = [
   TimingFunction.EASE_IN_OUT
 ];
 const CSS_FUNC_MATCHES = (str) => {
-  if (str.indexOf("#") === 0) {
+  if (str === ",") {
+    return "comma";
+  } else if (str.indexOf("#") === 0) {
     return "hex";
   } else if (ColorNames.isColorName(str)) {
-    return "color-name";
+    return "color";
   } else if (GRADIENT_LIST.includes(str) || TIMIING_LIST.includes(str)) {
     return str;
   } else if (str.match(CSS_LENGTH_REGEXP)) {
@@ -7112,6 +7117,9 @@ const findFunctionEndIndex = (allString, startIndex, funcStartCharacter = "(", f
       }
     }
   }
+  if (result.length > 0) {
+    return -1;
+  }
   return i + 1;
 };
 const makeFuncType = (type) => {
@@ -7119,19 +7127,32 @@ const makeFuncType = (type) => {
     return FuncType.GRADIENT;
   } else if (TIMIING_LIST.includes(type)) {
     return FuncType.TIMING;
-  } else if (type === "color-name") {
+  } else if (type === "color") {
     return FuncType.COLOR;
   } else if (type === "hex") {
     return FuncType.COLOR;
   } else if (type === "length") {
     return FuncType.LENGTH;
+  } else if (type === "comma") {
+    return FuncType.COMMA;
   }
   return type;
 };
 const makeGroupFunction = (type) => (item2, allString, funcStartCharacter = "(", funcEndCharacter = ")", parameterSaparator = ",") => {
-  const matchedString = allString.substring(item2.startIndex, findFunctionEndIndex(allString, item2.endIndex, funcStartCharacter, funcEndCharacter));
+  const lastIndex = findFunctionEndIndex(allString, item2.startIndex, funcStartCharacter, funcEndCharacter);
+  if (lastIndex === -1) {
+    return {
+      convert: true,
+      funcType: makeFuncType(type),
+      matchedString: allString,
+      type,
+      startIndex: item2.startIndex,
+      endIndex: item2.startIndex + allString.length
+    };
+  }
+  const matchedString = allString.substring(item2.startIndex, lastIndex);
   const matchedStringIndex = matchedString.indexOf(funcStartCharacter) + funcStartCharacter.length;
-  const args2 = allString.substring(matchedStringIndex, matchedString.lastIndexOf(funcEndCharacter));
+  const args2 = allString.substring(item2.startIndex + matchedStringIndex, item2.startIndex + matchedString.lastIndexOf(funcEndCharacter));
   const startIndex = item2.startIndex;
   const endIndex = item2.startIndex + matchedString.length;
   const newParsed = parseValue(args2).map((it) => {
@@ -7141,21 +7162,15 @@ const makeGroupFunction = (type) => (item2, allString, funcStartCharacter = "(",
     });
   });
   let parameters = [];
-  let tempArgsStartIndex = 0;
-  let tempArgsResults = [];
+  let commaIndex = 0;
   newParsed.forEach((it, index2) => {
-    const startString = args2.substring(tempArgsStartIndex, it.startIndex);
-    tempArgsResults.push(startString);
-    tempArgsResults.push(`@@${it.startIndex}:${it.endIndex}@@`);
-    tempArgsStartIndex = it.endIndex;
-  });
-  tempArgsResults.push(args2.substring(tempArgsStartIndex));
-  const tempArgs = tempArgsResults.join("");
-  parameters = tempArgs.split(parameterSaparator).map((it) => {
-    newParsed.forEach((item3) => {
-      it = it.replace(`@@${item3.startIndex}:${item3.endIndex}@@`, item3.matchedString);
-    });
-    return it.trim();
+    if (it.func === FuncType.COMMA) {
+      commaIndex++;
+    } else {
+      if (!parameters[commaIndex])
+        parameters[commaIndex] = [];
+      parameters[commaIndex].push(it);
+    }
   });
   return {
     convert: true,
@@ -7165,11 +7180,7 @@ const makeGroupFunction = (type) => (item2, allString, funcStartCharacter = "(",
     endIndex,
     matchedString,
     args: args2,
-    parameters,
-    parsed: newParsed,
-    parsedParameters: parameters.map((it) => {
-      return parseValue(it);
-    })
+    parameters
   };
 };
 const CSS_FUNC_PARSER_MAP = {
@@ -7179,13 +7190,14 @@ const CSS_FUNC_PARSER_MAP = {
   "rgba": (item2) => __spreadValues({ funcType: FuncType.COLOR }, Color.parse(item2.matchedString)),
   "hsl": (item2) => __spreadValues({ funcType: FuncType.COLOR }, Color.parse(item2.matchedString)),
   "hsla": (item2) => __spreadValues({ funcType: FuncType.COLOR }, Color.parse(item2.matchedString)),
-  "color-name": (item2) => __spreadValues({ funcType: FuncType.COLOR }, Color.parse(item2.matchedString)),
+  "color": (item2) => __spreadValues({ funcType: FuncType.COLOR }, Color.parse(item2.matchedString)),
   "steps": (item2) => ({
     funcType: FuncType.TIMING,
     name: "steps",
     count: +item2.parameters[0],
     direction: item2.parameters[1]
   }),
+  "static-gradient": makeGroupFunction("static-gradient"),
   "linear-gradient": makeGroupFunction("linear-gradient"),
   "radial-gradient": makeGroupFunction("radial-gradient"),
   "conic-gradient": makeGroupFunction("conic-gradient"),
@@ -7211,10 +7223,9 @@ function parseValue(str, {
   funcStartCharacter = "(",
   funcEndCharacter = ")",
   parameterSaparator = ",",
-  customFuncMap = {}
+  customFuncMap: customFuncMap2 = {}
 } = {}) {
-  var _a, _b;
-  const matches2 = str.match(CSS_FUNC_REGEXP);
+  let matches2 = str.match(CSS_FUNC_REGEXP);
   let result = [];
   if (!matches2) {
     return result;
@@ -7236,8 +7247,16 @@ function parseValue(str, {
     });
   }
   var pos = { next: 0 };
+  matches2 = matches2.map((matchedString) => {
+    const startIndex = str.indexOf(matchedString, pos.next);
+    pos.next = startIndex + matchedString.length;
+    return { index: startIndex, matchedString };
+  });
+  pos.next = 0;
   for (var i = 0, len2 = matches2.length; i < len2; i++) {
-    const matchedString = matches2[i];
+    const { matchedString, index: index2 } = matches2[i];
+    if (index2 < pos.next)
+      continue;
     let parsedFunc = CSS_FUNC_MATCHES(matchedString);
     let item2 = {
       matchedString
@@ -7248,7 +7267,8 @@ function parseValue(str, {
     }
     item2.startIndex = startIndex;
     item2.endIndex = startIndex + item2.matchedString.length;
-    if (checkParsedResult(item2.startIndex, item2.endIndex, item2.matchedString)) {
+    const isContinue = checkParsedResult(item2.startIndex, item2.endIndex, item2.matchedString);
+    if (isContinue) {
       continue;
     }
     if (parsedFunc) {
@@ -7265,17 +7285,21 @@ function parseValue(str, {
       });
       parsedFunc = func2;
     }
+    let customFunctionCallback;
     if (CSS_FUNC_PARSER_MAP[parsedFunc]) {
-      item2.parsed = CSS_FUNC_PARSER_MAP[parsedFunc].call(null, item2, str, funcStartCharacter, funcEndCharacter, parameterSaparator);
-      if ((_a = item2.parsed) == null ? void 0 : _a.convert) {
-        item2 = __spreadValues(__spreadValues({}, item2), item2.parsed);
+      customFunctionCallback = CSS_FUNC_PARSER_MAP[parsedFunc] || CSS_FUNC_PARSER_MAP[item2.matchedString];
+    } else if (customFuncMap2[parsedFunc] || customFuncMap2[item2.matchedString]) {
+      customFunctionCallback = customFuncMap2[parsedFunc] || customFuncMap2[item2.matchedString];
+    }
+    if (customFunctionCallback) {
+      const parsed = customFunctionCallback.call(null, item2, str, funcStartCharacter, funcEndCharacter, parameterSaparator);
+      if (parsed == null ? void 0 : parsed.convert) {
+        item2 = __spreadValues(__spreadValues({}, item2), parsed);
         delete item2.convert;
-      }
-    } else if (customFuncMap[parsedFunc]) {
-      item2.parsed = customFuncMap[parsedFunc].call(null, item2, str, funcStartCharacter, funcEndCharacter, parameterSaparator);
-      if ((_b = item2.parsed) == null ? void 0 : _b.convert) {
-        item2 = __spreadValues(__spreadValues({}, item2), item2.parsed);
-        delete item2.convert;
+      } else {
+        item2 = __spreadProps(__spreadValues({}, item2), {
+          parsed
+        });
       }
     }
     result.push(item2);
@@ -7285,6 +7309,14 @@ function parseValue(str, {
 }
 function parseOneValue(str) {
   return parseValue(str)[0];
+}
+function parseGroupValue(str, customMapFuncName = "temp") {
+  var _a;
+  return (_a = parseValue(`${customMapFuncName}(${str})`, {
+    customFuncMap: {
+      [customMapFuncName]: makeGroupFunction(customMapFuncName)
+    }
+  })[0]) == null ? void 0 : _a.parameters;
 }
 class ColorStep {
   constructor(obj2 = {}) {
@@ -7671,7 +7703,7 @@ class Gradient extends ImageResource {
         case TimingFunction.STEPS:
           var func2 = step(timing.count, timing.direction);
           var localColorSteps = [];
-          for (var i = 1; i <= timing.count; i++) {
+          for (var i = 0; i <= timing.count; i++) {
             var stopPercent = prevColorStep.percent + (percent - prevColorStep.percent) * (i / timing.count);
             var stopColor = Color.mix(prevColorStep.color, color2, func2(i / timing.count));
             localColorSteps.push({ percent: stopPercent, color: stopColor });
@@ -7701,12 +7733,36 @@ class Gradient extends ImageResource {
     });
     return results;
   }
-  static toCSSColorString(colorsteps = []) {
-    return Gradient.makeColorStepList(colorsteps).map((it) => `${it.color} ${it.percent}%`).join(",");
+  static toCSSColorString(colorsteps = [], unit = "%", maxValue = 100) {
+    const list2 = Gradient.makeColorStepList(colorsteps);
+    return list2.map((it) => {
+      const { color: color2, percent } = it;
+      const pos = percent / 100 * maxValue;
+      return `${color2} ${pos}${unit}`;
+    }).join(",");
   }
   static parseColorSteps(colors2) {
-    return colors2.map((it) => {
-      var _a;
+    return colors2.map((it, index2) => {
+      var _a, _b, _c;
+      if (it.length === 1) {
+        const prev = ((_a = colors2[index2 - 1]) == null ? void 0 : _a[1]) || { parsed: { value: 0 } };
+        const next = ((_b = colors2[index2 + 1]) == null ? void 0 : _b[1]) || { parsed: { value: 100 } };
+        let percent = 0;
+        if (!colors2[index2 - 1]) {
+          percent = 0;
+        } else if (!colors2[index2 + 1]) {
+          percent = 100;
+        } else {
+          percent = prev.parsed.value + (next.parsed.value - prev.parsed.value) * 0.5;
+        }
+        return new ColorStep({
+          color: it[0].matchedString,
+          percent,
+          unit: "%",
+          timing: parseOneValue("linear").parsed,
+          timingCount: 1
+        });
+      }
       if (it.length === 2) {
         return new ColorStep({
           color: it[0].matchedString,
@@ -7722,7 +7778,7 @@ class Gradient extends ImageResource {
             percent: it[1].parsed.value,
             unit: it[1].parsed.unit,
             timing: it[2].parsed,
-            timingCount: (_a = it[3]) == null ? void 0 : _a.parsed.value
+            timingCount: (_c = it[3]) == null ? void 0 : _c.parsed.value
           });
         }
         return new ColorStep({
@@ -7760,14 +7816,8 @@ class StaticGradient extends Gradient {
     });
   }
   static parse(str) {
-    var _a;
-    var results = convertMatches(str);
-    var colorsteps = [];
-    let newColor = (_a = results.str.split("(")[1].split(")")[0]) == null ? void 0 : _a.trim();
-    if (newColor.includes("@")) {
-      newColor = reverseMatches(newColor, results.matches);
-      colorsteps.push.apply(colorsteps, ColorStep.parse(newColor));
-    }
+    const result = parseOneValue(str);
+    var colorsteps = Gradient.parseColorSteps(result.parameters);
     return new StaticGradient({ colorsteps });
   }
   static create(color2 = "transparent") {
@@ -7780,7 +7830,13 @@ class StaticGradient extends Gradient {
   }
   toString() {
     var color2 = this.json.colorsteps[0].color;
-    return `linear-gradient(to right, ${color2} 0%, ${color2} 100%)`;
+    return `static-gradient(${color2})`;
+  }
+  toCSSString() {
+    if (this.colorsteps.length === 0)
+      return "";
+    const color2 = this.colorsteps[0].color || "black";
+    return `linear-gradient(${color2} 0%, ${color2} 100%)`;
   }
   isStatic() {
     return true;
@@ -7823,14 +7879,14 @@ const DEFINED_DIRECTIONS = {
   "315": "to top left"
 };
 const DEFINED_ANGLES$1 = {
-  "to top": "0",
-  "to top right": "45",
-  "to right": "90",
-  "to bottom right": "135",
-  "to bottom": "180",
-  "to bottom left": "225",
-  "to left": "270",
-  "to top left": "315"
+  "to top": 0,
+  "to top right": 45,
+  "to right": 90,
+  "to bottom right": 135,
+  "to bottom": 180,
+  "to bottom left": 225,
+  "to left": 270,
+  "to top left": 315
 };
 class LinearGradient extends Gradient {
   getDefaultObject(obj2) {
@@ -7850,6 +7906,12 @@ class LinearGradient extends Gradient {
   hasAngle() {
     return true;
   }
+  getRealAngle() {
+    return this.json.angle;
+  }
+  get angle() {
+    return this.getRealAngle();
+  }
   toString() {
     if (this.colorsteps.length === 0)
       return "";
@@ -7867,29 +7929,53 @@ class LinearGradient extends Gradient {
     var result = `${this.json.type}(${opt}, ${colorString})`;
     return result;
   }
-  static toLinearGradient(colorsteps) {
-    if (colorsteps.length === 0) {
-      return "none";
+  toCSSString() {
+    if (this.colorsteps.length === 0)
+      return "";
+    var colorString = LinearGradient.toCSSColorString(this.colorsteps);
+    var opt = "";
+    var angle2 = this.json.angle || 0;
+    opt = angle2;
+    if (isNumber(opt)) {
+      opt = DEFINED_DIRECTIONS[`${opt}`] || opt;
     }
-    var gradient2 = new LinearGradient({
-      angle: "to right",
-      colorsteps
-    });
-    return gradient2 + "";
+    if (isNumber(opt)) {
+      opt = opt > 360 ? opt % 360 : opt;
+      opt = `${opt}deg`;
+    }
+    var result = `${this.json.type}(${opt}, ${colorString})`;
+    return result;
   }
   static parse(str) {
-    var results = convertMatches(str);
-    var angle2 = 0;
-    var colorsteps = [];
-    results.str.split("(")[1].split(")")[0].split(",").map((it) => it.trim()).forEach((newValue, index2) => {
-      if (newValue.includes("@")) {
-        newValue = reverseMatches(newValue, results.matches);
-        colorsteps.push.apply(colorsteps, ColorStep.parse(newValue));
-      } else {
-        angle2 = isUndefined(DEFINED_ANGLES$1[newValue]) ? Length.parse(newValue) : Length.deg(+DEFINED_ANGLES$1[newValue]);
-      }
+    const result = parseOneValue(str);
+    var opt = {};
+    let [options2, ...colors2] = result.parameters;
+    const list2 = [];
+    const keywords = [];
+    if (options2[0].func !== FuncType.COLOR) {
+      options2.forEach((it) => {
+        if (it.func === FuncType.KEYWORD) {
+          keywords.push(it);
+        } else {
+          list2.push(it);
+        }
+      });
+    } else {
+      colors2 = result.parameters;
+    }
+    let angle2 = keywords.map((it) => it.matchedString).join(" ");
+    if (angle2 === "") {
+      [
+        angle2
+      ] = list2.map((it) => it.parsed.value);
+    } else {
+      angle2 = DEFINED_ANGLES$1[angle2];
+    }
+    opt = __spreadProps(__spreadValues({}, opt), {
+      angle: angle2
     });
-    return new LinearGradient({ angle: angle2.value, colorsteps });
+    const colorsteps = LinearGradient.parseColorSteps(colors2);
+    return new LinearGradient(__spreadProps(__spreadValues({}, opt), { colorsteps }));
   }
 }
 class RepeatingLinearGradient extends LinearGradient {
@@ -7976,8 +8062,6 @@ class RadialGradient extends Gradient {
     var point2 = cornerList.find((it) => it[2] === raySize)[1];
     var aspect_ratio = newSize.width / newSize.height;
     if (aspect_ratio === 0) {
-      endPoint = clone(startPoint);
-      shapePoint = clone(startPoint);
       return;
     }
     var distPoint = subtract([], point2, result.radialCenterPosition);
@@ -7986,7 +8070,7 @@ class RadialGradient extends Gradient {
     return { width: a, height: b };
   }
   getStartEndPoint(result) {
-    let startPoint2, endPoint2, shapePoint2;
+    let startPoint, endPoint, shapePoint;
     const radialType = this.json.radialType;
     const radialSize = this.json.radialSize;
     let [rx, ry] = this.json.radialPosition;
@@ -8033,35 +8117,35 @@ class RadialGradient extends Gradient {
     cornerList.sort((a, b) => {
       return a[2] - b[2];
     });
-    startPoint2 = clone(centerPoisiton);
+    startPoint = clone(centerPoisiton);
     switch (radialType) {
       case RadialGradientType.CIRCLE:
         switch (radialSize) {
           case RadialGradientSizeType.CLOSEST_SIDE:
             var [side, point2, dist$1] = list2[0];
-            endPoint2 = fromValues(startPoint2[0] + dist$1, startPoint2[1], startPoint2[2]);
-            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + dist$1, startPoint2[2]);
+            endPoint = fromValues(startPoint[0] + dist$1, startPoint[1], startPoint[2]);
+            shapePoint = fromValues(startPoint[0], startPoint[1] + dist$1, startPoint[2]);
             break;
           case RadialGradientSizeType.CLOSEST_CORNER:
             var [side, point2, dist$1] = cornerList[0];
-            endPoint2 = fromValues(startPoint2[0] + dist$1, startPoint2[1], startPoint2[2]);
-            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + dist$1, startPoint2[2]);
+            endPoint = fromValues(startPoint[0] + dist$1, startPoint[1], startPoint[2]);
+            shapePoint = fromValues(startPoint[0], startPoint[1] + dist$1, startPoint[2]);
             break;
           case RadialGradientSizeType.FARTHEST_SIDE:
             var [side, point2, dist$1] = list2[list2.length - 1];
-            endPoint2 = fromValues(startPoint2[0] + dist$1, startPoint2[1], startPoint2[2]);
-            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + dist$1, startPoint2[2]);
+            endPoint = fromValues(startPoint[0] + dist$1, startPoint[1], startPoint[2]);
+            shapePoint = fromValues(startPoint[0], startPoint[1] + dist$1, startPoint[2]);
             break;
           case RadialGradientType.CIRCLE:
           case RadialGradientSizeType.FARTHEST_CORNER:
             var [side, point2, dist$1] = cornerList[cornerList.length - 1];
-            endPoint2 = fromValues(startPoint2[0] + dist$1, startPoint2[1], startPoint2[2]);
-            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + dist$1, startPoint2[2]);
+            endPoint = fromValues(startPoint[0] + dist$1, startPoint[1], startPoint[2]);
+            shapePoint = fromValues(startPoint[0], startPoint[1] + dist$1, startPoint[2]);
             break;
           default:
             var dist$1 = radialSize[0].toPx(dist(result.backVerties[1], result.backVerties[0]));
-            endPoint2 = fromValues(startPoint2[0] + dist$1, startPoint2[1], startPoint2[2]);
-            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + dist$1, startPoint2[2]);
+            endPoint = fromValues(startPoint[0] + dist$1, startPoint[1], startPoint[2]);
+            shapePoint = fromValues(startPoint[0], startPoint[1] + dist$1, startPoint[2]);
             break;
         }
         break;
@@ -8069,39 +8153,39 @@ class RadialGradient extends Gradient {
         switch (radialSize) {
           case RadialGradientSizeType.CLOSEST_SIDE:
             var newSize = this.EllipseRadiusToSide(result, true);
-            endPoint2 = fromValues(startPoint2[0] + newSize.width, startPoint2[1], startPoint2[2]);
-            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + newSize.height, startPoint2[2]);
+            endPoint = fromValues(startPoint[0] + newSize.width, startPoint[1], startPoint[2]);
+            shapePoint = fromValues(startPoint[0], startPoint[1] + newSize.height, startPoint[2]);
             break;
           case RadialGradientSizeType.CLOSEST_CORNER:
             var newSize = this.EllipseRadiusToSide(result, true);
             var radius = this.EllipseRadius(newSize, result, true);
-            endPoint2 = fromValues(startPoint2[0] + radius.width, startPoint2[1], startPoint2[2]);
-            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + radius.height, startPoint2[2]);
+            endPoint = fromValues(startPoint[0] + radius.width, startPoint[1], startPoint[2]);
+            shapePoint = fromValues(startPoint[0], startPoint[1] + radius.height, startPoint[2]);
             break;
           case RadialGradientSizeType.FARTHEST_SIDE:
             var newSize = this.EllipseRadiusToSide(result, false);
-            endPoint2 = fromValues(startPoint2[0] + newSize.width, startPoint2[1], startPoint2[2]);
-            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + newSize.height, startPoint2[2]);
+            endPoint = fromValues(startPoint[0] + newSize.width, startPoint[1], startPoint[2]);
+            shapePoint = fromValues(startPoint[0], startPoint[1] + newSize.height, startPoint[2]);
             break;
           case RadialGradientSizeType.FARTHEST_CORNER:
             var newSize = this.EllipseRadiusToSide(result, false);
             var radius = this.EllipseRadius(newSize, result, false);
-            endPoint2 = fromValues(startPoint2[0] + radius.width, startPoint2[1], startPoint2[2]);
-            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + radius.height, startPoint2[2]);
+            endPoint = fromValues(startPoint[0] + radius.width, startPoint[1], startPoint[2]);
+            shapePoint = fromValues(startPoint[0], startPoint[1] + radius.height, startPoint[2]);
             break;
           default:
             var raySize = radialSize[0].toPx(dist(result.backVerties[1], result.backVerties[0]));
             var shapeSize = radialSize[1].toPx(dist(result.backVerties[3], result.backVerties[0]));
-            endPoint2 = fromValues(startPoint2[0] + raySize, startPoint2[1], startPoint2[2]);
-            shapePoint2 = fromValues(startPoint2[0], startPoint2[1] + shapeSize, startPoint2[2]);
+            endPoint = fromValues(startPoint[0] + raySize, startPoint[1], startPoint[2]);
+            shapePoint = fromValues(startPoint[0], startPoint[1] + shapeSize, startPoint[2]);
             break;
         }
         break;
     }
     return {
-      startPoint: startPoint2,
-      endPoint: endPoint2,
-      shapePoint: shapePoint2
+      startPoint,
+      endPoint,
+      shapePoint
     };
   }
   toString() {
@@ -8118,54 +8202,81 @@ class RadialGradient extends Gradient {
     opt = radialPosition ? `${radialType} ${radialSize} at ${radialPosition}` : `${radialType} ${radialSize}`;
     return `${json.type || "radial-gradient"}(${opt}, ${colorString})`;
   }
+  toCSSString() {
+    if (this.colorsteps.length === 0)
+      return "";
+    var colorString = RadialGradient.toCSSColorString(this.colorsteps);
+    var json = this.json;
+    var opt = "";
+    var radialType = json.radialType || RadialGradientType.ELLIPSE;
+    var radialSize = json.radialSize || RadialGradientSizeType.FARTHEST_CORNER;
+    var radialPosition = json.radialPosition || ["center", "center"];
+    radialPosition = DEFINED_POSITIONS$1[radialPosition] ? radialPosition : radialPosition.join(" ");
+    radialSize = isArray(radialSize) ? radialSize.join(" ") : radialSize;
+    opt = radialPosition ? `${radialType} ${radialSize} at ${radialPosition}` : `${radialType} ${radialSize}`;
+    return `${json.type || "radial-gradient"}(${opt}, ${colorString})`;
+  }
   static parse(str) {
-    var results = convertMatches(str);
-    var radialType = "ellipse";
-    var radialPosition = [Position.CENTER, Position.CENTER];
-    var colorsteps = [];
-    var radialSize = "";
-    results.str.split("(")[1].split(")")[0].split(",").map((it) => it.trim()).forEach((newValue, index2) => {
-      if (newValue.includes("@")) {
-        newValue = reverseMatches(newValue, results.matches);
-        colorsteps.push.apply(colorsteps, ColorStep.parse(newValue));
-      } else {
-        if (newValue.includes("at")) {
-          [radialType, radialPosition] = newValue.split("at").map((it) => it.trim());
+    const result = parseOneValue(str);
+    var opt = {
+      radialType: RadialGradientType.ELLIPSE,
+      radialSize: RadialGradientSizeType.FARTHEST_CORNER,
+      radialPosition: ["center", "center"]
+    };
+    let [options2, ...colors2] = result.parameters;
+    if (options2[0].func !== FuncType.COLOR) {
+      let radialType = RadialGradientType.ELLIPSE;
+      let hasAt = false;
+      let positions = [];
+      let sizeOption = [];
+      options2.forEach((it) => {
+        if (it.func === FuncType.KEYWORD && it.matchedString === "at") {
+          hasAt = true;
+        } else if (hasAt) {
+          positions.push(it);
         } else {
-          radialType = newValue;
-        }
-        const tempArr = radialType.split(" ").map((it) => it.trim());
-        radialType = tempArr[0];
-        radialSize = tempArr[1] || RadialGradientSizeType.FARTHEST_CORNER;
-        switch (radialSize) {
-          case RadialGradientSizeType.CLOSEST_SIDE:
-          case RadialGradientSizeType.CLOSEST_CORNER:
-          case RadialGradientSizeType.FARTHEST_SIDE:
-          case RadialGradientSizeType.FARTHEST_CORNER:
-            break;
-          default:
-            radialSize = radialSize.split(" ").map((it) => Length.parse(it.trim()));
-            break;
-        }
-        if (typeof radialPosition === "string") {
-          var arr = radialPosition.split(" ");
-          if (arr.length === 1) {
-            var len2 = Length.parse(arr[0]);
-            if (len2.isString()) {
-              radialPosition = [len2.value, len2.value];
-            } else {
-              radialPosition = [len2.clone(), len2.clone()];
-            }
-          } else if (arr.length === 2) {
-            radialPosition = arr.map((it) => {
-              var len3 = Length.parse(it);
-              return len3.isString() ? len3.value : len3.clone();
-            });
+          switch (it.matchedString) {
+            case RadialGradientType.CIRCLE:
+            case RadialGradientType.ELLIPSE:
+              radialType = it.matchedString;
+              break;
+            default:
+              sizeOption.push(it);
+              break;
           }
         }
+      });
+      opt.radialType = radialType;
+      opt.radialPosition = positions.map((it) => {
+        if (it.func === FuncType.KEYWORD) {
+          switch (it.matchedString) {
+            case "top":
+              return Length.percent(0);
+            case "left":
+              return Length.percent(0);
+            case "right":
+              return Length.percent(100);
+            case "bottom":
+              return Length.percent(100);
+            case "center":
+              return Length.percent(50);
+          }
+        }
+        return it.parsed;
+      });
+      opt.radialSize = sizeOption.map((it) => {
+        if (it.func === FuncType.KEYWORD)
+          return it.matchedString;
+        return it.parsed;
+      });
+      if (opt.radialSize.length) {
+        opt.radialSize = opt.radialSize[0];
       }
-    });
-    return new RadialGradient({ radialType, radialSize, radialPosition, colorsteps });
+    } else {
+      colors2 = result.parameters;
+    }
+    const colorsteps = RadialGradient.parseColorSteps(colors2);
+    return new RadialGradient(__spreadProps(__spreadValues({}, opt), { colorsteps }));
   }
 }
 class RepeatingRadialGradient extends RadialGradient {
@@ -8225,7 +8336,7 @@ class ConicGradient extends Gradient {
     return super.pickColorStep((percent + 100) % 100);
   }
   getStartEndPoint(result) {
-    let startPoint2, endPoint2, shapePoint2;
+    let startPoint, endPoint, shapePoint;
     let [rx, ry] = this.json.radialPosition;
     const backRect = result.backRect;
     const backVerties = rectToVerties(backRect.x, backRect.y, backRect.width, backRect.height);
@@ -8244,40 +8355,15 @@ class ConicGradient extends Gradient {
     const topRightDist = dist(centerPoisiton, topRightPoint);
     const bottomLeftDist = dist(centerPoisiton, bottomLeftPoint);
     const bottomRightDist = dist(centerPoisiton, bottomRightPoint);
-    startPoint2 = clone(centerPoisiton);
+    startPoint = clone(centerPoisiton);
     const dist$1 = Math.max(topLeftDist, topRightDist, bottomLeftDist, bottomRightDist);
-    endPoint2 = fromValues(startPoint2[0] + dist$1, startPoint2[1], startPoint2[2]);
-    shapePoint2 = fromValues(startPoint2[0], startPoint2[1] - dist$1, startPoint2[2]);
+    endPoint = fromValues(startPoint[0] + dist$1, startPoint[1], startPoint[2]);
+    shapePoint = fromValues(startPoint[0], startPoint[1] - dist$1, startPoint[2]);
     return {
-      startPoint: startPoint2,
-      endPoint: endPoint2,
-      shapePoint: shapePoint2
+      startPoint,
+      endPoint,
+      shapePoint
     };
-  }
-  getColorString() {
-    if (this.colorsteps.length === 0)
-      return "";
-    var colorsteps = this.colorsteps;
-    if (!colorsteps)
-      return "";
-    colorsteps.sort((a, b) => {
-      if (a.percent == b.percent)
-        return 0;
-      return a.percent > b.percent ? 1 : -1;
-    });
-    var newColors = colorsteps.map((c2, index2) => {
-      c2.prevColorStep = c2.cut && index2 > 0 ? colorsteps[index2 - 1] : null;
-      return c2;
-    });
-    return newColors.map((f) => {
-      var deg = Math.floor(f.percent * 3.6);
-      var prev = "";
-      if (f.cut && f.prevColorStep) {
-        var prevDeg = Math.floor(f.prevColorStep.percent * 3.6);
-        prev = `${prevDeg}deg`;
-      }
-      return `${f.color} ${prev} ${deg}deg`;
-    }).join(",");
   }
   toString() {
     var colorString = this.getColorString();
@@ -8296,56 +8382,73 @@ class ConicGradient extends Gradient {
     var optString = opt.length ? opt.join(" ") + "," : "";
     return `${json.type}(${optString} ${colorString})`;
   }
+  toCSSString() {
+    if (this.colorsteps.length === 0)
+      return "";
+    var colorString = ConicGradient.toCSSColorString(this.colorsteps, "deg", 360);
+    var opt = [];
+    var json = this.json;
+    var conicAngle = json.angle;
+    var conicPosition = json.radialPosition || Position.CENTER;
+    conicPosition = DEFINED_POSITIONS[conicPosition] ? conicPosition : conicPosition.join(" ");
+    if (isNotUndefined(conicAngle)) {
+      conicAngle = +(DEFINED_ANGLES[conicAngle] || conicAngle);
+      opt.push(`from ${conicAngle}deg`);
+    }
+    if (conicPosition) {
+      opt.push(`at ${conicPosition}`);
+    }
+    var optString = opt.length ? opt.join(" ") + "," : "";
+    return `${json.type}(${optString} ${colorString})`;
+  }
   static parse(str) {
-    var results = convertMatches(str);
-    var angle2 = "0deg";
-    var radialPosition = [Position.CENTER, Position.CENTER];
-    var colorsteps = [];
-    results.str.split("(")[1].split(")")[0].split(",").map((it) => it.trim()).forEach((newValue, index2) => {
-      if (newValue.includes("@")) {
-        newValue = newValue.split(" ").map((it) => it.trim()).map((it) => {
-          if (it.includes("deg")) {
-            return Length.parse(it).toPercent();
-          } else {
-            return it;
-          }
-        }).join(" ");
-        newValue = reverseMatches(newValue, results.matches);
-        colorsteps.push.apply(colorsteps, ColorStep.parse(newValue));
-      } else {
-        if (newValue.includes("at")) {
-          [angle2, radialPosition] = newValue.split("at").map((it) => it.trim());
-        } else {
-          angle2 = newValue;
+    const result = parseOneValue(str);
+    var opt = {
+      angle: 0,
+      radialPosition: ["center", "center"]
+    };
+    let [options2, ...colors2] = result.parameters;
+    if (options2[0].func !== FuncType.COLOR) {
+      let hasFrom = false;
+      let hasAt = false;
+      let positions = [];
+      let angle2 = [];
+      options2.forEach((it) => {
+        if (it.func === FuncType.KEYWORD && it.matchedString === "from") {
+          hasFrom = true;
+        } else if (it.func === FuncType.KEYWORD && it.matchedString === "at") {
+          hasAt = true;
+        } else if (hasAt) {
+          positions.push(it);
+        } else if (hasFrom) {
+          angle2.push(it);
         }
-        if (isString(radialPosition)) {
-          var arr = radialPosition.split(" ");
-          if (arr.length === 1) {
-            var len2 = Length.parse(arr[0]);
-            if (len2.isString()) {
-              radialPosition = [len2.value, len2.value];
-            } else {
-              radialPosition = [len2.clone(), len2.clone()];
-            }
-          } else if (arr.length === 2) {
-            radialPosition = arr.map((it) => {
-              var len3 = Length.parse(it);
-              return len3.isString() ? len3.value : len3;
-            });
-          }
-        }
-        if (isString(angle2)) {
-          if (angle2.includes("from")) {
-            angle2 = angle2.split("from")[1];
-            angle2 = isUndefined(DEFINED_ANGLES[angle2]) ? Length.parse(angle2) : Length.deg(+DEFINED_ANGLES[angle2]);
-          }
-          if (angle2 === "") {
-            angle2 = Length.deg(0);
+      });
+      opt.radialPosition = positions.map((it) => {
+        if (it.func === FuncType.KEYWORD) {
+          switch (it.matchedString) {
+            case "top":
+              return Length.percent(0);
+            case "left":
+              return Length.percent(0);
+            case "right":
+              return Length.percent(100);
+            case "bottom":
+              return Length.percent(100);
+            case "center":
+              return Length.percent(50);
           }
         }
+        return it.parsed;
+      });
+      if (angle2.length) {
+        opt.angle = angle2[0].parsed.value;
       }
-    });
-    return new ConicGradient({ angle: angle2.value, radialPosition, colorsteps });
+    } else {
+      colors2 = result.parameters;
+    }
+    const colorsteps = ConicGradient.parseColorSteps(colors2);
+    return new ConicGradient(__spreadProps(__spreadValues({}, opt), { colorsteps }));
   }
 }
 class RepeatingConicGradient extends ConicGradient {
@@ -8366,7 +8469,6 @@ class RepeatingConicGradient extends ConicGradient {
   }
 }
 const RepeatList = ["repeat", "no-repeat", "repeat-x", "repeat-y", "round", "space"];
-const reg = /((static\-gradient|linear\-gradient|repeating\-linear\-gradient|radial\-gradient|repeating\-radial\-gradient|conic\-gradient|repeating\-conic\-gradient|url)\(([^\)]*)\))/gi;
 class BackgroundImage extends PropertyItem {
   addImageResource(imageResource) {
     this.clear("image-resource");
@@ -8540,6 +8642,13 @@ class BackgroundImage extends PropertyItem {
     if (!this.json.image)
       return {};
     return {
+      "background-image": this.json.image.toCSSString()
+    };
+  }
+  toBackgroundImageProperty() {
+    if (!this.json.image)
+      return {};
+    return {
       "background-image": this.json.image.toString()
     };
   }
@@ -8587,6 +8696,10 @@ class BackgroundImage extends PropertyItem {
     const results = __spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues({}, this.toBackgroundImageCSS()), this.toBackgroundPositionCSS()), this.toBackgroundSizeCSS()), this.toBackgroundRepeatCSS()), this.toBackgroundBlendCSS()), this.toBackgroundVisibilityCSS());
     return results;
   }
+  toProperty() {
+    const results = __spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues({}, this.toBackgroundImageProperty()), this.toBackgroundPositionCSS()), this.toBackgroundSizeCSS()), this.toBackgroundRepeatCSS()), this.toBackgroundBlendCSS()), this.toBackgroundVisibilityCSS());
+    return results;
+  }
   toString() {
     return keyMap(this.toCSS(), (key, value) => {
       return `${key}: ${value}`;
@@ -8602,88 +8715,91 @@ class BackgroundImage extends PropertyItem {
     return new BackgroundImage(obj2);
   }
   static parseImage(str) {
-    var results = convertMatches(str);
+    const result = parseOneValue(str);
     let image2 = null;
-    var matchResult = results.str.match(reg);
-    if (!matchResult)
-      return image2;
-    matchResult.forEach((value, index2) => {
-      value = reverseMatches(value, results.matches);
-      if (value.includes("repeating-linear-gradient")) {
-        image2 = RepeatingLinearGradient.parse(value);
-      } else if (value.includes("linear-gradient")) {
-        image2 = LinearGradient.parse(value);
-        if (image2.colorsteps.length === 2) {
-          if (image2.colorsteps[0].color === image2.colorsteps[1].color) {
-            image2 = StaticGradient.parse(`static-gradient(${image2.colorsteps[0].color})`);
-          }
-        }
-      } else if (value.includes("static-gradient")) {
-        image2 = StaticGradient.parse(value);
-      } else if (value.includes("repeating-radial-gradient")) {
-        image2 = RepeatingRadialGradient.parse(value);
-      } else if (value.includes("radial-gradient")) {
-        image2 = RadialGradient.parse(value);
-      } else if (value.includes("repeating-conic-gradient")) {
-        image2 = RepeatingConicGradient.parse(value);
-      } else if (value.includes("conic-gradient")) {
-        image2 = ConicGradient.parse(value);
-      } else if (value.includes("url")) {
-        image2 = URLImageResource.parse(value);
-      }
-    });
+    if (!result || str === "undefined") {
+      return StaticGradient.create(str || "transparent");
+    }
+    switch (result.func) {
+      case GradientType.LINEAR:
+        image2 = LinearGradient.parse(result.matchedString);
+        break;
+      case GradientType.REPEATING_LINEAR:
+        image2 = RepeatingLinearGradient.parse(result.matchedString);
+        break;
+      case GradientType.RADIAL:
+        image2 = RadialGradient.parse(result.matchedString);
+        break;
+      case GradientType.REPEATING_RADIAL:
+        image2 = RepeatingRadialGradient.parse(result.matchedString);
+        break;
+      case GradientType.CONIC:
+        image2 = ConicGradient.parse(result.matchedString);
+        break;
+      case GradientType.REPEATING_CONIC:
+        image2 = RepeatingConicGradient.parse(result.matchedString);
+        break;
+      case GradientType.URL:
+        image2 = URLImageResource.parse(result.matchedString);
+        break;
+      default:
+        image2 = StaticGradient.parse(result.matchedString);
+        break;
+    }
     return image2;
   }
   static changeImageType(options2) {
     switch (options2.type) {
-      case "static-gradient":
+      case GradientType.STATIC:
         return new StaticGradient(options2);
-      case "linear-gradient":
+      case GradientType.LINEAR:
         return new LinearGradient(options2);
-      case "repeating-linear-gradient":
+      case GradientType.REPEATING_LINEAR:
         return new RepeatingLinearGradient(options2);
-      case "radial-gradient":
+      case GradientType.RADIAL:
         return new RadialGradient(options2);
-      case "repeating-radial-gradient":
+      case GradientType.REPEATING_RADIAL:
         return new RepeatingRadialGradient(options2);
-      case "conic-gradient":
+      case GradientType.CONIC:
         return new ConicGradient(options2);
-      case "repeating-conic-gradient":
+      case GradientType.REPEATING_CONIC:
         return new RepeatingConicGradient(options2);
-      case "image-resource":
-      case "url":
+      case GradientType.URL:
         return new URLImageResource(options2);
     }
   }
   static parseStyle(style) {
     var backgroundImages = [];
-    JSON.stringify(style);
     if (style["background-image"]) {
-      var results = convertMatches(style["background-image"]);
-      results.str.match(reg).forEach((value, index2) => {
-        let image2 = null;
-        value = reverseMatches(value, results.matches);
-        if (value.includes("repeating-linear-gradient")) {
-          image2 = RepeatingLinearGradient.parse(value);
-        } else if (value.includes("linear-gradient")) {
-          image2 = LinearGradient.parse(value);
-          if (image2.colorsteps.length === 2) {
-            if (image2.colorsteps[0].color === image2.colorsteps[1].color) {
-              image2 = StaticGradient.parse(`static-gradient(${image2.colorsteps[0].color})`);
-            }
-          }
-        } else if (value.includes("static-gradient")) {
-          image2 = StaticGradient.parse(value);
-        } else if (value.includes("repeating-radial-gradient")) {
-          image2 = RepeatingRadialGradient.parse(value);
-        } else if (value.includes("radial-gradient")) {
-          image2 = RadialGradient.parse(value);
-        } else if (value.includes("repeating-conic-gradient")) {
-          image2 = RepeatingConicGradient.parse(value);
-        } else if (value.includes("conic-gradient")) {
-          image2 = ConicGradient.parse(value);
-        } else if (value.includes("url")) {
-          image2 = URLImageResource.parse(value);
+      const result = parseGroupValue(style["background-image"], "background-image");
+      result.forEach((parsedValue, index2) => {
+        const item2 = parsedValue[0];
+        let image2;
+        switch (item2.func) {
+          case GradientType.STATIC:
+            image2 = StaticGradient.parse(item2.matchedString);
+            break;
+          case GradientType.LINEAR:
+            image2 = LinearGradient.parse(item2.matchedString);
+            break;
+          case GradientType.REPEATING_LINEAR:
+            image2 = RepeatingLinearGradient.parse(item2.matchedString);
+            break;
+          case GradientType.RADIAL:
+            image2 = RadialGradient.parse(item2.matchedString);
+            break;
+          case GradientType.REPEATING_RADIAL:
+            image2 = RepeatingRadialGradient.parse(item2.matchedString);
+            break;
+          case GradientType.CONIC:
+            image2 = ConicGradient.parse(item2.matchedString);
+            break;
+          case GradientType.REPEATING_CONIC:
+            image2 = RepeatingConicGradient.parse(item2.matchedString);
+            break;
+          case GradientType.URL:
+            image2 = URLImageResource.parse(item2.matchedString);
+            break;
         }
         backgroundImages[index2] = new BackgroundImage({
           type: image2.type,
@@ -8737,7 +8853,7 @@ class BackgroundImage extends PropertyItem {
     }
     return backgroundImages;
   }
-  static toPropertyCSS(list2) {
+  static toCSS(list2) {
     var results = {};
     list2.forEach((item2) => {
       keyEach(item2.toCSS(), (key, value) => {
@@ -8748,11 +8864,22 @@ class BackgroundImage extends PropertyItem {
     });
     return combineKeyArray(results);
   }
+  static toProperty(list2) {
+    var results = {};
+    list2.forEach((item2) => {
+      keyEach(item2.toProperty(), (key, value) => {
+        if (!results[key])
+          results[key] = [];
+        results[key].push(value);
+      });
+    });
+    return combineKeyArray(results);
+  }
   static join(list2) {
-    return CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(list2.map((it) => BackgroundImage.parse(it))));
+    return CSS_TO_STRING$1(BackgroundImage.toProperty(list2.map((it) => BackgroundImage.parse(it))));
   }
   static joinCSS(list2) {
-    return BackgroundImage.toPropertyCSS(list2.map((it) => BackgroundImage.parse(it)));
+    return BackgroundImage.toCSS(list2.map((it) => BackgroundImage.parse(it)));
   }
 }
 function makeInterpolateColorStep(layer2, property, startColorStep, endColorStep) {
@@ -10138,10 +10265,10 @@ class Point {
     let maxdist2 = 0;
     let breakIndex = start2;
     const tol2 = tolerance * tolerance;
-    const startPoint2 = points2[start2];
+    const startPoint = points2[start2];
     const lastPoint = points2[last2];
     for (var i = start2 + 1; i < last2; i++) {
-      const dist2 = Point.segmentDistance2(points2[i].x, points2[i].y, startPoint2, lastPoint);
+      const dist2 = Point.segmentDistance2(points2[i].x, points2[i].y, startPoint, lastPoint);
       if (dist2 <= maxdist2)
         continue;
       breakIndex = i;
@@ -11028,14 +11155,14 @@ class PathParser {
         var [cx1, cy1, x2, y2] = values;
         var prevPoint = Point.getPrevPoint(points2, points2.length);
         if (prevPoint.curve) {
-          var startPoint2 = { x: x2, y: y2 };
-          var endPoint2 = { x: x2, y: y2 };
+          var startPoint = { x: x2, y: y2 };
+          var endPoint = { x: x2, y: y2 };
           var reversePoint2 = { x: x2, y: y2 };
           points2.push({
             command: "L",
             originalCommand: command,
-            startPoint: startPoint2,
-            endPoint: endPoint2,
+            startPoint,
+            endPoint,
             reversePoint: reversePoint2,
             curve: false
           });
@@ -11044,27 +11171,27 @@ class PathParser {
           if (nextSegment && nextSegment.command === "L") {
             prevPoint.curve = true;
             prevPoint.endPoint = { x: cx1, y: cy1 };
-            var startPoint2 = { x: x2, y: y2 };
+            var startPoint = { x: x2, y: y2 };
             var reversePoint2 = { x: x2, y: y2 };
-            var endPoint2 = { x: x2, y: y2 };
+            var endPoint = { x: x2, y: y2 };
             points2.push({
               command: "L",
               originalCommand: command,
               curve: false,
-              startPoint: startPoint2,
-              endPoint: endPoint2,
+              startPoint,
+              endPoint,
               reversePoint: reversePoint2
             });
           } else {
-            var startPoint2 = { x: x2, y: y2 };
+            var startPoint = { x: x2, y: y2 };
             var reversePoint2 = { x: cx1, y: cy1 };
-            var endPoint2 = { x: x2, y: y2 };
+            var endPoint = { x: x2, y: y2 };
             points2.push({
               command,
               originalCommand: command,
               curve: true,
-              startPoint: startPoint2,
-              endPoint: endPoint2,
+              startPoint,
+              endPoint,
               reversePoint: reversePoint2
             });
           }
@@ -11076,14 +11203,14 @@ class PathParser {
           var [cx1, cy1, sx, sy] = prevSegment.values;
           var prevPoint = Point.getPrevPoint(points2, points2.length);
           prevPoint.endPoint = Point.getReversePoint({ x: sx, y: sy }, { x: cx1, y: cy1 });
-          var startPoint2 = { x: x2, y: y2 };
-          var endPoint2 = { x: x2, y: y2 };
+          var startPoint = { x: x2, y: y2 };
+          var endPoint = { x: x2, y: y2 };
           var reversePoint2 = { x: x2, y: y2 };
           points2.push({
             command: "L",
             originalCommand: command,
-            startPoint: startPoint2,
-            endPoint: endPoint2,
+            startPoint,
+            endPoint,
             reversePoint: reversePoint2,
             curve: false
           });
@@ -11091,15 +11218,15 @@ class PathParser {
       } else if (command === "C") {
         var prevPoint = Point.getPrevPoint(points2, points2.length);
         var [cx1, cy1, cx2, cy2, x2, y2] = values;
-        var startPoint2 = { x: x2, y: y2 };
+        var startPoint = { x: x2, y: y2 };
         var reversePoint2 = { x: cx2, y: cy2 };
-        var endPoint2 = { x: x2, y: y2 };
+        var endPoint = { x: x2, y: y2 };
         points2.push({
           command,
           originalCommand: command,
           curve: true,
-          startPoint: startPoint2,
-          endPoint: endPoint2,
+          startPoint,
+          endPoint,
           reversePoint: reversePoint2
         });
         if (prevPoint) {
@@ -11113,14 +11240,14 @@ class PathParser {
           var [cx2, cy2, sx, sy] = prevSegment.values;
           var prevPoint = Point.getPrevPoint(points2, points2.length);
           prevPoint.endPoint = Point.getReversePoint(prevPoint.startPoint, prevPoint.reversePoint);
-          var startPoint2 = { x: x2, y: y2 };
-          var endPoint2 = { x: x2, y: y2 };
+          var startPoint = { x: x2, y: y2 };
+          var endPoint = { x: x2, y: y2 };
           var reversePoint2 = { x: cx2, y: cy2 };
           points2.push({
             command: "Q",
             originalCommand: command,
-            startPoint: startPoint2,
-            endPoint: endPoint2,
+            startPoint,
+            endPoint,
             reversePoint: reversePoint2,
             curve: false
           });
@@ -12598,22 +12725,22 @@ function makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey) {
 }
 function makeInterpolateOffset(segments2) {
   var interpolateList = [];
-  var startPoint2 = [];
+  var startPoint = [];
   segments2.forEach((segment, index2) => {
     switch (segment.command) {
       case "M":
         var [ex, ey] = segment.values;
-        startPoint2 = [ex, ey];
+        startPoint = [ex, ey];
         break;
       case "m":
-        var [sx, sy] = startPoint2;
+        var [sx, sy] = startPoint;
         var [ex, ey] = segment.values;
         ex += sx;
         ey += sy;
-        startPoint2 = [ex, ey];
+        startPoint = [ex, ey];
         break;
       case "L":
-        var [sx, sy] = startPoint2;
+        var [sx, sy] = startPoint;
         var [ex, ey] = segment.values;
         interpolateList.push({
           command: segment.command,
@@ -12621,10 +12748,10 @@ function makeInterpolateOffset(segments2) {
           length: getDist(sx, sy, ex, ey),
           interpolate: makeInterpolateLine(sx, sy, ex, ey)
         });
-        startPoint2 = [ex, ey];
+        startPoint = [ex, ey];
         break;
       case "l":
-        var [sx, sy] = startPoint2;
+        var [sx, sy] = startPoint;
         var [ex, ey] = segment.values;
         ex += sx;
         ey += sy;
@@ -12634,10 +12761,10 @@ function makeInterpolateOffset(segments2) {
           length: getDist(sx, sy, ex, ey),
           interpolate: makeInterpolateLine(sx, sy, ex, ey)
         });
-        startPoint2 = [ex, ey];
+        startPoint = [ex, ey];
         break;
       case "C":
-        var [sx, sy] = startPoint2;
+        var [sx, sy] = startPoint;
         var [cx1, cy1, cx2, cy2, ex, ey] = segment.values;
         interpolateList.push({
           command: segment.command,
@@ -12645,10 +12772,10 @@ function makeInterpolateOffset(segments2) {
           length: getCurveDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
           interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
         });
-        startPoint2 = [ex, ey];
+        startPoint = [ex, ey];
         break;
       case "c":
-        var [sx, sy] = startPoint2;
+        var [sx, sy] = startPoint;
         var [cx1, cy1, cx2, cy2, ex, ey] = segment.values;
         cx1 += sx;
         cx2 += sx;
@@ -12662,10 +12789,10 @@ function makeInterpolateOffset(segments2) {
           length: getCurveDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
           interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
         });
-        startPoint2 = [ex, ey];
+        startPoint = [ex, ey];
         break;
       case "Q":
-        var [sx, sy] = startPoint2;
+        var [sx, sy] = startPoint;
         var [cx1, cy1, ex, ey] = segment.values;
         interpolateList.push({
           command: segment.command,
@@ -12673,10 +12800,10 @@ function makeInterpolateOffset(segments2) {
           length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
           interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
         });
-        startPoint2 = [ex, ey];
+        startPoint = [ex, ey];
         break;
       case "q":
-        var [sx, sy] = startPoint2;
+        var [sx, sy] = startPoint;
         var [cx1, cy1, ex, ey] = segment.values;
         cx1 += sx;
         ex += sx;
@@ -12688,10 +12815,10 @@ function makeInterpolateOffset(segments2) {
           length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
           interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
         });
-        startPoint2 = [ex, ey];
+        startPoint = [ex, ey];
         break;
       case "S":
-        var [sx, sy] = startPoint2;
+        var [sx, sy] = startPoint;
         var [cx2, cy2, ex, ey] = segment.values;
         var prevSegment = interpolateList[interpolateList.length - 1];
         if (["C", "c", "S", "s"].includes(prevSegment.command)) {
@@ -12703,11 +12830,11 @@ function makeInterpolateOffset(segments2) {
             length: getCubicDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
             interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
           });
-          startPoint2 = [ex, ey];
+          startPoint = [ex, ey];
           break;
         }
       case "s":
-        var [sx, sy] = startPoint2;
+        var [sx, sy] = startPoint;
         var [cx2, cy2, ex, ey] = segment.values;
         cx2 += sx;
         ex += sx;
@@ -12723,11 +12850,11 @@ function makeInterpolateOffset(segments2) {
             length: getCubicDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
             interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
           });
-          startPoint2 = [ex, ey];
+          startPoint = [ex, ey];
           break;
         }
       case "T":
-        var [sx, sy] = startPoint2;
+        var [sx, sy] = startPoint;
         var [ex, ey] = segment.values;
         var prevSegment = interpolateList[interpolateList.length - 1];
         if (["Q", "q", "T", "t"].includes(prevSegment.command)) {
@@ -12739,11 +12866,11 @@ function makeInterpolateOffset(segments2) {
             length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
             interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
           });
-          startPoint2 = [ex, ey];
+          startPoint = [ex, ey];
         }
         break;
       case "t":
-        var [sx, sy] = startPoint2;
+        var [sx, sy] = startPoint;
         var [ex, ey] = segment.values;
         ex += sx;
         ey += sy;
@@ -12757,7 +12884,7 @@ function makeInterpolateOffset(segments2) {
             length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
             interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
           });
-          startPoint2 = [ex, ey];
+          startPoint = [ex, ey];
         }
         break;
     }
@@ -15396,7 +15523,15 @@ class PatternCache {
     cachedPatternMap.set(key, parsedValue);
   }
 }
-const PATTERN_REG = /((check|grid|dot|cross\-dot|diagonal\-line|vertical\-line|horizontal\-line|)\(([^\)]*)\))/gi;
+const customFuncMap = {
+  "check": makeGroupFunction("check"),
+  "grid": makeGroupFunction("grid"),
+  "dot": makeGroupFunction("dot"),
+  "cross-dot": makeGroupFunction("cross-dot"),
+  "diagonal-line": makeGroupFunction("diagonal-line"),
+  "vertical-line": makeGroupFunction("vertical-line"),
+  "horizontal-line": makeGroupFunction("horizontal-line")
+};
 class Pattern extends PropertyItem {
   getDefaultObject(obj2 = {}) {
     return super.getDefaultObject(__spreadValues({
@@ -15414,32 +15549,35 @@ class Pattern extends PropertyItem {
   }
   static parseStyle(pattern) {
     var patterns2 = [];
-    if (!pattern)
+    if (!pattern || pattern === "undefined")
       return patterns2;
     pattern = pattern.trim();
     if (PatternCache.has(pattern)) {
       return PatternCache.get(pattern);
     }
-    var results = convertMatches(pattern);
-    var matches2 = results.str.match(PATTERN_REG) || [];
-    matches2.forEach((value, index2) => {
-      var [patternName, patternValue] = value.split("(");
-      patternValue = patternValue.split(")")[0].trim();
-      var [size2, position2, foreColor, backColor, blendMode, lineSize] = patternValue.split(",").map((it) => it.trim());
-      var [width2, height2] = size2.split(" ");
-      var [x2, y2] = position2.split(" ");
-      var [lineWidth, lineHeight] = (lineSize || "").split(" ");
+    const result = parseValue(pattern, {
+      customFuncMap
+    });
+    result.forEach((item2, index2) => {
+      const [
+        size2,
+        position2,
+        foreColor,
+        backColor,
+        blendMode = [{ matchedString: "normal" }],
+        lineSize = [{ parsed: Length.parse("1px") }, { parsed: Length.parse("1px") }]
+      ] = item2.parameters;
       patterns2[index2] = Pattern.parse({
-        type: patternName,
-        x: Length.parse(x2),
-        y: Length.parse(y2),
-        width: Length.parse(width2),
-        height: Length.parse(height2),
-        foreColor: reverseMatches(foreColor, results.matches),
-        backColor: reverseMatches(backColor, results.matches),
-        blendMode: blendMode || "normal",
-        lineWidth: Length.parse(lineWidth || "1px"),
-        lineHeight: Length.parse(lineHeight || "1px")
+        type: item2.type,
+        x: position2[0].parsed,
+        y: position2[1].parsed,
+        width: size2[0].parsed,
+        height: size2[1].parsed,
+        foreColor: foreColor[0].matchedString,
+        backColor: backColor[0].matchedString,
+        blendMode: blendMode[0].matchedString,
+        lineWidth: lineSize[0].parsed,
+        lineHeight: lineSize[1].parsed
       });
     });
     PatternCache.set(pattern, patterns2);
@@ -25182,37 +25320,26 @@ class CanvasView extends EditorElement {
       this.trigger("resizeCanvas");
       this.emit("moveSelectionToCenter", false);
       this.refreshCursor();
-    }, 1e3);
+    }, 100);
   }
   template() {
-    return `
-      <div class='elf--page-container' tabIndex="-1" ref='$container'>
-        <div class='page-view' ref="$pageView">
-          <div class='page-lock scrollbar' ref='$lock'>            
-
-            <!-- \uC120\uD0DD \uC601\uC5ED \uC774\uBCA4\uD2B8 \uC124\uC815  -->
-            ${createComponent("DragAreaView", {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--page-container",
+      tabIndex: "-1",
+      ref: "$container"
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "page-view",
+      ref: "$pageView"
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "page-lock scrollbar",
+      ref: "$lock"
+    }, createComponent("DragAreaView", {
       ref: "$dragAreaView"
-    })}
-
-            <!-- HTML \uB80C\uB354\uB9C1 \uC601\uC5ED  --> 
-            ${createComponent("HTMLRenderView", {
+    }), createComponent("HTMLRenderView", {
       ref: "$htmlRenderView"
-    })}
-
-            <!-- \uB4DC\uB798\uADF8 \uC601\uC5ED \uADF8\uB824\uC8FC\uB294 \uBDF0 --> 
-            ${createComponent("DragAreaRectView", {
+    }), createComponent("DragAreaRectView", {
       ref: "$dragAreaRectView"
-    })}
-
-            <!-- \uCE94\uBC84\uC2A4 \uC601\uC5ED\uC5D0 \uADF8\uB9AC\uAE30 \uB3C4\uC640\uC8FC\uB294 \uBDF0 -->
-            ${this.$injectManager.generate("canvas.view")}              
-
-          </div>
-        </div>
-        ${createComponent("PageTools")}
-      </div>
-    `;
+    }), this.$injectManager.generate("canvas.view"))), "$", createComponent("PageTools"));
   }
   [BIND("$pageView")]() {
     return {
@@ -28237,7 +28364,7 @@ class BackgroundImageEditor extends EditorElement {
     });
   }
   modifyBackgroundImage() {
-    var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.images));
+    var value = CSS_TO_STRING$1(BackgroundImage.toProperty(this.state.images));
     this.parent.trigger(this.props.onchange, this.props.key, value);
   }
   makeGradient(type) {
@@ -30996,10 +31123,7 @@ class ComponentEditor extends EditorElement {
         </div>
       `;
     }
-    return `
-        <object 
-          refClass="${childEditor.editor}" 
-          ${variable$4(__spreadProps(__spreadValues({}, childEditor.editorOptions), {
+    return createComponent(childEditor.editor, __spreadProps(__spreadValues({}, childEditor.editorOptions), {
       onchange: (key, value) => {
         const newValue = isFunction(childEditor.convert) ? childEditor.convert(key, value) : value;
         this.trigger("changeComponentValue", key, newValue);
@@ -31007,9 +31131,7 @@ class ComponentEditor extends EditorElement {
       ref: `${childEditor.key}${index2}`,
       key: childEditor.key,
       value: childEditor.defaultValue
-    }))} 
-        />
-    `;
+    }));
   }
   [LOAD("$body")]() {
     const inspector = this.state.inspector;
@@ -32547,7 +32669,7 @@ class DomModel extends GroupModel {
     }
   }
   getBackgroundImage(index2) {
-    const backgroundImages = this.computedValue("background-image");
+    const backgroundImages = BackgroundImage.parseStyle(STRING_TO_CSS(this.json["background-image"]));
     return backgroundImages[index2 || 0];
   }
   get borderWidth() {
@@ -32618,63 +32740,52 @@ class DomModel extends GroupModel {
         result.radialCenterStick = centerVerties[1];
         result.radialCenterPoint = [newRx.value, newRy.value, 0];
         if (image2.type === GradientType.RADIAL || image2.type === GradientType.REPEATING_RADIAL) {
-          const { startPoint: startPoint3, endPoint: endPoint3, shapePoint: shapePoint2 } = image2.getStartEndPoint(result);
-          const [
-            newStartPoint2,
-            newEndPoint2,
-            newShapePoint,
-            newEndPoint1,
-            newEndPoint22,
-            newShapePoint1,
-            newShapePoint2
-          ] = vertiesMap([
-            startPoint3,
-            endPoint3,
-            shapePoint2,
-            [endPoint3[0], endPoint3[1] + 1, endPoint3[2]],
-            [endPoint3[0], endPoint3[1] - 1, endPoint3[2]],
-            [shapePoint2[0] - 1, shapePoint2[1], shapePoint2[2]],
-            [shapePoint2[0] + 1, shapePoint2[1], shapePoint2[2]]
-          ], this.absoluteMatrix);
-          result.radialCenterPosition = newStartPoint2;
-          result.radialStartPoint = newStartPoint2;
-          result.radialEndPoint = newEndPoint2;
-          result.radialShapePoint = newShapePoint;
-          result.radialEndPoint1 = newEndPoint1;
-          result.radialEndPoint2 = newEndPoint22;
-          result.radialShapePoint1 = newShapePoint1;
-          result.radialShapePoint2 = newShapePoint2;
-          const dist$1 = dist(newStartPoint2, newEndPoint2);
-          result.colorsteps = image2.colorsteps.map((it) => {
-            const offset = it.toLength().toPx(dist$1).value;
-            return {
-              id: it.id,
-              cut: it.cut,
-              color: it.color,
-              pos: lerp([], result.radialStartPoint, result.radialEndPoint, offset / dist$1)
-            };
-          });
-        } else if (image2.type === GradientType.CONIC || image2.type === GradientType.REPEATING_CONIC) {
-          const { startPoint: startPoint3, endPoint: endPoint3, shapePoint: shapePoint2 } = image2.getStartEndPoint(result);
+          const { startPoint: startPoint2, endPoint: endPoint2, shapePoint } = image2.getStartEndPoint(result);
           const [
             newStartPoint2,
             newEndPoint2,
             newShapePoint
           ] = vertiesMap([
-            startPoint3,
-            endPoint3,
-            shapePoint2
+            startPoint2,
+            endPoint2,
+            shapePoint
           ], this.absoluteMatrix);
           result.radialCenterPosition = newStartPoint2;
-          result.radialStartPoint = newStartPoint2;
-          result.radialEndPoint = newEndPoint2;
-          result.radialShapePoint = newShapePoint;
-          [result.radialStartPoint, result.radialEndPoint, result.radialShapePoint] = vertiesMap([
-            result.radialStartPoint,
-            result.radialEndPoint,
-            result.radialShapePoint
+          result.startPoint = newStartPoint2;
+          result.endPoint = newEndPoint2;
+          result.shapePoint = newShapePoint;
+          result.colorsteps = image2.colorsteps.map((it) => {
+            const offset = it.toLength();
+            return {
+              id: it.id,
+              cut: it.cut,
+              color: it.color,
+              timing: it.timing,
+              timingCount: it.timingCount,
+              pos: lerp([], result.startPoint, result.endPoint, offset.value / 100)
+            };
+          });
+        } else if (image2.type === GradientType.CONIC || image2.type === GradientType.REPEATING_CONIC) {
+          const { startPoint: startPoint2, endPoint: endPoint2, shapePoint } = image2.getStartEndPoint(result);
+          const [
+            newStartPoint2,
+            newEndPoint2,
+            newShapePoint
+          ] = vertiesMap([
+            startPoint2,
+            endPoint2,
+            shapePoint
+          ], this.absoluteMatrix);
+          result.radialCenterPosition = newStartPoint2;
+          result.startPoint = newStartPoint2;
+          result.endPoint = newEndPoint2;
+          result.shapePoint = newShapePoint;
+          [result.startPoint, result.endPoint, result.shapePoint] = vertiesMap([
+            result.startPoint,
+            result.endPoint,
+            result.shapePoint
           ], calculateRotationOriginMat4(image2.angle, result.radialCenterPosition));
-          const targetPoint = result.radialShapePoint;
+          const targetPoint = result.shapePoint;
           result.colorsteps = image2.colorsteps.map((it) => {
             const angle2 = it.percent * 3.6;
             const [newPos] = vertiesMap([
@@ -32684,6 +32795,8 @@ class DomModel extends GroupModel {
               id: it.id,
               cut: it.cut,
               color: it.color,
+              timing: it.timing,
+              timingCount: it.timingCount,
               pos: newPos
             };
           });
@@ -32693,27 +32806,29 @@ class DomModel extends GroupModel {
       case GradientType.REPEATING_LINEAR:
         result.gradientLineLength = this.getGradientLineLength(backRect.width, backRect.height, image2.angle);
         result.centerPosition = lerp([], backVerties[0], backVerties[2], 0.5);
-        const startPoint2 = add$1([], result.centerPosition, [0, result.gradientLineLength / 2, 0]);
-        const endPoint2 = subtract([], result.centerPosition, [0, result.gradientLineLength / 2, 0]);
-        const areaStartPoint = clone(startPoint2);
-        const areaEndPoint = clone(endPoint2);
+        const startPoint = add$1([], result.centerPosition, [0, result.gradientLineLength / 2, 0]);
+        const endPoint = subtract([], result.centerPosition, [0, result.gradientLineLength / 2, 0]);
+        const areaStartPoint = clone(startPoint);
+        const areaEndPoint = clone(endPoint);
         const [
           newStartPoint,
           newEndPoint,
           newAreaStartPoint,
           newAreaEndPoint
-        ] = vertiesMap([startPoint2, endPoint2, areaStartPoint, areaEndPoint], calculateRotationOriginMat4(image2.angle, result.centerPosition));
+        ] = vertiesMap([startPoint, endPoint, areaStartPoint, areaEndPoint], calculateRotationOriginMat4(image2.angle, result.centerPosition));
         result.endPoint = newEndPoint;
         result.startPoint = newStartPoint;
         result.areaStartPoint = newAreaStartPoint;
         result.areaEndPoint = newAreaEndPoint;
         result.colorsteps = image2.colorsteps.map((it) => {
-          const offset = it.toLength().toPx(result.gradientLineLength).value;
+          const offset = it.toLength();
           return {
             id: it.id,
             cut: it.cut,
             color: it.color,
-            pos: lerp([], result.startPoint, result.endPoint, offset / result.gradientLineLength)
+            timing: it.timing,
+            timingCount: it.timingCount,
+            pos: lerp([], result.startPoint, result.endPoint, offset.value / 100)
           };
         });
         break;
@@ -32848,7 +32963,7 @@ class SVGLinearGradient extends SVGGradient {
   getDefaultObject(obj2) {
     return super.getDefaultObject(__spreadValues({
       type: GradientType.LINEAR,
-      x1: Length.parse("50%"),
+      x1: Length.parse("0%"),
       y1: Length.parse("50%"),
       x2: Length.parse("100%"),
       y2: Length.parse("50%"),
@@ -32902,7 +33017,7 @@ class SVGLinearGradient extends SVGGradient {
       }
     });
     var [
-      x1 = Length.percent(50),
+      x1 = Length.percent(0),
       y1 = Length.percent(50),
       x2 = Length.percent(100),
       y2 = Length.percent(50)
@@ -33208,7 +33323,7 @@ class SVGFill extends PropertyItem {
     return new SVGFill(obj2);
   }
   static parseImage(str = "") {
-    const result = parseValue(str)[0];
+    const result = parseOneValue(str);
     let image2 = null;
     if (!result) {
       return SVGStaticGradient.create(str || "transparent");
@@ -33411,6 +33526,7 @@ class SVGItem extends LayerModel {
             cut: it.cut,
             color: it.color,
             timing: it.timing,
+            timingCount: it.timingCount,
             pos: lerp([], result.startPoint, result.endPoint, offset.value / 100)
           };
         });
@@ -33438,6 +33554,7 @@ class SVGItem extends LayerModel {
             cut: it.cut,
             color: it.color,
             timing: it.timing,
+            timingCount: it.timingCount,
             pos: lerp([], result.startPoint, result.endPoint, offset.value / 100)
           };
         });
@@ -36951,9 +37068,6 @@ function font(editor) {
   });
 }
 var FillEditor$1 = "";
-({
-  "image-resource": iconUse$1("photo")
-});
 class FillEditor extends EditorElement {
   initState() {
     var _a;
@@ -37026,8 +37140,8 @@ class FillEditor extends EditorElement {
     var project2 = this.$selection.currentProject;
     if (project2) {
       [...e2.target.files].forEach((item2) => {
-        this.emit("updateImageAssetItem", item2, (imageId) => {
-          this.trigger("setImageUrl", project2.getImageValueById(imageId), project2.getImageDataURIById(imageId));
+        this.emit("updateImageAssetItem", item2, (local) => {
+          this.trigger("setImageUrl", local);
         });
       });
     }
@@ -37413,7 +37527,7 @@ class GradientPickerPopup extends BasePopup {
     }
     return createComponent("GradientEditor", {
       ref: "$g",
-      value: `${this.state.image}`,
+      value: `${this.state.image ? this.state.image.toString() : ""}`,
       index: this.state.selectColorStepIndex,
       onchange: "changeGradientEditor"
     });
@@ -37457,6 +37571,13 @@ class GradientPickerPopup extends BasePopup {
     this.emit("showGradientEditorView", {
       index: data.index
     });
+  }
+  [SUBSCRIBE("hideGradientickerPopup")]() {
+    this.hide();
+    this.emit("hideGradientEditorView");
+  }
+  onClose() {
+    this.emit("hideGradientEditorView");
   }
   [SUBSCRIBE("selectColorStep")](color2) {
     this.children.$color.setValue(color2);
@@ -37770,7 +37891,7 @@ class GradientSingleEditor extends EditorElement {
       const imageUrl = project2.getImageValueById(this.state.image.url);
       image2 = this.state.image.toString(imageUrl);
     } else {
-      image2 = this.state.image;
+      image2 = this.state.image.toCSSString();
     }
     return {
       style: {
@@ -40446,6 +40567,8 @@ class PatternEditor extends EditorElement {
     };
   }
   parsePattern(str) {
+    if (str === "undefined")
+      return [];
     return Pattern.parseStyle(str);
   }
   setValue(value) {
@@ -40500,6 +40623,7 @@ class PatternEditor extends EditorElement {
   [SUBSCRIBE("add")](type = "check") {
     var pattern = patterns.find((it) => it.key === type);
     if (pattern) {
+      console.log(this, pattern.execute()[0]);
       const data = Pattern.parseStyle(pattern.execute()[0].pattern);
       this.state.patterns.push.apply(this.state.patterns, data);
       this.refresh();
@@ -42940,12 +43064,18 @@ class CubicBezierEditor extends EditorElement {
     return {
       key: this.props.key,
       currentBezier: getPredefinedCubicBezier(this.props.value || "linear"),
+      isAnimating: isUndefined(this.props.isAnimating) ? true : Boolean(this.props.isAnimating),
       currentBezierIndex: 0,
       selectedColor: "#609de2",
       animatedColor: "#609de266",
       curveColor: "#609de2",
       baseLineColor: "rgba(117, 117, 117, 0.46)"
     };
+  }
+  afterRender() {
+    setTimeout(() => {
+      this.refresh();
+    }, 10);
   }
   template() {
     const linearCurve = curveToPath(this.state.currentBezier, 150, 150);
@@ -42963,7 +43093,7 @@ class CubicBezierEditor extends EditorElement {
                     <div class='predefined-text' ref='$text'></div>
                     <div class='right' ref='$right'>${obj.chevron_right}</div>
                 </div>
-                <div class='animation'>
+                <div class='animation' ref='$animationArea'>
                     <canvas 
                         class='animation-canvas' 
                         ref='$animationCanvas' 
@@ -42994,7 +43124,7 @@ class CubicBezierEditor extends EditorElement {
                 </div>
                 <div class='bezier'>
                     <svg class='bezier-canvas' width="150" height="150" viewBox="0 0 150 150" overflow="visible">
-                        <path d="${linearCurve}" stroke="white" stroke-width="1" fill='none' ref='$bezierCanvas' />
+                        <path d="${linearCurve}" stroke="black" stroke-width="1" fill='none' ref='$bezierCanvas' />
                         <path d="${linearCurvePoint}" stroke="gray" stroke-width="1" fill='none' ref='$bezierCanvasPoint' />
                     </svg>                
                     <div class='control' ref='$control'>
@@ -43004,6 +43134,13 @@ class CubicBezierEditor extends EditorElement {
                 </div>
             </div>
         `;
+  }
+  [BIND("$animationArea")]() {
+    return {
+      style: {
+        display: this.state.isAnimating ? "block" : "none"
+      }
+    };
   }
   [BIND("$bezierCanvas")]() {
     return {
@@ -43074,17 +43211,19 @@ class CubicBezierEditor extends EditorElement {
     var left2 = currentBezier[0] * width2;
     var top2 = (1 - currentBezier[1]) * height2;
     this.refs.$pointer1.css({
-      left: Length.px(left2).round(),
-      top: Length.px(top2).round()
+      left: Length.px(left2),
+      top: Length.px(top2)
     });
     left2 = currentBezier[2] * width2;
     top2 = (1 - currentBezier[3]) * height2;
     this.refs.$pointer2.css({
-      left: Length.px(left2).round(),
-      top: Length.px(top2).round()
+      left: Length.px(left2),
+      top: Length.px(top2)
     });
   }
   drawPoint() {
+    if (this.state.isAnimating === false)
+      return;
     if (this.timer)
       clearTimeout(this.timer);
     if (this.animationTimer)
@@ -43589,7 +43728,7 @@ var GradientEditor$1 = "";
 class GradientEditor extends EditorElement {
   initState() {
     var _a;
-    const image2 = BackgroundImage.parseImage(this.props.value || "") || { type: GradientType.STATIC, colorsteps: [] };
+    const image2 = BackgroundImage.parseImage(this.props.value || "static-gradient(#ececec)");
     const id = (_a = image2.colorsteps[this.props.index]) == null ? void 0 : _a.id;
     this.$selection.selectColorStep(id);
     if (id) {
@@ -43640,8 +43779,6 @@ class GradientEditor extends EditorElement {
     if (oldType === GradientType.STATIC) {
       if (colorsteps.length === 0) {
         colorsteps.push(colorsteps[0], colorsteps[0]);
-      } else if (colorsteps.length === 1) {
-        colorsteps.push(colorsteps[0]);
       }
     }
     var url = type === "image-resource" ? this.state.image.url : this.state.url;
@@ -52886,14 +53023,14 @@ class PathGenerator {
     var state = this.state;
     var x2 = state.dragXY.x + dx;
     var y2 = state.dragXY.y + dy;
-    var endPoint2 = { x: x2, y: y2 };
+    var endPoint = { x: x2, y: y2 };
     var reversePoint2 = { x: x2, y: y2 };
     if (state.dragPoints) {
-      state.reversePoint = Point.getReversePoint(state.startPoint, endPoint2);
+      state.reversePoint = Point.getReversePoint(state.startPoint, endPoint);
     }
     var point2 = {
       startPoint: state.startPoint,
-      endPoint: endPoint2,
+      endPoint,
       curve: !!state.dragPoints,
       reversePoint: reversePoint2,
       connected: true,
@@ -52901,12 +53038,12 @@ class PathGenerator {
     };
     this.points.push(point2);
   }
-  setLastPoint(startPoint2) {
-    var endPoint2 = clone$1(startPoint2);
-    var reversePoint2 = clone$1(startPoint2);
+  setLastPoint(startPoint) {
+    var endPoint = clone$1(startPoint);
+    var reversePoint2 = clone$1(startPoint);
     var point2 = {
-      startPoint: startPoint2,
-      endPoint: endPoint2,
+      startPoint,
+      endPoint,
       curve: false,
       reversePoint: reversePoint2,
       connected: false,
@@ -53206,15 +53343,15 @@ class PathGenerator {
     var points2 = this.points;
     var x2 = state.dragXY.x + dx;
     var y2 = state.dragXY.y + dy;
-    var endPoint2 = { x: x2, y: y2 };
+    var endPoint = { x: x2, y: y2 };
     var reversePoint2 = { x: x2, y: y2 };
     if (state.dragPoints) {
-      reversePoint2 = Point.getReversePoint(state.startPoint, endPoint2);
+      reversePoint2 = Point.getReversePoint(state.startPoint, endPoint);
     }
     points2.push({
       command: state.clickCount === 0 ? "M" : "",
       startPoint: state.startPoint,
-      endPoint: endPoint2,
+      endPoint,
       curve: !!state.dragPoints,
       reversePoint: reversePoint2
     });
@@ -53462,7 +53599,7 @@ class PathGenerator {
   }
   makeMovePositionGuide() {
     var state = this.state;
-    var { startPoint: startPoint2, moveXY, dragPoints, altKey, snapPointList, isGroupSegment } = state;
+    var { startPoint, moveXY, dragPoints, altKey, snapPointList, isGroupSegment } = state;
     var points2 = this.points;
     if (moveXY) {
       snapPointList = snapPointList || [];
@@ -53477,17 +53614,17 @@ class PathGenerator {
       var prev = points2[points2.length - 1];
       if (dragPoints && !isGroupSegment) {
         if (!prev) {
-          var { x: x2, y: y2 } = Point.getReversePoint(startPoint2, moveXY);
-          this.guideLineManager.M(moveXY).L(startPoint2).L({ x: x2, y: y2 });
-          this.segmentManager.addCurvePoint(startPoint2).addCurvePoint(moveXY).addCurvePoint({ x: x2, y: y2 });
+          var { x: x2, y: y2 } = Point.getReversePoint(startPoint, moveXY);
+          this.guideLineManager.M(moveXY).L(startPoint).L({ x: x2, y: y2 });
+          this.segmentManager.addCurvePoint(startPoint).addCurvePoint(moveXY).addCurvePoint({ x: x2, y: y2 });
         } else if (prev.curve) {
-          var { x: x2, y: y2 } = Point.getReversePoint(startPoint2, moveXY);
-          this.guideLineManager.M(prev.startPoint).C(prev.endPoint, { x: x2, y: y2 }, startPoint2);
-          this.segmentManager.addGuideLine(prev.startPoint, prev.endPoint).addGuideLine(startPoint2, { x: x2, y: y2 }).addGuideLine(startPoint2, moveXY).addCurvePoint(prev.endPoint).addCurvePoint({ x: x2, y: y2 }).addCurvePoint(moveXY).addPoint(false, startPoint2);
+          var { x: x2, y: y2 } = Point.getReversePoint(startPoint, moveXY);
+          this.guideLineManager.M(prev.startPoint).C(prev.endPoint, { x: x2, y: y2 }, startPoint);
+          this.segmentManager.addGuideLine(prev.startPoint, prev.endPoint).addGuideLine(startPoint, { x: x2, y: y2 }).addGuideLine(startPoint, moveXY).addCurvePoint(prev.endPoint).addCurvePoint({ x: x2, y: y2 }).addCurvePoint(moveXY).addPoint(false, startPoint);
         } else if (prev.curve === false) {
-          var { x: x2, y: y2 } = Point.getReversePoint(startPoint2, moveXY);
-          this.guideLineManager.M(prev.startPoint).Q({ x: x2, y: y2 }, startPoint2);
-          this.segmentManager.addGuideLine(moveXY, { x: x2, y: y2 }).addPoint(false, startPoint2).addCurvePoint({ x: x2, y: y2 }).addCurvePoint(moveXY);
+          var { x: x2, y: y2 } = Point.getReversePoint(startPoint, moveXY);
+          this.guideLineManager.M(prev.startPoint).Q({ x: x2, y: y2 }, startPoint);
+          this.segmentManager.addGuideLine(moveXY, { x: x2, y: y2 }).addPoint(false, startPoint).addCurvePoint({ x: x2, y: y2 }).addCurvePoint(moveXY);
         }
       } else {
         if (!prev)
@@ -56587,6 +56724,7 @@ var repeatTypeList = [
   "space",
   "round"
 ];
+const TOOL_SIZE$1 = 20;
 class GradientBaseEditor extends EditorElement {
   initializeData() {
     const value = this.$selection.current["background-image"];
@@ -56599,13 +56737,85 @@ class GradientBaseEditor extends EditorElement {
     this.state.backgroundImageMatrix = current.createBackgroundImageMatrix(this.state.index);
   }
   updateData() {
-    var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.backgroundImages));
+    var value = CSS_TO_STRING$1(BackgroundImage.toProperty(this.state.backgroundImages));
     this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
       "background-image": value
     }));
   }
 }
-class GradientResizer extends GradientBaseEditor {
+class GradientTimingStepEditor extends GradientBaseEditor {
+  [POINTERSTART("$el .step-point") + MOVE("moveStepPoint") + END("moveEndStepPoint")](e2) {
+    this.$el.toggleClass("dragging", true);
+    this.initializeData();
+    const colorStepIndex = +e2.$dt.data("colorstep-index");
+    this.localColorStep = this.state.backgroundImages[this.state.index].image.colorsteps[colorStepIndex];
+    this.localColorStepTimingCount = this.localColorStep.timing.count;
+    this.localColorCubicBezierTimingCount = this.localColorStep.timingCount;
+  }
+  moveStepPoint(dx, dy) {
+    const dist$1 = (dx < 0 ? -1 : 1) * Math.ceil(dist([0, 0, 0], [dx, dy, 0]) / 10);
+    switch (this.localColorStep.timing.name) {
+      case TimingFunction.LINEAR:
+        break;
+      case TimingFunction.STEPS:
+        this.localColorStep.timing.count = Math.max(this.localColorStepTimingCount + dist$1, 1);
+        break;
+      default:
+        this.localColorStep.timingCount = Math.max(this.localColorCubicBezierTimingCount + dist$1, 1);
+        break;
+    }
+    this.updateData();
+  }
+  makeTimingString(timing) {
+    switch (timing.name) {
+      case TimingFunction.LINEAR:
+        return ``;
+      case TimingFunction.EASE:
+      case TimingFunction.EASE_IN:
+      case TimingFunction.EASE_OUT:
+      case TimingFunction.EASE_IN_OUT:
+        return `${timing.name}`;
+      default:
+        return `cubic-bezier(${timing.x1}, ${timing.y1}, ${timing.x2}, ${timing.y2})`;
+    }
+  }
+  moveEndStepPoint(dx, dy) {
+    if (dx === 0 && dy === 0) {
+      const { timing, timingCount } = this.localColorStep;
+      switch (timing.name) {
+        case TimingFunction.STEPS:
+          this.localColorStep.timing.direction = this.localColorStep.timing.direction === "start" ? "end" : "start";
+          break;
+        case TimingFunction.LINEAR:
+          break;
+        default:
+          this.emit("showComponentPopup", {
+            title: "Cubic Bezier",
+            width: 220,
+            inspector: [
+              {
+                key: "timing",
+                editor: "cubic-bezier",
+                editorOptions: {
+                  isAnimating: false
+                },
+                defaultValue: this.makeTimingString(timing)
+              }
+            ],
+            changeEvent: (key, value) => {
+              this.localColorStep.timing = parseOneValue(value).parsed;
+              this.updateData();
+            }
+          });
+          this.$el.toggleClass("dragging", false);
+          return;
+      }
+    }
+    this.updateData();
+    this.$el.toggleClass("dragging", false);
+  }
+}
+class GradientResizer extends GradientTimingStepEditor {
   [POINTERSTART("$el .resizer") + LEFT_BUTTON + MOVE("calculateMovedResizer") + END("calculateMovedEndResizer") + PREVENT](e2) {
     this.state.$target = e2.$dt;
     this.$el.toggleClass("dragging", true);
@@ -56786,8 +56996,8 @@ class GradientColorstepEditor extends GradientRotateEditor {
       case GradientType.RADIAL:
       case GradientType.REPEATING_RADIAL:
         this.centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
-        this.startPoint = this.$viewport.applyVertex(result.radialStartPoint);
-        this.endPoint = this.$viewport.applyVertex(result.radialEndPoint);
+        this.startPoint = this.$viewport.applyVertex(result.startPoint);
+        this.endPoint = this.$viewport.applyVertex(result.endPoint);
         this.screenXY = this.$viewport.applyVertex(result.colorsteps[this.$targetIndex].pos);
         const dist2 = subtract([], this.endPoint, this.startPoint);
         const angle2 = calculateAngle360(dist2[0], dist2[1]) - 180;
@@ -56796,13 +57006,13 @@ class GradientColorstepEditor extends GradientRotateEditor {
       case GradientType.CONIC:
       case GradientType.REPEATING_CONIC:
         this.centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
-        this.startPoint = this.$viewport.applyVertex(result.radialShapePoint);
+        this.startPoint = this.$viewport.applyVertex(result.shapePoint);
         this.newStartPoint = subtract([], this.startPoint, this.centerPosition);
         this.newStartAngle = calculateAngle360(this.newStartPoint[0], this.newStartPoint[1]);
         const x2 = +$colorstep.data("x");
         const y2 = +$colorstep.data("y");
         this.screenXY = [x2, y2, 0];
-        this.endPoint = this.$viewport.applyVertex(result.radialEndPoint);
+        this.endPoint = this.$viewport.applyVertex(result.endPoint);
         this.rotateInverse = create$5();
         break;
     }
@@ -56829,6 +57039,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
           var distEnd = Math.abs(e2 - n);
           newDist = distStart / (distEnd + distStart) * 100;
         }
+        newDist = Math.max(0, Math.min(100, newDist));
         baseDist = dist(this.startPoint, this.endPoint);
         break;
       case GradientType.RADIAL:
@@ -56842,6 +57053,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
         } else {
           newDist = (n - s) / baseDefaultDist * 100;
         }
+        newDist = Math.max(0, Math.min(100, newDist));
         baseDist = dist(this.startPoint, this.endPoint);
         break;
       case GradientType.CONIC:
@@ -56869,7 +57081,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
     });
     nextImage.sortColorStep();
     this.emit("updateGradientEditor", nextImage, targetColorStep);
-    var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.backgroundImages));
+    var value = CSS_TO_STRING$1(BackgroundImage.toProperty(this.state.backgroundImages));
     this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
       "background-image": value
     }));
@@ -56881,13 +57093,13 @@ class GradientColorstepEditor extends GradientRotateEditor {
     }
     if (dx === 0 && dy === 0) {
       const image2 = this.state.backgroundImages[this.state.index].image;
-      image2.colorsteps[this.$targetIndex].toggle();
+      image2.colorsteps[this.$targetIndex].toggleTiming();
       const targetColorStep = {
         color: image2.colorsteps[this.$targetIndex].color,
         percent: image2.colorsteps[this.$targetIndex].percent
       };
       this.emit("updateGradientEditor", image2, targetColorStep);
-      var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.backgroundImages));
+      var value = CSS_TO_STRING$1(BackgroundImage.toProperty(this.state.backgroundImages));
       this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
         "background-image": value
       }));
@@ -56899,7 +57111,7 @@ class GradientColorstepEditor extends GradientRotateEditor {
     const { color: color2, percent } = image2.colorsteps[index2] || {};
     this.emit("updateGradientEditor", image2, { color: color2, percent });
     this.state.backgroundImages[this.state.index].image = image2;
-    var value = CSS_TO_STRING$1(BackgroundImage.toPropertyCSS(this.state.backgroundImages));
+    var value = CSS_TO_STRING$1(BackgroundImage.toProperty(this.state.backgroundImages));
     this.command("setAttributeForMulti", "change background image", this.$selection.packByValue({
       "background-image": value
     }));
@@ -57058,8 +57270,277 @@ class GradientEditorView extends GradientColorstepEditor {
     this.state.isShow = false;
     this.emit("pop.mode.view", "GradientEditorView");
   }
-  [SUBSCRIBE("refreshSelection")]() {
-    this.refresh();
+  makeTimingLine(timing, width2 = 10, startX = 0, startY = 0) {
+    switch (timing.name) {
+      case TimingFunction.LINEAR:
+        return ``;
+      case TimingFunction.STEPS:
+        return /* @__PURE__ */ createElementJsx("path", {
+          class: "timing",
+          d: `
+          M${startX + 0} ${startY + width2} 
+          L${startX + width2 * 1 / 3} ${startY + width2} 
+          L${startX + width2 * 1 / 3} ${startY + width2 * 2 / 3} 
+          L${startX + width2 * 2 / 3} ${startY + width2 * 2 / 3} 
+          L${startX + width2 * 2 / 3} ${startY + width2 * 1 / 3} 
+          L${startX + width2} ${startY + width2 * 1 / 3} 
+          L${startX + width2} ${startY + 0}           
+        `
+        });
+      default:
+        return /* @__PURE__ */ createElementJsx("path", {
+          class: "timing",
+          d: `
+          M${startX + 0} ${startY + width2} 
+          C 
+            ${startX + timing.x1 * width2} ${startY + width2 - timing.y1 * width2} 
+            ${startX + timing.x2 * width2} ${startY + width2 - timing.y2 * width2}  
+            ${startX + width2} ${startY + 0}
+        `
+        });
+    }
+  }
+  makeConicTimingLine(timing, width2 = 10, startX = 0, startY = 0) {
+    const half = width2 / 2;
+    switch (timing.name) {
+      case TimingFunction.LINEAR:
+        return ``;
+      case TimingFunction.STEPS:
+        return /* @__PURE__ */ createElementJsx("path", {
+          class: "timing",
+          d: `
+          M${startX + 0 - half} ${startY + width2 - half} 
+          L${startX + width2 * 1 / 3 - half} ${startY + width2 - half} 
+          L${startX + width2 * 1 / 3 - half} ${startY + width2 * 2 / 3 - half} 
+          L${startX + width2 * 2 / 3 - half} ${startY + width2 * 2 / 3 - half} 
+          L${startX + width2 * 2 / 3 - half} ${startY + width2 * 1 / 3 - half} 
+          L${startX + width2 - half} ${startY + width2 * 1 / 3 - half} 
+          L${startX + width2 - half} ${startY + 0 - half}           
+        `
+        });
+      default:
+        return /* @__PURE__ */ createElementJsx("path", {
+          class: "timing",
+          d: `
+          M${startX + 0 - half} ${startY + width2 - half} 
+          C 
+            ${startX + timing.x1 * width2 - half} ${startY + width2 - timing.y1 * width2 - half} 
+            ${startX + timing.x2 * width2 - half} ${startY + width2 - timing.y2 * width2 - half}  
+            ${startX + width2 - half} ${startY + 0 - half}
+        `
+        });
+    }
+  }
+  makeTimingCircle(colorstepIndex, current, prev, size2) {
+    const prevStickScreenXY = prev.stickScreenXYInEnd;
+    const stickScreenXY = current.stickScreenXYInStart;
+    const { timing, timingCount } = current;
+    let pos;
+    switch (timing.name) {
+      case TimingFunction.LINEAR:
+        return ``;
+      case TimingFunction.STEPS:
+        pos = lerp([], prevStickScreenXY, stickScreenXY, 0.5);
+        return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("circle", {
+          class: "step-point",
+          "data-colorstep-index": colorstepIndex,
+          cx: pos[0],
+          cy: pos[1],
+          r: 7
+        }), /* @__PURE__ */ createElementJsx("text", {
+          x: pos[0],
+          y: pos[1],
+          dy: 4,
+          "text-anchor": "middle"
+        }, timing.count));
+      default:
+        pos = lerp([], prevStickScreenXY, stickScreenXY, 0.5);
+        return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("circle", {
+          class: "step-point",
+          "data-colorstep-index": colorstepIndex,
+          cx: pos[0],
+          cy: pos[1],
+          r: 7
+        }), /* @__PURE__ */ createElementJsx("text", {
+          x: pos[0],
+          y: pos[1],
+          dy: 4,
+          "text-anchor": "middle"
+        }, timingCount));
+    }
+  }
+  makeConicTimingCircle(startPoint, colorstepIndex, current, prev) {
+    const prevStickScreenXY = prev.stickScreenXY;
+    const stickScreenXY = current.stickScreenXY;
+    const { timing, timingCount } = current;
+    const dist$1 = dist(prevStickScreenXY, startPoint);
+    const prevAngle = calculateAngle360(...subtract([], prevStickScreenXY, startPoint));
+    const angle2 = calculateAngle360(...subtract([], stickScreenXY, startPoint));
+    let nextAngle = this.getRealAngle(prevAngle + (angle2 - prevAngle) / 2);
+    const bigArc = Math.abs(angle2 - prevAngle) % 360 >= 180 ? 1 : 0;
+    if (bigArc) {
+      nextAngle -= 180;
+    }
+    var [pos] = vertiesMap([
+      lerp([], startPoint, add$1([], startPoint, [-1, 0, 0]), dist$1)
+    ], calculateRotationOriginMat4(nextAngle, startPoint));
+    switch (timing.name) {
+      case TimingFunction.LINEAR:
+        return ``;
+      case TimingFunction.STEPS:
+        return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("circle", {
+          class: "step-point",
+          "data-colorstep-index": colorstepIndex,
+          cx: pos[0],
+          cy: pos[1],
+          r: 7
+        }), /* @__PURE__ */ createElementJsx("text", {
+          x: pos[0],
+          y: pos[1],
+          dy: 4,
+          "text-anchor": "middle"
+        }, timing.count));
+      default:
+        return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("circle", {
+          class: "step-point",
+          "data-colorstep-index": colorstepIndex,
+          cx: pos[0],
+          cy: pos[1],
+          r: 7
+        }), /* @__PURE__ */ createElementJsx("text", {
+          x: pos[0],
+          y: pos[1],
+          dy: 4,
+          "text-anchor": "middle"
+        }, timingCount));
+    }
+  }
+  makeTimingArea(colorstepIndex, current, prev, size2) {
+    const prevStickScreenXY = prev.stickScreenXYInEnd;
+    const stickScreenXY = current.stickScreenXYInStart;
+    return /* @__PURE__ */ createElementJsx("g", {
+      class: "timing-area"
+    }, current.timing.name === TimingFunction.LINEAR ? `` : /* @__PURE__ */ createElementJsx("path", {
+      class: "timing-path",
+      d: `
+              M ${prevStickScreenXY[0]} ${prevStickScreenXY[1]}
+              L ${stickScreenXY[0]} ${stickScreenXY[1]}
+            `
+    }), this.makeTimingCircle(colorstepIndex, current, prev, size2));
+  }
+  getRealAngle(angle2) {
+    return angle2 < 0 ? 360 + angle2 : angle2;
+  }
+  makeConicTimingArea(startPoint, colorstepIndex, current, prev, size2, dist2, startAngle) {
+    const prevStickScreenXY = prev.stickScreenXY;
+    const stickScreenXY = current.stickScreenXY;
+    const prevAngle = calculateAngle360(...subtract([], prevStickScreenXY, startPoint)) + startAngle;
+    const angle2 = calculateAngle360(...subtract([], stickScreenXY, startPoint)) + startAngle;
+    const nextAngle = 360 - prevAngle;
+    const nextAngle2 = angle2;
+    const bigArc = Math.abs(nextAngle + nextAngle2) % 360 >= 180 ? 1 : 0;
+    return /* @__PURE__ */ createElementJsx("g", {
+      class: "timing-area"
+    }, current.timing.name === TimingFunction.LINEAR ? `` : /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("path", {
+      class: "timing-path",
+      d: `
+              M ${prevStickScreenXY[0]} ${prevStickScreenXY[1]}
+              A ${dist2} ${dist2} 0 ${bigArc} 1 ${stickScreenXY[0]} ${stickScreenXY[1]}
+            `
+    })), this.makeConicTimingCircle(startPoint, colorstepIndex, current, prev, dist2));
+  }
+  makeGradientPoint(colorsteps, startPoint, endPoint, shapePoint, newHoverColorStepPoint) {
+    const size2 = TOOL_SIZE$1;
+    const dist2 = subtract([], endPoint, startPoint);
+    const angle2 = calculateAngle360(dist2[0], dist2[1]) - 180;
+    return /* @__PURE__ */ createElementJsx(FragmentInstance, null, colorsteps.map((it, index2) => {
+      if (index2 === 0)
+        return "";
+      return this.makeTimingArea(index2, it, colorsteps[index2 - 1], TOOL_SIZE$1);
+    }), colorsteps.map((it, index2) => {
+      return /* @__PURE__ */ createElementJsx("g", {
+        transform: `rotate(${angle2} ${it.stickScreenXY[0]} ${it.stickScreenXY[1]})`
+      }, /* @__PURE__ */ createElementJsx("rect", {
+        id: it.id,
+        "data-index": index2,
+        class: "colorstep",
+        x: it.stickScreenXY[0],
+        y: it.stickScreenXY[1],
+        width: size2,
+        height: size2,
+        fill: it.color,
+        tabIndex: -1,
+        "data-x": it.screenXY[0],
+        "data-y": it.screenXY[1]
+      }), this.makeTimingLine(it.timing, size2, it.stickScreenXY[0], it.stickScreenXY[1]));
+    }), /* @__PURE__ */ createElementJsx("circle", {
+      class: "point",
+      "data-type": "start",
+      cx: startPoint[0],
+      cy: startPoint[1]
+    }), /* @__PURE__ */ createElementJsx("circle", {
+      class: "point",
+      "data-type": "end",
+      cx: endPoint[0],
+      cy: endPoint[1]
+    }), shapePoint && /* @__PURE__ */ createElementJsx("circle", {
+      class: "point",
+      "data-type": "shape",
+      cx: shapePoint[0],
+      cy: shapePoint[1]
+    }), newHoverColorStepPoint && /* @__PURE__ */ createElementJsx("circle", {
+      class: "hover-colorstep",
+      r: "5",
+      cx: newHoverColorStepPoint[0],
+      cy: newHoverColorStepPoint[1],
+      fill: this.state.hoverColorStep.color
+    }));
+  }
+  makeConicGradientPoint(colorsteps, startPoint, endPoint, shapePoint, newHoverColorStepPoint, dist2, startAngle) {
+    const size2 = TOOL_SIZE$1;
+    return /* @__PURE__ */ createElementJsx(FragmentInstance, null, colorsteps.map((it, index2) => {
+      if (index2 === 0)
+        return "";
+      return this.makeConicTimingArea(startPoint, index2, it, colorsteps[index2 - 1], TOOL_SIZE$1, dist2, startAngle);
+    }), colorsteps.map((it, index2) => {
+      const angle2 = calculateAngle360(...subtract([], it.screenXY, startPoint)) - 180;
+      return /* @__PURE__ */ createElementJsx("g", {
+        transform: `rotate(${angle2} ${it.screenXY[0]} ${it.screenXY[1]})`
+      }, /* @__PURE__ */ createElementJsx("rect", {
+        id: it.id,
+        "data-index": index2,
+        class: "colorstep",
+        x: it.screenXY[0] - size2 / 2,
+        y: it.screenXY[1] - size2 / 2,
+        width: size2,
+        height: size2,
+        fill: it.color,
+        tabIndex: -1,
+        "data-x": it.screenXY[0],
+        "data-y": it.screenXY[1]
+      }), this.makeConicTimingLine(it.timing, size2, it.screenXY[0], it.screenXY[1], startAngle));
+    }), /* @__PURE__ */ createElementJsx("circle", {
+      class: "point",
+      "data-type": "start",
+      cx: startPoint[0],
+      cy: startPoint[1]
+    }), /* @__PURE__ */ createElementJsx("circle", {
+      class: "point",
+      "data-type": "end",
+      cx: endPoint[0],
+      cy: endPoint[1]
+    }), shapePoint && /* @__PURE__ */ createElementJsx("circle", {
+      class: "point",
+      "data-type": "shape",
+      cx: shapePoint[0],
+      cy: shapePoint[1]
+    }), newHoverColorStepPoint && /* @__PURE__ */ createElementJsx("circle", {
+      class: "hover-colorstep",
+      r: "5",
+      cx: newHoverColorStepPoint[0],
+      cy: newHoverColorStepPoint[1],
+      fill: this.state.hoverColorStep.color
+    }));
   }
   makeGradientRect(result) {
     const boxPosition = this.$viewport.applyVerties(result.backVerties);
@@ -57101,38 +57582,39 @@ class GradientEditorView extends GradientColorstepEditor {
   makeConicCenterPoint(result) {
     const { image: image2 } = result.backgroundImage;
     let centerPosition, centerStick;
-    let radialStartPoint, radialEndPoint, radialShapePoint, colorsteps;
+    let startPoint, endPoint, shapePoint, colorsteps;
     this.$viewport.applyVerties(result.backVerties);
     centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
-    radialStartPoint = this.$viewport.applyVertex(result.radialStartPoint);
-    radialEndPoint = this.$viewport.applyVertex(result.radialEndPoint);
-    radialShapePoint = this.$viewport.applyVertex(result.radialShapePoint);
-    let lastDist = dist(radialStartPoint, radialEndPoint) / 2;
+    startPoint = this.$viewport.applyVertex(result.startPoint);
+    endPoint = this.$viewport.applyVertex(result.endPoint);
+    shapePoint = this.$viewport.applyVertex(result.shapePoint);
+    let lastDist = dist(startPoint, endPoint) / 2;
     if (lastDist < 50) {
       lastDist = 50;
     }
     colorsteps = result.colorsteps.map((it) => {
       it.screenXY = this.$viewport.applyVertex(it.pos);
-      const pointDist = dist(it.screenXY, radialStartPoint);
+      const pointDist = dist(it.screenXY, startPoint);
       if (pointDist < lastDist) {
-        it.screenXY = lerp([], radialStartPoint, lerp([], radialStartPoint, it.screenXY, 1 / pointDist), lastDist);
+        it.screenXY = lerp([], startPoint, lerp([], startPoint, it.screenXY, 1 / pointDist), lastDist + 20);
       } else if (pointDist > lastDist) {
-        it.screenXY = lerp([], radialStartPoint, it.screenXY, lastDist / pointDist);
+        it.screenXY = lerp([], startPoint, it.screenXY, (lastDist + 20) / pointDist);
       }
-      const dist$1 = subtract([], it.screenXY, radialStartPoint);
+      it.stickScreenXY = clone(it.screenXY);
+      const dist$1 = subtract([], it.screenXY, startPoint);
       it.angle = calculateAngle360(dist$1[0], dist$1[1]);
       return it;
     });
     centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
-    const stickPoint = this.$viewport.applyVertex(result.radialShapePoint);
+    const stickPoint = this.$viewport.applyVertex(result.shapePoint);
     centerStick = lerp([], centerPosition, lerp([], centerPosition, stickPoint, 1 / dist(centerPosition, stickPoint)), lastDist + 20);
     const targetStick = lerp([], centerStick, centerPosition, 1);
     let newHoverColorStepPoint = null;
     if (this.state.hoverColorStep) {
       const hoverAngle = this.state.hoverColorStep.percent * 3.6;
-      const originDist = dist(centerPosition, radialShapePoint);
+      const originDist = dist(centerPosition, shapePoint);
       [newHoverColorStepPoint] = vertiesMap([
-        lerp([], centerPosition, radialShapePoint, (lastDist + 15) / originDist)
+        lerp([], centerPosition, shapePoint, (lastDist + 15) / originDist)
       ], calculateRotationOriginMat4(hoverAngle, centerPosition));
     }
     return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("div", {
@@ -57146,13 +57628,13 @@ class GradientEditorView extends GradientColorstepEditor {
       class: "gradient-angle"
     }, /* @__PURE__ */ createElementJsx("circle", {
       class: "size",
-      cx: radialStartPoint[0],
-      cy: radialStartPoint[1],
+      cx: startPoint[0],
+      cy: startPoint[1],
       r: lastDist
     }), /* @__PURE__ */ createElementJsx("circle", {
       class: "area-line",
-      cx: radialStartPoint[0],
-      cy: radialStartPoint[1],
+      cx: startPoint[0],
+      cy: startPoint[1],
       r: lastDist
     }), /* @__PURE__ */ createElementJsx("path", {
       class: "stick",
@@ -57167,74 +57649,23 @@ class GradientEditorView extends GradientColorstepEditor {
       r: "7",
       "data-center-x": centerPosition[0],
       "data-center-y": centerPosition[1]
-    }), colorsteps.map((it, index2) => {
-      if (it.cut) {
-        return /* @__PURE__ */ createElementJsx("rect", {
-          id: it.id,
-          "data-index": index2,
-          class: "colorstep",
-          x: it.screenXY[0] - 7,
-          y: it.screenXY[1] - 7,
-          transform: `rotate(${it.angle} ${it.screenXY[0]} ${it.screenXY[1]})`,
-          width: 14,
-          height: 14,
-          fill: it.color,
-          tabIndex: -1,
-          "data-x": it.screenXY[0],
-          "data-y": it.screenXY[1]
-        });
-      } else {
-        return /* @__PURE__ */ createElementJsx("rect", {
-          id: it.id,
-          "data-index": index2,
-          class: "colorstep",
-          x: it.screenXY[0] - 7,
-          y: it.screenXY[1] - 7,
-          transform: `rotate(${it.angle} ${it.screenXY[0]} ${it.screenXY[1]})`,
-          rx: 7,
-          ry: 7,
-          width: 14,
-          height: 14,
-          fill: it.color,
-          tabIndex: -1,
-          "data-x": it.screenXY[0],
-          "data-y": it.screenXY[1]
-        });
-      }
-    }), newHoverColorStepPoint && /* @__PURE__ */ createElementJsx("circle", {
-      class: "hover-colorstep",
-      r: "5",
-      cx: newHoverColorStepPoint[0],
-      cy: newHoverColorStepPoint[1],
-      fill: this.state.hoverColorStep.color
-    })));
+    }), this.makeConicGradientPoint(colorsteps, startPoint, endPoint, shapePoint, newHoverColorStepPoint, lastDist + 20, image2.angle)));
   }
   makeRadialCenterPoint(result) {
     const { image: image2 } = result.backgroundImage;
-    let centerPosition, colorsteps, radialStartPoint, radialEndPoint, radialShapePoint, radialEndPoint1, radialShapePoint1, radialEndPoint2, radialShapePoint2;
+    let centerPosition, colorsteps, startPoint, endPoint, shapePoint;
     this.$viewport.applyVerties(result.backVerties);
     centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
-    radialStartPoint = this.$viewport.applyVertex(result.radialStartPoint);
-    radialEndPoint = this.$viewport.applyVertex(result.radialEndPoint);
-    radialShapePoint = this.$viewport.applyVertex(result.radialShapePoint);
-    radialEndPoint1 = this.$viewport.applyVertex(result.radialEndPoint1);
-    radialEndPoint2 = this.$viewport.applyVertex(result.radialEndPoint2);
-    radialShapePoint1 = this.$viewport.applyVertex(result.radialShapePoint1);
-    radialShapePoint2 = this.$viewport.applyVertex(result.radialShapePoint2);
-    [radialEndPoint1, radialEndPoint2] = vertiesMap([radialEndPoint1, radialEndPoint2], calculateScaleOriginMat4(30, radialEndPoint));
-    [radialShapePoint1, radialShapePoint2] = vertiesMap([radialShapePoint1, radialShapePoint2], calculateScaleOriginMat4(30, radialShapePoint));
-    colorsteps = result.colorsteps.map((it) => {
-      it.screenXY = this.$viewport.applyVertex(it.pos);
-      return it;
-    });
+    startPoint = this.$viewport.applyVertex(result.startPoint);
+    endPoint = this.$viewport.applyVertex(result.endPoint);
+    shapePoint = this.$viewport.applyVertex(result.shapePoint);
+    colorsteps = this.makeStickPoint(result.colorsteps, startPoint, endPoint);
     if (image2.radialType === RadialGradientType.ELLIPSE) {
-      radialShapePoint = this.$viewport.applyVertex(result.radialShapePoint);
+      shapePoint = this.$viewport.applyVertex(result.shapePoint);
     }
-    const dist$1 = subtract([], radialEndPoint, radialStartPoint);
-    const angle2 = calculateAngle360(dist$1[0], dist$1[1]);
     let newHoverColorStepPoint = null;
     if (this.state.hoverColorStep) {
-      newHoverColorStepPoint = lerp([], radialStartPoint, radialEndPoint, this.state.hoverColorStep.percent / 100);
+      newHoverColorStepPoint = lerp([], startPoint, endPoint, this.state.hoverColorStep.percent / 100);
     }
     return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("div", {
       class: "gradient-position center",
@@ -57247,98 +57678,65 @@ class GradientEditorView extends GradientColorstepEditor {
       class: "gradient-radial-line"
     }, /* @__PURE__ */ createElementJsx("path", {
       d: `
-              M ${radialStartPoint[0]} ${radialStartPoint[1]}
-              L ${radialEndPoint[0]} ${radialEndPoint[1]}
+              M ${startPoint[0]} ${startPoint[1]}
+              L ${endPoint[0]} ${endPoint[1]}
           `,
       class: "area-line"
     }), /* @__PURE__ */ createElementJsx("path", {
       d: `
-              M ${radialStartPoint[0]} ${radialStartPoint[1]}
-              L ${radialEndPoint[0]} ${radialEndPoint[1]}
+              M ${startPoint[0]} ${startPoint[1]}
+              L ${endPoint[0]} ${endPoint[1]}
           `,
       class: "start-end-line"
     }), /* @__PURE__ */ createElementJsx("path", {
       d: `
-              M ${radialEndPoint1[0]} ${radialEndPoint1[1]}
-              L ${radialEndPoint2[0]} ${radialEndPoint2[1]}
+              M ${startPoint[0]} ${startPoint[1]}
+              L ${shapePoint[0]} ${shapePoint[1]}
           `,
-      class: "start-end-line"
-    }), /* @__PURE__ */ createElementJsx("path", {
-      d: `
-              M ${radialShapePoint1[0]} ${radialShapePoint1[1]}
-              L ${radialShapePoint2[0]} ${radialShapePoint2[1]}
-          `,
-      class: "start-end-line"
-    }), image2.radialType === RadialGradientType.CIRCLE ? /* @__PURE__ */ createElementJsx("circle", {
-      class: "size",
-      cx: radialStartPoint[0],
-      cy: radialStartPoint[1],
-      r: dist(radialStartPoint, radialEndPoint)
-    }) : null, image2.radialType === RadialGradientType.ELLIPSE ? /* @__PURE__ */ createElementJsx("ellipse", {
-      class: "size",
-      cx: radialStartPoint[0],
-      cy: radialStartPoint[1],
-      transform: `rotate(${angle2} ${radialStartPoint[0]} ${radialStartPoint[1]})`,
-      rx: dist(radialStartPoint, radialEndPoint),
-      ry: dist(radialStartPoint, radialShapePoint)
-    }) : null, colorsteps.map((it, index2) => {
-      if (it.cut) {
-        return /* @__PURE__ */ createElementJsx("rect", {
-          id: it.id,
-          "data-index": index2,
-          class: "colorstep",
-          x: it.screenXY[0] - 7,
-          y: it.screenXY[1] - 7,
-          transform: `rotate(${angle2} ${it.screenXY[0]} ${it.screenXY[1]})`,
-          width: 14,
-          height: 14,
-          fill: it.color,
-          tabIndex: -1
-        });
-      } else {
-        return /* @__PURE__ */ createElementJsx("rect", {
-          id: it.id,
-          "data-index": index2,
-          class: "colorstep",
-          x: it.screenXY[0] - 7,
-          y: it.screenXY[1] - 7,
-          transform: `rotate(${angle2} ${it.screenXY[0]} ${it.screenXY[1]})`,
-          rx: 7,
-          ry: 7,
-          width: 14,
-          height: 14,
-          fill: it.color,
-          tabIndex: -1
-        });
-      }
-    }), newHoverColorStepPoint && /* @__PURE__ */ createElementJsx("circle", {
-      class: "hover-colorstep",
-      r: "7",
-      cx: newHoverColorStepPoint[0],
-      cy: newHoverColorStepPoint[1],
-      fill: this.state.hoverColorStep.color
-    })));
+      class: "shape-line"
+    }), this.makeGradientPoint(colorsteps, startPoint, endPoint, shapePoint, newHoverColorStepPoint)));
+  }
+  makeStickPoint(colorsteps, startPoint, endPoint) {
+    const size2 = TOOL_SIZE$1;
+    const dist2 = subtract([], endPoint, startPoint);
+    const angle2 = calculateAngle360(dist2[0], dist2[1]) - 180;
+    const rotateInverse = calculateRotationOriginMat4(-angle2, startPoint);
+    const rotateInverseInverse = invert([], rotateInverse);
+    return colorsteps.map((it) => {
+      it.screenXY = this.$viewport.applyVertex(it.pos);
+      const [newScreenXY] = vertiesMap([it.screenXY], rotateInverse);
+      [it.stickScreenXY, it.stickScreenXYInStart, it.stickScreenXYInEnd] = vertiesMap([
+        [newScreenXY[0] - size2 / 2, newScreenXY[1] - size2 * 1.5, 0],
+        [
+          newScreenXY[0] - size2 / 2,
+          newScreenXY[1] - size2 * 1.5 + size2 / 2,
+          0
+        ],
+        [
+          newScreenXY[0] + size2 / 2,
+          newScreenXY[1] - size2 * 1.5 + size2 / 2,
+          0
+        ]
+      ], rotateInverseInverse);
+      return it;
+    });
   }
   makeLinearCenterPoint(result) {
-    const { image: image2 } = result.backgroundImage;
-    let centerPosition, centerStick, startPoint2, endPoint2, areaStartPoint, areaEndPoint, colorsteps;
+    let centerPosition, centerStick, startPoint, endPoint, areaStartPoint, areaEndPoint, colorsteps;
     this.$viewport.applyVerties(result.backVerties);
-    startPoint2 = this.$viewport.applyVertex(result.startPoint);
-    endPoint2 = this.$viewport.applyVertex(result.endPoint);
+    startPoint = this.$viewport.applyVertex(result.startPoint);
+    endPoint = this.$viewport.applyVertex(result.endPoint);
     areaStartPoint = this.$viewport.applyVertex(result.areaStartPoint);
     areaEndPoint = this.$viewport.applyVertex(result.areaEndPoint);
     centerPosition = this.$viewport.applyVertex(result.centerPosition);
-    colorsteps = result.colorsteps.map((it) => {
-      it.screenXY = this.$viewport.applyVertex(it.pos);
-      return it;
-    });
-    const lastDist = dist(centerPosition, endPoint2);
-    const [stickPoint] = vertiesMap([endPoint2], calculateRotationOriginMat4(90, lerp([], startPoint2, endPoint2, 0.5)));
+    colorsteps = this.makeStickPoint(result.colorsteps, startPoint, endPoint);
+    const lastDist = dist(centerPosition, endPoint);
+    const [stickPoint] = vertiesMap([endPoint], calculateRotationOriginMat4(90, lerp([], startPoint, endPoint, 0.5)));
     centerStick = lerp([], centerPosition, lerp([], centerPosition, stickPoint, 1 / dist(centerPosition, stickPoint)), lastDist + 20);
     const targetStick = lerp([], centerStick, centerPosition, 20 / (lastDist + 20));
     let newHoverColorStepPoint = null;
     if (this.state.hoverColorStep) {
-      newHoverColorStepPoint = lerp([], startPoint2, endPoint2, this.state.hoverColorStep.percent / 100);
+      newHoverColorStepPoint = lerp([], startPoint, endPoint, this.state.hoverColorStep.percent / 100);
     }
     return /* @__PURE__ */ createElementJsx("svg", {
       class: "gradient-angle"
@@ -57352,7 +57750,7 @@ class GradientEditorView extends GradientColorstepEditor {
       class: "size",
       cx: centerPosition[0],
       cy: centerPosition[1],
-      r: dist(centerPosition, startPoint2)
+      r: dist(centerPosition, startPoint)
     }), /* @__PURE__ */ createElementJsx("circle", {
       class: "rotate",
       cx: centerStick[0],
@@ -57362,53 +57760,17 @@ class GradientEditorView extends GradientColorstepEditor {
       "data-center-y": centerPosition[1]
     }), /* @__PURE__ */ createElementJsx("path", {
       d: `
-                        M ${areaStartPoint[0]} ${areaStartPoint[1]}
-                        L ${areaEndPoint[0]} ${areaEndPoint[1]}
-                    `,
+              M ${areaStartPoint[0]} ${areaStartPoint[1]}
+              L ${areaEndPoint[0]} ${areaEndPoint[1]}
+          `,
       class: "area-line"
     }), /* @__PURE__ */ createElementJsx("path", {
       d: `
-                        M ${startPoint2[0]} ${startPoint2[1]}
-                        L ${endPoint2[0]} ${endPoint2[1]}
-                    `,
+              M ${startPoint[0]} ${startPoint[1]}
+              L ${endPoint[0]} ${endPoint[1]}
+          `,
       class: "start-end-line"
-    }), colorsteps.map((it, index2) => {
-      if (it.cut) {
-        return /* @__PURE__ */ createElementJsx("rect", {
-          id: it.id,
-          "data-index": index2,
-          class: "colorstep",
-          transform: `rotate(${image2.angle} ${it.screenXY[0]} ${it.screenXY[1]})`,
-          x: it.screenXY[0] - 7,
-          y: it.screenXY[1] - 7,
-          width: 14,
-          height: 14,
-          fill: it.color,
-          tabIndex: -1
-        });
-      } else {
-        return /* @__PURE__ */ createElementJsx("rect", {
-          id: it.id,
-          "data-index": index2,
-          class: "colorstep",
-          transform: `rotate(${image2.angle} ${it.screenXY[0]} ${it.screenXY[1]})`,
-          x: it.screenXY[0] - 7,
-          y: it.screenXY[1] - 7,
-          rx: 7,
-          ry: 7,
-          width: 14,
-          height: 14,
-          fill: it.color,
-          tabIndex: -1
-        });
-      }
-    }), newHoverColorStepPoint && /* @__PURE__ */ createElementJsx("circle", {
-      class: "hover-colorstep",
-      r: "5",
-      cx: newHoverColorStepPoint[0],
-      cy: newHoverColorStepPoint[1],
-      fill: this.state.hoverColorStep.color
-    }));
+    }), this.makeGradientPoint(colorsteps, startPoint, endPoint, null, newHoverColorStepPoint));
   }
   [LOAD("$el") + DOMDIFF]() {
     const current = this.$selection.current;
@@ -57428,13 +57790,13 @@ class GradientEditorView extends GradientColorstepEditor {
       case GradientType.RADIAL:
       case GradientType.REPEATING_RADIAL:
         this.state.centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
-        this.state.startPoint = this.$viewport.applyVertex(result.radialStartPoint);
-        this.state.endPoint = this.$viewport.applyVertex(result.radialEndPoint);
+        this.state.startPoint = this.$viewport.applyVertex(result.startPoint);
+        this.state.endPoint = this.$viewport.applyVertex(result.endPoint);
         break;
       case GradientType.CONIC:
       case GradientType.REPEATING_CONIC:
         this.state.centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
-        this.state.startPoint = this.$viewport.applyVertex(result.radialShapePoint);
+        this.state.startPoint = this.$viewport.applyVertex(result.shapePoint);
         break;
     }
     return /* @__PURE__ */ createElementJsx("div", null, this.makeGradientRect(result), image2.type === GradientType.STATIC || image2.type === GradientType.IMAGE ? null : this.makeCenterPoint(result));
@@ -58388,13 +58750,36 @@ class FillTimingStepEditor extends FillBaseEditor {
     const colorStepIndex = +e2.$dt.data("colorstep-index");
     this.localColorStep = this.state.imageResult.image.colorsteps[colorStepIndex];
     this.localColorStepTimingCount = this.localColorStep.timing.count;
+    this.localColorCubicBezierTimingCount = this.localColorStep.timingCount;
   }
   moveStepPoint(dx, dy) {
     const dist$1 = (dx < 0 ? -1 : 1) * Math.ceil(dist([0, 0, 0], [dx, dy, 0]) / 10);
-    this.localColorStep.timing.count = Math.max(this.localColorStepTimingCount + dist$1, 1);
+    switch (this.localColorStep.timing.name) {
+      case TimingFunction.LINEAR:
+        break;
+      case TimingFunction.STEPS:
+        this.localColorStep.timing.count = Math.max(this.localColorStepTimingCount + dist$1, 1);
+        break;
+      default:
+        this.localColorStep.timingCount = Math.max(this.localColorCubicBezierTimingCount + dist$1, 1);
+        break;
+    }
     this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$selection.packByValue({
       [this.state.key]: `${this.state.imageResult.image}`
     }));
+  }
+  makeTimingString(timing) {
+    switch (timing.name) {
+      case TimingFunction.LINEAR:
+        return ``;
+      case TimingFunction.EASE:
+      case TimingFunction.EASE_IN:
+      case TimingFunction.EASE_OUT:
+      case TimingFunction.EASE_IN_OUT:
+        return `${timing.name}`;
+      default:
+        return `cubic-bezier(${timing.x1}, ${timing.y1}, ${timing.x2}, ${timing.y2})`;
+    }
   }
   moveEndStepPoint(dx, dy) {
     if (dx === 0 && dy === 0) {
@@ -58404,6 +58789,27 @@ class FillTimingStepEditor extends FillBaseEditor {
         case TimingFunction.LINEAR:
           break;
         default:
+          this.emit("showComponentPopup", {
+            title: "Cubic Bezier",
+            width: 220,
+            inspector: [
+              {
+                key: "timing",
+                editor: "cubic-bezier",
+                editorOptions: {
+                  isAnimating: false
+                },
+                defaultValue: this.makeTimingString(timing)
+              }
+            ],
+            changeEvent: (key, value) => {
+              this.localColorStep.timing = parseOneValue(value).parsed;
+              this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$selection.packByValue({
+                [this.state.key]: `${this.state.imageResult.image}`
+              }));
+            }
+          });
+          this.$el.toggleClass("dragging", false);
           return;
       }
     }
@@ -58416,7 +58822,6 @@ class FillTimingStepEditor extends FillBaseEditor {
 class FillColorstepEditor extends FillTimingStepEditor {
   [KEYUP("$el .colorstep")](e2) {
     const index2 = +e2.$dt.data("index");
-    console.log(index2);
     switch (e2.code) {
       case "Delete":
       case "Backspace":
@@ -58437,7 +58842,6 @@ class FillColorstepEditor extends FillTimingStepEditor {
     }
   }
   removeStep(currentIndex) {
-    console.log(currentIndex);
     const image2 = this.state.imageResult.image;
     image2.removeColorStepByIndex(currentIndex);
     this.updateColorStepStatus(image2, -1);
@@ -58919,9 +59323,9 @@ class FillEditorView extends FillColorstepEditor {
             `
     }), this.makeTimingCircle(colorstepIndex, current, prev, size2));
   }
-  makeGradientPoint(colorsteps, startPoint2, endPoint2, shapePoint2, newHoverColorStepPoint) {
+  makeGradientPoint(colorsteps, startPoint, endPoint, shapePoint, newHoverColorStepPoint) {
     const size2 = TOOL_SIZE;
-    const dist2 = subtract([], endPoint2, startPoint2);
+    const dist2 = subtract([], endPoint, startPoint);
     const angle2 = calculateAngle360(dist2[0], dist2[1]) - 180;
     return /* @__PURE__ */ createElementJsx(FragmentInstance, null, colorsteps.map((it, index2) => {
       if (index2 === 0)
@@ -58946,18 +59350,18 @@ class FillEditorView extends FillColorstepEditor {
     }), /* @__PURE__ */ createElementJsx("circle", {
       class: "point",
       "data-type": "start",
-      cx: startPoint2[0],
-      cy: startPoint2[1]
+      cx: startPoint[0],
+      cy: startPoint[1]
     }), /* @__PURE__ */ createElementJsx("circle", {
       class: "point",
       "data-type": "end",
-      cx: endPoint2[0],
-      cy: endPoint2[1]
-    }), /* @__PURE__ */ createElementJsx("circle", {
+      cx: endPoint[0],
+      cy: endPoint[1]
+    }), shapePoint && /* @__PURE__ */ createElementJsx("circle", {
       class: "point",
       "data-type": "shape",
-      cx: shapePoint2[0],
-      cy: shapePoint2[1]
+      cx: shapePoint[0],
+      cy: shapePoint[1]
     }), newHoverColorStepPoint && /* @__PURE__ */ createElementJsx("circle", {
       class: "hover-colorstep",
       r: "5",
@@ -58966,11 +59370,11 @@ class FillEditorView extends FillColorstepEditor {
       fill: this.state.hoverColorStep.color
     }));
   }
-  makeStickPoint(colorsteps, startPoint2, endPoint2) {
+  makeStickPoint(colorsteps, startPoint, endPoint) {
     const size2 = TOOL_SIZE;
-    const dist2 = subtract([], endPoint2, startPoint2);
+    const dist2 = subtract([], endPoint, startPoint);
     const angle2 = calculateAngle360(dist2[0], dist2[1]) - 180;
-    const rotateInverse = calculateRotationOriginMat4(-angle2, startPoint2);
+    const rotateInverse = calculateRotationOriginMat4(-angle2, startPoint);
     const rotateInverseInverse = invert([], rotateInverse);
     return colorsteps.map((it) => {
       it.screenXY = this.$viewport.applyVertex(it.pos);
@@ -58992,61 +59396,61 @@ class FillEditorView extends FillColorstepEditor {
     });
   }
   makeRadialCenterPoint(result) {
-    let startPoint2, endPoint2, shapePoint2, colorsteps;
-    startPoint2 = this.$viewport.applyVertex(result.startPoint);
-    endPoint2 = this.$viewport.applyVertex(result.endPoint);
-    shapePoint2 = this.$viewport.applyVertex(result.shapePoint);
-    colorsteps = this.makeStickPoint(result.colorsteps, startPoint2, endPoint2);
+    let startPoint, endPoint, shapePoint, colorsteps;
+    startPoint = this.$viewport.applyVertex(result.startPoint);
+    endPoint = this.$viewport.applyVertex(result.endPoint);
+    shapePoint = this.$viewport.applyVertex(result.shapePoint);
+    colorsteps = this.makeStickPoint(result.colorsteps, startPoint, endPoint);
     let newHoverColorStepPoint = null;
     if (this.state.hoverColorStep) {
-      newHoverColorStepPoint = lerp([], startPoint2, endPoint2, this.state.hoverColorStep.percent / 100);
+      newHoverColorStepPoint = lerp([], startPoint, endPoint, this.state.hoverColorStep.percent / 100);
     }
     return /* @__PURE__ */ createElementJsx("svg", {
       class: "gradient-editor-area"
     }, /* @__PURE__ */ createElementJsx("path", {
       d: `
-              M ${startPoint2[0]} ${startPoint2[1]}
-              L ${endPoint2[0]} ${endPoint2[1]}
+              M ${startPoint[0]} ${startPoint[1]}
+              L ${endPoint[0]} ${endPoint[1]}
           `,
       class: "area-line"
     }), /* @__PURE__ */ createElementJsx("path", {
       d: `
-              M ${startPoint2[0]} ${startPoint2[1]}
-              L ${endPoint2[0]} ${endPoint2[1]}
+              M ${startPoint[0]} ${startPoint[1]}
+              L ${endPoint[0]} ${endPoint[1]}
           `,
       class: "start-end-line"
     }), /* @__PURE__ */ createElementJsx("path", {
       d: `
-              M ${startPoint2[0]} ${startPoint2[1]}
-              L ${shapePoint2[0]} ${shapePoint2[1]}
+              M ${startPoint[0]} ${startPoint[1]}
+              L ${shapePoint[0]} ${shapePoint[1]}
           `,
       class: "normal-line"
-    }), this.makeGradientPoint(colorsteps, startPoint2, endPoint2, shapePoint2, newHoverColorStepPoint));
+    }), this.makeGradientPoint(colorsteps, startPoint, endPoint, shapePoint, newHoverColorStepPoint));
   }
   makeLinearCenterPoint(result) {
-    let startPoint2, endPoint2, colorsteps;
-    startPoint2 = this.$viewport.applyVertex(result.startPoint);
-    endPoint2 = this.$viewport.applyVertex(result.endPoint);
-    colorsteps = this.makeStickPoint(result.colorsteps, startPoint2, endPoint2);
+    let startPoint, endPoint, colorsteps;
+    startPoint = this.$viewport.applyVertex(result.startPoint);
+    endPoint = this.$viewport.applyVertex(result.endPoint);
+    colorsteps = this.makeStickPoint(result.colorsteps, startPoint, endPoint);
     let newHoverColorStepPoint = null;
     if (this.state.hoverColorStep) {
-      newHoverColorStepPoint = lerp([], startPoint2, endPoint2, this.state.hoverColorStep.percent / 100);
+      newHoverColorStepPoint = lerp([], startPoint, endPoint, this.state.hoverColorStep.percent / 100);
     }
     return /* @__PURE__ */ createElementJsx("svg", {
       class: "gradient-editor-area"
     }, /* @__PURE__ */ createElementJsx("path", {
       d: `
-            M ${startPoint2[0]} ${startPoint2[1]}
-            L ${endPoint2[0]} ${endPoint2[1]}
+            M ${startPoint[0]} ${startPoint[1]}
+            L ${endPoint[0]} ${endPoint[1]}
           `,
       class: "area-line"
     }), /* @__PURE__ */ createElementJsx("path", {
       d: `
-              M ${startPoint2[0]} ${startPoint2[1]}
-              L ${endPoint2[0]} ${endPoint2[1]}
+              M ${startPoint[0]} ${startPoint[1]}
+              L ${endPoint[0]} ${endPoint[1]}
           `,
       class: "start-end-line"
-    }), this.makeGradientPoint(colorsteps, startPoint2, endPoint2, null, newHoverColorStepPoint));
+    }), this.makeGradientPoint(colorsteps, startPoint, endPoint, null, newHoverColorStepPoint));
   }
   makeCenterPoint(result) {
     const { image: image2 } = result;

@@ -16,7 +16,7 @@ export class SVGLinearGradient extends SVGGradient {
   getDefaultObject(obj) {
     return super.getDefaultObject({
       type: GradientType.LINEAR,
-      x1: Length.parse("50%"),
+      x1: Length.parse("0%"),
       y1: Length.parse("50%"),
       x2: Length.parse("100%"),
       y2: Length.parse("50%"),
@@ -68,19 +68,6 @@ export class SVGLinearGradient extends SVGGradient {
     return `url(#${id})`;
   }
 
-  // static toLinearGradient(colorsteps) {
-  //   if (colorsteps.length === 0) {
-  //     return "none";
-  //   }
-
-  //   var gradient = new LinearGradient({
-  //     angle: "to right",
-  //     colorsteps
-  //   });
-
-  //   return gradient + "";
-  // }
-
   static parse(str) {
 
     const result = parseOneValue(str);
@@ -103,7 +90,7 @@ export class SVGLinearGradient extends SVGGradient {
     });
 
     var [
-      x1 = Length.percent(50), 
+      x1 = Length.percent(0), 
       y1 = Length.percent(50), 
       x2 = Length.percent(100), 
       y2 = Length.percent(50), 

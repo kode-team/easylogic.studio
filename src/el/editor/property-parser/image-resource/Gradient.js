@@ -325,7 +325,7 @@ export class Gradient extends ImageResource {
         case TimingFunction.STEPS:
           var func = step(timing.count, timing.direction);
           var localColorSteps = [];
-          for(var i = 1; i <= timing.count; i++) {
+          for(var i = 0; i <= timing.count; i++) {
 
             var stopPercent = prevColorStep.percent + (percent - prevColorStep.percent) * (i/timing.count);
             var stopColor = Color.mix(prevColorStep.color, color, func(i / timing.count));     
@@ -356,30 +356,47 @@ export class Gradient extends ImageResource {
           results.push(...localColorSteps);
           break;
       }
-    
-      // if (it.cut) {
-      //   const prev = this.colorsteps[index - 1];
-
-      //   if (prev) {
-      //     const { percent: prevPercent, color: prevColor } = prev;
-      //     const { percent: nextPercent, color: nextColor } = it;
-          
-      //     results.push({ percent: prevPercent, color: prevColor });
-      //     results.push({ percent: nextPercent, color: nextColor });
-      //   }
-      // }
     });
 
     return results;
   }
 
-  static toCSSColorString (colorsteps = [] ) {
-    return Gradient.makeColorStepList(colorsteps).map(it => `${it.color} ${it.percent}%`).join(',')
+  static toCSSColorString (colorsteps = [], unit = '%', maxValue = 100 ) {
+    const list = Gradient.makeColorStepList(colorsteps);
+
+    return list.map(it => {
+      const { color, percent } = it;
+      const pos = (percent/100 * maxValue)
+      return `${color} ${pos}${unit}`
+    }).join(',')
   }
 
 
   static parseColorSteps (colors) {
-    return colors.map(it => {
+    return colors.map((it, index) => {
+
+      if (it.length === 1) {
+        const prev = colors[index-1]?.[1] || { parsed : { value : 0 } };
+        const next = colors[index+1]?.[1] || { parsed : { value : 100 }};
+
+        let percent = 0;
+
+        if (!colors[index-1]) {
+          percent = 0;
+        } else if (!colors[index+1]) {
+          percent = 100;
+        } else {
+          percent = prev.parsed.value + (next.parsed.value - prev.parsed.value) * 0.5
+        }
+
+        return new ColorStep({
+          color: it[0].matchedString,
+          percent, 
+          unit: '%',
+          timing: parseOneValue('linear').parsed,
+          timingCount: 1          
+        });
+      }
 
       if (it.length === 2) {
         return new ColorStep({

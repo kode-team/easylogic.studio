@@ -4,7 +4,7 @@ import { SVGRadialGradient } from "./image-resource/SVGRadialGradient";
 import { SVGStaticGradient } from "./image-resource/SVGStaticGradient";
 import { SVGImageResource } from "./image-resource/SVGImageResource";
 import { GradientType } from 'el/editor/types/model';
-import { parseValue } from "el/utils/css-function-parser";
+import { parseOneValue, parseValue } from "el/utils/css-function-parser";
 
 export class SVGFill extends PropertyItem {
   addImageResource(imageResource) {
@@ -67,7 +67,7 @@ export class SVGFill extends PropertyItem {
 
   static parseImage (str = '') {
 
-    const result = parseValue(str)[0];
+    const result = parseOneValue(str);
 
     let image = null;
 

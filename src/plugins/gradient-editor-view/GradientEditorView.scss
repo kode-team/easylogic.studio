@@ -28,6 +28,7 @@
         pointer-events: all;
         fill: transparent;
         stroke: white;
+        stroke-width: 1;
       }
     }
   }
@@ -60,7 +61,7 @@
         pointer-events: all;
         fill: transparent;
         stroke: white;
-        stroke-width: 2;
+        stroke-width: 1;
       }
     }
   }
@@ -116,6 +117,35 @@
         stroke: white;
         pointer-events: none;
       }
+
+
+      &.normal-line {
+        stroke: var(--elf--selected-color-2);
+        pointer-events: none;
+      }      
+
+      &.timing {
+        // fill: black;
+        stroke: white;
+        stroke-width: 1;
+        outline: none;
+        pointer-events: none;
+        filter: drop-shadow(0 0 1px rgb(0, 0, 0));
+      }
+
+      &.step-point {
+        // fill: black;
+        stroke: white;
+        stroke-width: 1;
+        outline: none;
+      }
+
+      &.timing-path {
+        stroke: rgba(255, 255, 255, 0.5);
+        stroke-width: 2;
+        outline: none;
+        pointer-events: none;
+      }      
     }
 
     rect {
@@ -168,6 +198,16 @@
       }      
 
 
+      &.point {
+        fill: white;
+        r: 5;
+
+        &[data-type='start'] {
+          fill: var(--elf--selected-color) !important;
+        }
+      }
+
+
       &.hover-colorstep {
         pointer-events: none;
         r: 8;
@@ -194,10 +234,48 @@
         stroke-width: 18;
         stroke: transparent;
       }      
+
+
+      &.timing {
+        // fill: black;
+        stroke: white;
+        stroke-width: 1;
+        outline: none;
+        pointer-events: none;
+        filter: drop-shadow(0 0 1px rgb(0, 0, 0));
+      }
+
+      &.step-point {
+        // fill: black;
+        stroke: white;
+        stroke-width: 1;
+        outline: none;
+      }
+
+      &.timing-path {
+        stroke: rgba(255, 255, 255, 0.5);
+        stroke-width: 2;
+        outline: none;
+        pointer-events: none;
+      }            
     }
 
     circle,
     ellipse {
+
+      &.step-point {
+        fill: white;
+        pointer-events: all;        
+      }
+
+      &.point {
+        fill: white;
+        r: 5;
+
+        &[data-type='start'] {
+          fill: var(--elf--selected-color) !important;
+        }
+      }      
       &.size {
         fill: transparent;
         stroke: white;

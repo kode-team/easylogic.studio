@@ -1,12 +1,11 @@
 import { Gradient } from "./Gradient";
 
 import { Length, Position } from "el/editor/unit/Length";
-import { convertMatches, reverseMatches } from "el/utils/parser";
-import { ColorStep } from "./ColorStep";
-import { RadialGradientSizeType, RadialGradientType } from "el/editor/types/model";
+import { FuncType, RadialGradientSizeType, RadialGradientType } from "el/editor/types/model";
 import { vec3 } from "gl-matrix";
 import { isArray } from "el/sapa/functions/func";
 import { rectToVerties } from "el/utils/collision";
+import { parseOneValue } from "el/utils/css-function-parser";
 
 const DEFINED_POSITIONS = {
   ["center"]: true,
@@ -105,8 +104,7 @@ export class RadialGradient extends Gradient {
     var aspect_ratio = newSize.width / newSize.height;
 
     if (aspect_ratio === 0) {
-      endPoint = vec3.clone(startPoint)
-      shapePoint = vec3.clone(startPoint)
+      // 비율이 안 맞을 때는 처리를 해줘야함 
       return;
     }
 
@@ -301,68 +299,97 @@ export class RadialGradient extends Gradient {
     return `${json.type || "radial-gradient"}(${opt}, ${colorString})`;
   }
 
+
+  toCSSString() {
+    if (this.colorsteps.length === 0) return '';
+
+    var colorString = RadialGradient.toCSSColorString(this.colorsteps);
+    var json = this.json;
+    var opt = '';
+    var radialType = json.radialType || RadialGradientType.ELLIPSE;
+    var radialSize = json.radialSize || RadialGradientSizeType.FARTHEST_CORNER;
+    var radialPosition = json.radialPosition || ["center", "center"];
+
+    radialPosition = DEFINED_POSITIONS[radialPosition]
+      ? radialPosition
+      : radialPosition.join(' ');
+
+    radialSize = isArray(radialSize) ? radialSize.join(" ") : radialSize;
+
+    opt = radialPosition ? `${radialType} ${radialSize} at ${radialPosition}` : `${radialType} ${radialSize}`;
+
+    return `${json.type || "radial-gradient"}(${opt}, ${colorString})`;
+  }
+
   static parse(str) {
 
-    var results = convertMatches(str);
-    var radialType = "ellipse";
-    var radialPosition = [Position.CENTER, Position.CENTER];
-    var colorsteps = [];
-    var radialSize = "";
-    results.str
-      .split("(")[1]
-      .split(")")[0]
-      .split(",")
-      .map(it => it.trim())
-      .forEach((newValue, index) => {
-        if (newValue.includes("@")) {
-          // color 복원
-          newValue = reverseMatches(newValue, results.matches);
+    const result = parseOneValue(str);
+    var opt = {
+      radialType: RadialGradientType.ELLIPSE,
+      radialSize: RadialGradientSizeType.FARTHEST_CORNER,
+      radialPosition: ["center", "center"]
+    }
 
-          colorsteps.push.apply(colorsteps, ColorStep.parse(newValue));
+   
+    let [options, ...colors] = result.parameters;
+
+    // 최초 옵션이 있는 경우, 
+    // 컬러부터 시작하지 않으면 옵션이 있는 것으로 간주 
+    if (options[0].func !== FuncType.COLOR) {
+
+      let radialType = RadialGradientType.ELLIPSE;
+      let hasAt = false;
+      let positions = [];
+      let sizeOption = [];
+      options.forEach(it => {
+        if (it.func === FuncType.KEYWORD && it.matchedString === 'at') {
+          hasAt = true;
+        } else if (hasAt) { // at 이 설정된 이후는 position 으로 파싱 
+          positions.push(it);
         } else {
-          // direction
-          if (newValue.includes("at")) {
-            [radialType, radialPosition] = newValue.split("at").map(it => it.trim());
-          } else {
-            radialType = newValue;
-          }
-
-          const tempArr = radialType.split(" ").map(it => it.trim());
-
-          radialType = tempArr[0]
-          radialSize = tempArr[1] || RadialGradientSizeType.FARTHEST_CORNER;
-
-          switch (radialSize) {
-            case RadialGradientSizeType.CLOSEST_SIDE:
-            case RadialGradientSizeType.CLOSEST_CORNER:
-            case RadialGradientSizeType.FARTHEST_SIDE:
-            case RadialGradientSizeType.FARTHEST_CORNER:
-              break;
-            default:
-              radialSize = radialSize.split(" ").map(it => Length.parse(it.trim()));
-              break;
-          }
-
-          if (typeof radialPosition === 'string') {
-            var arr = radialPosition.split(' ');
-            if (arr.length === 1) {
-              var len = Length.parse(arr[0]);
-
-              if (len.isString()) {
-                radialPosition = [len.value, len.value];
-              } else {
-                radialPosition = [len.clone(), len.clone()];
-              }
-            } else if (arr.length === 2) {
-              radialPosition = arr.map(it => {
-                var len = Length.parse(it);
-                return len.isString() ? len.value : len.clone();
-              });
-            }
+          switch(it.matchedString) {
+          // radial shape 
+          case RadialGradientType.CIRCLE:
+          case RadialGradientType.ELLIPSE:
+            radialType = it.matchedString;
+            break;
+          default:
+            sizeOption.push(it);
+            break;
           }
         }
+      })
+
+      opt.radialType = radialType;
+      opt.radialPosition = positions.map(it => {
+        if (it.func === FuncType.KEYWORD) {
+          switch(it.matchedString) {
+          case 'top': return Length.percent(0);
+          case 'left': return Length.percent(0);
+          case 'right': return Length.percent(100);
+          case 'bottom': return Length.percent(100);
+          case 'center': return Length.percent(50);
+          }
+        }
+        return it.parsed
+      });
+      opt.radialSize = sizeOption.map(it => {
+        if (it.func === FuncType.KEYWORD) return it.matchedString;
+        return it.parsed
       });
 
-    return new RadialGradient({ radialType, radialSize, radialPosition, colorsteps });
+      if (opt.radialSize.length) {
+        opt.radialSize = opt.radialSize[0];
+      }
+
+    } else {
+      colors = result.parameters;
+    } 
+
+
+    const colorsteps = RadialGradient.parseColorSteps(colors)
+
+
+    return new RadialGradient({ ...opt, colorsteps });
   }
 }

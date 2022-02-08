@@ -10,10 +10,10 @@ import { RepeatingRadialGradient } from "./image-resource/RepeatingRadialGradien
 import { ConicGradient } from "./image-resource/ConicGradient";
 import { RepeatingConicGradient } from "./image-resource/RepeatingConicGradient";
 import { Gradient } from "./image-resource/Gradient";
-import { convertMatches, reverseMatches } from "el/utils/parser";
 import { combineKeyArray, isString, keyEach, keyMap } from "el/sapa/functions/func";
 import { CSS_TO_STRING } from "el/utils/func";
-import { VisibilityType } from 'el/editor/types/model';
+import { GradientType, VisibilityType } from 'el/editor/types/model';
+import { parseGroupValue, parseOneValue } from "el/utils/css-function-parser";
 
 const RepeatList = ["repeat", "no-repeat", "repeat-x", "repeat-y", 'round', 'space'];
 const reg = /((static\-gradient|linear\-gradient|repeating\-linear\-gradient|radial\-gradient|repeating\-radial\-gradient|conic\-gradient|repeating\-conic\-gradient|url)\(([^\)]*)\))/gi;
@@ -31,9 +31,9 @@ export class BackgroundImage extends PropertyItem {
   setImageUrl(data) {
     if (!data.images) return;
     if (!data.images.length) return;
-    this.reset({ 
-      type: "image", 
-      image: BackgroundImage.createImage(data.images[0]) 
+    this.reset({
+      type: "image",
+      image: BackgroundImage.createImage(data.images[0])
     });
   }
 
@@ -119,7 +119,7 @@ export class BackgroundImage extends PropertyItem {
   }
 
   toCloneObject() {
-    var json = this.json; 
+    var json = this.json;
     return {
       ...super.toCloneObject(),
       ...this.attrs(
@@ -181,11 +181,11 @@ export class BackgroundImage extends PropertyItem {
    * @param {boolean} [options.shiftKey=false]    shiftKey 가 true 이면 width와 height 를 동일하게 width 로 맞춘다. 
    * @returns 
    */
-  recoverOffset (newX, newY, contentBox, dx = 0, dy = 0, options = { }) {
+  recoverOffset(newX, newY, contentBox, dx = 0, dy = 0, options = {}) {
     const { x, y, width, height } = this.json;
 
     const newWidth = Math.floor(width.toPx(contentBox.width).value + dx);
-    const newHeight = options.shiftKey ? newWidth : Math.floor(height.toPx(contentBox.height).value + dy);    
+    const newHeight = options.shiftKey ? newWidth : Math.floor(height.toPx(contentBox.height).value + dy);
 
     // 시작점을 contentBox 로 맞춘다. 
     newX -= contentBox.x;
@@ -197,7 +197,7 @@ export class BackgroundImage extends PropertyItem {
 
     if (newHeight < 0) {
       newY += newHeight
-    }    
+    }
 
     let nextX = Length.px(newX);
     let nextY = Length.px(newY);
@@ -209,11 +209,11 @@ export class BackgroundImage extends PropertyItem {
       if (Math.abs(newX) < dist) {
         nextX = Length.percent(0)
       } else if (Math.abs((contentBox.width - newWidth) - newX) < dist) {
-        nextX = Length.percent(100)        
-      } else if (Math.abs(((contentBox.width - newWidth)/2) - newX) < dist) {        
-        nextX = Length.percent(50)        
+        nextX = Length.percent(100)
+      } else if (Math.abs(((contentBox.width - newWidth) / 2) - newX) < dist) {
+        nextX = Length.percent(50)
       } else {
-        nextX = Length.makePercent(newX,  (contentBox.width - newWidth) );
+        nextX = Length.makePercent(newX, (contentBox.width - newWidth));
       }
     }
 
@@ -222,9 +222,9 @@ export class BackgroundImage extends PropertyItem {
       if (Math.abs(newY) < dist) {
         nextY = Length.percent(0)
       } else if (Math.abs((contentBox.height - newHeight) - newY) < dist) {
-        nextY = Length.percent(100)        
-      } else if (Math.abs(((contentBox.height - newHeight)/2) - newY) < dist) {        
-        nextY = Length.percent(50)        
+        nextY = Length.percent(100)
+      } else if (Math.abs(((contentBox.height - newHeight) / 2) - newY) < dist) {
+        nextY = Length.percent(50)
       } else {
         nextY = Length.makePercent(newY, (contentBox.height - newHeight));
       }
@@ -267,10 +267,20 @@ export class BackgroundImage extends PropertyItem {
 
   toBackgroundImageCSS() {
     if (!this.json.image) return {};
+
+    return {
+      "background-image": this.json.image.toCSSString()
+    };
+  }
+
+  toBackgroundImageProperty() {
+    if (!this.json.image) return {};
+
     return {
       "background-image": this.json.image.toString()
     };
   }
+
 
 
   toBackgroundPositionCSS() {
@@ -336,13 +346,27 @@ export class BackgroundImage extends PropertyItem {
     return results;
   }
 
+  toProperty() {
+
+    const results = {
+      ...this.toBackgroundImageProperty(),
+      ...this.toBackgroundPositionCSS(),
+      ...this.toBackgroundSizeCSS(),
+      ...this.toBackgroundRepeatCSS(),
+      ...this.toBackgroundBlendCSS(),
+      ...this.toBackgroundVisibilityCSS()
+    };
+
+    return results;
+  }
+
   toString() {
     return keyMap(this.toCSS(), (key, value) => {
       return `${key}: ${value}`;
     }).join(";");
   }
 
-  toBackgroundCSS () {
+  toBackgroundCSS() {
     var obj = this.toCSS();
 
     return {
@@ -358,110 +382,109 @@ export class BackgroundImage extends PropertyItem {
     return new BackgroundImage(obj);
   }
 
-  static parseImage (str) {
+  static parseImage(str) {
 
-    var results = convertMatches(str);
+    const result = parseOneValue(str);
+
     let image = null;
 
-    var matchResult = results.str.match(reg)
+    if (!result || str === 'undefined') {
+      return StaticGradient.create(str || 'transparent');
+    }
 
-    if (!matchResult) return image; 
-
-    matchResult.forEach((value, index) => {
-
-      value = reverseMatches(value, results.matches);
-      if (value.includes("repeating-linear-gradient")) {
-        image = RepeatingLinearGradient.parse(value);
-      } else if (value.includes("linear-gradient")) {
-        image = LinearGradient.parse(value);
-
-        // 동일한 색을 가진 linear 는 기본적으로 static 과 같다. 
-        if (image.colorsteps.length === 2) {
-          if (image.colorsteps[0].color === image.colorsteps[1].color) {
-            image = StaticGradient.parse(`static-gradient(${image.colorsteps[0].color})`);          
-          }
-        }
-
-      } else if (value.includes("static-gradient")) {
-        image = StaticGradient.parse(value);        
-      } else if (value.includes("repeating-radial-gradient")) {
-        image = RepeatingRadialGradient.parse(value);
-      } else if (value.includes("radial-gradient")) {
-        image = RadialGradient.parse(value);
-      } else if (value.includes("repeating-conic-gradient")) {
-        image = RepeatingConicGradient.parse(value);
-      } else if (value.includes("conic-gradient")) {
-        image = ConicGradient.parse(value);
-      } else if (value.includes("url")) {
-        image = URLImageResource.parse(value);
-      }
-    });
+    switch (result.func) {
+      case GradientType.LINEAR:
+        image = LinearGradient.parse(result.matchedString);
+        break;
+      case GradientType.REPEATING_LINEAR:
+        image = RepeatingLinearGradient.parse(result.matchedString);
+        break;
+      case GradientType.RADIAL:
+        image = RadialGradient.parse(result.matchedString);
+        break;
+      case GradientType.REPEATING_RADIAL:
+        image = RepeatingRadialGradient.parse(result.matchedString);
+        break;
+      case GradientType.CONIC:
+        image = ConicGradient.parse(result.matchedString);
+        break;
+      case GradientType.REPEATING_CONIC:
+        image = RepeatingConicGradient.parse(result.matchedString);
+        break;
+      case GradientType.URL:
+        image = URLImageResource.parse(result.matchedString);
+        break;
+      default:
+        image = StaticGradient.parse(result.matchedString);
+        break;
+    }
 
     return image
   }
 
-  static changeImageType (options) {
-    switch  (options.type) {
-    case 'static-gradient':
-      return new StaticGradient(options);
-    case 'linear-gradient': 
-      return new LinearGradient(options);
-    case 'repeating-linear-gradient': 
-      return new RepeatingLinearGradient(options);      
-    case 'radial-gradient': 
-      return new RadialGradient(options);
-    case 'repeating-radial-gradient': 
-      return new RepeatingRadialGradient(options);      
-    case 'conic-gradient': 
-      return new ConicGradient(options);
-    case 'repeating-conic-gradient': 
-      return new RepeatingConicGradient(options);      
-    case 'image-resource':
-    case 'url':
-      return new URLImageResource(options);
+  static changeImageType(options) {
+    switch (options.type) {
+      case GradientType.STATIC:
+        return new StaticGradient(options);
+      case GradientType.LINEAR:
+        return new LinearGradient(options);
+      case GradientType.REPEATING_LINEAR:
+        return new RepeatingLinearGradient(options);
+      case GradientType.RADIAL:
+        return new RadialGradient(options);
+      case GradientType.REPEATING_RADIAL:
+        return new RepeatingRadialGradient(options);
+      case GradientType.CONIC:
+        return new ConicGradient(options);
+      case GradientType.REPEATING_CONIC:
+        return new RepeatingConicGradient(options);
+      case GradientType.URL:
+        return new URLImageResource(options);
     }
   }
 
   static parseStyle(style) {
     var backgroundImages = [];
-    const key = JSON.stringify(style);
-
     if (style["background-image"]) {
-      var results = convertMatches(style["background-image"]);
 
-      results.str.match(reg).forEach((value, index) => {
-        let image = null;
-        value = reverseMatches(value, results.matches);
-        if (value.includes("repeating-linear-gradient")) {
-          image = RepeatingLinearGradient.parse(value);
-        } else if (value.includes("linear-gradient")) {
-          image = LinearGradient.parse(value);
+      const result = parseGroupValue(style["background-image"], 'background-image')
+      result.forEach((parsedValue, index) => {
 
-        // 동일한 색을 가진 linear 는 기본적으로 static 과 같다.           
-          if (image.colorsteps.length === 2) {
-            if (image.colorsteps[0].color === image.colorsteps[1].color) {
-              image = StaticGradient.parse(`static-gradient(${image.colorsteps[0].color})`);          
-            }
-          }
+        const item = parsedValue[0];
+        let image;
 
-        } else if (value.includes("static-gradient")) {
-          image = StaticGradient.parse(value);          
-        } else if (value.includes("repeating-radial-gradient")) {
-          image = RepeatingRadialGradient.parse(value);
-        } else if (value.includes("radial-gradient")) {
-          image = RadialGradient.parse(value);
-        } else if (value.includes("repeating-conic-gradient")) {
-          image = RepeatingConicGradient.parse(value);
-        } else if (value.includes("conic-gradient")) {
-          image = ConicGradient.parse(value);
-        } else if (value.includes("url")) {
-          image = URLImageResource.parse(value);
+        switch (item.func) {
+          case GradientType.STATIC:
+            image = StaticGradient.parse(item.matchedString);
+            break;
+          case GradientType.LINEAR:
+            image = LinearGradient.parse(item.matchedString);
+            break;
+          case GradientType.REPEATING_LINEAR:
+            image = RepeatingLinearGradient.parse(item.matchedString);
+            break;
+          case GradientType.RADIAL:
+            image = RadialGradient.parse(item.matchedString);
+            break;
+          case GradientType.REPEATING_RADIAL:
+            image = RepeatingRadialGradient.parse(item.matchedString);
+            break;
+          case GradientType.CONIC:
+            image = ConicGradient.parse(item.matchedString);
+            break;
+          case GradientType.REPEATING_CONIC:
+            image = RepeatingConicGradient.parse(item.matchedString);
+            break;
+          case GradientType.URL:
+            image = URLImageResource.parse(item.matchedString);
+            break;
         }
-        
+
         backgroundImages[index] = new BackgroundImage({
           type: image.type,
           image
         });
+
       });
     }
 
@@ -518,23 +541,35 @@ export class BackgroundImage extends PropertyItem {
   }
 
 
-  static toPropertyCSS(list) {
+  static toCSS(list) {
     var results = {};
     list.forEach(item => {
-        keyEach(item.toCSS(), (key, value) => {
-            if (!results[key]) results[key] = [];
-            results[key].push(value);
-        });
+      keyEach(item.toCSS(), (key, value) => {
+        if (!results[key]) results[key] = [];
+        results[key].push(value);
+      });
+    });
+
+    return combineKeyArray(results);
+  }
+
+  static toProperty(list) {
+    var results = {};
+    list.forEach(item => {
+      keyEach(item.toProperty(), (key, value) => {
+        if (!results[key]) results[key] = [];
+        results[key].push(value);
+      });
     });
 
     return combineKeyArray(results);
   }  
 
-  static join (list) {
-    return CSS_TO_STRING(BackgroundImage.toPropertyCSS(list.map(it => BackgroundImage.parse(it))))
+  static join(list) {
+    return CSS_TO_STRING(BackgroundImage.toProperty(list.map(it => BackgroundImage.parse(it))))
   }
 
-  static joinCSS (list) {
-    return BackgroundImage.toPropertyCSS(list.map(it => BackgroundImage.parse(it)))
-  }  
+  static joinCSS(list) {
+    return BackgroundImage.toCSS(list.map(it => BackgroundImage.parse(it)))
+  }
 }
