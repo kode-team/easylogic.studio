@@ -4,6 +4,7 @@ import { variable } from "el/sapa/functions/registElement";
 
 import './ComponentEditor.scss';
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class ComponentEditor extends EditorElement {
 
@@ -46,10 +47,7 @@ export default class ComponentEditor extends EditorElement {
       `
     }
 
-    return /*html*/`
-        <object 
-          refClass="${childEditor.editor}" 
-          ${variable({
+    return createComponent(childEditor.editor, {
       ...childEditor.editorOptions,
       onchange: (key, value) => {
         const newValue = isFunction(childEditor.convert) ? childEditor.convert(key, value) : value;
@@ -58,12 +56,7 @@ export default class ComponentEditor extends EditorElement {
       ref: `${childEditor.key}${index}`,
       key: childEditor.key,
       value: childEditor.defaultValue
-    })} 
-        />
-    `
-
-
-
+    });
   }
 
   [LOAD('$body')]() {

@@ -140,7 +140,7 @@ export default class BackgroundImageEditor extends EditorElement {
     }
 
     modifyBackgroundImage () {
-        var value = CSS_TO_STRING(BackgroundImage.toPropertyCSS(this.state.images));
+        var value = CSS_TO_STRING(BackgroundImage.toProperty(this.state.images));
 
         this.parent.trigger(this.props.onchange, this.props.key, value)
     }

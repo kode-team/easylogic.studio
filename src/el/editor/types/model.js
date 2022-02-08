@@ -238,6 +238,7 @@ export const SpreadMethodType = {
 }
 
 export const FuncType = {
+    COMMA: 'comma',
     COLOR: 'color',
     LENGTH: 'length',
     GRADIENT: 'gradient',

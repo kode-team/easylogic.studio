@@ -122,7 +122,7 @@ export default class GradientPickerPopup extends BasePopup {
 
     return createComponent("GradientEditor", {
       ref: "$g",
-      value: `${this.state.image}`,
+      value: `${this.state.image ? this.state.image.toString() : ''}`,
       index: this.state.selectColorStepIndex,
       onchange: 'changeGradientEditor'
     })
@@ -189,6 +189,17 @@ export default class GradientPickerPopup extends BasePopup {
       index: data.index
     })
   }
+
+
+  [SUBSCRIBE("hideGradientickerPopup")]() {
+    this.hide();
+
+    this.emit('hideGradientEditorView')
+  }
+
+  onClose() {
+    this.emit('hideGradientEditorView')
+  }    
 
   [SUBSCRIBE("selectColorStep")](color) {
     this.children.$color.setValue(color);

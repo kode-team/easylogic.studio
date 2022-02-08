@@ -39,7 +39,7 @@ export default class GradientSingleEditor extends EditorElement {
 
             image = this.state.image.toString(imageUrl);
         } else {
-            image = this.state.image;
+            image = this.state.image.toCSSString();
         }
 
         return {

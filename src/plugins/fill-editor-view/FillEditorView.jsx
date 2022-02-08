@@ -24,6 +24,7 @@ import {
 import { END, MOVE } from "el/editor/types/event";
 import { Length } from "el/editor/unit/Length";
 import { repeat } from "el/utils/func";
+import { parseOneValue } from "el/utils/css-function-parser";
 
 const spreadMethodList = [
   SpreadMethodType.PAD,
@@ -61,16 +62,29 @@ class FillTimingStepEditor extends FillBaseEditor {
     this.localColorStep =
       this.state.imageResult.image.colorsteps[colorStepIndex];
     this.localColorStepTimingCount = this.localColorStep.timing.count;
+    this.localColorCubicBezierTimingCount = this.localColorStep.timingCount;
   }
 
   moveStepPoint(dx, dy) {
     const dist =
       (dx < 0 ? -1 : 1) * Math.ceil(vec3.dist([0, 0, 0], [dx, dy, 0]) / 10);
 
-    this.localColorStep.timing.count = Math.max(
-      this.localColorStepTimingCount + dist,
-      1
-    );
+    switch (this.localColorStep.timing.name) {
+      case TimingFunction.LINEAR:
+        break;
+      case TimingFunction.STEPS:
+        this.localColorStep.timing.count = Math.max(
+          this.localColorStepTimingCount + dist,
+          1
+        );
+        break;
+      default:
+        this.localColorStep.timingCount = Math.max(
+          this.localColorCubicBezierTimingCount + dist,
+          1
+        );
+        break;
+    }
 
     this.command(
       "setAttributeForMulti",
@@ -81,21 +95,58 @@ class FillTimingStepEditor extends FillBaseEditor {
     );
   }
 
+  makeTimingString(timing) {
+    switch (timing.name) {
+      case TimingFunction.LINEAR:
+        return ``;
+      case TimingFunction.EASE:
+      case TimingFunction.EASE_IN:
+      case TimingFunction.EASE_OUT:
+      case TimingFunction.EASE_IN_OUT:
+        return `${timing.name}`;
+      default:
+        return `cubic-bezier(${timing.x1}, ${timing.y1}, ${timing.x2}, ${timing.y2})`;
+    }
+  }
+
   moveEndStepPoint(dx, dy) {
-
     if (dx === 0 && dy === 0) {
-      const {timing, timingCount}  = this.localColorStep
+      const { timing, timingCount } = this.localColorStep;
 
-      switch(timing.name) {
+      switch (timing.name) {
         case TimingFunction.STEPS:
         case TimingFunction.LINEAR:
           break;
-        default: 
-          // Cubic Bezier UI 표시를 해봅시다. 
-          // animation 쪽에 있는것을 가지고 와야 할 것 같네요. 
-        return;        
+        default:
+          // Cubic Bezier UI 표시를 해봅시다.
+          // animation 쪽에 있는것을 가지고 와야 할 것 같네요.
+          this.emit("showComponentPopup", {
+            title: "Cubic Bezier",
+            width: 220,
+            inspector: [
+              {
+                key: "timing",
+                editor: "cubic-bezier",
+                editorOptions: {
+                  isAnimating: false,
+                },
+                defaultValue: this.makeTimingString(timing),                
+              },
+            ],
+            changeEvent: (key, value) => {
+              this.localColorStep.timing = parseOneValue(value).parsed;
+              this.command(
+                "setAttributeForMulti",
+                `change ${this.state.key} fragment`,
+                this.$selection.packByValue({
+                  [this.state.key]: `${this.state.imageResult.image}`,
+                })
+              );
+            },
+          });
+          this.$el.toggleClass("dragging", false);          
+          return;
       }
-
     }
 
     this.command(
@@ -112,7 +163,6 @@ class FillTimingStepEditor extends FillBaseEditor {
 class FillColorstepEditor extends FillTimingStepEditor {
   [KEYUP("$el .colorstep")](e) {
     const index = +e.$dt.data("index");
-    console.log(index);
     switch (e.code) {
       case "Delete":
       case "Backspace":
@@ -134,9 +184,6 @@ class FillColorstepEditor extends FillTimingStepEditor {
   }
 
   removeStep(currentIndex) {
-
-
-    console.log(currentIndex);
     const image = this.state.imageResult.image;
     image.removeColorStepByIndex(currentIndex);
 
@@ -236,7 +283,7 @@ class FillColorstepEditor extends FillTimingStepEditor {
       const newDist = vec3.subtract([], tempEndPoint, tempStartPoint);
       let newAngle = calculateAngle360(newDist[0], newDist[1]) - 90;
 
-      // 360 기준으로 숫자를 맞추지 않으면 +,- 값에 의해서 나머지가 엄청 차이나는 결과를 가지게 된다. 
+      // 360 기준으로 숫자를 맞추지 않으면 +,- 값에 의해서 나머지가 엄청 차이나는 결과를 가지게 된다.
       newAngle = (newAngle + 360) % 360;
       newAngle -= newAngle % this.$config.get("fixed.gradient.angle");
 
@@ -797,7 +844,7 @@ export default class FillEditorView extends FillColorstepEditor {
 
     this.$el.show();
 
-    this.emit("push.mode.view", "FillEditorView");    
+    this.emit("push.mode.view", "FillEditorView");
   }
 
   [SUBSCRIBE("hideFillEditorView")]() {
@@ -808,7 +855,7 @@ export default class FillEditorView extends FillColorstepEditor {
     });
     this.$el.hide();
 
-    this.emit("pop.mode.view", "FillEditorView");    
+    this.emit("pop.mode.view", "FillEditorView");
   }
 
   makeTimingLine(timing, width = 10, startX = 0, startY = 0) {
@@ -853,6 +900,7 @@ export default class FillEditorView extends FillColorstepEditor {
     const prevStickScreenXY = prev.stickScreenXYInEnd;
     const stickScreenXY = current.stickScreenXYInStart;
     const { timing, timingCount } = current;
+
     let pos;
     switch (timing.name) {
       case TimingFunction.LINEAR:
@@ -915,16 +963,27 @@ export default class FillEditorView extends FillColorstepEditor {
     );
   }
 
-  makeGradientPoint(colorsteps, startPoint, endPoint, shapePoint, newHoverColorStepPoint) {
+  makeGradientPoint(
+    colorsteps,
+    startPoint,
+    endPoint,
+    shapePoint,
+    newHoverColorStepPoint
+  ) {
     const size = TOOL_SIZE;
     const dist = vec3.subtract([], endPoint, startPoint);
-    const angle = calculateAngle360(dist[0], dist[1]) - 180;    
+    const angle = calculateAngle360(dist[0], dist[1]) - 180;
     return (
       <>
         {colorsteps.map((it, index) => {
           if (index === 0) return "";
 
-          return this.makeTimingArea(index, it, colorsteps[index - 1], TOOL_SIZE);
+          return this.makeTimingArea(
+            index,
+            it,
+            colorsteps[index - 1],
+            TOOL_SIZE
+          );
         })}
         {colorsteps.map((it, index) => {
           return (
@@ -966,12 +1025,14 @@ export default class FillEditorView extends FillColorstepEditor {
           cx={endPoint[0]}
           cy={endPoint[1]}
         ></circle>
+        {shapePoint && (
         <circle
           class="point"
           data-type="shape"
           cx={shapePoint[0]}
           cy={shapePoint[1]}
-        ></circle>        
+        ></circle>
+        )}
         {newHoverColorStepPoint && (
           <circle
             class="hover-colorstep"

@@ -1,9 +1,43 @@
 
 import { expect, test } from 'vitest';
-import { parseOneValue, parseValue } from './css-function-parser';
+import { parseGroupValue, parseValue } from './css-function-parser';
 
-test("create css linear-gradient timing test - ease", () => {
-    const result = parseOneValue("linear-gradient(-0.7791965086794089% 40.30037452797422% 80.05772932007076% 40.021450975161% pad, #45abd6 0% ,rgb(14,71,119) 48.98766411675347% steps(3, start),rgb(137,111,133) 72.67366131157286% steps(10, start),#f69292 99.06577580909027% ease 15)");
+
+test("create css multi linear-gradient timing test -  with comma ", () => {
+    const result = parseValue(`
+        repeating-linear-gradient(1px, 2px, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.5) 100%),
+        repeating-linear-gradient(epx, 2px, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.5) 100%)
+    `, 'background-image');
+    
+    expect(result.length).toEqual(3);
+    expect(result[0].func).toEqual('repeating-linear-gradient');
+    expect(result[1].func).toEqual('comma');
+    expect(result[2].func).toEqual('repeating-linear-gradient');
+})
+
+
+test("create css multi linear-gradient timing test - group function", () => {
+    const result = parseGroupValue(`
+        repeating-linear-gradient(1px, 2px, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.5) 100%),
+        repeating-linear-gradient(epx, 2px, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.5) 100%)
+    `, 'background-image');
+    
+    expect(result.length).toEqual(2);
+})
+
+
+test("create css multi linear-gradient timing test - group function", () => {
+    const result = parseGroupValue("repeating-linear-gradient(10px, white),repeating-linear-gradient(20px red)", "background-image");
+
+    expect(result[1][0].parameters[0][0]).toEqual({
+        "matchedString": "20px",
+        "startIndex": 0,
+        "endIndex": 4,
+        "func": "length",
+        parsed: { value: 20, unit: 'px' }, 
+        "fullTextStartIndex": 65,
+        "fullTextEndIndex": 69
+    })
 })
 
 test("create css 8 digit color", () => {
@@ -57,7 +91,7 @@ test("create css color parser", () => {
             "matchedString": "white",
             "startIndex": 8,
             "endIndex": 13,
-            "func": "color-name",
+            "func": "color",
             "parsed": {
                 "funcType": "color",
                 "type": "rgb",
@@ -94,6 +128,7 @@ test("create css color parser", () => {
                 "l": 50
             }
         },
+        { matchedString: ',', startIndex: 38, endIndex: 39, func: 'comma' },         
         {
             "matchedString": "hsl(360, 0.1, 0.1)",
             "startIndex": 40,
@@ -123,17 +158,13 @@ test("create css color parser", () => {
 
 test("create css function parser", () => {
     const result = parseValue('linear-gradient( #FFFFFF white steps(5, step-start))')
-    // console.log(JSON.stringify(result, null, 2))
-    expect(result[0].parsedParameters[0][0].matchedString).toEqual('#FFFFFF');
+    expect(result[0].parameters[0][0].matchedString).toEqual('#FFFFFF');
 
 })
 
 test("create linear-gradient parser", () => {
     const result = parseValue('linear-gradient( #FFFFFF, white)')
 
-
-
-    // console.log(JSON.stringify(result, null, 2))
     expect(result[0].func).toEqual('linear-gradient');
 })
 
@@ -143,14 +174,12 @@ test("create css linear-gradient parser with offset and color", () => {
     // console.log(JSON.stringify(result, null, 2))
 
     expect(result[0].parameters.length).toEqual(3);
-    expect(result[0].parsedParameters[1].length).toEqual(2);
 })
 
 test("create timing function", () => {
     const result = parseValue('linear-gradient(to right, rgb(255, 0, 0) 0%, blue 100% ease 10)')
 
     expect(result[0].parameters.length).toEqual(3);
-    expect(result[0].parsedParameters[2].length).toEqual(4);
 })
 
 test("create timing function - ease", () => {

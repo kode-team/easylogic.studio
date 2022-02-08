@@ -1,5 +1,5 @@
 .elf--cubic-bezier-editor {
-    width: 228px;
+    width: 220px;
     height: 200px;
     position: relative;
     margin: 0 auto;
@@ -10,8 +10,9 @@
         height:150px;
         top:30px;
         left:60px;
-        border:1px solid var(--elf--border-color);
+        // border:1px solid var(--elf--border-color);
         background-color: var(--elf--background-color);
+        box-shadow: 0px 0px 0px 1px var(--elf--border-color);
 
         .bezier-canvas {
             pointer-events: none;

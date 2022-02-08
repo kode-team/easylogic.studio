@@ -39,34 +39,6 @@
     }
   }
 
-  &[data-selected-editor="linear-gradient"] {
-    [data-editor="spreadMethod"],
-    [data-editor="x1"],
-    [data-editor="x2"],
-    [data-editor="y1"],
-    [data-editor="y2"] {
-      display: block;
-    }
-  }
-
-  &[data-selected-editor="radial-gradient"] {
-    [data-editor="spreadMethod"],
-    [data-editor="cx"],
-    [data-editor="cy"],
-    [data-editor="r"],
-    [data-editor="fx"],
-    [data-editor="fy"],
-    [data-editor="fr"] {
-      display: block;
-    }
-  }
-
-  &[data-selected-editor="radial-gradient"] {
-    [data-editor="radialType"] {
-      display: block;
-    }
-  }
-
   &[data-selected-editor="image-resource"] {
     [data-editor="gradient"],
     [data-editor="tools"],

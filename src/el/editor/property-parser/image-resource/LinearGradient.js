@@ -1,8 +1,7 @@
 import { Gradient } from "./Gradient";
-import { convertMatches, reverseMatches } from "el/utils/parser";
-import { Length } from "el/editor/unit/Length";
-import { ColorStep } from "./ColorStep";
-import { isNumber, isUndefined } from "el/sapa/functions/func";
+import { isNumber, isUndefined} from "el/sapa/functions/func";
+import { parseOneValue } from "el/utils/css-function-parser";
+import { FuncType } from "el/editor/types/model";
 
 const DEFINED_DIRECTIONS = {
   "0": "to top",
@@ -16,14 +15,14 @@ const DEFINED_DIRECTIONS = {
 };
 
 const DEFINED_ANGLES = {
-  "to top": "0",
-  "to top right": "45",
-  "to right": "90",
-  "to bottom right": "135",
-  "to bottom": "180",
-  "to bottom left": "225",
-  "to left": "270",
-  "to top left": "315"
+  "to top": 0,
+  "to top right": 45,
+  "to right": 90,
+  "to bottom right": 135,
+  "to bottom": 180,
+  "to bottom left": 225,
+  "to left": 270,
+  "to top left": 315
 };
 
 export class LinearGradient extends Gradient {
@@ -47,6 +46,14 @@ export class LinearGradient extends Gradient {
   }
   hasAngle() {
     return true;
+  }
+
+  getRealAngle () {
+    return this.json.angle;
+  }
+
+  get angle () {
+    return this.getRealAngle();
   }
 
   toString() {
@@ -76,43 +83,74 @@ export class LinearGradient extends Gradient {
     return result;
   }
 
-  static toLinearGradient(colorsteps) {
-    if (colorsteps.length === 0) {
-      return "none";
+  toCSSString() {
+
+    if(this.colorsteps.length === 0) return '';    
+
+    var colorString = LinearGradient.toCSSColorString(this.colorsteps);
+
+    var opt = '';
+    var angle = this.json.angle || 0;
+
+    opt = angle;
+
+    if (isNumber(opt)) {
+      opt = DEFINED_DIRECTIONS[`${opt}`] || opt;
     }
 
-    var gradient = new LinearGradient({
-      angle: "to right",
-      colorsteps
-    });
+    if (isNumber(opt)) {
+      opt = opt > 360 ? opt % 360 : opt;
 
-    return gradient + "";
+      opt = `${opt}deg`;
+    }
+
+
+    var result = `${this.json.type}(${opt}, ${colorString})`;
+
+    return result;
   }
 
   static parse(str) {
-    var results = convertMatches(str);
-    
-    var angle = 0;
-    var colorsteps = [];
-    results.str
-      .split("(")[1]
-      .split(")")[0]
-      .split(",")
-      .map(it => it.trim())
-      .forEach((newValue, index) => {
-        if (newValue.includes("@")) {
 
-          newValue = reverseMatches(newValue, results.matches);
+    const result = parseOneValue(str);
 
-          colorsteps.push.apply(colorsteps, ColorStep.parse(newValue));
+    var opt = {}
+
+    let [options, ...colors] = result.parameters;
+    const list = []
+    const keywords = []
+
+    // 최초 옵션이 있는 경우, 
+    // 컬러부터 시작하지 않으면 옵션이 있는 것으로 간주 
+    if (options[0].func !== FuncType.COLOR) {
+      options.forEach(it => {
+        if (it.func === FuncType.KEYWORD) {
+          keywords.push(it);
         } else {
-
-          angle = isUndefined(DEFINED_ANGLES[newValue])
-            ? Length.parse(newValue)
-            : Length.deg(+DEFINED_ANGLES[newValue]);
+          list.push(it);
         }
       });
+    } else {
+      colors = result.parameters;
+    }
 
-    return new LinearGradient({ angle: angle.value, colorsteps });
+    let angle = keywords.map(it => it.matchedString).join(' ');
+
+    if (angle === '') {
+      [
+        angle,
+      ] = list.map(it => it.parsed.value);  
+    } else {
+      angle = DEFINED_ANGLES[angle];
+    }
+
+    opt = {
+      ...opt,
+      angle
+    }
+    
+    const colorsteps = LinearGradient.parseColorSteps(colors)
+
+    return new LinearGradient({ ...opt, colorsteps });
   }
 }

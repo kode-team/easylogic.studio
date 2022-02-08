@@ -11,40 +11,6 @@ import { END, MOVE } from "el/editor/types/event";
 
 import './FillEditor.scss';
 import { GradientType } from "el/editor/types/model";
-import { createComponent } from "el/sapa/functions/jsx";
-
-
-const imageTypeList = [
-  'static-gradient',
-  'linear-gradient',
-  'radial-gradient',
-  'image-resource'
-]
-
-const iconList = {
-  'image-resource': iconUse('photo')
-}
-
-
-const presetPosition = {
-  top: { x1: '0%', y1: '100%', x2: '0%', y2: '0%'},
-  'top left': { x1: '100%', y1: '100%', x2: '0%', y2: '0%'},
-  'top right': { x1: '0%', y1: '100%', x2: '100%', y2: '0%'},
-  left: { x1: '100%', y1: '0%', x2: '0%', y2: '0%'},
-  right: { x1: '0%', y1: '0%', x2: '100%', y2: '0%'},
-  bottom: { x1: '0%', y1: '0%', x2: '0%', y2: '100%'},
-  'bottom left': { x1: '100%', y1: '0%', x2: '0%', y2: '100%'},
-  'bottom right': { x1: '0%', y1: '0%', x2: '100%', y2: '100%'}
-}
-
-const props = [
-  'x1', 'y1', 'x2', 'y2', 
-  'cx', 'cy', 'r', 
-  'fx', 'fy', 'fr', 
-  'spreadMethod',  
-  'patternUnits', 'patternWidth', 'patternHeight',
-  'imageX', 'imageY', 'imageWidth', 'imageHeight'
-]
 
 export default class FillEditor extends EditorElement  {
 
@@ -130,9 +96,8 @@ export default class FillEditor extends EditorElement  {
     var project = this.$selection.currentProject;
     if (project) {
       [...e.target.files].forEach(item => {
-        this.emit('updateImageAssetItem', item, (imageId) => {
-
-          this.trigger('setImageUrl', project.getImageValueById(imageId), project.getImageDataURIById(imageId));
+        this.emit('updateImageAssetItem', item, (local) => {
+          this.trigger('setImageUrl', local);
         });
       })
     }

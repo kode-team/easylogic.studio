@@ -1,10 +1,19 @@
 import { Length } from "el/editor/unit/Length";
 import { PropertyItem } from "el/editor/items/PropertyItem";
-import { convertMatches, reverseMatches } from "el/utils/parser";
 import { BackgroundImage } from "./BackgroundImage";
 import { STRING_TO_CSS } from "el/utils/func";
 import { PatternCache } from "./PatternCache";
-const PATTERN_REG = /((check|grid|dot|cross\-dot|diagonal\-line|vertical\-line|horizontal\-line|)\(([^\)]*)\))/gi;
+import { makeGroupFunction, parseValue } from "el/utils/css-function-parser";
+
+const customFuncMap = {
+  "check": makeGroupFunction('check'),
+  "grid": makeGroupFunction('grid'),
+  "dot": makeGroupFunction('dot'),
+  "cross-dot": makeGroupFunction('cross-dot'),
+  "diagonal-line": makeGroupFunction('diagonal-line'),
+  "vertical-line": makeGroupFunction('vertical-line'),
+  "horizontal-line": makeGroupFunction('horizontal-line')
+}
 
 export class Pattern extends PropertyItem {
   getDefaultObject(obj = {}) {
@@ -30,7 +39,7 @@ export class Pattern extends PropertyItem {
 
     var patterns = [];
 
-    if (!pattern) return patterns;
+    if (!pattern || pattern === "undefined") return patterns;
 
     pattern = pattern.trim();
 
@@ -38,36 +47,35 @@ export class Pattern extends PropertyItem {
       return PatternCache.get(pattern);
     }
 
-    var results = convertMatches(pattern);
-
-    var matches = (results.str.match(PATTERN_REG) || []);
-    matches.forEach((value, index) => {
-      var [patternName, patternValue] = value.split("(");
-      patternValue = patternValue.split(")")[0].trim();
-
-        var [size, position, foreColor, backColor, blendMode, lineSize] = patternValue.split(",").map(it => it.trim());
-
-        var [width, height] = size.split(' ');
-        var [x, y] = position.split(' ');
-        var [lineWidth, lineHeight] = (lineSize || '').split(' ')
-
-        patterns[index] = Pattern.parse({
-          type: patternName,
-          x: Length.parse(x),
-          y: Length.parse(y),
-          width: Length.parse(width),
-          height: Length.parse(height),          
-          foreColor: reverseMatches(foreColor, results.matches),
-          backColor: reverseMatches(backColor, results.matches),
-          blendMode: blendMode || 'normal',
-          lineWidth: Length.parse(lineWidth || '1px'),
-          lineHeight: Length.parse(lineHeight || '1px'),
-        });
+    const result = parseValue(pattern, {
+      customFuncMap
     });
+
+    result.forEach((item, index) => {
+      const [
+        size, 
+        position, 
+        foreColor, 
+        backColor, 
+        blendMode = [ { matchedString: 'normal'}], 
+        lineSize = [{parsed: Length.parse("1px")}, {parsed: Length.parse('1px')}] 
+      ] = item.parameters;
+      patterns[index] = Pattern.parse({
+        type: item.type,
+        x: position[0].parsed,
+        y: position[1].parsed,
+        width: size[0].parsed,
+        height: size[1].parsed,
+        foreColor: foreColor[0].matchedString,
+        backColor: backColor[0].matchedString,
+        blendMode: blendMode[0].matchedString,
+        lineWidth: lineSize[0].parsed,
+        lineHeight: lineSize[1].parsed,
+      });
+    })
 
     PatternCache.set(pattern, patterns);
 
-    
     return patterns;
   }
 

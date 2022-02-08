@@ -301,6 +301,7 @@ export class DomModel extends GroupModel {
     if (list.length) {
       const project = this.top;
       this.cacheBackgroundImage = BackgroundImage.joinCSS(list);
+
       const cacheList = list.filter(it => it.type === GradientType.URL).map(it => it.image.url);
       let cacheImage = this.cacheBackgroundImage['background-image'];
 
@@ -351,7 +352,7 @@ export class DomModel extends GroupModel {
   }
 
   getBackgroundImage(index) {
-    const backgroundImages = this.computedValue('background-image');
+    const backgroundImages = BackgroundImage.parseStyle(STRING_TO_CSS(this.json['background-image']))
 
     return backgroundImages[index || 0]
   }
@@ -470,38 +471,26 @@ export class DomModel extends GroupModel {
             newStartPoint,
             newEndPoint,
             newShapePoint,
-            newEndPoint1,
-            newEndPoint2,
-            newShapePoint1,
-            newShapePoint2
           ] = vertiesMap([
             startPoint,
             endPoint,
             shapePoint,
-            [endPoint[0], endPoint[1] + 1, endPoint[2]],
-            [endPoint[0], endPoint[1] - 1, endPoint[2]],
-            [shapePoint[0] - 1, shapePoint[1], shapePoint[2]],
-            [shapePoint[0] + 1, shapePoint[1], shapePoint[2]]
           ], this.absoluteMatrix);
 
           result.radialCenterPosition = newStartPoint;
-          result.radialStartPoint = newStartPoint;
-          result.radialEndPoint = newEndPoint;
-          result.radialShapePoint = newShapePoint;
-          result.radialEndPoint1 = newEndPoint1;
-          result.radialEndPoint2 = newEndPoint2;
-          result.radialShapePoint1 = newShapePoint1;
-          result.radialShapePoint2 = newShapePoint2;
-
-          const dist = vec3.dist(newStartPoint, newEndPoint);
+          result.startPoint = newStartPoint;
+          result.endPoint = newEndPoint;
+          result.shapePoint = newShapePoint;
 
           result.colorsteps = image.colorsteps.map(it => {
-            const offset = it.toLength().toPx(dist).value;
+            const offset = it.toLength();
             return {
               id: it.id,
               cut: it.cut,
               color: it.color,
-              pos: vec3.lerp([], result.radialStartPoint, result.radialEndPoint, offset / dist)
+              timing: it.timing,
+              timingCount: it.timingCount,  
+              pos: vec3.lerp([], result.startPoint, result.endPoint, offset.value / 100)
             }
           });
 
@@ -520,18 +509,17 @@ export class DomModel extends GroupModel {
           ], this.absoluteMatrix);
 
           result.radialCenterPosition = newStartPoint;
-          result.radialStartPoint = newStartPoint;
-          result.radialEndPoint = newEndPoint;
-          result.radialShapePoint = newShapePoint;
+          result.startPoint = newStartPoint;
+          result.endPoint = newEndPoint;
+          result.shapePoint = newShapePoint;
 
-
-          [result.radialStartPoint, result.radialEndPoint, result.radialShapePoint] = vertiesMap([
-            result.radialStartPoint,
-            result.radialEndPoint,
-            result.radialShapePoint
+          [result.startPoint, result.endPoint, result.shapePoint] = vertiesMap([
+            result.startPoint,
+            result.endPoint,
+            result.shapePoint
           ], calculateRotationOriginMat4(image.angle, result.radialCenterPosition));
 
-          const targetPoint = result.radialShapePoint;
+          const targetPoint = result.shapePoint;
 
           result.colorsteps = image.colorsteps.map(it => {
             const angle = it.percent * 3.6;
@@ -544,7 +532,9 @@ export class DomModel extends GroupModel {
               id: it.id,
               cut: it.cut,
               color: it.color,
-              pos: newPos
+              timing: it.timing,
+              timingCount: it.timingCount,              
+              pos: newPos,
             }
           });
 
@@ -580,12 +570,14 @@ export class DomModel extends GroupModel {
         result.areaEndPoint = newAreaEndPoint;
 
         result.colorsteps = image.colorsteps.map(it => {
-          const offset = it.toLength().toPx(result.gradientLineLength).value;
+          const offset = it.toLength();
           return {
             id: it.id,
             cut: it.cut,
             color: it.color,
-            pos: vec3.lerp([], result.startPoint, result.endPoint, offset / result.gradientLineLength)
+            timing: it.timing,
+            timingCount: it.timingCount,
+            pos: vec3.lerp([], result.startPoint, result.endPoint, offset.value / 100)
           }
         });
 

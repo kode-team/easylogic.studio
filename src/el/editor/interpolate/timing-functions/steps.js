@@ -21,6 +21,7 @@ const stepTimingFunction = (step = 1, direction = 'end') => {
 
         } else if (direction == 'end') {
             if (rate === 0) return 0;
+            else if (rate === 1) return 1;
 
             pos = Math.ceil(offset) - 1;
         }
