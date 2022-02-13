@@ -25,6 +25,8 @@ import StrokeDashArrayEditor from "./StrokeDashArrayEditor";
 import TextAreaEditor from "./TextAreaEditor";
 import TextEditor from "./TextEditor";
 import VarEditor from "./VarEditor";
+import PathEditor from './path/PathEditor';
+import PathParser from 'el/editor/parser/PathParser';
 
 /**
  * 
@@ -37,6 +39,7 @@ export default function (editor) {
         TextEditor,
         ColorSingleEditor,
         CubicBezierEditor,
+        PathEditor,
         ColorViewEditor,
         VarEditor,
         PathDataEditor,
@@ -66,6 +69,7 @@ export default function (editor) {
         "text": "TextEditor",
         "color-single": "ColorSingleEditor",
         "cubic-bezier": "CubicBezierEditor",
+        'path': 'PathEditor',
         "clip-path": "ClipPathEditor",
         "color-view": "ColorViewEditor",
         "var": "VarEditor",
@@ -89,4 +93,5 @@ export default function (editor) {
         "color-assets": "ColorAssetsEditor",
         "font-select": "FontSelectEditor"
     })
+
 }

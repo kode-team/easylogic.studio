@@ -6534,7 +6534,8 @@ const TimingFunction = {
   EASE_OUT: "ease-out",
   EASE_IN_OUT: "ease-in-out",
   STEPS: "steps",
-  CUBIC_BEZIER: "cubic-bezier"
+  CUBIC_BEZIER: "cubic-bezier",
+  PATH: "path"
 };
 const SpreadMethodType = {
   PAD: "pad",
@@ -6552,6 +6553,7 @@ const FuncType = {
   NUMBER: "number",
   BOOLEAN: "boolean",
   FUNCTION: "function",
+  PATH: "path",
   UNKNOWN: "unknown"
 };
 class BoxShadow extends PropertyItem {
@@ -7193,9 +7195,14 @@ const CSS_FUNC_PARSER_MAP = {
   "color": (item2) => __spreadValues({ funcType: FuncType.COLOR }, Color.parse(item2.matchedString)),
   "steps": (item2) => ({
     funcType: FuncType.TIMING,
-    name: "steps",
+    name: TimingFunction.STEPS,
     count: +item2.parameters[0],
     direction: item2.parameters[1]
+  }),
+  "path": (item2) => ({
+    funcType: FuncType.TIMING,
+    name: TimingFunction.PATH,
+    d: item2.args
   }),
   "static-gradient": makeGroupFunction("static-gradient"),
   "linear-gradient": makeGroupFunction("linear-gradient"),
@@ -7206,18 +7213,18 @@ const CSS_FUNC_PARSER_MAP = {
   "repeating-conic-gradient": makeGroupFunction("repeating-conic-gradient"),
   "cubic-bezier": (item2) => ({
     funcType: FuncType.TIMING,
-    name: "cubic-bezier",
+    name: TimingFunction.CUBIC_BEZIER,
     matchedString: item2.matchedString,
     x1: +item2.parameters[0],
     y1: +item2.parameters[1],
     x2: +item2.parameters[2],
     y2: +item2.parameters[3]
   }),
-  "ease": (item2) => ({ funcType: FuncType.TIMING, name: "ease", matchedString: item2.matchedString, x1: 0.25, y1: 0.1, x2: 0.25, y2: 1 }),
-  "ease-in": (item2) => ({ funcType: FuncType.TIMING, name: "ease-in", matchedString: item2.matchedString, x1: 0.42, y1: 0, x2: 1, y2: 1 }),
-  "ease-out": (item2) => ({ funcType: FuncType.TIMING, name: "ease-out", matchedString: item2.matchedString, x1: 0, y1: 0, x2: 0.58, y2: 1 }),
-  "ease-in-out": (item2) => ({ funcType: FuncType.TIMING, name: "ease-in-out", matchedString: item2.matchedString, x1: 0.42, y1: 0, x2: 0.58, y2: 1 }),
-  "linear": (item2) => ({ funcType: FuncType.TIMING, name: "linear", matchedString: item2.matchedString, x1: 0, y1: 0, x2: 1, y2: 1 })
+  "ease": (item2) => ({ funcType: FuncType.TIMING, name: TimingFunction.EASE, matchedString: item2.matchedString, x1: 0.25, y1: 0.1, x2: 0.25, y2: 1 }),
+  "ease-in": (item2) => ({ funcType: FuncType.TIMING, name: TimingFunction.EASE_IN, matchedString: item2.matchedString, x1: 0.42, y1: 0, x2: 1, y2: 1 }),
+  "ease-out": (item2) => ({ funcType: FuncType.TIMING, name: TimingFunction.EASE_OUT, matchedString: item2.matchedString, x1: 0, y1: 0, x2: 0.58, y2: 1 }),
+  "ease-in-out": (item2) => ({ funcType: FuncType.TIMING, name: TimingFunction.EASE_IN_OUT, matchedString: item2.matchedString, x1: 0.42, y1: 0, x2: 0.58, y2: 1 }),
+  "linear": (item2) => ({ funcType: FuncType.TIMING, name: TimingFunction.LINEAR, matchedString: item2.matchedString, x1: 0, y1: 0, x2: 1, y2: 1 })
 };
 function parseValue(str, {
   funcStartCharacter = "(",
@@ -7357,14 +7364,22 @@ class ColorStep {
   toggleTiming() {
     switch (this.timing.name) {
       case TimingFunction.LINEAR:
-        this.timing = parseValue("steps(1, start)")[0].parsed;
+        this.timing = parseOneValue("steps(1, start)").parsed;
         break;
       case TimingFunction.STEPS:
-        this.timing = parseValue("ease")[0].parsed;
+        this.timing = parseOneValue("ease").parsed;
+        this.timingCount = 15;
+        break;
+      case TimingFunction.EASE:
+      case TimingFunction.EASE_IN:
+      case TimingFunction.EASE_IN_OUT:
+      case TimingFunction.EASE_OUT:
+      case TimingFunction.CUBIC_BEZIER:
+        this.timing = parseOneValue("path(M 0 0 C 0.25 0.25 0.75 0.75 1 1)").parsed;
         this.timingCount = 15;
         break;
       default:
-        this.timing = parseValue("linear")[0].parsed;
+        this.timing = parseOneValue("linear").parsed;
         this.timingCount = 1;
         break;
     }
@@ -7491,6 +7506,2297 @@ class ColorStep {
     return colorsteps;
   }
 }
+class Point {
+  static isEqual(a, b, c2) {
+    if (arguments.length === 2) {
+      return a.x === b.x && a.y === b.y;
+    } else if (arguments.length === 3) {
+      return Point.isEqual(a, b) && Point.isEqual(b, c2);
+    }
+  }
+  static isFirst(point2) {
+    return point2 && point2.command == "M";
+  }
+  static DouglasPeuker(tolerance, points2, start2, last2) {
+    if (last2 <= start2 + 1)
+      return;
+    let maxdist2 = 0;
+    let breakIndex = start2;
+    const tol2 = tolerance * tolerance;
+    const startPoint = points2[start2];
+    const lastPoint = points2[last2];
+    for (var i = start2 + 1; i < last2; i++) {
+      const dist2 = Point.segmentDistance2(points2[i].x, points2[i].y, startPoint, lastPoint);
+      if (dist2 <= maxdist2)
+        continue;
+      breakIndex = i;
+      maxdist2 = dist2;
+    }
+    if (maxdist2 > tol2) {
+      points2[breakIndex].mark = true;
+      Point.DouglasPeuker(tolerance, points2, start2, breakIndex);
+      Point.DouglasPeuker(tolerance, points2, breakIndex, last2);
+    }
+  }
+  static simply(points2, tolerance = 10) {
+    if (points2.length <= 2) {
+      return points2;
+    }
+    points2 = clone$1(points2);
+    points2[0].mark = true;
+    points2[points2.length - 1].mark = true;
+    Point.DouglasPeuker(tolerance, points2, 0, points2.length - 1);
+    return points2.filter((it) => Boolean(it.mark));
+  }
+  static segmentDistance2(x2, y2, A, B) {
+    let dx = B.x - A.x;
+    let dy = B.y - A.y;
+    let lenAB = dx * dx + dy * dy;
+    let du = x2 - A.x;
+    let dv = y2 - A.y;
+    let dot2 = dx * du + dy * dv;
+    if (lenAB === 0)
+      return du * du + dv * dv;
+    if (dot2 <= 0)
+      return du * du + dv * dv;
+    else if (dot2 >= lenAB) {
+      du = x2 - B.x;
+      dv = y2 - B.y;
+      return du * du + dv * dv;
+    } else {
+      const slash = du * dy - dv * dx;
+      return slash * slash / lenAB;
+    }
+  }
+  static isInLine(A, B, C) {
+    if (A.x === C.x)
+      return B.x === C.x;
+    if (A.y === C.y)
+      return B.y === C.y;
+    return (A.x - C.x) * (A.y - C.y) === (C.x - B.x) * (C.y - B.y);
+  }
+  static isLine(point2) {
+    return Point.isInLine(point2.endPoint, point2.startPoint, point2, reversePoint);
+  }
+  static getReversePoint(start2, end2) {
+    const [x2, y2, z] = lerp([], [end2.x, end2.y, 0], [start2.x, start2.y, 0], 2);
+    return { x: x2, y: y2 };
+  }
+  static getIndexPoint(points2, index2) {
+    return points2[index2];
+  }
+  static getPoint(points2, p0) {
+    return points2.filter((p) => {
+      return Point.isEqual(p.startPoint, p0);
+    })[0];
+  }
+  static getIndex(points2, p0) {
+    var firstIndex = -1;
+    for (var i = 0, len2 = points2.length; i < len2; i++) {
+      var p = points2[i];
+      if (Point.isEqual(p.startPoint, p0)) {
+        firstIndex = i;
+        break;
+      }
+    }
+    return firstIndex;
+  }
+  static getGroupList(points2) {
+    const groupList = [];
+    let groupIndex = 0;
+    points2.forEach((point2, index2) => {
+      if (point2.command === "M") {
+        groupList.push({ point: point2, index: index2, groupIndex: groupIndex++ });
+      }
+    });
+    return groupList;
+  }
+  static getSplitedGroupList(points2) {
+    const localPoints = clone$1(points2);
+    const splitedGroupList = [];
+    for (var i = 0, groupIndex = -1, len2 = localPoints.length; i < len2; i++) {
+      const point2 = localPoints[i];
+      if (point2.command === "M") {
+        groupIndex++;
+        splitedGroupList[groupIndex] = {
+          startPointIndex: i,
+          point: point2,
+          points: []
+        };
+      }
+      splitedGroupList[groupIndex].points.push(point2);
+    }
+    return splitedGroupList;
+  }
+  static getGroup(groupList, pointIndex) {
+    const list2 = groupList.filter((group2) => group2.point.index <= pointIndex);
+    return list2.pop();
+  }
+  static getGroupIndex(points2, index2) {
+    var groupIndex = -1;
+    for (var i = 0, len2 = points2.length; i < len2; i++) {
+      if (points2[i].command === "M") {
+        groupIndex++;
+      }
+      if (points2[i].index === index2) {
+        return groupIndex;
+      }
+    }
+  }
+  static getLastPoint(points2, index2) {
+    if (!points2.length)
+      return null;
+    var lastIndex = -1;
+    for (var i = index2 + 1, len2 = points2.length; i < len2; i++) {
+      if (points2[i].command === "M") {
+        lastIndex = i - 1;
+        break;
+      }
+    }
+    if (lastIndex == -1) {
+      lastIndex = points2.length - 1;
+    }
+    if (points2[lastIndex] && points2[lastIndex].command === "Z") {
+      lastIndex -= 1;
+    }
+    var point2 = points2[lastIndex];
+    if (point2) {
+      point2.index = lastIndex;
+    }
+    return point2;
+  }
+  static getFirstPoint(points2, index2) {
+    var firstIndex = -1;
+    for (var i = index2 - 1; i > 0; i--) {
+      if (points2[i].command === "M") {
+        firstIndex = i;
+        break;
+      }
+    }
+    if (firstIndex === -1) {
+      firstIndex = 0;
+    }
+    var point2 = points2[firstIndex];
+    if (point2) {
+      point2.index = firstIndex;
+    }
+    return point2;
+  }
+  static getConnectedPointList(points2, index2) {
+    const current = points2[index2];
+    return points2.filter((p, i) => i !== index2 && Point.isEqual(p.startPoint, current.startPoint));
+  }
+  static getPrevPoint(points2, index2) {
+    var prevIndex = index2 - 1;
+    if (prevIndex < 0) {
+      return Point.getLastPoint(points2, index2);
+    }
+    var point2 = points2[prevIndex];
+    if (point2) {
+      point2.index = prevIndex;
+    }
+    return point2;
+  }
+  static getNextPoint(points2, index2) {
+    var currentPoint = points2[index2];
+    var nextPoint = points2[index2 + 1];
+    if (nextPoint) {
+      nextPoint.index = index2 + 1;
+    }
+    if (currentPoint.connected || currentPoint.close) {
+      nextPoint = Point.getFirstPoint(points2, index2);
+    }
+    return nextPoint;
+  }
+  static removePoint(points2, pIndex, segment) {
+    if (segment === "startPoint") {
+      return points2.filter((_, index2) => index2 !== pIndex);
+    }
+  }
+  static splitPoints(points2) {
+    let splitedPointGroup = [];
+    let lastPoints = [];
+    points2.forEach((p) => {
+      if (Point.isFirst(p)) {
+        lastPoints = [p];
+        splitedPointGroup.push(lastPoints);
+      } else {
+        lastPoints.push(p);
+      }
+    });
+    return splitedPointGroup;
+  }
+  static recoverPoints(pointGroup) {
+    const newPoints = [];
+    pointGroup.forEach((points2) => {
+      points2.forEach((p, index2) => {
+        if (index2 === 0) {
+          p.command = "M";
+          p.originalCommand = "M";
+        }
+      });
+      newPoints.push.apply(newPoints, points2);
+    });
+    newPoints.forEach((p, index2) => {
+      p.index = index2;
+    });
+    return newPoints;
+  }
+}
+class Segment {
+  static M(x2, y2) {
+    return {
+      command: "M",
+      values: [x2, y2]
+    };
+  }
+  static L(x2, y2) {
+    return {
+      command: "L",
+      values: [x2, y2]
+    };
+  }
+  static Q(x1, y1, x2, y2) {
+    return {
+      command: "Q",
+      values: [x1, y1, x2, y2]
+    };
+  }
+  static C(x1, y1, x2, y2, x3, y3) {
+    return {
+      command: "C",
+      values: [x1, y1, x2, y2, x3, y3]
+    };
+  }
+  static A(rx, ry, xrot, laf, sf, x2, y2) {
+    return {
+      command: "A",
+      values: [rx, ry, xrot, laf, sf, x2, y2]
+    };
+  }
+  static Z() {
+    return {
+      command: "Z",
+      values: []
+    };
+  }
+}
+var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
+function getAugmentedNamespace(n) {
+  if (n.__esModule)
+    return n;
+  var a = Object.defineProperty({}, "__esModule", { value: true });
+  Object.keys(n).forEach(function(k) {
+    var d = Object.getOwnPropertyDescriptor(n, k);
+    Object.defineProperty(a, k, d.get ? d : {
+      enumerable: true,
+      get: function() {
+        return n[k];
+      }
+    });
+  });
+  return a;
+}
+var fitCurve$1 = { exports: {} };
+(function(module, exports) {
+  (function(global2, factory) {
+    {
+      factory(module);
+    }
+  })(commonjsGlobal, function(module2) {
+    function _classCallCheck(instance, Constructor) {
+      if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+      }
+    }
+    /**
+     *  @preserve  JavaScript implementation of
+     *  Algorithm for Automatically Fitting Digitized Curves
+     *  by Philip J. Schneider
+     *  "Graphics Gems", Academic Press, 1990
+     *
+     *  The MIT License (MIT)
+     *
+     *  https://github.com/soswow/fit-curves
+     */
+    function fitCurve2(points2, maxError, progressCallback) {
+      if (!Array.isArray(points2)) {
+        throw new TypeError("First argument should be an array");
+      }
+      points2.forEach(function(point2) {
+        if (!Array.isArray(point2) || point2.some(function(item2) {
+          return typeof item2 !== "number";
+        }) || point2.length !== points2[0].length) {
+          throw Error("Each point should be an array of numbers. Each point should have the same amount of numbers.");
+        }
+      });
+      points2 = points2.filter(function(point2, i) {
+        return i === 0 || !point2.every(function(val, j) {
+          return val === points2[i - 1][j];
+        });
+      });
+      if (points2.length < 2) {
+        return [];
+      }
+      var len2 = points2.length;
+      var leftTangent = createTangent(points2[1], points2[0]);
+      var rightTangent = createTangent(points2[len2 - 2], points2[len2 - 1]);
+      return fitCubic(points2, leftTangent, rightTangent, maxError, progressCallback);
+    }
+    function fitCubic(points2, leftTangent, rightTangent, error, progressCallback) {
+      var MaxIterations = 20;
+      var bezCurve, u, uPrime, maxError, prevErr, splitPoint, prevSplit, centerVector, toCenterTangent, fromCenterTangent, beziers, dist2, i;
+      if (points2.length === 2) {
+        dist2 = maths.vectorLen(maths.subtract(points2[0], points2[1])) / 3;
+        bezCurve = [points2[0], maths.addArrays(points2[0], maths.mulItems(leftTangent, dist2)), maths.addArrays(points2[1], maths.mulItems(rightTangent, dist2)), points2[1]];
+        return [bezCurve];
+      }
+      u = chordLengthParameterize(points2);
+      var _generateAndReport = generateAndReport(points2, u, u, leftTangent, rightTangent, progressCallback);
+      bezCurve = _generateAndReport[0];
+      maxError = _generateAndReport[1];
+      splitPoint = _generateAndReport[2];
+      if (maxError === 0 || maxError < error) {
+        return [bezCurve];
+      }
+      if (maxError < error * error) {
+        uPrime = u;
+        prevErr = maxError;
+        prevSplit = splitPoint;
+        for (i = 0; i < MaxIterations; i++) {
+          uPrime = reparameterize(bezCurve, points2, uPrime);
+          var _generateAndReport2 = generateAndReport(points2, u, uPrime, leftTangent, rightTangent, progressCallback);
+          bezCurve = _generateAndReport2[0];
+          maxError = _generateAndReport2[1];
+          splitPoint = _generateAndReport2[2];
+          if (maxError < error) {
+            return [bezCurve];
+          } else if (splitPoint === prevSplit) {
+            var errChange = maxError / prevErr;
+            if (errChange > 0.9999 && errChange < 1.0001) {
+              break;
+            }
+          }
+          prevErr = maxError;
+          prevSplit = splitPoint;
+        }
+      }
+      beziers = [];
+      centerVector = maths.subtract(points2[splitPoint - 1], points2[splitPoint + 1]);
+      if (centerVector.every(function(val) {
+        return val === 0;
+      })) {
+        centerVector = maths.subtract(points2[splitPoint - 1], points2[splitPoint]);
+        var _ref = [-centerVector[1], centerVector[0]];
+        centerVector[0] = _ref[0];
+        centerVector[1] = _ref[1];
+      }
+      toCenterTangent = maths.normalize(centerVector);
+      fromCenterTangent = maths.mulItems(toCenterTangent, -1);
+      beziers = beziers.concat(fitCubic(points2.slice(0, splitPoint + 1), leftTangent, toCenterTangent, error, progressCallback));
+      beziers = beziers.concat(fitCubic(points2.slice(splitPoint), fromCenterTangent, rightTangent, error, progressCallback));
+      return beziers;
+    }
+    function generateAndReport(points2, paramsOrig, paramsPrime, leftTangent, rightTangent, progressCallback) {
+      var bezCurve, maxError, splitPoint;
+      bezCurve = generateBezier(points2, paramsPrime, leftTangent, rightTangent);
+      var _computeMaxError = computeMaxError(points2, bezCurve, paramsOrig);
+      maxError = _computeMaxError[0];
+      splitPoint = _computeMaxError[1];
+      if (progressCallback) {
+        progressCallback({
+          bez: bezCurve,
+          points: points2,
+          params: paramsOrig,
+          maxErr: maxError,
+          maxPoint: splitPoint
+        });
+      }
+      return [bezCurve, maxError, splitPoint];
+    }
+    function generateBezier(points2, parameters, leftTangent, rightTangent) {
+      var bezCurve, A, a, C, X, det_C0_C1, det_C0_X, det_X_C1, alpha_l, alpha_r, epsilon, segLength, i, len2, tmp2, u, ux, firstPoint = points2[0], lastPoint = points2[points2.length - 1];
+      bezCurve = [firstPoint, null, null, lastPoint];
+      A = maths.zeros_Xx2x2(parameters.length);
+      for (i = 0, len2 = parameters.length; i < len2; i++) {
+        u = parameters[i];
+        ux = 1 - u;
+        a = A[i];
+        a[0] = maths.mulItems(leftTangent, 3 * u * (ux * ux));
+        a[1] = maths.mulItems(rightTangent, 3 * ux * (u * u));
+      }
+      C = [[0, 0], [0, 0]];
+      X = [0, 0];
+      for (i = 0, len2 = points2.length; i < len2; i++) {
+        u = parameters[i];
+        a = A[i];
+        C[0][0] += maths.dot(a[0], a[0]);
+        C[0][1] += maths.dot(a[0], a[1]);
+        C[1][0] += maths.dot(a[0], a[1]);
+        C[1][1] += maths.dot(a[1], a[1]);
+        tmp2 = maths.subtract(points2[i], bezier.q([firstPoint, firstPoint, lastPoint, lastPoint], u));
+        X[0] += maths.dot(a[0], tmp2);
+        X[1] += maths.dot(a[1], tmp2);
+      }
+      det_C0_C1 = C[0][0] * C[1][1] - C[1][0] * C[0][1];
+      det_C0_X = C[0][0] * X[1] - C[1][0] * X[0];
+      det_X_C1 = X[0] * C[1][1] - X[1] * C[0][1];
+      alpha_l = det_C0_C1 === 0 ? 0 : det_X_C1 / det_C0_C1;
+      alpha_r = det_C0_C1 === 0 ? 0 : det_C0_X / det_C0_C1;
+      segLength = maths.vectorLen(maths.subtract(firstPoint, lastPoint));
+      epsilon = 1e-6 * segLength;
+      if (alpha_l < epsilon || alpha_r < epsilon) {
+        bezCurve[1] = maths.addArrays(firstPoint, maths.mulItems(leftTangent, segLength / 3));
+        bezCurve[2] = maths.addArrays(lastPoint, maths.mulItems(rightTangent, segLength / 3));
+      } else {
+        bezCurve[1] = maths.addArrays(firstPoint, maths.mulItems(leftTangent, alpha_l));
+        bezCurve[2] = maths.addArrays(lastPoint, maths.mulItems(rightTangent, alpha_r));
+      }
+      return bezCurve;
+    }
+    function reparameterize(bezier2, points2, parameters) {
+      return parameters.map(function(p, i) {
+        return newtonRaphsonRootFind(bezier2, points2[i], p);
+      });
+    }
+    function newtonRaphsonRootFind(bez, point2, u) {
+      var d = maths.subtract(bezier.q(bez, u), point2), qprime = bezier.qprime(bez, u), numerator = maths.mulMatrix(d, qprime), denominator = maths.sum(maths.squareItems(qprime)) + 2 * maths.mulMatrix(d, bezier.qprimeprime(bez, u));
+      if (denominator === 0) {
+        return u;
+      } else {
+        return u - numerator / denominator;
+      }
+    }
+    function chordLengthParameterize(points2) {
+      var u = [], currU, prevU, prevP;
+      points2.forEach(function(p, i) {
+        currU = i ? prevU + maths.vectorLen(maths.subtract(p, prevP)) : 0;
+        u.push(currU);
+        prevU = currU;
+        prevP = p;
+      });
+      u = u.map(function(x2) {
+        return x2 / prevU;
+      });
+      return u;
+    }
+    function computeMaxError(points2, bez, parameters) {
+      var dist2, maxDist, splitPoint, v, i, count, point2, t;
+      maxDist = 0;
+      splitPoint = Math.floor(points2.length / 2);
+      var t_distMap = mapTtoRelativeDistances(bez, 10);
+      for (i = 0, count = points2.length; i < count; i++) {
+        point2 = points2[i];
+        t = find_t(bez, parameters[i], t_distMap, 10);
+        v = maths.subtract(bezier.q(bez, t), point2);
+        dist2 = v[0] * v[0] + v[1] * v[1];
+        if (dist2 > maxDist) {
+          maxDist = dist2;
+          splitPoint = i;
+        }
+      }
+      return [maxDist, splitPoint];
+    }
+    var mapTtoRelativeDistances = function mapTtoRelativeDistances2(bez, B_parts) {
+      var B_t_curr;
+      var B_t_dist = [0];
+      var B_t_prev = bez[0];
+      var sumLen = 0;
+      for (var i = 1; i <= B_parts; i++) {
+        B_t_curr = bezier.q(bez, i / B_parts);
+        sumLen += maths.vectorLen(maths.subtract(B_t_curr, B_t_prev));
+        B_t_dist.push(sumLen);
+        B_t_prev = B_t_curr;
+      }
+      B_t_dist = B_t_dist.map(function(x2) {
+        return x2 / sumLen;
+      });
+      return B_t_dist;
+    };
+    function find_t(bez, param, t_distMap, B_parts) {
+      if (param < 0) {
+        return 0;
+      }
+      if (param > 1) {
+        return 1;
+      }
+      var lenMax, lenMin, tMax, tMin, t;
+      for (var i = 1; i <= B_parts; i++) {
+        if (param <= t_distMap[i]) {
+          tMin = (i - 1) / B_parts;
+          tMax = i / B_parts;
+          lenMin = t_distMap[i - 1];
+          lenMax = t_distMap[i];
+          t = (param - lenMin) / (lenMax - lenMin) * (tMax - tMin) + tMin;
+          break;
+        }
+      }
+      return t;
+    }
+    function createTangent(pointA, pointB) {
+      return maths.normalize(maths.subtract(pointA, pointB));
+    }
+    var maths = function() {
+      function maths2() {
+        _classCallCheck(this, maths2);
+      }
+      maths2.zeros_Xx2x2 = function zeros_Xx2x2(x2) {
+        var zs = [];
+        while (x2--) {
+          zs.push([0, 0]);
+        }
+        return zs;
+      };
+      maths2.mulItems = function mulItems(items, multiplier) {
+        return items.map(function(x2) {
+          return x2 * multiplier;
+        });
+      };
+      maths2.mulMatrix = function mulMatrix(m1, m2) {
+        return m1.reduce(function(sum, x1, i) {
+          return sum + x1 * m2[i];
+        }, 0);
+      };
+      maths2.subtract = function subtract2(arr1, arr2) {
+        return arr1.map(function(x1, i) {
+          return x1 - arr2[i];
+        });
+      };
+      maths2.addArrays = function addArrays(arr1, arr2) {
+        return arr1.map(function(x1, i) {
+          return x1 + arr2[i];
+        });
+      };
+      maths2.addItems = function addItems(items, addition) {
+        return items.map(function(x2) {
+          return x2 + addition;
+        });
+      };
+      maths2.sum = function sum(items) {
+        return items.reduce(function(sum2, x2) {
+          return sum2 + x2;
+        });
+      };
+      maths2.dot = function dot2(m1, m2) {
+        return maths2.mulMatrix(m1, m2);
+      };
+      maths2.vectorLen = function vectorLen(v) {
+        return Math.hypot.apply(Math, v);
+      };
+      maths2.divItems = function divItems(items, divisor) {
+        return items.map(function(x2) {
+          return x2 / divisor;
+        });
+      };
+      maths2.squareItems = function squareItems(items) {
+        return items.map(function(x2) {
+          return x2 * x2;
+        });
+      };
+      maths2.normalize = function normalize2(v) {
+        return this.divItems(v, this.vectorLen(v));
+      };
+      return maths2;
+    }();
+    var bezier = function() {
+      function bezier2() {
+        _classCallCheck(this, bezier2);
+      }
+      bezier2.q = function q(ctrlPoly, t) {
+        var tx = 1 - t;
+        var pA = maths.mulItems(ctrlPoly[0], tx * tx * tx), pB = maths.mulItems(ctrlPoly[1], 3 * tx * tx * t), pC = maths.mulItems(ctrlPoly[2], 3 * tx * t * t), pD = maths.mulItems(ctrlPoly[3], t * t * t);
+        return maths.addArrays(maths.addArrays(pA, pB), maths.addArrays(pC, pD));
+      };
+      bezier2.qprime = function qprime(ctrlPoly, t) {
+        var tx = 1 - t;
+        var pA = maths.mulItems(maths.subtract(ctrlPoly[1], ctrlPoly[0]), 3 * tx * tx), pB = maths.mulItems(maths.subtract(ctrlPoly[2], ctrlPoly[1]), 6 * tx * t), pC = maths.mulItems(maths.subtract(ctrlPoly[3], ctrlPoly[2]), 3 * t * t);
+        return maths.addArrays(maths.addArrays(pA, pB), pC);
+      };
+      bezier2.qprimeprime = function qprimeprime(ctrlPoly, t) {
+        return maths.addArrays(maths.mulItems(maths.addArrays(maths.subtract(ctrlPoly[2], maths.mulItems(ctrlPoly[1], 2)), ctrlPoly[0]), 6 * (1 - t)), maths.mulItems(maths.addArrays(maths.subtract(ctrlPoly[3], maths.mulItems(ctrlPoly[2], 2)), ctrlPoly[1]), 6 * t));
+      };
+      return bezier2;
+    }();
+    module2.exports = fitCurve2;
+    module2.exports.fitCubic = fitCubic;
+    module2.exports.createTangent = createTangent;
+  });
+})(fitCurve$1);
+var fitCurve = fitCurve$1.exports;
+var _slicedToArray = function() {
+  function sliceIterator(arr, i) {
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = void 0;
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+        if (i && _arr.length === i)
+          break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"])
+          _i["return"]();
+      } finally {
+        if (_d)
+          throw _e;
+      }
+    }
+    return _arr;
+  }
+  return function(arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if (Symbol.iterator in Object(arr)) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+}();
+var TAU = Math.PI * 2;
+var mapToEllipse = function mapToEllipse2(_ref, rx, ry, cosphi, sinphi, centerx, centery) {
+  var x2 = _ref.x, y2 = _ref.y;
+  x2 *= rx;
+  y2 *= ry;
+  var xp = cosphi * x2 - sinphi * y2;
+  var yp = sinphi * x2 + cosphi * y2;
+  return {
+    x: xp + centerx,
+    y: yp + centery
+  };
+};
+var approxUnitArc = function approxUnitArc2(ang1, ang2) {
+  var a = ang2 === 1.5707963267948966 ? 0.551915024494 : ang2 === -1.5707963267948966 ? -0.551915024494 : 4 / 3 * Math.tan(ang2 / 4);
+  var x1 = Math.cos(ang1);
+  var y1 = Math.sin(ang1);
+  var x2 = Math.cos(ang1 + ang2);
+  var y2 = Math.sin(ang1 + ang2);
+  return [{
+    x: x1 - y1 * a,
+    y: y1 + x1 * a
+  }, {
+    x: x2 + y2 * a,
+    y: y2 - x2 * a
+  }, {
+    x: x2,
+    y: y2
+  }];
+};
+var vectorAngle = function vectorAngle2(ux, uy, vx, vy) {
+  var sign = ux * vy - uy * vx < 0 ? -1 : 1;
+  var dot2 = ux * vx + uy * vy;
+  if (dot2 > 1) {
+    dot2 = 1;
+  }
+  if (dot2 < -1) {
+    dot2 = -1;
+  }
+  return sign * Math.acos(dot2);
+};
+var getArcCenter = function getArcCenter2(px, py, cx, cy, rx, ry, largeArcFlag, sweepFlag, sinphi, cosphi, pxp, pyp) {
+  var rxsq = Math.pow(rx, 2);
+  var rysq = Math.pow(ry, 2);
+  var pxpsq = Math.pow(pxp, 2);
+  var pypsq = Math.pow(pyp, 2);
+  var radicant = rxsq * rysq - rxsq * pypsq - rysq * pxpsq;
+  if (radicant < 0) {
+    radicant = 0;
+  }
+  radicant /= rxsq * pypsq + rysq * pxpsq;
+  radicant = Math.sqrt(radicant) * (largeArcFlag === sweepFlag ? -1 : 1);
+  var centerxp = radicant * rx / ry * pyp;
+  var centeryp = radicant * -ry / rx * pxp;
+  var centerx = cosphi * centerxp - sinphi * centeryp + (px + cx) / 2;
+  var centery = sinphi * centerxp + cosphi * centeryp + (py + cy) / 2;
+  var vx1 = (pxp - centerxp) / rx;
+  var vy1 = (pyp - centeryp) / ry;
+  var vx2 = (-pxp - centerxp) / rx;
+  var vy2 = (-pyp - centeryp) / ry;
+  var ang1 = vectorAngle(1, 0, vx1, vy1);
+  var ang2 = vectorAngle(vx1, vy1, vx2, vy2);
+  if (sweepFlag === 0 && ang2 > 0) {
+    ang2 -= TAU;
+  }
+  if (sweepFlag === 1 && ang2 < 0) {
+    ang2 += TAU;
+  }
+  return [centerx, centery, ang1, ang2];
+};
+var arcToBezier = function arcToBezier2(_ref2) {
+  var px = _ref2.px, py = _ref2.py, cx = _ref2.cx, cy = _ref2.cy, rx = _ref2.rx, ry = _ref2.ry, _ref2$xAxisRotation = _ref2.xAxisRotation, xAxisRotation = _ref2$xAxisRotation === void 0 ? 0 : _ref2$xAxisRotation, _ref2$largeArcFlag = _ref2.largeArcFlag, largeArcFlag = _ref2$largeArcFlag === void 0 ? 0 : _ref2$largeArcFlag, _ref2$sweepFlag = _ref2.sweepFlag, sweepFlag = _ref2$sweepFlag === void 0 ? 0 : _ref2$sweepFlag;
+  var curves = [];
+  if (rx === 0 || ry === 0) {
+    return [];
+  }
+  var sinphi = Math.sin(xAxisRotation * TAU / 360);
+  var cosphi = Math.cos(xAxisRotation * TAU / 360);
+  var pxp = cosphi * (px - cx) / 2 + sinphi * (py - cy) / 2;
+  var pyp = -sinphi * (px - cx) / 2 + cosphi * (py - cy) / 2;
+  if (pxp === 0 && pyp === 0) {
+    return [];
+  }
+  rx = Math.abs(rx);
+  ry = Math.abs(ry);
+  var lambda = Math.pow(pxp, 2) / Math.pow(rx, 2) + Math.pow(pyp, 2) / Math.pow(ry, 2);
+  if (lambda > 1) {
+    rx *= Math.sqrt(lambda);
+    ry *= Math.sqrt(lambda);
+  }
+  var _getArcCenter = getArcCenter(px, py, cx, cy, rx, ry, largeArcFlag, sweepFlag, sinphi, cosphi, pxp, pyp), _getArcCenter2 = _slicedToArray(_getArcCenter, 4), centerx = _getArcCenter2[0], centery = _getArcCenter2[1], ang1 = _getArcCenter2[2], ang2 = _getArcCenter2[3];
+  var ratio = Math.abs(ang2) / (TAU / 4);
+  if (Math.abs(1 - ratio) < 1e-7) {
+    ratio = 1;
+  }
+  var segments2 = Math.max(Math.ceil(ratio), 1);
+  ang2 /= segments2;
+  for (var i = 0; i < segments2; i++) {
+    curves.push(approxUnitArc(ang1, ang2));
+    ang1 += ang2;
+  }
+  return curves.map(function(curve) {
+    var _mapToEllipse = mapToEllipse(curve[0], rx, ry, cosphi, sinphi, centerx, centery), x1 = _mapToEllipse.x, y1 = _mapToEllipse.y;
+    var _mapToEllipse2 = mapToEllipse(curve[1], rx, ry, cosphi, sinphi, centerx, centery), x2 = _mapToEllipse2.x, y2 = _mapToEllipse2.y;
+    var _mapToEllipse3 = mapToEllipse(curve[2], rx, ry, cosphi, sinphi, centerx, centery), x3 = _mapToEllipse3.x, y3 = _mapToEllipse3.y;
+    return { x1, y1, x2, y2, x: x3, y: y3 };
+  });
+};
+const REG_PARSE_NUMBER_FOR_PATH = /([mMlLvVhHcCsSqQtTaAzZ]([^mMlLvVhHcCsSqQtTaAzZ]*))/g;
+var numberReg = /-?[0-9]*\.?[0-9]+(?:e[-+]?\d+)?/ig;
+function xy$2(point2) {
+  return {
+    x: point2[0],
+    y: point2[1]
+  };
+}
+class PathParser {
+  constructor(pathString2 = "") {
+    this.reset(pathString2);
+  }
+  reset(pathString2 = "") {
+    this.segments = [];
+    this.pathString = pathString2.trim();
+    this.parse();
+    return this;
+  }
+  resetSegments(segments2) {
+    this.segments = segments2 || [];
+    this.pathString = this.joinPath();
+    return this;
+  }
+  addSegments(segments2, transform2) {
+    return this.resetSegments([...this.segments, ...segments2]);
+  }
+  addPath(otherPath, transform2 = create$5()) {
+    const newPath = otherPath.clone();
+    newPath.transformMat4(transform2);
+    return this.addSegments(newPath.segments);
+  }
+  trim(str = "") {
+    var arr = str.match(numberReg) || [];
+    return arr.filter((it) => it != "");
+  }
+  parse() {
+    var arr = this.pathString.match(REG_PARSE_NUMBER_FOR_PATH) || [];
+    this.segments = arr.map((s) => {
+      var command = s[0];
+      var values = this.trim(s.replace(command, "")).map((it) => +it);
+      return { command, values };
+    });
+    this.segments = this.segments.map((s, index2) => {
+      switch (s.command) {
+        case "m":
+          var prev = this.segments[index2 - 1];
+          if (prev && (prev.command == "z" || prev.command == "Z")) {
+            prev = this.segments[index2 - 2];
+          }
+          var x2 = (prev == null ? void 0 : prev.values[prev.values.length - 2]) || 0;
+          var y2 = (prev == null ? void 0 : prev.values[prev.values.length - 1]) || 0;
+          for (var i = 0, len2 = s.values.length; i < len2; i += 2) {
+            s.values[i] += x2;
+            s.values[i + 1] += y2;
+          }
+          return {
+            command: s.command.toUpperCase(),
+            values: [...s.values]
+          };
+        case "c":
+        case "l":
+        case "q":
+        case "s":
+        case "t":
+        case "v":
+        case "h":
+          var prev = this.segments[index2 - 1];
+          var x2 = (prev == null ? void 0 : prev.values[prev.values.length - 2]) || 0;
+          var y2 = (prev == null ? void 0 : prev.values[prev.values.length - 1]) || 0;
+          for (var i = 0, len2 = s.values.length; i < len2; i += 2) {
+            s.values[i] += x2;
+            s.values[i + 1] += y2;
+          }
+          return {
+            command: s.command.toUpperCase(),
+            values: [...s.values]
+          };
+        case "a":
+          var prev = this.segments[index2 - 1];
+          var x2 = (prev == null ? void 0 : prev.values[prev.values.length - 2]) || 0;
+          var y2 = (prev == null ? void 0 : prev.values[prev.values.length - 1]) || 0;
+          s.values[5] += x2;
+          s.values[6] += y2;
+          return {
+            command: s.command.toUpperCase(),
+            values: [...s.values]
+          };
+        case "z":
+          return {
+            command: s.command.toUpperCase(),
+            values: []
+          };
+        default:
+          return s;
+      }
+    });
+    this.segments.forEach((it, index2) => {
+      const prev = this.segments[index2 - 1];
+      if (it.command == "A") {
+        const x1 = (prev == null ? void 0 : prev.values[prev.values.length - 2]) || 0;
+        const y1 = (prev == null ? void 0 : prev.values[prev.values.length - 1]) || 0;
+        const [rx, ry, xrotate, largeArcFlag, sweepFlag, x2, y2] = it.values;
+        const path = PathParser.arcToCurve(x1, y1, rx, ry, xrotate, largeArcFlag, sweepFlag, x2, y2);
+        path.segments.forEach((seg) => {
+          if (seg.command !== "M" || seg.command !== "Z")
+            ;
+        });
+      }
+    });
+    return this;
+  }
+  convertGenerator() {
+    var points2 = [];
+    for (var index2 = 0, len2 = this.segments.length; index2 < len2; index2++) {
+      var s = this.segments[index2];
+      var nextSegment = this.segments[index2 + 1];
+      const { command, values } = s;
+      if (command === "M") {
+        var [x2, y2] = values;
+        points2.push({
+          command,
+          originalCommand: command,
+          startPoint: { x: x2, y: y2 },
+          endPoint: { x: x2, y: y2 },
+          reversePoint: { x: x2, y: y2 },
+          curve: false
+        });
+      } else if (command === "L") {
+        var prevPoint = Point.getPrevPoint(points2, points2.length);
+        if (prevPoint.curve) {
+          var [x2, y2] = values;
+          points2.push({
+            command,
+            originalCommand: command,
+            startPoint: { x: x2, y: y2 },
+            endPoint: { x: x2, y: y2 },
+            reversePoint: clone$1(prevPoint.endPoint),
+            curve: true
+          });
+        } else {
+          var [x2, y2] = values;
+          points2.push({
+            command,
+            originalCommand: command,
+            startPoint: { x: x2, y: y2 },
+            endPoint: { x: x2, y: y2 },
+            reversePoint: { x: x2, y: y2 },
+            curve: false
+          });
+        }
+      } else if (command === "Q") {
+        var [cx1, cy1, x2, y2] = values;
+        var prevPoint = Point.getPrevPoint(points2, points2.length);
+        if (prevPoint.curve) {
+          var startPoint = { x: x2, y: y2 };
+          var endPoint = { x: x2, y: y2 };
+          var reversePoint2 = { x: x2, y: y2 };
+          points2.push({
+            command: "L",
+            originalCommand: command,
+            startPoint,
+            endPoint,
+            reversePoint: reversePoint2,
+            curve: false
+          });
+          prevPoint.endPoint = { x: cx1, y: cy1 };
+        } else {
+          if (nextSegment && nextSegment.command === "L") {
+            prevPoint.curve = true;
+            prevPoint.endPoint = { x: cx1, y: cy1 };
+            var startPoint = { x: x2, y: y2 };
+            var reversePoint2 = { x: x2, y: y2 };
+            var endPoint = { x: x2, y: y2 };
+            points2.push({
+              command: "L",
+              originalCommand: command,
+              curve: false,
+              startPoint,
+              endPoint,
+              reversePoint: reversePoint2
+            });
+          } else {
+            var startPoint = { x: x2, y: y2 };
+            var reversePoint2 = { x: cx1, y: cy1 };
+            var endPoint = { x: x2, y: y2 };
+            points2.push({
+              command,
+              originalCommand: command,
+              curve: true,
+              startPoint,
+              endPoint,
+              reversePoint: reversePoint2
+            });
+          }
+        }
+      } else if (command === "T") {
+        var [x2, y2] = values;
+        var prevSegment = segments[index2 - 1];
+        if (prevSegment && prevSegment.command === "Q") {
+          var [cx1, cy1, sx, sy] = prevSegment.values;
+          var prevPoint = Point.getPrevPoint(points2, points2.length);
+          prevPoint.endPoint = Point.getReversePoint({ x: sx, y: sy }, { x: cx1, y: cy1 });
+          var startPoint = { x: x2, y: y2 };
+          var endPoint = { x: x2, y: y2 };
+          var reversePoint2 = { x: x2, y: y2 };
+          points2.push({
+            command: "L",
+            originalCommand: command,
+            startPoint,
+            endPoint,
+            reversePoint: reversePoint2,
+            curve: false
+          });
+        }
+      } else if (command === "C") {
+        var prevPoint = Point.getPrevPoint(points2, points2.length);
+        var [cx1, cy1, cx2, cy2, x2, y2] = values;
+        var startPoint = { x: x2, y: y2 };
+        var reversePoint2 = { x: cx2, y: cy2 };
+        var endPoint = { x: x2, y: y2 };
+        points2.push({
+          command,
+          originalCommand: command,
+          curve: true,
+          startPoint,
+          endPoint,
+          reversePoint: reversePoint2
+        });
+        if (prevPoint) {
+          prevPoint.curve = true;
+          prevPoint.endPoint = { x: cx1, y: cy1 };
+        }
+      } else if (command === "S") {
+        var [x2, y2] = values;
+        var prevSegment = segments[index2 - 1];
+        if (prevSegment && prevSegment.command === "C") {
+          var [cx2, cy2, sx, sy] = prevSegment.values;
+          var prevPoint = Point.getPrevPoint(points2, points2.length);
+          prevPoint.endPoint = Point.getReversePoint(prevPoint.startPoint, prevPoint.reversePoint);
+          var startPoint = { x: x2, y: y2 };
+          var endPoint = { x: x2, y: y2 };
+          var reversePoint2 = { x: cx2, y: cy2 };
+          points2.push({
+            command: "Q",
+            originalCommand: command,
+            startPoint,
+            endPoint,
+            reversePoint: reversePoint2,
+            curve: false
+          });
+        }
+      } else if (command === "Z") {
+        var prevPoint = Point.getPrevPoint(points2, points2.length);
+        var firstPoint = Point.getFirstPoint(points2, points2.length);
+        if (Point.isEqual(prevPoint.startPoint, firstPoint.startPoint)) {
+          prevPoint.connected = true;
+          prevPoint.endPoint = clone$1(firstPoint.endPoint);
+          firstPoint.reversePoint = clone$1(prevPoint.reversePoint);
+        }
+        prevPoint.close = true;
+      }
+    }
+    points2 = points2.filter((p) => !!p);
+    return points2;
+  }
+  setSegments(index2, seg) {
+    this.segments[index2] = seg;
+  }
+  getSegments(index2) {
+    if (isNotUndefined(index2)) {
+      return this.segments[index2];
+    }
+    return this.segments;
+  }
+  joinPath(segments2, split = "") {
+    var list2 = segments2 || this.segments;
+    return list2.map((it) => {
+      return `${it.command} ${it.values.length ? it.values.join(" ") : ""}`;
+    }).join(split);
+  }
+  each(callback, isReturn = false) {
+    var newSegments = this.segments.map((segment, index2) => {
+      return callback.call(this, segment, index2);
+    });
+    if (isReturn) {
+      return newSegments;
+    } else {
+      this.segments = newSegments;
+    }
+    return this;
+  }
+  _loop(m, isReturn = false) {
+    return this.each(function(segment) {
+      var v = segment.values;
+      var c2 = segment.command;
+      switch (c2) {
+        case "M":
+        case "L":
+          var result = m(v, 0);
+          segment.values = [result[0], result[1]];
+          break;
+        case "V":
+          var result = m([+v[0], 0]);
+          segment.values = [result[0]];
+          break;
+        case "H":
+          var result = m([0, +v[0]]);
+          segment.values = [result[1]];
+          break;
+        case "C":
+        case "S":
+        case "T":
+        case "Q":
+          for (var i = 0, len2 = v.length; i < len2; i += 2) {
+            var result = m(v, i);
+            segment.values[i] = result[0];
+            segment.values[i + 1] = result[1];
+          }
+          break;
+      }
+      return segment;
+    }, isReturn);
+  }
+  clone() {
+    const path = new PathParser();
+    path.resetSegments(this.segments.map((it) => {
+      return {
+        command: it.command,
+        values: it.values.slice()
+      };
+    }));
+    return path;
+  }
+  translate(tx, ty) {
+    this.transformMat4(fromTranslation([], [tx, ty, 0]));
+    return this;
+  }
+  translateTo(tx, ty) {
+    return this.joinPath(this.transformMat4(fromTranslation([], [tx, ty, 0]), true));
+  }
+  scale(sx, sy) {
+    this.transformMat4(fromScaling([], [sx, sy, 1]));
+    return this;
+  }
+  scaleTo(sx, sy) {
+    return this.joinPath(this.transformMat4(fromScaling([], [sx, sy, 1]), true));
+  }
+  scaleWith(width2, height2) {
+    const newPath = this.clone();
+    const rect2 = vertiesToRectangle(newPath.getBBox());
+    newPath.translate(-rect2.x, -rect2.y);
+    const scale2 = Math.min(width2 / rect2.width, height2 / rect2.height);
+    return newPath.scale(scale2, scale2).translate(width2 / 2 - rect2.width / 2 * scale2, height2 / 2 - rect2.height / 2 * scale2);
+  }
+  scaleFunc(xScale = (x2) => x2, yScale = (y2) => y2) {
+    return this.each(function(segment) {
+      var v = segment.values;
+      var c2 = segment.command;
+      switch (c2) {
+        case "M":
+        case "L":
+          segment.values = [xScale(v[0]), yScale(v[1])];
+          break;
+        case "C":
+        case "Q":
+          for (var i = 0, len2 = v.length; i < len2; i += 2) {
+            segment.values[i] = xScale(v[i]);
+            segment.values[i + 1] = yScale(v[i + 1]);
+          }
+          break;
+      }
+      return segment;
+    });
+  }
+  rotate(angle2, centerX = 0, centerY = 0) {
+    const view = create$5();
+    multiply$1(view, view, fromTranslation([], [centerX, centerY, 0]));
+    multiply$1(view, view, fromZRotation([], degreeToRadian$1(angle2)));
+    multiply$1(view, view, fromTranslation([], negate([], [centerX, centerY, 0])));
+    this.transformMat4(view);
+    return this;
+  }
+  rotateTo(angle2, centerX = 0, centerY = 0) {
+    const view = create$5();
+    multiply$1(view, view, fromTranslation([], [centerX, centerY, 0]));
+    multiply$1(view, view, fromZRotation([], degreeToRadian$1(angle2)));
+    multiply$1(view, view, fromTranslation([], negate([], [centerX, centerY, 0])));
+    return this.joinPath(this.transformMat4(view, true));
+  }
+  reflectionOrigin() {
+    this.transformMat4(fromScaling([], [-1, -1, 0]));
+    return this;
+  }
+  reflectionOriginTo() {
+    return this.joinPath(this.transformMat4(fromScaling([], [-1, -1, 0]), true));
+  }
+  flipX() {
+    this.transformMat4(fromScaling([], [1, -1, 0]));
+    return this;
+  }
+  flipXTo() {
+    return this.joinPath(this.transformMat4(fromScaling([], [1, -1, 0]), true));
+  }
+  flipY() {
+    this.transformMat4(fromScaling([], [-1, 1, 0]));
+    return this;
+  }
+  flipYTo() {
+    return this.joinPath(this.transformMat4(fromScaling([], [-1, 1, 0]), true));
+  }
+  skewX(angle2) {
+    this.transformMat4(fromValues$1(1, Math.tan(degreeToRadian$1(angle2)), 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
+    return this;
+  }
+  skewXTo(angle2) {
+    return this.joinPath(this.transformMat4(fromValues$1(1, Math.tan(degreeToRadian$1(angle2)), 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1), true));
+  }
+  skewY(angle2) {
+    this.transformMat4(fromValues$1(1, 0, 0, 0, Math.tan(degreeToRadian$1(angle2)), 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
+    return this;
+  }
+  skewYTo(angle2) {
+    return this.joinPath(this.transformMat4(fromValues$1(1, 0, 0, 0, Math.tan(degreeToRadian$1(angle2)), 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1), true));
+  }
+  forEachGroup(callback) {
+    const groupList = this.getGroup();
+    for (let i = 0, len2 = groupList.length; i < len2; i++) {
+      const group2 = groupList[i];
+      callback(group2, i, groupList);
+    }
+  }
+  forEach(callback) {
+    this.forEachGroup((segments2, index2, groupList) => {
+      for (let i = 0, len2 = segments2.length; i < len2; i++) {
+        const segment = segments2[i];
+        callback(segment, i, segments2, groupList, index2);
+      }
+    });
+  }
+  normalize() {
+    const allSegments = [];
+    const groupList = this.getGroup();
+    groupList.forEach((group2) => {
+      const newSegments = [];
+      group2.segments.forEach(({ segment }, index2) => {
+        var _a;
+        const prevSegment = (_a = group2.segments[index2 - 1]) == null ? void 0 : _a.segment;
+        if (segment.command === "M") {
+          newSegments.push(segment);
+          return;
+        } else if (segment.command === "L") {
+          const localCurve = normalizeCurveForLine([
+            [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
+            [segment.values[0], segment.values[1], 0]
+          ]);
+          newSegments.push({
+            command: "C",
+            values: [
+              localCurve[1][0],
+              localCurve[1][1],
+              localCurve[2][0],
+              localCurve[2][1],
+              localCurve[3][0],
+              localCurve[3][1]
+            ]
+          });
+          return;
+        } else if (segment.command === "C") {
+          newSegments.push(segment);
+        } else if (segment.command === "Q") {
+          const localCurve = normalizeCurveForQuard([
+            [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
+            [segment.values[0], segment.values[1], 0],
+            [segment.values[2], segment.values[3], 0]
+          ]);
+          newSegments.push({
+            command: "C",
+            values: [
+              localCurve[1][0],
+              localCurve[1][1],
+              localCurve[2][0],
+              localCurve[2][1],
+              localCurve[3][0],
+              localCurve[3][1]
+            ]
+          });
+        } else if (segment.command === "Z") {
+          newSegments.push(segment);
+        }
+      });
+      allSegments.push(...newSegments);
+    });
+    return PathParser.fromSegments(allSegments);
+  }
+  polygonal() {
+    const pathList = this.toPathList();
+    pathList.forEach((path) => {
+      const newSegments = [];
+      path.segments.forEach((segment, index2) => {
+        const prevSegment = path.segments[index2 - 1];
+        if (segment.command === "M") {
+          newSegments.push(segment);
+        } else if (segment.command === "L") {
+          newSegments.push(segment);
+        } else if (segment.command === "C") {
+          newSegments.push(...polygonalForCurve([prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0], [segment.values[0], segment.values[1], 0], [segment.values[2], segment.values[3], 0], [segment.values[4], segment.values[5], 0]).map((point2) => ({
+            command: "L",
+            values: [point2[0], point2[1], 0]
+          })));
+        } else if (segment.command === "Q") {
+          newSegments.push(...polygonalForCurve(...normalizeCurveForQuard([
+            [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
+            [segment.values[0], segment.values[1], 0],
+            [segment.values[2], segment.values[3], 0]
+          ])).map((point2) => ({
+            command: "L",
+            values: [point2[0], point2[1], 0]
+          })));
+        } else if (segment.command === "Z") {
+          newSegments.push(segment);
+        }
+      });
+      path.resetSegments(newSegments);
+    });
+    return PathParser.joinPathList(pathList);
+  }
+  divideSegmentByLength(length2 = 100) {
+    const newPath = new PathParser();
+    const groupList = this.getGroup();
+    groupList.forEach((group2) => {
+      const newSegments = [];
+      group2.segments.forEach(({ segment }, index2) => {
+        var _a;
+        (_a = group2.segments[index2 - 1]) == null ? void 0 : _a.segment;
+        if (segment.command === "M") {
+          newSegments.push(segment);
+          return;
+        } else if (segment.command === "L") {
+          const dividedSegments = divideLine(segment, length2);
+          newSegments.push(...dividedSegments);
+          return;
+        } else if (segment.command === "C") {
+          const dividedSegments = divideCurve(segment, length2);
+          newSegments.push(...dividedSegments);
+        } else if (segment.command === "Q") {
+          const dividedSegments = divideQuad(segment, length2);
+          newSegments.push(...dividedSegments);
+        } else if (segment.command === "Z") {
+          newSegments.push(segment);
+        }
+      });
+      newPath.addGroup(newSegments);
+    });
+    return newPath;
+  }
+  divideSegmentByCount(count = 1) {
+    let allSegments = [];
+    const groupList = this.getGroup();
+    groupList.forEach((group2) => {
+      const newSegments = [];
+      group2.segments.forEach(({ segment }, index2) => {
+        var _a, _b;
+        const prevSegment = (_a = group2.segments[index2 - 1]) == null ? void 0 : _a.segment;
+        (_b = group2.segments[index2 + 1]) == null ? void 0 : _b.segment;
+        if (segment.command === "M") {
+          newSegments.push(segment);
+        } else if (segment.command === "L") {
+          const linePoints = splitBezierPointsLineByCount([
+            {
+              x: prevSegment.values[prevSegment.values.length - 2],
+              y: prevSegment.values[prevSegment.values.length - 1]
+            },
+            {
+              x: segment.values[0],
+              y: segment.values[1]
+            }
+          ], count);
+          linePoints.forEach(([start2, end2]) => {
+            newSegments.push(Segment.L(end2.x, end2.y));
+          });
+        } else if (segment.command === "Q") {
+          const quardPoints = splitBezierPointsQuardByCount([
+            {
+              x: prevSegment.values[prevSegment.values.length - 2],
+              y: prevSegment.values[prevSegment.values.length - 1]
+            },
+            {
+              x: segment.values[0],
+              y: segment.values[1]
+            },
+            {
+              x: segment.values[2],
+              y: segment.values[3]
+            }
+          ], count);
+          quardPoints.forEach(([start2, middle2, end2]) => {
+            newSegments.push(Segment.Q(middle2.x, middle2.y, end2.x, end2.y));
+          });
+        } else if (segment.command === "C") {
+          const curvePoints = splitBezierPointsByCount([
+            {
+              x: prevSegment.values[prevSegment.values.length - 2],
+              y: prevSegment.values[prevSegment.values.length - 1]
+            },
+            {
+              x: segment.values[0],
+              y: segment.values[1]
+            },
+            {
+              x: segment.values[2],
+              y: segment.values[3]
+            },
+            {
+              x: segment.values[4],
+              y: segment.values[5]
+            }
+          ], count);
+          curvePoints.forEach(([start2, c1, c2, end2]) => {
+            newSegments.push(Segment.C(c1.x, c1.y, c2.x, c2.y, end2.x, end2.y));
+          });
+        } else if (segment.command === "Z") {
+          newSegments.push(segment);
+        }
+      });
+      allSegments = allSegments.concat(newSegments);
+    });
+    return PathParser.fromSegments(allSegments);
+  }
+  getBBox() {
+    let minX = Number.MAX_SAFE_INTEGER, minY = Number.MAX_SAFE_INTEGER;
+    let maxX = Number.MIN_SAFE_INTEGER, maxY = Number.MIN_SAFE_INTEGER;
+    this.each(function(segment, index2) {
+      var v = segment.values;
+      var c2 = segment.command;
+      const prevSegment = this.segments[index2 - 1];
+      switch (c2) {
+        case "M":
+        case "L":
+          minX = Math.min(minX, v[0]);
+          maxX = Math.max(maxX, v[0]);
+          minY = Math.min(minY, v[1]);
+          maxY = Math.max(maxY, v[1]);
+          break;
+        case "C":
+          getCurveBBox([
+            [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
+            [v[0], v[1], 0],
+            [v[2], v[3], 0],
+            [v[4], v[5], 0]
+          ]).forEach((p) => {
+            minX = Math.min(minX, p[0]);
+            maxX = Math.max(maxX, p[0]);
+            minY = Math.min(minY, p[1]);
+            maxY = Math.max(maxY, p[1]);
+          });
+          break;
+        case "Q":
+          const curve = normalizeCurveForQuard([
+            [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
+            [v[0], v[1], 0],
+            [v[2], v[3], 0]
+          ]);
+          getCurveBBox(curve).forEach((p) => {
+            minX = Math.min(minX, p[0]);
+            maxX = Math.max(maxX, p[0]);
+            minY = Math.min(minY, p[1]);
+            maxY = Math.max(maxY, p[1]);
+          });
+          break;
+      }
+      return segment;
+    });
+    return [
+      [minX, minY, 0],
+      [maxX, minY, 0],
+      [maxX, maxY, 0],
+      [minX, maxY, 0]
+    ];
+  }
+  rect() {
+    const bbox = this.getBBox();
+    return {
+      x: bbox[0][0],
+      y: bbox[0][1],
+      width: distance$1(bbox[0], bbox[1]),
+      height: distance$1(bbox[0], bbox[3]),
+      right: bbox[0][0] + distance$1(bbox[0], bbox[1]),
+      bottom: bbox[0][1] + distance$1(bbox[0], bbox[3])
+    };
+  }
+  getClosedPointInfo({ x: x2, y: y2 }, count = 20) {
+    let minDist = Number.MAX_SAFE_INTEGER;
+    let targetInfo = {};
+    let info = {};
+    for (var i = 1, len2 = this.segments.length; i < len2; i++) {
+      const segment = this.segments[i];
+      const prev = this.segments[i - 1].values;
+      const current = segment.values;
+      const command = segment.command;
+      const lastPoint = { x: prev[prev.length - 2], y: prev[prev.length - 1] };
+      if (command === "C") {
+        var points2 = [
+          lastPoint,
+          { x: current[0], y: current[1] },
+          { x: current[2], y: current[3] },
+          { x: current[4], y: current[5] }
+        ];
+        var curve = recoverBezier(...points2, count);
+        var t = curve(x2, y2);
+        info = {
+          segment,
+          index: i,
+          t,
+          points: points2,
+          targetPoint: getBezierPoints(points2, t).first[3]
+        };
+      } else if (command === "Q") {
+        var points2 = [
+          lastPoint,
+          { x: current[0], y: current[1] },
+          { x: current[2], y: current[3] }
+        ];
+        var curve = recoverBezierQuard(...points2, count);
+        var t = curve(x2, y2);
+        info = {
+          segment,
+          index: i,
+          t,
+          points: points2,
+          targetPoint: getBezierPointsQuard(points2, t).first[2]
+        };
+      } else if (command === "L") {
+        var points2 = [
+          lastPoint,
+          { x: current[0], y: current[1] }
+        ];
+        var curve = recoverBezierLine(...points2, count);
+        var t = curve(x2, y2);
+        info = {
+          segment,
+          index: i,
+          t,
+          points: points2,
+          targetPoint: getBezierPointsLine(points2, t).first[1]
+        };
+      }
+      if (info) {
+        var dist2 = Math.sqrt(Math.pow(info.targetPoint.x - x2, 2) + Math.pow(info.targetPoint.y - y2, 2));
+        if (dist2 < minDist) {
+          minDist = dist2;
+          targetInfo = info;
+        }
+      }
+    }
+    return targetInfo;
+  }
+  getClosedPoint({ x: x2, y: y2 }, count = 20) {
+    const info = this.getClosedPointInfo({ x: x2, y: y2 }, count);
+    if (info.targetPoint) {
+      return info.targetPoint;
+    }
+    return { x: x2, y: y2 };
+  }
+  isPointInPath({ x: x2, y: y2 }, dist$1 = 1) {
+    const info = this.getClosedPointInfo({ x: x2, y: y2 }, 20);
+    if (info.targetPoint) {
+      if (dist([info.targetPoint.x, info.targetPoint.y, 0], [x2, y2, 0]) <= dist$1) {
+        return true;
+      }
+    }
+    return false;
+  }
+  toString(split = "") {
+    return this.joinPath(void 0, split);
+  }
+  toSVGString() {
+    return this.d;
+  }
+  transformMat4(transformMatrix, isReturn = false) {
+    return this.each(function(segment) {
+      var v = segment.values;
+      var c2 = segment.command;
+      switch (c2) {
+        case "M":
+        case "L":
+          var result = transformMat4([], [v[0], v[1], 0], transformMatrix);
+          segment.values = [result[0], result[1]];
+          break;
+        case "C":
+        case "Q":
+          for (var i = 0, len2 = v.length; i < len2; i += 2) {
+            var result = transformMat4([], [v[i], v[i + 1], 0], transformMatrix);
+            segment.values[i] = result[0];
+            segment.values[i + 1] = result[1];
+          }
+          break;
+      }
+      return segment;
+    }, isReturn);
+  }
+  transform(customTransformFunction = ([x2, y2, z]) => [x2, y2, z]) {
+    const bbox = vertiesToRectangle(this.getBBox());
+    return this.each(function(segment) {
+      var v = segment.values;
+      var c2 = segment.command;
+      switch (c2) {
+        case "M":
+        case "L":
+        case "C":
+        case "Q":
+          for (var i = 0, len2 = v.length; i < len2; i += 2) {
+            var result = customTransformFunction([v[i], v[i + 1], 0], { bbox });
+            segment.values[i] = result[0];
+            segment.values[i + 1] = result[1];
+          }
+          break;
+      }
+      return segment;
+    });
+  }
+  invert(transformMatrix) {
+    this.transformMat4(invert([], transformMatrix));
+    return this;
+  }
+  round(k = 1) {
+    this.each(function(segment) {
+      segment.values = segment.values.map((it) => round$1(it, k));
+      return segment;
+    });
+    return this;
+  }
+  reverseSegments(segments2) {
+    const newSegments = [];
+    let lastIndex = segments2.length - 1;
+    for (var i = lastIndex; i > 0; i--) {
+      const segment = segments2[i];
+      const v = segment.values;
+      const c2 = segment.command;
+      const prevSegment = segments2[i - 1];
+      const lastX = prevSegment.values[prevSegment.values.length - 2];
+      const lastY = prevSegment.values[prevSegment.values.length - 1];
+      switch (c2) {
+        case "L":
+          if (i === lastIndex) {
+            newSegments.push(Segment.M(v[0], v[1]));
+          }
+          newSegments.push(Segment.L(lastX, lastY));
+          break;
+        case "C":
+          if (i === lastIndex) {
+            newSegments.push(Segment.M(v[4], v[5]));
+          }
+          newSegments.push(Segment.C(v[2], v[3], v[0], v[1], lastX, lastY));
+          break;
+        case "Q":
+          if (i === lastIndex) {
+            newSegments.push(Segment.M(v[2], v[3]));
+          }
+          newSegments.push(Segment.Q(v[0], v[1], lastX, lastY));
+          break;
+        case "Z":
+          newSegments.push(segment);
+          lastIndex = i - 1;
+          break;
+      }
+    }
+    if (newSegments[0].command === "Z") {
+      newSegments.push(newSegments.shift());
+    }
+    return newSegments;
+  }
+  splitSegments() {
+    const groupSegments = [];
+    let newSegments = [];
+    this.segments.forEach((s) => {
+      if (s.command === "M") {
+        newSegments = [s];
+        groupSegments.push(newSegments);
+      } else {
+        newSegments.push(s);
+      }
+    });
+    return groupSegments;
+  }
+  reverse(...groupIndexList) {
+    const groupSegments = this.splitSegments();
+    const newSegments = [];
+    if (groupIndexList.length === 0) {
+      groupSegments.forEach((segments2, index2) => {
+        newSegments.push.apply(newSegments, this.reverseSegments(segments2));
+      });
+    } else {
+      groupSegments.forEach((segments2, index2) => {
+        if (groupIndexList.includes(index2)) {
+          newSegments.push.apply(newSegments, this.reverseSegments(segments2));
+        } else {
+          newSegments.push.apply(newSegments, segments2);
+        }
+      });
+    }
+    return this.resetSegments(newSegments);
+  }
+  reversePathStringByFunc(func2) {
+    const pathList = this.toPathList().map((p, index2) => {
+      if (func2(p, index2)) {
+        return p.reverse();
+      }
+      return p;
+    });
+    return PathParser.joinPathList(pathList).toSVGString();
+  }
+  getCenterPointers() {
+    let arr = [];
+    let lastValues = [];
+    this.segments.forEach((segment, index2) => {
+      var v = segment.values;
+      var c2 = segment.command;
+      switch (c2) {
+        case "M":
+        case "L":
+          arr.push({
+            index: index2,
+            pointer: [...segment.values, 0]
+          });
+          break;
+        case "V":
+          arr.push({
+            index: index2,
+            pointer: [v[0], lastValues.pop(), 0]
+          });
+          break;
+        case "H":
+          lastValues.pop();
+          arr.push({
+            index: index2,
+            pointer: [lastValues.pop(), v[0], 0]
+          });
+          break;
+        case "C":
+        case "S":
+        case "T":
+        case "Q":
+          arr.push({
+            index: index2,
+            pointer: [v[v.length - 2], v[v.length - 1], 0]
+          });
+          break;
+      }
+      lastValues = clone$1(v);
+    });
+    return arr;
+  }
+  get points() {
+    return this.getCenterPointers();
+  }
+  getSamePointers(pointer, dist2 = 0) {
+    return this.getCenterPointers().filter((p) => {
+      if (distance$1(p.pointer, pointer) <= dist2) {
+        return true;
+      }
+    });
+  }
+  getGroup() {
+    const groupSegments = [];
+    let newSegments = [];
+    this.segments.forEach((segment, index2) => {
+      if (segment.command === "M") {
+        newSegments = [{
+          index: index2,
+          segment
+        }];
+        groupSegments.push({ index: index2, groupIndex: groupSegments.length, segments: newSegments });
+      } else {
+        newSegments.push({
+          index: index2,
+          segment
+        });
+      }
+    });
+    return groupSegments;
+  }
+  createGroupPath(index2) {
+    var _a, _b;
+    const path = new PathParser();
+    path.resetSegments(((_b = (_a = this.getGroup()[index2]) == null ? void 0 : _a.segments) == null ? void 0 : _b.map((it) => {
+      return it.segment;
+    })) || []);
+    return path;
+  }
+  toPathList() {
+    return this.getGroup().map((group2) => {
+      return PathParser.fromSegments(group2.segments.map((it) => it.segment));
+    });
+  }
+  replaceSegment(index2, ...segments2) {
+    const newSegments = [...this.segments];
+    newSegments.splice(index2, 1, ...segments2);
+    this.resetSegments(newSegments);
+  }
+  splitSegmentByPoint(pos, dist2 = 0) {
+    const closedPointInfo = this.getClosedPointInfo(pos, dist2);
+    if (closedPointInfo && closedPointInfo.t > 0 && closedPointInfo.t < 1) {
+      switch (closedPointInfo.segment.command) {
+        case "C":
+          var list2 = getBezierPoints(closedPointInfo.points, closedPointInfo.t);
+          var first = list2.first;
+          var firstSegment = Segment.C(first[1].x, first[1].y, first[2].x, first[2].y, first[3].x, first[3].y);
+          var second2 = list2.second;
+          var secondSegment = Segment.C(second2[1].x, second2[1].y, second2[2].x, second2[2].y, second2[3].x, second2[3].y);
+          this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);
+          break;
+        case "Q":
+          var list2 = getBezierPointsQuard(closedPointInfo.points, closedPointInfo.t);
+          var first = list2.first;
+          var firstSegment = Segment.Q(first[1].x, first[1].y, first[2].x, first[2].y);
+          var second2 = list2.second;
+          var secondSegment = Segment.Q(second2[1].x, second2[1].y, second2[2].x, second2[2].y);
+          this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);
+          break;
+        case "L":
+          var list2 = getBezierPointsLine(closedPointInfo.points, closedPointInfo.t);
+          var first = list2.first;
+          var firstSegment = Segment.L(first[1].x, first[1].y);
+          var second2 = list2.second;
+          var secondSegment = Segment.L(second2[1].x, second2[1].y);
+          this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);
+          break;
+        default:
+          return;
+      }
+      return closedPointInfo;
+    }
+  }
+  toMultiSegmentPathList() {
+    const paths = [];
+    const group2 = this.getGroup();
+    group2.forEach((group3, index2) => {
+      group3.segments.forEach((s, index3) => {
+        var _a;
+        const prevSegment = group3.segments[index3 - 1];
+        const lastValues = ((_a = prevSegment == null ? void 0 : prevSegment.segment) == null ? void 0 : _a.values) || [];
+        const lastX = lastValues[lastValues.length - 2];
+        const lastY = lastValues[lastValues.length - 1];
+        const values = s.segment.values;
+        if (s.segment.command === "M")
+          ;
+        else if (s.segment.command === "L") {
+          paths.push(new PathParser(`M ${lastX} ${lastY}L ${values.join(" ")}`));
+        } else if (s.segment.command === "C") {
+          paths.push(new PathParser(`M ${lastX} ${lastY}C ${values.join(" ")}`));
+        } else if (s.segment.command === "Q") {
+          paths.push(new PathParser(`M ${lastX} ${lastY}Q ${values.join(" ")}`));
+        } else
+          ;
+      });
+    });
+    return paths;
+  }
+  simplify(tolerance = 0.1) {
+    const newGroupSegments = [];
+    const groupList = this.getGroup();
+    groupList.forEach((group2, groupIndex) => {
+      const points2 = [
+        ...group2.segments.filter((it) => it.segment.command.toLowerCase() !== "z").map((it) => {
+          return {
+            x: it.segment.values[0],
+            y: it.segment.values[1]
+          };
+        })
+      ];
+      const newPoints = Point.simply(points2, tolerance);
+      const newSegments = [];
+      newPoints.forEach((p, index2) => {
+        if (index2 === 0) {
+          newSegments.push(Segment.M(p.x, p.y));
+        } else {
+          newSegments.push(Segment.L(p.x, p.y));
+        }
+      });
+      newGroupSegments.push(...newSegments);
+    });
+    return PathParser.fromSegments(newGroupSegments);
+  }
+  smooth(error = 50) {
+    let newGroupSegments = [];
+    const groupList = this.getGroup();
+    groupList.forEach((group2, groupIndex) => {
+      const points2 = [
+        ...group2.segments.filter((it) => it.segment.command.toLowerCase() !== "z").map((it) => {
+          return [...it.segment.values, 0];
+        })
+      ];
+      const bezierCurve = fitCurve(points2, error);
+      const newSegments = [];
+      bezierCurve.forEach((curve, index2) => {
+        if (index2 === 0) {
+          newSegments.push(Segment.M(...curve[0]));
+        }
+        newSegments.push(Segment.C(curve[1][0], curve[1][1], curve[2][0], curve[2][1], curve[3][0], curve[3][1]));
+      });
+      if (group2.segments[group2.segments.length - 1].segment.command.toLowerCase() === "z") {
+        newSegments.push(Segment.Z());
+      }
+      newGroupSegments = newGroupSegments.concat(newSegments);
+    });
+    return PathParser.fromSegments(newGroupSegments);
+  }
+  cardinalSplines(tension = 0.5) {
+    const newGroupSegments = [];
+    const groupList = this.getGroup();
+    groupList.forEach((group2, groupIndex) => {
+      const points2 = [
+        ...group2.segments.filter((it) => it.segment.command.toLowerCase() !== "z").map((it) => {
+          return [...it.segment.values, 0];
+        })
+      ];
+      const newPoints = [];
+      points2.forEach((point2, index2) => {
+        const prevPoint = points2[index2 - 1];
+        const nextPoint = points2[index2 + 1];
+        if (index2 === 0) {
+          newPoints.push({ point: point2 });
+        } else if (index2 === points2.length - 1) {
+          const firstPoint = points2[0];
+          if (equals$1(firstPoint, point2)) {
+            const p0 = prevPoint;
+            const p1 = point2;
+            const p2 = points2[1];
+            const V1 = div$1([], subtract([], p2, p0), [2, 2, 1]);
+            const V3 = multiply([], V1, [1 - tension, 1 - tension, 1]);
+            const V2 = negate([], V3);
+            newPoints.push({ reversePoint: add$1([], p1, V2), point: p1, endPoint: add$1([], p1, V3) });
+          } else {
+            newPoints.push({ point: point2 });
+          }
+        } else {
+          const p0 = prevPoint;
+          const p1 = point2;
+          const p2 = nextPoint;
+          const V1 = div$1([], subtract([], p2, p0), [2, 2, 1]);
+          const V3 = multiply([], V1, [1 - tension, 1 - tension, 1]);
+          const V2 = negate([], V3);
+          newPoints.push({ reversePoint: add$1([], p1, V2), point: p1, endPoint: add$1([], p1, V3) });
+        }
+      });
+      const newSegments = [];
+      newPoints.forEach((p, index2) => {
+        if (index2 === 0) {
+          newSegments.push(Segment.M(p.point[0], p.point[1]));
+        } else {
+          const prevPoint = newPoints[index2 - 1] || newPoints[newPoints.length - 1];
+          if (!prevPoint.endPoint) {
+            if (index2 === 1) {
+              const lastPoint = newPoints[newPoints.length - 1];
+              if (lastPoint.endPoint) {
+                newSegments.push(Segment.C(lastPoint.endPoint[0], lastPoint.endPoint[1], p.reversePoint[0], p.reversePoint[1], p.point[0], p.point[1]));
+              } else {
+                newSegments.push(Segment.Q(p.reversePoint[0], p.reversePoint[1], p.point[0], p.point[1]));
+              }
+            } else {
+              newSegments.push(Segment.Q(p.reversePoint[0], p.reversePoint[1], p.point[0], p.point[1]));
+            }
+          } else if (!p.reversePoint) {
+            newSegments.push(Segment.Q(prevPoint.endPoint[0], prevPoint.endPoint[1], p.point[0], p.point[1]));
+          } else {
+            newSegments.push(Segment.C(prevPoint.endPoint[0], prevPoint.endPoint[1], p.reversePoint[0], p.reversePoint[1], p.point[0], p.point[1]));
+          }
+        }
+      });
+      newGroupSegments.push(...newSegments);
+    });
+    const newPath = new PathParser();
+    newPath.resetSegments(newGroupSegments);
+    return newPath;
+  }
+  Z() {
+    this.segments.push(Segment.Z());
+    return this;
+  }
+  M(x2, y2) {
+    this.segments.push(Segment.M(x2, y2));
+    return this;
+  }
+  L(x2, y2) {
+    this.segments.push(Segment.L(x2, y2));
+    return this;
+  }
+  C(x1, y1, x2, y2, x3, y3) {
+    this.segments.push(Segment.C(x1, y1, x2, y2, x3, y3));
+    return this;
+  }
+  Q(x1, y1, x2, y2) {
+    this.segments.push(Segment.Q(x1, y1, x2, y2));
+    return this;
+  }
+  drawRect(x2, y2, width2, height2) {
+    this.segments.push(Segment.M(x2, y2), Segment.L(x2 + width2, y2), Segment.L(x2 + width2, y2 + height2), Segment.L(x2, y2 + height2), Segment.L(x2, y2), Segment.Z());
+    return this;
+  }
+  drawLine(x1, y1, x2, y2) {
+    this.segments.push(Segment.M(x1, y1), Segment.L(x2, y2));
+    return this;
+  }
+  drawCircleWithRect(x2, y2, width2, height2 = width2) {
+    var segmentSize = 0.552284749831;
+    const path = new PathParser();
+    path.resetSegments([
+      Segment.M(0, -1),
+      Segment.C(segmentSize, -1, 1, -segmentSize, 1, 0),
+      Segment.C(1, segmentSize, segmentSize, 1, 0, 1),
+      Segment.C(-segmentSize, 1, -1, segmentSize, -1, 0),
+      Segment.C(-1, -segmentSize, -segmentSize, -1, 0, -1),
+      Segment.Z()
+    ]);
+    path.translate(1, 1).scale(width2 / 2, height2 / 2).translate(x2, y2);
+    this.addPath(path);
+    return this;
+  }
+  drawCircle(cx, cy, radius) {
+    return this.drawCircleWithRect(cx - radius, cy - radius, radius * 2, radius * 2);
+  }
+  drawArc(rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x2, y2) {
+    const [x1, y1] = this.lastPoint;
+    return this.addPath(PathParser.arcToCurve(x1, y1, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x2, y2));
+  }
+  get verties() {
+    let arr = [];
+    let lastValues = [];
+    this.each(function(segment) {
+      var v = segment.values;
+      var c2 = segment.command;
+      switch (c2) {
+        case "M":
+        case "L":
+          arr.push([...segment.values, 0]);
+          break;
+        case "V":
+          arr.push([v[0], lastValues.pop(), 0]);
+          break;
+        case "H":
+          lastValues.pop();
+          arr.push([lastValues.pop(), v[0], 0]);
+          break;
+        case "C":
+        case "S":
+        case "T":
+        case "Q":
+          for (var i = 0, len2 = v.length; i < len2; i += 2) {
+            arr.push([v[i], v[i + 1], 0]);
+          }
+          break;
+      }
+      lastValues = v;
+    });
+    return arr;
+  }
+  get pathVerties() {
+    const pathVerties = [];
+    this.segments.forEach((segment, segmentIndex) => {
+      if (segment.values.length > 0) {
+        const arr = segment.values;
+        for (var i = 0, len2 = arr.length; i < len2; i += 2) {
+          pathVerties.push({
+            segmentIndex,
+            valueIndex: i,
+            x: arr[i],
+            y: arr[i + 1]
+          });
+        }
+      }
+    });
+    return pathVerties;
+  }
+  get d() {
+    return this.toString().trim();
+  }
+  get closed() {
+    return this.segments.some((segment) => segment.command === "Z") && equals(this.lastPoint, this.firstPoint);
+  }
+  get opened() {
+    return !this.closed;
+  }
+  get length() {
+    let totalLength = 0;
+    const group2 = this.getGroup();
+    group2.forEach((group3, index2) => {
+      group3.segments.forEach((s, index3) => {
+        var _a;
+        const prevSegment = group3.segments[index3 - 1];
+        const lastValues = ((_a = prevSegment == null ? void 0 : prevSegment.segment) == null ? void 0 : _a.values) || [];
+        const lastX = lastValues[lastValues.length - 2];
+        const lastY = lastValues[lastValues.length - 1];
+        const values = s.segment.values;
+        if (s.segment.command === "M")
+          ;
+        else if (s.segment.command === "L") {
+          totalLength += getDist(lastX, lastY, values[0], values[1]);
+        } else if (s.segment.command === "C") {
+          totalLength += getCurveDist(lastX, lastY, values[0], values[1], values[2], values[3], values[4], values[5]);
+        } else if (s.segment.command === "Q") {
+          totalLength += getQuardDist(lastX, lastY, values[0], values[1], values[2], values[3]);
+        } else
+          ;
+      });
+    });
+    return totalLength;
+  }
+  get lengthList() {
+    let totalLengthList = [];
+    const group2 = this.getGroup();
+    group2.forEach((group3, groupIndex) => {
+      group3.segments.forEach((s, index2) => {
+        var _a;
+        const prevSegment = group3.segments[index2 - 1];
+        const lastValues = ((_a = prevSegment == null ? void 0 : prevSegment.segment) == null ? void 0 : _a.values) || [];
+        const lastX = lastValues[lastValues.length - 2];
+        const lastY = lastValues[lastValues.length - 1];
+        const values = s.segment.values;
+        if (s.segment.command === "M")
+          ;
+        else if (s.segment.command === "L") {
+          totalLengthList.push({
+            groupIndex,
+            segmentIndex: index2,
+            length: getDist(lastX, lastY, values[0], values[1])
+          });
+        } else if (s.segment.command === "C") {
+          totalLengthList.push({
+            groupIndex,
+            segmentIndex: index2,
+            length: getCurveDist(lastX, lastY, values[0], values[1], values[2], values[3], values[4], values[5])
+          });
+        } else if (s.segment.command === "Q") {
+          totalLengthList.push({
+            groupIndex,
+            segmentIndex: index2,
+            length: getQuardDist(lastX, lastY, values[0], values[1], values[2], values[3])
+          });
+        } else
+          ;
+      });
+    });
+    return totalLengthList;
+  }
+  get lastSegment() {
+    const segment = this.segments[this.segments.length - 1];
+    if (segment.command !== "Z") {
+      return segment;
+    }
+    return this.segments[this.segments.length - 2];
+  }
+  get lastPoint() {
+    const values = this.lastSegment.values;
+    return [
+      values[values.length - 2],
+      values[values.length - 1]
+    ];
+  }
+  get firstSegment() {
+    const segment = this.segments[0];
+    return segment;
+  }
+  get firstPoint() {
+    const values = this.firstSegment.values;
+    return [
+      values[0],
+      values[1]
+    ];
+  }
+  static joinPathList(pathList = []) {
+    const newPath = PathParser.fromSVGString();
+    pathList.forEach((path) => {
+      newPath.addPath(path);
+    });
+    return newPath;
+  }
+  static fromSegments(segments2) {
+    const path = new PathParser();
+    path.resetSegments(segments2);
+    return path;
+  }
+  static fromSVGString(d = "") {
+    return new PathParser(d);
+  }
+  static makeRect(x2, y2, width2, height2) {
+    return PathParser.fromSVGString().drawRect(x2, y2, width2, height2);
+  }
+  static makeLine(x2, y2, x22, y22) {
+    return PathParser.fromSVGString().drawLine(x2, y2, x22, y22);
+  }
+  static makeCircle(x2, y2, width2, height2) {
+    return PathParser.fromSVGString().drawCircleWithRect(x2, y2, width2, height2);
+  }
+  static makePathByPoints(points2 = []) {
+    const segments2 = points2.map((p, index2) => {
+      if (index2 === 0) {
+        return Segment.M(p.x, p.y);
+      } else {
+        return Segment.L(p.x, p.y);
+      }
+    });
+    segments2.push(Segment.Z());
+    return PathParser.fromSegments(segments2);
+  }
+  static makePathByVerties(verties = [], isClosed = true) {
+    const segments2 = verties.map((v, index2) => {
+      if (index2 === 0) {
+        return Segment.M(v[0], v[1]);
+      } else {
+        return Segment.L(v[0], v[1]);
+      }
+    });
+    if (isClosed) {
+      segments2.push(Segment.Z());
+    }
+    return PathParser.fromSegments(segments2);
+  }
+  static makePolygon(width2, height2, count = 3) {
+    const segments2 = [];
+    const centerX = 1 / 2;
+    const centerY = 1 / 2;
+    for (var i = 0; i < count; i++) {
+      var angle2 = i / count * Math.PI * 2 - Math.PI / 2;
+      var x2 = Math.cos(angle2) * centerX + centerX;
+      var y2 = Math.sin(angle2) * centerY + centerY;
+      if (i === 0) {
+        segments2.push(Segment.M(x2, y2));
+      } else {
+        segments2.push(Segment.L(x2, y2));
+      }
+    }
+    segments2.push(Segment.L(segments2[0].values[0], segments2[0].values[1]));
+    segments2.push(Segment.Z());
+    return PathParser.fromSegments(segments2).scale(width2, height2);
+  }
+  static makeStar(width2, height2, count = 5, radius = 0.5) {
+    const segments2 = [];
+    const centerX = 1 / 2;
+    const centerY = 1 / 2;
+    const outerRadius = Math.min(centerX, centerY);
+    const innerRadius = outerRadius * radius;
+    const npoints = count * 2;
+    let firstX, firstY = 0;
+    for (var i = 0; i < npoints; i++) {
+      var angle2 = i / npoints * Math.PI * 2 - Math.PI / 2;
+      var radius = i % 2 === 0 ? outerRadius : innerRadius;
+      var x2 = Math.cos(angle2) * radius + centerX;
+      var y2 = Math.sin(angle2) * radius + centerY;
+      if (i === 0) {
+        segments2.push(Segment.M(x2, y2));
+        firstX = x2;
+        firstY = y2;
+      } else {
+        segments2.push(Segment.L(x2, y2));
+      }
+    }
+    segments2.push(Segment.L(firstX, firstY));
+    segments2.push(Segment.Z());
+    return PathParser.fromSegments(segments2).scale(width2, height2);
+  }
+  static makeCurvedStar(width2, height2, count = 5, radius = 0.5, tension = 0.5) {
+    const starPath = PathParser.makeStar(width2, height2, count, radius);
+    return starPath.cardinalSplines(tension);
+  }
+  static arcToCurve(x1, y1, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x2, y2) {
+    const bezierCurveList = arcToBezier({
+      px: x1,
+      py: y1,
+      cx: x2,
+      cy: y2,
+      rx,
+      ry,
+      xAxisRotation,
+      largeArcFlag,
+      sweepFlag
+    });
+    const path = new PathParser();
+    path.M(x1, y1);
+    bezierCurveList.forEach((bezierCurve) => {
+      path.C(bezierCurve.x1, bezierCurve.y1, bezierCurve.x2, bezierCurve.y2, bezierCurve.x, bezierCurve.y);
+    });
+    return path;
+  }
+  toCurveList() {
+    const curveList = [];
+    this.segments.forEach((segment, index2) => {
+      if (index2 > 0) {
+        const prevSegment = this.segments[index2 - 1];
+        const lastPoint = [
+          prevSegment.values[prevSegment.values.length - 2],
+          prevSegment.values[prevSegment.values.length - 1]
+        ];
+        const points2 = [
+          xy$2(lastPoint),
+          xy$2([segment.values[0], segment.values[1]]),
+          xy$2([segment.values[2], segment.values[3]]),
+          xy$2([segment.values[4], segment.values[5]])
+        ];
+        curveList.push({
+          points: points2,
+          curveFunction: createBezier(...points2)
+        });
+      }
+    });
+    return curveList;
+  }
+  toInterpolateFunction() {
+    const curveList = this.normalize().toCurveList().map((curve) => {
+      return {
+        points: curve.points,
+        curveFunction: curve.curveFunction,
+        start: curve.points[0].x,
+        end: curve.points[curve.points.length - 1].x
+      };
+    });
+    return (t) => {
+      const currentCurve = curveList.find((it) => {
+        return it.start <= t && t <= it.end;
+      });
+      if (currentCurve) {
+        const point2 = currentCurve.curveFunction(t);
+        return point2.y;
+      }
+      if (t === 0) {
+        return curveList[0].points[0].y;
+      }
+      const points2 = curveList[curveList.length - 1].points;
+      return points2[points2.length - 1].y;
+    };
+  }
+}
 const DEFINED_ANGLES$2 = {
   "to top": 0,
   "to top right": 45,
@@ -7565,6 +9871,8 @@ class Gradient extends ImageResource {
           case TimingFunction.STEPS:
             var func2 = step(timing.count, timing.direction);
             break;
+          case TimingFunction.PATH:
+            var func2 = PathParser.fromSVGString(timing.d).toInterpolateFunction();
           default:
             var func2 = createTimingFunction(timing.matchedString);
             break;
@@ -7680,6 +9988,8 @@ class Gradient extends ImageResource {
         return `${timing.name} ${timingCount}`;
       case TimingFunction.STEPS:
         return `steps(${timing.count}, ${timing.direction})`;
+      case TimingFunction.PATH:
+        return `path(${timing.d}) ${timingCount}`;
       default:
         return `cubic-bezier(${timing.x1}, ${timing.y1}, ${timing.x2}, ${timing.y2}) ${timingCount}`;
     }
@@ -7719,10 +10029,20 @@ class Gradient extends ImageResource {
             }
           });
           break;
+        case TimingFunction.PATH:
+          var func2 = PathParser.fromSVGString(timing.d).toInterpolateFunction();
+          var localColorSteps = [];
+          for (var i = 0; i <= timingCount; i++) {
+            const stopPercent2 = prevColorStep.percent + (percent - prevColorStep.percent) * (i / timingCount);
+            const stopColor2 = Color.mix(prevColorStep.color, color2, func2(i / timingCount));
+            localColorSteps.push({ percent: stopPercent2, color: stopColor2 });
+          }
+          results.push(...localColorSteps);
+          break;
         default:
           var func2 = createTimingFunction(timing.matchedString);
           var localColorSteps = [];
-          for (var i = 1; i <= timingCount; i++) {
+          for (var i = 0; i <= timingCount; i++) {
             const stopPercent2 = prevColorStep.percent + (percent - prevColorStep.percent) * (i / timingCount);
             const stopColor2 = Color.mix(prevColorStep.color, color2, func2(i / timingCount));
             localColorSteps.push({ percent: stopPercent2, color: stopColor2 });
@@ -8143,7 +10463,7 @@ class RadialGradient extends Gradient {
             shapePoint = fromValues(startPoint[0], startPoint[1] + dist$1, startPoint[2]);
             break;
           default:
-            var dist$1 = radialSize[0].toPx(dist(result.backVerties[1], result.backVerties[0]));
+            var dist$1 = (radialSize[0] || radialSize).toPx(dist(result.backVerties[1], result.backVerties[0])).value;
             endPoint = fromValues(startPoint[0] + dist$1, startPoint[1], startPoint[2]);
             shapePoint = fromValues(startPoint[0], startPoint[1] + dist$1, startPoint[2]);
             break;
@@ -8174,8 +10494,8 @@ class RadialGradient extends Gradient {
             shapePoint = fromValues(startPoint[0], startPoint[1] + radius.height, startPoint[2]);
             break;
           default:
-            var raySize = radialSize[0].toPx(dist(result.backVerties[1], result.backVerties[0]));
-            var shapeSize = radialSize[1].toPx(dist(result.backVerties[3], result.backVerties[0]));
+            var raySize = radialSize[0].toPx(dist(result.backVerties[1], result.backVerties[0])).value;
+            var shapeSize = radialSize[1].toPx(dist(result.backVerties[3], result.backVerties[0])).value;
             endPoint = fromValues(startPoint[0] + raySize, startPoint[1], startPoint[2]);
             shapePoint = fromValues(startPoint[0], startPoint[1] + shapeSize, startPoint[2]);
             break;
@@ -8269,7 +10589,7 @@ class RadialGradient extends Gradient {
           return it.matchedString;
         return it.parsed;
       });
-      if (opt.radialSize.length) {
+      if (opt.radialSize.length === 1) {
         opt.radialSize = opt.radialSize[0];
       }
     } else {
@@ -10247,2223 +12567,6 @@ function makeInterpolateStrokeDashArrray(layer2, property, startValue, endValue)
     var results = list2.map((it) => it(rate, t)).join(" ");
     return results;
   };
-}
-class Point {
-  static isEqual(a, b, c2) {
-    if (arguments.length === 2) {
-      return a.x === b.x && a.y === b.y;
-    } else if (arguments.length === 3) {
-      return Point.isEqual(a, b) && Point.isEqual(b, c2);
-    }
-  }
-  static isFirst(point2) {
-    return point2 && point2.command == "M";
-  }
-  static DouglasPeuker(tolerance, points2, start2, last2) {
-    if (last2 <= start2 + 1)
-      return;
-    let maxdist2 = 0;
-    let breakIndex = start2;
-    const tol2 = tolerance * tolerance;
-    const startPoint = points2[start2];
-    const lastPoint = points2[last2];
-    for (var i = start2 + 1; i < last2; i++) {
-      const dist2 = Point.segmentDistance2(points2[i].x, points2[i].y, startPoint, lastPoint);
-      if (dist2 <= maxdist2)
-        continue;
-      breakIndex = i;
-      maxdist2 = dist2;
-    }
-    if (maxdist2 > tol2) {
-      points2[breakIndex].mark = true;
-      Point.DouglasPeuker(tolerance, points2, start2, breakIndex);
-      Point.DouglasPeuker(tolerance, points2, breakIndex, last2);
-    }
-  }
-  static simply(points2, tolerance = 10) {
-    if (points2.length <= 2) {
-      return points2;
-    }
-    points2 = clone$1(points2);
-    points2[0].mark = true;
-    points2[points2.length - 1].mark = true;
-    Point.DouglasPeuker(tolerance, points2, 0, points2.length - 1);
-    return points2.filter((it) => Boolean(it.mark));
-  }
-  static segmentDistance2(x2, y2, A, B) {
-    let dx = B.x - A.x;
-    let dy = B.y - A.y;
-    let lenAB = dx * dx + dy * dy;
-    let du = x2 - A.x;
-    let dv = y2 - A.y;
-    let dot2 = dx * du + dy * dv;
-    if (lenAB === 0)
-      return du * du + dv * dv;
-    if (dot2 <= 0)
-      return du * du + dv * dv;
-    else if (dot2 >= lenAB) {
-      du = x2 - B.x;
-      dv = y2 - B.y;
-      return du * du + dv * dv;
-    } else {
-      const slash = du * dy - dv * dx;
-      return slash * slash / lenAB;
-    }
-  }
-  static isInLine(A, B, C) {
-    if (A.x === C.x)
-      return B.x === C.x;
-    if (A.y === C.y)
-      return B.y === C.y;
-    return (A.x - C.x) * (A.y - C.y) === (C.x - B.x) * (C.y - B.y);
-  }
-  static isLine(point2) {
-    return Point.isInLine(point2.endPoint, point2.startPoint, point2, reversePoint);
-  }
-  static getReversePoint(start2, end2) {
-    const [x2, y2, z] = lerp([], [end2.x, end2.y, 0], [start2.x, start2.y, 0], 2);
-    return { x: x2, y: y2 };
-  }
-  static getIndexPoint(points2, index2) {
-    return points2[index2];
-  }
-  static getPoint(points2, p0) {
-    return points2.filter((p) => {
-      return Point.isEqual(p.startPoint, p0);
-    })[0];
-  }
-  static getIndex(points2, p0) {
-    var firstIndex = -1;
-    for (var i = 0, len2 = points2.length; i < len2; i++) {
-      var p = points2[i];
-      if (Point.isEqual(p.startPoint, p0)) {
-        firstIndex = i;
-        break;
-      }
-    }
-    return firstIndex;
-  }
-  static getGroupList(points2) {
-    const groupList = [];
-    let groupIndex = 0;
-    points2.forEach((point2, index2) => {
-      if (point2.command === "M") {
-        groupList.push({ point: point2, index: index2, groupIndex: groupIndex++ });
-      }
-    });
-    return groupList;
-  }
-  static getSplitedGroupList(points2) {
-    const localPoints = clone$1(points2);
-    const splitedGroupList = [];
-    for (var i = 0, groupIndex = -1, len2 = localPoints.length; i < len2; i++) {
-      const point2 = localPoints[i];
-      if (point2.command === "M") {
-        groupIndex++;
-        splitedGroupList[groupIndex] = {
-          startPointIndex: i,
-          point: point2,
-          points: []
-        };
-      }
-      splitedGroupList[groupIndex].points.push(point2);
-    }
-    return splitedGroupList;
-  }
-  static getGroup(groupList, pointIndex) {
-    const list2 = groupList.filter((group2) => group2.point.index <= pointIndex);
-    return list2.pop();
-  }
-  static getGroupIndex(points2, index2) {
-    var groupIndex = -1;
-    for (var i = 0, len2 = points2.length; i < len2; i++) {
-      if (points2[i].command === "M") {
-        groupIndex++;
-      }
-      if (points2[i].index === index2) {
-        return groupIndex;
-      }
-    }
-  }
-  static getLastPoint(points2, index2) {
-    if (!points2.length)
-      return null;
-    var lastIndex = -1;
-    for (var i = index2 + 1, len2 = points2.length; i < len2; i++) {
-      if (points2[i].command === "M") {
-        lastIndex = i - 1;
-        break;
-      }
-    }
-    if (lastIndex == -1) {
-      lastIndex = points2.length - 1;
-    }
-    if (points2[lastIndex] && points2[lastIndex].command === "Z") {
-      lastIndex -= 1;
-    }
-    var point2 = points2[lastIndex];
-    if (point2) {
-      point2.index = lastIndex;
-    }
-    return point2;
-  }
-  static getFirstPoint(points2, index2) {
-    var firstIndex = -1;
-    for (var i = index2 - 1; i > 0; i--) {
-      if (points2[i].command === "M") {
-        firstIndex = i;
-        break;
-      }
-    }
-    if (firstIndex === -1) {
-      firstIndex = 0;
-    }
-    var point2 = points2[firstIndex];
-    if (point2) {
-      point2.index = firstIndex;
-    }
-    return point2;
-  }
-  static getConnectedPointList(points2, index2) {
-    const current = points2[index2];
-    return points2.filter((p, i) => i !== index2 && Point.isEqual(p.startPoint, current.startPoint));
-  }
-  static getPrevPoint(points2, index2) {
-    var prevIndex = index2 - 1;
-    if (prevIndex < 0) {
-      return Point.getLastPoint(points2, index2);
-    }
-    var point2 = points2[prevIndex];
-    if (point2) {
-      point2.index = prevIndex;
-    }
-    return point2;
-  }
-  static getNextPoint(points2, index2) {
-    var currentPoint = points2[index2];
-    var nextPoint = points2[index2 + 1];
-    if (nextPoint) {
-      nextPoint.index = index2 + 1;
-    }
-    if (currentPoint.connected || currentPoint.close) {
-      nextPoint = Point.getFirstPoint(points2, index2);
-    }
-    return nextPoint;
-  }
-  static removePoint(points2, pIndex, segment) {
-    if (segment === "startPoint") {
-      return points2.filter((_, index2) => index2 !== pIndex);
-    }
-  }
-  static splitPoints(points2) {
-    let splitedPointGroup = [];
-    let lastPoints = [];
-    points2.forEach((p) => {
-      if (Point.isFirst(p)) {
-        lastPoints = [p];
-        splitedPointGroup.push(lastPoints);
-      } else {
-        lastPoints.push(p);
-      }
-    });
-    return splitedPointGroup;
-  }
-  static recoverPoints(pointGroup) {
-    const newPoints = [];
-    pointGroup.forEach((points2) => {
-      points2.forEach((p, index2) => {
-        if (index2 === 0) {
-          p.command = "M";
-          p.originalCommand = "M";
-        }
-      });
-      newPoints.push.apply(newPoints, points2);
-    });
-    newPoints.forEach((p, index2) => {
-      p.index = index2;
-    });
-    return newPoints;
-  }
-}
-class Segment {
-  static M(x2, y2) {
-    return {
-      command: "M",
-      values: [x2, y2]
-    };
-  }
-  static L(x2, y2) {
-    return {
-      command: "L",
-      values: [x2, y2]
-    };
-  }
-  static Q(x1, y1, x2, y2) {
-    return {
-      command: "Q",
-      values: [x1, y1, x2, y2]
-    };
-  }
-  static C(x1, y1, x2, y2, x3, y3) {
-    return {
-      command: "C",
-      values: [x1, y1, x2, y2, x3, y3]
-    };
-  }
-  static A(rx, ry, xrot, laf, sf, x2, y2) {
-    return {
-      command: "A",
-      values: [rx, ry, xrot, laf, sf, x2, y2]
-    };
-  }
-  static Z() {
-    return {
-      command: "Z",
-      values: []
-    };
-  }
-}
-var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
-function getAugmentedNamespace(n) {
-  if (n.__esModule)
-    return n;
-  var a = Object.defineProperty({}, "__esModule", { value: true });
-  Object.keys(n).forEach(function(k) {
-    var d = Object.getOwnPropertyDescriptor(n, k);
-    Object.defineProperty(a, k, d.get ? d : {
-      enumerable: true,
-      get: function() {
-        return n[k];
-      }
-    });
-  });
-  return a;
-}
-var fitCurve$1 = { exports: {} };
-(function(module, exports) {
-  (function(global2, factory) {
-    {
-      factory(module);
-    }
-  })(commonjsGlobal, function(module2) {
-    function _classCallCheck(instance, Constructor) {
-      if (!(instance instanceof Constructor)) {
-        throw new TypeError("Cannot call a class as a function");
-      }
-    }
-    /**
-     *  @preserve  JavaScript implementation of
-     *  Algorithm for Automatically Fitting Digitized Curves
-     *  by Philip J. Schneider
-     *  "Graphics Gems", Academic Press, 1990
-     *
-     *  The MIT License (MIT)
-     *
-     *  https://github.com/soswow/fit-curves
-     */
-    function fitCurve2(points2, maxError, progressCallback) {
-      if (!Array.isArray(points2)) {
-        throw new TypeError("First argument should be an array");
-      }
-      points2.forEach(function(point2) {
-        if (!Array.isArray(point2) || point2.some(function(item2) {
-          return typeof item2 !== "number";
-        }) || point2.length !== points2[0].length) {
-          throw Error("Each point should be an array of numbers. Each point should have the same amount of numbers.");
-        }
-      });
-      points2 = points2.filter(function(point2, i) {
-        return i === 0 || !point2.every(function(val, j) {
-          return val === points2[i - 1][j];
-        });
-      });
-      if (points2.length < 2) {
-        return [];
-      }
-      var len2 = points2.length;
-      var leftTangent = createTangent(points2[1], points2[0]);
-      var rightTangent = createTangent(points2[len2 - 2], points2[len2 - 1]);
-      return fitCubic(points2, leftTangent, rightTangent, maxError, progressCallback);
-    }
-    function fitCubic(points2, leftTangent, rightTangent, error, progressCallback) {
-      var MaxIterations = 20;
-      var bezCurve, u, uPrime, maxError, prevErr, splitPoint, prevSplit, centerVector, toCenterTangent, fromCenterTangent, beziers, dist2, i;
-      if (points2.length === 2) {
-        dist2 = maths.vectorLen(maths.subtract(points2[0], points2[1])) / 3;
-        bezCurve = [points2[0], maths.addArrays(points2[0], maths.mulItems(leftTangent, dist2)), maths.addArrays(points2[1], maths.mulItems(rightTangent, dist2)), points2[1]];
-        return [bezCurve];
-      }
-      u = chordLengthParameterize(points2);
-      var _generateAndReport = generateAndReport(points2, u, u, leftTangent, rightTangent, progressCallback);
-      bezCurve = _generateAndReport[0];
-      maxError = _generateAndReport[1];
-      splitPoint = _generateAndReport[2];
-      if (maxError === 0 || maxError < error) {
-        return [bezCurve];
-      }
-      if (maxError < error * error) {
-        uPrime = u;
-        prevErr = maxError;
-        prevSplit = splitPoint;
-        for (i = 0; i < MaxIterations; i++) {
-          uPrime = reparameterize(bezCurve, points2, uPrime);
-          var _generateAndReport2 = generateAndReport(points2, u, uPrime, leftTangent, rightTangent, progressCallback);
-          bezCurve = _generateAndReport2[0];
-          maxError = _generateAndReport2[1];
-          splitPoint = _generateAndReport2[2];
-          if (maxError < error) {
-            return [bezCurve];
-          } else if (splitPoint === prevSplit) {
-            var errChange = maxError / prevErr;
-            if (errChange > 0.9999 && errChange < 1.0001) {
-              break;
-            }
-          }
-          prevErr = maxError;
-          prevSplit = splitPoint;
-        }
-      }
-      beziers = [];
-      centerVector = maths.subtract(points2[splitPoint - 1], points2[splitPoint + 1]);
-      if (centerVector.every(function(val) {
-        return val === 0;
-      })) {
-        centerVector = maths.subtract(points2[splitPoint - 1], points2[splitPoint]);
-        var _ref = [-centerVector[1], centerVector[0]];
-        centerVector[0] = _ref[0];
-        centerVector[1] = _ref[1];
-      }
-      toCenterTangent = maths.normalize(centerVector);
-      fromCenterTangent = maths.mulItems(toCenterTangent, -1);
-      beziers = beziers.concat(fitCubic(points2.slice(0, splitPoint + 1), leftTangent, toCenterTangent, error, progressCallback));
-      beziers = beziers.concat(fitCubic(points2.slice(splitPoint), fromCenterTangent, rightTangent, error, progressCallback));
-      return beziers;
-    }
-    function generateAndReport(points2, paramsOrig, paramsPrime, leftTangent, rightTangent, progressCallback) {
-      var bezCurve, maxError, splitPoint;
-      bezCurve = generateBezier(points2, paramsPrime, leftTangent, rightTangent);
-      var _computeMaxError = computeMaxError(points2, bezCurve, paramsOrig);
-      maxError = _computeMaxError[0];
-      splitPoint = _computeMaxError[1];
-      if (progressCallback) {
-        progressCallback({
-          bez: bezCurve,
-          points: points2,
-          params: paramsOrig,
-          maxErr: maxError,
-          maxPoint: splitPoint
-        });
-      }
-      return [bezCurve, maxError, splitPoint];
-    }
-    function generateBezier(points2, parameters, leftTangent, rightTangent) {
-      var bezCurve, A, a, C, X, det_C0_C1, det_C0_X, det_X_C1, alpha_l, alpha_r, epsilon, segLength, i, len2, tmp2, u, ux, firstPoint = points2[0], lastPoint = points2[points2.length - 1];
-      bezCurve = [firstPoint, null, null, lastPoint];
-      A = maths.zeros_Xx2x2(parameters.length);
-      for (i = 0, len2 = parameters.length; i < len2; i++) {
-        u = parameters[i];
-        ux = 1 - u;
-        a = A[i];
-        a[0] = maths.mulItems(leftTangent, 3 * u * (ux * ux));
-        a[1] = maths.mulItems(rightTangent, 3 * ux * (u * u));
-      }
-      C = [[0, 0], [0, 0]];
-      X = [0, 0];
-      for (i = 0, len2 = points2.length; i < len2; i++) {
-        u = parameters[i];
-        a = A[i];
-        C[0][0] += maths.dot(a[0], a[0]);
-        C[0][1] += maths.dot(a[0], a[1]);
-        C[1][0] += maths.dot(a[0], a[1]);
-        C[1][1] += maths.dot(a[1], a[1]);
-        tmp2 = maths.subtract(points2[i], bezier.q([firstPoint, firstPoint, lastPoint, lastPoint], u));
-        X[0] += maths.dot(a[0], tmp2);
-        X[1] += maths.dot(a[1], tmp2);
-      }
-      det_C0_C1 = C[0][0] * C[1][1] - C[1][0] * C[0][1];
-      det_C0_X = C[0][0] * X[1] - C[1][0] * X[0];
-      det_X_C1 = X[0] * C[1][1] - X[1] * C[0][1];
-      alpha_l = det_C0_C1 === 0 ? 0 : det_X_C1 / det_C0_C1;
-      alpha_r = det_C0_C1 === 0 ? 0 : det_C0_X / det_C0_C1;
-      segLength = maths.vectorLen(maths.subtract(firstPoint, lastPoint));
-      epsilon = 1e-6 * segLength;
-      if (alpha_l < epsilon || alpha_r < epsilon) {
-        bezCurve[1] = maths.addArrays(firstPoint, maths.mulItems(leftTangent, segLength / 3));
-        bezCurve[2] = maths.addArrays(lastPoint, maths.mulItems(rightTangent, segLength / 3));
-      } else {
-        bezCurve[1] = maths.addArrays(firstPoint, maths.mulItems(leftTangent, alpha_l));
-        bezCurve[2] = maths.addArrays(lastPoint, maths.mulItems(rightTangent, alpha_r));
-      }
-      return bezCurve;
-    }
-    function reparameterize(bezier2, points2, parameters) {
-      return parameters.map(function(p, i) {
-        return newtonRaphsonRootFind(bezier2, points2[i], p);
-      });
-    }
-    function newtonRaphsonRootFind(bez, point2, u) {
-      var d = maths.subtract(bezier.q(bez, u), point2), qprime = bezier.qprime(bez, u), numerator = maths.mulMatrix(d, qprime), denominator = maths.sum(maths.squareItems(qprime)) + 2 * maths.mulMatrix(d, bezier.qprimeprime(bez, u));
-      if (denominator === 0) {
-        return u;
-      } else {
-        return u - numerator / denominator;
-      }
-    }
-    function chordLengthParameterize(points2) {
-      var u = [], currU, prevU, prevP;
-      points2.forEach(function(p, i) {
-        currU = i ? prevU + maths.vectorLen(maths.subtract(p, prevP)) : 0;
-        u.push(currU);
-        prevU = currU;
-        prevP = p;
-      });
-      u = u.map(function(x2) {
-        return x2 / prevU;
-      });
-      return u;
-    }
-    function computeMaxError(points2, bez, parameters) {
-      var dist2, maxDist, splitPoint, v, i, count, point2, t;
-      maxDist = 0;
-      splitPoint = Math.floor(points2.length / 2);
-      var t_distMap = mapTtoRelativeDistances(bez, 10);
-      for (i = 0, count = points2.length; i < count; i++) {
-        point2 = points2[i];
-        t = find_t(bez, parameters[i], t_distMap, 10);
-        v = maths.subtract(bezier.q(bez, t), point2);
-        dist2 = v[0] * v[0] + v[1] * v[1];
-        if (dist2 > maxDist) {
-          maxDist = dist2;
-          splitPoint = i;
-        }
-      }
-      return [maxDist, splitPoint];
-    }
-    var mapTtoRelativeDistances = function mapTtoRelativeDistances2(bez, B_parts) {
-      var B_t_curr;
-      var B_t_dist = [0];
-      var B_t_prev = bez[0];
-      var sumLen = 0;
-      for (var i = 1; i <= B_parts; i++) {
-        B_t_curr = bezier.q(bez, i / B_parts);
-        sumLen += maths.vectorLen(maths.subtract(B_t_curr, B_t_prev));
-        B_t_dist.push(sumLen);
-        B_t_prev = B_t_curr;
-      }
-      B_t_dist = B_t_dist.map(function(x2) {
-        return x2 / sumLen;
-      });
-      return B_t_dist;
-    };
-    function find_t(bez, param, t_distMap, B_parts) {
-      if (param < 0) {
-        return 0;
-      }
-      if (param > 1) {
-        return 1;
-      }
-      var lenMax, lenMin, tMax, tMin, t;
-      for (var i = 1; i <= B_parts; i++) {
-        if (param <= t_distMap[i]) {
-          tMin = (i - 1) / B_parts;
-          tMax = i / B_parts;
-          lenMin = t_distMap[i - 1];
-          lenMax = t_distMap[i];
-          t = (param - lenMin) / (lenMax - lenMin) * (tMax - tMin) + tMin;
-          break;
-        }
-      }
-      return t;
-    }
-    function createTangent(pointA, pointB) {
-      return maths.normalize(maths.subtract(pointA, pointB));
-    }
-    var maths = function() {
-      function maths2() {
-        _classCallCheck(this, maths2);
-      }
-      maths2.zeros_Xx2x2 = function zeros_Xx2x2(x2) {
-        var zs = [];
-        while (x2--) {
-          zs.push([0, 0]);
-        }
-        return zs;
-      };
-      maths2.mulItems = function mulItems(items, multiplier) {
-        return items.map(function(x2) {
-          return x2 * multiplier;
-        });
-      };
-      maths2.mulMatrix = function mulMatrix(m1, m2) {
-        return m1.reduce(function(sum, x1, i) {
-          return sum + x1 * m2[i];
-        }, 0);
-      };
-      maths2.subtract = function subtract2(arr1, arr2) {
-        return arr1.map(function(x1, i) {
-          return x1 - arr2[i];
-        });
-      };
-      maths2.addArrays = function addArrays(arr1, arr2) {
-        return arr1.map(function(x1, i) {
-          return x1 + arr2[i];
-        });
-      };
-      maths2.addItems = function addItems(items, addition) {
-        return items.map(function(x2) {
-          return x2 + addition;
-        });
-      };
-      maths2.sum = function sum(items) {
-        return items.reduce(function(sum2, x2) {
-          return sum2 + x2;
-        });
-      };
-      maths2.dot = function dot2(m1, m2) {
-        return maths2.mulMatrix(m1, m2);
-      };
-      maths2.vectorLen = function vectorLen(v) {
-        return Math.hypot.apply(Math, v);
-      };
-      maths2.divItems = function divItems(items, divisor) {
-        return items.map(function(x2) {
-          return x2 / divisor;
-        });
-      };
-      maths2.squareItems = function squareItems(items) {
-        return items.map(function(x2) {
-          return x2 * x2;
-        });
-      };
-      maths2.normalize = function normalize2(v) {
-        return this.divItems(v, this.vectorLen(v));
-      };
-      return maths2;
-    }();
-    var bezier = function() {
-      function bezier2() {
-        _classCallCheck(this, bezier2);
-      }
-      bezier2.q = function q(ctrlPoly, t) {
-        var tx = 1 - t;
-        var pA = maths.mulItems(ctrlPoly[0], tx * tx * tx), pB = maths.mulItems(ctrlPoly[1], 3 * tx * tx * t), pC = maths.mulItems(ctrlPoly[2], 3 * tx * t * t), pD = maths.mulItems(ctrlPoly[3], t * t * t);
-        return maths.addArrays(maths.addArrays(pA, pB), maths.addArrays(pC, pD));
-      };
-      bezier2.qprime = function qprime(ctrlPoly, t) {
-        var tx = 1 - t;
-        var pA = maths.mulItems(maths.subtract(ctrlPoly[1], ctrlPoly[0]), 3 * tx * tx), pB = maths.mulItems(maths.subtract(ctrlPoly[2], ctrlPoly[1]), 6 * tx * t), pC = maths.mulItems(maths.subtract(ctrlPoly[3], ctrlPoly[2]), 3 * t * t);
-        return maths.addArrays(maths.addArrays(pA, pB), pC);
-      };
-      bezier2.qprimeprime = function qprimeprime(ctrlPoly, t) {
-        return maths.addArrays(maths.mulItems(maths.addArrays(maths.subtract(ctrlPoly[2], maths.mulItems(ctrlPoly[1], 2)), ctrlPoly[0]), 6 * (1 - t)), maths.mulItems(maths.addArrays(maths.subtract(ctrlPoly[3], maths.mulItems(ctrlPoly[2], 2)), ctrlPoly[1]), 6 * t));
-      };
-      return bezier2;
-    }();
-    module2.exports = fitCurve2;
-    module2.exports.fitCubic = fitCubic;
-    module2.exports.createTangent = createTangent;
-  });
-})(fitCurve$1);
-var fitCurve = fitCurve$1.exports;
-var _slicedToArray = function() {
-  function sliceIterator(arr, i) {
-    var _arr = [];
-    var _n = true;
-    var _d = false;
-    var _e = void 0;
-    try {
-      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-        _arr.push(_s.value);
-        if (i && _arr.length === i)
-          break;
-      }
-    } catch (err) {
-      _d = true;
-      _e = err;
-    } finally {
-      try {
-        if (!_n && _i["return"])
-          _i["return"]();
-      } finally {
-        if (_d)
-          throw _e;
-      }
-    }
-    return _arr;
-  }
-  return function(arr, i) {
-    if (Array.isArray(arr)) {
-      return arr;
-    } else if (Symbol.iterator in Object(arr)) {
-      return sliceIterator(arr, i);
-    } else {
-      throw new TypeError("Invalid attempt to destructure non-iterable instance");
-    }
-  };
-}();
-var TAU = Math.PI * 2;
-var mapToEllipse = function mapToEllipse2(_ref, rx, ry, cosphi, sinphi, centerx, centery) {
-  var x2 = _ref.x, y2 = _ref.y;
-  x2 *= rx;
-  y2 *= ry;
-  var xp = cosphi * x2 - sinphi * y2;
-  var yp = sinphi * x2 + cosphi * y2;
-  return {
-    x: xp + centerx,
-    y: yp + centery
-  };
-};
-var approxUnitArc = function approxUnitArc2(ang1, ang2) {
-  var a = ang2 === 1.5707963267948966 ? 0.551915024494 : ang2 === -1.5707963267948966 ? -0.551915024494 : 4 / 3 * Math.tan(ang2 / 4);
-  var x1 = Math.cos(ang1);
-  var y1 = Math.sin(ang1);
-  var x2 = Math.cos(ang1 + ang2);
-  var y2 = Math.sin(ang1 + ang2);
-  return [{
-    x: x1 - y1 * a,
-    y: y1 + x1 * a
-  }, {
-    x: x2 + y2 * a,
-    y: y2 - x2 * a
-  }, {
-    x: x2,
-    y: y2
-  }];
-};
-var vectorAngle = function vectorAngle2(ux, uy, vx, vy) {
-  var sign = ux * vy - uy * vx < 0 ? -1 : 1;
-  var dot2 = ux * vx + uy * vy;
-  if (dot2 > 1) {
-    dot2 = 1;
-  }
-  if (dot2 < -1) {
-    dot2 = -1;
-  }
-  return sign * Math.acos(dot2);
-};
-var getArcCenter = function getArcCenter2(px, py, cx, cy, rx, ry, largeArcFlag, sweepFlag, sinphi, cosphi, pxp, pyp) {
-  var rxsq = Math.pow(rx, 2);
-  var rysq = Math.pow(ry, 2);
-  var pxpsq = Math.pow(pxp, 2);
-  var pypsq = Math.pow(pyp, 2);
-  var radicant = rxsq * rysq - rxsq * pypsq - rysq * pxpsq;
-  if (radicant < 0) {
-    radicant = 0;
-  }
-  radicant /= rxsq * pypsq + rysq * pxpsq;
-  radicant = Math.sqrt(radicant) * (largeArcFlag === sweepFlag ? -1 : 1);
-  var centerxp = radicant * rx / ry * pyp;
-  var centeryp = radicant * -ry / rx * pxp;
-  var centerx = cosphi * centerxp - sinphi * centeryp + (px + cx) / 2;
-  var centery = sinphi * centerxp + cosphi * centeryp + (py + cy) / 2;
-  var vx1 = (pxp - centerxp) / rx;
-  var vy1 = (pyp - centeryp) / ry;
-  var vx2 = (-pxp - centerxp) / rx;
-  var vy2 = (-pyp - centeryp) / ry;
-  var ang1 = vectorAngle(1, 0, vx1, vy1);
-  var ang2 = vectorAngle(vx1, vy1, vx2, vy2);
-  if (sweepFlag === 0 && ang2 > 0) {
-    ang2 -= TAU;
-  }
-  if (sweepFlag === 1 && ang2 < 0) {
-    ang2 += TAU;
-  }
-  return [centerx, centery, ang1, ang2];
-};
-var arcToBezier = function arcToBezier2(_ref2) {
-  var px = _ref2.px, py = _ref2.py, cx = _ref2.cx, cy = _ref2.cy, rx = _ref2.rx, ry = _ref2.ry, _ref2$xAxisRotation = _ref2.xAxisRotation, xAxisRotation = _ref2$xAxisRotation === void 0 ? 0 : _ref2$xAxisRotation, _ref2$largeArcFlag = _ref2.largeArcFlag, largeArcFlag = _ref2$largeArcFlag === void 0 ? 0 : _ref2$largeArcFlag, _ref2$sweepFlag = _ref2.sweepFlag, sweepFlag = _ref2$sweepFlag === void 0 ? 0 : _ref2$sweepFlag;
-  var curves = [];
-  if (rx === 0 || ry === 0) {
-    return [];
-  }
-  var sinphi = Math.sin(xAxisRotation * TAU / 360);
-  var cosphi = Math.cos(xAxisRotation * TAU / 360);
-  var pxp = cosphi * (px - cx) / 2 + sinphi * (py - cy) / 2;
-  var pyp = -sinphi * (px - cx) / 2 + cosphi * (py - cy) / 2;
-  if (pxp === 0 && pyp === 0) {
-    return [];
-  }
-  rx = Math.abs(rx);
-  ry = Math.abs(ry);
-  var lambda = Math.pow(pxp, 2) / Math.pow(rx, 2) + Math.pow(pyp, 2) / Math.pow(ry, 2);
-  if (lambda > 1) {
-    rx *= Math.sqrt(lambda);
-    ry *= Math.sqrt(lambda);
-  }
-  var _getArcCenter = getArcCenter(px, py, cx, cy, rx, ry, largeArcFlag, sweepFlag, sinphi, cosphi, pxp, pyp), _getArcCenter2 = _slicedToArray(_getArcCenter, 4), centerx = _getArcCenter2[0], centery = _getArcCenter2[1], ang1 = _getArcCenter2[2], ang2 = _getArcCenter2[3];
-  var ratio = Math.abs(ang2) / (TAU / 4);
-  if (Math.abs(1 - ratio) < 1e-7) {
-    ratio = 1;
-  }
-  var segments2 = Math.max(Math.ceil(ratio), 1);
-  ang2 /= segments2;
-  for (var i = 0; i < segments2; i++) {
-    curves.push(approxUnitArc(ang1, ang2));
-    ang1 += ang2;
-  }
-  return curves.map(function(curve) {
-    var _mapToEllipse = mapToEllipse(curve[0], rx, ry, cosphi, sinphi, centerx, centery), x1 = _mapToEllipse.x, y1 = _mapToEllipse.y;
-    var _mapToEllipse2 = mapToEllipse(curve[1], rx, ry, cosphi, sinphi, centerx, centery), x2 = _mapToEllipse2.x, y2 = _mapToEllipse2.y;
-    var _mapToEllipse3 = mapToEllipse(curve[2], rx, ry, cosphi, sinphi, centerx, centery), x3 = _mapToEllipse3.x, y3 = _mapToEllipse3.y;
-    return { x1, y1, x2, y2, x: x3, y: y3 };
-  });
-};
-const REG_PARSE_NUMBER_FOR_PATH = /([mMlLvVhHcCsSqQtTaAzZ]([^mMlLvVhHcCsSqQtTaAzZ]*))/g;
-var numberReg = /-?[0-9]*\.?[0-9]+(?:e[-+]?\d+)?/ig;
-class PathParser {
-  constructor(pathString2 = "") {
-    this.reset(pathString2);
-  }
-  reset(pathString2 = "") {
-    this.segments = [];
-    this.pathString = pathString2.trim();
-    this.parse();
-  }
-  resetSegments(segments2) {
-    this.segments = segments2 || [];
-    this.pathString = this.joinPath();
-    return this;
-  }
-  addSegments(segments2, transform2) {
-    return this.resetSegments([...this.segments, ...segments2]);
-  }
-  addPath(otherPath, transform2 = create$5()) {
-    const newPath = otherPath.clone();
-    newPath.transformMat4(transform2);
-    return this.addSegments(newPath.segments);
-  }
-  trim(str = "") {
-    var arr = str.match(numberReg) || [];
-    return arr.filter((it) => it != "");
-  }
-  parse() {
-    var arr = this.pathString.match(REG_PARSE_NUMBER_FOR_PATH) || [];
-    this.segments = arr.map((s) => {
-      var command = s[0];
-      var values = this.trim(s.replace(command, "")).map((it) => +it);
-      return { command, values };
-    });
-    this.segments = this.segments.map((s, index2) => {
-      switch (s.command) {
-        case "m":
-          var prev = this.segments[index2 - 1];
-          if (prev && (prev.command == "z" || prev.command == "Z")) {
-            prev = this.segments[index2 - 2];
-          }
-          var x2 = (prev == null ? void 0 : prev.values[prev.values.length - 2]) || 0;
-          var y2 = (prev == null ? void 0 : prev.values[prev.values.length - 1]) || 0;
-          for (var i = 0, len2 = s.values.length; i < len2; i += 2) {
-            s.values[i] += x2;
-            s.values[i + 1] += y2;
-          }
-          return {
-            command: s.command.toUpperCase(),
-            values: [...s.values]
-          };
-        case "c":
-        case "l":
-        case "q":
-        case "s":
-        case "t":
-        case "v":
-        case "h":
-          var prev = this.segments[index2 - 1];
-          var x2 = (prev == null ? void 0 : prev.values[prev.values.length - 2]) || 0;
-          var y2 = (prev == null ? void 0 : prev.values[prev.values.length - 1]) || 0;
-          for (var i = 0, len2 = s.values.length; i < len2; i += 2) {
-            s.values[i] += x2;
-            s.values[i + 1] += y2;
-          }
-          return {
-            command: s.command.toUpperCase(),
-            values: [...s.values]
-          };
-        case "a":
-          var prev = this.segments[index2 - 1];
-          var x2 = (prev == null ? void 0 : prev.values[prev.values.length - 2]) || 0;
-          var y2 = (prev == null ? void 0 : prev.values[prev.values.length - 1]) || 0;
-          s.values[5] += x2;
-          s.values[6] += y2;
-          return {
-            command: s.command.toUpperCase(),
-            values: [...s.values]
-          };
-        case "z":
-          return {
-            command: s.command.toUpperCase(),
-            values: []
-          };
-        default:
-          return s;
-      }
-    });
-    this.segments.forEach((it, index2) => {
-      const prev = this.segments[index2 - 1];
-      if (it.command == "A") {
-        const x1 = (prev == null ? void 0 : prev.values[prev.values.length - 2]) || 0;
-        const y1 = (prev == null ? void 0 : prev.values[prev.values.length - 1]) || 0;
-        const [rx, ry, xrotate, largeArcFlag, sweepFlag, x2, y2] = it.values;
-        const path = PathParser.arcToCurve(x1, y1, rx, ry, xrotate, largeArcFlag, sweepFlag, x2, y2);
-        path.segments.forEach((seg) => {
-          if (seg.command !== "M" || seg.command !== "Z")
-            ;
-        });
-      }
-    });
-    return this;
-  }
-  convertGenerator() {
-    var points2 = [];
-    for (var index2 = 0, len2 = this.segments.length; index2 < len2; index2++) {
-      var s = this.segments[index2];
-      var nextSegment = this.segments[index2 + 1];
-      const { command, values } = s;
-      if (command === "M") {
-        var [x2, y2] = values;
-        points2.push({
-          command,
-          originalCommand: command,
-          startPoint: { x: x2, y: y2 },
-          endPoint: { x: x2, y: y2 },
-          reversePoint: { x: x2, y: y2 },
-          curve: false
-        });
-      } else if (command === "L") {
-        var prevPoint = Point.getPrevPoint(points2, points2.length);
-        if (prevPoint.curve) {
-          var [x2, y2] = values;
-          points2.push({
-            command,
-            originalCommand: command,
-            startPoint: { x: x2, y: y2 },
-            endPoint: { x: x2, y: y2 },
-            reversePoint: clone$1(prevPoint.endPoint),
-            curve: true
-          });
-        } else {
-          var [x2, y2] = values;
-          points2.push({
-            command,
-            originalCommand: command,
-            startPoint: { x: x2, y: y2 },
-            endPoint: { x: x2, y: y2 },
-            reversePoint: { x: x2, y: y2 },
-            curve: false
-          });
-        }
-      } else if (command === "Q") {
-        var [cx1, cy1, x2, y2] = values;
-        var prevPoint = Point.getPrevPoint(points2, points2.length);
-        if (prevPoint.curve) {
-          var startPoint = { x: x2, y: y2 };
-          var endPoint = { x: x2, y: y2 };
-          var reversePoint2 = { x: x2, y: y2 };
-          points2.push({
-            command: "L",
-            originalCommand: command,
-            startPoint,
-            endPoint,
-            reversePoint: reversePoint2,
-            curve: false
-          });
-          prevPoint.endPoint = { x: cx1, y: cy1 };
-        } else {
-          if (nextSegment && nextSegment.command === "L") {
-            prevPoint.curve = true;
-            prevPoint.endPoint = { x: cx1, y: cy1 };
-            var startPoint = { x: x2, y: y2 };
-            var reversePoint2 = { x: x2, y: y2 };
-            var endPoint = { x: x2, y: y2 };
-            points2.push({
-              command: "L",
-              originalCommand: command,
-              curve: false,
-              startPoint,
-              endPoint,
-              reversePoint: reversePoint2
-            });
-          } else {
-            var startPoint = { x: x2, y: y2 };
-            var reversePoint2 = { x: cx1, y: cy1 };
-            var endPoint = { x: x2, y: y2 };
-            points2.push({
-              command,
-              originalCommand: command,
-              curve: true,
-              startPoint,
-              endPoint,
-              reversePoint: reversePoint2
-            });
-          }
-        }
-      } else if (command === "T") {
-        var [x2, y2] = values;
-        var prevSegment = segments[index2 - 1];
-        if (prevSegment && prevSegment.command === "Q") {
-          var [cx1, cy1, sx, sy] = prevSegment.values;
-          var prevPoint = Point.getPrevPoint(points2, points2.length);
-          prevPoint.endPoint = Point.getReversePoint({ x: sx, y: sy }, { x: cx1, y: cy1 });
-          var startPoint = { x: x2, y: y2 };
-          var endPoint = { x: x2, y: y2 };
-          var reversePoint2 = { x: x2, y: y2 };
-          points2.push({
-            command: "L",
-            originalCommand: command,
-            startPoint,
-            endPoint,
-            reversePoint: reversePoint2,
-            curve: false
-          });
-        }
-      } else if (command === "C") {
-        var prevPoint = Point.getPrevPoint(points2, points2.length);
-        var [cx1, cy1, cx2, cy2, x2, y2] = values;
-        var startPoint = { x: x2, y: y2 };
-        var reversePoint2 = { x: cx2, y: cy2 };
-        var endPoint = { x: x2, y: y2 };
-        points2.push({
-          command,
-          originalCommand: command,
-          curve: true,
-          startPoint,
-          endPoint,
-          reversePoint: reversePoint2
-        });
-        if (prevPoint) {
-          prevPoint.curve = true;
-          prevPoint.endPoint = { x: cx1, y: cy1 };
-        }
-      } else if (command === "S") {
-        var [x2, y2] = values;
-        var prevSegment = segments[index2 - 1];
-        if (prevSegment && prevSegment.command === "C") {
-          var [cx2, cy2, sx, sy] = prevSegment.values;
-          var prevPoint = Point.getPrevPoint(points2, points2.length);
-          prevPoint.endPoint = Point.getReversePoint(prevPoint.startPoint, prevPoint.reversePoint);
-          var startPoint = { x: x2, y: y2 };
-          var endPoint = { x: x2, y: y2 };
-          var reversePoint2 = { x: cx2, y: cy2 };
-          points2.push({
-            command: "Q",
-            originalCommand: command,
-            startPoint,
-            endPoint,
-            reversePoint: reversePoint2,
-            curve: false
-          });
-        }
-      } else if (command === "Z") {
-        var prevPoint = Point.getPrevPoint(points2, points2.length);
-        var firstPoint = Point.getFirstPoint(points2, points2.length);
-        if (Point.isEqual(prevPoint.startPoint, firstPoint.startPoint)) {
-          prevPoint.connected = true;
-          prevPoint.endPoint = clone$1(firstPoint.endPoint);
-          firstPoint.reversePoint = clone$1(prevPoint.reversePoint);
-        }
-        prevPoint.close = true;
-      }
-    }
-    points2 = points2.filter((p) => !!p);
-    return points2;
-  }
-  setSegments(index2, seg) {
-    this.segments[index2] = seg;
-  }
-  getSegments(index2) {
-    if (isNotUndefined(index2)) {
-      return this.segments[index2];
-    }
-    return this.segments;
-  }
-  joinPath(segments2, split = "") {
-    var list2 = segments2 || this.segments;
-    return list2.map((it) => {
-      return `${it.command} ${it.values.length ? it.values.join(" ") : ""}`;
-    }).join(split);
-  }
-  each(callback, isReturn = false) {
-    var newSegments = this.segments.map((segment, index2) => {
-      return callback.call(this, segment, index2);
-    });
-    if (isReturn) {
-      return newSegments;
-    } else {
-      this.segments = newSegments;
-    }
-    return this;
-  }
-  _loop(m, isReturn = false) {
-    return this.each(function(segment) {
-      var v = segment.values;
-      var c2 = segment.command;
-      switch (c2) {
-        case "M":
-        case "L":
-          var result = m(v, 0);
-          segment.values = [result[0], result[1]];
-          break;
-        case "V":
-          var result = m([+v[0], 0]);
-          segment.values = [result[0]];
-          break;
-        case "H":
-          var result = m([0, +v[0]]);
-          segment.values = [result[1]];
-          break;
-        case "C":
-        case "S":
-        case "T":
-        case "Q":
-          for (var i = 0, len2 = v.length; i < len2; i += 2) {
-            var result = m(v, i);
-            segment.values[i] = result[0];
-            segment.values[i + 1] = result[1];
-          }
-          break;
-      }
-      return segment;
-    }, isReturn);
-  }
-  clone() {
-    const path = new PathParser();
-    path.resetSegments(this.segments.map((it) => {
-      return {
-        command: it.command,
-        values: it.values.slice()
-      };
-    }));
-    return path;
-  }
-  translate(tx, ty) {
-    this.transformMat4(fromTranslation([], [tx, ty, 0]));
-    return this;
-  }
-  translateTo(tx, ty) {
-    return this.joinPath(this.transformMat4(fromTranslation([], [tx, ty, 0]), true));
-  }
-  scale(sx, sy) {
-    this.transformMat4(fromScaling([], [sx, sy, 1]));
-    return this;
-  }
-  scaleTo(sx, sy) {
-    return this.joinPath(this.transformMat4(fromScaling([], [sx, sy, 1]), true));
-  }
-  scaleWith(width2, height2) {
-    const newPath = this.clone();
-    const rect2 = vertiesToRectangle(newPath.getBBox());
-    newPath.translate(-rect2.x, -rect2.y);
-    const scale2 = Math.min(width2 / rect2.width, height2 / rect2.height);
-    return newPath.scale(scale2, scale2).translate(width2 / 2 - rect2.width / 2 * scale2, height2 / 2 - rect2.height / 2 * scale2);
-  }
-  rotate(angle2, centerX = 0, centerY = 0) {
-    const view = create$5();
-    multiply$1(view, view, fromTranslation([], [centerX, centerY, 0]));
-    multiply$1(view, view, fromZRotation([], degreeToRadian$1(angle2)));
-    multiply$1(view, view, fromTranslation([], negate([], [centerX, centerY, 0])));
-    this.transformMat4(view);
-    return this;
-  }
-  rotateTo(angle2, centerX = 0, centerY = 0) {
-    const view = create$5();
-    multiply$1(view, view, fromTranslation([], [centerX, centerY, 0]));
-    multiply$1(view, view, fromZRotation([], degreeToRadian$1(angle2)));
-    multiply$1(view, view, fromTranslation([], negate([], [centerX, centerY, 0])));
-    return this.joinPath(this.transformMat4(view, true));
-  }
-  reflectionOrigin() {
-    this.transformMat4(fromScaling([], [-1, -1, 0]));
-    return this;
-  }
-  reflectionOriginTo() {
-    return this.joinPath(this.transformMat4(fromScaling([], [-1, -1, 0]), true));
-  }
-  flipX() {
-    this.transformMat4(fromScaling([], [1, -1, 0]));
-    return this;
-  }
-  flipXTo() {
-    return this.joinPath(this.transformMat4(fromScaling([], [1, -1, 0]), true));
-  }
-  flipY() {
-    this.transformMat4(fromScaling([], [-1, 1, 0]));
-    return this;
-  }
-  flipYTo() {
-    return this.joinPath(this.transformMat4(fromScaling([], [-1, 1, 0]), true));
-  }
-  skewX(angle2) {
-    this.transformMat4(fromValues$1(1, Math.tan(degreeToRadian$1(angle2)), 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
-    return this;
-  }
-  skewXTo(angle2) {
-    return this.joinPath(this.transformMat4(fromValues$1(1, Math.tan(degreeToRadian$1(angle2)), 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1), true));
-  }
-  skewY(angle2) {
-    this.transformMat4(fromValues$1(1, 0, 0, 0, Math.tan(degreeToRadian$1(angle2)), 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
-    return this;
-  }
-  skewYTo(angle2) {
-    return this.joinPath(this.transformMat4(fromValues$1(1, 0, 0, 0, Math.tan(degreeToRadian$1(angle2)), 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1), true));
-  }
-  forEachGroup(callback) {
-    const groupList = this.getGroup();
-    for (let i = 0, len2 = groupList.length; i < len2; i++) {
-      const group2 = groupList[i];
-      callback(group2, i, groupList);
-    }
-  }
-  forEach(callback) {
-    this.forEachGroup((segments2, index2, groupList) => {
-      for (let i = 0, len2 = segments2.length; i < len2; i++) {
-        const segment = segments2[i];
-        callback(segment, i, segments2, groupList, index2);
-      }
-    });
-  }
-  normalize() {
-    const allSegments = [];
-    const groupList = this.getGroup();
-    groupList.forEach((group2) => {
-      const newSegments = [];
-      group2.segments.forEach(({ segment }, index2) => {
-        var _a;
-        const prevSegment = (_a = group2.segments[index2 - 1]) == null ? void 0 : _a.segment;
-        if (segment.command === "M") {
-          newSegments.push(segment);
-          return;
-        } else if (segment.command === "L") {
-          const localCurve = normalizeCurveForLine([
-            [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
-            [segment.values[0], segment.values[1], 0]
-          ]);
-          newSegments.push({
-            command: "C",
-            values: [
-              localCurve[1][0],
-              localCurve[1][1],
-              localCurve[2][0],
-              localCurve[2][1],
-              localCurve[3][0],
-              localCurve[3][1]
-            ]
-          });
-          return;
-        } else if (segment.command === "C") {
-          newSegments.push(segment);
-        } else if (segment.command === "Q") {
-          const localCurve = normalizeCurveForQuard([
-            [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
-            [segment.values[0], segment.values[1], 0],
-            [segment.values[2], segment.values[3], 0]
-          ]);
-          newSegments.push({
-            command: "C",
-            values: [
-              localCurve[1][0],
-              localCurve[1][1],
-              localCurve[2][0],
-              localCurve[2][1],
-              localCurve[3][0],
-              localCurve[3][1]
-            ]
-          });
-        } else if (segment.command === "Z") {
-          newSegments.push(segment);
-        }
-      });
-      allSegments.push(...newSegments);
-    });
-    return PathParser.fromSegments(allSegments);
-  }
-  polygonal() {
-    const pathList = this.toPathList();
-    pathList.forEach((path) => {
-      const newSegments = [];
-      path.segments.forEach((segment, index2) => {
-        const prevSegment = path.segments[index2 - 1];
-        if (segment.command === "M") {
-          newSegments.push(segment);
-        } else if (segment.command === "L") {
-          newSegments.push(segment);
-        } else if (segment.command === "C") {
-          newSegments.push(...polygonalForCurve([prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0], [segment.values[0], segment.values[1], 0], [segment.values[2], segment.values[3], 0], [segment.values[4], segment.values[5], 0]).map((point2) => ({
-            command: "L",
-            values: [point2[0], point2[1], 0]
-          })));
-        } else if (segment.command === "Q") {
-          newSegments.push(...polygonalForCurve(...normalizeCurveForQuard([
-            [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
-            [segment.values[0], segment.values[1], 0],
-            [segment.values[2], segment.values[3], 0]
-          ])).map((point2) => ({
-            command: "L",
-            values: [point2[0], point2[1], 0]
-          })));
-        } else if (segment.command === "Z") {
-          newSegments.push(segment);
-        }
-      });
-      path.resetSegments(newSegments);
-    });
-    return PathParser.joinPathList(pathList);
-  }
-  divideSegmentByLength(length2 = 100) {
-    const newPath = new PathParser();
-    const groupList = this.getGroup();
-    groupList.forEach((group2) => {
-      const newSegments = [];
-      group2.segments.forEach(({ segment }, index2) => {
-        var _a;
-        (_a = group2.segments[index2 - 1]) == null ? void 0 : _a.segment;
-        if (segment.command === "M") {
-          newSegments.push(segment);
-          return;
-        } else if (segment.command === "L") {
-          const dividedSegments = divideLine(segment, length2);
-          newSegments.push(...dividedSegments);
-          return;
-        } else if (segment.command === "C") {
-          const dividedSegments = divideCurve(segment, length2);
-          newSegments.push(...dividedSegments);
-        } else if (segment.command === "Q") {
-          const dividedSegments = divideQuad(segment, length2);
-          newSegments.push(...dividedSegments);
-        } else if (segment.command === "Z") {
-          newSegments.push(segment);
-        }
-      });
-      newPath.addGroup(newSegments);
-    });
-    return newPath;
-  }
-  divideSegmentByCount(count = 1) {
-    let allSegments = [];
-    const groupList = this.getGroup();
-    groupList.forEach((group2) => {
-      const newSegments = [];
-      group2.segments.forEach(({ segment }, index2) => {
-        var _a, _b;
-        const prevSegment = (_a = group2.segments[index2 - 1]) == null ? void 0 : _a.segment;
-        (_b = group2.segments[index2 + 1]) == null ? void 0 : _b.segment;
-        if (segment.command === "M") {
-          newSegments.push(segment);
-        } else if (segment.command === "L") {
-          const linePoints = splitBezierPointsLineByCount([
-            {
-              x: prevSegment.values[prevSegment.values.length - 2],
-              y: prevSegment.values[prevSegment.values.length - 1]
-            },
-            {
-              x: segment.values[0],
-              y: segment.values[1]
-            }
-          ], count);
-          linePoints.forEach(([start2, end2]) => {
-            newSegments.push(Segment.L(end2.x, end2.y));
-          });
-        } else if (segment.command === "Q") {
-          const quardPoints = splitBezierPointsQuardByCount([
-            {
-              x: prevSegment.values[prevSegment.values.length - 2],
-              y: prevSegment.values[prevSegment.values.length - 1]
-            },
-            {
-              x: segment.values[0],
-              y: segment.values[1]
-            },
-            {
-              x: segment.values[2],
-              y: segment.values[3]
-            }
-          ], count);
-          quardPoints.forEach(([start2, middle2, end2]) => {
-            newSegments.push(Segment.Q(middle2.x, middle2.y, end2.x, end2.y));
-          });
-        } else if (segment.command === "C") {
-          const curvePoints = splitBezierPointsByCount([
-            {
-              x: prevSegment.values[prevSegment.values.length - 2],
-              y: prevSegment.values[prevSegment.values.length - 1]
-            },
-            {
-              x: segment.values[0],
-              y: segment.values[1]
-            },
-            {
-              x: segment.values[2],
-              y: segment.values[3]
-            },
-            {
-              x: segment.values[4],
-              y: segment.values[5]
-            }
-          ], count);
-          curvePoints.forEach(([start2, c1, c2, end2]) => {
-            newSegments.push(Segment.C(c1.x, c1.y, c2.x, c2.y, end2.x, end2.y));
-          });
-        } else if (segment.command === "Z") {
-          newSegments.push(segment);
-        }
-      });
-      allSegments = allSegments.concat(newSegments);
-    });
-    return PathParser.fromSegments(allSegments);
-  }
-  getBBox() {
-    let minX = Number.MAX_SAFE_INTEGER, minY = Number.MAX_SAFE_INTEGER;
-    let maxX = Number.MIN_SAFE_INTEGER, maxY = Number.MIN_SAFE_INTEGER;
-    this.each(function(segment, index2) {
-      var v = segment.values;
-      var c2 = segment.command;
-      const prevSegment = this.segments[index2 - 1];
-      switch (c2) {
-        case "M":
-        case "L":
-          minX = Math.min(minX, v[0]);
-          maxX = Math.max(maxX, v[0]);
-          minY = Math.min(minY, v[1]);
-          maxY = Math.max(maxY, v[1]);
-          break;
-        case "C":
-          getCurveBBox([
-            [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
-            [v[0], v[1], 0],
-            [v[2], v[3], 0],
-            [v[4], v[5], 0]
-          ]).forEach((p) => {
-            minX = Math.min(minX, p[0]);
-            maxX = Math.max(maxX, p[0]);
-            minY = Math.min(minY, p[1]);
-            maxY = Math.max(maxY, p[1]);
-          });
-          break;
-        case "Q":
-          const curve = normalizeCurveForQuard([
-            [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
-            [v[0], v[1], 0],
-            [v[2], v[3], 0]
-          ]);
-          getCurveBBox(curve).forEach((p) => {
-            minX = Math.min(minX, p[0]);
-            maxX = Math.max(maxX, p[0]);
-            minY = Math.min(minY, p[1]);
-            maxY = Math.max(maxY, p[1]);
-          });
-          break;
-      }
-      return segment;
-    });
-    return [
-      [minX, minY, 0],
-      [maxX, minY, 0],
-      [maxX, maxY, 0],
-      [minX, maxY, 0]
-    ];
-  }
-  rect() {
-    const bbox = this.getBBox();
-    return {
-      x: bbox[0][0],
-      y: bbox[0][1],
-      width: distance$1(bbox[0], bbox[1]),
-      height: distance$1(bbox[0], bbox[3]),
-      right: bbox[0][0] + distance$1(bbox[0], bbox[1]),
-      bottom: bbox[0][1] + distance$1(bbox[0], bbox[3])
-    };
-  }
-  getClosedPointInfo({ x: x2, y: y2 }, count = 20) {
-    let minDist = Number.MAX_SAFE_INTEGER;
-    let targetInfo = {};
-    let info = {};
-    for (var i = 1, len2 = this.segments.length; i < len2; i++) {
-      const segment = this.segments[i];
-      const prev = this.segments[i - 1].values;
-      const current = segment.values;
-      const command = segment.command;
-      const lastPoint = { x: prev[prev.length - 2], y: prev[prev.length - 1] };
-      if (command === "C") {
-        var points2 = [
-          lastPoint,
-          { x: current[0], y: current[1] },
-          { x: current[2], y: current[3] },
-          { x: current[4], y: current[5] }
-        ];
-        var curve = recoverBezier(...points2, count);
-        var t = curve(x2, y2);
-        info = {
-          segment,
-          index: i,
-          t,
-          points: points2,
-          targetPoint: getBezierPoints(points2, t).first[3]
-        };
-      } else if (command === "Q") {
-        var points2 = [
-          lastPoint,
-          { x: current[0], y: current[1] },
-          { x: current[2], y: current[3] }
-        ];
-        var curve = recoverBezierQuard(...points2, count);
-        var t = curve(x2, y2);
-        info = {
-          segment,
-          index: i,
-          t,
-          points: points2,
-          targetPoint: getBezierPointsQuard(points2, t).first[2]
-        };
-      } else if (command === "L") {
-        var points2 = [
-          lastPoint,
-          { x: current[0], y: current[1] }
-        ];
-        var curve = recoverBezierLine(...points2, count);
-        var t = curve(x2, y2);
-        info = {
-          segment,
-          index: i,
-          t,
-          points: points2,
-          targetPoint: getBezierPointsLine(points2, t).first[1]
-        };
-      }
-      if (info) {
-        var dist2 = Math.sqrt(Math.pow(info.targetPoint.x - x2, 2) + Math.pow(info.targetPoint.y - y2, 2));
-        if (dist2 < minDist) {
-          minDist = dist2;
-          targetInfo = info;
-        }
-      }
-    }
-    return targetInfo;
-  }
-  getClosedPoint({ x: x2, y: y2 }, count = 20) {
-    const info = this.getClosedPointInfo({ x: x2, y: y2 }, count);
-    if (info.targetPoint) {
-      return info.targetPoint;
-    }
-    return { x: x2, y: y2 };
-  }
-  isPointInPath({ x: x2, y: y2 }, dist$1 = 1) {
-    const info = this.getClosedPointInfo({ x: x2, y: y2 }, 20);
-    if (info.targetPoint) {
-      if (dist([info.targetPoint.x, info.targetPoint.y, 0], [x2, y2, 0]) <= dist$1) {
-        return true;
-      }
-    }
-    return false;
-  }
-  toString(split = "") {
-    return this.joinPath(void 0, split);
-  }
-  toSVGString() {
-    return this.d;
-  }
-  transformMat4(transformMatrix, isReturn = false) {
-    return this.each(function(segment) {
-      var v = segment.values;
-      var c2 = segment.command;
-      switch (c2) {
-        case "M":
-        case "L":
-          var result = transformMat4([], [v[0], v[1], 0], transformMatrix);
-          segment.values = [result[0], result[1]];
-          break;
-        case "C":
-        case "Q":
-          for (var i = 0, len2 = v.length; i < len2; i += 2) {
-            var result = transformMat4([], [v[i], v[i + 1], 0], transformMatrix);
-            segment.values[i] = result[0];
-            segment.values[i + 1] = result[1];
-          }
-          break;
-      }
-      return segment;
-    }, isReturn);
-  }
-  transform(customTransformFunction = ([x2, y2, z]) => [x2, y2, z]) {
-    const bbox = vertiesToRectangle(this.getBBox());
-    return this.each(function(segment) {
-      var v = segment.values;
-      var c2 = segment.command;
-      switch (c2) {
-        case "M":
-        case "L":
-        case "C":
-        case "Q":
-          for (var i = 0, len2 = v.length; i < len2; i += 2) {
-            var result = customTransformFunction([v[i], v[i + 1], 0], { bbox });
-            segment.values[i] = result[0];
-            segment.values[i + 1] = result[1];
-          }
-          break;
-      }
-      return segment;
-    });
-  }
-  invert(transformMatrix) {
-    this.transformMat4(invert([], transformMatrix));
-    return this;
-  }
-  round(k = 1) {
-    this.each(function(segment) {
-      segment.values = segment.values.map((it) => round$1(it, k));
-      return segment;
-    });
-    return this;
-  }
-  reverseSegments(segments2) {
-    const newSegments = [];
-    let lastIndex = segments2.length - 1;
-    for (var i = lastIndex; i > 0; i--) {
-      const segment = segments2[i];
-      const v = segment.values;
-      const c2 = segment.command;
-      const prevSegment = segments2[i - 1];
-      const lastX = prevSegment.values[prevSegment.values.length - 2];
-      const lastY = prevSegment.values[prevSegment.values.length - 1];
-      switch (c2) {
-        case "L":
-          if (i === lastIndex) {
-            newSegments.push(Segment.M(v[0], v[1]));
-          }
-          newSegments.push(Segment.L(lastX, lastY));
-          break;
-        case "C":
-          if (i === lastIndex) {
-            newSegments.push(Segment.M(v[4], v[5]));
-          }
-          newSegments.push(Segment.C(v[2], v[3], v[0], v[1], lastX, lastY));
-          break;
-        case "Q":
-          if (i === lastIndex) {
-            newSegments.push(Segment.M(v[2], v[3]));
-          }
-          newSegments.push(Segment.Q(v[0], v[1], lastX, lastY));
-          break;
-        case "Z":
-          newSegments.push(segment);
-          lastIndex = i - 1;
-          break;
-      }
-    }
-    if (newSegments[0].command === "Z") {
-      newSegments.push(newSegments.shift());
-    }
-    return newSegments;
-  }
-  splitSegments() {
-    const groupSegments = [];
-    let newSegments = [];
-    this.segments.forEach((s) => {
-      if (s.command === "M") {
-        newSegments = [s];
-        groupSegments.push(newSegments);
-      } else {
-        newSegments.push(s);
-      }
-    });
-    return groupSegments;
-  }
-  reverse(...groupIndexList) {
-    const groupSegments = this.splitSegments();
-    const newSegments = [];
-    if (groupIndexList.length === 0) {
-      groupSegments.forEach((segments2, index2) => {
-        newSegments.push.apply(newSegments, this.reverseSegments(segments2));
-      });
-    } else {
-      groupSegments.forEach((segments2, index2) => {
-        if (groupIndexList.includes(index2)) {
-          newSegments.push.apply(newSegments, this.reverseSegments(segments2));
-        } else {
-          newSegments.push.apply(newSegments, segments2);
-        }
-      });
-    }
-    return this.resetSegments(newSegments);
-  }
-  reversePathStringByFunc(func2) {
-    const pathList = this.toPathList().map((p, index2) => {
-      if (func2(p, index2)) {
-        return p.reverse();
-      }
-      return p;
-    });
-    return PathParser.joinPathList(pathList).toSVGString();
-  }
-  getCenterPointers() {
-    let arr = [];
-    let lastValues = [];
-    this.segments.forEach((segment, index2) => {
-      var v = segment.values;
-      var c2 = segment.command;
-      switch (c2) {
-        case "M":
-        case "L":
-          arr.push({
-            index: index2,
-            pointer: [...segment.values, 0]
-          });
-          break;
-        case "V":
-          arr.push({
-            index: index2,
-            pointer: [v[0], lastValues.pop(), 0]
-          });
-          break;
-        case "H":
-          lastValues.pop();
-          arr.push({
-            index: index2,
-            pointer: [lastValues.pop(), v[0], 0]
-          });
-          break;
-        case "C":
-        case "S":
-        case "T":
-        case "Q":
-          arr.push({
-            index: index2,
-            pointer: [v[v.length - 2], v[v.length - 1], 0]
-          });
-          break;
-      }
-      lastValues = clone$1(v);
-    });
-    return arr;
-  }
-  get points() {
-    return this.getCenterPointers();
-  }
-  getSamePointers(pointer, dist2 = 0) {
-    return this.getCenterPointers().filter((p) => {
-      if (distance$1(p.pointer, pointer) <= dist2) {
-        return true;
-      }
-    });
-  }
-  getGroup() {
-    const groupSegments = [];
-    let newSegments = [];
-    this.segments.forEach((segment, index2) => {
-      if (segment.command === "M") {
-        newSegments = [{
-          index: index2,
-          segment
-        }];
-        groupSegments.push({ index: index2, groupIndex: groupSegments.length, segments: newSegments });
-      } else {
-        newSegments.push({
-          index: index2,
-          segment
-        });
-      }
-    });
-    return groupSegments;
-  }
-  createGroupPath(index2) {
-    var _a, _b;
-    const path = new PathParser();
-    path.resetSegments(((_b = (_a = this.getGroup()[index2]) == null ? void 0 : _a.segments) == null ? void 0 : _b.map((it) => {
-      return it.segment;
-    })) || []);
-    return path;
-  }
-  toPathList() {
-    return this.getGroup().map((group2) => {
-      return PathParser.fromSegments(group2.segments.map((it) => it.segment));
-    });
-  }
-  replaceSegment(index2, ...segments2) {
-    const newSegments = [...this.segments];
-    newSegments.splice(index2, 1, ...segments2);
-    this.resetSegments(newSegments);
-  }
-  splitSegmentByPoint(pos, dist2 = 0) {
-    const closedPointInfo = this.getClosedPointInfo(pos, dist2);
-    if (closedPointInfo && closedPointInfo.t > 0 && closedPointInfo.t < 1) {
-      switch (closedPointInfo.segment.command) {
-        case "C":
-          var list2 = getBezierPoints(closedPointInfo.points, closedPointInfo.t);
-          var first = list2.first;
-          var firstSegment = Segment.C(first[1].x, first[1].y, first[2].x, first[2].y, first[3].x, first[3].y);
-          var second2 = list2.second;
-          var secondSegment = Segment.C(second2[1].x, second2[1].y, second2[2].x, second2[2].y, second2[3].x, second2[3].y);
-          this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);
-          break;
-        case "Q":
-          var list2 = getBezierPointsQuard(closedPointInfo.points, closedPointInfo.t);
-          var first = list2.first;
-          var firstSegment = Segment.Q(first[1].x, first[1].y, first[2].x, first[2].y);
-          var second2 = list2.second;
-          var secondSegment = Segment.Q(second2[1].x, second2[1].y, second2[2].x, second2[2].y);
-          this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);
-          break;
-        case "L":
-          var list2 = getBezierPointsLine(closedPointInfo.points, closedPointInfo.t);
-          var first = list2.first;
-          var firstSegment = Segment.L(first[1].x, first[1].y);
-          var second2 = list2.second;
-          var secondSegment = Segment.L(second2[1].x, second2[1].y);
-          this.replaceSegment(closedPointInfo.index, firstSegment, secondSegment);
-          break;
-        default:
-          return;
-      }
-      return closedPointInfo;
-    }
-  }
-  toMultiSegmentPathList() {
-    const paths = [];
-    const group2 = this.getGroup();
-    group2.forEach((group3, index2) => {
-      group3.segments.forEach((s, index3) => {
-        var _a;
-        const prevSegment = group3.segments[index3 - 1];
-        const lastValues = ((_a = prevSegment == null ? void 0 : prevSegment.segment) == null ? void 0 : _a.values) || [];
-        const lastX = lastValues[lastValues.length - 2];
-        const lastY = lastValues[lastValues.length - 1];
-        const values = s.segment.values;
-        if (s.segment.command === "M")
-          ;
-        else if (s.segment.command === "L") {
-          paths.push(new PathParser(`M ${lastX} ${lastY}L ${values.join(" ")}`));
-        } else if (s.segment.command === "C") {
-          paths.push(new PathParser(`M ${lastX} ${lastY}C ${values.join(" ")}`));
-        } else if (s.segment.command === "Q") {
-          paths.push(new PathParser(`M ${lastX} ${lastY}Q ${values.join(" ")}`));
-        } else
-          ;
-      });
-    });
-    return paths;
-  }
-  simplify(tolerance = 0.1) {
-    const newGroupSegments = [];
-    const groupList = this.getGroup();
-    groupList.forEach((group2, groupIndex) => {
-      const points2 = [
-        ...group2.segments.filter((it) => it.segment.command.toLowerCase() !== "z").map((it) => {
-          return {
-            x: it.segment.values[0],
-            y: it.segment.values[1]
-          };
-        })
-      ];
-      const newPoints = Point.simply(points2, tolerance);
-      const newSegments = [];
-      newPoints.forEach((p, index2) => {
-        if (index2 === 0) {
-          newSegments.push(Segment.M(p.x, p.y));
-        } else {
-          newSegments.push(Segment.L(p.x, p.y));
-        }
-      });
-      newGroupSegments.push(...newSegments);
-    });
-    return PathParser.fromSegments(newGroupSegments);
-  }
-  smooth(error = 50) {
-    let newGroupSegments = [];
-    const groupList = this.getGroup();
-    groupList.forEach((group2, groupIndex) => {
-      const points2 = [
-        ...group2.segments.filter((it) => it.segment.command.toLowerCase() !== "z").map((it) => {
-          return [...it.segment.values, 0];
-        })
-      ];
-      const bezierCurve = fitCurve(points2, error);
-      const newSegments = [];
-      bezierCurve.forEach((curve, index2) => {
-        if (index2 === 0) {
-          newSegments.push(Segment.M(...curve[0]));
-        }
-        newSegments.push(Segment.C(curve[1][0], curve[1][1], curve[2][0], curve[2][1], curve[3][0], curve[3][1]));
-      });
-      if (group2.segments[group2.segments.length - 1].segment.command.toLowerCase() === "z") {
-        newSegments.push(Segment.Z());
-      }
-      newGroupSegments = newGroupSegments.concat(newSegments);
-    });
-    return PathParser.fromSegments(newGroupSegments);
-  }
-  cardinalSplines(tension = 0.5) {
-    const newGroupSegments = [];
-    const groupList = this.getGroup();
-    groupList.forEach((group2, groupIndex) => {
-      const points2 = [
-        ...group2.segments.filter((it) => it.segment.command.toLowerCase() !== "z").map((it) => {
-          return [...it.segment.values, 0];
-        })
-      ];
-      const newPoints = [];
-      points2.forEach((point2, index2) => {
-        const prevPoint = points2[index2 - 1];
-        const nextPoint = points2[index2 + 1];
-        if (index2 === 0) {
-          newPoints.push({ point: point2 });
-        } else if (index2 === points2.length - 1) {
-          const firstPoint = points2[0];
-          if (equals$1(firstPoint, point2)) {
-            const p0 = prevPoint;
-            const p1 = point2;
-            const p2 = points2[1];
-            const V1 = div$1([], subtract([], p2, p0), [2, 2, 1]);
-            const V3 = multiply([], V1, [1 - tension, 1 - tension, 1]);
-            const V2 = negate([], V3);
-            newPoints.push({ reversePoint: add$1([], p1, V2), point: p1, endPoint: add$1([], p1, V3) });
-          } else {
-            newPoints.push({ point: point2 });
-          }
-        } else {
-          const p0 = prevPoint;
-          const p1 = point2;
-          const p2 = nextPoint;
-          const V1 = div$1([], subtract([], p2, p0), [2, 2, 1]);
-          const V3 = multiply([], V1, [1 - tension, 1 - tension, 1]);
-          const V2 = negate([], V3);
-          newPoints.push({ reversePoint: add$1([], p1, V2), point: p1, endPoint: add$1([], p1, V3) });
-        }
-      });
-      const newSegments = [];
-      newPoints.forEach((p, index2) => {
-        if (index2 === 0) {
-          newSegments.push(Segment.M(p.point[0], p.point[1]));
-        } else {
-          const prevPoint = newPoints[index2 - 1] || newPoints[newPoints.length - 1];
-          if (!prevPoint.endPoint) {
-            if (index2 === 1) {
-              const lastPoint = newPoints[newPoints.length - 1];
-              if (lastPoint.endPoint) {
-                newSegments.push(Segment.C(lastPoint.endPoint[0], lastPoint.endPoint[1], p.reversePoint[0], p.reversePoint[1], p.point[0], p.point[1]));
-              } else {
-                newSegments.push(Segment.Q(p.reversePoint[0], p.reversePoint[1], p.point[0], p.point[1]));
-              }
-            } else {
-              newSegments.push(Segment.Q(p.reversePoint[0], p.reversePoint[1], p.point[0], p.point[1]));
-            }
-          } else if (!p.reversePoint) {
-            newSegments.push(Segment.Q(prevPoint.endPoint[0], prevPoint.endPoint[1], p.point[0], p.point[1]));
-          } else {
-            newSegments.push(Segment.C(prevPoint.endPoint[0], prevPoint.endPoint[1], p.reversePoint[0], p.reversePoint[1], p.point[0], p.point[1]));
-          }
-        }
-      });
-      newGroupSegments.push(...newSegments);
-    });
-    const newPath = new PathParser();
-    newPath.resetSegments(newGroupSegments);
-    return newPath;
-  }
-  Z() {
-    this.segments.push(Segment.Z());
-    return this;
-  }
-  M(x2, y2) {
-    this.segments.push(Segment.M(x2, y2));
-    return this;
-  }
-  L(x2, y2) {
-    this.segments.push(Segment.L(x2, y2));
-    return this;
-  }
-  C(x1, y1, x2, y2, x3, y3) {
-    this.segments.push(Segment.C(x1, y1, x2, y2, x3, y3));
-    return this;
-  }
-  Q(x1, y1, x2, y2) {
-    this.segments.push(Segment.Q(x1, y1, x2, y2));
-    return this;
-  }
-  drawRect(x2, y2, width2, height2) {
-    this.segments.push(Segment.M(x2, y2), Segment.L(x2 + width2, y2), Segment.L(x2 + width2, y2 + height2), Segment.L(x2, y2 + height2), Segment.L(x2, y2), Segment.Z());
-    return this;
-  }
-  drawLine(x1, y1, x2, y2) {
-    this.segments.push(Segment.M(x1, y1), Segment.L(x2, y2));
-    return this;
-  }
-  drawCircleWithRect(x2, y2, width2, height2 = width2) {
-    var segmentSize = 0.552284749831;
-    const path = new PathParser();
-    path.resetSegments([
-      Segment.M(0, -1),
-      Segment.C(segmentSize, -1, 1, -segmentSize, 1, 0),
-      Segment.C(1, segmentSize, segmentSize, 1, 0, 1),
-      Segment.C(-segmentSize, 1, -1, segmentSize, -1, 0),
-      Segment.C(-1, -segmentSize, -segmentSize, -1, 0, -1),
-      Segment.Z()
-    ]);
-    path.translate(1, 1).scale(width2 / 2, height2 / 2).translate(x2, y2);
-    this.addPath(path);
-    return this;
-  }
-  drawCircle(cx, cy, radius) {
-    return this.drawCircleWithRect(cx - radius, cy - radius, radius * 2, radius * 2);
-  }
-  drawArc(rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x2, y2) {
-    const [x1, y1] = this.lastPoint;
-    return this.addPath(PathParser.arcToCurve(x1, y1, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x2, y2));
-  }
-  get verties() {
-    let arr = [];
-    let lastValues = [];
-    this.each(function(segment) {
-      var v = segment.values;
-      var c2 = segment.command;
-      switch (c2) {
-        case "M":
-        case "L":
-          arr.push([...segment.values, 0]);
-          break;
-        case "V":
-          arr.push([v[0], lastValues.pop(), 0]);
-          break;
-        case "H":
-          lastValues.pop();
-          arr.push([lastValues.pop(), v[0], 0]);
-          break;
-        case "C":
-        case "S":
-        case "T":
-        case "Q":
-          for (var i = 0, len2 = v.length; i < len2; i += 2) {
-            arr.push([v[i], v[i + 1], 0]);
-          }
-          break;
-      }
-      lastValues = v;
-    });
-    return arr;
-  }
-  get pathVerties() {
-    const pathVerties = [];
-    this.segments.forEach((segment, segmentIndex) => {
-      if (segment.values.length > 0) {
-        const arr = segment.values;
-        for (var i = 0, len2 = arr.length; i < len2; i += 2) {
-          pathVerties.push({
-            segmentIndex,
-            valueIndex: i,
-            x: arr[i],
-            y: arr[i + 1]
-          });
-        }
-      }
-    });
-    return pathVerties;
-  }
-  get d() {
-    return this.toString().trim();
-  }
-  get closed() {
-    return this.segments.some((segment) => segment.command === "Z") && equals(this.lastPoint, this.firstPoint);
-  }
-  get opened() {
-    return !this.closed;
-  }
-  get length() {
-    let totalLength = 0;
-    const group2 = this.getGroup();
-    group2.forEach((group3, index2) => {
-      group3.segments.forEach((s, index3) => {
-        var _a;
-        const prevSegment = group3.segments[index3 - 1];
-        const lastValues = ((_a = prevSegment == null ? void 0 : prevSegment.segment) == null ? void 0 : _a.values) || [];
-        const lastX = lastValues[lastValues.length - 2];
-        const lastY = lastValues[lastValues.length - 1];
-        const values = s.segment.values;
-        if (s.segment.command === "M")
-          ;
-        else if (s.segment.command === "L") {
-          totalLength += getDist(lastX, lastY, values[0], values[1]);
-        } else if (s.segment.command === "C") {
-          totalLength += getCurveDist(lastX, lastY, values[0], values[1], values[2], values[3], values[4], values[5]);
-        } else if (s.segment.command === "Q") {
-          totalLength += getQuardDist(lastX, lastY, values[0], values[1], values[2], values[3]);
-        } else
-          ;
-      });
-    });
-    return totalLength;
-  }
-  get lengthList() {
-    let totalLengthList = [];
-    const group2 = this.getGroup();
-    group2.forEach((group3, groupIndex) => {
-      group3.segments.forEach((s, index2) => {
-        var _a;
-        const prevSegment = group3.segments[index2 - 1];
-        const lastValues = ((_a = prevSegment == null ? void 0 : prevSegment.segment) == null ? void 0 : _a.values) || [];
-        const lastX = lastValues[lastValues.length - 2];
-        const lastY = lastValues[lastValues.length - 1];
-        const values = s.segment.values;
-        if (s.segment.command === "M")
-          ;
-        else if (s.segment.command === "L") {
-          totalLengthList.push({
-            groupIndex,
-            segmentIndex: index2,
-            length: getDist(lastX, lastY, values[0], values[1])
-          });
-        } else if (s.segment.command === "C") {
-          totalLengthList.push({
-            groupIndex,
-            segmentIndex: index2,
-            length: getCurveDist(lastX, lastY, values[0], values[1], values[2], values[3], values[4], values[5])
-          });
-        } else if (s.segment.command === "Q") {
-          totalLengthList.push({
-            groupIndex,
-            segmentIndex: index2,
-            length: getQuardDist(lastX, lastY, values[0], values[1], values[2], values[3])
-          });
-        } else
-          ;
-      });
-    });
-    return totalLengthList;
-  }
-  get lastSegment() {
-    const segment = this.segments[this.segments.length - 1];
-    if (segment.command !== "Z") {
-      return segment;
-    }
-    return this.segments[this.segments.length - 2];
-  }
-  get lastPoint() {
-    const values = this.lastSegment.values;
-    return [
-      values[values.length - 2],
-      values[values.length - 1]
-    ];
-  }
-  get firstSegment() {
-    const segment = this.segments[0];
-    return segment;
-  }
-  get firstPoint() {
-    const values = this.firstSegment.values;
-    return [
-      values[0],
-      values[1]
-    ];
-  }
-  static joinPathList(pathList = []) {
-    const newPath = PathParser.fromSVGString();
-    pathList.forEach((path) => {
-      newPath.addPath(path);
-    });
-    return newPath;
-  }
-  static fromSegments(segments2) {
-    const path = new PathParser();
-    path.resetSegments(segments2);
-    return path;
-  }
-  static fromSVGString(d = "") {
-    return new PathParser(d);
-  }
-  static makeRect(x2, y2, width2, height2) {
-    return PathParser.fromSVGString().drawRect(x2, y2, width2, height2);
-  }
-  static makeLine(x2, y2, x22, y22) {
-    return PathParser.fromSVGString().drawLine(x2, y2, x22, y22);
-  }
-  static makeCircle(x2, y2, width2, height2) {
-    return PathParser.fromSVGString().drawCircleWithRect(x2, y2, width2, height2);
-  }
-  static makePathByPoints(points2 = []) {
-    const segments2 = points2.map((p, index2) => {
-      if (index2 === 0) {
-        return Segment.M(p.x, p.y);
-      } else {
-        return Segment.L(p.x, p.y);
-      }
-    });
-    segments2.push(Segment.Z());
-    return PathParser.fromSegments(segments2);
-  }
-  static makePathByVerties(verties = [], isClosed = true) {
-    const segments2 = verties.map((v, index2) => {
-      if (index2 === 0) {
-        return Segment.M(v[0], v[1]);
-      } else {
-        return Segment.L(v[0], v[1]);
-      }
-    });
-    if (isClosed) {
-      segments2.push(Segment.Z());
-    }
-    return PathParser.fromSegments(segments2);
-  }
-  static makePolygon(width2, height2, count = 3) {
-    const segments2 = [];
-    const centerX = 1 / 2;
-    const centerY = 1 / 2;
-    for (var i = 0; i < count; i++) {
-      var angle2 = i / count * Math.PI * 2 - Math.PI / 2;
-      var x2 = Math.cos(angle2) * centerX + centerX;
-      var y2 = Math.sin(angle2) * centerY + centerY;
-      if (i === 0) {
-        segments2.push(Segment.M(x2, y2));
-      } else {
-        segments2.push(Segment.L(x2, y2));
-      }
-    }
-    segments2.push(Segment.L(segments2[0].values[0], segments2[0].values[1]));
-    segments2.push(Segment.Z());
-    return PathParser.fromSegments(segments2).scale(width2, height2);
-  }
-  static makeStar(width2, height2, count = 5, radius = 0.5) {
-    const segments2 = [];
-    const centerX = 1 / 2;
-    const centerY = 1 / 2;
-    const outerRadius = Math.min(centerX, centerY);
-    const innerRadius = outerRadius * radius;
-    const npoints = count * 2;
-    let firstX, firstY = 0;
-    for (var i = 0; i < npoints; i++) {
-      var angle2 = i / npoints * Math.PI * 2 - Math.PI / 2;
-      var radius = i % 2 === 0 ? outerRadius : innerRadius;
-      var x2 = Math.cos(angle2) * radius + centerX;
-      var y2 = Math.sin(angle2) * radius + centerY;
-      if (i === 0) {
-        segments2.push(Segment.M(x2, y2));
-        firstX = x2;
-        firstY = y2;
-      } else {
-        segments2.push(Segment.L(x2, y2));
-      }
-    }
-    segments2.push(Segment.L(firstX, firstY));
-    segments2.push(Segment.Z());
-    return PathParser.fromSegments(segments2).scale(width2, height2);
-  }
-  static makeCurvedStar(width2, height2, count = 5, radius = 0.5, tension = 0.5) {
-    const starPath = PathParser.makeStar(width2, height2, count, radius);
-    return starPath.cardinalSplines(tension);
-  }
-  static arcToCurve(x1, y1, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x2, y2) {
-    const bezierCurveList = arcToBezier({
-      px: x1,
-      py: y1,
-      cx: x2,
-      cy: y2,
-      rx,
-      ry,
-      xAxisRotation,
-      largeArcFlag,
-      sweepFlag
-    });
-    const path = new PathParser();
-    path.M(x1, y1);
-    bezierCurveList.forEach((bezierCurve) => {
-      path.C(bezierCurve.x1, bezierCurve.y1, bezierCurve.x2, bezierCurve.y2, bezierCurve.x, bezierCurve.y);
-    });
-    return path;
-  }
 }
 function makeInterpolatePathValues(layer2, property, s, e2) {
   var max = Math.max(s.length, e2.length);
@@ -33005,7 +33108,7 @@ class SVGLinearGradient extends SVGGradient {
   static parse(str) {
     const result = parseOneValue(str);
     var opt = {};
-    const [options2, ...colors2] = result.parsedParameters;
+    const [options2, ...colors2] = result.parameters;
     const list2 = [];
     options2.forEach((it) => {
       if (it.func === FuncType.KEYWORD) {
@@ -33106,7 +33209,7 @@ class SVGRadialGradient extends SVGGradient {
   static parse(str) {
     const result = parseOneValue(str);
     var opt = {};
-    const [options2, ...colors2] = result.parsedParameters;
+    const [options2, ...colors2] = result.parameters;
     const list2 = [];
     options2.forEach((it) => {
       if (it.func === FuncType.KEYWORD) {
@@ -43773,11 +43876,10 @@ class GradientEditor extends EditorElement {
     var _a, _b;
     const oldType = (_a = this.state.image) == null ? void 0 : _a.type;
     const colorsteps = ((_b = this.state.image) == null ? void 0 : _b.colorsteps) || [];
-    if (colorsteps.length === 1) {
-      colorsteps.push(colorsteps[0]);
-    }
     if (oldType === GradientType.STATIC) {
       if (colorsteps.length === 0) {
+        colorsteps.push(colorsteps[0], colorsteps[0]);
+      } else if (colorsteps.length === 1) {
         colorsteps.push(colorsteps[0], colorsteps[0]);
       }
     }
@@ -45302,6 +45404,1589 @@ class VarEditor extends EditorElement {
     this.parent.trigger(this.props.onchange, value, this.props.params);
   }
 }
+var PathEditor$1 = "";
+class SegmentManager {
+  constructor(viewport) {
+    this.viewport = viewport;
+    this.segmentList = [];
+  }
+  get hasViewport() {
+    return Boolean(this.viewport);
+  }
+  reset() {
+    this.segmentList = [];
+    return this;
+  }
+  checkInViewport(point2) {
+    if (!this.hasViewport)
+      return true;
+    const vertext = this.viewport.applyVertexInverse([point2.x, point2.y, 0]);
+    return this.viewport.checkInViewport(vertext);
+  }
+  addLine(a, b) {
+    if (this.hasViewport && getDist(a.x, a.y, b.x, b.y) < 1)
+      return this;
+    if (this.checkInViewport(a) || this.checkInViewport(b)) {
+      this.segmentList.push({
+        line: true,
+        x1: a.x,
+        y1: a.y,
+        x2: b.x,
+        y2: b.y
+      });
+    }
+    return this;
+  }
+  addGuideLine(a, b) {
+    if (this.hasViewport && getDist(a.x, a.y, b.x, b.y) < 1)
+      return this;
+    if (this.checkInViewport(a) || this.checkInViewport(b)) {
+      this.segmentList.push({
+        line: true,
+        guide: true,
+        x1: a.x,
+        y1: a.y,
+        x2: b.x,
+        y2: b.y
+      });
+    }
+    return this;
+  }
+  addDistanceLine(a, b) {
+    if (this.hasViewport && getDist(a.x, a.y, b.x, b.y) < 1)
+      return this;
+    this.segmentList.push({
+      line: true,
+      distance: true,
+      x1: a.x,
+      y1: a.y,
+      x2: b.x,
+      y2: b.y
+    });
+    return this;
+  }
+  addDistanceAngle(center2, rx, ry, degree, last2, line2) {
+    this.segmentList.push({
+      angle: true,
+      rx,
+      ry,
+      line: line2,
+      degree,
+      center: center2,
+      last: last2
+    });
+    return this;
+  }
+  addPoint(obj2, point2, index2, segment, selected = false) {
+    if (this.checkInViewport(point2)) {
+      this.segmentList.push(__spreadProps(__spreadValues({}, obj2), {
+        cx: point2.x,
+        cy: point2.y,
+        selected,
+        index: index2,
+        segment,
+        isFirst: point2.isFirst,
+        isLast: point2.isLast,
+        isSecond: point2.isSecond
+      }));
+    }
+    return this;
+  }
+  addStartPoint(obj2, point2) {
+    if (this.checkInViewport(point2)) {
+      this.segmentList.push(__spreadProps(__spreadValues({}, obj2), {
+        cx: point2.x,
+        cy: point2.y,
+        start: true
+      }));
+    }
+    return this;
+  }
+  addCurvePoint(point2, index2, segment, selected = false) {
+    if (this.checkInViewport(point2)) {
+      this.segmentList.push({
+        curve: true,
+        cx: point2.x,
+        cy: point2.y,
+        index: index2,
+        selected,
+        segment,
+        isFirst: point2.isFirst,
+        isLast: point2.isLast,
+        isSecond: point2.isSecond
+      });
+    }
+    return this;
+  }
+  addText(point2, text2) {
+    this.segmentList.push({
+      type: "text",
+      cx: point2.x,
+      cy: point2.y,
+      text: text2 + ""
+    });
+    return this;
+  }
+  toString() {
+    this.segmentList.sort((a, b) => {
+      if (a.line && !b.line) {
+        return -1;
+      } else if (!a.line && b.line) {
+        return 1;
+      }
+      return 0;
+    });
+    return this.segmentList.map((it) => {
+      if (it.angle) {
+        return `
+                <path stroke-width='1' 
+                    data-distance='true'
+                    fill="rgba(0,0,0,0.5)"
+                    d="M ${it.center.x},${it.center.y} A ${it.rx} ${it.ry},${it.degree},0,0,${it.last.x} ${it.last.y} L${it.line.x} ${it.line.y} Z"
+                />`;
+      } else if (it.line) {
+        return `
+                <line stroke-width='1' 
+                    data-segment="true"
+                    data-is-last="${it.isLast}"                
+                    data-guide='${it.guide}'
+                    data-distance='${it.distance}'
+                    x1='${it.x1}' x2='${it.x2}' y1='${it.y1}' y2='${it.y2}' 
+                />`;
+      } else if (it.text) {
+        return "";
+      } else if (it.curve && it.segment !== "startPoint") {
+        return `
+                <path stroke-width='1'
+                    class='curve' 
+                    ${it.selected && `data-selected="true"`}
+                    ${it.isLast && `data-is-last="true"`}
+                    ${it.isFirst && `data-is-first="true"`}
+                    ${it.isSecond && `data-is-second="true"`}
+                    title="${it.segment} curve"  
+                    data-index='${it.index}'
+                    data-segment-point='${it.segment}'
+                    data-segment="true" 
+                    d="M ${it.cx} ${it.cy - 4}L ${it.cx + 4} ${it.cy} L ${it.cx} ${it.cy + 4} L ${it.cx - 4} ${it.cy} Z"
+                />`;
+      } else if (it.start) {
+        return `
+                <circle 
+                    cx='${it.cx}' 
+                    cy='${it.cy}' 
+                    r='4'                    
+                    class='segment'
+                    data-selected='${it.selected}'
+                    title="Center"
+                    data-start="true" 
+                    tabIndex="-1"
+                />`;
+      } else {
+        return `
+                <circle 
+                    cx='${it.cx}' 
+                    cy='${it.cy}' 
+                    r='4'                    
+                    class='segment'
+                    data-selected='${it.selected}'
+                    title="${it.segment}"
+                    data-is-last="${it.isLast}"
+                    data-is-first="${it.isFirst}"
+                    data-is-second="${it.isSecond}"
+                    data-index='${it.index}' 
+                    data-segment-point='${it.segment}' 
+                    data-segment="true" 
+                    tabIndex="-1"                    
+                />`;
+      }
+    }).join("");
+  }
+}
+const SEGMENT_DIRECTION$1 = ["startPoint", "endPoint", "reversePoint"];
+function calculateSnapPoint$1(points2, sourceKey, target, distanceValue, dist2) {
+  var checkedPointList = points2.filter((p) => {
+    if (!p)
+      return false;
+    return Math.abs(p[sourceKey] - target) <= dist2;
+  }).map((p) => {
+    return { dist: Math.abs(p[sourceKey] - target), point: p };
+  });
+  checkedPointList.sort((a, b) => {
+    return a.dist < b.dist ? -1 : 1;
+  });
+  var point2 = null;
+  if (checkedPointList.length) {
+    point2 = checkedPointList[0].point;
+    distanceValue += point2[sourceKey] - target;
+  }
+  return { point: point2, distanceValue };
+}
+function calculateMovePointSnap$1(points2, moveXY, dist2 = 1) {
+  var snapPointX = calculatePointDist$1(points2, "x", moveXY.x, dist2);
+  var snapPointY = calculatePointDist$1(points2, "y", moveXY.y, dist2);
+  var snapEndPoint = __spreadValues({}, moveXY);
+  if (snapPointX) {
+    snapEndPoint.x = snapPointX.x;
+  }
+  if (snapPointY) {
+    snapEndPoint.y = snapPointY.y;
+  }
+  var snapPointList = [];
+  if (snapPointX) {
+    snapPointList.push({ startPoint: snapPointX, endPoint: snapEndPoint });
+  }
+  if (snapPointY) {
+    snapPointList.push({ startPoint: snapPointY, endPoint: snapEndPoint });
+  }
+  return { snapPointList, moveXY: snapEndPoint };
+}
+function calculatePointDist$1(points2, sourceKey, target, dist2) {
+  var checkedPointList = [];
+  var arr = SEGMENT_DIRECTION$1;
+  points2.filter((p) => p).forEach((p) => {
+    arr.filter((key) => p[key]).forEach((key) => {
+      var point2 = p[key];
+      var tempDist = Math.abs(point2[sourceKey] - target);
+      if (tempDist <= dist2) {
+        checkedPointList.push({ dist: tempDist, point: point2 });
+      }
+    });
+  });
+  checkedPointList.sort((a, b) => {
+    return a.dist > b.dist ? 1 : -1;
+  });
+  return checkedPointList.length ? checkedPointList[0].point : null;
+}
+function toPath$1(points2, minX, minY, scale2 = 1) {
+  var d = [];
+  for (var index2 = 0, len2 = points2.length; index2 < len2; index2++) {
+    var currentIndex = index2;
+    var current = points2[currentIndex];
+    if (!current)
+      continue;
+    if (current.command === "M") {
+      d.push({ command: "M", values: [current.startPoint] });
+    } else {
+      var prevPoint = Point.getPrevPoint(points2, index2);
+      if (current.curve === false) {
+        if (prevPoint.curve === false) {
+          d.push({ command: "L", values: [current.startPoint] });
+        } else {
+          d.push({ command: "Q", values: [prevPoint.endPoint, current.startPoint] });
+        }
+      } else {
+        if (prevPoint.curve === false) {
+          if (Point.isEqual(current.reversePoint, current.startPoint)) {
+            d.push({ command: "L", values: [current.startPoint] });
+          } else {
+            d.push({ command: "Q", values: [current.reversePoint, current.startPoint] });
+          }
+        } else {
+          d.push({ command: "C", values: [prevPoint.endPoint, current.reversePoint, current.startPoint] });
+        }
+      }
+    }
+    if (current.close) {
+      d.push({ command: "Z" });
+    }
+  }
+  var dString = d.map((segment) => {
+    return calculateRelativePosition$1(minX, minY, segment, scale2);
+  }).join(" ");
+  return {
+    d: dString
+  };
+}
+function calculateRelativePosition$1(minX, minY, segment, scale2 = 1) {
+  var { command, values } = segment;
+  switch (command) {
+    case "Z":
+      return "Z";
+    default:
+      var str = values.map((v) => {
+        var tx = v.x - minX === 0 ? 0 : (v.x - minX) / scale2;
+        var ty = v.y - minY === 0 ? 0 : (v.y - minY) / scale2;
+        return `${tx} ${ty}`;
+      }).join(" ");
+      return `${command} ${str}`;
+  }
+}
+function checkInArea$1(area2, point2) {
+  if (area2.x2.value < point2.x) {
+    return false;
+  }
+  if (area2.y2.value < point2.y) {
+    return false;
+  }
+  if (area2.x.value > point2.x) {
+    return false;
+  }
+  if (area2.y.value > point2.y) {
+    return false;
+  }
+  return true;
+}
+class PurePathGenerator {
+  generatorPathString(points2, minX = 0, minY = 0, scale2 = 1) {
+    return toPath$1(points2, minX, minY, scale2).d;
+  }
+  constructor(pathEditor) {
+    this.pathEditor = pathEditor;
+    this.pathStringManager = new PathStringManager();
+    this.guideLineManager = new PathStringManager();
+    this.segmentManager = new SegmentManager(null);
+    this.points = [];
+    this.cachedSegmentKeys = {};
+    this.initialize();
+    this.initializeSelect();
+  }
+  initialize() {
+    this.splitLines = [];
+    this.guideLineManager.reset();
+    this.segmentManager.reset();
+    this.pathStringManager.reset();
+  }
+  initializeSelect(initPointList = []) {
+    this.selectedPointKeys = {};
+    this.selectedPointList = [];
+    if (initPointList.length) {
+      this.select(...initPointList.map((p) => {
+        const checkedPoint = this.points[p.index][p.key];
+        if (!checkedPoint)
+          return void 0;
+        return { x: checkedPoint.x, y: checkedPoint.y, key: p.key, index: checkedPoint.index };
+      }).filter(Boolean));
+    }
+  }
+  get state() {
+    return this.pathEditor.state;
+  }
+  get clonePoints() {
+    return [...this.points];
+  }
+  get length() {
+    return this.points.length;
+  }
+  setPoints(points2 = []) {
+    this.points = points2;
+    this.snapPointList = [];
+    if (this.points.length === 0) {
+      this.select();
+      this.selectGroup(-1);
+    }
+  }
+  selectInBox(box, isToggle = false) {
+    var list2 = [];
+    this.points.forEach((point2, index2) => {
+      SEGMENT_DIRECTION$1.forEach((key) => {
+        const p = point2[key];
+        if (checkInArea$1(box, p)) {
+          list2.push({ x: p.x, y: p.y, key, index: index2 });
+        }
+      });
+    });
+    if (isToggle) {
+      list2 = list2.map((it) => {
+        const selectedKey = this.makeSegmentKey(it);
+        return __spreadProps(__spreadValues({}, it), { included: Boolean(this.selectedPointKeys[selectedKey]) });
+      });
+      const includedList = list2.filter((it) => it.included);
+      const notIncludedList = list2.filter((it) => !it.included);
+      let uniqueList = [...this.selectedPointList];
+      if (includedList.length) {
+        uniqueList = this.selectedPointList.filter((it) => {
+          const oldKey = this.makeSegmentKey(it);
+          return Boolean(includedList.find((includeNode) => {
+            return oldKey === this.makeSegmentKey(includeNode);
+          })) === false;
+        });
+      }
+      this.select(...uniqueList, ...notIncludedList);
+    } else {
+      this.select(...list2);
+    }
+  }
+  makeSegmentKey(p) {
+    return `${p.key}_${p.index}`;
+  }
+  select(...list2) {
+    this.selectedPointKeys = {};
+    this.selectedPointList = list2.map(({ x: x2, y: y2, key, index: index2 }) => ({
+      x: x2,
+      y: y2,
+      key,
+      index: +index2
+    }));
+    list2.forEach((it) => {
+      var key = this.makeSegmentKey(it);
+      this.selectedPointKeys[key] = true;
+    });
+  }
+  convertPointsToSelectionList(points2) {
+    var list2 = [];
+    points2.forEach((point2) => {
+      SEGMENT_DIRECTION$1.forEach((key) => {
+        const { x: x2, y: y2 } = point2[key];
+        list2.push({ x: x2, y: y2, key, index: point2.index });
+      });
+    });
+    return list2;
+  }
+  selectGroup(groupIndex) {
+    const group2 = this.splitedGroupList[groupIndex];
+    if (group2) {
+      this.select(...this.convertPointsToSelectionList(group2.points));
+    } else {
+      this.select();
+    }
+  }
+  getCacheSegmentKey(segmentKey, index2) {
+    if (!this.cachedSegmentKeys[segmentKey]) {
+      this.cachedSegmentKeys[segmentKey] = {};
+    }
+    if (!this.cachedSegmentKeys[segmentKey][index2]) {
+      this.cachedSegmentKeys[segmentKey][index2] = this.makeSegmentKey({ key: segmentKey, index: index2 });
+    }
+    return this.cachedSegmentKeys[segmentKey][index2];
+  }
+  toggleSelect(key, index2) {
+    if (this.points[index2]) {
+      var point2 = this.points[index2][key];
+      if (point2 && !this.isSelectedSegment(key, index2)) {
+        this.select(...this.selectedPointList, { x: point2.x, y: point2.y, key, index: index2 });
+      } else {
+        this.select(...this.selectedPointList.filter((it) => {
+          return it.key !== key || it.index !== index2;
+        }));
+      }
+    }
+  }
+  selectKeyIndex(key, index2) {
+    if (this.points[index2]) {
+      var point2 = this.points[index2][key];
+      if (point2 && !this.isSelectedSegment(key, index2)) {
+        this.select({ x: point2.x, y: point2.y, key, index: index2 });
+      }
+    }
+  }
+  reselect() {
+    this.selectedPointList.filter(Boolean).forEach((it) => {
+      var _a;
+      var point2 = (_a = this.points[it.index]) == null ? void 0 : _a[it.key];
+      if (point2) {
+        it.x = point2.x;
+        it.y = point2.y;
+      }
+    });
+  }
+  isSelectedSegment(segment, index2) {
+    var key = this.getCacheSegmentKey(segment, index2);
+    return this.selectedPointKeys[key];
+  }
+  commitTransformMatrix(point2, transformMatrix) {
+    var result = transformMat4([], [point2.x, point2.y, 0], transformMatrix);
+    return { x: result[0], y: result[1] };
+  }
+  transformMat4(transformMatrix) {
+    this.transformPoints.forEach((p, index2) => {
+      var realPoint = this.points[index2];
+      Object.assign(realPoint.startPoint, this.commitTransformMatrix(p.startPoint, transformMatrix));
+      Object.assign(realPoint.endPoint, this.commitTransformMatrix(p.endPoint, transformMatrix));
+      Object.assign(realPoint.reversePoint, this.commitTransformMatrix(p.reversePoint, transformMatrix));
+    });
+  }
+  transform(type, dx = 0, dy = 0) {
+    var { x: x2, y: y2, width: width2, height: height2 } = this.transformRect;
+    var view = create$5();
+    translate(view, view, [x2, y2, 0]);
+    switch (type) {
+      case "flipX":
+        scale$1(view, view, [-1, 1, 1]);
+        translate(view, view, [-width2, 0, 0]);
+        break;
+      case "flipY":
+        scale$1(view, view, [1, -1, 1]);
+        translate(view, view, [0, -height2, 0]);
+        break;
+      case "flip":
+        scale$1(view, view, [-1, -1, 1]);
+        translate(view, view, [-width2, -height2, 0]);
+        break;
+    }
+    translate(view, view, [-x2, -y2, 0]);
+    this.transformMat4(view);
+  }
+  initTransform(rect2) {
+    this.transformRect = clone$1(rect2);
+    this.transformPoints = this.clonePoints.map((p) => {
+      return {
+        startPoint: clone$1(p.startPoint),
+        endPoint: clone$1(p.endPoint),
+        reversePoint: clone$1(p.reversePoint)
+      };
+    });
+  }
+  setConnectedPoint(dx, dy) {
+    var state = this.state;
+    var x2 = state.dragXY.x + dx;
+    var y2 = state.dragXY.y + dy;
+    var endPoint = { x: x2, y: y2 };
+    var reversePoint2 = { x: x2, y: y2 };
+    if (state.dragPoints) {
+      state.reversePoint = Point.getReversePoint(state.startPoint, endPoint);
+    }
+    var point2 = {
+      startPoint: state.startPoint,
+      endPoint,
+      curve: !!state.dragPoints,
+      reversePoint: reversePoint2,
+      connected: true,
+      close: true
+    };
+    this.points.push(point2);
+  }
+  setLastPoint(startPoint) {
+    var endPoint = clone$1(startPoint);
+    var reversePoint2 = clone$1(startPoint);
+    var point2 = {
+      startPoint,
+      endPoint,
+      curve: false,
+      reversePoint: reversePoint2,
+      connected: false,
+      close: false
+    };
+    this.points.push(point2);
+  }
+  getPrevPoint(index2) {
+    return Point.getPrevPoint(this.points, index2);
+  }
+  getIndexPoint(index2) {
+    return Point.getIndexPoint(this.points, index2);
+  }
+  getNextPoint(index2) {
+    return Point.getNextPoint(this.points, index2);
+  }
+  getConnectedPointList(index2) {
+    return Point.getConnectedPointList(this.points, index2);
+  }
+  isFirst(segment) {
+    return Point.isFirst(segment);
+  }
+  getLastPoint(index2) {
+    return Point.getLastPoint(this.points, index2);
+  }
+  setCachePoint(index2, segmentKey, verties = []) {
+    var state = this.state;
+    this.snapPointList = [];
+    this.selectedIndex = index2;
+    state.connectedPoint = this.getPrevPoint(index2);
+    state.connectedPointList = clone$1(Point.getConnectedPointList(this.points, this.selectedIndex));
+    if (state.connectedPoint && !state.connectedPoint.connected) {
+      state.connectedPoint = null;
+    }
+    state.segment = this.getIndexPoint(index2);
+    if (state.segment.connected) {
+      state.connectedPoint = this.getNextPoint(index2);
+    }
+    var isFirstSegment = this.isFirst(state.segment);
+    if (isFirstSegment) {
+      var lastPoint = this.getLastPoint(index2);
+      if (lastPoint.connected) {
+        state.connectedPoint = lastPoint;
+      }
+    }
+    state.segmentKey = segmentKey;
+    state.isCurveSegment = state.segment.curve && state.segmentKey != "startPoint";
+    state.originalSegment = clone$1(state.segment);
+    if (state.connectedPoint) {
+      state.originalConnectedPoint = clone$1(state.connectedPoint);
+    }
+    state.cachedPoints = [];
+    this.points.filter((p) => p && p != state.segment).forEach((p) => {
+      state.cachedPoints.push(p.startPoint, p.reversePoint, p.endPoint);
+    });
+  }
+  clamp(value, min, max) {
+    if (isUndefined(min) || isUndefined(max)) {
+      return value;
+    }
+    return Math.max(min, Math.min(max, value));
+  }
+  moveSegment(segmentKey, dx, dy, originSegment = void 0, maxWidth = void 0, maxHeight = void 0) {
+    if (originSegment) {
+      const segment = this.points[originSegment.index][segmentKey];
+      segment.x = this.clamp(originSegment[segmentKey].x + dx, 0, maxWidth);
+      segment.y = this.clamp(originSegment[segmentKey].y + dy, 0, maxHeight);
+    } else {
+      var state = this.state;
+      var originPoint = state.originalSegment[segmentKey];
+      var targetPoint = state.segment[segmentKey];
+      if (originPoint) {
+        targetPoint.x = this.clamp(originPoint.x + dx, 0, maxWidth);
+        targetPoint.y = this.clamp(originPoint.y + dy, 0, maxHeight);
+      }
+    }
+  }
+  calculateToCurve(point2, nextPoint, prevPoint) {
+    var centerX = (nextPoint.startPoint.x + prevPoint.startPoint.x) / 2;
+    var centerY = (nextPoint.startPoint.y + prevPoint.startPoint.y) / 2;
+    var dx = (nextPoint.startPoint.x - centerX) / 2;
+    var dy = (nextPoint.startPoint.y - centerY) / 2;
+    point2.endPoint = {
+      x: point2.startPoint.x + dx,
+      y: point2.startPoint.y + dy
+    };
+    point2.reversePoint = {
+      x: point2.startPoint.x - dx,
+      y: point2.startPoint.y - dy
+    };
+    return { dx, dy };
+  }
+  convertToCurve(index2) {
+    var point2 = this.points[index2];
+    if (point2.curve) {
+      point2.curve = false;
+      point2.reversePoint = clone$1(point2.startPoint);
+      point2.endPoint = clone$1(point2.startPoint);
+      if (point2.command === "M") {
+        var lastPoint = Point.getPrevPoint(points, point2.index);
+        if (lastPoint.connected) {
+          lastPoint.curve = false;
+          lastPoint.reversePoint = clone$1(lastPoint.startPoint);
+          lastPoint.endPoint = clone$1(lastPoint.startPoint);
+        }
+      } else {
+        var nextPoint = this.getNextPoint(index2);
+        if (nextPoint && nextPoint.command === "M") {
+          var firstPoint = nextPoint;
+          firstPoint.curve = false;
+          firstPoint.reversePoint = clone$1(firstPoint.startPoint);
+          firstPoint.endPoint = clone$1(firstPoint.startPoint);
+        }
+      }
+    } else {
+      point2.curve = true;
+      var prevPoint = this.getPrevPoint(index2);
+      var nextPoint = this.getNextPoint(index2);
+      if (nextPoint && nextPoint.index < index2 && nextPoint.command === "M") {
+        var firstPoint = nextPoint;
+        nextPoint = this.getNextPoint(firstPoint.index);
+        this.calculateToCurve(point2, nextPoint, prevPoint);
+        firstPoint.curve = true;
+        firstPoint.endPoint = clone$1(point2.endPoint);
+        firstPoint.reversePoint = clone$1(point2.reversePoint);
+      } else if (nextPoint && nextPoint.index > index2 && nextPoint.command !== "M") {
+        this.calculateToCurve(point2, nextPoint, prevPoint);
+      } else if (!nextPoint && prevPoint) {
+        var centerX = (point2.startPoint.x - prevPoint.startPoint.x) / 3;
+        var centerY = (point2.startPoint.y - prevPoint.startPoint.y) / 3;
+        point2.endPoint = { x: point2.startPoint.x + centerX, y: point2.startPoint.y + centerY };
+        point2.reversePoint = Point.getReversePoint(point2.startPoint, point2.endPoint);
+      } else if (!prevPoint && nextPoint) {
+        var centerX = (point2.startPoint.x - nextPoint.startPoint.x) / 3;
+        var centerY = (point2.startPoint.y - nextPoint.startPoint.y) / 3;
+        point2.endPoint = { x: point2.startPoint.x + centerX, y: point2.startPoint.y + centerY };
+        point2.reverse = Point.getReversePoint(point2.startPoint, point2.endPoint);
+      }
+    }
+  }
+  moveCurveSegment(segmentKey, dx, dy) {
+    var state = this.state;
+    this.moveSegment(segmentKey, dx, dy);
+    var targetSegmentKey = segmentKey === "endPoint" ? "reversePoint" : "endPoint";
+    state.segment[targetSegmentKey] = Point.getReversePoint(state.segment.startPoint, state.segment[segmentKey]);
+  }
+  rotateSegmentTarget(segmentKey, target) {
+    var state = this.state;
+    if (state.originalSegment && state.segment) {
+      var { x: cx, y: cy } = state.originalSegment.startPoint;
+      var { x: rx, y: ry } = state.segment[segmentKey];
+      var { x: tx, y: ty } = state.originalSegment[target];
+      var { x: x2, y: y2 } = getXYInCircle(calculateAngle360(rx - cx, ry - cy), getDist(tx, ty, cx, cy), cx, cy);
+      state.segment[target] = { x: x2, y: y2 };
+    }
+  }
+  rotateSegment(segmentKey) {
+    this.rotateSegmentTarget(segmentKey, segmentKey === "endPoint" ? "reversePoint" : "endPoint");
+  }
+  calculateSnap(segmentKey, dx, dy, dist2 = 1) {
+    var state = this.state;
+    var cachedPoints = state.cachedPoints;
+    var original = state.originalSegment[segmentKey];
+    if (!segmentKey) {
+      return { dx, dy, snapPointList: [] };
+    }
+    var realX = original.x + dx;
+    var realY = original.y + dy;
+    var { point: snapPointX, distanceValue: dx } = calculateSnapPoint$1(cachedPoints, "x", realX, dx, dist2);
+    var { point: snapPointY, distanceValue: dy } = calculateSnapPoint$1(cachedPoints, "y", realY, dy, dist2);
+    var snapEndPoint = {
+      x: original.x + dx,
+      y: original.y + dy
+    };
+    var snapPointList = [];
+    if (snapPointX) {
+      snapPointList.push({ startPoint: snapPointX, endPoint: snapEndPoint });
+    }
+    if (snapPointY) {
+      snapPointList.push({ startPoint: snapPointY, endPoint: snapEndPoint });
+    }
+    return { dx, dy, snapPointList };
+  }
+  copySegment(from, to) {
+    to.startPoint = clone$1(from.startPoint);
+    to.endPoint = clone$1(from.endPoint);
+    to.reversePoint = clone$1(from.reversePoint);
+  }
+  get selectedLength() {
+    return this.selectedPointList.length;
+  }
+  moveSelectedSegment(dx, dy) {
+    if (this.selectedPointList.length > 0) {
+      this.selectedPointList.forEach((it) => {
+        var target = this.points[it.index][it.key];
+        target.x = it.x + dx;
+        target.y = it.y + dy;
+      });
+    } else if (this.selectedGroup) {
+      this.moveSelectedGroup(dx, dy);
+    }
+  }
+  moveSelectedGroup(dx, dy, maxWidth, maxHeight) {
+    this.selectedGroup.points.forEach((it) => {
+      const target = this.points[it.index];
+      target.startPoint.x = this.clamp(it.startPoint.x + dx, 0, maxWidth);
+      target.startPoint.y = this.clamp(it.startPoint.y + dy, 0, maxHeight);
+      target.endPoint.x = it.endPoint.x + dx;
+      target.endPoint.y = it.endPoint.y + dy;
+      target.reversePoint.x = it.reversePoint.x + dx;
+      target.reversePoint.y = it.reversePoint.y + dy;
+    });
+  }
+  get selectedGroup() {
+    return this.splitedGroupList[this.state.selectedGroupIndex];
+  }
+  get splitedGroupList() {
+    return Point.getSplitedGroupList(this.points);
+  }
+  get groupList() {
+    return Point.getGroupList(this.points);
+  }
+  getGroup(groupList, pointIndex) {
+    return Point.getGroup(groupList, pointIndex);
+  }
+  get selectedGroupIndexList() {
+    const groupIndexList = new Set();
+    const groupList = this.groupList;
+    if (this.selectedPointList.length === 0 && this.state.selectedGroupIndex < 0) {
+      return groupList.map((group2) => group2.groupIndex);
+    }
+    const points2 = this.selectedPointList;
+    points2.forEach((it) => {
+      const group2 = this.getGroup(groupList, it.index);
+      if (group2) {
+        groupIndexList.add(group2.groupIndex);
+      }
+    });
+    return [...new Set([...groupIndexList, this.state.selectedGroupIndex])];
+  }
+  removeSelectedSegment() {
+    this.selectedPointList.forEach((it) => {
+      var target = this.points[it.index][it.key];
+      target.removed = true;
+    });
+    const pointGroup = Point.splitPoints(this.points);
+    const newPoints = Point.recoverPoints(pointGroup.map((points2) => {
+      return points2.filter((p) => !p.startPoint.removed).map((p) => {
+        if (p.endPoint.removed) {
+          p.endPoint = clone$1(p.startPoint);
+        }
+        if (p.reversePoint.removed) {
+          p.reversePoint = clone$1(p.startPoint);
+        }
+        if (Point.isEqual(p.endPoint, p.startPoint, p.reversePoint)) {
+          p.command = "L";
+          p.curve = false;
+        }
+        return p;
+      });
+    }));
+    this.points = newPoints;
+    this.select();
+  }
+  move(dx, dy, e2, maxWidth, maxHeight) {
+    var state = this.state;
+    var { isCurveSegment, segmentKey, connectedPoint } = state;
+    if (this.selectedPointList.length > 1) {
+      this.moveSelectedSegment(dx, dy, maxWidth, maxHeight);
+    } else if (this.selectedPointList.length === 1) {
+      var { dx, dy, snapPointList } = this.calculateSnap(segmentKey, dx, dy, 3);
+      this.snapPointList = snapPointList || [];
+      if (isCurveSegment) {
+        if (e2.altKey) {
+          this.moveSegment(segmentKey, dx, dy);
+          this.rotateSegment(segmentKey);
+        } else if (e2.shiftKey) {
+          this.moveSegment(segmentKey, dx, dy);
+        } else {
+          this.moveSegment(segmentKey, dx, dy);
+          var targetSegmentKey = segmentKey === "endPoint" ? "reversePoint" : "endPoint";
+          state.segment[targetSegmentKey] = Point.getReversePoint(state.segment.startPoint, state.segment[segmentKey]);
+        }
+      } else {
+        this.moveSegment("startPoint", dx, dy, null, maxWidth, maxHeight);
+        this.moveSegment("endPoint", dx, dy);
+        this.moveSegment("reversePoint", dx, dy);
+        if (!e2.altKey) {
+          state.connectedPointList.forEach((it) => {
+            this.moveSegment("startPoint", dx, dy, it, maxWidth, maxHeight);
+            this.moveSegment("endPoint", dx, dy, it);
+            this.moveSegment("reversePoint", dx, dy, it);
+          });
+        }
+      }
+      connectedPoint && this.copySegment(state.segment, state.connectedPoint);
+    } else if (this.state.selectedGroupIndex > -1) {
+      this.moveSelectedGroup(dx, dy, maxWidth, maxHeight);
+    }
+  }
+  moveEnd(dx, dy) {
+    var state = this.state;
+    var points2 = this.points;
+    var x2 = state.dragXY.x + dx;
+    var y2 = state.dragXY.y + dy;
+    var endPoint = { x: x2, y: y2 };
+    var reversePoint2 = { x: x2, y: y2 };
+    if (state.dragPoints) {
+      reversePoint2 = Point.getReversePoint(state.startPoint, endPoint);
+    }
+    points2.push({
+      command: state.clickCount === 0 ? "M" : "",
+      startPoint: state.startPoint,
+      endPoint,
+      curve: !!state.dragPoints,
+      reversePoint: reversePoint2
+    });
+    state.startPoint = null;
+    state.dragPoints = false;
+    state.moveXY = null;
+  }
+  setPoint(obj2) {
+    var p0 = obj2.first[0];
+    var p1 = obj2.second[obj2.second.length - 1];
+    var allPoints = this.clonePoints;
+    var firstItem = Point.getPoint(allPoints, p0);
+    var secondItem = Point.getPoint(allPoints, p1);
+    var newPoints = [
+      __spreadProps(__spreadValues({}, firstItem), { endPoint: obj2.first[1] }),
+      { startPoint: obj2.first[3], reversePoint: obj2.first[2], curve: true, endPoint: obj2.second[1] },
+      __spreadProps(__spreadValues({}, secondItem), { reversePoint: obj2.second[2] })
+    ];
+    var firstIndex = Point.getIndex(allPoints, p0);
+    allPoints.splice(firstIndex, 2, ...newPoints);
+    this.points = allPoints;
+    return firstIndex + 1;
+  }
+  setPointQuard(obj2) {
+    var p0 = obj2.first[0];
+    var p1 = obj2.second[obj2.second.length - 1];
+    var allPoints = this.clonePoints;
+    var firstItem = Point.getPoint(allPoints, p0);
+    var secondItem = Point.getPoint(allPoints, p1);
+    if (firstItem.curve && secondItem.curve === false) {
+      var newPoints = [
+        __spreadProps(__spreadValues({}, firstItem), { endPoint: firstItem.startPoint }),
+        { startPoint: obj2.first[2], reversePoint: obj2.first[1], curve: true, endPoint: obj2.second[1] }
+      ];
+      var firstIndex = Point.getIndex(allPoints, p0);
+      allPoints.splice(firstIndex, 1, ...newPoints);
+    } else {
+      var newPoints = [
+        __spreadValues({}, firstItem),
+        { startPoint: obj2.first[2], reversePoint: obj2.first[1], curve: true, endPoint: obj2.second[1] },
+        __spreadProps(__spreadValues({}, secondItem), { reversePoint: obj2.second[1], curve: true })
+      ];
+      var firstIndex = Point.getIndex(allPoints, p0);
+      allPoints.splice(firstIndex, 2, ...newPoints);
+    }
+    this.points = allPoints;
+    return firstIndex + 1;
+  }
+  setPointLine(obj2) {
+    var p0 = obj2.first[0];
+    var allPoints = this.clonePoints;
+    var newPoints = [
+      { command: "L", startPoint: obj2.first[1], curve: false, endPoint: obj2.first[1], reversePoint: obj2.first[1] }
+    ];
+    var firstIndex = Point.getIndex(allPoints, p0);
+    allPoints.splice(firstIndex + 1, 0, ...newPoints);
+    this.points = allPoints;
+    return firstIndex + 1;
+  }
+  toPath(minX = 0, minY = 0, scale2 = 1) {
+    return toPath$1(this.clonePoints, minX, minY, scale2);
+  }
+  makeSVGPath() {
+    this.initialize();
+    this.makePointGuide(this.points);
+    this.makeMovePositionGuide();
+    return this.toSVGString();
+  }
+  makeTriangleDistancePointGuide(first, second2) {
+    var minX = Math.min(first.startPoint.x, second2.startPoint.x);
+    var maxX = Math.max(first.startPoint.x, second2.startPoint.x);
+    var minY = Math.min(first.startPoint.y, second2.startPoint.y);
+    var maxY = Math.max(first.startPoint.y, second2.startPoint.y);
+    if (first.startPoint.x < second2.startPoint.x && first.startPoint.y < second2.startPoint.y) {
+      this.segmentManager.addDistanceLine({ x: minX, y: minY }, { x: maxX, y: minY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
+      var centerX = minX;
+      var centerY = minY;
+      var angle2 = calculateAngle360(maxX - minX, maxY - minY) - 180;
+      var dist2 = 20;
+      var { x: x2, y: y2 } = getXYInCircle(0, dist2, centerX, centerY);
+      var last2 = getXYInCircle(angle2, dist2, centerX, centerY);
+      this.segmentManager.addDistanceAngle(last2, dist2, dist2, angle2, { x: x2, y: y2 }, { x: x2 - dist2, y: y2 });
+    } else if (first.startPoint.x < second2.startPoint.x && first.startPoint.y > second2.startPoint.y) {
+      this.segmentManager.addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
+    } else if (first.startPoint.x > second2.startPoint.x && first.startPoint.y > second2.startPoint.y) {
+      this.segmentManager.addDistanceLine({ x: minX, y: minY }, { x: minX, y: maxY }).addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY });
+    } else if (first.startPoint.x > second2.startPoint.x && first.startPoint.y < second2.startPoint.y) {
+      this.segmentManager.addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
+    }
+  }
+  makeDistancePointGuide(prevPoint, current, nextPoint, index2) {
+    if (current.selected) {
+      if (prevPoint) {
+        this.makeTriangleDistancePointGuide(prevPoint, current);
+      }
+      if (nextPoint) {
+        this.makeTriangleDistancePointGuide(current, nextPoint);
+      }
+    }
+  }
+  makeStartPointGuide(prevPoint, current, nextPoint, index2) {
+    current.startPoint.isFirst = true;
+    if (current.curve === false) {
+      this.segmentManager.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+    } else {
+      this.segmentManager.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2)).addGuideLine(current.startPoint, current.endPoint);
+      if (Point.isEqual(current.startPoint, current.endPoint) === false) {
+        this.segmentManager.addCurvePoint(current.endPoint, index2, "endPoint", this.isSelectedSegment("endPoint", index2));
+      }
+    }
+  }
+  makeMiddlePointGuideSegment(prevPoint, current, nextPoint, index2) {
+    var mng = this.segmentManager;
+    if (current.curve === false) {
+      if (prevPoint.curve === false) {
+        mng.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+      } else {
+        mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+        if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
+          mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, "endPoint", this.isSelectedSegment("endPoint", prevPoint.index));
+        }
+      }
+    } else {
+      if (prevPoint.curve === false) {
+        if (Point.isEqual(current.reversePoint, current.startPoint)) {
+          mng.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+        } else {
+          mng.addGuideLine(current.startPoint, current.reversePoint).addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+          if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
+            mng.addCurvePoint(current.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
+          }
+        }
+      } else {
+        if (current.connected) {
+          mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addGuideLine(current.startPoint, current.reversePoint);
+          if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
+            mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, "endPoint", this.isSelectedSegment("endPoint", prevPoint.index));
+          }
+          if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
+            mng.addCurvePoint(current.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
+          }
+        } else {
+          mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addGuideLine(current.startPoint, current.reversePoint).addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+          if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
+            mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, "endPoint", this.isSelectedSegment("endPoint", prevPoint.index));
+          }
+          if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
+            mng.addCurvePoint(current.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
+          }
+        }
+      }
+    }
+  }
+  makeMiddlePointGuideSplitLine(prevPoint, current, nextPoint, index2) {
+    const selected = "selected";
+    if (current.curve === false) {
+      if (prevPoint.curve === false) {
+        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).L(current.startPoint).toString(`split-path ${selected}`));
+      } else {
+        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).Q(prevPoint.endPoint, current.startPoint).toString(`split-path ${selected}`));
+      }
+    } else {
+      if (prevPoint.curve === false) {
+        if (Point.isEqual(current.reversePoint, current.startPoint)) {
+          this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).L(current.startPoint).toString(`split-path ${selected}`));
+        } else {
+          this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).Q(current.reversePoint, current.startPoint).toString(`split-path ${selected}`));
+        }
+      } else {
+        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).C(prevPoint.endPoint, current.reversePoint, current.startPoint).toString(`split-path ${selected}`));
+      }
+    }
+  }
+  makePointGuide(points2) {
+    for (var index2 = 0, len2 = points2.length; index2 < len2; index2++) {
+      var currentIndex = index2;
+      var current = points2[currentIndex];
+      if (!current)
+        continue;
+      var nextPoint = Point.getNextPoint(points2, index2);
+      var prevPoint = Point.getPrevPoint(points2, index2);
+      if (prevPoint && prevPoint.command === "M") {
+        if (current.startPoint) {
+          current.startPoint.isSecond = true;
+        }
+      }
+      if (current.startPoint) {
+        if (nextPoint) {
+          current.startPoint.isLast = nextPoint.command === "M";
+        } else {
+          current.startPoint.isLast = index2 === len2 - 1;
+        }
+      }
+      current.selected = this.selectedIndex === index2;
+      if (current.command === "M") {
+        this.makeStartPointGuide(prevPoint, current, nextPoint, index2);
+      } else {
+        this.makeMiddlePointGuideSplitLine(prevPoint, current, nextPoint, index2);
+        this.makeMiddlePointGuideSegment(prevPoint, current, nextPoint, index2);
+      }
+      if (current.close) {
+        this.pathStringManager.Z();
+      }
+    }
+  }
+  makeMovePositionGuide() {
+    var state = this.state;
+    var { startPoint, moveXY, dragPoints, altKey, snapPointList, isGroupSegment } = state;
+    var points2 = this.points;
+    if (moveXY) {
+      snapPointList = snapPointList || [];
+      var {
+        snapPointList: movePointSnapPointList,
+        moveXY: newMoveXY
+      } = calculateMovePointSnap$1(points2, moveXY, 3);
+      snapPointList.push.apply(snapPointList, movePointSnapPointList);
+      state.moveXY = newMoveXY;
+      moveXY = newMoveXY;
+      this.snapPointList = snapPointList;
+      var prev = points2[points2.length - 1];
+      if (dragPoints && !isGroupSegment) {
+        if (!prev) {
+          var { x: x2, y: y2 } = Point.getReversePoint(startPoint, moveXY);
+          this.guideLineManager.M(moveXY).L(startPoint).L({ x: x2, y: y2 });
+          this.segmentManager.addCurvePoint(startPoint).addCurvePoint(moveXY).addCurvePoint({ x: x2, y: y2 });
+        } else if (prev.curve) {
+          var { x: x2, y: y2 } = Point.getReversePoint(startPoint, moveXY);
+          this.guideLineManager.M(prev.startPoint).C(prev.endPoint, { x: x2, y: y2 }, startPoint);
+          this.segmentManager.addGuideLine(prev.startPoint, prev.endPoint).addGuideLine(startPoint, { x: x2, y: y2 }).addGuideLine(startPoint, moveXY).addCurvePoint(prev.endPoint).addCurvePoint({ x: x2, y: y2 }).addCurvePoint(moveXY).addPoint(false, startPoint);
+        } else if (prev.curve === false) {
+          var { x: x2, y: y2 } = Point.getReversePoint(startPoint, moveXY);
+          this.guideLineManager.M(prev.startPoint).Q({ x: x2, y: y2 }, startPoint);
+          this.segmentManager.addGuideLine(moveXY, { x: x2, y: y2 }).addPoint(false, startPoint).addCurvePoint({ x: x2, y: y2 }).addCurvePoint(moveXY);
+        }
+      } else {
+        if (!prev)
+          ;
+        else if (prev.curve) {
+          this.guideLineManager.M(prev.startPoint).Q(prev.endPoint, moveXY);
+          this.segmentManager.addGuideLine(prev.endPoint, prev.startPoint).addCurvePoint(prev.endPoint);
+        } else {
+          if (!prev.close) {
+            this.guideLineManager.M(prev.startPoint).L(moveXY);
+            this.segmentManager.addPoint(false, prev.startPoint);
+          }
+        }
+      }
+    }
+  }
+  makeSnapLines() {
+    var snapLines = [];
+    if (this.snapPointList) {
+      var snapPath = new PathStringManager();
+      snapLines = this.snapPointList.map((snapPoint) => {
+        snapPath.reset();
+        return snapPath.M(snapPoint.startPoint).L(snapPoint.endPoint).X(snapPoint.startPoint).toString("snap-path");
+      });
+    }
+    return snapLines.join("");
+  }
+  makePathArea() {
+    const pathList = this.splitedGroupList.map(({ startPointIndex, points: points2 }, groupIndex) => {
+      const d = this.generatorPathString(points2);
+      const verties = toRectVerties(PathParser.fromSVGString(d).getBBox());
+      return {
+        points: points2,
+        startPointIndex,
+        groupIndex,
+        center: verties[4],
+        d
+      };
+    });
+    const pathCount = pathList.length;
+    return `
+            <g>
+               ${pathList.map((it) => {
+      const { center: center2 } = it;
+      const [x2, y2] = center2;
+      const selected = this.state.selectedGroupIndex === it.groupIndex;
+      return `
+                        <path class="path-area ${selected ? "selected" : ""}" 
+                            d="${it.d}" 
+                            data-point-index="${it.startPointIndex}" 
+                            data-group-index="${it.groupIndex}" 
+                        />
+
+                        ${pathCount > 1 && `
+                            <text class="path-area-text" x="${x2}" y="${y2}" >${it.groupIndex + 1}</text>
+                        `}
+                    `;
+    }).join("")}
+            </g>
+        `;
+  }
+  toSVGString() {
+    return `
+        <svg width="100%" height="100%" class='svg-editor-canvas'>
+            ${this.guideLineManager.toString("guide")}
+            ${this.splitLines.join("")}
+            ${this.makeSnapLines()}
+            ${this.makePathArea()}
+            ${this.segmentManager.toString()}
+        </svg>
+        `;
+  }
+}
+function xy$1([x2, y2]) {
+  return { x: x2, y: y2 };
+}
+function scaleLinear(source2, target) {
+  function targetScale(t) {
+    if (target[0] < target[1]) {
+      return target[0] + t * (target[1] - target[0]);
+    } else if (target[0] > target[1]) {
+      return target[0] - t * (target[0] - target[1]);
+    }
+  }
+  function rate(v1, v2, current) {
+    const minValue = Math.min(v1, v2);
+    const maxValue = Math.max(v1, v2);
+    return (current - minValue) / (maxValue - minValue);
+  }
+  return (x2) => {
+    if (source2[0] < source2[1]) {
+      return targetScale(rate(source2[0], source2[1], x2));
+    } else if (source2[0] > source2[1]) {
+      return targetScale(1 - rate(source2[0], source2[1], x2));
+    }
+  };
+}
+const SegmentConvertor$1 = class extends EditorElement {
+  convertToCurve(index2) {
+    this.pathGenerator.convertToCurve(index2);
+    this.renderPath();
+    this.updatePathLayer();
+  }
+  isEditableSegment() {
+    return this.state.disableCurve === false;
+  }
+  [DOUBLECLICK("$view [data-segment]") + IF("isEditableSegment") + PREVENT](e2) {
+    var index2 = +e2.$dt.attr("data-index");
+    this.convertToCurve(index2);
+  }
+  [DOUBLETAB("$view [data-segment]") + PREVENT + DELAY(300)](e2) {
+    var index2 = +e2.$dt.attr("data-index");
+    this.convertToCurve(index2);
+  }
+};
+const PathCutter$1 = class extends SegmentConvertor$1 {
+  calculatePointOnLine(d, clickPosition) {
+    var parser2 = new PathParser(d);
+    return parser2.getClosedPoint(clickPosition);
+  }
+  [POINTERSTART("$view .split-path") + MOVE() + END()](e2) {
+    this.initRect();
+    var parser2 = new PathParser(e2.$dt.attr("d"));
+    var clickPosition = {
+      x: e2.xy.x - this.state.rect.x,
+      y: e2.xy.y - this.state.rect.y
+    };
+    var selectedSegmentIndex = -1;
+    if (this.isMode("path")) {
+      this.state.dragXY = clickPosition;
+      this.state.startPoint = this.state.dragXY;
+      this.pathGenerator.setLastPoint(this.state.startPoint);
+      this.state.isSplitPath = true;
+      this.renderPath();
+      if (this.state.current) {
+        this.updatePathLayer();
+      }
+      return;
+    } else {
+      if (parser2.segments[1].command === "C") {
+        var points2 = [
+          xy$1(parser2.segments[0].values),
+          xy$1(parser2.segments[1].values.slice(0, 2)),
+          xy$1(parser2.segments[1].values.slice(2, 4)),
+          xy$1(parser2.segments[1].values.slice(4, 6))
+        ];
+        var curve = recoverBezier(...points2, 20);
+        var t = curve(clickPosition.x, clickPosition.y);
+        selectedSegmentIndex = this.pathGenerator.setPoint(getBezierPoints(points2, t));
+      } else if (parser2.segments[1].command === "Q") {
+        var points2 = [
+          xy$1(parser2.segments[0].values),
+          xy$1(parser2.segments[1].values.slice(0, 2)),
+          xy$1(parser2.segments[1].values.slice(2, 4))
+        ];
+        var curve = recoverBezierQuard(...points2, 20);
+        var t = curve(clickPosition.x, clickPosition.y);
+        selectedSegmentIndex = this.pathGenerator.setPointQuard(getBezierPointsQuard(points2, t));
+      } else if (parser2.segments[1].command === "L") {
+        var points2 = [
+          xy$1(parser2.segments[0].values),
+          xy$1(parser2.segments[1].values.slice(0, 2))
+        ];
+        var curve = recoverBezierLine(...points2, 20);
+        var t = curve(clickPosition.x, clickPosition.y);
+        selectedSegmentIndex = this.pathGenerator.setPointLine(getBezierPointsLine(points2, t));
+        if (e2.altKey) {
+          this.pathGenerator.convertToCurve(selectedSegmentIndex);
+        }
+      }
+      this.renderPath();
+      this.updatePathLayer();
+      this.changeMode("segment-move");
+      this.pathGenerator.setCachePoint(selectedSegmentIndex, "startPoint");
+      this.pathGenerator.selectKeyIndex("startPoint", selectedSegmentIndex);
+    }
+  }
+};
+class PathEditor extends PathCutter$1 {
+  initialize() {
+    super.initialize();
+    this.pathParser = new PathParser();
+    this.pathGenerator = new PurePathGenerator(this);
+  }
+  initState() {
+    return {
+      domain: this.props.domain || [0, 1],
+      range: this.props.range || [1, 0],
+      isControl: false,
+      disableCurve: false,
+      points: [],
+      mode: "path",
+      clickCount: 0,
+      isSegment: false,
+      isFirstSegment: false,
+      current: null
+    };
+  }
+  template() {
+    return `
+        <div class='elf--path-editor' tabIndex="-1">
+            <style type="text/css" ref="$styleView"></style>
+            <svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'>
+                <defs>
+                    <pattern id='stripe' patternUnits='userSpaceOnUse' width='20' height='33' patternTransform='scale(1) rotate(135)'>
+                        <path d='M0 8h20z'   stroke-width='1' stroke='#07A3FB' fill='none'/>
+                        <path d='M0 16h20z'   stroke-width='1' stroke='#07A3FB' fill='none'/>
+                        <path d='M0 24h20z'   stroke-width='1' stroke='#07A3FB' fill='none'/>
+                        <path d='M0 32h20z'   stroke-width='1' stroke='#07A3FB' fill='none'/>
+                    </pattern>
+                </defs>    
+            </svg>
+            <div class='path-container' ref='$view'></div>
+            <div class='path-container split-panel'>
+                <svg width="100%" height="100%">
+                    <circle ref='$splitCircle' class='split-circle' />
+                </svg>
+            </div>
+            <div class='segment-box' ref='$segmentBox'></div>
+        </div>`;
+  }
+  [BIND("$el")]() {
+    return {
+      style: {
+        height: Length.px(this.props.height) || 200
+      }
+    };
+  }
+  initRect(isForce = false) {
+    if (!this.state.rect || isForce || this.state.rect.width == 0 || this.state.rect.height == 0) {
+      this.state.rect = this.refs.$view.rect();
+    }
+  }
+  [SUBSCRIBE("PathEditorDone")]() {
+    this.updatePathLayer();
+  }
+  [KEYUP() + ENTER]() {
+    this.trigger("PathEditorDone");
+  }
+  [KEYUP() + ESCAPE]() {
+    if (this.state.current) {
+      this.updatePathLayer();
+    }
+  }
+  [KEYUP("$el .segment")](e2) {
+    const index2 = +e2.$dt.data("index");
+    console.log(index2);
+    switch (e2.code) {
+      case "Delete":
+      case "Backspace":
+        this.trigger("deleteSegment");
+        break;
+    }
+  }
+  [SUBSCRIBE_SELF("deleteSegment")]() {
+    this.pathGenerator.reselect();
+    this.pathGenerator.removeSelectedSegment();
+    this.renderPath();
+    this.updatePathLayer();
+  }
+  [SUBSCRIBE_SELF("moveSegment")](dx, dy) {
+    this.pathGenerator.reselect();
+    this.pathGenerator.moveSelectedSegment(dx, dy);
+    this.renderPath();
+    this.updatePathLayer();
+  }
+  recoverAreaToPath(d) {
+    this.initRect(true);
+    var parser2 = new PathParser(d);
+    parser2.scaleFunc(this.state.domainScaleInvert, this.state.rangeScaleInvert);
+    return parser2.d;
+  }
+  updatePathLayer() {
+    var { d } = this.pathGenerator.toPath();
+    const value = this.recoverAreaToPath(d);
+    this.parent.trigger(this.props.onchange, this.state.key, value);
+  }
+  changeMode(mode, obj2) {
+    this.setState(__spreadValues({
+      mode,
+      clickCount: 0,
+      moveXY: null
+    }, obj2), false);
+    if (obj2 == null ? void 0 : obj2.points) {
+      this.pathGenerator.setPoints(obj2.points || []);
+    }
+  }
+  isMode(mode) {
+    return this.state.mode === mode;
+  }
+  convertPathToArea(obj2) {
+    this.initRect(true);
+    const width2 = this.state.rect.width;
+    const height2 = this.state.rect.height;
+    this.state.domainScale = scaleLinear([0, 1], [0, width2]);
+    this.state.rangeScale = scaleLinear([1, 0], [0, height2]);
+    this.state.domainScaleInvert = scaleLinear([0, width2], [0, 1]);
+    this.state.rangeScaleInvert = scaleLinear([0, height2], [1, 0]);
+    this.pathParser.reset(obj2.d).scaleFunc(this.state.domainScale, this.state.rangeScale);
+  }
+  refreshEditorView(obj2, removeCache = false) {
+    this.convertPathToArea(obj2);
+    removeCache ? [] : this.pathGenerator.selectedPointList;
+    this.pathGenerator.setPoints(this.pathParser.convertGenerator());
+    this.renderPath();
+  }
+  afterRender() {
+    const { mode, value } = this.props;
+    const obj2 = { d: value };
+    if (mode === "move") {
+      obj2.current = null;
+      obj2.points = [];
+    }
+    this.changeMode(mode, obj2);
+    setTimeout(() => {
+      this.refreshEditorView(obj2, true);
+    }, 10);
+  }
+  [BIND("$view")]() {
+    var _a;
+    const path = this.pathGenerator.makeSVGPath();
+    const strokeWidth = Length.parse((_a = this.state.current) == null ? void 0 : _a["stroke-width"]).value || 0;
+    return {
+      class: {
+        "path": this.state.mode === "path",
+        "modify": this.state.mode === "modify",
+        "transform": this.state.mode === "transform",
+        "segment-move": this.state.mode === "segment-move",
+        "is-control": this.state.isControl,
+        "has-one-stroke-width": strokeWidth === 1
+      },
+      htmlDiff: path
+    };
+  }
+  [BIND("$splitCircle")]() {
+    if (this.state.splitXY) {
+      return {
+        cx: this.state.splitXY.x,
+        cy: this.state.splitXY.y,
+        r: 5
+      };
+    } else {
+      return {
+        r: 0
+      };
+    }
+  }
+  renderPath() {
+    this.bindData("$view");
+  }
+  get checkDistance() {
+    return false;
+  }
+  getPathRect() {
+    this.initRect(true);
+    const { d } = this.pathGenerator.toPath();
+    return vertiesToRectangle(PathParser.fromSVGString(d).getBBox());
+  }
+  resetTransformZone() {
+    var rect2 = this.getPathRect();
+    this.state.transformZoneRect = rect2;
+  }
+  [POINTERMOVE("$view") + PREVENT](e2) {
+    this.initRect();
+    if (this.isMode("path") && this.state.rect) {
+      this.state.moveXY = {
+        x: e2.xy.x - this.state.rect.x,
+        y: e2.xy.y - this.state.rect.y
+      };
+      this.state.altKey = e2.altKey;
+      this.renderPath();
+    } else {
+      var $target = Dom.create(e2.target);
+      var isSplitPath = $target.hasClass("split-path");
+      if (isSplitPath) {
+        this.state.splitXY = this.calculatePointOnLine($target.attr("d"), {
+          x: e2.xy.x - this.state.rect.x,
+          y: e2.xy.y - this.state.rect.y
+        });
+      } else {
+        this.state.splitXY = null;
+      }
+      this.bindData("$splitCircle");
+      this.state.altKey = false;
+    }
+  }
+  [POINTERSTART("$view :not(.split-path)") + PREVENT + STOP + MOVE() + END()](e2) {
+    this.initRect();
+    this.state.altKey = false;
+    var isPathMode = this.isMode("path");
+    this.$config.set("set.move.control.point", true);
+    this.state.dragXY = {
+      x: e2.xy.x - this.state.rect.x,
+      y: e2.xy.y - this.state.rect.y
+    };
+    var $target = Dom.create(e2.target);
+    this.$segmentTarget = $target;
+    if ($target.hasClass("svg-editor-canvas") && !isPathMode)
+      ;
+    else {
+      this.pathGenerator.reselect();
+      this.state.isSegment = $target.attr("data-segment") === "true";
+      this.state.isFirstSegment = this.state.isSegment && $target.attr("data-is-first") === "true";
+      this.state.selectedGroupIndex = -1;
+      this.state.selectedPointIndex = -1;
+    }
+    if (isPathMode) {
+      if (this.state.isFirstSegment) {
+        var index2 = +$target.attr("data-index");
+        this.state.startPoint = this.pathGenerator.points[index2].startPoint;
+      } else {
+        this.state.startPoint = this.state.dragXY;
+      }
+      this.state.dragPoints = false;
+      this.state.endPoint = null;
+    } else {
+      if (this.state.isSegment) {
+        this.changeMode("segment-move");
+        var [index2, segmentKey] = $target.attrs("data-index", "data-segment-point");
+        const localIndex = +index2;
+        this.pathGenerator.setCachePoint(localIndex, segmentKey);
+        this.pathGenerator.selectKeyIndex(segmentKey, localIndex);
+        this.state.segmentKey = segmentKey;
+        this.renderPath();
+      }
+    }
+  }
+  move(dx, dy) {
+    const e2 = this.$config.get("bodyEvent");
+    if (this.state.segmentKey === "startPoint") {
+      const newXY = {
+        x: Math.max(0, Math.min(this.state.rect.width, e2.xy.x - this.state.rect.x)),
+        y: Math.max(0, Math.min(this.state.rect.height, e2.xy.y - this.state.rect.y))
+      };
+      dx = newXY.x - this.state.dragXY.x;
+      dy = newXY.y - this.state.dragXY.y;
+    }
+    if (this.isMode("segment-move")) {
+      this.pathGenerator.move(dx, dy, e2, this.state.rect.width, this.state.rect.height);
+      this.renderPath();
+      this.updatePathLayer();
+    } else if (this.isMode("path")) {
+      const dist2 = getDist(dx, dy, 0, 0);
+      if (dist2 >= 2) {
+        this.state.dragPoints = e2.altKey ? false : true;
+      }
+    }
+  }
+  renderSegment(callback) {
+    if (this.pathGenerator.selectedLength) {
+      this.pathGenerator.reselect();
+      if (isFunction(callback))
+        callback();
+      this.renderPath();
+      this.updatePathLayer();
+    }
+  }
+  end(dx, dy) {
+    this.$config.get("bodyEvent");
+    this.$config.set("set.move.control.point", false);
+    if (this.isMode("modify")) {
+      this.pathGenerator.reselect();
+    } else if (this.isMode("segment-move")) {
+      this.changeMode("modify");
+      this.pathGenerator.reselect();
+      this.renderPath();
+      this.updatePathLayer();
+    } else if (this.isMode("path")) {
+      if (this.state.isFirstSegment) {
+        this.changeMode("modify");
+        this.pathGenerator.setConnectedPoint(dx, dy);
+        this.renderPath();
+        if (this.state.current) {
+          this.updatePathLayer();
+        }
+      } else {
+        if (this.state.isSplitPath)
+          ;
+        else {
+          this.pathGenerator.moveEnd(dx, dy);
+          this.state.clickCount++;
+          this.renderPath();
+          this.pathGenerator.reselect();
+        }
+      }
+      this.state.isSplitPath = false;
+    }
+  }
+}
 function propertyEditor(editor) {
   editor.registerElement({
     IconListViewEditor,
@@ -45309,6 +46994,7 @@ function propertyEditor(editor) {
     TextEditor,
     ColorSingleEditor,
     CubicBezierEditor,
+    PathEditor,
     ColorViewEditor,
     VarEditor,
     PathDataEditor,
@@ -45337,6 +47023,7 @@ function propertyEditor(editor) {
     "text": "TextEditor",
     "color-single": "ColorSingleEditor",
     "cubic-bezier": "CubicBezierEditor",
+    "path": "PathEditor",
     "clip-path": "ClipPathEditor",
     "color-view": "ColorViewEditor",
     "var": "VarEditor",
@@ -52505,196 +54192,6 @@ function video(editor) {
     VideoProperty
   });
 }
-class SegmentManager {
-  constructor(viewport) {
-    this.viewport = viewport;
-    this.segmentList = [];
-  }
-  reset() {
-    this.segmentList = [];
-    return this;
-  }
-  checkInViewport(point2) {
-    const vertext = this.viewport.applyVertexInverse([point2.x, point2.y, 0]);
-    return this.viewport.checkInViewport(vertext);
-  }
-  addLine(a, b) {
-    if (getDist(a.x, a.y, b.x, b.y) < 1)
-      return this;
-    if (this.checkInViewport(a) || this.checkInViewport(b)) {
-      this.segmentList.push({
-        line: true,
-        x1: a.x,
-        y1: a.y,
-        x2: b.x,
-        y2: b.y
-      });
-    }
-    return this;
-  }
-  addGuideLine(a, b) {
-    if (getDist(a.x, a.y, b.x, b.y) < 1)
-      return this;
-    if (this.checkInViewport(a) || this.checkInViewport(b)) {
-      this.segmentList.push({
-        line: true,
-        guide: true,
-        x1: a.x,
-        y1: a.y,
-        x2: b.x,
-        y2: b.y
-      });
-    }
-    return this;
-  }
-  addDistanceLine(a, b) {
-    if (getDist(a.x, a.y, b.x, b.y) < 1)
-      return this;
-    this.segmentList.push({
-      line: true,
-      distance: true,
-      x1: a.x,
-      y1: a.y,
-      x2: b.x,
-      y2: b.y
-    });
-    return this;
-  }
-  addDistanceAngle(center2, rx, ry, degree, last2, line2) {
-    this.segmentList.push({
-      angle: true,
-      rx,
-      ry,
-      line: line2,
-      degree,
-      center: center2,
-      last: last2
-    });
-    return this;
-  }
-  addPoint(obj2, point2, index2, segment, selected = false) {
-    if (this.checkInViewport(point2)) {
-      this.segmentList.push(__spreadProps(__spreadValues({}, obj2), {
-        cx: point2.x,
-        cy: point2.y,
-        selected,
-        index: index2,
-        segment,
-        isFirst: point2.isFirst,
-        isLast: point2.isLast,
-        isSecond: point2.isSecond
-      }));
-    }
-    return this;
-  }
-  addStartPoint(obj2, point2) {
-    if (this.checkInViewport(point2)) {
-      this.segmentList.push(__spreadProps(__spreadValues({}, obj2), {
-        cx: point2.x,
-        cy: point2.y,
-        start: true
-      }));
-    }
-    return this;
-  }
-  addCurvePoint(point2, index2, segment, selected = false) {
-    if (this.checkInViewport(point2)) {
-      this.segmentList.push({
-        curve: true,
-        cx: point2.x,
-        cy: point2.y,
-        index: index2,
-        selected,
-        segment,
-        isFirst: point2.isFirst,
-        isLast: point2.isLast,
-        isSecond: point2.isSecond
-      });
-    }
-    return this;
-  }
-  addText(point2, text2) {
-    this.segmentList.push({
-      type: "text",
-      cx: point2.x,
-      cy: point2.y,
-      text: text2 + ""
-    });
-    return this;
-  }
-  toString() {
-    this.segmentList.sort((a, b) => {
-      if (a.line && !b.line) {
-        return -1;
-      } else if (!a.line && b.line) {
-        return 1;
-      }
-      return 0;
-    });
-    return this.segmentList.map((it) => {
-      if (it.angle) {
-        return `
-                <path stroke-width='1' 
-                    data-distance='true'
-                    fill="rgba(0,0,0,0.5)"
-                    d="M ${it.center.x},${it.center.y} A ${it.rx} ${it.ry},${it.degree},0,0,${it.last.x} ${it.last.y} L${it.line.x} ${it.line.y} Z"
-                />`;
-      } else if (it.line) {
-        return `
-                <line stroke-width='1' 
-                    data-segment="true"
-                    data-is-last="${it.isLast}"                
-                    data-guide='${it.guide}'
-                    data-distance='${it.distance}'
-                    x1='${it.x1}' x2='${it.x2}' y1='${it.y1}' y2='${it.y2}' 
-                />`;
-      } else if (it.text) {
-        return "";
-      } else if (it.curve && it.segment !== "startPoint") {
-        return `
-                <path stroke-width='1'
-                    class='curve' 
-                    ${it.selected && `data-selected="true"`}
-                    ${it.isLast && `data-is-last="true"`}
-                    ${it.isFirst && `data-is-first="true"`}
-                    ${it.isSecond && `data-is-second="true"`}
-                    title="${it.segment} curve"  
-                    data-index='${it.index}'
-                    data-segment-point='${it.segment}'
-                    data-segment="true" 
-                    d="M ${it.cx} ${it.cy - 4}L ${it.cx + 4} ${it.cy} L ${it.cx} ${it.cy + 4} L ${it.cx - 4} ${it.cy} Z"
-                />`;
-      } else if (it.start) {
-        return `
-                <circle 
-                    cx='${it.cx}' 
-                    cy='${it.cy}' 
-                    r='4'                    
-                    class='segment'
-                    data-selected='${it.selected}'
-                    title="Center"
-                    data-start="true" 
-                />`;
-      } else {
-        return `
-                <circle 
-                    cx='${it.cx}' 
-                    cy='${it.cy}' 
-                    r='4'                    
-                    class='segment'
-                    data-selected='${it.selected}'
-                    title="${it.segment}"
-                    data-is-last="${it.isLast}"
-                    data-is-first="${it.isFirst}"
-                    data-is-second="${it.isSecond}"
-                    data-index='${it.index}' 
-                    data-segment-point='${it.segment}' 
-                    data-segment="true" 
-                />`;
-      }
-    }).join("");
-  }
-}
 const SEGMENT_DIRECTION = ["startPoint", "endPoint", "reversePoint"];
 function calculateSnapPoint(points2, sourceKey, target, distanceValue, dist2) {
   var checkedPointList = points2.filter((p) => {
@@ -56788,6 +58285,26 @@ class GradientTimingStepEditor extends GradientBaseEditor {
           break;
         case TimingFunction.LINEAR:
           break;
+        case TimingFunction.PATH:
+          this.emit("showComponentPopup", {
+            title: "Path Editor",
+            width: 400,
+            inspector: [
+              {
+                key: "path",
+                editor: "path",
+                editorOptions: {
+                  height: 160
+                },
+                defaultValue: timing.d
+              }
+            ],
+            changeEvent: (key, value) => {
+              this.localColorStep.timing = parseOneValue(`path(${value})`).parsed;
+              this.updateData();
+            }
+          });
+          break;
         default:
           this.emit("showComponentPopup", {
             title: "Cubic Bezier",
@@ -57186,57 +58703,103 @@ class GradientEditorView extends GradientColorstepEditor {
       class: "elf--gradient-editor-view"
     });
   }
-  isMovableCenter(e2) {
-    this.initializeData();
-    return [
-      GradientType.RADIAL,
-      GradientType.REPEATING_RADIAL,
-      GradientType.CONIC,
-      GradientType.REPEATING_CONIC
-    ].includes(this.state.gradient.type);
-  }
-  [POINTERSTART("$el .gradient-position") + LEFT_BUTTON + MOVE("calculateMovedElement") + END("calculateMovedEndElement") + IF("isMovableCenter") + PREVENT](e2) {
-    this.state.$target = e2.$dt;
-    this.state.left = Length.parse(e2.$dt.css("left")).value;
-    this.state.top = Length.parse(e2.$dt.css("top")).value;
+  [POINTERSTART("$el .point") + LEFT_BUTTON + MOVE("calculateMovedElement") + END("calculateMovedEndElement") + PREVENT](e2) {
     this.$el.toggleClass("dragging", true);
     this.initializeData();
+    const result = this.state.backgroundImageMatrix;
+    this.pointTarget = e2.$dt.data("type");
+    this.startPoint = this.$viewport.applyVertex(result.startPoint);
+    this.endPoint = this.$viewport.applyVertex(result.endPoint);
+    if (result.shapePoint) {
+      this.shapePoint = this.$viewport.applyVertex(result.shapePoint);
+    }
   }
   calculateMovedElement(dx, dy) {
-    const newLeft = this.state.left + dx;
-    const newTop = this.state.top + dy;
-    this.state.$target.css({
-      left: Length.px(newLeft),
-      top: Length.px(newTop)
-    });
-    const worldPosition = this.$viewport.applyVertexInverse([
-      newLeft,
-      newTop,
-      0
-    ]);
-    const localPosition = vertiesMap([worldPosition], this.$selection.current.absoluteMatrixInverse)[0];
+    const targetPoint = this.pointTarget === "start" ? this.startPoint : this.endPoint;
+    let nextPoint = add$1([], targetPoint, [dx, dy, 0]);
+    var [localPosition] = vertiesMap([this.$viewport.applyVertexInverse(nextPoint)], this.$selection.current.absoluteMatrixInverse);
     const backgroundImage2 = this.state.gradient;
     const backRect = backgroundImage2.getOffset(this.state.contentBox);
-    const newX = localPosition[0] - backRect.x;
-    const newY = localPosition[1] - backRect.y;
-    this.state.backgroundImages[this.state.index].image.radialPosition = [
-      Length.makePercent(newX, backRect.width),
-      Length.makePercent(newY, backRect.height)
-    ];
-    this.updateData();
+    const image2 = this.state.gradient.image;
+    switch (image2.type) {
+      case GradientType.RADIAL:
+      case GradientType.REPEATING_RADIAL:
+        if (this.pointTarget === "start") {
+          const newX = localPosition[0] - backRect.x;
+          const newY = localPosition[1] - backRect.y;
+          this.state.backgroundImages[this.state.index].image.radialPosition = [
+            Length.makePercent(newX, backRect.width),
+            Length.makePercent(newY, backRect.height)
+          ];
+          this.updateData();
+        } else if (this.pointTarget === "end") {
+          var [localStartPosition] = vertiesMap([this.$viewport.applyVertexInverse(this.startPoint)], this.$selection.current.absoluteMatrixInverse);
+          var [localEndPosition] = vertiesMap([
+            this.$viewport.applyVertexInverse(add$1([], this.endPoint, [dx, 0, 0]))
+          ], this.$selection.current.absoluteMatrixInverse);
+          var [localShapePosition] = vertiesMap([this.$viewport.applyVertexInverse(this.shapePoint)], this.$selection.current.absoluteMatrixInverse);
+          const newEndX = localEndPosition[0] - backRect.x - localStartPosition[0];
+          const newShapeY = localShapePosition[1] - backRect.y - localStartPosition[1];
+          if (this.state.gradient.image.radialType === RadialGradientType.CIRCLE) {
+            this.state.backgroundImages[this.state.index].image.radialSize = [
+              Length.px(Math.abs(newEndX))
+            ];
+          } else if (this.state.gradient.image.radialType === RadialGradientType.ELLIPSE) {
+            this.state.backgroundImages[this.state.index].image.radialSize = [
+              Length.makePercent(Math.abs(newEndX), backRect.width),
+              Length.makePercent(Math.abs(newShapeY), backRect.height)
+            ];
+          }
+          this.updateData();
+        } else if (this.pointTarget === "shape") {
+          var [localStartPosition] = vertiesMap([this.$viewport.applyVertexInverse(this.startPoint)], this.$selection.current.absoluteMatrixInverse);
+          var [localShapePosition] = vertiesMap([
+            this.$viewport.applyVertexInverse(add$1([], this.shapePoint, [0, dy, 0]))
+          ], this.$selection.current.absoluteMatrixInverse);
+          var [localEndPosition] = vertiesMap([this.$viewport.applyVertexInverse(this.endPoint)], this.$selection.current.absoluteMatrixInverse);
+          const newEndX = localEndPosition[0] - backRect.x - localStartPosition[0];
+          const newShapeY = localShapePosition[1] - backRect.y - localStartPosition[1];
+          if (this.state.gradient.image.radialType === RadialGradientType.CIRCLE) {
+            this.state.backgroundImages[this.state.index].image.radialSize = [
+              Length.px(Math.abs(newShapeY))
+            ];
+          } else if (this.state.gradient.image.radialType === RadialGradientType.ELLIPSE) {
+            this.state.backgroundImages[this.state.index].image.radialSize = [
+              Length.makePercent(Math.abs(newEndX), backRect.width),
+              Length.makePercent(Math.abs(newShapeY), backRect.height)
+            ];
+          }
+          this.updateData();
+        }
+        break;
+      case GradientType.CONIC:
+      case GradientType.REPEATING_CONIC:
+        if (this.pointTarget === "start") {
+          const newX = localPosition[0] - backRect.x;
+          const newY = localPosition[1] - backRect.y;
+          this.state.backgroundImages[this.state.index].image.radialPosition = [
+            Length.makePercent(newX, backRect.width),
+            Length.makePercent(newY, backRect.height)
+          ];
+          this.updateData();
+        }
+        break;
+    }
   }
   calculateMovedEndElement(dx, dy) {
     if (dx == 0 && dy === 0) {
-      switch (this.state.gradient.type) {
-        case GradientType.RADIAL:
-        case GradientType.REPEATING_RADIAL:
-          const findKey = `${this.state.gradient.image.radialType} ${this.state.gradient.image.radialSize}`.trim();
-          const index2 = radialTypeList.indexOf(findKey);
-          const [radialType, radialSize] = radialTypeList[(index2 + 1) % radialTypeList.length].split(" ");
-          const image2 = this.state.backgroundImages[this.state.index].image;
-          image2.radialType = radialType;
-          image2.radialSize = radialSize;
-          break;
+      if (this.pointTarget === "start") {
+        switch (this.state.gradient.type) {
+          case GradientType.RADIAL:
+          case GradientType.REPEATING_RADIAL:
+            const findKey = `${this.state.gradient.image.radialType} ${this.state.gradient.image.radialSize}`.trim();
+            const index2 = radialTypeList.indexOf(findKey);
+            const [radialType, radialSize] = radialTypeList[(index2 + 1) % radialTypeList.length].split(" ");
+            const image2 = this.state.backgroundImages[this.state.index].image;
+            image2.radialType = radialType;
+            image2.radialSize = radialSize;
+            break;
+        }
       }
     }
     this.updateData();
@@ -57287,6 +58850,11 @@ class GradientEditorView extends GradientColorstepEditor {
           L${startX + width2} ${startY + 0}           
         `
         });
+      case TimingFunction.PATH:
+        return /* @__PURE__ */ createElementJsx("path", {
+          class: "timing",
+          d: PathParser.fromSVGString(timing.d).scale(width2, width2).flipX().translate(0, width2).d
+        });
       default:
         return /* @__PURE__ */ createElementJsx("path", {
           class: "timing",
@@ -57317,6 +58885,11 @@ class GradientEditorView extends GradientColorstepEditor {
           L${startX + width2 - half} ${startY + width2 * 1 / 3 - half} 
           L${startX + width2 - half} ${startY + 0 - half}           
         `
+        });
+      case TimingFunction.PATH:
+        return /* @__PURE__ */ createElementJsx("path", {
+          class: "timing",
+          d: PathParser.fromSVGString(timing.d).scale(width2, width2).flipX().translate(-hafl, width2).d
         });
       default:
         return /* @__PURE__ */ createElementJsx("path", {
@@ -57381,9 +58954,7 @@ class GradientEditorView extends GradientColorstepEditor {
     if (bigArc) {
       nextAngle -= 180;
     }
-    var [pos] = vertiesMap([
-      lerp([], startPoint, add$1([], startPoint, [-1, 0, 0]), dist$1)
-    ], calculateRotationOriginMat4(nextAngle, startPoint));
+    var [pos] = vertiesMap([lerp([], startPoint, add$1([], startPoint, [-1, 0, 0]), dist$1)], calculateRotationOriginMat4(nextAngle, startPoint));
     switch (timing.name) {
       case TimingFunction.LINEAR:
         return ``;
@@ -57607,14 +59178,14 @@ class GradientEditorView extends GradientColorstepEditor {
     });
     centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
     const stickPoint = this.$viewport.applyVertex(result.shapePoint);
-    centerStick = lerp([], centerPosition, lerp([], centerPosition, stickPoint, 1 / dist(centerPosition, stickPoint)), lastDist + 20);
+    centerStick = lerp([], centerPosition, lerp([], centerPosition, stickPoint, 1 / dist(centerPosition, stickPoint)), lastDist + 50);
     const targetStick = lerp([], centerStick, centerPosition, 1);
     let newHoverColorStepPoint = null;
     if (this.state.hoverColorStep) {
       const hoverAngle = this.state.hoverColorStep.percent * 3.6;
       const originDist = dist(centerPosition, shapePoint);
       [newHoverColorStepPoint] = vertiesMap([
-        lerp([], centerPosition, shapePoint, (lastDist + 15) / originDist)
+        lerp([], centerPosition, shapePoint, (lastDist + 20) / originDist)
       ], calculateRotationOriginMat4(hoverAngle, centerPosition));
     }
     return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("div", {
@@ -57652,29 +59223,19 @@ class GradientEditorView extends GradientColorstepEditor {
     }), this.makeConicGradientPoint(colorsteps, startPoint, endPoint, shapePoint, newHoverColorStepPoint, lastDist + 20, image2.angle)));
   }
   makeRadialCenterPoint(result) {
-    const { image: image2 } = result.backgroundImage;
-    let centerPosition, colorsteps, startPoint, endPoint, shapePoint;
+    result.backgroundImage;
+    let colorsteps, startPoint, endPoint, shapePoint;
     this.$viewport.applyVerties(result.backVerties);
-    centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
+    this.$viewport.applyVertex(result.radialCenterPosition);
     startPoint = this.$viewport.applyVertex(result.startPoint);
     endPoint = this.$viewport.applyVertex(result.endPoint);
     shapePoint = this.$viewport.applyVertex(result.shapePoint);
     colorsteps = this.makeStickPoint(result.colorsteps, startPoint, endPoint);
-    if (image2.radialType === RadialGradientType.ELLIPSE) {
-      shapePoint = this.$viewport.applyVertex(result.shapePoint);
-    }
     let newHoverColorStepPoint = null;
     if (this.state.hoverColorStep) {
       newHoverColorStepPoint = lerp([], startPoint, endPoint, this.state.hoverColorStep.percent / 100);
     }
-    return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("div", {
-      class: "gradient-position center",
-      "data-radial-type": image2.radialType,
-      style: {
-        left: Length.px(centerPosition[0]),
-        top: Length.px(centerPosition[1])
-      }
-    }), /* @__PURE__ */ createElementJsx("svg", {
+    return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("svg", {
       class: "gradient-radial-line"
     }, /* @__PURE__ */ createElementJsx("path", {
       d: `
@@ -58786,7 +60347,34 @@ class FillTimingStepEditor extends FillBaseEditor {
       const { timing, timingCount } = this.localColorStep;
       switch (timing.name) {
         case TimingFunction.STEPS:
+          this.localColorStep.timing.direction = this.localColorStep.timing.direction === "start" ? "end" : "start";
+          this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$selection.packByValue({
+            [this.state.key]: `${this.state.imageResult.image}`
+          }));
+          break;
         case TimingFunction.LINEAR:
+          break;
+        case TimingFunction.PATH:
+          this.emit("showComponentPopup", {
+            title: "Path Editor",
+            width: 400,
+            inspector: [
+              {
+                key: "path",
+                editor: "path",
+                editorOptions: {
+                  height: 160
+                },
+                defaultValue: timing.d
+              }
+            ],
+            changeEvent: (key, value) => {
+              this.localColorStep.timing = parseOneValue(`path(${value})`).parsed;
+              this.command("setAttributeForMulti", `change ${this.state.key} fragment`, this.$selection.packByValue({
+                [this.state.key]: `${this.state.imageResult.image}`
+              }));
+            }
+          });
           break;
         default:
           this.emit("showComponentPopup", {
@@ -59258,6 +60846,11 @@ class FillEditorView extends FillColorstepEditor {
           L${startX + width2} ${startY + width2 * 1 / 3} 
           L${startX + width2} ${startY + 0}           
         `
+        });
+      case TimingFunction.PATH:
+        return /* @__PURE__ */ createElementJsx("path", {
+          class: "timing",
+          d: PathParser.fromSVGString(timing.d).scale(width2, width2).flipX().translate(0, width2).translate(startX, startY).d
         });
       default:
         return /* @__PURE__ */ createElementJsx("path", {

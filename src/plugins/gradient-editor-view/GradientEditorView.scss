@@ -36,8 +36,9 @@
   .center {
     position: absolute;
     transform: translateX(-50%) translateY(-50%);
-    width: 20px;
-    height: 20px;
+    width: 10px;
+    height: 10px;
+    background-color: var(--elf--selected-color-2);
     border-radius: 50%;
     border: 2px solid white;
     pointer-events: all;
@@ -211,6 +212,7 @@
       &.hover-colorstep {
         pointer-events: none;
         r: 8;
+        filter: drop-shadow(0 0 1px rgb(255, 255, 255));        
       }
     }
   }
@@ -271,7 +273,8 @@
       &.point {
         fill: white;
         r: 5;
-
+        pointer-events: all;        
+        
         &[data-type='start'] {
           fill: var(--elf--selected-color) !important;
         }

@@ -65,14 +65,13 @@ export default class GradientEditor extends EditorElement {
     const oldType = this.state.image?.type;
     const colorsteps = this.state.image?.colorsteps || [];
 
-    if (colorsteps.length === 1) {
-      colorsteps.push(colorsteps[0])
-    }
-
     if (oldType === GradientType.STATIC) { 
       if (colorsteps.length === 0) {
         colorsteps.push(colorsteps[0], colorsteps[0])
+      } else if (colorsteps.length === 1) {
+        colorsteps.push(colorsteps[0],colorsteps[0])
       }
+
     }
 
     var url = type === 'image-resource' ? this.state.image.url : this.state.url;

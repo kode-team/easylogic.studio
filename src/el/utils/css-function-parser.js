@@ -171,9 +171,14 @@ const CSS_FUNC_PARSER_MAP = {
     "color": (item) => ({ funcType: FuncType.COLOR, ...Color.parse(item.matchedString) }),
     'steps': (item) => ({
         funcType: FuncType.TIMING,
-        name: 'steps',
+        name: TimingFunction.STEPS,
         count: +item.parameters[0],
         direction: item.parameters[1]
+    }),
+    'path': (item) => ({
+        funcType: FuncType.TIMING,
+        name: TimingFunction.PATH,
+        d: item.args
     }),
     'static-gradient': makeGroupFunction('static-gradient'),
     'linear-gradient': makeGroupFunction('linear-gradient'),
@@ -184,18 +189,18 @@ const CSS_FUNC_PARSER_MAP = {
     'repeating-conic-gradient': makeGroupFunction('repeating-conic-gradient'),
     'cubic-bezier': (item) => ({
         funcType: FuncType.TIMING,
-        name: 'cubic-bezier',
+        name: TimingFunction.CUBIC_BEZIER,
         matchedString: item.matchedString,
         x1: +item.parameters[0],
         y1: +item.parameters[1],
         x2: +item.parameters[2],
         y2: +item.parameters[3]
     }),
-    'ease': (item) => ({ funcType: FuncType.TIMING, name: 'ease', matchedString: item.matchedString, x1: 0.25, y1: 0.1, x2: 0.25, y2: 1 }),
-    'ease-in': (item) => ({ funcType: FuncType.TIMING, name: 'ease-in', matchedString: item.matchedString, x1: 0.42, y1: 0, x2: 1, y2: 1 }),
-    'ease-out': (item) => ({ funcType: FuncType.TIMING, name: 'ease-out', matchedString: item.matchedString, x1: 0, y1: 0, x2: 0.58, y2: 1 }),
-    'ease-in-out': (item) => ({ funcType: FuncType.TIMING, name: 'ease-in-out', matchedString: item.matchedString, x1: 0.42, y1: 0, x2: 0.58, y2: 1 }),
-    'linear': (item) => ({ funcType: FuncType.TIMING, name: 'linear', matchedString: item.matchedString, x1: 0, y1: 0, x2: 1, y2: 1 }),
+    'ease': (item) => ({ funcType: FuncType.TIMING, name: TimingFunction.EASE, matchedString: item.matchedString, x1: 0.25, y1: 0.1, x2: 0.25, y2: 1 }),
+    'ease-in': (item) => ({ funcType: FuncType.TIMING, name: TimingFunction.EASE_IN, matchedString: item.matchedString, x1: 0.42, y1: 0, x2: 1, y2: 1 }),
+    'ease-out': (item) => ({ funcType: FuncType.TIMING, name: TimingFunction.EASE_OUT, matchedString: item.matchedString, x1: 0, y1: 0, x2: 0.58, y2: 1 }),
+    'ease-in-out': (item) => ({ funcType: FuncType.TIMING, name: TimingFunction.EASE_IN_OUT, matchedString: item.matchedString, x1: 0.42, y1: 0, x2: 0.58, y2: 1 }),
+    'linear': (item) => ({ funcType: FuncType.TIMING, name: TimingFunction.LINEAR, matchedString: item.matchedString, x1: 0, y1: 0, x2: 1, y2: 1 }),
 }
 
 export function makeIndexString(it, prefix = '@') {

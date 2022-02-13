@@ -229,6 +229,7 @@ export const TimingFunction = {
     EASE_IN_OUT: "ease-in-out",
     STEPS: "steps",
     CUBIC_BEZIER: "cubic-bezier",
+    PATH: 'path'
 }
 
 export const SpreadMethodType = {
@@ -248,5 +249,6 @@ export const FuncType = {
     NUMBER: 'number',
     BOOLEAN: 'boolean',
     FUNCTION: 'function',
+    PATH: 'path',
     UNKNOWN: 'unknown'
 }

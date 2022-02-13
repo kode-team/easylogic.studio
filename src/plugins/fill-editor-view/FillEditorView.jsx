@@ -25,6 +25,7 @@ import { END, MOVE } from "el/editor/types/event";
 import { Length } from "el/editor/unit/Length";
 import { repeat } from "el/utils/func";
 import { parseOneValue } from "el/utils/css-function-parser";
+import PathParser from "el/editor/parser/PathParser";
 
 const spreadMethodList = [
   SpreadMethodType.PAD,
@@ -115,7 +116,46 @@ class FillTimingStepEditor extends FillBaseEditor {
 
       switch (timing.name) {
         case TimingFunction.STEPS:
+          this.localColorStep.timing.direction =
+            this.localColorStep.timing.direction === "start" ? "end" : "start";
+
+          this.command(
+            "setAttributeForMulti",
+            `change ${this.state.key} fragment`,
+            this.$selection.packByValue({
+              [this.state.key]: `${this.state.imageResult.image}`,
+            })
+          );
+          break;
         case TimingFunction.LINEAR:
+          break;
+        case TimingFunction.PATH:
+          this.emit("showComponentPopup", {
+            title: "Path Editor",
+            width: 400,
+            inspector: [
+              {
+                key: "path",
+                editor: "path",
+                editorOptions: {
+                  height: 160,
+                },
+                defaultValue: timing.d,
+              },
+            ],
+            changeEvent: (key, value) => {
+              this.localColorStep.timing = parseOneValue(`path(${value})`).parsed;
+
+              this.command(
+                "setAttributeForMulti",
+                `change ${this.state.key} fragment`,
+                this.$selection.packByValue({
+                  [this.state.key]: `${this.state.imageResult.image}`,
+                })
+              );
+            },
+          });
+
           break;
         default:
           // Cubic Bezier UI 표시를 해봅시다.
@@ -130,7 +170,7 @@ class FillTimingStepEditor extends FillBaseEditor {
                 editorOptions: {
                   isAnimating: false,
                 },
-                defaultValue: this.makeTimingString(timing),                
+                defaultValue: this.makeTimingString(timing),
               },
             ],
             changeEvent: (key, value) => {
@@ -144,7 +184,7 @@ class FillTimingStepEditor extends FillBaseEditor {
               );
             },
           });
-          this.$el.toggleClass("dragging", false);          
+          this.$el.toggleClass("dragging", false);
           return;
       }
     }
@@ -257,7 +297,6 @@ class FillColorstepEditor extends FillTimingStepEditor {
     this.pointTarget = e.$dt.data("type");
     this.startPoint = this.$viewport.applyVertex(result.startPoint);
     this.endPoint = this.$viewport.applyVertex(result.endPoint);
-    // this.areaStartPoint = this.$viewport.applyVertex(result.areaStartPoint);
 
     this.dist = vec3.dist(this.startPoint, this.endPoint);
 
@@ -878,6 +917,19 @@ export default class FillEditorView extends FillColorstepEditor {
         `}
           />
         );
+      case TimingFunction.PATH:
+        return (
+          <path
+            class="timing"
+            d={
+              PathParser.fromSVGString(timing.d)
+                .scale(width, width)
+                .flipX()
+                .translate(0, width)
+                .translate(startX, startY).d
+            }
+          />
+        );
       default:
         return (
           <path
@@ -1026,12 +1078,12 @@ export default class FillEditorView extends FillColorstepEditor {
           cy={endPoint[1]}
         ></circle>
         {shapePoint && (
-        <circle
-          class="point"
-          data-type="shape"
-          cx={shapePoint[0]}
-          cy={shapePoint[1]}
-        ></circle>
+          <circle
+            class="point"
+            data-type="shape"
+            cx={shapePoint[0]}
+            cy={shapePoint[1]}
+          ></circle>
         )}
         {newHoverColorStepPoint && (
           <circle
