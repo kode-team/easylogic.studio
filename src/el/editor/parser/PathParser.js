@@ -1,5 +1,5 @@
 
-import { getBezierPoints, getBezierPointsLine, getBezierPointsQuard, getCurveBBox, getCurveDist, getQuardDist, normalizeCurveForLine, normalizeCurveForQuard, polygonalForCurve, recoverBezier, recoverBezierLine, recoverBezierQuard, splitBezierPointsByCount, splitBezierPointsLineByCount, splitBezierPointsQuardByCount } from "el/utils/bezier";
+import { createBezier, getBezierPoints, getBezierPointsLine, getBezierPointsQuard, getCurveBBox, getCurveDist, getQuardDist, normalizeCurveForLine, normalizeCurveForQuard, polygonalForCurve, recoverBezier, recoverBezierLine, recoverBezierQuard, splitBezierPointsByCount, splitBezierPointsLineByCount, splitBezierPointsQuardByCount } from "el/utils/bezier";
 import { isNotUndefined, clone, isNumber } from "el/sapa/functions/func";
 import { degreeToRadian, getDist, round } from "el/utils/math";
 import { mat4, vec2, vec3 } from "gl-matrix";
@@ -13,6 +13,13 @@ import arcToBezier from 'svg-arc-to-cubic-bezier';
 const REG_PARSE_NUMBER_FOR_PATH = /([mMlLvVhHcCsSqQtTaAzZ]([^mMlLvVhHcCsSqQtTaAzZ]*))/g;
 const splitReg = /[\b\t \,]/g;
 var numberReg = /-?[0-9]*\.?[0-9]+(?:e[-+]?\d+)?/ig
+
+function xy (point) {
+    return {
+        x: point[0],
+        y: point[1]
+    }
+}
 export default class PathParser {
 
     /**
@@ -28,6 +35,8 @@ export default class PathParser {
         this.pathString = pathString.trim();
 
         this.parse()
+
+        return this;
     }
 
     /**
@@ -59,7 +68,7 @@ export default class PathParser {
      * @param {PathParser} otherPath 
      * @returns {PathParser}
      */
-    addPath (otherPath, transform = mat4.create()) {
+    addPath(otherPath, transform = mat4.create()) {
         const newPath = otherPath.clone();
         newPath.transformMat4(transform);
         return this.addSegments(newPath.segments);
@@ -142,7 +151,7 @@ export default class PathParser {
                     return {
                         command: s.command.toUpperCase(),
                         values: [...s.values]
-                    };                    
+                    };
                 case 'z':
                     return {
                         command: s.command.toUpperCase(),
@@ -408,7 +417,7 @@ export default class PathParser {
         }).join(split)
     }
 
-    
+
 
     each(callback, isReturn = false) {
         var newSegments = this.segments.map((segment, index) => {
@@ -498,10 +507,37 @@ export default class PathParser {
         const newPath = this.clone();
         const rect = vertiesToRectangle(newPath.getBBox());
         newPath.translate(-rect.x, -rect.y);
-        
+
         const scale = Math.min(width / rect.width, height / rect.height);
-        
-        return newPath.scale(scale, scale).translate(width/2 - (rect.width/2*scale), height/2 - (rect.height/2*scale));
+
+        return newPath.scale(scale, scale).translate(width / 2 - (rect.width / 2 * scale), height / 2 - (rect.height / 2 * scale));
+    }
+
+    scaleFunc(xScale = (x) => x, yScale = (y) => y) {
+        return this.each(function (segment) {
+            var v = segment.values;
+            var c = segment.command;
+
+            switch (c) {
+                case 'M':
+                case 'L':
+                    segment.values = [xScale(v[0]), yScale(v[1])]
+                    break;
+                case 'C':
+                case 'Q':
+                    for (var i = 0, len = v.length; i < len; i += 2) {
+                        segment.values[i] = xScale(v[i]);
+                        segment.values[i + 1] = yScale(v[i + 1]);
+                    }
+                    break;
+                case 'A':
+
+                    break;
+            }
+
+            return segment;
+
+        });
     }
 
     rotate(angle, centerX = 0, centerY = 0) {
@@ -660,7 +696,7 @@ export default class PathParser {
                 } else if (segment.command === 'L') {
 
                     const localCurve = normalizeCurveForLine([
-                        [prevSegment.values[prevSegment.values.length-2], prevSegment.values[prevSegment.values.length-1], 0],
+                        [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
                         [segment.values[0], segment.values[1], 0]
                     ])
 
@@ -678,7 +714,7 @@ export default class PathParser {
                 } else if (segment.command === 'Q') {
 
                     const localCurve = normalizeCurveForQuard([
-                        [prevSegment.values[prevSegment.values.length-2], prevSegment.values[prevSegment.values.length-1], 0],
+                        [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
                         [segment.values[0], segment.values[1], 0],
                         [segment.values[2], segment.values[3], 0],
                     ])
@@ -707,7 +743,7 @@ export default class PathParser {
 
         pathList.forEach(path => {
             const newSegments = [];
-            
+
             path.segments.forEach((segment, index) => {
 
                 const prevSegment = path.segments[index - 1];
@@ -716,10 +752,10 @@ export default class PathParser {
                     newSegments.push(segment);
                 } else if (segment.command === 'L') {
                     newSegments.push(segment);
-                } else if (segment.command === 'C') { 
+                } else if (segment.command === 'C') {
                     newSegments.push(
                         ...polygonalForCurve(
-                            [prevSegment.values[prevSegment.values.length-2], prevSegment.values[prevSegment.values.length-1], 0],
+                            [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
                             [segment.values[0], segment.values[1], 0],
                             [segment.values[2], segment.values[3], 0],
                             [segment.values[4], segment.values[5], 0]
@@ -732,7 +768,7 @@ export default class PathParser {
                     newSegments.push(
                         ...polygonalForCurve(
                             ...normalizeCurveForQuard([
-                                [prevSegment.values[prevSegment.values.length-2], prevSegment.values[prevSegment.values.length-1], 0],
+                                [prevSegment.values[prevSegment.values.length - 2], prevSegment.values[prevSegment.values.length - 1], 0],
                                 [segment.values[0], segment.values[1], 0],
                                 [segment.values[2], segment.values[3], 0]
                             ])
@@ -753,41 +789,41 @@ export default class PathParser {
     }
 
 
-    divideSegmentByLength(length = 100)  {
-        
-            const newPath = new PathParser();
-    
-            const groupList = this.getGroup();
-    
-            groupList.forEach(group => {
-    
-                const newSegments = [];
-    
-                group.segments.forEach(({ segment }, index) => {
-                    const prevSegment = group.segments[index - 1]?.segment;
-    
-                    if (segment.command === 'M') {
-                        newSegments.push(segment);
-                        return;
-                    } else if (segment.command === 'L') {
-                        const dividedSegments = divideLine(segment, length);
-                        newSegments.push(...dividedSegments);
-                        return;
-                    } else if (segment.command === 'C') {
-                        const dividedSegments = divideCurve(segment, length);
-                        newSegments.push(...dividedSegments);
-                    } else if (segment.command === 'Q') {
-                        const dividedSegments = divideQuad(segment, length);
-                        newSegments.push(...dividedSegments);
-                    } else if (segment.command === 'Z') {
-                        newSegments.push(segment);
-                    }
-                })
-    
-                newPath.addGroup(newSegments);
+    divideSegmentByLength(length = 100) {
+
+        const newPath = new PathParser();
+
+        const groupList = this.getGroup();
+
+        groupList.forEach(group => {
+
+            const newSegments = [];
+
+            group.segments.forEach(({ segment }, index) => {
+                const prevSegment = group.segments[index - 1]?.segment;
+
+                if (segment.command === 'M') {
+                    newSegments.push(segment);
+                    return;
+                } else if (segment.command === 'L') {
+                    const dividedSegments = divideLine(segment, length);
+                    newSegments.push(...dividedSegments);
+                    return;
+                } else if (segment.command === 'C') {
+                    const dividedSegments = divideCurve(segment, length);
+                    newSegments.push(...dividedSegments);
+                } else if (segment.command === 'Q') {
+                    const dividedSegments = divideQuad(segment, length);
+                    newSegments.push(...dividedSegments);
+                } else if (segment.command === 'Z') {
+                    newSegments.push(segment);
+                }
             })
-    
-            return newPath;                                
+
+            newPath.addGroup(newSegments);
+        })
+
+        return newPath;
     }
 
     /**
@@ -798,7 +834,7 @@ export default class PathParser {
      */
     divideSegmentByCount(count = 1) {
 
-    
+
         let allSegments = [];
         const groupList = this.getGroup();
 
@@ -948,7 +984,7 @@ export default class PathParser {
 
                         minY = Math.min(minY, p[1])
                         maxY = Math.max(maxY, p[1])
-                    })                
+                    })
 
                     break;
                 case 'A':
@@ -1151,7 +1187,7 @@ export default class PathParser {
         }, isReturn);
     }
 
-    transform (customTransformFunction = ([x, y, z]) => ([x, y, z])) {
+    transform(customTransformFunction = ([x, y, z]) => ([x, y, z])) {
         const bbox = vertiesToRectangle(this.getBBox(), false);
 
         return this.each(function (segment) {
@@ -1314,13 +1350,13 @@ export default class PathParser {
     reversePathStringByFunc(func) {
         const pathList = this.toPathList().map((p, index) => {
             if (func(p, index)) {
-              return p.reverse()
+                return p.reverse()
             }
-      
+
             return p;
-          });
-      
-          return PathParser.joinPathList(pathList).toSVGString();
+        });
+
+        return PathParser.joinPathList(pathList).toSVGString();
     }
 
 
@@ -1380,7 +1416,7 @@ export default class PathParser {
 
     }
 
-    get points () {
+    get points() {
         return this.getCenterPointers();
     }
 
@@ -1804,7 +1840,7 @@ export default class PathParser {
         return this;
     }
 
-    drawLine (x1, y1, x2, y2) {
+    drawLine(x1, y1, x2, y2) {
         this.segments.push(
             Segment.M(x1, y1),
             Segment.L(x2, y2)
@@ -1822,7 +1858,7 @@ export default class PathParser {
      * @param {number} height 
      * @returns {PathParser}
      */
-    drawCircleWithRect (x, y, width, height = width) {
+    drawCircleWithRect(x, y, width, height = width) {
 
         var segmentSize = 0.552284749831;
         const path = new PathParser();
@@ -1839,7 +1875,7 @@ export default class PathParser {
 
         this.addPath(path);
 
-        return this; 
+        return this;
     }
 
     /**
@@ -1851,7 +1887,7 @@ export default class PathParser {
      * @returns {PathParser}
      */
     drawCircle(cx, cy, radius) {
-        return this.drawCircleWithRect(cx - radius, cy - radius, radius * 2, radius * 2);   
+        return this.drawCircleWithRect(cx - radius, cy - radius, radius * 2, radius * 2);
     }
 
 
@@ -1860,7 +1896,7 @@ export default class PathParser {
         const [x1, y1] = this.lastPoint;
 
         return this.addPath(PathParser.arcToCurve(x1, y1, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y))
-    }    
+    }
 
 
     /**
@@ -1868,7 +1904,7 @@ export default class PathParser {
      * 
      * @returns {vec3[]}
      */
-     get verties() {
+    get verties() {
         let arr = []
 
         let lastValues = []
@@ -1908,18 +1944,18 @@ export default class PathParser {
         return arr;
     }
 
-    get pathVerties () {
+    get pathVerties() {
         const pathVerties = []
         this.segments.forEach((segment, segmentIndex) => {
 
             if (segment.values.length > 0) {
                 const arr = segment.values;
-                for(var i = 0, len = arr.length; i < len; i += 2) {
+                for (var i = 0, len = arr.length; i < len; i += 2) {
                     pathVerties.push({
                         segmentIndex,
                         valueIndex: i,
                         x: arr[i],
-                        y: arr[i+1],
+                        y: arr[i + 1],
                     })
                 }
             }
@@ -1929,7 +1965,7 @@ export default class PathParser {
 
 
         return pathVerties;
-    }    
+    }
 
 
     /**
@@ -1941,7 +1977,7 @@ export default class PathParser {
         return this.toString().trim();
     }
 
-    get closed () {
+    get closed() {
         return this.segments.some(segment => segment.command === 'Z') && vec2.equals(this.lastPoint, this.firstPoint);
     }
 
@@ -1951,7 +1987,7 @@ export default class PathParser {
 
 
 
-    get length () {
+    get length() {
         let totalLength = 0;
 
         const group = this.getGroup();
@@ -1982,7 +2018,7 @@ export default class PathParser {
         return totalLength;
     }
 
-    get lengthList () {
+    get lengthList() {
         let totalLengthList = [];
 
         const group = this.getGroup();
@@ -2008,13 +2044,13 @@ export default class PathParser {
                         groupIndex,
                         segmentIndex: index,
                         length: getCurveDist(lastX, lastY, values[0], values[1], values[2], values[3], values[4], values[5])
-                    });                    
+                    });
                 } else if (s.segment.command === 'Q') {
                     totalLengthList.push({
                         groupIndex,
                         segmentIndex: index,
                         length: getQuardDist(lastX, lastY, values[0], values[1], values[2], values[3])
-                    });                                        
+                    });
                 } else {
                     // NOOP 
                 }
@@ -2022,7 +2058,7 @@ export default class PathParser {
         });
 
         return totalLengthList;
-    }    
+    }
 
 
     get lastSegment() {
@@ -2047,7 +2083,7 @@ export default class PathParser {
 
     get firstSegment() {
         const segment = this.segments[0];
-    
+
         return segment;
     }
 
@@ -2069,10 +2105,10 @@ export default class PathParser {
      * @param {PathParser[]}} pathList 
      * @returns {PathParser}
      */
-    static joinPathList (pathList = []) {
+    static joinPathList(pathList = []) {
         const newPath = PathParser.fromSVGString();
         pathList.forEach(path => {
-            newPath.addPath(path);            
+            newPath.addPath(path);
         })
         return newPath;
     }
@@ -2112,7 +2148,7 @@ export default class PathParser {
      * @returns {PathParser}
      */
     static makeLine(x, y, x2, y2) {
-        return PathParser.fromSVGString().drawLine(x, y, x2, y2);        
+        return PathParser.fromSVGString().drawLine(x, y, x2, y2);
     }
 
     /**
@@ -2240,7 +2276,7 @@ export default class PathParser {
         return starPath.cardinalSplines(tension);
     }
 
-    static arcToCurve(x1, y1, rx, ry, xAxisRotation,  largeArcFlag, sweepFlag, x2, y2) {
+    static arcToCurve(x1, y1, rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x2, y2) {
         const bezierCurveList = arcToBezier({
             px: x1,
             py: y1,
@@ -2251,7 +2287,7 @@ export default class PathParser {
             xAxisRotation,
             largeArcFlag,
             sweepFlag,
-          });
+        });
 
         const path = new PathParser();
 
@@ -2261,5 +2297,70 @@ export default class PathParser {
         });
 
         return path
+    }
+
+    toCurveList() {
+
+        const curveList = [];
+        this.segments.forEach((segment, index) => {
+            if (index > 0) {
+                const prevSegment = this.segments[index - 1];
+                const lastPoint = [
+                    prevSegment.values[prevSegment.values.length - 2],
+                    prevSegment.values[prevSegment.values.length - 1]
+                ]
+
+                const points = [
+                    xy(lastPoint),
+                    xy([segment.values[0], segment.values[1]]),
+                    xy([segment.values[2], segment.values[3]]),
+                    xy([segment.values[4], segment.values[5]])
+                ]
+
+                curveList.push({
+                    points,
+                    curveFunction: createBezier(...points)
+                })
+            }
+        })
+
+        return curveList;
+    }
+
+    /**
+     * 
+     * curve 전체를 1 베이스로 바꾼다음에 사용해야함.
+     * 
+     * @returns 
+     */
+    toInterpolateFunction() {
+        const curveList = this.normalize().toCurveList().map(curve => {
+            return {
+                points: curve.points,
+                curveFunction: curve.curveFunction,
+                start: curve.points[0].x,
+                end: curve.points[curve.points.length-1].x,
+            }
+        });
+
+        return (t) => {
+            const currentCurve = curveList.find(it => {
+                return it.start <= t && t <= it.end;
+            })
+
+            if (currentCurve) {
+                const point = currentCurve.curveFunction(t);
+
+                return point.y
+            }
+
+            if (t === 0) {
+                return curveList[0].points[0].y;
+            }
+
+            const points = curveList[curveList.length - 1].points
+
+            return points[points.length-1].y;
+        }
     }
 }

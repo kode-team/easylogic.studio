@@ -8,6 +8,7 @@ import { parseOneValue } from "el/utils/css-function-parser";
 import { FuncType, TimingFunction } from "el/editor/types/model";
 import { createTimingFunction } from "el/editor/interpolate";
 import { step } from "el/editor/interpolate/timing-functions/steps";
+import PathParser from "el/editor/parser/PathParser";
 
 const DEFINED_ANGLES = {
   "to top": 0,
@@ -116,6 +117,8 @@ export class Gradient extends ImageResource {
           case TimingFunction.STEPS:
             var func = step(timing.count, timing.direction);
             break;
+          case TimingFunction.PATH:
+            var func = PathParser.fromSVGString(timing.d).toInterpolateFunction();
           default:
             var func = createTimingFunction(timing.matchedString)
             break;
@@ -288,6 +291,8 @@ export class Gradient extends ImageResource {
         return `${timing.name} ${timingCount}`;
       case TimingFunction.STEPS:
         return `steps(${timing.count}, ${timing.direction})`;
+      case TimingFunction.PATH:
+        return `path(${timing.d}) ${timingCount}`;        
       default:
         return `cubic-bezier(${timing.x1}, ${timing.y1}, ${timing.x2}, ${timing.y2}) ${timingCount}`;
     }
@@ -344,10 +349,21 @@ export class Gradient extends ImageResource {
             }
           })
           break;
+        case TimingFunction.PATH:
+            var func = PathParser.fromSVGString(timing.d).toInterpolateFunction();
+            var localColorSteps = [];
+            for(var i = 0; i <= timingCount; i++) {
+              const stopPercent = prevColorStep.percent + (percent - prevColorStep.percent) * (i/timingCount);
+              const stopColor = Color.mix(prevColorStep.color, color, func(i/timingCount));
+              localColorSteps.push({ percent: stopPercent, color: stopColor });
+            }
+  
+            results.push(...localColorSteps);
+            break;
         default:
           var func = createTimingFunction(timing.matchedString)
           var localColorSteps = [];
-          for(var i = 1; i <= timingCount; i++) {
+          for(var i = 0; i <= timingCount; i++) {
             const stopPercent = prevColorStep.percent + (percent - prevColorStep.percent) * (i/timingCount);
             const stopColor = Color.mix(prevColorStep.color, color, func(i/timingCount));
             localColorSteps.push({ percent: stopPercent, color: stopColor });

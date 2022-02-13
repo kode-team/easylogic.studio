@@ -74,7 +74,7 @@ export class SVGLinearGradient extends SVGGradient {
 
     var opt = {}
 
-    const [options, ...colors] = result.parsedParameters;
+    const [options, ...colors] = result.parameters;
     const list = []
 
     // option parser 

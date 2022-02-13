@@ -3,6 +3,33 @@ import { expect, test } from 'vitest';
 import { parseGroupValue, parseValue } from './css-function-parser';
 
 
+test("create css multi linear-gradient path timing test ", () => {
+    const result = parseValue(`
+        repeating-linear-gradient(1px, 2px, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.5) 100% path(M 0 0 C 0.25 0.25 0.75 0.75 1 1))
+    `, 'background-image');
+    
+    const [gradient] = result;
+    const [, , , lastColorStep] = gradient.parameters;
+    const [, , path] = lastColorStep;
+
+    expect(path).toEqual( {
+        matchedString: 'path(M 0 0 C 0.25 0.25 0.75 0.75 1 1)',
+        startIndex: 69,
+        endIndex: 106,
+        func: 'path',
+        args: 'M 0 0 C 0.25 0.25 0.75 0.75 1 1',
+        parameters: [ 'M 0 0 C 0.25 0.25 0.75 0.75 1 1' ],
+        parsed: { 
+            funcType: 'timing', 
+            name: 'path', 
+            d: 'M 0 0 C 0.25 0.25 0.75 0.75 1 1' 
+        },
+        fullTextStartIndex: 104,
+        fullTextEndIndex: 141
+      })
+})
+
+
 test("create css multi linear-gradient timing test -  with comma ", () => {
     const result = parseValue(`
         repeating-linear-gradient(1px, 2px, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.5) 100%),

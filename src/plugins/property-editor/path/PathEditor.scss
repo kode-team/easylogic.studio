@@ -1,0 +1,427 @@
+.elf--path-editor {
+    --line-color: var(--elf--border-color);
+    min-width: 100px;
+    min-height: 100px;
+    margin: 10px;
+    // box-shadow: 0 0 0 1px var(--line-color);
+
+    cursor: crosshair;
+    background-color: transparent;
+    position: relative;
+
+    background-image:   linear-gradient(to right, var(--line-color), var(--line-color) 1px, transparent 1px, transparent), 
+                        linear-gradient(to bottom, var(--line-color), var(--line-color) 1px, transparent 1px, transparent),
+                        linear-gradient(to right, var(--line-color), var(--line-color) 1px, transparent 1px, transparent), 
+                        linear-gradient(to bottom, var(--line-color), var(--line-color) 1px, transparent 1px, transparent);
+    background-size: 10% 100%, 100% 10%, 1px 100%, 100% 1px;
+    background-position: 0 0, 0 0, 100% 0, 0 100%;
+    background-repeat: repeat, repeat, no-repeat, no-repeat;
+
+
+    .segment-box {
+        pointer-events:none;
+        position: absolute;
+        border:0.5px solid rgba(92, 63, 255, 0.9);
+        background-color:rgba(158, 136, 255, 0.2);
+        box-sizing:border-box;
+      
+        left:-10000px;
+    }    
+
+    .path-container {
+        position: absolute;
+        left: 0px;
+        top:0px;
+        right:0px;
+        bottom:0px;
+
+        &:not(.modify),
+        &:not(.segment-move) {
+            path.object {
+                stroke: #848484;
+            }
+        }
+
+        &.split-panel {
+            pointer-events: none;
+        }
+
+        &.has-transform {
+            background-color: var(--elf--path-background-color);
+        }
+
+        &.path {
+            cursor: crosshair;
+            svg {
+                path {
+                    &.object {
+                        pointer-events: stroke;
+                        // stroke: #848484;
+                    }
+                }
+            }
+        }
+
+        &.segment-move {
+            cursor: move; 
+        }
+
+        &.alt {
+            svg {
+                circle {
+                    cursor: move;
+                }
+            }
+        }
+
+        &.transform {
+            svg {
+                circle, rect, text, line, .snap-path {
+                    display: none;
+                }
+            }
+        }
+
+        &.modify,
+        &.segment-move {
+            cursor: default;
+            svg {
+                path {
+                    &.object {
+                        pointer-events: stroke;
+                        // stroke: transparent;
+                    }
+                }
+            }
+        }
+
+        &.box {
+            svg {
+                path {
+                    &.object {
+                        stroke: var(--elf--border-color);
+                    }                
+                }
+            }
+        }
+
+        &.has-one-stroke-width {
+            svg {
+                path {
+                    &.object {
+                        stroke: transparent;
+                    }
+                }
+            }
+        }    
+        
+        &.is-control {
+            svg {
+                path {
+                    // &.split-path,
+                    &.path-area {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+
+    .path-tool {
+        pointer-events: none;
+        position: absolute;
+        left: 0px;
+        top:0px;
+        right:0px;
+        bottom:0px;        
+
+        .transform-manager {
+            position: absolute;
+            pointer-events: all;
+            display: none;
+
+            &[data-show="true"] {
+                display: inline-block;
+            }            
+
+            &[data-position="to rotate"] {
+                box-shadow: none;
+
+            
+                .transform-tool-item:not([data-position="to rotate"]) {
+                    display: none;
+                }
+            }
+
+            .transform-tool-item {
+                position: absolute;
+                background-color: rgba(255, 255, 255, 0.5);
+                box-shadow: 0 0 0 1px #7b7b7b;
+                display: inline-block;
+                width: 8px;
+                height: 8px;
+                transform: translate(-50%, -50%);                            
+
+                &[data-position="to rotate"] {
+                    left: 50%;
+                    top: -20px;
+                    cursor: move;
+                    border-radius: 100%;
+                    background-color: rgba(255, 255, 255, 1);
+                }
+                &[data-position="to skewX"] {
+                    left: calc(50% - 20px);
+                    top: -20px;
+                    cursor: move;
+                    background-color: rgba(255, 255, 255, 1);
+                    transform: skewX(10deg);
+                }
+                &[data-position="to skewY"] {
+                    left: calc(50% + 20px);
+                    top: -20px;
+                    cursor: move;
+                    background-color: rgba(255, 255, 255, 1);
+                    transform: skewY(10deg);
+                }                
+                &[data-position="to rotate"] {
+                    left: 50%;
+                    top: -20px;
+                    cursor: move;
+                    border-radius: 100%;
+                    background-color: rgba(255, 255, 255, 1);
+                }                                
+
+                &[data-position="to move"] {
+                    left: 0px;
+                    top: 0px;
+                    right: 0px;
+                    bottom: 0px;
+                    width: auto;
+                    height: auto;
+                    background-color: transparent;
+                    cursor: move;
+                    transform: none;
+                    box-shadow: 0 0 0 1px var(--elf--selected-color);
+                }
+
+                &[data-position="to top left"] {
+                    left: 0px;
+                    top: 0px;
+                    cursor: nwse-resize;
+                }
+            
+                &[data-position="to top right"] {
+                    left: 100%;
+                    top: 0px;
+                    cursor: nesw-resize;      
+                }    
+            
+                &[data-position="to top"] {
+                    left: 50%;
+                    top: 0px;
+                    cursor: ns-resize;
+                }        
+            
+                &[data-position="to left"] {
+                    left: 0px;
+                    top: 50%;
+                    cursor: ew-resize;       
+                }
+            
+                &[data-position="to right"] {
+                    left: 100%;
+                    top: 50%;
+                    cursor: ew-resize;             
+                }    
+            
+                &[data-position="to bottom"] {
+                    left: 50%;
+                    top: 100%;
+                    cursor: ns-resize;                   
+                }          
+                
+                
+                &[data-position="to bottom left"] {
+                    left: 0px;
+                    top: 100%;
+                    cursor: nesw-resize;            
+       
+                }
+            
+                &[data-position="to bottom right"] {
+                    left: 100%;
+                    top: 100%;
+                    cursor: nwse-resize;      
+                }    
+            }
+        }
+    }
+
+
+    svg {
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+        line {
+            stroke-width: 1; 
+            content-visibility: auto;
+
+            &[data-guide='true'] {
+                stroke: var(--elf--path-segment-stroke-color);                 
+                pointer-events: none;
+            }
+
+            &[data-distance='true'] {
+                stroke: var(--elf--selected-color);
+                stroke-dasharray: 2 2;
+                pointer-events: none;
+            }            
+        }
+
+        circle {
+            fill: white;
+            stroke: var(--elf--path-guide-color); 
+            stroke-width: 1;
+            cursor: move;
+            content-visibility: auto;
+
+            &.curve {
+                stroke: var(--elf--path-segment-stroke-color); 
+            }
+
+            &[data-is-first="true"] {
+                fill: red !important;
+                z-index: 1;
+            }
+
+            &[data-is-second="true"] {
+                fill: blue !important;
+                z-index: 1;
+            }            
+
+            &[data-is-last="true"] {
+                fill: red !important;
+                z-index: 0;
+            }       
+            
+            &[data-selected='true'] {
+                fill: var(--elf--selected-color);
+                stroke: var(--elf--selected-color);
+
+                &[data-is-first="true"] {
+                    fill: red !important;
+                    stroke: white;                    
+                }
+    
+                &[data-is-second="true"] {
+                    fill: blue !important;
+                    stroke: white;                    
+                }            
+    
+                &[data-is-last="true"] {
+                    fill: red !important;
+                    stroke: white;                    
+                }     
+
+                
+                // stroke: white;
+                r: 5;
+                stroke-width: 2;
+            }
+
+            &[data-segment-point="endPoint"],
+            &[data-segment-point="reversePoint"] {
+                &:not([data-selected='true']) {
+                    r: 3;
+                }
+            }
+            
+            &.split-circle {
+                fill: var(--elf--selected-color);
+                stroke: white;
+                pointer-events: none;
+            }
+        }
+
+        .svg-canvas {
+            fill: transparent;
+            stroke: var(--elf--selected-border-color);
+            stroke-width: 1;
+            // display: none;
+            pointer-events: none;
+        }
+
+        path {
+            fill: transparent;
+            content-visibility: auto;
+
+            &.path-area {
+                stroke-width: 0;
+
+                &:hover,
+                &.selected {
+                    fill: url(#stripe);
+                }
+            }
+
+            &.curve {
+                fill: white;
+                stroke-width: 1;
+                cursor: move;
+                stroke: var(--elf--path-segment-stroke-color); 
+
+ 
+                &[data-selected='true'] {
+                    fill: var(--elf--selected-color);
+                    stroke: var(--elf--selected-color);
+                }                
+            }
+
+            &.guide {
+                fill: transparent;
+                stroke: var(--elf--selected-color);
+                stroke-width: 1;                
+            }
+
+            &.segment {
+                fill: transparent;
+                stroke: var(--elf--selected-color);
+                stroke-width: 1; 
+                pointer-events: all;
+            }
+            
+            &.object {
+                fill: transparent;
+                // stroke: #848484;
+                stroke-width: 1; 
+            }       
+            
+            &.split-path {
+                fill: transparent;
+                stroke: #959595;
+                pointer-events: stroke;
+                stroke-width: 2;
+
+                &:hover {
+                    cursor: copy;
+                    stroke: var(--elf--selected-color);
+                    stroke-width: 2;                    
+                }
+            }
+
+            &.snap-path {
+                fill: transparent;
+                stroke: var(--elf--selected-color);
+                stroke-width: 1;
+            }
+        }
+
+        text {
+            fill: var(--elf--selected-color); 
+            stroke: var(--elf--selected-color);
+            stroke-width: 0.5;
+            pointer-events: none;
+            font-weight: bold;
+        }
+    }
+}

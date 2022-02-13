@@ -11,12 +11,19 @@ export default class SegmentManager {
         this.segmentList = []
     }
 
+    get hasViewport () {
+        return Boolean(this.viewport);
+    }
+
     reset() {
         this.segmentList = []
         return this;
     }
 
     checkInViewport(point) {
+
+        if (!this.hasViewport) return true;
+
         const vertext = this.viewport.applyVertexInverse([point.x, point.y, 0]);
 
         return this.viewport.checkInViewport(vertext);
@@ -25,7 +32,7 @@ export default class SegmentManager {
 
     addLine(a, b) {
 
-        if (getDist(a.x, a.y, b.x, b.y) < 1) return this;        
+        if (this.hasViewport && getDist(a.x, a.y, b.x, b.y) < 1) return this;        
 
         if (this.checkInViewport(a) || this.checkInViewport(b)) {
 
@@ -43,7 +50,7 @@ export default class SegmentManager {
 
     addGuideLine(a, b) {
 
-        if (getDist(a.x, a.y, b.x, b.y) < 1) return this;
+        if (this.hasViewport && getDist(a.x, a.y, b.x, b.y) < 1) return this;
 
         if (this.checkInViewport(a) || this.checkInViewport(b)) {        
             this.segmentList.push({
@@ -61,7 +68,7 @@ export default class SegmentManager {
 
     addDistanceLine(a, b) {
 
-        if (getDist(a.x, a.y, b.x, b.y) < 1) return this;
+        if (this.hasViewport && getDist(a.x, a.y, b.x, b.y) < 1) return this;
 
         this.segmentList.push({
             line: true,
@@ -126,10 +133,7 @@ export default class SegmentManager {
     }
 
     addCurvePoint(point, index, segment, selected = false) {
-
         if (this.checkInViewport(point)) {
-
-
             this.segmentList.push({
                 curve: true,
                 cx: point.x,
@@ -215,6 +219,7 @@ export default class SegmentManager {
                     data-selected='${it.selected}'
                     title="Center"
                     data-start="true" 
+                    tabIndex="-1"
                 />`
             } else {
                 return /*html*/`
@@ -231,6 +236,7 @@ export default class SegmentManager {
                     data-index='${it.index}' 
                     data-segment-point='${it.segment}' 
                     data-segment="true" 
+                    tabIndex="-1"                    
                 />`
             }
 

@@ -218,7 +218,7 @@ export class RadialGradient extends Gradient {
             break;
           default:
             // rect 길이에 대비해서 실제 길이를 계산함 
-            var dist = radialSize[0].toPx(vec3.dist(result.backVerties[1], result.backVerties[0]));
+            var dist = (radialSize[0] || radialSize).toPx(vec3.dist(result.backVerties[1], result.backVerties[0])).value;      
             endPoint = vec3.fromValues(startPoint[0] + dist, startPoint[1], startPoint[2])
             shapePoint = vec3.fromValues(startPoint[0], startPoint[1] + dist, startPoint[2])
             break;
@@ -260,8 +260,8 @@ export class RadialGradient extends Gradient {
             shapePoint = vec3.fromValues(startPoint[0], startPoint[1] + radius.height, startPoint[2]);
             break;
           default:
-            var raySize = radialSize[0].toPx(vec3.dist(result.backVerties[1], result.backVerties[0]));
-            var shapeSize = radialSize[1].toPx(vec3.dist(result.backVerties[3], result.backVerties[0]));
+            var raySize = radialSize[0].toPx(vec3.dist(result.backVerties[1], result.backVerties[0])).value;
+            var shapeSize = radialSize[1].toPx(vec3.dist(result.backVerties[3], result.backVerties[0])).value;
 
             endPoint = vec3.fromValues(startPoint[0] + raySize, startPoint[1], startPoint[2])
             shapePoint = vec3.fromValues(startPoint[0], startPoint[1] + shapeSize, startPoint[2]);
@@ -378,7 +378,7 @@ export class RadialGradient extends Gradient {
         return it.parsed
       });
 
-      if (opt.radialSize.length) {
+      if (opt.radialSize.length === 1) {
         opt.radialSize = opt.radialSize[0];
       }
 
@@ -388,7 +388,6 @@ export class RadialGradient extends Gradient {
 
 
     const colorsteps = RadialGradient.parseColorSteps(colors)
-
 
     return new RadialGradient({ ...opt, colorsteps });
   }

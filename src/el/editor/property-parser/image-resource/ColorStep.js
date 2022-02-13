@@ -6,7 +6,7 @@ import { randomNumber } from "el/utils/create";
 import Color from "el/utils/Color";
 import { uuidShort } from 'el/utils/math';
 import { TimingFunction } from '../../types/model';
-import { parseValue } from "el/utils/css-function-parser";
+import { parseOneValue, parseValue } from "el/utils/css-function-parser";
 
 export class ColorStep {
   constructor (obj = {}) {
@@ -54,14 +54,22 @@ export class ColorStep {
 
     switch(this.timing.name) {
     case TimingFunction.LINEAR:
-      this.timing = parseValue('steps(1, start)')[0].parsed;
+      this.timing = parseOneValue('steps(1, start)').parsed;
       break;
     case TimingFunction.STEPS:
-      this.timing = parseValue('ease')[0].parsed;
+      this.timing = parseOneValue('ease').parsed;
+      this.timingCount = 15;
+      break;
+    case TimingFunction.EASE:
+    case TimingFunction.EASE_IN:
+    case TimingFunction.EASE_IN_OUT:
+    case TimingFunction.EASE_OUT:
+    case TimingFunction.CUBIC_BEZIER:
+      this.timing = parseOneValue('path(M 0 0 C 0.25 0.25 0.75 0.75 1 1)').parsed;
       this.timingCount = 15;
       break;
     default: 
-      this.timing = parseValue('linear')[0].parsed
+      this.timing = parseOneValue('linear').parsed
       this.timingCount = 1; 
       break;
     }
