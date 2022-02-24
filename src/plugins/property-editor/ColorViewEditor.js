@@ -4,6 +4,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './ColorViewEditor.scss';
 import Color from "el/utils/Color";
 import { clone, isBoolean } from "el/sapa/functions/func";
+import { round } from "el/utils/math";
 
 export default class ColorViewEditor extends EditorElement {
 
@@ -209,7 +210,7 @@ export default class ColorViewEditor extends EditorElement {
         opacity = Math.max(0, Math.min(100, opacity));
 
         const color = Color.parse(this.state.value);
-        color.a = opacity / 100;
+        color.a = round(opacity / 100, 1000);
 
         const value = Color.format(color, color.type)
         this.updateData({

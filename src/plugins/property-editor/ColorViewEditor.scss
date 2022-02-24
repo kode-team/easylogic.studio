@@ -8,6 +8,10 @@
     box-sizing: border-box;
     height: var(--elf--input-height);
 
+    input {
+        outline: none;
+    }
+
     &.focused {
         border-color: var(--elf--selected-color);
         border-width: 1px;

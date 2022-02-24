@@ -6,7 +6,7 @@ function startEditor() {
 
   return idList.map(id => {
 
-    return EasyLogic.createDesignEditor({
+    return EasyLogic.createDataEditor({
       container: document.getElementById(id),
       onChange: (editor, key, value) => {
         console.log(editor.getValue(), key, value);

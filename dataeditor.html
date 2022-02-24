@@ -10,24 +10,15 @@
     <meta name="description" content="You can make simply web with Web editor. "/>
     <meta name="keywords" content="html5,css,svg,editor">
     <meta name="author" content="easylogic">
-    <link rel="stylesheet" href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css" />
-
-
-    <style>
-      #app {
-        position: relative;
-        height: 800px;
-        max-width: 80%;
-        margin:0 auto;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+    
+    <script src='https://unpkg.com/shiki'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify-html.min.js"></script>    
   </head>
   <body>
-    <a href="index.html">Editor</a>
-    <a href="single.html">Single Editor</a>
-    <a href="player.html">Player</a>
-    <a href="single-player.html">Single Player</a>
-    <h1>Draw a design tool in your page</h1>
     <div id="app"></div>    
+    <script type="module" src="./src/dataeditor.jsx"></script>
   </body>
 </html>

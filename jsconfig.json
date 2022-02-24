@@ -6,7 +6,7 @@
       "style/*": ["./src/scss/*"],
       "export-library/*": ["./src/export-library/*"],
       "plugins/*": ["./src/plugins/*"],
-      "designeditor/*": ["src/editor-layouts/designeditor/*"]
+      "editor-layouts/*": ["src/editor-layouts/*"]
     }
   }
 }

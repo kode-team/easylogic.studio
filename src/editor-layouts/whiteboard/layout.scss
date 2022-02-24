@@ -1,0 +1,33 @@
+.whiteboard {
+
+  .layout-main {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: var(--elf--header-background-color);
+
+    .layout-middle {
+      position: absolute;
+      left: 0px;
+      right: 0px;
+      top: 0px;
+      bottom: 0px;
+      box-sizing: border-box;
+      overflow: hidden;
+      background-color: var(--elf--background-color);
+
+      .layout-body {
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        position: absolute;
+        // transition: bottom 0.05s linear
+        // border: 1px solid var(--elf--border-color);
+        // border-radius: 4px;
+      }
+    }
+  }
+}

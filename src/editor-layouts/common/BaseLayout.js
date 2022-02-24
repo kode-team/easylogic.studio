@@ -45,10 +45,14 @@ export default class BaseLayout extends EditorElement {
   get $editor () {
 
     if (!this.__editorInstance) {
-      this.__editorInstance = new Editor()
+      this.__editorInstance = this.createEditorInstance();
     }
 
     return this.__editorInstance;
+  }
+
+  createEditorInstance() {
+    return new Editor();
   }
 
   afterRender() {
@@ -65,9 +69,6 @@ export default class BaseLayout extends EditorElement {
 
     // initialize root event 
     this.__initBodyMoves();
-
-    // load default data 
-    this.emit('load.json', this.opt.data);
   }
 
   [CONFIG('editor.theme')] () {

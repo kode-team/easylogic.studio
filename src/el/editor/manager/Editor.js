@@ -49,7 +49,7 @@ export class Editor {
    * @param {object} [opt={}] 
    * @param {BaseStore} opt.store  Message 처리기 
    */
-  constructor() {
+  constructor(opt = {}) {
 
     this.EDITOR_ID = uuid();
 
@@ -61,6 +61,7 @@ export class Editor {
     this.images = {}
     this.openRightPanel = true;
     this.mode = EDIT_MODE_SELECTION
+    this.ignoreManagers = opt.ignoreManagers || []
 
     this.loadManagers();
 
@@ -75,7 +76,9 @@ export class Editor {
     this.config = new ConfigManager(this);
     this.snapManager = new SnapManager(this);
     this.commands = new CommandManager(this);
-    this.shortcuts = new ShortCutManager(this);
+
+    if (this.ignoreManagers.includes('ShortCutManager') === false) this.shortcuts = new ShortCutManager(this);
+
     this.selection = new SelectionManager(this);
     this.segmentSelection = new SegmentSelectionManager(this);
     this.timeline = new TimelineSelectionManager(this);

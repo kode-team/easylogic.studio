@@ -17,27 +17,6 @@ var __spreadValues = (a, b) => {
   return a;
 };
 var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
-var index = "";
-var layout$1 = "";
-const UUID_REG$1 = /[xy]/g;
-function uuid$1() {
-  var dt = new Date().getTime();
-  var uuid2 = "xxx12-xx-34xx".replace(UUID_REG$1, function(c2) {
-    var r = (dt + Math.random() * 16) % 16 | 0;
-    dt = Math.floor(dt / 16);
-    return (c2 == "x" ? r : r & 3 | 8).toString(16);
-  });
-  return uuid2;
-}
-function uuidShort$1() {
-  var dt = new Date().getTime();
-  var uuid2 = "idxxxxxxx".replace(UUID_REG$1, function(c2) {
-    var r = (dt + Math.random() * 16) % 16 | 0;
-    dt = Math.floor(dt / 16);
-    return (c2 == "x" ? r : r & 3 | 8).toString(16);
-  });
-  return uuid2;
-}
 function collectProps(root, filterFunction = () => true) {
   let p = root;
   let results = [];
@@ -189,6 +168,139 @@ const splitMethodByKeyword = (arr, keyword) => {
   });
   return [filterKeys, filterMaps];
 };
+const setBooleanProp = (el, name2, value) => {
+  if (value) {
+    el.setAttribute(name2, name2);
+    el[name2] = value;
+  } else {
+    el.removeAttribute(name2);
+    el[name2] = value;
+  }
+};
+const setProp = (el, name2, value) => {
+  if (typeof value === "boolean") {
+    setBooleanProp(el, name2, value);
+  } else {
+    el.setAttribute(name2, value);
+  }
+};
+const removeBooleanProp = (node, name2) => {
+  node.removeAttribute(name2);
+  node[name2] = false;
+};
+const removeUndefinedProp = (node, name2) => {
+  node.removeAttribute(name2);
+};
+const removeProp = (node, name2, value) => {
+  if (typeof value === "boolean") {
+    removeBooleanProp(node, name2);
+  } else if (name2) {
+    removeUndefinedProp(node, name2);
+  }
+};
+const updateProp = (node, name2, newValue, oldValue) => {
+  if (!newValue) {
+    removeProp(node, name2, oldValue);
+  } else if (!oldValue || newValue !== oldValue) {
+    setProp(node, name2, newValue);
+  }
+};
+const updateProps = (node, newProps = {}, oldProps = {}) => {
+  const keyList2 = [];
+  keyList2.push.apply(keyList2, Object.keys(newProps));
+  keyList2.push.apply(keyList2, Object.keys(oldProps));
+  const props = new Set(keyList2);
+  props.forEach((key) => {
+    updateProp(node, key, newProps[key], oldProps[key]);
+  });
+};
+function changed(node1, node2) {
+  return node1.nodeType === Node.TEXT_NODE && node1.textContent !== node2.textContent || node1.nodeName !== node2.nodeName;
+}
+function hasPassed(node1) {
+  if ((node1 == null ? void 0 : node1.nodeType) === 8) {
+    return true;
+  }
+  return node1.nodeType !== Node.TEXT_NODE && node1.getAttribute("data-domdiff-pass") === "true";
+}
+function hasRefClass(node1) {
+  return node1.nodeType !== Node.TEXT_NODE && node1.getAttribute("refClass");
+}
+function getProps(attributes) {
+  var results = {};
+  const len2 = attributes.length;
+  for (let i = 0; i < len2; i++) {
+    const t = attributes[i];
+    results[t.name] = t.value;
+  }
+  return results;
+}
+function updateElement(parentElement, oldEl, newEl, i, options2 = {}) {
+  if (!oldEl) {
+    parentElement.appendChild(newEl.cloneNode(true));
+  } else if (!newEl) {
+    parentElement.removeChild(oldEl);
+  } else if (hasPassed(oldEl) || hasPassed(newEl))
+    ;
+  else if (changed(newEl, oldEl) || hasRefClass(newEl)) {
+    parentElement.replaceChild(newEl.cloneNode(true), oldEl);
+  } else if (newEl.nodeType !== Node.TEXT_NODE && newEl.nodeType !== Node.COMMENT_NODE && newEl.toString() !== "[object HTMLUnknownElement]") {
+    if (options2.checkPassed && options2.checkPassed(oldEl, newEl))
+      ;
+    else {
+      updateProps(oldEl, getProps(newEl.attributes), getProps(oldEl.attributes));
+    }
+    var oldChildren = children(oldEl);
+    var newChildren = children(newEl);
+    var max = Math.max(oldChildren.length, newChildren.length);
+    for (var i = 0; i < max; i++) {
+      updateElement(oldEl, oldChildren[i], newChildren[i], i, options2);
+    }
+  }
+}
+const children = (el) => {
+  var element = el.firstChild;
+  if (!element) {
+    return [];
+  }
+  var results = [];
+  do {
+    results.push(element);
+    element = element.nextSibling;
+  } while (element);
+  return results;
+};
+function DomDiff(A, B, options2 = {}) {
+  options2.checkPassed = isFunction(options2.checkPassed) ? options2.checkPassed : void 0;
+  options2.removedElements = [];
+  A = A.el || A;
+  B = B.el || B;
+  var childrenA = children(A);
+  var childrenB = children(B);
+  var len2 = Math.max(childrenA.length, childrenB.length);
+  for (var i = 0; i < len2; i++) {
+    updateElement(A, childrenA[i], childrenB[i], i, options2);
+  }
+}
+const UUID_REG$1 = /[xy]/g;
+function uuid$1() {
+  var dt = new Date().getTime();
+  var uuid2 = "xxx12-xx-34xx".replace(UUID_REG$1, function(c2) {
+    var r = (dt + Math.random() * 16) % 16 | 0;
+    dt = Math.floor(dt / 16);
+    return (c2 == "x" ? r : r & 3 | 8).toString(16);
+  });
+  return uuid2;
+}
+function uuidShort$1() {
+  var dt = new Date().getTime();
+  var uuid2 = "idxxxxxxx".replace(UUID_REG$1, function(c2) {
+    var r = (dt + Math.random() * 16) % 16 | 0;
+    dt = Math.floor(dt / 16);
+    return (c2 == "x" ? r : r & 3 | 8).toString(16);
+  });
+  return uuid2;
+}
 const map = {};
 const aliasMap = {};
 const __tempVariables = new Map();
@@ -255,6 +367,719 @@ function retriveAlias(key) {
 }
 function retriveElement(className) {
   return map[retriveAlias(className) || className];
+}
+class Dom {
+  constructor(tag, className, attr) {
+    if (typeof tag !== "string") {
+      this.el = tag;
+    } else {
+      var el = document.createElement(tag);
+      if (className) {
+        el.className = className;
+      }
+      attr = attr || {};
+      Object.assign(el, attr);
+      this.el = el;
+    }
+  }
+  static create(tag, className, attr) {
+    return new Dom(tag, className, attr);
+  }
+  static createByHTML(htmlString) {
+    var div2 = Dom.create("div");
+    var list2 = div2.html(htmlString).children();
+    if (list2.length) {
+      return Dom.create(list2[0].el);
+    }
+    return null;
+  }
+  static getScrollTop() {
+    return Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop);
+  }
+  static getScrollLeft() {
+    return Math.max(window.pageXOffset, document.documentElement.scrollLeft, document.body.scrollLeft);
+  }
+  static parse(html2) {
+    var parser2 = DOMParser();
+    return parser2.parseFromString(html2, "text/htmll");
+  }
+  static body() {
+    return Dom.create(document.body);
+  }
+  setAttr(obj2) {
+    Object.keys(obj2).forEach((key) => {
+      this.attr(key, obj2[key]);
+    });
+    return this;
+  }
+  setAttrNS(obj2, namespace = "http://www.w3.org/2000/svg") {
+    Object.keys(obj2).forEach((key) => {
+      this.attr(key, obj2[key], namespace);
+    });
+    return this;
+  }
+  setProp(obj2) {
+    Object.keys(obj2).forEach((key) => {
+      if (this.el[key] != obj2[key]) {
+        this.el[key] = obj2[key];
+      }
+    });
+    return this;
+  }
+  data(key, value) {
+    if (arguments.length === 1) {
+      const value2 = this.attr("data-" + key);
+      return recoverVariable(value2, false);
+    } else if (arguments.length === 2) {
+      return this.attr("data-" + key, value);
+    }
+    return this;
+  }
+  attr(key, value) {
+    if (arguments.length == 1) {
+      return this.el.getAttribute && this.el.getAttribute(key);
+    }
+    if (this.el.getAttribute(key) != value) {
+      this.el.setAttribute(key, value);
+    }
+    return this;
+  }
+  attrNS(key, value, namespace = "http://www.w3.org/2000/svg") {
+    if (arguments.length == 1) {
+      return this.el.getAttributeNS(namespace, key);
+    }
+    if (this.el.getAttributeNS(namespace, key) != value) {
+      this.el.setAttributeNS(namespace, key, value);
+    }
+    return this;
+  }
+  attrKeyValue(keyField) {
+    return {
+      [this.el.getAttribute(keyField)]: this.val()
+    };
+  }
+  attrs(...args2) {
+    return args2.map((key) => {
+      return this.el.getAttribute(key);
+    });
+  }
+  styles(...args2) {
+    return args2.map((key) => {
+      return this.el.style[key];
+    });
+  }
+  removeAttr(key) {
+    this.el.removeAttribute(key);
+    return this;
+  }
+  removeStyle(key) {
+    this.el.style.removeProperty(key);
+    return this;
+  }
+  is(checkElement) {
+    if (checkElement instanceof Dom) {
+      return this.el === checkElement.el;
+    }
+    return this.el === checkElement;
+  }
+  isTag(tag) {
+    return this.el.tagName.toLowerCase() === tag.toLowerCase();
+  }
+  closest(cls) {
+    var temp = this;
+    var checkCls = false;
+    while (!(checkCls = temp.hasClass(cls))) {
+      if (temp.el.parentNode) {
+        temp = Dom.create(temp.el.parentNode);
+      } else {
+        return null;
+      }
+    }
+    if (checkCls) {
+      return temp;
+    }
+    return null;
+  }
+  path() {
+    if (!this.el)
+      return [];
+    let pathList = [this];
+    let $parentNode = this.parent();
+    if (!$parentNode.el)
+      return pathList;
+    while ($parentNode) {
+      pathList.unshift($parentNode);
+      $parentNode = $parentNode.parent();
+      if (!$parentNode.el)
+        break;
+    }
+    return pathList;
+  }
+  get $parent() {
+    return this.parent();
+  }
+  parent() {
+    return Dom.create(this.el.parentNode);
+  }
+  hasParent() {
+    return !!this.el.parentNode;
+  }
+  removeClass(...args2) {
+    this.el.classList.remove(...args2);
+    return this;
+  }
+  replaceClass(oldClass, newClass) {
+    this.el.classList.replace(oldClass, newClass);
+    return this;
+  }
+  hasClass(cls) {
+    if (!this.el.classList)
+      return false;
+    return this.el.classList.contains(cls);
+  }
+  addClass(...args2) {
+    this.el.classList.add(...args2);
+    return this;
+  }
+  onlyOneClass(cls) {
+    var parent = this.parent();
+    parent.children().forEach((it) => {
+      it.removeClass(cls);
+    });
+    this.addClass(cls);
+  }
+  toggleClass(cls, isForce) {
+    this.el.classList.toggle(cls, isForce);
+    return this;
+  }
+  html(html2) {
+    try {
+      if (typeof html2 === "undefined") {
+        return this.el.innerHTML;
+      }
+      if (typeof html2 === "string") {
+        Object.assign(this.el, { innerHTML: html2 });
+      } else {
+        this.empty().append(html2);
+      }
+      return this;
+    } catch (e2) {
+      console.log(e2, html2);
+      return this;
+    }
+  }
+  htmlDiff(fragment) {
+    DomDiff(this, fragment);
+  }
+  updateDiff(html2, rootElement = "div", options2 = {}) {
+    DomDiff(this, Dom.create(rootElement).html(html2), options2);
+  }
+  updateSVGDiff(html2, rootElement = "div") {
+    DomDiff(this, Dom.create(rootElement).html(`<svg>${html2}</svg>`).firstChild.firstChild);
+  }
+  find(selector2) {
+    return this.el.querySelector(selector2);
+  }
+  $(selector2) {
+    var node = this.find(selector2);
+    return node ? Dom.create(node) : null;
+  }
+  findAll(selector2) {
+    return Array.from(this.el.querySelectorAll(selector2));
+  }
+  $$(selector2) {
+    var arr = this.findAll(selector2);
+    return arr.map((node) => Dom.create(node));
+  }
+  empty() {
+    while (this.el.firstChild)
+      this.el.removeChild(this.el.firstChild);
+    return this;
+  }
+  append(el) {
+    if (typeof el === "string") {
+      this.el.appendChild(document.createTextNode(el));
+    } else {
+      this.el.appendChild(el.el || el);
+    }
+    return this;
+  }
+  prepend(el) {
+    if (typeof el === "string") {
+      this.el.prepend(document.createTextNode(el));
+    } else {
+      this.el.prepend(el.el || el);
+    }
+    return this;
+  }
+  prependHTML(html2) {
+    var $dom = Dom.create("div").html(html2);
+    this.prepend($dom.createChildrenFragment());
+    return $dom;
+  }
+  appendHTML(html2) {
+    var $dom = Dom.create("div").html(html2);
+    this.append($dom.createChildrenFragment());
+    return $dom;
+  }
+  createChildrenFragment() {
+    const list2 = this.children();
+    var fragment = document.createDocumentFragment();
+    list2.forEach(($el) => fragment.appendChild($el.el));
+    return fragment;
+  }
+  appendTo(target) {
+    var t = target.el ? target.el : target;
+    t.appendChild(this.el);
+    return this;
+  }
+  remove() {
+    if (this.el.parentNode) {
+      this.el.parentNode.removeChild(this.el);
+    }
+    return this;
+  }
+  removeChild(el) {
+    this.el.removeChild(el.el || el);
+    return this;
+  }
+  text(value) {
+    if (typeof value === "undefined") {
+      return this.el.textContent;
+    } else {
+      var tempText = value;
+      if (value instanceof Dom) {
+        tempText = value.text();
+      }
+      if (this.el.textContent !== tempText) {
+        this.el.textContent = tempText;
+      }
+      return this;
+    }
+  }
+  css(key, value) {
+    if (typeof key !== "undefined" && typeof value !== "undefined") {
+      if (key.indexOf("--") === 0 && typeof value !== "undefined") {
+        this.el.style.setProperty(key, value);
+      } else {
+        this.el.style[key] = value;
+      }
+    } else if (typeof key !== "undefined") {
+      if (typeof key === "string") {
+        return getComputedStyle(this.el)[key];
+      } else {
+        Object.entries(key).forEach(([localKey, value2]) => {
+          if (localKey.indexOf("--") === 0 && typeof value2 !== "undefined") {
+            this.el.style.setProperty(localKey, value2);
+          } else {
+            this.el.style[localKey] = value2;
+          }
+        });
+      }
+    }
+    return this;
+  }
+  getComputedStyle(...list2) {
+    var css = getComputedStyle(this.el);
+    var obj2 = {};
+    list2.forEach((it) => {
+      obj2[it] = css[it];
+    });
+    return obj2;
+  }
+  getStyleList(...list2) {
+    var style = {};
+    var len2 = this.el.style.length;
+    for (var i = 0; i < len2; i++) {
+      var key = this.el.style[i];
+      style[key] = this.el.style[key];
+    }
+    list2.forEach((key2) => {
+      style[key2] = this.css(key2);
+    });
+    return style;
+  }
+  cssText(value) {
+    if (typeof value === "undefined") {
+      return this.el.style.cssText;
+    }
+    if (value != this.el.tempCssText) {
+      this.el.style.cssText = value;
+      this.el.tempCssText = value;
+    }
+    return this;
+  }
+  cssArray(arr) {
+    if (arr[0])
+      this.el.style[arr[0]] = arr[1];
+    if (arr[2])
+      this.el.style[arr[2]] = arr[3];
+    if (arr[4])
+      this.el.style[arr[4]] = arr[5];
+    if (arr[6])
+      this.el.style[arr[6]] = arr[7];
+    if (arr[8])
+      this.el.style[arr[8]] = arr[9];
+    return this;
+  }
+  cssFloat(key) {
+    return parseFloat(this.css(key));
+  }
+  cssInt(key) {
+    return parseInt(this.css(key));
+  }
+  px(key, value) {
+    return this.css(key, `${value}px`);
+  }
+  rect() {
+    return this.el.getBoundingClientRect();
+  }
+  bbox() {
+    return this.el.getBBox();
+  }
+  isSVG() {
+    return this.el.tagName.toUpperCase() === "SVG";
+  }
+  offsetRect() {
+    if (this.isSVG()) {
+      const parentBox = this.parent().rect();
+      const box = this.rect();
+      return {
+        x: box.x - parentBox.x,
+        y: box.y - parentBox.y,
+        width: box.width,
+        height: box.height
+      };
+    }
+    return {
+      x: this.el.offsetLeft,
+      y: this.el.offsetTop,
+      width: this.el.offsetWidth,
+      height: this.el.offsetHeight
+    };
+  }
+  offset() {
+    var rect2 = this.rect();
+    var scrollTop = Dom.getScrollTop();
+    var scrollLeft = Dom.getScrollLeft();
+    return {
+      top: rect2.top + scrollTop,
+      left: rect2.left + scrollLeft
+    };
+  }
+  offsetLeft() {
+    return this.offset().left;
+  }
+  offsetTop() {
+    return this.offset().top;
+  }
+  position() {
+    if (this.el.style.top) {
+      return {
+        top: parseFloat(this.css("top")),
+        left: parseFloat(this.css("left"))
+      };
+    } else {
+      return this.rect();
+    }
+  }
+  size() {
+    return [this.width(), this.height()];
+  }
+  width() {
+    return this.el.offsetWidth || this.rect().width;
+  }
+  contentWidth() {
+    return this.width() - this.cssFloat("padding-left") - this.cssFloat("padding-right");
+  }
+  height() {
+    return this.el.offsetHeight || this.rect().height;
+  }
+  contentHeight() {
+    return this.height() - this.cssFloat("padding-top") - this.cssFloat("padding-bottom");
+  }
+  val(value) {
+    if (typeof value === "undefined") {
+      return this.el.value;
+    } else if (typeof value !== "undefined") {
+      var tempValue = value;
+      if (value instanceof Dom) {
+        tempValue = value.val();
+      }
+      this.el.value = tempValue;
+    }
+    return this;
+  }
+  matches(selector2) {
+    if (this.el) {
+      if (!this.el.matches)
+        return null;
+      if (this.el.matches(selector2)) {
+        return this;
+      }
+      return this.parent().matches(selector2);
+    }
+    return null;
+  }
+  get value() {
+    return this.el.value;
+  }
+  get naturalWidth() {
+    return this.el.naturalWidth;
+  }
+  get naturalHeight() {
+    return this.el.naturalHeight;
+  }
+  get files() {
+    return this.el.files ? [...this.el.files] : [];
+  }
+  realVal() {
+    switch (this.el.nodeType) {
+      case "INPUT":
+        var type = this.attr("type");
+        if (type == "checkbox" || type == "radio") {
+          return this.checked();
+        }
+      case "SELECT":
+      case "TEXTAREA":
+        return this.el.value;
+    }
+    return "";
+  }
+  int() {
+    return parseInt(this.val(), 10);
+  }
+  float() {
+    return parseFloat(this.val());
+  }
+  show(displayType = "block") {
+    this.el.style.display = displayType != "none" ? displayType : "block";
+    return this;
+  }
+  hide() {
+    this.el.style.display = "none";
+    return this;
+  }
+  isHide() {
+    return this.el.style.display === "none";
+  }
+  isShow() {
+    return !this.isHide();
+  }
+  toggle(isForce) {
+    var currentHide = this.isHide();
+    if (arguments.length == 1) {
+      if (isForce) {
+        return this.show();
+      } else {
+        return this.hide();
+      }
+    } else {
+      if (currentHide) {
+        return this.show();
+      } else {
+        return this.hide();
+      }
+    }
+  }
+  get totalLength() {
+    return this.el.getTotalLength();
+  }
+  scrollIntoView() {
+    this.el.scrollIntoView();
+  }
+  addScrollLeft(dt) {
+    this.el.scrollLeft += dt;
+    return this;
+  }
+  addScrollTop(dt) {
+    this.el.scrollTop += dt;
+    return this;
+  }
+  setScrollTop(scrollTop) {
+    this.el.scrollTop = scrollTop;
+    return this;
+  }
+  setScrollLeft(scrollLeft) {
+    this.el.scrollLeft = scrollLeft;
+    return this;
+  }
+  scrollTop() {
+    if (this.el === document.body) {
+      return Dom.getScrollTop();
+    }
+    return this.el.scrollTop;
+  }
+  scrollLeft() {
+    if (this.el === document.body) {
+      return Dom.getScrollLeft();
+    }
+    return this.el.scrollLeft;
+  }
+  scrollHeight() {
+    return this.el.scrollHeight;
+  }
+  scrollWidth() {
+    return this.el.scrollWidth;
+  }
+  on(eventName, callback, opt1, opt2) {
+    this.el.addEventListener(eventName, callback, opt1, opt2);
+    return this;
+  }
+  off(eventName, callback) {
+    this.el.removeEventListener(eventName, callback);
+    return this;
+  }
+  getElement() {
+    return this.el;
+  }
+  createChild(tag, className = "", attrs = {}, css = {}) {
+    let $element = Dom.create(tag, className, attrs);
+    $element.css(css);
+    this.append($element);
+    return $element;
+  }
+  get firstChild() {
+    return Dom.create(this.el.firstElementChild);
+  }
+  children() {
+    var element = this.el.firstElementChild;
+    if (!element) {
+      return [];
+    }
+    var results = [];
+    do {
+      results.push(Dom.create(element));
+      element = element.nextElementSibling;
+    } while (element);
+    return results;
+  }
+  childLength() {
+    return this.el.children.length;
+  }
+  replace(newElement) {
+    if (this.el.parentNode) {
+      this.el.parentNode.replaceChild(newElement.el || newElement, this.el);
+    }
+    return this;
+  }
+  replaceChild(oldElement, newElement) {
+    this.el.replaceChild(newElement.el || newElement, oldElement.el || oldElement);
+    return this;
+  }
+  checked(isChecked = false) {
+    if (arguments.length == 0) {
+      return !!this.el.checked;
+    }
+    this.el.checked = !!isChecked;
+    return this;
+  }
+  click() {
+    this.el.click();
+    return this;
+  }
+  focus() {
+    this.el.focus();
+    return this;
+  }
+  select() {
+    if (this.attr("contenteditable") === "true") {
+      var range = document.createRange();
+      range.selectNodeContents(this.el);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    } else {
+      this.el.select();
+    }
+    return this;
+  }
+  blur() {
+    this.el.blur();
+    return this;
+  }
+  context(contextType = "2d") {
+    if (!this._initContext) {
+      this._initContext = this.el.getContext(contextType);
+    }
+    return this._initContext;
+  }
+  resize({ width: width2, height: height2 }) {
+    this._initContext = null;
+    var ctx = this.context();
+    var scale2 = window.devicePixelRatio || 1;
+    this.px("width", +width2);
+    this.px("height", +height2);
+    this.el.width = width2 * scale2;
+    this.el.height = height2 * scale2;
+    ctx.scale(scale2, scale2);
+  }
+  toDataURL(type = "image/png", quality = 1) {
+    return this.el.toDataURL(type, quality);
+  }
+  clear() {
+    this.context().clearRect(0, 0, this.el.width, this.el.height);
+  }
+  update(callback) {
+    this.clear();
+    callback.call(this, this);
+  }
+  drawImage(img, dx = 0, dy = 0) {
+    var ctx = this.context();
+    var scale2 = window.devicePixelRatio || 1;
+    ctx.drawImage(img, dx, dy, img.width, img.height, 0, 0, this.el.width / scale2, this.el.height / scale2);
+  }
+  drawOption(option = {}) {
+    var ctx = this.context();
+    Object.assign(ctx, option);
+  }
+  drawLine(x1, y1, x2, y2) {
+    var ctx = this.context();
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+    ctx.closePath();
+  }
+  drawPath(...path) {
+    var ctx = this.context();
+    ctx.beginPath();
+    path.forEach((p, index2) => {
+      if (index2 == 0) {
+        ctx.moveTo(p[0], p[1]);
+      } else {
+        ctx.lineTo(p[0], p[1]);
+      }
+    });
+    ctx.stroke();
+    ctx.fill();
+    ctx.closePath();
+  }
+  drawCircle(cx, cy, r) {
+    var ctx = this.context();
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.fill();
+  }
+  drawText(x2, y2, text2) {
+    this.context().fillText(text2, x2, y2);
+  }
+  fullscreen() {
+    var element = this.el;
+    if (element.requestFullscreen) {
+      element.requestFullscreen();
+    } else if (element.wekitRequestFullscreen) {
+      element.wekitRequestFullscreen();
+    }
+  }
+  toggleFullscreen() {
+    if (this.el === document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      this.fullscreen();
+    }
+  }
 }
 const MAGIC_METHOD = "@magic:";
 const makeEventChecker = (value, split = CHECK_SAPARATOR) => {
@@ -604,6 +1429,874 @@ var Event$1 = /* @__PURE__ */ Object.freeze({
   normalizeWheelEvent,
   "default": Event
 });
+class BaseHandler {
+  constructor(context, options2 = {}) {
+    this.context = context;
+    this.options = options2;
+  }
+  initialize() {
+  }
+  load() {
+  }
+  refresh() {
+  }
+  render() {
+  }
+  getRef(id) {
+    return this.context.getRef(id);
+  }
+  run() {
+  }
+  destroy() {
+  }
+}
+const scrollBlockingEvents = {
+  "touchstart": true,
+  "touchmove": true,
+  "mousedown": true,
+  "mouseup": true,
+  "mousemove": true
+};
+const eventConverts = {
+  "doubletab": "touchend"
+};
+const customEventNames = {
+  "doubletab": true
+};
+class DomEventHandler extends BaseHandler {
+  initialize() {
+    this.destroy();
+    if (this._domEvents && this.context.notEventRedefine) {
+      return;
+    }
+    if (!this._domEvents) {
+      this._domEvents = this.context.filterProps(CHECK_DOM_EVENT_PATTERN);
+    }
+    this._domEvents.forEach((key) => this.parseDomEvent(key));
+  }
+  destroy() {
+    if (this.context.notEventRedefine)
+      ;
+    else {
+      this.removeEventAll();
+    }
+  }
+  removeEventAll() {
+    this.getBindings().forEach((obj2) => {
+      this.removeDomEvent(obj2);
+    });
+    this.initBindings();
+  }
+  removeDomEvent({ eventName, dom, callback }) {
+    Event.removeDomEvent(dom, eventName, callback);
+  }
+  getBindings() {
+    if (!this._bindings) {
+      this.initBindings();
+    }
+    return this._bindings;
+  }
+  addBinding(obj2) {
+    this.getBindings().push(obj2);
+  }
+  initBindings() {
+    this._bindings = [];
+  }
+  matchPath(el, selector2) {
+    if (el) {
+      if (el.matches(selector2)) {
+        return el;
+      }
+      return this.matchPath(el.parentElement, selector2);
+    }
+    return null;
+  }
+  hasDelegate(e2, eventObject) {
+    return this.matchPath(e2.target || e2.srcElement, eventObject.delegate);
+  }
+  makeCallback(eventObject, callback) {
+    if (eventObject.delegate) {
+      return this.makeDelegateCallback(eventObject, callback);
+    } else {
+      return this.makeDefaultCallback(eventObject, callback);
+    }
+  }
+  makeDefaultCallback(eventObject, callback) {
+    return (e2) => {
+      var returnValue = this.runEventCallback(e2, eventObject, callback);
+      if (isNotUndefined(returnValue)) {
+        return returnValue;
+      }
+    };
+  }
+  makeDelegateCallback(eventObject, callback) {
+    return (e2) => {
+      const delegateTarget = this.hasDelegate(e2, eventObject);
+      if (delegateTarget) {
+        e2.$dt = Dom.create(delegateTarget);
+        var returnValue = this.runEventCallback(e2, eventObject, callback);
+        if (isNotUndefined(returnValue)) {
+          return returnValue;
+        }
+      }
+    };
+  }
+  runEventCallback(e2, eventObject, callback) {
+    const context = this.context;
+    e2.xy = Event.posXY(e2);
+    if (eventObject.beforeMethods.length) {
+      eventObject.beforeMethods.every((before) => {
+        return context[before.target].call(context, e2, before.param);
+      });
+    }
+    if (this.checkEventType(e2, eventObject)) {
+      var returnValue = callback(e2, e2.$dt, e2.xy);
+      if (returnValue !== false && eventObject.afterMethods.length) {
+        eventObject.afterMethods.forEach((after) => {
+          return context[after.target].call(context, e2, after.param);
+        });
+      }
+      return returnValue;
+    }
+  }
+  checkEventType(e2, eventObject) {
+    const context = this.context;
+    var hasKeyCode = true;
+    if (eventObject.codes.length) {
+      hasKeyCode = (e2.code ? eventObject.codes.indexOf(e2.code.toLowerCase()) > -1 : false) || (e2.key ? eventObject.codes.indexOf(e2.key.toLowerCase()) > -1 : false);
+    }
+    var isAllCheck = true;
+    if (eventObject.checkMethodList.length) {
+      isAllCheck = eventObject.checkMethodList.every((field) => {
+        var fieldValue = context[field];
+        if (isFunction(fieldValue) && fieldValue) {
+          return fieldValue.call(context, e2);
+        } else if (isNotUndefined(fieldValue)) {
+          return !!fieldValue;
+        }
+        return true;
+      });
+    }
+    return hasKeyCode && isAllCheck;
+  }
+  getDefaultDomElement(dom) {
+    const context = this.context;
+    let el;
+    if (dom) {
+      el = context.refs[dom] || context[dom] || window[dom];
+    } else {
+      el = context.el || context.$el || context.$root;
+    }
+    if (el instanceof Dom) {
+      return el.getElement();
+    }
+    return el;
+  }
+  getRealEventName(eventName) {
+    return eventConverts[eventName] || eventName;
+  }
+  getCustomEventName(eventName) {
+    return customEventNames[eventName] ? eventName : "";
+  }
+  getDefaultEventObject(eventName, checkMethodFilters) {
+    const context = this.context;
+    let arr = checkMethodFilters;
+    const checkMethodList = arr.filter((code2) => !!context[code2]);
+    const [afters, afterMethods] = splitMethodByKeyword(arr, "after");
+    const [befores, beforeMethods] = splitMethodByKeyword(arr, "before");
+    const [debounces, debounceMethods] = splitMethodByKeyword(arr, "debounce");
+    const [delays, delayMethods] = splitMethodByKeyword(arr, "delay");
+    const [throttles, throttleMethods] = splitMethodByKeyword(arr, "throttle");
+    const [captures] = splitMethodByKeyword(arr, "capture");
+    const filteredList = [
+      ...checkMethodList,
+      ...afters,
+      ...befores,
+      ...delays,
+      ...debounces,
+      ...throttles,
+      ...captures
+    ];
+    var codes = arr.filter((code2) => filteredList.indexOf(code2) === -1).map((code2) => code2.toLowerCase());
+    return {
+      eventName: this.getRealEventName(eventName),
+      customEventName: this.getCustomEventName(eventName),
+      codes,
+      captures,
+      afterMethods,
+      beforeMethods,
+      delayMethods,
+      debounceMethods,
+      throttleMethods,
+      checkMethodList
+    };
+  }
+  addDomEvent(eventObject, callback) {
+    eventObject.callback = this.makeCallback(eventObject, callback);
+    this.addBinding(eventObject);
+    var options2 = !!eventObject.captures.length;
+    if (scrollBlockingEvents[eventObject.eventName]) {
+      options2 = {
+        passive: true,
+        capture: options2
+      };
+    }
+    Event.addDomEvent(eventObject.dom, eventObject.eventName, eventObject.callback, options2);
+  }
+  makeCustomEventCallback(eventObject, callback) {
+    if (eventObject.customEventName === "doubletab") {
+      var delay = 300;
+      if (eventObject.delayMethods.length) {
+        delay = +eventObject.delayMethods[0].target;
+      }
+      return (...args2) => {
+        if (!this.doubleTab) {
+          this.doubleTab = {
+            time: performance.now()
+          };
+        } else {
+          if (performance.now() - this.doubleTab.time < delay) {
+            callback(...args2);
+          }
+          this.doubleTab = null;
+        }
+      };
+    }
+    return callback;
+  }
+  bindingDomEvent([eventName, dom, ...delegate], checkMethodFilters, callback) {
+    let eventObject = this.getDefaultEventObject(eventName, checkMethodFilters);
+    eventObject.dom = this.getDefaultDomElement(dom);
+    eventObject.delegate = delegate.join(SAPARATOR);
+    if (eventObject.debounceMethods.length) {
+      var debounceTime = +eventObject.debounceMethods[0].target;
+      callback = debounce(callback, debounceTime);
+    } else if (eventObject.throttleMethods.length) {
+      var throttleTime = +eventObject.throttleMethods[0].target;
+      callback = throttle(callback, throttleTime);
+    }
+    callback = this.makeCustomEventCallback(eventObject, callback);
+    this.addDomEvent(eventObject, callback);
+  }
+  getEventNames(eventName) {
+    let results = [];
+    eventName.split(NAME_SAPARATOR).forEach((e2) => {
+      var arr = e2.split(NAME_SAPARATOR);
+      results.push.apply(results, arr);
+    });
+    return results;
+  }
+  parseDomEvent(key) {
+    const context = this.context;
+    let checkMethodFilters = key.split(CHECK_SAPARATOR).map((it) => it.trim()).filter(Boolean);
+    var prefix = checkMethodFilters.shift();
+    var eventSelectorAndBehave = prefix.split(DOM_EVENT_SAPARATOR)[1];
+    var arr = eventSelectorAndBehave.split(SAPARATOR);
+    var eventNames = this.getEventNames(arr[0]);
+    var callback = context[key].bind(context);
+    for (let i = 0, len2 = eventNames.length; i < len2; i++) {
+      arr[0] = eventNames[i];
+      this.bindingDomEvent(arr, checkMethodFilters, callback);
+    }
+  }
+}
+const convertToPx = (key, value) => {
+  if (isNumber(value)) {
+    switch (key) {
+      case "width":
+      case "height":
+      case "top":
+      case "left":
+      case "right":
+      case "bottom":
+        return value + "px";
+    }
+  }
+  return value;
+};
+const applyElementAttribute = ($element, key, value) => {
+  if (key === "cssText") {
+    $element.cssText(value);
+    return;
+  } else if (key === "style") {
+    if (typeof value !== "string") {
+      const css = {};
+      Object.entries(value).forEach(([key2, value2]) => {
+        css[key2] = convertToPx(key2, value2);
+      });
+      $element.css(css);
+    }
+    return;
+  } else if (key === "class") {
+    if (Array.isArray(value)) {
+      $element.addClass(...value.filter(Boolean));
+    } else if (isObject(value)) {
+      const keys2 = Object.keys(value);
+      for (var i = 0, len2 = keys2.length; i < len2; i++) {
+        const className = keys2[i];
+        const hasClass = value[className];
+        $element.toggleClass(className, hasClass);
+      }
+    } else {
+      $element.el.className = value;
+    }
+    return;
+  } else if (key === "callback") {
+    if (typeof value === "function") {
+      value();
+      return;
+    }
+  }
+  if (typeof value === "undefined") {
+    $element.removeAttr(key);
+  } else {
+    if ($element.el.nodeName === "TEXTAREA" && key === "value") {
+      $element.text(value);
+    } else if (key === "text" || key === "textContent") {
+      $element.text(value);
+    } else if (key === "innerHTML" || key === "html") {
+      $element.html(value);
+    } else if (key === "htmlDiff") {
+      $element.updateDiff(value);
+    } else if (key === "svgDiff") {
+      $element.updateSVGDiff(value);
+    } else if (key === "value") {
+      $element.val(value);
+    } else {
+      $element.attr(key, value);
+    }
+  }
+};
+class BindHandler extends BaseHandler {
+  load(...args2) {
+    this.bindData(...args2);
+  }
+  bindData(...args2) {
+    if (!this._bindMethods) {
+      this._bindMethods = this.context.filterProps(CHECK_BIND_PATTERN);
+    }
+    const bindList = this._bindMethods.filter((originalCallbackName) => {
+      if (!args2.length)
+        return true;
+      var [callbackName, id] = originalCallbackName.split(CHECK_SAPARATOR);
+      var [_, $bind] = callbackName.split(" ");
+      return args2.indexOf($bind) > -1;
+    });
+    bindList.forEach(async (callbackName) => {
+      const bindMethod = this.context[callbackName];
+      var [callbackName, id] = callbackName.split(CHECK_SAPARATOR);
+      const refObject = this.getRef(id);
+      let refCallback = BIND_CHECK_DEFAULT_FUNCTION;
+      if (refObject != "" && typeof refObject === "string") {
+        refCallback = BIND_CHECK_FUNCTION(refObject);
+      } else if (typeof refObject === "function") {
+        refCallback = refObject;
+      }
+      const elName = callbackName.split(BIND_SAPARATOR)[1];
+      let $element = this.context.refs[elName];
+      const isBindCheck = typeof refCallback === "function" && refCallback.call(this.context);
+      if ($element && isBindCheck) {
+        const results = await bindMethod.call(this.context, ...args2);
+        if (!results)
+          return;
+        const keys2 = Object.keys(results);
+        for (var elementKeyIndex = 0, len2 = keys2.length; elementKeyIndex < len2; elementKeyIndex++) {
+          const key = keys2[elementKeyIndex];
+          const value = results[key];
+          applyElementAttribute($element, key, value);
+        }
+      }
+    });
+  }
+  destroy() {
+    this._bindMethods = void 0;
+  }
+}
+class CallbackHandler extends BaseHandler {
+  initialize() {
+    this.destroy();
+    if (!this._callbacks) {
+      this._callbacks = this.context.filterProps(CHECK_CALLBACK_PATTERN);
+    }
+    this._callbacks.forEach((key) => this.parseCallback(key));
+  }
+  destroy() {
+    if (this.context.notEventRedefine)
+      ;
+    else {
+      this.removeCallbackAll();
+    }
+  }
+  removeCallbackAll() {
+    this.getBindings().forEach((obj2) => {
+      this.removeCallback(obj2);
+    });
+    this.initBindings();
+  }
+  removeCallback({ animationFrameId }) {
+    cancelAnimationFrame(animationFrameId);
+  }
+  getBindings() {
+    if (!this._bindings) {
+      this.initBindings();
+    }
+    return this._bindings;
+  }
+  addBinding(obj2) {
+    this.getBindings().push(obj2);
+  }
+  initBindings() {
+    this._bindings = [];
+  }
+  matchPath(el, selector2) {
+    if (el) {
+      if (el.matches(selector2)) {
+        return el;
+      }
+      return this.matchPath(el.parentElement, selector2);
+    }
+    return null;
+  }
+  makeCallback(callbackObject, callback) {
+    const run = (time) => {
+      callback(time);
+      callbackObject.requestId = requestAnimationFrame(run);
+    };
+    return () => {
+      callbackObject.requestId = requestAnimationFrame(run);
+    };
+  }
+  getDefaultCallbackObject(callbackName, checkMethodFilters) {
+    const context = this.context;
+    let arr = checkMethodFilters;
+    const checkMethodList = arr.filter((code2) => !!context[code2]);
+    const [afters, afterMethods] = splitMethodByKeyword(arr, "after");
+    const [befores, beforeMethods] = splitMethodByKeyword(arr, "before");
+    const [debounces, debounceMethods] = splitMethodByKeyword(arr, "debounce");
+    const [delays, delayMethods] = splitMethodByKeyword(arr, "delay");
+    const [throttles, throttleMethods] = splitMethodByKeyword(arr, "throttle");
+    const [captures] = splitMethodByKeyword(arr, "capture");
+    [
+      ...checkMethodList,
+      ...afters,
+      ...befores,
+      ...delays,
+      ...debounces,
+      ...throttles,
+      ...captures
+    ];
+    return {
+      callbackName,
+      captures,
+      afterMethods,
+      beforeMethods,
+      delayMethods,
+      debounceMethods,
+      throttleMethods,
+      checkMethodList
+    };
+  }
+  addCallback(callbackObject, callback) {
+    callbackObject.callback = this.makeCallback(callbackObject, callback);
+    this.addBinding(callbackObject);
+    callbackObject.callback();
+  }
+  bindingCallback(callbackName, checkMethodFilters, originalCallback) {
+    let callbackObject = this.getDefaultCallbackObject(callbackName, checkMethodFilters);
+    if (callbackObject.debounceMethods.length) {
+      var debounceTime = +callbackObject.debounceMethods[0].target;
+      originalCallback = debounce(originalCallback, debounceTime);
+    } else if (callbackObject.throttleMethods.length) {
+      var throttleTime = +callbackObject.throttleMethods[0].target;
+      originalCallback = throttle(originalCallback, throttleTime);
+    }
+    this.addCallback(callbackObject, originalCallback);
+  }
+  parseCallback(key) {
+    const context = this.context;
+    let checkMethodFilters = key.split(CHECK_SAPARATOR).map((it) => it.trim()).filter(Boolean);
+    var prefix = checkMethodFilters.shift();
+    var callbackName = prefix.split(CALLBACK_SAPARATOR)[1];
+    var originalCallback = context[key].bind(context);
+    this.bindingCallback(callbackName, checkMethodFilters, originalCallback);
+  }
+}
+const REFERENCE_PROPERTY = "ref";
+const TEMP_DIV$1 = Dom.create("div");
+const QUERY_PROPERTY = `[${REFERENCE_PROPERTY}]`;
+const REF_CLASS = "refclass";
+const REF_CLASS_PROPERTY = `[${REF_CLASS}]`;
+class EventMachine {
+  constructor(opt, props) {
+    this.state = {};
+    this.prevState = {};
+    this.refs = {};
+    this.children = {};
+    this._bindings = [];
+    this.id = uuid$1();
+    this.handlers = this.initializeHandler();
+    this._localTimestamp = 0;
+    this.initializeProperty(opt, props);
+    this.initComponents();
+  }
+  get _timestamp() {
+    return this._localTimestamp++;
+  }
+  get target() {
+    return this.$el.el;
+  }
+  initializeProperty(opt, props = {}) {
+    this.opt = opt || {};
+    this.parent = this.opt;
+    this.props = props;
+    this.source = uuid$1();
+    this.sourceName = this.constructor.name;
+  }
+  initComponents() {
+    this.childComponents = this.components();
+  }
+  initializeHandler() {
+    return [
+      new BindHandler(this),
+      new DomEventHandler(this),
+      new CallbackHandler(this)
+    ];
+  }
+  initState() {
+    return {};
+  }
+  setState(state = {}, isLoad = true) {
+    this.prevState = this.state;
+    this.state = Object.assign({}, this.state, state);
+    if (isLoad) {
+      this.load();
+    }
+  }
+  toggleState(key, isLoad = true) {
+    this.setState({
+      [key]: !this.state[key]
+    }, isLoad);
+  }
+  apply(obj2) {
+    return spreadVariable(obj2);
+  }
+  _reload(props, $container = null) {
+    if ($container) {
+      this.render($container);
+    }
+    this.props = props;
+    this.state = {};
+    this.setState(this.initState(), false);
+    this.refresh(true);
+  }
+  render($container) {
+    this.$el = this.parseTemplate(html`
+        ${this.template()}
+      `);
+    this.refs.$el = this.$el;
+    if ($container) {
+      $container.append(this.$el);
+    }
+    this.load();
+    this.afterRender();
+  }
+  initialize() {
+    this.state = this.initState();
+  }
+  afterRender() {
+  }
+  components() {
+    return {};
+  }
+  getRef(...args2) {
+    const key = args2.join("");
+    return this.refs[key];
+  }
+  parseTemplate(html2, isLoad) {
+    if (Array.isArray(html2)) {
+      html2 = html2.join("");
+    }
+    html2 = html2.trim();
+    const list2 = TEMP_DIV$1.html(html2).children();
+    for (var i = 0, len2 = list2.length; i < len2; i++) {
+      const $el = list2[i];
+      var ref = $el.attr(REFERENCE_PROPERTY);
+      if (ref) {
+        this.refs[ref] = $el;
+      }
+      var refs = $el.$$(QUERY_PROPERTY);
+      var temp = {};
+      for (var refsIndex = 0, refsLen = refs.length; refsIndex < refsLen; refsIndex++) {
+        const $dom = refs[refsIndex];
+        const name2 = $dom.attr(REFERENCE_PROPERTY);
+        if (temp[name2]) {
+          console.warn(`${ref} is duplicated. - ${this.sourceName}`, this);
+        } else {
+          temp[name2] = true;
+        }
+        this.refs[name2] = $dom;
+      }
+    }
+    if (!isLoad) {
+      return list2[0];
+    }
+    return TEMP_DIV$1.createChildrenFragment();
+  }
+  parsePropertyInfo($dom) {
+    let props = {};
+    for (var t of $dom.el.attributes) {
+      if (hasVariable(t.nodeName)) {
+        const recoveredValue = getVariable(t.nodeName);
+        if (isObject(recoveredValue)) {
+          props = Object.assign(props, recoveredValue);
+        } else {
+          props[t.nodeName] = getVariable(t.nodeValue);
+        }
+      } else {
+        props[t.nodeName] = getVariable(t.nodeValue);
+      }
+    }
+    const content2 = $dom.html();
+    if (content2) {
+      props.content = content2;
+      props.contentChildren = this.parseContent(props.content);
+    }
+    return props;
+  }
+  parseSourceName(obj2) {
+    if (obj2.parent) {
+      return [obj2.sourceName, ...this.parseSourceName(obj2.parent)];
+    }
+    return [obj2.sourceName];
+  }
+  getEventMachineComponent(refClassName) {
+    var EventMachineComponent = retriveElement(refClassName) || this.childComponents[refClassName];
+    return EventMachineComponent;
+  }
+  createInstanceForComponent(EventMachineComponent, targetElement, props) {
+    if (EventMachineComponent.__proto__.name === "ProxyComponent") {
+      return new EventMachineComponent({ target: targetElement, props });
+    }
+    return new EventMachineComponent(this, props);
+  }
+  renderComponent({ $dom, refName, component: component2, props }) {
+    var _a;
+    var instance = null;
+    if (this.children[refName]) {
+      instance = this.children[refName];
+      instance.__timestamp = this._localTimestamp;
+      instance._reload(props);
+    } else {
+      instance = this.createInstanceForComponent(component2, $dom.$parent.el, props);
+      instance.__timestamp = this._localTimestamp;
+      this.children[refName || instance.id] = instance;
+      if (isFunction(instance.render)) {
+        instance.render();
+      }
+    }
+    if (instance.renderTarget) {
+      (_a = instance.$el) == null ? void 0 : _a.appendTo(instance.renderTarget);
+      $dom.remove();
+    } else if (instance.$el) {
+      $dom.replace(instance.$el);
+    } else {
+      $dom.remove();
+    }
+  }
+  parseContent(html2, filteredRefClass = []) {
+    return Dom.create("div").html(html2).children().map(($dom) => {
+      return this._getComponentInfo($dom);
+    }).filter((it) => filteredRefClass.length === 0 ? true : filteredRefClass.includes(it.refClass));
+  }
+  _getComponentInfo($dom) {
+    const refClass = $dom.attr(REF_CLASS);
+    const EventMachineComponent = this.getEventMachineComponent(refClass);
+    if (EventMachineComponent) {
+      let props = this.parsePropertyInfo($dom);
+      let refName = $dom.attr(REFERENCE_PROPERTY);
+      return {
+        $dom,
+        refClass,
+        props,
+        refName: refName || props.ref,
+        component: EventMachineComponent
+      };
+    } else {
+      return {
+        notUsed: true,
+        $dom
+      };
+    }
+  }
+  getComponentInfoList($el) {
+    if (!$el)
+      return [];
+    const children2 = [];
+    let targets = $el.$$(REF_CLASS_PROPERTY).filter((it) => {
+      return it.path().filter((a) => {
+        return a.attr(REF_CLASS);
+      }).length === 1;
+    });
+    targets.forEach(($dom) => {
+      children2.push(this._getComponentInfo($dom));
+    });
+    return children2;
+  }
+  parseComponent() {
+    const $el = this.$el;
+    const componentList = this.getComponentInfoList($el);
+    componentList.forEach((comp) => {
+      if (comp.notUsed) {
+        comp.$dom.remove();
+      } else {
+        this.renderComponent(comp);
+      }
+    });
+    keyEach(this.children, (key, child) => {
+      if (child.__timestamp !== this._localTimestamp) {
+        child.clean();
+      }
+    });
+  }
+  clean() {
+    if (this.$el && !this.$el.hasParent()) {
+      keyEach(this.children, (key, child) => {
+        if (isFunction(child == null ? void 0 : child.clean)) {
+          child.clean();
+        }
+      });
+      this.destroy();
+      this.$el = null;
+      return true;
+    }
+  }
+  refresh() {
+    this.load();
+  }
+  _afterLoad() {
+    this._timestamp;
+    this.runHandlers("initialize");
+    this.bindData();
+    this.parseComponent();
+  }
+  async load(...args2) {
+    if (!this._loadMethods) {
+      this._loadMethods = this.filterProps(CHECK_LOAD_PATTERN);
+    }
+    const localLoadMethods = this._loadMethods.filter((callbackName) => {
+      const elName = callbackName.split(LOAD_SAPARATOR)[1].split(CHECK_SAPARATOR).map((it) => it.trim())[0];
+      if (!args2.length)
+        return true;
+      return args2.indexOf(elName) > -1;
+    });
+    await localLoadMethods.forEach(async (callbackName) => {
+      let methodName = callbackName.split(LOAD_SAPARATOR)[1];
+      var [elName, ...checker] = methodName.split(CHECK_SAPARATOR).map((it) => it.trim());
+      checker = checker.map((it) => it.trim());
+      const isDomDiff = Boolean(checker.filter((it) => DOMDIFF.includes(it)).length);
+      const refTarget = this.refs[elName];
+      if (refTarget) {
+        var newTemplate = await this[callbackName].apply(this, args2);
+        if (Array.isArray(newTemplate)) {
+          newTemplate = newTemplate.join("");
+        }
+        const fragment = this.parseTemplate(html`${newTemplate}`, true);
+        if (isDomDiff) {
+          refTarget.htmlDiff(fragment);
+        } else {
+          if (refTarget) {
+            refTarget.html(fragment);
+          }
+        }
+      }
+    });
+    this._afterLoad();
+  }
+  runHandlers(func2 = "run", ...args2) {
+    this.handlers.forEach((h) => h[func2](...args2));
+  }
+  bindData(...args2) {
+    this.runHandlers("load", ...args2);
+  }
+  template() {
+    return `<div></div>`;
+  }
+  eachChildren(callback) {
+    if (!isFunction(callback))
+      return;
+    keyEach(this.children, (_, Component2) => {
+      callback(Component2);
+    });
+  }
+  rerender() {
+    var $parent = this.$el.parent();
+    this.destroy();
+    this.render($parent);
+  }
+  destroy() {
+    this.eachChildren((childComponent) => {
+      childComponent.destroy();
+    });
+    this.runHandlers("destroy");
+    if (this.$el) {
+      this.$el.remove();
+    }
+    this.$el = null;
+    this.refs = {};
+    this.children = {};
+  }
+  collectProps() {
+    if (!this.__cachedMethodList) {
+      this.__cachedMethodList = collectProps(this, (name2) => {
+        return name2.indexOf(MAGIC_METHOD) === 0;
+      });
+    }
+    return this.__cachedMethodList;
+  }
+  filterProps(pattern) {
+    return this.collectProps().filter((key) => {
+      return key.match(pattern);
+    });
+  }
+  self(e2) {
+    return e2 && e2.$dt && e2.$dt.is(e2.target);
+  }
+  isAltKey(e2) {
+    return e2.altKey;
+  }
+  isCtrlKey(e2) {
+    return e2.ctrlKey;
+  }
+  isShiftKey(e2) {
+    return e2.shiftKey;
+  }
+  isMetaKey(e2) {
+    return e2.metaKey || e2.key == "Meta" || e2.code.indexOf("Meta") > -1;
+  }
+  isMouseLeftButton(e2) {
+    return e2.buttons === 1;
+  }
+  isMouseRightButton(e2) {
+    return e2.buttons === 2;
+  }
+  hasMouse(e2) {
+    return e2.pointerType === "mouse";
+  }
+  hasTouch(e2) {
+    return e2.pointerType === "touch";
+  }
+  hasPen(e2) {
+    return e2.pointerType === "pen";
+  }
+  preventDefault(e2) {
+    e2.preventDefault();
+    return true;
+  }
+  stopPropagation(e2) {
+    e2.stopPropagation();
+    return true;
+  }
+}
 var EPSILON = 1e-6;
 var ARRAY_TYPE = typeof Float32Array !== "undefined" ? Float32Array : Array;
 if (!Math.hypot)
@@ -1997,6 +3690,288 @@ var math = /* @__PURE__ */ Object.freeze({
   getCenterInTriangle,
   normalize
 });
+class BaseStore {
+  constructor(editor) {
+    this.id = uuidShort();
+    this.cachedCallback = {};
+    this.callbacks = {};
+    this.editor = editor;
+    this.promiseProxy = new Proxy(this, {
+      get: (target, key) => {
+        return this.makePromiseEvent(key);
+      }
+    });
+  }
+  getCallbacks(event) {
+    if (!this.callbacks[event]) {
+      this.callbacks[event] = [];
+    }
+    return this.callbacks[event];
+  }
+  setCallbacks(event, list2 = []) {
+    this.callbacks[event] = list2;
+  }
+  debug(...args2) {
+  }
+  on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false, beforeMethods = [], frame = false) {
+    var callback = originalCallback;
+    if (debounceDelay > 0)
+      callback = debounce(originalCallback, debounceDelay);
+    else if (throttleDelay > 0)
+      callback = throttle(originalCallback, throttleDelay);
+    if (beforeMethods.length) {
+      callback = ifCheck(callback, context, beforeMethods);
+    }
+    if (frame) {
+      callback = makeRequestAnimationFrame(callback, context);
+    }
+    this.getCallbacks(event).push({ event, callback, context, originalCallback, enableAllTrigger, enableSelfTrigger });
+    this.debug("add message event", event, context.sourceName);
+    return () => {
+      this.off(event, originalCallback);
+    };
+  }
+  off(event, originalCallback) {
+    this.debug("off message event", event);
+    if (arguments.length == 1) {
+      this.setCallbacks(event);
+    } else if (arguments.length == 2) {
+      this.setCallbacks(event, this.getCallbacks(event).filter((f) => {
+        return f.originalCallback !== originalCallback;
+      }));
+    }
+  }
+  offAll(context) {
+    Object.keys(this.callbacks).forEach((event) => {
+      this.setCallbacks(event, this.getCallbacks(event).filter((f) => {
+        return f.context !== context;
+      }));
+    });
+    this.debug("off all message", context.sourceName);
+  }
+  getCachedCallbacks(event) {
+    return this.getCallbacks(event);
+  }
+  get promise() {
+    return this.promiseProxy;
+  }
+  get p() {
+    return this.promise;
+  }
+  makePromiseEvent(event) {
+    var list2 = this.getCachedCallbacks(event);
+    const source2 = this.source;
+    return (...args2) => Promise.all(list2.filter((f) => {
+      return !f.enableSelfTrigger;
+    }).filter((f) => {
+      return f.enableAllTrigger || f.originalCallback.source !== source2;
+    }).map((f) => {
+      return new Promise((resolve, reject) => {
+        resolve(f.callback.apply(f.context, args2));
+      });
+    }));
+  }
+  sendMessage(source2, event, ...args2) {
+    this.sendMessageList(source2, [
+      [event, ...args2]
+    ]);
+  }
+  sendMessageList(source2, messages = []) {
+    Promise.resolve().then(() => {
+      messages.forEach(([event, ...args2]) => {
+        var list2 = this.getCachedCallbacks(event);
+        if (list2 && list2.length) {
+          const runnableFunctions = list2.filter((f) => !f.enableSelfTrigger).filter((f) => f.enableAllTrigger || f.originalCallback.source !== source2);
+          for (const f of runnableFunctions) {
+            const result = f.callback.apply(f.context, args2);
+            if (isNotUndefined(result)) {
+              if (result === false) {
+                return;
+              } else if (isFunction(result)) {
+                result();
+                return;
+              }
+            }
+          }
+        }
+      });
+    });
+  }
+  nextSendMessage(source2, callback, ...args2) {
+    Promise.resolve().then(() => {
+      callback(...args2);
+    });
+  }
+  triggerMessage(source2, event, ...args2) {
+    Promise.resolve().then(() => {
+      var list2 = this.getCachedCallbacks(event);
+      if (list2) {
+        const runnableFunctions = list2.filter((f) => f.originalCallback.source === source2);
+        runnableFunctions.forEach((f) => {
+          f.callback.apply(f.context, args2);
+        });
+      } else {
+        console.warn(event, " is not valid event");
+      }
+    });
+  }
+  emit(event, ...args2) {
+    if (isFunction(event)) {
+      event(...args2);
+    } else if (isArray(event)) {
+      this.sendMessageList(this.source, event);
+    } else {
+      this.sendMessage(this.source, event, ...args2);
+    }
+  }
+  nextTick(callback) {
+    this.nextSendMessage(this.source, callback);
+  }
+  trigger(event, ...args2) {
+    if (isFunction(event)) {
+      event(...args2);
+    } else {
+      this.triggerMessage(this.source, event, ...args2);
+    }
+  }
+}
+class UIElement extends EventMachine {
+  constructor(opt, props = {}) {
+    super(opt, props);
+    if (props.store) {
+      this.__storeInstance = props.store;
+    } else {
+      this.__storeInstance = new BaseStore();
+    }
+    this.created();
+    this.initialize();
+    this.initializeStoreEvent();
+  }
+  createContext() {
+    return {};
+  }
+  pushContext() {
+    return this.contexts.push(this.createContext());
+  }
+  popContext() {
+    return this.contexts.pop();
+  }
+  currentContext() {
+    return this.contexts[this.contexts.length - 1];
+  }
+  setStore(storeInstance) {
+    this.__storeInstance = storeInstance;
+  }
+  get $store() {
+    return this.__storeInstance || this.parent.$store;
+  }
+  created() {
+  }
+  getRealEventName(e2, s = MULTI_PREFIX) {
+    var startIndex = e2.indexOf(s);
+    return e2.substr(startIndex < 0 ? 0 : startIndex + s.length);
+  }
+  splitMethod(arr, keyword, defaultValue = 0) {
+    var [methods, params] = splitMethodByKeyword(arr, keyword);
+    return [
+      methods.length ? params[0].target : defaultValue,
+      methods,
+      params
+    ];
+  }
+  createLocalCallback(event, callback) {
+    var newCallback = callback.bind(this);
+    newCallback.displayName = `${this.sourceName}.${event}`;
+    newCallback.source = this.source;
+    return newCallback;
+  }
+  initializeStoreEvent() {
+    this.filterProps(CHECK_SUBSCRIBE_PATTERN).forEach((key) => {
+      const events = this.getRealEventName(key, SUBSCRIBE_SAPARATOR);
+      const [method, ...methodLine] = events.split(CHECK_SAPARATOR);
+      const checkMethodList = methodLine.map((it) => it.trim()).filter((code2) => this[code2]).map((target) => ({ target }));
+      const [debounceSecond, debounceMethods] = this.splitMethod(methodLine, "debounce");
+      const [throttleSecond, throttleMethods] = this.splitMethod(methodLine, "throttle");
+      const [allTrigger, allTriggerMethods] = this.splitMethod(methodLine, "allTrigger");
+      const [selfTrigger, selfTriggerMethods] = this.splitMethod(methodLine, "selfTrigger");
+      const [frameTrigger, frameTriggerMethods] = this.splitMethod(methodLine, "frame");
+      const [paramsVariable, paramsVariableMethods, params] = this.splitMethod(methodLine, "params");
+      let debounce2 = +debounceSecond > 0 ? debounceSecond : 0;
+      let throttle2 = +throttleSecond > 0 ? throttleSecond : 0;
+      let isAllTrigger = Boolean(allTriggerMethods.length);
+      let isSelfTrigger = Boolean(selfTriggerMethods.length);
+      let isFrameTrigger = Boolean(frameTriggerMethods.length);
+      if (paramsVariableMethods.length) {
+        const settings = getVariable(paramsVariable);
+        if (isNotUndefined(settings.debounce))
+          debounce2 = settings.debounce;
+        if (isNotUndefined(settings.throttle))
+          throttle2 = settings.throttle;
+        if (isNotUndefined(settings.frame))
+          isFrameTrigger = settings.frame;
+      }
+      const originalCallback = this[key];
+      events.split(CHECK_SAPARATOR).filter((it) => {
+        return checkMethodList.indexOf(it) === -1 && debounceMethods.indexOf(it) === -1 && allTriggerMethods.indexOf(it) === -1 && selfTriggerMethods.indexOf(it) === -1 && throttleMethods.indexOf(it) === -1 && paramsVariableMethods.indexOf(it) === -1;
+      }).map((it) => it.trim()).filter(Boolean).forEach((e2) => {
+        if (isFunction(originalCallback)) {
+          var callback = this.createLocalCallback(e2, originalCallback);
+          this.$store.on(e2, callback, this, debounce2, throttle2, isAllTrigger, isSelfTrigger, checkMethodList, isFrameTrigger);
+        }
+      });
+    });
+  }
+  destoryStoreSUBSCRIBE() {
+    this.$store.offAll(this);
+  }
+  destroy() {
+    super.destroy();
+    this.destoryStoreSUBSCRIBE();
+  }
+  rerender() {
+    super.rerender();
+    this.initialize();
+    this.initializeStoreEvent();
+  }
+  emit(messageName, ...args2) {
+    this.$store.source = this.source;
+    this.$store.sourceContext = this;
+    this.$store.emit(messageName, ...args2);
+  }
+  nextTick(callback, delay = 0) {
+    setTimeout(() => {
+      this.$store.nextTick(callback);
+    }, delay);
+  }
+  trigger(messageName, ...args2) {
+    this.$store.source = this.source;
+    this.$store.trigger(messageName, ...args2);
+  }
+  broadcast(messageName, ...args2) {
+    Object.keys(this.children).forEach((key) => {
+      this.children[key].trigger(messageName, ...args2);
+    });
+  }
+  on(message, callback, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false, frame = false) {
+    this.$store.on(message, callback, this.source, debounceDelay, throttleDelay, enableAllTrigger, enableSelfTrigger, [], frame);
+  }
+  off(message, callback) {
+    this.$store.off(message, callback, this.source);
+  }
+  subscribe(callback, debounceSecond = 0, throttleSecond = 0) {
+    const id = `subscribe.${uuidShort$1()}`;
+    const newCallback = this.createLocalCallback(id, callback);
+    this.$store.on(id, newCallback, this, debounceSecond, throttleSecond, false, true);
+    return id;
+  }
+}
+const start$1 = (ElementClass, opt) => {
+  const $container = Dom.create(opt.container || document.body);
+  const app = new ElementClass(opt, opt);
+  app.render($container);
+  return app;
+};
+var index = "";
 const stringToPercent = {
   center: 50,
   top: 0,
@@ -2775,1848 +4750,6 @@ class Item {
     if (!isParent && this.json.parent.is("project") === false)
       return this.json.parent.hasParent(parentId);
     return isParent;
-  }
-}
-const setBooleanProp = (el, name2, value) => {
-  if (value) {
-    el.setAttribute(name2, name2);
-    el[name2] = value;
-  } else {
-    el.removeAttribute(name2);
-    el[name2] = value;
-  }
-};
-const setProp = (el, name2, value) => {
-  if (typeof value === "boolean") {
-    setBooleanProp(el, name2, value);
-  } else {
-    el.setAttribute(name2, value);
-  }
-};
-const removeBooleanProp = (node, name2) => {
-  node.removeAttribute(name2);
-  node[name2] = false;
-};
-const removeUndefinedProp = (node, name2) => {
-  node.removeAttribute(name2);
-};
-const removeProp = (node, name2, value) => {
-  if (typeof value === "boolean") {
-    removeBooleanProp(node, name2);
-  } else if (name2) {
-    removeUndefinedProp(node, name2);
-  }
-};
-const updateProp = (node, name2, newValue, oldValue) => {
-  if (!newValue) {
-    removeProp(node, name2, oldValue);
-  } else if (!oldValue || newValue !== oldValue) {
-    setProp(node, name2, newValue);
-  }
-};
-const updateProps = (node, newProps = {}, oldProps = {}) => {
-  const keyList2 = [];
-  keyList2.push.apply(keyList2, Object.keys(newProps));
-  keyList2.push.apply(keyList2, Object.keys(oldProps));
-  const props = new Set(keyList2);
-  props.forEach((key) => {
-    updateProp(node, key, newProps[key], oldProps[key]);
-  });
-};
-function changed(node1, node2) {
-  return node1.nodeType === Node.TEXT_NODE && node1.textContent !== node2.textContent || node1.nodeName !== node2.nodeName;
-}
-function hasPassed(node1) {
-  if ((node1 == null ? void 0 : node1.nodeType) === 8) {
-    return true;
-  }
-  return node1.nodeType !== Node.TEXT_NODE && node1.getAttribute("data-domdiff-pass") === "true";
-}
-function hasRefClass(node1) {
-  return node1.nodeType !== Node.TEXT_NODE && node1.getAttribute("refClass");
-}
-function getProps(attributes) {
-  var results = {};
-  const len2 = attributes.length;
-  for (let i = 0; i < len2; i++) {
-    const t = attributes[i];
-    results[t.name] = t.value;
-  }
-  return results;
-}
-function updateElement(parentElement, oldEl, newEl, i, options2 = {}) {
-  if (!oldEl) {
-    parentElement.appendChild(newEl.cloneNode(true));
-  } else if (!newEl) {
-    parentElement.removeChild(oldEl);
-  } else if (hasPassed(oldEl) || hasPassed(newEl))
-    ;
-  else if (changed(newEl, oldEl) || hasRefClass(newEl)) {
-    parentElement.replaceChild(newEl.cloneNode(true), oldEl);
-  } else if (newEl.nodeType !== Node.TEXT_NODE && newEl.nodeType !== Node.COMMENT_NODE && newEl.toString() !== "[object HTMLUnknownElement]") {
-    if (options2.checkPassed && options2.checkPassed(oldEl, newEl))
-      ;
-    else {
-      updateProps(oldEl, getProps(newEl.attributes), getProps(oldEl.attributes));
-    }
-    var oldChildren = children(oldEl);
-    var newChildren = children(newEl);
-    var max = Math.max(oldChildren.length, newChildren.length);
-    for (var i = 0; i < max; i++) {
-      updateElement(oldEl, oldChildren[i], newChildren[i], i, options2);
-    }
-  }
-}
-const children = (el) => {
-  var element = el.firstChild;
-  if (!element) {
-    return [];
-  }
-  var results = [];
-  do {
-    results.push(element);
-    element = element.nextSibling;
-  } while (element);
-  return results;
-};
-function DomDiff(A, B, options2 = {}) {
-  options2.checkPassed = isFunction(options2.checkPassed) ? options2.checkPassed : void 0;
-  options2.removedElements = [];
-  A = A.el || A;
-  B = B.el || B;
-  var childrenA = children(A);
-  var childrenB = children(B);
-  var len2 = Math.max(childrenA.length, childrenB.length);
-  for (var i = 0; i < len2; i++) {
-    updateElement(A, childrenA[i], childrenB[i], i, options2);
-  }
-}
-class Dom {
-  constructor(tag, className, attr) {
-    if (typeof tag !== "string") {
-      this.el = tag;
-    } else {
-      var el = document.createElement(tag);
-      if (className) {
-        el.className = className;
-      }
-      attr = attr || {};
-      Object.assign(el, attr);
-      this.el = el;
-    }
-  }
-  static create(tag, className, attr) {
-    return new Dom(tag, className, attr);
-  }
-  static createByHTML(htmlString) {
-    var div2 = Dom.create("div");
-    var list2 = div2.html(htmlString).children();
-    if (list2.length) {
-      return Dom.create(list2[0].el);
-    }
-    return null;
-  }
-  static getScrollTop() {
-    return Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop);
-  }
-  static getScrollLeft() {
-    return Math.max(window.pageXOffset, document.documentElement.scrollLeft, document.body.scrollLeft);
-  }
-  static parse(html2) {
-    var parser2 = DOMParser();
-    return parser2.parseFromString(html2, "text/htmll");
-  }
-  static body() {
-    return Dom.create(document.body);
-  }
-  setAttr(obj2) {
-    Object.keys(obj2).forEach((key) => {
-      this.attr(key, obj2[key]);
-    });
-    return this;
-  }
-  setAttrNS(obj2, namespace = "http://www.w3.org/2000/svg") {
-    Object.keys(obj2).forEach((key) => {
-      this.attr(key, obj2[key], namespace);
-    });
-    return this;
-  }
-  setProp(obj2) {
-    Object.keys(obj2).forEach((key) => {
-      if (this.el[key] != obj2[key]) {
-        this.el[key] = obj2[key];
-      }
-    });
-    return this;
-  }
-  data(key, value) {
-    if (arguments.length === 1) {
-      const value2 = this.attr("data-" + key);
-      return recoverVariable(value2, false);
-    } else if (arguments.length === 2) {
-      return this.attr("data-" + key, value);
-    }
-    return this;
-  }
-  attr(key, value) {
-    if (arguments.length == 1) {
-      return this.el.getAttribute && this.el.getAttribute(key);
-    }
-    if (this.el.getAttribute(key) != value) {
-      this.el.setAttribute(key, value);
-    }
-    return this;
-  }
-  attrNS(key, value, namespace = "http://www.w3.org/2000/svg") {
-    if (arguments.length == 1) {
-      return this.el.getAttributeNS(namespace, key);
-    }
-    if (this.el.getAttributeNS(namespace, key) != value) {
-      this.el.setAttributeNS(namespace, key, value);
-    }
-    return this;
-  }
-  attrKeyValue(keyField) {
-    return {
-      [this.el.getAttribute(keyField)]: this.val()
-    };
-  }
-  attrs(...args2) {
-    return args2.map((key) => {
-      return this.el.getAttribute(key);
-    });
-  }
-  styles(...args2) {
-    return args2.map((key) => {
-      return this.el.style[key];
-    });
-  }
-  removeAttr(key) {
-    this.el.removeAttribute(key);
-    return this;
-  }
-  removeStyle(key) {
-    this.el.style.removeProperty(key);
-    return this;
-  }
-  is(checkElement) {
-    if (checkElement instanceof Dom) {
-      return this.el === checkElement.el;
-    }
-    return this.el === checkElement;
-  }
-  isTag(tag) {
-    return this.el.tagName.toLowerCase() === tag.toLowerCase();
-  }
-  closest(cls) {
-    var temp = this;
-    var checkCls = false;
-    while (!(checkCls = temp.hasClass(cls))) {
-      if (temp.el.parentNode) {
-        temp = Dom.create(temp.el.parentNode);
-      } else {
-        return null;
-      }
-    }
-    if (checkCls) {
-      return temp;
-    }
-    return null;
-  }
-  path() {
-    if (!this.el)
-      return [];
-    let pathList = [this];
-    let $parentNode = this.parent();
-    if (!$parentNode.el)
-      return pathList;
-    while ($parentNode) {
-      pathList.unshift($parentNode);
-      $parentNode = $parentNode.parent();
-      if (!$parentNode.el)
-        break;
-    }
-    return pathList;
-  }
-  get $parent() {
-    return this.parent();
-  }
-  parent() {
-    return Dom.create(this.el.parentNode);
-  }
-  hasParent() {
-    return !!this.el.parentNode;
-  }
-  removeClass(...args2) {
-    this.el.classList.remove(...args2);
-    return this;
-  }
-  replaceClass(oldClass, newClass) {
-    this.el.classList.replace(oldClass, newClass);
-    return this;
-  }
-  hasClass(cls) {
-    if (!this.el.classList)
-      return false;
-    return this.el.classList.contains(cls);
-  }
-  addClass(...args2) {
-    this.el.classList.add(...args2);
-    return this;
-  }
-  onlyOneClass(cls) {
-    var parent = this.parent();
-    parent.children().forEach((it) => {
-      it.removeClass(cls);
-    });
-    this.addClass(cls);
-  }
-  toggleClass(cls, isForce) {
-    this.el.classList.toggle(cls, isForce);
-    return this;
-  }
-  html(html2) {
-    try {
-      if (typeof html2 === "undefined") {
-        return this.el.innerHTML;
-      }
-      if (typeof html2 === "string") {
-        Object.assign(this.el, { innerHTML: html2 });
-      } else {
-        this.empty().append(html2);
-      }
-      return this;
-    } catch (e2) {
-      console.log(e2, html2);
-      return this;
-    }
-  }
-  htmlDiff(fragment) {
-    DomDiff(this, fragment);
-  }
-  updateDiff(html2, rootElement = "div", options2 = {}) {
-    DomDiff(this, Dom.create(rootElement).html(html2), options2);
-  }
-  updateSVGDiff(html2, rootElement = "div") {
-    DomDiff(this, Dom.create(rootElement).html(`<svg>${html2}</svg>`).firstChild.firstChild);
-  }
-  find(selector2) {
-    return this.el.querySelector(selector2);
-  }
-  $(selector2) {
-    var node = this.find(selector2);
-    return node ? Dom.create(node) : null;
-  }
-  findAll(selector2) {
-    return Array.from(this.el.querySelectorAll(selector2));
-  }
-  $$(selector2) {
-    var arr = this.findAll(selector2);
-    return arr.map((node) => Dom.create(node));
-  }
-  empty() {
-    while (this.el.firstChild)
-      this.el.removeChild(this.el.firstChild);
-    return this;
-  }
-  append(el) {
-    if (typeof el === "string") {
-      this.el.appendChild(document.createTextNode(el));
-    } else {
-      this.el.appendChild(el.el || el);
-    }
-    return this;
-  }
-  prepend(el) {
-    if (typeof el === "string") {
-      this.el.prepend(document.createTextNode(el));
-    } else {
-      this.el.prepend(el.el || el);
-    }
-    return this;
-  }
-  prependHTML(html2) {
-    var $dom = Dom.create("div").html(html2);
-    this.prepend($dom.createChildrenFragment());
-    return $dom;
-  }
-  appendHTML(html2) {
-    var $dom = Dom.create("div").html(html2);
-    this.append($dom.createChildrenFragment());
-    return $dom;
-  }
-  createChildrenFragment() {
-    const list2 = this.children();
-    var fragment = document.createDocumentFragment();
-    list2.forEach(($el) => fragment.appendChild($el.el));
-    return fragment;
-  }
-  appendTo(target) {
-    var t = target.el ? target.el : target;
-    t.appendChild(this.el);
-    return this;
-  }
-  remove() {
-    if (this.el.parentNode) {
-      this.el.parentNode.removeChild(this.el);
-    }
-    return this;
-  }
-  removeChild(el) {
-    this.el.removeChild(el.el || el);
-    return this;
-  }
-  text(value) {
-    if (typeof value === "undefined") {
-      return this.el.textContent;
-    } else {
-      var tempText = value;
-      if (value instanceof Dom) {
-        tempText = value.text();
-      }
-      if (this.el.textContent !== tempText) {
-        this.el.textContent = tempText;
-      }
-      return this;
-    }
-  }
-  css(key, value) {
-    if (typeof key !== "undefined" && typeof value !== "undefined") {
-      if (key.indexOf("--") === 0 && typeof value !== "undefined") {
-        this.el.style.setProperty(key, value);
-      } else {
-        this.el.style[key] = value;
-      }
-    } else if (typeof key !== "undefined") {
-      if (typeof key === "string") {
-        return getComputedStyle(this.el)[key];
-      } else {
-        Object.entries(key).forEach(([localKey, value2]) => {
-          if (localKey.indexOf("--") === 0 && typeof value2 !== "undefined") {
-            this.el.style.setProperty(localKey, value2);
-          } else {
-            this.el.style[localKey] = value2;
-          }
-        });
-      }
-    }
-    return this;
-  }
-  getComputedStyle(...list2) {
-    var css = getComputedStyle(this.el);
-    var obj2 = {};
-    list2.forEach((it) => {
-      obj2[it] = css[it];
-    });
-    return obj2;
-  }
-  getStyleList(...list2) {
-    var style = {};
-    var len2 = this.el.style.length;
-    for (var i = 0; i < len2; i++) {
-      var key = this.el.style[i];
-      style[key] = this.el.style[key];
-    }
-    list2.forEach((key2) => {
-      style[key2] = this.css(key2);
-    });
-    return style;
-  }
-  cssText(value) {
-    if (typeof value === "undefined") {
-      return this.el.style.cssText;
-    }
-    if (value != this.el.tempCssText) {
-      this.el.style.cssText = value;
-      this.el.tempCssText = value;
-    }
-    return this;
-  }
-  cssArray(arr) {
-    if (arr[0])
-      this.el.style[arr[0]] = arr[1];
-    if (arr[2])
-      this.el.style[arr[2]] = arr[3];
-    if (arr[4])
-      this.el.style[arr[4]] = arr[5];
-    if (arr[6])
-      this.el.style[arr[6]] = arr[7];
-    if (arr[8])
-      this.el.style[arr[8]] = arr[9];
-    return this;
-  }
-  cssFloat(key) {
-    return parseFloat(this.css(key));
-  }
-  cssInt(key) {
-    return parseInt(this.css(key));
-  }
-  px(key, value) {
-    return this.css(key, `${value}px`);
-  }
-  rect() {
-    return this.el.getBoundingClientRect();
-  }
-  bbox() {
-    return this.el.getBBox();
-  }
-  isSVG() {
-    return this.el.tagName.toUpperCase() === "SVG";
-  }
-  offsetRect() {
-    if (this.isSVG()) {
-      const parentBox = this.parent().rect();
-      const box = this.rect();
-      return {
-        x: box.x - parentBox.x,
-        y: box.y - parentBox.y,
-        width: box.width,
-        height: box.height
-      };
-    }
-    return {
-      x: this.el.offsetLeft,
-      y: this.el.offsetTop,
-      width: this.el.offsetWidth,
-      height: this.el.offsetHeight
-    };
-  }
-  offset() {
-    var rect2 = this.rect();
-    var scrollTop = Dom.getScrollTop();
-    var scrollLeft = Dom.getScrollLeft();
-    return {
-      top: rect2.top + scrollTop,
-      left: rect2.left + scrollLeft
-    };
-  }
-  offsetLeft() {
-    return this.offset().left;
-  }
-  offsetTop() {
-    return this.offset().top;
-  }
-  position() {
-    if (this.el.style.top) {
-      return {
-        top: parseFloat(this.css("top")),
-        left: parseFloat(this.css("left"))
-      };
-    } else {
-      return this.rect();
-    }
-  }
-  size() {
-    return [this.width(), this.height()];
-  }
-  width() {
-    return this.el.offsetWidth || this.rect().width;
-  }
-  contentWidth() {
-    return this.width() - this.cssFloat("padding-left") - this.cssFloat("padding-right");
-  }
-  height() {
-    return this.el.offsetHeight || this.rect().height;
-  }
-  contentHeight() {
-    return this.height() - this.cssFloat("padding-top") - this.cssFloat("padding-bottom");
-  }
-  val(value) {
-    if (typeof value === "undefined") {
-      return this.el.value;
-    } else if (typeof value !== "undefined") {
-      var tempValue = value;
-      if (value instanceof Dom) {
-        tempValue = value.val();
-      }
-      this.el.value = tempValue;
-    }
-    return this;
-  }
-  matches(selector2) {
-    if (this.el) {
-      if (!this.el.matches)
-        return null;
-      if (this.el.matches(selector2)) {
-        return this;
-      }
-      return this.parent().matches(selector2);
-    }
-    return null;
-  }
-  get value() {
-    return this.el.value;
-  }
-  get naturalWidth() {
-    return this.el.naturalWidth;
-  }
-  get naturalHeight() {
-    return this.el.naturalHeight;
-  }
-  get files() {
-    return this.el.files ? [...this.el.files] : [];
-  }
-  realVal() {
-    switch (this.el.nodeType) {
-      case "INPUT":
-        var type = this.attr("type");
-        if (type == "checkbox" || type == "radio") {
-          return this.checked();
-        }
-      case "SELECT":
-      case "TEXTAREA":
-        return this.el.value;
-    }
-    return "";
-  }
-  int() {
-    return parseInt(this.val(), 10);
-  }
-  float() {
-    return parseFloat(this.val());
-  }
-  show(displayType = "block") {
-    this.el.style.display = displayType != "none" ? displayType : "block";
-    return this;
-  }
-  hide() {
-    this.el.style.display = "none";
-    return this;
-  }
-  isHide() {
-    return this.el.style.display === "none";
-  }
-  isShow() {
-    return !this.isHide();
-  }
-  toggle(isForce) {
-    var currentHide = this.isHide();
-    if (arguments.length == 1) {
-      if (isForce) {
-        return this.show();
-      } else {
-        return this.hide();
-      }
-    } else {
-      if (currentHide) {
-        return this.show();
-      } else {
-        return this.hide();
-      }
-    }
-  }
-  get totalLength() {
-    return this.el.getTotalLength();
-  }
-  scrollIntoView() {
-    this.el.scrollIntoView();
-  }
-  addScrollLeft(dt) {
-    this.el.scrollLeft += dt;
-    return this;
-  }
-  addScrollTop(dt) {
-    this.el.scrollTop += dt;
-    return this;
-  }
-  setScrollTop(scrollTop) {
-    this.el.scrollTop = scrollTop;
-    return this;
-  }
-  setScrollLeft(scrollLeft) {
-    this.el.scrollLeft = scrollLeft;
-    return this;
-  }
-  scrollTop() {
-    if (this.el === document.body) {
-      return Dom.getScrollTop();
-    }
-    return this.el.scrollTop;
-  }
-  scrollLeft() {
-    if (this.el === document.body) {
-      return Dom.getScrollLeft();
-    }
-    return this.el.scrollLeft;
-  }
-  scrollHeight() {
-    return this.el.scrollHeight;
-  }
-  scrollWidth() {
-    return this.el.scrollWidth;
-  }
-  on(eventName, callback, opt1, opt2) {
-    this.el.addEventListener(eventName, callback, opt1, opt2);
-    return this;
-  }
-  off(eventName, callback) {
-    this.el.removeEventListener(eventName, callback);
-    return this;
-  }
-  getElement() {
-    return this.el;
-  }
-  createChild(tag, className = "", attrs = {}, css = {}) {
-    let $element = Dom.create(tag, className, attrs);
-    $element.css(css);
-    this.append($element);
-    return $element;
-  }
-  get firstChild() {
-    return Dom.create(this.el.firstElementChild);
-  }
-  children() {
-    var element = this.el.firstElementChild;
-    if (!element) {
-      return [];
-    }
-    var results = [];
-    do {
-      results.push(Dom.create(element));
-      element = element.nextElementSibling;
-    } while (element);
-    return results;
-  }
-  childLength() {
-    return this.el.children.length;
-  }
-  replace(newElement) {
-    if (this.el.parentNode) {
-      this.el.parentNode.replaceChild(newElement.el || newElement, this.el);
-    }
-    return this;
-  }
-  replaceChild(oldElement, newElement) {
-    this.el.replaceChild(newElement.el || newElement, oldElement.el || oldElement);
-    return this;
-  }
-  checked(isChecked = false) {
-    if (arguments.length == 0) {
-      return !!this.el.checked;
-    }
-    this.el.checked = !!isChecked;
-    return this;
-  }
-  click() {
-    this.el.click();
-    return this;
-  }
-  focus() {
-    this.el.focus();
-    return this;
-  }
-  select() {
-    if (this.attr("contenteditable") === "true") {
-      var range = document.createRange();
-      range.selectNodeContents(this.el);
-      var sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(range);
-    } else {
-      this.el.select();
-    }
-    return this;
-  }
-  blur() {
-    this.el.blur();
-    return this;
-  }
-  context(contextType = "2d") {
-    if (!this._initContext) {
-      this._initContext = this.el.getContext(contextType);
-    }
-    return this._initContext;
-  }
-  resize({ width: width2, height: height2 }) {
-    this._initContext = null;
-    var ctx = this.context();
-    var scale2 = window.devicePixelRatio || 1;
-    this.px("width", +width2);
-    this.px("height", +height2);
-    this.el.width = width2 * scale2;
-    this.el.height = height2 * scale2;
-    ctx.scale(scale2, scale2);
-  }
-  toDataURL(type = "image/png", quality = 1) {
-    return this.el.toDataURL(type, quality);
-  }
-  clear() {
-    this.context().clearRect(0, 0, this.el.width, this.el.height);
-  }
-  update(callback) {
-    this.clear();
-    callback.call(this, this);
-  }
-  drawImage(img, dx = 0, dy = 0) {
-    var ctx = this.context();
-    var scale2 = window.devicePixelRatio || 1;
-    ctx.drawImage(img, dx, dy, img.width, img.height, 0, 0, this.el.width / scale2, this.el.height / scale2);
-  }
-  drawOption(option = {}) {
-    var ctx = this.context();
-    Object.assign(ctx, option);
-  }
-  drawLine(x1, y1, x2, y2) {
-    var ctx = this.context();
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.stroke();
-    ctx.closePath();
-  }
-  drawPath(...path) {
-    var ctx = this.context();
-    ctx.beginPath();
-    path.forEach((p, index2) => {
-      if (index2 == 0) {
-        ctx.moveTo(p[0], p[1]);
-      } else {
-        ctx.lineTo(p[0], p[1]);
-      }
-    });
-    ctx.stroke();
-    ctx.fill();
-    ctx.closePath();
-  }
-  drawCircle(cx, cy, r) {
-    var ctx = this.context();
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-    ctx.stroke();
-    ctx.fill();
-  }
-  drawText(x2, y2, text2) {
-    this.context().fillText(text2, x2, y2);
-  }
-  fullscreen() {
-    var element = this.el;
-    if (element.requestFullscreen) {
-      element.requestFullscreen();
-    } else if (element.wekitRequestFullscreen) {
-      element.wekitRequestFullscreen();
-    }
-  }
-  toggleFullscreen() {
-    if (this.el === document.fullscreenElement) {
-      document.exitFullscreen();
-    } else {
-      this.fullscreen();
-    }
-  }
-}
-class BaseHandler {
-  constructor(context, options2 = {}) {
-    this.context = context;
-    this.options = options2;
-  }
-  initialize() {
-  }
-  load() {
-  }
-  refresh() {
-  }
-  render() {
-  }
-  getRef(id) {
-    return this.context.getRef(id);
-  }
-  run() {
-  }
-  destroy() {
-  }
-}
-const scrollBlockingEvents = {
-  "touchstart": true,
-  "touchmove": true,
-  "mousedown": true,
-  "mouseup": true,
-  "mousemove": true
-};
-const eventConverts = {
-  "doubletab": "touchend"
-};
-const customEventNames = {
-  "doubletab": true
-};
-class DomEventHandler extends BaseHandler {
-  initialize() {
-    this.destroy();
-    if (this._domEvents && this.context.notEventRedefine) {
-      return;
-    }
-    if (!this._domEvents) {
-      this._domEvents = this.context.filterProps(CHECK_DOM_EVENT_PATTERN);
-    }
-    this._domEvents.forEach((key) => this.parseDomEvent(key));
-  }
-  destroy() {
-    if (this.context.notEventRedefine)
-      ;
-    else {
-      this.removeEventAll();
-    }
-  }
-  removeEventAll() {
-    this.getBindings().forEach((obj2) => {
-      this.removeDomEvent(obj2);
-    });
-    this.initBindings();
-  }
-  removeDomEvent({ eventName, dom, callback }) {
-    Event.removeDomEvent(dom, eventName, callback);
-  }
-  getBindings() {
-    if (!this._bindings) {
-      this.initBindings();
-    }
-    return this._bindings;
-  }
-  addBinding(obj2) {
-    this.getBindings().push(obj2);
-  }
-  initBindings() {
-    this._bindings = [];
-  }
-  matchPath(el, selector2) {
-    if (el) {
-      if (el.matches(selector2)) {
-        return el;
-      }
-      return this.matchPath(el.parentElement, selector2);
-    }
-    return null;
-  }
-  hasDelegate(e2, eventObject) {
-    return this.matchPath(e2.target || e2.srcElement, eventObject.delegate);
-  }
-  makeCallback(eventObject, callback) {
-    if (eventObject.delegate) {
-      return this.makeDelegateCallback(eventObject, callback);
-    } else {
-      return this.makeDefaultCallback(eventObject, callback);
-    }
-  }
-  makeDefaultCallback(eventObject, callback) {
-    return (e2) => {
-      var returnValue = this.runEventCallback(e2, eventObject, callback);
-      if (isNotUndefined(returnValue)) {
-        return returnValue;
-      }
-    };
-  }
-  makeDelegateCallback(eventObject, callback) {
-    return (e2) => {
-      const delegateTarget = this.hasDelegate(e2, eventObject);
-      if (delegateTarget) {
-        e2.$dt = Dom.create(delegateTarget);
-        var returnValue = this.runEventCallback(e2, eventObject, callback);
-        if (isNotUndefined(returnValue)) {
-          return returnValue;
-        }
-      }
-    };
-  }
-  runEventCallback(e2, eventObject, callback) {
-    const context = this.context;
-    e2.xy = Event.posXY(e2);
-    if (eventObject.beforeMethods.length) {
-      eventObject.beforeMethods.every((before) => {
-        return context[before.target].call(context, e2, before.param);
-      });
-    }
-    if (this.checkEventType(e2, eventObject)) {
-      var returnValue = callback(e2, e2.$dt, e2.xy);
-      if (returnValue !== false && eventObject.afterMethods.length) {
-        eventObject.afterMethods.forEach((after) => {
-          return context[after.target].call(context, e2, after.param);
-        });
-      }
-      return returnValue;
-    }
-  }
-  checkEventType(e2, eventObject) {
-    const context = this.context;
-    var hasKeyCode = true;
-    if (eventObject.codes.length) {
-      hasKeyCode = (e2.code ? eventObject.codes.indexOf(e2.code.toLowerCase()) > -1 : false) || (e2.key ? eventObject.codes.indexOf(e2.key.toLowerCase()) > -1 : false);
-    }
-    var isAllCheck = true;
-    if (eventObject.checkMethodList.length) {
-      isAllCheck = eventObject.checkMethodList.every((field) => {
-        var fieldValue = context[field];
-        if (isFunction(fieldValue) && fieldValue) {
-          return fieldValue.call(context, e2);
-        } else if (isNotUndefined(fieldValue)) {
-          return !!fieldValue;
-        }
-        return true;
-      });
-    }
-    return hasKeyCode && isAllCheck;
-  }
-  getDefaultDomElement(dom) {
-    const context = this.context;
-    let el;
-    if (dom) {
-      el = context.refs[dom] || context[dom] || window[dom];
-    } else {
-      el = context.el || context.$el || context.$root;
-    }
-    if (el instanceof Dom) {
-      return el.getElement();
-    }
-    return el;
-  }
-  getRealEventName(eventName) {
-    return eventConverts[eventName] || eventName;
-  }
-  getCustomEventName(eventName) {
-    return customEventNames[eventName] ? eventName : "";
-  }
-  getDefaultEventObject(eventName, checkMethodFilters) {
-    const context = this.context;
-    let arr = checkMethodFilters;
-    const checkMethodList = arr.filter((code2) => !!context[code2]);
-    const [afters, afterMethods] = splitMethodByKeyword(arr, "after");
-    const [befores, beforeMethods] = splitMethodByKeyword(arr, "before");
-    const [debounces, debounceMethods] = splitMethodByKeyword(arr, "debounce");
-    const [delays, delayMethods] = splitMethodByKeyword(arr, "delay");
-    const [throttles, throttleMethods] = splitMethodByKeyword(arr, "throttle");
-    const [captures] = splitMethodByKeyword(arr, "capture");
-    const filteredList = [
-      ...checkMethodList,
-      ...afters,
-      ...befores,
-      ...delays,
-      ...debounces,
-      ...throttles,
-      ...captures
-    ];
-    var codes = arr.filter((code2) => filteredList.indexOf(code2) === -1).map((code2) => code2.toLowerCase());
-    return {
-      eventName: this.getRealEventName(eventName),
-      customEventName: this.getCustomEventName(eventName),
-      codes,
-      captures,
-      afterMethods,
-      beforeMethods,
-      delayMethods,
-      debounceMethods,
-      throttleMethods,
-      checkMethodList
-    };
-  }
-  addDomEvent(eventObject, callback) {
-    eventObject.callback = this.makeCallback(eventObject, callback);
-    this.addBinding(eventObject);
-    var options2 = !!eventObject.captures.length;
-    if (scrollBlockingEvents[eventObject.eventName]) {
-      options2 = {
-        passive: true,
-        capture: options2
-      };
-    }
-    Event.addDomEvent(eventObject.dom, eventObject.eventName, eventObject.callback, options2);
-  }
-  makeCustomEventCallback(eventObject, callback) {
-    if (eventObject.customEventName === "doubletab") {
-      var delay = 300;
-      if (eventObject.delayMethods.length) {
-        delay = +eventObject.delayMethods[0].target;
-      }
-      return (...args2) => {
-        if (!this.doubleTab) {
-          this.doubleTab = {
-            time: performance.now()
-          };
-        } else {
-          if (performance.now() - this.doubleTab.time < delay) {
-            callback(...args2);
-          }
-          this.doubleTab = null;
-        }
-      };
-    }
-    return callback;
-  }
-  bindingDomEvent([eventName, dom, ...delegate], checkMethodFilters, callback) {
-    let eventObject = this.getDefaultEventObject(eventName, checkMethodFilters);
-    eventObject.dom = this.getDefaultDomElement(dom);
-    eventObject.delegate = delegate.join(SAPARATOR);
-    if (eventObject.debounceMethods.length) {
-      var debounceTime = +eventObject.debounceMethods[0].target;
-      callback = debounce(callback, debounceTime);
-    } else if (eventObject.throttleMethods.length) {
-      var throttleTime = +eventObject.throttleMethods[0].target;
-      callback = throttle(callback, throttleTime);
-    }
-    callback = this.makeCustomEventCallback(eventObject, callback);
-    this.addDomEvent(eventObject, callback);
-  }
-  getEventNames(eventName) {
-    let results = [];
-    eventName.split(NAME_SAPARATOR).forEach((e2) => {
-      var arr = e2.split(NAME_SAPARATOR);
-      results.push.apply(results, arr);
-    });
-    return results;
-  }
-  parseDomEvent(key) {
-    const context = this.context;
-    let checkMethodFilters = key.split(CHECK_SAPARATOR).map((it) => it.trim()).filter(Boolean);
-    var prefix = checkMethodFilters.shift();
-    var eventSelectorAndBehave = prefix.split(DOM_EVENT_SAPARATOR)[1];
-    var arr = eventSelectorAndBehave.split(SAPARATOR);
-    var eventNames = this.getEventNames(arr[0]);
-    var callback = context[key].bind(context);
-    for (let i = 0, len2 = eventNames.length; i < len2; i++) {
-      arr[0] = eventNames[i];
-      this.bindingDomEvent(arr, checkMethodFilters, callback);
-    }
-  }
-}
-const convertToPx = (key, value) => {
-  if (isNumber(value)) {
-    switch (key) {
-      case "width":
-      case "height":
-      case "top":
-      case "left":
-      case "right":
-      case "bottom":
-        return value + "px";
-    }
-  }
-  return value;
-};
-const applyElementAttribute = ($element, key, value) => {
-  if (key === "cssText") {
-    $element.cssText(value);
-    return;
-  } else if (key === "style") {
-    if (typeof value !== "string") {
-      const css = {};
-      Object.entries(value).forEach(([key2, value2]) => {
-        css[key2] = convertToPx(key2, value2);
-      });
-      $element.css(css);
-    }
-    return;
-  } else if (key === "class") {
-    if (Array.isArray(value)) {
-      $element.addClass(...value.filter(Boolean));
-    } else if (isObject(value)) {
-      const keys2 = Object.keys(value);
-      for (var i = 0, len2 = keys2.length; i < len2; i++) {
-        const className = keys2[i];
-        const hasClass = value[className];
-        $element.toggleClass(className, hasClass);
-      }
-    } else {
-      $element.el.className = value;
-    }
-    return;
-  } else if (key === "callback") {
-    if (typeof value === "function") {
-      value();
-      return;
-    }
-  }
-  if (typeof value === "undefined") {
-    $element.removeAttr(key);
-  } else {
-    if ($element.el.nodeName === "TEXTAREA" && key === "value") {
-      $element.text(value);
-    } else if (key === "text" || key === "textContent") {
-      $element.text(value);
-    } else if (key === "innerHTML" || key === "html") {
-      $element.html(value);
-    } else if (key === "htmlDiff") {
-      $element.updateDiff(value);
-    } else if (key === "svgDiff") {
-      $element.updateSVGDiff(value);
-    } else if (key === "value") {
-      $element.val(value);
-    } else {
-      $element.attr(key, value);
-    }
-  }
-};
-class BindHandler extends BaseHandler {
-  load(...args2) {
-    this.bindData(...args2);
-  }
-  bindData(...args2) {
-    if (!this._bindMethods) {
-      this._bindMethods = this.context.filterProps(CHECK_BIND_PATTERN);
-    }
-    const bindList = this._bindMethods.filter((originalCallbackName) => {
-      if (!args2.length)
-        return true;
-      var [callbackName, id] = originalCallbackName.split(CHECK_SAPARATOR);
-      var [_, $bind] = callbackName.split(" ");
-      return args2.indexOf($bind) > -1;
-    });
-    bindList.forEach(async (callbackName) => {
-      const bindMethod = this.context[callbackName];
-      var [callbackName, id] = callbackName.split(CHECK_SAPARATOR);
-      const refObject = this.getRef(id);
-      let refCallback = BIND_CHECK_DEFAULT_FUNCTION;
-      if (refObject != "" && typeof refObject === "string") {
-        refCallback = BIND_CHECK_FUNCTION(refObject);
-      } else if (typeof refObject === "function") {
-        refCallback = refObject;
-      }
-      const elName = callbackName.split(BIND_SAPARATOR)[1];
-      let $element = this.context.refs[elName];
-      const isBindCheck = typeof refCallback === "function" && refCallback.call(this.context);
-      if ($element && isBindCheck) {
-        const results = await bindMethod.call(this.context, ...args2);
-        if (!results)
-          return;
-        const keys2 = Object.keys(results);
-        for (var elementKeyIndex = 0, len2 = keys2.length; elementKeyIndex < len2; elementKeyIndex++) {
-          const key = keys2[elementKeyIndex];
-          const value = results[key];
-          applyElementAttribute($element, key, value);
-        }
-      }
-    });
-  }
-  destroy() {
-    this._bindMethods = void 0;
-  }
-}
-class CallbackHandler extends BaseHandler {
-  initialize() {
-    this.destroy();
-    if (!this._callbacks) {
-      this._callbacks = this.context.filterProps(CHECK_CALLBACK_PATTERN);
-    }
-    this._callbacks.forEach((key) => this.parseCallback(key));
-  }
-  destroy() {
-    if (this.context.notEventRedefine)
-      ;
-    else {
-      this.removeCallbackAll();
-    }
-  }
-  removeCallbackAll() {
-    this.getBindings().forEach((obj2) => {
-      this.removeCallback(obj2);
-    });
-    this.initBindings();
-  }
-  removeCallback({ animationFrameId }) {
-    cancelAnimationFrame(animationFrameId);
-  }
-  getBindings() {
-    if (!this._bindings) {
-      this.initBindings();
-    }
-    return this._bindings;
-  }
-  addBinding(obj2) {
-    this.getBindings().push(obj2);
-  }
-  initBindings() {
-    this._bindings = [];
-  }
-  matchPath(el, selector2) {
-    if (el) {
-      if (el.matches(selector2)) {
-        return el;
-      }
-      return this.matchPath(el.parentElement, selector2);
-    }
-    return null;
-  }
-  makeCallback(callbackObject, callback) {
-    const run = (time) => {
-      callback(time);
-      callbackObject.requestId = requestAnimationFrame(run);
-    };
-    return () => {
-      callbackObject.requestId = requestAnimationFrame(run);
-    };
-  }
-  getDefaultCallbackObject(callbackName, checkMethodFilters) {
-    const context = this.context;
-    let arr = checkMethodFilters;
-    const checkMethodList = arr.filter((code2) => !!context[code2]);
-    const [afters, afterMethods] = splitMethodByKeyword(arr, "after");
-    const [befores, beforeMethods] = splitMethodByKeyword(arr, "before");
-    const [debounces, debounceMethods] = splitMethodByKeyword(arr, "debounce");
-    const [delays, delayMethods] = splitMethodByKeyword(arr, "delay");
-    const [throttles, throttleMethods] = splitMethodByKeyword(arr, "throttle");
-    const [captures] = splitMethodByKeyword(arr, "capture");
-    [
-      ...checkMethodList,
-      ...afters,
-      ...befores,
-      ...delays,
-      ...debounces,
-      ...throttles,
-      ...captures
-    ];
-    return {
-      callbackName,
-      captures,
-      afterMethods,
-      beforeMethods,
-      delayMethods,
-      debounceMethods,
-      throttleMethods,
-      checkMethodList
-    };
-  }
-  addCallback(callbackObject, callback) {
-    callbackObject.callback = this.makeCallback(callbackObject, callback);
-    this.addBinding(callbackObject);
-    callbackObject.callback();
-  }
-  bindingCallback(callbackName, checkMethodFilters, originalCallback) {
-    let callbackObject = this.getDefaultCallbackObject(callbackName, checkMethodFilters);
-    if (callbackObject.debounceMethods.length) {
-      var debounceTime = +callbackObject.debounceMethods[0].target;
-      originalCallback = debounce(originalCallback, debounceTime);
-    } else if (callbackObject.throttleMethods.length) {
-      var throttleTime = +callbackObject.throttleMethods[0].target;
-      originalCallback = throttle(originalCallback, throttleTime);
-    }
-    this.addCallback(callbackObject, originalCallback);
-  }
-  parseCallback(key) {
-    const context = this.context;
-    let checkMethodFilters = key.split(CHECK_SAPARATOR).map((it) => it.trim()).filter(Boolean);
-    var prefix = checkMethodFilters.shift();
-    var callbackName = prefix.split(CALLBACK_SAPARATOR)[1];
-    var originalCallback = context[key].bind(context);
-    this.bindingCallback(callbackName, checkMethodFilters, originalCallback);
-  }
-}
-const REFERENCE_PROPERTY = "ref";
-const TEMP_DIV$1 = Dom.create("div");
-const QUERY_PROPERTY = `[${REFERENCE_PROPERTY}]`;
-const REF_CLASS = "refclass";
-const REF_CLASS_PROPERTY = `[${REF_CLASS}]`;
-class EventMachine {
-  constructor(opt, props) {
-    this.state = {};
-    this.prevState = {};
-    this.refs = {};
-    this.children = {};
-    this._bindings = [];
-    this.id = uuid$1();
-    this.handlers = this.initializeHandler();
-    this._localTimestamp = 0;
-    this.initializeProperty(opt, props);
-    this.initComponents();
-  }
-  get _timestamp() {
-    return this._localTimestamp++;
-  }
-  get target() {
-    return this.$el.el;
-  }
-  initializeProperty(opt, props = {}) {
-    this.opt = opt || {};
-    this.parent = this.opt;
-    this.props = props;
-    this.source = uuid$1();
-    this.sourceName = this.constructor.name;
-  }
-  initComponents() {
-    this.childComponents = this.components();
-  }
-  initializeHandler() {
-    return [
-      new BindHandler(this),
-      new DomEventHandler(this),
-      new CallbackHandler(this)
-    ];
-  }
-  initState() {
-    return {};
-  }
-  setState(state = {}, isLoad = true) {
-    this.prevState = this.state;
-    this.state = Object.assign({}, this.state, state);
-    if (isLoad) {
-      this.load();
-    }
-  }
-  toggleState(key, isLoad = true) {
-    this.setState({
-      [key]: !this.state[key]
-    }, isLoad);
-  }
-  apply(obj2) {
-    return spreadVariable(obj2);
-  }
-  _reload(props, $container = null) {
-    if ($container) {
-      this.render($container);
-    }
-    this.props = props;
-    this.state = {};
-    this.setState(this.initState(), false);
-    this.refresh(true);
-  }
-  render($container) {
-    this.$el = this.parseTemplate(html`
-        ${this.template()}
-      `);
-    this.refs.$el = this.$el;
-    if ($container) {
-      $container.append(this.$el);
-    }
-    this.load();
-    this.afterRender();
-  }
-  initialize() {
-    this.state = this.initState();
-  }
-  afterRender() {
-  }
-  components() {
-    return {};
-  }
-  getRef(...args2) {
-    const key = args2.join("");
-    return this.refs[key];
-  }
-  parseTemplate(html2, isLoad) {
-    if (Array.isArray(html2)) {
-      html2 = html2.join("");
-    }
-    html2 = html2.trim();
-    const list2 = TEMP_DIV$1.html(html2).children();
-    for (var i = 0, len2 = list2.length; i < len2; i++) {
-      const $el = list2[i];
-      var ref = $el.attr(REFERENCE_PROPERTY);
-      if (ref) {
-        this.refs[ref] = $el;
-      }
-      var refs = $el.$$(QUERY_PROPERTY);
-      var temp = {};
-      for (var refsIndex = 0, refsLen = refs.length; refsIndex < refsLen; refsIndex++) {
-        const $dom = refs[refsIndex];
-        const name2 = $dom.attr(REFERENCE_PROPERTY);
-        if (temp[name2]) {
-          console.warn(`${ref} is duplicated. - ${this.sourceName}`, this);
-        } else {
-          temp[name2] = true;
-        }
-        this.refs[name2] = $dom;
-      }
-    }
-    if (!isLoad) {
-      return list2[0];
-    }
-    return TEMP_DIV$1.createChildrenFragment();
-  }
-  parsePropertyInfo($dom) {
-    let props = {};
-    for (var t of $dom.el.attributes) {
-      if (hasVariable(t.nodeName)) {
-        const recoveredValue = getVariable(t.nodeName);
-        if (isObject(recoveredValue)) {
-          props = Object.assign(props, recoveredValue);
-        } else {
-          props[t.nodeName] = getVariable(t.nodeValue);
-        }
-      } else {
-        props[t.nodeName] = getVariable(t.nodeValue);
-      }
-    }
-    const content2 = $dom.html();
-    if (content2) {
-      props.content = content2;
-      props.contentChildren = this.parseContent(props.content);
-    }
-    return props;
-  }
-  parseSourceName(obj2) {
-    if (obj2.parent) {
-      return [obj2.sourceName, ...this.parseSourceName(obj2.parent)];
-    }
-    return [obj2.sourceName];
-  }
-  getEventMachineComponent(refClassName) {
-    var EventMachineComponent = retriveElement(refClassName) || this.childComponents[refClassName];
-    return EventMachineComponent;
-  }
-  createInstanceForComponent(EventMachineComponent, targetElement, props) {
-    if (EventMachineComponent.__proto__.name === "ProxyComponent") {
-      return new EventMachineComponent({ target: targetElement, props });
-    }
-    return new EventMachineComponent(this, props);
-  }
-  renderComponent({ $dom, refName, component: component2, props }) {
-    var _a;
-    var instance = null;
-    if (this.children[refName]) {
-      instance = this.children[refName];
-      instance.__timestamp = this._localTimestamp;
-      instance._reload(props);
-    } else {
-      instance = this.createInstanceForComponent(component2, $dom.$parent.el, props);
-      instance.__timestamp = this._localTimestamp;
-      this.children[refName || instance.id] = instance;
-      if (isFunction(instance.render)) {
-        instance.render();
-      }
-    }
-    if (instance.renderTarget) {
-      (_a = instance.$el) == null ? void 0 : _a.appendTo(instance.renderTarget);
-      $dom.remove();
-    } else if (instance.$el) {
-      $dom.replace(instance.$el);
-    } else {
-      $dom.remove();
-    }
-  }
-  parseContent(html2, filteredRefClass = []) {
-    return Dom.create("div").html(html2).children().map(($dom) => {
-      return this._getComponentInfo($dom);
-    }).filter((it) => filteredRefClass.length === 0 ? true : filteredRefClass.includes(it.refClass));
-  }
-  _getComponentInfo($dom) {
-    const refClass = $dom.attr(REF_CLASS);
-    const EventMachineComponent = this.getEventMachineComponent(refClass);
-    if (EventMachineComponent) {
-      let props = this.parsePropertyInfo($dom);
-      let refName = $dom.attr(REFERENCE_PROPERTY);
-      return {
-        $dom,
-        refClass,
-        props,
-        refName: refName || props.ref,
-        component: EventMachineComponent
-      };
-    } else {
-      return {
-        notUsed: true,
-        $dom
-      };
-    }
-  }
-  getComponentInfoList($el) {
-    if (!$el)
-      return [];
-    const children2 = [];
-    let targets = $el.$$(REF_CLASS_PROPERTY).filter((it) => {
-      return it.path().filter((a) => {
-        return a.attr(REF_CLASS);
-      }).length === 1;
-    });
-    targets.forEach(($dom) => {
-      children2.push(this._getComponentInfo($dom));
-    });
-    return children2;
-  }
-  parseComponent() {
-    const $el = this.$el;
-    const componentList = this.getComponentInfoList($el);
-    componentList.forEach((comp) => {
-      if (comp.notUsed) {
-        comp.$dom.remove();
-      } else {
-        this.renderComponent(comp);
-      }
-    });
-    keyEach(this.children, (key, child) => {
-      if (child.__timestamp !== this._localTimestamp) {
-        child.clean();
-      }
-    });
-  }
-  clean() {
-    if (this.$el && !this.$el.hasParent()) {
-      keyEach(this.children, (key, child) => {
-        if (isFunction(child == null ? void 0 : child.clean)) {
-          child.clean();
-        }
-      });
-      this.destroy();
-      this.$el = null;
-      return true;
-    }
-  }
-  refresh() {
-    this.load();
-  }
-  _afterLoad() {
-    this._timestamp;
-    this.runHandlers("initialize");
-    this.bindData();
-    this.parseComponent();
-  }
-  async load(...args2) {
-    if (!this._loadMethods) {
-      this._loadMethods = this.filterProps(CHECK_LOAD_PATTERN);
-    }
-    const localLoadMethods = this._loadMethods.filter((callbackName) => {
-      const elName = callbackName.split(LOAD_SAPARATOR)[1].split(CHECK_SAPARATOR).map((it) => it.trim())[0];
-      if (!args2.length)
-        return true;
-      return args2.indexOf(elName) > -1;
-    });
-    await localLoadMethods.forEach(async (callbackName) => {
-      let methodName = callbackName.split(LOAD_SAPARATOR)[1];
-      var [elName, ...checker] = methodName.split(CHECK_SAPARATOR).map((it) => it.trim());
-      checker = checker.map((it) => it.trim());
-      const isDomDiff = Boolean(checker.filter((it) => DOMDIFF.includes(it)).length);
-      const refTarget = this.refs[elName];
-      if (refTarget) {
-        var newTemplate = await this[callbackName].apply(this, args2);
-        if (Array.isArray(newTemplate)) {
-          newTemplate = newTemplate.join("");
-        }
-        const fragment = this.parseTemplate(html`${newTemplate}`, true);
-        if (isDomDiff) {
-          refTarget.htmlDiff(fragment);
-        } else {
-          if (refTarget) {
-            refTarget.html(fragment);
-          }
-        }
-      }
-    });
-    this._afterLoad();
-  }
-  runHandlers(func2 = "run", ...args2) {
-    this.handlers.forEach((h) => h[func2](...args2));
-  }
-  bindData(...args2) {
-    this.runHandlers("load", ...args2);
-  }
-  template() {
-    return `<div></div>`;
-  }
-  eachChildren(callback) {
-    if (!isFunction(callback))
-      return;
-    keyEach(this.children, (_, Component2) => {
-      callback(Component2);
-    });
-  }
-  rerender() {
-    var $parent = this.$el.parent();
-    this.destroy();
-    this.render($parent);
-  }
-  destroy() {
-    this.eachChildren((childComponent) => {
-      childComponent.destroy();
-    });
-    this.runHandlers("destroy");
-    if (this.$el) {
-      this.$el.remove();
-    }
-    this.$el = null;
-    this.refs = {};
-    this.children = {};
-  }
-  collectProps() {
-    if (!this.__cachedMethodList) {
-      this.__cachedMethodList = collectProps(this, (name2) => {
-        return name2.indexOf(MAGIC_METHOD) === 0;
-      });
-    }
-    return this.__cachedMethodList;
-  }
-  filterProps(pattern) {
-    return this.collectProps().filter((key) => {
-      return key.match(pattern);
-    });
-  }
-  self(e2) {
-    return e2 && e2.$dt && e2.$dt.is(e2.target);
-  }
-  isAltKey(e2) {
-    return e2.altKey;
-  }
-  isCtrlKey(e2) {
-    return e2.ctrlKey;
-  }
-  isShiftKey(e2) {
-    return e2.shiftKey;
-  }
-  isMetaKey(e2) {
-    return e2.metaKey || e2.key == "Meta" || e2.code.indexOf("Meta") > -1;
-  }
-  isMouseLeftButton(e2) {
-    return e2.buttons === 1;
-  }
-  isMouseRightButton(e2) {
-    return e2.buttons === 2;
-  }
-  hasMouse(e2) {
-    return e2.pointerType === "mouse";
-  }
-  hasTouch(e2) {
-    return e2.pointerType === "touch";
-  }
-  hasPen(e2) {
-    return e2.pointerType === "pen";
-  }
-  preventDefault(e2) {
-    e2.preventDefault();
-    return true;
-  }
-  stopPropagation(e2) {
-    e2.stopPropagation();
-    return true;
-  }
-}
-class BaseStore {
-  constructor(editor) {
-    this.id = uuidShort();
-    this.cachedCallback = {};
-    this.callbacks = {};
-    this.editor = editor;
-    this.promiseProxy = new Proxy(this, {
-      get: (target, key) => {
-        return this.makePromiseEvent(key);
-      }
-    });
-  }
-  getCallbacks(event) {
-    if (!this.callbacks[event]) {
-      this.callbacks[event] = [];
-    }
-    return this.callbacks[event];
-  }
-  setCallbacks(event, list2 = []) {
-    this.callbacks[event] = list2;
-  }
-  debug(...args2) {
-  }
-  on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false, beforeMethods = [], frame = false) {
-    var callback = originalCallback;
-    if (debounceDelay > 0)
-      callback = debounce(originalCallback, debounceDelay);
-    else if (throttleDelay > 0)
-      callback = throttle(originalCallback, throttleDelay);
-    if (beforeMethods.length) {
-      callback = ifCheck(callback, context, beforeMethods);
-    }
-    if (frame) {
-      callback = makeRequestAnimationFrame(callback, context);
-    }
-    this.getCallbacks(event).push({ event, callback, context, originalCallback, enableAllTrigger, enableSelfTrigger });
-    this.debug("add message event", event, context.sourceName);
-    return () => {
-      this.off(event, originalCallback);
-    };
-  }
-  off(event, originalCallback) {
-    this.debug("off message event", event);
-    if (arguments.length == 1) {
-      this.setCallbacks(event);
-    } else if (arguments.length == 2) {
-      this.setCallbacks(event, this.getCallbacks(event).filter((f) => {
-        return f.originalCallback !== originalCallback;
-      }));
-    }
-  }
-  offAll(context) {
-    Object.keys(this.callbacks).forEach((event) => {
-      this.setCallbacks(event, this.getCallbacks(event).filter((f) => {
-        return f.context !== context;
-      }));
-    });
-    this.debug("off all message", context.sourceName);
-  }
-  getCachedCallbacks(event) {
-    return this.getCallbacks(event);
-  }
-  get promise() {
-    return this.promiseProxy;
-  }
-  get p() {
-    return this.promise;
-  }
-  makePromiseEvent(event) {
-    var list2 = this.getCachedCallbacks(event);
-    const source2 = this.source;
-    return (...args2) => Promise.all(list2.filter((f) => {
-      return !f.enableSelfTrigger;
-    }).filter((f) => {
-      return f.enableAllTrigger || f.originalCallback.source !== source2;
-    }).map((f) => {
-      return new Promise((resolve, reject) => {
-        resolve(f.callback.apply(f.context, args2));
-      });
-    }));
-  }
-  sendMessage(source2, event, ...args2) {
-    this.sendMessageList(source2, [
-      [event, ...args2]
-    ]);
-  }
-  sendMessageList(source2, messages = []) {
-    Promise.resolve().then(() => {
-      messages.forEach(([event, ...args2]) => {
-        var list2 = this.getCachedCallbacks(event);
-        if (list2 && list2.length) {
-          const runnableFunctions = list2.filter((f) => !f.enableSelfTrigger).filter((f) => f.enableAllTrigger || f.originalCallback.source !== source2);
-          for (const f of runnableFunctions) {
-            const result = f.callback.apply(f.context, args2);
-            if (isNotUndefined(result)) {
-              if (result === false) {
-                return;
-              } else if (isFunction(result)) {
-                result();
-                return;
-              }
-            }
-          }
-        } else {
-          console.warn(`message event ${event} is not exist.`);
-        }
-      });
-    });
-  }
-  nextSendMessage(source2, callback, ...args2) {
-    Promise.resolve().then(() => {
-      callback(...args2);
-    });
-  }
-  triggerMessage(source2, event, ...args2) {
-    Promise.resolve().then(() => {
-      var list2 = this.getCachedCallbacks(event);
-      if (list2) {
-        const runnableFunctions = list2.filter((f) => f.originalCallback.source === source2);
-        runnableFunctions.forEach((f) => {
-          f.callback.apply(f.context, args2);
-        });
-      } else {
-        console.warn(event, " is not valid event");
-      }
-    });
-  }
-  emit(event, ...args2) {
-    if (isFunction(event)) {
-      event(...args2);
-    } else if (isArray(event)) {
-      this.sendMessageList(this.source, event);
-    } else {
-      this.sendMessage(this.source, event, ...args2);
-    }
-  }
-  nextTick(callback) {
-    this.nextSendMessage(this.source, callback);
-  }
-  trigger(event, ...args2) {
-    if (isFunction(event)) {
-      event(...args2);
-    } else {
-      this.triggerMessage(this.source, event, ...args2);
-    }
   }
 }
 var dark$1 = {
@@ -18319,7 +18452,9 @@ var keymap_keydown = {
   command: "keymap.keydown",
   execute: function(editor, e2) {
     editor.keyboardManager.add(e2.code, e2.keyCode);
-    editor.shortcuts.execute(e2, "keydown");
+    if (editor.shortcuts) {
+      editor.shortcuts.execute(e2, "keydown");
+    }
   }
 };
 var __glob_0_59$1 = /* @__PURE__ */ Object.freeze({
@@ -18331,7 +18466,9 @@ var keymap_keyup = {
   command: "keymap.keyup",
   execute: function(editor, e2) {
     editor.keyboardManager.remove(e2.key, e2.keyCode);
-    editor.shortcuts.execute(e2, "keyup");
+    if (editor.shortcuts) {
+      editor.shortcuts.execute(e2, "keyup");
+    }
   }
 };
 var __glob_0_60$1 = /* @__PURE__ */ Object.freeze({
@@ -22611,11 +22748,11 @@ var __glob_0_201 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": star
 });
-var start$1 = _icon_template(`<path d="M14.59,7.41L18.17,11H6v2h12.17l-3.59,3.59L16,18l6-6l-6-6L14.59,7.41z M2,6v12h2V6H2z"/>`);
+var start = _icon_template(`<path d="M14.59,7.41L18.17,11H6v2h12.17l-3.59,3.59L16,18l6-6l-6-6L14.59,7.41z M2,6v12h2V6H2z"/>`);
 var __glob_0_202 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
-  "default": start$1
+  "default": start
 });
 var storage = _icon_template(`<path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/>`);
 var __glob_0_203 = /* @__PURE__ */ Object.freeze({
@@ -23492,7 +23629,7 @@ class IconManager$1 {
 const EDIT_MODE_SELECTION = "SELECTION";
 const EDIT_MODE_ADD = "ADD";
 class Editor {
-  constructor() {
+  constructor(opt = {}) {
     this.EDITOR_ID = uuid();
     this.projects = [];
     this.popupZIndex = 1e4;
@@ -23502,6 +23639,7 @@ class Editor {
     this.images = {};
     this.openRightPanel = true;
     this.mode = EDIT_MODE_SELECTION;
+    this.ignoreManagers = opt.ignoreManagers || [];
     this.loadManagers();
   }
   loadManagers() {
@@ -23509,7 +23647,8 @@ class Editor {
     this.config = new ConfigManager(this);
     this.snapManager = new SnapManager(this);
     this.commands = new CommandManager(this);
-    this.shortcuts = new ShortCutManager(this);
+    if (this.ignoreManagers.includes("ShortCutManager") === false)
+      this.shortcuts = new ShortCutManager(this);
     this.selection = new SelectionManager(this);
     this.segmentSelection = new SegmentSelectionManager(this);
     this.timeline = new TimelineSelectionManager(this);
@@ -23761,124 +23900,6 @@ const MOVE = (method = "move") => {
 const END = (method = "end") => {
   return AFTER(`bodyMouseUp ${method}`);
 };
-class UIElement extends EventMachine {
-  constructor(opt, props = {}) {
-    super(opt, props);
-    if (props.store) {
-      this.__storeInstance = props.store;
-    } else {
-      this.__storeInstance = new BaseStore();
-    }
-    this.created();
-    this.initialize();
-    this.initializeStoreEvent();
-  }
-  setStore(storeInstance) {
-    this.__storeInstance = storeInstance;
-  }
-  get $store() {
-    return this.__storeInstance || this.parent.$store;
-  }
-  created() {
-  }
-  getRealEventName(e2, s = MULTI_PREFIX) {
-    var startIndex = e2.indexOf(s);
-    return e2.substr(startIndex < 0 ? 0 : startIndex + s.length);
-  }
-  splitMethod(arr, keyword, defaultValue = 0) {
-    var [methods, params] = splitMethodByKeyword(arr, keyword);
-    return [
-      methods.length ? params[0].target : defaultValue,
-      methods,
-      params
-    ];
-  }
-  createLocalCallback(event, callback) {
-    var newCallback = callback.bind(this);
-    newCallback.displayName = `${this.sourceName}.${event}`;
-    newCallback.source = this.source;
-    return newCallback;
-  }
-  initializeStoreEvent() {
-    this.filterProps(CHECK_SUBSCRIBE_PATTERN).forEach((key) => {
-      const events = this.getRealEventName(key, SUBSCRIBE_SAPARATOR);
-      const [method, ...methodLine] = events.split(CHECK_SAPARATOR);
-      const checkMethodList = methodLine.map((it) => it.trim()).filter((code2) => this[code2]).map((target) => ({ target }));
-      const [debounceSecond, debounceMethods] = this.splitMethod(methodLine, "debounce");
-      const [throttleSecond, throttleMethods] = this.splitMethod(methodLine, "throttle");
-      const [allTrigger, allTriggerMethods] = this.splitMethod(methodLine, "allTrigger");
-      const [selfTrigger, selfTriggerMethods] = this.splitMethod(methodLine, "selfTrigger");
-      const [frameTrigger, frameTriggerMethods] = this.splitMethod(methodLine, "frame");
-      const [paramsVariable, paramsVariableMethods, params] = this.splitMethod(methodLine, "params");
-      let debounce2 = +debounceSecond > 0 ? debounceSecond : 0;
-      let throttle2 = +throttleSecond > 0 ? throttleSecond : 0;
-      let isAllTrigger = Boolean(allTriggerMethods.length);
-      let isSelfTrigger = Boolean(selfTriggerMethods.length);
-      let isFrameTrigger = Boolean(frameTriggerMethods.length);
-      if (paramsVariableMethods.length) {
-        const settings = getVariable(paramsVariable);
-        if (isNotUndefined(settings.debounce))
-          debounce2 = settings.debounce;
-        if (isNotUndefined(settings.throttle))
-          throttle2 = settings.throttle;
-        if (isNotUndefined(settings.frame))
-          isFrameTrigger = settings.frame;
-      }
-      const originalCallback = this[key];
-      events.split(CHECK_SAPARATOR).filter((it) => {
-        return checkMethodList.indexOf(it) === -1 && debounceMethods.indexOf(it) === -1 && allTriggerMethods.indexOf(it) === -1 && selfTriggerMethods.indexOf(it) === -1 && throttleMethods.indexOf(it) === -1 && paramsVariableMethods.indexOf(it) === -1;
-      }).map((it) => it.trim()).filter(Boolean).forEach((e2) => {
-        if (isFunction(originalCallback)) {
-          var callback = this.createLocalCallback(e2, originalCallback);
-          this.$store.on(e2, callback, this, debounce2, throttle2, isAllTrigger, isSelfTrigger, checkMethodList, isFrameTrigger);
-        }
-      });
-    });
-  }
-  destoryStoreSUBSCRIBE() {
-    this.$store.offAll(this);
-  }
-  destroy() {
-    super.destroy();
-    this.destoryStoreSUBSCRIBE();
-  }
-  rerender() {
-    super.rerender();
-    this.initialize();
-    this.initializeStoreEvent();
-  }
-  emit(messageName, ...args2) {
-    this.$store.source = this.source;
-    this.$store.sourceContext = this;
-    this.$store.emit(messageName, ...args2);
-  }
-  nextTick(callback, delay = 0) {
-    setTimeout(() => {
-      this.$store.nextTick(callback);
-    }, delay);
-  }
-  trigger(messageName, ...args2) {
-    this.$store.source = this.source;
-    this.$store.trigger(messageName, ...args2);
-  }
-  broadcast(messageName, ...args2) {
-    Object.keys(this.children).forEach((key) => {
-      this.children[key].trigger(messageName, ...args2);
-    });
-  }
-  on(message, callback, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false, frame = false) {
-    this.$store.on(message, callback, this.source, debounceDelay, throttleDelay, enableAllTrigger, enableSelfTrigger, [], frame);
-  }
-  off(message, callback) {
-    this.$store.off(message, callback, this.source);
-  }
-  subscribe(callback, debounceSecond = 0, throttleSecond = 0) {
-    const id = `subscribe.${uuidShort$1()}`;
-    const newCallback = this.createLocalCallback(id, callback);
-    this.$store.on(id, newCallback, this, debounceSecond, throttleSecond, false, true);
-    return id;
-  }
-}
 class EditorElement extends UIElement {
   initialize() {
     super.initialize();
@@ -23918,10 +23939,10 @@ class EditorElement extends UIElement {
     return this.$editor.commands;
   }
   get $viewport() {
-    return this.$editor.viewport;
+    return this.parent.$viewport || this.$editor.viewport;
   }
   get $snapManager() {
-    return this.$editor.snapManager;
+    return this.parent.$snapManager || this.$editor.snapManager;
   }
   get $timeline() {
     return this.$editor.timeline;
@@ -24005,9 +24026,12 @@ class BaseLayout extends EditorElement {
   }
   get $editor() {
     if (!this.__editorInstance) {
-      this.__editorInstance = new Editor();
+      this.__editorInstance = this.createEditorInstance();
     }
     return this.__editorInstance;
+  }
+  createEditorInstance() {
+    return new Editor();
   }
   afterRender() {
     super.afterRender();
@@ -24018,7 +24042,6 @@ class BaseLayout extends EditorElement {
   initialize() {
     super.initialize();
     this.__initBodyMoves();
-    this.emit("load.json", this.opt.data);
   }
   [CONFIG("editor.theme")]() {
     this.$el.attr("data-theme", this.$config.get("editor.theme"));
@@ -25590,7 +25613,10 @@ class BodyPanel extends EditorElement {
         <div class='editing-area'>
           ${createComponent("HorizontalRuler")}
           ${createComponent("VerticalRuler")}
-          ${createComponent("CanvasView")}
+          <div class="canvas-layout">
+            ${createComponent("CanvasView")}
+          </div>
+
         </div>
       </div>
     `;
@@ -25858,12 +25884,6 @@ class ProjectWindow extends BaseWindow {
   }
 }
 registElement({ ProjectWindow });
-const start = (ElementClass, opt) => {
-  const $container = Dom.create(opt.container || document.body);
-  const app = new ElementClass(opt, opt);
-  app.render($container);
-  return app;
-};
 class EmbedEditorWindow extends BaseWindow {
   getClassName() {
     return "elf--export-window";
@@ -27732,8 +27752,13 @@ class BasePopup extends EditorElement {
   makeRect(width2, height2, rect2) {
     const elements = this.$config.get("editor.layout.elements");
     const bodyRect = elements.$bodyPanel.rect();
-    const left2 = bodyRect.left + bodyRect.width - (width2 - 10);
-    const top2 = rect2.top + height2 > bodyRect.top + bodyRect.height ? bodyRect.top + bodyRect.height - height2 - 10 : rect2.top;
+    let left2 = bodyRect.left + bodyRect.width - width2 - 10;
+    let top2 = rect2.top + height2 > bodyRect.top + bodyRect.height ? bodyRect.top + bodyRect.height - height2 - 10 : rect2.top;
+    left2 -= bodyRect.left;
+    top2 -= bodyRect.top;
+    if (top2 < 10) {
+      top2 = 10;
+    }
     return {
       top: top2,
       left: left2 < rect2.left && rect2.left <= left2 + width2 ? left2 - (left2 + width2 - rect2.left) - 10 : left2,
@@ -29688,7 +29713,6 @@ class BorderRadiusEditor extends EditorElement {
     this.setBorderRadius();
   }
   [LOAD("$body")]() {
-    BorderGroup.ALL;
     var borderRadius2 = this.state["border-radius"];
     return `
       <div class="border-radius-item">
@@ -29896,140 +29920,6 @@ function boxModel(editor) {
     BoxModelProperty
   });
 }
-var BoxShadowEditor$1 = "";
-class BoxShadowEditor extends EditorElement {
-  initState() {
-    return {
-      boxShadows: BoxShadow.parseStyle(this.props.value || "")
-    };
-  }
-  template() {
-    return `
-      <div class="elf--box-shadow-editor" >
-        <div class='box-shadow-list' ref='$shadowList'></div>
-      </div>
-    `;
-  }
-  [LOAD("$shadowList")]() {
-    var arr = this.state.boxShadows.map((shadow2, index2) => {
-      return `
-        <div class="shadow-item real" data-index="${index2}">
-            <label draggable="true" data-index="${index2}">${iconUse$1("drag_indicator")}</label>
-            ${createComponent("ColorViewEditor", {
-        mini: true,
-        key: "color",
-        value: shadow2.color,
-        params: index2,
-        onchange: "changeKeyValue"
-      })}
-            ${createComponent("ToggleButton", {
-        mini: true,
-        key: "inset",
-        value: shadow2.inset,
-        params: index2,
-        onchange: "changeKeyValue",
-        checkedValue: BoxShadowStyle.INSET,
-        toggleLabels: ["border_style", "border_style"],
-        toggleTitles: [BoxShadowStyle.INSET, BoxShadowStyle.INSET],
-        toggleValues: [BoxShadowStyle.OUTSET, BoxShadowStyle.INSET]
-      })}            
-            ${createComponent("NumberInputEditor", {
-        mini: true,
-        key: "offsetX",
-        label: "X",
-        value: shadow2.offsetX,
-        params: index2,
-        onchange: "changeKeyValue"
-      })}          
-            ${createComponent("NumberInputEditor", {
-        mini: true,
-        key: "offsetY",
-        label: "Y",
-        value: shadow2.offsetY,
-        params: index2,
-        onchange: "changeKeyValue"
-      })}                    
-            ${createComponent("NumberInputEditor", {
-        mini: true,
-        label: "B",
-        key: "blurRadius",
-        value: shadow2.blurRadius,
-        params: index2,
-        onchange: "changeKeyValue"
-      })} 
-            ${createComponent("NumberInputEditor", {
-        mini: true,
-        label: "S",
-        key: "spreadRadius",
-        value: shadow2.spreadRadius,
-        params: index2,
-        onchange: "changeKeyValue"
-      })}             
-          <div class="tools">
-            <button type="button" class="remove" data-index="${index2}">
-              ${iconUse$1("remove2")}
-            </button>
-          </div>
-        </div>
-      `;
-    });
-    return arr.join("");
-  }
-  modifyBoxShadow() {
-    var value = this.state.boxShadows.join(", ");
-    this.parent.trigger(this.props.onchange, this.props.key, value);
-  }
-  [SUBSCRIBE("add")](shadow2 = "") {
-    if (shadow2) {
-      this.state.boxShadows = BoxShadow.parseStyle(shadow2);
-    } else {
-      const shadowObj = new BoxShadow({
-        color: "black",
-        inset: BoxShadowStyle.OUTSET,
-        offsetX: 2,
-        offsetY: 2,
-        blurRadius: 3,
-        spreadRadius: 1
-      });
-      this.state.boxShadows.push(shadowObj);
-    }
-    this.refresh();
-    this.modifyBoxShadow();
-  }
-  [CLICK("$add")]() {
-    this.trigger("add");
-  }
-  [DRAGSTART("$shadowList .shadow-item > label")](e2) {
-    this.startIndex = +e2.$dt.attr("data-index");
-  }
-  [DRAGOVER("$shadowList .shadow-item") + PREVENT](e2) {
-  }
-  sortItem(arr, startIndex, targetIndex) {
-    arr.splice(targetIndex + (startIndex < targetIndex ? -1 : 0), 0, ...arr.splice(startIndex, 1));
-  }
-  sortBoxShadow(startIndex, targetIndex) {
-    this.sortItem(this.state.boxShadows, startIndex, targetIndex);
-  }
-  [DROP("$shadowList .shadow-item") + PREVENT](e2) {
-    var targetIndex = +e2.$dt.attr("data-index");
-    this.sortBoxShadow(this.startIndex, targetIndex);
-    this.refresh();
-    this.modifyBoxShadow();
-  }
-  [CLICK("$shadowList .remove")](e2) {
-    var index2 = +e2.$dt.attr("data-index");
-    this.state.boxShadows.splice(index2, 1);
-    this.refresh();
-    this.modifyBoxShadow();
-  }
-  [SUBSCRIBE("changeKeyValue")](key, value, index2) {
-    var shadow2 = this.state.boxShadows[index2];
-    shadow2.reset({
-      [key]: value
-    });
-    this.modifyBoxShadow();
-  }
-}
 var boxShadow$1 = [
   { name: "Box", shadow: `0px 3px 3px 0px rgba(0,0,0,0.2)` },
   { name: "Shadow-4", shadow: `
@@ -30114,9 +30004,6 @@ class BoxShadowProperty extends BaseProperty {
   }
 }
 function boxShadow(editor) {
-  editor.registerElement({
-    BoxShadowEditor
-  });
   editor.registerMenuItem("inspector.tab.style", {
     BoxShadowProperty
   });
@@ -31192,101 +31079,7 @@ class ComponentPopup extends BasePopup {
     this.show(data.width);
   }
 }
-var ComponentEditor$1 = "";
-class ComponentEditor extends EditorElement {
-  initState() {
-    return {
-      inspector: this.props.inspector
-    };
-  }
-  template() {
-    return `
-      <div ref='$body' class="component-editor"></div>
-    `;
-  }
-  getPropertyEditor(index2, childEditor) {
-    if (childEditor.type === "column") {
-      const size2 = (childEditor.size || [2]).join("-");
-      return `
-        <div class='column column-${size2}' style="--column-gap: ${childEditor.gap}px; --row-gap: ${childEditor.rowGap || 0}px" >
-          ${childEditor.columns.map((it, itemIndex) => {
-        if (it === "-") {
-          return `<div class="column-item"></div>`;
-        } else if (it.type === "label") {
-          return `<div class="column-item">
-                <label>${it.label}</label>
-              </div>`;
-        }
-        return `
-              <div class='column-item'>
-                ${this.getPropertyEditor(`${index2}${itemIndex}`, it)}
-              </div>
-            `;
-      }).join("")}  
-        </div>
-      `;
-    }
-    return createComponent(childEditor.editor, __spreadProps(__spreadValues({}, childEditor.editorOptions), {
-      onchange: (key, value) => {
-        const newValue = isFunction(childEditor.convert) ? childEditor.convert(key, value) : value;
-        this.trigger("changeComponentValue", key, newValue);
-      },
-      ref: `${childEditor.key}${index2}`,
-      key: childEditor.key,
-      value: childEditor.defaultValue
-    }));
-  }
-  [LOAD("$body")]() {
-    const inspector = this.state.inspector;
-    var self2 = inspector.map((it, index2) => {
-      if (isString(it) || it.type === "label") {
-        const title2 = it.label || it;
-        return `
-          <div class='component-item'> 
-            <label>${title2}</label>
-          </div>`;
-      } else {
-        return `
-            <div class='component-item'> 
-              ${this.getPropertyEditor(index2, it)}
-            </div>
-          `;
-      }
-    });
-    return self2;
-  }
-  setInspector(inspector) {
-    this.setState({
-      inspector
-    });
-  }
-  setValue(obj2 = {}) {
-    Object.keys(obj2).forEach((key) => {
-      const value = obj2[key];
-      this.eachChildren((child) => {
-        if (child.setValue && child.props.key === key) {
-          child.setValue(value);
-        }
-      });
-    });
-  }
-  getValue() {
-    const result = {};
-    this.eachChildren((child) => {
-      if (child.getValue) {
-        result[child.props.key] = child.getValue();
-      }
-    });
-    return result;
-  }
-  [SUBSCRIBE_SELF("changeComponentValue")](key, value) {
-    this.parent.trigger(this.props.onchange, key, value);
-  }
-}
 function component(editor) {
-  editor.registerElement({
-    ComponentEditor
-  });
   editor.registerMenuItem("inspector.tab.style", {
     ComponentProperty
   });
@@ -40480,7 +40273,7 @@ class ResizingProperty extends BaseProperty {
     });
   }
 }
-function layout(editor) {
+function layout$3(editor) {
   editor.registerElement({
     FlexLayoutEditor,
     FlexLayoutItemEditor,
@@ -42660,7 +42453,7 @@ class ColorViewEditor extends EditorElement {
     var opacity2 = +e2.$dt.value;
     opacity2 = Math.max(0, Math.min(100, opacity2));
     const color2 = Color.parse(this.state.value);
-    color2.a = opacity2 / 100;
+    color2.a = round$1(opacity2 / 100, 1e3);
     const value = Color.format(color2, color2.type);
     this.updateData({
       value,
@@ -46561,7 +46354,7 @@ class PurePathGenerator {
   }
   toSVGString() {
     return `
-        <svg width="100%" height="100%" class='svg-editor-canvas'>
+        <svg width="100%" height="100%" class='svg-editor-canvas' tabIndex="-1">
             ${this.guideLineManager.toString("guide")}
             ${this.splitLines.join("")}
             ${this.makeSnapLines()}
@@ -46741,6 +46534,9 @@ class PathEditor extends PathCutter$1 {
     if (this.state.current) {
       this.updatePathLayer();
     }
+  }
+  [KEYUP() + DELETE]() {
+    console.log("delete");
   }
   [KEYUP("$el .segment")](e2) {
     const index2 = +e2.$dt.data("index");
@@ -46987,8 +46783,364 @@ class PathEditor extends PathCutter$1 {
     }
   }
 }
+var BoxShadowEditor$1 = "";
+class BoxShadowEditor extends EditorElement {
+  initState() {
+    return {
+      boxShadows: BoxShadow.parseStyle(this.props.value || "")
+    };
+  }
+  template() {
+    return `
+      <div class="elf--box-shadow-editor" >
+        <div class='box-shadow-list' ref='$shadowList'></div>
+      </div>
+    `;
+  }
+  [LOAD("$shadowList")]() {
+    var arr = this.state.boxShadows.map((shadow2, index2) => {
+      return `
+        <div class="shadow-item real" data-index="${index2}">
+            <label draggable="true" data-index="${index2}">${iconUse$1("drag_indicator")}</label>
+            ${createComponent("ColorViewEditor", {
+        mini: true,
+        key: "color",
+        value: shadow2.color,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}
+            ${createComponent("ToggleButton", {
+        mini: true,
+        key: "inset",
+        value: shadow2.inset,
+        params: index2,
+        onchange: "changeKeyValue",
+        checkedValue: BoxShadowStyle.INSET,
+        toggleLabels: ["border_style", "border_style"],
+        toggleTitles: [BoxShadowStyle.INSET, BoxShadowStyle.INSET],
+        toggleValues: [BoxShadowStyle.OUTSET, BoxShadowStyle.INSET]
+      })}            
+            ${createComponent("NumberInputEditor", {
+        mini: true,
+        key: "offsetX",
+        label: "X",
+        value: shadow2.offsetX,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}          
+            ${createComponent("NumberInputEditor", {
+        mini: true,
+        key: "offsetY",
+        label: "Y",
+        value: shadow2.offsetY,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}                    
+            ${createComponent("NumberInputEditor", {
+        mini: true,
+        label: "B",
+        key: "blurRadius",
+        value: shadow2.blurRadius,
+        params: index2,
+        onchange: "changeKeyValue"
+      })} 
+            ${createComponent("NumberInputEditor", {
+        mini: true,
+        label: "S",
+        key: "spreadRadius",
+        value: shadow2.spreadRadius,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}             
+          <div class="tools">
+            <button type="button" class="remove" data-index="${index2}">
+              ${iconUse$1("remove2")}
+            </button>
+          </div>
+        </div>
+      `;
+    });
+    return arr.join("");
+  }
+  modifyBoxShadow() {
+    var value = this.state.boxShadows.join(", ");
+    this.parent.trigger(this.props.onchange, this.props.key, value);
+  }
+  [SUBSCRIBE("add")](shadow2 = "") {
+    if (shadow2) {
+      this.state.boxShadows = BoxShadow.parseStyle(shadow2);
+    } else {
+      const shadowObj = new BoxShadow({
+        color: "black",
+        inset: BoxShadowStyle.OUTSET,
+        offsetX: 2,
+        offsetY: 2,
+        blurRadius: 3,
+        spreadRadius: 1
+      });
+      this.state.boxShadows.push(shadowObj);
+    }
+    this.refresh();
+    this.modifyBoxShadow();
+  }
+  [CLICK("$add")]() {
+    this.trigger("add");
+  }
+  [DRAGSTART("$shadowList .shadow-item > label")](e2) {
+    this.startIndex = +e2.$dt.attr("data-index");
+  }
+  [DRAGOVER("$shadowList .shadow-item") + PREVENT](e2) {
+  }
+  sortItem(arr, startIndex, targetIndex) {
+    arr.splice(targetIndex + (startIndex < targetIndex ? -1 : 0), 0, ...arr.splice(startIndex, 1));
+  }
+  sortBoxShadow(startIndex, targetIndex) {
+    this.sortItem(this.state.boxShadows, startIndex, targetIndex);
+  }
+  [DROP("$shadowList .shadow-item") + PREVENT](e2) {
+    var targetIndex = +e2.$dt.attr("data-index");
+    this.sortBoxShadow(this.startIndex, targetIndex);
+    this.refresh();
+    this.modifyBoxShadow();
+  }
+  [CLICK("$shadowList .remove")](e2) {
+    var index2 = +e2.$dt.attr("data-index");
+    this.state.boxShadows.splice(index2, 1);
+    this.refresh();
+    this.modifyBoxShadow();
+  }
+  [SUBSCRIBE("changeKeyValue")](key, value, index2) {
+    var shadow2 = this.state.boxShadows[index2];
+    shadow2.reset({
+      [key]: value
+    });
+    this.modifyBoxShadow();
+  }
+}
+var TextShadowEditor$1 = "";
+class TextShadowEditor extends EditorElement {
+  initState() {
+    return {
+      textShadows: TextShadow.parseStyle(this.props.value)
+    };
+  }
+  template() {
+    return `
+      <div class="elf--text-shadow-editor" >
+        <div class='text-shadow-list' ref='$shadowList'></div>
+      </div>
+    `;
+  }
+  [LOAD("$shadowList")]() {
+    var arr = this.state.textShadows.map((shadow2, index2) => {
+      return `
+        <div class="shadow-item real" data-index="${index2}">
+          <label draggable="true" data-index="${index2}">${iconUse$1("drag_indicator")}</label>
+          ${createComponent("ColorViewEditor", {
+        mini: true,
+        key: "color",
+        value: shadow2.color,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}
+          ${createComponent("NumberInputEditor", {
+        mini: true,
+        key: "offsetX",
+        label: "X",
+        value: shadow2.offsetX,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}          
+          ${createComponent("NumberInputEditor", {
+        mini: true,
+        key: "offsetY",
+        label: "Y",
+        value: shadow2.offsetY,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}                    
+          ${createComponent("NumberInputEditor", {
+        mini: true,
+        label: "B",
+        key: "blurRadius",
+        value: shadow2.blurRadius,
+        params: index2,
+        onchange: "changeKeyValue"
+      })}                    
+          <div class="tools">
+            <button type="button" class="remove" data-index="${index2}">
+              ${iconUse$1("remove2")}
+            </button>
+          </div>
+        </div>
+      `;
+    });
+    return arr.join("");
+  }
+  modifyTextShadow() {
+    var value = this.state.textShadows.join(", ");
+    this.parent.trigger(this.props.onchange, this.props.key, value);
+  }
+  [SUBSCRIBE("add")](shadow2 = "") {
+    if (shadow2) {
+      this.state.textShadows = TextShadow.parseStyle(shadow2);
+    } else {
+      this.state.textShadows.push(new TextShadow());
+    }
+    this.refresh();
+    this.modifyTextShadow();
+  }
+  [CLICK("$add")]() {
+    this.trigger("add");
+  }
+  [DRAGSTART("$shadowList .shadow-item > label")](e2) {
+    this.startIndex = +e2.$dt.attr("data-index");
+  }
+  [DRAGOVER("$shadowList .shadow-item") + PREVENT](e2) {
+  }
+  sortItem(arr, startIndex, targetIndex) {
+    arr.splice(targetIndex + (startIndex < targetIndex ? -1 : 0), 0, ...arr.splice(startIndex, 1));
+  }
+  sortTextShadow(startIndex, targetIndex) {
+    this.sortItem(this.state.textShadows, startIndex, targetIndex);
+  }
+  [DROP("$shadowList .shadow-item") + PREVENT](e2) {
+    var targetIndex = +e2.$dt.attr("data-index");
+    this.sortTextShadow(this.startIndex, targetIndex);
+    this.refresh();
+    this.modifyTextShadow();
+  }
+  [CLICK("$shadowList .remove")](e2) {
+    var index2 = +e2.$dt.attr("data-index");
+    this.state.textShadows.splice(index2, 1);
+    this.refresh();
+    this.modifyTextShadow();
+  }
+  [SUBSCRIBE("changeKeyValue")](key, value, index2) {
+    var shadow2 = this.state.textShadows[index2];
+    shadow2.reset({
+      [key]: value
+    });
+    this.modifyTextShadow();
+  }
+}
+var ComponentEditor$1 = "";
+class ComponentEditor extends EditorElement {
+  initState() {
+    return {
+      inspector: this.props.inspector
+    };
+  }
+  template() {
+    return `
+      <div ref='$body' class="component-editor"></div>
+    `;
+  }
+  getPropertyEditor(index2, childEditor) {
+    if (childEditor.type === "folder") {
+      return `
+        <div class='component-folder'>
+          <label>${iconUse$1("chevron_right")} ${childEditor.label}</label>
+          <ul>
+            ${childEditor.children.map((it, itemIndex) => {
+        return `<li>${this.getPropertyEditor(`${index2}${itemIndex}`, it)}</li>`;
+      }).join("")}
+          </ul>
+        </div>
+      `;
+    } else if (childEditor.type === "column") {
+      const size2 = (childEditor.size || [2]).join("-");
+      return `
+        <div class='column column-${size2}' style="--column-gap: ${childEditor.gap}px; --row-gap: ${childEditor.rowGap || 0}px" >
+          ${childEditor.columns.map((it, itemIndex) => {
+        if (it === "-") {
+          return `<div class="column-item"></div>`;
+        } else if (it.type === "label") {
+          return `<div class="column-item">
+                    <label>${it.label}</label>
+                  </div>`;
+        }
+        return `
+                  <div class='column-item'>
+                    ${this.getPropertyEditor(`${index2}${itemIndex}`, it)}
+                  </div>
+                `;
+      }).join("")}  
+        </div>
+      `;
+    }
+    return createComponent(childEditor.editor, __spreadProps(__spreadValues({}, childEditor.editorOptions), {
+      onchange: (key, value) => {
+        const newValue = isFunction(childEditor.convert) ? childEditor.convert(key, value) : value;
+        this.trigger("changeComponentValue", key, newValue);
+      },
+      ref: `${childEditor.key}${index2}`,
+      key: childEditor.key,
+      value: childEditor.defaultValue
+    }));
+  }
+  [LOAD("$body")]() {
+    const inspector = this.state.inspector;
+    var self2 = inspector.map((it, index2) => {
+      if (isString(it) || it.type === "label") {
+        const title2 = it.label || it;
+        return `
+          <div class='component-item'> 
+            <label>${title2}</label>
+          </div>`;
+      } else if (it.type === "folder") {
+        return `
+          <div class='component-item'>
+            ${this.getPropertyEditor(index2, it)}
+          </div>
+        `;
+      } else {
+        return `
+            <div class='component-item'> 
+              ${this.getPropertyEditor(index2, it)}
+            </div>
+          `;
+      }
+    });
+    return self2;
+  }
+  setInspector(inspector) {
+    this.setState({
+      inspector
+    });
+  }
+  setValue(obj2 = {}) {
+    Object.keys(obj2).forEach((key) => {
+      const value = obj2[key];
+      this.eachChildren((child) => {
+        if (child.setValue && child.props.key === key) {
+          child.setValue(value);
+        }
+      });
+    });
+  }
+  getValue() {
+    const result = {};
+    this.eachChildren((child) => {
+      if (isFunction(child.getValue) && child.props.key) {
+        result[child.props.key] = child.getValue();
+      }
+    });
+    return result;
+  }
+  [SUBSCRIBE_SELF("changeComponentValue")](key, value) {
+    this.parent.trigger(this.props.onchange, key, value);
+  }
+  [CLICK("$el .component-folder > label")](e2) {
+    const $target = e2.$dt.closest("component-folder");
+    $target.toggleClass("close");
+  }
+}
 function propertyEditor(editor) {
   editor.registerElement({
+    ComponentEditor,
+    TextShadowEditor,
+    BoxShadowEditor,
     IconListViewEditor,
     TextAreaEditor,
     TextEditor,
@@ -47019,6 +47171,9 @@ function propertyEditor(editor) {
   });
   editor.registerAlias({
     "icon-list-view": "IconListViewEditor",
+    "box-shadow": "BoxShadowEditor",
+    "text-shadow": "TextShadowEditor",
+    "component": "ComponentEditor",
     "text-area": "TextAreaEditor",
     "text": "TextEditor",
     "color-single": "ColorSingleEditor",
@@ -53420,113 +53575,6 @@ function text$1(editor) {
     ];
   });
 }
-var TextShadowEditor$1 = "";
-class TextShadowEditor extends EditorElement {
-  initState() {
-    return {
-      textShadows: TextShadow.parseStyle(this.props.value)
-    };
-  }
-  template() {
-    return `
-      <div class="elf--text-shadow-editor" >
-        <div class='text-shadow-list' ref='$shadowList'></div>
-      </div>
-    `;
-  }
-  [LOAD("$shadowList")]() {
-    var arr = this.state.textShadows.map((shadow2, index2) => {
-      return `
-        <div class="shadow-item real" data-index="${index2}">
-          <label draggable="true" data-index="${index2}">${iconUse$1("drag_indicator")}</label>
-          ${createComponent("ColorViewEditor", {
-        mini: true,
-        key: "color",
-        value: shadow2.color,
-        params: index2,
-        onchange: "changeKeyValue"
-      })}
-          ${createComponent("NumberInputEditor", {
-        mini: true,
-        key: "offsetX",
-        label: "X",
-        value: shadow2.offsetX,
-        params: index2,
-        onchange: "changeKeyValue"
-      })}          
-          ${createComponent("NumberInputEditor", {
-        mini: true,
-        key: "offsetY",
-        label: "Y",
-        value: shadow2.offsetY,
-        params: index2,
-        onchange: "changeKeyValue"
-      })}                    
-          ${createComponent("NumberInputEditor", {
-        mini: true,
-        label: "B",
-        key: "blurRadius",
-        value: shadow2.blurRadius,
-        params: index2,
-        onchange: "changeKeyValue"
-      })}                    
-          <div class="tools">
-            <button type="button" class="remove" data-index="${index2}">
-              ${iconUse$1("remove2")}
-            </button>
-          </div>
-        </div>
-      `;
-    });
-    return arr.join("");
-  }
-  modifyTextShadow() {
-    var value = this.state.textShadows.join(", ");
-    this.parent.trigger(this.props.onchange, this.props.key, value);
-  }
-  [SUBSCRIBE("add")](shadow2 = "") {
-    if (shadow2) {
-      this.state.textShadows = TextShadow.parseStyle(shadow2);
-    } else {
-      this.state.textShadows.push(new TextShadow());
-    }
-    this.refresh();
-    this.modifyTextShadow();
-  }
-  [CLICK("$add")]() {
-    this.trigger("add");
-  }
-  [DRAGSTART("$shadowList .shadow-item > label")](e2) {
-    this.startIndex = +e2.$dt.attr("data-index");
-  }
-  [DRAGOVER("$shadowList .shadow-item") + PREVENT](e2) {
-  }
-  sortItem(arr, startIndex, targetIndex) {
-    arr.splice(targetIndex + (startIndex < targetIndex ? -1 : 0), 0, ...arr.splice(startIndex, 1));
-  }
-  sortTextShadow(startIndex, targetIndex) {
-    this.sortItem(this.state.textShadows, startIndex, targetIndex);
-  }
-  [DROP("$shadowList .shadow-item") + PREVENT](e2) {
-    var targetIndex = +e2.$dt.attr("data-index");
-    this.sortTextShadow(this.startIndex, targetIndex);
-    this.refresh();
-    this.modifyTextShadow();
-  }
-  [CLICK("$shadowList .remove")](e2) {
-    var index2 = +e2.$dt.attr("data-index");
-    this.state.textShadows.splice(index2, 1);
-    this.refresh();
-    this.modifyTextShadow();
-  }
-  [SUBSCRIBE("changeKeyValue")](key, value, index2) {
-    var shadow2 = this.state.textShadows[index2];
-    shadow2.reset({
-      [key]: value
-    });
-    this.modifyTextShadow();
-  }
-}
 var textShadow$1 = [
   { name: "Mystic", shadow: `20px 0px 10px rgb(0, 0, 0)` },
   { name: "Monoton", shadow: `0px -78px rgb(255, 196, 0)` },
@@ -53589,9 +53637,6 @@ class TextShadowProperty extends BaseProperty {
   }
 }
 function textShadow(editor) {
-  editor.registerElement({
-    TextShadowEditor
-  });
   editor.registerMenuItem("inspector.tab.style", {
     TextShadowProperty
   });
@@ -61106,7 +61151,7 @@ var designEditorPlugins = [
   gradient,
   alignment,
   position,
-  layout,
+  layout$3,
   boxModel,
   pathTool,
   artboard,
@@ -63257,12 +63302,14 @@ class SwitchRightPanel extends EditorElement {
     this.$config.toggle("show.right.panel");
   }
 }
+var layout$2 = "";
 class DesignEditor extends BaseLayout {
   initialize() {
     super.initialize();
     (async () => {
       this.$pathkit.registerPathKit(await PathKitInit());
     })();
+    this.emit("load.json", this.opt.data);
   }
   components() {
     return {
@@ -63294,7 +63341,7 @@ class DesignEditor extends BaseLayout {
   template() {
     const isItemMode = this.$config.is("editor.design.mode", "item");
     return `
-      <div class="designeditor">
+      <div class="easylogic-studio designeditor">
         <div class="layout-main">
           <div class='layout-top' ref='$top'>
             ${createComponent("ToolBar")}
@@ -63458,6 +63505,154 @@ class DesignEditor extends BaseLayout {
     }
   }
 }
+var layout$1 = "";
+class WhiteBoard extends BaseLayout {
+  initialize() {
+    super.initialize();
+    (async () => {
+      this.$pathkit.registerPathKit(await PathKitInit());
+    })();
+    this.emit("load.json", this.opt.data);
+  }
+  components() {
+    return {
+      BodyPanel,
+      PopupManager,
+      KeyboardManager,
+      IconManager
+    };
+  }
+  getPlugins() {
+    return designEditorPlugins;
+  }
+  template() {
+    return `
+      <div class="easylogic-studio whiteboard">
+        <div class="layout-main">
+          <div class="layout-middle" ref='$middle'>      
+            <div class="layout-body" ref='$bodyPanel'>
+              ${createComponent("BodyPanel", { ref: "$bodyPanelView" })}
+            </div>                           
+          </div>
+          ${createComponent("KeyboardManager")}
+        </div>
+        ${createComponent("PopupManager")}
+        ${createComponent("IconManager")}
+      </div>
+    `;
+  }
+  afterRender() {
+    super.afterRender();
+    this.$config.init("editor.layout.elements", this.refs);
+  }
+  [DRAGOVER("$middle") + PREVENT](e2) {
+  }
+  [DROP("$middle") + PREVENT](e2) {
+  }
+  [SUBSCRIBE("toggle.fullscreen")]() {
+    this.$el.toggleFullscreen();
+  }
+  [SUBSCRIBE("getLayoutElement")](callback) {
+    if (isFunction(callback)) {
+      callback(this.refs);
+    }
+  }
+}
+var dataEditorPlugins = [
+  defaultConfigs,
+  defaultIcons,
+  defaultMessages,
+  baseEditor,
+  propertyEditor,
+  color,
+  gradient
+];
+var layout = "";
+class DataEditor extends BaseLayout {
+  initialize() {
+    super.initialize();
+    (async () => {
+      this.$pathkit.registerPathKit(await PathKitInit());
+    })();
+  }
+  components() {
+    return {
+      PopupManager,
+      KeyboardManager,
+      IconManager
+    };
+  }
+  getPlugins() {
+    return dataEditorPlugins;
+  }
+  createEditorInstance() {
+    return new Editor({
+      ignoreManagers: [
+        "ShortCutManager"
+      ]
+    });
+  }
+  afterRender() {
+    super.afterRender();
+    this.$config.init("editor.layout.elements", this.refs);
+  }
+  initState() {
+    return {
+      inspector: this.props.inspector || [],
+      onChange: this.props.onChange || (() => true),
+      open: isBoolean(this.props.open) && this.props.open === false ? false : true,
+      leftSize: 340,
+      rightSize: 280,
+      bottomSize: 0,
+      lastBottomSize: 150
+    };
+  }
+  template() {
+    return `
+      <div class="easylogic-studio dataeditor" ref="$bodyPanel">
+        <div class="layout-main" ref="$main">
+            <div class='control-view' ref="$body"></div>
+            <div class='close' ref="$close">Close Controls</div>        
+        </div>
+
+        ${createComponent("KeyboardManager")}        
+        ${createComponent("PopupManager")}
+        ${createComponent("IconManager")}
+      </div>
+    `;
+  }
+  [CLICK("$close")]() {
+    this.setState({
+      open: !this.state.open
+    }, false);
+    this.bindData("$main");
+    this.bindData("$close");
+  }
+  [BIND("$main")]() {
+    return {
+      "data-open-status": this.state.open
+    };
+  }
+  [BIND("$close")]() {
+    return {
+      "text": this.state.open ? "Close Controls" : "Open Controls"
+    };
+  }
+  [LOAD("$body")]() {
+    const inspector = this.state.inspector;
+    return `
+      <object refClass="ComponentEditor" ref='$comp' inspector=${variable$4(inspector)} onchange="changeComponent" />
+    `;
+  }
+  getValue() {
+    return this.children.$comp.getValue();
+  }
+  [SUBSCRIBE_SELF("changeComponent")](key, value) {
+    if (isFunction(this.state.onChange)) {
+      this.emit(this.state.onChange, this, key, value);
+    }
+  }
+}
 var exportLibrary = __spreadValues({
   EditorInstance: Editor,
   Length,
@@ -63474,7 +63669,16 @@ var exportLibrary = __spreadValues({
 }, Event$1);
 var App = __spreadValues({
   createDesignEditor(opts = { type: "white" }) {
-    return start(DesignEditor, __spreadValues({}, opts));
+    return start$1(DesignEditor, opts);
+  },
+  createDataEditor(opts = {}) {
+    return start$1(DataEditor, opts);
+  },
+  createPageBuilder(opts = {}) {
+    return start$1(PageBuilder, opts);
+  },
+  createWhiteBoard(opts = {}) {
+    return start$1(WhiteBoard, opts);
   }
 }, exportLibrary);
 export { App as default };

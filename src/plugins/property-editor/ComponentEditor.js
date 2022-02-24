@@ -1,10 +1,11 @@
-import { LOAD, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { CLICK, LOAD, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { isFunction, isString } from "el/sapa/functions/func";
 import { variable } from "el/sapa/functions/registElement";
 
 import './ComponentEditor.scss';
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { createComponent } from "el/sapa/functions/jsx";
+import { iconUse } from "el/editor/icon/icon";
 
 export default class ComponentEditor extends EditorElement {
 
@@ -22,27 +23,38 @@ export default class ComponentEditor extends EditorElement {
 
   getPropertyEditor(index, childEditor) {
 
-    if (childEditor.type === 'column') {
+    if (childEditor.type === 'folder') {
+      return /*html*/`
+        <div class='component-folder'>
+          <label>${iconUse('chevron_right')} ${childEditor.label}</label>
+          <ul>
+            ${childEditor.children.map((it, itemIndex) => {
+              return `<li>${this.getPropertyEditor(`${index}${itemIndex}`, it)}</li>`
+            }).join('')}
+          </ul>
+        </div>
+      `
+    } else if (childEditor.type === 'column') {
 
       const size = (childEditor.size || [2]).join('-');
 
       return /*html*/`
         <div class='column column-${size}' style="--column-gap: ${childEditor.gap}px; --row-gap: ${childEditor.rowGap || 0}px" >
           ${childEditor.columns.map((it, itemIndex) => {
-        if (it === '-') {
-          return /*html*/`<div class="column-item"></div>`;
-        } else if (it.type === 'label') {
-          return /*html*/`<div class="column-item">
-                <label>${it.label}</label>
-              </div>`;
-        }
+            if (it === '-') {
+              return /*html*/`<div class="column-item"></div>`;
+            } else if (it.type === 'label') {
+              return /*html*/`<div class="column-item">
+                    <label>${it.label}</label>
+                  </div>`;
+            }
 
-        return /*html*/`
-              <div class='column-item'>
-                ${this.getPropertyEditor(`${index}${itemIndex}`, it)}
-              </div>
-            `
-      }).join('')}  
+            return /*html*/`
+                  <div class='column-item'>
+                    ${this.getPropertyEditor(`${index}${itemIndex}`, it)}
+                  </div>
+                `
+          }).join('')}  
         </div>
       `
     }
@@ -70,6 +82,14 @@ export default class ComponentEditor extends EditorElement {
           <div class='component-item'> 
             <label>${title}</label>
           </div>`
+      } else if (it.type === 'folder') {
+
+        return /*html*/`
+          <div class='component-item'>
+            ${this.getPropertyEditor(index, it)}
+          </div>
+        `
+
       } else {
         return /*html*/`
             <div class='component-item'> 
@@ -107,7 +127,7 @@ export default class ComponentEditor extends EditorElement {
   getValue() {
     const result = {}
     this.eachChildren(child => {
-      if (child.getValue) {
+      if (isFunction(child.getValue) && child.props.key) {
         result[child.props.key] = child.getValue();
       }
     })
@@ -117,5 +137,11 @@ export default class ComponentEditor extends EditorElement {
 
   [SUBSCRIBE_SELF('changeComponentValue')](key, value) {
     this.parent.trigger(this.props.onchange, key, value);
+  }
+
+  [CLICK('$el .component-folder > label')](e) {
+    const $target = e.$dt.closest('component-folder');
+
+    $target.toggleClass('close');
   }
 }

@@ -6,7 +6,5 @@ module.exports = {
     'style': path.resolve(__dirname, "./src/scss"),    
     'plugins': path.resolve(__dirname, "./src/plugins"),    
     'export-library': path.resolve(__dirname, "./src/export-library"),
-    'designeditor': path.resolve(__dirname, "./src/designeditor"),
-    'embededitor': path.resolve(__dirname, "./src/embededitor"),    
-    'designplayer': path.resolve(__dirname, "./src/designplayer"),
+    'editor-layouts': path.resolve(__dirname, "./src/editor-layouts"),
 }

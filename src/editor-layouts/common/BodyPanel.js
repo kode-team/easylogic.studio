@@ -30,7 +30,10 @@ export default class BodyPanel extends EditorElement {
         <div class='editing-area'>
           ${createComponent('HorizontalRuler')}
           ${createComponent('VerticalRuler')}
-          ${createComponent('CanvasView')}
+          <div class="canvas-layout">
+            ${createComponent('CanvasView')}
+          </div>
+
         </div>
       </div>
     `;

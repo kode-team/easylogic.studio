@@ -126,14 +126,14 @@ export class EditorElement extends UIElement {
      * @type {ViewportManager}
      */
     get $viewport() {
-        return this.$editor.viewport;
+        return this.parent.$viewport ||  this.$editor.viewport;
     }
 
     /**
      * @type {SnapManager}
      */
     get $snapManager() {
-        return this.$editor.snapManager;
+        return this.parent.$snapManager || this.$editor.snapManager;
     }
 
     get $timeline() {
