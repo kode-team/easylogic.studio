@@ -9,7 +9,7 @@
 함수는 [Editor](./Editor.md) 객체를 받습니다.
 
 ```js
-import EasyLogic from "./editor-layouts/designeditor/index";
+import EasyLogic from "./editor-layouts/index";
 
 function startEditor() {
   return EasyLogic.createDesignEditor({

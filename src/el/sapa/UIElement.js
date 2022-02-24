@@ -5,8 +5,6 @@ import { isFunction, isNotUndefined, splitMethodByKeyword } from "./functions/fu
 import { uuidShort } from "./functions/uuid";
 import { getVariable } from './functions/registElement';
 
-const reg = /@magic:subscribe ([^|]+)(\|[\W]+[a-zA-Z]+\((.*)\))+/g
-
 /**
  * UI 를 만드는 기본 단위 
  * 
@@ -35,6 +33,23 @@ class UIElement extends EventMachine {
 
   }
 
+  createContext() {
+    return {
+      
+    }
+  }
+
+  pushContext() {
+    return this.contexts.push(this.createContext());
+  }
+
+  popContext() {
+    return this.contexts.pop();
+  }
+
+  currentContext() {
+    return this.contexts[this.contexts.length - 1];
+  }
 
   setStore(storeInstance) {
     this.__storeInstance = storeInstance;

@@ -6,7 +6,7 @@ function startEditor() {
 
   return idList.map(id => {
 
-    return EasyLogic.createDesignEditor({
+    return EasyLogic.createWhiteBoard({
       container: document.getElementById(id),
       config: {
         'editor.theme': 'light',

@@ -20,7 +20,7 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'src/editor-layouts/designeditor/index.js'),
+      entry: path.resolve(__dirname, 'src/editor-layouts/index.js'),
       name: 'EasyLogicEditor',
       fileName: (format) => `editor.${format}.js`
     }

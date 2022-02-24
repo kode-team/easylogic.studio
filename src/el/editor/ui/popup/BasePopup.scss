@@ -19,6 +19,7 @@
       font-size: 12px;
       font-weight: bold;
       padding: 10px ;
+      padding-right: 0px;
       display: flex;
       pointer-events: all;
       border-bottom: 1px solid var(--elf--border-color);
@@ -31,6 +32,20 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;        
+
+
+        button {
+          border:0px;
+          background-color: transparent;
+          padding:0px;
+          cursor: pointer;
+
+          svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--elf--font-color);
+          }
+        }
       }
   
       label {

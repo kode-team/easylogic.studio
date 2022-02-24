@@ -2,6 +2,39 @@
     padding-bottom: 5px;
     --column-gap: 2px;
     --row-gap: 2px;
+
+    .component-folder {
+
+        &.close {
+            > label {
+                > svg {
+                    transform: rotate(0deg);
+                }
+            }  
+
+            > ul {
+                display: none;
+            }
+        }
+
+        > label {
+            cursor: pointer;
+            > svg {
+                width: 16px;
+                height: 16px;
+                fill: var(--elf--font-color);
+                vertical-align: middle;
+                transform: rotate(90deg);
+                transition: all 0.1s ease-in-out;
+            }
+        }
+        > ul {
+            padding: 0px;
+            margin: 0px;
+            list-style: none;
+        }
+    }
+
     .column {
         display: grid;
         grid-template-columns: 1fr;

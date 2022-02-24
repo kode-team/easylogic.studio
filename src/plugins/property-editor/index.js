@@ -26,7 +26,11 @@ import TextAreaEditor from "./TextAreaEditor";
 import TextEditor from "./TextEditor";
 import VarEditor from "./VarEditor";
 import PathEditor from './path/PathEditor';
-import PathParser from 'el/editor/parser/PathParser';
+import BoxShadowEditor from './BoxShadowEditor';
+import TextShadowEditor from './TextShadowEditor';
+import ComponentEditor from './ComponentEditor';
+
+
 
 /**
  * 
@@ -34,6 +38,9 @@ import PathParser from 'el/editor/parser/PathParser';
  */
 export default function (editor) {
     editor.registerElement({
+        ComponentEditor,
+        TextShadowEditor,
+        BoxShadowEditor,
         IconListViewEditor,
         TextAreaEditor,
         TextEditor,
@@ -65,6 +72,9 @@ export default function (editor) {
 
     editor.registerAlias({
         "icon-list-view": "IconListViewEditor",
+        "box-shadow": "BoxShadowEditor",
+        "text-shadow": "TextShadowEditor",
+        "component": "ComponentEditor",
         "text-area": "TextAreaEditor",
         "text": "TextEditor",
         "color-single": "ColorSingleEditor",

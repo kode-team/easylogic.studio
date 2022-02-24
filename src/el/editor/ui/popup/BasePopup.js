@@ -87,8 +87,15 @@ export default class BasePopup extends EditorElement {
     const elements = this.$config.get('editor.layout.elements');
     const bodyRect = elements.$bodyPanel.rect();
 
-    const left = bodyRect.left + bodyRect.width - (width - 10)
-    const top = rect.top + height > bodyRect.top + bodyRect.height ? bodyRect.top + bodyRect.height - height - 10 : rect.top;
+    let left = bodyRect.left + bodyRect.width - width - 10;
+    let top = rect.top + height > bodyRect.top + bodyRect.height ? bodyRect.top + bodyRect.height - height - 10 : rect.top;
+
+    left -= bodyRect.left;
+    top -= bodyRect.top;
+
+    if (top < 10) {
+      top = 10;
+    }
 
 
     return {

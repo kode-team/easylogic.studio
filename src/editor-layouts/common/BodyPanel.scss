@@ -23,12 +23,21 @@
         right: 0px;
         bottom: 0px;
         top: 0px;
+
+        > .canvas-layout {
+            position: absolute;
+            left: var(--elf--editor-ruler-size);
+            top: var(--elf--editor-ruler-size);            
+            right: 0px;
+            bottom: 0px;
+            overflow: hidden;
+        }
     }
 
     &:not(.ruler) {
-        > .editing-area > .elf--page-container {
-            left: 0px !important;
-            top: 0px !important;
+        > .editing-area > .canvas-layout {
+            left: 0px;
+            top: 0px;
         }
     }
 

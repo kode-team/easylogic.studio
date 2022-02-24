@@ -1,12 +1,10 @@
 import BaseWindow from "./BaseWindow";
 
-import { CLICK, SUBSCRIBE } from "el/sapa/Event";
-import Dom from "el/sapa/functions/Dom";
 import { registElement } from "el/sapa/functions/registElement";
-
+import { SUBSCRIBE } from 'el/sapa/Event';
 import './ExportWindow.scss';
-import { start } from "el/sapa/App";
-import App from "../../../../editor-layouts/designeditor";
+import App from "editor-layouts";
+
 
 export default class EmbedEditorWindow extends BaseWindow {
 
