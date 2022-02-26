@@ -64,7 +64,7 @@ export default class BorderRadiusEditor extends EditorElement {
         </div>
         <div></div>
 
-        <object refClass="ToggleButton" ${variable({
+          ${createComponent("ToggleButton", {
             compact: true,
             ref: '$toggle',
             key: 'border-all',
@@ -74,7 +74,6 @@ export default class BorderRadiusEditor extends EditorElement {
             toggleValues: [BorderGroup.ALL, BorderGroup.PARTITIAL],
             onchange: 'changeKeyValue'
         })}
-        />
       </div>
       <div
         class="full border-radius-item"
@@ -90,7 +89,17 @@ export default class BorderRadiusEditor extends EditorElement {
 
               return /*html*/`
                 <div>
-                    <object refClass="InputRangeEditor"  compact="true" ref='$${it.key}' label='${label}' title="${title}" key='${it.key}' value='${value}' min="0" step="1" onchange='changeBorderRadius' />
+                  ${createComponent("InputRangeEditor", {
+                    compact: true, 
+                    ref: `$${it.key}`,
+                    label, 
+                    title,
+                    key: it.key,
+                    value,
+                    min: 0,
+                    step: 1,
+                    onchange: 'changeBorderRadius' 
+                  })}
                 </div>  
               `;
             }).join('')}

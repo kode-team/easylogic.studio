@@ -3,7 +3,7 @@ import { LOAD, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './BorderProperty.scss';
-import { variable } from "el/sapa/functions/registElement";
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class BorderProperty extends BaseProperty {
 
@@ -19,14 +19,12 @@ export default class BorderProperty extends BaseProperty {
     var current = this.$selection.current || {}; 
     var value = current['border'] || ''
 
-    return /*html*/`
-      <object refClass='BorderEditor' ${variable({
+    return createComponent('BorderEditor', {
         ref: '$1',
         key: 'border',
         value,
         onchange: 'changeKeyValue'
-      })}  />
-    `
+      })
   }
 
   get editableProperty() {

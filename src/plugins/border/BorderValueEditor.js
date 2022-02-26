@@ -6,7 +6,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './BorderValueEditor.scss';
 import { BorderStyle } from "el/editor/types/model";
 import { iconUse } from "el/editor/icon/icon";
-import { variable } from 'el/sapa/functions/registElement';
+import { createComponent } from "el/sapa/functions/jsx";
 
 const borderStyleList = [
   BorderStyle.NONE,
@@ -61,7 +61,7 @@ export default class BorderValueEditor extends EditorElement {
     return /*html*/`
       <div class="elf--border-value-editor">
         <div class='editor-area'>
-          <object refClass="NumberInputEditor" ${variable({
+          ${createComponent("NumberInputEditor", {
             label: iconUse("line_weight"),
             compact: true,
             ref: '$width',
@@ -71,8 +71,8 @@ export default class BorderValueEditor extends EditorElement {
             key: "width", 
             value: width,
             onchange: 'changeKeyValue' 
-          })}/>        
-          <object refClass="SelectEditor" ${variable({
+          })}
+          ${createComponent("SelectEditor", {
             ref: '$style',
             key: 'style',
             label: iconUse('line_style'),
@@ -82,14 +82,14 @@ export default class BorderValueEditor extends EditorElement {
             value: style || 'solid',
             onchange: "changeKeyValue",
 
-          })} />
-          <object refClass="ColorViewEditor" ${variable({
+          })}
+          ${createComponent("ColorViewEditor", {
             ref: '$color',
             key: 'color',
             mini: true,
             value: color|| 'rgba(0, 0, 0, 1)',
             onchange: "changeKeyValue"
-          })} />          
+          })}
         </div>
       </div>
     `;

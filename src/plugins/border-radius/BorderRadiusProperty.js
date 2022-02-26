@@ -1,5 +1,6 @@
 import { DEBOUNCE, IF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class BorderRadiusProperty extends BaseProperty {
 
@@ -15,9 +16,11 @@ export default class BorderRadiusProperty extends BaseProperty {
     var current = this.$selection.current || {}; 
     var value = current['border-radius'] || ''
 
-    return /*html*/`
-      <object refClass="BorderRadiusEditor" ref='$1' value='${value}' onchange='changeBorderRadius' />
-    `
+    return createComponent("BorderRadiusEditor", {
+      ref: '$1',
+      value,
+      onchange: 'changeBorderRadius'
+    })
   }
 
   get editableProperty() {
