@@ -28646,7 +28646,7 @@ class BackgroundImagePositionPopup extends BasePopup {
   templateForY() {
     return `
       <div >
-        <object refClass="InputRangeEditor" ${variable$4({
+      ${createComponent("InputRangeEditor", {
       label: "Y",
       compact: true,
       ref: "$y",
@@ -28656,16 +28656,14 @@ class BackgroundImagePositionPopup extends BasePopup {
       max: 1e3,
       step: 1,
       onchange: "changeRangeEditor"
-    })}  
-          
-        />
+    })}      
       </div>
     `;
   }
   templateForWidth() {
     return `
     <div >
-      <object refClass="InputRangeEditor" ${variable$4({
+    ${createComponent("InputRangeEditor", {
       label: "W",
       compact: true,
       ref: "$width",
@@ -28675,16 +28673,14 @@ class BackgroundImagePositionPopup extends BasePopup {
       max: 500,
       step: 1,
       onchange: "changeRangeEditor"
-    })} 
-        
-      />
+    })}          
     </div>
     `;
   }
   templateForHeight() {
     return `
     <div >
-      <object refClass="InputRangeEditor" ${variable$4({
+    ${createComponent("InputRangeEditor", {
       label: "H",
       compact: true,
       ref: "$height",
@@ -28694,8 +28690,7 @@ class BackgroundImagePositionPopup extends BasePopup {
       max: 500,
       step: 1,
       onchange: "changeRangeEditor"
-    })} 
-
+    })}              
       />
     </div>
     `;
@@ -29240,13 +29235,13 @@ class BorderEditor extends EditorElement {
       label = this.$i18n("border.editor." + label);
       return `
       <div>
-        <object refClass='BorderValueEditor' ${variable$4({
+        ${createComponent("BorderValueEditor", {
         ref: `$${type}`,
         label,
         key: type,
         value: this.state.borders[type],
         onchange: "changeKeyValue"
-      })}  />
+      })}
       </div>
       `;
     });
@@ -29277,14 +29272,12 @@ class BorderProperty extends BaseProperty {
   [LOAD("$body")]() {
     var current = this.$selection.current || {};
     var value = current["border"] || "";
-    return `
-      <object refClass='BorderEditor' ${variable$4({
+    return createComponent("BorderEditor", {
       ref: "$1",
       key: "border",
       value,
       onchange: "changeKeyValue"
-    })}  />
-    `;
+    });
   }
   get editableProperty() {
     return "border";
@@ -29339,7 +29332,7 @@ class BorderValueEditor extends EditorElement {
     return `
       <div class="elf--border-value-editor">
         <div class='editor-area'>
-          <object refClass="NumberInputEditor" ${variable$4({
+          ${createComponent("NumberInputEditor", {
       label: iconUse$1("line_weight"),
       compact: true,
       ref: "$width",
@@ -29349,8 +29342,8 @@ class BorderValueEditor extends EditorElement {
       key: "width",
       value: width2,
       onchange: "changeKeyValue"
-    })}/>        
-          <object refClass="SelectEditor" ${variable$4({
+    })}
+          ${createComponent("SelectEditor", {
       ref: "$style",
       key: "style",
       label: iconUse$1("line_style"),
@@ -29359,14 +29352,14 @@ class BorderValueEditor extends EditorElement {
       options: borderStyleList,
       value: style || "solid",
       onchange: "changeKeyValue"
-    })} />
-          <object refClass="ColorViewEditor" ${variable$4({
+    })}
+          ${createComponent("ColorViewEditor", {
       ref: "$color",
       key: "color",
       mini: true,
       value: color2 || "rgba(0, 0, 0, 1)",
       onchange: "changeKeyValue"
-    })} />          
+    })}
         </div>
       </div>
     `;
@@ -29729,7 +29722,7 @@ class BorderRadiusEditor extends EditorElement {
         </div>
         <div></div>
 
-        <object refClass="ToggleButton" ${variable$4({
+          ${createComponent("ToggleButton", {
       compact: true,
       ref: "$toggle",
       key: "border-all",
@@ -29739,7 +29732,6 @@ class BorderRadiusEditor extends EditorElement {
       toggleValues: [BorderGroup.ALL, BorderGroup.PARTITIAL],
       onchange: "changeKeyValue"
     })}
-        />
       </div>
       <div
         class="full border-radius-item"
@@ -29754,7 +29746,17 @@ class BorderRadiusEditor extends EditorElement {
       var label = it.label;
       return `
                 <div>
-                    <object refClass="InputRangeEditor"  compact="true" ref='$${it.key}' label='${label}' title="${title2}" key='${it.key}' value='${value}' min="0" step="1" onchange='changeBorderRadius' />
+                  ${createComponent("InputRangeEditor", {
+        compact: true,
+        ref: `$${it.key}`,
+        label,
+        title: title2,
+        key: it.key,
+        value,
+        min: 0,
+        step: 1,
+        onchange: "changeBorderRadius"
+      })}
                 </div>  
               `;
     }).join("")}
@@ -29811,9 +29813,11 @@ class BorderRadiusProperty extends BaseProperty {
   [LOAD("$body")]() {
     var current = this.$selection.current || {};
     var value = current["border-radius"] || "";
-    return `
-      <object refClass="BorderRadiusEditor" ref='$1' value='${value}' onchange='changeBorderRadius' />
-    `;
+    return createComponent("BorderRadiusEditor", {
+      ref: "$1",
+      value,
+      onchange: "changeBorderRadius"
+    });
   }
   get editableProperty() {
     return "border-radius";
@@ -63640,9 +63644,11 @@ class DataEditor extends BaseLayout {
   }
   [LOAD("$body")]() {
     const inspector = this.state.inspector;
-    return `
-      <object refClass="ComponentEditor" ref='$comp' inspector=${variable$4(inspector)} onchange="changeComponent" />
-    `;
+    return createComponent("ComponentEditor", {
+      ref: "$comp",
+      inspector,
+      onchange: "changeComponent"
+    });
   }
   getValue() {
     return this.children.$comp.getValue();
