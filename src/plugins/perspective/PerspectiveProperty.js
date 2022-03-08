@@ -2,6 +2,7 @@ import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, DEBOUNCE, IF } from "el/sapa/Ev
 
 import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class PerspectiveProperty extends BaseProperty {
 
@@ -33,9 +34,13 @@ export default class PerspectiveProperty extends BaseProperty {
     var current = this.$selection.current || {};
 
     var perspective = current['perspective'] || ''
-    return /*html*/`
-        <object refClass="RangeEditor"  ref='$1' key='perspective' value="${perspective}" max="2000px" onchange="changePerspective" />
-    `;
+    return createComponent("RangeEditor", {
+      ref: '$1',
+      key: 'perspective',
+      value: perspective,
+      max: '2000px', 
+      onchange: "changePerspective"
+    })
   }
 
   [SUBSCRIBE_SELF('changePerspective')] (key, value) {

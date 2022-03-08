@@ -4,6 +4,7 @@ import { CSS_TO_STRING, STRING_TO_CSS } from "el/utils/func";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './GridLayoutEditor.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class GridLayoutEditor extends EditorElement {
 
@@ -37,40 +38,40 @@ export default class GridLayoutEditor extends EditorElement {
     [LOAD('$body')] () {
         return /*html*/`
             <div class='grid-layout-item'>
-                <object refClass="GridBoxEditor" 
-                    label='${this.$i18n('grid.layout.editor.template.columns')}'
-                    ref='$columnBox'
-                    key='grid-template-columns'
-                    value="${this.state['grid-template-columns'] || ''}"
-                    onchange='changeKeyValue'
-                />
+                ${createComponent("GridBoxEditor" , {
+                    label: this.$i18n('grid.layout.editor.template.columns'),
+                    ref: '$columnBox',
+                    key: 'grid-template-columns',
+                    value: this.state['grid-template-columns'] || '',
+                    onchange: 'changeKeyValue'
+                })}
             </div>
             <div class='grid-layout-item'>
-                <object refClass="GridGapEditor" 
-                    label='${this.$i18n('grid.layout.editor.column.gap')}'
-                    ref='$columnGap'
-                    key='grid-column-gap'
-                    value="${this.state['grid-column-gap'] || ''}"
-                    onchange='changeKeyValue'
-                />
+                ${createComponent("GridGapEditor" , {
+                    label: this.$i18n('grid.layout.editor.column.gap'),
+                    ref: '$columnGap',
+                    key: 'grid-column-gap',
+                    value: this.state['grid-column-gap'] || '',
+                    onchange: 'changeKeyValue'
+                })}
             </div>            
             <div class='grid-layout-item'>
-                <object refClass="GridBoxEditor" 
-                    label='${this.$i18n('grid.layout.editor.template.rows')}'
-                    ref='$rowBox'
-                    key='grid-template-rows'
-                    value="${this.state['grid-template-rows'] || ''}"
-                    onchange='changeKeyValue'
-                />
+                ${createComponent("GridBoxEditor" , {
+                    label: this.$i18n('grid.layout.editor.template.rows'),
+                    ref: '$rowBox',
+                    key: 'grid-template-rows',
+                    value: this.state['grid-template-rows'] || '',
+                    onchange: 'changeKeyValue'
+                })}
             </div>            
             <div class='grid-layout-item'>
-                <object refClass="GridGapEditor" 
-                    label='${this.$i18n('grid.layout.editor.row.gap')}'      
-                    ref='$rowGap'          
-                    key='grid-row-gap'
-                    value="${this.state['grid-row-gap'] || ''}"
-                    onchange='changeKeyValue'
-                />
+                ${createComponent("GridGapEditor" , {
+                    label: this.$i18n('grid.layout.editor.row.gap'),
+                    ref: '$rowGap',
+                    key: 'grid-row-gap',
+                    value: this.state['grid-row-gap'] || '',
+                    onchange: 'changeKeyValue'
+                })}
             </div>
         `
     }

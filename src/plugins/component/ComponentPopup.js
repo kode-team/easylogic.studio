@@ -1,9 +1,8 @@
 import { BIND, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { isFunction } from "el/sapa/functions/func";
-import { variable } from "el/sapa/functions/registElement";
-import { Length } from 'el/editor/unit/Length';
 import BasePopup from "el/editor/ui/popup/BasePopup";
 import './ComponentPopup.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 
 
 
@@ -46,9 +45,10 @@ export default class ComponentPopup extends BasePopup {
   [LOAD('$body')] () {    
     const inspector = this.state.inspector;
 
-    return /*html*/`
-      <object refClass="ComponentEditor" inspector=${variable(inspector)} onchange="changeComponent" />
-    `
+    return createComponent("ComponentEditor", {
+      inspector,
+      onchange: "changeComponent"
+    });
   }
 
   [SUBSCRIBE_SELF('changeComponent')] (key, value) {

@@ -1,7 +1,5 @@
 import BaseHandler from "./BaseHandler";
-import Event, { SAPARATOR, NAME_SAPARATOR, CHECK_CALLBACK_PATTERN, CHECK_SAPARATOR, CALLBACK_SAPARATOR } from "../Event";
-import { debounce, throttle, isNotUndefined, isFunction, splitMethodByKeyword } from "../functions/func";
-import Dom from "../functions/Dom";
+import { debounce, throttle } from "../functions/func";
 
 export default class CallbackHandler extends BaseHandler {
 
@@ -10,7 +8,7 @@ export default class CallbackHandler extends BaseHandler {
     this.destroy();
 
     if (!this._callbacks) {
-      this._callbacks = this.context.filterProps(CHECK_CALLBACK_PATTERN)
+      this._callbacks = this.context.filterProps('callback')
     }
     this._callbacks.forEach(key => this.parseCallback(key));
   }
@@ -91,35 +89,35 @@ export default class CallbackHandler extends BaseHandler {
     // context 에 속한 변수나 메소드 리스트 체크
     const checkMethodList = arr.filter(code => !!context[code]);
 
-    // 이벤트 정의 시점에 적용 되어야 하는 것들은 모두 method() 화 해서 정의한다.
-    const [afters, afterMethods] = splitMethodByKeyword(arr, "after");
-    const [befores, beforeMethods] = splitMethodByKeyword(arr, "before");
-    const [debounces, debounceMethods] = splitMethodByKeyword(arr, "debounce");
-    const [delays, delayMethods] = splitMethodByKeyword(arr, "delay");
-    const [throttles, throttleMethods] = splitMethodByKeyword(arr, "throttle");
-    const [captures] = splitMethodByKeyword(arr, "capture");
+    // // 이벤트 정의 시점에 적용 되어야 하는 것들은 모두 method() 화 해서 정의한다.
+    // const [afters, afterMethods] = splitMethodByKeyword(arr, "after");
+    // const [befores, beforeMethods] = splitMethodByKeyword(arr, "before");
+    // const [debounces, debounceMethods] = splitMethodByKeyword(arr, "debounce");
+    // const [delays, delayMethods] = splitMethodByKeyword(arr, "delay");
+    // const [throttles, throttleMethods] = splitMethodByKeyword(arr, "throttle");
+    // const [captures] = splitMethodByKeyword(arr, "capture");
 
-    // 위의 5개 필터 이외에 있는 코드들은 keycode 로 인식한다.
-    const filteredList = [
-      ...checkMethodList,
-      ...afters,
-      ...befores,
-      ...delays,
-      ...debounces,
-      ...throttles,
-      ...captures
-    ];
+    // // 위의 5개 필터 이외에 있는 코드들은 keycode 로 인식한다.
+    // const filteredList = [
+    //   ...checkMethodList,
+    //   ...afters,
+    //   ...befores,
+    //   ...delays,
+    //   ...debounces,
+    //   ...throttles,
+    //   ...captures
+    // ];
 
-    return {
-      callbackName,
-      captures,
-      afterMethods,
-      beforeMethods,
-      delayMethods,
-      debounceMethods,
-      throttleMethods,
-      checkMethodList
-    };
+    // return {
+    //   callbackName,
+    //   captures,
+    //   afterMethods,
+    //   beforeMethods,
+    //   delayMethods,
+    //   debounceMethods,
+    //   throttleMethods,
+    //   checkMethodList
+    // };
   }
 
 
@@ -154,14 +152,14 @@ export default class CallbackHandler extends BaseHandler {
    */
   parseCallback(key) {
 
-    const context = this.context;
-    let checkMethodFilters = key.split(CHECK_SAPARATOR).map(it => it.trim()).filter(Boolean);
+    // const context = this.context;
+    // let checkMethodFilters = key.split(CHECK_SAPARATOR).map(it => it.trim()).filter(Boolean);
 
-    var prefix = checkMethodFilters.shift()
-    var callbackName = prefix.split(CALLBACK_SAPARATOR)[1];    
+    // var prefix = checkMethodFilters.shift()
+    // var callbackName = prefix.split(CALLBACK_SAPARATOR)[1];    
 
-    var originalCallback = context[key].bind(context);
+    // var originalCallback = context[key].bind(context);
 
-    this.bindingCallback(callbackName, checkMethodFilters, originalCallback);
+    // this.bindingCallback(callbackName, checkMethodFilters, originalCallback);
   }
 }

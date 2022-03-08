@@ -4,6 +4,7 @@ import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/sapa/Ev
 
 import icon from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { createComponent } from "el/sapa/functions/jsx";
 
 
 export default class PerspectiveOriginProperty extends BaseProperty {
@@ -36,11 +37,11 @@ export default class PerspectiveOriginProperty extends BaseProperty {
     var current = this.$selection.current || {}; 
     var value = current['perspective-origin'] || ''
 
-    return /*html*/`<object refClass="PerspectiveOriginEditor" 
-              ref='$1' 
-              value='${value}' 
-              onchange='changePerspectiveOrigin' 
-            />`
+    return createComponent("PerspectiveOriginEditor" , {
+      ref: '$1',
+      value,
+      onchange: 'changePerspectiveOrigin' 
+    })
   }
 
   get editableProperty() {

@@ -7,6 +7,7 @@ import './ResizingProperty.scss';
 import { variable } from 'el/sapa/functions/registElement';
 import { Constraints, Layout, ResizingMode } from "el/editor/types/model";
 import { iconUse } from "el/editor/icon/icon";
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class ResizingProperty extends BaseProperty {
 
@@ -82,24 +83,24 @@ export default class ResizingProperty extends BaseProperty {
     return /*html*/`
       <div class="has-label-grid">
         <label data-direction="horizontal"></label>
-        <object refClass="SelectEditor" ${variable({
+        ${createComponent("SelectEditor", {
           ref: '$resizingHorizontal',
           key: 'resizingHorizontal',
           value: current?.resizingHorizontal || ResizingMode.FIXED,
           options: this.makeOptionsForHorizontal(),
           onchange: 'changeResizingMode'
-        })} />
+        })}
       </div>
 
       <div class="has-label-grid">
       <label data-direction="vertical"></label>
-        <object refClass="SelectEditor" ${variable({
+        ${createComponent("SelectEditor", {
           ref: '$resizingVertical',
           key: 'resizingVertical',
           value: current?.resizingVertical || ResizingMode.FIXED,
           options: this.makeOptionsForVertical(),
           onchange: 'changeResizingMode'
-        })} />          
+        })}
       </div>
     `
   }

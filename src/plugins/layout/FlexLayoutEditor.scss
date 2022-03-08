@@ -31,46 +31,107 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  position: relative;
+
+  > div {
+    width: 200px;
+    height: 200px;
+    position: relative;
+  }
+
+  .padding-top {
+    display: block;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    position: absolute;
+    background-color: var(--elf--border-color);
+  }
+
+  .padding-left {
+    display: block;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    position: absolute;
+    background-color: var(--elf--border-color);
+  }
+  
+  .padding-right {
+    display: block;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    position: absolute;
+    background-color: var(--elf--border-color);
+  }
+  
+  .padding-bottom {
+    display: block;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    position: absolute;
+    background-color: var(--elf--border-color);
+  }  
 
   .flex-group {
-    width: 100px;
-    height: 100px;
+    width: 100%;
+    height: 100%;
     border: 1px solid var(--elf--border-color);
     display: flex;
     gap: 2px;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
-    &:last-child {
-        display: none;
-    }
+    position: absolute;    
   }
 
+  .flex-group-padding {
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--elf--border-color);
+    display: block;
+    position: absolute;
+  }  
+
   .flex-direction {
-    // border: 1px solid var(--elf--border-color);
     display: flex;
     gap: 2px;
-    flex-direction: inherit;
-    align-items: inherit;
+    width: 24px;
+    height: 30px;
 
+    &[data-value="column"] {
+      width: 30px;
+      height: 24px;
 
-
-    .flex-direction-item {
-        width: 6px;
-        height: 30px;
-        background-color: var(--elf--selected-color-2);
-        display: inline-block;
-        border-radius: 2px;
+      .flex-direction-item {
+        width: 30px !important;
+        height: 6px !important;
 
         &:first-child {
-            height: 15px;
+          width: 15px !important;
         }
 
         &:nth-child(3) {
-            height: 20px;
+          width: 20px !important;
         }
+      }
     }
 
+    .flex-direction-item {
+      width: 6px;
+      height: 30px;
+      background-color: var(--elf--selected-color-2);
+      display: inline-block;
+      border-radius: 2px;
+
+      &:first-child {
+        height: 15px;
+        background-color: var(--elf--selected-color);
+      }
+
+      &:nth-child(3) {
+        height: 20px;
+        background-color: var(--elf--selected-color);        
+      }
+    }
   }
 }

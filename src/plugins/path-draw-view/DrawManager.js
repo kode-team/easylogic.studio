@@ -2,7 +2,7 @@ import { Length } from "el/editor/unit/Length";
 import { CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './DrawManager.scss';
-import { variable } from "el/sapa/functions/registElement";
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class DrawManager extends EditorElement {
 
@@ -50,58 +50,60 @@ export default class DrawManager extends EditorElement {
         </div>      
         <div class='tools'>   
           <div >        
-            <label data-tooltip="${this.$i18n('draw.manager.tolerance')}">Tolerance</label>            
-            <object refClass="NumberInputEditor"  
-              ref='$tolerance' 
-              key='tolerance' 
-              value="1" 
-              min="0"
-              max="100"
-              step="0.01"
-              unit="number" 
-              onchange="changeValue" 
-            />
+            <label data-tooltip="${this.$i18n('draw.manager.tolerance')}">Tolerance</label>       
+            ${createComponent("NumberInputEditor"  , {
+              ref: '$tolerance',
+              key: 'tolerance',
+              value: 1,
+              min: 0,
+              max: 100,
+              step: 0.01,
+              unit: "number",
+              onchange: "changeValue" 
+            })}
           </div>              
           <div >
             <label>${this.$i18n('svg.item.property.stroke')}</label>          
-            <object refClass="FillSingleEditor" 
-              ref='$stroke' 
-              simple="true" 
-              value="${this.state.stroke}" 
-              key='stroke' 
-              onchange="changeValue" 
-            />
+            ${createComponent("FillSingleEditor", {
+              ref: '$stroke',
+              simple: true,
+              value: this.state.stroke,
+              key: "stroke",
+              onchange: "changeValue",
+            })}
           </div>
 
           <div >
             <label>${this.$i18n('svg.item.property.strokeWidth')}</label>          
-            <object refClass="NumberInputEditor"  
-              ref='$strokeWidth' 
-              key="stroke-width" 
-              value="${this.state['stroke-width']}"              
-              onchange="changeValue" />
+            ${createComponent("NumberInputEditor"  , {
+              ref: '$strokeWidth',
+              key: "stroke-width",
+              value: this.state['stroke-width'],
+              onchange: 'changeValue'
+
+            })}
           </div>      
           
 
           <div>
             <label data-tooltip="${this.$i18n('svg.item.property.lineCap')}">Cap</label>          
-            <object refClass="SelectEditor" 
-              ref='$strokeLineCap' 
-              key="stroke-linecap" 
-              value="${this.state['stroke-linecap']}"                   
-              options=${variable(["butt","round","square"])} 
-              onchange="changeValue" 
-            />
+            ${createComponent("SelectEditor"  , {
+              ref: '$strokeLineCap',
+              key: "stroke-linecap",
+              value: this.state['stroke-linecap'],
+              options: ["butt","round","square"],
+              onchange: "changeValue"
+            })}
           </div> 
           <div>
             <label data-tooltip="${this.$i18n('svg.item.property.lineJoin')}">Join</label>          
-            <object refClass="SelectEditor"  
-              ref='$strokeLineJoin' 
-              key="stroke-linejoin" 
-              value="${this.state['stroke-linejoin']}"                                 
-              options=${variable(["miter","bevel","round" ])}
-              onchange="changeValue" 
-            />
+            ${createComponent("SelectEditor"  , {
+              ref: '$strokeLineJoin',
+              key: "stroke-linejoin",
+              value: this.state['stroke-linejoin'],
+              options: ["miter","bevel","round" ],
+              onchange: "changeValue" 
+            })}
           </div>
         </div>
       </div>    

@@ -53,7 +53,6 @@ export default class BaseStore {
    * @returns {Function} off callback 
    */
   on(event, originalCallback, context, debounceDelay = 0, throttleDelay = 0, enableAllTrigger = false, enableSelfTrigger = false, beforeMethods = [], frame = false) {
-
     var callback = originalCallback;
 
     if (debounceDelay > 0) callback = debounce(originalCallback, debounceDelay);
@@ -119,7 +118,7 @@ export default class BaseStore {
     return this.promiseProxy;
   }
 
-  get p () {
+  get p() {
     return this.promise;
   }
 
@@ -194,7 +193,6 @@ export default class BaseStore {
 
           for (const f of runnableFunctions) {
             const result = f.callback.apply(f.context, args)
-
             if (isNotUndefined(result)) {
               if (result === false) {
                 return;
@@ -204,6 +202,7 @@ export default class BaseStore {
               }
             }
           }
+
         } else {
           // console.warn(`message event ${event} is not exist.`)
         }
@@ -226,7 +225,7 @@ export default class BaseStore {
         const runnableFunctions = list.filter(f => f.originalCallback.source === source)
 
         runnableFunctions.forEach(f => {
-            f.callback.apply(f.context, args)
+          f.callback.apply(f.context, args)
         });
       } else {
         console.warn(event, ' is not valid event');
@@ -235,7 +234,6 @@ export default class BaseStore {
   }
 
   emit(event, ...args) {
-
     if (isFunction(event)) {
       event(...args);
     } else if (isArray(event)) {

@@ -1,5 +1,6 @@
-import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { SUBSCRIBE_SELF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { createComponent } from "el/sapa/functions/jsx";
 
 
 export default class EmbedColorPicker extends EditorElement {
@@ -13,13 +14,13 @@ export default class EmbedColorPicker extends EditorElement {
     template () {
       return /*html*/`
         <div class='embed-color-picker'>
-          <object refClass="ColorPickerEditor" 
-            ref='$colorpicker' 
-            key="colorpicker" 
-            value="${this.state.value}" 
-            onchange='localChangeColor' 
-            onchangeend='localLastUpdate' 
-          />        
+          ${createComponent("ColorPickerEditor" , {
+            ref: '$colorpicker',
+            key: "colorpicker",
+            value: this.state.value,
+            onchange: 'localChangeColor',
+            onchangeend: 'localLastUpdate' 
+          })}
         </div>
       `
     }

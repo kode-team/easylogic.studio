@@ -4,6 +4,7 @@ import { LOAD, CLICK, BIND, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/
 import icon, { iconUse } from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 import { Length } from "el/editor/unit/Length";
+import { createComponent } from "el/sapa/functions/jsx";
 
 
 const image_size = [
@@ -38,7 +39,15 @@ export default class ImageProperty extends BaseProperty {
         <button type="button" ref='$resize'>${iconUse("size")}</button>
       </div>
       <div>
-        <object refClass="SelectEditor"  ref='$select' label="${this.$i18n('image.property.size')}" key='size' value='' options='${image_size.join(',')}' onchange='changeImageSize' />
+        ${createComponent("SelectEditor", {
+          ref: '$select',
+          label: this.$i18n('image.property.size'),
+          key: 'size',
+          value: '',
+          options: image_size,
+          onchange: 'changeImageSize'
+        })}
+
       </div>
     `
   }
@@ -75,11 +84,12 @@ export default class ImageProperty extends BaseProperty {
     var current = this.$selection.current || {};
 
     var src = current.src || ''
-    return /*html*/`<object refClass="ImageSelectEditor" 
-              ref='$1' 
-              key='src' 
-              value="${src}" 
-              onchange="changeSelect" />`;
+    return createComponent("ImageSelectEditor" , {
+      ref: '$1',
+      key: 'src',
+      value: src,
+      onchange: "changeSelect"
+    })
   }
 
   [SUBSCRIBE_SELF('changeSelect')] (key, value, info) {

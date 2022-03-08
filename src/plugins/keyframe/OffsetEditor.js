@@ -6,6 +6,7 @@ import Dom from "el/sapa/functions/Dom";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { isUndefined } from "el/sapa/functions/func";
 import { END, MOVE } from "el/editor/types/event";
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class OffsetEditor extends EditorElement {
 
@@ -41,16 +42,16 @@ export default class OffsetEditor extends EditorElement {
         <div class='title'>
           <label>Offset</label>
           <div class='tools'>
-            <object refClass="InputRangeEditor" 
-              key='offset' 
-              min='0' 
-              max='100' 
-              step="0.01" 
-              value="${Length.percent(0)}" 
-              ref='$offsetInput' 
-              units="%" 
-              onchange='changeRangeEditor' 
-            />
+            ${createComponent("InputRangeEditor", { 
+              key: 'offset',
+              min: 0, 
+              max: 100, 
+              step: 0.01,
+              value: Length.percent(0),
+              ref: '$offsetInput',
+              units: "%",
+              onchange: 'changeRangeEditor' 
+            })}
           </div>
         </div>
       </div>
@@ -67,7 +68,11 @@ export default class OffsetEditor extends EditorElement {
   }
 
   templateForProperty() {
-    return /*html*/`<object refClass="CSSPropertyEditor" ref='$offsetPropertyEditor' hide-refresh="true" onchange='changeCSSPropertyEditor' />`
+    return createComponent("CSSPropertyEditor", {
+      ref: '$offsetPropertyEditor',
+      'hide-refresh': true, 
+      onchange: 'changeCSSPropertyEditor'
+    })
   }  
 
   templateForOffset () {

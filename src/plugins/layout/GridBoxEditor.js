@@ -5,6 +5,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { variable } from 'el/sapa/functions/registElement';
 import './GridBoxEditor.scss';
 import { clone } from 'el/sapa/functions/func';
+import { createComponent } from "el/sapa/functions/jsx";
 
 
 const REG_CSS_UNIT = /(auto)|(repeat\([^\)]*\))|(([\d.]+)(px|pt|fr|r?em|deg|vh|vw|%))/gi;
@@ -77,31 +78,34 @@ export default class GridBoxEditor extends EditorElement {
         return /*html*/`
             <div class='item' data-repeat-type='${it.type}' data-index='${index}' >
                 <div class='repeat'>
-                    <object refClass="SelectEditor" 
-                        ref='$${index}-type' 
-                        options="${this.getLayoutItemOptions()}" 
-                        key="type" 
-                        value="${it.type || 'auto'}" 
-                        params="${index}" 
-                        onchange="changeKeyValue" />
+                    ${createComponent("SelectEditor", { 
+                        ref: '$${index}-type',
+                        options: this.getLayoutItemOptions(),
+                        key: "type",
+                        value: it.type || 'auto',
+                        params: index,
+                        onchange: "changeKeyValue"
+                    })}
                 </div>
                 <div class='count'>
-                    <object refClass="NumberInputEditor" 
-                        ref='$${index}-count' 
-                        key="count" 
-                        value="${it.count}" 
-                        params="${index}" 
-                        max='1000'
-                        onchange="changeKeyValue" />
+                    ${createComponent("NumberInputEditor" , {
+                        ref: '$${index}-count',
+                        key: "count",
+                        value: it.count,
+                        params: index,
+                        max: 1000,
+                        onchange: "changeKeyValue"
+                    })}
                 </div>                
                 <div class='value'>
-                    <object refClass="InputRangeEditor" 
-                        ref='$${index}-value' 
-                        key="value" 
-                        value="${it.value}" 
-                        params="${index}" 
-                        units='auto,fr,px,em,%'
-                        onchange="changeKeyValue" />
+                    ${createComponent("InputRangeEditor", { 
+                        ref: '$${index}-value',
+                        key :"value",
+                        value: it.value,
+                        params: index,
+                        units: ['auto','fr','px','em','%'],
+                        onchange: "changeKeyValue"
+                    })}
                 </div>
                 <div class='tools'>
                     <button type="button" class='copy'>${iconUse("copy")}</button>                

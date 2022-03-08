@@ -1,9 +1,9 @@
 
 import { IF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF} from "el/sapa/Event";
-import { variable } from 'el/sapa/functions/registElement';
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './LayoutProperty.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 
 
 export default class LayoutProperty extends BaseProperty {
@@ -33,17 +33,14 @@ export default class LayoutProperty extends BaseProperty {
 
     if (!current) return '';
 
-    return /*html*/`
-      <object refClass="SelectIconEditor" ${variable({
+    return createComponent("SelectIconEditor" ,{
         ref: '$layout',
         key: 'layout',
         value: current.layout,
         options: ['default', 'flex', 'grid'],
         icons: ['layout_default','layout_flex','layout_grid'],
         onchange: "changeLayoutType"
-      })}
-      />
-    `
+      })
   }  
 
   [LOAD('$layoutProperty')] () {
@@ -52,7 +49,7 @@ export default class LayoutProperty extends BaseProperty {
       <div class='layout-list' ref='$layoutList'>
         <div data-value='default' class='${current.layout === 'default' ? 'selected': ''}'></div>
         <div data-value='flex' class='${current.layout === 'flex' ? 'selected': ''}'>
-          <object refClass="FlexLayoutEditor" ${variable({
+          ${createComponent("FlexLayoutEditor", {
             ref: '$flex',
             key: 'flex-layout',
             value: {
@@ -64,10 +61,15 @@ export default class LayoutProperty extends BaseProperty {
               gap: current.gap
             },
             onchange: 'changeLayoutInfo'
-          })}  />
+          })}
         </div>
         <div data-value='grid' class='${current.layout === 'grid' ? 'selected': ''}'>
-          <object refClass="GridLayoutEditor" ref='$grid' key='grid-layout' value="${current['grid-layout'] || ''}" onchange='changeLayoutInfo' />
+          ${createComponent("GridLayoutEditor", {
+            ref: '$grid',
+            key: 'grid-layout',
+            value: current['grid-layout'] || '',
+            onchange: 'changeLayoutInfo'
+          })}
         </div>
       </div>
     `

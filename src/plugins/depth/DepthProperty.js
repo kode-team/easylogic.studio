@@ -3,6 +3,7 @@ import OrderFirst from "el/editor/ui/menu-items/OrderFirst";
 import OrderLast from "el/editor/ui/menu-items/OrderLast";
 import OrderTop from "el/editor/ui/menu-items/OrderTop";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { createComponent } from "el/sapa/functions/jsx";
 
 import './DepthProperty.scss';
 
@@ -30,10 +31,10 @@ export default class DepthProperty extends BaseProperty {
   getBody() {
     return /*html*/`
       <div class="elf--depth-item">
-        <object refClass="OrderTop" />
-        <object refClass="OrderDown" />
-        <object refClass="OrderFirst" />
-        <object refClass="OrderLast" />        
+        ${createComponent("OrderTop")}
+        ${createComponent("OrderDown")}
+        ${createComponent("OrderFirst")}
+        ${createComponent("OrderLast")}
       </div>
     `;
   }

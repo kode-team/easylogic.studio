@@ -1,9 +1,9 @@
 import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { isFunction, isString } from "el/sapa/functions/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
-import { variable } from "el/sapa/functions/registElement";
 
 import './ComponentProperty.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class ComponentProperty extends BaseProperty {
 
@@ -75,9 +75,11 @@ export default class ComponentProperty extends BaseProperty {
       it.defaultValue = defaultValue;
     })
 
-    return /*html*/`
-      <object refClass="ComponentEditor" ref="$comp" inspector=${variable(inspector)} onchange="changeComponentProperty" />
-    `
+    return createComponent("ComponentEditor", {
+      ref: "$comp",
+      inspector,
+      onchange: "changeComponentProperty"
+    });
   }
 
   [SUBSCRIBE_SELF('changeComponentProperty')] (key, value) {

@@ -3,6 +3,7 @@ import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { DirectionLength } from "el/editor/unit/DirectionLength";
 import './DirectionEditor.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 const typeList = [
   { key: "top", title: "Top" },
   { key: "right", title: "Right" },
@@ -59,7 +60,12 @@ export default class DirectionEditor extends EditorElement {
           </button>
         </div>
         <div class="radius-value">
-          <object refClass="RangeEditor"  ref='$all' key='all' value="${direction}" onchange='changeBorderRadius' />
+          ${createComponent("RangeEditor", {
+            ref: '$all',
+            key: 'all',
+            value: direction,
+            onchange: 'changeBorderRadius'
+          })}
         </div>
       </div>
       <div
@@ -72,7 +78,13 @@ export default class DirectionEditor extends EditorElement {
             var value = this.state[it.key]
             return /*html*/`
               <div>
-                  <object refClass="RangeEditor"  ref='$${it.key}' label='${it.title}' key='${it.key}' value="${value}" onchange='changeBorderRadius' />
+                  ${createComponent("RangeEditor", {
+                    ref: `$${it.key}`,
+                    label: it.title,
+                    key: it.key, 
+                    value, 
+                    onchange: 'changeBorderRadius'
+                  })}
               </div>  
             `;
           }).join('')}

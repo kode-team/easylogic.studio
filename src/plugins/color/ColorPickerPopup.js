@@ -3,6 +3,7 @@ import { LOAD, CLICK, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import './ColorPickerPopup.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 export default class ColorPickerPopup extends BasePopup {
 
   getTitle() {
@@ -43,13 +44,12 @@ export default class ColorPickerPopup extends BasePopup {
     return /*html*/`
     <div>
       <div class='box'>
-        <object 
-          refClass="EmbedColorPicker" 
-          ref='$color' 
-          value='${this.state.color}' 
-          onchange=${this.subscribe((color) => this.updateData({ color }))} 
-          onchangeend=${this.subscribe((color) => this.updateEndData({ color }))} />
-      </div>
+        ${createComponent("EmbedColorPicker" , {
+          ref: '$color', 
+          value: this.state.color,
+          onchange: (color) => this.updateData({ color }),
+          onchangeend: (color) => this.updateEndData({ color })
+        })}
     </div>
   `;
   }

@@ -2,6 +2,7 @@ import { INPUT, SUBSCRIBE } from "el/sapa/Event";
 import BasePopup from "el/editor/ui/popup/BasePopup";
 
 import './KeyframePopup.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class KeyframePopup extends BasePopup {
 
@@ -34,7 +35,7 @@ export default class KeyframePopup extends BasePopup {
   templateForOffset () {
     return /*html*/`
       <div>
-        <object refClass="OffsetEditor" ref='$offsetEditor' />
+        ${createComponent("OffsetEditor",  { ref: '$offsetEditor' })}
       </div>
     `
   }

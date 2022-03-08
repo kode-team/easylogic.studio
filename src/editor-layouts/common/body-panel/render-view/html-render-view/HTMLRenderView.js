@@ -2,7 +2,7 @@ import { vec3 } from "gl-matrix";
 
 import { BIND, POINTERSTART, IF, KEYUP, DOUBLECLICK, FOCUSOUT, SUBSCRIBE, CONFIG, DEBOUNCE, FRAME } from "el/sapa/Event";
 import Dom from "el/sapa/functions/Dom";
-import { isFunction } from "el/sapa/functions/func";
+import { clone, isFunction } from "el/sapa/functions/func";
 import { KEY_CODE } from "el/editor/types/key";
 import { END, FIRSTMOVE, MOVE } from "el/editor/types/event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
@@ -337,8 +337,6 @@ export default class HTMLRenderView extends EditorElement {
             return;
         }
 
-
-
         let isInSelectedArea = this.$selection.hasPoint(this.initMousePoint)
         const $target = Dom.create(e.target);
 
@@ -415,16 +413,18 @@ export default class HTMLRenderView extends EditorElement {
     initializeDragSelection() {
         this.$selection.reselect();
         this.$snapManager.clear();
+    
+        this.emit('startGhostToolView');
 
         this.emit('refreshSelectionTool', true);
     }
 
     calculateFirstMovedElement () {
         this.emit('hideSelectionToolView');
+        this.emit('moveFirstGhostToolView');              
     }
 
     calculateMovedElement() {
-
         if (this.$config.get('set.dragarea.mode')) {
             this.emit('moveDragAreaView');            
             return;    
@@ -432,6 +432,7 @@ export default class HTMLRenderView extends EditorElement {
 
         // layout item 은 움직이지 않고 layout 이 좌표를 그리도록 한다. 
         if (this.$selection.isLayoutItem) {
+            this.emit('moveGhostToolView');            
             return;
         }
 
@@ -444,7 +445,7 @@ export default class HTMLRenderView extends EditorElement {
         // 최종 위치에서 ArtBoard 변경하기 
         // 마우스 위치에 따라 root 를 어디로 할지 정의 해야함 
         // 레이아웃도 있기 때문에 구조를 다시 맞춰야 함 . 
-        if (this.$selection.changeArtBoard()) {
+        if (this.$selection.changeInLayoutArea(this.$viewport.applyVertexInverse(targetMousePoint))) {
             this.initMousePoint = targetMousePoint;
             this.$selection.reselect();
             this.$snapManager.clear();
@@ -518,6 +519,7 @@ export default class HTMLRenderView extends EditorElement {
         const targetMousePoint = this.$viewport.getWorldPosition();
         const newDist = vec3.dist(targetMousePoint, this.initMousePoint);
         this.$config.init('set.move.control.point', false);
+        this.emit('endGhostToolView');
 
         if (this.$config.get('set.dragarea.mode')) {
             this.emit('endDragAreaView');
@@ -622,9 +624,20 @@ export default class HTMLRenderView extends EditorElement {
         })
 
         var list = [...new Set(selectionList)];
-        list.forEach(it => {
-            this.refreshElementBoundSize(it);
-        })
+
+        if (list.length) {
+            list.forEach(it => {
+                this.refreshElementBoundSize(it);
+            })
+        } else {
+            // FIXME: selection 이 없는 경우 
+            // FIXME: 모든 요소에 대해 bounding size 를 다시 맞추기 때문에 
+            // FIXME: 성능상의 문제가 될수도 있음. 
+            this.$selection.currentProject.artboards.forEach(it => {
+                this.refreshElementBoundSize(it);
+            });
+        }
+
     }
 
 

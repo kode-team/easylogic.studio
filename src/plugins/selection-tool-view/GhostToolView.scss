@@ -1,0 +1,46 @@
+
+.elf--ghost-tool-view {
+    pointer-events:none;
+    position:absolute;
+    left:0px;
+    top:0px;
+    right:0px;
+    bottom:0px;
+    // background-color: yellow;
+
+    svg {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      width: 100%;
+      height: 100%;
+
+      path {
+        fill: transparent;
+        stroke: var(--elf--selected-color);
+        stroke-width: 2;
+
+        &.target {
+          stroke: green;
+        }
+
+        &.target-rect {
+          stroke: rgb(4, 48, 4);
+        }
+
+        &.target-parent {
+          stroke: purple;
+        }
+
+        &.container {
+          stroke: red;
+        }
+
+        &.flex-item {
+          stroke:transparent;
+          fill: rgba(255, 0, 0, 0.5);
+        }
+      }
+    } 
+  }
+  

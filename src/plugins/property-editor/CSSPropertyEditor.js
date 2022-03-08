@@ -5,6 +5,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './CSSPropertyEditor.scss';
 import { variable } from 'el/sapa/functions/registElement';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class CSSPropertyEditor extends EditorElement {
 
@@ -123,12 +124,12 @@ export default class CSSPropertyEditor extends EditorElement {
   makeCustomePropertyEditor (property, index) {
     return /*html*/`
       <div class='property-editor'>
-        <${property.editor} 
-          onchange="changeSelect"
-          ref="$customProperty${index}"
-          key="${property.key}"
-          value="${property.value}"
-        />
+        ${createComponent(property.editor, {
+          onchange: "changeSelect",
+          ref: `$customProperty${index}`,
+          key: property.key,
+          value: property.value
+        })}
       </div>
     `
   }
@@ -138,7 +139,13 @@ export default class CSSPropertyEditor extends EditorElement {
     if (property.key === 'background-image') {
       return /*html*/`
         <div class='property-editor'>
-          <object refClass="BackgroundImageEditor" ref='$backgroundImage${index}' key="${property.key}" hide-title="${this.state.hideTitle}" value="${property.value}" onChange="changeKeyValue" />
+          ${createComponent("BackgroundImageEditor", {
+            ref: `$backgroundImage${index}`, 
+            key: property.key, 
+            'hide-title': this.state.hideTitle, 
+            value: property.value,
+            onchange: "changeKeyValue"
+          })}
         </div>
       `
     } else if (property.key === 'filter') {

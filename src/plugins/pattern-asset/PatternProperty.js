@@ -8,6 +8,7 @@ import { iconUse } from "el/editor/icon/icon";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import "./PatternProperty.scss";
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class PatternProperty extends BaseProperty {
 
@@ -52,7 +53,12 @@ export default class PatternProperty extends BaseProperty {
     var current = this.$selection.current || {} 
     var value = current.pattern;
 
-    return /*html*/`<object refClass="PatternEditor" ref='$patternEditor' value='${value}' hide-label='true' onchange='changePatternEditor' />`
+    return createComponent("PatternEditor", {
+      ref: '$patternEditor',
+      value,
+      'hide-label': true,
+      onchange: 'changePatternEditor'
+    })
   }
 
   [SUBSCRIBE_SELF('changePatternEditor')] (key, pattern) {

@@ -4,7 +4,7 @@ import { CSS_TO_STRING, STRING_TO_CSS } from "el/utils/func";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './GridLayoutItemProperty.scss';
-import { variable } from 'el/sapa/functions/registElement';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class GridLayoutItemProperty extends BaseProperty {
 
@@ -14,9 +14,9 @@ export default class GridLayoutItemProperty extends BaseProperty {
 
 
   getLayoutOptions () {
-    return variable(['none', 'value'].map(it => {
+    return ['none', 'value'].map(it => {
         return {value: it, text: this.$i18n(`grid.layout.item.property.${it}`) }
-    }));
+    });
   }
 
   getClassName() {
@@ -45,13 +45,14 @@ export default class GridLayoutItemProperty extends BaseProperty {
 
     return /*html*/`
       <div class='layout-select'>
-        <object refClass="SelectIconEditor" 
-        ref='$layout' 
-        key='layout' 
-        icon="true" 
-        value="${valueType}"
-        options="${this.getLayoutOptions()}"  
-        onchange="changeLayoutType" />
+        ${createComponent("SelectIconEditor" , {
+          ref: '$layout', 
+          key: 'layout',
+          icon: true,
+          value: valueType,
+          options: this.getLayoutOptions(),
+          onchange: "changeLayoutType"
+        })}
       </div>
       <div class='layout-list' ref='$layoutList' data-selected-value='${valueType}'>
         <div data-value='none'></div>
@@ -64,19 +65,46 @@ export default class GridLayoutItemProperty extends BaseProperty {
           <div class='value-item'>
             <label>${this.$i18n('grid.layout.item.property.column')}</label>
             <div>
-              <object refClass="NumberInputEditor"  ref='$columnStart' key="grid-column-start" value="${obj['grid-column-start'] || '0'}" min='0' onchange='changeGridItem' />
+              ${createComponent("NumberInputEditor", {
+                ref:'$columnStart',
+                key: "grid-column-start",
+                value: obj['grid-column-start'] || 0,
+                min: 0,
+                onchange: 'changeGridItem'
+              })}
             </div>
             <div>
-              <object refClass="NumberInputEditor"  ref='$columnEnd' key="grid-column-end" value="${obj['grid-column-end'] || '0'}" min='0' onchange='changeGridItem' />
+              ${createComponent("NumberInputEditor", {
+                ref: '$columnEnd',
+                key: "grid-column-end",
+                value: obj['grid-column-end'] || 0,
+                min: 0,
+                onchange: 'changeGridItem'
+              })}
+              
             </div>            
           </div>
           <div class='value-item'>
             <label>${this.$i18n('grid.layout.item.property.row')}</label>
             <div>
-              <object refClass="NumberInputEditor"  ref='$rowStart' key="grid-row-start" value="${obj['grid-row-start'] || '0'}" min='0' onchange='changeGridItem' />
+              ${createComponent("NumberInputEditor", {
+                ref: '$rowStart',
+                key: "grid-row-start",
+                value: obj['grid-row-start'] || 0,
+                min: 0, 
+                onchange: 'changeGridItem'
+              })}
+
             </div>
             <div>
-              <object refClass="NumberInputEditor"  ref='$rowEnd' key="grid-row-end" value="${obj['grid-row-end'] || '0'}" min='0' onchange='changeGridItem' />
+              ${createComponent("NumberInputEditor", {
+                ref: '$rowEnd',
+                key: "grid-row-end",
+                value: obj['grid-row-end'] || 0,
+                min: 0, 
+                onchange: 'changeGridItem'
+              })}
+
             </div>            
           </div>          
         </div>

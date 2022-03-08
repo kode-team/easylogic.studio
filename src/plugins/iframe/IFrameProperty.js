@@ -1,6 +1,7 @@
 
 import { DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import BaseProperty from "el/editor/ui/property/BaseProperty";
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class IFrameProperty extends BaseProperty {
 
@@ -15,7 +16,12 @@ export default class IFrameProperty extends BaseProperty {
   getBody() {
     return /*html*/`
       <div ref='$body' style='padding-top: 3px;'>
-        <object refClass="TextEditor" ref="$input" label="URL" key="url" onchange="changeText" />
+        ${createComponent("TextEditor", {
+          ref: "$input",
+          label: "URL",
+          key: "url",
+          onchange: "changeText"
+        })}
       </div>
     `;
   }  
