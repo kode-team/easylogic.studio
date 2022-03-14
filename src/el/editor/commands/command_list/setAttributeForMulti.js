@@ -41,7 +41,7 @@ export default {
             }
 
             const parent = item.parent;
-            if (item.isLayoutItem() || parent.is('boolean-path')) {
+            if (/*item.isLayoutItem() || */parent.is('boolean-path')) {
                 // 부모가 project 아닐 때만 업데이트 메세지를 날린다. 
                 const parent = editor.get(message.parentId)
                 if (message.parentId && parent?.isNot("project") && parent.children.length >= 1) {

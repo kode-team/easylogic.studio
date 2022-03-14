@@ -192,6 +192,7 @@ export default class BaseStore {
             .filter(f => f.enableAllTrigger || f.originalCallback.source !== source)
 
           for (const f of runnableFunctions) {
+            // console.log(event, f.context, ...args);
             const result = f.callback.apply(f.context, args)
             if (isNotUndefined(result)) {
               if (result === false) {

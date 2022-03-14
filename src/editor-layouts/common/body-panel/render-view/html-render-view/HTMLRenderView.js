@@ -117,7 +117,7 @@ export default class HTMLRenderView extends EditorElement {
         this.refreshAllElementBoundSize();
     }
 
-    [SUBSCRIBE('refreshElementBoundSize') + DEBOUNCE(100) + FRAME] (parentObj) {
+    [SUBSCRIBE('refreshElementBoundSize') + FRAME] (parentObj) {
         this.refreshElementBoundSize(parentObj);
     }    
 
@@ -430,11 +430,12 @@ export default class HTMLRenderView extends EditorElement {
             return;    
         }
 
+        this.emit('moveGhostToolView');          
+
         // layout item 은 움직이지 않고 layout 이 좌표를 그리도록 한다. 
         if (this.$selection.isLayoutItem) {
-            this.emit('moveGhostToolView');            
             return;
-        }
+        }          
 
         const targetMousePoint = this.$viewport.getWorldPosition();
 
@@ -455,14 +456,13 @@ export default class HTMLRenderView extends EditorElement {
 
             // ArtBoard 변경 이후에 LayerTreeView 업데이트
             this.emit('refreshLayerTreeView')
-            this.refreshAllElementBoundSize();
+            // this.refreshAllElementBoundSize();
         }
 
         this.emit('setAttributeForMulti', this.$selection.packByValue({
             'x': (item) => item.x , 
             'y': (item) => item.y ,
         }));
-        // this.emit('refreshSelectionTool', true);
 
     }
 
@@ -647,7 +647,7 @@ export default class HTMLRenderView extends EditorElement {
                 // 크기 변경이 없으면 bound size 를 수정하지 않는다. 
                 // 다른 레이아웃으로 들어가게 되면 크기의 변경이 있을 수도 있다. 
                 // 그 때는 레이아웃 기준으로 bound size 를 다시 잡을거라 괜찮다. 
-                if (parentObj.hasChangedField('width', 'height', 'border') === false) {
+                if (parentObj.hasChangedField('width', 'height', 'border', 'padding-top', 'padding-left', 'padding-right', 'padding-bottom') === false) {
                     return;
                 }
 
@@ -672,6 +672,8 @@ export default class HTMLRenderView extends EditorElement {
                 'width', 
                 'height', 
             )
+
+            console.log(parentObj.id, parentObj.itemType, hasChangedDimension);
             
             parentObj.layers.forEach(it => {
                 var $el = this.getElement(it.id);

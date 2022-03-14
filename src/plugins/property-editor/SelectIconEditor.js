@@ -34,16 +34,18 @@ export default class SelectIconEditor extends EditorElement {
             options, 
             icons, 
             colors,
-            value
+            value,
+            height: this.props.height
         }
     }
 
     template() {
-        var { label, compact } = this.state; 
+        var { label, compact, height } = this.state; 
         var hasLabel = !!label ? 'has-label' : ''
         var hasCompact = !!compact ? 'compact': '';
+        var heightVar = height ? `--elf--input-height: ${height}px;` : '';
         return /*html*/`
-            <div class='elf--select-icon-editor ${hasLabel}'>
+            <div class='elf--select-icon-editor ${hasLabel}' style="${heightVar}">
                 ${label ? `<label title="${label}">${label}</label>` : '' }
                 <div class='items ${hasCompact}' ref='$options'></div>
             </div>

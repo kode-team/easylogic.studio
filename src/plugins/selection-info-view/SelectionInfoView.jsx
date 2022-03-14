@@ -143,7 +143,12 @@ export default class SelectionInfoView extends EditorElement {
 
     [LOAD('$el') + DOMDIFF] () {
         return this.$selection.currentProject?.artboards.map(it => {
-            return { title: it.name, id: it.id, pointers: this.$viewport.applyVerties(it.verties) }
+            return { 
+                title: it.name, 
+                id: it.id, 
+                layout: it.layout,
+                pointers: this.$viewport.applyVerties(it.verties) 
+            }
         }).map(it => this.makeArtboardTitleArea(it))
 
     }
@@ -157,6 +162,7 @@ export default class SelectionInfoView extends EditorElement {
             <div 
                 class="artboard-title is-not-drag-area" 
                 data-artboard-title-id={artboardItem.id} 
+                data-layout={artboardItem.layout}
                 style={{
                     "transform-origin": "0% 0%",
                     "transform": `translate3d( calc(${newPointer[0]}px), calc(${newPointer[1]}px), 0px) rotateZ(${angle}deg)`  

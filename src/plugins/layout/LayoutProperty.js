@@ -36,6 +36,7 @@ export default class LayoutProperty extends BaseProperty {
     return createComponent("SelectIconEditor" ,{
         ref: '$layout',
         key: 'layout',
+        height: 24,
         value: current.layout,
         options: ['default', 'flex', 'grid'],
         icons: ['layout_default','layout_flex','layout_grid'],

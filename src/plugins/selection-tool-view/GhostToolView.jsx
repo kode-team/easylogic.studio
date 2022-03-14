@@ -1,10 +1,9 @@
-import { FlexDirection, Layout } from "el/editor/types/model";
+import { AlignContent, FlexDirection, JustifyContent, Layout } from "el/editor/types/model";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { DOMDIFF, LOAD, SUBSCRIBE } from "el/sapa/Event";
 import { clone } from "el/sapa/functions/func";
-import { rectToVerties, toRectVerties, vertiesToRectangle } from "el/utils/collision";
-import { vertiesMap } from "el/utils/math";
-import { mat4, vec3 } from "gl-matrix";
+import { toRectVerties, vertiesToRectangle } from "el/utils/collision";
+import { vec3 } from "gl-matrix";
 
 import './GhostToolView.scss';
 
@@ -25,8 +24,10 @@ export default class GhostToolView extends EditorElement {
 
     [SUBSCRIBE('startGhostToolView')] (verties) {
 
+
         const screenVerties = this.$selection.targetVerties;
 
+        this.isLayoutItem = this.$selection.isLayoutItem;        
         this.verties = clone(screenVerties);
         this.ghostVerties = clone(screenVerties);
         this.ghostScreenVerties = this.$viewport.applyVerties(this.ghostVerties);
@@ -100,7 +101,7 @@ export default class GhostToolView extends EditorElement {
         }
 
         return <svg>
-            {this.containerList.map(it => {
+            {this.containerList?.map(it => {
                 it = this.$viewport.applyVerties(it);
                 return <path class="container" d={`
                     M ${it[0][0]} ${it[0][1]}
@@ -120,7 +121,7 @@ export default class GhostToolView extends EditorElement {
         const textX = className === 'flex-item' ? verties[0][0] : verties[0][0];
         const textY = className === 'flex-item' ? verties[2][1] + 10 : verties[0][1] - 10;
 
-        return <>
+        return <g>
             <text x={textX} y={textY} font-size={8}>{data}</text>
             <path class={className} d={`
                 M ${verties[0][0]} ${verties[0][1]}
@@ -129,7 +130,7 @@ export default class GhostToolView extends EditorElement {
                 L ${verties[3][0]} ${verties[3][1]}
                 Z
             `} />
-        </>
+        </g>
     }
 
     renderLayoutFlexRowArea () {
@@ -152,6 +153,44 @@ export default class GhostToolView extends EditorElement {
             ], 'flex-item', 'flex-right');
         }
     }
+
+
+    renderLayoutFlexRowForFirst () {
+        // 레이아웃 container  rect 
+        const rect = vertiesToRectangle(this.targetOriginPosition);
+        const ghostRect = vertiesToRectangle(this.ghostScreenVerties);
+
+
+        let x = rect.x;
+        let y = rect.y;
+
+        switch(this.targetItem['justify-content']) {
+        case JustifyContent.FLEX_START: x = rect.x; break;
+        case JustifyContent.CENTER: 
+        case JustifyContent.SPACE_BETWEEN:
+        case JustifyContent.SPACE_AROUND:
+            x = rect.x + rect.width/2 - ghostRect.width/2; 
+            break;
+        case JustifyContent.FLEX_END: x = rect.x + rect.width - ghostRect.width; break;
+        }
+
+        switch(this.targetItem['align-content']) {
+        case AlignContent.FLEX_START: y = rect.y; break;
+        case AlignContent.CENTER: 
+        case AlignContent.SPACE_BETWEEN:
+        case AlignContent.SPACE_AROUND:
+            y = rect.y + rect.height/2 - ghostRect.height/2; 
+            break;
+        case AlignContent.FLEX_END: y = rect.y + rect.height - ghostRect.height; break;
+        }
+
+        return this.renderPath([
+            [x, y],
+            [x + ghostRect.width, y],
+            [x + ghostRect.width, y + ghostRect.height],
+            [x, y + ghostRect.height]
+        ], 'flex-item', '');
+    }    
 
     renderLayoutFlexColumnArea () {
         const rect = vertiesToRectangle(this.targetOriginPosition);        
@@ -201,6 +240,29 @@ export default class GhostToolView extends EditorElement {
         `} />
     }
 
+
+    renderLayoutItemForFirst () {
+
+        if (this.targetItem.hasChildren() === false) {
+            if (this.targetItem.isLayout(Layout.FLEX)) {
+
+                switch(this.targetItem['flex-direction']) {
+                case FlexDirection.ROW:
+                    return this.renderLayoutFlexRowForFirst();
+                case FlexDirection.COLUMN:
+                    return this.renderLayoutFlexColumnArea();
+                }
+
+            } else if (this.targetItem.isLayout(Layout.GRID)) {
+
+            }
+        }
+
+        return <path class="insert-area" d={`
+
+        `} />
+    }
+
     [LOAD('$view') + DOMDIFF] () {
 
         if (!this.ghostVerties) {
@@ -210,16 +272,18 @@ export default class GhostToolView extends EditorElement {
         return <svg>
 
             {this.targetParent && this.renderPath(this.targetParentPosition, "target-parent")}
-            {this.targetItem && this.renderPath(this.targetOriginPosition, "target")}
-            {this.targetItem && this.renderPath(this.targetOriginPosition, "target-rect")}
+            {this.targetItem && this.renderPath(this.targetOriginPosition, "target", "")}
+            {this.targetItem && this.renderPath(this.targetOriginPosition, "target-rect", "")}
             {this.targetItem && this.renderLayoutItemInsertArea()}
+            {this.targetItem && this.renderLayoutItemForFirst()}
 
 
-            {this.renderPath(this.ghostScreenVerties, "ghost")}
+            {this.isLayoutItem && this.renderPath(this.ghostScreenVerties, "ghost")}
         </svg>
     }
 
     initializeGhostView() {
+        this.isLayoutItem = false;
         this.ghostVerties = null;
         this.ghostScreenVerties = null;
 

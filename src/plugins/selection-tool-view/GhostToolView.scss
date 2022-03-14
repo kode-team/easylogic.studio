@@ -25,7 +25,7 @@
         }
 
         &.target-rect {
-          stroke: rgb(4, 48, 4);
+          stroke: rgb(0, 255, 0);
         }
 
         &.target-parent {
@@ -38,7 +38,8 @@
 
         &.flex-item {
           stroke:transparent;
-          fill: rgba(255, 0, 0, 0.5);
+          fill: rgba(255, 0, 0, 0.3);
+          z-index: -1000;
         }
       }
     } 

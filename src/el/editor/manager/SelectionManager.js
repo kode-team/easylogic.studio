@@ -412,8 +412,42 @@ export class SelectionManager {
 
     let checkedParentChange = false
 
-    const filteredList = this.filteredLayers;
+    this.each(instance => {
 
+      if (instance.is('artboard') === false) {
+
+        // FIXME: 내가 속한 영역이 객체의 instance 의 artboard 안에 있으면 artboard 를 바꾸지 않는다. 
+        if (instance.artboard) {
+          const localArtboardVerties = instance.artboard.originVerties;
+
+          const isInArtboard = polyPoint(localArtboardVerties, this.pos[0], this.pos[1]);
+
+          // 내가 여전히 나의 artboard 에 속해 있으면 변경하지 않는다. 
+          if (isInArtboard) {
+            return false;
+          }
+        }
+
+  
+        const selectedArtBoard = this.cachedArtBoardVerties.find(artboard => {
+          return polyPoint(artboard.matrix.originVerties, this.pos[0], this.pos[1])
+        })
+  
+        if (selectedArtBoard) {
+          // 부모 artboard 가 다르면  artboard 를 교체한다.            
+          if (selectedArtBoard.item !== instance.artboard && selectedArtBoard.item.hasLayout() === false) {
+            selectedArtBoard.item.appendChild(instance);
+            checkedParentChange = true;
+          }
+        } else {
+          if (instance.artboard) {
+            this.currentProject.appendChild(instance);       
+            checkedParentChange = true;
+          }
+
+        }
+      }
+    })
 
     return checkedParentChange;
   }

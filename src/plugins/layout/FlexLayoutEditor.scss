@@ -78,16 +78,152 @@
   .flex-group {
     width: 100%;
     height: 100%;
-    border: 1px solid var(--elf--border-color);
+    border: 1px solid var(--elf--selected-color-2);
     display: flex;
-    gap: 2px;
+    gap: var(--flex-group-gap, 2px);
     position: absolute;    
+
+    &::before {
+      content: "";
+      display: inline-block;
+      width: calc(100% - calc(var(--flex-group-padding, 0) * 2));
+      height: calc(100% - calc(var(--flex-group-padding, 0) * 2));
+      border: 1px solid var(--elf--selected-color-2);
+      position: absolute;
+    }
+  }
+
+  .flex-group-tool {
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--elf--selected-color-2);
+    display: flex;
+    gap: var(--flex-group-gap, 2px);
+    position: absolute;    
+
+    .tool-area {
+      background-color: rgba(255, 255, 0, 0.5);
+      display: inline-block;
+      width: calc(100% - calc(var(--flex-group-padding, 0) * 2));
+      height: calc(100% - calc(var(--flex-group-padding, 0) * 2));
+      border: 1px solid var(--elf--selected-color-2);
+      position: absolute;
+
+      &[data-direction="row"] {
+
+        .tool-area-item {
+
+          &[data-justify-content="flex-start"][data-align-content="flex-start"] {
+            left: 0px;
+            top: 0px;
+          }
+
+          &[data-justify-content="center"][data-align-content="flex-start"] {
+            left: 50%;
+            top: 0px;
+            transform: translate(-50%, 0);
+          }          
+
+          &[data-justify-content="flex-end"][data-align-content="flex-start"] {
+            left: 100%;
+            top: 0px;
+            transform: translate(-100%);
+          }
+
+          &[data-justify-content="flex-start"][data-align-content="center"] {
+            left: 0px;
+            top: 50%;
+            transform: translate(0, -50%);
+          }
+
+          &[data-justify-content="center"][data-align-content="center"] {
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+          }          
+
+          &[data-justify-content="flex-end"][data-align-content="center"] {
+            left: 100%;
+            top: 50%;
+            transform: translate(-100%, -50%);
+          }
+
+          &[data-justify-content="flex-start"][data-align-content="flex-end"] {
+            left: 0px;
+            top: 100%;
+            transform: translate(0, -100%);
+          }
+
+          &[data-justify-content="center"][data-align-content="flex-end"] {
+            left: 50%;
+            top: 100%;
+            transform: translate(-50%, -100%);
+          }          
+
+          &[data-justify-content="flex-end"][data-align-content="flex-end"] {
+            left: 100%;
+            top: 100%;
+            transform: translate(-100%, -100%);
+          }          
+        }
+      }
+
+      &[data-justify-content="flex-start"][data-align-content="flex-start"] { .tool-area-item[data-index="1"] { display: none; } }
+      &[data-justify-content="center"][data-align-content="flex-start"] { .tool-area-item[data-index="2"] { display: none; } }
+      &[data-justify-content="flex-end"][data-align-content="flex-start"] { .tool-area-item[data-index="3"] { display: none; } }
+      &[data-justify-content="flex-start"][data-align-content="center"] { .tool-area-item[data-index="4"] { display: none; } }
+      &[data-justify-content="center"][data-align-content="center"] { .tool-area-item[data-index="5"] { display: none; } }
+      &[data-justify-content="flex-end"][data-align-content="center"] { .tool-area-item[data-index="6"] { display: none; } }
+      &[data-justify-content="flex-start"][data-align-content="flex-end"] { .tool-area-item[data-index="7"] { display: none; } }
+      &[data-justify-content="center"][data-align-content="flex-end"] { .tool-area-item[data-index="8"] { display: none; } }
+      &[data-justify-content="flex-end"][data-align-content="flex-end"] { .tool-area-item[data-index="9"] { display: none; } }
+      &[data-justify-content="space-between"],
+      &[data-justify-content="space-around"]{
+        .tool-area-item[data-index="1"] { display: none; }
+        .tool-area-item[data-index="3"] { display: none; }
+        .tool-area-item[data-index="4"] { display: none; }
+        .tool-area-item[data-index="6"] { display: none; }
+        .tool-area-item[data-index="7"] { display: none; }
+        .tool-area-item[data-index="9"] { display: none; }
+
+        &[data-align-content="flex-start"]{
+          .tool-area-item[data-index="2"] { display: none; }
+        }      
+
+        &[data-align-content="center"]{
+          .tool-area-item[data-index="5"] { display: none; }
+        }      
+
+        &[data-align-content="flex-end"]{
+          .tool-area-item[data-index="8"] { display: none; }
+        }      
+  
+      }
+
+
+      .tool-area-item {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        width: 30px;
+        height: 30px;
+        background-color: transparent;
+        transition: all 0.2s linear;
+        cursor: pointer;
+        border: 1px solid black;
+        box-sizing: border-box;
+
+        &:hover {
+          background-color: rgba(75, 75, 255, 0.5);
+        }
+      }
+    }
   }
 
   .flex-group-padding {
     width: 100%;
     height: 100%;
-    border: 1px solid var(--elf--border-color);
+    border: 1px solid var(--elf--selected-color-2);
     display: block;
     position: absolute;
   }  

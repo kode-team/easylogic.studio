@@ -15453,7 +15453,31 @@ class SelectionManager {
   }
   changeInLayoutArea(pointer) {
     let checkedParentChange = false;
-    this.filteredLayers;
+    this.each((instance) => {
+      if (instance.is("artboard") === false) {
+        if (instance.artboard) {
+          const localArtboardVerties = instance.artboard.originVerties;
+          const isInArtboard = polyPoint(localArtboardVerties, this.pos[0], this.pos[1]);
+          if (isInArtboard) {
+            return false;
+          }
+        }
+        const selectedArtBoard = this.cachedArtBoardVerties.find((artboard2) => {
+          return polyPoint(artboard2.matrix.originVerties, this.pos[0], this.pos[1]);
+        });
+        if (selectedArtBoard) {
+          if (selectedArtBoard.item !== instance.artboard && selectedArtBoard.item.hasLayout() === false) {
+            selectedArtBoard.item.appendChild(instance);
+            checkedParentChange = true;
+          }
+        } else {
+          if (instance.artboard) {
+            this.currentProject.appendChild(instance);
+            checkedParentChange = true;
+          }
+        }
+      }
+    });
     return checkedParentChange;
   }
   setRectCache() {
@@ -19315,7 +19339,7 @@ var setAttributeForMulti = {
         return;
       }
       const parent = item2.parent;
-      if (item2.isLayoutItem() || parent.is("boolean-path")) {
+      if (parent.is("boolean-path")) {
         const parent2 = editor.get(message.parentId);
         if (message.parentId && (parent2 == null ? void 0 : parent2.isNot("project")) && parent2.children.length >= 1) {
           commandMaker.emit("update", message.parentId, { "changedChildren": true }, context);
@@ -24790,7 +24814,7 @@ class HTMLRenderView extends EditorElement {
   [SUBSCRIBE("refreshAllElementBoundSize")]() {
     this.refreshAllElementBoundSize();
   }
-  [SUBSCRIBE("refreshElementBoundSize") + DEBOUNCE(100) + FRAME](parentObj) {
+  [SUBSCRIBE("refreshElementBoundSize") + FRAME](parentObj) {
     this.refreshElementBoundSize(parentObj);
   }
   [SUBSCRIBE("updateAllCanvas")](parentLayer) {
@@ -24976,8 +25000,8 @@ class HTMLRenderView extends EditorElement {
       this.emit("moveDragAreaView");
       return;
     }
+    this.emit("moveGhostToolView");
     if (this.$selection.isLayoutItem) {
-      this.emit("moveGhostToolView");
       return;
     }
     const targetMousePoint = this.$viewport.getWorldPosition();
@@ -24990,7 +25014,6 @@ class HTMLRenderView extends EditorElement {
       this.clearElementAll();
       this.refreshAllCanvas();
       this.emit("refreshLayerTreeView");
-      this.refreshAllElementBoundSize();
     }
     this.emit("setAttributeForMulti", this.$selection.packByValue({
       "x": (item2) => item2.x,
@@ -25099,7 +25122,7 @@ class HTMLRenderView extends EditorElement {
   refreshElementBoundSize(parentObj) {
     if (parentObj) {
       if (parentObj.hasChildren() === false) {
-        if (parentObj.hasChangedField("width", "height", "border") === false) {
+        if (parentObj.hasChangedField("width", "height", "border", "padding-top", "padding-left", "padding-right", "padding-bottom") === false) {
           return;
         }
         var $el = this.getElement(parentObj.id);
@@ -25111,6 +25134,7 @@ class HTMLRenderView extends EditorElement {
         return;
       }
       const hasChangedDimension = parentObj.changedLayout || parentObj.hasChangedField("children", "box-model", "width", "height");
+      console.log(parentObj.id, parentObj.itemType, hasChangedDimension);
       parentObj.layers.forEach((it) => {
         var $el2 = this.getElement(it.id);
         if ($el2 && (hasChangedDimension || it.isLayoutItem())) {
@@ -38935,7 +38959,7 @@ class LayerTreeProperty extends BaseProperty {
       const path = PathParser.fromSVGString(item2.absolutePath().d);
       return iconUseForPath(path.scaleWith(24, 24).d, { width: 24, height: 24, fill: "currentColor", stroke: "currentColor" });
     }
-    if (item2.hasChildren()) {
+    if (item2.hasLayout() || item2.hasChildren() || item2.is("artboard")) {
       if (item2.isLayout("flex")) {
         return iconUse$1("layout_flex");
       } else if (item2.isLayout("grid")) {
@@ -39241,9 +39265,15 @@ class FlexLayoutEditor extends EditorElement {
   modifyData(key, value) {
     this.parent.trigger(this.props.onchange, key, value);
   }
-  [LOAD("$body")]() {
+  [LOAD("$body") + DOMDIFF]() {
     const current = this.$selection.current;
-    const padding2 = `padding-top:${current["padding-top"]}px;padding-left: ${current["padding-left"]}px;padding-right:${current["padding-right"]}px;padding-bottom: ${current["padding-bottom"]}px;`;
+    if (!current)
+      return "";
+    const realPaddingTop = Math.min(current["padding-top"] || 0, 50);
+    const realPaddingLeft = Math.min(current["padding-left"] || 0, 50);
+    const realPaddingRight = Math.min(current["padding-right"] || 0, 50);
+    const realPaddingBottom = Math.min(current["padding-bottom"] || 0, 50);
+    const padding2 = `padding-top:${realPaddingTop}px;padding-left: ${realPaddingLeft}px;padding-right:${realPaddingRight}px;padding-bottom: ${realPaddingBottom}px;`;
     return `
             <div class='flex-layout-item'>
                 <div class="grid-2">
@@ -39309,10 +39339,16 @@ class FlexLayoutEditor extends EditorElement {
                         <div class="padding-right" style="width: ${current["padding-right"]}px"></div>
                         <div class="padding-bottom" style="height: ${current["padding-bottom"]}px"></div>
                     </div>
-
-
-
-                    <div class="flex-group" style="${padding2};flex-direction: ${this.state["flex-direction"]};flex-wrap: ${this.state["flex-wrap"]};justify-content:${this.state["justify-content"]};align-items: ${this.state["align-items"]};align-content:${this.state["align-content"]};">
+                    <div class="flex-group" style="
+                            --flex-group-gap: ${Math.floor(this.state["gap"] / 10)}px;
+                            --flex-group-padding: ${realPaddingTop}px;
+                            ${padding2};
+                            flex-direction: ${this.state["flex-direction"]};
+                            flex-wrap: ${this.state["flex-wrap"]};
+                            justify-content:${this.state["justify-content"]};
+                            align-items: ${this.state["align-items"]};
+                            align-content:${this.state["align-content"]};
+                    ">
                         ${[1, 2, 3].map((it) => {
       return `
                                 <div class="flex-direction" data-value="${this.state["flex-direction"]}" style="flex-direction: ${this.state["flex-direction"]};align-items: ${this.state["align-items"]};">
@@ -39322,6 +39358,27 @@ class FlexLayoutEditor extends EditorElement {
                                 </div>
                             `;
     }).join("\n")}
+                    </div>
+                    <div class="flex-group-tool"  style="${padding2};">
+                        <div class="tool-area"  
+                            data-direction="${this.state["flex-direction"]}"  
+                            data-justify-content="${this.state["justify-content"]}"
+                            data-align-content="${this.state["align-content"]}"
+                            style="
+                                --flex-group-gap: ${Math.floor(this.state["gap"] / 10)}px;
+                                --flex-group-padding: ${realPaddingTop}px;
+                            "
+                        >
+                            <div class="tool-area-item" data-index="1" data-justify-content="flex-start" data-align-content="flex-start"></div>
+                            <div class="tool-area-item" data-index="2"  data-justify-content="center" data-align-content="flex-start"></div>
+                            <div class="tool-area-item" data-index="3"  data-justify-content="flex-end" data-align-content="flex-start"></div>
+                            <div class="tool-area-item" data-index="4"  data-justify-content="flex-start" data-align-content="center"></div>
+                            <div class="tool-area-item" data-index="5"  data-justify-content="center" data-align-content="center"></div>
+                            <div class="tool-area-item" data-index="6"  data-justify-content="flex-end" data-align-content="center"></div>
+                            <div class="tool-area-item" data-index="7"  data-justify-content="flex-start" data-align-content="flex-end"></div>
+                            <div class="tool-area-item" data-index="8"  data-justify-content="center" data-align-content="flex-end"></div>
+                            <div class="tool-area-item" data-index="9"  data-justify-content="flex-end" data-align-content="flex-end"></div>                            
+                        </div>
                     </div>
                 </div>
             </div>
@@ -39385,12 +39442,29 @@ class FlexLayoutEditor extends EditorElement {
     });
     this.refresh();
   }
-  [CLICK("$wrap")]() {
-    const checked = !this.refs.$wrap.checked();
-    this.setState({
-      "flex-wrap": checked ? "wrap" : "nowrap"
-    }, false);
-    this.modifyData("flex-wrap", checked ? "wrap" : "nowrap");
+  [CLICK("$body .tool-area-item")](e2) {
+    const $target = e2.$dt;
+    if (this.state["justify-content"] === JustifyContent.SPACE_BETWEEN) {
+      const [alignContent] = $target.attrs("data-align-content");
+      this.setState({
+        "align-content": alignContent
+      }, false);
+      this.modifyData("align-content", alignContent);
+    } else if (this.state["justify-content"] === JustifyContent.SPACE_AROUND) {
+      const [alignContent] = $target.attrs("data-align-content");
+      this.setState({
+        "align-content": alignContent
+      }, false);
+      this.modifyData("align-content", alignContent);
+    } else {
+      const [justifyContent, alignContent] = $target.attrs("data-justify-content", "data-align-content");
+      this.setState({
+        "justify-content": justifyContent,
+        "align-content": alignContent
+      }, false);
+      this.modifyData("justify-content", justifyContent);
+      this.modifyData("align-content", alignContent);
+    }
     this.refresh();
   }
 }
@@ -39943,6 +40017,7 @@ class LayoutProperty extends BaseProperty {
     return createComponent("SelectIconEditor", {
       ref: "$layout",
       key: "layout",
+      height: 24,
       value: current.layout,
       options: ["default", "flex", "grid"],
       icons: ["layout_default", "layout_flex", "layout_grid"],
@@ -44829,15 +44904,17 @@ class SelectIconEditor extends EditorElement {
       options: options2,
       icons,
       colors: colors2,
-      value
+      value,
+      height: this.props.height
     };
   }
   template() {
-    var { label, compact } = this.state;
+    var { label, compact, height: height2 } = this.state;
     var hasLabel = !!label ? "has-label" : "";
     var hasCompact = !!compact ? "compact" : "";
+    var heightVar = height2 ? `--elf--input-height: ${height2}px;` : "";
     return `
-            <div class='elf--select-icon-editor ${hasLabel}'>
+            <div class='elf--select-icon-editor ${hasLabel}' style="${heightVar}">
                 ${label ? `<label title="${label}">${label}</label>` : ""}
                 <div class='items ${hasCompact}' ref='$options'></div>
             </div>
@@ -57139,7 +57216,12 @@ class SelectionInfoView extends EditorElement {
   [LOAD("$el") + DOMDIFF]() {
     var _a;
     return (_a = this.$selection.currentProject) == null ? void 0 : _a.artboards.map((it) => {
-      return { title: it.name, id: it.id, pointers: this.$viewport.applyVerties(it.verties) };
+      return {
+        title: it.name,
+        id: it.id,
+        layout: it.layout,
+        pointers: this.$viewport.applyVerties(it.verties)
+      };
     }).map((it) => this.makeArtboardTitleArea(it));
   }
   createSize(pointers, artboardItem) {
@@ -57149,6 +57231,7 @@ class SelectionInfoView extends EditorElement {
     return /* @__PURE__ */ createElementJsx("div", {
       class: "artboard-title is-not-drag-area",
       "data-artboard-title-id": artboardItem.id,
+      "data-layout": artboardItem.layout,
       style: {
         "transform-origin": "0% 0%",
         "transform": `translate3d( calc(${newPointer[0]}px), calc(${newPointer[1]}px), 0px) rotateZ(${angle2}deg)`
@@ -58246,6 +58329,7 @@ class GhostToolView extends EditorElement {
   }
   [SUBSCRIBE("startGhostToolView")](verties) {
     const screenVerties = this.$selection.targetVerties;
+    this.isLayoutItem = this.$selection.isLayoutItem;
     this.verties = clone$1(screenVerties);
     this.ghostVerties = clone$1(screenVerties);
     this.ghostScreenVerties = this.$viewport.applyVerties(this.ghostVerties);
@@ -58294,10 +58378,11 @@ class GhostToolView extends EditorElement {
     this.load("$view");
   }
   [LOAD("$containerView")]() {
+    var _a;
     if (!this.ghostVerties) {
       return /* @__PURE__ */ createElementJsx("svg", null);
     }
-    return /* @__PURE__ */ createElementJsx("svg", null, this.containerList.map((it) => {
+    return /* @__PURE__ */ createElementJsx("svg", null, (_a = this.containerList) == null ? void 0 : _a.map((it) => {
       it = this.$viewport.applyVerties(it);
       return /* @__PURE__ */ createElementJsx("path", {
         class: "container",
@@ -58315,7 +58400,7 @@ class GhostToolView extends EditorElement {
     verties = toRectVerties(verties);
     const textX = className === "flex-item" ? verties[0][0] : verties[0][0];
     const textY = className === "flex-item" ? verties[2][1] + 10 : verties[0][1] - 10;
-    return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("text", {
+    return /* @__PURE__ */ createElementJsx("g", null, /* @__PURE__ */ createElementJsx("text", {
       x: textX,
       y: textY,
       "font-size": 8
@@ -58347,6 +58432,44 @@ class GhostToolView extends EditorElement {
         [this.targetOriginPosition[3][0] + rect2.width / 2, this.targetOriginPosition[3][1]]
       ], "flex-item", "flex-right");
     }
+  }
+  renderLayoutFlexRowForFirst() {
+    const rect2 = vertiesToRectangle(this.targetOriginPosition);
+    const ghostRect = vertiesToRectangle(this.ghostScreenVerties);
+    let x2 = rect2.x;
+    let y2 = rect2.y;
+    switch (this.targetItem["justify-content"]) {
+      case JustifyContent.FLEX_START:
+        x2 = rect2.x;
+        break;
+      case JustifyContent.CENTER:
+      case JustifyContent.SPACE_BETWEEN:
+      case JustifyContent.SPACE_AROUND:
+        x2 = rect2.x + rect2.width / 2 - ghostRect.width / 2;
+        break;
+      case JustifyContent.FLEX_END:
+        x2 = rect2.x + rect2.width - ghostRect.width;
+        break;
+    }
+    switch (this.targetItem["align-content"]) {
+      case AlignContent.FLEX_START:
+        y2 = rect2.y;
+        break;
+      case AlignContent.CENTER:
+      case AlignContent.SPACE_BETWEEN:
+      case AlignContent.SPACE_AROUND:
+        y2 = rect2.y + rect2.height / 2 - ghostRect.height / 2;
+        break;
+      case AlignContent.FLEX_END:
+        y2 = rect2.y + rect2.height - ghostRect.height;
+        break;
+    }
+    return this.renderPath([
+      [x2, y2],
+      [x2 + ghostRect.width, y2],
+      [x2 + ghostRect.width, y2 + ghostRect.height],
+      [x2, y2 + ghostRect.height]
+    ], "flex-item", "");
   }
   renderLayoutFlexColumnArea() {
     const rect2 = vertiesToRectangle(this.targetOriginPosition);
@@ -58388,13 +58511,33 @@ class GhostToolView extends EditorElement {
         `
     });
   }
+  renderLayoutItemForFirst() {
+    if (this.targetItem.hasChildren() === false) {
+      if (this.targetItem.isLayout(Layout.FLEX)) {
+        switch (this.targetItem["flex-direction"]) {
+          case FlexDirection.ROW:
+            return this.renderLayoutFlexRowForFirst();
+          case FlexDirection.COLUMN:
+            return this.renderLayoutFlexColumnArea();
+        }
+      } else if (this.targetItem.isLayout(Layout.GRID))
+        ;
+    }
+    return /* @__PURE__ */ createElementJsx("path", {
+      class: "insert-area",
+      d: `
+
+        `
+    });
+  }
   [LOAD("$view") + DOMDIFF]() {
     if (!this.ghostVerties) {
       return /* @__PURE__ */ createElementJsx("svg", null);
     }
-    return /* @__PURE__ */ createElementJsx("svg", null, this.targetParent && this.renderPath(this.targetParentPosition, "target-parent"), this.targetItem && this.renderPath(this.targetOriginPosition, "target"), this.targetItem && this.renderPath(this.targetOriginPosition, "target-rect"), this.targetItem && this.renderLayoutItemInsertArea(), this.renderPath(this.ghostScreenVerties, "ghost"));
+    return /* @__PURE__ */ createElementJsx("svg", null, this.targetParent && this.renderPath(this.targetParentPosition, "target-parent"), this.targetItem && this.renderPath(this.targetOriginPosition, "target", ""), this.targetItem && this.renderPath(this.targetOriginPosition, "target-rect", ""), this.targetItem && this.renderLayoutItemInsertArea(), this.targetItem && this.renderLayoutItemForFirst(), this.isLayoutItem && this.renderPath(this.ghostScreenVerties, "ghost"));
   }
   initializeGhostView() {
+    this.isLayoutItem = false;
     this.ghostVerties = null;
     this.ghostScreenVerties = null;
     this.targetOriginPosition = null;
@@ -61371,8 +61514,8 @@ var designEditorPlugins = [
   codeview,
   history,
   project,
-  selectionToolView,
   selectionInfoView,
+  selectionToolView,
   guideLineView,
   layerAppendView,
   hoverView,
