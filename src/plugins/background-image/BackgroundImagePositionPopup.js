@@ -32,23 +32,23 @@ export default class BackgroundImagePositionPopup extends BasePopup {
     this.emit(this.state.changeEvent, opt, this.state.params);
   }
 
- 
+
   templateForSize() {
     return /*html*/`
       <div>
         ${createComponent("SelectEditor", {
-          label: this.$i18n('background.image.position.popup.size'),
-          ref: '$size',
-          key: 'size',
-          value: this.state.size,
-          options: ["contain","cover","auto" ],
-          onchange: "changeRangeEditor"
-        })}
+      label: this.$i18n('background.image.position.popup.size'),
+      ref: '$size',
+      key: 'size',
+      value: this.state.size,
+      options: ["contain", "cover", "auto"],
+      onchange: "changeRangeEditor"
+    })}
       </div>
     `;
   }
 
-  [SUBSCRIBE_SELF('changeRangeEditor')] (key, value) {
+  [SUBSCRIBE_SELF('changeRangeEditor')](key, value) {
     this.updateData({ [key]: value });
   }
 
@@ -56,16 +56,16 @@ export default class BackgroundImagePositionPopup extends BasePopup {
     return /*html*/`
       <div>
         ${createComponent("InputRangeEditor", {
-          label: "X",
-          compact: true,
-          ref: "$x",
-          key: "x",
-          value: this.state.x,
-          min: -1000,
-          max: 1000,
-          step: 1,
-          onchange: "changeRangeEditor"
-        })}
+      label: "X",
+      compact: true,
+      ref: "$x",
+      key: "x",
+      value: this.state.x,
+      min: -1000,
+      max: 1000,
+      step: 1,
+      onchange: "changeRangeEditor"
+    })}
       </div>
     `;
   }
@@ -73,19 +73,17 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   templateForY() {
     return /*html*/`
       <div >
-        <object refClass="InputRangeEditor" ${variable({
-          label: "Y",
-          compact: true,
-          ref: "$y",
-          key: "y",
-          value: this.state.y,
-          min: -1000,
-          max: 1000,
-          step: 1,
-          onchange: "changeRangeEditor"
-        })}  
-          
-        />
+      ${createComponent("InputRangeEditor", {
+      label: "Y",
+      compact: true,
+      ref: "$y",
+      key: "y",
+      value: this.state.y,
+      min: -1000,
+      max: 1000,
+      step: 1,
+      onchange: "changeRangeEditor"
+    })}      
       </div>
     `;
   }
@@ -93,19 +91,17 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   templateForWidth() {
     return /*html*/`
     <div >
-      <object refClass="InputRangeEditor" ${variable({
-        label: "W",
-        compact: true,
-        ref: "$width",
-        key: "width",
-        value: this.state.width,
-        min:0,
-        max: 500,
-        step: 1,
-        onchange: "changeRangeEditor"
-      })} 
-        
-      />
+    ${createComponent("InputRangeEditor", {
+      label: "W",
+      compact: true,
+      ref: "$width",
+      key: "width",
+      value: this.state.width,
+      min: 0,
+      max: 500,
+      step: 1,
+      onchange: "changeRangeEditor"
+    })}          
     </div>
     `;
   }
@@ -113,18 +109,17 @@ export default class BackgroundImagePositionPopup extends BasePopup {
   templateForHeight() {
     return /*html*/`
     <div >
-      <object refClass="InputRangeEditor" ${variable({
-        label: "H",
-        compact: true,
-        ref: "$height",
-        key: "height",
-        value: this.state.height,
-        min:0, 
-        max:500,
-        step: 1,
-        onchange: "changeRangeEditor"
-      })} 
-
+    ${createComponent("InputRangeEditor", {
+      label: "H",
+      compact: true,
+      ref: "$height",
+      key: "height",
+      value: this.state.height,
+      min: 0,
+      max: 500,
+      step: 1,
+      onchange: "changeRangeEditor"
+    })}              
       />
     </div>
     `;
@@ -157,7 +152,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
     `;
   }
 
-  [LOAD('$picker')] () {
+  [LOAD('$picker')]() {
     return /*html*/`
       
       <div class='box'>
@@ -177,7 +172,7 @@ export default class BackgroundImagePositionPopup extends BasePopup {
 
   [SUBSCRIBE("showBackgroundImagePositionPopup")](data, params, rect) {
     this.state.changeEvent = data.changeEvent || 'changeFillPopup'
-    this.state.params = params; 
+    this.state.params = params;
 
     this.setState(data.data);
 

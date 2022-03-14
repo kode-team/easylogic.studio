@@ -2,7 +2,6 @@ import { LOAD, CLICK, POINTERSTART, BIND, CHANGE, SUBSCRIBE, SUBSCRIBE_SELF, KEY
 import { Length } from "el/editor/unit/Length";
 
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
-import icon, { iconUse } from "el/editor/icon/icon";
 import { SVGFill } from "el/editor/property-parser/SVGFill";
 import { SVGStaticGradient } from "el/editor/property-parser/image-resource/SVGStaticGradient";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
@@ -11,6 +10,7 @@ import { END, MOVE } from "el/editor/types/event";
 
 import './FillEditor.scss';
 import { GradientType } from "el/editor/types/model";
+import { createComponent } from 'el/sapa/functions/jsx';
 
 export default class FillEditor extends EditorElement  {
 
@@ -54,7 +54,13 @@ export default class FillEditor extends EditorElement  {
             </div>               
             <div class='sub-editor' ref='$subEditor'> 
                 <div data-editor='patternUnits'>
-                  <object refClass="SelectEditor"  label='Pattern' ref='$patternUnits' options='userSpaceOnUse' key='patternUnits' onchange='changeKeyValue' />
+                  ${createComponent("SelectEditor", {
+                    label: 'Pattern',
+                    ref: '$patternUnits',
+                    options: ['userSpaceOnUse'],
+                    key: 'patternUnits',
+                    onchange: 'changeKeyValue'
+                   })}
                 </div>                  
                                                                                                                                 
             </div>            

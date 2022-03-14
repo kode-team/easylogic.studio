@@ -4,6 +4,7 @@ import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './PerspectiveOriginEditor.scss';
+import { createComponent } from "el/sapa/functions/jsx";
 
 const typeList = [
   { key: "perspective-origin-x", title: "X" },
@@ -110,7 +111,13 @@ export default class PerspectiveOriginEditor extends EditorElement {
           </button>
         </div>
         <div class="radius-value">
-          <object refClass="RangeEditor"  ref='$all' key='perspective-origin' value="${perspectiveOrigin}" onchange='changePerspectiveOrigin' />
+          ${createComponent("RangeEditor" , {
+            ref: '$all',
+            key: 'perspective-origin',
+            value: perspectiveOrigin,
+            onchange: 'changePerspectiveOrigin'
+          })}
+          
         </div>
       </div>
       <div
@@ -125,7 +132,13 @@ export default class PerspectiveOriginEditor extends EditorElement {
 
             return /*html*/`
               <div>
-                  <object refClass="RangeEditor"  ref='$${it.key}' label='${label}' key='${it.key}' value="${this.state[it.key]}" onchange='changePerspectiveOrigin' />
+                ${createComponent("RangeEditor", {
+                  ref: `$${it.key}`,
+                  label, 
+                  key: it.key,
+                  value: this.state[it.key],
+                  onchange: 'changePerspectiveOrigin'
+                })}
               </div>  
             `;
           }).join('')}

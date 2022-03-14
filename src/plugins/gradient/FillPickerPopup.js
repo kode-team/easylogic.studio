@@ -4,13 +4,14 @@ import { BIND, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
 import { SVGStaticGradient } from "el/editor/property-parser/image-resource/SVGStaticGradient";
 import BasePopup from "el/editor/ui/popup/BasePopup";
-
-import './GradientPickerPopup';
-
-import { html, isString } from "el/sapa/functions/func";
+import { isString } from "el/sapa/functions/func";
 import { GradientType } from "el/editor/types/model";
 import { createComponent } from "el/sapa/functions/jsx";
 import { SVGFill } from "el/editor/property-parser/SVGFill";
+
+import './GradientPickerPopup';
+
+
 
 export default class FillPickerPopup extends BasePopup {
 
@@ -58,7 +59,7 @@ export default class FillPickerPopup extends BasePopup {
   }
 
   getBody() {
-    return html`
+    return /*html*/`
       <div class="elf--gradient-picker-popup" ref='$body' data-selected-editor='${this.state.image?.type}'>
         <div class='box'>
           <div ref='$gradientEditor'></div>

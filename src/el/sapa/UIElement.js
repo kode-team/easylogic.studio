@@ -1,9 +1,8 @@
 import BaseStore from "./BaseStore";
-import { CHECK_SAPARATOR, CHECK_SUBSCRIBE_PATTERN, SAPARATOR, SUBSCRIBE_SAPARATOR } from "./Event";
 import EventMachine from "./EventMachine";
-import { isFunction, isNotUndefined, splitMethodByKeyword } from "./functions/func";
 import { uuidShort } from "./functions/uuid";
 import { getVariable } from './functions/registElement';
+import { isNotUndefined } from "./functions/func";
 
 /**
  * UI 를 만드는 기본 단위 
@@ -70,19 +69,9 @@ class UIElement extends EventMachine {
    */
   created() { }
 
-  getRealEventName(e, s = MULTI_PREFIX) {
-    var startIndex = e.indexOf(s);
-    return e.substr(startIndex < 0 ? 0 : startIndex + s.length);
-  }
-
-  splitMethod(arr, keyword, defaultValue = 0) {
-    var [methods, params] = splitMethodByKeyword(arr, keyword);
-
-    return [
-      methods.length ? params[0].target : defaultValue,
-      methods,
-      params
-    ]
+  getRealEventName(e, separator) {
+    var startIndex = e.indexOf(separator);
+    return e.substr(startIndex < 0 ? 0 : startIndex + separator.length);
   }
 
   createLocalCallback(event, callback) {
@@ -102,58 +91,63 @@ class UIElement extends EventMachine {
    *
    */
   initializeStoreEvent() {
-    this.filterProps(CHECK_SUBSCRIBE_PATTERN).forEach(key => {
-      const events = this.getRealEventName(key, SUBSCRIBE_SAPARATOR);
-      // context 에 속한 변수나 메소드 리스트 체크
-      const [method, ...methodLine] = events.split(CHECK_SAPARATOR);
-      const checkMethodList = methodLine.map(it => it.trim()).filter(code => this[code]).map(target => ({ target }));
+    this.filterProps('subscribe').forEach(it => {
 
-      // support deboounce for store event    
-      const [debounceSecond, debounceMethods] = this.splitMethod(methodLine, 'debounce');
-      const [throttleSecond, throttleMethods] = this.splitMethod(methodLine, 'throttle');
-      const [allTrigger, allTriggerMethods] = this.splitMethod(methodLine, 'allTrigger');
-      const [selfTrigger, selfTriggerMethods] = this.splitMethod(methodLine, 'selfTrigger');
-      const [frameTrigger, frameTriggerMethods] = this.splitMethod(methodLine, 'frame');
-      const [paramsVariable, paramsVariableMethods, params] = this.splitMethod(methodLine, 'params');
+      const events = it.args.join(' ');
 
-      let debounce = +debounceSecond > 0 ? debounceSecond : 0;
-      let throttle = +throttleSecond > 0 ? throttleSecond : 0;
-      let isAllTrigger = Boolean(allTriggerMethods.length);
-      let isSelfTrigger = Boolean(selfTriggerMethods.length);
-      let isFrameTrigger = Boolean(frameTriggerMethods.length);
+      const checkMethodList = [];
+      const eventList = [];
 
-      if (paramsVariableMethods.length) {
-        const settings = getVariable(paramsVariable);
+      let debounce = 0;
+      let throttle = 0;
+      let isAllTrigger = false;
+      let isSelfTrigger = false;
+      let isFrameTrigger = false;
 
-        if (isNotUndefined(settings.debounce)) debounce = settings.debounce;
-        if (isNotUndefined(settings.throttle)) throttle = settings.throttle;
-        if (isNotUndefined(settings.frame)) isFrameTrigger = settings.frame;
-      }
+      it.pipes.forEach(pipe => {
+        if (pipe.type === 'function') {
+          switch (pipe.func) {
+            case 'debounce':
+              debounce = +(pipe.args?.[0] || 0);
+              break;
+            case 'throttle':
+              throttle = +(pipe.args?.[0] || 0);
+              break;
+            case 'allTrigger':
+              isAllTrigger = true;
+              break;
+            case 'selfTrigger':
+              isSelfTrigger = true;
+              break;
+            case 'frame':
+              isFrameTrigger = true;
+              break;
+            case 'params':
+              const settings = getVariable(pipe.args?.[0]);
 
-      const originalCallback = this[key]
+              if (isNotUndefined(settings.debounce)) debounce = settings.debounce;
+              if (isNotUndefined(settings.throttle)) throttle = settings.throttle;
+              if (isNotUndefined(settings.frame)) isFrameTrigger = settings.frame;
+              break;
+          }
+        } else if (pipe.type === 'keyword') {
+          const method = `${pipe.value}`;
+          if (this[method]) {
+            checkMethodList.push(method);
+          } else {
+            eventList.push(method);            
+          }
+        }
+      })
 
-      events
-        .split(CHECK_SAPARATOR)
-        .filter(it => {
-          return (
-            checkMethodList.indexOf(it) === -1 &&
-            debounceMethods.indexOf(it) === -1 &&
-            allTriggerMethods.indexOf(it) === -1 &&
-            selfTriggerMethods.indexOf(it) === -1 &&
-            throttleMethods.indexOf(it) === -1 &&
-            paramsVariableMethods.indexOf(it) === -1
-          )
-        })
-        .map(it => it.trim())
+      const originalCallback = this[it.originalMethod];
+      [...eventList, events]
         .filter(Boolean)
-        .forEach(e => {
-
-          if (isFunction(originalCallback)) {
+        .forEach((e) => {
             var callback = this.createLocalCallback(e, originalCallback)
             this.$store.on(e, callback, this, debounce, throttle, isAllTrigger, isSelfTrigger, checkMethodList, isFrameTrigger);
-          }
-
         });
+
     });
   }
 
@@ -232,6 +226,7 @@ class UIElement extends EventMachine {
   broadcast(messageName, ...args) {
     Object.keys(this.children).forEach(key => {
       this.children[key].trigger(messageName, ...args);
+      this.children[key].broadcast(messageName, ...args);      
     })
   }
 

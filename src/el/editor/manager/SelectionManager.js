@@ -22,6 +22,7 @@ export class SelectionManager {
     this.hoverItems = []    
     this.ids = []; 
     this.colorsteps = []
+    this.ghosts = [];
     this.cachedItemMatrices = []    
     this.cachedArtBoardVerties = []
     this.cachedVerties = rectToVerties(0, 0, 0, 0, '50% 50% 0px');
@@ -407,7 +408,7 @@ export class SelectionManager {
     })
   }
 
-  changeArtBoard () {
+  changeInLayoutArea (pointer) {
 
     let checkedParentChange = false
 
@@ -415,15 +416,11 @@ export class SelectionManager {
 
       if (instance.is('artboard') === false) {
 
-        const instanceVerties = instance.originVerties;
-
         // FIXME: 내가 속한 영역이 객체의 instance 의 artboard 안에 있으면 artboard 를 바꾸지 않는다. 
         if (instance.artboard) {
-          const localArtboard = instance.artboard;
-          const localArtboardVerties = localArtboard.originVerties;
+          const localArtboardVerties = instance.artboard.originVerties;
 
-          const isInArtboard = polyPoint(localArtboardVerties, ...instanceVerties[0]) || polyPoly(instanceVerties, localArtboardVerties) 
-
+          const isInArtboard = polyPoint(localArtboardVerties, this.pos[0], this.pos[1]);
 
           // 내가 여전히 나의 artboard 에 속해 있으면 변경하지 않는다. 
           if (isInArtboard) {
@@ -433,14 +430,12 @@ export class SelectionManager {
 
   
         const selectedArtBoard = this.cachedArtBoardVerties.find(artboard => {
-          const artboardVerties = artboard.matrix.originVerties;
-          return polyPoint(artboardVerties, ...instanceVerties[0]) || polyPoly(instanceVerties, artboardVerties) 
+          return polyPoint(artboard.matrix.originVerties, this.pos[0], this.pos[1])
         })
   
-
         if (selectedArtBoard) {
           // 부모 artboard 가 다르면  artboard 를 교체한다.            
-          if (selectedArtBoard.item !== instance.artboard) {
+          if (selectedArtBoard.item !== instance.artboard && selectedArtBoard.item.hasLayout() === false) {
             selectedArtBoard.item.appendChild(instance);
             checkedParentChange = true;
           }
@@ -462,7 +457,8 @@ export class SelectionManager {
     if (this.isEmpty) {
       this.cachedVerties = [];
       this.cachedRectVerties = [];
-      this.cachedItemMatrices = []
+      this.cachedItemMatrices = [];
+      this.ghosts = []
       this.cachedArtBoardVerties = this.currentProject.artboards.map(item => {
         return { item, matrix: item.matrix};
       })
@@ -475,9 +471,9 @@ export class SelectionManager {
 
     this.cachedItemMatrices = []
     this.cachedChildren = [];
+    this.ghosts = []
     
     this.items.forEach(it => {
-
       // artboard 가 선택되어 있을 때는 artboard 만 포함 
       if (it.is('artboard')) {
         this.cachedItemMatrices.push(it.matrix);
@@ -493,6 +489,9 @@ export class SelectionManager {
       else {
         this.cachedItemMatrices.push(it.matrix);
       }
+
+      // ghost 객체 설정 
+      this.ghosts.push(it.absoluteMatrix);
 
     })
 
@@ -532,7 +531,7 @@ export class SelectionManager {
   get targetVerties () {
 
     if (this.isOne) {    // 하나 일 때랑 
-      return this.current.targetVerties;
+      return this.current.originVerties;
     } else {
       return targetItemsToRectVerties(this.items);
     }

@@ -65,7 +65,7 @@ export function throttle(callback, delay) {
 export function ifCheck(callback, context, checkMethods) {
     return (...args) => {
         const ifResult = checkMethods.every(check => {
-            return context[check.target].apply(context, args);
+            return context[check].apply(context, args);
         });
 
         if (ifResult) {
@@ -192,50 +192,28 @@ const HTML_TAG = {
 }
 
 
-export const html = (strings, ...args) => {
+// export const html = (strings, ...args) => {
 
-    var results = strings.map((it, index) => {
+//     var results = strings.map((it, index) => {
 
-        var results = args[index] || ''
+//         var results = args[index] || ''
 
-        if (!Array.isArray(results)) {
-            results = [results]
-        }
+//         if (!Array.isArray(results)) {
+//             results = [results]
+//         }
 
-        results = results.join('')
+//         results = results.join('')
 
-        return it + results;
-    }).join('');
+//         return it + results;
+//     }).join('');
 
-    results = results.replace(short_tag_regexp, function (match, p1) {
-        if (HTML_TAG[p1.toLowerCase()]) {
-            return match;
-        } else {
-            return match.replace('/>', `></${p1}>`)
-        }
-    })
+//     results = results.replace(short_tag_regexp, function (match, p1) {
+//         if (HTML_TAG[p1.toLowerCase()]) {
+//             return match;
+//         } else {
+//             return match.replace('/>', `></${p1}>`)
+//         }
+//     })
 
-    return results;
-}
-
-
-/**
- * 전체 문자열에서 특정 키워드 함수를 사용하는 패턴을 찾아 리턴해준다. 
- * 
- * @param {string[]} arr 
- * @param {string} keyword 
- */
-export const splitMethodByKeyword = (arr, keyword) => {
-    const filterKeys = arr.filter(code => code.indexOf(`${keyword}(`) > -1);
-    const filterMaps = filterKeys.map(code => {
-        const [target, param] = code
-            .split(`${keyword}(`)[1]
-            .split(")")[0]
-            .trim()
-            .split(" ");
-
-        return { target, param };
-    });
-
-    return [filterKeys, filterMaps];
-};
+//     return results;
+// }

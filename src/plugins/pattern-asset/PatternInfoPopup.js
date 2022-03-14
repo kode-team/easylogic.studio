@@ -195,13 +195,13 @@ export default class PatternInfoPopup extends BasePopup {
 
     return /*html*/`
     <div class=''>
-      <object refClass="BlendSelectEditor" 
-            ref='$blend' 
-            key='blendMode' 
-            label="${this.$i18n('pattern.info.popup.blend')}"
-            value="${this.state.blendMode}" 
-            onchange="changeRangeEditor" 
-        />
+      ${createComponent("BlendSelectEditor", {
+        ref: '$blend',
+        key: 'blendMode',
+        label: this.$i18n('pattern.info.popup.blend'),
+        value: this.state.blendMode,
+        onchange: "changeRangeEditor" 
+      })}
     </div>
     `;
   }

@@ -4,6 +4,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './ColorAssetsEditor.scss';
 import { variable } from 'el/sapa/functions/registElement';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class ColorAssetsEditor extends EditorElement {
   
@@ -26,9 +27,12 @@ export default class ColorAssetsEditor extends EditorElement {
       return { value: it.key, text: it.title } 
     }));
 
-    return /*html*/`
-      <object refClass="SelectEditor"  key="preset" value="${this.state.preset}" options="${options}" onchange="changePreset"  />
-    `
+    return createComponent("SelectEditor", {
+      key: "preset",
+      value: this.state.preset,
+      options,
+      onchange: "changePreset"
+    });
   }
 
   [SUBSCRIBE('changePreset')] (key, value) {

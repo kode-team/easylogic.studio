@@ -116,15 +116,10 @@ export const makeGroupFunction = (type) => (item, allString, funcStartCharacter 
     const matchedStringIndex = matchedString.indexOf(funcStartCharacter) + funcStartCharacter.length;
     const args = allString.substring(item.startIndex + matchedStringIndex, item.startIndex + matchedString.lastIndexOf(funcEndCharacter));
 
-    // console.log(item.startIndex, item.endIndex, matchedString)
-
     const startIndex = item.startIndex;
     const endIndex = item.startIndex + matchedString.length;
 
-    // console.log({startIndex, endIndex, args})
-
     const newParsed = parseValue(args).map(it => {
-        // console.log('parsedValue', it.matchedString)
         return {
             ...it,
 
@@ -133,7 +128,6 @@ export const makeGroupFunction = (type) => (item, allString, funcStartCharacter 
         }
     })
 
-    // console.log(newParsed);
 
     let parameters = []
     let commaIndex = 0;
@@ -201,10 +195,6 @@ const CSS_FUNC_PARSER_MAP = {
     'ease-out': (item) => ({ funcType: FuncType.TIMING, name: TimingFunction.EASE_OUT, matchedString: item.matchedString, x1: 0, y1: 0, x2: 0.58, y2: 1 }),
     'ease-in-out': (item) => ({ funcType: FuncType.TIMING, name: TimingFunction.EASE_IN_OUT, matchedString: item.matchedString, x1: 0.42, y1: 0, x2: 0.58, y2: 1 }),
     'linear': (item) => ({ funcType: FuncType.TIMING, name: TimingFunction.LINEAR, matchedString: item.matchedString, x1: 0, y1: 0, x2: 1, y2: 1 }),
-}
-
-export function makeIndexString(it, prefix = '@') {
-    return `${prefix}${it.startIndex}`.padEnd(10, '0');
 }
 
 export function parseValue(str, {
@@ -332,8 +322,6 @@ export function parseValue(str, {
 
         result.push(item);
         pos.next = item.endIndex;
-
-        // console.log(pos.next, item);
     }
 
     return result;

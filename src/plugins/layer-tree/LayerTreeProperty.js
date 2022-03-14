@@ -111,7 +111,7 @@ export default class LayerTreeProperty extends BaseProperty {
       return iconUseForPath(path.scaleWith(24, 24).d, { width: 24, height: 24, fill: 'currentColor', stroke: 'currentColor' });
     }
 
-    if (item.hasChildren()) {
+    if (item.hasLayout() || item.hasChildren() || item.is('artboard')) {
       if (item.isLayout('flex')) {
         return iconUse("layout_flex");
       } else if (item.isLayout('grid')) {

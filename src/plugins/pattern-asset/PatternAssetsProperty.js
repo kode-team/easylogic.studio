@@ -8,6 +8,7 @@ import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './PatternAssetsProperty.scss';
 import { variable } from 'el/sapa/functions/registElement';
+import { createComponent } from "el/sapa/functions/jsx";
 
 export default class PatternAssetsProperty extends BaseProperty {
 
@@ -29,9 +30,13 @@ export default class PatternAssetsProperty extends BaseProperty {
       return { value: it.key, text: it.title } 
     }));
 
-    return /*html*/`
-      <object refClass="SelectEditor" ref="$assets"  key="preset" value="${this.state.preset}" options="${options}" onchange="changePreset"  />
-    `
+    return createComponent("SelectEditor", {
+      ref: "$assets",
+      key: "preset",
+      value: this.state.preset,
+      options, 
+      onchange: "changePreset"
+    })
   }  
 
 

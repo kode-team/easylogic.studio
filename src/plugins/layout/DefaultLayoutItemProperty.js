@@ -7,6 +7,7 @@ import './DefaultLayoutItemProperty.scss';
 import { variable } from 'el/sapa/functions/registElement';
 import { Constraints, ConstraintsDirection, Layout } from "el/editor/types/model";
 import { iconUse } from "el/editor/icon/icon";
+import { createComponent } from "el/sapa/functions/jsx";
 
 
 export default class DefaultLayoutItemProperty extends BaseProperty {
@@ -63,7 +64,7 @@ export default class DefaultLayoutItemProperty extends BaseProperty {
     const v = current?.['constraints-vertical'] || Constraints.MIN;    
     return /*html*/`
       <div>
-        <object refClass="SelectEditor" ${variable({
+        ${createComponent("SelectEditor", {
           ref: '$constraintsHorizontal',
           key: 'constraints-horizontal',
           value: current?.['constraints-horizontal'] || 'min',
@@ -77,11 +78,11 @@ export default class DefaultLayoutItemProperty extends BaseProperty {
             {value: 'scale', 'text': 'Scale', disabled: hasLayout},            
           ],
           onchange: 'changeConstraints'
-        })} />
+        })}
       </div>
 
       <div>
-        <object refClass="SelectEditor" ${variable({
+        ${createComponent("SelectEditor", {
           ref: '$constraintsVertical',
           key: 'constraints-vertical',
           value: current?.['constraints-vertical'] || 'min',
@@ -95,7 +96,7 @@ export default class DefaultLayoutItemProperty extends BaseProperty {
             {value: 'scale', 'text': 'Scale', disabled: hasLayout},            
           ],
           onchange: 'changeConstraints'
-        })} />          
+        })}
       </div>
     `
   }

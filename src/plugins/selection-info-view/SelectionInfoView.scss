@@ -13,6 +13,20 @@
     
     pointer-events: all;
     transform: translateY(-100%);
+
+    > div {
+      padding: 2px 5px;
+    }
+
+    &[data-layout="flex"] > div {
+      background-color: green;
+      color: var(--elf--selected-font-color);
+    }
+
+    &[data-layout="grid"] > div {
+      background-color: red;
+      color: var(--elf--selected-font-color);
+    }
   }
 }
 

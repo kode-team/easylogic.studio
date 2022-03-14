@@ -118,9 +118,11 @@ export default class DataEditor extends BaseLayout {
   [LOAD('$body')] () {    
     const inspector = this.state.inspector;
 
-    return /*html*/`
-      <object refClass="ComponentEditor" ref='$comp' inspector=${variable(inspector)} onchange="changeComponent" />
-    `
+    return createComponent("ComponentEditor", {
+      ref: '$comp',
+      inspector,
+      onchange: "changeComponent"
+    });
   }
 
   getValue () {

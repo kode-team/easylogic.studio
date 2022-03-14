@@ -19,7 +19,7 @@ import { KeyBoardManager } from "./KeyboardManager";
 import { ViewportManager } from "./ViewportManager";
 import { StorageManager } from "./StorageManager";
 import { CursorManager } from "./CursorManager";
-import { AssetManager } from "./AssetManager"; 
+import { AssetManager } from "./AssetManager";
 import { PluginManager } from "./PluginManager";
 import { RendererManager } from "./RendererManager";
 import { InjectManager } from "./InjectManager";
@@ -110,7 +110,7 @@ export class Editor {
     this.layout = this.loadItem('layout') || 'all'
   }
 
-  createProject () {
+  createProject() {
     return this.createModel({ itemType: 'project' })
   }
 
@@ -120,7 +120,7 @@ export class Editor {
 
   $i18n(key, params = {}, locale) {
     return this.getI18nMessage(key, params, locale);
-  }  
+  }
 
   hasI18nkey(key, locale) {
     return this.i18n.hasKey(key, locale || this.locale)
@@ -185,14 +185,14 @@ export class Editor {
   get isPointerUp() {
     const e = this.config.get('bodyEvent');
     if (!e) return true;
-    
-    if (e.type === 'pointerup' ) return true; 
-    else if (e.type === 'pointermove' &&  e.buttons === 0) return true; 
 
-    return false; 
+    if (e.type === 'pointerup') return true;
+    else if (e.type === 'pointermove' && e.buttons === 0) return true;
+
+    return false;
   }
 
-  get isPointerDown () {
+  get isPointerDown() {
     return !this.isPointerUp
   }
 
@@ -250,15 +250,21 @@ export class Editor {
   }
 
   /**
-   * store 의 nextTick 을 실행한다. 
+   * MicroTask 를 수행한다. 
    * 
    * @param {Function} callback 
+   * @param {number} [delay=0]  callback 이 실행될 딜레이 시간 설정 
    */
-  nextTick(callback) {
+  nextTick(callback, delay = 0) {
+
     if (this.store) {
-      this.store.nextTick(callback);
+      setTimeout(() => {
+        this.store.nextTick(callback);
+      }, delay);
     }
+
   }
+
 
   /**
    * get model by id
@@ -379,30 +385,30 @@ export class Editor {
     return this.renderers.getRenderer(rendererType);
   }
 
-  get html () {
+  get html() {
     return this.renderer('html');
   }
 
-  get svg () {
+  get svg() {
     return this.renderer('svg');
   }
-  
-  get json () {
+
+  get json() {
     return this.renderer('json');
-  }  
+  }
 
   /**
    * 
    * @param {object|function} commandObject
    * @return {function} dispose function 
-   */  
+   */
   registerCommand(commandObject) {
     return this.commands.registerCommand(commandObject);
   }
 
   /**
    * 단축키(shortcut)을 등록한다.  
-   */ 
+   */
   registerShortCut(shortcut) {
     this.shortcuts.registerShortCut(shortcut);
   }
@@ -424,7 +430,7 @@ export class Editor {
    * 에디터에 맞는 config 를 등록한다. 
    * 
    * @param {object} config
-   */ 
+   */
   registerConfig(config) {
     this.config.registerConfig(config);
   }
@@ -437,9 +443,9 @@ export class Editor {
     Object.entries(messages).forEach(([locale, messages]) => {
       this.registerI18nMessage(locale, messages);
     });
-  }  
+  }
 
-  registerIcon (itemType, iconOrFunction) {
+  registerIcon(itemType, iconOrFunction) {
     this.iconManager.registerIcon(itemType, iconOrFunction);
   }
 
@@ -448,7 +454,7 @@ export class Editor {
    * @param {string} id 
    * @returns {BaseModel}
    */
-  get (id) {
+  get(id) {
     return this.modelManager.get(id);
   }
 }

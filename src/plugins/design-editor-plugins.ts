@@ -162,8 +162,8 @@ export default [
     project,
 
     // canvas tool
+    selectionInfoView,        
     selectionToolView,
-    selectionInfoView,    
     guideLineView,    
     layerAppendView,
     hoverView,

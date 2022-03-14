@@ -3,7 +3,7 @@ import { Border } from "el/editor/property-parser/Border";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './BorderEditor.scss';
-import { variable } from "el/sapa/functions/registElement";
+import { createComponent } from "el/sapa/functions/jsx";
 
 const borderTypeList = [
   "border", 
@@ -56,13 +56,13 @@ export default class BorderEditor extends EditorElement {
       label = this.$i18n('border.editor.' + label);
       return /*html*/`
       <div>
-        <object refClass='BorderValueEditor' ${variable({
+        ${createComponent('BorderValueEditor', {
           ref: `$${type}`,
           label,
           key: type,
           value: this.state.borders[type],
           onchange: "changeKeyValue"
-        })}  />
+        })}
       </div>
       `
     })

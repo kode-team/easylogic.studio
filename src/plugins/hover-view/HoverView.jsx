@@ -77,7 +77,7 @@ export default class HoverView extends EditorElement {
         }
     }
 
-    [SUBSCRIBE('updateViewport')]() {
+    [SUBSCRIBE('updateViewport', 'refreshSelectionStyleView')]() {
         this.$selection.setHoverId('');
         this.renderHoverLayer()
     }

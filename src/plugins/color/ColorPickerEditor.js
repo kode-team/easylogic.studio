@@ -4,8 +4,9 @@ import ColorView from "./colorpicker/control/ColorView";
 import ColorInformation from "./colorpicker/ColorInformation";
 import Palette from "./colorpicker/ColorPalette";
 import ColorManagerV2 from "plugins/color/ColorManagerV2";
-import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { SUBSCRIBE_SELF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
+import { createComponent } from 'el/sapa/functions/jsx';
 
 
 export default class ColorPickerEditor extends EditorElement {
@@ -134,15 +135,15 @@ export default class ColorPickerEditor extends EditorElement {
         return /*html*/`
         <div class='colorpicker sketch inline'>
             <div class='colorpicker-body'>
-                <object refClass="Palette" ref='$palette' />
+                ${createComponent("Palette", {ref: '$palette'})}
                 <div class="control">
-                    <object refClass="Hue" ref='$hue' />
-                    <object refClass="Opacity" ref='$opacity' />
+                    ${createComponent("Hue", {ref: '$hue'})}
+                    ${createComponent("Opacity", {ref: '$opacity'})}
                     <div class="empty"></div>
-                    <object refClass="ColorView" ref='$colorview' />
+                    ${createComponent("ColorView", {ref: '$colorview'})}                    
                 </div>
-                <object refClass="ColorInformation" ref='$information' />
-                <object refClass="ColorAssetsEditor" ref='$colorAsset' key="colorAssets" onchange="selectColorAssets" /> 
+                ${createComponent("ColorInformation", {ref: '$information'})}                
+                ${createComponent("ColorAssetsEditor", {ref: '$colorAsset', key: 'colorAssets', onchange: "selectColorAssets"})}
             </div>
         </div>
       `;

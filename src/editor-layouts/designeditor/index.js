@@ -34,10 +34,18 @@ export default class DesignEditor extends BaseLayout {
       this.$pathkit.registerPathKit(await PathKitInit());
   
     })()
+  }
+
+
+  afterRender() {
+    super.afterRender();
+
+    this.$config.init('editor.layout.elements', this.refs);    
 
     // load default data 
     this.emit('load.json', this.opt.data);
   }
+
 
   components() {
     return {
@@ -219,13 +227,6 @@ export default class DesignEditor extends BaseLayout {
 
   moveEndSplitter () {
     this.refs.$splitter.removeClass('selected');
-  }
-
-  afterRender() {
-    super.afterRender();
-
-    this.$config.init('editor.layout.elements', this.refs);    
-
   }
 
   refresh () {

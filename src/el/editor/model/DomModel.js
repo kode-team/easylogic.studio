@@ -7,7 +7,7 @@ import PathParser from "el/editor/parser/PathParser";
 import { Pattern } from 'el/editor/property-parser/Pattern';
 import { BackgroundImage } from 'el/editor/property-parser/BackgroundImage';
 import { STRING_TO_CSS } from "el/utils/func";
-import { Constraints, GradientType, Layout, RadialGradientType, VisibilityType } from "el/editor/types/model";
+import { Constraints, GradientType, Layout, VisibilityType } from "el/editor/types/model";
 import { rectToVerties } from "el/utils/collision";
 import { calculateRotationOriginMat4, degreeToRadian, vertiesMap } from "el/utils/math";
 import { vec3 } from "gl-matrix";

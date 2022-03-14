@@ -1,19 +1,11 @@
+import MagicMethod, { SPLITTER } from "./functions/MagicMethod";
 import { variable } from "./functions/registElement";
 
-export const MAGIC_METHOD = "@magic:";
-export const makeEventChecker = (value, split = CHECK_SAPARATOR) => {
+export const makeEventChecker = (value, split = SPLITTER) => {
   return ` ${split} ${value}`;
 }
 
-// event name regular expression
-export const CHECK_DOM_EVENT_PATTERN = /domevent (.*)/gi;
-export const CHECK_CALLBACK_PATTERN = /callback (.*)/gi;
-export const CHECK_LOAD_PATTERN = /load (.*)/gi;
-export const CHECK_BIND_PATTERN = /bind (.*)/gi;
-export const CHECK_SUBSCRIBE_PATTERN = /subscribe (.*)/gi;
-
 const MULTI_PREFIX = "ME@";
-const SPLITTER = "|";
 
 export const PIPE = (...args) => {
   return args.join(SPLITTER);
@@ -28,13 +20,6 @@ export const ON = EVENT
 
 
 export const NAME_SAPARATOR = ":";
-export const CHECK_SAPARATOR = "|";
-export const DOM_EVENT_SAPARATOR = `${MAGIC_METHOD}domevent `;
-export const CALLBACK_SAPARATOR = `${MAGIC_METHOD}callback `;
-export const LOAD_SAPARATOR = `${MAGIC_METHOD}load `;
-export const BIND_SAPARATOR = `${MAGIC_METHOD}bind `;
-export const SUBSCRIBE_SAPARATOR = `${MAGIC_METHOD}subscribe `;
-
 export const SAPARATOR = ' ';
 
 const refManager = {};
@@ -42,29 +27,30 @@ const refManager = {};
 const DOM_EVENT_MAKE = (...keys) => {
   var key = keys.join(NAME_SAPARATOR);
   return (...args) => {
-    return DOM_EVENT_SAPARATOR + [key, ...args].join(SAPARATOR);
+    const [selector, ...result] = args;
+    return MagicMethod.make('domevent', [key, selector].join(' '), ...result);
   };
 };
 
 const SUBSCRIBE_EVENT_MAKE = (...args) => {
-  return SUBSCRIBE_SAPARATOR + args.join(CHECK_SAPARATOR);
+  return MagicMethod.make('subscribe', ...args);
 }
 
 const CALLBACK_EVENT_MAKE = (...args) => {
-  return CALLBACK_SAPARATOR + args.join(CHECK_SAPARATOR);
+  return MagicMethod.make('callback', ...args);
 }
 
 
 // Predefined CHECKER
-export const CHECKER = (value, split = CHECK_SAPARATOR) => {
+export const CHECKER = (value, split = SPLITTER) => {
   return makeEventChecker(value, split);
 };
 
-export const AFTER = (value, split = CHECK_SAPARATOR) => {
+export const AFTER = (value, split = SPLITTER) => {
   return CHECKER(`after(${value})`, split);
 };
 
-export const BEFORE = (value, split = CHECK_SAPARATOR) => {
+export const BEFORE = (value, split = SPLITTER) => {
   return CHECKER(`before(${value})`, split);  
 };
 
@@ -204,7 +190,7 @@ export const DOUBLETAB = CUSTOM('doubletab')
 
 // Predefined LOADER
 export const LOAD = (value = "$el") => {
-  return LOAD_SAPARATOR + value;
+  return MagicMethod.make('load', value);
 };
 
 export const getRef = id => {
@@ -222,9 +208,7 @@ export const BIND_CHECK_DEFAULT_FUNCTION = () => {
 };
 
 export const BIND = (value = "$el") => {
-  return (
-    BIND_SAPARATOR + value
-  );
+  return MagicMethod.make('bind', value);
 };
 
 export function normalizeWheelEvent (e) {

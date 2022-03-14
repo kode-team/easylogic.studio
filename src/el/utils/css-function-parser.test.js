@@ -206,6 +206,8 @@ test("create css linear-gradient parser with offset and color", () => {
 test("create timing function", () => {
     const result = parseValue('linear-gradient(to right, rgb(255, 0, 0) 0%, blue 100% ease 10)')
 
+    // console.log(JSON.stringify(result, null, 2));
+
     expect(result[0].parameters.length).toEqual(3);
 })
 
