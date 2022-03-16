@@ -1,303 +1,438 @@
-import { AlignContent, FlexDirection, JustifyContent, Layout } from "el/editor/types/model";
+import {
+  AlignContent,
+  FlexDirection,
+  JustifyContent,
+  Layout,
+} from "el/editor/types/model";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { DOMDIFF, LOAD, SUBSCRIBE } from "el/sapa/Event";
 import { clone } from "el/sapa/functions/func";
 import { toRectVerties, vertiesToRectangle } from "el/utils/collision";
+import { calculateMatrix, vertiesMap } from "el/utils/math";
 import { vec3 } from "gl-matrix";
 
-import './GhostToolView.scss';
+import "./GhostToolView.scss";
 
-const CHECK_RATE = 0.5; 
-
+const CHECK_RATE = 0.5;
 
 /**
- * 원보 아이템의 크기를 가지고 scale 이랑 조합해서 world 의 크기를 구하는게 기본 컨셉 
+ * 원보 아이템의 크기를 가지고 scale 이랑 조합해서 world 의 크기를 구하는게 기본 컨셉
  */
 export default class GhostToolView extends EditorElement {
+  template() {
+    return (
+      <div class="elf--ghost-tool-view">
+        <div ref="$containerView"></div>
+        <div ref="$view"></div>
+      </div>
+    );
+  }
 
-    template() {
-        return <div class='elf--ghost-tool-view' >
-                <div ref="$containerView"></div>
-                <div ref="$view"></div>
-            </div>
-    }
+  [SUBSCRIBE("startGhostToolView")](verties) {
+    const screenVerties = this.$selection.verties;
 
-    [SUBSCRIBE('startGhostToolView')] (verties) {
+    this.isLayoutItem = this.$selection.isLayoutItem;
+    this.verties = clone(screenVerties);
+    this.ghostVerties = clone(screenVerties);
+    this.ghostScreenVerties = this.$viewport.applyVerties(this.ghostVerties);
+    this.initMousePoint = this.$viewport.getWorldPosition();
+  }
 
+  [SUBSCRIBE("moveFirstGhostToolView")]() {
+    const targetMousePoint = this.$viewport.getWorldPosition();
 
-        const screenVerties = this.$selection.targetVerties;
+    const newDist = vec3.floor(
+      [],
+      vec3.subtract([], targetMousePoint, this.initMousePoint)
+    );
 
-        this.isLayoutItem = this.$selection.isLayoutItem;        
-        this.verties = clone(screenVerties);
-        this.ghostVerties = clone(screenVerties);
-        this.ghostScreenVerties = this.$viewport.applyVerties(this.ghostVerties);
-        this.initMousePoint = this.$viewport.getWorldPosition();
-    }
+    // translate
+    this.ghostVerties = this.verties.map((v) => {
+      return vec3.add([], v, newDist);
+    });
 
-    [SUBSCRIBE('moveFirstGhostToolView')] () {
-        const targetMousePoint = this.$viewport.getWorldPosition();
+    this.load("$containerView");
+  }
 
-        const newDist = vec3.floor([], vec3.subtract([], targetMousePoint, this.initMousePoint));
+  [SUBSCRIBE("moveGhostToolView")]() {
+    const targetMousePoint = this.$viewport.getWorldPosition();
 
-        // translate 
-        this.ghostVerties = this.verties.map(v => {
-            return vec3.add([], v, newDist);
-        });
+    const newDist = vec3.floor(
+      [],
+      vec3.subtract([], targetMousePoint, this.initMousePoint)
+    );
 
-        this.load('$containerView');
-    }
+    // translate
+    this.ghostVerties = this.verties.map((v) => {
+      return vec3.add([], v, newDist);
+    });
 
-    [SUBSCRIBE('moveGhostToolView')] () {
-        const targetMousePoint = this.$viewport.getWorldPosition();
+    this.ghostScreenVerties = this.$viewport.applyVerties(this.ghostVerties);
 
-        const newDist = vec3.floor([], vec3.subtract([], targetMousePoint, this.initMousePoint));
+    const filteredLayers = this.$selection.filteredLayers.filter(
+      (it) => this.$selection.check(it) === false
+    );
+    this.containerList = filteredLayers
+      .filter((it) => it.hasLayout() || it.is("artboard"))
+      .map((it) => it.originVerties);
+    this.targetItem = filteredLayers[0];
 
-        // translate 
-        this.ghostVerties = this.verties.map(v => {
-            return vec3.add([], v, newDist);
-        });
+    if (this.targetItem) {
+      this.targetOriginPosition = this.$viewport.applyVerties(
+        toRectVerties(this.targetItem.originVerties)
+      );
+      this.targetPoint = this.$viewport.applyVertex(targetMousePoint);
 
-        this.ghostScreenVerties = this.$viewport.applyVerties(this.ghostVerties);
+      this.targetRelativeMousePoint = {
+        x:
+          (this.targetPoint[0] - this.targetOriginPosition[0][0]) /
+          (this.targetOriginPosition[1][0] - this.targetOriginPosition[0][0]),
+        y:
+          (this.targetPoint[1] - this.targetOriginPosition[0][1]) /
+          (this.targetOriginPosition[3][1] - this.targetOriginPosition[0][1]),
+      };
 
-        const filteredLayers = this.$selection.filteredLayers.filter(it => this.$selection.check(it) === false);
-        this.containerList = filteredLayers.filter(it => it.hasLayout() || it.is('artboard')).map(it => it.originVerties);        
-        this.targetItem = filteredLayers[0];
+      if (this.targetItem.isLayoutItem()) {
+        this.targetParent = this.targetItem.parent;
 
-        if (this.targetItem) {
-            this.targetOriginPosition = this.$viewport.applyVerties(
-                toRectVerties(this.targetItem.originVerties)
-            );
-            this.targetPoint = this.$viewport.applyVertex(targetMousePoint);
-
-            this.targetRelativeMousePoint = {
-                x: (this.targetPoint[0] - this.targetOriginPosition[0][0]) / (this.targetOriginPosition[1][0] - this.targetOriginPosition[0][0]),
-                y: (this.targetPoint[1] - this.targetOriginPosition[0][1]) / (this.targetOriginPosition[3][1] - this.targetOriginPosition[0][1])
-            }
-
-            if (this.targetItem.isLayoutItem()) {
-                this.targetParent = this.targetItem.parent;
-
-                if (this.targetParent) {
-                    this.targetParentPosition = this.$viewport.applyVerties(this.targetParent.originVerties);
-                }
-            } else {
-                this.targetParent = null;
-                this.targetParentPosition = null;
-            }
-        } else {
-            this.targetPoint = null;
-            this.targetRelativeMousePoint = null;
-            this.targetParent = null;
-            this.targetParentPosition = null;            
+        if (this.targetParent) {
+          this.targetParentPosition = this.$viewport.applyVerties(
+            this.targetParent.originVerties
+          );
         }
-
-        this.load('$view');
+      } else {
+        this.targetParent = null;
+        this.targetParentPosition = null;
+      }
+    } else {
+      this.targetPoint = null;
+      this.targetRelativeMousePoint = null;
+      this.targetParent = null;
+      this.targetParentPosition = null;
     }
 
-    [LOAD('$containerView')] () {
+    this.load("$view");
+  }
 
-        if (!this.ghostVerties) {
-            return <svg></svg>
-        }
+  [LOAD("$containerView")]() {
+    if (!this.ghostVerties) {
+      return <svg></svg>;
+    }
 
-        return <svg>
-            {this.containerList?.map(it => {
-                it = this.$viewport.applyVerties(it);
-                return <path class="container" d={`
+    return (
+      <svg>
+        {this.containerList?.map((it) => {
+          it = this.$viewport.applyVerties(it);
+          return (
+            <path
+              class="container"
+              d={`
                     M ${it[0][0]} ${it[0][1]}
                     L ${it[1][0]} ${it[1][1]}
                     L ${it[2][0]} ${it[2][1]}
                     L ${it[3][0]} ${it[3][1]}
                     Z
-                `} />
-            })}
-        </svg>
-        
-    }
+                `}
+            />
+          );
+        })}
+      </svg>
+    );
+  }
 
-    renderPath (verties, className, data = className) {
-        verties = toRectVerties(verties);
+  renderPath(verties, className, data = className) {
+    verties = (data === 'ghost') ? verties : toRectVerties(verties);
 
-        const textX = className === 'flex-item' ? verties[0][0] : verties[0][0];
-        const textY = className === 'flex-item' ? verties[2][1] + 10 : verties[0][1] - 10;
+    const textX = className === "flex-item" ? verties[0][0] : verties[0][0];
+    const textY =
+      className === "flex-item" ? verties[2][1] + 10 : verties[0][1] - 10;
 
-        return <g>
-            <text x={textX} y={textY} font-size={8}>{data}</text>
-            <path class={className} d={`
+    return (
+      <g>
+        <text x={textX} y={textY} font-size={8}>
+          {data}
+        </text>
+        <path
+          class={className}
+          d={`
                 M ${verties[0][0]} ${verties[0][1]}
                 L ${verties[1][0]} ${verties[1][1]}
                 L ${verties[2][0]} ${verties[2][1]}
                 L ${verties[3][0]} ${verties[3][1]}
                 Z
-            `} />
-        </g>
+            `}
+        />
+      </g>
+    );
+  }
+
+  renderLayoutFlexRowArea() {
+    const rect = vertiesToRectangle(this.targetOriginPosition);
+
+    if (this.targetRelativeMousePoint.x < CHECK_RATE) {
+      return this.renderPath(
+        [
+          [this.targetOriginPosition[0][0], this.targetOriginPosition[0][1]],
+          [
+            this.targetOriginPosition[0][0] + rect.width / 2,
+            this.targetOriginPosition[1][1],
+          ],
+          [
+            this.targetOriginPosition[0][0] + rect.width / 2,
+            this.targetOriginPosition[2][1],
+          ],
+          [this.targetOriginPosition[3][0], this.targetOriginPosition[3][1]],
+        ],
+        "flex-item",
+        "flex-left"
+      );
+    } else {
+      return this.renderPath(
+        [
+          [
+            this.targetOriginPosition[0][0] + rect.width / 2,
+            this.targetOriginPosition[0][1],
+          ],
+          [this.targetOriginPosition[1][0], this.targetOriginPosition[1][1]],
+          [this.targetOriginPosition[2][0], this.targetOriginPosition[2][1]],
+          [
+            this.targetOriginPosition[3][0] + rect.width / 2,
+            this.targetOriginPosition[3][1],
+          ],
+        ],
+        "flex-item",
+        "flex-right"
+      );
+    }
+  }
+
+  renderLayoutFlexRowForFirst() {
+    // 레이아웃 container  rect
+    const rect = vertiesToRectangle(this.targetOriginPosition);
+    const ghostRect = vertiesToRectangle(this.ghostScreenVerties);
+
+    let x = rect.x;
+    let y = rect.y;
+
+    switch (this.targetItem["justify-content"]) {
+      case JustifyContent.FLEX_START:
+        x = rect.x;
+        break;
+      case JustifyContent.CENTER:
+      case JustifyContent.SPACE_BETWEEN:
+      case JustifyContent.SPACE_AROUND:
+        x = rect.x + rect.width / 2 - ghostRect.width / 2;
+        break;
+      case JustifyContent.FLEX_END:
+        x = rect.x + rect.width - ghostRect.width;
+        break;
     }
 
-    renderLayoutFlexRowArea () {
-        const rect = vertiesToRectangle(this.targetOriginPosition);
+    switch (this.targetItem["align-content"]) {
+      case AlignContent.FLEX_START:
+        y = rect.y;
+        break;
+      case AlignContent.CENTER:
+      case AlignContent.SPACE_BETWEEN:
+      case AlignContent.SPACE_AROUND:
+        y = rect.y + rect.height / 2 - ghostRect.height / 2;
+        break;
+      case AlignContent.FLEX_END:
+        y = rect.y + rect.height - ghostRect.height;
+        break;
+    }
 
-        if (this.targetRelativeMousePoint.x < CHECK_RATE) {
+    return this.renderPath(
+      [
+        [x, y],
+        [x + ghostRect.width, y],
+        [x + ghostRect.width, y + ghostRect.height],
+        [x, y + ghostRect.height],
+      ],
+      "flex-item",
+      ""
+    );
+  }
 
-            return this.renderPath([
-                [this.targetOriginPosition[0][0], this.targetOriginPosition[0][1]],
-                [this.targetOriginPosition[0][0] + rect.width/2, this.targetOriginPosition[1][1]],
-                [this.targetOriginPosition[0][0] + rect.width/2, this.targetOriginPosition[2][1]],
-                [this.targetOriginPosition[3][0], this.targetOriginPosition[3][1]]
-            ], 'flex-item', 'flex-left');
-        } else {
-            return this.renderPath([
-                [this.targetOriginPosition[0][0] + rect.width/2, this.targetOriginPosition[0][1]],
-                [this.targetOriginPosition[1][0], this.targetOriginPosition[1][1]],
-                [this.targetOriginPosition[2][0], this.targetOriginPosition[2][1]],
-                [this.targetOriginPosition[3][0] + rect.width/2, this.targetOriginPosition[3][1]]
-            ], 'flex-item', 'flex-right');
+  renderLayoutFlexColumnArea() {
+    const rect = vertiesToRectangle(this.targetOriginPosition);
+    if (this.targetRelativeMousePoint.y < CHECK_RATE) {
+      return this.renderPath(
+        [
+          [this.targetOriginPosition[0][0], this.targetOriginPosition[0][1]],
+          [this.targetOriginPosition[1][0], this.targetOriginPosition[1][1]],
+          [
+            this.targetOriginPosition[2][0],
+            this.targetOriginPosition[2][1] - rect.height / 2,
+          ],
+          [
+            this.targetOriginPosition[3][0],
+            this.targetOriginPosition[3][1] - rect.height / 2,
+          ],
+        ],
+        "flex-item",
+        "flex-top"
+      );
+    } else {
+      return this.renderPath(
+        [
+          [
+            this.targetOriginPosition[0][0],
+            this.targetOriginPosition[0][1] + rect.height / 2,
+          ],
+          [
+            this.targetOriginPosition[1][0],
+            this.targetOriginPosition[1][1] + rect.height / 2,
+          ],
+          [this.targetOriginPosition[2][0], this.targetOriginPosition[2][1]],
+          [this.targetOriginPosition[3][0], this.targetOriginPosition[3][1]],
+        ],
+        "flex-item",
+        "flex-bottom"
+      );
+    }
+  }
+
+  renderLayoutItemInsertArea() {
+    // 현재 선택된 layer 의 부모를 가지고 온다.
+
+    if (!this.targetParent) return "";
+
+    if (this.targetParent.hasLayout()) {
+      if (this.targetParent.isLayout(Layout.FLEX)) {
+        switch (this.targetParent["flex-direction"]) {
+          case FlexDirection.ROW:
+            return this.renderLayoutFlexRowArea();
+          case FlexDirection.COLUMN:
+            return this.renderLayoutFlexColumnArea();
         }
+      } else if (this.targetParent.isLayout(Layout.GRID)) {
+      }
     }
 
+    return (
+      <path
+        class="insert-area"
+        d={`
 
-    renderLayoutFlexRowForFirst () {
-        // 레이아웃 container  rect 
-        const rect = vertiesToRectangle(this.targetOriginPosition);
-        const ghostRect = vertiesToRectangle(this.ghostScreenVerties);
+        `}
+      />
+    );
+  }
 
-
-        let x = rect.x;
-        let y = rect.y;
-
-        switch(this.targetItem['justify-content']) {
-        case JustifyContent.FLEX_START: x = rect.x; break;
-        case JustifyContent.CENTER: 
-        case JustifyContent.SPACE_BETWEEN:
-        case JustifyContent.SPACE_AROUND:
-            x = rect.x + rect.width/2 - ghostRect.width/2; 
-            break;
-        case JustifyContent.FLEX_END: x = rect.x + rect.width - ghostRect.width; break;
+  renderLayoutItemForFirst() {
+    if (this.targetItem.hasChildren() === false) {
+      if (this.targetItem.isLayout(Layout.FLEX)) {
+        switch (this.targetItem["flex-direction"]) {
+          case FlexDirection.ROW:
+            return this.renderLayoutFlexRowForFirst();
+          case FlexDirection.COLUMN:
+            return this.renderLayoutFlexColumnArea();
         }
-
-        switch(this.targetItem['align-content']) {
-        case AlignContent.FLEX_START: y = rect.y; break;
-        case AlignContent.CENTER: 
-        case AlignContent.SPACE_BETWEEN:
-        case AlignContent.SPACE_AROUND:
-            y = rect.y + rect.height/2 - ghostRect.height/2; 
-            break;
-        case AlignContent.FLEX_END: y = rect.y + rect.height - ghostRect.height; break;
-        }
-
-        return this.renderPath([
-            [x, y],
-            [x + ghostRect.width, y],
-            [x + ghostRect.width, y + ghostRect.height],
-            [x, y + ghostRect.height]
-        ], 'flex-item', '');
-    }    
-
-    renderLayoutFlexColumnArea () {
-        const rect = vertiesToRectangle(this.targetOriginPosition);        
-        if (this.targetRelativeMousePoint.y < CHECK_RATE) {
-
-            return this.renderPath([
-                [this.targetOriginPosition[0][0], this.targetOriginPosition[0][1]],
-                [this.targetOriginPosition[1][0], this.targetOriginPosition[1][1]],
-                [this.targetOriginPosition[2][0], this.targetOriginPosition[2][1] - rect.height/2],
-                [this.targetOriginPosition[3][0], this.targetOriginPosition[3][1] - rect.height/2]
-            ], 'flex-item', 'flex-top');
-        } else {
-            return this.renderPath([
-                [this.targetOriginPosition[0][0], this.targetOriginPosition[0][1] + rect.height/2],
-                [this.targetOriginPosition[1][0], this.targetOriginPosition[1][1] + rect.height/2],
-                [this.targetOriginPosition[2][0], this.targetOriginPosition[2][1]],
-                [this.targetOriginPosition[3][0], this.targetOriginPosition[3][1]]
-            ], 'flex-item', 'flex-bottom');
-        }
+      } else if (this.targetItem.isLayout(Layout.GRID)) {
+      }
     }
 
-    renderLayoutItemInsertArea () {
+    return (
+      <path
+        class="insert-area"
+        d={`
 
-        // 현재 선택된 layer 의 부모를 가지고 온다. 
+        `}
+      />
+    );
+  }
 
-        if (!this.targetParent) return "";
-
-        console.log('this.targetparent', this.targetParent);
-
-        if (this.targetParent.hasLayout()) {
-            if (this.targetParent.isLayout(Layout.FLEX)) {
-
-                switch(this.targetParent['flex-direction']) {
-                case FlexDirection.ROW:
-                    return this.renderLayoutFlexRowArea();
-                case FlexDirection.COLUMN:
-                    return this.renderLayoutFlexColumnArea();
-                }
-
-            } else if (this.targetParent.isLayout(Layout.GRID)) {
-
-            }
-        }
-
-        return <path class="insert-area" d={`
-
-        `} />
+  [LOAD("$view") + DOMDIFF]() {
+    if (!this.ghostVerties) {
+      return <svg></svg>;
     }
 
+    return (
+      <svg>
+        {this.targetParent &&
+          this.renderPath(this.targetParentPosition, "target-parent")}
+        {this.targetItem &&
+          this.renderPath(this.targetOriginPosition, "target", "")}
+        {this.targetItem &&
+          this.renderPath(this.targetOriginPosition, "target-rect", "")}
+        {this.targetItem && this.renderLayoutItemInsertArea()}
+        {this.targetItem && this.renderLayoutItemForFirst()}
 
-    renderLayoutItemForFirst () {
+        {this.isLayoutItem && this.renderPath(this.ghostScreenVerties, "ghost")}
+      </svg>
+    );
+  }
 
-        if (this.targetItem.hasChildren() === false) {
-            if (this.targetItem.isLayout(Layout.FLEX)) {
+  initializeGhostView() {
+    this.isLayoutItem = false;
+    this.ghostVerties = null;
+    this.ghostScreenVerties = null;
 
-                switch(this.targetItem['flex-direction']) {
-                case FlexDirection.ROW:
-                    return this.renderLayoutFlexRowForFirst();
-                case FlexDirection.COLUMN:
-                    return this.renderLayoutFlexColumnArea();
-                }
+    this.targetOriginPosition = null;
+    this.targetOriginPosition = null;
 
-            } else if (this.targetItem.isLayout(Layout.GRID)) {
+    this.targetRelativeMousePoint = null;
 
-            }
-        }
+    this.targetParent = null;
+    this.targetParentPosition = null;
+  }
 
-        return <path class="insert-area" d={`
+  updateLayer() {
+    const current = this.$selection.current;
 
-        `} />
+    // 타겟이 없을때는 실행하지 않음. 
+    if (!this.targetItem) return;
+
+    // 타겟이 자식을 가지지 못하면 실행하지 않음 
+    if (this.targetItem.enableHasChildren() === false) return;
+
+    // target 이 레이아웃이 있고 
+    if (this.targetItem.hasLayout()) {
+
+        // 자식을 안가지고 있을 때는 그냥 appendChild 를 실행 
+      if (this.targetItem.hasChildren() === false) {
+        this.targetItem.appendChild(current);
+      } else {
+        // 내부에 자식이 있을 때는 , 마지막 드래그 위치에 따라 달라짐 
+      }
+    } else {
+
+      // 시작점이 layout item 이었을 경우 
+      if (current.isLayoutItem()) {
+        // targetItem 의 layout 이 default 일 때 , absolute 위치를 그대로 유지해준다. 
+        const targetMousePoint = this.$viewport.getWorldPosition();
+        const newDist = vec3.floor(
+            [],
+            vec3.subtract([], targetMousePoint, this.initMousePoint)
+        );        
+
+        // 화면에서 이동한 만큼 선택된 객체를 이동해준다음 
+        current.move(newDist);
+
+        // 타겟의 자식으로 넣으면 원래 위치로 복원된다. 
+        this.targetItem.appendChild(current);
+
+
+        this.command(
+            "setAttributeForMulti",
+            "change move",
+            this.$selection.pack('x', 'y')
+        );
+      }
     }
 
-    [LOAD('$view') + DOMDIFF] () {
+    this.emit("refreshAllCanvas");
+  }
 
-        if (!this.ghostVerties) {
-            return <svg></svg>
-        }
+  [SUBSCRIBE("endGhostToolView")]() {
+    this.updateLayer();
 
-        return <svg>
+    this.trigger("clearGhostView");
+  }
 
-            {this.targetParent && this.renderPath(this.targetParentPosition, "target-parent")}
-            {this.targetItem && this.renderPath(this.targetOriginPosition, "target", "")}
-            {this.targetItem && this.renderPath(this.targetOriginPosition, "target-rect", "")}
-            {this.targetItem && this.renderLayoutItemInsertArea()}
-            {this.targetItem && this.renderLayoutItemForFirst()}
-
-
-            {this.isLayoutItem && this.renderPath(this.ghostScreenVerties, "ghost")}
-        </svg>
-    }
-
-    initializeGhostView() {
-        this.isLayoutItem = false;
-        this.ghostVerties = null;
-        this.ghostScreenVerties = null;
-
-        this.targetOriginPosition = null;
-        this.targetOriginPosition = null;
-
-        this.targetRelativeMousePoint = null;
-
-        this.targetParent = null;
-        this.targetParentPosition = null;
-    }
-
-    [SUBSCRIBE('endGhostToolView')] () {
-        this.initializeGhostView();
-        this.load();
-    }
+  [SUBSCRIBE("clearGhostView")]() {
+    this.initializeGhostView();
+    this.load();
+  }
 }

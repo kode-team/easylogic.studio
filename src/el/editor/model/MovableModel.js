@@ -112,6 +112,14 @@ export class MovableModel extends BaseAssetModel {
         return this._cachedAbsoluteMatrixInverse || this.getAbsoluteMatrixInverse()
     }
 
+    get relativeMatrix() {
+        return this._cachedRelativeMatrix || this.getRelativeMatrix()
+    }
+
+    get relativeMatrixInverse() {
+        return this._cachedRelativeMatrixInverse || this.getRelativeMatrixInverse()
+    }    
+
     get verties() {
         return this._cachedVerties || this.getVerties();
     }
@@ -264,6 +272,9 @@ export class MovableModel extends BaseAssetModel {
     setCacheAbsoluteMatrix() {
         this._cachedAbsoluteMatrix = this.getAbsoluteMatrix();
         this._cachedAbsoluteMatrixInverse = mat4.invert([], this._cachedAbsoluteMatrix);
+
+        this._cachedRelativeMatrix = this.getRelativeMatrix();
+        this._cachedRelativeMatrixInverse = mat4.invert([], this._cachedRelativeMatrix);        
     }
 
     setCacheVerties() {
@@ -573,6 +584,10 @@ export class MovableModel extends BaseAssetModel {
         mat4.multiply(transform, transform, this.localMatrix)
 
         return transform;
+    }
+
+    getRelativeMatrixInverse() {
+        return mat4.invert([], this.getRelativeMatrix());
     }
 
     getTransformWithTranslate(item) {

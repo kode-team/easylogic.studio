@@ -450,13 +450,10 @@ export default class HTMLRenderView extends EditorElement {
             this.initMousePoint = targetMousePoint;
             this.$selection.reselect();
             this.$snapManager.clear();
-            this.clearElementAll();
-
             this.refreshAllCanvas()
 
             // ArtBoard 변경 이후에 LayerTreeView 업데이트
             this.emit('refreshLayerTreeView')
-            // this.refreshAllElementBoundSize();
         }
 
         this.emit('setAttributeForMulti', this.$selection.packByValue({
@@ -519,7 +516,8 @@ export default class HTMLRenderView extends EditorElement {
         const targetMousePoint = this.$viewport.getWorldPosition();
         const newDist = vec3.dist(targetMousePoint, this.initMousePoint);
         this.$config.init('set.move.control.point', false);
-        this.emit('endGhostToolView');
+
+        this.emit('endGhostToolView'); 
 
         if (this.$config.get('set.dragarea.mode')) {
             this.emit('endDragAreaView');

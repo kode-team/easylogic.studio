@@ -25011,7 +25011,6 @@ class HTMLRenderView extends EditorElement {
       this.initMousePoint = targetMousePoint;
       this.$selection.reselect();
       this.$snapManager.clear();
-      this.clearElementAll();
       this.refreshAllCanvas();
       this.emit("refreshLayerTreeView");
     }
@@ -31674,6 +31673,12 @@ class MovableModel extends BaseAssetModel {
   get absoluteMatrixInverse() {
     return this._cachedAbsoluteMatrixInverse || this.getAbsoluteMatrixInverse();
   }
+  get relativeMatrix() {
+    return this._cachedRelativeMatrix || this.getRelativeMatrix();
+  }
+  get relativeMatrixInverse() {
+    return this._cachedRelativeMatrixInverse || this.getRelativeMatrixInverse();
+  }
   get verties() {
     return this._cachedVerties || this.getVerties();
   }
@@ -31781,6 +31786,8 @@ class MovableModel extends BaseAssetModel {
   setCacheAbsoluteMatrix() {
     this._cachedAbsoluteMatrix = this.getAbsoluteMatrix();
     this._cachedAbsoluteMatrixInverse = invert([], this._cachedAbsoluteMatrix);
+    this._cachedRelativeMatrix = this.getRelativeMatrix();
+    this._cachedRelativeMatrixInverse = invert([], this._cachedRelativeMatrix);
   }
   setCacheVerties() {
     this._cachedVerties = this.getVerties();
@@ -31947,6 +31954,9 @@ class MovableModel extends BaseAssetModel {
     translate(transform2, transform2, [offsetX, offsetY, 0]);
     multiply$1(transform2, transform2, this.localMatrix);
     return transform2;
+  }
+  getRelativeMatrixInverse() {
+    return invert([], this.getRelativeMatrix());
   }
   getTransformWithTranslate(item2) {
     item2 = item2 || this;
@@ -58328,7 +58338,7 @@ class GhostToolView extends EditorElement {
     }));
   }
   [SUBSCRIBE("startGhostToolView")](verties) {
-    const screenVerties = this.$selection.targetVerties;
+    const screenVerties = this.$selection.verties;
     this.isLayoutItem = this.$selection.isLayoutItem;
     this.verties = clone$1(screenVerties);
     this.ghostVerties = clone$1(screenVerties);
@@ -58397,7 +58407,7 @@ class GhostToolView extends EditorElement {
     }));
   }
   renderPath(verties, className, data = className) {
-    verties = toRectVerties(verties);
+    verties = data === "ghost" ? verties : toRectVerties(verties);
     const textX = className === "flex-item" ? verties[0][0] : verties[0][0];
     const textY = className === "flex-item" ? verties[2][1] + 10 : verties[0][1] - 10;
     return /* @__PURE__ */ createElementJsx("g", null, /* @__PURE__ */ createElementJsx("text", {
@@ -58420,16 +58430,28 @@ class GhostToolView extends EditorElement {
     if (this.targetRelativeMousePoint.x < CHECK_RATE) {
       return this.renderPath([
         [this.targetOriginPosition[0][0], this.targetOriginPosition[0][1]],
-        [this.targetOriginPosition[0][0] + rect2.width / 2, this.targetOriginPosition[1][1]],
-        [this.targetOriginPosition[0][0] + rect2.width / 2, this.targetOriginPosition[2][1]],
+        [
+          this.targetOriginPosition[0][0] + rect2.width / 2,
+          this.targetOriginPosition[1][1]
+        ],
+        [
+          this.targetOriginPosition[0][0] + rect2.width / 2,
+          this.targetOriginPosition[2][1]
+        ],
         [this.targetOriginPosition[3][0], this.targetOriginPosition[3][1]]
       ], "flex-item", "flex-left");
     } else {
       return this.renderPath([
-        [this.targetOriginPosition[0][0] + rect2.width / 2, this.targetOriginPosition[0][1]],
+        [
+          this.targetOriginPosition[0][0] + rect2.width / 2,
+          this.targetOriginPosition[0][1]
+        ],
         [this.targetOriginPosition[1][0], this.targetOriginPosition[1][1]],
         [this.targetOriginPosition[2][0], this.targetOriginPosition[2][1]],
-        [this.targetOriginPosition[3][0] + rect2.width / 2, this.targetOriginPosition[3][1]]
+        [
+          this.targetOriginPosition[3][0] + rect2.width / 2,
+          this.targetOriginPosition[3][1]
+        ]
       ], "flex-item", "flex-right");
     }
   }
@@ -58477,13 +58499,25 @@ class GhostToolView extends EditorElement {
       return this.renderPath([
         [this.targetOriginPosition[0][0], this.targetOriginPosition[0][1]],
         [this.targetOriginPosition[1][0], this.targetOriginPosition[1][1]],
-        [this.targetOriginPosition[2][0], this.targetOriginPosition[2][1] - rect2.height / 2],
-        [this.targetOriginPosition[3][0], this.targetOriginPosition[3][1] - rect2.height / 2]
+        [
+          this.targetOriginPosition[2][0],
+          this.targetOriginPosition[2][1] - rect2.height / 2
+        ],
+        [
+          this.targetOriginPosition[3][0],
+          this.targetOriginPosition[3][1] - rect2.height / 2
+        ]
       ], "flex-item", "flex-top");
     } else {
       return this.renderPath([
-        [this.targetOriginPosition[0][0], this.targetOriginPosition[0][1] + rect2.height / 2],
-        [this.targetOriginPosition[1][0], this.targetOriginPosition[1][1] + rect2.height / 2],
+        [
+          this.targetOriginPosition[0][0],
+          this.targetOriginPosition[0][1] + rect2.height / 2
+        ],
+        [
+          this.targetOriginPosition[1][0],
+          this.targetOriginPosition[1][1] + rect2.height / 2
+        ],
         [this.targetOriginPosition[2][0], this.targetOriginPosition[2][1]],
         [this.targetOriginPosition[3][0], this.targetOriginPosition[3][1]]
       ], "flex-item", "flex-bottom");
@@ -58492,7 +58526,6 @@ class GhostToolView extends EditorElement {
   renderLayoutItemInsertArea() {
     if (!this.targetParent)
       return "";
-    console.log("this.targetparent", this.targetParent);
     if (this.targetParent.hasLayout()) {
       if (this.targetParent.isLayout(Layout.FLEX)) {
         switch (this.targetParent["flex-direction"]) {
@@ -58546,7 +58579,32 @@ class GhostToolView extends EditorElement {
     this.targetParent = null;
     this.targetParentPosition = null;
   }
+  updateLayer() {
+    const current = this.$selection.current;
+    if (!this.targetItem)
+      return;
+    if (this.targetItem.enableHasChildren() === false)
+      return;
+    if (this.targetItem.hasLayout()) {
+      if (this.targetItem.hasChildren() === false) {
+        this.targetItem.appendChild(current);
+      }
+    } else {
+      if (current.isLayoutItem()) {
+        const targetMousePoint = this.$viewport.getWorldPosition();
+        const newDist = floor([], subtract([], targetMousePoint, this.initMousePoint));
+        current.move(newDist);
+        this.targetItem.appendChild(current);
+        this.command("setAttributeForMulti", "change move", this.$selection.pack("x", "y"));
+      }
+    }
+    this.emit("refreshAllCanvas");
+  }
   [SUBSCRIBE("endGhostToolView")]() {
+    this.updateLayer();
+    this.trigger("clearGhostView");
+  }
+  [SUBSCRIBE("clearGhostView")]() {
     this.initializeGhostView();
     this.load();
   }
