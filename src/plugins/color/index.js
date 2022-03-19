@@ -13,7 +13,7 @@ export default function (editor) {
         ColorPickerEditor,
         EmbedColorPicker
     })
-    editor.registerMenuItem('popup', {
+    editor.registerUI('popup', {
         ColorPickerPopup
     })
 }

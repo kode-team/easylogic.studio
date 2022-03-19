@@ -15,7 +15,7 @@ export default function (editor) {
         TransformEditor
     })
 
-    editor.registerMenuItem('inspector.tab.style', {
+    editor.registerUI('inspector.tab.style', {
         TransformProperty
     })
 }

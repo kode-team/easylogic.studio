@@ -13,11 +13,11 @@ export default function (editor) {
         OffsetEditor
     })
 
-    editor.registerMenuItem('inspector.tab.transition', {
+    editor.registerUI('inspector.tab.transition', {
         KeyframeProperty
     })
 
-    editor.registerMenuItem('popup', {
+    editor.registerUI('popup', {
         KeyframePopup
     })
 }

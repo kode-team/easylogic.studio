@@ -8,11 +8,11 @@ import PathManager from './PathManager';
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerMenuItem('canvas.view', {
+    editor.registerUI('canvas.view', {
         PathEditorView        
     })
 
-    editor.registerMenuItem('page.subeditor.view', {
+    editor.registerUI('page.subeditor.view', {
         PathManager        
     })
 

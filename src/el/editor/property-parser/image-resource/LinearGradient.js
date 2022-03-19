@@ -1,5 +1,5 @@
 import { Gradient } from "./Gradient";
-import { isNumber, isUndefined} from "el/sapa/functions/func";
+import { isNumber} from "el/sapa/functions/func";
 import { parseOneValue } from "el/utils/css-function-parser";
 import { FuncType } from "el/editor/types/model";
 

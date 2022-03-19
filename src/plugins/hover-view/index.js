@@ -6,7 +6,7 @@ import HoverView from './HoverView';
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerMenuItem('canvas.view', {
+    editor.registerUI('canvas.view', {
         HoverView
     })
 }

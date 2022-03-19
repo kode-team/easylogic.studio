@@ -3,7 +3,7 @@ import { createComponent } from "el/sapa/functions/jsx";
 export class InjectManager {
   constructor(editor) {
     this.editor = editor;
-    this.menuItems = {}
+    this.ui = {}
   }
 
   /**
@@ -13,22 +13,22 @@ export class InjectManager {
    * @param {string} target 
    * @param {object} obj 
    */
-  registerMenuItem(target, obj = {}) {
+  registerUI(target, obj = {}) {
 
-    if (!this.menuItems[target]) {
-      this.menuItems[target] = []
+    if (!this.ui[target]) {
+      this.ui[target] = []
     }
 
     Object.keys(obj).forEach(refClass => {
-      this.menuItems[target].push({
+      this.ui[target].push({
         refClass,
         class: obj[refClass]
       })
     })
   }
 
-  getTargetMenuItems(target) {
-    return this.menuItems[target] || [];
+  getTargetUI(target) {
+    return this.ui[target] || [];
   }
 
   /**
@@ -38,7 +38,7 @@ export class InjectManager {
    * @returns {string}
    */
   generate(target, hasRef = false) {
-    return this.getTargetMenuItems(target).map(it => {
+    return this.getTargetUI(target).map(it => {
       const props = {}
 
       if (hasRef) {

@@ -12,7 +12,7 @@ export default function (editor) {
         TransformOriginEditor
     })
 
-    editor.registerMenuItem('inspector.tab.style', {
+    editor.registerUI('inspector.tab.style', {
         TransformOriginProperty
     })
 }

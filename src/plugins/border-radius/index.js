@@ -11,7 +11,7 @@ export default function (editor) {
         BorderRadiusEditor,
     });
 
-    editor.registerMenuItem('inspector.tab.style', {
+    editor.registerUI('inspector.tab.style', {
         BorderRadiusProperty
     });
 }

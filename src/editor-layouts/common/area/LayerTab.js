@@ -58,7 +58,7 @@ export default class LayerTab extends EditorElement {
               <label>${iconUse("plugin")}</label>
             </div>            
 
-            ${this.$injectManager.getTargetMenuItems('leftbar.tab').map(it => {
+            ${this.$injectManager.getTargetUI('leftbar.tab').map(it => {
               const { value, title} = it.class;   
               
               let iconString = it.class.icon;
@@ -93,7 +93,7 @@ export default class LayerTab extends EditorElement {
             <div class='tab-content' data-value='6'>
               ${createComponent("CustomAssets")}
             </div>
-            ${this.$injectManager.getTargetMenuItems('leftbar.tab').map(it => {
+            ${this.$injectManager.getTargetUI('leftbar.tab').map(it => {
               const { value } = it.class;
               return /*html*/`
                 <div class='tab-content' data-value='${value}'>

@@ -1,10 +1,10 @@
 import { makeInterpolateBoolean } from "./makeInterpolateBoolean";
 import { makeInterpolateLinearGradient } from "./gradient/makeInterpolateLinearGradient";
-import { makeInterpolateRepeatingLinearGradient } from "./gradient/makeInterpolateRepeatingLinearGradient";
-import { makeInterpolateRepeatingRadialGradient } from "./gradient/makeInterpolateRepeatingRadialGradient";
-import { makeInterpolateRepeatingConicGradient } from "./gradient/makeInterpolateRepeatingConicGradient";
-import { makeInterpolateRadialGradient } from "./gradient/makeInterpolateRadialGradient";
-import { makeInterpolateConicGradient } from "./gradient/makeInterpolateConicGradient";
+// import { makeInterpolateRepeatingLinearGradient } from "./gradient/makeInterpolateRepeatingLinearGradient";
+// import { makeInterpolateRepeatingRadialGradient } from "./gradient/makeInterpolateRepeatingRadialGradient";
+// import { makeInterpolateRepeatingConicGradient } from "./gradient/makeInterpolateRepeatingConicGradient";
+// import { makeInterpolateRadialGradient } from "./gradient/makeInterpolateRadialGradient";
+// import { makeInterpolateConicGradient } from "./gradient/makeInterpolateConicGradient";
 
 export function makeInterpolateImageResource(layer, property, s, e) {
 

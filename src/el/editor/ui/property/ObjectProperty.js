@@ -51,7 +51,7 @@ export default class ObjectProperty {
 
         if (json.preventUpdate) {
 
-          if (this.$editor.isPointerUp) {
+          if (this.$stateManager.isPointerUp) {
             this.refresh();
           }
 

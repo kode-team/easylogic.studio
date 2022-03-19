@@ -6,7 +6,7 @@ import SVGTextProperty from "./SVGTextProperty";
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerMenuItem('inspector.tab.style', {
+    editor.registerUI('inspector.tab.style', {
         SVGTextProperty
     })
 }

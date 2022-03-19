@@ -133,12 +133,7 @@ export default class ResizingProperty extends BaseProperty {
     this.refreshShow(() => {
       var current = this.$selection.current; 
 
-      const isFlexLayout = current.isLayout(Layout.FLEX);
-      const isGridLayout = current.isLayout(Layout.GRID);
-
-      const hasLayout = isFlexLayout || isGridLayout;
-
-      return  current && hasLayout && current.hasChildren();
+      return  current && current.hasLayout()
     });
   }
 }

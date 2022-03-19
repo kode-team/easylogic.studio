@@ -14,11 +14,11 @@ export default function (editor) {
         BackgroundPositionEditor,
     })
 
-    editor.registerMenuItem('inspector.tab.style', {
+    editor.registerUI('inspector.tab.style', {
         BackgroundImageProperty
     })
 
-    editor.registerMenuItem('popup', {
+    editor.registerUI('popup', {
         BackgroundImagePositionPopup
     })
 }

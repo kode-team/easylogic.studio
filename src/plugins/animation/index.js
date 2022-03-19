@@ -8,11 +8,11 @@ import AnimationPropertyPopup from "./AnimationPropertyPopup";
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerMenuItem('inspector.tab.transition', {
+    editor.registerUI('inspector.tab.transition', {
         AnimationProperty
     });
 
-    editor.registerMenuItem('popup', {
+    editor.registerUI('popup', {
         AnimationPropertyPopup
     })
 }

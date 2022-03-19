@@ -53,7 +53,7 @@ export default class ItemLayerTab extends EditorElement {
               <label>${iconUse("plugin")}</label>
             </div>            
 
-            ${this.$injectManager.getTargetMenuItems('leftbar.tab').filter(it => {
+            ${this.$injectManager.getTargetUI('leftbar.tab').filter(it => {
               return it.class.designMode && it.class.designMode.includes('item');
             }).map(it => {
               const { value, title} = it.class;   
@@ -77,7 +77,7 @@ export default class ItemLayerTab extends EditorElement {
             <div class='tab-content' data-value='6'>
               ${createComponent("CustomAssets")}
             </div>
-            ${this.$injectManager.getTargetMenuItems('leftbar.tab').filter(it => {
+            ${this.$injectManager.getTargetUI('leftbar.tab').filter(it => {
               return it.class.designMode && it.class.designMode.includes('item');
             }).map(it => {
               const { value } = it.class;

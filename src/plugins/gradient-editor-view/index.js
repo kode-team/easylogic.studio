@@ -7,7 +7,7 @@ import GradientEditorView from './GradientEditorView';
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerMenuItem('canvas.view', {
+    editor.registerUI('canvas.view', {
         GradientEditorView         
     })
 }

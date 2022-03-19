@@ -1,7 +1,6 @@
 import { Editor } from "el/editor/manager/Editor";
 import { TextClip, TextDecoration, TextTransform } from "el/editor/types/model";
 import ObjectProperty from "el/editor/ui/property/ObjectProperty";
-import { Length } from "el/editor/unit/Length";
 
 /**
  * 
@@ -9,7 +8,7 @@ import { Length } from "el/editor/unit/Length";
  */
 export default function (editor) {
 
-    editor.registerMenuItem('inspector.tab.style', {
+    editor.registerUI('inspector.tab.style', {
 
         TextProperty: ObjectProperty.create({
             title: editor.$i18n('text.property.title'),

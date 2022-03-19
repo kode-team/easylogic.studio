@@ -38,7 +38,7 @@ export default {
                         }, [current.id]));
 
                         editor.nextTick(() => {
-                            if (editor.isPointerUp) {
+                            if (editor.stateManager.isPointerUp) {
                                 // boolean path 의 조정이 끝나면 
                                 // box 를 재구성한다. 
                                 editor.emit('recoverBooleanPath');
@@ -77,7 +77,7 @@ export default {
                             editor.emit('updatePathItem', data);
 
                             editor.nextTick(() => {
-                                if (editor.isPointerUp) {
+                                if (editor.stateManager.isPointerUp) {
                                     // boolean path 의 조정이 끝나면 
                                     // box 를 재구성한다. 
                                     editor.emit('recoverBooleanPath');

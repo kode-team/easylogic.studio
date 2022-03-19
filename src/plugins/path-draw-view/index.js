@@ -8,11 +8,11 @@ import DrawManager from './DrawManager';
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerMenuItem('canvas.view', {
+    editor.registerUI('canvas.view', {
         PathDrawView        
     })
 
-    editor.registerMenuItem('page.subeditor.view', {
+    editor.registerUI('page.subeditor.view', {
         DrawManager        
     })
 

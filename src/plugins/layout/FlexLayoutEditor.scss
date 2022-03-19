@@ -113,54 +113,54 @@
 
         .tool-area-item {
 
-          &[data-justify-content="flex-start"][data-align-content="flex-start"] {
+          &[data-justify-content="flex-start"][data-align-items="flex-start"] {
             left: 0px;
             top: 0px;
           }
 
-          &[data-justify-content="center"][data-align-content="flex-start"] {
+          &[data-justify-content="center"][data-align-items="flex-start"] {
             left: 50%;
             top: 0px;
             transform: translate(-50%, 0);
           }          
 
-          &[data-justify-content="flex-end"][data-align-content="flex-start"] {
+          &[data-justify-content="flex-end"][data-align-items="flex-start"] {
             left: 100%;
             top: 0px;
             transform: translate(-100%);
           }
 
-          &[data-justify-content="flex-start"][data-align-content="center"] {
+          &[data-justify-content="flex-start"][data-align-items="center"] {
             left: 0px;
             top: 50%;
             transform: translate(0, -50%);
           }
 
-          &[data-justify-content="center"][data-align-content="center"] {
+          &[data-justify-content="center"][data-align-items="center"] {
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
           }          
 
-          &[data-justify-content="flex-end"][data-align-content="center"] {
+          &[data-justify-content="flex-end"][data-align-items="center"] {
             left: 100%;
             top: 50%;
             transform: translate(-100%, -50%);
           }
 
-          &[data-justify-content="flex-start"][data-align-content="flex-end"] {
+          &[data-justify-content="flex-start"][data-align-items="flex-end"] {
             left: 0px;
             top: 100%;
             transform: translate(0, -100%);
           }
 
-          &[data-justify-content="center"][data-align-content="flex-end"] {
+          &[data-justify-content="center"][data-align-items="flex-end"] {
             left: 50%;
             top: 100%;
             transform: translate(-50%, -100%);
           }          
 
-          &[data-justify-content="flex-end"][data-align-content="flex-end"] {
+          &[data-justify-content="flex-end"][data-align-items="flex-end"] {
             left: 100%;
             top: 100%;
             transform: translate(-100%, -100%);
@@ -168,15 +168,74 @@
         }
       }
 
-      &[data-justify-content="flex-start"][data-align-content="flex-start"] { .tool-area-item[data-index="1"] { display: none; } }
-      &[data-justify-content="center"][data-align-content="flex-start"] { .tool-area-item[data-index="2"] { display: none; } }
-      &[data-justify-content="flex-end"][data-align-content="flex-start"] { .tool-area-item[data-index="3"] { display: none; } }
-      &[data-justify-content="flex-start"][data-align-content="center"] { .tool-area-item[data-index="4"] { display: none; } }
-      &[data-justify-content="center"][data-align-content="center"] { .tool-area-item[data-index="5"] { display: none; } }
-      &[data-justify-content="flex-end"][data-align-content="center"] { .tool-area-item[data-index="6"] { display: none; } }
-      &[data-justify-content="flex-start"][data-align-content="flex-end"] { .tool-area-item[data-index="7"] { display: none; } }
-      &[data-justify-content="center"][data-align-content="flex-end"] { .tool-area-item[data-index="8"] { display: none; } }
-      &[data-justify-content="flex-end"][data-align-content="flex-end"] { .tool-area-item[data-index="9"] { display: none; } }
+      &[data-direction="column"] {
+
+        .tool-area-item {
+
+          &[data-align-items="flex-start"][data-justify-content="flex-start"] {
+            left: 0px;
+            top: 0px;
+          }
+
+          &[data-align-items="center"][data-justify-content="flex-start"] {
+            left: 50%;
+            top: 0px;
+            transform: translate(-50%, 0);
+          }          
+
+          &[data-align-items="flex-end"][data-justify-content="flex-start"] {
+            left: 100%;
+            top: 0px;
+            transform: translate(-100%);
+          }
+
+          &[data-align-items="flex-start"][data-justify-content="center"] {
+            left: 0px;
+            top: 50%;
+            transform: translate(0, -50%);
+          }
+
+          &[data-align-items="center"][data-justify-content="center"] {
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+          }          
+
+          &[data-align-items="flex-end"][data-justify-content="center"] {
+            left: 100%;
+            top: 50%;
+            transform: translate(-100%, -50%);
+          }
+
+          &[data-align-items="flex-start"][data-justify-content="flex-end"] {
+            left: 0px;
+            top: 100%;
+            transform: translate(0, -100%);
+          }
+
+          &[data-align-items="center"][data-justify-content="flex-end"] {
+            left: 50%;
+            top: 100%;
+            transform: translate(-50%, -100%);
+          }          
+
+          &[data-align-items="flex-end"][data-justify-content="flex-end"] {
+            left: 100%;
+            top: 100%;
+            transform: translate(-100%, -100%);
+          }          
+        }
+      }      
+
+      &[data-justify-content="flex-start"][data-align-items="flex-start"] { .tool-area-item[data-index="1"] { display: none; } }
+      &[data-justify-content="center"][data-align-items="flex-start"] { .tool-area-item[data-index="2"] { display: none; } }
+      &[data-justify-content="flex-end"][data-align-items="flex-start"] { .tool-area-item[data-index="3"] { display: none; } }
+      &[data-justify-content="flex-start"][data-align-items="center"] { .tool-area-item[data-index="4"] { display: none; } }
+      &[data-justify-content="center"][data-align-items="center"] { .tool-area-item[data-index="5"] { display: none; } }
+      &[data-justify-content="flex-end"][data-align-items="center"] { .tool-area-item[data-index="6"] { display: none; } }
+      &[data-justify-content="flex-start"][data-align-items="flex-end"] { .tool-area-item[data-index="7"] { display: none; } }
+      &[data-justify-content="center"][data-align-items="flex-end"] { .tool-area-item[data-index="8"] { display: none; } }
+      &[data-justify-content="flex-end"][data-align-items="flex-end"] { .tool-area-item[data-index="9"] { display: none; } }
       &[data-justify-content="space-between"],
       &[data-justify-content="space-around"]{
         .tool-area-item[data-index="1"] { display: none; }
@@ -186,15 +245,15 @@
         .tool-area-item[data-index="7"] { display: none; }
         .tool-area-item[data-index="9"] { display: none; }
 
-        &[data-align-content="flex-start"]{
+        &[data-align-items="flex-start"]{
           .tool-area-item[data-index="2"] { display: none; }
         }      
 
-        &[data-align-content="center"]{
+        &[data-align-items="center"]{
           .tool-area-item[data-index="5"] { display: none; }
         }      
 
-        &[data-align-content="flex-end"]{
+        &[data-align-items="flex-end"]{
           .tool-area-item[data-index="8"] { display: none; }
         }      
   

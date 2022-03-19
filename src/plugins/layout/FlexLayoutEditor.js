@@ -156,21 +156,22 @@ export default class FlexLayoutEditor extends EditorElement {
                         <div class="tool-area"  
                             data-direction="${this.state['flex-direction']}"  
                             data-justify-content="${this.state['justify-content']}"
-                            data-align-content="${this.state['align-content']}"
+                            data-align-items="${this.state['align-items']}"
+                            data-align-content="${this.state['align-content']}"                            
                             style="
                                 --flex-group-gap: ${Math.floor(this.state['gap'] / 10)}px;
                                 --flex-group-padding: ${realPaddingTop}px;
                             "
                         >
-                            <div class="tool-area-item" data-index="1" data-justify-content="flex-start" data-align-content="flex-start"></div>
-                            <div class="tool-area-item" data-index="2"  data-justify-content="center" data-align-content="flex-start"></div>
-                            <div class="tool-area-item" data-index="3"  data-justify-content="flex-end" data-align-content="flex-start"></div>
-                            <div class="tool-area-item" data-index="4"  data-justify-content="flex-start" data-align-content="center"></div>
-                            <div class="tool-area-item" data-index="5"  data-justify-content="center" data-align-content="center"></div>
-                            <div class="tool-area-item" data-index="6"  data-justify-content="flex-end" data-align-content="center"></div>
-                            <div class="tool-area-item" data-index="7"  data-justify-content="flex-start" data-align-content="flex-end"></div>
-                            <div class="tool-area-item" data-index="8"  data-justify-content="center" data-align-content="flex-end"></div>
-                            <div class="tool-area-item" data-index="9"  data-justify-content="flex-end" data-align-content="flex-end"></div>                            
+                            <div class="tool-area-item" data-index="1" data-justify-content="flex-start" data-align-items="flex-start"></div>
+                            <div class="tool-area-item" data-index="2"  data-justify-content="center" data-align-items="flex-start"></div>
+                            <div class="tool-area-item" data-index="3"  data-justify-content="flex-end" data-align-items="flex-start"></div>
+                            <div class="tool-area-item" data-index="4"  data-justify-content="flex-start" data-align-items="center"></div>
+                            <div class="tool-area-item" data-index="5"  data-justify-content="center" data-align-items="center"></div>
+                            <div class="tool-area-item" data-index="6"  data-justify-content="flex-end" data-align-items="center"></div>
+                            <div class="tool-area-item" data-index="7"  data-justify-content="flex-start" data-align-items="flex-end"></div>
+                            <div class="tool-area-item" data-index="8"  data-justify-content="center" data-align-items="flex-end"></div>
+                            <div class="tool-area-item" data-index="9"  data-justify-content="flex-end" data-align-items="flex-end"></div>                            
                         </div>
                     </div>
                 </div>
@@ -248,38 +249,32 @@ export default class FlexLayoutEditor extends EditorElement {
 
     [CLICK('$body .tool-area-item')](e) {
         const $target = e.$dt;
+        const [justifyContent, alignItems, alignContent] = $target.attrs('data-justify-content', 'data-align-items', 'data-align-content');
 
         if (this.state['justify-content'] === JustifyContent.SPACE_BETWEEN) {   // space 관련된게 있으면 align-content 만 변경한다. 
 
-            const [alignContent] = $target.attrs('data-align-content');
-
             this.setState({
-                'align-content': alignContent
+                'align-items': alignItems
             }, false)
 
-            this.modifyData('align-content', alignContent);
+            this.modifyData('align-item', alignItems);
         } else if (this.state['justify-content'] === JustifyContent.SPACE_AROUND) {  // space 관련된게 있으면 align-content 만 변경한다. 
 
-            const [alignContent] = $target.attrs('data-align-content');
-
             this.setState({
-                'align-content': alignContent
+                'align-items': alignItems
             }, false)
 
-            this.modifyData('align-content', alignContent);
+            this.modifyData('align-item', alignItems);
         } else {
-
-            const [justifyContent, alignContent] = $target.attrs('data-justify-content', 'data-align-content');
 
             this.setState({
                 'justify-content': justifyContent,
-                'align-content': alignContent
+                'align-items': alignItems
             }, false)
 
             this.modifyData('justify-content', justifyContent);
-            this.modifyData('align-content', alignContent);
+            this.modifyData('align-items', alignItems);
         }
-
 
         this.refresh();
     }

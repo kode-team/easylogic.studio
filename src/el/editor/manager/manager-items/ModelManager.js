@@ -1,5 +1,6 @@
+import { BaseModel } from 'el/editor/model/BaseModel';
 import { isFunction, clone } from 'el/sapa/functions/func';
-import { BaseModel } from '../model/BaseModel';
+
 import { ComponentManager } from './ComponentManager';
 
 const identity = () => true;

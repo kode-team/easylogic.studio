@@ -489,9 +489,8 @@ export default class HTMLRenderView extends EditorElement {
         this.$selection.cachedItemMatrices.forEach(it => {
 
             // newVerties 에 실제 움직인 좌표로 넣고 
-            const newVerties = it.verties.map(v => {
-                return vec3.add([], v, localDist)
-            })
+            const oldVertex = it.verties[4];
+            const newVertex = vec3.add([], oldVertex, localDist)
 
             // 첫번째 좌표 it.rectVerties[0] 과 
             // 마지막 좌표 newVerties[0] 를 
@@ -499,8 +498,8 @@ export default class HTMLRenderView extends EditorElement {
             // 그게 실제적인 distance 이다. 
             const newDist = vec3.subtract(
                 [], 
-                vec3.transformMat4([], newVerties[0], it.parentMatrixInverse), 
-                vec3.transformMat4([], it.verties[0], it.parentMatrixInverse)
+                vec3.transformMat4([], newVertex, it.parentMatrixInverse), 
+                vec3.transformMat4([], oldVertex, it.parentMatrixInverse)
             )
 
             result[it.id] = {
@@ -671,8 +670,6 @@ export default class HTMLRenderView extends EditorElement {
                 'height', 
             )
 
-            console.log(parentObj.id, parentObj.itemType, hasChangedDimension);
-            
             parentObj.layers.forEach(it => {
                 var $el = this.getElement(it.id);
 

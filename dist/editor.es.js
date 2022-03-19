@@ -1470,6 +1470,46 @@ const eventConverts = {
 const customEventNames = {
   "doubletab": true
 };
+const selfCheckMethods = {
+  self(e2) {
+    return e2 && e2.$dt && e2.$dt.is(e2.target);
+  },
+  isAltKey(e2) {
+    return e2.altKey;
+  },
+  isCtrlKey(e2) {
+    return e2.ctrlKey;
+  },
+  isShiftKey(e2) {
+    return e2.shiftKey;
+  },
+  isMetaKey(e2) {
+    return e2.metaKey || e2.key == "Meta" || e2.code.indexOf("Meta") > -1;
+  },
+  isMouseLeftButton(e2) {
+    return e2.buttons === 1;
+  },
+  isMouseRightButton(e2) {
+    return e2.buttons === 2;
+  },
+  hasMouse(e2) {
+    return e2.pointerType === "mouse";
+  },
+  hasTouch(e2) {
+    return e2.pointerType === "touch";
+  },
+  hasPen(e2) {
+    return e2.pointerType === "pen";
+  },
+  preventDefault(e2) {
+    e2.preventDefault();
+    return true;
+  },
+  stopPropagation(e2) {
+    e2.stopPropagation();
+    return true;
+  }
+};
 class DomEventHandler extends BaseHandler {
   initialize() {
     this.destroy();
@@ -1487,6 +1527,9 @@ class DomEventHandler extends BaseHandler {
     else {
       this.removeEventAll();
     }
+  }
+  getCallback(field) {
+    return this.context[field] || selfCheckMethods[field];
   }
   removeEventAll() {
     this.getBindings().forEach((obj2) => {
@@ -1553,14 +1596,14 @@ class DomEventHandler extends BaseHandler {
     e2.xy = Event.posXY(e2);
     if (eventObject.beforeMethods.length) {
       eventObject.beforeMethods.every((before) => {
-        return context[before.target].call(context, e2, before.param);
+        return this.getCallback(before.target).call(context, e2, before.param);
       });
     }
     if (this.checkEventType(e2, eventObject)) {
       var returnValue = callback(e2, e2.$dt, e2.xy);
       if (returnValue !== false && eventObject.afterMethods.length) {
         eventObject.afterMethods.forEach((after) => {
-          return context[after.target].call(context, e2, after.param);
+          return this.getCallback(after.target).call(context, e2, after.param);
         });
       }
       return returnValue;
@@ -1575,7 +1618,7 @@ class DomEventHandler extends BaseHandler {
     var isAllCheck = true;
     if (eventObject.checkMethodList.length) {
       isAllCheck = eventObject.checkMethodList.every((field) => {
-        var fieldValue = context[field];
+        var fieldValue = this.getCallback(field);
         if (isFunction(fieldValue) && fieldValue) {
           return fieldValue.call(context, e2);
         } else if (isNotUndefined(fieldValue)) {
@@ -1649,7 +1692,7 @@ class DomEventHandler extends BaseHandler {
         }
       } else if (pipe.type === "keyword") {
         const method = `${pipe.value}`;
-        if (this.context[method]) {
+        if (this.getCallback(method)) {
           obj2.checkMethodList.push(method);
         } else {
           obj2.codes.push(method.toLowerCase());
@@ -2324,44 +2367,6 @@ class EventMachine {
     return this.collectProps().filter((it) => {
       return it.method === methodKey;
     });
-  }
-  self(e2) {
-    return e2 && e2.$dt && e2.$dt.is(e2.target);
-  }
-  isAltKey(e2) {
-    return e2.altKey;
-  }
-  isCtrlKey(e2) {
-    return e2.ctrlKey;
-  }
-  isShiftKey(e2) {
-    return e2.shiftKey;
-  }
-  isMetaKey(e2) {
-    return e2.metaKey || e2.key == "Meta" || e2.code.indexOf("Meta") > -1;
-  }
-  isMouseLeftButton(e2) {
-    return e2.buttons === 1;
-  }
-  isMouseRightButton(e2) {
-    return e2.buttons === 2;
-  }
-  hasMouse(e2) {
-    return e2.pointerType === "mouse";
-  }
-  hasTouch(e2) {
-    return e2.pointerType === "touch";
-  }
-  hasPen(e2) {
-    return e2.pointerType === "pen";
-  }
-  preventDefault(e2) {
-    e2.preventDefault();
-    return true;
-  }
-  stopPropagation(e2) {
-    e2.stopPropagation();
-    return true;
   }
 }
 var EPSILON = 1e-6;
@@ -4853,111 +4858,81 @@ var theme = {
   dark: dark$1,
   light: light$1
 };
-class TimelineSelectionManager {
+class ConfigManager {
   constructor(editor) {
-    this.$editor = editor;
-    this.items = [];
-    this.itemKeys = {};
+    this.editor = editor;
+    this.configList = [];
+    this.config = new Map();
   }
-  initialize() {
-    this.items = [];
-    this.itemKeys = {};
+  load() {
+    const obj2 = this.editor.loadItem("config") || {};
+    Object.keys(obj2).forEach((key) => {
+      this.config.set(key, obj2[key]);
+    });
   }
-  currentProject(callback) {
-    var project2 = this.$editor.selection.currentProject;
-    if (project2) {
-      callback && callback(project2);
+  get(key) {
+    var _a;
+    if (this.config.has(key) === false) {
+      this.config.set(key, (_a = this.configList.find((it) => it.key == key)) == null ? void 0 : _a.defaultValue);
+    }
+    return this.config.get(key);
+  }
+  set(key, value, isSave = true) {
+    const oldValue = this.config.get(key);
+    if (oldValue !== value) {
+      this.config.set(key, value);
+      this.editor.emit("config:" + key, value, oldValue);
+      if (isSave) {
+        this.save();
+      }
     }
   }
-  empty() {
-    this.select();
+  init(key, value) {
+    this.set(key, value, false);
   }
-  each(callback) {
-    this.items.forEach((item2, index2) => {
-      callback && callback(item2, index2);
+  save() {
+    const obj2 = {};
+    this.configList.filter((it) => it.storage !== "none").forEach((it) => {
+      obj2[it.key] = this.get(it.key);
+    });
+    this.editor.saveItem("config", obj2);
+  }
+  setAll(obj2) {
+    Object.keys(obj2).forEach((key) => {
+      this.set(key, obj2[key]);
     });
   }
-  refreshCache(list2) {
-    this.items = list2;
-    this.itemKeys = {};
-    this.items.forEach((it) => {
-      this.itemKeys[it.id] = it;
-    });
+  getType(key) {
+    var _a;
+    return (_a = this.configList.find((it) => it.key == key)) == null ? void 0 : _a.type;
   }
-  cachedList() {
-    return this.items.map((it) => {
-      return __spreadValues({}, it);
-    });
+  isType(key, type) {
+    return this.getType(key) === type;
   }
-  checked(id) {
-    return !!this.itemKeys[id];
+  isBoolean(key) {
+    return this.isType(key, "boolean");
   }
-  selectLayer(layerId) {
-    this.currentProject((project2) => {
-      var list2 = project2.getKeyframeListReturnArray().filter((it) => {
-        return it.layerId === layerId;
-      });
-      this.refreshCache(list2);
-    });
+  toggle(key) {
+    if (this.isBoolean(key)) {
+      this.set(key, !this.get(key));
+    }
   }
-  toggleLayerContainer(animationId) {
-    this.currentProject((project2) => {
-      project2.getSelectedTimeline().animations.filter((it) => {
-        return it.id === animationId;
-      }).forEach((it) => {
-        it.collapsed = !it.collapsed;
-      });
-    });
+  true(key) {
+    return this.get(key) === true;
   }
-  selectProperty(layerId, property) {
-    this.currentProject((project2) => {
-      var list2 = project2.getKeyframeListReturnArray().filter((it) => {
-        return it.layerId === layerId && it.property === property;
-      });
-      this.refreshCache(list2);
-    });
+  false(key) {
+    return this.get(key) === false;
   }
-  select(...args2) {
-    this.refreshCache(args2);
+  is(key, value) {
+    return this.get(key) === value;
   }
-  selectBySearch(list2, startTime, endTime) {
-    this.currentProject((project2) => {
-      var totalList = [];
-      list2.forEach((it) => {
-        var results = [];
-        if (it.property) {
-          var p = project2.getTimelineProperty(it.layerId, it.property);
-          results = p.keyframes.filter((keyframe2) => {
-            return startTime <= keyframe2.time && keyframe2.time <= endTime;
-          });
-        } else {
-          var p = project2.getTimelineObject(it.layerId);
-          p.properties.filter((property) => {
-            return property.property === it.property;
-          }).forEach((property) => {
-            results.push.apply(results, property.keyframes.filter((keyframe2) => {
-              return startTime <= keyframe2.time && keyframe2.time <= endTime;
-            }));
-          });
-        }
-        totalList.push.apply(totalList, results);
-      });
-      var uniqueOffset = {};
-      totalList.forEach((it) => {
-        uniqueOffset[it.id] = it;
-      });
-      this.select(...Object.values(uniqueOffset));
-    });
+  remove(key) {
+    this.config.delete(key);
+    this.editor.emit("config:" + key);
   }
-  checkLayer(layerId) {
-    return Object.keys(this.itemKeys).some((key) => {
-      return this.itemKeys[key].layerId === layerId;
-    });
-  }
-  checkProperty(layerId, property) {
-    return Object.keys(this.itemKeys).some((key) => {
-      return this.itemKeys[key].layerId === layerId && this.itemKeys[key].property === property;
-    });
+  registerConfig(config) {
+    this.config.set(config.key, config.defaultValue);
+    this.configList.push(config);
   }
 }
 const MAX_CACHE_COUNT$2 = 1e3;
@@ -5187,172 +5162,203 @@ function toRectVerties(verties) {
     maxY = 0;
   return rectToVerties(minX, minY, maxX - minX, maxY - minY);
 }
-function second(fps, timecode2) {
-  if (isString(timecode2)) {
-    var [hour, minute, second2, frame] = timecode2.split(":");
-    hour = parseInt(hour, 10);
-    minute = parseInt(minute, 10);
-    second2 = parseInt(second2, 10);
-    frame = parseInt(frame, 10);
-    return hour * 3600 + minute * 60 + second2 + frame * (1 / fps);
-  } else if (isNumber(timecode2)) {
-    return timecode2 / fps;
-  }
-  return 0;
+const MAX_SNAP_DISTANCE = 3;
+const DEFAULT_DIST_VECTOR = fromValues(0, 0, 0);
+const AXIS_X = "x";
+const AXIS_Y = "y";
+function checkXAxis(sourceVertex, targetVertex) {
+  return Math.abs(sourceVertex[0] - targetVertex[0]) < 1;
 }
-function timecode(fps, seconds) {
-  var h = Math.floor(seconds / 3600);
-  var m = Math.floor(seconds / 60 % 60);
-  var s = Math.floor(seconds % 60);
-  var f = Math.round((seconds - Math.floor(seconds)) * fps);
-  if (f === fps) {
-    f = 0;
-    s += 1;
-    if (s === 60) {
-      m += 1;
-      if (m === 60) {
-        h += 1;
+function checkYAxis(sourceVertex, targetVertex) {
+  return Math.abs(sourceVertex[1] - targetVertex[1]) < 1;
+}
+class SnapManager {
+  constructor(editor, snapDistance = MAX_SNAP_DISTANCE) {
+    this.editor = editor;
+    this.map = new Map();
+    this.snapTargetLayers = [];
+    this.snapDistance = snapDistance;
+  }
+  get dist() {
+    return this.editor.config.get("snap.distance") || this.snapDistance;
+  }
+  get gridSize() {
+    return this.editor.config.get("snap.grid") || 50;
+  }
+  clear() {
+    this.snapTargetLayers = this.editor.selection.snapTargetLayers.map((it) => {
+      return this.convertMatrix(it);
+    });
+  }
+  convertMatrix(item2) {
+    const verties = this.convertGuideAndPathMatrix(item2);
+    const xList = verties.map((it) => it[0]);
+    const yList = verties.map((it) => it[1]);
+    return { id: item2.id, xList, yList, verties, rectVerties: toRectVertiesWithoutTransformOrigin(item2.originVerties) };
+  }
+  convertGuideAndPathMatrix(item2) {
+    const guideVerties = item2.guideVerties;
+    return [...guideVerties];
+  }
+  getSnapPoints() {
+    const points2 = [];
+    this.editor.selection.snapTargetLayersWithSelection.forEach((it) => {
+      points2.push.apply(points2, this.convertGuideAndPathMatrix(it));
+    });
+    return points2;
+  }
+  checkX(targetXList, sourceXList, dist2 = 0) {
+    const checkXList = [];
+    targetXList.forEach((targetX, targetIndex) => {
+      sourceXList.forEach((sourceX, sourceIndex) => {
+        const localDistX = targetX - sourceX;
+        const localGridDistX = this.gridSize - Math.abs(sourceX) % this.gridSize;
+        if (Math.abs(localDistX) <= dist2) {
+          checkXList.push({ targetX, sourceX, sourceIndex, targetIndex, dx: localDistX });
+        } else if (Math.abs(localGridDistX) <= dist2) {
+          checkXList.push({ targetX, sourceX, sourceIndex, targetIndex, dx: localGridDistX });
+        }
+      });
+    });
+    return checkXList;
+  }
+  checkY(targetYList, sourceYList, dist2 = 0) {
+    const checkYList = [];
+    targetYList.forEach((targetY, targetIndex) => {
+      sourceYList.forEach((sourceY, sourceIndex) => {
+        const localDistY = targetY - sourceY;
+        if (Math.abs(localDistY) <= dist2) {
+          checkYList.push({ targetY, sourceY, sourceIndex, targetIndex, dy: localDistY });
+        }
+      });
+    });
+    return checkYList;
+  }
+  check(sourceVerties) {
+    const snaps = [];
+    const dist2 = this.dist;
+    const sourceXList = sourceVerties.map((it) => it[0]);
+    const sourceYList = sourceVerties.map((it) => it[1]);
+    this.snapTargetLayers.forEach((target) => {
+      const x2 = this.checkX(target.xList, sourceXList, dist2)[0];
+      const y2 = this.checkY(target.yList, sourceYList, dist2)[0];
+      snaps.push(fromValues(x2 ? x2.dx : 0, y2 ? y2.dy : 0, 0));
+    });
+    return snaps.find((it) => isNotZero(it[0]) || isNotZero(it[1])) || DEFAULT_DIST_VECTOR;
+  }
+  checkPoint(sourceVertex) {
+    const snap = this.check([sourceVertex]);
+    return add$1([], sourceVertex, snap);
+  }
+  getGuidesByPointPoint(sourceVerties, targetVerties) {
+    const points2 = [];
+    const groupPoints = {};
+    let sourceVertex, targetVertex;
+    for (let sourceIndex = 0, sourceLength = sourceVerties.length; sourceIndex < sourceLength; sourceIndex++) {
+      sourceVertex = sourceVerties[sourceIndex];
+      const keyX = `${sourceVertex[0]}_x`;
+      const keyY = `${sourceVertex[1]}_y`;
+      if (!groupPoints[keyX]) {
+        groupPoints[keyX] = [];
+      }
+      if (!groupPoints[keyY]) {
+        groupPoints[keyY] = [];
+      }
+      for (let targetIndex = 0, targetLength = targetVerties.length; targetIndex < targetLength; targetIndex++) {
+        targetVertex = targetVerties[targetIndex];
+        if (checkXAxis(sourceVertex, targetVertex)) {
+          groupPoints[keyX].push([sourceVertex, targetVertex, AXIS_X, dist(sourceVertex, targetVertex)]);
+        }
+        if (checkYAxis(sourceVertex, targetVertex)) {
+          groupPoints[keyY].push([sourceVertex, targetVertex, AXIS_Y, dist(sourceVertex, targetVertex)]);
+        }
       }
     }
+    Object.keys(groupPoints).forEach((key) => {
+      if (groupPoints[key] && groupPoints[key].length) {
+        const sorted = groupPoints[key].sort((a, b) => a[3] - b[3]);
+        const [sourceVertex2, targetVertex2, axis] = sorted[0];
+        points2.push([sourceVertex2, targetVertex2, axis]);
+      }
+    });
+    return points2;
   }
-  return [h, m, s, f].map((t) => {
-    return (t + "").padStart(2, "0");
-  }).join(":");
+  findGuide(sourceVerties) {
+    const guides = [];
+    this.snapTargetLayers.forEach((target) => {
+      const points2 = this.getGuidesByPointPoint(sourceVerties, target.verties);
+      guides.push.apply(guides, points2);
+    });
+    return guides;
+  }
+  findGuideOne(sourceVerties) {
+    return [this.findGuide(sourceVerties)[0]];
+  }
 }
-function framesToTimecode(fps, frames, start2 = null) {
-  return timecode(fps, second(fps, frames) - second(fps, start2));
+function _currentProject(editor, callback) {
+  var project2 = editor.selection.currentProject;
+  if (project2) {
+    var timeline = project2.getSelectedTimeline();
+    callback && callback(project2, timeline);
+  }
 }
-function makeTimer(opt) {
-  var timer2 = {
-    id: 0,
-    start: 0,
-    speed: opt.speed || 1,
-    elapsed: opt.elapsed || 0,
-    duration: opt.duration || 0,
-    iterationStartCount: 1,
-    iterationCount: opt.iterationCount || Number.MAX_SAFE_INTEGER,
-    direction: opt.direction || "normal",
-    log: [],
-    logIndex: 0,
-    tick: opt.tick || (() => {
-    }),
-    startCallback: opt.start || (() => {
-    }),
-    endCallback: opt.end || (() => {
-    }),
-    firstCallback: opt.first || (() => {
-    }),
-    lastCallback: opt.last || (() => {
-    })
-  };
-  const isForward = () => {
-    if (timer2.direction === "normal") {
-      return true;
-    } else if (timer2.direction === "reverse") {
-      return false;
-    } else if (timer2.direction === "alternate") {
-      return timer2.iterationStartCount % 2 === 1;
-    } else if (timer2.direction === "alternate-reverse") {
-      return timer2.iterationStartCount % 2 === 0;
-    }
-  };
-  const calculateForDirection = (rate) => {
-    return isForward() ? rate : 1 - rate;
-  };
-  const tick = (now) => {
-    var isStart = false;
-    if (timer2.start === null) {
-      timer2.start = now;
-      isStart = true;
-    }
-    const dt = now - timer2.start;
-    timer2.elapsed += dt * timer2.speed;
-    timer2.start = now;
-    if (timer2.elapsed > timer2.duration) {
-      timer2.elapsed = timer2.duration;
-    }
-    var elapsed = calculateForDirection(timer2.elapsed / timer2.duration) * timer2.duration;
-    if (isStart)
-      timer2.startCallback(elapsed, timer2);
-    timer2.log[timer2.logIndex++] = { elapsed, dt: timer2.lastTime - elapsed };
-    timer2.lastTime = elapsed;
-    timer2.tick(elapsed, timer2);
-    if (timer2.elapsed === timer2.duration) {
-      end2();
-    } else {
-      frameStart();
-    }
-  };
-  const frameStart = () => {
-    timer2.id = requestAnimationFrame(tick);
-  };
-  const end2 = () => {
-    timer2.endCallback(timer2.elapsed, timer2);
-    timer2.iterationStartCount++;
-    if (timer2.iterationStartCount > timer2.iterationCount) {
-      timer2.lastCallback(timer2.elapsed, timer2);
-      cancelAnimationFrame(timer2.id);
-    } else {
-      timer2.start = null;
-      timer2.elapsed = 0;
-      frameStart();
-    }
-  };
-  const play2 = (opt2 = {}) => {
-    timer2.start = null;
-    timer2.iterationStartCount = 1;
-    timer2.log = [];
-    timer2.lastTime = 0;
-    timer2.logIndex = 0;
-    if (isNumber(opt2.elapsed))
-      timer2.elapsed = opt2.elapsed;
-    if (isNumber(opt2.speed))
-      timer2.speed = opt2.speed;
-    if (isNumber(opt2.duration))
-      timer2.duration = opt2.duration;
-    if (isNumber(opt2.iterationCount))
-      timer2.iterationCount = opt2.iterationCount || Number.MAX_SAFE_INTEGER;
-    if (isString(opt2.direction))
-      timer2.direction = opt2.direction;
-    if (isFunction(opt2.tick))
-      timer2.tick = opt2.tick;
-    if (isFunction(opt2.start))
-      timer2.startCallback = opt2.start;
-    if (isFunction(opt2.end))
-      timer2.endCallback = opt2.end;
-    if (isFunction(opt2.first))
-      timer2.firstCallback = opt2.first;
-    if (isFunction(opt2.last))
-      timer2.lastCallback = opt2.last;
-    if (isFunction(opt2.stop))
-      timer2.stopCallback = opt2.stop;
-    timer2.firstCallback(timer2.elapsed, timer2);
-    frameStart();
-  };
-  const stop = () => {
-    timer2.stopCallback(timer2.elapsed, timer2);
-    cancelAnimationFrame(timer2.id);
-  };
-  const seek = (t) => {
-    timer2.elapsed = t;
-    timer2.tick(timer2.elapsed, timer2);
-  };
-  const first = (t) => {
-    seek(0);
-  };
-  const last2 = (t) => {
-    seek(timer2.duration);
-  };
-  return {
-    play: play2,
-    stop,
-    tick,
-    first,
-    last: last2,
-    seek,
-    timer: timer2
-  };
+var __glob_0_0$4 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": _currentProject
+});
+function _doForceRefreshSelection(editor) {
+  editor.nextTick(() => {
+    editor.emit("refreshAll");
+    editor.emit("refreshSelectionTool");
+  });
 }
+var __glob_0_1$4 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": _doForceRefreshSelection
+});
+function addArtBoard(editor, obj2 = {}, center2 = null) {
+  var project2 = editor.selection.currentProject;
+  if (!project2) {
+    project2 = editor.add(editor.createModel({ itemType: "project" }));
+    editor.selection.selectProject(project2);
+  }
+  var artboard2 = project2.appendChild(editor.createModel(__spreadValues({
+    itemType: "artboard",
+    x: 300,
+    y: 200,
+    width: 375,
+    height: 667
+  }, obj2)));
+  if (center2) {
+    artboard2.reset({
+      x: 0,
+      y: 0
+    });
+    artboard2.moveByCenter(center2);
+  }
+  editor.selection.select(artboard2);
+  _doForceRefreshSelection(editor);
+}
+var __glob_0_2$4 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addArtBoard
+});
+var addBackgroundColor = {
+  command: "addBackgroundColor",
+  execute: function(editor, color2, id = null) {
+    editor.command("setAttributeForMulti", "add background color", editor.selection.packByValue({
+      "background-color": color2
+    }, id));
+  }
+};
+var __glob_0_3$4 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": addBackgroundColor
+});
 const predefinedBezier = {
   "linear": true,
   "ease": true,
@@ -5728,125 +5734,6 @@ const getCurveBBox = (points2) => {
     return [x2, y2, 0];
   });
 };
-function makeInterpolateNumber$1(layer2, property, startNumber, endNumber, unit = void 0) {
-  return (rate, t) => {
-    var result = 0;
-    if (t === 0) {
-      result = startNumber;
-    } else if (t === 1) {
-      result = endNumber;
-    } else {
-      result = startNumber + (endNumber - startNumber) * rate;
-    }
-    if (unit) {
-      return result + unit;
-    }
-    return result;
-  };
-}
-function makeInterpolateIdentity(layer2, property, value) {
-  return (ratio, t) => {
-    return value;
-  };
-}
-function getRealAttributeValue(layer2, property, value, refType = "width", refElement = "parent") {
-  var refObject = null;
-  if (refElement === "parent") {
-    refObject = layer2[refElement][refType];
-  } else if (refElement === "self") {
-    refObject = layer2[refType];
-  }
-  if (refObject) {
-    return value.toPx(refObject.value);
-  }
-  return value;
-}
-function rollbackRealAttributeValue(layer2, property, value, unit, refType = "width", refElement = "parent") {
-  var refObject = null;
-  if (refElement === "parent") {
-    refObject = layer2[refElement][refType];
-  } else if (refElement === "self") {
-    refObject = layer2[refType];
-  }
-  if (refObject) {
-    return value.to(unit, refObject.value);
-  }
-  return value;
-}
-function makeInterpolateLength(layer2, property, startNumber, endNumber, refType = "width", refElement = "parent") {
-  var s = Length.parse(startNumber);
-  var e2 = Length.parse(endNumber);
-  if (s.unit === e2.unit) {
-    return makeInterpolateNumber$1(layer2, property, s.value, e2.value, s.unit);
-  } else if (s.equals(e2)) {
-    return makeInterpolateIdentity(layer2, property, s);
-  }
-  return (rate, t) => {
-    var realStartValue = getRealAttributeValue(layer2, property, s, refType, refElement);
-    var realEndValue = getRealAttributeValue(layer2, property, e2, refType, refElement);
-    if (t === 0) {
-      return realStartValue;
-    } else if (t === 1) {
-      return realEndValue;
-    }
-    return rollbackRealAttributeValue(layer2, property, realStartValue.value + (realEndValue.value - realStartValue.value) * rate, s.unit, refType, refElement);
-  };
-}
-class BorderRadius {
-  static parseStyle(str = "") {
-    var obj2 = {
-      isAll: true,
-      "border-radius": 0,
-      "border-top-left-radius": 0,
-      "border-top-right-radius": 0,
-      "border-bottom-right-radius": 0,
-      "border-bottom-left-radius": 0
-    };
-    var arr = str.split(" ").filter((it) => Length.parse(it));
-    if (arr.length === 1) {
-      obj2.isAll = true;
-      obj2["border-radius"] = arr[0];
-    } else {
-      obj2.isAll = false;
-      obj2["border-top-left-radius"] = arr[0];
-      obj2["border-top-right-radius"] = arr[1];
-      obj2["border-bottom-right-radius"] = arr[2];
-      obj2["border-bottom-left-radius"] = arr[3];
-    }
-    return obj2;
-  }
-}
-const getBorderRadiusList = (radiusValue) => {
-  var startObject = [];
-  if (radiusValue.isAll) {
-    startObject = [
-      radiusValue["border-radius"] || "0px",
-      radiusValue["border-radius"] || "0px",
-      radiusValue["border-radius"] || "0px",
-      radiusValue["border-radius"] || "0px"
-    ];
-  } else {
-    startObject = [
-      radiusValue["border-top-left-radius"] || "0px",
-      radiusValue["border-top-right-radius"] || "0px",
-      radiusValue["border-bottom-right-radius"] || "0px",
-      radiusValue["border-bottom-left-radius"] || "0px"
-    ];
-  }
-  return startObject;
-};
-function makeInterpolateBorderRadius(layer2, property, startValue, endValue) {
-  var s = getBorderRadiusList(BorderRadius.parseStyle(startValue));
-  var e2 = getBorderRadiusList(BorderRadius.parseStyle(endValue));
-  var max = Math.max(s.length, e2.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    list2[i] = makeInterpolateLength(layer2, property, s[i], e2[i]);
-  }
-  return (rate, t) => {
-    return list2.map((it) => it(rate, t)).join(" ");
-  };
-}
 function format(obj2, type, defaultColor = "rgba(0, 0, 0, 0)") {
   if (Array.isArray(obj2)) {
     obj2 = { r: obj2[0], g: obj2[1], b: obj2[2], a: obj2[3] };
@@ -6083,6 +5970,38 @@ class PropertyItem extends Item {
   }
   toString() {
     return CSS_TO_STRING$1(this.toCSS());
+  }
+}
+class ImageResource extends PropertyItem {
+  getDefaultObject(obj2 = {}) {
+    return __spreadValues({
+      itemType: "image-resource",
+      type: "image"
+    }, obj2);
+  }
+  isGradient() {
+    return false;
+  }
+  isLinear() {
+    return false;
+  }
+  isImage() {
+    return false;
+  }
+  hasAngle() {
+    return false;
+  }
+  isUrl() {
+    return false;
+  }
+  isFile() {
+    return false;
+  }
+  isAttribute() {
+    return true;
+  }
+  toString() {
+    return "none";
   }
 }
 const color_names = { aliceblue: "rgb(240, 248, 255)", antiquewhite: "rgb(250, 235, 215)", aqua: "rgb(0, 255, 255)", aquamarine: "rgb(127, 255, 212)", azure: "rgb(240, 255, 255)", beige: "rgb(245, 245, 220)", bisque: "rgb(255, 228, 196)", black: "rgb(0, 0, 0)", blanchedalmond: "rgb(255, 235, 205)", blue: "rgb(0, 0, 255)", blueviolet: "rgb(138, 43, 226)", brown: "rgb(165, 42, 42)", burlywood: "rgb(222, 184, 135)", cadetblue: "rgb(95, 158, 160)", chartreuse: "rgb(127, 255, 0)", chocolate: "rgb(210, 105, 30)", coral: "rgb(255, 127, 80)", cornflowerblue: "rgb(100, 149, 237)", cornsilk: "rgb(255, 248, 220)", crimson: "rgb(237, 20, 61)", cyan: "rgb(0, 255, 255)", darkblue: "rgb(0, 0, 139)", darkcyan: "rgb(0, 139, 139)", darkgoldenrod: "rgb(184, 134, 11)", darkgray: "rgb(169, 169, 169)", darkgrey: "rgb(169, 169, 169)", darkgreen: "rgb(0, 100, 0)", darkkhaki: "rgb(189, 183, 107)", darkmagenta: "rgb(139, 0, 139)", darkolivegreen: "rgb(85, 107, 47)", darkorange: "rgb(255, 140, 0)", darkorchid: "rgb(153, 50, 204)", darkred: "rgb(139, 0, 0)", darksalmon: "rgb(233, 150, 122)", darkseagreen: "rgb(143, 188, 143)", darkslateblue: "rgb(72, 61, 139)", darkslategray: "rgb(47, 79, 79)", darkslategrey: "rgb(47, 79, 79)", darkturquoise: "rgb(0, 206, 209)", darkviolet: "rgb(148, 0, 211)", deeppink: "rgb(255, 20, 147)", deepskyblue: "rgb(0, 191, 255)", dimgray: "rgb(105, 105, 105)", dimgrey: "rgb(105, 105, 105)", dodgerblue: "rgb(30, 144, 255)", firebrick: "rgb(178, 34, 34)", floralwhite: "rgb(255, 250, 240)", forestgreen: "rgb(34, 139, 34)", fuchsia: "rgb(255, 0, 255)", gainsboro: "rgb(220, 220, 220)", ghostwhite: "rgb(248, 248, 255)", gold: "rgb(255, 215, 0)", goldenrod: "rgb(218, 165, 32)", gray: "rgb(128, 128, 128)", grey: "rgb(128, 128, 128)", green: "rgb(0, 128, 0)", greenyellow: "rgb(173, 255, 47)", honeydew: "rgb(240, 255, 240)", hotpink: "rgb(255, 105, 180)", indianred: "rgb(205, 92, 92)", indigo: "rgb(75, 0, 130)", ivory: "rgb(255, 255, 240)", khaki: "rgb(240, 230, 140)", lavender: "rgb(230, 230, 250)", lavenderblush: "rgb(255, 240, 245)", lawngreen: "rgb(124, 252, 0)", lemonchiffon: "rgb(255, 250, 205)", lightblue: "rgb(173, 216, 230)", lightcoral: "rgb(240, 128, 128)", lightcyan: "rgb(224, 255, 255)", lightgoldenrodyellow: "rgb(250, 250, 210)", lightgreen: "rgb(144, 238, 144)", lightgray: "rgb(211, 211, 211)", lightgrey: "rgb(211, 211, 211)", lightpink: "rgb(255, 182, 193)", lightsalmon: "rgb(255, 160, 122)", lightseagreen: "rgb(32, 178, 170)", lightskyblue: "rgb(135, 206, 250)", lightslategray: "rgb(119, 136, 153)", lightslategrey: "rgb(119, 136, 153)", lightsteelblue: "rgb(176, 196, 222)", lightyellow: "rgb(255, 255, 224)", lime: "rgb(0, 255, 0)", limegreen: "rgb(50, 205, 50)", linen: "rgb(250, 240, 230)", magenta: "rgb(255, 0, 255)", maroon: "rgb(128, 0, 0)", mediumaquamarine: "rgb(102, 205, 170)", mediumblue: "rgb(0, 0, 205)", mediumorchid: "rgb(186, 85, 211)", mediumpurple: "rgb(147, 112, 219)", mediumseagreen: "rgb(60, 179, 113)", mediumslateblue: "rgb(123, 104, 238)", mediumspringgreen: "rgb(0, 250, 154)", mediumturquoise: "rgb(72, 209, 204)", mediumvioletred: "rgb(199, 21, 133)", midnightblue: "rgb(25, 25, 112)", mintcream: "rgb(245, 255, 250)", mistyrose: "rgb(255, 228, 225)", moccasin: "rgb(255, 228, 181)", navajowhite: "rgb(255, 222, 173)", navy: "rgb(0, 0, 128)", oldlace: "rgb(253, 245, 230)", olive: "rgb(128, 128, 0)", olivedrab: "rgb(107, 142, 35)", orange: "rgb(255, 165, 0)", orangered: "rgb(255, 69, 0)", orchid: "rgb(218, 112, 214)", palegoldenrod: "rgb(238, 232, 170)", palegreen: "rgb(152, 251, 152)", paleturquoise: "rgb(175, 238, 238)", palevioletred: "rgb(219, 112, 147)", papayawhip: "rgb(255, 239, 213)", peachpuff: "rgb(255, 218, 185)", peru: "rgb(205, 133, 63)", pink: "rgb(255, 192, 203)", plum: "rgb(221, 160, 221)", powderblue: "rgb(176, 224, 230)", purple: "rgb(128, 0, 128)", rebeccapurple: "rgb(102, 51, 153)", red: "rgb(255, 0, 0)", rosybrown: "rgb(188, 143, 143)", royalblue: "rgb(65, 105, 225)", saddlebrown: "rgb(139, 69, 19)", salmon: "rgb(250, 128, 114)", sandybrown: "rgb(244, 164, 96)", seagreen: "rgb(46, 139, 87)", seashell: "rgb(255, 245, 238)", sienna: "rgb(160, 82, 45)", silver: "rgb(192, 192, 192)", skyblue: "rgb(135, 206, 235)", slateblue: "rgb(106, 90, 205)", slategray: "rgb(112, 128, 144)", slategrey: "rgb(112, 128, 144)", snow: "rgb(255, 250, 250)", springgreen: "rgb(0, 255, 127)", steelblue: "rgb(70, 130, 180)", tan: "rgb(210, 180, 140)", teal: "rgb(0, 128, 128)", thistle: "rgb(216, 191, 216)", tomato: "rgb(255, 99, 71)", turquoise: "rgb(64, 224, 208)", violet: "rgb(238, 130, 238)", wheat: "rgb(245, 222, 179)", white: "rgb(255, 255, 255)", whitesmoke: "rgb(245, 245, 245)", yellow: "rgb(255, 255, 0)", yellowgreen: "rgb(154, 205, 50)", transparent: "rgba(0, 0, 0, 0)", currentColor: "currentColor" };
@@ -6575,285 +6494,6 @@ var parser = /* @__PURE__ */ Object.freeze({
   parse,
   parseGradient
 });
-const ConstraintsDirection = {
-  HORIZONTAL: "constraints-horizontal",
-  VERTICAL: "constraints-vertical"
-};
-const Constraints = {
-  NONE: "none",
-  MIN: "min",
-  MAX: "max",
-  STRETCH: "stretch",
-  SCALE: "scale",
-  CENTER: "center"
-};
-const BooleanOperation = {
-  DIFFERENCE: "difference",
-  INTERSECTION: "intersection",
-  UNION: "union",
-  REVERSE_DIFFERENCE: "reverse-difference",
-  XOR: "xor"
-};
-const StrokeLineCap = {
-  BUTT: "butt",
-  ROUND: "round",
-  SQUARE: "square"
-};
-const StrokeLineJoin = {
-  MITER: "miter",
-  ROUND: "round",
-  BEVEL: "bevel"
-};
-const BlendMode = {
-  NORMAL: "normal",
-  MULTIPLY: "multiply",
-  SCREEN: "screen",
-  OVERLAY: "overlay",
-  DARKEN: "darken",
-  LIGHTEN: "lighten",
-  COLOR_DODGE: "color-dodge",
-  COLOR_BURN: "color-burn",
-  HARD_LIGHT: "hard-light",
-  SOFT_LIGHT: "soft-light",
-  DIFFERENCE: "difference",
-  EXCLUSION: "exclusion",
-  HUE: "hue",
-  SATURATION: "saturation",
-  COLOR: "color",
-  LUMINOSITY: "luminosity"
-};
-const TextDecoration = {
-  NONE: "none",
-  UNDERLINE: "underline",
-  OVERLINE: "overline",
-  LINE_THROUGH: "line-through",
-  BLINK: "blink"
-};
-const TextTransform = {
-  NONE: "none",
-  CAPITALIZE: "capitalize",
-  UPPERCASE: "uppercase",
-  LOWERCASE: "lowercase"
-};
-const Overflow = {
-  VISIBLE: "visible",
-  HIDDEN: "hidden",
-  SCROLL: "scroll",
-  AUTO: "auto"
-};
-const BorderStyle = {
-  NONE: "none",
-  HIDDEN: "hidden",
-  DOTTED: "dotted",
-  DASHED: "dashed",
-  SOLID: "solid",
-  DOUBLE: "double",
-  GROOVE: "groove",
-  RIDGE: "ridge",
-  INSET: "inset",
-  OUTSET: "outset"
-};
-const Layout = {
-  DEFAULT: "default",
-  FLEX: "flex",
-  GRID: "grid"
-};
-const FlexDirection = {
-  ROW: "row",
-  ROW_REVERSE: "row-reverse",
-  COLUMN: "column",
-  COLUMN_REVERSE: "column-reverse"
-};
-const JustifyContent = {
-  FLEX_START: "flex-start",
-  FLEX_END: "flex-end",
-  CENTER: "center",
-  SPACE_BETWEEN: "space-between",
-  SPACE_AROUND: "space-around",
-  SPACE_EVENLY: "space-evenly"
-};
-const AlignItems = {
-  FLEX_START: "flex-start",
-  FLEX_END: "flex-end",
-  CENTER: "center",
-  BASELINE: "baseline",
-  STRETCH: "stretch"
-};
-const AlignContent = {
-  FLEX_START: "flex-start",
-  FLEX_END: "flex-end",
-  CENTER: "center",
-  SPACE_BETWEEN: "space-between",
-  SPACE_AROUND: "space-around",
-  SPACE_EVENLY: "space-evenly"
-};
-const FlexWrap = {
-  NOWRAP: "nowrap",
-  WRAP: "wrap",
-  WRAP_REVERSE: "wrap-reverse"
-};
-const ResizingMode = {
-  FIXED: "fixed",
-  HUG_CONTENT: "hug-content",
-  FILL_CONTAINER: "fill-container"
-};
-const TextClip = {
-  NONE: "none",
-  TEXT: "text"
-};
-const BoxShadowStyle = {
-  OUTSET: "outset",
-  INSET: "inset"
-};
-const GradientType = {
-  STATIC: "static-gradient",
-  LINEAR: "linear-gradient",
-  RADIAL: "radial-gradient",
-  CONIC: "conic-gradient",
-  REPEATING_LINEAR: "repeating-linear-gradient",
-  REPEATING_RADIAL: "repeating-radial-gradient",
-  REPEATING_CONIC: "repeating-conic-gradient",
-  IMAGE: "image",
-  URL: "url"
-};
-const RadialGradientSizeType = {
-  CLOSEST_SIDE: "closest-side",
-  CLOSEST_CORNER: "closest-corner",
-  FARTHEST_SIDE: "farthest-side",
-  FARTHEST_CORNER: "farthest-corner"
-};
-const RadialGradientType = {
-  CIRCLE: "circle",
-  ELLIPSE: "ellipse"
-};
-const ClipPathType = {
-  NONE: "none",
-  CIRCLE: "circle",
-  ELLIPSE: "ellipse",
-  POLYGON: "polygon",
-  INSET: "inset",
-  PATH: "path",
-  SVG: "svg"
-};
-const VisibilityType = {
-  VISIBLE: "visible",
-  HIDDEN: "hidden"
-};
-const TimingFunction = {
-  LINEAR: "linear",
-  EASE: "ease",
-  EASE_IN: "ease-in",
-  EASE_OUT: "ease-out",
-  EASE_IN_OUT: "ease-in-out",
-  STEPS: "steps",
-  CUBIC_BEZIER: "cubic-bezier",
-  PATH: "path"
-};
-const SpreadMethodType = {
-  PAD: "pad",
-  REFLECT: "reflect",
-  REPEAT: "repeat"
-};
-const FuncType = {
-  COMMA: "comma",
-  COLOR: "color",
-  LENGTH: "length",
-  GRADIENT: "gradient",
-  TIMING: "timing",
-  KEYWORD: "keyword",
-  STRING: "string",
-  NUMBER: "number",
-  BOOLEAN: "boolean",
-  FUNCTION: "function",
-  PATH: "path",
-  UNKNOWN: "unknown"
-};
-class BoxShadow extends PropertyItem {
-  static parse(obj2) {
-    return new BoxShadow(obj2);
-  }
-  static parseStyle(str) {
-    var boxShadows = [];
-    str = str.trim();
-    if (!str)
-      return boxShadows;
-    var results = convertMatches(str);
-    boxShadows = results.str.split(",").filter((it) => it.trim()).map((shadow2) => {
-      var values = shadow2.trim().split(" ");
-      var insets = values.filter((it) => it === BoxShadowStyle.INSET);
-      var colors2 = values.filter((it) => it.includes("@")).map((it) => {
-        return reverseMatches(it, results.matches);
-      });
-      var numbers = values.filter((it) => {
-        return it !== BoxShadowStyle.INSET && !it.includes("@");
-      });
-      return BoxShadow.parse({
-        inset: !!insets.length ? BoxShadowStyle.INSET : BoxShadowStyle.OUTSET,
-        color: colors2[0] || "rgba(0, 0, 0, 1)",
-        offsetX: Length.parse(numbers[0] || "0px"),
-        offsetY: Length.parse(numbers[1] || "0px"),
-        blurRadius: Length.parse(numbers[2] || "0px"),
-        spreadRadius: Length.parse(numbers[3] || "0px")
-      });
-    });
-    return boxShadows;
-  }
-  static join(list2) {
-    return list2.map((it) => BoxShadow.parse(it)).join(", ");
-  }
-  getDefaultObject() {
-    return super.getDefaultObject({
-      itemType: "box-shadow",
-      inset: false,
-      offsetX: 0,
-      offsetY: 0,
-      blurRadius: 0,
-      spreadRadius: 0,
-      color: "rgba(0, 0, 0, 1)"
-    });
-  }
-  toCloneObject() {
-    this.json;
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("inset", "offsetX", "offsetY", "blurRadius", "spreadRadius", "color"));
-  }
-  convert(json) {
-    json = super.convert(json);
-    if (isNumber(json.offsetX))
-      json.offsetX = Length.px(json.offsetX);
-    else if (json.offsetX)
-      json.offsetX = Length.parse(json.offsetX);
-    if (isNumber(json.offsetY))
-      json.offsetY = Length.px(json.offsetY);
-    else if (json.offsetY)
-      json.offsetY = Length.parse(json.offsetY);
-    if (isNumber(json.blurRadius))
-      json.blurRadius = Length.px(json.blurRadius);
-    else if (json.blurRadius)
-      json.blurRadius = Length.parse(json.blurRadius);
-    if (isNumber(json.spreadRadius))
-      json.spreadRadius = Length.px(json.spreadRadius);
-    else if (json.spreadRadius)
-      json.spreadRadius = Length.parse(json.spreadRadius);
-    return json;
-  }
-  toCSS() {
-    return {
-      "box-shadow": this.toString()
-    };
-  }
-  toString() {
-    var json = this.json;
-    return `${json.inset === BoxShadowStyle.INSET ? "inset " : ""}${json.offsetX} ${json.offsetY} ${json.blurRadius} ${json.spreadRadius} ${json.color}`;
-  }
-}
-function makeInterpolateBoolean(layer2, property, s, e2) {
-  return (ratio, t) => {
-    if (t === 1) {
-      return e2;
-    }
-    return s;
-  };
-}
 function CMYKtoRGB(c2, m, y2, k) {
   if (arguments.length == 1) {
     var { c: c2, m, y: y2, k } = arguments[0];
@@ -7047,243 +6687,199 @@ var mixin = /* @__PURE__ */ Object.freeze({
   scaleV
 });
 var Color = __spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues(__spreadValues({}, create), formatter), math), mixin), parser), fromYCrCb), fromRGB), fromCMYK), fromHSV), fromHSL), fromLAB), func);
-function makeInterpolateColor(layer2, property, startColor, endColor) {
-  var s = Color.parse(startColor || "rgba(0, 0, 0, 1)");
-  var e2 = Color.parse(endColor || "rgba(0, 0, 0, 1)");
-  return (rate, t) => {
-    if (t === 0) {
-      return startColor;
-    } else if (t === 1) {
-      return endColor;
-    }
-    return interpolateRGB(s, e2, rate, "rgb");
-  };
-}
-function makeInterpolateBoxShadow(layer2, property, startValue, endValue) {
-  var s = BoxShadow.parseStyle(startValue);
-  var e2 = BoxShadow.parseStyle(endValue);
-  var totalLength = Math.max(s.length, e2.length);
-  var list2 = [];
-  for (var i = 0, len2 = totalLength; i < len2; i++) {
-    var startObject = s[i] || BoxShadow.parseStyle("0px 0px 0px 0px rgba(0, 0, 0, 0)")[0];
-    var endObject = e2[i] || BoxShadow.parseStyle("0px 0px 0px 0px rgba(0, 0, 0, 0)")[0];
-    list2.push({
-      inset: makeInterpolateBoolean(layer2, property, startObject.inset, endObject.inset),
-      offsetX: makeInterpolateLength(layer2, property, startObject.offsetX, endObject.offsetX),
-      offsetY: makeInterpolateLength(layer2, property, startObject.offsetY, endObject.offsetY),
-      blurRadius: makeInterpolateLength(layer2, property, startObject.blurRadius, endObject.blurRadius),
-      spreadRadius: makeInterpolateLength(layer2, property, startObject.spreadRadius, endObject.spreadRadius),
-      color: makeInterpolateColor(layer2, property, startObject.color, endObject.color)
-    });
-  }
-  return (rate, t) => {
-    return BoxShadow.join(list2.map((it) => {
-      return {
-        inset: it.inset(rate, t),
-        offsetX: it.offsetX(rate, t),
-        offsetY: it.offsetY(rate, t),
-        blurRadius: it.blurRadius(rate, t),
-        spreadRadius: it.spreadRadius(rate, t),
-        color: it.color(rate, t)
-      };
-    }));
-  };
-}
-function makeInterpolateString(layer2, property, startString, endString) {
-  return makeInterpolateBoolean(layer2, property, startString, endString);
-}
-const stepTimingFunction = (step2 = 1, direction = "end") => {
-  var stepDist = 1 / step2;
-  return function(rate) {
-    let pos = 0;
-    const offset = round$1(rate / stepDist, 1e7);
-    if (direction == "start") {
-      pos = Math.ceil(offset);
-    } else if (direction == "end") {
-      if (rate === 0)
-        return 0;
-      else if (rate === 1)
-        return 1;
-      pos = Math.ceil(offset) - 1;
-    }
-    return Math.min(Math.max(stepDist * pos, 0), 1);
-  };
+const ConstraintsDirection = {
+  HORIZONTAL: "constraints-horizontal",
+  VERTICAL: "constraints-vertical"
 };
-function step(step2 = 1, direction = "end") {
-  return stepTimingFunction(step2, direction);
-}
-function stepStart() {
-  return stepTimingFunction(1, "start");
-}
-function stepEnd() {
-  return stepTimingFunction(1, "end");
-}
-function easeOutElastic() {
-  return (rate) => {
-    return Math.pow(2, -10 * rate) * Math.sin((rate - 0.1) * 5 * Math.PI) + 1;
-  };
-}
-var timingFunctions = {
-  step,
-  "step-start": stepStart,
-  "step-end": stepEnd,
-  stepStart,
-  stepEnd,
-  "ease-out-elastic": easeOutElastic,
-  easeOutElastic
+const Constraints = {
+  NONE: "none",
+  MIN: "min",
+  MAX: "max",
+  STRETCH: "stretch",
+  SCALE: "scale",
+  CENTER: "center"
 };
-function makeInterpolateRotate(layer2, property, startNumber, endNumber) {
-  var startValue = Length.parse(startNumber);
-  var endValue = Length.parse(endNumber);
-  return (rate, t) => {
-    var realStartValue = startValue.value;
-    var realEndValue = endValue.value;
-    if (t === 0) {
-      return Length.deg(realStartValue);
-    } else if (t === 1) {
-      return Length.deg(realEndValue);
-    }
-    return Length.deg(realStartValue + (realEndValue - realStartValue) * rate).to(startValue.unit);
-  };
-}
-class TextShadow extends PropertyItem {
-  static parse(obj2) {
-    return new TextShadow(obj2);
-  }
-  static parseStyle(str = "") {
-    var results = convertMatches(str);
-    str = str.trim();
-    var textShadows = results.str.split(",").filter((it) => it.trim()).map((shadow2) => {
-      var values = shadow2.trim().split(" ");
-      var colors2 = values.filter((it) => it.includes("@")).map((it) => {
-        return reverseMatches(it, results.matches) || "black";
-      });
-      var numbers = values.filter((it) => {
-        return !it.includes("@");
-      });
-      return TextShadow.parse({
-        color: colors2[0] || "rgba(0, 0, 0, 1)",
-        offsetX: Length.parse(numbers[0] || "0px"),
-        offsetY: Length.parse(numbers[1] || "0px"),
-        blurRadius: Length.parse(numbers[2] || "0px")
-      });
-    });
-    return textShadows;
-  }
-  static join(list2) {
-    return list2.map((it) => TextShadow.parse(it)).join(", ");
-  }
-  getDefaultObject() {
-    return super.getDefaultObject({
-      itemType: "text-shadow",
-      offsetX: "0px",
-      offsetY: "0px",
-      blurRadius: "0px",
-      color: "rgba(0, 0, 0, 1)"
-    });
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("offsetX", "offsetY", "blurRadius", "color"));
-  }
-  convert(json) {
-    json = super.convert(json);
-    if (isNumber(json.offsetX))
-      json.offsetX = Length.px(json.offsetX);
-    else if (json.offsetX)
-      json.offsetX = Length.parse(json.offsetX);
-    if (isNumber(json.offsetY))
-      json.offsetY = Length.px(json.offsetY);
-    else if (json.offsetY)
-      json.offsetY = Length.parse(json.offsetY);
-    if (isNumber(json.blurRadius))
-      json.blurRadius = Length.px(json.blurRadius);
-    else if (json.blurRadius)
-      json.blurRadius = Length.parse(json.blurRadius);
-    return json;
-  }
-  toCSS() {
-    return {
-      "text-shadow": this.toString()
-    };
-  }
-  toString() {
-    var { offsetX, offsetY, blurRadius, color: color2 } = this.json;
-    if (isNumber(offsetX))
-      offsetX = Length.px(offsetX);
-    if (isNumber(offsetY))
-      offsetY = Length.px(offsetY);
-    if (isNumber(blurRadius))
-      blurRadius = Length.px(blurRadius);
-    return `${offsetX} ${offsetY} ${blurRadius} ${color2}`;
-  }
-}
-function makeInterpolateTextShadow(layer2, property, startValue, endValue) {
-  var s = TextShadow.parseStyle(startValue);
-  var e2 = TextShadow.parseStyle(endValue);
-  var totalLength = Math.max(s.length, e2.length);
-  var list2 = [];
-  for (var i = 0, len2 = totalLength; i < len2; i++) {
-    var startObject = s[i] || TextShadow.parseStyle("0px 0px 0px rgba(0, 0, 0, 0)")[0];
-    var endObject = e2[i] || TextShadow.parseStyle("0px 0px 0px rgba(0, 0, 0, 0)")[0];
-    list2.push({
-      offsetX: makeInterpolateLength(layer2, property, startObject.offsetX, endObject.offsetX, "width", "self"),
-      offsetY: makeInterpolateLength(layer2, property, startObject.offsetY, endObject.offsetY, "height", "self"),
-      blurRadius: makeInterpolateLength(layer2, property, startObject.blurRadius, endObject.blurRadius, "radius"),
-      color: makeInterpolateColor(layer2, property, startObject.color, endObject.color)
-    });
-  }
-  return (rate, t) => {
-    return TextShadow.join(list2.map((it) => {
-      return {
-        offsetX: it.offsetX(rate, t),
-        offsetY: it.offsetY(rate, t),
-        blurRadius: it.blurRadius(rate, t),
-        color: it.color(rate, t)
-      };
-    }));
-  };
-}
-class ImageResource extends PropertyItem {
-  getDefaultObject(obj2 = {}) {
-    return __spreadValues({
-      itemType: "image-resource",
-      type: "image"
-    }, obj2);
-  }
-  isGradient() {
-    return false;
-  }
-  isLinear() {
-    return false;
-  }
-  isRadial() {
-    return false;
-  }
-  isConic() {
-    return false;
-  }
-  isStatic() {
-    return false;
-  }
-  isImage() {
-    return false;
-  }
-  hasAngle() {
-    return false;
-  }
-  isUrl() {
-    return false;
-  }
-  isFile() {
-    return false;
-  }
-  isAttribute() {
-    return true;
-  }
-  toString() {
-    return "none";
-  }
-}
+const BooleanOperation = {
+  DIFFERENCE: "difference",
+  INTERSECTION: "intersection",
+  UNION: "union",
+  REVERSE_DIFFERENCE: "reverse-difference",
+  XOR: "xor"
+};
+const StrokeLineCap = {
+  BUTT: "butt",
+  ROUND: "round",
+  SQUARE: "square"
+};
+const StrokeLineJoin = {
+  MITER: "miter",
+  ROUND: "round",
+  BEVEL: "bevel"
+};
+const BlendMode = {
+  NORMAL: "normal",
+  MULTIPLY: "multiply",
+  SCREEN: "screen",
+  OVERLAY: "overlay",
+  DARKEN: "darken",
+  LIGHTEN: "lighten",
+  COLOR_DODGE: "color-dodge",
+  COLOR_BURN: "color-burn",
+  HARD_LIGHT: "hard-light",
+  SOFT_LIGHT: "soft-light",
+  DIFFERENCE: "difference",
+  EXCLUSION: "exclusion",
+  HUE: "hue",
+  SATURATION: "saturation",
+  COLOR: "color",
+  LUMINOSITY: "luminosity"
+};
+const TextDecoration = {
+  NONE: "none",
+  UNDERLINE: "underline",
+  OVERLINE: "overline",
+  LINE_THROUGH: "line-through",
+  BLINK: "blink"
+};
+const TextTransform = {
+  NONE: "none",
+  CAPITALIZE: "capitalize",
+  UPPERCASE: "uppercase",
+  LOWERCASE: "lowercase"
+};
+const Overflow = {
+  VISIBLE: "visible",
+  HIDDEN: "hidden",
+  SCROLL: "scroll",
+  AUTO: "auto"
+};
+const BorderStyle = {
+  NONE: "none",
+  HIDDEN: "hidden",
+  DOTTED: "dotted",
+  DASHED: "dashed",
+  SOLID: "solid",
+  DOUBLE: "double",
+  GROOVE: "groove",
+  RIDGE: "ridge",
+  INSET: "inset",
+  OUTSET: "outset"
+};
+const Layout = {
+  DEFAULT: "default",
+  FLEX: "flex",
+  GRID: "grid"
+};
+const FlexDirection = {
+  ROW: "row",
+  ROW_REVERSE: "row-reverse",
+  COLUMN: "column",
+  COLUMN_REVERSE: "column-reverse"
+};
+const JustifyContent = {
+  FLEX_START: "flex-start",
+  FLEX_END: "flex-end",
+  CENTER: "center",
+  SPACE_BETWEEN: "space-between",
+  SPACE_AROUND: "space-around",
+  SPACE_EVENLY: "space-evenly"
+};
+const AlignItems = {
+  FLEX_START: "flex-start",
+  FLEX_END: "flex-end",
+  CENTER: "center",
+  BASELINE: "baseline",
+  STRETCH: "stretch"
+};
+const AlignContent = {
+  FLEX_START: "flex-start",
+  FLEX_END: "flex-end",
+  CENTER: "center",
+  SPACE_BETWEEN: "space-between",
+  SPACE_AROUND: "space-around",
+  SPACE_EVENLY: "space-evenly"
+};
+const FlexWrap = {
+  NOWRAP: "nowrap",
+  WRAP: "wrap",
+  WRAP_REVERSE: "wrap-reverse"
+};
+const ResizingMode = {
+  FIXED: "fixed",
+  HUG_CONTENT: "hug-content",
+  FILL_CONTAINER: "fill-container"
+};
+const TextClip = {
+  NONE: "none",
+  TEXT: "text"
+};
+const BoxShadowStyle = {
+  OUTSET: "outset",
+  INSET: "inset"
+};
+const GradientType = {
+  STATIC: "static-gradient",
+  LINEAR: "linear-gradient",
+  RADIAL: "radial-gradient",
+  CONIC: "conic-gradient",
+  REPEATING_LINEAR: "repeating-linear-gradient",
+  REPEATING_RADIAL: "repeating-radial-gradient",
+  REPEATING_CONIC: "repeating-conic-gradient",
+  IMAGE: "image",
+  URL: "url"
+};
+const RadialGradientSizeType = {
+  CLOSEST_SIDE: "closest-side",
+  CLOSEST_CORNER: "closest-corner",
+  FARTHEST_SIDE: "farthest-side",
+  FARTHEST_CORNER: "farthest-corner"
+};
+const RadialGradientType = {
+  CIRCLE: "circle",
+  ELLIPSE: "ellipse"
+};
+const ClipPathType = {
+  NONE: "none",
+  CIRCLE: "circle",
+  ELLIPSE: "ellipse",
+  POLYGON: "polygon",
+  INSET: "inset",
+  PATH: "path",
+  SVG: "svg"
+};
+const VisibilityType = {
+  VISIBLE: "visible",
+  HIDDEN: "hidden"
+};
+const TimingFunction = {
+  LINEAR: "linear",
+  EASE: "ease",
+  EASE_IN: "ease-in",
+  EASE_OUT: "ease-out",
+  EASE_IN_OUT: "ease-in-out",
+  STEPS: "steps",
+  CUBIC_BEZIER: "cubic-bezier",
+  PATH: "path"
+};
+const SpreadMethodType = {
+  PAD: "pad",
+  REFLECT: "reflect",
+  REPEAT: "repeat"
+};
+const FuncType = {
+  COMMA: "comma",
+  COLOR: "color",
+  LENGTH: "length",
+  GRADIENT: "gradient",
+  TIMING: "timing",
+  KEYWORD: "keyword",
+  STRING: "string",
+  NUMBER: "number",
+  BOOLEAN: "boolean",
+  FUNCTION: "function",
+  PATH: "path",
+  UNKNOWN: "unknown"
+};
 const CSS_FUNC_REGEXP = /(([\-]?[\d.]+)(px|pt|fr|r?em|deg|vh|vw|m?s|%|g?rad|turn)?)|#(?:[\da-f]{8})|(#(?:[\da-f]{3}){1,2}|([a-z_\-]+)\([^\(\)]+\)|([a-z_\-]+))|(\,)/gi;
 const CSS_LENGTH_REGEXP = /^[\-]?([\d.]+)(px|pt|fr|r?em|deg|vh|vw|m?s|%|g?rad|turn)?$/gi;
 const CSS_KEYWORD_REGEXP = /^[a-z_\-]+$/gi;
@@ -7717,6 +7313,63 @@ class ColorStep {
     }).join(",");
     return colorsteps;
   }
+}
+const stepTimingFunction = (step2 = 1, direction = "end") => {
+  var stepDist = 1 / step2;
+  return function(rate) {
+    let pos = 0;
+    const offset = round$1(rate / stepDist, 1e7);
+    if (direction == "start") {
+      pos = Math.ceil(offset);
+    } else if (direction == "end") {
+      if (rate === 0)
+        return 0;
+      else if (rate === 1)
+        return 1;
+      pos = Math.ceil(offset) - 1;
+    }
+    return Math.min(Math.max(stepDist * pos, 0), 1);
+  };
+};
+function step(step2 = 1, direction = "end") {
+  return stepTimingFunction(step2, direction);
+}
+function stepStart() {
+  return stepTimingFunction(1, "start");
+}
+function stepEnd() {
+  return stepTimingFunction(1, "end");
+}
+function easeOutElastic() {
+  return (rate) => {
+    return Math.pow(2, -10 * rate) * Math.sin((rate - 0.1) * 5 * Math.PI) + 1;
+  };
+}
+var timingFunctions = {
+  step,
+  "step-start": stepStart,
+  "step-end": stepEnd,
+  stepStart,
+  stepEnd,
+  "ease-out-elastic": easeOutElastic,
+  easeOutElastic
+};
+function createTimingFunction(timing = "linear") {
+  var [funcName, params] = timing.split("(").map((it) => it.trim());
+  params = (params || "").split(")")[0].trim();
+  var func2 = timingFunctions[funcName];
+  if (func2) {
+    var args2 = timing.split("(")[1].split(")")[0].split(",").map((it) => it.trim());
+    return func2(...args2);
+  } else {
+    return createCurveFunction(timing);
+  }
+}
+function createCurveFunction(timing) {
+  var func2 = createBezierForPattern(timing);
+  return (rate) => {
+    return func2(rate).y;
+  };
 }
 class Point {
   static isEqual(a, b, c2) {
@@ -10370,9 +10023,6 @@ class StaticGradient extends Gradient {
     const color2 = this.colorsteps[0].color || "black";
     return `linear-gradient(${color2} 0%, ${color2} 100%)`;
   }
-  isStatic() {
-    return true;
-  }
 }
 const IMAGE_LIST$1 = ["jpg", "jpeg", "png", "gif", "svg"];
 class URLImageResource extends ImageResource {
@@ -10543,9 +10193,6 @@ class RadialGradient extends Gradient {
   }
   toCloneObject() {
     return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("radialType", "radialSize", "radialPosition"));
-  }
-  isRadial() {
-    return true;
   }
   getConerDist(result) {
     let topLeftPoint = result.backVerties[0];
@@ -10857,9 +10504,6 @@ class ConicGradient extends Gradient {
       angle: this.json.angle,
       radialPosition: clone$1(this.json.radialPosition)
     });
-  }
-  isConic() {
-    return true;
   }
   hasAngle() {
     return true;
@@ -11414,4370 +11058,6 @@ class BackgroundImage extends PropertyItem {
     return BackgroundImage.toCSS(list2.map((it) => BackgroundImage.parse(it)));
   }
 }
-function makeInterpolateColorStep(layer2, property, startColorStep, endColorStep) {
-  var obj2 = {
-    cut: makeInterpolateBoolean(layer2, property, startColorStep.cut, endColorStep.cut),
-    percent: makeInterpolateNumber$1(layer2, property, startColorStep.percent, endColorStep.percent),
-    px: makeInterpolateNumber$1(layer2, property, startColorStep.px, endColorStep.px),
-    em: makeInterpolateNumber$1(layer2, property, startColorStep.em, endColorStep.em),
-    unit: makeInterpolateString(layer2, property, startColorStep.unit, endColorStep.unit),
-    color: makeInterpolateColor(layer2, property, startColorStep.color, endColorStep.color)
-  };
-  return (rate, t) => {
-    return new ColorStep({
-      cut: obj2.cut(rate, t),
-      percent: obj2.percent(rate, t),
-      px: obj2.px(rate, t),
-      em: obj2.em(rate, t),
-      unit: obj2.unit(rate, t),
-      color: obj2.color(rate, t)
-    });
-  };
-}
-function makeInterpolateColorStepList(layer2, property, startColorsteps = [], endColorsteps = []) {
-  var max = Math.max(startColorsteps.length, endColorsteps.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var s = startColorsteps[i];
-    var e2 = endColorsteps[i];
-    if (s && e2) {
-      list2[i] = makeInterpolateColorStep(layer2, property, s, e2);
-    } else {
-      list2[i] = makeInterpolateBoolean(layer2, property, s, e2);
-    }
-  }
-  return (rate, t) => {
-    return list2.map((it) => it(rate, t));
-  };
-}
-function makeInterpolateLinearGradient(layer2, property, s, e2) {
-  var obj2 = {
-    angle: makeInterpolateNumber$1(layer2, property, s.angle, e2.angle),
-    colorsteps: makeInterpolateColorStepList(layer2, property, s.colorsteps, e2.colorsteps)
-  };
-  return (rate, t) => {
-    var colorsteps = obj2.colorsteps(rate, t);
-    return new LinearGradient({
-      angle: obj2.angle(rate, t),
-      colorsteps
-    });
-  };
-}
-function makeInterpolateRepeatingLinearGradient(layer2, property, s, e2) {
-  var func2 = makeInterpolateLinearGradient(layer2, property, s, e2);
-  return (rate, t) => {
-    var obj2 = func2(rate, t);
-    var results = new RepeatingLinearGradient({
-      angle: obj2.angle,
-      colorsteps: obj2.colorsteps
-    });
-    return results;
-  };
-}
-function convertPercent(value, type) {
-  switch (type) {
-    case "width":
-      if (value === "center") {
-        return "50%";
-      } else if (value === "left") {
-        return "0%";
-      } else if (value === "right") {
-        return "100%";
-      }
-      break;
-    case "height":
-      if (value === "center") {
-        return "50%";
-      } else if (value === "top") {
-        return "0%";
-      } else if (value === "bottom") {
-        return "100%";
-      }
-      break;
-  }
-  return value;
-}
-function makeInterpolateRadialGradient(layer2, property, s, e2) {
-  s.radialPosition[0] = convertPercent(s.radialPosition[0], "width");
-  s.radialPosition[1] = convertPercent(s.radialPosition[1], "height");
-  e2.radialPosition[0] = convertPercent(e2.radialPosition[0], "width");
-  e2.radialPosition[1] = convertPercent(e2.radialPosition[1], "height");
-  var obj2 = {
-    radialType: makeInterpolateString(layer2, property, s.radialType, e2.radialType),
-    radialPositionX: makeInterpolateLength(layer2, property, s.radialPosition[0], e2.radialPosition[0], "width", "self"),
-    radialPositionY: makeInterpolateLength(layer2, property, s.radialPosition[1], e2.radialPosition[1], "height", "self"),
-    colorsteps: makeInterpolateColorStepList(layer2, property, s.colorsteps, e2.colorsteps)
-  };
-  return (rate, t) => {
-    var results = new RadialGradient({
-      radialType: obj2.radialType(rate, t),
-      radialPosition: [
-        obj2.radialPositionX(rate, t),
-        obj2.radialPositionY(rate, t)
-      ],
-      colorsteps: obj2.colorsteps(rate, t)
-    });
-    return results;
-  };
-}
-function makeInterpolateRepeatingRadialGradient(layer2, property, s, e2) {
-  var func2 = makeInterpolateRadialGradient(layer2, property, s, e2);
-  return (rate, t) => {
-    var obj2 = func2(rate, t);
-    return new RepeatingRadialGradient({
-      radialType: obj2.radialType,
-      radialPosition: obj2.radialPosition,
-      colorsteps: obj2.colorsteps
-    });
-  };
-}
-function makeInterpolateConicGradient(layer2, property, s, e2) {
-  var obj2 = {
-    angle: makeInterpolateNumber$1(layer2, property, s.angle, e2.angle),
-    radialPositionX: makeInterpolateLength(layer2, property, s.radialPosition[0], e2.radialPosition[0], "width", "self"),
-    radialPositionY: makeInterpolateLength(layer2, property, s.radialPosition[1], e2.radialPosition[1], "height", "self"),
-    colorsteps: makeInterpolateColorStepList(layer2, property, s.colorsteps, e2.colorsteps)
-  };
-  return (rate, t) => {
-    return new ConicGradient({
-      angle: obj2.angle(rate, t),
-      radialPosition: [obj2.radialPositionX(rate, t), obj2.radialPositionY(rate, t)],
-      colorsteps: obj2.colorsteps(rate, t)
-    });
-  };
-}
-function makeInterpolateRepeatingConicGradient(layer2, property, s, e2) {
-  var func2 = makeInterpolateConicGradient(layer2, property, s, e2);
-  return (rate, t) => {
-    var obj2 = func2(rate, t);
-    return new RepeatingConicGradient({
-      angle: obj2.angle,
-      radialPosition: obj2.radialPosition,
-      colorsteps: obj2.colorsteps
-    });
-  };
-}
-function makeInterpolateImageResource(layer2, property, s, e2) {
-  var obj2 = {
-    image: (rate, t) => {
-      return t;
-    }
-  };
-  if (s.type === "url" || e2.type === "url") {
-    obj2.image = makeInterpolateBoolean(layer2, property, s, e2);
-  } else {
-    if (s.type != e2.type) {
-      obj2.image = makeInterpolateBoolean(layer2, property, s, e2);
-    } else {
-      switch (s.type) {
-        case "linear-gradient":
-          obj2.image = makeInterpolateLinearGradient(layer2, property, s, e2);
-          break;
-        case "repeating-linear-gradient":
-          obj2.image = makeInterpolateRepeatingLinearGradient(layer2, property, s, e2);
-          break;
-        case "radial-gradient":
-          obj2.image = makeInterpolateRadialGradient(layer2, property, s, e2);
-          break;
-        case "repeating-radial-gradient":
-          obj2.image = makeInterpolateRepeatingRadialGradient(layer2, property, s, e2);
-          break;
-        case "conic-gradient":
-          obj2.image = makeInterpolateConicGradient(layer2, property, s, e2);
-          break;
-        case "repeating-conic-gradient":
-          obj2.image = makeInterpolateRepeatingConicGradient(layer2, property, s, e2);
-          break;
-      }
-    }
-  }
-  return (rate, t) => {
-    return obj2.image(rate, t);
-  };
-}
-function makeInterpolateBackgroundImage(layer2, property, startValue, endValue) {
-  var s = BackgroundImage.parseStyle(STRING_TO_CSS(startValue));
-  var e2 = BackgroundImage.parseStyle(STRING_TO_CSS(endValue));
-  var totalLength = Math.max(s.length, e2.length);
-  var list2 = [];
-  for (var i = 0, len2 = totalLength; i < len2; i++) {
-    var startObject = s[i] || null;
-    var endObject = e2[i] || null;
-    if (startObject && !endObject) {
-      list2.push({
-        image: makeInterpolateIdentity(layer2, property, startObject.image),
-        size: makeInterpolateIdentity(layer2, property, startObject.size),
-        width: makeInterpolateIdentity(layer2, property, startObject.width),
-        height: makeInterpolateIdentity(layer2, property, startObject.height),
-        x: makeInterpolateIdentity(layer2, property, startObject.x),
-        y: makeInterpolateIdentity(layer2, property, startObject.y),
-        blendMode: makeInterpolateIdentity(layer2, property, startObject.blendMode),
-        repeat: makeInterpolateIdentity(layer2, property, startObject.repeat)
-      });
-    } else if (!startObject && endObject) {
-      list2.push({
-        image: makeInterpolateIdentity(layer2, property, endObject.image),
-        size: makeInterpolateIdentity(layer2, property, endObject.size),
-        width: makeInterpolateIdentity(layer2, property, endObject.width),
-        height: makeInterpolateIdentity(layer2, property, endObject.height),
-        x: makeInterpolateIdentity(layer2, property, endObject.x),
-        y: makeInterpolateIdentity(layer2, property, endObject.y),
-        blendMode: makeInterpolateIdentity(layer2, property, endObject.blendMode),
-        repeat: makeInterpolateIdentity(layer2, property, endObject.repeat)
-      });
-    } else if (startObject && endObject) {
-      list2.push({
-        image: makeInterpolateImageResource(layer2, property, startObject.image, endObject.image),
-        size: makeInterpolateString(layer2, property, startObject.size, endObject.size),
-        width: makeInterpolateLength(layer2, property, startObject.width, endObject.width, "width", "self"),
-        height: makeInterpolateLength(layer2, property, startObject.height, endObject.height, "height", "self"),
-        x: makeInterpolateLength(layer2, property, startObject.x, endObject.x, "width", "self"),
-        y: makeInterpolateLength(layer2, property, startObject.y, endObject.y, "height", "self"),
-        blendMode: makeInterpolateString(layer2, property, startObject.blendMode, endObject.blendMode),
-        repeat: makeInterpolateString(layer2, property, startObject.repeat, endObject.repeat)
-      });
-    }
-  }
-  return (rate, t) => {
-    return BackgroundImage.join(list2.map((it) => {
-      var data = {
-        image: it.image(rate, t),
-        size: it.size(rate, t),
-        x: it.x(rate, t),
-        y: it.y(rate, t),
-        width: it.width(rate, t),
-        height: it.height(rate, t),
-        blendMode: it.blendMode(rate, t),
-        repeat: it.repeat(rate, t)
-      };
-      return data;
-    }));
-  };
-}
-const FILTER_REG = /((blur|grayscale|drop\-shadow|hue\-rotate|invert|brightness|contrast|opacity|saturate|sepia|url)\(([^\)]*)\))/gi;
-class Filter extends PropertyItem {
-  getDefaultObject(obj2 = {}) {
-    return super.getDefaultObject(__spreadValues({
-      itemType: "filter"
-    }, obj2));
-  }
-  toString() {
-    return `${this.json.type}(${this.json.value || ""})`;
-  }
-  static parse(obj2) {
-    var FilterClass = FilterClassName[obj2.type];
-    if (FilterClass) {
-      return new FilterClass(obj2);
-    } else {
-      return new URLSvgFilter({
-        value: obj2.value
-      });
-    }
-  }
-  static parseStyle(filter2) {
-    var filters = [];
-    if (!filter2)
-      return filters;
-    var results = convertMatches(filter2);
-    var matches2 = results.str.match(FILTER_REG) || [];
-    matches2.forEach((value, index2) => {
-      var [filterName, filterValue] = value.split("(");
-      filterValue = filterValue.split(")")[0];
-      if (filterName === "drop-shadow") {
-        var arr = filterValue.split(" ");
-        var colors2 = arr.filter((it) => it.includes("@")).map((it) => {
-          return reverseMatches(it, results.matches);
-        });
-        var values = arr.filter((it) => !it.includes("@"));
-        filters[index2] = Filter.parse({
-          type: filterName,
-          offsetX: Length.parse(values[0]),
-          offsetY: Length.parse(values[1]),
-          blurRadius: Length.parse(values[2]),
-          color: colors2[0] || "rgba(0, 0, 0, 1)"
-        });
-      } else {
-        filters[index2] = Filter.parse({
-          type: filterName,
-          value: Length.parse(filterValue)
-        });
-      }
-    });
-    return filters;
-  }
-  static join(list2) {
-    return list2.map((it) => Filter.parse(it)).join(" ");
-  }
-}
-class BlurFilter extends Filter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "blur",
-      value: BlurFilter.spec.defaultValue
-    });
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("value"));
-  }
-}
-BlurFilter.spec = {
-  inputType: "range",
-  min: 0,
-  max: 100,
-  step: 1,
-  unit: "px",
-  units: ["px", "em"],
-  defaultValue: "0px"
-};
-class URLSvgFilter extends Filter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "svg",
-      value: URLSvgFilter.spec.defaultValue
-    });
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("value"));
-  }
-  toString() {
-    return `url(#${this.json.value || ""})`;
-  }
-}
-URLSvgFilter.spec = {
-  inputType: "select",
-  defaultValue: ""
-};
-class GrayscaleFilter extends Filter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "grayscale",
-      value: GrayscaleFilter.spec.defaultValue
-    });
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("value"));
-  }
-}
-GrayscaleFilter.spec = {
-  inputType: "range",
-  min: 0,
-  max: 100,
-  step: 1,
-  unit: "%",
-  units: ["%"],
-  defaultValue: Length.percent(0)
-};
-class HueRotateFilter extends Filter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "hue-rotate",
-      value: HueRotateFilter.spec.defaultValue
-    });
-  }
-}
-HueRotateFilter.spec = {
-  inputType: "range",
-  min: 0,
-  max: 360,
-  step: 1,
-  unit: "deg",
-  units: ["deg"],
-  defaultValue: Length.deg(0)
-};
-class InvertFilter extends Filter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "invert",
-      value: InvertFilter.spec.defaultValue
-    });
-  }
-}
-InvertFilter.spec = {
-  inputType: "range",
-  min: 0,
-  max: 100,
-  step: 1,
-  unit: "%",
-  units: ["%"],
-  defaultValue: Length.percent(0)
-};
-class BrightnessFilter extends Filter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "brightness",
-      value: BrightnessFilter.spec.defaultValue
-    });
-  }
-}
-BrightnessFilter.spec = {
-  inputType: "range",
-  min: 0,
-  max: 200,
-  step: 1,
-  unit: "%",
-  units: ["%"],
-  defaultValue: Length.percent(100)
-};
-class ContrastFilter extends Filter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "contrast",
-      value: ContrastFilter.spec.defaultValue
-    });
-  }
-}
-ContrastFilter.spec = {
-  inputType: "range",
-  min: 0,
-  max: 200,
-  step: 1,
-  unit: "%",
-  units: ["%"],
-  defaultValue: Length.percent(100)
-};
-class OpacityFilter extends Filter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "opacity",
-      value: OpacityFilter.spec.defaultValue
-    });
-  }
-}
-OpacityFilter.spec = {
-  inputType: "range",
-  min: 0,
-  max: 100,
-  step: 1,
-  unit: "%",
-  units: ["%"],
-  defaultValue: Length.percent(100)
-};
-class SaturateFilter extends Filter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "saturate",
-      value: SaturateFilter.spec.defaultValue
-    });
-  }
-}
-SaturateFilter.spec = {
-  inputType: "range",
-  min: 0,
-  max: 100,
-  step: 1,
-  unit: "%",
-  units: ["%"],
-  defaultValue: Length.percent(100)
-};
-class SepiaFilter extends Filter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "sepia",
-      value: SepiaFilter.spec.defaultValue
-    });
-  }
-}
-SepiaFilter.spec = {
-  inputType: "range",
-  min: 0,
-  max: 100,
-  step: 1,
-  unit: "%",
-  units: ["%"],
-  defaultValue: Length.percent(0)
-};
-class DropshadowFilter extends Filter {
-  getDefaultObject() {
-    return super.getDefaultObject({
-      type: "drop-shadow",
-      multi: true,
-      offsetX: DropshadowFilter.spec.offsetX.defaultValue,
-      offsetY: DropshadowFilter.spec.offsetY.defaultValue,
-      blurRadius: DropshadowFilter.spec.blurRadius.defaultValue,
-      color: DropshadowFilter.spec.color.defaultValue
-    });
-  }
-  toString() {
-    var json = this.json;
-    return `drop-shadow(${json.offsetX} ${json.offsetY} ${json.blurRadius} ${json.color})`;
-  }
-}
-DropshadowFilter.spec = {
-  offsetX: {
-    title: "Offset X",
-    inputType: "range",
-    min: -100,
-    max: 100,
-    step: 1,
-    defaultValue: "0px",
-    unit: "px",
-    units: ["px", "em"]
-  },
-  offsetY: {
-    title: "Offset Y",
-    inputType: "range",
-    min: -100,
-    max: 100,
-    step: 1,
-    defaultValue: "0px",
-    unit: "px",
-    units: ["px", "em"]
-  },
-  blurRadius: {
-    title: "Blur Radius",
-    inputType: "range",
-    min: 0,
-    max: 100,
-    step: 1,
-    defaultValue: "0px",
-    unit: "px",
-    units: ["px", "em", "%"]
-  },
-  color: {
-    title: "Color",
-    inputType: "color",
-    defaultValue: "rgba(0, 0, 0, 1)",
-    unit: "color"
-  }
-};
-const FilterClassName = {
-  blur: BlurFilter,
-  grayscale: GrayscaleFilter,
-  "hue-rotate": HueRotateFilter,
-  invert: InvertFilter,
-  brightness: BrightnessFilter,
-  contrast: ContrastFilter,
-  opacity: OpacityFilter,
-  saturate: SaturateFilter,
-  sepia: SepiaFilter,
-  "drop-shadow": DropshadowFilter,
-  svg: URLSvgFilter
-};
-function makeInterpolateFilterItem(layer2, property, startValue, endValue) {
-  var obj2 = {
-    type: makeInterpolateString(layer2, property, startValue.type, endValue.type),
-    value: makeInterpolateBoolean(layer2, property, startValue.value, endValue.value)
-  };
-  switch (startValue.type) {
-    case "blur":
-      obj2.value = makeInterpolateLength(layer2, property, startValue.value, endValue.value);
-      break;
-    case "grayscale":
-    case "invert":
-    case "brightness":
-    case "contrast":
-    case "opacity":
-    case "saturate":
-    case "sepia":
-    case "hue-rotate":
-      obj2.value = makeInterpolateNumber$1(layer2, property, startValue.value.value, endValue.value.value, startValue.value.unit);
-      break;
-    case "drop-shadow":
-      obj2.offsetX = makeInterpolateLength(layer2, property, startValue.offsetX, endValue.offsetX, "width", "self");
-      obj2.offsetY = makeInterpolateLength(layer2, property, startValue.offsetY, endValue.offsetY, "height", "self");
-      obj2.blurRadius = makeInterpolateLength(layer2, property, startValue.blurRadius, endValue.blurRadius, "width", "self");
-      obj2.spreadRadius = makeInterpolateLength(layer2, property, startValue.spreadRadius, endValue.spreadRadius, "width", "self");
-      obj2.color = makeInterpolateColor(layer2, property, startValue.color, endValue.color);
-      break;
-  }
-  return (rate, t) => {
-    var type = obj2.type(rate, t);
-    if (type === "drop-shadow") {
-      return {
-        type: obj2.type(rate, t),
-        offsetX: obj2.offsetX(rate, t),
-        offsetY: obj2.offsetY(rate, t),
-        blurRadius: obj2.blurRadius(rate, t),
-        spreadRadius: obj2.spreadRadius(rate, t),
-        color: obj2.color(rate, t)
-      };
-    } else {
-      return {
-        type: obj2.type(rate, t),
-        value: obj2.value(rate, t)
-      };
-    }
-  };
-}
-function makeInterpolateFilter(layer2, property, startValue, endValue) {
-  var s = Filter.parseStyle(startValue);
-  var e2 = Filter.parseStyle(endValue);
-  var totalLength = Math.max(s.length, e2.length);
-  var list2 = [];
-  for (var i = 0, len2 = totalLength; i < len2; i++) {
-    var startObject = s[i];
-    var endObject = e2[i];
-    if (startObject && !endObject) {
-      list2.push(makeInterpolateIdentity(layer2, property, startObject));
-    } else if (!startObject && endObject) {
-      list2.push(makeInterpolateIdentity(layer2, property, endObject));
-    } else {
-      if (startObject.type != endObject.type || startObject.type === "svg" || endObject.type === "svg") {
-        list2.push(makeInterpolateBoolean(layer2, property, startObject, endObject));
-      } else {
-        list2.push(makeInterpolateFilterItem(layer2, property, startObject, endObject));
-      }
-    }
-  }
-  return (rate, t) => {
-    return Filter.join(list2.map((it) => it(rate, t)));
-  };
-}
-class DirectionLength {
-  static parse(str) {
-    var temp = str.split(" ").filter((it) => it.trim()).map((it) => Length.parse(it));
-    var top2 = Length.percent(0), right2 = Length.percent(0), bottom2 = Length.percent(0), left2 = Length.percent(0);
-    if (temp.length === 1) {
-      top2 = temp[0].clone();
-      right2 = temp[0].clone();
-      bottom2 = temp[0].clone();
-      left2 = temp[0].clone();
-    } else if (temp.length === 2) {
-      top2 = temp[0].clone();
-      right2 = temp[1].clone();
-      bottom2 = temp[0].clone();
-      left2 = temp[1].clone();
-    } else if (temp.length === 3) {
-      top2 = temp[0].clone();
-      right2 = temp[1].clone();
-      bottom2 = temp[2].clone();
-      left2 = temp[1].clone();
-    } else if (temp.length === 4) {
-      top2 = temp[0].clone();
-      right2 = temp[1].clone();
-      bottom2 = temp[2].clone();
-      left2 = temp[3].clone();
-    }
-    return [temp.length, top2, right2, bottom2, left2];
-  }
-}
-const CLIPPATH_REG = /(content\-box|padding\-box|border\-box|margin\-box|view\-box|stroke\-box|fill\-box|none|(inset|circle|ellipse|polygon|path|svg|url)(\(([^\)]*)\))?)/gi;
-class ClipPath extends PropertyItem {
-  getDefaultObject(obj2 = {}) {
-    return super.getDefaultObject(__spreadValues({
-      itemType: "clip-path",
-      type: "none",
-      value: ""
-    }, obj2));
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("value"));
-  }
-  toString() {
-    var type = this.json.type;
-    var value = this.json.value;
-    var box = this.json.box;
-    var results = "";
-    switch (type) {
-      case "circle":
-      case "inset":
-      case "ellipse":
-      case "polygon":
-      case "path":
-        results = `${type}(${value})`;
-        break;
-      case "svg":
-        results = `url(#${value})`;
-        break;
-      default:
-        results = "none";
-        break;
-    }
-    return box ? `${box} ${results}` : results;
-  }
-  toCSS() {
-    return {
-      "clip-path": this.toString()
-    };
-  }
-  static toCSS(obj2) {
-    return new ClipPath(obj2).toCSS();
-  }
-  static toString(obj2) {
-    return ClipPath.toCSS(obj2)["clip-path"];
-  }
-  static parse(obj2) {
-    return new ClipPath(obj2);
-  }
-  static parseStyle(str) {
-    var clippath = {};
-    if (!str)
-      return {};
-    var matches2 = str.match(CLIPPATH_REG) || [];
-    matches2.forEach((value, index2) => {
-      if (value.includes("-box")) {
-        clippath.box = value;
-      } else {
-        var [clipPathName, clipPathValue] = value.split("(");
-        clipPathValue = clipPathValue || "";
-        if (clipPathName === "none") {
-          clipPathValue = "";
-        } else {
-          clipPathValue = clipPathValue.split(")")[0];
-        }
-        clippath.type = clipPathName;
-        clippath.value = clipPathValue;
-      }
-    });
-    return clippath;
-  }
-  static parseStyleForCircle(str = "50% at 50% 50%") {
-    var radius = new Length("", "closest-side"), position2 = "";
-    str = str || "50% at 50% 50%";
-    if (str.includes("at")) {
-      [radius, position2] = str.split("at").map((it) => it.trim());
-    } else {
-      position2 = str.trim();
-    }
-    var [x2, y2] = position2.split(" ");
-    if (isUndefined(y2)) {
-      y2 = x2;
-    }
-    radius = Length.parse(radius);
-    x2 = Length.parse(x2);
-    y2 = Length.parse(y2);
-    return {
-      radius,
-      x: x2,
-      y: y2
-    };
-  }
-  static parseStyleForEllipse(str = "50% 50%") {
-    var radius = `50% 50%`, position2 = "";
-    str = str || "50%";
-    if (str.includes("at")) {
-      [radius, position2] = str.split("at").map((it) => it.trim());
-    } else {
-      position2 = str.trim();
-    }
-    var [x2, y2] = position2.split(" ");
-    if (isUndefined(y2)) {
-      y2 = x2;
-    }
-    x2 = Length.parse(x2);
-    y2 = Length.parse(y2);
-    var [radiusX, radiusY] = radius.split(" ");
-    if (isUndefined(radiusY)) {
-      radiusY = radiusX;
-    }
-    radiusX = Length.parse(radiusX);
-    radiusY = Length.parse(radiusY);
-    return {
-      radiusX,
-      radiusY,
-      x: x2,
-      y: y2
-    };
-  }
-  static parseStyleForInset(str = "") {
-    var [inset, round2] = str.split("round");
-    var [_count, top2, right2, bottom2, left2] = DirectionLength.parse(inset);
-    if (round2) {
-      var [_roundCount, topRadius, rightRadius, bottomRadius, leftRadius] = DirectionLength.parse(round2);
-    }
-    return {
-      isAll: _count === 1,
-      top: top2,
-      right: right2,
-      bottom: bottom2,
-      left: left2,
-      round: round2,
-      isAllRadius: _roundCount === 1,
-      topRadius,
-      rightRadius,
-      bottomRadius,
-      leftRadius
-    };
-  }
-  static parseStyleForPolygon(str = "") {
-    return str.split(",").filter((it) => it.trim()).map((it) => {
-      var [x2, y2] = it.trim().split(" ");
-      return {
-        x: Length.parse(x2),
-        y: Length.parse(y2)
-      };
-    });
-  }
-}
-function makeInterpolateClipPathCircle(layer2, property, s, e2) {
-  var obj2 = {};
-  if (s.radius === "closest-side" || s.radius === "farthest-side" || e2.radius === "closest-side" || e2.radius === "farthest-side") {
-    obj2.radius = makeInterpolateBoolean(layer2, property, s.radius, e2.radius);
-  } else {
-    if (s.radius.unit === e2.radius.unit) {
-      obj2.radius = makeInterpolateNumber(layer2, property, s.radius.value, e2.radius.value, s.radius.unit);
-    } else {
-      obj2.radius = makeInterpolateLength(layer2, property, s.radius, e2.radius, "width", "self");
-    }
-  }
-  obj2.x = makeInterpolateLength(layer2, property, s.x, e2.x, "width", "self");
-  obj2.y = makeInterpolateLength(layer2, property, s.y, e2.y, "height", "self");
-  return (rate, t) => {
-    var radius = obj2.radius(rate, t);
-    var x2 = obj2.x(rate, t);
-    var y2 = obj2.y(rate, t);
-    var results = `${x2} ${y2}`;
-    var radiusString = radius + "";
-    if (radiusString.includes("closest-side")) {
-      radiusString = "closest-side";
-    } else if (radiusString.includes("farthest-side")) {
-      radiusString = "farthest-side";
-    }
-    return radius ? `${radiusString} at ${results}` : `${results}`;
-  };
-}
-function makeInterpolateClipPathEllipse(layer2, property, s, e2) {
-  var obj2 = {
-    radiusX: makeInterpolateLength(layer2, property, s.radiusX, e2.radiusX, "width", "self"),
-    radiusY: makeInterpolateLength(layer2, property, s.radiusY, e2.radiusY, "height", "self"),
-    x: makeInterpolateLength(layer2, property, s.x, e2.x, "width", "self"),
-    y: makeInterpolateLength(layer2, property, s.y, e2.y, "height", "self")
-  };
-  return (rate, t) => {
-    var radiusX = obj2.radiusX(rate, t);
-    var radiusY = obj2.radiusY(rate, t);
-    var x2 = obj2.x(rate, t);
-    var y2 = obj2.y(rate, t);
-    return `${radiusX} ${radiusY} at ${x2} ${y2}`;
-  };
-}
-function makeInterpolateClipPathPolygon(layer2, property, s, e2) {
-  var max = Math.max(s.length, e2.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var startPos = s[i];
-    var endPos = e2[i];
-    if (startPos && !endPos) {
-      list2.push({
-        x: makeInterpolateIdentity(layer2, property, startPos.x),
-        y: makeInterpolateIdentity(layer2, property, startPos.y)
-      });
-    } else if (!startPos && endPos) {
-      list2.push({
-        x: makeInterpolateIdentity(layer2, property, endPos.x),
-        y: makeInterpolateIdentity(layer2, property, endPos.y)
-      });
-    } else {
-      list2.push({
-        x: makeInterpolateLength(layer2, property, startPos.x, endPos.x, "width", "self"),
-        y: makeInterpolateLength(layer2, property, startPos.y, endPos.y, "height", "self")
-      });
-    }
-  }
-  return (rate, t) => {
-    return list2.map((it) => {
-      return `${it.x(rate, t)} ${it.y(rate, t)}`;
-    }).join(",");
-  };
-}
-function makeInterpolateClipPathInset(layer2, property, s, e2) {
-  var obj2 = {
-    top: makeInterpolateNumber$1(layer2, property, s.top.value, e2.top.value, s.top.unit),
-    left: makeInterpolateNumber$1(layer2, property, s.left.value, e2.left.value, s.left.unit),
-    right: makeInterpolateNumber$1(layer2, property, s.right.value, e2.right.value, s.right.unit),
-    bottom: makeInterpolateNumber$1(layer2, property, s.bottom.value, e2.bottom.value, s.bottom.unit),
-    round: makeInterpolateBoolean(layer2, property, s.round, e2.round),
-    topRadius: makeInterpolateNumber$1(layer2, property, s.topRadius.value, e2.topRadius.value, s.topRadius.unit),
-    leftRadius: makeInterpolateNumber$1(layer2, property, s.leftRadius.value, e2.leftRadius.value, s.leftRadius.unit),
-    rightRadius: makeInterpolateNumber$1(layer2, property, s.rightRadius.value, e2.rightRadius.value, s.rightRadius.unit),
-    bottomRadius: makeInterpolateNumber$1(layer2, property, s.bottomRadius.value, e2.bottomRadius.value, s.bottomRadius.unit)
-  };
-  return (rate, t) => {
-    var top2 = obj2.top(rate, t);
-    var right2 = obj2.right(rate, t);
-    var bottom2 = obj2.bottom(rate, t);
-    var left2 = obj2.left(rate, t);
-    var round2 = obj2.round(rate, t);
-    var topRadius = obj2.topRadius(rate, t);
-    var leftRadius = obj2.leftRadius(rate, t);
-    var bottomRadius = obj2.bottomRadius(rate, t);
-    var rightRadius = obj2.rightRadius(rate, t);
-    var position2 = [top2, right2, bottom2, left2].join(" ");
-    var radius = [topRadius, rightRadius, bottomRadius, leftRadius].join(" ");
-    var results = `${position2} ${round2 && radius.trim() ? `round ${radius}` : ""}`;
-    return results;
-  };
-}
-function makeInterpolateClipPath(layer2, property, startValue, endValue) {
-  var startObject = ClipPath.parseStyle(startValue);
-  var endObject = ClipPath.parseStyle(endValue);
-  var obj2 = {
-    type: makeInterpolateBoolean(layer2, property, startObject.type, startObject.type),
-    value: makeInterpolateBoolean(layer2, property, startValue, endValue)
-  };
-  if (startObject.type == endObject.type && startObject != "none") {
-    switch (startObject.type) {
-      case "circle":
-        startObject.value = ClipPath.parseStyleForCircle(startObject.value);
-        endObject.value = ClipPath.parseStyleForCircle(endObject.value);
-        obj2.value = makeInterpolateClipPathCircle(layer2, property, startObject.value, endObject.value);
-        break;
-      case "ellipse":
-        startObject.value = ClipPath.parseStyleForEllipse(startObject.value);
-        endObject.value = ClipPath.parseStyleForEllipse(endObject.value);
-        obj2.value = makeInterpolateClipPathEllipse(layer2, property, startObject.value, endObject.value);
-        break;
-      case "inset":
-        startObject.value = ClipPath.parseStyleForInset(startObject.value);
-        endObject.value = ClipPath.parseStyleForInset(endObject.value);
-        obj2.value = makeInterpolateClipPathInset(layer2, property, startObject.value, endObject.value);
-        break;
-      case "polygon":
-        startObject.value = ClipPath.parseStyleForPolygon(startObject.value);
-        endObject.value = ClipPath.parseStyleForPolygon(endObject.value);
-        obj2.value = makeInterpolateClipPathPolygon(layer2, property, startObject.value, endObject.value);
-        break;
-      case "path":
-        startObject.value = ClipPath.parseStyleForPath(startObject.value);
-        endObject.value = ClipPath.parseStyleForPath(endObject.value);
-        obj2.value = makeInterpolateClipPathPath(layer2, property, startObject.value, endObject.value);
-        break;
-    }
-  }
-  return (rate, t) => {
-    var type = obj2.type(rate, t);
-    var value = obj2.value(rate, t);
-    if (type === "none") {
-      return type;
-    }
-    return `${type}(${value})`;
-  };
-}
-const MAX_CACHE_COUNT$1 = 1e3;
-const cachedTransformMap = new Map();
-class TransformCache {
-  static has(key) {
-    return cachedTransformMap.has(key);
-  }
-  static get(key) {
-    return cachedTransformMap.get(key);
-  }
-  static set(key, parsedValue) {
-    if (cachedTransformMap.size > MAX_CACHE_COUNT$1) {
-      cachedTransformMap.clear();
-    }
-    cachedTransformMap.set(key, parsedValue);
-  }
-}
-const TRANSFORM_REG = /((matrix|translate(X|Y|Z|3d)?|scale(X|Y|Z|3d)?|rotate(X|Y|Z|3d)?|skew(X|Y)?|matrix(3d)?|perspective)\(([^\)]*)\))/gi;
-class Transform extends PropertyItem {
-  getDefaultObject() {
-    return {
-      itemType: "transform",
-      value: []
-    };
-  }
-  toCloneObject() {
-    return __spreadValues({}, this.attrs("itemType", "type", "value"));
-  }
-  toString() {
-    return `${this.json.type}(${this.json.value.join(", ") || ""})`;
-  }
-  static join(list2) {
-    var firstType = "perspective";
-    var lastType = "matrix3d";
-    var arr = list2.filter((it) => it.type === firstType);
-    var last2 = list2.filter((it) => it.type === lastType);
-    var arr2 = list2.filter((it) => it.type !== firstType && it.type !== lastType);
-    return [...arr, ...arr2, ...last2].map((it) => new Transform(it).toString()).join(" ");
-  }
-  hasNumberValue() {
-    var type = this.json.type;
-    return type.includes("matrix") || type.includes("scale");
-  }
-  static parse(transform2) {
-    return new Transform(transform2);
-  }
-  static remove(transform2, type = []) {
-    if (typeof type === "string") {
-      type = [type];
-    }
-    return Transform.filter(transform2, (it) => {
-      return type.includes(it.type) === false;
-    });
-  }
-  static filter(transform2, filterFunction) {
-    return Transform.join(Transform.parseStyle(transform2, false).filter((it) => filterFunction(it)));
-  }
-  static replace(transform2, valueObject) {
-    var obj2 = Transform.parseStyle(transform2, false);
-    var tObject = obj2.find((t) => t.type === valueObject.type);
-    if (tObject) {
-      tObject.value = valueObject.value;
-    } else {
-      obj2.push(valueObject);
-    }
-    return Transform.join(obj2);
-  }
-  static replaceAll(oldTransform, newTransform) {
-    var oldT = Transform.parseStyle(oldTransform, false);
-    var newT = Transform.parseStyle(newTransform);
-    for (var i = 0, len2 = newT.length; i < len2; i++) {
-      var newObject = newT[i];
-      var oldObject = oldT.find((t) => t.type === newObject.type);
-      if (oldObject) {
-        oldObject.value = newObject.value;
-      } else {
-        oldT.push(newObject);
-      }
-    }
-    return Transform.join(oldT);
-  }
-  static addTransform(oldTransform, newTransform) {
-    var oldT = Transform.parseStyle(oldTransform, false);
-    var newT = Transform.parseStyle(newTransform);
-    for (var i = 0, len2 = newT.length; i < len2; i++) {
-      var newObject = newT[i];
-      var oldObject = oldT.find((t) => t.type === newObject.type);
-      if (oldObject) {
-        newObject.value.forEach((v, i2) => {
-          oldObject.value[i2].value += v.value;
-        });
-      } else {
-        oldT.push(newObject);
-      }
-    }
-    return Transform.join(oldT);
-  }
-  static get(transform2, type) {
-    var arr = Transform.parseStyle(transform2, true);
-    if (typeof type === "function") {
-      arr = arr.find(type);
-    } else {
-      arr = arr.find((it) => it.type === type);
-    }
-    if (arr) {
-      return arr.value;
-    }
-    return void 0;
-  }
-  static createRotateKey(transform2, angle2, field) {
-    return `${transform2}:::${field}(${angle2})`;
-  }
-  static rotate(transform2, angle2, field = "rotate") {
-    const key = Transform.createRotateKey(transform2, angle2, field);
-    if (TransformCache.has(key))
-      return TransformCache.get(key);
-    TransformCache.set(key, Transform.replace(transform2, { type: field, value: [angle2] }));
-    return TransformCache.get(key);
-  }
-  static rotateZ(transform2, angle2) {
-    return Transform.rotate(transform2, angle2, "rotateZ");
-  }
-  static rotateX(transform2, angle2) {
-    return Transform.rotate(transform2, angle2, "rotateX");
-  }
-  static rotateY(transform2, angle2) {
-    return Transform.rotate(transform2, angle2, "rotateY");
-  }
-  static parseStyle(transform2, doCache = true) {
-    var transforms = [];
-    if (!transform2)
-      return transforms;
-    if (doCache && TransformCache.has(transform2)) {
-      return TransformCache.get(transform2);
-    }
-    var matches2 = transform2.match(TRANSFORM_REG) || [];
-    matches2.forEach((value, index2) => {
-      var [transformName, transformValue] = value.split("(");
-      transformValue = transformValue.split(")")[0];
-      var arr = transformValue.split(",");
-      if (transformValue.includes("matrix") || transformValue.includes("scale")) {
-        arr = arr.map((it) => Length.number(it.trim()));
-      } else {
-        arr = arr.map((it) => Length.parse(it.trim()));
-      }
-      transforms[index2] = Transform.parse({
-        type: transformName,
-        value: arr
-      });
-    });
-    if (doCache) {
-      TransformCache.set(transform2, transforms);
-    }
-    return transforms;
-  }
-  static createTransformMatrix(parsedTransformList, width2, height2) {
-    const view = create$5();
-    for (let i = 0, len2 = parsedTransformList.length; i < len2; i++) {
-      const it = parsedTransformList[i];
-      switch (it.type) {
-        case "translate":
-        case "translateX":
-        case "translateY":
-        case "translateZ":
-          var values = it.value;
-          if (it.type === "translate") {
-            values = [values[0].toPx(width2).value, values[1].toPx(height2).value, 0];
-          } else if (it.type === "translateX") {
-            values = [values[0].toPx(width2).value, 0, 0];
-          } else if (it.type === "translateY") {
-            values = [0, values[0].toPx(height2).value, 0];
-          } else if (it.type === "translateZ") {
-            values = [0, 0, values[0].toPx().value];
-          }
-          translate(view, view, values);
-          break;
-        case "rotate":
-        case "rotateZ":
-          rotateZ(view, view, degreeToRadian$1(it.value[0].value));
-          break;
-        case "rotateX":
-          rotateX(view, view, degreeToRadian$1(it.value[0].value));
-          break;
-        case "rotateY":
-          rotateY(view, view, degreeToRadian$1(it.value[0].value));
-          break;
-        case "rotate3d":
-          var values = it.value;
-          rotate$1(view, view, degreeToRadian$1(it.value[3].value), [
-            values[0].value,
-            values[1].value,
-            values[2].value
-          ]);
-          break;
-        case "scale":
-          scale$1(view, view, [it.value[0].value, it.value[1].value, 1]);
-          break;
-        case "scaleX":
-          scale$1(view, view, [it.value[0].value, 1, 1]);
-          break;
-        case "scaleY":
-          scale$1(view, view, [1, it.value[0].value, 1]);
-          break;
-        case "scaleZ":
-          scale$1(view, view, [1, 1, it.value[0].value]);
-          break;
-        case "skewX":
-          var rad = it.value[0].toDeg().toRad();
-          multiply$1(view, view, fromValues$1(1, 0, 0, 0, Math.tan(rad.value), 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
-          break;
-        case "skewY":
-          var rad = it.value[0].toDeg().toRad();
-          multiply$1(view, view, fromValues$1(1, Math.tan(rad.value), 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
-          break;
-        case "skew":
-          const skewX = it.value[0].toDeg().toRad();
-          const skewY = it.value.length > 1 ? it.value[1].toDeg().toRad() : skewX;
-          multiply$1(view, view, fromValues$1(1, Math.tan(skewY.value), 0, 0, Math.tan(skewX.value), 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
-          break;
-        case "matrix":
-          var values = it.value;
-          values = [
-            values[0].value,
-            values[1].value,
-            0,
-            0,
-            values[2].value,
-            values[3].value,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            values[4].value,
-            values[5].value,
-            0,
-            1
-          ];
-          multiply$1(view, view, values);
-          break;
-        case "matrix3d":
-          var values = it.value.map((it2) => it2.value);
-          multiply$1(view, view, values);
-          break;
-        case "perspective":
-          var values = it.value;
-          perspective$1(view, Math.PI * 0.5, width2 / height2, 1, values[0].value);
-          break;
-      }
-    }
-    return view;
-  }
-  static fromScale(scale2) {
-    if (scale2[0] === 1 && scale2[1] === 1) {
-      return "";
-    }
-    const list2 = [];
-    if (scale2[0] != 1)
-      list2.push(`scaleX(${scale2[0]})`);
-    if (scale2[1] != 1)
-      list2.push(`scaleY(${scale2[1]})`);
-    if (scale2[2] != 1)
-      list2.push(`scaleZ(${scale2[2]})`);
-    return list2.join(" ");
-  }
-}
-function makeInterpolateTransformLength(layer2, property, startValue, endValue) {
-  var obj2 = {
-    type: makeInterpolateBoolean(layer2, property, startValue.type, endValue.type)
-  };
-  var value = [];
-  var max = Math.max(startValue.value.length, endValue.value.length);
-  for (var i = 0; i < max; i++) {
-    var s = startValue.value[i];
-    var e2 = endValue.value[i];
-    if (s && e2) {
-      value.push(makeInterpolateLength(layer2, property, s, e2, startValue.type));
-    } else {
-      value.push(makeInterpolateLength(layer2, property, startValue.value[i] || startValue.value[i - 1] || startValue.value[i - 2], endValue.value[i] || endValue.value[i - 1] || endValue.value[i - 2], startValue.type));
-    }
-  }
-  obj2.value = value;
-  return (rate, t) => {
-    return {
-      type: obj2.type(rate, t),
-      value: obj2.value.map((it) => it(rate, t))
-    };
-  };
-}
-function makeInterpolateTransformNumber(layer2, property, startValue, endValue) {
-  var obj2 = {
-    type: makeInterpolateBoolean(layer2, property, startValue.type, endValue.type)
-  };
-  var value = [];
-  var max = Math.max(startValue.value.length, endValue.value.length);
-  for (var i = 0; i < max; i++) {
-    var s = startValue.value[i];
-    var e2 = endValue.value[i];
-    if (s && e2) {
-      value.push(makeInterpolateNumber$1(layer2, property, s.value, e2.value));
-    } else {
-      var ss = startValue.value[i].value || startValue.value[i - 1].value || startValue.value[i - 2].value;
-      var ee = endValue.value[i].value || endValue.value[i - 1].value || startValue.value[i - 2].value;
-      value.push(makeInterpolateNumber$1(layer2, property, ss, ee));
-    }
-  }
-  obj2.value = value;
-  return (rate, t) => {
-    var value2 = obj2.value.map((it) => it(rate, t));
-    var type = obj2.type(rate, t);
-    if (type.includes("matrix") || type.includes("scale")) {
-      value2 = value2.map((it) => {
-        return Length.number(it);
-      });
-    }
-    return { type, value: value2 };
-  };
-}
-function makeInterpolateTransformRotate(layer2, property, startValue, endValue) {
-  var obj2 = {
-    type: makeInterpolateBoolean(layer2, property, startValue.type, endValue.type)
-  };
-  var value = [];
-  var max = Math.max(startValue.value.length, endValue.value.length);
-  for (var i = 0; i < max; i++) {
-    var tempStartValue = startValue.value[i];
-    var tempEndValue = endValue.value[i];
-    if (tempStartValue && tempEndValue) {
-      value.push(makeInterpolateRotate(layer2, property, tempStartValue, tempEndValue));
-    } else {
-      value.push(makeInterpolateRotate(layer2, property, startValue.value[i] || startValue.value[i - 1] || startValue.value[i - 2], endValue.value[i] || endValue.value[i - 1] || startValue.value[i - 2]));
-    }
-  }
-  obj2.value = value;
-  return (rate, t) => {
-    var results = {
-      type: obj2.type(rate, t),
-      value: obj2.value.map((it) => it(rate, t))
-    };
-    return results;
-  };
-}
-function makeInterpolateTransform(layer2, property, startValue, endValue) {
-  var startObject = Transform.parseStyle(startValue.trim());
-  var endObject = Transform.parseStyle(endValue.trim());
-  var max = Math.max(startObject.length, endObject.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var s = startObject[i];
-    var e2 = endObject[i];
-    if (s && !e2) {
-      list2.push(makeInterpolateIdentity(layer2, property, s));
-    } else if (!s && e2) {
-      list2.push(makeInterpolateIdentity(layer2, property, e2));
-    } else if (s.type != e2.type) {
-      list2.push(makeInterpolateBoolean(layer2, property, s, e2));
-    } else {
-      switch (s.type) {
-        case "translate":
-        case "translateX":
-        case "translateY":
-        case "translateZ":
-        case "translate3d":
-        case "perspective":
-          list2.push(makeInterpolateTransformLength(layer2, property, s, e2));
-          break;
-        case "rotate":
-        case "rotateX":
-        case "rotateY":
-        case "rotateZ":
-        case "rotate3d":
-          list2.push(makeInterpolateTransformRotate(layer2, property, s, e2));
-          break;
-        case "scale":
-        case "scaleX":
-        case "scaleY":
-        case "scaleZ":
-        case "scale3d":
-        case "matrix":
-        case "matrix3d":
-          list2.push(makeInterpolateTransformNumber(layer2, property, s, e2));
-          break;
-      }
-    }
-  }
-  return (rate, t) => {
-    var results = Transform.join(list2.map((it) => {
-      return it(rate, t);
-    }));
-    return results;
-  };
-}
-function makeInterpolateTransformOrigin(layer2, property, startValue, endValue) {
-  var s = startValue.split(" ").map((it) => Length.parse(it));
-  var e2 = endValue.split(" ").map((it) => Length.parse(it));
-  var max = Math.max(s.length, e2.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var startPos = s[i];
-    var endPos = e2[i];
-    list2.push(makeInterpolateLength(layer2, property, startPos, endPos, "transform-origin"));
-  }
-  return (rate, t) => {
-    var results = list2.map((it) => it(rate, t)).join(" ");
-    return results;
-  };
-}
-function makeInterpolatePerspectiveOrigin(layer2, property, startValue, endValue) {
-  var s = startValue.split(" ").map((it) => Length.parse(it));
-  var e2 = endValue.split(" ").map((it) => Length.parse(it));
-  var max = Math.max(s.length, e2.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var startPos = s[i];
-    var endPos = e2[i];
-    list2.push(makeInterpolateLength(layer2, property, startPos, endPos, "perspective-origin"));
-  }
-  return (rate, t) => {
-    var results = list2.map((it) => it(rate, t)).join(" ");
-    return results;
-  };
-}
-function makeInterpolateStrokeDashArrray(layer2, property, startValue, endValue) {
-  var s = startValue.split(" ").map((it) => +it);
-  var e2 = endValue.split(" ").map((it) => +it);
-  var max = Math.max(s.length, e2.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var startPos = s[i];
-    var endPos = e2[i];
-    list2.push(makeInterpolateNumber$1(layer2, property, startPos, endPos));
-  }
-  return (rate, t) => {
-    var results = list2.map((it) => it(rate, t)).join(" ");
-    return results;
-  };
-}
-function makeInterpolatePathValues(layer2, property, s, e2) {
-  var max = Math.max(s.length, e2.length);
-  var list2 = [];
-  var startLastPos = s[s.length - 1];
-  var endLastPos = e2[e2.length - 1];
-  for (var i = 0; i < max; i++) {
-    var startPos = s[i];
-    var endPos = e2[i];
-    if (startPos && !endPos) {
-      list2.push(makeInterpolateNumber$1(layer2, property, startPos, endLastPos));
-    } else if (!startPos && endPos) {
-      list2.push(makeInterpolateNumber$1(layer2, property, startLastPos, endPos));
-    } else {
-      list2.push(makeInterpolateNumber$1(layer2, property, startPos, endPos));
-    }
-  }
-  return (rate, t) => {
-    return list2.map((it) => it(rate, t));
-  };
-}
-function makeInterpolatePath(layer2, property, startValue, endValue) {
-  var returnParser = new PathParser();
-  var s = new PathParser(startValue);
-  var e2 = new PathParser(endValue);
-  var max = Math.max(s.segments.length, e2.segments.length);
-  var list2 = [];
-  for (var i = 0; i < max; i++) {
-    var sc = s.segments[i];
-    var ec = e2.segments[i];
-    if (sc.command === ec.command) {
-      if (sc.values.length === ec.values.length) {
-        list2.push({
-          command: makeInterpolateIdentity(layer2, property, sc.command),
-          values: makeInterpolatePathValues(layer2, property, sc.values, ec.values)
-        });
-      } else {
-        list2.push({
-          command: makeInterpolateIdentity(layer2, property, sc.command),
-          values: makeInterpolateIdentity(layer2, property, sc.values)
-        });
-      }
-    } else {
-      list2.push({
-        command: makeInterpolateBoolean(layer2, property, sc.command, ec.command),
-        values: makeInterpolateBoolean(layer2, property, sc.values, ec.values)
-      });
-    }
-  }
-  return (rate, t) => {
-    var segments2 = list2.map((it) => {
-      return {
-        command: it.command(rate, t),
-        values: it.values(rate, t)
-      };
-    });
-    var results = returnParser.joinPath(segments2);
-    return results;
-  };
-}
-class PathStringManager {
-  constructor() {
-    this.pathArray = [];
-  }
-  reset() {
-    this.pathArray = [];
-  }
-  getPointString(values) {
-    return values.map((v) => `${v.x} ${v.y}`).join(" ");
-  }
-  makeString(command, values = []) {
-    this.pathArray.push(`${command} ${this.getPointString(values)}`);
-    return this;
-  }
-  M(...values) {
-    return this.makeString("M", values);
-  }
-  L(...values) {
-    return this.makeString("L", values);
-  }
-  X(...values) {
-    const dist2 = 3;
-    const point2 = values[0];
-    const topLeft = { x: point2.x - dist2, y: point2.y - dist2 };
-    const topRight = { x: point2.x + dist2, y: point2.y - dist2 };
-    const bottomLeft = { x: point2.x - dist2, y: point2.y + dist2 };
-    const bottomRight = { x: point2.x + dist2, y: point2.y + dist2 };
-    return this.M(topLeft).L(bottomRight).M(topRight).L(bottomLeft);
-  }
-  Q(...values) {
-    return this.makeString("Q", values);
-  }
-  C(...values) {
-    return this.makeString("C", values);
-  }
-  Z() {
-    return this.makeString("Z");
-  }
-  get d() {
-    return this.pathArray.join(" ").trim();
-  }
-  toString(className = "object") {
-    return `<path d="${this.d}" class='${className}'/>`;
-  }
-}
-const splitReg = /[\b\t \,]/g;
-class PolygonParser extends PathParser {
-  constructor(points2 = "") {
-    super(points2);
-  }
-  reset(points2 = "") {
-    this.segments = [];
-    this.points = points2;
-    this.parse();
-  }
-  resetSegments(segments2 = []) {
-    this.segments = segments2;
-    this.points = this.joinPoints();
-  }
-  parse() {
-    var points2 = this.points;
-    if (Array.isArray(points2)) {
-      points2 = points2.join(" ");
-    }
-    var arr = points2.trim().split(splitReg).filter((it) => it);
-    var segments2 = [];
-    for (var i = 0, len2 = arr.length; i < len2; i += 2) {
-      segments2.push({ x: +arr[i], y: +arr[i + 1] });
-    }
-    this.segments = segments2;
-  }
-  convertGenerator() {
-    return this.segments;
-  }
-  length() {
-    return this.segments.length;
-  }
-  toPathString() {
-    var path = new PathStringManager();
-    for (var i = 0, len2 = this.segments.length; i < len2; i++) {
-      var s = this.segments[i];
-      if (i === 0) {
-        path.M(s);
-      } else if (i === len2 - 1) {
-        path.L(s).L(this.segments[0]).Z();
-      } else {
-        path.L(s);
-      }
-    }
-    return path.d;
-  }
-  joinPath(segments2) {
-    return this.joinPoints(segments2);
-  }
-  joinPoints(segments2) {
-    var list2 = segments2 || this.segments;
-    return list2.map((it) => {
-      return `${it.x},${it.y}`;
-    }).join(" ");
-  }
-  each(callback, isReturn = false) {
-    var newSegments = this.segments.map((segment) => {
-      return callback.call(this, segment);
-    });
-    if (isReturn) {
-      return newSegments;
-    } else {
-      this.segments = newSegments;
-    }
-  }
-  _loop(m, isReturn = false) {
-    return this.each(function(segment) {
-      var [x2, y2] = m([segment.x, segment.y], 0);
-      segment.x = x2;
-      segment.y = y2;
-      return segment;
-    }, isReturn);
-  }
-  clone() {
-    return new PolygonParser(this.joinPoints());
-  }
-  toString() {
-    return this.joinPoints();
-  }
-}
-function makeInterpolatePolygon(layer2, property, startValue, endValue) {
-  var returnParser = new PolygonParser();
-  var s = new PolygonParser(startValue);
-  var e2 = new PolygonParser(endValue);
-  var max = Math.max(s.segments.length, e2.segments.length);
-  var list2 = [];
-  var startLastX = s.segments[s.segments.length - 1].x;
-  var startLastY = s.segments[s.segments.length - 1].y;
-  var endLastX = e2.segments[e2.segments.length - 1].x;
-  var endLastY = e2.segments[e2.segments.length - 1].y;
-  for (var i = 0; i < max; i++) {
-    var startPos = s.segments[i];
-    var endPos = e2.segments[i];
-    if (startPos && !endPos) {
-      list2.push({
-        x: makeInterpolateNumber$1(layer2, property, startPos.x, endLastX),
-        y: makeInterpolateNumber$1(layer2, property, startPos.y, endLastY)
-      });
-    } else if (!startPos && endPos) {
-      list2.push({
-        x: makeInterpolateNumber$1(layer2, property, startLastX, endPos.x),
-        y: makeInterpolateNumber$1(layer2, property, startLastY, endPos.y)
-      });
-    } else {
-      list2.push({
-        x: makeInterpolateNumber$1(layer2, property, startPos.x, endPos.x),
-        y: makeInterpolateNumber$1(layer2, property, startPos.y, endPos.y)
-      });
-    }
-  }
-  return (rate, t) => {
-    var points2 = returnParser.joinPoints(list2.map((it) => {
-      return {
-        x: it.x(rate, t),
-        y: it.y(rate, t)
-      };
-    }));
-    return points2;
-  };
-}
-function makeInterpolateLine(x1, y1, x2, y2) {
-  var obj2 = {
-    x: makeInterpolateNumber$1("", "", x1, x2),
-    y: makeInterpolateNumber$1("", "", y1, y2)
-  };
-  return (rate, t) => {
-    var results = {
-      x: obj2.x(rate, t),
-      y: obj2.y(rate, t)
-    };
-    return results;
-  };
-}
-function makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey) {
-  var points2 = [
-    { x: sx, y: sy },
-    { x: cx1, y: cy1 },
-    { x: ex, y: ey }
-  ];
-  return (rate, t) => {
-    return getBezierPointOneQuard(points2, t);
-  };
-}
-function makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey) {
-  var points2 = [
-    { x: sx, y: sy },
-    { x: cx1, y: cy1 },
-    { x: cx2, y: cy2 },
-    { x: ex, y: ey }
-  ];
-  return (rate, t) => {
-    return getBezierPointOne(points2, t);
-  };
-}
-function makeInterpolateOffset(segments2) {
-  var interpolateList = [];
-  var startPoint = [];
-  segments2.forEach((segment, index2) => {
-    switch (segment.command) {
-      case "M":
-        var [ex, ey] = segment.values;
-        startPoint = [ex, ey];
-        break;
-      case "m":
-        var [sx, sy] = startPoint;
-        var [ex, ey] = segment.values;
-        ex += sx;
-        ey += sy;
-        startPoint = [ex, ey];
-        break;
-      case "L":
-        var [sx, sy] = startPoint;
-        var [ex, ey] = segment.values;
-        interpolateList.push({
-          command: segment.command,
-          values: [sx, sy, ex, ey],
-          length: getDist(sx, sy, ex, ey),
-          interpolate: makeInterpolateLine(sx, sy, ex, ey)
-        });
-        startPoint = [ex, ey];
-        break;
-      case "l":
-        var [sx, sy] = startPoint;
-        var [ex, ey] = segment.values;
-        ex += sx;
-        ey += sy;
-        interpolateList.push({
-          command: segment.command,
-          values: [sx, sy, ex, ey],
-          length: getDist(sx, sy, ex, ey),
-          interpolate: makeInterpolateLine(sx, sy, ex, ey)
-        });
-        startPoint = [ex, ey];
-        break;
-      case "C":
-        var [sx, sy] = startPoint;
-        var [cx1, cy1, cx2, cy2, ex, ey] = segment.values;
-        interpolateList.push({
-          command: segment.command,
-          values: [sx, sy, cx1, cy1, cx2, cy2, ex, ey],
-          length: getCurveDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
-          interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
-        });
-        startPoint = [ex, ey];
-        break;
-      case "c":
-        var [sx, sy] = startPoint;
-        var [cx1, cy1, cx2, cy2, ex, ey] = segment.values;
-        cx1 += sx;
-        cx2 += sx;
-        ex += sx;
-        cy1 += sy;
-        cy2 += sy;
-        ey += sy;
-        interpolateList.push({
-          command: segment.command,
-          values: [sx, sy, cx1, cy1, cx2, cy2, ex, ey],
-          length: getCurveDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
-          interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
-        });
-        startPoint = [ex, ey];
-        break;
-      case "Q":
-        var [sx, sy] = startPoint;
-        var [cx1, cy1, ex, ey] = segment.values;
-        interpolateList.push({
-          command: segment.command,
-          values: [sx, sy, cx1, cy1, ex, ey],
-          length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
-          interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
-        });
-        startPoint = [ex, ey];
-        break;
-      case "q":
-        var [sx, sy] = startPoint;
-        var [cx1, cy1, ex, ey] = segment.values;
-        cx1 += sx;
-        ex += sx;
-        cy1 += sy;
-        ey += sy;
-        interpolateList.push({
-          command: segment.command,
-          values: [sx, sy, cx1, cy1, ex, ey],
-          length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
-          interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
-        });
-        startPoint = [ex, ey];
-        break;
-      case "S":
-        var [sx, sy] = startPoint;
-        var [cx2, cy2, ex, ey] = segment.values;
-        var prevSegment = interpolateList[interpolateList.length - 1];
-        if (["C", "c", "S", "s"].includes(prevSegment.command)) {
-          var [_, _, _, _, preC1x, preC1y, preEx, preEy] = prevSegment.values;
-          var { x: cx1, y: cy1 } = Point.getReversePoint({ x: preEx, y: preEy }, { x: preC1x, preC1y });
-          interpolateList.push({
-            command: segment.command,
-            values: [sx, sy, cx1, cy1, cx2, cy2, ex, ey],
-            length: getCubicDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
-            interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
-          });
-          startPoint = [ex, ey];
-          break;
-        }
-      case "s":
-        var [sx, sy] = startPoint;
-        var [cx2, cy2, ex, ey] = segment.values;
-        cx2 += sx;
-        ex += sx;
-        cy2 += sy;
-        ey += sy;
-        var prevSegment = interpolateList[interpolateList.length - 1];
-        if (["C", "c", "S", "s"].includes(prevSegment.command)) {
-          var [_, _, _, _, preC1x, preC1y, preEx, preEy] = prevSegment.values;
-          var { x: cx1, y: cy1 } = Point.getReversePoint({ x: preEx, y: preEy }, { x: preC1x, preC1y });
-          interpolateList.push({
-            command: segment.command,
-            values: [sx, sy, cx1, cy1, cx2, cy2, ex, ey],
-            length: getCubicDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
-            interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
-          });
-          startPoint = [ex, ey];
-          break;
-        }
-      case "T":
-        var [sx, sy] = startPoint;
-        var [ex, ey] = segment.values;
-        var prevSegment = interpolateList[interpolateList.length - 1];
-        if (["Q", "q", "T", "t"].includes(prevSegment.command)) {
-          var [_, _, preC1x, preC1y, preEx, preEy] = prevSegment.values;
-          var { x: cx1, y: cy1 } = Point.getReversePoint({ x: preEx, y: preEy }, { x: preC1x, preC1y });
-          interpolateList.push({
-            command: segment.command,
-            values: [sx, sy, cx1, cy1, ex, ey],
-            length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
-            interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
-          });
-          startPoint = [ex, ey];
-        }
-        break;
-      case "t":
-        var [sx, sy] = startPoint;
-        var [ex, ey] = segment.values;
-        ex += sx;
-        ey += sy;
-        var prevSegment = interpolateList[interpolateList.length - 1];
-        if (["Q", "q", "T", "t"].includes(prevSegment.command)) {
-          var [_, _, preC1x, preC1y, preEx, preEy] = prevSegment.values;
-          var { x: cx1, y: cy1 } = Point.getReversePoint({ x: preEx, y: preEy }, { x: preC1x, preC1y });
-          interpolateList.push({
-            command: segment.command,
-            values: [sx, sy, cx1, cy1, ex, ey],
-            length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
-            interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
-          });
-          startPoint = [ex, ey];
-        }
-        break;
-    }
-  });
-  var totalLength = 0;
-  interpolateList.forEach((it) => {
-    totalLength += it.length;
-  });
-  var start2 = 0;
-  interpolateList.forEach((it) => {
-    it.startT = start2 / totalLength;
-    it.endT = (start2 + it.length) / totalLength;
-    it.totalLength = totalLength;
-    start2 += it.length;
-  });
-  return { totalLength, interpolateList };
-}
-function makeInterpolateOffsetPath(layer2, property, startValue, endValue, artboard2) {
-  var [id, distance2, rotateStatus, rotate2] = startValue.split(",").map((it) => it.trim());
-  var startObject = { id, distance: Length.parse(distance2 || "0%"), rotateStatus: rotateStatus || "auto", rotate: Length.parse(rotate2 || "0deg") };
-  var innerInterpolate = (rate, t) => {
-    return { x, y };
-  };
-  var innerInterpolateAngle = (rotateStatus2, currentAngle) => {
-    var resultAngle = 0;
-    switch (rotateStatus2) {
-      case "angle":
-        resultAngle = startObject.rotate.value;
-        break;
-      case "auto angle":
-        resultAngle = currentAngle + startObject.rotate.value;
-        break;
-      case "reverse":
-        resultAngle = currentAngle + 180;
-        break;
-      case "auto":
-        resultAngle = currentAngle;
-        break;
-    }
-    return resultAngle;
-  };
-  var screenX = 0, screenY = 0;
-  if (artboard2) {
-    var pathLayer = artboard2.searchById(startObject.id);
-    if (pathLayer) {
-      screenX = pathLayer.screenX.value;
-      screenY = pathLayer.screenY.value;
-    }
-    innerInterpolate = (rate, t, timing) => {
-      var parser2 = new PathParser(pathLayer.d || "");
-      var { totalLength, interpolateList } = makeInterpolateOffset(parser2.segments);
-      var distance3 = startObject.distance.toPx(totalLength);
-      var dt = distance3 / totalLength;
-      t = t + dt;
-      if (t > 1) {
-        t -= 1;
-      }
-      var obj2 = interpolateList[0];
-      if (t === 0) {
-        obj2 = interpolateList[0];
-      } else if (t === 1) {
-        obj2 = interpolateList[interpolateList.length - 1];
-      }
-      var arr = interpolateList.find((it) => {
-        return it.startT <= t && t < it.endT;
-      });
-      if (arr) {
-        obj2 = arr;
-      }
-      var newT = (t - obj2.startT) / (obj2.endT - obj2.startT);
-      var newRate = timing(newT);
-      return __spreadProps(__spreadValues({}, obj2.interpolate(newRate, newT, timing)), {
-        totalLength: obj2.totalLength
-      });
-    };
-  }
-  return (rate, t, timing) => {
-    var arr = (layer2["transform-origin"] || "50% 50%").split(" ").map((it) => Length.parse(it));
-    var tx = arr[0].toPx(layer2.width);
-    var ty = arr[1].toPx(layer2.height);
-    var obj2 = innerInterpolate(rate, t, timing);
-    var results = {
-      x: obj2.x + screenX - tx.value,
-      y: obj2.y + screenY - ty.value
-    };
-    layer2.setScreenX(results.x);
-    layer2.setScreenY(results.y);
-    if (startObject.rotateStatus === "element")
-      ;
-    else {
-      var current = obj2;
-      var distValue = 0;
-      if (t < 1) {
-        distValue = 1 / obj2.totalLength;
-      }
-      var next = innerInterpolate(rate + distValue, t + distValue, timing);
-      var angle2 = calculateAngle(next.x - current.x, next.y - current.y);
-      var newAngle = Length.deg(innerInterpolateAngle(startObject.rotateStatus, angle2));
-      layer2.reset({
-        transform: Transform.rotate(layer2.transform, newAngle)
-      });
-    }
-    return results;
-  };
-}
-function makeInterpolateText(layer2, property, startText, endText, unit = void 0) {
-  var max = endText.length - 1;
-  var min = 0;
-  return (rate, t) => {
-    var result = 0;
-    if (t === 0) {
-      result = "";
-    } else if (t === 1) {
-      result = endText;
-    } else {
-      result = endText.substring(min, Math.floor((max - min) * t));
-    }
-    return result;
-  };
-}
-function makeInterpolatePlayTime(layer2, property, startValue, endValue, artboard2, layerElement) {
-  const mediaElement = layerElement.$("video").el;
-  let [sTime, eTime, durationTime] = startValue.split(":");
-  const duration = +(durationTime || 1);
-  const startTime = +(sTime || 0) * duration;
-  return (rate, t) => {
-    if (t === 0) {
-      mediaElement.currentTime = startTime;
-      if (mediaElement.paused) {
-        mediaElement.play();
-      }
-    } else if (t === 1) {
-      layer2.reset({
-        currentTime: mediaElement.currentTime
-      });
-      mediaElement.pause();
-    } else {
-      if (mediaElement.paused) {
-        mediaElement.play();
-      }
-    }
-  };
-}
-const DEFAULT_FUCTION = () => (rate, t) => {
-};
-function makeInterpolateCustom(property) {
-  switch (property) {
-    case "border-radius":
-      return makeInterpolateBorderRadius;
-    case "border":
-      return makeInterpolateBorder;
-    case "box-shadow":
-      return makeInterpolateBoxShadow;
-    case "text-shadow":
-      return makeInterpolateTextShadow;
-    case "background-image":
-    case "BackgroundImageEditor":
-      return makeInterpolateBackgroundImage;
-    case "filter":
-    case "backdrop-filter":
-      return makeInterpolateFilter;
-    case "clip-path":
-      return makeInterpolateClipPath;
-    case "transform":
-      return makeInterpolateTransform;
-    case "transform-origin":
-      return makeInterpolateTransformOrigin;
-    case "perspective-origin":
-      return makeInterpolatePerspectiveOrigin;
-    case "stroke-dasharray":
-      return makeInterpolateStrokeDashArrray;
-    case "d":
-      return makeInterpolatePath;
-    case "points":
-      return makeInterpolatePolygon;
-    case "offset-path":
-      return makeInterpolateOffsetPath;
-    case "text":
-      return makeInterpolateText;
-    case "playTime":
-      return makeInterpolatePlayTime;
-  }
-}
-function makeInterpolate(layer2, property, startValue, endValue, editorString, artboard2, layerElement) {
-  var checkField = editorString || property;
-  switch (checkField) {
-    case "width":
-    case "x":
-      return makeInterpolateLength(layer2, property, startValue, endValue, "width");
-    case "height":
-    case "y":
-      return makeInterpolateLength(layer2, property, startValue, endValue, "height");
-    case "perspective":
-    case "font-size":
-    case "font-weight":
-    case "text-stroke-width":
-    case "RangeEditor":
-    case "textLength":
-    case "startOffset":
-      return makeInterpolateLength(layer2, property, startValue, endValue, property);
-    case "fill-opacity":
-    case "opacity":
-    case "stroke-dashoffset":
-    case "currentTime":
-    case "NumberRangeEditor":
-      return makeInterpolateNumber$1(layer2, property, +startValue, +endValue);
-    case "background-color":
-    case "color":
-    case "text-fill-color":
-    case "text-stroke-color":
-    case "fill":
-    case "stroke":
-    case "ColorViewEditor":
-      return makeInterpolateColor(layer2, property, startValue, endValue);
-    case "mix-blend-mode":
-    case "fill-rule":
-    case "stroke-linecap":
-    case "stroke-linejoin":
-    case "SelectEditor":
-    case "lengthAdjust":
-      return makeInterpolateString(layer2, property, startValue, endValue);
-    case "rotate":
-      return makeInterpolateRotate(layer2, property, startValue, endValue);
-  }
-  var func2 = makeInterpolateCustom(checkField);
-  if (func2) {
-    return func2(layer2, property, startValue, endValue, artboard2, layerElement);
-  }
-  return DEFAULT_FUCTION;
-}
-function createInterpolateFunction(layer2, property, startValue, endValue, editorString, artboard2, layerElement) {
-  return makeInterpolate(layer2, property, startValue, endValue, editorString, artboard2, layerElement);
-}
-function createTimingFunction(timing = "linear") {
-  var [funcName, params] = timing.split("(").map((it) => it.trim());
-  params = (params || "").split(")")[0].trim();
-  var func2 = timingFunctions[funcName];
-  if (func2) {
-    var args2 = timing.split("(")[1].split(")")[0].split(",").map((it) => it.trim());
-    return func2(...args2);
-  } else {
-    return createCurveFunction(timing);
-  }
-}
-function createCurveFunction(timing) {
-  var func2 = createBezierForPattern(timing);
-  return (rate) => {
-    return func2(rate).y;
-  };
-}
-class Offset extends PropertyItem {
-  static parse(obj2) {
-    return new Offset(obj2);
-  }
-  getDefaultObject() {
-    return super.getDefaultObject({
-      itemType: "offset",
-      offset: Length.percent(0),
-      color: "rgba(255, 255, 255, 1)",
-      properties: []
-    });
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("offset", "color", "properties"));
-  }
-  convert(json) {
-    json = super.convert(json);
-    json.offset = Length.parse(json.offset);
-    return json;
-  }
-  toCSSText() {
-    return `${this.json.offset} ${CSS_TO_STRING$1(this.toCSS())}`;
-  }
-  createProperty(data = {}) {
-    return this.addProperty(__spreadValues({
-      checked: true,
-      value: 0
-    }, data));
-  }
-  addProperty(property) {
-    this.json.properties.push(property);
-  }
-  removeProperty(removeIndex) {
-    this.json.properties.splice(removeIndex, 1);
-  }
-  sortItem(arr, startIndex, targetIndex) {
-    arr.splice(targetIndex + (startIndex < targetIndex ? -1 : 0), 0, ...arr.splice(startIndex, 1));
-  }
-  sortProperty(startIndex, targetIndex) {
-    this.sortItem(this.json.properties, startIndex, targetIndex);
-  }
-  updateProperty(index2, data = {}) {
-    Object.assign(this.json.properties[+index2], __spreadValues({}, data));
-  }
-  updatePropertyByKey(key, data = {}) {
-    var arr = this.json.properties;
-    var index2 = -1;
-    for (var i = 0, len2 = arr.length; i < len2; i++) {
-      if (this.json.properties[i].key === key) {
-        index2 = i;
-        break;
-      }
-    }
-    Object.assign(this.json.properties[+index2], __spreadValues({}, data));
-  }
-  toCSS() {
-    var obj2 = {};
-    this.json.properties.forEach((it) => {
-      obj2 = __spreadValues(__spreadValues({}, obj2), it.toCSS());
-    });
-    return obj2;
-  }
-  toString() {
-    return this.toCSSText();
-  }
-}
-class Keyframe extends PropertyItem {
-  static parse(obj2) {
-    return new Keyframe(obj2);
-  }
-  static parseStyle(style) {
-    var keyframes = [];
-    var keyframeKeys = {};
-    if (style["keyframe"]) {
-      var results = convertMatches(style["keyframe"]);
-      results.str.split("|").map((it) => it.trim()).forEach((frameInfo, index2) => {
-        var [name2, offset, property, ...values] = frameInfo.split(" ");
-        var propertyValue = values.join(" ");
-        if (!keyframeKeys[name2]) {
-          keyframeKeys[name2] = new Keyframe({
-            name: name2
-          });
-          keyframes[index2] = name2;
-        }
-        var filteredOffset = keyframeKeys[name2].offsets.filter((it) => {
-          return it.offset.equals(Length.parse(offset));
-        });
-        var offsetObj = null;
-        if (filteredOffset.length) {
-          offsetObj = filteredOffset[0];
-        } else {
-          offsetObj = new Offset({
-            offset: Length.parse(offset)
-          });
-          keyframeKeys[name2].offsets.push(offsetObj);
-        }
-        offsetObj.addProperty({
-          key: property,
-          value: reverseMatches(propertyValue, results.matches)
-        });
-      });
-    }
-    return keyframes.map((name2) => {
-      keyframeKeys[name2].offsets.forEach((offset) => {
-        var vars = [];
-        var properties = [];
-        offset.properties.forEach((p) => {
-          if (p.key.includes("--")) {
-            vars.push(p);
-          } else {
-            properties.push(p);
-          }
-        });
-        let varValue = vars.map((it) => `${it.key}:${it.value}`).join(";");
-        if (vars.length) {
-          properties.push({ key: "var", value: varValue });
-        }
-        offset.properties = properties;
-      });
-      return keyframeKeys[name2];
-    });
-  }
-  getDefaultObject() {
-    return super.getDefaultObject({
-      itemType: "keyframe",
-      name: "sample",
-      selectedType: "list",
-      offsets: []
-    });
-  }
-  toCloneObject() {
-    var { name: name2, selectedType, offsets } = this.json;
-    return __spreadProps(__spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("name", "selectedType")), {
-      offsets: offsets.map((offset) => offset.clone())
-    });
-  }
-  isMultiStyle(key) {
-    switch (key) {
-      case "background-image":
-      case "var":
-        return true;
-    }
-    return false;
-  }
-  getMultiStyleString(p) {
-    switch (p.key) {
-      case "background-image":
-        return p.value.toString() + ";";
-      case "var":
-        var value = (p.value + "").split(";").map((str) => {
-          return `--` + str;
-        }).join(";");
-        return value + ";";
-    }
-    return p.value.toString() + ";";
-  }
-  toOffsetString(it) {
-    var tabString = "      ";
-    return `${it.offset.toString()} {
-${tabString}${it.properties.map((p) => {
-      if (this.isMultiStyle(p.key)) {
-        return this.getMultiStyleString(p);
-      } else {
-        var value = (p.value || "").toString();
-        if (value) {
-          var key = p.key;
-          if (key === "x")
-            key = "left";
-          else if (key === "y")
-            key = "top";
-          return `${key}: ${value};`;
-        } else {
-          return "";
-        }
-      }
-    }).join("").replace(/\;/g, ";\n" + tabString).trim()}
-  }`;
-  }
-  toOffsetText() {
-    var offsets = this.json.offsets.map((it) => {
-      return it;
-    });
-    offsets.sort((a, b) => {
-      return a.offset.value > b.offset.value ? 1 : -1;
-    });
-    return offsets.map((it) => {
-      if (it.properties.length === 0)
-        return "";
-      return this.toOffsetString(it);
-    }).join("\n");
-  }
-  toCSSText() {
-    var offsets = this.json.offsets.map((it) => {
-      return it;
-    });
-    offsets.sort((a, b) => {
-      return a.offset.value > b.offset.value ? 1 : -1;
-    });
-    return `
-@keyframes ${this.json.name} {
-
-  ${this.toOffsetText()}
-
-}
-`;
-  }
-  createOffset(data = {}) {
-    return this.addOffset(new Offset(__spreadValues({
-      checked: true
-    }, data)));
-  }
-  addOffset(offset) {
-    this.json.offsets.push(offset);
-  }
-  removeOffset(removeIndex) {
-    this.json.offsets.splice(removeIndex, 1);
-  }
-  sortItem(arr, startIndex, targetIndex) {
-    arr.splice(targetIndex + (startIndex < targetIndex ? -1 : 0), 0, ...arr.splice(startIndex, 1));
-  }
-  sortOffset(startIndex, targetIndex) {
-    this.sortItem(this.json.offsets, startIndex, targetIndex);
-  }
-  updateOffset(index2, data = {}) {
-    this.json.offsets[+index2].reset(data);
-  }
-  toCSS() {
-    return {};
-  }
-  toString() {
-    return this.toCSSText();
-  }
-}
-class ComponentManager {
-  constructor(editor) {
-    this.editor = editor;
-    this.components = {};
-    this.inspectors = {};
-  }
-  registerComponent(name2, componentProperty) {
-    if (this.components[name2])
-      throw new Error("It has duplicated item name. " + name2);
-    this.components[name2] = componentProperty;
-  }
-  registerInspector(name2, inspectorCallback) {
-    if (this.inspectors[name2])
-      throw new Error("It has duplicated item name. " + name2);
-    this.inspectors[name2] = inspectorCallback;
-  }
-  getComponentClass(name2) {
-    return this.components[name2] || this.components["rect"];
-  }
-  getInspector(name2) {
-    return this.inspectors[name2];
-  }
-  createComponent(itemType, obj2 = {}) {
-    var ComponentClass = this.getComponentClass(itemType);
-    if (!ComponentClass) {
-      throw new Error(`${itemType} type is not valid.`);
-    }
-    return new ComponentClass(obj2);
-  }
-  createInspector(item2, name2 = "") {
-    const inspector = this.getInspector(name2 || item2.itemType);
-    if (isFunction(inspector)) {
-      return inspector(item2) || [];
-    }
-    if (isFunction(item2.getProps)) {
-      return item2.getProps() || [];
-    }
-    return [];
-  }
-}
-const identity$1 = () => true;
-class ModelManager {
-  constructor(editor) {
-    this.editor = editor;
-    this.version = "0.0.0";
-    this.name = "";
-    this.description = "";
-    this.items = new Map();
-    this.projects = [];
-  }
-  load(doc2 = void 0, context = { origin: "*" }) {
-    var _a;
-    const newDoc = doc2 || this.editor.loadItem("model");
-    this.items.clear();
-    this.version = newDoc == null ? void 0 : newDoc.version;
-    this.name = newDoc == null ? void 0 : newDoc.name;
-    this.description = newDoc == null ? void 0 : newDoc.description;
-    (_a = newDoc == null ? void 0 : newDoc.projects) == null ? void 0 : _a.forEach((project2) => {
-      this.createModel(project2);
-    });
-    if (this.projects.length === 0) {
-      this.createProject();
-    }
-  }
-  createProject() {
-    this.createModel({
-      itemType: "project",
-      name: "New Project"
-    });
-  }
-  getProjectByIndex(index2 = 0) {
-    return this.get(this.projects[index2]);
-  }
-  get(id) {
-    return this.items.get(id);
-  }
-  set(id, item2) {
-    this.items.set(id, item2);
-    this.setChanged("set", id, item2);
-  }
-  remove(id) {
-    const obj2 = this.items.get(id);
-    const children2 = obj2.parent.children;
-    const index2 = children2.indexOf(id);
-    obj2.reset({
-      removed: true,
-      removedIndex: index2,
-      removedLeftSibling: index2 > 0 ? children2[index2 - 1] : null,
-      removedRightSibling: index2 < children2.length - 1 ? children2[index2 + 1] : null
-    });
-    this.setChanged("remove", id);
-  }
-  recover(id) {
-    const obj2 = this.items.get(id);
-    const parent = this.getParent(id);
-    if (!obj2.removedLeftSibling && obj2.removedRightSibling) {
-      parent.children.splice(parent.children.findIndex((it) => obj2.removedRightSibling) - 1, 0, id);
-    } else if (obj2.removedLeftSibling && !obj2.removedRightSibling) {
-      parent.children.splice(parent.children.findIndex((it) => obj2.removedLeftSibling) + 1, 0, id);
-    } else {
-      parent.children.splice(obj2.removedIndex, 0, id);
-    }
-    delete obj2.removed;
-    delete obj2.removedLeftSibling;
-    delete obj2.removedRightSibling;
-    delete obj2.removedIndex;
-    this.setChanged("recover", id);
-  }
-  clear() {
-    this.items.clear();
-  }
-  toJSON() {
-    return {
-      version: this.version,
-      name: this.name,
-      description: this.description,
-      projects: this.projects.map((id) => {
-        return this.get(id).toJSON();
-      })
-    };
-  }
-  setChanged(type, id, obj2) {
-    this.editor.emit("changed", type, id, obj2);
-  }
-  removeChild(rootId, childId) {
-    const obj2 = this.get(rootId);
-    obj2.children = obj2.children.filter((it) => it !== childId);
-    this.setChanged("removeChild", rootId, { childId });
-  }
-  hasParent(rootId, parentId) {
-    const obj2 = this.get(rootId);
-    const isParent = obj2.parentId === parentId;
-    if (!isParent && obj2.parent.is("project") === false)
-      return this.hasParent(obj2.parentId, parentId);
-    return isParent;
-  }
-  get components() {
-    return this.editor.components;
-  }
-  searchItem(id) {
-    return this.get(id);
-  }
-  searchLayers(rootId, childId) {
-    const obj2 = this.get(rootId);
-    return this.get(obj2.children.find((it) => it === childId));
-  }
-  searchItemsById(ids) {
-    return ids.map((id) => this.get(id));
-  }
-  hasPathOf(targetItems, searchItem) {
-    const path = this.getPath(searchItem.id, searchItem);
-    return targetItems.filter((it) => it.id !== searchItem.id).some((target) => {
-      return path.find((it) => it.id === target.id);
-    });
-  }
-  findGroupItem(rootId) {
-    const obj2 = this.get(rootId);
-    if (obj2.hasChildren()) {
-      return obj2;
-    }
-    if (obj2.parent && (obj2.parent.is("project") || obj2.parent.is("artboard") || obj2.isBooleanItem)) {
-      return obj2;
-    }
-    return obj2.parent && this.findGroupItem(obj2.parentId);
-  }
-  convertGroupItems(items) {
-    const objectList = {};
-    items.forEach((item2) => {
-      const groupItem = this.findGroupItem(item2.id) || item2;
-      objectList[groupItem.id] = groupItem;
-    });
-    return Object.values(objectList).filter((it) => it.isNot("project"));
-  }
-  searchLiveItemsById(ids) {
-    return ids.map((id) => this.get(id)).filter((it) => !it.removed);
-  }
-  markRemove(ids = []) {
-    ids.forEach((id) => {
-      this.remove(id);
-    });
-    this.setChanged("markRemove", ids, { isLayer: true });
-  }
-  markRemoveProject(id) {
-    const index2 = this.projects.findIndex((it) => it === id);
-    this.projects.splice(index2, 1);
-    this.get(id).removed = true;
-    this.setChanged("markRemoveProject", [id], { isProject: true });
-    return index2;
-  }
-  unmarkRemove(ids = []) {
-    ids.forEach((id) => {
-      this.recover(id);
-    });
-    this.setChanged("unmarkRemove", ids, { isLayer: true });
-  }
-  unmarkRemoveProject(id, index2) {
-    this.projects.splice(index2, 0, id);
-    this.get(id).removed = false;
-    this.setChanged("unmarkRemoveProject", [id], { removed: true, isProject: true });
-  }
-  createModel(itemObject, isRegister = true, context = { origin: "*" }) {
-    const layers2 = itemObject.layers;
-    delete itemObject.layers;
-    let item2;
-    if (this.get(itemObject.id)) {
-      item2 = this.get(itemObject.id);
-      item2.reset(itemObject);
-    } else {
-      item2 = this.components.createComponent(itemObject.itemType, __spreadValues({}, itemObject));
-      item2.setModelManager(this);
-    }
-    if (isRegister) {
-      this.set(item2.id, item2);
-      if (item2.is("project")) {
-        this.projects = [...new Set([...this.projects, item2.id])];
-      }
-    }
-    const children2 = (layers2 || []).map((it) => {
-      return this.createModel(__spreadProps(__spreadValues({}, it), { parentId: item2.id }), true, context);
-    });
-    item2.reset({
-      children: children2.map((it) => {
-        return it.id;
-      })
-    }, context);
-    return item2;
-  }
-  getAllLayers(rootId, filterCallback = identity$1) {
-    var results = [];
-    const obj2 = this.get(rootId);
-    let len2 = obj2.children.length;
-    for (let start2 = len2; start2--; ) {
-      let id = obj2.children[start2];
-      results.push(...this.getAllLayers(id, filterCallback));
-    }
-    if (isFunction(filterCallback) && filterCallback(obj2)) {
-      results.push(obj2);
-    }
-    return results;
-  }
-  getLayers(rootId, defaultRef = null) {
-    var _a;
-    const obj2 = this.get(rootId) || defaultRef;
-    return (_a = obj2 == null ? void 0 : obj2.children) == null ? void 0 : _a.map((childId) => this.get(childId));
-  }
-  eachLayers(rootId, callback) {
-    const obj2 = this.get(rootId);
-    let len2 = obj2.children.length;
-    for (let start2 = len2; start2--; ) {
-      let id = obj2.children[start2];
-      callback(this.get(id));
-    }
-  }
-  mapLayers(rootId, callback) {
-    const obj2 = this.get(rootId);
-    return obj2.children.map((childId) => {
-      return callback(this.get(childId));
-    });
-  }
-  getParent(rootId) {
-    var _a;
-    return this.get((_a = this.get(rootId)) == null ? void 0 : _a.parentId);
-  }
-  getDepth(rootId) {
-    const parent = this.getParent(rootId);
-    if (!parent)
-      return 1;
-    return this.getDepth(parent.id) + 1;
-  }
-  getRoot(rootId) {
-    const obj2 = this.get(rootId);
-    const parent = this.getParent(rootId);
-    if (!parent)
-      return obj2;
-    let localParent = parent;
-    do {
-      const nextParent = this.getParent(localParent.id);
-      if (!nextParent) {
-        return localParent;
-      }
-      localParent = nextParent;
-    } while (localParent);
-  }
-  getPath(rootId, defaultRef = null) {
-    const obj2 = this.get(rootId) || defaultRef;
-    const parent = this.getParent(rootId);
-    if (!parent)
-      return [obj2];
-    const list2 = this.getPath(parent.id);
-    list2.push(obj2);
-    return list2;
-  }
-  getModelTypeInPath(rootId, itemType) {
-    return this.getPath(rootId).find((it) => it && it.is(itemType));
-  }
-  getItemInPath(rootId, targetId) {
-    return this.getPath(rootId).find((it) => it && it.id === targetId);
-  }
-  getProject(rootId) {
-    return this.getModelTypeInPath(rootId, "project");
-  }
-  getArtBoard(rootId) {
-    return this.getModelTypeInPath(rootId, "artboard");
-  }
-  is(rootId, checkItemType) {
-    const obj2 = this.get(rootId);
-    return checkItemType === obj2.itemType;
-  }
-  isNot(rootId, checkItemType) {
-    return this.is(rootId, checkItemType) === false;
-  }
-  attrs(rootId, ...args2) {
-    const obj2 = this.get(rootId);
-    const result = {};
-    args2.forEach((field) => {
-      result[field] = clone$1(obj2[field]);
-    });
-    return result;
-  }
-  hasChildren(rootId) {
-    var _a;
-    return ((_a = this.get(rootId)) == null ? void 0 : _a.children.length) > 0;
-  }
-  clone(rootId, isDeep = true) {
-    const obj2 = this.get(rootId);
-    const json = obj2.toCloneObject(isDeep);
-    const item2 = this.createModel(json);
-    item2.setParentId(obj2.parentId);
-    return item2;
-  }
-  reset(rootId, obj2) {
-    var _a;
-    return (_a = this.get(rootId)) == null ? void 0 : _a.reset(obj2);
-  }
-  appendChild(rootId, childId) {
-    this.get(rootId);
-    this.get(childId);
-    this.json.children.push(layer.id);
-    layer.offsetInParent = this.json.children[last - 1].offset + 0.1;
-  }
-  replaceByType(rootId, itemType) {
-    const item2 = this.get(rootId);
-    if (item2) {
-      const json = item2.toCloneObject(false);
-      delete json.itemType;
-      const newInstance = this.components.createComponent(itemType, json);
-      newInstance.setModelManager(this);
-      this.set(rootId, newInstance);
-    }
-  }
-}
-class BaseModel {
-  constructor(json = {}, modelManager) {
-    this.modelManager = modelManager;
-    const self2 = this;
-    this.ref = new Proxy(self2, {
-      get(target, key) {
-        if (self2.hasCache(key)) {
-          return self2.getCache(key);
-        }
-        const prop = self2[key];
-        if (isFunction(prop)) {
-          if (!self2.hasCache(key)) {
-            self2.addCache(key, (...args2) => {
-              return prop.apply(self2, args2);
-            });
-          }
-          return self2.getCache(key);
-        } else {
-          return isNotUndefined(prop) ? prop : self2.json[key];
-        }
-      },
-      set(target, key, value) {
-        const isDiff = self2.json[key] != value;
-        if (isDiff) {
-          self2.reset({ [key]: value });
-        }
-        return true;
-      },
-      deleteProperty(target, key) {
-        self2.reset({ [key]: void 0 });
-      }
-    });
-    this.json = this.convert(Object.assign(this.getDefaultObject(), json));
-    this.lastChangedField = {};
-    this.lastChangedFieldKeys = [];
-    this.cachedValue = {};
-    this.timestamp = 0;
-    return this.ref;
-  }
-  setModelManager(modelManager) {
-    this.modelManager = modelManager;
-  }
-  getDefaultTitle() {
-    return "Item";
-  }
-  getIcon() {
-    return "";
-  }
-  isChanged(timestamp) {
-    return this.timestamp != Number(timestamp);
-  }
-  changed() {
-    this.timestamp += Date.now();
-  }
-  get title() {
-    return this.json.name || this.getDefaultTitle();
-  }
-  renameWithCount() {
-    let arr = this.json.name.split(" ");
-    if (arr.length < 2) {
-      return;
-    }
-    let last2 = arr.pop();
-    let lastNumber = +last2;
-    if (isNumber(lastNumber) && isNaN(lastNumber) === false) {
-      lastNumber++;
-    } else {
-      lastNumber = last2;
-    }
-    const nextName = [...arr, lastNumber].join(" ");
-    this.reset({
-      name: nextName
-    });
-  }
-  get allLayers() {
-    return this.modelManager.getAllLayers(this.id);
-  }
-  filteredAllLayers(filterCallback) {
-    return this.modelManager.getAllLayers(this.id, filterCallback);
-  }
-  get id() {
-    return this.json.id;
-  }
-  get layers() {
-    return this.modelManager.getLayers(this.id, this.ref);
-  }
-  get parentId() {
-    return this.json.parentId;
-  }
-  get parent() {
-    if (!this.parentId)
-      return void 0;
-    return this.modelManager.get(this.parentId);
-  }
-  setParentId(parentId) {
-    this.reset({ parentId });
-    this.modelManager.setChanged("setParentId", this.id, { parentId });
-  }
-  get depth() {
-    return this.modelManager.getDepth(this.id);
-  }
-  get top() {
-    return this.modelManager.getRoot(this.id);
-  }
-  get project() {
-    return this.modelManager.getProject(this.id);
-  }
-  get artboard() {
-    return this.modelManager.getArtBoard(this.id);
-  }
-  get path() {
-    return this.modelManager.getPath(this.id, this.ref);
-  }
-  get pathIds() {
-    return this.path.map((it) => it.id);
-  }
-  get childrenLength() {
-    return this.json.children.length;
-  }
-  getInnerId(postfix = "") {
-    return this.json.id + postfix;
-  }
-  is(checkItemType) {
-    return this.json.itemType === checkItemType;
-  }
-  isNot(checkItemType) {
-    return this.is(checkItemType) === false;
-  }
-  get(key) {
-    return this.json[key];
-  }
-  isSVG() {
-    return false;
-  }
-  addCache(key, value) {
-    this.cachedValue[key] = value;
-  }
-  getCache(key) {
-    return this.cachedValue[key];
-  }
-  hasCache(key) {
-    return Boolean(this.cachedValue[key]);
-  }
-  computed(key, newValueCallback, isForce = false) {
-    const cachedKey = `__cachedKey_${key}`;
-    const parsedKey = `${cachedKey}__parseValue`;
-    const value = this.json[key];
-    if (isForce)
-      ;
-    else {
-      if (this.getCache(cachedKey) === value && this.getCache(parsedKey)) {
-        return this.getCache(parsedKey);
-      }
-    }
-    this.addCache(cachedKey, value);
-    this.addCache(parsedKey, newValueCallback(value, this.ref));
-    return this.getCache(parsedKey);
-  }
-  computedValue(key) {
-    const cachedKey = `__cachedKey_${key}`;
-    const parsedKey = `${cachedKey}__parseValue`;
-    return this.getCache(parsedKey);
-  }
-  editable(editablePropertyName) {
-    return true;
-  }
-  generateListNumber() {
-    this.layers.forEach((it, index2) => {
-      it.no = index2;
-      it.generateListNumber();
-    });
-  }
-  convert(json = {}) {
-    return json;
-  }
-  setCache() {
-  }
-  toCloneObject(isDeep = true) {
-    var json = this.attrs("itemType", "name", "elementType", "type", "selected", "parentId", "children");
-    if (isDeep) {
-      json.layers = this.json.children.map((childId) => {
-        return this.modelManager.clone(childId, isDeep);
-      });
-    }
-    return json;
-  }
-  clone(isDeep = true) {
-    return this.modelManager.clone(this.id, isDeep);
-  }
-  isChangedValue(obj2) {
-    return true;
-  }
-  reset(obj2, context = { origin: "*" }) {
-    const isChanged = this.isChangedValue(obj2);
-    if (isChanged) {
-      this.json = this.convert(Object.assign(this.json, obj2));
-      this.lastChangedField = obj2;
-      this.lastChangedFieldKeys = Object.keys(obj2);
-      if (context.origin === "*") {
-        this.modelManager.setChanged("reset", this.id, obj2);
-      }
-      this.changed();
-    }
-    return true;
-  }
-  hasChangedField(...args2) {
-    return args2.some((it) => this.lastChangedField[it] !== void 0);
-  }
-  getDefaultObject(obj2 = {}) {
-    var id = obj2.id || uuid();
-    return __spreadValues({
-      id,
-      children: [],
-      offsetInParent: 1,
-      parentId: ""
-    }, obj2);
-  }
-  attrs(...args2) {
-    const result = {};
-    args2.forEach((field) => {
-      if (isNotUndefined(this.get(field))) {
-        result[field] = clone$1(this.get(field));
-      }
-    });
-    return result;
-  }
-  hasChildren() {
-    return this.json.children.length > 0;
-  }
-  appendChild(layer2) {
-    if (layer2.parentId === this.id) {
-      const hasId = this.json.children.find((it) => it === layer2.id);
-      if (Boolean(hasId) === false) {
-        this.json.children.push(layer2.id);
-        this.modelManager.setChanged("appendChild", this.id, { child: layer2.id, oldParentId: layer2.parentId });
-      }
-      return layer2;
-    }
-    this.resetMatrix(layer2);
-    if (layer2.parent) {
-      layer2.remove();
-    }
-    layer2.setParentId(this.id);
-    this.json.children.push(layer2.id);
-    return layer2;
-  }
-  resetMatrix(item2) {
-  }
-  refreshMatrixCache() {
-  }
-  insertChild(layer2, index2 = 0) {
-    this.resetMatrix(layer2);
-    if (layer2.parent) {
-      layer2.remove();
-    }
-    layer2.setParentId(this.id);
-    this.json.children.splice(index2, 0, layer2.id);
-    this.modelManager.setChanged("insertChild", this.id, { childId: layer2.id, index: 0 });
-    return layer2;
-  }
-  appendAfter(layer2) {
-    const index2 = this.parent.findIndex(this);
-    this.parent.insertChild(layer2, index2);
-    return layer2;
-  }
-  appendBefore(layer2) {
-    const index2 = this.parent.findIndex(this);
-    this.parent.insertChild(layer2, index2 - 1);
-    return layer2;
-  }
-  toggle(field, toggleValue) {
-    if (isUndefined(toggleValue)) {
-      this.reset({
-        [field]: !this.json[field]
-      });
-    } else {
-      this.reset({
-        [field]: !!toggleValue
-      });
-    }
-  }
-  isTreeItemHide() {
-    let currentParent = this.parent;
-    let collapsedList = [];
-    do {
-      if (currentParent.is("project"))
-        break;
-      collapsedList.push(Boolean(currentParent.collapsed));
-      currentParent = currentParent.parent;
-    } while (currentParent);
-    return Boolean(collapsedList.filter(Boolean).length);
-  }
-  expectJSON(key) {
-    if (isUndefined(this.json[key]))
-      return false;
-    return true;
-  }
-  toJSON() {
-    const json = this.json;
-    let newJSON = {};
-    Object.keys(json).filter((key) => this.expectJSON(key)).forEach((key) => {
-      newJSON[key] = json[key];
-    });
-    if (this.hasChildren()) {
-      newJSON.layers = this.json.children.map((childId) => {
-        var _a;
-        return (_a = this.modelManager.get(childId)) == null ? void 0 : _a.toJSON();
-      });
-    }
-    return newJSON;
-  }
-  resize() {
-  }
-  copy(dist2 = 0) {
-    return this.parent.copyItem(this.id, dist2);
-  }
-  findIndex(item2) {
-    return this.json.children.indexOf(item2.id);
-  }
-  find(id) {
-    return this.modelManager.get(id);
-  }
-  copyItem(childItemId, dist2 = 10) {
-    const childItem = this.modelManager.get(childItemId);
-    var child = childItem.clone();
-    child.renameWithCount();
-    child.move([dist2, dist2, 0]);
-    var childIndex = this.findIndex(childItem);
-    if (childIndex > -1) {
-      this.json.children.push(child.id);
-    }
-    return child;
-  }
-  remove() {
-    this.parent.removeChild(this.id);
-  }
-  removeChild(childItemId) {
-    return this.modelManager.removeChild(this.id, childItemId);
-  }
-  hasParent(parentId) {
-    return this.modelManager.hasParent(this.id, parentId);
-  }
-  to(itemType) {
-  }
-}
-class AssetModel extends BaseModel {
-  getDefaultObject(obj2 = {}) {
-    return super.getDefaultObject(__spreadValues({
-      comments: [],
-      colors: [],
-      gradients: [],
-      svgfilters: [],
-      svgimages: [],
-      keyframes: [],
-      images: [],
-      imageKeys: [],
-      videos: [],
-      videoKeys: [],
-      audios: []
-    }, obj2));
-  }
-  addKeyframe(keyframe2) {
-    this.json.keyframes.push(keyframe2);
-    return keyframe2;
-  }
-  createKeyframe(data = {}) {
-    return this.addKeyframe(new Keyframe(__spreadValues({
-      checked: true
-    }, data)));
-  }
-  removeKeyframe(removeIndex) {
-    this.removePropertyList(this.json.keyframes, removeIndex);
-  }
-  sortItem(arr, startIndex, targetIndex) {
-    arr.splice(targetIndex + (startIndex < targetIndex ? -1 : 0), 0, ...arr.splice(startIndex, 1));
-  }
-  sortKeyframe(startIndex, targetIndex) {
-    this.sortItem(this.json.keyframes, startIndex, targetIndex);
-  }
-  updateKeyframe(index2, data = {}) {
-    this.json.keyframes[+index2].reset(data);
-  }
-  toKeyframeString(isAnimate = false) {
-    return this.json.keyframes.map((keyframe2) => keyframe2.toString(isAnimate)).join("\n\n");
-  }
-  copyPropertyList(arr, index2) {
-    var copyObject = __spreadValues({}, arr[index2]);
-    arr.splice(index2, 0, copyObject);
-  }
-  toCloneObject() {
-    this.json;
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("colors", "gradients", "svgfilters", "svgimages", "images", "keyframes"));
-  }
-  removePropertyList(arr, removeIndex) {
-    arr.splice(removeIndex, 1);
-  }
-  removeColor(removeIndex) {
-    this.removePropertyList(this.json.colors, removeIndex);
-  }
-  copyColor(index2) {
-    this.copyPropertyList(this.json.colors, index2);
-  }
-  sortColor(startIndex, targetIndex) {
-    this.sortItem(this.json.colors, startIndex, targetIndex);
-  }
-  setColorValue(index2, value = {}) {
-    this.json.colors[index2] = __spreadValues(__spreadValues({}, this.json.colors[index2]), value);
-  }
-  getColorIndex(index2) {
-    return this.json.colors[index2];
-  }
-  getColor(name2) {
-    return this.json.colors.filter((item2) => item2.name === name2)[0];
-  }
-  addColor(obj2) {
-    this.json.colors.push(obj2);
-    return obj2;
-  }
-  createColor(data = {}) {
-    return this.addColor(data);
-  }
-  removeImage(removeIndex) {
-    this.removePropertyList(this.json.images, removeIndex);
-    this.refreshImageKeys();
-  }
-  copyImage(index2) {
-    this.copyPropertyList(this.json.images, index2);
-    this.refreshImageKeys();
-  }
-  sortImage(startIndex, targetIndex) {
-    this.sortItem(this.json.images, startIndex, targetIndex);
-  }
-  setImageValue(index2, value = {}) {
-    this.json.images[index2] = __spreadValues(__spreadValues({}, this.json.images[index2]), value);
-    this.refreshImageKeys();
-  }
-  getImageValueById(id, defaultValue = "") {
-    const image2 = this.json.imageKeys[id];
-    if (!image2)
-      return id || defaultValue;
-    return image2.local;
-  }
-  getImageDataURIById(id) {
-    const image2 = this.json.imageKeys[id];
-    if (!image2)
-      return void 0;
-    return image2.original;
-  }
-  refreshImageKeys() {
-    let imageKeys = {};
-    this.json.images.forEach((it) => {
-      imageKeys[it.id] = it;
-    });
-    this.reset({
-      imageKeys
-    });
-  }
-  addImage(obj2) {
-    this.json.images.push(obj2);
-    this.refreshImageKeys();
-    return obj2;
-  }
-  createImage(data = {}) {
-    return this.addImage(data);
-  }
-  removeVideo(removeIndex) {
-    this.removePropertyList(this.json.videos, removeIndex);
-    this.refreshVideoKeys();
-  }
-  copyVideo(index2) {
-    this.copyPropertyList(this.json.videos, index2);
-    this.refreshVideoKeys();
-  }
-  sortVideo(startIndex, targetIndex) {
-    this.sortItem(this.json.videos, startIndex, targetIndex);
-  }
-  setVideoValue(index2, value = {}) {
-    this.json.videos[index2] = __spreadValues(__spreadValues({}, this.json.videos[index2]), value);
-  }
-  getVideoValueById(id) {
-    const video2 = this.json.videoKeys[id];
-    if (!video2)
-      return void 0;
-    return video2.local;
-  }
-  refreshVideoKeys() {
-    let videoKeys = {};
-    this.json.videos.forEach((it) => {
-      videoKeys[it.id] = it;
-    });
-    this.reset({
-      videoKeys
-    });
-  }
-  addVideo(obj2) {
-    this.json.videos.push(obj2);
-    this.refreshVideoKeys();
-    return obj2;
-  }
-  createVideo(data = {}) {
-    return this.addVideo(data);
-  }
-  removeGradient(removeIndex) {
-    this.removePropertyList(this.json.gradients, removeIndex);
-  }
-  copyGradient(index2) {
-    this.copyPropertyList(this.json.gradients, index2);
-  }
-  sortGradient(startIndex, targetIndex) {
-    this.sortItem(this.json.gradients, startIndex, targetIndex);
-  }
-  setGradientValue(index2, value) {
-    this.json.gradients[index2] = __spreadValues(__spreadValues({}, this.json.gradients[index2]), value);
-  }
-  getGradientIndex(index2) {
-    return this.json.gradients[index2];
-  }
-  getGradient(name2) {
-    return this.json.gradients.filter((item2) => item2.name === name2)[0];
-  }
-  addGradient(obj2 = {}) {
-    this.json.gradients.push(obj2);
-    return obj2;
-  }
-  createGradient(data = {}) {
-    return this.addGradient(data);
-  }
-  getSVGFilterIndex(id) {
-    var _a;
-    var filter2 = this.json.svgfilters.map((it, index2) => {
-      return { id: it.id, index: index2 };
-    }).filter((it) => {
-      return it.id === id;
-    });
-    return filter2.length ? (_a = filter2 == null ? void 0 : filter2[0]) == null ? void 0 : _a.index : -1;
-  }
-  removeSVGFilter(removeIndex) {
-    this.removePropertyList(this.json.svgfilters, removeIndex);
-  }
-  copySVGFilter(index2) {
-    this.copyPropertyList(this.json.svgfilters, index2);
-  }
-  sortSVGFilter(startIndex, targetIndex) {
-    this.sortItem(this.json.svgfilters, startIndex, targetIndex);
-  }
-  setSVGFilterValue(index2, value) {
-    this.json.svgfilters[index2] = __spreadValues(__spreadValues({}, this.json.svgfilters[index2]), value);
-  }
-  addSVGFilter(obj2 = {}) {
-    this.json.svgfilters.push(obj2);
-    var index2 = this.json.svgfilters.length - 1;
-    return index2;
-  }
-  createSVGFilter(data = {}) {
-    return this.addSVGFilter(data);
-  }
-  getSVGImageIndex(id) {
-    var filter2 = this.json.svgimages.map((it, index2) => {
-      return { id: it.id, index: index2 };
-    }).filter((it) => {
-      return it.id === id;
-    })[0];
-    return filter2 ? filter2.index : -1;
-  }
-  removeSVGImage(removeIndex) {
-    this.removePropertyList(this.json.svgimages, removeIndex);
-  }
-  copySVGImage(index2) {
-    this.copyPropertyList(this.json.svgimages, index2);
-  }
-  sortSVGImage(startIndex, targetIndex) {
-    this.sortItem(this.json.svgimages, startIndex, targetIndex);
-  }
-  setSVGImageValue(index2, value) {
-    this.json.svgimages[index2] = __spreadValues(__spreadValues({}, this.json.svgimages[index2]), value);
-  }
-  addSVGImage(obj2 = {}) {
-    this.json.svgimages.push(obj2);
-    var index2 = this.json.svgimages.length - 1;
-    return index2;
-  }
-  createSVGImage(data = {}) {
-    return this.addSVGImage(data);
-  }
-}
-class TimelineModel extends AssetModel {
-  getDefaultObject(obj2 = {}) {
-    return super.getDefaultObject(__spreadValues({
-      timeline: [],
-      compiledTimeline: {}
-    }, obj2));
-  }
-  expectJSON(key) {
-    if (key === "compiledTimeline")
-      return false;
-    return super.expectJSON(key);
-  }
-  setTimelineInfo(obj2) {
-    var timeline = this.getSelectedTimeline();
-    if (!timeline)
-      return;
-    ["speed", "iterationCount", "direction"].forEach((key) => {
-      if (isNotUndefined(obj2[key])) {
-        timeline[key] = obj2[key];
-      }
-    });
-  }
-  compileAll() {
-    var timeline = this.getSelectedTimeline();
-    this.json.compiledTimeline = {};
-    if (timeline) {
-      timeline.animations.forEach((animation2) => {
-        animation2.properties.forEach((property) => {
-          this.compiledTimingFunction(animation2.id, property.property);
-        });
-      });
-    }
-  }
-  searchTimelineOffset(time) {
-    var timeline = this.getSelectedTimeline();
-    var filteredTimeline = [];
-    if (timeline) {
-      timeline.animations.forEach((animation2) => {
-        animation2.properties.forEach((p) => {
-          var list2 = this.getCompiledTimingFunction(animation2.id, p.property);
-          filteredTimeline.push(list2.find((keyframe2) => {
-            if (keyframe2.isOnlyTime && keyframe2.startTime <= time)
-              return true;
-            return keyframe2.startTime <= time && time < keyframe2.endTime;
-          }));
-        });
-      });
-    }
-    return filteredTimeline.filter((it) => it);
-  }
-  getCompiledTimingFunction(layerId, property) {
-    return this.json.compiledTimeline[`${layerId}.${property}`];
-  }
-  compiledTimingFunction(layerId, property) {
-    var artboard2 = this;
-    var p = this.getTimelineProperty(layerId, property);
-    var layer2 = this.modelManager.get(layerId);
-    var key = `${layerId}.${property}`;
-    if (p.keyframes.length === 1) {
-      this.json.compiledTimeline[key] = [];
-      return;
-    }
-    let layerElement = Dom.body().$(`[data-id="${layerId}"]`);
-    let editorString = p.keyframes.map((it) => it.editor)[0];
-    this.json.compiledTimeline[key] = p.keyframes.map((offset, index2) => {
-      var currentOffset = offset;
-      var nextOffset = p.keyframes[index2 + 1];
-      offset.editor = editorString;
-      if (!nextOffset) {
-        nextOffset = { time: offset.time, value: offset.value };
-      }
-      var it = {
-        layer: layer2,
-        layerElement,
-        property: p.property,
-        isOnlyTime: currentOffset.time === nextOffset.time,
-        startTime: offset.time,
-        endTime: nextOffset.time,
-        startValue: offset.value,
-        endValue: nextOffset.value,
-        timing: offset.timing,
-        interpolateFunction: createInterpolateFunction(layer2, p.property, offset.value, nextOffset.value, offset.editor, artboard2, layerElement),
-        timingFunction: createTimingFunction(offset.timing)
-      };
-      it.func = this.makeTimingFunction(it);
-      return it;
-    }).filter((it) => it);
-  }
-  makeTimingFunction(it) {
-    return (time) => {
-      var totalT = it.endTime - it.startTime;
-      var t = 1;
-      if (totalT !== 0) {
-        t = (time - it.startTime) / totalT;
-      }
-      return it.interpolateFunction(it.timingFunction(t), t, totalT, it.timingFunction);
-    };
-  }
-  stop(frameOrCode) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      var time = timeline.currentTime;
-      this.searchTimelineOffset(time).forEach((it) => {
-        if (it.property === "playTime") {
-          const $video = it.layerElement.$("video");
-          if ($video) {
-            $video.el.pause();
-          }
-        }
-      });
-    }
-  }
-  seek(frameOrCode, filterFunction = (it) => it) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      if (isNotUndefined(frameOrCode)) {
-        this.setTimelineCurrentTime(frameOrCode);
-      }
-      var time = timeline.currentTime;
-      this.searchTimelineOffset(time).filter(filterFunction).forEach((it) => {
-        if (it.property === "offset-path" || it.property === "playTime") {
-          it.func(time);
-        } else if (it.layer) {
-          it.layer.reset({
-            [it.property]: it.func(time)
-          });
-        }
-      });
-    }
-  }
-  getSelectedTimeline() {
-    var timeline = this.json.timeline;
-    var a = timeline.filter((it) => it.selected);
-    var selectedTimeline = a.length ? a[0] : timeline[0];
-    return selectedTimeline || null;
-  }
-  getKeyframeListReturnArray() {
-    var timeline = this.getSelectedTimeline();
-    var keyframes = [];
-    if (timeline) {
-      timeline.animations.forEach((a) => {
-        a.properties.forEach((p) => {
-          keyframes.push.apply(keyframes, p.keyframes);
-        });
-      });
-    }
-    return keyframes;
-  }
-  getKeyframeList(callback) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      timeline.animations.forEach((a) => {
-        a.properties.forEach((p) => {
-          p.keyframes.forEach((k) => {
-            callback && callback(timeline, k);
-          });
-        });
-      });
-    }
-  }
-  getSelectedTimelineLastTime() {
-    var time = 0;
-    this.getKeyframeList((timeline, keyframe2) => {
-      time = Math.max(keyframe2.time, time);
-    });
-    return time;
-  }
-  getSelectedTimelineFirstTime() {
-    var time = Number.MAX_SAFE_INTEGER;
-    this.getKeyframeList((timeline, keyframe2) => {
-      time = Math.min(keyframe2.time, time);
-    });
-    return time;
-  }
-  getSelectedTimelinePrevTime() {
-    var time = this.getSelectedTimelineFirstTime();
-    this.getKeyframeList((timeline, keyframe2) => {
-      if (timecode(timeline.fps, keyframe2.time) < timeline.currentTimecode) {
-        time = Math.max(keyframe2.time, time);
-      }
-    });
-    return time;
-  }
-  getSelectedTimelineNextTime() {
-    var time = this.getSelectedTimelineLastTime();
-    this.getKeyframeList((timeline, keyframe2) => {
-      if (timecode(timeline.fps, keyframe2.time) > timeline.currentTimecode) {
-        time = Math.min(keyframe2.time, time);
-      }
-    });
-    return time;
-  }
-  setTimelineTitle(id, text2) {
-    var timeline = this.json.timeline.find((it) => {
-      return it.id === id;
-    });
-    if (timeline) {
-      timeline.title = text2;
-    }
-  }
-  selectTimeline(id) {
-    if (id) {
-      this.json.timeline.forEach((it) => {
-        it.selected = it.id === id;
-      });
-    } else {
-      var selectedTimeline = this.json.timeline.filter((it) => it.selected);
-      if (selectedTimeline.length)
-        ;
-      else {
-        if (this.json.timeline.length) {
-          this.json.timeline.selected = true;
-        }
-      }
-    }
-    this.compileAll();
-  }
-  removeAnimation(id) {
-    this.json.timeline = this.json.timeline.filter((it) => {
-      return it.id !== id;
-    });
-    if (this.json.timeline.length) {
-      this.json.timeline[0].selected = true;
-    }
-    this.compileAll();
-  }
-  addTimeline(fps = 60, endTimecode = "00:00:10:00") {
-    var id = uuidShort();
-    var selectedTimeline = __spreadProps(__spreadValues({
-      id,
-      title: "sample"
-    }, this.getTimelineLayerInfo(fps, endTimecode)), {
-      animations: []
-    });
-    this.json.timeline.push(selectedTimeline);
-    this.selectTimeline(id);
-    return selectedTimeline;
-  }
-  addTimelineLayer(layerId, fps = 60, endTimecode = "00:00:10:00") {
-    var selectedTimeline = this.getSelectedTimeline();
-    if (!selectedTimeline) {
-      selectedTimeline = this.addTimeline(fps, endTimecode);
-    }
-    selectedTimeline.selected = true;
-    if (layerId) {
-      var layer2 = selectedTimeline.animations.filter((it) => it.id === layerId);
-      if (!layer2[0]) {
-        selectedTimeline.animations.push({
-          id: layerId,
-          properties: []
-        });
-      }
-    }
-  }
-  getTimelineLayerInfo(fps = 60, endTimecode = "00:00:10:00") {
-    var endTime = second(fps, endTimecode);
-    return {
-      fps,
-      speed: 1,
-      direction: "normal",
-      iterationCount: 1,
-      currentTimecode: timecode(fps, 0),
-      totalTimecode: timecode(fps, endTime),
-      currentTime: 0,
-      totalTime: endTime,
-      displayStartTime: 0,
-      displayEndTime: endTime
-    };
-  }
-  setTimelineCurrentTime(frameOrCode) {
-    var timeline = this.getSelectedTimeline();
-    var { fps, totalTimecode } = timeline;
-    if (timeline) {
-      var frame = frameOrCode;
-      var code2 = frameOrCode;
-      if (+frame + "" === frame) {
-        frame = +frame;
-        code2 = framesToTimecode(fps, frame);
-      }
-      if (code2 > totalTimecode) {
-        code2 = totalTimecode;
-      }
-      var currentTime = second(fps, code2);
-      timeline.currentTime = currentTime;
-      timeline.currentTimecode = timecode(fps, currentTime);
-    }
-  }
-  setDisplayTimeDxRate(dxRate, initStartTime, initEndTime) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      var dxTime = dxRate * timeline.totalTime;
-      var startTime = initStartTime + dxTime;
-      var endTime = initEndTime + dxTime;
-      startTime = Math.max(startTime, 0);
-      startTime = Math.min(startTime, endTime);
-      if (startTime === 0) {
-        endTime = initEndTime - initStartTime;
-      }
-      endTime = Math.max(endTime, startTime);
-      endTime = Math.min(endTime, timeline.totalTime);
-      if (endTime === timeline.totalTime) {
-        startTime = timeline.totalTime - (initEndTime - initStartTime);
-      }
-      timeline.displayStartTime = startTime;
-      timeline.displayEndTime = endTime;
-    }
-  }
-  setDisplayStartTimeRate(rate) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      timeline.displayStartTime = rate * timeline.totalTime;
-    }
-  }
-  setDisplayEndTimeRate(rate) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      timeline.displayEndTime = rate * timeline.totalTime;
-    }
-  }
-  setTimelineCurrentTimeRate(rate) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      var { displayStartTime, displayEndTime, fps } = timeline;
-      var currentTime = displayStartTime + (displayEndTime - displayStartTime) * rate;
-      this.setTimelineCurrentTime(timecode(fps, currentTime));
-    }
-  }
-  setTimelineTotalTime(frameOrCode) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      var frame = frameOrCode;
-      var code2 = frameOrCode;
-      if (+frame + "" === frame) {
-        frame = +frame;
-        code2 = framesToTimecode(timeline.fps, frame);
-      }
-      if (second(timeline.fps, code2) < timeline.displayEndTime) {
-        timeline.displayEndTime = second(timeline.fps, code2);
-        timeline.displayStartTime = 0;
-      }
-      timeline.totalTimecode = code2;
-      timeline.totalTime = second(timeline.fps, code2);
-    }
-  }
-  getTimelineObject(layerId) {
-    var selectedTimeline = this.getSelectedTimeline();
-    if (selectedTimeline) {
-      return selectedTimeline.animations.find((it) => it.id === layerId);
-    }
-  }
-  addTimelineProperty(layerId, property) {
-    this.addTimelineLayer(layerId);
-    var animation2 = this.getTimelineObject(layerId);
-    if (animation2) {
-      var p = animation2.properties.filter((it) => it.property === property);
-      if (!p.length) {
-        animation2.properties.push({
-          property,
-          keyframes: []
-        });
-        this.compiledTimingFunction(layerId, property);
-      }
-    }
-  }
-  getTimelineProperty(layerId, property) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      layerId = layerId || timeline.selectedLayerId;
-      property = property || timeline.selectedProperty;
-      var timelineObject = this.getTimelineObject(layerId);
-      if (timelineObject) {
-        return timelineObject.properties.find((it) => it.property === property);
-      }
-    }
-  }
-  setSelectedOffset(layerId, property, time) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      timeline.selectedLayerId = layerId;
-      timeline.selectedProperty = property;
-      timeline.selectedOffsetTime = time;
-      var p = this.getTimelineProperty();
-      p.keyframes.forEach((it) => {
-        it.selected = it.time === time;
-      });
-    }
-  }
-  deleteTimelineKeyframe(layerId, property, offsetId) {
-    var p = this.getTimelineProperty(layerId, property);
-    if (p) {
-      p.keyframes = p.keyframes.filter((it) => it.id != offsetId);
-    }
-  }
-  removeTimelineProperty(layerId, property) {
-    var layer2 = this.getTimelineObject(layerId);
-    if (layer2) {
-      layer2.properties = layer2.properties.filter((p) => p.property != property);
-    }
-  }
-  removeTimeline(layerId) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      timeline.animations = timeline.animations.filter((ani) => ani.id != layerId);
-    }
-  }
-  setTimelineKeyframeOffsetTime(layerId, property, offsetId, changedTime) {
-    var keyframe2 = this.getTimelineKeyframeById(layerId, property, offsetId);
-    if (keyframe2) {
-      keyframe2.time = changedTime;
-      this.compiledTimingFunction(layerId, property);
-    }
-  }
-  setTimelineKeyframeOffsetValue(layerId, property, offsetId, value = void 0, timing = void 0, time = void 0) {
-    var keyframe2 = this.getTimelineKeyframeById(layerId, property, offsetId);
-    if (keyframe2) {
-      if (isNotUndefined(time)) {
-        keyframe2.time = time;
-      }
-      if (isNotUndefined(value)) {
-        keyframe2.value = value;
-      }
-      if (isNotUndefined(timing)) {
-        keyframe2.timing = timing;
-      }
-      this.compiledTimingFunction(layerId, property);
-    }
-  }
-  addTimelineKeyframe({ layerId, property, value, timing, time: newTime, editor }) {
-    this.addTimelineProperty(layerId, property);
-    var timeline = this.getSelectedTimeline();
-    var p = this.getTimelineProperty(layerId, property);
-    if (p) {
-      var time = newTime || timeline.currentTime;
-      var times = p.keyframes.filter((it) => it.time === time);
-      if (!times.length) {
-        value = isUndefined(value) || value === "" ? this.getDefaultPropertyValue(property) : value;
-        var obj2 = { id: uuidShort(), layerId, property, time, value, timing: timing || "linear", editor };
-        p.keyframes.push(obj2);
-        p.keyframes.sort((a, b) => {
-          return a.time > b.time ? 1 : -1;
-        });
-        this.compiledTimingFunction(layerId, property);
-        return obj2;
-      }
-    }
-  }
-  getDefaultPropertyValue(property) {
-    switch (property) {
-      case "mix-blend-mode":
-        return "normal";
-      case "rotate":
-        return "0deg";
-      case "box-shadow":
-        return "0px 0px 0px 0px rgba(0, 0, 0, 1)";
-      case "text-shadow":
-        return "0px 0px 0px rgba(0, 0, 0, 1)";
-      case "opacity":
-        return 1;
-      default:
-        return "";
-    }
-  }
-  copyTimelineKeyframe(layerId, property, newTime = null) {
-    var p = this.getTimelineProperty(layerId, property);
-    if (p) {
-      var timeline = this.getSelectedTimeline();
-      var time = newTime || timeline.currentTime;
-      var times = p.keyframes.filter((it) => it.time < time);
-      var value = this.getDefaultPropertyValue(property);
-      var timing = "linear";
-      var editor = "";
-      if (times.length) {
-        times.sort((a, b) => {
-          return a.time > b.time ? -1 : 1;
-        });
-        value = times[0].value + "";
-        timing = times[0].timing + "";
-        editor = times[0].editor;
-      }
-      this.addTimelineKeyframe({ layerId, property, value, timing, editor });
-    }
-  }
-  getTimelineKeyframe(layerId, property, time) {
-    var p = this.getTimelineProperty(layerId, property);
-    if (p) {
-      return p.keyframes.find((it) => it.time === time);
-    }
-  }
-  getTimelineKeyframeById(layerId, property, id) {
-    var p = this.getTimelineProperty(layerId, property);
-    if (p) {
-      return p.keyframes.find((it) => it.id === id);
-    }
-  }
-  sortTimelineKeyframe(layerId, property) {
-    var p = this.getTimelineProperty(layerId, property);
-    if (p) {
-      p.keyframes.sort((a, b) => {
-        return a.time > b.time ? 1 : -1;
-      });
-      this.compiledTimingFunction(layerId, property);
-    }
-  }
-  setFps(fps) {
-    var timeline = this.getSelectedTimeline();
-    if (timeline) {
-      timeline.fps = fps;
-      timeline.currentTimecode = timecode(fps, timeline.currentTime);
-      timeline.totalTimecode = timecode(fps, timeline.totalTime);
-    }
-  }
-  toCloneObject() {
-    return __spreadProps(__spreadValues({}, super.toCloneObject()), {
-      timeline: clone$1(this.json.timeline)
-    });
-  }
-}
-const identity = create$5();
-class Project extends TimelineModel {
-  getDefaultTitle() {
-    return "New Project";
-  }
-  get isAbsolute() {
-    return false;
-  }
-  get parent() {
-    return null;
-  }
-  toRootVariableCSS() {
-    var obj2 = {};
-    this.json.rootVariable.split(";").filter((it) => it.trim()).forEach((it) => {
-      var [key, value] = it.split(":");
-      obj2[`--${key}`] = value;
-    });
-    return obj2;
-  }
-  getDefaultObject(obj2 = {}) {
-    return super.getDefaultObject(__spreadValues({
-      itemType: "project",
-      name: "new Project",
-      description: "",
-      rootVariable: ""
-    }, obj2));
-  }
-  toCloneObject() {
-    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("name", "description", "rootVariable"));
-  }
-  get artboards() {
-    return (this.layers || []).filter((it) => it.is("artboard"));
-  }
-  get offsetX() {
-    return 0;
-  }
-  get offsetY() {
-    return 0;
-  }
-  get screenWidth() {
-    return 0;
-  }
-  get screenHeight() {
-    return 0;
-  }
-  hasLayout() {
-    return false;
-  }
-  getAbsoluteMatrix() {
-    return create$5();
-  }
-  getTransformMatrix() {
-    return create$5();
-  }
-  resetMatrix(childItem) {
-    const [x2, y2] = getTranslation([], calculateMatrix(childItem.absoluteMatrix, childItem.localMatrixInverse));
-    childItem.reset({
-      x: x2,
-      y: y2
-    });
-  }
-  get rectVerties() {
-    var _a;
-    return ((_a = this.layers) == null ? void 0 : _a.length) ? itemsToRectVerties(this.layers) : null;
-  }
-  get absoluteMatrix() {
-    return identity;
-  }
-  get absoluteMatrixInverse() {
-    return identity;
-  }
-  get contentBox() {
-    return {
-      left: 0,
-      top: 0,
-      width: 0,
-      height: 0
-    };
-  }
-}
-class SelectionManager {
-  constructor(editor) {
-    this.$editor = editor;
-    this.project = null;
-    this.itemKeys = {};
-    this.hoverId = "";
-    this.hoverItems = [];
-    this.ids = [];
-    this.colorsteps = [];
-    this.ghosts = [];
-    this.cachedItemMatrices = [];
-    this.cachedArtBoardVerties = [];
-    this.cachedVerties = rectToVerties(0, 0, 0, 0, "50% 50% 0px");
-    this.$editor.on("config:bodyEvent", () => {
-      this.refreshMousePosition();
-    });
-  }
-  refreshMousePosition() {
-    const areaWidth = this.$editor.config.get("area.width");
-    const pos = this.$editor.viewport.getWorldPosition();
-    this.pos = pos;
-    const [row, column] = area(pos[0], pos[1], areaWidth);
-    this.row = row;
-    this.column = column;
-  }
-  get modelManager() {
-    return this.$editor.modelManager;
-  }
-  get lockManager() {
-    return this.$editor.lockManager;
-  }
-  get items() {
-    return this.modelManager.searchLiveItemsById(this.ids);
-  }
-  get current() {
-    return this.modelManager.searchItem(this.ids[0]);
-  }
-  get currentProject() {
-    if (!this.project) {
-      this.project = this.modelManager.getProjectByIndex();
-    }
-    return this.project;
-  }
-  get isEmpty() {
-    return !this.length;
-  }
-  get isOne() {
-    if (this.length === 1 && this.current.is("artboard"))
-      return true;
-    return this.length === 1;
-  }
-  get isMany() {
-    return this.length > 1;
-  }
-  get length() {
-    return this.ids.length;
-  }
-  get isLayoutItem() {
-    var _a;
-    return (_a = this.current) == null ? void 0 : _a.isLayoutItem();
-  }
-  get allLayers() {
-    return this.currentProject.allLayers || [];
-  }
-  get filteredLayers() {
-    const areaWidth = this.$editor.config.get("area.width");
-    return this.currentProject.filteredAllLayers((item2) => {
-      if (item2.is("project"))
-        return false;
-      const areaPosition = item2.getAreaPosition(areaWidth);
-      if (!areaPosition) {
-        return false;
-      }
-      const { column, row } = areaPosition;
-      return column[0] <= this.column && this.column <= column[1] && (row[0] <= this.row && this.row <= row[1]);
-    }).filter((item2) => {
-      return item2.isPointInRect(this.pos[0], this.pos[1]);
-    });
-  }
-  get snapTargetLayers() {
-    if (!this.currentProject)
-      return [];
-    return this.currentProject.allLayers.filter((item2) => {
-      if (item2.is("project"))
-        return false;
-      if (this.check(item2))
-        return false;
-      const inViewport = item2.verties.some((v) => {
-        return this.$editor.viewport.checkInViewport(v);
-      });
-      return inViewport;
-    });
-  }
-  get snapTargetLayersWithSelection() {
-    if (!this.currentProject)
-      return [];
-    return this.currentProject.allLayers.filter((item2) => {
-      if (item2.is("project"))
-        return false;
-      const inViewport = item2.verties.some((v) => {
-        return this.$editor.viewport.checkInViewport(v);
-      });
-      return inViewport;
-    });
-  }
-  get selectedArtboards() {
-    return [...new Set(this.items.map((it) => it.artboard))];
-  }
-  hasChangedField(...args2) {
-    if (this.current) {
-      return this.current.hasChangedField(...args2);
-    }
-    return false;
-  }
-  getRootItem(current) {
-    var rootItem = current;
-    if (current && current.parentId) {
-      rootItem = current.parent;
-    }
-    return rootItem;
-  }
-  selectColorStep(...args2) {
-    this.colorsteps = args2;
-  }
-  isSelectedColorStep(id) {
-    return this.colorsteps.includes(id);
-  }
-  selectProject(project2) {
-    if (isString(project2)) {
-      project2 = this.modelManager.get(project2);
-    }
-    this.project = project2;
-    this.select();
-  }
-  get isRelative() {
-    var item2 = this.current || {};
-    return item2.position === "relative";
-  }
-  isSameIds(newIds) {
-    if (this.ids.length != newIds.length) {
-      return false;
-    }
-    if (this.ids.filter((id) => newIds.includes(id)).length === this.ids.length) {
-      return true;
-    }
-    return false;
-  }
-  filterIds(ids = []) {
-    return ids.map((it) => it.id || it).filter(Boolean);
-  }
-  selectByGroup(...ids) {
-    var list2 = this.modelManager.searchItemsById(this.filterIds(ids || [])).filter((it) => {
-      return !this.lockManager.get(it.id);
-    });
-    const newSelectedItems = this.modelManager.convertGroupItems(list2);
-    return this.select(...newSelectedItems.map((it) => it.id));
-  }
-  select(...ids) {
-    var list2 = this.modelManager.searchItemsById(this.filterIds(ids || [])).filter((it) => !it.lock && it.isAbsolute);
-    const newSelectedItems = list2.filter((it) => {
-      return it.path.filter((element) => list2.includes(element)).length < 2;
-    });
-    const newSelectedIds = newSelectedItems.map((it) => it.id);
-    if (this.isSameIds(newSelectedIds)) {
-      return false;
-    }
-    this.itemKeys = {};
-    newSelectedItems.forEach((item2) => {
-      this.itemKeys[item2.id] = item2;
-    });
-    this.ids = newSelectedIds;
-    this.setRectCache();
-    return true;
-  }
-  reload() {
-    return this.select(...this.ids);
-  }
-  reselect() {
-    this.setRectCache();
-  }
-  check(item2) {
-    return !!this.itemKeys[item2.id];
-  }
-  hasPathOf(item2) {
-    return this.modelManager.hasPathOf(this.items.filter((it) => it.isNot("artboard")), item2);
-  }
-  hasParent(parentId) {
-    return this.items.some((it) => it.hasParent(parentId));
-  }
-  get(id) {
-    return this.itemKeys[id];
-  }
-  empty() {
-    this.select();
-  }
-  itemsByIds(ids = null) {
-    let itemIdList = [];
-    if (Array.isArray(ids)) {
-      itemIdList = ids;
-    } else if (isString(ids) || isObject(ids)) {
-      itemIdList = [ids];
-    }
-    return this.modelManager.searchItemsById(itemIdList);
-  }
-  selectById(id) {
-    this.select(id);
-  }
-  selectAfterCopy() {
-    this.select(...this.items.map((it) => it.copy()));
-  }
-  addById(id) {
-    if (this.itemKeys[id])
-      return;
-    this.select(...this.ids, id);
-  }
-  removeById(id) {
-    let ids = id;
-    if (isString(id)) {
-      ids = [id];
-    }
-    const filteredItems = this.ids.filter((id2) => ids.includes(id2) === false);
-    this.select(...filteredItems);
-  }
-  toggleById(id) {
-    if (this.itemKeys[id]) {
-      this.removeById(id);
-    } else {
-      this.addById(id);
-    }
-  }
-  getArtboardByPoint(vec) {
-    return this.currentProject.artboards.find((artboard2) => {
-      return polyPoint(artboard2.originVerties, ...vec);
-    });
-  }
-  changeInLayoutArea(pointer) {
-    let checkedParentChange = false;
-    this.each((instance) => {
-      if (instance.is("artboard") === false) {
-        if (instance.artboard) {
-          const localArtboardVerties = instance.artboard.originVerties;
-          const isInArtboard = polyPoint(localArtboardVerties, this.pos[0], this.pos[1]);
-          if (isInArtboard) {
-            return false;
-          }
-        }
-        const selectedArtBoard = this.cachedArtBoardVerties.find((artboard2) => {
-          return polyPoint(artboard2.matrix.originVerties, this.pos[0], this.pos[1]);
-        });
-        if (selectedArtBoard) {
-          if (selectedArtBoard.item !== instance.artboard && selectedArtBoard.item.hasLayout() === false) {
-            selectedArtBoard.item.appendChild(instance);
-            checkedParentChange = true;
-          }
-        } else {
-          if (instance.artboard) {
-            this.currentProject.appendChild(instance);
-            checkedParentChange = true;
-          }
-        }
-      }
-    });
-    return checkedParentChange;
-  }
-  setRectCache() {
-    if (this.isEmpty) {
-      this.cachedVerties = [];
-      this.cachedRectVerties = [];
-      this.cachedItemMatrices = [];
-      this.ghosts = [];
-      this.cachedArtBoardVerties = this.currentProject.artboards.map((item2) => {
-        return { item: item2, matrix: item2.matrix };
-      });
-      return;
-    }
-    this.cachedVerties = this.verties;
-    this.cachedRectVerties = toRectVerties(this.verties);
-    this.cachedItemMatrices = [];
-    this.cachedChildren = [];
-    this.ghosts = [];
-    this.items.forEach((it) => {
-      if (it.is("artboard")) {
-        this.cachedItemMatrices.push(it.matrix);
-      } else if (it.hasChildren()) {
-        const list2 = this.modelManager.getAllLayers(it.id).map((it2) => it2.matrix);
-        this.cachedChildren.push(...list2.map((it2) => it2.id));
-        this.cachedItemMatrices.push(...list2);
-      } else {
-        this.cachedItemMatrices.push(it.matrix);
-      }
-      this.ghosts.push(it.absoluteMatrix);
-    });
-    this.cachedArtBoardVerties = this.currentProject.artboards.map((item2) => {
-      return { item: item2, matrix: item2.matrix };
-    });
-    this.cachedCurrentItemMatrix = this.current.matrix;
-    this.cachedCurrentChildrenItemMatrices = this.modelManager.getAllLayers(this.current.id).map((it) => it.matrix);
-  }
-  startToCacheChildren() {
-    this.items.forEach((item2) => {
-      item2.startToCacheChildren();
-    });
-  }
-  recoverChildren() {
-    this.items.forEach((item2) => {
-      item2.recoverChildren();
-    });
-  }
-  get verties() {
-    if (this.isOne) {
-      return this.current.verties;
-    } else {
-      return this.rectVerties;
-    }
-  }
-  get targetVerties() {
-    if (this.isOne) {
-      return this.current.originVerties;
-    } else {
-      return targetItemsToRectVerties(this.items);
-    }
-  }
-  get originVerties() {
-    return this.rectVerties.filter((_, index2) => index2 < 4);
-  }
-  get rectVerties() {
-    if (this.isEmpty) {
-      return [];
-    }
-    return itemsToRectVerties(this.items);
-  }
-  get itemRect() {
-    const verties = this.verties;
-    return {
-      x: verties[0][0],
-      y: verties[0][1],
-      width: distance$1(verties[0], verties[1]),
-      height: distance$1(verties[0], verties[3])
-    };
-  }
-  toCloneObject() {
-    let data = {};
-    this.each((item2) => {
-      data[item2.id] = item2.toCloneObject(false);
-    });
-    return data;
-  }
-  pack(...keys2) {
-    let data = {};
-    this.each((item2) => {
-      data[item2.id] = {};
-      keys2.forEach((key) => {
-        data[item2.id][key] = item2[key];
-      });
-    });
-    return data;
-  }
-  packByIds(ids, ...keys2) {
-    let data = {};
-    let localItems = [];
-    if (ids === null) {
-      localItems = this.items;
-    } else if (isString(ids) || Array.isArray(ids)) {
-      localItems = this.itemsByIds(ids);
-    }
-    const valueObject = {};
-    keys2.forEach((it) => {
-      valueObject[it] = true;
-    });
-    localItems.forEach((item2) => {
-      data[item2.id] = item2.attrs(...keys2);
-    });
-    return data;
-  }
-  packByValue(valueObject, ids = null) {
-    let data = {};
-    let localItems = [];
-    if (ids === null) {
-      localItems = this.items;
-    } else if (isString(ids) || Array.isArray(ids)) {
-      localItems = this.itemsByIds(ids);
-    }
-    localItems.forEach((item2) => {
-      data[item2.id] = {};
-      Object.keys(valueObject).forEach((key) => {
-        data[item2.id][key] = isFunction(valueObject[key]) ? valueObject[key].call(valueObject, item2) : valueObject[key];
-      });
-    });
-    return data;
-  }
-  each(callback) {
-    if (isFunction(callback)) {
-      this.items.forEach((item2, index2) => {
-        callback(item2);
-      });
-    }
-  }
-  map(callback) {
-    if (isFunction(callback)) {
-      return this.items.map((item2, index2) => {
-        return callback(item2, index2);
-      });
-    }
-    return this.items;
-  }
-  reset(obj2) {
-    Object.entries(obj2).forEach(([id, attrs]) => {
-      var _a;
-      (_a = this.get(id)) == null ? void 0 : _a.reset(attrs);
-    });
-  }
-  resetCallback(callback) {
-    this.each((item2) => item2.reset(callback(item2)));
-  }
-  resize() {
-    this.each((item2) => item2.resize());
-  }
-  remove() {
-    this.each((item2) => item2.remove());
-    this.empty();
-  }
-  copy() {
-    console.warn("copy is deprecated");
-    this.copyItems = this.items.map((item2) => item2);
-  }
-  paste() {
-    console.warn("paste is deprecated. use copy and paste");
-    this.select(...this.copyItems.map((item2) => item2.copy(10)));
-    this.copy();
-  }
-  hasPoint(point2) {
-    var _a;
-    if (this.isMany) {
-      return polyPoint(this.originVerties, point2[0], point2[1]);
-    } else {
-      return (_a = this.current) == null ? void 0 : _a.hasPoint(point2[0], point2[1]);
-    }
-  }
-  hasChildrenPoint(point2) {
-    return this.cachedChildren.some((it) => {
-      var _a;
-      return (_a = this.modelManager.get(it)) == null ? void 0 : _a.hasPoint(point2[0], point2[1]);
-    });
-  }
-  checkChildren(childId) {
-    return this.cachedChildren.includes(childId);
-  }
-  checkHover(itemOrId) {
-    if (isString(itemOrId)) {
-      return this.hoverId === itemOrId;
-    } else {
-      return this.hoverItems.findIndex((it) => it.id === itemOrId.id) > -1;
-    }
-  }
-  hasHoverItem() {
-    return this.hoverId !== "";
-  }
-  selectHoverItem() {
-    this.select(this.hoverId);
-  }
-  setHoverId(id) {
-    let isChanged = false;
-    if (!id || this.itemKeys[id]) {
-      if (this.hoverId != "") {
-        isChanged = true;
-      }
-      this.hoverId = "";
-      this.hoverItems = [];
-    } else if (this.cachedArtBoardVerties.find((it) => it.item.id === id)) {
-      if (this.hoverId != "") {
-        isChanged = true;
-      }
-      this.hoverId = "";
-      this.hoverItems = [];
-    } else {
-      if (this.hoverId != id) {
-        isChanged = true;
-      }
-      this.hoverId = id;
-      this.hoverItems = this.itemsByIds([id]).filter((it) => it.isNot("artboard"));
-      if (this.hoverItems.length === 0) {
-        this.hoverId = "";
-        isChanged = true;
-      }
-    }
-    if (isChanged) {
-      this.$editor.emit("changeHoverItem");
-    }
-    return isChanged;
-  }
-  is(...args2) {
-    var _a;
-    return args2.includes((_a = this.current) == null ? void 0 : _a.itemType);
-  }
-  isAll(...args2) {
-    return this.items.every((it) => args2.includes(it.itemType));
-  }
-}
-function _currentProject(editor, callback) {
-  var project2 = editor.selection.currentProject;
-  if (project2) {
-    var timeline = project2.getSelectedTimeline();
-    callback && callback(project2, timeline);
-  }
-}
-var __glob_0_0$4 = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": _currentProject
-});
-function _doForceRefreshSelection(editor) {
-  editor.nextTick(() => {
-    editor.emit("refreshAll");
-    editor.emit("refreshSelectionTool");
-  });
-}
-var __glob_0_1$4 = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": _doForceRefreshSelection
-});
-function addArtBoard(editor, obj2 = {}, center2 = null) {
-  var project2 = editor.selection.currentProject;
-  if (!project2) {
-    project2 = editor.add(editor.createModel({ itemType: "project" }));
-    editor.selection.selectProject(project2);
-  }
-  var artboard2 = project2.appendChild(editor.createModel(__spreadValues({
-    itemType: "artboard",
-    x: 300,
-    y: 200,
-    width: 375,
-    height: 667
-  }, obj2)));
-  if (center2) {
-    artboard2.reset({
-      x: 0,
-      y: 0
-    });
-    artboard2.moveByCenter(center2);
-  }
-  editor.selection.select(artboard2);
-  _doForceRefreshSelection(editor);
-}
-var __glob_0_2$4 = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": addArtBoard
-});
-var addBackgroundColor = {
-  command: "addBackgroundColor",
-  execute: function(editor, color2, id = null) {
-    editor.command("setAttributeForMulti", "add background color", editor.selection.packByValue({
-      "background-color": color2
-    }, id));
-  }
-};
-var __glob_0_3$4 = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": addBackgroundColor
-});
 var addBackgroundImageAsset = {
   command: "addBackgroundImageAsset",
   execute: function(editor, url, id = null) {
@@ -15822,7 +11102,7 @@ var __glob_0_5$4 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": addBackgroundImageGradient
 });
-const MAX_CACHE_COUNT = 1e3;
+const MAX_CACHE_COUNT$1 = 1e3;
 const cachedPatternMap = new Map();
 class PatternCache {
   static has(key) {
@@ -15832,7 +11112,7 @@ class PatternCache {
     return cachedPatternMap.get(key);
   }
   static set(key, parsedValue) {
-    if (cachedPatternMap.size > MAX_CACHE_COUNT) {
+    if (cachedPatternMap.size > MAX_CACHE_COUNT$1) {
       cachedPatternMap.clear();
     }
     cachedPatternMap.set(key, parsedValue);
@@ -16463,7 +11743,7 @@ var clipboard_paste$1 = {
           const sourceItem = editor.get(referenceId);
           const model = editor.createModel(itemJSON);
           model.renameWithCount();
-          model.move([10, 10, 0]);
+          model.absoluteMove([10, 10, 0]);
           if (length2 === 1) {
             sourceItem.appendBefore(model);
           } else {
@@ -18106,6 +13386,172 @@ var __glob_0_43$2 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": fileDropItems
 });
+function second(fps, timecode2) {
+  if (isString(timecode2)) {
+    var [hour, minute, second2, frame] = timecode2.split(":");
+    hour = parseInt(hour, 10);
+    minute = parseInt(minute, 10);
+    second2 = parseInt(second2, 10);
+    frame = parseInt(frame, 10);
+    return hour * 3600 + minute * 60 + second2 + frame * (1 / fps);
+  } else if (isNumber(timecode2)) {
+    return timecode2 / fps;
+  }
+  return 0;
+}
+function timecode(fps, seconds) {
+  var h = Math.floor(seconds / 3600);
+  var m = Math.floor(seconds / 60 % 60);
+  var s = Math.floor(seconds % 60);
+  var f = Math.round((seconds - Math.floor(seconds)) * fps);
+  if (f === fps) {
+    f = 0;
+    s += 1;
+    if (s === 60) {
+      m += 1;
+      if (m === 60) {
+        h += 1;
+      }
+    }
+  }
+  return [h, m, s, f].map((t) => {
+    return (t + "").padStart(2, "0");
+  }).join(":");
+}
+function framesToTimecode(fps, frames, start2 = null) {
+  return timecode(fps, second(fps, frames) - second(fps, start2));
+}
+function makeTimer(opt) {
+  var timer2 = {
+    id: 0,
+    start: 0,
+    speed: opt.speed || 1,
+    elapsed: opt.elapsed || 0,
+    duration: opt.duration || 0,
+    iterationStartCount: 1,
+    iterationCount: opt.iterationCount || Number.MAX_SAFE_INTEGER,
+    direction: opt.direction || "normal",
+    log: [],
+    logIndex: 0,
+    tick: opt.tick || (() => {
+    }),
+    startCallback: opt.start || (() => {
+    }),
+    endCallback: opt.end || (() => {
+    }),
+    firstCallback: opt.first || (() => {
+    }),
+    lastCallback: opt.last || (() => {
+    })
+  };
+  const isForward = () => {
+    if (timer2.direction === "normal") {
+      return true;
+    } else if (timer2.direction === "reverse") {
+      return false;
+    } else if (timer2.direction === "alternate") {
+      return timer2.iterationStartCount % 2 === 1;
+    } else if (timer2.direction === "alternate-reverse") {
+      return timer2.iterationStartCount % 2 === 0;
+    }
+  };
+  const calculateForDirection = (rate) => {
+    return isForward() ? rate : 1 - rate;
+  };
+  const tick = (now) => {
+    var isStart = false;
+    if (timer2.start === null) {
+      timer2.start = now;
+      isStart = true;
+    }
+    const dt = now - timer2.start;
+    timer2.elapsed += dt * timer2.speed;
+    timer2.start = now;
+    if (timer2.elapsed > timer2.duration) {
+      timer2.elapsed = timer2.duration;
+    }
+    var elapsed = calculateForDirection(timer2.elapsed / timer2.duration) * timer2.duration;
+    if (isStart)
+      timer2.startCallback(elapsed, timer2);
+    timer2.log[timer2.logIndex++] = { elapsed, dt: timer2.lastTime - elapsed };
+    timer2.lastTime = elapsed;
+    timer2.tick(elapsed, timer2);
+    if (timer2.elapsed === timer2.duration) {
+      end2();
+    } else {
+      frameStart();
+    }
+  };
+  const frameStart = () => {
+    timer2.id = requestAnimationFrame(tick);
+  };
+  const end2 = () => {
+    timer2.endCallback(timer2.elapsed, timer2);
+    timer2.iterationStartCount++;
+    if (timer2.iterationStartCount > timer2.iterationCount) {
+      timer2.lastCallback(timer2.elapsed, timer2);
+      cancelAnimationFrame(timer2.id);
+    } else {
+      timer2.start = null;
+      timer2.elapsed = 0;
+      frameStart();
+    }
+  };
+  const play2 = (opt2 = {}) => {
+    timer2.start = null;
+    timer2.iterationStartCount = 1;
+    timer2.log = [];
+    timer2.lastTime = 0;
+    timer2.logIndex = 0;
+    if (isNumber(opt2.elapsed))
+      timer2.elapsed = opt2.elapsed;
+    if (isNumber(opt2.speed))
+      timer2.speed = opt2.speed;
+    if (isNumber(opt2.duration))
+      timer2.duration = opt2.duration;
+    if (isNumber(opt2.iterationCount))
+      timer2.iterationCount = opt2.iterationCount || Number.MAX_SAFE_INTEGER;
+    if (isString(opt2.direction))
+      timer2.direction = opt2.direction;
+    if (isFunction(opt2.tick))
+      timer2.tick = opt2.tick;
+    if (isFunction(opt2.start))
+      timer2.startCallback = opt2.start;
+    if (isFunction(opt2.end))
+      timer2.endCallback = opt2.end;
+    if (isFunction(opt2.first))
+      timer2.firstCallback = opt2.first;
+    if (isFunction(opt2.last))
+      timer2.lastCallback = opt2.last;
+    if (isFunction(opt2.stop))
+      timer2.stopCallback = opt2.stop;
+    timer2.firstCallback(timer2.elapsed, timer2);
+    frameStart();
+  };
+  const stop = () => {
+    timer2.stopCallback(timer2.elapsed, timer2);
+    cancelAnimationFrame(timer2.id);
+  };
+  const seek = (t) => {
+    timer2.elapsed = t;
+    timer2.tick(timer2.elapsed, timer2);
+  };
+  const first = (t) => {
+    seek(0);
+  };
+  const last2 = (t) => {
+    seek(timer2.duration);
+  };
+  return {
+    play: play2,
+    stop,
+    tick,
+    first,
+    last: last2,
+    seek,
+    timer: timer2
+  };
+}
 var firstTimelineItem = {
   command: "firstTimelineItem",
   execute: function(editor) {
@@ -18589,13 +14035,13 @@ var moveLayer = {
   command: "moveLayer",
   description: "move layer by keydown with matrix ",
   execute: function(editor, dx = 0, dy = 0) {
-    editor.command("setAttributeForMulti", "item move down", editor.selection.packByValue({
-      x: (item2) => item2.offsetX + dx,
-      y: (item2) => item2.offsetY + dy
-    }));
+    const absoluteDist = [dx, dy, 0];
+    editor.selection.items.forEach((it) => {
+      it.absoluteMove(absoluteDist);
+    });
+    editor.command("setAttributeForMulti", "item move down", editor.selection.pack("x", "y"));
     editor.nextTick(() => {
       editor.selection.reselect();
-      editor.emit("refreshAll");
     });
   }
 };
@@ -18611,14 +14057,13 @@ var moveLayerForItems = {
     const itemsMap = {};
     moveItems.forEach((it) => {
       itemsMap[it.item.id] = {
-        x: round$1(it.item.offsetX + it.dist[0]),
-        y: round$1(it.item.offsetY + it.dist[1])
+        x: it.item.offsetX + it.dist[0],
+        y: it.item.offsetY + it.dist[1]
       };
     });
     editor.emit("history.setAttributeForMulti", "item move down", itemsMap);
     editor.nextTick(() => {
       editor.selection.reselect();
-      editor.emit("refreshAll");
     });
   }
 };
@@ -18654,7 +14099,7 @@ var moveToCenter = {
   description: "Move Layer to Center on Viewport",
   execute: function(editor, areaVerties, withScale = false) {
     if (areaVerties) {
-      editor.viewport.moveLayerToCenter(areaVerties, withScale ? -0.2 : 0, withScale);
+      editor.viewport.moveToCenter(areaVerties, withScale ? -0.2 : 0, withScale);
     }
   }
 };
@@ -18721,6 +14166,182 @@ var __glob_0_68$1 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": nextTimelineItem
 });
+class DirectionLength {
+  static parse(str) {
+    var temp = str.split(" ").filter((it) => it.trim()).map((it) => Length.parse(it));
+    var top2 = Length.percent(0), right2 = Length.percent(0), bottom2 = Length.percent(0), left2 = Length.percent(0);
+    if (temp.length === 1) {
+      top2 = temp[0].clone();
+      right2 = temp[0].clone();
+      bottom2 = temp[0].clone();
+      left2 = temp[0].clone();
+    } else if (temp.length === 2) {
+      top2 = temp[0].clone();
+      right2 = temp[1].clone();
+      bottom2 = temp[0].clone();
+      left2 = temp[1].clone();
+    } else if (temp.length === 3) {
+      top2 = temp[0].clone();
+      right2 = temp[1].clone();
+      bottom2 = temp[2].clone();
+      left2 = temp[1].clone();
+    } else if (temp.length === 4) {
+      top2 = temp[0].clone();
+      right2 = temp[1].clone();
+      bottom2 = temp[2].clone();
+      left2 = temp[3].clone();
+    }
+    return [temp.length, top2, right2, bottom2, left2];
+  }
+}
+const CLIPPATH_REG = /(content\-box|padding\-box|border\-box|margin\-box|view\-box|stroke\-box|fill\-box|none|(inset|circle|ellipse|polygon|path|svg|url)(\(([^\)]*)\))?)/gi;
+class ClipPath extends PropertyItem {
+  getDefaultObject(obj2 = {}) {
+    return super.getDefaultObject(__spreadValues({
+      itemType: "clip-path",
+      type: "none",
+      value: ""
+    }, obj2));
+  }
+  toCloneObject() {
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("value"));
+  }
+  toString() {
+    var type = this.json.type;
+    var value = this.json.value;
+    var box = this.json.box;
+    var results = "";
+    switch (type) {
+      case "circle":
+      case "inset":
+      case "ellipse":
+      case "polygon":
+      case "path":
+        results = `${type}(${value})`;
+        break;
+      case "svg":
+        results = `url(#${value})`;
+        break;
+      default:
+        results = "none";
+        break;
+    }
+    return box ? `${box} ${results}` : results;
+  }
+  toCSS() {
+    return {
+      "clip-path": this.toString()
+    };
+  }
+  static toCSS(obj2) {
+    return new ClipPath(obj2).toCSS();
+  }
+  static toString(obj2) {
+    return ClipPath.toCSS(obj2)["clip-path"];
+  }
+  static parse(obj2) {
+    return new ClipPath(obj2);
+  }
+  static parseStyle(str) {
+    var clippath = {};
+    if (!str)
+      return {};
+    var matches2 = str.match(CLIPPATH_REG) || [];
+    matches2.forEach((value, index2) => {
+      if (value.includes("-box")) {
+        clippath.box = value;
+      } else {
+        var [clipPathName, clipPathValue] = value.split("(");
+        clipPathValue = clipPathValue || "";
+        if (clipPathName === "none") {
+          clipPathValue = "";
+        } else {
+          clipPathValue = clipPathValue.split(")")[0];
+        }
+        clippath.type = clipPathName;
+        clippath.value = clipPathValue;
+      }
+    });
+    return clippath;
+  }
+  static parseStyleForCircle(str = "50% at 50% 50%") {
+    var radius = new Length("", "closest-side"), position2 = "";
+    str = str || "50% at 50% 50%";
+    if (str.includes("at")) {
+      [radius, position2] = str.split("at").map((it) => it.trim());
+    } else {
+      position2 = str.trim();
+    }
+    var [x2, y2] = position2.split(" ");
+    if (isUndefined(y2)) {
+      y2 = x2;
+    }
+    radius = Length.parse(radius);
+    x2 = Length.parse(x2);
+    y2 = Length.parse(y2);
+    return {
+      radius,
+      x: x2,
+      y: y2
+    };
+  }
+  static parseStyleForEllipse(str = "50% 50%") {
+    var radius = `50% 50%`, position2 = "";
+    str = str || "50%";
+    if (str.includes("at")) {
+      [radius, position2] = str.split("at").map((it) => it.trim());
+    } else {
+      position2 = str.trim();
+    }
+    var [x2, y2] = position2.split(" ");
+    if (isUndefined(y2)) {
+      y2 = x2;
+    }
+    x2 = Length.parse(x2);
+    y2 = Length.parse(y2);
+    var [radiusX, radiusY] = radius.split(" ");
+    if (isUndefined(radiusY)) {
+      radiusY = radiusX;
+    }
+    radiusX = Length.parse(radiusX);
+    radiusY = Length.parse(radiusY);
+    return {
+      radiusX,
+      radiusY,
+      x: x2,
+      y: y2
+    };
+  }
+  static parseStyleForInset(str = "") {
+    var [inset, round2] = str.split("round");
+    var [_count, top2, right2, bottom2, left2] = DirectionLength.parse(inset);
+    if (round2) {
+      var [_roundCount, topRadius, rightRadius, bottomRadius, leftRadius] = DirectionLength.parse(round2);
+    }
+    return {
+      isAll: _count === 1,
+      top: top2,
+      right: right2,
+      bottom: bottom2,
+      left: left2,
+      round: round2,
+      isAllRadius: _roundCount === 1,
+      topRadius,
+      rightRadius,
+      bottomRadius,
+      leftRadius
+    };
+  }
+  static parseStyleForPolygon(str = "") {
+    return str.split(",").filter((it) => it.trim()).map((it) => {
+      var [x2, y2] = it.trim().split(" ");
+      return {
+        x: Length.parse(x2),
+        y: Length.parse(y2)
+      };
+    });
+  }
+}
 var open_editor = {
   command: "open.editor",
   description: "Open custom editor for item  when doubleclick is fired",
@@ -18740,7 +14361,7 @@ var open_editor = {
           changeEvent: (data) => {
             editor.command("setAttributeForMulti", "change editable path", editor.selection.packByValue(__spreadValues({}, current.recoverEditablePath(data.d)), [current.id]));
             editor.nextTick(() => {
-              if (editor.isPointerUp) {
+              if (editor.stateManager.isPointerUp) {
                 editor.emit("recoverBooleanPath");
               }
             });
@@ -18769,7 +14390,7 @@ var open_editor = {
             } else {
               editor.emit("updatePathItem", data);
               editor.nextTick(() => {
-                if (editor.isPointerUp) {
+                if (editor.stateManager.isPointerUp) {
                   editor.emit("recoverBooleanPath");
                 }
               });
@@ -19136,6 +14757,272 @@ var __glob_0_88$1 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": resizeArtBoard
 });
+const MAX_CACHE_COUNT = 1e3;
+const cachedTransformMap = new Map();
+class TransformCache {
+  static has(key) {
+    return cachedTransformMap.has(key);
+  }
+  static get(key) {
+    return cachedTransformMap.get(key);
+  }
+  static set(key, parsedValue) {
+    if (cachedTransformMap.size > MAX_CACHE_COUNT) {
+      cachedTransformMap.clear();
+    }
+    cachedTransformMap.set(key, parsedValue);
+  }
+}
+const TRANSFORM_REG = /((matrix|translate(X|Y|Z|3d)?|scale(X|Y|Z|3d)?|rotate(X|Y|Z|3d)?|skew(X|Y)?|matrix(3d)?|perspective)\(([^\)]*)\))/gi;
+class Transform extends PropertyItem {
+  getDefaultObject() {
+    return {
+      itemType: "transform",
+      value: []
+    };
+  }
+  toCloneObject() {
+    return __spreadValues({}, this.attrs("itemType", "type", "value"));
+  }
+  toString() {
+    return `${this.json.type}(${this.json.value.join(", ") || ""})`;
+  }
+  static join(list2) {
+    var firstType = "perspective";
+    var lastType = "matrix3d";
+    var arr = list2.filter((it) => it.type === firstType);
+    var last2 = list2.filter((it) => it.type === lastType);
+    var arr2 = list2.filter((it) => it.type !== firstType && it.type !== lastType);
+    return [...arr, ...arr2, ...last2].map((it) => new Transform(it).toString()).join(" ");
+  }
+  hasNumberValue() {
+    var type = this.json.type;
+    return type.includes("matrix") || type.includes("scale");
+  }
+  static parse(transform2) {
+    return new Transform(transform2);
+  }
+  static remove(transform2, type = []) {
+    if (typeof type === "string") {
+      type = [type];
+    }
+    return Transform.filter(transform2, (it) => {
+      return type.includes(it.type) === false;
+    });
+  }
+  static filter(transform2, filterFunction) {
+    return Transform.join(Transform.parseStyle(transform2, false).filter((it) => filterFunction(it)));
+  }
+  static replace(transform2, valueObject) {
+    var obj2 = Transform.parseStyle(transform2, false);
+    var tObject = obj2.find((t) => t.type === valueObject.type);
+    if (tObject) {
+      tObject.value = valueObject.value;
+    } else {
+      obj2.push(valueObject);
+    }
+    return Transform.join(obj2);
+  }
+  static replaceAll(oldTransform, newTransform) {
+    var oldT = Transform.parseStyle(oldTransform, false);
+    var newT = Transform.parseStyle(newTransform);
+    for (var i = 0, len2 = newT.length; i < len2; i++) {
+      var newObject = newT[i];
+      var oldObject = oldT.find((t) => t.type === newObject.type);
+      if (oldObject) {
+        oldObject.value = newObject.value;
+      } else {
+        oldT.push(newObject);
+      }
+    }
+    return Transform.join(oldT);
+  }
+  static addTransform(oldTransform, newTransform) {
+    var oldT = Transform.parseStyle(oldTransform, false);
+    var newT = Transform.parseStyle(newTransform);
+    for (var i = 0, len2 = newT.length; i < len2; i++) {
+      var newObject = newT[i];
+      var oldObject = oldT.find((t) => t.type === newObject.type);
+      if (oldObject) {
+        newObject.value.forEach((v, i2) => {
+          oldObject.value[i2].value += v.value;
+        });
+      } else {
+        oldT.push(newObject);
+      }
+    }
+    return Transform.join(oldT);
+  }
+  static get(transform2, type) {
+    var arr = Transform.parseStyle(transform2, true);
+    if (typeof type === "function") {
+      arr = arr.find(type);
+    } else {
+      arr = arr.find((it) => it.type === type);
+    }
+    if (arr) {
+      return arr.value;
+    }
+    return void 0;
+  }
+  static createRotateKey(transform2, angle2, field) {
+    return `${transform2}:::${field}(${angle2})`;
+  }
+  static rotate(transform2, angle2, field = "rotate") {
+    const key = Transform.createRotateKey(transform2, angle2, field);
+    if (TransformCache.has(key))
+      return TransformCache.get(key);
+    TransformCache.set(key, Transform.replace(transform2, { type: field, value: [angle2] }));
+    return TransformCache.get(key);
+  }
+  static rotateZ(transform2, angle2) {
+    return Transform.rotate(transform2, angle2, "rotateZ");
+  }
+  static rotateX(transform2, angle2) {
+    return Transform.rotate(transform2, angle2, "rotateX");
+  }
+  static rotateY(transform2, angle2) {
+    return Transform.rotate(transform2, angle2, "rotateY");
+  }
+  static parseStyle(transform2, doCache = true) {
+    var transforms = [];
+    if (!transform2)
+      return transforms;
+    if (doCache && TransformCache.has(transform2)) {
+      return TransformCache.get(transform2);
+    }
+    var matches2 = transform2.match(TRANSFORM_REG) || [];
+    matches2.forEach((value, index2) => {
+      var [transformName, transformValue] = value.split("(");
+      transformValue = transformValue.split(")")[0];
+      var arr = transformValue.split(",");
+      if (transformValue.includes("matrix") || transformValue.includes("scale")) {
+        arr = arr.map((it) => Length.number(it.trim()));
+      } else {
+        arr = arr.map((it) => Length.parse(it.trim()));
+      }
+      transforms[index2] = Transform.parse({
+        type: transformName,
+        value: arr
+      });
+    });
+    if (doCache) {
+      TransformCache.set(transform2, transforms);
+    }
+    return transforms;
+  }
+  static createTransformMatrix(parsedTransformList, width2, height2) {
+    const view = create$5();
+    for (let i = 0, len2 = parsedTransformList.length; i < len2; i++) {
+      const it = parsedTransformList[i];
+      switch (it.type) {
+        case "translate":
+        case "translateX":
+        case "translateY":
+        case "translateZ":
+          var values = it.value;
+          if (it.type === "translate") {
+            values = [values[0].toPx(width2).value, values[1].toPx(height2).value, 0];
+          } else if (it.type === "translateX") {
+            values = [values[0].toPx(width2).value, 0, 0];
+          } else if (it.type === "translateY") {
+            values = [0, values[0].toPx(height2).value, 0];
+          } else if (it.type === "translateZ") {
+            values = [0, 0, values[0].toPx().value];
+          }
+          translate(view, view, values);
+          break;
+        case "rotate":
+        case "rotateZ":
+          rotateZ(view, view, degreeToRadian$1(it.value[0].value));
+          break;
+        case "rotateX":
+          rotateX(view, view, degreeToRadian$1(it.value[0].value));
+          break;
+        case "rotateY":
+          rotateY(view, view, degreeToRadian$1(it.value[0].value));
+          break;
+        case "rotate3d":
+          var values = it.value;
+          rotate$1(view, view, degreeToRadian$1(it.value[3].value), [
+            values[0].value,
+            values[1].value,
+            values[2].value
+          ]);
+          break;
+        case "scale":
+          scale$1(view, view, [it.value[0].value, it.value[1].value, 1]);
+          break;
+        case "scaleX":
+          scale$1(view, view, [it.value[0].value, 1, 1]);
+          break;
+        case "scaleY":
+          scale$1(view, view, [1, it.value[0].value, 1]);
+          break;
+        case "scaleZ":
+          scale$1(view, view, [1, 1, it.value[0].value]);
+          break;
+        case "skewX":
+          var rad = it.value[0].toDeg().toRad();
+          multiply$1(view, view, fromValues$1(1, 0, 0, 0, Math.tan(rad.value), 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
+          break;
+        case "skewY":
+          var rad = it.value[0].toDeg().toRad();
+          multiply$1(view, view, fromValues$1(1, Math.tan(rad.value), 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
+          break;
+        case "skew":
+          const skewX = it.value[0].toDeg().toRad();
+          const skewY = it.value.length > 1 ? it.value[1].toDeg().toRad() : skewX;
+          multiply$1(view, view, fromValues$1(1, Math.tan(skewY.value), 0, 0, Math.tan(skewX.value), 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
+          break;
+        case "matrix":
+          var values = it.value;
+          values = [
+            values[0].value,
+            values[1].value,
+            0,
+            0,
+            values[2].value,
+            values[3].value,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            values[4].value,
+            values[5].value,
+            0,
+            1
+          ];
+          multiply$1(view, view, values);
+          break;
+        case "matrix3d":
+          var values = it.value.map((it2) => it2.value);
+          multiply$1(view, view, values);
+          break;
+        case "perspective":
+          var values = it.value;
+          perspective$1(view, Math.PI * 0.5, width2 / height2, 1, values[0].value);
+          break;
+      }
+    }
+    return view;
+  }
+  static fromScale(scale2) {
+    if (scale2[0] === 1 && scale2[1] === 1) {
+      return "";
+    }
+    const list2 = [];
+    if (scale2[0] != 1)
+      list2.push(`scaleX(${scale2[0]})`);
+    if (scale2[1] != 1)
+      list2.push(`scaleY(${scale2[1]})`);
+    if (scale2[2] != 1)
+      list2.push(`scaleZ(${scale2[2]})`);
+    return list2.join(" ");
+  }
+}
 var rotateLayer = {
   command: "rotateLayer",
   description: "rotate layer by keydown with matrix ",
@@ -19354,18 +15241,6 @@ var __glob_0_101$1 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": setAttributeForMulti
 });
-var setEditorLayout = {
-  command: "setEditorLayout",
-  execute: function(editor, layout2) {
-    editor.setLayout(layout2);
-    editor.emit("changedEditorlayout");
-  }
-};
-var __glob_0_102$1 = /* @__PURE__ */ Object.freeze({
-  __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  "default": setEditorLayout
-});
 var setLocale = {
   command: "setLocale",
   execute: function(editor, locale) {
@@ -19373,7 +15248,7 @@ var setLocale = {
     editor.emit("changed.locale");
   }
 };
-var __glob_0_103$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_102$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": setLocale
@@ -19389,7 +15264,7 @@ var setTimelineOffset = {
     }
   }
 };
-var __glob_0_104$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_103$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": setTimelineOffset
@@ -19400,7 +15275,7 @@ var showExportView = {
     editor.emit("showExportWindow");
   }
 };
-var __glob_0_105$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_104$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": showExportView
@@ -19426,7 +15301,7 @@ var sort_bottom = {
     }
   }
 };
-var __glob_0_106$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_105$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sort_bottom
@@ -19451,7 +15326,7 @@ var sort_center = {
     }
   }
 };
-var __glob_0_107$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_106$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sort_center
@@ -19477,7 +15352,7 @@ var sort_left = {
     }
   }
 };
-var __glob_0_108$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_107$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sort_left
@@ -19502,7 +15377,7 @@ var sort_middle = {
     }
   }
 };
-var __glob_0_109$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_108$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sort_middle
@@ -19528,7 +15403,7 @@ var sort_right = {
     }
   }
 };
-var __glob_0_110$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_109$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sort_right
@@ -19554,7 +15429,7 @@ var sort_top = {
     }
   }
 };
-var __glob_0_111$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_110$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sort_top
@@ -19584,7 +15459,7 @@ var switch_path = {
     }
   }
 };
-var __glob_0_112$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_111$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": switch_path
@@ -19595,7 +15470,7 @@ var toggle_tool_hand = {
     editor.config.toggle("set.tool.hand");
   }
 };
-var __glob_0_113$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_112$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": toggle_tool_hand
@@ -19618,7 +15493,7 @@ var ungroup_item$1 = {
     }
   }
 };
-var __glob_0_114$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_113$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": ungroup_item$1
@@ -19632,7 +15507,7 @@ var updateClipPath = {
     }));
   }
 };
-var __glob_0_115$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_114$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateClipPath
@@ -19655,7 +15530,7 @@ var updateImage = {
     reader.readAsDataURL(imageFileOrBlob);
   }
 };
-var __glob_0_116$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_115$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateImage
@@ -19683,7 +15558,7 @@ var updateImageAssetItem = {
     reader.readAsDataURL(item2);
   }
 };
-var __glob_0_117$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_116$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateImageAssetItem
@@ -19720,7 +15595,7 @@ var updatePathItem = {
     }
   }
 };
-var __glob_0_118$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_117$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updatePathItem
@@ -19750,7 +15625,7 @@ var updateResource = {
     });
   }
 };
-var __glob_0_119$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_118$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateResource
@@ -19763,7 +15638,7 @@ var updateScale = {
     editor.emit("updateViewport", scale2, oldScale);
   }
 };
-var __glob_0_120$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_119$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateScale
@@ -19833,7 +15708,7 @@ var updateUriList = {
     }
   }
 };
-var __glob_0_121$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_120$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateUriList
@@ -19856,7 +15731,7 @@ var updateVideo = {
     reader.readAsDataURL(item2);
   }
 };
-var __glob_0_122$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_121$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateVideo
@@ -19884,7 +15759,7 @@ var updateVideoAssetItem = {
     reader.readAsDataURL(item2);
   }
 };
-var __glob_0_123$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_122$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateVideoAssetItem
@@ -19895,7 +15770,7 @@ var zoom_default$1 = {
     editor.viewport.zoomDefault();
   }
 };
-var __glob_0_124$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_123$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": zoom_default$1
@@ -19906,7 +15781,7 @@ var zoom_in$1 = {
     editor.viewport.zoomIn(0.02);
   }
 };
-var __glob_0_125$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_124$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": zoom_in$1
@@ -19917,7 +15792,7 @@ var zoom_out$1 = {
     editor.viewport.zoomOut(0.02);
   }
 };
-var __glob_0_126$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_125$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": zoom_out$1
@@ -19935,12 +15810,12 @@ var update = {
     }
   }
 };
-var __glob_0_127$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_126$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": update
 });
-const modules$4 = { "./command_list/_currentProject.js": __glob_0_0$4, "./command_list/_doForceRefreshSelection.js": __glob_0_1$4, "./command_list/addArtBoard.js": __glob_0_2$4, "./command_list/addBackgroundColor.js": __glob_0_3$4, "./command_list/addBackgroundImageAsset.js": __glob_0_4$4, "./command_list/addBackgroundImageGradient.js": __glob_0_5$4, "./command_list/addBackgroundImagePattern.js": __glob_0_6$4, "./command_list/addCustomComponent.js": __glob_0_7$4, "./command_list/addImage.js": __glob_0_8$4, "./command_list/addImageAssetItem.js": __glob_0_9$4, "./command_list/addLayer.js": __glob_0_10$4, "./command_list/addLayerView.js": __glob_0_11$4, "./command_list/addProject.js": __glob_0_12$4, "./command_list/addSVGFilterAssetItem.js": __glob_0_13$4, "./command_list/addText.js": __glob_0_14$4, "./command_list/addTimelineCurrentProperty.js": __glob_0_15$4, "./command_list/addTimelineItem.js": __glob_0_16$4, "./command_list/addTimelineKeyframe.js": __glob_0_17$4, "./command_list/addTimelineProperty.js": __glob_0_18$4, "./command_list/addVideo.js": __glob_0_19$4, "./command_list/addVideoAssetItem.js": __glob_0_20$4, "./command_list/clipboard.copy.js": __glob_0_21$3, "./command_list/clipboard.paste.js": __glob_0_22$3, "./command_list/convert.flatten.path.js": __glob_0_23$3, "./command_list/convert.no.transform.path.js": __glob_0_24$3, "./command_list/convert.normalize.path.js": __glob_0_25$2, "./command_list/convert.path.operation.js": __glob_0_26$2, "./command_list/convert.polygonal.path.js": __glob_0_27$2, "./command_list/convert.simplify.path.js": __glob_0_28$2, "./command_list/convert.smooth.path.js": __glob_0_29$2, "./command_list/convert.stroke.to.path.js": __glob_0_30$2, "./command_list/convertPasteText.js": __glob_0_31$2, "./command_list/convertPath.js": __glob_0_32$2, "./command_list/copy.path.js": __glob_0_33$2, "./command_list/copyTimelineProperty.js": __glob_0_34$2, "./command_list/deleteTimelineKeyframe.js": __glob_0_35$2, "./command_list/doubleclick.item.js": __glob_0_36$2, "./command_list/downloadJSON.js": __glob_0_37$2, "./command_list/downloadPNG.js": __glob_0_38$2, "./command_list/downloadSVG.js": __glob_0_39$2, "./command_list/drop.asset.js": __glob_0_40$2, "./command_list/dropImageUrl.js": __glob_0_41$2, "./command_list/editor.config.body.event.js": __glob_0_42$2, "./command_list/fileDropItems.js": __glob_0_43$2, "./command_list/firstTimelineItem.js": __glob_0_44$2, "./command_list/group.item.js": __glob_0_45$2, "./command_list/history.addLayer.js": __glob_0_46$2, "./command_list/history.group.item.js": __glob_0_47$2, "./command_list/history.redo.js": __glob_0_48$2, "./command_list/history.refreshSelection.js": __glob_0_49$2, "./command_list/history.refreshSelectionProject.js": __glob_0_50$2, "./command_list/history.removeLayer.js": __glob_0_51$2, "./command_list/history.removeProject.js": __glob_0_52$1, "./command_list/history.setAttributeForMulti.js": __glob_0_53$1, "./command_list/history.undo.js": __glob_0_54$1, "./command_list/item.move.depth.down.js": __glob_0_55$1, "./command_list/item.move.depth.first.js": __glob_0_56$1, "./command_list/item.move.depth.last.js": __glob_0_57$1, "./command_list/item.move.depth.up.js": __glob_0_58$1, "./command_list/keymap.keydown.js": __glob_0_59$1, "./command_list/keymap.keyup.js": __glob_0_60$1, "./command_list/lastTimelineItem.js": __glob_0_61$1, "./command_list/load.json.js": __glob_0_62$1, "./command_list/moveLayer.js": __glob_0_63$1, "./command_list/moveLayerForItems.js": __glob_0_64$1, "./command_list/moveSelectionToCenter.js": __glob_0_65$1, "./command_list/moveToCenter.js": __glob_0_66$1, "./command_list/newComponent.js": __glob_0_67$1, "./command_list/nextTimelineItem.js": __glob_0_68$1, "./command_list/open.editor.js": __glob_0_69$1, "./command_list/pauseTimelineItem.js": __glob_0_70$1, "./command_list/playTimelineItem.js": __glob_0_71$1, "./command_list/pop.mode.view.js": __glob_0_72$1, "./command_list/prevTimelineItem.js": __glob_0_73$1, "./command_list/push.mode.view.js": __glob_0_74$1, "./command_list/recoverBooleanPath.js": __glob_0_75$1, "./command_list/recoverCursor.js": __glob_0_76$1, "./command_list/refreshArtboard.js": __glob_0_77$1, "./command_list/refreshCursor.js": __glob_0_78$1, "./command_list/refreshElement.js": __glob_0_79$1, "./command_list/refreshHistory.js": __glob_0_80$1, "./command_list/refreshProject.js": __glob_0_81$1, "./command_list/refreshSelectedOffset.js": __glob_0_82$1, "./command_list/removeAnimationItem.js": __glob_0_83$1, "./command_list/removeLayer.js": __glob_0_84$1, "./command_list/removeTimeline.js": __glob_0_85$1, "./command_list/removeTimelineProperty.js": __glob_0_86$1, "./command_list/resetSelection.js": __glob_0_87$1, "./command_list/resizeArtBoard.js": __glob_0_88$1, "./command_list/rotateLayer.js": __glob_0_89$1, "./command_list/same.height.js": __glob_0_90$1, "./command_list/same.width.js": __glob_0_91$1, "./command_list/saveJSON.js": __glob_0_92$1, "./command_list/savePNG.js": __glob_0_93$1, "./command_list/segment.delete.js": __glob_0_94$1, "./command_list/segment.move.down.js": __glob_0_95$1, "./command_list/segment.move.left.js": __glob_0_96$1, "./command_list/segment.move.right.js": __glob_0_97$1, "./command_list/segment.move.up.js": __glob_0_98$1, "./command_list/select.all.js": __glob_0_99$1, "./command_list/selectTimelineItem.js": __glob_0_100$1, "./command_list/setAttributeForMulti.js": __glob_0_101$1, "./command_list/setEditorLayout.js": __glob_0_102$1, "./command_list/setLocale.js": __glob_0_103$1, "./command_list/setTimelineOffset.js": __glob_0_104$1, "./command_list/showExportView.js": __glob_0_105$1, "./command_list/sort.bottom.js": __glob_0_106$1, "./command_list/sort.center.js": __glob_0_107$1, "./command_list/sort.left.js": __glob_0_108$1, "./command_list/sort.middle.js": __glob_0_109$1, "./command_list/sort.right.js": __glob_0_110$1, "./command_list/sort.top.js": __glob_0_111$1, "./command_list/switch.path.js": __glob_0_112$1, "./command_list/toggle.tool.hand.js": __glob_0_113$1, "./command_list/ungroup.item.js": __glob_0_114$1, "./command_list/updateClipPath.js": __glob_0_115$1, "./command_list/updateImage.js": __glob_0_116$1, "./command_list/updateImageAssetItem.js": __glob_0_117$1, "./command_list/updatePathItem.js": __glob_0_118$1, "./command_list/updateResource.js": __glob_0_119$1, "./command_list/updateScale.js": __glob_0_120$1, "./command_list/updateUriList.js": __glob_0_121$1, "./command_list/updateVideo.js": __glob_0_122$1, "./command_list/updateVideoAssetItem.js": __glob_0_123$1, "./command_list/zoom.default.js": __glob_0_124$1, "./command_list/zoom.in.js": __glob_0_125$1, "./command_list/zoom.out.js": __glob_0_126$1, "./command_list/model/update.js": __glob_0_127$1 };
+const modules$4 = { "./command_list/_currentProject.js": __glob_0_0$4, "./command_list/_doForceRefreshSelection.js": __glob_0_1$4, "./command_list/addArtBoard.js": __glob_0_2$4, "./command_list/addBackgroundColor.js": __glob_0_3$4, "./command_list/addBackgroundImageAsset.js": __glob_0_4$4, "./command_list/addBackgroundImageGradient.js": __glob_0_5$4, "./command_list/addBackgroundImagePattern.js": __glob_0_6$4, "./command_list/addCustomComponent.js": __glob_0_7$4, "./command_list/addImage.js": __glob_0_8$4, "./command_list/addImageAssetItem.js": __glob_0_9$4, "./command_list/addLayer.js": __glob_0_10$4, "./command_list/addLayerView.js": __glob_0_11$4, "./command_list/addProject.js": __glob_0_12$4, "./command_list/addSVGFilterAssetItem.js": __glob_0_13$4, "./command_list/addText.js": __glob_0_14$4, "./command_list/addTimelineCurrentProperty.js": __glob_0_15$4, "./command_list/addTimelineItem.js": __glob_0_16$4, "./command_list/addTimelineKeyframe.js": __glob_0_17$4, "./command_list/addTimelineProperty.js": __glob_0_18$4, "./command_list/addVideo.js": __glob_0_19$4, "./command_list/addVideoAssetItem.js": __glob_0_20$4, "./command_list/clipboard.copy.js": __glob_0_21$3, "./command_list/clipboard.paste.js": __glob_0_22$3, "./command_list/convert.flatten.path.js": __glob_0_23$3, "./command_list/convert.no.transform.path.js": __glob_0_24$3, "./command_list/convert.normalize.path.js": __glob_0_25$2, "./command_list/convert.path.operation.js": __glob_0_26$2, "./command_list/convert.polygonal.path.js": __glob_0_27$2, "./command_list/convert.simplify.path.js": __glob_0_28$2, "./command_list/convert.smooth.path.js": __glob_0_29$2, "./command_list/convert.stroke.to.path.js": __glob_0_30$2, "./command_list/convertPasteText.js": __glob_0_31$2, "./command_list/convertPath.js": __glob_0_32$2, "./command_list/copy.path.js": __glob_0_33$2, "./command_list/copyTimelineProperty.js": __glob_0_34$2, "./command_list/deleteTimelineKeyframe.js": __glob_0_35$2, "./command_list/doubleclick.item.js": __glob_0_36$2, "./command_list/downloadJSON.js": __glob_0_37$2, "./command_list/downloadPNG.js": __glob_0_38$2, "./command_list/downloadSVG.js": __glob_0_39$2, "./command_list/drop.asset.js": __glob_0_40$2, "./command_list/dropImageUrl.js": __glob_0_41$2, "./command_list/editor.config.body.event.js": __glob_0_42$2, "./command_list/fileDropItems.js": __glob_0_43$2, "./command_list/firstTimelineItem.js": __glob_0_44$2, "./command_list/group.item.js": __glob_0_45$2, "./command_list/history.addLayer.js": __glob_0_46$2, "./command_list/history.group.item.js": __glob_0_47$2, "./command_list/history.redo.js": __glob_0_48$2, "./command_list/history.refreshSelection.js": __glob_0_49$2, "./command_list/history.refreshSelectionProject.js": __glob_0_50$2, "./command_list/history.removeLayer.js": __glob_0_51$2, "./command_list/history.removeProject.js": __glob_0_52$1, "./command_list/history.setAttributeForMulti.js": __glob_0_53$1, "./command_list/history.undo.js": __glob_0_54$1, "./command_list/item.move.depth.down.js": __glob_0_55$1, "./command_list/item.move.depth.first.js": __glob_0_56$1, "./command_list/item.move.depth.last.js": __glob_0_57$1, "./command_list/item.move.depth.up.js": __glob_0_58$1, "./command_list/keymap.keydown.js": __glob_0_59$1, "./command_list/keymap.keyup.js": __glob_0_60$1, "./command_list/lastTimelineItem.js": __glob_0_61$1, "./command_list/load.json.js": __glob_0_62$1, "./command_list/moveLayer.js": __glob_0_63$1, "./command_list/moveLayerForItems.js": __glob_0_64$1, "./command_list/moveSelectionToCenter.js": __glob_0_65$1, "./command_list/moveToCenter.js": __glob_0_66$1, "./command_list/newComponent.js": __glob_0_67$1, "./command_list/nextTimelineItem.js": __glob_0_68$1, "./command_list/open.editor.js": __glob_0_69$1, "./command_list/pauseTimelineItem.js": __glob_0_70$1, "./command_list/playTimelineItem.js": __glob_0_71$1, "./command_list/pop.mode.view.js": __glob_0_72$1, "./command_list/prevTimelineItem.js": __glob_0_73$1, "./command_list/push.mode.view.js": __glob_0_74$1, "./command_list/recoverBooleanPath.js": __glob_0_75$1, "./command_list/recoverCursor.js": __glob_0_76$1, "./command_list/refreshArtboard.js": __glob_0_77$1, "./command_list/refreshCursor.js": __glob_0_78$1, "./command_list/refreshElement.js": __glob_0_79$1, "./command_list/refreshHistory.js": __glob_0_80$1, "./command_list/refreshProject.js": __glob_0_81$1, "./command_list/refreshSelectedOffset.js": __glob_0_82$1, "./command_list/removeAnimationItem.js": __glob_0_83$1, "./command_list/removeLayer.js": __glob_0_84$1, "./command_list/removeTimeline.js": __glob_0_85$1, "./command_list/removeTimelineProperty.js": __glob_0_86$1, "./command_list/resetSelection.js": __glob_0_87$1, "./command_list/resizeArtBoard.js": __glob_0_88$1, "./command_list/rotateLayer.js": __glob_0_89$1, "./command_list/same.height.js": __glob_0_90$1, "./command_list/same.width.js": __glob_0_91$1, "./command_list/saveJSON.js": __glob_0_92$1, "./command_list/savePNG.js": __glob_0_93$1, "./command_list/segment.delete.js": __glob_0_94$1, "./command_list/segment.move.down.js": __glob_0_95$1, "./command_list/segment.move.left.js": __glob_0_96$1, "./command_list/segment.move.right.js": __glob_0_97$1, "./command_list/segment.move.up.js": __glob_0_98$1, "./command_list/select.all.js": __glob_0_99$1, "./command_list/selectTimelineItem.js": __glob_0_100$1, "./command_list/setAttributeForMulti.js": __glob_0_101$1, "./command_list/setLocale.js": __glob_0_102$1, "./command_list/setTimelineOffset.js": __glob_0_103$1, "./command_list/showExportView.js": __glob_0_104$1, "./command_list/sort.bottom.js": __glob_0_105$1, "./command_list/sort.center.js": __glob_0_106$1, "./command_list/sort.left.js": __glob_0_107$1, "./command_list/sort.middle.js": __glob_0_108$1, "./command_list/sort.right.js": __glob_0_109$1, "./command_list/sort.top.js": __glob_0_110$1, "./command_list/switch.path.js": __glob_0_111$1, "./command_list/toggle.tool.hand.js": __glob_0_112$1, "./command_list/ungroup.item.js": __glob_0_113$1, "./command_list/updateClipPath.js": __glob_0_114$1, "./command_list/updateImage.js": __glob_0_115$1, "./command_list/updateImageAssetItem.js": __glob_0_116$1, "./command_list/updatePathItem.js": __glob_0_117$1, "./command_list/updateResource.js": __glob_0_118$1, "./command_list/updateScale.js": __glob_0_119$1, "./command_list/updateUriList.js": __glob_0_120$1, "./command_list/updateVideo.js": __glob_0_121$1, "./command_list/updateVideoAssetItem.js": __glob_0_122$1, "./command_list/zoom.default.js": __glob_0_123$1, "./command_list/zoom.in.js": __glob_0_124$1, "./command_list/zoom.out.js": __glob_0_125$1, "./command_list/model/update.js": __glob_0_126$1 };
 const obj$1 = {};
 Object.entries(modules$4).forEach(([key, value]) => {
   key = key.replace("./command_list/", "").replace(".js", "");
@@ -20025,6 +15900,138 @@ function os() {
   }
   return osInfo.name;
 }
+const KEY_CODE = {
+  "backspace": 8,
+  "tab": 9,
+  "enter": 13,
+  "escape": 27,
+  "space": 32,
+  "pageup": 33,
+  "pagedown": 34,
+  "end": 35,
+  "home": 36,
+  "left": 37,
+  "up": 38,
+  "right": 39,
+  "down": 40,
+  "insert": 45,
+  "delete": 46,
+  "0": 48,
+  "1": 49,
+  "2": 50,
+  "3": 51,
+  "4": 52,
+  "5": 53,
+  "6": 54,
+  "7": 55,
+  "8": 56,
+  "9": 57,
+  "semicolon": 59,
+  "equals": 61,
+  "a": 65,
+  "b": 66,
+  "c": 67,
+  "d": 68,
+  "e": 69,
+  "f": 70,
+  "g": 71,
+  "h": 72,
+  "i": 73,
+  "j": 74,
+  "k": 75,
+  "l": 76,
+  "m": 77,
+  "n": 78,
+  "o": 79,
+  "p": 80,
+  "q": 81,
+  "r": 82,
+  "s": 83,
+  "t": 84,
+  "u": 85,
+  "v": 86,
+  "w": 87,
+  "x": 88,
+  "y": 89,
+  "z": 90,
+  "multiply": 106,
+  "add": 107,
+  "subtract": 109,
+  "divide": 111,
+  "f1": 112,
+  "f2": 113,
+  "f3": 114,
+  "f4": 115,
+  "f5": 116,
+  "f6": 117,
+  "f7": 118,
+  "f8": 119,
+  "f9": 120,
+  "f10": 121,
+  "f11": 122,
+  "f12": 123,
+  "f13": 124,
+  "f14": 125,
+  "f15": 126,
+  "f16": 127,
+  "f17": 128,
+  "f18": 129,
+  "f19": 130,
+  "comma": 188,
+  ",": 188,
+  "period": 190,
+  ".": 190,
+  "slash": 191,
+  "/": 191,
+  "backquote": 192,
+  "`": 192,
+  "openbracket": 219,
+  "[": 219,
+  "backslash": 220,
+  "\\": 220,
+  "closebracket": 221,
+  "]": 221,
+  "quote": 222,
+  "'": 222,
+  "altgr": 225
+};
+const keyAlias$1 = {
+  "ARROWRIGHT": "\u2192",
+  "ARROWLEFT": "\u2190",
+  "ARROWUP": "\u2191",
+  "ARROWDOWN": "\u2192",
+  "BACKSPACE": "\u232B",
+  "CMD": "\u2318",
+  "SHIFT": "\u21E7",
+  "CTRL": "\u2303",
+  "ALT": "\u2325",
+  "ENTER": "\u21B5",
+  "ESC": "\u238B",
+  "TAB": "\u21E5",
+  "SPACE": "\u2423",
+  "CAPSLOCK": "\u21EA",
+  "DELETE": "\u2326",
+  "INSERT": "\u2324",
+  "HOME": "\u21F1",
+  "END": "\u21F2",
+  "PAGEUP": "\u21DE",
+  "PAGEDOWN": "\u21DF",
+  "PRINTSCREEN": "\u2399",
+  "SCROLLLOCK": "\u21DE",
+  "PAUSE": "\u23CF",
+  "NUMLOCK": "\u21EA",
+  "META": "\u2318",
+  "WINDOWS": "\u2318",
+  "CONTEXTMENU": "\u2325",
+  "COMMAND": "\u2318"
+};
+const OSName$1 = os();
+const KeyStringMaker = (item2, os2 = OSName$1) => {
+  return (item2[os2] || item2.key).split("+").map((it) => it.trim()).map((it) => {
+    const keyString = it.toUpperCase();
+    return keyAlias$1[keyString] || keyString;
+  }).join(" ");
+};
 var add_artboard = {
   category: "Tool",
   key: "a",
@@ -20692,138 +16699,6 @@ var __glob_0_51$1 = /* @__PURE__ */ Object.freeze({
 });
 const modules$3 = { "./shortcuts_list/add.artboard.js": __glob_0_0$3, "./shortcuts_list/add.brush.js": __glob_0_1$3, "./shortcuts_list/add.circle.js": __glob_0_2$3, "./shortcuts_list/add.circle.l.js": __glob_0_3$3, "./shortcuts_list/add.path.js": __glob_0_4$3, "./shortcuts_list/add.rect.js": __glob_0_5$3, "./shortcuts_list/add.rect.m.js": __glob_0_6$3, "./shortcuts_list/add.text.js": __glob_0_7$3, "./shortcuts_list/clipboard.copy.js": __glob_0_8$3, "./shortcuts_list/clipboard.paste.js": __glob_0_9$3, "./shortcuts_list/group.item.js": __glob_0_10$3, "./shortcuts_list/history.redo.js": __glob_0_11$3, "./shortcuts_list/history.undo.js": __glob_0_12$3, "./shortcuts_list/item.move.alt.down.js": __glob_0_13$3, "./shortcuts_list/item.move.alt.left.js": __glob_0_14$3, "./shortcuts_list/item.move.alt.right.js": __glob_0_15$3, "./shortcuts_list/item.move.alt.up.js": __glob_0_16$3, "./shortcuts_list/item.move.depth.down.js": __glob_0_17$3, "./shortcuts_list/item.move.depth.up.js": __glob_0_18$3, "./shortcuts_list/item.move.key.down.js": __glob_0_19$3, "./shortcuts_list/item.move.key.left.js": __glob_0_20$3, "./shortcuts_list/item.move.key.right.js": __glob_0_21$2, "./shortcuts_list/item.move.key.up.js": __glob_0_22$2, "./shortcuts_list/item.move.shift.down.js": __glob_0_23$2, "./shortcuts_list/item.move.shift.left.js": __glob_0_24$2, "./shortcuts_list/item.move.shift.right.js": __glob_0_25$1, "./shortcuts_list/item.move.shift.up.js": __glob_0_26$1, "./shortcuts_list/item.rotate.meta.left.js": __glob_0_27$1, "./shortcuts_list/item.rotate.meta.right.js": __glob_0_28$1, "./shortcuts_list/removeLayer.js": __glob_0_29$1, "./shortcuts_list/removeLayerByDeleteKey.js": __glob_0_30$1, "./shortcuts_list/segment.delete.js": __glob_0_31$1, "./shortcuts_list/segment.move.alt.down.js": __glob_0_32$1, "./shortcuts_list/segment.move.alt.left.js": __glob_0_33$1, "./shortcuts_list/segment.move.alt.right.js": __glob_0_34$1, "./shortcuts_list/segment.move.alt.up.js": __glob_0_35$1, "./shortcuts_list/segment.move.key.down.js": __glob_0_36$1, "./shortcuts_list/segment.move.key.left.js": __glob_0_37$1, "./shortcuts_list/segment.move.key.right.js": __glob_0_38$1, "./shortcuts_list/segment.move.key.up.js": __glob_0_39$1, "./shortcuts_list/segment.move.shift.down.js": __glob_0_40$1, "./shortcuts_list/segment.move.shift.left.js": __glob_0_41$1, "./shortcuts_list/segment.move.shift.right.js": __glob_0_42$1, "./shortcuts_list/segment.move.shift.up.js": __glob_0_43$1, "./shortcuts_list/select.all.js": __glob_0_44$1, "./shortcuts_list/select.view.js": __glob_0_45$1, "./shortcuts_list/set.tool.hand.js": __glob_0_46$1, "./shortcuts_list/show.pan.js": __glob_0_47$1, "./shortcuts_list/ungroup.item.js": __glob_0_48$1, "./shortcuts_list/zoom.default.js": __glob_0_49$1, "./shortcuts_list/zoom.in.js": __glob_0_50$1, "./shortcuts_list/zoom.out.js": __glob_0_51$1 };
 var shortcuts = Object.values(modules$3).map((it) => it.default);
-const KEY_CODE = {
-  "backspace": 8,
-  "tab": 9,
-  "enter": 13,
-  "escape": 27,
-  "space": 32,
-  "pageup": 33,
-  "pagedown": 34,
-  "end": 35,
-  "home": 36,
-  "left": 37,
-  "up": 38,
-  "right": 39,
-  "down": 40,
-  "insert": 45,
-  "delete": 46,
-  "0": 48,
-  "1": 49,
-  "2": 50,
-  "3": 51,
-  "4": 52,
-  "5": 53,
-  "6": 54,
-  "7": 55,
-  "8": 56,
-  "9": 57,
-  "semicolon": 59,
-  "equals": 61,
-  "a": 65,
-  "b": 66,
-  "c": 67,
-  "d": 68,
-  "e": 69,
-  "f": 70,
-  "g": 71,
-  "h": 72,
-  "i": 73,
-  "j": 74,
-  "k": 75,
-  "l": 76,
-  "m": 77,
-  "n": 78,
-  "o": 79,
-  "p": 80,
-  "q": 81,
-  "r": 82,
-  "s": 83,
-  "t": 84,
-  "u": 85,
-  "v": 86,
-  "w": 87,
-  "x": 88,
-  "y": 89,
-  "z": 90,
-  "multiply": 106,
-  "add": 107,
-  "subtract": 109,
-  "divide": 111,
-  "f1": 112,
-  "f2": 113,
-  "f3": 114,
-  "f4": 115,
-  "f5": 116,
-  "f6": 117,
-  "f7": 118,
-  "f8": 119,
-  "f9": 120,
-  "f10": 121,
-  "f11": 122,
-  "f12": 123,
-  "f13": 124,
-  "f14": 125,
-  "f15": 126,
-  "f16": 127,
-  "f17": 128,
-  "f18": 129,
-  "f19": 130,
-  "comma": 188,
-  ",": 188,
-  "period": 190,
-  ".": 190,
-  "slash": 191,
-  "/": 191,
-  "backquote": 192,
-  "`": 192,
-  "openbracket": 219,
-  "[": 219,
-  "backslash": 220,
-  "\\": 220,
-  "closebracket": 221,
-  "]": 221,
-  "quote": 222,
-  "'": 222,
-  "altgr": 225
-};
-const keyAlias$1 = {
-  "ARROWRIGHT": "\u2192",
-  "ARROWLEFT": "\u2190",
-  "ARROWUP": "\u2191",
-  "ARROWDOWN": "\u2192",
-  "BACKSPACE": "\u232B",
-  "CMD": "\u2318",
-  "SHIFT": "\u21E7",
-  "CTRL": "\u2303",
-  "ALT": "\u2325",
-  "ENTER": "\u21B5",
-  "ESC": "\u238B",
-  "TAB": "\u21E5",
-  "SPACE": "\u2423",
-  "CAPSLOCK": "\u21EA",
-  "DELETE": "\u2326",
-  "INSERT": "\u2324",
-  "HOME": "\u21F1",
-  "END": "\u21F2",
-  "PAGEUP": "\u21DE",
-  "PAGEDOWN": "\u21DF",
-  "PRINTSCREEN": "\u2399",
-  "SCROLLLOCK": "\u21DE",
-  "PAUSE": "\u23CF",
-  "NUMLOCK": "\u21EA",
-  "META": "\u2318",
-  "WINDOWS": "\u2318",
-  "CONTEXTMENU": "\u2325",
-  "COMMAND": "\u2318"
-};
-const OSName$1 = os();
-const KeyStringMaker = (item2, os2 = OSName$1) => {
-  return (item2[os2] || item2.key).split("+").map((it) => it.trim()).map((it) => {
-    const keyString = it.toUpperCase();
-    return keyAlias$1[keyString] || keyString;
-  }).join(" ");
-};
 function joinKeys(...args2) {
   return args2.filter(Boolean).join("+");
 }
@@ -20927,81 +16802,4282 @@ class ShortCutManager {
     }
   }
 }
-class ConfigManager {
-  constructor(editor) {
-    this.editor = editor;
-    this.configList = [];
-    this.config = new Map();
+class Offset extends PropertyItem {
+  static parse(obj2) {
+    return new Offset(obj2);
   }
-  load() {
-    const obj2 = this.editor.loadItem("config") || {};
-    Object.keys(obj2).forEach((key) => {
-      this.config.set(key, obj2[key]);
+  getDefaultObject() {
+    return super.getDefaultObject({
+      itemType: "offset",
+      offset: Length.percent(0),
+      color: "rgba(255, 255, 255, 1)",
+      properties: []
     });
   }
-  get(key) {
-    var _a;
-    if (this.config.has(key) === false) {
-      this.config.set(key, (_a = this.configList.find((it) => it.key == key)) == null ? void 0 : _a.defaultValue);
-    }
-    return this.config.get(key);
+  toCloneObject() {
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("offset", "color", "properties"));
   }
-  set(key, value, isSave = true) {
-    const oldValue = this.config.get(key);
-    if (oldValue !== value) {
-      this.config.set(key, value);
-      this.editor.emit("config:" + key, value, oldValue);
-      if (isSave) {
-        this.save();
+  convert(json) {
+    json = super.convert(json);
+    json.offset = Length.parse(json.offset);
+    return json;
+  }
+  toCSSText() {
+    return `${this.json.offset} ${CSS_TO_STRING$1(this.toCSS())}`;
+  }
+  createProperty(data = {}) {
+    return this.addProperty(__spreadValues({
+      checked: true,
+      value: 0
+    }, data));
+  }
+  addProperty(property) {
+    this.json.properties.push(property);
+  }
+  removeProperty(removeIndex) {
+    this.json.properties.splice(removeIndex, 1);
+  }
+  sortItem(arr, startIndex, targetIndex) {
+    arr.splice(targetIndex + (startIndex < targetIndex ? -1 : 0), 0, ...arr.splice(startIndex, 1));
+  }
+  sortProperty(startIndex, targetIndex) {
+    this.sortItem(this.json.properties, startIndex, targetIndex);
+  }
+  updateProperty(index2, data = {}) {
+    Object.assign(this.json.properties[+index2], __spreadValues({}, data));
+  }
+  updatePropertyByKey(key, data = {}) {
+    var arr = this.json.properties;
+    var index2 = -1;
+    for (var i = 0, len2 = arr.length; i < len2; i++) {
+      if (this.json.properties[i].key === key) {
+        index2 = i;
+        break;
+      }
+    }
+    Object.assign(this.json.properties[+index2], __spreadValues({}, data));
+  }
+  toCSS() {
+    var obj2 = {};
+    this.json.properties.forEach((it) => {
+      obj2 = __spreadValues(__spreadValues({}, obj2), it.toCSS());
+    });
+    return obj2;
+  }
+  toString() {
+    return this.toCSSText();
+  }
+}
+class Keyframe extends PropertyItem {
+  static parse(obj2) {
+    return new Keyframe(obj2);
+  }
+  static parseStyle(style) {
+    var keyframes = [];
+    var keyframeKeys = {};
+    if (style["keyframe"]) {
+      var results = convertMatches(style["keyframe"]);
+      results.str.split("|").map((it) => it.trim()).forEach((frameInfo, index2) => {
+        var [name2, offset, property, ...values] = frameInfo.split(" ");
+        var propertyValue = values.join(" ");
+        if (!keyframeKeys[name2]) {
+          keyframeKeys[name2] = new Keyframe({
+            name: name2
+          });
+          keyframes[index2] = name2;
+        }
+        var filteredOffset = keyframeKeys[name2].offsets.filter((it) => {
+          return it.offset.equals(Length.parse(offset));
+        });
+        var offsetObj = null;
+        if (filteredOffset.length) {
+          offsetObj = filteredOffset[0];
+        } else {
+          offsetObj = new Offset({
+            offset: Length.parse(offset)
+          });
+          keyframeKeys[name2].offsets.push(offsetObj);
+        }
+        offsetObj.addProperty({
+          key: property,
+          value: reverseMatches(propertyValue, results.matches)
+        });
+      });
+    }
+    return keyframes.map((name2) => {
+      keyframeKeys[name2].offsets.forEach((offset) => {
+        var vars = [];
+        var properties = [];
+        offset.properties.forEach((p) => {
+          if (p.key.includes("--")) {
+            vars.push(p);
+          } else {
+            properties.push(p);
+          }
+        });
+        let varValue = vars.map((it) => `${it.key}:${it.value}`).join(";");
+        if (vars.length) {
+          properties.push({ key: "var", value: varValue });
+        }
+        offset.properties = properties;
+      });
+      return keyframeKeys[name2];
+    });
+  }
+  getDefaultObject() {
+    return super.getDefaultObject({
+      itemType: "keyframe",
+      name: "sample",
+      selectedType: "list",
+      offsets: []
+    });
+  }
+  toCloneObject() {
+    var { name: name2, selectedType, offsets } = this.json;
+    return __spreadProps(__spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("name", "selectedType")), {
+      offsets: offsets.map((offset) => offset.clone())
+    });
+  }
+  isMultiStyle(key) {
+    switch (key) {
+      case "background-image":
+      case "var":
+        return true;
+    }
+    return false;
+  }
+  getMultiStyleString(p) {
+    switch (p.key) {
+      case "background-image":
+        return p.value.toString() + ";";
+      case "var":
+        var value = (p.value + "").split(";").map((str) => {
+          return `--` + str;
+        }).join(";");
+        return value + ";";
+    }
+    return p.value.toString() + ";";
+  }
+  toOffsetString(it) {
+    var tabString = "      ";
+    return `${it.offset.toString()} {
+${tabString}${it.properties.map((p) => {
+      if (this.isMultiStyle(p.key)) {
+        return this.getMultiStyleString(p);
+      } else {
+        var value = (p.value || "").toString();
+        if (value) {
+          var key = p.key;
+          if (key === "x")
+            key = "left";
+          else if (key === "y")
+            key = "top";
+          return `${key}: ${value};`;
+        } else {
+          return "";
+        }
+      }
+    }).join("").replace(/\;/g, ";\n" + tabString).trim()}
+  }`;
+  }
+  toOffsetText() {
+    var offsets = this.json.offsets.map((it) => {
+      return it;
+    });
+    offsets.sort((a, b) => {
+      return a.offset.value > b.offset.value ? 1 : -1;
+    });
+    return offsets.map((it) => {
+      if (it.properties.length === 0)
+        return "";
+      return this.toOffsetString(it);
+    }).join("\n");
+  }
+  toCSSText() {
+    var offsets = this.json.offsets.map((it) => {
+      return it;
+    });
+    offsets.sort((a, b) => {
+      return a.offset.value > b.offset.value ? 1 : -1;
+    });
+    return `
+@keyframes ${this.json.name} {
+
+  ${this.toOffsetText()}
+
+}
+`;
+  }
+  createOffset(data = {}) {
+    return this.addOffset(new Offset(__spreadValues({
+      checked: true
+    }, data)));
+  }
+  addOffset(offset) {
+    this.json.offsets.push(offset);
+  }
+  removeOffset(removeIndex) {
+    this.json.offsets.splice(removeIndex, 1);
+  }
+  sortItem(arr, startIndex, targetIndex) {
+    arr.splice(targetIndex + (startIndex < targetIndex ? -1 : 0), 0, ...arr.splice(startIndex, 1));
+  }
+  sortOffset(startIndex, targetIndex) {
+    this.sortItem(this.json.offsets, startIndex, targetIndex);
+  }
+  updateOffset(index2, data = {}) {
+    this.json.offsets[+index2].reset(data);
+  }
+  toCSS() {
+    return {};
+  }
+  toString() {
+    return this.toCSSText();
+  }
+}
+class ComponentManager {
+  constructor(editor) {
+    this.editor = editor;
+    this.components = {};
+    this.inspectors = {};
+  }
+  registerComponent(name2, componentProperty) {
+    if (this.components[name2])
+      throw new Error("It has duplicated item name. " + name2);
+    this.components[name2] = componentProperty;
+  }
+  registerInspector(name2, inspectorCallback) {
+    if (this.inspectors[name2])
+      throw new Error("It has duplicated item name. " + name2);
+    this.inspectors[name2] = inspectorCallback;
+  }
+  getComponentClass(name2) {
+    return this.components[name2] || this.components["rect"];
+  }
+  getInspector(name2) {
+    return this.inspectors[name2];
+  }
+  createComponent(itemType, obj2 = {}) {
+    var ComponentClass = this.getComponentClass(itemType);
+    if (!ComponentClass) {
+      throw new Error(`${itemType} type is not valid.`);
+    }
+    return new ComponentClass(obj2);
+  }
+  createInspector(item2, name2 = "") {
+    const inspector = this.getInspector(name2 || item2.itemType);
+    if (isFunction(inspector)) {
+      return inspector(item2) || [];
+    }
+    if (isFunction(item2.getProps)) {
+      return item2.getProps() || [];
+    }
+    return [];
+  }
+}
+const identity$1 = () => true;
+class ModelManager {
+  constructor(editor) {
+    this.editor = editor;
+    this.version = "0.0.0";
+    this.name = "";
+    this.description = "";
+    this.items = new Map();
+    this.projects = [];
+  }
+  load(doc2 = void 0, context = { origin: "*" }) {
+    var _a;
+    const newDoc = doc2 || this.editor.loadItem("model");
+    this.items.clear();
+    this.version = newDoc == null ? void 0 : newDoc.version;
+    this.name = newDoc == null ? void 0 : newDoc.name;
+    this.description = newDoc == null ? void 0 : newDoc.description;
+    (_a = newDoc == null ? void 0 : newDoc.projects) == null ? void 0 : _a.forEach((project2) => {
+      this.createModel(project2);
+    });
+    if (this.projects.length === 0) {
+      this.createProject();
+    }
+  }
+  createProject() {
+    this.createModel({
+      itemType: "project",
+      name: "New Project"
+    });
+  }
+  getProjectByIndex(index2 = 0) {
+    return this.get(this.projects[index2]);
+  }
+  get(id) {
+    return this.items.get(id);
+  }
+  set(id, item2) {
+    this.items.set(id, item2);
+    this.setChanged("set", id, item2);
+  }
+  remove(id) {
+    const obj2 = this.items.get(id);
+    const children2 = obj2.parent.children;
+    const index2 = children2.indexOf(id);
+    obj2.reset({
+      removed: true,
+      removedIndex: index2,
+      removedLeftSibling: index2 > 0 ? children2[index2 - 1] : null,
+      removedRightSibling: index2 < children2.length - 1 ? children2[index2 + 1] : null
+    });
+    this.setChanged("remove", id);
+  }
+  recover(id) {
+    const obj2 = this.items.get(id);
+    const parent = this.getParent(id);
+    if (!obj2.removedLeftSibling && obj2.removedRightSibling) {
+      parent.children.splice(parent.children.findIndex((it) => obj2.removedRightSibling) - 1, 0, id);
+    } else if (obj2.removedLeftSibling && !obj2.removedRightSibling) {
+      parent.children.splice(parent.children.findIndex((it) => obj2.removedLeftSibling) + 1, 0, id);
+    } else {
+      parent.children.splice(obj2.removedIndex, 0, id);
+    }
+    delete obj2.removed;
+    delete obj2.removedLeftSibling;
+    delete obj2.removedRightSibling;
+    delete obj2.removedIndex;
+    this.setChanged("recover", id);
+  }
+  clear() {
+    this.items.clear();
+  }
+  toJSON() {
+    return {
+      version: this.version,
+      name: this.name,
+      description: this.description,
+      projects: this.projects.map((id) => {
+        return this.get(id).toJSON();
+      })
+    };
+  }
+  setChanged(type, id, obj2) {
+    this.editor.emit("changed", type, id, obj2);
+  }
+  removeChild(rootId, childId) {
+    const obj2 = this.get(rootId);
+    obj2.children = obj2.children.filter((it) => it !== childId);
+    this.setChanged("removeChild", rootId, { childId });
+  }
+  hasParent(rootId, parentId) {
+    const obj2 = this.get(rootId);
+    const isParent = obj2.parentId === parentId;
+    if (!isParent && obj2.parent.is("project") === false)
+      return this.hasParent(obj2.parentId, parentId);
+    return isParent;
+  }
+  get components() {
+    return this.editor.components;
+  }
+  searchItem(id) {
+    return this.get(id);
+  }
+  searchLayers(rootId, childId) {
+    const obj2 = this.get(rootId);
+    return this.get(obj2.children.find((it) => it === childId));
+  }
+  searchItemsById(ids) {
+    return ids.map((id) => this.get(id));
+  }
+  hasPathOf(targetItems, searchItem) {
+    const path = this.getPath(searchItem.id, searchItem);
+    return targetItems.filter((it) => it.id !== searchItem.id).some((target) => {
+      return path.find((it) => it.id === target.id);
+    });
+  }
+  findGroupItem(rootId) {
+    const obj2 = this.get(rootId);
+    if (obj2.hasChildren()) {
+      return obj2;
+    }
+    if (obj2.parent && (obj2.parent.is("project") || obj2.parent.is("artboard") || obj2.isBooleanItem)) {
+      return obj2;
+    }
+    return obj2.parent && this.findGroupItem(obj2.parentId);
+  }
+  convertGroupItems(items) {
+    const objectList = {};
+    items.forEach((item2) => {
+      const groupItem = this.findGroupItem(item2.id) || item2;
+      objectList[groupItem.id] = groupItem;
+    });
+    return Object.values(objectList).filter((it) => it.isNot("project"));
+  }
+  searchLiveItemsById(ids) {
+    return ids.map((id) => this.get(id)).filter((it) => !it.removed);
+  }
+  markRemove(ids = []) {
+    ids.forEach((id) => {
+      this.remove(id);
+    });
+    this.setChanged("markRemove", ids, { isLayer: true });
+  }
+  markRemoveProject(id) {
+    const index2 = this.projects.findIndex((it) => it === id);
+    this.projects.splice(index2, 1);
+    this.get(id).removed = true;
+    this.setChanged("markRemoveProject", [id], { isProject: true });
+    return index2;
+  }
+  unmarkRemove(ids = []) {
+    ids.forEach((id) => {
+      this.recover(id);
+    });
+    this.setChanged("unmarkRemove", ids, { isLayer: true });
+  }
+  unmarkRemoveProject(id, index2) {
+    this.projects.splice(index2, 0, id);
+    this.get(id).removed = false;
+    this.setChanged("unmarkRemoveProject", [id], { removed: true, isProject: true });
+  }
+  createModel(itemObject, isRegister = true, context = { origin: "*" }) {
+    const layers2 = itemObject.layers;
+    delete itemObject.layers;
+    let item2;
+    if (this.get(itemObject.id)) {
+      item2 = this.get(itemObject.id);
+      item2.reset(itemObject);
+    } else {
+      item2 = this.components.createComponent(itemObject.itemType, __spreadValues({}, itemObject));
+      item2.setModelManager(this);
+    }
+    if (isRegister) {
+      this.set(item2.id, item2);
+      if (item2.is("project")) {
+        this.projects = [...new Set([...this.projects, item2.id])];
+      }
+    }
+    const children2 = (layers2 || []).map((it) => {
+      return this.createModel(__spreadProps(__spreadValues({}, it), { parentId: item2.id }), true, context);
+    });
+    item2.reset({
+      children: children2.map((it) => {
+        return it.id;
+      })
+    }, context);
+    return item2;
+  }
+  getAllLayers(rootId, filterCallback = identity$1) {
+    var results = [];
+    const obj2 = this.get(rootId);
+    let len2 = obj2.children.length;
+    for (let start2 = len2; start2--; ) {
+      let id = obj2.children[start2];
+      results.push(...this.getAllLayers(id, filterCallback));
+    }
+    if (isFunction(filterCallback) && filterCallback(obj2)) {
+      results.push(obj2);
+    }
+    return results;
+  }
+  getLayers(rootId, defaultRef = null) {
+    var _a;
+    const obj2 = this.get(rootId) || defaultRef;
+    return (_a = obj2 == null ? void 0 : obj2.children) == null ? void 0 : _a.map((childId) => this.get(childId));
+  }
+  eachLayers(rootId, callback) {
+    const obj2 = this.get(rootId);
+    let len2 = obj2.children.length;
+    for (let start2 = len2; start2--; ) {
+      let id = obj2.children[start2];
+      callback(this.get(id));
+    }
+  }
+  mapLayers(rootId, callback) {
+    const obj2 = this.get(rootId);
+    return obj2.children.map((childId) => {
+      return callback(this.get(childId));
+    });
+  }
+  getParent(rootId) {
+    var _a;
+    return this.get((_a = this.get(rootId)) == null ? void 0 : _a.parentId);
+  }
+  getDepth(rootId) {
+    const parent = this.getParent(rootId);
+    if (!parent)
+      return 1;
+    return this.getDepth(parent.id) + 1;
+  }
+  getRoot(rootId) {
+    const obj2 = this.get(rootId);
+    const parent = this.getParent(rootId);
+    if (!parent)
+      return obj2;
+    let localParent = parent;
+    do {
+      const nextParent = this.getParent(localParent.id);
+      if (!nextParent) {
+        return localParent;
+      }
+      localParent = nextParent;
+    } while (localParent);
+  }
+  getPath(rootId, defaultRef = null) {
+    const obj2 = this.get(rootId) || defaultRef;
+    const parent = this.getParent(rootId);
+    if (!parent)
+      return [obj2];
+    const list2 = this.getPath(parent.id);
+    list2.push(obj2);
+    return list2;
+  }
+  getModelTypeInPath(rootId, itemType) {
+    return this.getPath(rootId).find((it) => it && it.is(itemType));
+  }
+  getItemInPath(rootId, targetId) {
+    return this.getPath(rootId).find((it) => it && it.id === targetId);
+  }
+  getProject(rootId) {
+    return this.getModelTypeInPath(rootId, "project");
+  }
+  getArtBoard(rootId) {
+    return this.getModelTypeInPath(rootId, "artboard");
+  }
+  is(rootId, checkItemType) {
+    const obj2 = this.get(rootId);
+    return checkItemType === obj2.itemType;
+  }
+  isNot(rootId, checkItemType) {
+    return this.is(rootId, checkItemType) === false;
+  }
+  attrs(rootId, ...args2) {
+    const obj2 = this.get(rootId);
+    const result = {};
+    args2.forEach((field) => {
+      result[field] = clone$1(obj2[field]);
+    });
+    return result;
+  }
+  hasChildren(rootId) {
+    var _a;
+    return ((_a = this.get(rootId)) == null ? void 0 : _a.children.length) > 0;
+  }
+  clone(rootId, isDeep = true) {
+    const obj2 = this.get(rootId);
+    const json = obj2.toCloneObject(isDeep);
+    const item2 = this.createModel(json);
+    item2.setParentId(obj2.parentId);
+    return item2;
+  }
+  reset(rootId, obj2) {
+    var _a;
+    return (_a = this.get(rootId)) == null ? void 0 : _a.reset(obj2);
+  }
+  appendChild(rootId, childId) {
+    this.get(rootId);
+    this.get(childId);
+    this.json.children.push(layer.id);
+    layer.offsetInParent = this.json.children[last - 1].offset + 0.1;
+  }
+  replaceByType(rootId, itemType) {
+    const item2 = this.get(rootId);
+    if (item2) {
+      const json = item2.toCloneObject(false);
+      delete json.itemType;
+      const newInstance = this.components.createComponent(itemType, json);
+      newInstance.setModelManager(this);
+      this.set(rootId, newInstance);
+    }
+  }
+}
+class BaseModel {
+  constructor(json = {}, modelManager) {
+    this.modelManager = modelManager;
+    const self2 = this;
+    this.ref = new Proxy(self2, {
+      get(target, key) {
+        if (self2.hasCache(key)) {
+          return self2.getCache(key);
+        }
+        const prop = self2[key];
+        if (isFunction(prop)) {
+          if (!self2.hasCache(key)) {
+            self2.addCache(key, (...args2) => {
+              return prop.apply(self2, args2);
+            });
+          }
+          return self2.getCache(key);
+        } else {
+          return isNotUndefined(prop) ? prop : self2.json[key];
+        }
+      },
+      set(target, key, value) {
+        const isDiff = self2.json[key] != value;
+        if (isDiff) {
+          self2.reset({ [key]: value });
+        }
+        return true;
+      },
+      deleteProperty(target, key) {
+        self2.reset({ [key]: void 0 });
+      }
+    });
+    this.json = this.convert(Object.assign(this.getDefaultObject(), json));
+    this.lastChangedField = {};
+    this.lastChangedFieldKeys = [];
+    this.cachedValue = {};
+    this.timestamp = 0;
+    return this.ref;
+  }
+  setModelManager(modelManager) {
+    this.modelManager = modelManager;
+  }
+  getDefaultTitle() {
+    return "Item";
+  }
+  getIcon() {
+    return "";
+  }
+  isChanged(timestamp) {
+    return this.timestamp != Number(timestamp);
+  }
+  changed() {
+    this.timestamp += Date.now();
+  }
+  get title() {
+    return this.json.name || this.getDefaultTitle();
+  }
+  renameWithCount() {
+    let arr = this.json.name.split(" ");
+    if (arr.length < 2) {
+      return;
+    }
+    let last2 = arr.pop();
+    let lastNumber = +last2;
+    if (isNumber(lastNumber) && isNaN(lastNumber) === false) {
+      lastNumber++;
+    } else {
+      lastNumber = last2;
+    }
+    const nextName = [...arr, lastNumber].join(" ");
+    this.reset({
+      name: nextName
+    });
+  }
+  get allLayers() {
+    return this.modelManager.getAllLayers(this.id);
+  }
+  filteredAllLayers(filterCallback) {
+    return this.modelManager.getAllLayers(this.id, filterCallback);
+  }
+  get id() {
+    return this.json.id;
+  }
+  get layers() {
+    return this.modelManager.getLayers(this.id, this.ref);
+  }
+  get parentId() {
+    return this.json.parentId;
+  }
+  get parent() {
+    if (!this.parentId)
+      return void 0;
+    return this.modelManager.get(this.parentId);
+  }
+  setParentId(parentId) {
+    this.reset({ parentId });
+    this.modelManager.setChanged("setParentId", this.id, { parentId });
+  }
+  get depth() {
+    return this.modelManager.getDepth(this.id);
+  }
+  get top() {
+    return this.modelManager.getRoot(this.id);
+  }
+  get project() {
+    return this.modelManager.getProject(this.id);
+  }
+  get artboard() {
+    return this.modelManager.getArtBoard(this.id);
+  }
+  get path() {
+    return this.modelManager.getPath(this.id, this.ref);
+  }
+  get pathIds() {
+    return this.path.map((it) => it.id);
+  }
+  get childrenLength() {
+    return this.json.children.length;
+  }
+  getInnerId(postfix = "") {
+    return this.json.id + postfix;
+  }
+  is(checkItemType) {
+    return this.json.itemType === checkItemType;
+  }
+  isNot(checkItemType) {
+    return this.is(checkItemType) === false;
+  }
+  get(key) {
+    return this.json[key];
+  }
+  isSVG() {
+    return false;
+  }
+  addCache(key, value) {
+    this.cachedValue[key] = value;
+  }
+  getCache(key) {
+    return this.cachedValue[key];
+  }
+  hasCache(key) {
+    return Boolean(this.cachedValue[key]);
+  }
+  computed(key, newValueCallback, isForce = false) {
+    const cachedKey = `__cachedKey_${key}`;
+    const parsedKey = `${cachedKey}__parseValue`;
+    const value = this.json[key];
+    if (isForce)
+      ;
+    else {
+      if (this.getCache(cachedKey) === value && this.getCache(parsedKey)) {
+        return this.getCache(parsedKey);
+      }
+    }
+    this.addCache(cachedKey, value);
+    this.addCache(parsedKey, newValueCallback(value, this.ref));
+    return this.getCache(parsedKey);
+  }
+  computedValue(key) {
+    const cachedKey = `__cachedKey_${key}`;
+    const parsedKey = `${cachedKey}__parseValue`;
+    return this.getCache(parsedKey);
+  }
+  editable(editablePropertyName) {
+    return true;
+  }
+  generateListNumber() {
+    this.layers.forEach((it, index2) => {
+      it.no = index2;
+      it.generateListNumber();
+    });
+  }
+  convert(json = {}) {
+    return json;
+  }
+  setCache() {
+  }
+  toCloneObject(isDeep = true) {
+    var json = this.attrs("itemType", "name", "elementType", "type", "selected", "parentId", "children");
+    if (isDeep) {
+      json.layers = this.json.children.map((childId) => {
+        return this.modelManager.clone(childId, isDeep);
+      });
+    }
+    return json;
+  }
+  clone(isDeep = true) {
+    return this.modelManager.clone(this.id, isDeep);
+  }
+  isChangedValue(obj2) {
+    return true;
+  }
+  reset(obj2, context = { origin: "*" }) {
+    const isChanged = this.isChangedValue(obj2);
+    if (isChanged) {
+      this.json = this.convert(Object.assign(this.json, obj2));
+      this.lastChangedField = obj2;
+      this.lastChangedFieldKeys = Object.keys(obj2);
+      if (context.origin === "*") {
+        this.modelManager.setChanged("reset", this.id, obj2);
+      }
+      this.changed();
+    }
+    return true;
+  }
+  hasChangedField(...args2) {
+    return args2.some((it) => this.lastChangedField[it] !== void 0);
+  }
+  getDefaultObject(obj2 = {}) {
+    var id = obj2.id || uuid();
+    return __spreadValues({
+      id,
+      children: [],
+      offsetInParent: 1,
+      parentId: ""
+    }, obj2);
+  }
+  attrs(...args2) {
+    const result = {};
+    args2.forEach((field) => {
+      if (isNotUndefined(this.get(field))) {
+        result[field] = clone$1(this.get(field));
+      }
+    });
+    return result;
+  }
+  hasChildren() {
+    return this.json.children.length > 0;
+  }
+  appendChild(layer2) {
+    if (layer2.parentId === this.id) {
+      const hasId = this.json.children.find((it) => it === layer2.id);
+      if (Boolean(hasId) === false) {
+        this.json.children.push(layer2.id);
+        this.modelManager.setChanged("appendChild", this.id, { child: layer2.id, oldParentId: layer2.parentId });
+      }
+      return layer2;
+    }
+    this.resetMatrix(layer2);
+    if (layer2.parent) {
+      layer2.remove();
+    }
+    layer2.setParentId(this.id);
+    this.json.children.push(layer2.id);
+    return layer2;
+  }
+  resetMatrix(item2) {
+  }
+  refreshMatrixCache() {
+  }
+  insertChild(layer2, index2 = 0) {
+    this.resetMatrix(layer2);
+    if (layer2.parent) {
+      layer2.remove();
+    }
+    layer2.setParentId(this.id);
+    this.json.children.splice(index2, 0, layer2.id);
+    this.modelManager.setChanged("insertChild", this.id, { childId: layer2.id, index: 0 });
+    return layer2;
+  }
+  appendAfter(layer2) {
+    const index2 = this.parent.findIndex(this);
+    this.parent.insertChild(layer2, index2 + 1);
+    return layer2;
+  }
+  appendBefore(layer2) {
+    const index2 = this.parent.findIndex(this);
+    this.parent.insertChild(layer2, index2 - 1);
+    return layer2;
+  }
+  toggle(field, toggleValue) {
+    if (isUndefined(toggleValue)) {
+      this.reset({
+        [field]: !this.json[field]
+      });
+    } else {
+      this.reset({
+        [field]: !!toggleValue
+      });
+    }
+  }
+  isTreeItemHide() {
+    let currentParent = this.parent;
+    let collapsedList = [];
+    do {
+      if (currentParent.is("project"))
+        break;
+      collapsedList.push(Boolean(currentParent.collapsed));
+      currentParent = currentParent.parent;
+    } while (currentParent);
+    return Boolean(collapsedList.filter(Boolean).length);
+  }
+  expectJSON(key) {
+    if (isUndefined(this.json[key]))
+      return false;
+    return true;
+  }
+  toJSON() {
+    const json = this.json;
+    let newJSON = {};
+    Object.keys(json).filter((key) => this.expectJSON(key)).forEach((key) => {
+      newJSON[key] = json[key];
+    });
+    if (this.hasChildren()) {
+      newJSON.layers = this.json.children.map((childId) => {
+        var _a;
+        return (_a = this.modelManager.get(childId)) == null ? void 0 : _a.toJSON();
+      });
+    }
+    return newJSON;
+  }
+  resize() {
+  }
+  copy(dist2 = 0) {
+    return this.parent.copyItem(this.id, dist2);
+  }
+  findIndex(item2) {
+    return this.json.children.indexOf(item2.id);
+  }
+  find(id) {
+    return this.modelManager.get(id);
+  }
+  copyItem(childItemId, dist2 = 10) {
+    const childItem = this.modelManager.get(childItemId);
+    var child = childItem.clone();
+    child.renameWithCount();
+    child.absoluteMove([dist2, dist2, 0]);
+    var childIndex = this.findIndex(childItem);
+    if (childIndex > -1) {
+      this.json.children.push(child.id);
+    }
+    return child;
+  }
+  remove() {
+    this.parent.removeChild(this.id);
+  }
+  removeChild(childItemId) {
+    return this.modelManager.removeChild(this.id, childItemId);
+  }
+  hasParent(parentId) {
+    return this.modelManager.hasParent(this.id, parentId);
+  }
+  to(itemType) {
+  }
+}
+class AssetModel extends BaseModel {
+  getDefaultObject(obj2 = {}) {
+    return super.getDefaultObject(__spreadValues({
+      comments: [],
+      colors: [],
+      gradients: [],
+      svgfilters: [],
+      svgimages: [],
+      keyframes: [],
+      images: [],
+      imageKeys: [],
+      videos: [],
+      videoKeys: [],
+      audios: []
+    }, obj2));
+  }
+  addKeyframe(keyframe2) {
+    this.json.keyframes.push(keyframe2);
+    return keyframe2;
+  }
+  createKeyframe(data = {}) {
+    return this.addKeyframe(new Keyframe(__spreadValues({
+      checked: true
+    }, data)));
+  }
+  removeKeyframe(removeIndex) {
+    this.removePropertyList(this.json.keyframes, removeIndex);
+  }
+  sortItem(arr, startIndex, targetIndex) {
+    arr.splice(targetIndex + (startIndex < targetIndex ? -1 : 0), 0, ...arr.splice(startIndex, 1));
+  }
+  sortKeyframe(startIndex, targetIndex) {
+    this.sortItem(this.json.keyframes, startIndex, targetIndex);
+  }
+  updateKeyframe(index2, data = {}) {
+    this.json.keyframes[+index2].reset(data);
+  }
+  toKeyframeString(isAnimate = false) {
+    return this.json.keyframes.map((keyframe2) => keyframe2.toString(isAnimate)).join("\n\n");
+  }
+  copyPropertyList(arr, index2) {
+    var copyObject = __spreadValues({}, arr[index2]);
+    arr.splice(index2, 0, copyObject);
+  }
+  toCloneObject() {
+    this.json;
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("colors", "gradients", "svgfilters", "svgimages", "images", "keyframes"));
+  }
+  removePropertyList(arr, removeIndex) {
+    arr.splice(removeIndex, 1);
+  }
+  removeColor(removeIndex) {
+    this.removePropertyList(this.json.colors, removeIndex);
+  }
+  copyColor(index2) {
+    this.copyPropertyList(this.json.colors, index2);
+  }
+  sortColor(startIndex, targetIndex) {
+    this.sortItem(this.json.colors, startIndex, targetIndex);
+  }
+  setColorValue(index2, value = {}) {
+    this.json.colors[index2] = __spreadValues(__spreadValues({}, this.json.colors[index2]), value);
+  }
+  getColorIndex(index2) {
+    return this.json.colors[index2];
+  }
+  getColor(name2) {
+    return this.json.colors.filter((item2) => item2.name === name2)[0];
+  }
+  addColor(obj2) {
+    this.json.colors.push(obj2);
+    return obj2;
+  }
+  createColor(data = {}) {
+    return this.addColor(data);
+  }
+  removeImage(removeIndex) {
+    this.removePropertyList(this.json.images, removeIndex);
+    this.refreshImageKeys();
+  }
+  copyImage(index2) {
+    this.copyPropertyList(this.json.images, index2);
+    this.refreshImageKeys();
+  }
+  sortImage(startIndex, targetIndex) {
+    this.sortItem(this.json.images, startIndex, targetIndex);
+  }
+  setImageValue(index2, value = {}) {
+    this.json.images[index2] = __spreadValues(__spreadValues({}, this.json.images[index2]), value);
+    this.refreshImageKeys();
+  }
+  getImageValueById(id, defaultValue = "") {
+    const image2 = this.json.imageKeys[id];
+    if (!image2)
+      return id || defaultValue;
+    return image2.local;
+  }
+  getImageDataURIById(id) {
+    const image2 = this.json.imageKeys[id];
+    if (!image2)
+      return void 0;
+    return image2.original;
+  }
+  refreshImageKeys() {
+    let imageKeys = {};
+    this.json.images.forEach((it) => {
+      imageKeys[it.id] = it;
+    });
+    this.reset({
+      imageKeys
+    });
+  }
+  addImage(obj2) {
+    this.json.images.push(obj2);
+    this.refreshImageKeys();
+    return obj2;
+  }
+  createImage(data = {}) {
+    return this.addImage(data);
+  }
+  removeVideo(removeIndex) {
+    this.removePropertyList(this.json.videos, removeIndex);
+    this.refreshVideoKeys();
+  }
+  copyVideo(index2) {
+    this.copyPropertyList(this.json.videos, index2);
+    this.refreshVideoKeys();
+  }
+  sortVideo(startIndex, targetIndex) {
+    this.sortItem(this.json.videos, startIndex, targetIndex);
+  }
+  setVideoValue(index2, value = {}) {
+    this.json.videos[index2] = __spreadValues(__spreadValues({}, this.json.videos[index2]), value);
+  }
+  getVideoValueById(id) {
+    const video2 = this.json.videoKeys[id];
+    if (!video2)
+      return void 0;
+    return video2.local;
+  }
+  refreshVideoKeys() {
+    let videoKeys = {};
+    this.json.videos.forEach((it) => {
+      videoKeys[it.id] = it;
+    });
+    this.reset({
+      videoKeys
+    });
+  }
+  addVideo(obj2) {
+    this.json.videos.push(obj2);
+    this.refreshVideoKeys();
+    return obj2;
+  }
+  createVideo(data = {}) {
+    return this.addVideo(data);
+  }
+  removeGradient(removeIndex) {
+    this.removePropertyList(this.json.gradients, removeIndex);
+  }
+  copyGradient(index2) {
+    this.copyPropertyList(this.json.gradients, index2);
+  }
+  sortGradient(startIndex, targetIndex) {
+    this.sortItem(this.json.gradients, startIndex, targetIndex);
+  }
+  setGradientValue(index2, value) {
+    this.json.gradients[index2] = __spreadValues(__spreadValues({}, this.json.gradients[index2]), value);
+  }
+  getGradientIndex(index2) {
+    return this.json.gradients[index2];
+  }
+  getGradient(name2) {
+    return this.json.gradients.filter((item2) => item2.name === name2)[0];
+  }
+  addGradient(obj2 = {}) {
+    this.json.gradients.push(obj2);
+    return obj2;
+  }
+  createGradient(data = {}) {
+    return this.addGradient(data);
+  }
+  getSVGFilterIndex(id) {
+    var _a;
+    var filter2 = this.json.svgfilters.map((it, index2) => {
+      return { id: it.id, index: index2 };
+    }).filter((it) => {
+      return it.id === id;
+    });
+    return filter2.length ? (_a = filter2 == null ? void 0 : filter2[0]) == null ? void 0 : _a.index : -1;
+  }
+  removeSVGFilter(removeIndex) {
+    this.removePropertyList(this.json.svgfilters, removeIndex);
+  }
+  copySVGFilter(index2) {
+    this.copyPropertyList(this.json.svgfilters, index2);
+  }
+  sortSVGFilter(startIndex, targetIndex) {
+    this.sortItem(this.json.svgfilters, startIndex, targetIndex);
+  }
+  setSVGFilterValue(index2, value) {
+    this.json.svgfilters[index2] = __spreadValues(__spreadValues({}, this.json.svgfilters[index2]), value);
+  }
+  addSVGFilter(obj2 = {}) {
+    this.json.svgfilters.push(obj2);
+    var index2 = this.json.svgfilters.length - 1;
+    return index2;
+  }
+  createSVGFilter(data = {}) {
+    return this.addSVGFilter(data);
+  }
+  getSVGImageIndex(id) {
+    var filter2 = this.json.svgimages.map((it, index2) => {
+      return { id: it.id, index: index2 };
+    }).filter((it) => {
+      return it.id === id;
+    })[0];
+    return filter2 ? filter2.index : -1;
+  }
+  removeSVGImage(removeIndex) {
+    this.removePropertyList(this.json.svgimages, removeIndex);
+  }
+  copySVGImage(index2) {
+    this.copyPropertyList(this.json.svgimages, index2);
+  }
+  sortSVGImage(startIndex, targetIndex) {
+    this.sortItem(this.json.svgimages, startIndex, targetIndex);
+  }
+  setSVGImageValue(index2, value) {
+    this.json.svgimages[index2] = __spreadValues(__spreadValues({}, this.json.svgimages[index2]), value);
+  }
+  addSVGImage(obj2 = {}) {
+    this.json.svgimages.push(obj2);
+    var index2 = this.json.svgimages.length - 1;
+    return index2;
+  }
+  createSVGImage(data = {}) {
+    return this.addSVGImage(data);
+  }
+}
+function makeInterpolateNumber$1(layer2, property, startNumber, endNumber, unit = void 0) {
+  return (rate, t) => {
+    var result = 0;
+    if (t === 0) {
+      result = startNumber;
+    } else if (t === 1) {
+      result = endNumber;
+    } else {
+      result = startNumber + (endNumber - startNumber) * rate;
+    }
+    if (unit) {
+      return result + unit;
+    }
+    return result;
+  };
+}
+function makeInterpolateIdentity$1(layer2, property, value) {
+  return (ratio, t) => {
+    return value;
+  };
+}
+function getRealAttributeValue(layer2, property, value, refType = "width", refElement = "parent") {
+  var refObject = null;
+  if (refElement === "parent") {
+    refObject = layer2[refElement][refType];
+  } else if (refElement === "self") {
+    refObject = layer2[refType];
+  }
+  if (refObject) {
+    return value.toPx(refObject.value);
+  }
+  return value;
+}
+function rollbackRealAttributeValue(layer2, property, value, unit, refType = "width", refElement = "parent") {
+  var refObject = null;
+  if (refElement === "parent") {
+    refObject = layer2[refElement][refType];
+  } else if (refElement === "self") {
+    refObject = layer2[refType];
+  }
+  if (refObject) {
+    return value.to(unit, refObject.value);
+  }
+  return value;
+}
+function makeInterpolateLength(layer2, property, startNumber, endNumber, refType = "width", refElement = "parent") {
+  var s = Length.parse(startNumber);
+  var e2 = Length.parse(endNumber);
+  if (s.unit === e2.unit) {
+    return makeInterpolateNumber$1(layer2, property, s.value, e2.value, s.unit);
+  } else if (s.equals(e2)) {
+    return makeInterpolateIdentity$1(layer2, property, s);
+  }
+  return (rate, t) => {
+    var realStartValue = getRealAttributeValue(layer2, property, s, refType, refElement);
+    var realEndValue = getRealAttributeValue(layer2, property, e2, refType, refElement);
+    if (t === 0) {
+      return realStartValue;
+    } else if (t === 1) {
+      return realEndValue;
+    }
+    return rollbackRealAttributeValue(layer2, property, realStartValue.value + (realEndValue.value - realStartValue.value) * rate, s.unit, refType, refElement);
+  };
+}
+class BorderRadius {
+  static parseStyle(str = "") {
+    var obj2 = {
+      isAll: true,
+      "border-radius": 0,
+      "border-top-left-radius": 0,
+      "border-top-right-radius": 0,
+      "border-bottom-right-radius": 0,
+      "border-bottom-left-radius": 0
+    };
+    var arr = str.split(" ").filter((it) => Length.parse(it));
+    if (arr.length === 1) {
+      obj2.isAll = true;
+      obj2["border-radius"] = arr[0];
+    } else {
+      obj2.isAll = false;
+      obj2["border-top-left-radius"] = arr[0];
+      obj2["border-top-right-radius"] = arr[1];
+      obj2["border-bottom-right-radius"] = arr[2];
+      obj2["border-bottom-left-radius"] = arr[3];
+    }
+    return obj2;
+  }
+}
+const getBorderRadiusList = (radiusValue) => {
+  var startObject = [];
+  if (radiusValue.isAll) {
+    startObject = [
+      radiusValue["border-radius"] || "0px",
+      radiusValue["border-radius"] || "0px",
+      radiusValue["border-radius"] || "0px",
+      radiusValue["border-radius"] || "0px"
+    ];
+  } else {
+    startObject = [
+      radiusValue["border-top-left-radius"] || "0px",
+      radiusValue["border-top-right-radius"] || "0px",
+      radiusValue["border-bottom-right-radius"] || "0px",
+      radiusValue["border-bottom-left-radius"] || "0px"
+    ];
+  }
+  return startObject;
+};
+function makeInterpolateBorderRadius(layer2, property, startValue, endValue) {
+  var s = getBorderRadiusList(BorderRadius.parseStyle(startValue));
+  var e2 = getBorderRadiusList(BorderRadius.parseStyle(endValue));
+  var max = Math.max(s.length, e2.length);
+  var list2 = [];
+  for (var i = 0; i < max; i++) {
+    list2[i] = makeInterpolateLength(layer2, property, s[i], e2[i]);
+  }
+  return (rate, t) => {
+    return list2.map((it) => it(rate, t)).join(" ");
+  };
+}
+class BoxShadow extends PropertyItem {
+  static parse(obj2) {
+    return new BoxShadow(obj2);
+  }
+  static parseStyle(str) {
+    var boxShadows = [];
+    str = str.trim();
+    if (!str)
+      return boxShadows;
+    var results = convertMatches(str);
+    boxShadows = results.str.split(",").filter((it) => it.trim()).map((shadow2) => {
+      var values = shadow2.trim().split(" ");
+      var insets = values.filter((it) => it === BoxShadowStyle.INSET);
+      var colors2 = values.filter((it) => it.includes("@")).map((it) => {
+        return reverseMatches(it, results.matches);
+      });
+      var numbers = values.filter((it) => {
+        return it !== BoxShadowStyle.INSET && !it.includes("@");
+      });
+      return BoxShadow.parse({
+        inset: !!insets.length ? BoxShadowStyle.INSET : BoxShadowStyle.OUTSET,
+        color: colors2[0] || "rgba(0, 0, 0, 1)",
+        offsetX: Length.parse(numbers[0] || "0px"),
+        offsetY: Length.parse(numbers[1] || "0px"),
+        blurRadius: Length.parse(numbers[2] || "0px"),
+        spreadRadius: Length.parse(numbers[3] || "0px")
+      });
+    });
+    return boxShadows;
+  }
+  static join(list2) {
+    return list2.map((it) => BoxShadow.parse(it)).join(", ");
+  }
+  getDefaultObject() {
+    return super.getDefaultObject({
+      itemType: "box-shadow",
+      inset: false,
+      offsetX: 0,
+      offsetY: 0,
+      blurRadius: 0,
+      spreadRadius: 0,
+      color: "rgba(0, 0, 0, 1)"
+    });
+  }
+  toCloneObject() {
+    this.json;
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("inset", "offsetX", "offsetY", "blurRadius", "spreadRadius", "color"));
+  }
+  convert(json) {
+    json = super.convert(json);
+    if (isNumber(json.offsetX))
+      json.offsetX = Length.px(json.offsetX);
+    else if (json.offsetX)
+      json.offsetX = Length.parse(json.offsetX);
+    if (isNumber(json.offsetY))
+      json.offsetY = Length.px(json.offsetY);
+    else if (json.offsetY)
+      json.offsetY = Length.parse(json.offsetY);
+    if (isNumber(json.blurRadius))
+      json.blurRadius = Length.px(json.blurRadius);
+    else if (json.blurRadius)
+      json.blurRadius = Length.parse(json.blurRadius);
+    if (isNumber(json.spreadRadius))
+      json.spreadRadius = Length.px(json.spreadRadius);
+    else if (json.spreadRadius)
+      json.spreadRadius = Length.parse(json.spreadRadius);
+    return json;
+  }
+  toCSS() {
+    return {
+      "box-shadow": this.toString()
+    };
+  }
+  toString() {
+    var json = this.json;
+    return `${json.inset === BoxShadowStyle.INSET ? "inset " : ""}${json.offsetX} ${json.offsetY} ${json.blurRadius} ${json.spreadRadius} ${json.color}`;
+  }
+}
+function makeInterpolateBoolean(layer2, property, s, e2) {
+  return (ratio, t) => {
+    if (t === 1) {
+      return e2;
+    }
+    return s;
+  };
+}
+function makeInterpolateColor(layer2, property, startColor, endColor) {
+  var s = Color.parse(startColor || "rgba(0, 0, 0, 1)");
+  var e2 = Color.parse(endColor || "rgba(0, 0, 0, 1)");
+  return (rate, t) => {
+    if (t === 0) {
+      return startColor;
+    } else if (t === 1) {
+      return endColor;
+    }
+    return interpolateRGB(s, e2, rate, "rgb");
+  };
+}
+function makeInterpolateBoxShadow(layer2, property, startValue, endValue) {
+  var s = BoxShadow.parseStyle(startValue);
+  var e2 = BoxShadow.parseStyle(endValue);
+  var totalLength = Math.max(s.length, e2.length);
+  var list2 = [];
+  for (var i = 0, len2 = totalLength; i < len2; i++) {
+    var startObject = s[i] || BoxShadow.parseStyle("0px 0px 0px 0px rgba(0, 0, 0, 0)")[0];
+    var endObject = e2[i] || BoxShadow.parseStyle("0px 0px 0px 0px rgba(0, 0, 0, 0)")[0];
+    list2.push({
+      inset: makeInterpolateBoolean(layer2, property, startObject.inset, endObject.inset),
+      offsetX: makeInterpolateLength(layer2, property, startObject.offsetX, endObject.offsetX),
+      offsetY: makeInterpolateLength(layer2, property, startObject.offsetY, endObject.offsetY),
+      blurRadius: makeInterpolateLength(layer2, property, startObject.blurRadius, endObject.blurRadius),
+      spreadRadius: makeInterpolateLength(layer2, property, startObject.spreadRadius, endObject.spreadRadius),
+      color: makeInterpolateColor(layer2, property, startObject.color, endObject.color)
+    });
+  }
+  return (rate, t) => {
+    return BoxShadow.join(list2.map((it) => {
+      return {
+        inset: it.inset(rate, t),
+        offsetX: it.offsetX(rate, t),
+        offsetY: it.offsetY(rate, t),
+        blurRadius: it.blurRadius(rate, t),
+        spreadRadius: it.spreadRadius(rate, t),
+        color: it.color(rate, t)
+      };
+    }));
+  };
+}
+function makeInterpolateString(layer2, property, startString, endString) {
+  return makeInterpolateBoolean(layer2, property, startString, endString);
+}
+function makeInterpolateRotate(layer2, property, startNumber, endNumber) {
+  var startValue = Length.parse(startNumber);
+  var endValue = Length.parse(endNumber);
+  return (rate, t) => {
+    var realStartValue = startValue.value;
+    var realEndValue = endValue.value;
+    if (t === 0) {
+      return Length.deg(realStartValue);
+    } else if (t === 1) {
+      return Length.deg(realEndValue);
+    }
+    return Length.deg(realStartValue + (realEndValue - realStartValue) * rate).to(startValue.unit);
+  };
+}
+class TextShadow extends PropertyItem {
+  static parse(obj2) {
+    return new TextShadow(obj2);
+  }
+  static parseStyle(str = "") {
+    var results = convertMatches(str);
+    str = str.trim();
+    var textShadows = results.str.split(",").filter((it) => it.trim()).map((shadow2) => {
+      var values = shadow2.trim().split(" ");
+      var colors2 = values.filter((it) => it.includes("@")).map((it) => {
+        return reverseMatches(it, results.matches) || "black";
+      });
+      var numbers = values.filter((it) => {
+        return !it.includes("@");
+      });
+      return TextShadow.parse({
+        color: colors2[0] || "rgba(0, 0, 0, 1)",
+        offsetX: Length.parse(numbers[0] || "0px"),
+        offsetY: Length.parse(numbers[1] || "0px"),
+        blurRadius: Length.parse(numbers[2] || "0px")
+      });
+    });
+    return textShadows;
+  }
+  static join(list2) {
+    return list2.map((it) => TextShadow.parse(it)).join(", ");
+  }
+  getDefaultObject() {
+    return super.getDefaultObject({
+      itemType: "text-shadow",
+      offsetX: "0px",
+      offsetY: "0px",
+      blurRadius: "0px",
+      color: "rgba(0, 0, 0, 1)"
+    });
+  }
+  toCloneObject() {
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("offsetX", "offsetY", "blurRadius", "color"));
+  }
+  convert(json) {
+    json = super.convert(json);
+    if (isNumber(json.offsetX))
+      json.offsetX = Length.px(json.offsetX);
+    else if (json.offsetX)
+      json.offsetX = Length.parse(json.offsetX);
+    if (isNumber(json.offsetY))
+      json.offsetY = Length.px(json.offsetY);
+    else if (json.offsetY)
+      json.offsetY = Length.parse(json.offsetY);
+    if (isNumber(json.blurRadius))
+      json.blurRadius = Length.px(json.blurRadius);
+    else if (json.blurRadius)
+      json.blurRadius = Length.parse(json.blurRadius);
+    return json;
+  }
+  toCSS() {
+    return {
+      "text-shadow": this.toString()
+    };
+  }
+  toString() {
+    var { offsetX, offsetY, blurRadius, color: color2 } = this.json;
+    if (isNumber(offsetX))
+      offsetX = Length.px(offsetX);
+    if (isNumber(offsetY))
+      offsetY = Length.px(offsetY);
+    if (isNumber(blurRadius))
+      blurRadius = Length.px(blurRadius);
+    return `${offsetX} ${offsetY} ${blurRadius} ${color2}`;
+  }
+}
+function makeInterpolateTextShadow(layer2, property, startValue, endValue) {
+  var s = TextShadow.parseStyle(startValue);
+  var e2 = TextShadow.parseStyle(endValue);
+  var totalLength = Math.max(s.length, e2.length);
+  var list2 = [];
+  for (var i = 0, len2 = totalLength; i < len2; i++) {
+    var startObject = s[i] || TextShadow.parseStyle("0px 0px 0px rgba(0, 0, 0, 0)")[0];
+    var endObject = e2[i] || TextShadow.parseStyle("0px 0px 0px rgba(0, 0, 0, 0)")[0];
+    list2.push({
+      offsetX: makeInterpolateLength(layer2, property, startObject.offsetX, endObject.offsetX, "width", "self"),
+      offsetY: makeInterpolateLength(layer2, property, startObject.offsetY, endObject.offsetY, "height", "self"),
+      blurRadius: makeInterpolateLength(layer2, property, startObject.blurRadius, endObject.blurRadius, "radius"),
+      color: makeInterpolateColor(layer2, property, startObject.color, endObject.color)
+    });
+  }
+  return (rate, t) => {
+    return TextShadow.join(list2.map((it) => {
+      return {
+        offsetX: it.offsetX(rate, t),
+        offsetY: it.offsetY(rate, t),
+        blurRadius: it.blurRadius(rate, t),
+        color: it.color(rate, t)
+      };
+    }));
+  };
+}
+function makeInterpolateColorStep(layer2, property, startColorStep, endColorStep) {
+  var obj2 = {
+    cut: makeInterpolateBoolean(layer2, property, startColorStep.cut, endColorStep.cut),
+    percent: makeInterpolateNumber$1(layer2, property, startColorStep.percent, endColorStep.percent),
+    px: makeInterpolateNumber$1(layer2, property, startColorStep.px, endColorStep.px),
+    em: makeInterpolateNumber$1(layer2, property, startColorStep.em, endColorStep.em),
+    unit: makeInterpolateString(layer2, property, startColorStep.unit, endColorStep.unit),
+    color: makeInterpolateColor(layer2, property, startColorStep.color, endColorStep.color)
+  };
+  return (rate, t) => {
+    return new ColorStep({
+      cut: obj2.cut(rate, t),
+      percent: obj2.percent(rate, t),
+      px: obj2.px(rate, t),
+      em: obj2.em(rate, t),
+      unit: obj2.unit(rate, t),
+      color: obj2.color(rate, t)
+    });
+  };
+}
+function makeInterpolateColorStepList(layer2, property, startColorsteps = [], endColorsteps = []) {
+  var max = Math.max(startColorsteps.length, endColorsteps.length);
+  var list2 = [];
+  for (var i = 0; i < max; i++) {
+    var s = startColorsteps[i];
+    var e2 = endColorsteps[i];
+    if (s && e2) {
+      list2[i] = makeInterpolateColorStep(layer2, property, s, e2);
+    } else {
+      list2[i] = makeInterpolateBoolean(layer2, property, s, e2);
+    }
+  }
+  return (rate, t) => {
+    return list2.map((it) => it(rate, t));
+  };
+}
+function makeInterpolateLinearGradient(layer2, property, s, e2) {
+  var obj2 = {
+    angle: makeInterpolateNumber$1(layer2, property, s.angle, e2.angle),
+    colorsteps: makeInterpolateColorStepList(layer2, property, s.colorsteps, e2.colorsteps)
+  };
+  return (rate, t) => {
+    var colorsteps = obj2.colorsteps(rate, t);
+    return new LinearGradient({
+      angle: obj2.angle(rate, t),
+      colorsteps
+    });
+  };
+}
+function makeInterpolateImageResource(layer2, property, s, e2) {
+  var obj2 = {
+    image: (rate, t) => {
+      return t;
+    }
+  };
+  if (s.type === "url" || e2.type === "url") {
+    obj2.image = makeInterpolateBoolean(layer2, property, s, e2);
+  } else {
+    if (s.type != e2.type) {
+      obj2.image = makeInterpolateBoolean(layer2, property, s, e2);
+    } else {
+      switch (s.type) {
+        case "linear-gradient":
+          obj2.image = makeInterpolateLinearGradient(layer2, property, s, e2);
+          break;
+        case "repeating-linear-gradient":
+          obj2.image = makeInterpolateRepeatingLinearGradient(layer2, property, s, e2);
+          break;
+        case "radial-gradient":
+          obj2.image = makeInterpolateRadialGradient(layer2, property, s, e2);
+          break;
+        case "repeating-radial-gradient":
+          obj2.image = makeInterpolateRepeatingRadialGradient(layer2, property, s, e2);
+          break;
+        case "conic-gradient":
+          obj2.image = makeInterpolateConicGradient(layer2, property, s, e2);
+          break;
+        case "repeating-conic-gradient":
+          obj2.image = makeInterpolateRepeatingConicGradient(layer2, property, s, e2);
+          break;
       }
     }
   }
-  init(key, value) {
-    this.set(key, value, false);
-  }
-  save() {
-    const obj2 = {};
-    this.configList.filter((it) => it.storage !== "none").forEach((it) => {
-      obj2[it.key] = this.get(it.key);
-    });
-    this.editor.saveItem("config", obj2);
-  }
-  setAll(obj2) {
-    Object.keys(obj2).forEach((key) => {
-      this.set(key, obj2[key]);
-    });
-  }
-  getType(key) {
-    var _a;
-    return (_a = this.configList.find((it) => it.key == key)) == null ? void 0 : _a.type;
-  }
-  isType(key, type) {
-    return this.getType(key) === type;
-  }
-  isBoolean(key) {
-    return this.isType(key, "boolean");
-  }
-  toggle(key) {
-    if (this.isBoolean(key)) {
-      this.set(key, !this.get(key));
+  return (rate, t) => {
+    return obj2.image(rate, t);
+  };
+}
+function makeInterpolateBackgroundImage(layer2, property, startValue, endValue) {
+  var s = BackgroundImage.parseStyle(STRING_TO_CSS(startValue));
+  var e2 = BackgroundImage.parseStyle(STRING_TO_CSS(endValue));
+  var totalLength = Math.max(s.length, e2.length);
+  var list2 = [];
+  for (var i = 0, len2 = totalLength; i < len2; i++) {
+    var startObject = s[i] || null;
+    var endObject = e2[i] || null;
+    if (startObject && !endObject) {
+      list2.push({
+        image: makeInterpolateIdentity(layer2, property, startObject.image),
+        size: makeInterpolateIdentity(layer2, property, startObject.size),
+        width: makeInterpolateIdentity(layer2, property, startObject.width),
+        height: makeInterpolateIdentity(layer2, property, startObject.height),
+        x: makeInterpolateIdentity(layer2, property, startObject.x),
+        y: makeInterpolateIdentity(layer2, property, startObject.y),
+        blendMode: makeInterpolateIdentity(layer2, property, startObject.blendMode),
+        repeat: makeInterpolateIdentity(layer2, property, startObject.repeat)
+      });
+    } else if (!startObject && endObject) {
+      list2.push({
+        image: makeInterpolateIdentity(layer2, property, endObject.image),
+        size: makeInterpolateIdentity(layer2, property, endObject.size),
+        width: makeInterpolateIdentity(layer2, property, endObject.width),
+        height: makeInterpolateIdentity(layer2, property, endObject.height),
+        x: makeInterpolateIdentity(layer2, property, endObject.x),
+        y: makeInterpolateIdentity(layer2, property, endObject.y),
+        blendMode: makeInterpolateIdentity(layer2, property, endObject.blendMode),
+        repeat: makeInterpolateIdentity(layer2, property, endObject.repeat)
+      });
+    } else if (startObject && endObject) {
+      list2.push({
+        image: makeInterpolateImageResource(layer2, property, startObject.image, endObject.image),
+        size: makeInterpolateString(layer2, property, startObject.size, endObject.size),
+        width: makeInterpolateLength(layer2, property, startObject.width, endObject.width, "width", "self"),
+        height: makeInterpolateLength(layer2, property, startObject.height, endObject.height, "height", "self"),
+        x: makeInterpolateLength(layer2, property, startObject.x, endObject.x, "width", "self"),
+        y: makeInterpolateLength(layer2, property, startObject.y, endObject.y, "height", "self"),
+        blendMode: makeInterpolateString(layer2, property, startObject.blendMode, endObject.blendMode),
+        repeat: makeInterpolateString(layer2, property, startObject.repeat, endObject.repeat)
+      });
     }
   }
-  true(key) {
-    return this.get(key) === true;
+  return (rate, t) => {
+    return BackgroundImage.join(list2.map((it) => {
+      var data = {
+        image: it.image(rate, t),
+        size: it.size(rate, t),
+        x: it.x(rate, t),
+        y: it.y(rate, t),
+        width: it.width(rate, t),
+        height: it.height(rate, t),
+        blendMode: it.blendMode(rate, t),
+        repeat: it.repeat(rate, t)
+      };
+      return data;
+    }));
+  };
+}
+const FILTER_REG = /((blur|grayscale|drop\-shadow|hue\-rotate|invert|brightness|contrast|opacity|saturate|sepia|url)\(([^\)]*)\))/gi;
+class Filter extends PropertyItem {
+  getDefaultObject(obj2 = {}) {
+    return super.getDefaultObject(__spreadValues({
+      itemType: "filter"
+    }, obj2));
   }
-  false(key) {
-    return this.get(key) === false;
+  toString() {
+    return `${this.json.type}(${this.json.value || ""})`;
   }
-  is(key, value) {
-    return this.get(key) === value;
+  static parse(obj2) {
+    var FilterClass = FilterClassName[obj2.type];
+    if (FilterClass) {
+      return new FilterClass(obj2);
+    } else {
+      return new URLSvgFilter({
+        value: obj2.value
+      });
+    }
   }
-  remove(key) {
-    this.config.delete(key);
-    this.editor.emit("config:" + key);
+  static parseStyle(filter2) {
+    var filters = [];
+    if (!filter2)
+      return filters;
+    var results = convertMatches(filter2);
+    var matches2 = results.str.match(FILTER_REG) || [];
+    matches2.forEach((value, index2) => {
+      var [filterName, filterValue] = value.split("(");
+      filterValue = filterValue.split(")")[0];
+      if (filterName === "drop-shadow") {
+        var arr = filterValue.split(" ");
+        var colors2 = arr.filter((it) => it.includes("@")).map((it) => {
+          return reverseMatches(it, results.matches);
+        });
+        var values = arr.filter((it) => !it.includes("@"));
+        filters[index2] = Filter.parse({
+          type: filterName,
+          offsetX: Length.parse(values[0]),
+          offsetY: Length.parse(values[1]),
+          blurRadius: Length.parse(values[2]),
+          color: colors2[0] || "rgba(0, 0, 0, 1)"
+        });
+      } else {
+        filters[index2] = Filter.parse({
+          type: filterName,
+          value: Length.parse(filterValue)
+        });
+      }
+    });
+    return filters;
   }
-  registerConfig(config) {
-    this.config.set(config.key, config.defaultValue);
-    this.configList.push(config);
+  static join(list2) {
+    return list2.map((it) => Filter.parse(it)).join(" ");
+  }
+}
+class BlurFilter extends Filter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "blur",
+      value: BlurFilter.spec.defaultValue
+    });
+  }
+  toCloneObject() {
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("value"));
+  }
+}
+BlurFilter.spec = {
+  inputType: "range",
+  min: 0,
+  max: 100,
+  step: 1,
+  unit: "px",
+  units: ["px", "em"],
+  defaultValue: "0px"
+};
+class URLSvgFilter extends Filter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "svg",
+      value: URLSvgFilter.spec.defaultValue
+    });
+  }
+  toCloneObject() {
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("value"));
+  }
+  toString() {
+    return `url(#${this.json.value || ""})`;
+  }
+}
+URLSvgFilter.spec = {
+  inputType: "select",
+  defaultValue: ""
+};
+class GrayscaleFilter extends Filter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "grayscale",
+      value: GrayscaleFilter.spec.defaultValue
+    });
+  }
+  toCloneObject() {
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("value"));
+  }
+}
+GrayscaleFilter.spec = {
+  inputType: "range",
+  min: 0,
+  max: 100,
+  step: 1,
+  unit: "%",
+  units: ["%"],
+  defaultValue: Length.percent(0)
+};
+class HueRotateFilter extends Filter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "hue-rotate",
+      value: HueRotateFilter.spec.defaultValue
+    });
+  }
+}
+HueRotateFilter.spec = {
+  inputType: "range",
+  min: 0,
+  max: 360,
+  step: 1,
+  unit: "deg",
+  units: ["deg"],
+  defaultValue: Length.deg(0)
+};
+class InvertFilter extends Filter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "invert",
+      value: InvertFilter.spec.defaultValue
+    });
+  }
+}
+InvertFilter.spec = {
+  inputType: "range",
+  min: 0,
+  max: 100,
+  step: 1,
+  unit: "%",
+  units: ["%"],
+  defaultValue: Length.percent(0)
+};
+class BrightnessFilter extends Filter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "brightness",
+      value: BrightnessFilter.spec.defaultValue
+    });
+  }
+}
+BrightnessFilter.spec = {
+  inputType: "range",
+  min: 0,
+  max: 200,
+  step: 1,
+  unit: "%",
+  units: ["%"],
+  defaultValue: Length.percent(100)
+};
+class ContrastFilter extends Filter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "contrast",
+      value: ContrastFilter.spec.defaultValue
+    });
+  }
+}
+ContrastFilter.spec = {
+  inputType: "range",
+  min: 0,
+  max: 200,
+  step: 1,
+  unit: "%",
+  units: ["%"],
+  defaultValue: Length.percent(100)
+};
+class OpacityFilter extends Filter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "opacity",
+      value: OpacityFilter.spec.defaultValue
+    });
+  }
+}
+OpacityFilter.spec = {
+  inputType: "range",
+  min: 0,
+  max: 100,
+  step: 1,
+  unit: "%",
+  units: ["%"],
+  defaultValue: Length.percent(100)
+};
+class SaturateFilter extends Filter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "saturate",
+      value: SaturateFilter.spec.defaultValue
+    });
+  }
+}
+SaturateFilter.spec = {
+  inputType: "range",
+  min: 0,
+  max: 100,
+  step: 1,
+  unit: "%",
+  units: ["%"],
+  defaultValue: Length.percent(100)
+};
+class SepiaFilter extends Filter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "sepia",
+      value: SepiaFilter.spec.defaultValue
+    });
+  }
+}
+SepiaFilter.spec = {
+  inputType: "range",
+  min: 0,
+  max: 100,
+  step: 1,
+  unit: "%",
+  units: ["%"],
+  defaultValue: Length.percent(0)
+};
+class DropshadowFilter extends Filter {
+  getDefaultObject() {
+    return super.getDefaultObject({
+      type: "drop-shadow",
+      multi: true,
+      offsetX: DropshadowFilter.spec.offsetX.defaultValue,
+      offsetY: DropshadowFilter.spec.offsetY.defaultValue,
+      blurRadius: DropshadowFilter.spec.blurRadius.defaultValue,
+      color: DropshadowFilter.spec.color.defaultValue
+    });
+  }
+  toString() {
+    var json = this.json;
+    return `drop-shadow(${json.offsetX} ${json.offsetY} ${json.blurRadius} ${json.color})`;
+  }
+}
+DropshadowFilter.spec = {
+  offsetX: {
+    title: "Offset X",
+    inputType: "range",
+    min: -100,
+    max: 100,
+    step: 1,
+    defaultValue: "0px",
+    unit: "px",
+    units: ["px", "em"]
+  },
+  offsetY: {
+    title: "Offset Y",
+    inputType: "range",
+    min: -100,
+    max: 100,
+    step: 1,
+    defaultValue: "0px",
+    unit: "px",
+    units: ["px", "em"]
+  },
+  blurRadius: {
+    title: "Blur Radius",
+    inputType: "range",
+    min: 0,
+    max: 100,
+    step: 1,
+    defaultValue: "0px",
+    unit: "px",
+    units: ["px", "em", "%"]
+  },
+  color: {
+    title: "Color",
+    inputType: "color",
+    defaultValue: "rgba(0, 0, 0, 1)",
+    unit: "color"
+  }
+};
+const FilterClassName = {
+  blur: BlurFilter,
+  grayscale: GrayscaleFilter,
+  "hue-rotate": HueRotateFilter,
+  invert: InvertFilter,
+  brightness: BrightnessFilter,
+  contrast: ContrastFilter,
+  opacity: OpacityFilter,
+  saturate: SaturateFilter,
+  sepia: SepiaFilter,
+  "drop-shadow": DropshadowFilter,
+  svg: URLSvgFilter
+};
+function makeInterpolateFilterItem(layer2, property, startValue, endValue) {
+  var obj2 = {
+    type: makeInterpolateString(layer2, property, startValue.type, endValue.type),
+    value: makeInterpolateBoolean(layer2, property, startValue.value, endValue.value)
+  };
+  switch (startValue.type) {
+    case "blur":
+      obj2.value = makeInterpolateLength(layer2, property, startValue.value, endValue.value);
+      break;
+    case "grayscale":
+    case "invert":
+    case "brightness":
+    case "contrast":
+    case "opacity":
+    case "saturate":
+    case "sepia":
+    case "hue-rotate":
+      obj2.value = makeInterpolateNumber$1(layer2, property, startValue.value.value, endValue.value.value, startValue.value.unit);
+      break;
+    case "drop-shadow":
+      obj2.offsetX = makeInterpolateLength(layer2, property, startValue.offsetX, endValue.offsetX, "width", "self");
+      obj2.offsetY = makeInterpolateLength(layer2, property, startValue.offsetY, endValue.offsetY, "height", "self");
+      obj2.blurRadius = makeInterpolateLength(layer2, property, startValue.blurRadius, endValue.blurRadius, "width", "self");
+      obj2.spreadRadius = makeInterpolateLength(layer2, property, startValue.spreadRadius, endValue.spreadRadius, "width", "self");
+      obj2.color = makeInterpolateColor(layer2, property, startValue.color, endValue.color);
+      break;
+  }
+  return (rate, t) => {
+    var type = obj2.type(rate, t);
+    if (type === "drop-shadow") {
+      return {
+        type: obj2.type(rate, t),
+        offsetX: obj2.offsetX(rate, t),
+        offsetY: obj2.offsetY(rate, t),
+        blurRadius: obj2.blurRadius(rate, t),
+        spreadRadius: obj2.spreadRadius(rate, t),
+        color: obj2.color(rate, t)
+      };
+    } else {
+      return {
+        type: obj2.type(rate, t),
+        value: obj2.value(rate, t)
+      };
+    }
+  };
+}
+function makeInterpolateFilter(layer2, property, startValue, endValue) {
+  var s = Filter.parseStyle(startValue);
+  var e2 = Filter.parseStyle(endValue);
+  var totalLength = Math.max(s.length, e2.length);
+  var list2 = [];
+  for (var i = 0, len2 = totalLength; i < len2; i++) {
+    var startObject = s[i];
+    var endObject = e2[i];
+    if (startObject && !endObject) {
+      list2.push(makeInterpolateIdentity$1(layer2, property, startObject));
+    } else if (!startObject && endObject) {
+      list2.push(makeInterpolateIdentity$1(layer2, property, endObject));
+    } else {
+      if (startObject.type != endObject.type || startObject.type === "svg" || endObject.type === "svg") {
+        list2.push(makeInterpolateBoolean(layer2, property, startObject, endObject));
+      } else {
+        list2.push(makeInterpolateFilterItem(layer2, property, startObject, endObject));
+      }
+    }
+  }
+  return (rate, t) => {
+    return Filter.join(list2.map((it) => it(rate, t)));
+  };
+}
+function makeInterpolateClipPathCircle(layer2, property, s, e2) {
+  var obj2 = {};
+  if (s.radius === "closest-side" || s.radius === "farthest-side" || e2.radius === "closest-side" || e2.radius === "farthest-side") {
+    obj2.radius = makeInterpolateBoolean(layer2, property, s.radius, e2.radius);
+  } else {
+    if (s.radius.unit === e2.radius.unit) {
+      obj2.radius = makeInterpolateNumber(layer2, property, s.radius.value, e2.radius.value, s.radius.unit);
+    } else {
+      obj2.radius = makeInterpolateLength(layer2, property, s.radius, e2.radius, "width", "self");
+    }
+  }
+  obj2.x = makeInterpolateLength(layer2, property, s.x, e2.x, "width", "self");
+  obj2.y = makeInterpolateLength(layer2, property, s.y, e2.y, "height", "self");
+  return (rate, t) => {
+    var radius = obj2.radius(rate, t);
+    var x2 = obj2.x(rate, t);
+    var y2 = obj2.y(rate, t);
+    var results = `${x2} ${y2}`;
+    var radiusString = radius + "";
+    if (radiusString.includes("closest-side")) {
+      radiusString = "closest-side";
+    } else if (radiusString.includes("farthest-side")) {
+      radiusString = "farthest-side";
+    }
+    return radius ? `${radiusString} at ${results}` : `${results}`;
+  };
+}
+function makeInterpolateClipPathEllipse(layer2, property, s, e2) {
+  var obj2 = {
+    radiusX: makeInterpolateLength(layer2, property, s.radiusX, e2.radiusX, "width", "self"),
+    radiusY: makeInterpolateLength(layer2, property, s.radiusY, e2.radiusY, "height", "self"),
+    x: makeInterpolateLength(layer2, property, s.x, e2.x, "width", "self"),
+    y: makeInterpolateLength(layer2, property, s.y, e2.y, "height", "self")
+  };
+  return (rate, t) => {
+    var radiusX = obj2.radiusX(rate, t);
+    var radiusY = obj2.radiusY(rate, t);
+    var x2 = obj2.x(rate, t);
+    var y2 = obj2.y(rate, t);
+    return `${radiusX} ${radiusY} at ${x2} ${y2}`;
+  };
+}
+function makeInterpolateClipPathPolygon(layer2, property, s, e2) {
+  var max = Math.max(s.length, e2.length);
+  var list2 = [];
+  for (var i = 0; i < max; i++) {
+    var startPos = s[i];
+    var endPos = e2[i];
+    if (startPos && !endPos) {
+      list2.push({
+        x: makeInterpolateIdentity$1(layer2, property, startPos.x),
+        y: makeInterpolateIdentity$1(layer2, property, startPos.y)
+      });
+    } else if (!startPos && endPos) {
+      list2.push({
+        x: makeInterpolateIdentity$1(layer2, property, endPos.x),
+        y: makeInterpolateIdentity$1(layer2, property, endPos.y)
+      });
+    } else {
+      list2.push({
+        x: makeInterpolateLength(layer2, property, startPos.x, endPos.x, "width", "self"),
+        y: makeInterpolateLength(layer2, property, startPos.y, endPos.y, "height", "self")
+      });
+    }
+  }
+  return (rate, t) => {
+    return list2.map((it) => {
+      return `${it.x(rate, t)} ${it.y(rate, t)}`;
+    }).join(",");
+  };
+}
+function makeInterpolateClipPathInset(layer2, property, s, e2) {
+  var obj2 = {
+    top: makeInterpolateNumber$1(layer2, property, s.top.value, e2.top.value, s.top.unit),
+    left: makeInterpolateNumber$1(layer2, property, s.left.value, e2.left.value, s.left.unit),
+    right: makeInterpolateNumber$1(layer2, property, s.right.value, e2.right.value, s.right.unit),
+    bottom: makeInterpolateNumber$1(layer2, property, s.bottom.value, e2.bottom.value, s.bottom.unit),
+    round: makeInterpolateBoolean(layer2, property, s.round, e2.round),
+    topRadius: makeInterpolateNumber$1(layer2, property, s.topRadius.value, e2.topRadius.value, s.topRadius.unit),
+    leftRadius: makeInterpolateNumber$1(layer2, property, s.leftRadius.value, e2.leftRadius.value, s.leftRadius.unit),
+    rightRadius: makeInterpolateNumber$1(layer2, property, s.rightRadius.value, e2.rightRadius.value, s.rightRadius.unit),
+    bottomRadius: makeInterpolateNumber$1(layer2, property, s.bottomRadius.value, e2.bottomRadius.value, s.bottomRadius.unit)
+  };
+  return (rate, t) => {
+    var top2 = obj2.top(rate, t);
+    var right2 = obj2.right(rate, t);
+    var bottom2 = obj2.bottom(rate, t);
+    var left2 = obj2.left(rate, t);
+    var round2 = obj2.round(rate, t);
+    var topRadius = obj2.topRadius(rate, t);
+    var leftRadius = obj2.leftRadius(rate, t);
+    var bottomRadius = obj2.bottomRadius(rate, t);
+    var rightRadius = obj2.rightRadius(rate, t);
+    var position2 = [top2, right2, bottom2, left2].join(" ");
+    var radius = [topRadius, rightRadius, bottomRadius, leftRadius].join(" ");
+    var results = `${position2} ${round2 && radius.trim() ? `round ${radius}` : ""}`;
+    return results;
+  };
+}
+function makeInterpolateClipPath(layer2, property, startValue, endValue) {
+  var startObject = ClipPath.parseStyle(startValue);
+  var endObject = ClipPath.parseStyle(endValue);
+  var obj2 = {
+    type: makeInterpolateBoolean(layer2, property, startObject.type, startObject.type),
+    value: makeInterpolateBoolean(layer2, property, startValue, endValue)
+  };
+  if (startObject.type == endObject.type && startObject != "none") {
+    switch (startObject.type) {
+      case "circle":
+        startObject.value = ClipPath.parseStyleForCircle(startObject.value);
+        endObject.value = ClipPath.parseStyleForCircle(endObject.value);
+        obj2.value = makeInterpolateClipPathCircle(layer2, property, startObject.value, endObject.value);
+        break;
+      case "ellipse":
+        startObject.value = ClipPath.parseStyleForEllipse(startObject.value);
+        endObject.value = ClipPath.parseStyleForEllipse(endObject.value);
+        obj2.value = makeInterpolateClipPathEllipse(layer2, property, startObject.value, endObject.value);
+        break;
+      case "inset":
+        startObject.value = ClipPath.parseStyleForInset(startObject.value);
+        endObject.value = ClipPath.parseStyleForInset(endObject.value);
+        obj2.value = makeInterpolateClipPathInset(layer2, property, startObject.value, endObject.value);
+        break;
+      case "polygon":
+        startObject.value = ClipPath.parseStyleForPolygon(startObject.value);
+        endObject.value = ClipPath.parseStyleForPolygon(endObject.value);
+        obj2.value = makeInterpolateClipPathPolygon(layer2, property, startObject.value, endObject.value);
+        break;
+      case "path":
+        startObject.value = ClipPath.parseStyleForPath(startObject.value);
+        endObject.value = ClipPath.parseStyleForPath(endObject.value);
+        obj2.value = makeInterpolateClipPathPath(layer2, property, startObject.value, endObject.value);
+        break;
+    }
+  }
+  return (rate, t) => {
+    var type = obj2.type(rate, t);
+    var value = obj2.value(rate, t);
+    if (type === "none") {
+      return type;
+    }
+    return `${type}(${value})`;
+  };
+}
+function makeInterpolateTransformLength(layer2, property, startValue, endValue) {
+  var obj2 = {
+    type: makeInterpolateBoolean(layer2, property, startValue.type, endValue.type)
+  };
+  var value = [];
+  var max = Math.max(startValue.value.length, endValue.value.length);
+  for (var i = 0; i < max; i++) {
+    var s = startValue.value[i];
+    var e2 = endValue.value[i];
+    if (s && e2) {
+      value.push(makeInterpolateLength(layer2, property, s, e2, startValue.type));
+    } else {
+      value.push(makeInterpolateLength(layer2, property, startValue.value[i] || startValue.value[i - 1] || startValue.value[i - 2], endValue.value[i] || endValue.value[i - 1] || endValue.value[i - 2], startValue.type));
+    }
+  }
+  obj2.value = value;
+  return (rate, t) => {
+    return {
+      type: obj2.type(rate, t),
+      value: obj2.value.map((it) => it(rate, t))
+    };
+  };
+}
+function makeInterpolateTransformNumber(layer2, property, startValue, endValue) {
+  var obj2 = {
+    type: makeInterpolateBoolean(layer2, property, startValue.type, endValue.type)
+  };
+  var value = [];
+  var max = Math.max(startValue.value.length, endValue.value.length);
+  for (var i = 0; i < max; i++) {
+    var s = startValue.value[i];
+    var e2 = endValue.value[i];
+    if (s && e2) {
+      value.push(makeInterpolateNumber$1(layer2, property, s.value, e2.value));
+    } else {
+      var ss = startValue.value[i].value || startValue.value[i - 1].value || startValue.value[i - 2].value;
+      var ee = endValue.value[i].value || endValue.value[i - 1].value || startValue.value[i - 2].value;
+      value.push(makeInterpolateNumber$1(layer2, property, ss, ee));
+    }
+  }
+  obj2.value = value;
+  return (rate, t) => {
+    var value2 = obj2.value.map((it) => it(rate, t));
+    var type = obj2.type(rate, t);
+    if (type.includes("matrix") || type.includes("scale")) {
+      value2 = value2.map((it) => {
+        return Length.number(it);
+      });
+    }
+    return { type, value: value2 };
+  };
+}
+function makeInterpolateTransformRotate(layer2, property, startValue, endValue) {
+  var obj2 = {
+    type: makeInterpolateBoolean(layer2, property, startValue.type, endValue.type)
+  };
+  var value = [];
+  var max = Math.max(startValue.value.length, endValue.value.length);
+  for (var i = 0; i < max; i++) {
+    var tempStartValue = startValue.value[i];
+    var tempEndValue = endValue.value[i];
+    if (tempStartValue && tempEndValue) {
+      value.push(makeInterpolateRotate(layer2, property, tempStartValue, tempEndValue));
+    } else {
+      value.push(makeInterpolateRotate(layer2, property, startValue.value[i] || startValue.value[i - 1] || startValue.value[i - 2], endValue.value[i] || endValue.value[i - 1] || startValue.value[i - 2]));
+    }
+  }
+  obj2.value = value;
+  return (rate, t) => {
+    var results = {
+      type: obj2.type(rate, t),
+      value: obj2.value.map((it) => it(rate, t))
+    };
+    return results;
+  };
+}
+function makeInterpolateTransform(layer2, property, startValue, endValue) {
+  var startObject = Transform.parseStyle(startValue.trim());
+  var endObject = Transform.parseStyle(endValue.trim());
+  var max = Math.max(startObject.length, endObject.length);
+  var list2 = [];
+  for (var i = 0; i < max; i++) {
+    var s = startObject[i];
+    var e2 = endObject[i];
+    if (s && !e2) {
+      list2.push(makeInterpolateIdentity$1(layer2, property, s));
+    } else if (!s && e2) {
+      list2.push(makeInterpolateIdentity$1(layer2, property, e2));
+    } else if (s.type != e2.type) {
+      list2.push(makeInterpolateBoolean(layer2, property, s, e2));
+    } else {
+      switch (s.type) {
+        case "translate":
+        case "translateX":
+        case "translateY":
+        case "translateZ":
+        case "translate3d":
+        case "perspective":
+          list2.push(makeInterpolateTransformLength(layer2, property, s, e2));
+          break;
+        case "rotate":
+        case "rotateX":
+        case "rotateY":
+        case "rotateZ":
+        case "rotate3d":
+          list2.push(makeInterpolateTransformRotate(layer2, property, s, e2));
+          break;
+        case "scale":
+        case "scaleX":
+        case "scaleY":
+        case "scaleZ":
+        case "scale3d":
+        case "matrix":
+        case "matrix3d":
+          list2.push(makeInterpolateTransformNumber(layer2, property, s, e2));
+          break;
+      }
+    }
+  }
+  return (rate, t) => {
+    var results = Transform.join(list2.map((it) => {
+      return it(rate, t);
+    }));
+    return results;
+  };
+}
+function makeInterpolateTransformOrigin(layer2, property, startValue, endValue) {
+  var s = startValue.split(" ").map((it) => Length.parse(it));
+  var e2 = endValue.split(" ").map((it) => Length.parse(it));
+  var max = Math.max(s.length, e2.length);
+  var list2 = [];
+  for (var i = 0; i < max; i++) {
+    var startPos = s[i];
+    var endPos = e2[i];
+    list2.push(makeInterpolateLength(layer2, property, startPos, endPos, "transform-origin"));
+  }
+  return (rate, t) => {
+    var results = list2.map((it) => it(rate, t)).join(" ");
+    return results;
+  };
+}
+function makeInterpolatePerspectiveOrigin(layer2, property, startValue, endValue) {
+  var s = startValue.split(" ").map((it) => Length.parse(it));
+  var e2 = endValue.split(" ").map((it) => Length.parse(it));
+  var max = Math.max(s.length, e2.length);
+  var list2 = [];
+  for (var i = 0; i < max; i++) {
+    var startPos = s[i];
+    var endPos = e2[i];
+    list2.push(makeInterpolateLength(layer2, property, startPos, endPos, "perspective-origin"));
+  }
+  return (rate, t) => {
+    var results = list2.map((it) => it(rate, t)).join(" ");
+    return results;
+  };
+}
+function makeInterpolateStrokeDashArrray(layer2, property, startValue, endValue) {
+  var s = startValue.split(" ").map((it) => +it);
+  var e2 = endValue.split(" ").map((it) => +it);
+  var max = Math.max(s.length, e2.length);
+  var list2 = [];
+  for (var i = 0; i < max; i++) {
+    var startPos = s[i];
+    var endPos = e2[i];
+    list2.push(makeInterpolateNumber$1(layer2, property, startPos, endPos));
+  }
+  return (rate, t) => {
+    var results = list2.map((it) => it(rate, t)).join(" ");
+    return results;
+  };
+}
+function makeInterpolatePathValues(layer2, property, s, e2) {
+  var max = Math.max(s.length, e2.length);
+  var list2 = [];
+  var startLastPos = s[s.length - 1];
+  var endLastPos = e2[e2.length - 1];
+  for (var i = 0; i < max; i++) {
+    var startPos = s[i];
+    var endPos = e2[i];
+    if (startPos && !endPos) {
+      list2.push(makeInterpolateNumber$1(layer2, property, startPos, endLastPos));
+    } else if (!startPos && endPos) {
+      list2.push(makeInterpolateNumber$1(layer2, property, startLastPos, endPos));
+    } else {
+      list2.push(makeInterpolateNumber$1(layer2, property, startPos, endPos));
+    }
+  }
+  return (rate, t) => {
+    return list2.map((it) => it(rate, t));
+  };
+}
+function makeInterpolatePath(layer2, property, startValue, endValue) {
+  var returnParser = new PathParser();
+  var s = new PathParser(startValue);
+  var e2 = new PathParser(endValue);
+  var max = Math.max(s.segments.length, e2.segments.length);
+  var list2 = [];
+  for (var i = 0; i < max; i++) {
+    var sc = s.segments[i];
+    var ec = e2.segments[i];
+    if (sc.command === ec.command) {
+      if (sc.values.length === ec.values.length) {
+        list2.push({
+          command: makeInterpolateIdentity$1(layer2, property, sc.command),
+          values: makeInterpolatePathValues(layer2, property, sc.values, ec.values)
+        });
+      } else {
+        list2.push({
+          command: makeInterpolateIdentity$1(layer2, property, sc.command),
+          values: makeInterpolateIdentity$1(layer2, property, sc.values)
+        });
+      }
+    } else {
+      list2.push({
+        command: makeInterpolateBoolean(layer2, property, sc.command, ec.command),
+        values: makeInterpolateBoolean(layer2, property, sc.values, ec.values)
+      });
+    }
+  }
+  return (rate, t) => {
+    var segments2 = list2.map((it) => {
+      return {
+        command: it.command(rate, t),
+        values: it.values(rate, t)
+      };
+    });
+    var results = returnParser.joinPath(segments2);
+    return results;
+  };
+}
+class PathStringManager {
+  constructor() {
+    this.pathArray = [];
+  }
+  reset() {
+    this.pathArray = [];
+  }
+  getPointString(values) {
+    return values.map((v) => `${v.x} ${v.y}`).join(" ");
+  }
+  makeString(command, values = []) {
+    this.pathArray.push(`${command} ${this.getPointString(values)}`);
+    return this;
+  }
+  M(...values) {
+    return this.makeString("M", values);
+  }
+  L(...values) {
+    return this.makeString("L", values);
+  }
+  X(...values) {
+    const dist2 = 3;
+    const point2 = values[0];
+    const topLeft = { x: point2.x - dist2, y: point2.y - dist2 };
+    const topRight = { x: point2.x + dist2, y: point2.y - dist2 };
+    const bottomLeft = { x: point2.x - dist2, y: point2.y + dist2 };
+    const bottomRight = { x: point2.x + dist2, y: point2.y + dist2 };
+    return this.M(topLeft).L(bottomRight).M(topRight).L(bottomLeft);
+  }
+  Q(...values) {
+    return this.makeString("Q", values);
+  }
+  C(...values) {
+    return this.makeString("C", values);
+  }
+  Z() {
+    return this.makeString("Z");
+  }
+  get d() {
+    return this.pathArray.join(" ").trim();
+  }
+  toString(className = "object") {
+    return `<path d="${this.d}" class='${className}'/>`;
+  }
+}
+const splitReg = /[\b\t \,]/g;
+class PolygonParser extends PathParser {
+  constructor(points2 = "") {
+    super(points2);
+  }
+  reset(points2 = "") {
+    this.segments = [];
+    this.points = points2;
+    this.parse();
+  }
+  resetSegments(segments2 = []) {
+    this.segments = segments2;
+    this.points = this.joinPoints();
+  }
+  parse() {
+    var points2 = this.points;
+    if (Array.isArray(points2)) {
+      points2 = points2.join(" ");
+    }
+    var arr = points2.trim().split(splitReg).filter((it) => it);
+    var segments2 = [];
+    for (var i = 0, len2 = arr.length; i < len2; i += 2) {
+      segments2.push({ x: +arr[i], y: +arr[i + 1] });
+    }
+    this.segments = segments2;
+  }
+  convertGenerator() {
+    return this.segments;
+  }
+  length() {
+    return this.segments.length;
+  }
+  toPathString() {
+    var path = new PathStringManager();
+    for (var i = 0, len2 = this.segments.length; i < len2; i++) {
+      var s = this.segments[i];
+      if (i === 0) {
+        path.M(s);
+      } else if (i === len2 - 1) {
+        path.L(s).L(this.segments[0]).Z();
+      } else {
+        path.L(s);
+      }
+    }
+    return path.d;
+  }
+  joinPath(segments2) {
+    return this.joinPoints(segments2);
+  }
+  joinPoints(segments2) {
+    var list2 = segments2 || this.segments;
+    return list2.map((it) => {
+      return `${it.x},${it.y}`;
+    }).join(" ");
+  }
+  each(callback, isReturn = false) {
+    var newSegments = this.segments.map((segment) => {
+      return callback.call(this, segment);
+    });
+    if (isReturn) {
+      return newSegments;
+    } else {
+      this.segments = newSegments;
+    }
+  }
+  _loop(m, isReturn = false) {
+    return this.each(function(segment) {
+      var [x2, y2] = m([segment.x, segment.y], 0);
+      segment.x = x2;
+      segment.y = y2;
+      return segment;
+    }, isReturn);
+  }
+  clone() {
+    return new PolygonParser(this.joinPoints());
+  }
+  toString() {
+    return this.joinPoints();
+  }
+}
+function makeInterpolatePolygon(layer2, property, startValue, endValue) {
+  var returnParser = new PolygonParser();
+  var s = new PolygonParser(startValue);
+  var e2 = new PolygonParser(endValue);
+  var max = Math.max(s.segments.length, e2.segments.length);
+  var list2 = [];
+  var startLastX = s.segments[s.segments.length - 1].x;
+  var startLastY = s.segments[s.segments.length - 1].y;
+  var endLastX = e2.segments[e2.segments.length - 1].x;
+  var endLastY = e2.segments[e2.segments.length - 1].y;
+  for (var i = 0; i < max; i++) {
+    var startPos = s.segments[i];
+    var endPos = e2.segments[i];
+    if (startPos && !endPos) {
+      list2.push({
+        x: makeInterpolateNumber$1(layer2, property, startPos.x, endLastX),
+        y: makeInterpolateNumber$1(layer2, property, startPos.y, endLastY)
+      });
+    } else if (!startPos && endPos) {
+      list2.push({
+        x: makeInterpolateNumber$1(layer2, property, startLastX, endPos.x),
+        y: makeInterpolateNumber$1(layer2, property, startLastY, endPos.y)
+      });
+    } else {
+      list2.push({
+        x: makeInterpolateNumber$1(layer2, property, startPos.x, endPos.x),
+        y: makeInterpolateNumber$1(layer2, property, startPos.y, endPos.y)
+      });
+    }
+  }
+  return (rate, t) => {
+    var points2 = returnParser.joinPoints(list2.map((it) => {
+      return {
+        x: it.x(rate, t),
+        y: it.y(rate, t)
+      };
+    }));
+    return points2;
+  };
+}
+function makeInterpolateLine(x1, y1, x2, y2) {
+  var obj2 = {
+    x: makeInterpolateNumber$1("", "", x1, x2),
+    y: makeInterpolateNumber$1("", "", y1, y2)
+  };
+  return (rate, t) => {
+    var results = {
+      x: obj2.x(rate, t),
+      y: obj2.y(rate, t)
+    };
+    return results;
+  };
+}
+function makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey) {
+  var points2 = [
+    { x: sx, y: sy },
+    { x: cx1, y: cy1 },
+    { x: ex, y: ey }
+  ];
+  return (rate, t) => {
+    return getBezierPointOneQuard(points2, t);
+  };
+}
+function makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey) {
+  var points2 = [
+    { x: sx, y: sy },
+    { x: cx1, y: cy1 },
+    { x: cx2, y: cy2 },
+    { x: ex, y: ey }
+  ];
+  return (rate, t) => {
+    return getBezierPointOne(points2, t);
+  };
+}
+function makeInterpolateOffset(segments2) {
+  var interpolateList = [];
+  var startPoint = [];
+  segments2.forEach((segment, index2) => {
+    switch (segment.command) {
+      case "M":
+        var [ex, ey] = segment.values;
+        startPoint = [ex, ey];
+        break;
+      case "m":
+        var [sx, sy] = startPoint;
+        var [ex, ey] = segment.values;
+        ex += sx;
+        ey += sy;
+        startPoint = [ex, ey];
+        break;
+      case "L":
+        var [sx, sy] = startPoint;
+        var [ex, ey] = segment.values;
+        interpolateList.push({
+          command: segment.command,
+          values: [sx, sy, ex, ey],
+          length: getDist(sx, sy, ex, ey),
+          interpolate: makeInterpolateLine(sx, sy, ex, ey)
+        });
+        startPoint = [ex, ey];
+        break;
+      case "l":
+        var [sx, sy] = startPoint;
+        var [ex, ey] = segment.values;
+        ex += sx;
+        ey += sy;
+        interpolateList.push({
+          command: segment.command,
+          values: [sx, sy, ex, ey],
+          length: getDist(sx, sy, ex, ey),
+          interpolate: makeInterpolateLine(sx, sy, ex, ey)
+        });
+        startPoint = [ex, ey];
+        break;
+      case "C":
+        var [sx, sy] = startPoint;
+        var [cx1, cy1, cx2, cy2, ex, ey] = segment.values;
+        interpolateList.push({
+          command: segment.command,
+          values: [sx, sy, cx1, cy1, cx2, cy2, ex, ey],
+          length: getCurveDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
+          interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
+        });
+        startPoint = [ex, ey];
+        break;
+      case "c":
+        var [sx, sy] = startPoint;
+        var [cx1, cy1, cx2, cy2, ex, ey] = segment.values;
+        cx1 += sx;
+        cx2 += sx;
+        ex += sx;
+        cy1 += sy;
+        cy2 += sy;
+        ey += sy;
+        interpolateList.push({
+          command: segment.command,
+          values: [sx, sy, cx1, cy1, cx2, cy2, ex, ey],
+          length: getCurveDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
+          interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
+        });
+        startPoint = [ex, ey];
+        break;
+      case "Q":
+        var [sx, sy] = startPoint;
+        var [cx1, cy1, ex, ey] = segment.values;
+        interpolateList.push({
+          command: segment.command,
+          values: [sx, sy, cx1, cy1, ex, ey],
+          length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
+          interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
+        });
+        startPoint = [ex, ey];
+        break;
+      case "q":
+        var [sx, sy] = startPoint;
+        var [cx1, cy1, ex, ey] = segment.values;
+        cx1 += sx;
+        ex += sx;
+        cy1 += sy;
+        ey += sy;
+        interpolateList.push({
+          command: segment.command,
+          values: [sx, sy, cx1, cy1, ex, ey],
+          length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
+          interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
+        });
+        startPoint = [ex, ey];
+        break;
+      case "S":
+        var [sx, sy] = startPoint;
+        var [cx2, cy2, ex, ey] = segment.values;
+        var prevSegment = interpolateList[interpolateList.length - 1];
+        if (["C", "c", "S", "s"].includes(prevSegment.command)) {
+          var [_, _, _, _, preC1x, preC1y, preEx, preEy] = prevSegment.values;
+          var { x: cx1, y: cy1 } = Point.getReversePoint({ x: preEx, y: preEy }, { x: preC1x, preC1y });
+          interpolateList.push({
+            command: segment.command,
+            values: [sx, sy, cx1, cy1, cx2, cy2, ex, ey],
+            length: getCubicDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
+            interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
+          });
+          startPoint = [ex, ey];
+          break;
+        }
+      case "s":
+        var [sx, sy] = startPoint;
+        var [cx2, cy2, ex, ey] = segment.values;
+        cx2 += sx;
+        ex += sx;
+        cy2 += sy;
+        ey += sy;
+        var prevSegment = interpolateList[interpolateList.length - 1];
+        if (["C", "c", "S", "s"].includes(prevSegment.command)) {
+          var [_, _, _, _, preC1x, preC1y, preEx, preEy] = prevSegment.values;
+          var { x: cx1, y: cy1 } = Point.getReversePoint({ x: preEx, y: preEy }, { x: preC1x, preC1y });
+          interpolateList.push({
+            command: segment.command,
+            values: [sx, sy, cx1, cy1, cx2, cy2, ex, ey],
+            length: getCubicDist(sx, sy, cx1, cy1, cx2, cy2, ex, ey),
+            interpolate: makeInterpolateCubic(sx, sy, cx1, cy1, cx2, cy2, ex, ey)
+          });
+          startPoint = [ex, ey];
+          break;
+        }
+      case "T":
+        var [sx, sy] = startPoint;
+        var [ex, ey] = segment.values;
+        var prevSegment = interpolateList[interpolateList.length - 1];
+        if (["Q", "q", "T", "t"].includes(prevSegment.command)) {
+          var [_, _, preC1x, preC1y, preEx, preEy] = prevSegment.values;
+          var { x: cx1, y: cy1 } = Point.getReversePoint({ x: preEx, y: preEy }, { x: preC1x, preC1y });
+          interpolateList.push({
+            command: segment.command,
+            values: [sx, sy, cx1, cy1, ex, ey],
+            length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
+            interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
+          });
+          startPoint = [ex, ey];
+        }
+        break;
+      case "t":
+        var [sx, sy] = startPoint;
+        var [ex, ey] = segment.values;
+        ex += sx;
+        ey += sy;
+        var prevSegment = interpolateList[interpolateList.length - 1];
+        if (["Q", "q", "T", "t"].includes(prevSegment.command)) {
+          var [_, _, preC1x, preC1y, preEx, preEy] = prevSegment.values;
+          var { x: cx1, y: cy1 } = Point.getReversePoint({ x: preEx, y: preEy }, { x: preC1x, preC1y });
+          interpolateList.push({
+            command: segment.command,
+            values: [sx, sy, cx1, cy1, ex, ey],
+            length: getQuardDist(sx, sy, cx1, cy1, ex, ey),
+            interpolate: makeInterpolateQuard(sx, sy, cx1, cy1, ex, ey)
+          });
+          startPoint = [ex, ey];
+        }
+        break;
+    }
+  });
+  var totalLength = 0;
+  interpolateList.forEach((it) => {
+    totalLength += it.length;
+  });
+  var start2 = 0;
+  interpolateList.forEach((it) => {
+    it.startT = start2 / totalLength;
+    it.endT = (start2 + it.length) / totalLength;
+    it.totalLength = totalLength;
+    start2 += it.length;
+  });
+  return { totalLength, interpolateList };
+}
+function makeInterpolateOffsetPath(layer2, property, startValue, endValue, artboard2) {
+  var [id, distance2, rotateStatus, rotate2] = startValue.split(",").map((it) => it.trim());
+  var startObject = { id, distance: Length.parse(distance2 || "0%"), rotateStatus: rotateStatus || "auto", rotate: Length.parse(rotate2 || "0deg") };
+  var innerInterpolate = (rate, t) => {
+    return { x, y };
+  };
+  var innerInterpolateAngle = (rotateStatus2, currentAngle) => {
+    var resultAngle = 0;
+    switch (rotateStatus2) {
+      case "angle":
+        resultAngle = startObject.rotate.value;
+        break;
+      case "auto angle":
+        resultAngle = currentAngle + startObject.rotate.value;
+        break;
+      case "reverse":
+        resultAngle = currentAngle + 180;
+        break;
+      case "auto":
+        resultAngle = currentAngle;
+        break;
+    }
+    return resultAngle;
+  };
+  var screenX = 0, screenY = 0;
+  if (artboard2) {
+    var pathLayer = artboard2.searchById(startObject.id);
+    if (pathLayer) {
+      screenX = pathLayer.screenX.value;
+      screenY = pathLayer.screenY.value;
+    }
+    innerInterpolate = (rate, t, timing) => {
+      var parser2 = new PathParser(pathLayer.d || "");
+      var { totalLength, interpolateList } = makeInterpolateOffset(parser2.segments);
+      var distance3 = startObject.distance.toPx(totalLength);
+      var dt = distance3 / totalLength;
+      t = t + dt;
+      if (t > 1) {
+        t -= 1;
+      }
+      var obj2 = interpolateList[0];
+      if (t === 0) {
+        obj2 = interpolateList[0];
+      } else if (t === 1) {
+        obj2 = interpolateList[interpolateList.length - 1];
+      }
+      var arr = interpolateList.find((it) => {
+        return it.startT <= t && t < it.endT;
+      });
+      if (arr) {
+        obj2 = arr;
+      }
+      var newT = (t - obj2.startT) / (obj2.endT - obj2.startT);
+      var newRate = timing(newT);
+      return __spreadProps(__spreadValues({}, obj2.interpolate(newRate, newT, timing)), {
+        totalLength: obj2.totalLength
+      });
+    };
+  }
+  return (rate, t, timing) => {
+    var arr = (layer2["transform-origin"] || "50% 50%").split(" ").map((it) => Length.parse(it));
+    var tx = arr[0].toPx(layer2.width);
+    var ty = arr[1].toPx(layer2.height);
+    var obj2 = innerInterpolate(rate, t, timing);
+    var results = {
+      x: obj2.x + screenX - tx.value,
+      y: obj2.y + screenY - ty.value
+    };
+    layer2.setScreenX(results.x);
+    layer2.setScreenY(results.y);
+    if (startObject.rotateStatus === "element")
+      ;
+    else {
+      var current = obj2;
+      var distValue = 0;
+      if (t < 1) {
+        distValue = 1 / obj2.totalLength;
+      }
+      var next = innerInterpolate(rate + distValue, t + distValue, timing);
+      var angle2 = calculateAngle(next.x - current.x, next.y - current.y);
+      var newAngle = Length.deg(innerInterpolateAngle(startObject.rotateStatus, angle2));
+      layer2.reset({
+        transform: Transform.rotate(layer2.transform, newAngle)
+      });
+    }
+    return results;
+  };
+}
+function makeInterpolateText(layer2, property, startText, endText, unit = void 0) {
+  var max = endText.length - 1;
+  var min = 0;
+  return (rate, t) => {
+    var result = 0;
+    if (t === 0) {
+      result = "";
+    } else if (t === 1) {
+      result = endText;
+    } else {
+      result = endText.substring(min, Math.floor((max - min) * t));
+    }
+    return result;
+  };
+}
+function makeInterpolatePlayTime(layer2, property, startValue, endValue, artboard2, layerElement) {
+  const mediaElement = layerElement.$("video").el;
+  let [sTime, eTime, durationTime] = startValue.split(":");
+  const duration = +(durationTime || 1);
+  const startTime = +(sTime || 0) * duration;
+  return (rate, t) => {
+    if (t === 0) {
+      mediaElement.currentTime = startTime;
+      if (mediaElement.paused) {
+        mediaElement.play();
+      }
+    } else if (t === 1) {
+      layer2.reset({
+        currentTime: mediaElement.currentTime
+      });
+      mediaElement.pause();
+    } else {
+      if (mediaElement.paused) {
+        mediaElement.play();
+      }
+    }
+  };
+}
+const DEFAULT_FUCTION = () => (rate, t) => {
+};
+function makeInterpolateCustom(property) {
+  switch (property) {
+    case "border-radius":
+      return makeInterpolateBorderRadius;
+    case "border":
+      return makeInterpolateBorder;
+    case "box-shadow":
+      return makeInterpolateBoxShadow;
+    case "text-shadow":
+      return makeInterpolateTextShadow;
+    case "background-image":
+    case "BackgroundImageEditor":
+      return makeInterpolateBackgroundImage;
+    case "filter":
+    case "backdrop-filter":
+      return makeInterpolateFilter;
+    case "clip-path":
+      return makeInterpolateClipPath;
+    case "transform":
+      return makeInterpolateTransform;
+    case "transform-origin":
+      return makeInterpolateTransformOrigin;
+    case "perspective-origin":
+      return makeInterpolatePerspectiveOrigin;
+    case "stroke-dasharray":
+      return makeInterpolateStrokeDashArrray;
+    case "d":
+      return makeInterpolatePath;
+    case "points":
+      return makeInterpolatePolygon;
+    case "offset-path":
+      return makeInterpolateOffsetPath;
+    case "text":
+      return makeInterpolateText;
+    case "playTime":
+      return makeInterpolatePlayTime;
+  }
+}
+function makeInterpolate(layer2, property, startValue, endValue, editorString, artboard2, layerElement) {
+  var checkField = editorString || property;
+  switch (checkField) {
+    case "width":
+    case "x":
+      return makeInterpolateLength(layer2, property, startValue, endValue, "width");
+    case "height":
+    case "y":
+      return makeInterpolateLength(layer2, property, startValue, endValue, "height");
+    case "perspective":
+    case "font-size":
+    case "font-weight":
+    case "text-stroke-width":
+    case "RangeEditor":
+    case "textLength":
+    case "startOffset":
+      return makeInterpolateLength(layer2, property, startValue, endValue, property);
+    case "fill-opacity":
+    case "opacity":
+    case "stroke-dashoffset":
+    case "currentTime":
+    case "NumberRangeEditor":
+      return makeInterpolateNumber$1(layer2, property, +startValue, +endValue);
+    case "background-color":
+    case "color":
+    case "text-fill-color":
+    case "text-stroke-color":
+    case "fill":
+    case "stroke":
+    case "ColorViewEditor":
+      return makeInterpolateColor(layer2, property, startValue, endValue);
+    case "mix-blend-mode":
+    case "fill-rule":
+    case "stroke-linecap":
+    case "stroke-linejoin":
+    case "SelectEditor":
+    case "lengthAdjust":
+      return makeInterpolateString(layer2, property, startValue, endValue);
+    case "rotate":
+      return makeInterpolateRotate(layer2, property, startValue, endValue);
+  }
+  var func2 = makeInterpolateCustom(checkField);
+  if (func2) {
+    return func2(layer2, property, startValue, endValue, artboard2, layerElement);
+  }
+  return DEFAULT_FUCTION;
+}
+function createInterpolateFunction(layer2, property, startValue, endValue, editorString, artboard2, layerElement) {
+  return makeInterpolate(layer2, property, startValue, endValue, editorString, artboard2, layerElement);
+}
+class TimelineModel extends AssetModel {
+  getDefaultObject(obj2 = {}) {
+    return super.getDefaultObject(__spreadValues({
+      timeline: [],
+      compiledTimeline: {}
+    }, obj2));
+  }
+  expectJSON(key) {
+    if (key === "compiledTimeline")
+      return false;
+    return super.expectJSON(key);
+  }
+  setTimelineInfo(obj2) {
+    var timeline = this.getSelectedTimeline();
+    if (!timeline)
+      return;
+    ["speed", "iterationCount", "direction"].forEach((key) => {
+      if (isNotUndefined(obj2[key])) {
+        timeline[key] = obj2[key];
+      }
+    });
+  }
+  compileAll() {
+    var timeline = this.getSelectedTimeline();
+    this.json.compiledTimeline = {};
+    if (timeline) {
+      timeline.animations.forEach((animation2) => {
+        animation2.properties.forEach((property) => {
+          this.compiledTimingFunction(animation2.id, property.property);
+        });
+      });
+    }
+  }
+  searchTimelineOffset(time) {
+    var timeline = this.getSelectedTimeline();
+    var filteredTimeline = [];
+    if (timeline) {
+      timeline.animations.forEach((animation2) => {
+        animation2.properties.forEach((p) => {
+          var list2 = this.getCompiledTimingFunction(animation2.id, p.property);
+          filteredTimeline.push(list2.find((keyframe2) => {
+            if (keyframe2.isOnlyTime && keyframe2.startTime <= time)
+              return true;
+            return keyframe2.startTime <= time && time < keyframe2.endTime;
+          }));
+        });
+      });
+    }
+    return filteredTimeline.filter((it) => it);
+  }
+  getCompiledTimingFunction(layerId, property) {
+    return this.json.compiledTimeline[`${layerId}.${property}`];
+  }
+  compiledTimingFunction(layerId, property) {
+    var artboard2 = this;
+    var p = this.getTimelineProperty(layerId, property);
+    var layer2 = this.modelManager.get(layerId);
+    var key = `${layerId}.${property}`;
+    if (p.keyframes.length === 1) {
+      this.json.compiledTimeline[key] = [];
+      return;
+    }
+    let layerElement = Dom.body().$(`[data-id="${layerId}"]`);
+    let editorString = p.keyframes.map((it) => it.editor)[0];
+    this.json.compiledTimeline[key] = p.keyframes.map((offset, index2) => {
+      var currentOffset = offset;
+      var nextOffset = p.keyframes[index2 + 1];
+      offset.editor = editorString;
+      if (!nextOffset) {
+        nextOffset = { time: offset.time, value: offset.value };
+      }
+      var it = {
+        layer: layer2,
+        layerElement,
+        property: p.property,
+        isOnlyTime: currentOffset.time === nextOffset.time,
+        startTime: offset.time,
+        endTime: nextOffset.time,
+        startValue: offset.value,
+        endValue: nextOffset.value,
+        timing: offset.timing,
+        interpolateFunction: createInterpolateFunction(layer2, p.property, offset.value, nextOffset.value, offset.editor, artboard2, layerElement),
+        timingFunction: createTimingFunction(offset.timing)
+      };
+      it.func = this.makeTimingFunction(it);
+      return it;
+    }).filter((it) => it);
+  }
+  makeTimingFunction(it) {
+    return (time) => {
+      var totalT = it.endTime - it.startTime;
+      var t = 1;
+      if (totalT !== 0) {
+        t = (time - it.startTime) / totalT;
+      }
+      return it.interpolateFunction(it.timingFunction(t), t, totalT, it.timingFunction);
+    };
+  }
+  stop(frameOrCode) {
+    var timeline = this.getSelectedTimeline();
+    if (timeline) {
+      var time = timeline.currentTime;
+      this.searchTimelineOffset(time).forEach((it) => {
+        if (it.property === "playTime") {
+          const $video = it.layerElement.$("video");
+          if ($video) {
+            $video.el.pause();
+          }
+        }
+      });
+    }
+  }
+  seek(frameOrCode, filterFunction = (it) => it) {
+    var timeline = this.getSelectedTimeline();
+    if (timeline) {
+      if (isNotUndefined(frameOrCode)) {
+        this.setTimelineCurrentTime(frameOrCode);
+      }
+      var time = timeline.currentTime;
+      this.searchTimelineOffset(time).filter(filterFunction).forEach((it) => {
+        if (it.property === "offset-path" || it.property === "playTime") {
+          it.func(time);
+        } else if (it.layer) {
+          it.layer.reset({
+            [it.property]: it.func(time)
+          });
+        }
+      });
+    }
+  }
+  getSelectedTimeline() {
+    var timeline = this.json.timeline;
+    var a = timeline.filter((it) => it.selected);
+    var selectedTimeline = a.length ? a[0] : timeline[0];
+    return selectedTimeline || null;
+  }
+  getKeyframeListReturnArray() {
+    var timeline = this.getSelectedTimeline();
+    var keyframes = [];
+    if (timeline) {
+      timeline.animations.forEach((a) => {
+        a.properties.forEach((p) => {
+          keyframes.push.apply(keyframes, p.keyframes);
+        });
+      });
+    }
+    return keyframes;
+  }
+  getKeyframeList(callback) {
+    var timeline = this.getSelectedTimeline();
+    if (timeline) {
+      timeline.animations.forEach((a) => {
+        a.properties.forEach((p) => {
+          p.keyframes.forEach((k) => {
+            callback && callback(timeline, k);
+          });
+        });
+      });
+    }
+  }
+  getSelectedTimelineLastTime() {
+    var time = 0;
+    this.getKeyframeList((timeline, keyframe2) => {
+      time = Math.max(keyframe2.time, time);
+    });
+    return time;
+  }
+  getSelectedTimelineFirstTime() {
+    var time = Number.MAX_SAFE_INTEGER;
+    this.getKeyframeList((timeline, keyframe2) => {
+      time = Math.min(keyframe2.time, time);
+    });
+    return time;
+  }
+  getSelectedTimelinePrevTime() {
+    var time = this.getSelectedTimelineFirstTime();
+    this.getKeyframeList((timeline, keyframe2) => {
+      if (timecode(timeline.fps, keyframe2.time) < timeline.currentTimecode) {
+        time = Math.max(keyframe2.time, time);
+      }
+    });
+    return time;
+  }
+  getSelectedTimelineNextTime() {
+    var time = this.getSelectedTimelineLastTime();
+    this.getKeyframeList((timeline, keyframe2) => {
+      if (timecode(timeline.fps, keyframe2.time) > timeline.currentTimecode) {
+        time = Math.min(keyframe2.time, time);
+      }
+    });
+    return time;
+  }
+  setTimelineTitle(id, text2) {
+    var timeline = this.json.timeline.find((it) => {
+      return it.id === id;
+    });
+    if (timeline) {
+      timeline.title = text2;
+    }
+  }
+  selectTimeline(id) {
+    if (id) {
+      this.json.timeline.forEach((it) => {
+        it.selected = it.id === id;
+      });
+    } else {
+      var selectedTimeline = this.json.timeline.filter((it) => it.selected);
+      if (selectedTimeline.length)
+        ;
+      else {
+        if (this.json.timeline.length) {
+          this.json.timeline.selected = true;
+        }
+      }
+    }
+    this.compileAll();
+  }
+  removeAnimation(id) {
+    this.json.timeline = this.json.timeline.filter((it) => {
+      return it.id !== id;
+    });
+    if (this.json.timeline.length) {
+      this.json.timeline[0].selected = true;
+    }
+    this.compileAll();
+  }
+  addTimeline(fps = 60, endTimecode = "00:00:10:00") {
+    var id = uuidShort();
+    var selectedTimeline = __spreadProps(__spreadValues({
+      id,
+      title: "sample"
+    }, this.getTimelineLayerInfo(fps, endTimecode)), {
+      animations: []
+    });
+    this.json.timeline.push(selectedTimeline);
+    this.selectTimeline(id);
+    return selectedTimeline;
+  }
+  addTimelineLayer(layerId, fps = 60, endTimecode = "00:00:10:00") {
+    var selectedTimeline = this.getSelectedTimeline();
+    if (!selectedTimeline) {
+      selectedTimeline = this.addTimeline(fps, endTimecode);
+    }
+    selectedTimeline.selected = true;
+    if (layerId) {
+      var layer2 = selectedTimeline.animations.filter((it) => it.id === layerId);
+      if (!layer2[0]) {
+        selectedTimeline.animations.push({
+          id: layerId,
+          properties: []
+        });
+      }
+    }
+  }
+  getTimelineLayerInfo(fps = 60, endTimecode = "00:00:10:00") {
+    var endTime = second(fps, endTimecode);
+    return {
+      fps,
+      speed: 1,
+      direction: "normal",
+      iterationCount: 1,
+      currentTimecode: timecode(fps, 0),
+      totalTimecode: timecode(fps, endTime),
+      currentTime: 0,
+      totalTime: endTime,
+      displayStartTime: 0,
+      displayEndTime: endTime
+    };
+  }
+  setTimelineCurrentTime(frameOrCode) {
+    var timeline = this.getSelectedTimeline();
+    var { fps, totalTimecode } = timeline;
+    if (timeline) {
+      var frame = frameOrCode;
+      var code2 = frameOrCode;
+      if (+frame + "" === frame) {
+        frame = +frame;
+        code2 = framesToTimecode(fps, frame);
+      }
+      if (code2 > totalTimecode) {
+        code2 = totalTimecode;
+      }
+      var currentTime = second(fps, code2);
+      timeline.currentTime = currentTime;
+      timeline.currentTimecode = timecode(fps, currentTime);
+    }
+  }
+  setDisplayTimeDxRate(dxRate, initStartTime, initEndTime) {
+    var timeline = this.getSelectedTimeline();
+    if (timeline) {
+      var dxTime = dxRate * timeline.totalTime;
+      var startTime = initStartTime + dxTime;
+      var endTime = initEndTime + dxTime;
+      startTime = Math.max(startTime, 0);
+      startTime = Math.min(startTime, endTime);
+      if (startTime === 0) {
+        endTime = initEndTime - initStartTime;
+      }
+      endTime = Math.max(endTime, startTime);
+      endTime = Math.min(endTime, timeline.totalTime);
+      if (endTime === timeline.totalTime) {
+        startTime = timeline.totalTime - (initEndTime - initStartTime);
+      }
+      timeline.displayStartTime = startTime;
+      timeline.displayEndTime = endTime;
+    }
+  }
+  setDisplayStartTimeRate(rate) {
+    var timeline = this.getSelectedTimeline();
+    if (timeline) {
+      timeline.displayStartTime = rate * timeline.totalTime;
+    }
+  }
+  setDisplayEndTimeRate(rate) {
+    var timeline = this.getSelectedTimeline();
+    if (timeline) {
+      timeline.displayEndTime = rate * timeline.totalTime;
+    }
+  }
+  setTimelineCurrentTimeRate(rate) {
+    var timeline = this.getSelectedTimeline();
+    if (timeline) {
+      var { displayStartTime, displayEndTime, fps } = timeline;
+      var currentTime = displayStartTime + (displayEndTime - displayStartTime) * rate;
+      this.setTimelineCurrentTime(timecode(fps, currentTime));
+    }
+  }
+  setTimelineTotalTime(frameOrCode) {
+    var timeline = this.getSelectedTimeline();
+    if (timeline) {
+      var frame = frameOrCode;
+      var code2 = frameOrCode;
+      if (+frame + "" === frame) {
+        frame = +frame;
+        code2 = framesToTimecode(timeline.fps, frame);
+      }
+      if (second(timeline.fps, code2) < timeline.displayEndTime) {
+        timeline.displayEndTime = second(timeline.fps, code2);
+        timeline.displayStartTime = 0;
+      }
+      timeline.totalTimecode = code2;
+      timeline.totalTime = second(timeline.fps, code2);
+    }
+  }
+  getTimelineObject(layerId) {
+    var selectedTimeline = this.getSelectedTimeline();
+    if (selectedTimeline) {
+      return selectedTimeline.animations.find((it) => it.id === layerId);
+    }
+  }
+  addTimelineProperty(layerId, property) {
+    this.addTimelineLayer(layerId);
+    var animation2 = this.getTimelineObject(layerId);
+    if (animation2) {
+      var p = animation2.properties.filter((it) => it.property === property);
+      if (!p.length) {
+        animation2.properties.push({
+          property,
+          keyframes: []
+        });
+        this.compiledTimingFunction(layerId, property);
+      }
+    }
+  }
+  getTimelineProperty(layerId, property) {
+    var timeline = this.getSelectedTimeline();
+    if (timeline) {
+      layerId = layerId || timeline.selectedLayerId;
+      property = property || timeline.selectedProperty;
+      var timelineObject = this.getTimelineObject(layerId);
+      if (timelineObject) {
+        return timelineObject.properties.find((it) => it.property === property);
+      }
+    }
+  }
+  setSelectedOffset(layerId, property, time) {
+    var timeline = this.getSelectedTimeline();
+    if (timeline) {
+      timeline.selectedLayerId = layerId;
+      timeline.selectedProperty = property;
+      timeline.selectedOffsetTime = time;
+      var p = this.getTimelineProperty();
+      p.keyframes.forEach((it) => {
+        it.selected = it.time === time;
+      });
+    }
+  }
+  deleteTimelineKeyframe(layerId, property, offsetId) {
+    var p = this.getTimelineProperty(layerId, property);
+    if (p) {
+      p.keyframes = p.keyframes.filter((it) => it.id != offsetId);
+    }
+  }
+  removeTimelineProperty(layerId, property) {
+    var layer2 = this.getTimelineObject(layerId);
+    if (layer2) {
+      layer2.properties = layer2.properties.filter((p) => p.property != property);
+    }
+  }
+  removeTimeline(layerId) {
+    var timeline = this.getSelectedTimeline();
+    if (timeline) {
+      timeline.animations = timeline.animations.filter((ani) => ani.id != layerId);
+    }
+  }
+  setTimelineKeyframeOffsetTime(layerId, property, offsetId, changedTime) {
+    var keyframe2 = this.getTimelineKeyframeById(layerId, property, offsetId);
+    if (keyframe2) {
+      keyframe2.time = changedTime;
+      this.compiledTimingFunction(layerId, property);
+    }
+  }
+  setTimelineKeyframeOffsetValue(layerId, property, offsetId, value = void 0, timing = void 0, time = void 0) {
+    var keyframe2 = this.getTimelineKeyframeById(layerId, property, offsetId);
+    if (keyframe2) {
+      if (isNotUndefined(time)) {
+        keyframe2.time = time;
+      }
+      if (isNotUndefined(value)) {
+        keyframe2.value = value;
+      }
+      if (isNotUndefined(timing)) {
+        keyframe2.timing = timing;
+      }
+      this.compiledTimingFunction(layerId, property);
+    }
+  }
+  addTimelineKeyframe({ layerId, property, value, timing, time: newTime, editor }) {
+    this.addTimelineProperty(layerId, property);
+    var timeline = this.getSelectedTimeline();
+    var p = this.getTimelineProperty(layerId, property);
+    if (p) {
+      var time = newTime || timeline.currentTime;
+      var times = p.keyframes.filter((it) => it.time === time);
+      if (!times.length) {
+        value = isUndefined(value) || value === "" ? this.getDefaultPropertyValue(property) : value;
+        var obj2 = { id: uuidShort(), layerId, property, time, value, timing: timing || "linear", editor };
+        p.keyframes.push(obj2);
+        p.keyframes.sort((a, b) => {
+          return a.time > b.time ? 1 : -1;
+        });
+        this.compiledTimingFunction(layerId, property);
+        return obj2;
+      }
+    }
+  }
+  getDefaultPropertyValue(property) {
+    switch (property) {
+      case "mix-blend-mode":
+        return "normal";
+      case "rotate":
+        return "0deg";
+      case "box-shadow":
+        return "0px 0px 0px 0px rgba(0, 0, 0, 1)";
+      case "text-shadow":
+        return "0px 0px 0px rgba(0, 0, 0, 1)";
+      case "opacity":
+        return 1;
+      default:
+        return "";
+    }
+  }
+  copyTimelineKeyframe(layerId, property, newTime = null) {
+    var p = this.getTimelineProperty(layerId, property);
+    if (p) {
+      var timeline = this.getSelectedTimeline();
+      var time = newTime || timeline.currentTime;
+      var times = p.keyframes.filter((it) => it.time < time);
+      var value = this.getDefaultPropertyValue(property);
+      var timing = "linear";
+      var editor = "";
+      if (times.length) {
+        times.sort((a, b) => {
+          return a.time > b.time ? -1 : 1;
+        });
+        value = times[0].value + "";
+        timing = times[0].timing + "";
+        editor = times[0].editor;
+      }
+      this.addTimelineKeyframe({ layerId, property, value, timing, editor });
+    }
+  }
+  getTimelineKeyframe(layerId, property, time) {
+    var p = this.getTimelineProperty(layerId, property);
+    if (p) {
+      return p.keyframes.find((it) => it.time === time);
+    }
+  }
+  getTimelineKeyframeById(layerId, property, id) {
+    var p = this.getTimelineProperty(layerId, property);
+    if (p) {
+      return p.keyframes.find((it) => it.id === id);
+    }
+  }
+  sortTimelineKeyframe(layerId, property) {
+    var p = this.getTimelineProperty(layerId, property);
+    if (p) {
+      p.keyframes.sort((a, b) => {
+        return a.time > b.time ? 1 : -1;
+      });
+      this.compiledTimingFunction(layerId, property);
+    }
+  }
+  setFps(fps) {
+    var timeline = this.getSelectedTimeline();
+    if (timeline) {
+      timeline.fps = fps;
+      timeline.currentTimecode = timecode(fps, timeline.currentTime);
+      timeline.totalTimecode = timecode(fps, timeline.totalTime);
+    }
+  }
+  toCloneObject() {
+    return __spreadProps(__spreadValues({}, super.toCloneObject()), {
+      timeline: clone$1(this.json.timeline)
+    });
+  }
+}
+const identity = create$5();
+class Project extends TimelineModel {
+  getDefaultTitle() {
+    return "New Project";
+  }
+  get isAbsolute() {
+    return false;
+  }
+  get parent() {
+    return null;
+  }
+  toRootVariableCSS() {
+    var obj2 = {};
+    this.json.rootVariable.split(";").filter((it) => it.trim()).forEach((it) => {
+      var [key, value] = it.split(":");
+      obj2[`--${key}`] = value;
+    });
+    return obj2;
+  }
+  getDefaultObject(obj2 = {}) {
+    return super.getDefaultObject(__spreadValues({
+      itemType: "project",
+      name: "new Project",
+      description: "",
+      rootVariable: ""
+    }, obj2));
+  }
+  toCloneObject() {
+    return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("name", "description", "rootVariable"));
+  }
+  get artboards() {
+    return (this.layers || []).filter((it) => it.is("artboard"));
+  }
+  get offsetX() {
+    return 0;
+  }
+  get offsetY() {
+    return 0;
+  }
+  get screenWidth() {
+    return 0;
+  }
+  get screenHeight() {
+    return 0;
+  }
+  hasLayout() {
+    return false;
+  }
+  getAbsoluteMatrix() {
+    return create$5();
+  }
+  getTransformMatrix() {
+    return create$5();
+  }
+  resetMatrix(childItem) {
+    const [x2, y2] = getTranslation([], calculateMatrix(childItem.absoluteMatrix, childItem.localMatrixInverse));
+    childItem.reset({
+      x: x2,
+      y: y2
+    });
+  }
+  get rectVerties() {
+    var _a;
+    return ((_a = this.layers) == null ? void 0 : _a.length) ? itemsToRectVerties(this.layers) : null;
+  }
+  get absoluteMatrix() {
+    return identity;
+  }
+  get absoluteMatrixInverse() {
+    return identity;
+  }
+  get contentBox() {
+    return {
+      left: 0,
+      top: 0,
+      width: 0,
+      height: 0
+    };
+  }
+}
+class SelectionManager {
+  constructor(editor) {
+    this.$editor = editor;
+    this.project = null;
+    this.itemKeys = {};
+    this.hoverId = "";
+    this.hoverItems = [];
+    this.ids = [];
+    this.colorsteps = [];
+    this.ghosts = [];
+    this.cachedItemMatrices = [];
+    this.cachedArtBoardVerties = [];
+    this.cachedVerties = rectToVerties(0, 0, 0, 0, "50% 50% 0px");
+    this.$editor.on("config:bodyEvent", () => {
+      this.refreshMousePosition();
+    });
+  }
+  refreshMousePosition() {
+    const areaWidth = this.$editor.config.get("area.width");
+    const pos = this.$editor.viewport.getWorldPosition();
+    this.pos = pos;
+    const [row, column] = area(pos[0], pos[1], areaWidth);
+    this.row = row;
+    this.column = column;
+  }
+  get modelManager() {
+    return this.$editor.modelManager;
+  }
+  get lockManager() {
+    return this.$editor.lockManager;
+  }
+  get items() {
+    return this.modelManager.searchLiveItemsById(this.ids);
+  }
+  get current() {
+    return this.modelManager.searchItem(this.ids[0]);
+  }
+  get currentProject() {
+    if (!this.project) {
+      this.project = this.modelManager.getProjectByIndex();
+    }
+    return this.project;
+  }
+  get isEmpty() {
+    return !this.length;
+  }
+  get isOne() {
+    if (this.length === 1 && this.current.is("artboard"))
+      return true;
+    return this.length === 1;
+  }
+  get isMany() {
+    return this.length > 1;
+  }
+  get length() {
+    return this.ids.length;
+  }
+  get isLayoutItem() {
+    var _a;
+    return (_a = this.current) == null ? void 0 : _a.isLayoutItem();
+  }
+  get allLayers() {
+    return this.currentProject.allLayers || [];
+  }
+  get filteredLayers() {
+    const areaWidth = this.$editor.config.get("area.width");
+    return this.currentProject.filteredAllLayers((item2) => {
+      if (item2.is("project"))
+        return false;
+      const areaPosition = item2.getAreaPosition(areaWidth);
+      if (!areaPosition) {
+        return false;
+      }
+      const { column, row } = areaPosition;
+      return column[0] <= this.column && this.column <= column[1] && (row[0] <= this.row && this.row <= row[1]);
+    }).filter((item2) => {
+      return item2.isPointInRect(this.pos[0], this.pos[1]);
+    });
+  }
+  get snapTargetLayers() {
+    if (!this.currentProject)
+      return [];
+    return this.currentProject.allLayers.filter((item2) => {
+      if (item2.is("project"))
+        return false;
+      if (this.check(item2))
+        return false;
+      const inViewport = item2.verties.some((v) => {
+        return this.$editor.viewport.checkInViewport(v);
+      });
+      return inViewport;
+    });
+  }
+  get snapTargetLayersWithSelection() {
+    if (!this.currentProject)
+      return [];
+    return this.currentProject.allLayers.filter((item2) => {
+      if (item2.is("project"))
+        return false;
+      const inViewport = item2.verties.some((v) => {
+        return this.$editor.viewport.checkInViewport(v);
+      });
+      return inViewport;
+    });
+  }
+  get selectedArtboards() {
+    return [...new Set(this.items.map((it) => it.artboard))];
+  }
+  hasChangedField(...args2) {
+    if (this.current) {
+      return this.current.hasChangedField(...args2);
+    }
+    return false;
+  }
+  getRootItem(current) {
+    var rootItem = current;
+    if (current && current.parentId) {
+      rootItem = current.parent;
+    }
+    return rootItem;
+  }
+  selectColorStep(...args2) {
+    this.colorsteps = args2;
+  }
+  isSelectedColorStep(id) {
+    return this.colorsteps.includes(id);
+  }
+  selectProject(project2) {
+    if (isString(project2)) {
+      project2 = this.modelManager.get(project2);
+    }
+    this.project = project2;
+    this.select();
+  }
+  get isRelative() {
+    var item2 = this.current || {};
+    return item2.position === "relative";
+  }
+  isSameIds(newIds) {
+    if (this.ids.length != newIds.length) {
+      return false;
+    }
+    if (this.ids.filter((id) => newIds.includes(id)).length === this.ids.length) {
+      return true;
+    }
+    return false;
+  }
+  filterIds(ids = []) {
+    return ids.map((it) => it.id || it).filter(Boolean);
+  }
+  selectByGroup(...ids) {
+    var list2 = this.modelManager.searchItemsById(this.filterIds(ids || [])).filter((it) => {
+      return !this.lockManager.get(it.id);
+    });
+    const newSelectedItems = this.modelManager.convertGroupItems(list2);
+    return this.select(...newSelectedItems.map((it) => it.id));
+  }
+  select(...ids) {
+    var list2 = this.modelManager.searchItemsById(this.filterIds(ids || [])).filter((it) => !it.lock && it.isAbsolute);
+    const newSelectedItems = list2.filter((it) => {
+      return it.path.filter((element) => list2.includes(element)).length < 2;
+    });
+    const newSelectedIds = newSelectedItems.map((it) => it.id);
+    if (this.isSameIds(newSelectedIds)) {
+      return false;
+    }
+    this.itemKeys = {};
+    newSelectedItems.forEach((item2) => {
+      this.itemKeys[item2.id] = item2;
+    });
+    this.ids = newSelectedIds;
+    this.setRectCache();
+    return true;
+  }
+  reload() {
+    return this.select(...this.ids);
+  }
+  reselect() {
+    this.setRectCache();
+  }
+  check(item2) {
+    return !!this.itemKeys[item2.id];
+  }
+  hasPathOf(item2) {
+    return this.modelManager.hasPathOf(this.items.filter((it) => it.isNot("artboard")), item2);
+  }
+  hasParent(parentId) {
+    return this.items.some((it) => it.hasParent(parentId));
+  }
+  get(id) {
+    return this.itemKeys[id];
+  }
+  empty() {
+    this.select();
+  }
+  itemsByIds(ids = null) {
+    let itemIdList = [];
+    if (Array.isArray(ids)) {
+      itemIdList = ids;
+    } else if (isString(ids) || isObject(ids)) {
+      itemIdList = [ids];
+    }
+    return this.modelManager.searchItemsById(itemIdList);
+  }
+  selectById(id) {
+    this.select(id);
+  }
+  selectAfterCopy() {
+    this.select(...this.items.map((it) => it.copy()));
+  }
+  addById(id) {
+    if (this.itemKeys[id])
+      return;
+    this.select(...this.ids, id);
+  }
+  removeById(id) {
+    let ids = id;
+    if (isString(id)) {
+      ids = [id];
+    }
+    const filteredItems = this.ids.filter((id2) => ids.includes(id2) === false);
+    this.select(...filteredItems);
+  }
+  toggleById(id) {
+    if (this.itemKeys[id]) {
+      this.removeById(id);
+    } else {
+      this.addById(id);
+    }
+  }
+  getArtboardByPoint(vec) {
+    return this.currentProject.artboards.find((artboard2) => {
+      return polyPoint(artboard2.originVerties, ...vec);
+    });
+  }
+  changeInLayoutArea(pointer) {
+    let checkedParentChange = false;
+    this.each((instance) => {
+      if (instance.is("artboard") === false) {
+        if (instance.artboard) {
+          const localArtboardVerties = instance.artboard.originVerties;
+          const isInArtboard = polyPoint(localArtboardVerties, this.pos[0], this.pos[1]);
+          if (isInArtboard) {
+            return false;
+          }
+        }
+        const selectedArtBoard = this.cachedArtBoardVerties.find((artboard2) => {
+          return polyPoint(artboard2.matrix.originVerties, this.pos[0], this.pos[1]);
+        });
+        if (selectedArtBoard) {
+          if (selectedArtBoard.item !== instance.artboard && selectedArtBoard.item.hasLayout() === false) {
+            selectedArtBoard.item.appendChild(instance);
+            checkedParentChange = true;
+          }
+        } else {
+          if (instance.artboard) {
+            this.currentProject.appendChild(instance);
+            checkedParentChange = true;
+          }
+        }
+      }
+    });
+    return checkedParentChange;
+  }
+  setRectCache() {
+    if (this.isEmpty) {
+      this.cachedVerties = [];
+      this.cachedRectVerties = [];
+      this.cachedItemMatrices = [];
+      this.ghosts = [];
+      this.cachedArtBoardVerties = this.currentProject.artboards.map((item2) => {
+        return { item: item2, matrix: item2.matrix };
+      });
+      return;
+    }
+    this.cachedVerties = this.verties;
+    this.cachedRectVerties = toRectVerties(this.verties);
+    this.cachedItemMatrices = [];
+    this.cachedChildren = [];
+    this.ghosts = [];
+    this.items.forEach((it) => {
+      if (it.is("artboard")) {
+        this.cachedItemMatrices.push(it.matrix);
+      } else if (it.hasChildren()) {
+        const list2 = this.modelManager.getAllLayers(it.id).map((it2) => it2.matrix);
+        this.cachedChildren.push(...list2.map((it2) => it2.id));
+        this.cachedItemMatrices.push(...list2);
+      } else {
+        this.cachedItemMatrices.push(it.matrix);
+      }
+      this.ghosts.push(it.absoluteMatrix);
+    });
+    this.cachedArtBoardVerties = this.currentProject.artboards.map((item2) => {
+      return { item: item2, matrix: item2.matrix };
+    });
+    this.cachedCurrentItemMatrix = this.current.matrix;
+    this.cachedCurrentChildrenItemMatrices = this.modelManager.getAllLayers(this.current.id).map((it) => it.matrix);
+  }
+  startToCacheChildren() {
+    this.items.forEach((item2) => {
+      item2.startToCacheChildren();
+    });
+  }
+  recoverChildren() {
+    this.items.forEach((item2) => {
+      item2.recoverChildren();
+    });
+  }
+  get verties() {
+    if (this.isOne) {
+      return this.current.verties;
+    } else {
+      return this.rectVerties;
+    }
+  }
+  get targetVerties() {
+    if (this.isOne) {
+      return this.current.originVerties;
+    } else {
+      return targetItemsToRectVerties(this.items);
+    }
+  }
+  get originVerties() {
+    return this.rectVerties.filter((_, index2) => index2 < 4);
+  }
+  get rectVerties() {
+    if (this.isEmpty) {
+      return [];
+    }
+    return itemsToRectVerties(this.items);
+  }
+  get itemRect() {
+    const verties = this.verties;
+    return {
+      x: verties[0][0],
+      y: verties[0][1],
+      width: distance$1(verties[0], verties[1]),
+      height: distance$1(verties[0], verties[3])
+    };
+  }
+  toCloneObject() {
+    let data = {};
+    this.each((item2) => {
+      data[item2.id] = item2.toCloneObject(false);
+    });
+    return data;
+  }
+  pack(...keys2) {
+    let data = {};
+    this.each((item2) => {
+      data[item2.id] = {};
+      keys2.forEach((key) => {
+        data[item2.id][key] = item2[key];
+      });
+    });
+    return data;
+  }
+  packByIds(ids, ...keys2) {
+    let data = {};
+    let localItems = [];
+    if (ids === null) {
+      localItems = this.items;
+    } else if (isString(ids) || Array.isArray(ids)) {
+      localItems = this.itemsByIds(ids);
+    }
+    const valueObject = {};
+    keys2.forEach((it) => {
+      valueObject[it] = true;
+    });
+    localItems.forEach((item2) => {
+      data[item2.id] = item2.attrs(...keys2);
+    });
+    return data;
+  }
+  packByValue(valueObject, ids = null) {
+    let data = {};
+    let localItems = [];
+    if (ids === null) {
+      localItems = this.items;
+    } else if (isString(ids) || Array.isArray(ids)) {
+      localItems = this.itemsByIds(ids);
+    }
+    localItems.forEach((item2) => {
+      data[item2.id] = {};
+      Object.keys(valueObject).forEach((key) => {
+        data[item2.id][key] = isFunction(valueObject[key]) ? valueObject[key].call(valueObject, item2) : valueObject[key];
+      });
+    });
+    return data;
+  }
+  each(callback) {
+    if (isFunction(callback)) {
+      this.items.forEach((item2, index2) => {
+        callback(item2);
+      });
+    }
+  }
+  map(callback) {
+    if (isFunction(callback)) {
+      return this.items.map((item2, index2) => {
+        return callback(item2, index2);
+      });
+    }
+    return this.items;
+  }
+  reset(obj2) {
+    Object.entries(obj2).forEach(([id, attrs]) => {
+      var _a;
+      (_a = this.get(id)) == null ? void 0 : _a.reset(attrs);
+    });
+  }
+  resetCallback(callback) {
+    this.each((item2) => item2.reset(callback(item2)));
+  }
+  resize() {
+    this.each((item2) => item2.resize());
+  }
+  remove() {
+    this.each((item2) => item2.remove());
+    this.empty();
+  }
+  copy() {
+    console.warn("copy is deprecated");
+    this.copyItems = this.items.map((item2) => item2);
+  }
+  paste() {
+    console.warn("paste is deprecated. use copy and paste");
+    this.select(...this.copyItems.map((item2) => item2.copy(10)));
+    this.copy();
+  }
+  hasPoint(point2) {
+    var _a;
+    if (this.isMany) {
+      return polyPoint(this.originVerties, point2[0], point2[1]);
+    } else {
+      return (_a = this.current) == null ? void 0 : _a.hasPoint(point2[0], point2[1]);
+    }
+  }
+  hasChildrenPoint(point2) {
+    return this.cachedChildren.some((it) => {
+      var _a;
+      return (_a = this.modelManager.get(it)) == null ? void 0 : _a.hasPoint(point2[0], point2[1]);
+    });
+  }
+  checkChildren(childId) {
+    return this.cachedChildren.includes(childId);
+  }
+  checkHover(itemOrId) {
+    if (isString(itemOrId)) {
+      return this.hoverId === itemOrId;
+    } else {
+      return this.hoverItems.findIndex((it) => it.id === itemOrId.id) > -1;
+    }
+  }
+  hasHoverItem() {
+    return this.hoverId !== "";
+  }
+  selectHoverItem() {
+    this.select(this.hoverId);
+  }
+  setHoverId(id) {
+    let isChanged = false;
+    if (!id || this.itemKeys[id]) {
+      if (this.hoverId != "") {
+        isChanged = true;
+      }
+      this.hoverId = "";
+      this.hoverItems = [];
+    } else if (this.cachedArtBoardVerties.find((it) => it.item.id === id)) {
+      if (this.hoverId != "") {
+        isChanged = true;
+      }
+      this.hoverId = "";
+      this.hoverItems = [];
+    } else {
+      if (this.hoverId != id) {
+        isChanged = true;
+      }
+      this.hoverId = id;
+      this.hoverItems = this.itemsByIds([id]).filter((it) => it.isNot("artboard"));
+      if (this.hoverItems.length === 0) {
+        this.hoverId = "";
+        isChanged = true;
+      }
+    }
+    if (isChanged) {
+      this.$editor.emit("changeHoverItem");
+    }
+    return isChanged;
+  }
+  is(...args2) {
+    var _a;
+    return args2.includes((_a = this.current) == null ? void 0 : _a.itemType);
+  }
+  isAll(...args2) {
+    return this.items.every((it) => args2.includes(it.itemType));
+  }
+}
+class SegmentSelectionManager {
+  constructor(editor) {
+    this.$editor = editor;
+    this.selectedPointKeys = {};
+    this.selectedPointList = [];
+  }
+  get length() {
+    return this.selectedPointList.length;
+  }
+  initialize() {
+    this.selectedPointKeys = {};
+    this.selectedPointList = [];
+  }
+  makeSegmentKey(index2, key) {
+    return `${index2}_${key}`;
+  }
+  select(...list2) {
+    this.selectedPointKeys = {};
+    this.selectedPointList = list2.map(({ key, index: index2 }) => ({
+      key,
+      index: +index2 || 0
+    }));
+    list2.forEach((it) => {
+      var key = this.makeSegmentKey(it.index, it.key);
+      this.selectedPointKeys[key] = it;
+    });
+  }
+  toggleSegment(index2, key) {
+    if (!this.isSelectedSegment(key, index2)) {
+      this.select(...this.selectedPointList, { key, index: index2 });
+    } else {
+      this.select(...this.selectedPointList.filter((it) => {
+        return it.key !== key || it.index !== index2;
+      }));
+    }
+  }
+  toggleSelect(...list2) {
+    list2 = list2.map((it) => {
+      return __spreadProps(__spreadValues({}, it), { included: this.isSelectedSegment(it.index, it.key) });
+    });
+    const includedList = list2.filter((it) => it.included);
+    const notIncludedList = list2.filter((it) => !it.included);
+    let uniqueList = [...this.selectedPointList];
+    if (includedList.length) {
+      uniqueList = this.selectedPointList.filter((it) => {
+        const oldKey = this.makeSegmentKey(it);
+        return Boolean(includedList.find((includeNode) => {
+          return oldKey === this.makeSegmentKey(includeNode);
+        })) === false;
+      });
+    }
+    this.select(...uniqueList, ...notIncludedList);
+  }
+  selectKeyIndex(index2, key) {
+    if (!this.isSelectedSegment(index2, key)) {
+      this.select({ key, index: index2 });
+    }
+  }
+  isSelectedSegment(index2, key) {
+    var key = this.makeSegmentKey(index2, key);
+    return !!this.selectedPointKeys[key];
+  }
+}
+class TimelineSelectionManager {
+  constructor(editor) {
+    this.$editor = editor;
+    this.items = [];
+    this.itemKeys = {};
+  }
+  initialize() {
+    this.items = [];
+    this.itemKeys = {};
+  }
+  currentProject(callback) {
+    var project2 = this.$editor.selection.currentProject;
+    if (project2) {
+      callback && callback(project2);
+    }
+  }
+  empty() {
+    this.select();
+  }
+  each(callback) {
+    this.items.forEach((item2, index2) => {
+      callback && callback(item2, index2);
+    });
+  }
+  refreshCache(list2) {
+    this.items = list2;
+    this.itemKeys = {};
+    this.items.forEach((it) => {
+      this.itemKeys[it.id] = it;
+    });
+  }
+  cachedList() {
+    return this.items.map((it) => {
+      return __spreadValues({}, it);
+    });
+  }
+  checked(id) {
+    return !!this.itemKeys[id];
+  }
+  selectLayer(layerId) {
+    this.currentProject((project2) => {
+      var list2 = project2.getKeyframeListReturnArray().filter((it) => {
+        return it.layerId === layerId;
+      });
+      this.refreshCache(list2);
+    });
+  }
+  toggleLayerContainer(animationId) {
+    this.currentProject((project2) => {
+      project2.getSelectedTimeline().animations.filter((it) => {
+        return it.id === animationId;
+      }).forEach((it) => {
+        it.collapsed = !it.collapsed;
+      });
+    });
+  }
+  selectProperty(layerId, property) {
+    this.currentProject((project2) => {
+      var list2 = project2.getKeyframeListReturnArray().filter((it) => {
+        return it.layerId === layerId && it.property === property;
+      });
+      this.refreshCache(list2);
+    });
+  }
+  select(...args2) {
+    this.refreshCache(args2);
+  }
+  selectBySearch(list2, startTime, endTime) {
+    this.currentProject((project2) => {
+      var totalList = [];
+      list2.forEach((it) => {
+        var results = [];
+        if (it.property) {
+          var p = project2.getTimelineProperty(it.layerId, it.property);
+          results = p.keyframes.filter((keyframe2) => {
+            return startTime <= keyframe2.time && keyframe2.time <= endTime;
+          });
+        } else {
+          var p = project2.getTimelineObject(it.layerId);
+          p.properties.filter((property) => {
+            return property.property === it.property;
+          }).forEach((property) => {
+            results.push.apply(results, property.keyframes.filter((keyframe2) => {
+              return startTime <= keyframe2.time && keyframe2.time <= endTime;
+            }));
+          });
+        }
+        totalList.push.apply(totalList, results);
+      });
+      var uniqueOffset = {};
+      totalList.forEach((it) => {
+        uniqueOffset[it.id] = it;
+      });
+      this.select(...Object.values(uniqueOffset));
+    });
+  }
+  checkLayer(layerId) {
+    return Object.keys(this.itemKeys).some((key) => {
+      return this.itemKeys[key].layerId === layerId;
+    });
+  }
+  checkProperty(layerId, property) {
+    return Object.keys(this.itemKeys).some((key) => {
+      return this.itemKeys[key].layerId === layerId && this.itemKeys[key].property === property;
+    });
   }
 }
 class HistoryManager {
@@ -21019,7 +21095,7 @@ class HistoryManager {
     return Object.keys(this.selection);
   }
   createCommand(commandString) {
-    return this.$editor.isPointerUp ? `history.${commandString}` : commandString;
+    return this.$editor.stateManager.isPointerUp ? `history.${commandString}` : commandString;
   }
   saveSelection(obj2 = {}) {
     this.selection = this.$editor.selection.toCloneObject();
@@ -21094,139 +21170,6 @@ class HistoryManager {
         this.$editor.emit("refreshHistory", commandObject.command);
       });
     }
-  }
-}
-const MAX_SNAP_DISTANCE = 3;
-const DEFAULT_DIST_VECTOR = fromValues(0, 0, 0);
-const AXIS_X = "x";
-const AXIS_Y = "y";
-function checkXAxis(sourceVertex, targetVertex) {
-  return Math.abs(sourceVertex[0] - targetVertex[0]) < 1;
-}
-function checkYAxis(sourceVertex, targetVertex) {
-  return Math.abs(sourceVertex[1] - targetVertex[1]) < 1;
-}
-class SnapManager {
-  constructor(editor, snapDistance = MAX_SNAP_DISTANCE) {
-    this.editor = editor;
-    this.map = new Map();
-    this.snapTargetLayers = [];
-    this.snapDistance = snapDistance;
-  }
-  get dist() {
-    return this.editor.config.get("snap.distance") || this.snapDistance;
-  }
-  get gridSize() {
-    return this.editor.config.get("snap.grid") || 50;
-  }
-  clear() {
-    this.snapTargetLayers = this.editor.selection.snapTargetLayers.map((it) => {
-      return this.convertMatrix(it);
-    });
-  }
-  convertMatrix(item2) {
-    const verties = this.convertGuideAndPathMatrix(item2);
-    const xList = verties.map((it) => it[0]);
-    const yList = verties.map((it) => it[1]);
-    return { id: item2.id, xList, yList, verties, rectVerties: toRectVertiesWithoutTransformOrigin(item2.originVerties) };
-  }
-  convertGuideAndPathMatrix(item2) {
-    const guideVerties = item2.guideVerties;
-    return [...guideVerties];
-  }
-  getSnapPoints() {
-    const points2 = [];
-    this.editor.selection.snapTargetLayersWithSelection.forEach((it) => {
-      points2.push.apply(points2, this.convertGuideAndPathMatrix(it));
-    });
-    return points2;
-  }
-  checkX(targetXList, sourceXList, dist2 = 0) {
-    const checkXList = [];
-    targetXList.forEach((targetX, targetIndex) => {
-      sourceXList.forEach((sourceX, sourceIndex) => {
-        const localDistX = targetX - sourceX;
-        const localGridDistX = this.gridSize - Math.abs(sourceX) % this.gridSize;
-        if (Math.abs(localDistX) <= dist2) {
-          checkXList.push({ targetX, sourceX, sourceIndex, targetIndex, dx: localDistX });
-        } else if (Math.abs(localGridDistX) <= dist2) {
-          checkXList.push({ targetX, sourceX, sourceIndex, targetIndex, dx: localGridDistX });
-        }
-      });
-    });
-    return checkXList;
-  }
-  checkY(targetYList, sourceYList, dist2 = 0) {
-    const checkYList = [];
-    targetYList.forEach((targetY, targetIndex) => {
-      sourceYList.forEach((sourceY, sourceIndex) => {
-        const localDistY = targetY - sourceY;
-        if (Math.abs(localDistY) <= dist2) {
-          checkYList.push({ targetY, sourceY, sourceIndex, targetIndex, dy: localDistY });
-        }
-      });
-    });
-    return checkYList;
-  }
-  check(sourceVerties) {
-    const snaps = [];
-    const dist2 = this.dist;
-    const sourceXList = sourceVerties.map((it) => it[0]);
-    const sourceYList = sourceVerties.map((it) => it[1]);
-    this.snapTargetLayers.forEach((target) => {
-      const x2 = this.checkX(target.xList, sourceXList, dist2)[0];
-      const y2 = this.checkY(target.yList, sourceYList, dist2)[0];
-      snaps.push(fromValues(x2 ? x2.dx : 0, y2 ? y2.dy : 0, 0));
-    });
-    return snaps.find((it) => isNotZero(it[0]) || isNotZero(it[1])) || DEFAULT_DIST_VECTOR;
-  }
-  checkPoint(sourceVertex) {
-    const snap = this.check([sourceVertex]);
-    return add$1([], sourceVertex, snap);
-  }
-  getGuidesByPointPoint(sourceVerties, targetVerties) {
-    const points2 = [];
-    const groupPoints = {};
-    let sourceVertex, targetVertex;
-    for (let sourceIndex = 0, sourceLength = sourceVerties.length; sourceIndex < sourceLength; sourceIndex++) {
-      sourceVertex = sourceVerties[sourceIndex];
-      const keyX = `${sourceVertex[0]}_x`;
-      const keyY = `${sourceVertex[1]}_y`;
-      if (!groupPoints[keyX]) {
-        groupPoints[keyX] = [];
-      }
-      if (!groupPoints[keyY]) {
-        groupPoints[keyY] = [];
-      }
-      for (let targetIndex = 0, targetLength = targetVerties.length; targetIndex < targetLength; targetIndex++) {
-        targetVertex = targetVerties[targetIndex];
-        if (checkXAxis(sourceVertex, targetVertex)) {
-          groupPoints[keyX].push([sourceVertex, targetVertex, AXIS_X, dist(sourceVertex, targetVertex)]);
-        }
-        if (checkYAxis(sourceVertex, targetVertex)) {
-          groupPoints[keyY].push([sourceVertex, targetVertex, AXIS_Y, dist(sourceVertex, targetVertex)]);
-        }
-      }
-    }
-    Object.keys(groupPoints).forEach((key) => {
-      if (groupPoints[key] && groupPoints[key].length) {
-        const sorted = groupPoints[key].sort((a, b) => a[3] - b[3]);
-        const [sourceVertex2, targetVertex2, axis] = sorted[0];
-        points2.push([sourceVertex2, targetVertex2, axis]);
-      }
-    });
-    return points2;
-  }
-  findGuide(sourceVerties) {
-    const guides = [];
-    this.snapTargetLayers.forEach((target) => {
-      const points2 = this.getGuidesByPointPoint(sourceVerties, target.verties);
-      guides.push.apply(guides, points2);
-    });
-    return guides;
-  }
-  findGuideOne(sourceVerties) {
-    return [this.findGuide(sourceVerties)[0]];
   }
 }
 class KeyBoardManager {
@@ -21357,7 +21300,7 @@ class ViewportManager {
     this.setTransformOriginWithTranslate(add$1([], this.transformOrigin, [x2, y2, 0]));
     this.editor.emit("updateViewport");
   }
-  moveLayerToCenter(areaVerties, scaleRate = -0.2, withScale = true) {
+  moveToCenter(areaVerties, scaleRate = -0.2, withScale = true) {
     const areaCenter = lerp([], areaVerties[0], areaVerties[2], 0.5);
     const width2 = dist(areaVerties[0], areaVerties[1]);
     const height2 = dist(areaVerties[0], areaVerties[3]);
@@ -21438,60 +21381,6 @@ class ViewportManager {
   zoomDefault() {
     this.setScale(1);
     this.editor.emit("updateViewport");
-  }
-}
-class StorageManager {
-  constructor(editor) {
-    this.editor = editor;
-    this.customAssetKey = "custom-assets";
-  }
-  async getCustomAssetList() {
-    let isNew = false;
-    const artboards = (this.editor.loadItem(this.customAssetKey) || []).map((it) => {
-      if (!it.id) {
-        it.id = uuid();
-        isNew = true;
-      }
-      return it;
-    });
-    if (isNew) {
-      await this.setCustomAssetList(artboards);
-    }
-    return artboards;
-  }
-  async setCustomAssetList(list2) {
-    this.editor.saveItem(this.customAssetKey, list2);
-  }
-  async getCustomAsset(id) {
-    const assetList = await this.getCustomAssetList();
-    const it = assetList.find((it2) => it2.id === id);
-    if (it && it.component) {
-      return it.component;
-    }
-    return null;
-  }
-  async saveCustomAsset(datauri = "") {
-    const current = this.editor.selection.current;
-    if (current) {
-      const assetList = await this.getCustomAssetList();
-      const json = await this.editor.json.render(current);
-      json.x = "0px";
-      json.y = "0px";
-      await this.setCustomAssetList([
-        ...assetList,
-        {
-          id: uuid(),
-          preview: datauri,
-          component: json
-        }
-      ]);
-    }
-  }
-  async removeCustomAsset(id) {
-    const assetList = await this.getCustomAssetList();
-    await this.setCustomAssetList(assetList.filter((it) => {
-      return it.id !== id;
-    }));
   }
 }
 function _icon_template(tpl, opt) {
@@ -23209,51 +23098,6 @@ class AssetManager {
     return json;
   }
 }
-class PluginManager {
-  constructor(editor) {
-    this.editor = editor;
-    this.plugins = [];
-  }
-  registerPlugin(func2) {
-    this.plugins.push(func2);
-  }
-  async initializePlugin(options2 = {}) {
-    return await Promise.all(this.plugins.map(async (CreatePluginFunction) => {
-      return await CreatePluginFunction(this.editor, options2);
-    }));
-  }
-}
-class RendererManager {
-  constructor(editor) {
-    this.editor = editor;
-    this.renderers = {};
-    this.rendererTypes = {};
-  }
-  getRenderType(rendererType) {
-    if (!this.renderers[rendererType]) {
-      this.renderers[rendererType] = {};
-    }
-    return this.renderers[rendererType];
-  }
-  registerRenderer(rendererType, name2, rendererInstance) {
-    const typedRenderer = this.getRenderType(rendererType);
-    if (typedRenderer[name2])
-      throw new Error("It has duplicated renderer name. " + name2);
-    typedRenderer[name2] = rendererInstance;
-  }
-  registerRendererType(rendererType, rendererTypeInstance) {
-    if (this.rendererTypes[rendererType])
-      throw new Error("It has duplcated renderer type name. " + name);
-    this.rendererTypes[rendererType] = rendererTypeInstance;
-  }
-  getRenderer(rendererType) {
-    return this.rendererTypes[rendererType];
-  }
-  getRendererInstance(rendererType, name2) {
-    const typedRenderer = this.getRenderType(rendererType);
-    return typedRenderer[name2];
-  }
-}
 function CSS_TO_STRING(style, postfix = "") {
   var newStyle = style || {};
   return Object.keys(newStyle).filter((key) => isNotUndefined(newStyle[key])).map((key) => `${key}: ${newStyle[key]}`).join(";" + postfix);
@@ -23330,30 +23174,75 @@ const FragmentInstance = new Object();
 class InjectManager {
   constructor(editor) {
     this.editor = editor;
-    this.menuItems = {};
+    this.ui = {};
   }
-  registerMenuItem(target, obj2 = {}) {
-    if (!this.menuItems[target]) {
-      this.menuItems[target] = [];
+  registerUI(target, obj2 = {}) {
+    if (!this.ui[target]) {
+      this.ui[target] = [];
     }
     Object.keys(obj2).forEach((refClass) => {
-      this.menuItems[target].push({
+      this.ui[target].push({
         refClass,
         class: obj2[refClass]
       });
     });
   }
-  getTargetMenuItems(target) {
-    return this.menuItems[target] || [];
+  getTargetUI(target) {
+    return this.ui[target] || [];
   }
   generate(target, hasRef = false) {
-    return this.getTargetMenuItems(target).map((it) => {
+    return this.getTargetUI(target).map((it) => {
       const props = {};
       if (hasRef) {
         props.ref = `$${it.refClass}`;
       }
       return createComponent(it.refClass, props);
     }).join("\n");
+  }
+}
+class PluginManager {
+  constructor(editor) {
+    this.editor = editor;
+    this.plugins = [];
+  }
+  registerPlugin(func2) {
+    this.plugins.push(func2);
+  }
+  async initializePlugin(options2 = {}) {
+    return await Promise.all(this.plugins.map(async (CreatePluginFunction) => {
+      return await CreatePluginFunction(this.editor, options2);
+    }));
+  }
+}
+class RendererManager {
+  constructor(editor) {
+    this.editor = editor;
+    this.renderers = {};
+    this.rendererTypes = {};
+  }
+  getRenderType(rendererType) {
+    if (!this.renderers[rendererType]) {
+      this.renderers[rendererType] = {};
+    }
+    return this.renderers[rendererType];
+  }
+  registerRenderer(rendererType, name2, rendererInstance) {
+    const typedRenderer = this.getRenderType(rendererType);
+    if (typedRenderer[name2])
+      throw new Error("It has duplicated renderer name. " + name2);
+    typedRenderer[name2] = rendererInstance;
+  }
+  registerRendererType(rendererType, rendererTypeInstance) {
+    if (this.rendererTypes[rendererType])
+      throw new Error("It has duplcated renderer type name. " + name);
+    this.rendererTypes[rendererType] = rendererTypeInstance;
+  }
+  getRenderer(rendererType) {
+    return this.rendererTypes[rendererType];
+  }
+  getRendererInstance(rendererType, name2) {
+    const typedRenderer = this.getRenderType(rendererType);
+    return typedRenderer[name2];
   }
 }
 class I18nManager {
@@ -23545,88 +23434,6 @@ class PathKitManager {
     return pathObject.trim(startT, stopT, isComplement).toSVGString();
   }
 }
-class SegmentSelectionManager {
-  constructor(editor) {
-    this.$editor = editor;
-    this.selectedPointKeys = {};
-    this.selectedPointList = [];
-  }
-  get length() {
-    return this.selectedPointList.length;
-  }
-  initialize() {
-    this.selectedPointKeys = {};
-    this.selectedPointList = [];
-  }
-  makeSegmentKey(index2, key) {
-    return `${index2}_${key}`;
-  }
-  select(...list2) {
-    this.selectedPointKeys = {};
-    this.selectedPointList = list2.map(({ key, index: index2 }) => ({
-      key,
-      index: +index2 || 0
-    }));
-    list2.forEach((it) => {
-      var key = this.makeSegmentKey(it.index, it.key);
-      this.selectedPointKeys[key] = it;
-    });
-  }
-  toggleSegment(index2, key) {
-    if (!this.isSelectedSegment(key, index2)) {
-      this.select(...this.selectedPointList, { key, index: index2 });
-    } else {
-      this.select(...this.selectedPointList.filter((it) => {
-        return it.key !== key || it.index !== index2;
-      }));
-    }
-  }
-  toggleSelect(...list2) {
-    list2 = list2.map((it) => {
-      return __spreadProps(__spreadValues({}, it), { included: this.isSelectedSegment(it.index, it.key) });
-    });
-    const includedList = list2.filter((it) => it.included);
-    const notIncludedList = list2.filter((it) => !it.included);
-    let uniqueList = [...this.selectedPointList];
-    if (includedList.length) {
-      uniqueList = this.selectedPointList.filter((it) => {
-        const oldKey = this.makeSegmentKey(it);
-        return Boolean(includedList.find((includeNode) => {
-          return oldKey === this.makeSegmentKey(includeNode);
-        })) === false;
-      });
-    }
-    this.select(...uniqueList, ...notIncludedList);
-  }
-  selectKeyIndex(index2, key) {
-    if (!this.isSelectedSegment(index2, key)) {
-      this.select({ key, index: index2 });
-    }
-  }
-  isSelectedSegment(index2, key) {
-    var key = this.makeSegmentKey(index2, key);
-    return !!this.selectedPointKeys[key];
-  }
-}
-class LockManager {
-  constructor(editor) {
-    this.editor = editor;
-    this.lockList = {};
-  }
-  get(key) {
-    return this.lockList[key];
-  }
-  set(key, value) {
-    this.lockList[key] = true;
-  }
-  toggle(key) {
-    if (this.lockList[key]) {
-      delete this.lockList[key];
-    } else {
-      this.lockList[key] = true;
-    }
-  }
-}
 class VisibleManager {
   constructor(editor) {
     this.editor = editor;
@@ -23651,18 +23458,6 @@ class VisibleManager {
     } else {
       this.set(key, true);
     }
-  }
-}
-class CommandMaker {
-  constructor(editor) {
-    this.editor = editor;
-    this.commands = [];
-  }
-  emit(...args2) {
-    this.commands.push(args2);
-  }
-  run() {
-    this.editor.emit(this.commands);
   }
 }
 class ClipboardManager {
@@ -23703,6 +23498,120 @@ class IconManager$1 {
   }
   registerIcon(itemType, iconOrFunction) {
     this.set(itemType, iconOrFunction);
+  }
+}
+class StateManager {
+  constructor(editor) {
+    this.editor = editor;
+  }
+  get config() {
+    return this.editor.config;
+  }
+  get zIndex() {
+    return this.popupZIndex++;
+  }
+  get isPointerUp() {
+    const e2 = this.config.get("bodyEvent");
+    if (!e2)
+      return true;
+    if (e2.type === "pointerup")
+      return true;
+    else if (e2.type === "pointermove" && e2.buttons === 0)
+      return true;
+    return false;
+  }
+  get isPointerDown() {
+    return !this.isPointerUp;
+  }
+  get isPointerMove() {
+    if (!this.config.get("bodyEvent"))
+      return false;
+    return this.config.get("bodyEvent").type === "pointermove";
+  }
+}
+class StorageManager {
+  constructor(editor) {
+    this.editor = editor;
+    this.customAssetKey = "custom-assets";
+  }
+  async getCustomAssetList() {
+    let isNew = false;
+    const artboards = (this.editor.loadItem(this.customAssetKey) || []).map((it) => {
+      if (!it.id) {
+        it.id = uuid();
+        isNew = true;
+      }
+      return it;
+    });
+    if (isNew) {
+      await this.setCustomAssetList(artboards);
+    }
+    return artboards;
+  }
+  async setCustomAssetList(list2) {
+    this.editor.saveItem(this.customAssetKey, list2);
+  }
+  async getCustomAsset(id) {
+    const assetList = await this.getCustomAssetList();
+    const it = assetList.find((it2) => it2.id === id);
+    if (it && it.component) {
+      return it.component;
+    }
+    return null;
+  }
+  async saveCustomAsset(datauri = "") {
+    const current = this.editor.selection.current;
+    if (current) {
+      const assetList = await this.getCustomAssetList();
+      const json = await this.editor.json.render(current);
+      json.x = "0px";
+      json.y = "0px";
+      await this.setCustomAssetList([
+        ...assetList,
+        {
+          id: uuid(),
+          preview: datauri,
+          component: json
+        }
+      ]);
+    }
+  }
+  async removeCustomAsset(id) {
+    const assetList = await this.getCustomAssetList();
+    await this.setCustomAssetList(assetList.filter((it) => {
+      return it.id !== id;
+    }));
+  }
+}
+class LockManager {
+  constructor(editor) {
+    this.editor = editor;
+    this.lockList = {};
+  }
+  get(key) {
+    return this.lockList[key];
+  }
+  set(key, value) {
+    this.lockList[key] = true;
+  }
+  toggle(key) {
+    if (this.lockList[key]) {
+      delete this.lockList[key];
+    } else {
+      this.lockList[key] = true;
+    }
+  }
+}
+class CommandMaker {
+  constructor(editor) {
+    this.editor = editor;
+    this.commands = [];
+  }
+  emit(...args2) {
+    this.commands.push(args2);
+  }
+  run() {
+    this.editor.emit(this.commands);
   }
 }
 const EDIT_MODE_SELECTION = "SELECTION";
@@ -23749,6 +23658,7 @@ class Editor {
     this.visibleManager = new VisibleManager(this);
     this.clipboard = new ClipboardManager(this);
     this.iconManager = new IconManager$1(this);
+    this.stateManager = new StateManager(this);
     this.initPlugins();
     this.initStorage();
   }
@@ -23782,10 +23692,6 @@ class Editor {
     this.locale = locale;
     this.saveItem("locale", this.locale);
   }
-  setLayout(layout2 = "all") {
-    this.layout = layout2;
-    this.saveItem("layout", this.layout);
-  }
   setUser(user) {
     this.user = user;
   }
@@ -23806,24 +23712,6 @@ class Editor {
   }
   get zIndex() {
     return this.popupZIndex++;
-  }
-  get isPointerUp() {
-    const e2 = this.config.get("bodyEvent");
-    if (!e2)
-      return true;
-    if (e2.type === "pointerup")
-      return true;
-    else if (e2.type === "pointermove" && e2.buttons === 0)
-      return true;
-    return false;
-  }
-  get isPointerDown() {
-    return !this.isPointerUp;
-  }
-  get isPointerMove() {
-    if (!this.config.get("bodyEvent"))
-      return false;
-    return this.config.get("bodyEvent").type === "pointermove";
   }
   getFile(url) {
     return this.images[url] || url;
@@ -23848,7 +23736,7 @@ class Editor {
   debug(...args2) {
   }
   command(command, message, ...args2) {
-    if (this.isPointerUp) {
+    if (this.stateManager.isPointerUp) {
       return this.store.emit(`history.${command}`, message, ...args2);
     } else {
       return this.store.emit(command, ...args2);
@@ -23905,8 +23793,8 @@ class Editor {
       registAlias(key, value);
     });
   }
-  registerMenuItem(target, obj2 = {}) {
-    this.injectManager.registerMenuItem(target, obj2);
+  registerUI(target, obj2 = {}) {
+    this.injectManager.registerUI(target, obj2);
     this.registerElement(obj2);
   }
   registerComponent(name2, component2) {
@@ -24043,9 +23931,6 @@ class EditorElement extends UIElement {
   get $injectManager() {
     return this.$editor.injectManager;
   }
-  get $menuManager() {
-    return this.$injectManager;
-  }
   get $model() {
     return this.$editor.modelManager;
   }
@@ -24064,8 +23949,11 @@ class EditorElement extends UIElement {
   get $icon() {
     return this.$editor.iconManager;
   }
+  get $stateManager() {
+    return this.$editor.stateManager;
+  }
   command(command, description, ...args2) {
-    if (this.$editor.isPointerUp) {
+    if (this.$stateManager.isPointerUp) {
       return this.emit(`history.${command}`, description, ...args2);
     } else {
       return this.emit(command, ...args2);
@@ -25026,10 +24914,9 @@ class HTMLRenderView extends EditorElement {
     const localDist = add$1([], snap, dist2);
     const result = {};
     this.$selection.cachedItemMatrices.forEach((it) => {
-      const newVerties = it.verties.map((v) => {
-        return add$1([], v, localDist);
-      });
-      const newDist = subtract([], transformMat4([], newVerties[0], it.parentMatrixInverse), transformMat4([], it.verties[0], it.parentMatrixInverse));
+      const oldVertex = it.verties[4];
+      const newVertex = add$1([], oldVertex, localDist);
+      const newDist = subtract([], transformMat4([], newVertex, it.parentMatrixInverse), transformMat4([], oldVertex, it.parentMatrixInverse));
       result[it.id] = {
         x: Math.floor(it.x + newDist[0]),
         y: Math.floor(it.y + newDist[1])
@@ -25133,7 +25020,6 @@ class HTMLRenderView extends EditorElement {
         return;
       }
       const hasChangedDimension = parentObj.changedLayout || parentObj.hasChangedField("children", "box-model", "width", "height");
-      console.log(parentObj.id, parentObj.itemType, hasChangedDimension);
       parentObj.layers.forEach((it) => {
         var $el2 = this.getElement(it.id);
         if ($el2 && (hasChangedDimension || it.isLayoutItem())) {
@@ -25534,7 +25420,7 @@ class CanvasView extends EditorElement {
   afterRender() {
     this.nextTick(() => {
       this.trigger("resizeCanvas");
-      this.emit("moveSelectionToCenter", false);
+      this.emit("moveSelectionToCenter", true);
       this.refreshCursor();
     }, 100);
   }
@@ -25549,11 +25435,11 @@ class CanvasView extends EditorElement {
     }, /* @__PURE__ */ createElementJsx("div", {
       class: "page-lock scrollbar",
       ref: "$lock"
-    }, createComponent("DragAreaView", {
-      ref: "$dragAreaView"
-    }), createComponent("HTMLRenderView", {
+    }, /* @__PURE__ */ createElementJsx(DragAreaView, {
+      ref: "$dragArea"
+    }), /* @__PURE__ */ createElementJsx(HTMLRenderView, {
       ref: "$htmlRenderView"
-    }), createComponent("DragAreaRectView", {
+    }), /* @__PURE__ */ createElementJsx(DragAreaRectView, {
       ref: "$dragAreaRectView"
     }), this.$injectManager.generate("canvas.view"))), "$", createComponent("PageTools"));
   }
@@ -26196,7 +26082,7 @@ class Inspector extends EditorElement {
     }, this.$injectManager.generate("inspector.tab.code"), /* @__PURE__ */ createElementJsx("div", {
       class: "empty",
       style: "order: 1000000;"
-    }))), this.$injectManager.getTargetMenuItems("inspector.tab").map((it) => {
+    }))), this.$injectManager.getTargetUI("inspector.tab").map((it) => {
       const { value, title: title2, loadElements } = it.class;
       return /* @__PURE__ */ createElementJsx(TabPanel, {
         value,
@@ -27461,7 +27347,7 @@ class AlignmentProperty extends BaseProperty {
   }
 }
 function alignment(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     AlignmentProperty
   });
 }
@@ -28074,10 +27960,10 @@ class AnimationPropertyPopup extends BasePopup {
   }
 }
 function animation(editor) {
-  editor.registerMenuItem("inspector.tab.transition", {
+  editor.registerUI("inspector.tab.transition", {
     AnimationProperty
   });
-  editor.registerMenuItem("popup", {
+  editor.registerUI("popup", {
     AnimationPropertyPopup
   });
 }
@@ -28107,7 +27993,7 @@ class ObjectProperty {
       }
       [SUBSCRIBE("refreshSelection") + IF("checkShow")]() {
         if (json.preventUpdate) {
-          if (this.$editor.isPointerUp) {
+          if (this.$stateManager.isPointerUp) {
             this.refresh();
           }
         } else {
@@ -28147,7 +28033,7 @@ class ObjectProperty {
   }
 }
 function appearance(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     AppearanceProperty: ObjectProperty.create({
       title: editor.$i18n("background.color.property.title"),
       editableProperty: "appearance",
@@ -28339,7 +28225,7 @@ class ArtBoardSizeProperty extends BaseProperty {
   }
 }
 function artboard(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     ArtBoardSizeProperty
   });
 }
@@ -28443,7 +28329,7 @@ class BackdropFilterProperty extends BaseProperty {
   }
 }
 function backdropFilter(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     BackdropFilterProperty
   });
 }
@@ -28962,10 +28848,10 @@ function backgroundImage(editor) {
     BackgroundImageEditor,
     BackgroundPositionEditor
   });
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     BackgroundImageProperty
   });
-  editor.registerMenuItem("popup", {
+  editor.registerUI("popup", {
     BackgroundImagePositionPopup
   });
 }
@@ -29235,7 +29121,7 @@ class PathToolProperty extends BaseProperty {
   }
 }
 function pathTool(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     PathToolProperty
   });
 }
@@ -29465,7 +29351,7 @@ function border(editor) {
     BorderEditor,
     BorderValueEditor
   });
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     BorderProperty
   });
 }
@@ -29925,7 +29811,7 @@ function borderRadius(editor) {
   editor.registerElement({
     BorderRadiusEditor
   });
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     BorderRadiusProperty
   });
 }
@@ -30010,7 +29896,7 @@ class BoxModelProperty extends BaseProperty {
   }
 }
 function boxModel(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     BoxModelProperty
   });
 }
@@ -30098,7 +29984,7 @@ class BoxShadowProperty extends BaseProperty {
   }
 }
 function boxShadow(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     BoxShadowProperty
   });
 }
@@ -30298,7 +30184,7 @@ class ClipPathProperty extends BaseProperty {
   }
 }
 function clipPath(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     ClipPathProperty
   });
 }
@@ -30336,7 +30222,7 @@ class CodeViewProperty extends BaseProperty {
   }
 }
 function codeview(editor) {
-  editor.registerMenuItem("inspector.tab.code", {
+  editor.registerUI("inspector.tab.code", {
     CodeViewProperty
   });
 }
@@ -31061,7 +30947,7 @@ function color(editor) {
     ColorPickerEditor,
     EmbedColorPicker
   });
-  editor.registerMenuItem("popup", {
+  editor.registerUI("popup", {
     ColorPickerPopup
   });
 }
@@ -31176,10 +31062,10 @@ class ComponentPopup extends BasePopup {
   }
 }
 function component(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     ComponentProperty
   });
-  editor.registerMenuItem("popup", {
+  editor.registerUI("popup", {
     ComponentPopup
   });
 }
@@ -31682,6 +31568,9 @@ class MovableModel extends BaseAssetModel {
   get verties() {
     return this._cachedVerties || this.getVerties();
   }
+  get contentVerties() {
+    return this._cachedContentVerties || this.getContentVerties();
+  }
   get originVerties() {
     return this._cachedVertiesWithoutTransformOrigin || this.rectVerties();
   }
@@ -31751,7 +31640,7 @@ class MovableModel extends BaseAssetModel {
   }
   reset(obj2, context = { origin: "*" }) {
     const isChanged = super.reset(obj2, context);
-    if (this.hasChangedField("children", "x", "y", "width", "height", "angle", "transform-origin", "perspective", "perspective-origin")) {
+    if (this.hasChangedField("children", "x", "y", "width", "height", "angle", "transform-origin", "transform", "perspective", "perspective-origin")) {
       this.refreshMatrixCache();
     }
     return isChanged;
@@ -31791,6 +31680,7 @@ class MovableModel extends BaseAssetModel {
   }
   setCacheVerties() {
     this._cachedVerties = this.getVerties();
+    this._cachedContentVerties = this.getContentVerties();
     this._cachedVertiesWithoutTransformOrigin = this.rectVerties();
   }
   setCacheLocalVerties() {
@@ -31818,6 +31708,16 @@ class MovableModel extends BaseAssetModel {
     this.reset({
       x: newCenter[0] - this.screenWidth / 2,
       y: newCenter[1] - this.screenHeight / 2
+    });
+  }
+  absoluteMove(absoluteDist = [0, 0, 0]) {
+    const oldVertex = this.verties[4];
+    const newVertex = add$1([], oldVertex, absoluteDist);
+    const newVerties = vertiesMap([oldVertex, newVertex], this.parent.absoluteMatrixInverse);
+    const newDist = subtract([], newVerties[1], newVerties[0]);
+    this.reset({
+      x: this.offsetX + newDist[0],
+      y: this.offsetY + newDist[1]
     });
   }
   startToCacheChildren() {
@@ -31980,6 +31880,18 @@ class MovableModel extends BaseAssetModel {
     width2 = isNotUndefined(width2) ? width2 : this.screenWidth;
     height2 = isNotUndefined(height2) ? height2 : this.screenHeight;
     let model = rectToVerties(0, 0, width2, height2, this.json["transform-origin"]);
+    return vertiesMap(model, this.absoluteMatrix);
+  }
+  getContentVerties(width2, height2) {
+    width2 = isNotUndefined(width2) ? width2 : this.screenWidth;
+    height2 = isNotUndefined(height2) ? height2 : this.screenHeight;
+    const center2 = TransformOrigin.scale(this.json["transform-origin"], width2, height2);
+    const paddingTop = this.json["padding-top"] || 0;
+    const paddingRight = this.json["padding-right"] || 0;
+    const paddingBottom = this.json["padding-bottom"] || 0;
+    const paddingLeft = this.json["padding-left"] || 0;
+    const model = rectToVerties(0 + paddingLeft, 0 + paddingTop, width2 - paddingLeft - paddingRight, height2 - paddingTop - paddingBottom, this.json["transform-origin"]);
+    model[4] = center2;
     return vertiesMap(model, this.absoluteMatrix);
   }
   rectVerties() {
@@ -33179,9 +33091,6 @@ class SVGStaticGradient extends SVGGradient {
   }
   toFillValue() {
     return this.toString();
-  }
-  isStatic() {
-    return true;
   }
 }
 const IMAGE_LIST = ["jpg", "jpeg", "png", "gif", "svg"];
@@ -36776,7 +36685,7 @@ function defaultPatterns(editor) {
     CSSTextureView,
     SVGTextureView
   });
-  editor.registerMenuItem("leftbar.tab", {
+  editor.registerUI("leftbar.tab", {
     TextureView: {
       value: "texture",
       title: "Texture",
@@ -36784,7 +36693,7 @@ function defaultPatterns(editor) {
       designMode: ["design", "item"]
     }
   });
-  editor.registerMenuItem("leftbar.tab.texture", {
+  editor.registerUI("leftbar.tab.texture", {
     TextureView
   });
 }
@@ -36819,7 +36728,7 @@ class ExportProperty extends BaseProperty {
   }
 }
 function exportResource(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     ExportProperty
   });
 }
@@ -36935,12 +36844,12 @@ class FilterProperty extends BaseProperty {
   }
 }
 function filter(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     FilterProperty
   });
 }
 function font(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     FontProperty: ObjectProperty.create({
       title: editor.$i18n("font.property.title"),
       editableProperty: "font",
@@ -37971,7 +37880,7 @@ function gradient(editor) {
     "fill": "FillEditor",
     "gradient-single": "GradientSingleEditor"
   });
-  editor.registerMenuItem("popup", {
+  editor.registerUI("popup", {
     FillPickerPopup,
     GradientPickerPopup
   });
@@ -38225,7 +38134,7 @@ class HistoryProperty extends BaseProperty {
   }
 }
 function history(editor) {
-  editor.registerMenuItem("inspector.tab.history", {
+  editor.registerUI("inspector.tab.history", {
     HistoryProperty
   });
 }
@@ -38444,10 +38353,10 @@ function image(editor) {
   editor.registerElement({
     ImageSelectEditor
   });
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     ImageProperty
   });
-  editor.registerMenuItem("popup", {
+  editor.registerUI("popup", {
     ImageSelectPopup
   });
 }
@@ -38890,10 +38799,10 @@ function keyframe(editor) {
   editor.registerElement({
     OffsetEditor
   });
-  editor.registerMenuItem("inspector.tab.transition", {
+  editor.registerUI("inspector.tab.transition", {
     KeyframeProperty
   });
-  editor.registerMenuItem("popup", {
+  editor.registerUI("popup", {
     KeyframePopup
   });
 }
@@ -39373,21 +39282,22 @@ class FlexLayoutEditor extends EditorElement {
                         <div class="tool-area"  
                             data-direction="${this.state["flex-direction"]}"  
                             data-justify-content="${this.state["justify-content"]}"
-                            data-align-content="${this.state["align-content"]}"
+                            data-align-items="${this.state["align-items"]}"
+                            data-align-content="${this.state["align-content"]}"                            
                             style="
                                 --flex-group-gap: ${Math.floor(this.state["gap"] / 10)}px;
                                 --flex-group-padding: ${realPaddingTop}px;
                             "
                         >
-                            <div class="tool-area-item" data-index="1" data-justify-content="flex-start" data-align-content="flex-start"></div>
-                            <div class="tool-area-item" data-index="2"  data-justify-content="center" data-align-content="flex-start"></div>
-                            <div class="tool-area-item" data-index="3"  data-justify-content="flex-end" data-align-content="flex-start"></div>
-                            <div class="tool-area-item" data-index="4"  data-justify-content="flex-start" data-align-content="center"></div>
-                            <div class="tool-area-item" data-index="5"  data-justify-content="center" data-align-content="center"></div>
-                            <div class="tool-area-item" data-index="6"  data-justify-content="flex-end" data-align-content="center"></div>
-                            <div class="tool-area-item" data-index="7"  data-justify-content="flex-start" data-align-content="flex-end"></div>
-                            <div class="tool-area-item" data-index="8"  data-justify-content="center" data-align-content="flex-end"></div>
-                            <div class="tool-area-item" data-index="9"  data-justify-content="flex-end" data-align-content="flex-end"></div>                            
+                            <div class="tool-area-item" data-index="1" data-justify-content="flex-start" data-align-items="flex-start"></div>
+                            <div class="tool-area-item" data-index="2"  data-justify-content="center" data-align-items="flex-start"></div>
+                            <div class="tool-area-item" data-index="3"  data-justify-content="flex-end" data-align-items="flex-start"></div>
+                            <div class="tool-area-item" data-index="4"  data-justify-content="flex-start" data-align-items="center"></div>
+                            <div class="tool-area-item" data-index="5"  data-justify-content="center" data-align-items="center"></div>
+                            <div class="tool-area-item" data-index="6"  data-justify-content="flex-end" data-align-items="center"></div>
+                            <div class="tool-area-item" data-index="7"  data-justify-content="flex-start" data-align-items="flex-end"></div>
+                            <div class="tool-area-item" data-index="8"  data-justify-content="center" data-align-items="flex-end"></div>
+                            <div class="tool-area-item" data-index="9"  data-justify-content="flex-end" data-align-items="flex-end"></div>                            
                         </div>
                     </div>
                 </div>
@@ -39454,26 +39364,24 @@ class FlexLayoutEditor extends EditorElement {
   }
   [CLICK("$body .tool-area-item")](e2) {
     const $target = e2.$dt;
+    const [justifyContent, alignItems, alignContent] = $target.attrs("data-justify-content", "data-align-items", "data-align-content");
     if (this.state["justify-content"] === JustifyContent.SPACE_BETWEEN) {
-      const [alignContent] = $target.attrs("data-align-content");
       this.setState({
-        "align-content": alignContent
+        "align-items": alignItems
       }, false);
-      this.modifyData("align-content", alignContent);
+      this.modifyData("align-item", alignItems);
     } else if (this.state["justify-content"] === JustifyContent.SPACE_AROUND) {
-      const [alignContent] = $target.attrs("data-align-content");
       this.setState({
-        "align-content": alignContent
+        "align-items": alignItems
       }, false);
-      this.modifyData("align-content", alignContent);
+      this.modifyData("align-item", alignItems);
     } else {
-      const [justifyContent, alignContent] = $target.attrs("data-justify-content", "data-align-content");
       this.setState({
         "justify-content": justifyContent,
-        "align-content": alignContent
+        "align-items": alignItems
       }, false);
       this.modifyData("justify-content", justifyContent);
-      this.modifyData("align-content", alignContent);
+      this.modifyData("align-items", alignItems);
     }
     this.refresh();
   }
@@ -40313,10 +40221,7 @@ class ResizingProperty extends BaseProperty {
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow(() => {
       var current = this.$selection.current;
-      const isFlexLayout = current.isLayout(Layout.FLEX);
-      const isGridLayout = current.isLayout(Layout.GRID);
-      const hasLayout = isFlexLayout || isGridLayout;
-      return current && hasLayout && current.hasChildren();
+      return current && current.hasLayout();
     });
   }
 }
@@ -40327,7 +40232,7 @@ function layout$3(editor) {
     GridBoxEditor,
     GridGapEditor
   });
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     LayoutProperty,
     ResizingProperty,
     DefaultLayoutItemProperty,
@@ -40997,10 +40902,10 @@ function patternAsset(editor) {
     PatternSizeEditor,
     PatternAssetsProperty
   });
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     PatternProperty
   });
-  editor.registerMenuItem("popup", {
+  editor.registerUI("popup", {
     PatternInfoPopup
   });
 }
@@ -41046,7 +40951,7 @@ class PerspectiveProperty extends BaseProperty {
   }
 }
 function perspective(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     PerspectiveProperty
   });
 }
@@ -41248,7 +41153,7 @@ function perspectiveOrigin(editor) {
   editor.registerElement({
     PerspectiveOriginEditor
   });
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     PerspectiveOriginProperty
   });
 }
@@ -41404,7 +41309,7 @@ class PositionProperty extends BaseProperty {
   }
 }
 function position(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     PositionProperty
   });
 }
@@ -48980,7 +48885,7 @@ class DomRender$1 extends ItemRender$1 {
     if (item2.parent.isNot("project"))
       ;
     return __spreadProps(__spreadValues({
-      display: "inline-flex"
+      display: "flex"
     }, item2.attrs("flex-direction", "flex-wrap", "justify-content", "align-items", "align-content")), {
       gap: Length.px(item2.gap)
     });
@@ -51400,10 +51305,10 @@ class SelectorProperty extends BaseProperty {
   }
 }
 function selector(editor) {
-  editor.registerMenuItem("inspector.tab.transition", {
+  editor.registerUI("inspector.tab.transition", {
     SelectorProperty
   });
-  editor.registerMenuItem("popup", {
+  editor.registerUI("popup", {
     SelectorPopup
   });
 }
@@ -53212,14 +53117,14 @@ function svgItem(editor) {
     SVGFilterSelectEditor,
     SVGFilterEditor
   });
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     SVGItemProperty: ObjectProperty.create({
       title: editor.$i18n("svg.item.property.title"),
       editableProperty: "svg-item",
       preventUpdate: true
     })
   });
-  editor.registerMenuItem("popup", {
+  editor.registerUI("popup", {
     SVGFilterPopup
   });
   editor.registerInspector("svg-item", (current) => {
@@ -53578,12 +53483,12 @@ class SVGTextProperty extends BaseProperty {
   }
 }
 function svgText(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     SVGTextProperty
   });
 }
 function text$1(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     TextProperty: ObjectProperty.create({
       title: editor.$i18n("text.property.title"),
       editableProperty: "text-style",
@@ -53729,7 +53634,7 @@ class TextShadowProperty extends BaseProperty {
   }
 }
 function textShadow(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     TextShadowProperty
   });
 }
@@ -54140,10 +54045,10 @@ class TransitionPropertyPopup extends BasePopup {
   }
 }
 function transition(editor) {
-  editor.registerMenuItem("inspector.tab.transition", {
+  editor.registerUI("inspector.tab.transition", {
     TransitionProperty
   });
-  editor.registerMenuItem("popup", {
+  editor.registerUI("popup", {
     TransitionPropertyPopup
   });
 }
@@ -54325,7 +54230,7 @@ class VideoProperty extends BaseProperty {
   }
 }
 function video(editor) {
-  editor.registerMenuItem("inspector.tab.style", {
+  editor.registerUI("inspector.tab.style", {
     VideoProperty
   });
 }
@@ -55681,10 +55586,10 @@ class DrawManager extends EditorElement {
   }
 }
 function pathDrawView(editor) {
-  editor.registerMenuItem("canvas.view", {
+  editor.registerUI("canvas.view", {
     PathDrawView
   });
-  editor.registerMenuItem("page.subeditor.view", {
+  editor.registerUI("page.subeditor.view", {
     DrawManager
   });
 }
@@ -56357,10 +56262,10 @@ class PathManager extends EditorElement {
   }
 }
 function pathEditorView(editor) {
-  editor.registerMenuItem("canvas.view", {
+  editor.registerUI("canvas.view", {
     PathEditorView
   });
-  editor.registerMenuItem("page.subeditor.view", {
+  editor.registerUI("page.subeditor.view", {
     PathManager
   });
 }
@@ -56801,7 +56706,7 @@ class LayerAppendView extends EditorElement {
   }
 }
 function layerAppendView(editor) {
-  editor.registerMenuItem("canvas.view", {
+  editor.registerUI("canvas.view", {
     LayerAppendView
   });
 }
@@ -56912,7 +56817,7 @@ class HoverView extends EditorElement {
   }
 }
 function hoverView(editor) {
-  editor.registerMenuItem("canvas.view", {
+  editor.registerUI("canvas.view", {
     HoverView
   });
 }
@@ -57142,7 +57047,7 @@ class GuideLineView extends EditorElement {
   }
 }
 function guideLineView(editor) {
-  editor.registerMenuItem("canvas.view", {
+  editor.registerUI("canvas.view", {
     GuideLineView
   });
 }
@@ -57227,12 +57132,24 @@ class SelectionInfoView extends EditorElement {
     var _a;
     return (_a = this.$selection.currentProject) == null ? void 0 : _a.artboards.map((it) => {
       return {
+        item: it,
         title: it.name,
         id: it.id,
         layout: it.layout,
         pointers: this.$viewport.applyVerties(it.verties)
       };
     }).map((it) => this.makeArtboardTitleArea(it));
+  }
+  getIcon(item2) {
+    if (item2.hasLayout() || item2.hasChildren() || item2.is("artboard")) {
+      if (item2.isLayout("flex")) {
+        return iconUse$1("layout_flex", item2["flex-direction"] === "column" ? "rotate(90 12 12)" : "");
+      } else if (item2.isLayout("grid")) {
+        return iconUse$1("layout_grid");
+      }
+      return "";
+    }
+    return this.$icon.get(item2.itemType, item2);
   }
   createSize(pointers, artboardItem) {
     const newPointer = pointers[0];
@@ -57244,11 +57161,11 @@ class SelectionInfoView extends EditorElement {
       "data-layout": artboardItem.layout,
       style: {
         "transform-origin": "0% 0%",
-        "transform": `translate3d( calc(${newPointer[0]}px), calc(${newPointer[1]}px), 0px) rotateZ(${angle2}deg)`
+        transform: `translate3d( calc(${newPointer[0]}px), calc(${newPointer[1]}px), 0px) rotateZ(${angle2}deg)`
       }
     }, /* @__PURE__ */ createElementJsx("div", {
       style: "transform: translateY(-100%);"
-    }, artboardItem.title));
+    }, this.getIcon(artboardItem.item), artboardItem.title));
   }
   makeArtboardTitleArea(it) {
     return this.createSize(it.pointers, it);
@@ -57258,7 +57175,7 @@ class SelectionInfoView extends EditorElement {
   }
 }
 function selectionInfoView(editor) {
-  editor.registerMenuItem("canvas.view", {
+  editor.registerUI("canvas.view", {
     SelectionInfoView
   });
 }
@@ -58344,6 +58261,8 @@ class GhostToolView extends EditorElement {
     this.ghostVerties = clone$1(screenVerties);
     this.ghostScreenVerties = this.$viewport.applyVerties(this.ghostVerties);
     this.initMousePoint = this.$viewport.getWorldPosition();
+    this.filteredLayers = this.$selection.filteredLayers.filter((it) => this.$selection.check(it) === false);
+    this.containerList = this.filteredLayers.filter((it) => it.hasLayout() || it.is("artboard")).map((it) => it.originVerties);
   }
   [SUBSCRIBE("moveFirstGhostToolView")]() {
     const targetMousePoint = this.$viewport.getWorldPosition();
@@ -58352,19 +58271,22 @@ class GhostToolView extends EditorElement {
       return add$1([], v, newDist);
     });
     this.load("$containerView");
+    this.load("$view");
   }
   [SUBSCRIBE("moveGhostToolView")]() {
     const targetMousePoint = this.$viewport.getWorldPosition();
-    const newDist = floor([], subtract([], targetMousePoint, this.initMousePoint));
+    const newDist = this.getDist();
     this.ghostVerties = this.verties.map((v) => {
       return add$1([], v, newDist);
     });
     this.ghostScreenVerties = this.$viewport.applyVerties(this.ghostVerties);
     const filteredLayers = this.$selection.filteredLayers.filter((it) => this.$selection.check(it) === false);
-    this.containerList = filteredLayers.filter((it) => it.hasLayout() || it.is("artboard")).map((it) => it.originVerties);
     this.targetItem = filteredLayers[0];
     if (this.targetItem) {
-      this.targetOriginPosition = this.$viewport.applyVerties(toRectVerties(this.targetItem.originVerties));
+      if (this.targetItem.hasLayout()) {
+        this.targetItem = this.targetItem.layers.pop();
+      }
+      this.targetOriginPosition = this.$viewport.applyVerties(toRectVerties(this.targetItem.contentVerties));
       this.targetPoint = this.$viewport.applyVertex(targetMousePoint);
       this.targetRelativeMousePoint = {
         x: (this.targetPoint[0] - this.targetOriginPosition[0][0]) / (this.targetOriginPosition[1][0] - this.targetOriginPosition[0][0]),
@@ -58373,7 +58295,7 @@ class GhostToolView extends EditorElement {
       if (this.targetItem.isLayoutItem()) {
         this.targetParent = this.targetItem.parent;
         if (this.targetParent) {
-          this.targetParentPosition = this.$viewport.applyVerties(this.targetParent.originVerties);
+          this.targetParentPosition = this.$viewport.applyVerties(this.targetParent.contentVerties);
         }
       } else {
         this.targetParent = null;
@@ -58406,15 +58328,8 @@ class GhostToolView extends EditorElement {
       });
     }));
   }
-  renderPath(verties, className, data = className) {
-    verties = data === "ghost" ? verties : toRectVerties(verties);
-    const textX = className === "flex-item" ? verties[0][0] : verties[0][0];
-    const textY = className === "flex-item" ? verties[2][1] + 10 : verties[0][1] - 10;
-    return /* @__PURE__ */ createElementJsx("g", null, /* @__PURE__ */ createElementJsx("text", {
-      x: textX,
-      y: textY,
-      "font-size": 8
-    }, data), /* @__PURE__ */ createElementJsx("path", {
+  renderPathForVerties(verties, className) {
+    return /* @__PURE__ */ createElementJsx("g", null, /* @__PURE__ */ createElementJsx("path", {
       class: className,
       d: `
                 M ${verties[0][0]} ${verties[0][1]}
@@ -58424,6 +58339,16 @@ class GhostToolView extends EditorElement {
                 Z
             `
     }));
+  }
+  renderPath(verties, className, data = className) {
+    verties = data === "ghost" ? verties : toRectVerties(verties);
+    const textX = className === "flex-item" ? verties[0][0] : verties[0][0];
+    const textY = className === "flex-item" ? verties[2][1] + 10 : verties[0][1] - 10;
+    return /* @__PURE__ */ createElementJsx("g", null, /* @__PURE__ */ createElementJsx("text", {
+      x: textX,
+      y: textY,
+      "font-size": 8
+    }, data), this.renderPathForVerties(verties, className));
   }
   renderLayoutFlexRowArea() {
     const rect2 = vertiesToRectangle(this.targetOriginPosition);
@@ -58455,43 +58380,46 @@ class GhostToolView extends EditorElement {
       ], "flex-item", "flex-right");
     }
   }
-  renderLayoutFlexRowForFirst() {
+  renderLayoutFlexForFirstItem(direction) {
+    const verticalField = direction === FlexDirection.COLUMN ? "align-items" : "justify-content";
+    const verticalConst = direction === FlexDirection.COLUMN ? AlignItems : JustifyContent;
+    const horizontalField = direction === FlexDirection.COLUMN ? "justify-content" : "align-items";
+    const horizontalConst = direction === FlexDirection.COLUMN ? JustifyContent : AlignItems;
     const rect2 = vertiesToRectangle(this.targetOriginPosition);
-    const ghostRect = vertiesToRectangle(this.ghostScreenVerties);
-    let x2 = rect2.x;
-    let y2 = rect2.y;
-    switch (this.targetItem["justify-content"]) {
-      case JustifyContent.FLEX_START:
-        x2 = rect2.x;
+    const center2 = this.ghostScreenVerties[4];
+    const width2 = dist(this.ghostScreenVerties[0], this.ghostScreenVerties[1]);
+    const height2 = dist(this.ghostScreenVerties[0], this.ghostScreenVerties[3]);
+    let newCenterX = width2 / 2;
+    let newCenterY = height2 / 2;
+    switch (this.targetItem[verticalField]) {
+      case verticalConst.FLEX_START:
+        newCenterX = rect2.x + width2 / 2;
         break;
-      case JustifyContent.CENTER:
-      case JustifyContent.SPACE_BETWEEN:
-      case JustifyContent.SPACE_AROUND:
-        x2 = rect2.x + rect2.width / 2 - ghostRect.width / 2;
+      case verticalConst.CENTER:
+      case verticalConst.SPACE_BETWEEN:
+      case verticalConst.SPACE_AROUND:
+        newCenterX = rect2.x + rect2.width / 2;
         break;
-      case JustifyContent.FLEX_END:
-        x2 = rect2.x + rect2.width - ghostRect.width;
-        break;
-    }
-    switch (this.targetItem["align-content"]) {
-      case AlignContent.FLEX_START:
-        y2 = rect2.y;
-        break;
-      case AlignContent.CENTER:
-      case AlignContent.SPACE_BETWEEN:
-      case AlignContent.SPACE_AROUND:
-        y2 = rect2.y + rect2.height / 2 - ghostRect.height / 2;
-        break;
-      case AlignContent.FLEX_END:
-        y2 = rect2.y + rect2.height - ghostRect.height;
+      case verticalConst.FLEX_END:
+        newCenterX = rect2.x + rect2.width - width2 / 2;
         break;
     }
-    return this.renderPath([
-      [x2, y2],
-      [x2 + ghostRect.width, y2],
-      [x2 + ghostRect.width, y2 + ghostRect.height],
-      [x2, y2 + ghostRect.height]
-    ], "flex-item", "");
+    switch (this.targetItem[horizontalField]) {
+      case horizontalConst.FLEX_START:
+        newCenterY = rect2.y + height2 / 2;
+        break;
+      case horizontalConst.CENTER:
+      case horizontalConst.SPACE_BETWEEN:
+      case horizontalConst.SPACE_AROUND:
+        newCenterY = rect2.y + rect2.height / 2;
+        break;
+      case horizontalConst.FLEX_END:
+        newCenterY = rect2.y + rect2.height - height2 / 2;
+        break;
+    }
+    const newDist = subtract([], [newCenterX, newCenterY, 0], center2);
+    const renderVerties = this.ghostScreenVerties.map((it) => add$1([], it, newDist));
+    return this.renderPathForVerties(renderVerties, "flex-item", "ghost");
   }
   renderLayoutFlexColumnArea() {
     const rect2 = vertiesToRectangle(this.targetOriginPosition);
@@ -58524,8 +58452,9 @@ class GhostToolView extends EditorElement {
     }
   }
   renderLayoutItemInsertArea() {
-    if (!this.targetParent)
-      return "";
+    if (!this.targetParent) {
+      return;
+    }
     if (this.targetParent.hasLayout()) {
       if (this.targetParent.isLayout(Layout.FLEX)) {
         switch (this.targetParent["flex-direction"]) {
@@ -58547,12 +58476,7 @@ class GhostToolView extends EditorElement {
   renderLayoutItemForFirst() {
     if (this.targetItem.hasChildren() === false) {
       if (this.targetItem.isLayout(Layout.FLEX)) {
-        switch (this.targetItem["flex-direction"]) {
-          case FlexDirection.ROW:
-            return this.renderLayoutFlexRowForFirst();
-          case FlexDirection.COLUMN:
-            return this.renderLayoutFlexColumnArea();
-        }
+        return this.renderLayoutFlexForFirstItem(this.targetItem["flex-direction"]);
       } else if (this.targetItem.isLayout(Layout.GRID))
         ;
     }
@@ -58579,21 +58503,69 @@ class GhostToolView extends EditorElement {
     this.targetParent = null;
     this.targetParentPosition = null;
   }
+  getDist() {
+    const targetMousePoint = this.$viewport.getWorldPosition();
+    const newDist = floor([], subtract([], targetMousePoint, this.initMousePoint));
+    return newDist;
+  }
+  insertToBackground() {
+    const current = this.$selection.current;
+    const newDist = this.getDist();
+    if (current.isLayoutItem() === false)
+      return;
+    current.absoluteMove(newDist);
+    this.$selection.currentProject.appendChild(current);
+    this.command("setAttributeForMulti", "change move", this.$selection.pack("x", "y"));
+    this.emit("refreshAllCanvas");
+  }
+  insertToLayoutItem() {
+    const current = this.$selection.current;
+    const newDist = this.getDist();
+    if (this.targetParent.hasLayout()) {
+      current.absoluteMove(newDist);
+      if (this.targetParent.isLayout(Layout.FLEX)) {
+        switch (this.targetParent["flex-direction"]) {
+          case FlexDirection.ROW:
+            if (this.targetRelativeMousePoint.x < CHECK_RATE) {
+              this.targetItem.appendBefore(current);
+            } else {
+              this.targetItem.appendAfter(current);
+            }
+            break;
+          case FlexDirection.COLUMN:
+            if (this.targetRelativeMousePoint.y < CHECK_RATE) {
+              this.targetItem.appendBefore(current);
+            } else {
+              this.targetItem.appendAfter(current);
+            }
+            break;
+        }
+      } else if (this.targetParent.isLayout(Layout.GRID))
+        ;
+    }
+    this.command("setAttributeForMulti", "change move", this.$selection.pack("x", "y"));
+    this.emit("refreshAllCanvas");
+  }
   updateLayer() {
     const current = this.$selection.current;
-    if (!this.targetItem)
+    const newDist = this.getDist();
+    if (!this.targetItem) {
+      this.insertToBackground();
       return;
+    }
     if (this.targetItem.enableHasChildren() === false)
       return;
+    if (this.targetParent) {
+      this.insertToLayoutItem();
+      return;
+    }
     if (this.targetItem.hasLayout()) {
       if (this.targetItem.hasChildren() === false) {
         this.targetItem.appendChild(current);
       }
     } else {
       if (current.isLayoutItem()) {
-        const targetMousePoint = this.$viewport.getWorldPosition();
-        const newDist = floor([], subtract([], targetMousePoint, this.initMousePoint));
-        current.move(newDist);
+        current.absoluteMove(newDist);
         this.targetItem.appendChild(current);
         this.command("setAttributeForMulti", "change move", this.$selection.pack("x", "y"));
       }
@@ -58610,7 +58582,7 @@ class GhostToolView extends EditorElement {
   }
 }
 function selectionToolView(editor) {
-  editor.registerMenuItem("canvas.view", {
+  editor.registerUI("canvas.view", {
     GhostToolView,
     SelectionToolView,
     GroupSelectionToolView
@@ -59793,7 +59765,7 @@ class GradientEditorView extends GradientColorstepEditor {
   }
 }
 function gradientEditorView(editor) {
-  editor.registerMenuItem("canvas.view", {
+  editor.registerUI("canvas.view", {
     GradientEditorView
   });
 }
@@ -60445,7 +60417,7 @@ class ClippathEditorView$1 extends ClippathEllipseEditorView {
   }
 }
 function ClippathEditorView(editor) {
-  editor.registerMenuItem("canvas.view", {
+  editor.registerUI("canvas.view", {
     ClippathEditorView: ClippathEditorView$1
   });
 }
@@ -61516,7 +61488,7 @@ class FillEditorView extends FillColorstepEditor {
   }
 }
 function fillEditorView(editor) {
-  editor.registerMenuItem("canvas.view", {
+  editor.registerUI("canvas.view", {
     FillEditorView
   });
 }
@@ -61720,7 +61692,7 @@ class LayerTab extends EditorElement {
               <label>${iconUse$1("plugin")}</label>
             </div>            
 
-            ${this.$injectManager.getTargetMenuItems("leftbar.tab").map((it) => {
+            ${this.$injectManager.getTargetUI("leftbar.tab").map((it) => {
       const { value, title: title2 } = it.class;
       let iconString = it.class.icon;
       if (obj[it.class.icon]) {
@@ -61754,7 +61726,7 @@ class LayerTab extends EditorElement {
             <div class='tab-content' data-value='6'>
               ${createComponent("CustomAssets")}
             </div>
-            ${this.$injectManager.getTargetMenuItems("leftbar.tab").map((it) => {
+            ${this.$injectManager.getTargetUI("leftbar.tab").map((it) => {
       const { value } = it.class;
       return `
                 <div class='tab-content' data-value='${value}'>
@@ -63588,7 +63560,7 @@ class ItemLayerTab extends EditorElement {
               <label>${iconUse$1("plugin")}</label>
             </div>            
 
-            ${this.$injectManager.getTargetMenuItems("leftbar.tab").filter((it) => {
+            ${this.$injectManager.getTargetUI("leftbar.tab").filter((it) => {
       return it.class.designMode && it.class.designMode.includes("item");
     }).map((it) => {
       const { value, title: title2 } = it.class;
@@ -63611,7 +63583,7 @@ class ItemLayerTab extends EditorElement {
             <div class='tab-content' data-value='6'>
               ${createComponent("CustomAssets")}
             </div>
-            ${this.$injectManager.getTargetMenuItems("leftbar.tab").filter((it) => {
+            ${this.$injectManager.getTargetUI("leftbar.tab").filter((it) => {
       return it.class.designMode && it.class.designMode.includes("item");
     }).map((it) => {
       const { value } = it.class;

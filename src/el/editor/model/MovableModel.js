@@ -15,11 +15,11 @@ export class MovableModel extends BaseAssetModel {
         return super.getDefaultObject({
             angle: 0,
             x: 0,
-            y: 0,      
+            y: 0,
             width: 300,
-            height: 300,            
+            height: 300,
             ...obj
-          });
+        });
     }
 
     ////////////////////////////////////
@@ -118,10 +118,14 @@ export class MovableModel extends BaseAssetModel {
 
     get relativeMatrixInverse() {
         return this._cachedRelativeMatrixInverse || this.getRelativeMatrixInverse()
-    }    
+    }
 
     get verties() {
         return this._cachedVerties || this.getVerties();
+    }
+
+    get contentVerties () {
+        return this._cachedContentVerties || this.getContentVerties();
     }
 
     get originVerties() {
@@ -164,16 +168,16 @@ export class MovableModel extends BaseAssetModel {
     get angle() { return this.json.angle; }
 
     /** translate vector */
-    get translate () { return [0, 0, 0] }
+    get translate() { return [0, 0, 0] }
 
     /** scale vector */
-    get scale () { return [1, 1, 1] }
+    get scale() { return [1, 1, 1] }
 
     /** rotate vector */
-    get rotate () { return [0, 0, degreeToRadian(angle)] }
+    get rotate() { return [0, 0, degreeToRadian(angle)] }
 
     /** origin vector */
-    get origin () {
+    get origin() {
         return TransformOrigin.scale(
             this.json['transform-origin'] || '50% 50% 0px',
             this.screenWidth,
@@ -182,7 +186,7 @@ export class MovableModel extends BaseAssetModel {
     }
 
     /** quaternion(사원수) */
-    get quat () {
+    get quat() {
         return quat.fromEuler(quat.create(), 0, 0, this.angle)
     }
 
@@ -214,7 +218,7 @@ export class MovableModel extends BaseAssetModel {
         const isChanged = super.reset(obj, context);
 
         // transform 에 변경이 생기면 미리 캐슁해둔다. 
-        if (this.hasChangedField('children', 'x', 'y', 'width', 'height', 'angle', 'transform-origin', 'perspective', 'perspective-origin')) {
+        if (this.hasChangedField('children', 'x', 'y', 'width', 'height', 'angle', 'transform-origin', 'transform', 'perspective', 'perspective-origin')) {
             this.refreshMatrixCache()
         }
 
@@ -274,11 +278,12 @@ export class MovableModel extends BaseAssetModel {
         this._cachedAbsoluteMatrixInverse = mat4.invert([], this._cachedAbsoluteMatrix);
 
         this._cachedRelativeMatrix = this.getRelativeMatrix();
-        this._cachedRelativeMatrixInverse = mat4.invert([], this._cachedRelativeMatrix);        
+        this._cachedRelativeMatrixInverse = mat4.invert([], this._cachedRelativeMatrix);
     }
 
     setCacheVerties() {
         this._cachedVerties = this.getVerties();
+        this._cachedContentVerties = this.getContentVerties();
         this._cachedVertiesWithoutTransformOrigin = this.rectVerties();
     }
 
@@ -319,6 +324,31 @@ export class MovableModel extends BaseAssetModel {
         this.reset({
             x: newCenter[0] - this.screenWidth / 2,
             y: newCenter[1] - this.screenHeight / 2
+        })
+    }
+
+    /**
+     * world 좌표를 기준으로 이동함 
+     * 
+     * 
+     * @param {vec3} absoluteDist 
+     */
+    absoluteMove(absoluteDist = [0, 0, 0]) {
+
+        // 기존 world 좌표 
+        const oldVertex = this.verties[4];  // verties[4] 는 transform-origin 중심 좌표 , scale, rotate 에 영향을 받지 않는다. 
+
+        // 새로운 world 좌표 
+        const newVertex = vec3.add([], oldVertex, absoluteDist);
+
+        // 부모를 기준으로 얼마나 움직였는지 체크해본다. 
+        const newVerties = vertiesMap([ oldVertex, newVertex ], this.parent.absoluteMatrixInverse)
+
+        const newDist = vec3.subtract([], newVerties[1], newVerties[0])
+
+        this.reset({
+            x: this.offsetX + newDist[0],          // 1px 단위로 위치 설정 
+            y: this.offsetY + newDist[1],
         })
     }
 
@@ -628,6 +658,30 @@ export class MovableModel extends BaseAssetModel {
 
         return vertiesMap(model, this.absoluteMatrix)
     }
+
+    getContentVerties(width, height) {
+
+        width = isNotUndefined(width) ? width : this.screenWidth;
+        height = isNotUndefined(height) ? height : this.screenHeight;
+
+        const center = TransformOrigin.scale( this.json['transform-origin'],  width,  height );
+
+        const paddingTop = this.json['padding-top'] || 0;
+        const paddingRight = this.json['padding-right'] || 0;
+        const paddingBottom = this.json['padding-bottom'] || 0;
+        const paddingLeft = this.json['padding-left'] || 0;
+
+        const model = rectToVerties(
+            0 + paddingLeft, 
+            0 + paddingTop, 
+            width - paddingLeft - paddingRight, 
+            height - paddingTop - paddingBottom,
+            this.json['transform-origin']
+        );
+        model[4] = center;      // origin 은 전체 기준으로 넣어줌 
+
+        return vertiesMap(model, this.absoluteMatrix)
+    }    
 
     rectVerties() {
         return this.verties.filter((_, index) => index < 4)
@@ -955,7 +1009,7 @@ export class MovableModel extends BaseAssetModel {
 
         const axis = []
         const rad = quat.getAxisAngle(axis, q)
-        const angle = axis[2] ? radianToDegree(rad * axis[2]) : 0 
+        const angle = axis[2] ? radianToDegree(rad * axis[2]) : 0
 
         const newTransformMatrix = mat4.create();
         mat4.fromRotation(newTransformMatrix, rad, axis);

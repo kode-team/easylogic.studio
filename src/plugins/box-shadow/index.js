@@ -8,7 +8,7 @@ import BoxShadowProperty from "./BoxShadowProperty";
  */
 export default function (editor) {
 
-    editor.registerMenuItem('inspector.tab.style', {
+    editor.registerUI('inspector.tab.style', {
         BoxShadowProperty
     })
 }

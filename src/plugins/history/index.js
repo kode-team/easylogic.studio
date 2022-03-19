@@ -6,7 +6,7 @@ import HistoryProperty from "./HistoryProperty";
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerMenuItem('inspector.tab.history', {
+    editor.registerUI('inspector.tab.history', {
         HistoryProperty
     })
 }

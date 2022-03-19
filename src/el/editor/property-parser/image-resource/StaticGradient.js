@@ -53,6 +53,4 @@ export class StaticGradient extends Gradient {
 
         return `linear-gradient(${color} 0%, ${color} 100%)`;
     }
-
-    isStatic() { return true; }
 }
