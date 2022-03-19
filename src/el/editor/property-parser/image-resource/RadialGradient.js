@@ -37,10 +37,6 @@ export class RadialGradient extends Gradient {
     }
   }
 
-  isRadial() {
-    return true;
-  }
-
   getConerDist(result) {
     // coner 관련 
     let topLeftPoint = result.backVerties[0]

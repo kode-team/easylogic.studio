@@ -23,7 +23,7 @@ export default function (editor) {
         'gradient-single': 'GradientSingleEditor',
     })
 
-    editor.registerMenuItem('popup', {
+    editor.registerUI('popup', {
         FillPickerPopup,
         GradientPickerPopup
     })

@@ -46,9 +46,6 @@ export class ConicGradient extends Gradient {
     }
   }
 
-  isConic() {
-    return true;
-  }
   hasAngle() {
     return true;
   }

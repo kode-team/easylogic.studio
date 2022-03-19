@@ -24,6 +24,65 @@ const customEventNames = {
   'doubletab': true
 }
 
+const selfCheckMethods = {
+
+  /* magic check method  */
+
+  self(e) {
+    return e && e.$dt && e.$dt.is(e.target);
+  },
+
+  isAltKey(e) {
+    return e.altKey;
+  },
+
+  isCtrlKey(e) {
+    return e.ctrlKey;
+  },
+
+  isShiftKey(e) {
+    return e.shiftKey;
+  },
+
+  isMetaKey(e) {
+    return e.metaKey || e.key == 'Meta' || e.code.indexOf('Meta') > -1 ;
+  },
+
+  isMouseLeftButton(e) {
+    return e.buttons === 1;     // 1 is left button 
+  },
+
+  isMouseRightButton(e) {
+    return e.buttons === 2;     // 2 is right button 
+  },  
+
+  hasMouse(e) { 
+    return e.pointerType === 'mouse';
+  },
+
+  hasTouch(e) {
+    return e.pointerType === 'touch';
+  },
+
+  hasPen(e) {
+    return e.pointerType === 'pen';
+  },  
+
+  /** before check method */
+
+  /* after check method */
+
+  preventDefault(e) {
+    e.preventDefault();
+    return true;
+  },
+
+  stopPropagation(e) {
+    e.stopPropagation();
+    return true;
+  }
+}
+
 export default class DomEventHandler extends BaseHandler {
 
 
@@ -51,6 +110,9 @@ export default class DomEventHandler extends BaseHandler {
 
   }
 
+  getCallback(field) {
+    return this.context[field] || selfCheckMethods[field];
+  }
 
   removeEventAll() {
     this.getBindings().forEach(obj => {
@@ -133,7 +195,7 @@ export default class DomEventHandler extends BaseHandler {
 
     if (eventObject.beforeMethods.length) {
       eventObject.beforeMethods.every(before => {
-        return context[before.target].call(context, e, before.param);
+        return this.getCallback(before.target).call(context, e, before.param);
       });
     }
 
@@ -142,7 +204,7 @@ export default class DomEventHandler extends BaseHandler {
 
       if (returnValue !== false && eventObject.afterMethods.length) {
         eventObject.afterMethods.forEach(after => {
-          return context[after.target].call(context, e, after.param)
+          return this.getCallback(after.target).call(context, e, after.param)
         });
       }
 
@@ -164,7 +226,7 @@ export default class DomEventHandler extends BaseHandler {
     var isAllCheck = true;
     if (eventObject.checkMethodList.length) {
       isAllCheck = eventObject.checkMethodList.every(field => {
-        var fieldValue = context[field];
+        var fieldValue = this.getCallback(field);
         if (isFunction(fieldValue) && fieldValue) {
           // check method
           return fieldValue.call(context, e);
@@ -264,7 +326,7 @@ export default class DomEventHandler extends BaseHandler {
       } else if (pipe.type === 'keyword') {
         const method = `${pipe.value}`;
 
-        if (this.context[method]) {
+        if (this.getCallback(method)) {
           obj.checkMethodList.push(method);
         } else {
           obj.codes.push(method.toLowerCase());

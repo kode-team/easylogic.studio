@@ -1,7 +1,7 @@
 import { os } from "el/utils/detect";
-import shortcuts from "../shortcuts";
 import { KEY_CODE } from "el/editor/types/key";
 import { isArray, isBoolean } from "el/sapa/functions/func";
+import shortcuts from "el/editor/shortcuts";
 
 
 function joinKeys (...args) {

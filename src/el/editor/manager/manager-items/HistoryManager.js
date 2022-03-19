@@ -17,7 +17,7 @@ export class HistoryManager {
     }
 
     createCommand(commandString) {
-        return this.$editor.isPointerUp ? `history.${commandString}` : commandString;
+        return this.$editor.stateManager.isPointerUp ? `history.${commandString}` : commandString;
     }
 
     saveSelection(obj = {}) {

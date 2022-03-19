@@ -3,7 +3,7 @@ import { BackgroundImage } from "../../property-parser/BackgroundImage";
 import { STRING_TO_CSS } from "el/utils/func";
 import { makeInterpolateString } from "./makeInterpolateString";
 import { makeInterpolateImageResource } from "./makeInterpolateImageResource";
-import { makeInterpolateIdentity } from "./makeInterpolateIdentity";
+// import { makeInterpolateIdentity } from "./makeInterpolateIdentity";
 
 export function makeInterpolateBackgroundImage(layer, property, startValue, endValue) {
 

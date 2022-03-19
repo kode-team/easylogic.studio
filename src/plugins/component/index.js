@@ -9,11 +9,11 @@ import ComponentPopup from './ComponentPopup';
  */
 export default function (editor) {
 
-    editor.registerMenuItem('inspector.tab.style', {
+    editor.registerUI('inspector.tab.style', {
         ComponentProperty,
     })
 
-    editor.registerMenuItem('popup', {
+    editor.registerUI('popup', {
         ComponentPopup
     })
 }

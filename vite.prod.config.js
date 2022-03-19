@@ -1,5 +1,3 @@
-
-import { svelte } from '@sveltejs/vite-plugin-svelte';
 import { defineConfig } from 'vite'
 import { adorableCSS } from "adorable-css/vite-plugin-adorable-css"
 
@@ -27,9 +25,6 @@ export default defineConfig({
   plugins: [
     adorableCSS({
       include: ['**/*.{svelte,jsx}']
-    }),        
-    svelte({
-      /* plugin options */
     })
   ]
 })

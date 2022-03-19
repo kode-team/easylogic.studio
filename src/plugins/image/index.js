@@ -12,11 +12,11 @@ export default function (editor) {
     editor.registerElement({
         ImageSelectEditor
     })
-    editor.registerMenuItem('inspector.tab.style', {
+    editor.registerUI('inspector.tab.style', {
         ImageProperty
     })
 
-    editor.registerMenuItem('popup', {
+    editor.registerUI('popup', {
         ImageSelectPopup
     })
 }

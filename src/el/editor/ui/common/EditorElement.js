@@ -1,18 +1,6 @@
 
 import UIElement from "el/sapa/UIElement";
-import { ConfigManager } from "el/editor/manager/ConfigManager";
-import { InjectManager } from "el/editor/manager/InjectManager";
-import { SelectionManager } from "el/editor/manager/SelectionManager";
-import { ViewportManager } from "el/editor/manager/ViewportManager";
 import { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "el/editor/types/event";
-import { ModelManager } from "el/editor/manager/ModelManager";
-import { ShortCutManager } from "el/editor/manager/ShortCutManager";
-import { ModeViewManager } from "el/editor/manager/ModeViewManager";
-import { CommandManager } from "el/editor/manager/CommandManager";
-import { SnapManager } from "el/editor/manager/SnapManager";
-import { PathKitManager } from "el/editor/manager/PathKitManager";
-import { VisibleManager } from "el/editor/manager/VisibleManager";
-import { IconManager } from "el/editor/manager/IconManager";
 
 export class EditorElement extends UIElement {
 
@@ -62,6 +50,7 @@ export class EditorElement extends UIElement {
      * Editor 루트를 재정의 해서 사용
      * 
      * @override
+     * @returns {Editor}
      */
     get $editor() {
 
@@ -97,16 +86,10 @@ export class EditorElement extends UIElement {
         return this.$editor.initI18nMessage(key);
     }
 
-    /**
-     * @type {ConfigManager}
-     */ 
     get $config() {
         return this.$editor.config;
     }
 
-    /**
-     * @type {SelectionManager}
-     */
     get $selection() {
         return this.$editor.selection;
     }
@@ -115,23 +98,14 @@ export class EditorElement extends UIElement {
         return this.$editor.segmentSelection;
     }
 
-    /**
-     * @type {CommandManager}
-     */
     get $commands () {
         return this.$editor.commands;
     }
 
-    /**
-     * @type {ViewportManager}
-     */
     get $viewport() {
         return this.parent.$viewport ||  this.$editor.viewport;
     }
 
-    /**
-     * @type {SnapManager}
-     */
     get $snapManager() {
         return this.parent.$snapManager || this.$editor.snapManager;
     }
@@ -144,48 +118,25 @@ export class EditorElement extends UIElement {
         return this.$editor.history;
     }
 
-    /**
-     * @type {ShortCutManager}
-     */
     get $shortcuts() {
         return this.$editor.shortcuts;
     }
 
-    /**
-     * @type {KeyBoardManager}
-     */
     get $keyboardManager() {
         return this.$editor.keyboardManager;
     }
 
-    /**
-     * @type {StorageManager}
-     */
     get $storageManager() {
         return this.$editor.storageManager;
     }
 
-    /**
-     * @type {InjectManager}
-     */ 
     get $injectManager() {
         return this.$editor.injectManager;
     }
 
-    /**
-     * 하위 호환성을 위해서 이름을 유지함 
-     * 
-     * @type {InjectManager}
-     */ 
-     get $menuManager() {
-        return this.$injectManager
-    }    
-
 
     /**
      * 모델 관리하는 Manager 객체 
-     * 
-     * @type {ModelManager}
      * 
      */
     get $model() {
@@ -196,36 +147,27 @@ export class EditorElement extends UIElement {
         return this.$editor.lockManager;
     }
 
-    /**
-     * @type {VisibleManager}
-     */
     get $visibleManager() {
         return this.$editor.visibleManager;
     }
 
     /**
-     * 현재 에디팅 모드를 관리하는 Manager 객체 
-     * 
-     * @type {ModeViewManager}
+     * 현재 에디팅 모드를 관리하는 Manager 객체
      */
     get $modeView() {
         return this.$editor.modeViewManager;
     }
 
-    /**
-     * 
-     * @type {PathKitManager}
-     */
     get $pathkit() {
         return this.$editor.pathKitManager;
     }
 
-    /**
-     * 
-     * @type {IconManager}
-     */
     get $icon () {
         return this.$editor.iconManager;
+    }
+
+    get $stateManager () {
+        return this.$editor.stateManager;
     }
 
     /**
@@ -238,7 +180,7 @@ export class EditorElement extends UIElement {
      * @param {any[]} args 
      */
     command(command, description, ...args) {
-        if (this.$editor.isPointerUp) {
+        if (this.$stateManager.isPointerUp) {
             return this.emit(`history.${command}`, description, ...args);
         } else {
             return this.emit(command, ...args);

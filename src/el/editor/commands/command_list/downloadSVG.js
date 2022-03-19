@@ -1,5 +1,5 @@
 
-import ExportManager from "el/editor/manager/ExportManager";
+import ExportManager from "el/editor/manager/manager-items/ExportManager";
 import downloadFile from "el/editor/util/downloadFile";
 
 export default {

@@ -47,6 +47,4 @@ export class SVGStaticGradient extends SVGGradient {
     toFillValue () {
         return this.toString();
     }
-
-    isStatic () { return true; }
 }

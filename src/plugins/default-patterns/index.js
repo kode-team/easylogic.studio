@@ -16,7 +16,7 @@ import SVGTextureView from './views/SVGTextureView';
         SVGTextureView
     });    
 
-    editor.registerMenuItem('leftbar.tab', {
+    editor.registerUI('leftbar.tab', {
         TextureView: { 
             value: "texture",
             title: "Texture",
@@ -25,7 +25,7 @@ import SVGTextureView from './views/SVGTextureView';
         }
     })
 
-    editor.registerMenuItem('leftbar.tab.texture', {
+    editor.registerUI('leftbar.tab.texture', {
         TextureView
     })
 

@@ -7,7 +7,7 @@ import GuideLineView from './GuideLineView';
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerMenuItem('canvas.view', {
+    editor.registerUI('canvas.view', {
         GuideLineView         
     })
 }

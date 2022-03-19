@@ -450,13 +450,10 @@ export default class HTMLRenderView extends EditorElement {
             this.initMousePoint = targetMousePoint;
             this.$selection.reselect();
             this.$snapManager.clear();
-            this.clearElementAll();
-
             this.refreshAllCanvas()
 
             // ArtBoard 변경 이후에 LayerTreeView 업데이트
             this.emit('refreshLayerTreeView')
-            // this.refreshAllElementBoundSize();
         }
 
         this.emit('setAttributeForMulti', this.$selection.packByValue({
@@ -492,9 +489,8 @@ export default class HTMLRenderView extends EditorElement {
         this.$selection.cachedItemMatrices.forEach(it => {
 
             // newVerties 에 실제 움직인 좌표로 넣고 
-            const newVerties = it.verties.map(v => {
-                return vec3.add([], v, localDist)
-            })
+            const oldVertex = it.verties[4];
+            const newVertex = vec3.add([], oldVertex, localDist)
 
             // 첫번째 좌표 it.rectVerties[0] 과 
             // 마지막 좌표 newVerties[0] 를 
@@ -502,8 +498,8 @@ export default class HTMLRenderView extends EditorElement {
             // 그게 실제적인 distance 이다. 
             const newDist = vec3.subtract(
                 [], 
-                vec3.transformMat4([], newVerties[0], it.parentMatrixInverse), 
-                vec3.transformMat4([], it.verties[0], it.parentMatrixInverse)
+                vec3.transformMat4([], newVertex, it.parentMatrixInverse), 
+                vec3.transformMat4([], oldVertex, it.parentMatrixInverse)
             )
 
             result[it.id] = {
@@ -519,7 +515,8 @@ export default class HTMLRenderView extends EditorElement {
         const targetMousePoint = this.$viewport.getWorldPosition();
         const newDist = vec3.dist(targetMousePoint, this.initMousePoint);
         this.$config.init('set.move.control.point', false);
-        this.emit('endGhostToolView');
+
+        this.emit('endGhostToolView'); 
 
         if (this.$config.get('set.dragarea.mode')) {
             this.emit('endDragAreaView');
@@ -673,8 +670,6 @@ export default class HTMLRenderView extends EditorElement {
                 'height', 
             )
 
-            console.log(parentObj.id, parentObj.itemType, hasChangedDimension);
-            
             parentObj.layers.forEach(it => {
                 var $el = this.getElement(it.id);
 

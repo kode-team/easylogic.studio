@@ -12,13 +12,13 @@ export default function (editor) {
 
     editor.registerComponent('iframe', IFrameLayer);
 
-    editor.registerMenuItem('inspector.tab.style', {
+    editor.registerUI('inspector.tab.style', {
         IFrameProperty
     })
 
     editor.registerRenderer('html', 'iframe', new HTMLIFrameRender());
 
-    editor.registerMenuItem('tool.menu.css', {
+    editor.registerUI('tool.menu.css', {
         AddIFrame
     })
 }

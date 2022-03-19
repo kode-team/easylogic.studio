@@ -61,7 +61,7 @@ export default class Inspector extends EditorElement {
             </TabPanel>
 
             {this.$injectManager
-              .getTargetMenuItems("inspector.tab")
+              .getTargetUI("inspector.tab")
               .map((it) => {
                 const { value, title, loadElements } = it.class;
 

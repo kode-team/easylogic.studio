@@ -6,7 +6,7 @@ import CodeViewProperty from "./CodeViewProperty";
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerMenuItem('inspector.tab.code', {
+    editor.registerUI('inspector.tab.code', {
         CodeViewProperty
     })
 }

@@ -32,7 +32,7 @@ editor.registerComponent("iframe", IFrameLayer);
 editor.registerItem("rect", RectLayer);
 
 // Inspector 확장
-editor.registerMenuItem("inspector.tab.style", {
+editor.registerUI("inspector.tab.style", {
   IFrameProperty,
 });
 
@@ -49,7 +49,7 @@ editor.registerElement({
 
 // ObjectProperty 를 통해서 json 기반의 속성 편집기 정의
 // 정해진 영역(inspector.tab.style) 에 속성 편집기를 표현한다.
-editor.registerMenuItem("inspector.tab.style", {
+editor.registerUI("inspector.tab.style", {
   SVGItemProperty: ObjectProperty.create({
     title: editor.$i18n("svg.item.property.title"),
     editableProperty: "svg-item", // itemType 이 맞으면 속성 편집기가 열림
@@ -73,7 +73,7 @@ editor.registerInspector("svg-item", (current) => {
 });
 
 // 팝업 정의
-editor.registerMenuItem('popup', {
+editor.registerUI('popup', {
     SVGFilterPopup
 })
 

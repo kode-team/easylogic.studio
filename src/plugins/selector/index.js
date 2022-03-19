@@ -8,11 +8,11 @@ import SelectorProperty from "./SelectorProperty";
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerMenuItem('inspector.tab.transition', {
+    editor.registerUI('inspector.tab.transition', {
         SelectorProperty   
     })
 
-    editor.registerMenuItem('popup', {
+    editor.registerUI('popup', {
         SelectorPopup
     })
 }

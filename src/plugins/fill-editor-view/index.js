@@ -7,7 +7,7 @@ import FillEditorView from './FillEditorView';
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerMenuItem('canvas.view', {
+    editor.registerUI('canvas.view', {
         FillEditorView         
     })
 }

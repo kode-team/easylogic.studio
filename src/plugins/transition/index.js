@@ -8,11 +8,11 @@ import TransitionPropertyPopup from "./TransitionPropertyPopup";
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerMenuItem('inspector.tab.transition', {
+    editor.registerUI('inspector.tab.transition', {
         TransitionProperty
     })
 
-    editor.registerMenuItem('popup', {
+    editor.registerUI('popup', {
         TransitionPropertyPopup
     })
 }

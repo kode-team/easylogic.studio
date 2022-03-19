@@ -1061,8 +1061,6 @@ declare module "@easylogic/editor" {
          */
         get $storageManager(): StorageManager;
 
-        get $menuManager(): MenuItemManager;
-
         /**
          * history 가 필요한 커맨드는 command 함수를 사용하자. 
          * 마우스 업 상태에 따라서 자동으로 history 커맨드로 분기해준다. 
@@ -1161,7 +1159,7 @@ declare module "@easylogic/editor" {
 
     export interface EditorInstance {
         registerElement(obj: ElementValue<EditorElement>): void;
-        registerMenuItem(target: string, obj: ElementValue<EditorElement>): void;
+        registerUI(target: string, obj: ElementValue<EditorElement>): void;
         registerComponent(name: string, component: IComponent);
         registerItem(name: string, item: Item);
         registerInspector(name: string, inspectorCallback: Function);

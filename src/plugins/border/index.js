@@ -13,7 +13,7 @@ export default function (editor) {
         BorderEditor,
         BorderValueEditor
     })
-    editor.registerMenuItem('inspector.tab.style', {
+    editor.registerUI('inspector.tab.style', {
         BorderProperty
     })
 }

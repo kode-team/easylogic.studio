@@ -38,7 +38,7 @@ export default class CanvasView extends EditorElement {
   afterRender() {
     this.nextTick(() => {
       this.trigger('resizeCanvas');
-      this.emit('moveSelectionToCenter', false);
+      this.emit('moveSelectionToCenter', true);
       this.refreshCursor();
     }, 100)
   }
@@ -46,18 +46,9 @@ export default class CanvasView extends EditorElement {
     return <div class='elf--page-container' tabIndex="-1" ref='$container'>
         <div class='page-view' ref="$pageView">
           <div class='page-lock scrollbar' ref='$lock'>            
-
-            {createComponent("DragAreaView", {
-              ref: "$dragAreaView"
-            })}
-
-            {createComponent("HTMLRenderView", {
-              ref: "$htmlRenderView"
-            })}
-
-            {createComponent("DragAreaRectView", {
-              ref: "$dragAreaRectView"
-            })}
+            <DragAreaView ref='$dragArea'/>
+            <HTMLRenderView ref='$htmlRenderView'/>
+            <DragAreaRectView ref='$dragAreaRectView'/>
             
             {this.$injectManager.generate('canvas.view')}              
 

@@ -21,24 +21,28 @@
         stroke-width: 2;
 
         &.target {
-          stroke: green;
+          stroke-width:0;
+          // stroke: green;
         }
 
         &.target-rect {
-          stroke: rgb(0, 255, 0);
+          stroke-width:0;          
+          // stroke: rgb(0, 255, 0);
         }
 
         &.target-parent {
-          stroke: purple;
+          stroke-width:0;          
+          // stroke: purple;
         }
 
         &.container {
-          stroke: red;
+          stroke-width:0;
+          // stroke: red;
         }
 
         &.flex-item {
           stroke:transparent;
-          fill: rgba(255, 0, 0, 0.3);
+          fill: rgba(50, 50, 50, 0.3);
           z-index: -1000;
         }
       }

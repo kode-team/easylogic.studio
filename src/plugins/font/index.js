@@ -8,7 +8,7 @@ import { Length } from "el/editor/unit/Length";
  */
 export default function (editor) {
 
-    editor.registerMenuItem('inspector.tab.style', {
+    editor.registerUI('inspector.tab.style', {
 
         FontProperty: ObjectProperty.create({
             title: editor.$i18n('font.property.title'),

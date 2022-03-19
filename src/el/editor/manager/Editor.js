@@ -3,46 +3,42 @@ import { uuid } from "el/utils/math";
 import { Item } from "el/editor/items/Item";
 import BaseStore from "el/sapa/BaseStore";
 import { registAlias, registElement } from "el/sapa/functions/registElement";
-import { isString } from "el/sapa/functions/func";
 
 import theme from "el/editor/ui/theme";
-
-import { TimelineSelectionManager } from "./TimelineSelectionManager";
-import { SelectionManager } from "./SelectionManager";
-import { ComponentManager } from "./ComponentManager";
-import { CommandManager } from "./CommandManager";
-import { ShortCutManager } from "./ShortCutManager";
-import { ConfigManager } from "./ConfigManager";
-import { HistoryManager } from "./HistoryManager";
-import { SnapManager } from "./SnapManager";
-import { KeyBoardManager } from "./KeyboardManager";
-import { ViewportManager } from "./ViewportManager";
-import { StorageManager } from "./StorageManager";
-import { CursorManager } from "./CursorManager";
-import { AssetManager } from "./AssetManager";
-import { PluginManager } from "./PluginManager";
-import { RendererManager } from "./RendererManager";
-import { InjectManager } from "./InjectManager";
-import { I18nManager } from "./I18nManager";
-import { ModelManager } from './ModelManager';
-import { ModeViewManager } from './ModeViewManager';
-import { PathKitManager } from "./PathKitManager";
-import { SegmentSelectionManager } from "./SegmentSelectionManager";
-import { LockManager } from "./LockManager";
-import { VisibleManager } from "./VisibleManager";
-import { CommandMaker } from "./CommandMaker";
-import { ClipboardManager } from './ClipboardManager';
-import { IconManager } from './IconManager';
+import { ConfigManager } from "./manager-items/ConfigManager";
+import { SnapManager } from "./manager-items/SnapManager";
+import { CommandManager } from "./manager-items/CommandManager";
+import { ShortCutManager } from "./manager-items/ShortCutManager";
+import { SelectionManager } from "./manager-items/SelectionManager";
+import { SegmentSelectionManager } from "./manager-items/SegmentSelectionManager";
+import { TimelineSelectionManager } from "./manager-items/TimelineSelectionManager";
+import { HistoryManager } from "./manager-items/HistoryManager";
+import { KeyBoardManager } from "./manager-items/KeyboardManager";
+import { ViewportManager } from "./manager-items/ViewportManager";
+import { CursorManager } from "./manager-items/CursorManager";
+import { AssetManager } from "./manager-items/AssetManager";
+import { InjectManager } from "./manager-items/InjectManager";
+import { ComponentManager } from "./manager-items/ComponentManager";
+import { PluginManager } from "./manager-items/PluginManager";
+import { RendererManager } from "./manager-items/RendererManager";
+import { I18nManager } from "./manager-items/I18nManager";
+import { ModelManager } from "./manager-items/ModelManager";
+import { ModeViewManager } from "./manager-items/ModeViewManager";
+import { PathKitManager } from "./manager-items/PathKitManager";
+import { VisibleManager } from "./manager-items/VisibleManager";
+import { ClipboardManager } from "./manager-items/ClipboardManager";
+import { IconManager } from "./manager-items/IconManager";
+import { StateManager } from "./manager-items/StateManager";
+import { StorageManager } from "./manager-items/StorageManager";
+import { LockManager } from "./manager-items/LockManager";
+import { CommandMaker } from './manager-items/CommandMaker';
 
 
 export const EDIT_MODE_SELECTION = 'SELECTION';
 export const EDIT_MODE_ADD = 'ADD';
 
-const DEFAULT_THEME = 'dark'
-
 
 export class Editor {
-
 
   /**
    * 
@@ -100,6 +96,7 @@ export class Editor {
     this.visibleManager = new VisibleManager(this);
     this.clipboard = new ClipboardManager(this);
     this.iconManager = new IconManager(this);
+    this.stateManager = new StateManager(this);
 
     this.initPlugins();
     this.initStorage();
@@ -142,11 +139,6 @@ export class Editor {
     this.saveItem('locale', this.locale);
   }
 
-  setLayout(layout = 'all') {
-    this.layout = layout;
-    this.saveItem('layout', this.layout);
-  }
-
   setUser(user) {
     this.user = user;
   }
@@ -175,30 +167,6 @@ export class Editor {
   // 최근에 열린 팝업이 밑으로 가지 않게 한다. 
   get zIndex() {
     return this.popupZIndex++
-  }
-
-  /**
-   * 현재 Mouse Up 상태인지 체크 
-   * 
-   * @returns {boolean}
-   */
-  get isPointerUp() {
-    const e = this.config.get('bodyEvent');
-    if (!e) return true;
-
-    if (e.type === 'pointerup') return true;
-    else if (e.type === 'pointermove' && e.buttons === 0) return true;
-
-    return false;
-  }
-
-  get isPointerDown() {
-    return !this.isPointerUp
-  }
-
-  get isPointerMove() {
-    if (!this.config.get('bodyEvent')) return false;
-    return this.config.get('bodyEvent').type === 'pointermove'
   }
 
   getFile(url) {
@@ -242,7 +210,7 @@ export class Editor {
 
   command(command, message, ...args) {
 
-    if (this.isPointerUp) {
+    if (this.stateManager.isPointerUp) {
       return this.store.emit(`history.${command}`, message, ...args);
     } else {
       return this.store.emit(command, ...args);
@@ -352,8 +320,8 @@ export class Editor {
     })
   }
 
-  registerMenuItem(target, obj = {}) {
-    this.injectManager.registerMenuItem(target, obj);
+  registerUI(target, obj = {}) {
+    this.injectManager.registerUI(target, obj);
     this.registerElement(obj);
   }
 

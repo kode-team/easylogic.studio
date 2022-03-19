@@ -1,6 +1,6 @@
 import { clone, isFunction, isNotUndefined, isNumber, isUndefined } from "el/sapa/functions/func";
 import { uuid } from "el/utils/math";
-import { ModelManager } from "../manager/ModelManager";
+import { ModelManager } from "../manager/manager-items/ModelManager";
 
 /**
  * Item , 그리기를 위한 기본 모델 
@@ -539,7 +539,7 @@ export class BaseModel {
 
     const index = this.parent.findIndex(this);
 
-    this.parent.insertChild(layer, index);
+    this.parent.insertChild(layer, index+1);
     // this.project.addIndexItem(layer);
     return layer;
   }
@@ -652,7 +652,7 @@ export class BaseModel {
     var child = childItem.clone()
 
     child.renameWithCount()
-    child.move([dist, dist, 0])
+    child.absoluteMove([dist, dist, 0])
 
     var childIndex = this.findIndex(childItem);
 

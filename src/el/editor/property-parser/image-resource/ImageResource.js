@@ -15,15 +15,6 @@ export class ImageResource extends PropertyItem {
   isLinear() {
     return false;
   }
-  isRadial() {
-    return false;
-  }
-  isConic() {
-    return false;
-  }
-  isStatic() {
-    return false;
-  }
   isImage() {
     return false;
   }

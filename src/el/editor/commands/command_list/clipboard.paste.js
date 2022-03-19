@@ -31,7 +31,7 @@ export default {
                     model.renameWithCount()
 
                     // 10, 10 기본 이동 
-                    model.move([10, 10, 0])
+                    model.absoluteMove([10, 10, 0])
                     
                     if (length === 1) {
                         // 하나 일 때는 sourceItem 옆으로 생성하기 

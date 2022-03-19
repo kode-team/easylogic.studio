@@ -22,7 +22,7 @@ export default function (editor) {
   })
 
 
-  editor.registerMenuItem('inspector.tab.style', {
+  editor.registerUI('inspector.tab.style', {
     SVGItemProperty: ObjectProperty.create({
       title: editor.$i18n('svg.item.property.title'),
       editableProperty: 'svg-item',
@@ -30,7 +30,7 @@ export default function (editor) {
     })
   })
 
-  editor.registerMenuItem('popup', {
+  editor.registerUI('popup', {
     SVGFilterPopup
   })
 

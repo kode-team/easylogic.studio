@@ -1,4 +1,3 @@
-import ObjectProperty from "el/editor/ui/property/ObjectProperty";
 import Color from "el/utils/Color";
 import { CSS_TO_STRING } from "el/utils/func";
 import { SampleLayer } from "./SampleLayer";
@@ -14,7 +13,7 @@ import SampleRender from "./SampleRender";
 
     editor.registerRenderer('html', 'sample', new SampleRender());
 
-    // editor.registerMenuItem('inspector.tab.style', {
+    // editor.registerUI('inspector.tab.style', {
     //     SampleProperty: ObjectProperty.create({
     //       title: 'Sample 속성 편집기',
     //       editableProperty: 'sample',

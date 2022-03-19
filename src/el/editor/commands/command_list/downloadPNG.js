@@ -2,7 +2,7 @@
 import loadOriginalImage from "el/editor/util/loadOriginalImage";
 import createImagePng from "el/editor/util/createImagePng";
 import downloadFile from "el/editor/util/downloadFile";
-import ExportManager from "el/editor/manager/ExportManager";
+import ExportManager from "el/editor/manager/manager-items/ExportManager";
 
 export default {
     command: 'downloadPNG',

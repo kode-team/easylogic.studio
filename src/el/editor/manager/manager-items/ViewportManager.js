@@ -270,7 +270,7 @@ export class ViewportManager {
      * 
      * @param {vec3[]} areaVerties 
      */
-    moveLayerToCenter (areaVerties, scaleRate = -0.2, withScale = true) {
+    moveToCenter (areaVerties, scaleRate = -0.2, withScale = true) {
 
         const areaCenter = vec3.lerp([], areaVerties[0], areaVerties[2], 0.5);
         const width = vec3.dist(areaVerties[0], areaVerties[1])

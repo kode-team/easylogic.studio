@@ -9,7 +9,7 @@ import ExportProperty from "./ExportProperty";
  * @param {Editor} editor 
  */
 export default function (editor) {
-    editor.registerMenuItem('inspector.tab.style', {
+    editor.registerUI('inspector.tab.style', {
         ExportProperty
     })
 }

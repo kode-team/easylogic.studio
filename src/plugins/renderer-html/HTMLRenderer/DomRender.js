@@ -196,7 +196,7 @@ export default class DomRender extends ItemRender {
     }
 
     return {
-      display: 'inline-flex',
+      display: 'flex',
       ...item.attrs(
         'flex-direction',
         'flex-wrap',

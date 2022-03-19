@@ -21,7 +21,7 @@ export default function (editor) {
         GridGapEditor
     })
 
-    editor.registerMenuItem('inspector.tab.style', {
+    editor.registerUI('inspector.tab.style', {
         LayoutProperty,        
         ResizingProperty,
         DefaultLayoutItemProperty,
