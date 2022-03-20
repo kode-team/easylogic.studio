@@ -615,6 +615,28 @@ export function vertiesToRectangle (verties) {
     return {x, left: x, y, top: y, width, height}        
 }
 
+/**
+ * verties 를 path 로 변경 
+ * 
+ * @param {vec3[]} verties 
+ * @returns 
+ */
+export function vertiesToPath(verties) {
+    const results = []
+
+    for(var i = 0; i < verties.length; i++) {
+        if (i === 0) {
+            results.push(`M ${verties[i][0]} ${verties[i][1]}`)
+        } else {
+            results.push(`L ${verties[i][0]} ${verties[i][1]}`)
+        }
+    }
+
+    results.push('Z');
+
+    return results.join(' ');
+}
+
 export function toRectVertiesWithoutTransformOrigin (verties) {
     return toRectVerties(verties).filter((it, index) => {
         return index < 4;

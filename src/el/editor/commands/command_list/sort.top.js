@@ -14,6 +14,7 @@ export default {
                 const parent = current.parent;
                 // 선택된 객체가 하나이고 artboard 가 존재하면 artboard 를 기준으로 잡는다. 
                 const distY = getVertiesMinY(parent.verties) - getVertiesMinY(editor.selection.verties);
+                
                 editor.emit('moveLayer', 0, distY);
             }
 

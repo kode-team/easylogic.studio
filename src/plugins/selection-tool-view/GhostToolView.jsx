@@ -8,7 +8,7 @@ import {
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { DOMDIFF, LOAD, SUBSCRIBE } from "el/sapa/Event";
 import { clone } from "el/sapa/functions/func";
-import { toRectVerties, vertiesToRectangle } from "el/utils/collision";
+import { toRectVerties, vertiesToPath, vertiesToRectangle } from "el/utils/collision";
 import { vec3 } from "gl-matrix";
 
 import "./GhostToolView.scss";
@@ -54,25 +54,7 @@ export default class GhostToolView extends EditorElement {
       .map((it) => it.originVerties);
   }
 
-  [SUBSCRIBE("moveFirstGhostToolView")]() {
-    const targetMousePoint = this.$viewport.getWorldPosition();
-
-    const newDist = vec3.floor(
-      [],
-      vec3.subtract([], targetMousePoint, this.initMousePoint)
-    );
-
-    // translate
-    this.ghostVerties = this.verties.map((v) => {
-      return vec3.add([], v, newDist);
-    });
-
-    this.load("$containerView");
-    this.load("$view");
-
-  }
-
-  [SUBSCRIBE("moveGhostToolView")]() {
+  collectInformation() {
     const targetMousePoint = this.$viewport.getWorldPosition();
 
     const newDist = this.getDist();
@@ -92,9 +74,8 @@ export default class GhostToolView extends EditorElement {
     this.targetItem = filteredLayers[0];
 
     if (this.targetItem) {
-
-      // 현재 targetItem 이 layout 을 가지고 있다면 , container 로 인지하고 마지막 자식을 targetItem 으로 지정한다. 
-      if (this.targetItem.hasLayout()) {
+      // 현재 targetItem 이 layout 을 가지고 있다면 , container 로 인지하고 마지막 자식을 targetItem 으로 지정한다.
+      if (this.targetItem.hasLayout() && this.targetItem.hasChildren()) {
         this.targetItem = this.targetItem.layers.pop();
       }
 
@@ -102,6 +83,8 @@ export default class GhostToolView extends EditorElement {
       this.targetOriginPosition = this.$viewport.applyVerties(
         toRectVerties(this.targetItem.contentVerties)
       );
+
+      // console.log(this.targetOriginPosition);
 
       // 현재 스크린에서 마우스 위치
       this.targetPoint = this.$viewport.applyVertex(targetMousePoint);
@@ -137,6 +120,17 @@ export default class GhostToolView extends EditorElement {
       this.targetParent = null;
       this.targetParentPosition = null;
     }
+  }
+
+  [SUBSCRIBE("moveFirstGhostToolView")]() {
+    this.collectInformation();
+
+    this.load("$containerView");
+    this.load("$view");
+  }
+
+  [SUBSCRIBE("moveGhostToolView")]() {
+    this.collectInformation();
 
     this.load("$view");
   }
@@ -168,17 +162,14 @@ export default class GhostToolView extends EditorElement {
   }
 
   renderPathForVerties(verties, className) {
+
+    const d = vertiesToPath(verties);
+
     return (
       <g>
         <path
           class={className}
-          d={`
-                M ${verties[0][0]} ${verties[0][1]}
-                L ${verties[1][0]} ${verties[1][1]}
-                L ${verties[2][0]} ${verties[2][1]}
-                L ${verties[3][0]} ${verties[3][1]}
-                Z
-            `}
+          d={d}
         />
       </g>
     );
@@ -204,40 +195,85 @@ export default class GhostToolView extends EditorElement {
   renderLayoutFlexRowArea() {
     const rect = vertiesToRectangle(this.targetOriginPosition);
 
-    // 자식 기준으로 화면에 표시 
+    // 자식 기준으로 화면에 표시
     if (this.targetRelativeMousePoint.x < CHECK_RATE) {
-      return this.renderPath(
-        [
-          [this.targetOriginPosition[0][0], this.targetOriginPosition[0][1]],
-          [
-            this.targetOriginPosition[0][0] + rect.width / 2,
-            this.targetOriginPosition[1][1],
-          ],
-          [
-            this.targetOriginPosition[0][0] + rect.width / 2,
-            this.targetOriginPosition[2][1],
-          ],
-          [this.targetOriginPosition[3][0], this.targetOriginPosition[3][1]],
-        ],
-        "flex-item",
-        "flex-left"
+      return (
+        <>
+          {this.renderPathForVerties(
+            [
+              [
+                this.targetOriginPosition[0][0],
+                this.targetOriginPosition[0][1],
+              ],
+              [
+                this.targetOriginPosition[0][0] + rect.width / 2,
+                this.targetOriginPosition[1][1],
+              ],
+              [
+                this.targetOriginPosition[0][0] + rect.width / 2,
+                this.targetOriginPosition[2][1],
+              ],
+              [
+                this.targetOriginPosition[3][0],
+                this.targetOriginPosition[3][1],
+              ],
+            ],
+            "flex-item"
+          )}
+
+          {this.renderPathForVerties(
+            [
+              [
+                this.targetOriginPosition[0][0],
+                this.targetOriginPosition[0][1],
+              ],
+              [
+                this.targetOriginPosition[3][0],
+                this.targetOriginPosition[3][1],
+              ],
+            ],
+            "flex-target"
+          )}
+        </>
       );
     } else {
-      return this.renderPath(
-        [
-          [
-            this.targetOriginPosition[0][0] + rect.width / 2,
-            this.targetOriginPosition[0][1],
-          ],
-          [this.targetOriginPosition[1][0], this.targetOriginPosition[1][1]],
-          [this.targetOriginPosition[2][0], this.targetOriginPosition[2][1]],
-          [
-            this.targetOriginPosition[3][0] + rect.width / 2,
-            this.targetOriginPosition[3][1],
-          ],
-        ],
-        "flex-item",
-        "flex-right"
+      return (
+        <>
+          {this.renderPathForVerties(
+            [
+              [
+                this.targetOriginPosition[0][0] + rect.width / 2,
+                this.targetOriginPosition[0][1],
+              ],
+              [
+                this.targetOriginPosition[1][0],
+                this.targetOriginPosition[1][1],
+              ],
+              [
+                this.targetOriginPosition[2][0],
+                this.targetOriginPosition[2][1],
+              ],
+              [
+                this.targetOriginPosition[3][0] + rect.width / 2,
+                this.targetOriginPosition[3][1],
+              ],
+            ],
+            "flex-item"
+          )}
+          {this.renderPathForVerties(
+            [
+              [
+                this.targetOriginPosition[1][0],
+                this.targetOriginPosition[1][1],
+              ],
+              [
+                this.targetOriginPosition[2][0],
+                this.targetOriginPosition[2][1],
+              ],
+            ],
+            "flex-target"
+          )}
+        </>
       );
     }
   }
@@ -345,11 +381,10 @@ export default class GhostToolView extends EditorElement {
   }
 
   renderLayoutItemInsertArea() {
-
     // 현재 선택된 layer 의 부모를 가지고 온다.
     if (!this.targetParent) {
       return;
-    };
+    }
 
     if (this.targetParent.hasLayout()) {
       if (this.targetParent.isLayout(Layout.FLEX)) {
@@ -409,7 +444,7 @@ export default class GhostToolView extends EditorElement {
         {this.targetItem && this.renderLayoutItemInsertArea()}
         {this.targetItem && this.renderLayoutItemForFirst()}
 
-        {this.isLayoutItem && this.renderPath(this.ghostScreenVerties, "ghost")}
+        {this.isLayoutItem && this.renderPath(this.ghostScreenVerties.filter((_, index) => index < 4), "ghost")}
       </svg>
     );
   }
@@ -446,59 +481,94 @@ export default class GhostToolView extends EditorElement {
 
     if (current.isLayoutItem() === false) return;
 
-    // absolute move
-    current.absoluteMove(newDist);
-
-    this.$selection.currentProject.appendChild(current);
-
     this.command(
-      "setAttributeForMulti",
-      "change move",
-      this.$selection.pack("x", "y")
+      "moveLayerToTarget",
+      "change target with move",
+      current,
+      this.$selection.currentProject,
+      newDist,
+      "appendChild"
     );
-    this.emit("refreshAllCanvas");
+
+    // const lastParent = current.parent;
+
+    // // absolute move
+    // current.absoluteMove(newDist);
+
+    // this.$selection.currentProject.appendChild(current);
+
+    // this.command(
+    //   "setAttributeForMulti",
+    //   "change move",
+    //   this.$selection.pack("x", "y")
+    // );
+    // this.command("setAttributeForMulti", "change move", this.$selection.packByIds([lastParent.id], "children"));
+
+    // this.emit("refreshAllCanvas");
   }
 
-  // target 의 순서에 맞게 들어가기 
-  insertToLayoutItem() {
-    const current = this.$selection.current;
-    const newDist = this.getDist();
+  /**
+   *
+   * targetAction
+   * - appendChild: targetItem의 자식으로 추가
+   * - appendBefore: targetItem의 앞으로 추가
+   * - appendAfter: targetItem의 뒤에 추가
+   *
+   * @returns {string}
+   */
+  getTargetAction() {
+    let targetAction = "";
 
     if (this.targetParent.hasLayout()) {
-
-      // 화면에서 이동한 만큼 선택된 객체를 이동해준다음
-      current.absoluteMove(newDist);
-
       if (this.targetParent.isLayout(Layout.FLEX)) {
         switch (this.targetParent["flex-direction"]) {
           case FlexDirection.ROW:
-            // left 
+            // left
             if (this.targetRelativeMousePoint.x < CHECK_RATE) {
-              this.targetItem.appendBefore(current);              
-            } else {  // right 
-              this.targetItem.appendAfter(current);
+              targetAction = "appendBefore";
+            } else {
+              // right
+              targetAction = "appendAfter";
             }
             break;
           case FlexDirection.COLUMN:
             // top
             if (this.targetRelativeMousePoint.y < CHECK_RATE) {
-              this.targetItem.appendBefore(current);              
-            } else {  // bottom
-              this.targetItem.appendAfter(current);
-            }            
+              targetAction = "appendBefore";
+            } else {
+              // bottom
+              targetAction = "appendAfter";
+            }
             break;
         }
-      } else if (this.targetParent.isLayout(Layout.GRID)) {
-
       }
     }
 
-    this.command(
-      "setAttributeForMulti",
-      "change move",
-      this.$selection.pack("x", "y")
-    );
-    this.emit("refreshAllCanvas");    
+    return targetAction;
+  }
+
+  // target 의 순서에 맞게 들어가기
+  insertToLayoutItem() {
+    const current = this.$selection.current;
+    const newDist = this.getDist();
+
+    if (this.targetParent.hasLayout()) {
+      let targetAction = this.getTargetAction();
+
+      if (this.targetParent.isLayout(Layout.FLEX)) {
+        if (targetAction) {
+          this.command(
+            "moveLayerToTarget",
+            "change target with move",
+            current,
+            this.targetItem,
+            newDist,
+            targetAction
+          );
+        }
+      } else if (this.targetParent.isLayout(Layout.GRID)) {
+      }
+    }
   }
 
   /**
@@ -545,28 +615,30 @@ export default class GhostToolView extends EditorElement {
     if (this.targetItem.hasLayout()) {
       // 자식을 안가지고 있을 때는 그냥 appendChild 를 실행
       if (this.targetItem.hasChildren() === false) {
-        this.targetItem.appendChild(current);
+        this.command(
+          "moveLayerToTarget",
+          "change target with move",
+          current,
+          this.targetItem,
+          newDist,
+          "appendChild"
+        );
       } else {
         // 내부에 자식이 있을 때는 , 마지막 드래그 위치에 따라 달라짐
       }
     } else {
       // 시작점이 layout item 이었을 경우
       if (current.isLayoutItem()) {
-        // 화면에서 이동한 만큼 선택된 객체를 이동해준다음
-        current.absoluteMove(newDist);
-
-        // 타겟의 자식으로 넣으면 원래 위치로 복원된다.
-        this.targetItem.appendChild(current);
-
         this.command(
-          "setAttributeForMulti",
-          "change move",
-          this.$selection.pack("x", "y")
+          "moveLayerToTarget",
+          "change target with move",
+          current,
+          this.targetItem,
+          newDist,
+          "appendChild"
         );
       }
     }
-
-    this.emit("refreshAllCanvas");
   }
 
   [SUBSCRIBE("endGhostToolView")]() {

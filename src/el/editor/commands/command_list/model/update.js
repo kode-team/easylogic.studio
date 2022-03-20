@@ -11,7 +11,7 @@ export default {
      */
     execute: function (editor, id = null, attrs = {}, context = { origin: '*'}) {
 
-        const item = editor.modelManager.get(id);
+        const item = editor.get(id);
 
         if (item) {
             const isChanged = item.reset(attrs, context);

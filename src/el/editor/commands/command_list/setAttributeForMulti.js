@@ -12,7 +12,7 @@ export default {
         const messages = []
 
         Object.entries(multiAttrs).forEach(([id, attrs]) => {
-            const item = editor.modelManager.get(id);            
+            const item = editor.get(id);
             const newAttrs = {};
 
             Object.entries(attrs).forEach(([key, value]) => {
@@ -32,9 +32,12 @@ export default {
         messages.forEach(message => {
             commandMaker.emit('update', message.id, message.attrs, context);
 
-
             // 부모가 바뀌는 조건을 맞춰야 한다. 
             const item = editor.get(message.id);
+
+            if (item.is('project')) {
+                return;
+            }
 
             if (item.parent && item.parent.is('project')) {
                 return;
@@ -52,6 +55,8 @@ export default {
 
 
         })
+
+        // commandMaker.log();
 
         // run multi command 
         commandMaker.run();

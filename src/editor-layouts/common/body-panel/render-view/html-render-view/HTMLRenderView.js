@@ -456,10 +456,7 @@ export default class HTMLRenderView extends EditorElement {
             this.emit('refreshLayerTreeView')
         }
 
-        this.emit('setAttributeForMulti', this.$selection.packByValue({
-            'x': (item) => item.x , 
-            'y': (item) => item.y ,
-        }));
+        this.emit('setAttributeForMulti', this.$selection.pack('x', 'y'));
 
     }
 

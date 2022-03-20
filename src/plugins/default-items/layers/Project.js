@@ -69,6 +69,10 @@ export class Project extends TimelineModel {
     return 0;
   }
 
+  isLayoutItem() {
+    return false;
+  }
+
   hasLayout() {
     return false;
   }

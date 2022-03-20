@@ -22,6 +22,11 @@ export default class CallbackHandler extends BaseHandler {
 
   }
 
+  getCallback(field) {
+    return this.context[field];
+  }
+
+
 
   removeCallbackAll() {
     this.getBindings().forEach(obj => {
@@ -30,8 +35,8 @@ export default class CallbackHandler extends BaseHandler {
     this.initBindings();
   }
 
-  removeCallback({ animationFrameId }) {
-    cancelAnimationFrame(animationFrameId);
+  removeCallback({ requestId }) {
+    cancelAnimationFrame(requestId);
   }
 
   getBindings() {
@@ -51,18 +56,9 @@ export default class CallbackHandler extends BaseHandler {
   }
 
 
-  matchPath(el, selector) {
-    if (el) {
-      if (el.matches(selector)) {
-        return el;
-      }
-      return this.matchPath(el.parentElement, selector);
-    }
-    return null;
-  }
+  makeCallback(callbackObject, magicMethod) {
 
-
-  makeCallback(callbackObject, callback) {
+    const callback = callbackObject.callback;
 
     const run = (time) => {
       callback(time)
@@ -74,75 +70,52 @@ export default class CallbackHandler extends BaseHandler {
     };
   }
 
-
-  /**
-   * 
-   * doubletab -> touchend 로 바뀜 
-   * 
-   * @param {string} eventName  이벤트 이름 
-   * @param {array} checkMethodFilters 매직 필터 목록  
-   */
-  getDefaultCallbackObject(callbackName, checkMethodFilters) {
-    const context = this.context;
-    let arr = checkMethodFilters;
-
-    // context 에 속한 변수나 메소드 리스트 체크
-    const checkMethodList = arr.filter(code => !!context[code]);
-
-    // // 이벤트 정의 시점에 적용 되어야 하는 것들은 모두 method() 화 해서 정의한다.
-    // const [afters, afterMethods] = splitMethodByKeyword(arr, "after");
-    // const [befores, beforeMethods] = splitMethodByKeyword(arr, "before");
-    // const [debounces, debounceMethods] = splitMethodByKeyword(arr, "debounce");
-    // const [delays, delayMethods] = splitMethodByKeyword(arr, "delay");
-    // const [throttles, throttleMethods] = splitMethodByKeyword(arr, "throttle");
-    // const [captures] = splitMethodByKeyword(arr, "capture");
-
-    // // 위의 5개 필터 이외에 있는 코드들은 keycode 로 인식한다.
-    // const filteredList = [
-    //   ...checkMethodList,
-    //   ...afters,
-    //   ...befores,
-    //   ...delays,
-    //   ...debounces,
-    //   ...throttles,
-    //   ...captures
-    // ];
-
-    // return {
-    //   callbackName,
-    //   captures,
-    //   afterMethods,
-    //   beforeMethods,
-    //   delayMethods,
-    //   debounceMethods,
-    //   throttleMethods,
-    //   checkMethodList
-    // };
-  }
-
-
-  addCallback(callbackObject, callback) {
-    callbackObject.callback = this.makeCallback(callbackObject, callback);
+  addCallback(callbackObject, magicMethod) {
+    const callback = this.makeCallback(callbackObject, magicMethod);
     this.addBinding(callbackObject);
 
     // requestAnimationFrame 을 사용하는 경우
-    callbackObject.callback();
+    callback();
   }
 
 
-  bindingCallback(callbackName, checkMethodFilters, originalCallback) {
-    let callbackObject = this.getDefaultCallbackObject(callbackName, checkMethodFilters);
-
-
-    if (callbackObject.debounceMethods.length) {
-      var debounceTime = +callbackObject.debounceMethods[0].target;
-      originalCallback = debounce(originalCallback, debounceTime);
-    } else if (callbackObject.throttleMethods.length) {
-      var throttleTime = +callbackObject.throttleMethods[0].target;
-      originalCallback = throttle(originalCallback, throttleTime);
+  bindingCallback(magicMethod, callback) {
+    
+    const obj = {
+      eventName: magicMethod.args[0],
+      callback
     }
 
-    this.addCallback(callbackObject, originalCallback);
+    obj.codes = [];
+    obj.checkMethodList = [];
+
+    magicMethod.pipes.forEach(pipe => {
+      if (pipe.type === 'function') {
+
+        switch (pipe.func) {
+          case 'debounce':
+            var debounceTime = +(pipe.args?.[0] || 0);
+            obj.callback = debounce(callback, debounceTime);
+            break;
+          case 'throttle':
+            var throttleTime = +(pipe.args?.[0] || 0);
+            obj.callback = throttle(callback, throttleTime);
+            break;
+        }
+
+      } else if (pipe.type === 'keyword') {
+        const method = `${pipe.value}`;
+
+        if (this.getCallback(method)) {
+          obj.checkMethodList.push(method);
+        } else {
+          obj.codes.push(method.toLowerCase());
+        }
+      }
+
+    })
+
+    this.addCallback(obj, magicMethod);
   };
 
   /**
@@ -150,16 +123,16 @@ export default class CallbackHandler extends BaseHandler {
    * 
    * @param {string} key 
    */
-  parseCallback(key) {
+  parseCallback(it) {
 
-    // const context = this.context;
-    // let checkMethodFilters = key.split(CHECK_SAPARATOR).map(it => it.trim()).filter(Boolean);
+    const context = this.context;
 
-    // var prefix = checkMethodFilters.shift()
-    // var callbackName = prefix.split(CALLBACK_SAPARATOR)[1];    
+    var arr = it.args;
 
-    // var originalCallback = context[key].bind(context);
+    if (arr) {
+      var originalCallback = context[it.originalMethod].bind(context);
 
-    // this.bindingCallback(callbackName, checkMethodFilters, originalCallback);
+      this.bindingCallback(it, originalCallback);      
+    }    
   }
 }

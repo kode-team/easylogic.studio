@@ -103,11 +103,11 @@ export class EditorElement extends UIElement {
     }
 
     get $viewport() {
-        return this.parent.$viewport ||  this.$editor.viewport;
+        return this.$editor.viewport;
     }
 
     get $snapManager() {
-        return this.parent.$snapManager || this.$editor.snapManager;
+        return this.$editor.snapManager;
     }
 
     get $timeline() {
