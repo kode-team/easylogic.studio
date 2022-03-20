@@ -104,65 +104,9 @@ export default class DragAreaView extends EditorElement {
     }
 
     [POINTERSTART('$dragAreaView') + IF('checkEditMode') + MOVE('movePointer') + END('moveEndPointer')](e) {
-
         if (this.$config.get('set.dragarea.mode')) {
             this.emit('startDragAreaView');
-        } else if (this.$config.get('set.move.mode')) {
-
-
-            // 움직임 처리 
-            this.initMousePoint = this.$viewport.getWorldPosition();
-
-            this.mouseOverItem = this.$selection.filteredLayers[0];
-
-            // mouse point 기준으로 item 찾기 구현 필요 
-            // shift key 를 누른 상태로 선택 안되어 있는 객체나, 선택 되어 있는 객체를 체크 해야함 
-
-            // alt(option) + pointerstart 시점에 Layer 카피하기         
-            if (e.altKey) {
-
-                if (this.$selection.isEmpty === false && this.$selection.hasPoint(this.initMousePoint)) {
-                    // 선택된 모든 객체 카피하기 
-                    this.$selection.selectAfterCopy();
-                    this.trigger('refreshAllCanvas')
-                    this.emit('refreshLayerTreeView')
-
-                    // this.selectCurrent(...this.$selection.items)
-                    this.initializeDragSelection();
-                    this.emit('history.refreshSelection');
-                }
-
-            } else {
-                // mouse over item 이 있을 때 
-                if (this.mouseOverItem) {
-                    const id = this.mouseOverItem.id;
-
-                    // shift key 는 selection 을 토글한다. 
-                    if (e.shiftKey) {
-                        this.$selection.toggleById(id);
-                    } else {
-                        // 선택이 안되어 있으면 선택 
-                        if (this.$selection.check({ id }) === false) {
-
-                            const current = this.$model.get(id);
-                            if (current && current.is('artboard') && current.hasChildren()) {
-                                // NOOP
-                                // artboard 인데 자식이 있으면 선택을 하지 않는다. 
-                            } else {
-                                this.$selection.selectByGroup(id);
-                            }
-
-                        }
-                    }
-
-                }
-
-
-                this.initializeDragSelection();
-                this.emit('history.refreshSelection');
-            }
-
-        }
+        } 
 
     }
 
@@ -178,35 +122,7 @@ export default class DragAreaView extends EditorElement {
     movePointer(dx, dy) {
         if (this.$config.get('set.dragarea.mode')) {
             this.emit('moveDragAreaView');
-        } else if (this.$config.get('set.move.mode')) {
-            // 움직임 처리 
-
-            // // layout item 은 움직이지 않고 layout 이 좌표를 그리도록 한다. 
-            // if (this.$selection.isLayoutItem) {
-            //     return;
-            // }
-
-            // const targetMousePoint = this.$viewport.getWorldPosition();
-
-            // const newDist = vec3.floor([], vec3.subtract([], targetMousePoint, this.initMousePoint));
-
-            // this.moveTo(newDist);
-
-            // // 최종 위치에서 ArtBoard 변경하기 
-            // if (this.$selection.changeArtBoard()) {
-            //     this.initMousePoint = targetMousePoint;
-            //     this.$selection.reselect();
-            //     this.$snapManager.clear();
-
-            //     this.emit('refreshAllCanvas')
-
-            //     // ArtBoard 변경 이후에 LayerTreeView 업데이트
-            //     this.emit('refreshLayerTreeView')
-            // }
-
-            // this.emit('setAttributeForMulti', this.$selection.pack('x', 'y'));
-            // this.emit('refreshSelectionTool', true);
-        }
+        } 
 
     }
 
@@ -215,32 +131,8 @@ export default class DragAreaView extends EditorElement {
 
         if (this.$config.get('set.dragarea.mode')) {
             this.emit('endDragAreaView');
-        } else if (this.$config.get('set.move.mode')) {
-
-            // const targetMousePoint = this.$viewport.getWorldPosition();
-            // const newDist = vec3.floor([], vec3.subtract([], targetMousePoint, this.initMousePoint));
-
-
-
-            // if (newDist < 1) {
-            //     if (this.$selection.current.isSVG()) {
-            //         this.emit('open.editor');
-            //         this.emit('removeGuideLine');
-            //         return;
-            //     }
-            // } else {
-            //     this.$selection.reselect();
-            //     this.$snapManager.clear();
-            //     // this.emit('removeGuideLine');
-            //     this.command(
-            //         'setAttributeForMulti',
-            //         "move item",
-            //         this.$selection.pack('x', 'y')
-            //     );
-            // }
-
-            // this.emit('refreshSelectionTool', true);
-        }
+        } 
+        
         this.$config.init('set.dragarea.mode', false)
         this.$config.init('set.move.mode', false)
 

@@ -15,13 +15,12 @@ export default {
         const itemsMap = {}
 
         moveItems.forEach(it => {
-            itemsMap[it.item.id] = {
-                x: it.item.offsetX + it.dist[0],
-                y: it.item.offsetY + it.dist[1]
-            }
+            it.item.absoluteMove(it.dist);
+
+            itemsMap[it.item.id] = it.item.attrs('x', 'y');
         })
 
-        editor.emit('history.setAttributeForMulti', 'item move down', itemsMap);     
+        editor.emit('history.setAttributeForMulti', 'item move', itemsMap);     
 
         editor.nextTick(() =>{
             editor.selection.reselect();

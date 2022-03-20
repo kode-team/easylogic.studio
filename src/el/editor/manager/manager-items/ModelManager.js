@@ -137,8 +137,9 @@ export class ModelManager {
     removeChild(rootId, childId) {
 
         const obj = this.get(rootId)
-        obj.children = obj.children.filter(it => it !== childId)
-
+        obj.reset({
+            children: obj.children.filter(it => it !== childId)
+        })
         this.setChanged('removeChild', rootId, { childId });            
     }
 

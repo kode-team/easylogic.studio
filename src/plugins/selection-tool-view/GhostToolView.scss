@@ -42,8 +42,14 @@
 
         &.flex-item {
           stroke:transparent;
-          fill: rgba(50, 50, 50, 0.3);
+          fill: rgba(50, 50, 50, 0.1);
           z-index: -1000;
+        }
+
+        &.flex-target {
+          stroke-width: 5;
+          stroke: var(--elf--selected-color);
+
         }
       }
     } 

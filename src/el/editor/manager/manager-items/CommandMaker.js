@@ -4,6 +4,10 @@ export class CommandMaker {
         this.commands = []
     }
 
+    log() {
+        console.log(this.commands);
+    }
+
     emit (...args) {
         this.commands.push(args);
     }

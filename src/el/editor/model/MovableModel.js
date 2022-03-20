@@ -332,6 +332,7 @@ export class MovableModel extends BaseAssetModel {
      * 
      * 
      * @param {vec3} absoluteDist 
+     * @returns {{x: number, y: number}} old position
      */
     absoluteMove(absoluteDist = [0, 0, 0]) {
 
@@ -346,10 +347,14 @@ export class MovableModel extends BaseAssetModel {
 
         const newDist = vec3.subtract([], newVerties[1], newVerties[0])
 
+        const oldPosition = this.attrs('x', 'y');
+
         this.reset({
             x: this.offsetX + newDist[0],          // 1px 단위로 위치 설정 
             y: this.offsetY + newDist[1],
         })
+
+        return oldPosition;
     }
 
     /**

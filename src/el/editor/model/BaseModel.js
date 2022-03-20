@@ -241,6 +241,32 @@ export class BaseModel {
     return this.json.children.length;
   }
 
+  get index() {
+    return this.parent.findIndex(this);    
+  }
+
+  get prev() {
+    return this.modelManager.getPrev(this.id);
+  }
+
+  /**
+   * 부모,자식,형제 노드의 순서를 정리한다. 
+   * 
+   * @param {string[]} args field list
+   * @returns 
+   */
+  getInformationForHirachy (...args) {
+    const index = this.index;
+    return {
+      id: this.id,
+      index: index,
+      parentId: this.parentId,
+      prev: index === 0 ? undefined : this.parent.children[index - 1],
+      next: index === this.parent.childrenLength - 1 ? undefined : this.parent.children[index + 1],
+      attrs: this.attrs(...args)
+    }
+  }
+
   /**
    * id 기반 문자열 id 생성
    * 
@@ -452,6 +478,12 @@ export class BaseModel {
     return result;
   }
 
+  attrsWithId(...args) {
+    return {
+      [this.id]: this.attrs(...args)
+    }
+  }
+
   /**
    * 자식을 가지고 있는지 체크 
    * 
@@ -537,9 +569,7 @@ export class BaseModel {
    */
   appendAfter(layer) {
 
-    const index = this.parent.findIndex(this);
-
-    this.parent.insertChild(layer, index+1);
+    this.parent.insertChild(layer, this.index + 1);
     // this.project.addIndexItem(layer);
     return layer;
   }
@@ -551,10 +581,7 @@ export class BaseModel {
    * @param {Item} layer 
    */
   appendBefore(layer) {
-
-    const index = this.parent.findIndex(this);
-
-    this.parent.insertChild(layer, index - 1);
+    this.parent.insertChild(layer, this.index - 1);
     // this.project.addIndexItem(layer);
     return layer;
   }

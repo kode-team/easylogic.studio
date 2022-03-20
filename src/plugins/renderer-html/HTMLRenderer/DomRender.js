@@ -280,9 +280,12 @@ export default class DomRender extends ItemRender {
   toKeyListCSS(item, args = []) {
     let obj = {};
 
-    args.filter(it => isNotUndefined(item[it])).forEach(it => {
-      obj[it] = item[it]
-    })
+    for(var i = 0; i < args.length; i++) {
+      const key = args[i];
+      if (isNotUndefined(item[key])) {
+        obj[key] = item[key];
+      }
+    }
 
     return obj;
   }

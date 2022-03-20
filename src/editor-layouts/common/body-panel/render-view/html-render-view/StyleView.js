@@ -135,12 +135,19 @@ export default class StyleView extends EditorElement {
     const styleTags = [] 
     const removeStyleSelector = []
 
-
     for(let i = 0, len = items.length; i < len; i++) {
       const item = items[i];
-      var selector = item.allLayers.map(it => {
-        return `style[data-renderer-type="html"][data-id="${it.id}"]`
-      }).join(',');
+
+      if (item.is('project')) {
+        // style 변화가 project 일 때는 자기 자신만 처리하도록 한다. 
+        // 나머지는 다른 곳에서 오는 것들을 같이 적용한다.         
+        var selector = `style[data-renderer-type="html"][data-id="${item.id}"]`
+      } else {
+        var selector = item.allLayers.map(it => {
+          return `style[data-renderer-type="html"][data-id="${it.id}"]`
+        }).join(',');
+  
+      }
 
       removeStyleSelector.push(selector);
       styleTags.push(this.makeStyle(item))
@@ -151,8 +158,6 @@ export default class StyleView extends EditorElement {
         it.remove();
       })  
     }
-
-   
 
     var $fragment = TEMP_DIV.html(styleTags.join('')).createChildrenFragment()
 

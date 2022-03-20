@@ -237,10 +237,10 @@ export class Editor {
   /**
    * get model by id
    *
-   * @param {string} id
+   * @param {string} idOrModel
    */
-  get(id) {
-    return this.modelManager.get(id);
+  get(idOrModel) {
+    return this.modelManager.get(idOrModel.id || idOrModel);
   }
 
   replaceLocalUrltoRealUrl(str) {
@@ -415,14 +415,5 @@ export class Editor {
 
   registerIcon(itemType, iconOrFunction) {
     this.iconManager.registerIcon(itemType, iconOrFunction);
-  }
-
-  /**
-   * 
-   * @param {string} id 
-   * @returns {BaseModel}
-   */
-  get(id) {
-    return this.modelManager.get(id);
   }
 }
