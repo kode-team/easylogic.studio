@@ -17,12 +17,12 @@ export class BaseModel {
    * @param {object} json 초기화 할 데이타 
    * @param {ModelManager} modelManager
    */
-  constructor(json = {}, modelManager) {    
+  constructor(json = {}, modelManager) {
     this.modelManager = modelManager;
 
-    const self = this; 
+    const self = this;
     this.ref = new Proxy(self, {
-      get (target, key) {
+      get(target, key) {
         // target[key] 가 함수인 경우 미리 캐쉬 해둔다. 
         if (self.hasCache(key)) {
           return self.getCache(key);
@@ -52,7 +52,7 @@ export class BaseModel {
 
         return true;
       },
-      deleteProperty (target, key) {
+      deleteProperty(target, key) {
         self.reset({ [key]: undefined });
       }
     });
@@ -177,7 +177,7 @@ export class BaseModel {
   setParentId(parentId) {
     this.reset({ parentId });
 
-    this.modelManager.setChanged('setParentId', this.id, { parentId });        
+    this.modelManager.setChanged('setParentId', this.id, { parentId });
   }
 
   /**
@@ -242,11 +242,48 @@ export class BaseModel {
   }
 
   get index() {
-    return this.parent.findIndex(this);    
+    return this.parent.findIndex(this);
+  }
+
+  get isFirst() {
+    return this.index === 0;
+  }
+
+  get isLast() {
+    return this.index === this.parent.childrenLength - 1;
+  }
+
+  get first() {
+    return this.parent.layers[0];
+  }
+
+  get last() {
+    return this.parent.layers[this.parent.childrenLength - 1];
   }
 
   get prev() {
-    return this.modelManager.getPrev(this.id);
+    const index = this.index;
+    if (this.isFirst()) {
+      return this.ref;
+    }
+
+    return this.parent.layers[index - 1];
+  }
+
+  get next() {
+    const index = this.index();
+    if (this.isLast()) {
+      return this.ref;
+    }
+
+    return this.parent.layers[index + 1];
+  }
+
+  /**
+   * x, y, angle 을 기본적으로 포함한 부모와의 관계 데이타를 리턴한다. 
+   */
+  get hierarchy() {
+    return this.getInformationForHierarchy('x', 'y', 'angle');
   }
 
   /**
@@ -255,7 +292,7 @@ export class BaseModel {
    * @param {string[]} args field list
    * @returns 
    */
-  getInformationForHirachy (...args) {
+  getInformationForHierarchy(...args) {
     const index = this.index;
     return {
       id: this.id,
@@ -290,7 +327,7 @@ export class BaseModel {
    * @param {string} key 
    * @returns 
    */
-  get (key) {
+  get(key) {
     return this.json[key]
   }
 
@@ -306,7 +343,7 @@ export class BaseModel {
     return this.cachedValue[key];
   }
 
-  hasCache (key) {
+  hasCache(key) {
     return Boolean(this.cachedValue[key]);
   }
 
@@ -415,7 +452,7 @@ export class BaseModel {
    * @param {object} obj
    * @param {{origin: string}} context
    */
-  reset(obj, context = {origin: '*'}) {
+  reset(obj, context = { origin: '*' }) {
     const isChanged = this.isChangedValue(obj);
 
     if (isChanged) {
@@ -427,7 +464,7 @@ export class BaseModel {
       if (context.origin === '*') {
         this.modelManager.setChanged('reset', this.id, obj);
       }
-      
+
       this.changed();
     }
 
@@ -438,7 +475,7 @@ export class BaseModel {
    * 마지막 변경된 field 를 체크한다. 
    * 
    * @returns {boolean} 
-   */ 
+   */
   hasChangedField(...args) {
     return args.some(it => this.lastChangedField[it] !== undefined);
   }
@@ -466,13 +503,13 @@ export class BaseModel {
    * 
    * @param  {string[]} args 필드 리스트 
    */
-   attrs (...args) {
+  attrs(...args) {
     const result = {}
 
     args.forEach(field => {
       if (isNotUndefined(this.get(field))) {
         result[field] = clone(this.get(field))
-      } 
+      }
     })
 
     return result;
@@ -505,7 +542,7 @@ export class BaseModel {
       if (Boolean(hasId) === false) {
         // 아이디가 없는 경우 다시 아이디 넣어주기 
         this.json.children.push(layer.id);
-        this.modelManager.setChanged('appendChild', this.id, {child: layer.id, oldParentId: layer.parentId});
+        this.modelManager.setChanged('appendChild', this.id, { child: layer.id, oldParentId: layer.parentId });
       }
 
       return layer;
@@ -558,7 +595,7 @@ export class BaseModel {
 
     layer.setParentId(this.id);
     this.json.children.splice(index, 0, layer.id);
-    this.modelManager.setChanged('insertChild', this.id, {childId: layer.id, index: 0})
+    this.modelManager.setChanged('insertChild', this.id, { childId: layer.id, index: 0 })
     return layer;
   }
 
@@ -722,5 +759,111 @@ export class BaseModel {
    */
   to(itemType) {
 
+  }
+
+  /**
+   * 뒤로 보내기 
+   * 
+   * 계층 구조에서는 위로 보내기 
+   */
+  sendBackward(targetId) {
+
+    const siblings = children;
+
+    const result = {}
+    const selectedIndex = -1;
+    siblings.forEach((id, index) => {
+      result[id] = {id, index}
+
+      if (id === targetId) {
+        selectedIndex = index;
+      }
+    })
+
+    // prev === 1
+    // prev .prev === 1.5
+    result[targetId].index = selectedIndex - 1.5;
+
+    const children = Object.values(result).sort((a, b) => a.index - b.index).map(it => it.id);
+
+    this.reset({
+        children
+    });
+
+  }
+
+
+  sendBack (targetId) {
+
+    const siblings = children;
+
+    const result = {}
+    siblings.forEach((id, index) => {
+      result[id] = {id, index}
+    })
+
+    // first prev 
+    result[targetId].index = -1;
+
+    const children = Object.values(result).sort((a, b) => a.index - b.index).map(it => it.id);
+
+    this.reset({
+        children
+    });
+  }
+
+  /**
+   * 앞으로 가지고 오기 
+   * 
+   * 계층 구조 에서는 밑으로 보내기 
+   */
+  bringForward(targetId) {
+
+    const siblings = children;
+
+    const result = {}
+    const selectedIndex = -1;
+    siblings.forEach((id, index) => {
+      result[id] = {id, index}
+
+      if (id === targetId) {
+        selectedIndex = index;
+      }
+    })
+
+    // next === 1
+    // next .next === 1.5
+    result[targetId].index = selectedIndex + 1.5;
+
+    const children = Object.values(result).sort((a, b) => a.index - b.index).map(it => it.id);
+
+    this.reset({
+        children
+    });
+
+  }
+
+  bringFront (targetId) {
+
+    const siblings = children;
+
+    const result = {}
+    const selectedIndex = -1;
+    siblings.forEach((id, index) => {
+      result[id] = {id, index}
+
+      if (id === targetId) {
+        selectedIndex = index;
+      }
+    })
+
+    // last next 
+    result[targetId].index = Number.MAX_SAFE_INTEGER;
+
+    const children = Object.values(result).sort((a, b) => a.index - b.index).map(it => it.id);
+
+    this.reset({
+        children
+    });
   }
 }

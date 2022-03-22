@@ -1,7 +1,8 @@
 export default {
     category: 'Layer',            
     key: 'ctrl+]',
-    command: 'item.move.depth.up',
+    command: 'history.bring.forward',
     description: 'move layer to above',
+    args: ['bring forward'],
     when: 'CanvasView'
 }
