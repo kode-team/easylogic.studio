@@ -590,8 +590,6 @@ declare module "@easylogic/editor" {
     export class MovableItem extends Item {
 
         get isAbsolute(): boolean;
-        get isRelative(): boolean;
-        get isChild(): boolean;
 
         toCloneObject(isDeep: boolean = true): KeyValue;
 

@@ -24,6 +24,8 @@ export class BaseModel {
     this.ref = new Proxy(self, {
       get(target, key) {
         // target[key] 가 함수인 경우 미리 캐쉬 해둔다. 
+        // 체크 하는 펑션을 외부에서 제어할 수 있도록 구조를 맞춰야 할 듯 
+        // 모든 모델의 함수를 캐슁을 해야할 이유가 없을 듯 하다. 
         if (self.hasCache(key)) {
           return self.getCache(key);
         }
@@ -161,8 +163,16 @@ export class BaseModel {
   }
 
 
+  /**
+   * 
+   */
   get parentId() {
-    return this.json.parentId;
+    // parentId 가 나와 같으면 순환 참조가 되버리기 때문에 
+    // 이런 경우 무조건 없는걸로 간주한다. 
+    const parentId = this.json.parentId;
+    if (parentId ===  this.id) return undefined;
+
+    return parentId;
   }
 
   /**

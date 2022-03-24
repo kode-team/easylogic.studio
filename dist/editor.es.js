@@ -7576,8 +7576,8 @@ class Point {
     return point2;
   }
   static getConnectedPointList(points2, index2) {
-    const current2 = points2[index2];
-    return points2.filter((p, i) => i !== index2 && Point.isEqual(p.startPoint, current2.startPoint));
+    const current = points2[index2];
+    return points2.filter((p, i) => i !== index2 && Point.isEqual(p.startPoint, current.startPoint));
   }
   static getPrevPoint(points2, index2) {
     var prevIndex = index2 - 1;
@@ -8856,15 +8856,15 @@ class PathParser {
     for (var i = 1, len2 = this.segments.length; i < len2; i++) {
       const segment = this.segments[i];
       const prev = this.segments[i - 1].values;
-      const current2 = segment.values;
+      const current = segment.values;
       const command = segment.command;
       const lastPoint = { x: prev[prev.length - 2], y: prev[prev.length - 1] };
       if (command === "C") {
         var points2 = [
           lastPoint,
-          { x: current2[0], y: current2[1] },
-          { x: current2[2], y: current2[3] },
-          { x: current2[4], y: current2[5] }
+          { x: current[0], y: current[1] },
+          { x: current[2], y: current[3] },
+          { x: current[4], y: current[5] }
         ];
         var curve = recoverBezier(...points2, count);
         var t = curve(x2, y2);
@@ -8878,8 +8878,8 @@ class PathParser {
       } else if (command === "Q") {
         var points2 = [
           lastPoint,
-          { x: current2[0], y: current2[1] },
-          { x: current2[2], y: current2[3] }
+          { x: current[0], y: current[1] },
+          { x: current[2], y: current[3] }
         ];
         var curve = recoverBezierQuard(...points2, count);
         var t = curve(x2, y2);
@@ -8893,7 +8893,7 @@ class PathParser {
       } else if (command === "L") {
         var points2 = [
           lastPoint,
-          { x: current2[0], y: current2[1] }
+          { x: current[0], y: current[1] }
         ];
         var curve = recoverBezierLine(...points2, count);
         var t = curve(x2, y2);
@@ -11799,14 +11799,14 @@ var convert_flatten_path = {
   command: "convert.flatten.path",
   description: "flatten selected multi path",
   execute: (editor) => {
-    const current2 = editor.selection.current;
-    if (!current2)
+    const current = editor.selection.current;
+    if (!current)
       return;
     let newPath;
-    if (current2.is("boolean-path") || current2.isBooleanItem) {
-      let parent = current2;
-      if (current2.isBooleanItem) {
-        parent = current2.parent;
+    if (current.is("boolean-path") || current.isBooleanItem) {
+      let parent = current;
+      if (current.isBooleanItem) {
+        parent = current.parent;
       }
       newPath = parent.absolutePath(parent["boolean-path"]);
       newPath = parent.invertPath(newPath.d);
@@ -11827,10 +11827,10 @@ var convert_flatten_path = {
       editor.selection.each((item2) => {
         newPath.addPath(item2.absolutePath());
       });
-      newPath = current2.invertPath(newPath.d);
-      const parent = current2.parent;
-      const newPathInfo = current2.updatePath(newPath.d);
-      const newLayerAttrs = current2.toCloneObject();
+      newPath = current.invertPath(newPath.d);
+      const parent = current.parent;
+      const newPathInfo = current.updatePath(newPath.d);
+      const newLayerAttrs = current.toCloneObject();
       delete newLayerAttrs.id;
       editor.command("removeLayer", "remove selected layers");
       editor.nextTick(() => {
@@ -11848,11 +11848,11 @@ var convert_no_transform_path = {
   command: "convert.no.transform.path",
   description: "remove transform(rotate, translate, scale) inforation in path layer",
   execute: (editor) => {
-    const current2 = editor.selection.current;
-    if (!current2)
+    const current = editor.selection.current;
+    if (!current)
       return;
-    const parent = current2.parent;
-    const childPath = current2.absolutePath();
+    const parent = current.parent;
+    const childPath = current.absolutePath();
     if (parent.is("project")) {
       const verties = childPath.getBBox();
       const newRect = vertiesToRectangle(verties);
@@ -11879,10 +11879,10 @@ var convert_normalize_path = {
   command: "convert.normalize.path",
   description: "convert segments to bezier curve",
   execute: (editor) => {
-    const current2 = editor.selection.current;
-    if (!current2)
+    const current = editor.selection.current;
+    if (!current)
       return;
-    editor.command("setAttributeForMulti", "normalize path string", editor.selection.packByValue(current2.updatePath(PathParser.fromSVGString(current2.d).normalize().d)));
+    editor.command("setAttributeForMulti", "normalize path string", editor.selection.packByValue(current.updatePath(PathParser.fromSVGString(current.d).normalize().d)));
   }
 };
 var __glob_0_25$2 = /* @__PURE__ */ Object.freeze({
@@ -11895,8 +11895,8 @@ var convert_path_operation = {
   description: "apply path boolean operation",
   execute: (editor, booleanOperation) => {
     var _a;
-    const current2 = editor.selection.current;
-    if (!current2)
+    const current = editor.selection.current;
+    if (!current)
       return;
     const changeBooleanOperation = (booleanOperation2) => {
       editor.command("setAttributeForMulti", "change boolean operation", editor.selection.packByValue({
@@ -11913,10 +11913,10 @@ var convert_path_operation = {
         });
       });
     };
-    if (current2.is("boolean-path") || current2.isBooleanItem) {
-      let parent = current2;
-      if (current2.isBooleanItem) {
-        parent = current2.parent;
+    if (current.is("boolean-path") || current.isBooleanItem) {
+      let parent = current;
+      if (current.isBooleanItem) {
+        parent = current.parent;
       }
       editor.selection.select(parent);
       changeBooleanOperation(booleanOperation);
@@ -11945,10 +11945,10 @@ var convert_polygonal_path = {
   command: "convert.polygonal.path",
   description: "convert path to polygonal path",
   execute: (editor) => {
-    const current2 = editor.selection.current;
-    if (!current2)
+    const current = editor.selection.current;
+    if (!current)
       return;
-    editor.command("setAttributeForMulti", "polygonal path string", editor.selection.packByValue(current2.updatePath(PathParser.fromSVGString(current2.d).polygonal().d)));
+    editor.command("setAttributeForMulti", "polygonal path string", editor.selection.packByValue(current.updatePath(PathParser.fromSVGString(current.d).polygonal().d)));
   }
 };
 var __glob_0_27$2 = /* @__PURE__ */ Object.freeze({
@@ -11959,10 +11959,10 @@ var __glob_0_27$2 = /* @__PURE__ */ Object.freeze({
 var convert_simplify_path = {
   command: "convert.simplify.path",
   execute: (editor) => {
-    const current2 = editor.selection.current;
-    if (!current2)
+    const current = editor.selection.current;
+    if (!current)
       return;
-    editor.command("setAttributeForMulti", "change path string", editor.selection.packByValue(current2.updatePath(editor.pathKitManager.simplify(current2.d))));
+    editor.command("setAttributeForMulti", "change path string", editor.selection.packByValue(current.updatePath(editor.pathKitManager.simplify(current.d))));
   }
 };
 var __glob_0_28$2 = /* @__PURE__ */ Object.freeze({
@@ -11974,11 +11974,11 @@ var convert_smooth_path = {
   command: "convert.smooth.path",
   description: "convert path to smooth",
   execute: (editor, divideCount = 5, tolerance = 0.1, tension = 0.5) => {
-    const current2 = editor.selection.current;
-    if (!current2)
+    const current = editor.selection.current;
+    if (!current)
       return;
-    const smoothedPath = PathParser.fromSVGString(current2.d).divideSegmentByCount(divideCount).simplify(tolerance).cardinalSplines(tension).d;
-    editor.command("setAttributeForMulti", "smooth path string", editor.selection.packByValue(current2.updatePath(smoothedPath)));
+    const smoothedPath = PathParser.fromSVGString(current.d).divideSegmentByCount(divideCount).simplify(tolerance).cardinalSplines(tension).d;
+    editor.command("setAttributeForMulti", "smooth path string", editor.selection.packByValue(current.updatePath(smoothedPath)));
   }
 };
 var __glob_0_29$2 = /* @__PURE__ */ Object.freeze({
@@ -11989,12 +11989,12 @@ var __glob_0_29$2 = /* @__PURE__ */ Object.freeze({
 var convert_stroke_to_path = {
   command: "convert.stroke.to.path",
   execute: async (editor, text2) => {
-    const current2 = editor.selection.current;
-    if (!current2)
+    const current = editor.selection.current;
+    if (!current)
       return;
-    const attrs = current2.attrs("d", "stroke-width", "stroke-dasharray", "stroke-dashoffset", "stroke-linejoin", "stroke-linecap");
-    const pathAttrs = current2.convertStrokeToPath();
-    let newD = editor.pathKitManager.stroke(current2.d || attrs.d, {
+    const attrs = current.attrs("d", "stroke-width", "stroke-dasharray", "stroke-dashoffset", "stroke-linejoin", "stroke-linecap");
+    const pathAttrs = current.convertStrokeToPath();
+    let newD = editor.pathKitManager.stroke(current.d || attrs.d, {
       "stroke-width": Length.parse(attrs["stroke-width"]).value,
       "stroke-linejoin": attrs["stroke-linejoin"],
       "stroke-linecap": attrs["stroke-linecap"],
@@ -12004,7 +12004,7 @@ var convert_stroke_to_path = {
     });
     pathAttrs["fill-rule"] = "nonzero";
     newD = PathParser.fromSVGString(newD).reversePathStringByFunc((_, index2) => index2 % 2 === 0);
-    editor.command("addLayer", `add layer - path`, editor.createModel(__spreadValues(__spreadValues({}, pathAttrs), current2.updatePath(newD))), true, current2.parent);
+    editor.command("addLayer", `add layer - path`, editor.createModel(__spreadValues(__spreadValues({}, pathAttrs), current.updatePath(newD))), true, current.parent);
   }
 };
 var __glob_0_30$2 = /* @__PURE__ */ Object.freeze({
@@ -13135,24 +13135,24 @@ var __glob_0_31$2 = /* @__PURE__ */ Object.freeze({
   "default": convertPasteText
 });
 function convertPath(editor, pathString2, rect2 = null) {
-  var current2 = editor.selection.current;
-  if (current2) {
-    if (current2.is("svg-path", "svg-brush", "svg-textpath")) {
+  var current = editor.selection.current;
+  if (current) {
+    if (current.is("svg-path", "svg-brush", "svg-textpath")) {
       var d = pathString2;
       if (rect2) {
         var parser2 = new PathParser(pathString2);
-        parser2.scale(current2.width / rect2.width, current2.height / rect2.height);
+        parser2.scale(current.width / rect2.width, current.height / rect2.height);
         d = parser2.d;
       }
-      editor.command("setAttributeForMulti", "set attribute -d", editor.selection.packByValue({ d }, current2.id));
-    } else if (current2["clip-path"].includes("path")) {
+      editor.command("setAttributeForMulti", "set attribute -d", editor.selection.packByValue({ d }, current.id));
+    } else if (current["clip-path"].includes("path")) {
       var d = pathString2;
       if (rect2) {
         var parser2 = new PathParser(pathString2);
-        parser2.scale(current2.width / rect2.width, current2.height / rect2.height);
+        parser2.scale(current.width / rect2.width, current.height / rect2.height);
         d = parser2.d;
       }
-      editor.command("setAttributeForMulti", "change clip path", editor.selection.packByValue({ "clip-path": `path(${d})` }, current2.id));
+      editor.command("setAttributeForMulti", "change clip path", editor.selection.packByValue({ "clip-path": `path(${d})` }, current.id));
     }
   }
 }
@@ -13165,14 +13165,14 @@ var copy_path = {
   command: "copy.path",
   description: "copy as path for item with path string(d attribute)",
   execute: function(editor) {
-    const current2 = editor.selection.current;
-    if (current2) {
-      let newPath = PathParser.fromSVGString(current2.d);
+    const current = editor.selection.current;
+    if (current) {
+      let newPath = PathParser.fromSVGString(current.d);
       try {
-        const newLayerAttrs = current2.toSVGPath();
+        const newLayerAttrs = current.toSVGPath();
         editor.command("addLayer", `copy path`, editor.createModel(__spreadValues(__spreadValues({
           itemType: "svg-path"
-        }, newLayerAttrs), current2.updatePath(newPath.d))), true, current2.parent);
+        }, newLayerAttrs), current.updatePath(newPath.d))), true, current.parent);
       } catch (e2) {
         console.error(e2);
       }
@@ -13891,7 +13891,7 @@ var history_moveLayerToTarget = {
     editor.nextTick(() => {
       editor.history.add(message, this, {
         currentValues: [currentLayer.hierachy],
-        undoValues: [lastValues, current.parentId]
+        undoValues: [lastValues, currentLayer.parentId]
       });
       editor.emit("refreshAllCanvas");
     });
@@ -14280,9 +14280,9 @@ var __glob_0_60$1 = /* @__PURE__ */ Object.freeze({
 var item_move_depth_down$1 = {
   command: "item.move.depth.down",
   execute: function(editor) {
-    const current2 = editor.selection.current;
-    if (current2) {
-      current2.orderPrev();
+    const current = editor.selection.current;
+    if (current) {
+      current.orderPrev();
     }
     _doForceRefreshSelection(editor);
   }
@@ -14295,9 +14295,9 @@ var __glob_0_61$1 = /* @__PURE__ */ Object.freeze({
 var item_move_depth_first = {
   command: "item.move.depth.first",
   execute: function(editor) {
-    const current2 = editor.selection.current;
-    if (current2) {
-      current2.orderFirst();
+    const current = editor.selection.current;
+    if (current) {
+      current.orderFirst();
     }
     _doForceRefreshSelection(editor);
   }
@@ -14310,9 +14310,9 @@ var __glob_0_62$1 = /* @__PURE__ */ Object.freeze({
 var item_move_depth_last = {
   command: "item.move.depth.last",
   execute: function(editor) {
-    const current2 = editor.selection.current;
-    if (current2) {
-      current2.orderLast();
+    const current = editor.selection.current;
+    if (current) {
+      current.orderLast();
     }
     _doForceRefreshSelection(editor);
   }
@@ -14325,9 +14325,9 @@ var __glob_0_63$1 = /* @__PURE__ */ Object.freeze({
 var item_move_depth_up$1 = {
   command: "item.move.depth.up",
   execute: function(editor) {
-    const current2 = editor.selection.current;
-    if (current2) {
-      current2.orderNext();
+    const current = editor.selection.current;
+    if (current) {
+      current.orderNext();
     }
     _doForceRefreshSelection(editor);
   }
@@ -14707,21 +14707,21 @@ class ClipPath extends PropertyItem {
 var open_editor = {
   command: "open.editor",
   description: "Open custom editor for item  when doubleclick is fired",
-  execute: function(editor, current2) {
-    if (!current2 && editor.selection.isOne === false)
+  execute: function(editor, current) {
+    if (!current && editor.selection.isOne === false)
       return;
-    current2 = current2 || editor.selection.current;
-    if (current2) {
-      if (current2.editablePath) {
+    current = current || editor.selection.current;
+    if (current) {
+      if (current.editablePath) {
         editor.emit("showPathEditor", "modify", {
           box: "canvas",
-          current: current2,
-          matrix: current2.matrix,
+          current,
+          matrix: current.matrix,
           isControl: true,
           disableCurve: true,
-          d: current2.editablePath,
+          d: current.editablePath,
           changeEvent: (data) => {
-            editor.command("setAttributeForMulti", "change editable path", editor.selection.packByValue(__spreadValues({}, current2.recoverEditablePath(data.d)), [current2.id]));
+            editor.command("setAttributeForMulti", "change editable path", editor.selection.packByValue(__spreadValues({}, current.recoverEditablePath(data.d)), [current.id]));
             editor.nextTick(() => {
               if (editor.stateManager.isPointerUp) {
                 editor.emit("recoverBooleanPath");
@@ -14730,12 +14730,12 @@ var open_editor = {
           }
         });
         editor.emit("hideSelectionToolView");
-      } else if (current2.d) {
+      } else if (current.d) {
         editor.emit("showPathEditor", "modify", {
           box: "canvas",
-          current: current2,
-          matrix: current2.matrix,
-          d: current2.absolutePath().d,
+          current,
+          matrix: current.matrix,
+          d: current.absolutePath().d,
           changeEvent: (data) => {
             const newCurrent = editor.selection.current;
             if (newCurrent.isSVG() && newCurrent.isNot("svg-path")) {
@@ -14760,19 +14760,19 @@ var open_editor = {
           }
         });
         editor.emit("hideSelectionToolView");
-      } else if (current2["clip-path"]) {
-        var obj2 = ClipPath.parseStyle(current2["clip-path"]);
+      } else if (current["clip-path"]) {
+        var obj2 = ClipPath.parseStyle(current["clip-path"]);
         if (obj2.type === "path") {
-          var d = current2.absolutePath(current2.clipPathString).d;
+          var d = current.absolutePath(current.clipPathString).d;
           var mode = d ? "modify" : "path";
           editor.emit("showPathEditor", mode, {
             changeEvent: (data) => {
-              const resultPath = current2.invertPath(data.d).d;
+              const resultPath = current.invertPath(data.d).d;
               editor.command("setAttributeForMulti", "change clip-path", editor.selection.packByValue({
                 "clip-path": `path(${resultPath})`
               }));
             },
-            current: current2,
+            current,
             d
           });
           editor.emit("hideSelectionToolView");
@@ -14903,15 +14903,15 @@ var recoverBooleanPath = {
   command: "recoverBooleanPath",
   description: "recover box rectangle for boolean path result",
   execute: function(editor) {
-    const current2 = editor.selection.current;
+    const current = editor.selection.current;
     let booleanContainer;
-    if (current2 && current2.isBooleanItem) {
-      booleanContainer = current2.parent;
-    } else if (current2 && current2.is("boolean-path")) {
-      booleanContainer = current2;
+    if (current && current.isBooleanItem) {
+      booleanContainer = current.parent;
+    } else if (current && current.is("boolean-path")) {
+      booleanContainer = current;
     }
     if (booleanContainer) {
-      const isBooleanItem = typeof current2.isBooleanItem === "boolean" && current2.isBooleanItem;
+      const isBooleanItem = typeof current.isBooleanItem === "boolean" && current.isBooleanItem;
       const booleanPath = booleanContainer.d;
       if (!booleanPath) {
         return;
@@ -14977,14 +14977,14 @@ var __glob_0_84$1 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": refreshCursor
 });
-function refreshElement(editor, current2) {
-  editor.emit("refreshSelectionStyleView", current2);
-  if (current2 && current2.is("project")) {
-    editor.emit("refreshElementBoundSize", current2);
-  } else if (current2 && (current2.isLayoutItem() || current2.parent.is("boolean-path"))) {
-    editor.emit("refreshElementBoundSize", current2.parent);
+function refreshElement(editor, current) {
+  editor.emit("refreshSelectionStyleView", current);
+  if (current && current.is("project")) {
+    editor.emit("refreshElementBoundSize", current);
+  } else if (current && (current.isLayoutItem() || current.parent.is("boolean-path"))) {
+    editor.emit("refreshElementBoundSize", current.parent);
   } else {
-    editor.emit("refreshElementBoundSize", current2);
+    editor.emit("refreshElementBoundSize", current);
   }
 }
 var __glob_0_85$1 = /* @__PURE__ */ Object.freeze({
@@ -15000,8 +15000,8 @@ var __glob_0_86$1 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": refreshHistory
 });
-function refreshProject(editor, current2) {
-  editor.emit("refreshStyleView", current2, true);
+function refreshProject(editor, current) {
+  editor.emit("refreshStyleView", current, true);
 }
 var __glob_0_87$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -15104,15 +15104,15 @@ var __glob_0_93$1 = /* @__PURE__ */ Object.freeze({
   "default": resetSelection
 });
 function resizeArtBoard(editor, size2 = "") {
-  var current2 = editor.selection.current;
-  if (current2 && current2.is("artboard")) {
+  var current = editor.selection.current;
+  if (current && current.is("artboard")) {
     if (!size2.trim())
       return;
     var [width2, height2] = size2.split("x");
     width2 = +width2;
     height2 = +height2;
-    current2.reset({ width: width2, height: height2 });
-    editor.selection.select(current2);
+    current.reset({ width: width2, height: height2 });
+    editor.selection.select(current);
     _doForceRefreshSelection(editor);
   }
 }
@@ -15479,7 +15479,7 @@ var __glob_0_99$1 = /* @__PURE__ */ Object.freeze({
 });
 var segment_delete$1 = {
   command: "segment.delete",
-  execute: function(editor, current2) {
+  execute: function(editor, current) {
     editor.emit("deleteSegment");
   }
 };
@@ -15651,11 +15651,11 @@ var sort_bottom = {
   command: "sort.bottom",
   execute: function(editor) {
     if (editor.selection.isOne) {
-      const current2 = editor.selection.current;
-      if (current2.parent.is("project"))
+      const current = editor.selection.current;
+      if (current.parent.is("project"))
         ;
       else {
-        const parent = current2.parent;
+        const parent = current.parent;
         const distY = getVertiesMaxY(parent.verties) - getVertiesMaxY(editor.selection.verties);
         editor.emit("moveLayer", 0, distY);
       }
@@ -15677,11 +15677,11 @@ var sort_center = {
   command: "sort.center",
   execute: function(editor) {
     if (editor.selection.isOne) {
-      const current2 = editor.selection.current;
-      if (current2.parent.is("project"))
+      const current = editor.selection.current;
+      if (current.parent.is("project"))
         ;
-      else if (current2.artboard) {
-        const distX = getVertiesCenterX(current2.artboard.verties) - getVertiesCenterX(editor.selection.verties);
+      else if (current.artboard) {
+        const distX = getVertiesCenterX(current.artboard.verties) - getVertiesCenterX(editor.selection.verties);
         editor.emit("moveLayer", distX, 0);
       }
     } else if (editor.selection.isMany) {
@@ -15702,11 +15702,11 @@ var sort_left = {
   command: "sort.left",
   execute: function(editor) {
     if (editor.selection.isOne) {
-      const current2 = editor.selection.current;
-      if (current2.parent.is("project"))
+      const current = editor.selection.current;
+      if (current.parent.is("project"))
         ;
       else {
-        const parent = current2.parent;
+        const parent = current.parent;
         const distX = getVertiesMinX(parent.verties) - getVertiesMinX(editor.selection.verties);
         editor.emit("moveLayer", distX, 0);
       }
@@ -15728,11 +15728,11 @@ var sort_middle = {
   command: "sort.middle",
   execute: function(editor) {
     if (editor.selection.isOne) {
-      const current2 = editor.selection.current;
-      if (current2.parent.is("project"))
+      const current = editor.selection.current;
+      if (current.parent.is("project"))
         ;
-      else if (current2.artboard) {
-        const distY = getVertiesCenterY(current2.artboard.verties) - getVertiesCenterY(editor.selection.verties);
+      else if (current.artboard) {
+        const distY = getVertiesCenterY(current.artboard.verties) - getVertiesCenterY(editor.selection.verties);
         editor.emit("moveLayer", 0, distY);
       }
     } else if (editor.selection.isMany) {
@@ -15753,11 +15753,11 @@ var sort_right = {
   command: "sort.right",
   execute: function(editor) {
     if (editor.selection.isOne) {
-      const current2 = editor.selection.current;
-      if (current2.parent.is("project"))
+      const current = editor.selection.current;
+      if (current.parent.is("project"))
         ;
       else {
-        const parent = current2.parent;
+        const parent = current.parent;
         const distX = getVertiesMaxX(parent.verties) - getVertiesMaxX(editor.selection.verties);
         editor.emit("moveLayer", distX, 0);
       }
@@ -15779,11 +15779,11 @@ var sort_top = {
   command: "sort.top",
   execute: function(editor) {
     if (editor.selection.isOne) {
-      const current2 = editor.selection.current;
-      if (current2.parent.is("project"))
+      const current = editor.selection.current;
+      if (current.parent.is("project"))
         ;
       else {
-        const parent = current2.parent;
+        const parent = current.parent;
         const distY = getVertiesMinY(parent.verties) - getVertiesMinY(editor.selection.verties);
         editor.emit("moveLayer", 0, distY);
       }
@@ -15804,13 +15804,13 @@ var __glob_0_116$1 = /* @__PURE__ */ Object.freeze({
 var switch_path = {
   command: "switch.path",
   execute: async (editor, text2) => {
-    const current2 = editor.selection.current;
-    if (!current2)
+    const current = editor.selection.current;
+    if (!current)
       return;
-    if (current2.is("boolean-path") || current2.isBooleanItem) {
-      let parent = current2;
-      if (current2.isBooleanItem) {
-        parent = current2.parent;
+    if (current.is("boolean-path") || current.isBooleanItem) {
+      let parent = current;
+      if (current.isBooleanItem) {
+        parent = current.parent;
       }
       editor.selection.select(parent);
       editor.command("setAttributeForMulti", "change boolean operation", editor.selection.packByValue({
@@ -15819,7 +15819,7 @@ var switch_path = {
       }));
       editor.nextTick(() => {
         editor.emit("recoverBooleanPath");
-        editor.selection.select(current2);
+        editor.selection.select(current);
         editor.emit("refreshSelection");
         editor.emit("refreshSelectionTool");
       });
@@ -15847,9 +15847,9 @@ var ungroup_item$1 = {
   execute: function(editor) {
     if (editor.selection.length === 0)
       return;
-    const current2 = editor.selection.current;
-    if (current2) {
-      let groupLayer = current2;
+    const current = editor.selection.current;
+    if (current) {
+      let groupLayer = current;
       let layers2 = [...groupLayer.layers];
       layers2.reverse();
       layers2.forEach((child) => {
@@ -15934,10 +15934,10 @@ var updatePathItem = {
   command: "updatePathItem",
   description: "Update path string for selected svg path item",
   execute: function(editor, pathObject) {
-    const current2 = editor.selection.current;
-    if (current2) {
+    const current = editor.selection.current;
+    if (current) {
       if (pathObject.box === "box") {
-        const newPath = current2.invertPath(pathObject.d);
+        const newPath = current.invertPath(pathObject.d);
         editor.command("setAttributeForMulti", "change local path", editor.selection.packByValue({
           d: newPath.d
         }));
@@ -15949,8 +15949,8 @@ var updatePathItem = {
         const newHeight = distance$1(bbox[3], bbox[0]);
         let oldBBox = vertiesMap(rectToVerties(bbox[0][0], bbox[0][1], newWidth, newHeight), pathObject.matrix.absoluteMatrix);
         let newBBox = vertiesMap(oldBBox, calculateMatrixInverse(fromTranslation([], oldBBox[4]), Transform.createTransformMatrix(Transform.parseStyle(pathObject.matrix.transform), newWidth, newHeight), fromTranslation([], negate([], oldBBox[4]))));
-        const worldMatrix = calculateMatrix(fromTranslation([], newBBox[0]), current2.getLocalTransformMatrix(newWidth, newHeight));
-        const realXY = getTranslation([], calculateMatrix(pathObject.matrix.parentMatrixInverse, worldMatrix, invert([], current2.getLocalTransformMatrix(newWidth, newHeight))));
+        const worldMatrix = calculateMatrix(fromTranslation([], newBBox[0]), current.getLocalTransformMatrix(newWidth, newHeight));
+        const realXY = getTranslation([], calculateMatrix(pathObject.matrix.parentMatrixInverse, worldMatrix, invert([], current.getLocalTransformMatrix(newWidth, newHeight))));
         editor.command("setAttributeForMulti", "change path", editor.selection.packByValue({
           d: newPath.translate(-bbox[0][0], -bbox[0][1]).d,
           x: realXY[0],
@@ -17844,7 +17844,10 @@ class BaseModel {
     return this.modelManager.getLayers(this.id, this.ref);
   }
   get parentId() {
-    return this.json.parentId;
+    const parentId = this.json.parentId;
+    if (parentId === this.id)
+      return void 0;
+    return parentId;
   }
   get parent() {
     if (!this.parentId)
@@ -20145,13 +20148,13 @@ function makeInterpolateOffsetPath(layer2, property, startValue, endValue, artbo
     if (startObject.rotateStatus === "element")
       ;
     else {
-      var current2 = obj2;
+      var current = obj2;
       var distValue = 0;
       if (t < 1) {
         distValue = 1 / obj2.totalLength;
       }
       var next = innerInterpolate(rate + distValue, t + distValue, timing);
-      var angle2 = calculateAngle(next.x - current2.x, next.y - current2.y);
+      var angle2 = calculateAngle(next.x - current.x, next.y - current.y);
       var newAngle = Length.deg(innerInterpolateAngle(startObject.rotateStatus, angle2));
       layer2.reset({
         transform: Transform.rotate(layer2.transform, newAngle)
@@ -20967,6 +20970,9 @@ class SelectionManager {
       return item2.isPointInRect(this.pos[0], this.pos[1]);
     });
   }
+  get notSelectedLayers() {
+    return this.filteredLayers.filter((it) => this.check(it) === false);
+  }
   get snapTargetLayers() {
     if (!this.currentProject)
       return [];
@@ -21002,10 +21008,10 @@ class SelectionManager {
     }
     return false;
   }
-  getRootItem(current2) {
-    var rootItem = current2;
-    if (current2 && current2.parentId) {
-      rootItem = current2.parent;
+  getRootItem(current) {
+    var rootItem = current;
+    if (current && current.parentId) {
+      rootItem = current.parent;
     }
     return rootItem;
   }
@@ -21021,10 +21027,6 @@ class SelectionManager {
     }
     this.project = project2;
     this.select();
-  }
-  get isRelative() {
-    var item2 = this.current || {};
-    return item2.position === "relative";
   }
   isSameIds(newIds) {
     if (this.ids.length != newIds.length) {
@@ -24036,10 +24038,10 @@ class StorageManager {
     return null;
   }
   async saveCustomAsset(datauri = "") {
-    const current2 = this.editor.selection.current;
-    if (current2) {
+    const current = this.editor.selection.current;
+    if (current) {
       const assetList = await this.getCustomAssetList();
-      const json = await this.editor.json.render(current2);
+      const json = await this.editor.json.render(current);
       json.x = "0px";
       json.y = "0px";
       await this.setCustomAssetList([
@@ -24650,10 +24652,10 @@ class HorizontalRuler extends EditorElement {
     return text2.join("");
   }
   makeRulerForCurrentArtboard() {
-    const current2 = this.$selection.current;
-    if (!current2)
+    const current = this.$selection.current;
+    if (!current)
       return "";
-    const currentArtboard = current2.artboard;
+    const currentArtboard = current.artboard;
     if (!currentArtboard)
       return "";
     const verties = currentArtboard.verties;
@@ -24670,8 +24672,8 @@ class HorizontalRuler extends EditorElement {
         `;
   }
   makeRulerForCurrent() {
-    const current2 = this.$selection.current;
-    if (!current2)
+    const current = this.$selection.current;
+    if (!current)
       return "";
     const verties = this.$selection.verties;
     const xList = verties.map((it) => it[0]);
@@ -24763,8 +24765,8 @@ class HorizontalRuler extends EditorElement {
   }
   [SUBSCRIBE("refreshSelectionStyleView") + THROTTLE(10)]() {
     if (this.$selection.current) {
-      const current2 = this.$selection.current;
-      if (current2.hasChangedField("x", "y", "width", "height", "transform", "rotateZ", "rotate")) {
+      const current = this.$selection.current;
+      if (current.hasChangedField("x", "y", "width", "height", "transform", "rotateZ", "rotate")) {
         this.refresh();
       }
     }
@@ -24835,10 +24837,10 @@ class VerticalRuler extends EditorElement {
     return text2.join("");
   }
   makeRulerForCurrentArtboard() {
-    const current2 = this.$selection.current;
-    if (!current2)
+    const current = this.$selection.current;
+    if (!current)
       return "";
-    const currentArtboard = current2.artboard;
+    const currentArtboard = current.artboard;
     if (!currentArtboard)
       return "";
     const verties = currentArtboard.verties;
@@ -24855,8 +24857,8 @@ class VerticalRuler extends EditorElement {
         `;
   }
   makeRulerForCurrent() {
-    const current2 = this.$selection.current;
-    if (!current2)
+    const current = this.$selection.current;
+    if (!current)
       return "";
     const { minY, height: realHeight } = this.$viewport;
     const height2 = this.state.rect.height;
@@ -24937,8 +24939,8 @@ class VerticalRuler extends EditorElement {
     }
   }
   [SUBSCRIBE("refreshSelectionStyleView") + THROTTLE(10)]() {
-    const current2 = this.$selection.current;
-    if (current2 && current2.hasChangedField("x", "y", "width", "height", "transform", "rotateZ", "rotate")) {
+    const current = this.$selection.current;
+    if (current && current.hasChangedField("x", "y", "width", "height", "transform", "rotateZ", "rotate")) {
       this.refresh();
     }
   }
@@ -25043,10 +25045,10 @@ class StyleView extends EditorElement {
       this.changeStyleHead(item2);
     }
   }
-  [SUBSCRIBE("refreshStyleView", "moveTimeline", "playTimeline")](current2, isOnlyOne = false) {
-    if (current2) {
+  [SUBSCRIBE("refreshStyleView", "moveTimeline", "playTimeline")](current, isOnlyOne = false) {
+    if (current) {
       this.load();
-      this.refreshStyleHeadOne(current2, isOnlyOne);
+      this.refreshStyleHeadOne(current, isOnlyOne);
     } else {
       this.refresh();
     }
@@ -25195,8 +25197,8 @@ class HTMLRenderView extends EditorElement {
     const project2 = this.$selection.currentProject;
     var timeline = project2.getSelectedTimeline();
     if (timeline) {
-      timeline.animations.map((it) => this.$model.get(it.id)).forEach((current2) => {
-        this.updateTimelineElement(current2, true, false);
+      timeline.animations.map((it) => this.$model.get(it.id)).forEach((current) => {
+        this.updateTimelineElement(current, true, false);
       });
     }
   }
@@ -25338,10 +25340,10 @@ class HTMLRenderView extends EditorElement {
           this.$selection.toggleById(id);
         } else {
           if (this.$selection.check({ id }) === false) {
-            const current2 = this.$model.get(id);
-            if (current2 && current2.is("artboard") && current2.hasChildren())
+            const current = this.$model.get(id);
+            if (current && current.is("artboard") && current.hasChildren())
               ;
-            else if (current2.hasChildren()) {
+            else if (current.hasChildren()) {
               this.$selection.selectByGroup(id);
             } else {
               this.$selection.selectByGroup(id);
@@ -25430,8 +25432,8 @@ class HTMLRenderView extends EditorElement {
     if (obj2) {
       this.updateElement(obj2);
     } else {
-      this.$selection.items.forEach((current2) => {
-        this.updateElement(current2);
+      this.$selection.items.forEach((current) => {
+        this.updateElement(current);
       });
     }
   }
@@ -25485,7 +25487,7 @@ class HTMLRenderView extends EditorElement {
   refreshElementBoundSize(parentObj) {
     if (parentObj) {
       if (parentObj.hasChildren() === false) {
-        if (parentObj.hasChangedField("width", "height", "border", "padding-top", "padding-left", "padding-right", "padding-bottom") === false) {
+        if (parentObj.hasChangedField("x", "y", "width", "height", "border", "padding-top", "padding-left", "padding-right", "padding-bottom") === false) {
           return;
         }
         var $el = this.getElement(parentObj.id);
@@ -25581,21 +25583,21 @@ class PageTools extends EditorElement {
   [CLICK("$buttons button") + PREVENT + STOP](e2) {
     const itemId = e2.$dt.data("item-id");
     const pathIndex = e2.$dt.data("path-index");
-    const current2 = this.$editor.get(itemId);
-    if (current2.editablePath) {
-      this.emit("open.editor", current2);
+    const current = this.$editor.get(itemId);
+    if (current.editablePath) {
+      this.emit("open.editor", current);
     } else {
-      const pathList = PathParser.fromSVGString(current2.absolutePath().d).toPathList();
+      const pathList = PathParser.fromSVGString(current.absolutePath().d).toPathList();
       this.emit("showPathEditor", "modify", {
         box: "canvas",
-        current: current2,
-        matrix: current2.matrix,
+        current,
+        matrix: current.matrix,
         d: pathList[pathIndex].d,
         changeEvent: (data) => {
           pathList[pathIndex].reset(data.d);
-          const newPathD = current2.invertPath(PathParser.joinPathList(pathList).d).d;
+          const newPathD = current.invertPath(PathParser.joinPathList(pathList).d).d;
           this.command("setAttributeForMulti", "modify sub path", {
-            [itemId]: current2.updatePath(newPathD)
+            [itemId]: current.updatePath(newPathD)
           });
         }
       });
@@ -27688,9 +27690,9 @@ class BaseProperty extends EditorElement {
   onShowTitle(isShow) {
   }
   refreshShowIsNot(type = "", isRefresh = true) {
-    var current2 = this.$selection.current;
-    if (current2) {
-      if (type.includes(current2.itemType)) {
+    var current = this.$selection.current;
+    if (current) {
+      if (type.includes(current.itemType)) {
         this.hide();
       } else {
         this.show();
@@ -27700,14 +27702,14 @@ class BaseProperty extends EditorElement {
     }
   }
   refreshShow(type, isRefresh = true) {
-    var current2 = this.$selection.current;
-    if (current2) {
+    var current = this.$selection.current;
+    if (current) {
       if (isFunction(type) && type()) {
         this.show();
         if (isRefresh)
           this.refresh();
       } else {
-        if (!isFunction(type) && type.includes(current2.itemType)) {
+        if (!isFunction(type) && type.includes(current.itemType)) {
           this.show();
           if (isRefresh)
             this.refresh();
@@ -27972,10 +27974,10 @@ class AnimationProperty extends BaseProperty {
     return true;
   }
   [LOAD("$animationList") + DOMDIFF]() {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return "";
-    return Animation.parseStyle(current2.animation).map((it, index2) => {
+    return Animation.parseStyle(current.animation).map((it, index2) => {
       const selectedClass = this.state.selectedIndex === index2 ? "selected" : "";
       const path = curveToPath(it.timingFunction, 30, 30);
       return `
@@ -28016,15 +28018,15 @@ class AnimationProperty extends BaseProperty {
     });
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
-    const current2 = this.$selection.current;
-    if (current2 && current2.hasChangedField("animation")) {
+    const current = this.$selection.current;
+    if (current && current.hasChangedField("animation")) {
       this.refresh();
     }
     this.emit("hideAnimationPropertyPopup");
   }
   [CLICK("$add")](e2) {
-    var current2 = this.$selection.current;
-    if (current2) {
+    var current = this.$selection.current;
+    if (current) {
       this.command("setAttributeForMulti", "add animation property", this.$selection.packByValue({
         animation: (item2) => Animation.add(item2.animation, { name: null })
       }));
@@ -28039,29 +28041,29 @@ class AnimationProperty extends BaseProperty {
   }
   [CLICK("$animationList .tools .del")](e2) {
     var removeIndex = e2.$dt.attr("data-index");
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
-    current2.reset({
-      animation: Animation.remove(current2.animation, removeIndex)
+    current.reset({
+      animation: Animation.remove(current.animation, removeIndex)
     });
-    this.emit("refreshElement", current2);
+    this.emit("refreshElement", current);
     this.refresh();
   }
   [CLICK("$animationList .play-state")](e2) {
     var index2 = +e2.$dt.attr("data-index");
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
-    const list2 = Animation.parseStyle(current2.animation);
+    const list2 = Animation.parseStyle(current.animation);
     var animation2 = list2[index2];
     if (animation2) {
       animation2.togglePlayState();
       e2.$dt.attr("data-play-state-selected-value", animation2.playState);
-      current2.reset({
+      current.reset({
         animation: Animation.join(list2)
       });
-      this.emit("refreshElement", current2);
+      this.emit("refreshElement", current);
     }
   }
   selectItem(selectedIndex, isSelected = true) {
@@ -28272,10 +28274,10 @@ class AnimationPropertyPopup extends BasePopup {
     `;
   }
   [LOAD("$name")]() {
-    var current2 = this.$selection.currentProject;
+    var current = this.$selection.currentProject;
     var names2 = [];
-    if (current2 && current2.keyframes) {
-      names2 = current2.keyframes.map((it) => {
+    if (current && current.keyframes) {
+      names2 = current.keyframes.map((it) => {
         return { key: it.name, value: it.name };
       });
     }
@@ -28428,11 +28430,11 @@ class ObjectProperty {
         return isUndefined(json.order) ? 1e3 : json.order;
       }
       refresh() {
-        const current2 = this.$selection.current;
-        if (current2) {
-          this.setTitle(json.title || current2.getDefaultTitle() || current2.itemType || current2.name);
+        const current = this.$selection.current;
+        if (current) {
+          this.setTitle(json.title || current.getDefaultTitle() || current.itemType || current.name);
           this.load();
-          const inspector = isFunction(json.inspector) ? json.inspector(current2) : this.$editor.components.createInspector(current2, json.editableProperty);
+          const inspector = isFunction(json.inspector) ? json.inspector(current) : this.$editor.components.createInspector(current, json.editableProperty);
           this.children.$comp.setInspector(inspector);
         }
       }
@@ -28446,10 +28448,10 @@ class ObjectProperty {
         }
       }
       [LOAD("$body")]() {
-        var current2 = this.$selection.current;
-        if (!current2)
+        var current = this.$selection.current;
+        if (!current)
           return "";
-        const inspector = isFunction(json.inspector) ? json.inspector(current2) : this.$editor.components.createInspector(current2, json.editableProperty);
+        const inspector = isFunction(json.inspector) ? json.inspector(current) : this.$editor.components.createInspector(current, json.editableProperty);
         return createComponent("ComponentEditor", {
           ref: "$comp",
           inspector,
@@ -28457,8 +28459,8 @@ class ObjectProperty {
         });
       }
       getBody() {
-        var current2 = this.$selection.current || {};
-        const inspector = isFunction(json.inspector) ? json.inspector(current2) : this.$editor.components.createInspector(current2, json.editableProperty);
+        var current = this.$selection.current || {};
+        const inspector = isFunction(json.inspector) ? json.inspector(current) : this.$editor.components.createInspector(current, json.editableProperty);
         return createComponent("ComponentEditor", {
           ref: "$comp",
           inspector,
@@ -28483,7 +28485,7 @@ function appearance(editor) {
       title: editor.$i18n("background.color.property.title"),
       editableProperty: "appearance",
       preventUpdate: true,
-      inspector: (current2) => {
+      inspector: (current) => {
         return [
           {
             type: "column",
@@ -28496,7 +28498,7 @@ function appearance(editor) {
                   compact: true,
                   format: true
                 },
-                defaultValue: current2["background-color"]
+                defaultValue: current["background-color"]
               },
               {
                 key: "mix-blend-mode",
@@ -28505,7 +28507,7 @@ function appearance(editor) {
                   label: "tonality",
                   compact: true
                 },
-                defaultValue: current2["mix-blend-mode"]
+                defaultValue: current["mix-blend-mode"]
               }
             ]
           },
@@ -28518,7 +28520,7 @@ function appearance(editor) {
                 return { value: it, text: editor.$i18n(`background.color.property.overflow.${it}`) };
               })
             },
-            defaultValue: current2["overflow"]
+            defaultValue: current["overflow"]
           }
         ];
       }
@@ -28734,10 +28736,10 @@ class BackdropFilterProperty extends BaseProperty {
     });
   }
   getSVGFilterList() {
-    var current2 = this.$selection.currentProject;
+    var current = this.$selection.currentProject;
     var arr = [];
-    if (current2) {
-      arr = current2.svgfilters.map((it) => {
+    if (current) {
+      arr = current.svgfilters.map((it) => {
         return {
           title: `svg - #${it.id}`,
           value: it.id
@@ -28747,8 +28749,8 @@ class BackdropFilterProperty extends BaseProperty {
     return arr;
   }
   [LOAD("$body")]() {
-    var current2 = this.$selection.current || {};
-    var value = current2["backdrop-filter"];
+    var current = this.$selection.current || {};
+    var value = current["backdrop-filter"];
     return `
       <div>
         ${createComponent("FilterEditor", {
@@ -28789,8 +28791,8 @@ class BackgroundClipProperty extends BaseProperty {
     return `<div ref='$backgroundClip' style='padding-top: 3px;'></div>`;
   }
   [LOAD("$backgroundClip")]() {
-    var current2 = this.$selection.current || {};
-    var clip = current2["background-clip"] || "";
+    var current = this.$selection.current || {};
+    var clip = current["background-clip"] || "";
     return createComponent("SelectEditor", {
       ref: "$1",
       key: "background-clip",
@@ -28854,7 +28856,7 @@ class BackgroundImageEditor extends EditorElement {
         `;
   }
   [LOAD("$fillList") + DOMDIFF]() {
-    const current2 = this.$selection.current || { color: "black" };
+    const current = this.$selection.current || { color: "black" };
     return this.state.images.map((it, index2) => {
       var image2 = it.image;
       var backgroundType = types[image2.type];
@@ -28881,7 +28883,7 @@ class BackgroundImageEditor extends EditorElement {
         index: index2,
         ref: `$gse${index2}`,
         image: it.image,
-        color: current2.color,
+        color: current.color,
         key: "background-image",
         onchange: "changePattern"
       }])}
@@ -28979,8 +28981,8 @@ class BackgroundImageEditor extends EditorElement {
   }
   [CLICK("$fillList .tools .copy")](e2) {
     var index2 = +e2.$dt.attr("data-index");
-    const current2 = this.state.images[index2];
-    this.state.images.splice(index2, 0, current2);
+    const current = this.state.images[index2];
+    this.state.images.splice(index2, 0, current);
     this.refresh();
     this.modifyBackgroundImage();
   }
@@ -29197,8 +29199,8 @@ class BackgroundImageProperty extends BaseProperty {
     this.children.$backgroundImageEditor.trigger("add", e2.$dt.data("value"));
   }
   [LOAD("$property")]() {
-    var current2 = this.$selection.current || {};
-    var value = current2["background-image"] || "";
+    var current = this.$selection.current || {};
+    var value = current["background-image"] || "";
     return createComponent("BackgroundImageEditor", {
       ref: "$backgroundImageEditor",
       key: "background-image",
@@ -29691,8 +29693,8 @@ class BorderProperty extends BaseProperty {
     return `<div class="property-item full border-item" ref='$body'></div>`;
   }
   [LOAD("$body")]() {
-    var current2 = this.$selection.current || {};
-    var value = current2["border"] || "";
+    var current = this.$selection.current || {};
+    var value = current["border"] || "";
     return createComponent("BorderEditor", {
       ref: "$1",
       key: "border",
@@ -29825,19 +29827,19 @@ class BorderImageProperty extends BaseProperty {
     this.refresh();
   }
   getTools() {
-    var current2 = this.$selection.current || {};
-    var appliedBorderImage = current2.appliedBorderImage || false;
+    var current = this.$selection.current || {};
+    var appliedBorderImage = current.appliedBorderImage || false;
     return `
       <label><input type='checkbox' ${appliedBorderImage ? "checked" : ""} ref='$apply' /> Apply</label>
     `;
   }
   [CLICK("$apply")]() {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
     var applyBorderImage = this.refs.$apply.checked();
-    current2.reset({ applyBorderImage });
-    this.emit("refreshElement", current2);
+    current.reset({ applyBorderImage });
+    this.emit("refreshElement", current);
   }
   getColorStepList(image2) {
     switch (image2.type) {
@@ -29858,8 +29860,8 @@ class BorderImageProperty extends BaseProperty {
     }).join("");
   }
   [LOAD("$borderImageView")]() {
-    var current2 = this.$selection.current || { borderImage: { image: {} } };
-    var borderImage2 = current2.borderImage;
+    var current = this.$selection.current || { borderImage: { image: {} } };
+    var borderImage2 = current.borderImage;
     var backgroundTypeName = borderImage2.type ? names[borderImage2.type] : "";
     const imageCSS = `background-image: ${borderImage2.image.toString()}; background-size: cover;`;
     return ` 
@@ -29977,21 +29979,21 @@ class BorderImageProperty extends BaseProperty {
     return data;
   }
   viewFillPopup($preview, selectColorStepId) {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
     this.emit("showFillPopup", __spreadProps(__spreadValues({
       changeEvent: "changeBorderImageFillPopup"
-    }, this.getFillData(current2.borderImage)), {
+    }, this.getFillData(current.borderImage)), {
       selectColorStepId,
       refresh: true
     }));
   }
   viewChangeImage(data) {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
-    var borderImage2 = current2.borderImage;
+    var borderImage2 = current.borderImage;
     if (!borderImage2)
       return;
     var $el = this.getRef("$miniView");
@@ -30011,18 +30013,18 @@ class BorderImageProperty extends BaseProperty {
     }
   }
   setImage(data) {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
-    current2.borderImage.setImageUrl(data);
+    current.borderImage.setImageUrl(data);
     this.viewChangeImage(data);
-    this.emit("refreshElement", current2);
+    this.emit("refreshElement", current);
   }
   viewChangeGradient(data) {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
-    var borderImage2 = current2.borderImage;
+    var borderImage2 = current.borderImage;
     if (!borderImage2)
       return;
     var $el = this.getRef("$miniView");
@@ -30042,12 +30044,12 @@ class BorderImageProperty extends BaseProperty {
     }
   }
   setGradient(data) {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
-    current2.borderImage.setGradient(data);
+    current.borderImage.setGradient(data);
     this.viewChangeGradient(data);
-    this.emit("refreshElement", current2);
+    this.emit("refreshElement", current);
   }
   [SUBSCRIBE("changeBorderImageFillPopup")](data) {
     switch (data.type) {
@@ -30060,10 +30062,10 @@ class BorderImageProperty extends BaseProperty {
     }
   }
   setBorderImageProperty() {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
-    var borderImage2 = current2.borderImage;
+    var borderImage2 = current.borderImage;
     var type = this.refs.$selector.attr("data-selected-value");
     if (type === "all") {
       var len2 = this.children.$allSlice.getValue();
@@ -30081,7 +30083,7 @@ class BorderImageProperty extends BaseProperty {
         borderImage2.width[type2] = this.children[`$${type2}Width`].getValue();
       });
     }
-    this.emit("refreshElement", current2);
+    this.emit("refreshElement", current);
   }
   [CLICK("$selector button")](e2) {
     var type = e2.$dt.attr("data-value");
@@ -30232,8 +30234,8 @@ class BorderRadiusProperty extends BaseProperty {
     return `<div class="property-item full border-radius-item" ref='$body'></div>`;
   }
   [LOAD("$body")]() {
-    var current2 = this.$selection.current || {};
-    var value = current2["border-radius"] || "";
+    var current = this.$selection.current || {};
+    var value = current["border-radius"] || "";
     return createComponent("BorderRadiusEditor", {
       ref: "$1",
       value,
@@ -30277,50 +30279,50 @@ class BoxModelProperty extends BaseProperty {
     this.refresh();
   }
   [SUBSCRIBE("refreshSelectionStyleView")]() {
-    const current2 = this.$selection.current;
-    if (current2 == null ? void 0 : current2.hasChangedField("padding-left", "padding-right", "padding-top", "padding-bottom")) {
+    const current = this.$selection.current;
+    if (current == null ? void 0 : current.hasChangedField("padding-left", "padding-right", "padding-top", "padding-bottom")) {
       this.refresh();
     }
   }
   getBody() {
     return `<div class="property-item elf--box-model-item" ref="$boxModelItem"></div>`;
   }
-  templateInput(key, current2) {
-    var value = Length.parse(current2[key] || 0);
+  templateInput(key, current) {
+    var value = Length.parse(current[key] || 0);
     return `<input type="number" ref="$${key}" value="${value.value}" tabIndex="1" />`;
   }
   [LOAD("$boxModelItem") + DOMDIFF]() {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return "";
     return `
       <div>
         <div class="margin" data-title="${this.$i18n("box.model.property.margin")}">
           <div data-value="top">
-            ${this.templateInput("margin-top", current2)}
+            ${this.templateInput("margin-top", current)}
           </div>
           <div data-value="bottom">
-            ${this.templateInput("margin-bottom", current2)}
+            ${this.templateInput("margin-bottom", current)}
           </div>
           <div data-value="left">
-            ${this.templateInput("margin-left", current2)}
+            ${this.templateInput("margin-left", current)}
           </div>
           <div data-value="right">
-            ${this.templateInput("margin-right", current2)}
+            ${this.templateInput("margin-right", current)}
           </div>
         </div>
         <div class="padding" data-title="${this.$i18n("box.model.property.padding")}">
           <div data-value="top">
-            ${this.templateInput("padding-top", current2)}
+            ${this.templateInput("padding-top", current)}
           </div>
           <div data-value="bottom">
-            ${this.templateInput("padding-bottom", current2)}
+            ${this.templateInput("padding-bottom", current)}
           </div>
           <div data-value="left">
-            ${this.templateInput("padding-left", current2)}
+            ${this.templateInput("padding-left", current)}
           </div>
           <div data-value="right">
-            ${this.templateInput("padding-right", current2)}
+            ${this.templateInput("padding-right", current)}
           </div>
         </div>
         <div class='content' title='Content'>
@@ -30409,11 +30411,11 @@ class BoxShadowProperty extends BaseProperty {
     this.children.$boxshadow.trigger("add", boxShadow$1[index2].shadow);
   }
   [LOAD("$shadowList")]() {
-    var current2 = this.$selection.current || {};
+    var current = this.$selection.current || {};
     return createComponent("BoxShadowEditor", {
       ref: "$boxshadow",
       key: "box-shadow",
-      value: current2["box-shadow"],
+      value: current["box-shadow"],
       onchange: (key, value) => {
         this.command("setAttributeForMulti", "change box shadow", this.$selection.packByValue({
           [key]: value
@@ -30548,14 +30550,14 @@ class ClipPathProperty extends BaseProperty {
     `;
   }
   [CLICK("$clippathList .clippath-item .title .name")](e2) {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
     this.viewClipPathPicker();
   }
   [CLICK("$clippathList .del") + PREVENT](e2) {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
     this.command("setAttributeForMulti", "delete clip-path", this.$selection.packByValue({
       "clip-path": ""
@@ -30572,23 +30574,23 @@ class ClipPathProperty extends BaseProperty {
     this.refresh();
   }
   [LOAD("$clippathList")]() {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return "";
-    if (!current2["clip-path"])
+    if (!current["clip-path"])
       return "";
-    return this.makeClipPathTemplate(current2["clip-path"].split("(")[0], current2["clip-path"]);
+    return this.makeClipPathTemplate(current["clip-path"].split("(")[0], current["clip-path"]);
   }
   [CLICK("$tools [data-value]")](e2) {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
-    if (current2["clip-path"]) {
+    if (current["clip-path"]) {
       alert("clip-path is already exists.");
       return;
     }
-    if (current2) {
-      current2.reset({
+    if (current) {
+      current.reset({
         "clip-path": ClipPathSample[e2.$dt.data("value")]
       });
       this.command("setAttributeForMulti", "change clip-path", this.$selection.pack("clip-path"));
@@ -30596,22 +30598,22 @@ class ClipPathProperty extends BaseProperty {
     this.refresh();
   }
   viewClipPathPicker() {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
-    var obj2 = ClipPath.parseStyle(current2["clip-path"]);
+    var obj2 = ClipPath.parseStyle(current["clip-path"]);
     switch (obj2.type) {
       case "path":
-        var d = current2.absolutePath(current2.clipPathString).d;
+        var d = current.absolutePath(current.clipPathString).d;
         var mode = d ? "modify" : "path";
         this.emit("showPathEditor", mode, {
           changeEvent: (data) => {
-            data.d = current2.invertPath(data.d).d;
+            data.d = current.invertPath(data.d).d;
             this.updatePathInfo({
               "clip-path": `path(${data.d})`
             });
           },
-          current: current2,
+          current,
           d
         });
         break;
@@ -30620,10 +30622,10 @@ class ClipPathProperty extends BaseProperty {
   updatePathInfo(data) {
     if (!data)
       return;
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
-    current2.reset(data);
+    current.reset(data);
     this.refresh();
     this.command("setAttributeForMulti", "change clip-path", this.$selection.packByValue(data));
   }
@@ -31405,24 +31407,24 @@ class ComponentProperty extends BaseProperty {
     return "Component";
   }
   isShow() {
-    var current2 = this.$selection.current;
-    const inspector = this.$editor.components.createInspector(current2);
-    if (current2 && (current2.is("component") || inspector.length > 0)) {
+    var current = this.$selection.current;
+    const inspector = this.$editor.components.createInspector(current);
+    if (current && (current.is("component") || inspector.length > 0)) {
       return true;
     }
     return false;
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow((type) => {
-      const current2 = this.$selection.current;
-      const inspector = this.$editor.components.createInspector(current2);
+      const current = this.$selection.current;
+      const inspector = this.$editor.components.createInspector(current);
       return inspector.length > 0;
     });
   }
   refresh() {
-    var current2 = this.$selection.current;
-    if (current2) {
-      this.setTitle(current2.getDefaultTitle() || current2.itemType || current2.name);
+    var current = this.$selection.current;
+    if (current) {
+      this.setTitle(current.getDefaultTitle() || current.itemType || current.name);
       this.load();
     }
   }
@@ -31432,17 +31434,17 @@ class ComponentProperty extends BaseProperty {
     `;
   }
   [LOAD("$body")]() {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return "";
-    const inspector = this.$editor.components.createInspector(current2);
+    const inspector = this.$editor.components.createInspector(current);
     inspector.forEach((it) => {
       if (isString(it)) {
         return;
       }
-      let defaultValue = current2[it.key] || it.defaultValue;
+      let defaultValue = current[it.key] || it.defaultValue;
       if (isFunction(it.convertDefaultValue)) {
-        defaultValue = it.convertDefaultValue(current2, it.key);
+        defaultValue = it.convertDefaultValue(current, it.key);
       }
       it.defaultValue = defaultValue;
     });
@@ -31530,24 +31532,24 @@ class ContentProperty extends BaseProperty {
     `;
   }
   [BIND("$contentItem")]() {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return "";
     return {
-      value: current2.content || ""
+      value: current.content || ""
     };
   }
   [INPUT("$contentItem")](e2) {
     this.setContent();
   }
   setContent() {
-    var current2 = this.$selection.current;
-    if (current2) {
+    var current = this.$selection.current;
+    if (current) {
       var data = {
         content: this.refs.$contentItem.value
       };
-      current2.reset(data);
-      this.emit("refreshSelectionStyleView", current2);
+      current.reset(data);
+      this.emit("refreshSelectionStyleView", current);
     }
   }
 }
@@ -31953,18 +31955,6 @@ class MovableModel extends BaseAssetModel {
   get isAbsolute() {
     return this.json.position === "absolute";
   }
-  get isRelative() {
-    return this.json.position === "relative";
-  }
-  get isChild() {
-    if (this.json.parent) {
-      var isParentDrawItem = this.json.parent.is("project") === false;
-      if (isParentDrawItem && this.isAbsolute) {
-        return true;
-      }
-    }
-    return false;
-  }
   get isDragSelectable() {
     return true;
   }
@@ -32066,6 +32056,9 @@ class MovableModel extends BaseAssetModel {
   }
   get origin() {
     return TransformOrigin.scale(this.json["transform-origin"] || "50% 50% 0px", this.screenWidth, this.screenHeight);
+  }
+  get absoluteOrigin() {
+    return vertiesMap([this.origin], this.absoluteMatrix)[0];
   }
   get quat() {
     return fromEuler(create$2(), 0, 0, this.angle);
@@ -37252,10 +37245,10 @@ class FilterProperty extends BaseProperty {
     });
   }
   getSVGFilterList() {
-    var current2 = this.$selection.currentProject;
+    var current = this.$selection.currentProject;
     var arr = [];
-    if (current2) {
-      arr = current2.svgfilters.map((it) => {
+    if (current) {
+      arr = current.svgfilters.map((it) => {
         var id = it.id;
         return {
           title: `svg - #${id}`,
@@ -37266,8 +37259,8 @@ class FilterProperty extends BaseProperty {
     return arr;
   }
   [LOAD("$body")]() {
-    var current2 = this.$selection.current || {};
-    var value = current2.filter;
+    var current = this.$selection.current || {};
+    var value = current.filter;
     return createComponent("FilterEditor", {
       ref: "$filterEditor",
       key: "filter",
@@ -37303,7 +37296,7 @@ function font(editor) {
       preventUpdate: true
     })
   });
-  editor.registerInspector("font", (current2) => {
+  editor.registerInspector("font", (current) => {
     return [
       {
         key: "font-family",
@@ -37336,7 +37329,7 @@ function font(editor) {
             "system-ui"
           ]
         },
-        defaultValue: current2["font-family"] || ""
+        defaultValue: current["font-family"] || ""
       },
       {
         type: "column",
@@ -37348,7 +37341,7 @@ function font(editor) {
             editorOptions: {
               compact: true
             },
-            defaultValue: current2["color"] || "#000"
+            defaultValue: current["color"] || "#000"
           },
           {
             key: "font-size",
@@ -37360,7 +37353,7 @@ function font(editor) {
               max: 100,
               step: 1
             },
-            defaultValue: Length.parse(current2["font-size"]).value,
+            defaultValue: Length.parse(current["font-size"]).value,
             convert: (key, value) => Length.px(value)
           },
           {
@@ -37373,7 +37366,7 @@ function font(editor) {
               max: 900,
               step: 100
             },
-            defaultValue: current2["font-weight"] || 400
+            defaultValue: current["font-weight"] || 400
           }
         ]
       },
@@ -37392,7 +37385,7 @@ function font(editor) {
               step: 1,
               compact: true
             },
-            defaultValue: Length.parse(current2["text-indent"]).value,
+            defaultValue: Length.parse(current["text-indent"]).value,
             convert: (key, value) => Length.px(value)
           },
           {
@@ -37405,7 +37398,7 @@ function font(editor) {
               step: 0.01,
               compact: true
             },
-            defaultValue: current2["line-height"] || 1.2
+            defaultValue: current["line-height"] || 1.2
           },
           {
             key: "letter-spacing",
@@ -37417,7 +37410,7 @@ function font(editor) {
               step: 1,
               compact: true
             },
-            defaultValue: Length.parse(current2["letter-spacing"]).value,
+            defaultValue: Length.parse(current["letter-spacing"]).value,
             convert: (key, value) => Length.px(value)
           }
         ]
@@ -38632,8 +38625,8 @@ class ImageProperty extends BaseProperty {
     }));
   }
   [CLICK("$resize")]() {
-    var current2 = this.$selection.current;
-    if (current2) {
+    var current = this.$selection.current;
+    if (current) {
       this.command("setAttributeForMulti", "resize image", this.$selection.packByValue({
         width: (item2) => item2.naturalWidth.clone(),
         height: (item2) => item2.naturalHeight.clone()
@@ -38641,14 +38634,14 @@ class ImageProperty extends BaseProperty {
     }
   }
   [BIND("$sizeInfo")]() {
-    var current2 = this.$selection.current || {};
+    var current = this.$selection.current || {};
     return {
-      innerHTML: `${this.$i18n("image.property.width")}: ${current2.naturalWidth}, ${this.$i18n("image.property.height")}: ${current2.naturalHeight}`
+      innerHTML: `${this.$i18n("image.property.width")}: ${current.naturalWidth}, ${this.$i18n("image.property.height")}: ${current.naturalHeight}`
     };
   }
   [LOAD("$body")]() {
-    var current2 = this.$selection.current || {};
-    var src = current2.src || "";
+    var current = this.$selection.current || {};
+    var src = current.src || "";
     return createComponent("ImageSelectEditor", {
       ref: "$1",
       key: "src",
@@ -38657,9 +38650,9 @@ class ImageProperty extends BaseProperty {
     });
   }
   [SUBSCRIBE_SELF("changeSelect")](key, value, info) {
-    var current2 = this.$selection.current;
-    if (current2) {
-      current2.reset(__spreadValues({
+    var current = this.$selection.current;
+    if (current) {
+      current.reset(__spreadValues({
         src: value
       }, info));
       this.bindData("$sizeInfo");
@@ -38953,10 +38946,10 @@ class KeyframeProperty extends BaseProperty {
     var $keyframeItem = e2.$dt.closest("keyframe-item");
     var index2 = +$keyframeItem.attr("data-index");
     var type = e2.$dt.attr("data-type");
-    var current2 = this.$selection.currentProject;
-    if (!current2)
+    var current = this.$selection.currentProject;
+    if (!current)
       return;
-    var currentKeyframe = current2.keyframes[index2];
+    var currentKeyframe = current.keyframes[index2];
     if (currentKeyframe) {
       currentKeyframe.reset({
         selectedType: type
@@ -38966,43 +38959,43 @@ class KeyframeProperty extends BaseProperty {
   }
   [CLICK("$keyframeList .keyframe-item .offset-list")](e2) {
     var index2 = +e2.$dt.closest("keyframe-item").attr("data-index");
-    var current2 = this.$selection.currentProject;
-    if (!current2)
+    var current = this.$selection.currentProject;
+    if (!current)
       return;
     this.viewKeyframePicker(index2);
   }
   [CLICK("$keyframeList .del") + PREVENT](e2) {
     var removeIndex = e2.$dt.attr("data-index");
-    var current2 = this.$selection.currentProject;
-    if (!current2)
+    var current = this.$selection.currentProject;
+    if (!current)
       return;
-    current2.removeKeyframe(removeIndex);
-    this.emit("refreshProject", current2);
+    current.removeKeyframe(removeIndex);
+    this.emit("refreshProject", current);
     this.refresh();
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
-    const current2 = this.$selection.current;
-    if (current2 && current2.hasChangedField("keyframes")) {
+    const current = this.$selection.current;
+    if (current && current.hasChangedField("keyframes")) {
       this.refresh();
     }
   }
   [LOAD("$keyframeList")]() {
-    var current2 = this.$selection.currentProject;
-    if (!current2)
+    var current = this.$selection.currentProject;
+    if (!current)
       return "";
-    var keyframes = current2.keyframe ? Keyframe.parseStyle(current2) : current2.keyframes;
-    current2.keyframe = "";
-    current2.keyframes = keyframes;
+    var keyframes = current.keyframe ? Keyframe.parseStyle(current) : current.keyframes;
+    current.keyframe = "";
+    current.keyframes = keyframes;
     return keyframes.map((keyframe2, index2) => {
       return this.makeKeyframeTemplate(keyframe2, index2);
     });
   }
   [CLICK("$add")]() {
-    var current2 = this.$selection.currentProject;
-    if (current2) {
-      current2.createKeyframe();
+    var current = this.$selection.currentProject;
+    if (current) {
+      current.createKeyframe();
       this.refresh();
-      this.emit("refreshProject", current2);
+      this.emit("refreshProject", current);
     } else {
       alert("Please select a project.");
     }
@@ -39632,13 +39625,13 @@ class FlexLayoutEditor extends EditorElement {
     this.parent.trigger(this.props.onchange, key, value);
   }
   [LOAD("$body") + DOMDIFF]() {
-    const current2 = this.$selection.current;
-    if (!current2)
+    const current = this.$selection.current;
+    if (!current)
       return "";
-    const realPaddingTop = Math.min(current2["padding-top"] || 0, 50);
-    const realPaddingLeft = Math.min(current2["padding-left"] || 0, 50);
-    const realPaddingRight = Math.min(current2["padding-right"] || 0, 50);
-    const realPaddingBottom = Math.min(current2["padding-bottom"] || 0, 50);
+    const realPaddingTop = Math.min(current["padding-top"] || 0, 50);
+    const realPaddingLeft = Math.min(current["padding-left"] || 0, 50);
+    const realPaddingRight = Math.min(current["padding-right"] || 0, 50);
+    const realPaddingBottom = Math.min(current["padding-bottom"] || 0, 50);
     const padding2 = `padding-top:${realPaddingTop}px;padding-left: ${realPaddingLeft}px;padding-right:${realPaddingRight}px;padding-bottom: ${realPaddingBottom}px;`;
     return `
             <div class='flex-layout-item'>
@@ -39672,7 +39665,7 @@ class FlexLayoutEditor extends EditorElement {
       label: iconUse$1("padding"),
       key: "padding",
       ref: "$padding",
-      value: current2["padding-top"],
+      value: current["padding-top"],
       min: 0,
       max: 100,
       step: 1,
@@ -39700,10 +39693,10 @@ class FlexLayoutEditor extends EditorElement {
             <div class="select-flex-direction">
                 <div>
                     <div class="flex-group-padding">            
-                        <div class="padding-top" style="height: ${current2["padding-top"]}px"></div>
-                        <div class="padding-left" style="width: ${current2["padding-left"]}px"></div>
-                        <div class="padding-right" style="width: ${current2["padding-right"]}px"></div>
-                        <div class="padding-bottom" style="height: ${current2["padding-bottom"]}px"></div>
+                        <div class="padding-top" style="height: ${current["padding-top"]}px"></div>
+                        <div class="padding-left" style="width: ${current["padding-left"]}px"></div>
+                        <div class="padding-right" style="width: ${current["padding-right"]}px"></div>
+                        <div class="padding-bottom" style="height: ${current["padding-bottom"]}px"></div>
                     </div>
                     <div class="flex-group" style="
                             --flex-group-gap: ${Math.floor(this.state["gap"] / 10)}px;
@@ -39852,7 +39845,7 @@ class FlexLayoutItemProperty extends BaseProperty {
       `;
   }
   [LOAD("$body")]() {
-    var current2 = this.$selection.current || { "flex-layout-item": "none" };
+    var current = this.$selection.current || { "flex-layout-item": "none" };
     const valueType = "value";
     return `
       <div class='layout-select'>
@@ -39874,7 +39867,7 @@ class FlexLayoutItemProperty extends BaseProperty {
       ref: "$grow",
       label: this.$i18n("flex.layout.item.property.grow"),
       key: "flex-grow",
-      value: current2["flex-grow"],
+      value: current["flex-grow"],
       min: 0,
       max: 1,
       step: 0.01,
@@ -39887,7 +39880,7 @@ class FlexLayoutItemProperty extends BaseProperty {
       ref: "$shrink",
       label: this.$i18n("flex.layout.item.property.shrink"),
       key: "flex-shrink",
-      value: current2["flex-shrink"],
+      value: current["flex-shrink"],
       min: 0,
       max: 1,
       step: 0.01,
@@ -39900,7 +39893,7 @@ class FlexLayoutItemProperty extends BaseProperty {
       ref: "$basis",
       label: this.$i18n("flex.layout.item.property.basis"),
       key: "flex-basis",
-      value: current2["flex-basis"],
+      value: current["flex-basis"],
       min: 0,
       max: 1,
       step: 0.01,
@@ -39951,8 +39944,8 @@ class FlexLayoutItemProperty extends BaseProperty {
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow(() => {
-      var current2 = this.$selection.current;
-      return current2 && current2.isInFlex();
+      var current = this.$selection.current;
+      return current && current.isInFlex();
     });
   }
 }
@@ -40242,11 +40235,11 @@ class GridLayoutItemProperty extends BaseProperty {
       `;
   }
   [LOAD("$body")]() {
-    var current2 = this.$selection.current || { "grid-layout-item": "none" };
-    var valueType = current2["grid-layout-item"] || "none";
+    var current = this.$selection.current || { "grid-layout-item": "none" };
+    var valueType = current["grid-layout-item"] || "none";
     var obj2 = {};
     if (["none"].includes(valueType) === false) {
-      obj2 = STRING_TO_CSS(current2["grid-layout-item"]);
+      obj2 = STRING_TO_CSS(current["grid-layout-item"]);
     }
     if (Object.keys(obj2).length > 0) {
       valueType = "value";
@@ -40352,8 +40345,8 @@ class GridLayoutItemProperty extends BaseProperty {
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow(() => {
-      var current2 = this.$selection.current;
-      return current2 && current2.isInGrid();
+      var current = this.$selection.current;
+      return current && current.isInGrid();
     });
   }
 }
@@ -40376,44 +40369,44 @@ class LayoutProperty extends BaseProperty {
     `;
   }
   [LOAD("$layoutType")]() {
-    const current2 = this.$selection.current;
-    if (!current2)
+    const current = this.$selection.current;
+    if (!current)
       return "";
     return createComponent("SelectIconEditor", {
       ref: "$layout",
       key: "layout",
       height: 24,
-      value: current2.layout,
+      value: current.layout,
       options: ["default", "flex", "grid"],
       icons: ["layout_default", "layout_flex", "layout_grid"],
       onchange: "changeLayoutType"
     });
   }
   [LOAD("$layoutProperty")]() {
-    var current2 = this.$selection.current || { layout: "default" };
+    var current = this.$selection.current || { layout: "default" };
     return `
       <div class='layout-list' ref='$layoutList'>
-        <div data-value='default' class='${current2.layout === "default" ? "selected" : ""}'></div>
-        <div data-value='flex' class='${current2.layout === "flex" ? "selected" : ""}'>
+        <div data-value='default' class='${current.layout === "default" ? "selected" : ""}'></div>
+        <div data-value='flex' class='${current.layout === "flex" ? "selected" : ""}'>
           ${createComponent("FlexLayoutEditor", {
       ref: "$flex",
       key: "flex-layout",
       value: {
-        "flex-direction": current2["flex-direction"],
-        "flex-wrap": current2["flex-wrap"],
-        "justify-content": current2["justify-content"],
-        "align-items": current2["align-items"],
-        "align-content": current2["align-content"],
-        gap: current2.gap
+        "flex-direction": current["flex-direction"],
+        "flex-wrap": current["flex-wrap"],
+        "justify-content": current["justify-content"],
+        "align-items": current["align-items"],
+        "align-content": current["align-content"],
+        gap: current.gap
       },
       onchange: "changeLayoutInfo"
     })}
         </div>
-        <div data-value='grid' class='${current2.layout === "grid" ? "selected" : ""}'>
+        <div data-value='grid' class='${current.layout === "grid" ? "selected" : ""}'>
           ${createComponent("GridLayoutEditor", {
       ref: "$grid",
       key: "grid-layout",
-      value: current2["grid-layout"] || "",
+      value: current["grid-layout"] || "",
       onchange: "changeLayoutInfo"
     })}
         </div>
@@ -40480,10 +40473,10 @@ class DefaultLayoutItemProperty extends BaseProperty {
       `;
   }
   [LOAD("$constraintsInfo") + DOMDIFF]() {
-    var current2 = this.$selection.current;
-    current2 == null ? void 0 : current2.hasLayout();
-    const h = (current2 == null ? void 0 : current2["constraints-horizontal"]) || Constraints.MIN;
-    const v = (current2 == null ? void 0 : current2["constraints-vertical"]) || Constraints.MIN;
+    var current = this.$selection.current;
+    current == null ? void 0 : current.hasLayout();
+    const h = (current == null ? void 0 : current["constraints-horizontal"]) || Constraints.MIN;
+    const v = (current == null ? void 0 : current["constraints-vertical"]) || Constraints.MIN;
     return `
       <div class="constraints-box">
 
@@ -40501,16 +40494,16 @@ class DefaultLayoutItemProperty extends BaseProperty {
     `;
   }
   [LOAD("$constraintsInfoInput")]() {
-    var current2 = this.$selection.current;
-    const hasLayout = current2 == null ? void 0 : current2.hasLayout();
-    (current2 == null ? void 0 : current2["constraints-horizontal"]) || Constraints.MIN;
-    (current2 == null ? void 0 : current2["constraints-vertical"]) || Constraints.MIN;
+    var current = this.$selection.current;
+    const hasLayout = current == null ? void 0 : current.hasLayout();
+    (current == null ? void 0 : current["constraints-horizontal"]) || Constraints.MIN;
+    (current == null ? void 0 : current["constraints-vertical"]) || Constraints.MIN;
     return `
       <div>
         ${createComponent("SelectEditor", {
       ref: "$constraintsHorizontal",
       key: "constraints-horizontal",
-      value: (current2 == null ? void 0 : current2["constraints-horizontal"]) || "min",
+      value: (current == null ? void 0 : current["constraints-horizontal"]) || "min",
       label: iconUse$1("width"),
       compact: true,
       options: [
@@ -40528,7 +40521,7 @@ class DefaultLayoutItemProperty extends BaseProperty {
         ${createComponent("SelectEditor", {
       ref: "$constraintsVertical",
       key: "constraints-vertical",
-      value: (current2 == null ? void 0 : current2["constraints-vertical"]) || "min",
+      value: (current == null ? void 0 : current["constraints-vertical"]) || "min",
       label: iconUse$1("height"),
       compact: true,
       options: [
@@ -40545,11 +40538,11 @@ class DefaultLayoutItemProperty extends BaseProperty {
   }
   [CLICK("$constraintsInfo .item")](e2) {
     const [value, key] = e2.$dt.attrs("data-value", "data-key");
-    const current2 = this.$selection.current;
-    if (!current2)
+    const current = this.$selection.current;
+    if (!current)
       return;
-    current2.changeConstraints(key, value);
-    this.trigger("changeConstraints", key, current2[key]);
+    current.changeConstraints(key, value);
+    this.trigger("changeConstraints", key, current[key]);
   }
   [SUBSCRIBE_SELF("changeConstraints")](key, value) {
     this.command("setAttributeForMulti", "apply constraints", this.$selection.packByValue({
@@ -40561,8 +40554,8 @@ class DefaultLayoutItemProperty extends BaseProperty {
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow(() => {
-      var current2 = this.$selection.current;
-      return current2 && current2.isInDefault() && current2.parent.isNot("project");
+      var current = this.$selection.current;
+      return current && current.isInDefault() && current.parent.isNot("project");
     });
   }
 }
@@ -40585,9 +40578,9 @@ class ResizingProperty extends BaseProperty {
       `;
   }
   [LOAD("$resizingModeInfo") + DOMDIFF]() {
-    var current2 = this.$selection.current || {};
-    const h = current2.resizingHorizontal || ResizingMode.FIXED;
-    const v = current2.resizingVertical || ResizingMode.FIXED;
+    var current = this.$selection.current || {};
+    const h = current.resizingHorizontal || ResizingMode.FIXED;
+    const v = current.resizingVertical || ResizingMode.FIXED;
     return `
       <div class="resizing-mode-box" data-horizontal="${h}" data-vertical="${v}">
         <div class="rect">
@@ -40621,16 +40614,16 @@ class ResizingProperty extends BaseProperty {
     return options2;
   }
   [LOAD("$resizingModeInfoInput")]() {
-    var current2 = this.$selection.current || {};
-    current2.resizingHorizontal;
-    current2.reisizngModeVertical;
+    var current = this.$selection.current || {};
+    current.resizingHorizontal;
+    current.reisizngModeVertical;
     return `
       <div class="has-label-grid">
         <label data-direction="horizontal"></label>
         ${createComponent("SelectEditor", {
       ref: "$resizingHorizontal",
       key: "resizingHorizontal",
-      value: (current2 == null ? void 0 : current2.resizingHorizontal) || ResizingMode.FIXED,
+      value: (current == null ? void 0 : current.resizingHorizontal) || ResizingMode.FIXED,
       options: this.makeOptionsForHorizontal(),
       onchange: "changeResizingMode"
     })}
@@ -40641,7 +40634,7 @@ class ResizingProperty extends BaseProperty {
         ${createComponent("SelectEditor", {
       ref: "$resizingVertical",
       key: "resizingVertical",
-      value: (current2 == null ? void 0 : current2.resizingVertical) || ResizingMode.FIXED,
+      value: (current == null ? void 0 : current.resizingVertical) || ResizingMode.FIXED,
       options: this.makeOptionsForVertical(),
       onchange: "changeResizingMode"
     })}
@@ -40650,8 +40643,8 @@ class ResizingProperty extends BaseProperty {
   }
   [CLICK("$resizingModeInfo [data-key]")](e2) {
     const key = e2.$dt.data("key");
-    const current2 = this.$selection.current;
-    if (current2[key] === ResizingMode.FIXED) {
+    const current = this.$selection.current;
+    if (current[key] === ResizingMode.FIXED) {
       this.trigger("changeResizingMode", key, ResizingMode.HUG_CONTENT);
     } else {
       this.trigger("changeResizingMode", key, ResizingMode.FIXED);
@@ -40667,8 +40660,8 @@ class ResizingProperty extends BaseProperty {
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow(() => {
-      var current2 = this.$selection.current;
-      return current2 && current2.hasLayout();
+      var current = this.$selection.current;
+      return current && current.hasLayout();
     });
   }
 }
@@ -41220,8 +41213,8 @@ class PatternProperty extends BaseProperty {
     this.children.$patternEditor.trigger("add", patternType);
   }
   [LOAD("$body")]() {
-    var current2 = this.$selection.current || {};
-    var value = current2.pattern;
+    var current = this.$selection.current || {};
+    var value = current.pattern;
     return createComponent("PatternEditor", {
       ref: "$patternEditor",
       value,
@@ -41375,8 +41368,8 @@ class PerspectiveProperty extends BaseProperty {
     return `<div class='property-item' ref='$perspective'></div>`;
   }
   [LOAD("$perspective")]() {
-    var current2 = this.$selection.current || {};
-    var perspective2 = current2["perspective"] || "";
+    var current = this.$selection.current || {};
+    var perspective2 = current["perspective"] || "";
     return createComponent("RangeEditor", {
       ref: "$1",
       key: "perspective",
@@ -41576,8 +41569,8 @@ class PerspectiveOriginProperty extends BaseProperty {
     `;
   }
   [LOAD("$body")]() {
-    var current2 = this.$selection.current || {};
-    var value = current2["perspective-origin"] || "";
+    var current = this.$selection.current || {};
+    var value = current["perspective-origin"] || "";
     return createComponent("PerspectiveOriginEditor", {
       ref: "$1",
       value,
@@ -41617,21 +41610,21 @@ class PositionProperty extends BaseProperty {
     this.refreshShowIsNot(["project"]);
   }
   checkChangedValue() {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return false;
-    return current2.hasChangedField("x", "y", "right", "bottom", "width", "height", "angle", "transform", "rotateZ", "rotate", "opacity", "constraints-horizontal", "constriants-vertical");
+    return current.hasChangedField("x", "y", "right", "bottom", "width", "height", "angle", "transform", "rotateZ", "rotate", "opacity", "constraints-horizontal", "constriants-vertical");
   }
   [SUBSCRIBE("refreshSelectionStyleView") + IF("checkChangedValue") + THROTTLE(10)]() {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return "";
-    this.children.$x.setValue(current2.offsetX || DEFAULT_SIZE);
-    this.children.$y.setValue(current2.offsetY || DEFAULT_SIZE);
-    this.children.$width.setValue(current2.width || DEFAULT_SIZE);
-    this.children.$height.setValue(current2.height || DEFAULT_SIZE);
-    this.children.$opacity.setValue(current2["opacity"] || "1");
-    const rotateZ2 = Transform.get(current2.transform, "rotateZ");
+    this.children.$x.setValue(current.offsetX || DEFAULT_SIZE);
+    this.children.$y.setValue(current.offsetY || DEFAULT_SIZE);
+    this.children.$width.setValue(current.width || DEFAULT_SIZE);
+    this.children.$height.setValue(current.height || DEFAULT_SIZE);
+    this.children.$opacity.setValue(current["opacity"] || "1");
+    const rotateZ2 = Transform.get(current.transform, "rotateZ");
     if (rotateZ2) {
       this.children.$rotate.setValue(rotateZ2[0]);
     } else {
@@ -41718,14 +41711,14 @@ class PositionProperty extends BaseProperty {
     `;
   }
   refresh() {
-    const current2 = this.$selection.current;
-    if (current2) {
-      this.children.$x.setValue(current2.offsetX);
-      this.children.$y.setValue(current2.offsetY);
-      this.children.$width.setValue(current2.width);
-      this.children.$height.setValue(current2.height);
-      this.children.$opacity.setValue(current2["opacity"] || "1");
-      const rotateZ2 = Transform.get(current2.transform, "rotateZ");
+    const current = this.$selection.current;
+    if (current) {
+      this.children.$x.setValue(current.offsetX);
+      this.children.$y.setValue(current.offsetY);
+      this.children.$width.setValue(current.width);
+      this.children.$height.setValue(current.height);
+      this.children.$opacity.setValue(current["opacity"] || "1");
+      const rotateZ2 = Transform.get(current.transform, "rotateZ");
       if (rotateZ2) {
         this.children.$rotate.setValue(rotateZ2[0]);
       }
@@ -42961,9 +42954,9 @@ class CSSPropertyEditor extends EditorElement {
       return;
     }
     var value = this.getPropertyDefaultValue(key);
-    var current2 = this.$selection.current;
-    if (current2) {
-      value = current2[key];
+    var current = this.$selection.current;
+    if (current) {
+      value = current[key];
     }
     this.state.properties.push({ key, value });
     this.refresh();
@@ -43847,10 +43840,10 @@ class FilterEditor extends EditorElement {
     `;
   }
   getSVGFilterList() {
-    var current2 = this.$selection.current;
+    var current = this.$selection.current;
     var arr = [];
-    if (current2) {
-      arr = current2.svgfilters.map((it) => {
+    if (current) {
+      arr = current.svgfilters.map((it) => {
         return {
           title: `svg - #${it.id}`,
           value: it.id
@@ -43862,9 +43855,9 @@ class FilterEditor extends EditorElement {
   makeOneFilterEditor(index2, filter2, spec) {
     if (filter2.type === "svg") {
       var options2 = "";
-      var current2 = this.$selection.current;
-      if (current2) {
-        options2 = current2.svgfilters.map((it) => {
+      var current = this.$selection.current;
+      if (current) {
+        options2 = current.svgfilters.map((it) => {
           return { value: it.id };
         });
       }
@@ -43936,8 +43929,8 @@ class FilterEditor extends EditorElement {
   }
   [DROP("$filterList .filter-item") + PREVENT](e2) {
     var targetIndex = +e2.$dt.attr("data-index");
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
     this.sortFilter(this.startIndex, targetIndex);
     this.refresh();
@@ -43954,20 +43947,20 @@ class FilterEditor extends EditorElement {
     var _a, _b;
     var index2 = +e2.$dt.attr("data-index");
     var filter2 = this.state.filters[index2];
-    var current2 = this.$selection.current;
-    if (current2) {
-      var svgfilterIndex = current2.getSVGFilterIndex((_b = (_a = filter2.value) == null ? void 0 : _a.value) == null ? void 0 : _b.replace("#", ""));
+    var current = this.$selection.current;
+    if (current) {
+      var svgfilterIndex = current.getSVGFilterIndex((_b = (_a = filter2.value) == null ? void 0 : _a.value) == null ? void 0 : _b.replace("#", ""));
       this.trigger("openSVGFilterPopup", svgfilterIndex);
     }
   }
   [SUBSCRIBE("openSVGFilterPopup")](index2) {
-    const current2 = this.$selection.current || { svgfilters: [] };
-    const svgfilter = current2.svgfilters[index2];
+    const current = this.$selection.current || { svgfilters: [] };
+    const svgfilter = current.svgfilters[index2];
     this.emit("showSVGFilterPopup", {
       changeEvent: (params) => {
-        var current3 = this.$selection.current;
-        if (current3) {
-          current3.setSVGFilterValue(params.index, {
+        var current2 = this.$selection.current;
+        if (current2) {
+          current2.setSVGFilterValue(params.index, {
             filters: params.filters
           });
           this.command("setAttributeForMulti", "change filter", this.$selection.pack("svgfilters", "filter"));
@@ -45898,32 +45891,32 @@ function toPath$1(points2, minX, minY, scale2 = 1) {
   var d = [];
   for (var index2 = 0, len2 = points2.length; index2 < len2; index2++) {
     var currentIndex = index2;
-    var current2 = points2[currentIndex];
-    if (!current2)
+    var current = points2[currentIndex];
+    if (!current)
       continue;
-    if (current2.command === "M") {
-      d.push({ command: "M", values: [current2.startPoint] });
+    if (current.command === "M") {
+      d.push({ command: "M", values: [current.startPoint] });
     } else {
       var prevPoint = Point.getPrevPoint(points2, index2);
-      if (current2.curve === false) {
+      if (current.curve === false) {
         if (prevPoint.curve === false) {
-          d.push({ command: "L", values: [current2.startPoint] });
+          d.push({ command: "L", values: [current.startPoint] });
         } else {
-          d.push({ command: "Q", values: [prevPoint.endPoint, current2.startPoint] });
+          d.push({ command: "Q", values: [prevPoint.endPoint, current.startPoint] });
         }
       } else {
         if (prevPoint.curve === false) {
-          if (Point.isEqual(current2.reversePoint, current2.startPoint)) {
-            d.push({ command: "L", values: [current2.startPoint] });
+          if (Point.isEqual(current.reversePoint, current.startPoint)) {
+            d.push({ command: "L", values: [current.startPoint] });
           } else {
-            d.push({ command: "Q", values: [current2.reversePoint, current2.startPoint] });
+            d.push({ command: "Q", values: [current.reversePoint, current.startPoint] });
           }
         } else {
-          d.push({ command: "C", values: [prevPoint.endPoint, current2.reversePoint, current2.startPoint] });
+          d.push({ command: "C", values: [prevPoint.endPoint, current.reversePoint, current.startPoint] });
         }
       }
     }
-    if (current2.close) {
+    if (current.close) {
       d.push({ command: "Z" });
     }
   }
@@ -46592,117 +46585,117 @@ class PurePathGenerator {
       this.segmentManager.addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
     }
   }
-  makeDistancePointGuide(prevPoint, current2, nextPoint, index2) {
-    if (current2.selected) {
+  makeDistancePointGuide(prevPoint, current, nextPoint, index2) {
+    if (current.selected) {
       if (prevPoint) {
-        this.makeTriangleDistancePointGuide(prevPoint, current2);
+        this.makeTriangleDistancePointGuide(prevPoint, current);
       }
       if (nextPoint) {
-        this.makeTriangleDistancePointGuide(current2, nextPoint);
+        this.makeTriangleDistancePointGuide(current, nextPoint);
       }
     }
   }
-  makeStartPointGuide(prevPoint, current2, nextPoint, index2) {
-    current2.startPoint.isFirst = true;
-    if (current2.curve === false) {
-      this.segmentManager.addPoint({}, current2.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+  makeStartPointGuide(prevPoint, current, nextPoint, index2) {
+    current.startPoint.isFirst = true;
+    if (current.curve === false) {
+      this.segmentManager.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
     } else {
-      this.segmentManager.addPoint({}, current2.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2)).addGuideLine(current2.startPoint, current2.endPoint);
-      if (Point.isEqual(current2.startPoint, current2.endPoint) === false) {
-        this.segmentManager.addCurvePoint(current2.endPoint, index2, "endPoint", this.isSelectedSegment("endPoint", index2));
+      this.segmentManager.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2)).addGuideLine(current.startPoint, current.endPoint);
+      if (Point.isEqual(current.startPoint, current.endPoint) === false) {
+        this.segmentManager.addCurvePoint(current.endPoint, index2, "endPoint", this.isSelectedSegment("endPoint", index2));
       }
     }
   }
-  makeMiddlePointGuideSegment(prevPoint, current2, nextPoint, index2) {
+  makeMiddlePointGuideSegment(prevPoint, current, nextPoint, index2) {
     var mng = this.segmentManager;
-    if (current2.curve === false) {
+    if (current.curve === false) {
       if (prevPoint.curve === false) {
-        mng.addPoint({}, current2.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+        mng.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
       } else {
-        mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addCurvePoint(current2.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+        mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
         if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
           mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, "endPoint", this.isSelectedSegment("endPoint", prevPoint.index));
         }
       }
     } else {
       if (prevPoint.curve === false) {
-        if (Point.isEqual(current2.reversePoint, current2.startPoint)) {
-          mng.addPoint({}, current2.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+        if (Point.isEqual(current.reversePoint, current.startPoint)) {
+          mng.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
         } else {
-          mng.addGuideLine(current2.startPoint, current2.reversePoint).addCurvePoint(current2.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
-          if (Point.isEqual(current2.startPoint, current2.reversePoint) === false) {
-            mng.addCurvePoint(current2.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
+          mng.addGuideLine(current.startPoint, current.reversePoint).addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+          if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
+            mng.addCurvePoint(current.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
           }
         }
       } else {
-        if (current2.connected) {
-          mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addGuideLine(current2.startPoint, current2.reversePoint);
+        if (current.connected) {
+          mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addGuideLine(current.startPoint, current.reversePoint);
           if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
             mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, "endPoint", this.isSelectedSegment("endPoint", prevPoint.index));
           }
-          if (Point.isEqual(current2.startPoint, current2.reversePoint) === false) {
-            mng.addCurvePoint(current2.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
+          if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
+            mng.addCurvePoint(current.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
           }
         } else {
-          mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addGuideLine(current2.startPoint, current2.reversePoint).addCurvePoint(current2.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+          mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addGuideLine(current.startPoint, current.reversePoint).addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
           if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
             mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, "endPoint", this.isSelectedSegment("endPoint", prevPoint.index));
           }
-          if (Point.isEqual(current2.startPoint, current2.reversePoint) === false) {
-            mng.addCurvePoint(current2.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
+          if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
+            mng.addCurvePoint(current.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
           }
         }
       }
     }
   }
-  makeMiddlePointGuideSplitLine(prevPoint, current2, nextPoint, index2) {
+  makeMiddlePointGuideSplitLine(prevPoint, current, nextPoint, index2) {
     const selected = "selected";
-    if (current2.curve === false) {
+    if (current.curve === false) {
       if (prevPoint.curve === false) {
-        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).L(current2.startPoint).toString(`split-path ${selected}`));
+        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).L(current.startPoint).toString(`split-path ${selected}`));
       } else {
-        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).Q(prevPoint.endPoint, current2.startPoint).toString(`split-path ${selected}`));
+        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).Q(prevPoint.endPoint, current.startPoint).toString(`split-path ${selected}`));
       }
     } else {
       if (prevPoint.curve === false) {
-        if (Point.isEqual(current2.reversePoint, current2.startPoint)) {
-          this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).L(current2.startPoint).toString(`split-path ${selected}`));
+        if (Point.isEqual(current.reversePoint, current.startPoint)) {
+          this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).L(current.startPoint).toString(`split-path ${selected}`));
         } else {
-          this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).Q(current2.reversePoint, current2.startPoint).toString(`split-path ${selected}`));
+          this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).Q(current.reversePoint, current.startPoint).toString(`split-path ${selected}`));
         }
       } else {
-        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).C(prevPoint.endPoint, current2.reversePoint, current2.startPoint).toString(`split-path ${selected}`));
+        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).C(prevPoint.endPoint, current.reversePoint, current.startPoint).toString(`split-path ${selected}`));
       }
     }
   }
   makePointGuide(points2) {
     for (var index2 = 0, len2 = points2.length; index2 < len2; index2++) {
       var currentIndex = index2;
-      var current2 = points2[currentIndex];
-      if (!current2)
+      var current = points2[currentIndex];
+      if (!current)
         continue;
       var nextPoint = Point.getNextPoint(points2, index2);
       var prevPoint = Point.getPrevPoint(points2, index2);
       if (prevPoint && prevPoint.command === "M") {
-        if (current2.startPoint) {
-          current2.startPoint.isSecond = true;
+        if (current.startPoint) {
+          current.startPoint.isSecond = true;
         }
       }
-      if (current2.startPoint) {
+      if (current.startPoint) {
         if (nextPoint) {
-          current2.startPoint.isLast = nextPoint.command === "M";
+          current.startPoint.isLast = nextPoint.command === "M";
         } else {
-          current2.startPoint.isLast = index2 === len2 - 1;
+          current.startPoint.isLast = index2 === len2 - 1;
         }
       }
-      current2.selected = this.selectedIndex === index2;
-      if (current2.command === "M") {
-        this.makeStartPointGuide(prevPoint, current2, nextPoint, index2);
+      current.selected = this.selectedIndex === index2;
+      if (current.command === "M") {
+        this.makeStartPointGuide(prevPoint, current, nextPoint, index2);
       } else {
-        this.makeMiddlePointGuideSplitLine(prevPoint, current2, nextPoint, index2);
-        this.makeMiddlePointGuideSegment(prevPoint, current2, nextPoint, index2);
+        this.makeMiddlePointGuideSplitLine(prevPoint, current, nextPoint, index2);
+        this.makeMiddlePointGuideSegment(prevPoint, current, nextPoint, index2);
       }
-      if (current2.close) {
+      if (current.close) {
         this.pathStringManager.Z();
       }
     }
@@ -46819,10 +46812,10 @@ function scaleLinear(source2, target) {
       return target[0] - t * (target[0] - target[1]);
     }
   }
-  function rate(v1, v2, current2) {
+  function rate(v1, v2, current) {
     const minValue = Math.min(v1, v2);
     const maxValue = Math.max(v1, v2);
-    return (current2 - minValue) / (maxValue - minValue);
+    return (current - minValue) / (maxValue - minValue);
   }
   return (x2) => {
     if (source2[0] < source2[1]) {
@@ -47783,15 +47776,15 @@ class HTMLRenderer {
     const currentProject = item2.top;
     let keyframeCode = modifyNewLine(filterKeyName(currentProject ? currentProject.toKeyframeString() : ""));
     let rootVariable = currentProject ? CSS_TO_STRING$1(currentProject.toRootVariableCSS()) : "";
-    const current2 = item2;
-    const cssCode = filterKeyName(current2 ? TAG_TO_STRING(CSS_TO_STRING$1(this.toCSS(current2))) : "");
-    const nestedCssCode = current2 ? this.toNestedCSS(current2).map((it) => {
+    const current = item2;
+    const cssCode = filterKeyName(current ? TAG_TO_STRING(CSS_TO_STRING$1(this.toCSS(current))) : "");
+    const nestedCssCode = current ? this.toNestedCSS(current).map((it) => {
       var cssText = it.cssText ? it.cssText : CSS_TO_STRING$1(it.css);
       return `${it.selector} { 
     ${filterKeyName(TAG_TO_STRING(cssText), "&nbsp;&nbsp;")}
     }`;
     }) : [];
-    const selectorCode = current2 ? current2.selectors : [];
+    const selectorCode = current ? current.selectors : [];
     return `
 <div >
 
@@ -51652,30 +51645,30 @@ class SelectorProperty extends BaseProperty {
   }
   [CLICK("$selectorList .selector-item .name")](e2) {
     var index2 = +e2.$dt.closest("selector-item").attr("data-index");
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
     this.viewSelectorPicker(index2);
   }
   [CLICK("$selectorList .selector-item .del") + PREVENT + STOP](e2) {
     var removeIndex = e2.$dt.attr("data-index");
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
-    current2.removeSelector(removeIndex);
-    this.emit("refreshElement", current2);
+    current.removeSelector(removeIndex);
+    this.emit("refreshElement", current);
     this.refresh();
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShowIsNot(["project", "svg-path", "svg-brush", "svg-textpath", "svg-text"]);
   }
   [LOAD("$selectorList")]() {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return "";
-    var selectors = current2.selector ? Selector.parseStyle(current2) : current2.selectors;
-    current2.selector = "";
-    current2.selectors = selectors;
+    var selectors = current.selector ? Selector.parseStyle(current) : current.selectors;
+    current.selector = "";
+    current.selectors = selectors;
     return (selectors || []).map((selector2, index2) => {
       return this.makeSelectorTemplate(selector2, index2);
     });
@@ -51687,20 +51680,20 @@ class SelectorProperty extends BaseProperty {
   }
   [DROP("$selectorList .selector-item") + PREVENT](e2) {
     var targetIndex = +e2.$dt.attr("data-index");
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
-    current2.sortSelector(this.startIndex, targetIndex);
-    this.emit("refreshElement", current2);
+    current.sortSelector(this.startIndex, targetIndex);
+    this.emit("refreshElement", current);
     this.refresh();
   }
   [CLICK("$add")]() {
-    var current2 = this.$selection.current;
-    if (current2) {
-      current2.createSelector({
+    var current = this.$selection.current;
+    if (current) {
+      current.createSelector({
         selector: this.children.$select.getValue()
       });
-      this.emit("refreshElement", current2);
+      this.emit("refreshElement", current);
     }
     this.refresh();
   }
@@ -51786,8 +51779,8 @@ class SVGFilterAssetsProperty extends BaseProperty {
     `;
   }
   [LOAD("$svgfilterList")]() {
-    var current2 = this.$selection.currentProject || { svgfilters: [] };
-    var svgfilters = current2.svgfilters;
+    var current = this.$selection.currentProject || { svgfilters: [] };
+    var svgfilters = current.svgfilters;
     var results = svgfilters.map((svgfilter, index2) => {
       var filters = svgfilter.filters.map((filter2) => {
         return SVGFilter.parse(filter2);
@@ -53477,10 +53470,10 @@ class SVGFilterSelectEditor extends EditorElement {
     };
   }
   [LOAD("$options")]() {
-    var current2 = this.$selection.currentProject;
+    var current = this.$selection.currentProject;
     var options2 = "";
-    if (current2) {
-      options2 = current2.svgfilters.map((it) => it.id);
+    if (current) {
+      options2 = current.svgfilters.map((it) => it.id);
       options2 = options2.length ? "," + options2.join(",") : "";
     }
     options2 += ",-,new";
@@ -53577,14 +53570,14 @@ function svgItem(editor) {
   editor.registerUI("popup", {
     SVGFilterPopup
   });
-  editor.registerInspector("svg-item", (current2) => {
+  editor.registerInspector("svg-item", (current) => {
     return [
       {
         key: "edit",
         editor: "Button",
         editorOptions: {
           text: "Edit",
-          action: ["open.editor", current2]
+          action: ["open.editor", current]
         }
       },
       {
@@ -53599,7 +53592,7 @@ function svgItem(editor) {
               toggleLabels: ["join_full", "join_right"],
               toggleValues: ["nonzero", "evenodd"]
             },
-            defaultValue: current2["fill-rule"] || "nonzero"
+            defaultValue: current["fill-rule"] || "nonzero"
           }
         ]
       },
@@ -53613,7 +53606,7 @@ function svgItem(editor) {
             editorOptions: {
               wide: true
             },
-            defaultValue: current2["fill"]
+            defaultValue: current["fill"]
           },
           {
             key: "fill-opacity",
@@ -53625,7 +53618,7 @@ function svgItem(editor) {
               max: 1,
               step: 0.01
             },
-            defaultValue: current2["fill-opacity"]
+            defaultValue: current["fill-opacity"]
           }
         ]
       },
@@ -53646,7 +53639,7 @@ function svgItem(editor) {
             editorOptions: {
               wide: true
             },
-            defaultValue: current2["stroke"]
+            defaultValue: current["stroke"]
           },
           {
             key: "stroke-width",
@@ -53655,7 +53648,7 @@ function svgItem(editor) {
               compact: true,
               label: "line_weight"
             },
-            defaultValue: current2["stroke-width"]
+            defaultValue: current["stroke-width"]
           }
         ]
       },
@@ -53669,7 +53662,7 @@ function svgItem(editor) {
             editorOptions: {
               label: editor.$i18n("svg.item.property.dashArray")
             },
-            defaultValue: current2["stroke-dasharray"] || ""
+            defaultValue: current["stroke-dasharray"] || ""
           },
           {
             key: "stroke-dashoffset",
@@ -53681,7 +53674,7 @@ function svgItem(editor) {
               max: 1e3,
               step: 1
             },
-            defaultValue: current2["stroke-dashoffset"]
+            defaultValue: current["stroke-dashoffset"]
           }
         ]
       },
@@ -53693,7 +53686,7 @@ function svgItem(editor) {
           toggleLabels: ["line_cap_butt", "line_cap_round", "line_cap_square"],
           toggleValues: [StrokeLineCap.BUTT, StrokeLineJoin.ROUND, StrokeLineCap.SQUARE]
         },
-        defaultValue: current2["stroke-linecap"] || StrokeLineCap.BUTT
+        defaultValue: current["stroke-linecap"] || StrokeLineCap.BUTT
       },
       {
         key: "stroke-linejoin",
@@ -53703,7 +53696,7 @@ function svgItem(editor) {
           toggleLabels: ["line_join_miter", "line_join_round", "line_join_bevel"],
           toggleValues: [StrokeLineJoin.MITER, StrokeLineJoin.ROUND, StrokeLineJoin.BEVEL]
         },
-        defaultValue: current2["stroke-linejoin"] || StrokeLineJoin.MITER
+        defaultValue: current["stroke-linejoin"] || StrokeLineJoin.MITER
       },
       {
         key: "mix-blend-mode",
@@ -53711,7 +53704,7 @@ function svgItem(editor) {
         editorOptions: {
           label: editor.$i18n("svg.item.property.blend")
         },
-        defaultValue: current2["mix-blend-mode"]
+        defaultValue: current["mix-blend-mode"]
       }
     ];
   });
@@ -53850,8 +53843,8 @@ class SVGTextProperty extends BaseProperty {
     this.refreshShow(["svg-textpath", "svg-text", "svg-tspan"]);
   }
   refresh() {
-    var current2 = this.$selection.current;
-    if (current2) {
+    var current = this.$selection.current;
+    if (current) {
       this.setAllValue([
         "lengthAdjust",
         "textLength",
@@ -53862,11 +53855,11 @@ class SVGTextProperty extends BaseProperty {
     }
   }
   setAllValue(list2 = []) {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
     list2.forEach((key) => {
-      this.children[`$${key}`].setValue(current2[key]);
+      this.children[`$${key}`].setValue(current[key]);
     });
   }
   getBody() {
@@ -53945,7 +53938,7 @@ function text$1(editor) {
       preventUpdate: true
     })
   });
-  editor.registerInspector("text-style", (current2) => {
+  editor.registerInspector("text-style", (current) => {
     return [
       {
         type: "column",
@@ -53959,7 +53952,7 @@ function text$1(editor) {
               options: ["left", "center", "right", "justify"],
               icons: ["align_left", "align_center", "align_right", "align_justify"]
             },
-            defaultValue: current2["text-align"] || "left"
+            defaultValue: current["text-align"] || "left"
           },
           "-",
           {
@@ -53994,7 +53987,7 @@ function text$1(editor) {
               icons: ["horizontal_rule", "underline", "strikethrough"],
               onchange: "changeTextValue"
             },
-            defaultValue: current2["text-tranform"]
+            defaultValue: current["text-tranform"]
           },
           {
             key: "font-style",
@@ -54004,7 +53997,7 @@ function text$1(editor) {
               options: ["normal", "italic"],
               icons: ["title", "italic"]
             },
-            defaultValue: current2["font-style"]
+            defaultValue: current["font-style"]
           },
           {
             key: "text-clip",
@@ -54015,7 +54008,7 @@ function text$1(editor) {
               toggleTitles: ["", "Text Clip"],
               toggleValues: [TextClip.NONE, TextClip.TEXT]
             },
-            defaultValue: current2["text-clip"] || TextClip.NONE
+            defaultValue: current["text-clip"] || TextClip.NONE
           }
         ]
       }
@@ -54064,11 +54057,11 @@ class TextShadowProperty extends BaseProperty {
     this.children.$textshadow.trigger("add", textShadow$1[index2].shadow);
   }
   [LOAD("$shadowList")]() {
-    var current2 = this.$selection.current || {};
+    var current = this.$selection.current || {};
     return createComponent("TextShadowEditor", {
       ref: "$textshadow",
       key: "text-shadow",
-      value: current2["text-shadow"],
+      value: current["text-shadow"],
       onchange: (key, value) => {
         this.command("setAttributeForMulti", "change text shadow", this.$selection.packByValue({
           [key]: value
@@ -54201,10 +54194,10 @@ class TransitionProperty extends BaseProperty {
     return true;
   }
   [LOAD("$transitionList") + DOMDIFF]() {
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return "";
-    return Transition.parseStyle(current2.transition).map((it, index2) => {
+    return Transition.parseStyle(current.transition).map((it, index2) => {
       const selectedClass = this.state.selectedIndex === index2 ? "selected" : "";
       const path = curveToPath(it.timingFunction, 30, 30);
       return `
@@ -54236,8 +54229,8 @@ class TransitionProperty extends BaseProperty {
     this.refreshShowIsNot([]);
   }
   [CLICK("$add")](e2) {
-    var current2 = this.$selection.current;
-    if (current2) {
+    var current = this.$selection.current;
+    if (current) {
       this.command("setAttributeForMulti", "add transition", this.$selection.packByValue({
         transition: (item2) => Transition.add(item2.transition)
       }));
@@ -54255,13 +54248,13 @@ class TransitionProperty extends BaseProperty {
   }
   [CLICK("$transitionList .tools .del")](e2) {
     var removeIndex = e2.$dt.attr("data-index");
-    var current2 = this.$selection.current;
-    if (!current2)
+    var current = this.$selection.current;
+    if (!current)
       return;
-    current2.reset({
-      transition: Transition.remove(current2.transition, removeIndex)
+    current.reset({
+      transition: Transition.remove(current.transition, removeIndex)
     });
-    this.emit("refreshElement", current2);
+    this.emit("refreshElement", current);
     this.refresh();
   }
   selectItem(selectedIndex, isSelected = true) {
@@ -54539,9 +54532,9 @@ class VideoProperty extends BaseProperty {
       this.video.pause();
   }
   [LOAD("$body")]() {
-    var current2 = this.$selection.current || { playTime: "0:1:1" };
-    var currentTime = current2.currentTime || 0;
-    var duration = (current2.playTime || "0:1:1").split(":").pop();
+    var current = this.$selection.current || { playTime: "0:1:1" };
+    var currentTime = current.currentTime || 0;
+    var duration = (current.playTime || "0:1:1").split(":").pop();
     return `
         <div ref='$tools' class='play-control' data-selected-value="${this.state.status}">
           <button type="button" data-value="play" >${obj.play} ${this.$i18n("video.property.play")}</button>
@@ -54594,7 +54587,7 @@ class VideoProperty extends BaseProperty {
           ${createComponent("MediaProgressEditor", {
       ref: "$progress",
       key: "playTime",
-      value: current2.playTime,
+      value: current.playTime,
       onchange: "changeSelect"
     })}
         </div>
@@ -54657,16 +54650,16 @@ class VideoProperty extends BaseProperty {
     this.children.$currentTime.setValue(this.video.currentTime);
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
-    const current2 = this.$selection.current;
+    const current = this.$selection.current;
     this.refreshShow(["video"]);
-    if (current2 && current2.is("video")) {
-      this.emit("refElement", current2.id, ($el) => {
+    if (current && current.is("video")) {
+      this.emit("refElement", current.id, ($el) => {
         const $video = $el.$("video");
         this.state.$video = $video;
         this.setState({
-          volume: current2.volume,
-          currentTime: current2.currentTime,
-          playbackRate: current2.playbackRate
+          volume: current.volume,
+          currentTime: current.currentTime,
+          playbackRate: current.playbackRate
         }, false);
         this.video.ontimeupdate = (e2) => {
           this.trigger("updateVideoEvent", e2);
@@ -54743,32 +54736,32 @@ function toPath(points2, minX, minY, scale2 = 1) {
   var d = [];
   for (var index2 = 0, len2 = points2.length; index2 < len2; index2++) {
     var currentIndex = index2;
-    var current2 = points2[currentIndex];
-    if (!current2)
+    var current = points2[currentIndex];
+    if (!current)
       continue;
-    if (current2.command === "M") {
-      d.push({ command: "M", values: [current2.startPoint] });
+    if (current.command === "M") {
+      d.push({ command: "M", values: [current.startPoint] });
     } else {
       var prevPoint = Point.getPrevPoint(points2, index2);
-      if (current2.curve === false) {
+      if (current.curve === false) {
         if (prevPoint.curve === false) {
-          d.push({ command: "L", values: [current2.startPoint] });
+          d.push({ command: "L", values: [current.startPoint] });
         } else {
-          d.push({ command: "Q", values: [prevPoint.endPoint, current2.startPoint] });
+          d.push({ command: "Q", values: [prevPoint.endPoint, current.startPoint] });
         }
       } else {
         if (prevPoint.curve === false) {
-          if (Point.isEqual(current2.reversePoint, current2.startPoint)) {
-            d.push({ command: "L", values: [current2.startPoint] });
+          if (Point.isEqual(current.reversePoint, current.startPoint)) {
+            d.push({ command: "L", values: [current.startPoint] });
           } else {
-            d.push({ command: "Q", values: [current2.reversePoint, current2.startPoint] });
+            d.push({ command: "Q", values: [current.reversePoint, current.startPoint] });
           }
         } else {
-          d.push({ command: "C", values: [prevPoint.endPoint, current2.reversePoint, current2.startPoint] });
+          d.push({ command: "C", values: [prevPoint.endPoint, current.reversePoint, current.startPoint] });
         }
       }
     }
-    if (current2.close) {
+    if (current.close) {
       d.push({ command: "Z" });
     }
   }
@@ -55431,37 +55424,37 @@ class PathGenerator {
       this.segmentManager.addDistanceLine({ x: minX, y: maxY }, { x: maxX, y: maxY }).addDistanceLine({ x: maxX, y: minY }, { x: maxX, y: maxY });
     }
   }
-  makeDistancePointGuide(prevPoint, current2, nextPoint, index2) {
-    if (current2.selected) {
+  makeDistancePointGuide(prevPoint, current, nextPoint, index2) {
+    if (current.selected) {
       if (prevPoint) {
-        this.makeTriangleDistancePointGuide(prevPoint, current2);
+        this.makeTriangleDistancePointGuide(prevPoint, current);
       }
       if (nextPoint) {
-        this.makeTriangleDistancePointGuide(current2, nextPoint);
+        this.makeTriangleDistancePointGuide(current, nextPoint);
       }
     }
   }
-  makeStartPointGuide(prevPoint, current2, nextPoint, index2) {
-    current2.startPoint.isFirst = true;
-    if (current2.curve === false) {
-      this.segmentManager.addPoint({}, current2.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+  makeStartPointGuide(prevPoint, current, nextPoint, index2) {
+    current.startPoint.isFirst = true;
+    if (current.curve === false) {
+      this.segmentManager.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
     } else {
-      this.segmentManager.addPoint({}, current2.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2)).addGuideLine(current2.startPoint, current2.endPoint);
-      if (Point.isEqual(current2.startPoint, current2.endPoint) === false) {
-        this.segmentManager.addCurvePoint(current2.endPoint, index2, "endPoint", this.isSelectedSegment("endPoint", index2));
+      this.segmentManager.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2)).addGuideLine(current.startPoint, current.endPoint);
+      if (Point.isEqual(current.startPoint, current.endPoint) === false) {
+        this.segmentManager.addCurvePoint(current.endPoint, index2, "endPoint", this.isSelectedSegment("endPoint", index2));
       }
     }
   }
-  makeMiddlePointGuideSegment(prevPoint, current2, nextPoint, index2, isSiblingSelected) {
+  makeMiddlePointGuideSegment(prevPoint, current, nextPoint, index2, isSiblingSelected) {
     var mng = this.segmentManager;
-    if (current2.curve === false) {
+    if (current.curve === false) {
       if (prevPoint.curve === false) {
-        mng.addPoint({}, current2.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+        mng.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
       } else {
         if (isSiblingSelected === false) {
-          mng.addCurvePoint(current2.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+          mng.addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
         } else {
-          mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addCurvePoint(current2.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+          mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
           if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
             mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, "endPoint", this.isSelectedSegment("endPoint", prevPoint.index));
           }
@@ -55470,44 +55463,44 @@ class PathGenerator {
     } else {
       if (prevPoint.curve === false) {
         if (isSiblingSelected === false) {
-          if (Point.isEqual(current2.reversePoint, current2.startPoint)) {
-            mng.addPoint({}, current2.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+          if (Point.isEqual(current.reversePoint, current.startPoint)) {
+            mng.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
           } else {
-            mng.addCurvePoint(current2.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+            mng.addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
           }
         } else {
-          if (Point.isEqual(current2.reversePoint, current2.startPoint)) {
-            mng.addPoint({}, current2.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+          if (Point.isEqual(current.reversePoint, current.startPoint)) {
+            mng.addPoint({}, current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
           } else {
-            mng.addGuideLine(current2.startPoint, current2.reversePoint).addCurvePoint(current2.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
-            if (Point.isEqual(current2.startPoint, current2.reversePoint) === false) {
-              mng.addCurvePoint(current2.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
+            mng.addGuideLine(current.startPoint, current.reversePoint).addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+            if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
+              mng.addCurvePoint(current.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
             }
           }
         }
       } else {
-        if (current2.connected) {
+        if (current.connected) {
           if (isSiblingSelected === false)
             ;
           else {
-            mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addGuideLine(current2.startPoint, current2.reversePoint);
+            mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addGuideLine(current.startPoint, current.reversePoint);
             if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
               mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, "endPoint", this.isSelectedSegment("endPoint", prevPoint.index));
             }
-            if (Point.isEqual(current2.startPoint, current2.reversePoint) === false) {
-              mng.addCurvePoint(current2.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
+            if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
+              mng.addCurvePoint(current.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
             }
           }
         } else {
           if (isSiblingSelected === false) {
-            mng.addCurvePoint(current2.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+            mng.addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
           } else {
-            mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addGuideLine(current2.startPoint, current2.reversePoint).addCurvePoint(current2.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
+            mng.addGuideLine(prevPoint.startPoint, prevPoint.endPoint).addGuideLine(current.startPoint, current.reversePoint).addCurvePoint(current.startPoint, index2, "startPoint", this.isSelectedSegment("startPoint", index2));
             if (Point.isEqual(prevPoint.startPoint, prevPoint.endPoint) === false) {
               mng.addCurvePoint(prevPoint.endPoint, prevPoint.index, "endPoint", this.isSelectedSegment("endPoint", prevPoint.index));
             }
-            if (Point.isEqual(current2.startPoint, current2.reversePoint) === false) {
-              mng.addCurvePoint(current2.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
+            if (Point.isEqual(current.startPoint, current.reversePoint) === false) {
+              mng.addCurvePoint(current.reversePoint, index2, "reversePoint", this.isSelectedSegment("reversePoint", index2));
             }
           }
         }
@@ -55518,70 +55511,70 @@ class PathGenerator {
     const vertext = this.pathEditor.$viewport.applyVertexInverse([point2.x, point2.y, 0]);
     return this.pathEditor.$viewport.checkInViewport(vertext);
   }
-  makeMiddlePointGuideSplitLine(prevPoint, current2, nextPoint, index2, isSiblingSelected) {
+  makeMiddlePointGuideSplitLine(prevPoint, current, nextPoint, index2, isSiblingSelected) {
     const selected = isSiblingSelected ? "selected" : "";
-    if (current2.curve === false) {
+    if (current.curve === false) {
       if (prevPoint.curve === false) {
-        if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(current2.startPoint)) === false) {
+        if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(current.startPoint)) === false) {
           return;
         }
-        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).L(current2.startPoint).toString(`split-path ${selected}`));
+        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).L(current.startPoint).toString(`split-path ${selected}`));
       } else {
-        if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(prevPoint.endPoint) || this.checkInViewport(current2.startPoint)) === false) {
+        if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(prevPoint.endPoint) || this.checkInViewport(current.startPoint)) === false) {
           return;
         }
-        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).Q(prevPoint.endPoint, current2.startPoint).toString(`split-path ${selected}`));
+        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).Q(prevPoint.endPoint, current.startPoint).toString(`split-path ${selected}`));
       }
     } else {
       if (prevPoint.curve === false) {
-        if (Point.isEqual(current2.reversePoint, current2.startPoint)) {
-          if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(current2.startPoint)) === false) {
+        if (Point.isEqual(current.reversePoint, current.startPoint)) {
+          if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(current.startPoint)) === false) {
             return;
           }
-          this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).L(current2.startPoint).toString(`split-path ${selected}`));
+          this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).L(current.startPoint).toString(`split-path ${selected}`));
         } else {
-          if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(current2.reversePoint) || this.checkInViewport(current2.startPoint)) === false) {
+          if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(current.reversePoint) || this.checkInViewport(current.startPoint)) === false) {
             return;
           }
-          this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).Q(current2.reversePoint, current2.startPoint).toString(`split-path ${selected}`));
+          this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).Q(current.reversePoint, current.startPoint).toString(`split-path ${selected}`));
         }
       } else {
-        if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(prevPoint.endPoint) || this.checkInViewport(current2.reversePoint) || this.checkInViewport(current2.startPoint)) === false) {
+        if ((this.checkInViewport(prevPoint.startPoint) || this.checkInViewport(prevPoint.endPoint) || this.checkInViewport(current.reversePoint) || this.checkInViewport(current.startPoint)) === false) {
           return;
         }
-        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).C(prevPoint.endPoint, current2.reversePoint, current2.startPoint).toString(`split-path ${selected}`));
+        this.splitLines.push(new PathStringManager().M(prevPoint.startPoint).C(prevPoint.endPoint, current.reversePoint, current.startPoint).toString(`split-path ${selected}`));
       }
     }
   }
   makePointGuide(points2) {
     for (var index2 = 0, len2 = points2.length; index2 < len2; index2++) {
       var currentIndex = index2;
-      var current2 = points2[currentIndex];
-      if (!current2)
+      var current = points2[currentIndex];
+      if (!current)
         continue;
       var nextPoint = Point.getNextPoint(points2, index2);
       var prevPoint = Point.getPrevPoint(points2, index2);
       if (prevPoint && prevPoint.command === "M") {
-        if (current2.startPoint) {
-          current2.startPoint.isSecond = true;
+        if (current.startPoint) {
+          current.startPoint.isSecond = true;
         }
       }
-      if (current2.startPoint) {
+      if (current.startPoint) {
         if (nextPoint) {
-          current2.startPoint.isLast = nextPoint.command === "M";
+          current.startPoint.isLast = nextPoint.command === "M";
         } else {
-          current2.startPoint.isLast = index2 === len2 - 1;
+          current.startPoint.isLast = index2 === len2 - 1;
         }
       }
-      current2.selected = this.selectedIndex === index2;
-      if (current2.command === "M") {
-        this.makeStartPointGuide(prevPoint, current2, nextPoint, index2);
+      current.selected = this.selectedIndex === index2;
+      if (current.command === "M") {
+        this.makeStartPointGuide(prevPoint, current, nextPoint, index2);
       } else {
-        var isSiblingSelected = Boolean(this.isSelectedSegment("endPoint", prevPoint == null ? void 0 : prevPoint.index) || this.isSelectedSegment("startPoint", prevPoint == null ? void 0 : prevPoint.index) || this.isSelectedSegment("reversePoint", prevPoint == null ? void 0 : prevPoint.index) || this.isSelectedSegment("endPoint", nextPoint == null ? void 0 : nextPoint.index) || this.isSelectedSegment("startPoint", nextPoint == null ? void 0 : nextPoint.index) || this.isSelectedSegment("reversePoint", nextPoint == null ? void 0 : nextPoint.index) || this.isSelectedSegment("endPoint", current2 == null ? void 0 : current2.index) || this.isSelectedSegment("startPoint", current2 == null ? void 0 : current2.index) || this.isSelectedSegment("reversePoint", current2 == null ? void 0 : current2.index));
-        this.makeMiddlePointGuideSplitLine(prevPoint, current2, nextPoint, index2, isSiblingSelected);
-        this.makeMiddlePointGuideSegment(prevPoint, current2, nextPoint, index2, isSiblingSelected);
+        var isSiblingSelected = Boolean(this.isSelectedSegment("endPoint", prevPoint == null ? void 0 : prevPoint.index) || this.isSelectedSegment("startPoint", prevPoint == null ? void 0 : prevPoint.index) || this.isSelectedSegment("reversePoint", prevPoint == null ? void 0 : prevPoint.index) || this.isSelectedSegment("endPoint", nextPoint == null ? void 0 : nextPoint.index) || this.isSelectedSegment("startPoint", nextPoint == null ? void 0 : nextPoint.index) || this.isSelectedSegment("reversePoint", nextPoint == null ? void 0 : nextPoint.index) || this.isSelectedSegment("endPoint", current == null ? void 0 : current.index) || this.isSelectedSegment("startPoint", current == null ? void 0 : current.index) || this.isSelectedSegment("reversePoint", current == null ? void 0 : current.index));
+        this.makeMiddlePointGuideSplitLine(prevPoint, current, nextPoint, index2, isSiblingSelected);
+        this.makeMiddlePointGuideSegment(prevPoint, current, nextPoint, index2, isSiblingSelected);
       }
-      if (current2.close) {
+      if (current.close) {
         this.pathStringManager.Z();
       }
     }
@@ -55776,13 +55769,13 @@ class PathDrawView extends EditorElement {
     this.setState(__spreadValues(__spreadValues({}, this.initState()), obj2), false);
   }
   getCurrentObject() {
-    var current2 = this.state.current;
-    if (!current2) {
+    var current = this.state.current;
+    if (!current) {
       return null;
     }
     return {
-      current: current2,
-      d: current2.d
+      current,
+      d: current.d
     };
   }
   [SUBSCRIBE("showPathDrawEditor")](obj2 = {}) {
@@ -55925,10 +55918,10 @@ class DrawManager extends EditorElement {
   }
   [SUBSCRIBE("refreshSelection")]() {
     var _a, _b;
-    var current2 = this.$selection.current;
-    if (current2) {
-      (_a = this.children.$stroke) == null ? void 0 : _a.setValue(current2["stroke"] || "rgba(0, 0, 0, 1)");
-      (_b = this.children.$strokeWidth) == null ? void 0 : _b.setValue(current2["stroke-width"] || Length.number(1));
+    var current = this.$selection.current;
+    if (current) {
+      (_a = this.children.$stroke) == null ? void 0 : _a.setValue(current["stroke"] || "rgba(0, 0, 0, 1)");
+      (_b = this.children.$strokeWidth) == null ? void 0 : _b.setValue(current["stroke-width"] || Length.number(1));
     }
   }
   [SUBSCRIBE("setColorAsset")]({ color: color2 }) {
@@ -57217,11 +57210,11 @@ class HoverView extends EditorElement {
     this.$selection.setHoverId("");
     this.renderHoverLayer();
   }
-  createVisiblePath(current2) {
-    if (!current2.is("boolean-path")) {
+  createVisiblePath(current) {
+    if (!current.is("boolean-path")) {
       return "";
     }
-    const newPath = current2.absolutePath();
+    const newPath = current.absolutePath();
     newPath.transformMat4(this.$viewport.matrix);
     return `
         <svg overflow="visible">
@@ -57685,10 +57678,10 @@ class SelectionToolView extends SelectionToolEvent$1 {
       if (this.$config.get("bodyEvent").shiftKey) {
         newAngle -= newAngle % this.$config.get("fixed.angle");
       }
-      instance.angle = newAngle;
+      instance.angle = newAngle % 360;
     }
     this.state.dragging = true;
-    this.command("setAttributeForMulti", "change rotate", this.$selection.pack("angle"));
+    this.emit("setAttributeForMulti", this.$selection.pack("angle"));
   }
   rotateEndVertex() {
     this.state.dragging = false;
@@ -57742,10 +57735,6 @@ class SelectionToolView extends SelectionToolEvent$1 {
     this.$config.set("set.move.control.point", true);
     this.$selection.startToCacheChildren();
   }
-  calculateNewOffsetMatrixInverse(vertexOffset, width2, height2, origin2, itemMatrix) {
-    const center2 = subtract([], TransformOrigin.scale(origin2, width2, height2), vertexOffset);
-    return calculateMatrixInverse(fromTranslation([], vertexOffset), fromTranslation([], center2), itemMatrix, fromTranslation([], negate([], center2)));
-  }
   calculateDistance(vertex, distVector, reverseMatrix) {
     const currentVertex = clone(vertex);
     const moveVertext = add$1([], currentVertex, distVector);
@@ -57768,6 +57757,10 @@ class SelectionToolView extends SelectionToolEvent$1 {
         width: Math.abs(newWidth),
         height: Math.abs(newHeight)
       };
+      if (instance.isLayoutItem()) {
+        delete data.x;
+        delete data.y;
+      }
       if (this.hasRotate)
         ;
       else {
@@ -57777,7 +57770,9 @@ class SelectionToolView extends SelectionToolEvent$1 {
     }
   }
   moveDirectionVertex(item2, newWidth, newHeight, direction, directionNewVector, options2 = {}) {
-    const view = calculateMatrix(item2.directionMatrix[direction], this.calculateNewOffsetMatrixInverse(directionNewVector, newWidth, newHeight, item2.originalTransformOrigin, item2.itemMatrix));
+    const center2 = subtract([], TransformOrigin.scale(item2.originalTransformOrigin, newWidth, newHeight), directionNewVector);
+    const newOffsetInverse = calculateMatrixInverse(fromTranslation([], directionNewVector), fromTranslation([], center2), item2.itemMatrix, fromTranslation([], negate([], center2)));
+    const view = calculateMatrix(item2.directionMatrix[direction], newOffsetInverse);
     const lastStartVertex = getTranslation([], view);
     this.moveItem(this.$model.get(item2.id), lastStartVertex, newWidth, newHeight, options2);
   }
@@ -57974,7 +57969,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
       this.moveBottomLeftVertex(distVector);
     }
     this.$selection.recoverChildren();
-    this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "width", "height", "resizingHorizontal", "resizingVertical"));
+    this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "angle", "width", "height", "resizingHorizontal", "resizingVertical"));
     this.state.dragging = true;
   }
   moveEndVertex() {
@@ -58052,8 +58047,8 @@ class SelectionToolView extends SelectionToolEvent$1 {
   createPointerRect(pointers, rotatePointer, parentVector) {
     if (pointers.length === 0)
       return "";
-    const current2 = this.$selection.current;
-    const isArtBoard = current2 && current2.is("artboard");
+    const current = this.$selection.current;
+    const isArtBoard = current && current.is("artboard");
     let line2 = "";
     if (!isArtBoard) {
       const centerPointer = lerp([], pointers[0], pointers[1], 0.5);
@@ -58135,13 +58130,13 @@ class SelectionToolView extends SelectionToolEvent$1 {
         `;
   }
   createVisiblePath() {
-    const current2 = this.$selection.current;
-    if (!current2)
+    const current = this.$selection.current;
+    if (!current)
       return "";
-    if (!current2.isBooleanItem) {
+    if (!current.isBooleanItem) {
       return "";
     }
-    const newPath = current2.absolutePath();
+    const newPath = current.absolutePath();
     newPath.transformMat4(this.$viewport.matrix);
     return `
         <svg class='line' overflow="visible">
@@ -58158,14 +58153,14 @@ class SelectionToolView extends SelectionToolEvent$1 {
     return value.replace(/NaN/g, "0");
   }
   createRenderPointers(pointers) {
-    const current2 = this.$selection.current;
-    if (current2 && current2.is("text")) {
-      if (current2.width === 0 && current2.height === 0) {
+    const current = this.$selection.current;
+    if (current && current.is("text")) {
+      if (current.width === 0 && current.height === 0) {
         return;
       }
     }
-    const isArtBoard = current2 && current2.is("artboard");
-    const rotate2 = Length.deg(current2.angle).round(1e3);
+    const isArtBoard = current && current.is("artboard");
+    const rotate2 = Length.deg(current.angle).round(1e3);
     const rotatePointer = getRotatePointer(pointers, 34);
     const dist$1 = dist(pointers[0], pointers[2]);
     const width2 = dist(pointers[0], pointers[1]);
@@ -58634,7 +58629,7 @@ class GroupSelectionToolView extends SelectionToolEvent {
     if (this.state.isRotate) {
       const rotateZ2 = this.groupItem.angle;
       if (rotateZ2) {
-        text2 = `${rotateZ2[0].value}\xB0`;
+        text2 = `${rotateZ2}\xB0`;
       }
     }
     return `
@@ -58711,10 +58706,11 @@ class GhostToolView extends EditorElement {
     this.ghostVerties = clone$1(screenVerties);
     this.ghostScreenVerties = this.$viewport.applyVerties(this.ghostVerties);
     this.initMousePoint = this.$viewport.getWorldPosition();
-    this.filteredLayers = this.$selection.filteredLayers.filter((it) => this.$selection.check(it) === false);
+    this.filteredLayers = this.$selection.notSelectedLayers;
     this.containerList = this.filteredLayers.filter((it) => it.hasLayout() || it.is("artboard")).map((it) => it.originVerties);
   }
   collectInformation() {
+    var _a;
     const targetMousePoint = this.$viewport.getWorldPosition();
     const newDist = this.getDist();
     this.ghostVerties = this.verties.map((v) => {
@@ -58724,7 +58720,7 @@ class GhostToolView extends EditorElement {
     const filteredLayers = this.$selection.filteredLayers.filter((it) => this.$selection.check(it) === false);
     this.targetItem = filteredLayers[0];
     if (this.targetItem) {
-      if (this.targetItem.hasLayout() && this.targetItem.hasChildren()) {
+      if (this.targetItem.hasLayout() && ((_a = this.targetItem) == null ? void 0 : _a.hasChildren())) {
         this.targetItem = this.targetItem.layers.pop();
       }
       this.targetOriginPosition = this.$viewport.applyVerties(toRectVerties(this.targetItem.contentVerties));
@@ -58778,6 +58774,9 @@ class GhostToolView extends EditorElement {
     }));
   }
   renderPathForVerties(verties, className) {
+    if (!verties) {
+      return /* @__PURE__ */ createElementJsx("g", null);
+    }
     const d = vertiesToPath(verties);
     return /* @__PURE__ */ createElementJsx("g", null, /* @__PURE__ */ createElementJsx("path", {
       class: className,
@@ -58785,6 +58784,8 @@ class GhostToolView extends EditorElement {
     }));
   }
   renderPath(verties, className, data = className) {
+    if (!verties)
+      return "";
     verties = data === "ghost" ? verties : toRectVerties(verties);
     const textX = className === "flex-item" ? verties[0][0] : verties[0][0];
     const textY = className === "flex-item" ? verties[2][1] + 10 : verties[0][1] - 10;
@@ -58795,26 +58796,9 @@ class GhostToolView extends EditorElement {
     }, data), this.renderPathForVerties(verties, className));
   }
   renderLayoutFlexRowArea() {
-    const rect2 = vertiesToRectangle(this.targetOriginPosition);
+    vertiesToRectangle(this.targetOriginPosition);
     if (this.targetRelativeMousePoint.x < CHECK_RATE) {
       return /* @__PURE__ */ createElementJsx(FragmentInstance, null, this.renderPathForVerties([
-        [
-          this.targetOriginPosition[0][0],
-          this.targetOriginPosition[0][1]
-        ],
-        [
-          this.targetOriginPosition[0][0] + rect2.width / 2,
-          this.targetOriginPosition[1][1]
-        ],
-        [
-          this.targetOriginPosition[0][0] + rect2.width / 2,
-          this.targetOriginPosition[2][1]
-        ],
-        [
-          this.targetOriginPosition[3][0],
-          this.targetOriginPosition[3][1]
-        ]
-      ], "flex-item"), this.renderPathForVerties([
         [
           this.targetOriginPosition[0][0],
           this.targetOriginPosition[0][1]
@@ -58826,23 +58810,6 @@ class GhostToolView extends EditorElement {
       ], "flex-target"));
     } else {
       return /* @__PURE__ */ createElementJsx(FragmentInstance, null, this.renderPathForVerties([
-        [
-          this.targetOriginPosition[0][0] + rect2.width / 2,
-          this.targetOriginPosition[0][1]
-        ],
-        [
-          this.targetOriginPosition[1][0],
-          this.targetOriginPosition[1][1]
-        ],
-        [
-          this.targetOriginPosition[2][0],
-          this.targetOriginPosition[2][1]
-        ],
-        [
-          this.targetOriginPosition[3][0] + rect2.width / 2,
-          this.targetOriginPosition[3][1]
-        ]
-      ], "flex-item"), this.renderPathForVerties([
         [
           this.targetOriginPosition[1][0],
           this.targetOriginPosition[1][1]
@@ -58892,13 +58859,13 @@ class GhostToolView extends EditorElement {
         break;
     }
     const newDist = subtract([], [newCenterX, newCenterY, 0], center2);
-    const renderVerties = this.ghostScreenVerties.map((it) => add$1([], it, newDist));
+    const renderVerties = this.ghostScreenVerties.map((it) => add$1([], it, newDist)).filter((it, index2) => index2 < 4);
     return this.renderPathForVerties(renderVerties, "flex-item", "ghost");
   }
   renderLayoutFlexColumnArea() {
     const rect2 = vertiesToRectangle(this.targetOriginPosition);
     if (this.targetRelativeMousePoint.y < CHECK_RATE) {
-      return this.renderPath([
+      return this.renderPathForVerties([
         [this.targetOriginPosition[0][0], this.targetOriginPosition[0][1]],
         [this.targetOriginPosition[1][0], this.targetOriginPosition[1][1]],
         [
@@ -58911,7 +58878,7 @@ class GhostToolView extends EditorElement {
         ]
       ], "flex-item", "flex-top");
     } else {
-      return this.renderPath([
+      return this.renderPathForVerties([
         [
           this.targetOriginPosition[0][0],
           this.targetOriginPosition[0][1] + rect2.height / 2
@@ -58948,7 +58915,8 @@ class GhostToolView extends EditorElement {
     });
   }
   renderLayoutItemForFirst() {
-    if (this.targetItem.hasChildren() === false) {
+    var _a;
+    if (((_a = this.targetItem) == null ? void 0 : _a.hasChildren()) === false) {
       if (this.targetItem.isLayout(Layout.FLEX)) {
         return this.renderLayoutFlexForFirstItem(this.targetItem["flex-direction"]);
       } else if (this.targetItem.isLayout(Layout.GRID))
@@ -58962,10 +58930,13 @@ class GhostToolView extends EditorElement {
     });
   }
   [LOAD("$view") + DOMDIFF]() {
-    if (!this.ghostVerties) {
+    var _a;
+    const current = this.$selection.current;
+    if (!this.ghostVerties || !current) {
       return /* @__PURE__ */ createElementJsx("svg", null);
     }
-    return /* @__PURE__ */ createElementJsx("svg", null, this.targetParent && this.renderPath(this.targetParentPosition, "target-parent"), this.targetItem && this.renderPath(this.targetOriginPosition, "target", ""), this.targetItem && this.renderPath(this.targetOriginPosition, "target-rect", ""), this.targetItem && this.renderLayoutItemInsertArea(), this.targetItem && this.renderLayoutItemForFirst(), this.isLayoutItem && this.renderPath(this.ghostScreenVerties.filter((_, index2) => index2 < 4), "ghost"));
+    const hasTargetView = ((_a = this.targetItem) == null ? void 0 : _a.id) !== current.id;
+    return /* @__PURE__ */ createElementJsx("svg", null, this.targetParent && this.renderPathForVerties(this.targetParentPosition, "target-parent"), hasTargetView && this.renderPathForVerties(this.targetOriginPosition, "target", ""), hasTargetView && this.renderPathForVerties(this.targetOriginPosition, "target-rect", ""), hasTargetView && this.renderLayoutItemInsertArea(), hasTargetView && this.renderLayoutItemForFirst(), this.isLayoutItem && this.renderPathForVerties(this.ghostScreenVerties.filter((_, index2) => index2 < 4), "ghost"));
   }
   initializeGhostView() {
     this.isLayoutItem = false;
@@ -58983,11 +58954,11 @@ class GhostToolView extends EditorElement {
     return newDist;
   }
   insertToBackground() {
-    const current2 = this.$selection.current;
+    const current = this.$selection.current;
     const newDist = this.getDist();
-    if (current2.isLayoutItem() === false)
+    if (current.isLayoutItem() === false)
       return;
-    this.command("moveLayerToTarget", "change target with move", current2, this.$selection.currentProject, newDist, "appendChild");
+    this.command("moveLayerToTarget", "change target with move", current, this.$selection.currentProject, newDist, "appendChild");
   }
   getTargetAction() {
     let targetAction = "";
@@ -59014,38 +58985,45 @@ class GhostToolView extends EditorElement {
     return targetAction;
   }
   insertToLayoutItem() {
-    const current2 = this.$selection.current;
+    const current = this.$selection.current;
     const newDist = this.getDist();
     if (this.targetParent.hasLayout()) {
       let targetAction = this.getTargetAction();
       if (this.targetParent.isLayout(Layout.FLEX)) {
         if (targetAction) {
-          this.command("moveLayerToTarget", "change target with move", current2, this.targetItem, newDist, targetAction);
+          this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, targetAction);
         }
       } else if (this.targetParent.isLayout(Layout.GRID))
         ;
     }
   }
   updateLayer() {
-    const current2 = this.$selection.current;
+    var _a;
+    const current = this.$selection.current;
+    if (!current)
+      return;
     const newDist = this.getDist();
+    if (newDist[0] === 0 && newDist[1] === 0) {
+      return;
+    }
     if (!this.targetItem) {
       this.insertToBackground();
       return;
     }
-    if (this.targetItem.enableHasChildren() === false)
-      return;
     if (this.targetParent) {
       this.insertToLayoutItem();
       return;
     }
     if (this.targetItem.hasLayout()) {
-      if (this.targetItem.hasChildren() === false) {
-        this.command("moveLayerToTarget", "change target with move", current2, this.targetItem, newDist, "appendChild");
+      if (((_a = this.targetItem) == null ? void 0 : _a.hasChildren()) === false) {
+        this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, "appendChild");
       }
     } else {
-      if (current2.isLayoutItem()) {
-        this.command("moveLayerToTarget", "change target with move", current2, this.targetItem, newDist, "appendChild");
+      if (this.targetItem.id === current.id) {
+        return;
+      }
+      if (current.isLayoutItem() && current.parent.id !== this.targetItem.id) {
+        this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, "appendChild");
       }
     }
   }
@@ -59106,10 +59084,10 @@ class GradientBaseEditor extends EditorElement {
     const cssValue = STRING_TO_CSS(value);
     this.state.backgroundImages = BackgroundImage.parseStyle(cssValue);
     this.state.backImages = BackgroundImage.parseStyle(cssValue);
-    const current2 = this.$selection.current;
+    const current = this.$selection.current;
     this.state.gradient = this.state.backImages[this.state.index];
-    this.state.contentBox = current2.contentBox;
-    this.state.backgroundImageMatrix = current2.createBackgroundImageMatrix(this.state.index);
+    this.state.contentBox = current.contentBox;
+    this.state.backgroundImageMatrix = current.createBackgroundImageMatrix(this.state.index);
   }
   updateData() {
     var value = CSS_TO_STRING$1(BackgroundImage.toProperty(this.state.backgroundImages));
@@ -59782,10 +59760,10 @@ class GradientEditorView extends GradientColorstepEditor {
         });
     }
   }
-  makeTimingCircle(colorstepIndex, current2, prev, size2) {
+  makeTimingCircle(colorstepIndex, current, prev, size2) {
     const prevStickScreenXY = prev.stickScreenXYInEnd;
-    const stickScreenXY = current2.stickScreenXYInStart;
-    const { timing, timingCount } = current2;
+    const stickScreenXY = current.stickScreenXYInStart;
+    const { timing, timingCount } = current;
     let pos;
     switch (timing.name) {
       case TimingFunction.LINEAR:
@@ -59820,10 +59798,10 @@ class GradientEditorView extends GradientColorstepEditor {
         }, timingCount));
     }
   }
-  makeConicTimingCircle(startPoint, colorstepIndex, current2, prev) {
+  makeConicTimingCircle(startPoint, colorstepIndex, current, prev) {
     const prevStickScreenXY = prev.stickScreenXY;
-    const stickScreenXY = current2.stickScreenXY;
-    const { timing, timingCount } = current2;
+    const stickScreenXY = current.stickScreenXY;
+    const { timing, timingCount } = current;
     const dist$1 = dist(prevStickScreenXY, startPoint);
     const prevAngle = calculateAngle360(...subtract([], prevStickScreenXY, startPoint));
     const angle2 = calculateAngle360(...subtract([], stickScreenXY, startPoint));
@@ -59864,25 +59842,25 @@ class GradientEditorView extends GradientColorstepEditor {
         }, timingCount));
     }
   }
-  makeTimingArea(colorstepIndex, current2, prev, size2) {
+  makeTimingArea(colorstepIndex, current, prev, size2) {
     const prevStickScreenXY = prev.stickScreenXYInEnd;
-    const stickScreenXY = current2.stickScreenXYInStart;
+    const stickScreenXY = current.stickScreenXYInStart;
     return /* @__PURE__ */ createElementJsx("g", {
       class: "timing-area"
-    }, current2.timing.name === TimingFunction.LINEAR ? `` : /* @__PURE__ */ createElementJsx("path", {
+    }, current.timing.name === TimingFunction.LINEAR ? `` : /* @__PURE__ */ createElementJsx("path", {
       class: "timing-path",
       d: `
               M ${prevStickScreenXY[0]} ${prevStickScreenXY[1]}
               L ${stickScreenXY[0]} ${stickScreenXY[1]}
             `
-    }), this.makeTimingCircle(colorstepIndex, current2, prev, size2));
+    }), this.makeTimingCircle(colorstepIndex, current, prev, size2));
   }
   getRealAngle(angle2) {
     return angle2 < 0 ? 360 + angle2 : angle2;
   }
-  makeConicTimingArea(startPoint, colorstepIndex, current2, prev, size2, dist2, startAngle) {
+  makeConicTimingArea(startPoint, colorstepIndex, current, prev, size2, dist2, startAngle) {
     const prevStickScreenXY = prev.stickScreenXY;
-    const stickScreenXY = current2.stickScreenXY;
+    const stickScreenXY = current.stickScreenXY;
     const prevAngle = calculateAngle360(...subtract([], prevStickScreenXY, startPoint)) + startAngle;
     const angle2 = calculateAngle360(...subtract([], stickScreenXY, startPoint)) + startAngle;
     const nextAngle = 360 - prevAngle;
@@ -59890,13 +59868,13 @@ class GradientEditorView extends GradientColorstepEditor {
     const bigArc = Math.abs(nextAngle + nextAngle2) % 360 >= 180 ? 1 : 0;
     return /* @__PURE__ */ createElementJsx("g", {
       class: "timing-area"
-    }, current2.timing.name === TimingFunction.LINEAR ? `` : /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("path", {
+    }, current.timing.name === TimingFunction.LINEAR ? `` : /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("path", {
       class: "timing-path",
       d: `
               M ${prevStickScreenXY[0]} ${prevStickScreenXY[1]}
               A ${dist2} ${dist2} 0 ${bigArc} 1 ${stickScreenXY[0]} ${stickScreenXY[1]}
             `
-    })), this.makeConicTimingCircle(startPoint, colorstepIndex, current2, prev, dist2));
+    })), this.makeConicTimingCircle(startPoint, colorstepIndex, current, prev, dist2));
   }
   makeGradientPoint(colorsteps, startPoint, endPoint, shapePoint, newHoverColorStepPoint) {
     const size2 = TOOL_SIZE$1;
@@ -60212,10 +60190,10 @@ class GradientEditorView extends GradientColorstepEditor {
     }), this.makeGradientPoint(colorsteps, startPoint, endPoint, null, newHoverColorStepPoint));
   }
   [LOAD("$el") + DOMDIFF]() {
-    const current2 = this.$selection.current;
-    if (!current2)
+    const current = this.$selection.current;
+    if (!current)
       return "";
-    const result = current2.createBackgroundImageMatrix(this.state.index);
+    const result = current.createBackgroundImageMatrix(this.state.index);
     this.state.lastBackgroundMatrix = result;
     const image2 = result.backgroundImage.image;
     switch (image2.type) {
@@ -60249,18 +60227,18 @@ function gradientEditorView(editor) {
 var ClippathEditorView$2 = "";
 class ClippathPolygonEditorView extends EditorElement {
   initializePolygon() {
-    const current2 = this.$selection.current;
+    const current = this.$selection.current;
     this.state.current;
-    this.state.width = current2.screenWidth;
-    this.state.height = current2.screenHeight;
-    this.state.clippath = ClipPath.parseStyle(current2["clip-path"]);
+    this.state.width = current.screenWidth;
+    this.state.height = current.screenHeight;
+    this.state.clippath = ClipPath.parseStyle(current["clip-path"]);
     this.state.clippath.value = ClipPath.parseStyleForPolygon(this.state.clippath.value);
     this.screenPoints = this.$viewport.applyVerties(vertiesMap(this.state.clippath.value.map((point2) => {
       const { x: x2, y: y2 } = point2;
       const newX = x2.toPx(this.state.width);
       const newY = y2.toPx(this.state.height);
       return fromValues(newX, newY, 0);
-    }), current2.absoluteMatrix));
+    }), current.absoluteMatrix));
     this.clonedScreenPoints = clone$1(this.screenPoints);
   }
   [POINTERSTART("$el .polygon .polygon-pointer") + LEFT_BUTTON + MOVE("movePolygonPointer") + END("moveEndPolygonPointer")](e2) {
@@ -60280,9 +60258,9 @@ class ClippathPolygonEditorView extends EditorElement {
     const index2 = +e2.$dt.data("index");
     this.polygonTargetIndex = index2;
     console.log(index2);
-    const current2 = this.screenPoints[this.polygonTargetIndex];
+    const current = this.screenPoints[this.polygonTargetIndex];
     const next = this.screenPoints[(this.polygonTargetIndex + 1) % this.screenPoints.length];
-    const newPoint = lerp([], current2, next, 0.5);
+    const newPoint = lerp([], current, next, 0.5);
     this.screenPoints.splice(this.polygonTargetIndex + 1, 0, newPoint);
     this.updatePolygon(this.screenPoints);
   }
@@ -60325,15 +60303,15 @@ class ClippathPolygonEditorView extends EditorElement {
     this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
   }
   templatePolygon(clippath) {
-    const current2 = this.$selection.current;
+    const current = this.$selection.current;
     const points2 = ClipPath.parseStyleForPolygon(clippath.value).map((point2) => [
-      point2.x.toPx(current2.screenWidth).value,
-      point2.y.toPx(current2.screenHeight).value,
+      point2.x.toPx(current.screenWidth).value,
+      point2.y.toPx(current.screenHeight).value,
       0
     ]);
     const centerPoint = toRectVerties(points2)[4];
-    const screenPoints = this.$viewport.applyVerties(vertiesMap(points2, current2.absoluteMatrix));
-    const screenCenter = this.$viewport.applyVerties(vertiesMap([centerPoint], current2.absoluteMatrix))[0];
+    const screenPoints = this.$viewport.applyVerties(vertiesMap(points2, current.absoluteMatrix));
+    const screenCenter = this.$viewport.applyVerties(vertiesMap([centerPoint], current.absoluteMatrix))[0];
     return /* @__PURE__ */ createElementJsx("div", {
       class: "polygon"
     }, /* @__PURE__ */ createElementJsx("div", {
@@ -60369,24 +60347,24 @@ class ClippathPolygonEditorView extends EditorElement {
 }
 class ClippathInsetEditorView extends ClippathPolygonEditorView {
   initializeInset() {
-    const current2 = this.$selection.current;
+    const current = this.$selection.current;
     this.state.current;
-    this.state.width = current2.screenWidth;
-    this.state.height = current2.screenHeight;
-    this.state.clippath = ClipPath.parseStyle(current2["clip-path"]);
+    this.state.width = current.screenWidth;
+    this.state.height = current.screenHeight;
+    this.state.clippath = ClipPath.parseStyle(current["clip-path"]);
     this.state.clippath.value = ClipPath.parseStyleForInset(this.state.clippath.value);
     this.state.inset = this.state.clippath.value;
     const inset = this.state.inset;
-    const top2 = inset.top.toPx(current2.screenHeight);
-    const left2 = inset.left.toPx(current2.screenWidth);
-    const right2 = Length.px(current2.screenWidth - inset.right.toPx(current2.screenWidth));
-    const bottom2 = Length.px(current2.screenHeight - inset.bottom.toPx(current2.screenHeight));
+    const top2 = inset.top.toPx(current.screenHeight);
+    const left2 = inset.left.toPx(current.screenWidth);
+    const right2 = Length.px(current.screenWidth - inset.right.toPx(current.screenWidth));
+    const bottom2 = Length.px(current.screenHeight - inset.bottom.toPx(current.screenHeight));
     const verties = this.$viewport.applyVerties(vertiesMap([
       [left2, top2, 0],
       [right2, top2, 0],
       [right2, bottom2, 0],
       [left2, bottom2, 0]
-    ], current2.absoluteMatrix));
+    ], current.absoluteMatrix));
     const leftPoint = lerp([], verties[0], verties[3], 0.5);
     const topPoint = lerp([], verties[0], verties[1], 0.5);
     const rightPoint = lerp([], verties[1], verties[2], 0.5);
@@ -60496,18 +60474,18 @@ class ClippathInsetEditorView extends ClippathPolygonEditorView {
     this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
   }
   templateInset(clippath) {
-    const current2 = this.$selection.current;
+    const current = this.$selection.current;
     clippath.value = ClipPath.parseStyleForInset(clippath.value);
-    const top2 = clippath.value.top.toPx(current2.screenHeight);
-    const left2 = clippath.value.left.toPx(current2.screenWidth);
-    const right2 = Length.px(current2.screenWidth - clippath.value.right.toPx(current2.screenWidth));
-    const bottom2 = Length.px(current2.screenHeight - clippath.value.bottom.toPx(current2.screenHeight));
+    const top2 = clippath.value.top.toPx(current.screenHeight);
+    const left2 = clippath.value.left.toPx(current.screenWidth);
+    const right2 = Length.px(current.screenWidth - clippath.value.right.toPx(current.screenWidth));
+    const bottom2 = Length.px(current.screenHeight - clippath.value.bottom.toPx(current.screenHeight));
     const verties = this.$viewport.applyVerties(vertiesMap([
       [left2, top2, 0],
       [right2, top2, 0],
       [right2, bottom2, 0],
       [left2, bottom2, 0]
-    ], current2.absoluteMatrix));
+    ], current.absoluteMatrix));
     const leftPoint = lerp([], verties[0], verties[3], 0.5);
     const topPoint = lerp([], verties[0], verties[1], 0.5);
     const rightPoint = lerp([], verties[1], verties[2], 0.5);
@@ -60551,23 +60529,23 @@ class ClippathInsetEditorView extends ClippathPolygonEditorView {
 }
 class ClippathCircleEditorView extends ClippathInsetEditorView {
   [POINTERSTART("$el .circle .circle-radius") + LEFT_BUTTON + MOVE("moveCircleRadius") + END("moveEndCircleRadius")](e2) {
-    const current2 = this.$selection.current;
+    const current = this.$selection.current;
     this.state.current;
-    this.state.width = current2.screenWidth;
-    this.state.height = current2.screenHeight;
-    this.state.clippath = ClipPath.parseStyle(current2["clip-path"]);
+    this.state.width = current.screenWidth;
+    this.state.height = current.screenHeight;
+    this.state.clippath = ClipPath.parseStyle(current["clip-path"]);
     this.state.circle = ClipPath.parseStyleForCircle(this.state.clippath.value);
   }
   moveCircleRadius(dx, dy) {
-    const current2 = this.$selection.current;
+    const current = this.$selection.current;
     const { radius, x: x2, y: y2 } = this.state.circle;
-    const oldX = x2.toPx(current2.screenWidth);
-    const oldY = y2.toPx(current2.screenHeight);
-    const r = Math.sqrt(Math.pow(current2.screenWidth, 2) + Math.pow(current2.screenHeight, 2)) / Math.sqrt(2);
-    const oldRadius = radius.toPx(current2.screenWidth);
+    const oldX = x2.toPx(current.screenWidth);
+    const oldY = y2.toPx(current.screenHeight);
+    const r = Math.sqrt(Math.pow(current.screenWidth, 2) + Math.pow(current.screenHeight, 2)) / Math.sqrt(2);
+    const oldRadius = radius.toPx(current.screenWidth);
     const verties = this.$viewport.applyVerties(vertiesMap([
       [oldX.value + oldRadius.value, oldY, 0]
-    ], current2.absoluteMatrix));
+    ], current.absoluteMatrix));
     const newRadius = verties[0];
     const newX = newRadius[0] + dx;
     const newY = newRadius[1] + dy;
@@ -60588,21 +60566,21 @@ class ClippathCircleEditorView extends ClippathInsetEditorView {
     this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
   }
   [POINTERSTART("$el .circle .circle-center") + LEFT_BUTTON + MOVE("moveCircleCenter") + END("moveEndCircleCenter")](e2) {
-    const current2 = this.$selection.current;
+    const current = this.$selection.current;
     this.state.current;
-    this.state.width = current2.screenWidth;
-    this.state.height = current2.screenHeight;
-    this.state.clippath = ClipPath.parseStyle(current2["clip-path"]);
+    this.state.width = current.screenWidth;
+    this.state.height = current.screenHeight;
+    this.state.clippath = ClipPath.parseStyle(current["clip-path"]);
     this.state.circle = ClipPath.parseStyleForCircle(this.state.clippath.value);
   }
   moveCircleCenter(dx, dy) {
-    const current2 = this.$selection.current;
+    const current = this.$selection.current;
     const { radius, x: x2, y: y2 } = this.state.circle;
-    const oldX = x2.toPx(current2.screenWidth);
-    const oldY = y2.toPx(current2.screenHeight);
+    const oldX = x2.toPx(current.screenWidth);
+    const oldY = y2.toPx(current.screenHeight);
     const verties = this.$viewport.applyVerties(vertiesMap([
       [oldX, oldY, 0]
-    ], current2.absoluteMatrix));
+    ], current.absoluteMatrix));
     const center2 = verties[0];
     const newX = center2[0] + dx;
     const newY = center2[1] + dy;
@@ -60634,15 +60612,15 @@ class ClippathCircleEditorView extends ClippathInsetEditorView {
     this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
   }
   templateCircle(clippath) {
-    const current2 = this.$selection.current;
-    const r = Math.sqrt(Math.pow(current2.screenWidth, 2) + Math.pow(current2.screenHeight, 2)) / Math.sqrt(2);
+    const current = this.$selection.current;
+    const r = Math.sqrt(Math.pow(current.screenWidth, 2) + Math.pow(current.screenHeight, 2)) / Math.sqrt(2);
     const radius = clippath.value.radius.toPx(r);
-    const x2 = clippath.value.x.toPx(current2.screenWidth);
-    const y2 = clippath.value.y.toPx(current2.screenHeight);
+    const x2 = clippath.value.x.toPx(current.screenWidth);
+    const y2 = clippath.value.y.toPx(current.screenHeight);
     const verties = this.$viewport.applyVerties(vertiesMap([
       [x2, y2, 0],
       [x2.value + radius.value, y2, 0]
-    ], current2.absoluteMatrix));
+    ], current.absoluteMatrix));
     const center2 = verties[0];
     const radiusPos = verties[1];
     const dist$1 = dist(center2, radiusPos);
@@ -60673,22 +60651,22 @@ class ClippathCircleEditorView extends ClippathInsetEditorView {
 }
 class ClippathEllipseEditorView extends ClippathCircleEditorView {
   [POINTERSTART("$el .ellipse .ellipse-radius-x") + LEFT_BUTTON + MOVE("moveEllipseRadiusX") + END("moveEndEllipseRadiusX")](e2) {
-    const current2 = this.$selection.current;
+    const current = this.$selection.current;
     this.state.current;
-    this.state.width = current2.screenWidth;
-    this.state.height = current2.screenHeight;
-    this.state.clippath = ClipPath.parseStyle(current2["clip-path"]);
+    this.state.width = current.screenWidth;
+    this.state.height = current.screenHeight;
+    this.state.clippath = ClipPath.parseStyle(current["clip-path"]);
     this.state.ellipse = ClipPath.parseStyleForEllipse(this.state.clippath.value);
   }
   moveEllipseRadiusX(dx, dy) {
-    const current2 = this.$selection.current;
+    const current = this.$selection.current;
     const { radiusX, radiusY, x: x2, y: y2 } = this.state.ellipse;
-    const oldX = x2.toPx(current2.screenWidth);
-    const oldY = y2.toPx(current2.screenHeight);
-    const oldRadiusX = radiusX.toPx(current2.screenWidth);
+    const oldX = x2.toPx(current.screenWidth);
+    const oldY = y2.toPx(current.screenHeight);
+    const oldRadiusX = radiusX.toPx(current.screenWidth);
     const verties = this.$viewport.applyVerties(vertiesMap([
       [oldX.value + oldRadiusX.value, oldY, 0]
-    ], current2.absoluteMatrix));
+    ], current.absoluteMatrix));
     const newRadius = verties[0];
     const newX = newRadius[0] + dx;
     const newY = newRadius[1] + dy;
@@ -60705,22 +60683,22 @@ class ClippathEllipseEditorView extends ClippathCircleEditorView {
     this.emit("setAttributeForMulti", this.$selection.packByValue(value));
   }
   [POINTERSTART("$el .ellipse .ellipse-radius-y") + LEFT_BUTTON + MOVE("moveEllipseRadiusY") + END("moveEndEllipseRadiusX")](e2) {
-    const current2 = this.$selection.current;
+    const current = this.$selection.current;
     this.state.current;
-    this.state.width = current2.screenWidth;
-    this.state.height = current2.screenHeight;
-    this.state.clippath = ClipPath.parseStyle(current2["clip-path"]);
+    this.state.width = current.screenWidth;
+    this.state.height = current.screenHeight;
+    this.state.clippath = ClipPath.parseStyle(current["clip-path"]);
     this.state.ellipse = ClipPath.parseStyleForEllipse(this.state.clippath.value);
   }
   moveEllipseRadiusY(dx, dy) {
-    const current2 = this.$selection.current;
+    const current = this.$selection.current;
     const { radiusX, radiusY, x: x2, y: y2 } = this.state.ellipse;
-    const oldX = x2.toPx(current2.screenWidth);
-    const oldY = y2.toPx(current2.screenHeight);
-    const oldRadiusY = radiusY.toPx(current2.screenHeight);
+    const oldX = x2.toPx(current.screenWidth);
+    const oldY = y2.toPx(current.screenHeight);
+    const oldRadiusY = radiusY.toPx(current.screenHeight);
     const verties = this.$viewport.applyVerties(vertiesMap([
       [oldX.value, oldY.value + oldRadiusY.value, 0]
-    ], current2.absoluteMatrix));
+    ], current.absoluteMatrix));
     const newRadius = verties[0];
     const newX = newRadius[0] + dx;
     const newY = newRadius[1] + dy;
@@ -60741,11 +60719,11 @@ class ClippathEllipseEditorView extends ClippathCircleEditorView {
     this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
   }
   [POINTERSTART("$el .ellipse .ellipse-center") + LEFT_BUTTON + MOVE("moveEllipseCenter") + END("moveEndEllipseCenter")](e2) {
-    const current2 = this.$selection.current;
+    const current = this.$selection.current;
     this.state.current;
-    this.state.width = current2.screenWidth;
-    this.state.height = current2.screenHeight;
-    this.state.clippath = ClipPath.parseStyle(current2["clip-path"]);
+    this.state.width = current.screenWidth;
+    this.state.height = current.screenHeight;
+    this.state.clippath = ClipPath.parseStyle(current["clip-path"]);
     this.state.ellipse = ClipPath.parseStyleForEllipse(this.state.clippath.value);
     this.state.left = Length.parse(e2.$dt.css("left")).value;
     this.state.top = Length.parse(e2.$dt.css("top")).value;
@@ -60787,16 +60765,16 @@ class ClippathEllipseEditorView extends ClippathCircleEditorView {
     this.command("setAttributeForMulti", "change clippath", this.$selection.packByValue(value));
   }
   templateEllipse(clippath) {
-    const current2 = this.$selection.current;
-    const radiusX = clippath.value.radiusX.toPx(current2.screenWidth);
-    const radiusY = clippath.value.radiusY.toPx(current2.screenHeight);
-    const x2 = clippath.value.x.toPx(current2.screenWidth);
-    const y2 = clippath.value.y.toPx(current2.screenHeight);
+    const current = this.$selection.current;
+    const radiusX = clippath.value.radiusX.toPx(current.screenWidth);
+    const radiusY = clippath.value.radiusY.toPx(current.screenHeight);
+    const x2 = clippath.value.x.toPx(current.screenWidth);
+    const y2 = clippath.value.y.toPx(current.screenHeight);
     const verties = this.$viewport.applyVerties(vertiesMap([
       [x2, y2, 0],
       [x2.value + radiusX.value, y2, 0],
       [x2.value, y2.value + radiusY.value, 0]
-    ], current2.absoluteMatrix));
+    ], current.absoluteMatrix));
     const center2 = verties[0];
     const radiusXPos = verties[1];
     const radiusYPos = verties[2];
@@ -60844,11 +60822,11 @@ class ClippathEditorView$1 extends ClippathEllipseEditorView {
     });
   }
   [LOAD("$el") + DOMDIFF]() {
-    const current2 = this.$selection.current;
-    if (!current2) {
+    const current = this.$selection.current;
+    if (!current) {
       return "";
     }
-    const clippath = ClipPath.parseStyle(current2["clip-path"]);
+    const clippath = ClipPath.parseStyle(current["clip-path"]);
     switch (clippath.type) {
       case ClipPathType.CIRCLE:
         clippath.value = ClipPath.parseStyleForCircle(clippath.value);
@@ -60872,8 +60850,8 @@ class ClippathEditorView$1 extends ClippathEllipseEditorView {
   checkClipPath() {
     if (this.$el.isShow() === false)
       return false;
-    const current2 = this.$selection.current;
-    if (!current2)
+    const current = this.$selection.current;
+    if (!current)
       return false;
     return this.$selection.current.hasChangedField("clip-path", "angle", "x", "y", "width", "height");
   }
@@ -60956,13 +60934,13 @@ class SampleRender extends LayerRender$1 {
 function sample(editor) {
   editor.registerComponent("sample", SampleLayer);
   editor.registerRenderer("html", "sample", new SampleRender());
-  editor.registerInspector("sample", (current2) => {
+  editor.registerInspector("sample", (current) => {
     return [
       "Sample Text \uD3B8\uC9D1",
       {
         key: "sampleText",
         editor: "TextEditor",
-        defaultValue: current2.sampleText
+        defaultValue: current.sampleText
       },
       "Sample Number \uD3B8\uC9D1",
       {
@@ -60974,7 +60952,7 @@ function sample(editor) {
           step: 1,
           label: "SN"
         },
-        defaultValue: current2.sampleNumber
+        defaultValue: current.sampleNumber
       },
       "\uC2A4\uD0C0\uC77C \uCE74\uD53C",
       {
@@ -60988,7 +60966,7 @@ function sample(editor) {
             editorOptions: {
               text: "Copy CSS JSON",
               onClick: () => {
-                console.log(JSON.stringify(editor.html.toCSS(current2), null, 4));
+                console.log(JSON.stringify(editor.html.toCSS(current), null, 4));
               }
             }
           },
@@ -60998,7 +60976,7 @@ function sample(editor) {
             editorOptions: {
               text: "Copy CSS String",
               onClick: () => {
-                console.log(CSS_TO_STRING$1(editor.html.toCSS(current2)));
+                console.log(CSS_TO_STRING$1(editor.html.toCSS(current)));
               }
             }
           },
@@ -61011,7 +60989,7 @@ function sample(editor) {
                 const textColor = Color.random();
                 const backgroundColor = Color.random();
                 editor.emit("setAttributeForMulti", {
-                  [current2.id]: {
+                  [current.id]: {
                     color: textColor,
                     "background-color": backgroundColor
                   }
@@ -61038,8 +61016,8 @@ class ImageAssetPicker extends EditorElement {
     `;
   }
   [LOAD("$imageList") + DOMDIFF]() {
-    var current2 = this.$selection.currentProject || { images: [] };
-    var images = current2.images;
+    var current = this.$selection.currentProject || { images: [] };
+    var images = current.images;
     var results = images.map((image2) => {
       return `
         <div class='image-item'>
@@ -61089,8 +61067,8 @@ class ImageAssetsProperty extends BaseProperty {
     `;
   }
   [LOAD("$imageList") + DOMDIFF]() {
-    var current2 = this.$selection.currentProject || { images: [] };
-    var images = current2.images;
+    var current = this.$selection.currentProject || { images: [] };
+    var images = current.images;
     var results = images.map((image2, index2) => {
       return `
         <div class='image-item' data-index="${index2}">
@@ -61176,10 +61154,10 @@ const spreadMethodList = [
 const TOOL_SIZE = 20;
 class FillBaseEditor extends EditorElement {
   initializeData() {
-    const current2 = this.$selection.current;
-    this.state.currentMatrix = current2.matrix;
-    this.state.imageResult = current2.createFragmentMatrix(this.state.key);
-    this.state.originalResult = current2.createFragmentMatrix(this.state.key);
+    const current = this.$selection.current;
+    this.state.currentMatrix = current.matrix;
+    this.state.imageResult = current.createFragmentMatrix(this.state.key);
+    this.state.originalResult = current.createFragmentMatrix(this.state.key);
   }
 }
 class FillTimingStepEditor extends FillBaseEditor {
@@ -61743,10 +61721,10 @@ class FillEditorView extends FillColorstepEditor {
         });
     }
   }
-  makeTimingCircle(colorstepIndex, current2, prev, size2) {
+  makeTimingCircle(colorstepIndex, current, prev, size2) {
     const prevStickScreenXY = prev.stickScreenXYInEnd;
-    const stickScreenXY = current2.stickScreenXYInStart;
-    const { timing, timingCount } = current2;
+    const stickScreenXY = current.stickScreenXYInStart;
+    const { timing, timingCount } = current;
     let pos;
     switch (timing.name) {
       case TimingFunction.LINEAR:
@@ -61781,18 +61759,18 @@ class FillEditorView extends FillColorstepEditor {
         }, timingCount));
     }
   }
-  makeTimingArea(colorstepIndex, current2, prev, size2) {
+  makeTimingArea(colorstepIndex, current, prev, size2) {
     const prevStickScreenXY = prev.stickScreenXYInEnd;
-    const stickScreenXY = current2.stickScreenXYInStart;
+    const stickScreenXY = current.stickScreenXYInStart;
     return /* @__PURE__ */ createElementJsx("g", {
       class: "timing-area"
-    }, current2.timing.name === TimingFunction.LINEAR ? `` : /* @__PURE__ */ createElementJsx("path", {
+    }, current.timing.name === TimingFunction.LINEAR ? `` : /* @__PURE__ */ createElementJsx("path", {
       class: "timing-path",
       d: `
               M ${prevStickScreenXY[0]} ${prevStickScreenXY[1]}
               L ${stickScreenXY[0]} ${stickScreenXY[1]}
             `
-    }), this.makeTimingCircle(colorstepIndex, current2, prev, size2));
+    }), this.makeTimingCircle(colorstepIndex, current, prev, size2));
   }
   makeGradientPoint(colorsteps, startPoint, endPoint, shapePoint, newHoverColorStepPoint) {
     const size2 = TOOL_SIZE;
@@ -61936,12 +61914,12 @@ class FillEditorView extends FillColorstepEditor {
   [LOAD("$el") + DOMDIFF]() {
     if (!this.state.isShow)
       return "";
-    const current2 = this.$selection.current;
-    if (!current2)
+    const current = this.$selection.current;
+    if (!current)
       return "";
-    const result = current2.createFragmentMatrix(this.state.key);
+    const result = current.createFragmentMatrix(this.state.key);
     this.state.result = result;
-    this.state.originalResult = current2.createFragmentMatrix(this.state.key);
+    this.state.originalResult = current.createFragmentMatrix(this.state.key);
     const image2 = result.image;
     let angle2, dist2;
     switch (image2.type) {

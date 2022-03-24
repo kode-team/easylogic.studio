@@ -42,7 +42,7 @@ export default {
         editor.nextTick(() => {
             editor.history.add(message, this, {
                 currentValues: [currentLayer.hierachy],
-                undoValues: [lastValues, current.parentId],
+                undoValues: [lastValues, currentLayer.parentId],
             })
             editor.emit('refreshAllCanvas');            
         })

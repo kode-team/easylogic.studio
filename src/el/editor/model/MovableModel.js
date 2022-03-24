@@ -35,28 +35,6 @@ export class MovableModel extends BaseAssetModel {
         return this.json.position === 'absolute';
     }
 
-    /**
-     * @returns {boolean} wheather item is relative position 
-     */
-    get isRelative() {
-        return this.json.position === 'relative';
-    }
-
-    /**
-     * @returns {boolean} wheather item is child 
-     */
-    get isChild() {
-        if (this.json.parent) {
-            var isParentDrawItem = this.json.parent.is('project') === false;
-
-            if (isParentDrawItem && this.isAbsolute) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     get isDragSelectable() {
         return true;
     }
@@ -183,6 +161,11 @@ export class MovableModel extends BaseAssetModel {
             this.screenWidth,
             this.screenHeight
         )
+    }
+
+    /** absolute origin vector */
+    get absoluteOrigin () {
+        return vertiesMap([this.origin], this.absoluteMatrix)[0];
     }
 
     /** quaternion(사원수) */

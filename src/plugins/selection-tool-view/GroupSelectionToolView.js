@@ -727,7 +727,7 @@ export default class GroupSelectionToolView extends SelectionToolEvent {
             const rotateZ = this.groupItem.angle;
 
             if (rotateZ) {
-                text = `${rotateZ[0].value}°`
+                text = `${rotateZ}°`
             }
         }
 

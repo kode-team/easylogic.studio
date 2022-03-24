@@ -641,7 +641,7 @@ export default class HTMLRenderView extends EditorElement {
                 // 크기 변경이 없으면 bound size 를 수정하지 않는다. 
                 // 다른 레이아웃으로 들어가게 되면 크기의 변경이 있을 수도 있다. 
                 // 그 때는 레이아웃 기준으로 bound size 를 다시 잡을거라 괜찮다. 
-                if (parentObj.hasChangedField('width', 'height', 'border', 'padding-top', 'padding-left', 'padding-right', 'padding-bottom') === false) {
+                if (parentObj.hasChangedField('x', 'y', 'width', 'height', 'border', 'padding-top', 'padding-left', 'padding-right', 'padding-bottom') === false) {
                     return;
                 }
 

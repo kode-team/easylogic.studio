@@ -101,12 +101,12 @@ export default class SelectionToolView extends SelectionToolEvent {
                 newAngle -= newAngle % this.$config.get('fixed.angle');
             }
 
-            instance.angle = newAngle;
+            instance.angle = newAngle % 360;
         }
 
         this.state.dragging = true;
         // this.renderPointers();
-        this.command('setAttributeForMulti', 'change rotate', this.$selection.pack('angle'));
+        this.emit('setAttributeForMulti', this.$selection.pack('angle'));
     }
 
     rotateEndVertex() {
@@ -187,21 +187,21 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.$selection.startToCacheChildren();
     }
 
-    calculateNewOffsetMatrixInverse(vertexOffset, width, height, origin, itemMatrix) {
+    // calculateNewOffsetMatrixInverse(vertexOffset, width, height, origin, itemMatrix) {
 
-        const center = vec3.subtract(
-            [],
-            TransformOrigin.scale(origin, width, height),
-            vertexOffset
-        );
+    //     const center = vec3.subtract(
+    //         [],
+    //         TransformOrigin.scale(origin, width, height),
+    //         vertexOffset
+    //     );
 
-        return calculateMatrixInverse(
-            mat4.fromTranslation([], vertexOffset),
-            mat4.fromTranslation([], center),
-            itemMatrix,
-            mat4.fromTranslation([], vec3.negate([], center)),
-        );
-    }
+    //     return calculateMatrixInverse(
+    //         mat4.fromTranslation([], vertexOffset),
+    //         mat4.fromTranslation([], center),
+    //         itemMatrix,
+    //         mat4.fromTranslation([], vec3.negate([], center)),
+    //     );
+    // }
 
     calculateDistance(vertex, distVector, reverseMatrix) {
 
@@ -247,6 +247,12 @@ export default class SelectionToolView extends SelectionToolEvent {
                 height: Math.abs(newHeight),
             }
 
+            // layout item 인 경우 x, y 는 layout 이 정하기 때문에 width, height 만 바꾸는걸로 하자. 
+            if (instance.isLayoutItem()) {
+                delete data.x;
+                delete data.y;
+            }
+
             if (this.hasRotate) {
                 // noop 
             } else {
@@ -263,15 +269,27 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     moveDirectionVertex(item, newWidth, newHeight, direction, directionNewVector, options = {}) {
 
+        // 중심점 좌표를 구한다.
+        const center = vec3.subtract(
+            [],
+            TransformOrigin.scale(item.originalTransformOrigin, newWidth, newHeight),
+            directionNewVector
+        );
+
+        // 새로운 중심점 좌표를 구한다.
+        const newOffsetInverse = calculateMatrixInverse(
+            mat4.fromTranslation([], directionNewVector),
+            mat4.fromTranslation([], center),
+            item.itemMatrix,
+            mat4.fromTranslation([], vec3.negate([], center)),
+        );
+
+
         // 마지막 offset x, y 를 구해보자. 
         const view = calculateMatrix(
+            // 반대방향 벡터 기준으로 
             item.directionMatrix[direction],
-            this.calculateNewOffsetMatrixInverse(
-                directionNewVector,
-                newWidth, newHeight,
-                item.originalTransformOrigin,
-                item.itemMatrix
-            )
+            newOffsetInverse
         );
 
         const lastStartVertex = mat4.getTranslation([], view);
@@ -292,11 +310,14 @@ export default class SelectionToolView extends SelectionToolEvent {
     moveBottomRightVertex(distVector) {
         const { shiftKey, altKey, metaKey } = this.$config.get('bodyEvent');
         const item = this.$selection.cachedCurrentItemMatrix
+
         if (item) {
 
+            // 부모를 기준으로 실제 얼만큼 움직였는지를 찾는다. 
             let [realDx, realDy] = this.calculateRealDist(item, 2, distVector)
 
             let directionNewVector = vec3.fromValues(0, 0, 0);
+            // alt key 는 확장이기 때문에 움직임도 2배로 늘어난다. 
             if (altKey) {
                 realDx = realDx * 2;
                 realDy = realDy * 2;
@@ -561,8 +582,10 @@ export default class SelectionToolView extends SelectionToolEvent {
             this.moveBottomLeftVertex(distVector);
         }
 
-        this.$selection.recoverChildren();              
-        this.emit('setAttributeForMulti', this.$selection.pack('x', 'y', 'width', 'height', 'resizingHorizontal', 'resizingVertical'));
+        this.$selection.recoverChildren();         
+        // this.$selection.reselect();     
+        
+        this.emit('setAttributeForMulti', this.$selection.pack('x', 'y', 'angle', 'width', 'height', 'resizingHorizontal', 'resizingVertical'));
 
         this.state.dragging = true;
     }
