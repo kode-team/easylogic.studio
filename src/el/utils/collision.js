@@ -621,7 +621,7 @@ export function vertiesToRectangle (verties) {
  * @param {vec3[]} verties 
  * @returns 
  */
-export function vertiesToPath(verties) {
+export function vertiesToPath(verties = []) {
     const results = []
 
     for(var i = 0; i < verties.length; i++) {

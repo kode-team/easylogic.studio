@@ -453,7 +453,7 @@ export class BaseModel {
    * @returns {boolean}
    */
   isChangedValue(obj) {
-    return true;
+    return Object.keys(obj).some(key => obj[key] !== this.json[key])
   }
 
   /**

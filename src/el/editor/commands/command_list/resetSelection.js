@@ -6,8 +6,5 @@ import { isFunction } from "el/sapa/functions/func";
  * @param {Editor} editor 
  */
 export default function resetSelection (editor) {
-    editor.nextTick(() => {
-        editor.emit('refreshSelectionTool');
-    })
-
+    editor.emit('refreshSelectionTool');
 }

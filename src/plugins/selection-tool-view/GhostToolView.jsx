@@ -532,6 +532,7 @@ export default class GhostToolView extends EditorElement {
 
     if (this.targetParent.hasLayout()) {
       if (this.targetParent.isLayout(Layout.FLEX)) {
+
         switch (this.targetParent["flex-direction"]) {
           case FlexDirection.ROW:
             // left
@@ -616,6 +617,13 @@ export default class GhostToolView extends EditorElement {
       return;
     }
 
+
+    // 선택한 레이어와 targetItem 이 같은 경우 추가하지 않는다. 
+    if (this.targetItem.id === this.$selection.current?.id) {
+      return;
+    }
+
+
     // 타겟이 없을때는 백그라운드로 인지해서 current 의 부모를 project 로 옮긴다.
     if (!this.targetItem) {
       this.insertToBackground();
@@ -627,7 +635,7 @@ export default class GhostToolView extends EditorElement {
     if (this.targetParent) {
       this.insertToLayoutItem();
       return;
-    }
+    }    
 
     // target 이 레이아웃이 있고
     if (this.targetItem.hasLayout()) {

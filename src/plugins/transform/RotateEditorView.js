@@ -66,7 +66,7 @@ export default class RotateEditorView extends EditorElement {
                  
         this.bindData('$rotateZ')
         this.command('setAttributeForMulti', 'change direction', this.$selection.pack('transform'));
-        this.emit('refreshSelectionTool', false);
+        // this.emit('refreshSelectionTool', false);
 
     }
 
@@ -109,7 +109,7 @@ export default class RotateEditorView extends EditorElement {
         }));
         // this.$selection.reselect();
         this.command('setAttributeForMulti', 'change direction', this.$selection.pack('transform'));
-        this.emit('refreshSelectionTool');       
+        // this.emit('refreshSelectionTool');       
         this.bindData('$rotateContainer');   
     }
 
@@ -146,13 +146,13 @@ export default class RotateEditorView extends EditorElement {
         this.bindData('$rotateContainer');
 
         this.command('setAttributeForMulti', 'change rotate', this.$selection.pack('transform'));
-        this.emit('refreshSelectionTool');        
+        // this.emit('refreshSelectionTool');        
 
     }
 
     moveEndRotateXY (dx, dy) {    
         this.command('setAttributeForMulti', 'change rotate', this.$selection.pack('transform'));              
-        this.emit('refreshSelectionTool');        
+        // this.emit('refreshSelectionTool');        
     }
 
     [DOUBLECLICK('$handle')] () {
@@ -164,7 +164,7 @@ export default class RotateEditorView extends EditorElement {
         // this.$selection.reselect();
         this.bindData('$rotateZ');                   
         this.command('setAttributeForMulti', 'change rotate handle', this.$selection.pack('transform'));    
-        this.emit('refreshSelectionTool');       
+        // this.emit('refreshSelectionTool');       
     }
 
     [POINTERSTART('$handle') + MOVE() + END()] () {
@@ -192,12 +192,12 @@ export default class RotateEditorView extends EditorElement {
 
         this.bindData('$rotateZ');        
         this.command('setAttributeForMulti', 'change rotate handle', this.$selection.pack('transform'));
-        this.emit('refreshSelectionTool');        
+        // this.emit('refreshSelectionTool');        
     }
 
     end () {
         this.command('setAttributeForMulti', 'change rotate handle', this.$selection.pack('transform'));
-        this.emit('refreshSelectionTool');
+        // this.emit('refreshSelectionTool');
     }
 
 

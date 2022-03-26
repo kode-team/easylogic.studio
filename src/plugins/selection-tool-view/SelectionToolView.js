@@ -658,11 +658,20 @@ export default class SelectionToolView extends SelectionToolEvent {
             return;
         }
 
+        const screenVerties = this.$viewport.applyVerties(verties)
+
         this.state.renderPointerList = [
-            this.$viewport.applyVerties(verties),
+            screenVerties,
+            [
+                vec3.lerp([], screenVerties[4], screenVerties[0], (vec3.dist(screenVerties[4], screenVerties[0]) + 20) / vec3.dist(screenVerties[4], screenVerties[0])),
+                vec3.lerp([], screenVerties[4], screenVerties[1], (vec3.dist(screenVerties[4], screenVerties[1]) + 20) / vec3.dist(screenVerties[4], screenVerties[1])),
+                vec3.lerp([], screenVerties[4], screenVerties[2], (vec3.dist(screenVerties[4], screenVerties[2]) + 20) / vec3.dist(screenVerties[4], screenVerties[2])),
+                vec3.lerp([], screenVerties[4], screenVerties[3], (vec3.dist(screenVerties[4], screenVerties[3]) + 20) / vec3.dist(screenVerties[4], screenVerties[3])),
+
+            ]
         ]
 
-        const pointers = this.createRenderPointers(this.state.renderPointerList[0]);
+        const pointers = this.createRenderPointers(...this.state.renderPointerList);
 
         if (pointers) {
             const { line, parentRect, point, size, visiblePath } = pointers;
@@ -700,13 +709,13 @@ export default class SelectionToolView extends SelectionToolEvent {
         `
     }
 
-    createPointerRect(pointers, rotatePointer, parentVector) {
+    createPointerRect(pointers, rotatePointer = undefined) {
         if (pointers.length === 0) return '';
 
         const current = this.$selection.current;
         const isArtBoard = current && current.is('artboard');
         let line = '';
-        if (!isArtBoard) {
+        if (!isArtBoard && rotatePointer) {
             const centerPointer = vec3.lerp([], pointers[0], pointers[1], 0.5);
             line += `
                 M ${centerPointer[0]},${centerPointer[1]} 
@@ -826,7 +835,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         return value.replace(/NaN/g, '0');
     }
 
-    createRenderPointers(pointers) {
+    createRenderPointers(pointers, selectionPointers) {
 
         const current = this.$selection.current;
 
@@ -847,17 +856,17 @@ export default class SelectionToolView extends SelectionToolEvent {
         const height = vec3.dist(pointers[0], pointers[3]);
 
         return {
-            line: this.createPointerRect(pointers, rotatePointer),
+            line: this.createPointerRect(pointers),
             size: this.createSize(pointers),
             parentRect: '', //this.createParentRect(parentPointers),
             visiblePath: this.createVisiblePath(),
             point: [
                 // 4 모서리에서도 rotate 가 가능하도록 맞춤 
-                // this.createRotatePointer (selectionPointers[0], 0),
-                // this.createRotatePointer (selectionPointers[1], 1),
-                // this.createRotatePointer (selectionPointers[2], 2),
-                // this.createRotatePointer (selectionPointers[3], 3),
-                isArtBoard ? undefined : this.createRotatePointer(rotatePointer, 4, 'center center'),
+                this.createRotatePointer (selectionPointers[0], 0),
+                this.createRotatePointer (selectionPointers[1], 1),
+                this.createRotatePointer (selectionPointers[2], 2),
+                this.createRotatePointer (selectionPointers[3], 3),
+                // isArtBoard ? undefined : this.createRotatePointer(rotatePointer, 4, 'center center'),
 
                 dist < 20 ? undefined : this.createPointerSide(vec3.lerp([], pointers[0], pointers[1], 0.5), 11, rotate, width, 5),
                 dist < 20 ? undefined : this.createPointerSide(vec3.lerp([], pointers[1], pointers[2], 0.5), 12, rotate, 5, height),

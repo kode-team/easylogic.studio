@@ -402,6 +402,7 @@ export default {
     'layout.property.grid': 'Grid',
     'layout.property.default': 'Default',
     'layout.property.resizing.title': 'Resizing',
+    'layout.property.resizing.self.title': 'Self Resizing',        
 
     'default.layout.item.property.title.constraints': 'Constraints',    
 

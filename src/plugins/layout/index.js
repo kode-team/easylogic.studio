@@ -8,6 +8,7 @@ import GridLayoutItemProperty from "./GridLayoutItemProperty";
 import LayoutProperty from "./LayoutProperty";
 import DefaultLayoutItemProperty from './DefaultLayoutItemProperty';
 import ResizingProperty from './ResizingProperty';
+import ResizingItemProperty from './ResizingItemProperty';
 
 /**
  * 
@@ -24,6 +25,7 @@ export default function (editor) {
     editor.registerUI('inspector.tab.style', {
         LayoutProperty,        
         ResizingProperty,
+        ResizingItemProperty,
         DefaultLayoutItemProperty,
         GridLayoutItemProperty,
         FlexLayoutItemProperty,

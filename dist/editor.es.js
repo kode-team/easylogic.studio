@@ -5148,7 +5148,7 @@ function vertiesToRectangle(verties) {
   const height2 = dist(verties[0], verties[3]);
   return { x: x2, left: x2, y: y2, top: y2, width: width2, height: height2 };
 }
-function vertiesToPath(verties) {
+function vertiesToPath(verties = []) {
   const results = [];
   for (var i = 0; i < verties.length; i++) {
     if (i === 0) {
@@ -5338,7 +5338,6 @@ var __glob_0_0$4 = /* @__PURE__ */ Object.freeze({
 function _doForceRefreshSelection(editor) {
   editor.nextTick(() => {
     editor.emit("refreshAll");
-    editor.emit("refreshSelectionTool");
   });
 }
 var __glob_0_1$4 = /* @__PURE__ */ Object.freeze({
@@ -11524,25 +11523,28 @@ const DesignMode = {
   DESIGN: "design",
   ITEM: "item"
 };
-async function addLayerView(editor, type, data = {}) {
-  editor.selection.empty();
-  await editor.emit("refreshSelectionTool");
-  await editor.emit("hideAddViewLayer");
-  await editor.emit("removeGuideLine");
-  if (type === "select") {
-    editor.config.set("editing.mode", EditingMode.SELECT);
-  } else if (type === "brush") {
-    editor.config.set("editing.mode", EditingMode.DRAW);
-    await editor.emit("showPathDrawEditor");
-  } else if (type === "path") {
-    editor.config.set("editing.mode", EditingMode.PATH);
-    await editor.emit("showPathEditor", "path");
-  } else {
-    editor.config.set("editing.mode", EditingMode.APPEND);
-    editor.config.set("editing.mode.itemType", type);
-    await editor.emit("showLayerAppendView", type, data);
+var addLayerView = {
+  command: "addLayerView",
+  execute: async function(editor, type, data = {}) {
+    editor.selection.empty();
+    await editor.emit("refreshSelectionTool");
+    await editor.emit("hideAddViewLayer");
+    await editor.emit("removeGuideLine");
+    if (type === "select") {
+      editor.config.set("editing.mode", EditingMode.SELECT);
+    } else if (type === "brush") {
+      editor.config.set("editing.mode", EditingMode.DRAW);
+      await editor.emit("showPathDrawEditor");
+    } else if (type === "path") {
+      editor.config.set("editing.mode", EditingMode.PATH);
+      await editor.emit("showPathEditor", "path");
+    } else {
+      editor.config.set("editing.mode", EditingMode.APPEND);
+      editor.config.set("editing.mode.itemType", type);
+      await editor.emit("showLayerAppendView", type, data);
+    }
   }
-}
+};
 var __glob_0_11$4 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
@@ -11909,7 +11911,6 @@ var convert_path_operation = {
         editor.emit("recoverBooleanPath");
         editor.nextTick(() => {
           editor.emit("refreshSelection");
-          editor.emit("refreshSelectionTool");
         });
       });
     };
@@ -14950,17 +14951,19 @@ var __glob_0_82$1 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": recoverCursor
 });
-function refreshArtboard(editor) {
-  editor.emit("refreshLayerTreeView");
-  editor.emit("refreshAllCanvas");
-  editor.emit("refreshStyleView");
-  editor.emit("refreshSelectionStyleView");
-  editor.emit("refreshAllElementBoundSize");
-  editor.emit("refreshSelection");
-  editor.nextTick(() => {
-    editor.emit("refreshSelectionTool", true);
-  });
-}
+var refreshArtboard = {
+  command: "refreshArtboard",
+  execute: function(editor) {
+    const command = editor.createCommandMaker();
+    command.emit("refreshLayerTreeView");
+    command.emit("refreshAllCanvas");
+    command.emit("refreshStyleView");
+    command.emit("refreshSelectionStyleView");
+    command.emit("refreshAllElementBoundSize");
+    command.emit("refreshSelection");
+    command.run();
+  }
+};
 var __glob_0_83$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
@@ -14977,16 +14980,19 @@ var __glob_0_84$1 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": refreshCursor
 });
-function refreshElement(editor, current) {
-  editor.emit("refreshSelectionStyleView", current);
-  if (current && current.is("project")) {
-    editor.emit("refreshElementBoundSize", current);
-  } else if (current && (current.isLayoutItem() || current.parent.is("boolean-path"))) {
-    editor.emit("refreshElementBoundSize", current.parent);
-  } else {
-    editor.emit("refreshElementBoundSize", current);
+var refreshElement = {
+  command: "refreshElement",
+  execute: function(editor, current) {
+    editor.emit("refreshSelectionStyleView", current);
+    if (current && current.is("project")) {
+      editor.emit("refreshElementBoundSize", current);
+    } else if (current && (current.isLayoutItem() || current.parent.is("boolean-path"))) {
+      editor.emit("refreshElementBoundSize", current.parent);
+    } else {
+      editor.emit("refreshElementBoundSize", current);
+    }
   }
-}
+};
 var __glob_0_85$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
@@ -15094,9 +15100,7 @@ var __glob_0_92$1 = /* @__PURE__ */ Object.freeze({
   "default": removeTimelineProperty
 });
 function resetSelection(editor) {
-  editor.nextTick(() => {
-    editor.emit("refreshSelectionTool");
-  });
+  editor.emit("refreshSelectionTool");
 }
 var __glob_0_93$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
@@ -15821,7 +15825,6 @@ var switch_path = {
         editor.emit("recoverBooleanPath");
         editor.selection.select(current);
         editor.emit("refreshSelection");
-        editor.emit("refreshSelectionTool");
       });
     }
   }
@@ -17993,7 +17996,7 @@ class BaseModel {
     return this.modelManager.clone(this.id, isDeep);
   }
   isChangedValue(obj2) {
-    return true;
+    return Object.keys(obj2).some((key) => obj2[key] !== this.json[key]);
   }
   reset(obj2, context = { origin: "*" }) {
     const isChanged = this.isChangedValue(obj2);
@@ -25370,11 +25373,11 @@ class HTMLRenderView extends EditorElement {
       this.emit("moveDragAreaView");
       return;
     }
+    const targetMousePoint = this.$viewport.getWorldPosition();
     this.emit("moveGhostToolView");
     if (this.$selection.isLayoutItem) {
       return;
     }
-    const targetMousePoint = this.$viewport.getWorldPosition();
     const newDist = floor([], subtract([], targetMousePoint, this.initMousePoint));
     this.moveTo(newDist);
     if (this.$selection.changeInLayoutArea(this.$viewport.applyVertexInverse(targetMousePoint))) {
@@ -25425,7 +25428,6 @@ class HTMLRenderView extends EditorElement {
     }
     this.nextTick(() => {
       this.emit("refreshSelection");
-      this.emit("refreshSelectionTool", true);
     }, 100);
   }
   refreshSelectionStyleView(obj2) {
@@ -25487,7 +25489,7 @@ class HTMLRenderView extends EditorElement {
   refreshElementBoundSize(parentObj) {
     if (parentObj) {
       if (parentObj.hasChildren() === false) {
-        if (parentObj.hasChangedField("x", "y", "width", "height", "border", "padding-top", "padding-left", "padding-right", "padding-bottom") === false) {
+        if (parentObj.hasChangedField("x", "y", "width", "height", "border", "padding-top", "padding-left", "padding-right", "padding-bottom", "resizingHorizontal", "resizingVertical") === false) {
           return;
         }
         var $el = this.getElement(parentObj.id);
@@ -25495,6 +25497,9 @@ class HTMLRenderView extends EditorElement {
         if (width2 > 0 && height2 > 0) {
           parentObj.reset({ x: x2, y: y2, width: width2, height: height2 });
           this.refreshSelectionStyleView(parentObj);
+          if (this.$selection.check(parentObj)) {
+            this.emit("refreshSelectionTool");
+          }
         }
         return;
       }
@@ -25504,8 +25509,14 @@ class HTMLRenderView extends EditorElement {
         if ($el2 && (hasChangedDimension || it.isLayoutItem())) {
           const { x: x2, y: y2, width: width2, height: height2 } = $el2.offsetRect();
           if (width2 > 0 && height2 > 0) {
-            it.reset({ x: x2, y: y2, width: width2, height: height2 });
-            this.refreshSelectionStyleView(it);
+            const value = { x: x2, y: y2, width: width2, height: height2 };
+            if (it.isChangedValue(value)) {
+              it.reset(value);
+              this.refreshSelectionStyleView(it);
+              if (this.$selection.check(it)) {
+                this.emit("refreshSelectionTool");
+              }
+            }
           }
         }
         this.trigger("refreshElementBoundSize", it);
@@ -32910,8 +32921,11 @@ class DomModel extends GroupModel {
   get changedGridLayout() {
     return this.hasChangedField("grid-template-rows", "grid-template-columns", "grid-template-areas", "grid-auto-rows", "grid-auto-columns", "grid-auto-flow", "grid-row-gap", "grid-column-gap", "grid-row-start", "grid-row-end", "grid-column-start", "grid-column-end", "grid-area");
   }
+  get changedLayoutItem() {
+    return this.hasChangedField("resizingHorizontal", "resizingVertical");
+  }
   get changedLayout() {
-    return this.hasChangedField("layout") || this.changedBoxModel || this.changedFlexLayout || this.changedGridLayout;
+    return this.hasChangedField("layout") || this.changedBoxModel || this.changedFlexLayout || this.changedGridLayout || this.changedLayoutItem;
   }
   addSelector(selector2) {
     this.json.selectors.push(selector2);
@@ -35902,6 +35916,7 @@ var en_US = {
   "layout.property.grid": "Grid",
   "layout.property.default": "Default",
   "layout.property.resizing.title": "Resizing",
+  "layout.property.resizing.self.title": "Self Resizing",
   "default.layout.item.property.title.constraints": "Constraints",
   "flex.layout.editor.row": "Row",
   "flex.layout.editor.column": "column",
@@ -36310,6 +36325,7 @@ var ko_KR = {
   "layout.property.grid": "\uADF8\uB9AC\uB4DC",
   "layout.property.default": "\uAE30\uBCF8 \uC88C\uD45C",
   "layout.property.resizing.title": "\uC0AC\uC774\uC988 \uC870\uC808",
+  "layout.property.resizing.self.title": "\uC544\uC774\uD15C \uC0AC\uC774\uC988 \uC870\uC808",
   "default.layout.item.property.title.constraints": "Constraints",
   "flex.layout.editor.row": "\uD589",
   "flex.layout.editor.column": "\uC5F4",
@@ -36718,6 +36734,8 @@ var fr_FR = {
   "layout.property.flex": "Bo\xEEte Flex",
   "layout.property.grid": "Grille",
   "layout.property.default": "D\xE9faut",
+  "layout.property.resizing.title": "Resizing",
+  "layout.property.resizing.self.title": "Self Resizing",
   "default.layout.item.property.title.constraints": "Constraints",
   "flex.layout.editor.row": "Ligne",
   "flex.layout.editor.column": "Colonne",
@@ -39928,19 +39946,12 @@ class FlexLayoutItemProperty extends BaseProperty {
     this.command("setAttributeForMulti", "change flex layout", this.$selection.packByValue({
       [key]: value
     }));
-    this.nextTick(() => {
-      this.emit("refreshAllElementBoundSize");
-      this.emit("refreshSelectionTool", true);
-    });
   }
   [SUBSCRIBE_SELF("changeLayoutType")](key, value) {
     this.command("setAttributeForMulti", "change flex layout", this.$selection.packByValue({
       "flex": value
     }));
     this.refs.$layoutList.attr("data-selected-value", value);
-    this.nextTick(() => {
-      this.emit("refreshAllElementBoundSize");
-    });
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow(() => {
@@ -40665,6 +40676,124 @@ class ResizingProperty extends BaseProperty {
     });
   }
 }
+var ResizingItemProperty$1 = "";
+class ResizingItemProperty extends BaseProperty {
+  getTitle() {
+    return this.$i18n("layout.property.resizing.title");
+  }
+  getClassName() {
+    return "elf--resizing-item-property";
+  }
+  getBody() {
+    return `
+        <div ref='$body'>
+          <div class="resizing-mode">
+            <div class="resizing-box" ref="$resizingModeInfo"></div>
+            <div ref="$resizingModeInfoInput"></div>
+          </div>
+        </div>
+      `;
+  }
+  [LOAD("$resizingModeInfo") + DOMDIFF]() {
+    var current = this.$selection.current || {};
+    const h = current.resizingHorizontal || ResizingMode.FIXED;
+    const v = current.resizingVertical || ResizingMode.FIXED;
+    return `
+      <div class="resizing-mode-box" data-horizontal="${h}" data-vertical="${v}">
+        <div class="rect">
+          <div class="tool">
+            <div class="vertical">
+              <div class="vertical-top" data-key="resizingVertical">${iconUse$1("keyboard_arrow_up")}</div>
+              <div class="vertical-bottom" data-key="resizingVertical">${iconUse$1("keyboard_arrow_down")}</div>
+            </div>
+            <div class="horizontal">
+              <div class="horizontal-left" data-key="resizingHorizontal">${iconUse$1("keyboard_arrow_left")}</div>
+              <div class="horizontal-right" data-key="resizingHorizontal">${iconUse$1("keyboard_arrow_right")}</div>
+            </div>
+          </div>         
+          <div class="inner-rect"></div>
+        </div>
+
+      </div>
+    `;
+  }
+  makeOptionsForHorizontal() {
+    const options2 = [
+      { value: ResizingMode.FIXED, "text": "Fixed Width" },
+      { value: ResizingMode.FILL_CONTAINER, "text": "Fill Container" }
+    ];
+    return options2;
+  }
+  makeOptionsForVertical() {
+    const options2 = [
+      { value: ResizingMode.FIXED, "text": "Fixed Height" },
+      { value: ResizingMode.FILL_CONTAINER, "text": "Fill Container" }
+    ];
+    return options2;
+  }
+  [LOAD("$resizingModeInfoInput")]() {
+    var current = this.$selection.current || {};
+    this.setState({
+      horizontal: (current == null ? void 0 : current.resizingHorizontal) || ResizingMode.FIXED,
+      vertical: (current == null ? void 0 : current.resizingVertical) || ResizingMode.FIXED
+    }, false);
+    return `
+      <div class="has-label-grid">
+        <label data-direction="horizontal"></label>
+        ${createComponent("SelectEditor", {
+      ref: "$resizingHorizontal",
+      key: "resizingHorizontal",
+      value: this.state.resizingHorizontal,
+      options: this.makeOptionsForHorizontal(),
+      onchange: "changeResizingMode"
+    })}
+      </div>
+
+      <div class="has-label-grid">
+      <label data-direction="vertical"></label>
+        ${createComponent("SelectEditor", {
+      ref: "$resizingVertical",
+      key: "resizingVertical",
+      value: this.state.resizingVertical,
+      options: this.makeOptionsForVertical(),
+      onchange: "changeResizingMode"
+    })}
+      </div>
+    `;
+  }
+  [CLICK("$resizingModeInfo [data-key]")](e2) {
+    const key = e2.$dt.data("key");
+    const current = this.$selection.current;
+    if (current[key] === ResizingMode.FIXED) {
+      this.trigger("changeResizingMode", key, ResizingMode.FILL_CONTAINER);
+    } else {
+      this.trigger("changeResizingMode", key, ResizingMode.FIXED);
+    }
+  }
+  [SUBSCRIBE_SELF("changeResizingMode")](key, value) {
+    this.command("setAttributeForMulti", "apply constraints", this.$selection.packByValue({
+      [key]: value
+    }));
+    this.nextTick(() => {
+      this.refresh();
+    }, 100);
+  }
+  [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
+    this.refreshShow(() => {
+      var _a;
+      var current = this.$selection.current;
+      return (_a = current == null ? void 0 : current.parent) == null ? void 0 : _a.hasLayout();
+    });
+  }
+  [SUBSCRIBE("refreshSelectionStyleView")]() {
+    const current = this.$selection.current;
+    if (current && current.changedLayoutItem) {
+      if (current.resizingHorizontal !== this.state.resizingHorizontal || current.resizingVertical !== this.state.resizingVertical) {
+        this.refresh();
+      }
+    }
+  }
+}
 function layout$3(editor) {
   editor.registerElement({
     FlexLayoutEditor,
@@ -40675,6 +40804,7 @@ function layout$3(editor) {
   editor.registerUI("inspector.tab.style", {
     LayoutProperty,
     ResizingProperty,
+    ResizingItemProperty,
     DefaultLayoutItemProperty,
     GridLayoutItemProperty,
     FlexLayoutItemProperty
@@ -41732,10 +41862,6 @@ class PositionProperty extends BaseProperty {
     this.command("setAttributeForMulti", "change position or size", this.$selection.packByValue({
       [key]: value
     }));
-    this.nextTick(() => {
-      this.emit("refreshAllElementBoundSize");
-      this.emit("refreshSelectionTool", true);
-    });
   }
   [SUBSCRIBE_SELF("changeRotate")](key, rotate2) {
     this.command("setAttributeForMulti", "change rotate", this.$selection.packByValue({
@@ -49239,7 +49365,7 @@ class DomRender$1 extends ItemRender$1 {
     return {};
   }
   toLayoutItemCSS(item2) {
-    var _a;
+    var _a, _b;
     var parentLayout = (_a = item2.parent) == null ? void 0 : _a["layout"];
     var obj2 = {};
     if (parentLayout === Layout.FLEX) {
@@ -49261,7 +49387,12 @@ class DomRender$1 extends ItemRender$1 {
     }
     if (parentLayout === Layout.FLEX) {
       obj2 = __spreadValues(__spreadValues({}, obj2), item2.attrs("flex-basis", "flex-grow", "flex-shrink"));
-      if (item2.resizingHorizontal === ResizingMode.FILL_CONTAINER || item2.resizingVertical === ResizingMode.FILL_CONTAINER) {
+      const parentLayoutDirection = (_b = item2 == null ? void 0 : item2.parent) == null ? void 0 : _b["flex-direction"];
+      if (parentLayoutDirection === FlexDirection.ROW && item2.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
+        obj2.width = "auto";
+        obj2["flex-grow"] = 1;
+      } else if (parentLayoutDirection === FlexDirection.COLUMN && item2.resizingVertical === ResizingMode.FILL_CONTAINER) {
+        obj2.height = "auto";
         obj2["flex-grow"] = 1;
       }
     } else if (parentLayout === Layout.GRID) {
@@ -49403,11 +49534,19 @@ class DomRender$1 extends ItemRender$1 {
         if (item2.parent["align-items"] === AlignItems.STRETCH) {
           obj2.height = "auto";
         }
+        if (item2.resizingVertical === ResizingMode.FILL_CONTAINER) {
+          obj2.height = "auto";
+          obj2["align-self"] = AlignItems.STRETCH;
+        }
       } else {
         obj2.width = Length.px(item2.screenWidth);
         obj2.height = Length.px(item2.screenHeight);
         if (item2.parent["align-items"] === AlignItems.STRETCH) {
           obj2.width = "auto";
+        }
+        if (item2.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
+          obj2.width = "auto";
+          obj2["align-self"] = AlignItems.STRETCH;
         }
       }
     } else if (item2.isInGrid())
@@ -57234,13 +57373,76 @@ class HoverView extends EditorElement {
       this.emit("removeGuideLine");
     } else {
       const verties = items[0].verties;
-      const title2 = items[0].is("boolean-path") ? items[0]["boolean-operation"] : items[0].itemType;
-      const line2 = this.createPointerLine(this.$viewport.applyVerties(verties), title2);
-      this.refs.$hoverRect.updateDiff(line2);
+      const line2 = this.createPointerLine(this.$viewport.applyVerties(verties));
+      const offsetLine = this.createOffsetLine();
+      this.refs.$hoverRect.updateDiff(line2 + offsetLine);
       this.emit("refreshGuideLineByTarget", [items[0].verties]);
     }
   }
-  createPointerLine(pointers) {
+  getOffsetVerties(current, parent) {
+    const currentVerties = current.verties;
+    const parentVerties = parent.verties;
+    const result = {};
+    const left2 = this.$viewport.applyVerties([
+      [currentVerties[0][0], lerp([], currentVerties[0], currentVerties[3], 0.5)[1], 0],
+      [parentVerties[0][0], lerp([], currentVerties[0], currentVerties[3], 0.5)[1], 0]
+    ]);
+    var dist$1 = dist(...left2);
+    if (dist$1 > 0) {
+      result.left = left2;
+    }
+    const top2 = this.$viewport.applyVerties([
+      [lerp([], currentVerties[0], currentVerties[1], 0.5)[0], currentVerties[1][1], 0],
+      [lerp([], currentVerties[0], currentVerties[1], 0.5)[0], parentVerties[1][1], 0]
+    ]);
+    var dist$1 = dist(...top2);
+    if (dist$1 > 0) {
+      result.top = top2;
+    }
+    return result;
+  }
+  createOffsetLine() {
+    const item2 = this.$selection.hoverItems[0] || this.$selection.current;
+    if (!item2 || !item2.parent) {
+      return "";
+    }
+    if (item2.parent && item2.parent.is("project")) {
+      return "";
+    }
+    if (this.$selection.isEmpty) {
+      const offsetVerties = this.getOffsetVerties(item2, item2.parent);
+      return `
+            <svg overflow="visible">
+                <path
+                    class="offset-line"
+                    d="
+                        ${vertiesToPath(offsetVerties.left)}
+                        ${vertiesToPath(offsetVerties.right)}
+                        ${vertiesToPath(offsetVerties.top)}
+                        ${vertiesToPath(offsetVerties.bottom)}
+                    "
+                    />
+            </svg>
+            `;
+    } else {
+      const offsetVerties = this.getOffsetVerties(item2, this.$selection.current);
+      return `
+            <svg overflow="visible">
+                <path
+                    d="
+                        ${vertiesToPath(offsetVerties.left)}
+                        ${vertiesToPath(offsetVerties.top)}
+                    "
+                    stroke="red"
+                    stroke-width="1"
+                    stroke-dasharray="5, 10"
+                    fill="none"
+                    />
+            </svg>
+            `;
+    }
+  }
+  createPointerLine(pointers, offsetLines = []) {
     if (pointers.length === 0)
       return "";
     return `
@@ -57544,7 +57746,6 @@ class SelectionInfoView extends EditorElement {
     this.moveTo(newDist);
     this.emit("setAttributeForMulti", this.$selection.pack("x", "y"));
     this.emit("refreshSelectionStyleView");
-    this.emit("refreshSelectionTool", false);
     this.refresh();
   }
   [SUBSCRIBE("refreshItemName")](id, title2) {
@@ -57556,7 +57757,6 @@ class SelectionInfoView extends EditorElement {
   }
   calculateEndedElement(dx, dy) {
     this.command("setAttributeForMulti", "move item", this.$selection.pack("x", "y"));
-    this.emit("refreshSelectionTool", true);
     this.$config.set("set.move.control.point", false);
   }
   [SUBSCRIBE("updateViewport")]() {
@@ -58013,10 +58213,17 @@ class SelectionToolView extends SelectionToolEvent$1 {
     if (dist(verties[0], verties[1]) === 0) {
       return;
     }
+    const screenVerties = this.$viewport.applyVerties(verties);
     this.state.renderPointerList = [
-      this.$viewport.applyVerties(verties)
+      screenVerties,
+      [
+        lerp([], screenVerties[4], screenVerties[0], (dist(screenVerties[4], screenVerties[0]) + 20) / dist(screenVerties[4], screenVerties[0])),
+        lerp([], screenVerties[4], screenVerties[1], (dist(screenVerties[4], screenVerties[1]) + 20) / dist(screenVerties[4], screenVerties[1])),
+        lerp([], screenVerties[4], screenVerties[2], (dist(screenVerties[4], screenVerties[2]) + 20) / dist(screenVerties[4], screenVerties[2])),
+        lerp([], screenVerties[4], screenVerties[3], (dist(screenVerties[4], screenVerties[3]) + 20) / dist(screenVerties[4], screenVerties[3]))
+      ]
     ];
-    const pointers = this.createRenderPointers(this.state.renderPointerList[0]);
+    const pointers = this.createRenderPointers(...this.state.renderPointerList);
     if (pointers) {
       const { line: line2, parentRect, point: point2, size: size2, visiblePath } = pointers;
       this.refs.$pointerRect.updateDiff(line2 + parentRect + point2 + size2 + visiblePath);
@@ -58044,13 +58251,13 @@ class SelectionToolView extends SelectionToolEvent$1 {
         <div class='rotate-pointer' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px)" ></div>
         `;
   }
-  createPointerRect(pointers, rotatePointer, parentVector) {
+  createPointerRect(pointers, rotatePointer = void 0) {
     if (pointers.length === 0)
       return "";
     const current = this.$selection.current;
     const isArtBoard = current && current.is("artboard");
     let line2 = "";
-    if (!isArtBoard) {
+    if (!isArtBoard && rotatePointer) {
       const centerPointer = lerp([], pointers[0], pointers[1], 0.5);
       line2 += `
                 M ${centerPointer[0]},${centerPointer[1]} 
@@ -58152,26 +58359,29 @@ class SelectionToolView extends SelectionToolEvent$1 {
   removeNaN(value) {
     return value.replace(/NaN/g, "0");
   }
-  createRenderPointers(pointers) {
+  createRenderPointers(pointers, selectionPointers) {
     const current = this.$selection.current;
     if (current && current.is("text")) {
       if (current.width === 0 && current.height === 0) {
         return;
       }
     }
-    const isArtBoard = current && current.is("artboard");
+    current && current.is("artboard");
     const rotate2 = Length.deg(current.angle).round(1e3);
-    const rotatePointer = getRotatePointer(pointers, 34);
+    getRotatePointer(pointers, 34);
     const dist$1 = dist(pointers[0], pointers[2]);
     const width2 = dist(pointers[0], pointers[1]);
     const height2 = dist(pointers[0], pointers[3]);
     return {
-      line: this.createPointerRect(pointers, rotatePointer),
+      line: this.createPointerRect(pointers),
       size: this.createSize(pointers),
       parentRect: "",
       visiblePath: this.createVisiblePath(),
       point: [
-        isArtBoard ? void 0 : this.createRotatePointer(rotatePointer, 4, "center center"),
+        this.createRotatePointer(selectionPointers[0], 0),
+        this.createRotatePointer(selectionPointers[1], 1),
+        this.createRotatePointer(selectionPointers[2], 2),
+        this.createRotatePointer(selectionPointers[3], 3),
         dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[0], pointers[1], 0.5), 11, rotate2, width2, 5),
         dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[1], pointers[2], 0.5), 12, rotate2, 5, height2),
         dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[2], pointers[3], 0.5), 13, rotate2, width2, 5),
@@ -58998,12 +59208,15 @@ class GhostToolView extends EditorElement {
     }
   }
   updateLayer() {
-    var _a;
+    var _a, _b;
     const current = this.$selection.current;
     if (!current)
       return;
     const newDist = this.getDist();
     if (newDist[0] === 0 && newDist[1] === 0) {
+      return;
+    }
+    if (this.targetItem.id === ((_a = this.$selection.current) == null ? void 0 : _a.id)) {
       return;
     }
     if (!this.targetItem) {
@@ -59015,7 +59228,7 @@ class GhostToolView extends EditorElement {
       return;
     }
     if (this.targetItem.hasLayout()) {
-      if (((_a = this.targetItem) == null ? void 0 : _a.hasChildren()) === false) {
+      if (((_b = this.targetItem) == null ? void 0 : _b.hasChildren()) === false) {
         this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, "appendChild");
       }
     } else {

@@ -130,7 +130,6 @@ export class MovableModel extends BaseAssetModel {
         return this.json.y;
     }
 
-
     get screenWidth() {
         return this.json.width;
     }

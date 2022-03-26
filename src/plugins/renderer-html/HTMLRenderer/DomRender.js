@@ -108,9 +108,19 @@ export default class DomRender extends ItemRender {
 
       // 자식의 경우 fill container 를 가질 수 있고 
       // fill container 의 경우 flex-grow : 1 로 고정한다. 
-      if (item.resizingHorizontal === ResizingMode.FILL_CONTAINER || item.resizingVertical === ResizingMode.FILL_CONTAINER) {
+      // 부모의 flex-direction 에 따라 다르다.       
+      // 방향에 따라 flex-grow 가 정해지기 때문에 , 그에 따른 width, height 값이 auto  로 변경되어야 함 
+      const parentLayoutDirection  = item?.parent?.['flex-direction'];
+      if (parentLayoutDirection === FlexDirection.ROW && item.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
+        obj.width = 'auto';
+        obj['flex-grow'] = 1;
+      } else if (parentLayoutDirection === FlexDirection.COLUMN && item.resizingVertical === ResizingMode.FILL_CONTAINER) {
+        obj.height = 'auto';
         obj['flex-grow'] = 1;
       }
+
+
+
 
     } else if (parentLayout === Layout.GRID) {
       obj = {
@@ -330,6 +340,12 @@ export default class DomRender extends ItemRender {
         if (item.parent['align-items'] === AlignItems.STRETCH) {
           obj.height = 'auto';
         }
+
+        if (item.resizingVertical === ResizingMode.FILL_CONTAINER) {
+          obj.height = 'auto'
+          obj['align-self'] = AlignItems.STRETCH;
+        }
+
       } else {
         obj.width = Length.px(item.screenWidth);
         obj.height = Length.px(item.screenHeight);
@@ -337,6 +353,11 @@ export default class DomRender extends ItemRender {
         if (item.parent['align-items'] === AlignItems.STRETCH) {
           obj.width = 'auto';
         }
+
+        if (item.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
+          obj.width = 'auto'
+          obj['align-self'] = AlignItems.STRETCH;
+        }        
       }
 
     } else if (item.isInGrid()) {

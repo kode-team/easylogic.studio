@@ -183,8 +183,14 @@ export class DomModel extends GroupModel {
     )
   }
 
+  get changedLayoutItem() {
+    return this.hasChangedField(
+      'resizingHorizontal', 'resizingVertical'
+    )
+  }
+
   get changedLayout() {
-    return this.hasChangedField('layout') || this.changedBoxModel || this.changedFlexLayout || this.changedGridLayout
+    return this.hasChangedField('layout') || this.changedBoxModel || this.changedFlexLayout || this.changedGridLayout || this.changedLayoutItem
   }
 
 

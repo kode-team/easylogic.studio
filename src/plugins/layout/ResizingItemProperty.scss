@@ -1,0 +1,236 @@
+.elf--resizing-item-property {
+
+    .resizing-mode {
+        display: grid;
+        grid-template-columns: 100px 1fr;
+        column-gap: 10px;
+
+        padding-bottom: 10px;
+    }
+
+    .resizing-mode-box {
+        position: relative;
+        width: 63px;
+        height: 63px;
+        // background-color: white;
+        border: 1px solid var(--elf--input-border-color);
+        margin-left: 10px;
+        border-radius: 2px;
+
+        .rect {
+            position: relative;
+            width :100%;
+            height: 100%;
+
+            .inner-rect {
+                position: absolute;
+                width: 30px;
+                height: 30px;
+                border: 1px solid var(--elf--font-color);
+                pointer-events: none;
+            }
+        }
+
+        .tool {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            pointer-events: all;
+        }
+
+
+        .vertical {
+            position: absolute;
+            left: 50%;
+            top: 0px;
+            transform: translateX(-50%);
+            width: 50%;
+            height: 100%;
+        }
+
+        .horizontal {
+            position: absolute;
+            left: 0px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            height: 50%;
+        }
+
+        .vertical-top {
+            position: absolute;
+            width: 100%;
+            height: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0px;
+            display: flex;
+            justify-content: center;
+            opacity: 0;            
+        }
+
+        .vertical-bottom {
+            position: absolute;
+            width: 100%;
+            height: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: 0px;
+            display: flex;
+            justify-content: center;
+            opacity: 0;            
+        }        
+
+        .horizontal-left {
+            position: absolute;
+            width: 10px;
+            height: 100%;
+            left: 1px;
+            transform: translateY(-50%);
+            top: 50%;
+            display: flex;
+            justify-content: center;
+            opacity: 0;            
+        }
+
+        .horizontal-right {
+            position: absolute;
+            width: 10px;
+            height: 100%;
+            right: 1px;
+            transform: translateY(-50%);
+            top: 50%;
+            display: flex;
+            justify-content: center;      
+            opacity: 0;
+        }        
+
+        &:hover {
+            .vertical-top, .vertical-bottom, .horizontal-left, .horizontal-right {            
+                opacity: 1;
+                background-color: var(--elf--selected-hover-color);
+
+                svg {
+                    color: var(--elf--font-color);
+                }                    
+            }                
+        }            
+
+        &[data-horizontal="fixed"][data-vertical="fixed"] {
+            .inner-rect {
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        &[data-horizontal="fixed"][data-vertical="fill-container"] {
+            .inner-rect {
+                left: 50%;
+                top: 50%;
+                width: 50%;
+                height: 100%;                
+                transform: translate(-50%, -50%);
+            }
+
+            .vertical-top, .vertical-bottom {
+                opacity: 1;
+                // background-color: yellow;
+
+                svg {
+                    color: var(--elf--font-color);
+                }                    
+            }
+        }        
+
+        &[data-horizontal="fill-container"][data-vertical="fixed"] {
+            .inner-rect {
+                left: 50%;
+                top: 50%;
+                width: 100%;
+                height: 50%;                
+                transform: translate(-50%, -50%);
+            }
+
+            .horizontal-left, .horizontal-right {
+                opacity: 1;
+                // background-color: yellow;
+
+                svg {
+                    color: var(--elf--font-color);
+                }                    
+            }
+        }                
+
+        &[data-horizontal="fill-container"][data-vertical="fill-container"] {
+            .inner-rect {
+                left: 0px;
+                top: 0px;
+                right: 0px;
+                bottom: 0px;
+                width: 100%;
+                height: 100%;
+                transform: translate(0, 0);
+            }
+
+            .horizontal-left, .horizontal-right, .vertical-top, .vertical-bottom {
+                opacity: 1;
+                // background-color: yellow;
+
+                svg {
+                    color: var(--elf--font-color);
+                }                    
+            }            
+        }        
+
+    }
+
+
+    .has-label-grid {
+        display: grid;
+        grid-template-columns: 20px 1fr;
+        column-gap: 10px;
+        margin-bottom: 5px;
+
+        > label {
+            display: inline-block;
+            vertical-align: middle;
+            position: relative;
+
+            &[data-direction="vertical"] {
+                transform: rotate(-90deg);
+            }
+
+            &:before {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                vertical-align: middle;
+                content: '';
+                display: inline-block;
+                width: 16px;
+                height: 10px;
+                border-left: 1px solid var(--elf--font-color);
+                border-right: 1px solid var(--elf--font-color);
+                // border-radius: 50%;
+                margin-right: 4px;
+            }
+
+            &:after {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                vertical-align: middle;
+                content: '';
+                display: inline-block;
+                width: 16px;
+                height: 1px;
+                border-top: 1px solid var(--elf--font-color);
+                // border-radius: 50%;
+                margin-right: 4px;
+            }
+        }
+    }
+    
+}

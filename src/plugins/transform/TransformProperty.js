@@ -95,10 +95,6 @@ export default class TransformProperty extends BaseProperty {
     this.command('setAttributeForMulti', 'change transform property', this.$selection.packByValue({ 
       transform
     }))
-
-    this.nextTick(() => {
-      this.emit('refreshSelectionTool', false);
-    })
   }
 
   refresh () {

@@ -26,7 +26,6 @@ export default {
 
             editor.selection.select(current);
             editor.emit('refreshSelection');
-            editor.emit('refreshSelectionTool');
   
           });
 

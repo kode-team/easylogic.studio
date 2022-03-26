@@ -2,6 +2,9 @@ import { CONFIG, SUBSCRIBE, IF } from "el/sapa/Event";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import "./HoverView.scss";
 import Dom from 'el/sapa/functions/Dom';
+import { calculateMatrix } from "el/utils/math";
+import { vec3 } from "gl-matrix";
+import { vertiesToPath } from "el/utils/collision";
 
 export default class HoverView extends EditorElement {
 
@@ -115,19 +118,115 @@ export default class HoverView extends EditorElement {
             // refresh hover view 
             const verties = items[0].verties;
 
-            const title = items[0].is('boolean-path') ? items[0]['boolean-operation'] : items[0].itemType;
+            const line = this.createPointerLine(this.$viewport.applyVerties(verties));
+            const offsetLine = this.createOffsetLine();
 
-            const line = this.createPointerLine(this.$viewport.applyVerties(verties), title);
-
-            this.refs.$hoverRect.updateDiff(line)
+            this.refs.$hoverRect.updateDiff(line + offsetLine)
 
             this.emit('refreshGuideLineByTarget', [items[0].verties]);
 
         }
     }
 
+    getOffsetVerties(current, parent) {
 
-    createPointerLine(pointers) {
+        const currentVerties = current.verties;
+        const parentVerties = parent.verties;
+
+        const result = {}
+
+        // left; 
+        const left = this.$viewport.applyVerties([
+            // start
+            [currentVerties[0][0], vec3.lerp([], currentVerties[0], currentVerties[3], 0.5)[1], 0],
+            // end 
+            [parentVerties[0][0], vec3.lerp([], currentVerties[0], currentVerties[3], 0.5)[1], 0],
+        ])
+
+        var dist = vec3.dist(...left)
+
+        if (dist > 0) {
+            result.left = left;
+        }
+
+        const top = this.$viewport.applyVerties([
+            // start
+            [vec3.lerp([], currentVerties[0], currentVerties[1], 0.5)[0], currentVerties[1][1], 0],
+            // end 
+            [vec3.lerp([], currentVerties[0], currentVerties[1], 0.5)[0], parentVerties[1][1], 0],
+        ])
+
+        var dist = vec3.dist(...top)
+
+        if (dist > 0) {
+            result.top = top;
+        }
+
+        return result;
+    }
+
+    createOffsetLine() {
+
+        const item = this.$selection.hoverItems[0] || this.$selection.current;
+
+        if (!item || !item.parent) {
+            return "";
+        }
+
+        if (item.parent && item.parent.is('project')) {
+            return "";
+        }
+
+        if (this.$selection.isEmpty) {
+            const offsetVerties = this.getOffsetVerties(item, item.parent);
+
+            return /*html*/`
+            <svg overflow="visible">
+                <path
+                    class="offset-line"
+                    d="
+                        ${vertiesToPath(offsetVerties.left)}
+                        ${vertiesToPath(offsetVerties.right)}
+                        ${vertiesToPath(offsetVerties.top)}
+                        ${vertiesToPath(offsetVerties.bottom)}
+                    "
+                    />
+            </svg>
+            `;
+        } else {
+            const offsetVerties = this.getOffsetVerties(item, this.$selection.current);
+
+            return /*html*/`
+            <svg overflow="visible">
+                <path
+                    d="
+                        ${vertiesToPath(offsetVerties.left)}
+                        ${vertiesToPath(offsetVerties.top)}
+                    "
+                    stroke="red"
+                    stroke-width="1"
+                    stroke-dasharray="5, 10"
+                    fill="none"
+                    />
+            </svg>
+            `;
+        }
+
+
+        return /*html*/`
+        <svg overflow="visible">
+
+            <path
+                class="line"
+                d="M0,0 L0,0"
+                stroke="red"
+                stroke-width="2"
+                fill="none"
+                />
+        </svg>`
+    }
+
+    createPointerLine(pointers, offsetLines = []) {
         if (pointers.length === 0) return '';
 
         return /*html*/`
