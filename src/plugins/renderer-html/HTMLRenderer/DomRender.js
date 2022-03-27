@@ -101,7 +101,7 @@ export default class DomRender extends ItemRender {
         ...obj,
         ...item.attrs(
           'flex-basis',
-          'flex-grow',
+          // 'flex-grow',
           'flex-shrink',
         )
       }
@@ -113,14 +113,11 @@ export default class DomRender extends ItemRender {
       const parentLayoutDirection  = item?.parent?.['flex-direction'];
       if (parentLayoutDirection === FlexDirection.ROW && item.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
         obj.width = 'auto';
-        obj['flex-grow'] = 1;
+        obj['flex-grow'] = item['flex-grow'] || 1;
       } else if (parentLayoutDirection === FlexDirection.COLUMN && item.resizingVertical === ResizingMode.FILL_CONTAINER) {
         obj.height = 'auto';
-        obj['flex-grow'] = 1;
+        obj['flex-grow'] = item['flex-grow'] || 1;
       }
-
-
-
 
     } else if (parentLayout === Layout.GRID) {
       obj = {

@@ -1,6 +1,6 @@
 import { Editor } from "el/editor/manager/Editor";
 import FlexLayoutEditor from "./FlexLayoutEditor";
-import FlexLayoutItemProperty from "./FlexLayoutItemProperty";
+// import FlexLayoutItemProperty from "./FlexLayoutItemProperty";
 import GridBoxEditor from "./GridBoxEditor";
 import GridGapEditor from "./GridGapEditor";
 import GridLayoutEditor from "./GridLayoutEditor";
@@ -9,6 +9,7 @@ import LayoutProperty from "./LayoutProperty";
 import DefaultLayoutItemProperty from './DefaultLayoutItemProperty';
 import ResizingProperty from './ResizingProperty';
 import ResizingItemProperty from './ResizingItemProperty';
+import FlexGrowToolView from './FlexGrowToolView';
 
 /**
  * 
@@ -28,6 +29,10 @@ export default function (editor) {
         ResizingItemProperty,
         DefaultLayoutItemProperty,
         GridLayoutItemProperty,
-        FlexLayoutItemProperty,
+        // FlexLayoutItemProperty,
     })
+
+    editor.registerUI('canvas.view', {
+        FlexGrowToolView,
+    }, 1000)
 }

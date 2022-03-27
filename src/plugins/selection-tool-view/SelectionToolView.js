@@ -638,6 +638,10 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.renderPointers();
     }
 
+    getRateDistance(startVetex, endVertex, dist = 0) {
+        return vec3.lerp([], startVetex, endVertex, (vec3.dist(startVetex, endVertex) + dist) / vec3.dist(startVetex, endVertex));
+    }
+
 
     /**
      * 선택영역 컴포넌트 그리기 
@@ -663,11 +667,10 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.state.renderPointerList = [
             screenVerties,
             [
-                vec3.lerp([], screenVerties[4], screenVerties[0], (vec3.dist(screenVerties[4], screenVerties[0]) + 20) / vec3.dist(screenVerties[4], screenVerties[0])),
-                vec3.lerp([], screenVerties[4], screenVerties[1], (vec3.dist(screenVerties[4], screenVerties[1]) + 20) / vec3.dist(screenVerties[4], screenVerties[1])),
-                vec3.lerp([], screenVerties[4], screenVerties[2], (vec3.dist(screenVerties[4], screenVerties[2]) + 20) / vec3.dist(screenVerties[4], screenVerties[2])),
-                vec3.lerp([], screenVerties[4], screenVerties[3], (vec3.dist(screenVerties[4], screenVerties[3]) + 20) / vec3.dist(screenVerties[4], screenVerties[3])),
-
+                this.getRateDistance(screenVerties[4], screenVerties[0], 20),
+                this.getRateDistance(screenVerties[4], screenVerties[1], 20),
+                this.getRateDistance(screenVerties[4], screenVerties[2], 20),
+                this.getRateDistance(screenVerties[4], screenVerties[3], 20),
             ]
         ]
 

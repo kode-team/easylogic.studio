@@ -320,8 +320,8 @@ export class Editor {
     })
   }
 
-  registerUI(target, obj = {}) {
-    this.injectManager.registerUI(target, obj);
+  registerUI(target, obj = {}, order = 1) {
+    this.injectManager.registerUI(target, obj, order);
     this.registerElement(obj);
   }
 

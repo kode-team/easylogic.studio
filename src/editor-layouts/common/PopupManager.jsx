@@ -14,15 +14,14 @@ export default class PopupManager extends EditorElement {
   }
 
   template() {
-    return /*html*/`
-      <div class="popup-manger">
-        ${createComponent('ExportWindow')}
-        ${createComponent('EmbedEditorWindow')}
-        ${createComponent('ProjectWindow')}
-        ${createComponent('ShortcutWindow')}
-        ${createComponent('NotificationView')}
-        ${this.$injectManager.generate('popup')}
+    return <div class="popup-manger">
+        {createComponent('ExportWindow')}
+        {createComponent('EmbedEditorWindow')}
+        {createComponent('ProjectWindow')}
+        {createComponent('ShortcutWindow')}
+        {createComponent('NotificationView')}
+        {this.$injectManager.generate('popup')}
       </div>
-    `;
+    
   }
 }

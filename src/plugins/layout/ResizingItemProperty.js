@@ -11,7 +11,7 @@ import { createComponent } from "el/sapa/functions/jsx";
 export default class ResizingItemProperty extends BaseProperty {
 
   getTitle() {
-    return this.$i18n('layout.property.resizing.title');
+    return this.$i18n('layout.property.resizing.self.title');
   }
 
   getClassName() {
@@ -75,12 +75,12 @@ export default class ResizingItemProperty extends BaseProperty {
     return options;
   }
 
-  [LOAD('$resizingModeInfoInput')]() {
+  [LOAD('$resizingModeInfoInput') + DOMDIFF]() {
     var current = this.$selection.current || {}
 
     this.setState({
-      horizontal: current?.resizingHorizontal || ResizingMode.FIXED,
-      vertical: current?.resizingVertical || ResizingMode.FIXED
+      resizingHorizontal: current?.resizingHorizontal || ResizingMode.FIXED,
+      resizingVertical: current?.resizingVertical || ResizingMode.FIXED
     }, false);
 
     return /*html*/`
@@ -123,7 +123,8 @@ export default class ResizingItemProperty extends BaseProperty {
   [SUBSCRIBE_SELF('changeResizingMode')](key, value) {
 
     this.command('setAttributeForMulti', 'apply constraints', this.$selection.packByValue({
-      [key]: value
+      [key]: value,
+      'flex-grow': 1,
     }))
 
     this.nextTick(() => {

@@ -604,7 +604,18 @@ export class BaseModel {
     }
 
     layer.setParentId(this.id);
-    this.json.children.splice(index, 0, layer.id);
+
+    const list = this.json.children.map((id, index) => {
+      return {id, index}
+    })
+
+    list.push({ id: layer.id, index: index - 0.5 })
+
+    list.sort((a, b) => {
+      return a.index - b.index;
+    })
+
+    this.json.children = list.map(it => it.id);
     this.modelManager.setChanged('insertChild', this.id, { childId: layer.id, index: 0 })
     return layer;
   }
@@ -628,7 +639,7 @@ export class BaseModel {
    * @param {Item} layer 
    */
   appendBefore(layer) {
-    this.parent.insertChild(layer, this.index - 1);
+    this.parent.insertChild(layer, this.index);
     // this.project.addIndexItem(layer);
     return layer;
   }

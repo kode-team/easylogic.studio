@@ -18067,7 +18067,14 @@ class BaseModel {
       layer2.remove();
     }
     layer2.setParentId(this.id);
-    this.json.children.splice(index2, 0, layer2.id);
+    const list2 = this.json.children.map((id, index3) => {
+      return { id, index: index3 };
+    });
+    list2.push({ id: layer2.id, index: index2 - 0.5 });
+    list2.sort((a, b) => {
+      return a.index - b.index;
+    });
+    this.json.children = list2.map((it) => it.id);
     this.modelManager.setChanged("insertChild", this.id, { childId: layer2.id, index: 0 });
     return layer2;
   }
@@ -18076,7 +18083,7 @@ class BaseModel {
     return layer2;
   }
   appendBefore(layer2) {
-    this.parent.insertChild(layer2, this.index - 1);
+    this.parent.insertChild(layer2, this.index);
     return layer2;
   }
   toggle(field, toggleValue) {
@@ -23657,13 +23664,14 @@ class InjectManager {
     this.editor = editor;
     this.ui = {};
   }
-  registerUI(target, obj2 = {}) {
+  registerUI(target, obj2 = {}, order = 1) {
     if (!this.ui[target]) {
       this.ui[target] = [];
     }
     Object.keys(obj2).forEach((refClass) => {
       this.ui[target].push({
         refClass,
+        order,
         class: obj2[refClass]
       });
     });
@@ -23672,7 +23680,13 @@ class InjectManager {
     return this.ui[target] || [];
   }
   generate(target, hasRef = false) {
-    return this.getTargetUI(target).map((it) => {
+    const list2 = this.getTargetUI(target);
+    list2.sort((a, b) => {
+      if (a.order === b.order)
+        return 0;
+      return a.order > b.order ? 1 : -1;
+    });
+    return list2.map((it) => {
       const props = {};
       if (hasRef) {
         props.ref = `$${it.refClass}`;
@@ -24277,8 +24291,8 @@ class Editor {
       registAlias(key, value);
     });
   }
-  registerUI(target, obj2 = {}) {
-    this.injectManager.registerUI(target, obj2);
+  registerUI(target, obj2 = {}, order = 1) {
+    this.injectManager.registerUI(target, obj2, order);
     this.registerElement(obj2);
   }
   registerComponent(name2, component2) {
@@ -25923,12 +25937,10 @@ class CanvasView extends EditorElement {
       this.emit("refreshCursor", "grab");
     } else {
       this.emit("recoverCursor", "auto");
-      this.emit("addStatusBarMessage", "");
     }
   }
   startMovePan() {
     this.lastDist = create$4();
-    this.emit("addStatusBarMessage", this.$i18n("viewport.panning.enable"));
   }
   movePan(dx, dy) {
     this.emit("refreshCursor", "grabbing");
@@ -25939,7 +25951,6 @@ class CanvasView extends EditorElement {
   refreshCursor() {
     if (this.$config.get("set.tool.hand") === false) {
       this.emit("refreshCursor", "auto");
-      this.emit("addStatusBarMessage", "");
     } else {
       this.emit("refreshCursor", "grab");
     }
@@ -26391,16 +26402,9 @@ class PopupManager extends EditorElement {
     };
   }
   template() {
-    return `
-      <div class="popup-manger">
-        ${createComponent("ExportWindow")}
-        ${createComponent("EmbedEditorWindow")}
-        ${createComponent("ProjectWindow")}
-        ${createComponent("ShortcutWindow")}
-        ${createComponent("NotificationView")}
-        ${this.$injectManager.generate("popup")}
-      </div>
-    `;
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "popup-manger"
+    }, createComponent("ExportWindow"), createComponent("EmbedEditorWindow"), createComponent("ProjectWindow"), createComponent("ShortcutWindow"), createComponent("NotificationView"), this.$injectManager.generate("popup"));
   }
 }
 const formElements = ["TEXTAREA", "INPUT", "SELECT"];
@@ -39844,122 +39848,6 @@ class FlexLayoutEditor extends EditorElement {
     this.refresh();
   }
 }
-var FlexLayoutItemProperty$1 = "";
-class FlexLayoutItemProperty extends BaseProperty {
-  getTitle() {
-    return this.$i18n("flex.layout.item.property.title");
-  }
-  getClassName() {
-    return "elf--flex-layout-item-property";
-  }
-  getLayoutOptions() {
-    return ["none", "auto", "value"].map((it) => {
-      return { value: it, text: this.$i18n(`flex.layout.item.property.${it}`) };
-    });
-  }
-  getBody() {
-    return `
-        <div class='property-item' ref='$body'></div>
-      `;
-  }
-  [LOAD("$body")]() {
-    var current = this.$selection.current || { "flex-layout-item": "none" };
-    const valueType = "value";
-    return `
-      <div class='layout-select'>
-        ${createComponent("SelectIconEditor", {
-      ref: "$layout",
-      key: "layout",
-      icon: true,
-      value: valueType,
-      options: this.getLayoutOptions(),
-      onchange: "changeLayoutType"
-    })}
-      </div>
-      <div class='layout-list' ref='$layoutList' data-selected-value='${valueType}'>
-        <div data-value='none'></div>
-        <div data-value='auto'></div>
-        <div data-value='value'>
-          <div class='value-item'>
-            ${createComponent({
-      ref: "$grow",
-      label: this.$i18n("flex.layout.item.property.grow"),
-      key: "flex-grow",
-      value: current["flex-grow"],
-      min: 0,
-      max: 1,
-      step: 0.01,
-      units: ["", "auto"],
-      onchange: "changeFlexItem"
-    })}
-          </div>
-          <div class='value-item'>
-            ${createComponent({
-      ref: "$shrink",
-      label: this.$i18n("flex.layout.item.property.shrink"),
-      key: "flex-shrink",
-      value: current["flex-shrink"],
-      min: 0,
-      max: 1,
-      step: 0.01,
-      units: ["", "auto"],
-      onchange: "changeFlexItem"
-    })}
-          </div>
-          <div class='value-item'>
-            ${createComponent("RangeEditor", {
-      ref: "$basis",
-      label: this.$i18n("flex.layout.item.property.basis"),
-      key: "flex-basis",
-      value: current["flex-basis"],
-      min: 0,
-      max: 1,
-      step: 0.01,
-      units: ["px", "em", "%", "auto"],
-      onchange: "changeFlexItem"
-    })}          
-          </div>                    
-        </div>
-      </div>
-    `;
-  }
-  getFlexItemValue(value) {
-    if ((value == null ? void 0 : value.isString()) && value.unit === "" && value.value !== "auto") {
-      return 0;
-    }
-    return value.unit === "auto" ? "auto" : value;
-  }
-  getFlexValue() {
-    var grow = this.children.$grow.getValue();
-    var shrink = this.children.$shrink.getValue();
-    var basis = this.children.$basis.getValue();
-    grow = this.getFlexItemValue(grow);
-    shrink = this.getFlexItemValue(shrink);
-    basis = this.getFlexItemValue(basis);
-    return {
-      "flex-grow": grow,
-      "flex-shrink": shrink,
-      "flex-basis": basis
-    };
-  }
-  [SUBSCRIBE_SELF("changeFlexItem")](key, value) {
-    this.command("setAttributeForMulti", "change flex layout", this.$selection.packByValue({
-      [key]: value
-    }));
-  }
-  [SUBSCRIBE_SELF("changeLayoutType")](key, value) {
-    this.command("setAttributeForMulti", "change flex layout", this.$selection.packByValue({
-      "flex": value
-    }));
-    this.refs.$layoutList.attr("data-selected-value", value);
-  }
-  [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
-    this.refreshShow(() => {
-      var current = this.$selection.current;
-      return current && current.isInFlex();
-    });
-  }
-}
 var GridBoxEditor$1 = "";
 const REG_CSS_UNIT = /(auto)|(repeat\([^\)]*\))|(([\d.]+)(px|pt|fr|r?em|deg|vh|vw|%))/gi;
 class GridBoxEditor extends EditorElement {
@@ -40679,7 +40567,7 @@ class ResizingProperty extends BaseProperty {
 var ResizingItemProperty$1 = "";
 class ResizingItemProperty extends BaseProperty {
   getTitle() {
-    return this.$i18n("layout.property.resizing.title");
+    return this.$i18n("layout.property.resizing.self.title");
   }
   getClassName() {
     return "elf--resizing-item-property";
@@ -40731,11 +40619,11 @@ class ResizingItemProperty extends BaseProperty {
     ];
     return options2;
   }
-  [LOAD("$resizingModeInfoInput")]() {
+  [LOAD("$resizingModeInfoInput") + DOMDIFF]() {
     var current = this.$selection.current || {};
     this.setState({
-      horizontal: (current == null ? void 0 : current.resizingHorizontal) || ResizingMode.FIXED,
-      vertical: (current == null ? void 0 : current.resizingVertical) || ResizingMode.FIXED
+      resizingHorizontal: (current == null ? void 0 : current.resizingHorizontal) || ResizingMode.FIXED,
+      resizingVertical: (current == null ? void 0 : current.resizingVertical) || ResizingMode.FIXED
     }, false);
     return `
       <div class="has-label-grid">
@@ -40772,7 +40660,8 @@ class ResizingItemProperty extends BaseProperty {
   }
   [SUBSCRIBE_SELF("changeResizingMode")](key, value) {
     this.command("setAttributeForMulti", "apply constraints", this.$selection.packByValue({
-      [key]: value
+      [key]: value,
+      "flex-grow": 1
     }));
     this.nextTick(() => {
       this.refresh();
@@ -40794,6 +40683,89 @@ class ResizingItemProperty extends BaseProperty {
     }
   }
 }
+var FlexGrowToolView$1 = "";
+class FlexGrowToolView extends EditorElement {
+  template() {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--flex-grow-tool-view"
+    });
+  }
+  [LOAD("$el") + DOMDIFF]() {
+    return this.$selection.map((item2) => {
+      const parentItem = item2.parent;
+      if (!parentItem)
+        return;
+      if (parentItem.is("project"))
+        return;
+      if (parentItem.isLayout(Layout.FLEX) === false)
+        return;
+      return parentItem.layers.map((child) => {
+        const verties = this.$viewport.applyVerties(child.verties);
+        const center2 = verties[4];
+        let flexGrow = 0;
+        let size2 = child.screenWidth || 0;
+        const parentLayoutDirection = parentItem == null ? void 0 : parentItem["flex-direction"];
+        if (parentLayoutDirection === FlexDirection.ROW && child.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
+          flexGrow = child["flex-grow"] || 1;
+          size2 = child.screenWidth;
+        } else if (parentLayoutDirection === FlexDirection.COLUMN && child.resizingVertical === ResizingMode.FILL_CONTAINER) {
+          flexGrow = child["flex-grow"] || 1;
+          size2 = child.screenHeight;
+        }
+        return /* @__PURE__ */ createElementJsx("div", {
+          class: "flex-grow-item",
+          style: {
+            left: Length.px(center2[0]),
+            top: Length.px(center2[1])
+          },
+          "data-flex-item-id": child.id,
+          "data-parent-direction": parentLayoutDirection,
+          "data-flex-grow": flexGrow
+        }, size2, " | ", flexGrow || "none");
+      }).join("");
+    });
+  }
+  [POINTERSTART("$el .flex-grow-item") + MOVE() + END()](e2) {
+    const [id, grow] = e2.$dt.attrs("data-flex-item-id", "data-flex-grow");
+    this.state = {
+      id,
+      grow: +grow
+    };
+  }
+  move(dx, dy) {
+    const { id, grow } = this.state;
+    const item2 = this.$editor.get(id);
+    if (!item2)
+      return;
+    const parentItem = item2.parent;
+    if (!parentItem)
+      return;
+    const parentLayoutDirection = parentItem["flex-direction"];
+    let flexGrow = grow;
+    if (parentLayoutDirection === FlexDirection.ROW && item2.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
+      flexGrow = grow + Math.floor(dx / 10);
+    } else if (parentLayoutDirection === FlexDirection.COLUMN && item2.resizingVertical === ResizingMode.FILL_CONTAINER) {
+      flexGrow = grow + Math.floor(dy / 10);
+    }
+    flexGrow = Math.max(1, flexGrow);
+    this.emit("setAttributeForMulti", {
+      [id]: {
+        "flex-grow": flexGrow
+      }
+    });
+  }
+  end() {
+  }
+  [SUBSCRIBE("updateViewport")]() {
+    this.refresh();
+  }
+  [SUBSCRIBE("refreshSelection") + THROTTLE(100)]() {
+    this.refresh();
+  }
+  [SUBSCRIBE("refreshSelectionStyleView") + THROTTLE(1)]() {
+    this.refresh();
+  }
+}
 function layout$3(editor) {
   editor.registerElement({
     FlexLayoutEditor,
@@ -40806,9 +40778,11 @@ function layout$3(editor) {
     ResizingProperty,
     ResizingItemProperty,
     DefaultLayoutItemProperty,
-    GridLayoutItemProperty,
-    FlexLayoutItemProperty
+    GridLayoutItemProperty
   });
+  editor.registerUI("canvas.view", {
+    FlexGrowToolView
+  }, 1e3);
 }
 var check = {
   key: "check",
@@ -49386,14 +49360,14 @@ class DomRender$1 extends ItemRender$1 {
       obj2 = this.toDefaultLayoutItemCSS(item2);
     }
     if (parentLayout === Layout.FLEX) {
-      obj2 = __spreadValues(__spreadValues({}, obj2), item2.attrs("flex-basis", "flex-grow", "flex-shrink"));
+      obj2 = __spreadValues(__spreadValues({}, obj2), item2.attrs("flex-basis", "flex-shrink"));
       const parentLayoutDirection = (_b = item2 == null ? void 0 : item2.parent) == null ? void 0 : _b["flex-direction"];
       if (parentLayoutDirection === FlexDirection.ROW && item2.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
         obj2.width = "auto";
-        obj2["flex-grow"] = 1;
+        obj2["flex-grow"] = item2["flex-grow"] || 1;
       } else if (parentLayoutDirection === FlexDirection.COLUMN && item2.resizingVertical === ResizingMode.FILL_CONTAINER) {
         obj2.height = "auto";
-        obj2["flex-grow"] = 1;
+        obj2["flex-grow"] = item2["flex-grow"] || 1;
       }
     } else if (parentLayout === Layout.GRID) {
       obj2 = __spreadValues(__spreadValues({}, obj2), item2.attrs("grid-column-start", "grid-column-end", "grid-row-start", "grid-row-end"));
@@ -58202,6 +58176,9 @@ class SelectionToolView extends SelectionToolEvent$1 {
   makeSelectionTool() {
     this.renderPointers();
   }
+  getRateDistance(startVetex, endVertex, dist$1 = 0) {
+    return lerp([], startVetex, endVertex, (dist(startVetex, endVertex) + dist$1) / dist(startVetex, endVertex));
+  }
   renderPointers() {
     if (!this.$selection.cachedCurrentItemMatrix) {
       return;
@@ -58217,10 +58194,10 @@ class SelectionToolView extends SelectionToolEvent$1 {
     this.state.renderPointerList = [
       screenVerties,
       [
-        lerp([], screenVerties[4], screenVerties[0], (dist(screenVerties[4], screenVerties[0]) + 20) / dist(screenVerties[4], screenVerties[0])),
-        lerp([], screenVerties[4], screenVerties[1], (dist(screenVerties[4], screenVerties[1]) + 20) / dist(screenVerties[4], screenVerties[1])),
-        lerp([], screenVerties[4], screenVerties[2], (dist(screenVerties[4], screenVerties[2]) + 20) / dist(screenVerties[4], screenVerties[2])),
-        lerp([], screenVerties[4], screenVerties[3], (dist(screenVerties[4], screenVerties[3]) + 20) / dist(screenVerties[4], screenVerties[3]))
+        this.getRateDistance(screenVerties[4], screenVerties[0], 20),
+        this.getRateDistance(screenVerties[4], screenVerties[1], 20),
+        this.getRateDistance(screenVerties[4], screenVerties[2], 20),
+        this.getRateDistance(screenVerties[4], screenVerties[3], 20)
       ]
     ];
     const pointers = this.createRenderPointers(...this.state.renderPointerList);
