@@ -10,6 +10,6 @@ export default class OrderDown extends MenuItem {
   }
 
   clickButton(e) {
-    this.emit('item.move.depth.down');
+    this.command('send.backward', 'send backward', this.$selection.current);
   }
 }

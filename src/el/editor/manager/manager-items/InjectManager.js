@@ -13,8 +13,7 @@ export class InjectManager {
    * @param {string} target 
    * @param {object} obj 
    */
-  registerUI(target, obj = {}) {
-
+  registerUI(target, obj = {}, order = 1) {
     if (!this.ui[target]) {
       this.ui[target] = []
     }
@@ -22,6 +21,7 @@ export class InjectManager {
     Object.keys(obj).forEach(refClass => {
       this.ui[target].push({
         refClass,
+        order,
         class: obj[refClass]
       })
     })
@@ -38,7 +38,14 @@ export class InjectManager {
    * @returns {string}
    */
   generate(target, hasRef = false) {
-    return this.getTargetUI(target).map(it => {
+    const list = this.getTargetUI(target)
+
+    list.sort((a, b) => {
+      if (a.order === b.order) return 0;
+      return a.order > b.order ? 1 : -1;
+    })
+
+    return list.map(it => {
       const props = {}
 
       if (hasRef) {

@@ -146,10 +146,12 @@ export class SelectionManager {
       // 사각형 영역에 포함되는지 체크 
       return item.isPointInRect(this.pos[0], this.pos[1])
     })
-    
-    // .map(item => this.modelManager.findGroupItem(item.id));
-
   }
+
+  get notSelectedLayers() {
+    return this.filteredLayers.filter(it => this.check(it) === false);
+  }
+
 
   /**
    * snap to object 에 사용될 target item 리스트 
@@ -234,12 +236,6 @@ export class SelectionManager {
 
     this.project = project;
     this.select();
-  }
-
-  get isRelative () {
-    var item = this.current || { }
-
-    return item.position === 'relative'
   }
 
   isSameIds (newIds) {

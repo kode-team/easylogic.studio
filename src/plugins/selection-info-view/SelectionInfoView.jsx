@@ -101,8 +101,6 @@ export default class SelectionInfoView extends EditorElement {
 
     this.emit("setAttributeForMulti", this.$selection.pack("x", "y"));
     this.emit("refreshSelectionStyleView");
-    this.emit("refreshSelectionTool", false);
-    // this.emit('refreshRect');
     this.refresh();
   }
 
@@ -124,7 +122,6 @@ export default class SelectionInfoView extends EditorElement {
       "move item",
       this.$selection.pack("x", "y")
     );
-    this.emit("refreshSelectionTool", true);
     this.$config.set("set.move.control.point", false);
   }
 

@@ -9,7 +9,7 @@ export default {
         const currentParentLayer = currentLayer.parent;
         const currentTarget = editor.get(target);
 
-        const lastValues = currentLayer.getInformationForHirachy('x', 'y');
+        const lastValues = currentLayer.hierachy;
 
         currentLayer.absoluteMove(dist);
 
@@ -29,7 +29,7 @@ export default {
         // 수집된 커맨드 동시에 실행
         editor.emit('setAttributeForMulti', {
             // 현재 객체 정보 변경 
-            ...currentLayer.attrsWithId('x', 'y'),
+            ...currentLayer.attrsWithId('x', 'y', 'angle'),
 
             // target item 의 부모 정보 변경 
             ...currentValues,
@@ -41,8 +41,8 @@ export default {
 
         editor.nextTick(() => {
             editor.history.add(message, this, {
-                currentValues: [currentLayer.getInformationForHirachy('x', 'y')],
-                undoValues: [lastValues, current.parentId],
+                currentValues: [currentLayer.hierachy],
+                undoValues: [lastValues, currentLayer.parentId],
             })
             editor.emit('refreshAllCanvas');            
         })
@@ -62,11 +62,14 @@ export default {
         currentLayer.reset(info.attrs);
 
         editor.emit('setAttributeForMulti', {
-            ...currentLayer.attrsWithId('x', 'y'),
+            ...currentLayer.attrsWithId('x', 'y', 'angle'),
             ...currentTarget.attrsWithId('children')
         });
 
-        editor.emit('refreshAllCanvas');        
+
+        editor.nextTick(() => {
+            editor.emit('refreshAllCanvas');
+        })
     },
 
     undo: function (editor, { undoValues: [lastValues, currentParentId] }) {
@@ -76,17 +79,22 @@ export default {
         const lastLayer = editor.get(currentLayer.id);
         const lastParent = editor.get(currentLayer.parentId);
         const currentParent = editor.get(currentParentId);
+
+        // FIXME: prev, next 에 따른 위치를 찾아서 이동해야함 , 그래야 버그 가능성을 줄일 수 있다. 
         const lastIndex = currentLayer.index;
 
         lastParent.insertChild(lastLayer, lastIndex);
         lastLayer.reset(lastValues.attrs);
 
         editor.emit('setAttributeForMulti', {
-            ...lastLayer.attrsWithId('x', 'y'),
+            ...lastLayer.attrsWithId('x', 'y', 'angle'),
             ...lastParent.attrsWithId('children'),
             ...currentParent.attrsWithId('children')
         });
 
-        editor.emit('refreshAllCanvas');
+        editor.nextTick(() => {
+            editor.emit('refreshAllCanvas');
+        })
+
     }
 }

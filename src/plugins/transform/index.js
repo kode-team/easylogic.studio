@@ -1,5 +1,5 @@
 import { Editor } from "el/editor/manager/Editor";
-import RotateEditorView from "./RotateEditorView";
+// import RotateEditorView from "./RotateEditorView";
 import TransformEditor from "./TransformEditor";
 import TransformProperty from "./TransformProperty";
 
@@ -11,7 +11,7 @@ import TransformProperty from "./TransformProperty";
 export default function (editor) {
 
     editor.registerElement({
-        RotateEditorView,
+        // RotateEditorView,
         TransformEditor
     })
 

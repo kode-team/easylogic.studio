@@ -390,6 +390,8 @@ export default {
     'layout.property.flex': 'Boîte Flex',
     'layout.property.grid': 'Grille',
     'layout.property.default': 'Défaut',    
+    'layout.property.resizing.title': 'Resizing',        
+    'layout.property.resizing.self.title': 'Self Resizing',            
 
     'default.layout.item.property.title.constraints': 'Constraints',        
 

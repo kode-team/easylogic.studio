@@ -23,7 +23,7 @@ export default {
 
         editor.nextTick(() => {
           editor.emit('refreshSelection');
-          editor.emit('refreshSelectionTool');
+          // editor.emit('refreshSelectionTool');
         })
       })
     }

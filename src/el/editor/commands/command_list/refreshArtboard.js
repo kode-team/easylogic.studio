@@ -1,18 +1,18 @@
-/**
- * refresh element command 
- * 
- * @param {Editor} editor - editor instance 
- * @param {Array} args - command parameters 
- */
-export default function refreshArtboard (editor) {
-    editor.emit('refreshLayerTreeView')    
-    editor.emit('refreshAllCanvas');
-    editor.emit('refreshStyleView');
-    editor.emit('refreshSelectionStyleView');
-    editor.emit('refreshAllElementBoundSize')   
-    editor.emit('refreshSelection');    
-    editor.nextTick(() => {        
-        editor.emit('refreshSelectionTool', true);
-    })
+import { Editor } from "el/editor/manager/Editor";
 
+export default {
+    command: 'refreshArtboard',
+    execute: function (editor) {
+
+        const command = editor.createCommandMaker();
+
+        command.emit('refreshLayerTreeView')
+        command.emit('refreshAllCanvas');
+        command.emit('refreshStyleView');
+        command.emit('refreshSelectionStyleView');
+        command.emit('refreshAllElementBoundSize')
+        command.emit('refreshSelection');
+
+        command.run();
+    }
 }

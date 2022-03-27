@@ -125,11 +125,6 @@ export default class FlexLayoutItemProperty extends BaseProperty {
     this.command('setAttributeForMulti', 'change flex layout', this.$selection.packByValue({ 
       [key]: value
     }))
-
-    this.nextTick(() => {
-      this.emit('refreshAllElementBoundSize')    
-      this.emit('refreshSelectionTool', true);      
-    })
   }
 
   [SUBSCRIBE_SELF('changeLayoutType')] (key, value) {
@@ -139,10 +134,6 @@ export default class FlexLayoutItemProperty extends BaseProperty {
 
     // 타입 변화에 따른 하위 아이템들의 설정을 바꿔야 한다. 
     this.refs.$layoutList.attr('data-selected-value', value);
-
-    this.nextTick(() => {
-      this.emit('refreshAllElementBoundSize')    
-    })
 
   }
 

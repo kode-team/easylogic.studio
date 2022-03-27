@@ -1,8 +1,6 @@
 import { MovableModel } from "./MovableModel";
-import { rectToVerties } from 'el/utils/collision';
 import { AlignContent, AlignItems, Constraints, ConstraintsDirection, FlexDirection, FlexWrap, JustifyContent, Layout, ResizingMode } from 'el/editor/types/model';
 import DefaultLayoutEngine from "../layout-engine/DefaultLayoutEngine";
-import { isUndefined } from "el/sapa/functions/func";
 
 
 const LayoutEngine = {

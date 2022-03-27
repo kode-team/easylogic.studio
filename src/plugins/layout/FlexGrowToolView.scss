@@ -1,0 +1,30 @@
+.elf--flex-grow-tool-view {
+    pointer-events: none;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+
+    .flex-grow-item {
+        position: absolute;
+        height: 20px;
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 1px solid var(--elf--font-color);
+        border-radius: 4px;
+        pointer-events: all;
+        transform: translate(-50%, -50%);
+        display: inline-block;
+        text-align: center;
+        padding: 4px 10px;
+        line-height: 1;
+
+        &[data-parent-direction="row"] {
+            cursor: ew-resize;
+        }
+
+        &[data-parent-direction="column"] {
+            cursor: ns-resize;
+        }
+    }
+}

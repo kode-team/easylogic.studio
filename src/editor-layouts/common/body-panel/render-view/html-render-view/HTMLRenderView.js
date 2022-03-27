@@ -430,14 +430,13 @@ export default class HTMLRenderView extends EditorElement {
             return;    
         }
 
-        this.emit('moveGhostToolView');          
+        const targetMousePoint = this.$viewport.getWorldPosition();        
+        this.emit('moveGhostToolView');
 
         // layout item 은 움직이지 않고 layout 이 좌표를 그리도록 한다. 
         if (this.$selection.isLayoutItem) {
             return;
-        }          
-
-        const targetMousePoint = this.$viewport.getWorldPosition();
+        }         
 
         const newDist = vec3.floor([], vec3.subtract([], targetMousePoint, this.initMousePoint));
 
@@ -513,7 +512,7 @@ export default class HTMLRenderView extends EditorElement {
         const newDist = vec3.dist(targetMousePoint, this.initMousePoint);
         this.$config.init('set.move.control.point', false);
 
-        this.emit('endGhostToolView'); 
+        this.emit('endGhostToolView');
 
         if (this.$config.get('set.dragarea.mode')) {
             this.emit('endDragAreaView');
@@ -544,7 +543,7 @@ export default class HTMLRenderView extends EditorElement {
 
         this.nextTick(() => {
             this.emit('refreshSelection');
-            this.emit('refreshSelectionTool', true)   
+            // this.emit('refreshSelectionTool', true)   
         }, 100);
     }
 
@@ -641,7 +640,7 @@ export default class HTMLRenderView extends EditorElement {
                 // 크기 변경이 없으면 bound size 를 수정하지 않는다. 
                 // 다른 레이아웃으로 들어가게 되면 크기의 변경이 있을 수도 있다. 
                 // 그 때는 레이아웃 기준으로 bound size 를 다시 잡을거라 괜찮다. 
-                if (parentObj.hasChangedField('width', 'height', 'border', 'padding-top', 'padding-left', 'padding-right', 'padding-bottom') === false) {
+                if (parentObj.hasChangedField('x', 'y', 'width', 'height', 'border', 'padding-top', 'padding-left', 'padding-right', 'padding-bottom', 'resizingHorizontal', 'resizingVertical') === false) {
                     return;
                 }
 
@@ -649,9 +648,14 @@ export default class HTMLRenderView extends EditorElement {
                 const { x, y, width, height } = $el.offsetRect();
 
                 if (width > 0 && height > 0 ) {
+                    // console.log(x, y, width, height);
                     parentObj.reset({ x, y, width, height })
 
-                    this.refreshSelectionStyleView(parentObj);                    
+                    this.refreshSelectionStyleView(parentObj);
+
+                    if (this.$selection.check(parentObj)) {
+                        this.emit('refreshSelectionTool');
+                    }                    
                 }
 
 
@@ -678,9 +682,17 @@ export default class HTMLRenderView extends EditorElement {
                     const { x, y, width, height } = $el.offsetRect();
 
                     if (width > 0 && height > 0 ) {
-                        it.reset({ x, y, width, height })
+                        const value = { x, y, width, height };
+
+                        if (it.isChangedValue(value)) {
+                            it.reset(value)
     
-                        this.refreshSelectionStyleView(it);
+                            this.refreshSelectionStyleView(it);
+    
+                            if (this.$selection.check(it)) {
+                                this.emit('refreshSelectionTool');
+                            }
+                        }
                     }
                 }
 

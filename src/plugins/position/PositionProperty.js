@@ -172,12 +172,6 @@ export default class PositionProperty extends BaseProperty {
     this.command('setAttributeForMulti', 'change position or size', this.$selection.packByValue({
       [key]: value
     }))
-
-    this.nextTick(() => {
-      this.emit('refreshAllElementBoundSize')
-      this.emit("refreshSelectionTool", true);
-    })
-
   }
 
   [SUBSCRIBE_SELF('changeRotate')](key, rotate) {

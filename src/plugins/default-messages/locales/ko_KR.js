@@ -393,6 +393,7 @@ export default {
     'layout.property.grid': '그리드',
     'layout.property.default': '기본 좌표',   
     'layout.property.resizing.title': '사이즈 조절',    
+    'layout.property.resizing.self.title': '아이템 사이즈 조절',    
     
     'default.layout.item.property.title.constraints': 'Constraints',        
 

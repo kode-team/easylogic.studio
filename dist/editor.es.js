@@ -5148,7 +5148,7 @@ function vertiesToRectangle(verties) {
   const height2 = dist(verties[0], verties[3]);
   return { x: x2, left: x2, y: y2, top: y2, width: width2, height: height2 };
 }
-function vertiesToPath(verties) {
+function vertiesToPath(verties = []) {
   const results = [];
   for (var i = 0; i < verties.length; i++) {
     if (i === 0) {
@@ -5338,7 +5338,6 @@ var __glob_0_0$4 = /* @__PURE__ */ Object.freeze({
 function _doForceRefreshSelection(editor) {
   editor.nextTick(() => {
     editor.emit("refreshAll");
-    editor.emit("refreshSelectionTool");
   });
 }
 var __glob_0_1$4 = /* @__PURE__ */ Object.freeze({
@@ -11524,25 +11523,28 @@ const DesignMode = {
   DESIGN: "design",
   ITEM: "item"
 };
-async function addLayerView(editor, type, data = {}) {
-  editor.selection.empty();
-  await editor.emit("refreshSelectionTool");
-  await editor.emit("hideAddViewLayer");
-  await editor.emit("removeGuideLine");
-  if (type === "select") {
-    editor.config.set("editing.mode", EditingMode.SELECT);
-  } else if (type === "brush") {
-    editor.config.set("editing.mode", EditingMode.DRAW);
-    await editor.emit("showPathDrawEditor");
-  } else if (type === "path") {
-    editor.config.set("editing.mode", EditingMode.PATH);
-    await editor.emit("showPathEditor", "path");
-  } else {
-    editor.config.set("editing.mode", EditingMode.APPEND);
-    editor.config.set("editing.mode.itemType", type);
-    await editor.emit("showLayerAppendView", type, data);
+var addLayerView = {
+  command: "addLayerView",
+  execute: async function(editor, type, data = {}) {
+    editor.selection.empty();
+    await editor.emit("refreshSelectionTool");
+    await editor.emit("hideAddViewLayer");
+    await editor.emit("removeGuideLine");
+    if (type === "select") {
+      editor.config.set("editing.mode", EditingMode.SELECT);
+    } else if (type === "brush") {
+      editor.config.set("editing.mode", EditingMode.DRAW);
+      await editor.emit("showPathDrawEditor");
+    } else if (type === "path") {
+      editor.config.set("editing.mode", EditingMode.PATH);
+      await editor.emit("showPathEditor", "path");
+    } else {
+      editor.config.set("editing.mode", EditingMode.APPEND);
+      editor.config.set("editing.mode.itemType", type);
+      await editor.emit("showLayerAppendView", type, data);
+    }
   }
-}
+};
 var __glob_0_11$4 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
@@ -11909,7 +11911,6 @@ var convert_path_operation = {
         editor.emit("recoverBooleanPath");
         editor.nextTick(() => {
           editor.emit("refreshSelection");
-          editor.emit("refreshSelectionTool");
         });
       });
     };
@@ -13672,6 +13673,123 @@ var __glob_0_46$2 = /* @__PURE__ */ Object.freeze({
   [Symbol.toStringTag]: "Module",
   "default": history_addLayer
 });
+var history_bring_forward = {
+  command: "history.bring.forward",
+  description: "bring forward",
+  execute: function(editor, message, layer2 = editor.selection.current) {
+    const currentLayer = editor.get(layer2);
+    const lastValues = currentLayer.hierarchy;
+    const oldParentLayer = currentLayer.parent;
+    const currentValues2 = {};
+    let nextParentLayer = null;
+    if (currentLayer.isLast()) {
+      nextParentLayer = oldParentLayer.next;
+      if (nextParentLayer.enableHasChildren()) {
+        nextParentLayer.appendChild(currentLayer);
+        currentValues2 = currentLayer.hierarchy;
+      } else {
+        nextParentLayer.appendAfter(currentLayer);
+        currentValues2 = currentLayer.hierarchy;
+      }
+    } else {
+      currentLayer.parent.bringForward(currentLayer.id);
+      currentValues2 = currentLayer.hierarchy;
+    }
+    editor.emit("setAttributeForMulti", __spreadValues(__spreadValues(__spreadValues({}, oldParentLayer.attrsWithId("children")), currentLayer.attrsWithId("x", "y", "angle")), currentLayer.parent.attrsWithId("children")));
+    editor.nextTick(() => {
+      editor.history.add(message, this, {
+        currentValues: [currentValues2],
+        undoValues: [lastValues]
+      });
+      editor.emit("refreshAllCanvas");
+    });
+    editor.nextTick(() => {
+      editor.history.saveSelection();
+    });
+  },
+  redo: function(editor, { currentValues: [newValues], undoValues: [lastValues] }) {
+    const currentLayer = editor.get(newValues.id);
+    const currentTarget = editor.get(newValues.parentId);
+    const lastParent = editor.get(lastValues.parentId);
+    currentTarget.insertChild(currentLayer, newValues.index);
+    currentLayer.reset(newValues.attrs);
+    editor.emit("setAttributeForMulti", __spreadValues(__spreadValues(__spreadValues({}, lastParent.attrsWithId("children")), currentLayer.attrsWithId("x", "y", "angle")), currentTarget.attrsWithId("children")));
+    editor.nextTick(() => {
+      editor.emit("refreshAllCanvas");
+    });
+  },
+  undo: function(editor, { currentValues: [newValues], undoValues: [lastValues] }) {
+    const currentLayer = lastValues;
+    const lastLayer = editor.get(currentLayer.id);
+    const lastParent = editor.get(currentLayer.parentId);
+    const currentParent = editor.get(newValues.parentId);
+    const lastIndex = currentLayer.index;
+    lastParent.insertChild(lastLayer, lastIndex);
+    lastLayer.reset(lastValues.attrs);
+    editor.emit("setAttributeForMulti", __spreadValues(__spreadValues(__spreadValues({}, lastLayer.attrsWithId("x", "y", "angle")), lastParent.attrsWithId("children")), currentParent.attrsWithId("children")));
+    editor.nextTick(() => {
+      editor.emit("refreshAllCanvas");
+    });
+  }
+};
+var __glob_0_47$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": history_bring_forward
+});
+var history_bring_front = {
+  command: "history.bring.front",
+  description: "bring front",
+  execute: function(editor, message, layer2 = editor.selection.current) {
+    const currentLayer = editor.get(layer2);
+    const lastValues = currentLayer.hierachy;
+    const oldParentLayer = currentLayer.parent;
+    const currentValues2 = {};
+    if (currentLayer.isLast()) {
+      return;
+    } else {
+      currentLayer.parent.bringFront(currentLayer.id);
+      currentValues2 = currentLayer.hierarchy;
+    }
+    editor.emit("setAttributeForMulti", __spreadValues(__spreadValues({}, oldParentLayer.attrsWithId("children")), currentLayer.attrsWithId("x", "y", "angle")));
+    editor.nextTick(() => {
+      editor.history.add(message, this, {
+        currentValues: [currentValues2],
+        undoValues: [lastValues]
+      });
+      editor.emit("refreshAllCanvas");
+    });
+    editor.nextTick(() => {
+      editor.history.saveSelection();
+    });
+  },
+  redo: function(editor, { currentValues: [newValues], undoValues: [lastValues] }) {
+    const currentLayer = editor.get(newValues.id);
+    const currentTarget = editor.get(newValues.parentId);
+    currentTarget.insertChild(currentLayer, newValues.index);
+    currentLayer.reset(newValues.attrs);
+    editor.emit("setAttributeForMulti", __spreadValues(__spreadValues({}, currentLayer.attrsWithId("x", "y", "angle")), currentTarget.attrsWithId("children")));
+    editor.nextTick(() => {
+      editor.emit("refreshAllCanvas");
+    });
+  },
+  undo: function(editor, { currentValues: [newValues], undoValues: [lastValues] }) {
+    const currentLayer = lastValues;
+    const lastLayer = editor.get(currentLayer.id);
+    const lastParent = editor.get(currentLayer.parentId);
+    const lastIndex = currentLayer.index;
+    lastParent.insertChild(lastLayer, lastIndex);
+    editor.emit("setAttributeForMulti", __spreadValues(__spreadValues({}, lastLayer.attrsWithId("x", "y", "angle")), lastParent.attrsWithId("children")));
+    editor.nextTick(() => {
+      editor.emit("refreshAllCanvas");
+    });
+  }
+};
+var __glob_0_48$2 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": history_bring_front
+});
 var history_group_item = {
   command: "history.group.item",
   description: "History Group Item",
@@ -13699,7 +13817,7 @@ var history_group_item = {
   undo: function(editor, { undoValues: [ids, projectId] }) {
   }
 };
-var __glob_0_47$2 = /* @__PURE__ */ Object.freeze({
+var __glob_0_49$2 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_group_item
@@ -13745,7 +13863,7 @@ var history_moveLayer = {
     editor.emit("setAttributeForMulti", lastValues);
   }
 };
-var __glob_0_48$2 = /* @__PURE__ */ Object.freeze({
+var __glob_0_50$2 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_moveLayer
@@ -13757,7 +13875,7 @@ var history_moveLayerToTarget = {
     const currentLayer = editor.get(layer2);
     const currentParentLayer = currentLayer.parent;
     const currentTarget = editor.get(target);
-    const lastValues = currentLayer.getInformationForHirachy("x", "y");
+    const lastValues = currentLayer.hierachy;
     currentLayer.absoluteMove(dist2);
     let currentValues2 = {};
     if (targetAction === "appendChild") {
@@ -13770,11 +13888,11 @@ var history_moveLayerToTarget = {
       currentTarget.appendAfter(currentLayer);
       currentValues2 = currentTarget.parent.attrsWithId("children");
     }
-    editor.emit("setAttributeForMulti", __spreadValues(__spreadValues(__spreadValues({}, currentLayer.attrsWithId("x", "y")), currentValues2), currentParentLayer && currentParentLayer.isNot("project") ? currentParentLayer.attrsWithId("children") : {}));
+    editor.emit("setAttributeForMulti", __spreadValues(__spreadValues(__spreadValues({}, currentLayer.attrsWithId("x", "y", "angle")), currentValues2), currentParentLayer && currentParentLayer.isNot("project") ? currentParentLayer.attrsWithId("children") : {}));
     editor.nextTick(() => {
       editor.history.add(message, this, {
-        currentValues: [currentLayer.getInformationForHirachy("x", "y")],
-        undoValues: [lastValues]
+        currentValues: [currentLayer.hierachy],
+        undoValues: [lastValues, currentLayer.parentId]
       });
       editor.emit("refreshAllCanvas");
     });
@@ -13787,21 +13905,26 @@ var history_moveLayerToTarget = {
     const currentTarget = editor.get(info.parentId);
     currentTarget.insertChild(currentLayer, info.index);
     currentLayer.reset(info.attrs);
-    editor.emit("setAttributeForMulti", __spreadValues(__spreadValues({}, currentLayer.attrsWithId("x", "y")), currentTarget.attrsWithId("children")));
-    editor.emit("refreshAllCanvas");
+    editor.emit("setAttributeForMulti", __spreadValues(__spreadValues({}, currentLayer.attrsWithId("x", "y", "angle")), currentTarget.attrsWithId("children")));
+    editor.nextTick(() => {
+      editor.emit("refreshAllCanvas");
+    });
   },
-  undo: function(editor, { undoValues: [lastValues] }) {
+  undo: function(editor, { undoValues: [lastValues, currentParentId] }) {
     const currentLayer = lastValues;
     const lastLayer = editor.get(currentLayer.id);
     const lastParent = editor.get(currentLayer.parentId);
+    const currentParent = editor.get(currentParentId);
     const lastIndex = currentLayer.index;
     lastParent.insertChild(lastLayer, lastIndex);
     lastLayer.reset(lastValues.attrs);
-    editor.emit("setAttributeForMulti", __spreadValues(__spreadValues({}, lastLayer.attrsWithId("x", "y")), lastParent.attrsWithId("children")));
-    editor.emit("refreshAllCanvas");
+    editor.emit("setAttributeForMulti", __spreadValues(__spreadValues(__spreadValues({}, lastLayer.attrsWithId("x", "y", "angle")), lastParent.attrsWithId("children")), currentParent.attrsWithId("children")));
+    editor.nextTick(() => {
+      editor.emit("refreshAllCanvas");
+    });
   }
 };
-var __glob_0_49$2 = /* @__PURE__ */ Object.freeze({
+var __glob_0_51$2 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_moveLayerToTarget
@@ -13812,7 +13935,7 @@ var history_redo$1 = {
     editor.history.redo();
   }
 };
-var __glob_0_50$2 = /* @__PURE__ */ Object.freeze({
+var __glob_0_52$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_redo$1
@@ -13855,7 +13978,7 @@ var history_refreshSelection = {
     this.nextAction(editor);
   }
 };
-var __glob_0_51$2 = /* @__PURE__ */ Object.freeze({
+var __glob_0_53$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_refreshSelection
@@ -13893,7 +14016,7 @@ var history_refreshSelectionProject = {
     this.nextAction(editor);
   }
 };
-var __glob_0_52$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_54$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_refreshSelectionProject
@@ -13954,7 +14077,7 @@ var history_removeLayer = {
     });
   }
 };
-var __glob_0_53$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_55$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_removeLayer
@@ -13991,10 +14114,122 @@ var history_removeProject = {
     });
   }
 };
-var __glob_0_54$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_56$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_removeProject
+});
+var history_send_back = {
+  command: "history.send.back",
+  description: "send back",
+  execute: function(editor, message, layer2 = editor.selection.current) {
+    const currentLayer = editor.get(layer2);
+    const lastValues = currentLayer.hierarchy;
+    const oldParentLayer = currentLayer.parent;
+    const currentValues2 = {};
+    if (currentLayer.isFirst()) {
+      return;
+    } else {
+      currentLayer.parent.sendBack(currentLayer.id);
+      currentValues2 = currentLayer.hierarchy;
+    }
+    editor.emit("setAttributeForMulti", __spreadValues(__spreadValues({}, oldParentLayer.attrsWithId("children")), currentLayer.attrsWithId("x", "y", "angle")));
+    editor.nextTick(() => {
+      editor.history.add(message, this, {
+        currentValues: [currentValues2],
+        undoValues: [lastValues]
+      });
+      editor.emit("refreshAllCanvas");
+    });
+    editor.nextTick(() => {
+      editor.history.saveSelection();
+    });
+  },
+  redo: function(editor, { currentValues: [newValues], undoValues: [lastValues] }) {
+    const currentLayer = editor.get(newValues.id);
+    const currentTarget = editor.get(newValues.parentId);
+    currentTarget.insertChild(currentLayer, newValues.index);
+    currentLayer.reset(newValues.attrs);
+    editor.emit("setAttributeForMulti", __spreadValues(__spreadValues({}, currentLayer.attrsWithId("x", "y", "angle")), currentTarget.attrsWithId("children")));
+    editor.nextTick(() => {
+      editor.emit("refreshAllCanvas");
+    });
+  },
+  undo: function(editor, { currentValues: [newValues], undoValues: [lastValues] }) {
+    const currentLayer = lastValues;
+    const lastLayer = editor.get(currentLayer.id);
+    const lastParent = editor.get(currentLayer.parentId);
+    const lastIndex = currentLayer.index;
+    lastParent.insertChild(lastLayer, lastIndex);
+    editor.emit("setAttributeForMulti", __spreadValues(__spreadValues({}, lastLayer.attrsWithId("x", "y", "angle")), lastParent.attrsWithId("children")));
+    editor.nextTick(() => {
+      editor.emit("refreshAllCanvas");
+    });
+  }
+};
+var __glob_0_57$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": history_send_back
+});
+var history_send_backward = {
+  command: "history.send.backward",
+  description: "send backward",
+  execute: function(editor, message, layer2 = editor.selection.current) {
+    const currentLayer = editor.get(layer2);
+    const lastValues = currentLayer.hierarchy;
+    const oldParentLayer = currentLayer.parent;
+    const currentValues2 = {};
+    let prevParentLayer = null;
+    if (currentLayer.isFirst()) {
+      prevParentLayer = oldParentLayer.prev;
+      prevParentLayer.appendBefore(currentLayer);
+      currentValues2 = currentLayer.hierarchy;
+    } else {
+      currentLayer.parent.sendBackward(currentLayer.id);
+      currentValues2 = currentLayer.hierarchy;
+    }
+    editor.emit("setAttributeForMulti", __spreadValues(__spreadValues(__spreadValues({}, oldParentLayer.attrsWithId("children")), currentLayer.attrsWithId("x", "y", "angle")), currentLayer.parent.attrsWithId("children")));
+    editor.nextTick(() => {
+      editor.history.add(message, this, {
+        currentValues: [currentValues2],
+        undoValues: [lastValues]
+      });
+      editor.emit("refreshAllCanvas");
+    });
+    editor.nextTick(() => {
+      editor.history.saveSelection();
+    });
+  },
+  redo: function(editor, { currentValues: [newValues], undoValues: [lastValues] }) {
+    const currentLayer = editor.get(newValues.id);
+    const currentTarget = editor.get(newValues.parentId);
+    const lastParent = editor.get(lastValues.parentId);
+    currentTarget.insertChild(currentLayer, newValues.index);
+    currentLayer.reset(newValues.attrs);
+    editor.emit("setAttributeForMulti", __spreadValues(__spreadValues(__spreadValues({}, lastParent.attrsWithId("children")), currentLayer.attrsWithId("x", "y", "angle")), currentTarget.attrsWithId("children")));
+    editor.nextTick(() => {
+      editor.emit("refreshAllCanvas");
+    });
+  },
+  undo: function(editor, { currentValues: [newValues], undoValues: [lastValues] }) {
+    const currentLayer = lastValues;
+    const lastLayer = editor.get(currentLayer.id);
+    const lastParent = editor.get(currentLayer.parentId);
+    const currentParent = editor.get(newValues.parentId);
+    const lastIndex = currentLayer.index;
+    lastParent.insertChild(lastLayer, lastIndex);
+    lastLayer.reset(lastValues.attrs);
+    editor.emit("setAttributeForMulti", __spreadValues(__spreadValues(__spreadValues({}, lastLayer.attrsWithId("x", "y", "angle")), lastParent.attrsWithId("children")), currentParent.attrsWithId("children")));
+    editor.nextTick(() => {
+      editor.emit("refreshAllCanvas");
+    });
+  }
+};
+var __glob_0_58$1 = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  [Symbol.toStringTag]: "Module",
+  "default": history_send_backward
 });
 var history_setAttributeForMulti = {
   command: "history.setAttributeForMulti",
@@ -14027,7 +14262,7 @@ var history_setAttributeForMulti = {
     });
   }
 };
-var __glob_0_55$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_59$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_setAttributeForMulti
@@ -14038,7 +14273,7 @@ var history_undo$1 = {
     editor.history.undo();
   }
 };
-var __glob_0_56$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_60$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": history_undo$1
@@ -14053,7 +14288,7 @@ var item_move_depth_down$1 = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_57$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_61$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": item_move_depth_down$1
@@ -14068,7 +14303,7 @@ var item_move_depth_first = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_58$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_62$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": item_move_depth_first
@@ -14083,7 +14318,7 @@ var item_move_depth_last = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_59$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_63$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": item_move_depth_last
@@ -14098,7 +14333,7 @@ var item_move_depth_up$1 = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_60$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_64$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": item_move_depth_up$1
@@ -14112,7 +14347,7 @@ var keymap_keydown = {
     }
   }
 };
-var __glob_0_61$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_65$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": keymap_keydown
@@ -14126,7 +14361,7 @@ var keymap_keyup = {
     }
   }
 };
-var __glob_0_62$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_66$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": keymap_keyup
@@ -14144,7 +14379,7 @@ var lastTimelineItem = {
     });
   }
 };
-var __glob_0_63$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_67$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": lastTimelineItem
@@ -14156,7 +14391,7 @@ var load_json = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_64$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_68$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": load_json
@@ -14175,7 +14410,7 @@ var moveLayer = {
     });
   }
 };
-var __glob_0_65$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_69$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": moveLayer
@@ -14195,7 +14430,7 @@ var moveLayerForItems = {
     });
   }
 };
-var __glob_0_66$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_70$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": moveLayerForItems
@@ -14217,7 +14452,7 @@ var moveSelectionToCenter = {
     editor.emit("moveToCenter", areaVerties, withScale);
   }
 };
-var __glob_0_67$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_71$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": moveSelectionToCenter
@@ -14231,7 +14466,7 @@ var moveToCenter = {
     }
   }
 };
-var __glob_0_68$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_72$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": moveToCenter
@@ -14271,7 +14506,7 @@ function newComponent(editor, itemType, obj2, isSelected = true, containerItem =
   editor.command("addLayer", `add layer - ${itemType}`, editor.createModel(newObjAttrs), isSelected, containerItem);
   editor.changeMode(EDIT_MODE_SELECTION);
 }
-var __glob_0_69$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_73$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": newComponent
@@ -14289,7 +14524,7 @@ var nextTimelineItem = {
     });
   }
 };
-var __glob_0_70$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_74$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": nextTimelineItem
@@ -14552,7 +14787,7 @@ var open_editor = {
     }
   }
 };
-var __glob_0_71$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_75$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": open_editor
@@ -14565,7 +14800,7 @@ var pauseTimelineItem = {
     }
   }
 };
-var __glob_0_72$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_76$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pauseTimelineItem
@@ -14620,7 +14855,7 @@ var playTimelineItem = {
     });
   }
 };
-var __glob_0_73$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_77$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": playTimelineItem
@@ -14631,7 +14866,7 @@ var pop_mode_view = {
     editor.modeViewManager.popMode(modeView);
   }
 };
-var __glob_0_74$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_78$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": pop_mode_view
@@ -14649,7 +14884,7 @@ var prevTimelineItem = {
     });
   }
 };
-var __glob_0_75$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_79$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": prevTimelineItem
@@ -14660,7 +14895,7 @@ var push_mode_view = {
     editor.modeViewManager.pushMode(modeView);
   }
 };
-var __glob_0_76$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_80$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": push_mode_view
@@ -14700,7 +14935,7 @@ var recoverBooleanPath = {
     }
   }
 };
-var __glob_0_77$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_81$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": recoverBooleanPath
@@ -14711,23 +14946,25 @@ var recoverCursor = {
     editor.emit("changeIconView", "auto");
   }
 };
-var __glob_0_78$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_82$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": recoverCursor
 });
-function refreshArtboard(editor) {
-  editor.emit("refreshLayerTreeView");
-  editor.emit("refreshAllCanvas");
-  editor.emit("refreshStyleView");
-  editor.emit("refreshSelectionStyleView");
-  editor.emit("refreshAllElementBoundSize");
-  editor.emit("refreshSelection");
-  editor.nextTick(() => {
-    editor.emit("refreshSelectionTool", true);
-  });
-}
-var __glob_0_79$1 = /* @__PURE__ */ Object.freeze({
+var refreshArtboard = {
+  command: "refreshArtboard",
+  execute: function(editor) {
+    const command = editor.createCommandMaker();
+    command.emit("refreshLayerTreeView");
+    command.emit("refreshAllCanvas");
+    command.emit("refreshStyleView");
+    command.emit("refreshSelectionStyleView");
+    command.emit("refreshAllElementBoundSize");
+    command.emit("refreshSelection");
+    command.run();
+  }
+};
+var __glob_0_83$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": refreshArtboard
@@ -14738,22 +14975,25 @@ var refreshCursor = {
     editor.emit("changeIconView", iconType, ...args2);
   }
 };
-var __glob_0_80$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_84$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": refreshCursor
 });
-function refreshElement(editor, current) {
-  editor.emit("refreshSelectionStyleView", current);
-  if (current && current.is("project")) {
-    editor.emit("refreshElementBoundSize", current);
-  } else if (current && (current.isLayoutItem() || current.parent.is("boolean-path"))) {
-    editor.emit("refreshElementBoundSize", current.parent);
-  } else {
-    editor.emit("refreshElementBoundSize", current);
+var refreshElement = {
+  command: "refreshElement",
+  execute: function(editor, current) {
+    editor.emit("refreshSelectionStyleView", current);
+    if (current && current.is("project")) {
+      editor.emit("refreshElementBoundSize", current);
+    } else if (current && (current.isLayoutItem() || current.parent.is("boolean-path"))) {
+      editor.emit("refreshElementBoundSize", current.parent);
+    } else {
+      editor.emit("refreshElementBoundSize", current);
+    }
   }
-}
-var __glob_0_81$1 = /* @__PURE__ */ Object.freeze({
+};
+var __glob_0_85$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": refreshElement
@@ -14761,7 +15001,7 @@ var __glob_0_81$1 = /* @__PURE__ */ Object.freeze({
 function refreshHistory(editor) {
   editor.emit("saveJSON");
 }
-var __glob_0_82$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_86$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": refreshHistory
@@ -14769,7 +15009,7 @@ var __glob_0_82$1 = /* @__PURE__ */ Object.freeze({
 function refreshProject(editor, current) {
   editor.emit("refreshStyleView", current, true);
 }
-var __glob_0_83$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_87$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": refreshProject
@@ -14783,7 +15023,7 @@ var refreshSelectedOffset = {
     }
   }
 };
-var __glob_0_84$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_88$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": refreshSelectedOffset
@@ -14800,7 +15040,7 @@ var removeAnimationItem = {
     }
   }
 };
-var __glob_0_85$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_89$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": removeAnimationItem
@@ -14820,7 +15060,7 @@ var removeLayer$1 = {
     });
   }
 };
-var __glob_0_86$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_90$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": removeLayer$1
@@ -14837,7 +15077,7 @@ var removeTimeline = {
     }
   }
 };
-var __glob_0_87$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_91$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": removeTimeline
@@ -14854,17 +15094,15 @@ var removeTimelineProperty = {
     }
   }
 };
-var __glob_0_88$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_92$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": removeTimelineProperty
 });
 function resetSelection(editor) {
-  editor.nextTick(() => {
-    editor.emit("refreshSelectionTool");
-  });
+  editor.emit("refreshSelectionTool");
 }
-var __glob_0_89$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_93$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": resetSelection
@@ -14882,7 +15120,7 @@ function resizeArtBoard(editor, size2 = "") {
     _doForceRefreshSelection(editor);
   }
 }
-var __glob_0_90$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_94$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": resizeArtBoard
@@ -15166,7 +15404,7 @@ var rotateLayer = {
     });
   }
 };
-var __glob_0_91$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_95$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": rotateLayer
@@ -15187,7 +15425,7 @@ var same_height$1 = {
     }
   }
 };
-var __glob_0_92$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_96$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": same_height$1
@@ -15205,7 +15443,7 @@ var same_width$1 = {
     }
   }
 };
-var __glob_0_93$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_97$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": same_width$1
@@ -15216,7 +15454,7 @@ var saveJSON = {
     editor.saveItem("model", editor.modelManager.toJSON());
   }
 };
-var __glob_0_94$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_98$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": saveJSON
@@ -15238,7 +15476,7 @@ var savePNG = {
     }
   }
 };
-var __glob_0_95$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_99$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": savePNG
@@ -15249,7 +15487,7 @@ var segment_delete$1 = {
     editor.emit("deleteSegment");
   }
 };
-var __glob_0_96$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_100$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": segment_delete$1
@@ -15261,7 +15499,7 @@ var segment_move_down = {
     editor.emit("moveSegment", 0, dy);
   }
 };
-var __glob_0_97$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_101$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": segment_move_down
@@ -15273,7 +15511,7 @@ var segment_move_left = {
     editor.emit("moveSegment", -1 * dx, 0);
   }
 };
-var __glob_0_98$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_102$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": segment_move_left
@@ -15285,7 +15523,7 @@ var segment_move_right = {
     editor.emit("moveSegment", dx, 0);
   }
 };
-var __glob_0_99$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_103$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": segment_move_right
@@ -15297,7 +15535,7 @@ var segment_move_up = {
     editor.emit("moveSegment", 0, -1 * dy);
   }
 };
-var __glob_0_100$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_104$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": segment_move_up
@@ -15312,7 +15550,7 @@ var select_all$1 = {
     }
   }
 };
-var __glob_0_101$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_105$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": select_all$1
@@ -15328,7 +15566,7 @@ var selectTimelineItem = {
     }
   }
 };
-var __glob_0_102$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_106$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": selectTimelineItem
@@ -15369,7 +15607,7 @@ var setAttributeForMulti = {
     commandMaker.run();
   }
 };
-var __glob_0_103$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_107$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": setAttributeForMulti
@@ -15381,7 +15619,7 @@ var setLocale = {
     editor.emit("changed.locale");
   }
 };
-var __glob_0_104$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_108$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": setLocale
@@ -15397,7 +15635,7 @@ var setTimelineOffset = {
     }
   }
 };
-var __glob_0_105$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_109$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": setTimelineOffset
@@ -15408,7 +15646,7 @@ var showExportView = {
     editor.emit("showExportWindow");
   }
 };
-var __glob_0_106$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_110$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": showExportView
@@ -15434,7 +15672,7 @@ var sort_bottom = {
     }
   }
 };
-var __glob_0_107$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_111$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sort_bottom
@@ -15459,7 +15697,7 @@ var sort_center = {
     }
   }
 };
-var __glob_0_108$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_112$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sort_center
@@ -15485,7 +15723,7 @@ var sort_left = {
     }
   }
 };
-var __glob_0_109$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_113$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sort_left
@@ -15510,7 +15748,7 @@ var sort_middle = {
     }
   }
 };
-var __glob_0_110$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_114$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sort_middle
@@ -15536,7 +15774,7 @@ var sort_right = {
     }
   }
 };
-var __glob_0_111$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_115$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sort_right
@@ -15562,7 +15800,7 @@ var sort_top = {
     }
   }
 };
-var __glob_0_112$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_116$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": sort_top
@@ -15587,12 +15825,11 @@ var switch_path = {
         editor.emit("recoverBooleanPath");
         editor.selection.select(current);
         editor.emit("refreshSelection");
-        editor.emit("refreshSelectionTool");
       });
     }
   }
 };
-var __glob_0_113$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_117$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": switch_path
@@ -15603,7 +15840,7 @@ var toggle_tool_hand = {
     editor.config.toggle("set.tool.hand");
   }
 };
-var __glob_0_114$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_118$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": toggle_tool_hand
@@ -15626,7 +15863,7 @@ var ungroup_item$1 = {
     }
   }
 };
-var __glob_0_115$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_119$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": ungroup_item$1
@@ -15640,7 +15877,7 @@ var updateClipPath = {
     }));
   }
 };
-var __glob_0_116$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_120$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateClipPath
@@ -15663,7 +15900,7 @@ var updateImage = {
     reader.readAsDataURL(imageFileOrBlob);
   }
 };
-var __glob_0_117$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_121$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateImage
@@ -15691,7 +15928,7 @@ var updateImageAssetItem = {
     reader.readAsDataURL(item2);
   }
 };
-var __glob_0_118$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_122$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateImageAssetItem
@@ -15728,7 +15965,7 @@ var updatePathItem = {
     }
   }
 };
-var __glob_0_119$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_123$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updatePathItem
@@ -15758,7 +15995,7 @@ var updateResource = {
     });
   }
 };
-var __glob_0_120$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_124$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateResource
@@ -15771,7 +16008,7 @@ var updateScale = {
     editor.emit("updateViewport", scale2, oldScale);
   }
 };
-var __glob_0_121$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_125$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateScale
@@ -15841,7 +16078,7 @@ var updateUriList = {
     }
   }
 };
-var __glob_0_122$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_126$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateUriList
@@ -15864,7 +16101,7 @@ var updateVideo = {
     reader.readAsDataURL(item2);
   }
 };
-var __glob_0_123$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_127$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateVideo
@@ -15892,7 +16129,7 @@ var updateVideoAssetItem = {
     reader.readAsDataURL(item2);
   }
 };
-var __glob_0_124$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_128$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": updateVideoAssetItem
@@ -15903,7 +16140,7 @@ var zoom_default$1 = {
     editor.viewport.zoomDefault();
   }
 };
-var __glob_0_125$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_129$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": zoom_default$1
@@ -15914,7 +16151,7 @@ var zoom_in$1 = {
     editor.viewport.zoomIn(0.02);
   }
 };
-var __glob_0_126$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_130$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": zoom_in$1
@@ -15925,7 +16162,7 @@ var zoom_out$1 = {
     editor.viewport.zoomOut(0.02);
   }
 };
-var __glob_0_127$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_131$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": zoom_out$1
@@ -15943,12 +16180,12 @@ var update = {
     }
   }
 };
-var __glob_0_128$1 = /* @__PURE__ */ Object.freeze({
+var __glob_0_132$1 = /* @__PURE__ */ Object.freeze({
   __proto__: null,
   [Symbol.toStringTag]: "Module",
   "default": update
 });
-const modules$4 = { "./command_list/_currentProject.js": __glob_0_0$4, "./command_list/_doForceRefreshSelection.js": __glob_0_1$4, "./command_list/addArtBoard.js": __glob_0_2$4, "./command_list/addBackgroundColor.js": __glob_0_3$4, "./command_list/addBackgroundImageAsset.js": __glob_0_4$4, "./command_list/addBackgroundImageGradient.js": __glob_0_5$4, "./command_list/addBackgroundImagePattern.js": __glob_0_6$4, "./command_list/addCustomComponent.js": __glob_0_7$4, "./command_list/addImage.js": __glob_0_8$4, "./command_list/addImageAssetItem.js": __glob_0_9$4, "./command_list/addLayer.js": __glob_0_10$4, "./command_list/addLayerView.js": __glob_0_11$4, "./command_list/addProject.js": __glob_0_12$4, "./command_list/addSVGFilterAssetItem.js": __glob_0_13$4, "./command_list/addText.js": __glob_0_14$4, "./command_list/addTimelineCurrentProperty.js": __glob_0_15$4, "./command_list/addTimelineItem.js": __glob_0_16$4, "./command_list/addTimelineKeyframe.js": __glob_0_17$4, "./command_list/addTimelineProperty.js": __glob_0_18$4, "./command_list/addVideo.js": __glob_0_19$4, "./command_list/addVideoAssetItem.js": __glob_0_20$4, "./command_list/clipboard.copy.js": __glob_0_21$3, "./command_list/clipboard.paste.js": __glob_0_22$3, "./command_list/convert.flatten.path.js": __glob_0_23$3, "./command_list/convert.no.transform.path.js": __glob_0_24$3, "./command_list/convert.normalize.path.js": __glob_0_25$2, "./command_list/convert.path.operation.js": __glob_0_26$2, "./command_list/convert.polygonal.path.js": __glob_0_27$2, "./command_list/convert.simplify.path.js": __glob_0_28$2, "./command_list/convert.smooth.path.js": __glob_0_29$2, "./command_list/convert.stroke.to.path.js": __glob_0_30$2, "./command_list/convertPasteText.js": __glob_0_31$2, "./command_list/convertPath.js": __glob_0_32$2, "./command_list/copy.path.js": __glob_0_33$2, "./command_list/copyTimelineProperty.js": __glob_0_34$2, "./command_list/deleteTimelineKeyframe.js": __glob_0_35$2, "./command_list/doubleclick.item.js": __glob_0_36$2, "./command_list/downloadJSON.js": __glob_0_37$2, "./command_list/downloadPNG.js": __glob_0_38$2, "./command_list/downloadSVG.js": __glob_0_39$2, "./command_list/drop.asset.js": __glob_0_40$2, "./command_list/dropImageUrl.js": __glob_0_41$2, "./command_list/editor.config.body.event.js": __glob_0_42$2, "./command_list/fileDropItems.js": __glob_0_43$2, "./command_list/firstTimelineItem.js": __glob_0_44$2, "./command_list/group.item.js": __glob_0_45$2, "./command_list/history.addLayer.js": __glob_0_46$2, "./command_list/history.group.item.js": __glob_0_47$2, "./command_list/history.moveLayer.js": __glob_0_48$2, "./command_list/history.moveLayerToTarget.js": __glob_0_49$2, "./command_list/history.redo.js": __glob_0_50$2, "./command_list/history.refreshSelection.js": __glob_0_51$2, "./command_list/history.refreshSelectionProject.js": __glob_0_52$1, "./command_list/history.removeLayer.js": __glob_0_53$1, "./command_list/history.removeProject.js": __glob_0_54$1, "./command_list/history.setAttributeForMulti.js": __glob_0_55$1, "./command_list/history.undo.js": __glob_0_56$1, "./command_list/item.move.depth.down.js": __glob_0_57$1, "./command_list/item.move.depth.first.js": __glob_0_58$1, "./command_list/item.move.depth.last.js": __glob_0_59$1, "./command_list/item.move.depth.up.js": __glob_0_60$1, "./command_list/keymap.keydown.js": __glob_0_61$1, "./command_list/keymap.keyup.js": __glob_0_62$1, "./command_list/lastTimelineItem.js": __glob_0_63$1, "./command_list/load.json.js": __glob_0_64$1, "./command_list/moveLayer.js": __glob_0_65$1, "./command_list/moveLayerForItems.js": __glob_0_66$1, "./command_list/moveSelectionToCenter.js": __glob_0_67$1, "./command_list/moveToCenter.js": __glob_0_68$1, "./command_list/newComponent.js": __glob_0_69$1, "./command_list/nextTimelineItem.js": __glob_0_70$1, "./command_list/open.editor.js": __glob_0_71$1, "./command_list/pauseTimelineItem.js": __glob_0_72$1, "./command_list/playTimelineItem.js": __glob_0_73$1, "./command_list/pop.mode.view.js": __glob_0_74$1, "./command_list/prevTimelineItem.js": __glob_0_75$1, "./command_list/push.mode.view.js": __glob_0_76$1, "./command_list/recoverBooleanPath.js": __glob_0_77$1, "./command_list/recoverCursor.js": __glob_0_78$1, "./command_list/refreshArtboard.js": __glob_0_79$1, "./command_list/refreshCursor.js": __glob_0_80$1, "./command_list/refreshElement.js": __glob_0_81$1, "./command_list/refreshHistory.js": __glob_0_82$1, "./command_list/refreshProject.js": __glob_0_83$1, "./command_list/refreshSelectedOffset.js": __glob_0_84$1, "./command_list/removeAnimationItem.js": __glob_0_85$1, "./command_list/removeLayer.js": __glob_0_86$1, "./command_list/removeTimeline.js": __glob_0_87$1, "./command_list/removeTimelineProperty.js": __glob_0_88$1, "./command_list/resetSelection.js": __glob_0_89$1, "./command_list/resizeArtBoard.js": __glob_0_90$1, "./command_list/rotateLayer.js": __glob_0_91$1, "./command_list/same.height.js": __glob_0_92$1, "./command_list/same.width.js": __glob_0_93$1, "./command_list/saveJSON.js": __glob_0_94$1, "./command_list/savePNG.js": __glob_0_95$1, "./command_list/segment.delete.js": __glob_0_96$1, "./command_list/segment.move.down.js": __glob_0_97$1, "./command_list/segment.move.left.js": __glob_0_98$1, "./command_list/segment.move.right.js": __glob_0_99$1, "./command_list/segment.move.up.js": __glob_0_100$1, "./command_list/select.all.js": __glob_0_101$1, "./command_list/selectTimelineItem.js": __glob_0_102$1, "./command_list/setAttributeForMulti.js": __glob_0_103$1, "./command_list/setLocale.js": __glob_0_104$1, "./command_list/setTimelineOffset.js": __glob_0_105$1, "./command_list/showExportView.js": __glob_0_106$1, "./command_list/sort.bottom.js": __glob_0_107$1, "./command_list/sort.center.js": __glob_0_108$1, "./command_list/sort.left.js": __glob_0_109$1, "./command_list/sort.middle.js": __glob_0_110$1, "./command_list/sort.right.js": __glob_0_111$1, "./command_list/sort.top.js": __glob_0_112$1, "./command_list/switch.path.js": __glob_0_113$1, "./command_list/toggle.tool.hand.js": __glob_0_114$1, "./command_list/ungroup.item.js": __glob_0_115$1, "./command_list/updateClipPath.js": __glob_0_116$1, "./command_list/updateImage.js": __glob_0_117$1, "./command_list/updateImageAssetItem.js": __glob_0_118$1, "./command_list/updatePathItem.js": __glob_0_119$1, "./command_list/updateResource.js": __glob_0_120$1, "./command_list/updateScale.js": __glob_0_121$1, "./command_list/updateUriList.js": __glob_0_122$1, "./command_list/updateVideo.js": __glob_0_123$1, "./command_list/updateVideoAssetItem.js": __glob_0_124$1, "./command_list/zoom.default.js": __glob_0_125$1, "./command_list/zoom.in.js": __glob_0_126$1, "./command_list/zoom.out.js": __glob_0_127$1, "./command_list/model/update.js": __glob_0_128$1 };
+const modules$4 = { "./command_list/_currentProject.js": __glob_0_0$4, "./command_list/_doForceRefreshSelection.js": __glob_0_1$4, "./command_list/addArtBoard.js": __glob_0_2$4, "./command_list/addBackgroundColor.js": __glob_0_3$4, "./command_list/addBackgroundImageAsset.js": __glob_0_4$4, "./command_list/addBackgroundImageGradient.js": __glob_0_5$4, "./command_list/addBackgroundImagePattern.js": __glob_0_6$4, "./command_list/addCustomComponent.js": __glob_0_7$4, "./command_list/addImage.js": __glob_0_8$4, "./command_list/addImageAssetItem.js": __glob_0_9$4, "./command_list/addLayer.js": __glob_0_10$4, "./command_list/addLayerView.js": __glob_0_11$4, "./command_list/addProject.js": __glob_0_12$4, "./command_list/addSVGFilterAssetItem.js": __glob_0_13$4, "./command_list/addText.js": __glob_0_14$4, "./command_list/addTimelineCurrentProperty.js": __glob_0_15$4, "./command_list/addTimelineItem.js": __glob_0_16$4, "./command_list/addTimelineKeyframe.js": __glob_0_17$4, "./command_list/addTimelineProperty.js": __glob_0_18$4, "./command_list/addVideo.js": __glob_0_19$4, "./command_list/addVideoAssetItem.js": __glob_0_20$4, "./command_list/clipboard.copy.js": __glob_0_21$3, "./command_list/clipboard.paste.js": __glob_0_22$3, "./command_list/convert.flatten.path.js": __glob_0_23$3, "./command_list/convert.no.transform.path.js": __glob_0_24$3, "./command_list/convert.normalize.path.js": __glob_0_25$2, "./command_list/convert.path.operation.js": __glob_0_26$2, "./command_list/convert.polygonal.path.js": __glob_0_27$2, "./command_list/convert.simplify.path.js": __glob_0_28$2, "./command_list/convert.smooth.path.js": __glob_0_29$2, "./command_list/convert.stroke.to.path.js": __glob_0_30$2, "./command_list/convertPasteText.js": __glob_0_31$2, "./command_list/convertPath.js": __glob_0_32$2, "./command_list/copy.path.js": __glob_0_33$2, "./command_list/copyTimelineProperty.js": __glob_0_34$2, "./command_list/deleteTimelineKeyframe.js": __glob_0_35$2, "./command_list/doubleclick.item.js": __glob_0_36$2, "./command_list/downloadJSON.js": __glob_0_37$2, "./command_list/downloadPNG.js": __glob_0_38$2, "./command_list/downloadSVG.js": __glob_0_39$2, "./command_list/drop.asset.js": __glob_0_40$2, "./command_list/dropImageUrl.js": __glob_0_41$2, "./command_list/editor.config.body.event.js": __glob_0_42$2, "./command_list/fileDropItems.js": __glob_0_43$2, "./command_list/firstTimelineItem.js": __glob_0_44$2, "./command_list/group.item.js": __glob_0_45$2, "./command_list/history.addLayer.js": __glob_0_46$2, "./command_list/history.bring.forward.js": __glob_0_47$2, "./command_list/history.bring.front.js": __glob_0_48$2, "./command_list/history.group.item.js": __glob_0_49$2, "./command_list/history.moveLayer.js": __glob_0_50$2, "./command_list/history.moveLayerToTarget.js": __glob_0_51$2, "./command_list/history.redo.js": __glob_0_52$1, "./command_list/history.refreshSelection.js": __glob_0_53$1, "./command_list/history.refreshSelectionProject.js": __glob_0_54$1, "./command_list/history.removeLayer.js": __glob_0_55$1, "./command_list/history.removeProject.js": __glob_0_56$1, "./command_list/history.send.back.js": __glob_0_57$1, "./command_list/history.send.backward.js": __glob_0_58$1, "./command_list/history.setAttributeForMulti.js": __glob_0_59$1, "./command_list/history.undo.js": __glob_0_60$1, "./command_list/item.move.depth.down.js": __glob_0_61$1, "./command_list/item.move.depth.first.js": __glob_0_62$1, "./command_list/item.move.depth.last.js": __glob_0_63$1, "./command_list/item.move.depth.up.js": __glob_0_64$1, "./command_list/keymap.keydown.js": __glob_0_65$1, "./command_list/keymap.keyup.js": __glob_0_66$1, "./command_list/lastTimelineItem.js": __glob_0_67$1, "./command_list/load.json.js": __glob_0_68$1, "./command_list/moveLayer.js": __glob_0_69$1, "./command_list/moveLayerForItems.js": __glob_0_70$1, "./command_list/moveSelectionToCenter.js": __glob_0_71$1, "./command_list/moveToCenter.js": __glob_0_72$1, "./command_list/newComponent.js": __glob_0_73$1, "./command_list/nextTimelineItem.js": __glob_0_74$1, "./command_list/open.editor.js": __glob_0_75$1, "./command_list/pauseTimelineItem.js": __glob_0_76$1, "./command_list/playTimelineItem.js": __glob_0_77$1, "./command_list/pop.mode.view.js": __glob_0_78$1, "./command_list/prevTimelineItem.js": __glob_0_79$1, "./command_list/push.mode.view.js": __glob_0_80$1, "./command_list/recoverBooleanPath.js": __glob_0_81$1, "./command_list/recoverCursor.js": __glob_0_82$1, "./command_list/refreshArtboard.js": __glob_0_83$1, "./command_list/refreshCursor.js": __glob_0_84$1, "./command_list/refreshElement.js": __glob_0_85$1, "./command_list/refreshHistory.js": __glob_0_86$1, "./command_list/refreshProject.js": __glob_0_87$1, "./command_list/refreshSelectedOffset.js": __glob_0_88$1, "./command_list/removeAnimationItem.js": __glob_0_89$1, "./command_list/removeLayer.js": __glob_0_90$1, "./command_list/removeTimeline.js": __glob_0_91$1, "./command_list/removeTimelineProperty.js": __glob_0_92$1, "./command_list/resetSelection.js": __glob_0_93$1, "./command_list/resizeArtBoard.js": __glob_0_94$1, "./command_list/rotateLayer.js": __glob_0_95$1, "./command_list/same.height.js": __glob_0_96$1, "./command_list/same.width.js": __glob_0_97$1, "./command_list/saveJSON.js": __glob_0_98$1, "./command_list/savePNG.js": __glob_0_99$1, "./command_list/segment.delete.js": __glob_0_100$1, "./command_list/segment.move.down.js": __glob_0_101$1, "./command_list/segment.move.left.js": __glob_0_102$1, "./command_list/segment.move.right.js": __glob_0_103$1, "./command_list/segment.move.up.js": __glob_0_104$1, "./command_list/select.all.js": __glob_0_105$1, "./command_list/selectTimelineItem.js": __glob_0_106$1, "./command_list/setAttributeForMulti.js": __glob_0_107$1, "./command_list/setLocale.js": __glob_0_108$1, "./command_list/setTimelineOffset.js": __glob_0_109$1, "./command_list/showExportView.js": __glob_0_110$1, "./command_list/sort.bottom.js": __glob_0_111$1, "./command_list/sort.center.js": __glob_0_112$1, "./command_list/sort.left.js": __glob_0_113$1, "./command_list/sort.middle.js": __glob_0_114$1, "./command_list/sort.right.js": __glob_0_115$1, "./command_list/sort.top.js": __glob_0_116$1, "./command_list/switch.path.js": __glob_0_117$1, "./command_list/toggle.tool.hand.js": __glob_0_118$1, "./command_list/ungroup.item.js": __glob_0_119$1, "./command_list/updateClipPath.js": __glob_0_120$1, "./command_list/updateImage.js": __glob_0_121$1, "./command_list/updateImageAssetItem.js": __glob_0_122$1, "./command_list/updatePathItem.js": __glob_0_123$1, "./command_list/updateResource.js": __glob_0_124$1, "./command_list/updateScale.js": __glob_0_125$1, "./command_list/updateUriList.js": __glob_0_126$1, "./command_list/updateVideo.js": __glob_0_127$1, "./command_list/updateVideoAssetItem.js": __glob_0_128$1, "./command_list/zoom.default.js": __glob_0_129$1, "./command_list/zoom.in.js": __glob_0_130$1, "./command_list/zoom.out.js": __glob_0_131$1, "./command_list/model/update.js": __glob_0_132$1 };
 const obj$1 = {};
 Object.entries(modules$4).forEach(([key, value]) => {
   key = key.replace("./command_list/", "").replace(".js", "");
@@ -16388,8 +16625,9 @@ var __glob_0_16$3 = /* @__PURE__ */ Object.freeze({
 var item_move_depth_down = {
   category: "Layer",
   key: "ctrl+[",
-  command: "item.move.depth.down",
+  command: "history.send.backward",
   description: "move layer to below",
+  args: ["send backward"],
   when: "CanvasView"
 };
 var __glob_0_17$3 = /* @__PURE__ */ Object.freeze({
@@ -16400,8 +16638,9 @@ var __glob_0_17$3 = /* @__PURE__ */ Object.freeze({
 var item_move_depth_up = {
   category: "Layer",
   key: "ctrl+]",
-  command: "item.move.depth.up",
+  command: "history.bring.forward",
   description: "move layer to above",
+  args: ["bring forward"],
   when: "CanvasView"
 };
 var __glob_0_18$3 = /* @__PURE__ */ Object.freeze({
@@ -17608,7 +17847,10 @@ class BaseModel {
     return this.modelManager.getLayers(this.id, this.ref);
   }
   get parentId() {
-    return this.json.parentId;
+    const parentId = this.json.parentId;
+    if (parentId === this.id)
+      return void 0;
+    return parentId;
   }
   get parent() {
     if (!this.parentId)
@@ -17643,10 +17885,36 @@ class BaseModel {
   get index() {
     return this.parent.findIndex(this);
   }
-  get prev() {
-    return this.modelManager.getPrev(this.id);
+  get isFirst() {
+    return this.index === 0;
   }
-  getInformationForHirachy(...args2) {
+  get isLast() {
+    return this.index === this.parent.childrenLength - 1;
+  }
+  get first() {
+    return this.parent.layers[0];
+  }
+  get last() {
+    return this.parent.layers[this.parent.childrenLength - 1];
+  }
+  get prev() {
+    const index2 = this.index;
+    if (this.isFirst()) {
+      return this.ref;
+    }
+    return this.parent.layers[index2 - 1];
+  }
+  get next() {
+    const index2 = this.index();
+    if (this.isLast()) {
+      return this.ref;
+    }
+    return this.parent.layers[index2 + 1];
+  }
+  get hierarchy() {
+    return this.getInformationForHierarchy("x", "y", "angle");
+  }
+  getInformationForHierarchy(...args2) {
     const index2 = this.index;
     return {
       id: this.id,
@@ -17728,7 +17996,7 @@ class BaseModel {
     return this.modelManager.clone(this.id, isDeep);
   }
   isChangedValue(obj2) {
-    return true;
+    return Object.keys(obj2).some((key) => obj2[key] !== this.json[key]);
   }
   reset(obj2, context = { origin: "*" }) {
     const isChanged = this.isChangedValue(obj2);
@@ -17799,7 +18067,14 @@ class BaseModel {
       layer2.remove();
     }
     layer2.setParentId(this.id);
-    this.json.children.splice(index2, 0, layer2.id);
+    const list2 = this.json.children.map((id, index3) => {
+      return { id, index: index3 };
+    });
+    list2.push({ id: layer2.id, index: index2 - 0.5 });
+    list2.sort((a, b) => {
+      return a.index - b.index;
+    });
+    this.json.children = list2.map((it) => it.id);
     this.modelManager.setChanged("insertChild", this.id, { childId: layer2.id, index: 0 });
     return layer2;
   }
@@ -17808,7 +18083,7 @@ class BaseModel {
     return layer2;
   }
   appendBefore(layer2) {
-    this.parent.insertChild(layer2, this.index - 1);
+    this.parent.insertChild(layer2, this.index);
     return layer2;
   }
   toggle(field, toggleValue) {
@@ -17884,6 +18159,62 @@ class BaseModel {
     return this.modelManager.hasParent(this.id, parentId);
   }
   to(itemType) {
+  }
+  sendBackward(targetId) {
+    const siblings = children2;
+    const result = {};
+    const selectedIndex = -1;
+    siblings.forEach((id, index2) => {
+      result[id] = { id, index: index2 };
+      if (id === targetId) {
+        selectedIndex = index2;
+      }
+    });
+    result[targetId].index = selectedIndex - 1.5;
+    const children2 = Object.values(result).sort((a, b) => a.index - b.index).map((it) => it.id);
+    this.reset({
+      children: children2
+    });
+  }
+  sendBack(targetId) {
+    const siblings = children2;
+    const result = {};
+    siblings.forEach((id, index2) => {
+      result[id] = { id, index: index2 };
+    });
+    result[targetId].index = -1;
+    const children2 = Object.values(result).sort((a, b) => a.index - b.index).map((it) => it.id);
+    this.reset({
+      children: children2
+    });
+  }
+  bringForward(targetId) {
+    const siblings = children2;
+    const result = {};
+    const selectedIndex = -1;
+    siblings.forEach((id, index2) => {
+      result[id] = { id, index: index2 };
+      if (id === targetId) {
+        selectedIndex = index2;
+      }
+    });
+    result[targetId].index = selectedIndex + 1.5;
+    const children2 = Object.values(result).sort((a, b) => a.index - b.index).map((it) => it.id);
+    this.reset({
+      children: children2
+    });
+  }
+  bringFront(targetId) {
+    const siblings = children2;
+    const result = {};
+    siblings.forEach((id, index2) => {
+      result[id] = { id, index: index2 };
+    });
+    result[targetId].index = Number.MAX_SAFE_INTEGER;
+    const children2 = Object.values(result).sort((a, b) => a.index - b.index).map((it) => it.id);
+    this.reset({
+      children: children2
+    });
   }
 }
 class AssetModel extends BaseModel {
@@ -20649,6 +20980,9 @@ class SelectionManager {
       return item2.isPointInRect(this.pos[0], this.pos[1]);
     });
   }
+  get notSelectedLayers() {
+    return this.filteredLayers.filter((it) => this.check(it) === false);
+  }
   get snapTargetLayers() {
     if (!this.currentProject)
       return [];
@@ -20703,10 +21037,6 @@ class SelectionManager {
     }
     this.project = project2;
     this.select();
-  }
-  get isRelative() {
-    var item2 = this.current || {};
-    return item2.position === "relative";
   }
   isSameIds(newIds) {
     if (this.ids.length != newIds.length) {
@@ -23334,13 +23664,14 @@ class InjectManager {
     this.editor = editor;
     this.ui = {};
   }
-  registerUI(target, obj2 = {}) {
+  registerUI(target, obj2 = {}, order = 1) {
     if (!this.ui[target]) {
       this.ui[target] = [];
     }
     Object.keys(obj2).forEach((refClass) => {
       this.ui[target].push({
         refClass,
+        order,
         class: obj2[refClass]
       });
     });
@@ -23349,7 +23680,13 @@ class InjectManager {
     return this.ui[target] || [];
   }
   generate(target, hasRef = false) {
-    return this.getTargetUI(target).map((it) => {
+    const list2 = this.getTargetUI(target);
+    list2.sort((a, b) => {
+      if (a.order === b.order)
+        return 0;
+      return a.order > b.order ? 1 : -1;
+    });
+    return list2.map((it) => {
       const props = {};
       if (hasRef) {
         props.ref = `$${it.refClass}`;
@@ -23954,8 +24291,8 @@ class Editor {
       registAlias(key, value);
     });
   }
-  registerUI(target, obj2 = {}) {
-    this.injectManager.registerUI(target, obj2);
+  registerUI(target, obj2 = {}, order = 1) {
+    this.injectManager.registerUI(target, obj2, order);
     this.registerElement(obj2);
   }
   registerComponent(name2, component2) {
@@ -25050,11 +25387,11 @@ class HTMLRenderView extends EditorElement {
       this.emit("moveDragAreaView");
       return;
     }
+    const targetMousePoint = this.$viewport.getWorldPosition();
     this.emit("moveGhostToolView");
     if (this.$selection.isLayoutItem) {
       return;
     }
-    const targetMousePoint = this.$viewport.getWorldPosition();
     const newDist = floor([], subtract([], targetMousePoint, this.initMousePoint));
     this.moveTo(newDist);
     if (this.$selection.changeInLayoutArea(this.$viewport.applyVertexInverse(targetMousePoint))) {
@@ -25105,7 +25442,6 @@ class HTMLRenderView extends EditorElement {
     }
     this.nextTick(() => {
       this.emit("refreshSelection");
-      this.emit("refreshSelectionTool", true);
     }, 100);
   }
   refreshSelectionStyleView(obj2) {
@@ -25167,7 +25503,7 @@ class HTMLRenderView extends EditorElement {
   refreshElementBoundSize(parentObj) {
     if (parentObj) {
       if (parentObj.hasChildren() === false) {
-        if (parentObj.hasChangedField("width", "height", "border", "padding-top", "padding-left", "padding-right", "padding-bottom") === false) {
+        if (parentObj.hasChangedField("x", "y", "width", "height", "border", "padding-top", "padding-left", "padding-right", "padding-bottom", "resizingHorizontal", "resizingVertical") === false) {
           return;
         }
         var $el = this.getElement(parentObj.id);
@@ -25175,6 +25511,9 @@ class HTMLRenderView extends EditorElement {
         if (width2 > 0 && height2 > 0) {
           parentObj.reset({ x: x2, y: y2, width: width2, height: height2 });
           this.refreshSelectionStyleView(parentObj);
+          if (this.$selection.check(parentObj)) {
+            this.emit("refreshSelectionTool");
+          }
         }
         return;
       }
@@ -25184,8 +25523,14 @@ class HTMLRenderView extends EditorElement {
         if ($el2 && (hasChangedDimension || it.isLayoutItem())) {
           const { x: x2, y: y2, width: width2, height: height2 } = $el2.offsetRect();
           if (width2 > 0 && height2 > 0) {
-            it.reset({ x: x2, y: y2, width: width2, height: height2 });
-            this.refreshSelectionStyleView(it);
+            const value = { x: x2, y: y2, width: width2, height: height2 };
+            if (it.isChangedValue(value)) {
+              it.reset(value);
+              this.refreshSelectionStyleView(it);
+              if (this.$selection.check(it)) {
+                this.emit("refreshSelectionTool");
+              }
+            }
           }
         }
         this.trigger("refreshElementBoundSize", it);
@@ -25592,12 +25937,10 @@ class CanvasView extends EditorElement {
       this.emit("refreshCursor", "grab");
     } else {
       this.emit("recoverCursor", "auto");
-      this.emit("addStatusBarMessage", "");
     }
   }
   startMovePan() {
     this.lastDist = create$4();
-    this.emit("addStatusBarMessage", this.$i18n("viewport.panning.enable"));
   }
   movePan(dx, dy) {
     this.emit("refreshCursor", "grabbing");
@@ -25608,7 +25951,6 @@ class CanvasView extends EditorElement {
   refreshCursor() {
     if (this.$config.get("set.tool.hand") === false) {
       this.emit("refreshCursor", "auto");
-      this.emit("addStatusBarMessage", "");
     } else {
       this.emit("refreshCursor", "grab");
     }
@@ -26060,16 +26402,9 @@ class PopupManager extends EditorElement {
     };
   }
   template() {
-    return `
-      <div class="popup-manger">
-        ${createComponent("ExportWindow")}
-        ${createComponent("EmbedEditorWindow")}
-        ${createComponent("ProjectWindow")}
-        ${createComponent("ShortcutWindow")}
-        ${createComponent("NotificationView")}
-        ${this.$injectManager.generate("popup")}
-      </div>
-    `;
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "popup-manger"
+    }, createComponent("ExportWindow"), createComponent("EmbedEditorWindow"), createComponent("ProjectWindow"), createComponent("ShortcutWindow"), createComponent("NotificationView"), this.$injectManager.generate("popup"));
   }
 }
 const formElements = ["TEXTAREA", "INPUT", "SELECT"];
@@ -31635,18 +31970,6 @@ class MovableModel extends BaseAssetModel {
   get isAbsolute() {
     return this.json.position === "absolute";
   }
-  get isRelative() {
-    return this.json.position === "relative";
-  }
-  get isChild() {
-    if (this.json.parent) {
-      var isParentDrawItem = this.json.parent.is("project") === false;
-      if (isParentDrawItem && this.isAbsolute) {
-        return true;
-      }
-    }
-    return false;
-  }
   get isDragSelectable() {
     return true;
   }
@@ -31748,6 +32071,9 @@ class MovableModel extends BaseAssetModel {
   }
   get origin() {
     return TransformOrigin.scale(this.json["transform-origin"] || "50% 50% 0px", this.screenWidth, this.screenHeight);
+  }
+  get absoluteOrigin() {
+    return vertiesMap([this.origin], this.absoluteMatrix)[0];
   }
   get quat() {
     return fromEuler(create$2(), 0, 0, this.angle);
@@ -32599,8 +32925,11 @@ class DomModel extends GroupModel {
   get changedGridLayout() {
     return this.hasChangedField("grid-template-rows", "grid-template-columns", "grid-template-areas", "grid-auto-rows", "grid-auto-columns", "grid-auto-flow", "grid-row-gap", "grid-column-gap", "grid-row-start", "grid-row-end", "grid-column-start", "grid-column-end", "grid-area");
   }
+  get changedLayoutItem() {
+    return this.hasChangedField("resizingHorizontal", "resizingVertical");
+  }
   get changedLayout() {
-    return this.hasChangedField("layout") || this.changedBoxModel || this.changedFlexLayout || this.changedGridLayout;
+    return this.hasChangedField("layout") || this.changedBoxModel || this.changedFlexLayout || this.changedGridLayout || this.changedLayoutItem;
   }
   addSelector(selector2) {
     this.json.selectors.push(selector2);
@@ -35591,6 +35920,7 @@ var en_US = {
   "layout.property.grid": "Grid",
   "layout.property.default": "Default",
   "layout.property.resizing.title": "Resizing",
+  "layout.property.resizing.self.title": "Self Resizing",
   "default.layout.item.property.title.constraints": "Constraints",
   "flex.layout.editor.row": "Row",
   "flex.layout.editor.column": "column",
@@ -35999,6 +36329,7 @@ var ko_KR = {
   "layout.property.grid": "\uADF8\uB9AC\uB4DC",
   "layout.property.default": "\uAE30\uBCF8 \uC88C\uD45C",
   "layout.property.resizing.title": "\uC0AC\uC774\uC988 \uC870\uC808",
+  "layout.property.resizing.self.title": "\uC544\uC774\uD15C \uC0AC\uC774\uC988 \uC870\uC808",
   "default.layout.item.property.title.constraints": "Constraints",
   "flex.layout.editor.row": "\uD589",
   "flex.layout.editor.column": "\uC5F4",
@@ -36407,6 +36738,8 @@ var fr_FR = {
   "layout.property.flex": "Bo\xEEte Flex",
   "layout.property.grid": "Grille",
   "layout.property.default": "D\xE9faut",
+  "layout.property.resizing.title": "Resizing",
+  "layout.property.resizing.self.title": "Self Resizing",
   "default.layout.item.property.title.constraints": "Constraints",
   "flex.layout.editor.row": "Ligne",
   "flex.layout.editor.column": "Colonne",
@@ -39515,129 +39848,6 @@ class FlexLayoutEditor extends EditorElement {
     this.refresh();
   }
 }
-var FlexLayoutItemProperty$1 = "";
-class FlexLayoutItemProperty extends BaseProperty {
-  getTitle() {
-    return this.$i18n("flex.layout.item.property.title");
-  }
-  getClassName() {
-    return "elf--flex-layout-item-property";
-  }
-  getLayoutOptions() {
-    return ["none", "auto", "value"].map((it) => {
-      return { value: it, text: this.$i18n(`flex.layout.item.property.${it}`) };
-    });
-  }
-  getBody() {
-    return `
-        <div class='property-item' ref='$body'></div>
-      `;
-  }
-  [LOAD("$body")]() {
-    var current = this.$selection.current || { "flex-layout-item": "none" };
-    const valueType = "value";
-    return `
-      <div class='layout-select'>
-        ${createComponent("SelectIconEditor", {
-      ref: "$layout",
-      key: "layout",
-      icon: true,
-      value: valueType,
-      options: this.getLayoutOptions(),
-      onchange: "changeLayoutType"
-    })}
-      </div>
-      <div class='layout-list' ref='$layoutList' data-selected-value='${valueType}'>
-        <div data-value='none'></div>
-        <div data-value='auto'></div>
-        <div data-value='value'>
-          <div class='value-item'>
-            ${createComponent({
-      ref: "$grow",
-      label: this.$i18n("flex.layout.item.property.grow"),
-      key: "flex-grow",
-      value: current["flex-grow"],
-      min: 0,
-      max: 1,
-      step: 0.01,
-      units: ["", "auto"],
-      onchange: "changeFlexItem"
-    })}
-          </div>
-          <div class='value-item'>
-            ${createComponent({
-      ref: "$shrink",
-      label: this.$i18n("flex.layout.item.property.shrink"),
-      key: "flex-shrink",
-      value: current["flex-shrink"],
-      min: 0,
-      max: 1,
-      step: 0.01,
-      units: ["", "auto"],
-      onchange: "changeFlexItem"
-    })}
-          </div>
-          <div class='value-item'>
-            ${createComponent("RangeEditor", {
-      ref: "$basis",
-      label: this.$i18n("flex.layout.item.property.basis"),
-      key: "flex-basis",
-      value: current["flex-basis"],
-      min: 0,
-      max: 1,
-      step: 0.01,
-      units: ["px", "em", "%", "auto"],
-      onchange: "changeFlexItem"
-    })}          
-          </div>                    
-        </div>
-      </div>
-    `;
-  }
-  getFlexItemValue(value) {
-    if ((value == null ? void 0 : value.isString()) && value.unit === "" && value.value !== "auto") {
-      return 0;
-    }
-    return value.unit === "auto" ? "auto" : value;
-  }
-  getFlexValue() {
-    var grow = this.children.$grow.getValue();
-    var shrink = this.children.$shrink.getValue();
-    var basis = this.children.$basis.getValue();
-    grow = this.getFlexItemValue(grow);
-    shrink = this.getFlexItemValue(shrink);
-    basis = this.getFlexItemValue(basis);
-    return {
-      "flex-grow": grow,
-      "flex-shrink": shrink,
-      "flex-basis": basis
-    };
-  }
-  [SUBSCRIBE_SELF("changeFlexItem")](key, value) {
-    this.command("setAttributeForMulti", "change flex layout", this.$selection.packByValue({
-      [key]: value
-    }));
-    this.nextTick(() => {
-      this.emit("refreshAllElementBoundSize");
-      this.emit("refreshSelectionTool", true);
-    });
-  }
-  [SUBSCRIBE_SELF("changeLayoutType")](key, value) {
-    this.command("setAttributeForMulti", "change flex layout", this.$selection.packByValue({
-      "flex": value
-    }));
-    this.refs.$layoutList.attr("data-selected-value", value);
-    this.nextTick(() => {
-      this.emit("refreshAllElementBoundSize");
-    });
-  }
-  [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
-    this.refreshShow(() => {
-      var current = this.$selection.current;
-      return current && current.isInFlex();
-    });
-  }
-}
 var GridBoxEditor$1 = "";
 const REG_CSS_UNIT = /(auto)|(repeat\([^\)]*\))|(([\d.]+)(px|pt|fr|r?em|deg|vh|vw|%))/gi;
 class GridBoxEditor extends EditorElement {
@@ -40354,6 +40564,208 @@ class ResizingProperty extends BaseProperty {
     });
   }
 }
+var ResizingItemProperty$1 = "";
+class ResizingItemProperty extends BaseProperty {
+  getTitle() {
+    return this.$i18n("layout.property.resizing.self.title");
+  }
+  getClassName() {
+    return "elf--resizing-item-property";
+  }
+  getBody() {
+    return `
+        <div ref='$body'>
+          <div class="resizing-mode">
+            <div class="resizing-box" ref="$resizingModeInfo"></div>
+            <div ref="$resizingModeInfoInput"></div>
+          </div>
+        </div>
+      `;
+  }
+  [LOAD("$resizingModeInfo") + DOMDIFF]() {
+    var current = this.$selection.current || {};
+    const h = current.resizingHorizontal || ResizingMode.FIXED;
+    const v = current.resizingVertical || ResizingMode.FIXED;
+    return `
+      <div class="resizing-mode-box" data-horizontal="${h}" data-vertical="${v}">
+        <div class="rect">
+          <div class="tool">
+            <div class="vertical">
+              <div class="vertical-top" data-key="resizingVertical">${iconUse$1("keyboard_arrow_up")}</div>
+              <div class="vertical-bottom" data-key="resizingVertical">${iconUse$1("keyboard_arrow_down")}</div>
+            </div>
+            <div class="horizontal">
+              <div class="horizontal-left" data-key="resizingHorizontal">${iconUse$1("keyboard_arrow_left")}</div>
+              <div class="horizontal-right" data-key="resizingHorizontal">${iconUse$1("keyboard_arrow_right")}</div>
+            </div>
+          </div>         
+          <div class="inner-rect"></div>
+        </div>
+
+      </div>
+    `;
+  }
+  makeOptionsForHorizontal() {
+    const options2 = [
+      { value: ResizingMode.FIXED, "text": "Fixed Width" },
+      { value: ResizingMode.FILL_CONTAINER, "text": "Fill Container" }
+    ];
+    return options2;
+  }
+  makeOptionsForVertical() {
+    const options2 = [
+      { value: ResizingMode.FIXED, "text": "Fixed Height" },
+      { value: ResizingMode.FILL_CONTAINER, "text": "Fill Container" }
+    ];
+    return options2;
+  }
+  [LOAD("$resizingModeInfoInput") + DOMDIFF]() {
+    var current = this.$selection.current || {};
+    this.setState({
+      resizingHorizontal: (current == null ? void 0 : current.resizingHorizontal) || ResizingMode.FIXED,
+      resizingVertical: (current == null ? void 0 : current.resizingVertical) || ResizingMode.FIXED
+    }, false);
+    return `
+      <div class="has-label-grid">
+        <label data-direction="horizontal"></label>
+        ${createComponent("SelectEditor", {
+      ref: "$resizingHorizontal",
+      key: "resizingHorizontal",
+      value: this.state.resizingHorizontal,
+      options: this.makeOptionsForHorizontal(),
+      onchange: "changeResizingMode"
+    })}
+      </div>
+
+      <div class="has-label-grid">
+      <label data-direction="vertical"></label>
+        ${createComponent("SelectEditor", {
+      ref: "$resizingVertical",
+      key: "resizingVertical",
+      value: this.state.resizingVertical,
+      options: this.makeOptionsForVertical(),
+      onchange: "changeResizingMode"
+    })}
+      </div>
+    `;
+  }
+  [CLICK("$resizingModeInfo [data-key]")](e2) {
+    const key = e2.$dt.data("key");
+    const current = this.$selection.current;
+    if (current[key] === ResizingMode.FIXED) {
+      this.trigger("changeResizingMode", key, ResizingMode.FILL_CONTAINER);
+    } else {
+      this.trigger("changeResizingMode", key, ResizingMode.FIXED);
+    }
+  }
+  [SUBSCRIBE_SELF("changeResizingMode")](key, value) {
+    this.command("setAttributeForMulti", "apply constraints", this.$selection.packByValue({
+      [key]: value,
+      "flex-grow": 1
+    }));
+    this.nextTick(() => {
+      this.refresh();
+    }, 100);
+  }
+  [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
+    this.refreshShow(() => {
+      var _a;
+      var current = this.$selection.current;
+      return (_a = current == null ? void 0 : current.parent) == null ? void 0 : _a.hasLayout();
+    });
+  }
+  [SUBSCRIBE("refreshSelectionStyleView")]() {
+    const current = this.$selection.current;
+    if (current && current.changedLayoutItem) {
+      if (current.resizingHorizontal !== this.state.resizingHorizontal || current.resizingVertical !== this.state.resizingVertical) {
+        this.refresh();
+      }
+    }
+  }
+}
+var FlexGrowToolView$1 = "";
+class FlexGrowToolView extends EditorElement {
+  template() {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--flex-grow-tool-view"
+    });
+  }
+  [LOAD("$el") + DOMDIFF]() {
+    return this.$selection.map((item2) => {
+      const parentItem = item2.parent;
+      if (!parentItem)
+        return;
+      if (parentItem.is("project"))
+        return;
+      if (parentItem.isLayout(Layout.FLEX) === false)
+        return;
+      return parentItem.layers.map((child) => {
+        const verties = this.$viewport.applyVerties(child.verties);
+        const center2 = verties[4];
+        let flexGrow = 0;
+        let size2 = child.screenWidth || 0;
+        const parentLayoutDirection = parentItem == null ? void 0 : parentItem["flex-direction"];
+        if (parentLayoutDirection === FlexDirection.ROW && child.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
+          flexGrow = child["flex-grow"] || 1;
+          size2 = child.screenWidth;
+        } else if (parentLayoutDirection === FlexDirection.COLUMN && child.resizingVertical === ResizingMode.FILL_CONTAINER) {
+          flexGrow = child["flex-grow"] || 1;
+          size2 = child.screenHeight;
+        }
+        return /* @__PURE__ */ createElementJsx("div", {
+          class: "flex-grow-item",
+          style: {
+            left: Length.px(center2[0]),
+            top: Length.px(center2[1])
+          },
+          "data-flex-item-id": child.id,
+          "data-parent-direction": parentLayoutDirection,
+          "data-flex-grow": flexGrow
+        }, size2, " | ", flexGrow || "none");
+      }).join("");
+    });
+  }
+  [POINTERSTART("$el .flex-grow-item") + MOVE() + END()](e2) {
+    const [id, grow] = e2.$dt.attrs("data-flex-item-id", "data-flex-grow");
+    this.state = {
+      id,
+      grow: +grow
+    };
+  }
+  move(dx, dy) {
+    const { id, grow } = this.state;
+    const item2 = this.$editor.get(id);
+    if (!item2)
+      return;
+    const parentItem = item2.parent;
+    if (!parentItem)
+      return;
+    const parentLayoutDirection = parentItem["flex-direction"];
+    let flexGrow = grow;
+    if (parentLayoutDirection === FlexDirection.ROW && item2.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
+      flexGrow = grow + Math.floor(dx / 10);
+    } else if (parentLayoutDirection === FlexDirection.COLUMN && item2.resizingVertical === ResizingMode.FILL_CONTAINER) {
+      flexGrow = grow + Math.floor(dy / 10);
+    }
+    flexGrow = Math.max(1, flexGrow);
+    this.emit("setAttributeForMulti", {
+      [id]: {
+        "flex-grow": flexGrow
+      }
+    });
+  }
+  end() {
+  }
+  [SUBSCRIBE("updateViewport")]() {
+    this.refresh();
+  }
+  [SUBSCRIBE("refreshSelection") + THROTTLE(100)]() {
+    this.refresh();
+  }
+  [SUBSCRIBE("refreshSelectionStyleView") + THROTTLE(1)]() {
+    this.refresh();
+  }
+}
 function layout$3(editor) {
   editor.registerElement({
     FlexLayoutEditor,
@@ -40364,10 +40776,13 @@ function layout$3(editor) {
   editor.registerUI("inspector.tab.style", {
     LayoutProperty,
     ResizingProperty,
+    ResizingItemProperty,
     DefaultLayoutItemProperty,
-    GridLayoutItemProperty,
-    FlexLayoutItemProperty
+    GridLayoutItemProperty
   });
+  editor.registerUI("canvas.view", {
+    FlexGrowToolView
+  }, 1e3);
 }
 var check = {
   key: "check",
@@ -41421,10 +41836,6 @@ class PositionProperty extends BaseProperty {
     this.command("setAttributeForMulti", "change position or size", this.$selection.packByValue({
       [key]: value
     }));
-    this.nextTick(() => {
-      this.emit("refreshAllElementBoundSize");
-      this.emit("refreshSelectionTool", true);
-    });
   }
   [SUBSCRIBE_SELF("changeRotate")](key, rotate2) {
     this.command("setAttributeForMulti", "change rotate", this.$selection.packByValue({
@@ -48928,7 +49339,7 @@ class DomRender$1 extends ItemRender$1 {
     return {};
   }
   toLayoutItemCSS(item2) {
-    var _a;
+    var _a, _b;
     var parentLayout = (_a = item2.parent) == null ? void 0 : _a["layout"];
     var obj2 = {};
     if (parentLayout === Layout.FLEX) {
@@ -48949,9 +49360,14 @@ class DomRender$1 extends ItemRender$1 {
       obj2 = this.toDefaultLayoutItemCSS(item2);
     }
     if (parentLayout === Layout.FLEX) {
-      obj2 = __spreadValues(__spreadValues({}, obj2), item2.attrs("flex-basis", "flex-grow", "flex-shrink"));
-      if (item2.resizingHorizontal === ResizingMode.FILL_CONTAINER || item2.resizingVertical === ResizingMode.FILL_CONTAINER) {
-        obj2["flex-grow"] = 1;
+      obj2 = __spreadValues(__spreadValues({}, obj2), item2.attrs("flex-basis", "flex-shrink"));
+      const parentLayoutDirection = (_b = item2 == null ? void 0 : item2.parent) == null ? void 0 : _b["flex-direction"];
+      if (parentLayoutDirection === FlexDirection.ROW && item2.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
+        obj2.width = "auto";
+        obj2["flex-grow"] = item2["flex-grow"] || 1;
+      } else if (parentLayoutDirection === FlexDirection.COLUMN && item2.resizingVertical === ResizingMode.FILL_CONTAINER) {
+        obj2.height = "auto";
+        obj2["flex-grow"] = item2["flex-grow"] || 1;
       }
     } else if (parentLayout === Layout.GRID) {
       obj2 = __spreadValues(__spreadValues({}, obj2), item2.attrs("grid-column-start", "grid-column-end", "grid-row-start", "grid-row-end"));
@@ -49092,11 +49508,19 @@ class DomRender$1 extends ItemRender$1 {
         if (item2.parent["align-items"] === AlignItems.STRETCH) {
           obj2.height = "auto";
         }
+        if (item2.resizingVertical === ResizingMode.FILL_CONTAINER) {
+          obj2.height = "auto";
+          obj2["align-self"] = AlignItems.STRETCH;
+        }
       } else {
         obj2.width = Length.px(item2.screenWidth);
         obj2.height = Length.px(item2.screenHeight);
         if (item2.parent["align-items"] === AlignItems.STRETCH) {
           obj2.width = "auto";
+        }
+        if (item2.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
+          obj2.width = "auto";
+          obj2["align-self"] = AlignItems.STRETCH;
         }
       }
     } else if (item2.isInGrid())
@@ -56923,13 +57347,76 @@ class HoverView extends EditorElement {
       this.emit("removeGuideLine");
     } else {
       const verties = items[0].verties;
-      const title2 = items[0].is("boolean-path") ? items[0]["boolean-operation"] : items[0].itemType;
-      const line2 = this.createPointerLine(this.$viewport.applyVerties(verties), title2);
-      this.refs.$hoverRect.updateDiff(line2);
+      const line2 = this.createPointerLine(this.$viewport.applyVerties(verties));
+      const offsetLine = this.createOffsetLine();
+      this.refs.$hoverRect.updateDiff(line2 + offsetLine);
       this.emit("refreshGuideLineByTarget", [items[0].verties]);
     }
   }
-  createPointerLine(pointers) {
+  getOffsetVerties(current, parent) {
+    const currentVerties = current.verties;
+    const parentVerties = parent.verties;
+    const result = {};
+    const left2 = this.$viewport.applyVerties([
+      [currentVerties[0][0], lerp([], currentVerties[0], currentVerties[3], 0.5)[1], 0],
+      [parentVerties[0][0], lerp([], currentVerties[0], currentVerties[3], 0.5)[1], 0]
+    ]);
+    var dist$1 = dist(...left2);
+    if (dist$1 > 0) {
+      result.left = left2;
+    }
+    const top2 = this.$viewport.applyVerties([
+      [lerp([], currentVerties[0], currentVerties[1], 0.5)[0], currentVerties[1][1], 0],
+      [lerp([], currentVerties[0], currentVerties[1], 0.5)[0], parentVerties[1][1], 0]
+    ]);
+    var dist$1 = dist(...top2);
+    if (dist$1 > 0) {
+      result.top = top2;
+    }
+    return result;
+  }
+  createOffsetLine() {
+    const item2 = this.$selection.hoverItems[0] || this.$selection.current;
+    if (!item2 || !item2.parent) {
+      return "";
+    }
+    if (item2.parent && item2.parent.is("project")) {
+      return "";
+    }
+    if (this.$selection.isEmpty) {
+      const offsetVerties = this.getOffsetVerties(item2, item2.parent);
+      return `
+            <svg overflow="visible">
+                <path
+                    class="offset-line"
+                    d="
+                        ${vertiesToPath(offsetVerties.left)}
+                        ${vertiesToPath(offsetVerties.right)}
+                        ${vertiesToPath(offsetVerties.top)}
+                        ${vertiesToPath(offsetVerties.bottom)}
+                    "
+                    />
+            </svg>
+            `;
+    } else {
+      const offsetVerties = this.getOffsetVerties(item2, this.$selection.current);
+      return `
+            <svg overflow="visible">
+                <path
+                    d="
+                        ${vertiesToPath(offsetVerties.left)}
+                        ${vertiesToPath(offsetVerties.top)}
+                    "
+                    stroke="red"
+                    stroke-width="1"
+                    stroke-dasharray="5, 10"
+                    fill="none"
+                    />
+            </svg>
+            `;
+    }
+  }
+  createPointerLine(pointers, offsetLines = []) {
     if (pointers.length === 0)
       return "";
     return `
@@ -57233,7 +57720,6 @@ class SelectionInfoView extends EditorElement {
     this.moveTo(newDist);
     this.emit("setAttributeForMulti", this.$selection.pack("x", "y"));
     this.emit("refreshSelectionStyleView");
-    this.emit("refreshSelectionTool", false);
     this.refresh();
   }
   [SUBSCRIBE("refreshItemName")](id, title2) {
@@ -57245,7 +57731,6 @@ class SelectionInfoView extends EditorElement {
   }
   calculateEndedElement(dx, dy) {
     this.command("setAttributeForMulti", "move item", this.$selection.pack("x", "y"));
-    this.emit("refreshSelectionTool", true);
     this.$config.set("set.move.control.point", false);
   }
   [SUBSCRIBE("updateViewport")]() {
@@ -57367,10 +57852,10 @@ class SelectionToolView extends SelectionToolEvent$1 {
       if (this.$config.get("bodyEvent").shiftKey) {
         newAngle -= newAngle % this.$config.get("fixed.angle");
       }
-      instance.angle = newAngle;
+      instance.angle = newAngle % 360;
     }
     this.state.dragging = true;
-    this.command("setAttributeForMulti", "change rotate", this.$selection.pack("angle"));
+    this.emit("setAttributeForMulti", this.$selection.pack("angle"));
   }
   rotateEndVertex() {
     this.state.dragging = false;
@@ -57424,10 +57909,6 @@ class SelectionToolView extends SelectionToolEvent$1 {
     this.$config.set("set.move.control.point", true);
     this.$selection.startToCacheChildren();
   }
-  calculateNewOffsetMatrixInverse(vertexOffset, width2, height2, origin2, itemMatrix) {
-    const center2 = subtract([], TransformOrigin.scale(origin2, width2, height2), vertexOffset);
-    return calculateMatrixInverse(fromTranslation([], vertexOffset), fromTranslation([], center2), itemMatrix, fromTranslation([], negate([], center2)));
-  }
   calculateDistance(vertex, distVector, reverseMatrix) {
     const currentVertex = clone(vertex);
     const moveVertext = add$1([], currentVertex, distVector);
@@ -57450,6 +57931,10 @@ class SelectionToolView extends SelectionToolEvent$1 {
         width: Math.abs(newWidth),
         height: Math.abs(newHeight)
       };
+      if (instance.isLayoutItem()) {
+        delete data.x;
+        delete data.y;
+      }
       if (this.hasRotate)
         ;
       else {
@@ -57459,7 +57944,9 @@ class SelectionToolView extends SelectionToolEvent$1 {
     }
   }
   moveDirectionVertex(item2, newWidth, newHeight, direction, directionNewVector, options2 = {}) {
-    const view = calculateMatrix(item2.directionMatrix[direction], this.calculateNewOffsetMatrixInverse(directionNewVector, newWidth, newHeight, item2.originalTransformOrigin, item2.itemMatrix));
+    const center2 = subtract([], TransformOrigin.scale(item2.originalTransformOrigin, newWidth, newHeight), directionNewVector);
+    const newOffsetInverse = calculateMatrixInverse(fromTranslation([], directionNewVector), fromTranslation([], center2), item2.itemMatrix, fromTranslation([], negate([], center2)));
+    const view = calculateMatrix(item2.directionMatrix[direction], newOffsetInverse);
     const lastStartVertex = getTranslation([], view);
     this.moveItem(this.$model.get(item2.id), lastStartVertex, newWidth, newHeight, options2);
   }
@@ -57656,7 +58143,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
       this.moveBottomLeftVertex(distVector);
     }
     this.$selection.recoverChildren();
-    this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "width", "height", "resizingHorizontal", "resizingVertical"));
+    this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "angle", "width", "height", "resizingHorizontal", "resizingVertical"));
     this.state.dragging = true;
   }
   moveEndVertex() {
@@ -57689,6 +58176,9 @@ class SelectionToolView extends SelectionToolEvent$1 {
   makeSelectionTool() {
     this.renderPointers();
   }
+  getRateDistance(startVetex, endVertex, dist$1 = 0) {
+    return lerp([], startVetex, endVertex, (dist(startVetex, endVertex) + dist$1) / dist(startVetex, endVertex));
+  }
   renderPointers() {
     if (!this.$selection.cachedCurrentItemMatrix) {
       return;
@@ -57700,10 +58190,17 @@ class SelectionToolView extends SelectionToolEvent$1 {
     if (dist(verties[0], verties[1]) === 0) {
       return;
     }
+    const screenVerties = this.$viewport.applyVerties(verties);
     this.state.renderPointerList = [
-      this.$viewport.applyVerties(verties)
+      screenVerties,
+      [
+        this.getRateDistance(screenVerties[4], screenVerties[0], 20),
+        this.getRateDistance(screenVerties[4], screenVerties[1], 20),
+        this.getRateDistance(screenVerties[4], screenVerties[2], 20),
+        this.getRateDistance(screenVerties[4], screenVerties[3], 20)
+      ]
     ];
-    const pointers = this.createRenderPointers(this.state.renderPointerList[0]);
+    const pointers = this.createRenderPointers(...this.state.renderPointerList);
     if (pointers) {
       const { line: line2, parentRect, point: point2, size: size2, visiblePath } = pointers;
       this.refs.$pointerRect.updateDiff(line2 + parentRect + point2 + size2 + visiblePath);
@@ -57731,13 +58228,13 @@ class SelectionToolView extends SelectionToolEvent$1 {
         <div class='rotate-pointer' data-number="${number}" style="transform: translate3d( calc(${pointer[0]}px - 50%), calc(${pointer[1]}px - 50%), 0px)" ></div>
         `;
   }
-  createPointerRect(pointers, rotatePointer, parentVector) {
+  createPointerRect(pointers, rotatePointer = void 0) {
     if (pointers.length === 0)
       return "";
     const current = this.$selection.current;
     const isArtBoard = current && current.is("artboard");
     let line2 = "";
-    if (!isArtBoard) {
+    if (!isArtBoard && rotatePointer) {
       const centerPointer = lerp([], pointers[0], pointers[1], 0.5);
       line2 += `
                 M ${centerPointer[0]},${centerPointer[1]} 
@@ -57839,26 +58336,29 @@ class SelectionToolView extends SelectionToolEvent$1 {
   removeNaN(value) {
     return value.replace(/NaN/g, "0");
   }
-  createRenderPointers(pointers) {
+  createRenderPointers(pointers, selectionPointers) {
     const current = this.$selection.current;
     if (current && current.is("text")) {
       if (current.width === 0 && current.height === 0) {
         return;
       }
     }
-    const isArtBoard = current && current.is("artboard");
+    current && current.is("artboard");
     const rotate2 = Length.deg(current.angle).round(1e3);
-    const rotatePointer = getRotatePointer(pointers, 34);
+    getRotatePointer(pointers, 34);
     const dist$1 = dist(pointers[0], pointers[2]);
     const width2 = dist(pointers[0], pointers[1]);
     const height2 = dist(pointers[0], pointers[3]);
     return {
-      line: this.createPointerRect(pointers, rotatePointer),
+      line: this.createPointerRect(pointers),
       size: this.createSize(pointers),
       parentRect: "",
       visiblePath: this.createVisiblePath(),
       point: [
-        isArtBoard ? void 0 : this.createRotatePointer(rotatePointer, 4, "center center"),
+        this.createRotatePointer(selectionPointers[0], 0),
+        this.createRotatePointer(selectionPointers[1], 1),
+        this.createRotatePointer(selectionPointers[2], 2),
+        this.createRotatePointer(selectionPointers[3], 3),
         dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[0], pointers[1], 0.5), 11, rotate2, width2, 5),
         dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[1], pointers[2], 0.5), 12, rotate2, 5, height2),
         dist$1 < 20 ? void 0 : this.createPointerSide(lerp([], pointers[2], pointers[3], 0.5), 13, rotate2, width2, 5),
@@ -58316,7 +58816,7 @@ class GroupSelectionToolView extends SelectionToolEvent {
     if (this.state.isRotate) {
       const rotateZ2 = this.groupItem.angle;
       if (rotateZ2) {
-        text2 = `${rotateZ2[0].value}\xB0`;
+        text2 = `${rotateZ2}\xB0`;
       }
     }
     return `
@@ -58393,10 +58893,11 @@ class GhostToolView extends EditorElement {
     this.ghostVerties = clone$1(screenVerties);
     this.ghostScreenVerties = this.$viewport.applyVerties(this.ghostVerties);
     this.initMousePoint = this.$viewport.getWorldPosition();
-    this.filteredLayers = this.$selection.filteredLayers.filter((it) => this.$selection.check(it) === false);
+    this.filteredLayers = this.$selection.notSelectedLayers;
     this.containerList = this.filteredLayers.filter((it) => it.hasLayout() || it.is("artboard")).map((it) => it.originVerties);
   }
   collectInformation() {
+    var _a;
     const targetMousePoint = this.$viewport.getWorldPosition();
     const newDist = this.getDist();
     this.ghostVerties = this.verties.map((v) => {
@@ -58406,7 +58907,7 @@ class GhostToolView extends EditorElement {
     const filteredLayers = this.$selection.filteredLayers.filter((it) => this.$selection.check(it) === false);
     this.targetItem = filteredLayers[0];
     if (this.targetItem) {
-      if (this.targetItem.hasLayout() && this.targetItem.hasChildren()) {
+      if (this.targetItem.hasLayout() && ((_a = this.targetItem) == null ? void 0 : _a.hasChildren())) {
         this.targetItem = this.targetItem.layers.pop();
       }
       this.targetOriginPosition = this.$viewport.applyVerties(toRectVerties(this.targetItem.contentVerties));
@@ -58460,6 +58961,9 @@ class GhostToolView extends EditorElement {
     }));
   }
   renderPathForVerties(verties, className) {
+    if (!verties) {
+      return /* @__PURE__ */ createElementJsx("g", null);
+    }
     const d = vertiesToPath(verties);
     return /* @__PURE__ */ createElementJsx("g", null, /* @__PURE__ */ createElementJsx("path", {
       class: className,
@@ -58467,6 +58971,8 @@ class GhostToolView extends EditorElement {
     }));
   }
   renderPath(verties, className, data = className) {
+    if (!verties)
+      return "";
     verties = data === "ghost" ? verties : toRectVerties(verties);
     const textX = className === "flex-item" ? verties[0][0] : verties[0][0];
     const textY = className === "flex-item" ? verties[2][1] + 10 : verties[0][1] - 10;
@@ -58477,26 +58983,9 @@ class GhostToolView extends EditorElement {
     }, data), this.renderPathForVerties(verties, className));
   }
   renderLayoutFlexRowArea() {
-    const rect2 = vertiesToRectangle(this.targetOriginPosition);
+    vertiesToRectangle(this.targetOriginPosition);
     if (this.targetRelativeMousePoint.x < CHECK_RATE) {
       return /* @__PURE__ */ createElementJsx(FragmentInstance, null, this.renderPathForVerties([
-        [
-          this.targetOriginPosition[0][0],
-          this.targetOriginPosition[0][1]
-        ],
-        [
-          this.targetOriginPosition[0][0] + rect2.width / 2,
-          this.targetOriginPosition[1][1]
-        ],
-        [
-          this.targetOriginPosition[0][0] + rect2.width / 2,
-          this.targetOriginPosition[2][1]
-        ],
-        [
-          this.targetOriginPosition[3][0],
-          this.targetOriginPosition[3][1]
-        ]
-      ], "flex-item"), this.renderPathForVerties([
         [
           this.targetOriginPosition[0][0],
           this.targetOriginPosition[0][1]
@@ -58508,23 +58997,6 @@ class GhostToolView extends EditorElement {
       ], "flex-target"));
     } else {
       return /* @__PURE__ */ createElementJsx(FragmentInstance, null, this.renderPathForVerties([
-        [
-          this.targetOriginPosition[0][0] + rect2.width / 2,
-          this.targetOriginPosition[0][1]
-        ],
-        [
-          this.targetOriginPosition[1][0],
-          this.targetOriginPosition[1][1]
-        ],
-        [
-          this.targetOriginPosition[2][0],
-          this.targetOriginPosition[2][1]
-        ],
-        [
-          this.targetOriginPosition[3][0] + rect2.width / 2,
-          this.targetOriginPosition[3][1]
-        ]
-      ], "flex-item"), this.renderPathForVerties([
         [
           this.targetOriginPosition[1][0],
           this.targetOriginPosition[1][1]
@@ -58574,13 +59046,13 @@ class GhostToolView extends EditorElement {
         break;
     }
     const newDist = subtract([], [newCenterX, newCenterY, 0], center2);
-    const renderVerties = this.ghostScreenVerties.map((it) => add$1([], it, newDist));
+    const renderVerties = this.ghostScreenVerties.map((it) => add$1([], it, newDist)).filter((it, index2) => index2 < 4);
     return this.renderPathForVerties(renderVerties, "flex-item", "ghost");
   }
   renderLayoutFlexColumnArea() {
     const rect2 = vertiesToRectangle(this.targetOriginPosition);
     if (this.targetRelativeMousePoint.y < CHECK_RATE) {
-      return this.renderPath([
+      return this.renderPathForVerties([
         [this.targetOriginPosition[0][0], this.targetOriginPosition[0][1]],
         [this.targetOriginPosition[1][0], this.targetOriginPosition[1][1]],
         [
@@ -58593,7 +59065,7 @@ class GhostToolView extends EditorElement {
         ]
       ], "flex-item", "flex-top");
     } else {
-      return this.renderPath([
+      return this.renderPathForVerties([
         [
           this.targetOriginPosition[0][0],
           this.targetOriginPosition[0][1] + rect2.height / 2
@@ -58630,7 +59102,8 @@ class GhostToolView extends EditorElement {
     });
   }
   renderLayoutItemForFirst() {
-    if (this.targetItem.hasChildren() === false) {
+    var _a;
+    if (((_a = this.targetItem) == null ? void 0 : _a.hasChildren()) === false) {
       if (this.targetItem.isLayout(Layout.FLEX)) {
         return this.renderLayoutFlexForFirstItem(this.targetItem["flex-direction"]);
       } else if (this.targetItem.isLayout(Layout.GRID))
@@ -58644,10 +59117,13 @@ class GhostToolView extends EditorElement {
     });
   }
   [LOAD("$view") + DOMDIFF]() {
-    if (!this.ghostVerties) {
+    var _a;
+    const current = this.$selection.current;
+    if (!this.ghostVerties || !current) {
       return /* @__PURE__ */ createElementJsx("svg", null);
     }
-    return /* @__PURE__ */ createElementJsx("svg", null, this.targetParent && this.renderPath(this.targetParentPosition, "target-parent"), this.targetItem && this.renderPath(this.targetOriginPosition, "target", ""), this.targetItem && this.renderPath(this.targetOriginPosition, "target-rect", ""), this.targetItem && this.renderLayoutItemInsertArea(), this.targetItem && this.renderLayoutItemForFirst(), this.isLayoutItem && this.renderPath(this.ghostScreenVerties.filter((_, index2) => index2 < 4), "ghost"));
+    const hasTargetView = ((_a = this.targetItem) == null ? void 0 : _a.id) !== current.id;
+    return /* @__PURE__ */ createElementJsx("svg", null, this.targetParent && this.renderPathForVerties(this.targetParentPosition, "target-parent"), hasTargetView && this.renderPathForVerties(this.targetOriginPosition, "target", ""), hasTargetView && this.renderPathForVerties(this.targetOriginPosition, "target-rect", ""), hasTargetView && this.renderLayoutItemInsertArea(), hasTargetView && this.renderLayoutItemForFirst(), this.isLayoutItem && this.renderPathForVerties(this.ghostScreenVerties.filter((_, index2) => index2 < 4), "ghost"));
   }
   initializeGhostView() {
     this.isLayoutItem = false;
@@ -58709,24 +59185,34 @@ class GhostToolView extends EditorElement {
     }
   }
   updateLayer() {
+    var _a, _b;
     const current = this.$selection.current;
+    if (!current)
+      return;
     const newDist = this.getDist();
+    if (newDist[0] === 0 && newDist[1] === 0) {
+      return;
+    }
+    if (this.targetItem.id === ((_a = this.$selection.current) == null ? void 0 : _a.id)) {
+      return;
+    }
     if (!this.targetItem) {
       this.insertToBackground();
       return;
     }
-    if (this.targetItem.enableHasChildren() === false)
-      return;
     if (this.targetParent) {
       this.insertToLayoutItem();
       return;
     }
     if (this.targetItem.hasLayout()) {
-      if (this.targetItem.hasChildren() === false) {
+      if (((_b = this.targetItem) == null ? void 0 : _b.hasChildren()) === false) {
         this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, "appendChild");
       }
     } else {
-      if (current.isLayoutItem()) {
+      if (this.targetItem.id === current.id) {
+        return;
+      }
+      if (current.isLayoutItem() && current.parent.id !== this.targetItem.id) {
         this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, "appendChild");
       }
     }

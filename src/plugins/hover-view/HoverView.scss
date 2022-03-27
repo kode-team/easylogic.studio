@@ -27,6 +27,19 @@
   }
 
   svg {
+    // background-color: yellow;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    top: 0px;
+
+    .offset-line {
+      stroke: var(--elf--selected-color-2);
+      stroke-dasharray: 2 4;
+      fill: transparent;
+      stroke-width: 1;
+    }
     text {
       fill: var(--elf--selected-font-color);
     }

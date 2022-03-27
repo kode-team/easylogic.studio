@@ -44,9 +44,7 @@ export default class GhostToolView extends EditorElement {
     this.initMousePoint = this.$viewport.getWorldPosition();
 
     // 선택되지 않은 리스트들 중에
-    this.filteredLayers = this.$selection.filteredLayers.filter(
-      (it) => this.$selection.check(it) === false
-    );
+    this.filteredLayers = this.$selection.notSelectedLayers;
 
     // container 리스트 구하기, artboard 나 layout 을 가지고 있는 것들이 대상
     this.containerList = this.filteredLayers
@@ -75,7 +73,7 @@ export default class GhostToolView extends EditorElement {
 
     if (this.targetItem) {
       // 현재 targetItem 이 layout 을 가지고 있다면 , container 로 인지하고 마지막 자식을 targetItem 으로 지정한다.
-      if (this.targetItem.hasLayout() && this.targetItem.hasChildren()) {
+      if (this.targetItem.hasLayout() && this.targetItem?.hasChildren()) {
         this.targetItem = this.targetItem.layers.pop();
       }
 
@@ -163,6 +161,10 @@ export default class GhostToolView extends EditorElement {
 
   renderPathForVerties(verties, className) {
 
+    if (!verties) {
+      return <g></g>
+    }
+
     const d = vertiesToPath(verties);
 
     return (
@@ -176,6 +178,10 @@ export default class GhostToolView extends EditorElement {
   }
 
   renderPath(verties, className, data = className) {
+
+    // verties 포인트가 없으면 종료 
+    if (!verties) return "";
+
     verties = data === "ghost" ? verties : toRectVerties(verties);
 
     const textX = className === "flex-item" ? verties[0][0] : verties[0][0];
@@ -199,7 +205,7 @@ export default class GhostToolView extends EditorElement {
     if (this.targetRelativeMousePoint.x < CHECK_RATE) {
       return (
         <>
-          {this.renderPathForVerties(
+          {/* {this.renderPathForVerties(
             [
               [
                 this.targetOriginPosition[0][0],
@@ -219,7 +225,7 @@ export default class GhostToolView extends EditorElement {
               ],
             ],
             "flex-item"
-          )}
+          )} */}
 
           {this.renderPathForVerties(
             [
@@ -239,7 +245,7 @@ export default class GhostToolView extends EditorElement {
     } else {
       return (
         <>
-          {this.renderPathForVerties(
+          {/* {this.renderPathForVerties(
             [
               [
                 this.targetOriginPosition[0][0] + rect.width / 2,
@@ -259,7 +265,7 @@ export default class GhostToolView extends EditorElement {
               ],
             ],
             "flex-item"
-          )}
+          )} */}
           {this.renderPathForVerties(
             [
               [
@@ -336,7 +342,7 @@ export default class GhostToolView extends EditorElement {
     // xy 를 빼고 transform 을 한다.
     const renderVerties = this.ghostScreenVerties.map((it) =>
       vec3.add([], it, newDist)
-    );
+    ).filter((it, index) => index < 4);
 
     return this.renderPathForVerties(renderVerties, "flex-item", "ghost");
   }
@@ -344,7 +350,7 @@ export default class GhostToolView extends EditorElement {
   renderLayoutFlexColumnArea() {
     const rect = vertiesToRectangle(this.targetOriginPosition);
     if (this.targetRelativeMousePoint.y < CHECK_RATE) {
-      return this.renderPath(
+      return this.renderPathForVerties(
         [
           [this.targetOriginPosition[0][0], this.targetOriginPosition[0][1]],
           [this.targetOriginPosition[1][0], this.targetOriginPosition[1][1]],
@@ -361,7 +367,7 @@ export default class GhostToolView extends EditorElement {
         "flex-top"
       );
     } else {
-      return this.renderPath(
+      return this.renderPathForVerties(
         [
           [
             this.targetOriginPosition[0][0],
@@ -409,7 +415,7 @@ export default class GhostToolView extends EditorElement {
   }
 
   renderLayoutItemForFirst() {
-    if (this.targetItem.hasChildren() === false) {
+    if (this.targetItem?.hasChildren() === false) {
       if (this.targetItem.isLayout(Layout.FLEX)) {
         return this.renderLayoutFlexForFirstItem(
           this.targetItem["flex-direction"]
@@ -429,22 +435,27 @@ export default class GhostToolView extends EditorElement {
   }
 
   [LOAD("$view") + DOMDIFF]() {
-    if (!this.ghostVerties) {
+    const current = this.$selection.current;
+
+    if (!this.ghostVerties || !current) {
       return <svg></svg>;
     }
+
+    const hasTargetView = this.targetItem?.id !== current.id;
+
 
     return (
       <svg>
         {this.targetParent &&
-          this.renderPath(this.targetParentPosition, "target-parent")}
-        {this.targetItem &&
-          this.renderPath(this.targetOriginPosition, "target", "")}
-        {this.targetItem &&
-          this.renderPath(this.targetOriginPosition, "target-rect", "")}
-        {this.targetItem && this.renderLayoutItemInsertArea()}
-        {this.targetItem && this.renderLayoutItemForFirst()}
+          this.renderPathForVerties(this.targetParentPosition, "target-parent")}
+        {hasTargetView &&
+          this.renderPathForVerties(this.targetOriginPosition, "target", "")}
+        {hasTargetView &&
+          this.renderPathForVerties(this.targetOriginPosition, "target-rect", "")}
+        {hasTargetView && this.renderLayoutItemInsertArea()}
+        {hasTargetView && this.renderLayoutItemForFirst()}
 
-        {this.isLayoutItem && this.renderPath(this.ghostScreenVerties.filter((_, index) => index < 4), "ghost")}
+        {this.isLayoutItem && this.renderPathForVerties(this.ghostScreenVerties.filter((_, index) => index < 4), "ghost")}
       </svg>
     );
   }
@@ -521,6 +532,7 @@ export default class GhostToolView extends EditorElement {
 
     if (this.targetParent.hasLayout()) {
       if (this.targetParent.isLayout(Layout.FLEX)) {
+
         switch (this.targetParent["flex-direction"]) {
           case FlexDirection.ROW:
             // left
@@ -593,7 +605,24 @@ export default class GhostToolView extends EditorElement {
    */
   updateLayer() {
     const current = this.$selection.current;
+
+    // 선택된 객체가 없으면 동작하지 않는다. 
+    if (!current) return ;
+
     const newDist = this.getDist();
+
+    if (newDist[0] === 0 && newDist[1] === 0) {
+      // 움직이지 않은 상태는 GhostToolView 에서 아무것도 하지 않음. 
+      // NOOP
+      return;
+    }
+
+
+    // 선택한 레이어와 targetItem 이 같은 경우 추가하지 않는다. 
+    if (this.targetItem.id === this.$selection.current?.id) {
+      return;
+    }
+
 
     // 타겟이 없을때는 백그라운드로 인지해서 current 의 부모를 project 로 옮긴다.
     if (!this.targetItem) {
@@ -601,20 +630,17 @@ export default class GhostToolView extends EditorElement {
       return;
     }
 
-    // 타겟이 자식을 가지지 못하면 실행하지 않음
-    if (this.targetItem.enableHasChildren() === false) return;
-
     // target parent 가 존재하고
     // 해당 아이템이 layout item 일 때
     if (this.targetParent) {
       this.insertToLayoutItem();
       return;
-    }
+    }    
 
     // target 이 레이아웃이 있고
     if (this.targetItem.hasLayout()) {
       // 자식을 안가지고 있을 때는 그냥 appendChild 를 실행
-      if (this.targetItem.hasChildren() === false) {
+      if (this.targetItem?.hasChildren() === false) {
         this.command(
           "moveLayerToTarget",
           "change target with move",
@@ -627,8 +653,13 @@ export default class GhostToolView extends EditorElement {
         // 내부에 자식이 있을 때는 , 마지막 드래그 위치에 따라 달라짐
       }
     } else {
-      // 시작점이 layout item 이었을 경우
-      if (current.isLayoutItem()) {
+      if (this.targetItem.id === current.id) {
+        // targetItem 과 현재 선택된 객체가 동일하면 움직이지 않는다. 
+        return; 
+      }
+
+      // layout item 이고, 부모가 다르면 targetItem(다른 부모)로 이동함 
+      if (current.isLayoutItem() && current.parent.id !== this.targetItem.id) {
         this.command(
           "moveLayerToTarget",
           "change target with move",
