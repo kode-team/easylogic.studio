@@ -1,4 +1,4 @@
-import { LOAD, INPUT, FOCUSIN, FOCUSOUT, POINTERSTART, KEYUP, ENTER, IF } from "el/sapa/Event";
+import { LOAD, INPUT, FOCUSIN, FOCUSOUT, POINTERSTART, KEYUP, ENTER, IF, DEBOUNCE, DOMDIFF } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
@@ -43,7 +43,7 @@ export default class NumberInputEditor extends EditorElement {
         return `<div class='small-editor' ref='$body'></div>`
     }
 
-    [LOAD('$body')] () {
+    [LOAD('$body') + DOMDIFF] () {
         var { min, max, step, label,  type, layout, mini, compact, wide, disabled, removable } = this.state
 
         var value = this.state.value
@@ -123,9 +123,8 @@ export default class NumberInputEditor extends EditorElement {
     }
 
 
-    [INPUT('$body input[type=number]') + IF('isTriggerInput')] (e) {
+    [INPUT('$body input[type=number]') + IF('isTriggerInput') + DEBOUNCE(500)] (e) {
         this.updateValue(e);
-        // e.$dt.select();            
     }
 
     [KEYUP('$body input[type=number]') + IF('isTriggerEnter') + ENTER] (e) {

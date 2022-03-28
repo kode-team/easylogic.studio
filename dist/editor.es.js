@@ -25500,28 +25500,35 @@ class HTMLRenderView extends EditorElement {
       });
     }
   }
+  refreshSelfElement(item2) {
+    var $el = this.getElement(item2.id);
+    if ($el) {
+      const { x: x2, y: y2, width: width2, height: height2 } = $el.offsetRect();
+      if (width2 > 0 && height2 > 0) {
+        item2.reset({ x: x2, y: y2, width: width2, height: height2 });
+        this.refreshSelectionStyleView(item2);
+        if (this.$selection.check(item2)) {
+          this.emit("refreshSelectionTool");
+        }
+      }
+    }
+  }
   refreshElementBoundSize(parentObj) {
     if (parentObj) {
       if (parentObj.hasChildren() === false) {
         if (parentObj.hasChangedField("x", "y", "width", "height", "border", "padding-top", "padding-left", "padding-right", "padding-bottom", "resizingHorizontal", "resizingVertical") === false) {
           return;
         }
-        var $el = this.getElement(parentObj.id);
-        const { x: x2, y: y2, width: width2, height: height2 } = $el.offsetRect();
-        if (width2 > 0 && height2 > 0) {
-          parentObj.reset({ x: x2, y: y2, width: width2, height: height2 });
-          this.refreshSelectionStyleView(parentObj);
-          if (this.$selection.check(parentObj)) {
-            this.emit("refreshSelectionTool");
-          }
-        }
+        this.refreshSelfElement(parentObj);
         return;
+      } else {
+        this.refreshSelfElement(parentObj);
       }
       const hasChangedDimension = parentObj.changedLayout || parentObj.hasChangedField("children", "box-model", "width", "height");
       parentObj.layers.forEach((it) => {
-        var $el2 = this.getElement(it.id);
-        if ($el2 && (hasChangedDimension || it.isLayoutItem())) {
-          const { x: x2, y: y2, width: width2, height: height2 } = $el2.offsetRect();
+        var $el = this.getElement(it.id);
+        if ($el && (hasChangedDimension || it.isLayoutItem())) {
+          const { x: x2, y: y2, width: width2, height: height2 } = $el.offsetRect();
           if (width2 > 0 && height2 > 0) {
             const value = { x: x2, y: y2, width: width2, height: height2 };
             if (it.isChangedValue(value)) {
@@ -39787,17 +39794,6 @@ class FlexLayoutEditor extends EditorElement {
       onchange: "changeKeyValue"
     })}
             </div>
-            <div class='flex-layout-item'>
-                <div class="title">${this.$i18n("flex.layout.editor.align-content")}</div>                        
-                ${createComponent("SelectIconEditor", {
-      key: "align-content",
-      ref: "$alignContent",
-      value: this.state["align-content"] || AlignContent.FLEX_START,
-      options: this.getAlignContentOptions(),
-      icons: ["vertical_align_top", "vertical_align_bottom", "vertical_align_center", "horizontal_distribute", "justify_content_space_around", "vertical_align_stretch"],
-      onchange: "changeKeyValue"
-    })}
-            </div>    
         `;
   }
   template() {
@@ -40705,11 +40701,15 @@ class FlexGrowToolView extends EditorElement {
         let flexGrow = 0;
         let size2 = child.screenWidth || 0;
         const parentLayoutDirection = parentItem == null ? void 0 : parentItem["flex-direction"];
-        if (parentLayoutDirection === FlexDirection.ROW && child.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
-          flexGrow = child["flex-grow"] || 1;
+        if (parentLayoutDirection === FlexDirection.ROW) {
+          if (child.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
+            flexGrow = child["flex-grow"] || 1;
+          }
           size2 = child.screenWidth;
-        } else if (parentLayoutDirection === FlexDirection.COLUMN && child.resizingVertical === ResizingMode.FILL_CONTAINER) {
-          flexGrow = child["flex-grow"] || 1;
+        } else if (parentLayoutDirection === FlexDirection.COLUMN) {
+          if (child.resizingVertical === ResizingMode.FILL_CONTAINER) {
+            flexGrow = child["flex-grow"] || 1;
+          }
           size2 = child.screenHeight;
         }
         return /* @__PURE__ */ createElementJsx("div", {
@@ -40721,7 +40721,11 @@ class FlexGrowToolView extends EditorElement {
           "data-flex-item-id": child.id,
           "data-parent-direction": parentLayoutDirection,
           "data-flex-grow": flexGrow
-        }, size2, " | ", flexGrow || "none");
+        }, /* @__PURE__ */ createElementJsx("span", {
+          class: "size"
+        }, size2), " ", /* @__PURE__ */ createElementJsx("span", {
+          class: "grow"
+        }, flexGrow || "x"));
       }).join("");
     });
   }
@@ -40732,6 +40736,16 @@ class FlexGrowToolView extends EditorElement {
       grow: +grow
     };
   }
+  getFlexGrow(parentLayoutDirection, item2, grow, dx, dy) {
+    let flexGrow = grow;
+    if (parentLayoutDirection === FlexDirection.ROW && item2.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
+      flexGrow = grow + Math.floor(dx / 10);
+    } else if (parentLayoutDirection === FlexDirection.COLUMN && item2.resizingVertical === ResizingMode.FILL_CONTAINER) {
+      flexGrow = grow + Math.floor(dy / 10);
+    }
+    flexGrow = Math.max(1, flexGrow);
+    return flexGrow;
+  }
   move(dx, dy) {
     const { id, grow } = this.state;
     const item2 = this.$editor.get(id);
@@ -40741,20 +40755,49 @@ class FlexGrowToolView extends EditorElement {
     if (!parentItem)
       return;
     const parentLayoutDirection = parentItem["flex-direction"];
-    let flexGrow = grow;
-    if (parentLayoutDirection === FlexDirection.ROW && item2.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
-      flexGrow = grow + Math.floor(dx / 10);
-    } else if (parentLayoutDirection === FlexDirection.COLUMN && item2.resizingVertical === ResizingMode.FILL_CONTAINER) {
-      flexGrow = grow + Math.floor(dy / 10);
-    }
-    flexGrow = Math.max(1, flexGrow);
+    let flexGrow = this.getFlexGrow(parentLayoutDirection, item2, grow, dx, dy);
     this.emit("setAttributeForMulti", {
       [id]: {
         "flex-grow": flexGrow
       }
     });
   }
-  end() {
+  end(dx, dy) {
+    const { id, grow } = this.state;
+    const item2 = this.$editor.get(id);
+    if (!item2)
+      return;
+    const parentItem = item2.parent;
+    if (!parentItem)
+      return;
+    const parentLayoutDirection = parentItem["flex-direction"];
+    let flexGrow = this.getFlexGrow(parentLayoutDirection, item2, grow, dx, dy);
+    if (dx === 0 && dy === 0) {
+      if (parentLayoutDirection === FlexDirection.ROW && item2.resizingHorizontal !== ResizingMode.FILL_CONTAINER) {
+        this.command("setAttributeForMulti", "change self resizing", {
+          [id]: {
+            "flex-grow": 1,
+            resizingHorizontal: ResizingMode.FILL_CONTAINER
+          }
+        });
+      } else if (parentLayoutDirection === FlexDirection.COLUMN && item2.resizingVertical !== ResizingMode.FILL_CONTAINER) {
+        this.command("setAttributeForMulti", "change self resizing", {
+          [id]: {
+            "flex-grow": 1,
+            resizingVertical: ResizingMode.FILL_CONTAINER
+          }
+        });
+      }
+    } else {
+      this.command("setAttributeForMulti", "change self resizing", {
+        [id]: {
+          "flex-grow": flexGrow
+        }
+      });
+    }
+    this.nextTick(() => {
+      this.refresh();
+    }, 10);
   }
   [SUBSCRIBE("updateViewport")]() {
     this.refresh();
@@ -44969,7 +45012,7 @@ class NumberInputEditor extends EditorElement {
   template() {
     return `<div class='small-editor' ref='$body'></div>`;
   }
-  [LOAD("$body")]() {
+  [LOAD("$body") + DOMDIFF]() {
     var { min, max, step: step2, label, type, layout: layout2, mini, compact, wide, disabled, removable } = this.state;
     var value = this.state.value;
     if (isNaN(value)) {
@@ -45032,7 +45075,7 @@ class NumberInputEditor extends EditorElement {
   isTriggerEnter() {
     return this.state.trigger === "enter";
   }
-  [INPUT("$body input[type=number]") + IF("isTriggerInput")](e2) {
+  [INPUT("$body input[type=number]") + IF("isTriggerInput") + DEBOUNCE(500)](e2) {
     this.updateValue(e2);
   }
   [KEYUP("$body input[type=number]") + IF("isTriggerEnter") + ENTER](e2) {
@@ -49491,10 +49534,16 @@ class DomRender$1 extends ItemRender$1 {
         case ResizingMode.FIXED:
           obj2.width = Length.px(item2.screenWidth);
           break;
+        case ResizingMode.HUG_CONTENT:
+          obj2["min-width"] = Length.px(item2.screenWidth);
+          break;
       }
       switch (item2.resizingVertical) {
         case ResizingMode.FIXED:
           obj2.height = Length.px(item2.screenHeight);
+          break;
+        case ResizingMode.HUG_CONTENT:
+          obj2["min-height"] = Length.px(item2.screenHeight);
           break;
       }
     } else if (item2.isInDefault()) {
@@ -59193,6 +59242,8 @@ class GhostToolView extends EditorElement {
     if (newDist[0] === 0 && newDist[1] === 0) {
       return;
     }
+    if (!this.targetItem)
+      return;
     if (this.targetItem.id === ((_a = this.$selection.current) == null ? void 0 : _a.id)) {
       return;
     }

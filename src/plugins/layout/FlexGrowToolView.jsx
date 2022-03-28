@@ -33,17 +33,17 @@ export default class FlexGrowToolView extends EditorElement {
           let size = child.screenWidth || 0;
 
           const parentLayoutDirection = parentItem?.["flex-direction"];
-          if (
-            parentLayoutDirection === FlexDirection.ROW &&
-            child.resizingHorizontal === ResizingMode.FILL_CONTAINER
-          ) {
-            flexGrow = child["flex-grow"] || 1;
+
+          if (parentLayoutDirection === FlexDirection.ROW) {
+            if (child.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
+              flexGrow = child["flex-grow"] || 1;
+            }
             size = child.screenWidth;
-          } else if (
-            parentLayoutDirection === FlexDirection.COLUMN &&
-            child.resizingVertical === ResizingMode.FILL_CONTAINER
-          ) {
-            flexGrow = child["flex-grow"] || 1;
+          } else if (parentLayoutDirection === FlexDirection.COLUMN) {
+            if (child.resizingVertical === ResizingMode.FILL_CONTAINER) {
+              flexGrow = child["flex-grow"] || 1;
+            }
+
             size = child.screenHeight;
           }
 
@@ -58,7 +58,8 @@ export default class FlexGrowToolView extends EditorElement {
               data-parent-direction={parentLayoutDirection}
               data-flex-grow={flexGrow}
             >
-              {size} | {flexGrow || "none"}
+              <span class="size">{size}</span>{" "}
+              <span class="grow">{flexGrow || "x"}</span>
             </div>
           );
         })
@@ -75,17 +76,7 @@ export default class FlexGrowToolView extends EditorElement {
     };
   }
 
-  move(dx, dy) {
-    const { id, grow } = this.state;
-
-    const item = this.$editor.get(id);
-    if (!item) return;
-
-    const parentItem = item.parent;
-    if (!parentItem) return;
-
-    const parentLayoutDirection = parentItem["flex-direction"];
-
+  getFlexGrow(parentLayoutDirection, item, grow, dx, dy) {
     let flexGrow = grow;
 
     if (
@@ -102,6 +93,22 @@ export default class FlexGrowToolView extends EditorElement {
 
     flexGrow = Math.max(1, flexGrow);
 
+    return flexGrow;
+  }
+
+  move(dx, dy) {
+    const { id, grow } = this.state;
+
+    const item = this.$editor.get(id);
+    if (!item) return;
+
+    const parentItem = item.parent;
+    if (!parentItem) return;
+
+    const parentLayoutDirection = parentItem["flex-direction"];
+
+    let flexGrow = this.getFlexGrow(parentLayoutDirection, item, grow, dx, dy);
+
     this.emit("setAttributeForMulti", {
       [id]: {
         "flex-grow": flexGrow,
@@ -109,7 +116,54 @@ export default class FlexGrowToolView extends EditorElement {
     });
   }
 
-  end() {}
+  end(dx, dy) {
+    const { id, grow } = this.state;
+
+    const item = this.$editor.get(id);
+    if (!item) return;
+
+    const parentItem = item.parent;
+    if (!parentItem) return;
+
+    const parentLayoutDirection = parentItem["flex-direction"];
+
+    let flexGrow = this.getFlexGrow(parentLayoutDirection, item, grow, dx, dy);
+
+    if (dx === 0 && dy === 0) {
+      // 이 때 flex-grow 를 1로 다시 맞춘다.
+      if (
+        parentLayoutDirection === FlexDirection.ROW &&
+        item.resizingHorizontal !== ResizingMode.FILL_CONTAINER
+      ) {
+        this.command("setAttributeForMulti", "change self resizing", {
+          [id]: {
+            "flex-grow": 1,
+            resizingHorizontal: ResizingMode.FILL_CONTAINER,
+          },
+        });
+      } else if (
+        parentLayoutDirection === FlexDirection.COLUMN &&
+        item.resizingVertical !== ResizingMode.FILL_CONTAINER
+      ) {
+        this.command("setAttributeForMulti", "change self resizing", {
+          [id]: {
+            "flex-grow": 1,
+            resizingVertical: ResizingMode.FILL_CONTAINER,
+          },
+        });
+      }
+    } else {
+      this.command("setAttributeForMulti", "change self resizing", {
+        [id]: {
+          "flex-grow": flexGrow,
+        },
+      });
+    }
+
+    this.nextTick(() => {
+      this.refresh();
+    }, 10);
+  }
 
   [SUBSCRIBE("updateViewport")]() {
     this.refresh();

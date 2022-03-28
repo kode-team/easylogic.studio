@@ -199,17 +199,6 @@ export default class FlexLayoutEditor extends EditorElement {
             onchange: 'changeKeyValue'
         })}
             </div>
-            <div class='flex-layout-item'>
-                <div class="title">${this.$i18n('flex.layout.editor.align-content')}</div>                        
-                ${createComponent("SelectIconEditor", {
-            key: 'align-content',
-            ref: '$alignContent',
-            value: this.state['align-content'] || AlignContent.FLEX_START,
-            options: this.getAlignContentOptions(),
-            icons: ['vertical_align_top', 'vertical_align_bottom', 'vertical_align_center', 'horizontal_distribute', 'justify_content_space_around', 'vertical_align_stretch'],
-            onchange: 'changeKeyValue'
-        })}
-            </div>    
         `
     }
 

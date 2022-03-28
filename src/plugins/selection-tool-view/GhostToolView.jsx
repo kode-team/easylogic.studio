@@ -618,6 +618,10 @@ export default class GhostToolView extends EditorElement {
     }
 
 
+    // 이동하는 target 이 없는 경우는 멈춘다. 
+    // 백그라운드를 클릭했거나 나 자신을 클릭했을 때 
+    if (!this.targetItem) return;
+
     // 선택한 레이어와 targetItem 이 같은 경우 추가하지 않는다. 
     if (this.targetItem.id === this.$selection.current?.id) {
       return;

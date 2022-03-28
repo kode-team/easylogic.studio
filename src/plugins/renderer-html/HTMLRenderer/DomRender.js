@@ -307,6 +307,7 @@ export default class DomRender extends ItemRender {
           break; 
         case ResizingMode.HUG_CONTENT:
           // noop
+          obj['min-width'] = Length.px(item.screenWidth);
           // obj.width = 'fit-content';
           // obj.height = 'fit-content';
           break;
@@ -318,6 +319,7 @@ export default class DomRender extends ItemRender {
           break; 
         case ResizingMode.HUG_CONTENT:
           // noop
+          obj['min-height'] = Length.px(item.screenHeight);
           // obj.width = 'fit-content';
           // obj.height = 'fit-content';
           break;
