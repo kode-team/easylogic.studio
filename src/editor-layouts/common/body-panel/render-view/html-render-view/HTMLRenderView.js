@@ -633,6 +633,25 @@ export default class HTMLRenderView extends EditorElement {
 
     }
 
+    refreshSelfElement(item) {
+        var $el = this.getElement(item.id);                
+
+        if ($el) {
+            const { x, y, width, height } = $el.offsetRect();
+
+            if (width > 0 && height > 0 ) {
+                // console.log(x, y, width, height);
+                item.reset({ x, y, width, height })
+    
+                this.refreshSelectionStyleView(item);
+    
+                if (this.$selection.check(item)) {
+                    this.emit('refreshSelectionTool');
+                }                    
+            }
+        }
+
+    }
 
     refreshElementBoundSize(parentObj) {
         if (parentObj) {
@@ -644,22 +663,10 @@ export default class HTMLRenderView extends EditorElement {
                     return;
                 }
 
-                var $el = this.getElement(parentObj.id);                
-                const { x, y, width, height } = $el.offsetRect();
-
-                if (width > 0 && height > 0 ) {
-                    // console.log(x, y, width, height);
-                    parentObj.reset({ x, y, width, height })
-
-                    this.refreshSelectionStyleView(parentObj);
-
-                    if (this.$selection.check(parentObj)) {
-                        this.emit('refreshSelectionTool');
-                    }                    
-                }
-
-
+                this.refreshSelfElement(parentObj);
                 return;
+            } else {
+                this.refreshSelfElement(parentObj);
             }
 
 

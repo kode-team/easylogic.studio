@@ -14,5 +14,9 @@ export default {
         command.emit('refreshSelection');
 
         command.run();
+
+        editor.nextTick(() => {
+            editor.emit('refreshSelectionTool');
+        })
     }
 }

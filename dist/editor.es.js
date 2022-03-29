@@ -2311,7 +2311,16 @@ class EventMachine {
     const filtedLoadMethodList = this._loadMethods.filter((it) => args2.length === 0 ? true : it.args[0] === args2[0]);
     await filtedLoadMethodList.forEach(async (it) => {
       const [elName, ...args3] = it.args;
-      const isDomDiff = !!it.keys["domdiff"];
+      let isDomDiff = false;
+      it.pipes.forEach((pipe) => {
+        switch (pipe.type) {
+          case "keyword":
+            if (pipe.value === "domdiff") {
+              isDomDiff = true;
+            }
+            break;
+        }
+      });
       const refTarget = this.refs[elName];
       if (refTarget) {
         var newTemplate = await this[it.originalMethod].call(this, ...args3);
@@ -14037,10 +14046,12 @@ var history_removeLayer = {
     let items = editor.selection.itemsByIds(ids || editor.selection.ids);
     items = filterChildren(items);
     const filtedIds = items.map((it) => it.id);
-    console.log(filtedIds);
     editor.modelManager.markRemove(filtedIds);
     const parentIds = items.map((it) => it.parentId);
-    items.forEach((item2) => item2.remove());
+    items.forEach((item2) => {
+      item2.remove();
+      editor.selection.removeById(item2.id);
+    });
     editor.history.add(message, this, {
       currentValues: [filtedIds, parentIds],
       undoValues: filtedIds
@@ -14048,7 +14059,6 @@ var history_removeLayer = {
     editor.nextTick(() => {
       editor.selection.removeById(filtedIds);
       const commandMaker = editor.createCommandMaker();
-      commandMaker.emit("refreshAllElementBoundSize");
       commandMaker.emit("refreshAll");
       commandMaker.emit("removeGuideLine");
       parentIds.forEach((parentId) => {
@@ -14962,6 +14972,9 @@ var refreshArtboard = {
     command.emit("refreshAllElementBoundSize");
     command.emit("refreshSelection");
     command.run();
+    editor.nextTick(() => {
+      editor.emit("refreshSelectionTool");
+    });
   }
 };
 var __glob_0_83$1 = /* @__PURE__ */ Object.freeze({
@@ -18062,15 +18075,22 @@ class BaseModel {
   refreshMatrixCache() {
   }
   insertChild(layer2, index2 = 0) {
+    var _a;
     this.resetMatrix(layer2);
-    if (layer2.parent) {
+    if (layer2.parent && ((_a = layer2.parent) == null ? void 0 : _a.id) !== this.id) {
       layer2.remove();
     }
     layer2.setParentId(this.id);
-    const list2 = this.json.children.map((id, index3) => {
-      return { id, index: index3 };
+    let list2 = this.json.children.map((id, childIndex) => {
+      return { id, index: childIndex };
     });
-    list2.push({ id: layer2.id, index: index2 - 0.5 });
+    const childItem = list2.find((it) => it.id === layer2.id);
+    const targetIndex = index2 - 0.5;
+    if (childItem) {
+      childItem.index = targetIndex;
+    } else {
+      list2.push({ id: layer2.id, index: targetIndex });
+    }
     list2.sort((a, b) => {
       return a.index - b.index;
     });
@@ -25500,28 +25520,35 @@ class HTMLRenderView extends EditorElement {
       });
     }
   }
+  refreshSelfElement(item2) {
+    var $el = this.getElement(item2.id);
+    if ($el) {
+      const { x: x2, y: y2, width: width2, height: height2 } = $el.offsetRect();
+      if (width2 > 0 && height2 > 0) {
+        item2.reset({ x: x2, y: y2, width: width2, height: height2 });
+        this.refreshSelectionStyleView(item2);
+        if (this.$selection.check(item2)) {
+          this.emit("refreshSelectionTool");
+        }
+      }
+    }
+  }
   refreshElementBoundSize(parentObj) {
     if (parentObj) {
       if (parentObj.hasChildren() === false) {
         if (parentObj.hasChangedField("x", "y", "width", "height", "border", "padding-top", "padding-left", "padding-right", "padding-bottom", "resizingHorizontal", "resizingVertical") === false) {
           return;
         }
-        var $el = this.getElement(parentObj.id);
-        const { x: x2, y: y2, width: width2, height: height2 } = $el.offsetRect();
-        if (width2 > 0 && height2 > 0) {
-          parentObj.reset({ x: x2, y: y2, width: width2, height: height2 });
-          this.refreshSelectionStyleView(parentObj);
-          if (this.$selection.check(parentObj)) {
-            this.emit("refreshSelectionTool");
-          }
-        }
+        this.refreshSelfElement(parentObj);
         return;
+      } else {
+        this.refreshSelfElement(parentObj);
       }
       const hasChangedDimension = parentObj.changedLayout || parentObj.hasChangedField("children", "box-model", "width", "height");
       parentObj.layers.forEach((it) => {
-        var $el2 = this.getElement(it.id);
-        if ($el2 && (hasChangedDimension || it.isLayoutItem())) {
-          const { x: x2, y: y2, width: width2, height: height2 } = $el2.offsetRect();
+        var $el = this.getElement(it.id);
+        if ($el && (hasChangedDimension || it.isLayoutItem())) {
+          const { x: x2, y: y2, width: width2, height: height2 } = $el.offsetRect();
           if (width2 > 0 && height2 > 0) {
             const value = { x: x2, y: y2, width: width2, height: height2 };
             if (it.isChangedValue(value)) {
@@ -39787,17 +39814,6 @@ class FlexLayoutEditor extends EditorElement {
       onchange: "changeKeyValue"
     })}
             </div>
-            <div class='flex-layout-item'>
-                <div class="title">${this.$i18n("flex.layout.editor.align-content")}</div>                        
-                ${createComponent("SelectIconEditor", {
-      key: "align-content",
-      ref: "$alignContent",
-      value: this.state["align-content"] || AlignContent.FLEX_START,
-      options: this.getAlignContentOptions(),
-      icons: ["vertical_align_top", "vertical_align_bottom", "vertical_align_center", "horizontal_distribute", "justify_content_space_around", "vertical_align_stretch"],
-      onchange: "changeKeyValue"
-    })}
-            </div>    
         `;
   }
   template() {
@@ -40659,7 +40675,7 @@ class ResizingItemProperty extends BaseProperty {
     }
   }
   [SUBSCRIBE_SELF("changeResizingMode")](key, value) {
-    this.command("setAttributeForMulti", "apply constraints", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "apply self resizing", this.$selection.packByValue({
       [key]: value,
       "flex-grow": 1
     }));
@@ -40705,11 +40721,15 @@ class FlexGrowToolView extends EditorElement {
         let flexGrow = 0;
         let size2 = child.screenWidth || 0;
         const parentLayoutDirection = parentItem == null ? void 0 : parentItem["flex-direction"];
-        if (parentLayoutDirection === FlexDirection.ROW && child.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
-          flexGrow = child["flex-grow"] || 1;
+        if (parentLayoutDirection === FlexDirection.ROW) {
+          if (child.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
+            flexGrow = child["flex-grow"] || 1;
+          }
           size2 = child.screenWidth;
-        } else if (parentLayoutDirection === FlexDirection.COLUMN && child.resizingVertical === ResizingMode.FILL_CONTAINER) {
-          flexGrow = child["flex-grow"] || 1;
+        } else if (parentLayoutDirection === FlexDirection.COLUMN) {
+          if (child.resizingVertical === ResizingMode.FILL_CONTAINER) {
+            flexGrow = child["flex-grow"] || 1;
+          }
           size2 = child.screenHeight;
         }
         return /* @__PURE__ */ createElementJsx("div", {
@@ -40721,7 +40741,11 @@ class FlexGrowToolView extends EditorElement {
           "data-flex-item-id": child.id,
           "data-parent-direction": parentLayoutDirection,
           "data-flex-grow": flexGrow
-        }, size2, " | ", flexGrow || "none");
+        }, /* @__PURE__ */ createElementJsx("span", {
+          class: "size"
+        }, size2), " ", /* @__PURE__ */ createElementJsx("span", {
+          class: "grow"
+        }, flexGrow || "x"));
       }).join("");
     });
   }
@@ -40732,6 +40756,16 @@ class FlexGrowToolView extends EditorElement {
       grow: +grow
     };
   }
+  getFlexGrow(parentLayoutDirection, item2, grow, dx, dy) {
+    let flexGrow = grow;
+    if (parentLayoutDirection === FlexDirection.ROW && item2.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
+      flexGrow = grow + Math.floor(dx / 10);
+    } else if (parentLayoutDirection === FlexDirection.COLUMN && item2.resizingVertical === ResizingMode.FILL_CONTAINER) {
+      flexGrow = grow + Math.floor(dy / 10);
+    }
+    flexGrow = Math.max(1, flexGrow);
+    return flexGrow;
+  }
   move(dx, dy) {
     const { id, grow } = this.state;
     const item2 = this.$editor.get(id);
@@ -40741,20 +40775,49 @@ class FlexGrowToolView extends EditorElement {
     if (!parentItem)
       return;
     const parentLayoutDirection = parentItem["flex-direction"];
-    let flexGrow = grow;
-    if (parentLayoutDirection === FlexDirection.ROW && item2.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
-      flexGrow = grow + Math.floor(dx / 10);
-    } else if (parentLayoutDirection === FlexDirection.COLUMN && item2.resizingVertical === ResizingMode.FILL_CONTAINER) {
-      flexGrow = grow + Math.floor(dy / 10);
-    }
-    flexGrow = Math.max(1, flexGrow);
+    let flexGrow = this.getFlexGrow(parentLayoutDirection, item2, grow, dx, dy);
     this.emit("setAttributeForMulti", {
       [id]: {
         "flex-grow": flexGrow
       }
     });
   }
-  end() {
+  end(dx, dy) {
+    const { id, grow } = this.state;
+    const item2 = this.$editor.get(id);
+    if (!item2)
+      return;
+    const parentItem = item2.parent;
+    if (!parentItem)
+      return;
+    const parentLayoutDirection = parentItem["flex-direction"];
+    let flexGrow = this.getFlexGrow(parentLayoutDirection, item2, grow, dx, dy);
+    if (dx === 0 && dy === 0) {
+      if (parentLayoutDirection === FlexDirection.ROW && item2.resizingHorizontal !== ResizingMode.FILL_CONTAINER) {
+        this.command("setAttributeForMulti", "change self resizing", {
+          [id]: {
+            "flex-grow": 1,
+            resizingHorizontal: ResizingMode.FILL_CONTAINER
+          }
+        });
+      } else if (parentLayoutDirection === FlexDirection.COLUMN && item2.resizingVertical !== ResizingMode.FILL_CONTAINER) {
+        this.command("setAttributeForMulti", "change self resizing", {
+          [id]: {
+            "flex-grow": 1,
+            resizingVertical: ResizingMode.FILL_CONTAINER
+          }
+        });
+      }
+    } else {
+      this.command("setAttributeForMulti", "change self resizing", {
+        [id]: {
+          "flex-grow": flexGrow
+        }
+      });
+    }
+    this.nextTick(() => {
+      this.refresh();
+    }, 10);
   }
   [SUBSCRIBE("updateViewport")]() {
     this.refresh();
@@ -44969,7 +45032,7 @@ class NumberInputEditor extends EditorElement {
   template() {
     return `<div class='small-editor' ref='$body'></div>`;
   }
-  [LOAD("$body")]() {
+  [LOAD("$body") + DOMDIFF]() {
     var { min, max, step: step2, label, type, layout: layout2, mini, compact, wide, disabled, removable } = this.state;
     var value = this.state.value;
     if (isNaN(value)) {
@@ -45032,7 +45095,7 @@ class NumberInputEditor extends EditorElement {
   isTriggerEnter() {
     return this.state.trigger === "enter";
   }
-  [INPUT("$body input[type=number]") + IF("isTriggerInput")](e2) {
+  [INPUT("$body input[type=number]") + IF("isTriggerInput") + DEBOUNCE(500)](e2) {
     this.updateValue(e2);
   }
   [KEYUP("$body input[type=number]") + IF("isTriggerEnter") + ENTER](e2) {
@@ -49491,10 +49554,16 @@ class DomRender$1 extends ItemRender$1 {
         case ResizingMode.FIXED:
           obj2.width = Length.px(item2.screenWidth);
           break;
+        case ResizingMode.HUG_CONTENT:
+          obj2["min-width"] = Length.px(item2.screenWidth);
+          break;
       }
       switch (item2.resizingVertical) {
         case ResizingMode.FIXED:
           obj2.height = Length.px(item2.screenHeight);
+          break;
+        case ResizingMode.HUG_CONTENT:
+          obj2["min-height"] = Length.px(item2.screenHeight);
           break;
       }
     } else if (item2.isInDefault()) {
@@ -58983,29 +59052,10 @@ class GhostToolView extends EditorElement {
     }, data), this.renderPathForVerties(verties, className));
   }
   renderLayoutFlexRowArea() {
-    vertiesToRectangle(this.targetOriginPosition);
     if (this.targetRelativeMousePoint.x < CHECK_RATE) {
-      return /* @__PURE__ */ createElementJsx(FragmentInstance, null, this.renderPathForVerties([
-        [
-          this.targetOriginPosition[0][0],
-          this.targetOriginPosition[0][1]
-        ],
-        [
-          this.targetOriginPosition[3][0],
-          this.targetOriginPosition[3][1]
-        ]
-      ], "flex-target"));
+      return /* @__PURE__ */ createElementJsx(FragmentInstance, null, this.renderPathForVerties([this.targetOriginPosition[0], this.targetOriginPosition[3]], "flex-target"));
     } else {
-      return /* @__PURE__ */ createElementJsx(FragmentInstance, null, this.renderPathForVerties([
-        [
-          this.targetOriginPosition[1][0],
-          this.targetOriginPosition[1][1]
-        ],
-        [
-          this.targetOriginPosition[2][0],
-          this.targetOriginPosition[2][1]
-        ]
-      ], "flex-target"));
+      return /* @__PURE__ */ createElementJsx(FragmentInstance, null, this.renderPathForVerties([this.targetOriginPosition[1], this.targetOriginPosition[2]], "flex-target"));
     }
   }
   renderLayoutFlexForFirstItem(direction) {
@@ -59050,33 +59100,13 @@ class GhostToolView extends EditorElement {
     return this.renderPathForVerties(renderVerties, "flex-item", "ghost");
   }
   renderLayoutFlexColumnArea() {
-    const rect2 = vertiesToRectangle(this.targetOriginPosition);
+    if (this.targetRelativeMousePoint.y < 0) {
+      return "";
+    }
     if (this.targetRelativeMousePoint.y < CHECK_RATE) {
-      return this.renderPathForVerties([
-        [this.targetOriginPosition[0][0], this.targetOriginPosition[0][1]],
-        [this.targetOriginPosition[1][0], this.targetOriginPosition[1][1]],
-        [
-          this.targetOriginPosition[2][0],
-          this.targetOriginPosition[2][1] - rect2.height / 2
-        ],
-        [
-          this.targetOriginPosition[3][0],
-          this.targetOriginPosition[3][1] - rect2.height / 2
-        ]
-      ], "flex-item", "flex-top");
+      return this.renderPathForVerties([this.targetOriginPosition[0], this.targetOriginPosition[1]], "flex-target");
     } else {
-      return this.renderPathForVerties([
-        [
-          this.targetOriginPosition[0][0],
-          this.targetOriginPosition[0][1] + rect2.height / 2
-        ],
-        [
-          this.targetOriginPosition[1][0],
-          this.targetOriginPosition[1][1] + rect2.height / 2
-        ],
-        [this.targetOriginPosition[2][0], this.targetOriginPosition[2][1]],
-        [this.targetOriginPosition[3][0], this.targetOriginPosition[3][1]]
-      ], "flex-item", "flex-bottom");
+      return this.renderPathForVerties([this.targetOriginPosition[2], this.targetOriginPosition[3]], "flex-target");
     }
   }
   renderLayoutItemInsertArea() {
@@ -59127,13 +59157,14 @@ class GhostToolView extends EditorElement {
   }
   initializeGhostView() {
     this.isLayoutItem = false;
-    this.ghostVerties = null;
-    this.ghostScreenVerties = null;
-    this.targetOriginPosition = null;
-    this.targetOriginPosition = null;
-    this.targetRelativeMousePoint = null;
-    this.targetParent = null;
-    this.targetParentPosition = null;
+    this.ghostVerties = void 0;
+    this.ghostScreenVerties = void 0;
+    this.targetOriginPosition = void 0;
+    this.targetOriginPosition = void 0;
+    this.targetRelativeMousePoint = void 0;
+    this.targetItem = void 0;
+    this.targetParent = void 0;
+    this.targetParentPosition = void 0;
   }
   getDist() {
     const targetMousePoint = this.$viewport.getWorldPosition();
@@ -59185,7 +59216,7 @@ class GhostToolView extends EditorElement {
     }
   }
   updateLayer() {
-    var _a, _b;
+    var _a;
     const current = this.$selection.current;
     if (!current)
       return;
@@ -59193,7 +59224,9 @@ class GhostToolView extends EditorElement {
     if (newDist[0] === 0 && newDist[1] === 0) {
       return;
     }
-    if (this.targetItem.id === ((_a = this.$selection.current) == null ? void 0 : _a.id)) {
+    if (!this.targetItem)
+      return;
+    if (this.targetItem.id === (current == null ? void 0 : current.id)) {
       return;
     }
     if (!this.targetItem) {
@@ -59205,7 +59238,7 @@ class GhostToolView extends EditorElement {
       return;
     }
     if (this.targetItem.hasLayout()) {
-      if (((_b = this.targetItem) == null ? void 0 : _b.hasChildren()) === false) {
+      if (((_a = this.targetItem) == null ? void 0 : _a.hasChildren()) === false) {
         this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, "appendChild");
       }
     } else {

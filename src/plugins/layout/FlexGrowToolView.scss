@@ -8,16 +8,19 @@
 
     .flex-grow-item {
         position: absolute;
+        left: 0px;
+        top: 0px;
         height: 20px;
         background-color: rgba(255, 255, 255, 0.8);
         border: 1px solid var(--elf--font-color);
         border-radius: 4px;
         pointer-events: all;
         transform: translate(-50%, -50%);
-        display: inline-block;
+        display: flex;
         text-align: center;
-        padding: 4px 10px;
         line-height: 1;
+        overflow: hidden;
+        // transition: all linear 0.15s;
 
         &[data-parent-direction="row"] {
             cursor: ew-resize;
@@ -25,6 +28,35 @@
 
         &[data-parent-direction="column"] {
             cursor: ns-resize;
+            flex-direction: column;
+            overflow: hidden;
+            height: auto;
+
+            > * {
+                padding-top: 1px !important;
+                padding-bottom: 1px !important;
+            }
+        }
+
+        .size {
+            flex: 1 1 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 4px 4px;
+        }
+
+        .grow {
+            flex: none;
+            display: flex;
+            // height: 100px;
+            // padding: 10px;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 4px;
+            background-color: var(--elf--selected-color);
+            color: var(--elf--selected-font-color);
+            
         }
     }
 }
