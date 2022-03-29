@@ -2311,7 +2311,16 @@ class EventMachine {
     const filtedLoadMethodList = this._loadMethods.filter((it) => args2.length === 0 ? true : it.args[0] === args2[0]);
     await filtedLoadMethodList.forEach(async (it) => {
       const [elName, ...args3] = it.args;
-      const isDomDiff = !!it.keys["domdiff"];
+      let isDomDiff = false;
+      it.pipes.forEach((pipe) => {
+        switch (pipe.type) {
+          case "keyword":
+            if (pipe.value === "domdiff") {
+              isDomDiff = true;
+            }
+            break;
+        }
+      });
       const refTarget = this.refs[elName];
       if (refTarget) {
         var newTemplate = await this[it.originalMethod].call(this, ...args3);
@@ -14037,10 +14046,12 @@ var history_removeLayer = {
     let items = editor.selection.itemsByIds(ids || editor.selection.ids);
     items = filterChildren(items);
     const filtedIds = items.map((it) => it.id);
-    console.log(filtedIds);
     editor.modelManager.markRemove(filtedIds);
     const parentIds = items.map((it) => it.parentId);
-    items.forEach((item2) => item2.remove());
+    items.forEach((item2) => {
+      item2.remove();
+      editor.selection.removeById(item2.id);
+    });
     editor.history.add(message, this, {
       currentValues: [filtedIds, parentIds],
       undoValues: filtedIds
@@ -14048,7 +14059,6 @@ var history_removeLayer = {
     editor.nextTick(() => {
       editor.selection.removeById(filtedIds);
       const commandMaker = editor.createCommandMaker();
-      commandMaker.emit("refreshAllElementBoundSize");
       commandMaker.emit("refreshAll");
       commandMaker.emit("removeGuideLine");
       parentIds.forEach((parentId) => {
@@ -14962,6 +14972,9 @@ var refreshArtboard = {
     command.emit("refreshAllElementBoundSize");
     command.emit("refreshSelection");
     command.run();
+    editor.nextTick(() => {
+      editor.emit("refreshSelectionTool");
+    });
   }
 };
 var __glob_0_83$1 = /* @__PURE__ */ Object.freeze({
@@ -18062,15 +18075,22 @@ class BaseModel {
   refreshMatrixCache() {
   }
   insertChild(layer2, index2 = 0) {
+    var _a;
     this.resetMatrix(layer2);
-    if (layer2.parent) {
+    if (layer2.parent && ((_a = layer2.parent) == null ? void 0 : _a.id) !== this.id) {
       layer2.remove();
     }
     layer2.setParentId(this.id);
-    const list2 = this.json.children.map((id, index3) => {
-      return { id, index: index3 };
+    let list2 = this.json.children.map((id, childIndex) => {
+      return { id, index: childIndex };
     });
-    list2.push({ id: layer2.id, index: index2 - 0.5 });
+    const childItem = list2.find((it) => it.id === layer2.id);
+    const targetIndex = index2 - 0.5;
+    if (childItem) {
+      childItem.index = targetIndex;
+    } else {
+      list2.push({ id: layer2.id, index: targetIndex });
+    }
     list2.sort((a, b) => {
       return a.index - b.index;
     });
@@ -40655,7 +40675,7 @@ class ResizingItemProperty extends BaseProperty {
     }
   }
   [SUBSCRIBE_SELF("changeResizingMode")](key, value) {
-    this.command("setAttributeForMulti", "apply constraints", this.$selection.packByValue({
+    this.command("setAttributeForMulti", "apply self resizing", this.$selection.packByValue({
       [key]: value,
       "flex-grow": 1
     }));
@@ -59032,29 +59052,10 @@ class GhostToolView extends EditorElement {
     }, data), this.renderPathForVerties(verties, className));
   }
   renderLayoutFlexRowArea() {
-    vertiesToRectangle(this.targetOriginPosition);
     if (this.targetRelativeMousePoint.x < CHECK_RATE) {
-      return /* @__PURE__ */ createElementJsx(FragmentInstance, null, this.renderPathForVerties([
-        [
-          this.targetOriginPosition[0][0],
-          this.targetOriginPosition[0][1]
-        ],
-        [
-          this.targetOriginPosition[3][0],
-          this.targetOriginPosition[3][1]
-        ]
-      ], "flex-target"));
+      return /* @__PURE__ */ createElementJsx(FragmentInstance, null, this.renderPathForVerties([this.targetOriginPosition[0], this.targetOriginPosition[3]], "flex-target"));
     } else {
-      return /* @__PURE__ */ createElementJsx(FragmentInstance, null, this.renderPathForVerties([
-        [
-          this.targetOriginPosition[1][0],
-          this.targetOriginPosition[1][1]
-        ],
-        [
-          this.targetOriginPosition[2][0],
-          this.targetOriginPosition[2][1]
-        ]
-      ], "flex-target"));
+      return /* @__PURE__ */ createElementJsx(FragmentInstance, null, this.renderPathForVerties([this.targetOriginPosition[1], this.targetOriginPosition[2]], "flex-target"));
     }
   }
   renderLayoutFlexForFirstItem(direction) {
@@ -59099,33 +59100,13 @@ class GhostToolView extends EditorElement {
     return this.renderPathForVerties(renderVerties, "flex-item", "ghost");
   }
   renderLayoutFlexColumnArea() {
-    const rect2 = vertiesToRectangle(this.targetOriginPosition);
+    if (this.targetRelativeMousePoint.y < 0) {
+      return "";
+    }
     if (this.targetRelativeMousePoint.y < CHECK_RATE) {
-      return this.renderPathForVerties([
-        [this.targetOriginPosition[0][0], this.targetOriginPosition[0][1]],
-        [this.targetOriginPosition[1][0], this.targetOriginPosition[1][1]],
-        [
-          this.targetOriginPosition[2][0],
-          this.targetOriginPosition[2][1] - rect2.height / 2
-        ],
-        [
-          this.targetOriginPosition[3][0],
-          this.targetOriginPosition[3][1] - rect2.height / 2
-        ]
-      ], "flex-item", "flex-top");
+      return this.renderPathForVerties([this.targetOriginPosition[0], this.targetOriginPosition[1]], "flex-target");
     } else {
-      return this.renderPathForVerties([
-        [
-          this.targetOriginPosition[0][0],
-          this.targetOriginPosition[0][1] + rect2.height / 2
-        ],
-        [
-          this.targetOriginPosition[1][0],
-          this.targetOriginPosition[1][1] + rect2.height / 2
-        ],
-        [this.targetOriginPosition[2][0], this.targetOriginPosition[2][1]],
-        [this.targetOriginPosition[3][0], this.targetOriginPosition[3][1]]
-      ], "flex-item", "flex-bottom");
+      return this.renderPathForVerties([this.targetOriginPosition[2], this.targetOriginPosition[3]], "flex-target");
     }
   }
   renderLayoutItemInsertArea() {
@@ -59176,13 +59157,14 @@ class GhostToolView extends EditorElement {
   }
   initializeGhostView() {
     this.isLayoutItem = false;
-    this.ghostVerties = null;
-    this.ghostScreenVerties = null;
-    this.targetOriginPosition = null;
-    this.targetOriginPosition = null;
-    this.targetRelativeMousePoint = null;
-    this.targetParent = null;
-    this.targetParentPosition = null;
+    this.ghostVerties = void 0;
+    this.ghostScreenVerties = void 0;
+    this.targetOriginPosition = void 0;
+    this.targetOriginPosition = void 0;
+    this.targetRelativeMousePoint = void 0;
+    this.targetItem = void 0;
+    this.targetParent = void 0;
+    this.targetParentPosition = void 0;
   }
   getDist() {
     const targetMousePoint = this.$viewport.getWorldPosition();
@@ -59234,7 +59216,7 @@ class GhostToolView extends EditorElement {
     }
   }
   updateLayer() {
-    var _a, _b;
+    var _a;
     const current = this.$selection.current;
     if (!current)
       return;
@@ -59244,7 +59226,7 @@ class GhostToolView extends EditorElement {
     }
     if (!this.targetItem)
       return;
-    if (this.targetItem.id === ((_a = this.$selection.current) == null ? void 0 : _a.id)) {
+    if (this.targetItem.id === (current == null ? void 0 : current.id)) {
       return;
     }
     if (!this.targetItem) {
@@ -59256,7 +59238,7 @@ class GhostToolView extends EditorElement {
       return;
     }
     if (this.targetItem.hasLayout()) {
-      if (((_b = this.targetItem) == null ? void 0 : _b.hasChildren()) === false) {
+      if (((_a = this.targetItem) == null ? void 0 : _a.hasChildren()) === false) {
         this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, "appendChild");
       }
     } else {

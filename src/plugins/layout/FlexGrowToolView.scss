@@ -8,6 +8,8 @@
 
     .flex-grow-item {
         position: absolute;
+        left: 0px;
+        top: 0px;
         height: 20px;
         background-color: rgba(255, 255, 255, 0.8);
         border: 1px solid var(--elf--font-color);
@@ -18,6 +20,7 @@
         text-align: center;
         line-height: 1;
         overflow: hidden;
+        // transition: all linear 0.15s;
 
         &[data-parent-direction="row"] {
             cursor: ew-resize;

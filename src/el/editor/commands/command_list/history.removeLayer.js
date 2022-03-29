@@ -45,15 +45,16 @@ export default {
 
         const filtedIds = items.map(it => it.id);
 
-        console.log(filtedIds);
-
         // 삭제 할 때는 modelManager 에서 mark 를 한다. 
         editor.modelManager.markRemove(filtedIds);        
 
         //전체 삭제 
         const parentIds = items.map(it => it.parentId);
 
-        items.forEach(item => item.remove())
+        items.forEach(item => {
+            item.remove()
+            editor.selection.removeById(item.id)
+        })
 
         editor.history.add(message, this, {
             currentValues: [filtedIds, parentIds],
@@ -66,7 +67,6 @@ export default {
 
             const commandMaker = editor.createCommandMaker();
 
-            commandMaker.emit('refreshAllElementBoundSize')
             commandMaker.emit('refreshAll')
             commandMaker.emit('removeGuideLine');
 

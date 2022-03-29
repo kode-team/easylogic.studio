@@ -599,17 +599,27 @@ export class BaseModel {
     this.resetMatrix(layer);
 
     // 객체를 추가할 때는  layer 의 절대 값을 기준으로 객체를 움직인다. 
-    if (layer.parent) {
+    if (layer.parent && layer.parent?.id !== this.id) {
       layer.remove();
     }
 
     layer.setParentId(this.id);
 
-    const list = this.json.children.map((id, index) => {
-      return {id, index}
+    let list = this.json.children.map((id, childIndex) => {
+      return {id, index: childIndex}
     })
 
-    list.push({ id: layer.id, index: index - 0.5 })
+    // child 리스트 중에 layer.id 와 같은 값이 있는지 체크
+    const childItem = list.find(it => it.id === layer.id);
+    const targetIndex = index - 0.5;
+
+    // 이미 있는 경우
+    if (childItem) {
+      childItem.index = targetIndex;
+    } else {
+      // 없는 경우
+      list.push({ id: layer.id, index: targetIndex })
+    }
 
     list.sort((a, b) => {
       return a.index - b.index;

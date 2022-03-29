@@ -8,7 +8,11 @@ import {
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { DOMDIFF, LOAD, SUBSCRIBE } from "el/sapa/Event";
 import { clone } from "el/sapa/functions/func";
-import { toRectVerties, vertiesToPath, vertiesToRectangle } from "el/utils/collision";
+import {
+  toRectVerties,
+  vertiesToPath,
+  vertiesToRectangle,
+} from "el/utils/collision";
 import { vec3 } from "gl-matrix";
 
 import "./GhostToolView.scss";
@@ -160,26 +164,21 @@ export default class GhostToolView extends EditorElement {
   }
 
   renderPathForVerties(verties, className) {
-
     if (!verties) {
-      return <g></g>
+      return <g></g>;
     }
 
     const d = vertiesToPath(verties);
 
     return (
       <g>
-        <path
-          class={className}
-          d={d}
-        />
+        <path class={className} d={d} />
       </g>
     );
   }
 
   renderPath(verties, className, data = className) {
-
-    // verties 포인트가 없으면 종료 
+    // verties 포인트가 없으면 종료
     if (!verties) return "";
 
     verties = data === "ghost" ? verties : toRectVerties(verties);
@@ -199,45 +198,12 @@ export default class GhostToolView extends EditorElement {
   }
 
   renderLayoutFlexRowArea() {
-    const rect = vertiesToRectangle(this.targetOriginPosition);
-
     // 자식 기준으로 화면에 표시
     if (this.targetRelativeMousePoint.x < CHECK_RATE) {
       return (
         <>
-          {/* {this.renderPathForVerties(
-            [
-              [
-                this.targetOriginPosition[0][0],
-                this.targetOriginPosition[0][1],
-              ],
-              [
-                this.targetOriginPosition[0][0] + rect.width / 2,
-                this.targetOriginPosition[1][1],
-              ],
-              [
-                this.targetOriginPosition[0][0] + rect.width / 2,
-                this.targetOriginPosition[2][1],
-              ],
-              [
-                this.targetOriginPosition[3][0],
-                this.targetOriginPosition[3][1],
-              ],
-            ],
-            "flex-item"
-          )} */}
-
           {this.renderPathForVerties(
-            [
-              [
-                this.targetOriginPosition[0][0],
-                this.targetOriginPosition[0][1],
-              ],
-              [
-                this.targetOriginPosition[3][0],
-                this.targetOriginPosition[3][1],
-              ],
-            ],
+            [this.targetOriginPosition[0], this.targetOriginPosition[3]],
             "flex-target"
           )}
         </>
@@ -245,38 +211,8 @@ export default class GhostToolView extends EditorElement {
     } else {
       return (
         <>
-          {/* {this.renderPathForVerties(
-            [
-              [
-                this.targetOriginPosition[0][0] + rect.width / 2,
-                this.targetOriginPosition[0][1],
-              ],
-              [
-                this.targetOriginPosition[1][0],
-                this.targetOriginPosition[1][1],
-              ],
-              [
-                this.targetOriginPosition[2][0],
-                this.targetOriginPosition[2][1],
-              ],
-              [
-                this.targetOriginPosition[3][0] + rect.width / 2,
-                this.targetOriginPosition[3][1],
-              ],
-            ],
-            "flex-item"
-          )} */}
           {this.renderPathForVerties(
-            [
-              [
-                this.targetOriginPosition[1][0],
-                this.targetOriginPosition[1][1],
-              ],
-              [
-                this.targetOriginPosition[2][0],
-                this.targetOriginPosition[2][1],
-              ],
-            ],
+            [this.targetOriginPosition[1], this.targetOriginPosition[2]],
             "flex-target"
           )}
         </>
@@ -340,48 +276,28 @@ export default class GhostToolView extends EditorElement {
     const newDist = vec3.subtract([], [newCenterX, newCenterY, 0], center);
 
     // xy 를 빼고 transform 을 한다.
-    const renderVerties = this.ghostScreenVerties.map((it) =>
-      vec3.add([], it, newDist)
-    ).filter((it, index) => index < 4);
+    const renderVerties = this.ghostScreenVerties
+      .map((it) => vec3.add([], it, newDist))
+      .filter((it, index) => index < 4);
 
     return this.renderPathForVerties(renderVerties, "flex-item", "ghost");
   }
 
   renderLayoutFlexColumnArea() {
-    const rect = vertiesToRectangle(this.targetOriginPosition);
+
+    if (this.targetRelativeMousePoint.y < 0) {
+      return "";
+    }
+
     if (this.targetRelativeMousePoint.y < CHECK_RATE) {
       return this.renderPathForVerties(
-        [
-          [this.targetOriginPosition[0][0], this.targetOriginPosition[0][1]],
-          [this.targetOriginPosition[1][0], this.targetOriginPosition[1][1]],
-          [
-            this.targetOriginPosition[2][0],
-            this.targetOriginPosition[2][1] - rect.height / 2,
-          ],
-          [
-            this.targetOriginPosition[3][0],
-            this.targetOriginPosition[3][1] - rect.height / 2,
-          ],
-        ],
-        "flex-item",
-        "flex-top"
+        [this.targetOriginPosition[0], this.targetOriginPosition[1]],
+        "flex-target"
       );
     } else {
       return this.renderPathForVerties(
-        [
-          [
-            this.targetOriginPosition[0][0],
-            this.targetOriginPosition[0][1] + rect.height / 2,
-          ],
-          [
-            this.targetOriginPosition[1][0],
-            this.targetOriginPosition[1][1] + rect.height / 2,
-          ],
-          [this.targetOriginPosition[2][0], this.targetOriginPosition[2][1]],
-          [this.targetOriginPosition[3][0], this.targetOriginPosition[3][1]],
-        ],
-        "flex-item",
-        "flex-bottom"
+        [this.targetOriginPosition[2], this.targetOriginPosition[3]],
+        "flex-target"
       );
     }
   }
@@ -443,7 +359,6 @@ export default class GhostToolView extends EditorElement {
 
     const hasTargetView = this.targetItem?.id !== current.id;
 
-
     return (
       <svg>
         {this.targetParent &&
@@ -451,27 +366,36 @@ export default class GhostToolView extends EditorElement {
         {hasTargetView &&
           this.renderPathForVerties(this.targetOriginPosition, "target", "")}
         {hasTargetView &&
-          this.renderPathForVerties(this.targetOriginPosition, "target-rect", "")}
+          this.renderPathForVerties(
+            this.targetOriginPosition,
+            "target-rect",
+            ""
+          )}
         {hasTargetView && this.renderLayoutItemInsertArea()}
         {hasTargetView && this.renderLayoutItemForFirst()}
 
-        {this.isLayoutItem && this.renderPathForVerties(this.ghostScreenVerties.filter((_, index) => index < 4), "ghost")}
+        {this.isLayoutItem &&
+          this.renderPathForVerties(
+            this.ghostScreenVerties.filter((_, index) => index < 4),
+            "ghost"
+          )}
       </svg>
     );
   }
 
   initializeGhostView() {
     this.isLayoutItem = false;
-    this.ghostVerties = null;
-    this.ghostScreenVerties = null;
+    this.ghostVerties = undefined;
+    this.ghostScreenVerties = undefined;
 
-    this.targetOriginPosition = null;
-    this.targetOriginPosition = null;
+    this.targetOriginPosition = undefined;
+    this.targetOriginPosition = undefined;
 
-    this.targetRelativeMousePoint = null;
+    this.targetRelativeMousePoint = undefined;
 
-    this.targetParent = null;
-    this.targetParentPosition = null;
+    this.targetItem = undefined;
+    this.targetParent = undefined;
+    this.targetParentPosition = undefined;
   }
 
   getDist() {
@@ -532,7 +456,6 @@ export default class GhostToolView extends EditorElement {
 
     if (this.targetParent.hasLayout()) {
       if (this.targetParent.isLayout(Layout.FLEX)) {
-
         switch (this.targetParent["flex-direction"]) {
           case FlexDirection.ROW:
             // left
@@ -606,24 +529,23 @@ export default class GhostToolView extends EditorElement {
   updateLayer() {
     const current = this.$selection.current;
 
-    // 선택된 객체가 없으면 동작하지 않는다. 
-    if (!current) return ;
+    // 선택된 객체가 없으면 동작하지 않는다.
+    if (!current) return;
 
     const newDist = this.getDist();
 
     if (newDist[0] === 0 && newDist[1] === 0) {
-      // 움직이지 않은 상태는 GhostToolView 에서 아무것도 하지 않음. 
+      // 움직이지 않은 상태는 GhostToolView 에서 아무것도 하지 않음.
       // NOOP
       return;
     }
 
-
-    // 이동하는 target 이 없는 경우는 멈춘다. 
-    // 백그라운드를 클릭했거나 나 자신을 클릭했을 때 
+    // 이동하는 target 이 없는 경우는 멈춘다.
+    // 백그라운드를 클릭했거나 나 자신을 클릭했을 때
     if (!this.targetItem) return;
 
-    // 선택한 레이어와 targetItem 이 같은 경우 추가하지 않는다. 
-    if (this.targetItem.id === this.$selection.current?.id) {
+    // 선택한 레이어와 targetItem 이 같은 경우 추가하지 않는다.
+    if (this.targetItem.id === current?.id) {
       return;
     }
 
@@ -639,7 +561,7 @@ export default class GhostToolView extends EditorElement {
     if (this.targetParent) {
       this.insertToLayoutItem();
       return;
-    }    
+    }
 
     // target 이 레이아웃이 있고
     if (this.targetItem.hasLayout()) {
@@ -658,11 +580,11 @@ export default class GhostToolView extends EditorElement {
       }
     } else {
       if (this.targetItem.id === current.id) {
-        // targetItem 과 현재 선택된 객체가 동일하면 움직이지 않는다. 
-        return; 
+        // targetItem 과 현재 선택된 객체가 동일하면 움직이지 않는다.
+        return;
       }
 
-      // layout item 이고, 부모가 다르면 targetItem(다른 부모)로 이동함 
+      // layout item 이고, 부모가 다르면 targetItem(다른 부모)로 이동함
       if (current.isLayoutItem() && current.parent.id !== this.targetItem.id) {
         this.command(
           "moveLayerToTarget",

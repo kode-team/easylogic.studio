@@ -122,7 +122,7 @@ export default class ResizingItemProperty extends BaseProperty {
 
   [SUBSCRIBE_SELF('changeResizingMode')](key, value) {
 
-    this.command('setAttributeForMulti', 'apply constraints', this.$selection.packByValue({
+    this.command('setAttributeForMulti', 'apply self resizing', this.$selection.packByValue({
       [key]: value,
       'flex-grow': 1,
     }))

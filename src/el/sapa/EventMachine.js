@@ -541,7 +541,19 @@ export default class EventMachine {
 
       const [elName, ...args] = it.args;
 
-      const isDomDiff = !!it.keys['domdiff'];
+      let isDomDiff = false;
+      it.pipes.forEach(pipe => {
+        switch(pipe.type) {
+        case 'keyword': 
+          if (pipe.value === 'domdiff') {
+            isDomDiff = true;
+          }
+          break;
+        }
+      })
+
+
+
       const refTarget = this.refs[elName];
 
       if (refTarget) {        
