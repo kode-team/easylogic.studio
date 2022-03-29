@@ -100,10 +100,6 @@ const applyElementAttribute = ($element, key, value) => {
 
 export default class BindHandler extends BaseHandler {
 
-  load(...args) {
-    this.bindData(...args);
-  }
-
 
   /**
    * 

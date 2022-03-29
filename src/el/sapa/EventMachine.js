@@ -581,11 +581,11 @@ export default class EventMachine {
   }
 
   runHandlers(func = 'run', ...args) {
-    this.handlers.forEach(h => h[func](...args));
+    this.handlers.filter(h => h[func]).forEach(h => h[func](...args));
   }
 
   bindData (...args) {
-    this.runHandlers('load', ...args);
+    this.runHandlers('bindData', ...args);
   }
 
   // 기본 템플릿 지정

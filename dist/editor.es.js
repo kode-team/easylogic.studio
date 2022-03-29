@@ -1846,9 +1846,6 @@ const applyElementAttribute = ($element, key, value) => {
   }
 };
 class BindHandler extends BaseHandler {
-  load(...args2) {
-    this.bindData(...args2);
-  }
   async bindLocalValue(refName) {
     let target = this.context.refBindVariables;
     if (refName && this.context.refBindVariables[refName]) {
@@ -2340,10 +2337,10 @@ class EventMachine {
     this._afterLoad();
   }
   runHandlers(func2 = "run", ...args2) {
-    this.handlers.forEach((h) => h[func2](...args2));
+    this.handlers.filter((h) => h[func2]).forEach((h) => h[func2](...args2));
   }
   bindData(...args2) {
-    this.runHandlers("load", ...args2);
+    this.runHandlers("bindData", ...args2);
   }
   template() {
     return null;
