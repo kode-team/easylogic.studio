@@ -100,19 +100,6 @@ export default class HTMLRenderView extends EditorElement {
         this.bindData('$view');
     }
 
-    /**
-     * 기본 커서 제어 
-     */
-    [CONFIG('bodyEvent')]() {
-
-        // TODO: 커서를 제어하는 element 가 아니면 기본 커서로 지정해야할 듯 
-        const number = Dom.create(this.$config.get('bodyEvent').target).data('number')
-
-        if (!number) {
-            this.emit('recoverCursor')
-        }
-    }    
-
     [SUBSCRIBE('refreshAllElementBoundSize')]() {
         this.refreshAllElementBoundSize();
     }
@@ -541,10 +528,10 @@ export default class HTMLRenderView extends EditorElement {
 
         }
 
-        this.nextTick(() => {
+        // this.nextTick(() => {
             this.emit('refreshSelection');
             // this.emit('refreshSelectionTool', true)   
-        }, 100);
+        // }, 100); /
     }
 
 
@@ -592,7 +579,8 @@ export default class HTMLRenderView extends EditorElement {
             }
         })
 
-        this.bindData('$view');
+        // viewport 이동 
+        // this.bindData('$view');
 
         // 최초 전체 객체를 돌면서 update 함수를 실행해줄 트리거가 필요하다. 
         this.updateAllCanvas(project);
@@ -645,7 +633,7 @@ export default class HTMLRenderView extends EditorElement {
     
                 this.refreshSelectionStyleView(item);
     
-                if (this.$selection.check(item)) {
+                if (this.$selection.check(item)) {                           
                     this.emit('refreshSelectionTool');
                 }                    
             }
@@ -655,18 +643,10 @@ export default class HTMLRenderView extends EditorElement {
 
     refreshElementBoundSize(parentObj) {
         if (parentObj) {
-            if (parentObj.hasChildren() === false) {
-                // 크기 변경이 없으면 bound size 를 수정하지 않는다. 
-                // 다른 레이아웃으로 들어가게 되면 크기의 변경이 있을 수도 있다. 
-                // 그 때는 레이아웃 기준으로 bound size 를 다시 잡을거라 괜찮다. 
-                if (parentObj.hasChangedField('x', 'y', 'width', 'height', 'border', 'padding-top', 'padding-left', 'padding-right', 'padding-bottom', 'resizingHorizontal', 'resizingVertical') === false) {
-                    return;
-                }
+            this.refreshSelfElement(parentObj);
 
-                this.refreshSelfElement(parentObj);
+            if (parentObj.hasChildren() === false) {
                 return;
-            } else {
-                this.refreshSelfElement(parentObj);
             }
 
 
@@ -674,6 +654,9 @@ export default class HTMLRenderView extends EditorElement {
             const hasChangedDimension = parentObj.changedLayout || parentObj.hasChangedField(
                 'children', 
                 'box-model', 
+                'x',
+                'y',
+                'angle',
                 'width', 
                 'height', 
             )

@@ -3,7 +3,7 @@ import _doForceRefreshSelection from "./_doForceRefreshSelection";
 export default {
     command: 'history.moveLayerToTarget',
     description: 'move layer to target in world ',
-    execute: function (editor, message, layer, target, dist = [0, 0, 0], targetAction = 'appendChild' ) {
+    execute: function (editor, message, layer, target, dist = [0, 0, 0], targetAction = 'appendChild') {
 
         const currentLayer = editor.get(layer);
         const currentParentLayer = currentLayer.parent;
@@ -37,22 +37,24 @@ export default {
             // 이전 부모 정보 변경 
             // 이걸 해야 이전 부모의 자식들의 위치를 제대로 맞춰줄 수 있음. 
             ...(currentParentLayer && currentParentLayer.isNot('project') ? currentParentLayer.attrsWithId('children') : {})
-        });                
+        });
 
         editor.nextTick(() => {
             editor.history.add(message, this, {
                 currentValues: [currentLayer.hierachy],
                 undoValues: [lastValues, currentLayer.parentId],
             })
-            editor.emit('refreshAllCanvas');            
+
+            // editor.selection.reselect();
+            editor.emit('refreshAllCanvas');
         })
 
-        editor.nextTick(() =>  {
-          editor.history.saveSelection()  
-        })        
+        editor.nextTick(() => {
+            editor.history.saveSelection()
+        })
     },
 
-    redo: function (editor, {currentValues: [info]}) {
+    redo: function (editor, { currentValues: [info] }) {
 
 
         const currentLayer = editor.get(info.id);

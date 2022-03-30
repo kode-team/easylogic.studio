@@ -14,6 +14,14 @@
             stroke-width: 1;
             fill: none;
         }
+
+        &.layer-line {
+            stroke: var(--elf--font-color);
+        }
+
+        &.snap-line {
+            stroke: var(--elf--selected-color);
+        }        
     }
 
     line {

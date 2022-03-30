@@ -24,6 +24,7 @@ export default class PositionProperty extends BaseProperty {
 
   checkChangedValue() {
     var current = this.$selection.current;
+
     if (!current) return false;
 
     return current.hasChangedField(
@@ -35,9 +36,9 @@ export default class PositionProperty extends BaseProperty {
       'height',
       'angle',
       'transform',
-      'rotateZ',
-      'rotate',
       'opacity',
+      'resizingVertical',
+      'resizingHorizontal',
       'constraints-horizontal',
       'constriants-vertical'
     );
@@ -45,6 +46,7 @@ export default class PositionProperty extends BaseProperty {
 
   [SUBSCRIBE('refreshSelectionStyleView') + IF('checkChangedValue') + THROTTLE(10)]() {
     var current = this.$selection.current;
+
     if (!current) return '';
 
     this.children.$x.setValue(current.offsetX || DEFAULT_SIZE);

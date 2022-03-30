@@ -1068,14 +1068,83 @@ const SPLITTER = "|";
 const FUNC_REGEXP = /(([\$a-z_\-]+)\([^\(\)]*\)|([a-z_\-]+))/gi;
 const FUNC_START_CHARACTER = "(";
 const FUNC_END_CHARACTER = ")";
+const MAGICMETHOD_EXTRA = {
+  KEYWORD: "keyword",
+  FUNCTION: "function",
+  VALUE: "value"
+};
 class MagicMethod {
+  constructor(obj2) {
+    this.context = obj2.context;
+    this.originalMethod = obj2.originalMethod;
+    this.method = obj2.method;
+    this.args = obj2.args;
+    this.pipes = obj2.pipes;
+    this.keys = obj2.keys;
+    this.__cache = new Map();
+  }
+  setCache(key, value) {
+    this.__cache.set(key, value);
+  }
+  hasCache(key) {
+    return this.__cache.has(key);
+  }
+  getCache(key) {
+    return this.__cache.get(key);
+  }
+  hasKeyword(keyword) {
+    if (this.hasCache(keyword)) {
+      return this.getCache(keyword);
+    }
+    let exists = false;
+    this.pipes.forEach((pipe) => {
+      switch (pipe.type) {
+        case MAGICMETHOD_EXTRA.KEYWORD:
+          if (pipe.value === keyword) {
+            exists = true;
+          }
+          break;
+      }
+    });
+    this.setCache(keyword, exists);
+    return exists;
+  }
+  hasFunction(funcName) {
+    if (this.hasCache(funcName)) {
+      return this.getCache(funcName);
+    }
+    let exists = !!this.getFunction(funcName);
+    this.setCache(funcName, exists);
+    return exists;
+  }
+  getFunction(funcName) {
+    return this.functions.find((pipe) => pipe.func === funcName);
+  }
+  getFunctionList(funcName) {
+    return this.functions.filter((pipe) => pipe.func === funcName);
+  }
+  get originalCallback() {
+    return this.context[this.originalMethod];
+  }
+  get keywords() {
+    return this.keys[MAGICMETHOD_EXTRA.KEYWORD].map((pipe) => pipe.value);
+  }
+  get functions() {
+    return this.keys[MAGICMETHOD_EXTRA.FUNCTION];
+  }
+  get values() {
+    return this.keys[MAGICMETHOD_EXTRA.VALUE].map((pipe) => pipe.value);
+  }
+  execute(...args2) {
+    return this.originalCallback.call(this.context, ...args2);
+  }
   static make(str, ...args2) {
     return `${MAGIC_METHOD}${str} ${args2.join(SPLITTER)}`;
   }
   static check(str) {
     return str.match(MAGIC_METHOD_REG) !== null;
   }
-  static parse(str) {
+  static parse(str, context = {}) {
     const matches2 = str.match(MAGIC_METHOD_REG);
     if (!matches2) {
       return void 0;
@@ -1100,13 +1169,14 @@ class MagicMethod {
         pipeObjects.value.push(pipe);
       }
     });
-    return {
+    return new MagicMethod({
+      context,
       originalMethod: str,
       method,
       args: args2,
       pipes: pipeList,
       keys: pipeObjects
-    };
+    });
   }
   static parsePipe(it) {
     const result = it.match(FUNC_REGEXP);
@@ -1649,6 +1719,7 @@ class DomEventHandler extends BaseHandler {
     return customEventNames[eventName] ? eventName : "";
   }
   getDefaultEventObject(eventName, dom, delegate, magicMethod, callback) {
+    var _a, _b;
     const obj2 = {
       eventName: this.getRealEventName(eventName),
       customEventName: this.getCustomEventName(eventName),
@@ -1661,42 +1732,43 @@ class DomEventHandler extends BaseHandler {
     obj2.afterMethods = [];
     obj2.codes = [];
     obj2.checkMethodList = [];
-    magicMethod.pipes.forEach((pipe) => {
-      var _a, _b;
-      if (pipe.type === "function") {
-        switch (pipe.func) {
-          case "debounce":
-            var debounceTime = +(((_a = pipe.args) == null ? void 0 : _a[0]) || 0);
-            obj2.callback = debounce(callback, debounceTime);
-            break;
-          case "throttle":
-            var throttleTime = +(((_b = pipe.args) == null ? void 0 : _b[0]) || 0);
-            obj2.callback = throttle(callback, throttleTime);
-            break;
-          case "before":
-            var r = pipe.args[0].split(" ");
-            var [target, param] = r;
-            obj2.beforeMethods.push({
-              target,
-              param
-            });
-            break;
-          case "after":
-            var r = pipe.args[0].split(" ");
-            var [target, param] = r;
-            obj2.afterMethods.push({
-              target,
-              param
-            });
-            break;
-        }
-      } else if (pipe.type === "keyword") {
-        const method = `${pipe.value}`;
-        if (this.getCallback(method)) {
-          obj2.checkMethodList.push(method);
-        } else {
-          obj2.codes.push(method.toLowerCase());
-        }
+    const debounceFunction = magicMethod.getFunction("debounce");
+    const throttleFunction = magicMethod.getFunction("throttle");
+    if (debounceFunction) {
+      var debounceTime = +(((_a = debounceFunction.args) == null ? void 0 : _a[0]) || 0);
+      obj2.callback = debounce(callback, debounceTime);
+    } else if (throttleFunction) {
+      var throttleTime = +(((_b = throttleFunction.args) == null ? void 0 : _b[0]) || 0);
+      obj2.callback = throttle(callback, throttleTime);
+    }
+    const afterFunctionList = magicMethod.getFunctionList("after");
+    const beforeFunctionList = magicMethod.getFunctionList("before");
+    if (afterFunctionList.length) {
+      afterFunctionList.forEach((afterFunction) => {
+        var r = afterFunction.args[0].split(" ");
+        var [target, param] = r;
+        obj2.afterMethods.push({
+          target,
+          param
+        });
+      });
+    }
+    if (beforeFunctionList.length) {
+      beforeFunctionList.forEach((beforeFunction) => {
+        var r = beforeFunction.args[0].split(" ");
+        var [target, param] = r;
+        obj2.beforeMethods.push({
+          target,
+          param
+        });
+      });
+    }
+    magicMethod.keywords.forEach((keyword) => {
+      const method = keyword;
+      if (this.getCallback(method)) {
+        obj2.checkMethodList.push(method);
+      } else {
+        obj2.codes.push(method.toLowerCase());
       }
     });
     return obj2;
@@ -1705,15 +1777,9 @@ class DomEventHandler extends BaseHandler {
     eventObject.callback = this.makeCallback(eventObject, magicMethod, callback);
     this.addBinding(eventObject);
     var options2 = false;
-    magicMethod.pipes.forEach((pipe) => {
-      if (pipe.type === "keyword") {
-        switch (pipe.value) {
-          case "capture":
-            options2 = true;
-            break;
-        }
-      }
-    });
+    if (magicMethod.hasKeyword("capture")) {
+      options2 = true;
+    }
     if (scrollBlockingEvents[eventObject.eventName]) {
       options2 = {
         passive: true,
@@ -1725,18 +1791,13 @@ class DomEventHandler extends BaseHandler {
     }
   }
   makeCustomEventCallback(eventObject, magicMethod, callback) {
+    var _a;
     if (eventObject.customEventName === "doubletab") {
       var delay = 300;
-      magicMethod.pipes.forEach((pipe) => {
-        var _a;
-        if (pipe.type === "function") {
-          switch (pipe.func) {
-            case "delay":
-              delay = +(((_a = pipe.args) == null ? void 0 : _a[0]) || 0);
-              break;
-          }
-        }
-      });
+      var delayFunction = magicMethod.getFunction("delay");
+      if (delayFunction) {
+        delay = +(((_a = delayFunction.args) == null ? void 0 : _a[0]) || 0);
+      }
       return (...args2) => {
         if (!this.doubleTab) {
           this.doubleTab = {
@@ -1880,25 +1941,19 @@ class BindHandler extends BaseHandler {
         return true;
       return args2.indexOf(it.args[0]) > -1;
     });
-    await (bindList == null ? void 0 : bindList.forEach(async (it) => {
-      const bindMethod = this.context[it.originalMethod];
-      let refObject = null;
-      it.pipes.forEach((pipe) => {
-        if (pipe.type === "keyword") {
-          refObject = this.getRef(`${pipe.value}`);
-        }
-      });
+    await (bindList == null ? void 0 : bindList.forEach(async (magicMethod) => {
+      let refObject = this.getRef(`${magicMethod.keywords[0]}`);
       let refCallback = BIND_CHECK_DEFAULT_FUNCTION;
       if (typeof refObject === "string" && refObject !== "") {
         refCallback = BIND_CHECK_FUNCTION(refObject);
       } else if (typeof refObject === "function") {
         refCallback = refObject;
       }
-      const elName = it.args[0];
+      const elName = magicMethod.args[0];
       let $element = this.context.refs[elName];
       const isBindCheck = typeof refCallback === "function" && refCallback.call(this.context);
       if ($element && isBindCheck) {
-        const results = await bindMethod.call(this.context, ...args2);
+        const results = await magicMethod.execute(...args2);
         if (!results)
           return;
         const keys2 = Object.keys(results);
@@ -1969,32 +2024,28 @@ class CallbackHandler extends BaseHandler {
     callback();
   }
   bindingCallback(magicMethod, callback) {
+    var _a, _b;
     const obj2 = {
       eventName: magicMethod.args[0],
       callback
     };
     obj2.codes = [];
     obj2.checkMethodList = [];
-    magicMethod.pipes.forEach((pipe) => {
-      var _a, _b;
-      if (pipe.type === "function") {
-        switch (pipe.func) {
-          case "debounce":
-            var debounceTime = +(((_a = pipe.args) == null ? void 0 : _a[0]) || 0);
-            obj2.callback = debounce(callback, debounceTime);
-            break;
-          case "throttle":
-            var throttleTime = +(((_b = pipe.args) == null ? void 0 : _b[0]) || 0);
-            obj2.callback = throttle(callback, throttleTime);
-            break;
-        }
-      } else if (pipe.type === "keyword") {
-        const method = `${pipe.value}`;
-        if (this.getCallback(method)) {
-          obj2.checkMethodList.push(method);
-        } else {
-          obj2.codes.push(method.toLowerCase());
-        }
+    const debounceFunction = magicMethod.getFunction("debounce");
+    const throttleFunction = magicMethod.getFunction("throttle");
+    if (debounceFunction) {
+      var debounceTime = +(((_a = debounceFunction.args) == null ? void 0 : _a[0]) || 0);
+      obj2.callback = debounce(callback, debounceTime);
+    } else if (throttleFunction) {
+      var throttleTime = +(((_b = throttleFunction.args) == null ? void 0 : _b[0]) || 0);
+      obj2.callback = throttle(callback, throttleTime);
+    }
+    magicMethod.keywords.forEach((keyword) => {
+      const method = keyword;
+      if (this.getCallback(method)) {
+        obj2.checkMethodList.push(method);
+      } else {
+        obj2.codes.push(method.toLowerCase());
       }
     });
     this.addCallback(obj2, magicMethod);
@@ -2101,6 +2152,20 @@ class EventMachine {
     const key = args2.join("");
     return this.refs[key];
   }
+  refreshElementReference(targetRef) {
+    var refs = targetRef.$$(QUERY_PROPERTY);
+    for (var refsIndex = 0, refsLen = refs.length; refsIndex < refsLen; refsIndex++) {
+      const $dom = refs[refsIndex];
+      const name2 = $dom.attr(REFERENCE_PROPERTY);
+      if (this.refs[name2]) {
+        if (this.refs[name2].is($dom) === false) {
+          this.refs[name2] = $dom;
+        }
+      } else {
+        this.refs[name2] = $dom;
+      }
+    }
+  }
   parseTemplate(html, isLoad) {
     if (Array.isArray(html)) {
       html = html.join("");
@@ -2111,7 +2176,9 @@ class EventMachine {
       const $el = list2[i];
       var ref = $el.attr(REFERENCE_PROPERTY);
       if (ref) {
-        this.refs[ref] = $el;
+        if (!isLoad) {
+          this.refs[ref] = $el;
+        }
       }
       var refs = $el.$$(QUERY_PROPERTY);
       var temp = {};
@@ -2123,7 +2190,9 @@ class EventMachine {
         } else {
           temp[name2] = true;
         }
-        this.refs[name2] = $dom;
+        if (!isLoad) {
+          this.refs[name2] = $dom;
+        }
         const loadVariable = $dom.attr(LOAD_PROPERTY);
         const loadVariableRealFunction = getVariable(loadVariable);
         const bindVariable = $dom.attr(BIND_PROPERTY);
@@ -2292,12 +2361,14 @@ class EventMachine {
       if (Array.isArray(newTemplate)) {
         newTemplate = newTemplate.join("");
       }
+      const targetRef = this.refs[loadObj.ref];
       const fragment = this.parseTemplate(newTemplate, true);
       if (isDomDiff) {
-        this.refs[loadObj.ref].htmlDiff(fragment);
+        targetRef.htmlDiff(fragment);
       } else {
-        this.refs[loadObj.ref].html(fragment);
+        targetRef.html(fragment);
       }
+      this.refreshElementReference(targetRef);
     });
   }
   async load(...args2) {
@@ -2306,21 +2377,12 @@ class EventMachine {
     }
     await this.loadLocalValue(...args2);
     const filtedLoadMethodList = this._loadMethods.filter((it) => args2.length === 0 ? true : it.args[0] === args2[0]);
-    await filtedLoadMethodList.forEach(async (it) => {
-      const [elName, ...args3] = it.args;
-      let isDomDiff = false;
-      it.pipes.forEach((pipe) => {
-        switch (pipe.type) {
-          case "keyword":
-            if (pipe.value === "domdiff") {
-              isDomDiff = true;
-            }
-            break;
-        }
-      });
+    await filtedLoadMethodList.forEach(async (magicMethod) => {
+      const [elName, ...args3] = magicMethod.args;
+      let isDomDiff = magicMethod.hasKeyword("domdiff");
       const refTarget = this.refs[elName];
       if (refTarget) {
-        var newTemplate = await this[it.originalMethod].call(this, ...args3);
+        var newTemplate = await magicMethod.execute(...args3);
         if (Array.isArray(newTemplate)) {
           newTemplate = newTemplate.join("");
         }
@@ -2328,10 +2390,9 @@ class EventMachine {
         if (isDomDiff) {
           refTarget.htmlDiff(fragment);
         } else {
-          if (refTarget) {
-            refTarget.html(fragment);
-          }
+          refTarget.html(fragment);
         }
+        this.refreshElementReference(refTarget);
       }
     });
     this._afterLoad();
@@ -2380,7 +2441,7 @@ class EventMachine {
   collectProps() {
     if (!this.__cachedMethodList) {
       this.__cachedMethodList = collectProps(this, (name2) => MagicMethod.check(name2)).map((it) => {
-        return MagicMethod.parse(it);
+        return MagicMethod.parse(it, this);
       });
     }
     return this.__cachedMethodList;
@@ -3820,7 +3881,6 @@ class BaseStore {
       callback = makeRequestAnimationFrame(callback, context);
     }
     this.getCallbacks(event).push({ event, callback, context, originalCallback, enableAllTrigger, enableSelfTrigger });
-    this.debug("add message event", event, context.sourceName);
     return () => {
       this.off(event, originalCallback);
     };
@@ -3876,7 +3936,8 @@ class BaseStore {
         var list2 = this.getCachedCallbacks(event);
         if (list2 && list2.length) {
           const runnableFunctions = list2.filter((f) => !f.enableSelfTrigger).filter((f) => f.enableAllTrigger || f.originalCallback.source !== source2);
-          for (const f of runnableFunctions) {
+          for (let i = 0, len2 = runnableFunctions.length; i < len2; i++) {
+            const f = runnableFunctions[i];
             const result = f.callback.apply(f.context, args2);
             if (isNotUndefined(result)) {
               if (result === false) {
@@ -3972,8 +4033,9 @@ class UIElement extends EventMachine {
     return newCallback;
   }
   initializeStoreEvent() {
-    this.filterProps("subscribe").forEach((it) => {
-      const events = it.args.join(" ");
+    this.filterProps("subscribe").forEach((magicMethod) => {
+      var _a, _b;
+      const events = magicMethod.args.join(" ");
       const checkMethodList = [];
       const eventList = [];
       let debounce2 = 0;
@@ -3981,45 +4043,35 @@ class UIElement extends EventMachine {
       let isAllTrigger = false;
       let isSelfTrigger = false;
       let isFrameTrigger = false;
-      it.pipes.forEach((pipe) => {
-        var _a, _b, _c;
-        if (pipe.type === "function") {
-          switch (pipe.func) {
-            case "debounce":
-              debounce2 = +(((_a = pipe.args) == null ? void 0 : _a[0]) || 0);
-              break;
-            case "throttle":
-              throttle2 = +(((_b = pipe.args) == null ? void 0 : _b[0]) || 0);
-              break;
-            case "allTrigger":
-              isAllTrigger = true;
-              break;
-            case "selfTrigger":
-              isSelfTrigger = true;
-              break;
-            case "frame":
-              isFrameTrigger = true;
-              break;
-            case "params":
-              const settings = getVariable((_c = pipe.args) == null ? void 0 : _c[0]);
-              if (isNotUndefined(settings.debounce))
-                debounce2 = settings.debounce;
-              if (isNotUndefined(settings.throttle))
-                throttle2 = settings.throttle;
-              if (isNotUndefined(settings.frame))
-                isFrameTrigger = settings.frame;
-              break;
-          }
-        } else if (pipe.type === "keyword") {
-          const method = `${pipe.value}`;
-          if (this[method]) {
-            checkMethodList.push(method);
-          } else {
-            eventList.push(method);
-          }
+      const debounceFunction = magicMethod.getFunction("debounce");
+      const throttleFunction = magicMethod.getFunction("throttle");
+      const allTriggerFunction = magicMethod.getFunction("allTrigger");
+      const selfTriggerFunction = magicMethod.getFunction("selfTrigger");
+      const frameFunction = magicMethod.getFunction("frame");
+      if (debounceFunction) {
+        debounce2 = +(((_a = debounceFunction.args) == null ? void 0 : _a[0]) || 0);
+      }
+      if (throttleFunction) {
+        throttle2 = +(((_b = throttleFunction.args) == null ? void 0 : _b[0]) || 0);
+      }
+      if (allTriggerFunction) {
+        isAllTrigger = true;
+      }
+      if (selfTriggerFunction) {
+        isSelfTrigger = true;
+      }
+      if (frameFunction) {
+        isFrameTrigger = true;
+      }
+      magicMethod.keywords.forEach((keyword) => {
+        const method = keyword;
+        if (this[method]) {
+          checkMethodList.push(method);
+        } else {
+          eventList.push(method);
         }
       });
-      const originalCallback = this[it.originalMethod];
+      const originalCallback = this[magicMethod.originalMethod];
       [...eventList, events].filter(Boolean).forEach((e2) => {
         var callback = this.createLocalCallback(e2, originalCallback);
         this.$store.on(e2, callback, this, debounce2, throttle2, isAllTrigger, isSelfTrigger, checkMethodList, isFrameTrigger);
@@ -5163,7 +5215,9 @@ function vertiesToPath(verties = []) {
       results.push(`L ${verties[i][0]} ${verties[i][1]}`);
     }
   }
-  results.push("Z");
+  if (results.length) {
+    results.push("Z");
+  }
   return results.join(" ");
 }
 function toRectVertiesWithoutTransformOrigin(verties) {
@@ -13232,12 +13286,13 @@ var doubleclick_item = {
         editor.selection.select(item2);
         editor.emit("refreshSelection");
         editor.emit("refreshSelectionTool");
-      }
-      if (editor.selection.check(item2)) {
-        editor.emit("open.editor");
-        editor.emit("removeGuideLine");
       } else {
-        this.selectInWorldPosition(editor, evt, item2);
+        if (editor.selection.check(item2)) {
+          editor.emit("open.editor");
+          editor.emit("removeGuideLine");
+        } else {
+          this.selectInWorldPosition(editor, evt, item2);
+        }
       }
     } else {
       this.selectInWorldPosition(editor, evt, item2);
@@ -18548,7 +18603,7 @@ class BorderRadius {
       "border-bottom-right-radius": 0,
       "border-bottom-left-radius": 0
     };
-    var arr = str.split(" ").filter((it) => Length.parse(it));
+    var arr = str.split(" ").map((it) => Length.parse(it));
     if (arr.length === 1) {
       obj2.isAll = true;
       obj2["border-radius"] = arr[0];
@@ -18558,6 +18613,10 @@ class BorderRadius {
       obj2["border-top-right-radius"] = arr[1];
       obj2["border-bottom-right-radius"] = arr[2];
       obj2["border-bottom-left-radius"] = arr[3];
+      if (arr[0].equals(arr[1]) && arr[0].equals(arr[2]) && arr[0].equals(arr[3])) {
+        obj2.isAll = true;
+        obj2["border-radius"] = arr[0];
+      }
     }
     return obj2;
   }
@@ -20846,6 +20905,9 @@ class Project extends TimelineModel {
   get parent() {
     return null;
   }
+  get nestedAngle() {
+    return 0;
+  }
   toRootVariableCSS() {
     var obj2 = {};
     this.json.rootVariable.split(";").filter((it) => it.trim()).forEach((it) => {
@@ -21212,8 +21274,6 @@ class SelectionManager {
     this.cachedArtBoardVerties = this.currentProject.artboards.map((item2) => {
       return { item: item2, matrix: item2.matrix };
     });
-    this.cachedCurrentItemMatrix = this.current.matrix;
-    this.cachedCurrentChildrenItemMatrices = this.modelManager.getAllLayers(this.current.id).map((it) => it.matrix);
   }
   startToCacheChildren() {
     this.items.forEach((item2) => {
@@ -21710,7 +21770,7 @@ class ViewportManager {
     this.mouse = create$4();
     this.scale = 1;
     this.translate = create$4(), this.transformOrigin = create$4(), this.maxScale = 250;
-    this.minScale = 0.2;
+    this.minScale = 0.05;
     this.zoomFactor = 1;
     this.resetWorldMatrix();
   }
@@ -25209,12 +25269,6 @@ class HTMLRenderView extends EditorElement {
   [SUBSCRIBE("updateViewport")]() {
     this.bindData("$view");
   }
-  [CONFIG("bodyEvent")]() {
-    const number = Dom.create(this.$config.get("bodyEvent").target).data("number");
-    if (!number) {
-      this.emit("recoverCursor");
-    }
-  }
   [SUBSCRIBE("refreshAllElementBoundSize")]() {
     this.refreshAllElementBoundSize();
   }
@@ -25457,9 +25511,7 @@ class HTMLRenderView extends EditorElement {
         this.emit("recoverBooleanPath");
       });
     }
-    this.nextTick(() => {
-      this.emit("refreshSelection");
-    }, 100);
+    this.emit("refreshSelection");
   }
   refreshSelectionStyleView(obj2) {
     if (obj2) {
@@ -25490,7 +25542,6 @@ class HTMLRenderView extends EditorElement {
         return isPassed;
       }
     });
-    this.bindData("$view");
     this.updateAllCanvas(project2);
   }
   updateAllCanvas(parentLayer) {
@@ -25532,16 +25583,11 @@ class HTMLRenderView extends EditorElement {
   }
   refreshElementBoundSize(parentObj) {
     if (parentObj) {
+      this.refreshSelfElement(parentObj);
       if (parentObj.hasChildren() === false) {
-        if (parentObj.hasChangedField("x", "y", "width", "height", "border", "padding-top", "padding-left", "padding-right", "padding-bottom", "resizingHorizontal", "resizingVertical") === false) {
-          return;
-        }
-        this.refreshSelfElement(parentObj);
         return;
-      } else {
-        this.refreshSelfElement(parentObj);
       }
-      const hasChangedDimension = parentObj.changedLayout || parentObj.hasChangedField("children", "box-model", "width", "height");
+      const hasChangedDimension = parentObj.changedLayout || parentObj.hasChangedField("children", "box-model", "x", "y", "angle", "width", "height");
       parentObj.layers.forEach((it) => {
         var $el = this.getElement(it.id);
         if ($el && (hasChangedDimension || it.isLayoutItem())) {
@@ -32054,6 +32100,12 @@ class MovableModel extends BaseAssetModel {
   get guideVerties() {
     return this._cachedGuideVerties || this.getGuideVerties();
   }
+  get xList() {
+    return this._cachedXList || this.getXList();
+  }
+  get yList() {
+    return this._cachedYList || this.getYList();
+  }
   get areaPosition() {
     return this._cachedAreaPosition || this.getAreaPosition(this._cachedAreaWidth);
   }
@@ -32117,7 +32169,7 @@ class MovableModel extends BaseAssetModel {
   }
   reset(obj2, context = { origin: "*" }) {
     const isChanged = super.reset(obj2, context);
-    if (this.hasChangedField("children", "x", "y", "width", "height", "angle", "transform-origin", "transform", "perspective", "perspective-origin")) {
+    if (this.hasChangedField("children", "x", "y", "width", "height", "box-model", "angle", "transform-origin", "transform", "perspective", "perspective-origin", "resizingVertical", "resizingHorizontal", "contraints-vertical", "contraints-horizontal") || this.changedLayout) {
       this.refreshMatrixCache();
     }
     return isChanged;
@@ -32165,6 +32217,8 @@ class MovableModel extends BaseAssetModel {
   }
   setCacheGuideVerties() {
     this._cachedGuideVerties = this.getGuideVerties();
+    this._cachedXList = this._cachedGuideVerties.map((it) => it[0]);
+    this._cachedYList = this._cachedGuideVerties.map((it) => it[1]);
   }
   setCacheAreaPosition() {
     this._cachedAreaPosition = this.getAreaPosition(this._cachedAreaWidth || 100);
@@ -32358,7 +32412,14 @@ class MovableModel extends BaseAssetModel {
   getVerties(width2, height2) {
     width2 = isNotUndefined(width2) ? width2 : this.screenWidth;
     height2 = isNotUndefined(height2) ? height2 : this.screenHeight;
-    let model = rectToVerties(0, 0, width2, height2, this.json["transform-origin"]);
+    let x2 = 0;
+    let y2 = 0;
+    if (this.parent && this.parent.is("project") === false) {
+      const contentBox = this.parent.contentBox;
+      x2 = contentBox.x;
+      y2 = contentBox.y;
+    }
+    let model = rectToVerties(x2, y2, width2, height2, this.json["transform-origin"]);
     return vertiesMap(model, this.absoluteMatrix);
   }
   getContentVerties(width2, height2) {
@@ -32385,6 +32446,18 @@ class MovableModel extends BaseAssetModel {
       lerp([], verties[2], verties[3], 0.5),
       lerp([], verties[3], verties[0], 0.5)
     ];
+  }
+  getXList() {
+    return this.guideVerties.map((it) => it[0]);
+  }
+  getYList() {
+    return this.guideVerties.map((it) => it[1]);
+  }
+  get nestedAngle() {
+    if (this.parent) {
+      return this.parent.nestedAngle + this.json.angle;
+    }
+    return this.json.angle || 0;
   }
   get toRectVerties() {
     return itemsToRectVerties([this]);
@@ -32928,9 +33001,6 @@ class DomModel extends GroupModel {
     });
   }
   editable(editablePropertyName) {
-    if (editablePropertyName == "border" && this.hasChildren()) {
-      return false;
-    }
     switch (editablePropertyName) {
       case "svg-item":
       case "transform-origin":
@@ -40705,6 +40775,7 @@ class FlexGrowToolView extends EditorElement {
   }
   [LOAD("$el") + DOMDIFF]() {
     return this.$selection.map((item2) => {
+      var _a, _b;
       const parentItem = item2.parent;
       if (!parentItem)
         return;
@@ -40712,6 +40783,11 @@ class FlexGrowToolView extends EditorElement {
         return;
       if (parentItem.isLayout(Layout.FLEX) === false)
         return;
+      let minY = (_b = (_a = parentItem.layers) == null ? void 0 : _a[0].verties) == null ? void 0 : _b[0][1];
+      parentItem.layers.forEach((child) => {
+        const verties = this.$viewport.applyVerties(child.verties);
+        minY = Math.min(minY, Math.min.apply(Math, verties.map((it) => it[1])));
+      });
       return parentItem.layers.map((child) => {
         const verties = this.$viewport.applyVerties(child.verties);
         const center2 = verties[4];
@@ -40733,7 +40809,7 @@ class FlexGrowToolView extends EditorElement {
           class: "flex-grow-item",
           style: {
             left: Length.px(center2[0]),
-            top: Length.px(center2[1])
+            top: Length.px(minY)
           },
           "data-flex-item-id": child.id,
           "data-parent-direction": parentLayoutDirection,
@@ -40823,6 +40899,9 @@ class FlexGrowToolView extends EditorElement {
     this.refresh();
   }
   [SUBSCRIBE("refreshSelectionStyleView") + THROTTLE(1)]() {
+    this.refresh();
+  }
+  [CONFIG("set.move.control.point")]() {
     this.refresh();
   }
 }
@@ -41077,7 +41156,6 @@ class PatternEditor extends EditorElement {
   [SUBSCRIBE("add")](type = "check") {
     var pattern = patterns.find((it) => it.key === type);
     if (pattern) {
-      console.log(this, pattern.execute()[0]);
       const data = Pattern.parseStyle(pattern.execute()[0].pattern);
       this.state.patterns.push.apply(this.state.patterns, data);
       this.refresh();
@@ -41777,7 +41855,7 @@ class PositionProperty extends BaseProperty {
     var current = this.$selection.current;
     if (!current)
       return false;
-    return current.hasChangedField("x", "y", "right", "bottom", "width", "height", "angle", "transform", "rotateZ", "rotate", "opacity", "constraints-horizontal", "constriants-vertical");
+    return current.hasChangedField("x", "y", "right", "bottom", "width", "height", "angle", "transform", "opacity", "resizingVertical", "resizingHorizontal", "constraints-horizontal", "constriants-vertical");
   }
   [SUBSCRIBE("refreshSelectionStyleView") + IF("checkChangedValue") + THROTTLE(10)]() {
     var current = this.$selection.current;
@@ -49404,13 +49482,13 @@ class DomRender$1 extends ItemRender$1 {
     var obj2 = {};
     if (parentLayout === Layout.FLEX) {
       obj2 = {
-        position: "static",
+        position: "relative",
         left: "auto !important",
         top: "auto !important"
       };
     } else if (parentLayout === Layout.GRID) {
       obj2 = {
-        position: "static",
+        position: "relative",
         left: "auto !important",
         top: "auto !important",
         width: "auto !important",
@@ -49544,7 +49622,6 @@ class DomRender$1 extends ItemRender$1 {
     return obj2;
   }
   toSizeCSS(item2) {
-    var _a, _b;
     const obj2 = {};
     if (item2.isLayout(Layout.FLEX)) {
       switch (item2.resizingHorizontal) {
@@ -49563,10 +49640,12 @@ class DomRender$1 extends ItemRender$1 {
           obj2["min-height"] = Length.px(item2.screenHeight);
           break;
       }
-    } else if (item2.isInDefault()) {
+    }
+    if (item2.isInDefault()) {
       obj2.width = Length.px(item2.screenWidth);
       obj2.height = Length.px(item2.screenHeight);
-    } else if (item2.isInFlex()) {
+    }
+    if (item2.isInFlex()) {
       const direction = item2.parent["flex-direction"];
       if (direction === FlexDirection.ROW || direction === FlexDirection.ROW_REVERSE) {
         obj2.width = Length.px(item2.screenWidth);
@@ -49589,25 +49668,10 @@ class DomRender$1 extends ItemRender$1 {
           obj2["align-self"] = AlignItems.STRETCH;
         }
       }
-    } else if (item2.isInGrid())
-      ;
-    else {
-      if ((_a = item2.right) == null ? void 0 : _a.isNotAuto) {
-        if (!item2.x) {
-          obj2.width = Length.px(item2.width);
-        }
-      } else {
-        obj2.width = Length.px(item2.width);
-      }
-      if ((_b = item2.bottom) == null ? void 0 : _b.isNotAuto) {
-        if (!item2.y) {
-          obj2.height = Length.px(item2.height);
-        }
-      } else {
-        obj2.height = Length.px(item2.height);
-      }
     }
-    return __spreadValues({}, obj2);
+    if (item2.isInGrid())
+      ;
+    return obj2;
   }
   toDefaultCSS(item2) {
     let obj2 = {};
@@ -49783,7 +49847,7 @@ class DomRender$1 extends ItemRender$1 {
     return cssString;
   }
   toCSS(item2) {
-    return Object.assign({}, this.toVariableCSS(item2), this.toDefaultCSS(item2), this.toSizeCSS(item2), this.toClipPathCSS(item2), this.toWebkitCSS(item2), this.toTextClipCSS(item2), this.toBoxModelCSS(item2), this.toBorderCSS(item2), this.toBackgroundImageCSS(item2), this.toLayoutCSS(item2), this.toTransformCSS(item2), this.toLayoutItemCSS(item2));
+    return Object.assign({}, this.toVariableCSS(item2), this.toDefaultCSS(item2), this.toClipPathCSS(item2), this.toWebkitCSS(item2), this.toTextClipCSS(item2), this.toBoxModelCSS(item2), this.toBorderCSS(item2), this.toBackgroundImageCSS(item2), this.toLayoutCSS(item2), this.toSizeCSS(item2), this.toTransformCSS(item2), this.toLayoutItemCSS(item2));
   }
   toStyle(item2, renderer) {
     const cssString = this.generateView(item2, `[data-renderer-id='${renderer.id}'] .element-item[data-id='${item2.id}']`);
@@ -57350,7 +57414,7 @@ class HoverView extends EditorElement {
     const canvas = Dom.create(e2.target).closest("elf--page-container");
     if (!canvas)
       return false;
-    return this.$modeView.isCurrentMode("CanvasView");
+    return this.$modeView.isCurrentMode("CanvasView") && this.$stateManager.isPointerUp;
   }
   [CONFIG("bodyEvent") + IF("checkModeView")]() {
     var _a, _b, _c;
@@ -57379,6 +57443,9 @@ class HoverView extends EditorElement {
         this.renderHoverLayer();
       }
     }
+  }
+  [CONFIG("set.move.control.point")]() {
+    this.renderHoverLayer();
   }
   [SUBSCRIBE("refreshHoverView")](id) {
     if (this.$selection.setHoverId(id)) {
@@ -57485,19 +57552,10 @@ class HoverView extends EditorElement {
   createPointerLine(pointers, offsetLines = []) {
     if (pointers.length === 0)
       return "";
+    pointers = pointers.filter((_, index2) => index2 < 4);
     return `
         <svg overflow="visible">
-            <path 
-                class='line' 
-                d="
-                    M ${pointers[0][0]}, ${pointers[0][1]} 
-                    L ${pointers[1][0]}, ${pointers[1][1]} 
-                    L ${pointers[2][0]}, ${pointers[2][1]} 
-                    L ${pointers[3][0]}, ${pointers[3][1]} 
-                    L ${pointers[0][0]}, ${pointers[0][1]}
-                    Z
-                " 
-            />
+            <path class='line' d="${vertiesToPath(pointers)}" />
         </svg>`;
   }
 }
@@ -57605,7 +57663,8 @@ const point = (target, dist2 = 3, direction = "left") => {
 class GuideLineView extends EditorElement {
   template() {
     return `
-            <svg class='elf--guide-line-view' ref="$guide" width="100%" height="100%" ></svg>
+            <svg class='elf--guide-line-view' ref="$guide" width="100%" height="100%" >
+            </svg>
             `;
   }
   initState() {
@@ -57614,16 +57673,21 @@ class GuideLineView extends EditorElement {
     };
   }
   [BIND("$guide")]() {
+    const line2 = this.createGuideLine(this.state.list);
+    const layerLine = this.createLayerLine();
     return {
-      svgDiff: `<g>${this.createGuideLine(this.state.list)}</g>`
+      svgDiff: `<g>${line2}${layerLine}</g>`
     };
+  }
+  createLayerLine() {
+    return "";
   }
   createGuideLine(list2) {
     var images = [];
     var texts = [];
     list2 = list2.filter(Boolean);
     for (var i = 0, len2 = list2.length; i < len2; i++) {
-      const [source2, target, axis, dist2, newTarget, sourceVerties, targetVerties, isInvert] = list2[i];
+      const [source2, target, axis, dist2, newTarget, sourceVerties, targetVerties] = list2[i];
       const localDist = Math.floor(dist2);
       const localSourceVertex = this.$viewport.applyVertex(source2);
       const localTargetVertex = this.$viewport.applyVertex(target);
@@ -57726,7 +57790,7 @@ class GuideLineView extends EditorElement {
     if (this.$selection.isMany)
       return;
     const expect = this.$selection.hasChangedField("d", "clip-path");
-    if (!expect && this.$selection.hasChangedField("x", "y", "width", "height", "transform", "transform-origin")) {
+    if (!expect) {
       this.refreshSmartGuidesForVerties();
     }
   }
@@ -57904,8 +57968,8 @@ class SelectionToolView extends SelectionToolEvent$1 {
     this.refreshRotatePointerIcon();
     this.state.dragging = true;
     this.state.isRotate = true;
-    this.$config.set("set.move.control.point", true);
     this.initAngle = this.$selection.current.angle;
+    this.$config.set("set.move.control.point", true);
   }
   rotateVertex() {
     const targetMousePoint = this.$viewport.getWorldPosition();
@@ -57972,6 +58036,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
     this.$snapManager.clear();
     this.verties = this.$selection.verties;
     this.hasRotate = this.$selection.current.angle !== 0;
+    this.cachedCurrentItemMatrix = this.$selection.current.matrix;
     this.$config.set("set.move.control.point", true);
     this.$selection.startToCacheChildren();
   }
@@ -58018,7 +58083,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
   }
   moveBottomRightVertex(distVector) {
     const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
-    const item2 = this.$selection.cachedCurrentItemMatrix;
+    const item2 = this.cachedCurrentItemMatrix;
     if (item2) {
       let [realDx, realDy] = this.calculateRealDist(item2, 2, distVector);
       let directionNewVector = fromValues(0, 0, 0);
@@ -58042,7 +58107,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
   }
   moveTopRightVertex(distVector) {
     const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
-    const item2 = this.$selection.cachedCurrentItemMatrix;
+    const item2 = this.cachedCurrentItemMatrix;
     if (item2) {
       let [realDx, realDy] = this.calculateRealDist(item2, 1, distVector);
       if (altKey) {
@@ -58066,7 +58131,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
   }
   moveTopLeftVertex(distVector) {
     const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
-    const item2 = this.$selection.cachedCurrentItemMatrix;
+    const item2 = this.cachedCurrentItemMatrix;
     if (item2) {
       let [realDx, realDy] = this.calculateRealDist(item2, 0, distVector);
       if (altKey) {
@@ -58090,7 +58155,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
   }
   moveTopVertex(distVector) {
     const { altKey } = this.$config.get("bodyEvent");
-    const item2 = this.$selection.cachedCurrentItemMatrix;
+    const item2 = this.cachedCurrentItemMatrix;
     if (item2) {
       let [realDx, realDy] = this.calculateRealDist(item2, 0, distVector);
       if (altKey) {
@@ -58109,7 +58174,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
   }
   moveBottomVertex(distVector) {
     const { altKey } = this.$config.get("bodyEvent");
-    const item2 = this.$selection.cachedCurrentItemMatrix;
+    const item2 = this.cachedCurrentItemMatrix;
     if (item2) {
       let [realDx, realDy] = this.calculateRealDist(item2, 3, distVector);
       if (altKey) {
@@ -58128,7 +58193,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
   }
   moveRightVertex(distVector) {
     const { altKey } = this.$config.get("bodyEvent");
-    const item2 = this.$selection.cachedCurrentItemMatrix;
+    const item2 = this.cachedCurrentItemMatrix;
     if (item2) {
       let [realDx, realDy] = this.calculateRealDist(item2, 1, distVector);
       if (altKey) {
@@ -58147,7 +58212,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
   }
   moveLeftVertex(distVector) {
     const { altKey } = this.$config.get("bodyEvent");
-    const item2 = this.$selection.cachedCurrentItemMatrix;
+    const item2 = this.cachedCurrentItemMatrix;
     if (item2) {
       let [realDx, realDy] = this.calculateRealDist(item2, 0, distVector);
       if (altKey) {
@@ -58166,7 +58231,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
   }
   moveBottomLeftVertex(distVector) {
     const { shiftKey, altKey, metaKey } = this.$config.get("bodyEvent");
-    const item2 = this.$selection.cachedCurrentItemMatrix;
+    const item2 = this.cachedCurrentItemMatrix;
     if (item2) {
       let [realDx, realDy] = this.calculateRealDist(item2, 3, distVector);
       if (altKey) {
@@ -58246,9 +58311,6 @@ class SelectionToolView extends SelectionToolEvent$1 {
     return lerp([], startVetex, endVertex, (dist(startVetex, endVertex) + dist$1) / dist(startVetex, endVertex));
   }
   renderPointers() {
-    if (!this.$selection.cachedCurrentItemMatrix) {
-      return;
-    }
     if (this.$selection.isEmpty) {
       return;
     }
@@ -58409,8 +58471,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
         return;
       }
     }
-    current && current.is("artboard");
-    const rotate2 = Length.deg(current.angle).round(1e3);
+    const rotate2 = Length.deg(current.nestedAngle).round(1e3);
     getRotatePointer(pointers, 34);
     const dist$1 = dist(pointers[0], pointers[2]);
     const width2 = dist(pointers[0], pointers[1]);
@@ -58961,6 +59022,7 @@ class GhostToolView extends EditorElement {
     this.initMousePoint = this.$viewport.getWorldPosition();
     this.filteredLayers = this.$selection.notSelectedLayers;
     this.containerList = this.filteredLayers.filter((it) => it.hasLayout() || it.is("artboard")).map((it) => it.originVerties);
+    this.$config.set("set.move.control.point", true);
   }
   collectInformation() {
     var _a;
@@ -59221,39 +59283,32 @@ class GhostToolView extends EditorElement {
     if (newDist[0] === 0 && newDist[1] === 0) {
       return;
     }
-    if (!this.targetItem)
-      return;
-    if (this.targetItem.id === (current == null ? void 0 : current.id)) {
+    if (this.targetItem && this.targetItem.id === (current == null ? void 0 : current.id)) {
       return;
     }
     if (!this.targetItem) {
       this.insertToBackground();
       return;
     }
+    if (this.targetItem.hasLayout()) {
+      if (((_a = this.targetItem) == null ? void 0 : _a.hasChildren()) === false) {
+        this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, "appendChild");
+        return;
+      }
+    }
     if (this.targetParent) {
       this.insertToLayoutItem();
       return;
     }
-    if (this.targetItem.hasLayout()) {
-      if (((_a = this.targetItem) == null ? void 0 : _a.hasChildren()) === false) {
-        this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, "appendChild");
-      }
-    } else {
-      if (this.targetItem.id === current.id) {
-        return;
-      }
-      if (current.isLayoutItem() && current.parent.id !== this.targetItem.id) {
-        this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, "appendChild");
-      }
+    if (current.isLayoutItem() && current.parent.id !== this.targetItem.id) {
+      this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, "appendChild");
     }
   }
   [SUBSCRIBE("endGhostToolView")]() {
     this.updateLayer();
-    this.trigger("clearGhostView");
-  }
-  [SUBSCRIBE("clearGhostView")]() {
     this.initializeGhostView();
     this.load();
+    this.$config.set("set.move.control.point", false);
   }
 }
 function selectionToolView(editor) {

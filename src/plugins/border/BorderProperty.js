@@ -32,7 +32,6 @@ export default class BorderProperty extends BaseProperty {
   }
 
   [SUBSCRIBE('refreshSelection') + DEBOUNCE(100) + IF('checkShow')]() {
-
     this.refresh();
   }  
 

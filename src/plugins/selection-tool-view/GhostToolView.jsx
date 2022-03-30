@@ -54,6 +54,8 @@ export default class GhostToolView extends EditorElement {
     this.containerList = this.filteredLayers
       .filter((it) => it.hasLayout() || it.is("artboard"))
       .map((it) => it.originVerties);
+
+    this.$config.set("set.move.control.point", true);
   }
 
   collectInformation() {
@@ -284,7 +286,6 @@ export default class GhostToolView extends EditorElement {
   }
 
   renderLayoutFlexColumnArea() {
-
     if (this.targetRelativeMousePoint.y < 0) {
       return "";
     }
@@ -540,26 +541,14 @@ export default class GhostToolView extends EditorElement {
       return;
     }
 
-    // 이동하는 target 이 없는 경우는 멈춘다.
-    // 백그라운드를 클릭했거나 나 자신을 클릭했을 때
-    if (!this.targetItem) return;
-
     // 선택한 레이어와 targetItem 이 같은 경우 추가하지 않는다.
-    if (this.targetItem.id === current?.id) {
+    if (this.targetItem && this.targetItem.id === current?.id) {
       return;
     }
-
 
     // 타겟이 없을때는 백그라운드로 인지해서 current 의 부모를 project 로 옮긴다.
     if (!this.targetItem) {
       this.insertToBackground();
-      return;
-    }
-
-    // target parent 가 존재하고
-    // 해당 아이템이 layout item 일 때
-    if (this.targetParent) {
-      this.insertToLayoutItem();
       return;
     }
 
@@ -575,37 +564,39 @@ export default class GhostToolView extends EditorElement {
           newDist,
           "appendChild"
         );
+        return;
       } else {
         // 내부에 자식이 있을 때는 , 마지막 드래그 위치에 따라 달라짐
       }
-    } else {
-      if (this.targetItem.id === current.id) {
-        // targetItem 과 현재 선택된 객체가 동일하면 움직이지 않는다.
-        return;
-      }
 
-      // layout item 이고, 부모가 다르면 targetItem(다른 부모)로 이동함
-      if (current.isLayoutItem() && current.parent.id !== this.targetItem.id) {
-        this.command(
-          "moveLayerToTarget",
-          "change target with move",
-          current,
-          this.targetItem,
-          newDist,
-          "appendChild"
-        );
-      }
+    }
+
+    // target parent 가 존재하고
+    // 해당 아이템이 layout item 일 때
+    if (this.targetParent) {
+      this.insertToLayoutItem();
+      return;
+    }
+
+    // layout item 이고, 부모가 다르면 targetItem(다른 부모)로 이동함
+    if (current.isLayoutItem() && current.parent.id !== this.targetItem.id) {
+      this.command(
+        "moveLayerToTarget",
+        "change target with move",
+        current,
+        this.targetItem,
+        newDist,
+        "appendChild"
+      );
     }
   }
 
   [SUBSCRIBE("endGhostToolView")]() {
     this.updateLayer();
 
-    this.trigger("clearGhostView");
-  }
-
-  [SUBSCRIBE("clearGhostView")]() {
     this.initializeGhostView();
     this.load();
+
+    this.$config.set("set.move.control.point", false);
   }
 }

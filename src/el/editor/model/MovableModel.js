@@ -118,6 +118,14 @@ export class MovableModel extends BaseAssetModel {
         return this._cachedGuideVerties || this.getGuideVerties();
     }
 
+    get xList() {
+        return this._cachedXList || this.getXList();
+    }    
+
+    get yList() {
+        return this._cachedYList || this.getYList();
+    }
+
     get areaPosition() {
         return this._cachedAreaPosition || this.getAreaPosition(this._cachedAreaWidth);
     }
@@ -200,7 +208,23 @@ export class MovableModel extends BaseAssetModel {
         const isChanged = super.reset(obj, context);
 
         // transform 에 변경이 생기면 미리 캐슁해둔다. 
-        if (this.hasChangedField('children', 'x', 'y', 'width', 'height', 'angle', 'transform-origin', 'transform', 'perspective', 'perspective-origin')) {
+        if (this.hasChangedField(
+            'children', 
+            'x', 
+            'y', 
+            'width', 
+            'height', 
+            'box-model',
+            'angle', 
+            'transform-origin', 
+            'transform', 
+            'perspective', 
+            'perspective-origin',
+            'resizingVertical',
+            'resizingHorizontal',
+            'contraints-vertical',
+            'contraints-horizontal',
+        ) || this.changedLayout) {
             this.refreshMatrixCache()
         }
 
@@ -275,6 +299,9 @@ export class MovableModel extends BaseAssetModel {
 
     setCacheGuideVerties() {
         this._cachedGuideVerties = this.getGuideVerties();
+        this._cachedXList = this._cachedGuideVerties.map(it => it[0]);
+        this._cachedYList = this._cachedGuideVerties.map(it => it[1]);
+
     }
 
     setCacheAreaPosition() {
@@ -641,7 +668,17 @@ export class MovableModel extends BaseAssetModel {
         width = isNotUndefined(width) ? width : this.screenWidth;
         height = isNotUndefined(height) ? height : this.screenHeight;
 
-        let model = rectToVerties(0, 0, width, height, this.json['transform-origin']);
+        let x = 0; 
+        let y = 0;
+
+        if (this.parent && this.parent.is('project') === false) {
+            const contentBox = this.parent.contentBox;
+
+            x = contentBox.x;
+            y = contentBox.y;
+        }
+
+        let model = rectToVerties(x, y, width, height, this.json['transform-origin']);
 
         return vertiesMap(model, this.absoluteMatrix)
     }
@@ -685,6 +722,23 @@ export class MovableModel extends BaseAssetModel {
             vec3.lerp([], verties[2], verties[3], 0.5),
             vec3.lerp([], verties[3], verties[0], 0.5),
         ];
+    }
+
+    getXList() {
+        return this.guideVerties.map(it => it[0])
+    }
+
+    getYList() {
+        return this.guideVerties.map(it => it[1])
+    }
+    
+    get nestedAngle() {
+
+        if (this.parent) {
+            return this.parent.nestedAngle + this.json.angle;
+        }
+
+        return this.json.angle || 0;
     }
 
     get toRectVerties() {

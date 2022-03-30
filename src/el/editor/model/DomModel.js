@@ -142,11 +142,6 @@ export class DomModel extends GroupModel {
   }
 
   editable(editablePropertyName) {
-
-    if (editablePropertyName == 'border' && this.hasChildren()) {
-      return false
-    }
-
     switch (editablePropertyName) {
       case 'svg-item':
       // case 'box-model':

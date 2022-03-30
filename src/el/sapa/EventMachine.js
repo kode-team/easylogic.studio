@@ -96,6 +96,7 @@ export default class EventMachine {
   setState(state = {}, isLoad = true) {
     this.prevState = this.state;
     this.state = Object.assign({}, this.state, state );
+
     if (isLoad) {
       this.load();
     }
@@ -198,6 +199,32 @@ export default class EventMachine {
   }
 
   /**
+   * load 가 실행된 이후에  load 내부의 element 중에서 
+   * ref 가 존재하는데 등록되지 않은 element 들은 등록을 해준다. 
+   * 
+   * @param {Dom} targetRef 
+   */
+  refreshElementReference(targetRef) {
+    var refs = targetRef.$$(QUERY_PROPERTY);
+
+    for(var refsIndex = 0, refsLen = refs.length; refsIndex < refsLen; refsIndex++) {
+      const $dom = refs[refsIndex];
+
+      const name = $dom.attr(REFERENCE_PROPERTY);
+
+      // target 내부에 ref 가 존재할 때 
+      if (this.refs[name]) {
+        // ref의 instance 를 서로 비교해서 다를 때만 넣는다. 
+        if (this.refs[name].is($dom) === false) {
+          this.refs[name] = $dom;  
+        }
+      } else {
+        this.refs[name] = $dom;
+      }
+    }
+  }
+
+  /**
    * template() 함수의 결과물을 파싱해서 dom element 를 생성한다. 
    * 
    * @param {string} html 
@@ -219,7 +246,12 @@ export default class EventMachine {
 
       var ref = $el.attr(REFERENCE_PROPERTY)
       if (ref) {
-        this.refs[ref] = $el;
+
+        if (!isLoad) {
+          // FIXME: load 에서 정의되는건 따로 처리해야할 듯 하다. 
+          this.refs[ref] = $el;
+        } 
+
       }
 
       var refs = $el.$$(QUERY_PROPERTY);
@@ -235,8 +267,11 @@ export default class EventMachine {
           temp[name] = true; 
         }
 
-        this.refs[name] = $dom;        
-        
+        // FIXME: load 에서 정의되는건 따로 처리해야할 듯 하다. 
+        if (!isLoad) {
+          this.refs[name] = $dom;        
+        }
+
         
         // load 변수와 bind 변수를 저장한다. 
         const loadVariable = $dom.attr(LOAD_PROPERTY);
@@ -516,13 +551,15 @@ export default class EventMachine {
         newTemplate = newTemplate.join('');
       }
 
+      const targetRef = this.refs[loadObj.ref]
       // create fragment 
       const fragment = this.parseTemplate(newTemplate, true);
       if (isDomDiff) {
-        this.refs[loadObj.ref].htmlDiff(fragment);
+        targetRef.htmlDiff(fragment);
       } else {
-        this.refs[loadObj.ref].html(fragment);
+        targetRef.html(fragment);
       }
+      this.refreshElementReference(targetRef);      
     });
   }
 
@@ -537,27 +574,16 @@ export default class EventMachine {
     const filtedLoadMethodList = this._loadMethods.filter(it => args.length === 0 ? true : it.args[0] === args[0])
 
     // loop 가 비동기라 await 로 대기를 시켜줘야 나머지 html 업데이트에 대한 순서를 맞출 수 있다. 
-    await filtedLoadMethodList.forEach(async (it) => {
+    await filtedLoadMethodList.forEach(async (magicMethod) => {
 
-      const [elName, ...args] = it.args;
+      const [elName, ...args] = magicMethod.args;
 
-      let isDomDiff = false;
-      it.pipes.forEach(pipe => {
-        switch(pipe.type) {
-        case 'keyword': 
-          if (pipe.value === 'domdiff') {
-            isDomDiff = true;
-          }
-          break;
-        }
-      })
-
-
+      let isDomDiff = magicMethod.hasKeyword('domdiff');
 
       const refTarget = this.refs[elName];
 
       if (refTarget) {        
-        var newTemplate = await this[it.originalMethod].call(this, ...args);
+        var newTemplate = await magicMethod.execute(...args);
 
         if (Array.isArray(newTemplate)) {
           newTemplate = newTemplate.join('');
@@ -568,10 +594,9 @@ export default class EventMachine {
         if (isDomDiff) {
           refTarget.htmlDiff(fragment);
         } else {
-          if (refTarget) { 
-            refTarget.html(fragment);
-          }
+          refTarget.html(fragment);
         }
+        this.refreshElementReference(refTarget);                  
 
       }
     });
@@ -649,7 +674,7 @@ export default class EventMachine {
 
     if (!this.__cachedMethodList){
       this.__cachedMethodList = collectProps(this, (name) => MagicMethod.check(name)).map(it => {
-        return MagicMethod.parse(it);
+        return MagicMethod.parse(it, /*context*/this);
       });
     }
 

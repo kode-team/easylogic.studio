@@ -69,7 +69,7 @@ export default class BaseStore {
 
     this.getCallbacks(event).push({ event, callback, context, originalCallback, enableAllTrigger, enableSelfTrigger });
 
-    this.debug('add message event', event, context.sourceName);
+    // this.debug('add message event', event, context.sourceName);
 
     return () => {
       this.off(event, originalCallback);
@@ -191,8 +191,9 @@ export default class BaseStore {
             .filter(f => !f.enableSelfTrigger)
             .filter(f => f.enableAllTrigger || f.originalCallback.source !== source)
 
-          for (const f of runnableFunctions) {
-            // console.log(event, f.context, ...args);
+          for(let i = 0, len = runnableFunctions.length; i < len; i++) {
+            const f = runnableFunctions[i];
+
             const result = f.callback.apply(f.context, args)
             if (isNotUndefined(result)) {
               if (result === false) {

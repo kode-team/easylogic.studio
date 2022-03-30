@@ -77,7 +77,7 @@ export default class DomRender extends ItemRender {
     if (parentLayout === Layout.FLEX) {
       // 부모가  layout 이  지정 됐을 때 자식item 들은 position: relative 기준으로 동작한다. , left, top 은  속성에서 삭제 
       obj = {
-        position: 'static',
+        position: 'relative',
         left: 'auto !important',
         top: 'auto !important',
       }
@@ -85,7 +85,7 @@ export default class DomRender extends ItemRender {
     } else if (parentLayout === Layout.GRID) {
       // 부모가  layout 이  지정 됐을 때 자식item 들은 position: relative 기준으로 동작한다. , left, top 은  속성에서 삭제 
       obj = {
-        position: 'static',
+        position: 'relative',
         left: 'auto !important',
         top: 'auto !important',
         width: 'auto !important',
@@ -324,10 +324,18 @@ export default class DomRender extends ItemRender {
           // obj.height = 'fit-content';
           break;
       }      
-    } else if (item.isInDefault()) {
+    } 
+
+    // console.log(obj);
+    
+    if (item.isInDefault()) {
       obj.width = Length.px(item.screenWidth);
       obj.height = Length.px(item.screenHeight);
-    } else if (item.isInFlex()) {
+    } 
+
+    // console.log(obj);    
+    
+    if (item.isInFlex()) {
       // flex layout 일 때는 height 를 지정하지 않는다. 
       // FIXME: 방향에 따라 지정해야할 수도 있다. 
       const direction = item.parent['flex-direction']
@@ -345,6 +353,8 @@ export default class DomRender extends ItemRender {
           obj['align-self'] = AlignItems.STRETCH;
         }
 
+        // console.log(obj.height, obj['align-self'], item.resizingVertical)
+
       } else {
         obj.width = Length.px(item.screenWidth);
         obj.height = Length.px(item.screenHeight);
@@ -359,34 +369,37 @@ export default class DomRender extends ItemRender {
         }        
       }
 
-    } else if (item.isInGrid()) {
+    } 
+    // console.log(obj);
+    if (item.isInGrid()) {
       // NOOP , no width, heigh
-    } else {
+    } 
+    
+    // if (item.isInFlex() && item === false) {
+    //   if (item.right?.isNotAuto) {
+    //     if (!item.x) {
+    //       obj.width = Length.px(item.width);
+    //     }
 
-      if (item.right?.isNotAuto) {
-        if (!item.x) {
-          obj.width = Length.px(item.width);
-        }
+    //   } else {
+    //     obj.width = Length.px(item.width);
+    //   }
 
-      } else {
-        obj.width = Length.px(item.width);
-      }
+    //   if (item.bottom?.isNotAuto) {
+    //     // NOOP
+    //     if (!item.y) {
+    //       obj.height = Length.px(item.height);
+    //     }
 
-      if (item.bottom?.isNotAuto) {
-        // NOOP
-        if (!item.y) {
-          obj.height = Length.px(item.height);
-        }
+    //   } else {
+    //     obj.height = Length.px(item.height);
+    //   }
 
-      } else {
-        obj.height = Length.px(item.height);
-      }
+    // }
 
-    }
+    // console.log(obj);
 
-    return {
-      ...obj,
-    }
+    return obj;
   }
 
   /**
@@ -693,7 +706,6 @@ export default class DomRender extends ItemRender {
       {},
       this.toVariableCSS(item),
       this.toDefaultCSS(item),
-      this.toSizeCSS(item),
       this.toClipPathCSS(item),
       this.toWebkitCSS(item),
       this.toTextClipCSS(item),
@@ -701,6 +713,7 @@ export default class DomRender extends ItemRender {
       this.toBorderCSS(item),
       this.toBackgroundImageCSS(item),
       this.toLayoutCSS(item),
+      this.toSizeCSS(item),      
       this.toTransformCSS(item),
       this.toLayoutItemCSS(item)
     );

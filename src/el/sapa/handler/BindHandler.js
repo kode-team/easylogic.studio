@@ -169,17 +169,9 @@ export default class BindHandler extends BaseHandler {
       return args.indexOf(it.args[0]) > -1
     })
 
-    await bindList?.forEach(async (it) => {
-      const bindMethod = this.context[it.originalMethod];
+    await bindList?.forEach(async (magicMethod) => {
 
-      let refObject = null;
-
-      it.pipes.forEach(pipe => {
-        if(pipe.type === 'keyword') {
-          refObject = this.getRef(`${pipe.value}`);
-        }
-      })
-
+      let refObject = this.getRef(`${magicMethod.keywords[0]}`)
 
       let refCallback = BIND_CHECK_DEFAULT_FUNCTION;
 
@@ -189,13 +181,12 @@ export default class BindHandler extends BaseHandler {
         refCallback = refObject;
       }
 
-      const elName = it.args[0];
+      const elName = magicMethod.args[0];
       let $element = this.context.refs[elName];
-
       // isBindCheck 는 binding 하기 전에 변화된 지점을 찾아서 업데이트를 제한한다.
       const isBindCheck = typeof (refCallback) === 'function' && refCallback.call(this.context);
       if ($element && isBindCheck) {
-        const results = (await bindMethod.call(this.context, ...args));
+        const results = (await magicMethod.execute(...args));
 
         if (!results) return;
 

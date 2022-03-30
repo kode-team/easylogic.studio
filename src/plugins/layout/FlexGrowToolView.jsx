@@ -3,6 +3,7 @@ import { FlexDirection, Layout, ResizingMode } from "el/editor/types/model";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { Length } from "el/editor/unit/Length";
 import {
+  CONFIG,
   DOMDIFF,
   LOAD,
   POINTERSTART,
@@ -18,12 +19,20 @@ export default class FlexGrowToolView extends EditorElement {
   }
 
   [LOAD("$el") + DOMDIFF]() {
+
     return this.$selection.map((item) => {
       const parentItem = item.parent;
 
       if (!parentItem) return;
       if (parentItem.is("project")) return;
       if (parentItem.isLayout(Layout.FLEX) === false) return;
+
+      // 전체 공간에서 가장 위(minY)의 위치를 찾음 
+      let minY = parentItem.layers?.[0].verties?.[0][1];
+      parentItem.layers.forEach(child => {
+        const verties = this.$viewport.applyVerties(child.verties);
+          minY = Math.min(minY, Math.min.apply(Math, verties.map(it => it[1])));
+      })
 
       return parentItem.layers
         .map((child) => {
@@ -52,7 +61,7 @@ export default class FlexGrowToolView extends EditorElement {
               class="flex-grow-item"
               style={{
                 left: Length.px(center[0]),
-                top: Length.px(center[1]),
+                top: Length.px(minY),
               }}
               data-flex-item-id={child.id}
               data-parent-direction={parentLayoutDirection}
@@ -174,6 +183,10 @@ export default class FlexGrowToolView extends EditorElement {
   }
 
   [SUBSCRIBE("refreshSelectionStyleView") + THROTTLE(1)]() {
+    this.refresh();
+  }
+
+  [CONFIG("set.move.control.point")]() {
     this.refresh();
   }
 }

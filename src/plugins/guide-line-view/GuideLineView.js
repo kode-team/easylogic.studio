@@ -1,8 +1,7 @@
 
 import { BIND, DEBOUNCE, SUBSCRIBE } from "el/sapa/Event";
-import { toRectVerties, vertiesToRectangle } from "el/utils/collision";
+import { toRectVerties, vertiesToPath } from "el/utils/collision";
 import { makeGuidePoint } from "el/utils/math";
-import PathStringManager from "el/editor/parser/PathStringManager";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { vec3 } from "gl-matrix";
 
@@ -137,7 +136,8 @@ export default class GuideLineView extends EditorElement {
 
     template() {
         return /*html*/`
-            <svg class='elf--guide-line-view' ref="$guide" width="100%" height="100%" ></svg>
+            <svg class='elf--guide-line-view' ref="$guide" width="100%" height="100%" >
+            </svg>
             `
 
     }
@@ -149,9 +149,75 @@ export default class GuideLineView extends EditorElement {
     }
 
     [BIND('$guide')]() {
+
+        const line = this.createGuideLine(this.state.list)
+        const layerLine = this.createLayerLine()
+
         return {
-            svgDiff: /*html*/`<g>${this.createGuideLine(this.state.list)}</g>`
+            svgDiff: /*html*/`<g>${line}${layerLine}</g>`
         }
+    }
+
+    /**
+     * 스냅의 우선순위 
+     * 
+     * * 완전히 같은 선이 존재할 때
+     * * 중심점이 같을 때
+     * * x 축 체크 (y를 다르게 표현)
+     * * y 축 체크 (x를 다르게 표현)
+     * 
+     * 
+     * @returns 
+     */
+    createLayerLine() {
+        return "";
+        const currentVerties = this.$viewport.applyVerties(this.$selection.verties);
+
+        const lines = [];
+
+        const data = [];
+        
+        [this.$selection.snapTargetLayers?.[0]]?.filter(Boolean).forEach(layer => {
+            const verties = this.$viewport.applyVerties(layer.verties);
+            const originVerties = this.$viewport.applyVerties(layer.originVerties);
+
+            // lines.push(/*html*/`
+            //     <path class="layer-line" d="${vertiesToPath(originVerties)}" fill="transparent" stroke-width="1" stroke="black"></path>
+            // `)   
+
+
+
+            currentVerties.forEach(source => {
+                verties.forEach(target => {
+
+                    const half = vec3.lerp([], source, target, 0.5);
+                    const dot = vec3.dot(vec3.normalize([], source), vec3.normalize([], vec3.subtract([],target, source)));
+
+
+                    if (Math.abs(source[0] - target[0]) <= 3) {
+                        lines.push(/*html*/`
+                            <path class="snap-line" d="${vertiesToPath([
+                                [target[0],source[1],source[2]], target
+                            ])}" fill="transparent" stroke-width="2"></path>
+                        `)                        
+                    } else if (Math.abs(source[1] - target[1]) <= 3) {
+
+                        lines.push(/*html*/`
+                            <path class="snap-line" d="${vertiesToPath([
+                                [source[0],target[1],source[2]], target
+                            ])}" fill="transparent" stroke-width="1" stroke="black"></path>
+                        `)
+                    } else {
+
+                    }
+
+                })
+            })
+
+        })
+
+
+        return lines.join('');
     }
 
     createGuideLine(list) {
@@ -159,9 +225,10 @@ export default class GuideLineView extends EditorElement {
         var images = []
         var texts = []
         list = list.filter(Boolean);
+
         for (var i = 0, len = list.length; i < len; i++) {
 
-            const [source, target, axis, dist, newTarget, sourceVerties, targetVerties, isInvert] = list[i];
+            const [source, target, axis, dist, newTarget, sourceVerties, targetVerties] = list[i];
             const localDist = Math.floor(dist);            
 
             // 시작점 기준으로 맞출때가 필요하면 localSourceVertex 를 활용하자. 아직은 없음. 
@@ -239,8 +306,6 @@ export default class GuideLineView extends EditorElement {
                 images.push(rect(this.$viewport.applyVerties(targetVerties)))
             }
         }
-
-
 
         return [...images, ...texts].join('');
     }
@@ -324,7 +389,7 @@ export default class GuideLineView extends EditorElement {
 
         const expect = this.$selection.hasChangedField('d', 'clip-path')
 
-        if (!expect && this.$selection.hasChangedField('x', 'y', 'width', 'height', 'transform', 'transform-origin')) {
+        if (!expect) {
             this.refreshSmartGuidesForVerties();
         }
     }

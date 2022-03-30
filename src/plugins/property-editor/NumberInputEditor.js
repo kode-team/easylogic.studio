@@ -88,6 +88,7 @@ export default class NumberInputEditor extends EditorElement {
         this.setState({
             value
         }, false)
+
         this.refs.$propertyNumber.val(this.state.value)
     }
 

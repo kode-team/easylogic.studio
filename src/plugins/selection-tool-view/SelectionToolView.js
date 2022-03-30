@@ -77,8 +77,10 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.refreshRotatePointerIcon()
         this.state.dragging = true;
         this.state.isRotate = true;
-        this.$config.set('set.move.control.point', true);
         this.initAngle = this.$selection.current.angle;
+
+        // drag 시작 이벤트 설정 
+        this.$config.set('set.move.control.point', true);        
     }
 
     rotateVertex() {
@@ -181,27 +183,12 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.verties = this.$selection.verties;
 
         this.hasRotate = this.$selection.current.angle !== 0;
+        this.cachedCurrentItemMatrix = this.$selection.current.matrix;
 
         this.$config.set('set.move.control.point', true);
 
         this.$selection.startToCacheChildren();
     }
-
-    // calculateNewOffsetMatrixInverse(vertexOffset, width, height, origin, itemMatrix) {
-
-    //     const center = vec3.subtract(
-    //         [],
-    //         TransformOrigin.scale(origin, width, height),
-    //         vertexOffset
-    //     );
-
-    //     return calculateMatrixInverse(
-    //         mat4.fromTranslation([], vertexOffset),
-    //         mat4.fromTranslation([], center),
-    //         itemMatrix,
-    //         mat4.fromTranslation([], vec3.negate([], center)),
-    //     );
-    // }
 
     calculateDistance(vertex, distVector, reverseMatrix) {
 
@@ -309,7 +296,7 @@ export default class SelectionToolView extends SelectionToolEvent {
      */
     moveBottomRightVertex(distVector) {
         const { shiftKey, altKey, metaKey } = this.$config.get('bodyEvent');
-        const item = this.$selection.cachedCurrentItemMatrix
+        const item = this.cachedCurrentItemMatrix
 
         if (item) {
 
@@ -346,7 +333,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     moveTopRightVertex(distVector) {
         const { shiftKey, altKey, metaKey } = this.$config.get('bodyEvent');
-        const item = this.$selection.cachedCurrentItemMatrix
+        const item = this.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 1, distVector)
@@ -380,7 +367,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     moveTopLeftVertex(distVector) {
         const { shiftKey, altKey, metaKey } = this.$config.get('bodyEvent');
-        const item = this.$selection.cachedCurrentItemMatrix
+        const item = this.cachedCurrentItemMatrix
         if (item) {
             let [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
 
@@ -413,7 +400,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     moveTopVertex(distVector) {
         const { altKey } = this.$config.get('bodyEvent');
-        const item = this.$selection.cachedCurrentItemMatrix
+        const item = this.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
@@ -442,7 +429,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     moveBottomVertex(distVector) {
         const { altKey } = this.$config.get('bodyEvent');
-        const item = this.$selection.cachedCurrentItemMatrix
+        const item = this.cachedCurrentItemMatrix
         if (item) {
             let [realDx, realDy] = this.calculateRealDist(item, 3, distVector)
 
@@ -471,7 +458,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     moveRightVertex(distVector) {
         const { altKey } = this.$config.get('bodyEvent');
-        const item = this.$selection.cachedCurrentItemMatrix
+        const item = this.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 1, distVector)
@@ -498,7 +485,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     moveLeftVertex(distVector) {
         const { altKey } = this.$config.get('bodyEvent');
-        const item = this.$selection.cachedCurrentItemMatrix
+        const item = this.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
@@ -529,7 +516,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     moveBottomLeftVertex(distVector) {
         const { shiftKey, altKey, metaKey } = this.$config.get('bodyEvent');
-        const item = this.$selection.cachedCurrentItemMatrix
+        const item = this.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 3, distVector)
@@ -647,10 +634,6 @@ export default class SelectionToolView extends SelectionToolEvent {
      * 선택영역 컴포넌트 그리기 
      */
     renderPointers() {
-
-        if (!this.$selection.cachedCurrentItemMatrix) {
-            return;
-        }
 
         if (this.$selection.isEmpty) {
             return;
@@ -848,10 +831,8 @@ export default class SelectionToolView extends SelectionToolEvent {
             }
         }
 
-        const isArtBoard = current && current.is('artboard');
-
         //TODO: 여기서는 법선벡터를 구하게 되면 식이 훨씬 간단해진다. 
-        const rotate = Length.deg(current.angle).round(1000);
+        const rotate = Length.deg(current.nestedAngle).round(1000);
 
         const rotatePointer = getRotatePointer(pointers, 34)
         const dist = vec3.dist(pointers[0], pointers[2]);

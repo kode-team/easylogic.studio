@@ -9,13 +9,15 @@ export default {
                 editor.selection.select(item);
                 editor.emit('refreshSelection');                
                 editor.emit('refreshSelectionTool');
-            }
-
-            if (editor.selection.check(item)) {
-                editor.emit('open.editor');
-                editor.emit('removeGuideLine');
             } else {
-                this.selectInWorldPosition(editor, evt, item);
+
+                if (editor.selection.check(item)) {
+                    editor.emit('open.editor');
+                    editor.emit('removeGuideLine');
+                } else {
+                    this.selectInWorldPosition(editor, evt, item);
+                }
+    
             }
 
 

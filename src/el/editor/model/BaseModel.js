@@ -603,8 +603,7 @@ export class BaseModel {
       layer.remove();
     }
 
-    layer.setParentId(this.id);
-
+    layer.setParentId(this.id);      
     let list = this.json.children.map((id, childIndex) => {
       return {id, index: childIndex}
     })
@@ -638,6 +637,7 @@ export class BaseModel {
   appendAfter(layer) {
 
     this.parent.insertChild(layer, this.index + 1);
+
     // this.project.addIndexItem(layer);
     return layer;
   }

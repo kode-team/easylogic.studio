@@ -20,6 +20,10 @@ export class Project extends TimelineModel {
     return null;
   }
 
+  get nestedAngle() {
+    return 0;
+  }
+
   toRootVariableCSS() {
     var obj = {}
     this.json.rootVariable.split(';').filter(it => it.trim()).forEach(it => {
