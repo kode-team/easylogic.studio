@@ -27,13 +27,6 @@ export default class FlexGrowToolView extends EditorElement {
       if (parentItem.is("project")) return;
       if (parentItem.isLayout(Layout.FLEX) === false) return;
 
-      // 전체 공간에서 가장 위(minY)의 위치를 찾음 
-      let minY = parentItem.layers?.[0].verties?.[0][1];
-      parentItem.layers.forEach(child => {
-        const verties = this.$viewport.applyVerties(child.verties);
-          minY = Math.min(minY, Math.min.apply(Math, verties.map(it => it[1])));
-      })
-
       return parentItem.layers
         .map((child) => {
           const verties = this.$viewport.applyVerties(child.verties);
@@ -61,13 +54,13 @@ export default class FlexGrowToolView extends EditorElement {
               class="flex-grow-item"
               style={{
                 left: Length.px(center[0]),
-                top: Length.px(minY),
+                top: Length.px(center[1]),
               }}
               data-flex-item-id={child.id}
               data-parent-direction={parentLayoutDirection}
               data-flex-grow={flexGrow}
             >
-              <span class="size">{size}</span>{" "}
+              <span class="size">{Math.floor(size)}</span>{" "}
               <span class="grow">{flexGrow || "x"}</span>
             </div>
           );

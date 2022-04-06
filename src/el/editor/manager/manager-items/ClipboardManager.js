@@ -19,6 +19,10 @@ export class ClipboardManager {
         return this.clipboard.length == 0;
     }
 
+    get last () {
+        return this.clipboard[this.clipboard.length - 1];
+    }
+
     push (data) {
         this.clipboard.push(data);
     }

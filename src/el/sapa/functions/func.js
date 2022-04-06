@@ -157,9 +157,12 @@ export function isNotZero(num) {
     return !isZero(num);
 }
 
+const CLONE_FUNCTION = isFunction(structuredClone) ? structuredClone : (obj) => JSON.parse(JSON.stringify(obj));
+
 export function clone(obj) {
     if (isUndefined(obj)) return undefined;
-    return JSON.parse(JSON.stringify(obj));
+
+    return CLONE_FUNCTION(obj);
 }
 
 

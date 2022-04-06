@@ -29,7 +29,7 @@ export default {
         // 수집된 커맨드 동시에 실행
         editor.emit('setAttributeForMulti', {
             // 현재 객체 정보 변경 
-            ...currentLayer.attrsWithId('x', 'y', 'angle'),
+            ...currentLayer.attrsWithId('x', 'y', 'angle', 'parentId'),
 
             // target item 의 부모 정보 변경 
             ...currentValues,
@@ -46,7 +46,7 @@ export default {
             })
 
             // editor.selection.reselect();
-            editor.emit('refreshAllCanvas');
+
         })
 
         editor.nextTick(() => {
@@ -64,14 +64,9 @@ export default {
         currentLayer.reset(info.attrs);
 
         editor.emit('setAttributeForMulti', {
-            ...currentLayer.attrsWithId('x', 'y', 'angle'),
+            ...currentLayer.attrsWithId('x', 'y', 'angle', 'parentId'),
             ...currentTarget.attrsWithId('children')
         });
-
-
-        editor.nextTick(() => {
-            editor.emit('refreshAllCanvas');
-        })
     },
 
     undo: function (editor, { undoValues: [lastValues, currentParentId] }) {
@@ -93,10 +88,6 @@ export default {
             ...lastParent.attrsWithId('children'),
             ...currentParent.attrsWithId('children')
         });
-
-        editor.nextTick(() => {
-            editor.emit('refreshAllCanvas');
-        })
 
     }
 }

@@ -15,9 +15,9 @@ export default class GridBoxEditor extends EditorElement {
 
 
     getLayoutItemOptions () {
-        return variable('none,auto,repeat,length'.split(',').map(it => {
+        return 'none,auto,repeat,length'.split(',').map(it => {
             return {value: it, text: this.$i18n(`grid.box.editor.${it}`) }
-        }));
+        });
     }
 
     initState() {
@@ -79,7 +79,8 @@ export default class GridBoxEditor extends EditorElement {
             <div class='item' data-repeat-type='${it.type}' data-index='${index}' >
                 <div class='repeat'>
                     ${createComponent("SelectEditor", { 
-                        ref: '$${index}-type',
+                        ref: `$${index}-type`,
+                        compact: true,
                         options: this.getLayoutItemOptions(),
                         key: "type",
                         value: it.type || 'auto',
@@ -89,7 +90,8 @@ export default class GridBoxEditor extends EditorElement {
                 </div>
                 <div class='count'>
                     ${createComponent("NumberInputEditor" , {
-                        ref: '$${index}-count',
+                        compact: true,
+                        ref: `$${index}-count`,
                         key: "count",
                         value: it.count,
                         params: index,
@@ -99,7 +101,8 @@ export default class GridBoxEditor extends EditorElement {
                 </div>                
                 <div class='value'>
                     ${createComponent("InputRangeEditor", { 
-                        ref: '$${index}-value',
+                        ref: `$${index}-value`,
+                        compact: true,                        
                         key :"value",
                         value: it.value,
                         params: index,

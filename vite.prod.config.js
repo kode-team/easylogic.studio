@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite'
-import { adorableCSS } from "adorable-css/vite-plugin-adorable-css"
 
 const path = require('path');
 const alias = require('./alias');
@@ -21,10 +20,5 @@ export default defineConfig({
         editor: path.resolve(__dirname, 'index.html'),
       }
     }
-  },
-  plugins: [
-    adorableCSS({
-      include: ['**/*.{svelte,jsx}']
-    })
-  ]
+  }
 })

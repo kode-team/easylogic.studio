@@ -104,7 +104,7 @@ export default class HTMLRenderView extends EditorElement {
         this.refreshAllElementBoundSize();
     }
 
-    [SUBSCRIBE('refreshElementBoundSize') + FRAME] (parentObj) {
+    [SUBSCRIBE('refreshElementBoundSize')] (parentObj) {
         this.refreshElementBoundSize(parentObj);
     }    
 
@@ -499,7 +499,8 @@ export default class HTMLRenderView extends EditorElement {
         const newDist = vec3.dist(targetMousePoint, this.initMousePoint);
         this.$config.init('set.move.control.point', false);
 
-        this.emit('endGhostToolView');
+        const hasMoved = Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5;
+        this.emit('endGhostToolView', hasMoved);
 
         if (this.$config.get('set.dragarea.mode')) {
             this.emit('endDragAreaView');
@@ -528,10 +529,8 @@ export default class HTMLRenderView extends EditorElement {
 
         }
 
-        // this.nextTick(() => {
-            this.emit('refreshSelection');
-            // this.emit('refreshSelectionTool', true)   
-        // }, 100); /
+        this.emit('refreshSelection');
+        this.emit('refreshSelectionTool');
     }
 
 
@@ -625,18 +624,25 @@ export default class HTMLRenderView extends EditorElement {
         var $el = this.getElement(item.id);                
 
         if ($el) {
-            const { x, y, width, height } = $el.offsetRect();
 
-            if (width > 0 && height > 0 ) {
-                // console.log(x, y, width, height);
+            // 실제 element 가 존재하는지 체크 하고 업데이트 
+            if ($el.$parent.attr('data-id') === item.parentId) { 
+
+                const { x, y, width, height } = $el.offsetRect();
+
                 item.reset({ x, y, width, height })
     
                 this.refreshSelectionStyleView(item);
     
-                if (this.$selection.check(item)) {                           
+                if (this.$selection.check(item)) {                         
                     this.emit('refreshSelectionTool');
                 }                    
+
+                this.emit('refreshSelectionStyleView', item);
+
             }
+
+
         }
 
     }
@@ -649,43 +655,7 @@ export default class HTMLRenderView extends EditorElement {
                 return;
             }
 
-
-            // FIXME: text component 도 같이 업데이트 해준다.
-            const hasChangedDimension = parentObj.changedLayout || parentObj.hasChangedField(
-                'children', 
-                'box-model', 
-                'x',
-                'y',
-                'angle',
-                'width', 
-                'height', 
-            )
-
             parentObj.layers.forEach(it => {
-                var $el = this.getElement(it.id);
-
-                // offset 크기를 정하는건 따로 정의를 해야할 듯 
-                // 매번 offsetRect 를 구하는건 비효율적이다.
-                // 하지만 레이아웃이 적용이 되어 있기 때문에 selection 표현을 위해서는 어쩔 수 없다. 
-                // 그럼 drag 하는 상태처럼 selection 을 드래그 하는 동안은 그냥 막을까? 
-                if ($el && (hasChangedDimension ||  it.isLayoutItem())) {
-                    const { x, y, width, height } = $el.offsetRect();
-
-                    if (width > 0 && height > 0 ) {
-                        const value = { x, y, width, height };
-
-                        if (it.isChangedValue(value)) {
-                            it.reset(value)
-    
-                            this.refreshSelectionStyleView(it);
-    
-                            if (this.$selection.check(it)) {
-                                this.emit('refreshSelectionTool');
-                            }
-                        }
-                    }
-                }
-
                 this.trigger('refreshElementBoundSize', it);
             })
         }

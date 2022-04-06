@@ -250,5 +250,17 @@ export const FuncType = {
     BOOLEAN: 'boolean',
     FUNCTION: 'function',
     PATH: 'path',
+    URL: 'url',
+    REPEAT: 'repeat',
+    UNKNOWN: 'unknown'
+}
+
+export const PathSegmentType = {
+    MOVETO: 'M',
+    LINETO: 'L',
+    CURVETO: 'C',
+    QUARDTO: 'Q',
+    ARCTO: 'A',
+    CLOSEPATH: 'Z',
     UNKNOWN: 'unknown'
 }

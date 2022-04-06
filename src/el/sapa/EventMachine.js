@@ -204,7 +204,7 @@ export default class EventMachine {
    * 
    * @param {Dom} targetRef 
    */
-  refreshElementReference(targetRef) {
+  refreshElementReference(targetRef, refName) {
     var refs = targetRef.$$(QUERY_PROPERTY);
 
     for(var refsIndex = 0, refsLen = refs.length; refsIndex < refsLen; refsIndex++) {
@@ -222,6 +222,12 @@ export default class EventMachine {
         this.refs[name] = $dom;
       }
     }
+
+    this.afterLoadRendering(targetRef, refName);
+  }
+
+  afterLoadRendering(refName) {
+    // noop
   }
 
   /**
@@ -237,8 +243,9 @@ export default class EventMachine {
       html = html.join('');
     }
 
-    html = html.trim();
-    const list = TEMP_DIV.html(html).children();
+    html = (html || "").trim();
+
+    const list = TEMP_DIV.html(html).children() || [];
     ///////////////////////////////////////////////////////////////
 
     for(var i = 0, len = list.length; i < len; i++) {
@@ -559,7 +566,7 @@ export default class EventMachine {
       } else {
         targetRef.html(fragment);
       }
-      this.refreshElementReference(targetRef);      
+      this.refreshElementReference(targetRef, loadObj.ref);      
     });
   }
 
@@ -596,7 +603,7 @@ export default class EventMachine {
         } else {
           refTarget.html(fragment);
         }
-        this.refreshElementReference(refTarget);                  
+        this.refreshElementReference(refTarget, elName);                  
 
       }
     });

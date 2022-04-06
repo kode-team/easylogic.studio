@@ -174,6 +174,15 @@ const CSS_FUNC_PARSER_MAP = {
         name: TimingFunction.PATH,
         d: item.args
     }),
+    repeat: (item) => {
+        // repeat 에 개수가 더 많아질 수 있음. 
+        // repeat(1, 1fr 1fr 1fr);
+        return {
+            funcType: FuncType.REPEAT,
+            count: +item.parameters[0],
+            length: Length.parse(item.parameters[1]),
+        }
+    },
     'static-gradient': makeGroupFunction('static-gradient'),
     'linear-gradient': makeGroupFunction('linear-gradient'),
     'radial-gradient': makeGroupFunction('radial-gradient'),

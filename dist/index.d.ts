@@ -1144,7 +1144,7 @@ declare module "@easylogic/editor" {
 
         isHideTitle(): boolean;
 
-        static createMenuItem(opt: KeyValue = {}): MenuItem;
+        static createMenuItem(opt: KeyValue): MenuItem;
     }
 
     interface ICommandObject {
@@ -1158,7 +1158,7 @@ declare module "@easylogic/editor" {
     export interface EditorInstance {
         registerElement(obj: ElementValue<EditorElement>): void;
         registerUI(target: string, obj: ElementValue<EditorElement>): void;
-        registerComponent(name: string, component: IComponent);
+        registerComponent(name: string, component: ElementValue<EditorElement>);
         registerItem(name: string, item: Item);
         registerInspector(name: string, inspectorCallback: Function);
 
@@ -1181,8 +1181,8 @@ declare module "@easylogic/editor" {
     }
 
     export interface EditorInterface {
-        createDesignEditor (opt: KeyValue = {}): EditorElement;
-        createDesignPlayer (opt: KeyValue = {}): EditorElement;
+        createDesignEditor (opt: KeyValue): EditorElement;
+        createDesignPlayer (opt: KeyValue): EditorElement;
         plugins: PluginInterface[]
 
     }

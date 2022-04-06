@@ -545,11 +545,13 @@ export default class Dom {
       }
     }
 
+    const el = this.el;
+
     return {
-      x: this.el.offsetLeft,
-      y: this.el.offsetTop,
-      width: this.el.offsetWidth,
-      height: this.el.offsetHeight
+      x: el.offsetLeft,
+      y: el.offsetTop,
+      width: el.offsetWidth,
+      height: el.offsetHeight
     };
   }
 

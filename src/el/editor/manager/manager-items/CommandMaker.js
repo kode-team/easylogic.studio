@@ -15,4 +15,8 @@ export class CommandMaker {
     run () {
         this.editor.emit(this.commands);
     }
+
+    add(otherCommandMaker) {
+        this.commands = this.commands.concat(otherCommandMaker.commands);
+    }
 }

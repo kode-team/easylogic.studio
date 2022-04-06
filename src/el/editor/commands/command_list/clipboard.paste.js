@@ -6,7 +6,7 @@ export default {
         /** todo : support history */
         if (!editor.clipboard.isEmpty) {
 
-            const data = editor.clipboard.pop();
+            const data = editor.clipboard.last; // 마지막 클립보드 입력 
 
             if (data.type == 'copy') {
                 const ids = data.data;
@@ -53,7 +53,7 @@ export default {
                 editor.selection.select(...newIds);
 
                 // 전체 갱신에 대한 명령어를 다시 만들어야할 듯 
-                editor.emit('refreshAll')                
+                editor.emit('refreshAll')
             }
 
         } else {

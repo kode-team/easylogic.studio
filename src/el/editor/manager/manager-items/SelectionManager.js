@@ -26,6 +26,7 @@ export class SelectionManager {
     this.cachedItemMatrices = []    
     this.cachedArtBoardVerties = []
     this.cachedVerties = rectToVerties(0, 0, 0, 0, '50% 50% 0px');
+    this.gridInformation = {}
 
     this.$editor.on('config:bodyEvent', () => {
       this.refreshMousePosition();
@@ -807,5 +808,14 @@ export class SelectionManager {
 
   isAll (...args) {
     return this.items.every(it => args.includes(it.itemType));
+  }
+
+  /**
+   * grid information 정보를 사전에 캐쉬해둔다. 
+   * 
+   * @param {object} obj 
+   */
+  updateGridInformation(obj = {}) {
+    this.gridInformation = obj;
   }
 }

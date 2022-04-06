@@ -1,8 +1,6 @@
 
 import { defineConfig } from 'vite'
 import { replaceCodePlugin } from "vite-plugin-replace";
-import { adorableCSS } from "adorable-css/vite-plugin-adorable-css"
-// import { svelte } from '@sveltejs/vite-plugin-svelte';
 
 const alias = require('./alias');
 const pkgJSON = require('./package.json');
@@ -32,9 +30,6 @@ export default defineConfig({
     alias,
   },
   plugins: [
-    adorableCSS({
-      include: ['**/*.{svelte,jsx}']
-    }),    
     replaceCodePlugin({
       replacements: [
         {

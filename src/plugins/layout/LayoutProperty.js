@@ -4,6 +4,7 @@ import BaseProperty from "el/editor/ui/property/BaseProperty";
 
 import './LayoutProperty.scss';
 import { createComponent } from "el/sapa/functions/jsx";
+import { Layout } from "el/editor/types/model";
 
 
 export default class LayoutProperty extends BaseProperty {
@@ -38,7 +39,7 @@ export default class LayoutProperty extends BaseProperty {
         key: 'layout',
         height: 24,
         value: current.layout,
-        options: ['default', 'flex', 'grid'],
+        options: [Layout.DEFAULT, Layout.FLEX, Layout.GRID],
         icons: ['layout_default','layout_flex','layout_grid'],
         onchange: "changeLayoutType"
       })
@@ -82,7 +83,6 @@ export default class LayoutProperty extends BaseProperty {
       this.command('setAttributeForMulti', 'change padding', this.$selection.packByValue(value))
   
     } else {
-
       this.command('setAttributeForMulti', 'change layout info', this.$selection.packByValue({ 
         [key]: value
       }))
@@ -109,9 +109,6 @@ export default class LayoutProperty extends BaseProperty {
 
     this.nextTick(() => {
       this.refresh();
-      this.emit('refreshAllElementBoundSize');
-      this.emit('changeItemLayout')
-      this.emit('refreshSelection');
     })
 
   }

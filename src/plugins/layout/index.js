@@ -10,6 +10,7 @@ import DefaultLayoutItemProperty from './DefaultLayoutItemProperty';
 import ResizingProperty from './ResizingProperty';
 import ResizingItemProperty from './ResizingItemProperty';
 import FlexGrowToolView from './FlexGrowToolView';
+import GridGrowToolView from './GridGrowToolView';
 
 /**
  * 
@@ -34,5 +35,6 @@ export default function (editor) {
 
     editor.registerUI('canvas.view', {
         FlexGrowToolView,
+        GridGrowToolView,
     }, 1000)
 }

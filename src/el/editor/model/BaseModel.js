@@ -490,6 +490,10 @@ export class BaseModel {
     return args.some(it => this.lastChangedField[it] !== undefined);
   }
 
+  get hasChangedHirachy() {
+    return this.hasChangedField('children', 'parentId');
+  }
+
   /**
    * define default object for item
    *
@@ -802,7 +806,7 @@ export class BaseModel {
     const siblings = children;
 
     const result = {}
-    const selectedIndex = -1;
+    let selectedIndex = -1;
     siblings.forEach((id, index) => {
       result[id] = {id, index}
 
@@ -853,7 +857,7 @@ export class BaseModel {
     const siblings = children;
 
     const result = {}
-    const selectedIndex = -1;
+    let selectedIndex = -1;
     siblings.forEach((id, index) => {
       result[id] = {id, index}
 
@@ -879,7 +883,7 @@ export class BaseModel {
     const siblings = children;
 
     const result = {}
-    const selectedIndex = -1;
+    let selectedIndex = -1;
     siblings.forEach((id, index) => {
       result[id] = {id, index}
 

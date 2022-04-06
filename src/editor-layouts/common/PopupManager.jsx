@@ -4,7 +4,6 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import NotificationView from "el/editor/ui/view/NotificationView";
 import { createComponent } from "el/sapa/functions/jsx";
 
-
 export default class PopupManager extends EditorElement {
 
   components(){

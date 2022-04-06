@@ -171,49 +171,12 @@ export default class GuideLineView extends EditorElement {
      */
     createLayerLine() {
         return "";
-        const currentVerties = this.$viewport.applyVerties(this.$selection.verties);
-
         const lines = [];
-
-        const data = [];
         
-        [this.$selection.snapTargetLayers?.[0]]?.filter(Boolean).forEach(layer => {
+        this.$selection.snapTargetLayers?.filter(Boolean).forEach(layer => {
             const verties = this.$viewport.applyVerties(layer.verties);
-            const originVerties = this.$viewport.applyVerties(layer.originVerties);
 
-            // lines.push(/*html*/`
-            //     <path class="layer-line" d="${vertiesToPath(originVerties)}" fill="transparent" stroke-width="1" stroke="black"></path>
-            // `)   
-
-
-
-            currentVerties.forEach(source => {
-                verties.forEach(target => {
-
-                    const half = vec3.lerp([], source, target, 0.5);
-                    const dot = vec3.dot(vec3.normalize([], source), vec3.normalize([], vec3.subtract([],target, source)));
-
-
-                    if (Math.abs(source[0] - target[0]) <= 3) {
-                        lines.push(/*html*/`
-                            <path class="snap-line" d="${vertiesToPath([
-                                [target[0],source[1],source[2]], target
-                            ])}" fill="transparent" stroke-width="2"></path>
-                        `)                        
-                    } else if (Math.abs(source[1] - target[1]) <= 3) {
-
-                        lines.push(/*html*/`
-                            <path class="snap-line" d="${vertiesToPath([
-                                [source[0],target[1],source[2]], target
-                            ])}" fill="transparent" stroke-width="1" stroke="black"></path>
-                        `)
-                    } else {
-
-                    }
-
-                })
-            })
-
+            lines.push(`<text x="${verties[0][0]}" y="${verties[0][1]}" style="filter: drop-shadow(0 0 2px red)">${layer.id}</text>`)
         })
 
 

@@ -1,5 +1,5 @@
 
-import { POINTERSTART, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, DOUBLECLICK, ENTER, ESCAPE, DOUBLETAB, DELAY, SUBSCRIBE, THROTTLE } from "el/sapa/Event";
+import { POINTERSTART, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, DOUBLECLICK, ENTER, ESCAPE, DOUBLETAB, DELAY, SUBSCRIBE, THROTTLE, DEBOUNCE } from "el/sapa/Event";
 import PathGenerator from "el/editor/parser/PathGenerator";
 import Dom from "el/sapa/functions/Dom";
 import PathParser from "el/editor/parser/PathParser";
@@ -353,9 +353,13 @@ export default class PathEditorView extends PathTransformEditor {
             }
         });
 
-        const containerItem = this.$selection.getArtboardByPoint(bbox[0]) || this.$selection.currentProject;
+        const containerItem = this.$selection.currentProject;
 
 
+        // project 를 설정하다. 
+        // 이걸 여기다 하는게 맞는건가?  
+        // 이게 추가 되면  히스토리에 들어가야하기 때문에 
+        // history.moveLayerToTarget 으로 넘겨야 할지도 모른다. 
         layer = containerItem.appendChild(this.$editor.createModel(pathItem));
 
         return layer;

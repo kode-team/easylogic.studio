@@ -86,10 +86,8 @@ export default class DomRender extends ItemRender {
       // 부모가  layout 이  지정 됐을 때 자식item 들은 position: relative 기준으로 동작한다. , left, top 은  속성에서 삭제 
       obj = {
         position: 'relative',
-        left: 'auto !important',
-        top: 'auto !important',
-        width: 'auto !important',
-        height: 'auto !important',
+        left: 'auto',
+        top: 'auto',
       }
 
     } else if (parentLayout === Layout.DEFAULT) {
@@ -154,6 +152,7 @@ export default class DomRender extends ItemRender {
       case Constraints.STRETCH:
         obj.left = Length.px(item.x);
         obj.right = Length.px(parentWidth - item.offsetX - item.screenWidth);
+        obj.width = 'auto !important';
         break;
       case Constraints.CENTER:
         obj.left = Length.px(item.x);
@@ -161,6 +160,7 @@ export default class DomRender extends ItemRender {
       case Constraints.SCALE:
         obj.left = Length.px(item.x).toPercent(parentWidth);
         obj.right = Length.px(parentWidth - item.offsetX - item.screenWidth).toPercent(parentWidth);
+        obj.width = 'auto !important';        
         break;
     }
 
@@ -177,6 +177,7 @@ export default class DomRender extends ItemRender {
       case Constraints.STRETCH:
         obj.top = Length.px(item.y);
         obj.bottom = Length.px(parentHeight - item.offsetY - item.screenHeight);
+        obj.height = 'auto !important';
         break;
       case Constraints.CENTER:
         obj.top = Length.px(item.y);
@@ -184,8 +185,10 @@ export default class DomRender extends ItemRender {
       case Constraints.SCALE:
         obj.top = Length.px(item.y).toPercent(parentHeight);
         obj.bottom = Length.px(parentHeight - item.offsetY - item.screenHeight).toPercent(parentHeight);
+        obj.height = 'auto !important';        
         break;
     }
+
     return obj;
   }
 
@@ -204,6 +207,7 @@ export default class DomRender extends ItemRender {
 
     return {
       display: 'flex',
+      gap: Length.px(item.gap),      
       ...item.attrs(
         'flex-direction',
         'flex-wrap',
@@ -211,7 +215,6 @@ export default class DomRender extends ItemRender {
         'align-items',
         'align-content',
       ),
-      gap: Length.px(item.gap),
     }
   }
 
@@ -221,7 +224,7 @@ export default class DomRender extends ItemRender {
    */
   toGridLayoutCSS(item) {
     return {
-      display: 'grid',
+      display: 'grid',      
       ...item.attrs(
         'grid-template-columns',
         'grid-template-rows',
@@ -229,8 +232,9 @@ export default class DomRender extends ItemRender {
         'grid-auto-columns',
         'grid-auto-rows',
         'grid-auto-flow',
+        'grid-column-gap',
+        'grid-row-gap',
       ),
-      gap: Length.px(item.gap),
     }
   }
 
@@ -326,14 +330,10 @@ export default class DomRender extends ItemRender {
       }      
     } 
 
-    // console.log(obj);
-    
     if (item.isInDefault()) {
       obj.width = Length.px(item.screenWidth);
       obj.height = Length.px(item.screenHeight);
     } 
-
-    // console.log(obj);    
     
     if (item.isInFlex()) {
       // flex layout 일 때는 height 를 지정하지 않는다. 
@@ -353,8 +353,6 @@ export default class DomRender extends ItemRender {
           obj['align-self'] = AlignItems.STRETCH;
         }
 
-        // console.log(obj.height, obj['align-self'], item.resizingVertical)
-
       } else {
         obj.width = Length.px(item.screenWidth);
         obj.height = Length.px(item.screenHeight);
@@ -370,34 +368,12 @@ export default class DomRender extends ItemRender {
       }
 
     } 
-    // console.log(obj);
+
     if (item.isInGrid()) {
       // NOOP , no width, heigh
+      obj.width = 'auto';
+      obj.height = 'auto';
     } 
-    
-    // if (item.isInFlex() && item === false) {
-    //   if (item.right?.isNotAuto) {
-    //     if (!item.x) {
-    //       obj.width = Length.px(item.width);
-    //     }
-
-    //   } else {
-    //     obj.width = Length.px(item.width);
-    //   }
-
-    //   if (item.bottom?.isNotAuto) {
-    //     // NOOP
-    //     if (!item.y) {
-    //       obj.height = Length.px(item.height);
-    //     }
-
-    //   } else {
-    //     obj.height = Length.px(item.height);
-    //   }
-
-    // }
-
-    // console.log(obj);
 
     return obj;
   }
@@ -717,6 +693,12 @@ export default class DomRender extends ItemRender {
       this.toTransformCSS(item),
       this.toLayoutItemCSS(item)
     );
+  }
+
+  toStyleCode(item, renderer) {
+    const cssString = this.generateView(item, `[data-renderer-id='${renderer.id}'] .element-item[data-id='${item.id}']`)
+
+    return cssString;
   }
 
   /**

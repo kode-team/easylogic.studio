@@ -299,8 +299,8 @@ export class MovableModel extends BaseAssetModel {
 
     setCacheGuideVerties() {
         this._cachedGuideVerties = this.getGuideVerties();
-        this._cachedXList = this._cachedGuideVerties.map(it => it[0]);
-        this._cachedYList = this._cachedGuideVerties.map(it => it[1]);
+        this._cachedXList = this.getXList();
+        this._cachedYList = this.getYList();
 
     }
 
@@ -725,11 +725,11 @@ export class MovableModel extends BaseAssetModel {
     }
 
     getXList() {
-        return this.guideVerties.map(it => it[0])
+        return [...new Set(this.guideVerties.map(it => it[0]))]
     }
 
     getYList() {
-        return this.guideVerties.map(it => it[1])
+        return [...new Set(this.guideVerties.map(it => it[1]))]
     }
     
     get nestedAngle() {
@@ -861,7 +861,7 @@ export class MovableModel extends BaseAssetModel {
     }
 
     /**
-     * 로컬 좌표 path (d)로 새로운 bbox 를 구한다. 
+     * [로컬 좌표] path (d)로 새로운 bbox 를 구한다. 
      * 
      * A -> B 로 옮겨갈 때 부모 기준으로 새로운 bbox 위치를 구할 수 있다. 
      * 

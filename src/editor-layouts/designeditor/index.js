@@ -1,4 +1,4 @@
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, BIND, SUBSCRIBE, CONFIG, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { DRAGOVER, DROP, PREVENT, POINTERSTART, BIND, SUBSCRIBE, CONFIG } from "el/sapa/Event";
 
 import { Length } from "el/editor/unit/Length";
 

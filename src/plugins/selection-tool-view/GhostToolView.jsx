@@ -223,14 +223,12 @@ export default class GhostToolView extends EditorElement {
   }
 
   renderLayoutFlexForFirstItem(direction) {
-    const verticalField =
-      direction === FlexDirection.COLUMN ? "align-items" : "justify-content";
-    const verticalConst =
-      direction === FlexDirection.COLUMN ? AlignItems : JustifyContent;
-    const horizontalField =
-      direction === FlexDirection.COLUMN ? "justify-content" : "align-items";
-    const horizontalConst =
-      direction === FlexDirection.COLUMN ? JustifyContent : AlignItems;
+    const isColumn = direction === FlexDirection.COLUMN;
+
+    const verticalField = isColumn ? "align-items" : "justify-content";
+    const verticalConst = isColumn ? AlignItems : JustifyContent;
+    const horizontalField = isColumn ? "justify-content" : "align-items";
+    const horizontalConst = isColumn ? JustifyContent : AlignItems;
     const rect = vertiesToRectangle(this.targetOriginPosition);
 
     const center = this.ghostScreenVerties[4];
@@ -539,7 +537,7 @@ export default class GhostToolView extends EditorElement {
       // 움직이지 않은 상태는 GhostToolView 에서 아무것도 하지 않음.
       // NOOP
       return;
-    }
+    }    
 
     // 선택한 레이어와 targetItem 이 같은 경우 추가하지 않는다.
     if (this.targetItem && this.targetItem.id === current?.id) {
@@ -568,7 +566,6 @@ export default class GhostToolView extends EditorElement {
       } else {
         // 내부에 자식이 있을 때는 , 마지막 드래그 위치에 따라 달라짐
       }
-
     }
 
     // target parent 가 존재하고
@@ -591,12 +588,14 @@ export default class GhostToolView extends EditorElement {
     }
   }
 
-  [SUBSCRIBE("endGhostToolView")]() {
-    this.updateLayer();
+  [SUBSCRIBE("endGhostToolView")](hasMoved = false) {
+
+    // 움직임이 있을 때만 layer 를 움직인다. 그렇지 않으면 레이어를 움직이지 않는다.
+    if (hasMoved) {
+      this.updateLayer();
+    }
 
     this.initializeGhostView();
     this.load();
-
-    this.$config.set("set.move.control.point", false);
   }
 }

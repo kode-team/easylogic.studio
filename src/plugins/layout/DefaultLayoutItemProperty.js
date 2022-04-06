@@ -108,7 +108,7 @@ export default class DefaultLayoutItemProperty extends BaseProperty {
 
     if (!current) return;
 
-    current.changeConstraints(key, value);
+    current.changeConstraints(key, value, e.shiftKey);
     this.trigger('changeConstraints', key, current[key]);
   }
 
