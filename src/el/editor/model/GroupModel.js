@@ -1,10 +1,12 @@
 import { MovableModel } from "./MovableModel";
 import { AlignContent, AlignItems, Constraints, ConstraintsDirection, FlexDirection, FlexWrap, JustifyContent, Layout, ResizingMode } from 'el/editor/types/model';
 import DefaultLayoutEngine from "../layout-engine/DefaultLayoutEngine";
+import GridLayoutEngine from "../layout-engine/GridLayoutEngine";
 
 
 const LayoutEngine = {
-    [Layout.DEFAULT]: DefaultLayoutEngine
+    [Layout.DEFAULT]: DefaultLayoutEngine,
+    [Layout.GRID]: GridLayoutEngine,
 }
 
 export class GroupModel extends MovableModel {

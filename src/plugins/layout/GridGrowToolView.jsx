@@ -25,7 +25,6 @@ import { vec3 } from "gl-matrix";
 import "./GridGrowToolView.scss";
 
 class GridGrowBaseView extends EditorElement {
-
   updateRows(current, newRows) {
     this.command("setAttributeForMulti", "change grid rows", {
       [current.id]: {
@@ -48,7 +47,7 @@ class GridGrowBaseView extends EditorElement {
         "grid-column-gap": `${columnGap}`,
       },
     });
-  }  
+  }
 
   updateRowGap(current, rowGap) {
     this.command("setAttributeForMulti", "change grid row gap", {
@@ -56,7 +55,7 @@ class GridGrowBaseView extends EditorElement {
         "grid-row-gap": `${rowGap}`,
       },
     });
-  }    
+  }
 
   createNewGridItems(arr) {
     let newArr = [];
@@ -136,8 +135,11 @@ class GridGrowClickEventView extends GridGrowBaseView {
     const info = this.getGridLayoutInformation();
     const index = +e.$dt.data("index");
 
-    this.updateColumns(info.current, this.copyNewGridItems(info.rows, index));
-  }
+    this.updateRows(
+      info.current,
+      this.copyNewGridItems(info.rows, index)
+    );
+  }  
 
   [CLICK("$grid .row-delete") + IF("checkTargetLayer")](e) {
     const info = this.getGridLayoutInformation();
@@ -167,27 +169,28 @@ class GridGrowClickEventView extends GridGrowBaseView {
 class GridGrowDragEventView extends GridGrowClickEventView {
   [POINTERSTART("$gridGap .gap-tool.column-gap") +
     IF("checkTargetLayer") +
-    FIRSTMOVE('moveFirstColumnGap') +
+    FIRSTMOVE("moveFirstColumnGap") +
     MOVE("moveColumnGap") +
     END("moveEndColumnGap")](e) {
-      const info = this.getGridLayoutInformation();
+    const info = this.getGridLayoutInformation();
 
-      this.current = info.current;
-      this.columnGap = info.columnGap
-      this.lastColumnGap = info.columnGap;
-      this.initMousePosition = this.$viewport.getWorldPosition(e);
+    this.current = info.current;
+    this.columnGap = info.columnGap;
+    this.lastColumnGap = info.columnGap;
+    this.initMousePosition = this.$viewport.getWorldPosition(e);
   }
 
-  updateGapPointer (gap) {
-
-    const screenPosition = this.$viewport.applyVertex(this.$viewport.getWorldPosition());
+  updateGapPointer(gap) {
+    const screenPosition = this.$viewport.applyVertex(
+      this.$viewport.getWorldPosition()
+    );
 
     this.refs.$pointer.text(`${gap}`);
     this.refs.$pointer.css({
       left: Length.px(screenPosition[0]),
-      top: Length.px(screenPosition[1] + 20)
-    })    
-  } 
+      top: Length.px(screenPosition[1] + 20),
+    });
+  }
 
   moveFirstColumnGap() {
     this.refs.$pointer.show();
@@ -205,9 +208,13 @@ class GridGrowDragEventView extends GridGrowClickEventView {
     let newColumnGap = columnGap;
     if (columnGap instanceof Length) {
       if (columnGap.isPercent()) {
-        newColumnGap = Length.percent(Math.max(columnGap.value + stepRate * 5, 0)).round(1000);
+        newColumnGap = Length.percent(
+          Math.max(columnGap.value + stepRate * 5, 0)
+        ).round(1000);
       } else if (columnGap.isPx()) {
-        newColumnGap = Length.px(Math.max(columnGap.value + stepRate * 100, 0)).floor();
+        newColumnGap = Length.px(
+          Math.max(columnGap.value + stepRate * 100, 0)
+        ).floor();
       }
     }
 
@@ -218,18 +225,19 @@ class GridGrowDragEventView extends GridGrowClickEventView {
   }
 
   moveEndColumnGap() {
-
     const targetPosition = this.$viewport.getWorldPosition();
     const realDistance = vec3.dist(targetPosition, this.initMousePosition);
 
-    // gap 단위 변경 
+    // gap 단위 변경
     if (realDistance < 1) {
       if (this.lastColumnGap.isPx()) {
-        this.lastColumnGap = Length.makePercent(this.lastColumnGap.value, this.current.screenWidth);
+        this.lastColumnGap = Length.makePercent(
+          this.lastColumnGap.value,
+          this.current.screenWidth
+        );
       } else {
         this.lastColumnGap = this.lastColumnGap.toPx(this.current.screenWidth);
       }
-
     }
 
     this.updateColumnGap(this.current, this.lastColumnGap);
@@ -237,63 +245,71 @@ class GridGrowDragEventView extends GridGrowClickEventView {
     this.refs.$pointer.hide();
   }
 
-
   [POINTERSTART("$gridGap .gap-tool.row-gap") +
-  IF("checkTargetLayer") +
-  FIRSTMOVE('moveFirstColumnGap') +
-  MOVE("moveRowGap") +
-  END("moveEndRowGap")](e) {
+    IF("checkTargetLayer") +
+    FIRSTMOVE("moveFirstColumnGap") +
+    MOVE("moveRowGap") +
+    END("moveEndRowGap")](e) {
     const info = this.getGridLayoutInformation();
 
     this.current = info.current;
-    this.rowGap = info.rowGap
+    this.rowGap = info.rowGap;
     this.lastColumnGap = info.rowGap;
     this.initMousePosition = this.$viewport.getWorldPosition(e);
-}
-
-
-moveRowGap() {
-  const targetPosition = this.$viewport.getWorldPosition();
-  const newDist = vec3.subtract([], targetPosition, this.initMousePosition);
-
-  // column 은 world 좌표 기준으로 100 이면 step: 1의 비율로 치자.
-  // step 에 따라 달라진다.
-  const stepRate = newDist[1] / 100;
-  const rowGap = this.rowGap;
-  let newRowGap = rowGap;
-  if (rowGap instanceof Length) {
-    if (rowGap.isPercent()) {
-      newRowGap = Length.percent(Math.max(rowGap.value + stepRate * 5, 0)).round(1000);
-    } else if (rowGap.isPx()) {
-      newRowGap = Length.px(Math.max(rowGap.value + stepRate * 100, 0)).floor();
-    }
   }
 
-  this.lastRowGap = newRowGap;
-  this.updateRowGap(this.current, newRowGap);
+  moveRowGap() {
+    const targetPosition = this.$viewport.getWorldPosition();
+    const newDist = vec3.subtract([], targetPosition, this.initMousePosition);
 
-  this.updateGapPointer(this.lastRowGap);
-}
-
-moveEndRowGap() {
-
-  const targetPosition = this.$viewport.getWorldPosition();
-  const realDistance = vec3.dist(targetPosition, this.initMousePosition);
-
-  // gap 단위 변경 
-  if (realDistance < 1) {
-    if (this.lastRowGap.isPx()) {
-      this.lastRowGap = Length.makePercent(this.lastRowGap.value, this.current.screenHeight);
-    } else {
-      this.lastRowGap = this.lastRowGap.toPx(this.current.screenHeight);
+    // column 은 world 좌표 기준으로 100 이면 step: 1의 비율로 치자.
+    // step 에 따라 달라진다.
+    const stepRate = newDist[1] / 100;
+    const rowGap = this.rowGap;
+    let newRowGap = rowGap;
+    if (rowGap instanceof Length) {
+      if (rowGap.isPercent()) {
+        newRowGap = Length.percent(
+          Math.max(rowGap.value + stepRate * 5, 0)
+        ).round(1000);
+      } else if (rowGap.isPx()) {
+        newRowGap = Length.px(
+          Math.max(rowGap.value + stepRate * 100, 0)
+        ).floor();
+      }
     }
 
+    this.lastRowGap = newRowGap;
+    this.updateRowGap(this.current, newRowGap);
+
+    this.updateGapPointer(this.lastRowGap);
   }
 
-  this.updateRowGap(this.current, this.lastRowGap);
+  moveEndRowGap() {
+    const targetPosition = this.$viewport.getWorldPosition();
+    const realDistance = vec3.dist(targetPosition, this.initMousePosition);
 
-  this.refs.$pointer.hide();
-}
+    // gap 단위 변경
+    if (realDistance < 1) {
+
+      if (!this.lastRowGap) {
+        this.lastRowGap = Length.px(0);
+      }
+
+      if (this.lastRowGap.isPx()) {
+        this.lastRowGap = Length.makePercent(
+          this.lastRowGap.value,
+          this.current.screenHeight
+        );
+      } else {
+        this.lastRowGap = this.lastRowGap.toPx(this.current.screenHeight);
+      }
+    }
+
+    this.updateRowGap(this.current, this.lastRowGap);
+
+    this.refs.$pointer.hide();
+  }
 
   [POINTERSTART("$grid .grid-item-tool.column .item") +
     MOVE("moveColumn") +
@@ -566,16 +582,19 @@ export default class GridGrowToolView extends GridGrowDragEventView {
         height: height / scale,
       };
 
+      const verties = vertiesMap(
+        rectToVerties(rect.x, rect.y, rect.width, rect.height),
+        info.current.absoluteMatrix
+      );
+
       return {
         row,
         column,
         rect,
 
         // world position
-        verties: vertiesMap(
-          rectToVerties(rect.x, rect.y, rect.width, rect.height),
-          info.current.absoluteMatrix
-        ),
+        verties,
+        originVerties : verties.filter((_, index) => index < 4)
       };
     });
 
@@ -592,11 +611,10 @@ export default class GridGrowToolView extends GridGrowDragEventView {
   }
 
   [LOAD("$gridGap") + DOMDIFF]() {
-
     const current = this.getGridTargetLayer();
 
     if (!current) return "";
-    
+
     if (!this.$selection.current) return "";
 
     const last = this.state.lastGridInfo;
@@ -608,7 +626,7 @@ export default class GridGrowToolView extends GridGrowDragEventView {
 
     const result = [];
 
-    // collect column gap box area 
+    // collect column gap box area
     const rowItems = items.filter((it) => it.column === 1);
     const columnItems = items.filter((it) => it.row === 1);
 
@@ -636,15 +654,11 @@ export default class GridGrowToolView extends GridGrowDragEventView {
       });
     }
 
-    // collect row gap box area 
+    // collect row gap box area
 
     const w = info.current.screenWidth;
 
-    for (
-      var rowIndex = 1, len = rows.length;
-      rowIndex < len;
-      rowIndex++
-    ) {
+    for (var rowIndex = 1, len = rows.length; rowIndex < len; rowIndex++) {
       const prevCell = rowItems[rowIndex - 1];
       const cell = rowItems[rowIndex];
 
@@ -660,7 +674,7 @@ export default class GridGrowToolView extends GridGrowDragEventView {
         width: w,
         height: h,
       });
-    }    
+    }
 
     return result.map((it) => {
       if (it.type === "column-gap") {
@@ -764,8 +778,21 @@ export default class GridGrowToolView extends GridGrowDragEventView {
               >
                 <div class="grid-item-tool-inner">
                   <div class="item">{info.rows[index]}</div>
-                  <div class="drag-handle bottom row-delete" data-index={index}>
-                    {iconUse("close")}
+                  <div class="drag-handle bottom">
+                    <div
+                      class="row-delete"
+                      data-index={index}
+                      title={`Delete ${info.rows[index]}`}
+                    >
+                      {iconUse("close")}
+                    </div>
+                    <div
+                      class="row-add"
+                      data-index={index}
+                      title={`Add ${info.rows[index]}`}
+                    >
+                      {iconUse("add")}
+                    </div>
                   </div>
                 </div>
               </div>

@@ -6,13 +6,14 @@ import { mat4, vec3 } from "gl-matrix";
 import { Transform } from "el/editor/property-parser/Transform";
 import { TransformOrigin } from "el/editor/property-parser/TransformOrigin";
 import { calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, round, vertiesMap } from "el/utils/math";
-import { getRotatePointer } from "el/utils/collision";
+import { getRotatePointer, polyPoint, polyPoly } from "el/utils/collision";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
 
 import './SelectionView.scss';
 import { objectFloor } from "el/utils/func";
-import { ResizingMode } from "el/editor/types/model";
+import { Layout, ResizingMode } from "el/editor/types/model";
+import GridLayoutEngine from "el/editor/layout-engine/GridLayoutEngine";
 
 var directionType = {
     1: 'to top left',
@@ -234,10 +235,12 @@ export default class SelectionToolView extends SelectionToolEvent {
                 height: Math.abs(newHeight),
             }
 
-            // layout item 인 경우 x, y 는 layout 이 정하기 때문에 width, height 만 바꾸는걸로 하자. 
-            if (instance.isLayoutItem()) {
+
+            if (instance.isInFlex()) {
                 delete data.x;
                 delete data.y;
+            } else if (instance.isInGrid()) {
+                // NOOP
             }
 
             if (this.hasRotate) {
@@ -322,11 +325,13 @@ export default class SelectionToolView extends SelectionToolEvent {
                 directionNewVector = vec3.fromValues(realDx / 2, realDy / 2, 0);
             }
 
+            // item 의 크기를 업데이트 했으니 그때마다 갱신한다.
             this.moveDirectionVertex(item, newWidth, newHeight, 'to top left', directionNewVector, {
                 resizingVertical: ResizingMode.FIXED,
                 resizingHorizontal: ResizingMode.FIXED,
             })
 
+            this.updateGridArea(item);
         }
     }
 
@@ -361,6 +366,8 @@ export default class SelectionToolView extends SelectionToolEvent {
                 resizingVertical: ResizingMode.FIXED,
                 resizingHorizontal: ResizingMode.FIXED,
             })
+
+            this.updateGridArea(item);            
         }
     }
 
@@ -394,6 +401,8 @@ export default class SelectionToolView extends SelectionToolEvent {
                 resizingHorizontal: ResizingMode.FIXED,
                 resizingVertical: ResizingMode.FIXED,
             })
+
+            this.updateGridArea(item);            
         }
     }
 
@@ -422,6 +431,8 @@ export default class SelectionToolView extends SelectionToolEvent {
             this.moveDirectionVertex(item, newWidth, newHeight, 'to bottom', directionNewVector, {
                 resizingVertical: ResizingMode.FIXED,
             })
+
+            this.updateGridArea(item);            
         }
     }
 
@@ -452,6 +463,8 @@ export default class SelectionToolView extends SelectionToolEvent {
             this.moveDirectionVertex(item, newWidth, newHeight, 'to top', directionNewVector, {
                 resizingVertical: ResizingMode.FIXED,
             })
+
+            this.updateGridArea(item);            
         }
     }
 
@@ -480,6 +493,8 @@ export default class SelectionToolView extends SelectionToolEvent {
             this.moveDirectionVertex(item, newWidth, newHeight, 'to left', directionNewVector, {
                 resizingHorizontal: ResizingMode.FIXED,
             })
+
+            this.updateGridArea(item);            
         }
     }
 
@@ -510,6 +525,8 @@ export default class SelectionToolView extends SelectionToolEvent {
             this.moveDirectionVertex(item, newWidth, newHeight, 'to right', directionNewVector, {
                 resizingHorizontal: ResizingMode.FIXED,
             })
+
+            this.updateGridArea(item);            
         }
     }
 
@@ -543,6 +560,8 @@ export default class SelectionToolView extends SelectionToolEvent {
                 resizingVertical: ResizingMode.FIXED,
                 resizingHorizontal: ResizingMode.FIXED,
             })
+
+            this.updateGridArea(item);            
         }
     }
 
@@ -572,10 +591,35 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.$selection.recoverChildren();         
         // this.$selection.reselect();     
         
-        this.emit('setAttributeForMulti', this.$selection.pack('x', 'y', 'angle', 'width', 'height', 'resizingHorizontal', 'resizingVertical'));
+        const current = this.$selection.current;
+        if (current.isInGrid()) {
+            this.emit('setAttributeForMulti', this.$selection.pack(
+                'x', 'y', 
+                'angle', 'width', 'height', 
+                'resizingHorizontal', 'resizingVertical',
+                'grid-column-start',
+                'grid-column-end',
+                'grid-row-start',
+                'grid-row-end',
+            ));
+        } else {
+            this.emit('setAttributeForMulti', this.$selection.pack('x', 'y', 'angle', 'width', 'height', 'resizingHorizontal', 'resizingVertical'));
+        }
+
 
         this.state.dragging = true;
     }
+
+
+    /**
+     * px 로 된 위치를 기반으로 Grid Area 영역의 위치로 다시 맞춘다. 
+     * 
+     * @param {*} item 
+     */
+     updateGridArea () {
+        return GridLayoutEngine.updateGridArea(this.$selection.current, this.$selection.gridInformation)
+    }
+
 
     moveEndVertex() {
         this.state.dragging = false;
@@ -588,11 +632,31 @@ export default class SelectionToolView extends SelectionToolEvent {
             // recoverChildren 을 통해서 부모에서 변경된 크기에 따라 자식을 다시 재배치 한다. 
             this.$selection.recoverChildren();
 
-            this.command(
-                'setAttributeForMulti',
-                'move selection pointer',
-                this.$selection.pack('x', 'y', 'width', 'height')
-            );
+            if (this.$selection.current.isInGrid()) {
+                this.command(
+                    'setAttributeForMulti',
+                    'move selection pointer',
+                    this.$selection.pack(
+                        'x', 'y', 'angle', 'width', 'height', 
+                        'resizingHorizontal', 'resizingVertical',
+                        'grid-column-start',
+                        'grid-column-end',
+                        'grid-row-start',
+                        'grid-row-end'
+                    )
+                );
+    
+            } else {
+                this.command(
+                    'setAttributeForMulti',
+                    'move selection pointer',
+                    this.$selection.pack(
+                        'x', 'y', 'angle', 'width', 'height', 
+                        'resizingHorizontal', 'resizingVertical',
+                    )
+                );
+    
+            }
 
             this.emit('recoverBooleanPath');
         })

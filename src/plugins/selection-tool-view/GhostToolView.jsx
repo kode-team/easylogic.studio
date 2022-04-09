@@ -9,6 +9,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { DOMDIFF, LOAD, SUBSCRIBE } from "el/sapa/Event";
 import { clone } from "el/sapa/functions/func";
 import {
+  polyPoint,
   toRectVerties,
   vertiesToPath,
   vertiesToRectangle,
@@ -80,7 +81,14 @@ export default class GhostToolView extends EditorElement {
     if (this.targetItem) {
       // 현재 targetItem 이 layout 을 가지고 있다면 , container 로 인지하고 마지막 자식을 targetItem 으로 지정한다.
       if (this.targetItem.hasLayout() && this.targetItem?.hasChildren()) {
-        this.targetItem = this.targetItem.layers.pop();
+
+        // flex 레이아웃 일 때는 마지막 item 을 targetItem 으로 인식한다. 
+        if (this.targetItem.isLayout(Layout.FLEX)) {
+          this.targetItem = this.targetItem.layers[this.targetItem.layers.length - 1];
+        } else if (this.targetItem.isLayout(Layout.GRID)) {
+          // grid layout 의 경우 ? 
+        }
+
       }
 
       // target 전체 영역 위치
@@ -505,6 +513,50 @@ export default class GhostToolView extends EditorElement {
     }
   }
 
+  insertToGridItem() {
+    const current = this.$selection.current;
+    const targetMousePoint = this.$viewport.getWorldPosition();
+
+    const {info, items} = this.$selection.gridInformation
+
+    const checkedItem = items.find(it => {
+      return polyPoint(it.verties.filter((_, index) => index < 4), targetMousePoint[0], targetMousePoint[1]);
+    })
+
+
+    if (checkedItem) {
+      const MAX_COLUMN = info.columns.length + 1;
+      const MAX_ROW = info.rows.length + 1;
+
+      const grid = current.attrs('grid-column-start', 'grid-column-end', 'grid-row-start', 'grid-row-end');
+
+
+      const gridColumnDist = grid['grid-column-end'] - grid['grid-column-start'];
+
+      const columnStart = checkedItem.column;
+
+      // 마지막 열을 넘어가지 않도록 해준다. 
+      const columnEnd = Math.min(columnStart + gridColumnDist, MAX_COLUMN);
+
+      const gridRowDist = grid['grid-row-end'] - grid['grid-row-start'];
+
+      const rowStart = checkedItem.row;
+
+      // 마지막 행을 넘어가지 않도록 해준다.       
+      const rowEnd = Math.min(rowStart + gridRowDist, MAX_ROW);
+
+      this.command('setAttributeForMulti', 'change grid item', this.$selection.packByValue({
+        'grid-column-start': columnStart,
+        'grid-column-end': columnEnd,
+        'grid-row-start': rowStart,
+        'grid-row-end': rowEnd
+      }))
+
+      return;
+    }
+
+  }
+
   /**
    * Ghost 상태에서 움직인 이후에 객체를 이동하는 것을 정의한다.
    *
@@ -565,6 +617,11 @@ export default class GhostToolView extends EditorElement {
         return;
       } else {
         // 내부에 자식이 있을 때는 , 마지막 드래그 위치에 따라 달라짐
+
+        if (this.targetItem.isLayout(Layout.GRID)) {
+          this.insertToGridItem();
+          return;
+        }
       }
     }
 

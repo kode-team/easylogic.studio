@@ -92,9 +92,8 @@
         }
 
         .drag-handle {
-          height: 14px;
+          height: 40px;
           width: 100%;
-          position: absolute;
 
           &.top {
             top: 0px;
@@ -103,6 +102,11 @@
           &.bottom {
             bottom: 2px;
             cursor: pointer;
+
+            > * {
+              height: 20px;
+              position: relative;
+            }
 
             &:hover {
               filter: drop-shadow(0px 0px 1px black);
@@ -146,6 +150,19 @@
         &.row-plus {
           left: calc(-1 * var(--cell-size) - 4px);
           bottom: calc(-1 * var(--cell-size) - 4px);
+        }
+      }
+
+      &.row {
+        .grid-item-tool-inner {
+          flex-direction: column; 
+
+          .drag-handle.bottom {
+            display: inline-block;
+            > * {
+              display: block;
+            }
+          }
         }
       }
 

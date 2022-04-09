@@ -32301,8 +32301,42 @@ var DefaultLayoutEngine = {
     });
   }
 };
+var GridLayoutEngine = {
+  startCache() {
+  },
+  recover() {
+  },
+  updateGridArea(currentItem, gridInformation) {
+    if (currentItem.isInGrid() === false)
+      return;
+    const lastVerties = currentItem.originVerties;
+    const { info, items } = gridInformation;
+    const checkedGridRowColumnList = items.filter((it) => {
+      return polyPoly(lastVerties, it.originVerties);
+    });
+    if (checkedGridRowColumnList.length === 0)
+      return;
+    const rows = checkedGridRowColumnList.map((it) => it.row);
+    rows.sort((a, b) => a - b);
+    const columns = checkedGridRowColumnList.map((it) => it.column);
+    columns.sort((a, b) => a - b);
+    const gridColumnStart = columns[0];
+    const gridColumnEnd = columns[columns.length - 1];
+    const gridRowStart = rows[0];
+    const gridRowEnd = rows[rows.length - 1];
+    const gridArea = {
+      "grid-column-start": gridColumnStart,
+      "grid-column-end": gridColumnEnd + 1,
+      "grid-row-start": gridRowStart,
+      "grid-row-end": gridRowEnd + 1
+    };
+    currentItem.reset(gridArea);
+    return gridArea;
+  }
+};
 const LayoutEngine = {
-  [Layout.DEFAULT]: DefaultLayoutEngine
+  [Layout.DEFAULT]: DefaultLayoutEngine,
+  [Layout.GRID]: GridLayoutEngine
 };
 class GroupModel extends MovableModel {
   getDefaultObject(obj2 = {}) {
@@ -40507,7 +40541,7 @@ class GridGrowClickEventView extends GridGrowBaseView {
   [CLICK("$grid .row-add") + IF("checkTargetLayer")](e) {
     const info = this.getGridLayoutInformation();
     const index2 = +e.$dt.data("index");
-    this.updateColumns(info.current, this.copyNewGridItems(info.rows, index2));
+    this.updateRows(info.current, this.copyNewGridItems(info.rows, index2));
   }
   [CLICK("$grid .row-delete") + IF("checkTargetLayer")](e) {
     const info = this.getGridLayoutInformation();
@@ -40601,6 +40635,9 @@ class GridGrowDragEventView extends GridGrowClickEventView {
     const targetPosition = this.$viewport.getWorldPosition();
     const realDistance = dist(targetPosition, this.initMousePosition);
     if (realDistance < 1) {
+      if (!this.lastRowGap) {
+        this.lastRowGap = Length.px(0);
+      }
       if (this.lastRowGap.isPx()) {
         this.lastRowGap = Length.makePercent(this.lastRowGap.value, this.current.screenHeight);
       } else {
@@ -40808,11 +40845,13 @@ class GridGrowToolView extends GridGrowDragEventView {
         width: width2 / scale2,
         height: height2 / scale2
       };
+      const verties = vertiesMap(rectToVerties(rect2.x, rect2.y, rect2.width, rect2.height), info.current.absoluteMatrix);
       return {
         row,
         column,
         rect: rect2,
-        verties: vertiesMap(rectToVerties(rect2.x, rect2.y, rect2.width, rect2.height), info.current.absoluteMatrix)
+        verties,
+        originVerties: verties.filter((_, index2) => index2 < 4)
       };
     });
     this.state.lastGridInfo = { info, items };
@@ -40944,9 +40983,16 @@ class GridGrowToolView extends GridGrowDragEventView {
       }, /* @__PURE__ */ createElementJsx("div", {
         class: "item"
       }, info.rows[index2]), /* @__PURE__ */ createElementJsx("div", {
-        class: "drag-handle bottom row-delete",
-        "data-index": index2
-      }, iconUse$1("close")))));
+        class: "drag-handle bottom"
+      }, /* @__PURE__ */ createElementJsx("div", {
+        class: "row-delete",
+        "data-index": index2,
+        title: `Delete ${info.rows[index2]}`
+      }, iconUse$1("close")), /* @__PURE__ */ createElementJsx("div", {
+        class: "row-add",
+        "data-index": index2,
+        title: `Add ${info.rows[index2]}`
+      }, iconUse$1("add"))))));
     }), /* @__PURE__ */ createElementJsx("div", {
       class: "grid-item-tool append row-plus",
       style: {
@@ -58119,10 +58165,11 @@ class SelectionToolView extends SelectionToolEvent$1 {
         width: Math.abs(newWidth),
         height: Math.abs(newHeight)
       };
-      if (instance.isLayoutItem()) {
+      if (instance.isInFlex()) {
         delete data.x;
         delete data.y;
-      }
+      } else if (instance.isInGrid())
+        ;
       if (this.hasRotate)
         ;
       else {
@@ -58160,6 +58207,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
         resizingVertical: ResizingMode.FIXED,
         resizingHorizontal: ResizingMode.FIXED
       });
+      this.updateGridArea(item2);
     }
   }
   moveTopRightVertex(distVector) {
@@ -58184,6 +58232,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
         resizingVertical: ResizingMode.FIXED,
         resizingHorizontal: ResizingMode.FIXED
       });
+      this.updateGridArea(item2);
     }
   }
   moveTopLeftVertex(distVector) {
@@ -58208,6 +58257,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
         resizingHorizontal: ResizingMode.FIXED,
         resizingVertical: ResizingMode.FIXED
       });
+      this.updateGridArea(item2);
     }
   }
   moveTopVertex(distVector) {
@@ -58227,6 +58277,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
       this.moveDirectionVertex(item2, newWidth, newHeight, "to bottom", directionNewVector, {
         resizingVertical: ResizingMode.FIXED
       });
+      this.updateGridArea(item2);
     }
   }
   moveBottomVertex(distVector) {
@@ -58246,6 +58297,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
       this.moveDirectionVertex(item2, newWidth, newHeight, "to top", directionNewVector, {
         resizingVertical: ResizingMode.FIXED
       });
+      this.updateGridArea(item2);
     }
   }
   moveRightVertex(distVector) {
@@ -58265,6 +58317,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
       this.moveDirectionVertex(item2, newWidth, newHeight, "to left", directionNewVector, {
         resizingHorizontal: ResizingMode.FIXED
       });
+      this.updateGridArea(item2);
     }
   }
   moveLeftVertex(distVector) {
@@ -58284,6 +58337,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
       this.moveDirectionVertex(item2, newWidth, newHeight, "to right", directionNewVector, {
         resizingHorizontal: ResizingMode.FIXED
       });
+      this.updateGridArea(item2);
     }
   }
   moveBottomLeftVertex(distVector) {
@@ -58308,6 +58362,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
         resizingVertical: ResizingMode.FIXED,
         resizingHorizontal: ResizingMode.FIXED
       });
+      this.updateGridArea(item2);
     }
   }
   moveVertex() {
@@ -58331,8 +58386,16 @@ class SelectionToolView extends SelectionToolEvent$1 {
       this.moveBottomLeftVertex(distVector);
     }
     this.$selection.recoverChildren();
-    this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "angle", "width", "height", "resizingHorizontal", "resizingVertical"));
+    const current = this.$selection.current;
+    if (current.isInGrid()) {
+      this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "angle", "width", "height", "resizingHorizontal", "resizingVertical", "grid-column-start", "grid-column-end", "grid-row-start", "grid-row-end"));
+    } else {
+      this.emit("setAttributeForMulti", this.$selection.pack("x", "y", "angle", "width", "height", "resizingHorizontal", "resizingVertical"));
+    }
     this.state.dragging = true;
+  }
+  updateGridArea() {
+    return GridLayoutEngine.updateGridArea(this.$selection.current, this.$selection.gridInformation);
   }
   moveEndVertex() {
     this.state.dragging = false;
@@ -58341,7 +58404,11 @@ class SelectionToolView extends SelectionToolEvent$1 {
     this.$config.set("set.move.control.point", false);
     this.nextTick(() => {
       this.$selection.recoverChildren();
-      this.command("setAttributeForMulti", "move selection pointer", this.$selection.pack("x", "y", "width", "height"));
+      if (this.$selection.current.isInGrid()) {
+        this.command("setAttributeForMulti", "move selection pointer", this.$selection.pack("x", "y", "angle", "width", "height", "resizingHorizontal", "resizingVertical", "grid-column-start", "grid-column-end", "grid-row-start", "grid-row-end"));
+      } else {
+        this.command("setAttributeForMulti", "move selection pointer", this.$selection.pack("x", "y", "angle", "width", "height", "resizingHorizontal", "resizingVertical"));
+      }
       this.emit("recoverBooleanPath");
     });
   }
@@ -59093,7 +59160,10 @@ class GhostToolView extends EditorElement {
     this.targetItem = filteredLayers[0];
     if (this.targetItem) {
       if (this.targetItem.hasLayout() && ((_a = this.targetItem) == null ? void 0 : _a.hasChildren())) {
-        this.targetItem = this.targetItem.layers.pop();
+        if (this.targetItem.isLayout(Layout.FLEX)) {
+          this.targetItem = this.targetItem.layers[this.targetItem.layers.length - 1];
+        } else if (this.targetItem.isLayout(Layout.GRID))
+          ;
       }
       this.targetOriginPosition = this.$viewport.applyVerties(toRectVerties(this.targetItem.contentVerties));
       this.targetPoint = this.$viewport.applyVertex(targetMousePoint);
@@ -59332,6 +59402,32 @@ class GhostToolView extends EditorElement {
         ;
     }
   }
+  insertToGridItem() {
+    const current = this.$selection.current;
+    const targetMousePoint = this.$viewport.getWorldPosition();
+    const { info, items } = this.$selection.gridInformation;
+    const checkedItem = items.find((it) => {
+      return polyPoint(it.verties.filter((_, index2) => index2 < 4), targetMousePoint[0], targetMousePoint[1]);
+    });
+    if (checkedItem) {
+      const MAX_COLUMN = info.columns.length + 1;
+      const MAX_ROW = info.rows.length + 1;
+      const grid2 = current.attrs("grid-column-start", "grid-column-end", "grid-row-start", "grid-row-end");
+      const gridColumnDist = grid2["grid-column-end"] - grid2["grid-column-start"];
+      const columnStart = checkedItem.column;
+      const columnEnd = Math.min(columnStart + gridColumnDist, MAX_COLUMN);
+      const gridRowDist = grid2["grid-row-end"] - grid2["grid-row-start"];
+      const rowStart = checkedItem.row;
+      const rowEnd = Math.min(rowStart + gridRowDist, MAX_ROW);
+      this.command("setAttributeForMulti", "change grid item", this.$selection.packByValue({
+        "grid-column-start": columnStart,
+        "grid-column-end": columnEnd,
+        "grid-row-start": rowStart,
+        "grid-row-end": rowEnd
+      }));
+      return;
+    }
+  }
   updateLayer() {
     var _a;
     const current = this.$selection.current;
@@ -59352,6 +59448,11 @@ class GhostToolView extends EditorElement {
       if (((_a = this.targetItem) == null ? void 0 : _a.hasChildren()) === false) {
         this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, "appendChild");
         return;
+      } else {
+        if (this.targetItem.isLayout(Layout.GRID)) {
+          this.insertToGridItem();
+          return;
+        }
       }
     }
     if (this.targetParent) {
