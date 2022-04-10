@@ -104,7 +104,7 @@ export default class SelectionToolView extends SelectionToolEvent {
                 newAngle -= newAngle % this.$config.get('fixed.angle');
             }
 
-            instance.angle = newAngle % 360;
+            instance.angle = round(newAngle % 360, 100);
         }
 
         this.state.dragging = true;
@@ -120,13 +120,12 @@ export default class SelectionToolView extends SelectionToolEvent {
         // 마지막 변경 시점 업데이트 
         this.verties = null;
 
-        this.nextTick(() => {
-            this.command(
-                'setAttributeForMulti',
-                'change rotate',
-                this.$selection.pack('angle')
-            );
-        })
+
+        this.command(
+            'setAttributeForMulti',
+            'change rotate',
+            this.$selection.pack('angle')
+        );
     }
 
     refreshRotatePointerIcon(e) {
@@ -841,11 +840,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         let text = widthPx === heightPx ? `WH: ${widthPx}` : `${round(width, 100)} x ${round(height, 100)}`;
 
         if (this.state.isRotate) {
-            const rotateZ = Transform.get(this.$selection.current.transform, 'rotateZ')
-
-            if (rotateZ) {
-                text = `${round(rotateZ[0].value, 1000)}°`
-            }
+            text = `${round(this.$selection.current.angle, 100)}°`
         }
 
         return /*html*/`

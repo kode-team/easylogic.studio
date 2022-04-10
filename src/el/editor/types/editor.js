@@ -17,3 +17,10 @@ export const DesignMode = {
     DESIGN: 'design',
     ITEM: 'item',
 }
+
+export const CanvasViewToolLevel = {
+    DRAG_AREA: 0x000,
+    RENDERING_AREA: 0x100,
+    SELECTION_TOOL: 0x200,
+    LAYOUT_TOOL: 0x300,    
+}

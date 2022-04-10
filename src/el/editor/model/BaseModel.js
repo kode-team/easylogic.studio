@@ -490,6 +490,9 @@ export class BaseModel {
     return args.some(it => this.lastChangedField[it] !== undefined);
   }
 
+  /**
+   * 계층 구조가 변경이 되었는지 체크 한다. 
+   */
   get hasChangedHirachy() {
     return this.hasChangedField('children', 'parentId');
   }

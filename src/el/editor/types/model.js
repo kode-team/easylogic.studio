@@ -264,3 +264,26 @@ export const PathSegmentType = {
     CLOSEPATH: 'Z',
     UNKNOWN: 'unknown'
 }
+
+export const DirectionType = {
+    TO_TOP: "to top",
+    TO_RIGHT: "to right",
+    TO_BOTTOM: "to bottom",
+    TO_LEFT: "to left",
+    TO_TOP_LEFT: "to top left",
+    TO_TOP_RIGHT: "to top right",
+    TO_BOTTOM_LEFT: "to bottom left",
+    TO_BOTTOM_RIGHT: "to bottom right", 
+}
+
+export const DirectionNumberType = {
+    1: DirectionType.TO_TOP_LEFT,
+    2: DirectionType.TO_TOP_RIGHT,
+    3: DirectionType.TO_BOTTOM_LEFT,
+    4: DirectionType.TO_BOTTOM_RIGHT,    
+    11: DirectionType.TO_TOP,
+    12: DirectionType.TO_RIGHT,
+    13: DirectionType.TO_BOTTOM,
+    14: DirectionType.TO_LEFT,
+
+}

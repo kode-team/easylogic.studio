@@ -11622,6 +11622,12 @@ const DesignMode = {
   DESIGN: "design",
   ITEM: "item"
 };
+const CanvasViewToolLevel = {
+  DRAG_AREA: 0,
+  RENDERING_AREA: 256,
+  SELECTION_TOOL: 512,
+  LAYOUT_TOOL: 768
+};
 var addLayerView = {
   command: "addLayerView",
   execute: async function(editor, type, data = {}) {
@@ -15574,6 +15580,12 @@ var setAttributeForMulti = {
         item2.reset(message.attrs, context);
         if (item2.hasChangedField("layout")) {
           item2.layers.forEach((child) => {
+            if (child.isLayout(Layout.DEFAULT))
+              ;
+            else if (child.isLayout(Layout.FLEX))
+              ;
+            else if (child.isLayout(Layout.GRID))
+              ;
             commandMaker.emit("refreshElement", child);
           });
         }
@@ -25741,6 +25753,9 @@ class CanvasView extends EditorElement {
     this.state.cursor = cursor;
     this.state.cursorArgs = args2;
     this.bindData("$container");
+  }
+  [SUBSCRIBE("updateViewport")]() {
+    this.emit("refreshCursor", "auto");
   }
 }
 var BodyPanel$1 = "";
@@ -39738,140 +39753,6 @@ class GridLayoutEditor extends EditorElement {
     this.modifyData(key, value, params);
   }
 }
-var GridLayoutItemProperty$1 = "";
-class GridLayoutItemProperty extends BaseProperty {
-  getTitle() {
-    return this.$i18n("grid.layout.item.property.title");
-  }
-  getLayoutOptions() {
-    return ["none", "value"].map((it) => {
-      return { value: it, text: this.$i18n(`grid.layout.item.property.${it}`) };
-    });
-  }
-  getClassName() {
-    return "elf--grid-layout-item-property";
-  }
-  getBody() {
-    return `
-        <div class='property-item' ref='$body'></div>
-      `;
-  }
-  [LOAD("$body")]() {
-    var current = this.$selection.current || { "grid-layout-item": "none" };
-    var valueType = current["grid-layout-item"] || "none";
-    var obj2 = {};
-    if (["none"].includes(valueType) === false) {
-      obj2 = STRING_TO_CSS(current["grid-layout-item"]);
-    }
-    if (Object.keys(obj2).length > 0) {
-      valueType = "value";
-    }
-    return `
-      <div class='layout-select'>
-        ${createComponent("SelectIconEditor", {
-      ref: "$layout",
-      key: "layout",
-      icon: true,
-      value: valueType,
-      options: this.getLayoutOptions(),
-      onchange: "changeLayoutType"
-    })}
-      </div>
-      <div class='layout-list' ref='$layoutList' data-selected-value='${valueType}'>
-        <div data-value='none'></div>
-        <div data-value='value'>
-          <div class='value-item'>
-            <label></label>
-            <div>${this.$i18n("grid.layout.item.property.start")}</div>
-            <div>${this.$i18n("grid.layout.item.property.end")}</div>
-          </div>
-          <div class='value-item'>
-            <label>${this.$i18n("grid.layout.item.property.column")}</label>
-            <div>
-              ${createComponent("NumberInputEditor", {
-      ref: "$columnStart",
-      key: "grid-column-start",
-      value: obj2["grid-column-start"] || 0,
-      min: 0,
-      onchange: "changeGridItem"
-    })}
-            </div>
-            <div>
-              ${createComponent("NumberInputEditor", {
-      ref: "$columnEnd",
-      key: "grid-column-end",
-      value: obj2["grid-column-end"] || 0,
-      min: 0,
-      onchange: "changeGridItem"
-    })}
-              
-            </div>            
-          </div>
-          <div class='value-item'>
-            <label>${this.$i18n("grid.layout.item.property.row")}</label>
-            <div>
-              ${createComponent("NumberInputEditor", {
-      ref: "$rowStart",
-      key: "grid-row-start",
-      value: obj2["grid-row-start"] || 0,
-      min: 0,
-      onchange: "changeGridItem"
-    })}
-
-            </div>
-            <div>
-              ${createComponent("NumberInputEditor", {
-      ref: "$rowEnd",
-      key: "grid-row-end",
-      value: obj2["grid-row-end"] || 0,
-      min: 0,
-      onchange: "changeGridItem"
-    })}
-
-            </div>            
-          </div>          
-        </div>
-      </div>
-    `;
-  }
-  getGridValue() {
-    var obj2 = {
-      "grid-column-start": this.children.$columnStart.getValue(),
-      "grid-column-end": this.children.$columnEnd.getValue(),
-      "grid-row-start": this.children.$rowStart.getValue(),
-      "grid-row-end": this.children.$rowEnd.getValue()
-    };
-    return CSS_TO_STRING$1(obj2);
-  }
-  [SUBSCRIBE_SELF("changeGridItem")](key, value) {
-    this.command("setAttributeForMulti", "change grid layout item", this.$selection.packByValue({
-      "grid-layout-item": this.getGridValue()
-    }));
-    this.nextTick(() => {
-      this.emit("refreshAllElementBoundSize");
-    });
-  }
-  [SUBSCRIBE_SELF("changeLayoutType")](key, value) {
-    var valueType = this.children.$layout.getValue();
-    var value = valueType;
-    if (valueType === "value") {
-      value = this.getGridValue();
-    }
-    this.command("setAttributeForMulti", "change grid layout item", this.$selection.packByValue({
-      "grid-layout-item": value
-    }));
-    this.refs.$layoutList.attr("data-selected-value", valueType);
-    this.nextTick(() => {
-      this.emit("refreshAllElementBoundSize");
-    });
-  }
-  [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
-    this.refreshShow(() => {
-      var current = this.$selection.current;
-      return current && current.isInGrid();
-    });
-  }
-}
 var LayoutProperty$1 = "";
 class LayoutProperty extends BaseProperty {
   getTitle() {
@@ -41034,13 +40915,12 @@ function layout$3(editor) {
     LayoutProperty,
     ResizingProperty,
     ResizingItemProperty,
-    DefaultLayoutItemProperty,
-    GridLayoutItemProperty
+    DefaultLayoutItemProperty
   });
   editor.registerUI("canvas.view", {
     FlexGrowToolView,
     GridGrowToolView
-  }, 1e3);
+  }, CanvasViewToolLevel.LAYOUT_TOOL);
 }
 var check = {
   key: "check",
@@ -41985,12 +41865,7 @@ class PositionProperty extends BaseProperty {
     this.children.$width.setValue(current.width || DEFAULT_SIZE);
     this.children.$height.setValue(current.height || DEFAULT_SIZE);
     this.children.$opacity.setValue(current["opacity"] || "1");
-    const rotateZ2 = Transform.get(current.transform, "rotateZ");
-    if (rotateZ2) {
-      this.children.$rotate.setValue(rotateZ2[0]);
-    } else {
-      this.children.$rotate.setValue(Length.deg(0));
-    }
+    this.children.$rotate.setValue(Length.deg(current.angle).round(100));
   }
   isHideHeader() {
     return true;
@@ -42079,10 +41954,7 @@ class PositionProperty extends BaseProperty {
       this.children.$width.setValue(current.width);
       this.children.$height.setValue(current.height);
       this.children.$opacity.setValue(current["opacity"] || "1");
-      const rotateZ2 = Transform.get(current.transform, "rotateZ");
-      if (rotateZ2) {
-        this.children.$rotate.setValue(rotateZ2[0]);
-      }
+      this.children.$rotate.setValue(Length.deg(current.angle));
     }
   }
   [CLICK("$positionItem button[data-command]")](e) {
@@ -58085,7 +57957,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
       if (this.$config.get("bodyEvent").shiftKey) {
         newAngle -= newAngle % this.$config.get("fixed.angle");
       }
-      instance.angle = newAngle % 360;
+      instance.angle = round$1(newAngle % 360, 100);
     }
     this.state.dragging = true;
     this.emit("setAttributeForMulti", this.$selection.pack("angle"));
@@ -58096,9 +57968,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
     this.emit("recoverCursor");
     this.$config.set("set.move.control.point", false);
     this.verties = null;
-    this.nextTick(() => {
-      this.command("setAttributeForMulti", "change rotate", this.$selection.pack("angle"));
-    });
+    this.command("setAttributeForMulti", "change rotate", this.$selection.pack("angle"));
   }
   refreshRotatePointerIcon(e) {
     this.emit("refreshCursor", "rotate");
@@ -58551,10 +58421,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
     const heightPx = round$1(height2, 100);
     let text2 = widthPx === heightPx ? `WH: ${widthPx}` : `${round$1(width2, 100)} x ${round$1(height2, 100)}`;
     if (this.state.isRotate) {
-      const rotateZ2 = Transform.get(this.$selection.current.transform, "rotateZ");
-      if (rotateZ2) {
-        text2 = `${round$1(rotateZ2[0].value, 1e3)}\xB0`;
-      }
+      text2 = `${round$1(this.$selection.current.angle, 100)}\xB0`;
     }
     return `
             <div 
@@ -59476,7 +59343,7 @@ function selectionToolView(editor) {
     GhostToolView,
     SelectionToolView,
     GroupSelectionToolView
-  });
+  }, CanvasViewToolLevel.SELECTION_TOOL);
 }
 function defaultIcons(editor) {
   editor.registerIcon("artboard", "artboard");

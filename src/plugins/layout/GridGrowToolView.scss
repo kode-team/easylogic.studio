@@ -7,7 +7,9 @@
   bottom: 0px;
 
   --cell-size: 20px;
+  --cell-padding-size: 6px;
   --cell-color: rgb(255, 66, 77);
+  --cell-grid-item-color: gray;
 
   .layout-pointer {
       position: absolute;
@@ -30,7 +32,7 @@
       justify-content: center;
       align-items: center;
       box-sizing: border-box;
-      border: 1px dashed var(--cell-color);
+      border: 1px dashed var(--cell-grid-item-color);
     }
 
     .grid-item-tool.column {
@@ -39,7 +41,7 @@
       align-items: center;
       box-sizing: border-box;
       position: relative;
-      top: calc(var(--cell-size) * -1 - 4px);
+      top: calc(var(--cell-size) * -1 - var(--cell-padding-size));
       left: 1px;
       height: var(--cell-size);
       overflow: hidden;
@@ -81,7 +83,7 @@
       align-items: center;
       box-sizing: border-box;
       position: relative;
-      left: calc(var(--cell-size) * -1 - 4px);
+      left: calc(var(--cell-size) * -1 - var(--cell-padding-size));
       width: var(--cell-size);
       overflow: hidden;
       cursor: ns-resize;
@@ -143,13 +145,13 @@
         cursor: pointer;
 
         &.column-plus {
-          right: calc(-1 * var(--cell-size) - 4px);
-          top: calc(-1 * var(--cell-size) - 4px);
+          right: calc(-1 * var(--cell-size) - var(--cell-padding-size));
+          top: calc(-1 * var(--cell-size) - var(--cell-padding-size));
         }
 
         &.row-plus {
-          left: calc(-1 * var(--cell-size) - 4px);
-          bottom: calc(-1 * var(--cell-size) - 4px);
+          left: calc(-1 * var(--cell-size) - var(--cell-padding-size));
+          bottom: calc(-1 * var(--cell-size) - var(--cell-padding-size));
         }
       }
 

@@ -54,13 +54,7 @@ export default class PositionProperty extends BaseProperty {
     this.children.$width.setValue(current.width || DEFAULT_SIZE);
     this.children.$height.setValue(current.height || DEFAULT_SIZE);
     this.children.$opacity.setValue(current['opacity'] || '1')
-    const rotateZ = Transform.get(current.transform, 'rotateZ')
-    if (rotateZ) {
-      this.children.$rotate.setValue(rotateZ[0]);
-    } else {
-      this.children.$rotate.setValue(Length.deg(0));
-    }
-
+    this.children.$rotate.setValue(Length.deg(current.angle).round(100));
   }
 
   isHideHeader() {
@@ -153,10 +147,7 @@ export default class PositionProperty extends BaseProperty {
       this.children.$width.setValue(current.width);
       this.children.$height.setValue(current.height);
       this.children.$opacity.setValue(current['opacity'] || '1')
-      const rotateZ = Transform.get(current.transform, 'rotateZ')
-      if (rotateZ) {
-        this.children.$rotate.setValue(rotateZ[0]);
-      }
+      this.children.$rotate.setValue(Length.deg(current.angle));
     }
 
   }

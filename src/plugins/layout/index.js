@@ -4,13 +4,14 @@ import FlexLayoutEditor from "./FlexLayoutEditor";
 import GridBoxEditor from "./GridBoxEditor";
 import GridGapEditor from "./GridGapEditor";
 import GridLayoutEditor from "./GridLayoutEditor";
-import GridLayoutItemProperty from "./GridLayoutItemProperty";
+// import GridLayoutItemProperty from "./GridLayoutItemProperty";
 import LayoutProperty from "./LayoutProperty";
 import DefaultLayoutItemProperty from './DefaultLayoutItemProperty';
 import ResizingProperty from './ResizingProperty';
 import ResizingItemProperty from './ResizingItemProperty';
 import FlexGrowToolView from './FlexGrowToolView';
 import GridGrowToolView from './GridGrowToolView';
+import { CanvasViewToolLevel } from "el/editor/types/editor";
 
 /**
  * 
@@ -29,12 +30,12 @@ export default function (editor) {
         ResizingProperty,
         ResizingItemProperty,
         DefaultLayoutItemProperty,
-        GridLayoutItemProperty,
+        // GridLayoutItemProperty,
         // FlexLayoutItemProperty,
     })
 
     editor.registerUI('canvas.view', {
         FlexGrowToolView,
         GridGrowToolView,
-    }, 1000)
+    }, CanvasViewToolLevel.LAYOUT_TOOL)
 }

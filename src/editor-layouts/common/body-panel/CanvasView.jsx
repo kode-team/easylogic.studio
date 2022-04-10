@@ -89,8 +89,6 @@ export default class CanvasView extends EditorElement {
       this.emit('recoverCursor', 'auto')
       // this.emit('addStatusBarMessage', '');
     }
-
-
   }
 
   startMovePan() {
@@ -223,6 +221,10 @@ export default class CanvasView extends EditorElement {
     this.state.cursor = cursor;
     this.state.cursorArgs = args;
     this.bindData('$container')
+  }
+
+  [SUBSCRIBE('updateViewport')]() {
+    this.emit('refreshCursor', 'auto');
   }
 
 }

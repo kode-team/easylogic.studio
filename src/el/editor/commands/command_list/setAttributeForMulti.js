@@ -1,5 +1,6 @@
 import { isFunction } from "el/sapa/functions/func";
 import { Editor } from "el/editor/manager/Editor";
+import { Layout } from "el/editor/types/model";
 
 export default {
     command: 'setAttributeForMulti',
@@ -40,13 +41,20 @@ export default {
 
 
                 // [TIP] 
-                // css 에 기존 layout 값이 고정되어 있는 상태로  
-                // 부모를 변경하면 자식이 제대로 된 값으로 렌더링 된것이 아니기 때문에 
-                // offsetRect 에서 오류가 발생한다. 
-                // 그렇기 때문에 변경된 값에 layout 이 있는 경우 
-                // 자식을 변경 변경하고 이후에 부모를 다시 렌더링 한다. 
+                // 부모의 레이아웃이 바뀌면  자식을 먼저 렌더링 하고 부모를 렌더링 한다. 
                 if (item.hasChangedField('layout')) {
                     item.layers.forEach(child => {
+
+                        // 어떤 속성을 바꿔야 하는지 고민을 좀 해봐야할 듯 
+                        // 지금은 따로 속성을바꾸지 않기 때문에 이전의 레이아웃 아이템 속성이 그대로 복원될거다. 
+                        if (child.isLayout(Layout.DEFAULT)) {
+                            // grid, flex 속성 삭제 
+                        } else if (child.isLayout(Layout.FLEX)) {
+                            // grid 속성 삭제 
+                        } else if (child.isLayout(Layout.GRID)) {
+                            // flex 속성 삭제 
+                        }
+
                         commandMaker.emit('refreshElement', child);
                     })
                 }
