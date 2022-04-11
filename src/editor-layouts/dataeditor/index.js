@@ -1,18 +1,15 @@
 import { BIND, CLICK, LOAD, SUBSCRIBE_SELF } from "el/sapa/Event";
 
 import BaseLayout from "../common/BaseLayout"; 
-import BodyPanel from "../common/BodyPanel";
 import PopupManager from "../common/PopupManager";
 import KeyboardManager from "../common/KeyboardManager";
 
 import dataEditorPlugins from "plugins/data-editor-plugins";
 import { isFunction } from 'el/sapa/functions/func';
 import IconManager from '../common/IconManager';
-import PathKitInit from "pathkit-wasm/bin/pathkit";
 import { createComponent } from "el/sapa/functions/jsx";
 
 import './layout.scss';
-import { variable } from 'el/sapa/functions/registElement';
 import { isBoolean } from 'el/sapa/functions/func';
 import { Editor } from "el/editor/manager/Editor";
 
@@ -25,15 +22,6 @@ import { Editor } from "el/editor/manager/Editor";
  */
 
 export default class DataEditor extends BaseLayout {
-
-  initialize() {
-    super.initialize();
-
-    (async () => {
-      this.$pathkit.registerPathKit(await PathKitInit());
-  
-    })()
-  }
 
   components() {
     return {

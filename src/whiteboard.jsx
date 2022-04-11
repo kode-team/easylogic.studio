@@ -1,4 +1,4 @@
-import EasyLogic from "./editor-layouts/index";
+import { createWhiteBoard } from "./editor-layouts/index";
 
 function startEditor() {
 
@@ -6,7 +6,7 @@ function startEditor() {
 
   return idList.map(id => {
 
-    return EasyLogic.createWhiteBoard({
+    return createWhiteBoard({
       container: document.getElementById(id),
       config: {
         'editor.theme': 'light',

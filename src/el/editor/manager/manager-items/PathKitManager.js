@@ -50,14 +50,18 @@ These are only needed for PathKit.FromCmds().
 
 */
 
-import { Length } from 'el/editor/unit/Length';
 import {PathParser} from 'el/editor/parser/PathParser';
+import PathKitInit from 'pathkit-wasm/bin/pathkit';
 import { isArray } from 'el/sapa/functions/func';
 
 export class PathKitManager {
   constructor(editor) {
     this.editor = editor;
-    this.pathkit = null; 
+    this.pathkit = null;  
+  }
+
+  async load () {
+    this.registerPathKit(await PathKitInit());
   }
 
   registerPathKit (pathkit) {

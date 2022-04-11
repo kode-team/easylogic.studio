@@ -1,4 +1,4 @@
-import EasyLogic from "./editor-layouts/index";
+import { createDataEditor } from "./editor-layouts/index";
 
 function startEditor() {
 
@@ -6,7 +6,7 @@ function startEditor() {
 
   return idList.map(id => {
 
-    return EasyLogic.createDataEditor({
+    return createDataEditor({
       container: document.getElementById(id),
       onChange: (editor, key, value) => {
         console.log(editor.getValue(), key, value);
