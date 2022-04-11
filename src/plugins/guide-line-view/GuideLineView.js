@@ -6,7 +6,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { vec3 } from "gl-matrix";
 
 import './GuideLineView.scss';
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 
 const ARROW_SIZE = 4; 
 

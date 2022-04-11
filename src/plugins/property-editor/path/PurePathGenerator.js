@@ -4,7 +4,7 @@ import Point from "el/editor/parser/Point";
 import PathStringManager from "el/editor/parser/PathStringManager";
 import { mat4, vec3 } from "gl-matrix";
 import { clone, isNotUndefined } from "el/sapa/functions/func";
-import PathParser from 'el/editor/parser/PathParser';
+import {PathParser} from 'el/editor/parser/PathParser';
 import { toRectVerties } from "el/utils/collision";
 import { isUndefined } from 'el/sapa/functions/func';
 

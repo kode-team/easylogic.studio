@@ -51,7 +51,7 @@ These are only needed for PathKit.FromCmds().
 */
 
 import { Length } from 'el/editor/unit/Length';
-import PathParser from 'el/editor/parser/PathParser';
+import {PathParser} from 'el/editor/parser/PathParser';
 import { isArray } from 'el/sapa/functions/func';
 
 export class PathKitManager {

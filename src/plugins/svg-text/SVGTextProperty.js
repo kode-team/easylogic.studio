@@ -1,5 +1,5 @@
 import { SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 import { variable } from 'el/sapa/functions/registElement';
 import { createComponent } from "el/sapa/functions/jsx";
 

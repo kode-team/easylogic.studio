@@ -4,7 +4,7 @@ import { TransformOrigin } from "el/editor/property-parser/TransformOrigin";
 import { mat4, quat, vec3 } from "gl-matrix";
 import { area, calculateMatrix, calculateMatrixInverse, radianToDegree, round, vertiesMap } from "el/utils/math";
 import { isFunction, isNotUndefined, isUndefined } from "el/sapa/functions/func";
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties, toRectVerties } from "el/utils/collision";
 import { BaseAssetModel } from './BaseAssetModel';
 

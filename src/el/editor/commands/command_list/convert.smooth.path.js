@@ -1,5 +1,5 @@
 
-import PathParser from 'el/editor/parser/PathParser';
+import {PathParser} from 'el/editor/parser/PathParser';
 export default {
     command: 'convert.smooth.path',
     description: 'convert path to smooth',

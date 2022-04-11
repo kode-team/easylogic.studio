@@ -1,4 +1,4 @@
-import BaseProperty from "./BaseProperty";
+import {BaseProperty} from "./BaseProperty";
 
 import { CHANGEINPUT, SUBSCRIBE } from "el/sapa/Event";
 import { registElement } from "el/sapa/functions/registElement";

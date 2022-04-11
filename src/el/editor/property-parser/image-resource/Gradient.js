@@ -8,7 +8,7 @@ import { parseOneValue } from "el/utils/css-function-parser";
 import { FuncType, TimingFunction } from "el/editor/types/model";
 import { createTimingFunction } from "el/editor/interpolate";
 import { step } from "el/editor/interpolate/timing-functions/steps";
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 
 const DEFINED_ANGLES = {
   "to top": 0,

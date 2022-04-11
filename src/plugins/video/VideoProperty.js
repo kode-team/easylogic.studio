@@ -2,7 +2,7 @@
 import { LOAD, CLICK, BIND, DEBOUNCE, CHANGEINPUT, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 
 import icon from "el/editor/icon/icon";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 
 import './VideoProperty.scss';
 import { variable } from "el/sapa/functions/registElement";

@@ -1,6 +1,6 @@
 
 import { LOAD, INPUT, DEBOUNCE, CLICK } from "el/sapa/Event";
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './PathDataEditor.scss';

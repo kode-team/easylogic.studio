@@ -1,5 +1,5 @@
 
-import PathParser from 'el/editor/parser/PathParser';
+import {PathParser} from 'el/editor/parser/PathParser';
 export default {
     command: 'convert.polygonal.path',
     description: 'convert path to polygonal path',

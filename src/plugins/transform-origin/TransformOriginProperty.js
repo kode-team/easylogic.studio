@@ -1,6 +1,6 @@
 
 import { LOAD, CLICK, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/sapa/Event";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 import { createComponent } from "el/sapa/functions/jsx";
 
 export default class TransformOriginProperty extends BaseProperty {

@@ -1,6 +1,6 @@
 import { Editor } from "el/editor/manager/Editor";
 import { TextClip, TextDecoration, TextTransform } from "el/editor/types/model";
-import ObjectProperty from "el/editor/ui/property/ObjectProperty";
+import {ObjectProperty} from "el/editor/ui/property/ObjectProperty";
 
 /**
  * 

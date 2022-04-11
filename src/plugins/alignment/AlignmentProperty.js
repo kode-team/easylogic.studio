@@ -6,7 +6,7 @@ import RightAlign from "el/editor/ui/menu-items/RightAlign";
 import SameHeight from "el/editor/ui/menu-items/SameHeight";
 import SameWidth from "el/editor/ui/menu-items/SameWidth";
 import TopAlign from "el/editor/ui/menu-items/TopAlign";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 import { createComponentList } from "el/sapa/functions/jsx";
 
 import './AlignmentProperty.scss';

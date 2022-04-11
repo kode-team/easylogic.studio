@@ -1,7 +1,7 @@
 import { CLICK, DEBOUNCE, DRAGSTART, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import gradients from "el/editor/preset/gradients";
 import { Gradient } from "el/editor/property-parser/image-resource/Gradient";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 
 import "./GradientAssetsProperty.scss";
 import { iconUse } from "el/editor/icon/icon";

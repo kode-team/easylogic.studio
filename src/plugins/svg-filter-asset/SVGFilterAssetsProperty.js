@@ -3,7 +3,7 @@ import { LOAD, CLICK, INPUT, DEBOUNCE, SUBSCRIBE } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 import { SVGFilter } from "el/editor/property-parser/SVGFilter";
 import { uuidShort } from "el/utils/math";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 
 import './SVGFilterAssetsProperty.scss';
 

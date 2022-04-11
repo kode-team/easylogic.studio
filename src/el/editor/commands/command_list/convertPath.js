@@ -1,4 +1,4 @@
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 
 export default function convertPath (editor, pathString, rect = null) {
     var current = editor.selection.current;

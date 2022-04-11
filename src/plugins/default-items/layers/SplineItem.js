@@ -1,4 +1,4 @@
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 import icon from "el/editor/icon/icon";
 import { SVGItem } from "./SVGItem";
 import { vec3 } from "gl-matrix";

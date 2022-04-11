@@ -1,6 +1,6 @@
 import { LOAD, DOMDIFF, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF } from "el/sapa/Event";
 
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 import artboardSize from "./preset/artboard.size";
 import './ArtBoardSizeProperty.scss';
 import { variable } from "el/sapa/functions/registElement";

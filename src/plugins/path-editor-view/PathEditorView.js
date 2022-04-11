@@ -2,7 +2,7 @@
 import { POINTERSTART, BIND, POINTERMOVE, PREVENT, KEYUP, IF, STOP, DOUBLECLICK, ENTER, ESCAPE, DOUBLETAB, DELAY, SUBSCRIBE, THROTTLE, DEBOUNCE } from "el/sapa/Event";
 import PathGenerator from "el/editor/parser/PathGenerator";
 import Dom from "el/sapa/functions/Dom";
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 import { Length } from "el/editor/unit/Length";
 import { getBezierPoints, recoverBezier, recoverBezierQuard, getBezierPointsQuard, recoverBezierLine, getBezierPointsLine } from "el/utils/bezier";
 import { isFunction } from "el/sapa/functions/func";

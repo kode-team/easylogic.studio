@@ -13,7 +13,7 @@ import { Length } from "el/editor/unit/Length";
 import { ClipPathType } from "el/editor/types/model";
 import { ClipPath } from "el/editor/property-parser/ClipPath";
 import { vec3 } from "gl-matrix";
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 import { toRectVerties, vertiesToRectangle } from "el/utils/collision";
 import { clone } from "el/sapa/functions/func";
 

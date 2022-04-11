@@ -5,7 +5,7 @@ import {
 
 
 import icon, { iconUse } from "el/editor/icon/icon";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 import { createComponent } from "el/sapa/functions/jsx";
 
 

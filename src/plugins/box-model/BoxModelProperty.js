@@ -1,5 +1,5 @@
 import { DEBOUNCE, DOMDIFF, IF, INPUT, LOAD, SUBSCRIBE } from "el/sapa/Event";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 import { Length } from "el/editor/unit/Length";
 
 import './BoxModelProperty.scss';

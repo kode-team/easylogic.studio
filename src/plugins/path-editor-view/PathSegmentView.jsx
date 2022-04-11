@@ -1,4 +1,4 @@
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 import { Segment } from "el/editor/parser/Segment";
 import { END, MOVE } from "el/editor/types/event";
 import { PathSegmentType } from "el/editor/types/model";

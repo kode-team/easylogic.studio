@@ -2,7 +2,7 @@
 import { LOAD, CLICK, DOMDIFF, DRAGSTART, CHANGE, SUBSCRIBE } from "el/sapa/Event";
 
 import icon from "el/editor/icon/icon";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 import revokeObjectUrl from "el/editor/util/revokeObjectUrl";
 
 import './ImageAssetsProperty.scss';

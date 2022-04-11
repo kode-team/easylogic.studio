@@ -1,6 +1,6 @@
 
 import { Length } from 'el/editor/unit/Length';
-import PathParser from 'el/editor/parser/PathParser';
+import {PathParser} from 'el/editor/parser/PathParser';
 export default {
     command: 'convert.stroke.to.path',
     execute: async (editor, text) => {

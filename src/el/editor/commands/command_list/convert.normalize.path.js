@@ -1,5 +1,5 @@
 
-import PathParser from 'el/editor/parser/PathParser';
+import {PathParser} from 'el/editor/parser/PathParser';
 export default {
     command: 'convert.normalize.path',
     description: 'convert segments to bezier curve',

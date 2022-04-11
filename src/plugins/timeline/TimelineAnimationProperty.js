@@ -1,6 +1,6 @@
 import { LOAD, CLICK, DOUBLECLICK, FOCUSOUT, KEY, PREVENT, STOP, DOMDIFF, KEYDOWN, DEBOUNCE, ENTER, SUBSCRIBE } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 
 import './TimelineAnimationProperty.scss';
 

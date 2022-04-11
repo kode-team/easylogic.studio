@@ -21,7 +21,7 @@ function xy (point) {
         y: point[1]
     }
 }
-export default class PathParser {
+export class PathParser {
 
     /**
      * 

@@ -2,7 +2,7 @@ import { CLICK, LOAD } from "el/sapa/Event";
 import { EditorElement } from 'el/editor/ui/common/EditorElement';
 
 import './TextureView.scss';
-import PathParser from 'el/editor/parser/PathParser';
+import {PathParser} from 'el/editor/parser/PathParser';
 import { repeat } from "el/utils/func";
 // import PathStringManager from "el/editor/parser/PathStringManager";
 // import math from "./data/math";

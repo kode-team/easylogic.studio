@@ -1,4 +1,4 @@
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 import icon from "el/editor/icon/icon";
 import { SVGPathItem } from './SVGPathItem';
 import { BooleanOperation } from "el/editor/types/model";

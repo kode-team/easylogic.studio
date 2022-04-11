@@ -1,7 +1,7 @@
 
 import { CLICK, DEBOUNCE, DOMDIFF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 
 import './ResizingProperty.scss';
 import { variable } from 'el/sapa/functions/registElement';

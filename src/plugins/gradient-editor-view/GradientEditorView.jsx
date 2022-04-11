@@ -32,7 +32,7 @@ import {
 } from "el/editor/types/model";
 import { mat4, vec3 } from "gl-matrix";
 import { parseOneValue } from "el/utils/css-function-parser";
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 
 var radialTypeList = [
   "circle",

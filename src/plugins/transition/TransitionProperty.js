@@ -11,7 +11,7 @@ import {
 import icon, { iconUse } from "el/editor/icon/icon";
 import { Transition } from "el/editor/property-parser/Transition";
 import { curveToPath } from "el/utils/func";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 
 import './TransitionProperty.scss';
 

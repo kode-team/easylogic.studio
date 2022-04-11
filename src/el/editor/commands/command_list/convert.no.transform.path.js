@@ -1,5 +1,5 @@
 
-import PathParser from 'el/editor/parser/PathParser';
+import {PathParser} from 'el/editor/parser/PathParser';
 import { vertiesToRectangle } from 'el/utils/collision';
 export default {
   command: 'convert.no.transform.path',

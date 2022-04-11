@@ -361,6 +361,10 @@ export class Editor {
     return this.renderer('svg');
   }
 
+  /**
+   * 
+   * @returns {JSONRenderer}
+   */
   get json() {
     return this.renderer('json');
   }

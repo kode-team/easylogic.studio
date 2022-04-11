@@ -25,7 +25,7 @@ import { END, MOVE } from "el/editor/types/event";
 import { Length } from "el/editor/unit/Length";
 import { repeat } from "el/utils/func";
 import { parseOneValue } from "el/utils/css-function-parser";
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 
 const spreadMethodList = [
   SpreadMethodType.PAD,

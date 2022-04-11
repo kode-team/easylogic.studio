@@ -8,7 +8,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
 import "./LayerAppendView.scss";
 import { CSS_TO_STRING } from "el/utils/func";
-import PathParser from 'el/editor/parser/PathParser';
+import {PathParser} from 'el/editor/parser/PathParser';
 import { EditingMode } from 'el/editor/types/editor';
 
 export default class LayerAppendView extends EditorElement {

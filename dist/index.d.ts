@@ -126,17 +126,20 @@ declare module "@easylogic/editor" {
 
     export const FIT: string;
     export const PASSIVE: string;
+
+    /**
+     * LOAD 함수에서 domdiff 를 수행하는 플래그를 설정한다. 
+     */
     export const DOMDIFF: string;
 
     // event config method
-    export const DEBOUNCE = (t: number = 100) => string;
-    export const DELAY = (t: number = 300) => string;
+    export type TimeFunction = (time: number) => string;
+
+    export const DEBOUNCE: TimeFunction;
+    export const DELAY: TimeFunction;
     export const D1000: string;
 
-    export const THROTTLE = (t: number = 100) => string;
-
-    export const ALL_TRIGGER: string;
-
+    export const THROTTLE: TimeFunction;
     export const CAPTURE: string;
 
     // event config method
@@ -144,16 +147,19 @@ declare module "@easylogic/editor" {
     // before method
 
     // after method
-    export const MOVE = (method: string = "move") => string;
-    export const END = (method: string = "end") => string;
+    type MoveMethod = (method: string = "move") => string;
+    export const MOVE: MoveMethod;
+
+    type MoveEndMethod = (method: string = "end") => string;
+    export const END: MoveEndMethod;
 
     export const PREVENT = string;
     export const STOP = string;
 
-    const CallbackFunction = (...args: string[]) => string;
+    type CallbackFunction = (...args: string[]) => string;
+    type DOM_EVENT_MAKE = (...keys: string[]) => CallbackFunction;
 
-    const DOM_EVENT_MAKE = (...keys: string[]) => CallbackFunction;
-    const SUBSCRIBE_EVENT_MAKE = CallbackFunction;
+    const SUBSCRIBE_EVENT_MAKE: CallbackFunction;
 
     export const SUBSCRIBE: CallbackFunction;
     export const SUBSCRIBE_ALL: CallbackFunction;
@@ -217,7 +223,14 @@ declare module "@easylogic/editor" {
 
 
     // Predefined LOADER
-    export const LOAD = (value: string = "$el") => string;
+
+    /**
+     * 특정 영역의 html 을 만들기 위한 함수 
+     * 
+     * @param [refName=$el] 업데이트 되기 위한 refName 
+     * @returns {string} 
+     */
+    export const LOAD = (refName: string = "$el") => string;
     export const createRef = value => string;
     export const getRef = id => any;
     export const BIND = (value: string = "$el", checkFieldOrCallback: string = '') => string;
@@ -1119,7 +1132,7 @@ declare module "@easylogic/editor" {
     export interface ObjectPropertyProps {
         title: string;
         editableProperty?: string;
-        action?: string|Function;
+        action?: string | Function;
         inspector?: Function;
     }
     export class ObjectProperty {
@@ -1161,19 +1174,55 @@ declare module "@easylogic/editor" {
         registerComponent(name: string, component: ElementValue<EditorElement>);
         registerItem(name: string, item: Item);
         registerInspector(name: string, inspectorCallback: Function);
-
         registerRenderer(rendererType: string, name: string, rendererInstance: IRender);
         registerCommand(commandObject: Function | ICommandObject): void;
         registerShortCut(shortcut: ShortcutObject): void;
+
+        /**
+         * 에디터에 맞는 config 를 등록한다. 
+         * 
+         * @param {object} config
+         */
+        registerConfig(config: KeyValue): void;
 
         /**
          * 
          * @param {PluginInterface} createPluginFunction  
          */
         registerPlugin(createPluginFunction: PluginInterface): void;
-
         registerPluginList(plugins: PluginInterface[] = []): void;
 
+
+
+        /**
+         * locale 에 맞는 i18n 메세지 등록 
+         * 
+         * @param locale 
+         * @param messages 
+         */
+        registerI18nMessage(locale: string, messages: KeyValue): void;
+
+        /**
+         * 설정된 전체 locale 에 맞는 메세지 등록
+         * 
+         * @param messages 
+         */
+        registerI18nMessageWithLocale(messages: KeyValue): void;
+
+        /**
+         * itemType 에 대한 아이콘 지정 
+         * 
+         * @param itemType 
+         * @param iconOrFunction 
+         */
+        registerIcon(itemType: string, iconOrFunction: string | Function): void;
+
+        /**
+         * HTML Renderer 인스턴스 
+         */
+        html: HTMLRenderer;
+        svg: SVGRenderer;
+        json: JSONRenderer;
     }
 
     export interface PluginInterface {
@@ -1181,8 +1230,8 @@ declare module "@easylogic/editor" {
     }
 
     export interface EditorInterface {
-        createDesignEditor (opt: KeyValue): EditorElement;
-        createDesignPlayer (opt: KeyValue): EditorElement;
+        createDesignEditor(opt: KeyValue): EditorElement;
+        createDesignPlayer(opt: KeyValue): EditorElement;
         plugins: PluginInterface[]
 
     }
@@ -1194,6 +1243,20 @@ declare module "@easylogic/editor" {
 
         update(item: Item, currentElement: Dom, editor: EditorInstance): any;
     }
+
+    export interface SVGRenderer {
+
+        render(item: Item, renderer: SVGRenderer): string;
+
+        update(item: Item, currentElement: Dom, editor: EditorInstance): any;
+    }    
+
+    export interface JSONRenderer {
+
+        render(item: Item, renderer: JSONRenderer): string;
+
+        update(item: Item, currentElement: Dom, editor: EditorInstance): any;
+    }        
 
     export class Render {
 
@@ -1213,11 +1276,12 @@ declare module "@easylogic/editor" {
         update(item: Item, currentElement: Dom): void;
     }
 
-    export class DomRender extends HTMLItemRender { 
-        toDefString (item:Item):string;
+    export class DomRender extends HTMLItemRender {
+        toDefString(item: Item): string;
     }
 
     export class HTMLLayerRender extends DomRender {
+
     }
 
 

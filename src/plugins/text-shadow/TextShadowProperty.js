@@ -1,7 +1,7 @@
 import { LOAD, CLICK, SUBSCRIBE, IF, DEBOUNCE } from "el/sapa/Event";
 
 import icon from "el/editor/icon/icon";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 import { createComponent } from "el/sapa/functions/jsx";
 import textShadow from "el/editor/preset/text-shadow";
 

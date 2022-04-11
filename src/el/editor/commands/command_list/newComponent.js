@@ -1,5 +1,5 @@
 import { EDIT_MODE_SELECTION } from "el/editor/manager/Editor";
-import PathParser from 'el/editor/parser/PathParser';
+import {PathParser} from 'el/editor/parser/PathParser';
 
 /**
  * 새로운 객체 생성 

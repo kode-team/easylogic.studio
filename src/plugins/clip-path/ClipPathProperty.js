@@ -1,10 +1,10 @@
 import { CLICK, LOAD, PREVENT, SUBSCRIBE, IF } from "el/sapa/Event";
 import icon, { iconUse } from "el/editor/icon/icon";
 import { ClipPath } from "el/editor/property-parser/ClipPath";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 
 import './ClipPathProperty.scss';
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 import { vertiesToRectangle } from "el/utils/collision";
 import { ClipPathType } from "el/editor/types/model";
 import polygon from "el/editor/preset/clip-path/polygon";

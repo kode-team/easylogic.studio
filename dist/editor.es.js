@@ -1411,123 +1411,6 @@ var Event = {
     };
   }
 };
-var Event$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  makeEventChecker,
-  PIPE,
-  EVENT,
-  COMMAND,
-  ON,
-  NAME_SAPARATOR,
-  SAPARATOR,
-  CHECKER,
-  AFTER,
-  BEFORE,
-  IF,
-  KEY,
-  ARROW_UP,
-  ARROW_DOWN,
-  ARROW_LEFT,
-  ARROW_RIGHT,
-  ENTER,
-  SPACE,
-  ESCAPE,
-  BACKSPACE,
-  DELETE,
-  EQUAL,
-  MINUS,
-  BRACKET_RIGHT,
-  BRACKET_LEFT,
-  ALT,
-  SHIFT,
-  META,
-  CONTROL,
-  MOUSE,
-  TOUCH,
-  PEN,
-  SELF,
-  LEFT_BUTTON,
-  RIGHT_BUTTON,
-  FIT,
-  PASSIVE,
-  DOMDIFF,
-  DEBOUNCE,
-  DELAY,
-  D1000,
-  THROTTLE,
-  ALL_TRIGGER,
-  SELF_TRIGGER,
-  FRAME,
-  PARAMS,
-  CAPTURE,
-  PREVENT,
-  STOP,
-  SUBSCRIBE,
-  SUBSCRIBE_ALL,
-  SUBSCRIBE_SELF,
-  CONFIG,
-  CALLBACK,
-  RAF,
-  CUSTOM,
-  CLICK,
-  DOUBLECLICK,
-  MOUSEDOWN,
-  MOUSEUP,
-  MOUSEMOVE,
-  MOUSEOVER,
-  MOUSEOUT,
-  MOUSEENTER,
-  MOUSELEAVE,
-  TOUCHSTART,
-  TOUCHMOVE,
-  TOUCHEND,
-  KEYDOWN,
-  KEYUP,
-  KEYPRESS,
-  DRAG,
-  DRAGSTART,
-  DROP,
-  DRAGOVER,
-  DRAGENTER,
-  DRAGLEAVE,
-  DRAGEXIT,
-  DRAGOUT,
-  DRAGEND,
-  CONTEXTMENU,
-  CHANGE,
-  INPUT,
-  FOCUS,
-  FOCUSIN,
-  FOCUSOUT,
-  BLUR,
-  PASTE,
-  RESIZE,
-  SCROLL,
-  SUBMIT,
-  POINTERSTART,
-  POINTEROVER,
-  POINTERENTER,
-  POINTEROUT,
-  POINTERMOVE,
-  POINTEREND,
-  CHANGEINPUT,
-  WHEEL,
-  ANIMATIONSTART,
-  ANIMATIONEND,
-  ANIMATIONITERATION,
-  TRANSITIONSTART,
-  TRANSITIONEND,
-  TRANSITIONRUN,
-  TRANSITIONCANCEL,
-  DOUBLETAB,
-  LOAD,
-  getRef,
-  BIND_CHECK_FUNCTION,
-  BIND_CHECK_DEFAULT_FUNCTION,
-  BIND,
-  normalizeWheelEvent,
-  "default": Event
-}, Symbol.toStringTag, { value: "Module" }));
 const scrollBlockingEvents = {
   "touchstart": true,
   "touchmove": true,
@@ -26072,7 +25955,7 @@ class EmbedEditorWindow extends BaseWindow {
   }
   refresh() {
     if (this.$el.isShow()) {
-      App.createDesignEditor({
+      createDesignEditor({
         container: this.refs.$body.el,
         config: {
           "editor.design.mode": "item"
@@ -28984,7 +28867,7 @@ class Button extends BaseUI {
   template() {
     return `<div class='small-editor button' ref='$body'></div>`;
   }
-  [LOAD("$body")]() {
+  [LOAD("$body") + DOMDIFF]() {
     var { label, text: text2 } = this.state;
     var hasLabel = !!label ? "has-label" : "";
     return `
@@ -64767,29 +64650,13 @@ class DataEditor extends BaseLayout {
     }
   }
 }
-var exportLibrary = __spreadValues({
-  EditorInstance: Editor,
-  Length,
-  EditorElement,
-  HTMLLayerRender: LayerRender$1,
-  Component,
-  MenuItem,
-  BaseProperty,
-  ObjectProperty,
-  PathParser,
-  Segment,
-  Point,
-  icon: obj
-}, Event$1);
-var App = __spreadValues({
-  createDesignEditor(opts) {
-    return start$1(DesignEditor, opts);
-  },
-  createDataEditor(opts) {
-    return start$1(DataEditor, opts);
-  },
-  createWhiteBoard(opts) {
-    return start$1(WhiteBoard, opts);
-  }
-}, exportLibrary);
-export { App as default };
+function createDesignEditor(opts) {
+  return start$1(DesignEditor, opts);
+}
+function createDataEditor(opts) {
+  return start$1(DataEditor, opts);
+}
+function createWhiteBoard(opts) {
+  return start$1(WhiteBoard, opts);
+}
+export { AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHECKER, CLICK, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, Component, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, EDIT_MODE_ADD, EDIT_MODE_SELECTION, ENTER, EQUAL, ESCAPE, EVENT, Editor, EditorElement, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, IF, INPUT, KEY, KEYDOWN, KEYPRESS, KEYUP, LEFT_BUTTON, LOAD, Length, META, MINUS, MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, NAME_SAPARATOR, ON, ObjectProperty, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, PREVENT, PathParser, Position, RAF, RESIZE, RIGHT_BUTTON, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SHIFT, SPACE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, Segment, THROTTLE, TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, WHEEL, createDataEditor, createDesignEditor, createWhiteBoard, getRef, makeEventChecker, normalizeWheelEvent };

@@ -1,6 +1,6 @@
 
 import { POINTERSTART,BIND, KEYUP, IF, ESCAPE, ENTER, PREVENT, STOP, SUBSCRIBE} from "el/sapa/Event";
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 
 import { Length } from "el/editor/unit/Length";
 import PathStringManager from "el/editor/parser/PathStringManager";

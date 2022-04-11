@@ -1,6 +1,6 @@
 import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { isFunction, isString } from "el/sapa/functions/func";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 
 import './ComponentProperty.scss';
 import { createComponent } from "el/sapa/functions/jsx";

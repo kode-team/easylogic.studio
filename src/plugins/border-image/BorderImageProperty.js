@@ -2,7 +2,7 @@
 import { CLICK, CHANGE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 import { Position } from "el/editor/unit/Length";
 import icon from "el/editor/icon/icon";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 import { createComponent, createElementJsx } from "el/sapa/functions/jsx";
 
 const typeList = [
