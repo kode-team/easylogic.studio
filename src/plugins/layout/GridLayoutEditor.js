@@ -6,6 +6,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import './GridLayoutEditor.scss';
 import { createComponent } from "el/sapa/functions/jsx";
 import { Layout } from "el/editor/types/model";
+import { iconUse } from "el/editor/icon/icon";
 
 export default class GridLayoutEditor extends EditorElement {
 
@@ -27,6 +28,19 @@ export default class GridLayoutEditor extends EditorElement {
         if (current.isLayout(Layout.GRID) === false) return "";
 
         return /*html*/`
+            <div class="grid-layout-item">
+            ${createComponent("NumberInputEditor", {
+                wide: true,
+                label: 'grid padding',
+                key: 'padding',
+                ref: '$padding',
+                value: current['padding-top'],
+                min: 0,
+                max: 300,
+                step: 1,
+                onchange: 'changePadding'
+            })}
+            </div>
             <div class='grid-layout-item'>
                 ${createComponent("GridGapEditor" , {
                     label: this.$i18n('grid.layout.editor.column.gap'),
@@ -49,6 +63,14 @@ export default class GridLayoutEditor extends EditorElement {
     }
 
 
+    [SUBSCRIBE_SELF('changePadding')](key, value) {
+        this.modifyData(key, {
+            'padding-top': value,
+            'padding-left': value,
+            'padding-right': value,
+            'padding-bottom': value,
+        });
+    }
 
     [SUBSCRIBE_SELF('changeKeyValue')] (key, value, params) {
 

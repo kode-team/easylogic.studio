@@ -391,14 +391,15 @@ export default class DomRender extends ItemRender {
       obj.top = Length.px(item.y);
     }
 
-    let result = {}
+    let result = {
+      'box-sizing': 'border-box',
+    }
 
     result = Object.assign(result, obj);
     result = Object.assign(result, this.toKeyListCSS(item, [
       'position',
       'overflow',
       'z-index',
-      'box-sizing',
       'background-color',
       'color',
       'opacity',

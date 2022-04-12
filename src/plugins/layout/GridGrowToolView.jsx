@@ -135,11 +135,8 @@ class GridGrowClickEventView extends GridGrowBaseView {
     const info = this.getGridLayoutInformation();
     const index = +e.$dt.data("index");
 
-    this.updateRows(
-      info.current,
-      this.copyNewGridItems(info.rows, index)
-    );
-  }  
+    this.updateRows(info.current, this.copyNewGridItems(info.rows, index));
+  }
 
   [CLICK("$grid .row-delete") + IF("checkTargetLayer")](e) {
     const info = this.getGridLayoutInformation();
@@ -291,7 +288,6 @@ class GridGrowDragEventView extends GridGrowClickEventView {
 
     // gap 단위 변경
     if (realDistance < 1) {
-
       if (!this.lastRowGap) {
         this.lastRowGap = Length.px(0);
       }
@@ -407,6 +403,103 @@ class GridGrowDragEventView extends GridGrowClickEventView {
 
     this.updateColumns(this.current, this.columns);
   }
+
+  [POINTERSTART("$grid .grid-item-tool.row .item") +
+    MOVE("moveRow") +
+    END("moveEndRow")](e) {
+    const index = +e.$dt.data("index");
+
+    const info = this.getGridLayoutInformation();
+    this.current = info.current;
+    this.rows = info.rows;
+    this.selectedRowIndex = index;
+    this.selectedRowHeight = info.rows[index];
+    this.initMousePosition = this.$viewport.getWorldPosition(e);
+  }
+
+  moveRow() {
+    const targetPosition = this.$viewport.getWorldPosition();
+    const newDist = vec3.subtract([], targetPosition, this.initMousePosition);
+
+    // column 은 world 좌표 기준으로 100 이면 step: 1의 비율로 치자.
+    // step 에 따라 달라진다.
+    const stepRate = newDist[1] / 30;
+    const rowHeight = this.selectedRowHeight;
+    if (rowHeight instanceof Length) {
+      if (rowHeight.isPercent()) {
+        var newHeight = Math.max(rowHeight.value - stepRate * 5, 1);
+        this.rows[this.selectedRowIndex] =
+          Length.percent(newHeight).round(1000);
+      } else if (rowHeight.isPx()) {
+        var newHeight = Math.max(10, rowHeight.value - stepRate * 100);
+        this.rows[this.selectedRowIndex] = Length.px(newHeight).floor();
+      } else if (rowHeight.isFr()) {
+        var newHeight = Math.max(
+          rowHeight.value + Math.floor(newDist[1] / 20) * 0.25,
+          0.25
+        );
+        this.rows[this.selectedRowIndex] = Length.fr(newHeight);
+      } else {
+        var newHeight = Math.max(rowHeight.value - stepRate * 1, 10);
+        this.rows[this.selectedRowIndex] = new Length(
+          newHeight,
+          rowHeight.unit
+        );
+      }
+
+      this.updateRows(this.current, this.rows);
+    }
+  }
+
+  /**
+   * column size 의 를 변경한다.
+   *
+   * px -> %
+   * % -> fr
+   * fr -> auto
+   * auto -> px
+   */
+  changedRowSize() {
+    const info = this.getGridLayoutInformation();
+
+    const index = this.selectedRowIndex;
+    const height = this.selectedRowHeight;
+
+    if (height instanceof Length) {
+      if (height.isPercent()) {
+        this.rows[index] = Length.fr(1);
+      } else if (height.isPx()) {
+        this.rows[index] = Length.makePercent(
+          height.value,
+          info.current.screenHeight
+        ).round(1000);
+      } else if (height.isFr()) {
+        this.rows[index] = "auto";
+      }
+    } else if (height === "auto") {
+      const { items } = this.state.lastGridInfo;
+
+      const row = items.find((it) => it.row === index + 1);
+
+      this.rows[index] = Length.px(row.rect.height).floor();
+    }
+  }
+
+  moveEndColumn() {
+    const targetPosition = this.$viewport.getWorldPosition();
+    const newDist = vec3.subtract([], targetPosition, this.initMousePosition);
+
+    const realDistance = vec3.dist(targetPosition, this.initMousePosition);
+
+    if (realDistance < 1) {
+      // open 팝업 창 띄우기
+      // column 정보를 바꾸기 위한 팝업창
+      // 크기 패턴 바꾸기 팝업창
+      this.changedRowSize();
+    }
+
+    this.updateRows(this.current, this.rows);
+  }
 }
 
 export default class GridGrowToolView extends GridGrowDragEventView {
@@ -443,6 +536,13 @@ export default class GridGrowToolView extends GridGrowDragEventView {
 
     const info = this.getGridLayoutInformation();
 
+    const [paddingTop, paddingRight, paddingBottom, paddingLeft] =
+      this.getScaledInformation([
+        Length.px(info.current["padding-top"]),
+        Length.px(info.current["padding-right"]),
+        Length.px(info.current["padding-bottom"]),
+        Length.px(info.current["padding-left"]),
+      ]);
     const columns = this.getScaledInformation(info.columns);
     const rows = this.getScaledInformation(info.rows);
 
@@ -463,6 +563,10 @@ export default class GridGrowToolView extends GridGrowDragEventView {
         top: Length.px(rect.top),
         width: Length.px(rect.width),
         height: Length.px(rect.height),
+        "padding-top": paddingTop,
+        "padding-right": paddingRight,
+        "padding-bottom": paddingBottom,
+        "padding-left": paddingLeft,
         "transform-origin": "left top",
         transform: `rotate(${angle}deg)`,
       },
@@ -524,7 +628,7 @@ export default class GridGrowToolView extends GridGrowDragEventView {
 
     if (parent && parent.isLayout(Layout.GRID)) return parent;
 
-    return current;
+    return null;
   }
 
   getParsedValue(it) {
@@ -594,7 +698,7 @@ export default class GridGrowToolView extends GridGrowDragEventView {
 
         // world position
         verties,
-        originVerties : verties.filter((_, index) => index < 4)
+        originVerties: verties.filter((_, index) => index < 4),
       };
     });
 
@@ -630,7 +734,11 @@ export default class GridGrowToolView extends GridGrowDragEventView {
     const rowItems = items.filter((it) => it.column === 1);
     const columnItems = items.filter((it) => it.row === 1);
 
-    const h = info.current.screenHeight;
+    const h =
+      rowItems.reduce((prev, currentValue) => {
+        return prev + currentValue.rect.height;
+      }, 0) +
+      (rows.length - 1) * info.rowGap;
 
     for (
       var columnIndex = 1, len = columns.length;
@@ -656,7 +764,11 @@ export default class GridGrowToolView extends GridGrowDragEventView {
 
     // collect row gap box area
 
-    const w = info.current.screenWidth;
+    const w =
+      columnItems.reduce((prev, currentValue) => {
+        return prev + currentValue.rect.width;
+      }, 0) +
+      (columns.length - 1) * info.columnGap;
 
     for (var rowIndex = 1, len = rows.length; rowIndex < len; rowIndex++) {
       const prevCell = rowItems[rowIndex - 1];
@@ -777,7 +889,9 @@ export default class GridGrowToolView extends GridGrowDragEventView {
                 }}
               >
                 <div class="grid-item-tool-inner">
-                  <div class="item">{info.rows[index]}</div>
+                  <div class="item" data-index={index}>
+                    {info.rows[index]}
+                  </div>
                   <div class="drag-handle bottom">
                     <div
                       class="row-delete"

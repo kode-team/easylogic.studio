@@ -628,9 +628,9 @@ export default class HTMLRenderView extends EditorElement {
             // 실제 element 가 존재하는지 체크 하고 업데이트 
             if ($el.$parent.attr('data-id') === item.parentId) { 
 
-                const { x, y, width, height } = $el.offsetRect();
+                const offset = $el.offsetRect();                
 
-                item.reset({ x, y, width, height })
+                item.reset(offset)
     
                 this.refreshSelectionStyleView(item);
     
@@ -647,16 +647,16 @@ export default class HTMLRenderView extends EditorElement {
 
     }
 
-    refreshElementBoundSize(parentObj) {
-        if (parentObj) {
-            this.refreshSelfElement(parentObj);
+    refreshElementBoundSize(it) {
+        if (it) {
+            this.refreshSelfElement(it);
 
-            if (parentObj.hasChildren() === false) {
+            if (it.hasChildren() === false) {
                 return;
             }
 
-            parentObj.layers.forEach(it => {
-                this.trigger('refreshElementBoundSize', it);
+            it.layers.forEach(child => {
+                this.refreshElementBoundSize(child);
             })
         }
     }
