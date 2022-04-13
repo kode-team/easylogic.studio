@@ -7,3 +7,7 @@ export * from 'el/editor/model/Component';
 export * from "el/editor/parser/PathParser";
 export * from "el/editor/parser/Segment";
 export * from 'el/editor/ui/property/ObjectProperty';
+export * from 'el/editor/types/editor';
+export * from 'el/editor/types/event';
+export * from 'el/editor/types/model';
+export * from 'el/editor/types/key';

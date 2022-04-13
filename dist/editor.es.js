@@ -6703,6 +6703,14 @@ const TextTransform = {
   UPPERCASE: "uppercase",
   LOWERCASE: "lowercase"
 };
+const TextAlign = {
+  START: "start",
+  END: "end",
+  LEFT: "left",
+  RIGHT: "right",
+  CENTER: "center",
+  JUSTIFY: "justify"
+};
 const Overflow = {
   VISIBLE: "visible",
   HIDDEN: "hidden",
@@ -6720,6 +6728,29 @@ const BorderStyle = {
   RIDGE: "ridge",
   INSET: "inset",
   OUTSET: "outset"
+};
+const TransformValue = {
+  NONE: "none",
+  PERSPECTIVE: "perspective",
+  TRANSLATE: "translate",
+  TRANSLATE_X: "translateX",
+  TRANSLATE_Y: "translateY",
+  TRANSLATE_Z: "translateZ",
+  TRANSLATE_3D: "translate3d",
+  SCALE: "scale",
+  SCALE_X: "scaleX",
+  SCALE_Y: "scaleY",
+  SCALE_Z: "scaleZ",
+  SCALE_3D: "scale3d",
+  ROTATE: "rotate",
+  ROTATE_X: "rotateX",
+  ROTATE_Y: "rotateY",
+  ROTATE_Z: "rotateZ",
+  SKEW: "skew",
+  SKEW_X: "skewX",
+  SKEW_Y: "skewY",
+  MATRIX: "matrix",
+  MATRIX_3D: "matrix3d"
 };
 const Layout = {
   DEFAULT: "default",
@@ -6846,6 +6877,26 @@ const PathSegmentType = {
   ARCTO: "A",
   CLOSEPATH: "Z",
   UNKNOWN: "unknown"
+};
+const DirectionType = {
+  TO_TOP: "to top",
+  TO_RIGHT: "to right",
+  TO_BOTTOM: "to bottom",
+  TO_LEFT: "to left",
+  TO_TOP_LEFT: "to top left",
+  TO_TOP_RIGHT: "to top right",
+  TO_BOTTOM_LEFT: "to bottom left",
+  TO_BOTTOM_RIGHT: "to bottom right"
+};
+const DirectionNumberType = {
+  1: DirectionType.TO_TOP_LEFT,
+  2: DirectionType.TO_TOP_RIGHT,
+  3: DirectionType.TO_BOTTOM_LEFT,
+  4: DirectionType.TO_BOTTOM_RIGHT,
+  11: DirectionType.TO_TOP,
+  12: DirectionType.TO_RIGHT,
+  13: DirectionType.TO_BOTTOM,
+  14: DirectionType.TO_LEFT
 };
 const CSS_FUNC_REGEXP = /(([\-]?[\d.]+)(px|pt|fr|r?em|deg|vh|vw|m?s|%|g?rad|turn)?)|#(?:[\da-f]{8})|(#(?:[\da-f]{3}){1,2}|([a-z_\-]+)\([^\(\)]+\)|([a-z_\-]+))|(\,)/gi;
 const CSS_LENGTH_REGEXP = /^[\-]?([\d.]+)(px|pt|fr|r?em|deg|vh|vw|m?s|%|g?rad|turn)?$/gi;
@@ -11510,6 +11561,13 @@ const CanvasViewToolLevel = {
   RENDERING_AREA: 256,
   SELECTION_TOOL: 512,
   LAYOUT_TOOL: 768
+};
+const NotifyType = {
+  ERROR: "error",
+  INFO: "info",
+  SUCCESS: "success",
+  WARNING: "warning",
+  ALERT: "alert"
 };
 var addLayerView = {
   command: "addLayerView",
@@ -25797,6 +25855,12 @@ class EditorElement extends UIElement {
     } else {
       return this.emit(command, ...args2);
     }
+  }
+  notify(type, title2, description, duration = 1e3) {
+    this.emit("notify", type, title2, description, duration);
+  }
+  alert(title2, description, duration = 1e3) {
+    this.notify(NotifyType.ALERT, title2, description, duration);
   }
   $theme(key) {
     return this.$editor.themeValue(key);
@@ -64746,4 +64810,4 @@ function createDataEditor(opts) {
 function createWhiteBoard(opts) {
   return start$1(WhiteBoard, opts);
 }
-export { AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHECKER, CLICK, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, Component, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, EDIT_MODE_ADD, EDIT_MODE_SELECTION, ENTER, EQUAL, ESCAPE, EVENT, Editor, EditorElement, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, IF, INPUT, KEY, KEYDOWN, KEYPRESS, KEYUP, LEFT_BUTTON, LOAD, Length, META, MINUS, MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, NAME_SAPARATOR, ON, ObjectProperty, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, PREVENT, PathParser, Position, RAF, RESIZE, RIGHT_BUTTON, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SHIFT, SPACE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, Segment, THROTTLE, TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, WHEEL, createDataEditor, createDesignEditor, createWhiteBoard, getRef, makeEventChecker, normalizeWheelEvent };
+export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHECKER, CLICK, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, EDIT_MODE_ADD, EDIT_MODE_SELECTION, END, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FlexDirection, FlexWrap, FuncType, GradientType, IF, INPUT, JustifyContent, KEY, KEYDOWN, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LEFT_BUTTON, LOAD, Language, Layout, Length, META, MINUS, MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, NAME_SAPARATOR, NotifyType, ON, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, PREVENT, PathParser, PathSegmentType, Position, RAF, RESIZE, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SHIFT, SPACE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, Segment, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, VisibilityType, WHEEL, createDataEditor, createDesignEditor, createWhiteBoard, getRef, makeEventChecker, normalizeWheelEvent };

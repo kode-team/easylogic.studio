@@ -24,3 +24,11 @@ export const CanvasViewToolLevel = {
     SELECTION_TOOL: 0x200,
     LAYOUT_TOOL: 0x300,    
 }
+
+export const NotifyType = {
+    ERROR: 'error',
+    INFO: 'info',
+    SUCCESS: 'success',
+    WARNING: 'warning',
+    ALERT: 'alert',
+}

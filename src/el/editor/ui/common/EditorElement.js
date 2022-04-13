@@ -1,6 +1,7 @@
 
 import UIElement from "el/sapa/UIElement";
 import { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "el/editor/types/event";
+import { NotifyType } from "el/editor/types/editor";
 
 export class EditorElement extends UIElement {
 
@@ -186,6 +187,27 @@ export class EditorElement extends UIElement {
             return this.emit(command, ...args);
         }
 
+    }
+
+    /**
+     * 
+     * @param {string} type 
+     * @param {string} title 
+     * @param {string} description 
+     * @param {number} [duration=1000] 
+     */
+    notify(type, title, description, duration = 1000) {
+        this.emit(
+            "notify",
+            type,
+            title,
+            description,
+            duration
+          );
+    }
+
+    alert(title, description, duration = 1000) {
+        this.notify(NotifyType.ALERT, title, description, duration);
     }
 
     $theme(key) {
