@@ -27,7 +27,7 @@ export default class ProjectRender extends DomRender {
     toCSS(item) {
         return Object.assign(
             {},
-            ...this.toRootVariableCSS(item)
+            this.toRootVariableCSS(item)
         )
     }
 

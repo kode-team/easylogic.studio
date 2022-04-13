@@ -485,10 +485,8 @@ class GridGrowDragEventView extends GridGrowClickEventView {
     }
   }
 
-  moveEndColumn() {
+  moveEndRow() {
     const targetPosition = this.$viewport.getWorldPosition();
-    const newDist = vec3.subtract([], targetPosition, this.initMousePosition);
-
     const realDistance = vec3.dist(targetPosition, this.initMousePosition);
 
     if (realDistance < 1) {
@@ -724,8 +722,8 @@ export default class GridGrowToolView extends GridGrowDragEventView {
     const last = this.state.lastGridInfo;
     const scale = this.$viewport.scale;
     if (!last) return "";
-
     const { info, items } = last;
+
     const { columns, rows } = info;
 
     const result = [];
@@ -734,15 +732,13 @@ export default class GridGrowToolView extends GridGrowDragEventView {
     const rowItems = items.filter((it) => it.column === 1);
     const columnItems = items.filter((it) => it.row === 1);
 
-    const h =
-      rowItems.reduce((prev, currentValue) => {
-        return prev + currentValue.rect.height;
-      }, 0) +
-      (rows.length - 1) * info.rowGap;
+    const minY = Math.min(...rowItems.map(it => it.verties[0][1]));
+    const maxY = Math.max(...rowItems.map(it => it.verties[2][1]));
+    const h = maxY - minY;
 
     for (
       var columnIndex = 1, len = columns.length;
-      columnIndex < len;
+      columnIndex < len && columnItems.length;
       columnIndex++
     ) {
       const prevCell = columnItems[columnIndex - 1];
@@ -764,11 +760,9 @@ export default class GridGrowToolView extends GridGrowDragEventView {
 
     // collect row gap box area
 
-    const w =
-      columnItems.reduce((prev, currentValue) => {
-        return prev + currentValue.rect.width;
-      }, 0) +
-      (columns.length - 1) * info.columnGap;
+    const minX = Math.min(...columnItems.map(it => it.verties[0][0]));
+    const maxX = Math.max(...columnItems.map(it => it.verties[2][0]));
+    const w = maxX - minX;
 
     for (var rowIndex = 1, len = rows.length; rowIndex < len; rowIndex++) {
       const prevCell = rowItems[rowIndex - 1];

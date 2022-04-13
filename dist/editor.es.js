@@ -42290,9 +42290,8 @@ class GridGrowDragEventView extends GridGrowClickEventView {
       this.rows[index2] = Length.px(row.rect.height).floor();
     }
   }
-  moveEndColumn() {
+  moveEndRow() {
     const targetPosition = this.$viewport.getWorldPosition();
-    subtract([], targetPosition, this.initMousePosition);
     const realDistance = dist(targetPosition, this.initMousePosition);
     if (realDistance < 1) {
       this.changedRowSize();
@@ -42480,10 +42479,10 @@ class GridGrowToolView extends GridGrowDragEventView {
     const result = [];
     const rowItems = items.filter((it) => it.column === 1);
     const columnItems = items.filter((it) => it.row === 1);
-    const h = rowItems.reduce((prev, currentValue) => {
-      return prev + currentValue.rect.height;
-    }, 0) + (rows.length - 1) * info.rowGap;
-    for (var columnIndex = 1, len2 = columns.length; columnIndex < len2; columnIndex++) {
+    const minY = Math.min(...rowItems.map((it) => it.verties[0][1]));
+    const maxY = Math.max(...rowItems.map((it) => it.verties[2][1]));
+    const h = maxY - minY;
+    for (var columnIndex = 1, len2 = columns.length; columnIndex < len2 && columnItems.length; columnIndex++) {
       const prevCell = columnItems[columnIndex - 1];
       const cell = columnItems[columnIndex];
       const x2 = prevCell.rect.x + prevCell.rect.width;
@@ -42498,9 +42497,9 @@ class GridGrowToolView extends GridGrowDragEventView {
         height: h
       });
     }
-    const w = columnItems.reduce((prev, currentValue) => {
-      return prev + currentValue.rect.width;
-    }, 0) + (columns.length - 1) * info.columnGap;
+    const minX = Math.min(...columnItems.map((it) => it.verties[0][0]));
+    const maxX = Math.max(...columnItems.map((it) => it.verties[2][0]));
+    const w = maxX - minX;
     for (var rowIndex = 1, len2 = rows.length; rowIndex < len2; rowIndex++) {
       const prevCell = rowItems[rowIndex - 1];
       const cell = rowItems[rowIndex];
@@ -51850,7 +51849,7 @@ class ProjectRender$2 extends DomRender$1 {
     return obj2;
   }
   toCSS(item2) {
-    return Object.assign({}, ...this.toRootVariableCSS(item2));
+    return Object.assign({}, this.toRootVariableCSS(item2));
   }
   toStyle(item2) {
     const keyframeString = item2.toKeyframeString();
