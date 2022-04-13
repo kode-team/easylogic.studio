@@ -26,6 +26,7 @@
     "open-color": "^1.9.1",
     "pathkit-wasm": "^0.7.0",
     "svg-arc-to-cubic-bezier": "^3.2.0",
+    "three": "^0.139.2",
     "yorkie-js-sdk": "^0.1.11"
   },
   "devDependencies": {

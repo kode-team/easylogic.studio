@@ -18,6 +18,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         editor: path.resolve(__dirname, 'index.html'),
+        whiteboard: path.resolve(__dirname, 'whiteboard.html'),
+        dataeditor: path.resolve(__dirname, 'dataeditor.html'),
       }
     }
   }

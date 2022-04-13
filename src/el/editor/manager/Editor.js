@@ -32,6 +32,8 @@ import { StateManager } from "./manager-items/StateManager";
 import { StorageManager } from "./manager-items/StorageManager";
 import { LockManager } from "./manager-items/LockManager";
 import { CommandMaker } from './manager-items/CommandMaker';
+import { SceneManager } from './manager-items/SceneManager';
+
 
 
 export const EDIT_MODE_SELECTION = 'SELECTION';
@@ -97,6 +99,7 @@ export class Editor {
     this.clipboard = new ClipboardManager(this);
     this.iconManager = new IconManager(this);
     this.stateManager = new StateManager(this);
+    this.sceneManager = new SceneManager(this);
 
     this.initPlugins();
     this.initStorage();

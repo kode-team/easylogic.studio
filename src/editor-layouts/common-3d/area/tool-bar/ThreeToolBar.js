@@ -2,7 +2,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 // import ToolMenu from "./ToolMenu";
 import Projects from "el/editor/ui/menu-items/Projects";
 
-import './ToolBar.scss';
+import './ThreeToolBar.scss';
 import { DropdownMenu } from "el/editor/ui/view/DropdownMenu";
 import Undo from "el/editor/ui/menu-items/Undo";
 import Redo from "el/editor/ui/menu-items/Redo";
@@ -12,8 +12,6 @@ import Save from 'el/editor/ui/menu-items/Save';
 import Outline from "el/editor/ui/menu-items/Outline";
 import SelectTool from "el/editor/ui/menu-items/SelectTool";
 import ThemeChanger from "el/editor/ui/menu-items/ThemeChanger";
-import LayoutSelector from '../status-bar/LayoutSelector';
-import LanguageSelector from '../status-bar/LanguageSelector';
 import { Language } from "el/editor/types/editor";
 import { CONFIG, LOAD } from 'el/sapa/Event';
 import ToolbarMenu from "el/editor/menus/menu_list/ToolbarMenu";
@@ -24,7 +22,7 @@ import { createComponent, createElement } from "el/sapa/functions/jsx";
 
 
 
-export default class ToolBar extends EditorElement {
+export default class ThreeToolBar extends EditorElement {
 
     initState() {
         return {
@@ -61,8 +59,6 @@ export default class ToolBar extends EditorElement {
     components() {
         return {
             ToolBarRenderer,
-            LayoutSelector,
-            LanguageSelector,
             ThemeChanger,
             Outline,
             SelectTool,
@@ -84,7 +80,9 @@ export default class ToolBar extends EditorElement {
                 ${createComponent("ToolBarRenderer", {
                     items: ToolbarMenu.left(this.$editor)
                 })}
-                <div class='center'></div>
+                ${createComponent("ToolBarRenderer", {
+                    items: ToolbarMenu.center(this.$editor)
+                })}
                 <div class='right'>
                     ${this.$injectManager.generate('toolbar.right')}
                     ${createComponent("ThemeChanger")}

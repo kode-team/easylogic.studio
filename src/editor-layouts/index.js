@@ -1,12 +1,17 @@
 import * as App from 'el/sapa/App'
 import "../scss/index.scss";
 import DesignEditor from "./designeditor";
+import ThreeEditor from "./e3d-editor";
 import WhiteBoard from "./whiteboard";
 import DataEditor from "./dataeditor";
 export * from "export-library/index";
 
 function createDesignEditor(opts) {
   return App.start(DesignEditor, opts);
+}
+
+function createThreeEditor(opts) {
+  return App.start(ThreeEditor, opts);
 }
 
 function createDataEditor (opts) {
@@ -22,6 +27,7 @@ function createWhiteBoard (opts) {
 
 export {
   createDesignEditor,
+  createThreeEditor,
   createDataEditor,
   createWhiteBoard,
 };

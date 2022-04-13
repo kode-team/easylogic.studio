@@ -7,7 +7,15 @@ export default {
     },
 
     center: () => {
-        return []
+        return [
+            {
+                type: 'button',
+                icon: 'navigation',
+                action: (editor) => {
+                    editor.emit('addCubeBox');
+                }
+            },
+        ]
     },
 
     right: () => {

@@ -1,0 +1,11 @@
+.elf--toolbar-menu-item {
+
+    &:hover {
+        background-color: black;
+    }
+
+    &[data-selected="true"] {
+        background-color: var(--elf--selected-color-2);
+        color: var(--elf--selected-font-color);
+    }
+}
