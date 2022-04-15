@@ -44,7 +44,6 @@ export default class DragAreaView extends EditorElement {
      * @param {PointerEvent} e 
      */
     checkEditMode(e) {
-
         // hand tool 이 on 되어 있으면 드래그 하지 않는다. 
         if (this.$config.get('set.tool.hand')) {
             return false;
@@ -104,6 +103,7 @@ export default class DragAreaView extends EditorElement {
     }
 
     [POINTERSTART('$dragAreaView') + IF('checkEditMode') + MOVE('movePointer') + END('moveEndPointer')](e) {
+        console.log('fdsjkalfdjsklaf');
         if (this.$config.get('set.dragarea.mode')) {
             this.emit('startDragAreaView');
         } 

@@ -228,7 +228,7 @@ export default class HTMLRenderView extends EditorElement {
         }
 
         // 전체 캔버스 영역을 클릭하면 selection 하지 않는다. 
-        const $target = Dom.create(e.target);
+        const $target = Dom.create(e.target);        
         if ($target.hasClass('canvas-view')) {
             return false;
         }
@@ -510,7 +510,6 @@ export default class HTMLRenderView extends EditorElement {
 
         if (newDist < 1) {
             // NOOP 
-            // 마우스를 움직이지 않은 상태 
         } else {
             this.$selection.reselect();
             this.$snapManager.clear();

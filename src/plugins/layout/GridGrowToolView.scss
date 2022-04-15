@@ -11,6 +11,13 @@
   --cell-color: rgb(255, 66, 77);
   --cell-grid-item-color: gray;
 
+
+  &[data-drag-target-item="true"] {
+    .grid-item-tool {
+      visibility: hidden;
+    }
+  }
+
   .layout-pointer {
       position: absolute;
       left: 0px;

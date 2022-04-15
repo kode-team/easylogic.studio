@@ -1,7 +1,7 @@
 import * as App from 'el/sapa/App'
 import "../scss/index.scss";
 import DesignEditor from "./designeditor";
-import ThreeEditor from "./e3d-editor";
+import ThreeEditor from "./three-editor";
 import WhiteBoard from "./whiteboard";
 import DataEditor from "./dataeditor";
 export * from "export-library/index";

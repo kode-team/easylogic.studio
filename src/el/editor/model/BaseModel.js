@@ -791,6 +791,16 @@ export class BaseModel {
   }
 
   /**
+   * 자식 아이디를 가지고 있는지 체크 
+   * 
+   * @param {string} childId
+   * @returns {boolean}
+   */
+  hasChild(childId) {
+    return this.json.children.includes(childId);
+  }
+
+  /**
    * 특정 itemType 으로 데이타 변환 
    * 
    * @param {string} itemType 
@@ -806,7 +816,7 @@ export class BaseModel {
    */
   sendBackward(targetId) {
 
-    const siblings = children;
+    const siblings = this.json.children;
 
     const result = {}
     let selectedIndex = -1;
@@ -833,7 +843,7 @@ export class BaseModel {
 
   sendBack (targetId) {
 
-    const siblings = children;
+    const siblings = this.json.children;
 
     const result = {}
     siblings.forEach((id, index) => {
@@ -857,7 +867,7 @@ export class BaseModel {
    */
   bringForward(targetId) {
 
-    const siblings = children;
+    const siblings = this.json.children;
 
     const result = {}
     let selectedIndex = -1;
@@ -883,7 +893,7 @@ export class BaseModel {
 
   bringFront (targetId) {
 
-    const siblings = children;
+    const siblings = this.json.children;
 
     const result = {}
     let selectedIndex = -1;

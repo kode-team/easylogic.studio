@@ -10,6 +10,7 @@ import { DOMDIFF, LOAD, SUBSCRIBE } from "el/sapa/Event";
 import { clone } from "el/sapa/functions/func";
 import {
   polyPoint,
+  polyPoly,
   toRectVerties,
   vertiesToPath,
   vertiesToRectangle,
@@ -90,6 +91,8 @@ export default class GhostToolView extends EditorElement {
         }
 
       }
+
+      this.$selection.updateDragTargetItem(this.targetItem);
 
       // target 전체 영역 위치
       this.targetOriginPosition = this.$viewport.applyVerties(
@@ -403,6 +406,9 @@ export default class GhostToolView extends EditorElement {
     this.targetItem = undefined;
     this.targetParent = undefined;
     this.targetParentPosition = undefined;
+
+    // targetItem 초기화 
+    this.$selection.updateDragTargetItem(this.targetItem);
   }
 
   getDist() {
@@ -515,35 +521,24 @@ export default class GhostToolView extends EditorElement {
 
   insertToGridItem() {
     const current = this.$selection.current;
-    const targetMousePoint = this.$viewport.getWorldPosition();
 
-    const {info, items} = this.$selection.gridInformation
+    const {info, items} = this.$selection.gridInformation || {items: []}
 
-    const checkedItem = items.find(it => {
-      return polyPoint(it.verties.filter((_, index) => index < 4), targetMousePoint[0], targetMousePoint[1]);
+    // ghost 의 world좌표를 구함 
+    const currentVerties = this.$viewport.applyVertiesInverse(this.ghostScreenVerties.filter((_, index) => index < 4))
+    const checkedItems = items?.filter(it => {
+      return polyPoly(it.originVerties, currentVerties);
     })
 
+    if (checkedItems.length) {
 
-    if (checkedItem) {
-      const MAX_COLUMN = info.columns.length + 1;
-      const MAX_ROW = info.rows.length + 1;
+      const columnList = checkedItems.map(it => it.column)
+      const rowList = checkedItems.map(it => it.row)
 
-      const grid = current.attrs('grid-column-start', 'grid-column-end', 'grid-row-start', 'grid-row-end');
-
-
-      const gridColumnDist = grid['grid-column-end'] - grid['grid-column-start'];
-
-      const columnStart = checkedItem.column;
-
-      // 마지막 열을 넘어가지 않도록 해준다. 
-      const columnEnd = Math.min(columnStart + gridColumnDist, MAX_COLUMN);
-
-      const gridRowDist = grid['grid-row-end'] - grid['grid-row-start'];
-
-      const rowStart = checkedItem.row;
-
-      // 마지막 행을 넘어가지 않도록 해준다.       
-      const rowEnd = Math.min(rowStart + gridRowDist, MAX_ROW);
+      const columnStart = Math.min(...columnList);
+      const rowStart = Math.min(...rowList);
+      const columnEnd = Math.max(...columnList) + 1;
+      const rowEnd = Math.max(...rowList) + 1;      
 
       this.command('setAttributeForMulti', 'change grid item', this.$selection.packByValue({
         'grid-column-start': columnStart,
@@ -552,7 +547,35 @@ export default class GhostToolView extends EditorElement {
         'grid-row-end': rowEnd
       }))
 
+      // 해당 자식을 가지고 있지 않는 경우는 자식으로 변경해준다. 
+      if (this.targetItem.hasChild(current.id) === false) {
+        this.command(
+          "moveLayerToTarget",
+          "change target with move",
+          current,
+          this.targetItem,
+          0,
+          "appendChild"
+        );
+
+      }
+
       return;
+    } else {
+
+      if (this.targetItem) {
+        // targetItem 에 대한 grid 정보 다시 수집 
+        this.emit('refreshGridToolInfo', this.targetItem);
+        this.command(
+          "moveLayerToTarget",
+          "change target with move",
+          current,
+          this.targetItem,
+          0,
+          "appendChild"
+        );
+      }
+
     }
 
   }

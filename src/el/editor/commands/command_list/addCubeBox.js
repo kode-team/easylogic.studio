@@ -7,11 +7,12 @@ import { Editor } from "el/editor/manager/Editor";
  */
 export default function addCubeBox (editor) {
 
-    const geometry = new THREE.CircleGeometry( 1, 8, 0, Math.PI * 2 );
-		const mesh = new THREE.Mesh( geometry, new THREE.MeshStandardMaterial({
-            color: new THREE.Color(0xf000ff),
-        }) );
-		mesh.name = 'Circle';
+    const geometry = new THREE.BoxGeometry( 1, 1, 1, 1, 1, 1 );
+    const material = new THREE.MeshBasicMaterial( { color: 0xf0fff0 } );
+    const mesh = new THREE.Mesh( geometry, material );
+    mesh.name = 'Box';
+
+    mesh.position.y = 0.5;
 
     editor.sceneManager.addObject( mesh );
     editor.sceneManager.select( mesh );

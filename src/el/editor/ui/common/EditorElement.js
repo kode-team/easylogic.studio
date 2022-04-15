@@ -2,6 +2,7 @@
 import UIElement from "el/sapa/UIElement";
 import { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "el/editor/types/event";
 import { NotifyType } from "el/editor/types/editor";
+import { SceneManager } from '../../manager/manager-items/SceneManager';
 
 export class EditorElement extends UIElement {
 
@@ -171,6 +172,9 @@ export class EditorElement extends UIElement {
         return this.$editor.stateManager;
     }
 
+    /**
+     * @type {SceneManager}
+     */
     get $sceneManager() {
         return this.$editor.sceneManager;
     }

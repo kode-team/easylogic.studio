@@ -10,7 +10,7 @@ export default class Canvas3DView extends EditorElement {
   
 
   template() {
-    return <div class='elf--page-container' tabIndex="-1" ref='$container'>
+    return <div class='elf--page-three-container' tabIndex="-1" ref='$container'>
         <div class='page-view' ref="$pageView">
           <div class='page-lock scrollbar' ref='$lock'>            
 

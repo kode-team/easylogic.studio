@@ -7,6 +7,7 @@ import layerTree from "./layer-tree"
 import project from "./project"
 
 import defaultIcons from "./default-icons"
+import threeHelpers from "./three-helpers"
 
 
 export default [
@@ -68,4 +69,6 @@ export default [
     // todo: timeline,
     //timeline
     project,
+
+    threeHelpers,
 ]

@@ -1,8 +1,6 @@
 import { isArray } from 'el/sapa/functions/func';
 import * as THREE from 'three';
 
-const identity = () => true;
-
 var _DEFAULT_CAMERA = new THREE.PerspectiveCamera( 3, 1, 0.01, 1000 );
 _DEFAULT_CAMERA.name = 'Camera';
 _DEFAULT_CAMERA.position.set( 0, 5, 10 );
@@ -42,6 +40,10 @@ export class SceneManager {
         this.addCamera( this.camera );        
     }
 
+    emit ( event, ...args ) {
+        this.editor.emit( event, ...args );
+    }
+
 	setScene ( scene ) {
 
 		this.scene.uuid = scene.uuid;
@@ -62,7 +64,7 @@ export class SceneManager {
 
 		}
 
-        this.editor.emit('sceneChanged', this.scene);
+        this.emit('sceneChanged', this.scene);
 	}
 
 	addObject(object, parent, index, hasEmit = true ) {
@@ -88,8 +90,8 @@ export class SceneManager {
 
 		}
 
-        this.editor.emit('objectAdded', object);
-        this.editor.emit('sceneGraphChanged');
+        this.emit('objectAdded', object);
+        this.emit('sceneGraphChanged');
 	}
 
     moveObject(object,parent,before ) {
@@ -108,13 +110,13 @@ export class SceneManager {
 			parent.children.pop();
 		}
 
-        this.editor.emit('sceneGraphChanged');
+        this.emit('sceneGraphChanged');
 	}
 
     nameObject(object, name ) {
 
 		object.name = name;
-        this.editor.emit('sceneGraphChanged');        
+        this.emit('sceneGraphChanged');        
 	}
 
     removeObject( object ) {
@@ -132,8 +134,8 @@ export class SceneManager {
 
 		object.parent.remove( object );
 
-        this.editor.emit('objectRemoved', object);
-        this.editor.emit('sceneGraphChanged');
+        this.emit('objectRemoved', object);
+        this.emit('sceneGraphChanged');
 	}
 
     addGeometry ( geometry ) {
@@ -143,7 +145,7 @@ export class SceneManager {
     setGeometryName ( geometry, name ) {
 
 		geometry.name = name;
-        this.editor.emit( 'sceneGraphChanged' );
+        this.emit( 'sceneGraphChanged' );
 	}
 
     addMaterial ( material ) {
@@ -158,7 +160,7 @@ export class SceneManager {
 			this.addMaterialToRefCounter( material );
 		}
 
-        this.editor.emit('materialAdded');
+        this.emit('materialAdded');
 	}
 
     addMaterialToRefCounter ( material ) {
@@ -192,7 +194,7 @@ export class SceneManager {
 			this.removeMaterialFromRefCounter( material );
 		}
 
-        this.editor.emit('materialRemoved');
+        this.emit('materialRemoved');
 	}
 
     removeMaterialFromRefCounter ( material ) {
@@ -224,7 +226,7 @@ export class SceneManager {
     setMaterialName(material,name ) {
 
 		material.name = name;
-        this.editor.emit('sceneGraphChanged');
+        this.emit('sceneGraphChanged');
 	}
 
     addTexture( texture ) {
@@ -237,7 +239,7 @@ export class SceneManager {
 
 			this.cameras[ camera.uuid ] = camera;
 
-            this.editor.emit('cameraAdded', camera);
+            this.emit('cameraAdded', camera);
 		}
 
 	}
@@ -248,7 +250,7 @@ export class SceneManager {
 
 			delete this.cameras[ camera.uuid ];
 
-            this.editor.emit('cameraRemoved', camera);
+            this.emit('cameraRemoved', camera);
 		}
 
 	}
@@ -291,7 +293,7 @@ export class SceneManager {
         this.sceneHelpers.add( helper );
         this.helpers[ object.id ] = helper;
 
-        this.editor.emit('helperAdded', helper);
+        this.emit('helperAdded', helper);
 
 	}
 
@@ -304,7 +306,7 @@ export class SceneManager {
 
 			delete this.helpers[ object.id ];
 
-            this.editor.emit('helperRemoved', helper);
+            this.emit('helperRemoved', helper);
 
 		}
 
@@ -320,7 +322,7 @@ export class SceneManager {
 
 		this.scripts[ object.uuid ].push( script );
 
-        this.editor.emit('scriptAdded', script);
+        this.emit('scriptAdded', script);
 	}
 
     removeScript ( object, script ) {
@@ -335,7 +337,7 @@ export class SceneManager {
 
 		}
 
-        this.editor.emit('scriptRemoved', script);
+        this.emit('scriptRemoved', script);
 	}
 
     getObjectMaterial ( object, slot ) {
@@ -368,7 +370,7 @@ export class SceneManager {
 
 		this.viewportCamera = this.cameras[ uuid ];
 
-        this.editor.emit('viewportCameraChanged');
+        this.emit('viewportCameraChanged');
 	}
 
     select( object ) {
@@ -386,7 +388,7 @@ export class SceneManager {
 		this.selected = object;
 
         this.editor.config.set('selected', uuid);
-        this.editor.emit('objectSelected', object);
+        this.emit('objectSelected', object);
 
 	}
 
@@ -424,7 +426,7 @@ export class SceneManager {
 
 		if ( object !== undefined ) {
 
-            this.editor.emit('objectFocused', object);
+            this.emit('objectFocused', object);
 		}
 
 	}
@@ -436,7 +438,7 @@ export class SceneManager {
     clear () {
 
 		this.camera.copy( _DEFAULT_CAMERA );
-        this.editor.emit('cameraChanged');
+        this.emit('cameraChanged');
 
 		this.scene.name = 'Scene';
 		this.scene.userData = {};
@@ -464,7 +466,7 @@ export class SceneManager {
 
 		this.deselect();
 
-        this.editor.emit('editorCleared');
+        this.emit('editorCleared');
 	}
 
 	async fromJSON ( json ) {
@@ -474,7 +476,7 @@ export class SceneManager {
 
 		this.camera.copy( camera );
 
-        this.editor.emit('cameraResetted');
+        this.emit('cameraResetted');
 
 		this.scripts = json.scripts;
 

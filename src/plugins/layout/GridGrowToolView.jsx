@@ -515,6 +515,7 @@ export default class GridGrowToolView extends GridGrowDragEventView {
     const current = this.getGridTargetLayer();
 
     return {
+      'data-drag-target-item': Boolean(this.$selection.dragTargetItem),
       style: {
         display: current ? "block" : "none",
       },
@@ -614,6 +615,11 @@ export default class GridGrowToolView extends GridGrowDragEventView {
   }
 
   getGridTargetLayer() {
+
+    if (this.$selection.dragTargetItem) {
+      return this.$selection.dragTargetItem;
+    }
+
     const current = this.$selection.current;
 
     if (!current) return null;
@@ -939,6 +945,10 @@ export default class GridGrowToolView extends GridGrowDragEventView {
         })}
       </>
     );
+  }
+
+  [SUBSCRIBE('refreshGridToolInfo')] () {
+    this.refresh();
   }
 
   [SUBSCRIBE("updateViewport")]() {

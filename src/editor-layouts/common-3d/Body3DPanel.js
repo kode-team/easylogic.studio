@@ -17,7 +17,7 @@ export default class Body3DPanel extends EditorElement {
 
   template() {
     return /*html*/`
-      <div class="elf--body-panel">
+      <div class="elf--body-three-panel">
         <div class='editing-area'>
           <div class="canvas-layout">
             ${createComponent('Canvas3DView')}

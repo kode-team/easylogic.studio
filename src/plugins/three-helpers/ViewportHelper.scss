@@ -1,0 +1,20 @@
+
+.elf--viewport-helper {
+  pointer-events:none;
+  position:absolute;
+  left:0px;
+  top:0px;
+  right:0px;
+  bottom:0px;
+
+  .viewport-info {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    display: inline-block;
+    padding: 4px 10px;
+    background-color: rgba(255, 122, 0, 0.5);
+    color: white;    
+  }
+}
+

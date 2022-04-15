@@ -44,7 +44,7 @@ export default class DomRender extends ItemRender {
       "background-position": item.cacheBackgroundImage['background-position'],
       "background-repeat": item.cacheBackgroundImage['background-repeat'],
       "background-size": item.cacheBackgroundImage['background-size'],
-      "background-blend-mode": item.cacheBackgroundImage['background-blend-mode'],      
+      "background-blend-mode": item.cacheBackgroundImage['background-blend-mode'],
     };
   }
 
@@ -108,7 +108,7 @@ export default class DomRender extends ItemRender {
       // fill container 의 경우 flex-grow : 1 로 고정한다. 
       // 부모의 flex-direction 에 따라 다르다.       
       // 방향에 따라 flex-grow 가 정해지기 때문에 , 그에 따른 width, height 값이 auto  로 변경되어야 함 
-      const parentLayoutDirection  = item?.parent?.['flex-direction'];
+      const parentLayoutDirection = item?.parent?.['flex-direction'];
       if (parentLayoutDirection === FlexDirection.ROW && item.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
         obj.width = 'auto';
         obj['flex-grow'] = item['flex-grow'] || 1;
@@ -160,7 +160,7 @@ export default class DomRender extends ItemRender {
       case Constraints.SCALE:
         obj.left = Length.px(item.x).toPercent(parentWidth);
         obj.right = Length.px(parentWidth - item.offsetX - item.screenWidth).toPercent(parentWidth);
-        obj.width = 'auto !important';        
+        obj.width = 'auto !important';
         break;
     }
 
@@ -185,7 +185,7 @@ export default class DomRender extends ItemRender {
       case Constraints.SCALE:
         obj.top = Length.px(item.y).toPercent(parentHeight);
         obj.bottom = Length.px(parentHeight - item.offsetY - item.screenHeight).toPercent(parentHeight);
-        obj.height = 'auto !important';        
+        obj.height = 'auto !important';
         break;
     }
 
@@ -207,7 +207,7 @@ export default class DomRender extends ItemRender {
 
     return {
       display: 'flex',
-      gap: Length.px(item.gap),      
+      gap: Length.px(item.gap),
       ...item.attrs(
         'flex-direction',
         'flex-wrap',
@@ -224,7 +224,7 @@ export default class DomRender extends ItemRender {
    */
   toGridLayoutCSS(item) {
     return {
-      display: 'grid',      
+      display: 'grid',
       ...item.attrs(
         'grid-template-columns',
         'grid-template-rows',
@@ -252,7 +252,7 @@ export default class DomRender extends ItemRender {
       ...STRING_TO_CSS(item['border'])
     };
 
-    
+
 
     return obj;
   }
@@ -291,7 +291,7 @@ export default class DomRender extends ItemRender {
   toKeyListCSS(item, args = []) {
     let obj = {};
 
-    for(var i = 0; i < args.length; i++) {
+    for (var i = 0; i < args.length; i++) {
       const key = args[i];
       if (isNotUndefined(item[key])) {
         obj[key] = item[key];
@@ -306,9 +306,9 @@ export default class DomRender extends ItemRender {
 
     if (item.isLayout(Layout.FLEX)) {
       switch (item.resizingHorizontal) {
-        case ResizingMode.FIXED: 
+        case ResizingMode.FIXED:
           obj.width = Length.px(item.screenWidth);
-          break; 
+          break;
         case ResizingMode.HUG_CONTENT:
           // noop
           obj['min-width'] = Length.px(item.screenWidth);
@@ -318,23 +318,23 @@ export default class DomRender extends ItemRender {
       }
 
       switch (item.resizingVertical) {
-        case ResizingMode.FIXED: 
+        case ResizingMode.FIXED:
           obj.height = Length.px(item.screenHeight);
-          break; 
+          break;
         case ResizingMode.HUG_CONTENT:
           // noop
           obj['min-height'] = Length.px(item.screenHeight);
           // obj.width = 'fit-content';
           // obj.height = 'fit-content';
           break;
-      }      
-    } 
+      }
+    }
 
     if (item.isInDefault()) {
       obj.width = Length.px(item.screenWidth);
       obj.height = Length.px(item.screenHeight);
-    } 
-    
+    }
+
     if (item.isInFlex()) {
       // flex layout 일 때는 height 를 지정하지 않는다. 
       // FIXME: 방향에 따라 지정해야할 수도 있다. 
@@ -364,16 +364,16 @@ export default class DomRender extends ItemRender {
         if (item.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
           obj.width = 'auto'
           obj['align-self'] = AlignItems.STRETCH;
-        }        
+        }
       }
 
-    } 
+    }
 
     if (item.isInGrid()) {
       // NOOP , no width, heigh
       obj.width = 'auto';
       obj.height = 'auto';
-    } 
+    }
 
     return obj;
   }
@@ -640,9 +640,7 @@ export default class DomRender extends ItemRender {
    * @param {string} prefix 
    */
   toSelectorString(item, prefix = '') {
-    return item.selectors
-      .map(selector => selector.toString(prefix))
-      .join('\n\n')
+    return item.selectors?.map(selector => selector.toString(prefix)).join('\n\n')
   }
 
   /**
@@ -690,7 +688,7 @@ export default class DomRender extends ItemRender {
       this.toBorderCSS(item),
       this.toBackgroundImageCSS(item),
       this.toLayoutCSS(item),
-      this.toSizeCSS(item),      
+      this.toSizeCSS(item),
       this.toTransformCSS(item),
       this.toLayoutItemCSS(item)
     );

@@ -16,7 +16,7 @@ import ItemLayerTab from "../common/area/ItemLayerTab";
 import { createComponent } from "el/sapa/functions/jsx";
 
 import './layout.scss';
-import e3dEditorPlugins from "plugins/e3d-editor-plugins";
+import e3dEditorPlugins from "plugins/three-editor-plugins";
 import Body3DPanel from '../common-3d/Body3DPanel';
 import ThreeInspector from '../common/area/ThreeInspector';
 import ThreeToolBar from "editor-layouts/common-3d/area/tool-bar/ThreeToolBar";
@@ -69,7 +69,7 @@ export default class ThreeEditor extends BaseLayout {
 
   template() {
     return /*html*/`
-      <div class="easylogic-studio e3d-editor">
+      <div class="easylogic-studio three-editor">
         <div class="layout-main">
           <div class='layout-top' ref='$top'>
             ${createComponent('ThreeToolBar')}

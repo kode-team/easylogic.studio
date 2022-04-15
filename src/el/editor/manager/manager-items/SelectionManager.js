@@ -27,6 +27,7 @@ export class SelectionManager {
     this.cachedArtBoardVerties = []
     this.cachedVerties = rectToVerties(0, 0, 0, 0, '50% 50% 0px');
     this.gridInformation = {}
+    this.dragTargetItem = null;
 
     this.$editor.on('config:bodyEvent', () => {
       this.refreshMousePosition();
@@ -817,5 +818,9 @@ export class SelectionManager {
    */
   updateGridInformation(obj = {}) {
     this.gridInformation = obj;
+  }
+
+  updateDragTargetItem(item) {
+    this.dragTargetItem = item;
   }
 }
