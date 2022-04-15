@@ -628,7 +628,7 @@ export default class GhostToolView extends EditorElement {
     // target 이 레이아웃이 있고
     if (this.targetItem.hasLayout()) {
       // 자식을 안가지고 있을 때는 그냥 appendChild 를 실행
-      if (this.targetItem?.hasChildren() === false) {
+      if (this.targetItem?.hasChildren() === false && this.targetItem.isLayout(Layout.FLEX)) {
         this.command(
           "moveLayerToTarget",
           "change target with move",
