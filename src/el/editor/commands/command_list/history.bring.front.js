@@ -12,7 +12,7 @@ export default {
 
         // 마지막일때 
         // 다음 부모의 첫번째 자식을 선택한다. 
-        const currentValues = {}
+        let currentValues = {}
         if (currentLayer.isLast()) {
             // NOOP
             return;
@@ -30,14 +30,14 @@ export default {
             ...oldParentLayer.attrsWithId('children'),
 
             ...currentLayer.attrsWithId('x', 'y', 'angle'),
-        });                
+        });
 
         editor.nextTick(() => {
             editor.history.add(message, this, {
                 currentValues: [currentValues],
                 undoValues: [lastValues],
             })
-            editor.emit('refreshAllCanvas');            
+       
         })
 
         editor.nextTick(() =>  {
@@ -58,11 +58,6 @@ export default {
             ...currentLayer.attrsWithId('x', 'y', 'angle'),
             ...currentTarget.attrsWithId('children')
         });
-
-
-        editor.nextTick(() => {
-            editor.emit('refreshAllCanvas');
-        })
     },
 
     undo: function (editor, { currentValues: [newValues], undoValues: [lastValues] }) {
@@ -81,10 +76,5 @@ export default {
             ...lastLayer.attrsWithId('x', 'y', 'angle'),
             ...lastParent.attrsWithId('children'),
         });
-
-        editor.nextTick(() => {
-            editor.emit('refreshAllCanvas');
-        })
-
     }
 }

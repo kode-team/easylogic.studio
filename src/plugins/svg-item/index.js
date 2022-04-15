@@ -1,6 +1,6 @@
 import { Editor } from "el/editor/manager/Editor";
 import { StrokeLineCap, StrokeLineJoin } from "el/editor/types/model";
-import ObjectProperty from "el/editor/ui/property/ObjectProperty";
+import {ObjectProperty} from "el/editor/ui/property/ObjectProperty";
 import ColorMatrixEditor from "./editor/ColorMatrixEditor";
 import FuncFilterEditor from "./editor/FuncFilterEditor";
 import SVGFilterEditor from "./SVGFilterEditor";

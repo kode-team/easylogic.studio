@@ -1,4 +1,6 @@
-import EasyLogic from "./editor-layouts/index";
+import { createThreeEditor } from "./editor-layouts/index";
+
+
 
 function startEditor() {
 
@@ -6,7 +8,7 @@ function startEditor() {
 
   return idList.map(id => {
 
-    return EasyLogic.createPageBuilder({
+    return createThreeEditor({
       container: document.getElementById(id),
       config: {
         'editor.theme': 'light',

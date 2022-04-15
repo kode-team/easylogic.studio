@@ -26,6 +26,8 @@ export class SelectionManager {
     this.cachedItemMatrices = []    
     this.cachedArtBoardVerties = []
     this.cachedVerties = rectToVerties(0, 0, 0, 0, '50% 50% 0px');
+    this.gridInformation = {}
+    this.dragTargetItem = null;
 
     this.$editor.on('config:bodyEvent', () => {
       this.refreshMousePosition();
@@ -495,12 +497,6 @@ export class SelectionManager {
     this.cachedArtBoardVerties = this.currentProject.artboards.map(item => {
       return { item, matrix: item.matrix};
     })
-
-    // 현재 객체 matrix 캐쉬 설정 
-    this.cachedCurrentItemMatrix = this.current.matrix;
-
-    // 현재 객체 자식 matrix 캐쉬 설정 
-    this.cachedCurrentChildrenItemMatrices = this.modelManager.getAllLayers(this.current.id).map(it => it.matrix);
   }
 
   startToCacheChildren() {
@@ -813,5 +809,18 @@ export class SelectionManager {
 
   isAll (...args) {
     return this.items.every(it => args.includes(it.itemType));
+  }
+
+  /**
+   * grid information 정보를 사전에 캐쉬해둔다. 
+   * 
+   * @param {object} obj 
+   */
+  updateGridInformation(obj = {}) {
+    this.gridInformation = obj;
+  }
+
+  updateDragTargetItem(item) {
+    this.dragTargetItem = item;
   }
 }

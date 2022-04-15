@@ -11,7 +11,7 @@ import {
 
 
 import { Keyframe } from "el/editor/property-parser/Keyframe";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 
 import './KeyframeProperty.scss';
 

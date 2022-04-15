@@ -291,49 +291,60 @@ export default class DomEventHandler extends BaseHandler {
     obj.codes = [];
     obj.checkMethodList = [];
 
-    magicMethod.pipes.forEach(pipe => {
-      if (pipe.type === 'function') {
+    /** 함수 체크  */
+    const debounceFunction = magicMethod.getFunction('debounce');
+    const throttleFunction = magicMethod.getFunction('throttle');
 
-        switch (pipe.func) {
-          case 'debounce':
-            var debounceTime = +(pipe.args?.[0] || 0);
-            obj.callback = debounce(callback, debounceTime);
-            break;
-          case 'throttle':
-            var throttleTime = +(pipe.args?.[0] || 0);
-            obj.callback = throttle(callback, throttleTime);
-            break;
-          case 'before':
-            var r = pipe.args[0].split(' ');            
-            var [target, param] = r;            
-            obj.beforeMethods.push({
-              target,
-              param
-            });
-            break;
-          case 'after':
-            var r = pipe.args[0].split(' ');            
-            var [target, param] = r;            
+    if (debounceFunction) {
+      var debounceTime = +(debounceFunction.args?.[0] || 0);
+      obj.callback = debounce(callback, debounceTime);
+    } else if (throttleFunction) {
+      var throttleTime = +(throttleFunction.args?.[0] || 0);
+      obj.callback = throttle(callback, throttleTime);
+    }
 
-            obj.afterMethods.push({
-              target,
-              param
-            });
+    /* 함수 리스트 체크 */
+    const afterFunctionList = magicMethod.getFunctionList('after');
+    const beforeFunctionList = magicMethod.getFunctionList('before');    
 
-            break;
-        }
+    if (afterFunctionList.length) {
 
-      } else if (pipe.type === 'keyword') {
-        const method = `${pipe.value}`;
+      afterFunctionList.forEach(afterFunction => {
+        var r = afterFunction.args[0].split(' ');            
+        var [target, param] = r;            
+  
+        obj.afterMethods.push({
+          target,
+          param
+        });
+      })
 
-        if (this.getCallback(method)) {
-          obj.checkMethodList.push(method);
-        } else {
-          obj.codes.push(method.toLowerCase());
+    }
 
-        }
+    if (beforeFunctionList.length) {
+
+      beforeFunctionList.forEach(beforeFunction => {
+        var r = beforeFunction.args[0].split(' ');            
+        var [target, param] = r;            
+  
+        obj.beforeMethods.push({
+          target,
+          param
+        });
+      })
+
+    }
+
+    /** 키워드 체크  */
+    magicMethod.keywords.forEach(keyword => {
+      const method = keyword;
+
+      if (this.getCallback(method)) {
+        obj.checkMethodList.push(method);
+      } else {
+        obj.codes.push(method.toLowerCase());
+
       }
-
     })
 
     return obj;
@@ -347,15 +358,9 @@ export default class DomEventHandler extends BaseHandler {
 
     var options = false;
 
-    magicMethod.pipes.forEach(pipe => {
-      if (pipe.type === 'keyword') {
-        switch (pipe.value) {
-          case 'capture':
-            options = true;
-            break;
-        }
-      }
-    });
+    if (magicMethod.hasKeyword('capture')) {
+      options = true;
+    }
 
     if (scrollBlockingEvents[eventObject.eventName]) {
       options = {
@@ -380,16 +385,11 @@ export default class DomEventHandler extends BaseHandler {
     if (eventObject.customEventName === 'doubletab') {
       var delay = 300;
 
+      var delayFunction = magicMethod.getFunction('delay');
 
-      magicMethod.pipes.forEach(pipe => {
-        if (pipe.type === 'function') {
-          switch (pipe.func) {
-            case 'delay':
-              delay = +(pipe.args?.[0] || 0);
-              break;
-          }
-        }
-      })
+      if (delayFunction) {
+        delay = +(delayFunction.args?.[0] || 0);
+      }
 
       return (...args) => {
 

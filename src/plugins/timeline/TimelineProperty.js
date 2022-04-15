@@ -9,7 +9,7 @@ import KeyframeTimeView from "./timeline/KeyframeTimeView";
 import TimelineTopToolbar from "./timeline/TimelineTopToolbar";
 import TimelineKeyframeList from "./timeline/TimelineKeyframeList";
 import TimelineObjectList from "./timeline/TimelineObjectList";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 import { createComponent } from "el/sapa/functions/jsx";
 
 

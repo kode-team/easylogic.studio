@@ -38,7 +38,9 @@ editor.registerUI('canvas.view', {
     TestView: class extends EditorElement {
 
     }
-})
+}, orderNumber = 1000)
+
+orderNumber 를 지정하게 되면  오름차순으로 정렬이 됩니다. 
 
 ```
 

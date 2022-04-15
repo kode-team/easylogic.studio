@@ -158,8 +158,6 @@ export default class HTMLRenderer {
     toLayoutBaseModelCSS (item) {
         return this.to('toLayoutBaseModelCSS', item);            
     }    
-
-
     /**
      * 
      * 렌더링 될 style 태그를 리턴한다. 

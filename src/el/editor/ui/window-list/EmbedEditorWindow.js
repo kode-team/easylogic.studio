@@ -3,7 +3,7 @@ import BaseWindow from "./BaseWindow";
 import { registElement } from "el/sapa/functions/registElement";
 import { SUBSCRIBE } from 'el/sapa/Event';
 import './ExportWindow.scss';
-import App from "editor-layouts";
+import { createDesignEditor } from "editor-layouts/";
 
 
 export default class EmbedEditorWindow extends BaseWindow {
@@ -25,7 +25,7 @@ export default class EmbedEditorWindow extends BaseWindow {
     refresh() {
 
         if (this.$el.isShow()) {
-            App.createDesignEditor({
+            createDesignEditor({
                 container: this.refs.$body.el,
                 config: {
                     'editor.design.mode': 'item',

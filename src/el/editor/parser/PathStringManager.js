@@ -1,5 +1,3 @@
-import PathParser from "./PathParser";
-
 export default class PathStringManager {
     constructor () {
         this.pathArray = [] 

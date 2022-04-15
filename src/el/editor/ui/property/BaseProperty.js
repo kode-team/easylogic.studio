@@ -5,7 +5,7 @@ import { EditorElement } from "../common/EditorElement";
 
 import './BaseProperty.scss';
 
-export default class BaseProperty extends EditorElement {
+export class BaseProperty extends EditorElement {
 
   onToggleShow() { }
 

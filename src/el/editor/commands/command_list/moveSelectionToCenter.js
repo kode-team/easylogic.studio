@@ -18,7 +18,7 @@ export default {
 
         if (editor.selection.isEmpty) {
 
-          if (editor.selection.currentProject.layers.length > 0) {
+          if (editor.selection.currentProject?.layers.length > 0) {
             areaVerties = itemsToRectVerties(editor.selection.currentProject.layers);
           } else {
             areaVerties = rectToVerties(0, 0, 100, 100);

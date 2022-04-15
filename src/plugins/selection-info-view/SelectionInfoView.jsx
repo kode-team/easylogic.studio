@@ -138,6 +138,7 @@ export default class SelectionInfoView extends EditorElement {
             "y",
             "width",
             "height",
+            "angle",
             "transform",
             "transform-origin"
           )

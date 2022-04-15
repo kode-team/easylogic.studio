@@ -1,7 +1,7 @@
 
 import { INPUT, BIND, DEBOUNCE, SUBSCRIBE } from "el/sapa/Event";
 
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 import './ContentProperty.scss';
 export default class ContentProperty extends BaseProperty {
   getTitle() {

@@ -1,10 +1,12 @@
 import { MovableModel } from "./MovableModel";
 import { AlignContent, AlignItems, Constraints, ConstraintsDirection, FlexDirection, FlexWrap, JustifyContent, Layout, ResizingMode } from 'el/editor/types/model';
 import DefaultLayoutEngine from "../layout-engine/DefaultLayoutEngine";
+import GridLayoutEngine from "../layout-engine/GridLayoutEngine";
 
 
 const LayoutEngine = {
-    [Layout.DEFAULT]: DefaultLayoutEngine
+    [Layout.DEFAULT]: DefaultLayoutEngine,
+    [Layout.GRID]: GridLayoutEngine,
 }
 
 export class GroupModel extends MovableModel {
@@ -29,7 +31,9 @@ export class GroupModel extends MovableModel {
             resizingVertical: ResizingMode.FIXED,
             // grid
             'grid-template-rows': 'auto',
+            'grid-column-gap': '0px',
             'grid-template-columns': 'auto',
+            'grid-row-gap': '0px',            
             'grid-template-areas': '',
             'grid-auto-rows': 'auto',
             'grid-auto-columns': 'auto',
@@ -99,14 +103,11 @@ export class GroupModel extends MovableModel {
     reset(obj) {
         const isChanged = super.reset(obj);
 
-        if (this.hasChangedField(ConstraintsDirection.VERTICAL, ConstraintsDirection.HORIZONTAL)) {
-            console.log('a');
-        }
 
         return isChanged;
     }
 
-    changeConstraints(direction, value) {
+    changeConstraints(direction, value, shiftKey = false) {
 
         const h = this.json[direction];
         let newConstraints = value;
@@ -115,13 +116,13 @@ export class GroupModel extends MovableModel {
 
             if (value === Constraints.MAX) {
                 newConstraints = Constraints.SCALE;
-            } if (e.shiftKey && value === Constraints.MIN) {
+            } if (shiftKey && value === Constraints.MIN) {
                 newConstraints = Constraints.STRETCH
             }
         } else if (h === Constraints.MIN) {
             if (value === Constraints.MIN) {
                 newConstraints = Constraints.SCALE;
-            } else if (e.shiftKey && value === Constraints.MAX) {
+            } else if (shiftKey && value === Constraints.MAX) {
                 newConstraints = Constraints.STRETCH;
             }
         } else if (h === Constraints.STRETCH) {

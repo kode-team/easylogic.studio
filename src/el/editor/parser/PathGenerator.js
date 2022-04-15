@@ -4,7 +4,7 @@ import Point from "./Point";
 import PathStringManager from "./PathStringManager";
 import { mat4, vec3 } from "gl-matrix";
 import { clone, isNotUndefined } from "el/sapa/functions/func";
-import PathParser from './PathParser';
+import {PathParser} from './PathParser';
 import { toRectVerties } from "el/utils/collision";
 
 const SEGMENT_DIRECTION = ['startPoint', 'endPoint', 'reversePoint']

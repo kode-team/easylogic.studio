@@ -13,7 +13,7 @@ export default class BorderRadius {
         }
 
         var temp = {} 
-        var arr = str.split(' ').filter(it => Length.parse(it))
+        var arr = str.split(' ').map(it => Length.parse(it))
 
         if (arr.length === 1) {
             obj.isAll = true; 
@@ -24,6 +24,12 @@ export default class BorderRadius {
             obj['border-top-right-radius'] = arr[1];
             obj['border-bottom-right-radius'] = arr[2];
             obj['border-bottom-left-radius'] = arr[3];
+
+            // 모두 같은 속성이면 하나로 처리할 수 있도록 한다. 
+            if (arr[0].equals(arr[1]) && arr[0].equals(arr[2]) && arr[0].equals(arr[3])) {
+                obj.isAll = true; 
+                obj['border-radius'] = arr[0]
+            }
         }
 
         return obj; 

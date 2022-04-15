@@ -6,13 +6,14 @@ import { mat4, vec3 } from "gl-matrix";
 import { Transform } from "el/editor/property-parser/Transform";
 import { TransformOrigin } from "el/editor/property-parser/TransformOrigin";
 import { calculateAngle360, calculateAngleForVec3, calculateMatrix, calculateMatrixInverse, round, vertiesMap } from "el/utils/math";
-import { getRotatePointer } from "el/utils/collision";
+import { getRotatePointer, polyPoint, polyPoly } from "el/utils/collision";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { END, MOVE } from "el/editor/types/event";
 
 import './SelectionView.scss';
 import { objectFloor } from "el/utils/func";
-import { ResizingMode } from "el/editor/types/model";
+import { Layout, ResizingMode } from "el/editor/types/model";
+import GridLayoutEngine from "el/editor/layout-engine/GridLayoutEngine";
 
 var directionType = {
     1: 'to top left',
@@ -77,8 +78,10 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.refreshRotatePointerIcon()
         this.state.dragging = true;
         this.state.isRotate = true;
-        this.$config.set('set.move.control.point', true);
         this.initAngle = this.$selection.current.angle;
+
+        // drag 시작 이벤트 설정 
+        this.$config.set('set.move.control.point', true);        
     }
 
     rotateVertex() {
@@ -101,7 +104,7 @@ export default class SelectionToolView extends SelectionToolEvent {
                 newAngle -= newAngle % this.$config.get('fixed.angle');
             }
 
-            instance.angle = newAngle % 360;
+            instance.angle = round(newAngle % 360, 100);
         }
 
         this.state.dragging = true;
@@ -117,13 +120,12 @@ export default class SelectionToolView extends SelectionToolEvent {
         // 마지막 변경 시점 업데이트 
         this.verties = null;
 
-        this.nextTick(() => {
-            this.command(
-                'setAttributeForMulti',
-                'change rotate',
-                this.$selection.pack('angle')
-            );
-        })
+
+        this.command(
+            'setAttributeForMulti',
+            'change rotate',
+            this.$selection.pack('angle')
+        );
     }
 
     refreshRotatePointerIcon(e) {
@@ -181,27 +183,12 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.verties = this.$selection.verties;
 
         this.hasRotate = this.$selection.current.angle !== 0;
+        this.cachedCurrentItemMatrix = this.$selection.current.matrix;
 
         this.$config.set('set.move.control.point', true);
 
         this.$selection.startToCacheChildren();
     }
-
-    // calculateNewOffsetMatrixInverse(vertexOffset, width, height, origin, itemMatrix) {
-
-    //     const center = vec3.subtract(
-    //         [],
-    //         TransformOrigin.scale(origin, width, height),
-    //         vertexOffset
-    //     );
-
-    //     return calculateMatrixInverse(
-    //         mat4.fromTranslation([], vertexOffset),
-    //         mat4.fromTranslation([], center),
-    //         itemMatrix,
-    //         mat4.fromTranslation([], vec3.negate([], center)),
-    //     );
-    // }
 
     calculateDistance(vertex, distVector, reverseMatrix) {
 
@@ -247,10 +234,12 @@ export default class SelectionToolView extends SelectionToolEvent {
                 height: Math.abs(newHeight),
             }
 
-            // layout item 인 경우 x, y 는 layout 이 정하기 때문에 width, height 만 바꾸는걸로 하자. 
-            if (instance.isLayoutItem()) {
+
+            if (instance.isInFlex()) {
                 delete data.x;
                 delete data.y;
+            } else if (instance.isInGrid()) {
+                // NOOP
             }
 
             if (this.hasRotate) {
@@ -309,7 +298,7 @@ export default class SelectionToolView extends SelectionToolEvent {
      */
     moveBottomRightVertex(distVector) {
         const { shiftKey, altKey, metaKey } = this.$config.get('bodyEvent');
-        const item = this.$selection.cachedCurrentItemMatrix
+        const item = this.cachedCurrentItemMatrix
 
         if (item) {
 
@@ -335,18 +324,20 @@ export default class SelectionToolView extends SelectionToolEvent {
                 directionNewVector = vec3.fromValues(realDx / 2, realDy / 2, 0);
             }
 
+            // item 의 크기를 업데이트 했으니 그때마다 갱신한다.
             this.moveDirectionVertex(item, newWidth, newHeight, 'to top left', directionNewVector, {
                 resizingVertical: ResizingMode.FIXED,
                 resizingHorizontal: ResizingMode.FIXED,
             })
 
+            this.updateGridArea(item);
         }
     }
 
 
     moveTopRightVertex(distVector) {
         const { shiftKey, altKey, metaKey } = this.$config.get('bodyEvent');
-        const item = this.$selection.cachedCurrentItemMatrix
+        const item = this.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 1, distVector)
@@ -374,13 +365,15 @@ export default class SelectionToolView extends SelectionToolEvent {
                 resizingVertical: ResizingMode.FIXED,
                 resizingHorizontal: ResizingMode.FIXED,
             })
+
+            this.updateGridArea(item);            
         }
     }
 
 
     moveTopLeftVertex(distVector) {
         const { shiftKey, altKey, metaKey } = this.$config.get('bodyEvent');
-        const item = this.$selection.cachedCurrentItemMatrix
+        const item = this.cachedCurrentItemMatrix
         if (item) {
             let [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
 
@@ -407,13 +400,15 @@ export default class SelectionToolView extends SelectionToolEvent {
                 resizingHorizontal: ResizingMode.FIXED,
                 resizingVertical: ResizingMode.FIXED,
             })
+
+            this.updateGridArea(item);            
         }
     }
 
 
     moveTopVertex(distVector) {
         const { altKey } = this.$config.get('bodyEvent');
-        const item = this.$selection.cachedCurrentItemMatrix
+        const item = this.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
@@ -435,6 +430,8 @@ export default class SelectionToolView extends SelectionToolEvent {
             this.moveDirectionVertex(item, newWidth, newHeight, 'to bottom', directionNewVector, {
                 resizingVertical: ResizingMode.FIXED,
             })
+
+            this.updateGridArea(item);            
         }
     }
 
@@ -442,7 +439,7 @@ export default class SelectionToolView extends SelectionToolEvent {
 
     moveBottomVertex(distVector) {
         const { altKey } = this.$config.get('bodyEvent');
-        const item = this.$selection.cachedCurrentItemMatrix
+        const item = this.cachedCurrentItemMatrix
         if (item) {
             let [realDx, realDy] = this.calculateRealDist(item, 3, distVector)
 
@@ -465,13 +462,15 @@ export default class SelectionToolView extends SelectionToolEvent {
             this.moveDirectionVertex(item, newWidth, newHeight, 'to top', directionNewVector, {
                 resizingVertical: ResizingMode.FIXED,
             })
+
+            this.updateGridArea(item);            
         }
     }
 
 
     moveRightVertex(distVector) {
         const { altKey } = this.$config.get('bodyEvent');
-        const item = this.$selection.cachedCurrentItemMatrix
+        const item = this.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 1, distVector)
@@ -493,12 +492,14 @@ export default class SelectionToolView extends SelectionToolEvent {
             this.moveDirectionVertex(item, newWidth, newHeight, 'to left', directionNewVector, {
                 resizingHorizontal: ResizingMode.FIXED,
             })
+
+            this.updateGridArea(item);            
         }
     }
 
     moveLeftVertex(distVector) {
         const { altKey } = this.$config.get('bodyEvent');
-        const item = this.$selection.cachedCurrentItemMatrix
+        const item = this.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 0, distVector)
@@ -523,13 +524,15 @@ export default class SelectionToolView extends SelectionToolEvent {
             this.moveDirectionVertex(item, newWidth, newHeight, 'to right', directionNewVector, {
                 resizingHorizontal: ResizingMode.FIXED,
             })
+
+            this.updateGridArea(item);            
         }
     }
 
 
     moveBottomLeftVertex(distVector) {
         const { shiftKey, altKey, metaKey } = this.$config.get('bodyEvent');
-        const item = this.$selection.cachedCurrentItemMatrix
+        const item = this.cachedCurrentItemMatrix
         if (item) {
 
             let [realDx, realDy] = this.calculateRealDist(item, 3, distVector)
@@ -556,6 +559,8 @@ export default class SelectionToolView extends SelectionToolEvent {
                 resizingVertical: ResizingMode.FIXED,
                 resizingHorizontal: ResizingMode.FIXED,
             })
+
+            this.updateGridArea(item);            
         }
     }
 
@@ -585,10 +590,35 @@ export default class SelectionToolView extends SelectionToolEvent {
         this.$selection.recoverChildren();         
         // this.$selection.reselect();     
         
-        this.emit('setAttributeForMulti', this.$selection.pack('x', 'y', 'angle', 'width', 'height', 'resizingHorizontal', 'resizingVertical'));
+        const current = this.$selection.current;
+        if (current.isInGrid()) {
+            this.emit('setAttributeForMulti', this.$selection.pack(
+                'x', 'y', 
+                'angle', 'width', 'height', 
+                'resizingHorizontal', 'resizingVertical',
+                'grid-column-start',
+                'grid-column-end',
+                'grid-row-start',
+                'grid-row-end',
+            ));
+        } else {
+            this.emit('setAttributeForMulti', this.$selection.pack('x', 'y', 'angle', 'width', 'height', 'resizingHorizontal', 'resizingVertical'));
+        }
+
 
         this.state.dragging = true;
     }
+
+
+    /**
+     * px 로 된 위치를 기반으로 Grid Area 영역의 위치로 다시 맞춘다. 
+     * 
+     * @param {*} item 
+     */
+     updateGridArea () {
+        return GridLayoutEngine.updateGridArea(this.$selection.current, this.$selection.gridInformation)
+    }
+
 
     moveEndVertex() {
         this.state.dragging = false;
@@ -601,11 +631,31 @@ export default class SelectionToolView extends SelectionToolEvent {
             // recoverChildren 을 통해서 부모에서 변경된 크기에 따라 자식을 다시 재배치 한다. 
             this.$selection.recoverChildren();
 
-            this.command(
-                'setAttributeForMulti',
-                'move selection pointer',
-                this.$selection.pack('x', 'y', 'width', 'height')
-            );
+            if (this.$selection.current.isInGrid()) {
+                this.command(
+                    'setAttributeForMulti',
+                    'move selection pointer',
+                    this.$selection.pack(
+                        'x', 'y', 'angle', 'width', 'height', 
+                        'resizingHorizontal', 'resizingVertical',
+                        'grid-column-start',
+                        'grid-column-end',
+                        'grid-row-start',
+                        'grid-row-end'
+                    )
+                );
+    
+            } else {
+                this.command(
+                    'setAttributeForMulti',
+                    'move selection pointer',
+                    this.$selection.pack(
+                        'x', 'y', 'angle', 'width', 'height', 
+                        'resizingHorizontal', 'resizingVertical',
+                    )
+                );
+    
+            }
 
             this.emit('recoverBooleanPath');
         })
@@ -647,10 +697,6 @@ export default class SelectionToolView extends SelectionToolEvent {
      * 선택영역 컴포넌트 그리기 
      */
     renderPointers() {
-
-        if (!this.$selection.cachedCurrentItemMatrix) {
-            return;
-        }
 
         if (this.$selection.isEmpty) {
             return;
@@ -794,11 +840,7 @@ export default class SelectionToolView extends SelectionToolEvent {
         let text = widthPx === heightPx ? `WH: ${widthPx}` : `${round(width, 100)} x ${round(height, 100)}`;
 
         if (this.state.isRotate) {
-            const rotateZ = Transform.get(this.$selection.current.transform, 'rotateZ')
-
-            if (rotateZ) {
-                text = `${round(rotateZ[0].value, 1000)}°`
-            }
+            text = `${round(this.$selection.current.angle, 100)}°`
         }
 
         return /*html*/`
@@ -848,10 +890,8 @@ export default class SelectionToolView extends SelectionToolEvent {
             }
         }
 
-        const isArtBoard = current && current.is('artboard');
-
         //TODO: 여기서는 법선벡터를 구하게 되면 식이 훨씬 간단해진다. 
-        const rotate = Length.deg(current.angle).round(1000);
+        const rotate = Length.deg(current.nestedAngle).round(1000);
 
         const rotatePointer = getRotatePointer(pointers, 34)
         const dist = vec3.dist(pointers[0], pointers[2]);

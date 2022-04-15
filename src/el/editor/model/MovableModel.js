@@ -4,7 +4,7 @@ import { TransformOrigin } from "el/editor/property-parser/TransformOrigin";
 import { mat4, quat, vec3 } from "gl-matrix";
 import { area, calculateMatrix, calculateMatrixInverse, radianToDegree, round, vertiesMap } from "el/utils/math";
 import { isFunction, isNotUndefined, isUndefined } from "el/sapa/functions/func";
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 import { itemsToRectVerties, polyPoint, polyPoly, rectToVerties, toRectVerties } from "el/utils/collision";
 import { BaseAssetModel } from './BaseAssetModel';
 
@@ -118,6 +118,14 @@ export class MovableModel extends BaseAssetModel {
         return this._cachedGuideVerties || this.getGuideVerties();
     }
 
+    get xList() {
+        return this._cachedXList || this.getXList();
+    }    
+
+    get yList() {
+        return this._cachedYList || this.getYList();
+    }
+
     get areaPosition() {
         return this._cachedAreaPosition || this.getAreaPosition(this._cachedAreaWidth);
     }
@@ -200,7 +208,23 @@ export class MovableModel extends BaseAssetModel {
         const isChanged = super.reset(obj, context);
 
         // transform 에 변경이 생기면 미리 캐슁해둔다. 
-        if (this.hasChangedField('children', 'x', 'y', 'width', 'height', 'angle', 'transform-origin', 'transform', 'perspective', 'perspective-origin')) {
+        if (this.hasChangedField(
+            'children', 
+            'x', 
+            'y', 
+            'width', 
+            'height', 
+            'box-model',
+            'angle', 
+            'transform-origin', 
+            'transform', 
+            'perspective', 
+            'perspective-origin',
+            'resizingVertical',
+            'resizingHorizontal',
+            'contraints-vertical',
+            'contraints-horizontal',
+        ) || this.changedLayout) {
             this.refreshMatrixCache()
         }
 
@@ -275,6 +299,9 @@ export class MovableModel extends BaseAssetModel {
 
     setCacheGuideVerties() {
         this._cachedGuideVerties = this.getGuideVerties();
+        this._cachedXList = this.getXList();
+        this._cachedYList = this.getYList();
+
     }
 
     setCacheAreaPosition() {
@@ -641,7 +668,17 @@ export class MovableModel extends BaseAssetModel {
         width = isNotUndefined(width) ? width : this.screenWidth;
         height = isNotUndefined(height) ? height : this.screenHeight;
 
-        let model = rectToVerties(0, 0, width, height, this.json['transform-origin']);
+        let x = 0; 
+        let y = 0;
+
+        if (this.parent && this.parent.is('project') === false) {
+            const contentBox = this.parent.contentBox;
+
+            x = contentBox.x;
+            y = contentBox.y;
+        }
+
+        let model = rectToVerties(x, y, width, height, this.json['transform-origin']);
 
         return vertiesMap(model, this.absoluteMatrix)
     }
@@ -685,6 +722,23 @@ export class MovableModel extends BaseAssetModel {
             vec3.lerp([], verties[2], verties[3], 0.5),
             vec3.lerp([], verties[3], verties[0], 0.5),
         ];
+    }
+
+    getXList() {
+        return [...new Set(this.guideVerties.map(it => it[0]))]
+    }
+
+    getYList() {
+        return [...new Set(this.guideVerties.map(it => it[1]))]
+    }
+    
+    get nestedAngle() {
+
+        if (this.parent) {
+            return this.parent.nestedAngle + this.json.angle;
+        }
+
+        return this.json.angle || 0;
     }
 
     get toRectVerties() {
@@ -807,7 +861,7 @@ export class MovableModel extends BaseAssetModel {
     }
 
     /**
-     * 로컬 좌표 path (d)로 새로운 bbox 를 구한다. 
+     * [로컬 좌표] path (d)로 새로운 bbox 를 구한다. 
      * 
      * A -> B 로 옮겨갈 때 부모 기준으로 새로운 bbox 위치를 구할 수 있다. 
      * 

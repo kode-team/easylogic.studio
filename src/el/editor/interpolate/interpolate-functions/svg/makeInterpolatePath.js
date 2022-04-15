@@ -1,4 +1,4 @@
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 import { makeInterpolateIdentity } from "../makeInterpolateIdentity";
 import { makeInterpolatePathValues } from "./makeInterpolatePathValues";
 import { makeInterpolateBoolean } from "../makeInterpolateBoolean";

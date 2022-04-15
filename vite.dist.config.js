@@ -1,7 +1,6 @@
 
 import { defineConfig } from 'vite'
 import copy from 'rollup-plugin-copy'
-import { adorableCSS } from "adorable-css/vite-plugin-adorable-css"
 
 const path = require('path');
 
@@ -25,9 +24,6 @@ export default defineConfig({
     }
   },
   plugins: [
-    adorableCSS({
-      include: ['**/*.{svelte,jsx}']
-    }),    
     copy({
       targets: [
         { src: 'index.d.ts', dest: 'dist/' },

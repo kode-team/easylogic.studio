@@ -1,8 +1,8 @@
-import BaseProperty from "../../el/editor/ui/property/BaseProperty";
 import { LOAD, CLICK, PREVENT, STOP, FOCUSOUT, DOUBLECLICK, DOMDIFF, KEYDOWN, ENTER, SUBSCRIBE } from "el/sapa/Event";
 import icon from "el/editor/icon/icon";
 
 import './ProjectProperty.scss';
+import { BaseProperty } from 'el/editor/ui/property/BaseProperty';
 
 export default class ProjectProperty extends BaseProperty {
   getTitle() {

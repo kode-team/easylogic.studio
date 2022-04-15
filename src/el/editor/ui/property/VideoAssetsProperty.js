@@ -1,4 +1,4 @@
-import BaseProperty from "./BaseProperty";
+import {BaseProperty} from "./BaseProperty";
 import { LOAD, CLICK, DOMDIFF, DRAGSTART, CHANGE, SUBSCRIBE } from "el/sapa/Event";
 
 import icon from "el/editor/icon/icon";

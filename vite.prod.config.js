@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite'
-import { adorableCSS } from "adorable-css/vite-plugin-adorable-css"
 
 const path = require('path');
 const alias = require('./alias');
@@ -19,12 +18,10 @@ export default defineConfig({
     rollupOptions: {
       input: {
         editor: path.resolve(__dirname, 'index.html'),
+        whiteboard: path.resolve(__dirname, 'whiteboard.html'),
+        dataeditor: path.resolve(__dirname, 'dataeditor.html'),
+        threeeditor: path.resolve(__dirname, '3d.html'),
       }
     }
-  },
-  plugins: [
-    adorableCSS({
-      include: ['**/*.{svelte,jsx}']
-    })
-  ]
+  }
 })

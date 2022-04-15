@@ -34,7 +34,7 @@ class UIElement extends EventMachine {
 
   createContext() {
     return {
-      
+
     }
   }
 
@@ -91,9 +91,9 @@ class UIElement extends EventMachine {
    *
    */
   initializeStoreEvent() {
-    this.filterProps('subscribe').forEach(it => {
+    this.filterProps('subscribe').forEach(magicMethod => {
 
-      const events = it.args.join(' ');
+      const events = magicMethod.args.join(' ');
 
       const checkMethodList = [];
       const eventList = [];
@@ -104,48 +104,53 @@ class UIElement extends EventMachine {
       let isSelfTrigger = false;
       let isFrameTrigger = false;
 
-      it.pipes.forEach(pipe => {
-        if (pipe.type === 'function') {
-          switch (pipe.func) {
-            case 'debounce':
-              debounce = +(pipe.args?.[0] || 0);
-              break;
-            case 'throttle':
-              throttle = +(pipe.args?.[0] || 0);
-              break;
-            case 'allTrigger':
-              isAllTrigger = true;
-              break;
-            case 'selfTrigger':
-              isSelfTrigger = true;
-              break;
-            case 'frame':
-              isFrameTrigger = true;
-              break;
-            case 'params':
-              const settings = getVariable(pipe.args?.[0]);
+      // 함수 체크 
+      const debounceFunction = magicMethod.getFunction('debounce');
+      const throttleFunction = magicMethod.getFunction('throttle');
+      const allTriggerFunction = magicMethod.getFunction('allTrigger');
+      const selfTriggerFunction = magicMethod.getFunction('selfTrigger');
+      const frameFunction = magicMethod.getFunction('frame');
 
-              if (isNotUndefined(settings.debounce)) debounce = settings.debounce;
-              if (isNotUndefined(settings.throttle)) throttle = settings.throttle;
-              if (isNotUndefined(settings.frame)) isFrameTrigger = settings.frame;
-              break;
-          }
-        } else if (pipe.type === 'keyword') {
-          const method = `${pipe.value}`;
-          if (this[method]) {
-            checkMethodList.push(method);
-          } else {
-            eventList.push(method);            
-          }
+      // console.log(magicMethod, allTriggerFunction, selfTriggerFunction, frameFunction, this);
+
+      if (debounceFunction) {
+        debounce = +(debounceFunction.args?.[0] || 0);
+      }
+
+      if (throttleFunction) {
+        throttle = +(throttleFunction.args?.[0] || 0);
+      }
+
+      if (allTriggerFunction) {
+        isAllTrigger = true;
+      }
+
+      if (selfTriggerFunction) {
+        isSelfTrigger = true;
+      }
+
+      if (frameFunction) {
+        isFrameTrigger = true;
+      }
+
+
+      /** 키워드 체크  */
+      // console.log(magicMethod, magicMethod.keywords, this);
+      magicMethod.keywords.forEach(keyword => {
+        const method = keyword;
+        if (this[method]) {
+          checkMethodList.push(method);
+        } else {
+          eventList.push(method);
         }
       })
 
-      const originalCallback = this[it.originalMethod];
+      const originalCallback = this[magicMethod.originalMethod];
       [...eventList, events]
         .filter(Boolean)
         .forEach((e) => {
-            var callback = this.createLocalCallback(e, originalCallback)
-            this.$store.on(e, callback, this, debounce, throttle, isAllTrigger, isSelfTrigger, checkMethodList, isFrameTrigger);
+          var callback = this.createLocalCallback(e, originalCallback)
+          this.$store.on(e, callback, this, debounce, throttle, isAllTrigger, isSelfTrigger, checkMethodList, isFrameTrigger);
         });
 
     });
@@ -226,7 +231,7 @@ class UIElement extends EventMachine {
   broadcast(messageName, ...args) {
     Object.keys(this.children).forEach(key => {
       this.children[key].trigger(messageName, ...args);
-      this.children[key].broadcast(messageName, ...args);      
+      this.children[key].broadcast(messageName, ...args);
     })
   }
 

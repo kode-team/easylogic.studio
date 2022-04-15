@@ -13,9 +13,11 @@ export default {
         container.addCache("cachedLayerMatrix", container.layers.map(child => {
             child.startToCacheChildren();
 
+            const {x, y, width, height} = child.attrs('x', 'y', 'width', 'height')
+
             return {
                 id: child.id,
-                matrix: child.attrs('x', 'y', 'width', 'height'),
+                matrix: {x, y, width, height},
                 constraints: {
                     horizontal: child[ConstraintsDirection.HORIZONTAL],
                     vertical: child[ConstraintsDirection.VERTICAL]
@@ -75,10 +77,12 @@ export default {
                     localObj.width = width * scaleX;
                     break;
                 case Constraints.CENTER:
-                    const halfWidth = width / 2;
-                    const scaleNew = x + halfWidth / oldContainerWidth;
 
-                    localObj.x = scaleNew * currentContainerWidth - halfWidth * scaleX;
+                    // 옛날 위치에서 중심점의 비율을 가지고 현재 container 기준으로 다시 맞춘다. 
+                    const halfWidth = width / 2;
+                    const scaleNew = (x + halfWidth) / oldContainerWidth;
+
+                    localObj.x = scaleNew * currentContainerWidth - halfWidth;
                     break;
             }
 
@@ -92,17 +96,18 @@ export default {
                     break;
                 case Constraints.STRETCH:
                     localObj.y = top;
-                    localObj.width = currentContainerHeight - top - bottom;
+                    localObj.height = currentContainerHeight - top - bottom;
                     break;
                 case Constraints.SCALE:
                     localObj.y = top * scaleY;
                     localObj.height = height * scaleY;
                     break;
                 case Constraints.CENTER:
+                    // 옛날 위치에서 중심점의 비율을 가지고 현재 container 기준으로 다시 맞춘다.                     
                     const halfHeight = height / 2;
-                    const scaleNew = y + halfHeight / oldContainerHeight;
+                    const scaleNew = (y + halfHeight) / oldContainerHeight;
 
-                    localObj.y = scaleNew * currentContainerHeight - halfHeight * scaleY;
+                    localObj.y = scaleNew * currentContainerHeight - halfHeight;
                     break;
             }
 

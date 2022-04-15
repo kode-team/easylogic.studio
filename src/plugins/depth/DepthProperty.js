@@ -2,7 +2,7 @@ import OrderDown from "el/editor/ui/menu-items/OrderDown";
 import OrderFirst from "el/editor/ui/menu-items/OrderFirst";
 import OrderLast from "el/editor/ui/menu-items/OrderLast";
 import OrderTop from "el/editor/ui/menu-items/OrderTop";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 import { createComponent } from "el/sapa/functions/jsx";
 
 import './DepthProperty.scss';

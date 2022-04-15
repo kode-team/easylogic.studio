@@ -1,7 +1,7 @@
 
 import { CLICK, DEBOUNCE, DOMDIFF, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 
 import './DefaultLayoutItemProperty.scss';
 import { variable } from 'el/sapa/functions/registElement';
@@ -108,7 +108,7 @@ export default class DefaultLayoutItemProperty extends BaseProperty {
 
     if (!current) return;
 
-    current.changeConstraints(key, value);
+    current.changeConstraints(key, value, e.shiftKey);
     this.trigger('changeConstraints', key, current[key]);
   }
 

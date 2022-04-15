@@ -1,7 +1,7 @@
 import { Editor } from "el/editor/manager/Editor";
 import { Length } from "el/editor/unit/Length";
 import { mat4, vec3 } from "gl-matrix";
-import PathParser from 'el/editor/parser/PathParser';
+import {PathParser} from 'el/editor/parser/PathParser';
 import { rectToVerties } from "el/utils/collision";
 import { vertiesMap, calculateMatrix, calculateMatrixInverse } from 'el/utils/math';
 import { Transform } from 'el/editor/property-parser/Transform';

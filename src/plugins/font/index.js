@@ -1,5 +1,5 @@
 import { Editor } from "el/editor/manager/Editor";
-import ObjectProperty from "el/editor/ui/property/ObjectProperty";
+import {ObjectProperty} from "el/editor/ui/property/ObjectProperty";
 import { Length } from "el/editor/unit/Length";
 
 /**

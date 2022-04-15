@@ -4,7 +4,7 @@ import { LOAD, DEBOUNCE, DRAGSTART, CLICK, SUBSCRIBE, SUBSCRIBE_SELF, IF } from 
 import patterns from "el/editor/preset/patterns";
 import { Pattern } from "el/editor/property-parser/Pattern";
 import { CSS_TO_STRING } from "el/utils/func";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 
 import './PatternAssetsProperty.scss';
 import { variable } from 'el/sapa/functions/registElement';

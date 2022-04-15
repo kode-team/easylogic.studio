@@ -8,6 +8,7 @@ import { Segment } from "./Segment";
 import fitCurve from "fit-curve";
 import { vertiesToRectangle } from "el/utils/collision";
 import arcToBezier from 'svg-arc-to-cubic-bezier';
+import { PathSegmentType } from 'el/editor/types/model';
 
 
 const REG_PARSE_NUMBER_FOR_PATH = /([mMlLvVhHcCsSqQtTaAzZ]([^mMlLvVhHcCsSqQtTaAzZ]*))/g;
@@ -20,7 +21,7 @@ function xy (point) {
         y: point[1]
     }
 }
-export default class PathParser {
+export class PathParser {
 
     /**
      * 
@@ -1944,16 +1945,26 @@ export default class PathParser {
         return arr;
     }
 
+    /**
+     * 구조화된 verties 
+     */
     get pathVerties() {
         const pathVerties = []
         this.segments.forEach((segment, segmentIndex) => {
+
+            const prevSegment = this.segments[segmentIndex - 1];
+            const nextSegment = this.segments[segmentIndex + 1];
 
             if (segment.values.length > 0) {
                 const arr = segment.values;
                 for (var i = 0, len = arr.length; i < len; i += 2) {
                     pathVerties.push({
+                        prevSegment,
+                        nextSegment,
+                        segment,
                         segmentIndex,
                         valueIndex: i,
+                        vertex: [arr[i], arr[i+1], 0],
                         x: arr[i],
                         y: arr[i + 1],
                     })
@@ -2117,6 +2128,37 @@ export default class PathParser {
         const path = new PathParser();
 
         path.resetSegments(segments);
+        return path;
+    }
+
+    /**
+     * 
+     * StructuredVerties 를 기준으로 다시 path 를 복원한다. 
+     * 
+     * @param {*} verties 
+     * @returns 
+     */
+    static fromStructuredVerties(verties) {
+        const path = new PathParser();
+     
+        const segments = [];
+
+        verties.forEach(v => {
+            if (!segments[v.segmentIndex]) {
+                segments[v.segmentIndex] = {
+                    command: v.segment.command,
+                    values: []
+                }
+            }
+
+            if (segments[v.segmentIndex].command !== PathSegmentType.CLOSEPATH) {
+                segments[v.segmentIndex].values[v.valueIndex] = v.vertex[0];
+                segments[v.segmentIndex].values[v.valueIndex + 1] = v.vertex[1];
+            } 
+        })
+
+        path.resetSegments(segments);
+    
         return path;
     }
 

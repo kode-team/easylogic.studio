@@ -7,11 +7,11 @@ import {
 import { iconUse, iconUseForPath } from "el/editor/icon/icon";
 import { Length } from "el/editor/unit/Length";
 import { KEY_CODE } from "el/editor/types/key";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 
 import './LayerTreeProperty.scss';
 import Dom from 'el/sapa/functions/Dom';
-import PathParser from 'el/editor/parser/PathParser';
+import {PathParser} from 'el/editor/parser/PathParser';
 
 const DRAG_START_CLASS = 'drag-start'
 

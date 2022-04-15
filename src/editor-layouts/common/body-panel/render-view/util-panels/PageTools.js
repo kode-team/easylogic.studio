@@ -7,8 +7,8 @@ import icon, { iconUse } from "el/editor/icon/icon";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
 import './PageTools.scss';
-import PathParser from 'el/editor/parser/PathParser';
 import { createComponent } from "el/sapa/functions/jsx";
+import { PathParser } from 'el/editor/parser/PathParser';
 
 export default class PageTools extends EditorElement {
   

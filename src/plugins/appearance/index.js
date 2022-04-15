@@ -1,7 +1,7 @@
 import { Editor } from "el/editor/manager/Editor";
 import { Overflow } from "el/editor/types/model";
 // import AppearanceProperty from "./AppearanceProperty";
-import ObjectProperty from 'el/editor/ui/property/ObjectProperty';
+import { ObjectProperty } from 'el/editor/ui/property/ObjectProperty';
 
 /**
  * 

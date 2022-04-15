@@ -632,7 +632,9 @@ export function vertiesToPath(verties = []) {
         }
     }
 
-    results.push('Z');
+    if (results.length) {
+        results.push('Z');
+    }
 
     return results.join(' ');
 }

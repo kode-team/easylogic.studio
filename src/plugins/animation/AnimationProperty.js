@@ -10,7 +10,7 @@ import {
 import icon, { iconUse } from "el/editor/icon/icon";
 import { Animation } from "el/editor/property-parser/Animation";
 import { curveToPath } from "el/utils/func";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 
 import './AnimationProperty.scss';
 

@@ -1,4 +1,4 @@
-import { DRAGOVER, DROP, PREVENT, BIND, SUBSCRIBE, CONFIG } from "el/sapa/Event";
+import { DRAGOVER, DROP, PREVENT, SUBSCRIBE } from "el/sapa/Event";
 
 import BaseLayout from "../common/BaseLayout"; 
 import BodyPanel from "../common/BodyPanel";
@@ -9,7 +9,6 @@ import KeyboardManager from "../common/KeyboardManager";
 import designEditorPlugins from "plugins/design-editor-plugins";
 import { isFunction } from 'el/sapa/functions/func';
 import IconManager from '../common/IconManager';
-import PathKitInit from "pathkit-wasm/bin/pathkit";
 import { createComponent } from "el/sapa/functions/jsx";
 
 import './layout.scss';
@@ -28,10 +27,7 @@ export default class WhiteBoard extends BaseLayout {
   initialize() {
     super.initialize();
 
-    (async () => {
-      this.$pathkit.registerPathKit(await PathKitInit());
-  
-    })()
+    this.$pathkit.load();
 
     // load default data 
     this.emit('load.json', this.opt.data);

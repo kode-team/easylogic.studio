@@ -19,6 +19,7 @@
         fill: transparent;
         stroke: var(--elf--selected-color);
         stroke-width: 2;
+        stroke-dasharray: 2 2;
 
         &.target {
           stroke-width:0;

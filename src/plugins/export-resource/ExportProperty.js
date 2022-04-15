@@ -2,7 +2,7 @@
 import { DEBOUNCE, CLICK, SUBSCRIBE } from "el/sapa/Event";
 
 import icon, { iconUse } from "el/editor/icon/icon";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 import './ExportProperty.scss';
 
 export default class ExportProperty extends BaseProperty {

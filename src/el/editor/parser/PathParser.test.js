@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import PathParser from './PathParser';
+import {PathParser} from './PathParser';
 
 test("create PathParser", () => {
     expect(new PathParser()).toBeInstanceOf(PathParser);

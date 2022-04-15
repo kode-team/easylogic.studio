@@ -91,4 +91,29 @@ export class Segment {
             command: "Z", values: [] // closed path
         }
     }
+
+    static isMoveTo(segment) {
+        return segment.command === 'M';
+    }
+
+    static isLineTo(segment) {
+        return segment.command === 'L';
+    }
+
+    static isQuadraticBezierCurve(segment) {
+        return segment.command === 'Q';
+    }
+
+    static isCubicBezierCurve(segment) {
+        return segment.command === 'C';
+    }
+
+    static isArc(segment) {
+        return segment.command === 'A';
+    }
+
+    static isClosePath(segment) {
+        return segment.command === 'Z';
+    }
+    
 }

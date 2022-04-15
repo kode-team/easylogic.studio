@@ -1,13 +1,12 @@
 
 import { BIND, DEBOUNCE, SUBSCRIBE } from "el/sapa/Event";
-import { toRectVerties, vertiesToRectangle } from "el/utils/collision";
+import { toRectVerties, vertiesToPath } from "el/utils/collision";
 import { makeGuidePoint } from "el/utils/math";
-import PathStringManager from "el/editor/parser/PathStringManager";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { vec3 } from "gl-matrix";
 
 import './GuideLineView.scss';
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 
 const ARROW_SIZE = 4; 
 
@@ -137,7 +136,8 @@ export default class GuideLineView extends EditorElement {
 
     template() {
         return /*html*/`
-            <svg class='elf--guide-line-view' ref="$guide" width="100%" height="100%" ></svg>
+            <svg class='elf--guide-line-view' ref="$guide" width="100%" height="100%" >
+            </svg>
             `
 
     }
@@ -149,9 +149,38 @@ export default class GuideLineView extends EditorElement {
     }
 
     [BIND('$guide')]() {
+
+        const line = this.createGuideLine(this.state.list)
+        const layerLine = this.createLayerLine()
+
         return {
-            svgDiff: /*html*/`<g>${this.createGuideLine(this.state.list)}</g>`
+            svgDiff: /*html*/`<g>${line}${layerLine}</g>`
         }
+    }
+
+    /**
+     * 스냅의 우선순위 
+     * 
+     * * 완전히 같은 선이 존재할 때
+     * * 중심점이 같을 때
+     * * x 축 체크 (y를 다르게 표현)
+     * * y 축 체크 (x를 다르게 표현)
+     * 
+     * 
+     * @returns 
+     */
+    createLayerLine() {
+        return "";
+        const lines = [];
+        
+        this.$selection.snapTargetLayers?.filter(Boolean).forEach(layer => {
+            const verties = this.$viewport.applyVerties(layer.verties);
+
+            lines.push(`<text x="${verties[0][0]}" y="${verties[0][1]}" style="filter: drop-shadow(0 0 2px red)">${layer.id}</text>`)
+        })
+
+
+        return lines.join('');
     }
 
     createGuideLine(list) {
@@ -159,9 +188,10 @@ export default class GuideLineView extends EditorElement {
         var images = []
         var texts = []
         list = list.filter(Boolean);
+
         for (var i = 0, len = list.length; i < len; i++) {
 
-            const [source, target, axis, dist, newTarget, sourceVerties, targetVerties, isInvert] = list[i];
+            const [source, target, axis, dist, newTarget, sourceVerties, targetVerties] = list[i];
             const localDist = Math.floor(dist);            
 
             // 시작점 기준으로 맞출때가 필요하면 localSourceVertex 를 활용하자. 아직은 없음. 
@@ -239,8 +269,6 @@ export default class GuideLineView extends EditorElement {
                 images.push(rect(this.$viewport.applyVerties(targetVerties)))
             }
         }
-
-
 
         return [...images, ...texts].join('');
     }
@@ -324,7 +352,7 @@ export default class GuideLineView extends EditorElement {
 
         const expect = this.$selection.hasChangedField('d', 'clip-path')
 
-        if (!expect && this.$selection.hasChangedField('x', 'y', 'width', 'height', 'transform', 'transform-origin')) {
+        if (!expect) {
             this.refreshSmartGuidesForVerties();
         }
     }

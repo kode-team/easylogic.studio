@@ -1,7 +1,7 @@
 import { DEBOUNCE, LOAD, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 
 import { CSS_TO_STRING, STRING_TO_CSS } from "el/utils/func";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 
 import './GridLayoutItemProperty.scss';
 import { createComponent } from "el/sapa/functions/jsx";

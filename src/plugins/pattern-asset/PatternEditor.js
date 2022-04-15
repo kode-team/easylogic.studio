@@ -89,7 +89,7 @@ export default class PatternEditor extends EditorElement {
 
         if (pattern) {
 
-            console.log(this, pattern.execute()[0]);
+            // console.log(this, pattern.execute()[0]);
             const data = Pattern.parseStyle(pattern.execute()[0].pattern)
 
             this.state.patterns.push.apply(this.state.patterns, data);

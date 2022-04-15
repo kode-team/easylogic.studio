@@ -100,24 +100,11 @@ export default class HTMLRenderView extends EditorElement {
         this.bindData('$view');
     }
 
-    /**
-     * 기본 커서 제어 
-     */
-    [CONFIG('bodyEvent')]() {
-
-        // TODO: 커서를 제어하는 element 가 아니면 기본 커서로 지정해야할 듯 
-        const number = Dom.create(this.$config.get('bodyEvent').target).data('number')
-
-        if (!number) {
-            this.emit('recoverCursor')
-        }
-    }    
-
     [SUBSCRIBE('refreshAllElementBoundSize')]() {
         this.refreshAllElementBoundSize();
     }
 
-    [SUBSCRIBE('refreshElementBoundSize') + FRAME] (parentObj) {
+    [SUBSCRIBE('refreshElementBoundSize')] (parentObj) {
         this.refreshElementBoundSize(parentObj);
     }    
 
@@ -241,7 +228,7 @@ export default class HTMLRenderView extends EditorElement {
         }
 
         // 전체 캔버스 영역을 클릭하면 selection 하지 않는다. 
-        const $target = Dom.create(e.target);
+        const $target = Dom.create(e.target);        
         if ($target.hasClass('canvas-view')) {
             return false;
         }
@@ -512,7 +499,8 @@ export default class HTMLRenderView extends EditorElement {
         const newDist = vec3.dist(targetMousePoint, this.initMousePoint);
         this.$config.init('set.move.control.point', false);
 
-        this.emit('endGhostToolView');
+        const hasMoved = Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5;
+        this.emit('endGhostToolView', hasMoved);
 
         if (this.$config.get('set.dragarea.mode')) {
             this.emit('endDragAreaView');
@@ -522,7 +510,6 @@ export default class HTMLRenderView extends EditorElement {
 
         if (newDist < 1) {
             // NOOP 
-            // 마우스를 움직이지 않은 상태 
         } else {
             this.$selection.reselect();
             this.$snapManager.clear();
@@ -541,10 +528,8 @@ export default class HTMLRenderView extends EditorElement {
 
         }
 
-        this.nextTick(() => {
-            this.emit('refreshSelection');
-            // this.emit('refreshSelectionTool', true)   
-        }, 100);
+        this.emit('refreshSelection');
+        this.emit('refreshSelectionTool');
     }
 
 
@@ -592,7 +577,8 @@ export default class HTMLRenderView extends EditorElement {
             }
         })
 
-        this.bindData('$view');
+        // viewport 이동 
+        // this.bindData('$view');
 
         // 최초 전체 객체를 돌면서 update 함수를 실행해줄 트리거가 필요하다. 
         this.updateAllCanvas(project);
@@ -637,73 +623,39 @@ export default class HTMLRenderView extends EditorElement {
         var $el = this.getElement(item.id);                
 
         if ($el) {
-            const { x, y, width, height } = $el.offsetRect();
 
-            if (width > 0 && height > 0 ) {
-                // console.log(x, y, width, height);
-                item.reset({ x, y, width, height })
+            // 실제 element 가 존재하는지 체크 하고 업데이트 
+            if ($el.$parent.attr('data-id') === item.parentId) { 
+
+                const offset = $el.offsetRect();                
+
+                item.reset(offset)
     
                 this.refreshSelectionStyleView(item);
     
-                if (this.$selection.check(item)) {
+                if (this.$selection.check(item)) {                         
                     this.emit('refreshSelectionTool');
                 }                    
+
+                this.emit('refreshSelectionStyleView', item);
+
             }
+
+
         }
 
     }
 
-    refreshElementBoundSize(parentObj) {
-        if (parentObj) {
-            if (parentObj.hasChildren() === false) {
-                // 크기 변경이 없으면 bound size 를 수정하지 않는다. 
-                // 다른 레이아웃으로 들어가게 되면 크기의 변경이 있을 수도 있다. 
-                // 그 때는 레이아웃 기준으로 bound size 를 다시 잡을거라 괜찮다. 
-                if (parentObj.hasChangedField('x', 'y', 'width', 'height', 'border', 'padding-top', 'padding-left', 'padding-right', 'padding-bottom', 'resizingHorizontal', 'resizingVertical') === false) {
-                    return;
-                }
+    refreshElementBoundSize(it) {
+        if (it) {
+            this.refreshSelfElement(it);
 
-                this.refreshSelfElement(parentObj);
+            if (it.hasChildren() === false) {
                 return;
-            } else {
-                this.refreshSelfElement(parentObj);
             }
 
-
-            // FIXME: text component 도 같이 업데이트 해준다.
-            const hasChangedDimension = parentObj.changedLayout || parentObj.hasChangedField(
-                'children', 
-                'box-model', 
-                'width', 
-                'height', 
-            )
-
-            parentObj.layers.forEach(it => {
-                var $el = this.getElement(it.id);
-
-                // offset 크기를 정하는건 따로 정의를 해야할 듯 
-                // 매번 offsetRect 를 구하는건 비효율적이다.
-                // 하지만 레이아웃이 적용이 되어 있기 때문에 selection 표현을 위해서는 어쩔 수 없다. 
-                // 그럼 drag 하는 상태처럼 selection 을 드래그 하는 동안은 그냥 막을까? 
-                if ($el && (hasChangedDimension ||  it.isLayoutItem())) {
-                    const { x, y, width, height } = $el.offsetRect();
-
-                    if (width > 0 && height > 0 ) {
-                        const value = { x, y, width, height };
-
-                        if (it.isChangedValue(value)) {
-                            it.reset(value)
-    
-                            this.refreshSelectionStyleView(it);
-    
-                            if (this.$selection.check(it)) {
-                                this.emit('refreshSelectionTool');
-                            }
-                        }
-                    }
-                }
-
-                this.trigger('refreshElementBoundSize', it);
+            it.layers.forEach(child => {
+                this.refreshElementBoundSize(child);
             })
         }
     }

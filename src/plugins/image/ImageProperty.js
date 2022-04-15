@@ -2,7 +2,7 @@
 import { LOAD, CLICK, BIND, DEBOUNCE, SUBSCRIBE, SUBSCRIBE_SELF } from "el/sapa/Event";
 
 import icon, { iconUse } from "el/editor/icon/icon";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 import { Length } from "el/editor/unit/Length";
 import { createComponent } from "el/sapa/functions/jsx";
 

@@ -89,30 +89,29 @@ export default class CallbackHandler extends BaseHandler {
     obj.codes = [];
     obj.checkMethodList = [];
 
-    magicMethod.pipes.forEach(pipe => {
-      if (pipe.type === 'function') {
 
-        switch (pipe.func) {
-          case 'debounce':
-            var debounceTime = +(pipe.args?.[0] || 0);
-            obj.callback = debounce(callback, debounceTime);
-            break;
-          case 'throttle':
-            var throttleTime = +(pipe.args?.[0] || 0);
-            obj.callback = throttle(callback, throttleTime);
-            break;
-        }
+    /** 함수 체크  */
+    const debounceFunction = magicMethod.getFunction('debounce');
+    const throttleFunction = magicMethod.getFunction('throttle');
 
-      } else if (pipe.type === 'keyword') {
-        const method = `${pipe.value}`;
+    if (debounceFunction) {
+      var debounceTime = +(debounceFunction.args?.[0] || 0);
+      obj.callback = debounce(callback, debounceTime);
+    } else if (throttleFunction) {
+      var throttleTime = +(throttleFunction.args?.[0] || 0);
+      obj.callback = throttle(callback, throttleTime);
+    }
 
-        if (this.getCallback(method)) {
-          obj.checkMethodList.push(method);
-        } else {
-          obj.codes.push(method.toLowerCase());
-        }
+    /** 키워드 체크  */
+    magicMethod.keywords.forEach(keyword => {
+      const method = keyword;
+
+      if (this.getCallback(method)) {
+        obj.checkMethodList.push(method);
+      } else {
+        obj.codes.push(method.toLowerCase());
+
       }
-
     })
 
     this.addCallback(obj, magicMethod);

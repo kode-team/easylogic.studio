@@ -1,4 +1,6 @@
-import EasyLogic from "./editor-layouts/index";
+import { createDesignEditor } from "./editor-layouts/index";
+
+
 
 function startEditor() {
 
@@ -6,7 +8,7 @@ function startEditor() {
 
   return idList.map(id => {
 
-    return EasyLogic.createDesignEditor({
+    return createDesignEditor({
       container: document.getElementById(id),
       config: {
         'editor.theme': 'light',

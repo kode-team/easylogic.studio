@@ -82,16 +82,21 @@ export default [
     rendererSvg,
 
     // common editor 
+
     baseEditor,
     propertyEditor,
+        
     color,
     gradient,
+    
 
     // inspector.tab.style    
+    
     // depth,
     alignment,
-    position,        
+    position,    
     layout,   
+    
 
 
     // layout 
@@ -106,7 +111,6 @@ export default [
     textShadow,
     content,
     
-
     appearance,
     // iframe,
     component,
@@ -124,10 +128,10 @@ export default [
     // transformOrigin,         
     perspective,
     perspectiveOrigin,
+    
 
 
-
-
+    
     svgFilterAsset,
 
     svgItem,
@@ -142,20 +146,22 @@ export default [
     gradientAsset,
 
     exportResource,
+    
 
-
-
+    
     // animation 
     transition,
     keyframe,
     animation,
     selector,
 
+
     // codeview 
     codeview,
 
     // history
     history,
+    
 
     // todo: timeline,
     //timeline

@@ -3,7 +3,7 @@ import { Length } from "el/editor/unit/Length";
 import { GroupModel } from "./GroupModel";
 import { Selector } from "../property-parser/Selector";
 import { ClipPath } from "el/editor/property-parser/ClipPath";
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 import { Pattern } from 'el/editor/property-parser/Pattern';
 import { BackgroundImage } from 'el/editor/property-parser/BackgroundImage';
 import { STRING_TO_CSS } from "el/utils/func";
@@ -142,11 +142,6 @@ export class DomModel extends GroupModel {
   }
 
   editable(editablePropertyName) {
-
-    if (editablePropertyName == 'border' && this.hasChildren()) {
-      return false
-    }
-
     switch (editablePropertyName) {
       case 'svg-item':
       // case 'box-model':

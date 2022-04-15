@@ -3,6 +3,7 @@ import { FlexDirection, Layout, ResizingMode } from "el/editor/types/model";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { Length } from "el/editor/unit/Length";
 import {
+  CONFIG,
   DOMDIFF,
   LOAD,
   POINTERSTART,
@@ -18,6 +19,7 @@ export default class FlexGrowToolView extends EditorElement {
   }
 
   [LOAD("$el") + DOMDIFF]() {
+
     return this.$selection.map((item) => {
       const parentItem = item.parent;
 
@@ -58,7 +60,7 @@ export default class FlexGrowToolView extends EditorElement {
               data-parent-direction={parentLayoutDirection}
               data-flex-grow={flexGrow}
             >
-              <span class="size">{size}</span>{" "}
+              <span class="size">{Math.floor(size)}</span>{" "}
               <span class="grow">{flexGrow || "x"}</span>
             </div>
           );
@@ -174,6 +176,10 @@ export default class FlexGrowToolView extends EditorElement {
   }
 
   [SUBSCRIBE("refreshSelectionStyleView") + THROTTLE(1)]() {
+    this.refresh();
+  }
+
+  [CONFIG("set.move.control.point")]() {
     this.refresh();
   }
 }

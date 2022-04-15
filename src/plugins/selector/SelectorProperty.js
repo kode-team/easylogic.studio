@@ -13,7 +13,7 @@ import {
 
 
 import { Selector } from "el/editor/property-parser/Selector";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 
 import './SelectorProperty.scss';
 import { variable } from 'el/sapa/functions/registElement';

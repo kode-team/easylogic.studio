@@ -12,16 +12,10 @@ import Save from 'el/editor/ui/menu-items/Save';
 import Outline from "el/editor/ui/menu-items/Outline";
 import SelectTool from "el/editor/ui/menu-items/SelectTool";
 import ThemeChanger from "el/editor/ui/menu-items/ThemeChanger";
-import AddArtboard from 'el/editor/ui/menu-items/AddArtboard';
-import { variable } from "el/sapa/functions/registElement";
 import LayoutSelector from '../status-bar/LayoutSelector';
 import LanguageSelector from '../status-bar/LanguageSelector';
 import { Language } from "el/editor/types/editor";
 import { CONFIG, LOAD } from 'el/sapa/Event';
-import CssDropdownMenu from "el/editor/menus/menu_list/CssDropdownMenu";
-import SvgDropdownMenu from "el/editor/menus/menu_list/SvgDropdownMenu";
-import AddRect from "el/editor/ui/menu-items/AddRect";
-import AddSVGRect from "el/editor/ui/menu-items/AddSVGRect";
 import ToolbarMenu from "el/editor/menus/menu_list/ToolbarMenu";
 import ToolBarRenderer from "./ToolBarRenderer";
 import { createComponent, createElement } from "el/sapa/functions/jsx";
@@ -79,9 +73,9 @@ export default class ToolBar extends EditorElement {
             Redo,
             DropdownMenu,
             Projects,
-            AddArtboard,
-            AddRect,
-            AddSVGRect            
+            // AddArtboard,
+            // AddRect,
+            // AddSVGRect            
         }
     }
     template() {
@@ -90,8 +84,7 @@ export default class ToolBar extends EditorElement {
                 ${createComponent("ToolBarRenderer", {
                     items: ToolbarMenu.left(this.$editor)
                 })}
-                <div class='center'>
-                </div>
+                <div class='center'></div>
                 <div class='right'>
                     ${this.$injectManager.generate('toolbar.right')}
                     ${createComponent("ThemeChanger")}

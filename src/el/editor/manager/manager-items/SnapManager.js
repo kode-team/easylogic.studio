@@ -50,9 +50,7 @@ export class SnapManager {
      * 캐쉬된 item들의 matrix 정보를 삭제한다.
      */
     clear() {
-        this.snapTargetLayers = this.editor.selection.snapTargetLayers.map(it => {
-            return this.convertMatrix(it);
-        });
+        this.snapTargetLayers = this.editor.selection.snapTargetLayers;
     }
 
 

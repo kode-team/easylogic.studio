@@ -29,13 +29,15 @@ export default class HoverView extends EditorElement {
 
         if (!canvas) return false; 
 
-        return this.$modeView.isCurrentMode('CanvasView');
+        return this.$modeView.isCurrentMode('CanvasView') && this.$stateManager.isPointerUp;
     }
 
     /**
      * CanvasView 모드일 때만  HoverView 동작하도록 설정 
      */
     [CONFIG('bodyEvent') + IF('checkModeView')]() {
+
+
 
         if (this.$config.true("set.move.control.point")) {
             this.$selection.setHoverId('');
@@ -74,6 +76,10 @@ export default class HoverView extends EditorElement {
         }
     }
 
+    [CONFIG('set.move.control.point')]() {
+        this.renderHoverLayer();
+    }
+
     [SUBSCRIBE('refreshHoverView')](id) {
         if (this.$selection.setHoverId(id)) {
             this.renderHoverLayer()
@@ -109,8 +115,8 @@ export default class HoverView extends EditorElement {
     renderHoverLayer() {
 
         const items = this.$selection.hoverItems;
-
         if (items.length === 0) {
+            // hide render hover layer
             this.refs.$hoverRect.updateDiff('')
             this.emit('removeGuideLine');
         } else {
@@ -229,19 +235,11 @@ export default class HoverView extends EditorElement {
     createPointerLine(pointers, offsetLines = []) {
         if (pointers.length === 0) return '';
 
+        pointers = pointers.filter((_, index) => index < 4);
+
         return /*html*/`
         <svg overflow="visible">
-            <path 
-                class='line' 
-                d="
-                    M ${pointers[0][0]}, ${pointers[0][1]} 
-                    L ${pointers[1][0]}, ${pointers[1][1]} 
-                    L ${pointers[2][0]}, ${pointers[2][1]} 
-                    L ${pointers[3][0]}, ${pointers[3][1]} 
-                    L ${pointers[0][0]}, ${pointers[0][1]}
-                    Z
-                " 
-            />
+            <path class='line' d="${vertiesToPath(pointers)}" />
         </svg>`
     }
 

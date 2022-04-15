@@ -1,4 +1,4 @@
-import { LOAD, CLICK } from "el/sapa/Event";
+import { LOAD, CLICK, DOMDIFF } from "el/sapa/Event";
 import BaseUI from './BaseUI';
 import './Button.scss';
 
@@ -17,7 +17,7 @@ export default class Button extends BaseUI {
         return `<div class='small-editor button' ref='$body'></div>`
     }
 
-    [LOAD('$body')] () {
+    [LOAD('$body')+ DOMDIFF] () {
 
         var { label, text } = this.state
 

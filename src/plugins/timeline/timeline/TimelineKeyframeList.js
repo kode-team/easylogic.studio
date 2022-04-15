@@ -3,7 +3,7 @@ import { Length } from "el/editor/unit/Length";
 import { OBJECT_TO_CLASS, isUndefined } from "el/sapa/functions/func";
 import { timecode, second } from "el/utils/time";
 import Dom from "el/sapa/functions/Dom";
-import PathParser from "el/editor/parser/PathParser";
+import {PathParser} from 'el/editor/parser/PathParser';
 import makeInterpolateOffset from "el/editor/interpolate/interpolate-functions/offset-path/makeInterpolateOffset";
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 
@@ -230,8 +230,8 @@ export default class TimelineKeyframeList extends EditorElement {
 
     moveDragArea (dx, dy) {
         if (this.isNotMoved(dx, dy)) return; 
-        var left = dx < 0 ? this.dragXY.x + dx) : Length.px(this.dragXY.x;
-        var top = dy < 0 ? this.dragXY.y + dy) : Length.px(this.dragXY.y;
+        var left = dx < 0 ? Length.px(this.dragXY.x + dx) : Length.px(this.dragXY.x);
+        var top = dy < 0 ? Length.px(this.dragXY.y + dy) : Length.px(this.dragXY.y);
         var width = Math.abs(dx) 
         var height = Math.abs(dy)
 

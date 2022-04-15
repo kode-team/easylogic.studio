@@ -1,6 +1,8 @@
 
 import UIElement from "el/sapa/UIElement";
 import { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "el/editor/types/event";
+import { NotifyType } from "el/editor/types/editor";
+import { SceneManager } from '../../manager/manager-items/SceneManager';
 
 export class EditorElement extends UIElement {
 
@@ -171,6 +173,13 @@ export class EditorElement extends UIElement {
     }
 
     /**
+     * @type {SceneManager}
+     */
+    get $sceneManager() {
+        return this.$editor.sceneManager;
+    }
+
+    /**
      * history 가 필요한 커맨드는 command 함수를 사용하자. 
      * 마우스 업 상태에 따라서 자동으로 history 커맨드로 분기해준다. 
      * 기존 emit 과 거의 동일하게 사용할 수 있다.   
@@ -186,6 +195,27 @@ export class EditorElement extends UIElement {
             return this.emit(command, ...args);
         }
 
+    }
+
+    /**
+     * 
+     * @param {string} type 
+     * @param {string} title 
+     * @param {string} description 
+     * @param {number} [duration=1000] 
+     */
+    notify(type, title, description, duration = 1000) {
+        this.emit(
+            "notify",
+            type,
+            title,
+            description,
+            duration
+          );
+    }
+
+    alert(title, description, duration = 1000) {
+        this.notify(NotifyType.ALERT, title, description, duration);
     }
 
     $theme(key) {

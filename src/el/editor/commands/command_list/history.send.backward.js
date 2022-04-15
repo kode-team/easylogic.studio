@@ -12,7 +12,7 @@ export default {
 
         // 마지막일때 
         // 다음 부모의 첫번째 자식을 선택한다. 
-        const currentValues = {}
+        let currentValues = {}
         let prevParentLayer = null;
         if (currentLayer.isFirst()) {
             prevParentLayer = oldParentLayer.prev;
@@ -32,7 +32,7 @@ export default {
             // 현재 객체 정보 변경 
             ...oldParentLayer.attrsWithId('children'),
 
-            ...currentLayer.attrsWithId('x', 'y', 'angle'),
+            ...currentLayer.attrsWithId('x', 'y', 'angle', 'parentId'),
 
             ...currentLayer.parent.attrsWithId('children'),
         });                
@@ -41,8 +41,7 @@ export default {
             editor.history.add(message, this, {
                 currentValues: [currentValues],
                 undoValues: [lastValues],
-            })
-            editor.emit('refreshAllCanvas');            
+            })  
         })
 
         editor.nextTick(() =>  {
@@ -62,14 +61,9 @@ export default {
 
         editor.emit('setAttributeForMulti', {
             ...lastParent.attrsWithId('children'),
-            ...currentLayer.attrsWithId('x', 'y', 'angle'),
+            ...currentLayer.attrsWithId('x', 'y', 'angle', 'parentId'),
             ...currentTarget.attrsWithId('children')
         });
-
-
-        editor.nextTick(() => {
-            editor.emit('refreshAllCanvas');
-        })
     },
 
     undo: function (editor, { currentValues: [newValues], undoValues: [lastValues] }) {
@@ -91,10 +85,5 @@ export default {
             ...lastParent.attrsWithId('children'),
             ...currentParent.attrsWithId('children')
         });
-
-        editor.nextTick(() => {
-            editor.emit('refreshAllCanvas');
-        })
-
     }
 }

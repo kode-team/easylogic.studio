@@ -1,6 +1,7 @@
 import { Editor } from "el/editor/manager/Editor";
 import PathEditorView from './PathEditorView';
 import PathManager from './PathManager';
+// import PathSegmentView from './PathSegmentView';
 
 
 /**
@@ -9,7 +10,8 @@ import PathManager from './PathManager';
  */
 export default function (editor) {
     editor.registerUI('canvas.view', {
-        PathEditorView        
+        PathEditorView,
+        // PathSegmentView
     })
 
     editor.registerUI('page.subeditor.view', {

@@ -1,4 +1,4 @@
-import { DRAGOVER, DROP, PREVENT, TRANSITIONEND, POINTERSTART, BIND, SUBSCRIBE, CONFIG, SUBSCRIBE_SELF } from "el/sapa/Event";
+import { DRAGOVER, DROP, PREVENT, POINTERSTART, BIND, SUBSCRIBE, CONFIG } from "el/sapa/Event";
 
 import { Length } from "el/editor/unit/Length";
 
@@ -16,7 +16,6 @@ import LayerTab from "../common/area/LayerTab";
 import { END, MOVE } from "el/editor/types/event";
 import { isFunction } from 'el/sapa/functions/func';
 import IconManager from '../common/IconManager';
-import PathKitInit from "pathkit-wasm/bin/pathkit";
 import ItemLayerTab from "../common/area/ItemLayerTab";
 import SingleInspector from '../common/area/SingleInspector';
 import SwitchLeftPanel from '../common/area/status-bar/SwitchLeftPanel';
@@ -30,10 +29,7 @@ export default class DesignEditor extends BaseLayout {
   initialize() {
     super.initialize();
 
-    (async () => {
-      this.$pathkit.registerPathKit(await PathKitInit());
-  
-    })()
+    this.$pathkit.load();
   }
 
 

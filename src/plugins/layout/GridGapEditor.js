@@ -35,11 +35,13 @@ export default class GridGapEditor extends EditorElement {
         return /*html*/`
             <div class='item'>
                 <div class='value'>
-                    ${createComponent("RangeEditor", {
+                    ${createComponent("InputRangeEditor", {
                         label: this.state.label,
+                        wide: true,
                         ref: '$value',
                         key: "value",
                         value: this.state.value,
+                        max: 500,
                         units: ['px','em','%'],
                         onchange: "changeKeyValue"
                     })}

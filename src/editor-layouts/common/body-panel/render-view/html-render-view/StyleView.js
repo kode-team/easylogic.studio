@@ -14,6 +14,7 @@ export default class StyleView extends EditorElement {
 
   initState() {
     return {
+      cacheStyleElement: {},
       lastChangedList: {}
     }
   }
@@ -35,6 +36,10 @@ export default class StyleView extends EditorElement {
 
   makeStyle (item) {
     return this.$editor.html.toStyle(item);
+  }
+
+  toStyleData(item) {
+    return this.$editor.html.toStyleData(item);
   }
 
   refreshStyleHead () {
@@ -109,6 +114,48 @@ export default class StyleView extends EditorElement {
     this.load('$svgArea');
   }
 
+  getStyleElement (item) {
+    if (!this.state.cacheStyleElement[item.id])  {
+      const selector = `style[data-renderer-type="html"][data-id="${item.id}"]`
+      this.state.cacheStyleElement[item.id] = this.refs.$styleView.$(selector);
+    }
+
+    // 부모가 없으면 없는 것으로 판단한다. 
+    if (!this.state.cacheStyleElement[item.id].$parent) {
+      this.state.cacheStyleElement[item.id] = undefined;
+      return null;
+    }
+
+    return this.state.cacheStyleElement[item.id]
+  }
+
+  //  style 태그를 만들어서 추가한다. 
+  // 이미 있으면 업데이트 한다.
+  // 삭제 하는 경우는 어떻게 할지 고민해보자. 
+  loadStyle (items) {
+
+    const obj = {};
+
+    for(let i = 0, len = items.length; i < len; i++) {
+      const item = items[i];
+      obj[item.id] = item; 
+
+      const $itemStyle = this.getStyleElement(item);
+
+      if ($itemStyle) {
+        const cssString = this.toStyleData(item).cssString
+
+        $itemStyle.text(cssString);
+      } else {
+        const styleCode = this.makeStyle(item)        
+        var $fragment = TEMP_DIV.html(styleCode).createChildrenFragment()
+
+        this.refs.$styleView.append($fragment);        
+      }
+
+    }
+  }
+
   /**
    * 
    * @param {String|Object|Array<string>|Array<object>} obj  ,  id 리스트를 만들기 위한 객체, 없으면 selection에 있는 객체 전체
@@ -130,6 +177,11 @@ export default class StyleView extends EditorElement {
       items = this.$selection.itemsByIds(ids);
     } else {
       items = ids; 
+    }
+
+    if (items.length === 1) {
+      this.loadStyle(items);
+      return;
     }
 
     const styleTags = [] 

@@ -107,19 +107,19 @@
       position: absolute;
       left: 0px;
       top: 0px;
-      width: 10px;
-      height: 10px;
+      width: 14px;
+      height: 14px;
       box-sizing: border-box;
       background-color: white; 
       box-sizing: border-box;
-      border: 0.5px solid var(--elf--selection-tool-border-color);
+      border: 2px solid var(--elf--selection-tool-border-color);
       pointer-events: all;
       &[data-number="5"] { 
         border-radius: 100%; 
         background-color: var(--elf--selected-color);
         pointer-events: none;
-        width: 6px;
-        height: 6px;
+        width: 7px;
+        height: 7px;
         // z-index: 1000;
       }
 
@@ -208,6 +208,7 @@
       
       path {
         transform: translate(0.5px, 0.5px);
+        stroke-width: 2;
       }
     }
   }

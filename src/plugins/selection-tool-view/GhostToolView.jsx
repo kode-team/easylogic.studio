@@ -9,6 +9,8 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { DOMDIFF, LOAD, SUBSCRIBE } from "el/sapa/Event";
 import { clone } from "el/sapa/functions/func";
 import {
+  polyPoint,
+  polyPoly,
   toRectVerties,
   vertiesToPath,
   vertiesToRectangle,
@@ -54,6 +56,8 @@ export default class GhostToolView extends EditorElement {
     this.containerList = this.filteredLayers
       .filter((it) => it.hasLayout() || it.is("artboard"))
       .map((it) => it.originVerties);
+
+    this.$config.set("set.move.control.point", true);
   }
 
   collectInformation() {
@@ -78,8 +82,17 @@ export default class GhostToolView extends EditorElement {
     if (this.targetItem) {
       // 현재 targetItem 이 layout 을 가지고 있다면 , container 로 인지하고 마지막 자식을 targetItem 으로 지정한다.
       if (this.targetItem.hasLayout() && this.targetItem?.hasChildren()) {
-        this.targetItem = this.targetItem.layers.pop();
+
+        // flex 레이아웃 일 때는 마지막 item 을 targetItem 으로 인식한다. 
+        if (this.targetItem.isLayout(Layout.FLEX)) {
+          this.targetItem = this.targetItem.layers[this.targetItem.layers.length - 1];
+        } else if (this.targetItem.isLayout(Layout.GRID)) {
+          // grid layout 의 경우 ? 
+        }
+
       }
+
+      this.$selection.updateDragTargetItem(this.targetItem);
 
       // target 전체 영역 위치
       this.targetOriginPosition = this.$viewport.applyVerties(
@@ -221,14 +234,12 @@ export default class GhostToolView extends EditorElement {
   }
 
   renderLayoutFlexForFirstItem(direction) {
-    const verticalField =
-      direction === FlexDirection.COLUMN ? "align-items" : "justify-content";
-    const verticalConst =
-      direction === FlexDirection.COLUMN ? AlignItems : JustifyContent;
-    const horizontalField =
-      direction === FlexDirection.COLUMN ? "justify-content" : "align-items";
-    const horizontalConst =
-      direction === FlexDirection.COLUMN ? JustifyContent : AlignItems;
+    const isColumn = direction === FlexDirection.COLUMN;
+
+    const verticalField = isColumn ? "align-items" : "justify-content";
+    const verticalConst = isColumn ? AlignItems : JustifyContent;
+    const horizontalField = isColumn ? "justify-content" : "align-items";
+    const horizontalConst = isColumn ? JustifyContent : AlignItems;
     const rect = vertiesToRectangle(this.targetOriginPosition);
 
     const center = this.ghostScreenVerties[4];
@@ -284,7 +295,6 @@ export default class GhostToolView extends EditorElement {
   }
 
   renderLayoutFlexColumnArea() {
-
     if (this.targetRelativeMousePoint.y < 0) {
       return "";
     }
@@ -396,6 +406,9 @@ export default class GhostToolView extends EditorElement {
     this.targetItem = undefined;
     this.targetParent = undefined;
     this.targetParentPosition = undefined;
+
+    // targetItem 초기화 
+    this.$selection.updateDragTargetItem(this.targetItem);
   }
 
   getDist() {
@@ -506,6 +519,67 @@ export default class GhostToolView extends EditorElement {
     }
   }
 
+  insertToGridItem() {
+    const current = this.$selection.current;
+
+    const {info, items} = this.$selection.gridInformation || {items: []}
+
+    // ghost 의 world좌표를 구함 
+    const currentVerties = this.$viewport.applyVertiesInverse(this.ghostScreenVerties.filter((_, index) => index < 4))
+    const checkedItems = items?.filter(it => {
+      return polyPoly(it.originVerties, currentVerties);
+    })
+
+    if (checkedItems.length) {
+
+      const columnList = checkedItems.map(it => it.column)
+      const rowList = checkedItems.map(it => it.row)
+
+      const columnStart = Math.min(...columnList);
+      const rowStart = Math.min(...rowList);
+      const columnEnd = Math.max(...columnList) + 1;
+      const rowEnd = Math.max(...rowList) + 1;      
+
+      this.command('setAttributeForMulti', 'change grid item', this.$selection.packByValue({
+        'grid-column-start': columnStart,
+        'grid-column-end': columnEnd,
+        'grid-row-start': rowStart,
+        'grid-row-end': rowEnd
+      }))
+
+      // 해당 자식을 가지고 있지 않는 경우는 자식으로 변경해준다. 
+      if (this.targetItem.hasChild(current.id) === false) {
+        this.command(
+          "moveLayerToTarget",
+          "change target with move",
+          current,
+          this.targetItem,
+          0,
+          "appendChild"
+        );
+
+      }
+
+      return;
+    } else {
+
+      if (this.targetItem) {
+        // targetItem 에 대한 grid 정보 다시 수집 
+        this.emit('refreshGridToolInfo', this.targetItem);
+        this.command(
+          "moveLayerToTarget",
+          "change target with move",
+          current,
+          this.targetItem,
+          0,
+          "appendChild"
+        );
+      }
+
+    }
+
+  }
+
   /**
    * Ghost 상태에서 움직인 이후에 객체를 이동하는 것을 정의한다.
    *
@@ -538,28 +612,16 @@ export default class GhostToolView extends EditorElement {
       // 움직이지 않은 상태는 GhostToolView 에서 아무것도 하지 않음.
       // NOOP
       return;
-    }
-
-    // 이동하는 target 이 없는 경우는 멈춘다.
-    // 백그라운드를 클릭했거나 나 자신을 클릭했을 때
-    if (!this.targetItem) return;
+    }    
 
     // 선택한 레이어와 targetItem 이 같은 경우 추가하지 않는다.
-    if (this.targetItem.id === current?.id) {
+    if (this.targetItem && this.targetItem.id === current?.id) {
       return;
     }
-
 
     // 타겟이 없을때는 백그라운드로 인지해서 current 의 부모를 project 로 옮긴다.
     if (!this.targetItem) {
       this.insertToBackground();
-      return;
-    }
-
-    // target parent 가 존재하고
-    // 해당 아이템이 layout item 일 때
-    if (this.targetParent) {
-      this.insertToLayoutItem();
       return;
     }
 
@@ -575,36 +637,44 @@ export default class GhostToolView extends EditorElement {
           newDist,
           "appendChild"
         );
+        return;
       } else {
         // 내부에 자식이 있을 때는 , 마지막 드래그 위치에 따라 달라짐
-      }
-    } else {
-      if (this.targetItem.id === current.id) {
-        // targetItem 과 현재 선택된 객체가 동일하면 움직이지 않는다.
-        return;
-      }
 
-      // layout item 이고, 부모가 다르면 targetItem(다른 부모)로 이동함
-      if (current.isLayoutItem() && current.parent.id !== this.targetItem.id) {
-        this.command(
-          "moveLayerToTarget",
-          "change target with move",
-          current,
-          this.targetItem,
-          newDist,
-          "appendChild"
-        );
+        if (this.targetItem.isLayout(Layout.GRID)) {
+          this.insertToGridItem();
+          return;
+        }
       }
+    }
+
+    // target parent 가 존재하고
+    // 해당 아이템이 layout item 일 때
+    if (this.targetParent) {
+      this.insertToLayoutItem();
+      return;
+    }
+
+    // layout item 이고, 부모가 다르면 targetItem(다른 부모)로 이동함
+    if (current.isLayoutItem() && current.parent.id !== this.targetItem.id) {
+      this.command(
+        "moveLayerToTarget",
+        "change target with move",
+        current,
+        this.targetItem,
+        newDist,
+        "appendChild"
+      );
     }
   }
 
-  [SUBSCRIBE("endGhostToolView")]() {
-    this.updateLayer();
+  [SUBSCRIBE("endGhostToolView")](hasMoved = false) {
 
-    this.trigger("clearGhostView");
-  }
+    // 움직임이 있을 때만 layer 를 움직인다. 그렇지 않으면 레이어를 움직이지 않는다.
+    if (hasMoved) {
+      this.updateLayer();
+    }
 
-  [SUBSCRIBE("clearGhostView")]() {
     this.initializeGhostView();
     this.load();
   }

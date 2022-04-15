@@ -1,11 +1,12 @@
 import { CLICK, IF, SUBSCRIBE, SUBSCRIBE_SELF, THROTTLE } from "el/sapa/Event";
 import { Transform } from "el/editor/property-parser/Transform";
-import BaseProperty from "el/editor/ui/property/BaseProperty";
+import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 import { Length } from "el/editor/unit/Length";
 
 import "./PositionProperty.scss";
 import { variable } from 'el/sapa/functions/registElement';
 import { createComponent } from "el/sapa/functions/jsx";
+import { round } from "el/utils/math";
 
 const DEFAULT_SIZE = 0;
 
@@ -24,6 +25,7 @@ export default class PositionProperty extends BaseProperty {
 
   checkChangedValue() {
     var current = this.$selection.current;
+
     if (!current) return false;
 
     return current.hasChangedField(
@@ -35,9 +37,9 @@ export default class PositionProperty extends BaseProperty {
       'height',
       'angle',
       'transform',
-      'rotateZ',
-      'rotate',
       'opacity',
+      'resizingVertical',
+      'resizingHorizontal',
       'constraints-horizontal',
       'constriants-vertical'
     );
@@ -45,20 +47,15 @@ export default class PositionProperty extends BaseProperty {
 
   [SUBSCRIBE('refreshSelectionStyleView') + IF('checkChangedValue') + THROTTLE(10)]() {
     var current = this.$selection.current;
+
     if (!current) return '';
 
-    this.children.$x.setValue(current.offsetX || DEFAULT_SIZE);
-    this.children.$y.setValue(current.offsetY || DEFAULT_SIZE);
-    this.children.$width.setValue(current.width || DEFAULT_SIZE);
-    this.children.$height.setValue(current.height || DEFAULT_SIZE);
+    this.children.$x.setValue(round(current.offsetX || DEFAULT_SIZE, 100));
+    this.children.$y.setValue(round(current.offsetY || DEFAULT_SIZE, 100));
+    this.children.$width.setValue(round(current.width || DEFAULT_SIZE, 100));
+    this.children.$height.setValue(round(current.height || DEFAULT_SIZE, 100));
     this.children.$opacity.setValue(current['opacity'] || '1')
-    const rotateZ = Transform.get(current.transform, 'rotateZ')
-    if (rotateZ) {
-      this.children.$rotate.setValue(rotateZ[0]);
-    } else {
-      this.children.$rotate.setValue(Length.deg(0));
-    }
-
+    this.children.$rotate.setValue(Length.deg(current.angle).round(100));
   }
 
   isHideHeader() {
@@ -146,15 +143,12 @@ export default class PositionProperty extends BaseProperty {
   refresh() {
     const current = this.$selection.current;
     if (current) {
-      this.children.$x.setValue(current.offsetX);
-      this.children.$y.setValue(current.offsetY);
-      this.children.$width.setValue(current.width);
-      this.children.$height.setValue(current.height);
+      this.children.$x.setValue(round(current.offsetX || DEFAULT_SIZE, 100));
+      this.children.$y.setValue(round(current.offsetY || DEFAULT_SIZE, 100));
+      this.children.$width.setValue(round(current.width || DEFAULT_SIZE, 100));
+      this.children.$height.setValue(round(current.height || DEFAULT_SIZE, 100));  
       this.children.$opacity.setValue(current['opacity'] || '1')
-      const rotateZ = Transform.get(current.transform, 'rotateZ')
-      if (rotateZ) {
-        this.children.$rotate.setValue(rotateZ[0]);
-      }
+      this.children.$rotate.setValue(Length.deg(current.angle));
     }
 
   }

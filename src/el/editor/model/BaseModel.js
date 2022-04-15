@@ -491,6 +491,13 @@ export class BaseModel {
   }
 
   /**
+   * 계층 구조가 변경이 되었는지 체크 한다. 
+   */
+  get hasChangedHirachy() {
+    return this.hasChangedField('children', 'parentId');
+  }
+
+  /**
    * define default object for item
    *
    * @param {object} obj
@@ -603,8 +610,7 @@ export class BaseModel {
       layer.remove();
     }
 
-    layer.setParentId(this.id);
-
+    layer.setParentId(this.id);      
     let list = this.json.children.map((id, childIndex) => {
       return {id, index: childIndex}
     })
@@ -638,6 +644,7 @@ export class BaseModel {
   appendAfter(layer) {
 
     this.parent.insertChild(layer, this.index + 1);
+
     // this.project.addIndexItem(layer);
     return layer;
   }
@@ -784,6 +791,16 @@ export class BaseModel {
   }
 
   /**
+   * 자식 아이디를 가지고 있는지 체크 
+   * 
+   * @param {string} childId
+   * @returns {boolean}
+   */
+  hasChild(childId) {
+    return this.json.children.includes(childId);
+  }
+
+  /**
    * 특정 itemType 으로 데이타 변환 
    * 
    * @param {string} itemType 
@@ -799,10 +816,10 @@ export class BaseModel {
    */
   sendBackward(targetId) {
 
-    const siblings = children;
+    const siblings = this.json.children;
 
     const result = {}
-    const selectedIndex = -1;
+    let selectedIndex = -1;
     siblings.forEach((id, index) => {
       result[id] = {id, index}
 
@@ -826,7 +843,7 @@ export class BaseModel {
 
   sendBack (targetId) {
 
-    const siblings = children;
+    const siblings = this.json.children;
 
     const result = {}
     siblings.forEach((id, index) => {
@@ -850,10 +867,10 @@ export class BaseModel {
    */
   bringForward(targetId) {
 
-    const siblings = children;
+    const siblings = this.json.children;
 
     const result = {}
-    const selectedIndex = -1;
+    let selectedIndex = -1;
     siblings.forEach((id, index) => {
       result[id] = {id, index}
 
@@ -876,10 +893,10 @@ export class BaseModel {
 
   bringFront (targetId) {
 
-    const siblings = children;
+    const siblings = this.json.children;
 
     const result = {}
-    const selectedIndex = -1;
+    let selectedIndex = -1;
     siblings.forEach((id, index) => {
       result[id] = {id, index}
 

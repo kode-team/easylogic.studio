@@ -1,4 +1,5 @@
-import PathParser from "./PathParser";
+
+import { PathParser } from "./PathParser";
 import PathStringManager from "./PathStringManager";
 
 

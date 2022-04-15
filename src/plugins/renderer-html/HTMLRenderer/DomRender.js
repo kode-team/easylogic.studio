@@ -44,7 +44,7 @@ export default class DomRender extends ItemRender {
       "background-position": item.cacheBackgroundImage['background-position'],
       "background-repeat": item.cacheBackgroundImage['background-repeat'],
       "background-size": item.cacheBackgroundImage['background-size'],
-      "background-blend-mode": item.cacheBackgroundImage['background-blend-mode'],      
+      "background-blend-mode": item.cacheBackgroundImage['background-blend-mode'],
     };
   }
 
@@ -77,7 +77,7 @@ export default class DomRender extends ItemRender {
     if (parentLayout === Layout.FLEX) {
       // 부모가  layout 이  지정 됐을 때 자식item 들은 position: relative 기준으로 동작한다. , left, top 은  속성에서 삭제 
       obj = {
-        position: 'static',
+        position: 'relative',
         left: 'auto !important',
         top: 'auto !important',
       }
@@ -85,11 +85,9 @@ export default class DomRender extends ItemRender {
     } else if (parentLayout === Layout.GRID) {
       // 부모가  layout 이  지정 됐을 때 자식item 들은 position: relative 기준으로 동작한다. , left, top 은  속성에서 삭제 
       obj = {
-        position: 'static',
-        left: 'auto !important',
-        top: 'auto !important',
-        width: 'auto !important',
-        height: 'auto !important',
+        position: 'relative',
+        left: 'auto',
+        top: 'auto',
       }
 
     } else if (parentLayout === Layout.DEFAULT) {
@@ -110,7 +108,7 @@ export default class DomRender extends ItemRender {
       // fill container 의 경우 flex-grow : 1 로 고정한다. 
       // 부모의 flex-direction 에 따라 다르다.       
       // 방향에 따라 flex-grow 가 정해지기 때문에 , 그에 따른 width, height 값이 auto  로 변경되어야 함 
-      const parentLayoutDirection  = item?.parent?.['flex-direction'];
+      const parentLayoutDirection = item?.parent?.['flex-direction'];
       if (parentLayoutDirection === FlexDirection.ROW && item.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
         obj.width = 'auto';
         obj['flex-grow'] = item['flex-grow'] || 1;
@@ -154,6 +152,7 @@ export default class DomRender extends ItemRender {
       case Constraints.STRETCH:
         obj.left = Length.px(item.x);
         obj.right = Length.px(parentWidth - item.offsetX - item.screenWidth);
+        obj.width = 'auto !important';
         break;
       case Constraints.CENTER:
         obj.left = Length.px(item.x);
@@ -161,6 +160,7 @@ export default class DomRender extends ItemRender {
       case Constraints.SCALE:
         obj.left = Length.px(item.x).toPercent(parentWidth);
         obj.right = Length.px(parentWidth - item.offsetX - item.screenWidth).toPercent(parentWidth);
+        obj.width = 'auto !important';
         break;
     }
 
@@ -177,6 +177,7 @@ export default class DomRender extends ItemRender {
       case Constraints.STRETCH:
         obj.top = Length.px(item.y);
         obj.bottom = Length.px(parentHeight - item.offsetY - item.screenHeight);
+        obj.height = 'auto !important';
         break;
       case Constraints.CENTER:
         obj.top = Length.px(item.y);
@@ -184,8 +185,10 @@ export default class DomRender extends ItemRender {
       case Constraints.SCALE:
         obj.top = Length.px(item.y).toPercent(parentHeight);
         obj.bottom = Length.px(parentHeight - item.offsetY - item.screenHeight).toPercent(parentHeight);
+        obj.height = 'auto !important';
         break;
     }
+
     return obj;
   }
 
@@ -204,6 +207,7 @@ export default class DomRender extends ItemRender {
 
     return {
       display: 'flex',
+      gap: Length.px(item.gap),
       ...item.attrs(
         'flex-direction',
         'flex-wrap',
@@ -211,7 +215,6 @@ export default class DomRender extends ItemRender {
         'align-items',
         'align-content',
       ),
-      gap: Length.px(item.gap),
     }
   }
 
@@ -229,8 +232,9 @@ export default class DomRender extends ItemRender {
         'grid-auto-columns',
         'grid-auto-rows',
         'grid-auto-flow',
+        'grid-column-gap',
+        'grid-row-gap',
       ),
-      gap: Length.px(item.gap),
     }
   }
 
@@ -248,7 +252,7 @@ export default class DomRender extends ItemRender {
       ...STRING_TO_CSS(item['border'])
     };
 
-    
+
 
     return obj;
   }
@@ -287,7 +291,7 @@ export default class DomRender extends ItemRender {
   toKeyListCSS(item, args = []) {
     let obj = {};
 
-    for(var i = 0; i < args.length; i++) {
+    for (var i = 0; i < args.length; i++) {
       const key = args[i];
       if (isNotUndefined(item[key])) {
         obj[key] = item[key];
@@ -302,9 +306,9 @@ export default class DomRender extends ItemRender {
 
     if (item.isLayout(Layout.FLEX)) {
       switch (item.resizingHorizontal) {
-        case ResizingMode.FIXED: 
+        case ResizingMode.FIXED:
           obj.width = Length.px(item.screenWidth);
-          break; 
+          break;
         case ResizingMode.HUG_CONTENT:
           // noop
           obj['min-width'] = Length.px(item.screenWidth);
@@ -314,20 +318,24 @@ export default class DomRender extends ItemRender {
       }
 
       switch (item.resizingVertical) {
-        case ResizingMode.FIXED: 
+        case ResizingMode.FIXED:
           obj.height = Length.px(item.screenHeight);
-          break; 
+          break;
         case ResizingMode.HUG_CONTENT:
           // noop
           obj['min-height'] = Length.px(item.screenHeight);
           // obj.width = 'fit-content';
           // obj.height = 'fit-content';
           break;
-      }      
-    } else if (item.isInDefault()) {
+      }
+    }
+
+    if (item.isInDefault()) {
       obj.width = Length.px(item.screenWidth);
       obj.height = Length.px(item.screenHeight);
-    } else if (item.isInFlex()) {
+    }
+
+    if (item.isInFlex()) {
       // flex layout 일 때는 height 를 지정하지 않는다. 
       // FIXME: 방향에 따라 지정해야할 수도 있다. 
       const direction = item.parent['flex-direction']
@@ -356,37 +364,18 @@ export default class DomRender extends ItemRender {
         if (item.resizingHorizontal === ResizingMode.FILL_CONTAINER) {
           obj.width = 'auto'
           obj['align-self'] = AlignItems.STRETCH;
-        }        
+        }
       }
 
-    } else if (item.isInGrid()) {
+    }
+
+    if (item.isInGrid()) {
       // NOOP , no width, heigh
-    } else {
-
-      if (item.right?.isNotAuto) {
-        if (!item.x) {
-          obj.width = Length.px(item.width);
-        }
-
-      } else {
-        obj.width = Length.px(item.width);
-      }
-
-      if (item.bottom?.isNotAuto) {
-        // NOOP
-        if (!item.y) {
-          obj.height = Length.px(item.height);
-        }
-
-      } else {
-        obj.height = Length.px(item.height);
-      }
-
+      obj.width = 'auto';
+      obj.height = 'auto';
     }
 
-    return {
-      ...obj,
-    }
+    return obj;
   }
 
   /**
@@ -402,14 +391,15 @@ export default class DomRender extends ItemRender {
       obj.top = Length.px(item.y);
     }
 
-    let result = {}
+    let result = {
+      'box-sizing': 'border-box',
+    }
 
     result = Object.assign(result, obj);
     result = Object.assign(result, this.toKeyListCSS(item, [
       'position',
       'overflow',
       'z-index',
-      'box-sizing',
       'background-color',
       'color',
       'opacity',
@@ -650,9 +640,7 @@ export default class DomRender extends ItemRender {
    * @param {string} prefix 
    */
   toSelectorString(item, prefix = '') {
-    return item.selectors
-      .map(selector => selector.toString(prefix))
-      .join('\n\n')
+    return item.selectors?.map(selector => selector.toString(prefix)).join('\n\n')
   }
 
   /**
@@ -693,7 +681,6 @@ export default class DomRender extends ItemRender {
       {},
       this.toVariableCSS(item),
       this.toDefaultCSS(item),
-      this.toSizeCSS(item),
       this.toClipPathCSS(item),
       this.toWebkitCSS(item),
       this.toTextClipCSS(item),
@@ -701,9 +688,16 @@ export default class DomRender extends ItemRender {
       this.toBorderCSS(item),
       this.toBackgroundImageCSS(item),
       this.toLayoutCSS(item),
+      this.toSizeCSS(item),
       this.toTransformCSS(item),
       this.toLayoutItemCSS(item)
     );
+  }
+
+  toStyleCode(item, renderer) {
+    const cssString = this.generateView(item, `[data-renderer-id='${renderer.id}'] .element-item[data-id='${item.id}']`)
+
+    return cssString;
   }
 
   /**
