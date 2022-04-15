@@ -88530,7 +88530,7 @@ class GhostToolView extends EditorElement {
       return;
     }
     if (this.targetItem.hasLayout()) {
-      if (((_a = this.targetItem) == null ? void 0 : _a.hasChildren()) === false) {
+      if (((_a = this.targetItem) == null ? void 0 : _a.hasChildren()) === false && this.targetItem.isLayout(Layout.FLEX)) {
         this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, "appendChild");
         return;
       } else {
