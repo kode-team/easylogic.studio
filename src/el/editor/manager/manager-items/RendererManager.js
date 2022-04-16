@@ -17,13 +17,13 @@ export class RendererManager {
 
     const typedRenderer = this.getRenderType(rendererType);
 
-    if (typedRenderer[name]) throw new Error("It has duplicated renderer name. " + name);
+    // if (typedRenderer[name]) console.warn("It has duplicated renderer name. " + name);
     typedRenderer[name] = rendererInstance;
   }
 
   registerRendererType (rendererType, rendererTypeInstance) {
 
-    if (this.rendererTypes[rendererType]) throw new Error('It has duplcated renderer type name. ' + name);
+    // if (this.rendererTypes[rendererType]) console.warn('It has duplcated renderer type name. ' + name);
     this.rendererTypes[rendererType] = rendererTypeInstance
   }
 

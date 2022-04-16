@@ -8,6 +8,7 @@ import {
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { DOMDIFF, LOAD, SUBSCRIBE } from "el/sapa/Event";
 import { clone } from "el/sapa/functions/func";
+import { renderRootElementInstance } from "el/sapa/functions/registElement";
 import {
   polyPoint,
   polyPoly,
@@ -23,7 +24,7 @@ const CHECK_RATE = 0.5;
 
 /**
  * 원보 아이템의 크기를 가지고 scale 이랑 조합해서 world 의 크기를 구하는게 기본 컨셉
- */
+ */ 
 export default class GhostToolView extends EditorElement {
   template() {
     return (
@@ -525,7 +526,7 @@ export default class GhostToolView extends EditorElement {
     const {info, items} = this.$selection.gridInformation || {items: []}
 
     // ghost 의 world좌표를 구함 
-    const currentVerties = this.$viewport.applyVertiesInverse(this.ghostScreenVerties.filter((_, index) => index < 4))
+    const currentVerties = this.ghostVerties.filter((_, index) => index < 4)
     const checkedItems = items?.filter(it => {
       return polyPoly(it.originVerties, currentVerties);
     })
@@ -676,6 +677,13 @@ export default class GhostToolView extends EditorElement {
     }
 
     this.initializeGhostView();
-    this.load();
+    this.load(); 
   }
-}
+} 
+
+if (import.meta.hot) {
+  import.meta.hot.accept((newModule) => { 
+    // console.log(newModule.default, 'a');
+    renderRootElementInstance(newModule.default);
+  })
+} 
