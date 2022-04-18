@@ -115,8 +115,7 @@ function isZero(num) {
 function isNotZero(num) {
   return !isZero(num);
 }
-const checkStructuredClone = typeof structuredClone !== "undefined";
-const CLONE_FUNCTION = checkStructuredClone && isFunction(structuredClone) ? structuredClone : (obj2) => JSON.parse(JSON.stringify(obj2));
+const CLONE_FUNCTION = (obj2) => JSON.parse(JSON.stringify(obj2));
 function clone$1(obj2) {
   if (isUndefined(obj2))
     return void 0;
@@ -38753,7 +38752,7 @@ const NotifyType = {
   ALERT: "alert"
 };
 const IntersectEpsilonType = {
-  RECT: 20
+  RECT: 30
 };
 var addLayerView = {
   command: "addLayerView",
@@ -69617,18 +69616,32 @@ class Grid {
 var GridGrowToolView$1 = "";
 class GridGrowBaseView extends EditorElement {
   updateRows(current, newRows) {
-    this.command("setAttributeForMulti", "change grid rows", {
+    const data = {};
+    current.layers.forEach((it) => {
+      data[it.id] = {
+        "grid-row-start": Math.max(1, Math.min(newRows.length, it["grid-row-start"])),
+        "grid-row-end": Math.min(newRows.length + 1, it["grid-row-end"])
+      };
+    });
+    this.command("setAttributeForMulti", "change grid rows", __spreadProps(__spreadValues({}, data), {
       [current.id]: {
         "grid-template-rows": Grid.join(newRows)
       }
-    });
+    }));
   }
   updateColumns(current, newColumns) {
-    this.command("setAttributeForMulti", "change grid columns", {
+    const data = {};
+    current.layers.forEach((it) => {
+      data[it.id] = {
+        "grid-column-start": Math.max(1, Math.min(newColumns.length, it["grid-column-start"])),
+        "grid-column-end": Math.min(newColumns.length + 1, it["grid-column-end"])
+      };
+    });
+    this.command("setAttributeForMulti", "change grid columns", __spreadProps(__spreadValues({}, data), {
       [current.id]: {
         "grid-template-columns": Grid.join(newColumns)
       }
-    });
+    }));
   }
   updateColumnGap(current, columnGap) {
     this.command("setAttributeForMulti", "change grid column gap", {
@@ -70167,7 +70180,16 @@ class GridGrowToolView extends GridGrowDragEventView {
       return "";
     });
   }
+  isSelectedColumn(index2) {
+    const current = this.$selection.current;
+    return current["grid-column-start"] <= index2 && index2 < current["grid-column-end"];
+  }
+  isSelectedRow(index2) {
+    const current = this.$selection.current;
+    return current["grid-row-start"] <= index2 && index2 < current["grid-row-end"];
+  }
   [LOAD("$grid") + DOMDIFF]() {
+    var _a;
     const current = this.getGridTargetLayer();
     if (!current)
       return "";
@@ -70175,9 +70197,11 @@ class GridGrowToolView extends GridGrowDragEventView {
       return "";
     const info = this.getGridLayoutInformation();
     const totalCount = info.columns.length * info.rows.length;
+    const isChild = ((_a = this.$selection.current) == null ? void 0 : _a.id) !== info.current.id;
     return /* @__PURE__ */ createElementJsx(FragmentInstance, null, Array.from(Array(info.columns.length).keys()).map((index2) => {
+      const selected = isChild && this.isSelectedColumn(index2 + 1) ? "selected" : "";
       return /* @__PURE__ */ createElementJsx("div", {
-        class: "grid-item-tool column",
+        class: `grid-item-tool column ${selected}`,
         "data-index": index2,
         style: {
           "grid-column": `${index2 + 1} / span 1`,
@@ -70206,8 +70230,9 @@ class GridGrowToolView extends GridGrowDragEventView {
         "grid-row": `1 / span 1`
       }
     }, iconUse$1("add")), Array.from(Array(info.rows.length).keys()).map((index2) => {
+      const selected = isChild && this.isSelectedRow(index2 + 1) ? "selected" : "";
       return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("div", {
-        class: "grid-item-tool row",
+        class: `grid-item-tool row ${selected}`,
         style: {
           "grid-row": `${index2 + 1} / span 1`,
           "grid-column": `1 / span 1`
@@ -78834,6 +78859,12 @@ class DomRender$1 extends ItemRender$1 {
       }
     } else if (parentLayout === Layout.GRID) {
       obj2 = __spreadValues(__spreadValues({}, obj2), item2.attrs("grid-column-start", "grid-column-end", "grid-row-start", "grid-row-end"));
+      const columns = Grid.parseStyle(item2.parent["grid-template-columns"]);
+      const rows = Grid.parseStyle(item2.parent["grid-template-rows"]);
+      obj2["grid-column-start"] = Math.max(1, Math.min(columns.length, obj2["grid-column-start"]));
+      obj2["grid-column-end"] = Math.min(columns.length + 1, obj2["grid-column-end"]);
+      obj2["grid-row-start"] = Math.max(1, Math.min(rows.length, obj2["grid-row-start"]));
+      obj2["grid-row-end"] = Math.min(rows.length + 1, obj2["grid-row-end"]);
     }
     return obj2;
   }
@@ -78904,7 +78935,7 @@ class DomRender$1 extends ItemRender$1 {
   toGridLayoutCSS(item2) {
     return __spreadValues({
       display: "grid"
-    }, item2.attrs("grid-template-columns", "grid-template-rows", "grid-template-areas", "grid-auto-columns", "grid-auto-rows", "grid-auto-flow", "grid-column-gap", "grid-row-gap"));
+    }, item2.attrs("grid-template-columns", "grid-template-rows", "grid-auto-columns", "grid-auto-rows", "grid-auto-flow", "grid-column-gap", "grid-row-gap"));
   }
   toBorderCSS(item2) {
     const obj2 = __spreadValues({}, STRING_TO_CSS(item2["border"]));

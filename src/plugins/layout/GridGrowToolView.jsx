@@ -26,18 +26,36 @@ import "./GridGrowToolView.scss";
 
 class GridGrowBaseView extends EditorElement {
   updateRows(current, newRows) {
+    const data = {}
+    current.layers.forEach(it => {
+      data[it.id] = {
+        "grid-row-start" : Math.max(1, Math.min(newRows.length, it['grid-row-start'])),
+        "grid-row-end" : Math.min(newRows.length + 1, it['grid-row-end']),
+      };
+    })
+
     this.command("setAttributeForMulti", "change grid rows", {
+      ...data,
       [current.id]: {
         "grid-template-rows": Grid.join(newRows),
-      },
+      }
     });
   }
 
   updateColumns(current, newColumns) {
+    const data = {}
+    current.layers.forEach(it => {
+      data[it.id] = {
+        "grid-column-start" : Math.max(1, Math.min(newColumns.length, it['grid-column-start'])),
+        "grid-column-end" : Math.min(newColumns.length + 1, it['grid-column-end']),
+      };
+    })
+
     this.command("setAttributeForMulti", "change grid columns", {
+      ...data,
       [current.id]: {
         "grid-template-columns": Grid.join(newColumns),
-      },
+      }
     });
   }
 
@@ -824,6 +842,18 @@ export default class GridGrowToolView extends GridGrowDragEventView {
     });
   }
 
+  isSelectedColumn(index) {
+    const current = this.$selection.current;
+
+    return current['grid-column-start'] <= index &&   index < current['grid-column-end'];
+  }
+
+  isSelectedRow(index) {
+    const current = this.$selection.current;
+
+    return current['grid-row-start'] <= index &&   index < current['grid-row-end'];
+  }  
+
   [LOAD("$grid") + DOMDIFF]() {
     const current = this.getGridTargetLayer();
 
@@ -835,12 +865,17 @@ export default class GridGrowToolView extends GridGrowDragEventView {
 
     const totalCount = info.columns.length * info.rows.length;
 
+
+    const isChild  = this.$selection.current?.id !== info.current.id;
+
     return (
       <>
         {Array.from(Array(info.columns.length).keys()).map((index) => {
+          const selected = isChild && this.isSelectedColumn(index + 1) ? 'selected' : "";
+
           return (
             <div
-              class="grid-item-tool column"
+              class={`grid-item-tool column ${selected}`}
               data-index={index}
               style={{
                 "grid-column": `${index + 1} / span 1`,
@@ -884,10 +919,11 @@ export default class GridGrowToolView extends GridGrowDragEventView {
         </div>
 
         {Array.from(Array(info.rows.length).keys()).map((index) => {
+          const selected = isChild  && this.isSelectedRow(index + 1) ? 'selected' : "";          
           return (
             <>
               <div
-                class="grid-item-tool row"
+                class={`grid-item-tool row ${selected}`}
                 style={{
                   "grid-row": `${index + 1} / span 1`,
                   "grid-column": `1 / span 1`,

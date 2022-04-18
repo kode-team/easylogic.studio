@@ -20,7 +20,13 @@
 
   &[data-grid-layout-own="false"] {
     .grid-item-tool {
-      opacity: 0.5;
+      opacity: 0;
+      transition: opacity 0.2s linear;
+      &.selected,
+      &:hover {
+
+        opacity: 1;
+      }
     }
   }  
 
@@ -150,6 +156,13 @@
       pointer-events: all;
       color: var(--elf--selected-font-color);
       cursor: ew-resize;
+      // opacity: 0;
+      // transition: opacity 0.2s linear;
+      // &:hover {
+      //   opacity: 1;
+      // }
+
+
       svg {
         position: absolute;
         left: 50%;
