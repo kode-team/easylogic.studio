@@ -7,11 +7,12 @@ import {
 import { iconUse, iconUseForPath } from "el/editor/icon/icon";
 import { Length } from "el/editor/unit/Length";
 import { KEY_CODE } from "el/editor/types/key";
-import {BaseProperty} from "el/editor/ui/property/BaseProperty";
+import { BaseProperty } from "el/editor/ui/property/BaseProperty";
 
 import './LayerTreeProperty.scss';
 import Dom from 'el/sapa/functions/Dom';
-import {PathParser} from 'el/editor/parser/PathParser';
+import { PathParser } from 'el/editor/parser/PathParser';
+import { TargetActionType } from '../../el/editor/types/model';
 
 const DRAG_START_CLASS = 'drag-start'
 
@@ -116,7 +117,7 @@ export default class LayerTreeProperty extends BaseProperty {
         return iconUse("layout_flex");
       } else if (item.isLayout('grid')) {
         return iconUse("layout_grid");
-      } 
+      }
 
       return iconUse("layout_default");
     }
@@ -186,7 +187,7 @@ export default class LayerTreeProperty extends BaseProperty {
     if (!project) return ''
 
     return [
-      this.makeLayerList(project, 0), 
+      this.makeLayerList(project, 0),
       /*html*/`
         <div class='layer-item ' data-depth="0" data-is-last="true">
         </div>
@@ -243,28 +244,47 @@ export default class LayerTreeProperty extends BaseProperty {
     if (targetItem?.enableHasChildren() === false) return;
     if (targetItem && targetItem.hasParent(sourceItem.id)) return;
 
+    // drop 이 먼저 일어나게 되어서 mouse up 한 상태가 아니라서 
+    // history.xxx 형태로 emit 을 바로 날린다. 
     switch (this.state.lastDragOverItemDirection) {
       case 'self':
-        targetItem.appendChild(sourceItem);
+        this.emit(
+          "history.moveLayerToTarget",
+          "change target with move",
+          sourceItem,
+          targetItem,
+          undefined,
+          TargetActionType.APPEND_CHILD,
+        );
         break;
       case 'before':
-        targetItem.appendBefore(sourceItem);
+        this.emit(
+          "history.moveLayerToTarget",
+          "change target with move",
+          sourceItem,
+          targetItem,
+          undefined,
+          TargetActionType.INSERT_BEFORE,
+        );
         break;
       case 'after':
-        targetItem.appendAfter(sourceItem);
+        this.emit(
+          "history.moveLayerToTarget",
+          "change target with move",
+          sourceItem,
+          targetItem,
+          undefined,
+          TargetActionType.INSERT_AFTER,
+        );
         break;
     }
 
-    this.$selection.select(sourceItem);
-
-    this.setState({
-      hideDragPointer: true
-    })
-
-    this.emit('refreshAll')
-
     this.nextTick(() => {
       this.emit('recoverBooleanPath');
+      this.$selection.select(sourceItem);
+      this.setState({
+        hideDragPointer: true
+      })
     }, 10)
 
   }
@@ -281,13 +301,22 @@ export default class LayerTreeProperty extends BaseProperty {
         var id = input.closest('layer-item').attr('data-layer-id');
         var text = input.text();
 
-        this.emit('refreshItemName', id, text)
+
+        this.command('setAttributeForMulti', 'change name', {
+          [id]: {
+            name: text
+          }
+        })
       });
     } else {
       var id = input.closest('layer-item').attr('data-layer-id');
       var text = input.text();
 
-      this.emit('refreshItemName', id, text)
+      this.command('setAttributeForMulti', 'change name', {
+        [id]: {
+          name: text
+        }
+      })
     }
 
   }
@@ -447,10 +476,6 @@ export default class LayerTreeProperty extends BaseProperty {
     this.refresh();
   }
 
-  [SUBSCRIBE('refreshStylePosition')]() {
-    this.trigger('changeSelection')
-  }
-
   [SUBSCRIBE('refreshLayerTreeView') + THROTTLE(100)]() {
     this.refresh();
   }
@@ -467,6 +492,5 @@ export default class LayerTreeProperty extends BaseProperty {
       this.emit('refreshHoverView', $layerItem.data('layer-id'));
     }
   }
-
 
 }

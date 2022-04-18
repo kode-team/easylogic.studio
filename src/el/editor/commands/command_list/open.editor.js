@@ -67,7 +67,7 @@ export default {
 
                             editor.selection.select(newPath);
 
-                            newCurrent.appendAfter(newPath);
+                            newCurrent.insertAfter(newPath);
 
                             editor.nextTick(() => {
                                 editor.emit("removeLayer", [newCurrent.id]);

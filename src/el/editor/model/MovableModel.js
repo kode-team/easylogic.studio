@@ -1141,7 +1141,7 @@ export class MovableModel extends BaseAssetModel {
                 if (next.enableHasChildren()) {
                     next.appendChild(this);
                 } else {
-                    next.appendAfter(this);
+                    next.insertAfter(this);
                 }
 
             }
@@ -1172,7 +1172,7 @@ export class MovableModel extends BaseAssetModel {
             const prev = this.parent.prev();
 
             if (prev) {
-                prev.appendBefore(this);
+                prev.insertBefore(this);
             }
 
             return;

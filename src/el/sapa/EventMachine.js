@@ -146,6 +146,11 @@ export default class EventMachine {
   }
 
 
+  /**
+   * async render method 
+   * 
+   * @param {Dom|HTMLElement} $container 
+   */
   checkLoad($container) {
     requestAnimationFrame(() => {
       this.render($container);
@@ -174,13 +179,19 @@ export default class EventMachine {
     }
 
     const template = this.template();
-    this.$el = this.parseTemplate(template);
-    // console.log(this.$el, template)
-    this.refs.$el = this.$el;
 
+    const newDomElement = this.parseTemplate(template);
 
-    if ($container) {
-      $container.append(this.$el);
+    if (this.$el) {
+      this.$el.htmlDiff(newDomElement);  
+    } else {
+      this.$el = newDomElement;
+      this.refs.$el = this.$el;
+
+      if ($container) {
+        $container.append(this.$el);
+      }
+
     }
 
     // LOAD 로 정의된 것들을 수행한다. 

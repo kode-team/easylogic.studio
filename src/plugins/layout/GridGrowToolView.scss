@@ -18,6 +18,12 @@
     }
   }
 
+  &[data-grid-layout-own="false"] {
+    .grid-item-tool {
+      opacity: 0.5;
+    }
+  }  
+
   .layout-pointer {
       position: absolute;
       left: 0px;
@@ -54,6 +60,21 @@
       overflow: hidden;
 
       .grid-item-tool-inner {
+        > .item {
+          position: relative;
+          overflow: hidden;
+          > span {
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left :0px;
+            right: 0px;
+            display: flex;
+            pointer-events: none;
+            justify-content: center;
+            align-items: center;
+          }
+        }
         .drag-handle {
           height: 100%;
           width: 14px;

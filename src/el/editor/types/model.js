@@ -287,3 +287,9 @@ export const DirectionNumberType = {
     14: DirectionType.TO_LEFT,
 
 }
+
+export const TargetActionType = {
+    APPEND_CHILD: "appendChild",
+    INSERT_BEFORE: "insertBefore",
+    INSERT_AFTER: "insertAfter",
+}

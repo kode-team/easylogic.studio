@@ -33,7 +33,7 @@ export default {
             })
 
             // 마지막, 레이어 상으로는 가장 위 레이어 옆으로 추가 
-            list[0].item.appendAfter(groupLayer);
+            list[0].item.insertAfter(groupLayer);
 
             // selected 된 items 을 모두 group Layer 에 추가 
             list.forEach(({ item }) => {

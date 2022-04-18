@@ -1,28 +1,39 @@
 import _doForceRefreshSelection from "./_doForceRefreshSelection";
+import { TargetActionType } from '../../types/model';
 
+/**
+ * @command history.moveLayerToTarget
+ * 
+ * 선택된 레이어를 타겟 레이어로 이동한다.
+ * 이동하는 시점의 정보를 history 스택에 넣어둔다. 
+ * undo/redo 를 할 수 있다. 
+ * targetAction 에 따라 이동하는 방향이 다르다.
+ */
 export default {
     command: 'history.moveLayerToTarget',
     description: 'move layer to target in world ',
-    execute: function (editor, message, layer, target, dist = [0, 0, 0], targetAction = 'appendChild') {
-
+    execute: function (editor, message, layer, target, dist = [0, 0, 0], targetAction = TargetActionType.APPEND_CHILD) {
         const currentLayer = editor.get(layer);
         const currentParentLayer = currentLayer.parent;
         const currentTarget = editor.get(target);
 
         const lastValues = currentLayer.hierachy;
 
-        currentLayer.absoluteMove(dist);
+        if (dist) {
+            // 움직임이 있을 때만 움직임 
+            currentLayer.absoluteMove(dist);
+        }
 
         let currentValues = {}
 
-        if (targetAction === 'appendChild') {
+        if (targetAction === TargetActionType.APPEND_CHILD) {
             currentTarget.appendChild(currentLayer);
             currentValues = currentTarget.attrsWithId('children');
-        } else if (targetAction === 'appendBefore') {
-            currentTarget.appendBefore(currentLayer);
+        } else if (targetAction === TargetActionType.INSERT_BEFORE) {
+            currentTarget.insertBefore(currentLayer);
             currentValues = currentTarget.parent.attrsWithId('children');
-        } else if (targetAction === 'appendAfter') {
-            currentTarget.appendAfter(currentLayer);
+        } else if (targetAction === TargetActionType.INSERT_AFTER) {
+            currentTarget.insertAfter(currentLayer);
             currentValues = currentTarget.parent.attrsWithId('children');
         }
 

@@ -16,7 +16,7 @@ export default {
         let prevParentLayer = null;
         if (currentLayer.isFirst()) {
             prevParentLayer = oldParentLayer.prev;
-            prevParentLayer.appendBefore(currentLayer);
+            prevParentLayer.insertBefore(currentLayer);
 
             currentValues = currentLayer.hierarchy;
         } else {

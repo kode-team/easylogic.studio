@@ -641,7 +641,7 @@ export class BaseModel {
    * 
    * @param {Item} layer 
    */
-  appendAfter(layer) {
+  insertAfter(layer) {
 
     this.parent.insertChild(layer, this.index + 1);
 
@@ -655,7 +655,7 @@ export class BaseModel {
    * 
    * @param {Item} layer 
    */
-  appendBefore(layer) {
+  insertBefore(layer) {
     this.parent.insertChild(layer, this.index);
     // this.project.addIndexItem(layer);
     return layer;

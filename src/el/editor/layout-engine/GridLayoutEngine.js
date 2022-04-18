@@ -1,12 +1,13 @@
-import { polyPoly } from "el/utils/collision";
+import { intersectRectRect, polyPoly, vertiesToRectangle } from "el/utils/collision";
+import { IntersectEpsilonType } from "../types/editor";
 
 export default {
 
-    startCache () {
+    startCache() {
 
     },
 
-    recover () {
+    recover() {
 
     },
 
@@ -16,20 +17,24 @@ export default {
      * 
      * @param {*} item 
      */
-     updateGridArea (currentItem, gridInformation) {
+    updateGridArea(currentItem, gridInformation) {
 
         if (currentItem.isInGrid() === false) return;
 
         const lastVerties = currentItem.originVerties;
-
+        const targetRect = vertiesToRectangle(lastVerties);
 
         // grid area 의 정보를 얻기 위해서는 몇가지가 필요하다. 
         // 1. lastVerties 의 각 꼭지점이 어느 grid 영역에 속하는지를 알아야 한다. 
         // 2. 그런 이후 수집된 그리드 정보를 가지고 시작과 끝 영역을 분리해야한다. 
         // 3. 그런 다음 grid-column-start, end, grid-row-start-end 를 처리하면 된다. 
-        const {info, items} = gridInformation;
+        const { info, items } = gridInformation;
         const checkedGridRowColumnList = items.filter(it => {
             return polyPoly(lastVerties, it.originVerties);
+        }).filter(it => { // 겹친 영역이 rect 
+            const intersect = intersectRectRect(it.originRect, targetRect);
+
+            return Math.floor(intersect.width) > IntersectEpsilonType.RECT && Math.floor(intersect.height) > IntersectEpsilonType.RECT;
         })
 
         if (checkedGridRowColumnList.length === 0) return;
@@ -38,7 +43,7 @@ export default {
         rows.sort((a, b) => a - b);
 
         const columns = checkedGridRowColumnList.map(it => it.column);
-        columns.sort((a, b) => a - b);        
+        columns.sort((a, b) => a - b);
 
         const gridColumnStart = columns[0];
         const gridColumnEnd = columns[columns.length - 1];

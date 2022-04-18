@@ -115,7 +115,8 @@ function isZero(num) {
 function isNotZero(num) {
   return !isZero(num);
 }
-const CLONE_FUNCTION = isFunction(structuredClone) ? structuredClone : (obj2) => JSON.parse(JSON.stringify(obj2));
+const checkStructuredClone = typeof structuredClone !== "undefined";
+const CLONE_FUNCTION = checkStructuredClone && isFunction(structuredClone) ? structuredClone : (obj2) => JSON.parse(JSON.stringify(obj2));
 function clone$1(obj2) {
   if (isUndefined(obj2))
     return void 0;
@@ -315,9 +316,6 @@ function spreadVariable(obj2) {
 }
 function registElement(classes = {}) {
   Object.keys(classes).forEach((key) => {
-    if (key === "GhostToolView") {
-      console.log("registElement", { a: classes[key] });
-    }
     map[key] = classes[key];
   });
 }
@@ -2033,10 +2031,15 @@ class EventMachine {
       return;
     }
     const template = this.template();
-    this.$el = this.parseTemplate(template);
-    this.refs.$el = this.$el;
-    if ($container) {
-      $container.append(this.$el);
+    const newDomElement = this.parseTemplate(template);
+    if (this.$el) {
+      this.$el.htmlDiff(newDomElement);
+    } else {
+      this.$el = newDomElement;
+      this.refs.$el = this.$el;
+      if ($container) {
+        $container.append(this.$el);
+      }
     }
     this.load();
     this.afterRender();
@@ -4738,13 +4741,13 @@ class Item {
     this.project.addIndexItem(layer2);
     return layer2;
   }
-  appendAfter(layer2) {
+  insertAfter(layer2) {
     const index2 = this.parent.findIndex(this);
     this.parent.insertChild(layer2, index2);
     this.project.addIndexItem(layer2);
     return layer2;
   }
-  appendBefore(layer2) {
+  insertBefore(layer2) {
     const index2 = this.parent.findIndex(this);
     this.parent.insertChild(layer2, index2 - 1);
     this.project.addIndexItem(layer2);
@@ -4974,12 +4977,90 @@ class TransformOrigin {
     return `${transformOriginX} ${transformOriginY} ${transformOriginZ}`;
   }
 }
+class Rect {
+  constructor(x2, y2, width2, height2) {
+    this.x = x2;
+    this.y = y2;
+    this.width = width2;
+    this.height = height2;
+  }
+  get left() {
+    return this.x;
+  }
+  get right() {
+    return this.x + this.width;
+  }
+  get top() {
+    return this.y;
+  }
+  get bottom() {
+    return this.y + this.height;
+  }
+  get centerX() {
+    return this.x + this.width / 2;
+  }
+  get centerY() {
+    return this.y + this.height / 2;
+  }
+  get center() {
+    return [this.centerX, this.centerY];
+  }
+  get topLeft() {
+    return [this.left, this.top];
+  }
+  get topRight() {
+    return [this.right, this.top];
+  }
+  get bottomLeft() {
+    return [this.left, this.bottom];
+  }
+  get bottomRight() {
+    return [this.right, this.bottom];
+  }
+  get vertices() {
+    return [
+      this.topLeft,
+      this.topRight,
+      this.bottomLeft,
+      this.bottomRight
+    ];
+  }
+  intersect(rect2) {
+    return intersectRectRect(this, rect2);
+  }
+}
+function intersectRectRect(rect1, rect2) {
+  const minRectX = Math.min(rect1.x, rect2.x);
+  const minRectY = Math.min(rect1.y, rect2.y);
+  const rect1Verties = rectToVerties(rect1.x - minRectX, rect1.y - minRectY, rect1.width, rect1.height);
+  const rect2Verties = rectToVerties(rect2.x - minRectX, rect2.y - minRectY, rect2.width, rect2.height);
+  const startPoint = [
+    Math.max(rect1Verties[0][0], rect2Verties[0][0]),
+    Math.max(rect1Verties[0][1], rect2Verties[0][1]),
+    Math.max(rect1Verties[0][2], rect2Verties[0][2])
+  ];
+  const endPoint = [
+    Math.min(rect1Verties[2][0], rect2Verties[2][0]),
+    Math.min(rect1Verties[2][1], rect2Verties[2][1]),
+    Math.min(rect1Verties[2][2], rect2Verties[2][2])
+  ];
+  const minX = Math.min(startPoint[0], endPoint[0]);
+  const minY = Math.min(startPoint[1], endPoint[1]);
+  const maxX = Math.max(startPoint[0], endPoint[0]);
+  const maxY = Math.max(startPoint[1], endPoint[1]);
+  return new Rect(minX + minRectX, minY + minRectY, maxX - minX, maxY - minY);
+}
 function linePoint(x1, y1, x2, y2, px2, py2, buffer = 0.1) {
   const dist1 = Math.hypot(px2 - x1, py2 - y1);
   const dist2 = Math.hypot(px2 - x2, py2 - y2);
   const lineLength = Math.hypot(x1 - x2, y1 - y2);
   const calcDist = dist1 + dist2;
   return calcDist >= lineLength - buffer && calcDist <= lineLength + buffer;
+}
+function lineLineWithoutPoint(x1, y1, x2, y2, x3, y3, x4, y4, epsilon = 0.1) {
+  let A = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
+  let B = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
+  return 0 <= A && A <= 1 && 0 <= B && B <= 1;
 }
 function lineLine(x1, y1, x2, y2, x3, y3, x4, y4, epsilon = 0.1) {
   if (linePoint(x1, y1, x2, y2, x3, y3))
@@ -4990,19 +5071,19 @@ function lineLine(x1, y1, x2, y2, x3, y3, x4, y4, epsilon = 0.1) {
     return [x1, y1];
   else if (linePoint(x3, y3, x4, y4, x2, y2))
     return [x2, y2];
-  let A = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
-  let B = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
-  return 0 <= A && A <= 1 && 0 <= B && B <= 1;
+  return lineLineWithoutPoint(x1, y1, x2, y2, x3, y3, x4, y4, epsilon);
 }
-function polyPoint(verties = [], px2, py2) {
+function polyPoint(verties = [], px2, py2, withoutPoint = false) {
   let isCollision = false;
   const len2 = verties.length;
-  for (let i = 0; i < len2; i++) {
-    const v1 = verties[i];
-    const v2 = verties[(i + 1) % len2];
-    if (linePoint(v1[0], v1[1], v2[0], v2[1], px2, py2)) {
-      isCollision = true;
-      break;
+  if (withoutPoint === false) {
+    for (let i = 0; i < len2; i++) {
+      const v1 = verties[i];
+      const v2 = verties[(i + 1) % len2];
+      if (linePoint(v1[0], v1[1], v2[0], v2[1], px2, py2)) {
+        isCollision = true;
+        break;
+      }
     }
   }
   if (isCollision)
@@ -5016,23 +5097,27 @@ function polyPoint(verties = [], px2, py2) {
   });
   return isCollision;
 }
-function polyLine(verties = [], x1, y1, x2, y2) {
+function polyLine(verties = [], x1, y1, x2, y2, withoutPoint = false) {
   const len2 = verties.length;
   return verties.some((vector, index2) => {
     const [x3, y3] = vector;
     const [x4, y4] = verties[(index2 + 1) % len2];
-    return lineLine(x1, y1, x2, y2, x3, y3, x4, y4);
+    if (withoutPoint) {
+      return lineLineWithoutPoint(x1, y1, x2, y2, x3, y3, x4, y4);
+    } else {
+      return lineLine(x1, y1, x2, y2, x3, y3, x4, y4);
+    }
   });
 }
-function polyPoly(verties = [], targetVerties = []) {
+function polyPoly(verties = [], targetVerties = [], withoutPoint = false) {
   const len2 = verties.length;
   return verties.some((vector, index2) => {
     const [x1, y1] = vector;
     const [x2, y2] = verties[(index2 + 1) % len2];
-    let collision = polyLine(targetVerties, x1, y1, x2, y2);
+    let collision = polyLine(targetVerties, x1, y1, x2, y2, withoutPoint);
     if (collision)
       return true;
-    collision = polyPoint(verties, targetVerties[0][0], targetVerties[0][1]);
+    collision = polyPoint(verties, targetVerties[0][0], targetVerties[0][1], withoutPoint);
     if (collision)
       return true;
     return false;
@@ -5116,7 +5201,7 @@ function vertiesToRectangle(verties) {
   const y2 = verties[0][1];
   const width2 = dist(verties[0], verties[1]);
   const height2 = dist(verties[0], verties[3]);
-  return { x: x2, left: x2, y: y2, top: y2, width: width2, height: height2 };
+  return new Rect(x2, y2, width2, height2);
 }
 function vertiesToPath(verties = []) {
   const results = [];
@@ -6923,6 +7008,11 @@ const DirectionNumberType = {
   12: DirectionType.TO_RIGHT,
   13: DirectionType.TO_BOTTOM,
   14: DirectionType.TO_LEFT
+};
+const TargetActionType = {
+  APPEND_CHILD: "appendChild",
+  INSERT_BEFORE: "insertBefore",
+  INSERT_AFTER: "insertAfter"
 };
 const CSS_FUNC_REGEXP = /(([\-]?[\d.]+)(px|pt|fr|r?em|deg|vh|vw|m?s|%|g?rad|turn)?)|#(?:[\da-f]{8})|(#(?:[\da-f]{3}){1,2}|([a-z_\-]+)\([^\(\)]+\)|([a-z_\-]+))|(\,)/gi;
 const CSS_LENGTH_REGEXP = /^[\-]?([\d.]+)(px|pt|fr|r?em|deg|vh|vw|m?s|%|g?rad|turn)?$/gi;
@@ -38662,6 +38752,9 @@ const NotifyType = {
   WARNING: "warning",
   ALERT: "alert"
 };
+const IntersectEpsilonType = {
+  RECT: 20
+};
 var addLayerView = {
   command: "addLayerView",
   execute: async function(editor, type, data = {}) {
@@ -38903,9 +38996,9 @@ var clipboard_paste$1 = {
           model.renameWithCount();
           model.absoluteMove([10, 10, 0]);
           if (length2 === 1) {
-            sourceItem.appendBefore(model);
+            sourceItem.insertBefore(model);
           } else {
-            sourceItem.appendAfter(model);
+            sourceItem.insertAfter(model);
           }
           newIds.push(model.id);
         });
@@ -40725,7 +40818,7 @@ var group_item$1 = {
       const groupLayer = editor.createModel(__spreadValues(__spreadValues({
         itemType: "rect"
       }, editor.selection.itemRect), opt));
-      list2[0].item.appendAfter(groupLayer);
+      list2[0].item.insertAfter(groupLayer);
       list2.forEach(({ item: item2 }) => {
         groupLayer.appendChild(item2);
       });
@@ -40792,7 +40885,7 @@ var history_bring_forward = {
         nextParentLayer.appendChild(currentLayer);
         currentValues2 = currentLayer.hierarchy;
       } else {
-        nextParentLayer.appendAfter(currentLayer);
+        nextParentLayer.insertAfter(currentLayer);
         currentValues2 = currentLayer.hierarchy;
       }
     } else {
@@ -40957,21 +41050,23 @@ var __glob_0_51$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
 var history_moveLayerToTarget = {
   command: "history.moveLayerToTarget",
   description: "move layer to target in world ",
-  execute: function(editor, message, layer2, target, dist2 = [0, 0, 0], targetAction = "appendChild") {
+  execute: function(editor, message, layer2, target, dist2 = [0, 0, 0], targetAction = TargetActionType.APPEND_CHILD) {
     const currentLayer = editor.get(layer2);
     const currentParentLayer = currentLayer.parent;
     const currentTarget = editor.get(target);
     const lastValues = currentLayer.hierachy;
-    currentLayer.absoluteMove(dist2);
+    if (dist2) {
+      currentLayer.absoluteMove(dist2);
+    }
     let currentValues2 = {};
-    if (targetAction === "appendChild") {
+    if (targetAction === TargetActionType.APPEND_CHILD) {
       currentTarget.appendChild(currentLayer);
       currentValues2 = currentTarget.attrsWithId("children");
-    } else if (targetAction === "appendBefore") {
-      currentTarget.appendBefore(currentLayer);
+    } else if (targetAction === TargetActionType.INSERT_BEFORE) {
+      currentTarget.insertBefore(currentLayer);
       currentValues2 = currentTarget.parent.attrsWithId("children");
-    } else if (targetAction === "appendAfter") {
-      currentTarget.appendAfter(currentLayer);
+    } else if (targetAction === TargetActionType.INSERT_AFTER) {
+      currentTarget.insertAfter(currentLayer);
       currentValues2 = currentTarget.parent.attrsWithId("children");
     }
     editor.emit("setAttributeForMulti", __spreadValues(__spreadValues(__spreadValues({}, currentLayer.attrsWithId("x", "y", "angle", "parentId")), currentValues2), currentParentLayer && currentParentLayer.isNot("project") ? currentParentLayer.attrsWithId("children") : {}));
@@ -41249,7 +41344,7 @@ var history_send_backward = {
     let prevParentLayer = null;
     if (currentLayer.isFirst()) {
       prevParentLayer = oldParentLayer.prev;
-      prevParentLayer.appendBefore(currentLayer);
+      prevParentLayer.insertBefore(currentLayer);
       currentValues2 = currentLayer.hierarchy;
     } else {
       currentLayer.parent.sendBackward(currentLayer.id);
@@ -41393,7 +41488,7 @@ var __glob_0_65$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
 var keymap_keydown = {
   command: "keymap.keydown",
   execute: function(editor, e) {
-    editor.keyboardManager.add(e.code, e.keyCode);
+    editor.keyboardManager.add(e.code, e.keyCode, e);
     if (editor.shortcuts) {
       editor.shortcuts.execute(e, "keydown");
     }
@@ -41788,7 +41883,7 @@ var open_editor = {
                 itemType: "svg-path"
               }, newPathData));
               editor.selection.select(newPath);
-              newCurrent.appendAfter(newPath);
+              newCurrent.insertAfter(newPath);
               editor.nextTick(() => {
                 editor.emit("removeLayer", [newCurrent.id]);
                 editor.emit("updatePathItem", data);
@@ -42886,7 +42981,7 @@ var ungroup_item$1 = {
       let layers2 = [...groupLayer.layers];
       layers2.reverse();
       layers2.forEach((child) => {
-        groupLayer.appendBefore(child);
+        groupLayer.insertBefore(child);
       });
       editor.selection.select(...layers2);
       editor.emit("refreshAll");
@@ -45048,11 +45143,11 @@ class BaseModel {
     this.modelManager.setChanged("insertChild", this.id, { childId: layer2.id, index: 0 });
     return layer2;
   }
-  appendAfter(layer2) {
+  insertAfter(layer2) {
     this.parent.insertChild(layer2, this.index + 1);
     return layer2;
   }
-  appendBefore(layer2) {
+  insertBefore(layer2) {
     this.parent.insertChild(layer2, this.index);
     return layer2;
   }
@@ -48651,14 +48746,16 @@ class KeyBoardManager {
     this.editor = editor;
     this.codeSet = /* @__PURE__ */ new Set();
     this.keyCodeSet = /* @__PURE__ */ new Set();
+    this.event = {};
   }
-  add(key, keyCode) {
+  add(key, keyCode, e) {
     if (this.codeSet.has(key) === false) {
       this.codeSet.add(key);
     }
     if (this.keyCodeSet.has(keyCode) === false) {
       this.keyCodeSet.add(keyCode);
     }
+    this.event = e;
   }
   remove(key, keyCode) {
     this.codeSet.delete(key);
@@ -48669,6 +48766,18 @@ class KeyBoardManager {
   }
   check(...args2) {
     return args2.some((keyOrKeyCode) => this.hasKey(keyOrKeyCode));
+  }
+  isShift() {
+    return Boolean(this.event.shiftKey);
+  }
+  isCtrl() {
+    return Boolean(this.event.ctrlKey);
+  }
+  isAlt() {
+    return Boolean(this.event.altKey);
+  }
+  isMeta() {
+    return Boolean(this.event.metaKey);
   }
 }
 class ViewportManager {
@@ -54583,7 +54692,6 @@ class DragAreaView extends EditorElement {
     return true;
   }
   [POINTERSTART("$dragAreaView") + IF("checkEditMode") + MOVE("movePointer") + END("moveEndPointer")](e) {
-    console.log("fdsjkalfdjsklaf");
     if (this.$config.get("set.dragarea.mode")) {
       this.emit("startDragAreaView");
     }
@@ -61325,7 +61433,7 @@ class MovableModel extends BaseAssetModel {
         if (next.enableHasChildren()) {
           next.appendChild(this);
         } else {
-          next.appendAfter(this);
+          next.insertAfter(this);
         }
       }
       return;
@@ -61345,7 +61453,7 @@ class MovableModel extends BaseAssetModel {
     if (this.isFirst()) {
       const prev = this.parent.prev();
       if (prev) {
-        prev.appendBefore(this);
+        prev.insertBefore(this);
       }
       return;
     }
@@ -61461,9 +61569,13 @@ var GridLayoutEngine = {
     if (currentItem.isInGrid() === false)
       return;
     const lastVerties = currentItem.originVerties;
+    const targetRect = vertiesToRectangle(lastVerties);
     const { info, items } = gridInformation;
     const checkedGridRowColumnList = items.filter((it) => {
       return polyPoly(lastVerties, it.originVerties);
+    }).filter((it) => {
+      const intersect = intersectRectRect(it.originRect, targetRect);
+      return Math.floor(intersect.width) > IntersectEpsilonType.RECT && Math.floor(intersect.height) > IntersectEpsilonType.RECT;
     });
     if (checkedGridRowColumnList.length === 0)
       return;
@@ -68254,22 +68366,21 @@ class LayerTreeProperty extends BaseProperty {
       return;
     switch (this.state.lastDragOverItemDirection) {
       case "self":
-        targetItem.appendChild(sourceItem);
+        this.emit("history.moveLayerToTarget", "change target with move", sourceItem, targetItem, void 0, TargetActionType.APPEND_CHILD);
         break;
       case "before":
-        targetItem.appendBefore(sourceItem);
+        this.emit("history.moveLayerToTarget", "change target with move", sourceItem, targetItem, void 0, TargetActionType.INSERT_BEFORE);
         break;
       case "after":
-        targetItem.appendAfter(sourceItem);
+        this.emit("history.moveLayerToTarget", "change target with move", sourceItem, targetItem, void 0, TargetActionType.INSERT_AFTER);
         break;
     }
-    this.$selection.select(sourceItem);
-    this.setState({
-      hideDragPointer: true
-    });
-    this.emit("refreshAll");
     this.nextTick(() => {
       this.emit("recoverBooleanPath");
+      this.$selection.select(sourceItem);
+      this.setState({
+        hideDragPointer: true
+      });
     }, 10);
   }
   [DOUBLECLICK("$layerList .layer-item")](e) {
@@ -68280,12 +68391,20 @@ class LayerTreeProperty extends BaseProperty {
       this.endInputEditing(input2, () => {
         var id2 = input2.closest("layer-item").attr("data-layer-id");
         var text3 = input2.text();
-        this.emit("refreshItemName", id2, text3);
+        this.command("setAttributeForMulti", "change name", {
+          [id2]: {
+            name: text3
+          }
+        });
       });
     } else {
       var id = input2.closest("layer-item").attr("data-layer-id");
       var text2 = input2.text();
-      this.emit("refreshItemName", id, text2);
+      this.command("setAttributeForMulti", "change name", {
+        [id]: {
+          name: text2
+        }
+      });
     }
   }
   [KEYDOWN("$layerList .layer-item .name") + STOP](e) {
@@ -68394,9 +68513,6 @@ class LayerTreeProperty extends BaseProperty {
   }
   [SUBSCRIBE("refreshSelection")]() {
     this.refresh();
-  }
-  [SUBSCRIBE("refreshStylePosition")]() {
-    this.trigger("changeSelection");
   }
   [SUBSCRIBE("refreshLayerTreeView") + THROTTLE(100)]() {
     this.refresh();
@@ -69817,9 +69933,11 @@ class GridGrowToolView extends GridGrowDragEventView {
     }));
   }
   [BIND("$el")]() {
+    var _a;
     const current = this.getGridTargetLayer();
     return {
       "data-drag-target-item": Boolean(this.$selection.dragTargetItem),
+      "data-grid-layout-own": ((_a = this.$selection.current) == null ? void 0 : _a.id) === (current == null ? void 0 : current.id),
       style: {
         display: current ? "block" : "none"
       }
@@ -69955,12 +70073,15 @@ class GridGrowToolView extends GridGrowDragEventView {
         height: height2 / scale2
       };
       const verties = vertiesMap(rectToVerties(rect2.x, rect2.y, rect2.width, rect2.height), info.current.absoluteMatrix);
+      const originVerties = verties.filter((_, index2) => index2 < 4);
       return {
         row,
         column,
         rect: rect2,
+        info,
         verties,
-        originVerties: verties.filter((_, index2) => index2 < 4)
+        originVerties,
+        originRect: vertiesToRectangle(originVerties)
       };
     });
     this.state.lastGridInfo = { info, items };
@@ -70067,7 +70188,7 @@ class GridGrowToolView extends GridGrowDragEventView {
       }, /* @__PURE__ */ createElementJsx("div", {
         class: "item",
         "data-index": index2
-      }, info.columns[index2]), /* @__PURE__ */ createElementJsx("div", {
+      }, /* @__PURE__ */ createElementJsx("span", null, info.columns[index2])), /* @__PURE__ */ createElementJsx("div", {
         class: "drag-handle right"
       }, /* @__PURE__ */ createElementJsx("div", {
         class: "column-delete",
@@ -70096,7 +70217,7 @@ class GridGrowToolView extends GridGrowDragEventView {
       }, /* @__PURE__ */ createElementJsx("div", {
         class: "item",
         "data-index": index2
-      }, info.rows[index2]), /* @__PURE__ */ createElementJsx("div", {
+      }, /* @__PURE__ */ createElementJsx("span", null, info.rows[index2])), /* @__PURE__ */ createElementJsx("div", {
         class: "drag-handle bottom"
       }, /* @__PURE__ */ createElementJsx("div", {
         class: "row-delete",
@@ -88470,7 +88591,7 @@ class GhostToolView extends EditorElement {
     const newDist = this.getDist();
     if (current.isLayoutItem() === false)
       return;
-    this.command("moveLayerToTarget", "change target with move", current, this.$selection.currentProject, newDist, "appendChild");
+    this.command("moveLayerToTarget", "change target with move", current, this.$selection.currentProject, newDist);
   }
   getTargetAction() {
     let targetAction = "";
@@ -88479,16 +88600,16 @@ class GhostToolView extends EditorElement {
         switch (this.targetParent["flex-direction"]) {
           case FlexDirection.ROW:
             if (this.targetRelativeMousePoint.x < CHECK_RATE) {
-              targetAction = "appendBefore";
+              targetAction = TargetActionType.INSERT_BEFORE;
             } else {
-              targetAction = "appendAfter";
+              targetAction = TargetActionType.INSERT_AFTER;
             }
             break;
           case FlexDirection.COLUMN:
             if (this.targetRelativeMousePoint.y < CHECK_RATE) {
-              targetAction = "appendBefore";
+              targetAction = TargetActionType.INSERT_BEFORE;
             } else {
-              targetAction = "appendAfter";
+              targetAction = TargetActionType.INSERT_AFTER;
             }
             break;
         }
@@ -88505,18 +88626,23 @@ class GhostToolView extends EditorElement {
         if (targetAction) {
           this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, targetAction);
         }
-      } else if (this.targetParent.isLayout(Layout.GRID))
-        ;
+      } else if (this.targetParent.isLayout(Layout.GRID)) {
+        this.insertToGridItem();
+      }
     }
   }
   insertToGridItem() {
     const current = this.$selection.current;
     const { info, items } = this.$selection.gridInformation || { items: [] };
     const currentVerties = this.ghostVerties.filter((_, index2) => index2 < 4);
+    const targetRect = vertiesToRectangle(currentVerties);
     const checkedItems = items == null ? void 0 : items.filter((it) => {
       return polyPoly(it.originVerties, currentVerties);
+    }).filter((it) => {
+      const intersect = intersectRectRect(it.originRect, targetRect);
+      return Math.floor(intersect.width) > IntersectEpsilonType.RECT && Math.floor(intersect.height) > IntersectEpsilonType.RECT;
     });
-    if (checkedItems.length) {
+    if (checkedItems == null ? void 0 : checkedItems.length) {
       const columnList = checkedItems.map((it) => it.column);
       const rowList = checkedItems.map((it) => it.row);
       const columnStart = Math.min(...columnList);
@@ -88529,14 +88655,14 @@ class GhostToolView extends EditorElement {
         "grid-row-start": rowStart,
         "grid-row-end": rowEnd
       }));
-      if (this.targetItem.hasChild(current.id) === false) {
-        this.command("moveLayerToTarget", "change target with move", current, this.targetItem, 0, "appendChild");
+      if (info.current.hasChild(current.id) === false) {
+        this.command("moveLayerToTarget", "change target with move", current, info.current, void 0);
       }
       return;
     } else {
       if (this.targetItem) {
         this.emit("refreshGridToolInfo", this.targetItem);
-        this.command("moveLayerToTarget", "change target with move", current, this.targetItem, 0, "appendChild");
+        this.command("moveLayerToTarget", "change target with move", current, this.targetItem, void 0);
       }
     }
   }
@@ -88557,13 +88683,22 @@ class GhostToolView extends EditorElement {
       return;
     }
     if (this.targetItem.hasLayout()) {
-      if (((_a = this.targetItem) == null ? void 0 : _a.hasChildren()) === false && this.targetItem.isLayout(Layout.FLEX)) {
-        this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, "appendChild");
+      const isCtrl = this.$keyboardManager.isCtrl();
+      if (((_a = this.targetItem) == null ? void 0 : _a.hasChildren()) === false && this.targetItem.isLayout(Layout.FLEX) && isCtrl === false) {
+        this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist);
         return;
       } else {
-        if (this.targetItem.isLayout(Layout.GRID)) {
-          this.insertToGridItem();
-          return;
+        if (isCtrl) {
+          const { info, items } = this.$selection.gridInformation || { items: [] };
+          if (info == null ? void 0 : info.current) {
+            this.insertToGridItem();
+            return;
+          }
+        } else {
+          if (this.targetItem.isLayout(Layout.GRID)) {
+            this.insertToGridItem();
+            return;
+          }
         }
       }
     }
@@ -88572,7 +88707,7 @@ class GhostToolView extends EditorElement {
       return;
     }
     if (current.isLayoutItem() && current.parent.id !== this.targetItem.id) {
-      this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, "appendChild");
+      this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist);
     }
   }
   [SUBSCRIBE("endGhostToolView")](hasMoved = false) {
@@ -94525,4 +94660,4 @@ function createDataEditor(opts) {
 function createWhiteBoard(opts) {
   return start$1(WhiteBoard, opts);
 }
-export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHECKER, CLICK, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, EDIT_MODE_ADD, EDIT_MODE_SELECTION, END, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FlexDirection, FlexWrap, FuncType, GradientType, IF, INPUT, JustifyContent, KEY, KEYDOWN, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LEFT_BUTTON, LOAD, Language, Layout, Length, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, NAME_SAPARATOR, NotifyType, ON, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, PREVENT, PathParser, PathSegmentType, Position, RAF, RESIZE, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SHIFT, SPACE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, Segment, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, VisibilityType, WHEEL, createDataEditor, createDesignEditor, createThreeEditor, createWhiteBoard, getRef, makeEventChecker, normalizeWheelEvent };
+export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHECKER, CLICK, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, EDIT_MODE_ADD, EDIT_MODE_SELECTION, END, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FlexDirection, FlexWrap, FuncType, GradientType, IF, INPUT, IntersectEpsilonType, JustifyContent, KEY, KEYDOWN, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LEFT_BUTTON, LOAD, Language, Layout, Length, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, NAME_SAPARATOR, NotifyType, ON, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, PREVENT, PathParser, PathSegmentType, Position, RAF, RESIZE, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SHIFT, SPACE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, Segment, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, VisibilityType, WHEEL, createDataEditor, createDesignEditor, createThreeEditor, createWhiteBoard, getRef, makeEventChecker, normalizeWheelEvent };

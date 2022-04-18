@@ -54,7 +54,6 @@ export function initializeGroupVariables(groupId) {
  */
 export function recoverVariable(id, removeVariable = true) {
 
-    // console.log(id);
     if (isString(id) === false) {
         return id;
     }
@@ -102,15 +101,6 @@ export function spreadVariable(obj) {
 export function registElement(classes = {}) {
 
     Object.keys(classes).forEach(key => {
-        // if (map[key]) {
-        //     // console.warn(`${key} element is duplicated.`)
-        //     return;
-        // }
-
-        if (key === 'GhostToolView') {
-            console.log('registElement', {a : classes[key] });
-        }
-
         map[key] = classes[key];
     })
 }

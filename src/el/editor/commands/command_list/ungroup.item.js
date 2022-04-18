@@ -14,7 +14,7 @@ export default {
             layers.reverse();
 
             layers.forEach(child => {
-                groupLayer.appendBefore(child);
+                groupLayer.insertBefore(child);
             })
 
             editor.selection.select(...layers);

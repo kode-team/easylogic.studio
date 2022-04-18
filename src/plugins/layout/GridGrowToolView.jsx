@@ -516,6 +516,7 @@ export default class GridGrowToolView extends GridGrowDragEventView {
 
     return {
       'data-drag-target-item': Boolean(this.$selection.dragTargetItem),
+      'data-grid-layout-own': this.$selection.current?.id === current?.id,
       style: {
         display: current ? "block" : "none",
       },
@@ -695,14 +696,18 @@ export default class GridGrowToolView extends GridGrowDragEventView {
         info.current.absoluteMatrix
       );
 
+      const originVerties = verties.filter((_, index) => index < 4)
+
       return {
         row,
         column,
         rect,
+        info,
 
         // world position
         verties,
-        originVerties: verties.filter((_, index) => index < 4),
+        originVerties,
+        originRect: vertiesToRectangle(originVerties),
       };
     });
 
@@ -844,7 +849,7 @@ export default class GridGrowToolView extends GridGrowDragEventView {
             >
               <div class="grid-item-tool-inner">
                 <div class="item" data-index={index}>
-                  {info.columns[index]}
+                  <span>{info.columns[index]}</span>
                 </div>
                 <div class="drag-handle right">
                   <div
@@ -890,7 +895,7 @@ export default class GridGrowToolView extends GridGrowDragEventView {
               >
                 <div class="grid-item-tool-inner">
                   <div class="item" data-index={index}>
-                    {info.rows[index]}
+                    <span>{info.rows[index]}</span>
                   </div>
                   <div class="drag-handle bottom">
                     <div

@@ -6,6 +6,7 @@ export class KeyBoardManager {
         this.editor = editor; 
         this.codeSet = new Set();
         this.keyCodeSet = new Set();
+        this.event = {}
     }
 
     /**
@@ -14,7 +15,7 @@ export class KeyBoardManager {
      * @param {string} key 
      * @param {number} keyCode 
      */
-    add (key, keyCode) {
+    add (key, keyCode, e) {
 
         if (this.codeSet.has(key) === false) {
             this.codeSet.add(key);
@@ -23,6 +24,8 @@ export class KeyBoardManager {
         if (this.keyCodeSet.has(keyCode) === false) {
             this.keyCodeSet.add(keyCode);
         }
+
+        this.event = e; 
 
     }
 
@@ -46,4 +49,21 @@ export class KeyBoardManager {
     check (...args) {
         return args.some(keyOrKeyCode => this.hasKey(keyOrKeyCode))
     }
+
+    isShift() {
+        return Boolean(this.event.shiftKey);
+    }
+
+    isCtrl() {
+        return Boolean(this.event.ctrlKey);
+    }
+
+    isAlt() {
+        return Boolean(this.event.altKey);
+    }
+
+    isMeta() {
+        return Boolean(this.event.metaKey);
+    }
+
 }
