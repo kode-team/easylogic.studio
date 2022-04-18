@@ -29,6 +29,13 @@ export default class GroupRender extends BaseAssetRender {
         'grid-auto-rows',
         'grid-auto-columns',
         'grid-auto-flow',
+        // grid layout item 
+        'grid-column-start',
+        'grid-column-end',
+        'grid-row-start',
+        'grid-row-end',
+        'grid-column-gap',
+        'grid-row-gap',        
         // animation
         'animation',
         'transition',

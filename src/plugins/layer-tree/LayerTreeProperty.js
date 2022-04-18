@@ -472,7 +472,7 @@ export default class LayerTreeProperty extends BaseProperty {
     }
   }
 
-  [SUBSCRIBE('refreshSelection')]() {
+  [SUBSCRIBE('refreshSelection', 'refreshAllCanvas')]() {
     this.refresh();
   }
 

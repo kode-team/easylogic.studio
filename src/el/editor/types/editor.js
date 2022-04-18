@@ -36,3 +36,16 @@ export const NotifyType = {
 export const IntersectEpsilonType = {
     RECT: 30,
 }
+
+export const ClipboardType = {
+    TEXT: 'text',
+    IMAGE: 'image',
+    SVG: 'svg',
+    HTML: 'html',
+    JSON: 'json',
+}
+
+export const ClipboardActionType = {
+    COPY: 'copy',
+    CUT: 'cut',
+}

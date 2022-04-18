@@ -121,7 +121,7 @@ export default class StyleView extends EditorElement {
     }
 
     // 부모가 없으면 없는 것으로 판단한다. 
-    if (!this.state.cacheStyleElement[item.id].$parent) {
+    if (!this.state.cacheStyleElement[item.id]?.$parent) {
       this.state.cacheStyleElement[item.id] = undefined;
       return null;
     }
