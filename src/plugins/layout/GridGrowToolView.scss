@@ -18,6 +18,18 @@
     }
   }
 
+  &[data-grid-layout-own="false"] {
+    .grid-item-tool {
+      opacity: 0;
+      transition: opacity 0.2s linear;
+      &.selected,
+      &:hover {
+
+        opacity: 1;
+      }
+    }
+  }  
+
   .layout-pointer {
       position: absolute;
       left: 0px;
@@ -54,6 +66,21 @@
       overflow: hidden;
 
       .grid-item-tool-inner {
+        > .item {
+          position: relative;
+          overflow: hidden;
+          > span {
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left :0px;
+            right: 0px;
+            display: flex;
+            pointer-events: none;
+            justify-content: center;
+            align-items: center;
+          }
+        }
         .drag-handle {
           height: 100%;
           width: 14px;
@@ -129,6 +156,13 @@
       pointer-events: all;
       color: var(--elf--selected-font-color);
       cursor: ew-resize;
+      // opacity: 0;
+      // transition: opacity 0.2s linear;
+      // &:hover {
+      //   opacity: 1;
+      // }
+
+
       svg {
         position: absolute;
         left: 50%;

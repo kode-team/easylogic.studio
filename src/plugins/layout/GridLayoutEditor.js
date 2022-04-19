@@ -73,7 +73,6 @@ export default class GridLayoutEditor extends EditorElement {
     }
 
     [SUBSCRIBE_SELF('changeKeyValue')] (key, value, params) {
-
         this.modifyData(key, value, params);
     }
 }

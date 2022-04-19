@@ -1,10 +1,12 @@
+import { ClipboardActionType } from 'el/editor/types/editor';
+
 export default {
     command : 'clipboard.copy',
     title: 'Copy',
     description : 'Copy',
     execute: function (editor) {
         editor.clipboard.push({
-            type: 'copy',
+            type: ClipboardActionType.COPY,
             data: editor.selection.ids
         })
     }

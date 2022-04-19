@@ -520,7 +520,7 @@ export class Item {
    * 
    * @param {Item} layer 
    */
-  appendAfter (layer) {
+  insertAfter (layer) {
 
     const index = this.parent.findIndex(this);
 
@@ -535,7 +535,7 @@ export class Item {
    * 
    * @param {Item} layer 
    */
-  appendBefore (layer) {
+  insertBefore (layer) {
 
     const index = this.parent.findIndex(this);
 

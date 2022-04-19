@@ -103,7 +103,6 @@ export default class DragAreaView extends EditorElement {
     }
 
     [POINTERSTART('$dragAreaView') + IF('checkEditMode') + MOVE('movePointer') + END('moveEndPointer')](e) {
-        console.log('fdsjkalfdjsklaf');
         if (this.$config.get('set.dragarea.mode')) {
             this.emit('startDragAreaView');
         } 

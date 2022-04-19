@@ -6,6 +6,7 @@ import ItemRender from "./ItemRender";
 import { SVGFilter } from 'el/editor/property-parser/SVGFilter';
 import { AlignItems, Constraints, ConstraintsDirection, FlexDirection, Layout, ResizingMode } from "el/editor/types/model";
 import { Length } from "el/editor/unit/Length";
+import { Grid } from "el/editor/property-parser/Grid";
 
 const ZERO_CONFIG = {}
 
@@ -118,6 +119,7 @@ export default class DomRender extends ItemRender {
       }
 
     } else if (parentLayout === Layout.GRID) {
+
       obj = {
         ...obj,
         ...item.attrs(
@@ -127,6 +129,20 @@ export default class DomRender extends ItemRender {
           'grid-row-end'
         )
       }
+
+      // 렌더링 하는 쪽에서만 처리를 해주는게 맞을까? 
+      const columns = Grid.parseStyle(item.parent['grid-template-columns']);
+      const rows = Grid.parseStyle(item.parent['grid-template-rows']);      
+
+      // 부모의 grid-template-columns 의 개수가 조정이 되면  
+      // 자식의 grid-column-start, grid-column-end 값이 자동으로 변경된다.
+      obj['grid-column-start'] = Math.max(1, Math.min(columns.length, obj['grid-column-start']));
+      obj['grid-column-end'] = Math.min(columns.length + 1, obj['grid-column-end']);
+
+      // 부모의 grid-template-rows 의 개수가 조정이 되면
+      // 자식의 grid-row-start, grid-row-end 값이 자동으로 변경된다.
+      obj['grid-row-start'] = Math.max(1, Math.min(rows.length, obj['grid-row-start']));
+      obj['grid-row-end'] = Math.min(rows.length + 1, obj['grid-row-end']);
     }
 
     return obj;
@@ -228,7 +244,6 @@ export default class DomRender extends ItemRender {
       ...item.attrs(
         'grid-template-columns',
         'grid-template-rows',
-        'grid-template-areas',
         'grid-auto-columns',
         'grid-auto-rows',
         'grid-auto-flow',

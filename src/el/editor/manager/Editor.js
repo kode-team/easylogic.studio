@@ -146,8 +146,8 @@ export class Editor {
     this.user = user;
   }
 
-  initPlugins(options = {}) {
-    this.pluginManager.initializePlugin(options);
+  async initPlugins(options = {}) {
+    await this.pluginManager.initializePlugin(options);
   }
 
   themeValue(key, defaultValue = '') {
@@ -324,6 +324,7 @@ export class Editor {
   }
 
   registerUI(target, obj = {}, order = 1) {
+    // console.log(target, obj, order)
     this.injectManager.registerUI(target, obj, order);
     this.registerElement(obj);
   }

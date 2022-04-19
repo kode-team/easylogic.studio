@@ -9,7 +9,7 @@ import { CanvasViewToolLevel } from "el/editor/types/editor";
  * 
  * @param {Editor} editor 
  */
-export default function (editor) {
+export default async function (editor) {
     editor.registerUI('canvas.view', {
         GhostToolView,
         SelectionToolView,

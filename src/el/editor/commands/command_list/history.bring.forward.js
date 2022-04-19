@@ -21,7 +21,7 @@ export default {
 
                 currentValues = currentLayer.hierarchy;
             } else {
-                nextParentLayer.appendAfter(currentLayer);
+                nextParentLayer.insertAfter(currentLayer);
 
                 currentValues = currentLayer.hierarchy;
             }

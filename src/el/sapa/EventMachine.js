@@ -34,11 +34,11 @@ export default class EventMachine {
     this.children = {};
     this._bindings = [];
     this.id = uuid();    
-    this.handlers = this.initializeHandler()
     this._localTimestamp = 0;
 
     this.initializeProperty(opt, props);
 
+    this.handlers = this.initializeHandler()
     this.initComponents();
   }
 
@@ -145,17 +145,53 @@ export default class EventMachine {
     this.refresh(true);
   }
 
+
+  /**
+   * async render method 
+   * 
+   * @param {Dom|HTMLElement} $container 
+   */
+  checkLoad($container) {
+    requestAnimationFrame(() => {
+      this.render($container);
+    })
+  }
+
+  /**
+   * render 를 할 수 있는지 체크한다. 
+   * 
+   * @override
+   */
+  get isPreLoaded() {
+    return true;
+  }
+
   /**
    * template 을 렌더링 한다. 
    * 
    * @param {Dom|undefined} $container  컴포넌트가 그려질 대상 
    */
   render($container) {
-    this.$el = this.parseTemplate(this.template());
-    this.refs.$el = this.$el;
 
-    if ($container) {
-      $container.append(this.$el);
+    if (!this.isPreLoaded) {
+      this.checkLoad($container);
+      return;
+    }
+
+    const template = this.template();
+
+    const newDomElement = this.parseTemplate(template);
+
+    if (this.$el) {
+      this.$el.htmlDiff(newDomElement);  
+    } else {
+      this.$el = newDomElement;
+      this.refs.$el = this.$el;
+
+      if ($container) {
+        $container.append(this.$el);
+      }
+
     }
 
     // LOAD 로 정의된 것들을 수행한다. 
@@ -633,7 +669,18 @@ export default class EventMachine {
     });
   }
 
+  hmr() {
+    this.created();
+    this.initialize();
+    this.rerender();
+
+    this.eachChildren(child => {
+      child.hmr();
+    })
+  }
+
   rerender () {
+
     var $parent = this.$el.parent();
     this.destroy();
     this.render($parent);  

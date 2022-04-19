@@ -35,7 +35,7 @@ export default function (editor) {
                             label: 'tonality',
                             compact: true,
                           },
-                          defaultValue: current['mix-blend-mode']
+                          defaultValue: current['mix-blend-mode'] || 'normal'
                         },
                       ]
                     },

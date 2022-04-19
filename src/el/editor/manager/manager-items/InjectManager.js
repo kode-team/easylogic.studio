@@ -19,11 +19,20 @@ export class InjectManager {
     }
 
     Object.keys(obj).forEach(refClass => {
-      this.ui[target].push({
-        refClass,
-        order,
-        class: obj[refClass]
-      })
+
+      const targetClass = this.ui[target].find(it => it.refClass === refClass);
+
+      if (targetClass) {
+        targetClass.class = obj[refClass];
+      } else {
+
+        this.ui[target].push({
+          refClass,
+          order,
+          class: obj[refClass]
+        })
+      }
+
     })
   }
 

@@ -24,12 +24,12 @@ class UIElement extends EventMachine {
       this.__storeInstance = new BaseStore()
     }
 
-    this.created();
 
-    this.initialize();
+      this.created();
 
-    this.initializeStoreEvent();
-
+      this.initialize();
+  
+      this.initializeStoreEvent();
   }
 
   createContext() {
@@ -67,7 +67,7 @@ class UIElement extends EventMachine {
    * UIElement 가 생성될 때 호출되는 메소드 
    * @protected
    */
-  created() { }
+  async created() { }
 
   getRealEventName(e, separator) {
     var startIndex = e.indexOf(separator);

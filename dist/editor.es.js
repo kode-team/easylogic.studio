@@ -115,7 +115,7 @@ function isZero(num) {
 function isNotZero(num) {
   return !isZero(num);
 }
-const CLONE_FUNCTION = isFunction(structuredClone) ? structuredClone : (obj2) => JSON.parse(JSON.stringify(obj2));
+const CLONE_FUNCTION = (obj2) => JSON.parse(JSON.stringify(obj2));
 function clone$1(obj2) {
   if (isUndefined(obj2))
     return void 0;
@@ -129,41 +129,41 @@ function combineKeyArray(obj2) {
   });
   return obj2;
 }
-const setBooleanProp = (el, name2, value) => {
+const setBooleanProp = (el, name, value) => {
   if (value) {
-    el.setAttribute(name2, name2);
-    el[name2] = value;
+    el.setAttribute(name, name);
+    el[name] = value;
   } else {
-    el.removeAttribute(name2);
-    el[name2] = value;
+    el.removeAttribute(name);
+    el[name] = value;
   }
 };
-const setProp = (el, name2, value) => {
+const setProp = (el, name, value) => {
   if (typeof value === "boolean") {
-    setBooleanProp(el, name2, value);
+    setBooleanProp(el, name, value);
   } else {
-    el.setAttribute(name2, value);
+    el.setAttribute(name, value);
   }
 };
-const removeBooleanProp = (node, name2) => {
-  node.removeAttribute(name2);
-  node[name2] = false;
+const removeBooleanProp = (node, name) => {
+  node.removeAttribute(name);
+  node[name] = false;
 };
-const removeUndefinedProp = (node, name2) => {
-  node.removeAttribute(name2);
+const removeUndefinedProp = (node, name) => {
+  node.removeAttribute(name);
 };
-const removeProp = (node, name2, value) => {
+const removeProp = (node, name, value) => {
   if (typeof value === "boolean") {
-    removeBooleanProp(node, name2);
-  } else if (name2) {
-    removeUndefinedProp(node, name2);
+    removeBooleanProp(node, name);
+  } else if (name) {
+    removeUndefinedProp(node, name);
   }
 };
-const updateProp = (node, name2, newValue, oldValue) => {
+const updateProp = (node, name, newValue, oldValue) => {
   if (!newValue) {
-    removeProp(node, name2, oldValue);
+    removeProp(node, name, oldValue);
   } else if (!oldValue || newValue !== oldValue) {
-    setProp(node, name2, newValue);
+    setProp(node, name, newValue);
   }
 };
 const updateProps = (node, newProps = {}, oldProps = {}) => {
@@ -264,6 +264,7 @@ function uuidShort$1() {
 }
 const map = {};
 const aliasMap = {};
+const __rootInstance = /* @__PURE__ */ new Set();
 const __tempVariables = /* @__PURE__ */ new Map();
 const __tempVariablesGroup = /* @__PURE__ */ new Map();
 window.__tempVariables = __tempVariables;
@@ -314,9 +315,6 @@ function spreadVariable(obj2) {
 }
 function registElement(classes = {}) {
   Object.keys(classes).forEach((key) => {
-    if (map[key]) {
-      return;
-    }
     map[key] = classes[key];
   });
 }
@@ -328,6 +326,9 @@ function retriveAlias(key) {
 }
 function retriveElement(className) {
   return map[retriveAlias(className) || className];
+}
+function registRootElementInstance(instance) {
+  __rootInstance.add(instance);
 }
 class Dom {
   constructor(tag, className, attr) {
@@ -1960,9 +1961,9 @@ class EventMachine {
     this.children = {};
     this._bindings = [];
     this.id = uuid$1();
-    this.handlers = this.initializeHandler();
     this._localTimestamp = 0;
     this.initializeProperty(opt, props);
+    this.handlers = this.initializeHandler();
     this.initComponents();
   }
   get _timestamp() {
@@ -2015,11 +2016,29 @@ class EventMachine {
     this.setState(this.initState(), false);
     this.refresh(true);
   }
+  checkLoad($container) {
+    requestAnimationFrame(() => {
+      this.render($container);
+    });
+  }
+  get isPreLoaded() {
+    return true;
+  }
   render($container) {
-    this.$el = this.parseTemplate(this.template());
-    this.refs.$el = this.$el;
-    if ($container) {
-      $container.append(this.$el);
+    if (!this.isPreLoaded) {
+      this.checkLoad($container);
+      return;
+    }
+    const template = this.template();
+    const newDomElement = this.parseTemplate(template);
+    if (this.$el) {
+      this.$el.htmlDiff(newDomElement);
+    } else {
+      this.$el = newDomElement;
+      this.refs.$el = this.$el;
+      if ($container) {
+        $container.append(this.$el);
+      }
     }
     this.load();
     this.afterRender();
@@ -2040,13 +2059,13 @@ class EventMachine {
     var refs = targetRef.$$(QUERY_PROPERTY);
     for (var refsIndex = 0, refsLen = refs.length; refsIndex < refsLen; refsIndex++) {
       const $dom = refs[refsIndex];
-      const name2 = $dom.attr(REFERENCE_PROPERTY);
-      if (this.refs[name2]) {
-        if (this.refs[name2].is($dom) === false) {
-          this.refs[name2] = $dom;
+      const name = $dom.attr(REFERENCE_PROPERTY);
+      if (this.refs[name]) {
+        if (this.refs[name].is($dom) === false) {
+          this.refs[name] = $dom;
         }
       } else {
-        this.refs[name2] = $dom;
+        this.refs[name] = $dom;
       }
     }
     this.afterLoadRendering(targetRef, refName);
@@ -2071,24 +2090,24 @@ class EventMachine {
       var temp = {};
       for (var refsIndex = 0, refsLen = refs.length; refsIndex < refsLen; refsIndex++) {
         const $dom = refs[refsIndex];
-        const name2 = $dom.attr(REFERENCE_PROPERTY);
-        if (temp[name2]) {
+        const name = $dom.attr(REFERENCE_PROPERTY);
+        if (temp[name]) {
           console.warn(`${ref} is duplicated. - ${this.sourceName}`, this);
         } else {
-          temp[name2] = true;
+          temp[name] = true;
         }
         if (!isLoad) {
-          this.refs[name2] = $dom;
+          this.refs[name] = $dom;
         }
         const loadVariable = $dom.attr(LOAD_PROPERTY);
         const loadVariableRealFunction = getVariable(loadVariable);
         const bindVariable = $dom.attr(BIND_PROPERTY);
         const bindVariableRealFunction = getVariable(bindVariable);
         if (loadVariable && isFunction(loadVariableRealFunction)) {
-          this.refLoadVariables[name2] = { key: loadVariable, ref: name2, callback: loadVariableRealFunction };
+          this.refLoadVariables[name] = { key: loadVariable, ref: name, callback: loadVariableRealFunction };
         }
         if (bindVariable && isFunction(bindVariableRealFunction)) {
-          this.refBindVariables[name2] = { key: bindVariable, ref: name2, callback: bindVariableRealFunction };
+          this.refBindVariables[name] = { key: bindVariable, ref: name, callback: bindVariableRealFunction };
         }
       }
     }
@@ -2300,6 +2319,14 @@ class EventMachine {
       callback(Component2);
     });
   }
+  hmr() {
+    this.created();
+    this.initialize();
+    this.rerender();
+    this.eachChildren((child) => {
+      child.hmr();
+    });
+  }
   rerender() {
     var $parent = this.$el.parent();
     this.destroy();
@@ -2327,7 +2354,7 @@ class EventMachine {
   }
   collectProps() {
     if (!this.__cachedMethodList) {
-      this.__cachedMethodList = collectProps(this, (name2) => MagicMethod.check(name2)).map((it) => {
+      this.__cachedMethodList = collectProps(this, (name) => MagicMethod.check(name)).map((it) => {
         return MagicMethod.parse(it, this);
       });
     }
@@ -2459,6 +2486,25 @@ function fromValues$1(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23
   out[13] = m31;
   out[14] = m32;
   out[15] = m33;
+  return out;
+}
+function identity$3(out) {
+  out[0] = 1;
+  out[1] = 0;
+  out[2] = 0;
+  out[3] = 0;
+  out[4] = 0;
+  out[5] = 1;
+  out[6] = 0;
+  out[7] = 0;
+  out[8] = 0;
+  out[9] = 0;
+  out[10] = 1;
+  out[11] = 0;
+  out[12] = 0;
+  out[13] = 0;
+  out[14] = 0;
+  out[15] = 1;
   return out;
 }
 function transpose(out, a) {
@@ -3906,7 +3952,7 @@ class UIElement extends EventMachine {
   get $store() {
     return this.__storeInstance || this.parent.$store;
   }
-  created() {
+  async created() {
   }
   getRealEventName(e, separator) {
     var startIndex = e.indexOf(separator);
@@ -4009,10 +4055,11 @@ class UIElement extends EventMachine {
     return id;
   }
 }
-const start$1 = (ElementClass, opt) => {
+const start$1 = async (ElementClass, opt) => {
   const $container = Dom.create(opt.container || document.body);
   const app = new ElementClass(opt, opt);
-  app.render($container);
+  await app.render($container);
+  registRootElementInstance(app);
   return app;
 };
 var index = "";
@@ -4712,13 +4759,13 @@ class Item {
     this.project.addIndexItem(layer2);
     return layer2;
   }
-  appendAfter(layer2) {
+  insertAfter(layer2) {
     const index2 = this.parent.findIndex(this);
     this.parent.insertChild(layer2, index2);
     this.project.addIndexItem(layer2);
     return layer2;
   }
-  appendBefore(layer2) {
+  insertBefore(layer2) {
     const index2 = this.parent.findIndex(this);
     this.parent.insertChild(layer2, index2 - 1);
     this.project.addIndexItem(layer2);
@@ -4948,12 +4995,90 @@ class TransformOrigin {
     return `${transformOriginX} ${transformOriginY} ${transformOriginZ}`;
   }
 }
+class Rect {
+  constructor(x2, y2, width2, height2) {
+    this.x = x2;
+    this.y = y2;
+    this.width = width2;
+    this.height = height2;
+  }
+  get left() {
+    return this.x;
+  }
+  get right() {
+    return this.x + this.width;
+  }
+  get top() {
+    return this.y;
+  }
+  get bottom() {
+    return this.y + this.height;
+  }
+  get centerX() {
+    return this.x + this.width / 2;
+  }
+  get centerY() {
+    return this.y + this.height / 2;
+  }
+  get center() {
+    return [this.centerX, this.centerY];
+  }
+  get topLeft() {
+    return [this.left, this.top];
+  }
+  get topRight() {
+    return [this.right, this.top];
+  }
+  get bottomLeft() {
+    return [this.left, this.bottom];
+  }
+  get bottomRight() {
+    return [this.right, this.bottom];
+  }
+  get vertices() {
+    return [
+      this.topLeft,
+      this.topRight,
+      this.bottomLeft,
+      this.bottomRight
+    ];
+  }
+  intersect(rect2) {
+    return intersectRectRect(this, rect2);
+  }
+}
+function intersectRectRect(rect1, rect2) {
+  const minRectX = Math.min(rect1.x, rect2.x);
+  const minRectY = Math.min(rect1.y, rect2.y);
+  const rect1Verties = rectToVerties(rect1.x - minRectX, rect1.y - minRectY, rect1.width, rect1.height);
+  const rect2Verties = rectToVerties(rect2.x - minRectX, rect2.y - minRectY, rect2.width, rect2.height);
+  const startPoint = [
+    Math.max(rect1Verties[0][0], rect2Verties[0][0]),
+    Math.max(rect1Verties[0][1], rect2Verties[0][1]),
+    Math.max(rect1Verties[0][2], rect2Verties[0][2])
+  ];
+  const endPoint = [
+    Math.min(rect1Verties[2][0], rect2Verties[2][0]),
+    Math.min(rect1Verties[2][1], rect2Verties[2][1]),
+    Math.min(rect1Verties[2][2], rect2Verties[2][2])
+  ];
+  const minX = Math.min(startPoint[0], endPoint[0]);
+  const minY = Math.min(startPoint[1], endPoint[1]);
+  const maxX = Math.max(startPoint[0], endPoint[0]);
+  const maxY = Math.max(startPoint[1], endPoint[1]);
+  return new Rect(minX + minRectX, minY + minRectY, maxX - minX, maxY - minY);
+}
 function linePoint(x1, y1, x2, y2, px2, py2, buffer = 0.1) {
   const dist1 = Math.hypot(px2 - x1, py2 - y1);
   const dist2 = Math.hypot(px2 - x2, py2 - y2);
   const lineLength = Math.hypot(x1 - x2, y1 - y2);
   const calcDist = dist1 + dist2;
   return calcDist >= lineLength - buffer && calcDist <= lineLength + buffer;
+}
+function lineLineWithoutPoint(x1, y1, x2, y2, x3, y3, x4, y4, epsilon = 0.1) {
+  let A = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
+  let B = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
+  return 0 <= A && A <= 1 && 0 <= B && B <= 1;
 }
 function lineLine(x1, y1, x2, y2, x3, y3, x4, y4, epsilon = 0.1) {
   if (linePoint(x1, y1, x2, y2, x3, y3))
@@ -4964,19 +5089,19 @@ function lineLine(x1, y1, x2, y2, x3, y3, x4, y4, epsilon = 0.1) {
     return [x1, y1];
   else if (linePoint(x3, y3, x4, y4, x2, y2))
     return [x2, y2];
-  let A = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
-  let B = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1));
-  return 0 <= A && A <= 1 && 0 <= B && B <= 1;
+  return lineLineWithoutPoint(x1, y1, x2, y2, x3, y3, x4, y4, epsilon);
 }
-function polyPoint(verties = [], px2, py2) {
+function polyPoint(verties = [], px2, py2, withoutPoint = false) {
   let isCollision = false;
   const len2 = verties.length;
-  for (let i = 0; i < len2; i++) {
-    const v1 = verties[i];
-    const v2 = verties[(i + 1) % len2];
-    if (linePoint(v1[0], v1[1], v2[0], v2[1], px2, py2)) {
-      isCollision = true;
-      break;
+  if (withoutPoint === false) {
+    for (let i = 0; i < len2; i++) {
+      const v1 = verties[i];
+      const v2 = verties[(i + 1) % len2];
+      if (linePoint(v1[0], v1[1], v2[0], v2[1], px2, py2)) {
+        isCollision = true;
+        break;
+      }
     }
   }
   if (isCollision)
@@ -4990,23 +5115,27 @@ function polyPoint(verties = [], px2, py2) {
   });
   return isCollision;
 }
-function polyLine(verties = [], x1, y1, x2, y2) {
+function polyLine(verties = [], x1, y1, x2, y2, withoutPoint = false) {
   const len2 = verties.length;
   return verties.some((vector, index2) => {
     const [x3, y3] = vector;
     const [x4, y4] = verties[(index2 + 1) % len2];
-    return lineLine(x1, y1, x2, y2, x3, y3, x4, y4);
+    if (withoutPoint) {
+      return lineLineWithoutPoint(x1, y1, x2, y2, x3, y3, x4, y4);
+    } else {
+      return lineLine(x1, y1, x2, y2, x3, y3, x4, y4);
+    }
   });
 }
-function polyPoly(verties = [], targetVerties = []) {
+function polyPoly(verties = [], targetVerties = [], withoutPoint = false) {
   const len2 = verties.length;
   return verties.some((vector, index2) => {
     const [x1, y1] = vector;
     const [x2, y2] = verties[(index2 + 1) % len2];
-    let collision = polyLine(targetVerties, x1, y1, x2, y2);
+    let collision = polyLine(targetVerties, x1, y1, x2, y2, withoutPoint);
     if (collision)
       return true;
-    collision = polyPoint(verties, targetVerties[0][0], targetVerties[0][1]);
+    collision = polyPoint(verties, targetVerties[0][0], targetVerties[0][1], withoutPoint);
     if (collision)
       return true;
     return false;
@@ -5090,7 +5219,7 @@ function vertiesToRectangle(verties) {
   const y2 = verties[0][1];
   const width2 = dist(verties[0], verties[1]);
   const height2 = dist(verties[0], verties[3]);
-  return { x: x2, left: x2, y: y2, top: y2, width: width2, height: height2 };
+  return new Rect(x2, y2, width2, height2);
 }
 function vertiesToPath(verties = []) {
   const results = [];
@@ -5381,7 +5510,7 @@ const formatCubicBezier = (arr) => {
   }
   return `cubic-bezier( ${arr.filter((_, index2) => index2 < 4).join(",")} )`;
 };
-const parseCubicBezier = (str) => {
+function parseCubicBezier(str) {
   if (typeof str == "string") {
     if (predefinedBezier[str]) {
       return bezierList.filter((it) => it[4] === str)[0];
@@ -5392,7 +5521,7 @@ const parseCubicBezier = (str) => {
     }
   }
   return str;
-};
+}
 const createBezier = (C1, C2, C3, C4) => {
   var points2 = [C1, C2, C3, C4];
   return function(t) {
@@ -5969,11 +6098,11 @@ class ImageResource extends PropertyItem {
   }
 }
 const color_names = { aliceblue: "rgb(240, 248, 255)", antiquewhite: "rgb(250, 235, 215)", aqua: "rgb(0, 255, 255)", aquamarine: "rgb(127, 255, 212)", azure: "rgb(240, 255, 255)", beige: "rgb(245, 245, 220)", bisque: "rgb(255, 228, 196)", black: "rgb(0, 0, 0)", blanchedalmond: "rgb(255, 235, 205)", blue: "rgb(0, 0, 255)", blueviolet: "rgb(138, 43, 226)", brown: "rgb(165, 42, 42)", burlywood: "rgb(222, 184, 135)", cadetblue: "rgb(95, 158, 160)", chartreuse: "rgb(127, 255, 0)", chocolate: "rgb(210, 105, 30)", coral: "rgb(255, 127, 80)", cornflowerblue: "rgb(100, 149, 237)", cornsilk: "rgb(255, 248, 220)", crimson: "rgb(237, 20, 61)", cyan: "rgb(0, 255, 255)", darkblue: "rgb(0, 0, 139)", darkcyan: "rgb(0, 139, 139)", darkgoldenrod: "rgb(184, 134, 11)", darkgray: "rgb(169, 169, 169)", darkgrey: "rgb(169, 169, 169)", darkgreen: "rgb(0, 100, 0)", darkkhaki: "rgb(189, 183, 107)", darkmagenta: "rgb(139, 0, 139)", darkolivegreen: "rgb(85, 107, 47)", darkorange: "rgb(255, 140, 0)", darkorchid: "rgb(153, 50, 204)", darkred: "rgb(139, 0, 0)", darksalmon: "rgb(233, 150, 122)", darkseagreen: "rgb(143, 188, 143)", darkslateblue: "rgb(72, 61, 139)", darkslategray: "rgb(47, 79, 79)", darkslategrey: "rgb(47, 79, 79)", darkturquoise: "rgb(0, 206, 209)", darkviolet: "rgb(148, 0, 211)", deeppink: "rgb(255, 20, 147)", deepskyblue: "rgb(0, 191, 255)", dimgray: "rgb(105, 105, 105)", dimgrey: "rgb(105, 105, 105)", dodgerblue: "rgb(30, 144, 255)", firebrick: "rgb(178, 34, 34)", floralwhite: "rgb(255, 250, 240)", forestgreen: "rgb(34, 139, 34)", fuchsia: "rgb(255, 0, 255)", gainsboro: "rgb(220, 220, 220)", ghostwhite: "rgb(248, 248, 255)", gold: "rgb(255, 215, 0)", goldenrod: "rgb(218, 165, 32)", gray: "rgb(128, 128, 128)", grey: "rgb(128, 128, 128)", green: "rgb(0, 128, 0)", greenyellow: "rgb(173, 255, 47)", honeydew: "rgb(240, 255, 240)", hotpink: "rgb(255, 105, 180)", indianred: "rgb(205, 92, 92)", indigo: "rgb(75, 0, 130)", ivory: "rgb(255, 255, 240)", khaki: "rgb(240, 230, 140)", lavender: "rgb(230, 230, 250)", lavenderblush: "rgb(255, 240, 245)", lawngreen: "rgb(124, 252, 0)", lemonchiffon: "rgb(255, 250, 205)", lightblue: "rgb(173, 216, 230)", lightcoral: "rgb(240, 128, 128)", lightcyan: "rgb(224, 255, 255)", lightgoldenrodyellow: "rgb(250, 250, 210)", lightgreen: "rgb(144, 238, 144)", lightgray: "rgb(211, 211, 211)", lightgrey: "rgb(211, 211, 211)", lightpink: "rgb(255, 182, 193)", lightsalmon: "rgb(255, 160, 122)", lightseagreen: "rgb(32, 178, 170)", lightskyblue: "rgb(135, 206, 250)", lightslategray: "rgb(119, 136, 153)", lightslategrey: "rgb(119, 136, 153)", lightsteelblue: "rgb(176, 196, 222)", lightyellow: "rgb(255, 255, 224)", lime: "rgb(0, 255, 0)", limegreen: "rgb(50, 205, 50)", linen: "rgb(250, 240, 230)", magenta: "rgb(255, 0, 255)", maroon: "rgb(128, 0, 0)", mediumaquamarine: "rgb(102, 205, 170)", mediumblue: "rgb(0, 0, 205)", mediumorchid: "rgb(186, 85, 211)", mediumpurple: "rgb(147, 112, 219)", mediumseagreen: "rgb(60, 179, 113)", mediumslateblue: "rgb(123, 104, 238)", mediumspringgreen: "rgb(0, 250, 154)", mediumturquoise: "rgb(72, 209, 204)", mediumvioletred: "rgb(199, 21, 133)", midnightblue: "rgb(25, 25, 112)", mintcream: "rgb(245, 255, 250)", mistyrose: "rgb(255, 228, 225)", moccasin: "rgb(255, 228, 181)", navajowhite: "rgb(255, 222, 173)", navy: "rgb(0, 0, 128)", oldlace: "rgb(253, 245, 230)", olive: "rgb(128, 128, 0)", olivedrab: "rgb(107, 142, 35)", orange: "rgb(255, 165, 0)", orangered: "rgb(255, 69, 0)", orchid: "rgb(218, 112, 214)", palegoldenrod: "rgb(238, 232, 170)", palegreen: "rgb(152, 251, 152)", paleturquoise: "rgb(175, 238, 238)", palevioletred: "rgb(219, 112, 147)", papayawhip: "rgb(255, 239, 213)", peachpuff: "rgb(255, 218, 185)", peru: "rgb(205, 133, 63)", pink: "rgb(255, 192, 203)", plum: "rgb(221, 160, 221)", powderblue: "rgb(176, 224, 230)", purple: "rgb(128, 0, 128)", rebeccapurple: "rgb(102, 51, 153)", red: "rgb(255, 0, 0)", rosybrown: "rgb(188, 143, 143)", royalblue: "rgb(65, 105, 225)", saddlebrown: "rgb(139, 69, 19)", salmon: "rgb(250, 128, 114)", sandybrown: "rgb(244, 164, 96)", seagreen: "rgb(46, 139, 87)", seashell: "rgb(255, 245, 238)", sienna: "rgb(160, 82, 45)", silver: "rgb(192, 192, 192)", skyblue: "rgb(135, 206, 235)", slateblue: "rgb(106, 90, 205)", slategray: "rgb(112, 128, 144)", slategrey: "rgb(112, 128, 144)", snow: "rgb(255, 250, 250)", springgreen: "rgb(0, 255, 127)", steelblue: "rgb(70, 130, 180)", tan: "rgb(210, 180, 140)", teal: "rgb(0, 128, 128)", thistle: "rgb(216, 191, 216)", tomato: "rgb(255, 99, 71)", turquoise: "rgb(64, 224, 208)", violet: "rgb(238, 130, 238)", wheat: "rgb(245, 222, 179)", white: "rgb(255, 255, 255)", whitesmoke: "rgb(245, 245, 245)", yellow: "rgb(255, 255, 0)", yellowgreen: "rgb(154, 205, 50)", transparent: "rgba(0, 0, 0, 0)", currentColor: "currentColor" };
-function isColorName(name2) {
-  return !!color_names[name2];
+function isColorName(name) {
+  return !!color_names[name];
 }
-function getColorByName(name2) {
-  return color_names[name2];
+function getColorByName(name) {
+  return color_names[name];
 }
 var ColorNames = {
   isColorName,
@@ -6897,6 +7026,11 @@ const DirectionNumberType = {
   12: DirectionType.TO_RIGHT,
   13: DirectionType.TO_BOTTOM,
   14: DirectionType.TO_LEFT
+};
+const TargetActionType = {
+  APPEND_CHILD: "appendChild",
+  INSERT_BEFORE: "insertBefore",
+  INSERT_AFTER: "insertAfter"
 };
 const CSS_FUNC_REGEXP = /(([\-]?[\d.]+)(px|pt|fr|r?em|deg|vh|vw|m?s|%|g?rad|turn)?)|#(?:[\da-f]{8})|(#(?:[\da-f]{3}){1,2}|([a-z_\-]+)\([^\(\)]+\)|([a-z_\-]+))|(\,)/gi;
 const CSS_LENGTH_REGEXP = /^[\-]?([\d.]+)(px|pt|fr|r?em|deg|vh|vw|m?s|%|g?rad|turn)?$/gi;
@@ -12183,8 +12317,8 @@ const TYPED_ARRAYS = {
 function getTypedArray(type, buffer) {
   return new TYPED_ARRAYS[type](buffer);
 }
-function createElementNS(name2) {
-  return document.createElementNS("http://www.w3.org/1999/xhtml", name2);
+function createElementNS(name) {
+  return document.createElementNS("http://www.w3.org/1999/xhtml", name);
 }
 function SRGBToLinear(c2) {
   return c2 < 0.04045 ? c2 * 0.0773993808 : Math.pow(c2 * 0.9478672986 + 0.0521327014, 2.4);
@@ -12461,9 +12595,9 @@ class Color {
     let m;
     if (m = /^((?:rgb|hsl)a?)\(([^\)]*)\)/.exec(style)) {
       let color2;
-      const name2 = m[1];
+      const name = m[1];
       const components = m[2];
-      switch (name2) {
+      switch (name) {
         case "rgb":
         case "rgba":
           if (color2 = /^\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*(\d*\.?\d+)\s*)?$/.exec(components)) {
@@ -16052,15 +16186,15 @@ class Object3D extends EventDispatcher {
   getObjectById(id) {
     return this.getObjectByProperty("id", id);
   }
-  getObjectByName(name2) {
-    return this.getObjectByProperty("name", name2);
+  getObjectByName(name) {
+    return this.getObjectByProperty("name", name);
   }
-  getObjectByProperty(name2, value) {
-    if (this[name2] === value)
+  getObjectByProperty(name, value) {
+    if (this[name] === value)
       return this;
     for (let i = 0, l = this.children.length; i < l; i++) {
       const child = this.children[i];
-      const object = child.getObjectByProperty(name2, value);
+      const object = child.getObjectByProperty(name, value);
       if (object !== void 0) {
         return object;
       }
@@ -17195,19 +17329,19 @@ class BufferGeometry extends EventDispatcher {
     }
     return this;
   }
-  getAttribute(name2) {
-    return this.attributes[name2];
+  getAttribute(name) {
+    return this.attributes[name];
   }
-  setAttribute(name2, attribute) {
-    this.attributes[name2] = attribute;
+  setAttribute(name, attribute) {
+    this.attributes[name] = attribute;
     return this;
   }
-  deleteAttribute(name2) {
-    delete this.attributes[name2];
+  deleteAttribute(name) {
+    delete this.attributes[name];
     return this;
   }
-  hasAttribute(name2) {
-    return this.attributes[name2] !== void 0;
+  hasAttribute(name) {
+    return this.attributes[name] !== void 0;
   }
   addGroup(start2, count, materialIndex = 0) {
     this.groups.push({
@@ -17589,21 +17723,21 @@ class BufferGeometry extends EventDispatcher {
     const geometry2 = new BufferGeometry();
     const indices = this.index.array;
     const attributes = this.attributes;
-    for (const name2 in attributes) {
-      const attribute = attributes[name2];
+    for (const name in attributes) {
+      const attribute = attributes[name];
       const newAttribute = convertBufferAttribute(attribute, indices);
-      geometry2.setAttribute(name2, newAttribute);
+      geometry2.setAttribute(name, newAttribute);
     }
     const morphAttributes = this.morphAttributes;
-    for (const name2 in morphAttributes) {
+    for (const name in morphAttributes) {
       const morphArray = [];
-      const morphAttribute = morphAttributes[name2];
+      const morphAttribute = morphAttributes[name];
       for (let i = 0, il = morphAttribute.length; i < il; i++) {
         const attribute = morphAttribute[i];
         const newAttribute = convertBufferAttribute(attribute, indices);
         morphArray.push(newAttribute);
       }
-      geometry2.morphAttributes[name2] = morphArray;
+      geometry2.morphAttributes[name] = morphArray;
     }
     geometry2.morphTargetsRelative = this.morphTargetsRelative;
     const groups = this.groups;
@@ -17696,18 +17830,18 @@ class BufferGeometry extends EventDispatcher {
       this.setIndex(index2.clone(data));
     }
     const attributes = source2.attributes;
-    for (const name2 in attributes) {
-      const attribute = attributes[name2];
-      this.setAttribute(name2, attribute.clone(data));
+    for (const name in attributes) {
+      const attribute = attributes[name];
+      this.setAttribute(name, attribute.clone(data));
     }
     const morphAttributes = source2.morphAttributes;
-    for (const name2 in morphAttributes) {
+    for (const name in morphAttributes) {
       const array = [];
-      const morphAttribute = morphAttributes[name2];
+      const morphAttribute = morphAttributes[name];
       for (let i = 0, l = morphAttribute.length; i < l; i++) {
         array.push(morphAttribute[i].clone(data));
       }
-      this.morphAttributes[name2] = array;
+      this.morphAttributes[name] = array;
     }
     this.morphTargetsRelative = source2.morphTargetsRelative;
     const groups = source2.groups;
@@ -17783,9 +17917,9 @@ class Mesh extends Object3D {
           this.morphTargetInfluences = [];
           this.morphTargetDictionary = {};
           for (let m = 0, ml = morphAttribute.length; m < ml; m++) {
-            const name2 = morphAttribute[m].name || String(m);
+            const name = morphAttribute[m].name || String(m);
             this.morphTargetInfluences.push(0);
-            this.morphTargetDictionary[name2] = m;
+            this.morphTargetDictionary[name] = m;
           }
         }
       }
@@ -18142,46 +18276,46 @@ class ShaderMaterial extends Material {
     const data = super.toJSON(meta);
     data.glslVersion = this.glslVersion;
     data.uniforms = {};
-    for (const name2 in this.uniforms) {
-      const uniform = this.uniforms[name2];
+    for (const name in this.uniforms) {
+      const uniform = this.uniforms[name];
       const value = uniform.value;
       if (value && value.isTexture) {
-        data.uniforms[name2] = {
+        data.uniforms[name] = {
           type: "t",
           value: value.toJSON(meta).uuid
         };
       } else if (value && value.isColor) {
-        data.uniforms[name2] = {
+        data.uniforms[name] = {
           type: "c",
           value: value.getHex()
         };
       } else if (value && value.isVector2) {
-        data.uniforms[name2] = {
+        data.uniforms[name] = {
           type: "v2",
           value: value.toArray()
         };
       } else if (value && value.isVector3) {
-        data.uniforms[name2] = {
+        data.uniforms[name] = {
           type: "v3",
           value: value.toArray()
         };
       } else if (value && value.isVector4) {
-        data.uniforms[name2] = {
+        data.uniforms[name] = {
           type: "v4",
           value: value.toArray()
         };
       } else if (value && value.isMatrix3) {
-        data.uniforms[name2] = {
+        data.uniforms[name] = {
           type: "m3",
           value: value.toArray()
         };
       } else if (value && value.isMatrix4) {
-        data.uniforms[name2] = {
+        data.uniforms[name] = {
           type: "m4",
           value: value.toArray()
         };
       } else {
-        data.uniforms[name2] = {
+        data.uniforms[name] = {
           value
         };
       }
@@ -19856,14 +19990,14 @@ function WebGLBindingStates(gl, extensions, attributes, capabilities) {
     const geometryAttributes = geometry.attributes;
     const programAttributes = program.getAttributes();
     const materialDefaultAttributeValues = material.defaultAttributeValues;
-    for (const name2 in programAttributes) {
-      const programAttribute = programAttributes[name2];
+    for (const name in programAttributes) {
+      const programAttribute = programAttributes[name];
       if (programAttribute.location >= 0) {
-        let geometryAttribute = geometryAttributes[name2];
+        let geometryAttribute = geometryAttributes[name];
         if (geometryAttribute === void 0) {
-          if (name2 === "instanceMatrix" && object.instanceMatrix)
+          if (name === "instanceMatrix" && object.instanceMatrix)
             geometryAttribute = object.instanceMatrix;
-          if (name2 === "instanceColor" && object.instanceColor)
+          if (name === "instanceColor" && object.instanceColor)
             geometryAttribute = object.instanceColor;
         }
         if (geometryAttribute !== void 0) {
@@ -19914,7 +20048,7 @@ function WebGLBindingStates(gl, extensions, attributes, capabilities) {
             }
           }
         } else if (materialDefaultAttributeValues !== void 0) {
-          const value = materialDefaultAttributeValues[name2];
+          const value = materialDefaultAttributeValues[name];
           if (value !== void 0) {
             switch (value.length) {
               case 2:
@@ -20949,12 +21083,12 @@ function WebGLCubeUVMaps(renderer) {
 }
 function WebGLExtensions(gl) {
   const extensions = {};
-  function getExtension(name2) {
-    if (extensions[name2] !== void 0) {
-      return extensions[name2];
+  function getExtension(name) {
+    if (extensions[name] !== void 0) {
+      return extensions[name];
     }
     let extension;
-    switch (name2) {
+    switch (name) {
       case "WEBGL_depth_texture":
         extension = gl.getExtension("WEBGL_depth_texture") || gl.getExtension("MOZ_WEBGL_depth_texture") || gl.getExtension("WEBKIT_WEBGL_depth_texture");
         break;
@@ -20968,14 +21102,14 @@ function WebGLExtensions(gl) {
         extension = gl.getExtension("WEBGL_compressed_texture_pvrtc") || gl.getExtension("WEBKIT_WEBGL_compressed_texture_pvrtc");
         break;
       default:
-        extension = gl.getExtension(name2);
+        extension = gl.getExtension(name);
     }
-    extensions[name2] = extension;
+    extensions[name] = extension;
     return extension;
   }
   return {
-    has: function(name2) {
-      return getExtension(name2) !== null;
+    has: function(name) {
+      return getExtension(name) !== null;
     },
     init: function(capabilities) {
       if (capabilities.isWebGL2) {
@@ -20994,10 +21128,10 @@ function WebGLExtensions(gl) {
       getExtension("EXT_color_buffer_half_float");
       getExtension("WEBGL_multisampled_render_to_texture");
     },
-    get: function(name2) {
-      const extension = getExtension(name2);
+    get: function(name) {
+      const extension = getExtension(name);
       if (extension === null) {
-        console.warn("THREE.WebGLRenderer: " + name2 + " extension not supported.");
+        console.warn("THREE.WebGLRenderer: " + name + " extension not supported.");
       }
       return extension;
     }
@@ -21011,8 +21145,8 @@ function WebGLGeometries(gl, attributes, info, bindingStates) {
     if (geometry.index !== null) {
       attributes.remove(geometry.index);
     }
-    for (const name2 in geometry.attributes) {
-      attributes.remove(geometry.attributes[name2]);
+    for (const name in geometry.attributes) {
+      attributes.remove(geometry.attributes[name]);
     }
     geometry.removeEventListener("dispose", onGeometryDispose);
     delete geometries[geometry.id];
@@ -21037,12 +21171,12 @@ function WebGLGeometries(gl, attributes, info, bindingStates) {
   }
   function update2(geometry) {
     const geometryAttributes = geometry.attributes;
-    for (const name2 in geometryAttributes) {
-      attributes.update(geometryAttributes[name2], 34962);
+    for (const name in geometryAttributes) {
+      attributes.update(geometryAttributes[name], 34962);
     }
     const morphAttributes = geometry.morphAttributes;
-    for (const name2 in morphAttributes) {
-      const array = morphAttributes[name2];
+    for (const name in morphAttributes) {
+      const array = morphAttributes[name];
       for (let i = 0, l = array.length; i < l; i++) {
         attributes.update(array[i], 34962);
       }
@@ -21927,15 +22061,15 @@ function WebGLUniforms(gl, program) {
     parseUniform(info, addr, this);
   }
 }
-WebGLUniforms.prototype.setValue = function(gl, name2, value, textures) {
-  const u = this.map[name2];
+WebGLUniforms.prototype.setValue = function(gl, name, value, textures) {
+  const u = this.map[name];
   if (u !== void 0)
     u.setValue(gl, value, textures);
 };
-WebGLUniforms.prototype.setOptional = function(gl, object, name2) {
-  const v = object[name2];
+WebGLUniforms.prototype.setOptional = function(gl, object, name) {
+  const v = object[name];
   if (v !== void 0)
-    this.setValue(gl, name2, v);
+    this.setValue(gl, name, v);
 };
 WebGLUniforms.upload = function(gl, seq, values, textures) {
   for (let i = 0, n = seq.length; i !== n; ++i) {
@@ -22029,11 +22163,11 @@ function generateExtensions(parameters) {
 }
 function generateDefines(defines) {
   const chunks = [];
-  for (const name2 in defines) {
-    const value = defines[name2];
+  for (const name in defines) {
+    const value = defines[name];
     if (value === false)
       continue;
-    chunks.push("#define " + name2 + " " + value);
+    chunks.push("#define " + name + " " + value);
   }
   return chunks.join("\n");
 }
@@ -22042,7 +22176,7 @@ function fetchAttributeLocations(gl, program) {
   const n = gl.getProgramParameter(program, 35721);
   for (let i = 0; i < n; i++) {
     const info = gl.getActiveAttrib(program, i);
-    const name2 = info.name;
+    const name = info.name;
     let locationSize = 1;
     if (info.type === 35674)
       locationSize = 2;
@@ -22050,9 +22184,9 @@ function fetchAttributeLocations(gl, program) {
       locationSize = 3;
     if (info.type === 35676)
       locationSize = 4;
-    attributes[name2] = {
+    attributes[name] = {
       type: info.type,
-      location: gl.getAttribLocation(program, name2),
+      location: gl.getAttribLocation(program, name),
       locationSize
     };
   }
@@ -22732,9 +22866,9 @@ function WebGLPrograms(renderer, cubemaps, cubeuvmaps, extensions, capabilities,
       array.push(parameters.customFragmentShaderID);
     }
     if (parameters.defines !== void 0) {
-      for (const name2 in parameters.defines) {
-        array.push(name2);
-        array.push(parameters.defines[name2]);
+      for (const name in parameters.defines) {
+        array.push(name);
+        array.push(parameters.defines[name]);
       }
     }
     if (parameters.isRawShaderMaterial === false) {
@@ -28334,10 +28468,10 @@ class Skeleton {
     this.boneTextureSize = size2;
     return this;
   }
-  getBoneByName(name2) {
+  getBoneByName(name) {
     for (let i = 0, il = this.bones.length; i < il; i++) {
       const bone = this.bones[i];
-      if (bone.name === name2) {
+      if (bone.name === name) {
         return bone;
       }
     }
@@ -28619,9 +28753,9 @@ class Line extends Object3D {
           this.morphTargetInfluences = [];
           this.morphTargetDictionary = {};
           for (let m = 0, ml = morphAttribute.length; m < ml; m++) {
-            const name2 = morphAttribute[m].name || String(m);
+            const name = morphAttribute[m].name || String(m);
             this.morphTargetInfluences.push(0);
-            this.morphTargetDictionary[name2] = m;
+            this.morphTargetDictionary[name] = m;
           }
         }
       }
@@ -28762,9 +28896,9 @@ class Points extends Object3D {
           this.morphTargetInfluences = [];
           this.morphTargetDictionary = {};
           for (let m = 0, ml = morphAttribute.length; m < ml; m++) {
-            const name2 = morphAttribute[m].name || String(m);
+            const name = morphAttribute[m].name || String(m);
             this.morphTargetInfluences.push(0);
-            this.morphTargetDictionary[name2] = m;
+            this.morphTargetDictionary[name] = m;
           }
         }
       }
@@ -32757,9 +32891,9 @@ const AnimationUtils = {
       } while (key !== void 0);
     }
   },
-  subclip: function(sourceClip, name2, startFrame, endFrame, fps = 30) {
+  subclip: function(sourceClip, name, startFrame, endFrame, fps = 30) {
     const clip = sourceClip.clone();
-    clip.name = name2;
+    clip.name = name;
     const tracks = [];
     for (let i = 0; i < clip.tracks.length; ++i) {
       const track = clip.tracks[i];
@@ -33047,12 +33181,12 @@ class DiscreteInterpolant extends Interpolant {
   }
 }
 class KeyframeTrack {
-  constructor(name2, times, values, interpolation) {
-    if (name2 === void 0)
+  constructor(name, times, values, interpolation) {
+    if (name === void 0)
       throw new Error("THREE.KeyframeTrack: track name is undefined");
     if (times === void 0 || times.length === 0)
-      throw new Error("THREE.KeyframeTrack: no keyframes in track named " + name2);
-    this.name = name2;
+      throw new Error("THREE.KeyframeTrack: no keyframes in track named " + name);
+    this.name = name;
     this.times = AnimationUtils.convertArray(times, this.TimeBufferType);
     this.values = AnimationUtils.convertArray(values, this.ValueBufferType);
     this.setInterpolation(interpolation || this.DefaultInterpolation);
@@ -33311,8 +33445,8 @@ class VectorKeyframeTrack extends KeyframeTrack {
 }
 VectorKeyframeTrack.prototype.ValueTypeName = "vector";
 class AnimationClip {
-  constructor(name2, duration = -1, tracks, blendMode = NormalAnimationBlendMode) {
-    this.name = name2;
+  constructor(name, duration = -1, tracks, blendMode = NormalAnimationBlendMode) {
+    this.name = name;
     this.tracks = tracks;
     this.duration = duration;
     this.blendMode = blendMode;
@@ -33344,7 +33478,7 @@ class AnimationClip {
     }
     return json;
   }
-  static CreateFromMorphTargetSequence(name2, morphTargetSequence, fps, noLoop) {
+  static CreateFromMorphTargetSequence(name, morphTargetSequence, fps, noLoop) {
     const numMorphTargets = morphTargetSequence.length;
     const tracks = [];
     for (let i = 0; i < numMorphTargets; i++) {
@@ -33361,16 +33495,16 @@ class AnimationClip {
       }
       tracks.push(new NumberKeyframeTrack(".morphTargetInfluences[" + morphTargetSequence[i].name + "]", times, values).scale(1 / fps));
     }
-    return new this(name2, -1, tracks);
+    return new this(name, -1, tracks);
   }
-  static findByName(objectOrClipArray, name2) {
+  static findByName(objectOrClipArray, name) {
     let clipArray = objectOrClipArray;
     if (!Array.isArray(objectOrClipArray)) {
       const o = objectOrClipArray;
       clipArray = o.geometry && o.geometry.animations || o.animations;
     }
     for (let i = 0; i < clipArray.length; i++) {
-      if (clipArray[i].name === name2) {
+      if (clipArray[i].name === name) {
         return clipArray[i];
       }
     }
@@ -33383,17 +33517,17 @@ class AnimationClip {
       const morphTarget = morphTargets[i];
       const parts = morphTarget.name.match(pattern);
       if (parts && parts.length > 1) {
-        const name2 = parts[1];
-        let animationMorphTargets = animationToMorphTargets[name2];
+        const name = parts[1];
+        let animationMorphTargets = animationToMorphTargets[name];
         if (!animationMorphTargets) {
-          animationToMorphTargets[name2] = animationMorphTargets = [];
+          animationToMorphTargets[name] = animationMorphTargets = [];
         }
         animationMorphTargets.push(morphTarget);
       }
     }
     const clips = [];
-    for (const name2 in animationToMorphTargets) {
-      clips.push(this.CreateFromMorphTargetSequence(name2, animationToMorphTargets[name2], fps, noLoop));
+    for (const name in animationToMorphTargets) {
+      clips.push(this.CreateFromMorphTargetSequence(name, animationToMorphTargets[name], fps, noLoop));
     }
     return clips;
   }
@@ -34400,11 +34534,11 @@ class MaterialLoader extends Loader {
   }
   parse(json) {
     const textures = this.textures;
-    function getTexture(name2) {
-      if (textures[name2] === void 0) {
-        console.warn("THREE.MaterialLoader: Undefined texture", name2);
+    function getTexture(name) {
+      if (textures[name] === void 0) {
+        console.warn("THREE.MaterialLoader: Undefined texture", name);
       }
-      return textures[name2];
+      return textures[name];
     }
     const material = Material.fromType(json.type);
     if (json.uuid !== void 0)
@@ -34529,33 +34663,33 @@ class MaterialLoader extends Loader {
       }
     }
     if (json.uniforms !== void 0) {
-      for (const name2 in json.uniforms) {
-        const uniform = json.uniforms[name2];
-        material.uniforms[name2] = {};
+      for (const name in json.uniforms) {
+        const uniform = json.uniforms[name];
+        material.uniforms[name] = {};
         switch (uniform.type) {
           case "t":
-            material.uniforms[name2].value = getTexture(uniform.value);
+            material.uniforms[name].value = getTexture(uniform.value);
             break;
           case "c":
-            material.uniforms[name2].value = new Color().setHex(uniform.value);
+            material.uniforms[name].value = new Color().setHex(uniform.value);
             break;
           case "v2":
-            material.uniforms[name2].value = new Vector2().fromArray(uniform.value);
+            material.uniforms[name].value = new Vector2().fromArray(uniform.value);
             break;
           case "v3":
-            material.uniforms[name2].value = new Vector3().fromArray(uniform.value);
+            material.uniforms[name].value = new Vector3().fromArray(uniform.value);
             break;
           case "v4":
-            material.uniforms[name2].value = new Vector4().fromArray(uniform.value);
+            material.uniforms[name].value = new Vector4().fromArray(uniform.value);
             break;
           case "m3":
-            material.uniforms[name2].value = new Matrix3().fromArray(uniform.value);
+            material.uniforms[name].value = new Matrix3().fromArray(uniform.value);
             break;
           case "m4":
-            material.uniforms[name2].value = new Matrix4().fromArray(uniform.value);
+            material.uniforms[name].value = new Matrix4().fromArray(uniform.value);
             break;
           default:
-            material.uniforms[name2].value = uniform.value;
+            material.uniforms[name].value = uniform.value;
         }
       }
     }
@@ -35205,19 +35339,19 @@ class ObjectLoader extends Loader {
   }
   parseObject(data, geometries, materials, textures, animations) {
     let object;
-    function getGeometry(name2) {
-      if (geometries[name2] === void 0) {
-        console.warn("THREE.ObjectLoader: Undefined geometry", name2);
+    function getGeometry(name) {
+      if (geometries[name] === void 0) {
+        console.warn("THREE.ObjectLoader: Undefined geometry", name);
       }
-      return geometries[name2];
+      return geometries[name];
     }
-    function getMaterial(name2) {
-      if (name2 === void 0)
+    function getMaterial(name) {
+      if (name === void 0)
         return void 0;
-      if (Array.isArray(name2)) {
+      if (Array.isArray(name)) {
         const array = [];
-        for (let i = 0, l = name2.length; i < l; i++) {
-          const uuid2 = name2[i];
+        for (let i = 0, l = name.length; i < l; i++) {
+          const uuid2 = name[i];
           if (materials[uuid2] === void 0) {
             console.warn("THREE.ObjectLoader: Undefined material", uuid2);
           }
@@ -35225,10 +35359,10 @@ class ObjectLoader extends Loader {
         }
         return array;
       }
-      if (materials[name2] === void 0) {
-        console.warn("THREE.ObjectLoader: Undefined material", name2);
+      if (materials[name] === void 0) {
+        console.warn("THREE.ObjectLoader: Undefined material", name);
       }
-      return materials[name2];
+      return materials[name];
     }
     function getTexture(uuid2) {
       if (textures[uuid2] === void 0) {
@@ -35996,8 +36130,8 @@ class PropertyBinding {
       return new PropertyBinding.Composite(root, path, parsedPath);
     }
   }
-  static sanitizeNodeName(name2) {
-    return name2.replace(/\s/g, "_").replace(_reservedRe, "");
+  static sanitizeNodeName(name) {
+    return name.replace(/\s/g, "_").replace(_reservedRe, "");
   }
   static parseTrackName(trackName) {
     const matches2 = _trackRe.exec(trackName);
@@ -37844,9 +37978,9 @@ Vector4.prototype.lengthManhattan = function() {
   console.warn("THREE.Vector4: .lengthManhattan() has been renamed to .manhattanLength().");
   return this.manhattanLength();
 };
-Object3D.prototype.getChildByName = function(name2) {
+Object3D.prototype.getChildByName = function(name) {
   console.warn("THREE.Object3D: .getChildByName() has been renamed to .getObjectByName().");
-  return this.getObjectByName(name2);
+  return this.getObjectByName(name);
 };
 Object3D.prototype.renderDepth = function() {
   console.warn("THREE.Object3D: .renderDepth has been removed. Use .renderOrder, instead.");
@@ -38014,18 +38148,18 @@ BufferGeometry.prototype.addIndex = function(index2) {
   console.warn("THREE.BufferGeometry: .addIndex() has been renamed to .setIndex().");
   this.setIndex(index2);
 };
-BufferGeometry.prototype.addAttribute = function(name2, attribute) {
+BufferGeometry.prototype.addAttribute = function(name, attribute) {
   console.warn("THREE.BufferGeometry: .addAttribute() has been renamed to .setAttribute().");
   if (!(attribute && attribute.isBufferAttribute) && !(attribute && attribute.isInterleavedBufferAttribute)) {
     console.warn("THREE.BufferGeometry: .addAttribute() now expects ( name, attribute ).");
-    return this.setAttribute(name2, new BufferAttribute(arguments[1], arguments[2]));
+    return this.setAttribute(name, new BufferAttribute(arguments[1], arguments[2]));
   }
-  if (name2 === "index") {
+  if (name === "index") {
     console.warn("THREE.BufferGeometry.addAttribute: Use .setIndex() for index attribute.");
     this.setIndex(attribute);
     return this;
   }
-  return this.setAttribute(name2, attribute);
+  return this.setAttribute(name, attribute);
 };
 BufferGeometry.prototype.addDrawCall = function(start2, count, indexOffset) {
   if (indexOffset !== void 0) {
@@ -38041,9 +38175,9 @@ BufferGeometry.prototype.clearDrawCalls = function() {
 BufferGeometry.prototype.computeOffsets = function() {
   console.warn("THREE.BufferGeometry: .computeOffsets() has been removed.");
 };
-BufferGeometry.prototype.removeAttribute = function(name2) {
+BufferGeometry.prototype.removeAttribute = function(name) {
   console.warn("THREE.BufferGeometry: .removeAttribute() has been renamed to .deleteAttribute().");
-  return this.deleteAttribute(name2);
+  return this.deleteAttribute(name);
 };
 BufferGeometry.prototype.applyMatrix = function(matrix) {
   console.warn("THREE.BufferGeometry: .applyMatrix() has been renamed to .applyMatrix4().");
@@ -38636,6 +38770,20 @@ const NotifyType = {
   WARNING: "warning",
   ALERT: "alert"
 };
+const IntersectEpsilonType = {
+  RECT: 30
+};
+const ClipboardType = {
+  TEXT: "text",
+  IMAGE: "image",
+  SVG: "svg",
+  HTML: "html",
+  JSON: "json"
+};
+const ClipboardActionType = {
+  COPY: "copy",
+  CUT: "cut"
+};
 var addLayerView = {
   command: "addLayerView",
   execute: async function(editor, type, data = {}) {
@@ -38851,7 +38999,7 @@ var clipboard_copy$1 = {
   description: "Copy",
   execute: function(editor) {
     editor.clipboard.push({
-      type: "copy",
+      type: ClipboardActionType.COPY,
       data: editor.selection.ids
     });
   }
@@ -38864,28 +39012,7 @@ var clipboard_paste$1 = {
   command: "clipboard.paste",
   execute: async function(editor, event) {
     if (!editor.clipboard.isEmpty) {
-      const data = editor.clipboard.last;
-      if (data.type == "copy") {
-        const ids = data.data;
-        const items = await editor.json.renderAll(ids.map((it) => editor.get(it)));
-        const newIds = [];
-        const length2 = items.length;
-        items.forEach((itemJSON) => {
-          const referenceId = itemJSON.referenceId;
-          const sourceItem = editor.get(referenceId);
-          const model = editor.createModel(itemJSON);
-          model.renameWithCount();
-          model.absoluteMove([10, 10, 0]);
-          if (length2 === 1) {
-            sourceItem.appendBefore(model);
-          } else {
-            sourceItem.appendAfter(model);
-          }
-          newIds.push(model.id);
-        });
-        editor.selection.select(...newIds);
-        editor.emit("refreshAll");
-      }
+      editor.emit("history.clipboard.paste", "paste");
     } else {
       var text2 = await navigator.clipboard.readText();
       if (text2) {
@@ -40699,7 +40826,7 @@ var group_item$1 = {
       const groupLayer = editor.createModel(__spreadValues(__spreadValues({
         itemType: "rect"
       }, editor.selection.itemRect), opt));
-      list2[0].item.appendAfter(groupLayer);
+      list2[0].item.insertAfter(groupLayer);
       list2.forEach(({ item: item2 }) => {
         groupLayer.appendChild(item2);
       });
@@ -40766,7 +40893,7 @@ var history_bring_forward = {
         nextParentLayer.appendChild(currentLayer);
         currentValues2 = currentLayer.hierarchy;
       } else {
-        nextParentLayer.appendAfter(currentLayer);
+        nextParentLayer.insertAfter(currentLayer);
         currentValues2 = currentLayer.hierarchy;
       }
     } else {
@@ -40852,6 +40979,86 @@ var __glob_0_49$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   __proto__: null,
   "default": history_bring_front
 }, Symbol.toStringTag, { value: "Module" }));
+var history_clipboard_paste = {
+  command: "history.clipboard.paste",
+  description: "paste in clipboard ",
+  description_ko: [
+    "\uD074\uB9BD\uBCF4\uB4DC \uB370\uC774\uD0C0\uB97C \uAE30\uC900\uC73C\uB85C paste \uB97C \uC801\uC6A9\uD55C\uB2E4. "
+  ],
+  execute: async function(editor, message, clipboardData = void 0, hasHistory = true) {
+    const data = clipboardData || editor.clipboard.last;
+    if (data.type == ClipboardActionType.COPY) {
+      const ids = data.data;
+      const items = await editor.json.renderAll(ids.map((it) => editor.get(it)));
+      const newIds = [];
+      const length2 = items.length;
+      const itemList = {};
+      const parentList = {};
+      let updateData = {};
+      items.forEach((itemJSON) => {
+        const referenceId = itemJSON.referenceId;
+        const sourceItem = editor.get(referenceId);
+        parentList[sourceItem.parentId] = sourceItem.parent;
+        const model = editor.createModel(itemJSON);
+        model.renameWithCount();
+        console.log(model.attrs("x", "y"));
+        model.absoluteMove([10, 10, 0]);
+        if (length2 === 1) {
+          sourceItem.insertBefore(model);
+        } else {
+          sourceItem.insertAfter(model);
+        }
+        newIds.push(model.id);
+        itemList[model.id] = itemJSON;
+        updateData[model.id] = model.json;
+      });
+      Object.values(parentList).forEach((parent) => {
+        updateData = __spreadValues(__spreadValues({}, updateData), parent.attrsWithId("children"));
+      });
+      editor.emit("setAttributeForMulti", updateData);
+      editor.nextTick(() => {
+        editor.selection.select(...newIds);
+        if (hasHistory) {
+          editor.history.add(message, this, {
+            currentValues: [
+              data
+            ],
+            undoValues: [
+              newIds,
+              editor.selection.ids
+            ]
+          });
+        }
+        editor.history.saveSelection();
+      });
+    }
+  },
+  redo: function(editor, { currentValues: [data] }) {
+    editor.emit("history.clipboard.paste", "paste", data, false);
+  },
+  undo: function(editor, { currentValues: [data], undoValues: [newIds, selectedIds] }) {
+    if (data.type === ClipboardActionType.COPY) {
+      const parentList = {};
+      newIds.forEach((id) => {
+        const item2 = editor.get(id);
+        parentList[item2.parentId] = item2.parent;
+        if (item2) {
+          item2.remove();
+        }
+      });
+      let updateData = {};
+      Object.values(parentList).forEach((parent) => {
+        updateData = __spreadValues(__spreadValues({}, updateData), parent.attrsWithId("children"));
+      });
+      editor.selection.select(...selectedIds);
+      editor.emit("setAttributeForMulti", updateData);
+    }
+  }
+};
+var __glob_0_50$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": history_clipboard_paste
+}, Symbol.toStringTag, { value: "Module" }));
 var history_group_item = {
   command: "history.group.item",
   description: "History Group Item",
@@ -40879,7 +41086,7 @@ var history_group_item = {
   undo: function(editor, { undoValues: [ids, projectId] }) {
   }
 };
-var __glob_0_50$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_51$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_group_item
 }, Symbol.toStringTag, { value: "Module" }));
@@ -40924,28 +41131,30 @@ var history_moveLayer = {
     editor.emit("setAttributeForMulti", lastValues);
   }
 };
-var __glob_0_51$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_52$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_moveLayer
 }, Symbol.toStringTag, { value: "Module" }));
 var history_moveLayerToTarget = {
   command: "history.moveLayerToTarget",
   description: "move layer to target in world ",
-  execute: function(editor, message, layer2, target, dist2 = [0, 0, 0], targetAction = "appendChild") {
+  execute: function(editor, message, layer2, target, dist2 = [0, 0, 0], targetAction = TargetActionType.APPEND_CHILD) {
     const currentLayer = editor.get(layer2);
     const currentParentLayer = currentLayer.parent;
     const currentTarget = editor.get(target);
     const lastValues = currentLayer.hierachy;
-    currentLayer.absoluteMove(dist2);
+    if (dist2) {
+      currentLayer.absoluteMove(dist2);
+    }
     let currentValues2 = {};
-    if (targetAction === "appendChild") {
+    if (targetAction === TargetActionType.APPEND_CHILD) {
       currentTarget.appendChild(currentLayer);
       currentValues2 = currentTarget.attrsWithId("children");
-    } else if (targetAction === "appendBefore") {
-      currentTarget.appendBefore(currentLayer);
+    } else if (targetAction === TargetActionType.INSERT_BEFORE) {
+      currentTarget.insertBefore(currentLayer);
       currentValues2 = currentTarget.parent.attrsWithId("children");
-    } else if (targetAction === "appendAfter") {
-      currentTarget.appendAfter(currentLayer);
+    } else if (targetAction === TargetActionType.INSERT_AFTER) {
+      currentTarget.insertAfter(currentLayer);
       currentValues2 = currentTarget.parent.attrsWithId("children");
     }
     editor.emit("setAttributeForMulti", __spreadValues(__spreadValues(__spreadValues({}, currentLayer.attrsWithId("x", "y", "angle", "parentId")), currentValues2), currentParentLayer && currentParentLayer.isNot("project") ? currentParentLayer.attrsWithId("children") : {}));
@@ -40977,7 +41186,7 @@ var history_moveLayerToTarget = {
     editor.emit("setAttributeForMulti", __spreadValues(__spreadValues(__spreadValues({}, lastLayer.attrsWithId("x", "y", "angle")), lastParent.attrsWithId("children")), currentParent.attrsWithId("children")));
   }
 };
-var __glob_0_52$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_53$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_moveLayerToTarget
 }, Symbol.toStringTag, { value: "Module" }));
@@ -40987,7 +41196,7 @@ var history_redo$1 = {
     editor.history.redo();
   }
 };
-var __glob_0_53$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_54$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_redo$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41029,7 +41238,7 @@ var history_refreshSelection = {
     this.nextAction(editor);
   }
 };
-var __glob_0_54$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_55$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_refreshSelection
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41066,7 +41275,7 @@ var history_refreshSelectionProject = {
     this.nextAction(editor);
   }
 };
-var __glob_0_55$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_56$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_refreshSelectionProject
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41127,7 +41336,7 @@ var history_removeLayer = {
     });
   }
 };
-var __glob_0_56$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_57$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_removeLayer
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41163,7 +41372,7 @@ var history_removeProject = {
     });
   }
 };
-var __glob_0_57$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_58$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_removeProject
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41208,7 +41417,7 @@ var history_send_back = {
     editor.emit("setAttributeForMulti", __spreadValues(__spreadValues({}, lastLayer.attrsWithId("x", "y", "angle", "parentId")), lastParent.attrsWithId("children")));
   }
 };
-var __glob_0_58$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_59$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_send_back
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41223,7 +41432,7 @@ var history_send_backward = {
     let prevParentLayer = null;
     if (currentLayer.isFirst()) {
       prevParentLayer = oldParentLayer.prev;
-      prevParentLayer.appendBefore(currentLayer);
+      prevParentLayer.insertBefore(currentLayer);
       currentValues2 = currentLayer.hierarchy;
     } else {
       currentLayer.parent.sendBackward(currentLayer.id);
@@ -41259,7 +41468,7 @@ var history_send_backward = {
     editor.emit("setAttributeForMulti", __spreadValues(__spreadValues(__spreadValues({}, lastLayer.attrsWithId("x", "y", "angle")), lastParent.attrsWithId("children")), currentParent.attrsWithId("children")));
   }
 };
-var __glob_0_59$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_60$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_send_backward
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41294,7 +41503,7 @@ var history_setAttributeForMulti = {
     });
   }
 };
-var __glob_0_60$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_61$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_setAttributeForMulti
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41304,7 +41513,7 @@ var history_undo$1 = {
     editor.history.undo();
   }
 };
-var __glob_0_61$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_62$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": history_undo$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41318,7 +41527,7 @@ var item_move_depth_down$1 = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_62$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_63$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_depth_down$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41332,7 +41541,7 @@ var item_move_depth_first = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_63$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_64$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_depth_first
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41346,7 +41555,7 @@ var item_move_depth_last = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_64$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_65$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_depth_last
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41360,20 +41569,20 @@ var item_move_depth_up$1 = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_65$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_66$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": item_move_depth_up$1
 }, Symbol.toStringTag, { value: "Module" }));
 var keymap_keydown = {
   command: "keymap.keydown",
   execute: function(editor, e) {
-    editor.keyboardManager.add(e.code, e.keyCode);
+    editor.keyboardManager.add(e.code, e.keyCode, e);
     if (editor.shortcuts) {
       editor.shortcuts.execute(e, "keydown");
     }
   }
 };
-var __glob_0_66$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_67$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": keymap_keydown
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41386,7 +41595,7 @@ var keymap_keyup = {
     }
   }
 };
-var __glob_0_67$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_68$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": keymap_keyup
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41403,7 +41612,7 @@ var lastTimelineItem = {
     });
   }
 };
-var __glob_0_68$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_69$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": lastTimelineItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41414,7 +41623,7 @@ var load_json = {
     _doForceRefreshSelection(editor);
   }
 };
-var __glob_0_69$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_70$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": load_json
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41432,7 +41641,7 @@ var moveLayer = {
     });
   }
 };
-var __glob_0_70$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_71$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": moveLayer
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41451,7 +41660,7 @@ var moveLayerForItems = {
     });
   }
 };
-var __glob_0_71$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_72$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": moveLayerForItems
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41473,7 +41682,7 @@ var moveSelectionToCenter = {
     editor.emit("moveToCenter", areaVerties, withScale);
   }
 };
-var __glob_0_72$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_73$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": moveSelectionToCenter
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41486,7 +41695,7 @@ var moveToCenter = {
     }
   }
 };
-var __glob_0_73$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_74$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": moveToCenter
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41525,7 +41734,7 @@ function newComponent(editor, itemType, obj2, isSelected = true, containerItem =
   editor.command("addLayer", `add layer - ${itemType}`, editor.createModel(newObjAttrs), isSelected, containerItem);
   editor.changeMode(EDIT_MODE_SELECTION);
 }
-var __glob_0_74$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_75$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": newComponent
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41542,7 +41751,7 @@ var nextTimelineItem = {
     });
   }
 };
-var __glob_0_75$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_76$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": nextTimelineItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41762,7 +41971,7 @@ var open_editor = {
                 itemType: "svg-path"
               }, newPathData));
               editor.selection.select(newPath);
-              newCurrent.appendAfter(newPath);
+              newCurrent.insertAfter(newPath);
               editor.nextTick(() => {
                 editor.emit("removeLayer", [newCurrent.id]);
                 editor.emit("updatePathItem", data);
@@ -41804,7 +42013,7 @@ var open_editor = {
     }
   }
 };
-var __glob_0_76$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_77$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": open_editor
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41816,7 +42025,7 @@ var pauseTimelineItem = {
     }
   }
 };
-var __glob_0_77$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_78$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": pauseTimelineItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41870,7 +42079,7 @@ var playTimelineItem = {
     });
   }
 };
-var __glob_0_78$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_79$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": playTimelineItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41880,7 +42089,7 @@ var pop_mode_view = {
     editor.modeViewManager.popMode(modeView);
   }
 };
-var __glob_0_79$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_80$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": pop_mode_view
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41897,7 +42106,7 @@ var prevTimelineItem = {
     });
   }
 };
-var __glob_0_80$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_81$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": prevTimelineItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41907,7 +42116,7 @@ var push_mode_view = {
     editor.modeViewManager.pushMode(modeView);
   }
 };
-var __glob_0_81$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_82$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": push_mode_view
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41946,7 +42155,7 @@ var recoverBooleanPath = {
     }
   }
 };
-var __glob_0_82$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_83$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": recoverBooleanPath
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41956,7 +42165,7 @@ var recoverCursor = {
     editor.emit("changeIconView", "auto");
   }
 };
-var __glob_0_83$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_84$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": recoverCursor
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41976,7 +42185,7 @@ var refreshArtboard = {
     });
   }
 };
-var __glob_0_84$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_85$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": refreshArtboard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -41986,7 +42195,7 @@ var refreshCursor = {
     editor.emit("changeIconView", iconType, ...args2);
   }
 };
-var __glob_0_85$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_86$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": refreshCursor
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42010,21 +42219,21 @@ var refreshElement = {
     maker.run();
   }
 };
-var __glob_0_86$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_87$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": refreshElement
 }, Symbol.toStringTag, { value: "Module" }));
 function refreshHistory(editor) {
   editor.emit("saveJSON");
 }
-var __glob_0_87$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_88$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": refreshHistory
 }, Symbol.toStringTag, { value: "Module" }));
 function refreshProject(editor, current) {
   editor.emit("refreshStyleView", current, true);
 }
-var __glob_0_88$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_89$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": refreshProject
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42037,7 +42246,7 @@ var refreshSelectedOffset = {
     }
   }
 };
-var __glob_0_89$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_90$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": refreshSelectedOffset
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42053,7 +42262,7 @@ var removeAnimationItem = {
     }
   }
 };
-var __glob_0_90$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_91$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": removeAnimationItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42072,7 +42281,7 @@ var removeLayer$1 = {
     });
   }
 };
-var __glob_0_91$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_92$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": removeLayer$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42088,7 +42297,7 @@ var removeTimeline = {
     }
   }
 };
-var __glob_0_92$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_93$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": removeTimeline
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42104,14 +42313,14 @@ var removeTimelineProperty = {
     }
   }
 };
-var __glob_0_93$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_94$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": removeTimelineProperty
 }, Symbol.toStringTag, { value: "Module" }));
 function resetSelection(editor) {
   editor.emit("refreshSelectionTool");
 }
-var __glob_0_94$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_95$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": resetSelection
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42128,7 +42337,7 @@ function resizeArtBoard(editor, size2 = "") {
     _doForceRefreshSelection(editor);
   }
 }
-var __glob_0_95$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_96$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": resizeArtBoard
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42411,7 +42620,7 @@ var rotateLayer = {
     });
   }
 };
-var __glob_0_96$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_97$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": rotateLayer
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42431,7 +42640,7 @@ var same_height$1 = {
     }
   }
 };
-var __glob_0_97$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_98$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": same_height$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42448,7 +42657,7 @@ var same_width$1 = {
     }
   }
 };
-var __glob_0_98$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_99$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": same_width$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42458,7 +42667,7 @@ var saveJSON = {
     editor.saveItem("model", editor.modelManager.toJSON());
   }
 };
-var __glob_0_99$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_100$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": saveJSON
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42479,7 +42688,7 @@ var savePNG = {
     }
   }
 };
-var __glob_0_100$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_101$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": savePNG
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42489,7 +42698,7 @@ var segment_delete$1 = {
     editor.emit("deleteSegment");
   }
 };
-var __glob_0_101$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_102$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_delete$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42500,7 +42709,7 @@ var segment_move_down = {
     editor.emit("moveSegment", 0, dy);
   }
 };
-var __glob_0_102$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_103$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_down
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42511,7 +42720,7 @@ var segment_move_left = {
     editor.emit("moveSegment", -1 * dx, 0);
   }
 };
-var __glob_0_103$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_104$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_left
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42522,7 +42731,7 @@ var segment_move_right = {
     editor.emit("moveSegment", dx, 0);
   }
 };
-var __glob_0_104$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_105$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_right
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42533,7 +42742,7 @@ var segment_move_up = {
     editor.emit("moveSegment", 0, -1 * dy);
   }
 };
-var __glob_0_105$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_106$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": segment_move_up
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42547,7 +42756,7 @@ var select_all$1 = {
     }
   }
 };
-var __glob_0_106$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_107$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": select_all$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42562,7 +42771,7 @@ var selectTimelineItem = {
     }
   }
 };
-var __glob_0_107$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_108$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": selectTimelineItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42623,7 +42832,7 @@ var setAttributeForMulti = {
     commandMaker.run();
   }
 };
-var __glob_0_108$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_109$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": setAttributeForMulti
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42634,7 +42843,7 @@ var setLocale = {
     editor.emit("changed.locale");
   }
 };
-var __glob_0_109$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_110$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": setLocale
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42649,7 +42858,7 @@ var setTimelineOffset = {
     }
   }
 };
-var __glob_0_110$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_111$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": setTimelineOffset
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42659,7 +42868,7 @@ var showExportView = {
     editor.emit("showExportWindow");
   }
 };
-var __glob_0_111$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_112$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": showExportView
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42684,7 +42893,7 @@ var sort_bottom = {
     }
   }
 };
-var __glob_0_112$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_113$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_bottom
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42708,7 +42917,7 @@ var sort_center = {
     }
   }
 };
-var __glob_0_113$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_114$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_center
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42733,7 +42942,7 @@ var sort_left = {
     }
   }
 };
-var __glob_0_114$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_115$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_left
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42757,7 +42966,7 @@ var sort_middle = {
     }
   }
 };
-var __glob_0_115$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_116$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_middle
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42782,7 +42991,7 @@ var sort_right = {
     }
   }
 };
-var __glob_0_116$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_117$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_right
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42807,7 +43016,7 @@ var sort_top = {
     }
   }
 };
-var __glob_0_117$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_118$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": sort_top
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42835,7 +43044,7 @@ var switch_path = {
     }
   }
 };
-var __glob_0_118$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_119$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": switch_path
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42845,7 +43054,7 @@ var toggle_tool_hand = {
     editor.config.toggle("set.tool.hand");
   }
 };
-var __glob_0_119$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_120$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": toggle_tool_hand
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42860,14 +43069,14 @@ var ungroup_item$1 = {
       let layers2 = [...groupLayer.layers];
       layers2.reverse();
       layers2.forEach((child) => {
-        groupLayer.appendBefore(child);
+        groupLayer.insertBefore(child);
       });
       editor.selection.select(...layers2);
       editor.emit("refreshAll");
     }
   }
 };
-var __glob_0_120$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_121$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": ungroup_item$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42880,7 +43089,7 @@ var updateClipPath = {
     }));
   }
 };
-var __glob_0_121$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_122$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateClipPath
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42902,7 +43111,7 @@ var updateImage = {
     reader.readAsDataURL(imageFileOrBlob);
   }
 };
-var __glob_0_122$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_123$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateImage
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42929,7 +43138,7 @@ var updateImageAssetItem = {
     reader.readAsDataURL(item2);
   }
 };
-var __glob_0_123$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_124$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateImageAssetItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42965,7 +43174,7 @@ var updatePathItem = {
     }
   }
 };
-var __glob_0_124$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_125$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updatePathItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -42994,7 +43203,7 @@ var updateResource = {
     });
   }
 };
-var __glob_0_125$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_126$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateResource
 }, Symbol.toStringTag, { value: "Module" }));
@@ -43006,7 +43215,7 @@ var updateScale = {
     editor.emit("updateViewport", scale2, oldScale);
   }
 };
-var __glob_0_126$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_127$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateScale
 }, Symbol.toStringTag, { value: "Module" }));
@@ -43057,7 +43266,7 @@ var updateUriList = {
       }
     } else {
       var ext = item2.data.split(".").pop();
-      var name2 = item2.data.split("/").pop();
+      var name = item2.data.split("/").pop();
       switch (ext) {
         case "png":
         case "jpg":
@@ -43066,7 +43275,7 @@ var updateUriList = {
           editor.emit("addImageAssetItem", {
             id: uuidShort(),
             type: "image/" + ext,
-            name: name2,
+            name,
             original: item2.data,
             local: item2.data
           });
@@ -43075,7 +43284,7 @@ var updateUriList = {
     }
   }
 };
-var __glob_0_127$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_128$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateUriList
 }, Symbol.toStringTag, { value: "Module" }));
@@ -43097,7 +43306,7 @@ var updateVideo = {
     reader.readAsDataURL(item2);
   }
 };
-var __glob_0_128$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_129$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateVideo
 }, Symbol.toStringTag, { value: "Module" }));
@@ -43124,7 +43333,7 @@ var updateVideoAssetItem = {
     reader.readAsDataURL(item2);
   }
 };
-var __glob_0_129$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_130$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": updateVideoAssetItem
 }, Symbol.toStringTag, { value: "Module" }));
@@ -43134,7 +43343,7 @@ var zoom_default$1 = {
     editor.viewport.zoomDefault();
   }
 };
-var __glob_0_130$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_131$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": zoom_default$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -43144,7 +43353,7 @@ var zoom_in$1 = {
     editor.viewport.zoomIn(0.02);
   }
 };
-var __glob_0_131$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_132$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": zoom_in$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -43154,7 +43363,7 @@ var zoom_out$1 = {
     editor.viewport.zoomOut(0.02);
   }
 };
-var __glob_0_132$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_133$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": zoom_out$1
 }, Symbol.toStringTag, { value: "Module" }));
@@ -43171,11 +43380,11 @@ var update = {
     }
   }
 };
-var __glob_0_133$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+var __glob_0_134$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   "default": update
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$4 = { "./command_list/_currentProject.js": __glob_0_0$4, "./command_list/_doForceRefreshSelection.js": __glob_0_1$4, "./command_list/addArtBoard.js": __glob_0_2$4, "./command_list/addBackgroundColor.js": __glob_0_3$4, "./command_list/addBackgroundImageAsset.js": __glob_0_4$4, "./command_list/addBackgroundImageGradient.js": __glob_0_5$4, "./command_list/addBackgroundImagePattern.js": __glob_0_6$4, "./command_list/addCubeBox.js": __glob_0_7$4, "./command_list/addCustomComponent.js": __glob_0_8$4, "./command_list/addImage.js": __glob_0_9$4, "./command_list/addImageAssetItem.js": __glob_0_10$4, "./command_list/addLayer.js": __glob_0_11$4, "./command_list/addLayerView.js": __glob_0_12$4, "./command_list/addProject.js": __glob_0_13$4, "./command_list/addSVGFilterAssetItem.js": __glob_0_14$4, "./command_list/addText.js": __glob_0_15$4, "./command_list/addTimelineCurrentProperty.js": __glob_0_16$4, "./command_list/addTimelineItem.js": __glob_0_17$4, "./command_list/addTimelineKeyframe.js": __glob_0_18$4, "./command_list/addTimelineProperty.js": __glob_0_19$4, "./command_list/addVideo.js": __glob_0_20$4, "./command_list/addVideoAssetItem.js": __glob_0_21$3, "./command_list/clipboard.copy.js": __glob_0_22$3, "./command_list/clipboard.paste.js": __glob_0_23$3, "./command_list/convert.flatten.path.js": __glob_0_24$3, "./command_list/convert.no.transform.path.js": __glob_0_25$2, "./command_list/convert.normalize.path.js": __glob_0_26$2, "./command_list/convert.path.operation.js": __glob_0_27$2, "./command_list/convert.polygonal.path.js": __glob_0_28$2, "./command_list/convert.simplify.path.js": __glob_0_29$2, "./command_list/convert.smooth.path.js": __glob_0_30$2, "./command_list/convert.stroke.to.path.js": __glob_0_31$2, "./command_list/convertPasteText.js": __glob_0_32$2, "./command_list/convertPath.js": __glob_0_33$2, "./command_list/copy.path.js": __glob_0_34$2, "./command_list/copyTimelineProperty.js": __glob_0_35$2, "./command_list/deleteTimelineKeyframe.js": __glob_0_36$2, "./command_list/doubleclick.item.js": __glob_0_37$2, "./command_list/downloadJSON.js": __glob_0_38$2, "./command_list/downloadPNG.js": __glob_0_39$2, "./command_list/downloadSVG.js": __glob_0_40$2, "./command_list/drop.asset.js": __glob_0_41$2, "./command_list/dropImageUrl.js": __glob_0_42$2, "./command_list/editor.config.body.event.js": __glob_0_43$2, "./command_list/fileDropItems.js": __glob_0_44$2, "./command_list/firstTimelineItem.js": __glob_0_45$2, "./command_list/group.item.js": __glob_0_46$2, "./command_list/history.addLayer.js": __glob_0_47$2, "./command_list/history.bring.forward.js": __glob_0_48$2, "./command_list/history.bring.front.js": __glob_0_49$2, "./command_list/history.group.item.js": __glob_0_50$2, "./command_list/history.moveLayer.js": __glob_0_51$2, "./command_list/history.moveLayerToTarget.js": __glob_0_52$1, "./command_list/history.redo.js": __glob_0_53$1, "./command_list/history.refreshSelection.js": __glob_0_54$1, "./command_list/history.refreshSelectionProject.js": __glob_0_55$1, "./command_list/history.removeLayer.js": __glob_0_56$1, "./command_list/history.removeProject.js": __glob_0_57$1, "./command_list/history.send.back.js": __glob_0_58$1, "./command_list/history.send.backward.js": __glob_0_59$1, "./command_list/history.setAttributeForMulti.js": __glob_0_60$1, "./command_list/history.undo.js": __glob_0_61$1, "./command_list/item.move.depth.down.js": __glob_0_62$1, "./command_list/item.move.depth.first.js": __glob_0_63$1, "./command_list/item.move.depth.last.js": __glob_0_64$1, "./command_list/item.move.depth.up.js": __glob_0_65$1, "./command_list/keymap.keydown.js": __glob_0_66$1, "./command_list/keymap.keyup.js": __glob_0_67$1, "./command_list/lastTimelineItem.js": __glob_0_68$1, "./command_list/load.json.js": __glob_0_69$1, "./command_list/moveLayer.js": __glob_0_70$1, "./command_list/moveLayerForItems.js": __glob_0_71$1, "./command_list/moveSelectionToCenter.js": __glob_0_72$1, "./command_list/moveToCenter.js": __glob_0_73$1, "./command_list/newComponent.js": __glob_0_74$1, "./command_list/nextTimelineItem.js": __glob_0_75$1, "./command_list/open.editor.js": __glob_0_76$1, "./command_list/pauseTimelineItem.js": __glob_0_77$1, "./command_list/playTimelineItem.js": __glob_0_78$1, "./command_list/pop.mode.view.js": __glob_0_79$1, "./command_list/prevTimelineItem.js": __glob_0_80$1, "./command_list/push.mode.view.js": __glob_0_81$1, "./command_list/recoverBooleanPath.js": __glob_0_82$1, "./command_list/recoverCursor.js": __glob_0_83$1, "./command_list/refreshArtboard.js": __glob_0_84$1, "./command_list/refreshCursor.js": __glob_0_85$1, "./command_list/refreshElement.js": __glob_0_86$1, "./command_list/refreshHistory.js": __glob_0_87$1, "./command_list/refreshProject.js": __glob_0_88$1, "./command_list/refreshSelectedOffset.js": __glob_0_89$1, "./command_list/removeAnimationItem.js": __glob_0_90$1, "./command_list/removeLayer.js": __glob_0_91$1, "./command_list/removeTimeline.js": __glob_0_92$1, "./command_list/removeTimelineProperty.js": __glob_0_93$1, "./command_list/resetSelection.js": __glob_0_94$1, "./command_list/resizeArtBoard.js": __glob_0_95$1, "./command_list/rotateLayer.js": __glob_0_96$1, "./command_list/same.height.js": __glob_0_97$1, "./command_list/same.width.js": __glob_0_98$1, "./command_list/saveJSON.js": __glob_0_99$1, "./command_list/savePNG.js": __glob_0_100$1, "./command_list/segment.delete.js": __glob_0_101$1, "./command_list/segment.move.down.js": __glob_0_102$1, "./command_list/segment.move.left.js": __glob_0_103$1, "./command_list/segment.move.right.js": __glob_0_104$1, "./command_list/segment.move.up.js": __glob_0_105$1, "./command_list/select.all.js": __glob_0_106$1, "./command_list/selectTimelineItem.js": __glob_0_107$1, "./command_list/setAttributeForMulti.js": __glob_0_108$1, "./command_list/setLocale.js": __glob_0_109$1, "./command_list/setTimelineOffset.js": __glob_0_110$1, "./command_list/showExportView.js": __glob_0_111$1, "./command_list/sort.bottom.js": __glob_0_112$1, "./command_list/sort.center.js": __glob_0_113$1, "./command_list/sort.left.js": __glob_0_114$1, "./command_list/sort.middle.js": __glob_0_115$1, "./command_list/sort.right.js": __glob_0_116$1, "./command_list/sort.top.js": __glob_0_117$1, "./command_list/switch.path.js": __glob_0_118$1, "./command_list/toggle.tool.hand.js": __glob_0_119$1, "./command_list/ungroup.item.js": __glob_0_120$1, "./command_list/updateClipPath.js": __glob_0_121$1, "./command_list/updateImage.js": __glob_0_122$1, "./command_list/updateImageAssetItem.js": __glob_0_123$1, "./command_list/updatePathItem.js": __glob_0_124$1, "./command_list/updateResource.js": __glob_0_125$1, "./command_list/updateScale.js": __glob_0_126$1, "./command_list/updateUriList.js": __glob_0_127$1, "./command_list/updateVideo.js": __glob_0_128$1, "./command_list/updateVideoAssetItem.js": __glob_0_129$1, "./command_list/zoom.default.js": __glob_0_130$1, "./command_list/zoom.in.js": __glob_0_131$1, "./command_list/zoom.out.js": __glob_0_132$1, "./command_list/model/update.js": __glob_0_133$1 };
+const modules$4 = { "./command_list/_currentProject.js": __glob_0_0$4, "./command_list/_doForceRefreshSelection.js": __glob_0_1$4, "./command_list/addArtBoard.js": __glob_0_2$4, "./command_list/addBackgroundColor.js": __glob_0_3$4, "./command_list/addBackgroundImageAsset.js": __glob_0_4$4, "./command_list/addBackgroundImageGradient.js": __glob_0_5$4, "./command_list/addBackgroundImagePattern.js": __glob_0_6$4, "./command_list/addCubeBox.js": __glob_0_7$4, "./command_list/addCustomComponent.js": __glob_0_8$4, "./command_list/addImage.js": __glob_0_9$4, "./command_list/addImageAssetItem.js": __glob_0_10$4, "./command_list/addLayer.js": __glob_0_11$4, "./command_list/addLayerView.js": __glob_0_12$4, "./command_list/addProject.js": __glob_0_13$4, "./command_list/addSVGFilterAssetItem.js": __glob_0_14$4, "./command_list/addText.js": __glob_0_15$4, "./command_list/addTimelineCurrentProperty.js": __glob_0_16$4, "./command_list/addTimelineItem.js": __glob_0_17$4, "./command_list/addTimelineKeyframe.js": __glob_0_18$4, "./command_list/addTimelineProperty.js": __glob_0_19$4, "./command_list/addVideo.js": __glob_0_20$4, "./command_list/addVideoAssetItem.js": __glob_0_21$3, "./command_list/clipboard.copy.js": __glob_0_22$3, "./command_list/clipboard.paste.js": __glob_0_23$3, "./command_list/convert.flatten.path.js": __glob_0_24$3, "./command_list/convert.no.transform.path.js": __glob_0_25$2, "./command_list/convert.normalize.path.js": __glob_0_26$2, "./command_list/convert.path.operation.js": __glob_0_27$2, "./command_list/convert.polygonal.path.js": __glob_0_28$2, "./command_list/convert.simplify.path.js": __glob_0_29$2, "./command_list/convert.smooth.path.js": __glob_0_30$2, "./command_list/convert.stroke.to.path.js": __glob_0_31$2, "./command_list/convertPasteText.js": __glob_0_32$2, "./command_list/convertPath.js": __glob_0_33$2, "./command_list/copy.path.js": __glob_0_34$2, "./command_list/copyTimelineProperty.js": __glob_0_35$2, "./command_list/deleteTimelineKeyframe.js": __glob_0_36$2, "./command_list/doubleclick.item.js": __glob_0_37$2, "./command_list/downloadJSON.js": __glob_0_38$2, "./command_list/downloadPNG.js": __glob_0_39$2, "./command_list/downloadSVG.js": __glob_0_40$2, "./command_list/drop.asset.js": __glob_0_41$2, "./command_list/dropImageUrl.js": __glob_0_42$2, "./command_list/editor.config.body.event.js": __glob_0_43$2, "./command_list/fileDropItems.js": __glob_0_44$2, "./command_list/firstTimelineItem.js": __glob_0_45$2, "./command_list/group.item.js": __glob_0_46$2, "./command_list/history.addLayer.js": __glob_0_47$2, "./command_list/history.bring.forward.js": __glob_0_48$2, "./command_list/history.bring.front.js": __glob_0_49$2, "./command_list/history.clipboard.paste.js": __glob_0_50$2, "./command_list/history.group.item.js": __glob_0_51$2, "./command_list/history.moveLayer.js": __glob_0_52$1, "./command_list/history.moveLayerToTarget.js": __glob_0_53$1, "./command_list/history.redo.js": __glob_0_54$1, "./command_list/history.refreshSelection.js": __glob_0_55$1, "./command_list/history.refreshSelectionProject.js": __glob_0_56$1, "./command_list/history.removeLayer.js": __glob_0_57$1, "./command_list/history.removeProject.js": __glob_0_58$1, "./command_list/history.send.back.js": __glob_0_59$1, "./command_list/history.send.backward.js": __glob_0_60$1, "./command_list/history.setAttributeForMulti.js": __glob_0_61$1, "./command_list/history.undo.js": __glob_0_62$1, "./command_list/item.move.depth.down.js": __glob_0_63$1, "./command_list/item.move.depth.first.js": __glob_0_64$1, "./command_list/item.move.depth.last.js": __glob_0_65$1, "./command_list/item.move.depth.up.js": __glob_0_66$1, "./command_list/keymap.keydown.js": __glob_0_67$1, "./command_list/keymap.keyup.js": __glob_0_68$1, "./command_list/lastTimelineItem.js": __glob_0_69$1, "./command_list/load.json.js": __glob_0_70$1, "./command_list/moveLayer.js": __glob_0_71$1, "./command_list/moveLayerForItems.js": __glob_0_72$1, "./command_list/moveSelectionToCenter.js": __glob_0_73$1, "./command_list/moveToCenter.js": __glob_0_74$1, "./command_list/newComponent.js": __glob_0_75$1, "./command_list/nextTimelineItem.js": __glob_0_76$1, "./command_list/open.editor.js": __glob_0_77$1, "./command_list/pauseTimelineItem.js": __glob_0_78$1, "./command_list/playTimelineItem.js": __glob_0_79$1, "./command_list/pop.mode.view.js": __glob_0_80$1, "./command_list/prevTimelineItem.js": __glob_0_81$1, "./command_list/push.mode.view.js": __glob_0_82$1, "./command_list/recoverBooleanPath.js": __glob_0_83$1, "./command_list/recoverCursor.js": __glob_0_84$1, "./command_list/refreshArtboard.js": __glob_0_85$1, "./command_list/refreshCursor.js": __glob_0_86$1, "./command_list/refreshElement.js": __glob_0_87$1, "./command_list/refreshHistory.js": __glob_0_88$1, "./command_list/refreshProject.js": __glob_0_89$1, "./command_list/refreshSelectedOffset.js": __glob_0_90$1, "./command_list/removeAnimationItem.js": __glob_0_91$1, "./command_list/removeLayer.js": __glob_0_92$1, "./command_list/removeTimeline.js": __glob_0_93$1, "./command_list/removeTimelineProperty.js": __glob_0_94$1, "./command_list/resetSelection.js": __glob_0_95$1, "./command_list/resizeArtBoard.js": __glob_0_96$1, "./command_list/rotateLayer.js": __glob_0_97$1, "./command_list/same.height.js": __glob_0_98$1, "./command_list/same.width.js": __glob_0_99$1, "./command_list/saveJSON.js": __glob_0_100$1, "./command_list/savePNG.js": __glob_0_101$1, "./command_list/segment.delete.js": __glob_0_102$1, "./command_list/segment.move.down.js": __glob_0_103$1, "./command_list/segment.move.left.js": __glob_0_104$1, "./command_list/segment.move.right.js": __glob_0_105$1, "./command_list/segment.move.up.js": __glob_0_106$1, "./command_list/select.all.js": __glob_0_107$1, "./command_list/selectTimelineItem.js": __glob_0_108$1, "./command_list/setAttributeForMulti.js": __glob_0_109$1, "./command_list/setLocale.js": __glob_0_110$1, "./command_list/setTimelineOffset.js": __glob_0_111$1, "./command_list/showExportView.js": __glob_0_112$1, "./command_list/sort.bottom.js": __glob_0_113$1, "./command_list/sort.center.js": __glob_0_114$1, "./command_list/sort.left.js": __glob_0_115$1, "./command_list/sort.middle.js": __glob_0_116$1, "./command_list/sort.right.js": __glob_0_117$1, "./command_list/sort.top.js": __glob_0_118$1, "./command_list/switch.path.js": __glob_0_119$1, "./command_list/toggle.tool.hand.js": __glob_0_120$1, "./command_list/ungroup.item.js": __glob_0_121$1, "./command_list/updateClipPath.js": __glob_0_122$1, "./command_list/updateImage.js": __glob_0_123$1, "./command_list/updateImageAssetItem.js": __glob_0_124$1, "./command_list/updatePathItem.js": __glob_0_125$1, "./command_list/updateResource.js": __glob_0_126$1, "./command_list/updateScale.js": __glob_0_127$1, "./command_list/updateUriList.js": __glob_0_128$1, "./command_list/updateVideo.js": __glob_0_129$1, "./command_list/updateVideoAssetItem.js": __glob_0_130$1, "./command_list/zoom.default.js": __glob_0_131$1, "./command_list/zoom.in.js": __glob_0_132$1, "./command_list/zoom.out.js": __glob_0_133$1, "./command_list/model/update.js": __glob_0_134$1 };
 const obj$1 = {};
 Object.entries(modules$4).forEach(([key, value]) => {
   key = key.replace("./command_list/", "").replace(".js", "");
@@ -44188,15 +44397,15 @@ class Keyframe extends PropertyItem {
     if (style["keyframe"]) {
       var results = convertMatches(style["keyframe"]);
       results.str.split("|").map((it) => it.trim()).forEach((frameInfo, index2) => {
-        var [name2, offset, property, ...values] = frameInfo.split(" ");
+        var [name, offset, property, ...values] = frameInfo.split(" ");
         var propertyValue = values.join(" ");
-        if (!keyframeKeys[name2]) {
-          keyframeKeys[name2] = new Keyframe({
-            name: name2
+        if (!keyframeKeys[name]) {
+          keyframeKeys[name] = new Keyframe({
+            name
           });
-          keyframes[index2] = name2;
+          keyframes[index2] = name;
         }
-        var filteredOffset = keyframeKeys[name2].offsets.filter((it) => {
+        var filteredOffset = keyframeKeys[name].offsets.filter((it) => {
           return it.offset.equals(Length.parse(offset));
         });
         var offsetObj = null;
@@ -44206,7 +44415,7 @@ class Keyframe extends PropertyItem {
           offsetObj = new Offset({
             offset: Length.parse(offset)
           });
-          keyframeKeys[name2].offsets.push(offsetObj);
+          keyframeKeys[name].offsets.push(offsetObj);
         }
         offsetObj.addProperty({
           key: property,
@@ -44214,8 +44423,8 @@ class Keyframe extends PropertyItem {
         });
       });
     }
-    return keyframes.map((name2) => {
-      keyframeKeys[name2].offsets.forEach((offset) => {
+    return keyframes.map((name) => {
+      keyframeKeys[name].offsets.forEach((offset) => {
         var vars = [];
         var properties = [];
         offset.properties.forEach((p) => {
@@ -44231,7 +44440,7 @@ class Keyframe extends PropertyItem {
         }
         offset.properties = properties;
       });
-      return keyframeKeys[name2];
+      return keyframeKeys[name];
     });
   }
   getDefaultObject() {
@@ -44243,7 +44452,7 @@ class Keyframe extends PropertyItem {
     });
   }
   toCloneObject() {
-    var { name: name2, selectedType, offsets } = this.json;
+    var { name, selectedType, offsets } = this.json;
     return __spreadProps(__spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("name", "selectedType")), {
       offsets: offsets.map((offset) => offset.clone())
     });
@@ -44351,21 +44560,17 @@ class ComponentManager {
     this.components = {};
     this.inspectors = {};
   }
-  registerComponent(name2, componentProperty) {
-    if (this.components[name2])
-      throw new Error("It has duplicated item name. " + name2);
-    this.components[name2] = componentProperty;
+  registerComponent(name, componentProperty) {
+    this.components[name] = componentProperty;
   }
-  registerInspector(name2, inspectorCallback) {
-    if (this.inspectors[name2])
-      throw new Error("It has duplicated item name. " + name2);
-    this.inspectors[name2] = inspectorCallback;
+  registerInspector(name, inspectorCallback) {
+    this.inspectors[name] = inspectorCallback;
   }
-  getComponentClass(name2) {
-    return this.components[name2] || this.components["rect"];
+  getComponentClass(name) {
+    return this.components[name] || this.components["rect"];
   }
-  getInspector(name2) {
-    return this.inspectors[name2];
+  getInspector(name) {
+    return this.inspectors[name];
   }
   createComponent(itemType, obj2 = {}) {
     var ComponentClass = this.getComponentClass(itemType);
@@ -44374,8 +44579,8 @@ class ComponentManager {
     }
     return new ComponentClass(obj2);
   }
-  createInspector(item2, name2 = "") {
-    const inspector = this.getInspector(name2 || item2.itemType);
+  createInspector(item2, name = "") {
+    const inspector = this.getInspector(name || item2.itemType);
     if (isFunction(inspector)) {
       return inspector(item2) || [];
     }
@@ -45026,11 +45231,11 @@ class BaseModel {
     this.modelManager.setChanged("insertChild", this.id, { childId: layer2.id, index: 0 });
     return layer2;
   }
-  appendAfter(layer2) {
+  insertAfter(layer2) {
     this.parent.insertChild(layer2, this.index + 1);
     return layer2;
   }
-  appendBefore(layer2) {
+  insertBefore(layer2) {
     this.parent.insertChild(layer2, this.index);
     return layer2;
   }
@@ -45234,8 +45439,8 @@ class AssetModel extends BaseModel {
   getColorIndex(index2) {
     return this.json.colors[index2];
   }
-  getColor(name2) {
-    return this.json.colors.filter((item2) => item2.name === name2)[0];
+  getColor(name) {
+    return this.json.colors.filter((item2) => item2.name === name)[0];
   }
   addColor(obj2) {
     this.json.colors.push(obj2);
@@ -45340,8 +45545,8 @@ class AssetModel extends BaseModel {
   getGradientIndex(index2) {
     return this.json.gradients[index2];
   }
-  getGradient(name2) {
-    return this.json.gradients.filter((item2) => item2.name === name2)[0];
+  getGradient(name) {
+    return this.json.gradients.filter((item2) => item2.name === name)[0];
   }
   addGradient(obj2 = {}) {
     this.json.gradients.push(obj2);
@@ -48629,14 +48834,16 @@ class KeyBoardManager {
     this.editor = editor;
     this.codeSet = /* @__PURE__ */ new Set();
     this.keyCodeSet = /* @__PURE__ */ new Set();
+    this.event = {};
   }
-  add(key, keyCode) {
+  add(key, keyCode, e) {
     if (this.codeSet.has(key) === false) {
       this.codeSet.add(key);
     }
     if (this.keyCodeSet.has(keyCode) === false) {
       this.keyCodeSet.add(keyCode);
     }
+    this.event = e;
   }
   remove(key, keyCode) {
     this.codeSet.delete(key);
@@ -48647,6 +48854,18 @@ class KeyBoardManager {
   }
   check(...args2) {
     return args2.some((keyOrKeyCode) => this.hasKey(keyOrKeyCode));
+  }
+  isShift() {
+    return Boolean(this.event.shiftKey);
+  }
+  isCtrl() {
+    return Boolean(this.event.ctrlKey);
+  }
+  isAlt() {
+    return Boolean(this.event.altKey);
+  }
+  isMeta() {
+    return Boolean(this.event.metaKey);
   }
 }
 class ViewportManager {
@@ -50223,9 +50442,9 @@ Object.entries(modules$2).forEach(([key, value]) => {
   key = key.replace("./icon_list/", "").replace(".js", "");
   obj[key] = value.default;
 });
-function iconUse$1(name2, transform2 = "", opt = { width: 24, height: 24 }) {
+function iconUse$1(name, transform2 = "", opt = { width: 24, height: 24 }) {
   return `<svg viewBox="0 0 ${opt.width} ${opt.height}" xmlns="http://www.w3.org/2000/svg">
-  <use href="#icon-${name2}" transform="${transform2 || ""}" width="${opt.width}" height="${opt.height}" /> 
+  <use href="#icon-${name}" transform="${transform2 || ""}" width="${opt.width}" height="${opt.height}" /> 
 </svg>`;
 }
 function iconUseForPath(pathString2, opt = { width: 24, height: 24 }) {
@@ -50389,11 +50608,16 @@ class InjectManager {
       this.ui[target] = [];
     }
     Object.keys(obj2).forEach((refClass) => {
-      this.ui[target].push({
-        refClass,
-        order,
-        class: obj2[refClass]
-      });
+      const targetClass = this.ui[target].find((it) => it.refClass === refClass);
+      if (targetClass) {
+        targetClass.class = obj2[refClass];
+      } else {
+        this.ui[target].push({
+          refClass,
+          order,
+          class: obj2[refClass]
+        });
+      }
     });
   }
   getTargetUI(target) {
@@ -50441,23 +50665,19 @@ class RendererManager {
     }
     return this.renderers[rendererType];
   }
-  registerRenderer(rendererType, name2, rendererInstance) {
+  registerRenderer(rendererType, name, rendererInstance) {
     const typedRenderer = this.getRenderType(rendererType);
-    if (typedRenderer[name2])
-      throw new Error("It has duplicated renderer name. " + name2);
-    typedRenderer[name2] = rendererInstance;
+    typedRenderer[name] = rendererInstance;
   }
   registerRendererType(rendererType, rendererTypeInstance) {
-    if (this.rendererTypes[rendererType])
-      throw new Error("It has duplcated renderer type name. " + name);
     this.rendererTypes[rendererType] = rendererTypeInstance;
   }
   getRenderer(rendererType) {
     return this.rendererTypes[rendererType];
   }
-  getRendererInstance(rendererType, name2) {
+  getRendererInstance(rendererType, name) {
     const typedRenderer = this.getRenderType(rendererType);
-    return typedRenderer[name2];
+    return typedRenderer[name];
   }
 }
 class I18nManager {
@@ -52658,8 +52878,8 @@ class SceneManager {
     }
     this.emit("sceneGraphChanged");
   }
-  nameObject(object, name2) {
-    object.name = name2;
+  nameObject(object, name) {
+    object.name = name;
     this.emit("sceneGraphChanged");
   }
   removeObject(object) {
@@ -52678,8 +52898,8 @@ class SceneManager {
   addGeometry(geometry) {
     this.geometries[geometry.uuid] = geometry;
   }
-  setGeometryName(geometry, name2) {
-    geometry.name = name2;
+  setGeometryName(geometry, name) {
+    geometry.name = name;
     this.emit("sceneGraphChanged");
   }
   addMaterial(material) {
@@ -52727,8 +52947,8 @@ class SceneManager {
   getMaterialById(id) {
     return Object.values(this.materials).find((m) => m.id === id);
   }
-  setMaterialName(material, name2) {
-    material.name = name2;
+  setMaterialName(material, name) {
+    material.name = name;
     this.emit("sceneGraphChanged");
   }
   addTexture(texture2) {
@@ -52995,8 +53215,8 @@ class Editor {
   setUser(user) {
     this.user = user;
   }
-  initPlugins(options2 = {}) {
-    this.pluginManager.initializePlugin(options2);
+  async initPlugins(options2 = {}) {
+    await this.pluginManager.initializePlugin(options2);
   }
   themeValue(key, defaultValue = "") {
     return theme[this.config.get("editor.theme")][key] || defaultValue;
@@ -53024,8 +53244,8 @@ class Editor {
     this.store.emit(...args2);
   }
   on(...args2) {
-    const [name2, callback, context, ...rest] = args2;
-    return this.store.on(name2, callback, context || this, ...rest);
+    const [name, callback, context, ...rest] = args2;
+    return this.store.on(name, callback, context || this, ...rest);
   }
   off(...args2) {
     this.store.off(...args2);
@@ -53097,17 +53317,17 @@ class Editor {
     this.injectManager.registerUI(target, obj2, order);
     this.registerElement(obj2);
   }
-  registerComponent(name2, component2) {
-    this.components.registerComponent(name2, component2);
+  registerComponent(name, component2) {
+    this.components.registerComponent(name, component2);
   }
-  registerItem(name2, item2) {
-    this.registerComponent(name2, item2);
+  registerItem(name, item2) {
+    this.registerComponent(name, item2);
   }
-  registerInspector(name2, inspectorCallback) {
-    this.components.registerInspector(name2, inspectorCallback);
+  registerInspector(name, inspectorCallback) {
+    this.components.registerInspector(name, inspectorCallback);
   }
-  registerRenderer(rendererType, name2, rendererInstance) {
-    this.renderers.registerRenderer(rendererType, name2, rendererInstance);
+  registerRenderer(rendererType, name, rendererInstance) {
+    this.renderers.registerRenderer(rendererType, name, rendererInstance);
   }
   registerRendererType(rendererType, rendererTypeInstance) {
     this.renderers.registerRendererType(rendererType, rendererTypeInstance);
@@ -53288,16 +53508,20 @@ const EMPTY_POS = { x: 0, y: 0 };
 const DEFAULT_POS = { x: Number.MAX_SAFE_INTEGER, y: Number.MAX_SAFE_INTEGER };
 const MOVE_CHECK_MS = 0;
 class BaseLayout extends EditorElement {
-  created() {
+  async created() {
     this.$editor.registerPluginList(this.getPlugins());
     if (Array.isArray(this.opt.plugins)) {
       this.$editor.registerPluginList(this.opt.plugins);
     }
-    this.$editor.initPlugins();
+    await this.$editor.initPlugins();
     this.$config.load();
     if (isObject(this.opt.config)) {
       this.$config.setAll(this.opt.config || {});
     }
+    this._isPluginLoaded = true;
+  }
+  get isPreLoaded() {
+    return Boolean(this._isPluginLoaded);
   }
   get $editor() {
     if (!this.__editorInstance) {
@@ -53889,11 +54113,12 @@ class StyleView extends EditorElement {
     this.load("$svgArea");
   }
   getStyleElement(item2) {
+    var _a;
     if (!this.state.cacheStyleElement[item2.id]) {
       const selector2 = `style[data-renderer-type="html"][data-id="${item2.id}"]`;
       this.state.cacheStyleElement[item2.id] = this.refs.$styleView.$(selector2);
     }
-    if (!this.state.cacheStyleElement[item2.id].$parent) {
+    if (!((_a = this.state.cacheStyleElement[item2.id]) == null ? void 0 : _a.$parent)) {
       this.state.cacheStyleElement[item2.id] = void 0;
       return null;
     }
@@ -54556,7 +54781,6 @@ class DragAreaView extends EditorElement {
     return true;
   }
   [POINTERSTART("$dragAreaView") + IF("checkEditMode") + MOVE("movePointer") + END("moveEndPointer")](e) {
-    console.log("fdsjkalfdjsklaf");
     if (this.$config.get("set.dragarea.mode")) {
       this.emit("startDragAreaView");
     }
@@ -57267,7 +57491,7 @@ function appearance(editor) {
                   label: "tonality",
                   compact: true
                 },
-                defaultValue: current["mix-blend-mode"]
+                defaultValue: current["mix-blend-mode"] || "normal"
               }
             ]
           },
@@ -60892,15 +61116,13 @@ class MovableModel extends BaseAssetModel {
     });
   }
   absoluteMove(absoluteDist = [0, 0, 0]) {
+    var _a;
     const oldVertex = this.verties[4];
     const newVertex = add$1([], oldVertex, absoluteDist);
-    const newVerties = vertiesMap([oldVertex, newVertex], this.parent.absoluteMatrixInverse);
+    const newVerties = vertiesMap([oldVertex, newVertex], ((_a = this.parent) == null ? void 0 : _a.absoluteMatrixInverse) || identity$3([]));
     const newDist = subtract([], newVerties[1], newVerties[0]);
     const oldPosition = this.attrs("x", "y");
-    this.reset({
-      x: this.offsetX + newDist[0],
-      y: this.offsetY + newDist[1]
-    });
+    this.move(newDist);
     return oldPosition;
   }
   startToCacheChildren() {
@@ -61298,7 +61520,7 @@ class MovableModel extends BaseAssetModel {
         if (next.enableHasChildren()) {
           next.appendChild(this);
         } else {
-          next.appendAfter(this);
+          next.insertAfter(this);
         }
       }
       return;
@@ -61318,7 +61540,7 @@ class MovableModel extends BaseAssetModel {
     if (this.isFirst()) {
       const prev = this.parent.prev();
       if (prev) {
-        prev.appendBefore(this);
+        prev.insertBefore(this);
       }
       return;
     }
@@ -61434,9 +61656,13 @@ var GridLayoutEngine = {
     if (currentItem.isInGrid() === false)
       return;
     const lastVerties = currentItem.originVerties;
+    const targetRect = vertiesToRectangle(lastVerties);
     const { info, items } = gridInformation;
     const checkedGridRowColumnList = items.filter((it) => {
       return polyPoly(lastVerties, it.originVerties);
+    }).filter((it) => {
+      const intersect = intersectRectRect(it.originRect, targetRect);
+      return Math.floor(intersect.width) > IntersectEpsilonType.RECT && Math.floor(intersect.height) > IntersectEpsilonType.RECT;
     });
     if (checkedGridRowColumnList.length === 0)
       return;
@@ -63145,7 +63371,7 @@ var cacheKey = function(nurbs2, debug, checkBounds, pointType, weightType, knotT
   }
   return parts.join("_");
 };
-var createVariable$1 = function createVariable(name2, nurbs2) {
+var createVariable$1 = function createVariable(name, nurbs2) {
   return function(i, period) {
     if (i !== void 0 && !Array.isArray(i))
       i = [i];
@@ -63160,7 +63386,7 @@ var createVariable$1 = function createVariable(name2, nurbs2) {
         dimAccessors[i] = "(" + dimAccessors[i] + " + " + period[i] + ") % " + period[i];
       }
     }
-    return name2 + dimAccessors.join("_");
+    return name + dimAccessors.join("_");
   };
 };
 createVariable$1.sum = function(parts) {
@@ -63193,26 +63419,26 @@ function wrapAccessor(callback) {
     return callback(dimAccessors);
   };
 }
-function createAccessor(name2, data) {
+function createAccessor(name, data) {
   var i;
   if (!data)
     return void 0;
   switch (inferType$4(data)) {
     case inferType$4.ARRAY_OF_ARRAYS:
       return wrapAccessor(function(accessors) {
-        return name2 + "[" + accessors.join("][") + "]";
+        return name + "[" + accessors.join("][") + "]";
       });
     case inferType$4.GENERIC_NDARRAY:
       return wrapAccessor(function(accessors) {
-        return name2 + ".get(" + accessors.join(",") + ")";
+        return name + ".get(" + accessors.join(",") + ")";
       });
     case inferType$4.NDARRAY:
       return wrapAccessor(function(accessors) {
-        var code2 = [name2 + "Offset"];
+        var code2 = [name + "Offset"];
         for (i = 0; i < accessors.length; i++) {
-          code2.push(name2 + "Stride" + i + " * (" + accessors[i] + ")");
+          code2.push(name + "Stride" + i + " * (" + accessors[i] + ")");
         }
-        return name2 + "[" + code2.join(" + ") + "]";
+        return name + "[" + code2.join(" + ") + "]";
       });
     case inferType$4.PACKED:
     default:
@@ -67830,11 +68056,11 @@ class KeyframeProperty extends BaseProperty {
       return;
     this.currentKeyframe = this.current.keyframes[this.selectedIndex];
     const back = this.currentKeyframe;
-    const name2 = back.name;
+    const name = back.name;
     const offsets = back.offsets;
     this.emit("showKeyframePopup", {
       position: position2,
-      name: name2,
+      name,
       offsets
     });
   }
@@ -68138,9 +68364,9 @@ class LayerTreeProperty extends BaseProperty {
       var selectedPathClass = this.$selection.hasPathOf(layer2) ? "selected-path" : "";
       var selectedClass = this.$selection.check(layer2) ? "selected" : "";
       var hovered = this.$selection.checkHover(layer2) ? "hovered" : "";
-      var name2 = layer2.is("boolean-path") ? layer2["boolean-operation"] : layer2.name;
+      var name = layer2.is("boolean-path") ? layer2["boolean-operation"] : layer2.name;
       if (layer2.is("text")) {
-        name2 = layer2.text || layer2.name;
+        name = layer2.text || layer2.name;
       }
       var title2 = "";
       if (layer2.hasLayout()) {
@@ -68157,7 +68383,7 @@ class LayerTreeProperty extends BaseProperty {
             <label data-layout-title='${title2}' style='padding-left: ${Length.px(depthPadding)}' > 
               <div class='folder ${layer2.collapsed ? "collapsed" : ""}'>${hasChildren ? iconUse$1("arrow_right") : ""}</div>
               <span class='icon' data-item-type="${layer2.itemType}">${this.getIcon(layer2)}</span> 
-              <span class='name'>${name2}</span>
+              <span class='name'>${name}</span>
             </label>
             <div class="tools">
               <button type="button" class="lock" data-lock="${lock2}" title='Lock'>${lock2 ? iconUse$1("lock") : iconUse$1("lock_open")}</button>
@@ -68227,22 +68453,21 @@ class LayerTreeProperty extends BaseProperty {
       return;
     switch (this.state.lastDragOverItemDirection) {
       case "self":
-        targetItem.appendChild(sourceItem);
+        this.emit("history.moveLayerToTarget", "change target with move", sourceItem, targetItem, void 0, TargetActionType.APPEND_CHILD);
         break;
       case "before":
-        targetItem.appendBefore(sourceItem);
+        this.emit("history.moveLayerToTarget", "change target with move", sourceItem, targetItem, void 0, TargetActionType.INSERT_BEFORE);
         break;
       case "after":
-        targetItem.appendAfter(sourceItem);
+        this.emit("history.moveLayerToTarget", "change target with move", sourceItem, targetItem, void 0, TargetActionType.INSERT_AFTER);
         break;
     }
-    this.$selection.select(sourceItem);
-    this.setState({
-      hideDragPointer: true
-    });
-    this.emit("refreshAll");
     this.nextTick(() => {
       this.emit("recoverBooleanPath");
+      this.$selection.select(sourceItem);
+      this.setState({
+        hideDragPointer: true
+      });
     }, 10);
   }
   [DOUBLECLICK("$layerList .layer-item")](e) {
@@ -68253,12 +68478,20 @@ class LayerTreeProperty extends BaseProperty {
       this.endInputEditing(input2, () => {
         var id2 = input2.closest("layer-item").attr("data-layer-id");
         var text3 = input2.text();
-        this.emit("refreshItemName", id2, text3);
+        this.command("setAttributeForMulti", "change name", {
+          [id2]: {
+            name: text3
+          }
+        });
       });
     } else {
       var id = input2.closest("layer-item").attr("data-layer-id");
       var text2 = input2.text();
-      this.emit("refreshItemName", id, text2);
+      this.command("setAttributeForMulti", "change name", {
+        [id]: {
+          name: text2
+        }
+      });
     }
   }
   [KEYDOWN("$layerList .layer-item .name") + STOP](e) {
@@ -68365,11 +68598,8 @@ class LayerTreeProperty extends BaseProperty {
       }
     }
   }
-  [SUBSCRIBE("refreshSelection")]() {
+  [SUBSCRIBE("refreshSelection", "refreshAllCanvas")]() {
     this.refresh();
-  }
-  [SUBSCRIBE("refreshStylePosition")]() {
-    this.trigger("changeSelection");
   }
   [SUBSCRIBE("refreshLayerTreeView") + THROTTLE(100)]() {
     this.refresh();
@@ -69474,18 +69704,32 @@ class Grid {
 var GridGrowToolView$1 = "";
 class GridGrowBaseView extends EditorElement {
   updateRows(current, newRows) {
-    this.command("setAttributeForMulti", "change grid rows", {
+    const data = {};
+    current.layers.forEach((it) => {
+      data[it.id] = {
+        "grid-row-start": Math.max(1, Math.min(newRows.length, it["grid-row-start"])),
+        "grid-row-end": Math.min(newRows.length + 1, it["grid-row-end"])
+      };
+    });
+    this.command("setAttributeForMulti", "change grid rows", __spreadProps(__spreadValues({}, data), {
       [current.id]: {
         "grid-template-rows": Grid.join(newRows)
       }
-    });
+    }));
   }
   updateColumns(current, newColumns) {
-    this.command("setAttributeForMulti", "change grid columns", {
+    const data = {};
+    current.layers.forEach((it) => {
+      data[it.id] = {
+        "grid-column-start": Math.max(1, Math.min(newColumns.length, it["grid-column-start"])),
+        "grid-column-end": Math.min(newColumns.length + 1, it["grid-column-end"])
+      };
+    });
+    this.command("setAttributeForMulti", "change grid columns", __spreadProps(__spreadValues({}, data), {
       [current.id]: {
         "grid-template-columns": Grid.join(newColumns)
       }
-    });
+    }));
   }
   updateColumnGap(current, columnGap) {
     this.command("setAttributeForMulti", "change grid column gap", {
@@ -69790,9 +70034,11 @@ class GridGrowToolView extends GridGrowDragEventView {
     }));
   }
   [BIND("$el")]() {
+    var _a;
     const current = this.getGridTargetLayer();
     return {
       "data-drag-target-item": Boolean(this.$selection.dragTargetItem),
+      "data-grid-layout-own": ((_a = this.$selection.current) == null ? void 0 : _a.id) === (current == null ? void 0 : current.id),
       style: {
         display: current ? "block" : "none"
       }
@@ -69928,12 +70174,15 @@ class GridGrowToolView extends GridGrowDragEventView {
         height: height2 / scale2
       };
       const verties = vertiesMap(rectToVerties(rect2.x, rect2.y, rect2.width, rect2.height), info.current.absoluteMatrix);
+      const originVerties = verties.filter((_, index2) => index2 < 4);
       return {
         row,
         column,
         rect: rect2,
+        info,
         verties,
-        originVerties: verties.filter((_, index2) => index2 < 4)
+        originVerties,
+        originRect: vertiesToRectangle(originVerties)
       };
     });
     this.state.lastGridInfo = { info, items };
@@ -70019,7 +70268,16 @@ class GridGrowToolView extends GridGrowDragEventView {
       return "";
     });
   }
+  isSelectedColumn(index2) {
+    const current = this.$selection.current;
+    return current["grid-column-start"] <= index2 && index2 < current["grid-column-end"];
+  }
+  isSelectedRow(index2) {
+    const current = this.$selection.current;
+    return current["grid-row-start"] <= index2 && index2 < current["grid-row-end"];
+  }
   [LOAD("$grid") + DOMDIFF]() {
+    var _a;
     const current = this.getGridTargetLayer();
     if (!current)
       return "";
@@ -70027,9 +70285,11 @@ class GridGrowToolView extends GridGrowDragEventView {
       return "";
     const info = this.getGridLayoutInformation();
     const totalCount = info.columns.length * info.rows.length;
+    const isChild = ((_a = this.$selection.current) == null ? void 0 : _a.id) !== info.current.id;
     return /* @__PURE__ */ createElementJsx(FragmentInstance, null, Array.from(Array(info.columns.length).keys()).map((index2) => {
+      const selected = isChild && this.isSelectedColumn(index2 + 1) ? "selected" : "";
       return /* @__PURE__ */ createElementJsx("div", {
-        class: "grid-item-tool column",
+        class: `grid-item-tool column ${selected}`,
         "data-index": index2,
         style: {
           "grid-column": `${index2 + 1} / span 1`,
@@ -70040,7 +70300,7 @@ class GridGrowToolView extends GridGrowDragEventView {
       }, /* @__PURE__ */ createElementJsx("div", {
         class: "item",
         "data-index": index2
-      }, info.columns[index2]), /* @__PURE__ */ createElementJsx("div", {
+      }, /* @__PURE__ */ createElementJsx("span", null, info.columns[index2])), /* @__PURE__ */ createElementJsx("div", {
         class: "drag-handle right"
       }, /* @__PURE__ */ createElementJsx("div", {
         class: "column-delete",
@@ -70058,8 +70318,9 @@ class GridGrowToolView extends GridGrowDragEventView {
         "grid-row": `1 / span 1`
       }
     }, iconUse$1("add")), Array.from(Array(info.rows.length).keys()).map((index2) => {
+      const selected = isChild && this.isSelectedRow(index2 + 1) ? "selected" : "";
       return /* @__PURE__ */ createElementJsx(FragmentInstance, null, /* @__PURE__ */ createElementJsx("div", {
-        class: "grid-item-tool row",
+        class: `grid-item-tool row ${selected}`,
         style: {
           "grid-row": `${index2 + 1} / span 1`,
           "grid-column": `1 / span 1`
@@ -70069,7 +70330,7 @@ class GridGrowToolView extends GridGrowDragEventView {
       }, /* @__PURE__ */ createElementJsx("div", {
         class: "item",
         "data-index": index2
-      }, info.rows[index2]), /* @__PURE__ */ createElementJsx("div", {
+      }, /* @__PURE__ */ createElementJsx("span", null, info.rows[index2])), /* @__PURE__ */ createElementJsx("div", {
         class: "drag-handle bottom"
       }, /* @__PURE__ */ createElementJsx("div", {
         class: "row-delete",
@@ -78686,6 +78947,12 @@ class DomRender$1 extends ItemRender$1 {
       }
     } else if (parentLayout === Layout.GRID) {
       obj2 = __spreadValues(__spreadValues({}, obj2), item2.attrs("grid-column-start", "grid-column-end", "grid-row-start", "grid-row-end"));
+      const columns = Grid.parseStyle(item2.parent["grid-template-columns"]);
+      const rows = Grid.parseStyle(item2.parent["grid-template-rows"]);
+      obj2["grid-column-start"] = Math.max(1, Math.min(columns.length, obj2["grid-column-start"]));
+      obj2["grid-column-end"] = Math.min(columns.length + 1, obj2["grid-column-end"]);
+      obj2["grid-row-start"] = Math.max(1, Math.min(rows.length, obj2["grid-row-start"]));
+      obj2["grid-row-end"] = Math.min(rows.length + 1, obj2["grid-row-end"]);
     }
     return obj2;
   }
@@ -78756,7 +79023,7 @@ class DomRender$1 extends ItemRender$1 {
   toGridLayoutCSS(item2) {
     return __spreadValues({
       display: "grid"
-    }, item2.attrs("grid-template-columns", "grid-template-rows", "grid-template-areas", "grid-auto-columns", "grid-auto-rows", "grid-auto-flow", "grid-column-gap", "grid-row-gap"));
+    }, item2.attrs("grid-template-columns", "grid-template-rows", "grid-auto-columns", "grid-auto-rows", "grid-auto-flow", "grid-column-gap", "grid-row-gap"));
   }
   toBorderCSS(item2) {
     const obj2 = __spreadValues({}, STRING_TO_CSS(item2["border"]));
@@ -79063,9 +79330,9 @@ ${cssString}
     }).join("");
   }
   render(item2, renderer) {
-    var { elementType, id, name: name2, itemType, isBooleanItem } = item2;
+    var { elementType, id, name, itemType, isBooleanItem } = item2;
     const tagName = elementType || "div";
-    return `<${tagName} class="element-item ${itemType}" data-is-boolean-item="${isBooleanItem}" data-id="${id}" data-title="${name2}">${this.toDefString(item2)}${item2.layers.map((it) => {
+    return `<${tagName} class="element-item ${itemType}" data-is-boolean-item="${isBooleanItem}" data-id="${id}" data-title="${name}">${this.toDefString(item2)}${item2.layers.map((it) => {
       return renderer.render(it, renderer);
     }).join("")}</${tagName}>`;
   }
@@ -79518,9 +79785,9 @@ class SVGPathRender$2 extends SVGItemRender$2 {
     super.update(item2, currentElement);
   }
   render(item2) {
-    var { id, name: name2, itemType } = item2;
+    var { id, name, itemType } = item2;
     return `    
-<div class="element-item ${itemType}" data-id="${id}" data-title="${name2}">
+<div class="element-item ${itemType}" data-id="${id}" data-title="${name}">
   ${this.toDefString(item2)}
   <svg xmlns="http://www.w3.org/2000/svg" class="view-path-item" width="100%" height="100%" overflow="visible">
     <path 
@@ -79598,9 +79865,9 @@ class SVGPolygonRender$2 extends SVGItemRender$2 {
     super.update(item2, currentElement);
   }
   render(item2) {
-    var { id, name: name2, itemType } = item2;
+    var { id, name, itemType } = item2;
     return `    
-<div class="element-item ${itemType}" data-id="${id}" data-title="${name2}">
+<div class="element-item ${itemType}" data-id="${id}" data-title="${name}">
   ${this.toDefString(item2)}
   <svg xmlns="http://www.w3.org/2000/svg" class="view-path-item" width="100%" height="100%" overflow="visible">
     <path 
@@ -79663,9 +79930,9 @@ class SVGStarRender$2 extends SVGItemRender$2 {
     super.update(item2, currentElement);
   }
   render(item2) {
-    var { id, name: name2, itemType } = item2;
+    var { id, name, itemType } = item2;
     return `    
-<div class="element-item ${itemType}" data-id="${id}" data-title="${name2}">
+<div class="element-item ${itemType}" data-id="${id}" data-title="${name}">
   ${this.toDefString(item2)}
   <svg xmlns="http://www.w3.org/2000/svg" class="view-path-item" width="100%" height="100%" overflow="visible">
     <path 
@@ -80043,9 +80310,9 @@ class BooleanPathRender$2 extends SVGItemRender$2 {
     }
   }
   render(item2, renderer) {
-    var { id, name: name2, itemType } = item2;
+    var { id, name, itemType } = item2;
     return `    
-<div class="element-item ${itemType}" data-id="${id}" data-title="${name2}">
+<div class="element-item ${itemType}" data-id="${id}" data-title="${name}">
   ${this.toDefString(item2)}
   ${item2.layers.map((it) => {
       return renderer.render(it, renderer);
@@ -80138,7 +80405,7 @@ class BaseAssetRender extends ItemRender {
 }
 class GroupRender extends BaseAssetRender {
   async toCloneObject(item2, renderer) {
-    return __spreadValues(__spreadValues({}, await super.toCloneObject(item2, renderer)), item2.attrs("layout", "constraints-horizontal", "constraints-vertical", "resizingMode", "flex-direction", "flex-wrap", "flex-flow", "justify-content", "align-items", "align-content", "order", "flex-basis", "flex-grow", "flex-shrink", "gap", "grid-template-rows", "grid-template-columns", "grid-template-areas", "grid-auto-rows", "grid-auto-columns", "grid-auto-flow", "animation", "transition", "padding-top", "padding-right", "padding-left", "padding-bottom"));
+    return __spreadValues(__spreadValues({}, await super.toCloneObject(item2, renderer)), item2.attrs("layout", "constraints-horizontal", "constraints-vertical", "resizingMode", "flex-direction", "flex-wrap", "flex-flow", "justify-content", "align-items", "align-content", "order", "flex-basis", "flex-grow", "flex-shrink", "gap", "grid-template-rows", "grid-template-columns", "grid-template-areas", "grid-auto-rows", "grid-auto-columns", "grid-auto-flow", "grid-column-start", "grid-column-end", "grid-row-start", "grid-row-end", "grid-column-gap", "grid-row-gap", "animation", "transition", "padding-top", "padding-right", "padding-left", "padding-bottom"));
   }
 }
 class MovableRender extends GroupRender {
@@ -88443,7 +88710,7 @@ class GhostToolView extends EditorElement {
     const newDist = this.getDist();
     if (current.isLayoutItem() === false)
       return;
-    this.command("moveLayerToTarget", "change target with move", current, this.$selection.currentProject, newDist, "appendChild");
+    this.command("moveLayerToTarget", "change target with move", current, this.$selection.currentProject, newDist);
   }
   getTargetAction() {
     let targetAction = "";
@@ -88452,16 +88719,16 @@ class GhostToolView extends EditorElement {
         switch (this.targetParent["flex-direction"]) {
           case FlexDirection.ROW:
             if (this.targetRelativeMousePoint.x < CHECK_RATE) {
-              targetAction = "appendBefore";
+              targetAction = TargetActionType.INSERT_BEFORE;
             } else {
-              targetAction = "appendAfter";
+              targetAction = TargetActionType.INSERT_AFTER;
             }
             break;
           case FlexDirection.COLUMN:
             if (this.targetRelativeMousePoint.y < CHECK_RATE) {
-              targetAction = "appendBefore";
+              targetAction = TargetActionType.INSERT_BEFORE;
             } else {
-              targetAction = "appendAfter";
+              targetAction = TargetActionType.INSERT_AFTER;
             }
             break;
         }
@@ -88478,18 +88745,23 @@ class GhostToolView extends EditorElement {
         if (targetAction) {
           this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, targetAction);
         }
-      } else if (this.targetParent.isLayout(Layout.GRID))
-        ;
+      } else if (this.targetParent.isLayout(Layout.GRID)) {
+        this.insertToGridItem();
+      }
     }
   }
   insertToGridItem() {
     const current = this.$selection.current;
     const { info, items } = this.$selection.gridInformation || { items: [] };
-    const currentVerties = this.$viewport.applyVertiesInverse(this.ghostScreenVerties.filter((_, index2) => index2 < 4));
+    const currentVerties = this.ghostVerties.filter((_, index2) => index2 < 4);
+    const targetRect = vertiesToRectangle(currentVerties);
     const checkedItems = items == null ? void 0 : items.filter((it) => {
       return polyPoly(it.originVerties, currentVerties);
+    }).filter((it) => {
+      const intersect = intersectRectRect(it.originRect, targetRect);
+      return Math.floor(intersect.width) > IntersectEpsilonType.RECT && Math.floor(intersect.height) > IntersectEpsilonType.RECT;
     });
-    if (checkedItems.length) {
+    if (checkedItems == null ? void 0 : checkedItems.length) {
       const columnList = checkedItems.map((it) => it.column);
       const rowList = checkedItems.map((it) => it.row);
       const columnStart = Math.min(...columnList);
@@ -88502,14 +88774,14 @@ class GhostToolView extends EditorElement {
         "grid-row-start": rowStart,
         "grid-row-end": rowEnd
       }));
-      if (this.targetItem.hasChild(current.id) === false) {
-        this.command("moveLayerToTarget", "change target with move", current, this.targetItem, 0, "appendChild");
+      if (info.current.hasChild(current.id) === false) {
+        this.command("moveLayerToTarget", "change target with move", current, info.current, void 0);
       }
       return;
     } else {
       if (this.targetItem) {
         this.emit("refreshGridToolInfo", this.targetItem);
-        this.command("moveLayerToTarget", "change target with move", current, this.targetItem, 0, "appendChild");
+        this.command("moveLayerToTarget", "change target with move", current, this.targetItem, void 0);
       }
     }
   }
@@ -88530,13 +88802,22 @@ class GhostToolView extends EditorElement {
       return;
     }
     if (this.targetItem.hasLayout()) {
-      if (((_a = this.targetItem) == null ? void 0 : _a.hasChildren()) === false && this.targetItem.isLayout(Layout.FLEX)) {
-        this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, "appendChild");
+      const isCtrl = this.$keyboardManager.isCtrl();
+      if (((_a = this.targetItem) == null ? void 0 : _a.hasChildren()) === false && this.targetItem.isLayout(Layout.FLEX) && isCtrl === false) {
+        this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist);
         return;
       } else {
-        if (this.targetItem.isLayout(Layout.GRID)) {
-          this.insertToGridItem();
-          return;
+        if (isCtrl) {
+          const { info, items } = this.$selection.gridInformation || { items: [] };
+          if (info == null ? void 0 : info.current) {
+            this.insertToGridItem();
+            return;
+          }
+        } else {
+          if (this.targetItem.isLayout(Layout.GRID)) {
+            this.insertToGridItem();
+            return;
+          }
         }
       }
     }
@@ -88545,7 +88826,7 @@ class GhostToolView extends EditorElement {
       return;
     }
     if (current.isLayoutItem() && current.parent.id !== this.targetItem.id) {
-      this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist, "appendChild");
+      this.command("moveLayerToTarget", "change target with move", current, this.targetItem, newDist);
     }
   }
   [SUBSCRIBE("endGhostToolView")](hasMoved = false) {
@@ -88556,7 +88837,7 @@ class GhostToolView extends EditorElement {
     this.load();
   }
 }
-function selectionToolView(editor) {
+async function selectionToolView(editor) {
   editor.registerUI("canvas.view", {
     GhostToolView,
     SelectionToolView,
@@ -93471,14 +93752,14 @@ class TransformControlsGizmo extends Object3D {
     };
     function setupGizmo(gizmoMap) {
       const gizmo = new Object3D();
-      for (const name2 in gizmoMap) {
-        for (let i = gizmoMap[name2].length; i--; ) {
-          const object = gizmoMap[name2][i][0].clone();
-          const position2 = gizmoMap[name2][i][1];
-          const rotation = gizmoMap[name2][i][2];
-          const scale2 = gizmoMap[name2][i][3];
-          const tag = gizmoMap[name2][i][4];
-          object.name = name2;
+      for (const name in gizmoMap) {
+        for (let i = gizmoMap[name].length; i--; ) {
+          const object = gizmoMap[name][i][0].clone();
+          const position2 = gizmoMap[name][i][1];
+          const rotation = gizmoMap[name][i][2];
+          const scale2 = gizmoMap[name][i][3];
+          const tag = gizmoMap[name][i][4];
+          object.name = name;
           object.tag = tag;
           if (position2) {
             object.position.set(position2[0], position2[1], position2[2]);
@@ -94498,4 +94779,4 @@ function createDataEditor(opts) {
 function createWhiteBoard(opts) {
   return start$1(WhiteBoard, opts);
 }
-export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHECKER, CLICK, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, EDIT_MODE_ADD, EDIT_MODE_SELECTION, END, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FlexDirection, FlexWrap, FuncType, GradientType, IF, INPUT, JustifyContent, KEY, KEYDOWN, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LEFT_BUTTON, LOAD, Language, Layout, Length, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, NAME_SAPARATOR, NotifyType, ON, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, PREVENT, PathParser, PathSegmentType, Position, RAF, RESIZE, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SHIFT, SPACE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, Segment, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, VisibilityType, WHEEL, createDataEditor, createDesignEditor, createThreeEditor, createWhiteBoard, getRef, makeEventChecker, normalizeWheelEvent };
+export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHECKER, CLICK, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, EDIT_MODE_ADD, EDIT_MODE_SELECTION, END, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FlexDirection, FlexWrap, FuncType, GradientType, IF, INPUT, IntersectEpsilonType, JustifyContent, KEY, KEYDOWN, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LEFT_BUTTON, LOAD, Language, Layout, Length, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, NAME_SAPARATOR, NotifyType, ON, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, PREVENT, PathParser, PathSegmentType, Position, RAF, RESIZE, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SHIFT, SPACE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, Segment, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, VisibilityType, WHEEL, createDataEditor, createDesignEditor, createThreeEditor, createWhiteBoard, getRef, makeEventChecker, normalizeWheelEvent };

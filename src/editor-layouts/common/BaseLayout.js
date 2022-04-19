@@ -14,7 +14,10 @@ const MOVE_CHECK_MS = 0;
 
 export default class BaseLayout extends EditorElement {
 
-  created() {
+  async created() {
+
+
+
     // register local plugins 
     this.$editor.registerPluginList(this.getPlugins());
 
@@ -24,7 +27,7 @@ export default class BaseLayout extends EditorElement {
     }
 
     // initialize plugin list 
-    this.$editor.initPlugins();
+    await this.$editor.initPlugins();
 
     // load saved config
     this.$config.load();
@@ -35,8 +38,11 @@ export default class BaseLayout extends EditorElement {
       this.$config.setAll(this.opt.config || {});
     }
 
+    this._isPluginLoaded = true;
+  }
 
-
+  get isPreLoaded() {
+    return Boolean(this._isPluginLoaded);
   }
 
   /**

@@ -352,16 +352,13 @@ export class MovableModel extends BaseAssetModel {
         const newVertex = vec3.add([], oldVertex, absoluteDist);
 
         // 부모를 기준으로 얼마나 움직였는지 체크해본다. 
-        const newVerties = vertiesMap([ oldVertex, newVertex ], this.parent.absoluteMatrixInverse)
+        const newVerties = vertiesMap([ oldVertex, newVertex ], this.parent?.absoluteMatrixInverse || mat4.identity([]));
 
         const newDist = vec3.subtract([], newVerties[1], newVerties[0])
 
         const oldPosition = this.attrs('x', 'y');
 
-        this.reset({
-            x: this.offsetX + newDist[0],          // 1px 단위로 위치 설정 
-            y: this.offsetY + newDist[1],
-        })
+        this.move(newDist);
 
         return oldPosition;
     }
@@ -1141,7 +1138,7 @@ export class MovableModel extends BaseAssetModel {
                 if (next.enableHasChildren()) {
                     next.appendChild(this);
                 } else {
-                    next.appendAfter(this);
+                    next.insertAfter(this);
                 }
 
             }
@@ -1172,7 +1169,7 @@ export class MovableModel extends BaseAssetModel {
             const prev = this.parent.prev();
 
             if (prev) {
-                prev.appendBefore(this);
+                prev.insertBefore(this);
             }
 
             return;

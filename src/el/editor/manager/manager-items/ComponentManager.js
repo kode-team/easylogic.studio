@@ -10,13 +10,13 @@ export class ComponentManager {
 
   registerComponent (name, componentProperty) {
 
-    if (this.components[name]) throw new Error("It has duplicated item name. " + name);
+    // if (this.components[name]) console.warn("It has duplicated item name. " + name);
     this.components[name] = componentProperty;
   }
 
   registerInspector (name, inspectorCallback) {
 
-    if (this.inspectors[name]) throw new Error("It has duplicated item name. " + name);
+    // if (this.inspectors[name]) console.warn("It has duplicated item name. " + name);
     this.inspectors[name] = inspectorCallback;
   }  
 

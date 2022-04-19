@@ -486,7 +486,7 @@ declare module "@easylogic/editor" {
          * 
          * @param {Item} layer 
          */
-        appendAfter(layer: Item): Item;
+        insertAfter(layer: Item): Item;
 
 
         /**
@@ -494,7 +494,7 @@ declare module "@easylogic/editor" {
          * 
          * @param {Item} layer 
          */
-        appendBefore(layer: Item): Item;
+        insertBefore(layer: Item): Item;
 
         /**
          * 특정한 위치에 자식 객체로 Item 을 추가 한다. 

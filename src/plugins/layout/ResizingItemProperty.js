@@ -7,6 +7,7 @@ import './ResizingItemProperty.scss';
 import { ResizingMode } from "el/editor/types/model";
 import { iconUse } from "el/editor/icon/icon";
 import { createComponent } from "el/sapa/functions/jsx";
+import { Layout } from '../../el/editor/types/model';
 
 export default class ResizingItemProperty extends BaseProperty {
 
@@ -137,7 +138,7 @@ export default class ResizingItemProperty extends BaseProperty {
     this.refreshShow(() => {
       var current = this.$selection.current;
 
-      return current?.parent?.hasLayout()
+      return current?.parent?.hasLayout() && current?.parent?.isLayout(Layout.GRID) === false;
     });
   }
 

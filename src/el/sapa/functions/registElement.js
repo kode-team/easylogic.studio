@@ -3,6 +3,7 @@ import { isString } from './func';
 
 const map = {};
 const aliasMap = {}
+const __rootInstance = new Set();
 const __tempVariables = new Map();
 const __tempVariablesGroup = new Map();
 
@@ -53,7 +54,6 @@ export function initializeGroupVariables(groupId) {
  */
 export function recoverVariable(id, removeVariable = true) {
 
-    // console.log(id);
     if (isString(id) === false) {
         return id;
     }
@@ -101,13 +101,14 @@ export function spreadVariable(obj) {
 export function registElement(classes = {}) {
 
     Object.keys(classes).forEach(key => {
-        if (map[key]) {
-            // console.warn(`${key} element is duplicated.`)
-            return;
-        }
-
         map[key] = classes[key];
     })
+}
+
+export function replaceElement(module) {
+    if (map[module.name]) {
+        map[module.name] = module;
+    }
 }
 
 export function registAlias(a, b) {
@@ -120,4 +121,20 @@ export function retriveAlias(key) {
 
 export function retriveElement(className) {
     return map[retriveAlias(className) || className];
+}
+
+export function registRootElementInstance(instance) {
+    __rootInstance.add(instance);
+}
+
+export function getRootElementInstanceList() {
+    return [...__rootInstance];
+}
+
+export function renderRootElementInstance(module) {
+    replaceElement(module);
+
+    getRootElementInstanceList().forEach(instance => {
+        instance.hmr();
+    })
 }

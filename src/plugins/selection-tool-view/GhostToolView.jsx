@@ -9,7 +9,7 @@ import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { DOMDIFF, LOAD, SUBSCRIBE } from "el/sapa/Event";
 import { clone } from "el/sapa/functions/func";
 import {
-  polyPoint,
+  intersectRectRect,
   polyPoly,
   toRectVerties,
   vertiesToPath,
@@ -18,6 +18,8 @@ import {
 import { vec3 } from "gl-matrix";
 
 import "./GhostToolView.scss";
+import { TargetActionType } from '../../el/editor/types/model';
+import {IntersectEpsilonType} from "../../el/editor/types/editor";
 
 const CHECK_RATE = 0.5;
 
@@ -82,14 +84,13 @@ export default class GhostToolView extends EditorElement {
     if (this.targetItem) {
       // 현재 targetItem 이 layout 을 가지고 있다면 , container 로 인지하고 마지막 자식을 targetItem 으로 지정한다.
       if (this.targetItem.hasLayout() && this.targetItem?.hasChildren()) {
-
-        // flex 레이아웃 일 때는 마지막 item 을 targetItem 으로 인식한다. 
+        // flex 레이아웃 일 때는 마지막 item 을 targetItem 으로 인식한다.
         if (this.targetItem.isLayout(Layout.FLEX)) {
-          this.targetItem = this.targetItem.layers[this.targetItem.layers.length - 1];
+          this.targetItem =
+            this.targetItem.layers[this.targetItem.layers.length - 1];
         } else if (this.targetItem.isLayout(Layout.GRID)) {
-          // grid layout 의 경우 ? 
+          // grid layout 의 경우 ?
         }
-
       }
 
       this.$selection.updateDragTargetItem(this.targetItem);
@@ -407,7 +408,7 @@ export default class GhostToolView extends EditorElement {
     this.targetParent = undefined;
     this.targetParentPosition = undefined;
 
-    // targetItem 초기화 
+    // targetItem 초기화
     this.$selection.updateDragTargetItem(this.targetItem);
   }
 
@@ -434,8 +435,7 @@ export default class GhostToolView extends EditorElement {
       "change target with move",
       current,
       this.$selection.currentProject,
-      newDist,
-      "appendChild"
+      newDist
     );
 
     // const lastParent = current.parent;
@@ -459,8 +459,8 @@ export default class GhostToolView extends EditorElement {
    *
    * targetAction
    * - appendChild: targetItem의 자식으로 추가
-   * - appendBefore: targetItem의 앞으로 추가
-   * - appendAfter: targetItem의 뒤에 추가
+   * - insertBefore: targetItem의 앞으로 추가
+   * - insertAfter: targetItem의 뒤에 추가
    *
    * @returns {string}
    */
@@ -473,19 +473,19 @@ export default class GhostToolView extends EditorElement {
           case FlexDirection.ROW:
             // left
             if (this.targetRelativeMousePoint.x < CHECK_RATE) {
-              targetAction = "appendBefore";
+              targetAction = TargetActionType.INSERT_BEFORE;
             } else {
               // right
-              targetAction = "appendAfter";
+              targetAction = TargetActionType.INSERT_AFTER;
             }
             break;
           case FlexDirection.COLUMN:
             // top
             if (this.targetRelativeMousePoint.y < CHECK_RATE) {
-              targetAction = "appendBefore";
+              targetAction = TargetActionType.INSERT_BEFORE;
             } else {
               // bottom
-              targetAction = "appendAfter";
+              targetAction = TargetActionType.INSERT_AFTER;
             }
             break;
         }
@@ -515,6 +515,7 @@ export default class GhostToolView extends EditorElement {
           );
         }
       } else if (this.targetParent.isLayout(Layout.GRID)) {
+        this.insertToGridItem();
       }
     }
   }
@@ -522,62 +523,69 @@ export default class GhostToolView extends EditorElement {
   insertToGridItem() {
     const current = this.$selection.current;
 
-    const {info, items} = this.$selection.gridInformation || {items: []}
+    const { info, items } = this.$selection.gridInformation || { items: [] };
 
-    // ghost 의 world좌표를 구함 
-    const currentVerties = this.$viewport.applyVertiesInverse(this.ghostScreenVerties.filter((_, index) => index < 4))
-    const checkedItems = items?.filter(it => {
+    // ghost 의 world좌표를 구함
+    const currentVerties = this.ghostVerties.filter((_, index) => index < 4);
+    const targetRect = vertiesToRectangle(currentVerties);
+
+    const checkedItems = items?.filter((it) => {
       return polyPoly(it.originVerties, currentVerties);
-    })
+    }).filter(it => { // 겹친 영역이 rect 
+      // console.log(it.originRect, targetRect)
+      const intersect = intersectRectRect( it.originRect, targetRect);
 
-    if (checkedItems.length) {
+      return Math.floor(intersect.width) > IntersectEpsilonType.RECT && Math.floor(intersect.height) > IntersectEpsilonType.RECT;
+    });
 
-      const columnList = checkedItems.map(it => it.column)
-      const rowList = checkedItems.map(it => it.row)
+
+    // console.log(items)
+
+    if (checkedItems?.length) {
+      const columnList = checkedItems.map((it) => it.column);
+      const rowList = checkedItems.map((it) => it.row);
 
       const columnStart = Math.min(...columnList);
       const rowStart = Math.min(...rowList);
       const columnEnd = Math.max(...columnList) + 1;
-      const rowEnd = Math.max(...rowList) + 1;      
+      const rowEnd = Math.max(...rowList) + 1;
 
-      this.command('setAttributeForMulti', 'change grid item', this.$selection.packByValue({
-        'grid-column-start': columnStart,
-        'grid-column-end': columnEnd,
-        'grid-row-start': rowStart,
-        'grid-row-end': rowEnd
-      }))
+      this.command(
+        "setAttributeForMulti",
+        "change grid item",
+        this.$selection.packByValue({
+          "grid-column-start": columnStart,
+          "grid-column-end": columnEnd,
+          "grid-row-start": rowStart,
+          "grid-row-end": rowEnd,
+        })
+      );
 
-      // 해당 자식을 가지고 있지 않는 경우는 자식으로 변경해준다. 
-      if (this.targetItem.hasChild(current.id) === false) {
+      // 해당 자식을 가지고 있지 않는 경우는 자식으로 변경해준다.
+      if (info.current.hasChild(current.id) === false) {
         this.command(
           "moveLayerToTarget",
           "change target with move",
           current,
-          this.targetItem,
-          0,
-          "appendChild"
+          info.current,
+          undefined
         );
-
       }
 
       return;
     } else {
-
       if (this.targetItem) {
-        // targetItem 에 대한 grid 정보 다시 수집 
-        this.emit('refreshGridToolInfo', this.targetItem);
+        // targetItem 에 대한 grid 정보 다시 수집
+        this.emit("refreshGridToolInfo", this.targetItem);
         this.command(
           "moveLayerToTarget",
           "change target with move",
           current,
           this.targetItem,
-          0,
-          "appendChild"
+          undefined
         );
       }
-
     }
-
   }
 
   /**
@@ -612,7 +620,7 @@ export default class GhostToolView extends EditorElement {
       // 움직이지 않은 상태는 GhostToolView 에서 아무것도 하지 않음.
       // NOOP
       return;
-    }    
+    }
 
     // 선택한 레이어와 targetItem 이 같은 경우 추가하지 않는다.
     if (this.targetItem && this.targetItem.id === current?.id) {
@@ -627,24 +635,49 @@ export default class GhostToolView extends EditorElement {
 
     // target 이 레이아웃이 있고
     if (this.targetItem.hasLayout()) {
+
+
+      const isCtrl = this.$keyboardManager.isCtrl();
+
       // 자식을 안가지고 있을 때는 그냥 appendChild 를 실행
-      if (this.targetItem?.hasChildren() === false && this.targetItem.isLayout(Layout.FLEX)) {
+      if (
+        this.targetItem?.hasChildren() === false &&
+        this.targetItem.isLayout(Layout.FLEX) &&
+        isCtrl === false    // ctrl 이 눌러져 있으면 다음 로직으로 넘김 
+      ) {
         this.command(
           "moveLayerToTarget",
           "change target with move",
           current,
           this.targetItem,
-          newDist,
-          "appendChild"
+          newDist
         );
         return;
       } else {
-        // 내부에 자식이 있을 때는 , 마지막 드래그 위치에 따라 달라짐
 
-        if (this.targetItem.isLayout(Layout.GRID)) {
-          this.insertToGridItem();
-          return;
+        if (isCtrl) {
+          // ctrl 을 누른 상태로 drop 을 하면 
+          // targetItem 이 달라짐 
+          // targetItem 은 어디를 봐야할까?  
+
+          // 내부에 자식이 있을 때는 , 마지막 드래그 위치에 따라 달라짐
+          const { info, items } = this.$selection.gridInformation || { items: [] };
+
+          // grid 가 있을 때는 grid 를 보는 걸로 하자. 
+          if (info?.current) {
+            this.insertToGridItem();
+            return;
+          }
+
+          // 그 외는 targetItem 을 그대로 보는 걸로 하자. 
+        } else {
+          // 내부에 자식이 있을 때는 , 마지막 드래그 위치에 따라 달라짐
+          if (this.targetItem.isLayout(Layout.GRID)) {
+            this.insertToGridItem();
+            return;
+          }
         }
+
       }
     }
 
@@ -662,14 +695,12 @@ export default class GhostToolView extends EditorElement {
         "change target with move",
         current,
         this.targetItem,
-        newDist,
-        "appendChild"
+        newDist
       );
     }
   }
 
   [SUBSCRIBE("endGhostToolView")](hasMoved = false) {
-
     // 움직임이 있을 때만 layer 를 움직인다. 그렇지 않으면 레이어를 움직이지 않는다.
     if (hasMoved) {
       this.updateLayer();

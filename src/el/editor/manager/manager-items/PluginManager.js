@@ -11,12 +11,8 @@ export class PluginManager {
   }
 
   /**
-   * ItemType 에 해당되는 Item 객체를 생성한다. 
-   * create Item instance
+   * 플러그인 초기화를 비동기로 한다. 
    * 
-   * @param {string} itemType  ItemType 
-   * @param {object} obj 
-   * @returns {Item} 
    */
   async initializePlugin (options = {}) {
     return await Promise.all(this.plugins.map(async (CreatePluginFunction) => {

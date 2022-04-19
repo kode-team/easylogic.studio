@@ -1,4 +1,5 @@
 import Dom from "./functions/Dom";
+import { registRootElementInstance } from "./functions/registElement";
 import UIElement from "./UIElement";
 
 /**
@@ -7,13 +8,15 @@ import UIElement from "./UIElement";
  * @param {UIElement} ElementClass
  * @returns {UIElement}
  */ 
-export const start = (ElementClass, opt) => {
+export const start = async (ElementClass, opt) => {
 
   const $container = Dom.create(opt.container || document.body);
 
   const app = new ElementClass(opt, opt);
 
-  app.render($container);
+  await app.render($container);
+
+  registRootElementInstance(app);
 
   return app; 
 };

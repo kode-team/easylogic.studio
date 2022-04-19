@@ -7,44 +7,44 @@ export const predefinedBezier = {
     'ease': true,
     'ease-in': true,
     'ease-out': true,
-    'ease-in-out': true 
+    'ease-in-out': true
 }
 
 export const bezierObj = {
-    "ease" : "cubic-bezier(0.25, 0.1, 0.25, 1)",
-    "ease-in" : "cubic-bezier(0.42, 0, 1, 1)",
-    "ease-out" : "cubic-bezier(0, 0, 0.58, 1)"
+    "ease": "cubic-bezier(0.25, 0.1, 0.25, 1)",
+    "ease-in": "cubic-bezier(0.42, 0, 1, 1)",
+    "ease-out": "cubic-bezier(0, 0, 0.58, 1)"
 };
 
 export const bezierList = [
-    [ 0, 0, 1, 1, 'linear', true],
-    [ 0.25, 0.1, 0.25, 1, 'ease', true],
-    [ 0.42, 0, 1, 1, 'ease-in', true],
-    [ 0, 0, 0.58, 1, 'ease-out', true],
-    [  0.47, 0, 0.745, 0.715,  'ease-in-sine'],
-    [  0.39, 0.575, 0.565, 1,  'ease-out-sine'],
-    [  0.445, 0.05, 0.55, 0.95,  'ease-in-out-sine'],
-    [  0.55, 0.085, 0.68, 0.53,  'ease-in-quad'],
-    [  0.25, 0.46, 0.45, 0.94,  'ease-out-quad'],
-    [  0.455, 0.03, 0.515, 0.955,  'ease-in-out-quad'],
-    [ 0.55, 0.055, 0.675, 0.19, 'ease-in-cubic'],
-    [ 0.215, 0.61, 0.355, 1, 'ease-out-cubic'],
-    [ 0.645, 0.045, 0.355, 1, 'ease-in-out-cubic'],
-    [ 0.895, 0.03, 0.685, 0.22, 'ease-in-quart'],
-    [ 0.165, 0.84, 0.44, 1, 'ease-out-quart'],
-    [ 0.77, 0, 0.175, 1, 'ease-in-out-quart'],
+    [0, 0, 1, 1, 'linear', true],
+    [0.25, 0.1, 0.25, 1, 'ease', true],
+    [0.42, 0, 1, 1, 'ease-in', true],
+    [0, 0, 0.58, 1, 'ease-out', true],
+    [0.47, 0, 0.745, 0.715, 'ease-in-sine'],
+    [0.39, 0.575, 0.565, 1, 'ease-out-sine'],
+    [0.445, 0.05, 0.55, 0.95, 'ease-in-out-sine'],
+    [0.55, 0.085, 0.68, 0.53, 'ease-in-quad'],
+    [0.25, 0.46, 0.45, 0.94, 'ease-out-quad'],
+    [0.455, 0.03, 0.515, 0.955, 'ease-in-out-quad'],
+    [0.55, 0.055, 0.675, 0.19, 'ease-in-cubic'],
+    [0.215, 0.61, 0.355, 1, 'ease-out-cubic'],
+    [0.645, 0.045, 0.355, 1, 'ease-in-out-cubic'],
+    [0.895, 0.03, 0.685, 0.22, 'ease-in-quart'],
+    [0.165, 0.84, 0.44, 1, 'ease-out-quart'],
+    [0.77, 0, 0.175, 1, 'ease-in-out-quart'],
     [0.6, 0.04, 0.98, 0.335, 'ease-in-circ'],
-    [0.075, 0.82, 0.165, 1, 'ease-out-circ'], 
-    [0.785,0.135,0.15,0.86, 'ease-in-out-circ'],
-    [0.95,0.05,0.795,0.035, 'ease-in-expo'],
-    [0.19,1,0.22,1, 'ease-out-expo'],
-    [1,0,0,1, 'ease-in-out-expo'],
-    [0.755,0.05,0.855,0.06, 'ease-in-quint'],
-    [0.23,1,0.32,1, 'ease-out-quint'],
-    [0.86,0,0.07,1, 'ease-in-out-quint'],
-    [0.6,-0.28,0.735,0.045, 'ease-in-back'],
-    [0.175, 0.885,0.32,1.275, 'ease-out-back'],
-    [0.68,-0.55,0.265,1.55, 'ease-in-out-back']
+    [0.075, 0.82, 0.165, 1, 'ease-out-circ'],
+    [0.785, 0.135, 0.15, 0.86, 'ease-in-out-circ'],
+    [0.95, 0.05, 0.795, 0.035, 'ease-in-expo'],
+    [0.19, 1, 0.22, 1, 'ease-out-expo'],
+    [1, 0, 0, 1, 'ease-in-out-expo'],
+    [0.755, 0.05, 0.855, 0.06, 'ease-in-quint'],
+    [0.23, 1, 0.32, 1, 'ease-out-quint'],
+    [0.86, 0, 0.07, 1, 'ease-in-out-quint'],
+    [0.6, -0.28, 0.735, 0.045, 'ease-in-back'],
+    [0.175, 0.885, 0.32, 1.275, 'ease-out-back'],
+    [0.68, -0.55, 0.265, 1.55, 'ease-in-out-back']
 
 ];
 
@@ -54,9 +54,9 @@ export const getPredefinedCubicBezier = (str) => {
 }
 
 export const formatCubicBezier = (arr) => {
-    arr = arr.map(it => Math.floor(it * 100)/100 )
+    arr = arr.map(it => Math.floor(it * 100) / 100)
 
-    for(var i = 0, len  = bezierList.length; i < len; i++) {
+    for (var i = 0, len = bezierList.length; i < len; i++) {
         var bezier = bezierList[i];
 
         if (bezier[0] == arr[0] && bezier[1] == arr[1] && bezier[2] == arr[2] && bezier[3] == arr[3] && bezier[5] /* is support css timing function name */) {
@@ -67,7 +67,7 @@ export const formatCubicBezier = (arr) => {
     return `cubic-bezier( ${arr.filter((_, index) => index < 4).join(',')} )`;
 }
 
-export const parseCubicBezier = (str) => {
+export function parseCubicBezier(str) {
     if (typeof str == 'string') {
 
         if (predefinedBezier[str]) {
@@ -83,10 +83,10 @@ export const parseCubicBezier = (str) => {
 }
 
 export const calc = {
-    B1 : function (t) { return t*t*t },
-    B2 : function (t) { return 3*t*t*(1-t) },
-    B3 : function (t) { return 3*t*(1-t)*(1-t) },
-    B4 : function (t) { return (1-t)*(1-t)*(1-t) }
+    B1: function (t) { return t * t * t },
+    B2: function (t) { return 3 * t * t * (1 - t) },
+    B3: function (t) { return 3 * t * (1 - t) * (1 - t) },
+    B4: function (t) { return (1 - t) * (1 - t) * (1 - t) }
 }
 
 export const createBezier = (C1, C2, C3, C4) => {
@@ -111,13 +111,13 @@ export const createBezierLine = (C1, C2) => {
 }
 
 const checkDist = (obj, curve, t, x, y) => {
-    var p = curve(t) 
+    var p = curve(t)
     var dist = getDist(x, y, p.x, p.y);
 
     if (dist < obj.minDist) {
-        obj.minDist = dist; 
-        obj.minT = t; 
-    }        
+        obj.minDist = dist;
+        obj.minT = t;
+    }
 }
 
 export const getPolygonalDist = (points = []) => {
@@ -140,44 +140,44 @@ export const getPolygonalDist = (points = []) => {
 
 export const getCurveDist = (sx, sy, cx1, cy1, cx2, cy2, ex, ey, count = 1000) => {
     var curve = createBezier(
-        {x: sx, y: sy},
-        {x: cx1, y: cy1},
-        {x: cx2, y: cy2},
-        {x: ex, y: ey}
+        { x: sx, y: sy },
+        { x: cx1, y: cy1 },
+        { x: cx2, y: cy2 },
+        { x: ex, y: ey }
     )
 
     var total = 0
-    var startPoint = curve(0); 
-    for(var i = 0; i <= count; i++) {
-        var t = i/count
+    var startPoint = curve(0);
+    for (var i = 0; i <= count; i++) {
+        var t = i / count
         var xy = curve(t)
 
         total += getDist(startPoint.x, startPoint.y, xy.x, xy.y)
-        startPoint = xy; 
+        startPoint = xy;
     }
 
-    return total; 
+    return total;
 }
 
 
 export const getQuardDist = (sx, sy, cx1, cy1, ex, ey, count = 1000) => {
     var curve = createBezierQuard(
-        {x: sx, y: sy},
-        {x: cx1, y: cy1},
-        {x: ex, y: ey}
+        { x: sx, y: sy },
+        { x: cx1, y: cy1 },
+        { x: ex, y: ey }
     )
 
     var total = 0
-    var startPoint = curve(0); 
-    for(var i = 0; i <= count; i++) {
-        var t = i/count
+    var startPoint = curve(0);
+    for (var i = 0; i <= count; i++) {
+        var t = i / count
         var xy = curve(t)
 
         total += getDist(startPoint.x, startPoint.y, xy.x, xy.y)
-        startPoint = xy; 
+        startPoint = xy;
     }
 
-    return total; 
+    return total;
 }
 
 
@@ -188,16 +188,16 @@ const makeCurveFunction = (curve, count = 10) => {
     }
     return function (x, y) {
 
-        for(var i = 0; i <= count; i++) {
-            checkDist(obj, curve, i/count, x, y);
+        for (var i = 0; i <= count; i++) {
+            checkDist(obj, curve, i / count, x, y);
         }
 
         var step = 1 / (count * 2)
         var t = obj.minT
-        for(var i = 0; i < count; i++) {
+        for (var i = 0; i < count; i++) {
             checkDist(obj, curve, Math.max(0, t - step), x, y);
             checkDist(obj, curve, Math.min(1, t + step), x, y);
-            step /= 2;             
+            step /= 2;
         }
 
         return obj.minT;
@@ -213,24 +213,24 @@ export const recoverBezierQuard = (C1, C2, C3, count = 20) => {
 }
 
 export const recoverBezierLine = (C1, C2, count = 20) => {
-    return makeCurveFunction(createBezierLine(C1, C2), count)    
+    return makeCurveFunction(createBezierLine(C1, C2), count)
 }
 
 export const createBezierForPattern = (bezierString) => {
 
 
     if (bezierString === 'linear') {
-        var C1 = { x : 0, y : 0 };
-        var C2 = { x : 1, y : 1 };        
+        var C1 = { x: 0, y: 0 };
+        var C2 = { x: 1, y: 1 };
         return createBezierLine(C1, C2)
     }
 
     var bezierList = parseCubicBezier(bezierString);
 
-    var C1 = { x : 0, y : 0 };
-    var C2 = { x : bezierList[0], y : bezierList[1] };
-    var C3 = { x : bezierList[2], y : bezierList[3] };
-    var C4 = { x : 1, y : 1 };
+    var C1 = { x: 0, y: 0 };
+    var C2 = { x: bezierList[0], y: bezierList[1] };
+    var C3 = { x: bezierList[2], y: bezierList[3] };
+    var C4 = { x: 1, y: 1 };
 
     return createBezier(C1, C2, C3, C4);
 
@@ -239,7 +239,7 @@ export const createBezierForPattern = (bezierString) => {
 const interpolate = (p1, p2, t) => {
     return {
         x: p1.x + (p2.x - p1.x) * t,
-        y: p1.y + (p2.y - p1.y) * t 
+        y: p1.y + (p2.y - p1.y) * t
     }
 }
 
@@ -275,8 +275,8 @@ export const getBezierPoints = (points, t) => {
     var p5 = interpolate(p3, p4, t);
 
     return {
-        first: [ points[0], p0, p3, p5 ],
-        second: [ p5, p4, p2, points[3] ]
+        first: [points[0], p0, p3, p5],
+        second: [p5, p4, p2, points[3]]
     }
 }
 
@@ -287,16 +287,16 @@ export const getBezierPointsQuard = (points, t) => {
     var p2 = interpolate(p0, p1, t);
 
     return {
-        first: [ points[0], p0, p2 ],
-        second: [ p2, p1, points[2] ]
+        first: [points[0], p0, p2],
+        second: [p2, p1, points[2]]
     }
 }
 
 export const splitBezierPointsByCount = (points, count = 1) => {
     var result = []
 
-    while(count > 0) {
-        const curve = getBezierPoints(points, 1/count);
+    while (count > 0) {
+        const curve = getBezierPoints(points, 1 / count);
         result.push(curve.first)
         points = curve.second;
         count--;
@@ -308,8 +308,8 @@ export const splitBezierPointsByCount = (points, count = 1) => {
 export const splitBezierPointsQuardByCount = (points, count = 1) => {
     var result = []
 
-    while(count > 0) {
-        const curve = getBezierPointsQuard(points, 1/count);
+    while (count > 0) {
+        const curve = getBezierPointsQuard(points, 1 / count);
         result.push(curve.first)
         points = curve.second;
         count--;
@@ -320,9 +320,9 @@ export const splitBezierPointsQuardByCount = (points, count = 1) => {
 
 export const splitBezierPointsLineByCount = (points, count = 1) => {
     var result = []
-    const unit = 1/count;
-    
-    while(count > 0) {
+    const unit = 1 / count;
+
+    while (count > 0) {
         const curve = getBezierPointsLine(points, unit);
         result.push(curve.first)
         points = curve.second;
@@ -338,8 +338,8 @@ export const getBezierPointsLine = (points, t) => {
     var p0 = interpolate(points[0], points[1], t);
 
     return {
-        first: [ points[0], p0 ],
-        second: [ p0, points[1] ]
+        first: [points[0], p0],
+        second: [p0, points[1]]
     }
 }
 
@@ -353,7 +353,7 @@ export const normalizeCurveForLine = (points) => {
 
     return [
         vec3.clone(points[0]),
-        [ 
+        [
             points[0][0] + (points[1][0] - points[0][0]) * 0.33,
             points[0][1] + (points[1][1] - points[0][1]) * 0.33,
             0,
@@ -417,18 +417,18 @@ export const polygonalForCurve = (c1, c2, c3, c4, count = 1000) => {
     let lastLength = 0;
     let points = [];
 
-    const bezierPoints = [c1, c2, c3, c4].map(point => ({x: point[0], y: point[1]}))
+    const bezierPoints = [c1, c2, c3, c4].map(point => ({ x: point[0], y: point[1] }))
 
     do {
         points = [];
         let currentLength = 0;
-    
-        for(let i = 0; i <= samplingCount; i++) {
+
+        for (let i = 0; i <= samplingCount; i++) {
             const nextPoint = getBezierPointOne(bezierPoints, currentLength / totalLength);
             points.push(nextPoint);
             currentLength += samplingStep;
         }
-    
+
         lastLength = getPolygonalDist(points);
 
         samplingCount += samplingCount * (totalLength - lastLength) / totalLength;
@@ -453,8 +453,8 @@ export const calculateA = (points) => {
         vec3.add([], a1, a2),
         vec3.add([], a3, a4),
     )
-        
-    return vec3.multiply([], [3, 3, 3], newP) 
+
+    return vec3.multiply([], [3, 3, 3], newP)
 }
 
 export const calculateB = (points) => {
@@ -463,20 +463,20 @@ export const calculateB = (points) => {
     const b2 = vec3.multiply([], [-2, -2, -2], points[1])
     const b3 = points[2]
 
-    const newP = vec3.add([],vec3.add([], b1, b2), b3)
-        
-    return vec3.multiply([], [6, 6, 6], newP)     
+    const newP = vec3.add([], vec3.add([], b1, b2), b3)
+
+    return vec3.multiply([], [6, 6, 6], newP)
 }
 
 export const calculateC = (points) => {
     // c = 3 * (p1 - p0);
     const newP = vec3.add(
         [],
-        points[1], 
+        points[1],
         vec3.negate([], points[0])
     )
 
-    return vec3.multiply([], [3, 3, 3], newP)         
+    return vec3.multiply([], [3, 3, 3], newP)
 }
 
 
@@ -515,7 +515,7 @@ export const findRootForCurve = (points) => {
         }
 
     }
-    
+
     // y 
     const distY = b[1] * b[1] - 4 * a[1] * c[1];
 
@@ -533,15 +533,15 @@ export const findRootForCurve = (points) => {
         const rootY2 = (-b[1] - Math.sqrt(distY)) / (2 * a[1]);
 
         if (0 <= rootY1 && rootY1 <= 1) {
-            roots.push(rootY1);       
+            roots.push(rootY1);
         }
 
         if (0 <= rootY2 && rootY2 <= 1) {
-            roots.push(rootY2);       
-        }        
+            roots.push(rootY2);
+        }
     }
 
-    return roots; 
+    return roots;
 }
 
 /**
@@ -554,14 +554,14 @@ export const getCurveBBox = (points) => {
     const roots = findRootForCurve(points);
 
     const xyPoints = points.map(p => {
-        return {x: p[0], y: p[1]}
+        return { x: p[0], y: p[1] }
     })
 
     // root 에 t = 0, 1 을 항상 넣어준다. 
     roots.push(0, 1);
 
     return roots.map(t => {
-        const {x, y} = getBezierPointOne(xyPoints, t);
+        const { x, y } = getBezierPointOne(xyPoints, t);
         return [x, y, 0]
     })
 }
@@ -570,11 +570,11 @@ export const getQuardCurveBBox = (points) => {
     const roots = findRootForQuardCurve(points);
 
     const xyPoints = points.map(p => {
-        return {x: p[0], y: p[1]}
+        return { x: p[0], y: p[1] }
     })
 
     return roots.map(t => {
-        const {x, y} = getBezierPointOneQuard(xyPoints, t);
+        const { x, y } = getBezierPointOneQuard(xyPoints, t);
         return [x, y, 0]
     })
 }
@@ -601,7 +601,7 @@ export const getQuardCurveBBox = (points) => {
  * @param {Curve[]} bezierCurveList 
  * @param {*} tList 
  */
-export const getPointInCurveList = (bezierCurveList = [], tList= []) => {
+export const getPointInCurveList = (bezierCurveList = [], tList = []) => {
     const results = bezierCurveList.map((curve, index) => {
         const t = tList[index];
 
