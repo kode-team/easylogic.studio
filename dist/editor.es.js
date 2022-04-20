@@ -17,6 +17,10 @@ var __spreadValues = (a, b) => {
   return a;
 };
 var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
+var __publicField = (obj2, key, value) => {
+  __defNormalProp(obj2, typeof key !== "symbol" ? key + "" : key, value);
+  return value;
+};
 function collectProps(root, filterFunction = () => true) {
   let p = root;
   let results = [];
@@ -97,10 +101,10 @@ function isBoolean(value) {
 function isString(value) {
   return typeof value == "string";
 }
-function isArray(value) {
+function isArray$1(value) {
   return Array.isArray(value);
 }
-function isObject(value) {
+function isObject$1(value) {
   return typeof value == "object" && !Array.isArray(value) && !isNumber(value) && !isString(value) && value !== null;
 }
 function isFunction(value) {
@@ -138,7 +142,7 @@ const setBooleanProp = (el, name, value) => {
     el[name] = value;
   }
 };
-const setProp = (el, name, value) => {
+const setProp$1 = (el, name, value) => {
   if (typeof value === "boolean") {
     setBooleanProp(el, name, value);
   } else {
@@ -163,7 +167,7 @@ const updateProp = (node, name, newValue, oldValue) => {
   if (!newValue) {
     removeProp(node, name, oldValue);
   } else if (!oldValue || newValue !== oldValue) {
-    setProp(node, name, newValue);
+    setProp$1(node, name, newValue);
   }
 };
 const updateProps = (node, newProps = {}, oldProps = {}) => {
@@ -1754,7 +1758,7 @@ const applyElementAttribute = ($element, key, value) => {
   } else if (key === "class") {
     if (Array.isArray(value)) {
       $element.addClass(...value.filter(Boolean));
-    } else if (isObject(value)) {
+    } else if (isObject$1(value)) {
       const keys2 = Object.keys(value);
       for (var i = 0, len2 = keys2.length; i < len2; i++) {
         const className = keys2[i];
@@ -1972,10 +1976,13 @@ class EventMachine {
   get target() {
     return this.$el.el;
   }
+  checkProps(props = {}) {
+    return props;
+  }
   initializeProperty(opt, props = {}) {
     this.opt = opt || {};
     this.parent = this.opt;
-    this.props = props;
+    this.props = this.checkProps(props);
     this.source = uuid$1();
     this.sourceName = this.constructor.name;
   }
@@ -2011,7 +2018,7 @@ class EventMachine {
     if ($container) {
       this.render($container);
     }
-    this.props = props;
+    this.props = this.checkProps(props);
     this.state = {};
     this.setState(this.initState(), false);
     this.refresh(true);
@@ -2070,7 +2077,9 @@ class EventMachine {
     }
     this.afterLoadRendering(targetRef, refName);
   }
-  afterLoadRendering(refName) {
+  afterLoadRendering(targetRef, refName) {
+  }
+  afterComponentRendering() {
   }
   parseTemplate(html, isLoad) {
     if (Array.isArray(html)) {
@@ -2121,7 +2130,7 @@ class EventMachine {
     for (var t of $dom.el.attributes) {
       if (hasVariable(t.nodeName)) {
         const recoveredValue = getVariable(t.nodeName);
-        if (isObject(recoveredValue)) {
+        if (isObject$1(recoveredValue)) {
           props = Object.assign(props, recoveredValue);
         } else {
           props[t.nodeName] = getVariable(t.nodeValue);
@@ -2168,6 +2177,7 @@ class EventMachine {
         instance.render();
       }
     }
+    this.afterComponentRendering($dom, refName, instance, props);
     if (instance.renderTarget) {
       (_a = instance.$el) == null ? void 0 : _a.appendTo(instance.renderTarget);
       $dom.remove();
@@ -2197,6 +2207,7 @@ class EventMachine {
       };
     } else {
       return {
+        refClass,
         notUsed: true,
         $dom
       };
@@ -2222,6 +2233,7 @@ class EventMachine {
     componentList.forEach((comp) => {
       if (comp.notUsed) {
         comp.$dom.remove();
+        console.warn(`${comp.refClass} is not used.`);
       } else {
         this.renderComponent(comp);
       }
@@ -2247,7 +2259,7 @@ class EventMachine {
   refresh() {
     this.load();
   }
-  _afterLoad() {
+  async _afterLoad() {
     this._timestamp;
     this.runHandlers("initialize");
     this.bindData();
@@ -2301,7 +2313,7 @@ class EventMachine {
         this.refreshElementReference(refTarget, elName);
       }
     });
-    this._afterLoad();
+    await this._afterLoad();
   }
   runHandlers(func2 = "run", ...args2) {
     this.handlers.filter((h) => h[func2]).forEach((h) => h[func2](...args2));
@@ -3905,7 +3917,7 @@ class BaseStore {
   emit(event, ...args2) {
     if (isFunction(event)) {
       event(...args2);
-    } else if (isArray(event)) {
+    } else if (isArray$1(event)) {
       this.sendMessageList(this.source, event);
     } else {
       this.sendMessage(this.source, event, ...args2);
@@ -5396,6 +5408,45 @@ class SnapManager {
     return [this.findGuide(sourceVerties)[0]];
   }
 }
+function _doForceRefreshSelection(editor) {
+  editor.nextTick(() => {
+    editor.emit("refreshAll");
+  });
+}
+var __glob_0_2$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": _doForceRefreshSelection
+}, Symbol.toStringTag, { value: "Module" }));
+var AddArtBoard = {
+  command: "AddArtBoard",
+  execute: (editor, obj2 = {}, center2 = null) => {
+    var project2 = editor.selection.currentProject;
+    if (!project2) {
+      project2 = editor.add(editor.createModel({ itemType: "project" }));
+      editor.selection.selectProject(project2);
+    }
+    var artboard2 = project2.appendChild(editor.createModel(__spreadValues({
+      itemType: "artboard",
+      x: 300,
+      y: 200,
+      width: 375,
+      height: 667
+    }, obj2)));
+    if (center2) {
+      artboard2.reset({
+        x: 0,
+        y: 0
+      });
+      artboard2.moveByCenter(center2);
+    }
+    editor.selection.select(artboard2);
+    _doForceRefreshSelection(editor);
+  }
+};
+var __glob_0_0$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  "default": AddArtBoard
+}, Symbol.toStringTag, { value: "Module" }));
 function _currentProject(editor, callback) {
   var project2 = editor.selection.currentProject;
   if (project2) {
@@ -5403,45 +5454,9 @@ function _currentProject(editor, callback) {
     callback && callback(project2, timeline);
   }
 }
-var __glob_0_0$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": _currentProject
-}, Symbol.toStringTag, { value: "Module" }));
-function _doForceRefreshSelection(editor) {
-  editor.nextTick(() => {
-    editor.emit("refreshAll");
-  });
-}
 var __glob_0_1$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  "default": _doForceRefreshSelection
-}, Symbol.toStringTag, { value: "Module" }));
-function addArtBoard(editor, obj2 = {}, center2 = null) {
-  var project2 = editor.selection.currentProject;
-  if (!project2) {
-    project2 = editor.add(editor.createModel({ itemType: "project" }));
-    editor.selection.selectProject(project2);
-  }
-  var artboard2 = project2.appendChild(editor.createModel(__spreadValues({
-    itemType: "artboard",
-    x: 300,
-    y: 200,
-    width: 375,
-    height: 667
-  }, obj2)));
-  if (center2) {
-    artboard2.reset({
-      x: 0,
-      y: 0
-    });
-    artboard2.moveByCenter(center2);
-  }
-  editor.selection.select(artboard2);
-  _doForceRefreshSelection(editor);
-}
-var __glob_0_2$4 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  "default": addArtBoard
+  "default": _currentProject
 }, Symbol.toStringTag, { value: "Module" }));
 var addBackgroundColor = {
   command: "addBackgroundColor",
@@ -5964,12 +5979,12 @@ function OBJECT_TO_PROPERTY$1(obj2) {
   const target = obj2 || {};
   return Object.keys(target).map((key) => {
     if (key === "class") {
-      if (isObject(obj2[key])) {
+      if (isObject$1(obj2[key])) {
         return `${key}="${OBJECT_TO_CLASS$1(obj2[key])}"`;
       }
     }
     if (key === "style") {
-      if (isObject(obj2[key])) {
+      if (isObject$1(obj2[key])) {
         return `${key}="${CSS_TO_STRING$1(obj2[key])}"`;
       }
     }
@@ -7206,7 +7221,7 @@ function parseValue(str, {
   }
   function checkParsedResult(startIndex, endIndex, matchedString) {
     return result.some((it) => {
-      if (it.parsed && isArray(it.parsed)) {
+      if (it.parsed && isArray$1(it.parsed)) {
         return it.parsed.some((parsedIt) => {
           if (parsedIt.startIndex === startIndex && parsedIt.endIndex === endIndex && matchedString === parsedIt.matchedString) {
             return true;
@@ -10578,7 +10593,7 @@ class RadialGradient extends Gradient {
     var radialSize = json.radialSize || RadialGradientSizeType.FARTHEST_CORNER;
     var radialPosition = json.radialPosition || ["center", "center"];
     radialPosition = DEFINED_POSITIONS$1[radialPosition] ? radialPosition : radialPosition.join(" ");
-    radialSize = isArray(radialSize) ? radialSize.join(" ") : radialSize;
+    radialSize = isArray$1(radialSize) ? radialSize.join(" ") : radialSize;
     opt = radialPosition ? `${radialType} ${radialSize} at ${radialPosition}` : `${radialType} ${radialSize}`;
     return `${json.type || "radial-gradient"}(${opt}, ${colorString})`;
   }
@@ -10592,7 +10607,7 @@ class RadialGradient extends Gradient {
     var radialSize = json.radialSize || RadialGradientSizeType.FARTHEST_CORNER;
     var radialPosition = json.radialPosition || ["center", "center"];
     radialPosition = DEFINED_POSITIONS$1[radialPosition] ? radialPosition : radialPosition.join(" ");
-    radialSize = isArray(radialSize) ? radialSize.join(" ") : radialSize;
+    radialSize = isArray$1(radialSize) ? radialSize.join(" ") : radialSize;
     opt = radialPosition ? `${radialType} ${radialSize} at ${radialPosition}` : `${radialType} ${radialSize}`;
     return `${json.type || "radial-gradient"}(${opt}, ${colorString})`;
   }
@@ -38784,6 +38799,15 @@ const ClipboardActionType = {
   COPY: "copy",
   CUT: "cut"
 };
+const MenuItemType = {
+  BUTTON: "button",
+  LINK: "link",
+  SEPARATOR: "separator",
+  CHECKBOX: "checkbox",
+  RADIO: "radio",
+  SUBMENU: "submenu",
+  DROPDOWN: "dropdown"
+};
 var addLayerView = {
   command: "addLayerView",
   execute: async function(editor, type, data = {}) {
@@ -40467,7 +40491,7 @@ var __glob_0_37$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   __proto__: null,
   "default": doubleclick_item
 }, Symbol.toStringTag, { value: "Module" }));
-function downloadFile(datauri, filename = "easylogic.json") {
+function downloadFile(datauri, filename = "elf.json") {
   var a = document.createElement("a");
   a.href = datauri;
   a.download = filename;
@@ -40478,7 +40502,7 @@ var downloadJSON = {
   execute: function(editor, filename) {
     var json = JSON.stringify(editor.modelManager.toJSON());
     var datauri = "data:application/json;base64," + window.btoa(unescape(encodeURIComponent(json)));
-    downloadFile(datauri, filename || "easylogic.json");
+    downloadFile(datauri, filename || "elf.json");
   }
 };
 var __glob_0_38$2 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
@@ -40578,7 +40602,7 @@ var drop_asset = {
     } else if (obj2.asset) {
       const assetData = await editor.storageManager.getCustomAsset(obj2.asset.id);
       if (assetData) {
-        editor.emit("addArtBoard", assetData, obj2.asset.center);
+        editor.emit("AddArtBoard", assetData, obj2.asset.center);
       }
     }
     _doForceRefreshSelection(editor);
@@ -41094,7 +41118,7 @@ var history_moveLayer = {
   command: "history.moveLayer",
   description: "move layer in world ",
   execute: function(editor, message, layers2 = [], dist2 = [0, 0, 0]) {
-    if (isArray(layers2) === false) {
+    if (isArray$1(layers2) === false) {
       layers2 = [layers2];
     }
     const targetItems = editor.selection.itemsByIds(layers2);
@@ -43384,7 +43408,7 @@ var __glob_0_134$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.define
   __proto__: null,
   "default": update
 }, Symbol.toStringTag, { value: "Module" }));
-const modules$4 = { "./command_list/_currentProject.js": __glob_0_0$4, "./command_list/_doForceRefreshSelection.js": __glob_0_1$4, "./command_list/addArtBoard.js": __glob_0_2$4, "./command_list/addBackgroundColor.js": __glob_0_3$4, "./command_list/addBackgroundImageAsset.js": __glob_0_4$4, "./command_list/addBackgroundImageGradient.js": __glob_0_5$4, "./command_list/addBackgroundImagePattern.js": __glob_0_6$4, "./command_list/addCubeBox.js": __glob_0_7$4, "./command_list/addCustomComponent.js": __glob_0_8$4, "./command_list/addImage.js": __glob_0_9$4, "./command_list/addImageAssetItem.js": __glob_0_10$4, "./command_list/addLayer.js": __glob_0_11$4, "./command_list/addLayerView.js": __glob_0_12$4, "./command_list/addProject.js": __glob_0_13$4, "./command_list/addSVGFilterAssetItem.js": __glob_0_14$4, "./command_list/addText.js": __glob_0_15$4, "./command_list/addTimelineCurrentProperty.js": __glob_0_16$4, "./command_list/addTimelineItem.js": __glob_0_17$4, "./command_list/addTimelineKeyframe.js": __glob_0_18$4, "./command_list/addTimelineProperty.js": __glob_0_19$4, "./command_list/addVideo.js": __glob_0_20$4, "./command_list/addVideoAssetItem.js": __glob_0_21$3, "./command_list/clipboard.copy.js": __glob_0_22$3, "./command_list/clipboard.paste.js": __glob_0_23$3, "./command_list/convert.flatten.path.js": __glob_0_24$3, "./command_list/convert.no.transform.path.js": __glob_0_25$2, "./command_list/convert.normalize.path.js": __glob_0_26$2, "./command_list/convert.path.operation.js": __glob_0_27$2, "./command_list/convert.polygonal.path.js": __glob_0_28$2, "./command_list/convert.simplify.path.js": __glob_0_29$2, "./command_list/convert.smooth.path.js": __glob_0_30$2, "./command_list/convert.stroke.to.path.js": __glob_0_31$2, "./command_list/convertPasteText.js": __glob_0_32$2, "./command_list/convertPath.js": __glob_0_33$2, "./command_list/copy.path.js": __glob_0_34$2, "./command_list/copyTimelineProperty.js": __glob_0_35$2, "./command_list/deleteTimelineKeyframe.js": __glob_0_36$2, "./command_list/doubleclick.item.js": __glob_0_37$2, "./command_list/downloadJSON.js": __glob_0_38$2, "./command_list/downloadPNG.js": __glob_0_39$2, "./command_list/downloadSVG.js": __glob_0_40$2, "./command_list/drop.asset.js": __glob_0_41$2, "./command_list/dropImageUrl.js": __glob_0_42$2, "./command_list/editor.config.body.event.js": __glob_0_43$2, "./command_list/fileDropItems.js": __glob_0_44$2, "./command_list/firstTimelineItem.js": __glob_0_45$2, "./command_list/group.item.js": __glob_0_46$2, "./command_list/history.addLayer.js": __glob_0_47$2, "./command_list/history.bring.forward.js": __glob_0_48$2, "./command_list/history.bring.front.js": __glob_0_49$2, "./command_list/history.clipboard.paste.js": __glob_0_50$2, "./command_list/history.group.item.js": __glob_0_51$2, "./command_list/history.moveLayer.js": __glob_0_52$1, "./command_list/history.moveLayerToTarget.js": __glob_0_53$1, "./command_list/history.redo.js": __glob_0_54$1, "./command_list/history.refreshSelection.js": __glob_0_55$1, "./command_list/history.refreshSelectionProject.js": __glob_0_56$1, "./command_list/history.removeLayer.js": __glob_0_57$1, "./command_list/history.removeProject.js": __glob_0_58$1, "./command_list/history.send.back.js": __glob_0_59$1, "./command_list/history.send.backward.js": __glob_0_60$1, "./command_list/history.setAttributeForMulti.js": __glob_0_61$1, "./command_list/history.undo.js": __glob_0_62$1, "./command_list/item.move.depth.down.js": __glob_0_63$1, "./command_list/item.move.depth.first.js": __glob_0_64$1, "./command_list/item.move.depth.last.js": __glob_0_65$1, "./command_list/item.move.depth.up.js": __glob_0_66$1, "./command_list/keymap.keydown.js": __glob_0_67$1, "./command_list/keymap.keyup.js": __glob_0_68$1, "./command_list/lastTimelineItem.js": __glob_0_69$1, "./command_list/load.json.js": __glob_0_70$1, "./command_list/moveLayer.js": __glob_0_71$1, "./command_list/moveLayerForItems.js": __glob_0_72$1, "./command_list/moveSelectionToCenter.js": __glob_0_73$1, "./command_list/moveToCenter.js": __glob_0_74$1, "./command_list/newComponent.js": __glob_0_75$1, "./command_list/nextTimelineItem.js": __glob_0_76$1, "./command_list/open.editor.js": __glob_0_77$1, "./command_list/pauseTimelineItem.js": __glob_0_78$1, "./command_list/playTimelineItem.js": __glob_0_79$1, "./command_list/pop.mode.view.js": __glob_0_80$1, "./command_list/prevTimelineItem.js": __glob_0_81$1, "./command_list/push.mode.view.js": __glob_0_82$1, "./command_list/recoverBooleanPath.js": __glob_0_83$1, "./command_list/recoverCursor.js": __glob_0_84$1, "./command_list/refreshArtboard.js": __glob_0_85$1, "./command_list/refreshCursor.js": __glob_0_86$1, "./command_list/refreshElement.js": __glob_0_87$1, "./command_list/refreshHistory.js": __glob_0_88$1, "./command_list/refreshProject.js": __glob_0_89$1, "./command_list/refreshSelectedOffset.js": __glob_0_90$1, "./command_list/removeAnimationItem.js": __glob_0_91$1, "./command_list/removeLayer.js": __glob_0_92$1, "./command_list/removeTimeline.js": __glob_0_93$1, "./command_list/removeTimelineProperty.js": __glob_0_94$1, "./command_list/resetSelection.js": __glob_0_95$1, "./command_list/resizeArtBoard.js": __glob_0_96$1, "./command_list/rotateLayer.js": __glob_0_97$1, "./command_list/same.height.js": __glob_0_98$1, "./command_list/same.width.js": __glob_0_99$1, "./command_list/saveJSON.js": __glob_0_100$1, "./command_list/savePNG.js": __glob_0_101$1, "./command_list/segment.delete.js": __glob_0_102$1, "./command_list/segment.move.down.js": __glob_0_103$1, "./command_list/segment.move.left.js": __glob_0_104$1, "./command_list/segment.move.right.js": __glob_0_105$1, "./command_list/segment.move.up.js": __glob_0_106$1, "./command_list/select.all.js": __glob_0_107$1, "./command_list/selectTimelineItem.js": __glob_0_108$1, "./command_list/setAttributeForMulti.js": __glob_0_109$1, "./command_list/setLocale.js": __glob_0_110$1, "./command_list/setTimelineOffset.js": __glob_0_111$1, "./command_list/showExportView.js": __glob_0_112$1, "./command_list/sort.bottom.js": __glob_0_113$1, "./command_list/sort.center.js": __glob_0_114$1, "./command_list/sort.left.js": __glob_0_115$1, "./command_list/sort.middle.js": __glob_0_116$1, "./command_list/sort.right.js": __glob_0_117$1, "./command_list/sort.top.js": __glob_0_118$1, "./command_list/switch.path.js": __glob_0_119$1, "./command_list/toggle.tool.hand.js": __glob_0_120$1, "./command_list/ungroup.item.js": __glob_0_121$1, "./command_list/updateClipPath.js": __glob_0_122$1, "./command_list/updateImage.js": __glob_0_123$1, "./command_list/updateImageAssetItem.js": __glob_0_124$1, "./command_list/updatePathItem.js": __glob_0_125$1, "./command_list/updateResource.js": __glob_0_126$1, "./command_list/updateScale.js": __glob_0_127$1, "./command_list/updateUriList.js": __glob_0_128$1, "./command_list/updateVideo.js": __glob_0_129$1, "./command_list/updateVideoAssetItem.js": __glob_0_130$1, "./command_list/zoom.default.js": __glob_0_131$1, "./command_list/zoom.in.js": __glob_0_132$1, "./command_list/zoom.out.js": __glob_0_133$1, "./command_list/model/update.js": __glob_0_134$1 };
+const modules$4 = { "./command_list/AddArtBoard.js": __glob_0_0$4, "./command_list/_currentProject.js": __glob_0_1$4, "./command_list/_doForceRefreshSelection.js": __glob_0_2$4, "./command_list/addBackgroundColor.js": __glob_0_3$4, "./command_list/addBackgroundImageAsset.js": __glob_0_4$4, "./command_list/addBackgroundImageGradient.js": __glob_0_5$4, "./command_list/addBackgroundImagePattern.js": __glob_0_6$4, "./command_list/addCubeBox.js": __glob_0_7$4, "./command_list/addCustomComponent.js": __glob_0_8$4, "./command_list/addImage.js": __glob_0_9$4, "./command_list/addImageAssetItem.js": __glob_0_10$4, "./command_list/addLayer.js": __glob_0_11$4, "./command_list/addLayerView.js": __glob_0_12$4, "./command_list/addProject.js": __glob_0_13$4, "./command_list/addSVGFilterAssetItem.js": __glob_0_14$4, "./command_list/addText.js": __glob_0_15$4, "./command_list/addTimelineCurrentProperty.js": __glob_0_16$4, "./command_list/addTimelineItem.js": __glob_0_17$4, "./command_list/addTimelineKeyframe.js": __glob_0_18$4, "./command_list/addTimelineProperty.js": __glob_0_19$4, "./command_list/addVideo.js": __glob_0_20$4, "./command_list/addVideoAssetItem.js": __glob_0_21$3, "./command_list/clipboard.copy.js": __glob_0_22$3, "./command_list/clipboard.paste.js": __glob_0_23$3, "./command_list/convert.flatten.path.js": __glob_0_24$3, "./command_list/convert.no.transform.path.js": __glob_0_25$2, "./command_list/convert.normalize.path.js": __glob_0_26$2, "./command_list/convert.path.operation.js": __glob_0_27$2, "./command_list/convert.polygonal.path.js": __glob_0_28$2, "./command_list/convert.simplify.path.js": __glob_0_29$2, "./command_list/convert.smooth.path.js": __glob_0_30$2, "./command_list/convert.stroke.to.path.js": __glob_0_31$2, "./command_list/convertPasteText.js": __glob_0_32$2, "./command_list/convertPath.js": __glob_0_33$2, "./command_list/copy.path.js": __glob_0_34$2, "./command_list/copyTimelineProperty.js": __glob_0_35$2, "./command_list/deleteTimelineKeyframe.js": __glob_0_36$2, "./command_list/doubleclick.item.js": __glob_0_37$2, "./command_list/downloadJSON.js": __glob_0_38$2, "./command_list/downloadPNG.js": __glob_0_39$2, "./command_list/downloadSVG.js": __glob_0_40$2, "./command_list/drop.asset.js": __glob_0_41$2, "./command_list/dropImageUrl.js": __glob_0_42$2, "./command_list/editor.config.body.event.js": __glob_0_43$2, "./command_list/fileDropItems.js": __glob_0_44$2, "./command_list/firstTimelineItem.js": __glob_0_45$2, "./command_list/group.item.js": __glob_0_46$2, "./command_list/history.addLayer.js": __glob_0_47$2, "./command_list/history.bring.forward.js": __glob_0_48$2, "./command_list/history.bring.front.js": __glob_0_49$2, "./command_list/history.clipboard.paste.js": __glob_0_50$2, "./command_list/history.group.item.js": __glob_0_51$2, "./command_list/history.moveLayer.js": __glob_0_52$1, "./command_list/history.moveLayerToTarget.js": __glob_0_53$1, "./command_list/history.redo.js": __glob_0_54$1, "./command_list/history.refreshSelection.js": __glob_0_55$1, "./command_list/history.refreshSelectionProject.js": __glob_0_56$1, "./command_list/history.removeLayer.js": __glob_0_57$1, "./command_list/history.removeProject.js": __glob_0_58$1, "./command_list/history.send.back.js": __glob_0_59$1, "./command_list/history.send.backward.js": __glob_0_60$1, "./command_list/history.setAttributeForMulti.js": __glob_0_61$1, "./command_list/history.undo.js": __glob_0_62$1, "./command_list/item.move.depth.down.js": __glob_0_63$1, "./command_list/item.move.depth.first.js": __glob_0_64$1, "./command_list/item.move.depth.last.js": __glob_0_65$1, "./command_list/item.move.depth.up.js": __glob_0_66$1, "./command_list/keymap.keydown.js": __glob_0_67$1, "./command_list/keymap.keyup.js": __glob_0_68$1, "./command_list/lastTimelineItem.js": __glob_0_69$1, "./command_list/load.json.js": __glob_0_70$1, "./command_list/moveLayer.js": __glob_0_71$1, "./command_list/moveLayerForItems.js": __glob_0_72$1, "./command_list/moveSelectionToCenter.js": __glob_0_73$1, "./command_list/moveToCenter.js": __glob_0_74$1, "./command_list/newComponent.js": __glob_0_75$1, "./command_list/nextTimelineItem.js": __glob_0_76$1, "./command_list/open.editor.js": __glob_0_77$1, "./command_list/pauseTimelineItem.js": __glob_0_78$1, "./command_list/playTimelineItem.js": __glob_0_79$1, "./command_list/pop.mode.view.js": __glob_0_80$1, "./command_list/prevTimelineItem.js": __glob_0_81$1, "./command_list/push.mode.view.js": __glob_0_82$1, "./command_list/recoverBooleanPath.js": __glob_0_83$1, "./command_list/recoverCursor.js": __glob_0_84$1, "./command_list/refreshArtboard.js": __glob_0_85$1, "./command_list/refreshCursor.js": __glob_0_86$1, "./command_list/refreshElement.js": __glob_0_87$1, "./command_list/refreshHistory.js": __glob_0_88$1, "./command_list/refreshProject.js": __glob_0_89$1, "./command_list/refreshSelectedOffset.js": __glob_0_90$1, "./command_list/removeAnimationItem.js": __glob_0_91$1, "./command_list/removeLayer.js": __glob_0_92$1, "./command_list/removeTimeline.js": __glob_0_93$1, "./command_list/removeTimelineProperty.js": __glob_0_94$1, "./command_list/resetSelection.js": __glob_0_95$1, "./command_list/resizeArtBoard.js": __glob_0_96$1, "./command_list/rotateLayer.js": __glob_0_97$1, "./command_list/same.height.js": __glob_0_98$1, "./command_list/same.width.js": __glob_0_99$1, "./command_list/saveJSON.js": __glob_0_100$1, "./command_list/savePNG.js": __glob_0_101$1, "./command_list/segment.delete.js": __glob_0_102$1, "./command_list/segment.move.down.js": __glob_0_103$1, "./command_list/segment.move.left.js": __glob_0_104$1, "./command_list/segment.move.right.js": __glob_0_105$1, "./command_list/segment.move.up.js": __glob_0_106$1, "./command_list/select.all.js": __glob_0_107$1, "./command_list/selectTimelineItem.js": __glob_0_108$1, "./command_list/setAttributeForMulti.js": __glob_0_109$1, "./command_list/setLocale.js": __glob_0_110$1, "./command_list/setTimelineOffset.js": __glob_0_111$1, "./command_list/showExportView.js": __glob_0_112$1, "./command_list/sort.bottom.js": __glob_0_113$1, "./command_list/sort.center.js": __glob_0_114$1, "./command_list/sort.left.js": __glob_0_115$1, "./command_list/sort.middle.js": __glob_0_116$1, "./command_list/sort.right.js": __glob_0_117$1, "./command_list/sort.top.js": __glob_0_118$1, "./command_list/switch.path.js": __glob_0_119$1, "./command_list/toggle.tool.hand.js": __glob_0_120$1, "./command_list/ungroup.item.js": __glob_0_121$1, "./command_list/updateClipPath.js": __glob_0_122$1, "./command_list/updateImage.js": __glob_0_123$1, "./command_list/updateImageAssetItem.js": __glob_0_124$1, "./command_list/updatePathItem.js": __glob_0_125$1, "./command_list/updateResource.js": __glob_0_126$1, "./command_list/updateScale.js": __glob_0_127$1, "./command_list/updateUriList.js": __glob_0_128$1, "./command_list/updateVideo.js": __glob_0_129$1, "./command_list/updateVideoAssetItem.js": __glob_0_130$1, "./command_list/zoom.default.js": __glob_0_131$1, "./command_list/zoom.in.js": __glob_0_132$1, "./command_list/zoom.out.js": __glob_0_133$1, "./command_list/model/update.js": __glob_0_134$1 };
 const obj$1 = {};
 Object.entries(modules$4).forEach(([key, value]) => {
   key = key.replace("./command_list/", "").replace(".js", "");
@@ -43430,7 +43454,7 @@ class CommandManager {
       callback.source = command;
       this.localCommands[command] = callback;
       return this.$editor.on(command, callback, this, 0);
-    } else if (isObject(command)) {
+    } else if (isObject$1(command)) {
       const callback = (...args2) => {
         const result = command.execute.call(command, this.$editor, ...args2);
         this.$editor.debug("command execute", command, ...args2);
@@ -48264,7 +48288,7 @@ class SelectionManager {
     let itemIdList = [];
     if (Array.isArray(ids)) {
       itemIdList = ids;
-    } else if (isString(ids) || isObject(ids)) {
+    } else if (isString(ids) || isObject$1(ids)) {
       itemIdList = [ids];
     }
     return this.modelManager.searchItemsById(itemIdList);
@@ -50510,7 +50534,7 @@ class AssetManager {
   applyAsset(json, assets) {
     if (Array.isArray(json)) {
       json = json.map((it) => this.applyAsset(it, assets));
-    } else if (isObject(json)) {
+    } else if (isObject$1(json)) {
       Object.keys(json).forEach((key) => {
         json[key] = this.applyAsset(json[key], assets);
       });
@@ -50533,12 +50557,12 @@ function OBJECT_TO_PROPERTY(obj2) {
   const target = obj2 || {};
   return Object.keys(target).map((key) => {
     if (key === "class") {
-      if (isObject(obj2[key])) {
+      if (isObject$1(obj2[key])) {
         return `${key}="${OBJECT_TO_CLASS(obj2[key])}"`;
       }
     }
     if (key === "style") {
-      if (isObject(obj2[key])) {
+      if (isObject$1(obj2[key])) {
         return `${key}="${CSS_TO_STRING(obj2[key])}"`;
       }
     }
@@ -50569,7 +50593,7 @@ function createComponentList(...args2) {
     let children2 = [];
     if (isString(it)) {
       ComponentName = it;
-    } else if (isArray(it)) {
+    } else if (isArray$1(it)) {
       [ComponentName, props = {}, children2 = []] = it;
     }
     if (children2.length) {
@@ -50578,7 +50602,7 @@ function createComponentList(...args2) {
     return createComponent(ComponentName, props);
   }).join("\n");
 }
-function createElement(Component2, props, children2 = []) {
+function createElement$1(Component2, props, children2 = []) {
   children2 = children2.flat(Infinity);
   return `<${Component2} ${OBJECT_TO_PROPERTY(props)}>${children2.join(" ")}</${Component2}>`;
 }
@@ -50594,7 +50618,7 @@ function createElementJsx(Component2, props = {}, ...children2) {
     });
     return createComponent(ComponentName, props, children2);
   } else {
-    return createElement(Component2, props, children2);
+    return createElement$1(Component2, props, children2);
   }
 }
 const FragmentInstance = new Object();
@@ -52579,7 +52603,7 @@ class PathKitManager {
   stroke(path, opt = { width: 1, miter_limit: 4 }) {
     const PathKit = this.pathkit;
     const pathObject = PathKit.FromSVGString(path);
-    if (isArray(opt["stroke-dasharray"])) {
+    if (isArray$1(opt["stroke-dasharray"])) {
       const arr = opt["stroke-dasharray"];
       if (arr.length >= 2) {
         pathObject.dash(arr[0], arr[1], +(opt["stroke-dashoffset"] || 0));
@@ -52903,7 +52927,7 @@ class SceneManager {
     this.emit("sceneGraphChanged");
   }
   addMaterial(material) {
-    if (isArray(material)) {
+    if (isArray$1(material)) {
       for (var i = 0, l = material.length; i < l; i++) {
         this.addMaterialToRefCounter(material[i]);
       }
@@ -52924,7 +52948,7 @@ class SceneManager {
     }
   }
   removeMaterial(material) {
-    if (isArray(material)) {
+    if (isArray$1(material)) {
       for (var i = 0, l = material.length; i < l; i++) {
         this.removeMaterialFromRefCounter(material[i]);
       }
@@ -53023,13 +53047,13 @@ class SceneManager {
   }
   getObjectMaterial(object, slot) {
     var material = object.material;
-    if (isArray(material) && slot !== void 0) {
+    if (isArray$1(material) && slot !== void 0) {
       material = material[slot];
     }
     return material;
   }
   setObjectMaterial(object, slot, newMaterial) {
-    if (isArray(object.material) && slot !== void 0) {
+    if (isArray$1(object.material) && slot !== void 0) {
       object.material[slot] = newMaterial;
     } else {
       object.material = newMaterial;
@@ -53515,7 +53539,7 @@ class BaseLayout extends EditorElement {
     }
     await this.$editor.initPlugins();
     this.$config.load();
-    if (isObject(this.opt.config)) {
+    if (isObject$1(this.opt.config)) {
       this.$config.setAll(this.opt.config || {});
     }
     this._isPluginLoaded = true;
@@ -54296,12 +54320,6 @@ class HTMLRenderView extends EditorElement {
     }
     return this.state.cachedCurrentElement[id];
   }
-  [DOUBLECLICK("$view .element-item.text .text-content")](e) {
-    e.$dt.addClass("focused");
-    e.$dt.attr("contenteditable", "true");
-    e.$dt.focus();
-    e.$dt.select();
-  }
   [FOCUSOUT("$view .element-item.text .text-content")](e) {
     e.$dt.removeAttr("contenteditable");
     e.$dt.removeClass("focused");
@@ -54317,16 +54335,9 @@ class HTMLRenderView extends EditorElement {
         text: text2
       });
       arr.push({ id: item2.id, content: content2, text: text2 });
-      var $el = this.getElement(item2.id);
-      const { width: width2, height: height2 } = $el.offsetRect();
-      item2.reset({
-        width: width2,
-        height: height2
-      });
-      this.emit("refreshSelectionStyleView", item2);
+      this.refreshElementRect(item2);
     });
     this.emit("refreshContent", arr);
-    this.emit("refreshSelectionTool", false);
   }
   checkEditMode(e) {
     if (this.$config.get("set.tool.hand")) {
@@ -54377,9 +54388,18 @@ class HTMLRenderView extends EditorElement {
     const $item = Dom.create(e.target).closest("element-item");
     if ($item) {
       const id = $item.attr("data-id");
-      this.nextTick(() => {
+      const item2 = this.$model.get(id);
+      if (item2.is("text")) {
+        const $content = $item.$(".text-content");
+        this.nextTick(() => {
+          $content.addClass("focused");
+          $content.attr("contenteditable", "true");
+          $content.focus();
+          $content.select();
+        }, 100);
+      } else {
         this.emit("doubleclick.item", e, id);
-      }, 100);
+      }
     }
   }
   [POINTERSTART("$view") + IF("checkEditMode") + MOVE("calculateMovedElement") + FIRSTMOVE("calculateFirstMovedElement") + END("calculateEndedElement")](e) {
@@ -54564,18 +54584,20 @@ class HTMLRenderView extends EditorElement {
       });
     }
   }
+  refreshElementRect(item2) {
+    var $el = this.getElement(item2.id);
+    const offset = $el.offsetRect();
+    item2.reset(offset);
+    this.refreshSelectionStyleView(item2);
+    if (this.$selection.check(item2)) {
+      this.emit("refreshSelectionTool");
+    }
+    this.emit("refreshSelectionStyleView", item2);
+  }
   refreshSelfElement(item2) {
     var $el = this.getElement(item2.id);
     if ($el) {
-      if ($el.$parent.attr("data-id") === item2.parentId) {
-        const offset = $el.offsetRect();
-        item2.reset(offset);
-        this.refreshSelectionStyleView(item2);
-        if (this.$selection.check(item2)) {
-          this.emit("refreshSelectionTool");
-        }
-        this.emit("refreshSelectionStyleView", item2);
-      }
+      this.refreshElementRect(item2);
     }
   }
   refreshElementBoundSize(it) {
@@ -55509,16 +55531,17 @@ class Tabs extends EditorElement {
   initState() {
     return {
       type: this.props.type || "number",
+      direction: this.props.direction || "",
       selectedValue: this.props.selectedValue || ""
     };
   }
   template() {
     return `
-        <div class="tab" ref="$tab"></div>
+        <div class="tab number ${this.state.type === "side" ? `number-tab side-tab` : ""} side-tab-${this.state.direction}" ref="$tab"></div>
       `;
   }
   [LOAD("$tab")]() {
-    const { content: content2, contentChildren } = this.props;
+    const { content: content2, contentChildren = [] } = this.props;
     const children2 = contentChildren.filter((it) => it.component === TabPanel);
     return [
       /* @__PURE__ */ createElementJsx("div", {
@@ -55530,7 +55553,7 @@ class Tabs extends EditorElement {
         title: it.props.title
       }, /* @__PURE__ */ createElementJsx("label", {
         class: "title"
-      }, it.props.title)))),
+      }, it.props.icon || it.props.title)))),
       /* @__PURE__ */ createElementJsx("div", {
         class: "tab-body",
         ref: "$body"
@@ -55807,7 +55830,7 @@ class Projects extends MenuItem {
     this.emit("open.projects");
   }
 }
-var ToolBar$1 = "";
+var ToolBar$2 = "";
 var DropdownMenu$1 = "";
 class DropdownMenu extends EditorElement {
   initialize() {
@@ -56337,7 +56360,188 @@ class ToolbarMenuItem$2 extends EditorElement {
     };
   }
 }
+const everyValue = (target, block) => Object.values(target).every(block);
+const setProp = (target, key, value) => Object.defineProperty(target, key, { value, enumerable: false, writable: false, configurable: false });
+const isObject = (v) => !(v instanceof Array) && typeof v == "object";
+const isArray = (v) => v instanceof Array;
+class Field {
+  constructor() {
+    const self2 = this;
+    self2.get = (_) => this._decorator ? this._decorator(self2.v) : self2.v;
+    self2.set = (newValue) => {
+      if (!self2.typeValidation(newValue))
+        throw "invalid type: " + newValue;
+      if (self2.validator && !self2.validator(newValue))
+        throw "invalid validation: " + newValue;
+      self2.v = newValue;
+    };
+  }
+  typeValidation(v) {
+    throw "must be override!";
+  }
+  validation(validator) {
+    this.validator = validator;
+    return this;
+  }
+  default(v) {
+    this.set(v);
+    return this;
+  }
+  decorator(v) {
+    this._decorator = v;
+    return this;
+  }
+  toJSON() {
+    return this.v;
+  }
+  fromJSON(v) {
+    return v;
+  }
+}
+const handler = {
+  get(target, prop) {
+    if (prop[0] === "#")
+      return target[prop.substr(1)];
+    const field = target[prop];
+    return field instanceof Field ? field.get() : field;
+  },
+  set(target, prop, value) {
+    const field = target[prop];
+    field instanceof Field ? field.set(value) : target[prop] = value;
+    return true;
+  }
+};
+class Entity {
+  static union(base, ...sub) {
+    if (!sub.every((cls) => cls.prototype instanceof base))
+      throw "invalid subclass";
+    const parse2 = (json) => {
+      let target;
+      if (!sub.some((cls) => Object.keys(target = new cls()).every((key) => {
+        const field = target["#" + key];
+        const jsonValue = json[key];
+        if (jsonValue === void 0 && field.get() === void 0)
+          return false;
+        else {
+          target[key] = field.fromJSON(jsonValue);
+          return true;
+        }
+      })))
+        throw "no matched sub class";
+      return target;
+    };
+    setProp(base, "parse", parse2);
+    setProp(base.prototype, "parse", parse2);
+  }
+  constructor() {
+    return new Proxy(this, handler);
+  }
+  parse(json) {
+    Object.keys(this).forEach((key) => {
+      const jsonValue = json[key];
+      const field = this["#" + key];
+      if (jsonValue === void 0 && field.get() === void 0)
+        throw "no key in json:" + key;
+      field.set(field.fromJSON(jsonValue));
+    });
+    return this;
+  }
+  toJSON() {
+    const result = {};
+    Object.keys(this).forEach((key) => result[key] = this["#" + key]);
+    return result;
+  }
+}
+class StringField extends Field {
+  typeValidation(v) {
+    return typeof v == "string";
+  }
+}
+const stringValue = () => new StringField();
+class StringListField extends Field {
+  typeValidation(v) {
+    return isArray(v) && v.every((item2) => typeof item2 == "string");
+  }
+}
+const stringList = (_) => new StringListField();
+class StringMapField extends Field {
+  typeValidation(v) {
+    return isObject(v) && everyValue(v, (item2) => typeof item2 == "string");
+  }
+}
+const stringMap = (_) => new StringMapField();
+class EntityListField extends Field {
+  constructor(cls) {
+    super();
+    this.cls = cls;
+  }
+  typeValidation(v) {
+    return isArray(v) && v.every((item2) => item2 instanceof this.cls);
+  }
+  fromJSON(v) {
+    return v.map((json) => new this.cls().parse(json));
+  }
+}
+const entityList = (cls) => new EntityListField(cls);
+class Enum {
+  constructor(...values) {
+    Object.defineProperty(this, "_values", { value: values, enumerable: false, writable: false, configurable: false });
+    values.forEach((v) => Object.defineProperty(this, v, { value: v, enumerable: false, writable: false, configurable: false }));
+  }
+  isValid(v) {
+    return this._values.indexOf(v) > -1;
+  }
+}
+class EnumField extends Field {
+  constructor(targetEnum) {
+    super();
+    this.enum = targetEnum;
+  }
+  typeValidation(v) {
+    return this.enum.isValid(v);
+  }
+}
+const enumValue = (targetEnum) => new EnumField(targetEnum);
+const MenuItemTypeEnum = new Enum(MenuItemType.DROPDOWN, MenuItemType.BUTTON, MenuItemType.LINK);
+class MenuItemEntity extends Entity {
+  constructor() {
+    super(...arguments);
+    __publicField(this, "type", enumValue(MenuItemTypeEnum));
+    __publicField(this, "icon", stringValue());
+    __publicField(this, "style", stringMap());
+  }
+}
+class DropDownItemEntity extends Entity {
+  constructor() {
+    super(...arguments);
+    __publicField(this, "title", stringValue());
+    __publicField(this, "command", stringValue());
+    __publicField(this, "shortcut", stringValue());
+    __publicField(this, "events", stringList().default([]));
+  }
+}
+class DropdownMenuItemEntity extends MenuItemEntity {
+  constructor() {
+    super(...arguments);
+    __publicField(this, "items", entityList(DropDownItemEntity));
+  }
+}
+class ButtonMenuItemEntity extends MenuItemEntity {
+}
+class LinkMenuItemEntity extends MenuItemEntity {
+}
+Entity.union(MenuItemEntity, DropdownMenuItemEntity, ButtonMenuItemEntity, LinkMenuItemEntity);
+class ToolBarRendererItemEntity extends Entity {
+  constructor() {
+    super(...arguments);
+    __publicField(this, "items", entityList(MenuItemEntity));
+  }
+}
+new ToolBarRendererItemEntity();
 class ToolBarRenderer$1 extends EditorElement {
+  checkProps(props = {}) {
+    return props;
+  }
   components() {
     return {
       DropdownMenu,
@@ -56387,7 +56591,7 @@ class ToolBarRenderer$1 extends EditorElement {
       ref: "$dropdown-" + index2,
       items: item2.items,
       icon: item2.icon,
-      events: item2.events,
+      events: item2.events || [],
       selected: item2.selected,
       selectedKey: item2.selectedKey,
       action: item2.action,
@@ -56398,7 +56602,7 @@ class ToolBarRenderer$1 extends EditorElement {
     ]);
   }
 }
-class ToolBar extends EditorElement {
+class ToolBar$1 extends EditorElement {
   initState() {
     return {
       items: [
@@ -56473,7 +56677,7 @@ class ToolBar extends EditorElement {
       items: this.state.items,
       dy: 6
     }, [
-      createElement("label", { class: "logo" })
+      createElement$1("label", { class: "logo" })
     ])}
             </div>                                
         `;
@@ -57398,6 +57602,118 @@ function animation(editor) {
     AnimationPropertyPopup
   });
 }
+var ComponentEditor$1 = "";
+class ComponentEditor extends EditorElement {
+  initState() {
+    return {
+      inspector: this.props.inspector
+    };
+  }
+  template() {
+    return `
+      <div ref='$body' class="component-editor"></div>
+    `;
+  }
+  getPropertyEditor(index2, childEditor) {
+    if (childEditor.type === "folder") {
+      return `
+        <div class='component-folder'>
+          <label>${iconUse$1("chevron_right")} ${childEditor.label}</label>
+          <ul>
+            ${childEditor.children.map((it, itemIndex) => {
+        return `<li>${this.getPropertyEditor(`${index2}${itemIndex}`, it)}</li>`;
+      }).join("")}
+          </ul>
+        </div>
+      `;
+    } else if (childEditor.type === "column") {
+      const size2 = (childEditor.size || [2]).join("-");
+      return `
+        <div class='column column-${size2}' style="--column-gap: ${childEditor.gap}px; --row-gap: ${childEditor.rowGap || 0}px" >
+          ${childEditor.columns.map((it, itemIndex) => {
+        if (it === "-") {
+          return `<div class="column-item"></div>`;
+        } else if (it.type === "label") {
+          return `<div class="column-item">
+                    <label>${it.label}</label>
+                  </div>`;
+        }
+        return `
+                  <div class='column-item'>
+                    ${this.getPropertyEditor(`${index2}${itemIndex}`, it)}
+                  </div>
+                `;
+      }).join("")}  
+        </div>
+      `;
+    }
+    return createComponent(childEditor.editor, __spreadProps(__spreadValues({}, childEditor.editorOptions), {
+      onchange: (key, value) => {
+        const newValue = isFunction(childEditor.convert) ? childEditor.convert(key, value) : value;
+        this.trigger("changeComponentValue", key, newValue);
+      },
+      ref: `${childEditor.key}${index2}`,
+      key: childEditor.key,
+      value: childEditor.defaultValue
+    }));
+  }
+  [LOAD("$body")]() {
+    const inspector = this.state.inspector;
+    var self2 = inspector.map((it, index2) => {
+      if (isString(it) || it.type === "label") {
+        const title2 = it.label || it;
+        return `
+          <div class='component-item'> 
+            <label>${title2}</label>
+          </div>`;
+      } else if (it.type === "folder") {
+        return `
+          <div class='component-item'>
+            ${this.getPropertyEditor(index2, it)}
+          </div>
+        `;
+      } else {
+        return `
+            <div class='component-item'> 
+              ${this.getPropertyEditor(index2, it)}
+            </div>
+          `;
+      }
+    });
+    return self2;
+  }
+  setInspector(inspector) {
+    this.setState({
+      inspector
+    });
+  }
+  setValue(obj2 = {}) {
+    Object.keys(obj2).forEach((key) => {
+      const value = obj2[key];
+      this.eachChildren((child) => {
+        if (child.setValue && child.props.key === key) {
+          child.setValue(value);
+        }
+      });
+    });
+  }
+  getValue() {
+    const result = {};
+    this.eachChildren((child) => {
+      if (isFunction(child.getValue) && child.props.key) {
+        result[child.props.key] = child.getValue();
+      }
+    });
+    return result;
+  }
+  [SUBSCRIBE_SELF("changeComponentValue")](key, value) {
+    this.parent.trigger(this.props.onchange, key, value);
+  }
+  [CLICK("$el .component-folder > label")](e) {
+    const $target = e.$dt.closest("component-folder");
+    $target.toggleClass("close");
+  }
+}
 class ObjectProperty {
   static create(json) {
     return class extends BaseProperty {
@@ -57413,13 +57729,18 @@ class ObjectProperty {
       get order() {
         return isUndefined(json.order) ? 1e3 : json.order;
       }
+      afterComponentRendering($dom, refName, instance, props) {
+        if (refName == "$comp") {
+          const current = this.$selection.current || {};
+          const inspector = isFunction(json.inspector) ? json.inspector(current) : this.$editor.components.createInspector(current, json.editableProperty);
+          instance.setInspector(inspector);
+        }
+      }
       refresh() {
-        const current = this.$selection.current;
-        if (current) {
+        const current = this.$selection.current || {};
+        if (current || json.visible) {
           this.setTitle(json.title || current.getDefaultTitle() || current.itemType || current.name);
           this.load();
-          const inspector = isFunction(json.inspector) ? json.inspector(current) : this.$editor.components.createInspector(current, json.editableProperty);
-          this.children.$comp.setInspector(inspector);
         }
       }
       [SUBSCRIBE("refreshSelection") + IF("checkShow")]() {
@@ -57433,9 +57754,9 @@ class ObjectProperty {
       }
       [LOAD("$body")]() {
         var current = this.$selection.current;
-        if (!current)
+        if (!current && !json.visible)
           return "";
-        const inspector = isFunction(json.inspector) ? json.inspector(current) : this.$editor.components.createInspector(current, json.editableProperty);
+        const inspector = isFunction(json.inspector) ? json.inspector(current || {}) : this.$editor.components.createInspector(current || {}, json.editableProperty);
         return createComponent("ComponentEditor", {
           ref: "$comp",
           inspector,
@@ -57443,13 +57764,7 @@ class ObjectProperty {
         });
       }
       getBody() {
-        var current = this.$selection.current || {};
-        const inspector = isFunction(json.inspector) ? json.inspector(current) : this.$editor.components.createInspector(current, json.editableProperty);
-        return createComponent("ComponentEditor", {
-          ref: "$comp",
-          inspector,
-          onchange: "changeComponentProperty"
-        });
+        return `<div ref='$body'></div>`;
       }
       [SUBSCRIBE_SELF("changeComponentProperty")](key, value) {
         if (json.action) {
@@ -58299,7 +58614,7 @@ class BaseUI extends EditorElement {
       this.props.onClick(key, value, params);
     } else if (isString(this.props.action)) {
       this.emit(this.props.action, key, value, params);
-    } else if (isArray(this.props.action)) {
+    } else if (isArray$1(this.props.action)) {
       this.emit(...this.props.action, key, value, params);
     } else {
       this.parent.trigger(this.props.onchange, key, value, params);
@@ -60804,7 +61119,7 @@ var store_key = {
   defaultValue: "easylogic.studio",
   title: "Store Key",
   description: "Set localStorage key",
-  type: "number"
+  type: "string"
 };
 var __glob_0_23 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
@@ -61976,17 +62291,30 @@ class DomModel extends GroupModel {
     });
     return results;
   }
+  convert(json) {
+    json = super.convert(json);
+    if (json.padding) {
+      json["padding-top"] = Length.parse(json.padding);
+      json["padding-right"] = Length.parse(json.padding);
+      json["padding-bottom"] = Length.parse(json.padding);
+      json["padding-left"] = Length.parse(json.padding);
+      delete json.padding;
+    }
+    return json;
+  }
   reset(obj2, context = { origin: "*" }) {
     const isChanged = super.reset(obj2, context);
     if (this.hasChangedField("clip-path")) {
       this.setClipPathCache();
-    } else if (this.hasChangedField("width", "height")) {
+    }
+    if (this.hasChangedField("width", "height")) {
       if (this.cacheClipPath) {
         const d = this.cacheClipPath.clone().scale(this.json.width / this.cacheClipPathWidth, this.json.height / this.cacheClipPathHeight).d;
         this.json["clip-path"] = `path(${d})`;
         this.modelManager.setChanged("reset", this.id, { "clip-path": this.json["clip-path"] });
       }
-    } else if (this.hasChangedField("background-image", "pattern")) {
+    }
+    if (this.hasChangedField("background-image", "pattern")) {
       this.setBackgroundImageCache();
     }
     return isChanged;
@@ -66359,7 +66687,40 @@ function font(editor) {
       },
       {
         type: "column",
-        size: [2, 1, 1],
+        size: [1, 1],
+        gap: 10,
+        columns: [
+          {
+            key: "font-size",
+            editor: "NumberInputEditor",
+            editorOptions: {
+              label: "format_size",
+              compact: true,
+              min: 8,
+              max: 1e3,
+              step: 1
+            },
+            defaultValue: Length.parse(current["font-size"]).value,
+            convert: (key, value) => Length.px(value)
+          },
+          {
+            key: "padding",
+            editor: "NumberInputEditor",
+            editorOptions: {
+              label: "padding",
+              compact: true,
+              min: 8,
+              max: 1e3,
+              step: 1
+            },
+            defaultValue: Length.parse(current["padding-top"]).value,
+            convert: (key, value) => Length.px(value)
+          }
+        ]
+      },
+      {
+        type: "column",
+        size: [1, 1],
         columns: [
           {
             key: "color",
@@ -66368,19 +66729,6 @@ function font(editor) {
               compact: true
             },
             defaultValue: current["color"] || "#000"
-          },
-          {
-            key: "font-size",
-            editor: "NumberInputEditor",
-            editorOptions: {
-              label: "format_size",
-              compact: true,
-              min: 8,
-              max: 100,
-              step: 1
-            },
-            defaultValue: Length.parse(current["font-size"]).value,
-            convert: (key, value) => Length.px(value)
           },
           {
             key: "font-weight",
@@ -69530,9 +69878,9 @@ class ResizingItemProperty extends BaseProperty {
   }
   [SUBSCRIBE("refreshSelection") + DEBOUNCE(100)]() {
     this.refreshShow(() => {
-      var _a;
+      var _a, _b;
       var current = this.$selection.current;
-      return (_a = current == null ? void 0 : current.parent) == null ? void 0 : _a.hasLayout();
+      return ((_a = current == null ? void 0 : current.parent) == null ? void 0 : _a.hasLayout()) && ((_b = current == null ? void 0 : current.parent) == null ? void 0 : _b.isLayout(Layout.GRID)) === false;
     });
   }
   [SUBSCRIBE("refreshSelectionStyleView")]() {
@@ -70374,7 +70722,7 @@ class GridGrowToolView extends GridGrowDragEventView {
     this.refresh();
   }
 }
-function layout$4(editor) {
+function layout$5(editor) {
   editor.registerElement({
     FlexLayoutEditor,
     GridLayoutEditor,
@@ -72264,9 +72612,9 @@ class ColorAssetsEditor extends EditorElement {
     return `<div ref="$tools"></div>`;
   }
   [LOAD("$tools")]() {
-    const options2 = variable$4(this.state.colors.map((it) => {
+    const options2 = this.state.colors.map((it) => {
       return { value: it.key, text: it.title };
-    }));
+    });
     return createComponent("SelectEditor", {
       key: "preset",
       value: this.state.preset,
@@ -75031,7 +75379,7 @@ const dash_list = [
 ];
 class StrokeDashArrayEditor extends EditorElement {
   initState() {
-    var value = isArray(this.props.value) ? this.props.value : this.generateValue(this.props.value || "");
+    var value = isArray$1(this.props.value) ? this.props.value : this.generateValue(this.props.value || "");
     return {
       label: this.props.label || "",
       value,
@@ -77137,118 +77485,6 @@ class TextShadowEditor extends EditorElement {
       [key]: value
     });
     this.modifyTextShadow();
-  }
-}
-var ComponentEditor$1 = "";
-class ComponentEditor extends EditorElement {
-  initState() {
-    return {
-      inspector: this.props.inspector
-    };
-  }
-  template() {
-    return `
-      <div ref='$body' class="component-editor"></div>
-    `;
-  }
-  getPropertyEditor(index2, childEditor) {
-    if (childEditor.type === "folder") {
-      return `
-        <div class='component-folder'>
-          <label>${iconUse$1("chevron_right")} ${childEditor.label}</label>
-          <ul>
-            ${childEditor.children.map((it, itemIndex) => {
-        return `<li>${this.getPropertyEditor(`${index2}${itemIndex}`, it)}</li>`;
-      }).join("")}
-          </ul>
-        </div>
-      `;
-    } else if (childEditor.type === "column") {
-      const size2 = (childEditor.size || [2]).join("-");
-      return `
-        <div class='column column-${size2}' style="--column-gap: ${childEditor.gap}px; --row-gap: ${childEditor.rowGap || 0}px" >
-          ${childEditor.columns.map((it, itemIndex) => {
-        if (it === "-") {
-          return `<div class="column-item"></div>`;
-        } else if (it.type === "label") {
-          return `<div class="column-item">
-                    <label>${it.label}</label>
-                  </div>`;
-        }
-        return `
-                  <div class='column-item'>
-                    ${this.getPropertyEditor(`${index2}${itemIndex}`, it)}
-                  </div>
-                `;
-      }).join("")}  
-        </div>
-      `;
-    }
-    return createComponent(childEditor.editor, __spreadProps(__spreadValues({}, childEditor.editorOptions), {
-      onchange: (key, value) => {
-        const newValue = isFunction(childEditor.convert) ? childEditor.convert(key, value) : value;
-        this.trigger("changeComponentValue", key, newValue);
-      },
-      ref: `${childEditor.key}${index2}`,
-      key: childEditor.key,
-      value: childEditor.defaultValue
-    }));
-  }
-  [LOAD("$body")]() {
-    const inspector = this.state.inspector;
-    var self2 = inspector.map((it, index2) => {
-      if (isString(it) || it.type === "label") {
-        const title2 = it.label || it;
-        return `
-          <div class='component-item'> 
-            <label>${title2}</label>
-          </div>`;
-      } else if (it.type === "folder") {
-        return `
-          <div class='component-item'>
-            ${this.getPropertyEditor(index2, it)}
-          </div>
-        `;
-      } else {
-        return `
-            <div class='component-item'> 
-              ${this.getPropertyEditor(index2, it)}
-            </div>
-          `;
-      }
-    });
-    return self2;
-  }
-  setInspector(inspector) {
-    this.setState({
-      inspector
-    });
-  }
-  setValue(obj2 = {}) {
-    Object.keys(obj2).forEach((key) => {
-      const value = obj2[key];
-      this.eachChildren((child) => {
-        if (child.setValue && child.props.key === key) {
-          child.setValue(value);
-        }
-      });
-    });
-  }
-  getValue() {
-    const result = {};
-    this.eachChildren((child) => {
-      if (isFunction(child.getValue) && child.props.key) {
-        result[child.props.key] = child.getValue();
-      }
-    });
-    return result;
-  }
-  [SUBSCRIBE_SELF("changeComponentValue")](key, value) {
-    this.parent.trigger(this.props.onchange, key, value);
-  }
-  [CLICK("$el .component-folder > label")](e) {
-    const $target = e.$dt.closest("component-folder");
-    $target.toggleClass("close");
   }
 }
 function propertyEditor(editor) {
@@ -80132,12 +80368,8 @@ class TextRender$2 extends LayerRender$1 {
   toCSS(item2) {
     let css = super.toCSS(item2);
     css.margin = css.margin || "0px";
-    if (item2.parent.is("project")) {
-      css.height = Length.px(item2.screenHeight);
-    } else {
-      if (item2.overflow !== Overflow.SCROLL) {
-        css.height = "auto";
-      }
+    if (item2.overflow !== Overflow.SCROLL) {
+      css.height = "auto";
     }
     return css;
   }
@@ -81115,6 +81347,7 @@ class TextRender extends SVGLayerRender {
   toCSS(item2) {
     let css = super.toCSS(item2);
     css.margin = css.margin || "0px";
+    css.height = "auto";
     return css;
   }
   render(item2) {
@@ -86716,7 +86949,7 @@ class LayerAppendView extends EditorElement {
         break;
       case "text":
         if (hasArea) {
-          rect2["font-size"] = this.state.fontSize / this.$viewport.scale;
+          rect2["font-size"] = Length.px(this.state.fontSize).floor();
         } else {
           const scaledFontSize = this.state.fontSize / this.$viewport.scale;
           const $drawItem = this.refs.$area.$(".draw-item > p");
@@ -91763,7 +91996,7 @@ var designEditorPlugins = [
   gradient,
   alignment,
   position,
-  layout$4,
+  layout$5,
   boxModel,
   pathTool,
   artboard,
@@ -92165,7 +92398,7 @@ class SwitchRightPanel extends EditorElement {
     this.$config.toggle("show.right.panel");
   }
 }
-var layout$3 = "";
+var layout$4 = "";
 class DesignEditor extends BaseLayout {
   initialize() {
     super.initialize();
@@ -92180,7 +92413,7 @@ class DesignEditor extends BaseLayout {
     return {
       LayerTab,
       ItemLayerTab,
-      ToolBar,
+      ToolBar: ToolBar$1,
       StatusBar,
       Inspector,
       SingleInspector,
@@ -92206,7 +92439,7 @@ class DesignEditor extends BaseLayout {
   template() {
     const isItemMode = this.$config.is("editor.design.mode", "item");
     return `
-      <div class="easylogic-studio designeditor">
+      <div class="elf-studio designeditor">
         <div class="layout-main">
           <div class='layout-top' ref='$top'>
             ${createComponent("ToolBar")}
@@ -92366,7 +92599,7 @@ class DesignEditor extends BaseLayout {
     }
   }
 }
-var layout$2 = "";
+var layout$3 = "";
 var ViewportHelper$1 = "";
 class ViewportHelper extends EditorElement {
   template() {
@@ -94422,7 +94655,7 @@ class ThreeToolBar extends EditorElement {
       items: this.state.items,
       dy: 6
     }, [
-      createElement("label", { class: "logo" })
+      createElement$1("label", { class: "logo" })
     ])}
             </div>                                
         `;
@@ -94465,7 +94698,7 @@ class ThreeEditor extends BaseLayout {
   }
   template() {
     return `
-      <div class="easylogic-studio three-editor">
+      <div class="elf-studio three-editor">
         <div class="layout-main">
           <div class='layout-top' ref='$top'>
             ${createComponent("ThreeToolBar")}
@@ -94625,6 +94858,521 @@ class ThreeEditor extends BaseLayout {
     }
   }
 }
+var layout$2 = "";
+class BlankCanvasView extends EditorElement {
+  initState() {
+    return {
+      cursor: "auto",
+      cursorArgs: []
+    };
+  }
+  afterRender() {
+    this.nextTick(() => {
+      this.trigger("resizeCanvas");
+      this.emit("moveSelectionToCenter", true);
+      this.refreshCursor();
+    }, 100);
+  }
+  template() {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "elf--page-container",
+      tabIndex: "-1",
+      ref: "$container"
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "page-view",
+      ref: "$pageView"
+    }, /* @__PURE__ */ createElementJsx("div", {
+      class: "page-lock scrollbar",
+      ref: "$lock"
+    }, this.$injectManager.generate("canvas.view"))));
+  }
+  [BIND("$pageView")]() {
+    return {
+      style: {
+        "--elf--canvas-background-color": this.$config.get("style.canvas.background.color")
+      }
+    };
+  }
+  checkSpace(e) {
+    if (this.$config.get("set.tool.hand")) {
+      return true;
+    }
+    return this.$keyboardManager.check(this.$shortcuts.getGeneratedKeyCode(KEY_CODE.space));
+  }
+  [POINTERSTART("$lock") + IF("checkSpace") + MOVE("movePan") + END("moveEndPan")](e) {
+    this.startMovePan();
+  }
+  [CONFIG("set.tool.hand")](value) {
+    if (value) {
+      this.startMovePan();
+      this.emit("refreshCursor", "grab");
+    } else {
+      this.emit("recoverCursor", "auto");
+    }
+  }
+  startMovePan() {
+    this.lastDist = create$4();
+  }
+  movePan(dx, dy) {
+    this.emit("refreshCursor", "grabbing");
+    const currentDist = fromValues(dx, dy, 0);
+    this.$viewport.pan(...transformMat4([], subtract([], this.lastDist, currentDist), this.$viewport.scaleMatrixInverse));
+    this.lastDist = currentDist;
+  }
+  refreshCursor() {
+    if (this.$config.get("set.tool.hand") === false) {
+      this.emit("refreshCursor", "auto");
+    } else {
+      this.emit("refreshCursor", "grab");
+    }
+  }
+  moveEndPan() {
+    this.refreshCursor();
+  }
+  async [BIND("$container")]() {
+    const cursor = await this.$editor.cursorManager.load(this.state.cursor, ...this.state.cursorArgs || []);
+    return {
+      style: {
+        cursor
+      }
+    };
+  }
+  [DRAGOVER("$lock") + PREVENT]() {
+  }
+  [DROP("$lock") + PREVENT](e) {
+    const newCenter = this.$viewport.getWorldPosition(e);
+    if (e.dataTransfer.getData("text/asset")) {
+      this.emit("drop.asset", {
+        asset: { id: e.dataTransfer.getData("text/asset"), center: newCenter }
+      });
+    } else {
+      Resource.getAllDropItems(e);
+      const id = Dom.create(e.target).attr("data-id");
+      if (id) {
+        this.emit("drop.asset", {
+          gradient: e.dataTransfer.getData("text/gradient"),
+          pattern: e.dataTransfer.getData("text/pattern"),
+          color: e.dataTransfer.getData("text/color"),
+          imageUrl: e.dataTransfer.getData("image/info")
+        }, id);
+      } else {
+        const imageUrl = e.dataTransfer.getData("image/info");
+        this.emit("dropImageUrl", imageUrl);
+      }
+    }
+  }
+  [WHEEL("$lock") + PREVENT](e) {
+    const [dx, dy] = normalizeWheelEvent(e);
+    if (!this.state.gesture) {
+      if (e.ctrlKey) {
+        this.$viewport.setMousePoint(e.clientX, e.clientY);
+      }
+      this.emit("startGesture");
+      this.state.gesture = true;
+    } else {
+      if (e.ctrlKey) {
+        const zoomFactor = 1 - 2.5 * dy / 100;
+        this.$viewport.zoom(zoomFactor);
+      } else {
+        const newDx = -2.5 * dx;
+        const newDy = -2.5 * dy;
+        this.$viewport.pan(-newDx / this.$viewport.scale, -newDy / this.$viewport.scale, 0);
+      }
+    }
+    clearTimeout(this.state.timer);
+    this.state.timer = setTimeout(() => {
+      this.state.gesture = void 0;
+      this.emit("endGesture");
+    }, 200);
+  }
+  refreshCanvasSize() {
+    this.$viewport.refreshCanvasSize(this.refs.$lock.rect());
+  }
+  [SUBSCRIBE("resize.window", "resizeCanvas")]() {
+    this.refreshCanvasSize();
+  }
+  [SUBSCRIBE("changeIconView")](cursor, ...args2) {
+    if (`${this.state.cursor} ${this.state.cursorArgs}` === `${cursor} ${args2}`) {
+      return;
+    }
+    this.state.cursor = cursor;
+    this.state.cursorArgs = args2;
+    this.bindData("$container");
+  }
+  [SUBSCRIBE("updateViewport")]() {
+    this.emit("refreshCursor", "auto");
+  }
+}
+var BlankBodyPanel$1 = "";
+class BlankBodyPanel extends EditorElement {
+  components() {
+    return {
+      BlankCanvasView,
+      PageSubEditor
+    };
+  }
+  template() {
+    return `
+      <div class="elf--body-panel">
+        <div class="submenu-area">
+          ${createComponent("PageSubEditor")}
+        </div>
+        <div class='editing-area'>
+          <div class="canvas-layout">
+            ${createComponent("BlankCanvasView")}
+          </div>
+
+        </div>
+      </div>
+    `;
+  }
+  [SUBSCRIBE("bodypanel.toggle.fullscreen")]() {
+    this.refs.$el.toggleFullscreen();
+  }
+}
+class ToolBar extends EditorElement {
+  initState() {
+    return {
+      items: [
+        { title: "menu.item.fullscreen.title", command: "toggle.fullscreen", shortcut: "ALT+/" },
+        { title: "menu.item.shortcuts.title", command: "showShortcutWindow" },
+        "-",
+        { title: "menu.item.export.title", command: "showExportView" },
+        { title: "menu.item.export.title", command: "showEmbedEditorWindow" },
+        { title: "menu.item.download.title", command: "downloadJSON" },
+        {
+          title: "menu.item.save.title",
+          command: "saveJSON",
+          nextTick: () => {
+            this.emit("notify", "alert", "Save", "Save the content on localStorage", 2e3);
+          }
+        },
+        {
+          title: "menu.item.language.title",
+          items: [
+            { title: "English", command: "setLocale", args: [Language.EN], checked: () => this.$editor.locale === Language.EN },
+            { title: "Fran\xE7ais", command: "setLocale", args: [Language.FR], checked: () => this.$editor.locale === Language.FR },
+            { title: "Korean", command: "setLocale", args: [Language.KO], checked: () => this.$editor.locale === Language.KO }
+          ]
+        },
+        "-",
+        {
+          title: "EasyLogic Studio",
+          items: [
+            { type: "link", title: "Github", href: "https://github.com/easylogic/editor" },
+            { type: "link", title: "Learn", href: "https://www.easylogic.studio" }
+          ]
+        }
+      ]
+    };
+  }
+  components() {
+    return {
+      ToolBarRenderer: ToolBarRenderer$1,
+      ThemeChanger,
+      ExportView,
+      Download,
+      Undo,
+      Redo,
+      DropdownMenu,
+      Projects
+    };
+  }
+  template() {
+    return `
+            <div class='elf--tool-bar'>
+                <div class='left'>
+                    ${createComponent("ToolBarRenderer", {
+      items: [
+        {
+          type: "dropdown",
+          style: {
+            "margin-left": "12px"
+          },
+          icon: `<div class="logo-item"><label class='logo'></label></div>`,
+          items: [
+            { title: "menu.item.fullscreen.title", command: "toggle.fullscreen", shortcut: "ALT+/" }
+          ]
+        }
+      ]
+    })}
+                    ${this.$injectManager.generate("toolbar.left")}                                        
+                </div>
+                <div class='center'>
+                    ${createComponent("ToolBarRenderer", {
+      items: []
+    })}
+                    ${this.$injectManager.generate("toolbar.center")}                                        
+                </div>
+                <div class='right'>
+                    ${createComponent("ToolBarRenderer", {
+      items: []
+    })}                
+                    ${this.$injectManager.generate("toolbar.right")}                    
+                    ${createComponent("ThemeChanger")}
+                </div>
+            </div>
+        `;
+  }
+  [LOAD("$logo")]() {
+    return `
+            <div class="logo-item">           
+                ${createComponent("DropdownMenu", {
+      ref: "$menu",
+      items: this.state.items,
+      dy: 6
+    }, [
+      createElement$1("label", { class: "logo" })
+    ])}
+            </div>                                
+        `;
+  }
+  [CONFIG("language.locale")]() {
+    this.refresh();
+  }
+}
+var blankEditorPlugins = [
+  defaultConfigs,
+  defaultIcons,
+  defaultMessages,
+  baseEditor,
+  propertyEditor
+];
+class BlankInspector extends EditorElement {
+  afterRender() {
+    this.$el.toggle(this.$config.is("editor.design.mode", DesignMode.DESIGN));
+  }
+  [BIND("$el")]() {
+    return {
+      style: {
+        display: this.$config.is("editor.design.mode", DesignMode.DESIGN) ? "block" : "none"
+      }
+    };
+  }
+  template() {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "feature-control inspector"
+    }, /* @__PURE__ */ createElementJsx("div", null, /* @__PURE__ */ createElementJsx(Tabs, {
+      ref: "$tab",
+      selectedValue: this.$config.get("inspector.selectedValue"),
+      onchange: (value) => {
+        this.$config.set("inspector.selectedValue", value);
+      }
+    }, this.$injectManager.getTargetUI("inspector.tab").map((it) => {
+      const { value, title: title2, icon, loadElements = [] } = it.class;
+      return /* @__PURE__ */ createElementJsx(TabPanel, {
+        value,
+        title: title2,
+        icon
+      }, /* @__PURE__ */ createElementJsx("div", {
+        style: "display: flex: flex-direction: column;"
+      }, loadElements == null ? void 0 : loadElements.map((element) => createElement$1(element)), this.$injectManager.generate("inspector.tab." + value), /* @__PURE__ */ createElementJsx("div", {
+        class: "empty",
+        style: "order: 1000000;"
+      })));
+    }))));
+  }
+}
+class BlankLayerTab extends EditorElement {
+  template() {
+    return /* @__PURE__ */ createElementJsx("div", {
+      class: "layer-tab"
+    }, /* @__PURE__ */ createElementJsx(Tabs, {
+      ref: "$tab",
+      type: "side",
+      direction: "left",
+      selectedValue: this.$config.get("layertab.selectedValue"),
+      onchange: (value) => {
+        this.$config.set("layertab.selectedValue", value);
+      }
+    }, this.$injectManager.getTargetUI("layertab.tab").map((it) => {
+      const { value, title: title2, icon, loadElements = [] } = it.class;
+      return /* @__PURE__ */ createElementJsx(TabPanel, {
+        value,
+        title: title2,
+        icon
+      }, /* @__PURE__ */ createElementJsx("div", {
+        style: "display: flex: flex-direction: column;"
+      }, loadElements == null ? void 0 : loadElements.map((element) => createElement(element)), this.$injectManager.generate("layertab.tab." + value), /* @__PURE__ */ createElementJsx("div", {
+        class: "empty",
+        style: "order: 1000000;"
+      })));
+    })));
+  }
+}
+class BlankEditor extends BaseLayout {
+  afterRender() {
+    super.afterRender();
+    this.$config.init("editor.layout.elements", this.refs);
+  }
+  components() {
+    return {
+      BlankLayerTab,
+      BlankToolBar: ToolBar,
+      BlankInspector,
+      BlankBodyPanel,
+      PopupManager,
+      KeyboardManager,
+      IconManager
+    };
+  }
+  getPlugins() {
+    return blankEditorPlugins;
+  }
+  initState() {
+    return {
+      leftSize: 340,
+      rightSize: 280,
+      bottomSize: 0,
+      lastBottomSize: 150
+    };
+  }
+  template() {
+    return `
+      <div class="elf-studio blank-editor">
+        <div class="layout-main">
+          <div class='layout-top' ref='$top'>
+            ${createComponent("BlankToolBar")}
+          </div>
+          <div class="layout-middle" ref='$middle'>      
+            <div class="layout-body" ref='$bodyPanel'>
+              ${createComponent("BlankBodyPanel")}
+            </div>                           
+            <div class='layout-left' ref='$leftPanel'>
+              ${createComponent("BlankLayerTab")}
+            </div>
+            <div class="layout-right" ref='$rightPanel'>
+              ${createComponent("BlankInspector")}
+            </div>
+            <div class='splitter' ref='$splitter'></div>            
+          </div>
+          ${createComponent("KeyboardManager")}
+        </div>
+        ${createComponent("PopupManager")}
+        ${createComponent("IconManager")}
+      </div>
+    `;
+  }
+  [BIND("$el")]() {
+    return {
+      "data-design-mode": this.$config.get("editor.design.mode")
+    };
+  }
+  [BIND("$splitter")]() {
+    let left2 = this.state.leftSize;
+    if (this.$config.false("show.left.panel")) {
+      left2 = 0;
+    }
+    return {
+      style: {
+        left: left2
+      }
+    };
+  }
+  [BIND("$leftArrow")]() {
+    let left2 = this.state.leftSize;
+    if (this.$config.false("show.left.panel")) {
+      left2 = 0;
+    }
+    return {
+      style: {
+        left: left2
+      }
+    };
+  }
+  [BIND("$leftPanel")]() {
+    let left2 = `0px`;
+    let width2 = this.state.leftSize;
+    let bottom2 = this.state.bottomSize;
+    if (this.$config.false("show.left.panel")) {
+      left2 = `-${this.state.leftSize}px`;
+    }
+    return {
+      style: { left: left2, width: width2, bottom: bottom2 }
+    };
+  }
+  [BIND("$rightPanel")]() {
+    let right2 = 0;
+    let bottom2 = this.state.bottomSize;
+    if (this.$config.false("show.right.panel")) {
+      right2 = -this.state.rightSize;
+    }
+    return {
+      style: {
+        right: right2,
+        bottom: bottom2
+      }
+    };
+  }
+  [BIND("$bodyPanel")]() {
+    let left2 = this.state.leftSize;
+    let right2 = this.state.rightSize;
+    let bottom2 = this.state.bottomSize;
+    if (this.$config.false("show.left.panel")) {
+      left2 = 0;
+    }
+    if (this.$config.false("show.right.panel")) {
+      right2 = 0;
+    }
+    return {
+      style: {
+        left: left2,
+        right: right2,
+        bottom: bottom2
+      }
+    };
+  }
+  [POINTERSTART("$splitter") + MOVE("moveSplitter") + END("moveEndSplitter")]() {
+    this.minSize = this.$theme("left_size");
+    this.maxSize = this.$theme("left_max_size");
+    this.leftSize = Length.parse(this.refs.$splitter.css("left")).value;
+    this.refs.$splitter.addClass("selected");
+  }
+  moveSplitter(dx) {
+    this.setState({
+      leftSize: Math.max(Math.min(this.leftSize + dx, this.maxSize), this.minSize)
+    });
+  }
+  moveEndSplitter() {
+    this.refs.$splitter.removeClass("selected");
+  }
+  refresh() {
+    this.bindData("$el");
+    this.bindData("$splitter");
+    this.bindData("$headerPanel");
+    this.bindData("$leftPanel");
+    this.bindData("$rightPanel");
+    this.bindData("$bodyPanel");
+    this.emit("resizeEditor");
+  }
+  [CONFIG("show.left.panel")]() {
+    this.refresh();
+    this.nextTick(() => {
+      this.emit("resizeCanvas");
+    });
+  }
+  [CONFIG("show.right.panel")]() {
+    this.refresh();
+    this.nextTick(() => {
+      this.emit("resizeCanvas");
+    });
+  }
+  [CONFIG("editor.design.mode")]() {
+    this.bindData("$el");
+  }
+  [DRAGOVER("$middle") + PREVENT](e) {
+  }
+  [DROP("$middle") + PREVENT](e) {
+  }
+  [SUBSCRIBE("toggle.fullscreen")]() {
+    this.$el.toggleFullscreen();
+  }
+  [SUBSCRIBE("getLayoutElement")](callback) {
+    if (isFunction(callback)) {
+      callback(this.refs);
+    }
+  }
+}
 var layout$1 = "";
 class WhiteBoard extends BaseLayout {
   initialize() {
@@ -94645,7 +95393,7 @@ class WhiteBoard extends BaseLayout {
   }
   template() {
     return `
-      <div class="easylogic-studio whiteboard">
+      <div class="elf-studio whiteboard">
         <div class="layout-main">
           <div class="layout-middle" ref='$middle'>      
             <div class="layout-body" ref='$bodyPanel'>
@@ -94721,7 +95469,7 @@ class DataEditor extends BaseLayout {
   }
   template() {
     return `
-      <div class="easylogic-studio dataeditor" ref="$bodyPanel">
+      <div class="elf-studio dataeditor" ref="$bodyPanel">
         <div class="layout-main" ref="$main">
             <div class='control-view' ref="$body"></div>
             <div class='close' ref="$close">Close Controls</div>        
@@ -94773,10 +95521,13 @@ function createDesignEditor(opts) {
 function createThreeEditor(opts) {
   return start$1(ThreeEditor, opts);
 }
+function createBlankEditor(opts) {
+  return start$1(BlankEditor, opts);
+}
 function createDataEditor(opts) {
   return start$1(DataEditor, opts);
 }
 function createWhiteBoard(opts) {
   return start$1(WhiteBoard, opts);
 }
-export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHECKER, CLICK, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, EDIT_MODE_ADD, EDIT_MODE_SELECTION, END, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FlexDirection, FlexWrap, FuncType, GradientType, IF, INPUT, IntersectEpsilonType, JustifyContent, KEY, KEYDOWN, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LEFT_BUTTON, LOAD, Language, Layout, Length, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, NAME_SAPARATOR, NotifyType, ON, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, PREVENT, PathParser, PathSegmentType, Position, RAF, RESIZE, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SHIFT, SPACE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, Segment, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, VisibilityType, WHEEL, createDataEditor, createDesignEditor, createThreeEditor, createWhiteBoard, getRef, makeEventChecker, normalizeWheelEvent };
+export { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP, AFTER, ALL_TRIGGER, ALT, ANIMATIONEND, ANIMATIONITERATION, ANIMATIONSTART, ARROW_DOWN, ARROW_LEFT, ARROW_RIGHT, ARROW_UP, AlignContent, AlignItems, BACKSPACE, BEFORE, BIND, BIND_CHECK_DEFAULT_FUNCTION, BIND_CHECK_FUNCTION, BLUR, BRACKET_LEFT, BRACKET_RIGHT, BaseProperty, BlendMode, BooleanOperation, BorderStyle, BoxShadowStyle, CALLBACK, CAPTURE, CHANGE, CHANGEINPUT, CHECKER, CLICK, COMMAND, CONFIG, CONTEXTMENU, CONTROL, CUSTOM, CanvasViewToolLevel, ClipPathType, ClipboardActionType, ClipboardType, Component, Constraints, ConstraintsDirection, D1000, DEBOUNCE, DELAY, DELETE, DOMDIFF, DOUBLECLICK, DOUBLETAB, DRAG, DRAGEND, DRAGENTER, DRAGEXIT, DRAGLEAVE, DRAGOUT, DRAGOVER, DRAGSTART, DROP, DesignMode, DirectionNumberType, DirectionType, EDIT_MODE_ADD, EDIT_MODE_SELECTION, END, ENTER, EQUAL, ESCAPE, EVENT, EditingMode, Editor, EditorElement, FIRSTMOVE, FIT, FOCUS, FOCUSIN, FOCUSOUT, FRAME, FlexDirection, FlexWrap, FuncType, GradientType, IF, INPUT, IntersectEpsilonType, JustifyContent, KEY, KEYDOWN, KEYPRESS, KEYUP, KEY_CODE, KeyStringMaker, LEFT_BUTTON, LOAD, Language, Layout, Length, META, MINUS, MOUSE$1 as MOUSE, MOUSEDOWN, MOUSEENTER, MOUSELEAVE, MOUSEMOVE, MOUSEOUT, MOUSEOVER, MOUSEUP, MOVE, MenuItemType, NAME_SAPARATOR, NotifyType, ON, ObjectProperty, Overflow, PARAMS, PASSIVE, PASTE, PEN, PIPE, POINTEREND, POINTERENTER, POINTERMOVE, POINTEROUT, POINTEROVER, POINTERSTART, PREVENT, PathParser, PathSegmentType, Position, RAF, RESIZE, RIGHT_BUTTON, RadialGradientSizeType, RadialGradientType, ResizingMode, SAPARATOR, SCROLL, SELF, SELF_TRIGGER, SHIFT, SPACE, STOP, SUBMIT, SUBSCRIBE, SUBSCRIBE_ALL, SUBSCRIBE_SELF, Segment, SpreadMethodType, StrokeLineCap, StrokeLineJoin, THROTTLE, TOUCH$1 as TOUCH, TOUCHEND, TOUCHMOVE, TOUCHSTART, TRANSITIONCANCEL, TRANSITIONEND, TRANSITIONRUN, TRANSITIONSTART, TargetActionType, TextAlign, TextClip, TextDecoration, TextTransform, TimingFunction, TransformValue, VisibilityType, WHEEL, createBlankEditor, createDataEditor, createDesignEditor, createThreeEditor, createWhiteBoard, getRef, makeEventChecker, normalizeWheelEvent };

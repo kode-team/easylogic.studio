@@ -15,25 +15,26 @@ export class Tabs extends EditorElement {
     initState() {
       return {
         type: this.props.type || 'number',
+        direction: this.props.direction || '',
         selectedValue: this.props.selectedValue || '',
       }
     }
   
     template() {
       return /*html*/`
-        <div class="tab" ref="$tab"></div>
+        <div class="tab number ${this.state.type === 'side' ? `number-tab side-tab` : ''} side-tab-${this.state.direction}" ref="$tab"></div>
       `
     }
   
     [LOAD('$tab')]() {
-      const { content, contentChildren } = this.props;
+      const { content, contentChildren = [] } = this.props;
       const children = contentChildren.filter(it => it.component === TabPanel);
 
       return [
         <div class="tab-header" ref="$header">
           {children.map(it => (
             <div class="tab-item" data-value={it.props.value} title={it.props.title}>
-                <label class="title">{it.props.title}</label>
+                <label class="title">{it.props.icon || it.props.title}</label>
             </div>         
           ))}
         </div>,

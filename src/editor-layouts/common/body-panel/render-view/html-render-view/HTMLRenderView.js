@@ -163,15 +163,6 @@ export default class HTMLRenderView extends EditorElement {
         return this.state.cachedCurrentElement[id];
     }
 
-    // text 의 경우 doubleclick 을 해야 포커스를 줄 수 있고 
-    // 그 이후에 편집이 가능하다. 
-    [DOUBLECLICK('$view .element-item.text .text-content')](e) {
-        e.$dt.addClass('focused');
-        e.$dt.attr('contenteditable', 'true');
-        e.$dt.focus();
-        e.$dt.select();
-    }
-
     [FOCUSOUT('$view .element-item.text .text-content')](e) {
         e.$dt.removeAttr('contenteditable');
         e.$dt.removeClass('focused');
@@ -192,22 +183,10 @@ export default class HTMLRenderView extends EditorElement {
             })
             arr.push({ id: item.id, content, text })
 
-            var $el = this.getElement(item.id);
-
-            const { width, height } = $el.offsetRect();
-            item.reset({
-                width,
-                height
-            })
-
-            this.emit('refreshSelectionStyleView', item);
+            this.refreshElementRect(item);
         })
 
-
-
         this.emit('refreshContent', arr);
-
-        this.emit('refreshSelectionTool', false);
     }
 
     /**
@@ -297,9 +276,23 @@ export default class HTMLRenderView extends EditorElement {
         if ($item) {
             const id = $item.attr('data-id');
 
-            this.nextTick(() => {
+            const item = this.$model.get(id);
+
+            if (item.is('text')) {
+
+                const $content = $item.$('.text-content');
+
+                this.nextTick(() => {
+
+                    $content.addClass('focused');
+                    $content.attr('contenteditable', 'true');
+                    $content.focus();
+                    $content.select();
+                }, 100)
+
+            } else {
                 this.emit('doubleclick.item', e, id);
-            }, 100)
+            }
     
         }
     }
@@ -619,29 +612,26 @@ export default class HTMLRenderView extends EditorElement {
 
     }
 
+    refreshElementRect(item) {
+        var $el = this.getElement(item.id);   
+        const offset = $el.offsetRect();                
+
+        item.reset(offset)
+
+        this.refreshSelectionStyleView(item);
+
+        if (this.$selection.check(item)) {                         
+            this.emit('refreshSelectionTool');
+        }                    
+
+        this.emit('refreshSelectionStyleView', item);
+    }
+
     refreshSelfElement(item) {
         var $el = this.getElement(item.id);                
 
         if ($el) {
-
-            // 실제 element 가 존재하는지 체크 하고 업데이트 
-            if ($el.$parent.attr('data-id') === item.parentId) { 
-
-                const offset = $el.offsetRect();                
-
-                item.reset(offset)
-    
-                this.refreshSelectionStyleView(item);
-    
-                if (this.$selection.check(item)) {                         
-                    this.emit('refreshSelectionTool');
-                }                    
-
-                this.emit('refreshSelectionStyleView', item);
-
-            }
-
-
+            this.refreshElementRect(item);
         }
 
     }

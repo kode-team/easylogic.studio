@@ -7,7 +7,7 @@ export default {
 
         var datauri = 'data:application/json;base64,' + window.btoa(unescape(encodeURIComponent(json)));
 
-        downloadFile(datauri, filename || 'easylogic.json')
+        downloadFile(datauri, filename || 'elf.json')
     }
 
 }

@@ -52,10 +52,44 @@ export default function (editor) {
                 },
                 defaultValue: current['font-family'] || '',
             },
+            {
+                type: 'column',
+                size: [1, 1],
+                gap: 10,
+                columns: [
+                    {
+                        key: 'font-size',
+                        editor: 'NumberInputEditor',
+                        editorOptions: {
+                            label: 'format_size',
+                            compact: true,
+                            min: 8,
+                            max: 1000,
+                            step: 1,
+                        },
+                        defaultValue: Length.parse(current['font-size']).value,
+                        convert: (key, value) => Length.px(value)
+                    },            
+                    {
+                        key: 'padding',
+                        editor: 'NumberInputEditor',
+                        editorOptions: {
+                            label: 'padding',
+                            compact: true,
+                            min: 8,
+                            max: 1000,
+                            step: 1,
+                        },
+                        defaultValue: Length.parse(current['padding-top']).value,
+                        convert: (key, value) => Length.px(value)
+                    },   
+                ]
+            },
+                     
 
             {
                 type: 'column',
-                size: [2, 1, 1],
+                size: [1, 1],
                 columns: [
                     {
                         key: 'color',
@@ -65,20 +99,6 @@ export default function (editor) {
                         },
                         defaultValue: current['color'] || '#000',
                     },    
-                    
-                    {
-                        key: 'font-size',
-                        editor: 'NumberInputEditor',
-                        editorOptions: {
-                            label: 'format_size',
-                            compact: true,
-                            min: 8,
-                            max: 100,
-                            step: 1,
-                        },
-                        defaultValue: Length.parse(current['font-size']).value,
-                        convert: (key, value) => Length.px(value)
-                    },
                     {
                         key: 'font-weight',
                         editor: 'NumberInputEditor',

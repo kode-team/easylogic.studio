@@ -3,5 +3,5 @@ export default {
     defaultValue: "easylogic.studio",
     title: "Store Key",
     description: "Set localStorage key",
-    type: "number"
+    type: "string"
 }

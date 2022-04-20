@@ -69,7 +69,7 @@ export default class DataEditor extends BaseLayout {
 
   template() {
     return /*html*/`
-      <div class="easylogic-studio dataeditor" ref="$bodyPanel">
+      <div class="elf-studio dataeditor" ref="$bodyPanel">
         <div class="layout-main" ref="$main">
             <div class='control-view' ref="$body"></div>
             <div class='close' ref="$close">Close Controls</div>        

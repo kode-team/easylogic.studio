@@ -125,8 +125,12 @@ $tab-horizontal-header-right-width: 60px;
 
             .title {
               padding-bottom: 5px;
-              color: var(--elf--font-color);
-              display: none; 
+              color: var(--elf--selected-font-color);
+              // display: none; 
+              white-space: wrap;
+              word-break: break-all;
+              overflow: hidden;
+              text-overflow: ellipsis;
             }
 
           }

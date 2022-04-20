@@ -5,6 +5,24 @@ import { isFunction } from "el/sapa/functions/func";
 
 import './ToolbarMenuItem.scss';
 
+/**
+ * @class ToolbarMenuItem
+ * 
+ * props {
+ *  title: string;  // 제목 
+ *  icon: string;   // 아이콘 
+ *  command: string;    // 커맨드 이름 
+ *  args: any[];        // 커맨드 매개변수  
+ *  shortcut: string;   // 단축키 
+ *  nextTick: boolean;  // nextTick
+ *  disabled: boolean;  // disabled 상태 추가 
+ *  selected?: function;
+ *  selectedKey: string;
+ *  action: function;
+ *  events: string[];
+ * }
+ * 
+ */
 export class ToolbarMenuItem extends EditorElement {
 
     initialize () {

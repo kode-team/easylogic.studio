@@ -3,6 +3,9 @@ import {BaseProperty} from "el/editor/ui/property/BaseProperty";
 import { variable } from 'el/sapa/functions/registElement';
 import { isFunction, isUndefined } from "el/sapa/functions/func";
 import { createComponent } from "el/sapa/functions/jsx";
+import ComponentEditor from "plugins/property-editor/ComponentEditor";
+
+
 
 export class ObjectProperty {
 
@@ -13,6 +16,8 @@ export class ObjectProperty {
    * @param {string} [json.editableProperty] editable property name
    * @param {string|Function} [json.action] action name or function
    * @param {Function} [json.inspector] inspector create function
+   * @param {boolean} [json.visible=false] visible
+   * @param {preventUpdate} [json.preventUpdate=false] prevent update
    * @returns {BaseProperty}
    */
   static create (json) {
@@ -34,21 +39,25 @@ export class ObjectProperty {
         return  isUndefined(json.order) ? 1000 : json.order;
       }
 
+      afterComponentRendering($dom, refName, instance, props) {
+
+        if (refName == '$comp') {
+          const current = this.$selection.current || {};                    
+          const inspector = isFunction(json.inspector) ?  json.inspector(current) :  this.$editor.components.createInspector(current, json.editableProperty);              
+          instance.setInspector(inspector);  
+        }
+      }
+
       refresh() {
+        const current = this.$selection.current || {};
 
-        const current = this.$selection.current;
-
-        if (current) {
+        if (current || json.visible) {
           this.setTitle(json.title || current.getDefaultTitle() || current.itemType || current.name);
           this.load();
-
-          const inspector = isFunction(json.inspector) ?  json.inspector(current) :  this.$editor.components.createInspector(current, json.editableProperty);          
-          this.children.$comp.setInspector(inspector);
         }
       }
     
       [SUBSCRIBE('refreshSelection') + IF('checkShow')]() {
-
         if (json.preventUpdate) {
 
           if (this.$stateManager.isPointerUp) {
@@ -63,10 +72,10 @@ export class ObjectProperty {
     
       [LOAD('$body')] () {
         var current = this.$selection.current;
-    
-        if (!current) return "";
 
-        const inspector = isFunction(json.inspector) ?  json.inspector(current) :  this.$editor.components.createInspector(current, json.editableProperty);
+        if (!current && !json.visible) return "";
+
+        const inspector = isFunction(json.inspector) ?  json.inspector(current || {}) :  this.$editor.components.createInspector(current || {}, json.editableProperty);
 
         return createComponent("ComponentEditor", {
           ref: "$comp",
@@ -76,15 +85,7 @@ export class ObjectProperty {
       }
     
       getBody() {
-        var current = this.$selection.current || {};
-
-        const inspector = isFunction(json.inspector) ?  json.inspector(current) :  this.$editor.components.createInspector(current, json.editableProperty);
-
-        return createComponent("ComponentEditor", {
-          ref: "$comp",
-          inspector, 
-          onchange: "changeComponentProperty"
-        })
+        return /*html*/`<div ref='$body'></div>`
       }
     
       [SUBSCRIBE_SELF('changeComponentProperty')] (key, value) {

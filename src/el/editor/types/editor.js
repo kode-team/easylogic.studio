@@ -49,3 +49,14 @@ export const ClipboardActionType = {
     COPY: 'copy',
     CUT: 'cut',
 }
+
+export const MenuItemType = {
+    BUTTON: 'button',
+    LINK: 'link',
+    SEPARATOR: 'separator',
+    CHECKBOX: 'checkbox',
+    RADIO: 'radio',
+    SUBMENU: 'submenu',
+    DROPDOWN: 'dropdown',
+    
+}
