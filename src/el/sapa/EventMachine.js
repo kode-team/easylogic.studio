@@ -54,13 +54,23 @@ export default class EventMachine {
   }
 
   /**
+   * 매개변수를 체크한다. 
+   * 
+   * @param {object} props 
+   * @returns 
+   */
+  checkProps (props = {}) {
+    return props;
+  }
+
+  /**
    * UIElement instance 에 필요한 기본 속성 설정 
    */
   initializeProperty (opt, props = {}) {
 
     this.opt = opt || {};
     this.parent = this.opt;
-    this.props = props;
+    this.props = this.checkProps(props);
     this.source = uuid();
     this.sourceName = this.constructor.name;  
   }
@@ -139,7 +149,7 @@ export default class EventMachine {
       this.render($container);
     }
 
-    this.props = props;
+    this.props = this.checkProps(props);
     this.state = {}; 
     this.setState(this.initState(), false);
     this.refresh(true);
@@ -262,8 +272,12 @@ export default class EventMachine {
     this.afterLoadRendering(targetRef, refName);
   }
 
-  afterLoadRendering(refName) {
+  afterLoadRendering(targetRef, refName) {
     // noop
+  }
+
+  afterComponentRendering() {
+
   }
 
   /**
@@ -413,7 +427,6 @@ export default class EventMachine {
     // 동일한 refName 의 EventMachine 이 존재하면  해당 컴포넌트는 다시 그려진다. 
     // 루트 element 는 변경되지 않는다. 
     if (this.children[refName]) {
-
       // FIXME: svelte 컴포넌트를 어떻게 재로드 할지 고민해야함 
       instance = this.children[refName] 
       instance.__timestamp = this._localTimestamp;
@@ -434,6 +447,7 @@ export default class EventMachine {
 
     }
     
+    this.afterComponentRendering($dom, refName, instance, props);
 
     if (instance.renderTarget) {
       instance.$el?.appendTo(instance.renderTarget);
@@ -487,6 +501,7 @@ export default class EventMachine {
       }
     } else {
       return {
+        refClass,
         notUsed: true, 
         $dom,
       }
@@ -527,6 +542,7 @@ export default class EventMachine {
     componentList.forEach(comp => {
       if (comp.notUsed) {
         comp.$dom.remove();
+        console.warn(`${comp.refClass} is not used.`);
       } else {
         this.renderComponent(comp);
       }  
@@ -562,7 +578,7 @@ export default class EventMachine {
     this.load()
   }
 
-  _afterLoad () {
+  async _afterLoad () {
 
     // timestamp 기록 
     this._timestamp;
@@ -639,12 +655,12 @@ export default class EventMachine {
         } else {
           refTarget.html(fragment);
         }
-        this.refreshElementReference(refTarget, elName);                  
+        this.refreshElementReference(refTarget, elName);       
 
       }
     });
 
-    this._afterLoad();
+    await this._afterLoad();
 
   }
 

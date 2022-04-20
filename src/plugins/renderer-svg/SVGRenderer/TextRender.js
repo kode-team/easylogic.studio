@@ -13,6 +13,7 @@ export default class TextRender extends SVGLayerRender {
         let css = super.toCSS(item)
 
         css.margin = css.margin || '0px'
+        css.height = 'auto';
 
         return css
     }

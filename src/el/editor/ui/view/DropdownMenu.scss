@@ -6,6 +6,11 @@
   --elf--dropdown-menu-width: 240px;
   --elf--dropdown-menu-dy: 0px;
 
+  .dropdown-menu-item-list {
+    border: 2px solid var(--elf--selected-color);
+    filter:drop-shadow(0 0 2px white);
+  }
+
   > .icon {
     width: 34px;
     display: flex;
@@ -47,7 +52,7 @@
   &:hover,
   &.opened {
     &:not([data-selected="true"]) {
-      background-color: black;
+      // background-color: black;
 
       .dropdown-arrow {
         svg {
@@ -184,7 +189,7 @@
     height: 6px;
     left: 50%;
     transform: translateX(-50%) scale(1.5);
-    top: calc(100% - 9px + var(--elf--dropdown-menu-dy));
+    top: calc(100% - 7px + var(--elf--dropdown-menu-dy));
     box-sizing: border-box;
     // background-color: var(--elf--background-color);
 

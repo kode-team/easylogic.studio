@@ -16,7 +16,7 @@ export default {
 
             const assetData = await editor.storageManager.getCustomAsset(obj.asset.id);
             if (assetData) {
-                editor.emit('addArtBoard', assetData, obj.asset.center)
+                editor.emit('AddArtBoard', assetData, obj.asset.center)
             }
         }
 

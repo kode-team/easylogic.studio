@@ -4,9 +4,16 @@ import { variable } from "el/sapa/functions/registElement";
 import { DropdownMenu } from 'el/editor/ui/view/DropdownMenu';
 import { ToolbarMenuItem } from './ToolbarMenuItem';
 import { createComponent } from "el/sapa/functions/jsx";
-
+import { ToolbarItemEntity } from "el/editor/entity/editor";
 
 export default class ToolBarRenderer extends EditorElement {
+
+    checkProps(props = {}) {
+        // console.log(props);
+        // ToolbarItemEntity.parse(props);
+
+        return props;
+    }
 
     components() {
         return {
@@ -62,7 +69,7 @@ export default class ToolBarRenderer extends EditorElement {
             ref: "$dropdown-" + index,
             items: item.items,
             icon: item.icon,
-            events: item.events,
+            events: item.events || [],
             selected: item.selected,
             selectedKey: item.selectedKey,
             action: item.action,

@@ -23,9 +23,9 @@ export default class ColorAssetsEditor extends EditorElement {
   }
 
   [LOAD('$tools')] () {
-    const options = variable(this.state.colors.map(it => {
+    const options = this.state.colors.map(it => {
       return { value: it.key, text: it.title } 
-    }));
+    });
 
     return createComponent("SelectEditor", {
       key: "preset",

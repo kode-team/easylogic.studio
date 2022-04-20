@@ -69,7 +69,7 @@ export default class ThreeEditor extends BaseLayout {
 
   template() {
     return /*html*/`
-      <div class="easylogic-studio three-editor">
+      <div class="elf-studio three-editor">
         <div class="layout-main">
           <div class='layout-top' ref='$top'>
             ${createComponent('ThreeToolBar')}

@@ -17,7 +17,7 @@
     }
   },
   "dependencies": {
-    "@entityjs/entityjs": "0.0.5",
+    "@entityjs/entityjs": "0.0.6",
     "array-organizer": "^1.5.7",
     "fit-curve": "^0.2.0",
     "gl-matrix": "^3.3.0",

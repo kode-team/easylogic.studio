@@ -10,6 +10,7 @@ import "./LayerAppendView.scss";
 import { CSS_TO_STRING } from "el/utils/func";
 import {PathParser} from 'el/editor/parser/PathParser';
 import { EditingMode } from 'el/editor/types/editor';
+import { Length } from 'el/editor/unit/Length';
 
 export default class LayerAppendView extends EditorElement {
 
@@ -389,7 +390,7 @@ export default class LayerAppendView extends EditorElement {
                 if (hasArea) {
                     // NOOP
                     // newComponent 를 그대로 실행한다. 
-                    rect['font-size'] = this.state.fontSize / this.$viewport.scale;
+                    rect['font-size'] = Length.px(this.state.fontSize).floor();
                 } else {
                     const scaledFontSize = this.state.fontSize / this.$viewport.scale;
                     const $drawItem = this.refs.$area.$(".draw-item > p");

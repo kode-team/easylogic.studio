@@ -53,7 +53,7 @@ export default class WhiteBoard extends BaseLayout {
 
   template() {
     return /*html*/`
-      <div class="easylogic-studio whiteboard">
+      <div class="elf-studio whiteboard">
         <div class="layout-main">
           <div class="layout-middle" ref='$middle'>      
             <div class="layout-body" ref='$bodyPanel'>

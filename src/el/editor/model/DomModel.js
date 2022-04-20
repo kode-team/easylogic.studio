@@ -251,13 +251,33 @@ export class DomModel extends GroupModel {
     return results;
   }
 
+  convert(json) {
+    json = super.convert(json);
+
+    // padding 을 동시에 설정하기 
+    if (json.padding) {
+
+      json['padding-top'] = Length.parse(json.padding);
+      json['padding-right'] = Length.parse(json.padding);
+      json['padding-bottom'] = Length.parse(json.padding);
+      json['padding-left'] = Length.parse(json.padding);
+
+      delete json.padding;
+    }
+
+    return json;
+  }
+
   reset(obj, context = { origin: "*" }) {
+
     const isChanged = super.reset(obj, context);
 
     // transform 에 변경이 생기면 미리 캐슁해둔다. 
     if (this.hasChangedField('clip-path')) {
       this.setClipPathCache()
-    } else if (this.hasChangedField('width', 'height')) {
+    } 
+    
+    if (this.hasChangedField('width', 'height')) {
 
       if (this.cacheClipPath) {
         const d = this.cacheClipPath.clone().scale(this.json.width / this.cacheClipPathWidth, this.json.height / this.cacheClipPathHeight).d;
@@ -266,7 +286,9 @@ export class DomModel extends GroupModel {
         this.modelManager.setChanged('reset', this.id, { 'clip-path': this.json['clip-path'] });
       }
 
-    } else if (this.hasChangedField('background-image', 'pattern')) {
+    }  
+    
+    if (this.hasChangedField('background-image', 'pattern')) {
       this.setBackgroundImageCache()
     }
 

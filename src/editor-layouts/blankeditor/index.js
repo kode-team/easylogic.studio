@@ -3,60 +3,42 @@ import { DRAGOVER, DROP, PREVENT, POINTERSTART, BIND, SUBSCRIBE, CONFIG } from "
 import { Length } from "el/editor/unit/Length";
 
 import BaseLayout from "../common/BaseLayout"; 
-import BodyPanel from "../common/BodyPanel";
 import PopupManager from "../common/PopupManager";
 import KeyboardManager from "../common/KeyboardManager";
 
-import Inspector from "../common/area/Inspector";
-import StatusBar from '../common/area/StatusBar';
-import ToolBar from "../common/area/tool-bar/ToolBar";
-
-import designEditorPlugins from "plugins/design-editor-plugins";
-import LayerTab from "../common/area/LayerTab";
 import { END, MOVE } from "el/editor/types/event";
 import { isFunction } from 'el/sapa/functions/func';
 import IconManager from '../common/IconManager';
-import ItemLayerTab from "../common/area/ItemLayerTab";
-import SingleInspector from '../common/area/SingleInspector';
-import SwitchLeftPanel from '../common/area/status-bar/SwitchLeftPanel';
-import SwitchRightPanel from '../common/area/status-bar/SwitchRightPanel';
 import { createComponent } from "el/sapa/functions/jsx";
 
 import './layout.scss';
+import BlankBodyPanel from '../common/BlankBodyPanel';
+import BlankToolBar from "editor-layouts/common/area/tool-bar/BlankToolBar";
+import blankEditorPlugins from "plugins/blank-editor-plugins";
+import BlankInspector from '../common/area/BlankInspector';
+import BlankLayerTab from '../common/area/BlankLayerTab';
 
-export default class DesignEditor extends BaseLayout {
-
-  initialize() {
-    super.initialize();
-
-    this.$pathkit.load();
-  }
-
+export default class BlankEditor extends BaseLayout {
 
   afterRender() {
     super.afterRender();
 
     this.$config.init('editor.layout.elements', this.refs);    
 
-    // load default data 
-    this.emit('load.json', this.opt.data);
+    // 데이타 로드 
+    // this.loadDataFromJSON();
   }
 
 
   components() {
     return {
-      LayerTab,
-      ItemLayerTab,
-      ToolBar,
-      StatusBar,
-      Inspector,
-      SingleInspector,
-      BodyPanel,
+      BlankLayerTab,
+      BlankToolBar,
+      BlankInspector,
+      BlankBodyPanel,
       PopupManager,
       KeyboardManager,
       IconManager,
-      SwitchLeftPanel,
-      SwitchRightPanel,
     }
   }
 
@@ -66,7 +48,7 @@ export default class DesignEditor extends BaseLayout {
    * @returns {function[]}
    */
   getPlugins() {
-    return designEditorPlugins
+    return blankEditorPlugins
   }
 
   initState() {
@@ -79,22 +61,21 @@ export default class DesignEditor extends BaseLayout {
   }
 
   template() {
-    const isItemMode = this.$config.is('editor.design.mode', 'item')
     return /*html*/`
-      <div class="elf-studio designeditor">
+      <div class="elf-studio blank-editor">
         <div class="layout-main">
           <div class='layout-top' ref='$top'>
-            ${createComponent('ToolBar')}
+            ${createComponent('BlankToolBar')}
           </div>
           <div class="layout-middle" ref='$middle'>      
             <div class="layout-body" ref='$bodyPanel'>
-              ${createComponent('BodyPanel', {ref: "$bodyPanelView"})}
+              ${createComponent('BlankBodyPanel') }
             </div>                           
             <div class='layout-left' ref='$leftPanel'>
-              ${isItemMode ? createComponent('ItemLayerTab') : createComponent('LayerTab') }
+              ${createComponent('BlankLayerTab') }
             </div>
             <div class="layout-right" ref='$rightPanel'>
-              ${isItemMode ? createComponent("SingleInspector") : createComponent("Inspector") }
+              ${createComponent("BlankInspector") }
             </div>
             <div class='splitter' ref='$splitter'></div>            
           </div>
@@ -166,20 +147,6 @@ export default class DesignEditor extends BaseLayout {
     }
   }    
 
-  [BIND('$rightArrow')] () {
-    let right = 6    
-    let bottom = this.state.bottomSize;    
-    if (this.$config.true('show.right.panel')) {
-      right = this.state.rightSize + 6
-    }
-
-    return {
-      style: { 
-        right: right, 
-        bottom 
-      }
-    }
-  }    
 
   [BIND('$bodyPanel')] () {
    
@@ -232,10 +199,7 @@ export default class DesignEditor extends BaseLayout {
     this.bindData('$headerPanel');    
     this.bindData('$leftPanel');
     this.bindData('$rightPanel');
-    this.bindData('$toggleRightButton');
-    this.bindData('$toggleLeftButton');            
     this.bindData('$bodyPanel');  
-    this.bindData('$footerPanel');        
     
     this.emit('resizeEditor');    
 
