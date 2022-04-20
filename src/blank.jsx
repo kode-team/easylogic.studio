@@ -1,6 +1,8 @@
 import { createBlankEditor } from "./editor-layouts/index";
 import { ObjectProperty } from "el/editor/ui/property/ObjectProperty";
 import { iconUse } from "el/editor/icon/icon";
+import { EditorElement } from 'el/editor/ui/common/EditorElement';
+import { SUBSCRIBE, BIND } from 'el/sapa/Event';
 
 function startEditor() {
   const idList = ["app"];
@@ -55,6 +57,33 @@ function startEditor() {
               }
             })
           });
+
+          editor.registerUI("canvas.view", {
+            Sample: class extends EditorElement {
+              template() {
+                return "<div>fdsajfkdlsajfkdlsadfjksl</div>"
+              }
+
+              [BIND('$el')]() {
+                const { translate, transformOrigin: origin, scale } = this.$viewport;
+
+                const transform = `translate(${translate[0]}px, ${translate[1]}px) scale(${scale || 1})`;
+                const transformOrigin = `${origin[0]}px ${origin[1]}px`
+        
+                return {
+                    style: {
+                        'transform-origin': transformOrigin,
+                        transform
+                    }
+                }
+              }
+
+              [SUBSCRIBE('updateViewport')] () {
+                this.bindData('$el')
+              }
+            }
+          })
+
         }
       ]
     });
