@@ -20,10 +20,11 @@ import './ToolbarMenuItem.scss';
  *  selectedKey: string;
  *  action: function;
  *  events: string[];
+ *  style: object;
  * }
  * 
  */
-export class ToolbarMenuItem extends EditorElement {
+export class ToolbarButtonMenuItem extends EditorElement {
 
     initialize () {
         super.initialize();
@@ -40,28 +41,33 @@ export class ToolbarMenuItem extends EditorElement {
     template() {
         return /*html*/`
         <button type="button"  class='elf--toolbar-menu-item' >
-            <span class="icon" ref="$icon"></span>
         </button>
         `
     }
 
     [CLICK('$el')] (e) {
         if (this.props.command) {
-            this.emit(this.props.command, ...this.props.args);
-        } else if (this.props.action) {
-            this.props.action(this.$editor);
+            this.emit(this.props.command, ...(this.props.args || []));
+        } else if (isFunction(this.props.action)) {
+            this.props.action(this.$editor, this);
+        } else if (isFunction(this.props.onClick)) {
+            this.props.action(this.$editor, this);            
         }
 
     }
 
-    [LOAD('$icon') + DOMDIFF] () {
-        return iconUse(this.props.icon);
+    [LOAD('$el') + DOMDIFF] () {
+        return `<span class="icon">${iconUse(this.props.icon)}</span><span>${this.props.title}</span>`;
     }
 
     [BIND('$el')]() {
 
         const selected = isFunction(this.props.selected) ? this.props.selected(this.$editor) : false
+
         return {
+            style: {
+                ...this.props.style
+            },
             'data-selected': selected,
         }
     }

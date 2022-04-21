@@ -7,10 +7,174 @@ import { initializeGroupVariables, variable } from 'el/sapa/functions/registElem
 import { iconUse } from 'el/editor/icon/icon';
 import Dom from 'el/sapa/functions/Dom';
 import { Length } from 'el/editor/unit/Length';
+import { createComponent } from 'el/sapa/functions/jsx';
+import { isArray } from 'el/sapa/functions/func';
+import { isString } from 'el/sapa/functions/func';
+
+
+
+function makeMenuItem(it) {
+
+  if (it === '-') {
+    return createComponent('Divider', {
+      key: 'yellow'
+    });
+  }
+
+  if (it === '-' || it.type === 'divider') {
+    return createComponent('DropdownDividerMenuItem');
+  }
+
+  if (isString(it)) {
+    return createComponent('DropdownTextMenuItem', {
+      text: it
+    });
+  }
+
+  if (it.type === 'link') {
+    return createComponent('DropdownLinkMenuItem', {
+      href: it.href,
+      target: it.target,
+      title: it.title
+    });
+  }
+
+  if (isArray(it.items)) {
+    return createComponent('DropdownMenuList', {
+      title: it.title,
+      items: it.items,
+    })
+  }
+
+
+  return createComponent('DropdownMenuItem', {
+    checked: it.checked,
+    command: it.command,
+    args: it.args || [],
+    disabled: it.disabled,
+    icon: it.icon,
+    nextTick: it.nextTick,
+    onClick: it.onClick,
+    action: it.action,
+    shortcut: it.shortcut,
+    title: it.title,
+    args: it.args,
+    key: it.key,
+    events: it.events,
+    items: it.items || [],
+  });
+}
+
+function Divider (props) {
+  return /*html*/`<li class="dropdown-divider" data-key="${props.key}"></li>`;
+}
+
+class DropdownDividerMenuItem extends EditorElement {
+  template() {
+    return /*html*/`<li class="dropdown-divider"></li>`
+  }
+}
+
+class DropdownTextMenuItem extends EditorElement {
+  template() {
+    return /*html*/`<li class='text'><label>${this.$i18n(this.props.text)}</label></li>`
+  }
+}
+
+class DropdownLinkMenuItem extends EditorElement {
+  template() {
+    return /*html*/`<li><a href="${this.props.href}" target="${this.props.target || "_blank"}">${this.$i18n(this.props.title)}</a></li>`
+  }
+}
+
+class DropdownMenuList extends EditorElement {
+
+  components() {
+    return {
+      Divider,
+      DropdownDividerMenuItem,
+      DropdownLinkMenuItem,
+      DropdownMenuList,
+      DropdownMenuItem
+    }
+  }
+
+  template() {
+    return /*html*/`
+      <li>
+          <label>${this.$i18n(it.title)}</label> 
+          <span>${iconUse("arrowRight")}</span>              
+          <ul>
+              ${it.items.map(child => makeMenuItem(child)).join('')}
+          </ul>
+      </li>
+    `
+  }
+}
+
+class DropdownMenuItem extends EditorElement {
+
+  initialize() {
+    super.initialize();
+
+    const events = this.props.events || [];
+    if (events.length) {
+      events.forEach(event => {
+        this.on(event, () => this.refresh())
+      });
+    }
+
+  }
+
+  template() {
+
+    const it = this.props;
+
+    const checked = isFunction(it.checked) ? it.checked(this.$editor) : '';
+    return /*html*/`
+        <li data-command="${it.command}" data-has-children="${Boolean(it.items?.length)}"
+          ${it.disabled && 'disabled'} 
+          ${it.shortcut && 'shortcut'}
+          ${checked && 'checked'}
+          ${it.nextTick && `data-next-tick=${variable(it.nextTick, this.groupId)}`} 
+          ${it.args && `data-args=${variable(it.args, this.groupId)}`} 
+          ${it.key && `data-key=${it.key}`} 
+        >
+            <span class="icon">${checked ? iconUse('check') : (it.icon || '')}</span>
+            <div class='menu-item-text'>
+              <label>${this.$i18n(it.title)}</label>
+              <kbd class="shortcut">${it.shortcut || ''}</kbd>
+            </div>
+        </li>
+      `
+  }
+
+  [CLICK('$el')](e) {
+    if (this.props.command) {
+      this.emit(this.props.command, ...(this.props.args || []));
+    } else if (isFunction(this.props.action)) {
+      this.props.action(this.$editor, this);
+    } else if (isFunction(this.props.onClick)) {
+      this.props.action(this.$editor, this);
+    }
+
+  }
+
+}
 
 
 export class DropdownMenu extends EditorElement {
 
+  components() {
+    return {
+      Divider,
+      DropdownDividerMenuItem,
+      DropdownLinkMenuItem,
+      DropdownTextMenuItem,
+      DropdownMenuList,
+      DropdownMenuItem
+    }
+  }
 
   initialize() {
     super.initialize();
@@ -35,48 +199,6 @@ export class DropdownMenu extends EditorElement {
     }
   }
 
-  makeMenuItem(it) {
-    if (it === '-' || it.type === 'divider') {
-      return `<li class="dropdown-divider"></li>`
-    }
-
-    if (it.type === 'link') {
-      return /*html*/`
-          <li><a href="${it.href}" target="${it.target || "_blank"}">${this.$i18n(it.title)}</a></li>
-        `
-    }
-
-    if (Array.isArray(it.items)) {
-      return /*html*/`
-          <li>
-              <label>${this.$i18n(it.title)}</label> 
-              <span>${iconUse("arrowRight")}</span>              
-              <ul>
-                  ${it.items.map(child => this.makeMenuItem(child)).join('')}
-              </ul>
-          </li>
-        `
-    }
-
-    const checked = isFunction(it.checked) ? it.checked(this.$editor) : '';
-
-    return /*html*/`
-        <li data-command="${it.command}" data-has-children="${Boolean(it.items?.length)}"
-          ${it.disabled && 'disabled'} 
-          ${it.shortcut && 'shortcut'}
-          ${checked && 'checked'}
-          ${it.nextTick && `data-next-tick=${variable(it.nextTick, this.groupId)}`} 
-          ${it.args && `data-args=${variable(it.args, this.groupId)}`} 
-          ${it.key && `data-key=${it.key}`} 
-        >
-            <span class="icon">${checked ? iconUse('check') : (it.icon || '')}</span>
-            <div class='menu-item-text'>
-              <label>${this.$i18n(it.title)}</label>
-              <kbd class="shortcut">${it.shortcut || ''}</kbd>
-            </div>
-        </li>
-      `
-  }
 
   template() {
     const { direction, opened, items } = this.state;
@@ -85,6 +207,7 @@ export class DropdownMenu extends EditorElement {
     return /*html*/`
         <div class="dropdown-menu ${openedClass}" data-direction="${direction}">
           <span class='icon' ref="$icon"></span>
+          <span class='label' ref='$label'></span>
           <span class='dropdown-arrow' ref="$arrow">${iconUse('keyboard_arrow_down')}</span>
           <ul class="dropdown-menu-item-list" ref="$list"></ul>
           <div class="dropdown-menu-arrow">
@@ -100,10 +223,16 @@ export class DropdownMenu extends EditorElement {
     return isFunction(this.props.icon) ? this.props.icon(this.state) : this.props.icon;
   }
 
-  [BIND('$el')]() {
-    const selected = isFunction(this.props.selected) ? this.props.selected(this.state, this.$editor) : false        
+  [BIND('$label')]() {
     return {
-      'data-selected': selected,      
+      innerHTML: this.props.title
+    };
+  }
+
+  [BIND('$el')]() {
+    const selected = isFunction(this.props.selected) ? this.props.selected(this.state, this.$editor) : false
+    return {
+      'data-selected': selected,
       style: {
         ...(this.props.style || {}),
         '--elf--dropdown-menu-width': this.props.width,
@@ -136,7 +265,7 @@ export class DropdownMenu extends EditorElement {
 
   [LOAD('$list') + DOMDIFF]() {
     initializeGroupVariables(this.groupId);
-    return this.state.items.map(it => this.makeMenuItem(it));
+    return this.state.items.map(it => makeMenuItem(it));
   }
 
   checkDropdownOpen(e) {
@@ -151,10 +280,16 @@ export class DropdownMenu extends EditorElement {
     this.toggle();
   }
 
+  [CLICK('$label') + IF('checkDropdownOpen')](e) {
+    this.toggle();
+  }
+
   [CLICK('$icon')](e) {
 
     if (this.state.selectedKey) {
       const menuItem = this.state.items.find(it => it.key === this.state.selectedKey);
+
+      if (!menuItem) return;
 
       const command = menuItem.command;
       const args = menuItem.args;
@@ -176,8 +311,10 @@ export class DropdownMenu extends EditorElement {
       })
 
       // 닫고
-      this.close();      
+      this.close();
 
+    } else {
+      this.toggle();
     }
   }
 

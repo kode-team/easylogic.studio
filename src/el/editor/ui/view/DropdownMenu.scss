@@ -1,14 +1,19 @@
 .dropdown-menu {
   position: relative;
   display: flex;
-  text-align: left;
-
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
   --elf--dropdown-menu-width: 240px;
   --elf--dropdown-menu-dy: 0px;
 
   .dropdown-menu-item-list {
-    border: 2px solid var(--elf--selected-color);
+    border: 1px solid var(--elf--border-color);
     filter:drop-shadow(0 0 2px white);
+  }
+
+  > .label {
+    font-size: 13px;
   }
 
   > .icon {
@@ -18,9 +23,15 @@
     justify-content: center;
     padding: 0px 4px;
     padding-left: 8px;
+
+    &:empty {
+      display: none;
+    }
+
     svg {
       width: 20px;
       height: 20px;
+      pointer-events: none;
 
       path {
         stroke-width: 2;
@@ -52,7 +63,7 @@
   &:hover,
   &.opened {
     &:not([data-selected="true"]) {
-      // background-color: black;
+      background-color: black;
 
       .dropdown-arrow {
         svg {
@@ -139,6 +150,11 @@
       margin-top: 4px;
       margin-bottom: 4px;
       background-color: var(--elf--layout-border-color);
+      // pointer-events: none;
+
+      > * {
+        pointer-events: all;
+      }
     }
   }
 

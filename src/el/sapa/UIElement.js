@@ -29,13 +29,19 @@ class UIElement extends EventMachine {
 
       this.initialize();
   
-      this.initializeStoreEvent();
+      // this.initializeStoreEvent();
   }
 
   createContext() {
     return {
 
     }
+  }
+
+  render($container) {
+    super.render($container);
+
+    this.initializeStoreEvent();
   }
 
   pushContext() {
@@ -91,7 +97,12 @@ class UIElement extends EventMachine {
    *
    */
   initializeStoreEvent() {
-    this.filterProps('subscribe').forEach(magicMethod => {
+
+    if (!this._subscribes || this._subscribes.length == 0) {
+      this._subscribes = this.filterProps('subscribe', true);
+    }
+
+    this._subscribes.forEach(magicMethod => {
 
       const events = magicMethod.args.join(' ');
 
@@ -285,6 +296,19 @@ class UIElement extends EventMachine {
     this.$store.on(id, newCallback, this, debounceSecond, throttleSecond, false, /*self trigger*/true);
 
     return id;
+  }
+
+  /**
+   * 함수형 컴포넌트 생성 함수 
+   * 
+   * @override
+   * @param {Function} EventMachineComponent 
+   * @param {Dom} targetElement 
+   * @param {object} props 
+   * @returns 
+   */
+   createFunctionComponent(EventMachineComponent, targetElement, props, baseClass = UIElement) {
+    return super.createFunctionComponent(EventMachineComponent, targetElement, props, baseClass);
   }
 }
 

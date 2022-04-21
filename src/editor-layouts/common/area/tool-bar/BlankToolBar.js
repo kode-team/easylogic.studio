@@ -13,12 +13,13 @@ import { Language } from "el/editor/types/editor";
 import { CONFIG, LOAD } from 'el/sapa/Event';
 import ToolBarRenderer from "./ToolBarRenderer";
 import { createComponent, createElement } from "el/sapa/functions/jsx";
+import { SUBSCRIBE } from 'el/sapa/Event';
 
 
 
 
 
-export default class ToolBar extends EditorElement {
+export default class BlankToolBar extends EditorElement {
 
     initState() {
 
@@ -72,30 +73,19 @@ export default class ToolBar extends EditorElement {
             <div class='elf--tool-bar'>
                 <div class='left'>
                     ${createComponent("ToolBarRenderer", {
-                        items: [
-                            {
-                                type: 'dropdown',
-                                style: {
-                                    'margin-left': '12px',
-                                },
-                                icon: `<div class="logo-item"><label class='logo'></label></div>`,
-                                items: [
-                                    { title: 'menu.item.fullscreen.title', command: 'toggle.fullscreen', shortcut: "ALT+/" },
-                                ]
-                            }
-                        ]       // 왼쪽 메뉴 설정 
+                        items: this.$menu.getTargetMenu("toolbar.left")
                     })}
                     ${this.$injectManager.generate('toolbar.left')}                                        
                 </div>
                 <div class='center'>
                     ${createComponent("ToolBarRenderer", {
-                        items: []       // 가운데 메뉴 설정 
+                        items: this.$menu.getTargetMenu("toolbar.center")
                     })}
                     ${this.$injectManager.generate('toolbar.center')}                                        
                 </div>
                 <div class='right'>
                     ${createComponent("ToolBarRenderer", {
-                        items: []       // 오른쪽 메뉴 설정 
+                        items: this.$menu.getTargetMenu("toolbar.right")
                     })}                
                     ${this.$injectManager.generate('toolbar.right')}                    
                     ${createComponent("ThemeChanger")}
@@ -120,5 +110,11 @@ export default class ToolBar extends EditorElement {
 
     [CONFIG('language.locale')]() {
         this.refresh();
+    }
+
+    [SUBSCRIBE('updateMenu')] (target) {
+        if (target === 'toolbar.left' || target === 'toolbar.center' || target === 'toolbar.right') {
+            this.refresh();
+        }
     }
 }

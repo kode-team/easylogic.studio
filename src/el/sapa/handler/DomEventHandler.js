@@ -94,8 +94,8 @@ export default class DomEventHandler extends BaseHandler {
       return;
     }
 
-    if (!this._domEvents) {
-      this._domEvents = this.context.filterProps('domevent')
+    if (!this._domEvents || this._domEvents.length === 0) {
+      this._domEvents = this.context.filterProps('domevent', true)
     }
 
     this._domEvents.forEach(it => this.parseDomEvent(it));

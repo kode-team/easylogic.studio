@@ -1,10 +1,13 @@
 import { EditorElement } from "el/editor/ui/common/EditorElement";
 import { LOAD } from 'el/sapa/Event';
-import { variable } from "el/sapa/functions/registElement";
 import { DropdownMenu } from 'el/editor/ui/view/DropdownMenu';
-import { ToolbarMenuItem } from './ToolbarMenuItem';
 import { createComponent } from "el/sapa/functions/jsx";
+import { ToolbarButtonMenuItem } from "./ToolbarButtonMenuItem";
 import { ToolbarItemEntity } from "el/editor/entity/editor";
+import { MenuItemType } from 'el/editor/types/editor';
+
+import './ToolBarRenderer.scss';
+
 
 export default class ToolBarRenderer extends EditorElement {
 
@@ -18,12 +21,12 @@ export default class ToolBarRenderer extends EditorElement {
     components() {
         return {
             DropdownMenu,
-            ToolbarMenuItem
+            ToolbarButtonMenuItem
         }
     }
 
     template() {
-        return `<div class="toolbar-renderer"></div>`
+        return `<div class="elf--toolbar-renderer"></div>`
     }
 
     [LOAD('$el')]() {
@@ -34,13 +37,13 @@ export default class ToolBarRenderer extends EditorElement {
 
     renderMenuItem(item, index) {
         switch (item.type) {
-            case 'link':
+            case MenuItemType.LINK:
                 return this.renderLink(item, index);
-            case 'menu':
+            case MenuItemType.SUBMENU:
                 return this.renderMenu(item, index);
-            case 'button':
+            case MenuItemType.BUTTON:
                 return this.renderButton(item, index);
-            case 'dropdown':
+            case MenuItemType.DROPDOWN:
                 return this.renderDropdown(item, index);
             default:
                 return this.renderButton(item, index);
@@ -48,7 +51,7 @@ export default class ToolBarRenderer extends EditorElement {
     }
 
     renderButton(item, index) {
-        return createComponent("ToolbarMenuItem", {
+        return createComponent("ToolbarButtonMenuItem", {
             ref: "$button-" + index,
             title: item.title,
             icon: item.icon,
@@ -61,6 +64,7 @@ export default class ToolBarRenderer extends EditorElement {
             selectedKey: item.selectedKey,
             action: item.action,
             events: item.events,
+            style: item.style,
         });
     }
 
@@ -69,6 +73,7 @@ export default class ToolBarRenderer extends EditorElement {
             ref: "$dropdown-" + index,
             items: item.items,
             icon: item.icon,
+            title: item.title,
             events: item.events || [],
             selected: item.selected,
             selectedKey: item.selectedKey,

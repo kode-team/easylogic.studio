@@ -280,6 +280,22 @@ export default class EventMachine {
 
   }
 
+  parseLocalMethod ($dom, name) {
+    // load 변수와 bind 변수를 저장한다. 
+    const loadVariable = $dom.attr(LOAD_PROPERTY);
+    const loadVariableRealFunction = getVariable(loadVariable);
+    const bindVariable = $dom.attr(BIND_PROPERTY);
+    const bindVariableRealFunction = getVariable(bindVariable);
+
+    if (loadVariable && isFunction(loadVariableRealFunction)) {
+      this.refLoadVariables[name] = { key: loadVariable, ref: name,  callback: loadVariableRealFunction };
+    }
+
+    if (bindVariable && isFunction(bindVariableRealFunction)) {
+      this.refBindVariables[name] = { key: bindVariable, ref: name, callback: bindVariableRealFunction };
+    }    
+  }
+
   /**
    * template() 함수의 결과물을 파싱해서 dom element 를 생성한다. 
    * 
@@ -314,6 +330,7 @@ export default class EventMachine {
       var refs = $el.$$(QUERY_PROPERTY);
       var temp = {} 
 
+
       for(var refsIndex = 0, refsLen = refs.length; refsIndex < refsLen; refsIndex++) {
         const $dom = refs[refsIndex];
 
@@ -329,20 +346,7 @@ export default class EventMachine {
           this.refs[name] = $dom;        
         }
 
-        
-        // load 변수와 bind 변수를 저장한다. 
-        const loadVariable = $dom.attr(LOAD_PROPERTY);
-        const loadVariableRealFunction = getVariable(loadVariable);
-        const bindVariable = $dom.attr(BIND_PROPERTY);
-        const bindVariableRealFunction = getVariable(bindVariable);
-
-        if (loadVariable && isFunction(loadVariableRealFunction)) {
-          this.refLoadVariables[name] = { key: loadVariable, ref: name,  callback: loadVariableRealFunction };
-        }
-
-        if (bindVariable && isFunction(bindVariableRealFunction)) {
-          this.refBindVariables[name] = { key: bindVariable, ref: name, callback: bindVariableRealFunction };
-        }
+        this.parseLocalMethod($dom, name);        
       }
     }
 
@@ -410,11 +414,26 @@ export default class EventMachine {
     return EventMachineComponent;
   }
 
+  createFunctionComponent (EventMachineComponent, targetElement, props, BaseClass = EventMachine) {
+
+    class FunctionElement extends BaseClass {
+      template () {
+        return EventMachineComponent.call(this, this.props);
+      }
+    }
+
+    return new FunctionElement(this, props);
+  }
+
 
   createInstanceForComponent (EventMachineComponent, targetElement, props) {
     // external component 
     if (EventMachineComponent.__proto__.name === 'ProxyComponent') {
       return new EventMachineComponent({target: targetElement, props});
+    }
+
+    if (EventMachineComponent.__proto__.name === '' && isFunction(EventMachineComponent)) { 
+      return this.createFunctionComponent(EventMachineComponent, targetElement, props);
     }
 
     // return sapa component 
@@ -433,6 +452,7 @@ export default class EventMachine {
       instance._reload(props);
     } else {
       instance = this.createInstanceForComponent(component, $dom.$parent.el, props);
+
       instance.__timestamp = this._localTimestamp;
 
       this.children[refName || instance.id] = instance;
@@ -740,9 +760,9 @@ export default class EventMachine {
    * 
    * @returns {string[]} 나의 상위 모든 메소드를 수집해서 리턴한다. 
    */
-  collectProps() {
+  collectProps(refreshCache = false) {
 
-    if (!this.__cachedMethodList){
+    if (!this.__cachedMethodList || refreshCache){
       this.__cachedMethodList = collectProps(this, (name) => MagicMethod.check(name)).map(it => {
         return MagicMethod.parse(it, /*context*/this);
       });
@@ -751,8 +771,8 @@ export default class EventMachine {
     return this.__cachedMethodList;
   }
 
-  filterProps(methodKey) {
-    return this.collectProps().filter(it => {
+  filterProps(methodKey, refreshCache = false) {
+    return this.collectProps(refreshCache).filter(it => {
       return it.method === methodKey;
     });
   }

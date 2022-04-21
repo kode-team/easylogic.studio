@@ -21,6 +21,7 @@ export default defineConfig({
         whiteboard: path.resolve(__dirname, 'whiteboard.html'),
         dataeditor: path.resolve(__dirname, 'dataeditor.html'),
         threeeditor: path.resolve(__dirname, '3d.html'),
+        blankeditor: path.resolve(__dirname, 'blank.html'),
       }
     }
   }

@@ -150,8 +150,8 @@ export default class BindHandler extends BaseHandler {
   // 어떻게 실행하는게 좋을까? 
   // this.runHandle('bind', ...);
   async bindData(...args) {
-    if (!this._bindMethods) {
-      this._bindMethods = this.context.filterProps('bind');
+    if (!this._bindMethods || this._bindMethods.length === 0) {
+      this._bindMethods = this.context.filterProps('bind', true);
     }
 
     // local 로 등록된 bind 를 모두 실행한다. 

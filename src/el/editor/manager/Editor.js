@@ -33,6 +33,7 @@ import { StorageManager } from "./manager-items/StorageManager";
 import { LockManager } from "./manager-items/LockManager";
 import { CommandMaker } from './manager-items/CommandMaker';
 import { SceneManager } from './manager-items/SceneManager';
+import { MenuManager } from './manager-items/MenuManager';
 
 
 
@@ -100,6 +101,7 @@ export class Editor {
     this.iconManager = new IconManager(this);
     this.stateManager = new StateManager(this);
     this.sceneManager = new SceneManager(this);
+    this.menuManager = new MenuManager(this);
 
     this.initPlugins();
     this.initStorage();
@@ -423,5 +425,15 @@ export class Editor {
 
   registerIcon(itemType, iconOrFunction) {
     this.iconManager.registerIcon(itemType, iconOrFunction);
+  }
+
+  /**
+   * 메뉴 등록하기 
+   * 
+   * @param {string} target 
+   * @param {object|object[]} menu 
+   */
+  registerMenu(target, menu) {
+    this.menuManager.registerMenu(target, menu);
   }
 }

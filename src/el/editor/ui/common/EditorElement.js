@@ -3,13 +3,14 @@ import UIElement from "el/sapa/UIElement";
 import { ADD_BODY_FIRST_MOUSEMOVE, ADD_BODY_MOUSEMOVE, ADD_BODY_MOUSEUP } from "el/editor/types/event";
 import { NotifyType } from "el/editor/types/editor";
 import { SceneManager } from '../../manager/manager-items/SceneManager';
+import { MenuManager } from "el/editor/manager/manager-items/MenuManager";
 
 export class EditorElement extends UIElement {
 
 
     initialize() {
         super.initialize();
-    
+
         // EditorElement 내부에서 i18n 을 바로 설정 할 수 있도록 셋팅한다.  
         this.$editor.registerI18nMessageWithLocale(this.initializeI18nMessage());
     }
@@ -32,7 +33,7 @@ export class EditorElement extends UIElement {
      * ```
      * 
      * @override
-     */ 
+     */
     initializeI18nMessage() {
         return {}
     }
@@ -44,8 +45,8 @@ export class EditorElement extends UIElement {
      * 
      * @returns {boolean} 
      */
-    get notEventRedefine () {
-        return true; 
+    get notEventRedefine() {
+        return true;
     }
 
     /**
@@ -100,7 +101,7 @@ export class EditorElement extends UIElement {
         return this.$editor.segmentSelection;
     }
 
-    get $commands () {
+    get $commands() {
         return this.$editor.commands;
     }
 
@@ -164,11 +165,11 @@ export class EditorElement extends UIElement {
         return this.$editor.pathKitManager;
     }
 
-    get $icon () {
+    get $icon() {
         return this.$editor.iconManager;
     }
 
-    get $stateManager () {
+    get $stateManager() {
         return this.$editor.stateManager;
     }
 
@@ -177,6 +178,13 @@ export class EditorElement extends UIElement {
      */
     get $sceneManager() {
         return this.$editor.sceneManager;
+    }
+
+    /**
+     * @type {MenuManager}
+     */
+    get $menu() {
+        return this.$editor.menuManager;
     }
 
     /**
@@ -211,7 +219,7 @@ export class EditorElement extends UIElement {
             title,
             description,
             duration
-          );
+        );
     }
 
     alert(title, description, duration = 1000) {
@@ -239,6 +247,20 @@ export class EditorElement extends UIElement {
         if (this[methodName]) {
             this.emit(ADD_BODY_MOUSEUP, this[methodName], this, e.xy);
         }
+    }
+
+
+    /**
+     * 함수형 컴포넌트 생성 함수 
+     * 
+     * @override
+     * @param {Function} EventMachineComponent 
+     * @param {Dom} targetElement 
+     * @param {object} props 
+     * @returns 
+     */
+    createFunctionComponent(EventMachineComponent, targetElement, props, baseClass = EditorElement) {
+        return super.createFunctionComponent(EventMachineComponent, targetElement, props, baseClass);
     }
 
 }

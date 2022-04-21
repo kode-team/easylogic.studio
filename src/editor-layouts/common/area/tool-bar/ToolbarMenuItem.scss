@@ -1,5 +1,13 @@
 .elf--toolbar-menu-item {
 
+    height: 100%;
+    padding: 10px !important;
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: left;    
+
     &:hover {
         background-color: black;
     }

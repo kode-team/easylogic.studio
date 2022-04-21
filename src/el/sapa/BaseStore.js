@@ -195,6 +195,7 @@ export default class BaseStore {
             const f = runnableFunctions[i];
 
             const result = f.callback.apply(f.context, args)
+
             if (isNotUndefined(result)) {
               if (result === false) {
                 return;
