@@ -57,7 +57,7 @@ export class ToolbarButtonMenuItem extends EditorElement {
     }
 
     [LOAD('$el') + DOMDIFF] () {
-        return `<span class="icon">${iconUse(this.props.icon)}</span><span>${this.props.title}</span>`;
+        return `<span class="icon">${iconUse(this.props.icon)}</span><span>${this.props.title || ''}</span>`;
     }
 
     [BIND('$el')]() {

@@ -1168,6 +1168,38 @@ declare module "@easylogic/editor" {
 
     }
 
+
+    interface DropdownMenuItem {
+        type: 'dropdown';        
+        items?: MenuItem[];
+        icon?: string;
+        title?: string;
+        events?: any[];
+        selected?: boolean;
+        selectedKey?: string;
+        action?: Function;
+        style?: KeyValue;
+        dy?: number;
+    }
+
+    interface ButtonMenuItem {
+        type: 'button';
+        title?: string;
+        icon?: string;
+        command?: string;
+        shortcut?: string;
+        args?: any[];
+        nextTick?: () => void;
+        disabled?: boolean;
+        selected?: boolean;
+        selectedKey?: string;
+        action?: () => void;
+        events?: string[];
+        style?: KeyValue;
+    }
+
+    type MenuItem = string | DropdownMenuItem | ButtonMenuItem;
+
     export interface EditorInstance {
         registerElement(obj: ElementValue<EditorElement>): void;
         registerUI(target: string, obj: ElementValue<EditorElement>): void;
@@ -1217,6 +1249,8 @@ declare module "@easylogic/editor" {
          */
         registerIcon(itemType: string, iconOrFunction: string | Function): void;
 
+        registerMenu(target: string, menu: MenuItem | MenuItem[]): void;
+
         /**
          * HTML Renderer 인스턴스 
          */
@@ -1249,14 +1283,14 @@ declare module "@easylogic/editor" {
         render(item: Item, renderer: SVGRenderer): string;
 
         update(item: Item, currentElement: Dom, editor: EditorInstance): any;
-    }    
+    }
 
     export interface JSONRenderer {
 
         render(item: Item, renderer: JSONRenderer): string;
 
         update(item: Item, currentElement: Dom, editor: EditorInstance): any;
-    }        
+    }
 
     export class Render {
 

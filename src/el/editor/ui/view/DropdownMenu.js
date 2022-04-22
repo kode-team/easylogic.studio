@@ -102,10 +102,10 @@ class DropdownMenuList extends EditorElement {
   template() {
     return /*html*/`
       <li>
-          <label>${this.$i18n(it.title)}</label> 
+          <label>${this.$i18n(this.props.title)}</label> 
           <span>${iconUse("arrowRight")}</span>              
           <ul>
-              ${it.items.map(child => makeMenuItem(child)).join('')}
+              ${this.props.items.map(child => makeMenuItem(child)).join('')}
           </ul>
       </li>
     `

@@ -509,8 +509,8 @@ class Dom {
   }
   onlyOneClass(cls) {
     var parent = this.parent();
-    parent.children().forEach((it2) => {
-      it2.removeClass(cls);
+    parent.children().forEach((it) => {
+      it.removeClass(cls);
     });
     this.addClass(cls);
   }
@@ -648,8 +648,8 @@ class Dom {
   getComputedStyle(...list2) {
     var css = getComputedStyle(this.el);
     var obj2 = {};
-    list2.forEach((it2) => {
-      obj2[it2] = css[it2];
+    list2.forEach((it) => {
+      obj2[it] = css[it];
     });
     return obj2;
   }
@@ -1159,9 +1159,9 @@ class MagicMethod {
     const result = matches2[0].split(MAGIC_METHOD)[1].split(SPLITTER).map((item2) => item2.trim());
     let [initializer, ...pipes] = result;
     const [method, ...args2] = initializer.split(" ");
-    const pipeList = pipes.map((it2) => {
-      return this.parsePipe(it2);
-    }).filter((it2) => it2.value);
+    const pipeList = pipes.map((it) => {
+      return this.parsePipe(it);
+    }).filter((it) => it.value);
     const pipeObjects = {
       "function": [],
       "keyword": [],
@@ -1185,12 +1185,12 @@ class MagicMethod {
       keys: pipeObjects
     });
   }
-  static parsePipe(it2) {
-    const result = it2.match(FUNC_REGEXP);
+  static parsePipe(it) {
+    const result = it.match(FUNC_REGEXP);
     if (!result) {
       return {
         type: "value",
-        value: it2
+        value: it
       };
     }
     const [value] = result;
@@ -1201,7 +1201,7 @@ class MagicMethod {
         type: "function",
         value,
         func: func2,
-        args: args2.split(",").map((it3) => it3.trim()).filter(Boolean)
+        args: args2.split(",").map((it2) => it2.trim()).filter(Boolean)
       };
     }
     return {
@@ -1478,7 +1478,7 @@ class DomEventHandler extends BaseHandler {
     if (!this._domEvents || this._domEvents.length === 0) {
       this._domEvents = this.context.filterProps("domevent", true);
     }
-    this._domEvents.forEach((it2) => this.parseDomEvent(it2));
+    this._domEvents.forEach((it) => this.parseDomEvent(it));
   }
   destroy() {
     if (this.context.notEventRedefine)
@@ -1715,15 +1715,15 @@ class DomEventHandler extends BaseHandler {
     });
     return results;
   }
-  parseDomEvent(it2) {
+  parseDomEvent(it) {
     const context = this.context;
-    var arr = it2.args;
+    var arr = it.args;
     if (arr) {
       var eventNames = this.getEventNames(arr[0]);
-      var callback = context[it2.originalMethod].bind(context);
+      var callback = context[it.originalMethod].bind(context);
       for (let i = 0, len2 = eventNames.length; i < len2; i++) {
         arr[0] = eventNames[i];
-        this.bindingDomEvent(arr, it2, callback);
+        this.bindingDomEvent(arr, it, callback);
       }
     }
   }
@@ -1803,9 +1803,9 @@ class BindHandler extends BaseHandler {
         [refName]: this.context.refBindVariables[refName]
       };
     }
-    Object.values(target).forEach(async (it2) => {
-      const refCallback = it2.callback;
-      let $element = this.context.refs[it2.ref];
+    Object.values(target).forEach(async (it) => {
+      const refCallback = it.callback;
+      let $element = this.context.refs[it.ref];
       if ($element) {
         const results = await refCallback.call(this.context);
         if (!results)
@@ -1825,10 +1825,10 @@ class BindHandler extends BaseHandler {
       this._bindMethods = this.context.filterProps("bind", true);
     }
     await this.bindLocalValue(...args2);
-    const bindList = (_a = this._bindMethods) == null ? void 0 : _a.filter((it2) => {
+    const bindList = (_a = this._bindMethods) == null ? void 0 : _a.filter((it) => {
       if (!args2.length)
         return true;
-      return args2.indexOf(it2.args[0]) > -1;
+      return args2.indexOf(it.args[0]) > -1;
     });
     await (bindList == null ? void 0 : bindList.forEach(async (magicMethod) => {
       let refObject = this.getRef(`${magicMethod.keywords[0]}`);
@@ -1939,12 +1939,12 @@ class CallbackHandler extends BaseHandler {
     });
     this.addCallback(obj2, magicMethod);
   }
-  parseCallback(it2) {
+  parseCallback(it) {
     const context = this.context;
-    var arr = it2.args;
+    var arr = it.args;
     if (arr) {
-      var originalCallback = context[it2.originalMethod].bind(context);
-      this.bindingCallback(it2, originalCallback);
+      var originalCallback = context[it.originalMethod].bind(context);
+      this.bindingCallback(it, originalCallback);
     }
   }
 }
@@ -2204,7 +2204,7 @@ class EventMachine {
   parseContent(html, filteredRefClass = []) {
     return Dom.create("div").html(html).children().map(($dom) => {
       return this._getComponentInfo($dom);
-    }).filter((it2) => filteredRefClass.length === 0 ? true : filteredRefClass.includes(it2.refClass));
+    }).filter((it) => filteredRefClass.length === 0 ? true : filteredRefClass.includes(it.refClass));
   }
   _getComponentInfo($dom) {
     const refClass = $dom.attr(REF_CLASS);
@@ -2231,8 +2231,8 @@ class EventMachine {
     if (!$el)
       return [];
     const children2 = [];
-    let targets = $el.$$(REF_CLASS_PROPERTY).filter((it2) => {
-      return it2.path().filter((a) => {
+    let targets = $el.$$(REF_CLASS_PROPERTY).filter((it) => {
+      return it.path().filter((a) => {
         return a.attr(REF_CLASS);
       }).length === 1;
     });
@@ -2308,7 +2308,7 @@ class EventMachine {
       this._loadMethods = this.filterProps("load");
     }
     await this.loadLocalValue(...args2);
-    const filtedLoadMethodList = this._loadMethods.filter((it2) => args2.length === 0 ? true : it2.args[0] === args2[0]);
+    const filtedLoadMethodList = this._loadMethods.filter((it) => args2.length === 0 ? true : it.args[0] === args2[0]);
     await filtedLoadMethodList.forEach(async (magicMethod) => {
       const [elName, ...args3] = magicMethod.args;
       let isDomDiff = magicMethod.hasKeyword("domdiff");
@@ -2380,15 +2380,15 @@ class EventMachine {
   }
   collectProps(refreshCache = false) {
     if (!this.__cachedMethodList || refreshCache) {
-      this.__cachedMethodList = collectProps(this, (name) => MagicMethod.check(name)).map((it2) => {
-        return MagicMethod.parse(it2, this);
+      this.__cachedMethodList = collectProps(this, (name) => MagicMethod.check(name)).map((it) => {
+        return MagicMethod.parse(it, this);
       });
     }
     return this.__cachedMethodList;
   }
   filterProps(methodKey, refreshCache = false) {
-    return this.collectProps(refreshCache).filter((it2) => {
-      return it2.method === methodKey;
+    return this.collectProps(refreshCache).filter((it) => {
+      return it.method === methodKey;
     });
   }
 }
@@ -3766,7 +3766,7 @@ function getCenterInTriangle(a, b, c2) {
 }
 const splitReg$1 = /[\b\t \,\n]/g;
 function normalize(str) {
-  return str.trim().split(splitReg$1).filter((it2) => it2).map((it2) => +it2);
+  return str.trim().split(splitReg$1).filter((it) => it).map((it) => +it);
 }
 var math = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
@@ -4537,8 +4537,8 @@ function _traverse(obj2, filterCallback = identity$2) {
   var results = [];
   let len2 = obj2.layers.length;
   for (let start2 = len2; start2--; ) {
-    let it2 = obj2.layers[start2];
-    results.push(..._traverse(it2.ref, filterCallback));
+    let it = obj2.layers[start2];
+    results.push(..._traverse(it.ref, filterCallback));
   }
   if (filterCallback(obj2)) {
     results.push(obj2);
@@ -4646,10 +4646,10 @@ class Item {
     } while (localParent);
   }
   get project() {
-    return this.path.find((it2) => it2.is("project"));
+    return this.path.find((it) => it.is("project"));
   }
   get artboard() {
-    return this.path.find((it2) => it2.is("artboard"));
+    return this.path.find((it) => it.is("artboard"));
   }
   get path() {
     if (!this.parent)
@@ -4693,9 +4693,9 @@ class Item {
     return true;
   }
   generateListNumber() {
-    this.layers.forEach((it2, index2) => {
-      it2.no = index2;
-      it2.generateListNumber();
+    this.layers.forEach((it, index2) => {
+      it.no = index2;
+      it.generateListNumber();
     });
   }
   convert(json) {
@@ -4733,7 +4733,7 @@ class Item {
     return true;
   }
   hasChangedField(...args2) {
-    return args2.some((it2) => this.lastChangedFieldKeys.includes(it2));
+    return args2.some((it) => this.lastChangedFieldKeys.includes(it));
   }
   getDefaultObject(obj2 = {}) {
     var id = uuidShort();
@@ -4915,7 +4915,7 @@ class ConfigManager {
   get(key) {
     var _a;
     if (this.config.has(key) === false) {
-      this.config.set(key, (_a = this.configList.find((it2) => it2.key == key)) == null ? void 0 : _a.defaultValue);
+      this.config.set(key, (_a = this.configList.find((it) => it.key == key)) == null ? void 0 : _a.defaultValue);
     }
     return this.config.get(key);
   }
@@ -4934,8 +4934,8 @@ class ConfigManager {
   }
   save() {
     const obj2 = {};
-    this.configList.filter((it2) => it2.storage !== "none").forEach((it2) => {
-      obj2[it2.key] = this.get(it2.key);
+    this.configList.filter((it) => it.storage !== "none").forEach((it) => {
+      obj2[it.key] = this.get(it.key);
     });
     this.editor.saveItem("config", obj2);
   }
@@ -4946,7 +4946,7 @@ class ConfigManager {
   }
   getType(key) {
     var _a;
-    return (_a = this.configList.find((it2) => it2.key == key)) == null ? void 0 : _a.type;
+    return (_a = this.configList.find((it) => it.key == key)) == null ? void 0 : _a.type;
   }
   isType(key, type) {
     return this.getType(key) === type;
@@ -4998,12 +4998,12 @@ class TransformOrigin {
     if (TransformOriginCache.has(transformOrigin)) {
       return TransformOriginCache.get(transformOrigin);
     }
-    const origins = transformOrigin.trim().split(" ").filter((it2) => it2.trim());
+    const origins = transformOrigin.trim().split(" ").filter((it) => it.trim());
     let parsedTransformOrigin = null;
     if (origins.length === 1) {
-      parsedTransformOrigin = [origins[0], origins[0]].map((it2) => Length.parse(it2));
+      parsedTransformOrigin = [origins[0], origins[0]].map((it) => Length.parse(it));
     } else {
-      parsedTransformOrigin = origins.map((it2) => Length.parse(it2));
+      parsedTransformOrigin = origins.map((it) => Length.parse(it));
     }
     TransformOriginCache.set(transformOrigin, parsedTransformOrigin);
     return parsedTransformOrigin;
@@ -5271,7 +5271,7 @@ function vertiesToPath(verties = []) {
   return results.join(" ");
 }
 function toRectVertiesWithoutTransformOrigin(verties) {
-  return toRectVerties(verties).filter((it2, index2) => {
+  return toRectVerties(verties).filter((it, index2) => {
     return index2 < 4;
   });
 }
@@ -5328,8 +5328,8 @@ class SnapManager {
   }
   convertMatrix(item2) {
     const verties = this.convertGuideAndPathMatrix(item2);
-    const xList = verties.map((it2) => it2[0]);
-    const yList = verties.map((it2) => it2[1]);
+    const xList = verties.map((it) => it[0]);
+    const yList = verties.map((it) => it[1]);
     return { id: item2.id, xList, yList, verties, rectVerties: toRectVertiesWithoutTransformOrigin(item2.originVerties) };
   }
   convertGuideAndPathMatrix(item2) {
@@ -5338,8 +5338,8 @@ class SnapManager {
   }
   getSnapPoints() {
     const points2 = [];
-    this.editor.selection.snapTargetLayersWithSelection.forEach((it2) => {
-      points2.push.apply(points2, this.convertGuideAndPathMatrix(it2));
+    this.editor.selection.snapTargetLayersWithSelection.forEach((it) => {
+      points2.push.apply(points2, this.convertGuideAndPathMatrix(it));
     });
     return points2;
   }
@@ -5373,14 +5373,14 @@ class SnapManager {
   check(sourceVerties) {
     const snaps = [];
     const dist2 = this.dist;
-    const sourceXList = sourceVerties.map((it2) => it2[0]);
-    const sourceYList = sourceVerties.map((it2) => it2[1]);
+    const sourceXList = sourceVerties.map((it) => it[0]);
+    const sourceYList = sourceVerties.map((it) => it[1]);
     this.snapTargetLayers.forEach((target) => {
       const x2 = this.checkX(target.xList, sourceXList, dist2)[0];
       const y2 = this.checkY(target.yList, sourceYList, dist2)[0];
       snaps.push(fromValues(x2 ? x2.dx : 0, y2 ? y2.dy : 0, 0));
     });
-    return snaps.find((it2) => isNotZero(it2[0]) || isNotZero(it2[1])) || DEFAULT_DIST_VECTOR;
+    return snaps.find((it) => isNotZero(it[0]) || isNotZero(it[1])) || DEFAULT_DIST_VECTOR;
   }
   checkPoint(sourceVertex) {
     const snap = this.check([sourceVertex]);
@@ -5550,7 +5550,7 @@ const getPredefinedCubicBezier = (str) => {
   return [...parseCubicBezier(bezierObj[str] || str)];
 };
 const formatCubicBezier = (arr) => {
-  arr = arr.map((it2) => Math.floor(it2 * 100) / 100);
+  arr = arr.map((it) => Math.floor(it * 100) / 100);
   for (var i = 0, len2 = bezierList.length; i < len2; i++) {
     var bezier = bezierList[i];
     if (bezier[0] == arr[0] && bezier[1] == arr[1] && bezier[2] == arr[2] && bezier[3] == arr[3] && bezier[5]) {
@@ -5562,10 +5562,10 @@ const formatCubicBezier = (arr) => {
 function parseCubicBezier(str) {
   if (typeof str == "string") {
     if (predefinedBezier[str]) {
-      return bezierList.filter((it2) => it2[4] === str)[0];
+      return bezierList.filter((it) => it[4] === str)[0];
     } else {
       var arr = str.replace("cubic-bezier", "").replace("(", "").replace(")", "").split(",");
-      arr = arr.map((it2) => parseFloat(it2.trim()));
+      arr = arr.map((it) => parseFloat(it.trim()));
       return arr;
     }
   }
@@ -6001,8 +6001,8 @@ function STRING_TO_CSS(str = "", splitChar = ";", keySplitChar = ":") {
   var style = {};
   if (str === "")
     return style;
-  str.split(splitChar).forEach((it2) => {
-    var [key, ...value] = it2.split(keySplitChar).map((it3) => it3.trim());
+  str.split(splitChar).forEach((it) => {
+    var [key, ...value] = it.split(keySplitChar).map((it2) => it2.trim());
     if (key != "") {
       style[key] = value.join(keySplitChar);
     }
@@ -6419,8 +6419,8 @@ var fromHSL = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePropert
   HSLtoRGB
 }, Symbol.toStringTag, { value: "Module" }));
 const color_regexp = /(#(?:[\da-f]{3}){1,2}|#(?:[\da-f]{8})|rgb\((?:\s*\d{1,3},\s*){2}\d{1,3}\s*\)|rgba\((?:\s*\d{1,3},\s*){3}\d*\.?\d+\s*\)|hsl\(\s*\d{1,3}(?:,\s*\d{1,3}%){2}\s*\)|hsla\(\s*\d{1,3}(?:,\s*\d{1,3}%){2},\s*\d*\.?\d+\s*\)|([\w_\-]+))/gi;
-function getColorIndexString(it2, prefix = "@") {
-  return `${prefix}${it2.startIndex}`.padEnd(10, "0");
+function getColorIndexString(it, prefix = "@") {
+  return `${prefix}${it.startIndex}`.padEnd(10, "0");
 }
 function isColor(str) {
   const results = matches(str);
@@ -6453,24 +6453,24 @@ function matches(str) {
 }
 function convertMatches(str, prefix = "@") {
   const m = matches(str);
-  m.forEach((it2) => {
-    str = str.replace(it2.color, getColorIndexString(it2, prefix));
+  m.forEach((it) => {
+    str = str.replace(it.color, getColorIndexString(it, prefix));
   });
   return { str, matches: m };
 }
 function convertMatchesArray(str, splitStr = ",") {
   const ret = convertMatches(str);
-  return ret.str.split(splitStr).map((it2, index2) => {
-    it2 = trim(it2);
+  return ret.str.split(splitStr).map((it, index2) => {
+    it = trim(it);
     if (ret.matches[index2]) {
-      it2 = it2.replace(getColorIndexString(ret.matches[index2]), ret.matches[index2].color);
+      it = it.replace(getColorIndexString(ret.matches[index2]), ret.matches[index2].color);
     }
-    return it2;
+    return it;
   });
 }
 function reverseMatches(str, matches2) {
-  matches2.forEach((it2) => {
-    str = str.replace(getColorIndexString(it2), it2.color);
+  matches2.forEach((it) => {
+    str = str.replace(getColorIndexString(it), it.color);
   });
   return str;
 }
@@ -6570,9 +6570,9 @@ function parseGradient(colors2) {
   if (isString(colors2)) {
     colors2 = convertMatchesArray(colors2);
   }
-  colors2 = colors2.map((it2) => {
-    if (isString(it2)) {
-      const ret = convertMatches(it2);
+  colors2 = colors2.map((it) => {
+    if (isString(it)) {
+      const ret = convertMatches(it);
       let arr = trim(ret.str).split(" ");
       if (arr[1]) {
         if (arr[1].indexOf("%") > -1) {
@@ -6585,35 +6585,35 @@ function parseGradient(colors2) {
       }
       arr[0] = reverseMatches(arr[0], ret.matches);
       return arr;
-    } else if (Array.isArray(it2)) {
-      if (!it2[1]) {
-        it2[1] = "*";
-      } else if (isString(it2[1])) {
-        if (it2[1].indexOf("%") > -1) {
-          it2[1] = parseFloat(it2[1].replace(/%/, "")) / 100;
+    } else if (Array.isArray(it)) {
+      if (!it[1]) {
+        it[1] = "*";
+      } else if (isString(it[1])) {
+        if (it[1].indexOf("%") > -1) {
+          it[1] = parseFloat(it[1].replace(/%/, "")) / 100;
         } else {
-          it2[1] = +it2[1];
+          it[1] = +it[1];
         }
       }
-      return [...it2];
+      return [...it];
     }
   });
-  const count = colors2.filter((it2) => {
-    return it2[1] === "*";
+  const count = colors2.filter((it) => {
+    return it[1] === "*";
   }).length;
   if (count > 0) {
-    const sum = colors2.filter((it2) => {
-      return it2[1] != "*" && it2[1] != 1;
-    }).map((it2) => it2[1]).reduce((total, cur) => {
+    const sum = colors2.filter((it) => {
+      return it[1] != "*" && it[1] != 1;
+    }).map((it) => it[1]).reduce((total, cur) => {
       return total + cur;
     }, 0);
     const dist2 = (1 - sum) / count;
-    colors2.forEach((it2, index2) => {
-      if (it2[1] == "*" && index2 > 0) {
+    colors2.forEach((it, index2) => {
+      if (it[1] == "*" && index2 > 0) {
         if (colors2.length - 1 == index2)
           ;
         else {
-          it2[1] = dist2;
+          it[1] = dist2;
         }
       }
     });
@@ -7118,10 +7118,10 @@ const CSS_FUNC_MATCHES = (str) => {
 const findFunctionEndIndex = (allString, startIndex, funcStartCharacter = "(", funcEndCharacter = ")") => {
   const result = [];
   for (var i = startIndex; i < allString.length; i++) {
-    const it2 = allString[i];
-    if (it2 === funcStartCharacter) {
+    const it = allString[i];
+    if (it === funcStartCharacter) {
       result.push(funcStartCharacter);
-    } else if (it2 === funcEndCharacter) {
+    } else if (it === funcEndCharacter) {
       result.pop();
       if (result.length === 0) {
         break;
@@ -7166,21 +7166,21 @@ const makeGroupFunction = (type) => (item2, allString, funcStartCharacter = "(",
   const args2 = allString.substring(item2.startIndex + matchedStringIndex, item2.startIndex + matchedString.lastIndexOf(funcEndCharacter));
   const startIndex = item2.startIndex;
   const endIndex = item2.startIndex + matchedString.length;
-  const newParsed = parseValue(args2).map((it2) => {
-    return __spreadProps(__spreadValues({}, it2), {
-      fullTextStartIndex: item2.startIndex + matchedStringIndex + it2.startIndex,
-      fullTextEndIndex: item2.startIndex + matchedStringIndex + it2.endIndex
+  const newParsed = parseValue(args2).map((it) => {
+    return __spreadProps(__spreadValues({}, it), {
+      fullTextStartIndex: item2.startIndex + matchedStringIndex + it.startIndex,
+      fullTextEndIndex: item2.startIndex + matchedStringIndex + it.endIndex
     });
   });
   let parameters = [];
   let commaIndex = 0;
-  newParsed.forEach((it2, index2) => {
-    if (it2.func === FuncType.COMMA) {
+  newParsed.forEach((it, index2) => {
+    if (it.func === FuncType.COMMA) {
       commaIndex++;
     } else {
       if (!parameters[commaIndex])
         parameters[commaIndex] = [];
-      parameters[commaIndex].push(it2);
+      parameters[commaIndex].push(it);
     }
   });
   return {
@@ -7254,16 +7254,16 @@ function parseValue(str, {
     return result;
   }
   function checkParsedResult(startIndex, endIndex, matchedString) {
-    return result.some((it2) => {
-      if (it2.parsed && isArray$1(it2.parsed)) {
-        return it2.parsed.some((parsedIt) => {
+    return result.some((it) => {
+      if (it.parsed && isArray$1(it.parsed)) {
+        return it.parsed.some((parsedIt) => {
           if (parsedIt.startIndex === startIndex && parsedIt.endIndex === endIndex && matchedString === parsedIt.matchedString) {
             return true;
           }
           return false;
         });
       }
-      if (it2.startIndex === startIndex && it2.endIndex === endIndex && matchedString === it2.matchedString) {
+      if (it.startIndex === startIndex && it.endIndex === endIndex && matchedString === it.matchedString) {
         return true;
       }
       return false;
@@ -7304,7 +7304,7 @@ function parseValue(str, {
       item2 = __spreadProps(__spreadValues({}, item2), {
         func: func2,
         args: args2,
-        parameters: args2.split(parameterSaparator).map((it2) => it2.trim())
+        parameters: args2.split(parameterSaparator).map((it) => it.trim())
       });
       parsedFunc = func2;
     }
@@ -7471,7 +7471,7 @@ class ColorStep {
   static parse(colorStepString) {
     let colorsteps = [];
     const results = convertMatches(colorStepString);
-    var arr = results.str.split(" ").filter((it2) => it2.trim());
+    var arr = results.str.split(" ").filter((it) => it.trim());
     const colorIndex = +arr[0].replace("@", "");
     const color2 = results.matches[colorIndex].color;
     if (arr.length === 1) {
@@ -7563,11 +7563,11 @@ var timingFunctions = {
   easeOutElastic
 };
 function createTimingFunction(timing = "linear") {
-  var [funcName, params] = timing.split("(").map((it2) => it2.trim());
+  var [funcName, params] = timing.split("(").map((it) => it.trim());
   params = (params || "").split(")")[0].trim();
   var func2 = timingFunctions[funcName];
   if (func2) {
-    var args2 = timing.split("(")[1].split(")")[0].split(",").map((it2) => it2.trim());
+    var args2 = timing.split("(")[1].split(")")[0].split(",").map((it) => it.trim());
     return func2(...args2);
   } else {
     return createCurveFunction(timing);
@@ -7619,7 +7619,7 @@ class Point {
     points2[0].mark = true;
     points2[points2.length - 1].mark = true;
     Point.DouglasPeuker(tolerance, points2, 0, points2.length - 1);
-    return points2.filter((it2) => Boolean(it2.mark));
+    return points2.filter((it) => Boolean(it.mark));
   }
   static segmentDistance2(x2, y2, A, B) {
     let dx = B.x - A.x;
@@ -8390,13 +8390,13 @@ class PathParser {
   }
   trim(str = "") {
     var arr = str.match(numberReg) || [];
-    return arr.filter((it2) => it2 != "");
+    return arr.filter((it) => it != "");
   }
   parse() {
     var arr = this.pathString.match(REG_PARSE_NUMBER_FOR_PATH) || [];
     this.segments = arr.map((s) => {
       var command = s[0];
-      var values = this.trim(s.replace(command, "")).map((it2) => +it2);
+      var values = this.trim(s.replace(command, "")).map((it) => +it);
       return { command, values };
     });
     this.segments = this.segments.map((s, index2) => {
@@ -8453,12 +8453,12 @@ class PathParser {
           return s;
       }
     });
-    this.segments.forEach((it2, index2) => {
+    this.segments.forEach((it, index2) => {
       const prev = this.segments[index2 - 1];
-      if (it2.command == "A") {
+      if (it.command == "A") {
         const x1 = (prev == null ? void 0 : prev.values[prev.values.length - 2]) || 0;
         const y1 = (prev == null ? void 0 : prev.values[prev.values.length - 1]) || 0;
-        const [rx, ry, xrotate, largeArcFlag, sweepFlag, x2, y2] = it2.values;
+        const [rx, ry, xrotate, largeArcFlag, sweepFlag, x2, y2] = it.values;
         const path = PathParser.arcToCurve(x1, y1, rx, ry, xrotate, largeArcFlag, sweepFlag, x2, y2);
         path.segments.forEach((seg) => {
           if (seg.command !== "M" || seg.command !== "Z")
@@ -8633,8 +8633,8 @@ class PathParser {
   }
   joinPath(segments2, split = "") {
     var list2 = segments2 || this.segments;
-    return list2.map((it2) => {
-      return `${it2.command} ${it2.values.length ? it2.values.join(" ") : ""}`;
+    return list2.map((it) => {
+      return `${it.command} ${it.values.length ? it.values.join(" ") : ""}`;
     }).join(split);
   }
   each(callback, isReturn = false) {
@@ -8682,10 +8682,10 @@ class PathParser {
   }
   clone() {
     const path = new PathParser();
-    path.resetSegments(this.segments.map((it2) => {
+    path.resetSegments(this.segments.map((it) => {
       return {
-        command: it2.command,
-        values: it2.values.slice()
+        command: it.command,
+        values: it.values.slice()
       };
     }));
     return path;
@@ -9183,7 +9183,7 @@ class PathParser {
   }
   round(k = 1) {
     this.each(function(segment) {
-      segment.values = segment.values.map((it2) => round$1(it2, k));
+      segment.values = segment.values.map((it) => round$1(it, k));
       return segment;
     });
     return this;
@@ -9341,14 +9341,14 @@ class PathParser {
   createGroupPath(index2) {
     var _a, _b;
     const path = new PathParser();
-    path.resetSegments(((_b = (_a = this.getGroup()[index2]) == null ? void 0 : _a.segments) == null ? void 0 : _b.map((it2) => {
-      return it2.segment;
+    path.resetSegments(((_b = (_a = this.getGroup()[index2]) == null ? void 0 : _a.segments) == null ? void 0 : _b.map((it) => {
+      return it.segment;
     })) || []);
     return path;
   }
   toPathList() {
     return this.getGroup().map((group2) => {
-      return PathParser.fromSegments(group2.segments.map((it2) => it2.segment));
+      return PathParser.fromSegments(group2.segments.map((it) => it.segment));
     });
   }
   replaceSegment(index2, ...segments2) {
@@ -9420,10 +9420,10 @@ class PathParser {
     const groupList = this.getGroup();
     groupList.forEach((group2, groupIndex) => {
       const points2 = [
-        ...group2.segments.filter((it2) => it2.segment.command.toLowerCase() !== "z").map((it2) => {
+        ...group2.segments.filter((it) => it.segment.command.toLowerCase() !== "z").map((it) => {
           return {
-            x: it2.segment.values[0],
-            y: it2.segment.values[1]
+            x: it.segment.values[0],
+            y: it.segment.values[1]
           };
         })
       ];
@@ -9445,8 +9445,8 @@ class PathParser {
     const groupList = this.getGroup();
     groupList.forEach((group2, groupIndex) => {
       const points2 = [
-        ...group2.segments.filter((it2) => it2.segment.command.toLowerCase() !== "z").map((it2) => {
-          return [...it2.segment.values, 0];
+        ...group2.segments.filter((it) => it.segment.command.toLowerCase() !== "z").map((it) => {
+          return [...it.segment.values, 0];
         })
       ];
       const bezierCurve = fitCurve(points2, error);
@@ -9469,8 +9469,8 @@ class PathParser {
     const groupList = this.getGroup();
     groupList.forEach((group2, groupIndex) => {
       const points2 = [
-        ...group2.segments.filter((it2) => it2.segment.command.toLowerCase() !== "z").map((it2) => {
-          return [...it2.segment.values, 0];
+        ...group2.segments.filter((it) => it.segment.command.toLowerCase() !== "z").map((it) => {
+          return [...it.segment.values, 0];
         })
       ];
       const newPoints = [];
@@ -9897,8 +9897,8 @@ class PathParser {
       };
     });
     return (t) => {
-      const currentCurve = curveList.find((it2) => {
-        return it2.start <= t && t <= it2.end;
+      const currentCurve = curveList.find((it) => {
+        return it.start <= t && t <= it.end;
       });
       if (currentCurve) {
         const point2 = currentCurve.curveFunction(t);
@@ -10045,16 +10045,16 @@ class Gradient extends ImageResource {
         return a.index > b.index ? 1 : -1;
       }
     });
-    children2.forEach((it2, index2) => {
-      it2.index = index2 * 100;
+    children2.forEach((it, index2) => {
+      it.index = index2 * 100;
     });
   }
   sortToRight() {
     var children2 = this.colorsteps;
     const length2 = children2.length;
     const unit = 100 / length2;
-    children2.forEach((it2, index2) => {
-      it2.percent = unit * (index2 + 1);
+    children2.forEach((it, index2) => {
+      it.percent = unit * (index2 + 1);
     });
     this.sortColorStep();
   }
@@ -10062,8 +10062,8 @@ class Gradient extends ImageResource {
     var children2 = this.colorsteps;
     const length2 = children2.length;
     const unit = 100 / length2;
-    children2.forEach((it2, index2) => {
-      it2.percent = unit * index2;
+    children2.forEach((it, index2) => {
+      it.percent = unit * index2;
     });
     this.sortColorStep();
   }
@@ -10087,7 +10087,7 @@ class Gradient extends ImageResource {
     this.json.colorsteps.splice(index2, 1);
   }
   removeColorStep(id) {
-    this.json.colorsteps = this.json.colorsteps.filter((it2) => it2.id != id);
+    this.json.colorsteps = this.json.colorsteps.filter((it) => it.id != id);
   }
   get colorsteps() {
     return this.json.colorsteps;
@@ -10110,15 +10110,15 @@ class Gradient extends ImageResource {
     }
   }
   getColorString() {
-    return this.colorsteps.map((it2, index2) => {
-      const { color: color2, percent, timing, timingCount } = it2;
+    return this.colorsteps.map((it, index2) => {
+      const { color: color2, percent, timing, timingCount } = it;
       return `${color2} ${percent}% ${this.makeTimingString(timing, timingCount)}`;
     }).join(",");
   }
   static makeColorStepList(colorsteps) {
     const results = [];
-    colorsteps.forEach((it2, index2) => {
-      const { color: color2, percent, timing, timingCount } = it2;
+    colorsteps.forEach((it, index2) => {
+      const { color: color2, percent, timing, timingCount } = it;
       var prevColorStep = colorsteps[index2 - 1];
       if (index2 === 0) {
         results.push({ color: color2, percent });
@@ -10170,16 +10170,16 @@ class Gradient extends ImageResource {
   }
   static toCSSColorString(colorsteps = [], unit = "%", maxValue = 100) {
     const list2 = Gradient.makeColorStepList(colorsteps);
-    return list2.map((it2) => {
-      const { color: color2, percent } = it2;
+    return list2.map((it) => {
+      const { color: color2, percent } = it;
       const pos = percent / 100 * maxValue;
       return `${color2} ${pos}${unit}`;
     }).join(",");
   }
   static parseColorSteps(colors2) {
-    return colors2.map((it2, index2) => {
+    return colors2.map((it, index2) => {
       var _a, _b, _c;
-      if (it2.length === 1) {
+      if (it.length === 1) {
         const prev = ((_a = colors2[index2 - 1]) == null ? void 0 : _a[1]) || { parsed: { value: 0 } };
         const next = ((_b = colors2[index2 + 1]) == null ? void 0 : _b[1]) || { parsed: { value: 100 } };
         let percent = 0;
@@ -10191,44 +10191,44 @@ class Gradient extends ImageResource {
           percent = prev.parsed.value + (next.parsed.value - prev.parsed.value) * 0.5;
         }
         return new ColorStep({
-          color: it2[0].matchedString,
+          color: it[0].matchedString,
           percent,
           unit: "%",
           timing: parseOneValue("linear").parsed,
           timingCount: 1
         });
       }
-      if (it2.length === 2) {
+      if (it.length === 2) {
         return new ColorStep({
-          color: it2[0].matchedString,
-          percent: it2[1].parsed.value,
-          unit: it2[1].parsed.unit,
+          color: it[0].matchedString,
+          percent: it[1].parsed.value,
+          unit: it[1].parsed.unit,
           timing: parseOneValue("linear").parsed,
           timingCount: 1
         });
-      } else if (it2.length === 3) {
-        if (it2[2].parsed.funcType === FuncType.TIMING) {
+      } else if (it.length === 3) {
+        if (it[2].parsed.funcType === FuncType.TIMING) {
           return new ColorStep({
-            color: it2[0].matchedString,
-            percent: it2[1].parsed.value,
-            unit: it2[1].parsed.unit,
-            timing: it2[2].parsed,
-            timingCount: (_c = it2[3]) == null ? void 0 : _c.parsed.value
+            color: it[0].matchedString,
+            percent: it[1].parsed.value,
+            unit: it[1].parsed.unit,
+            timing: it[2].parsed,
+            timingCount: (_c = it[3]) == null ? void 0 : _c.parsed.value
           });
         }
         return new ColorStep({
-          color: it2[0].matchedString,
-          percent: it2[2].parsed.value,
-          unit: it2[2].parsed.unit,
+          color: it[0].matchedString,
+          percent: it[2].parsed.value,
+          unit: it[2].parsed.unit,
           timing: parseOneValue(`steps(1, start)`).parsed
         });
-      } else if (it2.length === 4) {
+      } else if (it.length === 4) {
         return new ColorStep({
-          color: it2[0].matchedString,
-          percent: it2[1].parsed.value,
-          unit: it2[1].parsed.unit,
-          timing: it2[2].parsed,
-          timingCount: it2[3].parsed.value
+          color: it[0].matchedString,
+          percent: it[1].parsed.value,
+          unit: it[1].parsed.unit,
+          timing: it[2].parsed,
+          timingCount: it[3].parsed.value
         });
       }
     });
@@ -10385,21 +10385,21 @@ class LinearGradient extends Gradient {
     const list2 = [];
     const keywords = [];
     if (options2[0].func !== FuncType.COLOR) {
-      options2.forEach((it2) => {
-        if (it2.func === FuncType.KEYWORD) {
-          keywords.push(it2);
+      options2.forEach((it) => {
+        if (it.func === FuncType.KEYWORD) {
+          keywords.push(it);
         } else {
-          list2.push(it2);
+          list2.push(it);
         }
       });
     } else {
       colors2 = result.parameters;
     }
-    let angle2 = keywords.map((it2) => it2.matchedString).join(" ");
+    let angle2 = keywords.map((it) => it.matchedString).join(" ");
     if (angle2 === "") {
       [
         angle2
-      ] = list2.map((it2) => it2.parsed.value);
+      ] = list2.map((it) => it.parsed.value);
     } else {
       angle2 = DEFINED_ANGLES$1[angle2];
     }
@@ -10488,7 +10488,7 @@ class RadialGradient extends Gradient {
     const { cornerList, topLeftDist, topRightDist, bottomRightDist, bottomLeftDist } = this.getConerDist(result);
     const targetList = [topLeftDist, topRightDist, bottomLeftDist, bottomRightDist];
     var raySize = isClosest ? Math.min(...targetList) : Math.max(...targetList);
-    var point2 = cornerList.find((it2) => it2[2] === raySize)[1];
+    var point2 = cornerList.find((it) => it[2] === raySize)[1];
     var aspect_ratio = newSize.width / newSize.height;
     if (aspect_ratio === 0) {
       return;
@@ -10658,27 +10658,27 @@ class RadialGradient extends Gradient {
       let hasAt = false;
       let positions = [];
       let sizeOption = [];
-      options2.forEach((it2) => {
-        if (it2.func === FuncType.KEYWORD && it2.matchedString === "at") {
+      options2.forEach((it) => {
+        if (it.func === FuncType.KEYWORD && it.matchedString === "at") {
           hasAt = true;
         } else if (hasAt) {
-          positions.push(it2);
+          positions.push(it);
         } else {
-          switch (it2.matchedString) {
+          switch (it.matchedString) {
             case RadialGradientType.CIRCLE:
             case RadialGradientType.ELLIPSE:
-              radialType = it2.matchedString;
+              radialType = it.matchedString;
               break;
             default:
-              sizeOption.push(it2);
+              sizeOption.push(it);
               break;
           }
         }
       });
       opt.radialType = radialType;
-      opt.radialPosition = positions.map((it2) => {
-        if (it2.func === FuncType.KEYWORD) {
-          switch (it2.matchedString) {
+      opt.radialPosition = positions.map((it) => {
+        if (it.func === FuncType.KEYWORD) {
+          switch (it.matchedString) {
             case "top":
               return Length.percent(0);
             case "left":
@@ -10691,12 +10691,12 @@ class RadialGradient extends Gradient {
               return Length.percent(50);
           }
         }
-        return it2.parsed;
+        return it.parsed;
       });
-      opt.radialSize = sizeOption.map((it2) => {
-        if (it2.func === FuncType.KEYWORD)
-          return it2.matchedString;
-        return it2.parsed;
+      opt.radialSize = sizeOption.map((it) => {
+        if (it.func === FuncType.KEYWORD)
+          return it.matchedString;
+        return it.parsed;
       });
       if (opt.radialSize.length === 1) {
         opt.radialSize = opt.radialSize[0];
@@ -10839,20 +10839,20 @@ class ConicGradient extends Gradient {
       let hasAt = false;
       let positions = [];
       let angle2 = [];
-      options2.forEach((it2) => {
-        if (it2.func === FuncType.KEYWORD && it2.matchedString === "from") {
+      options2.forEach((it) => {
+        if (it.func === FuncType.KEYWORD && it.matchedString === "from") {
           hasFrom = true;
-        } else if (it2.func === FuncType.KEYWORD && it2.matchedString === "at") {
+        } else if (it.func === FuncType.KEYWORD && it.matchedString === "at") {
           hasAt = true;
         } else if (hasAt) {
-          positions.push(it2);
+          positions.push(it);
         } else if (hasFrom) {
-          angle2.push(it2);
+          angle2.push(it);
         }
       });
-      opt.radialPosition = positions.map((it2) => {
-        if (it2.func === FuncType.KEYWORD) {
-          switch (it2.matchedString) {
+      opt.radialPosition = positions.map((it) => {
+        if (it.func === FuncType.KEYWORD) {
+          switch (it.matchedString) {
             case "top":
               return Length.percent(0);
             case "left":
@@ -10865,7 +10865,7 @@ class ConicGradient extends Gradient {
               return Length.percent(50);
           }
         }
-        return it2.parsed;
+        return it.parsed;
       });
       if (angle2.length) {
         opt.angle = angle2[0].parsed.value;
@@ -11234,27 +11234,27 @@ class BackgroundImage extends PropertyItem {
       });
     }
     if (style["background-repeat"]) {
-      style["background-repeat"].split(",").map((it2) => it2.trim()).forEach((it2, index2) => {
+      style["background-repeat"].split(",").map((it) => it.trim()).forEach((it, index2) => {
         if (backgroundImages[index2]) {
-          backgroundImages[index2].repeat = it2;
+          backgroundImages[index2].repeat = it;
         }
       });
     }
     if (style["background-blend-mode"]) {
-      style["background-blend-mode"].split(",").map((it2) => it2.trim()).forEach((it2, index2) => {
+      style["background-blend-mode"].split(",").map((it) => it.trim()).forEach((it, index2) => {
         if (backgroundImages[index2]) {
-          backgroundImages[index2].blendMode = it2;
+          backgroundImages[index2].blendMode = it;
         }
       });
     }
     if (style["background-size"]) {
-      style["background-size"].split(",").map((it2) => it2.trim()).forEach((it2, index2) => {
+      style["background-size"].split(",").map((it) => it.trim()).forEach((it, index2) => {
         if (backgroundImages[index2]) {
-          if (it2 == "cover" || it2 === "contain" || it2 === "auto") {
-            backgroundImages[index2].size = it2;
+          if (it == "cover" || it === "contain" || it === "auto") {
+            backgroundImages[index2].size = it;
           } else {
             backgroundImages[index2].size = "auto";
-            let [width2, height2] = it2.split(" ");
+            let [width2, height2] = it.split(" ");
             backgroundImages[index2].width = Length.parse(width2);
             backgroundImages[index2].height = Length.parse(height2);
           }
@@ -11262,18 +11262,18 @@ class BackgroundImage extends PropertyItem {
       });
     }
     if (style["background-position"]) {
-      style["background-position"].split(",").map((it2) => it2.trim()).forEach((it2, index2) => {
+      style["background-position"].split(",").map((it) => it.trim()).forEach((it, index2) => {
         if (backgroundImages[index2]) {
-          let [x2, y2] = it2.split(" ");
+          let [x2, y2] = it.split(" ");
           backgroundImages[index2].x = Length.parse(x2);
           backgroundImages[index2].y = Length.parse(y2);
         }
       });
     }
     if (style["background-visibility"]) {
-      style["background-visibility"].split(",").map((it2) => it2.trim()).forEach((it2, index2) => {
+      style["background-visibility"].split(",").map((it) => it.trim()).forEach((it, index2) => {
         if (backgroundImages[index2]) {
-          backgroundImages[index2].visibility = it2 === VisibilityType.HIDDEN ? VisibilityType.HIDDEN : VisibilityType.VISIBLE;
+          backgroundImages[index2].visibility = it === VisibilityType.HIDDEN ? VisibilityType.HIDDEN : VisibilityType.VISIBLE;
         }
       });
     }
@@ -11302,10 +11302,10 @@ class BackgroundImage extends PropertyItem {
     return combineKeyArray(results);
   }
   static join(list2) {
-    return CSS_TO_STRING$1(BackgroundImage.toProperty(list2.map((it2) => BackgroundImage.parse(it2))));
+    return CSS_TO_STRING$1(BackgroundImage.toProperty(list2.map((it) => BackgroundImage.parse(it))));
   }
   static joinCSS(list2) {
-    return BackgroundImage.toCSS(list2.map((it2) => BackgroundImage.parse(it2)));
+    return BackgroundImage.toCSS(list2.map((it) => BackgroundImage.parse(it)));
   }
 }
 var addBackgroundImageAsset = {
@@ -11427,12 +11427,12 @@ class Pattern extends PropertyItem {
     return patterns2;
   }
   static join(list2) {
-    return list2.map((it2) => Pattern.parse(it2)).join(" ");
+    return list2.map((it) => Pattern.parse(it)).join(" ");
   }
   static toCSS(str) {
     let list2 = [];
-    Pattern.parseStyle(str).forEach((it2) => {
-      list2.push.apply(list2, BackgroundImage.parseStyle(STRING_TO_CSS(it2.toCSS())));
+    Pattern.parseStyle(str).forEach((it) => {
+      list2.push.apply(list2, BackgroundImage.parseStyle(STRING_TO_CSS(it.toCSS())));
     });
     return BackgroundImage.joinCSS(list2);
   }
@@ -40569,8 +40569,8 @@ var ExportManager = {
     const cssString = item2.generateView(`[data-id='${item2.id}']`, appendCSS);
     return `
     ${cssString}
-    ` + item2.layers.map((it2) => {
-      return this.makeStyle(it2);
+    ` + item2.layers.map((it) => {
+      return this.makeStyle(it);
     }).join("");
   },
   makeSvg(project2) {
@@ -41047,7 +41047,7 @@ var history_clipboard_paste = {
     const data = clipboardData || editor.clipboard.last;
     if (data.type == ClipboardActionType.COPY) {
       const ids = data.data;
-      const items = await editor.json.renderAll(ids.map((it2) => editor.get(it2)));
+      const items = await editor.json.renderAll(ids.map((it) => editor.get(it)));
       const newIds = [];
       const length2 = items.length;
       const itemList = {};
@@ -41158,11 +41158,11 @@ var history_moveLayer = {
     const targetItems = editor.selection.itemsByIds(layers2);
     const lastValues = {};
     const currentValues2 = {};
-    targetItems.forEach((it2) => {
-      const oldPosition = it2.absoluteMove(dist2);
-      const newPosition = it2.attrs("x", "y");
-      lastValues[it2.id] = oldPosition;
-      currentValues2[it2.id] = newPosition;
+    targetItems.forEach((it) => {
+      const oldPosition = it.absoluteMove(dist2);
+      const newPosition = it.attrs("x", "y");
+      lastValues[it.id] = oldPosition;
+      currentValues2[it.id] = newPosition;
     });
     editor.emit("setAttributeForMulti", currentValues2);
     editor.nextTick(() => {
@@ -41178,10 +41178,10 @@ var history_moveLayer = {
   redo: function(editor, { currentValues: [layers2, dist2] }) {
     const targetItems = editor.selection.itemsByIds(layers2);
     const localChanges = {};
-    targetItems.forEach((it2) => {
-      it2.absoluteMove(dist2);
-      const newPosition = it2.attrs("x", "y");
-      localChanges[it2.id] = newPosition;
+    targetItems.forEach((it) => {
+      it.absoluteMove(dist2);
+      const newPosition = it.attrs("x", "y");
+      localChanges[it.id] = newPosition;
     });
     editor.emit("setAttributeForMulti", currentValues);
   },
@@ -41341,7 +41341,7 @@ function filterChildren(items = []) {
   return items.filter((item2) => {
     let total = 0;
     item2.path.forEach((treeItem) => {
-      total += items.filter((it2) => it2.id === treeItem.id).length ? 1 : 0;
+      total += items.filter((it) => it.id === treeItem.id).length ? 1 : 0;
     });
     return total === 1;
   });
@@ -41352,9 +41352,9 @@ var history_removeLayer = {
   execute: function(editor, message, ids = void 0) {
     let items = editor.selection.itemsByIds(ids || editor.selection.ids);
     items = filterChildren(items);
-    const filtedIds = items.map((it2) => it2.id);
+    const filtedIds = items.map((it) => it.id);
     editor.modelManager.markRemove(filtedIds);
-    const parentIds = items.map((it2) => it2.parentId);
+    const parentIds = items.map((it) => it.parentId);
     items.forEach((item2) => {
       item2.remove();
       editor.selection.removeById(item2.id);
@@ -41381,7 +41381,7 @@ var history_removeLayer = {
     const ids = currentValues2[0];
     let items = editor.selection.itemsByIds(ids || editor.selection.ids);
     items = filterChildren(items);
-    editor.modelManager.markRemove(items.map((it2) => it2.id));
+    editor.modelManager.markRemove(items.map((it) => it.id));
     items.forEach((item2) => item2.remove());
     editor.nextTick(() => {
       editor.emit("refreshAll");
@@ -41690,8 +41690,8 @@ var moveLayer = {
   description: "move layer by keydown with matrix ",
   execute: function(editor, dx = 0, dy = 0) {
     const absoluteDist = [dx, dy, 0];
-    editor.selection.items.forEach((it2) => {
-      it2.absoluteMove(absoluteDist);
+    editor.selection.items.forEach((it) => {
+      it.absoluteMove(absoluteDist);
     });
     editor.command("setAttributeForMulti", "item move down", editor.selection.pack("x", "y"));
     editor.nextTick(() => {
@@ -41708,9 +41708,9 @@ var moveLayerForItems = {
   description: "mova layer by multi items ",
   execute: function(editor, moveItems = []) {
     const itemsMap = {};
-    moveItems.forEach((it2) => {
-      it2.item.absoluteMove(it2.dist);
-      itemsMap[it2.item.id] = it2.item.attrs("x", "y");
+    moveItems.forEach((it) => {
+      it.item.absoluteMove(it.dist);
+      itemsMap[it.item.id] = it.item.attrs("x", "y");
     });
     editor.emit("history.setAttributeForMulti", "item move", itemsMap);
     editor.nextTick(() => {
@@ -41815,7 +41815,7 @@ var __glob_0_77$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
 }, Symbol.toStringTag, { value: "Module" }));
 class DirectionLength {
   static parse(str) {
-    var temp = str.split(" ").filter((it2) => it2.trim()).map((it2) => Length.parse(it2));
+    var temp = str.split(" ").filter((it) => it.trim()).map((it) => Length.parse(it));
     var top2 = Length.percent(0), right2 = Length.percent(0), bottom2 = Length.percent(0), left2 = Length.percent(0);
     if (temp.length === 1) {
       top2 = temp[0].clone();
@@ -41915,7 +41915,7 @@ class ClipPath extends PropertyItem {
     var radius = new Length("", "closest-side"), position2 = "";
     str = str || "50% at 50% 50%";
     if (str.includes("at")) {
-      [radius, position2] = str.split("at").map((it2) => it2.trim());
+      [radius, position2] = str.split("at").map((it) => it.trim());
     } else {
       position2 = str.trim();
     }
@@ -41936,7 +41936,7 @@ class ClipPath extends PropertyItem {
     var radius = `50% 50%`, position2 = "";
     str = str || "50%";
     if (str.includes("at")) {
-      [radius, position2] = str.split("at").map((it2) => it2.trim());
+      [radius, position2] = str.split("at").map((it) => it.trim());
     } else {
       position2 = str.trim();
     }
@@ -41980,8 +41980,8 @@ class ClipPath extends PropertyItem {
     };
   }
   static parseStyleForPolygon(str = "") {
-    return str.split(",").filter((it2) => it2.trim()).map((it2) => {
-      var [x2, y2] = it2.trim().split(" ");
+    return str.split(",").filter((it) => it.trim()).map((it) => {
+      var [x2, y2] = it.trim().split(" ");
       return {
         x: Length.parse(x2),
         y: Length.parse(y2)
@@ -42195,19 +42195,19 @@ var recoverBooleanPath = {
       if (!booleanPath) {
         return;
       }
-      const layersCache = booleanContainer.layers.map((it2) => {
+      const layersCache = booleanContainer.layers.map((it) => {
         return {
-          item: it2,
-          matrix: it2.matrix
+          item: it,
+          matrix: it.matrix
         };
       });
       const newBooleanContainerRect = booleanContainer.updatePath(booleanPath);
       delete newBooleanContainerRect.d;
       booleanContainer.reset(newBooleanContainerRect);
-      layersCache.forEach((it2) => {
-        booleanContainer.resetMatrix(it2.item);
+      layersCache.forEach((it) => {
+        booleanContainer.resetMatrix(it.item);
       });
-      const ids = [...layersCache.map((it2) => it2.item.id), booleanContainer.id];
+      const ids = [...layersCache.map((it) => it.item.id), booleanContainer.id];
       const data = editor.selection.packByIds(ids, "x", "y", "width", "height");
       editor.command("setAttributeForMulti", "fit boolean path", data, { origin: "*", doNotChildrenScale: isBooleanItem });
     }
@@ -42432,10 +42432,10 @@ class Transform extends PropertyItem {
   static join(list2) {
     var firstType = "perspective";
     var lastType = "matrix3d";
-    var arr = list2.filter((it2) => it2.type === firstType);
-    var last2 = list2.filter((it2) => it2.type === lastType);
-    var arr2 = list2.filter((it2) => it2.type !== firstType && it2.type !== lastType);
-    return [...arr, ...arr2, ...last2].map((it2) => new Transform(it2).toString()).join(" ");
+    var arr = list2.filter((it) => it.type === firstType);
+    var last2 = list2.filter((it) => it.type === lastType);
+    var arr2 = list2.filter((it) => it.type !== firstType && it.type !== lastType);
+    return [...arr, ...arr2, ...last2].map((it) => new Transform(it).toString()).join(" ");
   }
   hasNumberValue() {
     var type = this.json.type;
@@ -42448,12 +42448,12 @@ class Transform extends PropertyItem {
     if (typeof type === "string") {
       type = [type];
     }
-    return Transform.filter(transform2, (it2) => {
-      return type.includes(it2.type) === false;
+    return Transform.filter(transform2, (it) => {
+      return type.includes(it.type) === false;
     });
   }
   static filter(transform2, filterFunction) {
-    return Transform.join(Transform.parseStyle(transform2, false).filter((it2) => filterFunction(it2)));
+    return Transform.join(Transform.parseStyle(transform2, false).filter((it) => filterFunction(it)));
   }
   static replace(transform2, valueObject) {
     var obj2 = Transform.parseStyle(transform2, false);
@@ -42500,7 +42500,7 @@ class Transform extends PropertyItem {
     if (typeof type === "function") {
       arr = arr.find(type);
     } else {
-      arr = arr.find((it2) => it2.type === type);
+      arr = arr.find((it) => it.type === type);
     }
     if (arr) {
       return arr.value;
@@ -42539,9 +42539,9 @@ class Transform extends PropertyItem {
       transformValue = transformValue.split(")")[0];
       var arr = transformValue.split(",");
       if (transformValue.includes("matrix") || transformValue.includes("scale")) {
-        arr = arr.map((it2) => Length.number(it2.trim()));
+        arr = arr.map((it) => Length.number(it.trim()));
       } else {
-        arr = arr.map((it2) => Length.parse(it2.trim()));
+        arr = arr.map((it) => Length.parse(it.trim()));
       }
       transforms[index2] = Transform.parse({
         type: transformName,
@@ -42556,69 +42556,69 @@ class Transform extends PropertyItem {
   static createTransformMatrix(parsedTransformList, width2, height2) {
     const view = create$5();
     for (let i = 0, len2 = parsedTransformList.length; i < len2; i++) {
-      const it2 = parsedTransformList[i];
-      switch (it2.type) {
+      const it = parsedTransformList[i];
+      switch (it.type) {
         case "translate":
         case "translateX":
         case "translateY":
         case "translateZ":
-          var values = it2.value;
-          if (it2.type === "translate") {
+          var values = it.value;
+          if (it.type === "translate") {
             values = [values[0].toPx(width2).value, values[1].toPx(height2).value, 0];
-          } else if (it2.type === "translateX") {
+          } else if (it.type === "translateX") {
             values = [values[0].toPx(width2).value, 0, 0];
-          } else if (it2.type === "translateY") {
+          } else if (it.type === "translateY") {
             values = [0, values[0].toPx(height2).value, 0];
-          } else if (it2.type === "translateZ") {
+          } else if (it.type === "translateZ") {
             values = [0, 0, values[0].toPx().value];
           }
           translate(view, view, values);
           break;
         case "rotate":
         case "rotateZ":
-          rotateZ(view, view, degreeToRadian$1(it2.value[0].value));
+          rotateZ(view, view, degreeToRadian$1(it.value[0].value));
           break;
         case "rotateX":
-          rotateX(view, view, degreeToRadian$1(it2.value[0].value));
+          rotateX(view, view, degreeToRadian$1(it.value[0].value));
           break;
         case "rotateY":
-          rotateY(view, view, degreeToRadian$1(it2.value[0].value));
+          rotateY(view, view, degreeToRadian$1(it.value[0].value));
           break;
         case "rotate3d":
-          var values = it2.value;
-          rotate$1(view, view, degreeToRadian$1(it2.value[3].value), [
+          var values = it.value;
+          rotate$1(view, view, degreeToRadian$1(it.value[3].value), [
             values[0].value,
             values[1].value,
             values[2].value
           ]);
           break;
         case "scale":
-          scale$1(view, view, [it2.value[0].value, it2.value[1].value, 1]);
+          scale$1(view, view, [it.value[0].value, it.value[1].value, 1]);
           break;
         case "scaleX":
-          scale$1(view, view, [it2.value[0].value, 1, 1]);
+          scale$1(view, view, [it.value[0].value, 1, 1]);
           break;
         case "scaleY":
-          scale$1(view, view, [1, it2.value[0].value, 1]);
+          scale$1(view, view, [1, it.value[0].value, 1]);
           break;
         case "scaleZ":
-          scale$1(view, view, [1, 1, it2.value[0].value]);
+          scale$1(view, view, [1, 1, it.value[0].value]);
           break;
         case "skewX":
-          var rad = it2.value[0].toDeg().toRad();
+          var rad = it.value[0].toDeg().toRad();
           multiply$1(view, view, fromValues$1(1, 0, 0, 0, Math.tan(rad.value), 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
           break;
         case "skewY":
-          var rad = it2.value[0].toDeg().toRad();
+          var rad = it.value[0].toDeg().toRad();
           multiply$1(view, view, fromValues$1(1, Math.tan(rad.value), 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
           break;
         case "skew":
-          const skewX = it2.value[0].toDeg().toRad();
-          const skewY = it2.value.length > 1 ? it2.value[1].toDeg().toRad() : skewX;
+          const skewX = it.value[0].toDeg().toRad();
+          const skewY = it.value.length > 1 ? it.value[1].toDeg().toRad() : skewX;
           multiply$1(view, view, fromValues$1(1, Math.tan(skewY.value), 0, 0, Math.tan(skewX.value), 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
           break;
         case "matrix":
-          var values = it2.value;
+          var values = it.value;
           values = [
             values[0].value,
             values[1].value,
@@ -42640,11 +42640,11 @@ class Transform extends PropertyItem {
           multiply$1(view, view, values);
           break;
         case "matrix3d":
-          var values = it2.value.map((it3) => it3.value);
+          var values = it.value.map((it2) => it2.value);
           multiply$1(view, view, values);
           break;
         case "perspective":
-          var values = it2.value;
+          var values = it.value;
           perspective$1(view, Math.PI * 0.5, width2 / height2, 1, values[0].value);
           break;
       }
@@ -43654,8 +43654,8 @@ const keyAlias$1 = {
 };
 const OSName$1 = os();
 const KeyStringMaker = (item2, os2 = OSName$1) => {
-  return (item2[os2] || item2.key).split("+").map((it2) => it2.trim()).map((it2) => {
-    const keyString = it2.toUpperCase();
+  return (item2[os2] || item2.key).split("+").map((it) => it.trim()).map((it) => {
+    const keyString = it.toUpperCase();
     return keyAlias$1[keyString] || keyString;
   }).join(" ");
 };
@@ -44275,7 +44275,7 @@ var __glob_0_51$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineP
   "default": zoom_out
 }, Symbol.toStringTag, { value: "Module" }));
 const modules$3 = { "./shortcuts_list/add.artboard.js": __glob_0_0$3, "./shortcuts_list/add.brush.js": __glob_0_1$3, "./shortcuts_list/add.circle.js": __glob_0_2$3, "./shortcuts_list/add.circle.l.js": __glob_0_3$3, "./shortcuts_list/add.path.js": __glob_0_4$3, "./shortcuts_list/add.rect.js": __glob_0_5$3, "./shortcuts_list/add.rect.m.js": __glob_0_6$3, "./shortcuts_list/add.text.js": __glob_0_7$3, "./shortcuts_list/clipboard.copy.js": __glob_0_8$3, "./shortcuts_list/clipboard.paste.js": __glob_0_9$3, "./shortcuts_list/group.item.js": __glob_0_10$3, "./shortcuts_list/history.redo.js": __glob_0_11$3, "./shortcuts_list/history.undo.js": __glob_0_12$3, "./shortcuts_list/item.move.alt.down.js": __glob_0_13$3, "./shortcuts_list/item.move.alt.left.js": __glob_0_14$3, "./shortcuts_list/item.move.alt.right.js": __glob_0_15$3, "./shortcuts_list/item.move.alt.up.js": __glob_0_16$3, "./shortcuts_list/item.move.depth.down.js": __glob_0_17$3, "./shortcuts_list/item.move.depth.up.js": __glob_0_18$3, "./shortcuts_list/item.move.key.down.js": __glob_0_19$3, "./shortcuts_list/item.move.key.left.js": __glob_0_20$3, "./shortcuts_list/item.move.key.right.js": __glob_0_21$2, "./shortcuts_list/item.move.key.up.js": __glob_0_22$2, "./shortcuts_list/item.move.shift.down.js": __glob_0_23$2, "./shortcuts_list/item.move.shift.left.js": __glob_0_24$2, "./shortcuts_list/item.move.shift.right.js": __glob_0_25$1, "./shortcuts_list/item.move.shift.up.js": __glob_0_26$1, "./shortcuts_list/item.rotate.meta.left.js": __glob_0_27$1, "./shortcuts_list/item.rotate.meta.right.js": __glob_0_28$1, "./shortcuts_list/removeLayer.js": __glob_0_29$1, "./shortcuts_list/removeLayerByDeleteKey.js": __glob_0_30$1, "./shortcuts_list/segment.delete.js": __glob_0_31$1, "./shortcuts_list/segment.move.alt.down.js": __glob_0_32$1, "./shortcuts_list/segment.move.alt.left.js": __glob_0_33$1, "./shortcuts_list/segment.move.alt.right.js": __glob_0_34$1, "./shortcuts_list/segment.move.alt.up.js": __glob_0_35$1, "./shortcuts_list/segment.move.key.down.js": __glob_0_36$1, "./shortcuts_list/segment.move.key.left.js": __glob_0_37$1, "./shortcuts_list/segment.move.key.right.js": __glob_0_38$1, "./shortcuts_list/segment.move.key.up.js": __glob_0_39$1, "./shortcuts_list/segment.move.shift.down.js": __glob_0_40$1, "./shortcuts_list/segment.move.shift.left.js": __glob_0_41$1, "./shortcuts_list/segment.move.shift.right.js": __glob_0_42$1, "./shortcuts_list/segment.move.shift.up.js": __glob_0_43$1, "./shortcuts_list/select.all.js": __glob_0_44$1, "./shortcuts_list/select.view.js": __glob_0_45$1, "./shortcuts_list/set.tool.hand.js": __glob_0_46$1, "./shortcuts_list/show.pan.js": __glob_0_47$1, "./shortcuts_list/ungroup.item.js": __glob_0_48$1, "./shortcuts_list/zoom.default.js": __glob_0_49$1, "./shortcuts_list/zoom.in.js": __glob_0_50$1, "./shortcuts_list/zoom.out.js": __glob_0_51$1 };
-var shortcuts = Object.values(modules$3).map((it2) => it2.default);
+var shortcuts = Object.values(modules$3).map((it) => it.default);
 function joinKeys(...args2) {
   return args2.filter(Boolean).join("+");
 }
@@ -44316,22 +44316,22 @@ class ShortCutManager {
       return () => true;
     }
     const editor = this.$editor;
-    const whenList = when.split("|").map((it2) => it2.trim());
+    const whenList = when.split("|").map((it) => it.trim());
     return () => {
-      return whenList.some((it2) => editor.modeViewManager.isCurrentMode(it2));
+      return whenList.some((it) => editor.modeViewManager.isCurrentMode(it));
     };
   }
   sort() {
     this.commands = {};
-    this.list.forEach((it2) => {
-      if (Array.isArray(this.commands[it2.checkKeyString]) === false) {
-        this.commands[it2.checkKeyString] = [];
+    this.list.forEach((it) => {
+      if (Array.isArray(this.commands[it.checkKeyString]) === false) {
+        this.commands[it.checkKeyString] = [];
       }
-      this.commands[it2.checkKeyString].push(it2);
+      this.commands[it.checkKeyString].push(it);
     });
   }
   splitShortCut(key) {
-    var arr = key.toUpperCase().split("+").map((it2) => it2.trim()).filter(Boolean);
+    var arr = key.toUpperCase().split("+").map((it) => it.trim()).filter(Boolean);
     let isAlt = false;
     let isControl = false;
     let isShift = false;
@@ -44369,11 +44369,11 @@ class ShortCutManager {
   execute(e, eventType = "keydown") {
     let commands = this.checkShortCut(this.makeKeyCodeString(e), this.makeKeyString(e), this.makeCodeString(e));
     if (commands) {
-      const filteredCommands = commands.filter((it2) => it2.eventType === eventType).filter((it2) => this.checkWhen(it2));
+      const filteredCommands = commands.filter((it) => it.eventType === eventType).filter((it) => this.checkWhen(it));
       if (filteredCommands.length) {
         e.preventDefault();
-        filteredCommands.forEach((it2) => {
-          this.$editor.emit(it2.command, ...it2.args);
+        filteredCommands.forEach((it) => {
+          this.$editor.emit(it.command, ...it.args);
         });
       }
     }
@@ -44436,8 +44436,8 @@ class Offset extends PropertyItem {
   }
   toCSS() {
     var obj2 = {};
-    this.json.properties.forEach((it2) => {
-      obj2 = __spreadValues(__spreadValues({}, obj2), it2.toCSS());
+    this.json.properties.forEach((it) => {
+      obj2 = __spreadValues(__spreadValues({}, obj2), it.toCSS());
     });
     return obj2;
   }
@@ -44454,7 +44454,7 @@ class Keyframe extends PropertyItem {
     var keyframeKeys = {};
     if (style["keyframe"]) {
       var results = convertMatches(style["keyframe"]);
-      results.str.split("|").map((it2) => it2.trim()).forEach((frameInfo, index2) => {
+      results.str.split("|").map((it) => it.trim()).forEach((frameInfo, index2) => {
         var [name, offset, property, ...values] = frameInfo.split(" ");
         var propertyValue = values.join(" ");
         if (!keyframeKeys[name]) {
@@ -44463,8 +44463,8 @@ class Keyframe extends PropertyItem {
           });
           keyframes[index2] = name;
         }
-        var filteredOffset = keyframeKeys[name].offsets.filter((it2) => {
-          return it2.offset.equals(Length.parse(offset));
+        var filteredOffset = keyframeKeys[name].offsets.filter((it) => {
+          return it.offset.equals(Length.parse(offset));
         });
         var offsetObj = null;
         if (filteredOffset.length) {
@@ -44492,7 +44492,7 @@ class Keyframe extends PropertyItem {
             properties.push(p);
           }
         });
-        let varValue = vars.map((it2) => `${it2.key}:${it2.value}`).join(";");
+        let varValue = vars.map((it) => `${it.key}:${it.value}`).join(";");
         if (vars.length) {
           properties.push({ key: "var", value: varValue });
         }
@@ -44535,10 +44535,10 @@ class Keyframe extends PropertyItem {
     }
     return p.value.toString() + ";";
   }
-  toOffsetString(it2) {
+  toOffsetString(it) {
     var tabString = "      ";
-    return `${it2.offset.toString()} {
-${tabString}${it2.properties.map((p) => {
+    return `${it.offset.toString()} {
+${tabString}${it.properties.map((p) => {
       if (this.isMultiStyle(p.key)) {
         return this.getMultiStyleString(p);
       } else {
@@ -44558,21 +44558,21 @@ ${tabString}${it2.properties.map((p) => {
   }`;
   }
   toOffsetText() {
-    var offsets = this.json.offsets.map((it2) => {
-      return it2;
+    var offsets = this.json.offsets.map((it) => {
+      return it;
     });
     offsets.sort((a, b) => {
       return a.offset.value > b.offset.value ? 1 : -1;
     });
-    return offsets.map((it2) => {
-      if (it2.properties.length === 0)
+    return offsets.map((it) => {
+      if (it.properties.length === 0)
         return "";
-      return this.toOffsetString(it2);
+      return this.toOffsetString(it);
     }).join("\n");
   }
   toCSSText() {
-    var offsets = this.json.offsets.map((it2) => {
-      return it2;
+    var offsets = this.json.offsets.map((it) => {
+      return it;
     });
     offsets.sort((a, b) => {
       return a.offset.value > b.offset.value ? 1 : -1;
@@ -44704,9 +44704,9 @@ class ModelManager {
     const obj2 = this.items.get(id);
     const parent = this.getParent(id);
     if (!obj2.removedLeftSibling && obj2.removedRightSibling) {
-      parent.children.splice(parent.children.findIndex((it2) => obj2.removedRightSibling) - 1, 0, id);
+      parent.children.splice(parent.children.findIndex((it) => obj2.removedRightSibling) - 1, 0, id);
     } else if (obj2.removedLeftSibling && !obj2.removedRightSibling) {
-      parent.children.splice(parent.children.findIndex((it2) => obj2.removedLeftSibling) + 1, 0, id);
+      parent.children.splice(parent.children.findIndex((it) => obj2.removedLeftSibling) + 1, 0, id);
     } else {
       parent.children.splice(obj2.removedIndex, 0, id);
     }
@@ -44735,7 +44735,7 @@ class ModelManager {
   removeChild(rootId, childId) {
     const obj2 = this.get(rootId);
     obj2.reset({
-      children: obj2.children.filter((it2) => it2 !== childId)
+      children: obj2.children.filter((it) => it !== childId)
     });
     this.setChanged("removeChild", rootId, { childId });
   }
@@ -44754,15 +44754,15 @@ class ModelManager {
   }
   searchLayers(rootId, childId) {
     const obj2 = this.get(rootId);
-    return this.get(obj2.children.find((it2) => it2 === childId));
+    return this.get(obj2.children.find((it) => it === childId));
   }
   searchItemsById(ids) {
     return ids.map((id) => this.get(id));
   }
   hasPathOf(targetItems, searchItem) {
     const path = this.getPath(searchItem.id, searchItem);
-    return targetItems.filter((it2) => it2.id !== searchItem.id).some((target) => {
-      return path.find((it2) => it2.id === target.id);
+    return targetItems.filter((it) => it.id !== searchItem.id).some((target) => {
+      return path.find((it) => it.id === target.id);
     });
   }
   findGroupItem(rootId) {
@@ -44781,10 +44781,10 @@ class ModelManager {
       const groupItem = this.findGroupItem(item2.id) || item2;
       objectList[groupItem.id] = groupItem;
     });
-    return Object.values(objectList).filter((it2) => it2.isNot("project"));
+    return Object.values(objectList).filter((it) => it.isNot("project"));
   }
   searchLiveItemsById(ids) {
-    return ids.map((id) => this.get(id)).filter((it2) => !it2.removed);
+    return ids.map((id) => this.get(id)).filter((it) => !it.removed);
   }
   markRemove(ids = []) {
     ids.forEach((id) => {
@@ -44793,7 +44793,7 @@ class ModelManager {
     this.setChanged("markRemove", ids, { isLayer: true });
   }
   markRemoveProject(id) {
-    const index2 = this.projects.findIndex((it2) => it2 === id);
+    const index2 = this.projects.findIndex((it) => it === id);
     this.projects.splice(index2, 1);
     this.get(id).removed = true;
     this.setChanged("markRemoveProject", [id], { isProject: true });
@@ -44827,12 +44827,12 @@ class ModelManager {
         this.projects = [.../* @__PURE__ */ new Set([...this.projects, item2.id])];
       }
     }
-    const children2 = (layers2 || []).map((it2) => {
-      return this.createModel(__spreadProps(__spreadValues({}, it2), { parentId: item2.id }), true, context);
+    const children2 = (layers2 || []).map((it) => {
+      return this.createModel(__spreadProps(__spreadValues({}, it), { parentId: item2.id }), true, context);
     });
     item2.reset({
-      children: children2.map((it2) => {
-        return it2.id;
+      children: children2.map((it) => {
+        return it.id;
       })
     }, context);
     return item2;
@@ -44903,10 +44903,10 @@ class ModelManager {
     return list2;
   }
   getModelTypeInPath(rootId, itemType) {
-    return this.getPath(rootId).find((it2) => it2 && it2.is(itemType));
+    return this.getPath(rootId).find((it) => it && it.is(itemType));
   }
   getItemInPath(rootId, targetId) {
-    return this.getPath(rootId).find((it2) => it2 && it2.id === targetId);
+    return this.getPath(rootId).find((it) => it && it.id === targetId);
   }
   getProject(rootId) {
     return this.getModelTypeInPath(rootId, "project");
@@ -45078,7 +45078,7 @@ class BaseModel {
     return this.modelManager.getPath(this.id, this.ref);
   }
   get pathIds() {
-    return this.path.map((it2) => it2.id);
+    return this.path.map((it) => it.id);
   }
   get childrenLength() {
     return this.json.children.length;
@@ -45174,9 +45174,9 @@ class BaseModel {
     return true;
   }
   generateListNumber() {
-    this.layers.forEach((it2, index2) => {
-      it2.no = index2;
-      it2.generateListNumber();
+    this.layers.forEach((it, index2) => {
+      it.no = index2;
+      it.generateListNumber();
     });
   }
   convert(json = {}) {
@@ -45213,7 +45213,7 @@ class BaseModel {
     return true;
   }
   hasChangedField(...args2) {
-    return args2.some((it2) => this.lastChangedField[it2] !== void 0);
+    return args2.some((it) => this.lastChangedField[it] !== void 0);
   }
   get hasChangedHirachy() {
     return this.hasChangedField("children", "parentId");
@@ -45246,7 +45246,7 @@ class BaseModel {
   }
   appendChild(layer2) {
     if (layer2.parentId === this.id) {
-      const hasId = this.json.children.find((it2) => it2 === layer2.id);
+      const hasId = this.json.children.find((it) => it === layer2.id);
       if (Boolean(hasId) === false) {
         this.json.children.push(layer2.id);
         this.modelManager.setChanged("appendChild", this.id, { child: layer2.id, oldParentId: layer2.parentId });
@@ -45275,7 +45275,7 @@ class BaseModel {
     let list2 = this.json.children.map((id, childIndex) => {
       return { id, index: childIndex };
     });
-    const childItem = list2.find((it2) => it2.id === layer2.id);
+    const childItem = list2.find((it) => it.id === layer2.id);
     const targetIndex = index2 - 0.5;
     if (childItem) {
       childItem.index = targetIndex;
@@ -45285,7 +45285,7 @@ class BaseModel {
     list2.sort((a, b) => {
       return a.index - b.index;
     });
-    this.json.children = list2.map((it2) => it2.id);
+    this.json.children = list2.map((it) => it.id);
     this.modelManager.setChanged("insertChild", this.id, { childId: layer2.id, index: 0 });
     return layer2;
   }
@@ -45385,7 +45385,7 @@ class BaseModel {
       }
     });
     result[targetId].index = selectedIndex - 1.5;
-    const children2 = Object.values(result).sort((a, b) => a.index - b.index).map((it2) => it2.id);
+    const children2 = Object.values(result).sort((a, b) => a.index - b.index).map((it) => it.id);
     this.reset({
       children: children2
     });
@@ -45397,7 +45397,7 @@ class BaseModel {
       result[id] = { id, index: index2 };
     });
     result[targetId].index = -1;
-    const children2 = Object.values(result).sort((a, b) => a.index - b.index).map((it2) => it2.id);
+    const children2 = Object.values(result).sort((a, b) => a.index - b.index).map((it) => it.id);
     this.reset({
       children: children2
     });
@@ -45413,7 +45413,7 @@ class BaseModel {
       }
     });
     result[targetId].index = selectedIndex + 1.5;
-    const children2 = Object.values(result).sort((a, b) => a.index - b.index).map((it2) => it2.id);
+    const children2 = Object.values(result).sort((a, b) => a.index - b.index).map((it) => it.id);
     this.reset({
       children: children2
     });
@@ -45425,7 +45425,7 @@ class BaseModel {
       result[id] = { id, index: index2 };
     });
     result[targetId].index = Number.MAX_SAFE_INTEGER;
-    const children2 = Object.values(result).sort((a, b) => a.index - b.index).map((it2) => it2.id);
+    const children2 = Object.values(result).sort((a, b) => a.index - b.index).map((it) => it.id);
     this.reset({
       children: children2
     });
@@ -45536,8 +45536,8 @@ class AssetModel extends BaseModel {
   }
   refreshImageKeys() {
     let imageKeys = {};
-    this.json.images.forEach((it2) => {
-      imageKeys[it2.id] = it2;
+    this.json.images.forEach((it) => {
+      imageKeys[it.id] = it;
     });
     this.reset({
       imageKeys
@@ -45573,8 +45573,8 @@ class AssetModel extends BaseModel {
   }
   refreshVideoKeys() {
     let videoKeys = {};
-    this.json.videos.forEach((it2) => {
-      videoKeys[it2.id] = it2;
+    this.json.videos.forEach((it) => {
+      videoKeys[it.id] = it;
     });
     this.reset({
       videoKeys
@@ -45615,10 +45615,10 @@ class AssetModel extends BaseModel {
   }
   getSVGFilterIndex(id) {
     var _a;
-    var filter2 = this.json.svgfilters.map((it2, index2) => {
-      return { id: it2.id, index: index2 };
-    }).filter((it2) => {
-      return it2.id === id;
+    var filter2 = this.json.svgfilters.map((it, index2) => {
+      return { id: it.id, index: index2 };
+    }).filter((it) => {
+      return it.id === id;
     });
     return filter2.length ? (_a = filter2 == null ? void 0 : filter2[0]) == null ? void 0 : _a.index : -1;
   }
@@ -45643,10 +45643,10 @@ class AssetModel extends BaseModel {
     return this.addSVGFilter(data);
   }
   getSVGImageIndex(id) {
-    var filter2 = this.json.svgimages.map((it2, index2) => {
-      return { id: it2.id, index: index2 };
-    }).filter((it2) => {
-      return it2.id === id;
+    var filter2 = this.json.svgimages.map((it, index2) => {
+      return { id: it.id, index: index2 };
+    }).filter((it) => {
+      return it.id === id;
     })[0];
     return filter2 ? filter2.index : -1;
   }
@@ -45745,7 +45745,7 @@ class BorderRadius {
       "border-bottom-right-radius": 0,
       "border-bottom-left-radius": 0
     };
-    var arr = str.split(" ").map((it2) => Length.parse(it2));
+    var arr = str.split(" ").map((it) => Length.parse(it));
     if (arr.length === 1) {
       obj2.isAll = true;
       obj2["border-radius"] = arr[0];
@@ -45791,7 +45791,7 @@ function makeInterpolateBorderRadius(layer2, property, startValue, endValue) {
     list2[i] = makeInterpolateLength(layer2, property, s[i], e[i]);
   }
   return (rate, t) => {
-    return list2.map((it2) => it2(rate, t)).join(" ");
+    return list2.map((it) => it(rate, t)).join(" ");
   };
 }
 class BoxShadow extends PropertyItem {
@@ -45804,14 +45804,14 @@ class BoxShadow extends PropertyItem {
     if (!str)
       return boxShadows;
     var results = convertMatches(str);
-    boxShadows = results.str.split(",").filter((it2) => it2.trim()).map((shadow2) => {
+    boxShadows = results.str.split(",").filter((it) => it.trim()).map((shadow2) => {
       var values = shadow2.trim().split(" ");
-      var insets = values.filter((it2) => it2 === BoxShadowStyle.INSET);
-      var colors2 = values.filter((it2) => it2.includes("@")).map((it2) => {
-        return reverseMatches(it2, results.matches);
+      var insets = values.filter((it) => it === BoxShadowStyle.INSET);
+      var colors2 = values.filter((it) => it.includes("@")).map((it) => {
+        return reverseMatches(it, results.matches);
       });
-      var numbers = values.filter((it2) => {
-        return it2 !== BoxShadowStyle.INSET && !it2.includes("@");
+      var numbers = values.filter((it) => {
+        return it !== BoxShadowStyle.INSET && !it.includes("@");
       });
       return BoxShadow.parse({
         inset: !!insets.length ? BoxShadowStyle.INSET : BoxShadowStyle.OUTSET,
@@ -45825,7 +45825,7 @@ class BoxShadow extends PropertyItem {
     return boxShadows;
   }
   static join(list2) {
-    return list2.map((it2) => BoxShadow.parse(it2)).join(", ");
+    return list2.map((it) => BoxShadow.parse(it)).join(", ");
   }
   getDefaultObject() {
     return super.getDefaultObject({
@@ -45910,14 +45910,14 @@ function makeInterpolateBoxShadow(layer2, property, startValue, endValue) {
     });
   }
   return (rate, t) => {
-    return BoxShadow.join(list2.map((it2) => {
+    return BoxShadow.join(list2.map((it) => {
       return {
-        inset: it2.inset(rate, t),
-        offsetX: it2.offsetX(rate, t),
-        offsetY: it2.offsetY(rate, t),
-        blurRadius: it2.blurRadius(rate, t),
-        spreadRadius: it2.spreadRadius(rate, t),
-        color: it2.color(rate, t)
+        inset: it.inset(rate, t),
+        offsetX: it.offsetX(rate, t),
+        offsetY: it.offsetY(rate, t),
+        blurRadius: it.blurRadius(rate, t),
+        spreadRadius: it.spreadRadius(rate, t),
+        color: it.color(rate, t)
       };
     }));
   };
@@ -45946,13 +45946,13 @@ class TextShadow extends PropertyItem {
   static parseStyle(str = "") {
     var results = convertMatches(str);
     str = str.trim();
-    var textShadows = results.str.split(",").filter((it2) => it2.trim()).map((shadow2) => {
+    var textShadows = results.str.split(",").filter((it) => it.trim()).map((shadow2) => {
       var values = shadow2.trim().split(" ");
-      var colors2 = values.filter((it2) => it2.includes("@")).map((it2) => {
-        return reverseMatches(it2, results.matches) || "black";
+      var colors2 = values.filter((it) => it.includes("@")).map((it) => {
+        return reverseMatches(it, results.matches) || "black";
       });
-      var numbers = values.filter((it2) => {
-        return !it2.includes("@");
+      var numbers = values.filter((it) => {
+        return !it.includes("@");
       });
       return TextShadow.parse({
         color: colors2[0] || "rgba(0, 0, 0, 1)",
@@ -45964,7 +45964,7 @@ class TextShadow extends PropertyItem {
     return textShadows;
   }
   static join(list2) {
-    return list2.map((it2) => TextShadow.parse(it2)).join(", ");
+    return list2.map((it) => TextShadow.parse(it)).join(", ");
   }
   getDefaultObject() {
     return super.getDefaultObject({
@@ -46026,12 +46026,12 @@ function makeInterpolateTextShadow(layer2, property, startValue, endValue) {
     });
   }
   return (rate, t) => {
-    return TextShadow.join(list2.map((it2) => {
+    return TextShadow.join(list2.map((it) => {
       return {
-        offsetX: it2.offsetX(rate, t),
-        offsetY: it2.offsetY(rate, t),
-        blurRadius: it2.blurRadius(rate, t),
-        color: it2.color(rate, t)
+        offsetX: it.offsetX(rate, t),
+        offsetY: it.offsetY(rate, t),
+        blurRadius: it.blurRadius(rate, t),
+        color: it.color(rate, t)
       };
     }));
   };
@@ -46069,7 +46069,7 @@ function makeInterpolateColorStepList(layer2, property, startColorsteps = [], en
     }
   }
   return (rate, t) => {
-    return list2.map((it2) => it2(rate, t));
+    return list2.map((it) => it(rate, t));
   };
 }
 function makeInterpolateLinearGradient(layer2, property, s, e) {
@@ -46167,16 +46167,16 @@ function makeInterpolateBackgroundImage(layer2, property, startValue, endValue) 
     }
   }
   return (rate, t) => {
-    return BackgroundImage.join(list2.map((it2) => {
+    return BackgroundImage.join(list2.map((it) => {
       var data = {
-        image: it2.image(rate, t),
-        size: it2.size(rate, t),
-        x: it2.x(rate, t),
-        y: it2.y(rate, t),
-        width: it2.width(rate, t),
-        height: it2.height(rate, t),
-        blendMode: it2.blendMode(rate, t),
-        repeat: it2.repeat(rate, t)
+        image: it.image(rate, t),
+        size: it.size(rate, t),
+        x: it.x(rate, t),
+        y: it.y(rate, t),
+        width: it.width(rate, t),
+        height: it.height(rate, t),
+        blendMode: it.blendMode(rate, t),
+        repeat: it.repeat(rate, t)
       };
       return data;
     }));
@@ -46213,10 +46213,10 @@ class Filter extends PropertyItem {
       filterValue = filterValue.split(")")[0];
       if (filterName === "drop-shadow") {
         var arr = filterValue.split(" ");
-        var colors2 = arr.filter((it2) => it2.includes("@")).map((it2) => {
-          return reverseMatches(it2, results.matches);
+        var colors2 = arr.filter((it) => it.includes("@")).map((it) => {
+          return reverseMatches(it, results.matches);
         });
-        var values = arr.filter((it2) => !it2.includes("@"));
+        var values = arr.filter((it) => !it.includes("@"));
         filters[index2] = Filter.parse({
           type: filterName,
           offsetX: Length.parse(values[0]),
@@ -46234,7 +46234,7 @@ class Filter extends PropertyItem {
     return filters;
   }
   static join(list2) {
-    return list2.map((it2) => Filter.parse(it2)).join(" ");
+    return list2.map((it) => Filter.parse(it)).join(" ");
   }
 }
 class BlurFilter extends Filter {
@@ -46548,7 +46548,7 @@ function makeInterpolateFilter(layer2, property, startValue, endValue) {
     }
   }
   return (rate, t) => {
-    return Filter.join(list2.map((it2) => it2(rate, t)));
+    return Filter.join(list2.map((it) => it(rate, t)));
   };
 }
 function makeInterpolateClipPathCircle(layer2, property, s, e) {
@@ -46617,8 +46617,8 @@ function makeInterpolateClipPathPolygon(layer2, property, s, e) {
     }
   }
   return (rate, t) => {
-    return list2.map((it2) => {
-      return `${it2.x(rate, t)} ${it2.y(rate, t)}`;
+    return list2.map((it) => {
+      return `${it.x(rate, t)} ${it.y(rate, t)}`;
     }).join(",");
   };
 }
@@ -46714,7 +46714,7 @@ function makeInterpolateTransformLength(layer2, property, startValue, endValue) 
   return (rate, t) => {
     return {
       type: obj2.type(rate, t),
-      value: obj2.value.map((it2) => it2(rate, t))
+      value: obj2.value.map((it) => it(rate, t))
     };
   };
 }
@@ -46737,11 +46737,11 @@ function makeInterpolateTransformNumber(layer2, property, startValue, endValue) 
   }
   obj2.value = value;
   return (rate, t) => {
-    var value2 = obj2.value.map((it2) => it2(rate, t));
+    var value2 = obj2.value.map((it) => it(rate, t));
     var type = obj2.type(rate, t);
     if (type.includes("matrix") || type.includes("scale")) {
-      value2 = value2.map((it2) => {
-        return Length.number(it2);
+      value2 = value2.map((it) => {
+        return Length.number(it);
       });
     }
     return { type, value: value2 };
@@ -46766,7 +46766,7 @@ function makeInterpolateTransformRotate(layer2, property, startValue, endValue) 
   return (rate, t) => {
     var results = {
       type: obj2.type(rate, t),
-      value: obj2.value.map((it2) => it2(rate, t))
+      value: obj2.value.map((it) => it(rate, t))
     };
     return results;
   };
@@ -46815,15 +46815,15 @@ function makeInterpolateTransform(layer2, property, startValue, endValue) {
     }
   }
   return (rate, t) => {
-    var results = Transform.join(list2.map((it2) => {
-      return it2(rate, t);
+    var results = Transform.join(list2.map((it) => {
+      return it(rate, t);
     }));
     return results;
   };
 }
 function makeInterpolateTransformOrigin(layer2, property, startValue, endValue) {
-  var s = startValue.split(" ").map((it2) => Length.parse(it2));
-  var e = endValue.split(" ").map((it2) => Length.parse(it2));
+  var s = startValue.split(" ").map((it) => Length.parse(it));
+  var e = endValue.split(" ").map((it) => Length.parse(it));
   var max = Math.max(s.length, e.length);
   var list2 = [];
   for (var i = 0; i < max; i++) {
@@ -46832,13 +46832,13 @@ function makeInterpolateTransformOrigin(layer2, property, startValue, endValue) 
     list2.push(makeInterpolateLength(layer2, property, startPos, endPos, "transform-origin"));
   }
   return (rate, t) => {
-    var results = list2.map((it2) => it2(rate, t)).join(" ");
+    var results = list2.map((it) => it(rate, t)).join(" ");
     return results;
   };
 }
 function makeInterpolatePerspectiveOrigin(layer2, property, startValue, endValue) {
-  var s = startValue.split(" ").map((it2) => Length.parse(it2));
-  var e = endValue.split(" ").map((it2) => Length.parse(it2));
+  var s = startValue.split(" ").map((it) => Length.parse(it));
+  var e = endValue.split(" ").map((it) => Length.parse(it));
   var max = Math.max(s.length, e.length);
   var list2 = [];
   for (var i = 0; i < max; i++) {
@@ -46847,13 +46847,13 @@ function makeInterpolatePerspectiveOrigin(layer2, property, startValue, endValue
     list2.push(makeInterpolateLength(layer2, property, startPos, endPos, "perspective-origin"));
   }
   return (rate, t) => {
-    var results = list2.map((it2) => it2(rate, t)).join(" ");
+    var results = list2.map((it) => it(rate, t)).join(" ");
     return results;
   };
 }
 function makeInterpolateStrokeDashArrray(layer2, property, startValue, endValue) {
-  var s = startValue.split(" ").map((it2) => +it2);
-  var e = endValue.split(" ").map((it2) => +it2);
+  var s = startValue.split(" ").map((it) => +it);
+  var e = endValue.split(" ").map((it) => +it);
   var max = Math.max(s.length, e.length);
   var list2 = [];
   for (var i = 0; i < max; i++) {
@@ -46862,7 +46862,7 @@ function makeInterpolateStrokeDashArrray(layer2, property, startValue, endValue)
     list2.push(makeInterpolateNumber$1(layer2, property, startPos, endPos));
   }
   return (rate, t) => {
-    var results = list2.map((it2) => it2(rate, t)).join(" ");
+    var results = list2.map((it) => it(rate, t)).join(" ");
     return results;
   };
 }
@@ -46883,7 +46883,7 @@ function makeInterpolatePathValues(layer2, property, s, e) {
     }
   }
   return (rate, t) => {
-    return list2.map((it2) => it2(rate, t));
+    return list2.map((it) => it(rate, t));
   };
 }
 function makeInterpolatePath(layer2, property, startValue, endValue) {
@@ -46915,10 +46915,10 @@ function makeInterpolatePath(layer2, property, startValue, endValue) {
     }
   }
   return (rate, t) => {
-    var segments2 = list2.map((it2) => {
+    var segments2 = list2.map((it) => {
       return {
-        command: it2.command(rate, t),
-        values: it2.values(rate, t)
+        command: it.command(rate, t),
+        values: it.values(rate, t)
       };
     });
     var results = returnParser.joinPath(segments2);
@@ -46989,7 +46989,7 @@ class PolygonParser extends PathParser {
     if (Array.isArray(points2)) {
       points2 = points2.join(" ");
     }
-    var arr = points2.trim().split(splitReg).filter((it2) => it2);
+    var arr = points2.trim().split(splitReg).filter((it) => it);
     var segments2 = [];
     for (var i = 0, len2 = arr.length; i < len2; i += 2) {
       segments2.push({ x: +arr[i], y: +arr[i + 1] });
@@ -47021,8 +47021,8 @@ class PolygonParser extends PathParser {
   }
   joinPoints(segments2) {
     var list2 = segments2 || this.segments;
-    return list2.map((it2) => {
-      return `${it2.x},${it2.y}`;
+    return list2.map((it) => {
+      return `${it.x},${it.y}`;
     }).join(" ");
   }
   each(callback, isReturn = false) {
@@ -47081,10 +47081,10 @@ function makeInterpolatePolygon(layer2, property, startValue, endValue) {
     }
   }
   return (rate, t) => {
-    var points2 = returnParser.joinPoints(list2.map((it2) => {
+    var points2 = returnParser.joinPoints(list2.map((it) => {
       return {
-        x: it2.x(rate, t),
-        y: it2.y(rate, t)
+        x: it.x(rate, t),
+        y: it.y(rate, t)
       };
     }));
     return points2;
@@ -47291,20 +47291,20 @@ function makeInterpolateOffset(segments2) {
     }
   });
   var totalLength = 0;
-  interpolateList.forEach((it2) => {
-    totalLength += it2.length;
+  interpolateList.forEach((it) => {
+    totalLength += it.length;
   });
   var start2 = 0;
-  interpolateList.forEach((it2) => {
-    it2.startT = start2 / totalLength;
-    it2.endT = (start2 + it2.length) / totalLength;
-    it2.totalLength = totalLength;
-    start2 += it2.length;
+  interpolateList.forEach((it) => {
+    it.startT = start2 / totalLength;
+    it.endT = (start2 + it.length) / totalLength;
+    it.totalLength = totalLength;
+    start2 += it.length;
   });
   return { totalLength, interpolateList };
 }
 function makeInterpolateOffsetPath(layer2, property, startValue, endValue, artboard2) {
-  var [id, distance2, rotateStatus, rotate2] = startValue.split(",").map((it2) => it2.trim());
+  var [id, distance2, rotateStatus, rotate2] = startValue.split(",").map((it) => it.trim());
   var startObject = { id, distance: Length.parse(distance2 || "0%"), rotateStatus: rotateStatus || "auto", rotate: Length.parse(rotate2 || "0deg") };
   var innerInterpolate = (rate, t) => {
     return { x, y };
@@ -47349,8 +47349,8 @@ function makeInterpolateOffsetPath(layer2, property, startValue, endValue, artbo
       } else if (t === 1) {
         obj2 = interpolateList[interpolateList.length - 1];
       }
-      var arr = interpolateList.find((it2) => {
-        return it2.startT <= t && t < it2.endT;
+      var arr = interpolateList.find((it) => {
+        return it.startT <= t && t < it.endT;
       });
       if (arr) {
         obj2 = arr;
@@ -47363,7 +47363,7 @@ function makeInterpolateOffsetPath(layer2, property, startValue, endValue, artbo
     };
   }
   return (rate, t, timing) => {
-    var arr = (layer2["transform-origin"] || "50% 50%").split(" ").map((it2) => Length.parse(it2));
+    var arr = (layer2["transform-origin"] || "50% 50%").split(" ").map((it) => Length.parse(it));
     var tx = arr[0].toPx(layer2.width);
     var ty = arr[1].toPx(layer2.height);
     var obj2 = innerInterpolate(rate, t, timing);
@@ -47567,7 +47567,7 @@ class TimelineModel extends AssetModel {
         });
       });
     }
-    return filteredTimeline.filter((it2) => it2);
+    return filteredTimeline.filter((it) => it);
   }
   getCompiledTimingFunction(layerId, property) {
     return this.json.compiledTimeline[`${layerId}.${property}`];
@@ -47582,7 +47582,7 @@ class TimelineModel extends AssetModel {
       return;
     }
     let layerElement = Dom.body().$(`[data-id="${layerId}"]`);
-    let editorString = p.keyframes.map((it2) => it2.editor)[0];
+    let editorString = p.keyframes.map((it) => it.editor)[0];
     this.json.compiledTimeline[key] = p.keyframes.map((offset, index2) => {
       var currentOffset = offset;
       var nextOffset = p.keyframes[index2 + 1];
@@ -47590,7 +47590,7 @@ class TimelineModel extends AssetModel {
       if (!nextOffset) {
         nextOffset = { time: offset.time, value: offset.value };
       }
-      var it2 = {
+      var it = {
         layer: layer2,
         layerElement,
         property: p.property,
@@ -47603,27 +47603,27 @@ class TimelineModel extends AssetModel {
         interpolateFunction: createInterpolateFunction(layer2, p.property, offset.value, nextOffset.value, offset.editor, artboard2, layerElement),
         timingFunction: createTimingFunction(offset.timing)
       };
-      it2.func = this.makeTimingFunction(it2);
-      return it2;
-    }).filter((it2) => it2);
+      it.func = this.makeTimingFunction(it);
+      return it;
+    }).filter((it) => it);
   }
-  makeTimingFunction(it2) {
+  makeTimingFunction(it) {
     return (time) => {
-      var totalT = it2.endTime - it2.startTime;
+      var totalT = it.endTime - it.startTime;
       var t = 1;
       if (totalT !== 0) {
-        t = (time - it2.startTime) / totalT;
+        t = (time - it.startTime) / totalT;
       }
-      return it2.interpolateFunction(it2.timingFunction(t), t, totalT, it2.timingFunction);
+      return it.interpolateFunction(it.timingFunction(t), t, totalT, it.timingFunction);
     };
   }
   stop(frameOrCode) {
     var timeline = this.getSelectedTimeline();
     if (timeline) {
       var time = timeline.currentTime;
-      this.searchTimelineOffset(time).forEach((it2) => {
-        if (it2.property === "playTime") {
-          const $video = it2.layerElement.$("video");
+      this.searchTimelineOffset(time).forEach((it) => {
+        if (it.property === "playTime") {
+          const $video = it.layerElement.$("video");
           if ($video) {
             $video.el.pause();
           }
@@ -47631,19 +47631,19 @@ class TimelineModel extends AssetModel {
       });
     }
   }
-  seek(frameOrCode, filterFunction = (it2) => it2) {
+  seek(frameOrCode, filterFunction = (it) => it) {
     var timeline = this.getSelectedTimeline();
     if (timeline) {
       if (isNotUndefined(frameOrCode)) {
         this.setTimelineCurrentTime(frameOrCode);
       }
       var time = timeline.currentTime;
-      this.searchTimelineOffset(time).filter(filterFunction).forEach((it2) => {
-        if (it2.property === "offset-path" || it2.property === "playTime") {
-          it2.func(time);
-        } else if (it2.layer) {
-          it2.layer.reset({
-            [it2.property]: it2.func(time)
+      this.searchTimelineOffset(time).filter(filterFunction).forEach((it) => {
+        if (it.property === "offset-path" || it.property === "playTime") {
+          it.func(time);
+        } else if (it.layer) {
+          it.layer.reset({
+            [it.property]: it.func(time)
           });
         }
       });
@@ -47651,7 +47651,7 @@ class TimelineModel extends AssetModel {
   }
   getSelectedTimeline() {
     var timeline = this.json.timeline;
-    var a = timeline.filter((it2) => it2.selected);
+    var a = timeline.filter((it) => it.selected);
     var selectedTimeline = a.length ? a[0] : timeline[0];
     return selectedTimeline || null;
   }
@@ -47712,8 +47712,8 @@ class TimelineModel extends AssetModel {
     return time;
   }
   setTimelineTitle(id, text2) {
-    var timeline = this.json.timeline.find((it2) => {
-      return it2.id === id;
+    var timeline = this.json.timeline.find((it) => {
+      return it.id === id;
     });
     if (timeline) {
       timeline.title = text2;
@@ -47721,11 +47721,11 @@ class TimelineModel extends AssetModel {
   }
   selectTimeline(id) {
     if (id) {
-      this.json.timeline.forEach((it2) => {
-        it2.selected = it2.id === id;
+      this.json.timeline.forEach((it) => {
+        it.selected = it.id === id;
       });
     } else {
-      var selectedTimeline = this.json.timeline.filter((it2) => it2.selected);
+      var selectedTimeline = this.json.timeline.filter((it) => it.selected);
       if (selectedTimeline.length)
         ;
       else {
@@ -47737,8 +47737,8 @@ class TimelineModel extends AssetModel {
     this.compileAll();
   }
   removeAnimation(id) {
-    this.json.timeline = this.json.timeline.filter((it2) => {
-      return it2.id !== id;
+    this.json.timeline = this.json.timeline.filter((it) => {
+      return it.id !== id;
     });
     if (this.json.timeline.length) {
       this.json.timeline[0].selected = true;
@@ -47764,7 +47764,7 @@ class TimelineModel extends AssetModel {
     }
     selectedTimeline.selected = true;
     if (layerId) {
-      var layer2 = selectedTimeline.animations.filter((it2) => it2.id === layerId);
+      var layer2 = selectedTimeline.animations.filter((it) => it.id === layerId);
       if (!layer2[0]) {
         selectedTimeline.animations.push({
           id: layerId,
@@ -47866,14 +47866,14 @@ class TimelineModel extends AssetModel {
   getTimelineObject(layerId) {
     var selectedTimeline = this.getSelectedTimeline();
     if (selectedTimeline) {
-      return selectedTimeline.animations.find((it2) => it2.id === layerId);
+      return selectedTimeline.animations.find((it) => it.id === layerId);
     }
   }
   addTimelineProperty(layerId, property) {
     this.addTimelineLayer(layerId);
     var animation2 = this.getTimelineObject(layerId);
     if (animation2) {
-      var p = animation2.properties.filter((it2) => it2.property === property);
+      var p = animation2.properties.filter((it) => it.property === property);
       if (!p.length) {
         animation2.properties.push({
           property,
@@ -47890,7 +47890,7 @@ class TimelineModel extends AssetModel {
       property = property || timeline.selectedProperty;
       var timelineObject = this.getTimelineObject(layerId);
       if (timelineObject) {
-        return timelineObject.properties.find((it2) => it2.property === property);
+        return timelineObject.properties.find((it) => it.property === property);
       }
     }
   }
@@ -47901,15 +47901,15 @@ class TimelineModel extends AssetModel {
       timeline.selectedProperty = property;
       timeline.selectedOffsetTime = time;
       var p = this.getTimelineProperty();
-      p.keyframes.forEach((it2) => {
-        it2.selected = it2.time === time;
+      p.keyframes.forEach((it) => {
+        it.selected = it.time === time;
       });
     }
   }
   deleteTimelineKeyframe(layerId, property, offsetId) {
     var p = this.getTimelineProperty(layerId, property);
     if (p) {
-      p.keyframes = p.keyframes.filter((it2) => it2.id != offsetId);
+      p.keyframes = p.keyframes.filter((it) => it.id != offsetId);
     }
   }
   removeTimelineProperty(layerId, property) {
@@ -47952,7 +47952,7 @@ class TimelineModel extends AssetModel {
     var p = this.getTimelineProperty(layerId, property);
     if (p) {
       var time = newTime || timeline.currentTime;
-      var times = p.keyframes.filter((it2) => it2.time === time);
+      var times = p.keyframes.filter((it) => it.time === time);
       if (!times.length) {
         value = isUndefined(value) || value === "" ? this.getDefaultPropertyValue(property) : value;
         var obj2 = { id: uuidShort(), layerId, property, time, value, timing: timing || "linear", editor };
@@ -47986,7 +47986,7 @@ class TimelineModel extends AssetModel {
     if (p) {
       var timeline = this.getSelectedTimeline();
       var time = newTime || timeline.currentTime;
-      var times = p.keyframes.filter((it2) => it2.time < time);
+      var times = p.keyframes.filter((it) => it.time < time);
       var value = this.getDefaultPropertyValue(property);
       var timing = "linear";
       var editor = "";
@@ -48004,13 +48004,13 @@ class TimelineModel extends AssetModel {
   getTimelineKeyframe(layerId, property, time) {
     var p = this.getTimelineProperty(layerId, property);
     if (p) {
-      return p.keyframes.find((it2) => it2.time === time);
+      return p.keyframes.find((it) => it.time === time);
     }
   }
   getTimelineKeyframeById(layerId, property, id) {
     var p = this.getTimelineProperty(layerId, property);
     if (p) {
-      return p.keyframes.find((it2) => it2.id === id);
+      return p.keyframes.find((it) => it.id === id);
     }
   }
   sortTimelineKeyframe(layerId, property) {
@@ -48052,8 +48052,8 @@ class Project extends TimelineModel {
   }
   toRootVariableCSS() {
     var obj2 = {};
-    this.json.rootVariable.split(";").filter((it2) => it2.trim()).forEach((it2) => {
-      var [key, value] = it2.split(":");
+    this.json.rootVariable.split(";").filter((it) => it.trim()).forEach((it) => {
+      var [key, value] = it.split(":");
       obj2[`--${key}`] = value;
     });
     return obj2;
@@ -48070,7 +48070,7 @@ class Project extends TimelineModel {
     return __spreadValues(__spreadValues({}, super.toCloneObject()), this.attrs("name", "description", "rootVariable"));
   }
   get artboards() {
-    return (this.layers || []).filter((it2) => it2.is("artboard"));
+    return (this.layers || []).filter((it) => it.is("artboard"));
   }
   get offsetX() {
     return 0;
@@ -48204,7 +48204,7 @@ class SelectionManager {
     });
   }
   get notSelectedLayers() {
-    return this.filteredLayers.filter((it2) => this.check(it2) === false);
+    return this.filteredLayers.filter((it) => this.check(it) === false);
   }
   get snapTargetLayers() {
     if (!this.currentProject)
@@ -48233,7 +48233,7 @@ class SelectionManager {
     });
   }
   get selectedArtboards() {
-    return [...new Set(this.items.map((it2) => it2.artboard))];
+    return [...new Set(this.items.map((it) => it.artboard))];
   }
   hasChangedField(...args2) {
     if (this.current) {
@@ -48271,21 +48271,21 @@ class SelectionManager {
     return false;
   }
   filterIds(ids = []) {
-    return ids.map((it2) => it2.id || it2).filter(Boolean);
+    return ids.map((it) => it.id || it).filter(Boolean);
   }
   selectByGroup(...ids) {
-    var list2 = this.modelManager.searchItemsById(this.filterIds(ids || [])).filter((it2) => {
-      return !this.lockManager.get(it2.id);
+    var list2 = this.modelManager.searchItemsById(this.filterIds(ids || [])).filter((it) => {
+      return !this.lockManager.get(it.id);
     });
     const newSelectedItems = this.modelManager.convertGroupItems(list2);
-    return this.select(...newSelectedItems.map((it2) => it2.id));
+    return this.select(...newSelectedItems.map((it) => it.id));
   }
   select(...ids) {
-    var list2 = this.modelManager.searchItemsById(this.filterIds(ids || [])).filter((it2) => !it2.lock && it2.isAbsolute);
-    const newSelectedItems = list2.filter((it2) => {
-      return it2.path.filter((element) => list2.includes(element)).length < 2;
+    var list2 = this.modelManager.searchItemsById(this.filterIds(ids || [])).filter((it) => !it.lock && it.isAbsolute);
+    const newSelectedItems = list2.filter((it) => {
+      return it.path.filter((element) => list2.includes(element)).length < 2;
     });
-    const newSelectedIds = newSelectedItems.map((it2) => it2.id);
+    const newSelectedIds = newSelectedItems.map((it) => it.id);
     if (this.isSameIds(newSelectedIds)) {
       return false;
     }
@@ -48307,10 +48307,10 @@ class SelectionManager {
     return !!this.itemKeys[item2.id];
   }
   hasPathOf(item2) {
-    return this.modelManager.hasPathOf(this.items.filter((it2) => it2.isNot("artboard")), item2);
+    return this.modelManager.hasPathOf(this.items.filter((it) => it.isNot("artboard")), item2);
   }
   hasParent(parentId) {
-    return this.items.some((it2) => it2.hasParent(parentId));
+    return this.items.some((it) => it.hasParent(parentId));
   }
   get(id) {
     return this.itemKeys[id];
@@ -48331,7 +48331,7 @@ class SelectionManager {
     this.select(id);
   }
   selectAfterCopy() {
-    this.select(...this.items.map((it2) => it2.copy()));
+    this.select(...this.items.map((it) => it.copy()));
   }
   addById(id) {
     if (this.itemKeys[id])
@@ -48403,17 +48403,17 @@ class SelectionManager {
     this.cachedItemMatrices = [];
     this.cachedChildren = [];
     this.ghosts = [];
-    this.items.forEach((it2) => {
-      if (it2.is("artboard")) {
-        this.cachedItemMatrices.push(it2.matrix);
-      } else if (it2.hasChildren()) {
-        const list2 = this.modelManager.getAllLayers(it2.id).map((it3) => it3.matrix);
-        this.cachedChildren.push(...list2.map((it3) => it3.id));
+    this.items.forEach((it) => {
+      if (it.is("artboard")) {
+        this.cachedItemMatrices.push(it.matrix);
+      } else if (it.hasChildren()) {
+        const list2 = this.modelManager.getAllLayers(it.id).map((it2) => it2.matrix);
+        this.cachedChildren.push(...list2.map((it2) => it2.id));
         this.cachedItemMatrices.push(...list2);
       } else {
-        this.cachedItemMatrices.push(it2.matrix);
+        this.cachedItemMatrices.push(it.matrix);
       }
-      this.ghosts.push(it2.absoluteMatrix);
+      this.ghosts.push(it.absoluteMatrix);
     });
     this.cachedArtBoardVerties = this.currentProject.artboards.map((item2) => {
       return { item: item2, matrix: item2.matrix };
@@ -48487,8 +48487,8 @@ class SelectionManager {
       localItems = this.itemsByIds(ids);
     }
     const valueObject = {};
-    keys2.forEach((it2) => {
-      valueObject[it2] = true;
+    keys2.forEach((it) => {
+      valueObject[it] = true;
     });
     localItems.forEach((item2) => {
       data[item2.id] = item2.attrs(...keys2);
@@ -48560,9 +48560,9 @@ class SelectionManager {
     }
   }
   hasChildrenPoint(point2) {
-    return this.cachedChildren.some((it2) => {
+    return this.cachedChildren.some((it) => {
       var _a;
-      return (_a = this.modelManager.get(it2)) == null ? void 0 : _a.hasPoint(point2[0], point2[1]);
+      return (_a = this.modelManager.get(it)) == null ? void 0 : _a.hasPoint(point2[0], point2[1]);
     });
   }
   checkChildren(childId) {
@@ -48572,7 +48572,7 @@ class SelectionManager {
     if (isString(itemOrId)) {
       return this.hoverId === itemOrId;
     } else {
-      return this.hoverItems.findIndex((it2) => it2.id === itemOrId.id) > -1;
+      return this.hoverItems.findIndex((it) => it.id === itemOrId.id) > -1;
     }
   }
   hasHoverItem() {
@@ -48589,7 +48589,7 @@ class SelectionManager {
       }
       this.hoverId = "";
       this.hoverItems = [];
-    } else if (this.cachedArtBoardVerties.find((it2) => it2.item.id === id)) {
+    } else if (this.cachedArtBoardVerties.find((it) => it.item.id === id)) {
       if (this.hoverId != "") {
         isChanged = true;
       }
@@ -48600,7 +48600,7 @@ class SelectionManager {
         isChanged = true;
       }
       this.hoverId = id;
-      this.hoverItems = this.itemsByIds([id]).filter((it2) => it2.isNot("artboard"));
+      this.hoverItems = this.itemsByIds([id]).filter((it) => it.isNot("artboard"));
       if (this.hoverItems.length === 0) {
         this.hoverId = "";
         isChanged = true;
@@ -48616,7 +48616,7 @@ class SelectionManager {
     return args2.includes((_a = this.current) == null ? void 0 : _a.itemType);
   }
   isAll(...args2) {
-    return this.items.every((it2) => args2.includes(it2.itemType));
+    return this.items.every((it) => args2.includes(it.itemType));
   }
   updateGridInformation(obj2 = {}) {
     this.gridInformation = obj2;
@@ -48647,30 +48647,30 @@ class SegmentSelectionManager {
       key,
       index: +index2 || 0
     }));
-    list2.forEach((it2) => {
-      var key = this.makeSegmentKey(it2.index, it2.key);
-      this.selectedPointKeys[key] = it2;
+    list2.forEach((it) => {
+      var key = this.makeSegmentKey(it.index, it.key);
+      this.selectedPointKeys[key] = it;
     });
   }
   toggleSegment(index2, key) {
     if (!this.isSelectedSegment(key, index2)) {
       this.select(...this.selectedPointList, { key, index: index2 });
     } else {
-      this.select(...this.selectedPointList.filter((it2) => {
-        return it2.key !== key || it2.index !== index2;
+      this.select(...this.selectedPointList.filter((it) => {
+        return it.key !== key || it.index !== index2;
       }));
     }
   }
   toggleSelect(...list2) {
-    list2 = list2.map((it2) => {
-      return __spreadProps(__spreadValues({}, it2), { included: this.isSelectedSegment(it2.index, it2.key) });
+    list2 = list2.map((it) => {
+      return __spreadProps(__spreadValues({}, it), { included: this.isSelectedSegment(it.index, it.key) });
     });
-    const includedList = list2.filter((it2) => it2.included);
-    const notIncludedList = list2.filter((it2) => !it2.included);
+    const includedList = list2.filter((it) => it.included);
+    const notIncludedList = list2.filter((it) => !it.included);
     let uniqueList = [...this.selectedPointList];
     if (includedList.length) {
-      uniqueList = this.selectedPointList.filter((it2) => {
-        const oldKey = this.makeSegmentKey(it2);
+      uniqueList = this.selectedPointList.filter((it) => {
+        const oldKey = this.makeSegmentKey(it);
         return Boolean(includedList.find((includeNode) => {
           return oldKey === this.makeSegmentKey(includeNode);
         })) === false;
@@ -48715,13 +48715,13 @@ class TimelineSelectionManager {
   refreshCache(list2) {
     this.items = list2;
     this.itemKeys = {};
-    this.items.forEach((it2) => {
-      this.itemKeys[it2.id] = it2;
+    this.items.forEach((it) => {
+      this.itemKeys[it.id] = it;
     });
   }
   cachedList() {
-    return this.items.map((it2) => {
-      return __spreadValues({}, it2);
+    return this.items.map((it) => {
+      return __spreadValues({}, it);
     });
   }
   checked(id) {
@@ -48729,25 +48729,25 @@ class TimelineSelectionManager {
   }
   selectLayer(layerId) {
     this.currentProject((project2) => {
-      var list2 = project2.getKeyframeListReturnArray().filter((it2) => {
-        return it2.layerId === layerId;
+      var list2 = project2.getKeyframeListReturnArray().filter((it) => {
+        return it.layerId === layerId;
       });
       this.refreshCache(list2);
     });
   }
   toggleLayerContainer(animationId) {
     this.currentProject((project2) => {
-      project2.getSelectedTimeline().animations.filter((it2) => {
-        return it2.id === animationId;
-      }).forEach((it2) => {
-        it2.collapsed = !it2.collapsed;
+      project2.getSelectedTimeline().animations.filter((it) => {
+        return it.id === animationId;
+      }).forEach((it) => {
+        it.collapsed = !it.collapsed;
       });
     });
   }
   selectProperty(layerId, property) {
     this.currentProject((project2) => {
-      var list2 = project2.getKeyframeListReturnArray().filter((it2) => {
-        return it2.layerId === layerId && it2.property === property;
+      var list2 = project2.getKeyframeListReturnArray().filter((it) => {
+        return it.layerId === layerId && it.property === property;
       });
       this.refreshCache(list2);
     });
@@ -48758,17 +48758,17 @@ class TimelineSelectionManager {
   selectBySearch(list2, startTime, endTime) {
     this.currentProject((project2) => {
       var totalList = [];
-      list2.forEach((it2) => {
+      list2.forEach((it) => {
         var results = [];
-        if (it2.property) {
-          var p = project2.getTimelineProperty(it2.layerId, it2.property);
+        if (it.property) {
+          var p = project2.getTimelineProperty(it.layerId, it.property);
           results = p.keyframes.filter((keyframe2) => {
             return startTime <= keyframe2.time && keyframe2.time <= endTime;
           });
         } else {
-          var p = project2.getTimelineObject(it2.layerId);
+          var p = project2.getTimelineObject(it.layerId);
           p.properties.filter((property) => {
-            return property.property === it2.property;
+            return property.property === it.property;
           }).forEach((property) => {
             results.push.apply(results, property.keyframes.filter((keyframe2) => {
               return startTime <= keyframe2.time && keyframe2.time <= endTime;
@@ -48778,8 +48778,8 @@ class TimelineSelectionManager {
         totalList.push.apply(totalList, results);
       });
       var uniqueOffset = {};
-      totalList.forEach((it2) => {
-        uniqueOffset[it2.id] = it2;
+      totalList.forEach((it) => {
+        uniqueOffset[it.id] = it;
       });
       this.select(...Object.values(uniqueOffset));
     });
@@ -48956,8 +48956,8 @@ class ViewportManager {
     this.resetWorldMatrix();
   }
   resetWorldMatrix() {
-    this.translate = this.translate.map((it2) => +it2.toFixed(4));
-    this.transformOrigin = this.transformOrigin.map((it2) => +it2.toFixed(4));
+    this.translate = this.translate.map((it) => +it.toFixed(4));
+    this.transformOrigin = this.transformOrigin.map((it) => +it.toFixed(4));
     this.scale = +this.scale.toFixed(4);
     this.matrix = calculateMatrix(fromTranslation([], this.translate), fromTranslation([], this.transformOrigin), fromScaling([], [this.scale, this.scale, 1]), fromTranslation([], negate([], this.transformOrigin)));
     this.matrixInverse = invert([], this.matrix);
@@ -50553,8 +50553,8 @@ class AssetManager {
     var json = JSON.parse(value || "[]");
     var assets = {};
     json.forEach((project2) => {
-      project2.images.forEach((it2) => {
-        assets[`#${it2.id}`] = it2;
+      project2.images.forEach((it) => {
+        assets[`#${it.id}`] = it;
       });
     });
     Object.keys(assets).map((idString) => {
@@ -50569,7 +50569,7 @@ class AssetManager {
   }
   applyAsset(json, assets) {
     if (Array.isArray(json)) {
-      json = json.map((it2) => this.applyAsset(it2, assets));
+      json = json.map((it) => this.applyAsset(it, assets));
     } else if (isObject$1(json)) {
       Object.keys(json).forEach((key) => {
         json[key] = this.applyAsset(json[key], assets);
@@ -50623,14 +50623,14 @@ function createComponent(ComponentName, props = {}, children2 = []) {
   return `<object refClass="${ComponentName}" ${targetVariable}>${children2}</object>`;
 }
 function createComponentList(...args2) {
-  return args2.map((it2) => {
+  return args2.map((it) => {
     let ComponentName;
     let props = {};
     let children2 = [];
-    if (isString(it2)) {
-      ComponentName = it2;
-    } else if (isArray$1(it2)) {
-      [ComponentName, props = {}, children2 = []] = it2;
+    if (isString(it)) {
+      ComponentName = it;
+    } else if (isArray$1(it)) {
+      [ComponentName, props = {}, children2 = []] = it;
     }
     if (children2.length) {
       return createComponent(ComponentName, props, createComponentList(children2));
@@ -50668,7 +50668,7 @@ class InjectManager {
       this.ui[target] = [];
     }
     Object.keys(obj2).forEach((refClass) => {
-      const targetClass = this.ui[target].find((it2) => it2.refClass === refClass);
+      const targetClass = this.ui[target].find((it) => it.refClass === refClass);
       if (targetClass) {
         targetClass.class = obj2[refClass];
       } else {
@@ -50690,12 +50690,12 @@ class InjectManager {
         return 0;
       return a.order > b.order ? 1 : -1;
     });
-    return list2.map((it2) => {
+    return list2.map((it) => {
       const props = {};
       if (hasRef) {
-        props.ref = `$${it2.refClass}`;
+        props.ref = `$${it.refClass}`;
       }
-      return createComponent(it2.refClass, props);
+      return createComponent(it.refClass, props);
     }).join("\n");
   }
 }
@@ -52785,12 +52785,12 @@ class StorageManager {
   }
   async getCustomAssetList() {
     let isNew = false;
-    const artboards = (this.editor.loadItem(this.customAssetKey) || []).map((it2) => {
-      if (!it2.id) {
-        it2.id = uuid();
+    const artboards = (this.editor.loadItem(this.customAssetKey) || []).map((it) => {
+      if (!it.id) {
+        it.id = uuid();
         isNew = true;
       }
-      return it2;
+      return it;
     });
     if (isNew) {
       await this.setCustomAssetList(artboards);
@@ -52802,9 +52802,9 @@ class StorageManager {
   }
   async getCustomAsset(id) {
     const assetList = await this.getCustomAssetList();
-    const it2 = assetList.find((it3) => it3.id === id);
-    if (it2 && it2.component) {
-      return it2.component;
+    const it = assetList.find((it2) => it2.id === id);
+    if (it && it.component) {
+      return it.component;
     }
     return null;
   }
@@ -52827,8 +52827,8 @@ class StorageManager {
   }
   async removeCustomAsset(id) {
     const assetList = await this.getCustomAssetList();
-    await this.setCustomAssetList(assetList.filter((it2) => {
-      return it2.id !== id;
+    await this.setCustomAssetList(assetList.filter((it) => {
+      return it.id !== id;
     }));
   }
 }
@@ -53205,8 +53205,8 @@ class MenuManager {
     if (!isArray$1(obj2)) {
       obj2 = [obj2];
     }
-    obj2.forEach((it2) => {
-      this.menus[target].push(it2);
+    obj2.forEach((it) => {
+      this.menus[target].push(it);
     });
     this.editor.emit("updateMenu", target);
   }
@@ -53819,7 +53819,7 @@ class HorizontalRuler extends EditorElement {
     if (!current)
       return "";
     const verties = this.$selection.verties;
-    const xList = verties.map((it2) => it2[0]);
+    const xList = verties.map((it) => it[0]);
     const currentMinX = Math.min.apply(Math, xList);
     const currentMaxX = Math.max.apply(Math, xList);
     const { minX, width: realWidth } = this.$viewport;
@@ -54006,7 +54006,7 @@ class VerticalRuler extends EditorElement {
     const { minY, height: realHeight } = this.$viewport;
     const height2 = this.state.rect.height;
     const verties = this.$selection.verties;
-    const yList = verties.map((it2) => it2[1]);
+    const yList = verties.map((it) => it[1]);
     const currentMinY = Math.min.apply(Math, yList);
     const currentMaxY = Math.max.apply(Math, yList);
     const firstY = (currentMinY - minY) / realHeight * height2;
@@ -54110,7 +54110,7 @@ class Resource {
             data: e.dataTransfer.getData(type)
           };
         }
-      }).filter((it2) => it2);
+      }).filter((it) => it);
     }
     var files = [];
     if (e.dataTransfer) {
@@ -54176,15 +54176,15 @@ class StyleView extends EditorElement {
     if (!isOnlyOne) {
       list2 = item2.allLayers;
     }
-    var selector2 = list2.map((it2) => {
-      return `style[data-renderer-type="html"][data-id="${it2.id}"]`;
+    var selector2 = list2.map((it) => {
+      return `style[data-renderer-type="html"][data-id="${it.id}"]`;
     }).join(",");
     let isChanged = false;
-    this.refs.$styleView.$$(selector2).forEach((it2) => {
-      const renderItem = this.$model.get(it2.data("id"));
+    this.refs.$styleView.$$(selector2).forEach((it) => {
+      const renderItem = this.$model.get(it.data("id"));
       if (renderItem.isChanged(this.state.lastChangedList[renderItem.id])) {
         isChanged = true;
-        it2.remove();
+        it.remove();
         this.state.lastChangedList[renderItem.id] = renderItem.timestamp;
       }
     });
@@ -54257,16 +54257,16 @@ class StyleView extends EditorElement {
       if (item2.is("project")) {
         var selector2 = `style[data-renderer-type="html"][data-id="${item2.id}"]`;
       } else {
-        var selector2 = item2.allLayers.map((it2) => {
-          return `style[data-renderer-type="html"][data-id="${it2.id}"]`;
+        var selector2 = item2.allLayers.map((it) => {
+          return `style[data-renderer-type="html"][data-id="${it.id}"]`;
         }).join(",");
       }
       removeStyleSelector.push(selector2);
       styleTags.push(this.makeStyle(item2));
     }
     if (removeStyleSelector.length) {
-      this.refs.$styleView.$$(removeStyleSelector).forEach((it2) => {
-        it2.remove();
+      this.refs.$styleView.$$(removeStyleSelector).forEach((it) => {
+        it.remove();
       });
     }
     var $fragment = TEMP_DIV.html(styleTags.join("")).createChildrenFragment();
@@ -54370,7 +54370,7 @@ class HTMLRenderView extends EditorElement {
     const project2 = this.$selection.currentProject;
     var timeline = project2.getSelectedTimeline();
     if (timeline) {
-      timeline.animations.map((it2) => this.$model.get(it2.id)).forEach((current) => {
+      timeline.animations.map((it) => this.$model.get(it.id)).forEach((current) => {
         this.updateTimelineElement(current, true, false);
       });
     }
@@ -54396,7 +54396,7 @@ class HTMLRenderView extends EditorElement {
     var text2 = e.$dt.text();
     var id = e.$dt.parent().attr("data-id");
     var arr = [];
-    this.$selection.items.filter((it2) => it2.id === id).forEach((item2) => {
+    this.$selection.items.filter((it) => it.id === id).forEach((item2) => {
       item2.reset({
         content: content2,
         text: text2
@@ -54561,13 +54561,13 @@ class HTMLRenderView extends EditorElement {
     }), 3);
     const localDist = add$1([], snap, dist2);
     const result = {};
-    this.$selection.cachedItemMatrices.forEach((it2) => {
-      const oldVertex = it2.verties[4];
+    this.$selection.cachedItemMatrices.forEach((it) => {
+      const oldVertex = it.verties[4];
       const newVertex = add$1([], oldVertex, localDist);
-      const newDist = subtract([], transformMat4([], newVertex, it2.parentMatrixInverse), transformMat4([], oldVertex, it2.parentMatrixInverse));
-      result[it2.id] = {
-        x: Math.floor(it2.x + newDist[0]),
-        y: Math.floor(it2.y + newDist[1])
+      const newDist = subtract([], transformMat4([], newVertex, it.parentMatrixInverse), transformMat4([], oldVertex, it.parentMatrixInverse));
+      result[it.id] = {
+        x: Math.floor(it.x + newDist[0]),
+        y: Math.floor(it.y + newDist[1])
       };
     });
     this.$selection.reset(result);
@@ -54634,20 +54634,20 @@ class HTMLRenderView extends EditorElement {
     });
   }
   refreshAllElementBoundSize() {
-    var selectionList = this.$selection.items.map((it2) => {
-      if (it2.is("artboard")) {
-        return it2;
+    var selectionList = this.$selection.items.map((it) => {
+      if (it.is("artboard")) {
+        return it;
       }
-      return it2.parent;
+      return it.parent;
     });
     var list2 = [...new Set(selectionList)];
     if (list2.length) {
-      list2.forEach((it2) => {
-        this.refreshElementBoundSize(it2);
+      list2.forEach((it) => {
+        this.refreshElementBoundSize(it);
       });
     } else {
-      this.$selection.currentProject.artboards.forEach((it2) => {
-        this.refreshElementBoundSize(it2);
+      this.$selection.currentProject.artboards.forEach((it) => {
+        this.refreshElementBoundSize(it);
       });
     }
   }
@@ -54667,13 +54667,13 @@ class HTMLRenderView extends EditorElement {
       this.refreshElementRect(item2);
     }
   }
-  refreshElementBoundSize(it2) {
-    if (it2) {
-      this.refreshSelfElement(it2);
-      if (it2.hasChildren() === false) {
+  refreshElementBoundSize(it) {
+    if (it) {
+      this.refreshSelfElement(it);
+      if (it.hasChildren() === false) {
         return;
       }
-      it2.layers.forEach((child) => {
+      it.layers.forEach((child) => {
         this.refreshElementBoundSize(child);
       });
     }
@@ -54795,8 +54795,8 @@ class PageTools extends EditorElement {
         }
       });
     });
-    return buttons.map((it2) => {
-      const { item: item2, index: index2, path } = it2;
+    return buttons.map((it) => {
+      const { item: item2, index: index2, path } = it;
       return `
         <button type="button" data-item-id="${item2.id}" data-path-index="${index2}">
           <svg width="16" height="16" overflow="visible">
@@ -54950,12 +54950,12 @@ class DragAreaRectView extends EditorElement {
             items.push.apply(items, layer2.checkInAreaForAll(areaVerties));
           }
         });
-        items = items.filter((it2) => {
-          return it2.isDragSelectable;
+        items = items.filter((it) => {
+          return it.isDragSelectable;
         });
         if (items.length > 1) {
-          items = items.filter((it2) => {
-            return it2.is("artboard") === false;
+          items = items.filter((it) => {
+            return it.is("artboard") === false;
           });
         }
       }
@@ -55346,20 +55346,20 @@ ${this.$editor.html.render(project2)}
     if (this.state.selectedIndex === selectedIndex) {
       return;
     }
-    this.$el.$$(`[data-value="${this.state.selectedIndex}"]`).forEach((it2) => it2.removeClass("selected"));
-    this.$el.$$(`[data-value="${selectedIndex}"]`).forEach((it2) => it2.addClass("selected"));
+    this.$el.$$(`[data-value="${this.state.selectedIndex}"]`).forEach((it) => it.removeClass("selected"));
+    this.$el.$$(`[data-value="${selectedIndex}"]`).forEach((it) => it.addClass("selected"));
     this.setState({ selectedIndex }, false);
   }
 }
 registElement({ ExportWindow });
 var ShortcutWindow$1 = "";
 const categories = /* @__PURE__ */ new Set();
-shortcuts.forEach((it2) => {
-  categories.add(it2.category);
+shortcuts.forEach((it) => {
+  categories.add(it.category);
 });
 const keys = {};
-categories.forEach((it2) => {
-  shortcuts.filter((item2) => item2.category === it2).forEach((item2) => {
+categories.forEach((it) => {
+  shortcuts.filter((item2) => item2.category === it).forEach((item2) => {
     if (!keys[item2.category]) {
       keys[item2.category] = [];
     }
@@ -55383,8 +55383,8 @@ class ShortcutWindow extends BaseWindow {
     return "ShortCuts";
   }
   getKeyString(os2, item2) {
-    return (item2[os2] || item2.key).split("+").map((it2) => it2.trim()).map((it2) => {
-      const keyString = it2.toUpperCase();
+    return (item2[os2] || item2.key).split("+").map((it) => it.trim()).map((it) => {
+      const keyString = it.toUpperCase();
       return `<span>${keyAlias[keyString] || keyString}</span>`;
     }).join(" + ");
   }
@@ -55401,7 +55401,7 @@ class ShortcutWindow extends BaseWindow {
             <div class='item'>
                 <h2>${category}</h2>
                 <div>
-                    ${list2.map((it2) => this.getTemplateForShortcutItem(it2)).join("")}
+                    ${list2.map((it) => this.getTemplateForShortcutItem(it)).join("")}
                 </div>
             </div>
         `;
@@ -55609,18 +55609,18 @@ class Tabs extends EditorElement {
   }
   [LOAD("$tab")]() {
     const { content: content2, contentChildren = [] } = this.props;
-    const children2 = contentChildren.filter((it2) => it2.component === TabPanel);
+    const children2 = contentChildren.filter((it) => it.component === TabPanel);
     return [
       /* @__PURE__ */ createElementJsx("div", {
         class: "tab-header",
         ref: "$header"
-      }, children2.map((it2) => /* @__PURE__ */ createElementJsx("div", {
+      }, children2.map((it) => /* @__PURE__ */ createElementJsx("div", {
         class: "tab-item",
-        "data-value": it2.props.value,
-        title: it2.props.title
+        "data-value": it.props.value,
+        title: it.props.title
       }, /* @__PURE__ */ createElementJsx("label", {
         class: "title"
-      }, it2.props.icon || it2.props.title)))),
+      }, it.props.icon || it.props.title)))),
       /* @__PURE__ */ createElementJsx("div", {
         class: "tab-body",
         ref: "$body"
@@ -55689,15 +55689,15 @@ class Inspector extends EditorElement {
     }, this.$injectManager.generate("inspector.tab.code"), /* @__PURE__ */ createElementJsx("div", {
       class: "empty",
       style: "order: 1000000;"
-    }))), this.$injectManager.getTargetUI("inspector.tab").map((it2) => {
-      const { value, title: title2, loadElements } = it2.class;
+    }))), this.$injectManager.getTargetUI("inspector.tab").map((it) => {
+      const { value, title: title2, loadElements } = it.class;
       return /* @__PURE__ */ createElementJsx(TabPanel, {
         value,
         title: title2,
-        icon: it2.icon
+        icon: it.icon
       }, /* @__PURE__ */ createElementJsx("div", {
         style: "display: flex: flex-direction: column;"
-      }, loadElements.map((element) => craeteElement(element)), this.$injectManager.generate("inspector.tab." + it2.value), /* @__PURE__ */ createElementJsx("div", {
+      }, loadElements.map((element) => craeteElement(element)), this.$injectManager.generate("inspector.tab." + it.value), /* @__PURE__ */ createElementJsx("div", {
         class: "empty",
         style: "order: 1000000;"
       })));
@@ -55899,48 +55899,48 @@ class Projects extends MenuItem {
 }
 var ToolBar$1 = "";
 var DropdownMenu$1 = "";
-function makeMenuItem(it2) {
-  if (it2 === "-") {
+function makeMenuItem(it) {
+  if (it === "-") {
     return createComponent("Divider", {
       key: "yellow"
     });
   }
-  if (it2 === "-" || it2.type === "divider") {
+  if (it === "-" || it.type === "divider") {
     return createComponent("DropdownDividerMenuItem");
   }
-  if (isString(it2)) {
+  if (isString(it)) {
     return createComponent("DropdownTextMenuItem", {
-      text: it2
+      text: it
     });
   }
-  if (it2.type === "link") {
+  if (it.type === "link") {
     return createComponent("DropdownLinkMenuItem", {
-      href: it2.href,
-      target: it2.target,
-      title: it2.title
+      href: it.href,
+      target: it.target,
+      title: it.title
     });
   }
-  if (isArray$1(it2.items)) {
+  if (isArray$1(it.items)) {
     return createComponent("DropdownMenuList", {
-      title: it2.title,
-      items: it2.items
+      title: it.title,
+      items: it.items
     });
   }
   return createComponent("DropdownMenuItem", {
-    checked: it2.checked,
-    command: it2.command,
-    args: it2.args || [],
-    disabled: it2.disabled,
-    icon: it2.icon,
-    nextTick: it2.nextTick,
-    onClick: it2.onClick,
-    action: it2.action,
-    shortcut: it2.shortcut,
-    title: it2.title,
-    args: it2.args,
-    key: it2.key,
-    events: it2.events,
-    items: it2.items || []
+    checked: it.checked,
+    command: it.command,
+    args: it.args || [],
+    disabled: it.disabled,
+    icon: it.icon,
+    nextTick: it.nextTick,
+    onClick: it.onClick,
+    action: it.action,
+    shortcut: it.shortcut,
+    title: it.title,
+    args: it.args,
+    key: it.key,
+    events: it.events,
+    items: it.items || []
   });
 }
 function Divider(props) {
@@ -55974,10 +55974,10 @@ class DropdownMenuList extends EditorElement {
   template() {
     return `
       <li>
-          <label>${this.$i18n(it.title)}</label> 
+          <label>${this.$i18n(this.props.title)}</label> 
           <span>${iconUse$1("arrowRight")}</span>              
           <ul>
-              ${it.items.map((child) => makeMenuItem(child)).join("")}
+              ${this.props.items.map((child) => makeMenuItem(child)).join("")}
           </ul>
       </li>
     `;
@@ -55995,21 +55995,21 @@ class DropdownMenuItem extends EditorElement {
   }
   template() {
     var _a;
-    const it2 = this.props;
-    const checked = isFunction(it2.checked) ? it2.checked(this.$editor) : "";
+    const it = this.props;
+    const checked = isFunction(it.checked) ? it.checked(this.$editor) : "";
     return `
-        <li data-command="${it2.command}" data-has-children="${Boolean((_a = it2.items) == null ? void 0 : _a.length)}"
-          ${it2.disabled && "disabled"} 
-          ${it2.shortcut && "shortcut"}
+        <li data-command="${it.command}" data-has-children="${Boolean((_a = it.items) == null ? void 0 : _a.length)}"
+          ${it.disabled && "disabled"} 
+          ${it.shortcut && "shortcut"}
           ${checked && "checked"}
-          ${it2.nextTick && `data-next-tick=${variable$4(it2.nextTick, this.groupId)}`} 
-          ${it2.args && `data-args=${variable$4(it2.args, this.groupId)}`} 
-          ${it2.key && `data-key=${it2.key}`} 
+          ${it.nextTick && `data-next-tick=${variable$4(it.nextTick, this.groupId)}`} 
+          ${it.args && `data-args=${variable$4(it.args, this.groupId)}`} 
+          ${it.key && `data-key=${it.key}`} 
         >
-            <span class="icon">${checked ? iconUse$1("check") : it2.icon || ""}</span>
+            <span class="icon">${checked ? iconUse$1("check") : it.icon || ""}</span>
             <div class='menu-item-text'>
-              <label>${this.$i18n(it2.title)}</label>
-              <kbd class="shortcut">${it2.shortcut || ""}</kbd>
+              <label>${this.$i18n(it.title)}</label>
+              <kbd class="shortcut">${it.shortcut || ""}</kbd>
             </div>
         </li>
       `;
@@ -56108,7 +56108,7 @@ class DropdownMenu extends EditorElement {
   }
   [LOAD("$list") + DOMDIFF]() {
     initializeGroupVariables(this.groupId);
-    return this.state.items.map((it2) => makeMenuItem(it2));
+    return this.state.items.map((it) => makeMenuItem(it));
   }
   checkDropdownOpen(e) {
     const ul = Dom.create(e.target).closest("dropdown-menu-item-list");
@@ -56124,7 +56124,7 @@ class DropdownMenu extends EditorElement {
   }
   [CLICK("$icon")](e) {
     if (this.state.selectedKey) {
-      const menuItem = this.state.items.find((it2) => it2.key === this.state.selectedKey);
+      const menuItem = this.state.items.find((it) => it.key === this.state.selectedKey);
       if (!menuItem)
         return;
       const command = menuItem.command;
@@ -56528,7 +56528,7 @@ class ToolbarButtonMenuItem extends EditorElement {
     }
   }
   [LOAD("$el") + DOMDIFF]() {
-    return `<span class="icon">${iconUse$1(this.props.icon)}</span><span>${this.props.title}</span>`;
+    return `<span class="icon">${iconUse$1(this.props.icon)}</span><span>${this.props.title || ""}</span>`;
   }
   [BIND("$el")]() {
     const selected = isFunction(this.props.selected) ? this.props.selected(this.$editor) : false;
@@ -57167,8 +57167,8 @@ function alignment(editor) {
     AlignmentProperty
   });
 }
-function getCustomParseIndexString(it2, prefix = "@") {
-  return `${prefix}${it2.startIndex}`.padEnd(10, "0");
+function getCustomParseIndexString(it, prefix = "@") {
+  return `${prefix}${it.startIndex}`.padEnd(10, "0");
 }
 function customParseMatches(str, regexp) {
   const matches2 = str.match(regexp);
@@ -57190,14 +57190,14 @@ function customParseMatches(str, regexp) {
 }
 function customParseConvertMatches(str, regexp) {
   const m = customParseMatches(str, regexp);
-  m.forEach((it2) => {
-    str = str.replace(it2.parsedString, getCustomParseIndexString(it2));
+  m.forEach((it) => {
+    str = str.replace(it.parsedString, getCustomParseIndexString(it));
   });
   return { str, matches: m };
 }
 function customParseReverseMatches(str, matches2) {
-  matches2.forEach((it2) => {
-    str = str.replace(getCustomParseIndexString(it2), it2.parsedString);
+  matches2.forEach((it) => {
+    str = str.replace(getCustomParseIndexString(it), it.parsedString);
   });
   return str;
 }
@@ -57261,7 +57261,7 @@ class Animation extends PropertyItem {
     ].join(" ");
   }
   static join(list2) {
-    return list2.map((it2) => new Animation(it2).toString()).join(",");
+    return list2.map((it) => new Animation(it).toString()).join(",");
   }
   static add(animation2, item2 = {}) {
     const list2 = Animation.parseStyle(animation2);
@@ -57269,12 +57269,12 @@ class Animation extends PropertyItem {
     return Animation.join(list2);
   }
   static remove(animation2, removeIndex) {
-    return Animation.filter(animation2, (it2, index2) => {
+    return Animation.filter(animation2, (it, index2) => {
       return removeIndex != index2;
     });
   }
   static filter(animation2, filterFunction) {
-    return Animation.join(Animation.parseStyle(animation2).filter((it2) => filterFunction(it2)));
+    return Animation.join(Animation.parseStyle(animation2).filter((it) => filterFunction(it)));
   }
   static replace(animation2, replaceIndex, valueObject) {
     var list2 = Animation.parseStyle(animation2);
@@ -57294,8 +57294,8 @@ class Animation extends PropertyItem {
     if (!animation2)
       return list2;
     const result = customParseConvertMatches(animation2, ANIMATION_TIMING_REG);
-    list2 = result.str.split(",").map((it2) => {
-      const fields2 = it2.split(" ").filter(Boolean);
+    list2 = result.str.split(",").map((it) => {
+      const fields2 = it.split(" ").filter(Boolean);
       if (fields2.length >= 7) {
         return {
           duration: Length.parse(fields2[0]),
@@ -57323,7 +57323,7 @@ class Animation extends PropertyItem {
         return {};
       }
     });
-    return list2.map((it2) => Animation.parse(it2));
+    return list2.map((it) => Animation.parse(it));
   }
 }
 var AnimationProperty$1 = "";
@@ -57346,9 +57346,9 @@ class AnimationProperty extends BaseProperty {
     var current = this.$selection.current;
     if (!current)
       return "";
-    return Animation.parseStyle(current.animation).map((it2, index2) => {
+    return Animation.parseStyle(current.animation).map((it, index2) => {
       const selectedClass = this.state.selectedIndex === index2 ? "selected" : "";
-      const path = curveToPath(it2.timingFunction, 30, 30);
+      const path = curveToPath(it.timingFunction, 30, 30);
       return `
       <div class='animation-group-item'>
         <div class='animation-item ${selectedClass}' 
@@ -57362,15 +57362,15 @@ class AnimationProperty extends BaseProperty {
             </div>
             <div class='name'>
               <div class='title' ref="animationName${index2}">
-                ${it2.name ? it2.name : `&lt; ${this.$i18n("animation.property.select a keyframe")} &gt;`}
+                ${it.name ? it.name : `&lt; ${this.$i18n("animation.property.select a keyframe")} &gt;`}
               </div>
               <div class='labels'>
-                <label class='count' title='${this.$i18n("animation.property.iteration.count")}'><small>${it2.iterationCount}</small></label>
-                <label class='delay' title='${this.$i18n("animation.property.delay")}'><small>${it2.delay}</small></label>
-                <label class='duration' title='${this.$i18n("animation.property.duration")}'><small>${it2.duration}</small></label>
-                <label class='direction' title='${this.$i18n("animation.property.direction")}'><small>${it2.direction}</small></label>
-                <label class='fill-mode' title='${this.$i18n("animation.property.fill.mode")}'><small>${it2.fillMode}</small></label>
-                <label class='play-state' title='${this.$i18n("animation.property.play.state")}' data-index='${index2}' data-play-state-selected-value="${it2.playState}">
+                <label class='count' title='${this.$i18n("animation.property.iteration.count")}'><small>${it.iterationCount}</small></label>
+                <label class='delay' title='${this.$i18n("animation.property.delay")}'><small>${it.delay}</small></label>
+                <label class='duration' title='${this.$i18n("animation.property.duration")}'><small>${it.duration}</small></label>
+                <label class='direction' title='${this.$i18n("animation.property.direction")}'><small>${it.direction}</small></label>
+                <label class='fill-mode' title='${this.$i18n("animation.property.fill.mode")}'><small>${it.fillMode}</small></label>
+                <label class='play-state' title='${this.$i18n("animation.property.play.state")}' data-index='${index2}' data-play-state-selected-value="${it.playState}">
                   <small data-play-state-value='running'>${iconUse$1("play")}</small>
                   <small data-play-state-value='paused'>${iconUse$1("pause")}</small>
                 </label>
@@ -57646,23 +57646,23 @@ class AnimationPropertyPopup extends BasePopup {
     var current = this.$selection.currentProject;
     var names2 = [];
     if (current && current.keyframes) {
-      names2 = current.keyframes.map((it2) => {
-        return { key: it2.name, value: it2.name };
+      names2 = current.keyframes.map((it) => {
+        return { key: it.name, value: it.name };
       });
     }
     names2.unshift({ key: "Select a keyframe", value: "" });
-    return names2.map((it2) => {
-      var selected = it2.value === this.name ? "selected" : "";
-      var label = this.$i18n(it2.key);
-      return `<option value='${it2.value}' ${selected}>${label}</option>`;
+    return names2.map((it) => {
+      var selected = it.value === this.name ? "selected" : "";
+      var label = this.$i18n(it.key);
+      return `<option value='${it.value}' ${selected}>${label}</option>`;
     });
   }
   [CHANGE("$name")]() {
     this.updateData({ name: this.refs.$name.value });
   }
   templateForDirection() {
-    var options2 = "normal,reverse,alternate,alternate-reverse".split(",").map((it2) => {
-      return `${it2}:${this.$i18n(it2)}`;
+    var options2 = "normal,reverse,alternate,alternate-reverse".split(",").map((it) => {
+      return `${it}:${this.$i18n(it)}`;
     }).join(",");
     return `
       <div class='direction'>
@@ -57695,8 +57695,8 @@ class AnimationPropertyPopup extends BasePopup {
   `;
   }
   templateForFillMode() {
-    var options2 = "none,forwards,backwards,both".split(",").map((it2) => {
-      return `${it2}:${this.$i18n(it2)}`;
+    var options2 = "none,forwards,backwards,both".split(",").map((it) => {
+      return `${it}:${this.$i18n(it)}`;
     }).join(",");
     return `
     <div class='fill-mode'>
@@ -57801,8 +57801,8 @@ class ComponentEditor extends EditorElement {
         <div class='component-folder'>
           <label>${iconUse$1("chevron_right")} ${childEditor.label}</label>
           <ul>
-            ${childEditor.children.map((it2, itemIndex) => {
-        return `<li>${this.getPropertyEditor(`${index2}${itemIndex}`, it2)}</li>`;
+            ${childEditor.children.map((it, itemIndex) => {
+        return `<li>${this.getPropertyEditor(`${index2}${itemIndex}`, it)}</li>`;
       }).join("")}
           </ul>
         </div>
@@ -57811,17 +57811,17 @@ class ComponentEditor extends EditorElement {
       const size2 = (childEditor.size || [2]).join("-");
       return `
         <div class='column column-${size2}' style="--column-gap: ${childEditor.gap}px; --row-gap: ${childEditor.rowGap || 0}px" >
-          ${childEditor.columns.map((it2, itemIndex) => {
-        if (it2 === "-") {
+          ${childEditor.columns.map((it, itemIndex) => {
+        if (it === "-") {
           return `<div class="column-item"></div>`;
-        } else if (it2.type === "label") {
+        } else if (it.type === "label") {
           return `<div class="column-item">
-                    <label>${it2.label}</label>
+                    <label>${it.label}</label>
                   </div>`;
         }
         return `
                   <div class='column-item'>
-                    ${this.getPropertyEditor(`${index2}${itemIndex}`, it2)}
+                    ${this.getPropertyEditor(`${index2}${itemIndex}`, it)}
                   </div>
                 `;
       }).join("")}  
@@ -57840,23 +57840,23 @@ class ComponentEditor extends EditorElement {
   }
   [LOAD("$body")]() {
     const inspector = this.state.inspector;
-    var self2 = inspector.map((it2, index2) => {
-      if (isString(it2) || it2.type === "label") {
-        const title2 = it2.label || it2;
+    var self2 = inspector.map((it, index2) => {
+      if (isString(it) || it.type === "label") {
+        const title2 = it.label || it;
         return `
           <div class='component-item'> 
             <label>${title2}</label>
           </div>`;
-      } else if (it2.type === "folder") {
+      } else if (it.type === "folder") {
         return `
           <div class='component-item'>
-            ${this.getPropertyEditor(index2, it2)}
+            ${this.getPropertyEditor(index2, it)}
           </div>
         `;
       } else {
         return `
             <div class='component-item'> 
-              ${this.getPropertyEditor(index2, it2)}
+              ${this.getPropertyEditor(index2, it)}
             </div>
           `;
       }
@@ -57996,8 +57996,8 @@ function appearance(editor) {
             editor: "select",
             editorOptions: {
               label: editor.$i18n("background.color.property.overflow"),
-              options: [Overflow.VISIBLE, Overflow.HIDDEN, Overflow.SCROLL, Overflow.AUTO].map((it2) => {
-                return { value: it2, text: editor.$i18n(`background.color.property.overflow.${it2}`) };
+              options: [Overflow.VISIBLE, Overflow.HIDDEN, Overflow.SCROLL, Overflow.AUTO].map((it) => {
+                return { value: it, text: editor.$i18n(`background.color.property.overflow.${it}`) };
               })
             },
             defaultValue: current["overflow"]
@@ -58089,20 +58089,20 @@ class ArtBoardSizeProperty extends BaseProperty {
     return "ArtBoard Preset";
   }
   getTools() {
-    var categories2 = artboardSize.map((it2, index2) => {
-      return { category: it2.category, index: index2 };
+    var categories2 = artboardSize.map((it, index2) => {
+      return { category: it.category, index: index2 };
     });
     return createComponent("SelectEditor", {
       ref: "$select",
       value: categories2[0].category,
-      options: categories2.map((it2) => it2.category),
+      options: categories2.map((it) => it.category),
       onchange: "changeSizeIndex"
     });
   }
   [SUBSCRIBE_SELF("changeSizeIndex")](key, value) {
     var selectedIndex = this.state.selectedIndex;
-    artboardSize.forEach((it2, index2) => {
-      if (it2.category === value) {
+    artboardSize.forEach((it, index2) => {
+      if (it.category === value) {
         selectedIndex = index2;
       }
     });
@@ -58194,8 +58194,8 @@ class BackdropFilterProperty extends BaseProperty {
     this.children.$filterEditor.trigger("add", filterType);
   }
   [LOAD("$filterSelect")]() {
-    var list2 = filter_list$1.map((it2) => {
-      return { title: this.$i18n(`filter.property.${it2}`), value: it2 };
+    var list2 = filter_list$1.map((it) => {
+      return { title: this.$i18n(`filter.property.${it}`), value: it };
     });
     var svgFilterList = this.getSVGFilterList();
     var totalList = [];
@@ -58210,8 +58210,8 @@ class BackdropFilterProperty extends BaseProperty {
         ...list2
       ];
     }
-    return totalList.map((it2) => {
-      var { title: title2, value } = it2;
+    return totalList.map((it) => {
+      var { title: title2, value } = it;
       return `<option value='${value}'>${title2}</option>`;
     });
   }
@@ -58219,10 +58219,10 @@ class BackdropFilterProperty extends BaseProperty {
     var current = this.$selection.currentProject;
     var arr = [];
     if (current) {
-      arr = current.svgfilters.map((it2) => {
+      arr = current.svgfilters.map((it) => {
         return {
-          title: `svg - #${it2.id}`,
-          value: it2.id
+          title: `svg - #${it.id}`,
+          value: it.id
         };
       });
     }
@@ -58337,11 +58337,11 @@ class BackgroundImageEditor extends EditorElement {
   }
   [LOAD("$fillList") + DOMDIFF]() {
     const current = this.$selection.current || { color: "black" };
-    return this.state.images.map((it2, index2) => {
-      var image2 = it2.image;
+    return this.state.images.map((it, index2) => {
+      var image2 = it.image;
       var backgroundType = types[image2.type];
-      const selectedClass = it2.selected ? "selected" : "";
-      if (it2.selected) {
+      const selectedClass = it.selected ? "selected" : "";
+      if (it.selected) {
         this.selectedIndex = index2;
       }
       return `
@@ -58351,18 +58351,18 @@ class BackgroundImageEditor extends EditorElement {
         key: "background-position",
         index: index2,
         ref: `$bp${index2}`,
-        x: it2.x,
-        y: it2.y,
-        width: it2.width,
-        height: it2.height,
-        repeat: it2.repeat,
-        size: it2.size,
-        blendMode: it2.blendMode,
+        x: it.x,
+        y: it.y,
+        width: it.width,
+        height: it.height,
+        repeat: it.repeat,
+        size: it.size,
+        blendMode: it.blendMode,
         onchange: "changePattern"
       }], ["GradientSingleEditor", {
         index: index2,
         ref: `$gse${index2}`,
-        image: it2.image,
+        image: it.image,
         color: current.color,
         key: "background-image",
         onchange: "changePattern"
@@ -58373,14 +58373,14 @@ class BackgroundImageEditor extends EditorElement {
                         ${createComponent("BlendSelectEditor", {
         ref: `$blend_${index2}`,
         key: "blendMode",
-        value: it2.blendMode,
+        value: it.blendMode,
         params: index2,
         compact: true,
         onchange: "changeRangeEditor"
       })}
                     </div>
                     <div class='tools'>
-                      <button type="button" class='visibility' data-index='${index2}' title="Visibility">${iconUse$1(it2.visibility === VisibilityType.HIDDEN ? "visible_off" : "visible")}</button>
+                      <button type="button" class='visibility' data-index='${index2}' title="Visibility">${iconUse$1(it.visibility === VisibilityType.HIDDEN ? "visible_off" : "visible")}</button>
                     </div>                                       
                     <div class='tools'>
                       <button type="button" class='copy' data-index='${index2}' title="Copy Item">${iconUse$1("add")}</button>
@@ -58472,8 +58472,8 @@ class BackgroundImageEditor extends EditorElement {
     } else {
       this.refs[`fillIndex${selectedIndex}`].removeClass("selected");
     }
-    this.state.images.forEach((it2, index2) => {
-      it2.selected = index2 === selectedIndex;
+    this.state.images.forEach((it, index2) => {
+      it.selected = index2 === selectedIndex;
     });
   }
   [SUBSCRIBE("selectFillPopupTab")](type, data) {
@@ -58854,7 +58854,7 @@ class ToggleCheckBox extends BaseUI {
         <div class='elf--toggle-checkbox ${hasLabel}'>
             ${label ? `<label title="${label}">${label}</label>` : ""}
             <div class='area' ref="$area">
-                ${this.state.toggleValues.map((it2, index2) => {
+                ${this.state.toggleValues.map((it, index2) => {
       let label2 = this.state.toggleLabels[index2];
       this.state.toggleTitles[index2];
       if (obj[label2]) {
@@ -58862,9 +58862,9 @@ class ToggleCheckBox extends BaseUI {
       }
       return createElementJsx("div", null, createElementJsx("button", {
         type: "button",
-        class: `${it2 === checked ? "checked" : ""}`,
+        class: `${it === checked ? "checked" : ""}`,
         "data-index": index2,
-        value: it2,
+        value: it,
         style: "--elf--toggle-checkbox-tooltip-top: -20%;"
       }, label2));
     }).join("")}
@@ -58921,19 +58921,19 @@ class ToggleButton extends BaseUI {
     return `
         <div class='elf--toggle-button'>
             <div class='area' ref="$area">
-                ${this.state.toggleValues.map((it2, index2) => {
+                ${this.state.toggleValues.map((it, index2) => {
       let label = this.state.toggleLabels[index2];
       let title2 = this.state.toggleTitles[index2] || label;
       if (obj[label]) {
         label = iconUse$1(label, "", { width: 30, height: 30 });
       }
       return createElementJsx("div", {
-        class: `${it2 === checked ? "visible" : ""} ${it2 === checkedValue ? "checked" : ""}`
+        class: `${it === checked ? "visible" : ""} ${it === checkedValue ? "checked" : ""}`
       }, createElementJsx("button", {
         type: "button",
         "data-index": index2,
-        class: it2 === checkedValue ? "checked" : "",
-        value: it2,
+        class: it === checkedValue ? "checked" : "",
+        value: it,
         title: title2,
         style: "--elf--toggle-checkbox-tooltip-top: -20%;"
       }, label));
@@ -59072,7 +59072,7 @@ class Border {
     var style = "";
     var width2 = "";
     var color2 = "";
-    str.split(" ").filter((it2) => it2.trim()).forEach((value) => {
+    str.split(" ").filter((it) => it.trim()).forEach((value) => {
       if (BorderStyles[value]) {
         style = value;
       } else if (Color$1.isColor(value)) {
@@ -59097,7 +59097,7 @@ class Border {
       obj2["border-left"] ? `border-left: ${obj2["border-left"]}` : "",
       obj2["border-right"] ? `border-right: ${obj2["border-right"]}` : "",
       obj2["border-bottom"] ? `border-bottom: ${obj2["border-bottom"]}` : ""
-    ].filter((it2) => it2);
+    ].filter((it) => it);
     return arr.join(";");
   }
 }
@@ -59288,7 +59288,7 @@ const typeList$3 = [
   { key: "left", title: "Left" },
   { key: "right", title: "Right" }
 ];
-const keyList$2 = typeList$3.map((it2) => it2.key);
+const keyList$2 = typeList$3.map((it) => it.key);
 const names = {
   image: "Image",
   "static-gradient": "Static",
@@ -59392,24 +59392,24 @@ class BorderImageProperty extends BaseProperty {
         style="display: none;"
       >
         <div class="slice-setting-box" ref="$sliceSettingBox">
-          ${typeList$3.map((it2) => {
+          ${typeList$3.map((it) => {
       return `
               <div>
-                <label class='title'>${it2.title}</label>
+                <label class='title'>${it.title}</label>
               </div>
               <div>
                 ${createComponent("RangeEditor", {
-        ref: `$${it2.key}Slice`,
+        ref: `$${it.key}Slice`,
         label: "Slice",
-        key: `border-image-slice-${it2.key}`,
+        key: `border-image-slice-${it.key}`,
         onchange: "changeBorderImage"
       })}
               </div>  
               <div>
                 ${createComponent("RangeEditor", {
-        ref: `$${it2.key}Width`,
+        ref: `$${it.key}Width`,
         label: "Width",
-        key: `border-image-width-${it2.key}`,
+        key: `border-image-width-${it.key}`,
         onchange: "changeBorderImage"
       })}              
               </div>                
@@ -59588,7 +59588,7 @@ const typeList$2 = [
   { key: "border-bottom-left-radius", title: "bottomLeft", label: "BL" },
   { key: "border-bottom-right-radius", title: "bottomRight", label: "BR" }
 ];
-const keyList$1 = typeList$2.map((it2) => it2.key);
+const keyList$1 = typeList$2.map((it) => it.key);
 const BorderGroup = {
   ALL: "all",
   PARTITIAL: "partial"
@@ -59643,18 +59643,18 @@ class BorderRadiusEditor extends EditorElement {
       >
         <div class="radius-setting-box" ref="$radiusSettingBox">
           <div>
-            ${typeList$2.map((it2) => {
-      var value = this.state[it2.key];
-      var title2 = this.$i18n("border.radius.editor." + it2.title);
-      var label = it2.label;
+            ${typeList$2.map((it) => {
+      var value = this.state[it.key];
+      var title2 = this.$i18n("border.radius.editor." + it.title);
+      var label = it.label;
       return `
                 <div>
                   ${createComponent("InputRangeEditor", {
         compact: true,
-        ref: `$${it2.key}`,
+        ref: `$${it.key}`,
         label,
         title: title2,
-        key: it2.key,
+        key: it.key,
         value,
         min: 0,
         step: 1,
@@ -59746,7 +59746,7 @@ var BoxModelProperty$1 = "";
 const fields = ["margin", "padding"];
 let styleKeys = [];
 fields.forEach((field) => {
-  styleKeys.push.apply(styleKeys, ["-top", "-bottom", "-left", "-right"].map((it2) => field + it2));
+  styleKeys.push.apply(styleKeys, ["-top", "-bottom", "-left", "-right"].map((it) => field + it));
 });
 class BoxModelProperty extends BaseProperty {
   getTitle() {
@@ -60001,9 +60001,9 @@ class ClipPathProperty extends BaseProperty {
       const polygonList = polygon.execute();
       polygonSelect = createComponent("SelectEditor", {
         ref: "$polygonSelect",
-        options: ["", ...polygonList.map((it2) => it2.name)],
+        options: ["", ...polygonList.map((it) => it.name)],
         onchange: (key, value) => {
-          const polygon2 = polygonList.find((it2) => it2.name === value);
+          const polygon2 = polygonList.find((it) => it.name === value);
           if (polygon2) {
             this.updatePathInfo({
               "clip-path": `polygon(${polygon2.polygon})`
@@ -60358,7 +60358,7 @@ class ColorInformation extends EditorElement {
   }
   initFormat() {
     var current_format = this.format || "hex";
-    ["hex", "rgb", "hsl"].filter((it2) => it2 !== current_format).forEach((formatString) => {
+    ["hex", "rgb", "hsl"].filter((it) => it !== current_format).forEach((formatString) => {
       this.$el.removeClass(formatString);
     });
     this.$el.addClass(current_format);
@@ -60918,15 +60918,15 @@ class ComponentProperty extends BaseProperty {
     if (!current)
       return "";
     const inspector = this.$editor.components.createInspector(current);
-    inspector.forEach((it2) => {
-      if (isString(it2)) {
+    inspector.forEach((it) => {
+      if (isString(it)) {
         return;
       }
-      let defaultValue = current[it2.key] || it2.defaultValue;
-      if (isFunction(it2.convertDefaultValue)) {
-        defaultValue = it2.convertDefaultValue(current, it2.key);
+      let defaultValue = current[it.key] || it.defaultValue;
+      if (isFunction(it.convertDefaultValue)) {
+        defaultValue = it.convertDefaultValue(current, it.key);
       }
-      it2.defaultValue = defaultValue;
+      it.defaultValue = defaultValue;
     });
     return createComponent("ComponentEditor", {
       ref: "$comp",
@@ -61318,7 +61318,7 @@ var __glob_0_24 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
   "default": style_canvas_background_color
 }, Symbol.toStringTag, { value: "Module" }));
 const modules$1 = { "./config_list/area.width.js": __glob_0_0$1, "./config_list/body.move.ms.js": __glob_0_1$1, "./config_list/canvas.height.js": __glob_0_2$1, "./config_list/canvas.width.js": __glob_0_3$1, "./config_list/debug.mode.js": __glob_0_4$1, "./config_list/editing.mode.itemType.js": __glob_0_5$1, "./config_list/editing.mode.js": __glob_0_6$1, "./config_list/editor.design.mode.js": __glob_0_7$1, "./config_list/editor.layout.mode.js": __glob_0_8$1, "./config_list/editor.theme.js": __glob_0_9$1, "./config_list/fixed.angle.js": __glob_0_10$1, "./config_list/fixed.gradient.angle.js": __glob_0_11$1, "./config_list/history.delay.ms.js": __glob_0_12$1, "./config_list/language.locale.js": __glob_0_13$1, "./config_list/set.drag.path.area.js": __glob_0_14$1, "./config_list/set.move.control.point.js": __glob_0_15$1, "./config_list/set.tool.hand.js": __glob_0_16$1, "./config_list/show.left.panel.js": __glob_0_17$1, "./config_list/show.outline.js": __glob_0_18$1, "./config_list/show.right.panel.js": __glob_0_19$1, "./config_list/show.ruler.js": __glob_0_20$1, "./config_list/snap.distance.js": __glob_0_21, "./config_list/snap.grid.js": __glob_0_22, "./config_list/store.key.js": __glob_0_23, "./config_list/style.canvas.background.color.js": __glob_0_24 };
-var configs = Object.values(modules$1).map((it2) => it2.default);
+var configs = Object.values(modules$1).map((it) => it.default);
 function defaultConfigs(editor) {
   configs.forEach((config) => {
     editor.registerConfig(config);
@@ -61367,10 +61367,10 @@ class BaseAssetModel extends BaseModel {
   }
   getSVGFilterIndex(id) {
     var _a;
-    var filter2 = this.json.svgfilters.map((it2, index2) => {
-      return { id: it2.id, index: index2 };
-    }).filter((it2) => {
-      return it2.id === id;
+    var filter2 = this.json.svgfilters.map((it, index2) => {
+      return { id: it.id, index: index2 };
+    }).filter((it) => {
+      return it.id === id;
     });
     return filter2.length ? (_a = filter2 == null ? void 0 : filter2[0]) == null ? void 0 : _a.index : -1;
   }
@@ -61556,8 +61556,8 @@ class MovableModel extends BaseAssetModel {
     this.setCacheVerties();
     this.setCacheGuideVerties();
     this.setCacheAreaPosition();
-    this.layers.forEach((it2) => {
-      it2.refreshMatrixCache();
+    this.layers.forEach((it) => {
+      it.refreshMatrixCache();
     });
   }
   setCacheItemTransformMatrix() {
@@ -61743,7 +61743,7 @@ class MovableModel extends BaseAssetModel {
       }
     }
     multiply$1(transform2, transform2, this.getRelativeMatrix());
-    if (transform2.filter((it2) => !isNaN(it2)).length === 0) {
+    if (transform2.filter((it) => !isNaN(it)).length === 0) {
       return create$5();
     }
     return transform2;
@@ -61816,10 +61816,10 @@ class MovableModel extends BaseAssetModel {
     ];
   }
   getXList() {
-    return [...new Set(this.guideVerties.map((it2) => it2[0]))];
+    return [...new Set(this.guideVerties.map((it) => it[0]))];
   }
   getYList() {
-    return [...new Set(this.guideVerties.map((it2) => it2[1]))];
+    return [...new Set(this.guideVerties.map((it) => it[1]))];
   }
   get nestedAngle() {
     if (this.parent) {
@@ -61861,8 +61861,8 @@ class MovableModel extends BaseAssetModel {
       "to left": this.getDirectionLeftMatrix(width2, height2)
     };
     const verties = this.verties;
-    const xList = verties.map((it2) => it2[0]);
-    const yList = verties.map((it2) => it2[1]);
+    const xList = verties.map((it) => it[0]);
+    const yList = verties.map((it) => it[1]);
     return {
       id,
       x: x2,
@@ -62154,17 +62154,17 @@ var GridLayoutEngine = {
     const lastVerties = currentItem.originVerties;
     const targetRect = vertiesToRectangle(lastVerties);
     const { info, items } = gridInformation;
-    const checkedGridRowColumnList = items.filter((it2) => {
-      return polyPoly(lastVerties, it2.originVerties);
-    }).filter((it2) => {
-      const intersect = intersectRectRect(it2.originRect, targetRect);
+    const checkedGridRowColumnList = items.filter((it) => {
+      return polyPoly(lastVerties, it.originVerties);
+    }).filter((it) => {
+      const intersect = intersectRectRect(it.originRect, targetRect);
       return Math.floor(intersect.width) > IntersectEpsilonType.RECT && Math.floor(intersect.height) > IntersectEpsilonType.RECT;
     });
     if (checkedGridRowColumnList.length === 0)
       return;
-    const rows = checkedGridRowColumnList.map((it2) => it2.row);
+    const rows = checkedGridRowColumnList.map((it) => it.row);
     rows.sort((a, b) => a - b);
-    const columns = checkedGridRowColumnList.map((it2) => it2.column);
+    const columns = checkedGridRowColumnList.map((it) => it.column);
     columns.sort((a, b) => a - b);
     const gridColumnStart = columns[0];
     const gridColumnEnd = columns[columns.length - 1];
@@ -62504,8 +62504,8 @@ class DomModel extends GroupModel {
     let list2 = [];
     if (this.json.pattern) {
       const patternList = this.computed("pattern", (pattern) => {
-        return Pattern.parseStyle(pattern).map((it2) => {
-          return BackgroundImage.parseStyle(STRING_TO_CSS(it2.toCSS()));
+        return Pattern.parseStyle(pattern).map((it) => {
+          return BackgroundImage.parseStyle(STRING_TO_CSS(it.toCSS()));
         });
       });
       for (var i = 0, len2 = patternList.length; i < len2; i++) {
@@ -62516,12 +62516,12 @@ class DomModel extends GroupModel {
       const backgroundList = this.computed("background-image", (backgroundImage2) => {
         return BackgroundImage.parseStyle(STRING_TO_CSS(backgroundImage2));
       });
-      list2.push.apply(list2, backgroundList.filter((it2) => it2.visibility !== VisibilityType.HIDDEN));
+      list2.push.apply(list2, backgroundList.filter((it) => it.visibility !== VisibilityType.HIDDEN));
     }
     if (list2.length) {
       const project2 = this.top;
       this.cacheBackgroundImage = BackgroundImage.joinCSS(list2);
-      const cacheList = list2.filter((it2) => it2.type === GradientType.URL).map((it2) => it2.image.url);
+      const cacheList = list2.filter((it) => it.type === GradientType.URL).map((it) => it.image.url);
       let cacheImage = this.cacheBackgroundImage["background-image"];
       cacheList.forEach((url) => {
         const imageUrl = project2.getImageValueById(url);
@@ -62640,14 +62640,14 @@ class DomModel extends GroupModel {
           result.startPoint = newStartPoint2;
           result.endPoint = newEndPoint2;
           result.shapePoint = newShapePoint;
-          result.colorsteps = image2.colorsteps.map((it2) => {
-            const offset = it2.toLength();
+          result.colorsteps = image2.colorsteps.map((it) => {
+            const offset = it.toLength();
             return {
-              id: it2.id,
-              cut: it2.cut,
-              color: it2.color,
-              timing: it2.timing,
-              timingCount: it2.timingCount,
+              id: it.id,
+              cut: it.cut,
+              color: it.color,
+              timing: it.timing,
+              timingCount: it.timingCount,
               pos: lerp$1([], result.startPoint, result.endPoint, offset.value / 100)
             };
           });
@@ -62672,17 +62672,17 @@ class DomModel extends GroupModel {
             result.shapePoint
           ], calculateRotationOriginMat4(image2.angle, result.radialCenterPosition));
           const targetPoint = result.shapePoint;
-          result.colorsteps = image2.colorsteps.map((it2) => {
-            const angle2 = it2.percent * 3.6;
+          result.colorsteps = image2.colorsteps.map((it) => {
+            const angle2 = it.percent * 3.6;
             const [newPos] = vertiesMap([
               targetPoint
             ], calculateRotationOriginMat4(angle2, result.radialCenterPosition));
             return {
-              id: it2.id,
-              cut: it2.cut,
-              color: it2.color,
-              timing: it2.timing,
-              timingCount: it2.timingCount,
+              id: it.id,
+              cut: it.cut,
+              color: it.color,
+              timing: it.timing,
+              timingCount: it.timingCount,
               pos: newPos
             };
           });
@@ -62706,14 +62706,14 @@ class DomModel extends GroupModel {
         result.startPoint = newStartPoint;
         result.areaStartPoint = newAreaStartPoint;
         result.areaEndPoint = newAreaEndPoint;
-        result.colorsteps = image2.colorsteps.map((it2) => {
-          const offset = it2.toLength();
+        result.colorsteps = image2.colorsteps.map((it) => {
+          const offset = it.toLength();
           return {
-            id: it2.id,
-            cut: it2.cut,
-            color: it2.color,
-            timing: it2.timing,
-            timingCount: it2.timingCount,
+            id: it.id,
+            cut: it.cut,
+            color: it.color,
+            timing: it.timing,
+            timingCount: it.timingCount,
             pos: lerp$1([], result.startPoint, result.endPoint, offset.value / 100)
           };
         });
@@ -62879,8 +62879,8 @@ class SVGLinearGradient extends SVGGradient {
         y2="${y2}"
         spreadMethod="${spreadMethod}"
       >
-        ${SVGLinearGradient.makeColorStepList(this.colorsteps).map((it2) => `
-        <stop offset="${it2.percent}%" stop-color="${it2.color}"/>
+        ${SVGLinearGradient.makeColorStepList(this.colorsteps).map((it) => `
+        <stop offset="${it.percent}%" stop-color="${it.color}"/>
       `).join("")}
       </linearGradient>
     `;
@@ -62893,13 +62893,13 @@ class SVGLinearGradient extends SVGGradient {
     var opt = {};
     const [options2, ...colors2] = result.parameters;
     const list2 = [];
-    options2.forEach((it2) => {
-      if (it2.func === FuncType.KEYWORD) {
-        if (SpreadMethodList$1.includes(it2.matchedString)) {
-          opt.spreadMethod = it2.matchedString;
+    options2.forEach((it) => {
+      if (it.func === FuncType.KEYWORD) {
+        if (SpreadMethodList$1.includes(it.matchedString)) {
+          opt.spreadMethod = it.matchedString;
         }
       } else {
-        list2.push(it2);
+        list2.push(it);
       }
     });
     var [
@@ -62907,7 +62907,7 @@ class SVGLinearGradient extends SVGGradient {
       y1 = Length.percent(50),
       x2 = Length.percent(100),
       y2 = Length.percent(50)
-    ] = list2.map((it2) => it2.parsed);
+    ] = list2.map((it) => it.parsed);
     opt = __spreadProps(__spreadValues({}, opt), {
       x1,
       y1,
@@ -62980,8 +62980,8 @@ class SVGRadialGradient extends SVGGradient {
     const gradientTransform = `matrix(${view[0]}, ${view[1]}, ${view[3]}, ${view[4]}, ${view[6]}, ${view[7]})`;
     return `
 <radialGradient ${OBJECT_TO_PROPERTY$1({ id, cx: 0, cy: 0, r: dist$1, spreadMethod, gradientUnits: "userSpaceOnUse", gradientTransform })} >
-    ${SVGRadialGradient.makeColorStepList(this.colorsteps).map((it2) => `
-      <stop offset="${it2.percent}%" stop-color="${it2.color}"/>
+    ${SVGRadialGradient.makeColorStepList(this.colorsteps).map((it) => `
+      <stop offset="${it.percent}%" stop-color="${it.color}"/>
     `).join("")}
 </radialGradient>
 `;
@@ -62994,15 +62994,15 @@ class SVGRadialGradient extends SVGGradient {
     var opt = {};
     const [options2, ...colors2] = result.parameters;
     const list2 = [];
-    options2.forEach((it2) => {
-      if (it2.func === FuncType.KEYWORD) {
-        if (RadialTypeList.includes(it2.matchedString)) {
-          opt.radialType = it2.matchedString;
-        } else if (SpreadMethodList.includes(it2.matchedString)) {
-          opt.spreadMethod = it2.matchedString;
+    options2.forEach((it) => {
+      if (it.func === FuncType.KEYWORD) {
+        if (RadialTypeList.includes(it.matchedString)) {
+          opt.radialType = it.matchedString;
+        } else if (SpreadMethodList.includes(it.matchedString)) {
+          opt.spreadMethod = it.matchedString;
         }
       } else {
-        list2.push(it2);
+        list2.push(it);
       }
     });
     var [
@@ -63012,7 +63012,7 @@ class SVGRadialGradient extends SVGGradient {
       y2 = Length.percent(50),
       x3 = Length.percent(50),
       y3 = Length.percent(100)
-    ] = list2.map((it2) => it2.parsed);
+    ] = list2.map((it) => it.parsed);
     opt = __spreadProps(__spreadValues({}, opt), {
       x1,
       y1,
@@ -63049,8 +63049,8 @@ class SVGStaticGradient extends SVGGradient {
     });
   }
   setColor(color2) {
-    this.colorsteps.forEach((it2) => {
-      it2.color = color2;
+    this.colorsteps.forEach((it) => {
+      it.color = color2;
     });
   }
   toString() {
@@ -63402,14 +63402,14 @@ class SVGItem extends LayerModel {
         result.endPoint = newEndPoint;
         result.startPoint = newStartPoint;
         result.shapePoint = newShapePoint;
-        result.colorsteps = image2.colorsteps.map((it2) => {
-          const offset = it2.toLength();
+        result.colorsteps = image2.colorsteps.map((it) => {
+          const offset = it.toLength();
           return {
-            id: it2.id,
-            cut: it2.cut,
-            color: it2.color,
-            timing: it2.timing,
-            timingCount: it2.timingCount,
+            id: it.id,
+            cut: it.cut,
+            color: it.color,
+            timing: it.timing,
+            timingCount: it.timingCount,
             pos: lerp$1([], result.startPoint, result.endPoint, offset.value / 100)
           };
         });
@@ -63430,14 +63430,14 @@ class SVGItem extends LayerModel {
         result.startPoint = newStartPoint;
         result.areaStartPoint = clone(newStartPoint);
         result.areaEndPoint = clone(newEndPoint);
-        result.colorsteps = image2.colorsteps.map((it2) => {
-          const offset = it2.toLength();
+        result.colorsteps = image2.colorsteps.map((it) => {
+          const offset = it.toLength();
           return {
-            id: it2.id,
-            cut: it2.cut,
-            color: it2.color,
-            timing: it2.timing,
-            timingCount: it2.timingCount,
+            id: it.id,
+            cut: it.cut,
+            color: it.color,
+            timing: it.timing,
+            timingCount: it.timingCount,
             pos: lerp$1([], result.startPoint, result.endPoint, offset.value / 100)
           };
         });
@@ -64937,7 +64937,7 @@ class BooleanPathItem extends SVGPathItem {
       } else if (this.json["boolean-operation"] !== "none") {
         if (((_a = this.json.children) == null ? void 0 : _a.length) >= 2) {
           if (this.modelManager.editor.pathKitManager.has()) {
-            const paths = this.layers.filter((it2) => it2.d);
+            const paths = this.layers.filter((it) => it.d);
             if (paths.length >= 2) {
               const newPath = this.doBooleanOperation();
               this.json.d = newPath;
@@ -65044,7 +65044,7 @@ class BooleanPathItem extends SVGPathItem {
     return "";
   }
   getPathList() {
-    return this.layers.map((it2) => it2.absolutePath().d);
+    return this.layers.map((it) => it.absolutePath().d);
   }
   intersection() {
     const [first, ...rest] = this.getPathList();
@@ -66433,12 +66433,12 @@ class CSSTextureView extends EditorElement {
     `;
   }
   [LOAD("$css-list")]() {
-    return cssPatterns.map((it2, index2) => {
+    return cssPatterns.map((it, index2) => {
       const svg = this.$editor.svg.render(this.$model.createModel(__spreadValues({
-        itemType: it2.itemType,
+        itemType: it.itemType,
         width: 70,
         height: 70
-      }, it2.attrs), false));
+      }, it.attrs), false));
       return `
         <div class="pattern-item" data-index="${index2}">
           <div class="preview">${svg}</div>
@@ -66620,13 +66620,13 @@ class SVGTextureView extends EditorElement {
     `;
   }
   [LOAD("$svg-list")]() {
-    return svgPatterns.map((it2, index2) => {
-      let d = it2.attrs.d;
+    return svgPatterns.map((it, index2) => {
+      let d = it.attrs.d;
       if (d) {
         const path = PathParser.fromSVGString(d);
-        if (it2.attrs.originWidth) {
+        if (it.attrs.originWidth) {
           path.rect();
-          path.scale(60 / it2.attrs.originWidth, 60 / it2.attrs.originHeight);
+          path.scale(60 / it.attrs.originWidth, 60 / it.attrs.originHeight);
         } else {
           const rect2 = path.rect();
           path.scale(70 / rect2.width, 70 / rect2.height);
@@ -66634,10 +66634,10 @@ class SVGTextureView extends EditorElement {
         d = path.d;
       }
       const svg = this.$editor.svg.render(this.$model.createModel(__spreadProps(__spreadValues({
-        itemType: it2.itemType,
+        itemType: it.itemType,
         width: 80,
         height: 80
-      }, it2.attrs), {
+      }, it.attrs), {
         d
       }), false));
       return `
@@ -66758,8 +66758,8 @@ class FilterProperty extends BaseProperty {
     this.children.$filterEditor.trigger("add", filterType);
   }
   [LOAD("$filterSelect")]() {
-    var list2 = filter_list.map((it2) => {
-      return { title: this.$i18n(`filter.property.${it2}`), value: it2 };
+    var list2 = filter_list.map((it) => {
+      return { title: this.$i18n(`filter.property.${it}`), value: it };
     });
     var svgFilterList = this.getSVGFilterList();
     var totalList = [];
@@ -66774,8 +66774,8 @@ class FilterProperty extends BaseProperty {
         ...list2
       ];
     }
-    return totalList.map((it2) => {
-      var { title: title2, value } = it2;
+    return totalList.map((it) => {
+      var { title: title2, value } = it;
       return `<option value='${value}'>${title2}</option>`;
     });
   }
@@ -66783,8 +66783,8 @@ class FilterProperty extends BaseProperty {
     var current = this.$selection.currentProject;
     var arr = [];
     if (current) {
-      arr = current.svgfilters.map((it2) => {
-        var id = it2.id;
+      arr = current.svgfilters.map((it) => {
+        var id = it.id;
         return {
           title: `svg - #${id}`,
           value: id
@@ -66981,7 +66981,7 @@ class FillEditor extends EditorElement {
     const id = (_a = image2.colorsteps[this.props.index]) == null ? void 0 : _a.id;
     this.$selection.selectColorStep(id);
     if (id) {
-      this.currentStep = image2.colorsteps.find((it2) => this.$selection.isSelectedColorStep(it2.id));
+      this.currentStep = image2.colorsteps.find((it) => this.$selection.isSelectedColorStep(it.id));
     }
     return {
       cachedRect: null,
@@ -67163,12 +67163,12 @@ class FillEditor extends EditorElement {
   }
   [LOAD("$stepList")]() {
     var colorsteps = this.state.image.colorsteps || [];
-    return colorsteps.map((it2, index2) => {
-      var selected = this.$selection.isSelectedColorStep(it2.id) ? "selected" : "";
+    return colorsteps.map((it, index2) => {
+      var selected = this.$selection.isSelectedColorStep(it.id) ? "selected" : "";
       return `
-      <div class='step ${selected}' data-id='${it2.id}' data-cut='${it2.cut}' tabindex="-1" style='left: ${it2.toLength()};'>
-        <div class='color-view' style="background-color: ${it2.color}">
-          <span>${Math.floor(it2.percent * 10) / 10}</span>
+      <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' tabindex="-1" style='left: ${it.toLength()};'>
+        <div class='color-view' style="background-color: ${it.color}">
+          <span>${Math.floor(it.percent * 10) / 10}</span>
         </div>
         <div class='arrow'></div>
       </div>`;
@@ -67183,7 +67183,7 @@ class FillEditor extends EditorElement {
     this.state.id = id;
     this.$selection.selectColorStep(id);
     if (this.state.image.colorsteps) {
-      this.currentStep = this.state.image.colorsteps.find((it2) => this.$selection.isSelectedColorStep(it2.id));
+      this.currentStep = this.state.image.colorsteps.find((it) => this.$selection.isSelectedColorStep(it.id));
       this.parent.trigger("selectColorStep", this.currentStep.color);
     }
     this.refresh();
@@ -67222,7 +67222,7 @@ class FillEditor extends EditorElement {
     this.doFocus(id);
   }
   appendColorStep(id) {
-    const currentIndex = this.state.image.colorsteps.findIndex((it2) => it2.id === id);
+    const currentIndex = this.state.image.colorsteps.findIndex((it) => it.id === id);
     const nextIndex = currentIndex + 1;
     const currentColorStep = this.state.image.colorsteps[currentIndex];
     const nextColorStep = this.state.image.colorsteps[nextIndex];
@@ -67243,7 +67243,7 @@ class FillEditor extends EditorElement {
     }, 100);
   }
   prependColorStep(id) {
-    const currentIndex = this.state.image.colorsteps.findIndex((it2) => it2.id === id);
+    const currentIndex = this.state.image.colorsteps.findIndex((it) => it.id === id);
     const prevIndex = currentIndex - 1;
     const currentColorStep = this.state.image.colorsteps[currentIndex];
     const prevColorStep = this.state.image.colorsteps[prevIndex];
@@ -67446,7 +67446,7 @@ class GradientPickerPopup extends BasePopup {
   }
   [SUBSCRIBE("updateGradientEditor")](data, targetColorStep) {
     this.state.image = isString(data) ? BackgroundImage.parseImage(data) : data;
-    this.state.selectColorStepIndex = this.state.image.colorsteps.findIndex((it2) => it2.color === targetColorStep.color && it2.percent === targetColorStep.percent);
+    this.state.selectColorStepIndex = this.state.image.colorsteps.findIndex((it) => it.color === targetColorStep.color && it.percent === targetColorStep.percent);
     this.children.$color.setValue(targetColorStep.color);
     this.refresh();
   }
@@ -67611,7 +67611,7 @@ class FillPickerPopup extends BasePopup {
   [SUBSCRIBE("updateFillEditor")](data, targetColorStep = void 0) {
     this.state.image = isString(data) ? SVGFill.parseImage(data) : data;
     if (targetColorStep) {
-      this.state.selectColorStepIndex = this.state.image.colorsteps.findIndex((it2) => it2.color === targetColorStep.color && it2.percent === targetColorStep.percent);
+      this.state.selectColorStepIndex = this.state.image.colorsteps.findIndex((it) => it.color === targetColorStep.color && it.percent === targetColorStep.percent);
       this.children.$color.setValue(targetColorStep.color);
     }
     this.refresh();
@@ -67732,8 +67732,8 @@ class FillSingleEditor extends EditorElement {
       return { fill: "transparent" };
     var colors2 = image2.type != "url" ? `${image2.colorsteps[0].color}` : "transparent";
     if ([GradientType.LINEAR, GradientType.RADIAL].includes(image2.type)) {
-      colors2 = image2.colorsteps.map((it2) => {
-        return `<span class='color' style='background-color: ${it2.color}' title='${it2.color}'></span>`;
+      colors2 = image2.colorsteps.map((it) => {
+        return `<span class='color' style='background-color: ${it.color}' title='${it.color}'></span>`;
       }).join("");
     }
     return {
@@ -67885,7 +67885,7 @@ var linear = {
   title: "Linear",
   key: "linear",
   execute: function(count = 42) {
-    return repeat$1(count).map((it2) => {
+    return repeat$1(count).map((it) => {
       return {
         gradient: `linear-gradient(${randomItem(...angle_list$2)}, ${ColorStep.createColorStep(2)})`
       };
@@ -67896,7 +67896,7 @@ var radial = {
   title: "Radial",
   key: "radial",
   execute: function(count = 42) {
-    return repeat$1(count).map((it2) => {
+    return repeat$1(count).map((it) => {
       var shape2 = "circle";
       return {
         gradient: `radial-gradient(${shape2}, ${ColorStep.createColorStep(2)})`
@@ -67908,7 +67908,7 @@ var conic = {
   title: "Conic",
   key: "conic",
   execute: function(count = 42) {
-    return repeat$1(count).map((it2) => {
+    return repeat$1(count).map((it) => {
       var x2 = randomNumber(45, 55);
       var y2 = randomNumber(45, 55);
       var angle2 = randomNumber(0, 360);
@@ -67923,7 +67923,7 @@ var randomLinear = {
   title: "Random Linear",
   key: "random-linear",
   execute: function(count = 42) {
-    return repeat$1(count).map((it2) => {
+    return repeat$1(count).map((it) => {
       return {
         gradient: `linear-gradient(${randomItem(...angle_list$1)}, ${ColorStep.createColorStep(10)})`
       };
@@ -67934,7 +67934,7 @@ var randomRadial = {
   title: "Random Radial",
   key: "random-radial",
   execute: function(count = 42) {
-    return repeat$1(count).map((it2) => {
+    return repeat$1(count).map((it) => {
       return {
         gradient: `radial-gradient(circle, ${ColorStep.createColorStep(10)})`
       };
@@ -67945,7 +67945,7 @@ var randomConic = {
   title: "Random Conic",
   key: "random-conic",
   execute: function(count = 42) {
-    return repeat$1(count).map((it2) => {
+    return repeat$1(count).map((it) => {
       return {
         gradient: `conic-gradient(from 0deg at 50% 50%, ${ColorStep.createColorStep(10, 360, "deg")})`
       };
@@ -67957,7 +67957,7 @@ var repeatLinear = {
   title: "Repeat Linear",
   key: "repeat-linear",
   execute: function(count = 42) {
-    return repeat$1(count).map((it2) => {
+    return repeat$1(count).map((it) => {
       return {
         gradient: `repeating-linear-gradient(${randomItem(...angle_list)}, ${ColorStep.createRepeatColorStep(2, "10px")})`
       };
@@ -67968,7 +67968,7 @@ var repeatRadial = {
   title: "Repeat Radial",
   key: "repeat-radial",
   execute: function(count = 42) {
-    return repeat$1(count).map((it2) => {
+    return repeat$1(count).map((it) => {
       var shape2 = "circle";
       return {
         gradient: `repeating-radial-gradient(${shape2}, ${ColorStep.createRepeatColorStep(3, "6px")})`
@@ -67980,7 +67980,7 @@ var repeatConic = {
   title: "Repeat Conic",
   key: "repeat-conic",
   execute: function(count = 42) {
-    return repeat$1(count).map((it2) => {
+    return repeat$1(count).map((it) => {
       return {
         gradient: `repeating-conic-gradient(from 0deg at 0% 50%, ${ColorStep.createRepeatColorStep(10, "10deg")})`
       };
@@ -67999,8 +67999,8 @@ var gradients = [
   repeatConic
 ];
 var GradientAssetsProperty$1 = "";
-const options = gradients.map((it2) => {
-  return { value: it2.key, text: it2.title };
+const options = gradients.map((it) => {
+  return { value: it.key, text: it.title };
 });
 class GradientAssetsProperty extends BaseProperty {
   getTitle() {
@@ -68048,7 +68048,7 @@ class GradientAssetsProperty extends BaseProperty {
     e.dataTransfer.setData("text/gradient", gradient2);
   }
   [LOAD("$gradientList")]() {
-    var preset = gradients.find((it2) => it2.key === this.state.preset);
+    var preset = gradients.find((it) => it.key === this.state.preset);
     if (!preset) {
       return "";
     }
@@ -68112,14 +68112,14 @@ class HistoryProperty extends BaseProperty {
     `;
   }
   [LOAD("$body") + DOMDIFF]() {
-    return this.$editor.history.map((it2, index2) => {
-      if (it2 === "-") {
+    return this.$editor.history.map((it, index2) => {
+      if (it === "-") {
         return `<div class='divider'>-</div>`;
       }
       return `
         <div class='history-item'>
           <span>${index2 === this.$editor.history.currentIndex ? obj.arrowRight : ""}</span>
-          <span>${it2.message}</span>
+          <span>${it.message}</span>
         </div>
       `;
     });
@@ -68173,7 +68173,7 @@ class ImageProperty extends BaseProperty {
     `;
   }
   [SUBSCRIBE_SELF("changeImageSize")](key, value) {
-    var [width2, height2] = value.split("x").map((it2) => it2);
+    var [width2, height2] = value.split("x").map((it) => it);
     this.command("setAttributeForMulti", "resize image", this.$selection.packByValue({
       width: width2,
       height: height2
@@ -68406,7 +68406,7 @@ class KeyframePopup extends BasePopup {
     }
   }
   getOffsetData() {
-    var offsets = this.state.offsets.map((it2) => it2);
+    var offsets = this.state.offsets.map((it) => it);
     return { offsets };
   }
   refresh() {
@@ -68574,8 +68574,8 @@ class KeyframeProperty extends BaseProperty {
       this.getRef("$keyframeIndex", selectedIndex).removeClass("selected");
     }
     if (this.current) {
-      this.current.keyframes.forEach((it2, index2) => {
-        it2.selected = index2 === selectedIndex;
+      this.current.keyframes.forEach((it, index2) => {
+        it.selected = index2 === selectedIndex;
       });
     }
   }
@@ -68683,10 +68683,10 @@ class OffsetEditor extends EditorElement {
     }
     this.getRef("$offset").attr("data-selected-value", selectedIndex);
     this.selectedIndex = selectedIndex;
-    this.state.offsets.forEach((it2, index2) => {
-      it2.selected = index2 === selectedIndex;
+    this.state.offsets.forEach((it, index2) => {
+      it.selected = index2 === selectedIndex;
     });
-    var selectedList = this.state.offsets.filter((it2) => it2.selected);
+    var selectedList = this.state.offsets.filter((it) => it.selected);
     this.selectedOffsetItem = selectedList.length ? selectedList[0] : {};
     this.refreshOffsetInput();
   }
@@ -68697,8 +68697,8 @@ class OffsetEditor extends EditorElement {
     }
   }
   [LOAD("$offset")]() {
-    return this.state.offsets.map((it2, index2) => {
-      return this.makeOffset(it2, index2);
+    return this.state.offsets.map((it, index2) => {
+      return this.makeOffset(it, index2);
     });
   }
   isNotOffsetItem(e) {
@@ -68958,8 +68958,8 @@ class LayerTreeProperty extends BaseProperty {
       hideDragPointer: true
     }, false);
     this.bindData("$dragPointer");
-    this.refs.$layerList.$$(`.${DRAG_START_CLASS}`).forEach((it2) => {
-      it2.removeClass(DRAG_START_CLASS);
+    this.refs.$layerList.$$(`.${DRAG_START_CLASS}`).forEach((it) => {
+      it.removeClass(DRAG_START_CLASS);
     });
   }
   [DRAGOVER(`$layerList .layer-item:not(.${DRAG_START_CLASS})`) + PREVENT](e) {
@@ -69093,35 +69093,35 @@ class LayerTreeProperty extends BaseProperty {
     }
   }
   [SUBSCRIBE("changeHoverItem")]() {
-    this.refs.$layerList.$$(".hovered").forEach((it2) => {
-      it2.removeClass("hovered");
+    this.refs.$layerList.$$(".hovered").forEach((it) => {
+      it.removeClass("hovered");
     });
     if (this.$selection.hoverItems.length) {
-      var selector2 = this.$selection.hoverItems.map((it2) => {
-        return `[data-layer-id="${it2.id}"]`;
+      var selector2 = this.$selection.hoverItems.map((it) => {
+        return `[data-layer-id="${it.id}"]`;
       }).join(",");
-      this.refs.$layerList.$$(selector2).forEach((it2) => {
-        it2.addClass("hovered");
+      this.refs.$layerList.$$(selector2).forEach((it) => {
+        it.addClass("hovered");
       });
     }
   }
   [SUBSCRIBE_SELF("changeSelection")](isSelection = false) {
     if (isSelection && this.refs.$layerList) {
-      this.refs.$layerList.$$(".selected").forEach((it2) => {
-        it2.removeClass("selected");
+      this.refs.$layerList.$$(".selected").forEach((it) => {
+        it.removeClass("selected");
       });
-      this.refs.$layerList.$$(".selected-path").forEach((it2) => {
-        it2.removeClass("selected-path");
+      this.refs.$layerList.$$(".selected-path").forEach((it) => {
+        it.removeClass("selected-path");
       });
-      var selector2 = this.$selection.items.map((it2) => {
-        return `[data-layer-id="${it2.id}"]`;
+      var selector2 = this.$selection.items.map((it) => {
+        return `[data-layer-id="${it.id}"]`;
       }).join(",");
       if (selector2) {
-        this.refs.$layerList.$$(selector2).forEach((it2) => {
-          it2.addClass("selected");
-          var item2 = this.$selection.itemKeys[it2.attr("data-layer-id")];
+        this.refs.$layerList.$$(selector2).forEach((it) => {
+          it.addClass("selected");
+          var item2 = this.$selection.itemKeys[it.attr("data-layer-id")];
           if (item2.is("svg-path", "svg-polygon")) {
-            it2.$(".icon").html(this.getIcon(item2));
+            it.$(".icon").html(this.getIcon(item2));
           }
         });
       }
@@ -69167,8 +69167,8 @@ class FlexLayoutEditor extends EditorElement {
     return this.makeOptionsFunction("flex-start,flex-end,center,space-between,space-around,stretch");
   }
   makeOptionsFunction(options2) {
-    return options2.split(",").map((it2) => {
-      return { value: it2, text: this.$i18n("flex.layout.editor." + it2) };
+    return options2.split(",").map((it) => {
+      return { value: it, text: this.$i18n("flex.layout.editor." + it) };
     });
   }
   initState() {
@@ -69267,7 +69267,7 @@ class FlexLayoutEditor extends EditorElement {
                             align-items: ${this.state["align-items"]};
                             align-content:${this.state["align-content"]};
                     ">
-                        ${[1, 2, 3].map((it2) => {
+                        ${[1, 2, 3].map((it) => {
       return `
                                 <div class="flex-direction" data-value="${this.state["flex-direction"]}" style="flex-direction: ${this.state["flex-direction"]};align-items: ${this.state["align-items"]};">
                                     <div class="flex-direction-item" data-index="1"></div>
@@ -69378,8 +69378,8 @@ var GridBoxEditor$1 = "";
 const REG_CSS_UNIT = /(auto)|(repeat\([^\)]*\))|(([\d.]+)(px|pt|fr|r?em|deg|vh|vw|%))/gi;
 class GridBoxEditor extends EditorElement {
   getLayoutItemOptions() {
-    return "none,auto,repeat,length".split(",").map((it2) => {
-      return { value: it2, text: this.$i18n(`grid.box.editor.${it2}`) };
+    return "none,auto,repeat,length".split(",").map((it) => {
+      return { value: it, text: this.$i18n(`grid.box.editor.${it}`) };
     });
   }
   initState() {
@@ -69412,29 +69412,29 @@ class GridBoxEditor extends EditorElement {
     return target;
   }
   getValue() {
-    return this.state.list.map((it2) => {
-      if (it2.type === "repeat") {
-        return `repeat(${it2.count}, ${it2.value})`;
-      } else if (it2.type === "auto" || it2.type === "none") {
-        return it2.type;
+    return this.state.list.map((it) => {
+      if (it.type === "repeat") {
+        return `repeat(${it.count}, ${it.value})`;
+      } else if (it.type === "auto" || it.type === "none") {
+        return it.type;
       } else {
-        return it2.value;
+        return it.value;
       }
     }).join(" ");
   }
   modifyData() {
     this.parent.trigger(this.props.onchange, this.props.key, this.getValue());
   }
-  makeItem(it2, index2) {
+  makeItem(it, index2) {
     return `
-            <div class='item' data-repeat-type='${it2.type}' data-index='${index2}' >
+            <div class='item' data-repeat-type='${it.type}' data-index='${index2}' >
                 <div class='repeat'>
                     ${createComponent("SelectEditor", {
       ref: `$${index2}-type`,
       compact: true,
       options: this.getLayoutItemOptions(),
       key: "type",
-      value: it2.type || "auto",
+      value: it.type || "auto",
       params: index2,
       onchange: "changeKeyValue"
     })}
@@ -69444,7 +69444,7 @@ class GridBoxEditor extends EditorElement {
       compact: true,
       ref: `$${index2}-count`,
       key: "count",
-      value: it2.count,
+      value: it.count,
       params: index2,
       max: 1e3,
       onchange: "changeKeyValue"
@@ -69455,7 +69455,7 @@ class GridBoxEditor extends EditorElement {
       ref: `$${index2}-value`,
       compact: true,
       key: "value",
-      value: it2.value,
+      value: it.value,
       params: index2,
       units: ["auto", "fr", "px", "em", "%"],
       onchange: "changeKeyValue"
@@ -69469,8 +69469,8 @@ class GridBoxEditor extends EditorElement {
         `;
   }
   [LOAD("$list")]() {
-    return this.state.list.map((it2, index2) => {
-      return this.makeItem(it2, index2);
+    return this.state.list.map((it, index2) => {
+      return this.makeItem(it, index2);
     });
   }
   template() {
@@ -70209,18 +70209,18 @@ class FlexGrowToolView extends EditorElement {
 class Grid {
   static parseStyle(value) {
     const units = [];
-    parseValue(value).forEach((it2) => {
-      switch (it2.func) {
+    parseValue(value).forEach((it) => {
+      switch (it.func) {
         case FuncType.REPEAT:
-          for (var i = 0, len2 = it2.parsed.count; i < len2; i++) {
-            units.push(it2.parsed.length);
+          for (var i = 0, len2 = it.parsed.count; i < len2; i++) {
+            units.push(it.parsed.length);
           }
           break;
         case FuncType.LENGTH:
-          units.push(it2.parsed);
+          units.push(it.parsed);
           break;
         case FuncType.KEYWORD:
-          units.push(it2.matchedString);
+          units.push(it.matchedString);
           break;
       }
     });
@@ -70234,10 +70234,10 @@ var GridGrowToolView$1 = "";
 class GridGrowBaseView extends EditorElement {
   updateRows(current, newRows) {
     const data = {};
-    current.layers.forEach((it2) => {
-      data[it2.id] = {
-        "grid-row-start": Math.max(1, Math.min(newRows.length, it2["grid-row-start"])),
-        "grid-row-end": Math.min(newRows.length + 1, it2["grid-row-end"])
+    current.layers.forEach((it) => {
+      data[it.id] = {
+        "grid-row-start": Math.max(1, Math.min(newRows.length, it["grid-row-start"])),
+        "grid-row-end": Math.min(newRows.length + 1, it["grid-row-end"])
       };
     });
     this.command("setAttributeForMulti", "change grid rows", __spreadProps(__spreadValues({}, data), {
@@ -70248,10 +70248,10 @@ class GridGrowBaseView extends EditorElement {
   }
   updateColumns(current, newColumns) {
     const data = {};
-    current.layers.forEach((it2) => {
-      data[it2.id] = {
-        "grid-column-start": Math.max(1, Math.min(newColumns.length, it2["grid-column-start"])),
-        "grid-column-end": Math.min(newColumns.length + 1, it2["grid-column-end"])
+    current.layers.forEach((it) => {
+      data[it.id] = {
+        "grid-column-start": Math.max(1, Math.min(newColumns.length, it["grid-column-start"])),
+        "grid-column-end": Math.min(newColumns.length + 1, it["grid-column-end"])
       };
     });
     this.command("setAttributeForMulti", "change grid columns", __spreadProps(__spreadValues({}, data), {
@@ -70476,7 +70476,7 @@ class GridGrowDragEventView extends GridGrowClickEventView {
       }
     } else if (width2 === "auto") {
       const { items } = this.state.lastGridInfo;
-      const column = items.find((it2) => it2.column === index2 + 1);
+      const column = items.find((it) => it.column === index2 + 1);
       this.columns[index2] = Length.px(column.rect.width).floor();
     }
   }
@@ -70534,7 +70534,7 @@ class GridGrowDragEventView extends GridGrowClickEventView {
       }
     } else if (height2 === "auto") {
       const { items } = this.state.lastGridInfo;
-      const row = items.find((it2) => it2.row === index2 + 1);
+      const row = items.find((it) => it.row === index2 + 1);
       this.rows[index2] = Length.px(row.rect.height).floor();
     }
   }
@@ -70634,17 +70634,17 @@ class GridGrowToolView extends GridGrowDragEventView {
     };
   }
   getScaledInformation(arr) {
-    return arr.map((it2) => this.getScaledLength(it2));
+    return arr.map((it) => this.getScaledLength(it));
   }
-  getScaledLength(it2) {
-    if (isString(it2)) {
-      return it2;
-    } else if (it2 instanceof Length) {
-      if (it2.isPx()) {
-        return it2.clone().mul(this.$viewport.scale);
+  getScaledLength(it) {
+    if (isString(it)) {
+      return it;
+    } else if (it instanceof Length) {
+      if (it.isPx()) {
+        return it.clone().mul(this.$viewport.scale);
       }
     }
-    return it2;
+    return it;
   }
   getGridTargetLayer() {
     if (this.$selection.dragTargetItem) {
@@ -70662,11 +70662,11 @@ class GridGrowToolView extends GridGrowDragEventView {
       return parent;
     return null;
   }
-  getParsedValue(it2) {
-    if (it2 === "auto") {
-      return it2;
+  getParsedValue(it) {
+    if (it === "auto") {
+      return it;
     }
-    return Length.parse(it2);
+    return Length.parse(it);
   }
   getGridLayoutInformation() {
     const current = this.getGridTargetLayer();
@@ -70693,9 +70693,9 @@ class GridGrowToolView extends GridGrowDragEventView {
       return;
     const info = this.getGridLayoutInformation();
     const scale2 = this.$viewport.scale;
-    const items = targetRef.$$(".grid-item").map((it2) => {
-      const [row, column] = it2.attrs("data-row", "data-column").map((it22) => +it22);
-      const { x: x2, y: y2, width: width2, height: height2 } = it2.offsetRect();
+    const items = targetRef.$$(".grid-item").map((it) => {
+      const [row, column] = it.attrs("data-row", "data-column").map((it2) => +it2);
+      const { x: x2, y: y2, width: width2, height: height2 } = it.offsetRect();
       const rect2 = {
         x: x2 / scale2,
         y: y2 / scale2,
@@ -70734,10 +70734,10 @@ class GridGrowToolView extends GridGrowDragEventView {
     const { info, items } = last2;
     const { columns, rows } = info;
     const result = [];
-    const rowItems = items.filter((it2) => it2.column === 1);
-    const columnItems = items.filter((it2) => it2.row === 1);
-    const minY = Math.min(...rowItems.map((it2) => it2.verties[0][1]));
-    const maxY = Math.max(...rowItems.map((it2) => it2.verties[2][1]));
+    const rowItems = items.filter((it) => it.column === 1);
+    const columnItems = items.filter((it) => it.row === 1);
+    const minY = Math.min(...rowItems.map((it) => it.verties[0][1]));
+    const maxY = Math.max(...rowItems.map((it) => it.verties[2][1]));
     const h = maxY - minY;
     for (var columnIndex = 1, len2 = columns.length; columnIndex < len2 && columnItems.length; columnIndex++) {
       const prevCell = columnItems[columnIndex - 1];
@@ -70754,8 +70754,8 @@ class GridGrowToolView extends GridGrowDragEventView {
         height: h
       });
     }
-    const minX = Math.min(...columnItems.map((it2) => it2.verties[0][0]));
-    const maxX = Math.max(...columnItems.map((it2) => it2.verties[2][0]));
+    const minX = Math.min(...columnItems.map((it) => it.verties[0][0]));
+    const maxX = Math.max(...columnItems.map((it) => it.verties[2][0]));
     const w = maxX - minX;
     for (var rowIndex = 1, len2 = rows.length; rowIndex < len2; rowIndex++) {
       const prevCell = rowItems[rowIndex - 1];
@@ -70772,25 +70772,25 @@ class GridGrowToolView extends GridGrowDragEventView {
         height: h2
       });
     }
-    return result.map((it2) => {
-      if (it2.type === "column-gap") {
+    return result.map((it) => {
+      if (it.type === "column-gap") {
         return /* @__PURE__ */ createElementJsx("div", {
           class: "gap-tool column-gap",
           style: {
-            left: Length.px(it2.x * scale2),
-            top: Length.px(it2.y * scale2),
-            width: Length.px(Math.max(it2.width * scale2, 5)),
-            height: Length.px(it2.height * scale2)
+            left: Length.px(it.x * scale2),
+            top: Length.px(it.y * scale2),
+            width: Length.px(Math.max(it.width * scale2, 5)),
+            height: Length.px(it.height * scale2)
           }
         });
-      } else if (it2.type === "row-gap") {
+      } else if (it.type === "row-gap") {
         return /* @__PURE__ */ createElementJsx("div", {
           class: "gap-tool row-gap",
           style: {
-            left: Length.px(it2.x * scale2),
-            top: Length.px(it2.y * scale2),
-            height: Length.px(Math.max(it2.height * scale2, 5)),
-            width: Length.px(it2.width * scale2)
+            left: Length.px(it.x * scale2),
+            top: Length.px(it.y * scale2),
+            height: Length.px(Math.max(it.height * scale2, 5)),
+            width: Length.px(it.width * scale2)
           }
         });
       }
@@ -71026,8 +71026,8 @@ class PatternAssetsProperty extends BaseProperty {
     };
   }
   getTools() {
-    const options2 = variable$4(patterns.map((it2) => {
-      return { value: it2.key, text: it2.title };
+    const options2 = variable$4(patterns.map((it) => {
+      return { value: it.key, text: it.title };
     }));
     return createComponent("SelectEditor", {
       ref: "$assets",
@@ -71063,7 +71063,7 @@ class PatternAssetsProperty extends BaseProperty {
     e.dataTransfer.setData("text/pattern", pattern);
   }
   [LOAD("$patternList")]() {
-    var preset = patterns.find((it2) => it2.key === this.state.preset);
+    var preset = patterns.find((it) => it.key === this.state.preset);
     if (!preset) {
       return "";
     }
@@ -71117,9 +71117,9 @@ class PatternEditor extends EditorElement {
         `;
   }
   [LOAD("$patternList")]() {
-    return this.state.patterns.map((it2, index2) => {
-      const selectedClass = it2.selected ? "selected" : "";
-      if (it2.selected) {
+    return this.state.patterns.map((it, index2) => {
+      const selectedClass = it.selected ? "selected" : "";
+      if (it.selected) {
         this.selectedIndex = index2;
       }
       return `
@@ -71127,17 +71127,17 @@ class PatternEditor extends EditorElement {
                 ${createComponent("PatternSizeEditor", {
         key: "pattern-size",
         ref: `$bp${index2}`,
-        type: it2.type,
-        x: it2.x,
-        y: it2.y,
-        width: it2.width,
-        height: it2.height,
+        type: it.type,
+        x: it.x,
+        y: it.y,
+        width: it.width,
+        height: it.height,
         index: index2,
-        foreColor: it2.foreColor,
-        backColor: it2.backColor,
-        blendMode: it2.blendMode,
-        lineWidth: it2.lineWidth,
-        lineHeight: it2.lineHeight,
+        foreColor: it.foreColor,
+        backColor: it.backColor,
+        blendMode: it.blendMode,
+        lineWidth: it.lineWidth,
+        lineHeight: it.lineHeight,
         onchange: "changePatternSizeInfo"
       })}
                 <div class='tools'>
@@ -71152,7 +71152,7 @@ class PatternEditor extends EditorElement {
     this.parent.trigger(this.props.onchange, this.props.key, value);
   }
   [SUBSCRIBE("add")](type = "check") {
-    var pattern = patterns.find((it2) => it2.key === type);
+    var pattern = patterns.find((it) => it.key === type);
     if (pattern) {
       const data = Pattern.parseStyle(pattern.execute()[0].pattern);
       this.state.patterns.push.apply(this.state.patterns, data);
@@ -71196,8 +71196,8 @@ class PatternEditor extends EditorElement {
     } else {
       this.refs[`fillIndex${selectedIndex}`].removeClass("selected");
     }
-    this.state.patterns.forEach((it2, index2) => {
-      it2.selected = index2 === selectedIndex;
+    this.state.patterns.forEach((it, index2) => {
+      it.selected = index2 === selectedIndex;
     });
   }
   [SUBSCRIBE("changePatternSizeInfo") + DEBOUNCE(10)](key, value, index2) {
@@ -71640,7 +71640,7 @@ const typeList$1 = [
   { key: "perspective-origin-x", title: "X" },
   { key: "perspective-origin-y", title: "Y" }
 ];
-const keyList = typeList$1.map((it2) => it2.key);
+const keyList = typeList$1.map((it) => it.key);
 const origin = {
   top: "50% 0%",
   "top left": "0% 0%",
@@ -71737,15 +71737,15 @@ class PerspectiveOriginEditor extends EditorElement {
         style="display: none;"
       >
         <div class="radius-setting-box" ref="$radiusSettingBox">
-          ${typeList$1.map((it2) => {
-      var label = this.$i18n(it2.title);
+          ${typeList$1.map((it) => {
+      var label = this.$i18n(it.title);
       return `
               <div>
                 ${createComponent("RangeEditor", {
-        ref: `$${it2.key}`,
+        ref: `$${it.key}`,
         label,
-        key: it2.key,
-        value: this.state[it2.key],
+        key: it.key,
+        value: this.state[it.key],
         onchange: "changePerspectiveOrigin"
       })}
               </div>  
@@ -72066,13 +72066,13 @@ var SelectEditor$1 = "";
 class SelectEditor extends EditorElement {
   initState() {
     var splitChar = this.props.split || ",";
-    var options2 = Array.isArray(this.props.options) ? this.props.options.map((it2) => {
-      if (typeof it2 === "string") {
-        return { value: it2, text: it2 };
+    var options2 = Array.isArray(this.props.options) ? this.props.options.map((it) => {
+      if (typeof it === "string") {
+        return { value: it, text: it };
       }
-      return it2;
-    }) : (this.props.options || "").split(splitChar).map((it2) => it2.trim()).map((it2) => {
-      const [value2, text2] = it2.split(":");
+      return it;
+    }) : (this.props.options || "").split(splitChar).map((it) => it.trim()).map((it) => {
+      const [value2, text2] = it.split(":");
       return { value: value2, text: text2 || value2 };
     });
     var value = this.props.value;
@@ -72124,13 +72124,13 @@ class SelectEditor extends EditorElement {
   [BIND("$selectedValue")]() {
     var _a;
     return {
-      text: (_a = this.state.options.find((it2) => it2.value === this.state.value)) == null ? void 0 : _a.text
+      text: (_a = this.state.options.find((it) => it.value === this.state.value)) == null ? void 0 : _a.text
     };
   }
   [LOAD("$options") + DOMDIFF]() {
-    var arr = this.state.options.map((it2) => {
-      var value = it2.value;
-      var label = it2.text || it2.value;
+    var arr = this.state.options.map((it) => {
+      var value = it.value;
+      var label = it.text || it.value;
       if (label === "") {
         label = this.props["none-value"] ? this.props["none-value"] : "";
       } else if (label === "-") {
@@ -72138,7 +72138,7 @@ class SelectEditor extends EditorElement {
         value = "";
       }
       var selected = value === this.state.value ? "selected" : "";
-      const disabled = it2.disabled ? "disabled" : "";
+      const disabled = it.disabled ? "disabled" : "";
       return `<option ${selected} value="${value}" ${disabled}>${label}</option>`;
     });
     return arr;
@@ -72174,8 +72174,8 @@ const blend_list = [
 ];
 class BlendSelectEditor extends SelectEditor {
   getBlendList() {
-    return blend_list.map((it2) => {
-      return { value: it2, text: this.$i18n(`blend.${it2}`) };
+    return blend_list.map((it) => {
+      return { value: it, text: this.$i18n(`blend.${it}`) };
     });
   }
   initState() {
@@ -72778,7 +72778,7 @@ var __glob_0_20 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.definePro
   "default": random
 }, Symbol.toStringTag, { value: "Module" }));
 const modules = { "./colors_list/material-amber.js": __glob_0_0, "./colors_list/material-blue.js": __glob_0_1, "./colors_list/material-bluegray.js": __glob_0_2, "./colors_list/material-brown.js": __glob_0_3, "./colors_list/material-cyan.js": __glob_0_4, "./colors_list/material-deeporange.js": __glob_0_5, "./colors_list/material-deeppurple.js": __glob_0_6, "./colors_list/material-gray.js": __glob_0_7, "./colors_list/material-green.js": __glob_0_8, "./colors_list/material-indigo.js": __glob_0_9, "./colors_list/material-lightblue.js": __glob_0_10, "./colors_list/material-lightgreen.js": __glob_0_11, "./colors_list/material-lime.js": __glob_0_12, "./colors_list/material-orange.js": __glob_0_13, "./colors_list/material-pink.js": __glob_0_14, "./colors_list/material-purple.js": __glob_0_15, "./colors_list/material-red.js": __glob_0_16, "./colors_list/material-teal.js": __glob_0_17, "./colors_list/material-yellow.js": __glob_0_18, "./colors_list/opencolor-gray.js": __glob_0_19, "./colors_list/random.js": __glob_0_20 };
-var colors = Object.values(modules).map((it2) => it2.default);
+var colors = Object.values(modules).map((it) => it.default);
 var ColorAssetsEditor$1 = "";
 class ColorAssetsEditor extends EditorElement {
   initState() {
@@ -72793,8 +72793,8 @@ class ColorAssetsEditor extends EditorElement {
     return `<div ref="$tools"></div>`;
   }
   [LOAD("$tools")]() {
-    const options2 = this.state.colors.map((it2) => {
-      return { value: it2.key, text: it2.title };
+    const options2 = this.state.colors.map((it) => {
+      return { value: it.key, text: it.title };
     });
     return createComponent("SelectEditor", {
       key: "preset",
@@ -72822,7 +72822,7 @@ class ColorAssetsEditor extends EditorElement {
     this.$el.toggleClass("is-open");
   }
   [LOAD("$colorList")]() {
-    var preset = this.state.colors.find((it2) => it2.key === this.state.preset);
+    var preset = this.state.colors.find((it) => it.key === this.state.preset);
     if (!preset) {
       return "";
     }
@@ -73153,8 +73153,8 @@ class CSSPropertyEditor extends EditorElement {
   }
   [CLICK("$addProperty")](e) {
     var key = this.getRef("$propertySelect").value;
-    var searchItem = this.state.properties.find((it2) => {
-      return it2.key === key;
+    var searchItem = this.state.properties.find((it) => {
+      return it.key === key;
     });
     if (searchItem) {
       alert(`${key} is already added.`);
@@ -73491,11 +73491,11 @@ class CSSPropertyEditor extends EditorElement {
     this.modifyPropertyValue(key, value + "");
   }
   searchKey(key, callback) {
-    this.state.properties.filter((it2) => it2.key === key).forEach(callback);
+    this.state.properties.filter((it) => it.key === key).forEach(callback);
   }
   modifyPropertyValue(key, value) {
-    this.searchKey(key, (it2) => {
-      it2.value = value;
+    this.searchKey(key, (it) => {
+      it.value = value;
     });
     this.modifyProperty();
   }
@@ -73550,11 +73550,11 @@ class CSSPropertyEditor extends EditorElement {
     `;
   }
   [LOAD("$property")]() {
-    return this.state.properties.map((it2, index2) => {
+    return this.state.properties.map((it, index2) => {
       return `
         <div class='css-property-item'>
           <div class='title'>
-            <label>${it2.key}</label>
+            <label>${it.key}</label>
             <div class='tools'>
               <button type="button" class='remove' data-index="${index2}">${obj.remove2}</button>
             </div>
@@ -73565,7 +73565,7 @@ class CSSPropertyEditor extends EditorElement {
             </div>
           </div>
           <div class='value-editor'>
-            ${this.makePropertyEditor(it2, index2)}
+            ${this.makePropertyEditor(it, index2)}
           </div>
         </div>
       `;
@@ -73878,9 +73878,9 @@ class DirectionEditor extends EditorElement {
   }
   [SUBSCRIBE("changeBorderRadius")](key, value) {
     if (key === "all") {
-      typeList.forEach((it2) => {
-        this.state[it2.key] = value.clone();
-        this.children[`$${it2.key}`].setValue(value.clone());
+      typeList.forEach((it) => {
+        this.state[it.key] = value.clone();
+        this.children[`$${it.key}`].setValue(value.clone());
       });
     }
     this.updateData({
@@ -73914,14 +73914,14 @@ class DirectionEditor extends EditorElement {
         style="${display}"
       >
         <div class="radius-setting-box">
-          ${typeList.map((it2) => {
-      var value = this.state[it2.key];
+          ${typeList.map((it) => {
+      var value = this.state[it.key];
       return `
               <div>
                   ${createComponent("RangeEditor", {
-        ref: `$${it2.key}`,
-        label: it2.title,
-        key: it2.key,
+        ref: `$${it.key}`,
+        label: it.title,
+        key: it.key,
         value,
         onchange: "changeBorderRadius"
       })}
@@ -73983,8 +73983,8 @@ class FilterEditor extends EditorElement {
       </div>`;
   }
   [LOAD("$filterSelect")]() {
-    var list2 = filter_list$2.map((it2) => {
-      return { title: it2, value: it2 };
+    var list2 = filter_list$2.map((it) => {
+      return { title: it, value: it };
     });
     var svgFilterList = this.getSVGFilterList();
     var totalList = [];
@@ -73999,8 +73999,8 @@ class FilterEditor extends EditorElement {
         ...list2
       ];
     }
-    return totalList.map((it2) => {
-      var { title: title2, value } = it2;
+    return totalList.map((it) => {
+      var { title: title2, value } = it;
       return `<option value='${value}'>${title2}</option>`;
     });
   }
@@ -74050,10 +74050,10 @@ class FilterEditor extends EditorElement {
     var current = this.$selection.current;
     var arr = [];
     if (current) {
-      arr = current.svgfilters.map((it2) => {
+      arr = current.svgfilters.map((it) => {
         return {
-          title: `svg - #${it2.id}`,
-          value: it2.id
+          title: `svg - #${it.id}`,
+          value: it.id
         };
       });
     }
@@ -74064,8 +74064,8 @@ class FilterEditor extends EditorElement {
       var options2 = "";
       var current = this.$selection.current;
       if (current) {
-        options2 = current.svgfilters.map((it2) => {
-          return { value: it2.id };
+        options2 = current.svgfilters.map((it) => {
+          return { value: it.id };
         });
       }
       return createComponent("SelectEditor", {
@@ -74252,8 +74252,8 @@ const font_list = [
 ];
 class FontSelectEditor extends SelectEditor {
   getFontList() {
-    return font_list.map((it2) => {
-      return { value: it2 };
+    return font_list.map((it) => {
+      return { value: it };
     });
   }
   initState() {
@@ -74270,7 +74270,7 @@ class GradientEditor extends EditorElement {
     const id = (_a = image2.colorsteps[this.props.index]) == null ? void 0 : _a.id;
     this.$selection.selectColorStep(id);
     if (id) {
-      this.currentStep = image2.colorsteps.find((it2) => this.$selection.isSelectedColorStep(it2.id));
+      this.currentStep = image2.colorsteps.find((it) => this.$selection.isSelectedColorStep(it.id));
     }
     return {
       id,
@@ -74372,12 +74372,12 @@ class GradientEditor extends EditorElement {
   [LOAD("$stepList") + DOMDIFF]() {
     var _a;
     var colorsteps = ((_a = this.state.image) == null ? void 0 : _a.colorsteps) || [];
-    return colorsteps.map((it2, index2) => {
-      var selected = this.$selection.isSelectedColorStep(it2.id) ? "selected" : "";
+    return colorsteps.map((it, index2) => {
+      var selected = this.$selection.isSelectedColorStep(it.id) ? "selected" : "";
       return `
-      <div class='step ${selected}' data-id='${it2.id}' data-cut='${it2.cut}' tabindex="-1" style='left: ${it2.toLength()};'>
-        <div class='color-view' style="background-color: ${it2.color}">
-          <span>${Math.floor(it2.percent * 10) / 10}</span>
+      <div class='step ${selected}' data-id='${it.id}' data-cut='${it.cut}' tabindex="-1" style='left: ${it.toLength()};'>
+        <div class='color-view' style="background-color: ${it.color}">
+          <span>${Math.floor(it.percent * 10) / 10}</span>
         </div>      
         <div class='arrow'></div>      
       </div>`;
@@ -74392,7 +74392,7 @@ class GradientEditor extends EditorElement {
     this.state.id = id;
     this.$selection.selectColorStep(id);
     if (this.state.image.colorsteps) {
-      this.currentStep = this.state.image.colorsteps.find((it2) => this.$selection.isSelectedColorStep(it2.id));
+      this.currentStep = this.state.image.colorsteps.find((it) => this.$selection.isSelectedColorStep(it.id));
       this.parent.trigger("selectColorStep", this.currentStep.color);
     }
     this.refresh();
@@ -74431,7 +74431,7 @@ class GradientEditor extends EditorElement {
     this.doFocus(id);
   }
   appendColorStep(id) {
-    const currentIndex = this.state.image.colorsteps.findIndex((it2) => it2.id === id);
+    const currentIndex = this.state.image.colorsteps.findIndex((it) => it.id === id);
     const nextIndex = currentIndex + 1;
     const currentColorStep = this.state.image.colorsteps[currentIndex];
     const nextColorStep = this.state.image.colorsteps[nextIndex];
@@ -74452,7 +74452,7 @@ class GradientEditor extends EditorElement {
     }, 100);
   }
   prependColorStep(id) {
-    const currentIndex = this.state.image.colorsteps.findIndex((it2) => it2.id === id);
+    const currentIndex = this.state.image.colorsteps.findIndex((it) => it.id === id);
     const prevIndex = currentIndex - 1;
     const currentColorStep = this.state.image.colorsteps[currentIndex];
     const prevColorStep = this.state.image.colorsteps[prevIndex];
@@ -74586,7 +74586,7 @@ class IconListViewEditor extends EditorElement {
 }
 class InputArrayEditor extends EditorElement {
   initState() {
-    var values = this.props.values.split(" ").map((it2) => +it2);
+    var values = this.props.values.split(" ").map((it) => +it);
     return {
       values,
       column: this.props.column
@@ -74812,12 +74812,12 @@ class RangeEditor extends EditorElement {
     if (this.state.units === "%") {
       throw new Error("%");
     }
-    var units = this.state.units.map((it2) => {
-      let description = it2;
+    var units = this.state.units.map((it) => {
+      let description = it;
       if (description === "number") {
         description = "";
       }
-      return { value: it2, text: description };
+      return { value: it, text: description };
     });
     return `
         <div 
@@ -75298,14 +75298,14 @@ class PathDataEditor extends EditorElement {
       if (command === "Z" && $command.attr("data-toggle") === "false") {
         return null;
       }
-      var values = $segment.$$(".values input[type=number]").map((it2) => {
-        return +it2.value;
+      var values = $segment.$$(".values input[type=number]").map((it) => {
+        return +it.value;
       });
       return {
         command,
         values
       };
-    }).filter((it2) => it2);
+    }).filter((it) => it);
   }
   updateData() {
     var segments2 = this.makeSegments();
@@ -75332,8 +75332,8 @@ class PathDataEditor extends EditorElement {
   }
   [LOAD("$data")]() {
     var segments2 = [];
-    this.state.parser.segments.forEach((it2, index2) => {
-      var s = __spreadValues({}, it2);
+    this.state.parser.segments.forEach((it, index2) => {
+      var s = __spreadValues({}, it);
       segments2.push(s);
       var next = this.state.parser.segments[index2 + 1];
       if (next && next.command === "M") {
@@ -75348,17 +75348,17 @@ class PathDataEditor extends EditorElement {
     if (last2 && last2.command !== "Z") {
       segments2.push({ command: "Z", toggle: false, values: [] });
     }
-    var arr = segments2.map((it2) => {
-      var cls = it2.command === "M" ? "m" : "";
+    var arr = segments2.map((it) => {
+      var cls = it.command === "M" ? "m" : "";
       return `
                 <div class='segment ${cls}'>
-                    <div class='command' data-command='${it2.command}' data-toggle="${it2.toggle}" title='Toggle'>${it2.command}</div>
+                    <div class='command' data-command='${it.command}' data-toggle="${it.toggle}" title='Toggle'>${it.command}</div>
                     <div class='values'>
-                        ${it2.values.map((v) => {
+                        ${it.values.map((v) => {
         return `<input type="number" value="${v}" />`;
       }).join("")}
 
-                        ${it2.command === "Z" ? it2.toggle === false ? "opened" : "closed" : ""}
+                        ${it.command === "Z" ? it.toggle === false ? "opened" : "closed" : ""}
                     </div>
                 </div>
             `;
@@ -75429,12 +75429,12 @@ class PolygonDataEditor extends EditorElement {
         `;
   }
   [LOAD("$data")]() {
-    return this.state.parser.segments.map((it2) => {
+    return this.state.parser.segments.map((it) => {
       return `
                 <div class='segment'>
                     <div class='values'>
-                        <label>X <input type="number" data-key="x" value="${it2.x}" /></label>
-                        <label>Y <input type="number" data-key="y" value="${it2.y}" /></label>
+                        <label>X <input type="number" data-key="x" value="${it.x}" /></label>
+                        <label>Y <input type="number" data-key="y" value="${it.y}" /></label>
                     </div>
                 </div>
             `;
@@ -75448,13 +75448,13 @@ var SelectIconEditor$1 = "";
 class SelectIconEditor extends EditorElement {
   initState() {
     var splitChar = this.props.split || ",";
-    var options2 = Array.isArray(this.props.options) ? this.props.options.map((it2) => {
-      if (isString(it2)) {
-        return { value: it2, text: it2 };
+    var options2 = Array.isArray(this.props.options) ? this.props.options.map((it) => {
+      if (isString(it)) {
+        return { value: it, text: it };
       }
-      return it2;
-    }) : (this.props.options || "").split(splitChar).map((it2) => it2.trim()).map((it2) => {
-      const [value2, text2] = it2.split(":");
+      return it;
+    }) : (this.props.options || "").split(splitChar).map((it) => it.trim()).map((it) => {
+      const [value2, text2] = it.split(":");
       return { value: value2, text: text2 };
     });
     var icons = this.props.icons || [];
@@ -75497,14 +75497,14 @@ class SelectIconEditor extends EditorElement {
     });
   }
   [LOAD("$options") + DOMDIFF]() {
-    return this.state.options.map((it2, index2) => {
-      var value = it2.value;
-      var label = it2.text;
-      var title2 = it2.text;
+    return this.state.options.map((it, index2) => {
+      var value = it.value;
+      var label = it.text;
+      var title2 = it.text;
       var iconClass = "";
       var isSelected = value === this.state.value;
       var selected = isSelected ? "selected" : "";
-      if (it2.value === "") {
+      if (it.value === "") {
         var label = "";
         title2 = "close";
         if (isNotUndefined(this.state.icons[index2])) {
@@ -75518,7 +75518,7 @@ class SelectIconEditor extends EditorElement {
           iconClass = "icon";
         }
         title2 = label;
-        label = obj[iconKey] || label || iconKey || it2.text || it2.value;
+        label = obj[iconKey] || label || iconKey || it.text || it.value;
       }
       var color2 = this.state.colors[index2];
       var css = {};
@@ -75590,7 +75590,7 @@ class StrokeDashArrayEditor extends EditorElement {
     return this.state.value;
   }
   generateValue(value) {
-    return value.split(" ").filter(Boolean).map((it2) => +it2);
+    return value.split(" ").filter(Boolean).map((it) => +it);
   }
   setValue(value) {
     if (Array.isArray(value))
@@ -75768,8 +75768,8 @@ class TextEditor extends EditorElement {
 var VarEditor$1 = "";
 class VarEditor extends EditorElement {
   initState() {
-    var values = this.props.value.split(";").filter((it2) => it2.trim()).map((it2) => {
-      let [key, value] = it2.split(":");
+    var values = this.props.value.split(";").filter((it) => it.trim()).map((it) => {
+      let [key, value] = it.split(":");
       key = key.replace("--", "");
       return { key, value };
     });
@@ -75804,14 +75804,14 @@ class VarEditor extends EditorElement {
     this.trigger("add");
   }
   [LOAD("$varList")]() {
-    return this.state.values.map((it2, index2) => {
+    return this.state.values.map((it, index2) => {
       return `
                 <div class='var-item' >
                     <div>
-                        <input type="text" data-type="key" value="${it2.key}" data-index="${index2}"  placeholder="variable" />
+                        <input type="text" data-type="key" value="${it.key}" data-index="${index2}"  placeholder="variable" />
                     </div>
                     <div>
-                        <input type="text" data-type="value" value="${it2.value}" data-index="${index2}"  placeholder="value" />
+                        <input type="text" data-type="value" value="${it.value}" data-index="${index2}"  placeholder="value" />
                     </div>
                     <div class="tools">
                         <button type="button" class="del" data-index="${index2}">
@@ -75835,8 +75835,8 @@ class VarEditor extends EditorElement {
     this.updateData();
   }
   updateData(data) {
-    var value = this.state.values.map((it2) => {
-      return `${it2.key}:${it2.value}`;
+    var value = this.state.values.map((it) => {
+      return `${it.key}:${it.value}`;
     }).join(";");
     this.parent.trigger(this.props.onchange, value, this.props.params);
   }
@@ -75973,47 +75973,47 @@ class SegmentManager {
       }
       return 0;
     });
-    return this.segmentList.map((it2) => {
-      if (it2.angle) {
+    return this.segmentList.map((it) => {
+      if (it.angle) {
         return `
                 <path stroke-width='1' 
                     data-distance='true'
                     fill="rgba(0,0,0,0.5)"
-                    d="M ${it2.center.x},${it2.center.y} A ${it2.rx} ${it2.ry},${it2.degree},0,0,${it2.last.x} ${it2.last.y} L${it2.line.x} ${it2.line.y} Z"
+                    d="M ${it.center.x},${it.center.y} A ${it.rx} ${it.ry},${it.degree},0,0,${it.last.x} ${it.last.y} L${it.line.x} ${it.line.y} Z"
                 />`;
-      } else if (it2.line) {
+      } else if (it.line) {
         return `
                 <line stroke-width='1' 
                     data-segment="true"
-                    data-is-last="${it2.isLast}"                
-                    data-guide='${it2.guide}'
-                    data-distance='${it2.distance}'
-                    x1='${it2.x1}' x2='${it2.x2}' y1='${it2.y1}' y2='${it2.y2}' 
+                    data-is-last="${it.isLast}"                
+                    data-guide='${it.guide}'
+                    data-distance='${it.distance}'
+                    x1='${it.x1}' x2='${it.x2}' y1='${it.y1}' y2='${it.y2}' 
                 />`;
-      } else if (it2.text) {
+      } else if (it.text) {
         return "";
-      } else if (it2.curve && it2.segment !== "startPoint") {
+      } else if (it.curve && it.segment !== "startPoint") {
         return `
                 <path stroke-width='1'
                     class='curve' 
-                    ${it2.selected && `data-selected="true"`}
-                    ${it2.isLast && `data-is-last="true"`}
-                    ${it2.isFirst && `data-is-first="true"`}
-                    ${it2.isSecond && `data-is-second="true"`}
-                    title="${it2.segment} curve"  
-                    data-index='${it2.index}'
-                    data-segment-point='${it2.segment}'
+                    ${it.selected && `data-selected="true"`}
+                    ${it.isLast && `data-is-last="true"`}
+                    ${it.isFirst && `data-is-first="true"`}
+                    ${it.isSecond && `data-is-second="true"`}
+                    title="${it.segment} curve"  
+                    data-index='${it.index}'
+                    data-segment-point='${it.segment}'
                     data-segment="true" 
-                    d="M ${it2.cx} ${it2.cy - 4}L ${it2.cx + 4} ${it2.cy} L ${it2.cx} ${it2.cy + 4} L ${it2.cx - 4} ${it2.cy} Z"
+                    d="M ${it.cx} ${it.cy - 4}L ${it.cx + 4} ${it.cy} L ${it.cx} ${it.cy + 4} L ${it.cx - 4} ${it.cy} Z"
                 />`;
-      } else if (it2.start) {
+      } else if (it.start) {
         return `
                 <circle 
-                    cx='${it2.cx}' 
-                    cy='${it2.cy}' 
+                    cx='${it.cx}' 
+                    cy='${it.cy}' 
                     r='4'                    
                     class='segment'
-                    data-selected='${it2.selected}'
+                    data-selected='${it.selected}'
                     title="Center"
                     data-start="true" 
                     tabIndex="-1"
@@ -76021,17 +76021,17 @@ class SegmentManager {
       } else {
         return `
                 <circle 
-                    cx='${it2.cx}' 
-                    cy='${it2.cy}' 
+                    cx='${it.cx}' 
+                    cy='${it.cy}' 
                     r='4'                    
                     class='segment'
-                    data-selected='${it2.selected}'
-                    title="${it2.segment}"
-                    data-is-last="${it2.isLast}"
-                    data-is-first="${it2.isFirst}"
-                    data-is-second="${it2.isSecond}"
-                    data-index='${it2.index}' 
-                    data-segment-point='${it2.segment}' 
+                    data-selected='${it.selected}'
+                    title="${it.segment}"
+                    data-is-last="${it.isLast}"
+                    data-is-first="${it.isFirst}"
+                    data-is-second="${it.isSecond}"
+                    data-index='${it.index}' 
+                    data-segment-point='${it.segment}' 
                     data-segment="true" 
                     tabIndex="-1"                    
                 />`;
@@ -76223,16 +76223,16 @@ class PurePathGenerator {
       });
     });
     if (isToggle) {
-      list2 = list2.map((it2) => {
-        const selectedKey = this.makeSegmentKey(it2);
-        return __spreadProps(__spreadValues({}, it2), { included: Boolean(this.selectedPointKeys[selectedKey]) });
+      list2 = list2.map((it) => {
+        const selectedKey = this.makeSegmentKey(it);
+        return __spreadProps(__spreadValues({}, it), { included: Boolean(this.selectedPointKeys[selectedKey]) });
       });
-      const includedList = list2.filter((it2) => it2.included);
-      const notIncludedList = list2.filter((it2) => !it2.included);
+      const includedList = list2.filter((it) => it.included);
+      const notIncludedList = list2.filter((it) => !it.included);
       let uniqueList = [...this.selectedPointList];
       if (includedList.length) {
-        uniqueList = this.selectedPointList.filter((it2) => {
-          const oldKey = this.makeSegmentKey(it2);
+        uniqueList = this.selectedPointList.filter((it) => {
+          const oldKey = this.makeSegmentKey(it);
           return Boolean(includedList.find((includeNode) => {
             return oldKey === this.makeSegmentKey(includeNode);
           })) === false;
@@ -76254,8 +76254,8 @@ class PurePathGenerator {
       key,
       index: +index2
     }));
-    list2.forEach((it2) => {
-      var key = this.makeSegmentKey(it2);
+    list2.forEach((it) => {
+      var key = this.makeSegmentKey(it);
       this.selectedPointKeys[key] = true;
     });
   }
@@ -76292,8 +76292,8 @@ class PurePathGenerator {
       if (point2 && !this.isSelectedSegment(key, index2)) {
         this.select(...this.selectedPointList, { x: point2.x, y: point2.y, key, index: index2 });
       } else {
-        this.select(...this.selectedPointList.filter((it2) => {
-          return it2.key !== key || it2.index !== index2;
+        this.select(...this.selectedPointList.filter((it) => {
+          return it.key !== key || it.index !== index2;
         }));
       }
     }
@@ -76307,12 +76307,12 @@ class PurePathGenerator {
     }
   }
   reselect() {
-    this.selectedPointList.filter(Boolean).forEach((it2) => {
+    this.selectedPointList.filter(Boolean).forEach((it) => {
       var _a;
-      var point2 = (_a = this.points[it2.index]) == null ? void 0 : _a[it2.key];
+      var point2 = (_a = this.points[it.index]) == null ? void 0 : _a[it.key];
       if (point2) {
-        it2.x = point2.x;
-        it2.y = point2.y;
+        it.x = point2.x;
+        it.y = point2.y;
       }
     });
   }
@@ -76581,24 +76581,24 @@ class PurePathGenerator {
   }
   moveSelectedSegment(dx, dy) {
     if (this.selectedPointList.length > 0) {
-      this.selectedPointList.forEach((it2) => {
-        var target = this.points[it2.index][it2.key];
-        target.x = it2.x + dx;
-        target.y = it2.y + dy;
+      this.selectedPointList.forEach((it) => {
+        var target = this.points[it.index][it.key];
+        target.x = it.x + dx;
+        target.y = it.y + dy;
       });
     } else if (this.selectedGroup) {
       this.moveSelectedGroup(dx, dy);
     }
   }
   moveSelectedGroup(dx, dy, maxWidth, maxHeight) {
-    this.selectedGroup.points.forEach((it2) => {
-      const target = this.points[it2.index];
-      target.startPoint.x = this.clamp(it2.startPoint.x + dx, 0, maxWidth);
-      target.startPoint.y = this.clamp(it2.startPoint.y + dy, 0, maxHeight);
-      target.endPoint.x = it2.endPoint.x + dx;
-      target.endPoint.y = it2.endPoint.y + dy;
-      target.reversePoint.x = it2.reversePoint.x + dx;
-      target.reversePoint.y = it2.reversePoint.y + dy;
+    this.selectedGroup.points.forEach((it) => {
+      const target = this.points[it.index];
+      target.startPoint.x = this.clamp(it.startPoint.x + dx, 0, maxWidth);
+      target.startPoint.y = this.clamp(it.startPoint.y + dy, 0, maxHeight);
+      target.endPoint.x = it.endPoint.x + dx;
+      target.endPoint.y = it.endPoint.y + dy;
+      target.reversePoint.x = it.reversePoint.x + dx;
+      target.reversePoint.y = it.reversePoint.y + dy;
     });
   }
   get selectedGroup() {
@@ -76620,8 +76620,8 @@ class PurePathGenerator {
       return groupList.map((group2) => group2.groupIndex);
     }
     const points2 = this.selectedPointList;
-    points2.forEach((it2) => {
-      const group2 = this.getGroup(groupList, it2.index);
+    points2.forEach((it) => {
+      const group2 = this.getGroup(groupList, it.index);
       if (group2) {
         groupIndexList.add(group2.groupIndex);
       }
@@ -76629,8 +76629,8 @@ class PurePathGenerator {
     return [.../* @__PURE__ */ new Set([...groupIndexList, this.state.selectedGroupIndex])];
   }
   removeSelectedSegment() {
-    this.selectedPointList.forEach((it2) => {
-      var target = this.points[it2.index][it2.key];
+    this.selectedPointList.forEach((it) => {
+      var target = this.points[it.index][it.key];
       target.removed = true;
     });
     const pointGroup = Point.splitPoints(this.points);
@@ -76676,10 +76676,10 @@ class PurePathGenerator {
         this.moveSegment("endPoint", dx, dy);
         this.moveSegment("reversePoint", dx, dy);
         if (!e.altKey) {
-          state.connectedPointList.forEach((it2) => {
-            this.moveSegment("startPoint", dx, dy, it2, maxWidth, maxHeight);
-            this.moveSegment("endPoint", dx, dy, it2);
-            this.moveSegment("reversePoint", dx, dy, it2);
+          state.connectedPointList.forEach((it) => {
+            this.moveSegment("startPoint", dx, dy, it, maxWidth, maxHeight);
+            this.moveSegment("endPoint", dx, dy, it);
+            this.moveSegment("reversePoint", dx, dy, it);
           });
         }
       }
@@ -76977,19 +76977,19 @@ class PurePathGenerator {
     const pathCount = pathList.length;
     return `
             <g>
-               ${pathList.map((it2) => {
-      const { center: center2 } = it2;
+               ${pathList.map((it) => {
+      const { center: center2 } = it;
       const [x2, y2] = center2;
-      const selected = this.state.selectedGroupIndex === it2.groupIndex;
+      const selected = this.state.selectedGroupIndex === it.groupIndex;
       return `
                         <path class="path-area ${selected ? "selected" : ""}" 
-                            d="${it2.d}" 
-                            data-point-index="${it2.startPointIndex}" 
-                            data-group-index="${it2.groupIndex}" 
+                            d="${it.d}" 
+                            data-point-index="${it.startPointIndex}" 
+                            data-group-index="${it.groupIndex}" 
                         />
 
                         ${pathCount > 1 && `
-                            <text class="path-area-text" x="${x2}" y="${y2}" >${it2.groupIndex + 1}</text>
+                            <text class="path-area-text" x="${x2}" y="${y2}" >${it.groupIndex + 1}</text>
                         `}
                     `;
     }).join("")}
@@ -77739,11 +77739,11 @@ const char_list = [
   /\(/gi,
   /\)/gi
 ];
-const function_list = "grayscale,matrix,rotateZ,blur,sepia,linear-gradient,radial-gradient,conic-gradient,circle,inset,polygon,rgb".split(",").map((it2) => {
-  return new RegExp(it2, "gi");
+const function_list = "grayscale,matrix,rotateZ,blur,sepia,linear-gradient,radial-gradient,conic-gradient,circle,inset,polygon,rgb".split(",").map((it) => {
+  return new RegExp(it, "gi");
 });
-const keyword_list = "butt,miter,start,at,black,repeat,lighten,multiply,solid,border-box,visible,absolute,relative,auto".split(",").map((it2) => {
-  return new RegExp(it2, "gi");
+const keyword_list = "butt,miter,start,at,black,repeat,lighten,multiply,solid,border-box,visible,absolute,relative,auto".split(",").map((it) => {
+  return new RegExp(it, "gi");
 });
 function replaceKeyword(str) {
   keyword_list.forEach((ke) => {
@@ -77764,9 +77764,9 @@ function replaceKeyword(str) {
   return str;
 }
 function filterKeyName(str, prefixPadding = "") {
-  return str.split(";").filter((it2) => it2.trim()).map((it2) => {
-    it2 = it2.trim();
-    var [key, value] = it2.split(":").map((it3) => it3.trim());
+  return str.split(";").filter((it) => it.trim()).map((it) => {
+    it = it.trim();
+    var [key, value] = it.split(":").map((it2) => it2.trim());
     if (value === "") {
       return "";
     }
@@ -77873,9 +77873,9 @@ class HTMLRenderer {
     let rootVariable = currentProject ? CSS_TO_STRING$1(currentProject.toRootVariableCSS()) : "";
     const current = item2;
     const cssCode = filterKeyName(current ? TAG_TO_STRING(CSS_TO_STRING$1(this.toCSS(current))) : "");
-    const nestedCssCode = current ? this.toNestedCSS(current).map((it2) => {
-      var cssText = it2.cssText ? it2.cssText : CSS_TO_STRING$1(it2.css);
-      return `${it2.selector} { 
+    const nestedCssCode = current ? this.toNestedCSS(current).map((it) => {
+      var cssText = it.cssText ? it.cssText : CSS_TO_STRING$1(it.css);
+      return `${it.selector} { 
     ${filterKeyName(TAG_TO_STRING(cssText), "&nbsp;&nbsp;")}
     }`;
     }) : [];
@@ -77885,8 +77885,8 @@ class HTMLRenderer {
 
 ${cssCode && `<div><pre title='CSS'>${cssCode}</pre></div>`}
 
-${nestedCssCode.map((it2) => {
-      return `<div><pre title='CSS'>${it2}</pre></div>`;
+${nestedCssCode.map((it) => {
+      return `<div><pre title='CSS'>${it}</pre></div>`;
     }).join("")}
 
 ${(selectorCode || []).length ? `<div>
@@ -77984,17 +77984,17 @@ class BaseSVGFilter extends PropertyItem {
     return false;
   }
   getSourceInAttribute(inList) {
-    return (inList || this.json.in).map((it2, index2) => {
-      if (!it2)
+    return (inList || this.json.in).map((it, index2) => {
+      if (!it)
         return "";
       var indexString = index2 === 0 ? "" : index2 + 1 + "";
       if (!this.hasInIndex()) {
         indexString = "";
       }
-      if (Primitive.includes(it2.type)) {
-        return `in${indexString}="${it2.type}"`;
+      if (Primitive.includes(it.type)) {
+        return `in${indexString}="${it.type}"`;
       }
-      return `in${indexString}="${it2.id}result"`;
+      return `in${indexString}="${it.id}result"`;
     }).join(" ");
   }
   toString() {
@@ -78051,8 +78051,8 @@ class MergeSVGFilter extends BaseSVGFilter {
     var { in: inList } = this.json;
     return `
     <feMerge  ${this.getDefaultAttribute()} >
-      ${inList.map((it2) => {
-      return `<feMergeNode ${this.getSourceInAttribute([it2])} />`;
+      ${inList.map((it) => {
+      return `<feMergeNode ${this.getSourceInAttribute([it])} />`;
     }).join("")}
     </feMerge>`;
   }
@@ -79583,8 +79583,8 @@ class DomRender$1 extends ItemRender$1 {
   toVariableCSS(item2) {
     const v = item2.computed("variable", (v2) => {
       let obj2 = {};
-      v2.split(";").filter((it2) => it2.trim()).forEach((it2) => {
-        const [key, value] = it2.split(":");
+      v2.split(";").filter((it) => it.trim()).forEach((it) => {
+        const [key, value] = it.split(":");
         obj2[`--${key}`] = value;
       });
       return obj2;
@@ -79593,8 +79593,8 @@ class DomRender$1 extends ItemRender$1 {
   }
   toRootVariableCSS(item2) {
     let obj2 = {};
-    item2.rootVariable.split(";").filter((it2) => it2.trim()).forEach((it2) => {
-      const [key, value] = it2.split(":");
+    item2.rootVariable.split(";").filter((it) => it.trim()).forEach((it) => {
+      const [key, value] = it.split(":");
       obj2[`--${key}`] = value;
     });
     return obj2;
@@ -79703,9 +79703,9 @@ class DomRender$1 extends ItemRender$1 {
       ${CSS_TO_STRING$1(this.toCSS(item2), "\n    ")}; 
       ${appendCSS}
   }
-  ${this.toNestedCSS(item2).map((it2) => {
-      return `${prefix} ${it2.selector} { 
-        ${it2.cssText ? it2.cssText : CSS_TO_STRING$1(it2.css || {}, "\n		")}; 
+  ${this.toNestedCSS(item2).map((it) => {
+      return `${prefix} ${it.selector} { 
+        ${it.cssText ? it.cssText : CSS_TO_STRING$1(it.css || {}, "\n		")}; 
     }`;
     }).join("\n")}
   ${this.toSelectorString(item2, prefix)}
@@ -79725,8 +79725,8 @@ class DomRender$1 extends ItemRender$1 {
 <style type='text/css' data-renderer-type="html" data-id='${item2.id}'>
 ${cssString}
 </style>
-    ` + item2.layers.map((it2) => {
-      return renderer.toStyle(it2, renderer);
+    ` + item2.layers.map((it) => {
+      return renderer.toStyle(it, renderer);
     }).join("");
   }
   toStyleData(item2, renderer) {
@@ -79742,15 +79742,15 @@ ${cssString}
 <style type='text/css' data-renderer-type="html" data-id='${item2.id}' data-timestamp='${item2.timestamp}'>
 ${cssString}
 </style>
-    ` + item2.layers.map((it2) => {
-      return renderer.toExportStyle(it2, renderer);
+    ` + item2.layers.map((it) => {
+      return renderer.toExportStyle(it, renderer);
     }).join("");
   }
   render(item2, renderer) {
     var { elementType, id, name, itemType, isBooleanItem } = item2;
     const tagName = elementType || "div";
-    return `<${tagName} class="element-item ${itemType}" data-is-boolean-item="${isBooleanItem}" data-id="${id}" data-title="${name}">${this.toDefString(item2)}${item2.layers.map((it2) => {
-      return renderer.render(it2, renderer);
+    return `<${tagName} class="element-item ${itemType}" data-is-boolean-item="${isBooleanItem}" data-id="${id}" data-title="${name}">${this.toDefString(item2)}${item2.layers.map((it) => {
+      return renderer.render(it, renderer);
     }).join("")}</${tagName}>`;
   }
   toSVGFilter(item2) {
@@ -79813,8 +79813,8 @@ class ArtBoardRender$2 extends DomRender$1 {
     return `    
       <div class="element-item artboard" data-id="${id}">
         ${this.toDefString(item2)}
-        ${item2.layers.map((it2) => {
-      return renderer.render(it2, renderer);
+        ${item2.layers.map((it) => {
+      return renderer.render(it, renderer);
     }).join("\n	")}
       </div>
     `;
@@ -80009,8 +80009,8 @@ class ImageRender$2 extends LayerRender$1 {
 class ProjectRender$2 extends DomRender$1 {
   toRootVariableCSS(item2) {
     let obj2 = {};
-    item2.rootVariable.split(";").filter((it2) => it2.trim()).forEach((it2) => {
-      var [key, value] = it2.split(":");
+    item2.rootVariable.split(";").filter((it) => it.trim()).forEach((it) => {
+      var [key, value] = it.split(":");
       obj2[`--${key}`] = value;
     });
     return obj2;
@@ -80045,8 +80045,8 @@ class ProjectRender$2 extends DomRender$1 {
         `;
   }
   render(item2, renderer) {
-    return item2.layers.map((it2) => {
-      return renderer.render(it2);
+    return item2.layers.map((it) => {
+      return renderer.render(it);
     }).join("");
   }
   renderSVG(item2, renderer) {
@@ -80727,8 +80727,8 @@ class BooleanPathRender$2 extends SVGItemRender$2 {
     return `    
 <div class="element-item ${itemType}" data-id="${id}" data-title="${name}">
   ${this.toDefString(item2)}
-  ${item2.layers.map((it2) => {
-      return renderer.render(it2, renderer);
+  ${item2.layers.map((it) => {
+      return renderer.render(it, renderer);
     }).join("")}
   <svg xmlns="http://www.w3.org/2000/svg" class="boolean-path-item" width="100%" height="100%" overflow="visible">
     <path 
@@ -80785,8 +80785,8 @@ class JSONRenderer {
     }
   }
   async renderAll(items, renderer) {
-    return await Promise.all(items.map(async (it2) => {
-      return await this.render(it2, renderer);
+    return await Promise.all(items.map(async (it) => {
+      return await this.render(it, renderer);
     }));
   }
   async getResourceDataURI(item2, renderer) {
@@ -81090,8 +81090,8 @@ class SVGRender extends DomRender$1 {
 >
     <${tagName} xmlns="http://www.w3.org/1999/xhtml" style="${CSS_TO_STRING$1(css)};width:100%;height:100%;"></${tagName}>
 </foreignObject>    
-${item2.layers.map((it2) => {
-        return renderer.render(it2, renderer);
+${item2.layers.map((it) => {
+        return renderer.render(it, renderer);
       }).join("")}
             `;
     });
@@ -81120,8 +81120,8 @@ ${encoding ? `<?xml version="1.0"?>` : ""}
     style="${CSS_TO_STRING$1(css)}"
 >
     ${this.toDefString(item2)}
-    ${item2.layers.map((it2) => {
-      return renderer.render(it2, renderer);
+    ${item2.layers.map((it) => {
+      return renderer.render(it, renderer);
     }).join("")}
 </svg>      
         `;
@@ -81192,8 +81192,8 @@ class ImageRender extends SVGLayerRender {
 }
 class ProjectRender extends SVGRender {
   render(item2, renderer) {
-    return item2.artboards.map((it2) => {
-      return renderer.render(it2, renderer);
+    return item2.artboards.map((it) => {
+      return renderer.render(it, renderer);
     });
   }
 }
@@ -81826,8 +81826,8 @@ class SelectorProperty extends BaseProperty {
       this.getRef("$selectorIndex", selectedIndex).removeClass("selected");
     }
     if (this.current) {
-      this.current.selectors.forEach((it2, index2) => {
-        it2.selected = index2 === selectedIndex;
+      this.current.selectors.forEach((it, index2) => {
+        it.selected = index2 === selectedIndex;
       });
     }
   }
@@ -82172,8 +82172,8 @@ var colormatrix = {
 };
 var ColorMatrixEditor$1 = "";
 const COLUMN = 6;
-const sampleList = Object.keys(colormatrix).map((it2) => {
-  return { title: it2, values: colormatrix[it2] };
+const sampleList = Object.keys(colormatrix).map((it) => {
+  return { title: it, values: colormatrix[it] };
 });
 class ColorMatrixEditor extends EditorElement {
   initState() {
@@ -82202,8 +82202,8 @@ class ColorMatrixEditor extends EditorElement {
     };
   }
   [LOAD("$sample")]() {
-    return sampleList.map((it2, index2) => {
-      return `<div class='sample-item' title='${it2.title}' data-index="${index2}">${it2.title}</div>`;
+    return sampleList.map((it, index2) => {
+      return `<div class='sample-item' title='${it.title}' data-index="${index2}">${it.title}</div>`;
     });
   }
   [CLICK("$sample .sample-item")](e) {
@@ -82309,14 +82309,14 @@ class FuncFilterEditor extends EditorElement {
     })}
             </div>
             <div data-type='linear'>
-                ${["slop", "intercept"].map((it2) => {
+                ${["slop", "intercept"].map((it) => {
       return `
                         <div>
                             ${createComponent("NumberRangeEditor", {
-        label: it2,
-        ref: `$${it2}`,
-        key: it2,
-        value: this.state[it2],
+        label: it,
+        ref: `$${it}`,
+        key: it,
+        value: this.state[it],
         onchange: (key, value) => {
           this.updateData({
             [key]: value
@@ -82328,14 +82328,14 @@ class FuncFilterEditor extends EditorElement {
     }).join("")}
             </div>
             <div data-type='gamma'>
-                ${["amplitude", "exponent", "offset"].map((it2) => {
+                ${["amplitude", "exponent", "offset"].map((it) => {
       return `
                         <div>
                             ${createComponent("NumberRangeEditor", {
-        label: it2,
-        ref: `$${it2}`,
-        key: it2,
-        value: this.state[it2],
+        label: it,
+        ref: `$${it}`,
+        key: it,
+        value: this.state[it],
         onchange: (key, value) => {
           this.updateData({
             [key]: value
@@ -82883,7 +82883,7 @@ let inYAxis = {
   "5": [-28, -14, 0, 14, 28]
 };
 Object.keys(inYAxis).forEach((len2) => {
-  inYAxis[len2] = inYAxis[len2].map((it2) => it2 + half_height);
+  inYAxis[len2] = inYAxis[len2].map((it) => it + half_height);
 });
 class SVGFilterEditor extends EditorElement {
   makeFilterSelect() {
@@ -82978,8 +82978,8 @@ class SVGFilterEditor extends EditorElement {
     if (this.state.selectedTabIndex === selectedTabIndex) {
       return;
     }
-    this.$el.$$(`[data-value="${this.state.selectedTabIndex}"]`).forEach((it2) => it2.removeClass("selected"));
-    this.$el.$$(`[data-value="${selectedTabIndex}"]`).forEach((it2) => it2.addClass("selected"));
+    this.$el.$$(`[data-value="${this.state.selectedTabIndex}"]`).forEach((it) => it.removeClass("selected"));
+    this.$el.$$(`[data-value="${selectedTabIndex}"]`).forEach((it) => it.addClass("selected"));
     this.setState({ selectedTabIndex }, false);
   }
   [DRAGSTART("$filterSelect .item")](e) {
@@ -83158,7 +83158,7 @@ class SVGFilterEditor extends EditorElement {
     this.parent.trigger(this.props.onchange, this.props.key, this.state.filters);
   }
   parseFilter(list2 = []) {
-    return list2.map((it2) => SVGFilter.parse(it2));
+    return list2.map((it) => SVGFilter.parse(it));
   }
   makeFilter(type, opt = {}) {
     return SVGFilter.parse(__spreadProps(__spreadValues({}, opt), { type }));
@@ -83258,24 +83258,24 @@ class SVGFilterEditor extends EditorElement {
     }
     var sourceX = sourceItem.bound.x + connectedXAxis["1"][0];
     var sourceY = sourceItem.bound.y + connectedYAxis["1"][0];
-    var target = this.state.filters.map((it2, index3) => {
-      return { it: it2, index: index3 };
-    }).find((it2) => {
-      if (!it2)
+    var target = this.state.filters.map((it, index3) => {
+      return { it, index: index3 };
+    }).find((it) => {
+      if (!it)
         return false;
-      if (!it2.it)
+      if (!it.it)
         return false;
-      return it2 && it2.it.id === connectedInfo.id;
+      return it && it.it.id === connectedInfo.id;
     });
     var len2 = `${target.it.getInCount()}`;
-    var source2 = target.it.in.map((it2, index3) => {
-      return { it: it2, index: index3 };
-    }).find((it2) => {
-      if (!it2)
+    var source2 = target.it.in.map((it, index3) => {
+      return { it, index: index3 };
+    }).find((it) => {
+      if (!it)
         return false;
-      if (!it2.it)
+      if (!it.it)
         return false;
-      return it2.it.id === sourceItem.id;
+      return it.it.id === sourceItem.id;
     });
     if (!source2) {
       return [];
@@ -83288,10 +83288,10 @@ class SVGFilterEditor extends EditorElement {
   [LOAD("$connectedLinePanel")]() {
     return `
       <svg>
-        ${this.state.filters.map((it2) => {
-      return it2.connected.map((connectedItem) => {
-        var path = this.createPath(it2, connectedItem);
-        var sourceType = getSourceTypeString(it2.type);
+        ${this.state.filters.map((it) => {
+      return it.connected.map((connectedItem) => {
+        var path = this.createPath(it, connectedItem);
+        var sourceType = getSourceTypeString(it.type);
         return `
               <path 
                 class="connected-line"
@@ -83303,7 +83303,7 @@ class SVGFilterEditor extends EditorElement {
                 <circle 
                   data-source-type="${sourceType}"
                   data-target-id="${connectedItem.id}"
-                  data-source-id="${it2.id}"
+                  data-source-id="${it.id}"
                   class="connected-remove-circle"
                   cx="${(path[0].x + path[1].x) / 2}"
                   cy="${(path[0].y + path[1].y) / 2}"
@@ -83319,11 +83319,11 @@ class SVGFilterEditor extends EditorElement {
   [CLICK("$connectedLinePanel .connected-remove-circle")](e) {
     var [tid, sid] = e.$dt.attrs("data-target-id", "data-source-id");
     var filters = this.state.filters;
-    filters.filter((it2) => it2.id === sid).forEach((it2) => {
-      it2.connected = it2.connected.filter((c2) => c2.id != tid);
+    filters.filter((it) => it.id === sid).forEach((it) => {
+      it.connected = it.connected.filter((c2) => c2.id != tid);
     });
-    filters.filter((it2) => it2.id === tid).forEach((it2) => {
-      it2.in = it2.in.map((inObject) => {
+    filters.filter((it) => it.id === tid).forEach((it) => {
+      it.in = it.in.map((inObject) => {
         if (inObject && inObject.id == sid) {
           return null;
         }
@@ -83407,21 +83407,21 @@ class SVGFilterEditor extends EditorElement {
     }
   }
   makeGraphPanel() {
-    return this.state.filters.map((it2, index2) => {
+    return this.state.filters.map((it, index2) => {
       const selectedClass = index2 === this.state.selectedIndex ? "selected" : "";
       return `
-        <div class='filter-node ${selectedClass}' data-type="${it2.type}" data-index="${index2}" data-filter-id="${it2.id}" style='left: ${it2.bound.x}px;top: ${it2.bound.y}px;'>
-          <div class='label'>${this.$i18n(it2.type)}</div>
+        <div class='filter-node ${selectedClass}' data-type="${it.type}" data-index="${index2}" data-filter-id="${it.id}" style='left: ${it.bound.x}px;top: ${it.bound.y}px;'>
+          <div class='label'>${this.$i18n(it.type)}</div>
           <div class='remove'>${iconUse$1("close")}</div>
-          <div class='preview' data-source-type="${getSourceTypeString(it2.type)}" data-filter-type='${it2.type}'>${getIcon(it2.type)}</div>
+          <div class='preview' data-source-type="${getSourceTypeString(it.type)}" data-filter-type='${it.type}'>${getIcon(it.type)}</div>
           <div class='in-list'>
-            ${repeat$1(it2.getInCount()).map((itIn, inIndex) => {
+            ${repeat$1(it.getInCount()).map((itIn, inIndex) => {
         return `<div class='in' data-index='${inIndex}'></div>`;
       }).join("")}
           </div>
           
           <div class='out' data-index="0">${iconUse$1("chevron_right")}</div>
-          ${it2.hasLight() ? `<div class='light'  data-index="0"></div>` : ""}
+          ${it.hasLight() ? `<div class='light'  data-index="0"></div>` : ""}
         </div>
       `;
     });
@@ -83454,10 +83454,10 @@ class SVGFilterEditor extends EditorElement {
     this.modifyFilter();
   }
   removeFilter(id) {
-    var filters = this.state.filters.filter((it2) => it2.id != id);
-    filters.forEach((it2) => {
-      it2.connected = it2.connected.filter((c2) => c2.id != id);
-      it2.in = it2.in.filter((c2) => c2.id != id);
+    var filters = this.state.filters.filter((it) => it.id != id);
+    filters.forEach((it) => {
+      it.connected = it.connected.filter((c2) => c2.id != id);
+      it.in = it.in.filter((c2) => c2.id != id);
     });
     if (this.state.selectedFilter.id === id) {
       this.state.selectedFilter = null;
@@ -83517,8 +83517,8 @@ class SVGFilterPopup extends BasePopup {
     });
   }
   [SUBSCRIBE("showSVGFilterPopup")](data) {
-    data.filters = data.filters.map((it2) => {
-      return SVGFilter.parse(it2);
+    data.filters = data.filters.map((it) => {
+      return SVGFilter.parse(it);
     });
     data.preview = isNotUndefined(data.preview) ? data.preview : true;
     this.setState(data);
@@ -83583,14 +83583,14 @@ class SVGFilterSelectEditor extends EditorElement {
     var current = this.$selection.currentProject;
     var options2 = "";
     if (current) {
-      options2 = current.svgfilters.map((it2) => it2.id);
+      options2 = current.svgfilters.map((it) => it.id);
       options2 = options2.length ? "," + options2.join(",") : "";
     }
     options2 += ",-,new";
     options2 = options2.split(",");
-    var arr = options2.map((it2) => {
-      var value = it2;
-      var label = it2;
+    var arr = options2.map((it) => {
+      var value = it;
+      var label = it;
       if (value.includes(":")) {
         var [value, label] = value.split(":");
       }
@@ -83607,7 +83607,7 @@ class SVGFilterSelectEditor extends EditorElement {
   }
   setOptions(options2 = "") {
     this.setState({
-      options: options2.split(this.state.splitChar).map((it2) => it2.trim())
+      options: options2.split(this.state.splitChar).map((it) => it.trim())
     });
   }
   sendMessage(type) {
@@ -84227,7 +84227,7 @@ class Transition extends PropertyItem {
     ].join(" ");
   }
   static join(list2) {
-    return list2.map((it2) => new Transition(it2).toString()).join(",");
+    return list2.map((it) => new Transition(it).toString()).join(",");
   }
   static add(transition2, item2 = {}) {
     const list2 = Transition.parseStyle(transition2);
@@ -84235,12 +84235,12 @@ class Transition extends PropertyItem {
     return Transition.join(list2);
   }
   static remove(transition2, removeIndex) {
-    return Transition.filter(transition2, (it2, index2) => {
+    return Transition.filter(transition2, (it, index2) => {
       return removeIndex != index2;
     });
   }
   static filter(transition2, filterFunction) {
-    return Transition.join(Transition.parseStyle(transition2).filter((it2) => filterFunction(it2)));
+    return Transition.join(Transition.parseStyle(transition2).filter((it) => filterFunction(it)));
   }
   static replace(transition2, replaceIndex, valueObject) {
     var list2 = Transition.parseStyle(transition2);
@@ -84260,8 +84260,8 @@ class Transition extends PropertyItem {
     if (!transition2)
       return list2;
     const result = customParseConvertMatches(transition2, TRANSITION_TIMING_REG);
-    list2 = result.str.split(",").map((it2) => {
-      const fields2 = it2.split(" ").filter(Boolean);
+    list2 = result.str.split(",").map((it) => {
+      const fields2 = it.split(" ").filter(Boolean);
       if (fields2.length >= 4) {
         return {
           name: fields2[0],
@@ -84284,7 +84284,7 @@ class Transition extends PropertyItem {
         return {};
       }
     });
-    return list2.map((it2) => Transition.parse(it2));
+    return list2.map((it) => Transition.parse(it));
   }
 }
 var TransitionProperty$1 = "";
@@ -84307,9 +84307,9 @@ class TransitionProperty extends BaseProperty {
     var current = this.$selection.current;
     if (!current)
       return "";
-    return Transition.parseStyle(current.transition).map((it2, index2) => {
+    return Transition.parseStyle(current.transition).map((it, index2) => {
       const selectedClass = this.state.selectedIndex === index2 ? "selected" : "";
-      const path = curveToPath(it2.timingFunction, 30, 30);
+      const path = curveToPath(it.timingFunction, 30, 30);
       return `
       <div class='transition-group-item'>
         <div class='transition-item ${selectedClass}' data-index='${index2}' ref="transitionIndex${index2}">
@@ -84320,9 +84320,9 @@ class TransitionProperty extends BaseProperty {
             </div>
             <div class='name'>
               <div class='labels'>
-                <span class='property-name' title='Property'>${it2.name}</span>
-                <span class='duration' title='Duration'><small>Duration: ${it2.duration}</small></span>
-                <span class='delay' title='Delay'><small>Delay: ${it2.delay}</small></span>
+                <span class='property-name' title='Property'>${it.name}</span>
+                <span class='duration' title='Duration'><small>Duration: ${it.duration}</small></span>
+                <span class='delay' title='Delay'><small>Delay: ${it.delay}</small></span>
               </div>
             </div>
             <div class='tools'>
@@ -84482,9 +84482,9 @@ const property_list = [
   "width",
   "word-spacing",
   "z-index"
-].map((it2) => ({
-  value: it2,
-  text: it2
+].map((it) => ({
+  value: it,
+  text: it
 }));
 class TransitionPropertyPopup extends BasePopup {
   getTitle() {
@@ -84971,16 +84971,16 @@ class PathGenerator {
       });
     });
     if (isToggle) {
-      list2 = list2.map((it2) => {
-        const selectedKey = this.makeSegmentKey(it2);
-        return __spreadProps(__spreadValues({}, it2), { included: Boolean(this.selectedPointKeys[selectedKey]) });
+      list2 = list2.map((it) => {
+        const selectedKey = this.makeSegmentKey(it);
+        return __spreadProps(__spreadValues({}, it), { included: Boolean(this.selectedPointKeys[selectedKey]) });
       });
-      const includedList = list2.filter((it2) => it2.included);
-      const notIncludedList = list2.filter((it2) => !it2.included);
+      const includedList = list2.filter((it) => it.included);
+      const notIncludedList = list2.filter((it) => !it.included);
       let uniqueList = [...this.selectedPointList];
       if (includedList.length) {
-        uniqueList = this.selectedPointList.filter((it2) => {
-          const oldKey = this.makeSegmentKey(it2);
+        uniqueList = this.selectedPointList.filter((it) => {
+          const oldKey = this.makeSegmentKey(it);
           return Boolean(includedList.find((includeNode) => {
             return oldKey === this.makeSegmentKey(includeNode);
           })) === false;
@@ -85002,8 +85002,8 @@ class PathGenerator {
       key,
       index: +index2
     }));
-    list2.forEach((it2) => {
-      var key = this.makeSegmentKey(it2);
+    list2.forEach((it) => {
+      var key = this.makeSegmentKey(it);
       this.selectedPointKeys[key] = true;
     });
   }
@@ -85040,8 +85040,8 @@ class PathGenerator {
       if (point2 && !this.isSelectedSegment(key, index2)) {
         this.select(...this.selectedPointList, { x: point2.x, y: point2.y, key, index: index2 });
       } else {
-        this.select(...this.selectedPointList.filter((it2) => {
-          return it2.key !== key || it2.index !== index2;
+        this.select(...this.selectedPointList.filter((it) => {
+          return it.key !== key || it.index !== index2;
         }));
       }
     }
@@ -85055,12 +85055,12 @@ class PathGenerator {
     }
   }
   reselect() {
-    this.selectedPointList.filter(Boolean).forEach((it2) => {
+    this.selectedPointList.filter(Boolean).forEach((it) => {
       var _a;
-      var point2 = (_a = this.points[it2.index]) == null ? void 0 : _a[it2.key];
+      var point2 = (_a = this.points[it.index]) == null ? void 0 : _a[it.key];
       if (point2) {
-        it2.x = point2.x;
-        it2.y = point2.y;
+        it.x = point2.x;
+        it.y = point2.y;
       }
     });
   }
@@ -85323,24 +85323,24 @@ class PathGenerator {
   }
   moveSelectedSegment(dx, dy) {
     if (this.selectedPointList.length > 0) {
-      this.selectedPointList.forEach((it2) => {
-        var target = this.points[it2.index][it2.key];
-        target.x = it2.x + dx;
-        target.y = it2.y + dy;
+      this.selectedPointList.forEach((it) => {
+        var target = this.points[it.index][it.key];
+        target.x = it.x + dx;
+        target.y = it.y + dy;
       });
     } else if (this.selectedGroup) {
       this.moveSelectedGroup(dx, dy);
     }
   }
   moveSelectedGroup(dx, dy) {
-    this.selectedGroup.points.forEach((it2) => {
-      const target = this.points[it2.index];
-      target.startPoint.x = it2.startPoint.x + dx;
-      target.startPoint.y = it2.startPoint.y + dy;
-      target.endPoint.x = it2.endPoint.x + dx;
-      target.endPoint.y = it2.endPoint.y + dy;
-      target.reversePoint.x = it2.reversePoint.x + dx;
-      target.reversePoint.y = it2.reversePoint.y + dy;
+    this.selectedGroup.points.forEach((it) => {
+      const target = this.points[it.index];
+      target.startPoint.x = it.startPoint.x + dx;
+      target.startPoint.y = it.startPoint.y + dy;
+      target.endPoint.x = it.endPoint.x + dx;
+      target.endPoint.y = it.endPoint.y + dy;
+      target.reversePoint.x = it.reversePoint.x + dx;
+      target.reversePoint.y = it.reversePoint.y + dy;
     });
   }
   get selectedGroup() {
@@ -85362,8 +85362,8 @@ class PathGenerator {
       return groupList.map((group2) => group2.groupIndex);
     }
     const points2 = this.selectedPointList;
-    points2.forEach((it2) => {
-      const group2 = this.getGroup(groupList, it2.index);
+    points2.forEach((it) => {
+      const group2 = this.getGroup(groupList, it.index);
       if (group2) {
         groupIndexList.add(group2.groupIndex);
       }
@@ -85371,8 +85371,8 @@ class PathGenerator {
     return [.../* @__PURE__ */ new Set([...groupIndexList, this.state.selectedGroupIndex])];
   }
   removeSelectedSegment() {
-    this.selectedPointList.forEach((it2) => {
-      var target = this.points[it2.index][it2.key];
+    this.selectedPointList.forEach((it) => {
+      var target = this.points[it.index][it.key];
       target.removed = true;
     });
     const pointGroup = Point.splitPoints(this.points);
@@ -85418,10 +85418,10 @@ class PathGenerator {
         this.moveSegment("endPoint", dx, dy);
         this.moveSegment("reversePoint", dx, dy);
         if (!e.altKey) {
-          state.connectedPointList.forEach((it2) => {
-            this.moveSegment("startPoint", dx, dy, it2);
-            this.moveSegment("endPoint", dx, dy, it2);
-            this.moveSegment("reversePoint", dx, dy, it2);
+          state.connectedPointList.forEach((it) => {
+            this.moveSegment("startPoint", dx, dy, it);
+            this.moveSegment("endPoint", dx, dy, it);
+            this.moveSegment("reversePoint", dx, dy, it);
           });
         }
       }
@@ -85759,19 +85759,19 @@ class PathGenerator {
     const pathCount = pathList.length;
     return `
             <g>
-               ${pathList.map((it2) => {
-      const { center: center2 } = it2;
+               ${pathList.map((it) => {
+      const { center: center2 } = it;
       const [x2, y2] = center2;
-      const selected = this.state.selectedGroupIndex === it2.groupIndex;
+      const selected = this.state.selectedGroupIndex === it.groupIndex;
       return `
                         <path class="path-area ${selected ? "selected" : ""}" 
-                            d="${it2.d}" 
-                            data-point-index="${it2.startPointIndex}" 
-                            data-group-index="${it2.groupIndex}" 
+                            d="${it.d}" 
+                            data-point-index="${it.startPointIndex}" 
+                            data-group-index="${it.groupIndex}" 
                         />
 
                         ${pathCount > 1 && `
-                            <text class="path-area-text" x="${x2}" y="${y2}" >${it2.groupIndex + 1}</text>
+                            <text class="path-area-text" x="${x2}" y="${y2}" >${it.groupIndex + 1}</text>
                         `}
                     `;
     }).join("")}
@@ -86685,7 +86685,7 @@ class PathEditorView extends PathTransformEditor {
     this.refs.$segmentBox.css(obj2);
   }
   getSelectBox() {
-    var [x2, y2, width2, height2] = this.refs.$segmentBox.styles("left", "top", "width", "height").map((it2) => Length.parse(it2));
+    var [x2, y2, width2, height2] = this.refs.$segmentBox.styles("left", "top", "width", "height").map((it) => Length.parse(it));
     var rect2 = {
       x: x2,
       y: y2,
@@ -87292,14 +87292,14 @@ class HoverView extends EditorElement {
     }
     const filteredList = this.$selection.filteredLayers;
     const point2 = this.$viewport.getWorldPosition(this.$config.get("bodyEvent"));
-    const items = filteredList.filter((it2) => it2.hasPoint(point2[0], point2[1])).filter((it2) => it2.isNot("artboard"));
+    const items = filteredList.filter((it) => it.hasPoint(point2[0], point2[1])).filter((it) => it.isNot("artboard"));
     let hoverItems = items;
     let id = (_a = hoverItems[0]) == null ? void 0 : _a.id;
     if (this.$selection.isEmpty) {
       id = (_b = hoverItems[0]) == null ? void 0 : _b.id;
     } else if (this.$selection.isOne) {
       const pathIds = this.$selection.current.pathIds;
-      hoverItems = hoverItems.filter((it2) => pathIds.includes(it2.id) === false || it2.id === this.$selection.current.id);
+      hoverItems = hoverItems.filter((it) => pathIds.includes(it.id) === false || it.id === this.$selection.current.id);
       id = (_c = hoverItems[0]) == null ? void 0 : _c.id;
     }
     if (!id) {
@@ -87631,7 +87631,7 @@ class GuideLineView extends EditorElement {
     const sourceVerties = toRectVerties(this.$selection.verties);
     let targetList;
     if (targetVertiesList) {
-      targetList = targetVertiesList.map((it2) => toRectVerties(it2));
+      targetList = targetVertiesList.map((it) => toRectVerties(it));
     } else {
       const targets = this.$selection.snapTargetLayers.map((target) => {
         const rectVerties = toRectVerties(target.verties);
@@ -87699,14 +87699,14 @@ class SelectionInfoView extends EditorElement {
     }), 3);
     const localDist = add$1([], snap, dist2);
     const result = {};
-    this.$selection.cachedItemMatrices.forEach((it2) => {
-      const newVerties = it2.verties.map((v) => {
+    this.$selection.cachedItemMatrices.forEach((it) => {
+      const newVerties = it.verties.map((v) => {
         return add$1([], v, localDist);
       });
-      const newDist = subtract([], transformMat4([], newVerties[0], it2.parentMatrixInverse), transformMat4([], it2.verties[0], it2.parentMatrixInverse));
-      result[it2.id] = {
-        x: Math.floor(it2.x + newDist[0]),
-        y: Math.floor(it2.y + newDist[1])
+      const newDist = subtract([], transformMat4([], newVerties[0], it.parentMatrixInverse), transformMat4([], it.verties[0], it.parentMatrixInverse));
+      result[it.id] = {
+        x: Math.floor(it.x + newDist[0]),
+        y: Math.floor(it.y + newDist[1])
       };
     });
     this.$selection.reset(result);
@@ -87744,15 +87744,15 @@ class SelectionInfoView extends EditorElement {
   }
   [LOAD("$el") + DOMDIFF]() {
     var _a;
-    return (_a = this.$selection.currentProject) == null ? void 0 : _a.artboards.map((it2) => {
+    return (_a = this.$selection.currentProject) == null ? void 0 : _a.artboards.map((it) => {
       return {
-        item: it2,
-        title: it2.name,
-        id: it2.id,
-        layout: it2.layout,
-        pointers: this.$viewport.applyVerties(it2.verties)
+        item: it,
+        title: it.name,
+        id: it.id,
+        layout: it.layout,
+        pointers: this.$viewport.applyVerties(it.verties)
       };
-    }).map((it2) => this.makeArtboardTitleArea(it2));
+    }).map((it) => this.makeArtboardTitleArea(it));
   }
   getIcon(item2) {
     if (item2.hasLayout() || item2.hasChildren() || item2.is("artboard")) {
@@ -87781,8 +87781,8 @@ class SelectionInfoView extends EditorElement {
       style: "transform: translateY(-100%);"
     }, this.getIcon(artboardItem.item), artboardItem.title));
   }
-  makeArtboardTitleArea(it2) {
-    return this.createSize(it2.pointers, it2);
+  makeArtboardTitleArea(it) {
+    return this.createSize(it.pointers, it);
   }
   [SUBSCRIBE("refreshAll")]() {
     this.refresh();
@@ -87868,7 +87868,7 @@ class SelectionToolView extends SelectionToolEvent$1 {
   refreshPointerIcon(e) {
     const dataPointer = e.$dt.data("pointer");
     if (dataPointer) {
-      const pointer = dataPointer.split(",").map((it2) => Number(it2));
+      const pointer = dataPointer.split(",").map((it) => Number(it));
       const diff = subtract([], pointer, this.state.renderPointerList[0][4]);
       const angle2 = calculateAngle360(diff[0], diff[1]);
       let iconAngle = Math.floor(angle2);
@@ -88297,8 +88297,8 @@ class SelectionToolView extends SelectionToolEvent$1 {
       { start: right2, end: left2 },
       { start: bottom2, end: top2 },
       { start: left2, end: right2 }
-    ].map((it2, index2) => {
-      return { index: index2, data: it2 };
+    ].map((it, index2) => {
+      return { index: index2, data: it };
     });
     list2.sort((a, b) => {
       return a.data.start[1] > b.data.start[1] ? -1 : 1;
@@ -88452,7 +88452,7 @@ class GroupSelectionToolView extends SelectionToolEvent {
     const selectionMatrix = calculateRotationOriginMat4(distAngle, this.verties[4]);
     let cachedItemMatrices = this.$selection.cachedItemMatrices;
     if (this.$selection.length === 1) {
-      cachedItemMatrices = cachedItemMatrices.filter((it2) => it2.id === this.$selection.current.id);
+      cachedItemMatrices = cachedItemMatrices.filter((it) => it.id === this.$selection.current.id);
     }
     cachedItemMatrices.forEach((item2) => {
       const newVerties = vertiesMap(item2.verties, multiply$1([], item2.parentMatrixInverse, selectionMatrix));
@@ -88488,7 +88488,7 @@ class GroupSelectionToolView extends SelectionToolEvent {
   refreshPointerIcon(e) {
     const dataPointer = e.$dt.data("pointer");
     if (dataPointer) {
-      const pointer = dataPointer.split(",").map((it2) => Number(it2));
+      const pointer = dataPointer.split(",").map((it) => Number(it));
       const diff = subtract([], pointer, this.state.renderPointerList[0][4]);
       const angle2 = calculateAngle360(diff[0], diff[1]);
       let iconAngle = Math.floor(angle2);
@@ -88547,12 +88547,12 @@ class GroupSelectionToolView extends SelectionToolEvent {
       height: round$1(Math.abs(newHeight), 1e3)
     });
   }
-  moveItemForGroup(it2, newVerties, realDx = 0, realDy = 0) {
-    const transformViewInverse = calculateMatrixInverse(fromTranslation([], newVerties[4]), it2.itemMatrix, fromTranslation([], negate([], newVerties[4])));
+  moveItemForGroup(it, newVerties, realDx = 0, realDy = 0) {
+    const transformViewInverse = calculateMatrixInverse(fromTranslation([], newVerties[4]), it.itemMatrix, fromTranslation([], negate([], newVerties[4])));
     const [newX, newY] = transformMat4([], newVerties[0], transformViewInverse);
     const newWidth = distance$1(newVerties[0], newVerties[1]);
     const newHeight = distance$1(newVerties[0], newVerties[3]);
-    const instance = this.$model.get(it2.id);
+    const instance = this.$model.get(it.id);
     if (instance) {
       instance.reset({
         x: newX + realDx,
@@ -88565,10 +88565,10 @@ class GroupSelectionToolView extends SelectionToolEvent {
   recoverItemForGroup(groupItem, scaleX, scaleY, realDx = 0, realDy = 0) {
     const absoluteMatrix = groupItem.absoluteMatrix;
     const absoluteMatrixInverse = groupItem.absoluteMatrixInverse;
-    this.$selection.cachedItemMatrices.forEach((it2) => {
-      const localView = calculateMatrix(it2.parentMatrixInverse, absoluteMatrix, fromTranslation([], [realDx, realDy, 0]), fromScaling([], [scaleX, scaleY, 1]), absoluteMatrixInverse);
-      const newVerties = vertiesMap(it2.verties, localView);
-      this.moveItemForGroup(it2, newVerties);
+    this.$selection.cachedItemMatrices.forEach((it) => {
+      const localView = calculateMatrix(it.parentMatrixInverse, absoluteMatrix, fromTranslation([], [realDx, realDy, 0]), fromScaling([], [scaleX, scaleY, 1]), absoluteMatrixInverse);
+      const newVerties = vertiesMap(it.verties, localView);
+      this.moveItemForGroup(it, newVerties);
     });
   }
   moveBottomRightVertex(distVector) {
@@ -88810,8 +88810,8 @@ class GroupSelectionToolView extends SelectionToolEvent {
       { start: right2, end: left2 },
       { start: bottom2, end: top2 },
       { start: left2, end: right2 }
-    ].map((it2, index2) => {
-      return { index: index2, data: it2 };
+    ].map((it, index2) => {
+      return { index: index2, data: it };
     });
     list2.sort((a, b) => {
       return a.data.start[1] > b.data.start[1] ? -1 : 1;
@@ -88849,8 +88849,8 @@ class GroupSelectionToolView extends SelectionToolEvent {
       elementLine: `
                 <svg class='line' overflow="visible">
                     <path 
-                        d="${this.$selection.items.map((it2, index2) => {
-        return this.createLine(this.$viewport.applyVerties(it2.originVerties));
+                        d="${this.$selection.items.map((it, index2) => {
+        return this.createLine(this.$viewport.applyVerties(it.originVerties));
       }).join("")}
                         " />
                 </svg>
@@ -88904,7 +88904,7 @@ class GhostToolView extends EditorElement {
     this.ghostScreenVerties = this.$viewport.applyVerties(this.ghostVerties);
     this.initMousePoint = this.$viewport.getWorldPosition();
     this.filteredLayers = this.$selection.notSelectedLayers;
-    this.containerList = this.filteredLayers.filter((it2) => it2.hasLayout() || it2.is("artboard")).map((it2) => it2.originVerties);
+    this.containerList = this.filteredLayers.filter((it) => it.hasLayout() || it.is("artboard")).map((it) => it.originVerties);
     this.$config.set("set.move.control.point", true);
   }
   collectInformation() {
@@ -88915,7 +88915,7 @@ class GhostToolView extends EditorElement {
       return add$1([], v, newDist);
     });
     this.ghostScreenVerties = this.$viewport.applyVerties(this.ghostVerties);
-    const filteredLayers = this.$selection.filteredLayers.filter((it2) => this.$selection.check(it2) === false);
+    const filteredLayers = this.$selection.filteredLayers.filter((it) => this.$selection.check(it) === false);
     this.targetItem = filteredLayers[0];
     if (this.targetItem) {
       if (this.targetItem.hasLayout() && ((_a = this.targetItem) == null ? void 0 : _a.hasChildren())) {
@@ -88961,15 +88961,15 @@ class GhostToolView extends EditorElement {
     if (!this.ghostVerties) {
       return /* @__PURE__ */ createElementJsx("svg", null);
     }
-    return /* @__PURE__ */ createElementJsx("svg", null, (_a = this.containerList) == null ? void 0 : _a.map((it2) => {
-      it2 = this.$viewport.applyVerties(it2);
+    return /* @__PURE__ */ createElementJsx("svg", null, (_a = this.containerList) == null ? void 0 : _a.map((it) => {
+      it = this.$viewport.applyVerties(it);
       return /* @__PURE__ */ createElementJsx("path", {
         class: "container",
         d: `
-                    M ${it2[0][0]} ${it2[0][1]}
-                    L ${it2[1][0]} ${it2[1][1]}
-                    L ${it2[2][0]} ${it2[2][1]}
-                    L ${it2[3][0]} ${it2[3][1]}
+                    M ${it[0][0]} ${it[0][1]}
+                    L ${it[1][0]} ${it[1][1]}
+                    L ${it[2][0]} ${it[2][1]}
+                    L ${it[3][0]} ${it[3][1]}
                     Z
                 `
       });
@@ -89043,7 +89043,7 @@ class GhostToolView extends EditorElement {
         break;
     }
     const newDist = subtract([], [newCenterX, newCenterY, 0], center2);
-    const renderVerties = this.ghostScreenVerties.map((it2) => add$1([], it2, newDist)).filter((it2, index2) => index2 < 4);
+    const renderVerties = this.ghostScreenVerties.map((it) => add$1([], it, newDist)).filter((it, index2) => index2 < 4);
     return this.renderPathForVerties(renderVerties, "flex-item", "ghost");
   }
   renderLayoutFlexColumnArea() {
@@ -89169,15 +89169,15 @@ class GhostToolView extends EditorElement {
     const { info, items } = this.$selection.gridInformation || { items: [] };
     const currentVerties = this.ghostVerties.filter((_, index2) => index2 < 4);
     const targetRect = vertiesToRectangle(currentVerties);
-    const checkedItems = items == null ? void 0 : items.filter((it2) => {
-      return polyPoly(it2.originVerties, currentVerties);
-    }).filter((it2) => {
-      const intersect = intersectRectRect(it2.originRect, targetRect);
+    const checkedItems = items == null ? void 0 : items.filter((it) => {
+      return polyPoly(it.originVerties, currentVerties);
+    }).filter((it) => {
+      const intersect = intersectRectRect(it.originRect, targetRect);
       return Math.floor(intersect.width) > IntersectEpsilonType.RECT && Math.floor(intersect.height) > IntersectEpsilonType.RECT;
     });
     if (checkedItems == null ? void 0 : checkedItems.length) {
-      const columnList = checkedItems.map((it2) => it2.column);
-      const rowList = checkedItems.map((it2) => it2.row);
+      const columnList = checkedItems.map((it) => it.column);
+      const rowList = checkedItems.map((it) => it.row);
       const columnStart = Math.min(...columnList);
       const rowStart = Math.min(...rowList);
       const columnEnd = Math.max(...columnList) + 1;
@@ -89664,8 +89664,8 @@ class GradientColorstepEditor extends GradientRotateEditor {
       percent: image2.colorsteps[this.$targetIndex].percent
     };
     const nextImage = this.state.backgroundImages[this.state.index].image;
-    nextImage.colorsteps = image2.colorsteps.map((it2) => {
-      return it2;
+    nextImage.colorsteps = image2.colorsteps.map((it) => {
+      return it;
     });
     nextImage.sortColorStep();
     this.emit("updateGradientEditor", nextImage, targetColorStep);
@@ -90095,26 +90095,26 @@ class GradientEditorView extends GradientColorstepEditor {
     const size2 = TOOL_SIZE$1;
     const dist2 = subtract([], endPoint, startPoint);
     const angle2 = calculateAngle360(dist2[0], dist2[1]) - 180;
-    return /* @__PURE__ */ createElementJsx(FragmentInstance, null, colorsteps.map((it2, index2) => {
+    return /* @__PURE__ */ createElementJsx(FragmentInstance, null, colorsteps.map((it, index2) => {
       if (index2 === 0)
         return "";
-      return this.makeTimingArea(index2, it2, colorsteps[index2 - 1], TOOL_SIZE$1);
-    }), colorsteps.map((it2, index2) => {
+      return this.makeTimingArea(index2, it, colorsteps[index2 - 1], TOOL_SIZE$1);
+    }), colorsteps.map((it, index2) => {
       return /* @__PURE__ */ createElementJsx("g", {
-        transform: `rotate(${angle2} ${it2.stickScreenXY[0]} ${it2.stickScreenXY[1]})`
+        transform: `rotate(${angle2} ${it.stickScreenXY[0]} ${it.stickScreenXY[1]})`
       }, /* @__PURE__ */ createElementJsx("rect", {
-        id: it2.id,
+        id: it.id,
         "data-index": index2,
         class: "colorstep",
-        x: it2.stickScreenXY[0],
-        y: it2.stickScreenXY[1],
+        x: it.stickScreenXY[0],
+        y: it.stickScreenXY[1],
         width: size2,
         height: size2,
-        fill: it2.color,
+        fill: it.color,
         tabIndex: -1,
-        "data-x": it2.screenXY[0],
-        "data-y": it2.screenXY[1]
-      }), this.makeTimingLine(it2.timing, size2, it2.stickScreenXY[0], it2.stickScreenXY[1]));
+        "data-x": it.screenXY[0],
+        "data-y": it.screenXY[1]
+      }), this.makeTimingLine(it.timing, size2, it.stickScreenXY[0], it.stickScreenXY[1]));
     }), /* @__PURE__ */ createElementJsx("circle", {
       class: "point",
       "data-type": "start",
@@ -90140,27 +90140,27 @@ class GradientEditorView extends GradientColorstepEditor {
   }
   makeConicGradientPoint(colorsteps, startPoint, endPoint, shapePoint, newHoverColorStepPoint, dist2, startAngle) {
     const size2 = TOOL_SIZE$1;
-    return /* @__PURE__ */ createElementJsx(FragmentInstance, null, colorsteps.map((it2, index2) => {
+    return /* @__PURE__ */ createElementJsx(FragmentInstance, null, colorsteps.map((it, index2) => {
       if (index2 === 0)
         return "";
-      return this.makeConicTimingArea(startPoint, index2, it2, colorsteps[index2 - 1], TOOL_SIZE$1, dist2, startAngle);
-    }), colorsteps.map((it2, index2) => {
-      const angle2 = calculateAngle360(...subtract([], it2.screenXY, startPoint)) - 180;
+      return this.makeConicTimingArea(startPoint, index2, it, colorsteps[index2 - 1], TOOL_SIZE$1, dist2, startAngle);
+    }), colorsteps.map((it, index2) => {
+      const angle2 = calculateAngle360(...subtract([], it.screenXY, startPoint)) - 180;
       return /* @__PURE__ */ createElementJsx("g", {
-        transform: `rotate(${angle2} ${it2.screenXY[0]} ${it2.screenXY[1]})`
+        transform: `rotate(${angle2} ${it.screenXY[0]} ${it.screenXY[1]})`
       }, /* @__PURE__ */ createElementJsx("rect", {
-        id: it2.id,
+        id: it.id,
         "data-index": index2,
         class: "colorstep",
-        x: it2.screenXY[0] - size2 / 2,
-        y: it2.screenXY[1] - size2 / 2,
+        x: it.screenXY[0] - size2 / 2,
+        y: it.screenXY[1] - size2 / 2,
         width: size2,
         height: size2,
-        fill: it2.color,
+        fill: it.color,
         tabIndex: -1,
-        "data-x": it2.screenXY[0],
-        "data-y": it2.screenXY[1]
-      }), this.makeConicTimingLine(it2.timing, size2, it2.screenXY[0], it2.screenXY[1], startAngle));
+        "data-x": it.screenXY[0],
+        "data-y": it.screenXY[1]
+      }), this.makeConicTimingLine(it.timing, size2, it.screenXY[0], it.screenXY[1], startAngle));
     }), /* @__PURE__ */ createElementJsx("circle", {
       class: "point",
       "data-type": "start",
@@ -90234,18 +90234,18 @@ class GradientEditorView extends GradientColorstepEditor {
     if (lastDist < 50) {
       lastDist = 50;
     }
-    colorsteps = result.colorsteps.map((it2) => {
-      it2.screenXY = this.$viewport.applyVertex(it2.pos);
-      const pointDist = dist(it2.screenXY, startPoint);
+    colorsteps = result.colorsteps.map((it) => {
+      it.screenXY = this.$viewport.applyVertex(it.pos);
+      const pointDist = dist(it.screenXY, startPoint);
       if (pointDist < lastDist) {
-        it2.screenXY = lerp$1([], startPoint, lerp$1([], startPoint, it2.screenXY, 1 / pointDist), lastDist + 20);
+        it.screenXY = lerp$1([], startPoint, lerp$1([], startPoint, it.screenXY, 1 / pointDist), lastDist + 20);
       } else if (pointDist > lastDist) {
-        it2.screenXY = lerp$1([], startPoint, it2.screenXY, (lastDist + 20) / pointDist);
+        it.screenXY = lerp$1([], startPoint, it.screenXY, (lastDist + 20) / pointDist);
       }
-      it2.stickScreenXY = clone(it2.screenXY);
-      const dist$1 = subtract([], it2.screenXY, startPoint);
-      it2.angle = calculateAngle360(dist$1[0], dist$1[1]);
-      return it2;
+      it.stickScreenXY = clone(it.screenXY);
+      const dist$1 = subtract([], it.screenXY, startPoint);
+      it.angle = calculateAngle360(dist$1[0], dist$1[1]);
+      return it;
     });
     centerPosition = this.$viewport.applyVertex(result.radialCenterPosition);
     const stickPoint = this.$viewport.applyVertex(result.shapePoint);
@@ -90334,10 +90334,10 @@ class GradientEditorView extends GradientColorstepEditor {
     const angle2 = calculateAngle360(dist2[0], dist2[1]) - 180;
     const rotateInverse = calculateRotationOriginMat4(-angle2, startPoint);
     const rotateInverseInverse = invert([], rotateInverse);
-    return colorsteps.map((it2) => {
-      it2.screenXY = this.$viewport.applyVertex(it2.pos);
-      const [newScreenXY] = vertiesMap([it2.screenXY], rotateInverse);
-      [it2.stickScreenXY, it2.stickScreenXYInStart, it2.stickScreenXYInEnd] = vertiesMap([
+    return colorsteps.map((it) => {
+      it.screenXY = this.$viewport.applyVertex(it.pos);
+      const [newScreenXY] = vertiesMap([it.screenXY], rotateInverse);
+      [it.stickScreenXY, it.stickScreenXYInStart, it.stickScreenXYInEnd] = vertiesMap([
         [newScreenXY[0] - size2 / 2, newScreenXY[1] - size2 * 1.5, 0],
         [
           newScreenXY[0] - size2 / 2,
@@ -90350,7 +90350,7 @@ class GradientEditorView extends GradientColorstepEditor {
           0
         ]
       ], rotateInverseInverse);
-      return it2;
+      return it;
     });
   }
   makeLinearCenterPoint(result) {
@@ -90534,22 +90534,22 @@ class ClippathPolygonEditorView extends EditorElement {
     }, /* @__PURE__ */ createElementJsx("svg", {
       style: "position:absolute;width:100%;height:100%;"
     }, /* @__PURE__ */ createElementJsx("polygon", {
-      points: `${screenPoints.map((it2) => [it2[0], it2[1]].join(",")).join(" ")}`
-    }), screenPoints.map((it2, index2) => {
+      points: `${screenPoints.map((it) => [it[0], it[1]].join(",")).join(" ")}`
+    }), screenPoints.map((it, index2) => {
       const nextIndex = (index2 + 1) % screenPoints.length;
       const nextPoint = screenPoints[nextIndex];
       return /* @__PURE__ */ createElementJsx("line", {
-        x1: it2[0],
-        y1: it2[1],
+        x1: it[0],
+        y1: it[1],
         x2: nextPoint[0],
         y2: nextPoint[1],
         class: "polygon-line",
         "data-index": index2
       });
-    }), screenPoints.map((it2, index2) => {
+    }), screenPoints.map((it, index2) => {
       return /* @__PURE__ */ createElementJsx("circle", {
-        cx: it2[0],
-        cy: it2[1],
+        cx: it[0],
+        cy: it[1],
         r: 3,
         class: "polygon-pointer",
         "data-index": index2
@@ -91710,7 +91710,7 @@ class FillColorstepEditor extends FillTimingStepEditor {
             break;
           }
         default:
-          const index2 = spreadMethodList.findIndex((it2) => image2.spreadMethod === it2);
+          const index2 = spreadMethodList.findIndex((it) => image2.spreadMethod === it);
           const nextIndex = (index2 + 1) % spreadMethodList.length;
           image2.reset({
             spreadMethod: spreadMethodList[nextIndex]
@@ -91780,8 +91780,8 @@ class FillColorstepEditor extends FillTimingStepEditor {
       percent: image2.colorsteps[this.$targetIndex].percent
     };
     const nextImage = this.state.originalResult.image;
-    nextImage.colorsteps = image2.colorsteps.map((it2) => {
-      return it2;
+    nextImage.colorsteps = image2.colorsteps.map((it) => {
+      return it;
     });
     nextImage.sortColorStep();
     this.emit("updateFillEditor", nextImage, targetColorStep);
@@ -91991,26 +91991,26 @@ class FillEditorView extends FillColorstepEditor {
     const size2 = TOOL_SIZE;
     const dist2 = subtract([], endPoint, startPoint);
     const angle2 = calculateAngle360(dist2[0], dist2[1]) - 180;
-    return /* @__PURE__ */ createElementJsx(FragmentInstance, null, colorsteps.map((it2, index2) => {
+    return /* @__PURE__ */ createElementJsx(FragmentInstance, null, colorsteps.map((it, index2) => {
       if (index2 === 0)
         return "";
-      return this.makeTimingArea(index2, it2, colorsteps[index2 - 1], TOOL_SIZE);
-    }), colorsteps.map((it2, index2) => {
+      return this.makeTimingArea(index2, it, colorsteps[index2 - 1], TOOL_SIZE);
+    }), colorsteps.map((it, index2) => {
       return /* @__PURE__ */ createElementJsx("g", {
-        transform: `rotate(${angle2} ${it2.stickScreenXY[0]} ${it2.stickScreenXY[1]})`
+        transform: `rotate(${angle2} ${it.stickScreenXY[0]} ${it.stickScreenXY[1]})`
       }, /* @__PURE__ */ createElementJsx("rect", {
-        id: it2.id,
+        id: it.id,
         "data-index": index2,
         class: "colorstep",
-        x: it2.stickScreenXY[0],
-        y: it2.stickScreenXY[1],
+        x: it.stickScreenXY[0],
+        y: it.stickScreenXY[1],
         width: size2,
         height: size2,
-        fill: it2.color,
+        fill: it.color,
         tabIndex: -1,
-        "data-x": it2.screenXY[0],
-        "data-y": it2.screenXY[1]
-      }), this.makeTimingLine(it2.timing, size2, it2.stickScreenXY[0], it2.stickScreenXY[1]));
+        "data-x": it.screenXY[0],
+        "data-y": it.screenXY[1]
+      }), this.makeTimingLine(it.timing, size2, it.stickScreenXY[0], it.stickScreenXY[1]));
     }), /* @__PURE__ */ createElementJsx("circle", {
       class: "point",
       "data-type": "start",
@@ -92040,10 +92040,10 @@ class FillEditorView extends FillColorstepEditor {
     const angle2 = calculateAngle360(dist2[0], dist2[1]) - 180;
     const rotateInverse = calculateRotationOriginMat4(-angle2, startPoint);
     const rotateInverseInverse = invert([], rotateInverse);
-    return colorsteps.map((it2) => {
-      it2.screenXY = this.$viewport.applyVertex(it2.pos);
-      const [newScreenXY] = vertiesMap([it2.screenXY], rotateInverse);
-      [it2.stickScreenXY, it2.stickScreenXYInStart, it2.stickScreenXYInEnd] = vertiesMap([
+    return colorsteps.map((it) => {
+      it.screenXY = this.$viewport.applyVertex(it.pos);
+      const [newScreenXY] = vertiesMap([it.screenXY], rotateInverse);
+      [it.stickScreenXY, it.stickScreenXYInStart, it.stickScreenXYInEnd] = vertiesMap([
         [newScreenXY[0] - size2 / 2, newScreenXY[1] - size2 * 1.5, 0],
         [
           newScreenXY[0] - size2 / 2,
@@ -92056,7 +92056,7 @@ class FillEditorView extends FillColorstepEditor {
           0
         ]
       ], rotateInverseInverse);
-      return it2;
+      return it;
     });
   }
   makeRadialCenterPoint(result) {
@@ -92259,14 +92259,14 @@ class CustomAssets extends EditorElement {
   }
   async [LOAD("$list")]() {
     const data = await this.$storageManager.getCustomAssetList();
-    return data.map((it2) => {
+    return data.map((it) => {
       return `
-        <div class='asset-preview' draggable="true" data-preview-id="${it2.id}">
-          <div class='thumbnail'><img src='${it2.preview}' /></div>
+        <div class='asset-preview' draggable="true" data-preview-id="${it.id}">
+          <div class='thumbnail'><img src='${it.preview}' /></div>
           <div class='tools'>
-            <div class='title'>${it2.component.name}</div>
+            <div class='title'>${it.component.name}</div>
             <div class='buttons'>
-              <button type="button" class='remove-asset-preview' title="remove asset" data-preview-id="${it2.id}">${iconUse$1("remove")}</button>
+              <button type="button" class='remove-asset-preview' title="remove asset" data-preview-id="${it.id}">${iconUse$1("remove")}</button>
             </div>
           </div>
         </div>
@@ -92362,11 +92362,11 @@ class LayerTab extends EditorElement {
               <label>${iconUse$1("plugin")}</label>
             </div>            
 
-            ${this.$injectManager.getTargetUI("leftbar.tab").map((it2) => {
-      const { value, title: title2 } = it2.class;
-      let iconString = it2.class.icon;
-      if (obj[it2.class.icon]) {
-        iconString = iconUse$1(it2.class.icon);
+            ${this.$injectManager.getTargetUI("leftbar.tab").map((it) => {
+      const { value, title: title2 } = it.class;
+      let iconString = it.class.icon;
+      if (obj[it.class.icon]) {
+        iconString = iconUse$1(it.class.icon);
       }
       return `
                 <div class='tab-item' data-value='${value}' data-direction="right"  data-tooltip="${title2}">
@@ -92396,8 +92396,8 @@ class LayerTab extends EditorElement {
             <div class='tab-content' data-value='6'>
               ${createComponent("CustomAssets")}
             </div>
-            ${this.$injectManager.getTargetUI("leftbar.tab").map((it2) => {
-      const { value } = it2.class;
+            ${this.$injectManager.getTargetUI("leftbar.tab").map((it) => {
+      const { value } = it.class;
       return `
                 <div class='tab-content' data-value='${value}'>
                   ${this.$injectManager.generate(`leftbar.tab.${value}`)}
@@ -92414,8 +92414,8 @@ class LayerTab extends EditorElement {
     if (this.state.selectedIndexValue === selectedIndexValue) {
       return;
     }
-    this.$el.$$(`[data-value="${this.state.selectedIndexValue}"]`).forEach((it2) => it2.removeClass("selected"));
-    this.$el.$$(`[data-value="${selectedIndexValue}"]`).forEach((it2) => it2.addClass("selected"));
+    this.$el.$$(`[data-value="${this.state.selectedIndexValue}"]`).forEach((it) => it.removeClass("selected"));
+    this.$el.$$(`[data-value="${selectedIndexValue}"]`).forEach((it) => it.addClass("selected"));
     this.setState({ selectedIndexValue }, false);
   }
 }
@@ -92481,13 +92481,13 @@ class ItemLayerTab extends EditorElement {
               <label>${iconUse$1("plugin")}</label>
             </div>            
 
-            ${this.$injectManager.getTargetUI("leftbar.tab").filter((it2) => {
-      return it2.class.designMode && it2.class.designMode.includes("item");
-    }).map((it2) => {
-      const { value, title: title2 } = it2.class;
-      let iconString = it2.class.icon;
-      if (obj[it2.class.icon]) {
-        iconString = iconUse$1(it2.class.icon);
+            ${this.$injectManager.getTargetUI("leftbar.tab").filter((it) => {
+      return it.class.designMode && it.class.designMode.includes("item");
+    }).map((it) => {
+      const { value, title: title2 } = it.class;
+      let iconString = it.class.icon;
+      if (obj[it.class.icon]) {
+        iconString = iconUse$1(it.class.icon);
       }
       return `
                 <div class='tab-item' data-value='${value}' data-direction="right"  data-tooltip="${title2}">
@@ -92504,10 +92504,10 @@ class ItemLayerTab extends EditorElement {
             <div class='tab-content' data-value='6'>
               ${createComponent("CustomAssets")}
             </div>
-            ${this.$injectManager.getTargetUI("leftbar.tab").filter((it2) => {
-      return it2.class.designMode && it2.class.designMode.includes("item");
-    }).map((it2) => {
-      const { value } = it2.class;
+            ${this.$injectManager.getTargetUI("leftbar.tab").filter((it) => {
+      return it.class.designMode && it.class.designMode.includes("item");
+    }).map((it) => {
+      const { value } = it.class;
       return `
                 <div class='tab-content' data-value='${value}'>
                   ${this.$injectManager.generate(`leftbar.tab.${value}`)}
@@ -92524,8 +92524,8 @@ class ItemLayerTab extends EditorElement {
     if (this.state.selectedIndexValue === selectedIndexValue) {
       return;
     }
-    this.$el.$$(`[data-value="${this.state.selectedIndexValue}"]`).forEach((it2) => it2.removeClass("selected"));
-    this.$el.$$(`[data-value="${selectedIndexValue}"]`).forEach((it2) => it2.addClass("selected"));
+    this.$el.$$(`[data-value="${this.state.selectedIndexValue}"]`).forEach((it) => it.removeClass("selected"));
+    this.$el.$$(`[data-value="${selectedIndexValue}"]`).forEach((it) => it.addClass("selected"));
     this.setState({ selectedIndexValue }, false);
   }
 }
@@ -94649,15 +94649,15 @@ class ThreeInspector extends EditorElement {
     }, this.$injectManager.generate("inspector.tab.style"), /* @__PURE__ */ createElementJsx("div", {
       class: "empty",
       style: "order: 1000000;"
-    }))), this.$injectManager.getTargetUI("inspector.tab").map((it2) => {
-      const { value, title: title2, loadElements } = it2.class;
+    }))), this.$injectManager.getTargetUI("inspector.tab").map((it) => {
+      const { value, title: title2, loadElements } = it.class;
       return /* @__PURE__ */ createElementJsx(TabPanel, {
         value,
         title: title2,
-        icon: it2.icon
+        icon: it.icon
       }, /* @__PURE__ */ createElementJsx("div", {
         style: "display: flex: flex-direction: column;"
-      }, loadElements.map((element) => craeteElement(element)), this.$injectManager.generate("inspector.tab." + it2.value), /* @__PURE__ */ createElementJsx("div", {
+      }, loadElements.map((element) => craeteElement(element)), this.$injectManager.generate("inspector.tab." + it.value), /* @__PURE__ */ createElementJsx("div", {
         class: "empty",
         style: "order: 1000000;"
       })));
@@ -95333,8 +95333,8 @@ class BlankInspector extends EditorElement {
       onchange: (value) => {
         this.$config.set("inspector.selectedValue", value);
       }
-    }, this.$injectManager.getTargetUI("inspector.tab").map((it2) => {
-      const { value, title: title2, icon, loadElements = [] } = it2.class;
+    }, this.$injectManager.getTargetUI("inspector.tab").map((it) => {
+      const { value, title: title2, icon, loadElements = [] } = it.class;
       return /* @__PURE__ */ createElementJsx(TabPanel, {
         value,
         title: title2,
@@ -95360,8 +95360,8 @@ class BlankLayerTab extends EditorElement {
       onchange: (value) => {
         this.$config.set("layertab.selectedValue", value);
       }
-    }, this.$injectManager.getTargetUI("layertab.tab").map((it2) => {
-      const { value, title: title2, icon, loadElements = [] } = it2.class;
+    }, this.$injectManager.getTargetUI("layertab.tab").map((it) => {
+      const { value, title: title2, icon, loadElements = [] } = it.class;
       return /* @__PURE__ */ createElementJsx(TabPanel, {
         value,
         title: title2,

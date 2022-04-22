@@ -160,7 +160,7 @@ export default class BlankCanvasView extends EditorElement {
       this.state.gesture = true;
     } else {
 
-      if (e.ctrlKey) {
+      if (e.ctrlKey) {  // 트랙패드 에서  pinchzoom 을 하면  ctrlKey : true 가 활성하가 되어 있다.
 
         const zoomFactor = 1 - (2.5 * dy) / 100;
 
